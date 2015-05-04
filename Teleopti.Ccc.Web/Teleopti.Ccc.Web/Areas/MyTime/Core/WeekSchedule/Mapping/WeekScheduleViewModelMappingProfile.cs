@@ -62,8 +62,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				.ForMember(d => d.TimeLineCulture, o => o.MapFrom(s => _loggedOnUser.Invoke().CurrentUser().PermissionInformation.Culture().ToString()))
 				.ForMember(d => d.TimeLine, o => o.ResolveUsing(s =>
 				{
-					var startTime = s.MinMaxTime.StartTime;
-					var endTime = s.MinMaxTime.EndTime;
+					var startTime = s.MinMaxTimeLineData.MinMaxTime.StartTime;
+					var endTime = s.MinMaxTimeLineData.MinMaxTime.EndTime;
 					var firstHour = startTime
 						.Subtract(new TimeSpan(0, 0, startTime.Minutes, startTime.Seconds, startTime.Milliseconds))
 						.Add(new TimeSpan(1, 0, 0));
@@ -78,16 +78,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 						.Distinct()
 						;
 
-					var timezone = _userTimeZone.Invoke().TimeZone();
-					var zeroTimeInUtc = TimeZoneHelper.ConvertToUtc(_now().LocalDateTime().Date, timezone);
+					if (s.MinMaxTimeLineData.isContainsEndDateDST)
+					{
+						times = times.Concat(new[] { s.MinMaxTimeLineData.timespanDST }).OrderBy(t => t);
+					}
 
 					var diff = endTime - startTime;
 					return (from t in times
 						select new TimeLineViewModel
 						{
 							Time = t,
-							TimeLineDisplay = TimeZoneInfo.ConvertTimeFromUtc(zeroTimeInUtc.Add(t), timezone)
-								.ToString(_culture().GetCulture().DateTimeFormat.ShortTimePattern),
+							TimeLineDisplay = new DateTime().Add(t).ToString(_culture().GetCulture().DateTimeFormat.ShortTimePattern),
 							PositionPercentage = diff == TimeSpan.Zero ? 0 : (decimal) (t - startTime).Ticks/diff.Ticks
 						}).ToArray();
 				}))

@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Autofac;
-using AutoMapper;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Budgeting;
@@ -19,23 +14,14 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Mapping;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Core.IoC;
-using Teleopti.Ccc.WebTest.Core.Common.DataProvider;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -129,7 +115,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			viewModel.TimeLine.Last().TimeLineDisplay.Should().Be("18:15");
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldMapTimeLineCorrectlyOnFirstDstDay()
 		{
 			Culture.IsSwedish();
@@ -149,7 +135,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			viewModel.TimeLine.Last().TimeLineDisplay.Should().Be("19:15");
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldMapTimeLineCorrectlyOnFirstDstDayAndNightShift()
 		{
 			Culture.IsSwedish();
@@ -158,19 +144,50 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			User.CurrentUser().PermissionInformation.SetCulture(Culture.GetCulture());
 			Now.Is("2015-03-29 10:00");
 			var date = new DateOnly(Now.UtcDateTime());
-			var personAssignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), date);
 			var phone = new Activity("p");
-			personAssignment.AddActivity(phone, new DateTimePeriod("2015-03-29 00:00".Utc(), "2015-03-29 04:00".Utc()));
-			ScheduleData.Set(new IScheduleData[] { personAssignment });
+			var personAssignment1 = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2015,3,28));
+			personAssignment1.AddActivity(phone, new DateTimePeriod("2015-03-28 00:00".Utc(), "2015-03-28 04:00".Utc()));
+			var personAssignment2 = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2015, 3, 29));
+			personAssignment2.AddActivity(phone, new DateTimePeriod("2015-03-29 00:00".Utc(), "2015-03-29 04:00".Utc()));
+			ScheduleData.Set(new IScheduleData[] { personAssignment1,personAssignment2 });
 
 			var viewModel = Target.CreateWeekViewModel(date);
 
 			viewModel.TimeLine.First().TimeLineDisplay.Should().Be("00:45");
 			viewModel.TimeLine.ElementAt(1).TimeLineDisplay.Should().Be("01:00");
-			viewModel.TimeLine.ElementAt(2).TimeLineDisplay.Should().Be("03:00");
-			viewModel.TimeLine.ElementAt(3).TimeLineDisplay.Should().Be("04:00");
-			viewModel.TimeLine.ElementAt(4).TimeLineDisplay.Should().Be("05:00");
-			viewModel.TimeLine.ElementAt(5).TimeLineDisplay.Should().Be("06:00");
+			viewModel.TimeLine.ElementAt(2).TimeLineDisplay.Should().Be("02:00");
+			viewModel.TimeLine.ElementAt(3).TimeLineDisplay.Should().Be("03:00");
+			viewModel.TimeLine.ElementAt(4).TimeLineDisplay.Should().Be("04:00");
+			viewModel.TimeLine.ElementAt(5).TimeLineDisplay.Should().Be("05:00");
+			viewModel.TimeLine.ElementAt(6).TimeLineDisplay.Should().Be("06:00");
+			viewModel.TimeLine.Last().TimeLineDisplay.Should().Be("06:15");
+		}
+		
+		[Test]
+		public void ShouldMapTimeLineCorrectlyOnEndDstDayAndNightShift()
+		{
+			Culture.IsSwedish();
+			TimeZone.IsSweden();
+			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(TimeZone.TimeZone());
+			User.CurrentUser().PermissionInformation.SetCulture(Culture.GetCulture());
+			Now.Is("2015-10-25 10:00");
+			var date = new DateOnly(Now.UtcDateTime());
+			var phone = new Activity("p");
+			var personAssignment1 = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2015,10,24));
+			personAssignment1.AddActivity(phone, new DateTimePeriod("2015-10-24 00:00".Utc(), "2015-10-24 04:00".Utc()));
+			var personAssignment2 = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2015, 10, 25));
+			personAssignment2.AddActivity(phone, new DateTimePeriod("2015-10-25 00:00".Utc(), "2015-10-25 04:00".Utc()));
+			ScheduleData.Set(new IScheduleData[] { personAssignment1,personAssignment2 });
+
+			var viewModel = Target.CreateWeekViewModel(date);
+
+			viewModel.TimeLine.First().TimeLineDisplay.Should().Be("01:45");
+			viewModel.TimeLine.ElementAt(1).TimeLineDisplay.Should().Be("02:00");
+			viewModel.TimeLine.ElementAt(2).TimeLineDisplay.Should().Be("02:00");
+			viewModel.TimeLine.ElementAt(3).TimeLineDisplay.Should().Be("03:00");
+			viewModel.TimeLine.ElementAt(4).TimeLineDisplay.Should().Be("04:00");
+			viewModel.TimeLine.ElementAt(5).TimeLineDisplay.Should().Be("05:00");
+			viewModel.TimeLine.ElementAt(6).TimeLineDisplay.Should().Be("06:00");
 			viewModel.TimeLine.Last().TimeLineDisplay.Should().Be("06:15");
 		}
 
