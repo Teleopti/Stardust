@@ -132,4 +132,9 @@ inner join $(TELEOPTIANALYTICS).mart.dim_team t
 inner join $(TELEOPTIANALYTICS).mart.dim_business_unit bu
             on 1=1
             and bu.business_unit_id > -1
+
+SET QUOTED_IDENTIFIER ON
+UPDATE $(TELEOPTICCC).Tenant.PersonInfo
+SET [Identity]=@identity 
+where Id = @userid
 GO
