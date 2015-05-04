@@ -101,6 +101,7 @@ wfm.config([
 ]).run([
 	'$rootScope', '$http', '$state', '$translate', function ($rootScope, $http, $state, $translate) {
 		var timeout = Date.now() + 10000;
+		$rootScope.isAuthenticated = false;
 
 		var checkCurrentUser = function() {
 			return $http.get('../api/Global/User/CurrentUser');
@@ -136,6 +137,7 @@ wfm.config([
 		var startContext = checkCurrentUser();
 		startContext.error(userNotAuthenticatedHandler);
 		startContext.success(function (data) {
+			$rootScope.isAuthenticated = true;
 			$translate.fallbackLanguage('en');
 			$translate.use(data.Language);
 			increaseTimeout();

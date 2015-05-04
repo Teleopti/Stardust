@@ -5,7 +5,7 @@
 		watch: {
 			dev: {
 				files: ['css/*.scss', 'js/**/*.js'],
-				tasks: ['uglify', 'sass', 'cssmin'],
+				tasks: ['uglify:dev', 'sass', 'cssmin'],
 				options: {
 					spawn: false,
 				}
@@ -50,6 +50,16 @@
 				files: {
 					'dist/main.min.js': ['js/**/*.js']
 				}
+			},
+			dev: {
+				options: {
+					sourceMap: true,
+					beautify: true,
+					mangle: false
+				},
+				files: {
+					'dist/main.min.js': ['js/**/*.js']
+				}
 			}
 		},
 
@@ -73,5 +83,5 @@
 	grunt.registerTask('default', ['watch:dev']); // this task watchs
 	grunt.registerTask('unitTest', ['watch:test']); // this task watchs
 
-	grunt.registerTask('dist', ['uglify', 'download', 'sass', 'cssmin']); // this task is kind of package
+	grunt.registerTask('dist', ['uglify:dist', 'download', 'sass', 'cssmin']); // this task is kind of package
 };
