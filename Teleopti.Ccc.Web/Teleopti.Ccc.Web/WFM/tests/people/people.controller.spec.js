@@ -102,7 +102,6 @@ describe("PeopleCtrl", function () {
 		expect(scope.keyword).toEqual("Paris/Team 1");
 	}));
 	 
-	//*
 	it("should show agent by search with option", inject(function ($controller) {
 		var scope = $rootScope.$new();
 
@@ -130,5 +129,4 @@ describe("PeopleCtrl", function () {
 		//expect(scope.keyword).toEqual("FirstName: (ashley,smith), Organization: (london,shenzhen)");
 		//expect(scope.keyword).toEqual("FirstName contains 'ashley,smith', Organization contains 'london,shenzhen'");
 	}));
-	//*/
 });

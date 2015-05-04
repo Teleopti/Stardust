@@ -141,40 +141,40 @@ function PeopleController($scope, $filter, $state, SearchSvrc) {
 		///advancedOptionForm.LastName
 		//triger search
 		var keyword = "";
-		if (!$scope.IsUndefinedOrEmpty($scope.advancedSearchForm.firstName)) {
+		if (!IsUndefinedOrEmpty($scope.advancedSearchForm.firstName)) {
 			keyword += "FirstName: " + $scope.advancedSearchForm.firstName + ", ";
 		}
-		if (!$scope.IsUndefinedOrEmpty($scope.advancedSearchForm.lastName)) {
+		if (!IsUndefinedOrEmpty($scope.advancedSearchForm.lastName)) {
 			keyword += "LastName: " + $scope.advancedSearchForm.lastName + ", ";
 		}
-		if (!$scope.IsUndefinedOrEmpty($scope.advancedSearchForm.employmentNumber)) {
+		if (!IsUndefinedOrEmpty($scope.advancedSearchForm.employmentNumber)) {
 			keyword += "EmploymentNumber: " + $scope.advancedSearchForm.employmentNumber + ", ";
 		}
-		if (!$scope.IsUndefinedOrEmpty($scope.advancedSearchForm.organization)) {
+		if (!IsUndefinedOrEmpty($scope.advancedSearchForm.organization)) {
 			keyword += "Organization: " + $scope.advancedSearchForm.organization + ", ";
 		}
-		if (!$scope.IsUndefinedOrEmpty($scope.advancedSearchForm.role)) {
+		if (!IsUndefinedOrEmpty($scope.advancedSearchForm.role)) {
 			keyword += "Role: " + $scope.advancedSearchForm.role + ", ";
 		}
-		if (!$scope.IsUndefinedOrEmpty($scope.advancedSearchForm.contract)) {
+		if (!IsUndefinedOrEmpty($scope.advancedSearchForm.contract)) {
 			keyword += "Contract: " + $scope.advancedSearchForm.contract + ", ";
 		}
-		if (!$scope.IsUndefinedOrEmpty($scope.advancedSearchForm.contractSchedule)) {
+		if (!IsUndefinedOrEmpty($scope.advancedSearchForm.contractSchedule)) {
 			keyword += "ContractSchedule: " + $scope.advancedSearchForm.contractSchedule + ", ";
 		}
-		if (!$scope.IsUndefinedOrEmpty($scope.advancedSearchForm.shiftBag)) {
+		if (!IsUndefinedOrEmpty($scope.advancedSearchForm.shiftBag)) {
 			keyword += "ShiftBag: " + $scope.advancedSearchForm.shiftBag + ", ";
 		}
-		if (!$scope.IsUndefinedOrEmpty($scope.advancedSearchForm.partTimePercentage)) {
+		if (!IsUndefinedOrEmpty($scope.advancedSearchForm.partTimePercentage)) {
 			keyword += "PartTimePercentage: " + $scope.advancedSearchForm.partTimePercentage + ", ";
 		}
-		if (!$scope.IsUndefinedOrEmpty($scope.advancedSearchForm.skill)) {
+		if (!IsUndefinedOrEmpty($scope.advancedSearchForm.skill)) {
 			keyword += "Skill: " + $scope.advancedSearchForm.skill + ", ";
 		}
-		if (!$scope.IsUndefinedOrEmpty($scope.advancedSearchForm.badgeGroup)) {
+		if (!IsUndefinedOrEmpty($scope.advancedSearchForm.badgeGroup)) {
 			keyword += "BadgeGroup: " + $scope.advancedSearchForm.badgeGroup + ", ";
 		}
-		if (!$scope.IsUndefinedOrEmpty($scope.advancedSearchForm.note)) {
+		if (!IsUndefinedOrEmpty($scope.advancedSearchForm.note)) {
 			keyword += "Note: " + $scope.advancedSearchForm.note + ", ";
 		}
 		if (keyword != "") {
@@ -200,8 +200,8 @@ function PeopleController($scope, $filter, $state, SearchSvrc) {
 		$scope.isAdvancedSearchEnabled = result.IsEnabled;
 	});
 
-	$scope.IsUndefinedOrEmpty = function(value) {
-		return value == undefined || value == "";
-	};
 	$scope.searchKeyword();
 }
+function IsUndefinedOrEmpty (value) {
+	return value == undefined || value == "";
+};
