@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public string GenerateKey()
 		{
-			return _activity + "|" + _skills.Key;
+			return string.Format(CultureInfo.InvariantCulture, "{0}|{1}", _activity, _skills.Key);
 		}
 	}
 }

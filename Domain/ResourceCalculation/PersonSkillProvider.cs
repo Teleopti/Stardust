@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				.Concat(personPeriod.PersonNonBlendSkillCollection.Where(s => s.Active && s.SkillPercentage.Value > 0))
 				.Select(s => s.Skill)
 				.Distinct()
-				.ToList();
+				.ToArray();
 
 			var skillEfficiencies =
 				personSkillCollection.Where(
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 			var key = SkillCombination.ToKey(skills.Where(s => !((IDeleteTag)s).IsDeleted).Select(s => s.Id.GetValueOrDefault()));
 
-			var combination = new SkillCombination(key, skills.ToArray(), personPeriod.Period, skillEfficiencies);
+			var combination = new SkillCombination(key, skills, personPeriod.Period, skillEfficiencies);
 			if (foundCombinations != null)
 			{
 				foundCombinations.Add(combination);

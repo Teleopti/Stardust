@@ -177,9 +177,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
         {
             guardAction(_ =>
             {
-                var deleteOptions = new PasteOptions();
-                deleteOptions.Default = true;
-                deleteInMainGrid(deleteOptions);
+                var deleteOptions = new PasteOptions {Default = true};
+	            deleteInMainGrid(deleteOptions);
             });
         }
 
@@ -187,9 +186,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
         {
             guardAction(_ =>
             {
-                var deleteOptions = new PasteOptions();
-                deleteOptions.PersonalShifts = true;
-                setCutMode(deleteOptions);
+                var deleteOptions = new PasteOptions {PersonalShifts = true};
+	            setCutMode(deleteOptions);
                 deleteInMainGrid(deleteOptions);
             });
         }
@@ -198,9 +196,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
         {
             guardAction(_ =>
             {
-                var deleteOptions = new PasteOptions();
-                deleteOptions.DayOff = true;
-                setCutMode(deleteOptions);
+                var deleteOptions = new PasteOptions {DayOff = true};
+	            setCutMode(deleteOptions);
                 deleteInMainGrid(deleteOptions);
             });
         }
@@ -209,9 +206,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
         {
             guardAction(_ =>
             {
-                var deleteOptions = new PasteOptions();
-                deleteOptions.Absences = PasteAction.Replace;
-                setCutMode(deleteOptions);
+                var deleteOptions = new PasteOptions {Absences = PasteAction.Replace};
+	            setCutMode(deleteOptions);
                 deleteInMainGrid(deleteOptions);
             });
         }
@@ -220,9 +216,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
         {
             guardAction(_ =>
             {
-                var deleteOptions = new PasteOptions();
-                deleteOptions.MainShift = true;
-                setCutMode(deleteOptions);
+                var deleteOptions = new PasteOptions {MainShift = true};
+	            setCutMode(deleteOptions);
                 deleteInMainGrid(deleteOptions);
             });
         }
@@ -270,13 +265,15 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
         public override void PasteSpecial()
         {
             var options = new PasteOptions();
-            var clipboardSpecialOptions = new ClipboardSpecialOptions();
-            clipboardSpecialOptions.ShowRestrictions = _scheduleView() is AgentRestrictionsDetailView;
-            clipboardSpecialOptions.DeleteMode = false;
-            clipboardSpecialOptions.ShowOvertimeAvailability = false;
-            clipboardSpecialOptions.ShowShiftAsOvertime = true;
+            var clipboardSpecialOptions = new ClipboardSpecialOptions
+            {
+	            ShowRestrictions = _scheduleView() is AgentRestrictionsDetailView,
+	            DeleteMode = false,
+	            ShowOvertimeAvailability = false,
+	            ShowShiftAsOvertime = true
+            };
 
-            guardAction(owner =>
+	        guardAction(owner =>
             {
 	            IEnumerable<IMultiplicatorDefinitionSet> multiplicatorDefinitionSets =
 		            new MultiplicatorsetForPasteSpecialFilter()
@@ -318,7 +315,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
                     (IScheduleDay) owner.SchedulerState.Schedules[scheduleDay.Person].ReFetch(scheduleDay).Clone();
 
                 part.Clear<IScheduleData>();
-                IEditableShift mainShift = workShift.ToEditorShift(part.DateOnlyAsPeriod.DateOnly,
+                IEditableShift mainShift = workShift.ToEditorShift(part.DateOnlyAsPeriod,
                     part.Person.PermissionInformation.DefaultTimeZone());
                 var category =
                     owner.SchedulerState.CommonStateHolder.ShiftCategories.FirstOrDefault(

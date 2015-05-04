@@ -1,5 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -37,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			workShift = _target.Convert(shiftToConvert, new DateOnly(2006, 12, 31), _timeZoneInfo);
 			Assert.AreEqual(expectedPeriod, workShift.Projection.Period());
 
-			var convertedBack = workShift.ToEditorShift(new DateOnly(2007, 1, 1), _timeZoneInfo);
+			var convertedBack = workShift.ToEditorShift(new DateOnlyAsDateTimePeriod(new DateOnly(2007, 1, 1), _timeZoneInfo),_timeZoneInfo);
 			Assert.AreSame(shiftToConvert.ShiftCategory, convertedBack.ShiftCategory);
 			Assert.IsTrue(equator.MainShiftEquals(shiftToConvert, convertedBack));
 		}

@@ -99,12 +99,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
             get { return _visualLayerCollection ?? (_visualLayerCollection = ProjectionService().CreateProjection()); }
         }
 
-        public IEditableShift ToEditorShift(DateOnly localMainShiftBaseDate, TimeZoneInfo localTimeZoneInfo)
+        public IEditableShift ToEditorShift(IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod, TimeZoneInfo localTimeZone)
         {
-            var utcDateBaseDate = TimeZoneHelper.ConvertToUtc(localMainShiftBaseDate.Date, localTimeZoneInfo);
-            var nextUtcDate = TimeZoneHelper.ConvertToUtc(localMainShiftBaseDate.Date.AddDays(1), localTimeZoneInfo);
+			var period = dateOnlyAsDateTimePeriod.Period();
+			var utcDateBaseDate = period.StartDateTime;
+	        var nextUtcDate = period.EndDateTime;
             if (nextUtcDate.AddMinutes(-1).Subtract(utcDateBaseDate) != TimeSpan.FromHours(24).Add(TimeSpan.FromMinutes(-1)))
-                return toMainShiftOnDaylightSavingChange(localMainShiftBaseDate.Date, localTimeZoneInfo);
+                return toMainShiftOnDaylightSavingChange(dateOnlyAsDateTimePeriod.DateOnly.Date, localTimeZone);
 
             var ret = new EditableShift(ShiftCategory);
             foreach (var layer in LayerCollection)

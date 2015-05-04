@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Interfaces.Domain;
@@ -19,15 +20,15 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     {
         private IEditableShift _mainShift;
         private readonly IWorkShift _workShift;
-	    private DateOnly _schedulingDate;
         private TimeSpan? _workShiftProjectionContractTime;
         private DateTimePeriod? _workShiftProjectionPeriod;
 	    private IVisualLayerCollection _mainshiftProjection;
         private TimeZoneInfo _localTimeZoneInfo;
         private DayOfWeek _dayOfWeek;
     	private readonly IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
+	    private IDateOnlyAsDateTimePeriod _dateOnlyAsPeriod;
 
-        protected ShiftProjectionCache()
+	    protected ShiftProjectionCache()
         { }
 
      
@@ -39,13 +40,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         public void SetDate(DateOnly schedulingDate, TimeZoneInfo localTimeZoneInfo)
         {
-            if (SchedulingDate != schedulingDate || !_localTimeZoneInfo.Equals(localTimeZoneInfo))
+            if (_dateOnlyAsPeriod == null || _dateOnlyAsPeriod.DateOnly != schedulingDate || _localTimeZoneInfo.Id != localTimeZoneInfo.Id)
             {
                 _localTimeZoneInfo = localTimeZoneInfo;
-                _schedulingDate = schedulingDate;
-                _dayOfWeek = SchedulingDate.DayOfWeek;
+                _dayOfWeek = schedulingDate.DayOfWeek;
 	            _mainShift = null;
                 _mainshiftProjection = null;
+	            _dateOnlyAsPeriod = new DateOnlyAsDateTimePeriod(schedulingDate, localTimeZoneInfo);
             }           
         }
         /// <summary>
@@ -62,7 +63,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	        get
 	        {
 		        if (_mainShift == null)
-					_mainShift = _workShift.ToEditorShift(_schedulingDate, _localTimeZoneInfo);
+					_mainShift = _workShift.ToEditorShift(_dateOnlyAsPeriod, _localTimeZoneInfo);
 				return _mainShift;
 	        }
         }
@@ -163,9 +164,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
     	}
 
-	    public DateOnly SchedulingDate
-	    {
-		    get { return _schedulingDate; }
-	    }
+	    public DateOnly SchedulingDate { get { return _dateOnlyAsPeriod == null ? DateOnly.MinValue : _dateOnlyAsPeriod.DateOnly; } }
     }
 }

@@ -34,14 +34,12 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
         /// Convert this instance to a main shift
         /// </summary>
-        /// <param name="localMainShiftBaseDate">The local main shift base date.</param>
-        /// <param name="localTimeZoneInfo">The local time zone info.</param>
         /// <returns></returns>
         /// <remarks>
         /// Created by: rogerkr
         /// Created date: 2009-03-02
         /// </remarks>
-		IEditableShift ToEditorShift(DateOnly localMainShiftBaseDate, TimeZoneInfo localTimeZoneInfo);
+		IEditableShift ToEditorShift(IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod, TimeZoneInfo localTimeZone);
 
         /// <summary>
         /// Convert the workshift datetime period to timeperiod.

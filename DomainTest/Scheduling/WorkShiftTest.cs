@@ -1,5 +1,6 @@
 using System;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Rhino.Mocks;
@@ -179,7 +180,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             target.LayerCollection.Add(layer2);
             TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Arabian Standard Time");
             DateTime baseDateLocal = TimeZoneHelper.ConvertFromUtc(WorkShift.BaseDate, timeZoneInfo).Date.AddDays(77);
-			IEditableShift mainShift = target.ToEditorShift(new DateOnly(baseDateLocal), timeZoneInfo);
+			IEditableShift mainShift = target.ToEditorShift(new DateOnlyAsDateTimePeriod(new DateOnly(baseDateLocal), timeZoneInfo),timeZoneInfo);
             Assert.AreEqual(2, mainShift.LayerCollection.Count);
             Assert.AreEqual(category, mainShift.ShiftCategory);
             Assert.AreEqual(layer1.Payload, mainShift.LayerCollection[0].Payload);
@@ -207,7 +208,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             target.LayerCollection.Add(layer2);
             var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
             var baseDateLocal = new DateOnly(2009,3,29);
-			IEditableShift mainShift = target.ToEditorShift(baseDateLocal, timeZoneInfo);
+			IEditableShift mainShift = target.ToEditorShift(new DateOnlyAsDateTimePeriod(baseDateLocal, timeZoneInfo),timeZoneInfo);
             IVisualLayerCollection layerCollectionWorkShift = target.ProjectionService().CreateProjection();
             IVisualLayerCollection layerCollection = mainShift.ProjectionService().CreateProjection();
             Assert.AreEqual(WorkShift.BaseDate.AddHours(1).AddMinutes(15).TimeOfDay, mainShift.LayerCollection[1].Period.StartDateTime.TimeOfDay);
@@ -236,7 +237,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Jordan Standard Time");
             
             var baseDateLocal = new DateOnly(2011, 4, 1);
-			IEditableShift mainShift = target.ToEditorShift(baseDateLocal, timeZoneInfo);
+			IEditableShift mainShift = target.ToEditorShift(new DateOnlyAsDateTimePeriod(baseDateLocal, timeZoneInfo),timeZoneInfo);
             IVisualLayerCollection layerCollectionWorkShift = target.ProjectionService().CreateProjection();
             IVisualLayerCollection layerCollection = mainShift.ProjectionService().CreateProjection();
             Assert.AreEqual(tp1.StartDateTime.Subtract(WorkShift.BaseDate), mainShift.LayerCollection[0].Period.StartDateTimeLocal(timeZoneInfo).TimeOfDay);
@@ -265,7 +266,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Jordan Standard Time");
 
             var baseDateLocal = new DateOnly(2011, 3, 31);
-			IEditableShift mainShift = target.ToEditorShift(baseDateLocal, timeZoneInfo);
+			IEditableShift mainShift = target.ToEditorShift(new DateOnlyAsDateTimePeriod(baseDateLocal, timeZoneInfo),timeZoneInfo);
             IVisualLayerCollection layerCollectionWorkShift = target.ProjectionService().CreateProjection();
             IVisualLayerCollection layerCollection = mainShift.ProjectionService().CreateProjection();
             Assert.AreEqual(tp1.StartDateTime.Subtract(WorkShift.BaseDate), mainShift.LayerCollection[0].Period.StartDateTimeLocal(timeZoneInfo).TimeOfDay);
@@ -288,7 +289,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             
             var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
             var baseDateLocal = new DateOnly(2009, 10, 25);
-			IEditableShift mainShift = target.ToEditorShift(baseDateLocal, timeZoneInfo);
+			IEditableShift mainShift = target.ToEditorShift(new DateOnlyAsDateTimePeriod(baseDateLocal, timeZoneInfo),timeZoneInfo);
             IVisualLayerCollection layerCollectionWorkShift = target.ProjectionService().CreateProjection();
             IVisualLayerCollection layerCollection = mainShift.ProjectionService().CreateProjection();
             Assert.AreEqual(WorkShift.BaseDate.AddHours(1).AddMinutes(15).TimeOfDay, mainShift.LayerCollection[0].Period.StartDateTime.TimeOfDay);
@@ -313,7 +314,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Arabian Standard Time");
 	        var shiftDate = new DateOnly(2000, 1, 1);
 			var utcShiftDateTime = TimeZoneInfo.ConvertTimeToUtc(shiftDate.Date,timeZoneInfo);
-			IEditableShift mainShift = target.ToEditorShift(shiftDate, timeZoneInfo);
+			IEditableShift mainShift = target.ToEditorShift(new DateOnlyAsDateTimePeriod(shiftDate, timeZoneInfo),timeZoneInfo);
             Assert.AreEqual(2, mainShift.LayerCollection.Count);
 			Assert.AreEqual(new DateTimePeriod(utcShiftDateTime.AddHours(22), utcShiftDateTime.AddHours(28)), mainShift.LayerCollection[0].Period);
 			Assert.AreEqual(new DateTimePeriod(utcShiftDateTime.AddHours(25), utcShiftDateTime.AddHours(26)), mainShift.LayerCollection[1].Period);

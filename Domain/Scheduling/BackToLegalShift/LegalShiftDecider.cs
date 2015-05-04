@@ -1,6 +1,7 @@
 ﻿
 
 using System;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Domain;
 
@@ -27,10 +28,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 			var shifts = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(date, timeZoneInfo, rulesetBag, false,
 				true);
 
+			var period = new DateOnlyAsDateTimePeriod(date, timeZoneInfo);
 			foreach (var shiftProjectionCach in shifts)
 			{
-				if (_scheduleDayEquator.MainShiftEquals(shiftProjectionCach.TheWorkShift.ToEditorShift(date, timeZoneInfo),
-					currentShiftProjectionCache.TheWorkShift.ToEditorShift(date, timeZoneInfo)))
+				if (_scheduleDayEquator.MainShiftEquals(shiftProjectionCach.TheWorkShift.ToEditorShift(period, timeZoneInfo),
+					currentShiftProjectionCache.TheWorkShift.ToEditorShift(period, timeZoneInfo)))
 					return true;
 			}
 

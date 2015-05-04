@@ -18,21 +18,22 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					fractionPeriod.HasValue ? new[] {fractionPeriod.Value} : new DateTimePeriod[] {}),
 				(s, d) =>
 					new InnerPeriodResourceDetail(d.Count + heads, d.Resource + resource, mergeEffiencyResources(skillCombination.SkillEfficiencies,d.EffiencyResources),
-						fractionPeriod.HasValue ? d.FractionPeriods.Append(fractionPeriod.Value).ToArray() : d.FractionPeriods));
+						fractionPeriod.HasValue ? d.FractionPeriods.Append(fractionPeriod.Value).ToArray() : d.FractionPeriods.ToArray()));
 		}
 
 		private SkillEffiencyResource[] mergeEffiencyResources(SkillEffiencyResource[] effiencyResources1,
 			SkillEffiencyResource[] effiencyResources2)
 		{
-			return effiencyResources1.Join(effiencyResources2, e1 => e1.Skill, e2 => e2.Skill,
-				(x, y) => new SkillEffiencyResource(x.Skill, x.Resource + y.Resource)).ToArray();
+			var result = effiencyResources1.Concat(effiencyResources2);
+			return result.GroupBy(x => x.Skill).Select(y => new SkillEffiencyResource(y.Key, y.Sum(z => z.Resource))).ToArray();
 		}
 
-		private SkillEffiencyResource[] subtractEffiencyResources(SkillEffiencyResource[] effiencyResources1,
-			SkillEffiencyResource[] effiencyResources2)
+		private SkillEffiencyResource[] subtractEffiencyResources(SkillEffiencyResource[] baseCollection,
+			SkillEffiencyResource[] subtractCollection)
 		{
-			return effiencyResources1.Join(effiencyResources2, e1 => e1.Skill, e2 => e2.Skill,
-				(x, y) => new SkillEffiencyResource(x.Skill, x.Resource - y.Resource)).ToArray();
+			var subtract = subtractCollection.Select(x => new SkillEffiencyResource(x.Skill, -x.Resource));
+			var result = baseCollection.Concat(subtract);
+			return result.GroupBy(x => x.Skill).Select(y => new SkillEffiencyResource(y.Key, Math.Min(y.Sum(z => z.Resource), 0))).ToArray();
 		}
 
 		public void RemoveResource(string key, SkillCombination skillCombination, double resource, DateTimePeriod? fractionPeriod)

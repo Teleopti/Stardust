@@ -73,9 +73,7 @@ namespace Teleopti.Interfaces.Domain
 		{
             if (!scheduleDay.HasProjection())
             {
-	            var emptyTask = new TaskCompletionSource<object>();
-				emptyTask.SetResult(null);
-	            return emptyTask.Task;
+	            return Task.FromResult(true);
             }
 
 			return Task.Factory.StartNew(() =>
