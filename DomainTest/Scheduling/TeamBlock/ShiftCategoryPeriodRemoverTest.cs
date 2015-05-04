@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private ShiftCategoryLimitation _shiftCategoryLimitation;
 		private ISchedulingOptions _schedulingOptions;
 		private IOptimizationPreferences _optimizationPreferences;
+		private IVirtualSchedulePeriod _schedulePeriod;
 
 
 		[SetUp]
@@ -47,6 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_shiftCategoryLimitation.MaxNumberOf = 0;
 			_schedulingOptions = new SchedulingOptions();
 			_optimizationPreferences = new OptimizationPreferences();
+			_schedulePeriod = _mock.StrictMock<IVirtualSchedulePeriod>();
 			_target = new ShiftCategoryPeriodRemover(_teamBlockRemoveShiftCategoryOnBestDateService);
 		}
 
@@ -57,8 +59,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mock.Record())
 			{
 				Expect.Call(_scheduleMatrixPro.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(_scheduleDayPros)).Repeat.AtLeastOnce();
-				Expect.Call(_scheduleDayPro.Day).Return(_dateOnly).Repeat.AtLeastOnce();
-
+				Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_schedulePeriod);
+				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
 				Expect.Call(_teamBlockRemoveShiftCategoryOnBestDateService.IsThisDayCorrectShiftCategory(_scheduleDayPro, _shiftCategory)).Return(true);
 				Expect.Call(_teamBlockRemoveShiftCategoryOnBestDateService.Execute(_shiftCategory, _schedulingOptions, _scheduleMatrixPro, _dateOnlyPeriod, _optimizationPreferences)).Return(_scheduleDayPro);
 				Expect.Call(_teamBlockRemoveShiftCategoryOnBestDateService.IsThisDayCorrectShiftCategory(_scheduleDayPro, _shiftCategory)).Return(false);

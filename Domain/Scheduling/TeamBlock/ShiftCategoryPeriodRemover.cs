@@ -20,16 +20,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		public IList<IScheduleDayPro> RemoveShiftCategoryOnPeriod(IShiftCategoryLimitation limitation, ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro, IOptimizationPreferences optimizationPreferences)
 		{
-
-			IList<IScheduleDayPro> periodDays = new List<IScheduleDayPro>(scheduleMatrixPro.EffectivePeriodDays);
-            var start = periodDays[0].Day;
-            var end = periodDays[periodDays.Count - 1].Day;
-            var period = new DateOnlyPeriod(start, end);
-
 			IList<IScheduleDayPro> result = new List<IScheduleDayPro>();
 			while (isShiftCategoryOverPeriodLimit(limitation, scheduleMatrixPro))
 			{
-				var thisResult = _teamBlockRemoveShiftCategoryOnBestDateService.Execute(limitation.ShiftCategory, schedulingOptions, scheduleMatrixPro, period, optimizationPreferences);
+				var thisResult = _teamBlockRemoveShiftCategoryOnBestDateService.Execute(limitation.ShiftCategory, schedulingOptions, scheduleMatrixPro, scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod, optimizationPreferences);
 				if (thisResult != null)
 				{
 					schedulingOptions.NotAllowedShiftCategories.Add(limitation.ShiftCategory);
