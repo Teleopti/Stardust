@@ -10,8 +10,8 @@ describe("PeopleCtrl", function () {
 		$q = _$q_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
-		$httpBackend.whenGET("../api/Global/Language?lang=en").respond(200, 'mock');
-		$httpBackend.whenGET("../api/Global/User/CurrentUser").respond(200, 'mock');
+		$httpBackend.expectGET("../api/Global/Language?lang=en").respond(200, 'mock');
+		$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, 'mock');
 	}));
 	 
 	var mockSearchService = {
@@ -101,7 +101,8 @@ describe("PeopleCtrl", function () {
 
 		expect(scope.keyword).toEqual("Paris/Team 1");
 	}));
-
+	 
+	//*
 	it("should show agent by search with option", inject(function ($controller) {
 		var scope = $rootScope.$new();
 
@@ -129,4 +130,5 @@ describe("PeopleCtrl", function () {
 		//expect(scope.keyword).toEqual("FirstName: (ashley,smith), Organization: (london,shenzhen)");
 		//expect(scope.keyword).toEqual("FirstName contains 'ashley,smith', Organization contains 'london,shenzhen'");
 	}));
+	//*/
 });
