@@ -1,4 +1,3 @@
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
@@ -9,11 +8,13 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 	{
 		private readonly IChangePasswordView _view;
 		private readonly IChangePassword _changePassword;
+		private readonly IPerson _loggedOnPerson;
 
-		public ChangePasswordPresenter(IChangePasswordView view, IChangePassword changePassword)
+		public ChangePasswordPresenter(IChangePasswordView view, IChangePassword changePassword, IPerson loggedOnPerson)
 		{
 			_view = view;
 			_changePassword = changePassword;
+			_loggedOnPerson = loggedOnPerson;
 		}
 
 		public ChangePasswordModel Model { get; private set; }
@@ -32,20 +33,19 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 				_view.ShowValidationError();
 				return;
 			}
-			var loggedOnUser = ((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person;
 			var res =
 				_changePassword.SetNewPassword(new ChangePasswordInput
 				{
 					NewPassword = Model.NewPassword,
 					OldPassword = Model.OldPassword,
-					PersonId = loggedOnUser.Id.Value
+					PersonId = _loggedOnPerson.Id.Value
 				});
 			if (!res.Success)
 			{
 				_view.ShowValidationError();
 				return;
 			}
-			loggedOnUser.ApplicationAuthenticationInfo.Password = Model.NewPassword;
+			_loggedOnPerson.ApplicationAuthenticationInfo.Password = Model.NewPassword;
 			_view.Close();
 		}
 
