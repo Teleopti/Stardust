@@ -140,7 +140,6 @@ function PeopleController($scope, $filter, $state, SearchSvrc) {
 		$scope.showAdvancedSearchOption = false;
 		///advancedOptionForm.LastName
 		//triger search
-		console.log("$scope.advancedSearchForm.FirstName", $scope.advancedSearchForm.firstName);
 		var keyword = "";
 		if (!$scope.IsUndefinedOrEmpty($scope.advancedSearchForm.firstName)) {
 			keyword += "FirstName: " + $scope.advancedSearchForm.firstName + ", ";
@@ -198,7 +197,6 @@ function PeopleController($scope, $filter, $state, SearchSvrc) {
 	}
 
 	SearchSvrc.isAdvancedSearchEnabled.query({ toggle: 'WfmPeople_AdvancedSearch_32973' }).$promise.then(function (result) {
-		console.log("[LIXF] Toggle enabled:", result.IsEnabled);
 		$scope.isAdvancedSearchEnabled = result.IsEnabled;
 	});
 
