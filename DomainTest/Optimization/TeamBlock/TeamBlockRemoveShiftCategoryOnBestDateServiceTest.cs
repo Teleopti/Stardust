@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -30,6 +31,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 		private IPersonSkill _personSkill;
 		private ISkill _skill;
 		private IList<ISkill> _skills;
+		private IScheduleMatrixValueCalculatorProFactory _matrixValueCalculatorProFactory;
+		private IScheduleFairnessCalculator _scheduleFairnessCalculator;
+		private IOptimizationPreferences _optimizationPreferences;
+		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 		
 		[SetUp]
 		public void SetUp()
@@ -51,7 +56,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			_personSkill = _mock.StrictMock<IPersonSkill>();
 			_skill = _mock.StrictMock<ISkill>();
 			_skills = new List<ISkill>{_skill};
-			_target = new TeamBlockRemoveShiftCategoryOnBestDateService(_scheduleDayService);	
+			_matrixValueCalculatorProFactory = _mock.StrictMock<IScheduleMatrixValueCalculatorProFactory>();
+			_scheduleFairnessCalculator = _mock.StrictMock<IScheduleFairnessCalculator>();
+			_optimizationPreferences = new OptimizationPreferences();
+			_schedulingResultStateHolder = _mock.StrictMock<ISchedulingResultStateHolder>();
+			_target = new TeamBlockRemoveShiftCategoryOnBestDateService(_scheduleDayService, _matrixValueCalculatorProFactory,_scheduleFairnessCalculator);	
 		}
 
 		[Test]
@@ -71,14 +80,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 				Expect.Call(_person.Period(_dateOnly)).Return(_personPeriod);
 				Expect.Call(_personPeriod.PersonSkillCollection).Return(new List<IPersonSkill> {_personSkill});
 				Expect.Call(_personSkill.Skill).Return(_skill);
+				Expect.Call(_matrixValueCalculatorProFactory.CreateScheduleMatrixValueCalculatorPro(_dateOnlyPeriod.DayCollection(), _optimizationPreferences, _schedulingResultStateHolder, _scheduleFairnessCalculator)).Return(_scheduleMatrixValueCalculator);
 				Expect.Call(_scheduleMatrixValueCalculator.DayValueForSkills(_dateOnly, _skills)).Return(10d);
+				Expect.Call(_scheduleMatrixPro.SchedulingStateHolder).Return(_schedulingResultStateHolder);
 
 				Expect.Call(_scheduleDayService.DeleteMainShift(new List<IScheduleDay> { _scheduleDay }, _schedulingOptions));
 			}
 
 			using (_mock.Playback())
 			{
-				var result = _target.Execute(_shiftCategory, _schedulingOptions, _scheduleMatrixValueCalculator, _scheduleMatrixPro, _dateOnlyPeriod);
+				var result = _target.Execute(_shiftCategory, _schedulingOptions, _scheduleMatrixPro, _dateOnlyPeriod, _optimizationPreferences);
 				Assert.AreEqual(_scheduleDayPro, result);
 			}
 		}

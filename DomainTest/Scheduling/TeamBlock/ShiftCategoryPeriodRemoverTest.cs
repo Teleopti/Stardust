@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -21,13 +22,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private IScheduleMatrixPro _scheduleMatrixPro;
 		private IScheduleDayPro _scheduleDayPro;
 		private IList<IScheduleDayPro> _scheduleDayPros;
-		private IScheduleMatrixValueCalculatorPro _scheduleMatrixValueCalculatorPro;
 		private ITeamBlockRemoveShiftCategoryOnBestDateService _teamBlockRemoveShiftCategoryOnBestDateService;
 		private DateOnly _dateOnly;
 		private DateOnlyPeriod _dateOnlyPeriod;
 		private ShiftCategory _shiftCategory;
 		private ShiftCategoryLimitation _shiftCategoryLimitation;
 		private ISchedulingOptions _schedulingOptions;
+		private IOptimizationPreferences _optimizationPreferences;
 
 
 		[SetUp]
@@ -37,7 +38,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_scheduleMatrixPro = _mock.StrictMock<IScheduleMatrixPro>();
 			_scheduleDayPro = _mock.StrictMock<IScheduleDayPro>();
 			_scheduleDayPros = new List<IScheduleDayPro> {_scheduleDayPro};
-			_scheduleMatrixValueCalculatorPro = _mock.StrictMock<IScheduleMatrixValueCalculatorPro>();
 			_teamBlockRemoveShiftCategoryOnBestDateService = _mock.StrictMock<ITeamBlockRemoveShiftCategoryOnBestDateService>();
 			_dateOnly = new DateOnly(2015, 1, 1);
 			_dateOnlyPeriod = new DateOnlyPeriod(_dateOnly, _dateOnly);
@@ -46,6 +46,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_shiftCategoryLimitation = new ShiftCategoryLimitation(_shiftCategory);
 			_shiftCategoryLimitation.MaxNumberOf = 0;
 			_schedulingOptions = new SchedulingOptions();
+			_optimizationPreferences = new OptimizationPreferences();
 			_target = new ShiftCategoryPeriodRemover(_teamBlockRemoveShiftCategoryOnBestDateService);
 		}
 
@@ -59,13 +60,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_scheduleDayPro.Day).Return(_dateOnly).Repeat.AtLeastOnce();
 
 				Expect.Call(_teamBlockRemoveShiftCategoryOnBestDateService.IsThisDayCorrectShiftCategory(_scheduleDayPro, _shiftCategory)).Return(true);
-				Expect.Call(_teamBlockRemoveShiftCategoryOnBestDateService.Execute(_shiftCategory, _schedulingOptions, _scheduleMatrixValueCalculatorPro, _scheduleMatrixPro, _dateOnlyPeriod)).Return(_scheduleDayPro);
+				Expect.Call(_teamBlockRemoveShiftCategoryOnBestDateService.Execute(_shiftCategory, _schedulingOptions, _scheduleMatrixPro, _dateOnlyPeriod, _optimizationPreferences)).Return(_scheduleDayPro);
 				Expect.Call(_teamBlockRemoveShiftCategoryOnBestDateService.IsThisDayCorrectShiftCategory(_scheduleDayPro, _shiftCategory)).Return(false);
 			}
 
 			using (_mock.Playback())
 			{
-				var result =_target.RemoveShiftCategoryOnPeriod(_shiftCategoryLimitation, _schedulingOptions, _scheduleMatrixValueCalculatorPro, _scheduleMatrixPro);
+				var result = _target.RemoveShiftCategoryOnPeriod(_shiftCategoryLimitation, _schedulingOptions, _scheduleMatrixPro, _optimizationPreferences);
 				Assert.AreEqual(result[0], _scheduleDayPro);
 				Assert.AreEqual(1, _schedulingOptions.NotAllowedShiftCategories.Count);
 				Assert.AreEqual(_shiftCategory, _schedulingOptions.NotAllowedShiftCategories[0]);

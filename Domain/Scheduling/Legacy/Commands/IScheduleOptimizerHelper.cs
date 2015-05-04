@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock;
+using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
@@ -30,7 +32,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 	public class RequiredScheduleHelper : IRequiredScheduleHelper
 	{
-		private readonly ISchedulePeriodListShiftCategoryBackToLegalStateService _shiftCategoryBackToLegalState;
 		private readonly IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak _ruleSetBagsOfGroupOfPeopleCanHaveShortBreak;
 		private readonly Func<ISchedulingResultStateHolder> _resultStateHolder;
 		private readonly Func<IFixedStaffSchedulingService> _fixedStaffSchedulingService;
@@ -44,10 +45,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private readonly IScheduleDayEquator _scheduleDayEquator;
 		private readonly IMatrixListFactory _matrixListFactory;
+		private readonly ITeamBlockRemoveShiftCategoryBackToLegalService _teamBlockRemoveShiftCategoryBackToLegalService;
 
-		public RequiredScheduleHelper(ISchedulePeriodListShiftCategoryBackToLegalStateService shiftCategoryBackToLegalState, IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak ruleSetBagsOfGroupOfPeopleCanHaveShortBreak, Func<ISchedulingResultStateHolder> resultStateHolder, Func<IFixedStaffSchedulingService> fixedStaffSchedulingService, IStudentSchedulingService studentSchedulingService, Func<IOptimizationPreferences> optimizationPreferences, IScheduleService scheduleService, IResourceOptimizationHelper resourceOptimizationHelper, IGridlockManager gridlockManager, IDaysOffSchedulingService daysOffSchedulingService, Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder,IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleDayEquator scheduleDayEquator, IMatrixListFactory matrixListFactory)
+		public RequiredScheduleHelper(IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak ruleSetBagsOfGroupOfPeopleCanHaveShortBreak, Func<ISchedulingResultStateHolder> resultStateHolder, Func<IFixedStaffSchedulingService> fixedStaffSchedulingService, IStudentSchedulingService studentSchedulingService, Func<IOptimizationPreferences> optimizationPreferences, IScheduleService scheduleService, IResourceOptimizationHelper resourceOptimizationHelper, IGridlockManager gridlockManager, IDaysOffSchedulingService daysOffSchedulingService, Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder,IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleDayEquator scheduleDayEquator, IMatrixListFactory matrixListFactory, ITeamBlockRemoveShiftCategoryBackToLegalService teamBlockRemoveShiftCategoryBackToLegalService)
 		{
-			_shiftCategoryBackToLegalState = shiftCategoryBackToLegalState;
 			_ruleSetBagsOfGroupOfPeopleCanHaveShortBreak = ruleSetBagsOfGroupOfPeopleCanHaveShortBreak;
 			_resultStateHolder = resultStateHolder;
 			_fixedStaffSchedulingService = fixedStaffSchedulingService;
@@ -61,6 +62,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_scheduleDayEquator = scheduleDayEquator;
 			_matrixListFactory = matrixListFactory;
+			_teamBlockRemoveShiftCategoryBackToLegalService = teamBlockRemoveShiftCategoryBackToLegalService;
 		}
 
 		public void RemoveShiftCategoryBackToLegalState(
@@ -79,7 +81,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				if (backgroundWorker.CancellationPending)
 					return;
 
-				_shiftCategoryBackToLegalState.Execute(matrixList, schedulingOptions, optimizationPreferences, _resourceOptimizationHelper);
+				var schedulePartModifyAndRollbackService = new SchedulePartModifyAndRollbackService(_resultStateHolder(), _scheduleDayChangeCallback, new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
+				var shiftNudgeDirective = new ShiftNudgeDirective();
+				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, schedulingOptions.ConsiderShortBreaks);
+
+				for (var i = 0; i < 2; i++)
+				{
+					foreach (var matrix in matrixList)
+					{
+						_teamBlockRemoveShiftCategoryBackToLegalService.Execute(schedulingOptions, matrix, _resultStateHolder(), schedulePartModifyAndRollbackService, resourceCalculateDelayer, matrixList, shiftNudgeDirective, optimizationPreferences);
+					}
+				}
 			}
 		}
 

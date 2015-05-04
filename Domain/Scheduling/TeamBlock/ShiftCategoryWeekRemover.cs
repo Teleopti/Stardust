@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 	public interface IShiftCategoryWeekRemover
 	{
-		IList<IScheduleDayPro> Remove(IShiftCategoryLimitation shiftCategoryLimitation, ISchedulingOptions schedulingOptions, IScheduleMatrixValueCalculatorPro scheduleMatrixValueCalculatorPro, IScheduleMatrixPro scheduleMatrixPro);
+		IList<IScheduleDayPro> Remove(IShiftCategoryLimitation shiftCategoryLimitation, ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro, IOptimizationPreferences optimizationPreferences);
 	}
 
 	public class ShiftCategoryWeekRemover : IShiftCategoryWeekRemover
@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_teamBlockRemoveShiftCategoryOnBestDateService = teamBlockRemoveShiftCategoryOnBestDateService;
 		}
 
-		public IList<IScheduleDayPro> Remove(IShiftCategoryLimitation shiftCategoryLimitation, ISchedulingOptions schedulingOptions, IScheduleMatrixValueCalculatorPro scheduleMatrixValueCalculatorPro, IScheduleMatrixPro scheduleMatrixPro)
+		public IList<IScheduleDayPro> Remove(IShiftCategoryLimitation shiftCategoryLimitation, ISchedulingOptions schedulingOptions,  IScheduleMatrixPro scheduleMatrixPro, IOptimizationPreferences optimizationPreferences)
 		{
 			IList<IScheduleDayPro> days = scheduleMatrixPro.FullWeeksPeriodDays;
 			IList<IScheduleDayPro> result = new List<IScheduleDayPro>();
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				while (categoryCounter > shiftCategoryLimitation.MaxNumberOf)
 				{
 					var periodForWeek = new DateOnlyPeriod(days[o].Day, days[o].Day.AddDays(6));
-					var thisResult = _teamBlockRemoveShiftCategoryOnBestDateService.Execute(shiftCategoryLimitation.ShiftCategory, schedulingOptions, scheduleMatrixValueCalculatorPro, scheduleMatrixPro, periodForWeek);
+					var thisResult = _teamBlockRemoveShiftCategoryOnBestDateService.Execute(shiftCategoryLimitation.ShiftCategory, schedulingOptions, scheduleMatrixPro, periodForWeek, optimizationPreferences);
 
 					if (thisResult != null)
 					{

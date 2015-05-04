@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 	public interface IShiftCategoryPeriodRemover
 	{
-		IList<IScheduleDayPro> RemoveShiftCategoryOnPeriod(IShiftCategoryLimitation limitation, ISchedulingOptions schedulingOptions, IScheduleMatrixValueCalculatorPro scheduleMatrixValueCalculator, IScheduleMatrixPro scheduleMatrixPro);
+		IList<IScheduleDayPro> RemoveShiftCategoryOnPeriod(IShiftCategoryLimitation limitation, ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro, IOptimizationPreferences optimizationPreferences);
 	}
 
 	public class ShiftCategoryPeriodRemover : IShiftCategoryPeriodRemover
@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_teamBlockRemoveShiftCategoryOnBestDateService = teamBlockRemoveShiftCategoryOnBestDateService;
 		}
 
-		public IList<IScheduleDayPro> RemoveShiftCategoryOnPeriod(IShiftCategoryLimitation limitation, ISchedulingOptions schedulingOptions, IScheduleMatrixValueCalculatorPro scheduleMatrixValueCalculator, IScheduleMatrixPro scheduleMatrixPro)
+		public IList<IScheduleDayPro> RemoveShiftCategoryOnPeriod(IShiftCategoryLimitation limitation, ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro, IOptimizationPreferences optimizationPreferences)
 		{
 
 			IList<IScheduleDayPro> periodDays = new List<IScheduleDayPro>(scheduleMatrixPro.EffectivePeriodDays);
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			IList<IScheduleDayPro> result = new List<IScheduleDayPro>();
 			while (isShiftCategoryOverPeriodLimit(limitation, scheduleMatrixPro))
 			{
-				var thisResult = _teamBlockRemoveShiftCategoryOnBestDateService.Execute(limitation.ShiftCategory, schedulingOptions, scheduleMatrixValueCalculator, scheduleMatrixPro, period);
+				var thisResult = _teamBlockRemoveShiftCategoryOnBestDateService.Execute(limitation.ShiftCategory, schedulingOptions, scheduleMatrixPro, period, optimizationPreferences);
 				if (thisResult != null)
 				{
 					schedulingOptions.NotAllowedShiftCategories.Add(limitation.ShiftCategory);
