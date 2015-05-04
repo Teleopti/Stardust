@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 									sb.AppendLine();
 									sb.Append("    ");
 									sb.Append(
-										personalLayer.Payload.ConfidentialDescription(ass.Person, scheduleDay.DateOnlyAsPeriod.DateOnly).Name);
+										personalLayer.Payload.ConfidentialDescription(ass.Person).Name);
 									sb.Append(": ");
 									sb.Append(ToLocalStartEndTimeString(personalLayer.Period, timeZoneInfo, cultureInfo));
 								}

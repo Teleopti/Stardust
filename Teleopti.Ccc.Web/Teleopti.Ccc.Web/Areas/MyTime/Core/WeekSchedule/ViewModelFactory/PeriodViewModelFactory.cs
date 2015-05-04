@@ -14,10 +14,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 	public class PeriodViewModelFactory : IPeriodViewModelFactory
     {
 		private readonly IMappingEngine _mapper;
+		private readonly IUserTimeZone _timeZone;
 
-		public PeriodViewModelFactory(IMappingEngine mapper)
+		public PeriodViewModelFactory(IMappingEngine mapper, IUserTimeZone timeZone)
 		{
 			_mapper = mapper;
+			_timeZone = timeZone;
 		}
 
 		public IEnumerable<PeriodViewModel> CreatePeriodViewModels(IEnumerable<IVisualLayer> visualLayerCollection, TimePeriod minMaxTime, DateTime localDate, TimeZoneInfo timeZone)
@@ -50,19 +52,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
                                                                                CultureInfo.CurrentUICulture),
                                     Title = visualLayer.DisplayDescription().Name,
                                     TimeSpan =
-                                        visualLayer.Period.TimePeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone).
+										visualLayer.Period.TimePeriod(_timeZone.TimeZone()).
                                         ToShortTimeString(),
                                     StyleClassName = colorToString(visualLayer.DisplayColor()),
                                     Meeting = meetingModel,
                                     Color = visualLayer.DisplayColor().ToCSV(),
                                     StartPositionPercentage =
                                         (decimal)
-                                        (visualLayer.VisualPeriod.TimePeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone).
+										(visualLayer.VisualPeriod.TimePeriod(_timeZone.TimeZone()).
                                              StartTime - minMaxTime.StartTime).Ticks/
                                         (minMaxTime.EndTime - minMaxTime.StartTime).Ticks,
                                     EndPositionPercentage =
                                         (decimal)
-                                        (visualLayer.VisualPeriod.TimePeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone).
+										(visualLayer.VisualPeriod.TimePeriod(_timeZone.TimeZone()).
                                              EndTime - minMaxTime.StartTime).Ticks/
                                         (minMaxTime.EndTime - minMaxTime.StartTime).Ticks
                                 });

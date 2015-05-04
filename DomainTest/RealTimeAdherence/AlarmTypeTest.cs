@@ -27,9 +27,9 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
 		public void VerifyProperties()
 		{
 			Assert.AreEqual(_description, _target.Description);
-			Assert.AreEqual(_description, _target.ConfidentialDescription(null, new DateOnly()));
+			Assert.AreEqual(_description, _target.ConfidentialDescription(null));
 			Assert.AreEqual(_color, _target.DisplayColor);
-			Assert.AreEqual(_color, _target.ConfidentialDisplayColor(null, new DateOnly()));
+			Assert.AreEqual(_color, _target.ConfidentialDisplayColor(null));
 			Assert.AreEqual(_thresholdTime, _target.ThresholdTime);
 			Assert.AreEqual(_staffingEffect, _target.StaffingEffect);
 			Assert.IsNull(_target.Tracker);

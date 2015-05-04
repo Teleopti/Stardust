@@ -178,7 +178,7 @@ namespace Teleopti.Ccc.TestCommon
 			var absence = MockRepository.GenerateStub<IAbsence>();
 			absence.Description = new Description(name);
 			absence.DisplayColor = color;
-			absence.Stub(x => x.ConfidentialDisplayColor(Arg<IPerson>.Is.Anything, Arg<DateOnly>.Is.Anything)).Return(Color.Gray);
+			absence.Stub(x => x.ConfidentialDisplayColor(Arg<IPerson>.Is.Anything)).Return(Color.Gray);
 			return absence;
 		}
 

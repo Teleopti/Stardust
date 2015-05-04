@@ -63,10 +63,10 @@ namespace Teleopti.Ccc.Win.Scheduling
     	private void drawAbsenceAndDayOff(GridDrawCellEventArgs e, IScheduleDay scheduleDay)
     	{
 			IAbsence absence = SignificantAbsence(scheduleDay);
-			String shortName = absence.ConfidentialDescription(scheduleDay.Person,scheduleDay.DateOnlyAsPeriod.DateOnly).ShortName;
+			String shortName = absence.ConfidentialDescription(scheduleDay.Person).ShortName;
 			SizeF stringWidth = e.Graphics.MeasureString(shortName, CellFontBig);
 			Point point = new Point(e.Bounds.X - (int)stringWidth.Width / 2 + e.Bounds.Width / 2, e.Bounds.Y - (int)stringWidth.Height / 2 + e.Bounds.Height / 2);
-			using (HatchBrush brush = new HatchBrush(HatchStyle.LightUpwardDiagonal, Color.LightGray, absence.ConfidentialDisplayColor(scheduleDay.Person,scheduleDay.DateOnlyAsPeriod.DateOnly)))
+			using (HatchBrush brush = new HatchBrush(HatchStyle.LightUpwardDiagonal, Color.LightGray, absence.ConfidentialDisplayColor(scheduleDay.Person)))
 			{
 				GridHelper.FillRoundedRectangle(e.Graphics, e.Bounds, 1, brush, -4);
 				e.Graphics.DrawString(shortName, CellFontBig, Brushes.Black, point);
@@ -104,12 +104,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void drawAbsenceFromSchedule(GridDrawCellEventArgs e, IScheduleDay scheduleDay)
 		{
 			IAbsence absence = SignificantAbsence(scheduleDay);
-			String shortName = absence.ConfidentialDescription(scheduleDay.Person,scheduleDay.DateOnlyAsPeriod.DateOnly).ShortName;
+			String shortName = absence.ConfidentialDescription(scheduleDay.Person).ShortName;
 			SizeF stringWidth = e.Graphics.MeasureString(shortName, CellFontBig);
 			Point point = new Point(e.Bounds.X - (int) stringWidth.Width/2 + e.Bounds.Width/2,
 			                        e.Bounds.Y - (int) stringWidth.Height/2 + e.Bounds.Height/2);
 
-			using (SolidBrush brush = new SolidBrush(absence.ConfidentialDisplayColor(scheduleDay.Person,scheduleDay.DateOnlyAsPeriod.DateOnly)))
+			using (SolidBrush brush = new SolidBrush(absence.ConfidentialDisplayColor(scheduleDay.Person)))
 			{
 				GridHelper.FillRoundedRectangle(e.Graphics, e.Bounds, 1, brush, -4);
 				e.Graphics.DrawString(shortName, CellFontBig, Brushes.Black, point);

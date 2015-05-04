@@ -56,14 +56,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
             }
         }
 
-		public Description ConfidentialDescription(IPerson assignedPerson, DateOnly assignedDate)
+		public Description ConfidentialDescription(IPerson assignedPerson)
         {
-            return _meeting.Activity.ConfidentialDescription(assignedPerson, assignedDate);
+            return _meeting.Activity.ConfidentialDescription(assignedPerson);
         }
 
-		public Color ConfidentialDisplayColor(IPerson assignedPerson, DateOnly assignedDate)
+		public Color ConfidentialDisplayColor(IPerson assignedPerson)
         {
-            return _meeting.Activity.ConfidentialDisplayColor(assignedPerson, assignedDate);
+            return _meeting.Activity.ConfidentialDisplayColor(assignedPerson);
         }
 
         public override IPayload UnderlyingPayload

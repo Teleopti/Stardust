@@ -26,8 +26,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
             Assert.AreEqual(_name, _target.Name);
             Assert.AreEqual(_available, _target.Available);
             Assert.AreEqual(_defaultStateGroup, _target.DefaultStateGroup);
-            Assert.AreEqual(Color.Empty,_target.ConfidentialDisplayColor(null,DateOnly.Today));
-            Assert.AreEqual(_name,_target.ConfidentialDescription(null,DateOnly.Today).Name);
+            Assert.AreEqual(Color.Empty,_target.ConfidentialDisplayColor(null));
+            Assert.AreEqual(_name,_target.ConfidentialDescription(null).Name);
             Assert.IsFalse(_target.InContractTime);
             Assert.IsFalse(_target.IsLogOutState);
             Assert.IsNull(_target.Tracker);
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
             _target.IsLogOutState = true;
 
             Assert.AreEqual("newName",_target.Name);
-            Assert.AreEqual("newName", _target.ConfidentialDescription(null,DateOnly.Today).Name);
+            Assert.AreEqual("newName", _target.ConfidentialDescription(null).Name);
             Assert.IsFalse(_target.Available);
             Assert.IsTrue(_target.DefaultStateGroup);
             Assert.IsTrue(_target.IsLogOutState);

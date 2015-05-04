@@ -74,8 +74,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
 			DateOnlyPeriod period, IScenario scenario)
 		{
-			var thePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDate(period.StartDate, period.EndDate, TimeZoneInfo.Utc);
-			return ScheduleDictionaryForTest.WithScheduleData(person, scenario, thePeriod, _data.ToArray());
+			return ScheduleDictionaryForTest.WithScheduleData(person, scenario, period.ToDateTimePeriod(TimeZoneInfo.Utc), _data.ToArray());
 		}
 
 		public IScheduleDictionary FindSchedulesForPersonsOnlyInGivenPeriod(IEnumerable<IPerson> persons,

@@ -96,12 +96,12 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
     		_stateCollection.Remove(state);
     	}
 
-    	public virtual Description ConfidentialDescription(IPerson assignedPerson, DateOnly assignedDate)
+    	public virtual Description ConfidentialDescription(IPerson assignedPerson)
         {
             return new Description(_name);
         }
 
-		public virtual Color ConfidentialDisplayColor(IPerson assignedPerson, DateOnly assignedDate)
+		public virtual Color ConfidentialDisplayColor(IPerson assignedPerson)
         {
             return Color.Empty;
         }

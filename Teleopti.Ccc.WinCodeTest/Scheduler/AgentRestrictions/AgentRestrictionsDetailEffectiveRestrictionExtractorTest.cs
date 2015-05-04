@@ -157,10 +157,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			}
 
 			var absencePayload = part.PersonAbsenceCollection()[0].Layer.Payload;
-			var absenceDescription = absencePayload.ConfidentialDescription(_person, dateOnly);
+			var absenceDescription = absencePayload.ConfidentialDescription(_person);
 			Assert.AreEqual(absenceDescription.Name, _preferenceCellData.DisplayName);
 			Assert.AreEqual(absenceDescription.ShortName, _preferenceCellData.DisplayShortName);
-			Assert.AreEqual(absencePayload.ConfidentialDisplayColor(_person,dateOnly), _preferenceCellData.DisplayColor);
+			Assert.AreEqual(absencePayload.ConfidentialDisplayColor(_person), _preferenceCellData.DisplayColor);
 			Assert.IsTrue(_preferenceCellData.HasFullDayAbsence);
 			Assert.AreEqual(TimeHelper.GetLongHourMinuteTimeString(projection.ContractTime(), TeleoptiPrincipal.CurrentPrincipal.Regional.Culture), _preferenceCellData.ShiftLengthScheduledShift);
 			

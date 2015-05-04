@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 				    sb.AppendLine();
 				    sb.Append("    ");
-				    sb.Append(layer.Payload.ConfidentialDescription(pa.Person, scheduleDay.DateOnlyAsPeriod.DateOnly).Name);
+				    sb.Append(layer.Payload.ConfidentialDescription(pa.Person).Name);
 				    //name
 				    sb.Append(": ");
                         sb.Append(ToLocalStartEndTimeString(layer.Period, TimeZoneGuard.Instance.TimeZone)); //time
@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 {
                     if (sb.Length > 0) sb.AppendLine();
 
-                    sb.Append(pa.Layer.Payload.ConfidentialDescription(pa.Person,cell.DateOnlyAsPeriod.DateOnly).Name); //name
+                    sb.Append(pa.Layer.Payload.ConfidentialDescription(pa.Person).Name); //name
                     sb.Append(": ");
                     sb.Append(ToLocalStartEndTimeStringAbsences(cell.Period, pa.Layer.Period, TimeZoneGuard.Instance.TimeZone));
                 }
@@ -233,7 +233,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 if (sb.Length > 0) sb.AppendLine();
                 sb.Append(layer.DefinitionSet.Name);
                 sb.Append(": ");
-                sb.Append(layer.Payload.ConfidentialDescription(cell.Person,cell.DateOnlyAsPeriod.DateOnly).Name);
+                sb.Append(layer.Payload.ConfidentialDescription(cell.Person).Name);
                 sb.Append(": ");
                 sb.Append(ToLocalStartEndTimeString(layer.Period, TimeZoneGuard.Instance.TimeZone));
             }

@@ -764,14 +764,14 @@ namespace Teleopti.Ccc.Win.Scheduling
             {
 				if (significantPart == SchedulePartView.ContractDayOff)
 				{
-					using (var brush = new HatchBrush(HatchStyle.LightUpwardDiagonal, Color.LightGray, layer.Payload.ConfidentialDisplayColor(person, dateOnly)))
+					using (var brush = new HatchBrush(HatchStyle.LightUpwardDiagonal, Color.LightGray, layer.Payload.ConfidentialDisplayColor(person)))
 					{
 						e.Graphics.FillRectangle(brush, rect);
 					}
 				}
 				else
 				{
-					using (LinearGradientBrush lBrush = GridHelper.GetGradientBrush(rect,layer.Payload.ConfidentialDisplayColor(person, dateOnly)))
+					using (LinearGradientBrush lBrush = GridHelper.GetGradientBrush(rect,layer.Payload.ConfidentialDisplayColor(person)))
 					{
 						e.Graphics.FillRectangle(lBrush, rect);
 					}

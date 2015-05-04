@@ -134,8 +134,7 @@ namespace Teleopti.Ccc.WinCode.Common
 			{
 				var vs = Layer as IVisualLayer;
 				return vs == null
-						   ? Layer.Payload.ConfidentialDisplayColor(SchedulePart.Person,
-																	 SchedulePart.DateOnlyAsPeriod.DateOnly)
+						   ? Layer.Payload.ConfidentialDisplayColor(SchedulePart.Person)
 						   : vs.DisplayColor();
 			}
 		}
@@ -150,7 +149,7 @@ namespace Teleopti.Ccc.WinCode.Common
 			get
 			{
 				var vs = Layer as IVisualLayer;
-				return vs == null ? Layer.Payload.ConfidentialDescription(SchedulePart.Person, SchedulePart.DateOnlyAsPeriod.DateOnly).Name : vs.DisplayDescription().Name;
+				return vs == null ? Layer.Payload.ConfidentialDescription(SchedulePart.Person).Name : vs.DisplayDescription().Name;
 			}
 		}
 

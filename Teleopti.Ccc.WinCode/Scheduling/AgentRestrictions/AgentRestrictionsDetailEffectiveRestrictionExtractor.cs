@@ -111,13 +111,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
             IEffectiveRestriction totalRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),new WorkTimeLimitation(), null, null, null,new List<IActivityRestriction>());
             totalRestriction = totalRestriction.Combine(new EffectiveRestriction(startTimeLimitation, endTimeLimitation, workTimeLimitation, null,null, null, new List<IActivityRestriction>()));
 
-			var description = scheduleDay.PersonAbsenceCollection()[0].Layer.Payload.ConfidentialDescription(scheduleDay.Person,
-			                                                                                                 scheduleDay.
-			                                                                                                 	DateOnlyAsPeriod.
-			                                                                                                 	DateOnly);
+			var description = scheduleDay.PersonAbsenceCollection()[0].Layer.Payload.ConfidentialDescription(scheduleDay.Person);
 			preferenceCellData.DisplayName = description.Name;
 			preferenceCellData.DisplayShortName = description.ShortName;
-			preferenceCellData.DisplayColor = scheduleDay.PersonAbsenceCollection()[0].Layer.Payload.ConfidentialDisplayColor(scheduleDay.Person,scheduleDay.DateOnlyAsPeriod.DateOnly);
+			preferenceCellData.DisplayColor = scheduleDay.PersonAbsenceCollection()[0].Layer.Payload.ConfidentialDisplayColor(scheduleDay.Person);
 			preferenceCellData.HasFullDayAbsence = true;
 			preferenceCellData.ShiftLengthScheduledShift = TimeHelper.GetLongHourMinuteTimeString(projection.ContractTime(),TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
 			preferenceCellData.StartEndScheduledShift = period.Value.TimePeriod(TimeZoneGuard.Instance.TimeZone).ToShortTimeString(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);

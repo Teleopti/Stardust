@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 							        select new PersonalShiftViewModel
 								        {
 									        Subject =
-														layer.Payload.ConfidentialDescription(assignment.Person, s.DateOnlyAsPeriod.DateOnly).Name,
+														layer.Payload.ConfidentialDescription(assignment.Person).Name,
 									        TimeSpan =
 												ScheduleDayStringVisualizer.ToLocalStartEndTimeString(layer.Period, _userTimeZone.TimeZone(), CultureInfo.CurrentCulture)
 								        }).ToList();

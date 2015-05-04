@@ -24,8 +24,8 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
         {
         	var period = _dateTimePeriodAssembler.DomainEntityToDto(entity.Period);
             var activity = _activityAssembler.DomainEntityToDto(entity.Payload);
-            activity.Description = entity.Payload.ConfidentialDescription(_person,new DateOnly(period.LocalStartDateTime)).Name;
-            activity.DisplayColor = new ColorDto(entity.Payload.ConfidentialDisplayColor(_person,new DateOnly(period.LocalStartDateTime)));
+            activity.Description = entity.Payload.ConfidentialDescription(_person).Name;
+            activity.DisplayColor = new ColorDto(entity.Payload.ConfidentialDisplayColor(_person));
 
             return new OvertimeLayerDto
                        {

@@ -131,12 +131,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
             return String.Concat(Description.Name, ", ", base.ToString());
         }
 
-		public virtual Description ConfidentialDescription(IPerson assignedPerson, DateOnly assignedDate)
+		public virtual Description ConfidentialDescription(IPerson assignedPerson)
 		{
 			return Description;
 		}
 
-		public virtual Color ConfidentialDisplayColor(IPerson assignedPerson, DateOnly assignedDate)
+		public virtual Color ConfidentialDisplayColor(IPerson assignedPerson)
 		{
 			return DisplayColor;
 		}

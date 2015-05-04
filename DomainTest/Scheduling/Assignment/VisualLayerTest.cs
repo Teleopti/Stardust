@@ -40,9 +40,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             Description d = new Description("sdfsdf");
             using(mocks.Record())
             {
-                Expect.Call(act.ConfidentialDescription(target.Person,new DateOnly(2000,1,1)))
+                Expect.Call(act.ConfidentialDescription(target.Person))
                     .Return(d);
-				Expect.Call(act.ConfidentialDisplayColor(target.Person, new DateOnly(2000, 1, 1)))
+				Expect.Call(act.ConfidentialDisplayColor(target.Person))
                     .Return(c);
             }
             using(mocks.Playback())
