@@ -1,10 +1,8 @@
 <div class="material-block-content">
 	<div class="row">
-		<div class="col-lg-12">
-			<h4>
-				Period from {{period.startDate | date : shortDate}} to {{period.endDate | date : shortDate}}
-			</h4>
-		</div>
+		<h4>
+			Period from {{period.startDate | date : shortDate}} to {{period.endDate | date : shortDate}}
+		</h4>
 	</div>
 	<div ng-if="result" ng-class="result.success ? 'success' : 'fail'">
 		{{result.message}}
