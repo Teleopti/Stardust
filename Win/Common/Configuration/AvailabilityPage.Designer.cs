@@ -400,6 +400,7 @@
 			this.gridControlAvailability.Text = "gridControl1";
 			this.gridControlAvailability.ThemesEnabled = true;
 			this.gridControlAvailability.UseRightToLeftCompatibleTextBox = true;
+			this.gridControlAvailability.KeyDown += new System.Windows.Forms.KeyEventHandler(this.gridControlAvailability_KeyDown);
 			// 
 			// gradientPanelHeader
 			// 
@@ -441,7 +442,7 @@
 			this.labelHeader.Location = new System.Drawing.Point(3, 6);
 			this.labelHeader.Name = "labelHeader";
 			this.labelHeader.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
-			this.labelHeader.Size = new System.Drawing.Size(259, 25);
+			this.labelHeader.Size = new System.Drawing.Size(261, 25);
 			this.labelHeader.TabIndex = 0;
 			this.labelHeader.Text = "xxChangeYourAvailabilities";
 			// 

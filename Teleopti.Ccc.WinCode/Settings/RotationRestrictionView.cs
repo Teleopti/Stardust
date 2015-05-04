@@ -131,8 +131,8 @@ namespace Teleopti.Ccc.WinCode.Settings
         /// <param name="maxTime"></param>
         private void OnTimeChanged(TimeSpan? minTime, TimeSpan? maxTime)
         {
-            if (minTime.HasValue || maxTime.HasValue)
-                DayOffTemplate = null;
+			if (minTime.HasValue || maxTime.HasValue)
+				DayOffTemplate = null;
         }
 
         public void AssignValuesToDomainObject()

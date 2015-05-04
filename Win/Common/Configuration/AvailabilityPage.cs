@@ -526,5 +526,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			get { return ViewType.Availability; }
 		}
+
+		//bugfix #33189: Syncfusion grid crash when cutting ctrl+x
+		private void gridControlAvailability_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.Control && e.KeyCode == Keys.X)
+				e.Handled = true;
+		}
 	}
 }

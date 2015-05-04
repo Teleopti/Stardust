@@ -807,5 +807,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			get { return ViewType.Rotation; }
 		}
+
+		//bugfix #33189: Syncfusion grid crash when cutting ctrl+x
+		private void gridControlRotation_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.Control && e.KeyCode == Keys.X)
+				e.Handled = true;
+		}
 	}
 }

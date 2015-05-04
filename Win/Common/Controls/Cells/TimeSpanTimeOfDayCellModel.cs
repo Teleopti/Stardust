@@ -45,12 +45,12 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
             // Get culture specified in style, default if null
             CultureInfo ci = style.GetCulture(true);
 
-			//if (value == null)
-			//{
-			//	style.Enabled = false;
-			//	style.CellType = "Static";
-			//	return string.Empty;
-			//}
+			if (value == null)
+			{
+				style.Enabled = false;
+				style.CellType = "Static";
+				return string.Empty;
+			}
 
             TimeSpan timeSpan = (TimeSpan) value;
             return TimeHelper.TimeOfDayFromTimeSpan(timeSpan, ci);

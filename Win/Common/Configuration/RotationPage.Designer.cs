@@ -401,6 +401,7 @@
 			this.gridControlRotation.Text = "gridControl1";
 			this.gridControlRotation.ThemesEnabled = true;
 			this.gridControlRotation.UseRightToLeftCompatibleTextBox = true;
+			this.gridControlRotation.KeyDown += new System.Windows.Forms.KeyEventHandler(this.gridControlRotation_KeyDown);
 			// 
 			// gradientPanelHeader
 			// 
@@ -442,7 +443,7 @@
 			this.labelHeader.Location = new System.Drawing.Point(3, 6);
 			this.labelHeader.Name = "labelHeader";
 			this.labelHeader.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
-			this.labelHeader.Size = new System.Drawing.Size(234, 25);
+			this.labelHeader.Size = new System.Drawing.Size(236, 25);
 			this.labelHeader.TabIndex = 0;
 			this.labelHeader.Text = "xxChangeYourRotations";
 			// 
