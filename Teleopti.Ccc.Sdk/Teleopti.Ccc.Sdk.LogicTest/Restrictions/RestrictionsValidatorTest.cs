@@ -234,7 +234,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
                 Expect.Call(_stateHolder.Schedules).Return(_dictionary).Repeat.AtLeastOnce();
                 Expect.Call(_dictionary[_person]).Return(_range).Repeat.AtLeastOnce();
                 Expect.Call(_range.ScheduledDay(dateOnly)).IgnoreArguments().Repeat.AtLeastOnce().Return(_part);
-            	Expect.Call(_part.DateOnlyAsPeriod).Return(dateOnlyAsPeriod).Repeat.AtLeastOnce();
+	            Expect.Call(_part.DateOnlyAsPeriod).Return(dateOnlyAsPeriod).Repeat.Any();
                 Expect.Call(_part.PersistableScheduleDataCollection()).Return(data).Repeat.AtLeastOnce();
                 Expect.Call(_part.PersonAssignment()).Return(personAssignment).Repeat.AtLeastOnce();
                 Expect.Call(_part.RestrictionCollection()).Return(new List<IRestrictionBase>()).Repeat.AtLeastOnce();

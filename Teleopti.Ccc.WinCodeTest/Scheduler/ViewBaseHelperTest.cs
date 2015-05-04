@@ -241,9 +241,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(part.Period).Return(partStartperiod);
                 Expect.Call(part.Period).Return(partMiddlePeriod);
                 Expect.Call(part.Period).Return(partEndPeriod);
-				Expect.Call(part.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(partStartperiod.StartDateTime), TimeZoneGuard.Instance.TimeZone));
-				Expect.Call(part.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(partMiddlePeriod.StartDateTime), TimeZoneGuard.Instance.TimeZone));
-				Expect.Call(part.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(partEndPeriod.StartDateTime), TimeZoneGuard.Instance.TimeZone));
             }
 
             using (_mockRep.Playback())
