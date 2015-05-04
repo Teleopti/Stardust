@@ -21,17 +21,5 @@ namespace Teleopti.Ccc.Domain.Backlog
 			var task =  _incomingTaskFactory.Create(new DateOnlyPeriod(startDate, endDate), totalWorkItems, averageWorkTimePerItem);
 			_incomingTasks.Add(task);
 		}
-
-		public void SetManualTimeOnDate(DateOnly date, TimeSpan time)
-		{
-			
-		}
-
-		private IEnumerable<IncomingTask> tasksAffected(DateOnly date)
-		{
-			return _incomingTasks.Where(t => t.SpanningPeriod.Contains(date)).OrderBy(t => t.SpanningPeriod.StartDate);
-		}
-
-
 	}
 }

@@ -297,6 +297,12 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Backlog\AddCampaign.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Backlog\AddCampaign.Designer.cs">
+      <DependentUpon>AddCampaign.cs</DependentUpon>
+    </Compile>
     <Compile Include="Backlog\BacklogCategory.cs" />
     <Compile Include="Backlog\BacklogEditableGridRow.cs" />
     <Compile Include="Backlog\BacklogGridExpandedRow.cs" />
@@ -315,6 +321,12 @@
     </Compile>
     <Compile Include="Backlog\BacklogView.Designer.cs">
       <DependentUpon>BacklogView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Backlog\OutboundView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Backlog\OutboundView.Designer.cs">
+      <DependentUpon>OutboundView.cs</DependentUpon>
     </Compile>
     <Compile Include="Backlog\SkillMapperDialog.cs">
       <SubType>Form</SubType>
@@ -2621,11 +2633,17 @@
     <Compile Include="Sikuli\Validators\SelftestValidators\SelftestFailValidator.cs" />
     <Compile Include="Sikuli\Validators\SelftestValidators\SelftestPassValidator.cs" />
     <Compile Include="Sikuli\Helpers\ValidatorHelper.cs" />
+    <EmbeddedResource Include="Backlog\AddCampaign.resx">
+      <DependentUpon>AddCampaign.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Backlog\BacklogSelector.resx">
       <DependentUpon>BacklogSelector.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Backlog\BacklogView.resx">
       <DependentUpon>BacklogView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Backlog\OutboundView.resx">
+      <DependentUpon>OutboundView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Backlog\SkillMapperDialog.resx">
       <DependentUpon>SkillMapperDialog.cs</DependentUpon>
@@ -3149,6 +3167,10 @@
     <ProjectReference Include="..\Teleopti.Ccc.SmartClientPortal\Teleopti.Common.UI.SmartPartControls\Teleopti.Common.UI.SmartPartControls.csproj">
       <Project>{92d88c7b-2401-4bc2-8f89-b919dbc6d143}</Project>
       <Name>Teleopti.Common.UI.SmartPartControls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.SmartParts\Teleopti.Ccc.SmartParts.csproj">
+      <Project>{2D32D355-5660-4DD7-B45B-655363F42550}</Project>
+      <Name>Teleopti.Ccc.SmartParts</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.SyncfusionGridBinding\Teleopti.Ccc.SyncfusionGridBinding.csproj">
       <Project>{D40E1F39-988C-42F2-B5AF-DE42DB5B11A9}</Project>
