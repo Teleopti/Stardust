@@ -1,30 +1,7 @@
-﻿.label:hover, .tab-group input[type=radio]:checked + .label{
-	background-color: #0099FF; 
-}
-
-/* Extract in styleguide */
-.input-prepend i{
-	color: rgba(0, 0, 0, 0.54);
-	width: 18px;
-	&:before{
-		vertical-align: sub;
-	}
-}
-
-.input-prepend input[type="text"]{
-	width: auto;
-}
-
-input[type="text"]{
-	height: 20px;
-}
-
-.tab-group .label{
+﻿.tab-group .label{
 	  line-height: initial;
 		text-transform: capitalize;
 }
-
-
 
 .permissions-tree {
 	li {
@@ -55,75 +32,10 @@ input[type="text"]{
 
 }
 
-.animate-show {
-  opacity: 1;
-  background: white;
-}
-
-.animate-show.ng-hide-add.ng-hide-add-active,
-.animate-show.ng-hide-remove.ng-hide-remove-active {
-  -webkit-transition: all linear 0.2s;
-  transition: all linear 0.2s;
-}
-
-.animate-show.ng-hide {
-  line-height: 0;
-  opacity: 0;
-}
-
 .permissions-list {
 	table-layout:auto;
 }
 
-.wfm-radio-list {
-	margin-bottom: 5px;
-	cursor: pointer;
-	word-wrap: break-word;
-	vertical-align: middle;
-}
-
-.wfm-radio-list-item.selected {
-	background-color: #9CCC65;
-	font-weight:normal;
-	&:hover{
-		font-weight:normal;
-	}
-}
-
-.wfm-radio-list-item:hover {
-	font-weight:normal;
-}
-
 p {
 	margin-bottom: 5px;
-}
-
-
-
-
-md-select.md-default-theme:not([disabled]):focus .md-select-label{
-	border-bottom: #ec38a3 1px solid;
-	padding: 0;
-}
-
-md-select-menu.md-default-theme md-option:hover {
-	background-color: #E0E0E0;
-}
-
-md-select-menu.md-default-theme md-option[selected], md-select-menu.md-default-theme md-option[selected]:focus{
-	background-color: #c2e085;
-}
-
-md-select {
-	margin-top: auto;
-	.md-select-label{
-		padding: 0;
-		height: 21px;
-		font-size: 15px;
-	}
-
-}
-
-md-option{
-	height: 30px;
 }
