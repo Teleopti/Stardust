@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -14,8 +13,6 @@ namespace Teleopti.Ccc.WinCode.Matrix
 	{
 		IEnumerable<IMatrixFunctionGroup> GroupedPermittedMatrixFunctions { get; }
 		IEnumerable<IApplicationFunction> OrphanPermittedMatrixFunctions { get; }
-		AuthenticationTypeOption AuthenticationType { get; }
-		Guid? BusinessUnitId { get; }
 		IEnumerable<IApplicationFunction> PermittedOnlineReportFunctions { get; }
 		IEnumerable<IApplicationFunction> PermittedMatrixFunctions { get; }
 	}
@@ -218,21 +215,6 @@ namespace Teleopti.Ccc.WinCode.Matrix
 						 where groupedMatrixFunctionForeignIds.Contains(f.ForeignId) == false
 						 select f;
 			}
-		}
-
-		public AuthenticationTypeOption AuthenticationType
-		{
-			get { return StateHolderReader.Instance.StateReader.SessionScopeData.AuthenticationTypeOption; }
-		}
-
-		public Guid? BusinessUnitId
-		{
-			get { return ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit.Id; }
-		}
-
-		public string DataSourceName
-		{
-			get { return ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).DataSource.DataSourceName; }
 		}
 	}
 

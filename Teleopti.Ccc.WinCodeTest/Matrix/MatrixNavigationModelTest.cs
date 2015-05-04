@@ -28,22 +28,6 @@ namespace Teleopti.Ccc.WinCodeTest.Matrix
 		}
 
 		[Test]
-		public void ShouldProvideAuthenticationType()
-		{
-			var expectedAuthenticationTypeOption = StateHolderReader.Instance.StateReader.SessionScopeData.AuthenticationTypeOption;
-			AuthenticationTypeOption actualAuthenticationTypeOption = _target.AuthenticationType;
-			Assert.That(actualAuthenticationTypeOption, Is.EqualTo(expectedAuthenticationTypeOption));
-		}
-
-		[Test]
-		public void ShouldProvideBusinessUnitId()
-		{
-			var expectedBusinessUnitId = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit.Id;
-			var actualBusinessUnitId = _target.BusinessUnitId;
-			Assert.That(expectedBusinessUnitId, Is.EqualTo(actualBusinessUnitId));
-		}
-
-		[Test]
 		public void ShouldProvidePermittedMatrixFunctions()
 		{
 			var authorization = _mocks.StrictMock<IPrincipalAuthorization>();
