@@ -7,14 +7,12 @@ describe("OutboundService", function () {
 	beforeEach(module('wfm'));
 
 	beforeEach(inject(function (_$httpBackend_) {
-
-
 		$httpBackend = _$httpBackend_;
 
-		$httpBackend.expectGET("../api/Global/Language?lang=en").respond(200, 'mock');
-		$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, 'mock');
+		$httpBackend.whenGET("../api/Global/Language?lang=en").respond(200, 'mock');
+		$httpBackend.whenGET("../api/Global/User/CurrentUser").respond(200, 'mock');
 
-		$httpBackend.expectGET("html/forecasting/forecasting.html").respond(200, 'mock');
+		$httpBackend.whenGET("html/forecasting/forecasting.html").respond(200, 'mock');
 	}));
 
 	it("should be able to list campaigns", inject(function (OutboundService) {
