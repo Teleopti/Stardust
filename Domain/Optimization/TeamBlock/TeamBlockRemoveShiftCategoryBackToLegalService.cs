@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
 	public interface ITeamBlockRemoveShiftCategoryBackToLegalService
 	{
-		bool Execute(IVirtualSchedulePeriod schedulePeriod, ISchedulingOptions schedulingOptions, IScheduleMatrixValueCalculatorPro scheduleMatrixValueCalculator, IScheduleMatrixPro scheduleMatrixPro, ISchedulingResultStateHolder schedulingResultStateHolder, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleMatrixPro> allScheduleMatrixPros, ShiftNudgeDirective shiftNudgeDirective);
+		bool Execute(ISchedulingOptions schedulingOptions, IScheduleMatrixValueCalculatorPro scheduleMatrixValueCalculator, IScheduleMatrixPro scheduleMatrixPro, ISchedulingResultStateHolder schedulingResultStateHolder, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleMatrixPro> allScheduleMatrixPros, ShiftNudgeDirective shiftNudgeDirective);
 	}
 
 	public class TeamBlockRemoveShiftCategoryBackToLegalService : ITeamBlockRemoveShiftCategoryBackToLegalService
@@ -19,8 +19,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
 		private readonly IShiftCategoryWeekRemover _shiftCategoryWeekRemover;
 		private readonly IShiftCategoryPeriodRemover _shiftCategoryPeriodRemover;
+		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
 
-		public TeamBlockRemoveShiftCategoryBackToLegalService(ITeamBlockScheduler teamBlockScheduler, ITeamInfoFactory teamInfoFactory, ITeamBlockInfoFactory teamBlockInfoFactory, ITeamBlockClearer teamBlockClearer,  ITeamBlockSchedulingOptions teamBlockSchedulingOptions, IShiftCategoryWeekRemover shiftCategoryWeekRemover, IShiftCategoryPeriodRemover shiftCategoryPeriodRemover)
+		public TeamBlockRemoveShiftCategoryBackToLegalService(ITeamBlockScheduler teamBlockScheduler, ITeamInfoFactory teamInfoFactory, ITeamBlockInfoFactory teamBlockInfoFactory, ITeamBlockClearer teamBlockClearer,  ITeamBlockSchedulingOptions teamBlockSchedulingOptions, IShiftCategoryWeekRemover shiftCategoryWeekRemover, IShiftCategoryPeriodRemover shiftCategoryPeriodRemover, ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation)
 		{
 			_teamBlockScheduler = teamBlockScheduler;
 			_teamInfoFactory = teamInfoFactory;
@@ -29,14 +30,17 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_teamBlockSchedulingOptions = teamBlockSchedulingOptions;
 			_shiftCategoryWeekRemover = shiftCategoryWeekRemover;
 			_shiftCategoryPeriodRemover = shiftCategoryPeriodRemover;
+			_safeRollbackAndResourceCalculation = safeRollbackAndResourceCalculation;
 		}
 
-		public bool Execute(IVirtualSchedulePeriod schedulePeriod, ISchedulingOptions schedulingOptions, IScheduleMatrixValueCalculatorPro scheduleMatrixValueCalculator, IScheduleMatrixPro scheduleMatrixPro, ISchedulingResultStateHolder schedulingResultStateHolder, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleMatrixPro> allScheduleMatrixPros, ShiftNudgeDirective shiftNudgeDirective)
+		public bool Execute(ISchedulingOptions schedulingOptions, IScheduleMatrixValueCalculatorPro scheduleMatrixValueCalculator, IScheduleMatrixPro scheduleMatrixPro, ISchedulingResultStateHolder schedulingResultStateHolder, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleMatrixPro> allScheduleMatrixPros, ShiftNudgeDirective shiftNudgeDirective)
 		{
 			var success = true;
 			var removedScheduleDayPros = new List<IScheduleDayPro>();
 			var isSingleAgentTeam = _teamBlockSchedulingOptions.IsSingleAgentTeam(schedulingOptions);
-
+			var schedulePeriod = scheduleMatrixPro.SchedulePeriod;
+			var person = scheduleMatrixPro.Person;
+			
 			foreach (var limitation in schedulePeriod.ShiftCategoryLimitationCollection())
 			{
 				if (limitation.Weekly) removedScheduleDayPros.AddRange(_shiftCategoryWeekRemover.Remove(limitation, schedulingOptions, scheduleMatrixValueCalculator, scheduleMatrixPro));
@@ -44,9 +48,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				
 				foreach (var removedScheduleDayPro in removedScheduleDayPros)
 				{
+					rollbackService.ClearModificationCollection();
+
 					var dateOnly = removedScheduleDayPro.Day;
 					var dateOnlyPeriod = new DateOnlyPeriod(dateOnly, dateOnly);
-					var teamInfo = _teamInfoFactory.CreateTeamInfo(removedScheduleDayPro.DaySchedulePart().Person, dateOnlyPeriod, allScheduleMatrixPros);
+					var teamInfo = _teamInfoFactory.CreateTeamInfo(person, dateOnlyPeriod, allScheduleMatrixPros);
 					var teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly, schedulingOptions.BlockFinderTypeForAdvanceScheduling, isSingleAgentTeam);
 					if (teamBlockInfo == null) continue;
 
@@ -57,18 +63,12 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					success = _teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, dateOnly, schedulingOptions, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, shiftNudgeDirective);
 					if (success) continue;
 
-					rollbackService.Rollback();
-					
-					foreach (var selectedBlockDay in teamBlockInfo.BlockInfo.UnLockedDates())
-					{
-						resourceCalculateDelayer.CalculateIfNeeded(selectedBlockDay, null);
-					}
+					_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
 				}
 			}
 
-			if(!_teamBlockSchedulingOptions.IsTeamScheduling(schedulingOptions) && !_teamBlockSchedulingOptions.IsTeamBlockScheduling(schedulingOptions)) 
-				schedulingOptions.NotAllowedShiftCategories.Clear();
-
+			if (isSingleAgentTeam) schedulingOptions.NotAllowedShiftCategories.Clear();
+			
 			return success;
 		}
 	}

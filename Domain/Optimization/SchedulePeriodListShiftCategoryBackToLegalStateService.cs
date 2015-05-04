@@ -44,15 +44,15 @@ namespace Teleopti.Ccc.Domain.Optimization
                     _stateHolder(), 
                     _fairnessCalculator);
 
+			var schedulePartModifyAndRollbackService = new SchedulePartModifyAndRollbackService(_stateHolder(), _scheduleDayChangeCallback(), new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
+			var shiftNudgeDirective = new ShiftNudgeDirective();
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(resourceOptimizationHelper, 1, true, schedulingOptions.ConsiderShortBreaks);
 
 			for (var i = 0; i < 2; i++)
 			{
 				foreach (var matrix in scheduleMatrixList)
 				{
-					var schedulePartModifyAndRollbackService = new SchedulePartModifyAndRollbackService(_stateHolder(), _scheduleDayChangeCallback(), new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
-					var shiftNudgeDirective = new ShiftNudgeDirective();
-					var resourceCalculateDelayer = new ResourceCalculateDelayer(resourceOptimizationHelper, 1, true, schedulingOptions.ConsiderShortBreaks);
-					_teamBlockRemoveShiftCategoryBackToLegalService.Execute(matrix.SchedulePeriod, schedulingOptions, scheduleMatrixValueCalculator, matrix, _stateHolder(), schedulePartModifyAndRollbackService, resourceCalculateDelayer, scheduleMatrixList, shiftNudgeDirective); 
+					_teamBlockRemoveShiftCategoryBackToLegalService.Execute(schedulingOptions, scheduleMatrixValueCalculator, matrix, _stateHolder(), schedulePartModifyAndRollbackService, resourceCalculateDelayer, scheduleMatrixList, shiftNudgeDirective); 
 				}
 			}
         }
