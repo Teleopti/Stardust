@@ -43,9 +43,6 @@
 		},
 
 		uglify: {
-			options: {
-				sourceMap: true
-			},
 			dist: {
 				files: {
 					'dist/main.min.js': ['js/**/*.js']
