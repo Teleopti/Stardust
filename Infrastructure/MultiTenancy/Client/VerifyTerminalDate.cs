@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 			var tenant = _applicationData().DataSource(tenantName);
 			using (var uow = tenant.Application.CreateAndOpenUnitOfWork())
 			{
+				//could be a bit efficient if needed - only load terminaldate column. Wait with that though - premature opt...
 				var person = new PersonRepository(uow).Get(personId);
 				var terminalDate = person.TerminalDate;
 				return terminalDate.HasValue && terminalDate.Value < DateOnly.Today;
