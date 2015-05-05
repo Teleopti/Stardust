@@ -1,16 +1,21 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Runtime.InteropServices;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 {
 	public class AuthenticationFromFileQuerier : IAuthenticationQuerier
 	{
 		private readonly ITenantServerConfiguration _tenantServerConfiguration;
+		private readonly Func<IApplicationData> _applicationData;
 
-		public AuthenticationFromFileQuerier(ITenantServerConfiguration tenantServerConfiguration)
+		public AuthenticationFromFileQuerier(ITenantServerConfiguration tenantServerConfiguration, Func<IApplicationData> applicationData)
 		{
 			_tenantServerConfiguration = tenantServerConfiguration;
+			_applicationData = applicationData;
 		}
 
 		public AuthenticationQueryResult TryLogon(ApplicationLogonClientModel applicationLogonClientModel, string userAgent)
@@ -29,7 +34,10 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 				return new AuthenticationQueryResult { FailReason = string.Format("No file with name {0}", _tenantServerConfiguration.Path), Success = false };
 
 			var json = File.ReadAllText(_tenantServerConfiguration.Path);
-			return JsonConvert.DeserializeObject<AuthenticationQueryResult>(json);
+
+			var result = JsonConvert.DeserializeObject<AuthenticationQueryResult>(json);
+			_applicationData().MakeSureDataSourceExists(result.Tenant, result.DataSourceConfiguration.ApplicationNHibernateConfig, result.DataSourceConfiguration.AnalyticsConnectionString);
+			return result;
 		}
 	}
 }
