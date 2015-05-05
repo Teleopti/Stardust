@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Win.Reporting
 			var all = _stateHolder.AllPermittedPersons.Select(p => p.Id.Value).ToList();
 
 			using (var scheduleFilterView = new PersonsFilterView(_stateHolder.RequestedPeriod.DateOnlyPeriod, _stateHolder.FilteredPersonDictionary,
-				ComponentContext,ReportApplicationFunction, _selectedGroupPageKey, all))
+				ComponentContext,ReportApplicationFunction, _selectedGroupPageKey, all, false))
 			{
 				scheduleFilterView.StartPosition = FormStartPosition.Manual;
 				Point pointToScreen =

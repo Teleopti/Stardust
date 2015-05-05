@@ -9,7 +9,6 @@
 		Scheduler_Seniority_24331,
 		Forecast_CopySettingsToWorkflow_11112,
 
-		Scheduler_AdvanceFilter_29555,
 		Scheduler_WeeklyRestRuleSolver_27108,
 		Scheduler_TeamBlockMoveTimeBetweenDays_22407,
 		Scheduler_TeamBlockAdhereWithMaxSeatRule_23419,

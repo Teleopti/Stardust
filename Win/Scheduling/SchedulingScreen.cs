@@ -4082,7 +4082,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		}
 
 		private PersonsFilterView _cachedPersonsFilterView;
-		private PersonsFilterView getCachedPersonsFilterView(bool isAdvancedEnabled)
+		private PersonsFilterView getCachedPersonsFilterView()
 		{
 			if (_cachedPersonsFilterView == null || _cachedPersonsFilterView.IsDisposed)
 			{
@@ -4095,7 +4095,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 											ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory()
 											.ApplicationFunctionList, DefinedRaptorApplicationFunctionPaths.OpenSchedulePage),
 											string.Empty,
-											permittedPersons, isAdvancedEnabled);
+											permittedPersons, true);
 			}
 			_cachedPersonsFilterView.SetCurrentFilter(SchedulerState.FilteredPersonDictionary);
 			return _cachedPersonsFilterView;
@@ -4103,8 +4103,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void showFilterDialog()
 		{
-			var toggleManager = _container.Resolve<IToggleManager>();
-			var scheduleFilterView = getCachedPersonsFilterView(toggleManager.IsEnabled(Toggles.Scheduler_AdvanceFilter_29555));
+			var scheduleFilterView = getCachedPersonsFilterView();
 			
 			scheduleFilterView.StartPosition = FormStartPosition.Manual;
 			
