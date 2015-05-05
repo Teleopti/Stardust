@@ -330,8 +330,7 @@ Scenario: Show error message when acces to my team but no own team
 
 Scenario: Show friendly message when after leaving date
 	Given I am an agent in a team that leaves on '2030-05-02'
-	And I am viewing team schedule for '2030-05-02'
-	When I click the next day button in datepicker
+	When I am viewing team schedule for '2030-05-03'
 	Then I should see a user-friendly message explaining I dont have anything to view
 
 Scenario: Navigate next date without team

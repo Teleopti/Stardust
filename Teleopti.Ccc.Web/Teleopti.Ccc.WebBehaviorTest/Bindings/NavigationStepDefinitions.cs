@@ -411,6 +411,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 		[When(@"I view group schedule for '(.*)'")]
 		[Given(@"I am viewing team schedule for '(.*)'")]
+		[When(@"I am viewing team schedule for '(.*)'")]
 		[Given(@"I am viewing group schedule for '(.*)'")]
 		public void WhenIViewTeamScheduleFor(DateTime date)
 		{
