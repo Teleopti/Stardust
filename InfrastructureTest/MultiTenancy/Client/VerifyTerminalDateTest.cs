@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			PersistAndRemoveFromUnitOfWork(person);
 			UnitOfWork.PersistAll();
 
-			var target = new VerifyTerminalDate(SetupFixtureForAssembly.ApplicationData);
+			var target = new VerifyTerminalDate(() => SetupFixtureForAssembly.ApplicationData);
 			target.IsTerminated(SetupFixtureForAssembly.DataSource.DataSourceName, person.Id.Value)
 				.Should().Be.False();
 		}
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			PersistAndRemoveFromUnitOfWork(person);
 			UnitOfWork.PersistAll();
 
-			var target = new VerifyTerminalDate(SetupFixtureForAssembly.ApplicationData);
+			var target = new VerifyTerminalDate(() => SetupFixtureForAssembly.ApplicationData);
 			target.IsTerminated(SetupFixtureForAssembly.DataSource.DataSourceName, person.Id.Value)
 				.Should().Be.True();
 		}
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			PersistAndRemoveFromUnitOfWork(person);
 			UnitOfWork.PersistAll();
 
-			var target = new VerifyTerminalDate(SetupFixtureForAssembly.ApplicationData);
+			var target = new VerifyTerminalDate(() => SetupFixtureForAssembly.ApplicationData);
 			target.IsTerminated(SetupFixtureForAssembly.DataSource.DataSourceName, person.Id.Value)
 				.Should().Be.False();
 		}

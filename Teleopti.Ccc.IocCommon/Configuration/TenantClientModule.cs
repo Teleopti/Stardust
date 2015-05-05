@@ -66,6 +66,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				builder.RegisterType<emptyTenantLogonDataManager>().As<ITenantLogonDataManager>().SingleInstance();
 			}
+			builder.RegisterType<VerifyTerminalDate>().As<IVerifyTerminalDate>().SingleInstance();
 		}
 
 		private static bool isRunFromTest(string server)

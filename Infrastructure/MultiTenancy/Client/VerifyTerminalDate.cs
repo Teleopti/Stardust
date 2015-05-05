@@ -6,16 +6,16 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 {
 	public class VerifyTerminalDate : IVerifyTerminalDate
 	{
-		private readonly IApplicationData _applicationData;
+		private readonly Func<IApplicationData> _applicationData;
 
-		public VerifyTerminalDate(IApplicationData applicationData)
+		public VerifyTerminalDate(Func<IApplicationData> applicationData)
 		{
 			_applicationData = applicationData;
 		}
 
 		public bool IsTerminated(string tenantName, Guid personId)
 		{
-			var tenant = _applicationData.DataSource(tenantName);
+			var tenant = _applicationData().DataSource(tenantName);
 			using (var uow = tenant.Application.CreateAndOpenUnitOfWork())
 			{
 				var person = new PersonRepository(uow).Get(personId);
