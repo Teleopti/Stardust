@@ -32,16 +32,13 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 			var evaluateResult = _forecastWorkloadEvaluator.Measure(workload, _historicalPeriodProvider.PeriodForEvaluate());
 			var bestAccuracy = evaluateResult.Accuracies.SingleOrDefault(x => x.IsSelected);
 
-			var days = createDayViewModels(workload, bestAccuracy);
-			var methods = createMethodViewModels(evaluateResult);
-
 			return new WorkloadForecastViewModel
 			{
 				Name = workload.Name,
 				WorkloadId = workload.Id.Value,
 				ForecastMethodRecommended = (bestAccuracy == null ? ForecastMethodType.None : bestAccuracy.MethodId),
-				ForecastMethods = methods,
-				ForecastDays = days
+				ForecastMethods = createMethodViewModels(evaluateResult),
+				ForecastDays = createDayViewModels(workload, bestAccuracy)
 			};
 
 		}
@@ -90,8 +87,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 				}
 			}
 
-			var days = data.Values.ToArray();
-			return days;
+			return data.Values.ToArray();
 		}
 	}
 }

@@ -3,50 +3,52 @@
 angular.module('wfm.forecasting', [])
 	.controller('ForecastingCtrl', [
 		'$scope', '$state',
-		function ($scope, $state) {
+		function($scope, $state) {
 			var startDate = moment().add(1, 'months').startOf('month').format("YYYY-MM-DD");
 			var endDate = moment().add(2, 'months').startOf('month').format("YYYY-MM-DD");
 			$scope.period = { startDate: startDate, endDate: endDate }; //use moment to get first day of next month
 
-			$scope.nextStepAll = function (period) {
+			$scope.nextStepAll = function(period) {
 				$state.go('forecasting.runall', { period: period });
 			};
 
-			$scope.nextStepAdvanced = function (period) {
+			$scope.nextStepAdvanced = function(period) {
 				$state.go('forecasting.target', { period: period });
 			};
 		}
-	]
-	)
-	.controller('ForecastingRunCtrl', ['$scope', '$stateParams', '$http', 'Forecasting',
-		function ($scope, $stateParams, $http, Forecasting) {
+	])
+	.controller('ForecastingRunCtrl', [
+		'$scope', '$stateParams', '$http', 'Forecasting',
+		function($scope, $stateParams, $http, Forecasting) {
 
 			$scope.period = $stateParams.period;
 			$scope.targets = $stateParams.targets;
 			var workloads = [];
-			angular.forEach($scope.targets, function (workload) {
+			angular.forEach($scope.targets, function(workload) {
 				workloads.push({ WorkloadId: workload.Id, ForecastMethodId: workload.Method });
 			});
 			$http.post('../api/Forecasting/Forecast', JSON.stringify({ ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate, Workloads: workloads })).
-				success(function (data, status, headers, config) {
+				success(function(data, status, headers, config) {
 					$scope.result = { success: true, message: 'You now have an updated forecast for the following workloads in your default scenario, based on last year\'s data:' };
 				}).
-				error(function (data, status, headers, config) {
+				error(function(data, status, headers, config) {
 					$scope.result = { success: false, message: 'The forecast has failed. Please try again later' };
 				});
-		}])
-	.controller('ForecastingRunAllCtrl', ['$scope', '$stateParams', '$http',
-		function ($scope, $stateParams, $http) {
+		}
+	])
+	.controller('ForecastingRunAllCtrl', [
+		'$scope', '$stateParams', '$http',
+		function($scope, $stateParams, $http) {
 
 			$scope.period = $stateParams.period;
 
 			$http.post('../api/Forecasting/ForecastAll', JSON.stringify({ ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate })).
-				success(function (data, status, headers, config) {
+				success(function(data, status, headers, config) {
 					$scope.result = { success: true, message: 'You now have an updated forecast in your default scenario, based on last year\'s data.' };
 				}).
-				error(function (data, status, headers, config) {
+				error(function(data, status, headers, config) {
 					$scope.result = { success: false, message: 'The forecast has failed. Please try again later' };
 				});
-			
-		}])
-;
+
+		}
+	]);

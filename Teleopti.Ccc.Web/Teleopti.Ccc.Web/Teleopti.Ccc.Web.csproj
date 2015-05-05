@@ -1235,6 +1235,7 @@
     <Content Include="WFM\js\seatManagement\seatmapedit.controller.js" />
     <Content Include="WFM\js\seatManagement\seatmapedit.directive.js" />
     <Content Include="WFM\js\people\template\advancedPeopleSearch.html" />
+    <Content Include="WFM\tests\forecasting\forecasting.controller.spec.js" />
     <Content Include="WFM\tests\search\search.controller.spec.js" />
     <Content Include="WFM\vendor\c3\c3-angular.min.js" />
     <Content Include="WFM\vendor\c3\c3.min.css" />

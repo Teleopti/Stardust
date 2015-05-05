@@ -46,12 +46,12 @@ wfm.config([
 			url: '/forecasting',
 			templateUrl: 'html/forecasting/forecasting.html',
 			controller: 'ForecastingCtrl'
-    }).state('forecasting.target', {
-    	params: { period: {} },
-    	templateUrl: 'html/forecasting/forecasting-target.html',
-    	controller: 'ForecastingTargetCtrl'
+		}).state('forecasting.target', {
+			params: { period: {} },
+			templateUrl: 'html/forecasting/forecasting-target.html',
+			controller: 'ForecastingTargetCtrl'
 		}).state('forecasting.run', {
-        params:{ period: {}, targets: {} },
+			params: { period: {}, targets: {} },
 			templateUrl: 'html/forecasting/forecasting-run.html',
 			controller: 'ForecastingRunCtrl'
 		}).state('forecasting.runall', {
@@ -88,7 +88,7 @@ wfm.config([
 			controller: 'SeatPlanCtrl as seatplan'
 		}).state('seatMap', {
 			url: '/seatMap',
-			templateUrl: 'js/seatManagement/html/seatmap.html'			
+			templateUrl: 'js/seatManagement/html/seatmap.html'
 		}).state('rta', {
 			url: '/rta',
 			templateUrl: 'js/rta/html/rta.html',
