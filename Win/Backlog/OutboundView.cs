@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Win.Backlog
 			InitializeComponent();
 		}
 
-		private void OutboundView_Load(object sender, EventArgs e)
+		private void outboundViewLoad(object sender, EventArgs e)
 		{
 			loadCampaigns();
 		}
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Win.Backlog
 			}
 		}
 
-		private void toolStripButtonAddCampaign_Click(object sender, EventArgs e)
+		private void toolStripButtonAddCampaignClick(object sender, EventArgs e)
 		{
 			createAndPersistCampaign();
 			loadCampaigns();

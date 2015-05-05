@@ -430,7 +430,6 @@
     <Compile Include="Intraday\OpenIntradayTodayCommandTest.cs" />
     <Compile Include="Intraday\ReforecastModelTest.cs" />
     <Compile Include="Intraday\ReforecastWizardPagesTest.cs" />
-    <Compile Include="Main\AuthenticationFromFileQuerierTest.cs" />
     <Compile Include="Main\LicenseStatusLoaderTest.cs" />
     <Compile Include="Main\LoginInitializerTest.cs" />
     <Compile Include="Main\LogonLicenseCheckerTest.cs" />
