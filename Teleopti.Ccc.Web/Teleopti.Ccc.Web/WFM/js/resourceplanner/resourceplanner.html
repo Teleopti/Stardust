@@ -13,8 +13,8 @@
 			Change the planning period to 
 			<div ng-repeat="op in suggestedPlanningPeriods">
 				<div class="wfm-radio">
-					<input type="radio" name="changeRangeGroup" id="{{op}}" ng-click="rangeUpdated(planningPeriod.Id, op)" />
-					<label for="{{op}}">
+					<input type="radio" name="changeRangeGroup" id="{{op.PeriodType}}-{{op.Number}}" ng-click="rangeUpdated(planningPeriod.Id, op)" />
+					<label for="{{op.PeriodType}}-{{op.Number}}">
 						<span class="wfm-radio-toggle"></span>
 						<span class="wfm-radio-label"> {{op.StartDate | date:"yyyy-MM-dd"}} {{'ToText' | translate}} {{op.EndDate | date:"yyyy-MM-dd"}} having range of {{op.Number}} {{op.PeriodType}}</span>
 					</label>

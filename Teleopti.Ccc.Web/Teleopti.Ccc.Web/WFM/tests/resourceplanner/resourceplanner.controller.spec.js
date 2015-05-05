@@ -14,80 +14,80 @@ describe('ResourceplannerCtrl', function() {
 		$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, 'mock');
 	}));
 
-	//it('not null', inject(function($controller) {
-	//	var scope = $rootScope.$new();
-	//	var mockResourcePlannerSvrc = {
-	//		getPlanningPeriod: {
-	//			query: function() {}
-	//		},
-	//		isEnabled: {
-	//			query: function(param) {
-	//				var queryDeferred = $q.defer();
-	//				queryDeferred.resolve('true');
-	//				return { $promise: queryDeferred.promise };
-	//			}
-	//		}
+	it('not null', inject(function($controller) {
+		var scope = $rootScope.$new();
+		var mockResourcePlannerSvrc = {
+			getPlanningPeriod: {
+				query: function() {}
+			},
+			isEnabled: {
+				query: function(param) {
+					var queryDeferred = $q.defer();
+					queryDeferred.resolve('true');
+					return { $promise: queryDeferred.promise };
+				}
+			}
 
-	//	};
+		};
 
-	//	$controller('ResourceplannerCtrl', { $scope: scope, ResourcePlannerSvrc: mockResourcePlannerSvrc });
-	//	expect($controller).not.toBe(null);
-	//}));
+		$controller('ResourceplannerCtrl', { $scope: scope, ResourcePlannerSvrc: mockResourcePlannerSvrc });
+		expect($controller).not.toBe(null);
+	}));
 
-	//it('returns correct planning period', inject(function($controller) {
-	//	var scope = $rootScope.$new();
-	//	var mockResourcePlannerSvrc = {
-	//		getPlanningPeriod: {
-	//			query: function() {
-	//				return { StartDate: new Date(20150501), EndDate: new Date(20150531), Id: 'someguid' };
-	//			}
-	//		},
-	//		isEnabled: {
-	//			query: function (param) {
-	//				var queryDeferred = $q.defer();
-	//				queryDeferred.resolve('true');
-	//				return { $promise: queryDeferred.promise };
-	//			}
-	//		}
-	//	};
+	it('returns correct planning period', inject(function($controller) {
+		var scope = $rootScope.$new();
+		var mockResourcePlannerSvrc = {
+			getPlanningPeriod: {
+				query: function() {
+					return { StartDate: new Date(20150501), EndDate: new Date(20150531), Id: 'someguid' };
+				}
+			},
+			isEnabled: {
+				query: function (param) {
+					var queryDeferred = $q.defer();
+					queryDeferred.resolve('true');
+					return { $promise: queryDeferred.promise };
+				}
+			}
+		};
 
-	//	$controller('ResourceplannerCtrl', { $scope: scope, ResourcePlannerSvrc: mockResourcePlannerSvrc });
-	//	expect(scope.planningPeriod.StartDate).toEqual(new Date(20150501));
-	//	expect(scope.planningPeriod.EndDate).toEqual(new Date(20150531));
-	//	expect(scope.planningPeriod.Id).toEqual('someguid');
-	//}));
+		$controller('ResourceplannerCtrl', { $scope: scope, ResourcePlannerSvrc: mockResourcePlannerSvrc });
+		expect(scope.planningPeriod.StartDate).toEqual(new Date(20150501));
+		expect(scope.planningPeriod.EndDate).toEqual(new Date(20150531));
+		expect(scope.planningPeriod.Id).toEqual('someguid');
+	}));
 
-	//it('returns missing skills with content', inject(function($controller) {
-	//	var scope = $rootScope.$new();
-	//	var mockResourcePlannerSvrc = {
-	//		getPlanningPeriod: {
-	//			query: function() {	
-	//				return {
-	//					Skills: [
-	//						{
-	//							SkillName: 'Phone',
-	//							MissingRanges: [
-	//								{ StartDate: new Date(20150502), EndDate: new Date(20150509) },
-	//								{ StartDate: new Date(20150515), EndDate: new Date(20150517) }
-	//							]
-	//						}
-	//					]
-	//				};
-	//			}
-	//		},
-	//		isEnabled: {
-	//			query: function (param) {
-	//				var queryDeferred = $q.defer();
-	//				queryDeferred.resolve('true');
-	//				return { $promise: queryDeferred.promise };
-	//			}
-	//		}
-	//	};
+	it('returns missing skills with content', inject(function($controller) {
+		var scope = $rootScope.$new();
+		var mockResourcePlannerSvrc = {
+			getPlanningPeriod: {
+				query: function() {	
+					return {
+						Skills: [
+							{
+								SkillName: 'Phone',
+								MissingRanges: [
+									{ StartDate: new Date(20150502), EndDate: new Date(20150509) },
+									{ StartDate: new Date(20150515), EndDate: new Date(20150517) }
+								]
+							}
+						]
+					};
+				}
+			},
+			isEnabled: {
+				query: function (param) {
+					var queryDeferred = $q.defer();
+					queryDeferred.resolve('true');
+					return { $promise: queryDeferred.promise };
+				}
+			}
+		};
 
-	//	$controller('ResourceplannerCtrl', { $scope: scope, ResourcePlannerSvrc: mockResourcePlannerSvrc });
+		$controller('ResourceplannerCtrl', { $scope: scope, ResourcePlannerSvrc: mockResourcePlannerSvrc });
 
-	//	expect(scope.planningPeriod.Skills[0].SkillName).toEqual('Phone');
-	//	expect(scope.planningPeriod.Skills[0].MissingRanges.length).toEqual(2);
-	//}));
+		expect(scope.planningPeriod.Skills[0].SkillName).toEqual('Phone');
+		expect(scope.planningPeriod.Skills[0].MissingRanges.length).toEqual(2);
+	}));
 
 });

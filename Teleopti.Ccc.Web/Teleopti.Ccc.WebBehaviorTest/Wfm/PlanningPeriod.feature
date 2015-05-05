@@ -20,7 +20,7 @@ Scenario: schedule the next planning period
 	When I view Resource planner
 	And  I click schedule
 	Then I should see '0'
-@ignore
+
 Scenario: update the next planning period
 	Given the time is '2014-04-10' 
 	And I have a role with
@@ -49,7 +49,7 @@ Scenario: update the next planning period
 	And GroupingReadModel is updated
 	When I view Resource planner
 	And I click next planning period
-	And I update planning period to '2' 'Week' 
-	And I view Resource planner
-	Then I should see planning period from '2014-05-13'to '2014-05-26'
+	And I update planning period to two week 
+	Then I should see planning period from '2014-04-06'to '2014-04-19'
+	
 
