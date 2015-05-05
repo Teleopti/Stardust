@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
@@ -35,6 +36,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 
 			var date1 = new DateOnly(2014, 12, 29);
 			var date2 = new DateOnly(2014, 12, 30);
+			var date3 = new DateOnly(2014, 12, 31);
 			var workloadDay1 = new WorkloadDay();
 			workloadDay1.Create(date1, new Workload(SkillFactory.CreateSkill("Phone")), new List<TimePeriod>());
 			workloadDay1.MakeOpen24Hours();
@@ -78,7 +80,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 									new IForecastingTarget[]
 									{
 										new ForecastingTarget(date1, new OpenForWork(true, true)){Tasks = 34.1},
-										new ForecastingTarget(date2, new OpenForWork(true, true)){Tasks = 34.2}
+										new ForecastingTarget(date2, new OpenForWork(true, true)){Tasks = 34.2},
+										new ForecastingTarget(date3, new OpenForWork(true, true)){Tasks = 34.3}
 									}
 							}
 						}
@@ -91,10 +94,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			((object)firstDay.date).Should().Be.EqualTo(date1.Date);
 			((object)firstDay.vh).Should().Be.EqualTo(8d);
 			((object)firstDay.vb).Should().Be.EqualTo(34.1);
-			dynamic secondDay = result.ForecastDays.Last();
+			dynamic secondDay = result.ForecastDays.Second();
 			((object)secondDay.date).Should().Be.EqualTo(date2.Date);
 			((object)secondDay.vh).Should().Be.EqualTo(12d);
 			((object)secondDay.vb).Should().Be.EqualTo(34.2);
+			dynamic thirdDay = result.ForecastDays.Last();
+			((object)thirdDay.date).Should().Be.EqualTo(date3.Date);
+			((IDictionary<String, object>)thirdDay).ContainsKey("vh").Should().Be.False();
+			((object)thirdDay.vb).Should().Be.EqualTo(34.3);
 		}
 
 		[Test]
@@ -119,7 +126,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 						new[]
 						{
 							new MethodAccuracy {Number = 89, MethodId = ForecastMethodType.TeleoptiClassic, IsSelected = false},
-							new MethodAccuracy {Number = 92, MethodId = ForecastMethodType.TeleoptiClassicWithTrend, IsSelected = true}
+							new MethodAccuracy {Number = 92, MethodId = ForecastMethodType.TeleoptiClassicWithTrend, IsSelected = true, MeasureResult = new IForecastingTarget[]{}}
 						}
 				});
 			var dictionary = new Dictionary<DateOnly, IDictionary<ForecastMethodType, double>>();
