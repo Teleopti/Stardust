@@ -1,6 +1,8 @@
-﻿using Teleopti.Ccc.Domain.Security;
+﻿using System;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Interfaces;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 {
@@ -10,17 +12,20 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 		private readonly INhibConfigDecryption _nhibConfigDecryption;
 		private readonly IPostHttpRequest _postHttpRequest;
 		private readonly IJsonSerializer _jsonSerializer;
+		private readonly Func<IApplicationData> _applicationData;
 
 
 		public AuthenticationQuerier(ITenantServerConfiguration tenantServerConfiguration, 
 																INhibConfigDecryption nhibConfigDecryption, 
 																IPostHttpRequest postHttpRequest,
-																IJsonSerializer jsonSerializer)
+																IJsonSerializer jsonSerializer,
+																Func<IApplicationData> applicationData)
 		{
 			_tenantServerConfiguration = tenantServerConfiguration;
 			_nhibConfigDecryption = nhibConfigDecryption;
 			_postHttpRequest = postHttpRequest;
 			_jsonSerializer = jsonSerializer;
+			_applicationData = applicationData;
 		}
 
 		public AuthenticationQueryResult TryLogon(ApplicationLogonClientModel applicationLogonClientModel, string userAgent)
@@ -37,7 +42,11 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 		{
 			var json = _jsonSerializer.SerializeObject(clientModel);
 			var result = _postHttpRequest.Send<AuthenticationQueryResult>(path, json, userAgent);
-			_nhibConfigDecryption.DecryptConfig(result.DataSourceConfiguration);
+			if (result.Success)
+			{
+				_nhibConfigDecryption.DecryptConfig(result.DataSourceConfiguration);
+				_applicationData().MakeSureDataSourceExists(result.Tenant, result.DataSourceConfiguration.ApplicationNHibernateConfig, result.DataSourceConfiguration.AnalyticsConnectionString);
+			}
 			return result;
 		}
 	}

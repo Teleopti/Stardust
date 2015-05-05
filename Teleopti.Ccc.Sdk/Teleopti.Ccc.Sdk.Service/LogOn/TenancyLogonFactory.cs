@@ -19,7 +19,8 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
 				_multiTenancyApplicationLogon = new MultiTenancyApplicationLogon(new RepositoryFactory(),
 					new AuthenticationQuerier(new TenantServerConfiguration(ConfigurationManager.AppSettings["TenantServer"]),
 						new NhibConfigDecryption(), new PostHttpRequest(),
-						new NewtonsoftJsonSerializer()));
+						new NewtonsoftJsonSerializer(),
+						StateHolder.Instance.StateReader.ApplicationScopeData));
 			}
 			return _multiTenancyApplicationLogon;
 		}
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
 				_multiTenancyWindowsLogon = new MultiTenancyWindowsLogon(new RepositoryFactory(),
 					new AuthenticationQuerier(new TenantServerConfiguration(ConfigurationManager.AppSettings["TenantServer"]),
 						new NhibConfigDecryption(), new PostHttpRequest(),
-						new NewtonsoftJsonSerializer()),new WebWindowsUserProvider());
+						new NewtonsoftJsonSerializer(), StateHolder.Instance.StateReader.ApplicationScopeData), new WebWindowsUserProvider());
 			}
 			return _multiTenancyWindowsLogon;
 		}

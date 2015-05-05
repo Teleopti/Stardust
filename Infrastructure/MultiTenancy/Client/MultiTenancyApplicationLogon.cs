@@ -1,9 +1,6 @@
-﻿using NHibernate.Cfg;
-using Teleopti.Ccc.Domain.Repositories;
+﻿using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
@@ -32,9 +29,8 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 
 			var dataSourceName = result.Tenant;
 			var personId = result.PersonId;
-			var dataSourceCfg = result.DataSourceConfiguration;
-
-			logonModel.SelectedDataSourceContainer = getDataSorce(dataSourceName, dataSourceCfg, applicationData);
+			
+			logonModel.SelectedDataSourceContainer = new DataSourceContainer(applicationData.DataSource(dataSourceName), _repositoryFactory, AuthenticationTypeOption.Application);
 
 			using (var uow = logonModel.SelectedDataSourceContainer.DataSource.Application.CreateAndOpenUnitOfWork())
 			{
@@ -48,12 +44,6 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 				Person = logonModel.SelectedDataSourceContainer.User,
 				Successful = true
 			};
-		}
-
-		private IDataSourceContainer getDataSorce(string dataSourceName, DataSourceConfig nhibConfig, IApplicationData applicationData)
-		{
-			applicationData.MakeSureDataSourceExists(dataSourceName, nhibConfig.ApplicationNHibernateConfig, nhibConfig.AnalyticsConnectionString);
-			return new DataSourceContainer(applicationData.DataSource(dataSourceName), _repositoryFactory, AuthenticationTypeOption.Application);
 		}
 	}
 }

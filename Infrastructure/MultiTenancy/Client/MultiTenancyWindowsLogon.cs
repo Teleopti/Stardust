@@ -42,9 +42,8 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 
 			var dataSourceName = result.Tenant;
 			var personId = result.PersonId;
-			var dataSourceCfg = result.DataSourceConfiguration;
 
-			logonModel.SelectedDataSourceContainer = getDataSorce(dataSourceName, dataSourceCfg, applicationData);
+			logonModel.SelectedDataSourceContainer = new DataSourceContainer(applicationData.DataSource(dataSourceName), _repositoryFactory, AuthenticationTypeOption.Application);
 			if (logonModel.SelectedDataSourceContainer == null)
 				return new AuthenticationResult
 				{
@@ -73,12 +72,6 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 			var domain = _windowsUserProvider.DomainName;
 
 			return _authenticationQuerier.TryLogon(new IdentityLogonClientModel{Identity = domain + "\\" + userId}, "").Success;
-		}
-
-		private IDataSourceContainer getDataSorce(string dataSourceName, DataSourceConfig nhibConfig, IApplicationData applicationData)
-		{
-			applicationData.MakeSureDataSourceExists(dataSourceName, nhibConfig.ApplicationNHibernateConfig, nhibConfig.AnalyticsConnectionString);
-			return new DataSourceContainer(applicationData.DataSource(dataSourceName), _repositoryFactory, AuthenticationTypeOption.Application);
 		}
 	}
 }
