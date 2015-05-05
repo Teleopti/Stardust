@@ -198,6 +198,7 @@
     <Compile Include="LogOn\PersonInRoleCache.cs" />
     <Compile Include="LogOn\PersonInRoleCacheItem.cs" />
     <Compile Include="LogOn\TenancyLogonFactory.cs" />
+    <Compile Include="MultiTenancyModule.cs" />
     <Compile Include="SdkCommandHandlersModule.cs" />
     <Compile Include="CreateScheduleDistributionAsyncResult.cs" />
     <Compile Include="Factory\AbsenceTypeFactory.cs" />

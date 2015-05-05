@@ -92,6 +92,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework, Version=2.6.2.12296, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
@@ -199,6 +203,8 @@
     <Compile Include="CommandHandler\SavePersonAbsenceRequestCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\SetPersonAccountForPersonCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\SetSchedulePeriodWorktimeOverrideCommandHandlerTest.cs" />
+    <Compile Include="MultiTenancy\PostHttpRequestFake.cs" />
+    <Compile Include="MultiTenancy\TenantPeopleLoaderTest.cs" />
     <Compile Include="OldTests\AbsenceDtoTest.cs" />
     <Compile Include="OldTests\AbsenceLayerDtoTest.cs" />
     <Compile Include="OldTests\AdherenceDataDtoTest.cs" />
@@ -272,6 +278,7 @@
     <Compile Include="Restrictions\RestrictionsValidatorTest.cs" />
     <Compile Include="SaveSchedulePartServiceTest.cs" />
     <Compile Include="SetUpFixtureForAssembly.cs" />
+    <Compile Include="TenantSdkTestAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Domain\Teleopti.Ccc.Domain.csproj">
@@ -281,6 +288,10 @@
     <ProjectReference Include="..\..\Infrastructure\Teleopti.Ccc.Infrastructure.csproj">
       <Project>{AA4A5374-77AF-44F0-85C1-6CABC6701352}</Project>
       <Name>Teleopti.Ccc.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
+      <Project>{db42d973-9889-4d51-9fc5-be66aa7f117c}</Project>
+      <Name>Teleopti.Ccc.IocCommon</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Teleopti.Ccc.Payroll\Teleopti.Ccc.PayrollFormatter\Teleopti.Ccc.PayrollFormatter.csproj">
       <Project>{D3A96039-45CD-42CA-BCEC-1AE495651082}</Project>
@@ -302,9 +313,16 @@
       <Project>{1277112D-B11A-4358-AF9A-8C9C7A5E701E}</Project>
       <Name>Teleopti.Ccc.Sdk.Logic</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.Sdk.Service\Teleopti.Ccc.Sdk.Service.csproj">
+      <Project>{c788bdad-d961-4ed5-ab9a-6f7cfd06e25d}</Project>
+      <Name>Teleopti.Ccc.Sdk.Service</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Teleopti.Ccc.Sdk.LogicTest.dll.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

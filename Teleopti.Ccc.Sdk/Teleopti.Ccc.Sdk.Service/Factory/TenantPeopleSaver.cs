@@ -31,10 +31,15 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 			{
 				ApplicationLogonName = personDto.ApplicationLogOnName,
 				Password = personDto.ApplicationLogOnPassword,
+#pragma warning disable 618
 				Identity = !string.IsNullOrEmpty(personDto.WindowsDomain) && !string.IsNullOrEmpty(personDto.WindowsLogOnName) ? personDto.WindowsDomain + "\\" + personDto.WindowsLogOnName : null,
+#pragma warning restore 618
 				PersonId = id,
 				Tenant = tenant
 			};
+			if (!string.IsNullOrEmpty(personDto.Identity))
+				data.Identity = personDto.Identity;
+
 			if (personDto.TerminationDate != null)
 				data.TerminalDate = personDto.TerminationDate.DateTime;
 			

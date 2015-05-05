@@ -23,6 +23,7 @@ using Teleopti.Ccc.Infrastructure.Config;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon.Configuration;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Common.WcfExtensions;
 using Teleopti.Ccc.Sdk.Logic;
@@ -195,15 +196,11 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			return builder;
 		}
 
-		private static void registerSdkFactories(ContainerBuilder builder, IocConfiguration configuration)
+		private static void registerSdkFactories(ContainerBuilder builder, IIocConfiguration configuration)
 		{
 			builder.RegisterType<TeleoptiCccSdkService>();
-			builder.RegisterType<ChangePassword>().As<IChangePassword>().SingleInstance();
-			builder.RegisterType<MultiTenancyAuthenticationFactory>().As<IAuthenticationFactory>().InstancePerLifetimeScope();
-			builder.RegisterType<TenantPeopleSaver>().As<ITenantPeopleSaver>().InstancePerLifetimeScope();
-			builder.RegisterType<TenantDataManager>().As<ITenantDataManager>().InstancePerLifetimeScope();
 			builder.RegisterType<GetPayrollResultById.MultiTenancyPayrollLogon>().As<GetPayrollResultById.IPayrollLogon>().InstancePerLifetimeScope();
-
+			builder.RegisterModule(new MultiTenancyModule(configuration));
 			builder.RegisterType<LicenseFactory>().InstancePerLifetimeScope();
 			builder.RegisterType<ScheduleFactory>().InstancePerLifetimeScope();
 			builder.RegisterType<TeleoptiPayrollExportFactory>().InstancePerLifetimeScope();
@@ -221,4 +218,5 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 	}
 
 	
+
 }
