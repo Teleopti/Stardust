@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 	{
 		private IWebLogOn target;
 		private ILogOnOff logOnOff;
-		private MockRepository mocks;
 		private IApplicationData applicationData;
 		private IPersonRepository personRepository;
 		private IBusinessUnitRepository businessUnitRepository;
@@ -33,16 +32,15 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 		[SetUp]
 		public void Setup()
 		{
-			mocks = new MockRepository();
-			applicationData = mocks.DynamicMock<IApplicationData>();
-			repositoryFactory = mocks.DynamicMock<IRepositoryFactory>();
-			personRepository = mocks.DynamicMock<IPersonRepository>();
-			businessUnitRepository = mocks.DynamicMock<IBusinessUnitRepository>();
-			sessionSpecificDataProvider = mocks.StrictMock<ISessionSpecificDataProvider>(); //made this strict on purpose
-			unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
-			logOnOff = mocks.DynamicMock<ILogOnOff>();
-			var ruleToPrincipalCommand = mocks.DynamicMock<IRoleToPrincipalCommand>();
-			principalAuthorization = mocks.DynamicMock<IPrincipalAuthorization>();
+			applicationData = MockRepository.GenerateMock<IApplicationData>();
+			repositoryFactory = MockRepository.GenerateMock<IRepositoryFactory>();
+			personRepository = MockRepository.GenerateMock<IPersonRepository>();
+			businessUnitRepository = MockRepository.GenerateMock<IBusinessUnitRepository>();
+			sessionSpecificDataProvider = MockRepository.GenerateMock<ISessionSpecificDataProvider>();
+			unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			logOnOff = MockRepository.GenerateMock<ILogOnOff>();
+			var ruleToPrincipalCommand = MockRepository.GenerateMock<IRoleToPrincipalCommand>();
+			principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
 			ITeleoptiPrincipal principal = new TeleoptiPrincipal(new TeleoptiIdentity("", null, null, null), new Person());
 
 			target = new WebLogOn(logOnOff,
@@ -62,28 +60,24 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			var personId = Guid.NewGuid();
 
 			var choosenBusinessUnit = new BusinessUnit("sdfsdf");
-			var choosenDatasource = mocks.DynamicMock<IDataSource>();
-			var uow = mocks.DynamicMock<IUnitOfWork>();
+			var choosenDatasource = MockRepository.GenerateMock<IDataSource>();
+			var uow = MockRepository.GenerateMock<IUnitOfWork>();
 			var logonPerson = new Person();
 
-			using (mocks.Record())
-			{
-				Expect.Call(applicationData.DataSource(dataSourceName))
-					.Return(choosenDatasource);
-				Expect.Call(choosenDatasource.Application).Return(unitOfWorkFactory);
-				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
-				Expect.Call(repositoryFactory.CreatePersonRepository(uow)).Return(personRepository);
-				Expect.Call(repositoryFactory.CreateBusinessUnitRepository(uow)).Return(businessUnitRepository);
-				Expect.Call(personRepository.Get(personId)).Return(logonPerson);
-				Expect.Call(businessUnitRepository.Get(buId)).Return(choosenBusinessUnit);
-				Expect.Call(() => logOnOff.LogOn(choosenDatasource, logonPerson, choosenBusinessUnit));
-				Expect.Call(principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb)).Return(true);
-				Expect.Call(() => sessionSpecificDataProvider.StoreInCookie(null)).IgnoreArguments();
-			}
-			using (mocks.Playback())
-			{
-				target.LogOn(dataSourceName, buId, personId);
-			}
+			applicationData.Stub(x => x.DataSource(dataSourceName)).Return(choosenDatasource);
+			choosenDatasource.Stub(x => x.Application).Return(unitOfWorkFactory);
+			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
+			repositoryFactory.Stub(x => x.CreatePersonRepository(uow)).Return(personRepository);
+			repositoryFactory.Stub(x => x.CreateBusinessUnitRepository(uow)).Return(businessUnitRepository);
+			repositoryFactory.Stub(x => x.CreateApplicationFunctionRepository(uow)).Return(MockRepository.GenerateMock<IApplicationFunctionRepository>());
+			personRepository.Stub(x => x.Get(personId)).Return(logonPerson);
+			businessUnitRepository.Stub(x => x.Get(buId)).Return(choosenBusinessUnit);
+			principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb)).Return(true);
+
+			target.LogOn(dataSourceName, buId, personId);
+
+			logOnOff.AssertWasCalled(x => x.LogOn(choosenDatasource, logonPerson, choosenBusinessUnit));
+			sessionSpecificDataProvider.AssertWasCalled(x => x.StoreInCookie(null), o => o.IgnoreArguments());
 		}
 
 		[Test]
@@ -94,28 +88,25 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			var personId = Guid.NewGuid();
 
 			var choosenBusinessUnit = new BusinessUnit("sdfsdf");
-			var choosenDatasource = mocks.DynamicMock<IDataSource>();
-			var uow = mocks.DynamicMock<IUnitOfWork>();
+			var choosenDatasource = MockRepository.GenerateMock<IDataSource>();
+			var uow = MockRepository.GenerateMock<IUnitOfWork>();
 			var logonPerson = new Person();
 
-			using (mocks.Record())
-			{
-				Expect.Call(applicationData.DataSource(dataSourceName))
-					.Return(choosenDatasource);
-				Expect.Call(choosenDatasource.Application).Return(unitOfWorkFactory);
-				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
-				Expect.Call(repositoryFactory.CreatePersonRepository(uow)).Return(personRepository);
-				Expect.Call(repositoryFactory.CreateBusinessUnitRepository(uow)).Return(businessUnitRepository);
-				Expect.Call(personRepository.Get(personId)).Return(logonPerson);
-				Expect.Call(businessUnitRepository.Get(buId)).Return(choosenBusinessUnit);
-				Expect.Call(() => logOnOff.LogOn(choosenDatasource, logonPerson, choosenBusinessUnit));
-				Expect.Call(principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.Anywhere)).Return(true);
-				Expect.Call(() => sessionSpecificDataProvider.StoreInCookie(null)).IgnoreArguments();
-			}
-			using (mocks.Playback())
-			{
-				target.LogOn(dataSourceName, buId, personId);
-			}
+			applicationData.Stub(x => x.DataSource(dataSourceName)).Return(choosenDatasource);
+			choosenDatasource.Stub(x => x.Application).Return(unitOfWorkFactory);
+			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
+			repositoryFactory.Stub(x => x.CreatePersonRepository(uow)).Return(personRepository);
+			repositoryFactory.Stub(x => x.CreateBusinessUnitRepository(uow)).Return(businessUnitRepository);
+			repositoryFactory.Stub(x => x.CreateApplicationFunctionRepository(uow))
+				.Return(MockRepository.GenerateMock<IApplicationFunctionRepository>());
+			personRepository.Stub(x => x.Get(personId)).Return(logonPerson);
+			businessUnitRepository.Stub(x => x.Get(buId)).Return(choosenBusinessUnit);
+			principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.Anywhere)).Return(true);
+			
+			target.LogOn(dataSourceName, buId, personId);
+
+			logOnOff.AssertWasCalled(x => x.LogOn(choosenDatasource, logonPerson, choosenBusinessUnit));
+			sessionSpecificDataProvider.AssertWasCalled(x => x.StoreInCookie(null), o => o.IgnoreArguments());
 		}
 
 		[Test]
@@ -126,30 +117,26 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			var personId = Guid.NewGuid();
 
 			var choosenBusinessUnit = new BusinessUnit("sdfsdf");
-			var choosenDatasource = mocks.DynamicMock<IDataSource>();
-			var uow = mocks.DynamicMock<IUnitOfWork>();
+			var choosenDatasource = MockRepository.GenerateMock<IDataSource>();
+			var uow = MockRepository.GenerateMock<IUnitOfWork>();
 			var logonPerson = new Person();
 
-			using (mocks.Record())
-			{
-				Expect.Call(applicationData.DataSource(dataSourceName))
-					.Return(choosenDatasource);
-				Expect.Call(choosenDatasource.Application).Return(unitOfWorkFactory);
-				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
-				Expect.Call(repositoryFactory.CreatePersonRepository(uow)).Return(personRepository);
-				Expect.Call(repositoryFactory.CreateBusinessUnitRepository(uow)).Return(businessUnitRepository);
-				Expect.Call(personRepository.Get(personId)).Return(logonPerson);
-				Expect.Call(businessUnitRepository.Get(buId)).Return(choosenBusinessUnit);
-				Expect.Call(() => logOnOff.LogOn(choosenDatasource, logonPerson, choosenBusinessUnit));
-				Expect.Call(principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb)).Return(false);
-				Expect.Call(principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.Anywhere)).Return(false);
-			}
-			using (mocks.Playback())
-			{
-				Assert.Throws<PermissionException>(() =>
-												   target.LogOn(dataSourceName, buId, personId));
-			}
-		}
+			applicationData.Stub(x => x.DataSource(dataSourceName)).Return(choosenDatasource);
+			choosenDatasource.Stub(x => x.Application).Return(unitOfWorkFactory);
+			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
+			repositoryFactory.Stub(x => x.CreatePersonRepository(uow)).Return(personRepository);
+			repositoryFactory.Stub(x => x.CreateBusinessUnitRepository(uow)).Return(businessUnitRepository);
+			repositoryFactory.Stub(x => x.CreateApplicationFunctionRepository(uow))
+				.Return(MockRepository.GenerateMock<IApplicationFunctionRepository>());
+			personRepository.Stub(x => x.Get(personId)).Return(logonPerson);
+			businessUnitRepository.Stub(x => x.Get(buId)).Return(choosenBusinessUnit);
+			principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb)).Return(false);
+			principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.Anywhere)).Return(false);
 
+			Assert.Throws<PermissionException>(() => target.LogOn(dataSourceName, buId, personId));
+
+			logOnOff.AssertWasCalled(x => x.LogOn(choosenDatasource, logonPerson, choosenBusinessUnit));
+			sessionSpecificDataProvider.AssertWasNotCalled(x => x.StoreInCookie(null), o => o.IgnoreArguments());
+		}
 	}
 }

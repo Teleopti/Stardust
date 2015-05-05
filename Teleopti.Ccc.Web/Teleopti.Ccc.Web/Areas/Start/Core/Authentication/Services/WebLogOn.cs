@@ -48,6 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 				_logOnOff.LogOn(dataSource, person, businessUnit);
 				var principal = _currentTeleoptiPrincipal.Current();
 				_roleToPrincipalCommand.Execute(principal, dataSource.Application, personRep);
+				_repositoryFactory.CreateApplicationFunctionRepository(uow).LoadAll();
 
 				var allowed =	_principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb) ||
 								_principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.Anywhere) ||
