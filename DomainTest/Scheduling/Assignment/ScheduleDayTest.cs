@@ -316,6 +316,30 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		}
 
 		[Test]
+		public void ShouldUseExistingPersonAssingmentWhenNoShiftLayers()
+		{
+			var person1 = PersonFactory.CreatePerson();
+			var parameters = new ScheduleParameters(ScenarioFactory.CreateScenarioAggregate(), person1, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
+			var scenario = parameters.Scenario;
+			var underlyingDictionary = new Dictionary<IPerson, IScheduleRange>();
+			var dic = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(rangePeriod), underlyingDictionary);
+
+			var activity = ActivityFactory.CreateActivity("activity");
+			var start = new DateTime(2000, 1, 2, 10, 0, 0, DateTimeKind.Utc);
+			var end = new DateTime(2000, 1, 2, 12, 0, 0, DateTimeKind.Utc);
+			var period = new DateTimePeriod(start, end);
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("shiftCategory");
+
+			var target = ExtractedSchedule.CreateScheduleDay(dic, parameters.Person, new DateOnly(2000, 1, 1));
+			var assNoMainShift = PersonAssignmentFactory.CreateEmptyAssignment(scenario, parameters.Person, parameters.Period);
+
+			target.Add(assNoMainShift);
+
+			target.CreateAndAddActivity(activity, period, shiftCategory);
+			Assert.AreEqual(period, target.PersonAssignment().MainActivities().Single().Period);
+		}
+
+		[Test]
 		public void VerifyCreateAndAddPersonalActivityPersonalAssignmentExists()
 		{
 			var person1 = PersonFactory.CreatePerson();

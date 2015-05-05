@@ -590,6 +590,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             IList<IPersonAbsence> splitList = new List<IPersonAbsence>();
             IList<IPersonAbsence> deleteList = new List<IPersonAbsence>();
             IVisualLayerCollection layerCollection = ProjectionService().CreateProjection();
+	        if (!layerCollection.Period().HasValue) return;
             var dateTimePeriod = layerCollection.Period().Value;
 
             //loop absences in source
@@ -717,9 +718,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             if (!authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment))
                 return;
 
-					var ass = PersonAssignment();
-					if (ass != null && 
-						(DateOnlyAsPeriod.Period().Contains(period.StartDateTime) || ass.Period.Intersect(period) || ass.Period.AdjacentTo(period))) //should not start before day I presume? Fix later - will be handled inside PersonAssignment/AgentDay instead...
+			var ass = PersonAssignment();
+
+			if ( ass != null)
+			{
+				if ((!ass.ShiftLayers.Any() || DateOnlyAsPeriod.Period().Contains(period.StartDateTime) || ass.Period.Intersect(period) || ass.Period.AdjacentTo(period)))
 				{
 					ass.AddActivity(activity, period);
 					if (ass.ShiftCategory == null)
@@ -728,6 +731,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					}
 					return;
 				}
+			}
 
 			//TODO create inparameters to check on if to create new personassignment
 			IPersonAssignment newPersonAssignment = new PersonAssignment(Person, Scenario, DateOnlyAsPeriod.DateOnly);
