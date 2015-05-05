@@ -526,5 +526,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GoToPeople();
 		}
 
+		[When(@"I view outbound")]
+		public void WhenIViewOutbound()
+		{
+			TestControllerMethods.Logon();
+			Navigation.GoToOutbound();
+		}
+
 	}
 }

@@ -198,6 +198,7 @@
     <Compile Include="Bindings\Generic\EmptyDayStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\LogonAsAnotherUserStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Messages\MessageStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\OutboundStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PhoneStateStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\RealTimeAdherencePageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ShiftExchangeOfferFields.cs" />
@@ -838,6 +839,12 @@
       <DependentUpon>Toggle.feature</DependentUpon>
     </Compile>
     <Compile Include="Toggle\ToggleStepDefinition.cs" />
+    <Compile Include="Wfm\Outbound\OutboundCampaignBasicOperations.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OutboundCampaignBasicOperations.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Wfm\Outbound\OutboundCampaignStepDefinitions.cs" />
     <Compile Include="Wfm\People\AdvancedSearch.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1189,6 +1196,10 @@
     <None Include="Wfm\People\AdvancedSearch.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>AdvancedSearch.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Wfm\Outbound\OutboundCampaignBasicOperations.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>OutboundCampaignBasicOperations.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\People\ShowBasicInformation.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

@@ -42,7 +42,7 @@
 					<input type="text" name="filterRole" ng-model="searchCampaign.name" placeholder="Campaign filter ..." />
 				</div>-->
 			</div>
-			<div id="searchCampaignResult" class="role-container">
+			<div class="campaign-list role-container">
 				<ul class="wfm-list">
 					<li ng-repeat="campaign in campaigns | filter:searchCampaign" ng-click="show(campaign)" ng-dblclick="editing = true" ng-class="{'active': selectedTarget && campaign.Id == selectedTarget.Id}" class="role-btn wfm-block wfm-list-item role">
 						<div class="wfm-leave-behind">
@@ -95,7 +95,7 @@
 						</div>
 						<div class="row">
 							<div ng-class="{'col-lg-4': showMoreHeaderFields}">
-								<span ng-hide="editing">{{campaign.Name}}</span>
+								<span ng-class="outbound-campaign-name" ng-hide="editing">{{campaign.Name}}</span>
 								<form ng-show="editing" ng-submit="editing = false; update(campaign)">
 									<input type="text" class="inline-role-name" ng-model="campaign.Name" placeholder="Name" ng-required />
 								</form>

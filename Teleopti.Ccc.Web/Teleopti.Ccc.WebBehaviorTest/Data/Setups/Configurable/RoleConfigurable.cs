@@ -58,6 +58,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public bool AccessToLeaderboard { get; set; }
 		public bool AccessToResourcePlanner { get; set; }
 		public bool AccessToPeople { get; set; }
+		public bool AccessToOutbound { get; set; }
 
 		public bool AddFullDayAbsence { get; set; }
 		public bool AddIntradayAbsence { get; set; }
@@ -105,6 +106,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			AddActivity = true;
 			MoveActivity = true;
 			QuickForecaster = false;
+			AccessToOutbound = false;
 		}
 
 		public void Apply(IUnitOfWork uow)
@@ -247,6 +249,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 				applicationFunctions = from f in applicationFunctions
 											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage
 											  select f;
+
+			if (!AccessToOutbound)
+				applicationFunctions = from f in applicationFunctions
+											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.Outbound
+											  select f;
+
 			if (!AccessToPersonalAbsenceAccount)
 				applicationFunctions = from f in applicationFunctions
 											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ViewPersonalAccount
