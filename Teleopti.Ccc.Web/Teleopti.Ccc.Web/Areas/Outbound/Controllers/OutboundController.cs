@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider;
@@ -102,17 +103,24 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 			}			
 		}
 
-		[HttpPost, Route("api/Outbound/Campaign/{Id}/WorkingPeriod"), UnitOfWork]
-		public virtual IHttpActionResult UpdateCampaignWorkingPeriodAssignment(Guid Id, CampaignWorkingPeriodForm form)
+		[HttpPost, Route("api/Outbound/Campaign/{Id}/WorkingPeriod")]
+		public virtual IHttpActionResult AddCampaignWorkingPeriod(Guid Id, CampaignWorkingPeriodForm form)
 		{
-			form.CampaignId = Id;
-			var campaignWorkingPeriod = _outboundCampaignPersister.Persist(form);
-			if (campaignWorkingPeriod == null)
-			{
+			CampaignWorkingPeriodViewModel viewModel;
+			CampaignWorkingPeriod entity;
+			PersistAndMapWorkingPeriod(Id, form, out viewModel, out entity);
+			if (viewModel == null)
 				return BadRequest();
-			}
-			return Ok(_outboundCampaignViewModelMapper.Map(campaignWorkingPeriod));
+			viewModel.Id = entity.Id;
+			return Ok(viewModel);
 		}
 
+		[UnitOfWork]
+		public virtual void PersistAndMapWorkingPeriod(Guid Id, CampaignWorkingPeriodForm form, out CampaignWorkingPeriodViewModel viewModel, out CampaignWorkingPeriod entity)
+		{
+			form.CampaignId = Id;
+			entity = _outboundCampaignPersister.Persist(form);			
+			viewModel = (entity != null)? _outboundCampaignViewModelMapper.Map(entity): null;			
+		}
 	}
 }
