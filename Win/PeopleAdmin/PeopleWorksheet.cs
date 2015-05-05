@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 using Autofac;
 using Microsoft.Practices.Composite.Events;
 using Syncfusion.Windows.Forms.Grid;
@@ -148,9 +149,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 
 		private void setPermissionOnControls()
 		{
-			backStageButton3.Enabled =
-				PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
-			//backStageButton3.Visible = backStageButton3.Enabled;
+			var optionPagePermission = PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
+			backStageButton3.Enabled = optionPagePermission;
+
+			toolStripButtonContract.Enabled = optionPagePermission;
+			toolStripButtonContractSchedule.Enabled = optionPagePermission;
+			toolStripButtonPartTimePercentage.Enabled = optionPagePermission;
 		}
 
 		private void dateNavigatePeriodsSelectedDateChanged(object sender, CustomEventArgs<DateOnly> e)
