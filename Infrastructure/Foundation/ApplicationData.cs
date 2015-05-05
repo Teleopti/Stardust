@@ -76,17 +76,17 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		}
 
 		private readonly object addDataSourceLocker = new object();
-		public void MakeSureDataSourceExists(string dataSourceName, IDictionary<string, string> applicationNhibConfiguration, string analyticsConnectionString)
+		public void MakeSureDataSourceExists(string tenantName, IDictionary<string, string> applicationNhibConfiguration, string analyticsConnectionString)
 		{
-			var dataSource = Tenant(dataSourceName);
+			var dataSource = Tenant(tenantName);
 			if (dataSource != null)
 				return;
 			lock (addDataSourceLocker)
 			{
-				dataSource = Tenant(dataSourceName);
+				dataSource = Tenant(tenantName);
 				if (dataSource != null)
 					return;
-				applicationNhibConfiguration[NHibernate.Cfg.Environment.SessionFactoryName] = dataSourceName;
+				applicationNhibConfiguration[NHibernate.Cfg.Environment.SessionFactoryName] = tenantName;
 				var newDataSource = _dataSourcesFactory.Create(applicationNhibConfiguration, analyticsConnectionString);
 				_registeredDataSourceCollection.Add(newDataSource);
 			}
