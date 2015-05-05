@@ -1,5 +1,8 @@
 <div class="material-block-content">
 	<div class="row">
+		<div ng-if="!result" class="text-center">
+			<md-progress-linear md-mode="indeterminate"></md-progress-linear>
+		</div>
 		<h4>
 			Period from {{period.startDate | date : shortDate}} to {{period.endDate | date : shortDate}}
 		</h4>
@@ -13,9 +16,6 @@
 				</li>
 			</ul>
 		</div>
-	</div>
-	<div ng-if="!result" class="text-center">
-		<md-progress-linear md-mode="indeterminate"></md-progress-linear>
 	</div>
 </div>
 <div class="clearfix"></div>

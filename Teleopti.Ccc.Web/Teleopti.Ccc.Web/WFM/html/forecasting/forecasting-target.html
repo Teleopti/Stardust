@@ -1,5 +1,5 @@
 ﻿<div ui-view>
-	<div ng-if="!showSelection" class="text-center">
+	<div ng-if="!showSelection" class="text-center wfm-block">
 		<div>
 			<md-progress-linear md-mode="indeterminate"></md-progress-linear>
 		</div>
@@ -71,7 +71,7 @@
 					<div class="modal-header">
 						{{skill.Name}} - {{workload.Name}}
 					</div>
-					<div ng-if="!workload.loaded" class="modal-inner-content">
+					<div ng-if="!workload.loaded" class="modal-inner-content wfm-block">
 						<md-progress-linear md-mode="indeterminate"></md-progress-linear>
 					</div>
 					<div class="modal-inner-content" ng-if="workload.loaded">
