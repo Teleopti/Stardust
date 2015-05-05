@@ -25,21 +25,19 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 
 		public AuthenticationQueryResult TryLogon(ApplicationLogonClientModel applicationLogonClientModel, string userAgent)
 		{
-			var json = _jsonSerializer.SerializeObject(applicationLogonClientModel);
-			var result = _postHttpRequest.Send<AuthenticationQueryResult>(_tenantServerConfiguration.Path + "Authenticate/ApplicationLogon", json, userAgent);
-
-			_nhibConfigDecryption.DecryptConfig(result.DataSourceConfiguration);
-			
-			return result;
+			return doAuthenticationCall(_tenantServerConfiguration.Path + "Authenticate/ApplicationLogon", applicationLogonClientModel, userAgent);
 		}
 
 		public AuthenticationQueryResult TryLogon(IdentityLogonClientModel identityLogonClientModel, string userAgent)
 		{
-			var json = _jsonSerializer.SerializeObject(identityLogonClientModel);
-			var result = _postHttpRequest.Send<AuthenticationQueryResult>(_tenantServerConfiguration.Path + "Authenticate/IdentityLogon", json, userAgent);
+			return doAuthenticationCall(_tenantServerConfiguration.Path + "Authenticate/IdentityLogon", identityLogonClientModel, userAgent);
+		}
 
+		private AuthenticationQueryResult doAuthenticationCall(string path, object clientModel, string userAgent)
+		{
+			var json = _jsonSerializer.SerializeObject(clientModel);
+			var result = _postHttpRequest.Send<AuthenticationQueryResult>(path, json, userAgent);
 			_nhibConfigDecryption.DecryptConfig(result.DataSourceConfiguration);
-			
 			return result;
 		}
 	}
