@@ -15,7 +15,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 
 		public AggregateStatisticTasksForSkillLocalDayConsideringSkillMidnightBreakTest()
 		{
-			var workload = WorkloadFactory.CreateWorkload(SkillFactory.CreateSkill("Direct sales"));
+			var skill = SkillFactory.CreateSkill("Direct sales");
+			skill.SetId(Guid.NewGuid());
+			var workload = WorkloadFactory.CreateWorkload(skill);
 			var localTimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
 			workload.Skill.TimeZone = localTimeZone;
 			workload.Skill.MidnightBreakOffset = TimeSpan.FromHours(2);

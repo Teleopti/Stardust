@@ -4,7 +4,6 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
@@ -33,9 +32,15 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 		{
 			var statisticRepository = MockRepository.GenerateStub<IStatisticRepository>();
 			statisticRepository.Stub(
-				x => x.LoadHourlyStatisticForSpecificDates(Workload.QueueSourceCollection, HistoricalPeriodForForecast.ToDateTimePeriod(SkillTimeZoneInfo()))).Return(StatisticTasks().ToArray());
+				x =>
+					x.LoadDailyStatisticForSpecificDates(Workload.QueueSourceCollection,
+						HistoricalPeriodForForecast.ToDateTimePeriod(SkillTimeZoneInfo()), Workload.Skill.Id.Value, Workload.Skill.MidnightBreakOffset))
+				.Return(StatisticTasks().ToArray());
 			statisticRepository.Stub(
-				x => x.LoadHourlyStatisticForSpecificDates(Workload.QueueSourceCollection, HistoricalPeriodForMeasurement.ToDateTimePeriod(SkillTimeZoneInfo()))).Return(StatisticTasksForMeasurement().ToArray());
+				x =>
+					x.LoadDailyStatisticForSpecificDates(Workload.QueueSourceCollection,
+						HistoricalPeriodForMeasurement.ToDateTimePeriod(SkillTimeZoneInfo()), Workload.Skill.Id.Value, Workload.Skill.MidnightBreakOffset))
+				.Return(StatisticTasksForMeasurement().ToArray());
 			var dailyStatistics = new DailyStatisticsAggregator(statisticRepository);
 
 			var skillDays = CurrentSkillDays();
@@ -76,7 +81,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 			get
 			{
 				if (_workload != null) return _workload;
-				_workload = WorkloadFactory.CreateWorkloadWithFullOpenHours(SkillFactory.CreateSkill("_"));
+				var skill = SkillFactory.CreateSkill("_");
+				skill.SetId(Guid.NewGuid());
+				_workload = WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
 				_workload.SetId(Guid.NewGuid());
 				return _workload;
 			}

@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return new List<IStatisticTask>();
         }
 
-		public ICollection<IStatisticTask> LoadHourlyStatisticForSpecificDates(ICollection<IQueueSource> sources, DateTimePeriod period)
+		public ICollection<IStatisticTask> LoadDailyStatisticForSpecificDates(ICollection<IQueueSource> sources, DateTimePeriod period, Guid skillId, TimeSpan midnightBreakOffset)
 		{
 			return new List<IStatisticTask>();
 		}

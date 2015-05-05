@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -17,42 +16,22 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Historical
 
 		public IEnumerable<DailyStatistic> LoadDailyStatistics(IWorkload workload, DateOnlyPeriod dateRange)
 		{
-			var statisticTasks = _statisticRepository.LoadHourlyStatisticForSpecificDates(workload.QueueSourceCollection,
-				dateRange.ToDateTimePeriod(workload.Skill.TimeZone));
+			var statisticTasks = _statisticRepository.LoadDailyStatisticForSpecificDates(workload.QueueSourceCollection,
+				dateRange.ToDateTimePeriod(workload.Skill.TimeZone), workload.Skill.Id.Value, workload.Skill.MidnightBreakOffset);
 
 			var calculator = new QueueStatisticsCalculator(workload.QueueAdjustments);
 			var result = from t in statisticTasks
-				group t by
-					TimeZoneHelper.ConvertFromUtc(t.Interval, workload.Skill.TimeZone)
-						.Subtract(workload.Skill.MidnightBreakOffset)
-						.Date
-				into g
-				select aggregateDailyNumbers(g, calculator);
+				select calculateTasksForDailyStatistics(t, calculator);
 			return result.ToArray(); //perf: no deferred execution here!
 		}
 
-		private static DailyStatistic aggregateDailyNumbers(IGrouping<DateTime, IStatisticTask> grouping, QueueStatisticsCalculator calculator)
+		private static DailyStatistic calculateTasksForDailyStatistics(IStatisticTask statisticTask, QueueStatisticsCalculator calculator)
 		{
-			double sumCalculatedTasks=0;
-			double sumAnsweredTasks = 0;
-			double totalTimeAnsweredTasks=0;
-			double totalAfterTimeAnsweredTasks=0;
-			var amountItems=0;
+			calculator.Calculate(statisticTask);
 
-			foreach (var statisticTask in grouping)
-			{
-				amountItems++;
-				calculator.Calculate(statisticTask);
-				sumAnsweredTasks += statisticTask.StatAnsweredTasks;
-				sumCalculatedTasks += statisticTask.StatCalculatedTasks;
-				var answeredTasksWithLowestPossibleOne = Math.Max(statisticTask.StatAnsweredTasks,1);
-				totalTimeAnsweredTasks += answeredTasksWithLowestPossibleOne*statisticTask.StatAverageTaskTimeSeconds;
-				totalAfterTimeAnsweredTasks += answeredTasksWithLowestPossibleOne*statisticTask.StatAverageAfterTaskTimeSeconds;
-			}
-
-			return new DailyStatistic(new DateOnly(grouping.Key), (int) sumCalculatedTasks,
-				sumAnsweredTasks > 0 ? totalTimeAnsweredTasks/sumAnsweredTasks : totalTimeAnsweredTasks/amountItems,
-				sumAnsweredTasks > 0 ? totalAfterTimeAnsweredTasks/sumAnsweredTasks : totalAfterTimeAnsweredTasks/amountItems);
+			return new DailyStatistic(new DateOnly(statisticTask.Interval), (int) statisticTask.StatCalculatedTasks,
+				statisticTask.StatAverageTaskTimeSeconds,
+				statisticTask.StatAverageAfterTaskTimeSeconds);
 		}
 	}
 }

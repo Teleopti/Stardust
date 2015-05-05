@@ -67,8 +67,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void VerifyLoadSpecificDatesDateTimePeriod()
         {
             ICollection<IQueueSource> sources = new List<IQueueSource>();
-            sources.Add(new QueueSource("heja", "gnaget", 191661));
-            sources.Add(new QueueSource("heja", "guldGnaget", 191667));
+						sources.Add(new QueueSource("heja", "blåvitt", 191661));
+						sources.Add(new QueueSource("heja", "Änglarna", 191667));
             sources.Add(new QueueSource("Kö 1", "Anmälan", 191666));
             sources.Add(new QueueSource("Kö 2", "Ordrar", 191664));
             target.LoadSpecificDates(sources, new DateTimePeriod(2006, 1, 1, 2006, 1, 2));
@@ -81,12 +81,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void VerifyLoadSpecificDatesDateTimePeriodArabic()
         {
             ICollection<IQueueSource> sources = new List<IQueueSource>();
-            sources.Add(new QueueSource("heja", "gnaget", 191661));
-            sources.Add(new QueueSource("heja", "guldGnaget", 191667));
+						sources.Add(new QueueSource("heja", "blåvitt", 191661));
+						sources.Add(new QueueSource("heja", "Änglarna", 191667));
             sources.Add(new QueueSource("Kö 1", "Anmälan", 191666));
             sources.Add(new QueueSource("Kö 2", "Ordrar", 191664));
             target.LoadSpecificDates(sources, new DateTimePeriod(2006, 1, 1, 2006, 1, 2));
         }
+
+				[Test]
+				public void VerifyLoadDailyStatisticsForSpecificDates()
+				{
+					ICollection<IQueueSource> sources = new List<IQueueSource>();
+					sources.Add(new QueueSource("heja", "blåvitt", 191661));
+					sources.Add(new QueueSource("heja", "Änglarna", 191667));
+					sources.Add(new QueueSource("Kö 1", "Anmälan", 191666));
+					sources.Add(new QueueSource("Kö 2", "Ordrar", 191664));
+					target.LoadDailyStatisticForSpecificDates(sources, new DateTimePeriod(2006, 1, 1, 2006, 1, 2), new Guid(), TimeSpan.FromHours(2));
+				}
 
        [Test]
         public void VerifyLoadAgentStat()
