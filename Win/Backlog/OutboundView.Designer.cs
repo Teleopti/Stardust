@@ -127,7 +127,7 @@
 			this.toolStripButtonAddCampaign.Name = "toolStripButtonAddCampaign";
 			this.toolStripButtonAddCampaign.Size = new System.Drawing.Size(91, 22);
 			this.toolStripButtonAddCampaign.Text = "Add Campaign";
-			this.toolStripButtonAddCampaign.Click += new System.EventHandler(this.toolStripButtonAddCampaign_Click);
+			this.toolStripButtonAddCampaign.Click += new System.EventHandler(this.toolStripButtonAddCampaignClick);
 			// 
 			// statusStrip1
 			// 
@@ -146,7 +146,7 @@
 			this.Controls.Add(this.toolStripContainer1);
 			this.Name = "OutboundView";
 			this.Text = "OutboundView";
-			this.Load += new System.EventHandler(this.OutboundView_Load);
+			this.Load += new System.EventHandler(this.outboundViewLoad);
 			this.toolStripContainer1.ContentPanel.ResumeLayout(false);
 			this.toolStripContainer1.TopToolStripPanel.ResumeLayout(false);
 			this.toolStripContainer1.TopToolStripPanel.PerformLayout();

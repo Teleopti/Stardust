@@ -258,7 +258,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		{
 			ISkillRepository skillRep = _repositoryFactory.CreateSkillRepository(uow);
 			ICollection<ISkill> skills = skillRep.FindAllWithWorkloadAndQueues();
-			skills = skills.Except(skills.OfType<IChildSkill>()).ToList();
+			skills = skills.Except(skills.OfType<IChildSkill>()).Where(s => s.SkillType.ForecastSource != ForecastSource.OutboundTelephony).ToList();
 			return skills.Select(createSkillModel).ToList();
 		}
 
