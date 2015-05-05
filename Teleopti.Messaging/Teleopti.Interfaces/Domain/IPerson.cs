@@ -306,5 +306,6 @@ namespace Teleopti.Interfaces.Domain
 		 void AddExternalLogOn(IExternalLogOn externalLogOn, IPersonPeriod personPeriod);
 		 void ResetExternalLogOn(IPersonPeriod personPeriod);
 		 void RemoveExternalLogOn(IExternalLogOn externalLogOn, IPersonPeriod personPeriod);
+	    bool IsTerminated();
     }
 }

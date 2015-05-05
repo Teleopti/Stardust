@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 			{
 				var foundAppUser = _repositoryFactory.CreatePersonRepository(uow).LoadPersonAndPermissions(personInfo.PersonId);
-				if (foundAppUser.TerminalDate.HasValue && foundAppUser.TerminalDate.Value < DateOnly.Today)
+				if (foundAppUser.IsTerminated())
 				{
 					return new AuthenticateResult {Successful = false};
 				}

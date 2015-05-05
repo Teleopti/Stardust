@@ -209,6 +209,11 @@ namespace Teleopti.Ccc.Domain.Common
 		   addPersonActivityStartingEvent();
 	   }
 
+	    public virtual bool IsTerminated()
+	    {
+				return TerminalDate.HasValue && TerminalDate.Value < DateOnly.Today;
+	    }
+
 	    // adding this event so servicebus and rta do a check if person should be monitored in rta
 		private void addPersonActivityStartingEvent()
 		{
