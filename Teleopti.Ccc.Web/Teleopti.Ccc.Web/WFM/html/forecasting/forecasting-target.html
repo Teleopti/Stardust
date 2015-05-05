@@ -6,9 +6,9 @@
 	</div>
 	<div class="material-block-content" ng-if="showSelection">
 		<div class="row col-lg-12">
-			<button class="wfm-btn wfm-btn-default" ng-click="back()">Back<md-tooltip>Peridod selection</md-tooltip></button>
-			<button class="wfm-btn apply pull-right" ng-class="{'wfm-btn-primary-disabled': !hasOneSelected(), 'wfm-btn-primary':hasOneSelected()}" ng-click="nextStep()">Apply<md-tooltip>Generate forecast</md-tooltip></button>
-			<p>Select forcasting target(s) for period {{period.startDate | date : shortDate}} to {{period.endDate | date : shortDate}}:</p>
+			<button class="wfm-btn wfm-btn-default" ng-click="back()">Back <md-tooltip translate>PeriodSelectionTip</md-tooltip> </button>
+			<button class="wfm-btn apply pull-right" ng-class="{'wfm-btn-primary-disabled': !hasOneSelected(), 'wfm-btn-primary':hasOneSelected()}" ng-click="nextStep()">Apply<md-tooltip translate>GenerateForecastTip</md-tooltip></button>
+			<p>Select forcasting target(s) for period {{period.startDate | date : shortDate}} {{'To' | translate}} {{period.endDate | date : shortDate}}:</p>
 		</div>
 		<div class="row col-lg-12">
 			<div class="tree">
@@ -53,7 +53,7 @@
 					<i class="pull-right workload-accuracy">{{workload.Accuracy}}</i>
 					<span><i class="mdi mdi-check"></i></span>
 					<i class="mdi mdi-chart-bar forecasting-chart-bar" ng-click="openModal(workload);$event.stopPropagation();">
-						<md-tooltip>View method chart</md-tooltip>
+						<md-tooltip translate>ViewChartTip</md-tooltip>
 					</i>
 					<div ng-include="'forecasting-chart.html'"></div>
 				</div>
@@ -81,7 +81,7 @@
 							<div class="row">
 								<div class="col-lg-12">
 									<h4>Forescast Method</h4>
-									<p>Based on volumes prior to the historical data, forecast methods have been created and applied to the previous year. The most accurate method is currently displayed in the chart and will be used for your next forecast. </p>
+									<p translate>ForecastChartIntro</p>
 								</div>
 							</div>
 							<c3chart bindto-id="{{workload.chartId}}" chart-data="workload.chartData" chart-columns="dataColumns" chart-x="dataX" show-subchart="true" enable-zoom="true">

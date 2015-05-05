@@ -13018,4 +13018,20 @@ Reduce the complexity to use these shifts.</value>
     <value>Outbound</value>
     <comment>Permission: Outbound</comment>
   </data>
+  <data name="ForecastChartIntro" xml:space="preserve">
+    <value>Based on volumes prior to the historical data, forecast methods have been created and applied to the previous year. The most accurate method is currently displayed in the chart and will be used for your next forecast.</value>
+    <comment>Describe the web forecast method chart</comment>
+  </data>
+  <data name="GenerateForecastTip" xml:space="preserve">
+    <value>Generate forecast</value>
+    <comment>Proceed to generate forecast from advanced web forecast</comment>
+  </data>
+  <data name="PeriodSelectionTip" xml:space="preserve">
+    <value>Period selection</value>
+    <comment>Go back to period selection from advanced web forecast</comment>
+  </data>
+  <data name="ViewChartTip" xml:space="preserve">
+    <value>View method chart</value>
+    <comment>Trigger modal window in advanced web forecast</comment>
+  </data>
 </root>

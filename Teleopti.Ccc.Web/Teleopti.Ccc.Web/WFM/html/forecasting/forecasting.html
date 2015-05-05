@@ -9,14 +9,14 @@
 	<div class="material-block-content">
 		<div class="wfm-datepicker-wrap">
 			<div class="sub-header">
-				From <span class="startDate">{{period.startDate | date : format}}</span>
+				{{'From' | translate}} <span class="startDate">{{period.startDate | date : format}}</span>
 			</div>
 			<datepicker ng-model="period.startDate" show-weeks="true" class="wfm-datepicker"></datepicker>
 		</div>
 
 		<div class="wfm-datepicker-wrap">
 			<div class="sub-header">
-				To <span class="endDate">{{period.endDate | date : format}}</span>
+				{{'To' | translate}} <span class="endDate">{{period.endDate | date : format}}</span>
 			</div>
 			<datepicker ng-model="period.endDate" min-date="period.startDate" show-weeks="true" class="wfm-datepicker"></datepicker>
 		</div>
