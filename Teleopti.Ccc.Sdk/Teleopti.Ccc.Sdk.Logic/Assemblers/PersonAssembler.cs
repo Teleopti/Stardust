@@ -86,11 +86,13 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 				var identities = IdentityHelper.Split(entity.AuthenticationInfo.Identity);
 				personDto.WindowsDomain = identities.Item1;
 				personDto.WindowsLogOnName = identities.Item2;
+				personDto.Identity = entity.AuthenticationInfo.Identity;
 			}
 			else
 			{
 				personDto.WindowsDomain = "";
 				personDto.WindowsLogOnName = "";
+				personDto.Identity = "";
 			}
 #pragma warning restore 618
 			personDto.Note = entity.Note;
