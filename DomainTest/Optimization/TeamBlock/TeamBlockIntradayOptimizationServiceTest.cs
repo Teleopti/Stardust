@@ -56,8 +56,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 				_safeRollbackAndResourceCalculation,
 				_teamBlockIntradayDecisionMaker, _teamBlockOptimizationLimits,
 				_teamBlockClearer, _teamBlockMaxSeatChecker, _dailyTargetValueCalculatorForTeamBlock, _teamBlockSteadyStateValidator,
-				//seems to miss tests when this is true?
-				false,
 				_teamBlockShiftCategoryLimitationValidator
 				);
 			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
@@ -100,8 +98,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 					.Return(true);
 				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(dateOnly, schedulingOptions)).Return(true);
 				Expect.Call(_teamBlockOptimizationLimits.Validate(teamBlockInfo, optimizationPreferences)).Return(true);
-				Expect.Call(_dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo, optimizationPreferences.Advanced,
-					false))
+				Expect.Call(_dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo, optimizationPreferences.Advanced))
 					.Return(0.5).Repeat.Twice();
 				Expect.Call(
 					() => _safeRollbackAndResourceCalculation.Execute(_schedulePartModifyAndRollbackService, schedulingOptions));
@@ -184,8 +181,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 					new ShiftNudgeDirective()))
 					.IgnoreArguments()
 					.Return(false);
-				Expect.Call(_dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo, optimizationPreferences.Advanced,
-					false))
+				Expect.Call(_dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo, optimizationPreferences.Advanced))
 					.Return(5.0);
 				Expect.Call(
 					() => _safeRollbackAndResourceCalculation.Execute(_schedulePartModifyAndRollbackService, schedulingOptions));
@@ -233,8 +229,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 					.IgnoreArguments()
 					.Return(true);
 				Expect.Call(_teamBlockOptimizationLimits.Validate(teamBlockInfo, optimizationPreferences)).Return(false);
-				Expect.Call(_dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo, optimizationPreferences.Advanced,
-					false))
+				Expect.Call(_dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo, optimizationPreferences.Advanced))
 					.Return(5.0);
 				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(dateOnly, schedulingOptions)).Return(true);
 				Expect.Call(
@@ -282,8 +277,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 					.IgnoreArguments()
 					.Return(true);
 				Expect.Call(_teamBlockOptimizationLimits.Validate(teamBlockInfo, optimizationPreferences)).Return(true);
-				Expect.Call(_dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo, optimizationPreferences.Advanced,
-					false))
+				Expect.Call(_dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo, optimizationPreferences.Advanced))
 					.Return(5.0);
 				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(dateOnly, schedulingOptions)).Return(true);
 				Expect.Call(
@@ -394,8 +388,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 					_schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder,
 					new ShiftNudgeDirective())).IgnoreArguments().Return(true);
 				Expect.Call(_teamBlockOptimizationLimits.Validate(teamBlockInfo, optimizationPreferences)).Return(false);
-				Expect.Call(_dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo, optimizationPreferences.Advanced,
-					false)).Return(5.0);
+				Expect.Call(_dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo, optimizationPreferences.Advanced)).Return(5.0);
 				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(dateOnly, schedulingOptions)).Return(true);
 				Expect.Call(
 					() => _safeRollbackAndResourceCalculation.Execute(_schedulePartModifyAndRollbackService, schedulingOptions));

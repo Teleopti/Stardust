@@ -35,7 +35,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly ITeamBlockOptimizationLimits _teamBlockOptimizationLimits;
 		private readonly IDailyTargetValueCalculatorForTeamBlock _dailyTargetValueCalculatorForTeamBlock;
 		private readonly ITeamBlockSteadyStateValidator _teamTeamBlockSteadyStateValidator;
-		private readonly bool _isMaxSeatToggleEnabled;
 		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 
 		public TeamBlockIntradayOptimizationService(ITeamBlockGenerator teamBlockGenerator,
@@ -48,8 +47,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker,
 			IDailyTargetValueCalculatorForTeamBlock dailyTargetValueCalculatorForTeamBlock,
 			ITeamBlockSteadyStateValidator teamTeamBlockSteadyStateValidator,
-			//remove this - instead use two different impl of (a smaller interface of) ITeamBlockIntradayOptimizationService
-			bool isMaxSeatToggleEnabled,
 			ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator)
 		{
 			_teamBlockScheduler = teamBlockScheduler;
@@ -60,7 +57,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_teamBlockMaxSeatChecker = teamBlockMaxSeatChecker;
 			_dailyTargetValueCalculatorForTeamBlock = dailyTargetValueCalculatorForTeamBlock;
 			_teamTeamBlockSteadyStateValidator = teamTeamBlockSteadyStateValidator;
-			_isMaxSeatToggleEnabled = isMaxSeatToggleEnabled;
 			_teamBlockShiftCategoryLimitationValidator = teamBlockShiftCategoryLimitationValidator;
 			_teamBlockGenerator = teamBlockGenerator;
 			_teamBlockOptimizationLimits = teamBlockOptimizationLimits;
@@ -92,7 +88,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					schedulingOptions, remainingInfoList,
 					schedulePartModifyAndRollbackService,
 					resourceCalculateDelayer,
-					schedulingResultStateHolder, _isMaxSeatToggleEnabled, ()=> { cancelMe = true; });
+					schedulingResultStateHolder, ()=> { cancelMe = true; });
 				foreach (var teamBlock in teamBlocksToRemove)
 				{
 					remainingInfoList.Remove(teamBlock);
@@ -115,8 +111,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private IEnumerable<ITeamBlockInfo> optimizeOneRound(DateOnlyPeriod selectedPeriod,
 			IOptimizationPreferences optimizationPreferences, ISchedulingOptions schedulingOptions,
 			IList<ITeamBlockInfo> allTeamBlockInfos, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder,
-			bool isMaxSeatToggleEnabled, Action cancelAction)
+			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder, 
+			Action cancelAction)
 		{
 			var teamBlockToRemove = new List<ITeamBlockInfo>();
 
@@ -138,9 +134,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				string teamName = teamBlockInfo.TeamInfo.Name.DisplayString(20);
 				schedulePartModifyAndRollbackService.ClearModificationCollection();
 
-				var previousTargetValue = _dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo,
-					optimizationPreferences
-						.Advanced, isMaxSeatToggleEnabled);
+				var previousTargetValue = _dailyTargetValueCalculatorForTeamBlock
+					.TargetValue(teamBlockInfo, optimizationPreferences.Advanced);
 				_teamBlockClearer.ClearTeamBlock(schedulingOptions, schedulePartModifyAndRollbackService, teamBlockInfo);
 				var firstSelectedDay = selectedPeriod.DayCollection().First();
 				var datePoint = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().FirstOrDefault(x => x >= firstSelectedDay);
@@ -189,7 +184,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				
 
 				var newTargetValue = _dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo,
-					optimizationPreferences.Advanced, isMaxSeatToggleEnabled);
+					optimizationPreferences.Advanced);
 				var isWorse = newTargetValue >= previousTargetValue;
 				string commonProgress = Resources.OptimizingIntraday + Resources.Colon + "(" + totalTeamBlockInfos + ")(" +
 				                        runningTeamBlockCounter + ") " + teamBlockInfo.BlockInfo.BlockPeriod.DateString + " " +

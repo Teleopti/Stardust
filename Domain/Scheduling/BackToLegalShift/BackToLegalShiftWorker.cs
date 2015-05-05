@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 		bool ReSchedule(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions,
 			IShiftProjectionCache roleModelShift,
 			ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer,
-			ISchedulingResultStateHolder schedulingResultStateHolder, bool isMaxSeatToggleEnabled);
+			ISchedulingResultStateHolder schedulingResultStateHolder);
 	}
 
 	public class BackToLegalShiftWorker : IBackToLegalShiftWorker
@@ -30,12 +30,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 		public bool ReSchedule(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions,
 			IShiftProjectionCache roleModelShift,
 			ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer,
-			ISchedulingResultStateHolder schedulingResultStateHolder, bool isMaxSeatToggleEnabled)
+			ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
 			var date = teamBlockInfo.BlockInfo.BlockPeriod.StartDate;
 			bool success = _teamBlockSingleDayScheduler.ScheduleSingleDay(teamBlockInfo, schedulingOptions, date, roleModelShift,
-				rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, null, isMaxSeatToggleEnabled);
+				rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, null);
 			if (!success)
 			{
 				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);

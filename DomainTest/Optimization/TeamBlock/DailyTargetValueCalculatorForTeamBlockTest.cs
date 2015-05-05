@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 				Expect.Call(_maxSeatSkillAggregator.GetAggregatedSkills(_teamInfo.GroupMembers.ToList(), _dateOnlyPeriod)).Return(new HashSet<ISkill>());
 
 			}
-			Assert.AreEqual(_target.TargetValue(_teamBlockInfo, _advancePrefrences, false), 0.0);
+			Assert.AreEqual(_target.TargetValue(_teamBlockInfo, _advancePrefrences), 0.0);
 		}
 
 		[Test]
@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 				Expect.Call(_maxSeatSkillAggregator.GetAggregatedSkills(_teamInfo.GroupMembers.ToList(), _dateOnlyPeriod)).Return(new HashSet<ISkill>());
 
 			}
-			Assert.AreEqual(_target.TargetValue(_teamBlockInfo, _advancePrefrences, false), 0.3);
+			Assert.AreEqual(_target.TargetValue(_teamBlockInfo, _advancePrefrences), 0.3);
 		}
 
 		[Test]
@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 				Expect.Call(_maxSeatSkillAggregator.GetAggregatedSkills(_teamInfo.GroupMembers.ToList(), _dateOnlyPeriod)).Return(new HashSet<ISkill>());
 
 			}
-			Assert.AreEqual(_target.TargetValue(_teamBlockInfo, _advancePrefrences, false), 0.3);
+			Assert.AreEqual(_target.TargetValue(_teamBlockInfo, _advancePrefrences), 0.3);
 		}
 
 		[Test]
@@ -237,7 +237,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			}
 			using (_mock.Playback())
 			{
-				Assert.AreEqual(5000.3, _target.TargetValue(_teamBlockInfo, _advancePrefrences, false), 0.001);
+				Assert.AreEqual(5000.3, _target.TargetValue(_teamBlockInfo, _advancePrefrences), 0.001);
 			}
 		}
 
@@ -283,7 +283,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			}
 			using (_mock.Playback())
 			{
-				Assert.AreEqual(5000.3, _target.TargetValue(_teamBlockInfo, _advancePrefrences, true ), 0.001);
+				Assert.AreEqual(5000.3, _target.TargetValue(_teamBlockInfo, _advancePrefrences), 0.001);
 			}
 		}
 

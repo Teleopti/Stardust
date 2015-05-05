@@ -76,12 +76,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_person.VirtualSchedulePeriod(new DateOnly()),
 					out x, out y)).Return(true).OutRef(1, y);
 				Expect.Call(_backToLegalShiftWorker.ReSchedule(_teamBlock, _schedulingOptions, _shiftProjectionCache,
-					_rollBackService, _resourceCalculateDelayer, _schedulingResultStateHolder, true)).Return(true);
+					_rollBackService, _resourceCalculateDelayer, _schedulingResultStateHolder)).Return(true);
 			}
 			using (_mocks.Playback())
 			{
 				_target.Execute(new List<ITeamBlockInfo> {_teamBlock}, _schedulingOptions, _schedulingResultStateHolder,
-					_rollBackService, _resourceCalculateDelayer, true);
+					_rollBackService, _resourceCalculateDelayer);
 			}
 		}
 
@@ -107,12 +107,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_person.VirtualSchedulePeriod(new DateOnly()),
 					out x, out y)).Return(true).OutRef(1, y);
 				Expect.Call(_backToLegalShiftWorker.ReSchedule(_teamBlock, _schedulingOptions, _shiftProjectionCache,
-					_rollBackService, _resourceCalculateDelayer, _schedulingResultStateHolder, true)).Return(false);
+					_rollBackService, _resourceCalculateDelayer, _schedulingResultStateHolder)).Return(false);
 			}
 			using (_mocks.Playback())
 			{
 				_target.Execute(new List<ITeamBlockInfo> { _teamBlock }, _schedulingOptions, _schedulingResultStateHolder,
-					_rollBackService, _resourceCalculateDelayer, true);
+					_rollBackService, _resourceCalculateDelayer);
 				Assert.AreEqual(_person, _workShiftFinderResultHolder.GetResults()[0].Person);
 				Assert.AreEqual(new DateOnly(), _workShiftFinderResultHolder.GetResults()[0].ScheduleDate);
 			}
@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 			using (_mocks.Playback())
 			{
 				_target.Execute(new List<ITeamBlockInfo> { _teamBlock }, _schedulingOptions, _schedulingResultStateHolder,
-					_rollBackService, _resourceCalculateDelayer, true);
+					_rollBackService, _resourceCalculateDelayer);
 				Assert.AreEqual(_person, _workShiftFinderResultHolder.GetResults()[0].Person);
 				Assert.AreEqual(new DateOnly(), _workShiftFinderResultHolder.GetResults()[0].ScheduleDate);
 			}
@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 			using (_mocks.Playback())
 			{
 				_target.Execute(new List<ITeamBlockInfo> { _teamBlock }, _schedulingOptions, _schedulingResultStateHolder,
-					_rollBackService, _resourceCalculateDelayer, true);
+					_rollBackService, _resourceCalculateDelayer);
 			}
 		}
 
@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 			using (_mocks.Playback())
 			{
 				_target.Execute(new List<ITeamBlockInfo> { _teamBlock }, _schedulingOptions, _schedulingResultStateHolder,
-					_rollBackService, _resourceCalculateDelayer, true);
+					_rollBackService, _resourceCalculateDelayer);
 			}
 		}
 
@@ -202,7 +202,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 			using (_mocks.Playback())
 			{
 				_target.Execute(new List<ITeamBlockInfo> { _teamBlock }, _schedulingOptions, _schedulingResultStateHolder,
-					_rollBackService, _resourceCalculateDelayer, true);
+					_rollBackService, _resourceCalculateDelayer);
 			}
 		}
 
@@ -229,7 +229,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 			{
 				_target.Progress+=_target_Progress;
 				_target.Execute(new List<ITeamBlockInfo> { _teamBlock, _teamBlock }, _schedulingOptions, _schedulingResultStateHolder,
-					_rollBackService, _resourceCalculateDelayer, true);
+					_rollBackService, _resourceCalculateDelayer);
 				_target.Progress -= _target_Progress;
 			}
 		}

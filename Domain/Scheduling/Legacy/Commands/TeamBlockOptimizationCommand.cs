@@ -318,9 +318,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					_teamBlockMaxSeatChecker,
 					_dailyTargetValueCalculatorForTeamBlock,
 					_teamBlockSteadyStateValidator,
-					//this shouldn't be here.
-					//should be two different impl of the interface instead
-					_toggleManager.IsEnabled(Toggles.Scheduler_TeamBlockAdhereWithMaxSeatRule_23419),
 					_teamBlockShiftCategoryLimitationValidator
 					);
 

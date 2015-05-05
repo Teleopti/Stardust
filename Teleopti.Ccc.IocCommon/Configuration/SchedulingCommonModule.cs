@@ -421,14 +421,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ValidNumberOfDayOffInAWeekSpecification>().As<IValidNumberOfDayOffInAWeekSpecification>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamScheduling>().As<ITeamScheduling>();
 			builder.RegisterType<TeamBlockSingleDayScheduler>().As<ITeamBlockSingleDayScheduler>();
-			builder.RegisterType<TeamBlockScheduler>().As<TeamBlockScheduler>();
-			builder.Register(c =>
-			{
-				//ugly hack. should be two different implementations instead
-				var isMaxSeatToggleEnabled =
-					c.Resolve<IToggleManager>().IsEnabled(Toggles.Scheduler_TeamBlockAdhereWithMaxSeatRule_23419);
-				return c.Resolve<TeamBlockScheduler>(new NamedParameter("isMaxSeatToggleEnabled", isMaxSeatToggleEnabled));
-			}).As<ITeamBlockScheduler>();
+			builder.RegisterType<TeamBlockScheduler>().As<ITeamBlockScheduler>();
 			builder.RegisterType<TeamBlockGenerator>().As<ITeamBlockGenerator>();
 		}
 

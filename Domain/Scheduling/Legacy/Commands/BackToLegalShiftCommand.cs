@@ -75,10 +75,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				_scheduleDayChangeCallback,
 				tagSetter);
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, false, true);
-			var maxSeatToggle = _toggleManager.IsEnabled(Toggles.Scheduler_TeamBlockAdhereWithMaxSeatRule_23419);
 			_backToLegalShiftService.Progress += _backToLegalShiftService_Progress;
 			_backToLegalShiftService.Execute(selectedTeamBlocks, schedulingOptions, schedulingResultStateHolder, rollbackService,
-				resourceCalculateDelayer, maxSeatToggle);
+				resourceCalculateDelayer);
 			_backToLegalShiftService.Progress -= _backToLegalShiftService_Progress;
 		}
 

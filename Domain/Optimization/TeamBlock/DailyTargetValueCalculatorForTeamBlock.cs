@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
 	public interface IDailyTargetValueCalculatorForTeamBlock
 	{
-		double TargetValue(ITeamBlockInfo teamBlockInfo, IAdvancedPreferences advancedPreferences, bool isMaxSeatToggleEnabled);
+		double TargetValue(ITeamBlockInfo teamBlockInfo, IAdvancedPreferences advancedPreferences);
 	}
 
 	public class DailyTargetValueCalculatorForTeamBlock : IDailyTargetValueCalculatorForTeamBlock
@@ -53,8 +53,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_pullTargetValueFromSkillIntervalData = pullTargetValueFromSkillIntervalData;
 		}
 
-		public double TargetValue(ITeamBlockInfo teamBlockInfo, IAdvancedPreferences advancedPreferences,
-			bool isMaxSeatToggleEnabled)
+		public double TargetValue(ITeamBlockInfo teamBlockInfo, IAdvancedPreferences advancedPreferences)
 		{
 			var groupMembers = teamBlockInfo.TeamInfo.GroupMembers;
 
@@ -66,8 +65,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			var minimumResolution = _resolutionProvider.MinimumResolution(skills);
 			IDictionary<DateTime, IntervalLevelMaxSeatInfo> aggregatedMaxSeatSkill =
 				new Dictionary<DateTime, IntervalLevelMaxSeatInfo>();
-			if (hasMaxSeatSkill.Any() && isMaxSeatToggleEnabled &&
-			    advancedPreferences.UserOptionMaxSeatsFeature != MaxSeatsFeatureOptions.DoNotConsiderMaxSeats)
+			if (hasMaxSeatSkill.Any() 
+				&& advancedPreferences.UserOptionMaxSeatsFeature != MaxSeatsFeatureOptions.DoNotConsiderMaxSeats)
 			{
 				minimumResolution = 15;
 				aggregatedMaxSeatSkill = getAggregatedIntervalLevelInfo(teamBlockInfo, dateOnlyList.Min());

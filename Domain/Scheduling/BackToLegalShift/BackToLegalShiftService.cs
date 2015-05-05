@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 	{
 		void Execute(IList<ITeamBlockInfo> selectedTeamBlocks, ISchedulingOptions schedulingOptions,
 			ISchedulingResultStateHolder schedulingResultStateHolder, ISchedulePartModifyAndRollbackService rollbackService,
-			IResourceCalculateDelayer resourceCalculateDelayer, bool isMaxSeatToggleEnabled);
+			IResourceCalculateDelayer resourceCalculateDelayer);
 
 		event EventHandler<BackToLegalShiftArgs> Progress;
 	}
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 
 		public void Execute(IList<ITeamBlockInfo> selectedTeamBlocks, ISchedulingOptions schedulingOptions,
 			ISchedulingResultStateHolder schedulingResultStateHolder, ISchedulePartModifyAndRollbackService rollbackService,
-			IResourceCalculateDelayer resourceCalculateDelayer, bool isMaxSeatToggleEnabled)
+			IResourceCalculateDelayer resourceCalculateDelayer)
 		{
 			//single block, single team
 			int processedBlocks = 0;
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 				}
 
 				success = _backToLegalShiftWorker.ReSchedule(selectedTeamBlock, schedulingOptions, roleModel, rollbackService,
-					resourceCalculateDelayer, schedulingResultStateHolder, isMaxSeatToggleEnabled);
+					resourceCalculateDelayer, schedulingResultStateHolder);
 
 				if (!success)
 				{
