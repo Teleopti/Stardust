@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 			_jsonSerializer = jsonSerializer;
 		}
 
-		public AuthenticationQueryResult TryApplicationLogon(ApplicationLogonClientModel applicationLogonClientModel, string userAgent)
+		public AuthenticationQueryResult TryLogon(ApplicationLogonClientModel applicationLogonClientModel, string userAgent)
 		{
 			var json = _jsonSerializer.SerializeObject(applicationLogonClientModel);
 			var result = _postHttpRequest.Send<AuthenticationQueryResult>(_tenantServerConfiguration.Path + "Authenticate/ApplicationLogon", json, userAgent);
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 			return result;
 		}
 
-		public AuthenticationQueryResult TryIdentityLogon(IdentityLogonClientModel identityLogonClientModel, string userAgent)
+		public AuthenticationQueryResult TryLogon(IdentityLogonClientModel identityLogonClientModel, string userAgent)
 		{
 			var json = _jsonSerializer.SerializeObject(identityLogonClientModel);
 			var result = _postHttpRequest.Send<AuthenticationQueryResult>(_tenantServerConfiguration.Path + "Authenticate/IdentityLogon", json, userAgent);

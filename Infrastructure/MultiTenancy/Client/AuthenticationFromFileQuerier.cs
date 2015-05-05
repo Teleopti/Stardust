@@ -13,12 +13,12 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 			_tenantServerConfiguration = tenantServerConfiguration;
 		}
 
-		public AuthenticationQueryResult TryApplicationLogon(ApplicationLogonClientModel applicationLogonClientModel, string userAgent)
+		public AuthenticationQueryResult TryLogon(ApplicationLogonClientModel applicationLogonClientModel, string userAgent)
 		{
 			return readFile();
 		}
 
-		public AuthenticationQueryResult TryIdentityLogon(IdentityLogonClientModel identityLogonClientModel, string userAgent)
+		public AuthenticationQueryResult TryLogon(IdentityLogonClientModel identityLogonClientModel, string userAgent)
 		{
 			return readFile();
 		}

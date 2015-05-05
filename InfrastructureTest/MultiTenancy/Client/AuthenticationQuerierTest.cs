@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			var nhibConfigEncryption = MockRepository.GenerateStub<INhibConfigDecryption>();
 			nhibConfigEncryption.Stub(x => x.DecryptConfig(authResult.DataSourceConfiguration));
 			var target = new AuthenticationQuerier(new TenantServerConfiguration(pathToTenantServer), nhibConfigEncryption, postHttpRequest, jsonSerializer);
-			target.TryApplicationLogon(applicationLogonClientModel, userAgent)
+			target.TryLogon(applicationLogonClientModel, userAgent)
 				.Should().Be.SameInstanceAs(authResult);
 		}
 
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			var nhibConfigEncryption = MockRepository.GenerateStub<INhibConfigDecryption>();
 			nhibConfigEncryption.Stub(x => x.DecryptConfig(authResult.DataSourceConfiguration));
 			var target = new AuthenticationQuerier(new TenantServerConfiguration(pathToTenantServer), nhibConfigEncryption, postHttpRequest, jsonSerializer);
-			target.TryIdentityLogon(logonClientModel, userAgent)
+			target.TryLogon(logonClientModel, userAgent)
 				.Should().Be.SameInstanceAs(authResult);
 		}
 	}
