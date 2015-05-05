@@ -1368,6 +1368,9 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			int rows = HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_dim_business_unit_load", parameterList,
 												_dataMartConnectionString);
 
+            HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_job_intraday_settings_load",null,
+                                                _dataMartConnectionString);
+
 			HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_job_intraday_settings_load_deviation", parameterList,
 												_dataMartConnectionString);
 			return rows;

@@ -9,6 +9,48 @@ GO
 CREATE PROCEDURE [mart].[etl_job_intraday_settings_load] 
 	
 AS
+--REMOVE INVALID LOG_OBJECTS
+IF (SELECT COUNT(*) FROM mart.v_log_object_detail)> 0
+BEGIN
+	DELETE jis
+	FROM mart.etl_job_intraday_settings jis
+	WHERE NOT EXISTS (SELECT * FROM mart.v_log_object_detail lod 
+	INNER JOIN mart.sys_datasource ds
+		ON ds.log_object_id = lod.log_object_id
+	INNER JOIN mart.etl_job_intraday_settings_type t
+		ON t.detail_id = lod.detail_id
+	WHERE jis.detail_id=lod.detail_id AND jis.datasource_id=ds.datasource_id)
+	AND detail_id IN (1,2)
+	--3
+	DELETE jis
+	FROM mart.etl_job_intraday_settings jis
+	WHERE NOT EXISTS (SELECT * FROM mart.v_log_object_detail lod 
+	INNER JOIN mart.sys_datasource ds
+	ON ds.log_object_id = lod.log_object_id
+	WHERE ds.datasource_id = jis.datasource_id and lod.detail_id = 2)
+	AND detail_id IN (3)
+
+END
+IF (SELECT COUNT(*) FROM mart.v_log_object_detail)= 0 AND (SELECT COUNT(*) FROM dbo.log_object_detail)> 0 --special case when no agg db
+BEGIN
+	DELETE jis
+	FROM mart.etl_job_intraday_settings jis
+	WHERE NOT EXISTS (SELECT * FROM dbo.log_object_detail lod 
+	INNER JOIN mart.sys_datasource ds
+		ON ds.log_object_id = lod.log_object_id
+	INNER JOIN mart.etl_job_intraday_settings_type t
+		ON t.detail_id = lod.detail_id
+	WHERE jis.detail_id=lod.detail_id AND jis.datasource_id=ds.datasource_id)
+	AND detail_id IN (1,2)
+	--3
+	DELETE jis
+	FROM mart.etl_job_intraday_settings jis
+	WHERE NOT EXISTS (SELECT * FROM dbo.log_object_detail lod 
+	INNER JOIN mart.sys_datasource ds
+	ON ds.log_object_id = lod.log_object_id
+	WHERE ds.datasource_id = jis.datasource_id and lod.detail_id = 2)
+	AND detail_id IN (3)
+END
 --A proper Agg or Azure
 insert into [mart].[etl_job_intraday_settings]
 select
