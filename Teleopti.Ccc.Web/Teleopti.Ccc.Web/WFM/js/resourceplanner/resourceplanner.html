@@ -6,20 +6,20 @@
 	<div class="row" ng-show="planningPeriod.$resolved">
 		<div class="wfm-accordion material-depth-2">
 			<div class="next-planning-peroid wfm-accordion-head" ng-click="changeDateToggle = !changeDateToggle">
-				<h4>{{'NextPlanningPeriodMessage' | translate}} {{planningPeriod.StartDate | amDateFormat:"L"}} {{'ToText' | translate}} {{planningPeriod.EndDate | amDateFormat:"L"}}</h4>
+				<h4>{{'NextPlanningPeriodMessage' | translate}} {{planningPeriod.StartDate | date:"yyyy-MM-dd"}} {{'ToText' | translate}} {{planningPeriod.EndDate | date:"yyyy-MM-dd"}}</h4>
 			</div>
 		</div> 
 		<div ng-show="changeDateToggle && isEnabled">
 			<div class="wfm-datepicker-wrap">
 				<div class="sub-header">
-					From <span class="startDate">{{planningPeriod.StartDate | amDateFormat : "L"}}</span>
+					From <span class="startDate">{{planningPeriod.StartDate | date : format}}</span>
 				</div>
 				<datepicker ng-model="planningPeriod.StartDate" show-weeks="true" class="wfm-datepicker" ng-click="recalculateValidation(planningPeriod.Id,planningPeriod.StartDate,planningPeriod.EndDate)"></datepicker>
 			</div>
 
 			<div class="wfm-datepicker-wrap">
 				<div class="sub-header">
-					To <span class="endDate">{{planningPeriod.EndDate | amDateFormat : "L"}}</span>
+					To <span class="endDate">{{planningPeriod.EndDate | date : format}}</span>
 				</div>
 				<datepicker ng-model="planningPeriod.EndDate" min-date="planningPeriod.StartDate" show-weeks="true" class="wfm-datepicker" ng-click="recalculateValidation(planningPeriod.Id,planningPeriod.StartDate,planningPeriod.EndDate)"></datepicker>
 			</div>
@@ -38,7 +38,7 @@
 					<span class="pull-right" class="text-muted">{{skill.MissingRanges.length}} {{'IssuesText' | translate }}</span>
 				</div>
 				<div class="wfm-accordion-content" ng-cloak ng-show="skill.toggle">
-					<div ng-repeat="range in skill.MissingRanges">{{'MissingForecastFrom' | translate }} {{range.StartDate | amDateFormat:"L"}} {{'ToText' | translate}} {{range.EndDate | amDateFormat:"L"}}</div>
+					<div ng-repeat="range in skill.MissingRanges">{{'MissingForecastFrom' | translate }} {{range.StartDate | date:"yyyy-MM-dd"}} {{'ToText' | translate}} {{range.EndDate | date:"yyyy-MM-dd"}}</div>
 				</div>
 			</li>
 		</ul>
