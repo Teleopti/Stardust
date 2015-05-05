@@ -10018,4 +10018,130 @@ Ces options sont actives:
   <data name="SelectedItems" xml:space="preserve">
     <value>Objets activés</value>
   </data>
+  <data name="WeekWithNumber" xml:space="preserve">
+    <value>Semaine {0}</value>
+  </data>
+  <data name="Invalid" xml:space="preserve">
+    <value>Non valide</value>
+  </data>
+  <data name="CalculateBadgeWithRank" xml:space="preserve">
+    <value>Calculer badge avec rang</value>
+  </data>
+  <data name="UseBadgeForAnsweredCalls" xml:space="preserve">
+    <value>Utiliser badge pour appels répondus</value>
+  </data>
+  <data name="UseBadgeforAHT" xml:space="preserve">
+    <value>Utiliser badge pour DMT</value>
+  </data>
+  <data name="UseBadgeforAdherence" xml:space="preserve">
+    <value>Utiliser badge pour adhérence</value>
+  </data>
+  <data name="SetBadgeBronzeThresholdForAnsweredCalls" xml:space="preserve">
+    <value>Seuil pour bronze:</value>
+  </data>
+  <data name="SetBadgeSilverThresholdForAnsweredCalls" xml:space="preserve">
+    <value>Seuil pour argent:</value>
+  </data>
+  <data name="SetBadgeGoldThresholdForAnsweredCalls" xml:space="preserve">
+    <value>Seuil pour or:</value>
+  </data>
+  <data name="SetBadgeBronzeThresholdForAHT" xml:space="preserve">
+    <value>Seuil pour bronze (HH:mm:ss):</value>
+  </data>
+  <data name="SetBadgeSilverThresholdForAHT" xml:space="preserve">
+    <value>Seuil pour argent (HH:mm:ss):</value>
+  </data>
+  <data name="SetBadgeGoldThresholdForAHT" xml:space="preserve">
+    <value>Seuil pour or (HH:mm:ss):</value>
+  </data>
+  <data name="SetBadgeBronzeThresholdForAdherence" xml:space="preserve">
+    <value>Seuil pour bronze (%):</value>
+  </data>
+  <data name="SetBadgeSilverThresholdForAdherence" xml:space="preserve">
+    <value>Seuil pour argent (%):</value>
+  </data>
+  <data name="SetBadgeGoldThresholdForAdherence" xml:space="preserve">
+    <value>Seuil pour or (%):</value>
+  </data>
+  <data name="AnsweredCallsBronzeThresholdShouldLessThanSilverThreshold" xml:space="preserve">
+    <value>Le seuil du badge bronze pour appels répondus doit être plus bas que le seuil du badge argent.</value>
+  </data>
+  <data name="AnsweredCallsSilverThresholdShouldLessThanGoldThreshold" xml:space="preserve">
+    <value>Le seuil du badge argent pour les appels répondus doit être plus bas que le seuil du badge or.</value>
+  </data>
+  <data name="AHTBronzeThresholdShouldLessThanSilverThreshold" xml:space="preserve">
+    <value>Le seuil du badge bronze pour la DMT doit être plus élevé que le seuil du badge argent.</value>
+  </data>
+  <data name="AHTSilverThresholdShouldLessThanGoldThreshold" xml:space="preserve">
+    <value>Le seuil du badge argent pour la DMT doit être plus haut que le seuil du badge or.</value>
+  </data>
+  <data name="AdherenceBronzeThresholdShouldGreaterThanSilverThreshold" xml:space="preserve">
+    <value>Le seuil du badge bronze pour l'adhérence doit être plus bas que le seuil du badge argent.</value>
+  </data>
+  <data name="AdherenceSilverThresholdShouldGreaterThanGoldThreshold" xml:space="preserve">
+    <value>Le seuil du badge argent pour l'adhérence doit être plus bas que le seuil du badge or.</value>
+  </data>
+  <data name="SilverThresholdForAnsweredCallsValue" xml:space="preserve">
+    <value>La valeur du seuil argent pour les appels répondus doit être plus élevée que le seuil bronze.</value>
+  </data>
+  <data name="PersonFinderFieldRole" xml:space="preserve">
+    <value>Rôle</value>
+  </data>
+  <data name="NoGamificationSetting" xml:space="preserve">
+    <value>Pas de paramètres de ludification</value>
+  </data>
+  <data name="SeatMap" xml:space="preserve">
+    <value>Plan de plateau</value>
+  </data>
+  <data name="SeatPlan" xml:space="preserve">
+    <value>Placement</value>
+  </data>
+  <data name="CheckingForecastingRequirements" xml:space="preserve">
+    <value>Vérifie les prérequis prévisions</value>
+  </data>
+  <data name="IssuesText" xml:space="preserve">
+    <value>problèmes</value>
+  </data>
+  <data name="MissingForecastFrom" xml:space="preserve">
+    <value>Prévisions manquantes à partir de</value>
+  </data>
+  <data name="MissingSkills" xml:space="preserve">
+    <value>Des prévisions sont manquantes pour ces compétences</value>
+  </data>
+  <data name="NextPlanningPeriodMessage" xml:space="preserve">
+    <value>La prochaine période de planification sera à partir de</value>
+  </data>
+  <data name="PlanningPeriodMissingMessage" xml:space="preserve">
+    <value>Ces prérequis sont manquants pour pouvoir planifier la prochaine période de planning:</value>
+  </data>
+  <data name="ToText" xml:space="preserve">
+    <value>à</value>
+  </data>
+  <data name="showMoreHeaderFields" xml:space="preserve">
+    <value>Plus de champs d'en-tête</value>
+  </data>
+  <data name="AdherenceCannotBeEmpty" xml:space="preserve">
+    <value>L'adhérence ne peut être vide</value>
+  </data>
+  <data name="NextPlanningPeriod" xml:space="preserve">
+    <value>Prochaine période de planification</value>
+  </data>
+  <data name="PlanningPeriod" xml:space="preserve">
+    <value>Période de planification</value>
+  </data>
+  <data name="DaysAreScheduled" xml:space="preserve">
+    <value>jours sont planifiés</value>
+  </data>
+  <data name="ApplicationLogonExists" xml:space="preserve">
+    <value>Le nom de connexion ({0}) existe déjà, merci d'en sélectionner un autre.</value>
+  </data>
+  <data name="IdentityLogonExists" xml:space="preserve">
+    <value>L'identité ({0}) existe déjà, merci d'en sélectionner une autre.</value>
+  </data>
+  <data name="AddGlobalAuthorizationLabel" xml:space="preserve">
+    <value>Choisir un niveau d'authorisation global</value>
+  </data>
+  <data name="AddSpecificAuthorizationLabel" xml:space="preserve">
+    <value>Ajouter une authorisation spécifique dans la liste suivante:</value>
+  </data>
 </root>
