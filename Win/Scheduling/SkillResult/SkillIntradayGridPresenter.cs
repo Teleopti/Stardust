@@ -279,13 +279,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 
 				}
 
-                //feature flag here
-                var estimatedServiceLevelPropertyName = "EstimatedServiceLevel";
-			    if (_toggleManager.IsEnabled(Toggles.Scheduler_ShowIntadayESLWithShrinkage_21874))
-			        estimatedServiceLevelPropertyName = "EstimatedServiceLevelShrinkage";
-
 				gridRow = new SkillStaffPeriodGridRowScheduler(_rowManager, "PercenFromPercentReadOnlyCellModel",
-				                                               estimatedServiceLevelPropertyName, UserTexts.Resources.ESL);
+															   "EstimatedServiceLevelShrinkage", UserTexts.Resources.ESL);
 				gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
 				_gridRows.Add(_rowManager.AddRow(gridRow));
 			}

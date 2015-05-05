@@ -10,7 +10,6 @@
 		Forecast_CopySettingsToWorkflow_11112,
 
 		Scheduler_TeamBlockAdhereWithMaxSeatRule_23419,
-		Scheduler_ShowIntadayESLWithShrinkage_21874,
 		Scheduler_OccupancyESL_11724,
 		Scheduler_HidePointsFairnessSystem_28317,
 		Scheduler_SudentAvailabilityForFixedStaff_30393,

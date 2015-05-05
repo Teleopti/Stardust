@@ -115,9 +115,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
 			if (DisplayMember == "RelativeIncomingDifference")
 				return SkillStaffPeriodHelper.RelativeDifferenceIncoming(SkillStaffPeriodList);
 
-			if (DisplayMember == "EstimatedServiceLevel")
-				return SkillStaffPeriodHelper.EstimatedServiceLevel(SkillStaffPeriodList);
-
 			if (DisplayMember == "EstimatedServiceLevelShrinkage")
 				return SkillStaffPeriodHelper.EstimatedServiceLevelShrinkage(SkillStaffPeriodList);
 
