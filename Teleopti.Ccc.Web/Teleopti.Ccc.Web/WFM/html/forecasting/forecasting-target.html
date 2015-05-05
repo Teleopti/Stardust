@@ -6,8 +6,8 @@
 	</div>
 	<div class="material-block-content" ng-if="showSelection">
 		<div class="row col-lg-12">
-			<button class="wfm-btn wfm-btn-default" ng-click="back()">Back <md-tooltip translate>PeriodSelectionTip</md-tooltip> </button>
-			<button class="wfm-btn apply pull-right" ng-class="{'wfm-btn-primary-disabled': !hasOneSelected(), 'wfm-btn-primary':hasOneSelected()}" ng-click="nextStep()">Apply<md-tooltip translate>GenerateForecastTip</md-tooltip></button>
+			<button class="wfm-btn wfm-btn-default" ng-click="back()">{{ 'Back' | translate }} <md-tooltip>Period selection</md-tooltip> </button>
+			<button class="wfm-btn apply pull-right" ng-class="{'wfm-btn-primary-disabled': !hasOneSelected(), 'wfm-btn-primary':hasOneSelected()}" ng-click="nextStep()">{{ 'Apply' | translate }}<md-tooltip>Generate forecast</md-tooltip></button>
 			<p>Select forcasting target(s) for period {{period.startDate | date : shortDate}} {{'To' | translate}} {{period.endDate | date : shortDate}}:</p>
 		</div>
 		<div class="row col-lg-12">
@@ -53,7 +53,7 @@
 					<i class="pull-right workload-accuracy">{{workload.Accuracy}}</i>
 					<span><i class="mdi mdi-check"></i></span>
 					<i class="mdi mdi-chart-bar forecasting-chart-bar" ng-click="openModal(workload);$event.stopPropagation();">
-						<md-tooltip translate>ViewChartTip</md-tooltip>
+						<md-tooltip>View method chart</md-tooltip>
 					</i>
 					<div ng-include="'forecasting-chart.html'"></div>
 				</div>
@@ -80,7 +80,7 @@
 						<div class="wfm-block">
 							<div class="row">
 								<div class="col-lg-12">
-									<h4>Forescast Method</h4>
+									<h4>{{ 'ForecastMethod' | translate }}</h4>
 									<p translate>ForecastChartIntro</p>
 								</div>
 							</div>
@@ -99,7 +99,7 @@
 					</div>
 					<div class="modal-footer">
 						<aside>
-							<a class="wfm-btn wfm-btn-invis-primary" ng-click="cancelMethod(workload)">Close chart</a>
+							<a class="wfm-btn wfm-btn-invis-primary" ng-click="cancelMethod(workload)">{{ 'Close' | translate }}</a>
 						</aside>
 					</div>
 				</div>

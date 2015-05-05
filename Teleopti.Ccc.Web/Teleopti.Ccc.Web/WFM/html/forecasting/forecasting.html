@@ -1,9 +1,7 @@
 <div ui-view>
 	<div class="row">
 		<div class="col-lg-12">
-			<h4>
-				Choose a future period to forecast:
-			</h4>
+			<h4 translate>SelectForecastPeriodIntro</h4>
 		</div>
 	</div>
 	<div class="material-block-content">
@@ -21,8 +19,8 @@
 			<datepicker ng-model="period.endDate" min-date="period.startDate" show-weeks="true" class="wfm-datepicker"></datepicker>
 		</div>
 		<div>
-			<button class="wfm-btn wfm-btn-primary next-step-all" ng-click="nextStepAll(period)">Forecast for all</button>
-			<button class="wfm-btn wfm-btn-default next-step-advanced" ng-click="nextStepAdvanced(period)">Advanced<md-tooltip>Select specific workloads</md-tooltip></button>
+			<button class="wfm-btn wfm-btn-primary next-step-all" ng-click="nextStepAll(period)">{{ 'ForecastAll' | translate }}</button>
+			<button class="wfm-btn wfm-btn-default next-step-advanced" ng-click="nextStepAdvanced(period)">{{ 'Advanced' | translate }}<md-tooltip>Select specific workloads</md-tooltip></button>
 		</div>
 	</div>
 	<div class="clearfix"></div>

@@ -13034,4 +13034,12 @@ Reduce the complexity to use these shifts.</value>
     <value>View method chart</value>
     <comment>Trigger modal window in advanced web forecast</comment>
   </data>
+  <data name="ForecastAll" xml:space="preserve">
+    <value>Forecast all</value>
+    <comment>Forecast all</comment>
+  </data>
+  <data name="SelectForecastPeriodIntro" xml:space="preserve">
+    <value>Choose a future period to forecast</value>
+    <comment>Pick a period before web forecast</comment>
+  </data>
 </root>

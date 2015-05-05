@@ -9671,6 +9671,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Forecast all.
+        /// </summary>
+        public static string ForecastAll {
+            get {
+                return ResourceManager.GetString("ForecastAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Based on volumes prior to the historical data, forecast methods have been created and applied to the previous year. The most accurate method is currently displayed in the chart and will be used for your next forecast..
         /// </summary>
         public static string ForecastChartIntro {
@@ -22822,6 +22831,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SelectFileDestination {
             get {
                 return ResourceManager.GetString("SelectFileDestination", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose a future period to forecast.
+        /// </summary>
+        public static string SelectForecastPeriodIntro {
+            get {
+                return ResourceManager.GetString("SelectForecastPeriodIntro", resourceCulture);
             }
         }
         

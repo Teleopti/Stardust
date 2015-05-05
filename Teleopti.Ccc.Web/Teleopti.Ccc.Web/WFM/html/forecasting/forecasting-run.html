@@ -4,7 +4,7 @@
 			<md-progress-linear md-mode="indeterminate"></md-progress-linear>
 		</div>
 		<h4>
-			{{'Period' | translate}}{{'From' | translate}} {{period.startDate | date : shortDate}} {{'To' | translate}} {{period.endDate | date : shortDate}}
+			{{'From' | translate}} {{period.startDate | date : shortDate}} {{'To' | translate}} {{period.endDate | date : shortDate}}
 		</h4>
 	</div>
 	<div ng-if="result" ng-class="result.success ? 'success' : 'fail'">
