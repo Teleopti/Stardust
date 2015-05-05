@@ -8,6 +8,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -27,7 +28,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 			var newIdentity = new TeleoptiIdentity("test2", null, null, null);
 			Thread.CurrentPrincipal = new TeleoptiPrincipal(newIdentity, person);
-			var target = new SearchController(new FakeNextPlanningPeriodProvider(new PlanningPeriod(new TestableNow(new DateTime(2015,04,15)))), new FakeToggleManager(Toggles.Wfm_ResourcePlanner_32892));
+			var target =
+				new SearchController(
+					new FakeNextPlanningPeriodProvider(
+						new PlanningPeriod(
+							(new PlanningPeriodSuggestions(new TestableNow(new DateTime(2015, 4, 15)), new List<AggregatedSchedulePeriod>())))),
+					new FakeToggleManager(Toggles.Wfm_ResourcePlanner_32892));
 			var result = (OkNegotiatedContentResult<IEnumerable<SearchResultModel>>)target.GetResult("Next");
 			result.Content.Count().Should().Be.EqualTo(1);
 		}
@@ -35,7 +41,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 		[Test, SetCulture("sv-SE"), SetUICulture("sv-SE")]
 		public void ShouldNotSearchPlanningPeriodIfSchedulingIsDisabled()
 		{
-			var target = new SearchController(new FakeNextPlanningPeriodProvider(new PlanningPeriod(new TestableNow(new DateTime(2015, 04, 15)))), new FakeToggleManager());
+			var target =
+				new SearchController(
+					new FakeNextPlanningPeriodProvider(
+						new PlanningPeriod(
+							(new PlanningPeriodSuggestions(new TestableNow(new DateTime(2015, 4, 15)), new List<AggregatedSchedulePeriod>())))),
+					new FakeToggleManager());
 			var result = (OkNegotiatedContentResult<IEnumerable<SearchResultModel>>)target.GetResult("Next");
 			result.Content.Count().Should().Be.EqualTo(0);
 		}
@@ -60,6 +71,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 		}
 
 		public IEnumerable<SchedulePeriodType> SuggestedPeriods()
+		{
+			throw new NotImplementedException();
+		}
+
+		public IPlanningPeriod Update(SchedulePeriodType periodType, int periodRange)
 		{
 			throw new NotImplementedException();
 		}

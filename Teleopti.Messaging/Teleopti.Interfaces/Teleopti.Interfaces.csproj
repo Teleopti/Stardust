@@ -872,6 +872,7 @@
     <Compile Include="Domain\UnderstaffingDetails.cs" />
     <Compile Include="Messages\Rta\StartUpBusinessUnit.cs" />
     <Compile Include="ReadModel\IScheduleChangedReadModel.cs" />
+    <Compile Include="SchedulePeriodForRangeCalculation.cs" />
     <Compile Include="ToStringSerializer.cs" />
   </ItemGroup>
   <ItemGroup>

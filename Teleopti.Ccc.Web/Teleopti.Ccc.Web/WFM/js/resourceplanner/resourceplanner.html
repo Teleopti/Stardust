@@ -5,23 +5,20 @@
 	</div>
 	<div class="row" ng-show="planningPeriod.$resolved">
 		<div class="wfm-accordion material-depth-2">
-			<div class="next-planning-peroid wfm-accordion-head" ng-click="changeDateToggle = !changeDateToggle">
+			<div class="next-planning-peroid wfm-accordion-head" ng-click="changeDateToggle = !changeDateToggle;suggestions(planningPeriod.Id)">
 				<h4>{{'NextPlanningPeriodMessage' | translate}} {{planningPeriod.StartDate | date:"yyyy-MM-dd"}} {{'ToText' | translate}} {{planningPeriod.EndDate | date:"yyyy-MM-dd"}}</h4>
 			</div>
 		</div> 
-		<div ng-show="changeDateToggle && isEnabled">
-			<div class="wfm-datepicker-wrap">
-				<div class="sub-header">
-					From <span class="startDate">{{planningPeriod.StartDate | date : format}}</span>
+		<div ng-show="changeDateToggle && isEnabled" >
+			Change the planning period to 
+			<div ng-repeat="op in suggestedPlanningPeriods">
+				<div class="wfm-radio">
+					<input type="radio" name="changeRangeGroup" id="{{op}}" ng-click="rangeUpdated(planningPeriod.Id, op)" />
+					<label for="{{op}}">
+						<span class="wfm-radio-toggle"></span>
+						<span class="wfm-radio-label"> {{op.StartDate | date:"yyyy-MM-dd"}} {{'ToText' | translate}} {{op.EndDate | date:"yyyy-MM-dd"}} having range of {{op.Number}} {{op.PeriodType}}</span>
+					</label>
 				</div>
-				<datepicker ng-model="planningPeriod.StartDate" show-weeks="true" class="wfm-datepicker" ng-click="recalculateValidation(planningPeriod.Id,planningPeriod.StartDate,planningPeriod.EndDate)"></datepicker>
-			</div>
-
-			<div class="wfm-datepicker-wrap">
-				<div class="sub-header">
-					To <span class="endDate">{{planningPeriod.EndDate | date : format}}</span>
-				</div>
-				<datepicker ng-model="planningPeriod.EndDate" min-date="planningPeriod.StartDate" show-weeks="true" class="wfm-datepicker" ng-click="recalculateValidation(planningPeriod.Id,planningPeriod.StartDate,planningPeriod.EndDate)"></datepicker>
 			</div>
 		</div>
 		

@@ -2,6 +2,9 @@ using System;
 using System.Threading;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
+using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 {
@@ -33,12 +36,27 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			Browser.Interactions.Click(".next-planning-peroid");
 		}
 
-		[When(@"I update planning period from '(.*)' to '(.*)'")]
-		public void WhenIUpdatePlanningPeriodFromTo(DateTime oldFromDate, DateTime newFromDate)
+		//[When(@"I update planning period from '(.*)' to '(.*)'")]
+		//public void WhenIUpdatePlanningPeriodFromTo(DateTime oldFromDate, DateTime newFromDate)
+		//{
+		//	var dayValue = (newFromDate - oldFromDate).Days + 1;
+		//	Browser.Interactions.ClickContaining(".btn-default", dayValue.ToString());
+		//	Thread.Sleep(2000);
+		//}
+
+		[When(@"I update planning period to '(.*)' '(.*)'")]
+		public void WhenIUpdatePlanningPeriodTo(int p0, string p1)
 		{
-			var dayValue = (newFromDate - oldFromDate).Days + 1;
-			Browser.Interactions.ClickContaining(".btn-default", dayValue.ToString());
-			Thread.Sleep(2000);
+			Browser.Interactions.Javascript("document.querySelector('.select-num-resourceplanner').value = '" + "1" + "';");
+			Browser.Interactions.Javascript("document.querySelector('.select-type-resourceplanner').value = '" + "1" + "';");
 		}
+
+		[Given(@"GroupingReadModel is updated")]
+		public void GivenGroupingReadModelIsUpdated()
+		{
+			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
+		}
+
+
 	}
 }

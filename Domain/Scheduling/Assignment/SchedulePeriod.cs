@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
@@ -729,13 +730,5 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 			return currentPeriod;
 		}
-	}
-
-	public struct SchedulePeriodForRangeCalculation
-	{
-		public CultureInfo Culture { get; set; }
-		public SchedulePeriodType PeriodType { get; set; }
-		public DateOnly StartDate { get; set; }
-		public int Number { get; set; }
 	}
 }

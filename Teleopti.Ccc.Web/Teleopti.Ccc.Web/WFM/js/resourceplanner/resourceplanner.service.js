@@ -7,8 +7,11 @@
 			this.launchScheduling = $resource('../api/ResourcePlanner/Schedule/FixedStaff', {}, {
 				query: { method: 'POST', params: name, isArray: false }
 			});
-			this.updatePlanningPeriod = $resource('../api/resourceplanner/updateplanningperiod', {}, {
-				update: { method: 'POST', params: { }, isArray: false }
+			this.changeRange = $resource('../api/resourceplanner/planningperiod/:id', { id: "@id" }, {
+				update: { method: 'PUT', params: {} , isArray: false }
+			});
+			this.getSuggestions = $resource('../api/resourceplanner/planningperiod/:id/suggestions', { id: "@id" }, {
+				query: { method: 'GET', params: {}, isArray: true }
 			});
 			this.isEnabled = $resource('../ToggleHandler/IsEnabled?toggle=:toggle', {toggle:"@toggle"}, {
 				query: { method: 'GET', params: {}, isArray: false }

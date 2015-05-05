@@ -22,14 +22,34 @@ Scenario: schedule the next planning period
 	Then I should see '0'
 @ignore
 Scenario: update the next planning period
-	Given the time is '2014-04-10'
+	Given the time is '2014-04-10' 
 	And I have a role with
 		| Field									| Value            |
         | Name									| Resource Planner |
 		| Access to resource planner			| True             | 
+	And there are shift categories
+	| Name  |
+	| Day   |
+	And there is an activity with
+	| Field | Value |
+	| Name  | Phone |
+	| Color | Green |
+	And I have a workflow control set with
+	| Field                      | Value              |
+	| Name                       | Published schedule |
+	| Schedule published to date | 2014-03-30         |
+	And I have a schedule period with 
+	| Field      | Value      |
+	| Start date | 2014-04-06 |
+	| Type       | Week       |
+	| Length     | 1          |
+	And I have a person period with 
+	| Field      | Value      |
+	| Start date | 2014-04-06 |
+	And GroupingReadModel is updated
 	When I view Resource planner
 	And I click next planning period
-	And I update planning period from '2014-05-01' to '2014-05-10'
+	And I update planning period to '2' 'Week' 
 	And I view Resource planner
-	Then I should see planning period from '2014-05-10'to '2014-05-31'
+	Then I should see planning period from '2014-05-13'to '2014-05-26'
 

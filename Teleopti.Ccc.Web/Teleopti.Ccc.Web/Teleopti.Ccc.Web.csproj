@@ -529,6 +529,7 @@
     <Compile Include="Areas\ResourcePlanner\FixedStaffLoader.cs" />
     <Compile Include="Areas\ResourcePlanner\FixedStaffSchedulingInput.cs" />
     <Compile Include="Areas\ResourcePlanner\PeopleSelection.cs" />
+    <Compile Include="Areas\ResourcePlanner\PlanningPeriodChangeRangeModel.cs" />
     <Compile Include="Areas\ResourcePlanner\ResourcePlannnerModule.cs" />
     <Compile Include="Areas\ResourcePlanner\IMissingForecastProvider.cs" />
     <Compile Include="Areas\ResourcePlanner\MissingForecastModel.cs" />
@@ -538,6 +539,7 @@
     <Compile Include="Areas\ResourcePlanner\ScheduleController.cs" />
     <Compile Include="Areas\ResourcePlanner\SchedulingResultModel.cs" />
     <Compile Include="Areas\ResourcePlanner\SetupStateHolderForWebScheduling.cs" />
+    <Compile Include="Areas\ResourcePlanner\SuggestedPlanningPeriodRangeModel.cs" />
     <Compile Include="Areas\Rta\Controllers\SyncController.cs" />
     <Compile Include="Areas\People\Core\Providers\IPeopleSearchProvider.cs" />
     <Compile Include="Areas\Rta\Log4NetWcfLogger.cs" />

@@ -1,36 +1,33 @@
-using System.Globalization;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
-using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
 	public class PlanningPeriod : NonversionedAggregateRootWithBusinessUnit, IPlanningPeriod
 	{
 		private DateOnlyPeriod _range;
+		private static readonly SchedulePeriodRangeCalculator _calculator = new SchedulePeriodRangeCalculator();
 
 		protected PlanningPeriod()
 		{
-			
 		}
-
-		public PlanningPeriod(DateOnlyPeriod range)
+		
+		public PlanningPeriod(IPlanningPeriodSuggestions planningPeriodSuggestions) : this()
 		{
-			_range = range;
-		}
-
-		public PlanningPeriod(INow now)
-		{
-			var date = now.LocalDateTime();
-			var firstDateOfMonth = DateHelper.GetLastDateInMonth(date, CultureInfo.CurrentCulture).AddDays(1);
-			var lastDateOfMonth = DateHelper.GetLastDateInMonth(firstDateOfMonth, CultureInfo.CurrentCulture);
-			_range = new DateOnlyPeriod(new DateOnly(firstDateOfMonth), new DateOnly(lastDateOfMonth));
+			_range = planningPeriodSuggestions.Default().Range;
 		}
 
 		public virtual DateOnlyPeriod Range
 		{
 			get { return _range;  }
+		}
+
+		public virtual void ChangeRange(SchedulePeriodForRangeCalculation schedulePeriodForRangeCalculation)
+		{
+			_range = _calculator.PeriodForType(schedulePeriodForRangeCalculation.StartDate, schedulePeriodForRangeCalculation);
 		}
 	}
 }

@@ -1,10 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -22,28 +22,68 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			_uniqueSchedulePeriods = uniqueSchedulePeriods;
 		}
 
-		public DateOnlyPeriod Default(bool isToggleEnabled)
+		public SuggestedPlanningPeriod Default()
 		{
-			if (_uniqueSchedulePeriods.Any() && isToggleEnabled)
+			var now = _now.LocalDateOnly();
+			if (_uniqueSchedulePeriods.Any() )
 			{
-				var aggregatedSchedulePeriod =  _uniqueSchedulePeriods.OrderByDescending(x => x.Priority).First();
-				var currentPeriod =  _schedulePeriodRangeCalculator.PeriodForType(new DateOnly(_now.UtcDateTime()),
+				var aggregatedSchedulePeriod = _uniqueSchedulePeriods.First();
+				var currentPeriod = _schedulePeriodRangeCalculator.PeriodForType(now,
 					rangeCalculation(aggregatedSchedulePeriod));
 
-				return _schedulePeriodRangeCalculator.PeriodForType(new DateOnly(currentPeriod.EndDate.AddDays(1).Date),
-					rangeCalculation(aggregatedSchedulePeriod));
+				return new SuggestedPlanningPeriod
+				{
+					Number = aggregatedSchedulePeriod.Number,
+					PeriodType = aggregatedSchedulePeriod.PeriodType,
+					Range = _schedulePeriodRangeCalculator.PeriodForType(currentPeriod.EndDate.AddDays(1),
+						rangeCalculation(aggregatedSchedulePeriod))
+				};
 			}
-			return monthIsLastResort();
+			return monthIsLastResort(now.Date);
 		}
 
-		public IEnumerable<SchedulePeriodType> UniqueSuggestedPeriod { get
+		public IEnumerable<SuggestedPlanningPeriod> SuggestedPeriods(DateOnly forDate)
 		{
-			return _uniqueSchedulePeriods.Select(x => x.PeriodType);
-		}  }
+			var result = new List<SuggestedPlanningPeriod>();
+
+			var resultingRanges = _uniqueSchedulePeriods.SelectMany(uniqueSchedulePeriod => new []{ new SuggestedPlanningPeriod
+			{
+				PeriodType = uniqueSchedulePeriod.PeriodType,
+				Number = uniqueSchedulePeriod.Number,
+				Range =
+					_schedulePeriodRangeCalculator.PeriodForType(forDate,
+						new SchedulePeriodForRangeCalculation
+						{
+							Culture =
+								CultureInfo.GetCultureInfo(uniqueSchedulePeriod.Culture.GetValueOrDefault(CultureInfo.CurrentCulture.LCID)),
+							Number = uniqueSchedulePeriod.Number,
+							PeriodType = uniqueSchedulePeriod.PeriodType,
+							StartDate = new DateOnly(uniqueSchedulePeriod.DateFrom)
+						})
+			},new SuggestedPlanningPeriod
+			{
+				PeriodType = uniqueSchedulePeriod.PeriodType,
+				Number = uniqueSchedulePeriod.Number * 2,
+				Range =
+					_schedulePeriodRangeCalculator.PeriodForType(forDate,
+						new SchedulePeriodForRangeCalculation
+						{
+							Culture =
+								CultureInfo.GetCultureInfo(uniqueSchedulePeriod.Culture.GetValueOrDefault(CultureInfo.CurrentCulture.LCID)),
+							Number = uniqueSchedulePeriod.Number * 2,
+							PeriodType = uniqueSchedulePeriod.PeriodType,
+							StartDate = new DateOnly(uniqueSchedulePeriod.DateFrom)
+						})
+			}});
+
+			result.AddRange(resultingRanges.Distinct());
+			result.Add(monthIsLastResort(forDate.Date));
+			return result;
+		}
 
 		private static SchedulePeriodForRangeCalculation rangeCalculation(AggregatedSchedulePeriod aggregatedSchedulePeriod)
 		{
-			return new SchedulePeriodForRangeCalculation()
+			return new SchedulePeriodForRangeCalculation
 			{
 				Culture = CultureInfo.CurrentCulture,
 				PeriodType = aggregatedSchedulePeriod.PeriodType,
@@ -52,12 +92,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			};
 		}
 
-		private DateOnlyPeriod monthIsLastResort()
+		private SuggestedPlanningPeriod monthIsLastResort(DateTime givenDate)
 		{
-			var date = _now.LocalDateTime();
-			var firstDateOfMonth = DateHelper.GetLastDateInMonth(date, CultureInfo.CurrentCulture).AddDays(1);
+			var firstDateOfMonth = DateHelper.GetLastDateInMonth(givenDate, CultureInfo.CurrentCulture).AddDays(1);
 			var lastDateOfMonth = DateHelper.GetLastDateInMonth(firstDateOfMonth, CultureInfo.CurrentCulture);
-			return new DateOnlyPeriod(new DateOnly(firstDateOfMonth), new DateOnly(lastDateOfMonth));
+			return new SuggestedPlanningPeriod{PeriodType = SchedulePeriodType.Month,Number = 1,Range = new DateOnlyPeriod(new DateOnly(firstDateOfMonth), new DateOnly(lastDateOfMonth))};
 		}
 	}
+	
 }
