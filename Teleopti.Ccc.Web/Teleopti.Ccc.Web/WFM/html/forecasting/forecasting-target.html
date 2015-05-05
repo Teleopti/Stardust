@@ -6,8 +6,8 @@
 	</div>
 	<div class="material-block-content" ng-if="showSelection">
 		<div class="row col-lg-12">
-			<button class="wfm-btn wfm-btn-default" ng-click="back()">Back</button>
-			<button class="wfm-btn apply pull-right" ng-class="{'wfm-btn-primary-disabled': !hasOneSelected(), 'wfm-btn-primary':hasOneSelected()}" ng-click="nextStep()">Apply</button>
+			<button class="wfm-btn wfm-btn-default" ng-click="back()">Back<md-tooltip>Peridod selection</md-tooltip></button>
+			<button class="wfm-btn apply pull-right" ng-class="{'wfm-btn-primary-disabled': !hasOneSelected(), 'wfm-btn-primary':hasOneSelected()}" ng-click="nextStep()">Apply<md-tooltip>Generate forecast</md-tooltip></button>
 			<p>Select forcasting target(s) for period {{period.startDate | date : shortDate}} to {{period.endDate | date : shortDate}}:</p>
 		</div>
 		<div class="row col-lg-12">
@@ -53,7 +53,7 @@
 					<i class="pull-right workload-accuracy">{{workload.Accuracy}}</i>
 					<span><i class="mdi mdi-check"></i></span>
 					<i class="mdi mdi-chart-bar forecasting-chart-bar" ng-click="openModal(workload);$event.stopPropagation();">
-						<md-tooltip>View method graph</md-tooltip>
+						<md-tooltip>View method chart</md-tooltip>
 					</i>
 					<div ng-include="'forecasting-chart.html'"></div>
 				</div>
@@ -71,7 +71,7 @@
 					<div class="modal-header">
 						{{skill.Name}} - {{workload.Name}}
 					</div>
-					<div ng-if="!workload.loaded" class="text-center modal-inner-content">
+					<div ng-if="!workload.loaded" class="modal-inner-content">
 						<md-progress-linear md-mode="indeterminate"></md-progress-linear>
 					</div>
 					<div class="modal-inner-content" ng-if="workload.loaded">
