@@ -1,9 +1,11 @@
+using System;
 using NUnit.Framework;
 using Rhino.Mocks;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.People.Core.Providers;
 using Teleopti.Ccc.Web.Areas.People.Core.ViewModels;
@@ -16,13 +18,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 	public class PeopleSearchControllerTest
 	{
 		private PeopleSearchController target;
-		private IPeopleSearchProvider peopleSearchProvider;
+		private ILoggedOnUser loggonUser;
 
 		[SetUp]
 		public void Setup()
 		{
-			peopleSearchProvider = MockRepository.GenerateMock<IPeopleSearchProvider>();
-			target = new PeopleSearchController(peopleSearchProvider);
+			loggonUser = new FakeLoggedOnUser();
 		}
 
 		[Test]
@@ -43,19 +44,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			var optionalColumnValue = new OptionalColumnValue("123456");
 
 			person.AddOptionalColumnValue(optionalColumnValue, optionalColumn);
-			peopleSearchProvider.Stub(x => x.SearchPeople("Ashley", 50, 1, DateOnly.Today))
-				.IgnoreArguments()
-				.Return(new PeopleSummaryModel
-				{
-					People = new List<IPerson>
-					{
-						person
-					},
-					OptionalColumns = new List<IOptionalColumn>
-					{
-						optionalColumn
-					}
-				});
+
+			target = new PeopleSearchController(new FakePeopleSearchProvider(new []{person}, new []{optionalColumn}), loggonUser);
 
 			var result = ((dynamic) target).GetResult("Ashley", 10, 1);
 
@@ -85,23 +75,55 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			var firstPerson = PersonFactory.CreatePersonWithGuid("Ashley", "Andeen");
 			var secondPerson = PersonFactory.CreatePersonWithGuid("Abc", "Bac");
 
-			peopleSearchProvider.Stub(x => x.SearchPeople("Ashley", 50, 1, DateOnly.Today))
-				.IgnoreArguments()
-				.Return(new PeopleSummaryModel
-				{
-					People = new List<IPerson>
-					{
-						firstPerson,
-						secondPerson
-					},
-					OptionalColumns = new List<IOptionalColumn>()
-				});
+			target = new PeopleSearchController(new FakePeopleSearchProvider(new[] { firstPerson, secondPerson }, new List<IOptionalColumn>()), loggonUser);
 
 			var result = ((dynamic) target).GetResult("a", 10, 1);
 
 			var peopleList = (IEnumerable<dynamic>)result.Content.People;
 			peopleList.First().FirstName.Equals(firstPerson.Name.FirstName);
 			peopleList.Last().FirstName.Equals(secondPerson.Name.FirstName);
+		}
+
+		[Test]
+		public void ShouldReturnMyTeamMembersByDefault()
+		{
+			var currentUser = loggonUser.CurrentUser();
+			currentUser.SetId(Guid.NewGuid());
+			currentUser.Name = new Name("firstName", "lastName");
+			var person = PersonFactory.CreatePersonWithGuid("Ashley", "Andeen");
+
+			var team = TeamFactory.CreateTeam("MyTeam", "MySite");
+			currentUser.AddPersonPeriod(new PersonPeriod(DateOnly.Today.AddDays(-1),
+				PersonContractFactory.CreatePersonContract(), team));
+
+			target = new PeopleSearchController(new FakePeopleSearchProvider(new[] { person, currentUser }, new List<IOptionalColumn>()), loggonUser);
+
+			var result = ((dynamic)target).GetResult("", 10, 1);
+			var peopleList = (IEnumerable<dynamic>)result.Content.People;
+
+			peopleList.Count().Equals(2);
+			peopleList.First().FirstName.Equals(person.Name.FirstName);
+			peopleList.Last().FirstName.Equals(currentUser.Name.FirstName);
+		}
+	}
+
+	public class FakePeopleSearchProvider : IPeopleSearchProvider
+	{
+		private readonly PeopleSummaryModel _model;
+
+
+		public FakePeopleSearchProvider(IEnumerable<IPerson> peopleList, IEnumerable<IOptionalColumn> optionalColumns  )
+		{
+			_model = new PeopleSummaryModel
+			{
+				People = peopleList.ToList(),
+				OptionalColumns = optionalColumns.ToList()
+			};
+		}
+
+		public PeopleSummaryModel SearchPeople(IDictionary<PersonFinderField, string> criteriaDictionary, int pageSize, int currentPageIndex, DateOnly currentDate)
+		{
+			return _model;
 		}
 	}
 }

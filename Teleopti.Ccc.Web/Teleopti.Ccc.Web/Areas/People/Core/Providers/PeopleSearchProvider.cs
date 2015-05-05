@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -31,22 +32,17 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 			_loggonUser = loggonUser;
 		}
 
-		public PeopleSummaryModel SearchPeople(string keyword, int pageSize, int currentPageIndex, DateOnly currentDate)
+		public PeopleSummaryModel SearchPeople(IDictionary<PersonFinderField, string> criteriaDictionary,
+			int pageSize, int currentPageIndex, DateOnly currentDate)
 		{
-			var myTeam = _loggonUser.CurrentUser().MyTeam(currentDate);
 			var optionalColumnCollection = _optionalColumnRepository.GetOptionalColumns<Person>();
-			var searchType = PersonFinderField.All;
 
-			if (string.IsNullOrEmpty(keyword) && myTeam != null)
-			{
-				keyword = myTeam.Description.Name;
-				searchType = PersonFinderField.Organization;
-			}
-
-			var search = new PersonFinderSearchCriteria(searchType, keyword, pageSize, currentDate, 1, 1)
+			var search = new PersonFinderSearchCriteria(criteriaDictionary.First().Key, criteriaDictionary.First().Value,
+				pageSize, currentDate, 1, 1)
 			{
 				CurrentPage = currentPageIndex
 			};
+
 			_searchRepository.Find(search);
 
 			var permittedPersonList =

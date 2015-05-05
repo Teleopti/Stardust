@@ -10,24 +10,44 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 	public class PeopleSearchController : ApiController
 	{
 		private readonly IPeopleSearchProvider _searchProvider;
+		private readonly ILoggedOnUser _loggonUser;
 
-		public PeopleSearchController(IPeopleSearchProvider searchProvider)
+		public PeopleSearchController(IPeopleSearchProvider searchProvider, ILoggedOnUser loggonUser)
 		{
 			_searchProvider = searchProvider;
+			_loggonUser = loggonUser;
 		}
 
 		[UnitOfWork]
-		[HttpGet, Route("api/Search/People")]
+		[HttpGet, Route("api/Search/People/Keyword")]
 		public virtual IHttpActionResult GetResult(string keyword, int pageSize, int currentPageIndex)
 		{
 			var currentDate = DateOnly.Today;
-			var peopleList = _searchProvider.SearchPeople(keyword, pageSize, currentPageIndex, currentDate);
+			var criteriaDictionary = new Dictionary<PersonFinderField, string>();
+			var myTeam = _loggonUser.CurrentUser().MyTeam(currentDate);
+
+			if (string.IsNullOrEmpty(keyword) && myTeam == null)
+			{
+				return Ok(new {});
+			}
+
+			if (string.IsNullOrEmpty(keyword))
+			{
+				keyword = myTeam.Description.Name;
+				criteriaDictionary.Add(PersonFinderField.Organization, keyword);
+			}
+			else
+			{
+				criteriaDictionary.Add(PersonFinderField.All, keyword);
+			}
+
+			var peopleList = _searchProvider.SearchPeople(criteriaDictionary, pageSize, currentPageIndex, currentDate);
 			var resultPeople = peopleList.People.Select(x => new
 			{
 				FirstName = x.Name.FirstName,
 				LastName = x.Name.LastName,
 				EmploymentNumber = x.EmploymentNumber,
-				PersonId = x.Id.Value,
+				PersonId = x.Id.GetValueOrDefault(),
 				Email = x.Email,
 				LeavingDate = x.TerminalDate == null ? "" : x.TerminalDate.Value.ToShortDateString(),
 				OptionalColumnValues = peopleList.OptionalColumns.Select(c =>

@@ -4,7 +4,7 @@ angular
 	.module('peopleSearchService', ['ngResource'])
 	.service('PeopleSearch', [
 	'$resource', function($resource) {
-		this.search = $resource('../api/Search/People', {
+		this.search = $resource('../api/Search/People/Keyword', {
 			keyword: "@searchKey",
 			pageSize: "@pageSize",
 			currentPageIndex: "@currentPageIndex"

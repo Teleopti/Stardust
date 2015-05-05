@@ -72,7 +72,13 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 			var optionalColumnValue = new OptionalColumnValue("123456");
 			person.AddOptionalColumnValue(optionalColumnValue, optionalColumn);
 
-			var result = target.SearchPeople("Ashley", 10, 1, DateOnly.Today);
+			var searchCriteria = new Dictionary<PersonFinderField, string>
+			{
+				{
+					PersonFinderField.All, "Ashley"
+				}
+			};
+			var result = target.SearchPeople(searchCriteria, 10, 1, DateOnly.Today);
 
 			var peopleList = result.People;
 			var optionalColumns = result.OptionalColumns;
@@ -109,47 +115,15 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 			personRepository.Stub(x => x.FindPeople(new List<Guid>())).IgnoreArguments().Return(new List<IPerson>());
 			optionalColumnRepository.Stub(x => x.GetOptionalColumns<Person>()).Return(new List<IOptionalColumn>());
 
-			var result = target.SearchPeople("Ashley", 10, 1, DateOnly.Today);
+			var searchCriteria = new Dictionary<PersonFinderField, string>
+			{
+				{
+					PersonFinderField.All, "Ashley"
+				}
+			};
+			var result = target.SearchPeople(searchCriteria, 10, 1, DateOnly.Today);
 			var peopleList = result.People;
 			peopleList.Count().Equals(0);
-		}
-
-		[Test]
-		public void ShouldReturnMyTeamMembersByDefault()
-		{
-			var currentUser = loggedOnUser.CurrentUser();
-			currentUser.SetId(new Guid());
-			currentUser.Name = new Name("firstName", "lastName");
-			var person = PersonFactory.CreatePersonWithGuid("Ashley", "Andeen");
-
-			var team = TeamFactory.CreateTeam("MyTeam", "MySite");
-			currentUser.AddPersonPeriod(new PersonPeriod(DateOnly.Today.AddDays(-1),
-				PersonContractFactory.CreatePersonContract(), team));
-
-			var personFinderDisplayRow = new PersonFinderDisplayRow
-			{
-				FirstName = currentUser.Name.FirstName,
-				LastName = currentUser.Name.LastName,
-				EmploymentNumber = "1011",
-				PersonId = currentUser.Id.Value,
-				RowNumber = 1
-			};
-
-			searchRepository.Stub(x => x.Find(null)).Callback(new Func<IPersonFinderSearchCriteria, bool>(c =>
-			{
-				c.SetRow(1, personFinderDisplayRow);
-				return true;
-			}));
-			personRepository.Stub(x => x.FindPeople(new List<Guid>()))
-				.IgnoreArguments()
-				.Return(new List<IPerson> { currentUser });
-			optionalColumnRepository.Stub(x => x.GetOptionalColumns<Person>()).Return(new List<IOptionalColumn>());
-
-			var result = target.SearchPeople("", 10, 1, DateOnly.Today);
-			var peopleList = result.People;
-			peopleList.Count().Equals(1);
-			peopleList.First().Name.FirstName.Equals(currentUser.Name.FirstName);
-			peopleList.Count(x => x.Name.FirstName == person.Name.FirstName).Equals(0);
 		}
 	}
 }
