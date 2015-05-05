@@ -131,8 +131,10 @@
 				}
 			};
 
-			$scope.addWorkingPeriod = function() {
-				OutboundService.addWorkingPeriod($scope.campaign, angular.copy($scope.newWorkingPeriod));
+			$scope.addWorkingPeriod = function () {
+				if ($scope.newWorkingPeriod.EndTime > $scope.newWorkingPeriod.StartTime) {
+					OutboundService.addWorkingPeriod($scope.campaign, angular.copy($scope.newWorkingPeriod));
+				}
 			};
 
 			$scope.deleteWorkingPeriod = function(workingPeriod) {

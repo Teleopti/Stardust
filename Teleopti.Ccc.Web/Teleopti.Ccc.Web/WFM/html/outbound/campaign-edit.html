@@ -144,11 +144,13 @@
 									</li>
 								</ul>
 							</div>
-							<div class="wfm-block">
+							<div class="wfm-block m-t-10">
 								<form name="newWorkingPeriodForm" ng-submit="">
 									<div class="inline-fix clearfix">
-										<i class="mdi mdi-plus" ng-click="addWorkingPeriod(); resetWorkingPeriodForm()"></i>
+										<i class="mdi mdi-plus" ng-click="addWorkingPeriod()"></i>
 										<timepicker class="wfm-timepicker" ng-model="newWorkingPeriod.StartTime" ng-change="" hour-step="1" minute-step="15" show-meridian="false"></timepicker>
+										<span class="pull-left">-</span>
+										<timepicker class="wfm-timepicker m-l-10" ng-model="newWorkingPeriod.EndTime" hour-step="1" minute-step="15" show-meridian="false"></timepicker>
 									</div>
 								</form>
 							</div>
