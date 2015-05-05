@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 
 			var applicationData = MockRepository.GenerateStub<IApplicationData>();
 
-			var target = new AuthenticationQuerier(new TenantServerConfiguration(pathToTenantServer), MockRepository.GenerateStub<INhibConfigDecryption>(), postHttpRequest, jsonSerializer, applicationData);
+			var target = new AuthenticationQuerier(new TenantServerConfiguration(pathToTenantServer), MockRepository.GenerateStub<INhibConfigDecryption>(), postHttpRequest, jsonSerializer, () => applicationData);
 			target.TryLogon(logonClientModel, userAgent)
 				.Should().Be.SameInstanceAs(authResult);
 
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 
 			var applicationData = MockRepository.GenerateStub<IApplicationData>();
 
-			var target = new AuthenticationQuerier(new TenantServerConfiguration(pathToTenantServer), MockRepository.GenerateStub<INhibConfigDecryption>(), postHttpRequest, jsonSerializer, applicationData);
+			var target = new AuthenticationQuerier(new TenantServerConfiguration(pathToTenantServer), MockRepository.GenerateStub<INhibConfigDecryption>(), postHttpRequest, jsonSerializer, () => applicationData);
 			target.TryLogon(applicationLogonClientModel, userAgent)
 				.Should().Be.SameInstanceAs(authResult);
 
