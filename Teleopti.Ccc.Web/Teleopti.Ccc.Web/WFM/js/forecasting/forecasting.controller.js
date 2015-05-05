@@ -18,8 +18,8 @@ angular.module('wfm.forecasting', [])
 		}
 	])
 	.controller('ForecastingRunCtrl', [
-		'$scope', '$stateParams', '$http', 'Forecasting',
-		function($scope, $stateParams, $http, Forecasting) {
+		'$scope', '$stateParams', '$http',
+		function($scope, $stateParams, $http) {
 
 			$scope.period = $stateParams.period;
 			$scope.targets = $stateParams.targets;

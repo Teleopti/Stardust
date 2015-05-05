@@ -14,7 +14,12 @@ describe('ForecastingCtrl', function () {
 		$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, 'mock');
 	}));
 
-	it('forecasting test 1', inject(function ($controller) {
-		expect(1).toEqual(1);
+	it("forecasting period should default to next month", inject(function ($controller) {
+		var scope = $rootScope.$new();
+
+		expect(scope.period).toBe(undefined);
+		$controller('ForecastingCtrl', { $scope: scope, $state: {} });
+		expect(scope.period.startDate).toBe(moment().add(1, 'months').startOf('month').format("YYYY-MM-DD"));
+		expect(scope.period.endDate).toBe(moment().add(2, 'months').startOf('month').format("YYYY-MM-DD"));
 	}));
 });

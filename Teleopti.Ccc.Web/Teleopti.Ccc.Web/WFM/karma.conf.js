@@ -22,6 +22,7 @@ module.exports = function(config) {
 		'node_modules/angular-translate/dist/angular-translate.min.js',
 		'node_modules/angular-translate/dist/angular-translate-loader-url/angular-translate-loader-url.min.js',
 		'vendor/ui-bootstrap-custom-build/ui-bootstrap-custom-tpls-0.12.1.min.js',
+		'node_modules/moment/min/moment-with-locales.min.js',
 		'node_modules/angular-moment/angular-moment.min.js',
 		'vendor/angular-ui-tree/angular-ui-tree.min.js',
 		'vendor/angular-aria/angular-aria.min.js',

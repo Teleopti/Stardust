@@ -3,7 +3,7 @@
 angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 	.controller('ForecastingTargetCtrl', [
 			'$scope', '$stateParams', '$state', 'Forecasting', '$http',
-			function($scope, $stateParams, $state, Forecasting, $http) {
+			function($scope, $stateParams, $state, forecasting, $http) {
 				$scope.showSelection = true;
 				$scope.skillsDisplayed = [];
 				$scope.all = { Name: 'All', Selected: false, show: true, numberOfSelectedWorkloads: 0 };
@@ -11,7 +11,7 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 				$scope.selectedIds = [];
 
 
-				$scope.methodNames = ["Teleopti Classic", "Teleopti Classic with Trend"];
+				var methodNames = ["Teleopti Classic", "Teleopti Classic with Trend"];
 				$scope.dataColumns = [{ id: "vh", type: "line", name: "Historical data" },
 									{ id: "vb", type: "line", name: "Best method" }];
 				$scope.dataX = { id: "date" };
@@ -42,10 +42,9 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 								selectedMethod = data.ForecastMethodRecommended;
 							}
 							workload.selectedMethod = selectedMethod;
-							$scope.dataColumns[1].name = $scope.methodNames[selectedMethod];
+							$scope.dataColumns[1].name = methodNames[selectedMethod];
 						}).
 						error(function(data, status, headers, config) {
-							console.log(data);
 							$scope.error = { message: "Failed to do the preforecast." };
 							workload.loaded = true;
 						});
@@ -103,12 +102,11 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 					$scope.all.Selected = allSet;
 				}, true);
 
-				Forecasting.skills.query().$promise.then(function (result) {
+				forecasting.skills.query().$promise.then(function (result) {
 					$scope.skillsDisplayed = result;
 					angular.forEach($scope.skillsDisplayed, function (skill) {
 						skill.show = true;
 						angular.forEach(skill.Workloads, function (workload) {
-
 							workload.chartId = "chart" + workload.Id;
 						});
 					});
