@@ -21,8 +21,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		public void Execute(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> allVisibleMatrixes, IBackgroundWorkerWrapper backgroundWorker, IPeriodValueCalculator periodValueCalculator, ISchedulingResultStateHolder schedulingResultStateHolder, IList<IScheduleMatrixPro> matrixesOnSelectedperiod)
 		{
 			_backgroundWorker = backgroundWorker;
-			if (!_toggleManager.IsEnabled(Toggles.Scheduler_TeamBlockMoveTimeBetweenDays_22407))
-				return;
 			_teamBlockMoveTimeBetweenDaysService.ReportProgress += moveTimePerformed;
 			_teamBlockMoveTimeBetweenDaysService.Execute(optimizationPreferences, allVisibleMatrixes, rollbackService, periodValueCalculator, schedulingResultStateHolder, selectedPersons, selectedPeriod, resourceCalculateDelayer);
 			_teamBlockMoveTimeBetweenDaysService.ReportProgress -= moveTimePerformed;
