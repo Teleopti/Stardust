@@ -95,6 +95,66 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		}
 
 		[Test]
+		public void ShouldRemoveSkillsWithProficiency()
+		{
+			_person.ChangeSkillProficiency(_skill, new Percent(0.9), _person.Period(_date));
+			_target.AddResources(_person, _date,
+								 new ResourceLayer
+								 {
+									 PayloadId = _activity.Id.GetValueOrDefault(),
+									 Period = _period,
+									 RequiresSeat = false,
+									 Resource = 0.8
+								 });
+			_target.AddResources(PersonFactory.CreatePersonWithPersonPeriod(_date,new []{_skill}), _date,
+								 new ResourceLayer
+								 {
+									 PayloadId = _activity.Id.GetValueOrDefault(),
+									 Period = _period,
+									 RequiresSeat = false,
+									 Resource = 0.7
+								 });
+			_target.RemoveResources(_person, _date, new ResourceLayer
+			{
+				PayloadId = _activity.Id.GetValueOrDefault(),
+				Period = _period,
+				RequiresSeat = false,
+				Resource = 0.8
+			});
+			var result = _target.AffectedResources(_activity, _period);
+			var affectedSkill = result.First().Value;
+			affectedSkill.SkillEffiencies[_skill.Id.GetValueOrDefault()].Should().Be.IncludedIn(0.99d,1.01d);
+			affectedSkill.Resource.Should().Be.EqualTo(0.7);
+			affectedSkill.Skills.First().Should().Be.EqualTo(_skill);
+		}
+
+		[Test]
+		public void ShouldRemoveOnePersonsSkillsWithProficiency()
+		{
+			_person.ChangeSkillProficiency(_skill, new Percent(0.9), _person.Period(_date));
+			_target.AddResources(_person, _date,
+								 new ResourceLayer
+								 {
+									 PayloadId = _activity.Id.GetValueOrDefault(),
+									 Period = _period,
+									 RequiresSeat = false,
+									 Resource = 0.8
+								 });
+			_target.RemoveResources(_person, _date, new ResourceLayer
+			{
+				PayloadId = _activity.Id.GetValueOrDefault(),
+				Period = _period,
+				RequiresSeat = false,
+				Resource = 0.8
+			});
+			var result = _target.AffectedResources(_activity, _period);
+			var affectedSkill = result.First().Value;
+			affectedSkill.SkillEffiencies[_skill.Id.GetValueOrDefault()].Should().Be.EqualTo(0d);
+			affectedSkill.Resource.Should().Be.EqualTo(0d);
+			affectedSkill.Skills.First().Should().Be.EqualTo(_skill);
+		}
+
+		[Test]
 		public void ShouldGetCorrectEfficiencyForAffectedSkillsWhenCalledMoreThanOnce()
 		{
 			_target.AddResources(_person, _date,

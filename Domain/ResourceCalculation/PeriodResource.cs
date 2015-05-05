@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			var subtract = subtractCollection.Select(x => new SkillEffiencyResource(x.Skill, -x.Resource));
 			var result = baseCollection.Concat(subtract);
-			return result.GroupBy(x => x.Skill).Select(y => new SkillEffiencyResource(y.Key, Math.Min(y.Sum(z => z.Resource), 0))).ToArray();
+			return result.GroupBy(x => x.Skill).Select(y => new SkillEffiencyResource(y.Key, Math.Max(y.Sum(z => z.Resource), 0))).ToArray();
 		}
 
 		public void RemoveResource(string key, SkillCombination skillCombination, double resource, DateTimePeriod? fractionPeriod)
