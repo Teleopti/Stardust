@@ -1,5 +1,4 @@
 ﻿using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Interfaces.Domain;
@@ -31,7 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 			if (personInfo == null)
 				return new AuthenticateResult{Successful = false};
 
-			var dataSource = _applicationData.DataSource(personInfo.Tenant);
+			var dataSource = _applicationData.Tenant(personInfo.Tenant);
 			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 			{
 				var foundAppUser = _repositoryFactory.CreatePersonRepository(uow).LoadPersonAndPermissions(personInfo.PersonId);

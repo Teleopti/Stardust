@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Initialize
 
 		private ITeleoptiPrincipal createPrincipal(SessionSpecificData sessionData)
 		{
-			var dataSource = _applicationData.DataSource(sessionData.DataSourceName);
+			var dataSource = _applicationData.Tenant(sessionData.DataSourceName);
 			if (dataSource == null)
 				return null;
 

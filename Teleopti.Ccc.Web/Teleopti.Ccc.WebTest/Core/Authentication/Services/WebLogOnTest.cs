@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			var uow = MockRepository.GenerateMock<IUnitOfWork>();
 			var logonPerson = new Person();
 
-			applicationData.Stub(x => x.DataSource(dataSourceName)).Return(choosenDatasource);
+			applicationData.Stub(x => x.Tenant(dataSourceName)).Return(choosenDatasource);
 			choosenDatasource.Stub(x => x.Application).Return(unitOfWorkFactory);
 			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
 			repositoryFactory.Stub(x => x.CreatePersonRepository(uow)).Return(personRepository);
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			var uow = MockRepository.GenerateMock<IUnitOfWork>();
 			var logonPerson = new Person();
 
-			applicationData.Stub(x => x.DataSource(dataSourceName)).Return(choosenDatasource);
+			applicationData.Stub(x => x.Tenant(dataSourceName)).Return(choosenDatasource);
 			choosenDatasource.Stub(x => x.Application).Return(unitOfWorkFactory);
 			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
 			repositoryFactory.Stub(x => x.CreatePersonRepository(uow)).Return(personRepository);
@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			var uow = MockRepository.GenerateMock<IUnitOfWork>();
 			var logonPerson = new Person();
 
-			applicationData.Stub(x => x.DataSource(dataSourceName)).Return(choosenDatasource);
+			applicationData.Stub(x => x.Tenant(dataSourceName)).Return(choosenDatasource);
 			choosenDatasource.Stub(x => x.Application).Return(unitOfWorkFactory);
 			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
 			repositoryFactory.Stub(x => x.CreatePersonRepository(uow)).Return(personRepository);

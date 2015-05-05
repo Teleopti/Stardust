@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Core
 		{
 			if (latency > 0)
 				Thread.Sleep(latency);
-			return new SqlConnection(_applicationData.DataSource(name).Statistic.ConnectionString);
+			return new SqlConnection(_applicationData.Tenant(name).Statistic.ConnectionString);
 		}
 	}
 }

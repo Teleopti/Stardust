@@ -51,9 +51,9 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			}
 		}
 
-		public IDataSource DataSource(string tenant)
+		public IDataSource Tenant(string tenantName)
 		{
-			return _registeredDataSourceCollection.SingleOrDefault(x => x.DataSourceName.Equals(tenant));
+			return _registeredDataSourceCollection.SingleOrDefault(x => x.DataSourceName.Equals(tenantName));
 		}
 
 		public IMessageBrokerComposite Messaging
@@ -78,12 +78,12 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		private readonly object addDataSourceLocker = new object();
 		public void MakeSureDataSourceExists(string dataSourceName, IDictionary<string, string> applicationNhibConfiguration, string analyticsConnectionString)
 		{
-			var dataSource = DataSource(dataSourceName);
+			var dataSource = Tenant(dataSourceName);
 			if (dataSource != null)
 				return;
 			lock (addDataSourceLocker)
 			{
-				dataSource = DataSource(dataSourceName);
+				dataSource = Tenant(dataSourceName);
 				if (dataSource != null)
 					return;
 				applicationNhibConfiguration[NHibernate.Cfg.Environment.SessionFactoryName] = dataSourceName;

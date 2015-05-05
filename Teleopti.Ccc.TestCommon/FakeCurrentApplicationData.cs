@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.TestCommon
 		}
 
 		public IEnumerable<IDataSource> RegisteredDataSourceCollection { get; set; }
-		public IDataSource DataSource(string tenant)
+		public IDataSource Tenant(string tenantName)
 		{
 			throw new NotImplementedException();
 		}

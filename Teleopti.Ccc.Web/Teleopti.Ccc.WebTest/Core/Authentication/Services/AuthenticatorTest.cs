@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			var tenantAndPersonId = new TenantAndPersonId {PersonId = Guid.NewGuid(), Tenant = tenant};
 			var person = new Person();
 
-			applicationData.Stub(x => x.DataSource(tenant)).Return(dataSource);
+			applicationData.Stub(x => x.Tenant(tenant)).Return(dataSource);
 			dataSource.Stub(x => x.Application).Return(unitOfWorkFactory);
 			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
 			repositoryFactory.Stub(x => x.CreatePersonRepository(uow)).Return(personRep);
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			var person = new Person();
 			person.TerminatePerson(DateOnly.Today.AddDays(-3), new PersonAccountUpdaterDummy());
 
-			applicationData.Stub(x => x.DataSource(tenant)).Return(dataSource);
+			applicationData.Stub(x => x.Tenant(tenant)).Return(dataSource);
 			dataSource.Stub(x => x.Application).Return(unitOfWorkFactory);
 			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
 			repositoryFactory.Stub(x => x.CreatePersonRepository(uow)).Return(personRep);

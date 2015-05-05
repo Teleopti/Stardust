@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 
 		public void LogOn(string dataSourceName, Guid businessUnitId, Guid personId)
 		{
-			var dataSource = _applicationData.DataSource(dataSourceName);
+			var dataSource = _applicationData.Tenant(dataSourceName);
 			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 			{
 				var personRep = _repositoryFactory.CreatePersonRepository(uow);

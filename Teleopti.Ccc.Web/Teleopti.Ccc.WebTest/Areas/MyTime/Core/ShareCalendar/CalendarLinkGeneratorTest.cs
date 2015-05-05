@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.ShareCalendar
 		{
 		    const string dataSourceName = "Main";
 		    var applicationData = MockRepository.GenerateMock<IApplicationData>();
-            applicationData.Stub(x => x.DataSource(dataSourceName)).Return(_dataSource);
+            applicationData.Stub(x => x.Tenant(dataSourceName)).Return(_dataSource);
 
             var calendarTransformer = MockRepository.GenerateMock<ICalendarTransformer>();
 	    

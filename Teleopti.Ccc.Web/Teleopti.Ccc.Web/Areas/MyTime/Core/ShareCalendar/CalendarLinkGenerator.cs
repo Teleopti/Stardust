@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.ShareCalendar
 
 		public string Generate(CalendarLinkId calendarLinkId)
 		{
-			var dataSource = _applicationData.DataSource(calendarLinkId.DataSourceName);
+			var dataSource = _applicationData.Tenant(calendarLinkId.DataSourceName);
 
 			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 			{

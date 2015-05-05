@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Core
 
 			if (result.Success)
 			{
-				var dataSource = _applicationData.DataSource(result.Tenant);
+				var dataSource = _applicationData.Tenant(result.Tenant);
 				using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 				{
 					var person = _repositoryFactory.CreatePersonRepository(uow).LoadPersonAndPermissions(result.PersonId); //TODO tenant: - don't load permissions here - just needed to get web scenarios to work

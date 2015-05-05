@@ -55,9 +55,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			var dataSource = new FakeDataSource{DataSourceName = dataSourceName};
 			dataSourcesFactory.Expect(x => x.Create(appNhibConf, statisticConnString)).Return(dataSource);
 			var target = new ApplicationData(new Dictionary<string, string>(), Enumerable.Empty<IDataSource>(), null, null, dataSourcesFactory);
-			target.DataSource(dataSourceName).Should().Be.EqualTo(null);
+			target.Tenant(dataSourceName).Should().Be.EqualTo(null);
 			target.MakeSureDataSourceExists(dataSourceName, appNhibConf, statisticConnString);
-			target.DataSource(dataSourceName).Should().Be.SameInstanceAs(dataSource);
+			target.Tenant(dataSourceName).Should().Be.SameInstanceAs(dataSource);
 		}
 
 		[Test]
@@ -70,10 +70,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			var dataSource = new FakeDataSource { DataSourceName = dataSourceName };
 			dataSourcesFactory.Expect(x => x.Create(appNhibConf, statisticConnString)).Return(dataSource);
 			var target = new ApplicationData(new Dictionary<string, string>(), new[]{dataSource}, null, null, dataSourcesFactory);
-			target.DataSource(dataSourceName).Should().Be.SameInstanceAs(dataSource);
+			target.Tenant(dataSourceName).Should().Be.SameInstanceAs(dataSource);
 			target.MakeSureDataSourceExists(dataSourceName, appNhibConf, statisticConnString);
 
-			target.DataSource(dataSourceName).Should().Be.SameInstanceAs(dataSource);
+			target.Tenant(dataSourceName).Should().Be.SameInstanceAs(dataSource);
 			dataSourcesFactory.AssertWasNotCalled(x=> x.Create(appNhibConf, statisticConnString));
 		}
 
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			var dsName = Guid.NewGuid().ToString();
 			var ds = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory(dsName), null, null);
 			var target = new ApplicationData(_receivedSettings, new[] { ds }, null, null, null);
-			target.DataSource(dsName).Should().Be.SameInstanceAs(ds);
+			target.Tenant(dsName).Should().Be.SameInstanceAs(ds);
 		}
 
 		[Test]
@@ -121,14 +121,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			var dsName = Guid.NewGuid().ToString();
 			var ds = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory(dsName), null, null);
 			var target = new ApplicationData(_receivedSettings, new[] { ds }, null, null, null);
-			target.DataSource("something else").Should().Be.Null();
+			target.Tenant("something else").Should().Be.Null();
 		}
 
 		[Test]
 		public void NoDataSourceTenant()
 		{
 			var target = new ApplicationData(_receivedSettings, Enumerable.Empty<IDataSource>(), null, null, null);
-			target.DataSource("something").Should().Be.Null();
+			target.Tenant("something").Should().Be.Null();
 		}
 
         [Test]

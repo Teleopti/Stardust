@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO
 			{
 				PasswordExpired = true
 			});
-			applicationData.Stub(x => x.DataSource(dataSourceName)).Return(datasource);
+			applicationData.Stub(x => x.Tenant(dataSourceName)).Return(datasource);
 			datasource.Stub(x => x.DataSourceName).Return(dataSourceName);
 
 			target.AuthenticateApplicationUser(userName, password)

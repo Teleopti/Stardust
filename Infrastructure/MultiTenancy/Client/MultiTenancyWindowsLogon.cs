@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 			var dataSourceName = result.Tenant;
 			var personId = result.PersonId;
 
-			logonModel.SelectedDataSourceContainer = new DataSourceContainer(applicationData.DataSource(dataSourceName), _repositoryFactory, AuthenticationTypeOption.Application);
+			logonModel.SelectedDataSourceContainer = new DataSourceContainer(applicationData.Tenant(dataSourceName), _repositoryFactory, AuthenticationTypeOption.Application);
 			if (logonModel.SelectedDataSourceContainer == null)
 				return new AuthenticationResult
 				{

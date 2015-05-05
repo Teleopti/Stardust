@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				public static SdkDataSourceResult GetDataSource(IApplicationData applicationData, string tenant, IRepositoryFactory repositoryFactory)
 				{
 					var ret = new SdkDataSourceResult();
-		    var dataSource = applicationData.DataSource(tenant);
+		    var dataSource = applicationData.Tenant(tenant);
 		    if (dataSource == null)
 		    {
 					Logger.ErrorFormat("No datasource matching the name {0} was found.", tenant);

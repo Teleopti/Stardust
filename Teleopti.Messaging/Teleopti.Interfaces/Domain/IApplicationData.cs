@@ -10,7 +10,7 @@ namespace Teleopti.Interfaces.Domain
 	/// </summary>
 	public interface IApplicationData : IDisposable
 	{
-		IDataSource DataSource(string tenant);
+		IDataSource Tenant(string tenantName);
 
 		/// <summary>
 		/// Gets the message broker.

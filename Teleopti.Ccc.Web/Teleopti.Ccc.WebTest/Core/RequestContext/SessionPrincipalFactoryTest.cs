@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			using (mocks.Record())
 			{
 				Expect.Call(sessionSpecificDataProvider.GrabFromCookie()).Return(sessData);
-				Expect.Call(applicationData.DataSource(sessData.DataSourceName)).Return(dataSource);
+				Expect.Call(applicationData.Tenant(sessData.DataSourceName)).Return(dataSource);
 				Expect.Call(dataSource.Application).Return(uowFactory);
 				Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(uow);
 				Expect.Call(repositoryFactory.CreatePersonRepository(uow)).Return(personRepository);

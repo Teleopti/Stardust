@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 
 		public bool IsTerminated(string tenantName, Guid personId)
 		{
-			var tenant = _applicationData().DataSource(tenantName);
+			var tenant = _applicationData().Tenant(tenantName);
 			using (var uow = tenant.Application.CreateAndOpenUnitOfWork())
 			{
 				//could be a bit efficient if needed - only load terminaldate column. Wait with that though - premature opt...
