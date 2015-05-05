@@ -1,6 +1,5 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.Security;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 {
@@ -26,7 +25,6 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		public virtual string Password { get; protected set; }
 		//
 		public virtual string Identity { get; protected set; }
-		public virtual DateOnly? TerminalDate { get; set; }
 
 		public virtual ApplicationLogonInfo ApplicationLogonInfo
 		{

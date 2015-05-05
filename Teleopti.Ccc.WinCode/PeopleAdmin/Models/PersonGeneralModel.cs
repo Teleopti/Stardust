@@ -50,9 +50,6 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 				_tenantData.ApplicationLogonName = ContainedEntity.ApplicationAuthenticationInfo.ApplicationLogOnName;
 				_tenantData.Password = ContainedEntity.ApplicationAuthenticationInfo.Password;
 			}
-			_tenantData.TerminalDate = ContainedEntity.TerminalDate.HasValue
-				? ContainedEntity.TerminalDate.Value.Date
-				: (DateTime?) null;
 
 			if (logonInfoModel != null)
 			{
@@ -315,16 +312,12 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 				if (terminateDate.HasValue)
 				{
 					ContainedEntity.TerminatePerson(terminateDate.Value, _personAccountUpdater);
-					_tenantData.TerminalDate = terminateDate.Value.Date;
 				}
 				else
 				{
 					ContainedEntity.ActivatePerson(_personAccountUpdater);
-					_tenantData.TerminalDate = null;
 				}
-				_tenantData.Changed = true;
 			}
-
 		}
 
 		public string Roles

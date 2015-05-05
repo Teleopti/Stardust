@@ -39,9 +39,6 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 			};
 			if (!string.IsNullOrEmpty(personDto.Identity))
 				data.Identity = personDto.Identity;
-
-			if (personDto.TerminationDate != null)
-				data.TerminalDate = personDto.TerminationDate.DateTime;
 			
 			var result = _tenantDataManager.SaveTenantData(data);
 			if(!result.Success)

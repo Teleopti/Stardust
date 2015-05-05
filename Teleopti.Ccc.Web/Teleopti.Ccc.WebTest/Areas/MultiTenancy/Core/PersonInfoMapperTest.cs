@@ -77,23 +77,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 
 			Assert.Throws<PasswordStrengthException>(() => target.Map(new PersonInfoModel{Password = password, ApplicationLogonName = RandomName.Make()}));
 		}
-		
-		[Test]
-		public void TerminalDateShouldBeSet()
-		{
-			var terminalDate = DateOnly.Today;
-			var target = new PersonInfoMapper(MockRepository.GenerateMock<IFindTenantByNameQuery>(), new CheckPasswordStrengthFake());
-			var result = target.Map(new PersonInfoModel { TerminalDate = terminalDate.Date});
-			result.TerminalDate.Should().Be.EqualTo(terminalDate);
-		}
-
-		[Test]
-		public void NullTerminalDateShouldBeSet()
-		{
-			var target = new PersonInfoMapper(MockRepository.GenerateMock<IFindTenantByNameQuery>(), new CheckPasswordStrengthFake());
-			var result = target.Map(new PersonInfoModel { TerminalDate = null });
-			result.TerminalDate.HasValue.Should().Be.False();
-		}
 
 		[Test]
 		//TODO: tenant - when we impl auth for persisting stuff - use tenant from auth user instead?

@@ -444,10 +444,6 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 			_target.TenantData.Changed.Should().Be.True();
 			_target.TenantData.Changed = false;
 
-			_target.TenantData.Changed.Should().Be.False();
-			_target.TerminalDate = new DateOnly(2015,3,4);
-			_target.TenantData.Changed.Should().Be.True();
-
 		}
 
 	}

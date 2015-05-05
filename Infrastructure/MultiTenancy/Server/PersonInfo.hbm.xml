@@ -7,8 +7,6 @@
 		<id name="Id">
 			<generator class="assigned" />
 		</id>
-		<property name="TerminalDate" 
-							type="Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate.DateOnlyAsDateMappingType, Teleopti.Ccc.Infrastructure" />
 		<many-to-one name="tenant" class="Tenant" access="field"/>
 		
 		<property name="Identity" column="[Identity]"/>
@@ -28,7 +26,6 @@
 		<![CDATA[
 select p from PersonInfo p
 where p.Identity = :identity
-and (p.TerminalDate is null or p.TerminalDate >= convert(date,getdate()))
 ]]>
 	</query>
 
@@ -36,7 +33,6 @@ and (p.TerminalDate is null or p.TerminalDate >= convert(date,getdate()))
 		<![CDATA[
 select pi from PersonInfo pi
 where pi.ApplicationLogonName=:userName
-and (pi.TerminalDate is null or pi.TerminalDate >= convert(date,getdate()))
 ]]>
 	</query>
 

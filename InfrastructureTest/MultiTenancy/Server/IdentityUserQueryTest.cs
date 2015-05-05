@@ -44,16 +44,6 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 			result.Should().Be.Null();
 		}
 
-		[Test]
-		public void TerminatedUserShouldFail()
-		{
-			var personInDatabase = _tenantUnitOfWorkManager.CurrentSession().Get<PersonInfo>(personId);
-			personInDatabase.TerminalDate = DateOnly.Today.AddDays(-2);
-
-
-			target.FindUserData(correctIdentity)
-				.Should().Be.Null();
-		}
 
 		[SetUp]
 		public void Setup_WillBeChangedWhenMovedAwayFromUnitOfWork()
@@ -104,17 +94,6 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		{
 			var result = target.FindUserData("incorrectUserName");
 			result.Should().Be.Null();
-		}
-
-		[Test]
-		public void TerminatedUserShouldFail()
-		{
-			var personInDatabase = Session.Get<Person>(personId);
-			personInDatabase.TerminatePerson(new DateOnly(DateTime.Now.AddDays(-2)), new PersonAccountUpdaterDummy());
-			PersistAndRemoveFromUnitOfWork(personInDatabase);
-
-			target.FindUserData(correctIdentity)
-				.Should().Be.Null();
 		}
 
 		[Test]

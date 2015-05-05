@@ -9,7 +9,6 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 		public string ApplicationLogonName { get; set; }
 		public string Password { get; set; }
 		public string Identity { get; set; }
-		public DateTime? TerminalDate { get; set; }
 		[JsonIgnore]
 		public bool Changed { get; set; }
 		public Guid PersonId { get; set; }

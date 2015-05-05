@@ -6,8 +6,6 @@
 		<id name="Id">
 			<generator class="assigned" />
 		</id>
-		<property name="TerminalDate" 
-							type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"/>
 		<many-to-one name="tenant" entity-name="Tenant_OldSchema" class="Tenant" access="field"/>
 		
 		<join table="AuthenticationInfo" fetch="join" optional="true">
@@ -40,7 +38,6 @@
 		<![CDATA[
 select p from PersonInfo_OldSchema p
 where p.Identity = :identity
-and (p.TerminalDate is null or p.TerminalDate >= convert(date,getdate()))
 ]]>
 	</query>
 
@@ -48,7 +45,6 @@ and (p.TerminalDate is null or p.TerminalDate >= convert(date,getdate()))
 		<![CDATA[
 select pi from PersonInfo_OldSchema pi
 where pi.ApplicationLogonName=:userName
-and (pi.TerminalDate is null or pi.TerminalDate >= convert(date,getdate()))
 ]]>
 	</query>
 </hibernate-mapping>
