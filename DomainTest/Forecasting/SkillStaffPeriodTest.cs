@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         private SkillStaffPeriod _target;
         private DateTimePeriod _tp;
         private ITask _task;
-		private readonly IStaffingCalculatorServiceFacade _staffingCalculatorService = new StaffingCalculatorServiceFacade();
+	    private IStaffingCalculatorServiceFacade _staffingCalculatorService;
         private ServiceAgreement _sa;
         private DateTime _dt = new DateTime(2008, 2, 1, 0, 0, 0, DateTimeKind.Utc);
         private MockRepository mocks;
@@ -40,7 +40,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             _tp = new DateTimePeriod(_dt.Add(TimeSpan.FromHours(10)), _dt.Add(TimeSpan.FromHours(11)));
             _task = new Task(100, TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(20));
             _sa = new ServiceAgreement(new ServiceLevel(new Percent(0.8), 20), new Percent(0), new Percent(1));
-            _target = new SkillStaffPeriod(_tp, _task, _sa,_staffingCalculatorService);
+			_staffingCalculatorService = new StaffingCalculatorServiceFacade();
+            _target = new SkillStaffPeriod(_tp, _task, _sa, _staffingCalculatorService);
 			
             _target.IsAvailable = true;
             _target.SetCalculatedResource65(123);
@@ -306,7 +307,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
             ITask taskWithLongAfterTalk = new Task(100, TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(320));
             
-            _sa = new ServiceAgreement(new ServiceLevel(new Percent(0.8), 20), new Percent(0), new Percent(1));
+            _sa = new ServiceAgreement(new ServiceLevel(new Percent(0.8), 20), new Percent(0), new Percent(100));
             _target = new SkillStaffPeriod(_tp, taskWithLongAfterTalk, _sa, _staffingCalculatorService)
 	            {
 		            IsAvailable = true
@@ -315,19 +316,18 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 	        _target.SetCalculatedResource65(20);
             _target.Payload.CalculatedLoggedOn = 321;
             _target.Payload.Efficiency = new Percent(1);
-            var serviceLevel =
-               _staffingCalculatorService.ServiceLevelAchieved(_target.Payload.CalculatedResource,
-                                                               _target.Payload.ServiceAgreementData.ServiceLevel.
-                                                                   Seconds,
-                                                               _target.Payload.TaskData.Tasks,
-                                                               _target.Payload.TaskData.AverageTaskTime.TotalSeconds + _target.Payload.TaskData.AverageAfterTaskTime.TotalSeconds,
-                                                               _target.Period.ElapsedTime(),
-                                                               (int)
-                                                               _target.Payload.ServiceAgreementData.ServiceLevel.
-                                                                   Percent.Value *
-                                                               100);
-            
-            _target.PickResources65();
+
+	        var serviceLevel = _staffingCalculatorService.ServiceLevelAchievedOcc(_target.Payload.CalculatedResource,
+		        _target.Payload.ServiceAgreementData.ServiceLevel.Seconds,
+		        _target.Payload.TaskData.Tasks,
+		        _target.Payload.TaskData.AverageTaskTime.TotalSeconds +
+		        _target.Payload.TaskData.AverageAfterTaskTime.TotalSeconds,
+		        _target.Period.ElapsedTime(),
+				(int)_target.Payload.ServiceAgreementData.ServiceLevel.Percent.Value * 100,
+		        _target.Payload.ForecastedIncomingDemandWithoutShrinkage
+		        );
+			
+			_target.PickResources65();
             Assert.AreEqual(new Percent(serviceLevel), _target.EstimatedServiceLevel);
         }
 

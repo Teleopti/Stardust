@@ -28,8 +28,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 		public double ServiceLevelAchievedOcc(double agents, double serviceTime, double calls, double aht, TimeSpan intervalLength, double sla, double forecastedAgents)
 		{
-			return _serviceLevelAchivedOcc.ServiceLevelAchived(forecastedAgents, agents, sla, (int) serviceTime, calls,
-				TimeSpan.FromSeconds(aht), intervalLength);
+			return _serviceLevelAchivedOcc.ServiceLevelAchived(forecastedAgents, agents, sla, (int) serviceTime, calls, TimeSpan.FromSeconds(aht), intervalLength);
 		}
 
 		public double ServiceLevelAchieved(double obj0, double obj1, double obj2, double obj3, TimeSpan obj4, int obj5)
