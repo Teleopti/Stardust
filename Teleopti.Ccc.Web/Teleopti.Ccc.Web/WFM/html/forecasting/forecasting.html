@@ -9,7 +9,7 @@
 			<div class="sub-header">
 				{{'From' | translate}} <span class="startDate">{{period.startDate | date : format}}</span>
 			</div>
-			<datepicker ng-model="period.startDate" show-weeks="true" class="wfm-datepicker"></datepicker>
+			<datepicker ng-model="period.startDate" show-weeks="true" max-date="endDate" class="wfm-datepicker"></datepicker>
 		</div>
 
 		<div class="wfm-datepicker-wrap">
