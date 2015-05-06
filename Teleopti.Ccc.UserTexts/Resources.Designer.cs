@@ -4579,6 +4579,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change planning period to.
+        /// </summary>
+        public static string ChangePlanningPeriodTo {
+            get {
+                return ResourceManager.GetString("ChangePlanningPeriodTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Set Tag.
         /// </summary>
         public static string ChangeTag {

@@ -10,13 +10,13 @@
 			</div>
 		</div> 
 		<div ng-show="changeDateToggle && isEnabled" >
-			Change the planning period to 
+			{{'ChangePlanningPeriodTo' | translate}}
 			<div ng-repeat="op in suggestedPlanningPeriods">
 				<div class="wfm-radio">
 					<input type="radio" name="changeRangeGroup" id="{{op.PeriodType}}-{{op.Number}}" ng-click="rangeUpdated(planningPeriod.Id, op)" />
 					<label for="{{op.PeriodType}}-{{op.Number}}">
 						<span class="wfm-radio-toggle"></span>
-						<span class="wfm-radio-label"> {{op.StartDate | date:"yyyy-MM-dd"}} {{'ToText' | translate}} {{op.EndDate | date:"yyyy-MM-dd"}} having range of {{op.Number}} {{op.PeriodType}}</span>
+						<span class="wfm-radio-label"> {{op.StartDate | amDateFormat:"L"}} {{'ToText' | translate}} {{op.EndDate | amDateFormat:"L"}} having range of {{op.Number}} {{op.PeriodType}}</span>
 					</label>
 				</div>
 			</div>

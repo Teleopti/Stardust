@@ -13042,4 +13042,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Choose a future period to forecast</value>
     <comment>Pick a period before web forecast</comment>
   </data>
+  <data name="ChangePlanningPeriodTo" xml:space="preserve">
+    <value>Change planning period to</value>
+    <comment>to change the planning period</comment>
+  </data>
 </root>
