@@ -17,7 +17,7 @@ CREATE PROCEDURE [mart].[raptor_queue_statistics_load]
 (@QueueList					varchar(max),		
 @DateFrom					smalldatetime,
 @DateTo						smalldatetime,
-@SkillCode					uniqueidentifier,
+@TimeZoneCode				nvarchar(50),
 @MidnightBreakDifference	int
 )
 AS
@@ -29,7 +29,7 @@ BEGIN
 	DECLARE @time_zone_id as int
 
 	SET @mindate = CAST('19000101' as smalldatetime)
-	SELECT @time_zone_id = time_zone_id FROM mart.dim_skill WHERE skill_code = @SkillCode
+	SELECT @time_zone_id = time_zone_id FROM mart.dim_time_zone WHERE time_zone_code = @TimeZoneCode
 
 	
 	DECLARE @TempList table

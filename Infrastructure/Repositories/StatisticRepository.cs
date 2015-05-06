@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             }
         }
 
-		public ICollection<IStatisticTask> LoadDailyStatisticForSpecificDates(ICollection<IQueueSource> sources, DateTimePeriod period, Guid skillId, TimeSpan midnightBreakOffset)
+		public ICollection<IStatisticTask> LoadDailyStatisticForSpecificDates(ICollection<IQueueSource> sources, DateTimePeriod period, string timeZoneId, TimeSpan midnightBreakOffset)
 		{
 			if (sources.Count == 0) return new List<IStatisticTask>();
 
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				foreach (var source in sources.Batch(500))
 				{
 					string queueList = buildStringQueueList(source);
-					IQuery query = createDailyStatisticQuery(uow, period, queueList, skillId, midnightBreakOffset);
+					IQuery query = createDailyStatisticQuery(uow, period, queueList, timeZoneId, midnightBreakOffset);
 					query.SetTimeout(1200);
 
 					foreach (var item in query.List<IStatisticTask>())
@@ -147,9 +147,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 .QueueMartId.ToString(CultureInfo.InvariantCulture)).ToArray());
         }
 
-		private IQuery createDailyStatisticQuery(IStatelessUnitOfWork uow, DateTimePeriod date, string queueList, Guid skillId, TimeSpan midnightBreakOffset)
+		private IQuery createDailyStatisticQuery(IStatelessUnitOfWork uow, DateTimePeriod date, string queueList, string timeZoneId, TimeSpan midnightBreakOffset)
 		{
-			return session(uow).CreateSQLQuery("exec mart.raptor_queue_statistics_load @DateFrom=:DateFrom, @DateTo=:DateTo, @QueueList=:QueueList, @SkillCode=:SkillCode, @MidnightBreakDifference=:MidnightBreakDifference")
+			return session(uow).CreateSQLQuery("exec mart.raptor_queue_statistics_load @DateFrom=:DateFrom, @DateTo=:DateTo, @QueueList=:QueueList, @TimeZoneCode=:TimeZoneId, @MidnightBreakDifference=:MidnightBreakDifference")
 				.AddScalar("StatAverageTaskTimeSeconds", NHibernateUtil.Double)
 				.AddScalar("StatAverageAfterTaskTimeSeconds", NHibernateUtil.Double)
 				.AddScalar("StatOfferedTasks", NHibernateUtil.Double)
@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetString("DateFrom", date.StartDateTime.ToString(CultureInfo.InvariantCulture))
 				.SetString("DateTo", date.EndDateTime.ToString(CultureInfo.InvariantCulture))
 				.SetString("QueueList", queueList)
-				.SetString("SkillCode", skillId.ToString())
+				.SetString("TimeZoneId", timeZoneId)
 				.SetString("MidnightBreakDifference", midnightBreakOffset.TotalMinutes.ToString(CultureInfo.InvariantCulture))
 				.SetResultTransformer(Transformers.AliasToBean(typeof(StatisticTask)));
 		}

@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					sources.Add(new QueueSource("heja", "Änglarna", 191667));
 					sources.Add(new QueueSource("Kö 1", "Anmälan", 191666));
 					sources.Add(new QueueSource("Kö 2", "Ordrar", 191664));
-					target.LoadDailyStatisticForSpecificDates(sources, new DateTimePeriod(2006, 1, 1, 2006, 1, 2), new Guid(), TimeSpan.FromHours(2));
+					target.LoadDailyStatisticForSpecificDates(sources, new DateTimePeriod(2006, 1, 1, 2006, 1, 2), "utc", TimeSpan.FromHours(2));
 				}
 
        [Test]

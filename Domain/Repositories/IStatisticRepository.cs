@@ -131,6 +131,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		IEnumerable<RunningEtlJob> GetRunningEtlJobs();
 
 		IEnumerable<ForecastActualDifferNotification> ForecastActualDifferNotifications();
-		ICollection<IStatisticTask> LoadDailyStatisticForSpecificDates(ICollection<IQueueSource> sources, DateTimePeriod period, Guid skillId, TimeSpan midnightBreakOffset);
+		ICollection<IStatisticTask> LoadDailyStatisticForSpecificDates(ICollection<IQueueSource> sources, DateTimePeriod period, string timeZoneId, TimeSpan midnightBreakOffset);
 	}
 }
