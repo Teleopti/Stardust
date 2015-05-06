@@ -1580,4 +1580,11 @@ End personal drop down menu
 	.cal-month-day span {
 		opacity: 1 !important;	
 	}
+	*{transition:none!important}
+	.cal-month-day .date-number {
+		color: #000 !important;
+	}
+	.label-default {
+		background-color: transparent !important;
+	}
 }
