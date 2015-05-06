@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using System.Linq;
+using NUnit.Framework;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Commands;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
 using Rhino.Mocks;
@@ -29,7 +31,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin
             using(_mocks.Record())
             {
                 Expect.Call(_model.SearchCriteria).Return(_personFinderSearchCritera);
-                Expect.Call(_personFinderSearchCritera.SearchValue).Return(string.Empty);
+                Expect.Call(_personFinderSearchCritera.SearchCriterias).Return(new Dictionary<PersonFinderField, string>());
             }
 
             using(_mocks.Playback())
@@ -44,7 +46,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin
             using (_mocks.Record())
             {
                 Expect.Call(_model.SearchCriteria).Return(_personFinderSearchCritera);
-                Expect.Call(_personFinderSearchCritera.SearchValue).Return("searchValue");
+				Expect.Call(_personFinderSearchCritera.SearchCriterias).Return(new Dictionary<PersonFinderField, string> { { PersonFinderField.All, "aa" } });
             }
 
             using (_mocks.Playback())

@@ -37,8 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 		{
 			var optionalColumnCollection = _optionalColumnRepository.GetOptionalColumns<Person>();
 
-			var search = new PersonFinderSearchCriteria(criteriaDictionary.First().Key, criteriaDictionary.First().Value,
-				pageSize, currentDate, 1, 1)
+			var search = new PersonFinderSearchCriteria(criteriaDictionary, pageSize, currentDate, 1, 1)
 			{
 				CurrentPage = currentPageIndex
 			};

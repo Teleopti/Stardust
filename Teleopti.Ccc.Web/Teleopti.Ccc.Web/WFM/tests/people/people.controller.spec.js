@@ -110,9 +110,10 @@ describe("PeopleCtrl", function() {
 		$controller("PeopleCtrl", { $scope: scope, PeopleSearch: mockSearchService });
 
 		scope.advancedSearchForm = {
-			firstName: "ashley smith",
-			organization: "london shenzhen"
+			FirstName: "Ashley Smith",
+			Organization: "London Shenzhen"
 		};
+			
 		scope.advancedSearch();
 		scope.$digest(); // this is needed to resolve the promise
 
@@ -126,9 +127,6 @@ describe("PeopleCtrl", function() {
 		expect(scope.optionalColumns.length).toEqual(1);
 		expect(scope.optionalColumns[0]).toEqual("CellPhone");
 
-		expect(scope.keyword).toEqual("FirstName: ashley smith, Organization: london shenzhen");
-		//expect(scope.keyword).toEqual("FirstName: (ashley smith), Organization: (london shenzhen)");
-		//expect(scope.keyword).toEqual("FirstName: (ashley,smith), Organization: (london,shenzhen)");
-		//expect(scope.keyword).toEqual("FirstName contains 'ashley,smith', Organization contains 'london,shenzhen'");
+		expect(scope.keyword).toEqual("FirstName: Ashley Smith, Organization: London Shenzhen");
 	}));
 });

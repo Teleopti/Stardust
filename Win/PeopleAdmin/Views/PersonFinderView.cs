@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
             {
                 var crit = _presenter.Model.SearchCriteria;
                 var currentPage = _presenter.Model.SearchCriteria.CurrentPage;
-                return new PersonFinderSearchCriteria(crit.Field, crit.SearchValue, (int)comboBox2.SelectedValue, crit.TerminalDate, crit.SortColumn, crit.SortDirection) { CurrentPage = currentPage };
+				return new PersonFinderSearchCriteria(crit.SearchCriterias.SingleOrDefault().Key, crit.SearchCriterias.SingleOrDefault().Value, (int)comboBox2.SelectedValue, crit.TerminalDate, crit.SortColumn, crit.SortDirection) { CurrentPage = currentPage };
             }
         }
 

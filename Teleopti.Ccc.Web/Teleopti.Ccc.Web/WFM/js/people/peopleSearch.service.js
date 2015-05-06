@@ -25,14 +25,11 @@ angular
 				isArray: false
 			}
 		});
-		this.searchWithOption = $resource('../api/Search/PeopleWithOptions',
-		{
-			searchOption: "@advancedSearchForm",
-			pageSize: "@pageSize",
-			currentPageIndex: "@currentPageIndex"
-		}, {
+
+		this.searchWithOption = $resource('../api/Search/People/Criteria',{},
+		 {
 			query: {
-				method: 'GET',
+				method: 'POST',
 				params: {},
 				isArray: false
 			}

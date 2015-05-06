@@ -31,8 +31,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldConstructProperties()
 		{
-			Assert.AreEqual(_field, _target.Field);
-			Assert.AreEqual(_searchValue, _target.SearchValue);
 			Assert.AreEqual(_pageSize, _target.PageSize);
 			Assert.AreEqual(_currentPage, _target.CurrentPage);
 			Assert.AreEqual(_pageSize, _target.DisplayRows.Count);

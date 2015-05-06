@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -39,7 +41,11 @@ namespace Teleopti.Interfaces.Domain
 		/// BudgetGroup
 		/// </summary>
 		BudgetGroup,
-		Role
+		Role,
+		FirstName,
+		LastName,
+		EmploymentNumber,
+		Note
 	}
 
 	/// <summary>
@@ -47,14 +53,7 @@ namespace Teleopti.Interfaces.Domain
 	/// </summary>
 	public interface IPersonFinderSearchCriteria
 	{
-		/// <summary>
-		/// Field to search in
-		/// </summary>
-		PersonFinderField Field { get; }
-		/// <summary>
-		/// Search value
-		/// </summary>
-		string SearchValue { get; }
+
 		/// <summary>
 		/// Page size
 		/// </summary>
@@ -102,5 +101,7 @@ namespace Teleopti.Interfaces.Domain
 		///<param name="rowNumber"></param>
 		///<param name="theRow"></param>
 		void SetRow(int rowNumber, IPersonFinderDisplayRow theRow);
+
+		IDictionary<PersonFinderField, string> SearchCriterias { get; }
 	}
 }
