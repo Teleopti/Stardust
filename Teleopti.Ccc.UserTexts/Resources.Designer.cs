@@ -60,15 +60,7 @@ namespace Teleopti.Ccc.UserTexts {
             }
         }
         
-        /// <summary>
-        ///   Looks up a localized string similar to Abandoned.
-        /// </summary>
-        public static string _string {
-            get {
-                return ResourceManager.GetString("string", resourceCulture);
-            }
-        }
-        
+       
         /// <summary>
         ///   Looks up a localized string similar to Abandoned after service level.
         /// </summary>
