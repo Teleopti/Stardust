@@ -89,14 +89,11 @@ Declare @searchValue nvarchar(max)
 
 WHILE @@FETCH_STATUS = 0
 BEGIN
-  --print 'SearchString: "' + @searchString + '"'
   Select @splitterIndex = CHARINDEX(':', @searchString)
   IF @splitterIndex > 0
   BEGIN
    select @searchType = LTRIM(RTRIM(SUBSTRING(@searchString, 0, @splitterIndex)))
-   --print 'SearchType: "' + @searchType + '"'
    select @searchValue = LTRIM(RTRIM(SUBSTRING(@searchString, @splitterIndex + 1, LEN(@searchString) - @splitterIndex)))
-   --print 'SearchValue: "' + @searchValue + '"'
    Insert Into #SearchCriteria Values(@searchType, @searchValue)
   END
 
@@ -163,8 +160,6 @@ BEGIN
       SELECT @valueClause = 'SearchValue like N''%' + @searchValue + '%'''
    END
 
-   PRINT @valueClause
-
    IF @valueClause <> '()'
    BEGIN
       SELECT @dynamicSQL = @dynamicSQL + 'SELECT PersonId FROM ReadModel.FindPerson WHERE '
@@ -187,7 +182,7 @@ CLOSE SearchCriteriaCursor;
 DEALLOCATE SearchCriteriaCursor;
 
 --debug
-SELECT @dynamicSQL
+--SELECT @dynamicSQL
 
 --insert into PersonId temp table
 INSERT INTO #PersonId
