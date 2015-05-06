@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Models.MessageBroker
 			var bu = new BusinessUnit("dd");
 			bu.SetId(expected);
 			buProvider.Expect(mock => mock.Current()).Return(bu);
-			var result = target.CreateViewModel(new DateTime());
+			var result = target.CreateViewModel();
 			result.BusinessUnitId.Should().Be.EqualTo(expected);
 		}
 
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Models.MessageBroker
 			const string expected = "stoj och lek";
 			dataSource.Expect(mock => mock.DataSourceName).Return(expected);
 
-			var result = target.CreateViewModel(new DateTime());
+			var result = target.CreateViewModel();
 			result.DataSourceName.Should().Be.EqualTo(expected);
 		}
 
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Models.MessageBroker
 			nameValue.Add(UserDataFactory.MessageBrokerUrlKey, expected);
 			configReader.Expect(mock => mock.AppSettings).Return(nameValue);
 
-			var result = target.CreateViewModel(new DateTime());
+			var result = target.CreateViewModel();
 			result.Url.Should().Be.EqualTo(expected);
 		}
 
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Models.MessageBroker
 			nameValue.Add("UseRelativeConfiguration", "true");
 			configReader.Expect(mock => mock.AppSettings).Return(nameValue);
 
-			var result = target.CreateViewModel(new DateTime());
+			var result = target.CreateViewModel();
 			result.Url.Should().Be.EqualTo("/broker/signalr/");
 		}
 
@@ -83,23 +83,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Models.MessageBroker
 			person.SetId(expected);
 			loggedOnUser.Expect(mock => mock.CurrentUser()).Return(person);
 
-			var result = target.CreateViewModel(new DateTime());
+			var result = target.CreateViewModel();
 			result.AgentId.Should().Be.EqualTo(expected);
-		}
-
-		[Test]
-		public void ShouldGetCorrectMinuteOffsetTimeZone()
-		{
-			var swedishTimezone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
-			var dateTime = new DateTime(2015, 5, 5, 0, 0, 0, DateTimeKind.Utc);
-			var expected = Guid.NewGuid();
-			var person = new Person();
-			person.SetId(expected);
-			loggedOnUser.Expect(mock => mock.CurrentUser()).Return(person);
-			loggedOnUser.CurrentUser().PermissionInformation.SetDefaultTimeZone(swedishTimezone); 
-
-			var result = target.CreateViewModel(dateTime);
-			result.TimeZoneMinuteOffset.Should().Be.EqualTo(swedishTimezone.GetUtcOffset(dateTime).TotalMinutes);
 		}
 	}
 }

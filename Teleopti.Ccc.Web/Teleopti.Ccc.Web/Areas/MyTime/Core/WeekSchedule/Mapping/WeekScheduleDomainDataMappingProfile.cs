@@ -141,6 +141,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 													return lateEnd > lateEndOvertimeAvailability ? lateEnd : lateEndOvertimeAvailability;
 												});
 
+									var isContainsEndDateOfDst = _userTimeZone.TimeZone().IsDaylightSavingTime(firstDayOfWeek.Date)
+																&& !_userTimeZone.TimeZone().IsDaylightSavingTime(firstDayOfWeek.Date.AddDays(6).Add(new TimeSpan(23, 59, 59)));
+									TimeSpan endDSTTimeSpan = new TimeSpan();
+									if (isContainsEndDateOfDst)
+									{
+										var DSTEndMarginPoint = getMarginPointOfDST(_userTimeZone.TimeZone(), firstDayOfWeek.Date.ToUniversalTime(),
+														 firstDayOfWeek.AddDays(6).Date.Add(new TimeSpan(23,59,59)).ToUniversalTime());
+										endDSTTimeSpan= TimeZoneInfo.ConvertTimeFromUtc(DSTEndMarginPoint, _userTimeZone.TimeZone()).TimeOfDay;
+										if (endDSTTimeSpan<earliest || latest < endDSTTimeSpan)
+										{
+											isContainsEndDateOfDst = false;
+										}
+									}
+
 									const int margin = 15;
 
 									var early = earliest;
@@ -155,7 +169,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 									early = early.Ticks > TimeSpan.Zero.Add(new TimeSpan(0, margin, 0)).Ticks ? early.Subtract(new TimeSpan(0, margin, 0)) : TimeSpan.Zero;
 									late = late.Ticks < new TimeSpan(23, 59, 59).Subtract(new TimeSpan(0, margin, 0)).Ticks ? late.Add(new TimeSpan(0, margin, 0)) : new TimeSpan(23, 59, 59);
 
-									var minMaxTime = new TimePeriod(early, late);
+									var MinMaxTimeLineData = new MinMaxTimePeriod()
+									{
+										MinMaxTime = new TimePeriod(early, late),
+									    isContainsEndDateDST = isContainsEndDateOfDst,
+										timespanDST = endDSTTimeSpan,
+									};
 
 									var days = (from day in firstDayOfWeek.DateRange(7)
 												let scheduleDay = scheduleDays.SingleOrDefault(d => d.DateOnlyAsPeriod.DateOnly == day)
@@ -178,7 +197,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 															OvertimeAvailability = overtimeAvailability,
 															OvertimeAvailabilityYesterday = overtimeAvailabilityYesterday,
 															ScheduleDay = scheduleDay,
-															MinMaxTime = minMaxTime,
+															MinMaxTime = new TimePeriod(early, late),
 															Availability = availabilityForDay,
 															ProbabilityClass = probabilityClass,
 															ProbabilityText = probabilityText
@@ -219,7 +238,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 												Date = date,
 												Days = days,
 												ColorSource = colorSource,
-												MinMaxTime = minMaxTime,
+												MinMaxTimeLineData = MinMaxTimeLineData,
 												AsmPermission = asmPermission,
 												TextRequestPermission = textRequestPermission,
 												OvertimeAvailabilityPermission = overtimeAvailabilityPermission,

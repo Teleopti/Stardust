@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.MessageBroker
 			_loggedOnUser = loggedOnUser;
 		}
 
-		public UserData CreateViewModel(DateTime date)
+		public UserData CreateViewModel()
 		{
 			var currentBu = _businessUnitProvider.Current();
 			var appSettings = _configReader.AppSettings;
@@ -40,13 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.MessageBroker
 			if (appSettings != null)
 				userData.Url = EnableMyTimeMessageBroker ? replaceDummyHostName(appSettings) : "http://disabledmessagebroker/";
 			if (loggedOnUser != null)
-			{
-				var defaultTimeZone = loggedOnUser.PermissionInformation.DefaultTimeZone();
 				userData.AgentId = loggedOnUser.Id.Value;
-				userData.TimeZoneMinuteOffset = DateTime.Compare(date,new DateTime())==0?
-							0:defaultTimeZone.GetUtcOffset(TimeZoneInfo.ConvertTimeFromUtc(date,defaultTimeZone)).TotalMinutes;
-			}
-				
 			return userData;
 		}
 

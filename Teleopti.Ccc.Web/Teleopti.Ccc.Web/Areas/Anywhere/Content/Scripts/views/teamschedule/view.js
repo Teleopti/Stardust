@@ -63,7 +63,7 @@ define([
 			options.renderHtml(view);
 
 			viewModel = new teamScheduleViewModel();
-			
+
 			resize.onresize(function () {
 				var timeLineWidth;
 				var timeLine = $('.time-line-for');
