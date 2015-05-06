@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Teleopti.Ccc.Domain.Backlog;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.DayOffPlanning.Scheduling;
@@ -13,6 +14,7 @@ using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization;
 using Teleopti.Ccc.Domain.Outbound;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -509,6 +511,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<OutboundSkillCreator>().As<OutboundSkillCreator>().SingleInstance();
 			builder.RegisterType<OutboundSkillTypeProvider>().As<IOutboundSkillTypeProvider>().SingleInstance();
 			builder.RegisterType<OutboundSkillPersister>().As<OutboundSkillPersister>().SingleInstance();
+			builder.RegisterType<IncomingTaskFactory>().As<IncomingTaskFactory>().SingleInstance();
+			builder.RegisterType<FlatDistributionSetter>().As<FlatDistributionSetter>().SingleInstance();
+			//FlatDistributionSetter
 		}
 	}
 }

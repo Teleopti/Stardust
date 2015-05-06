@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Win.Backlog
 			campaign.CallListLen = (int)numericUpDown1.Value;
 			campaign.ConnectAverageHandlingTime = (int) numericUpDown2.Value;
 			var campaignWorkingPeriod = new CampaignWorkingPeriod();
-			campaignWorkingPeriod.TimePeriod = new TimePeriod(5, 0, 18, 0);
+			campaignWorkingPeriod.TimePeriod = new TimePeriod(7, 0, 20, 0);
 
 			campaignWorkingPeriod.AddAssignment(new CampaignWorkingPeriodAssignment { WeekdayIndex = DayOfWeek.Monday });
 			campaignWorkingPeriod.AddAssignment(new CampaignWorkingPeriodAssignment { WeekdayIndex = DayOfWeek.Tuesday });
