@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel.Historical
 {
-	public interface IDailyStatisticsAggregator
+	public interface IDailyStatisticsProvider
 	{
 		IEnumerable<DailyStatistic> LoadDailyStatistics(IWorkload workload, DateOnlyPeriod dateRange);
 	}

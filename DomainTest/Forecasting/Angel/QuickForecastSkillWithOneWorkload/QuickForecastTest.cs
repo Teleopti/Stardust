@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 					x.LoadDailyStatisticForSpecificDates(Workload.QueueSourceCollection,
 						HistoricalPeriodForMeasurement.ToDateTimePeriod(SkillTimeZoneInfo()), Workload.Skill.Id.Value, Workload.Skill.MidnightBreakOffset))
 				.Return(StatisticTasksForMeasurement().ToArray());
-			var dailyStatistics = new DailyStatisticsAggregator(statisticRepository);
+			var dailyStatistics = new DailyStatisticsProvider(statisticRepository);
 
 			var skillDays = CurrentSkillDays();
 

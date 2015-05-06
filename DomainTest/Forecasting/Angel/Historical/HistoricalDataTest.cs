@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Historical
 		[Test]
 		public void ShouldLoadHistoricalDataFromStatistics()
 		{
-			var dailyStatisticsAggregator = MockRepository.GenerateMock<IDailyStatisticsAggregator>();
+			var dailyStatisticsAggregator = MockRepository.GenerateMock<IDailyStatisticsProvider>();
 			var workload = WorkloadFactory.CreateWorkload(SkillFactory.CreateSkill("skill1"));
 			var startDate = new DateOnly(2015,1,1);
 			var period = new DateOnlyPeriod(startDate, new DateOnly(2015,2,1));

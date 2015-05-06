@@ -399,13 +399,8 @@
     <Compile Include="Forecasting\Angel\QuickForecastCreatorTest.cs" />
     <Compile Include="Forecasting\Angel\QuickForecasterTest.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\QuickForecastEvaluatorTest.cs" />
-    <Compile Include="Forecasting\Angel\QuickForecastSkillWithOneWorkload\AggregateAverageHandlingTimesForOneDayTest.cs" />
-    <Compile Include="Forecasting\Angel\QuickForecastSkillWithOneWorkload\AggregateAverageHandlingTimesForOneDayWithNoAnsweredCallsTest.cs" />
-    <Compile Include="Forecasting\Angel\QuickForecastSkillWithOneWorkload\AggregateStatisticTasksForOneDayTest.cs" />
-    <Compile Include="Forecasting\Angel\QuickForecastSkillWithOneWorkload\AggregateStatisticTasksForSkillLocalDayConsideringSkillMidnightBreakTest.cs" />
-    <Compile Include="Forecasting\Angel\QuickForecastSkillWithOneWorkload\AggregateStatisticTasksForTwoDaysTest.cs" />
-    <Compile Include="Forecasting\Angel\QuickForecastSkillWithOneWorkload\AggregateStatisticTasksWithQueueAdjustmentTest.cs" />
-    <Compile Include="Forecasting\Angel\QuickForecastSkillWithOneWorkload\AggregateStatisticTasksForSkillLocalDayTest.cs" />
+    <Compile Include="Forecasting\Angel\QuickForecastSkillWithOneWorkload\ProvideStatisticTasksAndTimesTest.cs" />
+    <Compile Include="Forecasting\Angel\QuickForecastSkillWithOneWorkload\ProvideStatisticTasksWithQueueAdjustmentTest.cs" />
     <Compile Include="Forecasting\Angel\LegacyWrappers\LoadStatisticsTest.cs" />
     <Compile Include="Forecasting\Angel\LegacyWrappers\StatisticHelperFactoryForTest.cs" />
     <Compile Include="Forecasting\Angel\LegacyWrappers\StatisticHelperFactoryTest.cs" />

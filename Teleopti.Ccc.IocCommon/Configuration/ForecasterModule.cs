@@ -51,9 +51,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<FetchAndFillSkillDays>()
 				.SingleInstance()
 				.As<IFetchAndFillSkillDays>();
-			builder.RegisterType<DailyStatisticsAggregator>()
+			builder.RegisterType<DailyStatisticsProvider>()
 				.SingleInstance()
-				.As<IDailyStatisticsAggregator>();
+				.As<IDailyStatisticsProvider>();
 			builder.RegisterType<FutureData>()
 				.SingleInstance()
 				.As<IFutureData>();

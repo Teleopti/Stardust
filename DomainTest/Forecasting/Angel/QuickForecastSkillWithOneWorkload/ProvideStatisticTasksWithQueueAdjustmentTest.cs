@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWorkload
 {
-	public class AggregateStatisticTasksWithQueueAdjustmentTest : QuickForecastTest
+	public class ProvideStatisticTasksWithQueueAdjustmentTest : QuickForecastTest
 	{
 		protected override IWorkload Workload
 		{

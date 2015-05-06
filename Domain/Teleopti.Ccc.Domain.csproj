@@ -540,7 +540,7 @@
     <Compile Include="Forecasting\Angel\Future\FutureData.cs" />
     <Compile Include="Forecasting\Angel\Future\IFutureData.cs" />
     <Compile Include="Forecasting\Angel\Historical\DailyStatistic.cs" />
-    <Compile Include="Forecasting\Angel\Historical\DailyStatisticsAggregator.cs" />
+    <Compile Include="Forecasting\Angel\Historical\DailyStatisticsProvider.cs" />
     <Compile Include="Forecasting\Angel\Future\IFetchAndFillSkillDays.cs" />
     <Compile Include="Forecasting\Angel\Future\IForecastVolumeApplier.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\IForecastingMeasurer.cs" />
@@ -556,7 +556,7 @@
     <Compile Include="Forecasting\Angel\LegacyWrappers\DailyStatisticsToTaskOwnerConverterExtension.cs" />
     <Compile Include="Forecasting\Angel\Historical\HistoricalData.cs" />
     <Compile Include="Forecasting\Angel\Historical\IHistoricalData.cs" />
-    <Compile Include="Forecasting\Angel\Historical\IDailyStatisticsAggregator.cs" />
+    <Compile Include="Forecasting\Angel\Historical\IDailyStatisticsProvider.cs" />
     <Compile Include="Forecasting\Angel\IQuickForecasterWorkload.cs" />
     <Compile Include="Forecasting\Angel\LegacyWrappers\IFillWithEmptySkillDays.cs" />
     <Compile Include="Forecasting\Angel\LegacyWrappers\ILoadStatistics.cs" />

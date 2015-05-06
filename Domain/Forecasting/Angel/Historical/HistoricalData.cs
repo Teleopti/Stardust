@@ -6,16 +6,16 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Historical
 {
 	public class HistoricalData : IHistoricalData
 	{
-		private readonly IDailyStatisticsAggregator _dailyStatisticsAggregator;
+		private readonly IDailyStatisticsProvider _dailyStatisticsProvider;
 
-		public HistoricalData(IDailyStatisticsAggregator dailyStatisticsAggregator)
+		public HistoricalData(IDailyStatisticsProvider dailyStatisticsProvider)
 		{
-			_dailyStatisticsAggregator = dailyStatisticsAggregator;
+			_dailyStatisticsProvider = dailyStatisticsProvider;
 		}
 
 		public TaskOwnerPeriod Fetch(IWorkload workload, DateOnlyPeriod period)
 		{
-			var statistics = _dailyStatisticsAggregator.LoadDailyStatistics(workload, period);
+			var statistics = _dailyStatisticsProvider.LoadDailyStatistics(workload, period);
 
 			var dailyStatistics =
 				period.DayCollection()

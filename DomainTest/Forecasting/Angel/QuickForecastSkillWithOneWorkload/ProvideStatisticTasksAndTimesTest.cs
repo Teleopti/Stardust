@@ -7,31 +7,32 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWorkload
 {
-	public class AggregateStatisticTasksForTwoDaysTest : QuickForecastTest
+	public class ProvideStatisticTasksAndTimesTest : QuickForecastTest
 	{
-		protected override DateOnlyPeriod HistoricalPeriodForForecast
-		{
-			get { return new DateOnlyPeriod(2000,1,1,2000,1,2); }
-		}
-
 		protected override IEnumerable<StatisticTask> StatisticTasks()
 		{
 			var startDateOnHistoricalPeriod = HistoricalPeriodForForecast.ToDateTimePeriod(SkillTimeZoneInfo()).StartDateTime.AddHours(12);
 			return new[]
 			{
-				new StatisticTask {Interval = startDateOnHistoricalPeriod, StatOfferedTasks = 6},
-				new StatisticTask {Interval = startDateOnHistoricalPeriod.AddDays(1), StatOfferedTasks = 7}
+				new StatisticTask
+				{
+					Interval = startDateOnHistoricalPeriod, 
+					StatOfferedTasks = 6,
+					StatAverageTaskTimeSeconds = 35,
+					StatAverageAfterTaskTimeSeconds = 50
+				},
 			};
 		}
 
 		protected override void Assert(IEnumerable<ISkillDay> modifiedSkillDays)
 		{
 			var firstDay = modifiedSkillDays.Single(x => x.CurrentDate == FuturePeriod.StartDate);
-			var lastDay = modifiedSkillDays.Single(x => x.CurrentDate == FuturePeriod.StartDate.AddDays(1));
 			Convert.ToInt32(firstDay.Tasks)
 				.Should().Be.EqualTo(6);
-			Convert.ToInt32(lastDay.Tasks)
-				.Should().Be.EqualTo(7);
+			Convert.ToInt32(firstDay.AverageTaskTime.TotalSeconds)
+				.Should().Be.EqualTo(35);
+			Convert.ToInt32(firstDay.AverageAfterTaskTime.TotalSeconds)
+				.Should().Be.EqualTo(50);
 		}
 	}
 }

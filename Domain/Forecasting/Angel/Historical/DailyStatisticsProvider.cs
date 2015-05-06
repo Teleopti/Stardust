@@ -5,11 +5,11 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel.Historical
 {
-	public class DailyStatisticsAggregator : IDailyStatisticsAggregator
+	public class DailyStatisticsProvider : IDailyStatisticsProvider
 	{
 		private readonly IStatisticRepository _statisticRepository;
 
-		public DailyStatisticsAggregator(IStatisticRepository statisticRepository)
+		public DailyStatisticsProvider(IStatisticRepository statisticRepository)
 		{
 			_statisticRepository = statisticRepository;
 		}
