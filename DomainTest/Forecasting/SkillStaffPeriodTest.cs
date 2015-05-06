@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 				Percent.Value, _target.EstimatedServiceLevelShrinkage.Value, 0.001);
 
 			//setup for occ toggle
-			_target = new SkillStaffPeriod(_tp, _task, _sa, new StaffingCalculatorServiceFacade(true));
+			_target = new SkillStaffPeriod(_tp, _task, _sa, new StaffingCalculatorServiceFacade());
 			payload = _target.Payload;
 			payload.Efficiency = new Percent(1);
 			_target.IsAvailable = true;

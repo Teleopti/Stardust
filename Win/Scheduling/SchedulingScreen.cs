@@ -3503,7 +3503,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			foreach (ISkill skill in skills)
 			{
 				if(skill.SkillType is SkillTypePhone)
-					skill.SkillType.StaffingCalculatorService = new StaffingCalculatorServiceFacade(toggleManager.IsEnabled(Toggles.Scheduler_OccupancyESL_11724));
+					skill.SkillType.StaffingCalculatorService = new StaffingCalculatorServiceFacade();
 				stateHolder.SchedulingResultState.Skills.Add(skill);
 			}
 		}

@@ -9,7 +9,6 @@
 		Scheduler_Seniority_24331,
 		Forecast_CopySettingsToWorkflow_11112,
 
-		Scheduler_OccupancyESL_11724,
 		Scheduler_HidePointsFairnessSystem_28317,
 		Scheduler_SudentAvailabilityForFixedStaff_30393,
 		Scheduler_BackToLegalShift_29831,

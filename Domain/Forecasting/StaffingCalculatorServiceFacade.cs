@@ -7,16 +7,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
 {
 	public class StaffingCalculatorServiceFacade : IStaffingCalculatorServiceFacade
 	{
-		private readonly bool _occEsl;
 		private readonly IStaffingCalculatorService _secretService = new StaffingCalculatorService();
 		private readonly ServiceLevelAchivedOcc _serviceLevelAchivedOcc = new ServiceLevelAchivedOcc();
-
-		public StaffingCalculatorServiceFacade(){}
-
-		public StaffingCalculatorServiceFacade(bool occEsl)
-		{
-			_occEsl = occEsl;
-		}
 
 		public double TeleoptiAgents(double sla, int serviceTime, double calls, double averageHandlingTime, TimeSpan periodLength)
 		{
@@ -36,9 +28,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 		public double ServiceLevelAchievedOcc(double agents, double serviceTime, double calls, double aht, TimeSpan intervalLength, double sla, double forecastedAgents)
 		{
-			if (!_occEsl)
-				return _secretService.ServiceLevelAchieved(agents, serviceTime, calls, aht, intervalLength, (int)(sla*100));
-
 			return _serviceLevelAchivedOcc.ServiceLevelAchived(forecastedAgents, agents, sla, (int) serviceTime, calls,
 				TimeSpan.FromSeconds(aht), intervalLength);
 		}
