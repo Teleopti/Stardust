@@ -33,10 +33,12 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 				Password = personDto.ApplicationLogOnPassword,
 #pragma warning disable 618
 				Identity = !string.IsNullOrEmpty(personDto.WindowsDomain) && !string.IsNullOrEmpty(personDto.WindowsLogOnName) ? personDto.WindowsDomain + "\\" + personDto.WindowsLogOnName : null,
-#pragma warning restore 618
 				PersonId = id,
 				Tenant = tenant
 			};
+			if (string.IsNullOrEmpty(data.Identity) && !string.IsNullOrEmpty(personDto.WindowsLogOnName))
+				data.Identity = personDto.WindowsLogOnName;
+#pragma warning restore 618
 			if (!string.IsNullOrEmpty(personDto.Identity))
 				data.Identity = personDto.Identity;
 			
