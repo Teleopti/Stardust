@@ -16,7 +16,7 @@
 					<input type="radio" name="changeRangeGroup" id="{{op.PeriodType}}-{{op.Number}}" ng-click="rangeUpdated(planningPeriod.Id, op)" />
 					<label for="{{op.PeriodType}}-{{op.Number}}">
 						<span class="wfm-radio-toggle"></span>
-						<span class="wfm-radio-label"> {{op.StartDate | amDateFormat:"L"}} {{'ToText' | translate}} {{op.EndDate | amDateFormat:"L"}} having range of {{op.Number}} {{op.PeriodType}}</span>
+						<span class="wfm-radio-label"> {{op.StartDate |  date : format}} {{'ToText' | translate}} {{op.EndDate | date : format}} having range of {{op.Number}} {{op.PeriodType}}</span>
 					</label>
 				</div>
 			</div>
