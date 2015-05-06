@@ -3,6 +3,7 @@
 	As a user
 	I want to be able to sign out
 
+@ignore
 @WindowsAsDefaultIdentityProviderLogon
 Scenario: Logon as another user
 	Given I have a role with

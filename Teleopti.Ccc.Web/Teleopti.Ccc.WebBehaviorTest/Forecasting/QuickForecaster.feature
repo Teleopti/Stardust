@@ -1,4 +1,5 @@
-﻿Feature: QuickForecaster
+﻿@ignore
+Feature: QuickForecaster
 	In order to create a forecast
 	As a user
 	I want to be able to do a forecast
