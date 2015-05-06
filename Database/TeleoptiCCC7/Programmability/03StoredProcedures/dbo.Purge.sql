@@ -24,7 +24,6 @@ declare @MessageKeepUntil datetime
 declare @PayrollKeepYears int
 declare @PayrollKeepUntil datetime
 declare @SecurityAuditKeepDays int
-declare @SecurityAuditKeepUntil datetime
 declare @RequestsKeepMonths int
 declare @RequestsKeepUntil datetime
 
@@ -50,7 +49,6 @@ select @ForecastsKeepUntil = dateadd(year,-1*@ForecastKeepYears,getdate())
 select @ScheduleKeepUntil = dateadd(year,-1*@ScheduleKeepYears,getdate())
 select @MessageKeepUntil = dateadd(year,-1*@MessageKeepYears,getdate())
 select @PayrollKeepUntil = dateadd(year,-1*@MessageKeepYears,getdate())
-select @SecurityAuditKeepUntil = dateadd(day,-1*@SecurityAuditKeepDays,getdate())
 select @RequestsKeepUntil = dateadd(month,-1*@RequestsKeepMonths,getdate())
 
 select @BatchSize = 14
@@ -192,10 +190,6 @@ delete PayrollResult
 from PayrollResult pr
 where pr.UpdatedOn < @PayrollKeepUntil
 and pr.UpdatedOn < @Maxdate
-
---SecurityAudit
-delete [Auditing].[Security]
-where  [DateTimeUtc] < @SecurityAuditKeepUntil
 
 --Requests
 --AF: Need to remove top (50000) as this caused corrupt data...
