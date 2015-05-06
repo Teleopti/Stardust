@@ -58,16 +58,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 														String.Empty)))).SetResultTransformer(Transformers.DistinctRootEntity).List<IPerson>();
 		}
 
-
-		private ICriteria createIdentityLogonNameCriteria(string identity)
-		{
-			return Session.CreateCriteria(typeof(Person), "person")
-				 .Add(Restrictions.Eq("AuthenticationInfo.Identity", identity))
-				 .Add(Restrictions.Disjunction()
-							.Add(Restrictions.IsNull("TerminalDate"))
-							.Add(Restrictions.Ge("TerminalDate", DateOnly.Today)));
-		}
-
 		public override bool ValidateUserLoggedOn
 		{
 			get
