@@ -72,30 +72,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			var activityInternalData = _activityIntervalDataCreator.CreateFor(teamBlockInfo, datePointer,
 				_schedulingResultStateHolder, true);
-			var maxSeatFeatureOption = MaxSeatsFeatureOptions.DoNotConsiderMaxSeats;
-			IDictionary<DateTime, IntervalLevelMaxSeatInfo> maxSeatInfo = new Dictionary<DateTime, IntervalLevelMaxSeatInfo>();
-			maxSeatFeatureOption = maxSeatsFeature(teamBlockInfo, datePointer, schedulingOptions, maxSeatFeatureOption, ref maxSeatInfo);
+			var maxSeatInfo = _maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(teamBlockInfo, datePointer, _schedulingResultStateHolder, TimeZoneGuard.Instance.TimeZone, true);
 			var maxSeatSkills = _maxSeatSkillAggregator.GetAggregatedSkills(teamBlockInfo.TeamInfo.GroupMembers.ToList() , new DateOnlyPeriod(datePointer, datePointer));
 			bool hasMaxSeatSkill = maxSeatSkills.Any();
-
 			var parameters = new PeriodValueCalculationParameters(schedulingOptions
 				.WorkShiftLengthHintOption, schedulingOptions.UseMinimumPersons,
-				schedulingOptions.UseMaximumPersons, maxSeatFeatureOption, hasMaxSeatSkill, maxSeatInfo);
+				schedulingOptions.UseMaximumPersons, schedulingOptions.UserOptionMaxSeatsFeature, hasMaxSeatSkill, maxSeatInfo);
 
 			var roleModel = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
 				parameters, TimeZoneGuard.Instance.TimeZone);
 
 			return roleModel;
-		}
-
-		private MaxSeatsFeatureOptions maxSeatsFeature(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions, MaxSeatsFeatureOptions maxSeatFeatureOption, ref IDictionary<DateTime, IntervalLevelMaxSeatInfo> maxSeatInfo)
-		{
-
-			maxSeatFeatureOption = schedulingOptions.UserOptionMaxSeatsFeature;
-			maxSeatInfo = _maxSeatInformationGeneratorBasedOnIntervals
-				.GetMaxSeatInfo(teamBlockInfo, datePointer, _schedulingResultStateHolder, TimeZoneGuard.Instance.TimeZone,true);
-			
-			return maxSeatFeatureOption;
 		}
 	}
 }

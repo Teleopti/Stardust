@@ -94,10 +94,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			var activityInternalData = _activityIntervalDataCreator.CreateFor(teamBlockSingleDayInfo, day,
 				schedulingResultStateHolder, false);
-			var maxSeatFeatureOption = MaxSeatsFeatureOptions.DoNotConsiderMaxSeats;
-			IDictionary<DateTime, IntervalLevelMaxSeatInfo> maxSeatInfo = new Dictionary<DateTime, IntervalLevelMaxSeatInfo>();
-			maxSeatFeatureOption = handleMaxSeatFeature(teamBlockInfo, schedulingOptions, day, schedulingResultStateHolder,
-				maxSeatFeatureOption, ref maxSeatInfo);
+
+
+			IDictionary<DateTime, IntervalLevelMaxSeatInfo> maxSeatInfo =
+						_maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(teamBlockInfo, day, schedulingResultStateHolder, TimeZoneGuard.Instance.TimeZone, true);
+			
 
 			var maxSeatSkills = _maxSeatSkillAggregator.GetAggregatedSkills(teamBlockInfo.TeamInfo.GroupMembers.ToList(),
 				new DateOnlyPeriod(day, day));
@@ -105,7 +106,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			var parameters = new PeriodValueCalculationParameters(schedulingOptions
 				.WorkShiftLengthHintOption, schedulingOptions.UseMinimumPersons,
-				schedulingOptions.UseMaximumPersons, maxSeatFeatureOption, hasMaxSeatSkill, maxSeatInfo);
+				schedulingOptions.UseMaximumPersons, schedulingOptions.UserOptionMaxSeatsFeature, hasMaxSeatSkill, maxSeatInfo);
 
 			resultList = _workShiftSelector.SelectAllShiftProjectionCaches(shifts, activityInternalData,
 				parameters, TimeZoneGuard.Instance.TimeZone);
@@ -164,20 +165,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 					var activityInternalData = _activityIntervalDataCreator.CreateFor(teamBlockSingleDayInfo, day,
 						schedulingResultStateHolder, false);
-					var maxSeatFeatureOption = MaxSeatsFeatureOptions.DoNotConsiderMaxSeats;
-					IDictionary<DateTime, IntervalLevelMaxSeatInfo> maxSeatInfo = new Dictionary<DateTime, IntervalLevelMaxSeatInfo>();
-					maxSeatFeatureOption = handleMaxSeatFeature(teamBlockInfo, schedulingOptions, day, schedulingResultStateHolder,
-						maxSeatFeatureOption, ref maxSeatInfo);
+
+					IDictionary<DateTime, IntervalLevelMaxSeatInfo> maxSeatInfo =
+						_maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(teamBlockInfo, day, schedulingResultStateHolder, TimeZoneGuard.Instance.TimeZone, true);
+			
 
 					var maxSeatSkills = _maxSeatSkillAggregator.GetAggregatedSkills(teamBlockInfo.TeamInfo.GroupMembers.ToList(),
 						new DateOnlyPeriod(day, day));
 					bool hasMaxSeatSkill = maxSeatSkills.Any();
 
 					var parameters = new PeriodValueCalculationParameters(schedulingOptions
-						.WorkShiftLengthHintOption, schedulingOptions
-							.UseMinimumPersons,
-						schedulingOptions
-							.UseMaximumPersons, maxSeatFeatureOption, hasMaxSeatSkill, maxSeatInfo);
+						.WorkShiftLengthHintOption, schedulingOptions.UseMinimumPersons,
+						schedulingOptions.UseMaximumPersons, schedulingOptions.UserOptionMaxSeatsFeature, hasMaxSeatSkill, maxSeatInfo);
 					bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
 						parameters, TimeZoneGuard.Instance.TimeZone);
 					if (bestShiftProjectionCache == null) continue;
@@ -190,18 +189,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			}
 
 			return isTeamBlockScheduledForSelectedTeamMembers(selectedTeamMembers, day, teamBlockSingleDayInfo);
-		}
-
-		private MaxSeatsFeatureOptions handleMaxSeatFeature(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions,
-			DateOnly day, ISchedulingResultStateHolder schedulingResultStateHolder, MaxSeatsFeatureOptions maxSeatFeatureOption,
-			ref IDictionary<DateTime, IntervalLevelMaxSeatInfo> maxSeatInfo)
-		{
-			
-			maxSeatFeatureOption = schedulingOptions.UserOptionMaxSeatsFeature;
-			maxSeatInfo = _maxSeatInformationGeneratorBasedOnIntervals
-				.GetMaxSeatInfo(teamBlockInfo, day, schedulingResultStateHolder, TimeZoneGuard.Instance.TimeZone,true);
-			
-			return maxSeatFeatureOption;
 		}
 
 		private bool isTeamBlockScheduledForSelectedTeamMembers(IList<IPerson> selectedTeamMembers, DateOnly day,

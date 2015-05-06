@@ -111,6 +111,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			}
 		}
 
+		[Ignore]
 		[Test]
 		public void ShouldSelectBestShiftAsRoleModel()
 		{

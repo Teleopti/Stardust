@@ -203,6 +203,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 					  .Return(true);
 				Expect.Call(_maxSeatSkillAggregator.GetAggregatedSkills(_teamBlockInfo.TeamInfo.GroupMembers.ToList(),
 					new DateOnlyPeriod(_dateOnly, _dateOnly))).Return(new HashSet<ISkill>()).Repeat.Twice();
+				Expect.Call(_maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(_teamBlockInfo, _dateOnly,
+					_schedulingResultStateHolder, TimeZoneGuard.Instance.TimeZone, true)).Return(new Dictionary<DateTime, IntervalLevelMaxSeatInfo>()).Repeat.AtLeastOnce();
 			}
 			using (_mocks.Playback())
 			{
@@ -259,6 +261,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 					  .Return(true);
 				Expect.Call(_maxSeatSkillAggregator.GetAggregatedSkills(_teamBlockInfo.TeamInfo.GroupMembers.ToList(),
 					new DateOnlyPeriod(_dateOnly, _dateOnly))).Return(new HashSet<ISkill> { SkillFactory.CreateSkill("") });
+
+				Expect.Call(_maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(_teamBlockInfo, _dateOnly,
+					_schedulingResultStateHolder, TimeZoneGuard.Instance.TimeZone, true)).Return(new Dictionary<DateTime, IntervalLevelMaxSeatInfo>());
 			}
 			using (_mocks.Playback())
 			{
@@ -269,7 +274,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		}
 
 		[Test]
-		public void ShouldScheduleWithMaxSeatToggleOn()
+		public void ShouldScheduleWithConsideringMaxSeat()
 		{
 			var restriction = new EffectiveRestriction(new StartTimeLimitation(),
 																		 new EndTimeLimitation(),
