@@ -8,6 +8,8 @@ using Teleopti.Ccc.Domain.Kpi;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.ApplicationConfig.Creators
@@ -15,6 +17,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
 	public class DefaultDataCreator
 	{
 		private readonly ISessionFactory _sessionFactory;
+		private readonly TenantUnitOfWorkManager _tenantUnitOfWorkManager;
 		private readonly string _businessUnitName;
 		private readonly CultureInfo _cultureInfo;
 		private readonly TimeZoneInfo _timeZone;
@@ -28,7 +31,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
 		private SkillTypeCreator _skillTypeCreator;
 		private KeyPerformanceIndicatorCreator _keyPerformanceIndicatorCreator;
 
-		public DefaultDataCreator(string businessUnitName, CultureInfo cultureInfo, TimeZoneInfo timeZone, string newUserName, string newUserPassword, ISessionFactory sessionFactory)
+		public DefaultDataCreator(string businessUnitName, CultureInfo cultureInfo, TimeZoneInfo timeZone, string newUserName, string newUserPassword, ISessionFactory sessionFactory, TenantUnitOfWorkManager tenantUnitOfWorkManager)
 		{
 			_businessUnitName = businessUnitName;
 			_cultureInfo = cultureInfo;
@@ -36,6 +39,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
 			_newUserName = newUserName;
 			_newUserPassword = newUserPassword;
 			_sessionFactory = sessionFactory;
+			_tenantUnitOfWorkManager = tenantUnitOfWorkManager;
 		}
 
 		public DefaultAggregateRoot Create()
@@ -177,7 +181,19 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
 
 				_personCreator.Save(sysAdmin);
 				updateUserWithSuperRole(sysAdmin);
+				addToTenantDb(sysAdmin);
 			}
+		}
+
+		private void addToTenantDb(IPerson sysAdmin)
+		{
+			var tenantSession = _tenantUnitOfWorkManager.CurrentSession();
+			var tenant = tenantSession.Get<Tenant>(1);
+			var personInfo = new PersonInfo(tenant, sysAdmin.Id.Value);
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), sysAdmin.ApplicationAuthenticationInfo.ApplicationLogOnName, sysAdmin.ApplicationAuthenticationInfo.Password);
+			personInfo.SetIdentity(sysAdmin.AuthenticationInfo.Identity);
+			tenantSession.Save(personInfo);
+			_tenantUnitOfWorkManager.CommitAndDisposeCurrent();
 		}
 
 		private void updateUserWithSuperRole(IPerson user)

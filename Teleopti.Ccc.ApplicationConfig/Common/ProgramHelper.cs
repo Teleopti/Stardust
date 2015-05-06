@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -148,7 +149,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 		{
 			var databaseHandler = new DatabaseHandler(argument);
 			var defaultDataCreator = new DefaultDataCreator(argument.BusinessUnit, argument.CultureInfo, argument.TimeZone,
-				argument.NewUserName, argument.NewUserPassword, databaseHandler.SessionFactory);
+				argument.NewUserName, argument.NewUserPassword, databaseHandler.SessionFactory, TenantUnitOfWorkManager.CreateInstanceForTest(argument.DestinationConnectionString));
 
 			DefaultAggregateRoot defaultAggregateRoot = defaultDataCreator.Create();
 			defaultDataCreator.Save(defaultAggregateRoot);
