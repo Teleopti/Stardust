@@ -534,5 +534,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GoToOutbound();
 		}
 
+		[When(@"I view campaign '(.*)'")]
+		public void WhenIViewCampaign(string campaginName)
+		{
+			var campaignId = (from c in DataMaker.Data().UserDatasOfType<OutboundCampaignConfigurable>()
+						  let campaign = c.Campaign
+						  where campaign.Name.Equals(campaginName)
+						  select campaign.Id.GetValueOrDefault())
+						  .First();
+			TestControllerMethods.Logon();
+			Navigation.GoToOutboundCampaign(campaignId);			
+		}
+
 	}
 }

@@ -12,6 +12,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 {
 	public class OutboundCampaignConfigurable : IDataSetup
 	{
+		public Campaign Campaign;
+
 		public string Name { get; set; }
 		public DateTime StartDate { get; set; }
 		public DateTime EndDate { get; set; }
@@ -21,7 +23,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		{
 			var skillRepository = new SkillRepository(uow);
 			var skill = skillRepository.LoadAll().Single(x => x.Name == Skill);
-			var campaign = new Campaign()
+
+			Campaign = new Campaign()
 			{
 				Name = Name,
 				CallListLen = 100,
@@ -37,7 +40,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				CampaignStatus = CampaignStatus.Ongoing
 			};
 
-			new OutboundCampaignRepository(uow).Add(campaign);
+			new OutboundCampaignRepository(uow).Add(Campaign);
 		}
 
 	}

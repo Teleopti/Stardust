@@ -84,6 +84,11 @@
 			$scope.newWorkingPeriod = { StartTime: null, EndTime: null };
 			$scope.showCampaignDetail = angular.isDefined($scope.campaign) && ($scope.campaign != null);
 
+			$scope.acToggle1 = true;
+			$scope.acToggle2 = true;
+			$scope.acToggle3 = true;
+
+
 			$scope.$on('outbound.campaigns.loaded', function() {
 				$scope.campaign = (angular.isDefined($stateParams.Id) && $stateParams.Id != "") ? OutboundService.getCampaignById($stateParams.Id) : null;
 				$scope.showCampaignDetail = angular.isDefined($scope.campaign) && ($scope.campaign != null);

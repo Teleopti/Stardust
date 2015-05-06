@@ -45,6 +45,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 			throw new NotImplementedException();
 		}
 
+		public void HoverOver(string selector)
+		{
+			throw new NotImplementedException();
+		}
+
 		public void AssertExists(string selector)
 		{
 			throw new NotSupportedException(notAllowedAction);
@@ -83,6 +88,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 		public void AssertFirstNotContains(string selector, string text)
 		{
 			throw new NotSupportedException(notAllowedAction);
+		}
+
+		public void AssertInputValue(string selector, string value)
+		{
+			throw new NotImplementedException();
 		}
 
 		public void AssertUrlContains(string url)

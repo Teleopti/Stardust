@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 		void Clear(string selector);
 		void FillWith(string selector, string value);
 		void PressEnter(string selector);
+		void HoverOver(string selector);
 
 		void AssertExists(string selector);
 		void AssertNotExists(string existsSelector, string notExistsSelector);
@@ -23,6 +24,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 		void AssertNoContains(string existsSelector, string collectionSelector, string text);
 		void AssertFirstContains(string selector, string text);
 		void AssertFirstNotContains(string selector, string text);
+
+		void AssertInputValue(string selector, string value);
 
 		void AssertUrlContains(string url);
 		void AssertUrlNotContains(string urlContains, string urlNotContains);

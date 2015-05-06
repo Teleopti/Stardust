@@ -21,7 +21,7 @@
 			</div>			
 		</div>				
 	</div>
-	<div class="material-block-content">
+	<div class="material-block-content campaign-details">
 		<div class=" wfm-accordion">
 			<div class="wfm-block">
 				<div class="sub-header accordion-head" ng-click="acToggle1 = !acToggle1">
@@ -30,14 +30,14 @@
 				</div>
 				<div ng-show="acToggle1">
 					<form name="formCampaignParams" class="form-horizontal wfm-block input-group" ng-submit="update()" form-locator>
-						<input type="submit" style="position: absolute; left: -9999px"/>
-						<div class="input-prepend">
+						<input type="submit" style="position: absolute; left: -9999px" />
+						<div class=" input-prepend">
 							<span><strong>Name</strong></span>
 							<input id="name" type="text" ng-model="campaign.Name" ng-blur="update()" ng-required />
 						</div>
 						<div class="input-prepend">
 							<span><strong>Call List Length</strong></span>
-							<input id="callList" type="text" ng-model="campaign.CallListLen" ng-blur="update()"  placeholder="call list length"/>
+							<input id="callList" type="text" ng-model="campaign.CallListLen" ng-blur="update()" placeholder="call list length" />
 						</div>
 						<div class="input-prepend">
 							<span><strong>Target Rate</strong></span>
@@ -74,15 +74,17 @@
 				<div ng-show="acToggle2">
 					<div class="row wfm-block">
 						<div class="col-lg-6">
-							<div class="wfm-datepicker-wrap">
-								<div class="sub-header">Start time: <strong>{{campaign.StartDate.Date | date: format }}</strong>
+							<div class="wfm-datepicker-wrap campaign-startdate">
+								<div class="sub-header">
+									Start time: <strong>{{campaign.StartDate.Date | date: format }}</strong>
 								</div>
 								<datepicker ng-model="campaign.StartDate.Date" max-date="campaign.EndDate.Date" show-weeks="true" class="well well-sm" ng-change="update(true)"></datepicker>
 							</div>
 						</div>
 						<div class="col-lg-6">
-							<div class="wfm-datepicker-wrap">
-								<div class="sub-header">End time: <strong class="end-date">{{campaign.EndDate.Date | date: format }}</strong>
+							<div class="wfm-datepicker-wrap campaign-enddate">
+								<div class="sub-header">
+									End time: <strong class="end-date">{{campaign.EndDate.Date | date: format }}</strong>
 								</div>
 								<datepicker ng-model="campaign.EndDate.Date" min-date="campaign.StartDate.Date" show-weeks="true" class="well well-sm" ng-change="update(true)"></datepicker>
 							</div>
@@ -91,7 +93,7 @@
 				</div>
 			</div>
 			<div class="wfm-block" ng-if="true">
-				<div class="sub-header accordion-head" ng-click="acToggle4 = !acToggle4">
+				<div class="sub-header accordion-head" ng-click="acToggle3 = !acToggle3">
 					Working Hours
 				</div>
 				<div ng-show="acToggle4">
@@ -107,12 +109,12 @@
 									</div>
 								</div>
 							</div>
-							<div class="wfm-block">
+							<div class="wfm-block campaign-working-hours">
 								<ul class="wfm-list">
 									<li ng-repeat="WorkingPeriod in campaign.CampaignWorkingPeriods"
-									    ng-class="{'wfm-list-item-selected': WorkingPeriod.selected}"
-									    ng-click="$parent.toggleWorkingPeriodSelect(WorkingPeriod)"
-									    class="role-btn wfm-block wfm-dense">
+										ng-class="{'wfm-list-item-selected': WorkingPeriod.selected}"
+										ng-click="$parent.toggleWorkingPeriodSelect(WorkingPeriod)"
+										class="role-btn wfm-block wfm-dense">
 										<div class="wfm-leave-behind wfm-leave-behind-1">
 											<span>
 												<i ng-click="$parent.deleteWorkingPeriod(WorkingPeriod)">
@@ -133,7 +135,7 @@
 											</div>
 											<div ng-repeat-start="WeekDay in WorkingPeriod.ExpandedWorkingPeriodAssignments" ng-repeat-end class="col-lg-1">
 												<div class="wfm-checkbox wfm-checkbox-inline ">
-													<input type="checkbox" id="check_workinghour_{{WorkingPeriod.Id}}_weekday_{{WeekDay.WeekDay}}" ng-model="WeekDay.Checked" ng-change="$parent.$parent.toggleWorkingPeriodAssignment(WorkingPeriod, WeekDay)"/>
+													<input type="checkbox" id="check_workinghour_{{WorkingPeriod.Id}}_weekday_{{WeekDay.WeekDay}}" ng-model="WeekDay.Checked" ng-change="$parent.$parent.toggleWorkingPeriodAssignment(WorkingPeriod, WeekDay)" />
 													<label for="check_workinghour_{{WorkingPeriod.Id}}_weekday_{{WeekDay.WeekDay}}">
 														<span class="wfm-checkbox-toggle"></span>
 														<span class="wfm-checkbox-label"></span>

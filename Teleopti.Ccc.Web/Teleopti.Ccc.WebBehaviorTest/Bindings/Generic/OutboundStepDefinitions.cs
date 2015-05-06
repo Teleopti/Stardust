@@ -14,6 +14,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			var campaign = table.CreateInstance<OutboundCampaignConfigurable>();
 			DataMaker.Data().Apply(campaign);
 		}
+
+
+
 	}
 
 

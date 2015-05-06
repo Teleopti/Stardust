@@ -78,6 +78,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 			_browser.FindCss(selector, options()).SendKeys(Keys.Enter);
 		}
 
+		public void HoverOver(string selector)
+		{
+			_browser.FindCss(selector, options()).Hover();
+		}
+
+
 		public void DragnDrop(string selector, int x, int y)
 		{
 				var selenium = ((OpenQA.Selenium.Remote.RemoteWebDriver)_browser.Native);
@@ -129,6 +135,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 		public void AssertFirstNotContains(string selector, string text)
 		{
 			assert(_browser.FindCss(selector, options()).HasNoContentMatch(new Regex(Regex.Escape(text))), Is.True, "Failed to assert that " + selector + " did not contain text " + text);
+		}
+
+		public void AssertInputValue(string selector, string value)
+		{
+			eventualAssert(() =>
+			{
+				return _browser.FindCss(selector, options()).Value;
+			}, Is.EqualTo(value), "Failed to assert that input value was " + value);
 		}
 
 		public void AssertUrlContains(string url)
