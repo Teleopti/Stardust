@@ -6,9 +6,9 @@
 	<div class="row" ng-show="planningPeriod.$resolved">
 		<div class="wfm-accordion material-depth-2">
 			<div class="next-planning-peroid wfm-accordion-head" ng-click="changeDateToggle = !changeDateToggle;suggestions(planningPeriod.Id)">
-				<h4>{{'NextPlanningPeriodMessage' | translate}} {{planningPeriod.StartDate | date:"yyyy-MM-dd"}} {{'ToText' | translate}} {{planningPeriod.EndDate | date:"yyyy-MM-dd"}}</h4>
+				<h4>{{'NextPlanningPeriodMessage' | translate}} {{planningPeriod.StartDate | amDateFormat:"L"}} {{'ToText' | translate}} {{planningPeriod.EndDate | amDateFormat:"L"}}</h4>
 			</div>
-		</div> 
+		</div>
 		<div ng-show="changeDateToggle && isEnabled" >
 			{{'ChangePlanningPeriodTo' | translate}}
 			<div ng-repeat="op in suggestedPlanningPeriods">
@@ -21,7 +21,7 @@
 				</div>
 			</div>
 		</div>
-		
+
 
 		<p ng-show="planningPeriod.Skills.length>0">{{'PlanningPeriodMissingMessage' | translate}}</p>
 		<div ng-show="planningPeriod.Skills.length>0">
@@ -35,7 +35,7 @@
 					<span class="pull-right" class="text-muted">{{skill.MissingRanges.length}} {{'IssuesText' | translate }}</span>
 				</div>
 				<div class="wfm-accordion-content" ng-cloak ng-show="skill.toggle">
-					<div ng-repeat="range in skill.MissingRanges">{{'MissingForecastFrom' | translate }} {{range.StartDate | date:"yyyy-MM-dd"}} {{'ToText' | translate}} {{range.EndDate | date:"yyyy-MM-dd"}}</div>
+					<div ng-repeat="range in skill.MissingRanges">{{'MissingForecastFrom' | translate }} {{range.StartDate | amDateFormat:"L"}} {{'ToText' | translate}} {{range.EndDate | amDateFormat:"L"}}</div>
 				</div>
 			</li>
 		</ul>

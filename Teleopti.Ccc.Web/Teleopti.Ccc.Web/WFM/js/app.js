@@ -99,7 +99,7 @@ wfm.config([
 		$translateProvider.preferredLanguage('en');
 	}
 ]).run([
-	'$rootScope', '$http', '$state', '$translate', function ($rootScope, $http, $state, $translate) {
+	'$rootScope', '$http', '$state', '$translate', 'amMoment', function ($rootScope, $http, $state, $translate, angularMoment) {
 		var timeout = Date.now() + 10000;
 		$rootScope.isAuthenticated = false;
 
@@ -140,6 +140,7 @@ wfm.config([
 			$rootScope.isAuthenticated = true;
 			$translate.fallbackLanguage('en');
 			$translate.use(data.Language);
+			angularMoment.changeLocale(data.DateFormat);
 			increaseTimeout();
 
 			var ab1 = new ABmetrics();
