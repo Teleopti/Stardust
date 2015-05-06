@@ -4,7 +4,7 @@ using System.IO;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
-namespace Teleopti.Ccc.Sdk.WcfService.Factory
+namespace Teleopti.Ccc.Sdk.Logic.MultiTenancy
 {
 	public interface ITenantPeopleSaver
 	{

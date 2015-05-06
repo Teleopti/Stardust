@@ -17,6 +17,7 @@ using System.Xml.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
+using Teleopti.Ccc.Sdk.Logic.MultiTenancy;
 using Teleopti.Ccc.Sdk.Logic.QueryHandler;
 using log4net;
 using Teleopti.Ccc.Domain.Collection;

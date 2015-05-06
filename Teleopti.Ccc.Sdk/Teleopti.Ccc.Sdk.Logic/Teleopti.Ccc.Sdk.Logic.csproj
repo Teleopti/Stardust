@@ -208,6 +208,7 @@
     <Compile Include="IPayrollResultFactory.cs" />
     <Compile Include="IPersistPersonRequest.cs" />
     <Compile Include="MultiTenancy\TenantPeopleLoader.cs" />
+    <Compile Include="MultiTenancy\TenantPeopleSaver.cs" />
     <Compile Include="Payroll\PayrollFormatHandler.cs" />
     <Compile Include="Payroll\PayrollResultService.cs" />
     <Compile Include="QueryHandler\DateOnlyDtoExtensions.cs" />
