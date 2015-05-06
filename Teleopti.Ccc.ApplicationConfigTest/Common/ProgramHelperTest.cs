@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.ApplicationConfigTest.Common
 
             ISessionFactory factory = SetupFixtureForAssembly.SessionFactory;
 
-            DefaultDataCreator defaultDataCreator = new DefaultDataCreator("Test", _commandLineArgument.CultureInfo, _commandLineArgument.TimeZone, _commandLineArgument.NewUserName, _commandLineArgument.NewUserPassword, factory);
+            DefaultDataCreator defaultDataCreator = new DefaultDataCreator("Test", _commandLineArgument.CultureInfo, _commandLineArgument.TimeZone, _commandLineArgument.NewUserName, _commandLineArgument.NewUserPassword, factory, null);
 
             _defaultAggregateRoot = defaultDataCreator.Create();
             defaultDataCreator.Save(_defaultAggregateRoot);

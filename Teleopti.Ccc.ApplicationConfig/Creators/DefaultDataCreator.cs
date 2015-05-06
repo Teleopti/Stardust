@@ -187,6 +187,8 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
 
 		private void addToTenantDb(IPerson sysAdmin)
 		{
+			if (_tenantUnitOfWorkManager == null)
+				return;
 			var tenantSession = _tenantUnitOfWorkManager.CurrentSession();
 			var tenant = tenantSession.Get<Tenant>(1);
 			var personInfo = new PersonInfo(tenant, sysAdmin.Id.Value);

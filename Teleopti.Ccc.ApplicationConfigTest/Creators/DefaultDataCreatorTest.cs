@@ -2,18 +2,17 @@
 using System.Globalization;
 using NHibernate;
 using NUnit.Framework;
+using Rhino.Mocks;
 using Teleopti.Ccc.ApplicationConfig;
 using Teleopti.Ccc.ApplicationConfig.Common;
 using Teleopti.Ccc.ApplicationConfig.Creators;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.ApplicationConfigTest.Creators
 {
-    [TestFixture]
     [Category("LongRunning")]
     public class DefaultDataCreatorTest
     {
@@ -27,7 +26,7 @@ namespace Teleopti.Ccc.ApplicationConfigTest.Creators
             CultureInfo cultureInfo = commandLineArgument.CultureInfo;
 
             ISessionFactory sessionFactory = SetupFixtureForAssembly.SessionFactory;
-            _target = new DefaultDataCreator(businessUnitName, cultureInfo, (TimeZoneInfo.Local), "username", "password", sessionFactory);
+            _target = new DefaultDataCreator(businessUnitName, cultureInfo, (TimeZoneInfo.Local), "username", "password", sessionFactory, null);
         }
 
         [Test]
