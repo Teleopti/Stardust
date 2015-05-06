@@ -108,6 +108,7 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 						skill.show = true;
 						angular.forEach(skill.Workloads, function (workload) {
 							workload.chartId = "chart" + workload.Id;
+							workload.selectedMethod = -1;
 						});
 					});
 				});
