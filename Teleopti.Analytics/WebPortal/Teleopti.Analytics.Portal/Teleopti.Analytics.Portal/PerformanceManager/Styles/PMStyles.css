@@ -1,7 +1,7 @@
 ﻿html, BODY
 {
 	height: 92%;
-	margin-top: 0px;
+	margin-top: 0;
 	margin-left: 5px;
 	margin-right: 5px;
     color: #000000;
@@ -57,16 +57,17 @@ FONT.key
     font-weight: bold;
     color: rgb(169,169,169);
 }
+
 .divTag
 {
     border: 1px;
     border-style: solid;
-    background-color: #FFFFFF;
     text-decoration: none;
     height: auto;
     width: auto;
     background-color: #cecece;
 }
+
 .BannerColumn
 {
     background-color: #000000;
@@ -83,11 +84,11 @@ FONT.key
     font-size: 18pt;
     color: #cecece;
     font-family: Segoe UI;
-    height: 0px;
+    height: 0;
     margin-top: 0;
     margin-left: 8px;
     margin-bottom: 0;
-    padding: 0px;
+    padding: 0;
     white-space: nowrap;
 }
 .BannerTextApplication
@@ -96,11 +97,11 @@ FONT.key
     font-weight: bold;
     font-size: 18pt;
     font-family: Segoe UI;
-    height: 0px;
+    height: 0;
     margin-top: 0;
     margin-left: 8px;
     margin-bottom: 0;
-    padding: 0px;
+    padding: 0;
     white-space: nowrap;    
 }
 .BannerText
@@ -108,18 +109,18 @@ FONT.key
     font-weight: bold;
     font-size: 18pt;
     font-family: Segoe UI;
-    height: 0px;
+    height: 0;
     margin-top: 0;
     margin-left: 8px;
     margin-bottom: 0;
-    padding: 0px;
+    padding: 0;
 }
 .BannerSubhead
 {
     border: 0;
     padding: 0;
     height: 16px;
-    margin-top: 0px;
+    margin-top: 0;
     margin-left: 10px;
     color: #ffffff;
 }
@@ -129,15 +130,15 @@ FONT.key
     height: 11px;
     font-size: 11px;
     font-family: Segoe UI;
-    margin-top: 1;
-    margin-left: 10;
+    margin-top: 1px;
+    margin-left: 10px;
 }
 .FooterRule
 {
     border: 0;
     padding: 0;
     height: 1px;
-    margin: 0px;
+    margin: 0;
     color: #ffffff;
 }
 .FooterText
@@ -146,10 +147,10 @@ FONT.key
     font-weight: normal;
     text-decoration: none;
     font-family: Verdana;
-    margin-top: 10;
-    margin-left: 0px;
-    margin-bottom: 2;
-    padding: 0px;
+	margin-top: 10px;
+    margin-left: 0;
+    margin-bottom: 2px;
+    padding: 0;
     color: #999999;
     white-space: nowrap;
 }
@@ -186,7 +187,7 @@ FONT.key
     margin-top: 0;
     margin-right: 2px;
     margin-bottom: 0;
-    padding: 0px;
+    padding: 0;
     color: #000000;
 }
 .InstallTextStyle
@@ -238,15 +239,15 @@ FONT.key
 }
 .banneri1
 {
-    background-image: url("../images/headerborder.png");
-    background-repeat:repeat-x;
+	background-color: #007fff;
+
+		
 }
 .banneri2
 {
-    background-image: url("../images/edge.png") ;
-    background-repeat:repeat-x;
-    padding-bottom: 5px;
-    padding-right: 5px;
+	background-color: #007fff;
+   padding-right: 5px;
+	margin-bottom: 5px;
 }
 .italicSubText
 {
@@ -271,11 +272,12 @@ FONT.key
 	color: #FF6600;
 	font-style: italic;
 }
-hoverNormalNode, a.hoverNormalNode:hover
+.hoverNormalNode, a.hoverNormalNode:hover
 {
 	color: #FF6600;
 }
-hoverDeleteNode, a.hoverDeleteNode:hover
+
+.hoverDeleteNode, a.hoverDeleteNode:hover
 {
 	color: Black;
 }
@@ -285,8 +287,8 @@ hoverDeleteNode, a.hoverDeleteNode:hover
 }
 .reportTitle
 {
-	color: #000066;
-	font-size: 14pt;
+	color: White;
+	font-size: 20pt;
 	font-weight: normal;
 	float:left;
 }
@@ -323,4 +325,7 @@ hoverDeleteNode, a.hoverDeleteNode:hover
 {
 	border-bottom: solid 1px #000066;
     width: 100%;
+}
+#linkButtonLogOut {
+	color: white;
 }

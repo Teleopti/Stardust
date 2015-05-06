@@ -13,11 +13,11 @@ namespace Teleopti.Analytics.Etl.Interfaces.Common
         /// <summary>
         /// Permissions to view Performance Manager reports.
         /// </summary>
-        GeneralUser = 1,
+        GeneralUser = 81,
 
         /// <summary>
         /// Permissions to create Performance Manager reports.
         /// </summary>
-        ReportDesigner = 2
+        ReportDesigner = 85
     }
 }

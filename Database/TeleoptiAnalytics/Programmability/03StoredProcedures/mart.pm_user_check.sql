@@ -12,22 +12,26 @@ GO
 -- =============================================
 -- Author:		jonas n
 -- Create date: 2010-06-24
+-- Ola 2015-05-06 pm_user table has changed to contain the access_level
 -- Description:	Truncate table mart.pm_user
+--  [mart].[pm_user_check] '10957AD5-5489-48E0-959A-9B5E015B2B5C'
+-- [mart].[pm_user_check] 'CCB9C388-F65B-483F-94CA-9B5E015B2564'
 -- =============================================
 CREATE PROCEDURE [mart].[pm_user_check] 
-@user_name nvarchar(256),
-@is_windows_logon bit
+@person_id uniqueidentifier
 WITH EXECUTE AS OWNER
 AS
 BEGIN
-	DECLARE @user_found bit
 
-    SELECT @user_found = COUNT(*) 
+IF EXISTS(SELECT *
     FROM mart.pm_user
-    WHERE [user_name] = @user_name
-		AND is_windows_logon = @is_windows_logon
-    
-    SELECT @user_found
+    WHERE [person_id] = @person_id)
+BEGIN
+	SELECT access_level FROM mart.pm_user
+    WHERE [person_id] = @person_id
+	return
+   END
+    SELECT 0
 END
 
 GO

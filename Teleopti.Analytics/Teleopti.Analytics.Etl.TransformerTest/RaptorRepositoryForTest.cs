@@ -503,11 +503,6 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             return 0;
         }
 
-        public int FillAspNetUsersDataMart()
-        {
-            return 0;
-        }
-
         public int SynchronizeQueues(IList<IQueueSource> matrixQueues)
         {
             return 0;

@@ -37,13 +37,14 @@ namespace Teleopti.Analytics.Portal.PerformanceManager
 
 			if (AuthorizationHelper.IsAuthenticationConfigurationValid())
 			{
-				if (!AuthorizationHelper.DoCurrentUserHavePmPermission(AuthorizationHelper.LoggedOnUserName))
+				var userPermission = AuthorizationHelper.CurrentUserPmPermission(AuthorizationHelper.LoggedOnUser);
+				if (userPermission == PermissionLevel.None)
 				{
 					Message = permissionDenyText;
 				}
 				else
 				{
-					switch (PermissionInformation.UserPermissions)
+					switch (userPermission)
 					{
 						case PermissionLevel.GeneralUser:
 							ReportTreeView1.Visible = true;

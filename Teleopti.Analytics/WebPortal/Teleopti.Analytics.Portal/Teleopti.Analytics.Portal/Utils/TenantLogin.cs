@@ -8,7 +8,7 @@ namespace Teleopti.Analytics.Portal.Utils
 {
 	public class TenantLogin
 	{
-		public bool TryApplicationLogon(ApplicationLogonClientModel applicationLogonClientModel)
+		public AuthenticationQueryResult TryApplicationLogon(ApplicationLogonClientModel applicationLogonClientModel)
 		{
 			var json = JsonConvert.SerializeObject(applicationLogonClientModel);
 			var server = WebConfigurationManager.AppSettings["TenantServer"];
@@ -17,8 +17,20 @@ namespace Teleopti.Analytics.Portal.Utils
 
 			var result = request.PostRequest<AuthenticationQueryResult>(json);
 			
-			return result.Success;
-		} 
+			return result;
+		}
+
+		public AuthenticationQueryResult TryIdentityLogon(IdentityLogonClientModel identityLogonClientModel)
+		{
+			var json = JsonConvert.SerializeObject(identityLogonClientModel);
+			var server = WebConfigurationManager.AppSettings["TenantServer"];
+			var request = (HttpWebRequest)WebRequest.Create(server + "Authenticate/IdentityLogon");
+			request.UserAgent = "PM";
+
+			var result = request.PostRequest<AuthenticationQueryResult>(json);
+
+			return result;
+		}
 	}
 
 	public class ApplicationLogonClientModel
@@ -34,6 +46,11 @@ namespace Teleopti.Analytics.Portal.Utils
 		public Guid PersonId { get; set; }
 		public string Tenant { get; set; }
 		//public string DataSourceConfiguration { get; set; }
+	}
+
+	public class IdentityLogonClientModel
+	{
+		public string Identity { get; set; }
 	}
 
 	public static class JsonExtensions

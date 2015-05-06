@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.UI;
+using Teleopti.Analytics.Portal.PerformanceManager.Helper;
 using Teleopti.Analytics.Portal.Utils;
 
 namespace Teleopti.Analytics.Portal
@@ -13,7 +14,7 @@ namespace Teleopti.Analytics.Portal
 		{
 			if (StateHolder.UserObject == null)
 			{
-				if (StateHolder.UserName == null)
+				if (AuthorizationHelper.LoggedOnUser == null)
 					Response.Redirect(LoginUrl());
 			}
 

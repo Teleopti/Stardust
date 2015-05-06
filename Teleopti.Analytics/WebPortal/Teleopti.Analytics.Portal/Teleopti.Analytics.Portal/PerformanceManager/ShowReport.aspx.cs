@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Web.UI.WebControls;
+using Teleopti.Analytics.Portal.AnalyzerProxy;
 using Teleopti.Analytics.Portal.PerformanceManager.Helper;
 using Teleopti.Analytics.Portal.PerformanceManager.ViewModel;
 
@@ -12,7 +13,7 @@ namespace Teleopti.Analytics.Portal.PerformanceManager
         {
             AnalyzerReportView1.Visible = false;
 
-            if (!AuthorizationHelper.DoCurrentUserHavePmPermission(AuthorizationHelper.LoggedOnUserName))
+				if (AuthorizationHelper.CurrentUserPmPermission(AuthorizationHelper.LoggedOnUser) == PermissionLevel.None)
             {
                 return;
             }

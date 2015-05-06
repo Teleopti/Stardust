@@ -48,26 +48,39 @@ namespace Teleopti.Analytics.Portal
 
 					// Get user from aspnet_Users
 					var winUser = Request.ServerVariables["LOGON_USER"];
-					var winUserHasAcccess = AuthorizationHelper.DoCurrentUserHavePmPermission(winUser);
-					if (winUserHasAcccess && !loggedOut)
+					var tenantLogon = new TenantLogin();
+					var result =
+						tenantLogon.TryIdentityLogon(new IdentityLogonClientModel {Identity = winUser});
+					if (result.Success)
 					{
-						FormsAuthentication.SetAuthCookie(winUser, false);
-						Page.Response.Redirect(RedirectUrl(winUser));
+						HttpContext.Current.Session["PERSONID"] = result.PersonId;
+						var userAcccess = AuthorizationHelper.CurrentUserPmPermission(result.PersonId);
+						if (userAcccess > 0 && !loggedOut)
+						{
+							FormsAuthentication.SetAuthCookie(winUser, false);
+							Page.Response.Redirect(RedirectUrl(winUser));
+						}
 					}
 					else
 					{
-						// Win user could not be validated in db. Can use Forms login instead.
-						//not show this when user has logged out
-						if (!loggedOut)
-						labelInfo.Text = string.Concat(Resources.AuthenticationFailedForUser,   //"xxAuthentication failed for user"
-														" '",
-														winUser,
-														"'. ",
-														Resources.PleaseUseApplicationLoginInstead);   //"xxPlease use application login instead."
+						giveInfo(loggedOut);
 					}
 				}
 			}
 		}
+
+		private void giveInfo(bool loggedOut)
+		{
+			// Win user could not be validated in db. Can use Forms login instead.
+			//not show this when user has logged out
+			if (!loggedOut)
+				labelInfo.Text = string.Concat(Resources.AuthenticationFailedForUser,   //"xxAuthentication failed for user"
+												" '",
+												 Request.ServerVariables["LOGON_USER"],
+												"'. ",
+												Resources.PleaseUseApplicationLoginInstead);   //"xxPlease use application login instead."
+		}
+
 		private string RedirectUrl(string userName)
 		{
 			return string.Format(CultureInfo.InvariantCulture, "{0}?{1}",
@@ -79,12 +92,19 @@ namespace Teleopti.Analytics.Portal
 		{
 			//bool Authenticated;
 			var tenantLogin = new TenantLogin();
-			e.Authenticated = tenantLogin.TryApplicationLogon(new ApplicationLogonClientModel{UserName = Login1.UserName, Password  = Login1.Password});
+			var result =
+				tenantLogin.TryApplicationLogon(new ApplicationLogonClientModel
+				{
+					UserName = Login1.UserName,
+					Password = Login1.Password
+				});
+			e.Authenticated =result.Success;
 
 			if (e.Authenticated)
 			{
 				StateHolder.UserObject = null;
 				FormsAuthentication.SetAuthCookie(Login1.UserName, Login1.RememberMeSet);
+				HttpContext.Current.Session["PERSONID"] = result.PersonId;
 				HttpContext.Current.Session["LOGOUT"] = false;
 				HttpContext.Current.Session["FORCEFORMSLOGIN"] = true;
 				StateHolder.UserName = Login1.UserName;

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
@@ -11,15 +12,17 @@ namespace Teleopti.Analytics.Portal.PerformanceManager.Helper
 {
 	public static class AuthorizationHelper
 	{
-		public static bool DoCurrentUserHavePmPermission(string currentuser)
+		public static PermissionLevel CurrentUserPmPermission(Guid? currentuser)
 		{
+			if (currentuser == null)
+				return PermissionLevel.None;
+
 			IList<SqlParameter> parameters = new List<SqlParameter>
 												 {
-													 new SqlParameter("user_name", currentuser),
-													 new SqlParameter("is_windows_logon", CheckWindowsAuthentication())
+													 new SqlParameter("person_id", currentuser)
 												 };
 
-			return (bool)
+			return (PermissionLevel)
 			DatabaseHelperFunctions.ExecuteScalar(CommandType.StoredProcedure, "mart.pm_user_check", parameters,
 										  connectionString);
 		}
@@ -38,6 +41,22 @@ namespace Teleopti.Analytics.Portal.PerformanceManager.Helper
 		{
 			var sec = (AuthenticationSection)HttpContext.Current.GetSection("system.web/authentication");
 			return sec.Mode;
+		}
+
+		public static Guid? LoggedOnUser
+		{
+			get
+			{
+
+				if (HttpContext.Current.Session["PERSONID"] == null)
+					return null;
+
+					Guid personid;
+					Guid.TryParse(HttpContext.Current.Session["PERSONID"].ToString(), out personid);
+
+				return personid;
+
+			}
 		}
 
 		public static string LoggedOnUserName
