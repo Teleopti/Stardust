@@ -99,16 +99,15 @@ Scenario: Sort late shifts after early shifts
 	| StartTime      | 2013-03-25 09:00 |
 	| EndTime        | 2013-03-25 18:00 |
 	| Shift category | Day              |
-	And John Smith has a shift with
+	And Pierre Baldi has a shift with
 	| Field          | Value            |
 	| StartTime      | 2013-03-25 08:00 |
 	| EndTime        | 2013-03-25 17:00 |
 	| Shift category | Day              |
 	When I view group schedule for '2013-03-25'
 	And The schedules have been populated
-	And I select 'Kontrakt/A contract' in the team picker
 	Then I should see my schedule in team schedule 
-	And I should see 'John Smith' before myself
+	And I should see 'Pierre Baldi' before myself
 
 @ignore
 Scenario: Default to my team
