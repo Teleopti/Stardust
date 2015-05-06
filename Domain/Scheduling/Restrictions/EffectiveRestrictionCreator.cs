@@ -12,22 +12,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			_extractor = extractor;
 		}
 
-		public virtual IEffectiveRestriction GetEffectiveRestriction(IScheduleDay part, ISchedulingOptions options)
+		public IEffectiveRestriction GetEffectiveRestriction(IScheduleDay part, ISchedulingOptions options)
 		{
-		    var result = _extractor.Extract(part);
-		    IEffectiveRestriction ret = result.CombinedRestriction(options);
+			var result = _extractor.Extract(part);
+			IEffectiveRestriction ret = result.CombinedRestriction(options);
 
 			if (ret == null)
 				return null;
 
-		    if (options.UseAvailability && ret.IsAvailabilityDay && ret.NotAvailable)
-		        ret.DayOffTemplate = options.DayOffTemplate;
+			if (options.UseAvailability && ret.IsAvailabilityDay && ret.NotAvailable)
+				ret.DayOffTemplate = options.DayOffTemplate;
 
-			if (part != null && part.SignificantPart() != SchedulePartView.MainShift)
-				return ret;
+			if (options.UseStudentAvailability && ret.NotAvailable)
+				ret.DayOffTemplate = options.DayOffTemplate;
 
-		    return ret;
+			return ret;
 		}
+
 
 		public IEffectiveRestriction GetEffectiveRestrictionForSinglePerson(
 			IPerson person,

@@ -286,12 +286,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RestrictionExtractor>().As<IRestrictionExtractor>().SingleInstance();
 			builder.RegisterType<RestrictionCombiner>().As<IRestrictionCombiner>().SingleInstance();
 			builder.RegisterType<RestrictionRetrievalOperation>().As<IRestrictionRetrievalOperation>().SingleInstance();
-			builder.RegisterType<EffectiveRestrictionCreator30393>().As<EffectiveRestrictionCreator30393>();
-			builder.RegisterType<EffectiveRestrictionCreator>().As<EffectiveRestrictionCreator>();
-			builder.Register(c => c.Resolve<IToggleManager>().IsEnabled(Toggles.Scheduler_SudentAvailabilityForFixedStaff_30393)
-				? (IEffectiveRestrictionCreator) c.Resolve<EffectiveRestrictionCreator30393>()
-				: c.Resolve<EffectiveRestrictionCreator>())
-				.As<IEffectiveRestrictionCreator>();
+			builder.RegisterType<EffectiveRestrictionCreator>().As<IEffectiveRestrictionCreator>();
 
 			builder.RegisterType<MinWeekWorkTimeRule>().As<MinWeekWorkTimeRule>();
 			builder.RegisterType<MinWeekWorkTimeRuleToggle31992Off>().As<MinWeekWorkTimeRuleToggle31992Off>();

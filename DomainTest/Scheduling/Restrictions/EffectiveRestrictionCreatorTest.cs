@@ -41,8 +41,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			{
 				Expect.Call(_extractor.Extract(_scheduleDay)).Return(_extractorResult);
 				Expect.Call(_extractorResult.CombinedRestriction(options)).Return(expected);
-
-				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None);
 			}
 
 			IEffectiveRestriction ret;
@@ -75,8 +73,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			{
 				Expect.Call(_extractor.Extract(_scheduleDay)).Return(_extractorResult);
 				Expect.Call(_extractorResult.CombinedRestriction(options)).Return(fromExtractor);
-
-				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None);
 			}
 
 			IEffectiveRestriction ret;
@@ -91,11 +87,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		[Test]
 		public void WhenUseHourlyAvailabilityAndNotAvailableTargetShouldHaveDayOff()
 		{
-			_target = new EffectiveRestrictionCreator30393(_extractor);
+			_target = new EffectiveRestrictionCreator(_extractor);
 			ISchedulingOptions options = new SchedulingOptions();
 			options.UseAvailability = false;
 			options.UseStudentAvailability = true;
-			IDayOffTemplate dayOffTemplate = new DayOffTemplate(new Description());
+			IDayOffTemplate dayOffTemplate = new DayOffTemplate(new Description("Test"));
 			options.DayOffTemplate = dayOffTemplate;
 			IEffectiveRestriction fromExtractor = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),
 																	  new WorkTimeLimitation(), null, null, null,
@@ -110,8 +106,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			{
 				Expect.Call(_extractor.Extract(_scheduleDay)).Return(_extractorResult);
 				Expect.Call(_extractorResult.CombinedRestriction(options)).Return(fromExtractor);
-
-				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None);
 			}
 
 			IEffectiveRestriction ret;
@@ -156,8 +150,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 				Expect.Call(range2.ScheduledDay(dateOnly)).Return(scheduleDay2);
 				Expect.Call(_extractor.Extract(scheduleDay2)).Return(_extractorResult);
 				Expect.Call(_extractorResult.CombinedRestriction(options)).Return(restriction2);
-				Expect.Call(scheduleDay2.SignificantPart()).Return(SchedulePartView.None);
-				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None);
 			}
 
 			IEffectiveRestriction ret;
@@ -200,9 +192,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 				Expect.Call(range2.ScheduledDay(dateOnly)).Return(scheduleDay2);
 				Expect.Call(_extractor.Extract(scheduleDay2)).Return(_extractorResult);
 				Expect.Call(_extractorResult.CombinedRestriction(options)).Return(restriction2);
-				
-				Expect.Call(scheduleDay2.SignificantPart()).Return(SchedulePartView.None);
-				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None);
 
 			}
 
@@ -274,7 +263,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 				Expect.Call(range1.ScheduledDay(dateOnly)).Return(_scheduleDay);
 				Expect.Call(_extractor.Extract(_scheduleDay)).Return(_extractorResult);
 				Expect.Call(_extractorResult.CombinedRestriction(options)).Return(restriction1);
-				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None);
 			}
 
 			IEffectiveRestriction ret;

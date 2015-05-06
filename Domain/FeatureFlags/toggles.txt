@@ -37,7 +37,6 @@ Portal_NewLandingpage_29415 = true
 Show_StaticPageOnNoInternet_29415 = false
 Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635 = true
 MyTimeWeb_AgentBadge_28913 = true
-Scheduler_SudentAvailabilityForFixedStaff_30393 = true
 Settings_SetAgentDescription_23257 = true
 Scheduler_HidePointsFairnessSystem_28317 = true
 Scheduler_BackToLegalShift_29831 = true
