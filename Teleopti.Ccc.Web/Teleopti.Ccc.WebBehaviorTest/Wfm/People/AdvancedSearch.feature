@@ -47,7 +47,6 @@ Scenario: match any search terms in a field
 	Then I should see 'Ashley Andeen' in people list
 	And I should see 'Ashley Smith' in people list
 
-@ignore
 Scenario: match all search terms in different fields
 	When I view people
 	And I search with
