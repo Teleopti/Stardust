@@ -139,11 +139,9 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job
             Assert.AreEqual(_target.BusinessUnitStatus, clone.BusinessUnitStatus);
 
             IBusinessUnit otherBu = new BusinessUnit("other bu");
-            _target = new JobStepResult("Other name", 44, 1300, otherBu, null);
-            var user = new UserDto { AccessLevel = 1, UserName = "arne\\anka" };
-            _target.Status = "yoda";
+            _target = new JobStepResult("Other name", 44, 1300, otherBu, null) {Status = "yoda"};
 
-            Assert.AreNotEqual(_target.Name, clone.Name);
+	        Assert.AreNotEqual(_target.Name, clone.Name);
             Assert.AreNotSame(_target.CurrentBusinessUnit, clone.CurrentBusinessUnit);
             Assert.AreNotEqual(_target.Duration, clone.Duration);
             Assert.AreNotEqual(_target.RowsAffected, clone.RowsAffected);
@@ -156,11 +154,12 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job
         [Test]
         public void ShouldMakeADeepCloneWhenExceptionExist()
         {
-            _target = new JobStepResult("Name", 2500, new NotImplementedException("eee"), _businessUnit, getJobResultCollection());
-            var user = new UserDto { AccessLevel = 1, UserName = "arne\\anka" };
-            _target.Status = "Error";
+            _target = new JobStepResult("Name", 2500, new NotImplementedException("eee"), _businessUnit, getJobResultCollection())
+            {
+	            Status = "Error"
+            };
 
-            var clone = (JobStepResult)_target.Clone();
+	        var clone = (JobStepResult)_target.Clone();
 
             Assert.AreEqual(_target.Name, clone.Name);
             Assert.AreSame(_target.CurrentBusinessUnit, clone.CurrentBusinessUnit);

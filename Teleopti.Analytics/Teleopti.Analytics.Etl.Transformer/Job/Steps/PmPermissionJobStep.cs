@@ -1,9 +1,7 @@
 using System.Collections.Generic;
 using Teleopti.Analytics.Etl.Interfaces.PerformanceManager;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
-using Teleopti.Analytics.Etl.PerformanceManagerProxy;
 using Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition;
-using Teleopti.Analytics.PM.PMServiceHost;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Infrastructure;
@@ -20,9 +18,8 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 		{
 			_checkIfNeeded = checkIfNeeded;
 			Name = "Performance Manager permissions";
-			Transformer = new PmPermissionTransformer(new PmProxyFactory());
+			Transformer = new PmPermissionTransformer();
 			PermissionExtractor = new PmPermissionExtractor(new LicensedFunctionsProvider(new DefinedRaptorApplicationFunctionFactory()));
-			PmWindowsUserSynchronizer = new PmWindowsUserSynchronizer();
 			PmUserInfrastructure.AddColumnsToDataTable(BulkInsertDataTable1);
 		}
 		
@@ -35,7 +32,6 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 
 		public IPmPermissionExtractor PermissionExtractor { get; set; }
 
-		public IPmWindowsUserSynchronizer PmWindowsUserSynchronizer { get; set; }
 
 		protected override int RunStep(IList<IJobResult> jobResultCollection, bool isLastBusinessUnit)
 		{
@@ -50,20 +46,9 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 			using (var uow = UnitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				uow.Reassociate(personList);
-				var applicationAuthUsers =
-					(List<UserDto>)
-						Transformer.GetUsersWithPermissionsToPerformanceManager(personList, false, PermissionExtractor, UnitOfWorkFactory);
-				IList<UserDto> windowsAuthUsers = Transformer.GetUsersWithPermissionsToPerformanceManager(personList, true,
-					PermissionExtractor, UnitOfWorkFactory);
-				var windowsAuthValidatedUsers = PmWindowsUserSynchronizer.Synchronize(windowsAuthUsers, Transformer,
-					_jobParameters.OlapServer, _jobParameters.OlapDatabase);
-
-				var isPmWinAuth = Transformer.IsPmWindowsAuthenticated(_jobParameters.OlapServer, _jobParameters.OlapDatabase);
-				if (isPmWinAuth.IsWindowsAuthentication)
-					windowsAuthUsers = windowsAuthValidatedUsers;
-
-				applicationAuthUsers.AddRange(windowsAuthUsers);
-				Transformer.Transform(applicationAuthUsers, BulkInsertDataTable1);
+				var pmUsers = Transformer.GetUsersWithPermissionsToPerformanceManager(personList,  PermissionExtractor, UnitOfWorkFactory);
+				
+				Transformer.Transform(pmUsers, BulkInsertDataTable1);
 
 				return _jobParameters.Helper.Repository.PersistPmUser(BulkInsertDataTable1);
 			}

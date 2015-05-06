@@ -1,16 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.Threading;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Analytics.Etl.Interfaces.PerformanceManager;
-using Teleopti.Analytics.Etl.PerformanceManagerProxy;
 using Teleopti.Analytics.Etl.Transformer;
 using Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition;
-using Teleopti.Analytics.PM.PMServiceHost;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using PersonFactory = Teleopti.Analytics.Etl.TransformerTest.FakeData.PersonFactory;
@@ -29,7 +27,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 		[SetUp]
 		public void Setup()
 		{
-			_target = new PmPermissionTransformer(null);
+			_target = new PmPermissionTransformer();
 			_personCollection = PersonFactory.CreatePersonGraphCollection();
 
 			_mocks = new MockRepository();
@@ -38,7 +36,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 		}
 
 		[Test]
-		public void ShouldGetUserWhichOnlyGotWindowsCredentials()
+		public void ShouldGetUserWithPermission()
 		{
 			IPerson person = _personCollection[4];
 			Assert.IsNotNullOrEmpty(person.AuthenticationInfo.Identity);
@@ -48,92 +46,13 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 			Expect.Call(_permissionExtractor.ExtractPermission(applicationRole.ApplicationFunctionCollection, _unitOfWorkFactory)).Return(PmPermissionType.ReportDesigner);
 			_mocks.ReplayAll();
 
-			IList<UserDto> users = _target.GetUsersWithPermissionsToPerformanceManager(new List<IPerson> { person }, true, _permissionExtractor, _unitOfWorkFactory);
+			var users = _target.GetUsersWithPermissionsToPerformanceManager(new List<IPerson> { person }, _permissionExtractor, _unitOfWorkFactory);
 			_mocks.VerifyAll();
 
 			Assert.AreEqual(1, users.Count);
-			Assert.IsTrue(users[0].IsWindowsLogOn);
+			users[0].AccessLevel.Should().Be.EqualTo(PmPermissionType.ReportDesigner);
 		}
 
-		[Test]
-		public void ShouldGetUserWhichOnlyGotApplicationCredentials()
-		{
-			IPerson person = _personCollection[6]; // Belongs to three roles
-			Assert.That(person.AuthenticationInfo, Is.Null);
-
-			Assert.IsNotNullOrEmpty(person.ApplicationAuthenticationInfo.ApplicationLogOnName);
-			Assert.IsNotNullOrEmpty(person.ApplicationAuthenticationInfo.Password);
-
-			var applicationRole1 = person.PermissionInformation.ApplicationRoleCollection[0];
-			var applicationRole2 = person.PermissionInformation.ApplicationRoleCollection[1];
-			var applicationRole3 = person.PermissionInformation.ApplicationRoleCollection[2];
-
-			Expect.Call(_permissionExtractor.ExtractPermission(applicationRole1.ApplicationFunctionCollection, _unitOfWorkFactory)).Return(PmPermissionType.ReportDesigner);
-			Expect.Call(_permissionExtractor.ExtractPermission(applicationRole2.ApplicationFunctionCollection, _unitOfWorkFactory)).Return(PmPermissionType.GeneralUser);
-			Expect.Call(_permissionExtractor.ExtractPermission(applicationRole3.ApplicationFunctionCollection, _unitOfWorkFactory)).Return(PmPermissionType.None);
-			_mocks.ReplayAll();
-
-			IList<UserDto> users = _target.GetUsersWithPermissionsToPerformanceManager(new List<IPerson> { person }, false, _permissionExtractor, _unitOfWorkFactory);
-			_mocks.VerifyAll();
-
-			Assert.AreEqual(1, users.Count);
-			Assert.IsFalse(users[0].IsWindowsLogOn);
-		}
-
-		[Test]
-		public void ShouldGetUserWhichGotBothWindowsAndApplicationCredentials()
-		{
-			IPerson person = _personCollection[3];
-			Assert.IsNotNullOrEmpty(person.AuthenticationInfo.Identity);
-			Assert.IsNotNullOrEmpty(person.ApplicationAuthenticationInfo.ApplicationLogOnName);
-			Assert.IsNotNullOrEmpty(person.ApplicationAuthenticationInfo.Password);
-
-			var applicationRole = person.PermissionInformation.ApplicationRoleCollection[0];
-
-			Expect.Call(_permissionExtractor.ExtractPermission(applicationRole.ApplicationFunctionCollection, _unitOfWorkFactory)).Return(PmPermissionType.GeneralUser).Repeat.Twice();
-			_mocks.ReplayAll();
-
-			IList<UserDto> windowUsers = _target.GetUsersWithPermissionsToPerformanceManager(new List<IPerson> { person }, true, _permissionExtractor, _unitOfWorkFactory);
-			IList<UserDto> applicationUsers = _target.GetUsersWithPermissionsToPerformanceManager(new List<IPerson> { person }, false, _permissionExtractor, _unitOfWorkFactory);
-			_mocks.VerifyAll();
-
-			Assert.AreEqual(1, windowUsers.Count);
-			Assert.AreEqual(1, applicationUsers.Count);
-			Assert.IsTrue(windowUsers[0].IsWindowsLogOn);
-			Assert.IsFalse(applicationUsers[0].IsWindowsLogOn);
-		}
-
-		[Test]
-		public void ShouldOnlyReturnUsersWithWindowsLogOn()
-		{
-			ensureBothWindowsAndApplicationUsersExistInList();
-
-			Expect.Call(_permissionExtractor.ExtractPermission(new List<IApplicationFunction>(), _unitOfWorkFactory)).Return(
-					PmPermissionType.GeneralUser).Repeat.AtLeastOnce().IgnoreArguments();
-			_mocks.ReplayAll();
-
-			IList<UserDto> users = _target.GetUsersWithPermissionsToPerformanceManager(_personCollection, true, _permissionExtractor, _unitOfWorkFactory);
-			_mocks.VerifyAll();
-
-			Assert.Greater(users.Count(u => u.IsWindowsLogOn), 0);
-			Assert.AreEqual(0, users.Count(u => !u.IsWindowsLogOn));
-		}
-
-		[Test]
-		public void ShouldOnlyReturnUsersWithApplicationLogOn()
-		{
-			ensureBothWindowsAndApplicationUsersExistInList();
-
-			Expect.Call(_permissionExtractor.ExtractPermission(new List<IApplicationFunction>(), _unitOfWorkFactory)).Return(
-					PmPermissionType.GeneralUser).Repeat.AtLeastOnce().IgnoreArguments();
-			_mocks.ReplayAll();
-
-			IList<UserDto> users = _target.GetUsersWithPermissionsToPerformanceManager(_personCollection, false, _permissionExtractor, _unitOfWorkFactory);
-			_mocks.VerifyAll();
-
-			Assert.Greater(users.Count(u => !u.IsWindowsLogOn), 0);
-			Assert.AreEqual(0, users.Count(u => u.IsWindowsLogOn));
-		}
 
 		[Test]
 		public void ShouldNotGetUsersThatLacksPermissionToPm()
@@ -142,7 +61,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 			Assert.IsNotNullOrEmpty(person.AuthenticationInfo.Identity);
 			Assert.AreEqual(0, person.PermissionInformation.ApplicationRoleCollection.Count);
 
-			IList<UserDto> users = _target.GetUsersWithPermissionsToPerformanceManager(new List<IPerson> { person }, true, _permissionExtractor, _unitOfWorkFactory);
+			var users = _target.GetUsersWithPermissionsToPerformanceManager(new List<IPerson> { person }, _permissionExtractor, _unitOfWorkFactory);
 			Assert.AreEqual(0, users.Count);
 		}
 
@@ -155,7 +74,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 			Expect.Call(_permissionExtractor.ExtractPermission(applicationRole.ApplicationFunctionCollection, _unitOfWorkFactory)).Return(PmPermissionType.GeneralUser);
 			_mocks.ReplayAll();
 
-			IList<UserDto> userDtoCollection = _target.GetUsersWithPermissionsToPerformanceManager(new List<IPerson> { person }, true, _permissionExtractor, _unitOfWorkFactory);
+			var userDtoCollection = _target.GetUsersWithPermissionsToPerformanceManager(new List<IPerson> { person }, _permissionExtractor, _unitOfWorkFactory);
 			_mocks.VerifyAll();
 			Assert.AreEqual(1, userDtoCollection[0].AccessLevel);
 		}
@@ -169,134 +88,10 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 			Expect.Call(_permissionExtractor.ExtractPermission(applicationRole.ApplicationFunctionCollection, _unitOfWorkFactory)).Return(PmPermissionType.ReportDesigner);
 			_mocks.ReplayAll();
 
-			IList<UserDto> userDtoCollection = _target.GetUsersWithPermissionsToPerformanceManager(new List<IPerson> { person }, true, _permissionExtractor, _unitOfWorkFactory);
+			var userDtoCollection = _target.GetUsersWithPermissionsToPerformanceManager(new List<IPerson> { person }, _permissionExtractor, _unitOfWorkFactory);
 			_mocks.VerifyAll();
 
 			Assert.AreEqual(2, userDtoCollection[0].AccessLevel);
-		}
-
-
-
-		private void ensureBothWindowsAndApplicationUsersExistInList()
-		{
-			int windowsUserCount =
-					_personCollection.Count(
-							p => p.AuthenticationInfo != null);
-
-			int applicationUserCount =
-					_personCollection.Count(
-							p => p.ApplicationAuthenticationInfo != null);
-
-			Assert.Greater(windowsUserCount, 0);
-			Assert.Greater(applicationUserCount, 0);
-		}
-
-		[Test]
-		public void ShouldSynchronizeUserPermissionForOneUser()
-		{
-			var mocks = new MockRepository();
-			var pmProxyFactory = mocks.StrictMock<IPmProxyFactory>();
-			var pmProxy = mocks.StrictMock<IPmProxy>();
-			_target = new PmPermissionTransformer(pmProxyFactory);
-			var userCollection = new List<UserDto> { new UserDto { UserName = "name", AccessLevel = 1, IsWindowsLogOn = false } };
-			UserDto[] userArray = userCollection.ToArray();
-			var result = new ResultDto { Success = true };
-
-			using (mocks.Record())
-			{
-				Expect.Call(pmProxyFactory.CreateProxy()).Return(pmProxy);
-				Expect.Call(() => pmProxy.ResetUserLists());
-				Expect.Call(pmProxy.AddUsersToSynchronize(userArray)).Return(result).Repeat.Once();
-				Expect.Call(pmProxy.SynchronizeUsers("olaServer", "olapDb")).Return(result).Repeat.Once();
-				Expect.Call(() => pmProxy.ResetUserLists());
-				pmProxy.Close();
-				pmProxy.Abort();
-			}
-			using (mocks.Playback())
-			{
-				_target.SynchronizeUserPermissions(userCollection, "olaServer", "olapDb");
-			}
-		}
-
-		[Test]
-		public void ShouldSynchronizeUserPermissionForMoreThan100Users()
-		{
-			var mocks = new MockRepository();
-			var pmProxyFactory = mocks.StrictMock<IPmProxyFactory>();
-			var pmProxy = mocks.StrictMock<IPmProxy>();
-			_target = new PmPermissionTransformer(pmProxyFactory);
-			var userCollection = createLotsOfUsers(210);
-			var result = new ResultDto { Success = true };
-
-			using (mocks.Record())
-			{
-				Expect.Call(pmProxyFactory.CreateProxy()).Return(pmProxy);
-				Expect.Call(() => pmProxy.ResetUserLists());
-				foreach (IEnumerable<UserDto> userDtos in userCollection.Batch(100))
-				{
-					Expect.Call(pmProxy.AddUsersToSynchronize(userDtos.ToArray())).Return(result);
-				}
-				Expect.Call(pmProxy.SynchronizeUsers("olaServer", "olapDb")).Return(result);
-				Expect.Call(() => pmProxy.ResetUserLists());
-				pmProxy.Close();
-				pmProxy.Abort();
-			}
-			using (mocks.Playback())
-			{
-				_target.SynchronizeUserPermissions(userCollection, "olaServer", "olapDb");
-			}
-		}
-
-		[Test]
-		public void ShouldStopSynchronizingUserPermissionWhenOneBatchIsNotSuccessful()
-		{
-			var mocks = new MockRepository();
-			var pmProxyFactory = mocks.StrictMock<IPmProxyFactory>();
-			var pmProxy = mocks.StrictMock<IPmProxy>();
-			_target = new PmPermissionTransformer(pmProxyFactory);
-			IList<UserDto> userCollection1 = createLotsOfUsers(100);
-			var userCollectionConcat = new List<UserDto>(userCollection1);
-			userCollectionConcat.AddRange(createLotsOfUsers(10));
-
-			var result = new ResultDto { Success = false };
-
-			using (mocks.Record())
-			{
-				Expect.Call(pmProxyFactory.CreateProxy()).Return(pmProxy);
-				Expect.Call(() => pmProxy.ResetUserLists());
-				Expect.Call(pmProxy.AddUsersToSynchronize(userCollection1.ToArray())).Return(result).Repeat.Once();
-
-				pmProxy.Abort();
-			}
-			using (mocks.Playback())
-			{
-				_target.SynchronizeUserPermissions(userCollectionConcat, "olaServer", "olapDb");
-				Assert.IsFalse(result.Success);
-			}
-		}
-
-		[Test, ExpectedException(typeof(PmSynchronizeException))]
-		public void VerifySynchronizeUserPermissionsException()
-		{
-			var mocks = new MockRepository();
-			var pmProxyFactory = mocks.StrictMock<IPmProxyFactory>();
-			var pmProxy = mocks.StrictMock<IPmProxy>();
-			_target = new PmPermissionTransformer(pmProxyFactory);
-			var userCollection = new List<UserDto> { new UserDto { UserName = "name", AccessLevel = 1, IsWindowsLogOn = false } };
-			UserDto[] userArray = userCollection.ToArray();
-
-			using (mocks.Record())
-			{
-				Expect.Call(pmProxyFactory.CreateProxy()).Return(pmProxy);
-				Expect.Call(() => pmProxy.ResetUserLists());
-				Expect.Call(pmProxy.AddUsersToSynchronize(userArray)).Return(new ResultDto { Success = true }).Repeat.Once();
-				Expect.Call(pmProxy.SynchronizeUsers("olaServer", "olapDb")).Throw(new PmSynchronizeException("Only a sample exception..."));
-				pmProxy.Abort();
-			}
-			using (mocks.Playback())
-			{
-				_target.SynchronizeUserPermissions(userCollection, "olaServer", "olapDb");
-			}
 		}
 
 		[Test]
@@ -304,20 +99,20 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 		{
 			using (var table = new DataTable())
 			{
-				var windowsUserWithViewPermission = new UserDto { UserName = @"domain1\kalle", AccessLevel = 1 };
-				var windowsUserWithCreatePermission = new UserDto { UserName = @"domain1\lotta", AccessLevel = 2 };
-				var applicationUserWithViewPermission = new UserDto { UserName = "CarlH", AccessLevel = 2 };
-				IList<UserDto> users = new List<UserDto> { windowsUserWithViewPermission, windowsUserWithCreatePermission, applicationUserWithViewPermission };
+				var userWithViewPermission = new PmUser { PersonId = Guid.NewGuid(), AccessLevel = 1 };
+				var userWithCreatePermission = new PmUser { PersonId = Guid.NewGuid(), AccessLevel = 2 };
+
+				var users = new List<PmUser> { userWithViewPermission, userWithCreatePermission };
 
 				table.Locale = Thread.CurrentThread.CurrentCulture;
 				PmUserInfrastructure.AddColumnsToDataTable(table);
 				_target.Transform(users, table);
 
 				Assert.IsNotNull(table);
-				Assert.AreEqual(3, table.Rows.Count);
-				Assert.AreEqual(windowsUserWithViewPermission.UserName, table.Rows[0]["user_name"]);
-				Assert.AreEqual(windowsUserWithCreatePermission.UserName, table.Rows[1]["user_name"]);
-				Assert.AreEqual(applicationUserWithViewPermission.UserName, table.Rows[2]["user_name"]);
+				Assert.AreEqual(2, table.Rows.Count);
+				Assert.AreEqual(userWithViewPermission.PersonId, table.Rows[0]["person_id"]);
+				Assert.AreEqual(userWithCreatePermission.PersonId, table.Rows[1]["person_id"]);
+
 			}
 		}
 
@@ -335,106 +130,11 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 			Expect.Call(_permissionExtractor.ExtractPermission(applicationRole3.ApplicationFunctionCollection, _unitOfWorkFactory)).Return(PmPermissionType.None);
 			_mocks.ReplayAll();
 
-			IList<UserDto> users = _target.GetUsersWithPermissionsToPerformanceManager(new List<IPerson> { person }, false, _permissionExtractor, _unitOfWorkFactory);
+			var users = _target.GetUsersWithPermissionsToPerformanceManager(new List<IPerson> { person }, _permissionExtractor, _unitOfWorkFactory);
 			_mocks.VerifyAll();
 
 			Assert.AreEqual(1, users.Count);
 			Assert.AreEqual(2, users[0].AccessLevel); // AccessLevel = 2 is Create
-		}
-
-		[Test]
-		public void ShouldJoinSeveralResultsToOneResult()
-		{
-			var resultDto1 = new ResultDto { AffectedUsersCount = 3, Success = true };
-			var resultDto2 = new ResultDto { AffectedUsersCount = 3, Success = true };
-			resultDto1.AddRangeUsersInserted(new List<UserDto> { new UserDto { UserName = "A/I" } });
-			resultDto1.AddRangeUsersUpdated(new List<UserDto> { new UserDto { UserName = "A/U" } });
-			resultDto1.AddRangeUsersDeleted(new List<UserDto> { new UserDto { UserName = "A/D" } });
-			resultDto2.AddRangeUsersInserted(new List<UserDto> { new UserDto { UserName = "B/I" } });
-			resultDto2.AddRangeUsersUpdated(new List<UserDto> { new UserDto { UserName = "B/U" } });
-			resultDto2.AddRangeUsersDeleted(new List<UserDto> { new UserDto { UserName = "B/D" } });
-
-			ResultDto joinedResult = _target.JoinResults(new List<ResultDto> { resultDto1, resultDto2 });
-
-			Assert.AreEqual(2, joinedResult.UsersInserted.Count);
-			Assert.AreEqual(2, joinedResult.UsersUpdated.Count);
-			Assert.AreEqual(2, joinedResult.UsersDeleted.Count);
-			Assert.AreEqual(6, joinedResult.AffectedUsersCount);
-			Assert.IsNull(joinedResult.ErrorMessage);
-			Assert.IsNull(joinedResult.ErrorType);
-			Assert.IsTrue(joinedResult.Success);
-		}
-
-		[Test]
-		public void ShouldReturnEmptySuccessResultWhenTryingToJoinZeroResults()
-		{
-			ResultDto joinedResult = _target.JoinResults(new List<ResultDto>());
-
-			Assert.AreEqual(0, joinedResult.UsersInserted.Count);
-			Assert.AreEqual(0, joinedResult.UsersUpdated.Count);
-			Assert.AreEqual(0, joinedResult.UsersDeleted.Count);
-			Assert.AreEqual(0, joinedResult.AffectedUsersCount);
-			Assert.IsNull(joinedResult.ErrorMessage);
-			Assert.IsNull(joinedResult.ErrorType);
-			Assert.IsTrue(joinedResult.Success);
-		}
-
-		//[Test, ExpectedException(typeof(PmSynchronizeException))]
-		[Test]
-		public void ShouldCheckIfPmIsWindowsAuthenticated()
-		{
-			var mocks = new MockRepository();
-			var pmProxyFactory = mocks.StrictMock<IPmProxyFactory>();
-			var pmProxy = mocks.StrictMock<IPmProxy>();
-			var resultDto = new ResultDto {Success = true, IsWindowsAuthentication = true };
-			_target = new PmPermissionTransformer(pmProxyFactory);
-
-			using (mocks.Record())
-			{
-				Expect.Call(pmProxyFactory.CreateProxy()).Return(pmProxy);
-				Expect.Call(pmProxy.IsWindowsAuthentication("OS", "OD")).Return(resultDto);
-				Expect.Call(() => pmProxy.Close());
-				Expect.Call(() => pmProxy.Abort());
-			}
-
-			using (mocks.Playback())
-			{
-				var result = _target.IsPmWindowsAuthenticated("OS", "OD");
-				Assert.AreSame(resultDto, result);
-			}
-		}
-
-		[Test, ExpectedException(typeof(PmSynchronizeException))]
-		public void ShouldFailToCheckPmAuthentication()
-		{
-			var mocks = new MockRepository();
-			var pmProxyFactory = mocks.StrictMock<IPmProxyFactory>();
-			var pmProxy = mocks.StrictMock<IPmProxy>();
-			_target = new PmPermissionTransformer(pmProxyFactory);
-
-			using (mocks.Record())
-			{
-				Expect.Call(pmProxyFactory.CreateProxy()).Return(pmProxy);
-				Expect.Call(pmProxy.IsWindowsAuthentication("OS", "OD")).Return(new ResultDto { Success = false });
-				Expect.Call(() => pmProxy.Close());
-				Expect.Call(() => pmProxy.Abort());
-			}
-
-			using (mocks.Playback())
-			{
-				_target.IsPmWindowsAuthenticated("OS", "OD");
-			}
-		}
-
-		private static List<UserDto> createLotsOfUsers(int numberOfUsers)
-		{
-			List<UserDto> userCollection = new List<UserDto>();
-			for (int i = 1; i <= numberOfUsers; i++)
-			{
-				userCollection.Add(new UserDto { UserName = "user " + i, AccessLevel = 1 });
-			}
-
-			return userCollection;
 		}
 	}
 }

@@ -3,14 +3,13 @@ using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.PM.PMServiceHost;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
 
 namespace Teleopti.Analytics.Etl.Interfaces.PerformanceManager
 {
-	public interface IPmPermissionTransformer : IEtlTransformer<UserDto>
+	public interface IPmPermissionTransformer : IEtlTransformer<PmUser>
 	{
-		IList<UserDto> GetUsersWithPermissionsToPerformanceManager(IList<IPerson> personCollection, bool filterWindowsLogOn, IPmPermissionExtractor permissionExtractor, IUnitOfWorkFactory unitOfWorkFactory);
-		ResultDto SynchronizeUserPermissions(IList<UserDto> users, string olapServer, string olapDatabase);
-		ResultDto IsPmWindowsAuthenticated(string olapServer, string olapDatabase);
+		IList<PmUser> GetUsersWithPermissionsToPerformanceManager(IList<IPerson> personCollection, IPmPermissionExtractor permissionExtractor, IUnitOfWorkFactory unitOfWorkFactory);
+		//ResultDto SynchronizeUserPermissions(IList<UserDto> users, string olapServer, string olapDatabase);
+		//ResultDto IsPmWindowsAuthenticated(string olapServer, string olapDatabase);
 	}
 }
