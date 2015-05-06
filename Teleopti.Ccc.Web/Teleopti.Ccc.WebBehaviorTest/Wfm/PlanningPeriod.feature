@@ -21,6 +21,7 @@ Scenario: schedule the next planning period
 	And  I click schedule
 	Then I should see '0'
 
+@OnlyRunIfEnabled('Wfm_ChangePlanningPeriod_33043')
 Scenario: update the next planning period
 	Given the time is '2014-04-10' 
 	And I have a role with

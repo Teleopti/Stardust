@@ -8795,7 +8795,7 @@ Period: {3}</value>
     <value>Optimize Activities</value>
     <comment>Optimize Activities</comment>
   </data>
-  <data name="Abandoned" xml:space="preserve">
+  <data name="string" xml:space="preserve">
     <value>Abandoned</value>
     <comment>Abandoned</comment>
   </data>
@@ -13045,5 +13045,9 @@ Reduce the complexity to use these shifts.</value>
   <data name="ChangePlanningPeriodTo" xml:space="preserve">
     <value>Change planning period to</value>
     <comment>to change the planning period</comment>
+  </data>
+  <data name="HavingRangeOf" xml:space="preserve">
+    <value>having range of</value>
+    <comment>a message shown with the suggested planning period like 'having range of 2 Week'</comment>
   </data>
 </root>

@@ -63,9 +63,9 @@ namespace Teleopti.Ccc.UserTexts {
         /// <summary>
         ///   Looks up a localized string similar to Abandoned.
         /// </summary>
-        public static string Abandoned {
+        public static string _string {
             get {
-                return ResourceManager.GetString("Abandoned", resourceCulture);
+                return ResourceManager.GetString("string", resourceCulture);
             }
         }
         
@@ -10684,6 +10684,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string HavePermissionToRestrictedScenariosButNotForSelectedTeams {
             get {
                 return ResourceManager.GetString("HavePermissionToRestrictedScenariosButNotForSelectedTeams", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to having range of.
+        /// </summary>
+        public static string HavingRangeOf {
+            get {
+                return ResourceManager.GetString("HavingRangeOf", resourceCulture);
             }
         }
         
