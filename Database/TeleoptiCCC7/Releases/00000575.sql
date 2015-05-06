@@ -1,0 +1,10 @@
+drop table Auditing_Old.MainShift_AUD
+drop table Auditing_Old.MainShiftActivityLayer_AUD
+drop table Auditing_Old.OvertimeShift_AUD
+drop table Auditing_Old.OvertimeShiftActivityLayer_AUD
+drop table Auditing_Old.PersonAbsence_AUD
+drop table Auditing_Old.PersonalShift_AUD
+drop table Auditing_Old.PersonalShiftActivityLayer_AUD
+drop table Auditing_Old.PersonAssignment_AUD
+drop table Auditing_Old.PersonDayOff_AUD
+drop table Auditing_Old.Revision
