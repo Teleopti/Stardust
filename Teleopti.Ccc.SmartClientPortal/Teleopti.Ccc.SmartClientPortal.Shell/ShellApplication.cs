@@ -1,10 +1,6 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Configuration;
 using System.Globalization;
-using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows;
@@ -13,9 +9,7 @@ using System.Windows.Markup;
 using Autofac;
 using log4net;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.MultipleConfig;
@@ -47,7 +41,6 @@ using Teleopti.Ccc.Win.Shifts;
 using Teleopti.Ccc.WinCode.Autofac;
 using Teleopti.Ccc.WinCode.Common.ExceptionHandling;
 using Teleopti.Ccc.WinCode.Events;
-using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Application = System.Windows.Forms.Application;
@@ -94,7 +87,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 #if (!DEBUG)
 			 //NHibernateProfiler.Initialize();
 			 SetReleaseMode();
-			populateFeatureToggleFlags_THISMUSTHAPPENBEFORELOGON_SEEBUG30359(container);
+			 populateFeatureToggleFlags_THISMUSTHAPPENBEFORELOGON_SEEBUG30359(container);
 			 var applicationStarter = container.Resolve<ApplicationStartup>();
 			 if (applicationStarter.LogOn())
 			 {
@@ -105,7 +98,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				 }
 				 catch (Exception exception)
 				 {
-					 HandleException(exception);
+					 handleException(exception);
 				 }
 			 }
 
@@ -234,8 +227,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		/// </summary>
 		private static void SetReleaseMode()
 		{
-			AppDomain.CurrentDomain.UnhandledException += AppDomainUnhandledException;
-			Application.ThreadException += ApplicationThreadException;
+			AppDomain.CurrentDomain.UnhandledException += appDomainUnhandledException;
+			Application.ThreadException += applicationThreadException;
 		}
 
 		/// <summary>
@@ -253,14 +246,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		/// </summary>
 		/// <param name="sender">The sender.</param>
 		/// <param name="e">The <see cref="System.UnhandledExceptionEventArgs"/> instance containing the event data.</param>
-		private static void AppDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
+		private static void appDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
 		{
-			HandleException(e.ExceptionObject as Exception);
+			handleException(e.ExceptionObject as Exception);
 		}
 
-		private static void ApplicationThreadException(object sender, ThreadExceptionEventArgs e)
+		private static void applicationThreadException(object sender, ThreadExceptionEventArgs e)
 		{
-			HandleException(e.Exception);
+			handleException(e.Exception);
 		}
 
 		/// <summary>
@@ -268,27 +261,35 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		/// </summary>
 		/// <param name="ex">The ex.</param>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-		private static void HandleException(Exception ex)
+		private static void handleException(Exception ex)
 		{
 			if (ex == null) return;
 
-			Application.ThreadException -= ApplicationThreadException;
-			AppDomain.CurrentDomain.UnhandledException -= AppDomainUnhandledException;
+			Application.ThreadException -= applicationThreadException;
+			AppDomain.CurrentDomain.UnhandledException -= appDomainUnhandledException;
 			string fallBack = string.Empty;
 
+			var iocArgs = new IocArgs(appConfigReader);
+			var tempContainerBecauseWeDontHaveAGlobalOneHere = new ContainerBuilder();
+			tempContainerBecauseWeDontHaveAGlobalOneHere.RegisterModule(new CommonModule(new IocConfiguration(iocArgs, CommonModule.ToggleManagerForIoc(iocArgs))));
+			ITogglesActive toggles;
+			using (var container = tempContainerBecauseWeDontHaveAGlobalOneHere.Build())
+			{
+				toggles = container.Resolve<ITogglesActive>();
+			}
+			var exceptionMessageBuilder = new ExceptionMessageBuilder(ex, toggles);
 
 			try
 			{
 				var log = LogManager.GetLogger(typeof(SmartClientShellApplication));
-				log.Error(ex.Message, ex);
+				log.Error(exceptionMessageBuilder.BuildSimpleExceptionMessage(), ex);
 			}
 			catch (Exception)
 			{
 				//do nothing
 			}
 
-
-			StringSetting emailSetting = new StringSetting();
+			var emailSetting = new StringSetting();
 			if (StateHolderReader.IsInitialized)
 			{
 				try
@@ -296,8 +297,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 					using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 					{
 						ISettingDataRepository settingDataRepository = new GlobalSettingDataRepository(uow);
-						emailSetting = settingDataRepository.FindValueByKey("SupportEmailSetting",
-																							 new StringSetting());
+						emailSetting = settingDataRepository.FindValueByKey("SupportEmailSetting", new StringSetting());
 					}
 				}
 				catch (Exception)
@@ -309,27 +309,19 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			string defaultEmail = !string.IsNullOrEmpty(emailSetting.StringValue)
 											  ? emailSetting.StringValue
 											  : fallBack;
-			IWriteToFile fileWriter = new WriteStringToFile();
-			IMapiMailMessage message = new MapiMailMessage(string.Empty, string.Empty);
-
-			var iocArgs = new IocArgs(appConfigReader);
-			var tempContainerBecauseWeDontHaveAGlobalOneHere = new ContainerBuilder();
-			tempContainerBecauseWeDontHaveAGlobalOneHere.RegisterModule(new CommonModule(new IocConfiguration(iocArgs, CommonModule.ToggleManagerForIoc(iocArgs))));
-			ExceptionHandlerModel exceptionHandlerModel;
-			using (var container = tempContainerBecauseWeDontHaveAGlobalOneHere.Build())
-			{
-				exceptionHandlerModel = new ExceptionHandlerModel(ex, defaultEmail, message, fileWriter, container.Resolve<ITogglesActive>());
-			}
+			var fileWriter = new WriteStringToFile();
+			var message = new MapiMailMessage(string.Empty, string.Empty);
+			var exceptionHandlerModel = new ExceptionHandlerModel(ex, defaultEmail, message, fileWriter, exceptionMessageBuilder);
 			using (var view = new ExceptionHandlerView(exceptionHandlerModel))
 			{
 				view.ShowDialog();
 			}
-			KillOpenForms();
+			killOpenForms();
 			Application.Exit();
 
 		}
 
-		private static void KillOpenForms()
+		private static void killOpenForms()
 		{
 			ArrayList forms = new ArrayList(Application.OpenForms);
 			for (int i = 0; i < forms.Count; i++)

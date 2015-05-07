@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.WinCodeTest.ExceptionHandler
         private IMapiMailMessage _mapi;
         private ExceptionHandlerModel _model;
         private ExceptionHandlerPresenter _target;
+	    private ExceptionMessageBuilder _exceptionMessageBuilder;
 
         [SetUp]
         public void Setup()
@@ -37,7 +38,8 @@ namespace Teleopti.Ccc.WinCodeTest.ExceptionHandler
             _view = _mocks.StrictMock<IExceptionHandlerView>();
             _mapi = _mocks.StrictMock<IMapiMailMessage>();
             _fileWriter = _mocks.StrictMock<IWriteToFile>(); 
-            _model = new ExceptionHandlerModel(_exception, "hej", _mapi, _fileWriter,null);
+			_exceptionMessageBuilder = new ExceptionMessageBuilder(_exception, null);
+			_model = new ExceptionHandlerModel(_exception, "hej", _mapi, _fileWriter, _exceptionMessageBuilder);
             _target = new ExceptionHandlerPresenter(_view, _model);
         }
 
@@ -136,8 +138,9 @@ namespace Teleopti.Ccc.WinCodeTest.ExceptionHandler
         [Test]
         public void ShouldGetProductVersionFromCurrentAssembly()
         {
-            var createSqlException = SqlExceptionConstructor.CreateSqlException("Timeout", 123);
-            var model = new ExceptionHandlerModel(createSqlException, "", _mapi, _fileWriter,null);
+            var sqlException = SqlExceptionConstructor.CreateSqlException("Timeout", 123);
+			var exceptionMessageBuilder = new ExceptionMessageBuilder(sqlException, null);
+			var model = new ExceptionHandlerModel(sqlException, "", _mapi, _fileWriter, exceptionMessageBuilder);
             var expectedString = model.CompleteStackAndAssemblyText();
 
 			expectedString.Should().Contain("Product Version: " + Application.ProductVersion);
@@ -146,10 +149,11 @@ namespace Teleopti.Ccc.WinCodeTest.ExceptionHandler
 		[Test]
 		public void ShouldGetAllExceptionsIfSqlExceptionException()
 		{
-			var createSqlException = SqlExceptionConstructor.CreateSqlException("Timeout", 123);
-			var model = new ExceptionHandlerModel(createSqlException, "", _mapi, _fileWriter, null);
+			var sqlException = SqlExceptionConstructor.CreateSqlException("Timeout", 123);
+			var exceptionMessageBuilder = new ExceptionMessageBuilder(sqlException, null);
+			var model = new ExceptionHandlerModel(sqlException, "", _mapi, _fileWriter, exceptionMessageBuilder);
 			var expectedString = model.CompleteStackAndAssemblyText();
-			expectedString.Should().StartWith("System.Data.SqlClient.SqlError: Timeout\r\nSystem.Data.SqlClient.SqlError: Timeout");
+			expectedString.Should().Contain("System.Data.SqlClient.SqlError: Timeout\r\nSystem.Data.SqlClient.SqlError: Timeout");
 		}
 
 		[Test]
@@ -160,8 +164,9 @@ namespace Teleopti.Ccc.WinCodeTest.ExceptionHandler
 				               {Toggles.TestToggle, true}
 			               };
 			var allToggleFeatures = new ActiveTogglesStub(features);
+			var exceptionMessageBuilder = new ExceptionMessageBuilder(_exception, allToggleFeatures);
 
-			var model = new ExceptionHandlerModel(SqlExceptionConstructor.CreateSqlException("Any Exception will do", 123), "", _mapi, _fileWriter, allToggleFeatures);
+			var model = new ExceptionHandlerModel(SqlExceptionConstructor.CreateSqlException("Any Exception will do", 123), "", _mapi, _fileWriter, exceptionMessageBuilder);
 			var expectedString = model.CompleteStackAndAssemblyText();
 
 			expectedString.Should().Contain(string.Format("{0} = {1}", Toggles.TestToggle, features[Toggles.TestToggle]));
@@ -175,8 +180,9 @@ namespace Teleopti.Ccc.WinCodeTest.ExceptionHandler
 				               {Toggles.TestToggle, false}
 			               };
 			var allToggleFeatures = new ActiveTogglesStub(features);
+			var exceptionMessageBuilder = new ExceptionMessageBuilder(_exception, allToggleFeatures);
 
-			var model = new ExceptionHandlerModel(SqlExceptionConstructor.CreateSqlException("Any Exception will do", 123), "", _mapi, _fileWriter, allToggleFeatures);
+			var model = new ExceptionHandlerModel(SqlExceptionConstructor.CreateSqlException("Any Exception will do", 123), "", _mapi, _fileWriter, exceptionMessageBuilder);
 			var expectedString = model.CompleteStackAndAssemblyText();
 
 			expectedString.Should().Contain(string.Format("{0} = {1}", Toggles.TestToggle, features[Toggles.TestToggle]));
@@ -187,12 +193,14 @@ namespace Teleopti.Ccc.WinCodeTest.ExceptionHandler
 	    {
 		    const string exceptionInfo = "System.Data.SqlClient.SqlError";
 			var allToggleFeatures = new ActiveTogglesThatThrowsWhenTryingToReadFeatures();
-
-			var model = new ExceptionHandlerModel(SqlExceptionConstructor.CreateSqlException(exceptionInfo, 123), "", _mapi, _fileWriter, allToggleFeatures);
+			
+		    var sqlException = SqlExceptionConstructor.CreateSqlException(exceptionInfo, 123);
+			var exceptionMessageBuilder = new ExceptionMessageBuilder(sqlException, allToggleFeatures);
+			var model = new ExceptionHandlerModel(sqlException, "", _mapi, _fileWriter, exceptionMessageBuilder);
 			var expectedString = model.CompleteStackAndAssemblyText();
 
-			expectedString.Should().StartWith(exceptionInfo);
-		    expectedString.Should().Contain(ExceptionHandlerModel.ToggleFeaturesUnknown);
+			expectedString.Should().Contain(exceptionInfo);
+		    expectedString.Should().Contain(ExceptionMessageBuilder.ToggleFeaturesUnknown);
 	    }
 
 		public class ActiveTogglesStub : ITogglesActive

@@ -356,6 +356,7 @@
     <Compile Include="Common\DefaultScenarioLoader.cs" />
     <Compile Include="Common\ExceptionHandling\ExceptionHandlerModel.cs" />
     <Compile Include="Common\ExceptionHandling\ExceptionHandlerPresenter.cs" />
+    <Compile Include="Common\ExceptionHandling\ExceptionMessageBuilder.cs" />
     <Compile Include="Common\ExceptionHandling\IExceptionHandlerView.cs" />
     <Compile Include="Common\ExceptionHandling\ISimpleExceptionHandlerView.cs" />
     <Compile Include="Common\ExceptionHandling\SimpleExceptionHandlerModel.cs" />

@@ -14,16 +14,15 @@ namespace Teleopti.Ccc.WinCode.Common.ExceptionHandling
 {
     public class ExceptionHandlerModel
     {
-        private Exception _exception;
-        private string _defaultEmail;
-        private IMapiMailMessage _mapiMessage;
-        private IWriteToFile _fileWriter;
-	    private ITogglesActive _allToggles;
-	    public const string ToggleFeaturesUnknown = "ToggleFeatures unknown";
+        private readonly Exception _exception;
+        private readonly string _defaultEmail;
+        private readonly IMapiMailMessage _mapiMessage;
+        private readonly IWriteToFile _fileWriter;
+	    private readonly ExceptionMessageBuilder _exceptionMessageBuilder;
 
-		public ExceptionHandlerModel(Exception exception, string defaultEmail, IMapiMailMessage mapiMessage, IWriteToFile fileWriter, ITogglesActive allToggles)
+		public ExceptionHandlerModel(Exception exception, string defaultEmail, IMapiMailMessage mapiMessage, IWriteToFile fileWriter, ExceptionMessageBuilder exceptionMessageBuilder)
         {
-			_allToggles = allToggles;
+			_exceptionMessageBuilder = exceptionMessageBuilder;
 			_exception = exception;
             _defaultEmail = defaultEmail;
             _mapiMessage = mapiMessage;
@@ -90,67 +89,10 @@ namespace Teleopti.Ccc.WinCode.Common.ExceptionHandling
         {
             return string.Concat(Resources.AFileContainingTheErrorMessageCouldNotBeCreated, " ", error);
         }
-       
-        public string CompleteStackAndAssemblyText()
-        {
-	        var text = new StringBuilder();
 
-			//Note: SQL exceptions are different, we need to loop the Error collection
-			//to get all the information.
-			var sqlException = _exception as SqlException;
-	        if (sqlException == null)
-	        {
-		        text.Append(_exception);
-	        }
-	        else
-	        {
-		        appendSqlException(text, sqlException);
-	        }
-
-            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
-            {
-                text.AppendLine(assembly.ToString());
-            }
-
-	        appendVersionInfo(text);
-			appendFeatureInfo(text, _allToggles);
-
-	        return text.ToString();
-        }
-
-	    private static void appendVersionInfo(StringBuilder text)
+	    public string CompleteStackAndAssemblyText()
 	    {
-		    text.AppendLine();
-		    text.Append("Product Version: ");
-		    text.Append(Application.ProductVersion);
-		    text.AppendLine();
-		    text.AppendLine();
+		    return _exceptionMessageBuilder.BuildCompleteExceptionMessage();
 	    }
-
-	    private static void appendFeatureInfo(StringBuilder text, ITogglesActive allToggles)
-	    {
-			text.AppendLine();
-			text.AppendLine();
-			try
-		    {
-
-				foreach (var entry in allToggles.AllActiveToggles())
-			    {
-				    text.AppendLine(string.Format("{0} = {1} ", entry.Key, entry.Value));
-			    }
-		    }
-		    catch (Exception)
-		    {
-				text.AppendLine(ToggleFeaturesUnknown);
-		    }
-	    }
-
-        private static void appendSqlException(StringBuilder text, SqlException sqlException)
-        {
-	        foreach (SqlError error in sqlException.Errors)
-	        {
-		        text.AppendLine(error.ToString());
-	        }
-        }
     }
 }
