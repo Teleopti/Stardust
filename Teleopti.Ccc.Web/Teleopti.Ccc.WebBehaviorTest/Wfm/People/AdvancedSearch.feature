@@ -61,11 +61,10 @@ Scenario: match entire quoted search term
 	And I search people with keyword '"Team Red" Smith'
 	Then I should see 'Ashley Smith' in people list
 
-@ignore
 Scenario: match entire quoted search term in different fields
 	When I view people
 	And I search with
-	| Field        | Value          |
-	| last name    | "Andeen Smith" |
-	| organization | Red          |
-	Then I should see no result
+	| Field        | Value      |
+	| last name    | Andeen     |
+	| organization | "Team Red" |
+	Then I should see 'Ashley Andeen' in people list
