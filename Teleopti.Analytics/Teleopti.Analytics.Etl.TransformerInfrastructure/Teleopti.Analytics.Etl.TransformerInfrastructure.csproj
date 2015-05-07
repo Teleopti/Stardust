@@ -142,7 +142,6 @@
     <Compile Include="DataTableDefinition\ScheduleDayOffCountInfrastructure.cs" />
     <Compile Include="DataTableDefinition\SchedulePreferenceInfrastructure.cs" />
     <Compile Include="ScheduleTransformerException.cs" />
-    <Compile Include="DataTableDefinition\UserInfrastructure.cs" />
     <Compile Include="DataTableDefinition\PersonSkillInfrastructure.cs" />
     <Compile Include="DataTableDefinition\PermissionReportInfrastructure.cs" />
     <Compile Include="DataTableDefinition\KpiTargetTeamInfrastructure.cs" />
