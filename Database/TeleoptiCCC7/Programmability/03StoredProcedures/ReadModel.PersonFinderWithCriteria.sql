@@ -120,9 +120,6 @@ OPEN SearchCriteriaCursor;
 
 FETCH NEXT FROM SearchCriteriaCursor INTO @searchType, @searchValue, @cursorCount
 
-DECLARE @relationShip nvarchar(5)
-SELECT @relationShip = ' OR '
-
 WHILE @@FETCH_STATUS = 0
 BEGIN
    DECLARE @valueClause nvarchar(max)
@@ -130,8 +127,6 @@ BEGIN
    DECLARE @valueSplitterIndex int
    SELECT @valueSplitterIndex = CHARINDEX(';', @searchValue)
 
-	IF @searchType = 'All'
-		SELECT @relationShip = ' AND '
    -- If the search value contains multiple keyword (combined with ';')
    -- Then generate search conditions for every search keyword combined with OR
    IF @valueSplitterIndex > 0
@@ -151,7 +146,7 @@ BEGIN
 		 IF @valuePart <> ''
 		 BEGIN
             IF @valueClause <> '('
-               SELECT @valueClause = @valueClause + @relationShip
+               SELECT @valueClause = @valueClause + ' OR '
             SELECT @valueClause = @valueClause + 'SearchValue LIKE N''%' + @valuePart + '%'''
 		 END
          SELECT @notProcessedSearchValue = LTRIM(RTRIM(SUBSTRING(@notProcessedSearchValue, @valueSplitterIndex + 1,
