@@ -13050,4 +13050,76 @@ Reduce the complexity to use these shifts.</value>
     <value>having range of</value>
     <comment>a message shown with the suggested planning period like 'having range of 2 Week'</comment>
   </data>
+  <data name="AGREE" xml:space="preserve">
+    <value>AGREE</value>
+    <comment>use in wfm web. button of confirm message box when delete a campaign</comment>
+  </data>
+  <data name="AreYouSureYouWantToDeleteThisCampaign" xml:space="preserve">
+    <value>Are you sure you want to delete this campaign?</value>
+    <comment>use in wfm web outbound, campaign view. text of confirm message box when delete a campaign</comment>
+  </data>
+  <data name="CallListLength" xml:space="preserve">
+    <value>Call List Length</value>
+    <comment>use in wfm web outbound, campaign edit view property of a campaign</comment>
+  </data>
+  <data name="Campaign" xml:space="preserve">
+    <value>Campaign</value>
+    <comment>use in wfm web outbound, title of campaign edit view</comment>
+  </data>
+  <data name="CampaignName" xml:space="preserve">
+    <value>Campaign Name</value>
+    <comment>use in wfm web outbound, campaign list view</comment>
+  </data>
+  <data name="Campaigns" xml:space="preserve">
+    <value>Campaigns</value>
+    <comment>use in wfm web outbound, campaign list view</comment>
+  </data>
+  <data name="ConnectAHT" xml:space="preserve">
+    <value>Connect AHT(s)</value>
+    <comment>use in wfm web outbound, campaign edit view property of a campaign. Average handling time</comment>
+  </data>
+  <data name="ConnectRate" xml:space="preserve">
+    <value>Connect Rate(%)</value>
+    <comment>use in wfm web outbound, campaign edit view property of a campaign</comment>
+  </data>
+  <data name="DeleteCampaign" xml:space="preserve">
+    <value>Delete Campaign</value>
+    <comment>use in wfm web outbound, campaign view. title of confirm message box when delete a campaign</comment>
+  </data>
+  <data name="DISMISS" xml:space="preserve">
+    <value>DISMISS</value>
+    <comment>use in wfm web. button of confirm message box when delete a campaign</comment>
+  </data>
+  <data name="OutboundCampaigns" xml:space="preserve">
+    <value>Outbound Campaigns</value>
+    <comment>use in wfm web outbound, campaign list view</comment>
+  </data>
+  <data name="OutboundIntroduction" xml:space="preserve">
+    <value>To view existing campaigns and create new campaign</value>
+    <comment>use in wfm web outbound, campaign view</comment>
+  </data>
+  <data name="Progress" xml:space="preserve">
+    <value>Progress</value>
+    <comment>use in wfm web outbound, campaign list view</comment>
+  </data>
+  <data name="RPCAHT" xml:space="preserve">
+    <value>RPC AHT(s)</value>
+    <comment>use in wfm web outbound, campaign edit view property of a campaign. Right Party Connection Average Handing Time</comment>
+  </data>
+  <data name="RPCR" xml:space="preserve">
+    <value>RPCR(%)</value>
+    <comment>use in wfm web outbound, campaign edit view property of a campaign. Right Party Connect Rate</comment>
+  </data>
+  <data name="TargetRate" xml:space="preserve">
+    <value>Target Rate(%)</value>
+    <comment>use in wfm web outbound, campaign edit view property of a campaign</comment>
+  </data>
+  <data name="UnproductiveTime" xml:space="preserve">
+    <value>Unproductive Time(s)</value>
+    <comment>use in wfm web outbound, campaign edit view property of a campaign.</comment>
+  </data>
+  <data name="WorkingHours" xml:space="preserve">
+    <value>Working Hours</value>
+    <comment>use in wfm web outbound campaign edit view</comment>
+  </data>
 </root>

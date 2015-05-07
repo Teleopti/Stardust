@@ -7,9 +7,9 @@
 						<path d="M2,12C2,6.48 6.48,2 12,2C17.52,2 22,6.48 22,12C22,17.52 17.52,22 12,22C6.48,22 2,17.52 2,12M17,12L12,7V10H8V14H12V17L17,12Z" transform="rotate(180, 12, 12)" />
 					</svg>
 				</div>
-				<span>Goto configuration</span>
+				<span translate>Goto configuration</span>
 			</div>
-			<div class="col-xs-offset-3 col-xs-2">Configuration</div>
+			<div class="col-xs-offset-3 col-xs-2" translate>Configuration</div>
 			
 			<div class="navigate-to active pull-right" ng-click="navigateToForecasting()">
 				<div class="pull-right">
@@ -17,7 +17,7 @@
 						<path d="M2,12C2,6.48 6.48,2 12,2C17.52,2 22,6.48 22,12C22,17.52 17.52,22 12,22C6.48,22 2,17.52 2,12M17,12L12,7V10H8V14H12V17L17,12Z"/>
 					</svg>
 				</div>
-				<span>Goto forecasting</span>
+				<span translate>Goto forecasting</span>
 			</div>			
 		</div>				
 	</div>
@@ -25,42 +25,42 @@
 		<div class=" wfm-accordion">
 			<div class="wfm-block">
 				<div class="sub-header accordion-head" ng-click="acToggle1 = !acToggle1">
-					Campaign
+					<span translate>Campaign</span>
 					<strong>{{campaign.Name}}</strong>
 				</div>
 				<div ng-show="acToggle1">
 					<form name="formCampaignParams" class="form-horizontal wfm-block input-group" ng-submit="update()" form-locator>
 						<input type="submit" style="position: absolute; left: -9999px"/>
 						<div class=" input-prepend">
-							<span><strong>Name</strong></span>
+							<span><strong translate>Name</strong></span>
 							<input id="name" type="text" ng-model="campaign.Name" ng-blur="update()" ng-required maxlength="255" />
 						</div>
 						<div class="input-prepend">
-							<span><strong>Call List Length</strong></span>
+							<span><strong translate>CallListLength</strong></span>
 							<input id="callList" type="number" ng-model="campaign.CallListLen" ng-blur="update()" placeholder="call list length" min="0" />
 						</div>
 						<div class="input-prepend">
-							<span><strong>Target Rate(%)</strong></span>
+							<span><strong translate>TargetRate</strong></span>
 							<input id="sla" type="number" ng-model="campaign.TargetRate" ng-blur="update()" placeholder="sla" min="0" max="100" />
 						</div>
 						<div class="input-prepend">
-							<span><strong>Connect Rate(%)</strong></span>
+							<span><strong translate>ConnectRate</strong></span>
 							<input id="cr" type="number" ng-model="campaign.ConnectRate" ng-blur="update()" placeholder="connect rate" min="0" max="100" />
 						</div>
 						<div class="input-prepend">
-							<span><strong>RPCR(%)</strong></span>
+							<span><strong translate>RPCR</strong></span>
 							<input id="target" type="number" ng-model="campaign.RightPartyConnectRate" ng-blur="update()" placeholder="right party connect rate" min="0" max="100" />
 						</div>
 						<div class="input-prepend">
-							<span><strong>Connect AHT(s)</strong></span>
+							<span><strong translate>ConnectAHT</strong></span>
 							<input id="cAHT" type="number" ng-model="campaign.ConnectAverageHandlingTime" ng-blur="update()" placeholder="connect average handle time" min="0" />
 						</div>
 						<div class="input-prepend">
-							<span><strong>RPC AHT(s)</strong></span>
+							<span><strong translate>RPCAHT</strong></span>
 							<input id="rpcAHT" type="number" ng-model="campaign.RightPartyAverageHandlingTime" ng-blur="update()" placeholder="right party average handle time" min="0" />
 						</div>
 						<div class="input-prepend">
-							<span><strong>Unproductive Time(s)</strong></span>
+							<span><strong translate>UnproductiveTime</strong></span>
 							<input id="unproductive" type="number" ng-model="campaign.UnproductiveTime" ng-blur="update()" placeholder="unproductive time" min="0" />
 						</div>
 					</form>
@@ -68,23 +68,23 @@
 			</div>
 			<div class="wfm-block">
 				<div class="sub-header accordion-head" ng-click="acToggle2 = !acToggle2">
-					Duration
-					<span ng-show="!acToggle2"> from <strong>{{campaign.StartDate.Date | date: format }}</strong> to <strong>{{campaign.EndDate.Date | date: format }}</strong></span>
+					<span translate>Duration</span>
+					<span ng-show="!acToggle2"> <span translate>DateFrom</span><strong>{{campaign.StartDate.Date | date: format }}</strong> <span translate>DateTo</span> <strong>{{campaign.EndDate.Date | date: format }}</strong></span>
 				</div>
 				<div ng-show="acToggle2">
 					<div class="row wfm-block">
 						<div class="col-lg-6">
 							<div class="wfm-datepicker-wrap campaign-startdate">
 								<div class="sub-header">
-									Start time: <strong>{{campaign.StartDate.Date | date: format }}</strong>
+									<span translate>StartTimeColon</span> <strong>{{campaign.StartDate.Date | date: format }}</strong>
 								</div>
 								<datepicker ng-model="campaign.StartDate.Date" max-date="campaign.EndDate.Date" show-weeks="true" class="well well-sm" ng-change="update(true)"></datepicker>
 							</div>
 						</div>
 						<div class="col-lg-6">
 							<div class="wfm-datepicker-wrap campaign-enddate">
-								<div class="sub-header">
-									End time: <strong class="end-date">{{campaign.EndDate.Date | date: format }}</strong>
+								<div class="sub-header" >
+									<span translate>EndTimeColon</span> <strong class="end-date">{{campaign.EndDate.Date | date: format }}</strong>
 								</div>
 								<datepicker ng-model="campaign.EndDate.Date" min-date="campaign.StartDate.Date" show-weeks="true" class="well well-sm" ng-change="update(true)"></datepicker>
 							</div>
@@ -94,7 +94,7 @@
 			</div>
 			<div class="wfm-block" ng-if="true">
 				<div class="sub-header accordion-head" ng-click="acToggle3 = !acToggle3">
-					Working Hours
+					<span translate>WorkingHours</span>
 				</div>
 				<div ng-show="acToggle3">
 					<div class="row toolbar">
@@ -122,7 +122,7 @@
 														<path fill="#555555" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />
 													</svg>
 													<md-tooltip>
-														Delete
+														<span translate>Delete</span>
 													</md-tooltip>
 												</i>
 											</span>
@@ -155,7 +155,7 @@
 										<input type="time" name="NewTimeRangeEnd" ng-model="newWorkingPeriod.EndTime" />
 									</div>
 								</form>
-								<div class="alert-error notice-spacer m-t-10" ng-show="isPeriodInValid"><i class='mdi mdi-alert-octagon'></i> Error: end time should not earlier than start time.</div>
+								<div class="alert-error notice-spacer m-t-10" ng-show="isPeriodInValid"><i class='mdi mdi-alert-octagon'></i> <span translate>EndTimeMustBeGreaterOrEqualToStartTime</span></div>
 							</div>
 						</div>
 					</div>
