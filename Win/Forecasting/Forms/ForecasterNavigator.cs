@@ -109,7 +109,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			_messageSender = messageSender;
 			_repositoryFactory = repositoryFactory;
 			_unitOfWorkFactory = unitOfWorkFactory;
-			//splitContainer1.SplitterDistance = splitContainer1.Height - portalSettings.ForecasterActionPaneHeight;
 
 			setVisibility();
 		}
@@ -241,7 +240,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		private ICollection<skillTypeModel> loadSkillTypeCollection(IUnitOfWork uow)
 		{
 			ISkillTypeRepository skillTypeRep = _repositoryFactory.CreateSkillTypeRepository(uow);
-			ICollection<ISkillType> skillTypes = skillTypeRep.FindAll();
+			//remove where to debug outbound
+			ICollection<ISkillType> skillTypes = skillTypeRep.FindAll().Where(s => s.ForecastSource != ForecastSource.OutboundTelephony).ToList();
 			return
 				skillTypes.Select(
 					s =>
@@ -258,8 +258,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		{
 			ISkillRepository skillRep = _repositoryFactory.CreateSkillRepository(uow);
 			ICollection<ISkill> skills = skillRep.FindAllWithWorkloadAndQueues();
-			skills = skills.Except(skills.OfType<IChildSkill>()).ToList();
-			//skills = skills.Except(skills.OfType<IChildSkill>()).Where(s => s.SkillType.ForecastSource != ForecastSource.OutboundTelephony).ToList();
+			//remove where to debug outbound
+			skills = skills.Except(skills.OfType<IChildSkill>()).Where(s => s.SkillType.ForecastSource != ForecastSource.OutboundTelephony).ToList();
 			return skills.Select(createSkillModel).ToList();
 		}
 
