@@ -815,7 +815,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			try
 			{
 				var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(_toggleManager)));
-				throw new Exception("Planned exception");
 				settings.Show();
 				settings.BringToFront();
 			}
