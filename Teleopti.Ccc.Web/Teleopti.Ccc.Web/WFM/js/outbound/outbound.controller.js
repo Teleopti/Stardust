@@ -83,6 +83,7 @@
 			$scope.campaign = (angular.isDefined($stateParams.Id) && $stateParams.Id != "") ? OutboundService.getCampaignById($stateParams.Id) : null;
 			$scope.newWorkingPeriod = { StartTime: null, EndTime: null };
 			$scope.showCampaignDetail = angular.isDefined($scope.campaign) && ($scope.campaign != null);
+			$scope.isPeriodInValid = false;
 
 			$scope.acToggle1 = true;
 			$scope.acToggle2 = true;
@@ -137,8 +138,12 @@
 			};
 
 			$scope.addWorkingPeriod = function () {
-				if ($scope.newWorkingPeriod.EndTime > $scope.newWorkingPeriod.StartTime) {
+				if ($scope.newWorkingPeriod.EndTime != null && $scope.newWorkingPeriod.StartTime != null)
+				if ($scope.newWorkingPeriod.EndTime >= $scope.newWorkingPeriod.StartTime) {
+					$scope.isPeriodInValid = false;
 					OutboundService.addWorkingPeriod($scope.campaign, angular.copy($scope.newWorkingPeriod));
+				} else {
+					$scope.isPeriodInValid = true;
 				}
 			};
 

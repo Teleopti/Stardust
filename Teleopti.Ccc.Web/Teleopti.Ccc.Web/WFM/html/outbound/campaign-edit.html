@@ -30,38 +30,38 @@
 				</div>
 				<div ng-show="acToggle1">
 					<form name="formCampaignParams" class="form-horizontal wfm-block input-group" ng-submit="update()" form-locator>
-						<input type="submit" style="position: absolute; left: -9999px" />
+						<input type="submit" style="position: absolute; left: -9999px"/>
 						<div class=" input-prepend">
 							<span><strong>Name</strong></span>
 							<input id="name" type="text" ng-model="campaign.Name" ng-blur="update()" ng-required />
 						</div>
 						<div class="input-prepend">
 							<span><strong>Call List Length</strong></span>
-							<input id="callList" type="text" ng-model="campaign.CallListLen" ng-blur="update()" placeholder="call list length" />
+							<input id="callList" type="number" ng-model="campaign.CallListLen" ng-blur="update()" placeholder="call list length" min="0" />
 						</div>
 						<div class="input-prepend">
-							<span><strong>Target Rate</strong></span>
-							<input id="sla" type="text" ng-model="campaign.TargetRate" ng-blur="update()" placeholder="sla" />
+							<span><strong>Target Rate(%)</strong></span>
+							<input id="sla" type="number" ng-model="campaign.TargetRate" ng-blur="update()" placeholder="sla" min="0" max="100" />
 						</div>
 						<div class="input-prepend">
-							<span><strong>Connect Rate</strong></span>
-							<input id="cr" type="text" ng-model="campaign.ConnectRate" ng-blur="update()" placeholder="connect rate" />
+							<span><strong>Connect Rate(%)</strong></span>
+							<input id="cr" type="number" ng-model="campaign.ConnectRate" ng-blur="update()" placeholder="connect rate" min="0" max="100" />
 						</div>
 						<div class="input-prepend">
-							<span><strong>RPCR</strong></span>
-							<input id="target" type="text" ng-model="campaign.RightPartyConnectRate" ng-blur="update()" placeholder="right party connect rate" />
+							<span><strong>RPCR(%)</strong></span>
+							<input id="target" type="number" ng-model="campaign.RightPartyConnectRate" ng-blur="update()" placeholder="right party connect rate" min="0" max="100" />
 						</div>
 						<div class="input-prepend">
-							<span><strong>Connect AHT</strong></span>
-							<input id="cAHT" type="text" ng-model="campaign.ConnectAverageHandlingTime" ng-blur="update()" placeholder="connect average handle time" />
+							<span><strong>Connect AHT(s)</strong></span>
+							<input id="cAHT" type="number" ng-model="campaign.ConnectAverageHandlingTime" ng-blur="update()" placeholder="connect average handle time" min="0" />
 						</div>
 						<div class="input-prepend">
-							<span><strong>RPC AHT</strong></span>
-							<input id="rpcAHT" type="text" ng-model="campaign.RightPartyAverageHandlingTime" ng-blur="update()" placeholder="right party average handle time" />
+							<span><strong>RPC AHT(s)</strong></span>
+							<input id="rpcAHT" type="number" ng-model="campaign.RightPartyAverageHandlingTime" ng-blur="update()" placeholder="right party average handle time" min="0" />
 						</div>
 						<div class="input-prepend">
-							<span><strong>Unproductive Time</strong></span>
-							<input id="unproductive" type="text" ng-model="campaign.UnproductiveTime" ng-blur="update()" placeholder="unproductive time" />
+							<span><strong>Unproductive Time(s)</strong></span>
+							<input id="unproductive" type="number" ng-model="campaign.UnproductiveTime" ng-blur="update()" placeholder="unproductive time" min="0" />
 						</div>
 					</form>
 				</div>
@@ -96,7 +96,7 @@
 				<div class="sub-header accordion-head" ng-click="acToggle3 = !acToggle3">
 					Working Hours
 				</div>
-				<div ng-show="acToggle4">
+				<div ng-show="acToggle3">
 					<div class="row toolbar">
 						<div class="wfm-block">
 							<div class="wfm-block">
@@ -155,6 +155,7 @@
 										<input type="time" name="NewTimeRangeEnd" ng-model="newWorkingPeriod.EndTime" />
 									</div>
 								</form>
+								<div class="alert-error notice-spacer m-t-10" ng-show="isPeriodInValid"><i class='mdi mdi-alert-octagon'></i> Error: end time should not earlier than start time.</div>
 							</div>
 						</div>
 					</div>

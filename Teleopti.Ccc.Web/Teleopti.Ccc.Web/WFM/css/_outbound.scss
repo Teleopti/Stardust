@@ -6,7 +6,7 @@
 	display: inline-block;
 	width: 18%;
 }
-.input-prepend span + input[type='text'] {
+.input-prepend span + input {
 	display: inline-block;
 	width: 65% !important;
 	margin-bottom: 1px;
@@ -53,4 +53,8 @@
 }
 .wfm-list li:hover .wfm-checkbox-toggle:after {
 	background-color: white;
+}
+
+.m-t-10{
+    margin-top: 10px;
 }
