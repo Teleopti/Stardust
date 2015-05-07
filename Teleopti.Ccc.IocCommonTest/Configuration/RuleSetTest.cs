@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-using MbCache.Configuration;
+using Autofac;
 using MbCache.Core;
 using NUnit.Framework;
-using Autofac;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.IocCommon;
@@ -15,22 +14,14 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 {
 	public class RuleSetTest
 	{
-		private ContainerBuilder containerBuilder;
-		private IWorkShiftAddCallback _callback;
-
-		[SetUp]
-		public void Setup()
-		{
-			containerBuilder = new ContainerBuilder();
-			_callback = new WorkShiftAddStopperCallback();
-		}
-
 		[Test]
 		public void VerifyProjectionServiceIsCached([Values(true, false)] bool perLifeTimeScope)
 		{
+			var containerBuilder = new ContainerBuilder();
 			var configuration = new IocConfiguration(new IocArgs(new AppConfigReader()), null);
-			containerBuilder.RegisterModule(new CommonModule(configuration));
-			containerBuilder.RegisterModule(new RuleSetModule(configuration, perLifeTimeScope));
+			containerBuilder.RegisterModule(new CommonModule(configuration))
+				.RegisterModule(new RuleSetModule(configuration, perLifeTimeScope));
+			var callback = new WorkShiftAddStopperCallback();
 			using (var container = containerBuilder.Build())
 			{
 				var wsRs = createRuleset(true);
@@ -38,19 +29,19 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 				var projSvc = container.Resolve<IRuleSetProjectionEntityService>();
 				var projSvc2 = container.Resolve<IRuleSetProjectionEntityService>();
 
-				Assert.AreSame(projSvc.ProjectionCollection(wsRs, _callback), projSvc2.ProjectionCollection(wsRs, _callback));
-
+				Assert.AreSame(projSvc.ProjectionCollection(wsRs, callback), projSvc2.ProjectionCollection(wsRs, callback));
 			}
 		}
 
 		[Test]
 		public void ProjectionServiceIsCachedPerScope()
 		{
+			var containerBuilder = new ContainerBuilder();
 			var configuration = new IocConfiguration(new IocArgs(new AppConfigReader()), null);
-			containerBuilder.RegisterModule(new CommonModule(configuration));
-			containerBuilder.RegisterModule(new RuleSetModule(configuration, true));
+			containerBuilder.RegisterModule(new CommonModule(configuration))
+				.RegisterModule(new RuleSetModule(configuration, true));
 			var wsRs = createRuleset(true);
-
+			var callback = new WorkShiftAddStopperCallback();
 			using (var container = containerBuilder.Build())
 			{
 				IRuleSetProjectionEntityService projSvc;
@@ -64,16 +55,17 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 					projSvc2 = inner2.Resolve<IRuleSetProjectionEntityService>();
 				}
 
-				Assert.AreNotSame(projSvc.ProjectionCollection(wsRs, _callback), projSvc2.ProjectionCollection(wsRs, _callback));
+				Assert.AreNotSame(projSvc.ProjectionCollection(wsRs, callback), projSvc2.ProjectionCollection(wsRs, callback));
 			}
 		}
 
 		[Test]
 		public void ShouldCacheWorkShiftWorkTime([Values(true, false)] bool perLifeTimeScope)
 		{
+			var containerBuilder = new ContainerBuilder();
 			var configuration = new IocConfiguration(new IocArgs(new AppConfigReader()), null);
-			containerBuilder.RegisterModule(new CommonModule(configuration));
-			containerBuilder.RegisterModule(new RuleSetModule(configuration, perLifeTimeScope));
+			containerBuilder.RegisterModule(new CommonModule(configuration))
+				.RegisterModule(new RuleSetModule(configuration, perLifeTimeScope));
 
 			using (var container = containerBuilder.Build())
 			{
@@ -85,11 +77,12 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void CacheShouldBeInvalidatedWhenContainerScopeIsDead()
 		{
+			var containerBuilder = new ContainerBuilder();
 			var configuration = new IocConfiguration(new IocArgs(new AppConfigReader()), null);
-			containerBuilder.RegisterModule(new CommonModule(configuration));
-			containerBuilder.RegisterModule(new RuleSetModule(configuration, true));
+			containerBuilder.RegisterModule(new CommonModule(configuration))
+				.RegisterModule(new RuleSetModule(configuration, true));
 			var wsRs = createRuleset(true);
-
+			var callback = new WorkShiftAddStopperCallback();
 			using (var container = containerBuilder.Build())
 			{
 				IEnumerable<IWorkShiftVisualLayerInfo> proj;
@@ -97,27 +90,46 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 				using (var inner1 = container.BeginLifetimeScope())
 				{
 					projSvc = inner1.Resolve<IRuleSetProjectionEntityService>();
-					proj = projSvc.ProjectionCollection(wsRs, _callback);
+					proj = projSvc.ProjectionCollection(wsRs, callback);
 
 				}
-				Assert.AreNotSame(proj, projSvc.ProjectionCollection(wsRs, _callback));
+				Assert.AreNotSame(proj, projSvc.ProjectionCollection(wsRs, callback));
+			}
+		}
+
+		[Test]
+		public void ShouldCacheWithDifferentCallbacks([Values(true, false)] bool perLifeTimeScope)
+		{
+			var containerBuilder = new ContainerBuilder();
+			var configuration = new IocConfiguration(new IocArgs(new AppConfigReader()), null);
+			containerBuilder.RegisterModule(new CommonModule(configuration))
+				.RegisterModule(new RuleSetModule(configuration, perLifeTimeScope));
+			using (var container = containerBuilder.Build())
+			{
+				var wsRs = createRuleset(true);
+
+				var projSvc = container.Resolve<IRuleSetProjectionEntityService>();
+				var projSvc2 = container.Resolve<IRuleSetProjectionEntityService>();
+
+				Assert.AreSame(projSvc.ProjectionCollection(wsRs, new WorkShiftAddStopperCallback()), projSvc2.ProjectionCollection(wsRs, new WorkShiftAddStopperCallback()));
 			}
 		}
 
 		[Test]
 		public void ShouldNotCacheRuleSetWithNoId([Values(true, false)] bool perLifeTimeScope)
 		{
+			var containerBuilder = new ContainerBuilder();
 			var configuration = new IocConfiguration(new IocArgs(new AppConfigReader()), null);
-			containerBuilder.RegisterModule(new CommonModule(configuration));
-			containerBuilder.RegisterModule(new RuleSetModule(configuration, perLifeTimeScope));
+			containerBuilder.RegisterModule(new CommonModule(configuration))
+				.RegisterModule(new RuleSetModule(configuration, perLifeTimeScope));
 			var wsRs = createRuleset(false);
-
+			var callback = new WorkShiftAddStopperCallback();
 			using (var container = containerBuilder.Build())
 			{
 				using (var inner1 = container.BeginLifetimeScope())
 				{
 					var projSvc = inner1.Resolve<IRuleSetProjectionEntityService>();
-					Assert.AreNotSame(projSvc.ProjectionCollection(wsRs, _callback), projSvc.ProjectionCollection(wsRs, _callback));
+					Assert.AreNotSame(projSvc.ProjectionCollection(wsRs, callback), projSvc.ProjectionCollection(wsRs, callback));
 				}
 			}
 		}
