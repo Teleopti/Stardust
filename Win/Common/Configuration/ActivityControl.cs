@@ -242,7 +242,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			_sourceList.Clear();
 			var activityRepository = new ActivityRepository(uow);
-			_sourceList.Add(GridType.Activity, activityRepository.LoadAllWithUpdatedBy().Where(a => a.IsOutboundActivity == false));
+			_sourceList.Add(GridType.Activity, activityRepository.LoadAllWithUpdatedBy().Where(a => a.IsOutboundActivity == false).ToList());
 		}
 
 		private List<T> getSource<T>(GridType gridType)
