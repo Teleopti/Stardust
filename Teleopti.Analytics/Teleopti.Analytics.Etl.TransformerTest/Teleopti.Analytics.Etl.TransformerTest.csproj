@@ -181,7 +181,6 @@
     <Compile Include="ScheduleForecastSkillResourceCalculationTest.cs" />
     <Compile Include="ScheduleForecastSkillTest.cs" />
     <Compile Include="SchedulePreferenceTransformerTest.cs" />
-    <Compile Include="UserTransformerTest.cs" />
     <Compile Include="FakeData\KpiTargetTeamFactory.cs" />
     <Compile Include="KpiTargetTeamTransformerTest.cs" />
     <Compile Include="FakeData\ScheduleFactory.cs" />

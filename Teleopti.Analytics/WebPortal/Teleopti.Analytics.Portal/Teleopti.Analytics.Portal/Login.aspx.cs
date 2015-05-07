@@ -46,7 +46,6 @@ namespace Teleopti.Analytics.Portal
 					// Windows authentication in web.config AND we get a flag 
 					// telling that we should not force a forms authentication.
 
-					// Get user from aspnet_Users
 					var winUser = Request.ServerVariables["LOGON_USER"];
 					var tenantLogon = new TenantLogin();
 					var result =

@@ -29,8 +29,6 @@ BEGIN
 	DELETE FROM mart.bridge_skillset_skill
 	DELETE FROM mart.v_permission_report
 	DELETE FROM mart.scorecard_kpi
-	DELETE FROM dbo.aspnet_Membership
-	DELETE FROM dbo.aspnet_Users
 	DELETE FROM mart.bridge_acd_login_person
 	DELETE FROM mart.bridge_group_page_person
 

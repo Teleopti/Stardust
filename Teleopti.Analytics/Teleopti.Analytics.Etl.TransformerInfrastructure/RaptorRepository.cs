@@ -912,12 +912,6 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			return HelperFunctions.BulkInsert(dataTable, "stage.stg_user", _dataMartConnectionString);
 		}
 
-		public int FillAspNetUsersDataMart()
-		{
-			return
-				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_aspnet_users_load", null,
-											  _dataMartConnectionString);
-		}
 
 		public int SynchronizeQueues(IList<IQueueSource> matrixQueues)
 		{

@@ -249,7 +249,6 @@
     <Compile Include="SchedulePreferenceTransformer.cs" />
     <Compile Include="ScheduleThreading\TimeInfo.cs" />
     <Compile Include="ScheduleThreading\TimeInfoObject.cs" />
-    <Compile Include="UserTransformer.cs" />
     <Compile Include="ScheduleDayOffCountTransformer.cs" />
     <Compile Include="ScheduleThreading\DayAbsenceDataRowFactory.cs" />
     <Compile Include="ScheduleThreading\IScheduleDataRowCollectionFactory.cs" />
