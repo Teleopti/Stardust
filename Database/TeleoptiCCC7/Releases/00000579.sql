@@ -10,7 +10,7 @@
 
     CREATE table #minid(id uniqueidentifier, foreignid nvarchar(100) COLLATE database_default   )
             INSERT INTO #minid
-            SELECT MIN(id), d.foreignid  FROM ApplicationFunction f
+            SELECT min(convert(varchar(100),id)), d.foreignid  FROM ApplicationFunction f
             INNER JOIN #double d ON f.ForeignId = d.foreignid
             GROUP BY d.foreignid
 
