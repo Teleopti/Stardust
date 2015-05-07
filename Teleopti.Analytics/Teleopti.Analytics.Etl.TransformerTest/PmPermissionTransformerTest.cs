@@ -76,7 +76,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 
 			var userDtoCollection = _target.GetUsersWithPermissionsToPerformanceManager(new List<IPerson> { person }, _permissionExtractor, _unitOfWorkFactory);
 			_mocks.VerifyAll();
-			Assert.AreEqual(1, userDtoCollection[0].AccessLevel);
+			Assert.AreEqual(81, userDtoCollection[0].AccessLevel);
 		}
 
 		[Test]
@@ -91,7 +91,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 			var userDtoCollection = _target.GetUsersWithPermissionsToPerformanceManager(new List<IPerson> { person }, _permissionExtractor, _unitOfWorkFactory);
 			_mocks.VerifyAll();
 
-			Assert.AreEqual(2, userDtoCollection[0].AccessLevel);
+			Assert.AreEqual(85, userDtoCollection[0].AccessLevel);
 		}
 
 		[Test]
@@ -134,7 +134,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 			_mocks.VerifyAll();
 
 			Assert.AreEqual(1, users.Count);
-			Assert.AreEqual(2, users[0].AccessLevel); // AccessLevel = 2 is Create
+			Assert.AreEqual(85, users[0].AccessLevel); // AccessLevel = 2 is Create
 		}
 	}
 }
