@@ -2,7 +2,7 @@
 
 namespace Teleopti.Ccc.Domain.Aop
 {
-	public class ReadModelUnitOfWorkAttribute : ResolvedAspectAttribute
+	public class ReadModelUnitOfWorkAttribute : AspectAttribute
 	{
 		public ReadModelUnitOfWorkAttribute()
 			: base(typeof(IReadModelUnitOfWorkAspect))

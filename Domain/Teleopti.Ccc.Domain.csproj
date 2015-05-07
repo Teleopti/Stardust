@@ -141,6 +141,7 @@
     <Compile Include="AgentInfo\Requests\ShiftExchangeOffer.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeRequestIsAfterLoadedPeriodSpecification.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeStatusExtensions.cs" />
+    <Compile Include="Aop\Core\AspectAttribute.cs" />
     <Compile Include="Aop\Core\IInvocationInfo.cs" />
     <Compile Include="Aop\ILogAspect.cs" />
     <Compile Include="Aop\ILogManagerWrapper.cs" />
@@ -387,7 +388,6 @@
     <Compile Include="ApplicationLayer\SyncEventsPublisher.cs" />
     <Compile Include="ApplicationLayer\SyncPublishTo.cs" />
     <Compile Include="ApplicationLayer\TrackingMessageSender.cs" />
-    <Compile Include="Aop\Core\AspectAttribute.cs" />
     <Compile Include="Auditing\AuditSetting.cs" />
     <Compile Include="Auditing\LoginAttemptModel.cs" />
     <Compile Include="Auditing\Revision.cs" />
@@ -574,10 +574,7 @@
     <Compile Include="Forecasting\SkillMap_DEV.cs" />
     <Compile Include="Forecasting\StaffingCalculatorServiceFacade.cs" />
     <Compile Include="Aop\Core\IAspect.cs" />
-    <Compile Include="Aop\Core\IAspectAttribute.cs" />
-    <Compile Include="Aop\Core\IOrderedAspect.cs" />
-    <Compile Include="Aop\Core\IResolvedAspect.cs" />
-    <Compile Include="Aop\Core\IResolvedAspectAttribute.cs" />
+    <Compile Include="Aop\Core\IAttributeForAspect.cs" />
     <Compile Include="Aop\IReadModelUnitOfWorkAspect.cs" />
     <Compile Include="GenericDisposable.cs" />
     <Compile Include="Helper\DateExtensions.cs" />
@@ -855,7 +852,6 @@
     <Compile Include="Repositories\IGlobalSettingDataRepository.cs" />
     <Compile Include="Repositories\Paging.cs" />
     <Compile Include="Repositories\TimeFilterInfo.cs" />
-    <Compile Include="Aop\Core\ResolvedAspectAttribute.cs" />
     <Compile Include="ResourceCalculation\DayOffsInPeriodCalculator.cs" />
     <Compile Include="ResourceCalculation\FairnessAndMaxSeatCalculatorsManager.cs" />
     <Compile Include="ResourceCalculation\FairnessAndMaxSeatCalculatorsManager28317.cs" />

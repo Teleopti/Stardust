@@ -3,7 +3,6 @@ using System.Linq;
 using Autofac;
 using Castle.DynamicProxy;
 using Teleopti.Ccc.Domain.Aop.Core;
-using Teleopti.Ccc.Domain.Collection;
 
 namespace Teleopti.Ccc.Infrastructure.Aop
 {
@@ -18,25 +17,17 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 
 		public void Intercept(IInvocation invocation)
 		{
-			var orderedAspects = from a in invocation.Method.GetCustomAttributes(false)
-			                     let orderedAspect = a as IOrderedAspect
-			                     where orderedAspect != null
-			                     orderby orderedAspect.Order
-			                     select orderedAspect;
+			var aspects = (
+				from IAttributeForAspect attribute in invocation.Method.GetCustomAttributes(typeof (IAttributeForAspect), false) 
+				select (IAspect) _resolver.Resolve(attribute.AspectType)
+				)
+				.ToList();
 
-			var aspects = from a in orderedAspects
-			              let aspect = a as IAspect
-			              let resolvedAspect = a as IResolvedAspect
-			              let theResolvedAspect = resolvedAspect == null ? null : (IAspect) _resolver.Resolve(resolvedAspect.AspectType)
-			              let useAspect = aspect ?? theResolvedAspect
-			              select useAspect;
 
-			var array = aspects.ToArray();
-
-			if (array.Any())
+			if (aspects.Any())
 			{
 				var invocationInfo = new InvocationInfo(invocation);
-				array.ForEach(a => a.OnBeforeInvocation(invocationInfo));
+				aspects.ForEach(a => a.OnBeforeInvocation(invocationInfo));
 
 				Exception exception = null;
 				try
@@ -50,7 +41,7 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 				}
 				finally
 				{
-					array.Reverse().ForEach(a => a.OnAfterInvocation(exception, invocationInfo));
+					aspects.ForEach(a => a.OnAfterInvocation(exception, invocationInfo));
 				}
 			}
 			else

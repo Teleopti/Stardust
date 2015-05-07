@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using Autofac;
 using NUnit.Framework;
@@ -12,7 +11,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 	[TestFixture]
 	public class AspectsTest
 	{
-
 		private static IContainer setupContainer()
 		{
 			var builder = new ContainerBuilder();
@@ -25,11 +23,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 		[SetUp]
 		public void Setup()
 		{
-			ASimpleAspect.BeforeCallback = null;
-			ASimpleAspect.AfterCallback = null;
-			ASimpleAspect.AfterCallbackWithException = null;
-			AnotherAspect.BeforeCallback = null;
-			AnotherAspect.AfterCallback = null;
 			AResolvedAspect.BeforeCallback = null;
 			AResolvedAspect.AfterCallback = null;
 		}
@@ -39,9 +32,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 		{
 			var beforeInvoked = false;
 			var container = setupContainer();
-			ASimpleAspect.BeforeCallback = () => beforeInvoked = true;
+			AResolvedAspect.BeforeCallback = () => beforeInvoked = true;
 
-			container.Resolve<AspectedClass>().AspectedMethod();
+			container.Resolve<AspectedClass>().ResolvedAspectMethod();
 
 			beforeInvoked.Should().Be.True();
 		}
@@ -51,9 +44,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 		{
 			var afterInvokted = false;
 			var container = setupContainer();
-			ASimpleAspect.AfterCallback = () => afterInvokted = true;
+			AResolvedAspect.AfterCallback = () => afterInvokted = true;
 
-			container.Resolve<AspectedClass>().AspectedMethod();
+			container.Resolve<AspectedClass>().ResolvedAspectMethod();
 
 			afterInvokted.Should().Be.True();
 		}
@@ -66,35 +59,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 
 			var target = container.Resolve<AspectedClass>();
 			target.AspectedMethodCallback = () => methodInvoked = true;
-			target.AspectedMethod();
+			target.ResolvedAspectMethod();
 			
 			methodInvoked.Should().Be.True();
-		}
-
-		[Test]
-		public void ShouldInvokeAspectBeforeMethodsInOrder()
-		{
-			var callbacks = new List<int>();
-			var container = setupContainer();
-			ASimpleAspect.BeforeCallback = () => callbacks.Add(1);
-			AnotherAspect.BeforeCallback = () => callbacks.Add(2);
-
-			container.Resolve<AspectedClass>().OrderedAspectedMethod();
-
-			callbacks.Should().Have.SameSequenceAs(new[] {1, 2});
-		}
-
-		[Test]
-		public void ShouldInvokeAspectAfterMethodsInReverseOrder()
-		{
-			var callbacks = new List<int>();
-			var container = setupContainer();
-			ASimpleAspect.AfterCallback = () => callbacks.Add(1);
-			AnotherAspect.AfterCallback = () => callbacks.Add(2);
-
-			container.Resolve<AspectedClass>().OrderedAspectedMethod();
-
-			callbacks.Should().Have.SameSequenceAs(new[] {2, 1});
 		}
 
 		[Test]
@@ -123,11 +90,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 		public void ShouldThrowOnAspectException()
 		{
 			var container = setupContainer();
-			ASimpleAspect.BeforeCallback = () => { throw new FileNotFoundException(); };
+			AResolvedAspect.BeforeCallback = () => { throw new FileNotFoundException(); };
 
 			var target = container.Resolve<AspectedClass>();
 
-			Assert.Throws<FileNotFoundException>(target.AspectedMethod);
+			Assert.Throws<FileNotFoundException>(target.ResolvedAspectMethod);
 		}
 
 		[Test]
@@ -135,12 +102,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 		{
 			var afterInvoked = false;
 			var container = setupContainer();
-			ASimpleAspect.AfterCallback = () => afterInvoked = true;
+			AResolvedAspect.AfterCallback = () => afterInvoked = true;
 
 			var target = container.Resolve<AspectedClass>();
 			target.AspectedMethodCallback = () => { throw new FileNotFoundException(); };
 
-			Assert.Throws<FileNotFoundException>(target.AspectedMethod);
+			Assert.Throws<FileNotFoundException>(target.ResolvedAspectMethod);
 			afterInvoked.Should().Be.True();
 		}
 
@@ -150,12 +117,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 			Exception expected = new FileNotFoundException();
 			Exception actual = null;
 			var container = setupContainer();
-			ASimpleAspect.AfterCallbackWithException = e => actual = e;
+			AResolvedAspect.AfterCallbackWithException = e => actual = e;
 
 			var target = container.Resolve<AspectedClass>();
 			target.AspectedMethodCallback = () => { throw expected; };
 
-			Assert.Throws<FileNotFoundException>(target.AspectedMethod);
+			Assert.Throws<FileNotFoundException>(target.ResolvedAspectMethod);
 			actual.Should().Be.SameInstanceAs(expected);
 		}
 
@@ -163,66 +130,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 		{
 			public Action AspectedMethodCallback;
 
-			[ASimpleAspect]
-			public virtual void AspectedMethod() { if (AspectedMethodCallback != null) AspectedMethodCallback(); }
-
-			[AnotherAspect(Order = 2)]
-			[ASimpleAspect(Order = 1)]
-			public virtual void OrderedAspectedMethod() { }
-
 			[An]
 			public virtual void AttributedMethod() { }
 
 			[AResolvedAspect]
-			public virtual void ResolvedAspectMethod() { }
+			public virtual void ResolvedAspectMethod() { if (AspectedMethodCallback != null) AspectedMethodCallback(); }
 
 		}
 
-		public class ASimpleAspect : AspectAttribute
+		private class AnAttribute : Attribute
+		{
+		}
+
+		private class AResolvedAspect : AspectAttribute
 		{
 			public static Action BeforeCallback;
 			public static Action AfterCallback;
 			public static Action<Exception> AfterCallbackWithException;
-
-			public override void OnBeforeInvocation(IInvocationInfo invocation)
-			{
-				base.OnBeforeInvocation(invocation);
-				if (BeforeCallback != null) BeforeCallback();
-			}
-			public override void OnAfterInvocation(Exception exception, IInvocationInfo invocation)
-			{
-				base.OnAfterInvocation(exception, invocation);
-				if (AfterCallback != null) AfterCallback();
-				if (AfterCallbackWithException != null) AfterCallbackWithException(exception);
-			}
-		}
-
-		public class AnotherAspect : AspectAttribute
-		{
-			public static Action BeforeCallback;
-			public static Action AfterCallback;
-
-			public override void OnBeforeInvocation(IInvocationInfo invocation)
-			{
-				base.OnBeforeInvocation(invocation);
-				if (BeforeCallback != null) BeforeCallback();
-			}
-			public override void OnAfterInvocation(Exception exception, IInvocationInfo invocation)
-			{
-				base.OnAfterInvocation(exception, invocation);
-				if (AfterCallback != null) AfterCallback();
-			}
-		}
-
-		public class AnAttribute : Attribute
-		{
-			
-		}
-
-		public class AResolvedAspect : ResolvedAspectAttribute
-		{
-			public static Action BeforeCallback;
-			public static Action AfterCallback;
 
 			public AResolvedAspect() : base(typeof(TheResolvedAspect)) { }
 
@@ -236,6 +160,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 				public void OnAfterInvocation(Exception exception, IInvocationInfo invocation)
 				{
 					if (AfterCallback != null) AfterCallback();
+					if (AfterCallbackWithException != null) AfterCallbackWithException(exception);
 				}
 			}
 		}

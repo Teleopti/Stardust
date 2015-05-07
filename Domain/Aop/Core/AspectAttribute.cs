@@ -2,10 +2,13 @@ using System;
 
 namespace Teleopti.Ccc.Domain.Aop.Core
 {
-	public abstract class AspectAttribute : Attribute, IAspectAttribute
+	public abstract class AspectAttribute : Attribute, IAttributeForAspect
 	{
-		public int Order { get; set; }
-		public virtual void OnBeforeInvocation(IInvocationInfo invocation) { }
-		public virtual void OnAfterInvocation(Exception exception, IInvocationInfo invocation) { }
+		protected AspectAttribute(Type aspectType)
+		{
+			AspectType = aspectType;
+		}
+
+		public Type AspectType { get; set; }
 	}
 }

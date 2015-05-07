@@ -2,7 +2,7 @@ using System;
 
 namespace Teleopti.Ccc.Domain.Aop.Core
 {
-	public interface IResolvedAspect
+	public interface IAttributeForAspect
 	{
 		Type AspectType { get; }
 	}
