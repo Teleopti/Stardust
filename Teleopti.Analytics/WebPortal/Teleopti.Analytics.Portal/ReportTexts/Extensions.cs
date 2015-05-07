@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Teleopti.Analytics.ReportTexts
 {
-
 	public static class Extensions
 	{
 		public static string GetMonthResourceKey(this int month)
@@ -41,19 +37,17 @@ namespace Teleopti.Analytics.ReportTexts
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "WeekDay")]
-		public static string GetWeekDayResourceKey(this DayOfWeek weekdayNumber)
+		public static string GetWeekDayResourceKey(this DayOfWeek weekDayNumber)
 		{
-			var number = (int) weekdayNumber;
-			if (weekdayNumber == DayOfWeek.Sunday)
+			var number = (int) weekDayNumber;
+			if (weekDayNumber == DayOfWeek.Sunday)
 				number = 7;
 			return number.GetWeekDayResourceKey();
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "WeekDay")]
-		public static string GetWeekDayResourceKey(this int weekdayNumber)
+		public static string GetWeekDayResourceKey(this int weekDayNumber)
 		{
-			switch (weekdayNumber)
+			switch (weekDayNumber)
 			{
 				case 1:
 					return "ResDayOfWeekMonday";
@@ -72,7 +66,6 @@ namespace Teleopti.Analytics.ReportTexts
 				default:
 					return "";
 			}
-
 		}
 	}
 }
