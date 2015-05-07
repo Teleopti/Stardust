@@ -56,7 +56,7 @@ Scenario: Edit selected campaign
 	| Start Date | 2015-05-21 |
 	| End Date   | 2015-05-30 |
 
-@ignore
+
 Scenario: Delete selected campaign
 	When I view outbound
 	And I delete 'Campaign1' from campaign list

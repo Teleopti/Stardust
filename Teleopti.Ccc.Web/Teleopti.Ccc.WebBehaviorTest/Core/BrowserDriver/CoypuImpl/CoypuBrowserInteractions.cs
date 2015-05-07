@@ -78,9 +78,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 			_browser.FindCss(selector, options()).SendKeys(Keys.Enter);
 		}
 
-		public void HoverOver(string selector)
+		public void HoverOver(string selector, string value)
 		{
-			_browser.FindCss(selector, options()).Hover();
+			if (string.IsNullOrWhiteSpace(value))
+			{
+				_browser.FindCss(selector, options()).Hover();
+			}
+			else
+			{
+				_browser.FindCss(selector, value).Hover();
+			}			
 		}
 
 

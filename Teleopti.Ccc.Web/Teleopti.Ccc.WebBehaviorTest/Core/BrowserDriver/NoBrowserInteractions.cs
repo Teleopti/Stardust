@@ -45,10 +45,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 			throw new NotImplementedException();
 		}
 
-		public void HoverOver(string selector)
+		public void HoverOver(string selector, string value)
 		{
 			throw new NotImplementedException();
-		}
+		}		
 
 		public void AssertExists(string selector)
 		{

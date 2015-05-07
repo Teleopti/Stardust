@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
@@ -62,18 +63,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 		[When(@"I delete '(.*)' from campaign list")]
 		public void WhenIDeleteFromCampaignList(string campaignName)
 		{
-			Browser.Interactions.HoverOver(string.Format(".campaign-list li:contains(\"{0}\")", campaignName));
-			Browser.Interactions.ClickContaining(string.Format(".campaign-list li:contains(\"{0}\") i", campaignName), "Delete");
+			Browser.Interactions.HoverOver(".campaign-list li", campaignName);
+			Browser.Interactions.HoverOver(".campaign-list li .delete-campaign-toggle", "");			
+			Browser.Interactions.Click(".campaign-list .delete-campaign-toggle");
 			Browser.Interactions.ClickContaining(".modal-box a", "AGREE");
 		}
 
 		[Then(@"I should not see '(.*)' in campaign list")]
 		public void ThenIShouldNotSeeInCampaignList(string campaignName)
 		{
-			var script = @" var elem = angular.element(document.getElementsByClassName('campaign-details')[0]);" +
-			             @"return elem.find('li').length; ";
-
-			Browser.Interactions.AssertJavascriptResultContains(script, "1");
+			Browser.Interactions.AssertNoContains(".campaign-list li", ".campaign-list li", campaignName);
 		}
 
 
