@@ -36,13 +36,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldLoadPersonsWithMultipleCriteria()
 		{
 			var criterias = new Dictionary<PersonFinderField, string>();
-			criterias.Add(PersonFinderField.FirstName,"ashley");
-			criterias.Add(PersonFinderField.Role,"agent");
+			criterias.Add(PersonFinderField.FirstName,"Ashley");
+			criterias.Add(PersonFinderField.Role,"Agent");
 			var crit = new PersonFinderSearchCriteria(criterias, 10,
 															 new DateOnly(2012, 1, 1), 1, 1);
 			_target = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.CurrentUnitOfWork());
 			_target.Find(crit);
 			Assert.That(crit.TotalRows, Is.EqualTo(1));
+		}
+
+		[Test]
+		public void ShouldLoadPersonsWithOneWordQuotation()
+		{
+			var crit = new PersonFinderSearchCriteria(PersonFinderField.All, "\"Direct Sales\"", 10,
+				new DateOnly(2016, 1, 1), 1, 1);
+			_target = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.CurrentUnitOfWork());
+			_target.Find(crit);
+			Assert.That(crit.TotalRows, Is.EqualTo(2));
 		}
 
 	    [Test]
@@ -115,6 +125,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			    "Insert into [ReadModel].[FindPerson](PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType)" +
 			    " Values ('11610FE4-0130-4568-97DE-9B5E015B2564','Ashley','Andeen','137545','',NULL,'Direct Sales','Skill');")
 			    .ExecuteUpdate();
+			Session.CreateSQLQuery(
+				"Insert into [ReadModel].[FindPerson](PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType)" +
+				" Values ('11610FE4-0130-4568-97DE-9B5E05412741','Ashley Pierre','Andeen','137545','',NULL,'Direct Sales','Skill');")
+				.ExecuteUpdate();
 
 	    }
     }

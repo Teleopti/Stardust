@@ -6,8 +6,8 @@ Feature: AdvancedSearch
 
 	Background: 
 	Given there is a site named 'London'
-	And there is a team named 'Team1' on site 'London'
-	And there is a team named 'Team2' on site 'London'
+	And there is a team named 'Team Red' on site 'London'
+	And there is a team named 'Team Blue' on site 'London'
 	And I have a role with
 	 | Field              | Value       |
 	 | Name               | Team leader |
@@ -15,27 +15,27 @@ Feature: AdvancedSearch
 	 | Access to people   | true        |
 	And Ashley Andeen has a person period with
 	 | Field      | Value      |
-	 | Team       | Team1      |
+	 | Team       | Team Red   |
 	 | Start Date | 2015-01-21 |
 	And Ashley Smith has a person period with
 	 | Field      | Value      |
-	 | Team       | Team2      |
+	 | Team       | Team Blue      |
 	 | Start Date | 2015-01-21 |
 	And I have a person period with
 	 | Field      | Value      |
-	 | Team       | Team1      |
+	 | Team       | Team Red      |
 	 | Start Date | 2015-01-21 |
 
 Scenario: match all search terms by default
 	When I view people
-	And I search people with keyword 'Team1 Ashley'
+	And I search people with keyword 'Red Ashley'
 	Then I should see 'Ashley Andeen' in people list
 	And I should not see 'Ashley Smith' in people list
 
 @ignore
 Scenario: match any search term
 	When I view people
-	And I search people with keyword 'Team1 Smith' matching any keywords
+	And I search people with keyword 'Red Smith' matching any keywords
 	Then I should see 'Ashley Andeen' in people list
 	And I should see 'Ashley Smith' in people list
 
@@ -52,14 +52,13 @@ Scenario: match all search terms in different fields
 	And I search with
 	| Field        | Value        |
 	| last name    | Andeen Smith |
-	| organization | Team1        |
+	| organization | Red        |
 	Then I should see 'Ashley Andeen' in people list
-
 @ignore
 Scenario: match entire quoted search term
 	When I view people
-	And I search people with keyword '"Team1 Smith"'
-	Then I should see no result
+	And I search people with keyword '"Team Red" Smith'
+	Then I should see 'Ashley Smith' in people list
 
 @ignore
 Scenario: match entire quoted search term in different fields
@@ -67,5 +66,5 @@ Scenario: match entire quoted search term in different fields
 	And I search with
 	| Field        | Value          |
 	| last name    | "Andeen Smith" |
-	| organization | Team1          |
+	| organization | Red          |
 	Then I should see no result

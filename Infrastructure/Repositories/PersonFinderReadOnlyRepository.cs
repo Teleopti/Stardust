@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
@@ -19,19 +21,39 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             _currentUnitOfWork = currentUnitOfWork;
         }
+	    
+		private IEnumerable<string> parse(string searchValue)
+		{
+			const string quotePattern = "(\"[^\"]*?\")";
 
-	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider",
-		    MessageId = "System.String.Format(System.String,System.Object[])"),
-	     System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design",
-		     "CA1062:Validate arguments of public methods", MessageId = "0")]
+			var notParsedSearchValue = Regex.Replace(searchValue, quotePattern, " $1 ");
+			notParsedSearchValue = Regex.Replace(notParsedSearchValue, " {2,}", " ");
+
+			const string splitPattern = "(?<!\"[^ ]+) (?![^ ]+\")";
+			var result = Regex.Split(notParsedSearchValue, splitPattern)
+			 .Select(x => x.Replace("\"", "").Trim())
+			 .Where(x => !string.IsNullOrEmpty(x)).ToList();
+
+			return new HashSet<string>(result);
+		}
 
 	    private string createSearchString(IDictionary<PersonFinderField, string> criterias)
 	    {
 		    var builder = new StringBuilder();
+		    
 		    foreach (var criteria in criterias)
 		    {
-				var valuesSplittedBysemicolon = criteria.Value.Replace(" ", ";");
-				builder.AppendFormat("{0}:{1},", criteria.Key, valuesSplittedBysemicolon);
+				var valueSplittedWithSemicolon = "";
+			    parse(criteria.Value).ForEach(s =>
+			    {
+				    valueSplittedWithSemicolon = string.Concat(valueSplittedWithSemicolon, s, ";");
+			    });
+			    if (valueSplittedWithSemicolon.EndsWith(";"))
+			    {
+				    valueSplittedWithSemicolon = valueSplittedWithSemicolon.TrimEnd(new[] {';'});
+			    }
+
+				builder.AppendFormat("{0}:{1},", criteria.Key, valueSplittedWithSemicolon);
 		    }
 
 		    var searchString = builder.ToString();
@@ -43,6 +65,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		    return searchString;
 	    }
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider",
+			MessageId = "System.String.Format(System.String,System.Object[])"),
+		 System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design",
+			 "CA1062:Validate arguments of public methods", MessageId = "0")]
 	    public void Find(IPersonFinderSearchCriteria personFinderSearchCriteria)
         {
 			personFinderSearchCriteria.TotalRows = 0;
