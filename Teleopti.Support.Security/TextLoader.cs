@@ -5,13 +5,19 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.Reflection;
 using System.Resources;
+using log4net;
 
-namespace Teleopti.Ccc.Web.Core.Startup
+namespace Teleopti.Support.Security
 {
 	public class TextLoader
 	{
-		public static void LoadAllTextsToDatabase(string connectionString)
+		private static readonly ILog log = LogManager.GetLogger(typeof(Program));
+
+		public static int LoadAllTextsToDatabase(string connectionString)
 		{
+			var dataTable = new DataTable();
+			AddColumnsToTable(dataTable);
+
 			using (var connection = new SqlConnection())
 			{
 				// Get the ResourceManager
@@ -25,8 +31,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				CultureInfo enlishInfo = CultureInfo.CreateSpecificCulture("en");
 				var englishResorces = rm.GetResourceSet(enlishInfo, true, true);
 				//for each culture and string load to database
-				var dataTable = new DataTable();
-				AddColumnsToTable(dataTable);
+				
 				foreach (var s in stringArray)
 				{
 					CultureInfo info = CultureInfo.CreateSpecificCulture(s);
@@ -53,6 +58,9 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				sqlCommand.ExecuteNonQuery();
 				doBulkCopy(connectionString, dataTable);
 			}
+			var rowsAffected = dataTable.Rows.Count;
+			log.Debug("inserted " + rowsAffected + " report text rows.");
+			return rowsAffected;
 		}
 
 		private static void doBulkCopy(string connectionString, DataTable dataTable)

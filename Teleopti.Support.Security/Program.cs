@@ -12,11 +12,12 @@ namespace Teleopti.Support.Security
 	class Program
 	{
 		private static readonly ICommandLineCommand PasswordEncryption = new PasswordEncryption();
-        private static readonly ICommandLineCommand ForecasterDateAdjustment = new ForecasterDateAdjustment();
-        private static readonly ICommandLineCommand PersonFirstDayOfWeekSetter = new PersonFirstDayOfWeekSetter();
-        private static readonly ICommandLineCommand LicenseStatusChecker = new LicenseStatusChecker();
+		private static readonly ICommandLineCommand ForecasterDateAdjustment = new ForecasterDateAdjustment();
+		private static readonly ICommandLineCommand PersonFirstDayOfWeekSetter = new PersonFirstDayOfWeekSetter();
+		private static readonly ICommandLineCommand LicenseStatusChecker = new LicenseStatusChecker();
 		private static readonly ICommandLineCommand CrossDatabaseViewUpdate = new CrossDatabaseViewUpdate();
 		private static readonly ICommandLineCommand DelayedDataConvert = new DelayedDataConvert();
+		private static readonly ICommandLineCommand reportTextCommand = new ReportTextsCommand();
 		private static readonly ILog log = LogManager.GetLogger(typeof(Program));
 
 		static void Main(string[] args)
@@ -33,6 +34,7 @@ namespace Teleopti.Support.Security
 				var commandLineArgument = new CommandLineArgument(args);
 				if (!string.IsNullOrEmpty(commandLineArgument.AggDatabase))
 				{
+					reportTextCommand.Execute(commandLineArgument);
 					CrossDatabaseViewUpdate.Execute(commandLineArgument);
 					DelayedDataConvert.Execute(commandLineArgument);
 				}
@@ -52,11 +54,11 @@ namespace Teleopti.Support.Security
 			{
 				handleError(e);
 			}
-			
+
 			Thread.Sleep(TimeSpan.FromSeconds(3));
 			log.Debug("Teleopti.Support.Security successful");
 			Environment.ExitCode = 0;
-        }
+		}
 
 		private static void initAuditData(CommandLineArgument commandLineArgument)
 		{
@@ -130,7 +132,7 @@ namespace Teleopti.Support.Security
 					i++; ;
 					if ((i % 1000) == 0)
 					{
-						log.Debug("   agents left: " + (counter-i));
+						log.Debug("   agents left: " + (counter - i));
 					}
 				}
 			}
