@@ -15,8 +15,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     {
         private IPersonFinderReadOnlyRepository _target;
 
-	    [SetUp]
-	    public void SetUp()
+		[SetUp]
+		public void Setup()
 	    {
 			createAndSaveReadModel();
 			UnitOfWork.PersistAll();
