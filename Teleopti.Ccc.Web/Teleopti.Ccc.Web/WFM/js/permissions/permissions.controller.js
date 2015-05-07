@@ -1,8 +1,8 @@
 ﻿'use strict';
 
-var permissions = angular.module('wfm.permissions',[]);
+var permissions = angular.module('wfm.permissions', []);
 permissions.controller('PermissionsCtrl', [
-	'$scope', '$filter', 'Permissions',
+	'$scope', '$filter', 'Permissions', 
 	function ($scope, $filter, Permissions) {
 		$scope.roles = [];
 		$scope.list = [];
@@ -13,6 +13,11 @@ permissions.controller('PermissionsCtrl', [
 		$scope.dataFlat = [];
 		$scope.selectedRole = {};
 		$scope.organization = { BusinessUnit: [{ BusinessUnit: { Sites: [] } }], DynamicOptions: [] };
+		$scope.selectedFunctionsToggle = false;
+		$scope.selectedDataToggle = false;
+		$scope.unselectedFunctionsToggle = false;
+		$scope.unselectedDataToggle = false;
+
 
 		$scope.roles = Permissions.roles.get();
 		Permissions.organizationSelections.query().$promise.then(function (result) {
@@ -21,8 +26,8 @@ permissions.controller('PermissionsCtrl', [
 		});
 
 		Permissions.applicationFunctions.query().$promise.then(function (result) {
+			parseFunctions(result, [], $scope.nmbFunctionsTotal);
 			$scope.functionsDisplayed = result;
-			flatFunctions($scope.functionsDisplayed);
 		});
 
 
@@ -49,14 +54,16 @@ permissions.controller('PermissionsCtrl', [
 			});
 		};
 
-		$scope.toggleFunctionForRole = function (functionNode) {
+		$scope.toggleFunctionForRole = function (functionNode, parentNode) {
 			if (functionNode.selected) {
 				Permissions.deleteFunction.query({ Id: $scope.selectedRole, FunctionId: [functionNode.FunctionId] }).$promise.then(function (result) {
 					functionNode.selected = false;
+					if (parentNode) parentNode.nmbSelectedChildren--; 
 				});
 			} else {
 				Permissions.postFunction.query({ Id: $scope.selectedRole, Functions: [functionNode.FunctionId] }).$promise.then(function (result) {
 					functionNode.selected = true;
+					if (parentNode) parentNode.nmbSelectedChildren++;
 				});
 			}
 		};
@@ -122,12 +129,8 @@ permissions.controller('PermissionsCtrl', [
 				var permsFunc = result.AvailableFunctions;
 				var permsData = result.AvailableBusinessUnits.concat(result.AvailableSites.concat(result.AvailableTeams));
 				$scope.dynamicOptionSelected = result.AvailableDataRange;
-				
-
-				$scope.functionsFlat.forEach(function (item) {
-					var availableFunctions = $filter('filter')(permsFunc, { Id: item.FunctionId });
-					item.selected = availableFunctions.length != 0 ? true : false;
-				});
+	
+				parseFunctions($scope.functionsDisplayed, permsFunc);
 
 				$scope.dataFlat.forEach(function (item) {
 					var availableData = $filter('filter')(permsData, { Id: item.Id });
@@ -137,12 +140,32 @@ permissions.controller('PermissionsCtrl', [
 		};
 
 		var flatFunctions = function (functionTab) {
+			var parentId = functionTab.FunctionId;
 			functionTab.forEach(function (item) {
+				item.parentId = parentId;
 				$scope.functionsFlat.push(item);
 				if (item.ChildFunctions.length != 0) {
 					flatFunctions(item.ChildFunctions);
 				}
 			});
+		};
+
+		var parseFunctions = function (functionTab, selectedFunctions, parentNode) {
+			var selectedChildren = 0;
+			functionTab.forEach(function (item) { 
+				var availableFunctions = $filter('filter')(selectedFunctions, { Id: item.FunctionId });
+				item.selected = false;
+				if (availableFunctions.length != 0) {
+					item.selected = true;
+					selectedChildren++;
+				}
+				if (item.ChildFunctions.length != 0) { 
+					parseFunctions(item.ChildFunctions, selectedFunctions, item);
+				}
+			});
+			if (parentNode) {
+				parentNode.nmbSelectedChildren = selectedChildren;
+			}
 		};
 
 		var flatData = function (dataTab) {
@@ -153,6 +176,7 @@ permissions.controller('PermissionsCtrl', [
 				}
 			});
 		};
-
+		
 	}]
 );
+

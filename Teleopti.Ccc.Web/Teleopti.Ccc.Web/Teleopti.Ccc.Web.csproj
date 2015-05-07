@@ -1229,6 +1229,7 @@
     <Content Include="Areas\Reporting\Views\Report\NoPermission.cshtml" />
     <Content Include="WFM\js\outbound\outbound.directive.js" />
     <None Include="WFM\css\_forecasting.scss" />
+    <Content Include="WFM\js\permissions\permissions.filters.js" />
     <Content Include="WFM\js\seatManagement\fabric.fix.js" />
     <Content Include="WFM\js\seatManagement\html\imageLoadWithPreview.html" />
     <Content Include="WFM\js\seatManagement\html\seatmapeditor.html" />
@@ -1237,6 +1238,7 @@
     <Content Include="WFM\js\seatManagement\seatmapedit.directive.js" />
     <Content Include="WFM\js\people\template\advancedPeopleSearch.html" />
     <Content Include="WFM\tests\forecasting\forecasting.controller.spec.js" />
+    <Content Include="WFM\tests\permissions\permissions.filter.spec.js" />
     <Content Include="WFM\tests\search\search.controller.spec.js" />
     <Content Include="WFM\vendor\c3\c3-angular.min.js" />
     <Content Include="WFM\vendor\c3\c3.min.css" />

@@ -75,7 +75,7 @@
 									</div>
 									<div class="col-md-4">
 										<div class="wfm-switch permissions-tree-switch">
-											<input type="checkbox" id="switch1" ng-model="checked" ng-click="node.show = true" />
+											<input type="checkbox" id="switch1" ng-model="selectedFunctionsToggle" ng-click="node.show = true" />
 											<label for="switch1">
 												<span class="wfm-switch-label" translate>SelectedItems</span>
 												<span class="wfm-switch-toggle"></span>
@@ -83,7 +83,7 @@
 										</div>
 
 										<div class="wfm-switch permissions-tree-switch">
-											<input type="checkbox" id="switch2" />
+											<input type="checkbox" id="switch2" ng-model="unselectedFunctionsToggle" />
 											<label for="switch2">
 												<span class="wfm-switch-label" translate>NotSelectedItems</span>
 												<span class="wfm-switch-toggle"></span>
@@ -95,7 +95,7 @@
 								<div class="tree permissions-tree">
 									<div ui-tree data-drag-enabled="false">
 										<ol ui-tree-nodes="" ng-model="functionsDisplayed" id="tree-root" class="tree-line" toggle-focus>
-											<li ng-repeat="node in functionsDisplayed | filter:searchPermissions" ui-tree-node ng-include="'nodes_renderer.html'"></li>
+											<li ng-repeat="node in functionsDisplayed | filter:searchPermissions  | filter:searchPermissions | selectedFunctions:selectedFunctionsToggle | unselectedFunctions:unselectedFunctionsToggle" ui-tree-node ng-include="'nodes_renderer.html'"></li>
 										</ol>
 									</div>
 								</div>
@@ -117,14 +117,14 @@
 									</div>
 									<div class="col-md-4">
 										<div class="wfm-switch permissions-tree-switch">
-											<input type="checkbox" id="switch3" />
+											<input type="checkbox" id="switch3" ng-model="selectedDataToggle" />
 											<label for="switch3">
 												<span class="wfm-switch-label" translate>SelectedItems</span>
 												<span class="wfm-switch-toggle"></span>
 											</label>
 										</div>
 										<div class="wfm-switch permissions-tree-switch">
-											<input type="checkbox" id="switch4" />
+											<input type="checkbox" id="switch4" ng-model="unselectedDataToggle" />
 											<label for="switch4">
 												<span class="wfm-switch-label" translate>NotSelectedItems</span>
 												<span class="wfm-switch-toggle"></span>
@@ -167,27 +167,28 @@
 
 
 
-<!-- Nested node template -->
+<!-- Nested node template for functions -->
 <script type="text/ng-template" id="nodes_renderer.html">
-	<div class="tree-toggle-group">
+	<div class="tree-toggle-group" >
 		<div class="toggle-handle" ng-class="{open: node.show}" ng-click="node.show = !node.show"><i ng-show="node.ChildFunctions.length > 0" class="mdi mdi-chevron-right"></i></div>
-		<div ui-tree-handle class="ui-tree-handle" ng-class="{selected: node.selected}" ng-click="toggleFunctionForRole(node)" ng-hide="checked">
+		<div ui-tree-handle class="ui-tree-handle" ng-class="{selected: node.selected}" ng-click="toggleFunctionForRole(node)">
 			{{node.LocalizedFunctionDescription}}
 			<span><i class="mdi mdi-check"></i></span>
 		</div>
 	</div>
 
-	<ol ui-tree-nodes="" ng-model="node.ChildFunctions" ng-show="node.show">
-		<li ng-repeat="node in node.ChildFunctions | filter:searchPermissions" ui-tree-node ng-include="'nodes_renderer.html'">
+	<ol ui-tree-nodes="" ng-model="node.ChildFunctions" ng-show="node.show" >
+		<li ng-repeat="node in node.ChildFunctions | filter:searchPermissions | selectedFunctions:selectedFunctionsToggle | unselectedFunctions:unselectedFunctionsToggle" 
+				ui-tree-node ng-include="'nodes_renderer.html'">
 		</li>
 	</ol>
 </script>
 
-<!-- Nested node template -->
+<!-- Nested node template for data -->
 <script type="text/ng-template" id="nodes_bu_renderer.html">
 	<div class="tree-toggle-group">
 		<div class="toggle-handle" ng-class="{open: node.show}" ng-click="node.show = !node.show"><i ng-show="node.ChildNodes.length > 0" class="mdi mdi-chevron-right"></i></div>
-		<div ui-tree-handle class="ui-tree-handle" ng-class="{selected: node.selected}" ng-click="toggleOrganizationSelection(node)" ng-hide="checked">
+		<div ui-tree-handle class="ui-tree-handle" ng-class="{selected: node.selected}" ng-click="toggleOrganizationSelection(node)" ng-hide="selectedDataToggle">
 			{{node.Name}}
 			<span><i class="mdi mdi-check"></i></span>
 		</div>

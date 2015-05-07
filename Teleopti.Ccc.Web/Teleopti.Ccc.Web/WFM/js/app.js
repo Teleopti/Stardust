@@ -33,7 +33,8 @@ var wfm = angular.module('wfm', [
 	'ui.grid.autoResize',
 	'ui.grid.exporter',
 	'ui.grid.selection',
-	'wfm.rta'
+	'wfm.rta',
+	'permissionsFilters'
 ]);
 wfm.config([
 	'$stateProvider', '$urlRouterProvider', '$translateProvider', function ($stateProvider, $urlRouterProvider, $translateProvider) {
