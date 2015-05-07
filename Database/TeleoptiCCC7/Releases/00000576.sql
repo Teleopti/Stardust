@@ -2,6 +2,7 @@
 --Name: David
 --Desc: bug #33307 - database CPU and IO load is too high. Table scan
 ---------------- 
+/* AF: Ouch, does not work on Azure... Will fix.
 --Only apply if CIX does not already exist (delivered add-hoc/manually by Service Desk)
 IF NOT EXISTS (
 	SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[PreferenceDay]')
@@ -66,3 +67,4 @@ BEGIN
 	DROP TABLE [dbo].[PreferenceDay_old]
 END
 GO
+*/
