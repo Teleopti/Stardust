@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		//TODO: tenant move these to applicationlogoninfo
 		public virtual string ApplicationLogonName { get; protected set; }
 		//make private when oldschema is gone!
-		public virtual string Password { get; protected set; }
+		public virtual string ApplicationLogonPassword { get; protected set; }
 		//
 		public virtual string Identity { get; protected set; }
 
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		{
 			checkPasswordStrength.Validate(newPassword);
 			//todo: tenant get rid of domain dependency here
-			Password = new OneWayEncryption().EncryptString(newPassword);
+			ApplicationLogonPassword = new OneWayEncryption().EncryptString(newPassword);
 		}
 	}
 }

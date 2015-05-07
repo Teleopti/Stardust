@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 				clearInvalidAttempts(utcNow);
 			}
 
-			var isValid = PersonInfo.Password.Equals(encryptedPassword);
+			var isValid = PersonInfo.ApplicationLogonPassword.Equals(encryptedPassword);
 			if (isValid)
 			{
 				clearInvalidAttempts(utcNow);

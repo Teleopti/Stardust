@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 			session.Flush();
 			session.Clear();
 			var loaded = session.Get<PersonInfo>(id);
-			loaded.Password.Should().Be.EqualTo(EncryptPassword.ToDbFormat(newPassword));
+			loaded.ApplicationLogonPassword.Should().Be.EqualTo(EncryptPassword.ToDbFormat(newPassword));
 			loaded.Id.Should().Be.EqualTo(id);
 		}
 

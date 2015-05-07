@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 			var target = new PersonInfoMapper(MockRepository.GenerateMock<IFindTenantByNameQuery>(), new CheckPasswordStrengthFake());
 			var result = target.Map(new PersonInfoModel {Password = RandomName.Make(), ApplicationLogonName = null});
 			result.ApplicationLogonName.Should().Be.Null();
-			result.Password.Should().Be.Null();
+			result.ApplicationLogonPassword.Should().Be.Null();
 		}
 
 		[Test]
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 			var target = new PersonInfoMapper(MockRepository.GenerateMock<IFindTenantByNameQuery>(), new CheckPasswordStrengthFake());
 			var result = target.Map(new PersonInfoModel { ApplicationLogonName = RandomName.Make(), Password = null});
 			result.ApplicationLogonName.Should().Be.Null();
-			result.Password.Should().Be.Null();
+			result.ApplicationLogonPassword.Should().Be.Null();
 		}
 
 		[Test]
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 			var password = RandomName.Make();
 			var target = new PersonInfoMapper(MockRepository.GenerateMock<IFindTenantByNameQuery>(), new CheckPasswordStrengthFake());
 			var result = target.Map(new PersonInfoModel { Password = password, ApplicationLogonName = RandomName.Make()});
-			result.Password.Should().Be.EqualTo(EncryptPassword.ToDbFormat(password));
+			result.ApplicationLogonPassword.Should().Be.EqualTo(EncryptPassword.ToDbFormat(password));
 		}
 
 		[Test]

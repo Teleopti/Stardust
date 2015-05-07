@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		public void ShouldFindPassword()
 		{
 			var result = target.Find(correctUserName);
-			result.Password.Should().Not.Be.Null();
+			result.ApplicationLogonPassword.Should().Not.Be.Null();
 		}
 
 

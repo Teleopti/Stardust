@@ -16,7 +16,7 @@
 		<join table="ApplicationAuthenticationInfo" fetch="join" optional="true">
 			<key column="Person"/>
 			<property name="ApplicationLogonName" />
-			<property name="Password" />
+			<property name="ApplicationLogonPassword" column="Password"/>
 		</join>
 
 		<join fetch="join" optional="true" table="UserDetail">

@@ -1,0 +1,1 @@
+sp_rename 'Tenant.PersonInfo.Password', 'ApplicationLogonPassword', 'column'
