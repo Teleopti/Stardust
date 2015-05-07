@@ -62,8 +62,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				.ForMember(d => d.TimeLineCulture, o => o.MapFrom(s => _loggedOnUser.Invoke().CurrentUser().PermissionInformation.Culture().ToString()))
 				.ForMember(d => d.TimeLine, o => o.ResolveUsing(s =>
 				{
-					var startTime = s.MinMaxTimeLineData.MinMaxTime.StartTime;
-					var endTime = s.MinMaxTimeLineData.MinMaxTime.EndTime;
+					var startTime = s.MinMaxTime.StartTime;
+					var endTime = s.MinMaxTime.EndTime;
 					var firstHour = startTime
 						.Subtract(new TimeSpan(0, 0, startTime.Minutes, startTime.Seconds, startTime.Milliseconds))
 						.Add(new TimeSpan(1, 0, 0));
@@ -77,11 +77,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 						.OrderBy(t => t)
 						.Distinct()
 						;
-
-					if (s.MinMaxTimeLineData.isContainsEndDateDST)
-					{
-						times = times.Concat(new[] { s.MinMaxTimeLineData.timespanDST }).OrderBy(t => t);
-					}
 
 					var diff = endTime - startTime;
 					return (from t in times
