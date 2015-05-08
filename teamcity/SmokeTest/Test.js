@@ -39,7 +39,7 @@ client.setValue('#Username-input', 'demo')
 	.waitForExist('.user-name', 120000, false, function(err, res, response) {
 		if (err || !res) {
 			log('failed to sign in first time. res: ' + res);
-			client.pause(5000);
+			//second try
 			client.url(webUrl)
 				.waitForExist('.user-name', 120000, false, function(err, res, response) {
 					if (err || !res) {
@@ -73,9 +73,26 @@ client.refresh()
 	});
 client.pause(5000);
 client.click('#Start-Check')
-	.waitForExist('#Bus-Results', 600000, false, function(err, res, response) {
+	.waitForExist('#Bus-Results', 300000, false, function(err, res, response) {
 		if (err || !res) {
-			closeAndThrow('service bus doesnot work well after trying 10 minutes. ' + err);
+			log('failed to check service bus before refresh page.');
+			//second try
+			client.refresh()
+				.waitForExist(".services li span", 300000, false, function(err, res, response) {
+					if (err || !res) {
+						closeAndThrow('service bus isnot up and running after trying 5 minutes. ' + err);
+					}
+				});
+			client.pause(5000);
+			
+			client.click('#Start-Check')
+				.waitForExist('#Bus-Results', 300000, false, function(err, res, response) {
+					if (err || !res) {
+						closeAndThrow('service bus doesnot work well after trying 10 minutes. ' + err);
+					}else{
+						log('service bus and broker work well');
+					}
+				});
 		}else{
 			log('service bus and broker work well');
 		}
