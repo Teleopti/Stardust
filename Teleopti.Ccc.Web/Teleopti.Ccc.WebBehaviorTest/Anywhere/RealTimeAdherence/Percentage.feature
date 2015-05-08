@@ -4,6 +4,7 @@
 	I want to see ...
 	
 @OnlyRunIfEnabled('RTA_SeePercentageAdherenceForOneAgent_30783')
+@ignore
 Scenario: Should be able to see adherence percentage from agent state overview
 	Given there is an activity named 'Phone'
 	And there is a site named 'Paris'
