@@ -46,6 +46,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			_testRun.BeforeScenario();
 		}
 
+		[AfterStep]
+		public static void AfterStep()
+		{
+			_testRun.AfterStep();
+		}
 
 		[AfterScenario]
 		public static void AfterScenario()

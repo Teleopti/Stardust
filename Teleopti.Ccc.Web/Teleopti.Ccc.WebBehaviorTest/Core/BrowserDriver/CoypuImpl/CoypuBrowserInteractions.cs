@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Coypu;
@@ -175,30 +174,35 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 
 		public void DumpInfo(Action<string> writer)
 		{
-			writer(" Time: ");
-			writer(DateTime.Now.ToString());
-			writer(" Url: ");
-			writer(_browser.Location.ToString());
+			writer(string.Format(" Time: {0}", DateTime.Now));
+
+			var url = _browser.Location.ToString();
+			writer(string.Format(" Url: {0}", url));
+
+			if (url == "about:blank" || url.EndsWith("Test/ClearConnections"))
+			{
+				return;
+			}
+
+			string domSource;
+			const string scriptToGetDomSource = "return document.documentElement.innerHTML;";
+			try
+			{
+				domSource = _browser.ExecuteScript(scriptToGetDomSource);
+			}
+			catch (Exception ex)
+			{
+				domSource = string.Format("Failed to get DOM source with \"" + scriptToGetDomSource + "\"\r\n{0}",
+					ex.Message);
+			}
+
 			writer(" Html: ");
-			writer(succeedOrIgnore(() => _browser.ExecuteScript("return $('body').html();")));
+			writer(domSource);
 		}
 
 		public void DumpUrl(Action<string> writer)
 		{
 			writer(_browser.Location.ToString());
-		}
-
-		
-		private static string succeedOrIgnore(Func<string> operation)
-		{
-			try
-			{
-				return operation();
-			}
-			catch (Exception)
-			{
-				return "Failed";
-			}
 		}
 
 		private Options options()
@@ -238,7 +242,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 			DumpInfo(s => builder.Append(s));
 			return builder.ToString();
 		}
-
 	}
-
 }

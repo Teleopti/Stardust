@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 {
 	public class TestRun
 	{
-		private static readonly ILog log = LogManager.GetLogger(typeof(EventBindings));
+		private static readonly ILog log = LogManager.GetLogger(typeof(TestRun));
 
 		public void Setup()
 		{
@@ -68,6 +68,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			File.Delete(targetTestDataNHibFile);
 
 			log.Debug("Finished scenario " + ScenarioContext.Current.ScenarioInfo.Title);
+		}
+
+		public void AfterStep()
+		{
+			if (ScenarioContext.Current.TestError == null) return;
+			log.Error("Step exception occurred, dumping info here.");
+
+			Browser.Interactions.DumpInfo(log.Error);
 		}
 
 		public void TearDown()
