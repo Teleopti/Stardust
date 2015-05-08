@@ -10,7 +10,6 @@
 		Forecast_CopySettingsToWorkflow_11112,
 
 		Scheduler_HidePointsFairnessSystem_28317,
-		Scheduler_BackToLegalShift_29831,
 		Scheduler_IntraIntervalSolver_29845,
 		Schedule_IntraIntervalOptimizer_29846,
 		Schedule_PublishSchedules_30929,

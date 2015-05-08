@@ -234,11 +234,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			schedulerToolStripButton.Enabled = enabled;
 			enableSubItems(schedulerToolStripButton, enabled);
-			if(!toggleManager.IsEnabled(Toggles.Scheduler_BackToLegalShift_29831))
-			{
-				var menuItems = schedulerToolStripButton.DropDownItems.Find("ToolStripMenuItemShiftBackToLegal", false);
-				menuItems[0].Visible = false;
-			}
 		}
 
 		private static bool isEnabledScheduleButton(
