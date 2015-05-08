@@ -4,6 +4,7 @@
 	I want to see adherence things
 	
 @OnlyRunIfEnabled('RTA_CalculatePercentageInAgentTimezone_31236')
+@Ignore
 Scenario: Should see adherence percentage when call center is in Hawaii
 	Given I am located in Hawaii
 	And 'Pierre Baldi' is located in Hawaii
