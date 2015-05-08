@@ -1,6 +1,7 @@
 ﻿using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
+using Navigation = Teleopti.Ccc.WebBehaviorTest.Bindings.NavigationStepDefinitions;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Wfm 
 {
@@ -8,9 +9,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm
 	class SeatMapStepDefinitions
 	{
 
-		[When(@"I click on the Edit Button")]
-		public void WhenIClickOnTheEditButton()
+		[When(@"I edit the seat map")]
+		public void WhenIEditTheSeatMap()
 		{
+
 			Browser.Interactions.Click (".mfb-component__main-icon--active");
 		}
 

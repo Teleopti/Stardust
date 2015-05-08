@@ -8,7 +8,7 @@ Scenario: create a seat
 		| Name                  | Seat Planner |
 		| Access to seatplanner | True              |
 	When I view Seat map
-	And I click on the Edit Button
+	And I edit the seat map
 	And I create a seat
 	Then I should see a seat in the seat map
 
@@ -18,7 +18,7 @@ Scenario: create a location
 		| Name                  | Seat Planner |
 		| Access to seatplanner | True              |
 	When I view Seat map
-	And I click on the Edit Button
+	And I edit the seat map
 	And I create a location
 	Then I should see a location in the seat map
 	
