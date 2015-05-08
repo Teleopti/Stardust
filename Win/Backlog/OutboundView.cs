@@ -51,6 +51,14 @@ namespace Teleopti.Ccc.Win.Backlog
 				{
 					LazyLoadingManager.Initialize(campaign.Skill);
 					LazyLoadingManager.Initialize(campaign.Skill.Activity);
+					foreach (var campaignWorkingPeriod in campaign.CampaignWorkingPeriods)
+					{
+						LazyLoadingManager.Initialize(campaignWorkingPeriod);
+						foreach (var assignment in campaignWorkingPeriod.CampaignWorkingPeriodAssignments)
+						{
+							LazyLoadingManager.Initialize(assignment);
+						}
+					}
 				}
 			}
 
@@ -137,14 +145,21 @@ namespace Teleopti.Ccc.Win.Backlog
 
 		private void updateAndPersistCampaignSkillPeriod(Campaign campaign)
 		{
-			//create productionPlan
-			var incomingTaskFactory = _container.Resolve<IncomingTaskFactory>();
-			var incomingTask = incomingTaskFactory.Create(new DateOnlyPeriod(campaign.StartDate.Value, campaign.EndDate.Value),
-				campaign.CallListLen, TimeSpan.FromHours(campaign.ConnectAverageHandlingTime/campaign.CallListLen));
-			incomingTask.RecalculateDistribution();
+			var incomingTask = createProductionPlan(campaign);
 
-			//persist
+			//persist productionPlan
 			updateSkillDays(campaign.Skill, incomingTask);
+		}
+
+		private IncomingTask createProductionPlan(Campaign campaign)
+		{
+			var incomingTaskFactory = _container.Resolve<OutboundProductionPlanFactory>();
+			var incomingTask =
+				incomingTaskFactory.CreateAndMakeInitialPlan(new DateOnlyPeriod(campaign.StartDate.Value, campaign.EndDate.Value),
+					campaign.CallListLen, TimeSpan.FromHours((double) campaign.ConnectAverageHandlingTime/campaign.CallListLen),
+					campaign.CampaignWorkingPeriods.ToList());
+			
+			return incomingTask;
 		}
 
 		private void saveSkillDays(IEnumerable<ISkillDay> dirtyList)
@@ -186,15 +201,29 @@ namespace Teleopti.Ccc.Win.Backlog
 				var forecastingTargets = new List<IForecastingTarget>();
 				foreach (var dateOnly in incomingTask.SpanningPeriod.DayCollection())
 				{
-					var forecastingTarget = new ForecastingTarget(dateOnly, new OpenForWork(true, true));  //fix this assumption
-					//faked values for now
-					forecastingTarget.Tasks = 100;
-					forecastingTarget.AverageTaskTime = TimeSpan.FromMinutes(5);
+					var isOpen = incomingTask.PlannedTimeTypeOnDate(dateOnly) != PlannedTimeTypeEnum.Closed;
+					var forecastingTarget = new ForecastingTarget(dateOnly, new OpenForWork(isOpen, isOpen));
+					if(isOpen)
+					{
+						forecastingTarget.Tasks = 1;
+						forecastingTarget.AverageTaskTime = incomingTask.GetTimeOnDate(dateOnly);
+					}
+
 					forecastingTargets.Add(forecastingTarget);
 				}
 				merger.Merge(forecastingTargets, workLoadDays);				
 			}
 			saveSkillDays(skillDays);			
+		}
+
+		private void toolStripButton1_Click(object sender, EventArgs e)
+		{
+			var selectedCampaign = listView1.SelectedItems[0];
+			var incomingTask = createProductionPlan((Campaign) selectedCampaign.Tag);
+			using (var outboundStatusView = new OutboundStatusView(incomingTask))
+			{
+				outboundStatusView.ShowDialog(this);
+			}
 		}
 	}
 }

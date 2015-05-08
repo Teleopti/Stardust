@@ -837,6 +837,7 @@
     <Compile Include="Outbound\Campaign.cs" />
     <Compile Include="Outbound\CampaignWorkingPeriod.cs" />
     <Compile Include="Outbound\CampaignWorkingPeriodAssignment.cs" />
+    <Compile Include="Outbound\OutboundProductionPlanFactory.cs" />
     <Compile Include="Outbound\OutboundSkillCreator.cs" />
     <Compile Include="Outbound\OutboundSkillTypeProvider.cs" />
     <Compile Include="Payroll\PayrollFormat.cs" />

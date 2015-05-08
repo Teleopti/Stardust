@@ -35,7 +35,14 @@ namespace Teleopti.Ccc.Domain.Backlog
 
 		public void Close()
 		{
+			_time = TimeSpan.Zero;
 			_plannedTimeType = PlannedTimeTypeEnum.Closed;
+		}
+
+		public void Open()
+		{
+			_time = TimeSpan.Zero;
+			_plannedTimeType = PlannedTimeTypeEnum.Calculated;
 		}
 
 		public void ClearTime()

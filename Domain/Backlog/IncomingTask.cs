@@ -64,13 +64,12 @@ namespace Teleopti.Ccc.Domain.Backlog
 
 		public void RecalculateDistribution()
 		{
-			_distributionSetter.Distribute(_taskDays.Values.ToList(), AverageWorkTimePerItem);
+			_distributionSetter.Distribute(_taskDays.Values.ToList(), TotalWorkTime);
 		}
 
 		public void Close(DateOnly date)
 		{
 			_taskDays[date].Close();
-			RecalculateDistribution();
 		}
 
 		public void SetTimeOnDate(DateOnly date, TimeSpan timeSpan, PlannedTimeTypeEnum timeType)
@@ -78,22 +77,26 @@ namespace Teleopti.Ccc.Domain.Backlog
 			_taskDays[date].SetTime(timeSpan, timeType);
 		}
 
-		public TimeSpan GetUnBookedTime()
+		public TimeSpan GetEstimatedOutgoingBacklogOnDate(DateOnly date)
 		{
-			var bookedTime = TimeSpan.Zero;
-			foreach (var taskDay in _taskDays.Values)
+			var planned = TimeSpan.Zero;
+			foreach (var dateOnly in _taskDays.Keys)
 			{
-				if (taskDay.PlannedTimeType == PlannedTimeTypeEnum.Manual ||
-				    taskDay.PlannedTimeType == PlannedTimeTypeEnum.Scheduled)
-					bookedTime = bookedTime.Add(taskDay.Time);
+				if (dateOnly <= date)
+					planned = planned.Add(GetTimeOnDate(date));
 			}
 
-			return TotalWorkTime.Subtract(bookedTime);
+			return TotalWorkTime.Subtract(planned);
 		}
 
 		public void ClearTimeOnDate(DateOnly date)
 		{
 			_taskDays[date].ClearTime();
+		}
+
+		public void Open(DateOnly date)
+		{
+			_taskDays[date].Open();
 		}
 	}
 }

@@ -513,7 +513,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<OutboundSkillPersister>().As<OutboundSkillPersister>().SingleInstance();
 			builder.RegisterType<IncomingTaskFactory>().As<IncomingTaskFactory>().SingleInstance();
 			builder.RegisterType<FlatDistributionSetter>().As<FlatDistributionSetter>().SingleInstance();
-			//FlatDistributionSetter
+			builder.RegisterType<OutboundProductionPlanFactory>().As<OutboundProductionPlanFactory>().SingleInstance();
+			//OutboundProductionPlanFactory
 		}
 	}
 }
