@@ -1,3 +1,5 @@
+using System;
+using NHibernate.Linq.Clauses;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -63,15 +65,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                 var appRole = ApplicationRoleFactory.CreateRole("Role " + i, "Role Description " + i);
                 var applicationFunction = new ApplicationFunction("Test");
                 var applicationFunction1 = new ApplicationFunction("Test2");
-              
+				var availableData = new AvailableData();
+			
                 PersistAndRemoveFromUnitOfWork(applicationFunction);
                 PersistAndRemoveFromUnitOfWork(applicationFunction1);
                
                 appRole.AddApplicationFunction(applicationFunction);
                 appRole.AddApplicationFunction(applicationFunction1);
-
+	            
+	           
                 PersistAndRemoveFromUnitOfWork(appRole);
-             }
+
+				appRole.AvailableData = availableData;
+	            availableData.ApplicationRole = appRole;
+
+				PersistAndRemoveFromUnitOfWork(availableData);
+            }
 
             var rolesList = new ApplicationRoleRepository(UnitOfWork).LoadAllApplicationRolesSortedByName();
             Assert.AreEqual(roleCount, rolesList.Count);
@@ -80,5 +89,33 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.IsTrue(LazyLoadingManager.IsInitialized(rolesList[0].ApplicationFunctionCollection));
         }
 
+		[Test]
+		public void ShouldNotLoadRolesWithoutAvailableData()
+		{
+			const int roleCount = 5;
+			for (var i = 0; i < roleCount; i++)
+			{
+				var appRole = ApplicationRoleFactory.CreateRole("Role " + i, "Role Description " + i);
+				var applicationFunction = new ApplicationFunction("Test");
+				var applicationFunction1 = new ApplicationFunction("Test2");
+				var availableData = new AvailableData();
+
+				PersistAndRemoveFromUnitOfWork(applicationFunction);
+				PersistAndRemoveFromUnitOfWork(applicationFunction1);
+
+				appRole.AddApplicationFunction(applicationFunction);
+				appRole.AddApplicationFunction(applicationFunction1);
+
+				PersistAndRemoveFromUnitOfWork(appRole);
+
+				if (i >= roleCount - 1) continue;
+				appRole.AvailableData = availableData;
+				availableData.ApplicationRole = appRole;
+				PersistAndRemoveFromUnitOfWork(availableData);
+			}
+
+			var rolesList = new ApplicationRoleRepository(UnitOfWork).LoadAllApplicationRolesSortedByName();
+			Assert.AreEqual(4, rolesList.Count);
+		}
     }
 }

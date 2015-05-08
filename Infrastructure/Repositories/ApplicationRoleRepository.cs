@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NHibernate;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Repositories;
@@ -51,11 +52,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         /// </remarks>
         public virtual IList<IApplicationRole> LoadAllApplicationRolesSortedByName()
         {
-            var appRoles = Session.CreateCriteria(typeof (ApplicationRole))
-                .SetFetchMode("ApplicationFunctionCollection", FetchMode.Join)
-                .AddOrder(Order.Asc("Name"))
-                .SetResultTransformer(new DistinctRootEntityResultTransformer())
-                .List<IApplicationRole>();
+	        var appRoles = Session.CreateCriteria(typeof (ApplicationRole))
+		        .SetFetchMode("ApplicationFunctionCollection", FetchMode.Join)
+		        .AddOrder(Order.Asc("Name"))
+		        .SetResultTransformer(new DistinctRootEntityResultTransformer())
+		        .List<IApplicationRole>()
+		        .Where(x => x.AvailableData != null)
+		        .ToList();
            
             return appRoles;
         }
