@@ -1075,7 +1075,6 @@
     <Compile Include="Scheduling\Overtime\OvertimeSkillStaffPeriodToSkillIntervalDataMapper.cs" />
     <Compile Include="Scheduling\Restrictions\ExtractedRestrictionResult.cs" />
     <Compile Include="Scheduling\Restrictions\RestrictionExtractor.cs" />
-    <Compile Include="Scheduling\Rules\MinWeekWorkTimeRuleToggle31992Off.cs" />
     <Compile Include="Scheduling\Rules\NonMainShiftActivityRule.cs" />
     <Compile Include="Scheduling\Rules\MinWeekWorkTimeRule.cs" />
     <Compile Include="Scheduling\TeamBlock\ActivityIntervalDataCreator.cs" />

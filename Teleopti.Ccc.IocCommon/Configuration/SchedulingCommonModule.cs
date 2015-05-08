@@ -287,14 +287,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RestrictionCombiner>().As<IRestrictionCombiner>().SingleInstance();
 			builder.RegisterType<RestrictionRetrievalOperation>().As<IRestrictionRetrievalOperation>().SingleInstance();
 			builder.RegisterType<EffectiveRestrictionCreator>().As<IEffectiveRestrictionCreator>();
-
-			builder.RegisterType<MinWeekWorkTimeRule>().As<MinWeekWorkTimeRule>();
-			builder.RegisterType<MinWeekWorkTimeRuleToggle31992Off>().As<MinWeekWorkTimeRuleToggle31992Off>();
-			builder.Register(c => c.Resolve<IToggleManager>().IsEnabled(Toggles.Scheduler_DoNotBreakMinWeekWorkTimeOptimization_31992)
-				? (IMinWeekWorkTimeRule)c.Resolve<MinWeekWorkTimeRule>()
-				: c.Resolve<MinWeekWorkTimeRuleToggle31992Off>())
-				.As<IMinWeekWorkTimeRule>();
-
+			builder.RegisterType<MinWeekWorkTimeRule>().As<IMinWeekWorkTimeRule>();
 			builder.RegisterType<DailyValueByAllSkillsExtractor>().As<IDailyValueByAllSkillsExtractor>();
 			//IDailyValueByAllSkillsExtractor
 		}

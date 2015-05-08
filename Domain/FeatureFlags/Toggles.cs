@@ -15,7 +15,6 @@
 		Schedule_IntraIntervalOptimizer_29846,
 		Schedule_PublishSchedules_30929,
 		Schedule_OvertimeBeforeShiftStart_30712,
-		Scheduler_DoNotBreakMinWeekWorkTimeOptimization_31992,
 
 		Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635,
 		MyReport_AgentQueueMetrics_22254,
