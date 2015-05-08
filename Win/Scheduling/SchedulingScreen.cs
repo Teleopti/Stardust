@@ -470,15 +470,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			updater.RegisterType<PersonAccountConflictResolver>().As<IPersonAccountConflictResolver>().InstancePerLifetimeScope();
 			updater.RegisterType<RequestPersister>().As<IRequestPersister>().InstancePerLifetimeScope();
 			updater.RegisterType<WriteProtectionPersister>().As<IWriteProtectionPersister>().InstancePerLifetimeScope();
-			updater.RegisterType<WorkflowControlSetPublishDatePersisterToggle30929Off>().As<WorkflowControlSetPublishDatePersisterToggle30929Off>().InstancePerLifetimeScope();
-			updater.RegisterType<WorkflowControlSetPublishDatePersister>().As<WorkflowControlSetPublishDatePersister>().InstancePerLifetimeScope();
-			updater.Register(c => c.Resolve<IToggleManager>().IsEnabled(Toggles.Schedule_PublishSchedules_30929)
-			   ? (IWorkflowControlSetPublishDatePersister)c.Resolve<WorkflowControlSetPublishDatePersister>()
-			   : c.Resolve<WorkflowControlSetPublishDatePersisterToggle30929Off>())
-				   .As<IWorkflowControlSetPublishDatePersister>().InstancePerLifetimeScope();
-
-
-
+			updater.RegisterType<WorkflowControlSetPublishDatePersister>().As<IWorkflowControlSetPublishDatePersister>().InstancePerLifetimeScope();
 
 			updater.Register(c => clearReferredShiftTradeRequests).As<IClearReferredShiftTradeRequests>().InstancePerLifetimeScope();
 			updater.Update(componentRegistry);
@@ -930,7 +922,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripMenuItemSeniorityRankDesc.Visible = seniorityEnabled;
 			toolStripMenuItemSeniorityRankAsc.Visible = seniorityEnabled;
 
-			var publishScedule = _container.Resolve<IToggleManager>().IsEnabled(Toggles.Schedule_PublishSchedules_30929) && authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.PublishSchedule);
+			var publishScedule = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.PublishSchedule);
 			toolStripMenuItemPublish.Visible = publishScedule;
 
 			setPermissionOnControls();

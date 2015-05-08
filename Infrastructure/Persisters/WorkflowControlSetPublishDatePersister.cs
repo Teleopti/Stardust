@@ -41,12 +41,4 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 			}
 		}
 	}
-
-	public class WorkflowControlSetPublishDatePersisterToggle30929Off : IWorkflowControlSetPublishDatePersister
-	{
-		public void Persist(ICollection<IWorkflowControlSet> workflowControlSets)
-		{
-			
-		}
-	}
 }
