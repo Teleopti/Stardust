@@ -36,7 +36,6 @@ Scenario: List all active campaigns
 	Then I should see 'Campaign1' in campaign list
 	And I should see 'Campaign2' in campaign list
 
-
 Scenario: View selected campaign
 	When I view campaign 'Campaign1'
 	Then I should see campaign details with 
@@ -45,7 +44,7 @@ Scenario: View selected campaign
 	| Start Date | 2015-05-01   |
 	| End Date   | 2015-05-30   |
 
-
+@ignore
 Scenario: Edit selected campaign
 	When I view campaign 'Campaign1'
 	And I change the campaign name to 'Campaign1+'
@@ -56,7 +55,7 @@ Scenario: Edit selected campaign
 	| Start Date | 2015-05-21 |
 	| End Date   | 2015-05-30 |
 
-
+@ignore
 Scenario: Delete selected campaign
 	When I view outbound
 	And I delete 'Campaign1' from campaign list
