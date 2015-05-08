@@ -22,6 +22,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			CleanUpAfterTest();
 	    }
 
+		[Test]
+		public void ShouldMatchAllValuesInAllCriteria()
+		{
+			var crit = new PersonFinderSearchCriteria(PersonFinderField.All, "Ashley Agent", 10,
+															 new DateOnly(2012, 1, 1), 1, 1);
+			_target = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.CurrentUnitOfWork());
+			_target.Find(crit);
+			Assert.That(crit.TotalRows, Is.EqualTo(1));
+		}
+
         [Test]
         public void ShouldLoadPersonsWithOneCriteria()
         {
