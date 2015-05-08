@@ -58,8 +58,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 			IScheduleDay secondScheduleDay = secondDay.DaySchedulePart();
 			TimeSpan secondDayContractTime = secondScheduleDay.ProjectionService().CreateProjection().ContractTime();
 
-			TimeSpan totalContractTimeBefore = firstDayContractTime.Add(secondDayContractTime);
-
 			if (firstDayDate == secondDayDate)
 				return false;
 
@@ -105,23 +103,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 				return false;
 			}
 			
-
-			//IScheduleDayPro firstDay1 = matrix.GetScheduleDayByKey(daysToBeMoved[0]);
-			//IScheduleDay firstScheduleDay1 = firstDay1.DaySchedulePart();
-			//TimeSpan firstDayContractTime1 = firstScheduleDay1.ProjectionService().CreateProjection().ContractTime();
-
-			//IScheduleDayPro secondDay1 = matrix.GetScheduleDayByKey(daysToBeMoved[1]);
-			//IScheduleDay secondScheduleDay1 = secondDay1.DaySchedulePart();
-			//TimeSpan secondDayContractTime1 = secondScheduleDay1.ProjectionService().CreateProjection().ContractTime();
-
-			//TimeSpan totalContractTimeAfter = firstDayContractTime1.Add(secondDayContractTime1);
-			//if (totalContractTimeBefore != totalContractTimeAfter)
-			//{
-			//	_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
-			//	return false;
-			//}
-
-
 			double newPeriodValue = periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization);
 			bool isPeriodBetter = newPeriodValue < oldPeriodValue;
 			if (!isPeriodBetter)
