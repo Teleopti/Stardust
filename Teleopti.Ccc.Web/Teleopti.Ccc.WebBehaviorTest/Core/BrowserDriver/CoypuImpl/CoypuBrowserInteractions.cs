@@ -1,5 +1,4 @@
 using System;
-using System.Text;
 using System.Text.RegularExpressions;
 using Coypu;
 using NUnit.Framework;
@@ -29,12 +28,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 			else
 			{
 				_options = new Options
-					{
-						ConsiderInvisibleElements = _configuration.ConsiderInvisibleElements,
-						RetryInterval = _configuration.RetryInterval,
-						Timeout = timeout,
-						WaitBeforeClick = _configuration.WaitBeforeClick
-					};
+				{
+					ConsiderInvisibleElements = _configuration.ConsiderInvisibleElements,
+					RetryInterval = _configuration.RetryInterval,
+					Timeout = timeout,
+					WaitBeforeClick = _configuration.WaitBeforeClick
+				};
 			}
 		}
 
@@ -86,27 +85,27 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 			else
 			{
 				_browser.FindCss(selector, value).Hover();
-			}			
+			}
 		}
-
 
 		public void DragnDrop(string selector, int x, int y)
 		{
-				var selenium = ((OpenQA.Selenium.Remote.RemoteWebDriver)_browser.Native);
-				var start =selenium.FindElement(By.CssSelector(selector));
-				var end = selenium.FindElement(By.CssSelector(selector));
-				new Actions(selenium).DragAndDropToOffset(start, x, y).Perform();
+			var selenium = ((OpenQA.Selenium.Remote.RemoteWebDriver) _browser.Native);
+			var start = selenium.FindElement(By.CssSelector(selector));
+			//var end = selenium.FindElement(By.CssSelector(selector));
+			new Actions(selenium).DragAndDropToOffset(start, x, y).Perform();
 		}
-		
+
 		public void AssertExists(string selector)
 		{
 			assert(_browser.HasCss(selector, options()), Is.True, "Could not find element matching selector " + selector);
 		}
-		
+
 		public void AssertNotExists(string existsSelector, string notExistsSelector)
 		{
 			AssertExists(existsSelector);
-			assert(_browser.HasNoCss(notExistsSelector, options()), Is.True, "Found element matching selector " + notExistsSelector + " although I shouldnt");
+			assert(_browser.HasNoCss(notExistsSelector, options()), Is.True,
+				"Found element matching selector " + notExistsSelector + " although I shouldnt");
 		}
 
 		public void AssertAnyContains(string selector, string text)
@@ -128,48 +127,52 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 			var snapshot = _browser.FindAllCss(collectionSelector, null, options());
 			snapshot.ForEach(e =>
 			{
-				assert(e.HasNoContentMatch(regex, options()), Is.True, "Failed to assert that " + collectionSelector + " did not find anything containing text " + text);
+				assert(e.HasNoContentMatch(regex, options()), Is.True,
+					"Failed to assert that " + collectionSelector + " did not find anything containing text " + text);
 			});
 		}
 
 		public void AssertFirstContains(string selector, string text)
 		{
 			Console.WriteLine("Assert first element match selector \"{0}\" contain text \"{1}\"", selector, text);
-			assert(_browser.FindCss(selector, options()).HasContentMatch(new Regex(Regex.Escape(text))), Is.True, "Failed to assert that " + selector + " contained text " + text);
+			assert(_browser.FindCss(selector, options()).HasContentMatch(new Regex(Regex.Escape(text))), Is.True,
+				"Failed to assert that " + selector + " contained text " + text);
 		}
 
 		public void AssertFirstNotContains(string selector, string text)
 		{
-			assert(_browser.FindCss(selector, options()).HasNoContentMatch(new Regex(Regex.Escape(text))), Is.True, "Failed to assert that " + selector + " did not contain text " + text);
+			assert(_browser.FindCss(selector, options()).HasNoContentMatch(new Regex(Regex.Escape(text))), Is.True,
+				"Failed to assert that " + selector + " did not contain text " + text);
 		}
 
 		public void AssertInputValue(string selector, string value)
 		{
-			eventualAssert(() =>
-			{
-				return _browser.FindCss(selector, options()).Value;
-			}, Is.EqualTo(value), "Failed to assert that input value was " + value);
+			eventualAssert(() => _browser.FindCss(selector, options()).Value, Is.EqualTo(value),
+				"Failed to assert that input value was " + value);
 		}
 
 		public void AssertUrlContains(string url)
 		{
-			eventualAssert(() => _browser.Location.ToString(), Is.StringContaining(url), "Failed to assert that current url contains " + url);
+			eventualAssert(() => _browser.Location.ToString(), Is.StringContaining(url),
+				"Failed to assert that current url contains " + url);
 		}
 
 		public void AssertUrlNotContains(string urlContains, string urlNotContains)
 		{
 			AssertUrlContains(urlContains);
-			eventualAssert(() => _browser.Location.ToString(), Is.Not.StringContaining(urlNotContains), "Failed to assert that current url did not contain " + urlNotContains);
+			eventualAssert(() => _browser.Location.ToString(), Is.Not.StringContaining(urlNotContains),
+				"Failed to assert that current url did not contain " + urlNotContains);
 		}
 
-	    public void CloseWindow(string name)
-	    {
-	        _browser.FindWindow(name).ExecuteScript("window.close();");
-	    }
+		public void CloseWindow(string name)
+		{
+			_browser.FindWindow(name).ExecuteScript("window.close();");
+		}
 
 		public void AssertJavascriptResultContains(string javascript, string text)
 		{
-			eventualAssert(() => _browser.ExecuteScript(javascript), Is.StringContaining(text), "Failed to assert that javascript " + javascript + " returned a value containing " + text);
+			eventualAssert(() => _browser.ExecuteScript(javascript), Is.StringContaining(text),
+				string.Format("Failed to assert that javascript \"{0}\" returned a value containing \"{1}\"", javascript, text));
 		}
 
 		public void DumpInfo(Action<string> writer)
@@ -196,8 +199,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 					ex.Message);
 			}
 
-			writer(" Html: ");
-			writer(domSource);
+			writer(string.Format(" Html: {0}", domSource));
 		}
 
 		public void DumpUrl(Action<string> writer)
@@ -225,22 +227,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 			}
 			catch (AssertionException)
 			{
-				Assert.Fail(buildMessage(message));
+				Assert.Fail(message);
 			}
 		}
 
 		private void eventualAssert<T>(Func<T> value, Constraint constraint, string message)
 		{
-			EventualAssert.That(value, constraint, () => buildMessage(message), new SeleniumExceptionCatcher());
-		}
-
-		private string buildMessage(string message)
-		{
-			var builder = new StringBuilder();
-			builder.Append(message);
-			builder.Append(" ");
-			DumpInfo(s => builder.Append(s));
-			return builder.ToString();
+			EventualAssert.That(value, constraint, () => message, new SeleniumExceptionCatcher());
 		}
 	}
 }

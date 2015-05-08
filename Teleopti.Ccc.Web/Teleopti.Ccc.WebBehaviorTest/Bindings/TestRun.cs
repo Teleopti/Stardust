@@ -91,11 +91,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		private static void handleScenarioException()
 		{
 			if (ScenarioContext.Current.TestError == null) return;
-
-			log.Error("Scenario exception occurred, dumping info here.");
-
-			Browser.Interactions.DumpInfo(log.Error);
+			Console.WriteLine("\r\nTest Scenario \"{0}\" failed, please check the error message.",
+				ScenarioContext.Current.ScenarioInfo.Title);
 		}
-
 	}
 }
