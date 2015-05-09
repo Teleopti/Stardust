@@ -1246,7 +1246,6 @@
     <Content Include="WFM\vendor\d3\d3.min.js" />
     <Content Include="WFM\vendor\d3\nv.d3.css" />
     <Content Include="WFM\vendor\d3\nv.d3.js" />
-    <Content Include="WFM\vendor\n3-chart\line-chart\line-chart.min.js" />
     <Content Include="WFM\vendor\ng-mfb\mfb.css.map" />
     <Content Include="WFM\css\_mfb.scss" />
     <None Include="WFM\css\_layout.scss" />
