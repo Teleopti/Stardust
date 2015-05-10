@@ -2340,8 +2340,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 			loadLockMenues();
 			loadScenarioMenuItems();
 
+			toolStripStatusLabelStatus.Text = "SETTING UP SKILL TABS...";
+			Refresh();
 			setupSkillTabs();
+
+			toolStripStatusLabelStatus.Text = "SETTING UP INFO TABS...";
+			Refresh();
 			setupInfoTabs();
+			toolStripStatusLabelStatus.Text = LanguageResourceHelper.Translate("XXLoadingFormThreeDots");
+			Refresh();
 
 			if (schedulerSplitters1.PinnedPage != null)
 				schedulerSplitters1.TabSkillData.SelectedTab = schedulerSplitters1.PinnedPage;
