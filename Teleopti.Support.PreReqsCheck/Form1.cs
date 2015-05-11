@@ -11,7 +11,6 @@ namespace CheckPreRequisites
 	{
 		private readonly HardwareCheck _hardwareCheck;
 		private readonly WebCheck _webCheck;
-		private readonly V6Check _v6Check;
 		private readonly DatabaseCheck _databaseCheck;
 
 		public Form1()
@@ -20,7 +19,6 @@ namespace CheckPreRequisites
 			_hardwareCheck = new HardwareCheck(this);
 			_databaseCheck = new DatabaseCheck(this);
 			_webCheck = new WebCheck(this);
-			_v6Check = new V6Check(this, _databaseCheck);
 		}
 		
 		// ReSharper disable InconsistentNaming
@@ -41,9 +39,6 @@ namespace CheckPreRequisites
 				_hardwareCheck.RunHardWareChecks((int) numericUpDownAgents.Value);
 				_databaseCheck.RunDbChecks(comboBoxSQLInstance.SelectedItem.ToString().Trim());
 			}
-
-			if (comboBoxServerSetup.SelectedItem.ToString().Contains("Version6"))
-				_v6Check.RunV6Checks(textBoxDBName.Text);
 		}
 
 		private void CheckDbConnection_Click(object sender, EventArgs e)

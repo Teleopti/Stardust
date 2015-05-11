@@ -74,7 +74,6 @@
     </Compile>
     <Compile Include="Checks\DatabaseCheck.cs" />
     <Compile Include="Checks\HardwareCheck.cs" />
-    <Compile Include="Checks\V6Check.cs" />
     <Compile Include="Checks\WebCheck.cs" />
     <Compile Include="Environment\FrameworkVersion.cs" />
     <Compile Include="Environment\FrameworkVersionDetection.cs" />
@@ -112,9 +111,6 @@
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <None Include="p_raptor_run_before_conversion.sql">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>

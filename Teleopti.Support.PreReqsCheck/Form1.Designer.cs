@@ -355,8 +355,7 @@
 			this.comboBoxServerSetup.Items.AddRange(new object[] {
             "Web",
             "DB",
-            "Web+DB",
-            "Version6"});
+            "Web+DB"});
 			this.comboBoxServerSetup.Location = new System.Drawing.Point(7, 22);
 			this.comboBoxServerSetup.Name = "comboBoxServerSetup";
 			this.comboBoxServerSetup.Size = new System.Drawing.Size(140, 23);
