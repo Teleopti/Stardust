@@ -10,7 +10,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void WhenIChooseToSignOut()
 		{
 			Browser.Interactions.Click(".user-name-link");
-			Browser.Interactions.Click("#signout");
+
+			const string script = @" $('#signout')[0].click(); return 1;";
+			Browser.Interactions.AssertJavascriptResultContains(script, "1");
+		
 		}
 
 		[When(@"I choose teleopti identity provider")]

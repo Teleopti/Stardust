@@ -119,8 +119,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void WhenILogonToMytimeWeb()
 		{
 			DataMaker.Data().ApplyDelayed();
-			//Navigation.GotoWeekSchedulePage();  temporary fix build
-			Navigation.GotoTeamSchedule();
+			Navigation.GotoWeekSchedulePage(); 
 		}
 		
 
