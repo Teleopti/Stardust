@@ -222,7 +222,6 @@ BEGIN
 	WHERE m.MessageId = @MessageId
 	AND isnull(m.ExpiresAt,DATEADD(mi,1,GetUtcDate())) > GetUtcDate()
 	AND m.Processed=0
-	AND m.ProcessingUntil<GetUtcDate()
 	ORDER BY m.CreatedAt ASC
 END
 GO
@@ -250,11 +249,18 @@ BEGIN
 			UPDATE Queue.Messages
 			SET ProcessingUntil = DateAdd(mi,1,GetUtcDate()),
 			ProcessedCount=ProcessedCount+1
-			WHERE MessageId=@MessageId
-			
-			SELECT *
-			FROM Queue.Messages
-			WHERE MessageId=@MessageId
+			WHERE MessageId=@MessageId AND ProcessingUntil<GetUtcDate()
+			IF (@@ROWCOUNT > 0)
+				BEGIN
+					SELECT *
+					FROM Queue.Messages
+					WHERE MessageId=@MessageId
+				END
+			ELSE
+				BEGIN
+					SELECT TOP 0 *
+					FROM Queue.Messages;
+				END
 		END
 	else
 		BEGIN
@@ -326,6 +332,7 @@ BEGIN
     DECLARE @QueueId int;
 	DECLARE @DiscardedQueueId int;
 	DECLARE @TimeoutQueueId int;
+	DECLARE @ErrorQueueId int;
         
     EXEC Queue.GetAndAddQueue @Endpoint,@Queue,null,@QueueId=@QueueId OUTPUT;
 	
@@ -344,6 +351,24 @@ BEGIN
 	INNER JOIN Queue.Queues q
 	ON m.QueueId = q.QueueId
 	AND q.QueueId = @DiscardedQueueId
+
+	--Move error messages
+	SELECT @ErrorQueueId = QueueId
+	FROM Queue.Queues
+	WHERE [Endpoint] = @Endpoint 
+	AND [ParentQueueId] = @QueueId
+	AND QueueName = N'Errors'
+
+	IF @ErrorQueueId IS NOT NULL
+	BEGIN
+		DELETE FROM Queue.Messages
+		OUTPUT deleted.* INTO [Queue].[MessagesPurged](MessageId, QueueId, CreatedAt, ProcessingUntil, ExpiresAt, Processed, Headers, Payload, ProcessedCount)
+		FROM Queue.Messages	m
+		INNER JOIN Queue.Queues q
+		ON m.QueueId = q.QueueId
+		AND q.QueueId = @ErrorQueueId
+		AND CreatedAt < DATEADD(d,-3,GetUtcDate())
+	END
 
 	----Move timeout messages
 	--SELECT @TimeoutQueueId = QueueId
