@@ -3,8 +3,8 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.Web.Core.MessageBroker;
 using Teleopti.Interfaces.MessageBroker;
 
 namespace Teleopti.Ccc.WebTest.Core.MessageBroker.LegacyTests

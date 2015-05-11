@@ -5,6 +5,7 @@ using System.Web.Hosting;
 using System.Web.Mvc;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Teleopti.Ccc.Domain;
+using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Web.Broker;
 using Teleopti.Ccc.Web.Core.RequestContext.Initialize;
 using Teleopti.Ccc.Web.Core.Startup;

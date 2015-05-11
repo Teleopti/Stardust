@@ -4,6 +4,7 @@ using Autofac.Configuration;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.SignalR;
 using Autofac.Integration.WebApi;
+using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Rta;
@@ -33,7 +34,6 @@ using Teleopti.Ccc.Web.Areas.Start.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.Start.Models.Authentication;
 using Teleopti.Ccc.Web.Broker;
 using Teleopti.Ccc.Web.Core.Hangfire;
-using Teleopti.Ccc.Web.Core.MessageBroker;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Ccc.Web.Core.RequestContext.Initialize;
@@ -59,6 +59,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterControllers(typeof(WebModule).Assembly).ApplyAspects();
 			builder.RegisterHubs(typeof(WebModule).Assembly).ApplyAspects();
 
+			builder.RegisterModule<MessageBrokerWebModule>();
 			builder.RegisterModule<MessageBrokerServerModule>();
 
 			if (_httpConfiguration != null)
@@ -147,8 +148,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<VirtualSchedulePeriodProvider>().As<IVirtualSchedulePeriodProvider>();
 			builder.RegisterType<DefaultDateCalculator>().As<IDefaultDateCalculator>();
 			builder.RegisterType<UrlHelperProvider>().As<IUrlHelper>().SingleInstance();
-			builder.Register(c => SignalRConfiguration.ActionScheduler).As<IActionScheduler>().ExternallyOwned();
-			builder.RegisterType<SubscriptionFiller>().As<IBeforeSubscribe>();
 			builder.RegisterType<IpAddressResolver>().As<IIpAddressResolver>();
 			builder.RegisterType<AuthenticationModule>().As<IAuthenticationModule>().SingleInstance();
 			builder.RegisterType<IdentityProviderProvider>().As<IIdentityProviderProvider>().SingleInstance();

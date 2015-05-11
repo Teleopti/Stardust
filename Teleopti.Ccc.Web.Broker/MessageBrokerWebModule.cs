@@ -1,6 +1,5 @@
 using Autofac;
-using Autofac.Integration.SignalR;
-using RegistrationExtensions = Autofac.Integration.Mvc.RegistrationExtensions;
+using Teleopti.Ccc.Domain.MessageBroker;
 
 namespace Teleopti.Ccc.Web.Broker
 {
@@ -8,8 +7,8 @@ namespace Teleopti.Ccc.Web.Broker
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterHubs(typeof(MessageBrokerHub).Assembly);
-			RegistrationExtensions.RegisterControllers(builder, typeof(MessageBrokerController).Assembly);
+			builder.Register(c => SignalRConfiguration.ActionScheduler).As<IActionScheduler>().ExternallyOwned();
+			builder.RegisterType<SignalR>().As<ISignalR>().SingleInstance();
 		}
 	}
 }

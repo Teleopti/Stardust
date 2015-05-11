@@ -586,6 +586,15 @@
     <Compile Include="ICurrentApplicationData.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\ITenantDataManager.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\TenantAuthenticationData.cs" />
+    <Compile Include="MessageBroker\ActionImmediate.cs" />
+    <Compile Include="MessageBroker\ActionThrottle.cs" />
+    <Compile Include="MessageBroker\IActionScheduler.cs" />
+    <Compile Include="MessageBroker\IBeforeSubscribe.cs" />
+    <Compile Include="MessageBroker\IMessageBrokerServer.cs" />
+    <Compile Include="MessageBroker\ISignalR.cs" />
+    <Compile Include="MessageBroker\MessageBrokerServer.cs" />
+    <Compile Include="MessageBroker\SubscriptionFiller.cs" />
+    <Compile Include="MessageBroker\SubscriptionPassThrough.cs" />
     <Compile Include="Notification\ClickatellNotificationSender.cs" />
     <Compile Include="Notification\CustomNotificationSenderFactory.cs" />
     <Compile Include="Notification\EmailConfiguration.cs" />

@@ -152,23 +152,14 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="ActionImmediate.cs" />
-    <Compile Include="ActionThrottle.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="IActionScheduler.cs" />
-    <Compile Include="IBeforeSubscribe.cs" />
-    <Compile Include="IMessageBrokerServer.cs" />
-    <Compile Include="ISignalR.cs" />
     <Compile Include="MessageBrokerController.cs" />
     <Compile Include="MessageBrokerHub.cs" />
-    <Compile Include="MessageBrokerServer.cs" />
-    <Compile Include="MessageBrokerServerModule.cs" />
     <Compile Include="MessageBrokerWebModule.cs" />
     <Compile Include="SignalRConfiguration.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="SubscriptionPassThrough.cs" />
     <Compile Include="Backportability.cs" />
     <Compile Include="TimeoutSettings.cs" />
   </ItemGroup>
@@ -185,6 +176,14 @@
     <None Include="customTimeoutSettings.config.notinuse" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Domain\Teleopti.Ccc.Domain.csproj">
+      <Project>{ADD1BCDC-CFBB-4632-8FB5-4FF3BD04F666}</Project>
+      <Name>Teleopti.Ccc.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
+      <Project>{DB42D973-9889-4D51-9FC5-BE66AA7F117C}</Project>
+      <Name>Teleopti.Ccc.IocCommon</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
       <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
       <Name>Teleopti.Interfaces</Name>

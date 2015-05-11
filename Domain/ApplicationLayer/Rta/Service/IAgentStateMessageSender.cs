@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;

@@ -320,8 +320,6 @@
     <Compile Include="Core\IanaTimeZoneProviderTest.cs" />
     <Compile Include="Core\IoC\HangfireModuleTest.cs" />
     <Compile Include="Core\MessageBroker\LegacyTests\MessageBrokerControllerTest.cs" />
-    <Compile Include="Core\MessageBroker\MessageBrokerServerTestAttribute.cs" />
-    <Compile Include="Core\MessageBroker\SignalRPublishTest.cs" />
     <Compile Include="Core\MonthSchedule\Mapping\MonthScheduleDomainDataMappingTest.cs" />
     <Compile Include="Core\PersonNameProviderTest.cs" />
     <Compile Include="Core\Portal\DataProvider\BadgeSettingProviderTest.cs" />

@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Web.Broker;
 
 namespace Teleopti.Ccc.WebTest.Core.MessageBroker.LegacyTests

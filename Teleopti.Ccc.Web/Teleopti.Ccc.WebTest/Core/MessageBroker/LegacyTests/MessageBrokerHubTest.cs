@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Web.Broker;
 using Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs;
 using Teleopti.Interfaces.MessageBroker;

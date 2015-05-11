@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Ccc.Web.Broker
+namespace Teleopti.Ccc.Domain.MessageBroker
 {
 	public class ActionImmediate : IActionScheduler
 	{

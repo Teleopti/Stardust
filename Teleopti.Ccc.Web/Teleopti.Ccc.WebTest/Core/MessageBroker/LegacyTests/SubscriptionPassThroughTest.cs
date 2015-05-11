@@ -1,5 +1,7 @@
 ﻿using NUnit.Framework;
+using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Web.Broker;
+using Teleopti.Interfaces.MessageBroker;
 
 namespace Teleopti.Ccc.WebTest.Core.MessageBroker.LegacyTests
 {
@@ -9,7 +11,7 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker.LegacyTests
 		[Test]
 		public void ShouldBeReallyLazy()
 		{
-			var subscription = new Interfaces.MessageBroker.Subscription();
+			var subscription = new Subscription();
 			var target = new SubscriptionPassThrough();
 
 			target.Invoke(subscription);

@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Web.Broker;
-using Teleopti.Interfaces.MessageBroker;
+using Teleopti.Ccc.Domain.MessageBroker;
 
-namespace Teleopti.Ccc.WebTest.Core.MessageBroker
+namespace Teleopti.Ccc.DomainTest.MessageBroker
 {
 	[CLSCompliant(false)]
 	[TestFixture]
@@ -19,7 +18,7 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 		[Test]
 		public void ShouldPublishToSignalR()
 		{
-			var notification = new Notification();
+			var notification = new Interfaces.MessageBroker.Notification();
 			Server.NotifyClients(notification);
 			SignalR.SentMessage.Should().Be(notification);
 		}
@@ -27,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 		[Test]
 		public void ShouldPublishToAllRoutes()
 		{
-			var notification = new Notification();
+			var notification = new Interfaces.MessageBroker.Notification();
 
 			Server.NotifyClients(notification);
 
@@ -38,7 +37,7 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 		[Test]
 		public void ShouldPublishMultipleNotifications()
 		{
-			var notifications = new[] { new Notification(), new Notification() };
+			var notifications = new[] { new Interfaces.MessageBroker.Notification(), new Interfaces.MessageBroker.Notification() };
 			Server.NotifyClientsMultiple(notifications);
 			SignalR.SentMessages.Should().Have.SameValuesAs(notifications);
 		}
@@ -46,15 +45,15 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 
 	public class FakeSignalR : ISignalR
 	{
-		public Notification SentMessage;
+		public Interfaces.MessageBroker.Notification SentMessage;
 		public string SentToGroup;
 		public string SentRoute;
 
 		public IList<string> SentToGroups = new List<string>();
 		public IList<string> SentRoutes = new List<string>();
-		public IList<Notification> SentMessages = new List<Notification>();
+		public IList<Interfaces.MessageBroker.Notification> SentMessages = new List<Interfaces.MessageBroker.Notification>();
 
-		public void CallOnEventMessage(string groupName, string route, Notification notification)
+		public void CallOnEventMessage(string groupName, string route, Interfaces.MessageBroker.Notification notification)
 		{
 			SentToGroup = groupName;
 			SentRoute = route;

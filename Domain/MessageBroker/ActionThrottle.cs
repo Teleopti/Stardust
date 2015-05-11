@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using log4net;
 
-namespace Teleopti.Ccc.Web.Broker
+namespace Teleopti.Ccc.Domain.MessageBroker
 {
 	public class ActionThrottle : IDisposable, IActionScheduler
 	{

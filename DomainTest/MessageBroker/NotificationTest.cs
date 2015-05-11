@@ -1,10 +1,11 @@
 ﻿using System;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Events;
 
-namespace Teleopti.Ccc.DomainTest.Helper
+namespace Teleopti.Ccc.DomainTest.MessageBroker
 {
 	[TestFixture]
 	public class NotificationTest

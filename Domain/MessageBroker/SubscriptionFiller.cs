@@ -1,9 +1,8 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Web.Broker;
 using Teleopti.Interfaces.MessageBroker;
 
-namespace Teleopti.Ccc.Web.Core.MessageBroker
+namespace Teleopti.Ccc.Domain.MessageBroker
 {
 	public class SubscriptionFiller : IBeforeSubscribe
 	{

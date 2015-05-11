@@ -9,6 +9,8 @@ using log4net;
 using Microsoft.AspNet.SignalR;
 using Microsoft.Owin;
 using Owin;
+using Teleopti.Ccc.Domain.MessageBroker;
+using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Web.Broker;
 using RegistrationExtensions = Autofac.Integration.Mvc.RegistrationExtensions;
 
@@ -28,6 +30,9 @@ namespace Teleopti.Ccc.Web.Broker
 			var builder = new ContainerBuilder();
 			builder.RegisterModule<MessageBrokerWebModule>();
 			builder.RegisterModule<MessageBrokerServerModule>();
+			builder.RegisterType<SubscriptionPassThrough>().As<IBeforeSubscribe>().SingleInstance();
+			builder.RegisterHubs(typeof(MessageBrokerHub).Assembly);
+			RegistrationExtensions.RegisterControllers(builder, typeof(MessageBrokerController).Assembly);
 			_container = builder.Build();
 
 			var lifetimeScope = _container.BeginLifetimeScope();

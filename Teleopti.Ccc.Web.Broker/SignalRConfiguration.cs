@@ -4,6 +4,7 @@ using System.Threading;
 using Contrib.SignalR.SignalRMessageBus;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Infrastructure;
+using Teleopti.Ccc.Domain.MessageBroker;
 
 namespace Teleopti.Ccc.Web.Broker
 {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web;
+using Teleopti.Ccc.Domain.MessageBroker;
 
 namespace Teleopti.Ccc.Web.Broker
 {

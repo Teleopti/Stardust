@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.AspNet.SignalR.Hubs;
 using log4net;
+using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Interfaces.MessageBroker;
 
 namespace Teleopti.Ccc.Web.Broker

@@ -459,7 +459,7 @@
     <Compile Include="GroupPageCreator\SkillGroupPageTest.cs" />
     <Compile Include="ApplicationLayer\AddFullDayAbsenceCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\DenormalizeScheduleProjectionTest.cs" />
-    <Compile Include="Helper\SubscriptionTest.cs" />
+    <Compile Include="MessageBroker\SubscriptionTest.cs" />
     <Compile Include="Helper\VisualLayerCollectionExtensionsTest.cs" />
     <Compile Include="Helper\StaffingCalculatorServiceModelTest.cs" />
     <Compile Include="Helper\GroupPageChangedMessageTest.cs" />
@@ -467,7 +467,7 @@
     <Compile Include="Helper\LogPointOutputTest.cs" />
     <Compile Include="Helper\NoFormattingTest.cs" />
     <Compile Include="Helper\NormalizeTextTest.cs" />
-    <Compile Include="Helper\NotificationTest.cs" />
+    <Compile Include="MessageBroker\NotificationTest.cs" />
     <Compile Include="Helper\PersonPeriodChangedMessageTest.cs" />
     <Compile Include="Helper\ProcessDenormalizeQueueTest.cs" />
     <Compile Include="Helper\StringExtensionsTest.cs" />
@@ -475,6 +475,8 @@
     <Compile Include="Infrastructure\EventMessageArgsTest.cs" />
     <Compile Include="Infrastructure\PagingDetailTest.cs" />
     <Compile Include="Infrastructure\PagingTest.cs" />
+    <Compile Include="MessageBroker\MessageBrokerServerTestAttribute.cs" />
+    <Compile Include="MessageBroker\SignalRPublishTest.cs" />
     <Compile Include="Notification\ClickatellNotificationSenderTest.cs" />
     <Compile Include="Notification\CustomNotificationSenderFactoryTest.cs" />
     <Compile Include="Notification\MultipleNotificationSenderFactoryTest.cs" />
