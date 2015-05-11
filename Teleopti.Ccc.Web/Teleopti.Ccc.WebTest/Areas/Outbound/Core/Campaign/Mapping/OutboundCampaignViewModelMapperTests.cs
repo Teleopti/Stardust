@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -8,7 +9,6 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping;
 using Teleopti.Interfaces.Domain;
 
@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core.Campaign.Mapping
 		private Domain.Outbound.Campaign _campaign;
 		private IList<ISkill> _skills;
 		private ISkill _selectedSkill;
-		private ICreateHourText _createHourText;
 
 		[SetUp]
 		public void Setup()
@@ -40,10 +39,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core.Campaign.Mapping
 			workingPeriod.AddAssignment(new CampaignWorkingPeriodAssignment(){WeekdayIndex = DayOfWeek.Monday});
 			_campaign.AddWorkingPeriod(workingPeriod);
 			_skillRepository = MockRepository.GenerateMock<ISkillRepository>();
-			_createHourText = MockRepository.GenerateMock<ICreateHourText>();
 			_campaigns = new List<Domain.Outbound.Campaign> {_campaign};
 			_skillRepository.Stub(x => x.LoadAll()).Return(_skills);
-			_target = new OutboundCampaignViewModelMapper(_skillRepository, _createHourText);
+			_target = new OutboundCampaignViewModelMapper(_skillRepository);
 		}
 
 		[Test]
@@ -176,21 +174,21 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core.Campaign.Mapping
 		[Test]
 		public void ShouldMapCampaignWorkingPeriodStartTime()
 		{
+			var expactedTime = new TimeSpan(6, 0, 0);
+			_campaigns.First().CampaignWorkingPeriods.First().TimePeriod = new TimePeriod(expactedTime, new TimeSpan(18, 0, 0));
 			var result = _target.Map(_campaigns);
-			var expactedTime = "6:00am";
-			_createHourText.Stub(x => x.CreateText(new DateTime())).IgnoreArguments().Return(expactedTime);
 
-			result.First().CampaignWorkingPeriods.First().StartTime.Should().Be.EqualTo(expactedTime);
+			result.First().CampaignWorkingPeriods.First().StartTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(expactedTime, CultureInfo.CurrentCulture));
 		}		
 		
 		[Test]
 		public void ShouldMapCampaignWorkingPeriodEndTime()
 		{
+			var expactedTime = new TimeSpan(18, 0, 0);
+			_campaigns.First().CampaignWorkingPeriods.First().TimePeriod = new TimePeriod(new TimeSpan(6, 0, 0), expactedTime);
 			var result = _target.Map(_campaigns);
-			var expactedTime = "6:00pm";
-			_createHourText.Stub(x => x.CreateText(new DateTime())).IgnoreArguments().Return(expactedTime);
 
-			result.First().CampaignWorkingPeriods.First().EndTime.Should().Be.EqualTo(expactedTime);
+			result.First().CampaignWorkingPeriods.First().EndTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(expactedTime, CultureInfo.CurrentCulture));
 		}
 
 		[Test]

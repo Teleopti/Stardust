@@ -62,12 +62,9 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			var campaign = _outboundCampaignRepository.Get(form.CampaignId.Value);
 			if (campaign == null) return null;
 
-			var start = TimeZoneHelper.ConvertToUtc(new DateTime(1900, 1, 1, form.StartTime.Hours, form.StartTime.Minutes, form.StartTime.Seconds), _userTimeZone.TimeZone());
-			var end = TimeZoneHelper.ConvertToUtc(new DateTime(1900, 1, 1, form.EndTime.Hours, form.EndTime.Minutes, form.EndTime.Seconds), _userTimeZone.TimeZone());
-
 			var campaignWorkingPeriod = new CampaignWorkingPeriod
 			{
-				TimePeriod = new TimePeriod(new TimeSpan(start.Hour, start.Minute, start.Second), new TimeSpan(end.Hour, end.Minute, end.Second)),
+				TimePeriod = new TimePeriod(form.StartTime, form.EndTime),
 				CampaignWorkingPeriodAssignments = new HashSet<CampaignWorkingPeriodAssignment>()
 			};
 
