@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
         private ISchedulingResultStateHolder _schedulingResultStateHolder;
 
         private IRtaStateGroupRepository _rtaStateGroupRepository;
-        private IStateGroupActivityAlarmRepository _stateGroupActivityAlarmRepository;
 
         [SetUp]
         public void Setup()
@@ -27,7 +26,6 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
             _schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 
             _rtaStateGroupRepository = _mocks.StrictMock<IRtaStateGroupRepository>();
-            _stateGroupActivityAlarmRepository = _mocks.StrictMock<IStateGroupActivityAlarmRepository>();
 
             _target = new RtaStateHolder(_schedulingResultStateHolder, _rtaStateGroupRepository);
         }
@@ -46,8 +44,6 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
         public void ShouldLoadStateOnInit()
         {
 	        Expect.Call(_rtaStateGroupRepository.LoadAllCompleteGraph()).Return(new List<IRtaStateGroup>());
-	        Expect.Call(_stateGroupActivityAlarmRepository.LoadAllCompleteGraph())
-				.Return(new List<IStateGroupActivityAlarm>());
             
             _mocks.ReplayAll();
             _target = new RtaStateHolder(_schedulingResultStateHolder, _rtaStateGroupRepository);
@@ -100,8 +96,6 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
 		public void MustHaveDefaultStateGroup()
 		{
 			Expect.Call(_rtaStateGroupRepository.LoadAllCompleteGraph()).Return(new List<IRtaStateGroup>());
-			Expect.Call(_stateGroupActivityAlarmRepository.LoadAllCompleteGraph())
-				.Return(new List<IStateGroupActivityAlarm>());
 
 			_mocks.ReplayAll();
 			_target = new RtaStateHolder(_schedulingResultStateHolder, _rtaStateGroupRepository);
@@ -115,8 +109,6 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
 		{
 			var stateGroup = _mocks.DynamicMock<IRtaStateGroup>();
 			Expect.Call(_rtaStateGroupRepository.LoadAllCompleteGraph()).Return(new List<IRtaStateGroup>{stateGroup});
-			Expect.Call(_stateGroupActivityAlarmRepository.LoadAllCompleteGraph())
-				.Return(new List<IStateGroupActivityAlarm>());
 
 			_mocks.ReplayAll();
 			_target = new RtaStateHolder(_schedulingResultStateHolder, _rtaStateGroupRepository);
