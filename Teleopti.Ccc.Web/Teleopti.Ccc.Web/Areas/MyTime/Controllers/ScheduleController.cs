@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Mvc;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.UserTexts;
@@ -23,14 +24,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly INow _now;
 		private readonly IOvertimeAvailabilityPersister _overtimeAvailabilityPersister;
 		private readonly IAbsenceReportPersister _absenceReportPersister;
+		private readonly IUserTimeZone _userTimeZone;
 
-		public ScheduleController(IScheduleViewModelFactory scheduleViewModelFactory, IRequestsViewModelFactory requestsViewModelFactory, INow now, IOvertimeAvailabilityPersister overtimeAvailabilityPersister, IAbsenceReportPersister absenceReportPersister)
+		public ScheduleController(IScheduleViewModelFactory scheduleViewModelFactory, IRequestsViewModelFactory requestsViewModelFactory, INow now, IOvertimeAvailabilityPersister overtimeAvailabilityPersister, IAbsenceReportPersister absenceReportPersister, IUserTimeZone userTimeZone)
 		{
 			_scheduleViewModelFactory = scheduleViewModelFactory;
 			_requestsViewModelFactory = requestsViewModelFactory;
 			_now = now;
 			_overtimeAvailabilityPersister = overtimeAvailabilityPersister;
 			_absenceReportPersister = absenceReportPersister;
+			_userTimeZone = userTimeZone;
 		}
 
 		[EnsureInPortal]
@@ -52,6 +55,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
         {
             return View("MonthPartial");
         }
+
+		[UnitOfWorkAction]
+		public JsonResult GetUserTimeZoneMinuteOffset()
+		{
+			var utcNow = DateTime.UtcNow;
+			var model =
+				new
+				{
+					UserTimeZoneMinuteOffset =
+						(TimeZoneInfo.ConvertTimeFromUtc(utcNow, _userTimeZone.TimeZone()) - utcNow).TotalMinutes
+				};
+			return Json(model, JsonRequestBehavior.AllowGet);
+		}
 
 		[UnitOfWorkAction]
 		public JsonResult FetchData(DateOnly? date)
