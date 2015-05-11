@@ -188,7 +188,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 			}
 
 			string domSource;
-			const string scriptToGetDomSource = "return document.documentElement.innerHTML;";
+			const string scriptToGetDomSource = "return document.documentElement.outerHTML;";
 			try
 			{
 				domSource = _browser.ExecuteScript(scriptToGetDomSource);
