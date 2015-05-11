@@ -11311,7 +11311,7 @@ Teleopti R&amp;D</value>
     <value>Отсутствие не может быть внесено.</value>
   </data>
   <data name="ShiftTradeBulletinBoard" xml:space="preserve">
-    <value>Сводка обменов сменами</value>
+    <value>Доска обменов сменами</value>
   </data>
   <data name="Publish" xml:space="preserve">
     <value>Публикация...</value>
@@ -11666,5 +11666,59 @@ Teleopti R&amp;D</value>
   </data>
   <data name="Top" xml:space="preserve">
     <value>Верх</value>
+  </data>
+  <data name="PersonFinderFieldRole" xml:space="preserve">
+    <value>Роль</value>
+  </data>
+  <data name="NoGamificationSetting" xml:space="preserve">
+    <value>Нет настроек геймификации</value>
+  </data>
+  <data name="SeatMap" xml:space="preserve">
+    <value>Карта рабочих мест</value>
+  </data>
+  <data name="SeatPlan" xml:space="preserve">
+    <value>План рабочих мест</value>
+  </data>
+  <data name="CheckingForecastingRequirements" xml:space="preserve">
+    <value>Проверка требований прогноза</value>
+  </data>
+  <data name="IssuesText" xml:space="preserve">
+    <value>проблемы</value>
+  </data>
+  <data name="MissingForecastFrom" xml:space="preserve">
+    <value>Отсутствует прогноз с</value>
+  </data>
+  <data name="MissingSkills" xml:space="preserve">
+    <value>Для этих навыков отсутствует прогноз</value>
+  </data>
+  <data name="NextPlanningPeriodMessage" xml:space="preserve">
+    <value>Следующий период планирования будет с</value>
+  </data>
+  <data name="PlanningPeriodMissingMessage" xml:space="preserve">
+    <value>Следующие требования отсутствуют для планирования периода:</value>
+  </data>
+  <data name="showMoreHeaderFields" xml:space="preserve">
+    <value>Больше заголовков</value>
+  </data>
+  <data name="AdherenceCannotBeEmpty" xml:space="preserve">
+    <value>Соблюдение графика не может быть пустым</value>
+  </data>
+  <data name="NextPlanningPeriod" xml:space="preserve">
+    <value>Следующий период планирования</value>
+  </data>
+  <data name="PlanningPeriod" xml:space="preserve">
+    <value>Период планирования</value>
+  </data>
+  <data name="DaysAreScheduled" xml:space="preserve">
+    <value>дни запланированы</value>
+  </data>
+  <data name="ApplicationLogonExists" xml:space="preserve">
+    <value>Логин ({0}) уже существует, выберите другое имя.</value>
+  </data>
+  <data name="IdentityLogonExists" xml:space="preserve">
+    <value>({0}) уже существует, выберите другое.</value>
+  </data>
+  <data name="AddGlobalAuthorizationLabel" xml:space="preserve">
+    <value>Выберите общий уровень авторизации:</value>
   </data>
 </root>
