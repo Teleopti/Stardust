@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Autofac;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Grouping;
@@ -20,6 +21,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 	public partial class PersonsFilterView : BaseDialogForm, IReportPersonsSelectionView, IScheduleAgentFilter
 	{
+		private readonly IComponentContext _componentContext;
 		private readonly IPersonSelectorPresenter _personSelectorPresenter;
 		private PersonsFilterView(){}
 		private readonly IGracefulDataSourceExceptionHandler _dataSourceExceptionHandler = new GracefulDataSourceExceptionHandler();
@@ -29,6 +31,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		public PersonsFilterView(DateOnlyPeriod selectedPeriod, IDictionary<Guid, IPerson> selectedPersons, IComponentContext componentContext, IApplicationFunction applicationFunction, string selectedGroupPage, IEnumerable<Guid> visiblePersonGuids, bool isAdvanced)
 		{
+			_componentContext = componentContext;
 			InitializeComponent();
 
 			_personSelectorPresenter =
@@ -93,7 +96,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_getTheGuidsFromAdvanceFilter = false;
 			using (_filterMultiplePersons = new FilterMultiplePersons())
 			{
-				_filterMultiplePersons.SetSearchablePersons(_selectedPersons );
+				_filterMultiplePersons.SetSearchablePersons(_selectedPersons, _componentContext.Resolve<ITenantLogonDataManager>());
 				_filterMultiplePersons.ShowDialog(this);
 
 				if (_filterMultiplePersons.DialogResult == DialogResult.OK)

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Interfaces.Domain;
@@ -15,14 +16,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 {
 	public partial class FilterMultiplePersons : BaseDialogForm
 	{
+		private ITenantLogonDataManager _tenantLogonDataManager;
 		private readonly ArrayList _persons = new ArrayList();
 		private List<IPerson> _searchablePersons;
 		private ArrayList _userSelectedPersonList;
-		private readonly List<String > _duplicateInputText;
+		private readonly List<String> _duplicateInputText;
 		private bool _textChangedRunning;
+		private List<LogonInfoModel> _logonInfos;
 
-		public ArrayList  UserSelectedPerson 
-		{ 
+		public ArrayList UserSelectedPerson
+		{
 			get { return _userSelectedPersonList; }
 			set { _userSelectedPersonList = value; }
 		}
@@ -30,11 +33,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 		public FilterMultiplePersons()
 		{
 			InitializeComponent();
-			if(!DesignMode )
+			if (!DesignMode)
 				SetTexts();
 			_duplicateInputText = new List<string>();
 			initializeDefaultSearchGrid();
-			initializeBothResultResultGrids( );
+			initializeBothResultResultGrids();
 		}
 
 		private void initializeBothResultResultGrids()
@@ -67,7 +70,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				foreach (IPerson person in found)
 				{
-					_persons.Add(new FilterMultiplePersonGridControlItem(person));
+					_persons.Add(new FilterMultiplePersonGridControlItem(person, getLogonInfoModelForPerson(person.Id.GetValueOrDefault())));
 				}
 
 				gridListControlDefaultSearch.DataSource = _persons;
@@ -77,7 +80,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				gridListControlDefaultSearch.MultiColumn = true;
 
 				gridListControlDefaultSearch.Grid.ColHiddenEntries.Add(new GridColHidden(0));
-				gridListControlDefaultSearch.Grid.ColHiddenEntries.Add(new GridColHidden(4));
+				gridListControlDefaultSearch.Grid.ColHiddenEntries.Add(new GridColHidden(6));
 
 				if (_persons.Count > 0)
 				{
@@ -89,6 +92,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			gridListControlDefaultSearch.EndUpdate();
 
+		}
+
+		private LogonInfoModel getLogonInfoModelForPerson(Guid personId)
+		{
+			var model = _logonInfos.FirstOrDefault(l => l.PersonId.Equals(personId));
+			if(model == null)
+				return new LogonInfoModel();
+			return model;
 		}
 
 		private void gridMouseDoubleClick(object sender, MouseEventArgs e)
@@ -108,10 +119,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (gridListControlDefaultSearch.SelectedItem == null) return;
 
 			var selected = selectedPersons();
-				
+
 			foreach (var person in selected)
 			{
-				addPersonInResultGridFromDefaultSearch(person);	
+				addPersonInResultGridFromDefaultSearch(person);
 			}
 		}
 
@@ -119,7 +130,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		#region "Result grid"
 
-		private void refurbishItemsInResultGrid(GridListControl  gridListControl)
+		private void refurbishItemsInResultGrid(GridListControl gridListControl)
 		{
 			gridListControl.BeginUpdate();
 			gridListControl.DataSource = _userSelectedPersonList;
@@ -129,7 +140,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			gridListControl.MultiColumn = true;
 
 			gridListControl.Grid.ColHiddenEntries.Add(new GridColHidden(0));
-			gridListControl.Grid.ColHiddenEntries.Add(new GridColHidden(4));
+			gridListControl.Grid.ColHiddenEntries.Add(new GridColHidden(6));
 
 			if (_userSelectedPersonList.Count > 0)
 				gridListControl.SetSelected(0, true);
@@ -145,7 +156,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			gridListControl.BorderStyle = BorderStyle.None;
 		}
 		#endregion
-		
+
 		#region "Grid Common functions"
 
 		private void Grid_QueryCellInfo(object sender, GridQueryCellInfoEventArgs e)
@@ -164,6 +175,18 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			if (e.RowIndex <= 0 && e.ColIndex == 3)
 			{
+				e.Style.Text = UserTexts.Resources.LogOn;
+				e.Handled = true;
+			}
+
+			if (e.RowIndex <= 0 && e.ColIndex == 4)
+			{
+				e.Style.Text = UserTexts.Resources.ApplicationLogon;
+				e.Handled = true;
+			}
+
+			if (e.RowIndex <= 0 && e.ColIndex == 5)
+			{
 				e.Style.Text = UserTexts.Resources.Email;
 				e.Handled = true;
 			}
@@ -174,27 +197,35 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			_searchablePersons.Remove(person);
 			fillGridListControlDefaultSearch();
-			_userSelectedPersonList.Add(new FilterMultiplePersonGridControlItem(person));
+			_userSelectedPersonList.Add(new FilterMultiplePersonGridControlItem(person, getLogonInfoModelForPerson(person.Id.GetValueOrDefault())));
 			refurbishItemsInResultGrid(gridListControlResult);
 			refurbishItemsInResultGrid(gridListControlResult2);
 			textBox1.Text = String.Empty;
 			textBox1.Select();
 		}
-		
+
 		#endregion
 
 		public IPerson SelectedPerson()
 		{
 			if (gridListControlDefaultSearch.SelectedItem != null)
-				return (IPerson) gridListControlDefaultSearch.SelectedValue;
+				return (IPerson)gridListControlDefaultSearch.SelectedValue;
 
 			return null;
 		}
 
-		public void SetSearchablePersons(IEnumerable<IPerson> searchablePersons)
+		public void SetSearchablePersons(IEnumerable<IPerson> searchablePersons, ITenantLogonDataManager tenantLogonDataManager)
 		{
+			_tenantLogonDataManager = tenantLogonDataManager;
 			_searchablePersons = searchablePersons.ToList();
+			loadLogonInfo();
 			textBox1.Select();
+		}
+
+		private void loadLogonInfo()
+		{
+			var guids = _searchablePersons.Select(person => person.Id.GetValueOrDefault()).ToList();
+			_logonInfos = _tenantLogonDataManager.GetLogonInfoModelsForGuids(guids);
 		}
 
 		private void textBox1TextChanged(object sender, EventArgs e)
@@ -206,22 +237,36 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			CultureInfo cultureInfo = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
 			string lowerSearchText = searchText.ToLower(cultureInfo);
+	
+			var guids = (from logonInfoModel in _logonInfos where logonContains(logonInfoModel, lowerSearchText, cultureInfo) select logonInfoModel.PersonId).ToList();
+			
 			ICollection<IPerson> personQuery =
 					(from
-						person in _searchablePersons 
+						person in _searchablePersons
 					 where
 						person.Name.ToString(NameOrderOption.LastNameFirstName).ToLower(cultureInfo).Contains(lowerSearchText) ||
 						person.Name.ToString(NameOrderOption.LastNameFirstName).ToLower(cultureInfo).Replace(",", "").Contains(lowerSearchText) ||
 						person.Name.ToString(NameOrderOption.FirstNameLastName).ToLower(cultureInfo).Contains(lowerSearchText) ||
 						person.EmploymentNumber.ToLower(cultureInfo).Contains(lowerSearchText) ||
-						person.Email.ToLower(cultureInfo).Contains(lowerSearchText ) 
-						
+						person.Email.ToLower(cultureInfo).Contains(lowerSearchText) ||
+						guids.Contains(person.Id.GetValueOrDefault())
+
 					 select person).ToList();
 
 			return personQuery;
 
 		}
-		
+
+		private bool logonContains(LogonInfoModel model, string lowerSearchText, CultureInfo cultureInfo)
+		{
+			var logon = "";
+			if (!string.IsNullOrEmpty(model.Identity))
+				logon = model.Identity.ToLower(cultureInfo);
+			if (!string.IsNullOrEmpty(model.LogonName))
+				logon += model.LogonName.ToLower(cultureInfo);
+			return logon.Contains(lowerSearchText);
+		}
+
 		private void buttonAdd_Click(object sender, EventArgs e)
 		{
 			if (gridListControlDefaultSearch.SelectedItem == null) return;
@@ -229,7 +274,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			foreach (var person in selected)
 			{
-				addPersonInResultGridFromDefaultSearch(person);	
+				addPersonInResultGridFromDefaultSearch(person);
 			}
 		}
 
@@ -242,11 +287,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				for (var row = gridRangeInfo.Top - 1; row <= gridRangeInfo.Bottom - 1; row++)
 				{
-					if(!gridRangeInfo.IsRows) continue;
-					if(!(gridListControlDefaultSearch.Items.Count >= row)) continue;
+					if (!gridRangeInfo.IsRows) continue;
+					if (!(gridListControlDefaultSearch.Items.Count >= row)) continue;
 					var item = (FilterMultiplePersonGridControlItem)gridListControlDefaultSearch.Items[row];
 					selectedPersons.Add(item.Person);
-				}	
+				}
 			}
 
 			return selectedPersons;
@@ -272,16 +317,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 				var personQuery = Search(lowerSearchText);
 				if (personQuery.Count == 1)
 				{
-					var gridColumnPerson = new FilterMultiplePersonGridControlItem(personQuery.First());
+					var gridColumnPerson = new FilterMultiplePersonGridControlItem(personQuery.First(), getLogonInfoModelForPerson(personQuery.First().Id.GetValueOrDefault()));
 					if (_userSelectedPersonList.Contains(gridColumnPerson)) continue;
-					_userSelectedPersonList.Add(new FilterMultiplePersonGridControlItem(personQuery.First()));
+					_userSelectedPersonList.Add(new FilterMultiplePersonGridControlItem(personQuery.First(), getLogonInfoModelForPerson(personQuery.First().Id.GetValueOrDefault())));
 					actualInput.Remove(expected);
 				}
 				else if (personQuery.Count > 1)
 				{
 					foreach (var person in personQuery)
 					{
-						var tempPerson = new FilterMultiplePersonGridControlItem(person);
+						var tempPerson = new FilterMultiplePersonGridControlItem(person, getLogonInfoModelForPerson(person.Id.GetValueOrDefault()));
 						if (!_userSelectedPersonList.Contains(tempPerson))
 						{
 							_duplicateInputText.Add(expected);
@@ -295,7 +340,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			actualInput.AddRange(_duplicateInputText);
 			textBoxCustomSearch.Text = String.Join(currentDelimiter.First().ToString(), actualInput);
 			refurbishItemsInResultGrid(gridListControlResult);
-			refurbishItemsInResultGrid(gridListControlResult2);	
+			refurbishItemsInResultGrid(gridListControlResult2);
 		}
 
 		public HashSet<Guid> SelectedPersonGuids()
@@ -303,7 +348,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var selectedPersonGuid = new HashSet<Guid>();
 			foreach (FilterMultiplePersonGridControlItem person in _userSelectedPersonList)
 			{
-				selectedPersonGuid.Add(person.Person.Id.Value );
+				selectedPersonGuid.Add(person.Person.Id.Value);
 			}
 			return selectedPersonGuid;
 		}
@@ -322,7 +367,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				pasted.Replace("\r\n", currentDelimiter)
 					.Replace("\n\r", currentDelimiter)
 					.Replace("\r", currentDelimiter)
-					.Replace("\n", currentDelimiter) 
+					.Replace("\n", currentDelimiter)
 					.Replace("\t", currentDelimiter);
 			textBoxCustomSearch.Text = preprocessed;
 			if (textBoxCustomSearch.Text == currentDelimiter)
@@ -341,7 +386,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 
 			if (gridListControlDefaultSearch.SelectedItem == null) return;
-			
+
 
 			var selected = selectedPersons();
 
@@ -377,7 +422,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				gridListControlDefaultSearch.Select();
 				if (gridListControlDefaultSearch.SelectedIndex != -1 &&
-				    gridListControlDefaultSearch.SelectedIndex < gridListControlDefaultSearch.Items.Count - 1)
+					 gridListControlDefaultSearch.SelectedIndex < gridListControlDefaultSearch.Items.Count - 1)
 				{
 					gridListControlDefaultSearch.SetSelected(gridListControlDefaultSearch.SelectedIndex, false);
 					gridListControlDefaultSearch.SetSelected(gridListControlDefaultSearch.SelectedIndex + 1, true);
@@ -416,10 +461,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 	internal class FilterMultiplePersonGridControlItem
 	{
 		private IPerson _person;
-
-		public FilterMultiplePersonGridControlItem(IPerson person)
+		private readonly LogonInfoModel _logonInfoModel;
+		
+		public FilterMultiplePersonGridControlItem(IPerson person, LogonInfoModel logonInfoModel)
 		{
 			_person = person;
+			_logonInfoModel = logonInfoModel;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
@@ -432,6 +479,27 @@ namespace Teleopti.Ccc.Win.Scheduling
 		public string EmploymentNumber
 		{
 			get { return _person.EmploymentNumber; }
+		}
+
+		public string LogOn
+		{
+			get
+			{
+				if (_logonInfoModel != null)
+					return _logonInfoModel.Identity;
+				return string.Empty;
+			}
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+		public string ApplicationLogOnName
+		{
+			get
+			{
+				if (_logonInfoModel != null)
+					return _logonInfoModel.LogonName;
+				return string.Empty;
+			}
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
@@ -453,8 +521,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		public override bool Equals(object o)
 		{
-			var compareTo = (FilterMultiplePersonGridControlItem ) o;
-			if (Person == compareTo.Person ) return true;
+			var compareTo = (FilterMultiplePersonGridControlItem)o;
+			if (Person == compareTo.Person) return true;
 			return false;
 		}
 
