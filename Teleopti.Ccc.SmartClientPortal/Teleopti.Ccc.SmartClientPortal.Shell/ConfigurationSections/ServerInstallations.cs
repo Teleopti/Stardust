@@ -13,10 +13,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.ConfigurationSections
 
 		public static IDictionary<string, IDictionary<string, string>> FetchServerInstallations()
 		{
-			var serverInstallations = ((ServerInstallations)ConfigurationManager.GetSection("serverInstallations")).Installations;
+			var serverInstallations = ConfigurationManager.GetSection("serverInstallations");
+			if(serverInstallations==null)
+				return new Dictionary<string, IDictionary<string, string>>();
+			var installations = ((ServerInstallations)serverInstallations).Installations;
 			var appsettingOverrides = new Dictionary<string, IDictionary<string, string>>();
 
-			foreach (var serverInstallation in serverInstallations)
+			foreach (var serverInstallation in installations)
 			{
 				var appsettings = new Dictionary<string, string>();
 				foreach (var appSetting in serverInstallation.Overrides)
