@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 
 			//parsedString.Add((PersonFinderField)Enum.Parse(typeof(PersonFinderField), searchType), searchValue);
 			//return parsedString;
+			return null;
 		}
 
 		public static IDictionary<PersonFinderField, string> Parse(PeopleSearchCriteria form)
