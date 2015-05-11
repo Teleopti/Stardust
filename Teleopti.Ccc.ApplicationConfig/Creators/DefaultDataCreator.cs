@@ -181,19 +181,19 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
 
 				_personCreator.Save(sysAdmin);
 				updateUserWithSuperRole(sysAdmin);
-				addToTenantDb(sysAdmin);
+				addSysadminToTenantDb(sysAdmin);
 			}
 		}
 
-		private void addToTenantDb(IPerson sysAdmin)
+		private void addSysadminToTenantDb(IPerson sysAdmin)
 		{
 			if (_tenantUnitOfWorkManager == null)
 				return;
 			var tenantSession = _tenantUnitOfWorkManager.CurrentSession();
 			var tenant = tenantSession.Get<Tenant>(1);
 			var personInfo = new PersonInfo(tenant, sysAdmin.Id.Value);
-			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), sysAdmin.ApplicationAuthenticationInfo.ApplicationLogOnName, sysAdmin.ApplicationAuthenticationInfo.Password);
-			personInfo.SetIdentity(sysAdmin.AuthenticationInfo.Identity);
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), _newUserName, _newUserPassword);
+			personInfo.SetIdentity(IdentityHelper.Merge(Environment.UserDomainName, Environment.UserName));
 			tenantSession.Save(personInfo);
 			_tenantUnitOfWorkManager.CommitAndDisposeCurrent();
 		}
