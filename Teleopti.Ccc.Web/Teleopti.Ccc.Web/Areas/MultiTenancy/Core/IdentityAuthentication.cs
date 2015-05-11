@@ -30,7 +30,8 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 				Success = true,
 				PersonId = foundUser.Id,
 				Tenant = foundUser.Tenant,
-				DataSourceConfiguration = nhibConfig
+				DataSourceConfiguration = nhibConfig,
+				TenantPassword = foundUser.TenantPassword
 			};
 		}
 

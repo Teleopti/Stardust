@@ -49,15 +49,17 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 					FailReason = passwordCheck.Message,
 					PasswordExpired = passwordCheck.PasswordExpired,
 					Success = passwordCheck.Successful,
-					Tenant = applicationLogonInfo.PersonInfo.Tenant
+					Tenant = personInfo.Tenant,
+					TenantPassword = personInfo.TenantPassword
 				};
 
 			return new TenantAuthenticationResult
 			{
 				Success = true,
-				PersonId = applicationLogonInfo.PersonInfo.Id,
-				Tenant = applicationLogonInfo.PersonInfo.Tenant,
-				DataSourceConfiguration = nhibConfig
+				PersonId = personInfo.Id,
+				Tenant = personInfo.Tenant,
+				DataSourceConfiguration = nhibConfig,
+				TenantPassword = personInfo.TenantPassword
 			};
 		}
 

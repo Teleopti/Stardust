@@ -79,6 +79,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 			res.Tenant.Should().Be.EqualTo(personInfo.Tenant);
 			res.PersonId.Should().Be.EqualTo(personInfo.Id);
 			res.DataSourceConfiguration.Should().Be.SameInstanceAs(dataSourceConfiguration);
+			res.TenantPassword.Should().Be.EqualTo(personInfo.TenantPassword);
 		}
 
 		[Test]
