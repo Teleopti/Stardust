@@ -105,6 +105,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			peopleList.First().FirstName.Equals(person.Name.FirstName);
 			peopleList.Last().FirstName.Equals(currentUser.Name.FirstName);
 		}
+
 	}
 
 	public class FakePeopleSearchProvider : IPeopleSearchProvider
