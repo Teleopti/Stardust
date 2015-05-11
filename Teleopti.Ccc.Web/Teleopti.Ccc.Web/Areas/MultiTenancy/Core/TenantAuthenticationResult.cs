@@ -2,7 +2,7 @@
 
 namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 {
-	public class ApplicationAuthenticationResult
+	public class TenantAuthenticationResult
 	{
 		public bool Success { get; set; }
 		public string FailReason { get; set; }

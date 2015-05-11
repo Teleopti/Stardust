@@ -593,7 +593,7 @@
     <Compile Include="Areas\MultiTenancy\Core\IIdentityAuthentication.cs" />
     <Compile Include="Areas\MultiTenancy\AuthenticateController.cs" />
     <Compile Include="Areas\MultiTenancy\Core\ApplicationAuthentication.cs" />
-    <Compile Include="Areas\MultiTenancy\Core\ApplicationAuthenticationResult.cs" />
+    <Compile Include="Areas\MultiTenancy\Core\TenantAuthenticationResult.cs" />
     <Compile Include="Areas\MultiTenancy\Core\IApplicationAuthentication.cs" />
     <Compile Include="Areas\Forecasting\Controllers\ForecastController.cs" />
     <Compile Include="Areas\Forecasting\Core\IoC\ForecastingAreaModule.cs" />

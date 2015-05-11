@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 			_verifyPasswordPolicy = verifyPasswordPolicy;
 		}
 
-		public ApplicationAuthenticationResult Logon(string userName, string password)
+		public TenantAuthenticationResult Logon(string userName, string password)
 		{
 			var personInfo = _applicationUserQuery.Find(userName);
 			if (personInfo == null)
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 
 			var passwordCheck = _verifyPasswordPolicy.Check(applicationLogonInfo);
 			if (passwordCheck.HasMessage)
-				return new ApplicationAuthenticationResult
+				return new TenantAuthenticationResult
 				{
 					FailReason = passwordCheck.Message,
 					PasswordExpired = passwordCheck.PasswordExpired,
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 					Tenant = applicationLogonInfo.PersonInfo.Tenant
 				};
 
-			return new ApplicationAuthenticationResult
+			return new TenantAuthenticationResult
 			{
 				Success = true,
 				PersonId = applicationLogonInfo.PersonInfo.Id,
@@ -61,9 +61,9 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 			};
 		}
 
-		private static ApplicationAuthenticationResult createFailingResult(string failReason)
+		private static TenantAuthenticationResult createFailingResult(string failReason)
 		{
-			return new ApplicationAuthenticationResult
+			return new TenantAuthenticationResult
 			{
 				Success = false,
 				FailReason = failReason

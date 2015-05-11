@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		{
 			const string userName = "Hejhej";
 			const string password = "Tjoflöjt";
-			var serviceResult = new ApplicationAuthenticationResult
+			var serviceResult = new TenantAuthenticationResult
 			{
 				Success = true,
 				PersonId = Guid.NewGuid(),
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			appAuthentication.Expect(x => x.Logon(userName, password)).Return(serviceResult);
 
 			var webCall = target.ApplicationLogon(new ApplicationLogonModel{UserName = userName, Password = password});
-			var result = ((ApplicationAuthenticationResult)webCall.Data);
+			var result = ((TenantAuthenticationResult)webCall.Data);
 			result.Should().Be.SameInstanceAs(serviceResult);
 		}
 
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		{
 			const string userName = "Hejhej";
 			const string password = "Tjoflöjt";
-			var serviceResult = new ApplicationAuthenticationResult
+			var serviceResult = new TenantAuthenticationResult
 			{
 				Success = false,
 				FailReason = "nåt fel"
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			var target = new StubbingControllerBuilder().CreateController<AuthenticateController>(appAuthentication, null, MockRepository.GenerateMock<ILogLogonAttempt>());
 			appAuthentication.Expect(x => x.Logon(userName, password)).Return(serviceResult);
 
-			var result = ((ApplicationAuthenticationResult)target.ApplicationLogon(new ApplicationLogonModel { UserName = userName, Password = password }).Data);
+			var result = ((TenantAuthenticationResult)target.ApplicationLogon(new ApplicationLogonModel { UserName = userName, Password = password }).Data);
 			result.Should().Be.SameInstanceAs(serviceResult);
 			//target.Response.StatusCode.Should().Be.EqualTo(401);
 		}
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		{
 			const string identity = "Hejhej\\Tjoflöjt";
 			
-			var serviceResult = new ApplicationAuthenticationResult
+			var serviceResult = new TenantAuthenticationResult
 			{
 				Success = true,
 				PersonId = Guid.NewGuid(),
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			identityAuthentication.Expect(x => x.Logon(identity)).Return(serviceResult);
 
 			var webCall = target.IdentityLogon(new IdentityLogonModel{Identity = identity});
-			var result = ((ApplicationAuthenticationResult)webCall.Data);
+			var result = ((TenantAuthenticationResult)webCall.Data);
 			result.Should().Be.SameInstanceAs(serviceResult);
 		}
 
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		public void FailingIdentityLogon()
 		{
 			const string identity = "Hejhej\\Tjoflöjt";
-			var serviceResult = new ApplicationAuthenticationResult
+			var serviceResult = new TenantAuthenticationResult
 			{
 				Success = false,
 				FailReason = "nåt fel"
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			var target = new StubbingControllerBuilder().CreateController<AuthenticateController>(null, identityAuthentication, MockRepository.GenerateMock<ILogLogonAttempt>());
 			identityAuthentication.Expect(x => x.Logon(identity)).Return(serviceResult);
 
-			var result = ((ApplicationAuthenticationResult)target.IdentityLogon(new IdentityLogonModel { Identity = identity }).Data);
+			var result = ((TenantAuthenticationResult)target.IdentityLogon(new IdentityLogonModel { Identity = identity }).Data);
 			result.Should().Be.SameInstanceAs(serviceResult);
 			//target.Response.StatusCode.Should().Be.EqualTo(401);
 		}
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		{
 			const string userName = "sadfasdf";
 			const string password = " löaksdf";
-			var serviceResult = new ApplicationAuthenticationResult();
+			var serviceResult = new TenantAuthenticationResult();
 			var appAuthentication = MockRepository.GenerateMock<IApplicationAuthentication>();
 			var logger = MockRepository.GenerateMock<ILogLogonAttempt>();
 			var target = new StubbingControllerBuilder().CreateController<AuthenticateController>(appAuthentication, null, logger);
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		public void ShouldLogIdentityLogon()
 		{
 			const string identity = "sadfasdf asdf";
-			var serviceResult = new ApplicationAuthenticationResult();
+			var serviceResult = new TenantAuthenticationResult();
 			var idAuthentication = MockRepository.GenerateMock<IIdentityAuthentication>();
 			var logger = MockRepository.GenerateMock<ILogLogonAttempt>();
 			var target = new StubbingControllerBuilder().CreateController<AuthenticateController>(null, idAuthentication, logger);

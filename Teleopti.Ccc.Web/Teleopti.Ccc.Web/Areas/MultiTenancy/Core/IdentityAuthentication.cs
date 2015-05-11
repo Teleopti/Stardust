@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 			_dataSourceConfigurationProvider = dataSourceConfigurationProvider;
 		}
 
-		public ApplicationAuthenticationResult Logon(string identity)
+		public TenantAuthenticationResult Logon(string identity)
 		{
 			var foundUser = _identityUserQuery.FindUserData(identity);
 			if (foundUser==null)
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 			if (nhibConfig==null)
 				return createFailingResult(Resources.NoDatasource);
 			
-			return new ApplicationAuthenticationResult
+			return new TenantAuthenticationResult
 			{
 				Success = true,
 				PersonId = foundUser.Id,
@@ -34,9 +34,9 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 			};
 		}
 
-		private static ApplicationAuthenticationResult createFailingResult(string failReason)
+		private static TenantAuthenticationResult createFailingResult(string failReason)
 		{
-			return new ApplicationAuthenticationResult
+			return new TenantAuthenticationResult
 			{
 				Success = false,
 				FailReason = failReason

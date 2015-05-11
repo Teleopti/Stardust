@@ -2,6 +2,7 @@
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 {
+	//TODO: remove me! when authorization is in place, tenant should be read from there instead!
 	public class FindTenantByNameQuery : IFindTenantByNameQuery
 	{
 		private readonly ICurrentTenantSession _tenantUnitOfWorkManager;

@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO
 			var applicationData = MockRepository.GenerateMock<IApplicationData>();
 			var datasource = MockRepository.GenerateMock<IDataSource>();
 			var target = new SsoAuthenticator(applicationData, null, applicationAuthentication);
-			applicationAuthentication.Stub(x => x.Logon(userName, password)).Return(new ApplicationAuthenticationResult
+			applicationAuthentication.Stub(x => x.Logon(userName, password)).Return(new TenantAuthenticationResult
 			{
 				PasswordExpired = true
 			});

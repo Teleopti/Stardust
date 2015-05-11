@@ -2,6 +2,6 @@
 {
 	public interface IIdentityAuthentication
 	{
-		ApplicationAuthenticationResult Logon(string identity);
+		TenantAuthenticationResult Logon(string identity);
 	}
 }
