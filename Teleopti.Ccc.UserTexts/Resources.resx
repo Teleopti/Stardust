@@ -10220,27 +10220,35 @@ These options are activated:
   </data>
   <data name="PersonFinderFieldAll" xml:space="preserve">
     <value>All</value>
+    <comment>PersonFinderField enum member.</comment>
   </data>
   <data name="PersonFinderFieldBudgetGroup" xml:space="preserve">
     <value>Budget Group</value>
+    <comment>PersonFinderField enum member. </comment>
   </data>
   <data name="PersonFinderFieldContract" xml:space="preserve">
     <value>Contract</value>
+    <comment>PersonFinderField enum member.</comment>
   </data>
   <data name="PersonFinderFieldContractSchedule" xml:space="preserve">
     <value>Contract Schedule</value>
+    <comment>PersonFinderField enum member</comment>
   </data>
   <data name="PersonFinderFieldOrganization" xml:space="preserve">
     <value>Organization</value>
+    <comment>PersonFinderField enum member</comment>
   </data>
   <data name="PersonFinderFieldPartTimePercentage" xml:space="preserve">
     <value>Part-Time Percentage</value>
+    <comment>PersonFinderField enum member</comment>
   </data>
   <data name="PersonFinderFieldShiftBag" xml:space="preserve">
     <value>Shift Bag</value>
+    <comment>PersonFinderField enum member.</comment>
   </data>
   <data name="PersonFinderFieldSkill" xml:space="preserve">
     <value>Skill</value>
+    <comment>PersonFinderField enum member.</comment>
   </data>
   <data name="RowsPerPageFifty" xml:space="preserve">
     <value>Fifty</value>
@@ -12939,7 +12947,7 @@ Reduce the complexity to use these shifts.</value>
   </data>
   <data name="PersonFinderFieldRole" xml:space="preserve">
     <value>Role</value>
-    <comment>used when searching for persons based on role</comment>
+    <comment>PersonFinderField enum member.</comment>
   </data>
   <data name="NoGamificationSetting" xml:space="preserve">
     <value>No gamification setting</value>
@@ -13121,5 +13129,21 @@ Reduce the complexity to use these shifts.</value>
   <data name="WorkingHours" xml:space="preserve">
     <value>Working Hours</value>
     <comment>use in wfm web outbound campaign edit view</comment>
+  </data>
+  <data name="PersonFinderFieldEmploymentNumber" xml:space="preserve">
+    <value>Employment Number</value>
+    <comment>PersonFinderField enum member</comment>
+  </data>
+  <data name="PersonFinderFieldFirstName" xml:space="preserve">
+    <value>First Name</value>
+    <comment>PersonFinderField enum member</comment>
+  </data>
+  <data name="PersonFinderFieldLastName" xml:space="preserve">
+    <value>Last Name</value>
+    <comment>PersonFinderField enum member</comment>
+  </data>
+  <data name="PersonFinderFieldNote" xml:space="preserve">
+    <value>Note</value>
+    <comment>PersonFinderField enum member</comment>
   </data>
 </root>
