@@ -12,6 +12,7 @@
 		<property name="Identity" column="[Identity]"/>
 		<property name="ApplicationLogonName"/>
 		<property name="ApplicationLogonPassword"/>
+		<property name="TenantPassword" />
 
 		<component name="ApplicationLogonInfo" class="ApplicationLogonInfo">
 			<parent name="PersonInfo" />

@@ -16,9 +16,11 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		{
 			this.tenant = tenant;
 			Id = personId;
+			RegenerateTenantPassword();
 		}
 
 		public virtual Guid Id { get; protected set; }
+		public virtual string TenantPassword { get; protected set; }
 		//TODO: tenant move these to applicationlogoninfo
 		public virtual string ApplicationLogonName { get; protected set; }
 		//make private when oldschema is gone!
@@ -52,6 +54,11 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		public virtual void SetIdentity(string identityName)
 		{
 			Identity = identityName;
+		}
+
+		public virtual void RegenerateTenantPassword()
+		{
+			TenantPassword = Guid.NewGuid().ToString().Replace('-', 'x');
 		}
 
 		private void setPassword(ICheckPasswordStrength checkPasswordStrength, string newPassword)
