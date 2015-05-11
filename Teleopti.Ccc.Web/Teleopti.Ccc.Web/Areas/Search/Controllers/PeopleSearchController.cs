@@ -24,22 +24,22 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 		public virtual IHttpActionResult GetResult(string keyword, int pageSize, int currentPageIndex)
 		{
 			var currentDate = DateOnly.Today;
-			var criteriaDictionary = new Dictionary<PersonFinderField, string>();
+			IDictionary<PersonFinderField, string> criteriaDictionary = null;
 			var myTeam = _loggonUser.CurrentUser().MyTeam(currentDate);
 
 			if (string.IsNullOrEmpty(keyword) && myTeam == null)
 			{
 				return Ok(new {});
 			}
-
+			;
 			if (string.IsNullOrEmpty(keyword))
 			{
 				keyword = myTeam.Description.Name;
-				criteriaDictionary.Add(PersonFinderField.Organization, keyword);
+				criteriaDictionary = new Dictionary<PersonFinderField, string>{{PersonFinderField.Organization, keyword}};
 			}
 			else
 			{
-				criteriaDictionary.Add(PersonFinderField.All, keyword);
+				criteriaDictionary = SearchTermParser.Parse(keyword);
 			}
 
 			var peopleList = _searchProvider.SearchPeople(criteriaDictionary, pageSize, currentPageIndex, currentDate);
