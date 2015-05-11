@@ -5,39 +5,27 @@
 		<td>
 			<table class="table-condensed">
 				<tr class="form-inline">
-					<td>
-					    <div class="input-group">
-					        <span class="input-group-addon">
-					            <i class="glyphicon glyphicon-step-backward"></i>
-					        </span>
-					        <input class="overtime-availability-start-date form-control" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat() }" type="text" disabled="disabled" />
-					        <span class="input-group-addon">
-							<i class="glyphicon glyphicon-calendar"></i>
-					        </span>
-					    </div>
+					<td class="col-xs-3 col-sm-4 col-md-4 col-lg-6">
+						<div class="input-group ">
+							<input class="overtime-availability-start-date form-control" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat() }" type="text" disabled="disabled" />
+						</div>
 					</td>
-				    <td>
-				        <div class="bootstrap-timepicker">
-				            <div class="input-group" title="@Resources.StartTime">
-				                <input type="text" class="overtime-availability-start-time form-control" data-bind="timepicker: StartTime, timepickerOptions: { showMeridian: ShowMeridian, allowEmpty: false }" />
-				                <span class="input-group-addon">
-				                    <i class="glyphicon glyphicon-time"></i>
-				                </span>
-				            </div>
-				        </div>
-				    </td>
-                    <td/>
+					<td class=" col-xs-4 col-sm-5 col-md-5 col-lg-7">
+						<div class="bootstrap-timepicker">
+							<div class="input-group" title="@Resources.StartTime">
+								<input type="text" class="overtime-availability-start-time form-control" data-bind="timepicker: StartTime, timepickerOptions: { showMeridian: ShowMeridian, allowEmpty: false }" />
+								<span class="input-group-addon">
+									<i class="glyphicon glyphicon-time"></i>
+								</span>
+							</div>
+						</div>
+					</td>
+					<td/>
 				</tr>
 				<tr class="form-inline">
 					<td>
 					    <div class="input-group">
-					        <span class="input-group-addon">
-					            <i class="glyphicon glyphicon-step-forward"></i>
-					        </span>
 					        <input class="overtime-availability-end-date form-control" data-bind="datepicker: DateToForDisplay(), datepickerOptions: { autoHide: true, format: DateFormat() }" type="text" disabled="disabled" />
-					        <span class="input-group-addon">
-					            <i class="glyphicon glyphicon-calendar"></i>
-					        </span>
 					    </div>
 					</td>
 				    <td>
