@@ -15,11 +15,10 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
         private readonly IRtaStateGroupRepository _rtaStateGroupRepository;
 		private readonly ConcurrentDictionary<Guid, IActualAgentState> _actualAgentStates = new ConcurrentDictionary<Guid, IActualAgentState>();
 		
-        public RtaStateHolder(ISchedulingResultStateHolder schedulingResultStateHolder, IRtaStateGroupRepository rtaStateGroupRepository, IStateGroupActivityAlarmRepository stateGroupActivityAlarmRepository)
+        public RtaStateHolder(ISchedulingResultStateHolder schedulingResultStateHolder, IRtaStateGroupRepository rtaStateGroupRepository)
         {
             InParameter.NotNull("schedulingResultStateHolder", schedulingResultStateHolder);
             InParameter.NotNull("rtaStateGroupProvider", rtaStateGroupRepository);
-            InParameter.NotNull("stateGroupActivityAlarmProvider", stateGroupActivityAlarmRepository);
 
             _schedulingResultStateHolder = schedulingResultStateHolder;
             _rtaStateGroupRepository = rtaStateGroupRepository;

@@ -29,8 +29,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
             _rtaStateGroupRepository = _mocks.StrictMock<IRtaStateGroupRepository>();
             _stateGroupActivityAlarmRepository = _mocks.StrictMock<IStateGroupActivityAlarmRepository>();
 
-            _target = new RtaStateHolder(_schedulingResultStateHolder, _rtaStateGroupRepository,
-                                         _stateGroupActivityAlarmRepository);
+            _target = new RtaStateHolder(_schedulingResultStateHolder, _rtaStateGroupRepository);
         }
 
         [Test]
@@ -51,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
 				.Return(new List<IStateGroupActivityAlarm>());
             
             _mocks.ReplayAll();
-            _target = new RtaStateHolder(_schedulingResultStateHolder, _rtaStateGroupRepository, _stateGroupActivityAlarmRepository);
+            _target = new RtaStateHolder(_schedulingResultStateHolder, _rtaStateGroupRepository);
             _target.Initialize();
 			Assert.That(_target.RtaStateGroups,Is.Not.Null);
             _mocks.VerifyAll();
@@ -105,7 +104,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
 				.Return(new List<IStateGroupActivityAlarm>());
 
 			_mocks.ReplayAll();
-			_target = new RtaStateHolder(_schedulingResultStateHolder, _rtaStateGroupRepository, _stateGroupActivityAlarmRepository);
+			_target = new RtaStateHolder(_schedulingResultStateHolder, _rtaStateGroupRepository);
 			_target.Initialize();
 			_target.VerifyDefaultStateGroupExists();
 			_mocks.VerifyAll();
@@ -120,7 +119,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
 				.Return(new List<IStateGroupActivityAlarm>());
 
 			_mocks.ReplayAll();
-			_target = new RtaStateHolder(_schedulingResultStateHolder, _rtaStateGroupRepository, _stateGroupActivityAlarmRepository);
+			_target = new RtaStateHolder(_schedulingResultStateHolder, _rtaStateGroupRepository);
 			_target.Initialize();
 			_target.VerifyDefaultStateGroupExists();
 			_mocks.VerifyAll();
