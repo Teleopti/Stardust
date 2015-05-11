@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
+using Autofac;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -45,9 +46,10 @@ namespace Teleopti.Ccc.Win.Grouping
 
 		private readonly IApplicationFunction _myApplicationFunction =
 			ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList,
-								   DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage);
+									DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage);
 
 		private readonly IGroupPageHelper _groupPageHelper;
+		private readonly IComponentContext _container;
 
 		public string GroupPageName { get; set; }
 
@@ -74,10 +76,11 @@ namespace Teleopti.Ccc.Win.Grouping
 			}
 		}
 
-		public GroupPagePreviewScreen(IGroupPageHelper groupPageHelper)
+		public GroupPagePreviewScreen(IGroupPageHelper groupPageHelper, IComponentContext container)
 			: this()
 		{
 			_groupPageHelper = groupPageHelper;
+			_container = container;
 			_treeViewCreator = new TreeViewCreator(_groupPageHelper);
 			treeViewAdvPreviewTree.AutoScrolling = ScrollBars.Vertical;
 		}
@@ -93,7 +96,7 @@ namespace Teleopti.Ccc.Win.Grouping
 			var len = e.Node.Text.Length;
 			if (len > 50) len = 50;
 			e.Node.Text = e.Node.Text.Substring(0, len);
-			
+
 			group.Description = new Description(e.Node.Text);
 		}
 
@@ -109,7 +112,7 @@ namespace Teleopti.Ccc.Win.Grouping
 			_treeViewDragHighlightTracker.QueryDragInsertInfo += treeViewDragHighlightTrackerQueryDragInsertInfo;
 
 
-			findPersonsView1.Initialize(new FindPersonsModel(_groupPageHelper.PersonCollection), _myApplicationFunction);
+			findPersonsView1.Initialize(new FindPersonsModel(_groupPageHelper.PersonCollection), _myApplicationFunction, _container);
 			SetTexts();
 			gradientPanelHeader.BackColor = ColorHelper.OptionsDialogHeaderBackColor();
 			labelTitle.ForeColor = ColorHelper.OptionsDialogHeaderForeColor();
@@ -172,10 +175,10 @@ namespace Teleopti.Ccc.Win.Grouping
 					// Get the destination node 
 					var sourceNode = (TreeNodeAdv)e.Data.GetData(typeof(TreeNodeAdv));
 
-	                if (!isPersonNode(sourceNode))
-	                {
-						if(sourceNode.HasNode(destinationNode) || sourceNode == destinationNode) return;   
-	                }
+					if (!isPersonNode(sourceNode))
+					{
+						if (sourceNode.HasNode(destinationNode) || sourceNode == destinationNode) return;
+					}
 
 					//Clone the nodes to avoid the override issue
 					var selectedNodesCollection = (SelectedNodesCollection)sourceNode.TreeView.SelectedNodes.Clone();
@@ -183,7 +186,7 @@ namespace Teleopti.Ccc.Win.Grouping
 					foreach (TreeNodeAdv node in selectedNodesCollection)
 					{
 						var nodeInDestinationTree = treeViewAdvPreviewTree.FindNodesWithTagObject(node.TagObject).First();
-					  
+
 						switch (dropPosition)
 						{
 							case TreeViewDropPositions.AboveNode:
@@ -310,22 +313,22 @@ namespace Teleopti.Ccc.Win.Grouping
 			if (_cutSourceNode == null && findPersonsView1.CutNodes == null)
 				toolStripMenuItemPaste.Enabled = false;
 			if (string.Compare(GroupingConstants.NodeTypeRoot, _rightMouseDownNodeCached[0].Tag.ToString(),
-							   StringComparison.OrdinalIgnoreCase) == 0)
+								StringComparison.OrdinalIgnoreCase) == 0)
 			{
 				toolStripMenuItemCut.Enabled = false;
 			}
 			else if (string.Compare(GroupingConstants.NodeTypePerson, _rightMouseDownNodeCached[0].Tag.ToString(),
-							   StringComparison.OrdinalIgnoreCase) == 0)
+								StringComparison.OrdinalIgnoreCase) == 0)
 			{
-				toolStripMenuItemDelete.Enabled = canPerformPersonDeletion(_rightMouseDownNodeCached[0]); 
+				toolStripMenuItemDelete.Enabled = canPerformPersonDeletion(_rightMouseDownNodeCached[0]);
 			}
 			else if (string.Compare(GroupingConstants.NodeTypeGroup, _rightMouseDownNodeCached[0].Tag.ToString(),
 									StringComparison.OrdinalIgnoreCase) == 0)
 			{
-				toolStripMenuItemDelete.Enabled = canPerformGroupDeletion(_rightMouseDownNodeCached[0]); 
+				toolStripMenuItemDelete.Enabled = canPerformGroupDeletion(_rightMouseDownNodeCached[0]);
 			}
 			if (string.Compare(GroupingConstants.NodeTypeGroup, _rightMouseDownNodeCached[0].Tag.ToString(),
-							   StringComparison.OrdinalIgnoreCase) == 0)
+								StringComparison.OrdinalIgnoreCase) == 0)
 			{
 				toolStripMenuItemChangeNameOnGroup.Enabled = true;
 			}
@@ -473,7 +476,7 @@ namespace Teleopti.Ccc.Win.Grouping
 		{
 			if (_rightMouseDownNodeCached != null &&
 				string.Compare(GroupingConstants.NodeTypeGroup, _rightMouseDownNodeCached[0].Tag.ToString(),
-							   StringComparison.OrdinalIgnoreCase) == 0)
+								StringComparison.OrdinalIgnoreCase) == 0)
 			{
 				treeViewAdvPreviewTree.BeginEdit(_rightMouseDownNodeCached[0]);
 			}
@@ -482,14 +485,14 @@ namespace Teleopti.Ccc.Win.Grouping
 		public void SetUnitOfWork(IUnitOfWork value)
 		{
 		}
-		
+
 		private void performNodeMoveInGroupPage(TreeNodeAdv sourceNode, TreeNodeAdv destinationNode)
 		{
 			if (sourceNode != null && sourceNode.TagObject != null &&
 				destinationNode != null && destinationNode.TagObject != null)
 			{
 				if (string.Compare(GroupingConstants.NodeTypePerson, sourceNode.Tag.ToString(),
-								   StringComparison.OrdinalIgnoreCase) == 0)
+									StringComparison.OrdinalIgnoreCase) == 0)
 				{
 					var nodeInDestinationTree = sourceNode;
 					if (findPersonsView1.CutNodes != null)
@@ -528,7 +531,7 @@ namespace Teleopti.Ccc.Win.Grouping
 			}
 
 			if ((getTreeNodeLevel(sourceNode.Level) == TreeElementLevel.Children &&
-			   getTreeNodeLevel(destinationNode.Level) == TreeElementLevel.VirtualRoot))
+				getTreeNodeLevel(destinationNode.Level) == TreeElementLevel.VirtualRoot))
 			{
 				if (sourceNode.Parent != null)
 				{
@@ -680,8 +683,8 @@ namespace Teleopti.Ccc.Win.Grouping
 			{
 				//2
 				var sourceRootPersonGroup = sourceNode.TagObject as ChildPersonGroup;
-				var parentPersonGroupBase = sourceNode.Parent.TagObject as PersonGroupBase;    
- 
+				var parentPersonGroupBase = sourceNode.Parent.TagObject as PersonGroupBase;
+
 				if (sourceRootPersonGroup != null && parentPersonGroupBase != null)
 				{
 					//remove the group from the parent of the source node
@@ -735,13 +738,13 @@ namespace Teleopti.Ccc.Win.Grouping
 
 			var virtualNode = new TreeNodeAdv(rootName)
 			{
-			    TagObject = "RootGroup",
-			    Tag = GroupingConstants.NodeTypeRoot,
-			    LeftImageIndices = new[] {1},
-			    RightImagePadding = 10
+				TagObject = "RootGroup",
+				Tag = GroupingConstants.NodeTypeRoot,
+				LeftImageIndices = new[] { 1 },
+				RightImagePadding = 10
 			};
 
-		    foreach (TreeNodeAdv node in treeNodes)
+			foreach (TreeNodeAdv node in treeNodes)
 				virtualNode.Nodes.Add(node);
 
 			treeViewAdvPreviewTree.Nodes.Add(virtualNode);
@@ -913,7 +916,7 @@ namespace Teleopti.Ccc.Win.Grouping
 		{
 			if (_rightMouseDownNodeCached != null)
 			{
-				_cutSourceNode = (SelectedNodesCollection) _rightMouseDownNodeCached.Clone();
+				_cutSourceNode = (SelectedNodesCollection)_rightMouseDownNodeCached.Clone();
 			}
 		}
 
@@ -928,11 +931,11 @@ namespace Teleopti.Ccc.Win.Grouping
 				{
 					for (var i = 0; i < _cutSourceNode.Count; i++)
 					{
-	                    if (!isPersonNode(_cutSourceNode[i]))
-	                    {
-							if(_cutSourceNode[i].HasNode(_rightMouseDownNodeCached[0]) || _cutSourceNode[i] == _rightMouseDownNodeCached[0])
-   								continue;
-	                    }
+						if (!isPersonNode(_cutSourceNode[i]))
+						{
+							if (_cutSourceNode[i].HasNode(_rightMouseDownNodeCached[0]) || _cutSourceNode[i] == _rightMouseDownNodeCached[0])
+								continue;
+						}
 						performNodeMoveInGroupPage(_cutSourceNode[i], _rightMouseDownNodeCached[0]);
 					}
 					_rightMouseDownNodeCached[0].Expand();
@@ -944,19 +947,19 @@ namespace Teleopti.Ccc.Win.Grouping
 
 		private void treeViewAdvPreviewTreeKeyDown(object sender, KeyEventArgs e)
 		{
-			 if (e.KeyCode == Keys.X && e.Modifiers == Keys.Control)
-			 {
-				 _rightMouseDownNodeCached = treeViewAdvPreviewTree.SelectedNodes;
-				 handleCut();
-			 }
+			if (e.KeyCode == Keys.X && e.Modifiers == Keys.Control)
+			{
+				_rightMouseDownNodeCached = treeViewAdvPreviewTree.SelectedNodes;
+				handleCut();
+			}
 
-			 if (e.KeyCode == Keys.V && e.Modifiers == Keys.Control)
-			 {
-				 _rightMouseDownNodeCached = treeViewAdvPreviewTree.SelectedNodes;
-				 handlePaste();
-			 }
+			if (e.KeyCode == Keys.V && e.Modifiers == Keys.Control)
+			{
+				_rightMouseDownNodeCached = treeViewAdvPreviewTree.SelectedNodes;
+				handlePaste();
+			}
 
-			 base.OnKeyDown(e);
+			base.OnKeyDown(e);
 		}
 	}
 }

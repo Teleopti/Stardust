@@ -77,10 +77,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		private class emptyTenantDataManager : ITenantDataManager
 		{
-			public void SaveTenantData(IEnumerable<TenantAuthenticationData> tenantAuthenticationData)
-			{
-			}
-
 			public SavePersonInfoResult SaveTenantData(TenantAuthenticationData tenantAuthenticationData)
 			{
 				return new SavePersonInfoResult { Success = true };

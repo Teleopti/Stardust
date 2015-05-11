@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using Autofac;
 using Microsoft.Practices.Composite.Events;
 using Syncfusion.Drawing;
 using Syncfusion.Grouping;
@@ -28,6 +29,7 @@ namespace Teleopti.Ccc.Win.Grouping
 	{
 		private readonly IEventAggregator _eventAggregator;
 		private readonly IGroupPageHelper _groupPageHelper;
+		private readonly IComponentContext _container;
 		private readonly IEventAggregator _globalEventAggregator;
 		private DateOnlyPeriod? _selectedPeriod;
 		private readonly Brush _intermediateBrush = Brushes.LightGray;
@@ -35,12 +37,13 @@ namespace Teleopti.Ccc.Win.Grouping
 		public event EventHandler DoFilter;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public PersonSelectorView(IEventAggregatorLocator eventAggregatorLocator,IGroupPageHelper groupPageHelper)
+		public PersonSelectorView(IEventAggregatorLocator eventAggregatorLocator, IGroupPageHelper groupPageHelper, IComponentContext container)
 		{
 			_eventAggregator = eventAggregatorLocator.LocalAggregator();
 			_globalEventAggregator = eventAggregatorLocator.GlobalAggregator();
 
 			_groupPageHelper = groupPageHelper;
+			_container = container;
 			InitializeComponent();
 			xdtpDate.Value = DateTime.Today;
 			xdtpDate.SetCalendarMetroStyle();
@@ -196,7 +199,7 @@ namespace Teleopti.Ccc.Win.Grouping
 				_groupPageHelper.LoadAll();
 				_groupPageHelper.SetCurrentGroupPageById(id);
 
-				var groupPagePreviewScreen = new GroupPagePreviewScreen(_groupPageHelper);
+				var groupPagePreviewScreen = new GroupPagePreviewScreen(_groupPageHelper,_container);
 
 				if (_groupPageHelper.CurrentGroupPage != null)
 				{

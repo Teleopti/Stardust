@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using Autofac;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls.DateSelection;
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.Win.Grouping
             }
         }
 
-        public void Initialize(FindPersonsModel model, IApplicationFunction applicationFunction)
+        public void Initialize(FindPersonsModel model, IApplicationFunction applicationFunction, IComponentContext container)
         {
             dateTimePickerAdvFrom.SetCultureInfoSafe(System.Globalization.CultureInfo.CurrentCulture);
             dateTimePickerAdvTo.SetCultureInfoSafe(System.Globalization.CultureInfo.CurrentCulture);
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.Win.Grouping
             dateTimePickerAdvFrom.ValueChanged -= dateTimePickerAdvFromValueChanged;
             dateTimePickerAdvTo.ValueChanged -= dateTimePickerAdvToValueChanged;
 
-            _presenter = new FindPersonsPresenter(this, model, applicationFunction);
+				_presenter = new FindPersonsPresenter(this, model, applicationFunction, container);
             _presenter.Initialize();
 
             dateTimePickerAdvFrom.ValueChanged += dateTimePickerAdvFromValueChanged;

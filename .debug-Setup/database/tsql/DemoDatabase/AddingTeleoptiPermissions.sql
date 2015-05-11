@@ -110,16 +110,6 @@ select @identity=@WinDomain + N'\' + @WinUser
 INSERT INTO $(TELEOPTICCC).dbo.AuthenticationInfo
 SELECT @userid,@identity
 
---Add currect user to IIS-users: update aspnet_users
-UPDATE $(TELEOPTIANALYTICS).dbo.aspnet_Users
-SET
-	UserName=@WinDomain+'\'+@WinUser,
-	LoweredUserName=@WinDomain+'\'+@WinUser
-WHERE userid=@userid
-
-update $(TELEOPTIANALYTICS).dbo.aspnet_Users
-set LoweredUserName = lower(LoweredUserName)
-
 --Add permissions on all reports
 truncate table $(TELEOPTIANALYTICS).mart.permission_report
 

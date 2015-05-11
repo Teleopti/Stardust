@@ -106,6 +106,10 @@
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.7\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="policy.2.3.FSharp.Core">
       <HintPath>..\packages\FSharp.Core.3.0.0.2\lib\net40\policy.2.3.FSharp.Core.dll</HintPath>
     </Reference>
@@ -580,6 +584,8 @@
     <Compile Include="Helper\DateExtensions.cs" />
     <Compile Include="Helper\IBackgroundWorkerWrapper.cs" />
     <Compile Include="ICurrentApplicationData.cs" />
+    <Compile Include="Security\MultiTenancyAuthentication\ITenantDataManager.cs" />
+    <Compile Include="Security\MultiTenancyAuthentication\TenantAuthenticationData.cs" />
     <Compile Include="Notification\ClickatellNotificationSender.cs" />
     <Compile Include="Notification\CustomNotificationSenderFactory.cs" />
     <Compile Include="Notification\EmailConfiguration.cs" />
@@ -1619,6 +1625,7 @@
     <Compile Include="Security\MultiTenancyAuthentication\IAuthenticationQuerier.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\IChangePassword.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\IdentityLogonClientModel.cs" />
+    <Compile Include="Security\MultiTenancyAuthentication\ITenantLogonDataManager.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\LogonInfoModel.cs" />
     <Compile Include="Security\NhibConfigDecryption.cs" />
     <Compile Include="Security\OneWayEncryption.cs">

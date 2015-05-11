@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
+namespace Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication
 {
 	public class TenantAuthenticationData
 	{

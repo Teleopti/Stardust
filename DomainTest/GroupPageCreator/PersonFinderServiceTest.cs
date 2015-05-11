@@ -6,8 +6,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.GroupPageCreator;
-using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
-using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -29,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.GroupPageCreator
         {
             persons = new List<IPerson>();
             var applicationFunction =  ApplicationFunctionFactory.CreateApplicationFunction("dontknow?");
-            target = new PersonFinderService(new PersonIndexBuilder(applicationFunction, persons, new DateOnlyPeriod(2010, 1, 1, 2011, 1, 1)));
+            target = new PersonFinderService(new PersonIndexBuilder(applicationFunction, persons, new DateOnlyPeriod(2010, 1, 1, 2011, 1, 1),new fakeTenantLogonDataManager()));
         }
 
         private void SetupPersons()
@@ -81,4 +80,12 @@ namespace Teleopti.Ccc.DomainTest.GroupPageCreator
             target.Find("Rågge").Should().Not.Be.Empty();
         }
     }
+
+	class fakeTenantLogonDataManager : ITenantLogonDataManager
+	{
+		public List<LogonInfoModel> GetLogonInfoModelsForGuids(IEnumerable<Guid> personGuids)
+		{
+			return new List<LogonInfoModel>();
+		}
+	}
 }

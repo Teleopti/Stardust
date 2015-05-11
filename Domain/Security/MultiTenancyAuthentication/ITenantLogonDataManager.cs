@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 
-namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
+namespace Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication
 {
 	public interface ITenantLogonDataManager
 	{
