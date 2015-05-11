@@ -3,7 +3,7 @@ IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ReadModel].[
 DROP PROCEDURE [ReadModel].[PersonFinderWithCriteria]
 GO
 
--- exec [ReadModel].PersonFinderWithCriteria 'FirstName : ashley; pierre, Organization: london', '2001-01-01', 1, 100, 1, 1, 1053
+-- EXEC [ReadModel].[PersonFinderWithCriteria] 'FirstName : ashley; pierre, Organization: london', '2001-01-01', 1, 100, 1, 1, 1053
 -- =============================================
 -- Author:      Xinfeng
 -- Create date: 2005-05-09
@@ -12,6 +12,7 @@ GO
 ------------------------------------------------
 -- When         Who       What
 -- 2015-05-08   Chundan	  Add mutual search for type 'All' and other specific searchTypes, and make searching in 'All' match all values
+-- 2015-05-11   Xinfeng	  Optimize search value parsing
 -- =============================================
 CREATE PROCEDURE [ReadModel].[PersonFinderWithCriteria]
 @search_criterias nvarchar(max),
@@ -95,30 +96,49 @@ select @splitterIndex = -1
 Declare @searchType nvarchar(200)
 Declare @searchValue nvarchar(max)
 
+Declare @keywordSplitterIndex int
+Declare @searchKeyword nvarchar(max)
+Declare @notProcessedSearchValue nvarchar(100)
+
 WHILE @@FETCH_STATUS = 0
 BEGIN
-  Select @splitterIndex = CHARINDEX(':', @searchString)
-  IF @splitterIndex > 0
-  BEGIN
-   select @searchType = LTRIM(RTRIM(SUBSTRING(@searchString, 0, @splitterIndex)))
-   select @searchValue = LTRIM(RTRIM(SUBSTRING(@searchString, @splitterIndex + 1, LEN(@searchString) - @splitterIndex)))
-   IF @searchType = 'All'
-		BEGIN
-		SELECT @isSearchInAll = 1
-		SELECT @searchValue = REPLACE(@searchValue, ';', ',')
-		INSERT INTO #SearchStringsInAll
-		SELECT * FROM dbo.SplitStringString(@searchValue)
-		END
-   ELSE
-	   BEGIN
-	   Insert Into #SearchCriteria Values(@searchType, @searchValue)
-	   END
-  END
+	SELECT @splitterIndex = CHARINDEX(':', @searchString)
+	IF @splitterIndex > 0
+	BEGIN
+		SELECT @searchType = LTRIM(RTRIM(SUBSTRING(@searchString, 0, @splitterIndex)))
+		SELECT @searchValue = LTRIM(RTRIM(SUBSTRING(@searchString, @splitterIndex + 1, LEN(@searchString) - @splitterIndex)))
 
-  FETCH NEXT FROM SearchStringCursor INTO @searchString
+		SELECT @keywordSplitterIndex = CHARINDEX(';', @searchValue)
+
+		IF @searchType = 'All' SELECT @isSearchInAll = 1
+
+		IF @searchType = 'All' AND @keywordSplitterIndex > 0
+		BEGIN
+			Select @notProcessedSearchValue = @searchValue
+			IF RIGHT(@notProcessedSearchValue, 1) <> ';'
+				Select @notProcessedSearchValue = @notProcessedSearchValue + ';'
+			WHILE @keywordSplitterIndex > 0
+			BEGIN
+				SELECT @searchKeyword = LTRIM(RTRIM(SUBSTRING(@notProcessedSearchValue, 0, @keywordSplitterIndex)))
+
+				IF @searchKeyword <> ''
+					INSERT INTO #SearchCriteria VALUES('All', @searchKeyword)
+
+				SELECT @notProcessedSearchValue = LTRIM(RTRIM(SUBSTRING(@notProcessedSearchValue, @keywordSplitterIndex + 1,
+					LEN(@notProcessedSearchValue) - @keywordSplitterIndex)))
+				SELECT @keywordSplitterIndex = CHARINDEX(';', @notProcessedSearchValue)
+			END
+		END
+		ELSE
+			INSERT INTO #SearchCriteria VALUES(@searchType, @searchValue)
+	END
+
+	FETCH NEXT FROM SearchStringCursor INTO @searchString
 END
 
---select * from #SearchCriteria
+--debug
+--SELECT * from #SearchCriteria
+
 CLOSE SearchStringCursor
 DEALLOCATE SearchStringCursor;
 
@@ -133,106 +153,78 @@ FROM #SearchStringsInAll
 --convert @leave_after to ISO-format string
 SELECT @leave_after_ISO = CONVERT(NVARCHAR(10), @leave_after,120)
 
-IF @isSearchInAll = 1
+------------
+--search in specific one or sevaral types
+--cursor for adding "AND" or "OR" conditions for each search criteria
+------------
+DECLARE SearchCriteriaCursor CURSOR FOR
+SELECT SearchType, SearchValue, ROW_NUMBER() OVER(ORDER BY SearchType DESC) as RowNum FROM #SearchCriteria;
+OPEN SearchCriteriaCursor;
+
+FETCH NEXT FROM SearchCriteriaCursor INTO @searchType, @searchValue, @cursorCount
+
+WHILE @@FETCH_STATUS = 0
 BEGIN
-	------------
-	--search in type 'All'
-	------------
-	DECLARE SearchWordCursor CURSOR FOR
-	SELECT SearchWord, ROW_NUMBER() OVER(ORDER BY SearchWord DESC) as RowNum FROM #SearchStringsInAll;
-	OPEN SearchWordCursor;
-
-	FETCH NEXT FROM SearchWordCursor INTO @cursorString, @cursorCountInAll
-
-	WHILE @@FETCH_STATUS = 0
-	 BEGIN
-		
-		SELECT @dynamicSQL = @dynamicSQL + 'SELECT PersonId FROM ReadModel.FindPerson WHERE ISNULL(TerminalDate, ''2100-01-01'') >= '''+ @leave_after_ISO + ''' AND SearchValue like N''%' + @cursorString + '%'''
-
-		--add INTERSECT between each result set
-		IF @cursorCountInAll <> @wordsInAllCount --But NOT on last condition, the syntax is different
-		SELECT @dynamicSQL = @dynamicSQL + ' INTERSECT '
-		  
-		--fectch next
-		FETCH NEXT FROM SearchWordCursor INTO @cursorString, @cursorCountInAll
-	 END
-	 
-	CLOSE SearchWordCursor;
-	DEALLOCATE SearchWordCursor;
-END
-ELSE
-BEGIN
-	------------
-	--search in specific one or sevaral types
-	--cursor for adding "AND" or "OR" conditions for each search criteria
-	------------
-	DECLARE SearchCriteriaCursor CURSOR FOR
-	SELECT SearchType, SearchValue, ROW_NUMBER() OVER(ORDER BY SearchType DESC) as RowNum FROM #SearchCriteria;
-	OPEN SearchCriteriaCursor;
-
-	FETCH NEXT FROM SearchCriteriaCursor INTO @searchType, @searchValue, @cursorCount
-
-	WHILE @@FETCH_STATUS = 0
+	IF @isSearchInAll = 1 AND @searchType <> 'All' 
 	BEGIN
-	   DECLARE @valueClause nvarchar(max)
-
-	   DECLARE @valueSplitterIndex int
-	   SELECT @valueSplitterIndex = CHARINDEX(';', @searchValue)
-
-	   -- If the search value contains multiple keyword (combined with ';')
-	   -- Then generate search conditions for every search keyword combined with OR
-	   IF @valueSplitterIndex > 0
-	   BEGIN
-		  DECLARE @notProcessedSearchValue nvarchar(max)
-		  DECLARE @valuePart nvarchar(max)
-
-		  SELECT @notProcessedSearchValue = @searchValue
-
-		  IF RIGHT(@searchValue, 1) <> ';'
-			 SELECT @notProcessedSearchValue = @searchValue + ';'
-
-		  SELECT @valueClause = '('
-		  WHILE @valueSplitterIndex > 0
-		  BEGIN
-			 SELECT @valuePart = LTRIM(RTRIM(SUBSTRING(@notProcessedSearchValue, 0, @valueSplitterIndex)))
-			 IF @valuePart <> ''
-			 BEGIN
-				IF @valueClause <> '('
-				   SELECT @valueClause = @valueClause + ' OR '
-				SELECT @valueClause = @valueClause + 'SearchValue LIKE N''%' + @valuePart + '%'''
-			 END
-			 SELECT @notProcessedSearchValue = LTRIM(RTRIM(SUBSTRING(@notProcessedSearchValue, @valueSplitterIndex + 1,
-				LEN(@notProcessedSearchValue) - @valueSplitterIndex)))
-			 SELECT @valueSplitterIndex = CHARINDEX(';', @notProcessedSearchValue)
-		  END
-		  SELECT @valueClause = @valueClause + ')'
-	   END
-	   ELSE
-	   BEGIN
-		  SELECT @valueClause = 'SearchValue like N''%' + @searchValue + '%'''
-	   END
-
-	   IF @valueClause <> '()'
-	   BEGIN
-		  SELECT @dynamicSQL = @dynamicSQL + 'SELECT PersonId FROM ReadModel.FindPerson WHERE '
-			 + 'ISNULL(TerminalDate, ''2100-01-01'') >= ''' + @leave_after_ISO + ''' AND ' + @valueClause
-
-		  --If 'All' set searchtype as a separate AND condition
-		  IF @searchType <> 'All'
-			 SELECT @dynamicSQL = @dynamicSQL + ' AND (SearchType = '''' OR SearchType = '''+ @searchType + ''')'
-
-		  --add INTERSECT between each result set
-		  IF @cursorCount <> @criteriaCount --But NOT on last condition, the syntax is different
-			 SELECT @dynamicSQL = @dynamicSQL + ' INTERSECT '
-	   END
-
-	   --fectch next
-	   FETCH NEXT FROM SearchCriteriaCursor INTO @searchType, @searchValue, @cursorCount
+		--fectch next
+		FETCH NEXT FROM SearchCriteriaCursor INTO @searchType, @searchValue, @cursorCount
+		CONTINUE
 	END
 
-	CLOSE SearchCriteriaCursor;
-	DEALLOCATE SearchCriteriaCursor;
+	DECLARE @valueClause nvarchar(max)
+
+	--DECLARE @keywordSplitterIndex int
+	SELECT @keywordSplitterIndex = CHARINDEX(';', @searchValue)
+
+	-- If the search value contains multiple keyword (combined with ';')
+	-- Then generate search conditions for every search keyword combined with OR
+	IF @keywordSplitterIndex > 0
+	BEGIN
+		SELECT @notProcessedSearchValue = @searchValue
+
+		IF RIGHT(@searchValue, 1) <> ';'
+			SELECT @notProcessedSearchValue = @searchValue + ';'
+
+		SELECT @valueClause = '('
+		WHILE @keywordSplitterIndex > 0
+		BEGIN
+			SELECT @searchKeyword = LTRIM(RTRIM(SUBSTRING(@notProcessedSearchValue, 0, @keywordSplitterIndex)))
+			IF @searchKeyword <> ''
+			BEGIN
+			IF @valueClause <> '('
+				SELECT @valueClause = @valueClause + ' OR '
+			SELECT @valueClause = @valueClause + 'SearchValue LIKE N''%' + @searchKeyword + '%'''
+			END
+			SELECT @notProcessedSearchValue = LTRIM(RTRIM(SUBSTRING(@notProcessedSearchValue, @keywordSplitterIndex + 1,
+			LEN(@notProcessedSearchValue) - @keywordSplitterIndex)))
+			SELECT @keywordSplitterIndex = CHARINDEX(';', @notProcessedSearchValue)
+		END
+		SELECT @valueClause = @valueClause + ')'
+	END
+	ELSE
+		SELECT @valueClause = 'SearchValue like N''%' + @searchValue + '%'''
+
+	IF @valueClause <> '()'
+	BEGIN
+		SELECT @dynamicSQL = @dynamicSQL + 'SELECT PersonId FROM ReadModel.FindPerson WHERE '
+			+ 'ISNULL(TerminalDate, ''2100-01-01'') >= ''' + @leave_after_ISO + ''' AND ' + @valueClause
+
+		--If 'All' set searchtype as a separate AND condition
+		IF @searchType <> 'All'
+			SELECT @dynamicSQL = @dynamicSQL + ' AND (SearchType = '''' OR SearchType = '''+ @searchType + ''')'
+
+		--add INTERSECT between each result set
+		IF @cursorCount <> @criteriaCount --But NOT on last condition, the syntax is different
+			SELECT @dynamicSQL = @dynamicSQL + CHAR(13)+CHAR(10) + ' INTERSECT ' + CHAR(13)+CHAR(10)
+	END
+
+	--fectch next
+	FETCH NEXT FROM SearchCriteriaCursor INTO @searchType, @searchValue, @cursorCount
 END
+
+CLOSE SearchCriteriaCursor;
+DEALLOCATE SearchCriteriaCursor;
 
 --debug
 --SELECT @dynamicSQL
