@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
 	public interface ITeamBlockRemoveShiftCategoryBackToLegalService
 	{
-		bool Execute(ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro, ISchedulingResultStateHolder schedulingResultStateHolder, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleMatrixPro> allScheduleMatrixPros, ShiftNudgeDirective shiftNudgeDirective, IOptimizationPreferences optimizationPreferences);
+		IList<IScheduleDayPro> Execute(ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro, ISchedulingResultStateHolder schedulingResultStateHolder, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleMatrixPro> allScheduleMatrixPros, ShiftNudgeDirective shiftNudgeDirective, IOptimizationPreferences optimizationPreferences);
 	}
 
 	public class TeamBlockRemoveShiftCategoryBackToLegalService : ITeamBlockRemoveShiftCategoryBackToLegalService
@@ -33,9 +33,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_safeRollbackAndResourceCalculation = safeRollbackAndResourceCalculation;
 		}
 
-		public bool Execute(ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro, ISchedulingResultStateHolder schedulingResultStateHolder, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleMatrixPro> allScheduleMatrixPros, ShiftNudgeDirective shiftNudgeDirective, IOptimizationPreferences optimizationPreferences)
+		public IList<IScheduleDayPro> Execute(ISchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro, ISchedulingResultStateHolder schedulingResultStateHolder, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleMatrixPro> allScheduleMatrixPros, ShiftNudgeDirective shiftNudgeDirective, IOptimizationPreferences optimizationPreferences)
 		{
-			var success = true;
+			IList<IScheduleDayPro> unresolveDayPros = new List<IScheduleDayPro>();
 			var removedScheduleDayPros = new List<IScheduleDayPro>();
 			var isSingleAgentTeam = _teamBlockSchedulingOptions.IsSingleAgentTeam(schedulingOptions);
 			var schedulePeriod = scheduleMatrixPro.SchedulePeriod;
@@ -44,8 +44,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			foreach (var limitation in schedulePeriod.ShiftCategoryLimitationCollection())
 			{
 				if (limitation.Weekly) removedScheduleDayPros.AddRange(_shiftCategoryWeekRemover.Remove(limitation, schedulingOptions, scheduleMatrixPro, optimizationPreferences));
-				else removedScheduleDayPros.AddRange(_shiftCategoryPeriodRemover.RemoveShiftCategoryOnPeriod(limitation, schedulingOptions, scheduleMatrixPro, optimizationPreferences));	
-				
+				else removedScheduleDayPros.AddRange(_shiftCategoryPeriodRemover.RemoveShiftCategoryOnPeriod(limitation, schedulingOptions, scheduleMatrixPro, optimizationPreferences));
+
 				foreach (var removedScheduleDayPro in removedScheduleDayPros)
 				{
 					rollbackService.ClearModificationCollection();
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					var teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly, schedulingOptions.BlockFinderTypeForAdvanceScheduling, isSingleAgentTeam);
 					if (teamBlockInfo == null) continue;
 
-					success = _teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, dateOnly, schedulingOptions, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, shiftNudgeDirective);
+					var success = _teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, dateOnly, schedulingOptions, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, shiftNudgeDirective);
 					if (success) continue;
 
 					_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
@@ -64,12 +64,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					if (success) continue;
 
 					_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
+					unresolveDayPros.Add(removedScheduleDayPro);
 				}
 			}
 
 			if (isSingleAgentTeam) schedulingOptions.NotAllowedShiftCategories.Clear();
-			
-			return success;
+
+			return unresolveDayPros;
 		}
 	}
 }

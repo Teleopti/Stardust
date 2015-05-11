@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using NHibernate.Linq.Clauses;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
@@ -31,7 +30,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 		private TeamBlockRemoveShiftCategoryBackToLegalService _target;
 		private IShiftCategoryLimitation _shiftCategoryLimitation;
 		private IShiftCategory _shiftCategory;
-		private IScheduleMatrixValueCalculatorPro _scheduleMatrixValueCalculatorPro;
 		private IScheduleMatrixPro _scheduleMatrixPro;
 		private IList<IScheduleMatrixPro> _scheduleMatrixPros; 
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
@@ -65,7 +63,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			_virtualSchedulePeriod = _mock.StrictMock<IVirtualSchedulePeriod>();
 			_shiftCategory = new ShiftCategory("shiftCategory");
 			_shiftCategoryLimitation = new ShiftCategoryLimitation(_shiftCategory);
-			_scheduleMatrixValueCalculatorPro = _mock.StrictMock<IScheduleMatrixValueCalculatorPro>();
 			_scheduleMatrixPro = _mock.StrictMock<IScheduleMatrixPro>();
 			_scheduleMatrixPros = new List<IScheduleMatrixPro>{_scheduleMatrixPro};
 			_schedulingResultStateHolder = _mock.StrictMock<ISchedulingResultStateHolder>();
@@ -109,7 +106,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			{
 				_schedulingOptions.GroupOnGroupPageForTeamBlockPer = new GroupPageLight("test", GroupPageType.SingleAgent);
 				var result = _target.Execute(_schedulingOptions, _scheduleMatrixPro, _schedulingResultStateHolder, _rollbackService, _resourceCalculateDelayer, _scheduleMatrixPros, _shiftNudgeDirective, _optimizationPreferences);
-				Assert.IsTrue(result);
+				Assert.IsEmpty(result);
 				Assert.IsEmpty(_schedulingOptions.NotAllowedShiftCategories);
 			}
 		}
@@ -137,7 +134,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			{
 				_schedulingOptions.GroupOnGroupPageForTeamBlockPer = new GroupPageLight("test", GroupPageType.SingleAgent);
 				var result = _target.Execute(_schedulingOptions, _scheduleMatrixPro, _schedulingResultStateHolder, _rollbackService, _resourceCalculateDelayer, _scheduleMatrixPros, _shiftNudgeDirective, _optimizationPreferences);
-				Assert.IsTrue(result);
+				Assert.IsEmpty(result);
 				Assert.IsEmpty(_schedulingOptions.NotAllowedShiftCategories);
 			}	
 		}
@@ -168,7 +165,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			{
 				_schedulingOptions.GroupOnGroupPageForTeamBlockPer = new GroupPageLight("test", GroupPageType.SingleAgent);
 				var result = _target.Execute(_schedulingOptions, _scheduleMatrixPro, _schedulingResultStateHolder, _rollbackService, _resourceCalculateDelayer, _scheduleMatrixPros, _shiftNudgeDirective, _optimizationPreferences);
-				Assert.IsTrue(result);
+				Assert.IsEmpty(result);
 				Assert.IsEmpty(_schedulingOptions.NotAllowedShiftCategories);
 			}	
 		}
@@ -203,7 +200,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			{
 				_schedulingOptions.GroupOnGroupPageForTeamBlockPer = new GroupPageLight("test", GroupPageType.SingleAgent);
 				var result = _target.Execute(_schedulingOptions, _scheduleMatrixPro, _schedulingResultStateHolder, _rollbackService, _resourceCalculateDelayer, _scheduleMatrixPros, _shiftNudgeDirective, _optimizationPreferences);
-				Assert.IsFalse(result);
+				Assert.IsNotEmpty(result);
 				Assert.IsEmpty(_schedulingOptions.NotAllowedShiftCategories);
 			}		
 		}
@@ -231,7 +228,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			using (_mock.Playback())
 			{
 				var result = _target.Execute(_schedulingOptions, _scheduleMatrixPro, _schedulingResultStateHolder, _rollbackService, _resourceCalculateDelayer, _scheduleMatrixPros, _shiftNudgeDirective, _optimizationPreferences);
-				Assert.IsTrue(result);
+				Assert.IsEmpty(result);
 				Assert.IsNotEmpty(_schedulingOptions.NotAllowedShiftCategories);
 			}
 		}
