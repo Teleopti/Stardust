@@ -22,19 +22,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_stateCodeAdder = stateCodeAdder;
 		}
 
-		public AlarmMapping AlarmFor(Guid businessUnitId, string stateCode, Guid? activityId)
+		public AlarmMapping AlarmFor(Guid businessUnitId, Guid platformTypeId, string stateCode, Guid? activityId)
 		{
-			var match = queryAlarm(businessUnitId, stateCode, activityId);
+			var match = queryAlarm(businessUnitId, platformTypeId, stateCode, activityId);
 			if (activityId != null && match == null)
-				match = queryAlarm(businessUnitId, stateCode, null);
+				match = queryAlarm(businessUnitId, platformTypeId, stateCode, null);
 			return match;
 		}
 
-		private AlarmMapping queryAlarm(Guid businessUnitId, string stateCode, Guid? activityId)
+		private AlarmMapping queryAlarm(Guid businessUnitId, Guid platformTypeId, string stateCode, Guid? activityId)
 		{
 			return (from m in _alarmMappingLoader.Load()
 				where
 					m.BusinessUnitId == businessUnitId &&
+					m.PlatformTypeId == platformTypeId &&
 					m.StateCode == stateCode &&
 					m.ActivityId == activityId
 				select m)

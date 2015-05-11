@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public FakeEventPublisher EventPublisher;
 
 		[Test]
-		public void ShouldMapWithNoStateGroup()
+		public void ShouldMapAlarmWithoutStateGroup()
 		{
 			var businessUnitId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
@@ -44,13 +44,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 
 		[Test]
-		public void ShouldMapWithAlarmWithoutAlarm()
+		public void ShouldMapDefaultAdherenceWhenNoAlarm()
 		{
-			var businessUnitId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
 			Database
-				.WithBusinessUnit(businessUnitId)
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, phone, "2015-03-12 8:00", "2015-03-12 9:00")
 				.WithAlarm("phone", phone, (Guid?) null)
@@ -64,6 +62,31 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			});
 
 			EventPublisher.PublishedEvents.OfType<PersonNeutralAdherenceEvent>().Should().Have.Count.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldMapAlarmBasedOnPlatformTypeOfStateCode()
+		{
+			var personId = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			var platform1 = Guid.NewGuid();
+			var platform2 = Guid.NewGuid();
+			Database
+				.WithUser("usercode", personId)
+				.WithSchedule(personId, phone, "2015-05-11 08:00", "2015-05-11 09:00")
+				.WithAlarm("AUX1", platform1, phone, -1, Adherence.Out)
+				.WithAlarm("AUX1", platform2, phone, 0, Adherence.In)
+				;
+			Now.Is("2015-05-11 08:00");
+
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "AUX1",
+				PlatformTypeId = platform2.ToString()
+			});
+
+			EventPublisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Should().Have.Count.EqualTo(1);
 		}
 
 	}

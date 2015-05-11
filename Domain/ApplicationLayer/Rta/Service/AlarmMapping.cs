@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 		public Guid BusinessUnitId { get; set; }
+		public Guid PlatformTypeId { get; set; }
 		public string StateCode { get; set; }
 		public Guid? ActivityId { get; set; }
 

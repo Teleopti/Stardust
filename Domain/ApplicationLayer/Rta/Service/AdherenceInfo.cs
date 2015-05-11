@@ -35,8 +35,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			_adherence = new Lazy<AdherenceState>(() => adherenceFor(agentState.CurrentState()));
 			_adherenceForPreviousState = new Lazy<AdherenceState>(() => adherenceFor(agentState.PreviousState()));
-			_adherenceForPreviousStateAndCurrentActivity = new Lazy<AdherenceState>(() => adherenceFor(agentState.PreviousState().StateCode, agentState.CurrentState().ActivityId));
-			_adherenceForNewStateAndPreviousActivity = new Lazy<AdherenceState>(() => adherenceFor(_input.StateCode, scheduleInfo.PreviousActivity()));
+			_adherenceForPreviousStateAndCurrentActivity = new Lazy<AdherenceState>(() => adherenceFor(agentState.PreviousState().StateCode, agentState.PreviousState().PlatformTypeId, agentState.CurrentState().ActivityId));
+			_adherenceForNewStateAndPreviousActivity = new Lazy<AdherenceState>(() => adherenceFor(_input.StateCode, _input.ParsedPlatformTypeId(), scheduleInfo.PreviousActivity()));
 		}
 
 		public AdherenceState CurrentAdherence()
@@ -64,16 +64,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return state.Adherence.HasValue ? state.Adherence.Value : AdherenceState.Unknown;
 		}
 
-		private AdherenceState adherenceFor(string stateCode, ScheduleLayer activity)
+		private AdherenceState adherenceFor(string stateCode, Guid platformTypeId, ScheduleLayer activity)
 		{
 			if (activity == null)
-				return adherenceFor(stateCode, (Guid?) null);
-			return adherenceFor(stateCode, activity.PayloadId);
+				return adherenceFor(stateCode, platformTypeId, (Guid?) null);
+			return adherenceFor(stateCode, platformTypeId, activity.PayloadId);
 		}
 
-		private AdherenceState adherenceFor(string stateCode, Guid? activityId)
+		private AdherenceState adherenceFor(string stateCode, Guid platformTypeId, Guid? activityId)
 		{
-			var alarm = _stateMapper.AlarmFor(_person.BusinessUnitId, stateCode, activityId);
+			var alarm = _stateMapper.AlarmFor(_person.BusinessUnitId, platformTypeId, stateCode, activityId);
 			if (alarm == null)
 				return AdherenceState.Unknown;
 			return alarm.Adherence;

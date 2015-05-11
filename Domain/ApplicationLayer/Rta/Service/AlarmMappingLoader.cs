@@ -30,16 +30,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				from m in mappings
 				let businessUnitId = tryGetBusinessUnitId(m)
 				let stateCodes = m.StateGroup == null
-					? new string[] {null}
-					: from s in m.StateGroup.StateCollection select s.StateCode
+					? new IRtaState[] {null}
+					: from s in m.StateGroup.StateCollection select s
 				from c in stateCodes
+				let statecode = c != null ? c.StateCode : null
+				let platformTypeId = c != null ? c.PlatformTypeId : Guid.Empty
 				let activityId = m.Activity != null ? m.Activity.Id.Value : (Guid?) null
 				let alarmType = m.AlarmType ?? new AlarmType()
 				let alarmTypeId = alarmType.Id.HasValue ? alarmType.Id.Value : Guid.Empty
 				select new AlarmMapping
 				{
 					BusinessUnitId = businessUnitId,
-					StateCode = c,
+					PlatformTypeId = platformTypeId,
+					StateCode = statecode,
 					ActivityId = activityId,
 					AlarmTypeId = alarmTypeId,
 					AlarmName = alarmType.Description.Name,

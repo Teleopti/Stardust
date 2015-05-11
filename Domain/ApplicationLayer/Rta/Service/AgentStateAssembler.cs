@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			var platformTypeId = string.IsNullOrEmpty(input.PlatformTypeId) ?  previous.PlatformTypeId : input.ParsedPlatformTypeId();
 			var stateCode = input.StateCode ?? previous.StateCode;
 			var state = _stateMapper.StateFor(person.BusinessUnitId, platformTypeId, stateCode, input.StateDescription);
-			var alarm = _stateMapper.AlarmFor(person.BusinessUnitId, stateCode, scheduleInfo.CurrentActivityId()) ?? new AlarmMapping();
+			var alarm = _stateMapper.AlarmFor(person.BusinessUnitId, platformTypeId, stateCode, scheduleInfo.CurrentActivityId()) ?? new AlarmMapping();
 			var agentState = new AgentState
 			{
 				PersonId = person.PersonId,
