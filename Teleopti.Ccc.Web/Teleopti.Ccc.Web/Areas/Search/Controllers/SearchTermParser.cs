@@ -46,7 +46,56 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 
 		public static IDictionary<PersonFinderField, string> Parse(PeopleSearchCriteria form)
 		{
-			return null;
+			var criteriaDictionary = new Dictionary<PersonFinderField, string>();
+			if (!string.IsNullOrEmpty(form.FirstName))
+			{
+				criteriaDictionary.Add(PersonFinderField.FirstName, form.FirstName);
+			}
+			if (!string.IsNullOrEmpty(form.LastName))
+			{
+				criteriaDictionary.Add(PersonFinderField.LastName, form.LastName);
+			}
+			if (!string.IsNullOrEmpty(form.BudgetGroup))
+			{
+				criteriaDictionary.Add(PersonFinderField.BudgetGroup, form.BudgetGroup);
+			}
+			if (!string.IsNullOrEmpty(form.Contract))
+			{
+				criteriaDictionary.Add(PersonFinderField.Contract, form.Contract);
+			}
+			if (!string.IsNullOrEmpty(form.ContractSchedule))
+			{
+				criteriaDictionary.Add(PersonFinderField.ContractSchedule, form.ContractSchedule);
+			}
+			if (!string.IsNullOrEmpty(form.EmploymentNumber))
+			{
+				criteriaDictionary.Add(PersonFinderField.EmploymentNumber, form.EmploymentNumber);
+			}
+			if (!string.IsNullOrEmpty(form.Note))
+			{
+				criteriaDictionary.Add(PersonFinderField.Note, form.Note);
+			}
+			if (!string.IsNullOrEmpty(form.Organization))
+			{
+				criteriaDictionary.Add(PersonFinderField.Organization, form.Organization);
+			}
+			if (!string.IsNullOrEmpty(form.PartTimePercentage))
+			{
+				criteriaDictionary.Add(PersonFinderField.PartTimePercentage, form.PartTimePercentage);
+			}
+			if (!string.IsNullOrEmpty(form.Role))
+			{
+				criteriaDictionary.Add(PersonFinderField.Role, form.Role);
+			}
+			if (!string.IsNullOrEmpty(form.ShiftBag))
+			{
+				criteriaDictionary.Add(PersonFinderField.ShiftBag, form.ShiftBag);
+			}
+			if (!string.IsNullOrEmpty(form.Skill))
+			{
+				criteriaDictionary.Add(PersonFinderField.Skill, form.Skill);
+			}
+			return criteriaDictionary;
 		}
 	}
 }

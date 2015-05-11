@@ -76,6 +76,20 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 		}
 
 		[Test]
+		public void ShouldParseSearchCriterias()
+		{
+			var criteria = new PeopleSearchCriteria {FirstName = "a b", Organization = "London"};
+
+			var result = SearchTermParser.Parse(criteria);
+
+			result.Count().Equals(2);
+			result.First().Key.Equals(PersonFinderField.FirstName);
+			result.First().Value.Equals("a b");
+			result.Second().Key.Equals(PersonFinderField.Organization);
+			result.Second().Value.Equals("London");
+		}
+		
+		[Test]
 		public void ShouldAlertUserForInvalidInput()
 		{
 			const string invalidInput = "FirstName: aa, bb";

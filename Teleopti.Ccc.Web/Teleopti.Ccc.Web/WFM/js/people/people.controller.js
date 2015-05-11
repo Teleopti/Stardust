@@ -50,20 +50,7 @@ function PeopleController($scope, $filter, $state, SearchSvrc) {
 	$scope.totalPages = 0;
 	$scope.currentPageIndex = 1;
 	$scope.searchKeywordChanged = false;
-	$scope.advancedSearchForm = {
-		FirstName: "",
-		LastName: "",
-		EmploymentNumber: "",
-		BudgetGroup: "",
-		Contract: "",
-		ContractSchedule: "",
-		Note: "",
-		Organization: "",
-		PartTimePercentage: "",
-		Role: "",
-		ShiftBag: "",
-		Skill: ""
-	};
+	$scope.advancedSearchForm = {};
 	$scope.searchCriteriaDic = {};
 
 

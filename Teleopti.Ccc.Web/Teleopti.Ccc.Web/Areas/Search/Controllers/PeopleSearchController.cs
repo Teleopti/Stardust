@@ -42,6 +42,25 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 				criteriaDictionary = SearchTermParser.Parse(keyword);
 			}
 
+			var result = constructResult(pageSize, currentPageIndex, criteriaDictionary, currentDate);
+			return Ok(result);
+		}
+
+
+		[UnitOfWork]
+		[HttpPost, Route("api/Search/People/Criteria")]
+		public virtual IHttpActionResult GetAdvancedSearchResult(AdvancedSearchInput input)
+		{
+			var currentDate = DateOnly.Today;
+			var criteriaDictionary = SearchTermParser.Parse(input.SearchCriteria);
+
+			var result = constructResult(input.PageSize, input.CurrentPageIndex, criteriaDictionary, currentDate);
+			return Ok(result);
+		}
+
+
+		private object constructResult(int pageSize, int currentPageIndex, IDictionary<PersonFinderField, string> criteriaDictionary, DateOnly currentDate)
+		{
 			var peopleList = _searchProvider.SearchPeople(criteriaDictionary, pageSize, currentPageIndex, currentDate);
 			var resultPeople = peopleList.People.Select(x => new
 			{
@@ -67,89 +86,7 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 				TotalPages = peopleList.TotalPages,
 				OptionalColumns = peopleList.OptionalColumns.Select(x => x.Name)
 			};
-			return Ok(result);
-		}
-
-		[UnitOfWork]
-		[HttpPost, Route("api/Search/People/Criteria")]
-		public virtual IHttpActionResult GetAdvancedSearchResult(AdvancedSearchInput input)
-		{
-			var currentDate = DateOnly.Today;
-			var criteriaDictionary = new Dictionary<PersonFinderField, string>();
-			if (!string.IsNullOrEmpty(input.SearchCriteria.FirstName))
-			{
-				criteriaDictionary.Add(PersonFinderField.FirstName, input.SearchCriteria.FirstName);
-			}
-			if (!string.IsNullOrEmpty(input.SearchCriteria.LastName))
-			{
-				criteriaDictionary.Add(PersonFinderField.LastName, input.SearchCriteria.LastName);
-			}
-			if (!string.IsNullOrEmpty(input.SearchCriteria.BudgetGroup))
-			{
-				criteriaDictionary.Add(PersonFinderField.BudgetGroup, input.SearchCriteria.BudgetGroup);
-			}
-			if (!string.IsNullOrEmpty(input.SearchCriteria.Contract))
-			{
-				criteriaDictionary.Add(PersonFinderField.Contract, input.SearchCriteria.Contract);
-			}
-			if (!string.IsNullOrEmpty(input.SearchCriteria.ContractSchedule))
-			{
-				criteriaDictionary.Add(PersonFinderField.ContractSchedule, input.SearchCriteria.ContractSchedule);
-			}
-			if (!string.IsNullOrEmpty(input.SearchCriteria.EmploymentNumber))
-			{
-				criteriaDictionary.Add(PersonFinderField.EmploymentNumber, input.SearchCriteria.EmploymentNumber);
-			}
-			if (!string.IsNullOrEmpty(input.SearchCriteria.Note))
-			{
-				criteriaDictionary.Add(PersonFinderField.Note, input.SearchCriteria.Note);
-			}
-			if (!string.IsNullOrEmpty(input.SearchCriteria.Organization))
-			{
-				criteriaDictionary.Add(PersonFinderField.Organization, input.SearchCriteria.Organization);
-			}
-			if (!string.IsNullOrEmpty(input.SearchCriteria.PartTimePercentage))
-			{
-				criteriaDictionary.Add(PersonFinderField.PartTimePercentage, input.SearchCriteria.PartTimePercentage);
-			}
-			if (!string.IsNullOrEmpty(input.SearchCriteria.Role))
-			{
-				criteriaDictionary.Add(PersonFinderField.Role, input.SearchCriteria.Role);
-			}
-			if (!string.IsNullOrEmpty(input.SearchCriteria.ShiftBag))
-			{
-				criteriaDictionary.Add(PersonFinderField.ShiftBag, input.SearchCriteria.ShiftBag);
-			}
-			if (!string.IsNullOrEmpty(input.SearchCriteria.Skill))
-			{
-				criteriaDictionary.Add(PersonFinderField.Skill, input.SearchCriteria.Skill);
-			}
-			var peopleList = _searchProvider.SearchPeople(criteriaDictionary, input.PageSize, input.CurrentPageIndex, currentDate);
-			var resultPeople = peopleList.People.Select(x => new
-			{
-				FirstName = x.Name.FirstName,
-				LastName = x.Name.LastName,
-				EmploymentNumber = x.EmploymentNumber,
-				PersonId = x.Id.Value,
-				Email = x.Email,
-				LeavingDate = x.TerminalDate == null ? "" : x.TerminalDate.Value.ToShortDateString(),
-				OptionalColumnValues = peopleList.OptionalColumns.Select(c =>
-				{
-					var columnValue = x.GetColumnValue(c);
-					var value = columnValue == null ? "" : columnValue.Description;
-					return new KeyValuePair<string, string>(c.Name, value);
-				}),
-				Team = x.MyTeam(currentDate) == null ? "" : x.MyTeam(currentDate).SiteAndTeam
-			}).OrderBy(p => p.LastName);
-
-			var result = new
-			{
-				People = resultPeople,
-				CurrentPage = input.CurrentPageIndex,
-				TotalPages = peopleList.TotalPages,
-				OptionalColumns = peopleList.OptionalColumns.Select(x => x.Name)
-			};
-			return Ok(result);
+			return result;
 		}
 	}
 
