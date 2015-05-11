@@ -1,0 +1,10 @@
+{
+	"Success" : "true",
+	"PersonId" : "8C4F2F48-CEE6-43A2-852B-575551CBE810",
+	"Tenant" : "Teleopti WFM",
+	"DataSourceConfiguration" : {
+		"ApplicationNHibernateConfig" : {
+			"connection.connection_string" : "Data Source=.\\TELEOPTIFORECAST;User Id=forecast;Password=teleopti;initial Catalog=TeleoptiCCC_Forecasts;Current Language=us_english"
+		}
+	}
+}
