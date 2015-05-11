@@ -20,16 +20,14 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 		private readonly ISkillRepository _skillRepository;
 		private readonly IOutboundCampaignMapper _outboundCampaignMapper;
 		private readonly IOutboundCampaignViewModelMapper _outboundCampaignViewModelMapper;
-		private readonly IUserTimeZone _userTimeZone;
 
 		public OutboundCampaignPersister(IOutboundCampaignRepository outboundCampaignRepository, ISkillRepository skillRepository, 
-			IOutboundCampaignMapper outboundCampaignMapper, IOutboundCampaignViewModelMapper outboundCampaignViewModelMapper, IUserTimeZone userTimeZone)
+			IOutboundCampaignMapper outboundCampaignMapper, IOutboundCampaignViewModelMapper outboundCampaignViewModelMapper)
 		{
 			_outboundCampaignRepository = outboundCampaignRepository;
 			_skillRepository = skillRepository;
 			_outboundCampaignMapper = outboundCampaignMapper;
 			_outboundCampaignViewModelMapper = outboundCampaignViewModelMapper;
-			_userTimeZone = userTimeZone;
 		}
 
 		public CampaignViewModel Persist(string name)
