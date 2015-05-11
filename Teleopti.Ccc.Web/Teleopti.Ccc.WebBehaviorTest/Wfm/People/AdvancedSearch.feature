@@ -34,6 +34,7 @@ Scenario: match all search terms by default
 	And I should not see 'Ashley Smith' in people list
 
 @ignore
+#not implemented
 Scenario: match any search term
 	When I view people
 	And I search people with keyword 'Red Smith' matching any keywords
@@ -55,11 +56,13 @@ Scenario: match all search terms in different fields
 	| last name    | Andeen Smith |
 	| organization | Red        |
 	Then I should see 'Ashley Andeen' in people list
-@ignore
+
+	@ignore
 Scenario: match entire quoted search term
 	When I view people
-	And I search people with keyword '"Team Red" Smith'
+	And I search people with keyword '"Team Blue" Ashley'
 	Then I should see 'Ashley Smith' in people list
+	And I should not see 'Ashley Andeen' in people list
 
 Scenario: match entire quoted search term in different fields
 	When I view people
