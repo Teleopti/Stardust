@@ -14,29 +14,24 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
     {
         private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
         private readonly IRtaStateGroupRepository _rtaStateGroupRepository;
-        private readonly IStateGroupActivityAlarmRepository _stateGroupActivityAlarmRepository;
 		private readonly ConcurrentDictionary<Guid, AgentStateReadModel> _actualAgentStates = new ConcurrentDictionary<Guid, AgentStateReadModel>();
 		
-        public RtaStateHolder(ISchedulingResultStateHolder schedulingResultStateHolder, IRtaStateGroupRepository rtaStateGroupRepository, IStateGroupActivityAlarmRepository stateGroupActivityAlarmRepository)
+        public RtaStateHolder(ISchedulingResultStateHolder schedulingResultStateHolder, IRtaStateGroupRepository rtaStateGroupRepository)
         {
             InParameter.NotNull("schedulingResultStateHolder", schedulingResultStateHolder);
             InParameter.NotNull("rtaStateGroupProvider", rtaStateGroupRepository);
-            InParameter.NotNull("stateGroupActivityAlarmProvider", stateGroupActivityAlarmRepository);
 
             _schedulingResultStateHolder = schedulingResultStateHolder;
             _rtaStateGroupRepository = rtaStateGroupRepository;
-            _stateGroupActivityAlarmRepository = stateGroupActivityAlarmRepository;
         }
 
         public void Initialize()
         {
             RtaStateGroups = _rtaStateGroupRepository.LoadAllCompleteGraph();
-            StateGroupActivityAlarms = _stateGroupActivityAlarmRepository.LoadAllCompleteGraph();
         }
 
 	    public IEnumerable<IRtaStateGroup> RtaStateGroups { get; private set; }
 
-	    public IEnumerable<IStateGroupActivityAlarm> StateGroupActivityAlarms { get; private set; }
 
 	    public ISchedulingResultStateHolder SchedulingResultStateHolder
         {

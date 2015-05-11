@@ -254,7 +254,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 				PersonId = person.Id.Value,
 				AlarmId = Guid.NewGuid()
 			};
-			var rtaStateHolder = new RtaStateHolder(new SchedulingResultStateHolder(), MockRepository.GenerateMock<IRtaStateGroupRepository>(),MockRepository.GenerateMock<IStateGroupActivityAlarmRepository>());
+			var rtaStateHolder = new RtaStateHolder(new SchedulingResultStateHolder(), MockRepository.GenerateMock<IRtaStateGroupRepository>());
 			rtaStateHolder.SetFilteredPersons(new [] {person});
 			rtaStateHolder.SetActualAgentState(actualAgentState);
 			var target1 = new DayLayerViewModel(rtaStateHolder, null, null, null, null);
@@ -276,7 +276,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			{
 				PersonId = person.Id.Value,
 			};
-			var rtaStateHolder = new RtaStateHolder(new SchedulingResultStateHolder(), MockRepository.GenerateMock<IRtaStateGroupRepository>(), MockRepository.GenerateMock<IStateGroupActivityAlarmRepository>());
+			var rtaStateHolder = new RtaStateHolder(new SchedulingResultStateHolder(), MockRepository.GenerateMock<IRtaStateGroupRepository>());
 			rtaStateHolder.SetFilteredPersons(new[] { person });
 			rtaStateHolder.SetActualAgentState(actualAgentState);
 			var target = new DayLayerViewModel(rtaStateHolder, null, null, null, null);
