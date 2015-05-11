@@ -58,7 +58,6 @@ MyTimeWeb_ShiftTradeExchangeBulletin_31296 = true
 MyTimeWeb_SeeAnnouncedShifts_31639 = true
 MyTimeWeb_AnonymousTrades_31638 = true
 MyTimeWeb_LockTrades_31637 = true
-Schedule_OvertimeBeforeShiftStart_30712 = true
 MyTimeWeb_AvailabilityVerifyHours_31654 = true
 MyTeam_AbsenceBackToWork_31478 = true
 Gamification_NewBadgeCalculation_31185 = true

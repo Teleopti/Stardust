@@ -6331,7 +6331,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 				using (var options = new OvertimePreferencesDialog(_schedulerState.CommonStateHolder.ActiveScheduleTags, "OvertimePreferences", _schedulerState.CommonStateHolder.ActiveActivities, resolution, definitionSets))
 				{
-					options.UseSpecifiedPeriod(_container.Resolve<IToggleManager>().IsEnabled(Toggles.Schedule_OvertimeBeforeShiftStart_30712));
 					if (options.ShowDialog(this) != DialogResult.OK) return;
 					options.Refresh();
 					startBackgroundScheduleWork(_backgroundWorkerOvertimeScheduling,new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules()){OvertimePreferences = options.Preferences}, true);

@@ -45,16 +45,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_presenter.SetStateButtons(_definitionSets);
 		}
 
-		public void UseSpecifiedPeriod(bool use)
-		{
-			if (!use)
-			{
-				labelSpecifiedPeriod.Visible = false;
-				fromToTimePickerSpecifiedPeriod.Visible = false;
-				fromToTimePickerSpecifiedPeriod.EndTime.SetTimeValue(TimeSpan.FromDays(2));
-			}
-		}
-
 		public IOvertimePreferences Preferences
 		{
 			get { return _overtimePreferences; }

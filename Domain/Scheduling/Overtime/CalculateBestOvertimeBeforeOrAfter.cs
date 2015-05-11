@@ -5,6 +5,14 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
+	public interface ICalculateBestOvertime
+	{
+		IList<DateTimePeriod> GetBestOvertime(MinMax<TimeSpan> overtimeDuration, MinMax<TimeSpan> overtimeSpecifiedPeriod,
+			IList<OvertimePeriodValue> overtimePeriodValueMappedDat, IScheduleDay scheduleDay, int minimumResolution,
+			bool onlyAvailableAgents, IList<IOvertimeSkillIntervalData> skillIntervalDataList);
+	}
+
+
 	public class CalculateBestOvertimeBeforeOrAfter : ICalculateBestOvertime
 	{
 		private readonly IOvertimeDateTimePeriodExtractor _overtimeDateTimePeriodExtractor;

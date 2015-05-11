@@ -10,13 +10,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<ScheduleOvertimeService>().As<IScheduleOvertimeService>();
-			builder.RegisterType<CalculateBestOvertime>().As<CalculateBestOvertime>();
-			builder.RegisterType<CalculateBestOvertimeBeforeOrAfter>().As<CalculateBestOvertimeBeforeOrAfter>();
-			builder.Register(c => c.Resolve<IToggleManager>().IsEnabled(Toggles.Schedule_OvertimeBeforeShiftStart_30712)
-				? (ICalculateBestOvertime)c.Resolve<CalculateBestOvertimeBeforeOrAfter>()
-				: c.Resolve<CalculateBestOvertime>())
-				.As<ICalculateBestOvertime>();
-
+			builder.RegisterType<CalculateBestOvertimeBeforeOrAfter>().As<ICalculateBestOvertime>();
 			builder.RegisterType<OvertimeDateTimePeriodExtractor>().As<IOvertimeDateTimePeriodExtractor>();
 			builder.RegisterType<OvertimeRelativeDifferenceCalculator>().As<IOvertimeRelativeDifferenceCalculator>();
 		}

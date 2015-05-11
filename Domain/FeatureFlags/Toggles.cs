@@ -12,7 +12,6 @@
 		Scheduler_HidePointsFairnessSystem_28317,
 		Scheduler_IntraIntervalSolver_29845,
 		Schedule_IntraIntervalOptimizer_29846,
-		Schedule_OvertimeBeforeShiftStart_30712,
 
 		Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635,
 		MyReport_AgentQueueMetrics_22254,
