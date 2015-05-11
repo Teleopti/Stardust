@@ -16,16 +16,27 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 				parsedTerms.Add(PersonFinderField.All, values);
 				return parsedTerms;
 			}
+
 			var searchTerms = values.Split(new[] {','}).Select(s => s.Trim()).Where(s=>!string.IsNullOrEmpty(s));
 			foreach (var term in searchTerms)
 			{
 				var splitter = term.IndexOf(':');
 				var type = term.Substring(0, splitter).Trim();
 				var value = term.Substring(splitter + 1, term.Length - splitter - 1).Trim();
+				
 				PersonFinderField parsedType;
-				if (Enum.TryParse(type, true, out parsedType))
+				if (!Enum.TryParse(type, true, out parsedType))
+				{
+					continue;
+				}
+
+				if (!parsedTerms.ContainsKey(parsedType))
 				{
 					parsedTerms.Add(parsedType, value);
+				}
+				else
+				{
+					parsedTerms[parsedType] = parsedTerms[parsedType] + " " + value;
 				}
 			}
 			
