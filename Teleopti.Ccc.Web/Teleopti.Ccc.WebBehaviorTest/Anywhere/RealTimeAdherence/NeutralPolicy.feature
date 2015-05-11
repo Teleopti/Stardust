@@ -4,7 +4,6 @@
 	I want to see correct adherence value
 
 @OnlyRunIfEnabled('RTA_NeutralAdherence_30930')
-@ignore
 Scenario: Should adherence percentage with neutral adherence
 	Given there is an activity named 'Phone'
 	And there is an activity named 'Administration'
@@ -54,7 +53,6 @@ Scenario: Should adherence percentage with neutral adherence
 	Then I should see historical adherence for 'Pierre Baldi' with adherence of 100%
 
 @OnlyRunIfEnabled('RTA_NeutralAdherence_30930')
-@ignore
 Scenario: Should see adherence details with neutral adherence
 	Given there is an activity named 'Phone'
 	And there is an activity named 'Administration'
