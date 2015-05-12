@@ -43,6 +43,7 @@ xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
 		<Setting name="TeleoptiDriveMap.AccountKey" />
 		<Setting name="TeleoptiDriveMap.ContainerName" />
 		<Setting name="TeleoptiDriveMap.DataSourceName" />
+		<Setting name="TeleoptiSetting.VmSize" />		
 	</ConfigurationSettings>
 
   </WebRole>
