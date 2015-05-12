@@ -193,6 +193,19 @@ and pr.UpdatedOn < @Maxdate
 
 --Requests
 --AF: Need to remove top (50000) as this caused corrupt data...
+update ShiftTradeRequest
+set Offer = NULL
+from ShiftTradeRequest a 
+inner join ShiftExchangeOffer b on a.Offer=b.Request
+inner join Request r on r.id = b.Request
+where r.EndDateTime < @RequestsKeepUntil
+and a.Offer is not null
+
+delete ShiftExchangeOffer 
+from ShiftExchangeOffer a
+inner join Request r on r.id = a.Request
+where r.EndDateTime < @RequestsKeepUntil
+
 delete ShiftTradeSwapDetail
 from ShiftTradeSwapDetail a
 inner join ShiftTradeRequest st on st.Request = a.Parent
