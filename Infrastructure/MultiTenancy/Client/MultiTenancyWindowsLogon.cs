@@ -1,7 +1,6 @@
 ﻿using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
@@ -44,13 +43,6 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 			var personId = result.PersonId;
 
 			logonModel.SelectedDataSourceContainer = new DataSourceContainer(applicationData.Tenant(dataSourceName), _repositoryFactory, AuthenticationTypeOption.Application);
-			if (logonModel.SelectedDataSourceContainer == null)
-				return new AuthenticationResult
-				{
-					Successful = false,
-					HasMessage = true,
-					Message = string.Format(Resources.CannotFindDataSourceWithName, dataSourceName)
-				};
 
 			using (var uow = logonModel.SelectedDataSourceContainer.DataSource.Application.CreateAndOpenUnitOfWork())
 			{
