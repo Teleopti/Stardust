@@ -1749,7 +1749,6 @@
     <Compile Include="Common\ContractScheduleWeek.cs" />
     <Compile Include="Common\EntityContainer.cs" />
     <Compile Include="Common\EntityConverter.cs" />
-    <Compile Include="Common\EntityBaseTypes\AggregateRootWithBusinessUnit.cs" />
     <Compile Include="Scheduling\Rules\DayOffRule.cs" />
     <Compile Include="AgentInfo\PersonPeriod.cs" />
     <Compile Include="Common\RestrictionSet.cs" />

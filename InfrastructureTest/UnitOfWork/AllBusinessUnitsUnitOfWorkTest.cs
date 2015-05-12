@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			stateCollection.Select(x => x.Name).Single().Should().Be("phone");
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldPersistChangesWhenNotLoggedIn()
 		{
 			TheService.Does(uow =>

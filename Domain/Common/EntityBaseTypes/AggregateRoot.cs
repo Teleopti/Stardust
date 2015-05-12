@@ -1,10 +1,72 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 {
+
+	public abstract class VersionedAggregateRootWithBusinessUnitWithoutChangeInfo : Entity,
+		IVersioned,
+		IAggregateRoot,
+		IBelongsToBusinessUnit
+	{
+		private IBusinessUnit _businessUnit;
+
+		public virtual IBusinessUnit BusinessUnit
+		{
+			get
+			{
+				if (_businessUnit == null)
+					_businessUnit = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit;
+				return _businessUnit;
+			}
+			protected set { _businessUnit = value; }
+		}
+
+		private int? _version;
+
+		public virtual int? Version
+		{
+			get { return _version; }
+		}
+
+		public virtual void SetVersion(int version)
+		{
+			_version = version;
+		}
+	}
+
+	public abstract class VersionedAggregateRootWithBusinessUnit : VersionedAggregateRoot,
+													  IBelongsToBusinessUnit
+	{
+		private IBusinessUnit _businessUnit;
+
+		public virtual IBusinessUnit BusinessUnit
+		{
+			get
+			{
+				if (_businessUnit == null)
+					_businessUnit = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit;
+				return _businessUnit;
+			}
+			protected set { _businessUnit = value; }
+		}
+	}
+
+	public abstract class NonversionedAggregateRootWithBusinessUnit : AggregateRoot,
+														  IBelongsToBusinessUnit
+	{
+		private IBusinessUnit _businessUnit;
+
+		public virtual IBusinessUnit BusinessUnit
+		{
+			get { return _businessUnit ?? (_businessUnit = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit); }
+			protected set { _businessUnit = value; }
+		}
+	}
+
 	public abstract class VersionedAggregateRoot : AggregateRoot,
 		IVersioned
 	{

@@ -1,16 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Drawing;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.RealTimeAdherence
 {
-    public class RtaStateGroup : VersionedAggregateRootWithBusinessUnit,
-                                 IRtaStateGroup, IDeleteTag
+	public class RtaStateGroup : VersionedAggregateRootWithBusinessUnitWithoutChangeInfo, IRtaStateGroup
     {
         private readonly IList<IRtaState> _stateCollection = new List<IRtaState>();
         private bool _available;
@@ -95,45 +92,6 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
     	{
     		_stateCollection.Remove(state);
     	}
-
-    	public virtual Description ConfidentialDescription(IPerson assignedPerson)
-        {
-            return new Description(_name);
-        }
-
-		public virtual Color ConfidentialDisplayColor(IPerson assignedPerson)
-        {
-            return Color.Empty;
-        }
-
-        public virtual bool InContractTime
-        {
-            get
-            {
-                return false;
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public virtual ITracker Tracker
-        {
-            get
-            {
-                return null;
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public virtual IPayload UnderlyingPayload
-        {
-            get { return this; }
-        }
 
         public virtual bool IsDeleted
         {

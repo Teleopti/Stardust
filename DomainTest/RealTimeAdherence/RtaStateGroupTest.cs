@@ -26,11 +26,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
             Assert.AreEqual(_name, _target.Name);
             Assert.AreEqual(_available, _target.Available);
             Assert.AreEqual(_defaultStateGroup, _target.DefaultStateGroup);
-            Assert.AreEqual(Color.Empty,_target.ConfidentialDisplayColor(null));
-            Assert.AreEqual(_name,_target.ConfidentialDescription(null).Name);
-            Assert.IsFalse(_target.InContractTime);
             Assert.IsFalse(_target.IsLogOutState);
-            Assert.IsNull(_target.Tracker);
 
             _target.Name = "newName";
             _target.Available = false;
@@ -38,7 +34,6 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
             _target.IsLogOutState = true;
 
             Assert.AreEqual("newName",_target.Name);
-            Assert.AreEqual("newName", _target.ConfidentialDescription(null).Name);
             Assert.IsFalse(_target.Available);
             Assert.IsTrue(_target.DefaultStateGroup);
             Assert.IsTrue(_target.IsLogOutState);
@@ -53,20 +48,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
             Assert.AreEqual(state1.StateGroup.Name, _name);
             Assert.AreEqual(1, _target.StateCollection.Count);
         }
-
-        [Test, ExpectedException(typeof(NotImplementedException))]
-        public void VerifySetInContractTimeNotImplemented()
-        {
-            _target.InContractTime = true;
-        }
-
-        [Test, ExpectedException(typeof(NotImplementedException))]
-        public void VerifySetTrackerNotImplemented()
-        {
-            _target.Tracker = null;
-        }
-
-
+		
         [Test]
         public void VerifySetDeleted()
         {

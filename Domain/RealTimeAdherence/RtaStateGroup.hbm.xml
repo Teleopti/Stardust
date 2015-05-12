@@ -9,8 +9,6 @@
 			<generator class="guid.comb" />
 		</id>
 		<version name="Version" unsaved-value="null"/>
-		<many-to-one name="UpdatedBy" class="Teleopti.Ccc.Domain.Common.Person" />
-		<property name="UpdatedOn" />
 		<property name="Name" />
 		<property name="DefaultStateGroup" />
 		<property name="IsLogOutState" />

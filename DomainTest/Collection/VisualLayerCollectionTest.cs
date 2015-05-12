@@ -89,22 +89,6 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		}
 
 		[Test]
-		public void VerifyFilterLayersByLayerType()
-		{
-			IRtaStateGroup stateGroup = new Domain.RealTimeAdherence.RtaStateGroup("test", false, true);
-			internalCollection.Add(visualLayerFactory.CreateShiftSetupLayer(dummyPayload, new DateTimePeriod(2001, 1, 1, 2001, 1, 2), dummyPerson));
-			IVisualLayer actLayer = visualLayerFactory.CreateShiftSetupLayer(ActivityFactory.CreateActivity("sd"),
-																													 new DateTimePeriod(2001, 1, 1, 2001, 1, 2).MovePeriod(TimeSpan.FromHours(1)), dummyPerson);
-			internalCollection.Add(visualLayerFactory.CreateResultLayer(stateGroup, actLayer, new DateTimePeriod(2001, 1, 1, 2001, 1, 2).MovePeriod(TimeSpan.FromHours(1))));
-
-			IVisualLayerCollection ret = target.FilterLayers<IRtaStateGroup>();
-			Assert.AreEqual(1, ret.Count());
-			Assert.IsInstanceOf<IRtaStateGroup>(ret.ElementAt(0).Payload);
-			ret = target.FilterLayers<IPayload>();
-			Assert.AreEqual(2, ret.Count());
-		}
-
-		[Test]
 		public void VerifyHasLayers()
 		{
 			internalCollection.Add(visualLayerFactory.CreateShiftSetupLayer(dummyPayload, new DateTimePeriod(2000, 1, 1, 2001, 1, 1), dummyPerson));
