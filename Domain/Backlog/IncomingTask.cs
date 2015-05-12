@@ -102,7 +102,25 @@ namespace Teleopti.Ccc.Domain.Backlog
 					planned = planned.Add(GetTimeOnDate(dateOnly));
 			}
 
-			return TotalWorkTime.Subtract(planned);
+			if (planned < TotalWorkTime)
+				return TotalWorkTime.Subtract(planned);
+
+			return TimeSpan.Zero;
+		}
+
+		public TimeSpan GetEstimatedIncomingBacklogOnDate(DateOnly date)
+		{
+			var planned = TimeSpan.Zero;
+			foreach (var dateOnly in _taskDays.Keys)
+			{
+				if (dateOnly < date)
+					planned = planned.Add(GetTimeOnDate(dateOnly));
+			}
+
+			if (planned < TotalWorkTime)
+				return TotalWorkTime.Subtract(planned);
+
+			return TimeSpan.Zero;
 		}
 
 		public void ClearTimeOnDate(DateOnly date)
@@ -113,6 +131,17 @@ namespace Teleopti.Ccc.Domain.Backlog
 		public void Open(DateOnly date)
 		{
 			_taskDays[date].Open();
+		}
+
+		public TimeSpan GetOverstaffTimeOnDate(DateOnly date)
+		{
+			var backlog = GetEstimatedIncomingBacklogOnDate(date);
+			var timeOnDate = GetTimeOnDate(date);
+
+			if (timeOnDate > backlog)
+				return timeOnDate.Subtract(backlog);
+
+			return TimeSpan.Zero;
 		}
 	}
 }

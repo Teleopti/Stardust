@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using Teleopti.Ccc.Domain.Backlog;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Backlog
 {
@@ -34,7 +26,7 @@ namespace Teleopti.Ccc.Win.Backlog
 			var series1 = chart1.Series.Add("Estimated outgoing backlog");
 			var series2 = chart1.Series.Add("Planned");		
 			var series3 = chart1.Series.Add("Scheduled");
-			//var series4 = chart1.Series.Add("Estimated total backlog");
+			var series4 = chart1.Series.Add("Overstaff");
 			//var series5 = chart1.Series.Add("Planned time");
 
 			series1.ChartType = SeriesChartType.StackedColumn;
@@ -52,10 +44,11 @@ namespace Teleopti.Ccc.Win.Backlog
 			series3.YAxisType = AxisType.Primary;
 			series3.Color = Color.DarkCyan;
 
-			//series4.ChartType = SeriesChartType.Line;
-			//series4.YAxisType = AxisType.Primary;
-			//series4.XValueType = ChartValueType.Date;
-			//series4.Color = Color.Red;
+			series4.ChartType = SeriesChartType.StackedColumn;
+			series4.YAxisType = AxisType.Primary;
+			series4.XValueType = ChartValueType.Date;
+			series4.Color = Color.Red;
+
 			//series5.ChartType = SeriesChartType.Line;
 			//series5.YAxisType = AxisType.Primary;
 			//series5.XValueType = ChartValueType.Date;
@@ -64,8 +57,7 @@ namespace Teleopti.Ccc.Win.Backlog
 			var dataPointIndex = 0;
 			foreach (var date in incomingTask.SpanningPeriod.DayCollection())
 			{
-				DataPoint datapoint;
-				datapoint = new DataPoint(dataPointIndex, incomingTask.GetEstimatedOutgoingBacklogOnDate(date).TotalHours);
+				DataPoint datapoint = new DataPoint(dataPointIndex, incomingTask.GetEstimatedOutgoingBacklogOnDate(date).TotalHours);
 				datapoint.AxisLabel = date.ToShortDateString();
 				series1.Points.Add(datapoint);
 
@@ -77,12 +69,10 @@ namespace Teleopti.Ccc.Win.Backlog
 				datapoint.AxisLabel = date.ToShortDateString();
 				series3.Points.Add(datapoint);
 
-				//datapoint = new DataPoint(i, _model.GetScheduledBacklogTimeOnIncomingIndex(i, skill).GetValueOrDefault(TimeSpan.Zero).TotalHours);
-				//series2.Points.Add(datapoint);
-				//datapoint = new DataPoint(i, _model.GetScheduledOverstaffOnIncomming(i, skill).GetValueOrDefault(TimeSpan.Zero).TotalHours);
-				//series3.Points.Add(datapoint);
-				//datapoint = new DataPoint(i, _model.GetScheduledBacklogTimeOnIndex(i, skill).GetValueOrDefault(TimeSpan.Zero).TotalHours);
-				//series4.Points.Add(datapoint);
+				datapoint = new DataPoint(dataPointIndex, incomingTask.GetOverstaffTimeOnDate(date).TotalHours);
+				datapoint.AxisLabel = date.ToShortDateString();
+				series4.Points.Add(datapoint);
+
 				//datapoint = new DataPoint(i, _model.GetScheduledTimeOnIndex(i, skill).GetValueOrDefault(TimeSpan.Zero).TotalHours);
 				//series5.Points.Add(datapoint);
 
