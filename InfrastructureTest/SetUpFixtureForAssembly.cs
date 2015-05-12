@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Linq;
+using Teleopti.Ccc.Domain;
+using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Ccc.Domain.Infrastructure;
 using NHibernate;
@@ -161,10 +163,10 @@ you have to manually clean up or call CleanUpAfterTest() to restore the database
 
 		public static void BeforeTestWithOpenUnitOfWork(out IPerson person, out IUnitOfWork unitOfWork)
 		{
-			CreateFakeStateEntities(out person);
-			SetupFakeState(person);
+			createBusinessUnitAndPerson(out person);
+			Login(person);
 			unitOfWork = DataSource.Application.CreateAndOpenUnitOfWork();
-			SaveFakeState(person, unitOfWork);
+			saveBusinessUnitAndPerson(person, unitOfWork);
 		}
 
 		public static void AfterTestWithOpenUnitOfWork(IUnitOfWork unitOfWork, bool cleanUp)
@@ -178,23 +180,23 @@ you have to manually clean up or call CleanUpAfterTest() to restore the database
 				CheckThatDbIsEmtpy();
 		}
 
-		public static void BeforeTest(out IPerson person)
+		public static IDisposable CreatePersonAndLogin(out IPerson person)
 		{
-			CreateFakeStateEntities(out person);
-			SetupFakeState(person);
+			createBusinessUnitAndPerson(out person);
+			Login(person);
 			using (var unitOfWork = DataSource.Application.CreateAndOpenUnitOfWork())
 			{
-				SaveFakeState(person, unitOfWork);
+				saveBusinessUnitAndPerson(person, unitOfWork);
 				unitOfWork.PersistAll();
 			}
+			return new GenericDisposable(() =>
+			{
+				RestoreCcc7Database();
+				Logout();
+			});
 		}
 
-		public static void AfterTest()
-		{
-			RestoreCcc7Database();
-		}
-
-		private static void CreateFakeStateEntities(out IPerson person)
+		private static void createBusinessUnitAndPerson(out IPerson person)
 		{
 			BusinessUnitFactory.CreateNewBusinessUnitUsedInTest();
 
@@ -203,7 +205,7 @@ you have to manually clean up or call CleanUpAfterTest() to restore the database
 				string.Empty);
 		}
 
-		public static void SetupFakeState(IPerson person)
+		public static void Login(IPerson person)
 		{
 			StateHolderProxyHelper.SetupFakeState(
 				DataSource, 
@@ -217,7 +219,7 @@ you have to manually clean up or call CleanUpAfterTest() to restore the database
 			StateHolderProxyHelper.Logout(new ThreadPrincipalContext(null));
 		}
 
-		private static void SaveFakeState(IPerson person, IUnitOfWork uow)
+		private static void saveBusinessUnitAndPerson(IPerson person, IUnitOfWork uow)
 		{
 			var session = uow.FetchSession();
 

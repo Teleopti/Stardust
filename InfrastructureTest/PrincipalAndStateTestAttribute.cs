@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System;
+using Autofac;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Interfaces.Domain;
 
@@ -7,6 +8,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 	public class PrincipalAndStateTestAttribute : InfrastructureTestAttribute, IPrincipalAndStateContext
 	{
 		private IPerson person;
+		private IDisposable _scope;
 
 		protected override void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
 		{
@@ -17,17 +19,18 @@ namespace Teleopti.Ccc.InfrastructureTest
 
 		protected override void BeforeTest()
 		{
-			SetupFixtureForAssembly.BeforeTest(out person);
+			_scope = SetupFixtureForAssembly.CreatePersonAndLogin(out person);
 		}
 
 		protected override void AfterTest()
 		{
-			SetupFixtureForAssembly.AfterTest();
+			_scope.Dispose();
+			_scope = null;
 		}
 
-		public void SetupPrincipalAndState()
+		public void Login()
 		{
-			SetupFixtureForAssembly.SetupFakeState(person);
+			SetupFixtureForAssembly.Login(person);
 		}
 
 		public void Logout()
@@ -38,7 +41,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 
 	public interface IPrincipalAndStateContext
 	{
-		void SetupPrincipalAndState();
+		void Login();
 		void Logout();
 	}
 }
