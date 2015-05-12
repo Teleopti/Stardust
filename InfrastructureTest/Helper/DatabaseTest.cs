@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Helper
 {
     public abstract class DatabaseTest
     {
-        private bool cleanUpAfterTest;
 	    private ISession _session;
 	    private IPerson _loggedOnPerson;
 	    private IUnitOfWork _unitOfWork;
@@ -37,8 +36,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Helper
         public void Setup()
         {
 			Mocks = new MockRepository();
-	        cleanUpAfterTest = false;
-			_loginWithOpenUnitOfWork = SetupFixtureForAssembly.CreatePersonAndLoginWithOpenUnitOfWork(out _loggedOnPerson, out _unitOfWork);
+	        _loginWithOpenUnitOfWork = SetupFixtureForAssembly.CreatePersonAndLoginWithOpenUnitOfWork(out _loggedOnPerson, out _unitOfWork);
 	        _loginWithOpenUnitOfWork.CleanUpAfterTest = false;
 			_session = _unitOfWork.FetchSession();
 			SetupForRepositoryTest();
