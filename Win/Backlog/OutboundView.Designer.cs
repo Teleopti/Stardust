@@ -28,10 +28,10 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.Windows.Forms.ListViewGroup listViewGroup1 = new System.Windows.Forms.ListViewGroup("testgroup", System.Windows.Forms.HorizontalAlignment.Left);
-			System.Windows.Forms.ListViewGroup listViewGroup2 = new System.Windows.Forms.ListViewGroup("another", System.Windows.Forms.HorizontalAlignment.Left);
-			System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("test");
-			System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem("anothe test");
+			System.Windows.Forms.ListViewGroup listViewGroup7 = new System.Windows.Forms.ListViewGroup("testgroup", System.Windows.Forms.HorizontalAlignment.Left);
+			System.Windows.Forms.ListViewGroup listViewGroup8 = new System.Windows.Forms.ListViewGroup("another", System.Windows.Forms.HorizontalAlignment.Left);
+			System.Windows.Forms.ListViewItem listViewItem7 = new System.Windows.Forms.ListViewItem("test");
+			System.Windows.Forms.ListViewItem listViewItem8 = new System.Windows.Forms.ListViewItem("anothe test");
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OutboundView));
 			this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
 			this.listView1 = new System.Windows.Forms.ListView();
@@ -40,8 +40,10 @@
 			this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
 			this.toolStripButtonAddCampaign = new System.Windows.Forms.ToolStripButton();
-			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
+			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
 			this.toolStripContainer1.ContentPanel.SuspendLayout();
 			this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
 			this.toolStripContainer1.SuspendLayout();
@@ -76,18 +78,18 @@
             this.columnHeader3});
 			this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.listView1.FullRowSelect = true;
-			listViewGroup1.Header = "testgroup";
-			listViewGroup1.Name = "testgroup";
-			listViewGroup2.Header = "another";
-			listViewGroup2.Name = "listViewGroup1";
+			listViewGroup7.Header = "testgroup";
+			listViewGroup7.Name = "testgroup";
+			listViewGroup8.Header = "another";
+			listViewGroup8.Name = "listViewGroup1";
 			this.listView1.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
-            listViewGroup1,
-            listViewGroup2});
-			listViewItem1.Group = listViewGroup1;
-			listViewItem2.Group = listViewGroup2;
+            listViewGroup7,
+            listViewGroup8});
+			listViewItem7.Group = listViewGroup7;
+			listViewItem8.Group = listViewGroup8;
 			this.listView1.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem1,
-            listViewItem2});
+            listViewItem7,
+            listViewItem8});
 			this.listView1.Location = new System.Drawing.Point(0, 0);
 			this.listView1.Name = "listView1";
 			this.listView1.Size = new System.Drawing.Size(937, 511);
@@ -115,10 +117,11 @@
 			this.toolStrip1.Dock = System.Windows.Forms.DockStyle.None;
 			this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonAddCampaign,
-            this.toolStripButton1});
+            this.toolStripButton1,
+            this.toolStripButton2});
 			this.toolStrip1.Location = new System.Drawing.Point(3, 0);
 			this.toolStrip1.Name = "toolStrip1";
-			this.toolStrip1.Size = new System.Drawing.Size(205, 25);
+			this.toolStrip1.Size = new System.Drawing.Size(297, 25);
 			this.toolStrip1.TabIndex = 0;
 			// 
 			// toolStripButtonAddCampaign
@@ -131,14 +134,6 @@
 			this.toolStripButtonAddCampaign.Text = "Add Campaign";
 			this.toolStripButtonAddCampaign.Click += new System.EventHandler(this.toolStripButtonAddCampaignClick);
 			// 
-			// statusStrip1
-			// 
-			this.statusStrip1.Location = new System.Drawing.Point(0, 540);
-			this.statusStrip1.Name = "statusStrip1";
-			this.statusStrip1.Size = new System.Drawing.Size(937, 22);
-			this.statusStrip1.TabIndex = 2;
-			this.statusStrip1.Text = "statusStrip1";
-			// 
 			// toolStripButton1
 			// 
 			this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
@@ -148,6 +143,31 @@
 			this.toolStripButton1.Size = new System.Drawing.Size(71, 22);
 			this.toolStripButton1.Text = "View Status";
 			this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
+			// 
+			// toolStripButton2
+			// 
+			this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
+			this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButton2.Name = "toolStripButton2";
+			this.toolStripButton2.Size = new System.Drawing.Size(92, 22);
+			this.toolStripButton2.Text = "Load schedules";
+			this.toolStripButton2.Click += new System.EventHandler(this.toolStripButton2_Click);
+			// 
+			// statusStrip1
+			// 
+			this.statusStrip1.Location = new System.Drawing.Point(0, 540);
+			this.statusStrip1.Name = "statusStrip1";
+			this.statusStrip1.Size = new System.Drawing.Size(937, 22);
+			this.statusStrip1.TabIndex = 2;
+			this.statusStrip1.Text = "statusStrip1";
+			// 
+			// backgroundWorker1
+			// 
+			this.backgroundWorker1.WorkerReportsProgress = true;
+			this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+			this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
+			this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
 			// 
 			// OutboundView
 			// 
@@ -182,6 +202,8 @@
 		private System.Windows.Forms.ToolStripButton toolStripButtonAddCampaign;
 		private System.Windows.Forms.StatusStrip statusStrip1;
 		private System.Windows.Forms.ToolStripButton toolStripButton1;
+		private System.Windows.Forms.ToolStripButton toolStripButton2;
+		private System.ComponentModel.BackgroundWorker backgroundWorker1;
 
 	}
 }

@@ -57,6 +57,22 @@ namespace Teleopti.Ccc.Domain.Backlog
 			return _taskDays[date].Time;
 		}
 
+		public TimeSpan GetPlannedTimeOnDate(DateOnly date)
+		{
+			if (PlannedTimeTypeOnDate(date) != PlannedTimeTypeEnum.Scheduled)
+				return GetTimeOnDate(date);
+
+			return TimeSpan.Zero;
+		}
+
+		public TimeSpan GetScheduledTimeOnDate(DateOnly date)
+		{
+			if (PlannedTimeTypeOnDate(date) == PlannedTimeTypeEnum.Scheduled)
+				return GetTimeOnDate(date);
+
+			return TimeSpan.Zero;
+		}
+
 		public PlannedTimeTypeEnum PlannedTimeTypeOnDate(DateOnly date)
 		{
 			return _taskDays[date].PlannedTimeType;
@@ -83,7 +99,7 @@ namespace Teleopti.Ccc.Domain.Backlog
 			foreach (var dateOnly in _taskDays.Keys)
 			{
 				if (dateOnly <= date)
-					planned = planned.Add(GetTimeOnDate(date));
+					planned = planned.Add(GetTimeOnDate(dateOnly));
 			}
 
 			return TotalWorkTime.Subtract(planned);

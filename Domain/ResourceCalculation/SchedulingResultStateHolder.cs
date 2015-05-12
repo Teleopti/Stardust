@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			var allSkillDaysOnDate = SkillDaysOnDateOnly(new List<DateOnly> {dateOnly});
 
-			return allSkillDaysOnDate.FirstOrDefault(skillday => skillday.Skill == skill);
+			return allSkillDaysOnDate.FirstOrDefault(skillday => skillday.Skill.Equals(skill));
 		}
 
 		public ISeniorityWorkDayRanks SeniorityWorkDayRanks { get; set; }
