@@ -6,7 +6,7 @@ SET PowerShellScriptPath=%ThisScriptsDirectory%DeployToAzure.ps1
 SET AzurePackagePath=%~1
 IF "%AzurePackagePath%"=="" GOTO :NoAzurePackage
 
-PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& '%PowerShellScriptPath%' '%ThisScriptsDirectory%' 'Teleopti CCC Azure' 'teleoptirnd' '%AzurePackagePath%' '%ThisScriptsDirectory%teleoptirnd.cscfg' 'production' '%ThisScriptsDirectory%AzureDemo.publishsettings'";
+PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& '%PowerShellScriptPath%' '%ThisScriptsDirectory%' 'Teleopti CCC Azure' 'teleoptirnd' '%AzurePackagePath%' '%ThisScriptsDirectory%AzureRelease\teleoptirnd.cscfg' 'production' '%ThisScriptsDirectory%AzureDemo.publishsettings'";
 EXIT %ERRORLEVEL%
 
 :NoAzurePackage
