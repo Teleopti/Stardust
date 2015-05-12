@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				{
 					stateGroup = new RtaStateGroup(name, false, true);
 					stateGroup.SetId(Guid.NewGuid());
-					stateGroup.SetBusinessUnit(_businessUnit);
+					stateGroup.SetBusinessUnitOnAggregateWithoutChangeInfo(_businessUnit);
 					stateGroup.IsLogOutState = isLoggedOutState;
 					stateGroup.AddState(null, stateCode, platformTypeIdGuid);
 					RtaStateGroupRepository.Add(stateGroup);
