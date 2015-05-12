@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using System.Collections.Generic;
 using System.Linq;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.TestCommon;
@@ -29,16 +30,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 		[Test]
 		public void ShouldReturnPeopleSummary()
 		{
-			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(DateOnly.Today,
-				new Team
-				{
-					Description = new Description("TestTeam")
-				});
+			var team = TeamFactory.CreateTeam("TestTeam", "TestSite");
+			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(DateOnly.Today.AddDays(-1),
+				team);
 			person.Name = new Name("Ashley", "Andeen");
 			person.Email = "ashley.andeen@abc.com";
+			person.EmploymentNumber = "1011";
 
 			var personId = person.Id.Value;
-			person.TerminatePerson(new DateOnly(2015, 4, 9), MockRepository.GenerateMock<IPersonAccountUpdater>());
+			var leavingDate = DateOnly.Today.AddDays(1);
+			person.TerminatePerson(leavingDate, MockRepository.GenerateMock<IPersonAccountUpdater>());
 
 			var optionalColumn = new OptionalColumn("Cell Phone");
 			var optionalColumnValue = new OptionalColumnValue("123456");
@@ -50,23 +51,23 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			var result = ((dynamic) target).GetResult("Ashley", 10, 1);
 
 			var optionalColumns = (IEnumerable<string>)result.Content.OptionalColumns;
-			optionalColumns.Count().Equals(1);
-			optionalColumns.First().Equals("CellPhone");
+			Assert.AreEqual(1, optionalColumns.Count());
+			Assert.AreEqual("Cell Phone", optionalColumns.First());
 
 			var peopleList = (IEnumerable<dynamic>) result.Content.People;
 			var first = peopleList.First();
-			first.Team.Equals("TestTeam");
-			first.FirstName.Equals("Ashley");
-			first.LastName.Equals("Andeen");
-			first.EmploymentNumber.Equals("1011");
-			first.PersonId.Equals(personId);
-			first.Email.Equals("ashley.andeen@abc.com");
-			first.LeavingDate.Equals("2015-04-09");
+			Assert.AreEqual("TestSite/TestTeam", first.Team);
+			Assert.AreEqual("Ashley", first.FirstName);
+			Assert.AreEqual("Andeen",first.LastName);
+			Assert.AreEqual("1011",first.EmploymentNumber);
+			Assert.AreEqual(personId, first.PersonId);
+			Assert.AreEqual("ashley.andeen@abc.com",first.Email);
+			Assert.AreEqual(leavingDate.ToShortDateString(), first.LeavingDate);
 
 			var optionalColumnValues = (IEnumerable<KeyValuePair<string, string>>)first.OptionalColumnValues;
 			var columnValue = optionalColumnValues.First();
-			columnValue.Key.Equals("CellPhone");
-			columnValue.Value.Equals("123456");
+			Assert.AreEqual("Cell Phone", columnValue.Key);
+			Assert.AreEqual("123456", columnValue.Value);
 		}
 
 		[Test]
@@ -80,8 +81,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			var result = ((dynamic) target).GetResult("a", 10, 1);
 
 			var peopleList = (IEnumerable<dynamic>)result.Content.People;
-			peopleList.First().FirstName.Equals(firstPerson.Name.FirstName);
-			peopleList.Last().FirstName.Equals(secondPerson.Name.FirstName);
+			Assert.AreEqual(firstPerson.Name.FirstName, peopleList.First().FirstName);
+			Assert.AreEqual(secondPerson.Name.FirstName, peopleList.Last().FirstName);
 		}
 
 		[Test]
@@ -101,9 +102,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			var result = ((dynamic)target).GetResult("", 10, 1);
 			var peopleList = (IEnumerable<dynamic>)result.Content.People;
 
-			peopleList.Count().Equals(2);
-			peopleList.First().FirstName.Equals(person.Name.FirstName);
-			peopleList.Last().FirstName.Equals(currentUser.Name.FirstName);
+			Assert.AreEqual(2, peopleList.Count());
+			Assert.AreEqual(person.Name.FirstName, peopleList.First().FirstName);
+			Assert.AreEqual(currentUser.Name.FirstName, peopleList.Last().FirstName);
 		}
 
 	}
