@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Teleopti.Interfaces.Domain;
@@ -10,21 +11,26 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 	{
 		public static IDictionary<PersonFinderField, string> Parse(string values)
 		{
+			const char keyValueSplitter = ':';
+			const char keywordsSplitter = ' ';
+			const char searchTermSplitter = ',';
+
 			var parsedTerms = new Dictionary<PersonFinderField, string>();
-			if (!values.Contains(":"))
+			if (!values.Contains(keyValueSplitter))
 			{
 				parsedTerms.Add(PersonFinderField.All, values);
 				return parsedTerms;
 			}
 
 			var quotePatternRegex = new Regex("\\s*(\"[^\"]*?\")\\s*");
-			var splitPattern = new Regex("(?<!\"[^ ]+) (?![^ ]+\")");
+			var splitPattern =
+				new Regex("(?<!\"[^" + keywordsSplitter + "]+)" + keywordsSplitter + "(?![^" + keywordsSplitter + "]+\")");
 
 			values = Regex.Replace(values, @"\s{1,}", " ");
-			var searchTerms = values.Split(new[] {','}).Select(s => s.Trim()).Where(s => !string.IsNullOrEmpty(s));
+			var searchTerms = values.Split(new[] {searchTermSplitter}).Select(s => s.Trim()).Where(s => !string.IsNullOrEmpty(s));
 			foreach (var term in searchTerms)
 			{
-				var splitterPosition = term.IndexOf(':');
+				var splitterPosition = term.IndexOf(keyValueSplitter);
 				if (splitterPosition < 0) continue;
 
 				var searchTypeString = term.Substring(0, splitterPosition).Trim();
@@ -38,6 +44,7 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 				var searchValues = term.Substring(splitterPosition + 1, term.Length - splitterPosition - 1).Trim();
 
 				// Replace multiple spaces and tabs before/after quote pair to single space
+				// Or add space before/after quote pair if there is no space
 				searchValues = quotePatternRegex.Replace(searchValues, " $1 ");
 
 				// Split search value into single keyword based on space and quote pair
@@ -50,7 +57,8 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 					: new List<string>();
 
 				searchKeywords.AddRange(result);
-				parsedTerms[searchType] = string.Join(" ", new HashSet<string>(searchKeywords));
+				parsedTerms[searchType] = string.Join(keywordsSplitter.ToString(CultureInfo.CurrentCulture),
+					new HashSet<string>(searchKeywords));
 			}
 
 			return parsedTerms;
@@ -58,56 +66,30 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 
 		public static IDictionary<PersonFinderField, string> Parse(PeopleSearchCriteria form)
 		{
-			var criteriaDictionary = new Dictionary<PersonFinderField, string>();
-			if (!string.IsNullOrEmpty(form.FirstName))
-			{
-				criteriaDictionary.Add(PersonFinderField.FirstName, form.FirstName);
-			}
-			if (!string.IsNullOrEmpty(form.LastName))
-			{
-				criteriaDictionary.Add(PersonFinderField.LastName, form.LastName);
-			}
-			if (!string.IsNullOrEmpty(form.BudgetGroup))
-			{
-				criteriaDictionary.Add(PersonFinderField.BudgetGroup, form.BudgetGroup);
-			}
-			if (!string.IsNullOrEmpty(form.Contract))
-			{
-				criteriaDictionary.Add(PersonFinderField.Contract, form.Contract);
-			}
-			if (!string.IsNullOrEmpty(form.ContractSchedule))
-			{
-				criteriaDictionary.Add(PersonFinderField.ContractSchedule, form.ContractSchedule);
-			}
-			if (!string.IsNullOrEmpty(form.EmploymentNumber))
-			{
-				criteriaDictionary.Add(PersonFinderField.EmploymentNumber, form.EmploymentNumber);
-			}
-			if (!string.IsNullOrEmpty(form.Note))
-			{
-				criteriaDictionary.Add(PersonFinderField.Note, form.Note);
-			}
-			if (!string.IsNullOrEmpty(form.Organization))
-			{
-				criteriaDictionary.Add(PersonFinderField.Organization, form.Organization);
-			}
-			if (!string.IsNullOrEmpty(form.PartTimePercentage))
-			{
-				criteriaDictionary.Add(PersonFinderField.PartTimePercentage, form.PartTimePercentage);
-			}
-			if (!string.IsNullOrEmpty(form.Role))
-			{
-				criteriaDictionary.Add(PersonFinderField.Role, form.Role);
-			}
-			if (!string.IsNullOrEmpty(form.ShiftBag))
-			{
-				criteriaDictionary.Add(PersonFinderField.ShiftBag, form.ShiftBag);
-			}
-			if (!string.IsNullOrEmpty(form.Skill))
-			{
-				criteriaDictionary.Add(PersonFinderField.Skill, form.Skill);
-			}
-			return criteriaDictionary;
+			var criterias = new Dictionary<PersonFinderField, string>();
+
+			addSearchCriteria(criterias, PersonFinderField.FirstName, form.FirstName);
+			addSearchCriteria(criterias, PersonFinderField.LastName, form.LastName);
+			addSearchCriteria(criterias, PersonFinderField.BudgetGroup, form.BudgetGroup);
+			addSearchCriteria(criterias, PersonFinderField.Contract, form.Contract);
+			addSearchCriteria(criterias, PersonFinderField.ContractSchedule, form.ContractSchedule);
+			addSearchCriteria(criterias, PersonFinderField.EmploymentNumber, form.EmploymentNumber);
+			addSearchCriteria(criterias, PersonFinderField.Note, form.Note);
+			addSearchCriteria(criterias, PersonFinderField.Organization, form.Organization);
+			addSearchCriteria(criterias, PersonFinderField.PartTimePercentage, form.PartTimePercentage);
+			addSearchCriteria(criterias, PersonFinderField.Role, form.Role);
+			addSearchCriteria(criterias, PersonFinderField.ShiftBag, form.ShiftBag);
+			addSearchCriteria(criterias, PersonFinderField.Skill, form.Skill);
+
+			return criterias;
+		}
+
+		private static void addSearchCriteria(IDictionary<PersonFinderField, string> criterias,
+			PersonFinderField searchType, string searchValue)
+		{
+			if (string.IsNullOrEmpty(searchValue)) return;
+
+			criterias.Add(searchType, searchValue);
 		}
 	}
 }
