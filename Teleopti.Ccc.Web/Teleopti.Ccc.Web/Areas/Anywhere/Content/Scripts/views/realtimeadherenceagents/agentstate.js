@@ -51,7 +51,7 @@
 
                 that.AlarmStart(data.AlarmStart ? moment.utc(data.AlarmStart).add(resources.TimeZoneOffsetMinutes, 'minutes').format(resources.FixedDateTimeWithSecondsFormatForMoment) : '');
 
-                if (that.shouldWaitWithUpdatingAlarm()) {
+                if (that.shouldWaitWithUpdatingAlarm(data.AlarmStart)) {
                     that.HaveNewAlarm = true;
                     that.NextAlarm = data.Alarm;
                     that.NextAlarmColor = data.AlarmColor;
@@ -73,8 +73,8 @@
                 that.HaveNewAlarm = false;
             }
 
-            that.shouldWaitWithUpdatingAlarm = function () {
-                return that.AlarmStart() && moment.utc().isBefore(that.AlarmStart());
+            that.shouldWaitWithUpdatingAlarm = function (alarmStartUtc) {
+            	return that.AlarmStart() && moment.utc().isBefore(alarmStartUtc);
             }
 
             that.refreshColor = function (newColor) {
