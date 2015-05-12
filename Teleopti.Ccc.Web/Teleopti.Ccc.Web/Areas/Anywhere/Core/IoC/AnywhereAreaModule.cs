@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC
 			builder.RegisterType<SeatImpactOnPeriodForProjection>().As<ISeatImpactOnPeriodForProjection>();
 			builder.RegisterType<SingleSkillDictionary>().As<ISingleSkillDictionary>().InstancePerLifetimeScope();
 
-			builder.RegisterType<IntraIntervalFinderServiceToggle29845Off>().As<IIntraIntervalFinderService>();	
+			builder.RegisterType<IntraIntervalFinderService>().As<IIntraIntervalFinderService>();	
 		}
 	}
 }

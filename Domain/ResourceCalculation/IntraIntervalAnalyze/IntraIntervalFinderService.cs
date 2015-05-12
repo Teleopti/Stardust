@@ -31,12 +31,4 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze
 			}
 		}
 	}
-
-	public class IntraIntervalFinderServiceToggle29845Off : IIntraIntervalFinderService
-	{
-		public void Execute(ISchedulingResultStateHolder schedulingResultStateHolder, DateOnly dateOnly, IResourceCalculationDataContainer resourceCalculationDataContainer)
-		{
-			
-		}
-	}
 }

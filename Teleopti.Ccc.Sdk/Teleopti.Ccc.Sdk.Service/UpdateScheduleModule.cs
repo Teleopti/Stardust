@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			builder.RegisterType<PersonSkillProvider>().As<IPersonSkillProvider>().InstancePerLifetimeScope();
 			builder.RegisterType<PeriodDistributionService>().As<IPeriodDistributionService>();
 			builder.RegisterType<ResourceOptimizationHelper>().As<IResourceOptimizationHelper>().InstancePerLifetimeScope();
-			builder.RegisterType<IntraIntervalFinderServiceToggle29845Off>().As<IIntraIntervalFinderService>();	
+			builder.RegisterType<IntraIntervalFinderService>().As<IIntraIntervalFinderService>();	
 			builder.RegisterType<SkillDayLoadHelper>().As<ISkillDayLoadHelper>().InstancePerLifetimeScope();
 			builder.RegisterType<PeopleAndSkillLoaderDecider>().As<IPeopleAndSkillLoaderDecider>().InstancePerLifetimeScope();
 			builder.RegisterGeneric(typeof(PairMatrixService<>)).As(typeof(IPairMatrixService<>)).InstancePerLifetimeScope();
