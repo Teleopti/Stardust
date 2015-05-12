@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Search.Controllers
@@ -17,30 +16,43 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 				parsedTerms.Add(PersonFinderField.All, values);
 				return parsedTerms;
 			}
-			values = Regex.Replace(values, @"\s+", " ");
-			var searchTerms = values.Split(new[] {','}).Select(s => s.Trim()).Where(s=>!string.IsNullOrEmpty(s));
+
+			var quotePatternRegex = new Regex("\\s*(\"[^\"]*?\")\\s*");
+			var splitPattern = new Regex("(?<!\"[^ ]+) (?![^ ]+\")");
+
+			values = Regex.Replace(values, @"\s{1,}", " ");
+			var searchTerms = values.Split(new[] {','}).Select(s => s.Trim()).Where(s => !string.IsNullOrEmpty(s));
 			foreach (var term in searchTerms)
 			{
-				var splitter = term.IndexOf(':');
-				var type = term.Substring(0, splitter).Trim();
-				var value = term.Substring(splitter + 1, term.Length - splitter - 1).Trim();
-				
-				PersonFinderField parsedType;
-				if (!Enum.TryParse(type, true, out parsedType))
+				var splitterPosition = term.IndexOf(':');
+				if (splitterPosition < 0) continue;
+
+				var searchTypeString = term.Substring(0, splitterPosition).Trim();
+
+				PersonFinderField searchType;
+				if (!Enum.TryParse(searchTypeString, true, out searchType))
 				{
 					continue;
 				}
 
-				if (!parsedTerms.ContainsKey(parsedType))
-				{
-					parsedTerms.Add(parsedType, value);
-				}
-				else
-				{
-					parsedTerms[parsedType] = parsedTerms[parsedType] + " " + value;
-				}
+				var searchValues = term.Substring(splitterPosition + 1, term.Length - splitterPosition - 1).Trim();
+
+				// Replace multiple spaces and tabs before/after quote pair to single space
+				searchValues = quotePatternRegex.Replace(searchValues, " $1 ");
+
+				// Split search value into single keyword based on space and quote pair
+				var result = splitPattern.Split(searchValues)
+					.Select(x => x.Trim())
+					.Where(x => !string.IsNullOrEmpty(x));
+
+				var searchKeywords = parsedTerms.ContainsKey(searchType)
+					? parsedTerms[searchType].Split(new[] {' '}).ToList()
+					: new List<string>();
+
+				searchKeywords.AddRange(result);
+				parsedTerms[searchType] = string.Join(" ", new HashSet<string>(searchKeywords));
 			}
-			
+
 			return parsedTerms;
 		}
 

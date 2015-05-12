@@ -27,6 +27,23 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 		}
 
 		[Test]
+		public void ShouldHandleMultipleSpacesAndTabs()
+		{
+			const string searchTerm = "FirstName: \taa    bb, \t LastName  \t  :   cc   \tdd  ";
+			var result = SearchTermParser.Parse(searchTerm);
+
+			Assert.AreEqual(2, result.Count());
+
+			var firstTerm = result.First();
+			Assert.AreEqual(PersonFinderField.FirstName, firstTerm.Key);
+			Assert.AreEqual("aa bb", firstTerm.Value);
+
+			var secondTerm = result.Second();
+			Assert.AreEqual(PersonFinderField.LastName, secondTerm.Key);
+			Assert.AreEqual("cc dd", secondTerm.Value);
+		}
+
+		[Test]
 		public void ShouldParseSearchTermStringWithInvalidType()
 		{
 			const string searchTerm = "Firstme: aa bb, lastName: cc dd";
@@ -62,17 +79,20 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 
 			var firstTerm = result.First();
 			Assert.AreEqual(PersonFinderField.FirstName, firstTerm.Key);
-			Assert.AreEqual(firstTerm.Value, "aa bb ee");
+			Assert.AreEqual("aa bb ee", firstTerm.Value);
 		}
 
 		[Test]
 		public void ShouldParseSearchTermStringWithAdvancedSingleSearchTerm()
 		{
-			const string advancedSingleSearchTerm = "   FirstName  :   aa	   bb   ";
-			var advancedSingleSearchTermResult = SearchTermParser.Parse(advancedSingleSearchTerm);
-			Assert.AreEqual(1, advancedSingleSearchTermResult.Count());
-			Assert.AreEqual(PersonFinderField.FirstName, advancedSingleSearchTermResult.First().Key);
-			Assert.AreEqual("aa bb", advancedSingleSearchTermResult.First().Value);
+			const string advancedSingleSearchTerm = "FirstName:aa bb";
+			var result = SearchTermParser.Parse(advancedSingleSearchTerm);
+
+			Assert.AreEqual(1, result.Count());
+
+			var firstTerm = result.First();
+			Assert.AreEqual(PersonFinderField.FirstName, firstTerm.Key);
+			Assert.AreEqual("aa bb", firstTerm.Value);
 		}
 
 		[Test]
@@ -88,12 +108,42 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			Assert.AreEqual(PersonFinderField.Organization, result.Second().Key);
 			Assert.AreEqual("London", result.Second().Value);
 		}
-		
+
 		[Test]
-		public void ShouldAlertUserForInvalidInput()
+		public void ShouldRemoveDuplicateKeywordForDuplicateSearchType()
+		{
+			const string searchTerm = "Firstname: aa bb, Firstname: aa ee";
+			var result = SearchTermParser.Parse(searchTerm);
+
+			Assert.AreEqual(1, result.Count());
+
+			var firstTerm = result.First();
+			Assert.AreEqual(PersonFinderField.FirstName, firstTerm.Key);
+			Assert.AreEqual("aa bb ee", firstTerm.Value);
+		}
+
+		[Test]
+		public void ShouldHandleSearchKeywordWithQuote()
+		{
+			const string searchTerm = "Firstname: \"aa bb\"dd, Firstname: aa ee";
+			var result = SearchTermParser.Parse(searchTerm);
+
+			Assert.AreEqual(1, result.Count());
+
+			var firstTerm = result.First();
+			Assert.AreEqual(PersonFinderField.FirstName, firstTerm.Key);
+			Assert.AreEqual("\"aa bb\" dd aa ee", firstTerm.Value);
+		}
+
+		[Test]
+		public void ShouldIgnoreInvalidTerm()
 		{
 			const string invalidInput = "FirstName: aa, bb";
-			Assert.Catch(() => SearchTermParser.Parse(invalidInput));
+			var result = SearchTermParser.Parse(invalidInput);
+			Assert.AreEqual(result.Count, 1);
+
+			var firstTerm = result.First();
+			Assert.AreEqual("aa", firstTerm.Value);
 		}
 	}
 }
