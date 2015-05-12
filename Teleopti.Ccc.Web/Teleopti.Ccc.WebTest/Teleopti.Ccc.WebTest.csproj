@@ -240,6 +240,7 @@
     <Compile Include="Areas\Global\UserControllerTest.cs" />
     <Compile Include="Areas\MultiTenancy\ChangePasswordTest.cs" />
     <Compile Include="Areas\MultiTenancy\PersonInfoLogonInfoFromGuidsTest.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\AgentScheduleViewModelReworkedMapperTest.cs" />
     <Compile Include="Areas\Outbound\Controllers\OutboundControllerTest.cs" />
     <Compile Include="Areas\Outbound\Core\Campaign\Mapping\OutboundCampaignMapperTests.cs" />
     <Compile Include="Areas\Outbound\Core\OutboundAreaModuleTest.cs" />
