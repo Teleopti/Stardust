@@ -33,12 +33,12 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 
 		public AuthenticationQueryResult TryLogon(ApplicationLogonClientModel applicationLogonClientModel, string userAgent)
 		{
-			return doAuthenticationCall(_tenantServerConfiguration.Path + "Authenticate/ApplicationLogon", applicationLogonClientModel, userAgent);
+			return doAuthenticationCall(_tenantServerConfiguration.FullPath("Authenticate/ApplicationLogon"), applicationLogonClientModel, userAgent);
 		}
 
 		public AuthenticationQueryResult TryLogon(IdentityLogonClientModel identityLogonClientModel, string userAgent)
 		{
-			return doAuthenticationCall(_tenantServerConfiguration.Path + "Authenticate/IdentityLogon", identityLogonClientModel, userAgent);
+			return doAuthenticationCall(_tenantServerConfiguration.FullPath("Authenticate/IdentityLogon"), identityLogonClientModel, userAgent);
 		}
 
 		private AuthenticationQueryResult doAuthenticationCall(string path, object clientModel, string userAgent)

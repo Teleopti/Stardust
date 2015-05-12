@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Runtime.InteropServices;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Interfaces.Domain;
@@ -30,10 +29,11 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 
 		private AuthenticationQueryResult readFile()
 		{
-			if (!File.Exists(_tenantServerConfiguration.Path))
-				return new AuthenticationQueryResult { FailReason = string.Format("No file with name {0}", _tenantServerConfiguration.Path), Success = false };
+			var path = _tenantServerConfiguration.FullPath(string.Empty);
+			if (!File.Exists(path))
+				return new AuthenticationQueryResult { FailReason = string.Format("No file with name {0}", path), Success = false };
 
-			var json = File.ReadAllText(_tenantServerConfiguration.Path);
+			var json = File.ReadAllText(path);
 
 			var result = JsonConvert.DeserializeObject<AuthenticationQueryResult>(json);
 			_applicationData().MakeSureDataSourceExists(result.Tenant, result.DataSourceConfiguration.ApplicationNHibernateConfig, result.DataSourceConfiguration.AnalyticsConnectionString);

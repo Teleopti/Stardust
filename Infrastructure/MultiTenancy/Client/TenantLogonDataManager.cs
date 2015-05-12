@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 			{
 				var json = _jsonSerializer.SerializeObject(batch);
 				ret.AddRange(
-					_postHttpRequest.Send<List<LogonInfoModel>>(_tenantServerConfiguration.Path + "PersonInfo/LogonInfoFromGuids", json));
+					_postHttpRequest.Send<List<LogonInfoModel>>(_tenantServerConfiguration.FullPath("PersonInfo/LogonInfoFromGuids"), json));
 			}
 
 			return ret;

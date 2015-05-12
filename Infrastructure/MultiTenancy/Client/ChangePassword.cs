@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 			var json = _jsonSerializer.SerializeObject(newPasswordInput);
 			try
 			{
-				_postHttpRequest.Send<object>(_tenantServerConfiguration.Path + "ChangePassword/Modify", json);
+				_postHttpRequest.Send<object>(_tenantServerConfiguration.FullPath("ChangePassword/Modify"), json);
 				return new ChangePasswordResult { Success = true };
 			}
 			catch (WebException wEx)

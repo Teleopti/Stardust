@@ -2,6 +2,6 @@
 {
 	public interface ITenantServerConfiguration
 	{
-		string Path { get; }
+		string FullPath(string relativeUrl);
 	}
 }

@@ -2,11 +2,18 @@
 {
 	public class TenantServerConfiguration : ITenantServerConfiguration
 	{
+		private readonly string _pathToServer;
+
 		public TenantServerConfiguration(string pathToServer)
 		{
-			Path = pathToServer;
+			_pathToServer = pathToServer;
 		}
 
-		public string Path { get; private set; }
+		public string FullPath(string relativeUrl)
+		{
+			return relativeUrl == string.Empty || _pathToServer.EndsWith("/")
+				? _pathToServer + relativeUrl
+				: _pathToServer + "/" + relativeUrl;
+		}
 	}
 }

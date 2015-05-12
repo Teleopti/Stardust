@@ -8,11 +8,31 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 	public class TenantServerConfigurationTest
 	{
 		[Test]
-		public void ShouldGetPath()
+		public void ShouldGetPathIfEndingWithBackslash()
+		{
+			const string path = @"http://www.roger.com/";
+			var relativePath = RandomName.Make();
+			var target = new TenantServerConfiguration(path);
+			target.FullPath(relativePath)
+				.Should().Be.EqualTo(@"http://www.roger.com/" + relativePath);
+		}
+
+		[Test]
+		public void ShouldGetPathIfNotEndingWithBackslash()
+		{
+			const string path = @"http://www.roger.com";
+			var relativePath = RandomName.Make();
+			var target = new TenantServerConfiguration(path);
+			target.FullPath(relativePath)
+				.Should().Be.EqualTo(@"http://www.roger.com/" + relativePath);
+		}
+
+		[Test]
+		public void IfRelativePathIsEmptyReturnAsIsToGetFakeImplementationWorkCorrectly()
 		{
 			var path = RandomName.Make();
 			var target = new TenantServerConfiguration(path);
-			target.Path
+			target.FullPath(string.Empty)
 				.Should().Be.EqualTo(path);
 		}
 	}
