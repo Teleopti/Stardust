@@ -110,7 +110,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job
 				"Data Source=SSAS_Server;Initial Catalog=SSAS_DB", 
 				"false", 
 				CultureInfo.CurrentCulture, 
-				null,
+				new JobParametersFactory.FakeContainerHolder(), 
 				false);
 			IList<IJobStep> jobStepList = new List<IJobStep>();
 			jobStepList.Add(new StageScheduleJobStep(jobParameters));

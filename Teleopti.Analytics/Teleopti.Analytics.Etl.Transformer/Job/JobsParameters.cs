@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using Autofac;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job.MultipleDate;
+using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.Toggle;
 
 namespace Teleopti.Analytics.Etl.Transformer.Job
@@ -13,7 +15,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job
 			IJobMultipleDate jobCategoryDates, int dataSource, string timeZone,
 			int intervalLengthMinutes, string cubeConnectionString,
 			string pmInstall, CultureInfo currentCulture,
-			IToggleManager toggleManager, bool runIndexMaintenance
+			IContainerHolder containerHolder, bool runIndexMaintenance
 			)
 		{
 			DataSource = dataSource;
@@ -24,7 +26,11 @@ namespace Teleopti.Analytics.Etl.Transformer.Job
 			JobCategoryDates = jobCategoryDates ?? new JobMultipleDate(DefaultTimeZone);
 			setOlapServerAndDatabase(cubeConnectionString);
 			IsPmInstalled = checkPmInstall(pmInstall);
-			ToggleManager = toggleManager;
+			
+			ToggleManager = containerHolder.ToggleManager;
+			TenantLogonDataManager = containerHolder.TenantLogonDataManager;
+			
+			
 			RunIndexMaintenance = runIndexMaintenance;
 		}
 
@@ -54,6 +60,8 @@ namespace Teleopti.Analytics.Etl.Transformer.Job
 		public CultureInfo CurrentCulture { get; private set; }
 
 		public IToggleManager ToggleManager { get; private set; }
+
+		public ITenantLogonDataManager TenantLogonDataManager { get; private set; }
 
 		public bool RunIndexMaintenance { get; private set; }
 

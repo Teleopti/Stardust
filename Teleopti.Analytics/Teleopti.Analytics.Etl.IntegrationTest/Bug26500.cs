@@ -7,7 +7,6 @@ using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job;
 using Teleopti.Analytics.Etl.Transformer.Job.MultipleDate;
 using Teleopti.Analytics.Etl.TransformerInfrastructure;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
@@ -18,6 +17,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 	[TestFixture]
 	public class Bug26500
 	{
+		
 		[SetUp]
 		public void Setup()
 		{
@@ -62,7 +62,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			var jobParameters = new JobParameters(
 				dateList, 1, "UTC", 15, "", "False", 
 				CultureInfo.CurrentCulture,
-				new FakeToggleManager(), false)
+				new FakeContainerHolder(), false)
 				{
 					Helper =
 						new JobHelper(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null, null, null)

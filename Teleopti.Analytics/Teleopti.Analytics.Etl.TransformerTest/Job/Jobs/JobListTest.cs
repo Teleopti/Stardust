@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Autofac;
 using NUnit.Framework;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job.Jobs;
@@ -10,6 +11,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Jobs
     public class JobListTest
     {
         private IList<IJob> _jobList;
+
         [SetUp]
         public void Setup()
         {

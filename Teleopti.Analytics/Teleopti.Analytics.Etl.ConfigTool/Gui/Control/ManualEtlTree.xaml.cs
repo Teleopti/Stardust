@@ -163,10 +163,10 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 			_logonWorker.Dispose();
 		}
 
-		public void LoadJobTree(IBaseConfiguration baseConfiguration)
+		public void LoadJobTree(IBaseConfiguration baseConfiguration, Autofac.IContainer container)
 		{
 			_baseConfiguration = baseConfiguration;
-			_jobCollectionFactory = new JobCollectionFactory(baseConfiguration);
+			_jobCollectionFactory = new JobCollectionFactory(baseConfiguration, container);
 			_logonWorker.RunWorkerAsync(CultureInfo.CurrentCulture);
 		}
 	}

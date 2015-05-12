@@ -19,7 +19,6 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
@@ -81,7 +80,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			var jobParameters = new JobParameters(
 				dateList, 1, "UTC", 15, "", "False",
 				CultureInfo.CurrentCulture,
-				new FakeToggleManager(), false
+				new FakeContainerHolder(), false
 				)
 			{
 				Helper =
@@ -149,7 +148,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			var jobParameters = new JobParameters(
 				dateList, 1, "UTC", 15, "", "False",
 				CultureInfo.CurrentCulture,
-				new FakeToggleManager(), false
+				new FakeContainerHolder(), false
 				)
 			{
 				Helper =
@@ -218,7 +217,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			var jobParameters = new JobParameters(
 				dateList, 1, "UTC", 15, "", "False",
 				CultureInfo.CurrentCulture,
-				new FakeToggleManager(), false
+				new FakeContainerHolder(), false
 				)
 			{
 				Helper =
@@ -328,10 +327,12 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				new LogOnHelperFake(dataSource, user));
 			//var jobHelper = new JobHelper(null, null, null,new LogOnHelper(""));
 			jobHelper.LogOffTeleoptiCccDomain();
+			var fakeManager = new FakeContainerHolder();
+			fakeManager.EnableToggle(Toggles.ETL_OnlyLatestQueueAgentStatistics_30787);
 			var jobParameters = new JobParameters(
 				dateList, 1, "UTC", 15, "", "False",
 				CultureInfo.CurrentCulture,
-				new FakeToggleManager(Toggles.ETL_OnlyLatestQueueAgentStatistics_30787),
+				fakeManager,
 				false
 				)
 			{

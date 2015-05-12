@@ -4,10 +4,12 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Markup;
+using Autofac;
 using Teleopti.Analytics.Etl.ConfigTool.Gui.StartupConfiguration;
 using Teleopti.Analytics.Etl.Transformer;
 using log4net.Config;
-using System.Xaml;
+using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.MultipleConfig;
 using Teleopti.Interfaces.Domain;
 using Application = System.Windows.Application;
 
@@ -22,6 +24,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool
 		private void Application_Startup(object sender, StartupEventArgs e)
 		{
 			XmlConfigurator.Configure();
+			IContainer container = configureContainer();
 
 			var configurationHandler = new ConfigurationHandler(new GeneralFunctions(ConfigurationManager.AppSettings["datamartConnectionString"]));
 
@@ -42,9 +45,23 @@ namespace Teleopti.Analytics.Etl.ConfigTool
 			FrameworkElement.LanguageProperty.OverrideMetadata(
 				typeof(FrameworkElement),
 				new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
-
-			var startWindow = new MainWindow(configurationHandler.BaseConfiguration);
+			
+			var startWindow = new MainWindow(configurationHandler.BaseConfiguration,container);
 			startWindow.Show();
 		}
-	}
+
+	    private static IContainer configureContainer()
+	    {
+			 var builder = new ContainerBuilder();
+		    var iocArgs = new IocArgs(new AppConfigReader());
+			 var configuration = new IocConfiguration(
+							iocArgs,
+							CommonModule.ToggleManagerForIoc(iocArgs));
+
+			 builder.RegisterModule(
+			 new CommonModule(configuration));
+			 return builder.Build();
+
+	    }
+    }
 }

@@ -31,7 +31,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job
 				_jobMultipleDate, 1, "W. Europe Standard Time", 5, 
 				cubeConnectionString, "true", 
 				CultureInfo.CurrentCulture, 
-				null,
+				new JobParametersFactory.FakeContainerHolder(), 
 				false
 			);
 		}
@@ -85,15 +85,15 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job
 			Assert.IsTrue(_target.IsPmInstalled);
 
 			_target = new JobParameters(
-				_jobMultipleDate, 1, "W. Europe Standard Time", 5, "", "false", CultureInfo.CurrentCulture, null, false);
+				_jobMultipleDate, 1, "W. Europe Standard Time", 5, "", "false", CultureInfo.CurrentCulture, new JobParametersFactory.FakeContainerHolder(), false);
 			Assert.IsFalse(_target.IsPmInstalled);
 
 			_target = new JobParameters(
-				_jobMultipleDate, 1, "W. Europe Standard Time", 5, "", "True", CultureInfo.CurrentCulture, null, false);
+				_jobMultipleDate, 1, "W. Europe Standard Time", 5, "", "True", CultureInfo.CurrentCulture, new JobParametersFactory.FakeContainerHolder(), false);
 			Assert.IsTrue(_target.IsPmInstalled);
 
 			_target = new JobParameters(
-				_jobMultipleDate, 1, "W. Europe Standard Time", 5, "", "", CultureInfo.CurrentCulture, null, false);
+				_jobMultipleDate, 1, "W. Europe Standard Time", 5, "", "", CultureInfo.CurrentCulture, new JobParametersFactory.FakeContainerHolder(), false);
 			Assert.IsFalse(_target.IsPmInstalled);
 		}
 	}

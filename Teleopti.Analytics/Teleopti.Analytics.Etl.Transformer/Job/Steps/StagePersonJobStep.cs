@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition;
 using Teleopti.Interfaces.Domain;
@@ -19,8 +20,9 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 		protected override int RunStep(IList<IJobResult> jobResultCollection, bool isLastBusinessUnit)
 		{
 			//Get data from Raptor
-			IEnumerable<IPerson> rootList = _jobParameters.StateHolder.PersonCollection;
-
+			IEnumerable<IPerson> rootList = _jobParameters.StateHolder.PersonCollection.ToList();
+			var guids = rootList.Select(person => person.Id.GetValueOrDefault()).ToList();
+			var logonInfos = JobParameters.TenantLogonDataManager.GetLogonInfoModelsForGuids(guids);
 			// Get common agent name description setting
 			ICommonNameDescriptionSetting commonNameDescriptionSetting = _jobParameters.Helper.Repository.CommonAgentNameDescriptionSetting;
 
@@ -29,7 +31,8 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 																 DateOnly.Today,
 																 BulkInsertDataTable1,
 																 BulkInsertDataTable2,
-																 commonNameDescriptionSetting);
+																 commonNameDescriptionSetting,
+																 logonInfos);
 
 			int affectedPersonRows = _jobParameters.Helper.Repository.PersistPerson(BulkInsertDataTable1);
 			int affectedAcdLoginRows = _jobParameters.Helper.Repository.PersistAcdLogOnPerson(BulkInsertDataTable2);

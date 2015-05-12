@@ -8,6 +8,7 @@ using NUnit.Framework;
 using Teleopti.Analytics.Etl.Transformer;
 using Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition;
 using Teleopti.Analytics.Etl.TransformerTest.FakeData;
+using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -41,7 +42,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             _acdTable.Locale = Thread.CurrentThread.CurrentCulture;
             PersonInfrastructure.AddColumnsToDataTable(_table);
             AcdLogOnPersonInfrastructure.AddColumnsToDataTable(_acdTable);
-            PersonTransformer.Transform(_personCollection, _intervalsPerDay, new DateOnly(2000, 1, 1), _table, _acdTable, _commonNameDescriptionSetting);
+            PersonTransformer.Transform(_personCollection, _intervalsPerDay, new DateOnly(2000, 1, 1), _table, _acdTable, _commonNameDescriptionSetting, new List<LogonInfoModel>());
         }
 
         [Test]
@@ -101,7 +102,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 
             _table.Rows.Clear();
             _acdTable.Rows.Clear();
-            PersonTransformer.Transform(_personCollection, _intervalsPerDay, new DateOnly(2000, 1, 1), _table, _acdTable, _commonNameDescriptionSetting);
+            PersonTransformer.Transform(_personCollection, _intervalsPerDay, new DateOnly(2000, 1, 1), _table, _acdTable, _commonNameDescriptionSetting, new List<LogonInfoModel>());
             
             Assert.AreEqual(DBNull.Value, _table.Rows[0]["scorecard_code"]);
         }
@@ -122,7 +123,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 
             _table.Rows.Clear();
             _acdTable.Rows.Clear();
-            PersonTransformer.Transform(_personCollection, _intervalsPerDay, new DateOnly(2000, 1, 1), _table, _acdTable, _commonNameDescriptionSetting);
+            PersonTransformer.Transform(_personCollection, _intervalsPerDay, new DateOnly(2000, 1, 1), _table, _acdTable, _commonNameDescriptionSetting, new List<LogonInfoModel>());
 
             Assert.AreEqual(DBNull.Value, _table.Rows[0]["scorecard_code"]);
         }

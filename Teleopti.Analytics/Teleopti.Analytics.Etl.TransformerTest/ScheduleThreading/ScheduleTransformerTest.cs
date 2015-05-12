@@ -29,7 +29,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.ScheduleThreading
 				minutesPerInterval,
 				"Data Source=SSAS_Server;Initial Catalog=SSAS_DB", "false",
 				CultureInfo.CurrentCulture, 
-				null,
+				new JobParametersFactory.FakeContainerHolder(), 
 				false);
 
 			jobParameters.Helper = new JobHelper(new RaptorRepositoryForTest(), null, null, null);

@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
+using Autofac;
+using Autofac.Core;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -33,6 +35,7 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 		{
 			return _enabled.Any(e => e == toggle);
 		}
-
 	}
+
+
 }

@@ -1,8 +1,10 @@
 ﻿using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Globalization;
+using Autofac;
 using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
+using Teleopti.Analytics.Etl.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job;
 using Teleopti.Analytics.Etl.Transformer.Job.Jobs;
 
@@ -11,10 +13,12 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Transformer
 	public class JobCollectionFactory
 	{
 		private readonly IBaseConfiguration _baseConfiguration;
+		private readonly IContainer _container;
 
-		public JobCollectionFactory(IBaseConfiguration baseConfiguration)
+		public JobCollectionFactory(IBaseConfiguration baseConfiguration, IContainer container)
 		{
 			_baseConfiguration = baseConfiguration;
+			_container = container;
 		}
 
 		public ObservableCollection<IJob> JobCollection
@@ -27,8 +31,8 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Transformer
 					_baseConfiguration.IntervalLength.Value,
 					ConfigurationManager.AppSettings["cube"],
 					ConfigurationManager.AppSettings["pmInstallation"],
-					CultureInfo.CurrentCulture, 
-					_baseConfiguration.ToggleManager,
+					CultureInfo.CurrentCulture,
+					new IocContainerHolder(_container), 
 					_baseConfiguration.RunIndexMaintenance
 					);
 

@@ -7,7 +7,6 @@ using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job;
 using Teleopti.Analytics.Etl.Transformer.Job.MultipleDate;
 using Teleopti.Analytics.Etl.TransformerInfrastructure;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
@@ -20,6 +19,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 	[TestFixture]
 	public class Bug28991
 	{
+
 		[SetUp]
 		public void Setup()
 		{
@@ -60,7 +60,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			var jobParameters = new JobParameters(
 				dateList, 1, "UTC", 15, "", "False",
 				CultureInfo.CurrentCulture,
-				new FakeToggleManager(), false
+				new FakeContainerHolder(), false
 				)
 				{
 					Helper =
@@ -88,7 +88,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			jobParameters = new JobParameters(
 				dateList, 1, "UTC", 15, "", "False",
 				CultureInfo.CurrentCulture,
-				new FakeToggleManager(), false
+				new FakeContainerHolder(), false
 				)
 			{
 				Helper =
@@ -130,7 +130,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			var jobParameters = new JobParameters(
 				dateList, 1, "UTC", 15, "", "False",
 				CultureInfo.CurrentCulture,
-				new FakeToggleManager(), false
+				new FakeContainerHolder(), false
 				)
 			{
 				Helper =
@@ -158,7 +158,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			jobParameters = new JobParameters(
 				dateList, 1, "UTC", 15, "", "False",
 				CultureInfo.CurrentCulture,
-				new FakeToggleManager(), false
+				new FakeContainerHolder(), false
 				)
 			{
 				Helper =

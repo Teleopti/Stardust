@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
@@ -8,9 +7,6 @@ using System.Globalization;
 using System.Linq;
 using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Ccc.Domain.Analytics;
-using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.MultipleConfig;
 using Teleopti.Interfaces.Domain;
 using log4net;
 
@@ -133,7 +129,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 		{
 			var dataSet = HelperFunctions.ExecuteDataSet(CommandType.StoredProcedure, "mart.sys_configuration_get", null, _dataMartConnectionString);
 			if (dataSet == null || dataSet.Tables.Count != 1)
-				return new BaseConfiguration(null, null, null, null, false);
+				return new BaseConfiguration(null, null, null, false);
 
 			int? culture = null;
 			int? intervalLength = null;
@@ -164,9 +160,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 				}
 			}
 
-			var toggleManager = CommonModule.ToggleManagerForIoc(new IocArgs(new AppConfigReader()));
-
-			return new BaseConfiguration(culture, intervalLength, timeZone, toggleManager, runIndexMaintenance);
+			return new BaseConfiguration(culture, intervalLength, timeZone, runIndexMaintenance);
 		}
 
 		public void SaveBaseConfiguration(IBaseConfiguration configuration)

@@ -1,13 +1,13 @@
 using System;
 using System.Globalization;
+using Autofac;
 using log4net;
 using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
+using Teleopti.Analytics.Etl.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job;
 using Teleopti.Analytics.Etl.Transformer.Job.Jobs;
 using Teleopti.Analytics.Etl.Transformer.Job.MultipleDate;
-using Teleopti.Ccc.Infrastructure.Toggle;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.ServiceLogic
 {
@@ -16,8 +16,8 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes")]
 		public static IJob ExtractJobFromSchedule(
 			IEtlJobSchedule etlJobScheduleToRun, JobHelper jobHelper, 
-			string timeZoneId, int intervalLengthMinutes, string cube, 
-			string pmInstallation, IToggleManager toggleManager, 
+			string timeZoneId, int intervalLengthMinutes, string cube,
+			string pmInstallation, IContainer container, 
 			bool runIndexMaintenance, CultureInfo culture)
 		{
 			var log = LogManager.GetLogger(typeof(JobExtractor));
@@ -30,8 +30,8 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 					intervalLengthMinutes,
 					cube,
 					pmInstallation,
-					culture, 
-					toggleManager,
+					culture,
+					new IocContainerHolder(container), 
                     runIndexMaintenance)
 					{
 						Helper = jobHelper

@@ -5,11 +5,13 @@ using System.Configuration;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
+using Autofac;
 using Teleopti.Analytics.Etl.Common.Entity;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.ConfigTool.Transformer;
 using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
+using Teleopti.Analytics.Etl.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job;
 using Teleopti.Analytics.Etl.Transformer.Job.Jobs;
 using Teleopti.Interfaces.Domain;
@@ -29,9 +31,10 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 		private readonly ObservableCollection<IEtlJobSchedule> _observableCollection;
 		private readonly IBaseConfiguration _baseConfiguration;
 		private readonly bool _selectDataSourceIsPossible;
+		private readonly IContainer _container;
 
 		public JobSchedule(IEtlJobSchedule etlJobSchedule, ObservableCollection<IEtlJobSchedule> observableCollection,
-			IBaseConfiguration baseConfiguration, bool selectDataSourceIsPossible)
+			IBaseConfiguration baseConfiguration, bool selectDataSourceIsPossible, IContainer container)
 		{
 			InitializeComponent();
 			_connectionString = ConfigurationManager.AppSettings["datamartConnectionString"];
@@ -39,6 +42,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 			_observableCollection = observableCollection;
 			_baseConfiguration = baseConfiguration;
 			_selectDataSourceIsPossible = selectDataSourceIsPossible;
+			_container = container;
 
 			if (etlJobSchedule == null)
 			{
@@ -69,7 +73,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 						ConfigurationManager.AppSettings["cube"],
 						ConfigurationManager.AppSettings["pmInstallation"],
 						CultureInfo.CurrentCulture,
-						_baseConfiguration.ToggleManager,
+						new IocContainerHolder(_container), 
 						_baseConfiguration.RunIndexMaintenance
 						)
 					);

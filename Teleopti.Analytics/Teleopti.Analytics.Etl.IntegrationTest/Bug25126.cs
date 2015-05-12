@@ -9,7 +9,6 @@ using Teleopti.Analytics.Etl.Transformer.Job.MultipleDate;
 using Teleopti.Analytics.Etl.Transformer.Job.Steps;
 using Teleopti.Analytics.Etl.TransformerInfrastructure;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
@@ -22,6 +21,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 	[TestFixture]
 	public class Bug25126
 	{
+
 		[SetUp]
 		public void Setup()
 		{
@@ -33,7 +33,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		{
 			SetupFixtureForAssembly.EndTest();
 		}
-		 
+
 		[Test]
 		public void ShouldWorkForStockholm()
 		{
@@ -46,7 +46,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>(), testDate);
 
 			IPerson person;
-            BasicShiftSetup.SetupBasicForShifts();
+			BasicShiftSetup.SetupBasicForShifts();
 			BasicShiftSetup.AddPerson(out person, "Ola H", "", testDate);
 
 			var cat = new ShiftCategoryConfigurable { Name = "Kattegat", Color = "Green" };
@@ -84,9 +84,9 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			var dateList = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 			dateList.Add(testDate.AddDays(-3), testDate.AddDays(3), JobCategoryType.Schedule);
 			var jobParameters = new JobParameters(
-				dateList, 1, "UTC", 15, "", "False", 
-				CultureInfo.CurrentCulture, 
-				new FakeToggleManager(), false)
+				dateList, 1, "UTC", 15, "", "False",
+				CultureInfo.CurrentCulture,
+				new FakeContainerHolder(), false)
 				{
 					Helper =
 						new JobHelper(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null, null, null)
@@ -95,14 +95,14 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			//transfer site, team contract etc from app to analytics
 			var result = StepRunner.RunBasicStepsBeforeSchedule(jobParameters);
 
-			
+
 			JobStepBase step = new StageScheduleJobStep(jobParameters);
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 
 			step = new DimShiftLengthJobStep(jobParameters);
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 
-			step = new FactScheduleJobStep(jobParameters,false);
+			step = new FactScheduleJobStep(jobParameters, false);
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 
 			step = new FactScheduleDayCountJobStep(jobParameters);
@@ -135,7 +135,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			var etlUpdateDate = new EtlReadModelSetup { BusinessUnit = TestState.BusinessUnit, StepName = "Schedules" };
 			Data.Apply(etlUpdateDate);
 
-			var brasilTimeZone = new BrasilTimeZone {TimeZoneId = 2};
+			var brasilTimeZone = new BrasilTimeZone { TimeZoneId = 2 };
 			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup> { brasilTimeZone }, testDate);
 
 			var cat = new ShiftCategoryConfigurable { Name = "Kattegat", Color = "Green" };
@@ -147,7 +147,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			Data.Apply(activityLunch);
 
 			IPerson person;
-            BasicShiftSetup.SetupBasicForShifts();
+			BasicShiftSetup.SetupBasicForShifts();
 			BasicShiftSetup.AddPerson(out person, "Ola H", "", testDate);
 			BasicShiftSetup.AddThreeShifts("Ola H", cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity, testDate);
 
@@ -177,9 +177,9 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			var dateList = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 			dateList.Add(testDate.AddDays(-3), testDate.AddDays(3), JobCategoryType.Schedule);
 			var jobParameters = new JobParameters(
-				dateList, 1, "UTC", 15, "", "False", 
+				dateList, 1, "UTC", 15, "", "False",
 				CultureInfo.CurrentCulture,
-				new FakeToggleManager(), false)
+				new FakeContainerHolder(), false)
 			{
 				Helper =
 					new JobHelper(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null, null, null)
@@ -210,7 +210,5 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 			Assert.That(factSchedules, Is.EqualTo(96));
 		}
-
-		
 	}
 }

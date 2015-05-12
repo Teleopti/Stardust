@@ -8,8 +8,7 @@ using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job;
 using Teleopti.Analytics.Etl.Transformer.Job.MultipleDate;
 using Teleopti.Analytics.Etl.Transformer.Job.Steps;
-using Teleopti.Ccc.Domain.Analytics;
-using Teleopti.Ccc.IocCommon.Toggle;
+using Teleopti.Analytics.Etl.TransformerTest.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
@@ -37,7 +36,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 
 			_jobCategoryDates.Add(startDate, endDate, JobCategoryType.AgentStatistics);
 			var jobParameters = new JobParameters(
-                _jobCategoryDates, 1, _timeZone.Id, 15, "", "", CultureInfo.CurrentCulture, new FakeToggleManager(), false);
+					 _jobCategoryDates, 1, _timeZone.Id, 15, "", "", CultureInfo.CurrentCulture, new JobParametersFactory.FakeContainerHolder(), false);
 
 			var jobHelper = new JobHelper(_repository, null, null, null);
 			jobParameters.Helper = jobHelper;
@@ -59,35 +58,35 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 			_repository.VerifyAllExpectations();
 		}
 
-        [Test]
-        public void ShouldRunIfToday()
-        {
-            var startDate = DateTime.SpecifyKind(DateTime.Today.AddDays(0), DateTimeKind.Local);
-            var endDate = DateTime.SpecifyKind(DateTime.Today.AddDays(0), DateTimeKind.Local);
+		  [Test]
+		  public void ShouldRunIfToday()
+		  {
+				var startDate = DateTime.SpecifyKind(DateTime.Today.AddDays(0), DateTimeKind.Local);
+				var endDate = DateTime.SpecifyKind(DateTime.Today.AddDays(0), DateTimeKind.Local);
 
-            _jobCategoryDates.Add(startDate, endDate, JobCategoryType.AgentStatistics);
+				_jobCategoryDates.Add(startDate, endDate, JobCategoryType.AgentStatistics);
 				var jobParameters = new JobParameters(
-                    _jobCategoryDates, 1, _timeZone.Id, 15, "", "", CultureInfo.CurrentCulture, new FakeToggleManager(), false);
+						  _jobCategoryDates, 1, _timeZone.Id, 15, "", "", CultureInfo.CurrentCulture, new JobParametersFactory.FakeContainerHolder(), false);
 
 			var jobHelper = new JobHelper(_repository, null, null, null);
-            jobParameters.Helper = jobHelper;
+				jobParameters.Helper = jobHelper;
 
-            _repository.Expect(x => x.FillScheduleDeviationDataMart(new DateTimePeriod(), null, null, 0, null)).Constraints(
-                                                                    Rhino.Mocks.Constraints.Is.Anything(),
-                                                                    Rhino.Mocks.Constraints.Is.Anything(),
-                                                                    Rhino.Mocks.Constraints.Is.Anything(),
-                                                                    Rhino.Mocks.Constraints.Is.Anything(),
+				_repository.Expect(x => x.FillScheduleDeviationDataMart(new DateTimePeriod(), null, null, 0, null)).Constraints(
+																						  Rhino.Mocks.Constraints.Is.Anything(),
+																						  Rhino.Mocks.Constraints.Is.Anything(),
+																						  Rhino.Mocks.Constraints.Is.Anything(),
+																						  Rhino.Mocks.Constraints.Is.Anything(),
 																	Rhino.Mocks.Constraints.Is.Anything()
-                                                                    )
-                                                                    .Return(0)
-                                                                    .Repeat.Times(1); 
+																						  )
+																						  .Return(0)
+																						  .Repeat.Times(1); 
 
-            var target = new FactScheduleDeviationJobStep(jobParameters);
-            var result = target.Run(new List<IJobStep>(), null, null, false);
-            result.JobStepException.Should().Be.Null();
+				var target = new FactScheduleDeviationJobStep(jobParameters);
+				var result = target.Run(new List<IJobStep>(), null, null, false);
+				result.JobStepException.Should().Be.Null();
 
-            _repository.VerifyAllExpectations();
-        }
+				_repository.VerifyAllExpectations();
+		  }
 
 	}
 }

@@ -126,6 +126,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			properties.ForEach(x => x.SetValue(_fixture, _container.Resolve(x.PropertyType), null));
 			var fields = _fixtureType.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
 			fields.ForEach(x => x.SetValue(_fixture, _container.Resolve(x.FieldType)));
+
 		}
 
 		protected object Resolve(Type targetType)

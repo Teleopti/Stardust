@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.Toggle;
 
 namespace Teleopti.Analytics.Etl.Interfaces.Transformer
@@ -20,6 +21,7 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
 		bool IsPmInstalled { get; }
 		CultureInfo CurrentCulture { get; }
 		IToggleManager ToggleManager { get; }
+		ITenantLogonDataManager TenantLogonDataManager { get; }
 		DateTime? NowForTestPurpose { get; set; }
 		bool RunIndexMaintenance { get; }
 	}

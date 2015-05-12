@@ -28,7 +28,7 @@ namespace Teleopti.Analytics.Etl.ConfigToolCodeTest.Gui.StartupConfiguration
 		[Test]
 		public void ShouldFillCultureListOnView()
 		{
-			_configurationHandler.Stub(x => x.BaseConfiguration).Return(new BaseConfiguration(null, null, null, null, false));
+			_configurationHandler.Stub(x => x.BaseConfiguration).Return(new BaseConfiguration(null, null, null, false));
 			_target.Initialize();
 			_view.AssertWasCalled(x => x.LoadCultureList(_model.CultureList));
 		}
@@ -36,7 +36,7 @@ namespace Teleopti.Analytics.Etl.ConfigToolCodeTest.Gui.StartupConfiguration
 		[Test, SetCulture("en-US")]
 		public void ShouldSetDefaultCultureFromCurrentCultureIfValueIsMissing()
 		{
-			_configurationHandler.Stub(x => x.BaseConfiguration).Return(new BaseConfiguration(null, 15, "UTC", null, false));
+			_configurationHandler.Stub(x => x.BaseConfiguration).Return(new BaseConfiguration(null, 15, "UTC", false));
 			_target.Initialize();
 			_view.AssertWasCalled(x => x.SetDefaultCulture(_model.GetCultureItem(CultureInfo.CurrentCulture)));
 		}
@@ -44,7 +44,7 @@ namespace Teleopti.Analytics.Etl.ConfigToolCodeTest.Gui.StartupConfiguration
 		[Test, SetCulture("en-US")]
 		public void ShouldSetDefaultCultureFromCurrentCultureIfValueIsInvalid()
 		{
-			_configurationHandler.Stub(x => x.BaseConfiguration).Return(new BaseConfiguration(100976, 15, "UTC", null, false));
+			_configurationHandler.Stub(x => x.BaseConfiguration).Return(new BaseConfiguration(100976, 15, "UTC", false));
 			_target.Initialize();
 			_view.AssertWasCalled(x => x.SetDefaultCulture(_model.GetCultureItem(CultureInfo.CurrentCulture)));
 		}
@@ -53,7 +53,7 @@ namespace Teleopti.Analytics.Etl.ConfigToolCodeTest.Gui.StartupConfiguration
 		public void ShouldSetDefaultCultureFromDatabaseIfValueExist()
 		{
 			var swedishCulture = CultureInfo.GetCultureInfo("sv-SE");
-			_configurationHandler.Stub(x => x.BaseConfiguration).Return(new BaseConfiguration(swedishCulture.LCID, 15, "UTC", null, false));
+			_configurationHandler.Stub(x => x.BaseConfiguration).Return(new BaseConfiguration(swedishCulture.LCID, 15, "UTC", false));
 			_target.Initialize();
 			_view.AssertWasCalled(x => x.SetDefaultCulture(_model.GetCultureItem(swedishCulture)));
 		}
@@ -61,7 +61,7 @@ namespace Teleopti.Analytics.Etl.ConfigToolCodeTest.Gui.StartupConfiguration
 		[Test]
 		public void ShouldFillIntervalLengthList()
 		{
-			_configurationHandler.Stub(x => x.BaseConfiguration).Return(new BaseConfiguration(null, null, null, null, false));
+			_configurationHandler.Stub(x => x.BaseConfiguration).Return(new BaseConfiguration(null, null, null, false));
 			_target.Initialize();
 			_view.AssertWasCalled(x => x.LoadIntervalLengthList(_model.IntervalLengthList));
 		}
@@ -69,7 +69,7 @@ namespace Teleopti.Analytics.Etl.ConfigToolCodeTest.Gui.StartupConfiguration
 		[Test]
 		public void ShouldSetDefaultIntervalLengthTo15MinutesIfValueMissing()
 		{
-			_configurationHandler.Stub(x => x.BaseConfiguration).Return(new BaseConfiguration(null, null, null, null, false));
+			_configurationHandler.Stub(x => x.BaseConfiguration).Return(new BaseConfiguration(null, null, null, false));
 			_target.Initialize();
 			_view.AssertWasCalled(x => x.SetDefaultIntervalLength(15));
 		}
@@ -77,7 +77,7 @@ namespace Teleopti.Analytics.Etl.ConfigToolCodeTest.Gui.StartupConfiguration
 		[Test]
 		public void ShouldSetDefaultIntervalLengthTo15MinutesIfValueIsInvalid()
 		{
-			_configurationHandler.Stub(x => x.BaseConfiguration).Return(new BaseConfiguration(null, 99, null, null, false));
+			_configurationHandler.Stub(x => x.BaseConfiguration).Return(new BaseConfiguration(null, 99, null, false));
 			_target.Initialize();
 			_view.AssertWasCalled(x => x.SetDefaultIntervalLength(15));
 		}
@@ -85,7 +85,7 @@ namespace Teleopti.Analytics.Etl.ConfigToolCodeTest.Gui.StartupConfiguration
 		[Test]
 		public void ShouldSetDefaultIntervalLengthFromDatabaseIfValueExist()
 		{
-			_configurationHandler.Stub(x => x.BaseConfiguration).Return(new BaseConfiguration(null, 30, null, null, false));
+			_configurationHandler.Stub(x => x.BaseConfiguration).Return(new BaseConfiguration(null, 30, null, false));
 			_target.Initialize();
 			_view.AssertWasCalled(x => x.SetDefaultIntervalLength(30));
 		}
@@ -93,7 +93,7 @@ namespace Teleopti.Analytics.Etl.ConfigToolCodeTest.Gui.StartupConfiguration
 		[Test]
 		public void ShouldFillTimeZoneList()
 		{
-			_configurationHandler.Stub(x => x.BaseConfiguration).Return(new BaseConfiguration(null, null, null, null, false));
+			_configurationHandler.Stub(x => x.BaseConfiguration).Return(new BaseConfiguration(null, null, null, false));
 			_target.Initialize();
 			_view.AssertWasCalled(x => x.LoadTimeZoneList(_model.TimeZoneList));
 		}
@@ -101,7 +101,7 @@ namespace Teleopti.Analytics.Etl.ConfigToolCodeTest.Gui.StartupConfiguration
 		[Test]
 		public void ShouldSetTimeZoneToUsersIfValueIsMissing()
 		{
-			_configurationHandler.Stub(x => x.BaseConfiguration).Return(new BaseConfiguration(null, null, null, null, false));
+			_configurationHandler.Stub(x => x.BaseConfiguration).Return(new BaseConfiguration(null, null, null, false));
 			_target.Initialize();
 			_view.AssertWasCalled(x => x.SetDefaultTimeZone(_model.GetTimeZoneItem(TimeZoneInfo.Local)));
 		}
@@ -109,7 +109,7 @@ namespace Teleopti.Analytics.Etl.ConfigToolCodeTest.Gui.StartupConfiguration
 		[Test]
 		public void ShouldSetTimeZoneToUsersIfValueIsInvalid()
 		{
-			_configurationHandler.Stub(x => x.BaseConfiguration).Return(new BaseConfiguration(null, null, "dummie time zone", null, false));
+			_configurationHandler.Stub(x => x.BaseConfiguration).Return(new BaseConfiguration(null, null, "dummie time zone", false));
 			_target.Initialize();
 			_view.AssertWasCalled(x => x.SetDefaultTimeZone(_model.GetTimeZoneItem(TimeZoneInfo.Local)));
 		}
@@ -117,7 +117,7 @@ namespace Teleopti.Analytics.Etl.ConfigToolCodeTest.Gui.StartupConfiguration
 		[Test]
 		public void ShouldSetTimeZoneFromDatabaseIfValueExists()
 		{
-			_configurationHandler.Stub(x => x.BaseConfiguration).Return(new BaseConfiguration(null, null, "UTC", null, false));
+			_configurationHandler.Stub(x => x.BaseConfiguration).Return(new BaseConfiguration(null, null, "UTC", false));
 			_target.Initialize();
 			_view.AssertWasCalled(x => x.SetDefaultTimeZone(_model.GetTimeZoneItem(TimeZoneInfo.Utc)));
 		}
@@ -137,7 +137,7 @@ namespace Teleopti.Analytics.Etl.ConfigToolCodeTest.Gui.StartupConfiguration
 		public void ShouldSetDefaultIntervalLengthAlreadyInUse()
 		{
 			_configurationHandler.Stub(x => x.IntervalLengthInUse).Return(30);
-			_configurationHandler.Stub(x => x.BaseConfiguration).Return(new BaseConfiguration(null, null, null, null, false));
+			_configurationHandler.Stub(x => x.BaseConfiguration).Return(new BaseConfiguration(null, null, null, false));
 			_target.Initialize();
 			_view.AssertWasCalled(x => x.SetDefaultIntervalLength(30));
 		}
@@ -146,7 +146,7 @@ namespace Teleopti.Analytics.Etl.ConfigToolCodeTest.Gui.StartupConfiguration
 		public void ShouldDisableIntervalLengthControlWhenValueIsAlreadyInUse()
 		{
 			_configurationHandler.Stub(x => x.IntervalLengthInUse).Return(30);
-			_configurationHandler.Stub(x => x.BaseConfiguration).Return(new BaseConfiguration(null, null, null, null, false));
+			_configurationHandler.Stub(x => x.BaseConfiguration).Return(new BaseConfiguration(null, null, null, false));
 			_target.Initialize();
 			_view.AssertWasCalled(x => x.DisableIntervalLength());
 		}
@@ -154,7 +154,7 @@ namespace Teleopti.Analytics.Etl.ConfigToolCodeTest.Gui.StartupConfiguration
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Analytics.Etl.ConfigToolCode.StartupConfiguration.IStartupConfigurationView.ShowErrorMessage(System.String)"), Test]
 		public void ShouldDisableOkButtonAndShowErrorMessageWhenInvalidIntervalIsInUse()
 		{
-			_configurationHandler.Stub(x => x.BaseConfiguration).Return(new BaseConfiguration(null, 5, null, null, false));
+			_configurationHandler.Stub(x => x.BaseConfiguration).Return(new BaseConfiguration(null, 5, null, false));
 			_configurationHandler.Stub(x => x.IntervalLengthInUse).Return(5);
 			
 			_target.Initialize();

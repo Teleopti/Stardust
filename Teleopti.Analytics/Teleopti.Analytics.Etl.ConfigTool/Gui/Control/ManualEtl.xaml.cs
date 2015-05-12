@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using Autofac;
 using Teleopti.Analytics.Etl.ConfigTool.Transformer;
 using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
@@ -107,11 +108,11 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 			Dispose();
 		}
 
-		public void SetBaseConfiguration(IBaseConfiguration baseConfiguration)
+		public void SetBaseConfiguration(IBaseConfiguration baseConfiguration, IContainer container)
 		{
 			_baseConfiguration = baseConfiguration;
 			myControl.SetBaseConfiguration(baseConfiguration);
-			myTree.LoadJobTree(baseConfiguration);
+			myTree.LoadJobTree(baseConfiguration, container);
 		}
 	}
 }

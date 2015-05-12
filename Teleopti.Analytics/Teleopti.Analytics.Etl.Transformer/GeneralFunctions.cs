@@ -10,20 +10,18 @@ namespace Teleopti.Analytics.Etl.Transformer
 {
 	public class GeneralFunctions : IGeneralFunctions
 	{
-		private readonly string _dataMartConnectionString;
 		private readonly IGeneralInfrastructure _generalInfrastructure;
 
 		public GeneralFunctions(string dataMartConnectionString)
 		{
-			_dataMartConnectionString = dataMartConnectionString;
-			_generalInfrastructure = new GeneralInfrastructure(_dataMartConnectionString);
+			_generalInfrastructure = new GeneralInfrastructure(dataMartConnectionString);
 		}
 
 		// Used for test only
 		public GeneralFunctions(IGeneralInfrastructure generalInfrastructure, string dataMartConnectionString)
 		{
 			_generalInfrastructure = generalInfrastructure;
-			_dataMartConnectionString = dataMartConnectionString;
+			string s = dataMartConnectionString;
 		}
 
 		public IList<IDataSourceEtl> DataSourceValidList

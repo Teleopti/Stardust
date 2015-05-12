@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Globalization;
 using System.Threading;
 using System.Timers;
+using Autofac;
 using Teleopti.Analytics.Etl.Common;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.JobLog;
@@ -15,6 +16,8 @@ using log4net;
 using log4net.Config;
 using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Analytics.Etl.Transformer.Job;
+using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.MultipleConfig;
 using Teleopti.Interfaces.Domain;
 using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
 using Timer = System.Timers.Timer;
@@ -69,6 +72,7 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 		{
 			bool isStopping = false;
 			_timer.Stop();
+			IContainer container = configureContainer();
 			try
 			{
 				var configHandler = new ConfigurationHandler(new GeneralFunctions(_connectionString));
@@ -94,7 +98,7 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 				IJob jobToRun = JobExtractor.ExtractJobFromSchedule(
 					scheduleToRun, _jobHelper, configHandler.BaseConfiguration.TimeZoneCode,
 					configHandler.BaseConfiguration.IntervalLength.Value, _cube,
-					_pmInstallation, configHandler.BaseConfiguration.ToggleManager,
+					_pmInstallation, container,
 					configHandler.BaseConfiguration.RunIndexMaintenance,
 					culture
 					);
@@ -199,6 +203,20 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 				}
 			}
 		}
+
+		private static IContainer configureContainer()
+		{
+			var builder = new ContainerBuilder();
+			var iocArgs = new IocArgs(new AppConfigReader());
+			var configuration = new IocConfiguration(
+						  iocArgs,
+						  CommonModule.ToggleManagerForIoc(iocArgs));
+
+			builder.RegisterModule(
+			new CommonModule(configuration));
+			return builder.Build();
+
+		}
 	}
 
 	public class EtlConfigReader
@@ -219,4 +237,5 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 		public string Cube;
 		public string PmInstallation;
 	}
+
 }
