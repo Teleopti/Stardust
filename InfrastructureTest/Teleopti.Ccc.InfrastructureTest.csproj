@@ -478,6 +478,7 @@
     <Compile Include="SystemCheck\CheckMessageBrokerTest.cs" />
     <Compile Include="SystemCheck\SystemCheckerValidatorTest.cs" />
     <Compile Include="UnitOfWorkTestAttribute.cs" />
+    <Compile Include="UnitOfWork\AllBusinessUnitsUnitOfWorkTest.cs" />
     <Compile Include="UnitOfWork\ConnectionStringTest.cs" />
     <Compile Include="UnitOfWork\DifferentPersistAllTest.cs" />
     <Compile Include="UnitOfWork\DisableFilterScopeTest.cs" />
@@ -515,7 +516,6 @@
     <Compile Include="ApplicationLayer\ServiceBusEventPublisherTest.cs" />
     <Compile Include="UnitOfWork\TeamOrSiteChangedMessageSenderTest.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkAndSession.cs" />
-    <Compile Include="UnitOfWork\UnitOfWorkAspectNotSignedInTest.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkAspectTest.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkFactoryProviderTest.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkInitiatorIdentifierHandlingTest.cs" />

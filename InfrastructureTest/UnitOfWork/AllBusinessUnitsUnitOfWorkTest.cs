@@ -7,12 +7,9 @@ using NHibernate;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.Aop.Core;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Aop;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -24,12 +21,11 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 {
 	[TestFixture]
 	[PrincipalAndStateTest]
-	public class UnitOfWorkAspectNotSignedInTest : IRegisterInContainer
+	public class AllBusinessUnitsUnitOfWorkTest : IRegisterInContainer
 	{
 		public void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
 		{
 			builder.RegisterType<TheServiceImpl>().AsSelf().SingleInstance().ApplyAspects();
-			builder.RegisterType<MutableFakeCurrentHttpContext>().AsSelf().As<ICurrentHttpContext>().SingleInstance();
 		}
 
 		public TheServiceImpl TheService;
@@ -54,7 +50,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			}
 
 			[AllBusinessUnitsUnitOfWork]
-			public virtual void DoesWithoutBusinessUnitFilter(Action<IUnitOfWork> action)
+			public virtual void DoesOnAllBusinessUnits(Action<IUnitOfWork> action)
 			{
 				action(_uow.Current());
 			}
@@ -90,7 +86,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 				RepositoryNotValidatingUserLogon.Add(stateGroup);
 			});
 			Context.Logout();
-			TheService.DoesWithoutBusinessUnitFilter(uow =>
+			TheService.DoesOnAllBusinessUnits(uow =>
 			{
 				stateGroups = RepositoryNotValidatingUserLogon.LoadAll();
 			});
@@ -102,7 +98,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		public void ShouldDisposeUnitOfWorkAfterNotFilteringOnBusinessUnit()
 		{
 			Context.Logout();
-			TheService.DoesWithoutBusinessUnitFilter(uow => { });
+			TheService.DoesOnAllBusinessUnits(uow => { });
 
 			// existing beahvior is the HibernateException, although something else would be better
 			//UnitOfWork.Current().Should().Be.Null();
@@ -118,16 +114,36 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 				RepositoryNotValidatingUserLogon.Add(new RtaStateGroup(" ", true, true));
 			});
 			
-			TheService.DoesWithoutBusinessUnitFilter(uow =>
+			TheService.DoesOnAllBusinessUnits(uow =>
 			{
 				RepositoryNotValidatingUserLogon.LoadAll().Single().AddState("phone", "phone", Guid.NewGuid());
 			});
 
-			TheService.DoesWithoutBusinessUnitFilter(uow =>
+			TheService.DoesOnAllBusinessUnits(uow =>
 			{
 				stateCollection = RepositoryNotValidatingUserLogon.LoadAll().Single().StateCollection;
 			});
 			stateCollection.Select(x => x.Name).Single().Should().Be("phone");
+		}
+
+		[Test, Ignore]
+		public void ShouldPersistChangesWhenNotLoggedIn()
+		{
+			TheService.Does(uow =>
+			{
+				RepositoryNotValidatingUserLogon.Add(new RtaStateGroup(" ", true, true));
+			});
+			Context.Logout();
+
+			TheService.DoesOnAllBusinessUnits(uow =>
+			{
+				RepositoryNotValidatingUserLogon.LoadAll().Single().AddState("phone", "phone", Guid.NewGuid());
+			});
+
+			TheService.DoesOnAllBusinessUnits(uow =>
+			{
+				RepositoryNotValidatingUserLogon.LoadAll().Should().Have.Count.EqualTo(1);
+			});
 		}
 
 		[Test]
@@ -140,7 +156,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			});
 			try
 			{
-				TheService.DoesWithoutBusinessUnitFilter(uow =>
+				TheService.DoesOnAllBusinessUnits(uow =>
 				{
 
 					RepositoryNotValidatingUserLogon.LoadAll().Single().AddState("phone", "phone", Guid.NewGuid());
@@ -149,7 +165,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			}
 			catch { }
 
-			TheService.DoesWithoutBusinessUnitFilter(uow =>
+			TheService.DoesOnAllBusinessUnits(uow =>
 			{
 				stateCollection = RepositoryNotValidatingUserLogon.LoadAll().Single().StateCollection;
 			});
