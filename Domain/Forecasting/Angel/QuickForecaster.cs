@@ -11,17 +11,15 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 		private readonly IQuickForecasterWorkload _quickForecasterWorkload;
 		private readonly IFetchAndFillSkillDays _fetchAndFillSkillDays;
 		private readonly IQuickForecastWorkloadEvaluator _quickForecastWorkloadEvaluator;
-		private readonly IHistoricalPeriodProvider _historicalPeriodProvider;
 
-		public QuickForecaster(IQuickForecasterWorkload quickForecasterWorkload, IFetchAndFillSkillDays fetchAndFillSkillDays, IQuickForecastWorkloadEvaluator quickForecastWorkloadEvaluator, IHistoricalPeriodProvider historicalPeriodProvider)
+		public QuickForecaster(IQuickForecasterWorkload quickForecasterWorkload, IFetchAndFillSkillDays fetchAndFillSkillDays, IQuickForecastWorkloadEvaluator quickForecastWorkloadEvaluator)
 		{
 			_quickForecasterWorkload = quickForecasterWorkload;
 			_fetchAndFillSkillDays = fetchAndFillSkillDays;
 			_quickForecastWorkloadEvaluator = quickForecastWorkloadEvaluator;
-			_historicalPeriodProvider = historicalPeriodProvider;
 		}
 
-		public void ForecastWorkloadsWithinSkill(ISkill skill, ForecastWorkloadInput[] workloads, DateOnlyPeriod futurePeriod)
+		public void ForecastWorkloadsWithinSkill(ISkill skill, ForecastWorkloadInput[] workloads, DateOnlyPeriod futurePeriod, DateOnlyPeriod historicalPeriodForForecast)
 		{
 			var skillDays = _fetchAndFillSkillDays.FindRange(futurePeriod, skill);
 
@@ -44,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 						WorkLoad = workload,
 						FuturePeriod = futurePeriod,
 						SkillDays = skillDays,
-						HistoricalPeriod = _historicalPeriodProvider.PeriodForForecast(workload),
+						HistoricalPeriod = historicalPeriodForForecast,
 						ForecastMethodId = forecastMethodId
 					};
 					_quickForecasterWorkload.Execute(quickForecasterWorkloadParams);
@@ -52,7 +50,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			}
 		}
 
-		public void ForecastAll(ISkill skill, DateOnlyPeriod futurePeriod)
+		public void ForecastAll(ISkill skill, DateOnlyPeriod futurePeriod, DateOnlyPeriod historicalPeriodForForecast)
 		{
 			var skillDays = _fetchAndFillSkillDays.FindRange(futurePeriod, skill);
 
@@ -64,7 +62,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 					WorkLoad = workload,
 					FuturePeriod = futurePeriod,
 					SkillDays = skillDays,
-					HistoricalPeriod = _historicalPeriodProvider.PeriodForForecast(workload),
+					HistoricalPeriod = historicalPeriodForForecast,
 					ForecastMethodId = (workloadAccuracy == null || workloadAccuracy.Accuracies.Length == 0) ? ForecastMethodType.TeleoptiClassic : workloadAccuracy.Accuracies.Single(x => x.IsSelected).MethodId
 				};
 				_quickForecasterWorkload.Execute(quickForecasterWorkloadParams);

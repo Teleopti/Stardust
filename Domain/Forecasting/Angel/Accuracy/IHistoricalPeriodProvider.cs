@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 	public interface IHistoricalPeriodProvider
 	{
 		DateOnlyPeriod PeriodForEvaluate(IWorkload workload);
-		DateOnlyPeriod PeriodForForecast(IWorkload workload);
+		DateOnlyPeriod PeriodForForecast();
 	}
 
 	public class HistoricalPeriodProvider : IHistoricalPeriodProvider
@@ -27,10 +27,10 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 			return new DateOnlyPeriod(new DateOnly(endDate.Date.AddYears(-2)), endDate);
 		}
 
-		public DateOnlyPeriod PeriodForForecast(IWorkload workload)
+		public DateOnlyPeriod PeriodForForecast()
 		{
-			var endDate = _statisticRepository.QueueStatisticsUpUntilDate(workload);
-			return new DateOnlyPeriod(new DateOnly(endDate.Date.AddYears(-1)), endDate);
+			var nowDate = _now.LocalDateOnly();
+			return new DateOnlyPeriod(new DateOnly(nowDate.Date.AddYears(-1)), nowDate);
 		}
 	}
 }

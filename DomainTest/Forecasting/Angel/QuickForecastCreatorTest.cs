@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
+using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			var historicalPeriodForForecast = new DateOnlyPeriod(new DateOnly(nowDate.Date.AddYears(-1)), nowDate);
 			var historicalPeriodForMeasurement = new DateOnlyPeriod(new DateOnly(nowDate.Date.AddYears(-2)), nowDate);
 
-			var target = new QuickForecastCreator(quickForecaster, skillRepository);
+			var target = new QuickForecastCreator(quickForecaster, skillRepository, new HistoricalPeriodProvider(now, MockRepository.GenerateMock<IStatisticRepository>()));
 			var forecastWorkloadInputs = new[]
 			{
 				new ForecastWorkloadInput
@@ -46,8 +47,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 				}
 			};
 			target.CreateForecastForWorkloads(futurePeriod, forecastWorkloadInputs);
-			quickForecaster.AssertWasCalled(x => x.ForecastWorkloadsWithinSkill(skill1, forecastWorkloadInputs, futurePeriod));
-			quickForecaster.AssertWasCalled(x => x.ForecastWorkloadsWithinSkill(skill2, forecastWorkloadInputs, futurePeriod));
+			quickForecaster.AssertWasCalled(x => x.ForecastWorkloadsWithinSkill(skill1, forecastWorkloadInputs, futurePeriod, historicalPeriodForForecast));
+			quickForecaster.AssertWasCalled(x => x.ForecastWorkloadsWithinSkill(skill2, forecastWorkloadInputs, futurePeriod, historicalPeriodForForecast));
 		}
 
 		[Test]
@@ -65,10 +66,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			var historicalPeriodForForecast = new DateOnlyPeriod(new DateOnly(nowDate.Date.AddYears(-1)), nowDate);
 			var historicalPeriodForMeasurement = new DateOnlyPeriod(new DateOnly(nowDate.Date.AddYears(-2)), nowDate);
 
-			var target = new QuickForecastCreator(quickForecaster, skillRepository);
+			var target = new QuickForecastCreator(quickForecaster, skillRepository, new HistoricalPeriodProvider(now, MockRepository.GenerateMock<IStatisticRepository>()));
 			target.CreateForecastForAll(futurePeriod);
-			quickForecaster.AssertWasCalled(x => x.ForecastAll(skill1, futurePeriod));
-			quickForecaster.AssertWasCalled(x => x.ForecastAll(skill2, futurePeriod));
+			quickForecaster.AssertWasCalled(x => x.ForecastAll(skill1, futurePeriod, historicalPeriodForForecast));
+			quickForecaster.AssertWasCalled(x => x.ForecastAll(skill2, futurePeriod, historicalPeriodForForecast));
 		}
 	}
 }
