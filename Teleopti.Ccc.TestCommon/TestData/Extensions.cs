@@ -6,17 +6,11 @@ namespace Teleopti.Ccc.TestCommon.TestData
 {
 	public static class Extensions
 	{
-
 		public static void SetBusinessUnit(this IBelongsToBusinessUnit aggregateRootWithBusinessUnit, IBusinessUnit businessUnit)
 		{
-			var type = typeof(VersionedAggregateRootWithBusinessUnit);
-			var privateField = type.GetField("_businessUnit", BindingFlags.NonPublic | BindingFlags.Instance);
-			privateField.SetValue(aggregateRootWithBusinessUnit, businessUnit);
-		}
-
-		public static void SetBusinessUnitOnAggregateWithoutChangeInfo(this IBelongsToBusinessUnit aggregateRootWithBusinessUnit, IBusinessUnit businessUnit)
-		{
-			var type = typeof(VersionedAggregateRootWithBusinessUnitWithoutChangeInfo);
+			var type = typeof (VersionedAggregateRootWithBusinessUnit);
+			if (aggregateRootWithBusinessUnit is VersionedAggregateRootWithBusinessUnitWithoutChangeInfo)
+				type = typeof(VersionedAggregateRootWithBusinessUnitWithoutChangeInfo);
 			var privateField = type.GetField("_businessUnit", BindingFlags.NonPublic | BindingFlags.Instance);
 			privateField.SetValue(aggregateRootWithBusinessUnit, businessUnit);
 		}
