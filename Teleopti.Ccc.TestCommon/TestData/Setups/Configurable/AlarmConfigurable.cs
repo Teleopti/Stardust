@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			{
 				var businessUnit = new BusinessUnitRepository(uow).LoadAll().Single(b => b.Name == BusinessUnit);
 				if (stateGroup != null)
-					stateGroup.SetBusinessUnit(businessUnit);
+					stateGroup.SetBusinessUnitOnAggregateWithoutChangeInfo(businessUnit);
 				stateGroupActivityAlarm.SetBusinessUnit(businessUnit);
 			}
 
