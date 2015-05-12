@@ -72,8 +72,8 @@
 					<span ng-show="!acToggle2"> <span translate>DateFrom</span><strong>{{campaign.StartDate.Date | date: format }}</strong> <span translate>DateTo</span> <strong>{{campaign.EndDate.Date | date: format }}</strong></span>
 				</div>
 				<div ng-show="acToggle2">
-					<div class="row wfm-block">
-						<div class="col-lg-6">
+					<div class="wfm-block clearfix">
+						<div class="pull-left">
 							<div class="wfm-datepicker-wrap campaign-startdate">
 								<div class="sub-header">
 									<span translate>StartTimeColon</span> <strong>{{campaign.StartDate.Date | date: format }}</strong>
@@ -81,9 +81,9 @@
 								<datepicker ng-model="campaign.StartDate.Date" max-date="campaign.EndDate.Date" show-weeks="true" class="well well-sm" ng-change="update(true)"></datepicker>
 							</div>
 						</div>
-						<div class="col-lg-6">
+						<div class="pull-left">
 							<div class="wfm-datepicker-wrap campaign-enddate">
-								<div class="sub-header" >
+								<div class="sub-header">
 									<span translate>EndTimeColon</span> <strong class="end-date">{{campaign.EndDate.Date | date: format }}</strong>
 								</div>
 								<datepicker ng-model="campaign.EndDate.Date" min-date="campaign.StartDate.Date" show-weeks="true" class="well well-sm" ng-change="update(true)"></datepicker>
@@ -101,10 +101,10 @@
 						<div class="wfm-block">
 							<div class="wfm-block">
 								<div class="row">
-									<div class="col-lg-3 column-label">
+									<div class="col-xs-3 column-label">
 										<span></span>
 									</div>
-									<div ng-repeat-start="weekday in [0,1,2,3,4,5,6]" ng-repeat-end class="col-lg-1 column-label">
+									<div ng-repeat-start="weekday in [0,1,2,3,4,5,6]" ng-repeat-end class="col-xs-1 column-label">
 										<span>{{weekday | showWeekdays}}</span>
 									</div>
 								</div>
@@ -128,12 +128,12 @@
 											</span>
 										</div>
 										<div class="row">
-											<div class="col-lg-3">
+											<div class="col-xs-3">
 												<span>{{WorkingPeriod.StartTime}}</span>
 												<span> - </span>
 												<span>{{WorkingPeriod.EndTime}}</span>
 											</div>
-											<div ng-repeat-start="WeekDay in WorkingPeriod.ExpandedWorkingPeriodAssignments" ng-repeat-end class="col-lg-1">
+											<div ng-repeat-start="WeekDay in WorkingPeriod.ExpandedWorkingPeriodAssignments" ng-repeat-end class="col-xs-1">
 												<div class="wfm-checkbox wfm-checkbox-inline ">
 													<input type="checkbox" id="check_workinghour_{{WorkingPeriod.Id}}_weekday_{{WeekDay.WeekDay}}" ng-model="WeekDay.Checked" ng-change="$parent.$parent.toggleWorkingPeriodAssignment(WorkingPeriod, WeekDay)" />
 													<label for="check_workinghour_{{WorkingPeriod.Id}}_weekday_{{WeekDay.WeekDay}}">
@@ -149,10 +149,19 @@
 							<div class="wfm-block m-t-10">
 								<form name="newWorkingPeriodForm" ng-submit="">
 									<div class="inline-fix clearfix">
-										<i class="mdi mdi-plus" ng-click="addWorkingPeriod()"></i>
-										<input type="time" name="NewTimeRangeStart" ng-model="newWorkingPeriod.StartTime" />
+										<button class="wfm-fab mini success" ng-click="addWorkingPeriod()"><i class="mdi mdi-plus"></i></button>
+										<!--<i class="mdi mdi-plus move-down-5" ng-click="addWorkingPeriod()"></i>-->
+										<!--<input type="time" name="NewTimeRangeStart" ng-model="newWorkingPeriod.StartTime"/>
 										-
-										<input type="time" name="NewTimeRangeEnd" ng-model="newWorkingPeriod.EndTime" />
+										<input type="time" name="NewTimeRangeEnd" ng-model="newWorkingPeriod.EndTime"/>-->
+
+										<div class="wfm-timepicker-wrapper">
+											<wfm-timepicker ng-model="newWorkingPeriod.StartTime" use-meridian="useMeridian" minute-step="15"></wfm-timepicker>
+										</div>
+										<span class="m-l-40">-</span>
+										<div class="wfm-timepicker-wrapper m-l-10">
+											<wfm-timepicker ng-model="newWorkingPeriod.EndTime" use-meridian="useMeridian" minute-step="15"></wfm-timepicker>
+										</div>
 									</div>
 								</form>
 								<div class="alert-error notice-spacer m-t-10" ng-show="isPeriodInValid"><i class='mdi mdi-alert-octagon'></i> <span translate>EndTimeMustBeGreaterOrEqualToStartTime</span></div>

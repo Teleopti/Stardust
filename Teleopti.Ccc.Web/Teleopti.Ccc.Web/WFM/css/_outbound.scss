@@ -4,7 +4,8 @@
 }
 .input-prepend span {
 	display: inline-block;
-	width: 18%;
+	min-width: 140px;
+	white-space:nowrap;
 }
 .input-prepend span + input {
 	display: inline-block;
@@ -57,4 +58,48 @@
 
 .m-t-10{
     margin-top: 10px;
+}
+.move-down-5{
+	position:relative;
+	bottom:-5px;
+}
+
+.wfm-timepicker-wrapper {
+  width: 120px;
+  display: inline-block;
+
+  select {	
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+    margin-left: 3px;
+    border-radius: 0px !important;
+    background-color: white;
+    -webkit-appearance: none;
+    -webkit-border-radius: 0px;
+  }
+  input {
+    padding-left: 5px;
+	height:24px;
+
+    &.ng-dirty.ng-invalid {
+      border: 2px solid red;
+    }
+    &.ng-pristine.ng-invalid {
+      border-color: #E0E0E0;
+    }
+  }
+
+  select::-ms-expand {
+    display: none;
+  }
+}
+
+.displayinline-block{
+	display:inline-block;
+}
+.m-l-40{
+	margin-left:40px;
+}
+.m-l-10{
+	margin-left:10px;
 }

@@ -89,6 +89,7 @@
 			$scope.acToggle2 = true;
 			$scope.acToggle3 = true;
 
+			$scope.useMeridian = true;
 
 			$scope.$on('outbound.campaigns.loaded', function() {
 				$scope.campaign = (angular.isDefined($stateParams.Id) && $stateParams.Id != "") ? OutboundService.getCampaignById($stateParams.Id) : null;
