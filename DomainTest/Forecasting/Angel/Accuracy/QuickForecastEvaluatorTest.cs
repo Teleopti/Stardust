@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 			var workload1 = Guid.NewGuid();
 			var workload2 = Guid.NewGuid();
 			var workload3 = Guid.NewGuid();
-			quickForecastSkillEvaluator.Stub(x => x.Measure(skill1, historicalPeriod)).Return(new SkillAccuracy()
+			quickForecastSkillEvaluator.Stub(x => x.Measure(skill1)).Return(new SkillAccuracy()
 			{
 				Id = skill1.Id.Value,
 				Name = skill1.Name,
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 					Accuracies = new []{new MethodAccuracy { Number = 2.4 }}
 				}}
 			});
-			quickForecastSkillEvaluator.Stub(x => x.Measure(skill2, historicalPeriod)).Return(new SkillAccuracy()
+			quickForecastSkillEvaluator.Stub(x => x.Measure(skill2)).Return(new SkillAccuracy()
 			{
 				Id = skill2.Id.Value,
 				Name = skill2.Name,
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 			});
 			
 
-			var target = new QuickForecastEvaluator(quickForecastSkillEvaluator, skillRepository, new HistoricalPeriodProvider(now));
+			var target = new QuickForecastEvaluator(quickForecastSkillEvaluator, skillRepository);
 			var result = target.MeasureForecastForAllSkills();
 			result.First().Id.Should().Be.EqualTo(skill1.Id.Value);
 			result.First().Name.Should().Be.EqualTo(skill1.Name);

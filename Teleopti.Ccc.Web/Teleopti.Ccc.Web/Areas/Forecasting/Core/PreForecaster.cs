@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 		public WorkloadForecastViewModel MeasureAndForecast(PreForecastInput input)
 		{
 			var workload = _workloadRepository.Get(input.WorkloadId);
-			var evaluateResult = _forecastWorkloadEvaluator.Measure(workload, _historicalPeriodProvider.PeriodForEvaluate());
+			var evaluateResult = _forecastWorkloadEvaluator.Measure(workload);
 			var bestAccuracy = evaluateResult.Accuracies.SingleOrDefault(x => x.IsSelected);
 
 			return new WorkloadForecastViewModel
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 
 		private dynamic[] createDayViewModels(IWorkload workload, MethodAccuracy bestAccuracy)
 		{
-			var historicalDataForForecasting = _historicalData.Fetch(workload, _historicalPeriodProvider.PeriodForForecast());
+			var historicalDataForForecasting = _historicalData.Fetch(workload, _historicalPeriodProvider.PeriodForForecast(workload));
 			var data = new Dictionary<DateOnly, dynamic>();
 			foreach (var taskOwner in historicalDataForForecasting.TaskOwnerDayCollection)
 			{
