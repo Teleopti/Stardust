@@ -17,7 +17,12 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Initialize
 		private readonly IPrincipalFactory _principalFactory;
 		private readonly ITokenIdentityProvider _tokenIdentityProvider;
 
-		public SessionPrincipalFactory(IApplicationData applicationData, ISessionSpecificDataProvider sessionSpecificDataProvider, IRepositoryFactory repositoryFactory, IRoleToPrincipalCommand roleToPrincipalCommand, IPrincipalFactory principalFactory, ITokenIdentityProvider tokenIdentityProvider)
+		public SessionPrincipalFactory(IApplicationData applicationData, 
+																ISessionSpecificDataProvider sessionSpecificDataProvider, 
+																IRepositoryFactory repositoryFactory, 
+																IRoleToPrincipalCommand roleToPrincipalCommand, 
+																IPrincipalFactory principalFactory, 
+																ITokenIdentityProvider tokenIdentityProvider)
 		{
 			_applicationData = applicationData;
 			_sessionSpecificDataProvider = sessionSpecificDataProvider;

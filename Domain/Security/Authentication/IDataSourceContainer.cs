@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
 		IRepositoryFactory RepositoryFactory { get; }
 		IPerson User { get; }
 		void SetUser(IPerson person);
-		string LogOnName { get; set; }
 		IAvailableBusinessUnitsProvider AvailableBusinessUnitProvider { get; }
 		string DataSourceName { get; }
 	}

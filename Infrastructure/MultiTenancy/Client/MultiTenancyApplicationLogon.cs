@@ -36,7 +36,6 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 			{
 				var person = _repositoryFactory.CreatePersonRepository(uow).LoadPersonAndPermissions(personId);
 				logonModel.SelectedDataSourceContainer.SetUser(person);
-				logonModel.SelectedDataSourceContainer.LogOnName = logonModel.UserName;
 			}
 
 			return new AuthenticationResult

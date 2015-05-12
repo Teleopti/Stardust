@@ -1,5 +1,3 @@
-using System;
-using log4net;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
@@ -7,8 +5,6 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
 {
 	public class DataSourceContainer : IDataSourceContainer
 	{
-		private readonly ILog _logger = LogManager.GetLogger(typeof(DataSourceContainer));
-
 		public DataSourceContainer(IDataSource dataSource, IRepositoryFactory repositoryFactory, AuthenticationTypeOption authenticationTypeOption)
 		{
 
@@ -42,8 +38,6 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
 		{
 			User = person;
 		}
-
-		public string LogOnName { get; set; }
 
 		public override string ToString()
 		{
