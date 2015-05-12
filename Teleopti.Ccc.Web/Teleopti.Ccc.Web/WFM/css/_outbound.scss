@@ -103,3 +103,29 @@
 .m-l-10{
 	margin-left:10px;
 }
+
+.wrong-sign, .right-sign {
+	display: none !important;
+}
+
+input.ng-valid + .input-validation-sign .right-sign {
+	display: block !important;
+}
+
+input.ng-invalid + .input-validation-sign .wrong-sign {
+	display: block !important;
+}
+
+.right-sign {
+	color: #c2e085 !important;
+}
+.wrong-sign {
+	color: #ee8f7d !important;
+}
+
+.campaign-details {
+
+	input[type="text"] {
+		height: 24px;
+	}
+}

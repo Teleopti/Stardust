@@ -16,6 +16,34 @@
 	});
 
 
+	outbound.directive('rangeValidate', function() {
+		return {
+			restrict: 'A',
+			require: "ngModel",
+			scope: {
+				'rangeMin' : '@?',
+				'rangeMax' : '@?'
+			},
+			link: postLink
+		};
+		function postLink(scope, elem, attr, ngModel) {			
+			ngModel.$validators.range = function (modelValue, viewValue) {				
+				if (modelValue == null) return true;
+				modelValue = parseInt(modelValue);			
+				if (angular.isDefined(scope.rangeMin)) {
+					var min = parseInt(scope.rangeMin);
+					if (modelValue < min) return false;					
+				}
+				
+				if (angular.isDefined(scope.rangeMax)) {
+					var max = parseInt(scope.rangeMax);
+					if (modelValue > max) return false;
+				}				
+				return true;
+			};
+		}
+	});
+
 	outbound
 		.directive('wfmTimepicker', timepickerDirective)
 		.directive('minuteInput', minuteInputDirective)
@@ -151,8 +179,7 @@
 			});
 
 			scope.$watch('timeValue', setViewValue, true);
-			scope.$watch(function () {
-				console.log("watcher", ngModel.$dirty, ngModel.$invalid);
+			scope.$watch(function () {				
 				return ngModel.$dirty && ngModel.$invalid;
 			}, function (newValue) {
 				if (newValue) {
@@ -165,8 +192,7 @@
 					if (angular.isDefined(ngModel.$error['maxTime'])) {
 						errMsg = "Max-time: " + timepicker.getTimeText(scope.maxTime);
 						scope.$broadcast('timepicker.notification.invalid', errMsg);
-					}
-					console.log(ngModel.$error);
+					}				
 				}
 			});
 

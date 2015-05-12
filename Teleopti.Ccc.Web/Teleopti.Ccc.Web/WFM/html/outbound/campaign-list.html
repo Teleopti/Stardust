@@ -6,9 +6,9 @@
 		<div class="col-lg-9">
 			<p translate>OutboundIntroduction</p>
 		</div>
-		<div class="col-lg-3">
+		<!--<div class="col-lg-3">
 			<md-checkbox id="slide1" ng-model="showMoreHeaderFields"><span translate>showMoreHeaderFields</span></md-checkbox>
-		</div>
+		</div>-->
 	</div>
 	
 	<div ng-class="{'col-lg-4' : !showMoreHeaderFields , 'col-lg-12': showMoreHeaderFields   }">
@@ -45,16 +45,16 @@
 			<div class="campaign-list role-container">
 				<ul class="wfm-list">
 					<li ng-repeat="campaign in campaigns | filter:searchCampaign" ng-click="show(campaign)" ng-dblclick="editing = true" ng-class="{'active': selectedTarget && campaign.Id == selectedTarget.Id}" class="role-btn wfm-block wfm-list-item role">
-						<div class="wfm-leave-behind wfm-leave-behind-2">
+						<div class="wfm-leave-behind wfm-leave-behind-1">
 							<span>
-								<i ng-click="$parent.copyNew(campaign);">
+								<!--<i ng-click="$parent.copyNew(campaign);">
 									<svg style="width: 18px; height: 18px" viewBox="0 0 24 24">
 										<path fill="#555555" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
 									</svg>
 									<md-tooltip>
 										<span translate>Duplicate</span>
 									</md-tooltip>
-								</i>
+								</i>-->
 								<i ng-click="modalLaunch1 = !modalLaunch1" class="delete-campaign-toggle">
 									<svg style="width: 18px; height: 18px" viewBox="0 0 24 24">
 										<path fill="#555555" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />
