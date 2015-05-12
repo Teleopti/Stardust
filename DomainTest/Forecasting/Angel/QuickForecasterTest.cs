@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			var workload2 = WorkloadFactory.CreateWorkload("workload2", skill1);
 			workload2.SetId(Guid.NewGuid());
 			var quickForecastWorkloadEvaluator = MockRepository.GenerateMock<IQuickForecastWorkloadEvaluator>();
-			quickForecastWorkloadEvaluator.Stub(x => x.Measure(workload1, historicalPeriodForMeasurement))
+			quickForecastWorkloadEvaluator.Stub(x => x.Measure(workload1))
 				.Return(new WorkloadAccuracy
 				{
 					Accuracies =
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 				});
 
 			var target = new QuickForecaster(quickForecasterWorkload, fetchAndFillSkillDays, quickForecastWorkloadEvaluator);
-			target.ForecastWorkloadsWithinSkill(skill1, new[] { new ForecastWorkloadInput { WorkloadId = workload1.Id.Value, ForecastMethodId = ForecastMethodType.None } }, futurePeriod, historicalPeriodForForecast, historicalPeriodForMeasurement);
+			target.ForecastWorkloadsWithinSkill(skill1, new[] { new ForecastWorkloadInput { WorkloadId = workload1.Id.Value, ForecastMethodId = ForecastMethodType.None } }, futurePeriod, historicalPeriodForForecast);
 			quickForecasterWorkload.AssertWasCalled(x => x.Execute(new QuickForecasterWorkloadParams
 			{
 				FuturePeriod = futurePeriod,
@@ -79,8 +79,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			workload1.SetId(Guid.NewGuid());
 			var quickForecastWorkloadEvaluator = MockRepository.GenerateMock<IQuickForecastWorkloadEvaluator>();
 			var target = new QuickForecaster(quickForecasterWorkload, fetchAndFillSkillDays, quickForecastWorkloadEvaluator);
-			target.ForecastWorkloadsWithinSkill(skill1, new[] { new ForecastWorkloadInput { WorkloadId = workload1.Id.Value, ForecastMethodId = ForecastMethodType.TeleoptiClassic} }, futurePeriod, historicalPeriodForForecast, historicalPeriodForMeasurement);
-			quickForecastWorkloadEvaluator.AssertWasNotCalled(x => x.Measure(workload1, historicalPeriodForMeasurement));
+			target.ForecastWorkloadsWithinSkill(skill1, new[] { new ForecastWorkloadInput { WorkloadId = workload1.Id.Value, ForecastMethodId = ForecastMethodType.TeleoptiClassic} }, futurePeriod, historicalPeriodForForecast);
+			quickForecastWorkloadEvaluator.AssertWasNotCalled(x => x.Measure(workload1));
 			quickForecasterWorkload.AssertWasCalled(x => x.Execute(new QuickForecasterWorkloadParams
 			{
 				FuturePeriod = futurePeriod,
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			var workload1 = WorkloadFactory.CreateWorkload("workload1", skill1);
 			workload1.SetId(Guid.NewGuid());
 			var quickForecastWorkloadEvaluator = MockRepository.GenerateMock<IQuickForecastWorkloadEvaluator>();
-			quickForecastWorkloadEvaluator.Stub(x => x.Measure(workload1, historicalPeriodForMeasurement))
+			quickForecastWorkloadEvaluator.Stub(x => x.Measure(workload1))
 				.Return(new WorkloadAccuracy
 				{
 					Accuracies =
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 						}
 				});
 			var target = new QuickForecaster(quickForecasterWorkload, fetchAndFillSkillDays, quickForecastWorkloadEvaluator);
-			target.ForecastWorkloadsWithinSkill(skill1,new[] {new ForecastWorkloadInput {WorkloadId = workload1.Id.Value, ForecastMethodId = ForecastMethodType.None}}, futurePeriod, historicalPeriodForForecast, historicalPeriodForMeasurement);
+			target.ForecastWorkloadsWithinSkill(skill1,new[] {new ForecastWorkloadInput {WorkloadId = workload1.Id.Value, ForecastMethodId = ForecastMethodType.None}}, futurePeriod, historicalPeriodForForecast);
 			quickForecasterWorkload.AssertWasCalled(x => x.Execute(new QuickForecasterWorkloadParams
 			{
 				FuturePeriod = futurePeriod,
@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			workload2.SetId(Guid.NewGuid());
 
 			var quickForecastWorkloadEvaluator = MockRepository.GenerateMock<IQuickForecastWorkloadEvaluator>();
-			quickForecastWorkloadEvaluator.Stub(x => x.Measure(workload1, historicalPeriodForMeasurement))
+			quickForecastWorkloadEvaluator.Stub(x => x.Measure(workload1))
 				.Return(new WorkloadAccuracy
 				{
 					Accuracies =
@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 							new MethodAccuracy{MethodId = ForecastMethodType.TeleoptiClassicWithTrend}
 						}
 				});
-			quickForecastWorkloadEvaluator.Stub(x => x.Measure(workload2, historicalPeriodForMeasurement))
+			quickForecastWorkloadEvaluator.Stub(x => x.Measure(workload2))
 				.Return(new WorkloadAccuracy
 				{
 					Accuracies =
@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 				});
 
 			var target = new QuickForecaster(quickForecasterWorkload, fetchAndFillSkillDays, quickForecastWorkloadEvaluator);
-			target.ForecastAll(skill1, futurePeriod, historicalPeriodForForecast, historicalPeriodForMeasurement);
+			target.ForecastAll(skill1, futurePeriod, historicalPeriodForForecast);
 			quickForecasterWorkload.AssertWasCalled(x => x.Execute(new QuickForecasterWorkloadParams
 			{
 				FuturePeriod = futurePeriod,

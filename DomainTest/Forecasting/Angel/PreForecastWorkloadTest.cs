@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -20,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 		{
 			var skill = SkillFactory.CreateSkillWithWorkloadAndSources();
 			var workload = skill.WorkloadCollection.Single();
-			var historicalPeriodProvider = new HistoricalPeriodProvider(new MutableNow(new DateTime(2014, 12, 31, 0, 0, 0, DateTimeKind.Utc)));
+			var historicalPeriodProvider = new HistoricalPeriodProvider(new MutableNow(new DateTime(2014, 12, 31, 0, 0, 0, DateTimeKind.Utc)), MockRepository.GenerateMock<IStatisticRepository>());
 			var taskOwnerPeriod = new TaskOwnerPeriod(DateOnly.MinValue, new List<WorkloadDay>(), TaskOwnerPeriodType.Other);
 
 			var dateOnly = new DateOnly(2015, 1, 1);
@@ -47,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 
 			var skill = SkillFactory.CreateSkillWithWorkloadAndSources();
 			var workload = skill.WorkloadCollection.Single();
-			var historicalPeriodProvider = new HistoricalPeriodProvider(new MutableNow(new DateTime(2014, 12, 31, 0, 0, 0, DateTimeKind.Utc)));
+			var historicalPeriodProvider = new HistoricalPeriodProvider(new MutableNow(new DateTime(2014, 12, 31, 0, 0, 0, DateTimeKind.Utc)), MockRepository.GenerateMock<IStatisticRepository>());
 			var taskOwnerPeriod = new TaskOwnerPeriod(DateOnly.MinValue, new List<WorkloadDay>
 			{
 				workloadDay1,
