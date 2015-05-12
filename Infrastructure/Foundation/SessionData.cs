@@ -29,7 +29,5 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		public object Clip { get; set; }
 
 		public AuthenticationTypeOption AuthenticationTypeOption { get; set; }
-
-		public string UserName { get; set; }
 	}
 }

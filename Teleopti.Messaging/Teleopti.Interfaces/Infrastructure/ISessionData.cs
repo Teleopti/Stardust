@@ -15,7 +15,5 @@ namespace Teleopti.Interfaces.Infrastructure
 		object Clip { get; set; }
 
 		AuthenticationTypeOption AuthenticationTypeOption { get; set; }
-
-		string UserName { get; set; }
 	}
 }
