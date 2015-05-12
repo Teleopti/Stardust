@@ -1212,6 +1212,8 @@
     <Content Include="WFM\tests\forecasting\forecasting.controller.spec.js" />
     <Content Include="WFM\tests\permissions\permissions.filter.spec.js" />
     <Content Include="WFM\tests\search\search.controller.spec.js" />
+    <Content Include="WFM\vendor\angular-breadcrumb\angular-breadcrumb.js" />
+    <Content Include="WFM\vendor\angular-breadcrumb\uiBreadcrumbs.tpl.html" />
     <Content Include="WFM\vendor\c3\c3-angular.min.js" />
     <Content Include="WFM\vendor\c3\c3.min.css" />
     <Content Include="WFM\vendor\c3\c3.min.js" />

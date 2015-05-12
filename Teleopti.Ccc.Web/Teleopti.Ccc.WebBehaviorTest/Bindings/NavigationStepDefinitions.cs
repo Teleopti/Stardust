@@ -547,5 +547,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GoToOutboundCampaign(campaignId);			
 		}
 
+		[Given(@"I view forecasting")]
+		public void GivenIViewForecasting()
+		{
+			TestControllerMethods.Logon();
+			Navigation.GoToForecasting();
+		}
+
 	}
 }

@@ -112,5 +112,19 @@ label {
 	background-repeat: no-repeat;
 }
 
+.breadbin{
+	display:inline-flex;
+	list-style:none;
+}
 
+.breadbin a{
+	color:white!important; 
+}
 
+.breadcrumb>.active {
+  color: white!important;
+}
+
+.breadcrumb{
+	background:transparent;
+}

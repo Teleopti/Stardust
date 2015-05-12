@@ -34,10 +34,21 @@ var wfm = angular.module('wfm', [
 	'ui.grid.exporter',
 	'ui.grid.selection',
 	'wfm.rta',
+	'ncy-angular-breadcrumb',
 	'permissionsFilters'
 ]);
 wfm.config([
-	'$stateProvider', '$urlRouterProvider', '$translateProvider', function ($stateProvider, $urlRouterProvider, $translateProvider) {
+	'$stateProvider', '$urlRouterProvider', '$translateProvider', '$breadcrumbProvider', function ($stateProvider, $urlRouterProvider, $translateProvider, $breadcrumbProvider) {
+		$breadcrumbProvider.setOptions({
+			template: '<ol class="breadcrumb">' +
+            '<li ng-repeat="step in steps" ng-class="{active: $last}" ng-switch="$last || !!step.abstract">' +
+            '<a ng-switch-when="false" ui-sref="{{step.name}}" ui-sref-opts="{ reload: true}">{{step.ncyBreadcrumbLabel}}</a>' +
+            '<span ng-switch-when="true">{{step.ncyBreadcrumbLabel}}</span>' +
+            '</li>' +
+            '</ol>'
+		});
+
+
 		$urlRouterProvider.otherwise("forecasting");
 		$stateProvider.state('main', {
 			url: '/',
@@ -46,19 +57,31 @@ wfm.config([
 		}).state('forecasting', {
 			url: '/forecasting',
 			templateUrl: 'html/forecasting/forecasting.html',
-			controller: 'ForecastingCtrl'
+			controller: 'ForecastingCtrl',
+			ncyBreadcrumb: {
+				label: "{{'Forecasts' | translate}}"
+			},
 		}).state('forecasting.target', {
 			params: { period: {} },
 			templateUrl: 'html/forecasting/forecasting-target.html',
-			controller: 'ForecastingTargetCtrl'
+			controller: 'ForecastingTargetCtrl',
+			ncyBreadcrumb: {
+				label: "{{'Advanced' | translate}}"
+			}
 		}).state('forecasting.run', {
 			params: { period: {}, targets: {} },
 			templateUrl: 'html/forecasting/forecasting-run.html',
-			controller: 'ForecastingRunCtrl'
+			controller: 'ForecastingRunCtrl',
+			ncyBreadcrumb: {
+				label: 'forecasting results'
+			}
 		}).state('forecasting.runall', {
 			params: { period: {} },
 			templateUrl: 'html/forecasting/forecasting-run.html',
-			controller: 'ForecastingRunAllCtrl'
+			controller: 'ForecastingRunAllCtrl',
+			ncyBreadcrumb: {
+				label: 'forecasting results'
+			}
 		}).state('resourceplanner', {
 			url: '/resourceplanner',
 			templateUrl: 'js/resourceplanner/resourceplanner.html',
@@ -66,11 +89,15 @@ wfm.config([
 		}).state('permissions', {
 			url: '/permissions',
 			templateUrl: 'html/permissions/permissions.html',
-			controller: 'PermissionsCtrl'
+			controller: 'PermissionsCtrl',
+
 		}).state('outbound', {
 			url: '/outbound',
 			templateUrl: 'html/outbound/campaign-list.html',
-			controller: 'OutboundListCtrl'
+			controller: 'OutboundListCtrl',
+			ncyBreadcrumb: {
+				label: "{{'Outbound' | translate}}"
+			}
 		}).state('outbound.edit', {
 			url: '/campaign/:Id',
 			templateUrl: 'html/outbound/campaign-edit.html',
@@ -86,14 +113,23 @@ wfm.config([
 		}).state('seatPlan', {
 			url: '/seatPlan',
 			templateUrl: 'js/seatManagement/html/seatplan.html',
-			controller: 'SeatPlanCtrl as seatplan'
+			controller: 'SeatPlanCtrl as seatplan',
+			ncyBreadcrumb: {
+				label: "{{'SeatPlan' | translate}}"
+			}
 		}).state('seatMap', {
 			url: '/seatMap',
-			templateUrl: 'js/seatManagement/html/seatmap.html'
+			templateUrl: 'js/seatManagement/html/seatmap.html',
+			ncyBreadcrumb: {
+				label: "{{'SeatMap' | translate}}"
+			}
 		}).state('rta', {
 			url: '/rta',
 			templateUrl: 'js/rta/html/rta.html',
-			controller: 'RtaCtrl'
+			controller: 'RtaCtrl',
+			ncyBreadcrumb: {
+				label: "{{'RealTimeAdherenceOverview' | translate}}"
+			}
 		});
 
 		$translateProvider.useUrlLoader('../api/Global/Language');
@@ -104,11 +140,11 @@ wfm.config([
 		var timeout = Date.now() + 10000;
 		$rootScope.isAuthenticated = false;
 
-		var checkCurrentUser = function() {
+		var checkCurrentUser = function () {
 			return $http.get('../api/Global/User/CurrentUser');
 		};
 
-		var userNotAuthenticatedHandler = function() {
+		var userNotAuthenticatedHandler = function () {
 			if (window.location.hash) {
 				var d = new Date();
 				d.setTime(d.getTime() + (5 * 60 * 1000));
@@ -118,17 +154,17 @@ wfm.config([
 			window.location = 'Authentication';
 		};
 
-		var increaseTimeout = function() {
+		var increaseTimeout = function () {
 			timeout = Date.now() + 10000;
 		};
 
-		$rootScope.$on('$stateChangeStart', function(event, next, toParams) {
+		$rootScope.$on('$stateChangeStart', function (event, next, toParams) {
 
 			if (Date.now() > timeout) { // TODO : extract it in a service
 				event.preventDefault();
 				var context = checkCurrentUser();
 				context.error(userNotAuthenticatedHandler);
-				context.success(function(data) {
+				context.success(function (data) {
 					increaseTimeout();
 					$state.go(next, toParams);
 				});

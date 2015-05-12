@@ -442,5 +442,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 		{	
 			GoToPage("wfm/#/outbound/campaign/" + id );
 		}
+
+		public static void GoToForecasting()
+		{
+			GoToPage("wfm/#/forecasting/");
+		}
 	}
 }

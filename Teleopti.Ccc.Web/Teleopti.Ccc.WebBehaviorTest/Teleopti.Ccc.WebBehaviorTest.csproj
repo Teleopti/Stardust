@@ -203,6 +203,7 @@
     <Compile Include="Bindings\Generic\Anywhere\RealTimeAdherencePageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ShiftExchangeOfferFields.cs" />
     <Compile Include="Bindings\Generic\StateGroupStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\Wfm\GlobalStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Wfm\PermissionsStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Wfm\ResourcePlannerStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\WorkloadStepDefinitions.cs" />
@@ -839,6 +840,11 @@
       <DependentUpon>Toggle.feature</DependentUpon>
     </Compile>
     <Compile Include="Toggle\ToggleStepDefinition.cs" />
+    <Compile Include="Wfm\Global.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Global.feature</DependentUpon>
+    </Compile>
     <Compile Include="Wfm\Outbound\OutboundCampaignBasicOperations.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1193,6 +1199,11 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Toggle.feature.cs</LastGenOutput>
     </None>
+    <None Include="Wfm\Global.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Global.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Wfm\Global.feature" />
     <None Include="Wfm\People\AdvancedSearch.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>AdvancedSearch.feature.cs</LastGenOutput>
