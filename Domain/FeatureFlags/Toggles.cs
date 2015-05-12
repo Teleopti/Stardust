@@ -10,7 +10,6 @@
 		Forecast_CopySettingsToWorkflow_11112,
 
 		Scheduler_HidePointsFairnessSystem_28317,
-		Schedule_IntraIntervalOptimizer_29846,
 
 		Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635,
 		MyReport_AgentQueueMetrics_22254,

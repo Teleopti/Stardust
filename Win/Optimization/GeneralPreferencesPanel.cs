@@ -39,11 +39,6 @@ namespace Teleopti.Ccc.Win.Optimization
 			    _eventAggregator.GetEvent<GenericEvent<ExtraPreferencesPanelUseBlockScheduling>>()
 				    .Subscribe(enableDisableShiftCategoryLimitations);
 
-			var intraIntervalOptimizer = _toggleManager.IsEnabled(Toggles.Schedule_IntraIntervalOptimizer_29846);
-		    checkBoxAdvIntraIntervalOptimization.Visible = intraIntervalOptimizer;
-			if(!intraIntervalOptimizer)
-				tableLayoutPanel6.RowStyles[6].Height = 0;
-
 		    ExchangeData(ExchangeDataOption.DataSourceToControls);
 		    setInitialControlStatus();
 	    }
