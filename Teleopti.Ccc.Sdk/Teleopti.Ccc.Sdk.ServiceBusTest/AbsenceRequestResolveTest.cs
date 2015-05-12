@@ -6,7 +6,11 @@ using Rhino.ServiceBus.MessageModules;
 using SharpTestsEx;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
+using Teleopti.Ccc.IocCommon.MultipleConfig;
 using Teleopti.Ccc.Sdk.ServiceBus;
+using Teleopti.Ccc.Secrets.DayOffPlanning;
+using Teleopti.Ccc.Secrets.WorkShiftCalculator;
+using Teleopti.Ccc.Secrets.WorkShiftPeriodValueCalculator;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.Requests;
@@ -19,16 +23,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
         [Test]
         public void ShouldResolveNewAbsenceRequestConsumer()
         {
+
 			var builder = new ContainerBuilder();
 			builder.RegisterType<NewAbsenceRequestConsumer>().As<ConsumerOf<NewAbsenceRequestCreated>>();
-
 			builder.RegisterModule(CommonModule.ForTest());
 			builder.RegisterModule<ServiceBusCommonModule>();
 			builder.RegisterModule<ForecastContainerInstaller>();
 			builder.RegisterModule<RequestContainerInstaller>();
 			builder.RegisterModule<SchedulingContainerInstaller>();
-					builder.RegisterModule(SchedulePersistModule.ForOtherModules());
-
+			builder.RegisterModule(SchedulePersistModule.ForOtherModules());
+			builder.RegisterModule<IntraIntervalSolverServiceModule>();
+		
 			using (var container = builder.Build())
 			{
 				container.Resolve<ConsumerOf<NewAbsenceRequestCreated>>().Should().Not.Be.Null();
