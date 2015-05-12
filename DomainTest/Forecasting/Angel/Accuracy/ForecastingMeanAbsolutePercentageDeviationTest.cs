@@ -26,6 +26,20 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 			result.StartDate.Should().Be.EqualTo(new DateOnly(dateOnly.Date.AddYears(-2)));
 			result.EndDate.Should().Be.EqualTo(dateOnly);
 		}
+
+		[Test]
+		public void ShouldGetMostRecentOneYearsForForecast()
+		{
+			var statisticRepository = MockRepository.GenerateMock<IStatisticRepository>();
+			var dateOnly = new DateOnly(2014, 5, 5);
+			var workload = new Workload(SkillFactory.CreateSkill("Phone"));
+			statisticRepository.Stub(x => x.QueueStatisticsUpUntilDate(workload)).Return(dateOnly);
+			var target = new HistoricalPeriodProvider(new Now(), statisticRepository);
+
+			var result = target.PeriodForForecast(workload);
+			result.StartDate.Should().Be.EqualTo(new DateOnly(dateOnly.Date.AddYears(-1)));
+			result.EndDate.Should().Be.EqualTo(dateOnly);
+		}
 	}
 
 	public class ForecastingMeanAbsolutePercentageDeviationTest
