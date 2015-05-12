@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -96,18 +97,20 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public void RefreshListBoxWorkingDays(int selectedIndex)
 		{
-			listBoxWorkingDays.DataSource = _presenter.SeniorityWorkDays();
+			var workDays = _presenter.SeniorityWorkDays();
+			listBoxWorkingDays.DataSource = workDays;
 			listBoxWorkingDays.DisplayMember = "DayOfWeekName";
 			listBoxWorkingDays.ValueMember = "DayOfWeek";
-			listBoxWorkingDays.SelectedIndex = selectedIndex;
+			if(!workDays.IsEmpty()) listBoxWorkingDays.SelectedIndex = selectedIndex;
 		}
 
 		public void RefreshListBoxShiftCategoryRank(int selectedIndex)
 		{
-			listBoxShiftCatgory.DataSource = _presenter.SeniorityShiftCategoryRanks();
+			var ranks = _presenter.SeniorityShiftCategoryRanks();
+			listBoxShiftCatgory.DataSource = ranks;
 			listBoxShiftCatgory.DisplayMember = "Text";
 			listBoxShiftCatgory.ValueMember = "ShiftCategory";
-			listBoxShiftCatgory.SelectedIndex = selectedIndex;	
+			if(!ranks.IsEmpty()) listBoxShiftCatgory.SelectedIndex = selectedIndex;	
 		}
 
 		public void SetChangedInfo(ISeniorityWorkDayRanks workDayRanks)
