@@ -1,4 +1,5 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using System;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest
@@ -6,16 +7,17 @@ namespace Teleopti.Ccc.InfrastructureTest
 	public class UnitOfWorkTestAttribute : InfrastructureTestAttribute
 	{
 		private IUnitOfWork unitOfWork;
+		private SetupFixtureForAssembly.TestScope _loginWithOpenUnitOfWork;
 
 		protected override void BeforeTest()
 		{
 			IPerson loggedOnPerson;
-			SetupFixtureForAssembly.BeforeTestWithOpenUnitOfWork(out loggedOnPerson, out unitOfWork);
+			_loginWithOpenUnitOfWork = SetupFixtureForAssembly.CreatePersonAndLoginWithOpenUnitOfWork(out loggedOnPerson, out unitOfWork);
 		}
 
 		protected override void AfterTest()
 		{
-			SetupFixtureForAssembly.AfterTestWithOpenUnitOfWork(unitOfWork, true);
+			_loginWithOpenUnitOfWork.Teardown();
 		}
 
 	}

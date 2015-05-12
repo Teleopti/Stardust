@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Helper
 	    private ISession _session;
 	    private IPerson _loggedOnPerson;
 	    private IUnitOfWork _unitOfWork;
+	    private SetupFixtureForAssembly.TestScope _loginWithOpenUnitOfWork;
 
 	    protected ISession Session
 	    {
@@ -37,7 +38,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Helper
         {
 			Mocks = new MockRepository();
 	        cleanUpAfterTest = false;
-			SetupFixtureForAssembly.BeforeTestWithOpenUnitOfWork(out _loggedOnPerson, out _unitOfWork);
+			_loginWithOpenUnitOfWork = SetupFixtureForAssembly.CreatePersonAndLoginWithOpenUnitOfWork(out _loggedOnPerson, out _unitOfWork);
+	        _loginWithOpenUnitOfWork.CleanUpAfterTest = false;
 			_session = _unitOfWork.FetchSession();
 			SetupForRepositoryTest();
         }
@@ -47,7 +49,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Helper
         [TearDown]
         public void BaseTeardown()
         {
-			SetupFixtureForAssembly.AfterTestWithOpenUnitOfWork(UnitOfWork, cleanUpAfterTest);
+			_loginWithOpenUnitOfWork.Teardown();
 		}
 
         protected void PersistAndRemoveFromUnitOfWork(IEntity obj)
@@ -67,8 +69,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Helper
 
         protected void CleanUpAfterTest()
         {
-            cleanUpAfterTest = true;
-        }
+			_loginWithOpenUnitOfWork.CleanUpAfterTest = true;
+		}
 
 	    protected void Logout()
 	    {

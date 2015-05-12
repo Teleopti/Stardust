@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 	public class PrincipalAndStateTestAttribute : InfrastructureTestAttribute, IPrincipalAndStateContext
 	{
 		private IPerson person;
-		private IDisposable _scope;
+		private IDisposable _login;
 
 		protected override void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
 		{
@@ -19,13 +19,13 @@ namespace Teleopti.Ccc.InfrastructureTest
 
 		protected override void BeforeTest()
 		{
-			_scope = SetupFixtureForAssembly.CreatePersonAndLogin(out person);
+			_login = SetupFixtureForAssembly.CreatePersonAndLogin(out person);
 		}
 
 		protected override void AfterTest()
 		{
-			_scope.Dispose();
-			_scope = null;
+			_login.Dispose();
+			_login = null;
 		}
 
 		public void Login()

@@ -161,23 +161,39 @@ you have to manually clean up or call CleanUpAfterTest() to restore the database
 
 
 
-		public static void BeforeTestWithOpenUnitOfWork(out IPerson person, out IUnitOfWork unitOfWork)
+		public static TestScope CreatePersonAndLoginWithOpenUnitOfWork(out IPerson person, out IUnitOfWork unitOfWork)
 		{
 			createBusinessUnitAndPerson(out person);
 			Login(person);
 			unitOfWork = DataSource.Application.CreateAndOpenUnitOfWork();
 			saveBusinessUnitAndPerson(person, unitOfWork);
+			return new TestScope(unitOfWork);
 		}
 
-		public static void AfterTestWithOpenUnitOfWork(IUnitOfWork unitOfWork, bool cleanUp)
+		public class TestScope
 		{
-			//roll back if still open
-			unitOfWork.Dispose();
+			private readonly IUnitOfWork _unitOfWork;
 
-			if (cleanUp)
-				RestoreCcc7Database();
-			else
-				CheckThatDbIsEmtpy();
+			public TestScope(IUnitOfWork unitOfWork)
+			{
+				_unitOfWork = unitOfWork;
+			}
+
+			public bool CleanUpAfterTest = true;
+
+			public void Teardown()
+			{
+				//roll back if still open
+				_unitOfWork.Dispose();
+
+				if (CleanUpAfterTest)
+					RestoreCcc7Database();
+				else
+					CheckThatDbIsEmtpy();
+
+				// can not logout and clean up state because there are 11 tests at this time that are dependent on that side effect
+				//Logout();
+			}
 		}
 
 		public static IDisposable CreatePersonAndLogin(out IPerson person)
@@ -234,4 +250,5 @@ you have to manually clean up or call CleanUpAfterTest() to restore the database
 		}
 
 	}
+
 }
