@@ -16,13 +16,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SkillActivityCounter>().As<ISkillActivityCounter>().SingleInstance();
 			builder.RegisterType<SkillActivityCountCollector>().As<ISkillActivityCountCollector>().SingleInstance();
 			builder.RegisterType<FullIntervalFinder>().As<IFullIntervalFinder>().SingleInstance();
-
-			builder.Register(c => c.Resolve<IToggleManager>().IsEnabled(Toggles.Scheduler_IntraIntervalSolver_29845)
-			   ? (IIntraIntervalFinderService)c.Resolve<IntraIntervalFinderService>()
-			   : c.Resolve<IntraIntervalFinderServiceToggle29845Off>())
-				   .As<IIntraIntervalFinderService>();
-
-			//IFullIntervalFinder
+			builder.RegisterType<IntraIntervalFinderService>().As<IIntraIntervalFinderService>().SingleInstance();
 		}
 	}
 }

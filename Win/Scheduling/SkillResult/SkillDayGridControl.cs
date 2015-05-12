@@ -190,7 +190,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 				gridRow.ChartSeriesSettings = ConfigureSetting(gridRow.DisplayMember);
 				GridRows.Add(_rowManager.AddRow(gridRow));
 
-				if (ToggleManager.IsEnabled(Toggles.Scheduler_IntraIntervalSolver_29845) && (skill.SkillType.ForecastSource == ForecastSource.InboundTelephony || skill.SkillType.ForecastSource == ForecastSource.Chat) && (!skill.IsVirtual) )
+				if ((skill.SkillType.ForecastSource == ForecastSource.InboundTelephony || skill.SkillType.ForecastSource == ForecastSource.Chat) 
+					&& !skill.IsVirtual )
 				{
 					gridRow = new SkillDayGridIntervalIssues(_rowManager, "ReadOnlyPercentCell", "HighestDeviationInPeriod", Resources.LowestIntraIntervalBalance);
 				}

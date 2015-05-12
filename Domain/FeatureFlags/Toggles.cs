@@ -10,7 +10,6 @@
 		Forecast_CopySettingsToWorkflow_11112,
 
 		Scheduler_HidePointsFairnessSystem_28317,
-		Scheduler_IntraIntervalSolver_29845,
 		Schedule_IntraIntervalOptimizer_29846,
 
 		Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635,
