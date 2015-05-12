@@ -4,9 +4,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Repositories
 {
-	public interface IPersonForShiftTradeRepository
+	public interface IPersonForScheduleFinder
 	{
-		IList<IAuthorizeOrganisationDetail> GetPersonForShiftTrade(DateOnly shiftTradeDate, IList<Guid> teamIdList,
+		IList<IAuthorizeOrganisationDetail> GetPersonFor(DateOnly shiftTradeDate, IList<Guid> teamIdList,
 			string name);
 	}
 }

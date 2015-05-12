@@ -11,19 +11,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider
 	public class TeamSchedulePersonsProvider : ITeamSchedulePersonsProvider
 	{
 		private readonly IPermissionProvider _permissionProvider;
-		private readonly IPersonForShiftTradeRepository _personForShiftTradeRepository;
+		private readonly IPersonForScheduleFinder _personForScheduleFinder;
 
 		public TeamSchedulePersonsProvider(IPermissionProvider permissionProvider,
-			IPersonForShiftTradeRepository personForShiftTradeRepository)
+			IPersonForScheduleFinder personForScheduleFinder)
 		{
 			_permissionProvider = permissionProvider;
-			_personForShiftTradeRepository = personForShiftTradeRepository;
+			_personForScheduleFinder = personForScheduleFinder;
 		}
 
 		public IEnumerable<Guid> RetrievePersons(TeamScheduleViewModelData data)
 		{
 			// The following function name should be modified to be more reuse-friendly ......
-			var fetchedPersonList = _personForShiftTradeRepository.GetPersonForShiftTrade(data.ScheduleDate, data.TeamIdList,
+			var fetchedPersonList = _personForScheduleFinder.GetPersonFor(data.ScheduleDate, data.TeamIdList,
 				data.SearchNameText);
 
 			var permittedPersonList = fetchedPersonList.Where(id =>

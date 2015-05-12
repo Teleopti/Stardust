@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetResultTransformer(Transformers.AliasToBean(typeof (PersonScheduleDayReadModel)))
 				.SetReadOnly(true)
 				.List<PersonScheduleDayReadModel>();
-		}
+		}	
 
 		private class TimeFilterString
 		{

@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
 	public class PersonForShiftTradeRepositoryTest : DatabaseTest
 	{
-		private PersonForShiftTradeRepository _target;
+		private PersonForScheduleFinder _target;
 
 		[Test]
 		public void ShouldLoadPersonInSpecificTeamForShiftTrade()
@@ -23,9 +23,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var team = TeamFactory.CreateSimpleTeam("team one");
 			var person = persistPerson(date, team);
 
-			_target = new PersonForShiftTradeRepository(UnitOfWork);
+			_target = new PersonForScheduleFinder(UnitOfWork);
 			var teamIdList = new List<Guid> {team.Id.GetValueOrDefault()};
-			var result = _target.GetPersonForShiftTrade(date, teamIdList, "anna");
+			var result = _target.GetPersonFor(date, teamIdList, "anna");
 
 			result.Count.Should().Be.EqualTo(1);
 			result.First().PersonId.Should().Be.EqualTo(person.Id.Value);

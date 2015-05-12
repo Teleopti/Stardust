@@ -11,16 +11,16 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-	public class PersonForShiftTradeRepository : IPersonForShiftTradeRepository
+	public class PersonForScheduleFinder : IPersonForScheduleFinder
 	{
 		private readonly ICurrentUnitOfWork _unitOfWork;
 
-		public PersonForShiftTradeRepository(ICurrentUnitOfWork unitOfWork)
+		public PersonForScheduleFinder(ICurrentUnitOfWork unitOfWork)
 		{
 			_unitOfWork = unitOfWork;
 		}
 
-		public PersonForShiftTradeRepository(IUnitOfWork unitOfWork)
+		public PersonForScheduleFinder(IUnitOfWork unitOfWork)
 		{
 			_unitOfWork = new FixedCurrentUnitOfWork(unitOfWork);
 		}
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return Guid.Parse(businessUnitId.ToString());
 		}
 
-		public IList<IAuthorizeOrganisationDetail> GetPersonForShiftTrade(DateOnly shiftTradeDate, IList<Guid> teamIdList , string name)
+		public IList<IAuthorizeOrganisationDetail> GetPersonFor(DateOnly shiftTradeDate, IList<Guid> teamIdList , string name)
 		{
 			return ((NHibernateUnitOfWork)_unitOfWork.Current()).Session.CreateSQLQuery(
 				"exec ReadModel.LoadPersonForScheduleSearch @scheduleDate=:scheduleDate, @teamIdList=:teamIdList,@businessUnitId=:businessUnitId, @name=:name ")

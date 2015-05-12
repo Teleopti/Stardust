@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		private IPersonRepository personRepository;
 		private IPermissionProvider permissionProvider;
 		private IPerson currentUser;
-		private IPersonForShiftTradeRepository personForShiftTradeRepository;
+		private IPersonForScheduleFinder personForScheduleFinder;
 		private ITeam myTeam;
 
 		[SetUp]
@@ -40,12 +40,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			currentUser.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today, myTeam));
 			shiftTradeValidator = MockRepository.GenerateMock<IShiftTradeLightValidator>();
 			personRepository = MockRepository.GenerateMock<IPersonRepository>();
-			personForShiftTradeRepository = MockRepository.GenerateMock<IPersonForShiftTradeRepository>();
+			personForScheduleFinder = MockRepository.GenerateMock<IPersonForScheduleFinder>();
 			permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			loggedOnUser.Expect(l => loggedOnUser.CurrentUser()).Return(currentUser);
 
-			target = new PossibleShiftTradePersonsProvider(personRepository, shiftTradeValidator, loggedOnUser, permissionProvider, personForShiftTradeRepository);
+			target = new PossibleShiftTradePersonsProvider(personRepository, shiftTradeValidator, loggedOnUser, permissionProvider, personForScheduleFinder);
 		}
 
 		[Test]
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				TeamIdList = new List<Guid> {myTeam.Id.GetValueOrDefault()}
 			};
 
-			personForShiftTradeRepository.Expect(rep => rep.GetPersonForShiftTrade(data.ShiftTradeDate,data.TeamIdList , data.SearchNameText))
+			personForScheduleFinder.Expect(rep => rep.GetPersonFor(data.ShiftTradeDate,data.TeamIdList , data.SearchNameText))
 											.Return(new List<IAuthorizeOrganisationDetail> { currentUserGuids });
 
 			personRepository.Expect(rep => rep.FindPeople(new List<Guid>())).Return(new Collection<IPerson>());
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				TeamIdList = new List<Guid> {myTeam.Id.GetValueOrDefault()}
 			};
 
-			personForShiftTradeRepository.Expect(rep => rep.GetPersonForShiftTrade(data.ShiftTradeDate, data.TeamIdList, data.SearchNameText))
+			personForScheduleFinder.Expect(rep => rep.GetPersonFor(data.ShiftTradeDate, data.TeamIdList, data.SearchNameText))
 											.Return(new List<IAuthorizeOrganisationDetail> { personInMyTeamGuids });
 			permissionProvider.Expect(
 				perm =>
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			string teamIdsString = string.Join(",", teamIds.ToArray());
 			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = date, TeamIdList = teamIds };
 
-			personForShiftTradeRepository.Expect(rep => rep.GetPersonForShiftTrade(data.ShiftTradeDate, data.TeamIdList, data.SearchNameText))
+			personForScheduleFinder.Expect(rep => rep.GetPersonFor(data.ShiftTradeDate, data.TeamIdList, data.SearchNameText))
 											.Return(new List<IAuthorizeOrganisationDetail> { personInMyTeamGuids });
 			permissionProvider.Expect(
 				perm =>
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var date = DateOnly.Today;
 			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = date, TeamIdList = new List<Guid>(){myTeam.Id.GetValueOrDefault()}};
 
-			personForShiftTradeRepository.Expect(rep => rep.GetPersonForShiftTrade(data.ShiftTradeDate,data.TeamIdList,data.SearchNameText))
+			personForScheduleFinder.Expect(rep => rep.GetPersonFor(data.ShiftTradeDate,data.TeamIdList,data.SearchNameText))
 											.Return(new List<IAuthorizeOrganisationDetail> { validAgentGuids, invalidAgentGuids });
 			permissionProvider.Expect(
 				perm =>
@@ -193,7 +193,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				SearchNameText = person2InMyTeam.Name.FirstName
 			};
 
-			personForShiftTradeRepository.Expect(rep => rep.GetPersonForShiftTrade(data.ShiftTradeDate, data.TeamIdList, data.SearchNameText))
+			personForScheduleFinder.Expect(rep => rep.GetPersonFor(data.ShiftTradeDate, data.TeamIdList, data.SearchNameText))
 											.Return(new List<IAuthorizeOrganisationDetail> { person2InMyTeamGuids });
 			permissionProvider.Expect(
 				perm =>

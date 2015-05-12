@@ -454,7 +454,7 @@
     <Compile Include="Persisters\WriteProtection\IWriteProtectionPersister.cs" />
     <Compile Include="Persisters\WriteProtection\WriteProtectionPersister.cs" />
     <Compile Include="Repositories\ApplicationRolePersonRepository.cs" />
-    <Compile Include="Repositories\PersonForShiftTradeRepository.cs" />
+    <Compile Include="Repositories\PersonForScheduleFinder.cs" />
     <Compile Include="Repositories\IResourceCalculationPrerequisitesLoader.cs" />
     <Compile Include="Repositories\DisabledScheduledResourcesReadModelStorage.cs" />
     <Compile Include="Repositories\PersonScheduleDayReadModelPersister.cs" />
