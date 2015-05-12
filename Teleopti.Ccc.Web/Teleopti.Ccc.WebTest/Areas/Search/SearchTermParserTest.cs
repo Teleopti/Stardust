@@ -82,11 +82,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 
 			var result = SearchTermParser.Parse(criteria);
 
-			result.Count().Equals(2);
-			result.First().Key.Equals(PersonFinderField.FirstName);
-			result.First().Value.Equals("a b");
-			result.Second().Key.Equals(PersonFinderField.Organization);
-			result.Second().Value.Equals("London");
+			Assert.AreEqual(2, result.Count());
+			Assert.AreEqual(PersonFinderField.FirstName, result.First().Key);
+			Assert.AreEqual("a b", result.First().Value);
+			Assert.AreEqual(PersonFinderField.Organization, result.Second().Key);
+			Assert.AreEqual("London", result.Second().Value);
 		}
 		
 		[Test]
