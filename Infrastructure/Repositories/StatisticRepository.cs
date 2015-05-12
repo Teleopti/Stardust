@@ -117,11 +117,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 		}
 
-	    public DateOnly QueueStatisticsUpUntilDate(IWorkload workload)
-	    {
-		    throw new NotImplementedException();
-	    }
-
 	    public ICollection<IActiveAgentCount> LoadActiveAgentCount(ISkill skill, DateTimePeriod period)
         {
             using (IStatelessUnitOfWork uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())

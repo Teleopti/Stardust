@@ -1,30 +1,27 @@
 ﻿using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 {
 	public interface IHistoricalPeriodProvider
 	{
-		DateOnlyPeriod PeriodForEvaluate(IWorkload workload);
+		DateOnlyPeriod PeriodForEvaluate();
 		DateOnlyPeriod PeriodForForecast();
 	}
 
 	public class HistoricalPeriodProvider : IHistoricalPeriodProvider
 	{
 		private readonly INow _now;
-		private readonly IStatisticRepository _statisticRepository;
 
-		public HistoricalPeriodProvider(INow now, IStatisticRepository statisticRepository)
+		public HistoricalPeriodProvider(INow now)
 		{
 			_now = now;
-			_statisticRepository = statisticRepository;
 		}
 
-		public DateOnlyPeriod PeriodForEvaluate(IWorkload workload)
+		public DateOnlyPeriod PeriodForEvaluate()
 		{
-			var endDate=_statisticRepository.QueueStatisticsUpUntilDate(workload);
-			return new DateOnlyPeriod(new DateOnly(endDate.Date.AddYears(-2)), endDate);
+			var nowDate = _now.LocalDateOnly();
+			return new DateOnlyPeriod(new DateOnly(nowDate.Date.AddYears(-2)), nowDate);
 		}
 
 		public DateOnlyPeriod PeriodForForecast()

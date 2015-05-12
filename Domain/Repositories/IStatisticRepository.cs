@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using Teleopti.Ccc.Domain.ETL;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Interfaces.Domain;
@@ -133,6 +132,5 @@ namespace Teleopti.Ccc.Domain.Repositories
 
 		IEnumerable<ForecastActualDifferNotification> ForecastActualDifferNotifications();
 		ICollection<IStatisticTask> LoadDailyStatisticForSpecificDates(ICollection<IQueueSource> sources, DateTimePeriod period, string timeZoneId, TimeSpan midnightBreakOffset);
-		DateOnly QueueStatisticsUpUntilDate(IWorkload workload);
 	}
 }

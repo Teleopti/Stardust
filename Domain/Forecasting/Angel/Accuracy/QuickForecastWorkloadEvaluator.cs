@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Historical;
 using Teleopti.Interfaces.Domain;
@@ -9,19 +11,17 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 		private readonly IHistoricalData _historicalData;
 		private readonly IForecastingMeasurer _forecastingMeasurer;
 		private readonly IForecastMethodProvider _forecastMethodProvider;
-		private readonly IHistoricalPeriodProvider _historicalPeriodProvider;
 
-		public QuickForecastWorkloadEvaluator(IHistoricalData historicalData, IForecastingMeasurer forecastingMeasurer, IForecastMethodProvider forecastMethodProvider, IHistoricalPeriodProvider historicalPeriodProvider)
+		public QuickForecastWorkloadEvaluator(IHistoricalData historicalData, IForecastingMeasurer forecastingMeasurer, IForecastMethodProvider forecastMethodProvider)
 		{
 			_historicalData = historicalData;
 			_forecastingMeasurer = forecastingMeasurer;
 			_forecastMethodProvider = forecastMethodProvider;
-			_historicalPeriodProvider = historicalPeriodProvider;
 		}
 
-		public WorkloadAccuracy Measure(IWorkload workload)
+		public WorkloadAccuracy Measure(IWorkload workload, DateOnlyPeriod historicalPeriod)
 		{
-			var historicalData = _historicalData.Fetch(workload, _historicalPeriodProvider.PeriodForEvaluate(workload));
+			var historicalData = _historicalData.Fetch(workload, historicalPeriod);
 			if (!historicalData.TaskOwnerDayCollection.Any())
 				return new WorkloadAccuracy { Id = workload.Id.Value, Name = workload.Name, Accuracies = new MethodAccuracy[] { } };
 
