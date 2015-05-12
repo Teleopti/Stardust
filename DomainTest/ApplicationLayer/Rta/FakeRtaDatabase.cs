@@ -204,7 +204,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			{
 				defaultStateGroup = new RtaStateGroup(".", true, true);
 				defaultStateGroup.SetId(Guid.NewGuid());
-				defaultStateGroup.SetBusinessUnit(_businessUnit);
+				defaultStateGroup.SetBusinessUnitOnAggregateWithoutChangeInfo(_businessUnit);
 				RtaStateGroupRepository.Add(defaultStateGroup);
 			}
 			return this;
