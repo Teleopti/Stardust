@@ -486,16 +486,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RuleSetSkillActivityChecker>().As<IRuleSetSkillActivityChecker>().InstancePerLifetimeScope();
 			builder.RegisterType<PersonalShiftAndMeetingFilter>().As<IPersonalShiftAndMeetingFilter>();
 			builder.RegisterType<PersonalShiftMeetingTimeChecker>().As<IPersonalShiftMeetingTimeChecker>().InstancePerLifetimeScope();
+			builder.RegisterType<DisallowedShiftProjectionCashesFilter>().As<IDisallowedShiftProjectionCashesFilter>().InstancePerLifetimeScope();
 			
-
-			builder.RegisterType<DisallowedShiftProjectionCashesFilter>().As<DisallowedShiftProjectionCashesFilter>().InstancePerLifetimeScope();
-			builder.RegisterType<DisallowedShiftProjectionCashesFilter29846Off>().As<DisallowedShiftProjectionCashesFilter29846Off>().InstancePerLifetimeScope();
-
-			builder.Register(c => c.Resolve<IToggleManager>().IsEnabled(Toggles.Schedule_IntraIntervalOptimizer_29846)
-			   ? (IDisallowedShiftProjectionCashesFilter)c.Resolve<DisallowedShiftProjectionCashesFilter>()
-			   : c.Resolve<DisallowedShiftProjectionCashesFilter29846Off>())
-				   .As<IDisallowedShiftProjectionCashesFilter>();
-
 			builder.RegisterType<OutboundSkillCreator>().As<OutboundSkillCreator>().SingleInstance();
 			builder.RegisterType<OutboundSkillTypeProvider>().As<IOutboundSkillTypeProvider>().SingleInstance();
 			builder.RegisterType<OutboundSkillPersister>().As<OutboundSkillPersister>().SingleInstance();

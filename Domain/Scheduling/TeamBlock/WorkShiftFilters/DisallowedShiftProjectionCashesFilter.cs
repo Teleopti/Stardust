@@ -27,12 +27,4 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			return result;
 		}
 	}
-
-	public class DisallowedShiftProjectionCashesFilter29846Off : IDisallowedShiftProjectionCashesFilter
-	{
-		public IList<IShiftProjectionCache> Filter(IList<IShiftProjectionCache> notAllowedShiftProjectionCaches, IList<IShiftProjectionCache> shiftProjectionCaches, IWorkShiftFinderResult finderResult)
-		{
-			return shiftProjectionCaches;
-		}
-	}
 }
