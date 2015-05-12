@@ -27,7 +27,7 @@
 		<NpmInstallFlattenPackages>"$(NpmCmd)" install -g flatten-packages@0.1.4</NpmInstallFlattenPackages>
 		
 		<!-- Protractor install command -->
-		<NpmInstallProtractorCmd>"$(NpmCmd)" update -g protractor</NpmInstallProtractorCmd>
+		<NpmInstallProtractorCmd>"$(NpmCmd)" install -g protractor</NpmInstallProtractorCmd>
 		
 		<!-- Karma install command -->
 		<NpmInstallKarmaCmd>"$(NpmCmd)" install -g karma</NpmInstallKarmaCmd>
