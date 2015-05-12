@@ -392,6 +392,9 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 
 			_target.SetFairnessType(FairnessType.Seniority);
 			Assert.AreEqual(FairnessType.Seniority, _target.GetFairnessType(true, true));
+
+			_target.SetFairnessType(FairnessType.EqualNumberOfShiftCategory);
+			Assert.AreEqual(FairnessType.EqualNumberOfShiftCategory, _target.GetFairnessType(true, true));
 	    }
 
 		[Test]
