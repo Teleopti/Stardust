@@ -43,6 +43,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[When(@"I select following days in student availability")]
 		public void WhenISelectFollowingDaysInStudentAvailability(Table table)
 		{
+			Browser.Interactions.AssertExists("#init-flag");
 			var dates = table.CreateSet<SingleValue>();
 			dates.ForEach(date =>
 				{

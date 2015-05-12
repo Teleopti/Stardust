@@ -50,7 +50,9 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 
         self.previousPeriod = function () {
             self.selectedDate(self.previousPeriodDate());
-        };       
+        };
+
+	    self.isInitFinished = ko.observable(false);
     };
 
 	function _initPeriodSelection() {
@@ -127,7 +129,7 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 		var from = $('li[data-mytime-date]').first().data('mytime-date');
 		var to = $('li[data-mytime-date]').last().data('mytime-date');
 
-		_loadStudentAvailabilityAndSchedules(from, to);
+		_loadStudentAvailabilityAndSchedules(from, to).then(function() { vm.isInitFinished(true); });
 
 		var periodData = $('#StudentAvailability-body').data('mytime-periodselection');
 		periodFeedbackVM = new Teleopti.MyTimeWeb.StudentAvailability.PeriodFeedbackViewModel(ajax, dayViewModels, periodData.Date, toggle31654Enabled);
