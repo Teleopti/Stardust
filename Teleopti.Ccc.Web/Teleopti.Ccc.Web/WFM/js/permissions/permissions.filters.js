@@ -21,10 +21,14 @@
 		function() {
 			return function(nodes, unselectedFunctionToggle) {
 				if (!unselectedFunctionToggle) return nodes;
-
 				var filteredNodes = [];
-				nodes.forEach(function(node) {
-					if (!node.selected) {
+				nodes.forEach(function (node) {
+					var hasUnselectedChildren = false;
+					if (node.ChildFunctions && node.ChildFunctions.length > 0
+						&& node.nmbSelectedChildren < node.ChildFunctions.length)
+						hasUnselectedChildren = true;
+
+					if (!node.selected || hasUnselectedChildren) {
 						filteredNodes.push(node);
 					}
 				});

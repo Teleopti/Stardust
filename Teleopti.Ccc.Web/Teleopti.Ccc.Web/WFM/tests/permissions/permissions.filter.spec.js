@@ -14,16 +14,6 @@ describe('PermissionsFilters', function() {
 		$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, 'mock');
 	}));
 
-
-	it('should filter on the unselected functions only', inject(function ($filter) {
-		var allFunctions = [{ id: 1, selected: false }, { id: 2, selected: false }, { id: 3, selected: true }];
-		var filter = $filter('unselectedFunctions');
-
-		var filteredArray = filter(allFunctions, true);
-
-		expect(filteredArray.length).toEqual(2);
-	}));
-
 	it('should filter on the selected functions only', inject(function ($filter) {
 		var allFunctions = [{ id: 1, selected: false, nmbSelectedChildren: 1 },
 			{ id: 2, selected: false }, { id: 3, selected: true }];
@@ -32,6 +22,32 @@ describe('PermissionsFilters', function() {
 		var filteredArray = filter(allFunctions, true);
 
 		expect(filteredArray.length).toEqual(2);
+	}));
+
+
+	it('should filter on the unselected functions only', inject(function ($filter) {
+		var allFunctions = [
+		{
+			id: 1,
+			selected: true,
+			nmbSelectedChildren: 0,
+			ChildFunctions: [
+				{ id: 4, selected: false }
+			]
+		},
+		{
+			id: 2,
+			selected: false
+		},
+		{
+			id: 3,
+			selected: true
+		}];
+		var filter = $filter('unselectedFunctions');
+
+		var filteredArray = filter(allFunctions, true);
+
+		expect(filteredArray.length).toEqual(2); 
 	}));
 
 });
