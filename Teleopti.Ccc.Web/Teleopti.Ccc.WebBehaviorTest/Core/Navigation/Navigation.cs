@@ -20,10 +20,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 			_interceptors.Add(u => true, new ApplicationStartupTimeout());
 			_interceptors.Add(u => u == "", new BustCache());
 			_interceptors.Add(u => u == "MyTime#Requests/Index", new BustCache());
-			_interceptors.Add(u => u.Contains("/Anywhere#realtimeadherenceagents"), new DONTUSE_FakeClientTimeForAllJsDateObjectsCreatedAsUtcSoTheActualTimeFromGetTimeVaryDependengingOnBrowserTimeZone());
+			_interceptors.Add(u => u.Contains("/Anywhere#realtimeadherenceagents"), new FakeClientTimeUsingSinonProvenWay());
 			_interceptors.Add(u => u.Contains("/Anywhere#teamschedule"), new FakeClientTimeUsingSinonProvenWay());
 			_interceptors.Add(u => u.Contains("/Anywhere#personschedule"), new FakeClientTimeUsingSinonProvenWay());
-			_interceptors.Add(u => u.Contains("/Anywhere#personschedule"), new DONTUSE_FakeClientTimeUsingLegacyMyTimeMethodButWithUTC());
+			_interceptors.Add(u => u.Contains("/Anywhere#personschedule"), new FakeClientTimeUsingSinonProvenWay());
 			_interceptors.Add(u => u.Contains("/Anywhere#realtimeadherence"), new FakeClientTimeUsingSinonProvenWay());
 			_interceptors.Add(u => u.Contains("/Anywhere#realtimeadherence"), new WaitUntilHangfireQueueIsProcessed());
 			_interceptors.Add(u => u.Contains("/Anywhere#manageadherence"), new WaitUntilHangfireQueueIsProcessed());

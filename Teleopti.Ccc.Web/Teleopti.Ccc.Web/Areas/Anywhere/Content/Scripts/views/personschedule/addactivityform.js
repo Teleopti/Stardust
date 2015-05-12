@@ -133,16 +133,8 @@ define([
 		});
 		
 		this.DefaultStart = ko.computed(function () {
-
-			// Please stop using getTeleoptiTime in Anywhere!
-			// The Date constructor is already faked correctly, using sinon method
-			// That goes from js unit tests and behavior tests both
-			if (new Date().getTeleoptiTime) {
-				var now = moment(new Date(new Date().getTeleoptiTime()));
-			} else {
-				var now = moment(new Date(new Date().getTime()));
-			}
-
+			var now = moment(new Date().getTime());
+			
 			var nowInUserTimeZone = now.tz(timezoneCurrent.IanaTimeZone());
 			var start;
 			if (self.ShiftStart() < nowInUserTimeZone && nowInUserTimeZone < self.ShiftEnd()) {
