@@ -12,8 +12,8 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 
 
 				var methodNames = ["Teleopti Classic", "Teleopti Classic with Trend"];
-				$scope.dataColumns = [{ id: "vh", type: "line", name: "Historical data" },
-									{ id: "vb", type: "line", name: "Best method" }];
+				$scope.dataColumns = [{ id: "vh", type: "line", name: "Queue Statistics" },
+									{ id: "vb", type: "line", name: "Forecast Method" }];
 				$scope.dataX = { id: "date" };
 
 				$scope.openModal = function (workload) {
@@ -42,7 +42,7 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 								selectedMethod = data.ForecastMethodRecommended;
 							}
 							workload.selectedMethod = selectedMethod;
-							$scope.dataColumns[1].name = methodNames[selectedMethod];
+							$scope.dataColumns[1].name = "Forecast Method";
 						}).
 						error(function(data, status, headers, config) {
 							$scope.error = { message: "Failed to do the preforecast." };
