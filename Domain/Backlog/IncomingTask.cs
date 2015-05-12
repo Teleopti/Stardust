@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Domain.Backlog
 		public TimeSpan GetScheduledTimeOnDate(DateOnly date)
 		{
 			if (PlannedTimeTypeOnDate(date) == PlannedTimeTypeEnum.Scheduled)
-				return GetTimeOnDate(date);
+				return GetTimeOnDate(date).Subtract(GetOverstaffTimeOnDate(date));
 
 			return TimeSpan.Zero;
 		}

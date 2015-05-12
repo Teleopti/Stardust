@@ -47,20 +47,20 @@ namespace Teleopti.Ccc.DomainTest.Backlog
 			Assert.AreEqual(TimeSpan.FromHours(20), _target.GetOverstaffTimeOnDate(new DateOnly(2015, 06, 4)));
 		}
 
-		//[Test]
-		//public void GetScheduledTimeOnDateShouldReportZeroIfOverstaffed()
-		//{
-		//	setupOpenDays();
+		[Test]
+		public void GetScheduledTimeOnDateShouldNotIncludeOverstaffed()
+		{
+			setupOpenDays();
 
-		//	Assert.AreEqual(TimeSpan.Zero, _target.GetOverstaffTimeOnDate(new DateOnly(2015, 06, 4)));
+			Assert.AreEqual(TimeSpan.Zero, _target.GetOverstaffTimeOnDate(new DateOnly(2015, 06, 4)));
 
-		//	_target.SetTimeOnDate(new DateOnly(2015, 6, 1), TimeSpan.FromHours(30), PlannedTimeTypeEnum.Scheduled);
-		//	_target.SetTimeOnDate(new DateOnly(2015, 6, 2), TimeSpan.FromHours(30), PlannedTimeTypeEnum.Scheduled);
-		//	_target.SetTimeOnDate(new DateOnly(2015, 6, 3), TimeSpan.FromHours(30), PlannedTimeTypeEnum.Scheduled);
-		//	_target.SetTimeOnDate(new DateOnly(2015, 6, 4), TimeSpan.FromHours(30), PlannedTimeTypeEnum.Scheduled);
+			_target.SetTimeOnDate(new DateOnly(2015, 6, 1), TimeSpan.FromHours(30), PlannedTimeTypeEnum.Scheduled);
+			_target.SetTimeOnDate(new DateOnly(2015, 6, 2), TimeSpan.FromHours(30), PlannedTimeTypeEnum.Scheduled);
+			_target.SetTimeOnDate(new DateOnly(2015, 6, 3), TimeSpan.FromHours(30), PlannedTimeTypeEnum.Scheduled);
+			_target.SetTimeOnDate(new DateOnly(2015, 6, 4), TimeSpan.FromHours(30), PlannedTimeTypeEnum.Scheduled);
 
-		//	Assert.AreEqual(TimeSpan.Zero, _target.GetScheduledTimeOnDate(new DateOnly(2015, 06, 4)));
-		//}
+			Assert.AreEqual(TimeSpan.FromHours(10), _target.GetScheduledTimeOnDate(new DateOnly(2015, 06, 4)));
+		}
 
 		[Test]
 		public void EstimatedOutgoingBacklogCanNeverBeNegative()
