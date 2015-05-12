@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 				parsedTerms.Add(PersonFinderField.All, values);
 				return parsedTerms;
 			}
-
+			values = Regex.Replace(values, @"\s+", " ");
 			var searchTerms = values.Split(new[] {','}).Select(s => s.Trim()).Where(s=>!string.IsNullOrEmpty(s));
 			foreach (var term in searchTerms)
 			{

@@ -15,15 +15,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			const string searchTerm = "FirstName: aa bb, LastName: cc dd";
 			var result = SearchTermParser.Parse(searchTerm);
 
-			result.Count().Equals(2);
+			Assert.AreEqual(2, result.Count());
 
 			var firstTerm = result.First();
-			firstTerm.Key.Equals(PersonFinderField.FirstName);
-			firstTerm.Value.Equals("aa bb");
+			Assert.AreEqual(PersonFinderField.FirstName, firstTerm.Key);
+			Assert.AreEqual("aa bb", firstTerm.Value);
 
 			var secondTerm = result.Second();
-			secondTerm.Key.Equals(PersonFinderField.LastName);
-			secondTerm.Value.Equals("cc dd");
+			Assert.AreEqual(PersonFinderField.LastName, secondTerm.Key);
+			Assert.AreEqual("cc dd", secondTerm.Value);
 		}
 
 		[Test]
@@ -32,11 +32,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			const string searchTerm = "Firstme: aa bb, lastName: cc dd";
 			var result = SearchTermParser.Parse(searchTerm);
 
-			result.Count().Equals(1);
+			Assert.AreEqual(1, result.Count());
 
 			var firstTerm = result.First();
-			firstTerm.Key.Equals(PersonFinderField.LastName);
-			firstTerm.Value.Equals("cc dd");
+			Assert.AreEqual(PersonFinderField.LastName, firstTerm.Key);
+			Assert.AreEqual("cc dd", firstTerm.Value);
 		}
 
 		[Test]
@@ -45,24 +45,41 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			const string searchTerm = "aa bb cc dd";
 			var result = SearchTermParser.Parse(searchTerm);
 
-			result.Count().Equals(1);
+			Assert.AreEqual(1, result.Count());
 
 			var firstTerm = result.First();
-			firstTerm.Key.Equals(PersonFinderField.All);
-			firstTerm.Value.Equals("aa bb cc dd");
+			Assert.AreEqual(PersonFinderField.All, firstTerm.Key);
+			Assert.AreEqual("aa bb cc dd", firstTerm.Value);
 		}
 
 		[Test]
 		public void ShouldHandleDuplicateSearchType()
 		{
-			const string searchTerm = "Firstname: aa bb, lastName: cc dd, Firstname: ee";
+			const string searchTerm = "Firstname: aa bb, Firstname: ee";
 			var result = SearchTermParser.Parse(searchTerm);
 
-			result.Count().Equals(1);
+			Assert.AreEqual(1, result.Count());
 
 			var firstTerm = result.First();
-			firstTerm.Key.Equals(PersonFinderField.FirstName);
-			firstTerm.Value.Equals("aa bb ee");
+			Assert.AreEqual(PersonFinderField.FirstName, firstTerm.Key);
+			Assert.AreEqual(firstTerm.Value, "aa bb ee");
+		}
+
+		[Test]
+		public void ShouldParseSearchTermStringWithAdvancedSingleSearchTerm()
+		{
+			const string advancedSingleSearchTerm = "   FirstName  :   aa	   bb   ";
+			var advancedSingleSearchTermResult = SearchTermParser.Parse(advancedSingleSearchTerm);
+			Assert.AreEqual(1, advancedSingleSearchTermResult.Count());
+			Assert.AreEqual(PersonFinderField.FirstName, advancedSingleSearchTermResult.First().Key);
+			Assert.AreEqual("aa bb", advancedSingleSearchTermResult.First().Value);
+		}
+
+		[Test]
+		public void ShouldAlertUserForInvalidInput()
+		{
+			const string invalidInput = "FirstName: aa, bb";
+			Assert.Catch(() => SearchTermParser.Parse(invalidInput));
 		}
 	}
 }
