@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private ArrayList _userSelectedPersonList;
 		private readonly List<String> _duplicateInputText;
 		private bool _textChangedRunning;
-		private List<LogonInfoModel> _logonInfos;
+		private IEnumerable<LogonInfoModel> _logonInfos;
 
 		public ArrayList UserSelectedPerson
 		{

@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		private class emptyTenantLogonDataManager : ITenantLogonDataManager
 		{
-			public List<LogonInfoModel> GetLogonInfoModelsForGuids(IEnumerable<Guid> personGuids)
+			public IEnumerable<LogonInfoModel> GetLogonInfoModelsForGuids(IEnumerable<Guid> personGuids)
 			{
 				return new List<LogonInfoModel>();
 			}

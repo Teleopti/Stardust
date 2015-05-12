@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 		[Test]
 		public void HappyPath()
 		{
-			var pathToTenantServer = RandomName.Make();
+			var pathToTenantServer = RandomName.Make() + "/";
 			var postHttpRequest = MockRepository.GenerateStub<IPostHttpRequest>();
 			var jsonSerializer = MockRepository.GenerateStub<IJsonSerializer>();
 			var changePasswordInput = new ChangePasswordInput();
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			var ex = new WebException();
 			var responseException = MockRepository.GenerateStub<IResponseException>();
 			responseException.Stub(x => x.ExceptionStatus(ex)).Return(HttpStatusCode.BadRequest);
-			var pathToTenantServer = RandomName.Make();
+			var pathToTenantServer = RandomName.Make() + "/";
 			var postHttpRequest = MockRepository.GenerateStub<IPostHttpRequest>();
 			var jsonSerializer = MockRepository.GenerateStub<IJsonSerializer>();
 			var changePasswordInput = new ChangePasswordInput();
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			var ex = new WebException();
 			var responseException = MockRepository.GenerateStub<IResponseException>();
 			responseException.Stub(x => x.ExceptionStatus(ex)).Return(HttpStatusCode.Forbidden);
-			var pathToTenantServer = RandomName.Make();
+			var pathToTenantServer = RandomName.Make() + "/";
 			var postHttpRequest = MockRepository.GenerateStub<IPostHttpRequest>();
 			var jsonSerializer = MockRepository.GenerateStub<IJsonSerializer>();
 			var changePasswordInput = new ChangePasswordInput();
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			var ex = new WebException();
 			var responseException = MockRepository.GenerateStub<IResponseException>();
 			responseException.Stub(x => x.ExceptionStatus(ex)).Return(HttpStatusCode.Conflict);
-			var pathToTenantServer = RandomName.Make();
+			var pathToTenantServer = RandomName.Make() + "/";
 			var postHttpRequest = MockRepository.GenerateStub<IPostHttpRequest>();
 			var jsonSerializer = MockRepository.GenerateStub<IJsonSerializer>();
 			var changePasswordInput = new ChangePasswordInput();
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 		[Test]
 		public void ShouldNotCatchGeneralExceptions()
 		{
-			var pathToTenantServer = RandomName.Make();
+			var pathToTenantServer = RandomName.Make() + "/";
 			var postHttpRequest = MockRepository.GenerateStub<IPostHttpRequest>();
 			var jsonSerializer = MockRepository.GenerateStub<IJsonSerializer>();
 			var changePasswordInput = new ChangePasswordInput();

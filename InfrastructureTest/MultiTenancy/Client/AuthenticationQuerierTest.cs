@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 		[Test]
 		public void DontCreateDatabaseIfUnsuccefulLogon()
 		{
-			var pathToTenantServer = RandomName.Make();
+			var pathToTenantServer = RandomName.Make() + "/";
 			var userAgent = RandomName.Make();
 			var postHttpRequest = MockRepository.GenerateStub<IPostHttpRequest>();
 			var jsonSerializer = MockRepository.GenerateStub<IJsonSerializer>();
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 		[Test]
 		public void DoApplicationLogonWithEncryptedNhibConfiguration()
 		{
-			var pathToTenantServer = RandomName.Make();
+			var pathToTenantServer = RandomName.Make() + "/";
 			var userAgent = RandomName.Make();
 			var postHttpRequest = MockRepository.GenerateStub<IPostHttpRequest>();
 			var jsonSerializer = MockRepository.GenerateStub<IJsonSerializer>();
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 		[Test]
 		public void DoIdentityLogonWithEncryptedNhibConfiguration()
 		{
-			var pathToTenantServer = RandomName.Make();
+			var pathToTenantServer = RandomName.Make() + "/";
 			var userAgent = RandomName.Make();
 			var postHttpRequest = MockRepository.GenerateStub<IPostHttpRequest>();
 			var jsonSerializer = MockRepository.GenerateStub<IJsonSerializer>();
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 		[Test]
 		public void MakeSureDatasourceIsCreatedIfNeededWhenDoingIdentityLogon()
 		{
-			var pathToTenantServer = RandomName.Make();
+			var pathToTenantServer = RandomName.Make() + "/";
 			var userAgent = RandomName.Make();
 			var postHttpRequest = MockRepository.GenerateStub<IPostHttpRequest>();
 			var jsonSerializer = MockRepository.GenerateStub<IJsonSerializer>();
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 		[Test]
 		public void MakeSureDatasourceIsCreatedIfNeededWhenDoingApplicationLogon()
 		{
-			var pathToTenantServer = RandomName.Make();
+			var pathToTenantServer = RandomName.Make() + "/";
 			var userAgent = RandomName.Make();
 			var postHttpRequest = MockRepository.GenerateStub<IPostHttpRequest>();
 			var jsonSerializer = MockRepository.GenerateStub<IJsonSerializer>();
@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 		[Test]
 		public void CheckTerminatedApplicationUser()
 		{
-			var pathToTenantServer = RandomName.Make();
+			var pathToTenantServer = RandomName.Make() + "/";
 			var userAgent = RandomName.Make();
 			var postHttpRequest = MockRepository.GenerateStub<IPostHttpRequest>();
 			var jsonSerializer = MockRepository.GenerateStub<IJsonSerializer>();
@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 		[Test]
 		public void CheckTerminatedIdentityUser()
 		{
-			var pathToTenantServer = RandomName.Make();
+			var pathToTenantServer = RandomName.Make() + "/";
 			var userAgent = RandomName.Make();
 			var postHttpRequest = MockRepository.GenerateStub<IPostHttpRequest>();
 			var jsonSerializer = MockRepository.GenerateStub<IJsonSerializer>();

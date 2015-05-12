@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Interfaces;
@@ -21,16 +22,13 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 			_jsonSerializer = jsonSerializer;
 		}
 
-		public List<LogonInfoModel> GetLogonInfoModelsForGuids(IEnumerable<Guid> personGuids)
+		public IEnumerable<LogonInfoModel> GetLogonInfoModelsForGuids(IEnumerable<Guid> personGuids)
 		{
 			var ret = new List<LogonInfoModel>();
-			foreach (var batch in personGuids.Batch(200))
+			foreach (var json in personGuids.Batch(200).Select(batch => _jsonSerializer.SerializeObject(batch)))
 			{
-				var json = _jsonSerializer.SerializeObject(batch);
-				ret.AddRange(
-					_postHttpRequest.Send<List<LogonInfoModel>>(_tenantServerConfiguration.FullPath("PersonInfo/LogonInfoFromGuids"), json));
+				ret.AddRange(_postHttpRequest.Send<IEnumerable<LogonInfoModel>>(_tenantServerConfiguration.FullPath("PersonInfo/LogonInfoFromGuids"), json));
 			}
-
 			return ret;
 		}
 	}

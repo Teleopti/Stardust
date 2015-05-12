@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication
 {
 	public interface ITenantLogonDataManager
 	{
-		List<LogonInfoModel> GetLogonInfoModelsForGuids(IEnumerable<Guid> personGuids);
+		IEnumerable<LogonInfoModel> GetLogonInfoModelsForGuids(IEnumerable<Guid> personGuids);
 	}
 }

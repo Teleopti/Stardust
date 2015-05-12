@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 		private IList<ExternalLogOnModel> _filteredExternalLogOnCollection;
 
 		private IList<Guid> toBeRemovedList = new List<Guid>();
-		private List<LogonInfoModel> _logonData;
+		private IEnumerable<LogonInfoModel> _logonData;
 
 		public FilteredPeopleHolder(ITraceableRefreshService refreshService,
 				IDictionary<IPerson, IPersonAccountCollection> allAccounts,
@@ -367,7 +367,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 			}
 		}
 
-		public void ReassociateSelectedPeopleWithNewUowOpenPeople(IList<IPerson> people, List<LogonInfoModel> logonData)
+		public void ReassociateSelectedPeopleWithNewUowOpenPeople(IList<IPerson> people, IEnumerable<LogonInfoModel> logonData)
 		{
 			_logonData = logonData;
 			int length = people.Count();
@@ -415,61 +415,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 		{
 			return _logonData.FirstOrDefault(logonInfoModel => logonInfoModel.PersonId.Equals(personId));
 		}
-
-		//[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Uow")]
-		//public void ReassociateSelectedPeopleWithNewUow(IList<IPerson> people)
-		//{
-		//	InParameter.NotNull("people", people);
-
-		//	int length = people.Count;
-
-		//	if (length > 0)
-		//	{
-		//		var rep = new PersonRepository(GetUnitOfWork);
-		//		var personRotationRep = new PersonRotationRepository(GetUnitOfWork);
-		//		var personAvailRep = new PersonAvailabilityRepository(GetUnitOfWork);
-
-		//		clearCollections();
-
-		//		var foundPeople = rep.FindPeople(people).ToList();
-		//		foreach (var person in people)
-		//		{
-		//			if (!foundPeople.Contains(person))
-		//			{
-		//				foundPeople.Add(person);
-		//			}
-		//		}
-
-		//		_filteredPersonCollection.AddRange(foundPeople);
-		//		var today = DateOnly.Today;
-
-		//		LoadPersonRotations(foundPeople, today, personRotationRep);
-		//		LoadPersonAvailabilities(foundPeople, personAvailRep);
-
-		//		var repositoryFactory = new RepositoryFactory();
-		//		var repository = repositoryFactory.CreateUserDetailRepository(GetUnitOfWork);
-		//		var userDetails = repository.FindAllUsers();
-
-		//		foreach (var person in _filteredPersonCollection)
-		//		{
-		//			IUserDetail ud;
-		//			if (userDetails.ContainsKey(person))
-		//			{
-		//				ud = userDetails[person];
-		//			}
-		//			else
-		//			{
-		//				ud = new UserDetail(person);
-		//				repository.Add(ud);
-		//			}
-
-		//			loadFilteredPeopleGridData(person, ud);
-		//			getParentPersonPeriods(person, today);
-		//			GetParentSchedulePeriods(person, today);
-		//			GetParentPersonAccounts(person, today);
-		//		}
-		//	}
-		//}
 
 		private void clearCollections()
 		{

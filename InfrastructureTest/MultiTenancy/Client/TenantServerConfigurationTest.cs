@@ -35,5 +35,14 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			target.FullPath(string.Empty)
 				.Should().Be.EqualTo(path);
 		}
+
+		[Test]
+		public void ShouldReturnRelativePathIfPathIsNull()
+		{
+			var relativePath = RandomName.Make();
+			var target = new TenantServerConfiguration(null);
+			target.FullPath(relativePath)
+				.Should().Be.EqualTo(relativePath);
+		}
 	}
 }

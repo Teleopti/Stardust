@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.DomainTest.GroupPageCreator
 
 	class fakeTenantLogonDataManager : ITenantLogonDataManager
 	{
-		public List<LogonInfoModel> GetLogonInfoModelsForGuids(IEnumerable<Guid> personGuids)
+		public IEnumerable<LogonInfoModel> GetLogonInfoModelsForGuids(IEnumerable<Guid> personGuids)
 		{
 			return new List<LogonInfoModel>();
 		}

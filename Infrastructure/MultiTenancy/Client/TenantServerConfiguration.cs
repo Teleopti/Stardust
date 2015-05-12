@@ -11,6 +11,9 @@
 
 		public string FullPath(string relativeUrl)
 		{
+			if (_pathToServer == null)
+				return relativeUrl;
+
 			return relativeUrl == string.Empty || _pathToServer.EndsWith("/")
 				? _pathToServer + relativeUrl
 				: _pathToServer + "/" + relativeUrl;

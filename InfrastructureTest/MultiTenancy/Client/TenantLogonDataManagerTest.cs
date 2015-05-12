@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 {
 	[TenantClientTest]
-	[TestCommon.IoC.Toggle(Toggles.MultiTenancy_LogonUseNewSchema_33049)]
+	[Toggle(Toggles.MultiTenancy_LogonUseNewSchema_33049)]
 	public class TenantLogonDataManagerTest
 	{
 		public PostHttpRequestFake HttpRequestFake;
@@ -19,12 +20,12 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 		public void ShouldBatchCallsToGetLogonInfoModelsForGuids()
 		{
 			var guids = new List<Guid>();
-			for (int i = 0; i < 400; i++)
+			for (var i = 0; i < 400; i++)
 			{
 				guids.Add(Guid.NewGuid());
 			}
 			var returnVal = new List<LogonInfoModel>();
-			for (int i = 0; i < 200; i++)
+			for (var i = 0; i < 200; i++)
 			{
 				returnVal.Add(new LogonInfoModel());
 			}
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			HttpRequestFake.SetReturnValue(returnVal);
 
 			var result = Target.GetLogonInfoModelsForGuids(guids);
-			result.Count.Should().Be.EqualTo(400);
+			result.Count().Should().Be.EqualTo(400);
 		}
 	}
 }
