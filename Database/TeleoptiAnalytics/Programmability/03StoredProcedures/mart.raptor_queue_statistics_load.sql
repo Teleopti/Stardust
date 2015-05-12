@@ -44,7 +44,12 @@ BEGIN
 	[StatOfferedTasks] [decimal](24, 5) NULL,
 	[StatAnsweredTasks] [decimal](24, 5) NULL,
 	[StatTaskTimeSeconds] [decimal](38, 14) NOT NULL,
-	[StatAfterTaskTimeSeconds] [decimal](38, 14) NOT NULL
+	[StatAfterTaskTimeSeconds] [decimal](38, 14) NOT NULL,
+	[StatAbandonedTasks] [decimal](24, 5) NULL,
+	[StatAbandonedShortTasks] [decimal](18, 0) NULL,
+	[StatAbandonedTasksWithinSL] [decimal](24, 5) NULL,
+	[StatOverflowInTasks] [decimal](24, 5) NULL,
+	[StatOverflowOutTasks] [decimal](24, 5) NULL
 	)
 
 	INSERT INTO @TempList
@@ -61,7 +66,12 @@ BEGIN
 		fq.offered_calls as StatOfferedTasks,
 		fq.answered_calls as StatAnsweredTasks,
 		ISNULL(fq.talk_time_s, 0) AS StatTaskTimeSeconds,
-		ISNULL(fq.after_call_work_s, 0) AS StatAfterTaskTimeSeconds
+		ISNULL(fq.after_call_work_s, 0) AS StatAfterTaskTimeSeconds,
+		fq.abandoned_calls as StatAbandonedTasks, 
+		fq.abandoned_short_calls as StatAbandonedShortTasks, 
+		fq.abandoned_calls_within_SL as StatAbandonedTasksWithinSL, 
+		fq.overflow_in_calls as StatOverflowInTasks,
+		fq.overflow_out_calls as StatOverflowOutTasks
 	FROM
 		mart.fact_queue fq WITH (NOLOCK)
 	INNER JOIN	mart.dim_date d
@@ -72,13 +82,17 @@ BEGIN
 	INNER JOIN	@TempList q
 		ON fq.queue_id = q.QueueID
 	WHERE (DATEADD(mi, DATEDIFF(mi, @mindate,i.interval_start), d.date_date) BETWEEN DATEADD(day, -1, @DateFrom) and DATEADD(day, 2, @DateTo))
-	
-	
+
 	SELECT 
 		CONVERT(DATE, DATEADD(mi, DATEDIFF(mi, @mindate, i.interval_start) - @MidnightBreakDifference, d.date_date)) as Interval,
 		--r.date_id, r.interval_id,
 		SUM(r.StatAnsweredTasks) as StatAnsweredTasks,
 		SUM(r.StatOfferedTasks) as StatOfferedTasks,
+		SUM(r.StatAbandonedTasks) as StatAbandonedTasks,
+		SUM(r.StatAbandonedShortTasks) as StatAbandonedShortTasks,
+		SUM(r.StatAbandonedTasksWithinSL) as StatAbandonedTasksWithinSL,
+		SUM(r.StatOverflowOutTasks) as StatOverflowOutTasks,
+		SUM(r.StatOverflowInTasks) as StatOverflowInTasks,
 		CASE SUM(r.StatAnsweredTasks)
 			WHEN 0 
 			THEN SUM(StatTaskTimeSeconds)
