@@ -6,6 +6,7 @@ using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Secrets.DayOffPlanning;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Ccc.Secrets.WorkShiftPeriodValueCalculator;
+using Teleopti.Ccc.WebTest.Areas.ResourcePlanner;
 
 namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 {

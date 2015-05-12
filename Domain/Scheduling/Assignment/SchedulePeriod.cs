@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		private Percent _seasonality;
 		private TimeSpan _balanceIn;
 		private TimeSpan? _periodTime;
-		private readonly PeriodIncrementorFactory _periodIncrementorFactory = new PeriodIncrementorFactory();
 		private readonly SchedulePeriodRangeCalculator _schedulePeriodRangeCalculator = new SchedulePeriodRangeCalculator();
 
 		/// <summary>
@@ -682,7 +681,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public IncreaseMonthByOne(CultureInfo cultureInfo)
 		{
-			_cultureInfo = cultureInfo;
+			_cultureInfo = cultureInfo ?? CultureInfo.GetCultureInfo(CultureInfo.CurrentCulture.LCID);
 		}
 
 		public DateOnly Increase(DateOnly currentStartDate, int number)
@@ -721,7 +720,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			var periodIncrementor = _periodIncrementorFactory.PeriodIncrementor(period.PeriodType, period.Culture);
 			var start = periodIncrementor.EvaluateProperInitialStartDate(period.StartDate, period.Number, requestedDate);
-			DateOnlyPeriod currentPeriod = new DateOnlyPeriod(start, periodIncrementor.Increase(start, period.Number));
+			var currentPeriod = new DateOnlyPeriod(start, periodIncrementor.Increase(start, period.Number));
 			while (!currentPeriod.Contains(requestedDate))
 			{
 				start = periodIncrementor.Increase(start, period.Number).AddDays(1);

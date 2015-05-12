@@ -513,6 +513,7 @@
     <Compile Include="Areas\ResourcePlanner\SchedulingResultModel.cs" />
     <Compile Include="Areas\ResourcePlanner\SetupStateHolderForWebScheduling.cs" />
     <Compile Include="Areas\ResourcePlanner\SuggestedPlanningPeriodRangeModel.cs" />
+    <Compile Include="Areas\ResourcePlanner\VoilatedSchedulePeriodBusinessRule.cs" />
     <Compile Include="Areas\Rta\Controllers\SyncController.cs" />
     <Compile Include="Areas\People\Core\Providers\IPeopleSearchProvider.cs" />
     <Compile Include="Areas\Rta\Log4NetWcfLogger.cs" />
