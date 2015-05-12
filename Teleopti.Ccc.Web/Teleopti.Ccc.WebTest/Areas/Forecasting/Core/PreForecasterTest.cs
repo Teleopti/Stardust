@@ -46,12 +46,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			workloadDay2.MakeOpen24Hours();
 			workloadDay2.TotalStatisticCalculatedTasks = 12d;
 
-			var statisticRepository = MockRepository.GenerateMock<IStatisticRepository>();
-			statisticRepository.Stub(x => x.QueueStatisticsUpUntilDate(workload)).Return(new DateOnly(2014, 12, 20));
-			var historicalPeriodProvider = new HistoricalPeriodProvider(new MutableNow(new DateTime(2014, 12, 20, 0, 0, 0, DateTimeKind.Utc)), statisticRepository);
+			var historicalPeriodProvider = new HistoricalPeriodProvider(new MutableNow(new DateTime(2014, 12, 20, 0, 0, 0, DateTimeKind.Utc)), MockRepository.GenerateMock<IStatisticRepository>());
 			var historicalData = MockRepository.GenerateMock<IHistoricalData>();
 			var taskOwnerPeriod = new TaskOwnerPeriod(DateOnly.MinValue, new List<WorkloadDay>{workloadDay1, workloadDay2}, TaskOwnerPeriodType.Other);
-			historicalData.Stub(x => x.Fetch(workload, historicalPeriodProvider.PeriodForForecast(workload))).Return(taskOwnerPeriod);
+			historicalData.Stub(x => x.Fetch(workload, historicalPeriodProvider.PeriodForForecast())).Return(taskOwnerPeriod);
 			var preForecastWorkload = MockRepository.GenerateMock<IPreForecastWorkload>();
 			preForecastWorkload.Stub(
 				x =>
@@ -120,9 +118,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			};
 			workloadRepository.Stub(x => x.Get(preForecastInput.WorkloadId)).Return(workload);
 			var quickForecastWorkloadEvaluator = MockRepository.GenerateMock<IQuickForecastWorkloadEvaluator>();
-			var statisticRepository = MockRepository.GenerateMock<IStatisticRepository>();
-			statisticRepository.Stub(x => x.QueueStatisticsUpUntilDate(workload)).Return(new DateOnly(2014, 12, 20));
-			var historicalPeriodProvider = new HistoricalPeriodProvider(new MutableNow(new DateTime(2014, 12, 20, 0, 0, 0, DateTimeKind.Utc)), statisticRepository);
+			var historicalPeriodProvider = new HistoricalPeriodProvider(new MutableNow(new DateTime(2014, 12, 20, 0, 0, 0, DateTimeKind.Utc)), MockRepository.GenerateMock<IStatisticRepository>());
 			quickForecastWorkloadEvaluator.Stub(x => x.Measure(workload))
 				.Return(new WorkloadAccuracy
 				{
@@ -139,7 +135,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			dictionary.Add(dateOnly, oneDay);
 			var historicalData = MockRepository.GenerateMock<IHistoricalData>();
 			var taskOwnerPeriod = new TaskOwnerPeriod(DateOnly.MinValue, new List<WorkloadDay>(), TaskOwnerPeriodType.Other);
-			historicalData.Stub(x => x.Fetch(workload, historicalPeriodProvider.PeriodForForecast(workload))).Return(taskOwnerPeriod);
+			historicalData.Stub(x => x.Fetch(workload, historicalPeriodProvider.PeriodForForecast())).Return(taskOwnerPeriod);
 			var target = new PreForecaster(quickForecastWorkloadEvaluator, workloadRepository, historicalPeriodProvider, historicalData);
 
 			var result = target.MeasureAndForecast(preForecastInput);
