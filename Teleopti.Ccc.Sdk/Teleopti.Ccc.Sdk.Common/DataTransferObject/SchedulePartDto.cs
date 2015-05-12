@@ -91,6 +91,7 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
         /// </summary>
         /// <remarks>This information is read only in this context and will not be saved when saving schedules.</remarks>
         [DataMember]
+		[Obsolete("This is not exposing details anymore. Use designated functions.")]
         public StudentAvailabilityDayDto StudentAvailabilityDay { get; set; }
 
         /// <summary>
@@ -98,6 +99,7 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
         /// </summary>
         /// <remarks>This information is read only in this context and will not be saved when saving schedules.</remarks>
         [DataMember]
+		[Obsolete("This is not exposing details anymore. Use designated functions.")]
         public PreferenceRestrictionDto PreferenceRestriction { get; set; }
 
         /// <summary>

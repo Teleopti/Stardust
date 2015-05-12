@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ServiceModel;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -51,7 +52,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			target = new GetSchedulesBySiteQueryHandler(currentUnitOfWorkFactory,scheduleRepository,personRepository,scenarioRepository,siteRepository,dateTimePeriodAssembler,scheduleDayAssembler);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		[Test]
 		public void ShouldGetScheduleForSiteInGivenScenario()
 		{
 			var scenario = ScenarioFactory.CreateScenarioAggregate();
@@ -73,6 +74,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 				Expect.Call(currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
 				Expect.Call(dictionary[person1]).Return(scheduleRange);
 				Expect.Call(dictionary[person2]).Return(scheduleRange);
+				Expect.Call(scheduleDayAssembler.DomainEntitiesToDtos(null))
+					.Return(new List<SchedulePartDto> { new SchedulePartDto() });
 			}
 			using (mocks.Playback())
 			{
@@ -113,7 +116,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		[Test]
 		public void ShouldGetScheduleForSiteInDefaultScenario()
 		{
 			var scenario = ScenarioFactory.CreateScenarioAggregate();
@@ -135,6 +138,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 				Expect.Call(currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
 				Expect.Call(dictionary[person1]).Return(scheduleRange);
 				Expect.Call(dictionary[person2]).Return(scheduleRange);
+				Expect.Call(scheduleDayAssembler.DomainEntitiesToDtos(null))
+					.Return(new List<SchedulePartDto> { new SchedulePartDto() });
 			}
 			using (mocks.Playback())
 			{

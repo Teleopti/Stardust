@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
@@ -37,13 +36,12 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 			_scheduleDayAssembler = scheduleDayAssembler;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public ICollection<SchedulePartDto> Handle(GetSchedulesByGroupPageGroupQueryDto query)
 		{
-			IList<SchedulePartDto> returnList = new List<SchedulePartDto>();
+			var returnList = new List<SchedulePartDto>();
 
 			var queryDate = query.QueryDate.ToDateOnly();
-			var timeZone = (TimeZoneInfo.FindSystemTimeZoneById(query.TimeZoneId));
+			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(query.TimeZoneId);
 			var datePeriod = new DateOnlyPeriod(queryDate, queryDate);
 			var period = new DateOnlyPeriod(datePeriod.StartDate, datePeriod.EndDate.AddDays(1));
 
@@ -62,17 +60,12 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
 				var personList = _personRepository.FindPeople(availableDetails.Select(d => d.PersonId));
 
-				IScheduleDictionary scheduleDictionary = _scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(personList, new ScheduleDictionaryLoadOptions(true, false), period, scenario);
+				IScheduleDictionary scheduleDictionary = _scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(personList, new ScheduleDictionaryLoadOptions(false, false), period, scenario);
 				foreach (IPerson person in personList)
 				{
 					IScheduleRange scheduleRange = scheduleDictionary[person];
-					foreach (DateOnly dateOnly in datePeriod.DayCollection())
-					{
-						IScheduleDay part = scheduleRange.ScheduledDay(dateOnly);
-						//rk - ugly hack until ScheduleProjectionService is stateless (=not depended on schedulday in ctor)
-						//when that's done - inject a IProjectionService instead.
-						returnList.Add(_scheduleDayAssembler.DomainEntityToDto(part));
-					}
+					var parts = scheduleRange.ScheduledDayCollection(datePeriod);
+					returnList.AddRange(_scheduleDayAssembler.DomainEntitiesToDtos(parts));
 				}
 			}
 
@@ -81,15 +74,9 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
 		private IScenario GetGivenScenarioOrDefault(GetSchedulesByGroupPageGroupQueryDto query)
 		{
-			IScenario scenario;
-			if (query.ScenarioId.HasValue)
-			{
-				scenario = _scenarioRepository.Get(query.ScenarioId.Value);
-			}
-			else
-			{
-				scenario = _scenarioRepository.LoadDefaultScenario();
-			}
+			IScenario scenario = query.ScenarioId.HasValue
+				? _scenarioRepository.Get(query.ScenarioId.Value)
+				: _scenarioRepository.LoadDefaultScenario();
 
 			if (scenario==null)
 			{

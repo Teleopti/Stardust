@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			target = new GetSchedulesByGroupPageGroupQueryHandler(unitOfWorkFactory,scheduleRepository,personRepository,scenarioRepository,groupingReadOnlyRepository,dateTimePeriodAssembler,scheduleDayAssembler);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		[Test]
 		public void ShouldGetScheduleForTeamInGivenScenario()
 		{
 			var scenario = ScenarioFactory.CreateScenarioAggregate();
@@ -68,6 +68,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 				Expect.Call(scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), scenario)).IgnoreArguments().Return(dictionary);
 				Expect.Call(unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork()).Return(unitOfWork);
 				Expect.Call(dictionary[person1]).Return(scheduleRange);
+				Expect.Call(scheduleDayAssembler.DomainEntitiesToDtos(null))
+					.Return(new List<SchedulePartDto> { new SchedulePartDto() });
 			}
 			using (mocks.Playback())
 			{
@@ -103,7 +105,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		[Test]
 		public void ShouldGetScheduleForTeamInDefaultScenario()
 		{
 			var scenario = ScenarioFactory.CreateScenarioAggregate();
@@ -120,6 +122,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 				Expect.Call(scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), scenario)).IgnoreArguments().Return(dictionary);
 				Expect.Call(unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork()).Return(unitOfWork);
 				Expect.Call(dictionary[person1]).Return(scheduleRange);
+				Expect.Call(scheduleDayAssembler.DomainEntitiesToDtos(null))
+					.Return(new List<SchedulePartDto> {new SchedulePartDto()});
 			}
 			using (mocks.Playback())
 			{

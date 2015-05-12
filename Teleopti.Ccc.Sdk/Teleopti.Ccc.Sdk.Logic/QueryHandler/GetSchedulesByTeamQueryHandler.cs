@@ -4,7 +4,6 @@ using System.ServiceModel;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
@@ -32,10 +31,9 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 			_scheduleDayAssembler = scheduleDayAssembler;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public ICollection<SchedulePartDto> Handle(GetSchedulesByTeamQueryDto query)
 		{
-			IList<SchedulePartDto> returnList = new List<SchedulePartDto>();
+			var returnList = new List<SchedulePartDto>();
 
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(query.TimeZoneId);
 			var datePeriod = new DateOnlyPeriod(query.StartDate.ToDateOnly(), query.EndDate.ToDateOnly());
@@ -54,17 +52,12 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
 				var personList = _personRepository.FindPeopleBelongTeam(team, datePeriod);
 
-				IScheduleDictionary scheduleDictionary = _scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(personList, new ScheduleDictionaryLoadOptions(true, false), period, scenario);
+				var scheduleDictionary = _scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(personList, new ScheduleDictionaryLoadOptions(false, false), period, scenario);
 				foreach (IPerson person in personList)
 				{
-					IScheduleRange scheduleRange = scheduleDictionary[person];
-					foreach (DateOnly dateOnly in datePeriod.DayCollection())
-					{
-						IScheduleDay part = scheduleRange.ScheduledDay(dateOnly);
-						//rk - ugly hack until ScheduleProjectionService is stateless (=not depended on schedulday in ctor)
-						//when that's done - inject a IProjectionService instead.
-						returnList.Add(_scheduleDayAssembler.DomainEntityToDto(part));
-					}
+					var scheduleRange = scheduleDictionary[person];
+					var parts = scheduleRange.ScheduledDayCollection(datePeriod);
+					returnList.AddRange(_scheduleDayAssembler.DomainEntitiesToDtos(parts));
 				}
 			}
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ServiceModel;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -62,6 +63,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 				Expect.Call(currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
 				Expect.Call(dictionary[person1]).Return(scheduleRange);
+				Expect.Call(scheduleDayAssembler.DomainEntitiesToDtos(null))
+					.Return(new List<SchedulePartDto> { new SchedulePartDto() });
 			}
 			using (mocks.Playback())
 			{
@@ -115,6 +118,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 				Expect.Call(currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
 				Expect.Call(dictionary[person1]).Return(scheduleRange);
+				Expect.Call(scheduleDayAssembler.DomainEntitiesToDtos(null))
+					.Return(new List<SchedulePartDto> { new SchedulePartDto() });
 			}
 			using (mocks.Playback())
 			{

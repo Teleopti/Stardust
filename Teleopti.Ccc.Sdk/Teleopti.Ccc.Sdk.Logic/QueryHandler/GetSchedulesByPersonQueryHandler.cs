@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
 		public ICollection<SchedulePartDto> Handle(GetSchedulesByPersonQueryDto query)
 		{
-			IList<SchedulePartDto> returnList = new List<SchedulePartDto>();
+			var returnList = new List<SchedulePartDto>();
 
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(query.TimeZoneId);
 			var datePeriod = new DateOnlyPeriod(query.StartDate.ToDateOnly(), query.EndDate.ToDateOnly());
@@ -48,16 +48,12 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 				var person = _personRepository.Get(query.PersonId);
 
 				IScheduleDictionary scheduleDictionary =
-					_scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(true, false), period, scenario);
+					_scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false),
+						period, scenario);
 
 				IScheduleRange scheduleRange = scheduleDictionary[person];
-				foreach (DateOnly dateOnly in datePeriod.DayCollection())
-				{
-					IScheduleDay part = scheduleRange.ScheduledDay(dateOnly);
-					//rk - ugly hack until ScheduleProjectionService is stateless (=not depended on schedulday in ctor)
-					//when that's done - inject a IProjectionService instead.
-					returnList.Add(_scheduleDayAssembler.DomainEntityToDto(part));
-				}
+				var parts = scheduleRange.ScheduledDayCollection(datePeriod);
+				returnList.AddRange(_scheduleDayAssembler.DomainEntitiesToDtos(parts));
 			}
 
 			return returnList;
@@ -65,15 +61,9 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
 		private IScenario GetGivenScenarioOrDefault(GetSchedulesByPersonQueryDto query)
 		{
-			IScenario scenario;
-			if (query.ScenarioId.HasValue)
-			{
-				scenario = _scenarioRepository.Get(query.ScenarioId.Value);
-			}
-			else
-			{
-				scenario = _scenarioRepository.LoadDefaultScenario();
-			}
+			IScenario scenario = query.ScenarioId.HasValue
+				? _scenarioRepository.Get(query.ScenarioId.Value)
+				: _scenarioRepository.LoadDefaultScenario();
 
 			if (scenario == null)
 			{
