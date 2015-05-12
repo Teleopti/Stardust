@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
         private ISchedulingResultStateHolder _stateHolder;
         private IPerson _person;
-        private IFairnessValueCalculator _fairnessValueCalculator;
         private ISeatLimitationWorkShiftCalculator2 _seatLimitationWorkShiftCalculator;
         private IShiftCategoryFairnessShiftValueCalculator _shiftCategoryFairnessShiftValueCalculator;
         private IShiftCategoryFairnessManager _shiftCatFairnessManager;
@@ -35,14 +34,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             _mocks = new MockRepository();
             _stateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
-            _fairnessValueCalculator = _mocks.StrictMock<IFairnessValueCalculator>();
             _seatLimitationWorkShiftCalculator = _mocks.StrictMock<ISeatLimitationWorkShiftCalculator2>();
             _shiftCategoryFairnessShiftValueCalculator = _mocks.StrictMock<IShiftCategoryFairnessShiftValueCalculator>();
             _shiftCatFairnessManager = _mocks.StrictMock<IShiftCategoryFairnessManager>();
             _options = new SchedulingOptions{ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff,
                 WorkShiftLengthHintOption = WorkShiftLengthHintOption.AverageWorkTime, UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak};
             _target = new FairnessAndMaxSeatCalculatorsManager(()=>_stateHolder, _shiftCatFairnessManager,
-                _shiftCategoryFairnessShiftValueCalculator, _fairnessValueCalculator,_seatLimitationWorkShiftCalculator);
+                _shiftCategoryFairnessShiftValueCalculator,_seatLimitationWorkShiftCalculator);
 
             _shiftCategoryFairnessFactors = _mocks.StrictMock<IShiftCategoryFairnessFactors>();
             _person = _mocks.StrictMock<IPerson>();
@@ -189,8 +187,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Expect.Call(dic[_person]).Return(range);
             Expect.Call(range.FairnessPoints()).Return(fairnessValueResult);
             Expect.Call(shiftCache.ShiftCategoryDayOfWeekJusticeValue).Return(5);
-			Expect.Call(_fairnessValueCalculator.CalculateFairnessValue(1, 5, 15, 5, fairnessValueResult, 3, _options)).IgnoreArguments().Return(11);
-
 			Expect.Call(shiftCache.MainShiftProjection).Return(projection).Repeat.AtLeastOnce();
             Expect.Call(_seatLimitationWorkShiftCalculator.CalculateShiftValue(_person, projection, maxSeatSkillPeriods,
                                                                                _options.UserOptionMaxSeatsFeature)).Return(55);

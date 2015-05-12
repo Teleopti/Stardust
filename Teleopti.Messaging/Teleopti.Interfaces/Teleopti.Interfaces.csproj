@@ -332,7 +332,6 @@
     <Compile Include="Domain\IScheduleMatrixOriginalStateContainer.cs" />
     <Compile Include="Domain\IScheduleOptimizationService.cs" />
     <Compile Include="Domain\IBlockSchedulingService.cs" />
-    <Compile Include="Domain\IFairnessValueCalculator.cs" />
     <Compile Include="Domain\IPreSchedulingStatusChecker.cs" />
     <Compile Include="Domain\ISchedulePeriodTargetCalculator.cs" />
     <Compile Include="Domain\ISchedulePeriodTargetCalculatorFactory.cs" />

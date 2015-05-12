@@ -15,10 +15,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public FairnessAndMaxSeatCalculatorsManager28317(Func<ISchedulingResultStateHolder> resultStateHolder,
 			IShiftCategoryFairnessManager shiftCategoryFairnessManager,
 			IShiftCategoryFairnessShiftValueCalculator categoryFairnessShiftValueCalculator,
-			IFairnessValueCalculator fairnessValueCalculator,
 			ISeatLimitationWorkShiftCalculator2 seatLimitationWorkShiftCalculator)
 			: base(
-				resultStateHolder, shiftCategoryFairnessManager, categoryFairnessShiftValueCalculator, fairnessValueCalculator,
+				resultStateHolder, shiftCategoryFairnessManager, categoryFairnessShiftValueCalculator,
 				seatLimitationWorkShiftCalculator)
 		{
 			_shiftCategoryFairnessManager = shiftCategoryFairnessManager;

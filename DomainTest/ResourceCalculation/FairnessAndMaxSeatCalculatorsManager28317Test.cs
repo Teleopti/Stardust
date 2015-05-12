@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		private ISchedulingResultStateHolder _resultStateHolder;
 		private IShiftCategoryFairnessManager _shiftCategoryFairnessManager;
 		private IShiftCategoryFairnessShiftValueCalculator _categoryFairnessShiftValueCalculator;
-		private IFairnessValueCalculator _fairnessValueCalculator;
 		private ISeatLimitationWorkShiftCalculator2 _seatLimitationWorkShiftCalculator;
 		private IPerson _person;
 		private IShiftProjectionCache _shiftProjectionCache;
@@ -42,12 +41,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_resultStateHolder = _mock.StrictMock<ISchedulingResultStateHolder>();
 			_shiftCategoryFairnessManager = _mock.StrictMock<IShiftCategoryFairnessManager>();
 			_categoryFairnessShiftValueCalculator = _mock.StrictMock<IShiftCategoryFairnessShiftValueCalculator>();
-			_fairnessValueCalculator = _mock.StrictMock<IFairnessValueCalculator>();
 			_seatLimitationWorkShiftCalculator = _mock.StrictMock<ISeatLimitationWorkShiftCalculator2>();
 			_target = new FairnessAndMaxSeatCalculatorsManager28317(
 				()=>_resultStateHolder, _shiftCategoryFairnessManager, 
 				_categoryFairnessShiftValueCalculator, 
-				_fairnessValueCalculator, _seatLimitationWorkShiftCalculator);
+				_seatLimitationWorkShiftCalculator);
 			_person = _mock.StrictMock<IPerson>();
 			_shiftProjectionCache = _mock.StrictMock<IShiftProjectionCache>();
 			_allValues = new List<IWorkShiftCalculationResultHolder>

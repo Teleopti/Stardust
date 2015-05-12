@@ -871,7 +871,6 @@
     <Compile Include="ResourceCalculation\DayOffsInPeriodCalculator.cs" />
     <Compile Include="ResourceCalculation\FairnessAndMaxSeatCalculatorsManager.cs" />
     <Compile Include="ResourceCalculation\FairnessAndMaxSeatCalculatorsManager28317.cs" />
-    <Compile Include="ResourceCalculation\FairnessValueCalculator.cs" />
     <Compile Include="ResourceCalculation\FixedStaffSchedulingService.cs" />
     <Compile Include="ResourceCalculation\FurnessDataConverter.cs" />
     <Compile Include="ResourceCalculation\IntraIntervalAnalyze\FullIntervalFinder.cs" />

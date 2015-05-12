@@ -995,7 +995,6 @@
     <Compile Include="Scheduling\Assignment\VirtualSchedulePeriodTest.cs" />
     <Compile Include="Scheduling\LoadSchedulingStateHolderForResourceCalculationTest.cs" />
     <Compile Include="Scheduling\DayOffTest.cs" />
-    <Compile Include="Scheduling\FairnessValueCalculatorTest.cs" />
     <Compile Include="Scheduling\LegalStateRuleTest.cs" />
     <Compile Include="Scheduling\Meetings\RecurrentMonthlyByWeekMeetingTest.cs" />
     <Compile Include="Scheduling\MeetingPayloadTest.cs" />
