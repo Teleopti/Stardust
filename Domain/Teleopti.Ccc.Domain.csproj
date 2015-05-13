@@ -869,7 +869,6 @@
     <Compile Include="Repositories\Paging.cs" />
     <Compile Include="Repositories\TimeFilterInfo.cs" />
     <Compile Include="ResourceCalculation\DayOffsInPeriodCalculator.cs" />
-    <Compile Include="ResourceCalculation\FairnessAndMaxSeatCalculatorsManager.cs" />
     <Compile Include="ResourceCalculation\FairnessAndMaxSeatCalculatorsManager28317.cs" />
     <Compile Include="ResourceCalculation\FixedStaffSchedulingService.cs" />
     <Compile Include="ResourceCalculation\FurnessDataConverter.cs" />

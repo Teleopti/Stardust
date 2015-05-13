@@ -6,26 +6,28 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-	public class FairnessAndMaxSeatCalculatorsManager28317 : FairnessAndMaxSeatCalculatorsManager
+	public interface IFairnessAndMaxSeatCalculatorsManager
+	{
+		IList<IWorkShiftCalculationResultHolder> RecalculateFoundValues(IEnumerable<IWorkShiftCalculationResultHolder> allValues,
+											   double maxValue, IPerson person, DateOnly dateOnly,
+											   IDictionary<ISkill, ISkillStaffPeriodDictionary> maxSeatSkillPeriods, TimeSpan averageWorkTimePerDay, ISchedulingOptions schedulingOptions);
+	}
+
+
+	public class FairnessAndMaxSeatCalculatorsManager28317 : IFairnessAndMaxSeatCalculatorsManager
 	{
 		private readonly IShiftCategoryFairnessManager _shiftCategoryFairnessManager;
 		private readonly IShiftCategoryFairnessShiftValueCalculator _categoryFairnessShiftValueCalculator;
 		private readonly ISeatLimitationWorkShiftCalculator2 _seatLimitationWorkShiftCalculator;
 
-		public FairnessAndMaxSeatCalculatorsManager28317(Func<ISchedulingResultStateHolder> resultStateHolder,
-			IShiftCategoryFairnessManager shiftCategoryFairnessManager,
-			IShiftCategoryFairnessShiftValueCalculator categoryFairnessShiftValueCalculator,
-			ISeatLimitationWorkShiftCalculator2 seatLimitationWorkShiftCalculator)
-			: base(
-				resultStateHolder, shiftCategoryFairnessManager, categoryFairnessShiftValueCalculator,
-				seatLimitationWorkShiftCalculator)
+		public FairnessAndMaxSeatCalculatorsManager28317(IShiftCategoryFairnessManager shiftCategoryFairnessManager, IShiftCategoryFairnessShiftValueCalculator categoryFairnessShiftValueCalculator, ISeatLimitationWorkShiftCalculator2 seatLimitationWorkShiftCalculator)
 		{
 			_shiftCategoryFairnessManager = shiftCategoryFairnessManager;
 			_categoryFairnessShiftValueCalculator = categoryFairnessShiftValueCalculator;
 			_seatLimitationWorkShiftCalculator = seatLimitationWorkShiftCalculator;
 		}
 
-		public override IList<IWorkShiftCalculationResultHolder> RecalculateFoundValues(IEnumerable<IWorkShiftCalculationResultHolder> allValues, double maxValue, IPerson person,
+		public IList<IWorkShiftCalculationResultHolder> RecalculateFoundValues(IEnumerable<IWorkShiftCalculationResultHolder> allValues, double maxValue, IPerson person,
 			DateOnly dateOnly, IDictionary<ISkill, ISkillStaffPeriodDictionary> maxSeatSkillPeriods, TimeSpan averageWorkTimePerDay,
 			ISchedulingOptions schedulingOptions)
 		{

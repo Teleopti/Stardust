@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 		private MockRepository _mock;
 		private IFairnessAndMaxSeatCalculatorsManager _target;
-		private ISchedulingResultStateHolder _resultStateHolder;
 		private IShiftCategoryFairnessManager _shiftCategoryFairnessManager;
 		private IShiftCategoryFairnessShiftValueCalculator _categoryFairnessShiftValueCalculator;
 		private ISeatLimitationWorkShiftCalculator2 _seatLimitationWorkShiftCalculator;
@@ -38,12 +37,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public void Setup()
 		{
 			_mock = new MockRepository();
-			_resultStateHolder = _mock.StrictMock<ISchedulingResultStateHolder>();
 			_shiftCategoryFairnessManager = _mock.StrictMock<IShiftCategoryFairnessManager>();
 			_categoryFairnessShiftValueCalculator = _mock.StrictMock<IShiftCategoryFairnessShiftValueCalculator>();
 			_seatLimitationWorkShiftCalculator = _mock.StrictMock<ISeatLimitationWorkShiftCalculator2>();
-			_target = new FairnessAndMaxSeatCalculatorsManager28317(
-				()=>_resultStateHolder, _shiftCategoryFairnessManager, 
+			_target = new FairnessAndMaxSeatCalculatorsManager28317(_shiftCategoryFairnessManager, 
 				_categoryFairnessShiftValueCalculator, 
 				_seatLimitationWorkShiftCalculator);
 			_person = _mock.StrictMock<IPerson>();
