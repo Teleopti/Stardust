@@ -53,7 +53,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
 
 	public class FakeTenantLogonDataManager : ITenantLogonDataManager
 	{
-		public List<LogonInfoModel> GetLogonInfoModelsForGuids(IEnumerable<Guid> personGuids)
+		public IEnumerable<LogonInfoModel> GetLogonInfoModelsForGuids(IEnumerable<Guid> personGuids)
 		{
 			return new List<LogonInfoModel>();
 		}
