@@ -1160,7 +1160,6 @@
     <Compile Include="Scheduling\Assignment\NewSchedulePeriodTargetCalculatorFactory.cs" />
     <Compile Include="Scheduling\Assignment\RangeProjectionService.cs" />
     <Compile Include="Scheduling\Assignment\ScheduleDayStringVisualizer.cs" />
-    <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessManager.cs" />
     <Compile Include="Scheduling\Assignment\VirtualSchedulePeriodSplitChecker.cs" />
     <Compile Include="Scheduling\ResourceCalculateSkillCommand.cs" />
     <Compile Include="Scheduling\DayOffScheduling\AdvanceDaysOffSchedulingService.cs" />
@@ -1188,9 +1187,7 @@
     <Compile Include="Scheduling\PublicNoteByDateSorter.cs" />
     <Compile Include="Scheduling\PublicNote.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessHolder.cs" />
-    <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessCalculator.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessCreator.cs" />
-    <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessFactors.cs" />
     <Compile Include="Scheduling\MasterActivity.cs" />
     <Compile Include="Scheduling\Meetings\BestSlotForMeetingFinder.cs" />
     <Compile Include="Scheduling\Meetings\MeetingSlotFinderService.cs" />

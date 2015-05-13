@@ -119,12 +119,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<NonBlendSkillImpactOnPeriodForProjection>()
 				.As<INonBlendSkillImpactOnPeriodForProjection>()
 				.InstancePerLifetimeScope();
-			builder.RegisterType<ShiftCategoryFairnessManager>().As<IShiftCategoryFairnessManager>().InstancePerLifetimeScope();
 			builder.RegisterType<GroupShiftCategoryFairnessCreator>()
 				.As<IGroupShiftCategoryFairnessCreator>()
-				.InstancePerLifetimeScope();
-			builder.RegisterType<ShiftCategoryFairnessCalculator>()
-				.As<IShiftCategoryFairnessCalculator>()
 				.InstancePerLifetimeScope();
 			builder.RegisterType<GroupPagePerDateHolder>().As<IGroupPagePerDateHolder>().InstancePerLifetimeScope();
 			builder.RegisterType<DesiredShiftLengthCalculator>().As<IDesiredShiftLengthCalculator>().InstancePerLifetimeScope();
