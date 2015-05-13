@@ -95,7 +95,7 @@
 								<div class="tree permissions-tree">
 									<div ui-tree data-drag-enabled="false">
 										<ol ui-tree-nodes="" ng-model="functionsDisplayed" id="tree-root" class="tree-line" toggle-focus>
-											<li ng-repeat="node in functionsDisplayed | filter:searchPermissions  | filter:searchPermissions | selectedFunctions:selectedFunctionsToggle | unselectedFunctions:unselectedFunctionsToggle" ui-tree-node ng-include="'nodes_renderer.html'"></li>
+											<li ng-repeat="node in functionsDisplayed | filter:searchPermissions | selectedFunctions:selectedFunctionsToggle | unselectedFunctions:unselectedFunctionsToggle" ui-tree-node ng-include="'nodes_renderer.html'"></li>
 										</ol>
 									</div>
 								</div>
@@ -170,16 +170,17 @@
 <!-- Nested node template for functions -->
 <script type="text/ng-template" id="nodes_renderer.html">
 	<div class="tree-toggle-group" >
-		<div class="toggle-handle" ng-class="{open: node.show}" ng-click="node.show = !node.show"><i ng-show="node.ChildFunctions.length > 0" class="mdi mdi-chevron-right"></i></div>
-		<div ui-tree-handle class="ui-tree-handle" ng-class="{selected: node.selected}" ng-click="toggleFunctionForRole(node, $parent.node)">
-			{{node.LocalizedFunctionDescription}}
+		<div class="toggle-handle" ng-class="{open: node.show}" ng-click="node.show = !node.show"><i ng-show="childNodes().length > 0" class="mdi mdi-chevron-right"></i></div>
+		<div ui-tree-handle class="ui-tree-handle" ng-class="{selected: node.selected}" ng-click="toggleFunctionForRole(this)">
+			{{node.LocalizedFunctionDescription}} {{nbSelected(childNodes()) }} / {{childNodes().length}} selected
 			<span><i class="mdi mdi-check"></i></span>
 		</div>
 	</div>
 
 	<ol ui-tree-nodes="" ng-model="node.ChildFunctions" ng-show="node.show" >
+		{{$node}}
 		<li ng-repeat="node in node.ChildFunctions | filter:searchPermissions | selectedFunctions:selectedFunctionsToggle | unselectedFunctions:unselectedFunctionsToggle" 
-				ui-tree-node ng-include="'nodes_renderer.html'">
+				ui-tree-node ng-include="'nodes_renderer.html'" ng-hide="applyFilter(this)">
 		</li>
 	</ol>
 </script>

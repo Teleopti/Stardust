@@ -84,14 +84,19 @@ describe('PermissionsCtrl', function () {
 	}));
 
 	it('selects a function for a role', inject(function($controller) {
-		var functionNode = {selected: false};
+		var functionNode = {
+			$modelValue: { selected: false },
+			$parentNodeScope: {
+				$modelValue: { hasSelectedChildren: 0 }
+			}
+	};
 		var scope = $rootScope.$new();
 		$controller('PermissionsCtrl', { $scope: scope, Permissions: mockPermissionsService });
 
 		scope.toggleFunctionForRole(functionNode);
 		scope.$digest();
 
-		expect(functionNode.selected).toBe(true);
+		expect(functionNode.$modelValue.selected).toBe(true);
 	}));
 
 	it('updates functions list when selected functions for a role is updated from the service ', inject(function ($controller) {

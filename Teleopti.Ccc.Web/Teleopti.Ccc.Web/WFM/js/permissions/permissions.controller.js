@@ -54,16 +54,17 @@ permissions.controller('PermissionsCtrl', [
 			});
 		};
 
-		$scope.toggleFunctionForRole = function (functionNode, parentNode) {
-			if (functionNode.selected) {
+		$scope.toggleFunctionForRole = function (node) {
+			var functionNode = node.$modelValue;
+			if (functionNode.selected) { //functionNode
 				Permissions.deleteFunction.query({ Id: $scope.selectedRole, FunctionId: [functionNode.FunctionId] }).$promise.then(function (result) {
 					functionNode.selected = false;
-					if (parentNode) parentNode.nmbSelectedChildren--; 
+					node.$parentNodeScope.$modelValue.nmbSelectedChildren--;
 				});
 			} else {
 				Permissions.postFunction.query({ Id: $scope.selectedRole, Functions: [functionNode.FunctionId] }).$promise.then(function (result) {
 					functionNode.selected = true;
-					if (parentNode) parentNode.nmbSelectedChildren++;
+					node.$parentNodeScope.$modelValue.nmbSelectedChildren++;
 				});
 			}
 		};
@@ -89,11 +90,12 @@ permissions.controller('PermissionsCtrl', [
 		$scope.changeRangeOption = function (node) {
 			if (node.selected && node.RangeOption !== 0) {
 				$scope.organization.DynamicOptions[0].selected = true;
+
 				node.selected = false;
 				$scope.changeRangeOption($scope.organization.DynamicOptions[0]);
 			} else {
 				var data = {};
-				data.Id = $scope.selectedRole;
+				data.Id = $scope.selectedRole; 
 				data['RangeOption'] = node.RangeOption;
 				Permissions.assignOrganizationSelection.postData(data).$promise.then(function (result) {
 					$scope.organization.DynamicOptions.forEach(function (option) {
@@ -139,15 +141,17 @@ permissions.controller('PermissionsCtrl', [
 			});
 		};
 
-		var flatFunctions = function (functionTab) {
-			var parentId = functionTab.FunctionId;
-			functionTab.forEach(function (item) {
-				item.parentId = parentId;
-				$scope.functionsFlat.push(item);
-				if (item.ChildFunctions.length != 0) {
-					flatFunctions(item.ChildFunctions);
-				}
+		$scope.nbSelected = function($nodes) {
+			var nb = 0;
+			$nodes.forEach(function($node) {
+				if ($node.$modelValue.selected)
+					nb++;
 			});
+			return nb;
+		};
+
+		$scope.applyFilters = function($node) {
+			var isSelected = $filter('unselectedFunctions2')($node.$modelValue, unselectedFunctionToggle);
 		};
 
 		var parseFunctions = function (functionTab, selectedFunctions, parentNode) {
