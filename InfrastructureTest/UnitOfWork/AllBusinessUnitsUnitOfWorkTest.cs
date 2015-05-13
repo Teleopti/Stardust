@@ -104,48 +104,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			//UnitOfWork.Current().Should().Be.Null();
 			Assert.Throws<HibernateException>(() => RepositoryNotValidatingUserLogon.LoadAll());
 		}
-
-		[Test]
-		public void ShouldPersistChanges()
-		{
-			ReadOnlyCollection<IRtaState> stateCollection = null;
-			TheService.Does(uow =>
-			{
-				RepositoryNotValidatingUserLogon.Add(new RtaStateGroup(" ", true, true));
-			});
-			
-			TheService.DoesOnAllBusinessUnits(uow =>
-			{
-				RepositoryNotValidatingUserLogon.LoadAll().Single().AddState("phone", "phone", Guid.NewGuid());
-			});
-
-			TheService.DoesOnAllBusinessUnits(uow =>
-			{
-				stateCollection = RepositoryNotValidatingUserLogon.LoadAll().Single().StateCollection;
-			});
-			stateCollection.Select(x => x.Name).Single().Should().Be("phone");
-		}
-
-		[Test]
-		public void ShouldPersistChangesWhenNotLoggedIn()
-		{
-			TheService.Does(uow =>
-			{
-				RepositoryNotValidatingUserLogon.Add(new RtaStateGroup(" ", true, true));
-			});
-			Context.Logout();
-
-			TheService.DoesOnAllBusinessUnits(uow =>
-			{
-				RepositoryNotValidatingUserLogon.LoadAll().Single().AddState("phone", "phone", Guid.NewGuid());
-			});
-
-			TheService.DoesOnAllBusinessUnits(uow =>
-			{
-				RepositoryNotValidatingUserLogon.LoadAll().Should().Have.Count.EqualTo(1);
-			});
-		}
-
+		
 		[Test]
 		public void ShouldNotPersistOnException()
 		{
