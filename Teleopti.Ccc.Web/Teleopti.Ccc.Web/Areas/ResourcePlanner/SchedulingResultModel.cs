@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
@@ -9,11 +10,20 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		public IEnumerable<BusinessRulesValidationResult> BusinessRulesValidationResults { get; set; }
 	}
 
-	public struct BusinessRulesValidationResult
+	public struct BusinessRulesValidationResult : IEquatable<BusinessRulesValidationResult>
 	{
 		public string Name { get; set; }
 		public string Message { get; set; }
 		public BusinessRuleCategory BusinessRuleCategory { get; set; }
+		public bool Equals(BusinessRulesValidationResult other)
+		{
+			return Name.Equals(other.Name) && BusinessRuleCategory.Equals(other.BusinessRuleCategory);
+		}
+
+		public override int GetHashCode()
+		{
+			return Name.GetHashCode() ^ BusinessRuleCategory.GetHashCode();
+		}
 	}
 
 	public enum BusinessRuleCategory

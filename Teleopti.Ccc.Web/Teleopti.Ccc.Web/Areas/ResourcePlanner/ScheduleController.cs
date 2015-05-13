@@ -110,11 +110,16 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				int targetDaysOff;
 				IList<IScheduleDay> dayOffsNow;
 				var virtualSchedulePeriod = person.VirtualSchedulePeriod(period.StartDate);
-				if(virtualSchedulePeriod== null) continue;
+				if (virtualSchedulePeriod == null || !virtualSchedulePeriod.IsValid) continue;
 			   var hasCorrectNumberOfDayOff =_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(virtualSchedulePeriod, out targetDaysOff, out dayOffsNow);
 				if (!hasCorrectNumberOfDayOff && isNotAInvalidScheduleRange(schedulePeriodNotInRange, person))
 				{
-						result.Add(new BusinessRulesValidationResult(){BusinessRuleCategory = BusinessRuleCategory.DayOff,Message = "Target days off are not achieved",Name = person.Name.FirstName});
+					result.Add(new BusinessRulesValidationResult()
+					{
+						BusinessRuleCategory = BusinessRuleCategory.DayOff,
+						Message = string.Format("Target of {0} Day Offs is not fulfilled", targetDaysOff),
+						Name = person.Name.FirstName
+					});
 				} 
 			}
 			result.AddRange(schedulePeriodNotInRange);
@@ -126,7 +131,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			return !schedulePeriodNotInRange.Contains(new BusinessRulesValidationResult()
 			{
 				BusinessRuleCategory = BusinessRuleCategory.SchedulePeriod,
-				Name = person.Name.FirstName
+				Name = person.Name.ToString(NameOrderOption.FirstNameLastName)
 			});
 		}
 
