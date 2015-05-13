@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 					if (!_estimatedServiceLevel.HasValue)
 						CalculateEstimatedServiceLevel();
 
-                    return _estimatedServiceLevel.Value;
+                    return _estimatedServiceLevel.GetValueOrDefault(new Percent(0));
                 }
             } 
         }
@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 					if (!_estimatedServiceLevelShrinkage.HasValue)
 						CalculateEstimatedServiceLevel();
 
-					return _estimatedServiceLevelShrinkage.Value;
+					return _estimatedServiceLevelShrinkage.GetValueOrDefault(new Percent(0));
                 }
             }
         }
