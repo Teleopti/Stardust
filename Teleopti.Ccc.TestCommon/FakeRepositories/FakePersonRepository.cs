@@ -206,7 +206,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IPerson LoadPersonAndPermissions(Guid id)
 		{
-			throw new NotImplementedException();
+			return _persons.SingleOrDefault(x => x.Id.Equals(id));
 		}
 	}
 }

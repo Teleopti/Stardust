@@ -7,22 +7,22 @@
 //using Teleopti.Ccc.Domain.Repositories;
 //using Teleopti.Ccc.Domain.Security.Authentication;
 //using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
-//using Teleopti.Ccc.Infrastructure.MultiTenancy;
 //using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 //using Teleopti.Ccc.Infrastructure.UnitOfWork;
 //using Teleopti.Interfaces.Domain;
 //using Teleopti.Interfaces.Infrastructure;
 
-//namespace Teleopti.Ccc.DomainTest.Security.MultiTenancyAuthentication
+//namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 //{
 //	[TestFixture]
+//	[TenantClientTest]
 //	public class MultiTenancyIdentityLogonTest
 //	{
 //		private MultiTenancyWindowsLogon _target;
 //		private IRepositoryFactory _repositoryFactory;
 //		private IAuthenticationQuerier _authenticationQuerier;
 //		private IDataSource _dataSource;
-//		private ILogonModel _model;
+//		private LogonModel _model;
 //		private IDataSourcesFactory _dataSourcesFactory;
 //		private IWindowsUserProvider _windowsUserProvider;
 //		private const string userAgent = "something";
@@ -35,8 +35,8 @@
 //			_windowsUserProvider = MockRepository.GenerateMock<IWindowsUserProvider>();
 //			_dataSource = MockRepository.GenerateMock<IDataSource>();
 //			_dataSourcesFactory = MockRepository.GenerateMock<IDataSourcesFactory>();
-		
-			
+
+
 //			_dataSource.Expect(x => x.DataSourceName).Return("Teleopti WFM");
 //			_model = new LogonModel { UserName = "kalle", Password = "kula" };
 //			_target = new MultiTenancyWindowsLogon(_repositoryFactory, _authenticationQuerier, _windowsUserProvider, _dataSourcesFactory);
@@ -68,7 +68,7 @@
 
 //			result.Successful.Should().Be.True();
 //			_model.SelectedDataSourceContainer.User.Should().Be.EqualTo(person);
-			
+
 //		}
 
 //		[Test]
@@ -84,5 +84,5 @@
 //			_model.SelectedDataSourceContainer.Should().Be.Null();
 //		}
 //	}
-	
+
 //}
