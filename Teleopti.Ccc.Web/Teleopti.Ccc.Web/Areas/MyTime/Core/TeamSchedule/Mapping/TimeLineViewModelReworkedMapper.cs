@@ -8,13 +8,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 {
 	public class TimeLineViewModelReworkedMapper : ITimeLineViewModelReworkedMapper
 	{
-		private readonly ILoggedOnUser _loggedOnUser;
+		private readonly IUserTimeZone _userTimeZone;
 		private readonly ITimeLineViewModelReworkedFactory _timeLineViewModelReworkedFactory;
 
-		public TimeLineViewModelReworkedMapper(ILoggedOnUser loggedOnUser, ITimeLineViewModelReworkedFactory timeLineViewModelReworkedFactory)
+		public TimeLineViewModelReworkedMapper(ITimeLineViewModelReworkedFactory timeLineViewModelReworkedFactory, IUserTimeZone userTimeZone)
 		{
-			_loggedOnUser = loggedOnUser;
 			_timeLineViewModelReworkedFactory = timeLineViewModelReworkedFactory;
+			_userTimeZone = userTimeZone;
 		}
 
 		public IEnumerable<TimeLineViewModelReworked> Map(IEnumerable<AgentScheduleViewModelReworked>
@@ -26,15 +26,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 		private DateTimePeriod getTimeLinePeriod(IEnumerable<AgentScheduleViewModelReworked>
 			agentSchedules, DateOnly date)
 		{
-			DateTimePeriod? possibleTradeScheduleMinMax = getScheduleMinMax(agentSchedules);
+			DateTimePeriod? scheduleMinMaxPeriod = getScheduleMinMax(agentSchedules);
 
-			var timeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+			var timeZone = _userTimeZone.TimeZone();
 
 			var returnPeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(date.Date.AddHours(8),
 				date.Date.AddHours(17), timeZone);
 
-			if (possibleTradeScheduleMinMax.HasValue)
-				returnPeriod = possibleTradeScheduleMinMax.Value;
+			if (scheduleMinMaxPeriod.HasValue)
+				returnPeriod = scheduleMinMaxPeriod.Value;
 
 			returnPeriod = returnPeriod.ChangeStartTime(new TimeSpan(0, -15, 0));
 			returnPeriod = returnPeriod.ChangeEndTime(new TimeSpan(0, 15, 0));
@@ -49,8 +49,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 
 			if (!schedulesWithoutDayoffAndEmptyDays.Any())
 				return null;
-			
-			var timeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+
+			var timeZone = _userTimeZone.TimeZone();
 
 			var startTime = schedulesWithoutDayoffAndEmptyDays.Min(s => s.ScheduleLayers.First().Start);
 			var endTime = schedulesWithoutDayoffAndEmptyDays.Max(l => l.ScheduleLayers.Last().End);

@@ -3,12 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 {
@@ -18,7 +15,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 		private readonly IAgentScheduleViewModelReworkedMapper _agentScheduleViewModelReworkedMapper;
 		private readonly ITimeLineViewModelReworkedMapper _timeLineViewModelReworkedMapper;
 		private readonly IPersonScheduleDayReadModelFinder _scheduleDayReadModelFinder;
-		private readonly IPermissionProvider _permissionProvider;
 		private readonly IPersonRepository _personRep;
 
 		public TeamScheduleViewModelReworkedMapper(ITeamSchedulePersonsProvider teamSchedulePersonsProvider, IAgentScheduleViewModelReworkedMapper agentScheduleViewModelReworkedMapper, ITimeLineViewModelReworkedMapper timeLineViewModelReworkedMapper, IPersonScheduleDayReadModelFinder scheduleDayReadModelFinder, IPermissionProvider permissionProvider, IPersonRepository personRep)
@@ -27,7 +23,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 			_agentScheduleViewModelReworkedMapper = agentScheduleViewModelReworkedMapper;
 			_timeLineViewModelReworkedMapper = timeLineViewModelReworkedMapper;
 			_scheduleDayReadModelFinder = scheduleDayReadModelFinder;
-			_permissionProvider = permissionProvider;
 			_personRep = personRep;
 		}
 

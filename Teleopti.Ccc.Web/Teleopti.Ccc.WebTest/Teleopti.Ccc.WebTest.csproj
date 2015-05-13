@@ -241,6 +241,7 @@
     <Compile Include="Areas\MultiTenancy\ChangePasswordTest.cs" />
     <Compile Include="Areas\MultiTenancy\PersonInfoLogonInfoFromGuidsTest.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\AgentScheduleViewModelReworkedMapperTest.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\TimeLineViewModelReworkedMapperTest.cs" />
     <Compile Include="Areas\Outbound\Controllers\OutboundControllerTest.cs" />
     <Compile Include="Areas\Outbound\Core\Campaign\Mapping\OutboundCampaignMapperTests.cs" />
     <Compile Include="Areas\Outbound\Core\OutboundAreaModuleTest.cs" />
@@ -340,6 +341,7 @@
     <Compile Include="Areas\MyTime\Core\Common\ViewModelFactory\TeamViewModelFactoryTest.cs" />
     <Compile Include="Core\Startup\FindAreaRegistrationsTest.cs" />
     <Compile Include="Core\Startup\RegisterAreasTest.cs" />
+    <Compile Include="Core\TeamSchedule\Mapping\TeamScheduleViewModelReworkedMapperTest.cs" />
     <Compile Include="Core\WeekSchedule\DataProvider\AbsenceRequestProbabilityProviderTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftTradeAddPersonScheduleViewModelMapperTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftTradeAddScheduleLayerViewModelMapperTest.cs" />
