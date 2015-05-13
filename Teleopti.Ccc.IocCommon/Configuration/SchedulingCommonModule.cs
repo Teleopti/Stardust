@@ -107,16 +107,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IRuleSetDeletedShiftCategoryChecker>()
 				.InstancePerLifetimeScope();
 			builder.RegisterType<WorkShiftCalculatorsManager>().As<IWorkShiftCalculatorsManager>().InstancePerLifetimeScope();
-
-			builder.RegisterType<FairnessAndMaxSeatCalculatorsManager28317>()
+			builder.RegisterType<FairnessAndMaxSeatCalculatorsManager28317>().As<IFairnessAndMaxSeatCalculatorsManager>()
 				.InstancePerLifetimeScope();
-			builder.RegisterType<FairnessAndMaxSeatCalculatorsManager>()
-				.InstancePerLifetimeScope();
-			builder.Register(c => c.Resolve<IToggleManager>().IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317)
-				? (IFairnessAndMaxSeatCalculatorsManager) c.Resolve<FairnessAndMaxSeatCalculatorsManager28317>()
-				: c.Resolve<FairnessAndMaxSeatCalculatorsManager>())
-				.As<IFairnessAndMaxSeatCalculatorsManager>();
-
 			builder.RegisterType<SchedulerStateScheduleDayChangedCallback>()
 				.As<IScheduleDayChangeCallback>()
 				.InstancePerLifetimeScope();

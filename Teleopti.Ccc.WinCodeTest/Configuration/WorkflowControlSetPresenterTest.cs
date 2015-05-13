@@ -998,8 +998,6 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
                 _target.SetSelectedWorkflowControlSetModel(_workflowControlSetModel);
                 _target.OnRadioButtonAdvFairnessEqualCheckChanged(true);
                 Assert.AreEqual(FairnessType.EqualNumberOfShiftCategory, _workflowControlSetModel.GetFairnessType(true));
-                _target.OnRadioButtonAdvFairnessPointsCheckChanged(true);
-				Assert.AreEqual(FairnessType.FairnessPoints, _workflowControlSetModel.GetFairnessType(true));
 				_target.OnRadioButtonAdvSeniorityCheckedChanged(true);
 				Assert.AreEqual(FairnessType.Seniority, _workflowControlSetModel.GetFairnessType(true));
             }

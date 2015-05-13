@@ -8,8 +8,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 {
 	public interface IDistributionReportService
 	{
-		DistributionReportData CreateReport(IPerson person, IGroupPage groupPageForDate, IList<IPerson> allFilteredPersons,
-			IScheduleDictionary scheduleDictionary, bool schedulerHidePointsFairnessSystem28317, bool schedulerSeniority11111);
+		DistributionReportData CreateReport(IPerson person, IGroupPage groupPageForDate, IList<IPerson> allFilteredPersons, IScheduleDictionary scheduleDictionary, bool schedulerSeniority11111);
 	}
 
 	public class DistributionReportService : IDistributionReportService
@@ -24,9 +23,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 			_groupCreator = groupCreator;
 		}
 
-		public DistributionReportData CreateReport(IPerson person, IGroupPage groupPageForDate,
-			IList<IPerson> allFilteredPersons, IScheduleDictionary scheduleDictionary,
-			bool schedulerHidePointsFairnessSystem28317, bool schedulerSeniority11111)
+		public DistributionReportData CreateReport(IPerson person, IGroupPage groupPageForDate, IList<IPerson> allFilteredPersons, IScheduleDictionary scheduleDictionary, bool schedulerSeniority11111)
 		{
 			var report = new DistributionReportData();
 			var totalDistribution =

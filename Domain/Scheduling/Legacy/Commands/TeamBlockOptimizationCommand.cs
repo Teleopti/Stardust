@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				_equalNumberOfCategoryFairness.ReportProgress += resourceOptimizerPersonOptimized;
 				_equalNumberOfCategoryFairness.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions,
 					_schedulerStateHolder().Schedules, rollbackServiceWithoutResourceCalculation,
-					optimizationPreferences, _toggleManager.IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317), _toggleManager.IsEnabled(Toggles.Scheduler_Seniority_24331));
+					optimizationPreferences, _toggleManager.IsEnabled(Toggles.Scheduler_Seniority_24331));
 				_equalNumberOfCategoryFairness.ReportProgress -= resourceOptimizerPersonOptimized;
 
 				if (_toggleManager.IsEnabled(Toggles.Scheduler_Seniority_24331))

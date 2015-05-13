@@ -369,9 +369,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		}
 
 	    [Test]
-		public void ShouldReturnCorrectFairnessTypeWhenScheduler_HidePointsFairnessSystem_28317IsTrue_scheduler_Seniority_24331IsTrue()
+		public void ShouldReturnCorrectFairnessTypeWhenScheduler_scheduler_Seniority_24331IsTrue()
 	    {
-		    var scheduler_HidePointsFairnessSystem_28317 = true;
 		    var seniority_24331 = true;
 			_target.SetFairnessType(FairnessType.FairnessPoints);
 			Assert.AreEqual(FairnessType.EqualNumberOfShiftCategory, _target.GetFairnessType(seniority_24331));

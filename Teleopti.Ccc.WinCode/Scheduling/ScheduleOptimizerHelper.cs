@@ -525,7 +525,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			equalNumberOfCategoryFairnessService.ReportProgress += resourceOptimizerPersonOptimized;
 			equalNumberOfCategoryFairnessService.Execute(matrixListForFairness, selectedPeriod, selectedPersons,
 				schedulingOptions, _schedulerStateHolder().Schedules, rollbackService,
-				optimizationPreferences, true, true);
+				optimizationPreferences, true);
 			equalNumberOfCategoryFairnessService.ReportProgress -= resourceOptimizerPersonOptimized;
 
 			if (!_toggleManager.IsEnabled(Toggles.Scheduler_Seniority_24331)) return;
