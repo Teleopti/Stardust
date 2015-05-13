@@ -117,9 +117,26 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 		}
 
-	    public DateOnly QueueStatisticsUpUntilDate(IWorkload workload)
+		public DateOnly? QueueStatisticsUpUntilDate(ICollection<IQueueSource> sources)
 	    {
-		    throw new NotImplementedException();
+			using (IStatelessUnitOfWork uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			{
+				var mostRecentDate = DateTime.MinValue;
+				foreach (var source in sources.Batch(500))
+				{
+					var queueList = buildStringQueueList(source);
+					var date = session(uow).CreateSQLQuery("exec mart.raptor_queue_statistics_up_until_date @QueueList=:QueueList")
+						.SetString("QueueList", queueList)
+						.UniqueResult<DateTime?>();
+
+					if (date.HasValue && date.Value > mostRecentDate)
+						mostRecentDate = date.Value;
+
+				}
+				if (mostRecentDate == DateTime.MinValue)
+					return null;
+				return new DateOnly(mostRecentDate);
+			}
 	    }
 
 	    public ICollection<IActiveAgentCount> LoadActiveAgentCount(ISkill skill, DateTimePeriod period)

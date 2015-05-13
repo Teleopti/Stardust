@@ -23,14 +23,18 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 
 		public DateOnlyPeriod PeriodForEvaluate(IWorkload workload)
 		{
-			var endDate=_statisticRepository.QueueStatisticsUpUntilDate(workload);
-			return new DateOnlyPeriod(new DateOnly(endDate.Date.AddYears(-2)), endDate);
+			var endDate = _statisticRepository.QueueStatisticsUpUntilDate(workload.QueueSourceCollection);
+			return endDate.HasValue
+				? new DateOnlyPeriod(new DateOnly(endDate.Value.Date.AddYears(-2)), endDate.Value)
+				: new DateOnlyPeriod(_now.LocalDateOnly(), _now.LocalDateOnly());
 		}
 
 		public DateOnlyPeriod PeriodForForecast(IWorkload workload)
 		{
-			var endDate = _statisticRepository.QueueStatisticsUpUntilDate(workload);
-			return new DateOnlyPeriod(new DateOnly(endDate.Date.AddYears(-1)), endDate);
+			var endDate = _statisticRepository.QueueStatisticsUpUntilDate(workload.QueueSourceCollection);
+			return endDate.HasValue
+				? new DateOnlyPeriod(new DateOnly(endDate.Value.Date.AddYears(-1)), endDate.Value)
+				: new DateOnlyPeriod(_now.LocalDateOnly(), _now.LocalDateOnly());
 		}
 	}
 }

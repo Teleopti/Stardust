@@ -133,6 +133,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 
 		IEnumerable<ForecastActualDifferNotification> ForecastActualDifferNotifications();
 		ICollection<IStatisticTask> LoadDailyStatisticForSpecificDates(ICollection<IQueueSource> sources, DateTimePeriod period, string timeZoneId, TimeSpan midnightBreakOffset);
-		DateOnly QueueStatisticsUpUntilDate(IWorkload workload);
+		DateOnly? QueueStatisticsUpUntilDate(ICollection<IQueueSource> sources);
 	}
 }
