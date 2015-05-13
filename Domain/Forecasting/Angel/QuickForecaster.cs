@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			_quickForecastWorkloadEvaluator = quickForecastWorkloadEvaluator;
 		}
 
-		public void ForecastWorkloadsWithinSkill(ISkill skill, ForecastWorkloadInput[] workloads, DateOnlyPeriod futurePeriod, DateOnlyPeriod historicalPeriodForForecast, DateOnlyPeriod historicalPeriodForMeasurement)
+		public void ForecastWorkloadsWithinSkill(ISkill skill, ForecastWorkloadInput[] workloads, DateOnlyPeriod futurePeriod, DateOnlyPeriod historicalPeriodForForecast)
 		{
 			var skillDays = _fetchAndFillSkillDays.FindRange(futurePeriod, skill);
 
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 					var forecastMethodId = workloadInput.ForecastMethodId;
 					if (forecastMethodId == ForecastMethodType.None)
 					{
-						var workloadAccuracy = _quickForecastWorkloadEvaluator.Measure(workload, historicalPeriodForMeasurement);
+						var workloadAccuracy = _quickForecastWorkloadEvaluator.Measure(workload);
 						forecastMethodId = (workloadAccuracy == null || workloadAccuracy.Accuracies.Length == 0)
 							? ForecastMethodType.TeleoptiClassic
 							: workloadAccuracy.Accuracies.Single(x => x.IsSelected).MethodId;
@@ -50,13 +50,13 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			}
 		}
 
-		public void ForecastAll(ISkill skill, DateOnlyPeriod futurePeriod, DateOnlyPeriod historicalPeriodForForecast, DateOnlyPeriod historicalPeriodForMeasurement)
+		public void ForecastAll(ISkill skill, DateOnlyPeriod futurePeriod, DateOnlyPeriod historicalPeriodForForecast)
 		{
 			var skillDays = _fetchAndFillSkillDays.FindRange(futurePeriod, skill);
 
 			foreach (var workload in skill.WorkloadCollection)
 			{
-				var workloadAccuracy = _quickForecastWorkloadEvaluator.Measure(workload, historicalPeriodForMeasurement);
+				var workloadAccuracy = _quickForecastWorkloadEvaluator.Measure(workload);
 				var quickForecasterWorkloadParams = new QuickForecasterWorkloadParams
 				{
 					WorkLoad = workload,

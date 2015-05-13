@@ -46,7 +46,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return new List<IStatisticTask>();
 		}
 
-        /// <summary>
+	    public DateOnly QueueStatisticsUpUntilDate(IWorkload workload)
+	    {
+		    throw new NotImplementedException();
+	    }
+
+	    /// <summary>
         /// Stub for loading matrix reports. 
         /// Note: It will return null, instead of an empty list.
         /// </summary>
