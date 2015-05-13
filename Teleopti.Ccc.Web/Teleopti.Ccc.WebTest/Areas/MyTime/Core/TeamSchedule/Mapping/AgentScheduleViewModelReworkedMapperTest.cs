@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autofac;
-using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
@@ -23,11 +24,17 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.Mapping
 		protected override void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
 		{
 			builder.RegisterType<AgentScheduleViewModelReworkedMapper>().As<IAgentScheduleViewModelReworkedMapper>().SingleInstance();
+			builder.RegisterType<TimeLineViewModelReworkedMapper>().As<ITimeLineViewModelReworkedMapper>().SingleInstance();
+
 			builder.RegisterInstance(new FakePermissionProvider()).As<IPermissionProvider>().SingleInstance();
 			builder.RegisterInstance(new FakeLayerViewModelReworkedMapper()).As<ILayerViewModelReworkedMapper>().SingleInstance();
 			builder.RegisterInstance(new FakePersonNameProvider()).As<IPersonNameProvider>().SingleInstance();
+			builder.RegisterInstance(new FakeUserTimeZone(TimeZoneInfo.Utc)).As<IUserTimeZone>().SingleInstance();
+			builder.RegisterInstance(new FakeTimeLineViewModelReworkedFactory()).As<ITimeLineViewModelReworkedFactory>().SingleInstance();
 		}
 	}
+
+	
 
 	[TestFixture]
 	[TeamScheduleTestAttribute]
@@ -166,12 +173,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.Mapping
 			};
 			Mapper = new AgentScheduleViewModelReworkedMapper
 				(
-				new FakeLayerViewModelReworkedMapper(),
-				new FakePersonNameProvider(),
-				new FakePermissionProvider()
-					{
-						isPersonSchedulePublished = false
-					});
+					new FakeLayerViewModelReworkedMapper(),
+					new FakePersonNameProvider(),
+					new FakeNoPermissionProvider()
+				);
 
 			var target = Mapper.Map(personSchedule);
 			target.MinStart.Should().Be.EqualTo(null);
