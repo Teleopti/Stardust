@@ -372,8 +372,6 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		public void ShouldReturnCorrectFairnessTypeWhenScheduler_scheduler_Seniority_24331IsTrue()
 	    {
 		    var seniority_24331 = true;
-			_target.SetFairnessType(FairnessType.FairnessPoints);
-			Assert.AreEqual(FairnessType.EqualNumberOfShiftCategory, _target.GetFairnessType(seniority_24331));
 			_target.SetFairnessType(FairnessType.EqualNumberOfShiftCategory);
 			Assert.AreEqual(FairnessType.EqualNumberOfShiftCategory, _target.GetFairnessType(seniority_24331));
 			_target.SetFairnessType(FairnessType.Seniority);
@@ -383,9 +381,6 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		[Test]
 	    public void ShouldReturnFairnessTypeWhenSettingIsAvailable()
 	    {
-			_target.SetFairnessType(FairnessType.FairnessPoints);
-			Assert.AreEqual(FairnessType.EqualNumberOfShiftCategory, _target.GetFairnessType(false));
-
 			_target.SetFairnessType(FairnessType.EqualNumberOfShiftCategory);
 			Assert.AreEqual(FairnessType.EqualNumberOfShiftCategory, _target.GetFairnessType(false));
 
@@ -399,9 +394,6 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		[Test]
 	    public void ShouldReturnEqualNumberOfShiftCateoryWhenSettingIsDisabled()
 	    {
-			_target.SetFairnessType(FairnessType.FairnessPoints);
-			Assert.AreEqual(FairnessType.EqualNumberOfShiftCategory, _target.GetFairnessType(false));
-    
 			_target.SetFairnessType(FairnessType.Seniority);
 			Assert.AreEqual(FairnessType.EqualNumberOfShiftCategory, _target.GetFairnessType(false));
 	    }

@@ -160,10 +160,6 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
 		        switch (fairnessType)
 		        {
-					case FairnessType.FairnessPoints :
-						tableLayoutPanelRanking.Visible = false;
-						tableLayoutPanelFairness.Visible = false;
-				        break;
 					case FairnessType.EqualNumberOfShiftCategory:
 						tableLayoutPanelRanking.Visible = false;
 						tableLayoutPanelFairness.Visible = true;
@@ -175,8 +171,6 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 						updateRankingData(_stateHolder.Schedules[_selectedPerson], _stateHolder.SchedulingResultState.ShiftCategories,
 					                  _stateHolder.FilteredPersonDictionary.Values.ToList());
 				        break;
-
-
 		        }
 	        }
         }

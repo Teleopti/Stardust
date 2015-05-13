@@ -544,12 +544,6 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
             _selectedModel.RemoveSkillFromMatchList(skill);
         }
 
-        public void OnRadioButtonAdvFairnessPointsCheckChanged(bool value)
-        {
-			if(value)
-				_selectedModel.SetFairnessType(FairnessType.FairnessPoints, _toggleManager.IsEnabled(Toggles.Scheduler_Seniority_24331));
-        }
-
         public void OnRadioButtonAdvFairnessEqualCheckChanged(bool value)
         {
 			if(value)

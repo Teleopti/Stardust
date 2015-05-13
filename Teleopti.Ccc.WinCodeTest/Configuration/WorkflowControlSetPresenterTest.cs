@@ -990,9 +990,11 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             {
                 ExpectInitialize(repositoryCollection);
                 ExpectSetSelectedWorkflowControlSetModel();
+	      
             }
             using (_mocks.Playback())
             {
+		
                 _target.Initialize();
                 _target.SetSelectedWorkflowControlSetModel(_workflowControlSetModel);
                 _target.OnRadioButtonAdvFairnessEqualCheckChanged(true);
@@ -1077,7 +1079,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             Expect.Call(() => view.SetAutoGrant(false)).IgnoreArguments();
             Expect.Call(() => view.SetAnonymousTrading(false)).IgnoreArguments();
             Expect.Call(() => view.SetLockTrading(false)).IgnoreArguments();
-            Expect.Call(() => view.SetFairnessType(FairnessType.FairnessPoints)).IgnoreArguments();
+			Expect.Call(() => view.SetFairnessType(FairnessType.EqualNumberOfShiftCategory)).IgnoreArguments();
             Expect.Call(view.EnableAllAuthorized);
         }
     }
