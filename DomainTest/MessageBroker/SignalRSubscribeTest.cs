@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.TestCommon;
@@ -8,6 +9,7 @@ using Teleopti.Interfaces.MessageBroker;
 namespace Teleopti.Ccc.DomainTest.MessageBroker
 {
 	[TestFixture]
+	[CLSCompliant(false)]
 	[MessageBrokerServerTest]
 	public class SignalRSubscribeTest
 	{
