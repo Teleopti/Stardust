@@ -14,9 +14,8 @@
 							<li class="animate-repeat" ng-repeat="item in searchResult | filter:{ SearchGroup: gp }">
 								<a ui-sref='resourceplanner' ng-click="ResetSearch()">{{item.Name}}</a>
 							</li>
-							<li class="animate-repeat" ng-if="searchResult.length == 0">
+							<li class="animate-repeat" ng-if="searchResult.length == 0"></li>
 						</div>
-						
 					</ul>
 				</div>
 			</span>
