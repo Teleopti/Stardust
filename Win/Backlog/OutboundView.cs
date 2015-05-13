@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using Autofac;
@@ -26,6 +27,7 @@ namespace Teleopti.Ccc.Win.Backlog
 	{
 		private readonly IComponentContext _container;
 		private BacklogScheduledProvider _backlogScheduledProvider;
+		private DateOnlyPeriod _loadedPeriod;
 
 		public OutboundView()
 		{
@@ -41,6 +43,7 @@ namespace Teleopti.Ccc.Win.Backlog
 		private void outboundViewLoad(object sender, EventArgs e)
 		{
 			loadCampaigns();
+			updateStatusOnCampaigns();
 		}
 
 		private void loadCampaigns()
@@ -49,7 +52,7 @@ namespace Teleopti.Ccc.Win.Backlog
 			// move to method in repository
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				campaigns = new OutboundCampaignRepository(uow).LoadAll();
+				campaigns = new OutboundCampaignRepository(uow).LoadAll().Where(c => c.EndDate > new DateOnly(DateTime.Now).AddDays(-14)).ToList();
 				foreach (var campaign in campaigns)
 				{
 					LazyLoadingManager.Initialize(campaign.Skill);
@@ -64,6 +67,10 @@ namespace Teleopti.Ccc.Win.Backlog
 					}
 				}
 			}
+
+			var earliestStart = campaigns.Min(c => c.StartDate).Value;
+			var latestEnd = campaigns.Max(c => c.EndDate).Value;
+			_loadedPeriod = new DateOnlyPeriod(earliestStart, latestEnd);
 
 			listView1.Items.Clear();
 			listView1.Groups.Clear();
@@ -210,6 +217,48 @@ namespace Teleopti.Ccc.Win.Backlog
 			}		
 		}
 
+		private void updateStatusOnCampaigns()
+		{
+			foreach (var item in listView1.Items)
+			{
+				var listItem = (ListViewItem) item;
+				var status = getStatusOnCampaign((Campaign)listItem.Tag);
+
+				switch (status)
+				{
+						case CampaignStatus.Ok:
+						listItem.SubItems[2].Text = "OK";
+						listItem.ForeColor = Color.DarkGreen;
+						break;
+
+						case CampaignStatus.NotInSLA:
+						listItem.SubItems[2].Text = "Outside SLA";
+						listItem.ForeColor = Color.Red;
+						break;
+
+						case CampaignStatus.Overstaffed:
+						listItem.SubItems[2].Text = "Overstaffed";
+						listItem.ForeColor = Color.Red;
+						break;
+				}
+			}
+		}
+
+		private CampaignStatus getStatusOnCampaign(Campaign campaign)
+		{
+			var incomingTask = createProductionPlan(campaign);
+			if(incomingTask.GetTimeOutsideSLA() > TimeSpan.Zero)
+				return CampaignStatus.NotInSLA;
+
+			foreach (var dateOnly in incomingTask.SpanningPeriod.DayCollection())
+			{
+				if(incomingTask.GetOverstaffTimeOnDate(dateOnly) > TimeSpan.Zero)
+					return CampaignStatus.Overstaffed;
+			}
+
+			return CampaignStatus.Ok;
+		}
+
 		private void toolStripButton1_Click(object sender, EventArgs e)
 		{
 			var selectedCampaign = listView1.SelectedItems[0];
@@ -222,7 +271,7 @@ namespace Teleopti.Ccc.Win.Backlog
 
 		private void toolStripButton2_Click(object sender, EventArgs e)
 		{
-			_backlogScheduledProvider = new BacklogScheduledProvider(_container, new DateOnlyPeriod(2015, 6, 1, 2015, 6, 30));
+			_backlogScheduledProvider = new BacklogScheduledProvider(_container, _loadedPeriod);
 			Enabled = false;
 			backgroundWorker1.RunWorkerAsync();
 		}
@@ -240,6 +289,14 @@ namespace Teleopti.Ccc.Win.Backlog
 		private void backgroundWorker1_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
 		{
 			Enabled = true;
+			updateStatusOnCampaigns();
 		}
+	}
+
+	public enum CampaignStatus
+	{
+		Ok,
+		NotInSLA,
+		Overstaffed
 	}
 }

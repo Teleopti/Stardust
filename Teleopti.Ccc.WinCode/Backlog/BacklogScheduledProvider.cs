@@ -63,6 +63,8 @@ namespace Teleopti.Ccc.WinCode.Backlog
 		public TimeSpan GetScheduledTimeOnDate(DateOnly date, ISkill skill)
 		{
 			var skillDay = _stateHolder.SchedulingResultState.SkillDayOnSkillAndDateOnly(skill, date);
+			if (skillDay == null)
+				return TimeSpan.Zero;
 
 			return
 				TimeSpan.FromHours(SkillStaffPeriodHelper.ScheduledHours(skillDay.SkillStaffPeriodCollection).GetValueOrDefault(0));
