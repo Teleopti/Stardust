@@ -7,6 +7,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 	{
 		public int DaysScheduled { get; set; }
 		public int ConflictCount { get; set; }
+		public int ScheduledAgentsCount { get; set; }
 		public IEnumerable<BusinessRulesValidationResult> BusinessRulesValidationResults { get; set; }
 	}
 

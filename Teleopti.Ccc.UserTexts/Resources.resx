@@ -13146,4 +13146,10 @@ Reduce the complexity to use these shifts.</value>
     <value>Note</value>
     <comment>PersonFinderField enum member</comment>
   </data>
+  <data name="SchedulePeriodNotInRange" xml:space="preserve">
+    <value>Schedule period range is not within planning period</value>
+  </data>
+  <data name="TargetDayOffNotFulfilledMessage" xml:space="preserve">
+    <value>Target of {0} Day Offs is not fulfilled</value>
+  </data>
 </root>

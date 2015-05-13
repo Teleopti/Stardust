@@ -33,7 +33,11 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		private readonly VoilatedSchedulePeriodBusinessRule _voilatedSchedulePeriodBusinessRule;
 		private readonly IDayOffsInPeriodCalculator _dayOffsInPeriodCalculator;
 
-		public ScheduleController(SetupStateHolderForWebScheduling setupStateHolderForWebScheduling, FixedStaffLoader fixedStaffLoader, IDayOffTemplateRepository dayOffTemplateRepository, IActivityRepository activityRepository, Func<IFixedStaffSchedulingService> fixedStaffSchedulingService, Func<IScheduleCommand> scheduleCommand, Func<ISchedulerStateHolder> schedulerStateHolder, Func<IRequiredScheduleHelper> requiredScheduleHelper, Func<IGroupPagePerDateHolder> groupPagePerDateHolder, Func<IScheduleTagSetter> scheduleTagSetter, Func<IPersonSkillProvider> personSkillProvider, IScheduleRangePersister persister, IDayOffsInPeriodCalculator dayOffsInPeriodCalculator)
+		public ScheduleController(SetupStateHolderForWebScheduling setupStateHolderForWebScheduling,FixedStaffLoader fixedStaffLoader, IDayOffTemplateRepository dayOffTemplateRepository,
+					IActivityRepository activityRepository, Func<IFixedStaffSchedulingService> fixedStaffSchedulingService,Func<IScheduleCommand> scheduleCommand, Func<ISchedulerStateHolder> schedulerStateHolder,
+						Func<IRequiredScheduleHelper> requiredScheduleHelper, Func<IGroupPagePerDateHolder> groupPagePerDateHolder,Func<IScheduleTagSetter> scheduleTagSetter, 
+							Func<IPersonSkillProvider> personSkillProvider,IScheduleRangePersister persister, IDayOffsInPeriodCalculator dayOffsInPeriodCalculator,
+									VoilatedSchedulePeriodBusinessRule voilatedSchedulePeriodBusinessRule)
 		{
 			_setupStateHolderForWebScheduling = setupStateHolderForWebScheduling;
 			_fixedStaffLoader = fixedStaffLoader;
@@ -48,7 +52,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			_personSkillProvider = personSkillProvider;
 			_persister = persister;
 			_dayOffsInPeriodCalculator = dayOffsInPeriodCalculator;
-			_voilatedSchedulePeriodBusinessRule = new VoilatedSchedulePeriodBusinessRule();
+			_voilatedSchedulePeriodBusinessRule = voilatedSchedulePeriodBusinessRule;
 		}
 
 		[HttpPost, Route("api/ResourcePlanner/Schedule/FixedStaff"), Authorize, UnitOfWork]
@@ -98,7 +102,15 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			}
 
 			var voilatedBusinessRules = getBusinessRulesValidationResults(people.SelectedPeople, period);
-			return Ok(new SchedulingResultModel { DaysScheduled = daysScheduled, ConflictCount = conflicts.Count(), BusinessRulesValidationResults = voilatedBusinessRules });
+			return
+				Ok(new SchedulingResultModel
+				{
+					DaysScheduled = daysScheduled,
+					ConflictCount = conflicts.Count(),
+					//come up with something better or - slap my self -
+					ScheduledAgentsCount = people.SelectedPeople.Count - voilatedBusinessRules.Count(),
+					BusinessRulesValidationResults = voilatedBusinessRules
+				});
 		}
 
 		private IEnumerable<BusinessRulesValidationResult> getBusinessRulesValidationResults(IEnumerable<IPerson> selectedPeople, DateOnlyPeriod period)
@@ -117,10 +129,12 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 					result.Add(new BusinessRulesValidationResult()
 					{
 						BusinessRuleCategory = BusinessRuleCategory.DayOff,
-						Message = string.Format("Target of {0} Day Offs is not fulfilled", targetDaysOff),
-						Name = person.Name.FirstName
+						Message = string.Format(UserTexts.Resources.TargetDayOffNotFulfilledMessage, targetDaysOff),
+						Name = person.Name.ToString(NameOrderOption.FirstNameLastName)
 					});
 				} 
+
+
 			}
 			result.AddRange(schedulePeriodNotInRange);
 			return result;

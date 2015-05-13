@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 				()=> requiredScheduleHelper, () => groupPagePerDateHolder,
 				() => new ScheduleTagSetter(NullScheduleTag.Instance),
 				()=> new PersonSkillProvider(),
-				persister, MockRepository.GenerateMock<IDayOffsInPeriodCalculator>());
+				persister, MockRepository.GenerateMock<IDayOffsInPeriodCalculator>(), new VoilatedSchedulePeriodBusinessRule());
 			using (new CustomAuthorizationContext(new PrincipalAuthorizationWithFullPermission()))
 			{
 				var result =
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 				() => requiredScheduleHelper, () => groupPagePerDateHolder,
 				() => new ScheduleTagSetter(NullScheduleTag.Instance),
 				() => new PersonSkillProvider(),
-				persister, dayOffInPeriodCalc);
+				persister, dayOffInPeriodCalc, new VoilatedSchedulePeriodBusinessRule());
 			
 			dayOffInPeriodCalc.Stub(x => x.HasCorrectNumberOfDaysOff(agent1.VirtualSchedulePeriod(period.StartDate),out targetDaysOff,out dayOffNow))
 				.Return(true);
@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 				() => requiredScheduleHelper, () => groupPagePerDateHolder,
 				() => new ScheduleTagSetter(NullScheduleTag.Instance),
 				() => new PersonSkillProvider(),
-				persister, MockRepository.GenerateMock<IDayOffsInPeriodCalculator>());
+				persister, MockRepository.GenerateMock<IDayOffsInPeriodCalculator>(), new VoilatedSchedulePeriodBusinessRule());
 			using (new CustomAuthorizationContext(new PrincipalAuthorizationWithFullPermission()))
 			{
 				var result =
@@ -170,6 +170,59 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 
 				result.Content.Should().Not.Be.Null();
 				result.Content.BusinessRulesValidationResults.ToList().Count.Should().Be.EqualTo(1);
+			}
+
+		}
+
+		[Test]
+		public void ShouldReturnNumberOfScheduledAgents()
+		{
+			var period = new DateOnlyPeriod(2015, 5, 1, 2015, 5, 31);
+			IPerson agent1 = new Person();
+			agent1 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(agent1, period.StartDate);
+			agent1.SetId(Guid.NewGuid());
+			var personRepository = new FakePersonRepository(agent1);
+			int targetDaysOff;
+			IList<IScheduleDay> dayOffNow;
+
+			FakeCurrentTeleoptiPrincipal currentTeleoptiPrincipal;
+			ISkillRepository skillRepository;
+			ICurrentUnitOfWorkFactory currentUnitOfWorkFactory;
+			IScheduleRepository scheduleRepository;
+			IDayOffTemplateRepository dayOffTemplateRepository;
+			IScheduleCommand scheduleCommand;
+			SchedulerStateHolder stateHolder;
+			GroupPagePerDateHolder groupPagePerDateHolder;
+			IRequiredScheduleHelper requiredScheduleHelper;
+			IPeopleAndSkillLoaderDecider peopleAndSkillLoaderDecider;
+			IScheduleRangePersister persister;
+			var scenario = commonMocks(period, agent1, out currentTeleoptiPrincipal, out skillRepository, out currentUnitOfWorkFactory, out scheduleRepository, out dayOffTemplateRepository, out scheduleCommand, out stateHolder, out groupPagePerDateHolder, out requiredScheduleHelper, out peopleAndSkillLoaderDecider, out persister);
+			var dayOffInPeriodCalc = MockRepository.GenerateMock<IDayOffsInPeriodCalculator>();
+			var target = new ScheduleController(new SetupStateHolderForWebScheduling(new FakeScenarioRepository(scenario),
+				MockRepository.GenerateMock<ISkillDayLoadHelper>(), skillRepository,
+				scheduleRepository, MockRepository.GenerateMock<IPersonAbsenceAccountRepository>(),
+				peopleAndSkillLoaderDecider,
+				currentTeleoptiPrincipal,
+				currentUnitOfWorkFactory, () => stateHolder), new FixedStaffLoader(personRepository),
+				dayOffTemplateRepository, MockRepository.GenerateMock<IActivityRepository>(),
+				() => MockRepository.GenerateMock<IFixedStaffSchedulingService>(),
+				() => scheduleCommand,
+				() => stateHolder,
+				() => requiredScheduleHelper, () => groupPagePerDateHolder,
+				() => new ScheduleTagSetter(NullScheduleTag.Instance),
+				() => new PersonSkillProvider(),
+				persister, dayOffInPeriodCalc, new VoilatedSchedulePeriodBusinessRule());
+
+			dayOffInPeriodCalc.Stub(x => x.HasCorrectNumberOfDaysOff(agent1.VirtualSchedulePeriod(period.StartDate), out targetDaysOff, out dayOffNow))
+				.Return(true);
+			using (new CustomAuthorizationContext(new PrincipalAuthorizationWithFullPermission()))
+			{
+				var result =
+					(OkNegotiatedContentResult<SchedulingResultModel>)
+						target.FixedStaff(new FixedStaffSchedulingInput { StartDate = period.StartDate.Date, EndDate = period.EndDate.Date });
+
+				result.Content.Should().Not.Be.Null();
+				result.Content.ScheduledAgentsCount.Should().Be.EqualTo(1);
 			}
 
 		}

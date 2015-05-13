@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			return new BusinessRulesValidationResult
 			{
 				BusinessRuleCategory = BusinessRuleCategory.SchedulePeriod,
-				Message = "Schedule period range is not within planning period",
+				Message = UserTexts.Resources.SchedulePeriodNotInRange,
 				Name = x.Name.ToString(NameOrderOption.FirstNameLastName)
 			};
 		}
