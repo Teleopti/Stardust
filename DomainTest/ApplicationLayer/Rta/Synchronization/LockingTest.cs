@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 	[Toggle(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783)]
 	[Toggle(Toggles.RTA_EventStreamInitialization_31237)]
 	[TestFixture]
-	public class LockingTest : IRegisterInContainer
+	public class LockingTest : ISetup
 	{
 		public FakeRtaDatabase Database;
 		public MutableNow Now;
@@ -32,14 +32,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 		public IDistributedLockAcquirer DistributedLock;
 		public NonConcurrenctSafeHandler Handler;
 
-		public void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			builder.RegisterType<NonConcurrenctSafeHandler>()
-				.As<IHandleEvent<PersonStateChangedEvent>>()
-				.As<IInitializeble>()
-				.AsSelf()
-				.SingleInstance()
-				;
+			system.UseTestDouble<NonConcurrenctSafeHandler>().For<IHandleEvent<PersonStateChangedEvent>, IInitializeble>();
 		}
 
 		[Test]

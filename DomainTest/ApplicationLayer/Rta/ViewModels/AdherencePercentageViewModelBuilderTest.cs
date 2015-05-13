@@ -20,19 +20,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 {
 	[IoCTest]
 	[TestFixture]
-	public class AdherencePercentageViewModelBuilderTest : IRegisterInContainer
+	public class AdherencePercentageViewModelBuilderTest : ISetup
 	{
-		public void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			builder.RegisterType<FakeAdherencePercentageReadModelReader>()
-				.AsSelf()
-				.As<IAdherencePercentageReadModelReader>()
-				.SingleInstance();
-			builder.RegisterType<FakePersonRepository>()
-				.AsSelf()
-				.As<IPersonRepository>()
-				.As<IRepository<IPerson>>()
-				.SingleInstance();
+			system.UseTestDouble<FakeAdherencePercentageReadModelReader>().For<IAdherencePercentageReadModelReader>();
+			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository, IRepository<IPerson>>();
 		}
 
 		public FakeAdherencePercentageReadModelReader Reader;

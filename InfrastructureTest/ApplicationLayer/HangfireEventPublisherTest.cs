@@ -14,31 +14,20 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 {
 	[TestFixture]
 	[IoCTest]
-	public class HangfireEventPublisherTest : IRegisterInContainer
+	public class HangfireEventPublisherTest : ISetup
 	{
 		public FakeHangfireEventClient JobClient;
 		public IHangfireEventPublisher Target;
 		public IJsonSerializer Serializer;
 
-		public void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			builder.RegisterInstance(new FakeHangfireEventClient()).AsSelf().As<IHangfireEventClient>().SingleInstance();
+			system.UseTestDouble(new FakeHangfireEventClient()).For<IHangfireEventClient>();
 
-			builder.RegisterInstance(new TestHandler())
-				.As<IHandleEvent<TestEvent>>()
-				.As<IHandleEvent<Event>>()
-				;
-			builder.RegisterInstance(new TestMultiHandler1())
-				.As<IHandleEvent<MultiHandlerTestEvent>>()
-				;
-			builder.RegisterInstance(new TestMultiHandler2())
-				.As<IHandleEvent<MultiHandlerTestEvent>>()
-				;
-			builder.RegisterType<TestAspectedHandler>()
-				.As<IHandleEvent<AspectedHandlerTestEvent>>()
-				.SingleInstance()
-				.ApplyAspects()
-				;
+			system.AddService<TestHandler>();
+			system.AddService<TestMultiHandler1>();
+			system.AddService<TestMultiHandler2>();
+			system.AddService<TestAspectedHandler>();
 		}
 
 		[Test]

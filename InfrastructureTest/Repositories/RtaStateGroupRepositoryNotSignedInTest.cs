@@ -1,12 +1,10 @@
 using System;
 using System.Linq;
-using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Infrastructure;
@@ -15,15 +13,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
 	[TestFixture]
 	[PrincipalAndStateTest]
-	public class RtaStateGroupRepositoryNotSignedInTest : IRegisterInContainer
+	public class RtaStateGroupRepositoryNotSignedInTest : ISetup
 	{
 		public IRtaStateGroupRepository StateGroupRepository;
 		public IPrincipalAndStateContext Context;
 		public TheServiceImpl TheService;
 
-		public void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			builder.RegisterType<TheServiceImpl>().AsSelf().SingleInstance().ApplyAspects();
+			system.AddService<TheServiceImpl>();
 		}
 
 		public class TheServiceImpl
@@ -76,5 +74,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				StateGroupRepository.LoadAll().Single().StateCollection.Single()
 					.StateCode.Should().Be.EqualTo("phone"));
 		}
+
 	}
 }

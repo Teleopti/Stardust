@@ -1,26 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Autofac;
+using log4net;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.DomainTest.Aop.TestDoubles;
-using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.Aop
 {
 	[IoCTest]
-	public class InfoLogAspectTest : IRegisterInContainer
+	public class InfoLogAspectTest : ISetup
 	{
-		public void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			builder.RegisterType<Service>().AsSelf().SingleInstance().ApplyAspects();
+			system.AddService<Service>();
 			var fakeLogger = new LogSpy();
-			builder.RegisterInstance(fakeLogger).AsSelf();
-			builder.RegisterInstance(new FakeLogManagerWrapper(fakeLogger)).As<ILogManagerWrapper>();
+			system.UseTestDouble(fakeLogger).For<ILog>();
+			system.UseTestDouble(new FakeLogManagerWrapper(fakeLogger)).For<ILogManagerWrapper>();
 		}
 
 		public LogSpy Logger;

@@ -21,19 +21,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 {
 	[TestFixture]
 	[PrincipalAndStateTest]
-	public class InfrastructureTest : IRegisterInContainer
+	public class InfrastructureTest : ISetup
 	{
 		public IRtaStateGroupRepository StateGroupRepository;
-		public IPersonCreator PersonCreator;
+		public PersonCreator PersonCreator;
 		public IPrincipalAndStateContext Context;
 		public MutableNow Now;
 		public TheServiceImpl TheService;
 		public IRta Target;
 
-		public void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			builder.RegisterType<TheServiceImpl>().AsSelf().SingleInstance().ApplyAspects();
-			builder.RegisterType<PersonCreator>().As<IPersonCreator>();
+			system.AddService<TheServiceImpl>();
+			system.AddService<PersonCreator>();
 		}
 
 		public class TheServiceImpl
@@ -91,12 +91,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		}
 	}
 
-	public interface IPersonCreator
-	{
-		IPerson CreatePersonWithExternalLogOn(INow now, string externalLogon);
-	}
-
-	public class PersonCreator : IPersonCreator
+	public class PersonCreator
 	{
 		private readonly IPersonRepository _personRepository;
 		private readonly ISiteRepository _siteRepository;

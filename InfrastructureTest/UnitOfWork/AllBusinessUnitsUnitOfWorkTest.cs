@@ -19,11 +19,11 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 {
 	[TestFixture]
 	[PrincipalAndStateTest]
-	public class AllBusinessUnitsUnitOfWorkTest : IRegisterInContainer
+	public class AllBusinessUnitsUnitOfWorkTest : ISetup
 	{
-		public void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			builder.RegisterType<TheServiceImpl>().AsSelf().SingleInstance().ApplyAspects();
+			system.AddService<TheServiceImpl>();
 		}
 
 		public TheServiceImpl TheService;

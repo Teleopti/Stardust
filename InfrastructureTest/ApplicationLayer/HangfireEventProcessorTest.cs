@@ -21,27 +21,27 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 {
 	[TestFixture]
 	[IoCTestAttribute]
-	public class HangfireEventProcessorTest : IRegisterInContainer
+	public class HangfireEventProcessorTest : ISetup
 	{
 		public AHandler Handler;
 		public AnotherHandler Another;
 		public AspectedHandler aspected;
 		public IHangfireEventProcessor Target;
 
-		public void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			builder.RegisterInstance(new AHandler()).AsSelf().As<IHandleEvent<AnEvent>>().SingleInstance();
-			builder.RegisterInstance(new AnotherHandler()).AsSelf().As<IHandleEvent<AnEvent>>().SingleInstance();
-			builder.RegisterType<AspectedHandler>().AsSelf().As<IHandleEvent<AnEvent>>().ApplyAspects().SingleInstance();
-			builder.RegisterInstance(new NonConcurrenctSafeHandler()).AsSelf().As<IHandleEvent<AnEvent>>().SingleInstance();
+			system.AddService<AHandler>();
+			system.AddService<AnotherHandler>();
+			system.AddService<AspectedHandler>();
+			system.AddService<NonConcurrenctSafeHandler>();
 
-			builder.RegisterInstance(new FakeConfigReader
+			system.UseTestDouble(new FakeConfigReader
 			{
 				ConnectionStrings = new ConnectionStringSettingsCollection
 				{
 					new ConnectionStringSettings("RtaApplication", ConnectionStringHelper.ConnectionStringUsedInTests)
 				}
-			}).As<IConfigReader>().AsSelf().SingleInstance();
+			}).For<IConfigReader>();
 		}
 
 		[Test]

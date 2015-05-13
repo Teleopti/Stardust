@@ -19,11 +19,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		void Reset(Action<ContainerBuilder, IIocConfiguration> registerInContainer);
 	};
 
-	public interface IRegisterInContainer
-	{
-		void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration);
-	};
-
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface, AllowMultiple = false)]
 	public class IoCTestAttribute : Attribute, ITestAction, IIoCTestContext
 	{
@@ -109,8 +104,8 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			builder.RegisterInstance(new FakeUserCulture(CultureInfoFactory.CreateSwedishCulture())).As<IUserCulture>().AsSelf().SingleInstance();
 			builder.RegisterInstance(this).As<IIoCTestContext>();
 			RegisterInContainer(builder, configuration);
-			if (_fixture is IRegisterInContainer)
-				(_fixture as IRegisterInContainer).RegisterInContainer(builder, configuration);
+			if (_fixture is ISetup)
+				(_fixture as ISetup).Setup(new ContainerBuilderWrapper(builder), configuration);
 			registerInContainer(builder, configuration);
 			_container = builder.Build();
 		}

@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
-using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -21,12 +19,12 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 {
 	[TestFixture]
 	[PrincipalAndStateTest]
-	public class UnitOfWorkAspectTest : IRegisterInContainer
+	public class UnitOfWorkAspectTest : ISetup
 	{
-		public void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			builder.RegisterType<TheServiceImpl>().AsSelf().SingleInstance().ApplyAspects();
-			builder.RegisterType<MutableFakeCurrentHttpContext>().AsSelf().As<ICurrentHttpContext>().SingleInstance();
+			system.UseTestDouble<MutableFakeCurrentHttpContext>().For<ICurrentHttpContext>();
+			system.AddService<TheServiceImpl>();
 		}
 
 		public TheServiceImpl TheService;

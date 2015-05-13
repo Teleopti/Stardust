@@ -16,15 +16,15 @@ namespace Teleopti.Ccc.InfrastructureTest.DistributedLock
 {
 	[TestFixture]
 	[IoCTest]
-	public class DistributedLockTest : IRegisterInContainer
+	public class DistributedLockTest : ISetup
 	{
 		public IDistributedLockAcquirer Target;
 		public FakeConfigReader ConfigReader;
 		public Lock1 Lock1Proxy;
 
-		public void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			builder.RegisterInstance(
+			system.UseTestDouble(
 				new FakeConfigReader
 				{
 					ConnectionStrings = new ConnectionStringSettingsCollection
@@ -32,12 +32,9 @@ namespace Teleopti.Ccc.InfrastructureTest.DistributedLock
 						new ConnectionStringSettings("RtaApplication", ConnectionStringHelper.ConnectionStringUsedInTests)
 					}
 				})
-				.As<IConfigReader>().AsSelf().SingleInstance();
+				.For<IConfigReader>();
 
-			builder.RegisterType<Lock1>()
-				.AsSelf()
-				.ApplyAspects()
-				;
+			system.AddService<Lock1>();
 		}
 
 		[Test]

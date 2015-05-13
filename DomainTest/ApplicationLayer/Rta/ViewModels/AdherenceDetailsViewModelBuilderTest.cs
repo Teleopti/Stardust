@@ -21,19 +21,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 {
 	[TestFixture]
 	[IoCTest]
-	public class AdherenceDetailsViewModelBuilderTest : IRegisterInContainer
+	public class AdherenceDetailsViewModelBuilderTest : ISetup
 	{
-		public void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			builder.RegisterType<FakeAdherenceDetailsReadModelReader>()
-				.AsSelf()
-				.As<IAdherenceDetailsReadModelReader>()
-				.SingleInstance();
-			builder.RegisterType<FakePersonRepository>()
-				.AsSelf()
-				.As<IPersonRepository>()
-				.As<IRepository<IPerson>>()
-				.SingleInstance();
+			system.UseTestDouble<FakeAdherenceDetailsReadModelReader>().For<IAdherenceDetailsReadModelReader>();
+			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository, IRepository<IPerson>>();
 		}
 
 		public FakeAdherenceDetailsReadModelReader Reader;

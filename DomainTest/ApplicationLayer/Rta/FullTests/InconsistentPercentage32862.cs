@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.FullTests
 	[Toggle(Toggles.RTA_SeeAdherenceDetailsForOneAgent_31285)]
 	[Toggle(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783)]
 	[Toggle(Toggles.RTA_NeutralAdherence_30930)]
-	public class InconsistentPercentage32862 : IRegisterInContainer
+	public class InconsistentPercentage32862 : ISetup
 	{
 		public FakeRtaDatabase Database;
 		public MutableNow Now;
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.FullTests
 		public IAdherenceDetailsViewModelBuilder DetailsView;
 		public IAdherencePercentageViewModelBuilder PercentageView;
 
-		public void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			var detailsPersister = new FakeAdherenceDetailsReadModelPersister();
 			var percentagePersister = new FakeAdherencePercentageReadModelPersister();
@@ -40,9 +40,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.FullTests
 			var percentageUpdater = new AdherencePercentageReadModelUpdater(percentagePersister);
 			var publisher = new SyncPublishTo(new object[] {detailsUpdater, percentageUpdater});
 
-			builder.RegisterInstance(detailsPersister).AsImplementedInterfaces().AsSelf();
-			builder.RegisterInstance(percentagePersister).AsImplementedInterfaces().AsSelf();
-			builder.RegisterInstance(publisher).As<IEventPublisher>().AsSelf();
+			system.UseTestDouble(detailsPersister).For<IAdherenceDetailsReadModelPersister, IAdherenceDetailsReadModelReader>();
+			system.UseTestDouble(percentagePersister).For<IAdherencePercentageReadModelPersister, IAdherencePercentageReadModelReader>();
+			system.UseTestDouble(publisher).For<IEventPublisher>();
 		}
 
 		[Test]

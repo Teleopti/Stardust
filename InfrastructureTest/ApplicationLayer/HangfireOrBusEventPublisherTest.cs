@@ -16,24 +16,24 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 	[TestFixture]
 	[IoCTest]
 	[Toggle(Toggles.RTA_HangfireEventProcessing_31237)]
-	public class HangfireOrBusEventPublisherTest : IRegisterInContainer
+	public class HangfireOrBusEventPublisherTest : ISetup
 	{
 		public FakeHangfireEventClient hangfire;
 		public FakeServiceBusSender bus;
 		public IEventPublisher target;
 
-		public void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			builder.RegisterInstance(new FakeHangfireEventClient()).AsSelf().As<IHangfireEventClient>();
-			builder.RegisterInstance(new FakeServiceBusSender()).AsSelf().As<IServiceBusSender>();
-			builder.RegisterInstance(new HangfireEventHandler()).AsSelf()
-				.As<IHandleEvent<HangfireEvent>>()
-				.As<IHandleEvent<PersonShiftStartEvent>>()
-				.As<IHandleEvent<PersonShiftEndEvent>>()
-				.As<IHandleEvent<PersonActivityStartEvent>>()
-				.As<IHandleEvent<PersonStateChangedEvent>>()
-				.As<IHandleEvent<PersonInAdherenceEvent>>()
-				.As<IHandleEvent<PersonOutOfAdherenceEvent>>()
+			system.UseTestDouble(new FakeHangfireEventClient()).For<IHangfireEventClient>();
+			system.UseTestDouble(new FakeServiceBusSender()).For<IServiceBusSender>();
+			system.UseTestDouble(new HangfireEventHandler())
+				.For<IHandleEvent<HangfireEvent>,
+					IHandleEvent<PersonShiftStartEvent>,
+					IHandleEvent<PersonShiftEndEvent>,
+					IHandleEvent<PersonActivityStartEvent>,
+					IHandleEvent<PersonStateChangedEvent>,
+					IHandleEvent<PersonInAdherenceEvent>,
+					IHandleEvent<PersonOutOfAdherenceEvent>>()
 				;
 		}
 
