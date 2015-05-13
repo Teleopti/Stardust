@@ -51,21 +51,18 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			dateOnlyPeriodsVisualizer1.Culture = TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture;
 			timeSpanTextBox1.TimeSpanBoxWidth = timeSpanTextBox1.Width;
 			dateTimePickerAdvViewpoint.SetCultureInfoSafe(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
-			radioButtonAdvFairnessPoints.Hide();
-			var rowIndex = tableLayoutPanelBasic.GetRow(radioButtonAdvFairnessPoints);
-			tableLayoutPanelBasic.RowStyles[rowIndex].Height = 0;
 
 			if (!toggleManager.IsEnabled(Toggles.Scheduler_Seniority_24331))
 			{
 				radioButtonAdvSeniority.Hide();
-				rowIndex = tableLayoutPanelBasic.GetRow(radioButtonAdvSeniority);
+				var rowIndex = tableLayoutPanelBasic.GetRow(radioButtonAdvSeniority);
 				tableLayoutPanelBasic.RowStyles[rowIndex].Height = 0;
 			}
 
 			if (!toggleManager.IsEnabled(Toggles.MyTimeWeb_AbsenceReport_31011))
 			{
 				twoListSelectorAbsencesForReport.Hide();
-				rowIndex = tableLayoutPanelBasic.GetRow(twoListSelectorAbsencesForReport);
+				var rowIndex = tableLayoutPanelBasic.GetRow(twoListSelectorAbsencesForReport);
 				tableLayoutPanelBasic.RowStyles[rowIndex].Height = 0;
 
 				labelAllowedAbsencesForReport.Hide();
@@ -1028,11 +1025,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			_presenter.SetAutoGrant(checkBoxAdvAutoGrant.Checked);
 		}
 
-		private void radioButtonAdvFairnessPointsCheckChanged(object sender, EventArgs e)
-		{
-			_presenter.OnRadioButtonAdvFairnessPointsCheckChanged(radioButtonAdvFairnessPoints.Checked);
-		}
-
 		private void radioButtonAdvFairnessEqualCheckChanged(object sender, EventArgs e)
 		{
 			_presenter.OnRadioButtonAdvFairnessEqualCheckChanged(radioButtonAdvFairnessEqual.Checked);
@@ -1046,21 +1038,16 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		public void SetFairnessType(FairnessType value)
 		{
 			radioButtonAdvFairnessEqual.CheckChanged -= radioButtonAdvFairnessEqualCheckChanged;
-			radioButtonAdvFairnessPoints.CheckChanged -= radioButtonAdvFairnessPointsCheckChanged;
 			radioButtonAdvSeniority.CheckChanged -= radioButtonAdvSeniorityCheckChanged;
 
 			radioButtonAdvFairnessEqual.Checked = false;
-			radioButtonAdvFairnessPoints.Checked = false;
 
 			if(value == FairnessType.EqualNumberOfShiftCategory)
 				radioButtonAdvFairnessEqual.Checked = true;
-			else if(value == FairnessType.FairnessPoints)
-				radioButtonAdvFairnessPoints.Checked = true;
 			else if (value == FairnessType.Seniority)
 				radioButtonAdvSeniority.Checked = true;
 
 			radioButtonAdvFairnessEqual.CheckChanged += radioButtonAdvFairnessEqualCheckChanged;
-			radioButtonAdvFairnessPoints.CheckChanged += radioButtonAdvFairnessPointsCheckChanged;
 			radioButtonAdvSeniority.CheckChanged += radioButtonAdvSeniorityCheckChanged;
 		}
 

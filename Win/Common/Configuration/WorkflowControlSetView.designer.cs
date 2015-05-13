@@ -109,7 +109,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.labelOpenPreference = new System.Windows.Forms.Label();
 			this.panel6 = new System.Windows.Forms.Panel();
 			this.label4 = new System.Windows.Forms.Label();
-			this.radioButtonAdvFairnessPoints = new Syncfusion.Windows.Forms.Tools.RadioButtonAdv();
 			this.radioButtonAdvFairnessEqual = new Syncfusion.Windows.Forms.Tools.RadioButtonAdv();
 			this.panel7 = new System.Windows.Forms.Panel();
 			this.labelOpenStudentAvailability = new System.Windows.Forms.Label();
@@ -185,7 +184,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.tableLayoutPanelOpenPreference.SuspendLayout();
 			this.panelOpenPreference.SuspendLayout();
 			this.panel6.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.radioButtonAdvFairnessPoints)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.radioButtonAdvFairnessEqual)).BeginInit();
 			this.panel7.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.radioButtonAdvSeniority)).BeginInit();
@@ -253,7 +251,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.labelHeader.Location = new System.Drawing.Point(3, 6);
 			this.labelHeader.Name = "labelHeader";
 			this.labelHeader.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
-			this.labelHeader.Size = new System.Drawing.Size(304, 25);
+			this.labelHeader.Size = new System.Drawing.Size(305, 25);
 			this.labelHeader.TabIndex = 0;
 			this.labelHeader.Text = "xxManageWorkflowControlSets";
 			// 
@@ -320,7 +318,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.labelSubHeader1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.labelSubHeader1.Location = new System.Drawing.Point(3, 8);
 			this.labelSubHeader1.Name = "labelSubHeader1";
-			this.labelSubHeader1.Size = new System.Drawing.Size(231, 17);
+			this.labelSubHeader1.Size = new System.Drawing.Size(232, 17);
 			this.labelSubHeader1.TabIndex = 0;
 			this.labelSubHeader1.Text = "xxChooseWorkflowControlSetToEdit";
 			this.labelSubHeader1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -517,15 +515,14 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.tableLayoutPanelBasic.Controls.Add(this.tableLayoutPanelOpenPreference, 0, 7);
 			this.tableLayoutPanelBasic.Controls.Add(this.panelOpenPreference, 0, 6);
 			this.tableLayoutPanelBasic.Controls.Add(this.panel6, 0, 18);
-			this.tableLayoutPanelBasic.Controls.Add(this.radioButtonAdvFairnessPoints, 0, 19);
-			this.tableLayoutPanelBasic.Controls.Add(this.radioButtonAdvFairnessEqual, 0, 20);
+			this.tableLayoutPanelBasic.Controls.Add(this.radioButtonAdvFairnessEqual, 0, 19);
 			this.tableLayoutPanelBasic.Controls.Add(this.panel7, 0, 4);
-			this.tableLayoutPanelBasic.Controls.Add(this.radioButtonAdvSeniority, 0, 21);
+			this.tableLayoutPanelBasic.Controls.Add(this.radioButtonAdvSeniority, 0, 20);
 			this.tableLayoutPanelBasic.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanelBasic.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanelBasic.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanelBasic.Name = "tableLayoutPanelBasic";
-			this.tableLayoutPanelBasic.RowCount = 23;
+			this.tableLayoutPanelBasic.RowCount = 22;
 			this.tableLayoutPanelBasic.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 115F));
 			this.tableLayoutPanelBasic.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
 			this.tableLayoutPanelBasic.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
@@ -547,8 +544,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.tableLayoutPanelBasic.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanelBasic.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
 			this.tableLayoutPanelBasic.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-			this.tableLayoutPanelBasic.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
 			this.tableLayoutPanelBasic.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanelBasic.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanelBasic.Size = new System.Drawing.Size(965, 429);
 			this.tableLayoutPanelBasic.TabIndex = 0;
 			// 
@@ -931,11 +928,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// 
 			this.comboBoxAdvAllowedPreferenceActivity.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.comboBoxAdvAllowedPreferenceActivity.BackColor = System.Drawing.Color.White;
-			this.comboBoxAdvAllowedPreferenceActivity.BeforeTouchSize = new System.Drawing.Size(199, 19);
+			this.comboBoxAdvAllowedPreferenceActivity.BeforeTouchSize = new System.Drawing.Size(199, 23);
 			this.comboBoxAdvAllowedPreferenceActivity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxAdvAllowedPreferenceActivity.Location = new System.Drawing.Point(3, 1362);
 			this.comboBoxAdvAllowedPreferenceActivity.Name = "comboBoxAdvAllowedPreferenceActivity";
-			this.comboBoxAdvAllowedPreferenceActivity.Size = new System.Drawing.Size(199, 19);
+			this.comboBoxAdvAllowedPreferenceActivity.Size = new System.Drawing.Size(199, 23);
 			this.comboBoxAdvAllowedPreferenceActivity.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxAdvAllowedPreferenceActivity.TabIndex = 15;
 			this.comboBoxAdvAllowedPreferenceActivity.SelectedIndexChanged += new System.EventHandler(this.comboBoxAdvAllowedPreferenceActivity_SelectedIndexChanged);
@@ -1239,27 +1236,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.label4.Text = "xxFairnessSystemUsedForScheduling";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// radioButtonAdvFairnessPoints
-			// 
-			this.radioButtonAdvFairnessPoints.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.radioButtonAdvFairnessPoints.BeforeTouchSize = new System.Drawing.Size(932, 24);
-			this.radioButtonAdvFairnessPoints.Checked = true;
-			this.tableLayoutPanelBasic.SetColumnSpan(this.radioButtonAdvFairnessPoints, 2);
-			this.radioButtonAdvFairnessPoints.Location = new System.Drawing.Point(3, 1660);
-			this.radioButtonAdvFairnessPoints.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
-			this.radioButtonAdvFairnessPoints.Name = "radioButtonAdvFairnessPoints";
-			this.radioButtonAdvFairnessPoints.Size = new System.Drawing.Size(932, 24);
-			this.radioButtonAdvFairnessPoints.TabIndex = 17;
-			this.radioButtonAdvFairnessPoints.Text = "xxPointsPerShiftCategory";
-			this.radioButtonAdvFairnessPoints.ThemesEnabled = true;
-			this.radioButtonAdvFairnessPoints.CheckChanged += new System.EventHandler(this.radioButtonAdvFairnessPointsCheckChanged);
-			// 
 			// radioButtonAdvFairnessEqual
 			// 
 			this.radioButtonAdvFairnessEqual.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.radioButtonAdvFairnessEqual.BeforeTouchSize = new System.Drawing.Size(932, 24);
 			this.tableLayoutPanelBasic.SetColumnSpan(this.radioButtonAdvFairnessEqual, 2);
-			this.radioButtonAdvFairnessEqual.Location = new System.Drawing.Point(3, 1695);
+			this.radioButtonAdvFairnessEqual.Location = new System.Drawing.Point(3, 1660);
 			this.radioButtonAdvFairnessEqual.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.radioButtonAdvFairnessEqual.Name = "radioButtonAdvFairnessEqual";
 			this.radioButtonAdvFairnessEqual.Size = new System.Drawing.Size(932, 24);
@@ -1298,7 +1280,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.radioButtonAdvSeniority.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.radioButtonAdvSeniority.BeforeTouchSize = new System.Drawing.Size(932, 24);
 			this.tableLayoutPanelBasic.SetColumnSpan(this.radioButtonAdvSeniority, 2);
-			this.radioButtonAdvSeniority.Location = new System.Drawing.Point(3, 1730);
+			this.radioButtonAdvSeniority.Location = new System.Drawing.Point(3, 1695);
 			this.radioButtonAdvSeniority.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.radioButtonAdvSeniority.Name = "radioButtonAdvSeniority";
 			this.radioButtonAdvSeniority.Size = new System.Drawing.Size(932, 24);
@@ -1547,7 +1529,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.dateTimePickerAdvViewpoint.Calendar.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.dateTimePickerAdvViewpoint.Calendar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.dateTimePickerAdvViewpoint.Calendar.BottomHeight = 25;
-			this.dateTimePickerAdvViewpoint.Calendar.Culture = new System.Globalization.CultureInfo("en-US");
+			this.dateTimePickerAdvViewpoint.Calendar.Culture = new System.Globalization.CultureInfo("sv-SE");
 			this.dateTimePickerAdvViewpoint.Calendar.DayNamesColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.dateTimePickerAdvViewpoint.Calendar.DayNamesFont = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.dateTimePickerAdvViewpoint.Calendar.DaysFont = new System.Drawing.Font("Segoe UI", 9F);
@@ -1839,7 +1821,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.labelOpenForShiftTrade.ForeColor = System.Drawing.Color.GhostWhite;
 			this.labelOpenForShiftTrade.Location = new System.Drawing.Point(3, 8);
 			this.labelOpenForShiftTrade.Name = "labelOpenForShiftTrade";
-			this.labelOpenForShiftTrade.Size = new System.Drawing.Size(193, 17);
+			this.labelOpenForShiftTrade.Size = new System.Drawing.Size(194, 17);
 			this.labelOpenForShiftTrade.TabIndex = 0;
 			this.labelOpenForShiftTrade.Text = "xxOpenForShiftTradeRequests";
 			// 
@@ -1863,7 +1845,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.labelTolerance.ForeColor = System.Drawing.Color.GhostWhite;
 			this.labelTolerance.Location = new System.Drawing.Point(3, 8);
 			this.labelTolerance.Name = "labelTolerance";
-			this.labelTolerance.Size = new System.Drawing.Size(242, 17);
+			this.labelTolerance.Size = new System.Drawing.Size(243, 17);
 			this.labelTolerance.TabIndex = 0;
 			this.labelTolerance.Text = "xxToleranceForMatchingContractTime";
 			// 
@@ -1951,7 +1933,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.timeSpanTextBox1.TabIndex = 9;
 			this.timeSpanTextBox1.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
 			this.timeSpanTextBox1.TimeSpanBoxHeight = 23;
-			this.timeSpanTextBox1.TimeSpanBoxWidth = 1834;
+			this.timeSpanTextBox1.TimeSpanBoxWidth = 3959;
 			this.timeSpanTextBox1.Leave += new System.EventHandler(this.timeSpanTextBox1_Leave);
 			// 
 			// labelTolerancePosNeg
@@ -2077,7 +2059,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.panelOpenPreference.PerformLayout();
 			this.panel6.ResumeLayout(false);
 			this.panel6.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.radioButtonAdvFairnessPoints)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.radioButtonAdvFairnessEqual)).EndInit();
 			this.panel7.ResumeLayout(false);
 			this.panel7.PerformLayout();
@@ -2207,7 +2188,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvAutoGrant;
 		private Panel panel6;
 		private Label label4;
-		private Syncfusion.Windows.Forms.Tools.RadioButtonAdv radioButtonAdvFairnessPoints;
 		private Syncfusion.Windows.Forms.Tools.RadioButtonAdv radioButtonAdvFairnessEqual;
 		private Panel panel7;
 		private Label labelOpenStudentAvailability;
