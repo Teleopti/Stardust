@@ -60,13 +60,6 @@ namespace Teleopti.Ccc.Web.Broker
 			}
 		}
 
-		public void Ping(int expectedNumberOfSentMessages, int messagesPerSecond)
-		{
-			_actionScheduler = new ActionThrottle(messagesPerSecond);
-			((ActionThrottle)_actionScheduler).Start();
-
-			Ping(expectedNumberOfSentMessages);
-		}
 	}
 
 }
