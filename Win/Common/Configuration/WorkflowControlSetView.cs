@@ -51,25 +51,21 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			dateOnlyPeriodsVisualizer1.Culture = TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture;
 			timeSpanTextBox1.TimeSpanBoxWidth = timeSpanTextBox1.Width;
 			dateTimePickerAdvViewpoint.SetCultureInfoSafe(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
-
-			if (toggleManager.IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317))
-			{
-				radioButtonAdvFairnessPoints.Hide();
-				var rowIndex = tableLayoutPanelBasic.GetRow(radioButtonAdvFairnessPoints);
-				tableLayoutPanelBasic.RowStyles[rowIndex].Height = 0;
-			}
+			radioButtonAdvFairnessPoints.Hide();
+			var rowIndex = tableLayoutPanelBasic.GetRow(radioButtonAdvFairnessPoints);
+			tableLayoutPanelBasic.RowStyles[rowIndex].Height = 0;
 
 			if (!toggleManager.IsEnabled(Toggles.Scheduler_Seniority_24331))
 			{
 				radioButtonAdvSeniority.Hide();
-				var rowIndex = tableLayoutPanelBasic.GetRow(radioButtonAdvSeniority);
+				rowIndex = tableLayoutPanelBasic.GetRow(radioButtonAdvSeniority);
 				tableLayoutPanelBasic.RowStyles[rowIndex].Height = 0;
 			}
 
 			if (!toggleManager.IsEnabled(Toggles.MyTimeWeb_AbsenceReport_31011))
 			{
 				twoListSelectorAbsencesForReport.Hide();
-				var rowIndex = tableLayoutPanelBasic.GetRow(twoListSelectorAbsencesForReport);
+				rowIndex = tableLayoutPanelBasic.GetRow(twoListSelectorAbsencesForReport);
 				tableLayoutPanelBasic.RowStyles[rowIndex].Height = 0;
 
 				labelAllowedAbsencesForReport.Hide();

@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common;
@@ -21,11 +18,9 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 		private bool _dataLoaded;
 		private IList<GroupPageLight> _groupPages;
 		private IEnumerable<IActivity> _availableActivity;
-		private IList<GroupPageLight> _groupPagesFairness;
 		private IEnumerable<IScheduleTag> _scheduleTags;
 		private ISchedulerGroupPagesProvider _groupPagesProvider;
 		private GroupPageLight _singleAgentEntry;
-		private IToggleManager _toggleManager;
 
 		public SchedulingSessionPreferencesTabPanel()
 		{
@@ -33,15 +28,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			if (!DesignMode) SetTexts();
 		}
 
-		public void Initialize(ISchedulingOptions schedulingOptions, 
-							   IEnumerable<IShiftCategory> shiftCategories,
-		                       bool backToLegalStateDialog, 
-							   ISchedulerGroupPagesProvider groupPagesProvider,
-		                       IEnumerable<IScheduleTag> scheduleTags, 
-							   IEnumerable<IActivity> availableActivity, 
-							   IToggleManager toggleManager)
+		public void Initialize(ISchedulingOptions schedulingOptions, IEnumerable<IShiftCategory> shiftCategories, bool backToLegalStateDialog, ISchedulerGroupPagesProvider groupPagesProvider, IEnumerable<IScheduleTag> scheduleTags, IEnumerable<IActivity> availableActivity)
 		{
-			_toggleManager = toggleManager;
 			_groupPagesProvider = groupPagesProvider;
 			_availableActivity = availableActivity;
 
@@ -50,18 +38,14 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 				pnlBlockTeamScheduling.Visible = false;
 			}
 
-			if (_toggleManager.IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317))
+			if (backToLegalStateDialog)
 			{
-
-				if (backToLegalStateDialog)
-				{
-					tabPageExtra.Hide();
-				}
-				else
-				{
-					tableLayoutPanel2.RowStyles[2].Height = 0;
-					tableLayoutPanel2.RowStyles[1].Height = 0;
-				}
+				tabPageExtra.Hide();
+			}
+			else
+			{
+				tableLayoutPanel2.RowStyles[2].Height = 0;
+				tableLayoutPanel2.RowStyles[1].Height = 0;
 			}
 
 			labelResourceCalculateEveryColon.Visible = true;
@@ -79,7 +63,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			_shiftCategories = shiftCategories;
 			_scheduleTags = scheduleTags;
 			_groupPages = _groupPagesProvider.GetGroups(false);
-			_groupPagesFairness = _groupPages.ToList();
 			_singleAgentEntry = GroupPageLight.SingleAgentGroup(Resources.NoTeam);
 			ExchangeData(ExchangeDataOption.DataSourceToControls);
 			_dataLoaded = true;
@@ -253,10 +236,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			_schedulingOptions.UseTeam = _localSchedulingOptions.UseTeam;
 			_schedulingOptions.GroupOnGroupPageForTeamBlockPer = _localSchedulingOptions.GroupOnGroupPageForTeamBlockPer;
 			_schedulingOptions.DoNotBreakMaxStaffing = _localSchedulingOptions.DoNotBreakMaxStaffing;
-
-			_schedulingOptions.Fairness = _toggleManager.IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317) 
-				? new Percent(0) : _localSchedulingOptions.Fairness;
-
+			_schedulingOptions.Fairness = new Percent(0);
 			_schedulingOptions.GroupPageForShiftCategoryFairness = _localSchedulingOptions.GroupPageForShiftCategoryFairness;
 		    _schedulingOptions.UserOptionMaxSeatsFeature = _localSchedulingOptions.UserOptionMaxSeatsFeature;
 			_schedulingOptions.UseSameDayOffs = _localSchedulingOptions.UseSameDayOffs;
@@ -348,8 +328,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
 			checkBoxUseShiftCategory.Checked = _localSchedulingOptions.ShiftCategory != null;
 
-			trackBar1.Value = _toggleManager.IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317)
-				? 0 : (int) (_localSchedulingOptions.Fairness.Value*100);
+			trackBar1.Value = 0;
 
 			checkBoxDoNotBreakMaxSeats.Checked = _localSchedulingOptions.DoNotBreakMaxStaffing;
 		    if (_localSchedulingOptions.UserOptionMaxSeatsFeature == MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak)

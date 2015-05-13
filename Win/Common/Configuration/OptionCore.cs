@@ -196,11 +196,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				allSupportedPages.Add(new BadgeThresholdSettings(_toggleManager));
 			}
 
-			if (!_toggleManager.IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317))
-			{
-				allSupportedPages.Add(new FairnessValuesControl());
-			}
-
 			if (_toggleManager.IsEnabled(Toggles.Scheduler_Seniority_24331))
 			{
 				allSupportedPages.Add(new SeniorityControl());

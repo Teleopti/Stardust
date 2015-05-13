@@ -236,7 +236,6 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 				return;
 
 			var service = _container.Resolve<IDistributionReportService>();
-			var pointsFairnessHidden = _toggleManager.IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317);
 			var seniorityFairness = _toggleManager.IsEnabled(Toggles.Scheduler_Seniority_24331);
 			var report = service.CreateReport(person, _groupPagePerDate.GetGroupPageByDate(dateOnly),
 				state.PersonsInOrganization.ToList(), state.Schedules, seniorityFairness);
