@@ -49,12 +49,7 @@
 			this.lblUseRestrictions = new System.Windows.Forms.Label();
 			this.tabPageExtra = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-			this.lblFairness = new System.Windows.Forms.Label();
 			this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
-			this.panel1 = new System.Windows.Forms.Panel();
-			this.label3 = new System.Windows.Forms.Label();
-			this.label4 = new System.Windows.Forms.Label();
-			this.trackBar1 = new System.Windows.Forms.TrackBar();
 			this.label5 = new System.Windows.Forms.Label();
 			this.comboBoxGroupingFairness = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.pnlBlockTeamScheduling = new System.Windows.Forms.Panel();
@@ -111,8 +106,6 @@
 			this.tabPageExtra.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
 			this.tableLayoutPanel5.SuspendLayout();
-			this.panel1.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxGroupingFairness)).BeginInit();
 			this.pnlBlockTeamScheduling.SuspendLayout();
 			this.tableLayoutPanel4.SuspendLayout();
@@ -455,7 +448,6 @@
 			// 
 			this.tableLayoutPanel2.ColumnCount = 1;
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Controls.Add(this.lblFairness, 0, 1);
 			this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel5, 0, 2);
 			this.tableLayoutPanel2.Controls.Add(this.pnlBlockTeamScheduling, 0, 0);
 			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -469,17 +461,6 @@
 			this.tableLayoutPanel2.Size = new System.Drawing.Size(498, 564);
 			this.tableLayoutPanel2.TabIndex = 0;
 			// 
-			// lblFairness
-			// 
-			this.lblFairness.AutoSize = true;
-			this.lblFairness.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.lblFairness.Location = new System.Drawing.Point(3, 354);
-			this.lblFairness.Margin = new System.Windows.Forms.Padding(3);
-			this.lblFairness.Name = "lblFairness";
-			this.lblFairness.Size = new System.Drawing.Size(61, 15);
-			this.lblFairness.TabIndex = 26;
-			this.lblFairness.Text = "xxFairness";
-			// 
 			// tableLayoutPanel5
 			// 
 			this.tableLayoutPanel5.ColumnCount = 4;
@@ -487,7 +468,6 @@
 			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 259F));
 			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 17F));
-			this.tableLayoutPanel5.Controls.Add(this.panel1, 1, 0);
 			this.tableLayoutPanel5.Controls.Add(this.label5, 0, 1);
 			this.tableLayoutPanel5.Controls.Add(this.comboBoxGroupingFairness, 2, 1);
 			this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -501,54 +481,6 @@
 			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel5.Size = new System.Drawing.Size(498, 190);
 			this.tableLayoutPanel5.TabIndex = 25;
-			// 
-			// panel1
-			// 
-			this.tableLayoutPanel5.SetColumnSpan(this.panel1, 2);
-			this.panel1.Controls.Add(this.label3);
-			this.panel1.Controls.Add(this.label4);
-			this.panel1.Controls.Add(this.trackBar1);
-			this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel1.Location = new System.Drawing.Point(20, 3);
-			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(458, 98);
-			this.panel1.TabIndex = 21;
-			// 
-			// label3
-			// 
-			this.label3.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.label3.AutoSize = true;
-			this.label3.Location = new System.Drawing.Point(3, 74);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(62, 15);
-			this.label3.TabIndex = 1;
-			this.label3.Text = "xxBusiness";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
-			// label4
-			// 
-			this.label4.Anchor = System.Windows.Forms.AnchorStyles.Right;
-			this.label4.AutoSize = true;
-			this.label4.Location = new System.Drawing.Point(389, 74);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(59, 15);
-			this.label4.TabIndex = 2;
-			this.label4.Text = "xxFairness";
-			this.label4.TextAlign = System.Drawing.ContentAlignment.BottomRight;
-			// 
-			// trackBar1
-			// 
-			this.trackBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.trackBar1.BackColor = System.Drawing.SystemColors.Window;
-			this.trackBar1.Location = new System.Drawing.Point(7, 17);
-			this.trackBar1.Margin = new System.Windows.Forms.Padding(0);
-			this.trackBar1.Maximum = 100;
-			this.trackBar1.Name = "trackBar1";
-			this.trackBar1.Size = new System.Drawing.Size(447, 45);
-			this.trackBar1.TabIndex = 39;
-			this.trackBar1.TickFrequency = 5;
-			this.trackBar1.ValueChanged += new System.EventHandler(this.trackBar1ValueChanged);
 			// 
 			// label5
 			// 
@@ -1157,12 +1089,8 @@
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvTag)).EndInit();
 			this.tabPageExtra.ResumeLayout(false);
 			this.tableLayoutPanel2.ResumeLayout(false);
-			this.tableLayoutPanel2.PerformLayout();
 			this.tableLayoutPanel5.ResumeLayout(false);
 			this.tableLayoutPanel5.PerformLayout();
-			this.panel1.ResumeLayout(false);
-			this.panel1.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxGroupingFairness)).EndInit();
 			this.pnlBlockTeamScheduling.ResumeLayout(false);
 			this.tableLayoutPanel4.ResumeLayout(false);
@@ -1224,11 +1152,7 @@
         private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxTeamSameStartTime;
         private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxTeamSameEndTime;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TrackBar trackBar1;
+		private System.Windows.Forms.Label label5;
         private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxGroupingFairness;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
@@ -1248,8 +1172,7 @@
         private System.Windows.Forms.Label labelResourceCalculateEveryColon;
         private System.Windows.Forms.Panel pnlBlockTeamScheduling;
         private System.Windows.Forms.Panel pnlShiftCategory;
-        private System.Windows.Forms.Label lblUseRestrictions;
-        private System.Windows.Forms.Label lblFairness;
+		private System.Windows.Forms.Label lblUseRestrictions;
         private System.Windows.Forms.Label lblShiftSelection;
         private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxUseShiftCategoryRestrictions;
         private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxTeamSameActivity;

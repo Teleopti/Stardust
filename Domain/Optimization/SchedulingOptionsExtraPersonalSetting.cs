@@ -68,8 +68,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		    if (activityList != null & _commonActivtyId.HasValue)
 			    schedulingOptions.CommonActivity = activityList.FirstOrDefault(x => x.Id == _commonActivtyId);
 
-		    schedulingOptions.Fairness = new Percent(_fairnessValue);
-
 		    foreach (var groupPage in groupPages)
 		    {
 			    if (_fairnessGroupPageKey == groupPage.Key)
@@ -97,7 +95,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		    _useGroupSchedulingCommonCategory = schedulingOptions.TeamSameShiftCategory;
 		    _useCommmonActivity = schedulingOptions.TeamSameActivity;
 
-		    _fairnessValue = schedulingOptions.Fairness.Value;
 		    _fairnessGroupPageKey = schedulingOptions.GroupPageForShiftCategoryFairness.Key;
 		    _resourceCalculateFrequency = schedulingOptions.ResourceCalculateFrequency;
 		    _screenRefreshRate = schedulingOptions.RefreshRate;

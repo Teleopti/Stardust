@@ -236,7 +236,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			_schedulingOptions.UseTeam = _localSchedulingOptions.UseTeam;
 			_schedulingOptions.GroupOnGroupPageForTeamBlockPer = _localSchedulingOptions.GroupOnGroupPageForTeamBlockPer;
 			_schedulingOptions.DoNotBreakMaxStaffing = _localSchedulingOptions.DoNotBreakMaxStaffing;
-			_schedulingOptions.Fairness = new Percent(0);
 			_schedulingOptions.GroupPageForShiftCategoryFairness = _localSchedulingOptions.GroupPageForShiftCategoryFairness;
 		    _schedulingOptions.UserOptionMaxSeatsFeature = _localSchedulingOptions.UserOptionMaxSeatsFeature;
 			_schedulingOptions.UseSameDayOffs = _localSchedulingOptions.UseSameDayOffs;
@@ -276,7 +275,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			else
 				_localSchedulingOptions.ShiftCategory = null;
 
-			_localSchedulingOptions.Fairness = new Percent(trackBar1.Value/100d);
 			_localSchedulingOptions.GroupPageForShiftCategoryFairness =
 				(GroupPageLight)comboBoxGroupingFairness.SelectedItem;
 			_localSchedulingOptions.UseShiftCategoryLimitations = checkBoxUseShiftCategoryRestrictions.Checked;
@@ -327,8 +325,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			checkBoxUseShiftCategoryRestrictions.Checked = _localSchedulingOptions.UseShiftCategoryLimitations;
 
 			checkBoxUseShiftCategory.Checked = _localSchedulingOptions.ShiftCategory != null;
-
-			trackBar1.Value = 0;
 
 			checkBoxDoNotBreakMaxSeats.Checked = _localSchedulingOptions.DoNotBreakMaxStaffing;
 		    if (_localSchedulingOptions.UserOptionMaxSeatsFeature == MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak)

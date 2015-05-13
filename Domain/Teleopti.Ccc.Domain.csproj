@@ -508,7 +508,6 @@
     <Compile Include="DayOffPlanning\MoveWeekendDayOffDecisionMaker.cs" />
     <Compile Include="DayOffPlanning\Scheduling\DesiredShiftLengthCalculator.cs" />
     <Compile Include="DayOffPlanning\Scheduling\PossibleMinMaxWorkShiftLengthExtractor.cs" />
-    <Compile Include="DayOffPlanning\Scheduling\ShiftCategoryFairnessShiftValueCalculator.cs" />
     <Compile Include="DayOffPlanning\Scheduling\ShiftLengthDecider.cs" />
     <Compile Include="DayOffPlanning\Scheduling\WorkShiftMinMaxCalculator.cs" />
     <Compile Include="DayOffPlanning\Scheduling\WorkShiftMinMaxCalculatorSkipWeekCheck.cs" />

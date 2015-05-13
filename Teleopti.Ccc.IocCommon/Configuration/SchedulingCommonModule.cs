@@ -95,9 +95,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<PersonSkillPeriodsDataHolderManager>()
 				.As<IPersonSkillPeriodsDataHolderManager>()
 				.InstancePerLifetimeScope();
-			builder.RegisterType<ShiftCategoryFairnessShiftValueCalculator>()
-				.As<IShiftCategoryFairnessShiftValueCalculator>()
-				.InstancePerLifetimeScope();
 			builder.RegisterType<ShiftProjectionCacheManager>().As<IShiftProjectionCacheManager>().InstancePerLifetimeScope();
 			builder.RegisterType<ShiftFromMasterActivityService>()
 				.As<IShiftFromMasterActivityService>()

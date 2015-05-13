@@ -1235,13 +1235,6 @@
     <Compile Include="Payroll\Overtime\MultiplicatorControlView.Designer.cs">
       <DependentUpon>MultiplicatorControlView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\Configuration\JusticeValuesControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Common\Configuration\JusticeValuesControl.Designer.cs">
-      <DependentUpon>JusticeValuesControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Common\Configuration\JusticeValuesView.cs" />
     <Compile Include="Common\Configuration\ManageAlarmSituations.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -3329,10 +3322,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Payroll\Overtime\MultiplicatorControlView.resx">
       <DependentUpon>MultiplicatorControlView.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Common\Configuration\JusticeValuesControl.resx">
-      <DependentUpon>JusticeValuesControl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Common\Configuration\ManageAlarmSituations.resx">

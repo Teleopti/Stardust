@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Interfaces.Domain;
 
@@ -16,14 +15,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 	public class FairnessAndMaxSeatCalculatorsManager28317 : IFairnessAndMaxSeatCalculatorsManager
 	{
-		private readonly IShiftCategoryFairnessManager _shiftCategoryFairnessManager;
-		private readonly IShiftCategoryFairnessShiftValueCalculator _categoryFairnessShiftValueCalculator;
 		private readonly ISeatLimitationWorkShiftCalculator2 _seatLimitationWorkShiftCalculator;
 
-		public FairnessAndMaxSeatCalculatorsManager28317(IShiftCategoryFairnessManager shiftCategoryFairnessManager, IShiftCategoryFairnessShiftValueCalculator categoryFairnessShiftValueCalculator, ISeatLimitationWorkShiftCalculator2 seatLimitationWorkShiftCalculator)
+		public FairnessAndMaxSeatCalculatorsManager28317(ISeatLimitationWorkShiftCalculator2 seatLimitationWorkShiftCalculator)
 		{
-			_shiftCategoryFairnessManager = shiftCategoryFairnessManager;
-			_categoryFairnessShiftValueCalculator = categoryFairnessShiftValueCalculator;
 			_seatLimitationWorkShiftCalculator = seatLimitationWorkShiftCalculator;
 		}
 
@@ -32,12 +27,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			ISchedulingOptions schedulingOptions)
 		{
 			double highestShiftValue = double.MinValue;
-            IShiftCategoryFairnessFactors shiftCategoryFairnessFactors = null;
-			if (schedulingOptions.Fairness.Value > 0)
-			{
-				shiftCategoryFairnessFactors = _shiftCategoryFairnessManager.GetFactorsForPersonOnDate(person, dateOnly);
-			}
-
 			var foundValues = new List<IWorkShiftCalculationResultHolder>();
 
 
@@ -45,20 +34,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             {
                 IShiftProjectionCache shiftProjection = thisShiftValue.ShiftProjection;
 	            double shiftValue = thisShiftValue.Value;
-
-	            if (shiftCategoryFairnessFactors != null)
-	            {          
-			            IShiftCategory shiftCategory = shiftProjection.TheMainShift.ShiftCategory;
-			            double factorForShiftCategory = shiftCategoryFairnessFactors.FairnessFactor(shiftCategory);
-			            var fairnessValue =
-				            _categoryFairnessShiftValueCalculator.ModifiedShiftValue(thisShiftValue.Value,
-				                                                                     factorForShiftCategory,
-				                                                                     maxValue, schedulingOptions);
-		           
-		            
-
-		            shiftValue = fairnessValue;
-	            }
 
 				if (shiftValue > highestShiftValue && schedulingOptions.UserOptionMaxSeatsFeature != MaxSeatsFeatureOptions.DoNotConsiderMaxSeats)
                 {

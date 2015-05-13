@@ -34,7 +34,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public IShiftCategory ShiftCategory { get; set; }
         public IDayOffTemplate DayOffTemplate { get; set; }
         public bool UseShiftCategoryLimitations { get; set; }
-        public Percent Fairness { get; set; }
         public bool UseStudentAvailability { get; set; }
 		public bool UseTeam { get; set; }
 

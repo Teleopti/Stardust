@@ -188,12 +188,6 @@ namespace Teleopti.Interfaces.Domain
         bool UseStudentAvailability { get; set; }
 
         /// <summary>
-        /// Gets or sets the fairness.
-        /// </summary>
-        /// <value>The fairness.</value>
-        Percent Fairness { get; set; }
-
-        /// <summary>
         /// Gets or sets the not allowed shift categories.
         /// </summary>
         /// <value>The not allowed shift categories.</value>

@@ -40,9 +40,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_shiftCategoryFairnessManager = _mock.StrictMock<IShiftCategoryFairnessManager>();
 			_categoryFairnessShiftValueCalculator = _mock.StrictMock<IShiftCategoryFairnessShiftValueCalculator>();
 			_seatLimitationWorkShiftCalculator = _mock.StrictMock<ISeatLimitationWorkShiftCalculator2>();
-			_target = new FairnessAndMaxSeatCalculatorsManager28317(_shiftCategoryFairnessManager, 
-				_categoryFairnessShiftValueCalculator, 
-				_seatLimitationWorkShiftCalculator);
+			_target = new FairnessAndMaxSeatCalculatorsManager28317(_seatLimitationWorkShiftCalculator);
 			_person = _mock.StrictMock<IPerson>();
 			_shiftProjectionCache = _mock.StrictMock<IShiftProjectionCache>();
 			_allValues = new List<IWorkShiftCalculationResultHolder>
@@ -58,7 +56,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak
 
 			};
-			_options.Fairness = new Percent(1);
 			_shiftCategoryFairnessFactors = _mock.StrictMock<IShiftCategoryFairnessFactors>();
 			_shiftCategory = new ShiftCategory("test");
 			_shift = new EditableShift(_shiftCategory);
@@ -73,13 +70,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			using (_mock.Record())
 			{
-
-				Expect.Call(_shiftCategoryFairnessManager.GetFactorsForPersonOnDate(_person, _dateOnly)).Return(
-					_shiftCategoryFairnessFactors);
-				
-				Expect.Call(_shiftCategoryFairnessFactors.FairnessFactor(_shiftCategory)).Return(5);
-				Expect.Call(_shiftProjectionCache.TheMainShift).Return(_shift);
-				Expect.Call(_categoryFairnessShiftValueCalculator.ModifiedShiftValue(1, 5, 3, _options)).Return(1);
 				Expect.Call(_shiftProjectionCache.MainShiftProjection).Return(_visualLayerCollection);
 				Expect.Call(_seatLimitationWorkShiftCalculator.CalculateShiftValue(_person, _visualLayerCollection,
 					_maxSeatSkillPeriodsDictionary, _options.UserOptionMaxSeatsFeature)).Return(2);

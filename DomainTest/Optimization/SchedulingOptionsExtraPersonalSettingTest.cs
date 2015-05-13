@@ -58,9 +58,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Assert.IsFalse(_schedulingOptions.TeamSameStartTime);
 			Assert.IsFalse(_schedulingOptions.TeamSameActivity);
 			Assert.IsNull(_schedulingOptions.CommonActivity);
-
-			//Fairness
-			Assert.AreEqual(new Percent(0), _schedulingOptions.Fairness);
 	    }
 
         [Test]
@@ -81,7 +78,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 	        _schedulingOptions.CommonActivity = _activity;
 
 	        _schedulingOptions.GroupPageForShiftCategoryFairness = _groupPageLight;
-			_schedulingOptions.Fairness = new Percent(1);
 
             _target.MapFrom(_schedulingOptions);
 			_schedulingOptions = new SchedulingOptions();
@@ -105,7 +101,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			//Fairness
 			Assert.AreEqual(_groupPageLight, _schedulingOptions.GroupPageForShiftCategoryFairness);
-			Assert.AreEqual(new Percent(1), _schedulingOptions.Fairness);
 
         }
 

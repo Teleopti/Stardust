@@ -234,6 +234,11 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			}
 		}
 
+		private void schedulingSessionPreferencesTabPanel1_Load(object sender, EventArgs e)
+		{
+
+		}
+
 
 	}
 }

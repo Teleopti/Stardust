@@ -173,6 +173,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			this.schedulingSessionPreferencesTabPanel1.UseGroupSchedulingCommonCategory = false;
 			this.schedulingSessionPreferencesTabPanel1.UseGroupSchedulingCommonEnd = false;
 			this.schedulingSessionPreferencesTabPanel1.UseGroupSchedulingCommonStart = false;
+			this.schedulingSessionPreferencesTabPanel1.Load += new System.EventHandler(this.schedulingSessionPreferencesTabPanel1_Load);
 			// 
 			// tabPageDayOffPlanningOptions
 			// 

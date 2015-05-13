@@ -40,7 +40,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			schedulingOptions.RefreshRate = optimizationPreferences.Advanced.RefreshScreenInterval;
 
-			schedulingOptions.Fairness = new Percent(optimizationPreferences.Extra.FairnessValue);
 			schedulingOptions.GroupPageForShiftCategoryFairness = optimizationPreferences.Extra.GroupPageOnCompareWith;
 
 			schedulingOptions.BlockFinderTypeForAdvanceScheduling =

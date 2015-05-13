@@ -33,16 +33,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [Test]
         public void VerifyBuild()
         {
-            var schedulingOptions = _mockRepository.StrictMock<ISchedulingOptions>();
             var scheduleMatrixPro = _mockRepository.StrictMock<IScheduleMatrixPro>();
         	var schedulePartModifyAndRollbackService =
         		_mockRepository.StrictMock<ISchedulePartModifyAndRollbackService>();
 
-            using(_mockRepository.Record())
-            {
-				Expect.Call(schedulingOptions.Fairness).Return(new Percent(0.5));
-
-            }
 			ISchedulePeriodShiftCategoryBackToLegalStateService result = _target.Build(scheduleMatrixPro, schedulePartModifyAndRollbackService);
             Assert.IsNotNull(result);
         }
