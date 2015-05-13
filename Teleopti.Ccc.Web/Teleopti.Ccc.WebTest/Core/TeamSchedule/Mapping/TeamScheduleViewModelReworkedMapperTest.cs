@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 	[TeamScheduleTestAttribute]
 	public class TeamScheduleViewModelReworkedMapperTest
 	{
-		private ITeamScheduleViewModelReworkedMapper Mapper;
+		public ITeamScheduleViewModelReworkedMapper Mapper;
 		[Test]
 		public void ShouldMap()
 		{
