@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Win.Backlog
 			var series2 = chart1.Series.Add("Planned");		
 			var series3 = chart1.Series.Add("Scheduled");
 			var series4 = chart1.Series.Add("Overstaff");
-			//var series5 = chart1.Series.Add("Planned time");
+			var series5 = chart1.Series.Add("Outside SLA");
 
 			series1.ChartType = SeriesChartType.StackedColumn;
 			series1.XValueType = ChartValueType.Date;
@@ -49,10 +49,10 @@ namespace Teleopti.Ccc.Win.Backlog
 			series4.XValueType = ChartValueType.Date;
 			series4.Color = Color.Red;
 
-			//series5.ChartType = SeriesChartType.Line;
-			//series5.YAxisType = AxisType.Primary;
-			//series5.XValueType = ChartValueType.Date;
-			//series5.Color = Color.Blue;
+			series5.ChartType = SeriesChartType.StackedColumn;
+			series5.YAxisType = AxisType.Primary;
+			series5.XValueType = ChartValueType.Date;
+			series5.Color = Color.Yellow;
 
 			var dataPointIndex = 0;
 			foreach (var date in incomingTask.SpanningPeriod.DayCollection())
@@ -73,8 +73,9 @@ namespace Teleopti.Ccc.Win.Backlog
 				datapoint.AxisLabel = date.ToShortDateString();
 				series4.Points.Add(datapoint);
 
-				//datapoint = new DataPoint(i, _model.GetScheduledTimeOnIndex(i, skill).GetValueOrDefault(TimeSpan.Zero).TotalHours);
-				//series5.Points.Add(datapoint);
+				datapoint = date == incomingTask.SpanningPeriod.EndDate ? new DataPoint(dataPointIndex, incomingTask.GetTimeOutsideSLA().TotalHours) : new DataPoint(dataPointIndex, 0);
+				datapoint.AxisLabel = date.ToShortDateString();
+				series5.Points.Add(datapoint);
 
 				dataPointIndex++;
 			}

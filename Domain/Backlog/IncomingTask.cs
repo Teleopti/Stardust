@@ -95,6 +95,9 @@ namespace Teleopti.Ccc.Domain.Backlog
 
 		public TimeSpan GetEstimatedOutgoingBacklogOnDate(DateOnly date)
 		{
+			if (date == SpanningPeriod.EndDate)
+				return TimeSpan.Zero;
+
 			var planned = TimeSpan.Zero;
 			foreach (var dateOnly in _taskDays.Keys)
 			{
@@ -140,6 +143,20 @@ namespace Teleopti.Ccc.Domain.Backlog
 
 			if (timeOnDate > backlog)
 				return timeOnDate.Subtract(backlog);
+
+			return TimeSpan.Zero;
+		}
+
+		public TimeSpan GetTimeOutsideSLA()
+		{
+			var planned = TimeSpan.Zero;
+			foreach (var dateOnly in _taskDays.Keys)
+			{
+				planned = planned.Add(GetTimeOnDate(dateOnly));
+			}
+
+			if (planned < TotalWorkTime)
+				return TotalWorkTime.Subtract(planned);
 
 			return TimeSpan.Zero;
 		}

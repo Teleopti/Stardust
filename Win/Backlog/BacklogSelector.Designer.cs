@@ -31,10 +31,6 @@
 			this.monthCalendar1 = new System.Windows.Forms.MonthCalendar();
 			this.buttonCancel = new System.Windows.Forms.Button();
 			this.buttonOK = new System.Windows.Forms.Button();
-			this.comboBox1 = new System.Windows.Forms.ComboBox();
-			this.label1 = new System.Windows.Forms.Label();
-			this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
-			this.label2 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// monthCalendar1
@@ -48,7 +44,8 @@
 			// buttonCancel
 			// 
 			this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.buttonCancel.Location = new System.Drawing.Point(337, 447);
+			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.buttonCancel.Location = new System.Drawing.Point(112, 500);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(75, 23);
 			this.buttonCancel.TabIndex = 1;
@@ -58,7 +55,7 @@
 			// buttonOK
 			// 
 			this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.buttonOK.Location = new System.Drawing.Point(256, 446);
+			this.buttonOK.Location = new System.Drawing.Point(31, 499);
 			this.buttonOK.Name = "buttonOK";
 			this.buttonOK.Size = new System.Drawing.Size(75, 23);
 			this.buttonOK.TabIndex = 2;
@@ -66,51 +63,13 @@
 			this.buttonOK.UseVisualStyleBackColor = true;
 			this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);
 			// 
-			// comboBox1
-			// 
-			this.comboBox1.FormattingEnabled = true;
-			this.comboBox1.Location = new System.Drawing.Point(214, 29);
-			this.comboBox1.Name = "comboBox1";
-			this.comboBox1.Size = new System.Drawing.Size(198, 21);
-			this.comboBox1.TabIndex = 3;
-			// 
-			// label1
-			// 
-			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(211, 13);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(49, 13);
-			this.label1.TabIndex = 4;
-			this.label1.Text = "Scenario";
-			// 
-			// checkedListBox1
-			// 
-			this.checkedListBox1.FormattingEnabled = true;
-			this.checkedListBox1.Location = new System.Drawing.Point(214, 73);
-			this.checkedListBox1.Name = "checkedListBox1";
-			this.checkedListBox1.Size = new System.Drawing.Size(198, 349);
-			this.checkedListBox1.TabIndex = 5;
-			// 
-			// label2
-			// 
-			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(214, 57);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(71, 13);
-			this.label2.TabIndex = 6;
-			this.label2.Text = "Backlog skills";
-			// 
 			// BacklogSelector
 			// 
 			this.AcceptButton = this.buttonOK;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.buttonCancel;
-			this.ClientSize = new System.Drawing.Size(424, 482);
-			this.Controls.Add(this.label2);
-			this.Controls.Add(this.checkedListBox1);
-			this.Controls.Add(this.label1);
-			this.Controls.Add(this.comboBox1);
+			this.ClientSize = new System.Drawing.Size(199, 535);
 			this.Controls.Add(this.buttonOK);
 			this.Controls.Add(this.buttonCancel);
 			this.Controls.Add(this.monthCalendar1);
@@ -122,7 +81,6 @@
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "BacklogSelector";
 			this.ResumeLayout(false);
-			this.PerformLayout();
 
 		}
 
@@ -131,9 +89,5 @@
 		private System.Windows.Forms.MonthCalendar monthCalendar1;
 		private System.Windows.Forms.Button buttonCancel;
 		private System.Windows.Forms.Button buttonOK;
-		private System.Windows.Forms.ComboBox comboBox1;
-		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.CheckedListBox checkedListBox1;
-		private System.Windows.Forms.Label label2;
 	}
 }

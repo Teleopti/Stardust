@@ -90,6 +90,34 @@ namespace Teleopti.Ccc.DomainTest.Backlog
 			Assert.AreEqual(TimeSpan.FromHours(20), _target.GetOverstaffTimeOnDate(new DateOnly(2015, 06, 4)));
 		}
 
+		[Test]
+		public void EstimatedOutgoingBacklogOnLastDayShouldBeZeroBecauseIfExistsItWillBeReportedInBacklogOutsideSLA()
+		{
+			setupOpenDays();
+
+			_target.SetTimeOnDate(new DateOnly(2015, 6, 1), TimeSpan.FromHours(10), PlannedTimeTypeEnum.Scheduled);
+			_target.SetTimeOnDate(new DateOnly(2015, 6, 2), TimeSpan.FromHours(10), PlannedTimeTypeEnum.Scheduled);
+			_target.SetTimeOnDate(new DateOnly(2015, 6, 3), TimeSpan.FromHours(10), PlannedTimeTypeEnum.Scheduled);
+			_target.SetTimeOnDate(new DateOnly(2015, 6, 4), TimeSpan.FromHours(10), PlannedTimeTypeEnum.Scheduled);
+			_target.SetTimeOnDate(new DateOnly(2015, 6, 5), TimeSpan.FromHours(10), PlannedTimeTypeEnum.Scheduled);
+
+			Assert.AreEqual(TimeSpan.Zero, _target.GetEstimatedOutgoingBacklogOnDate(new DateOnly(2015, 06, 7)));
+		}
+
+		[Test]
+		public void IfThereIsABacklogAfterLastDateItShouldBeReportedByGetTimeOutsideSLA()
+		{
+			setupOpenDays();
+
+			_target.SetTimeOnDate(new DateOnly(2015, 6, 1), TimeSpan.FromHours(10), PlannedTimeTypeEnum.Scheduled);
+			_target.SetTimeOnDate(new DateOnly(2015, 6, 2), TimeSpan.FromHours(10), PlannedTimeTypeEnum.Scheduled);
+			_target.SetTimeOnDate(new DateOnly(2015, 6, 3), TimeSpan.FromHours(10), PlannedTimeTypeEnum.Scheduled);
+			_target.SetTimeOnDate(new DateOnly(2015, 6, 4), TimeSpan.FromHours(10), PlannedTimeTypeEnum.Scheduled);
+			_target.SetTimeOnDate(new DateOnly(2015, 6, 5), TimeSpan.FromHours(10), PlannedTimeTypeEnum.Scheduled);
+
+			Assert.AreEqual(TimeSpan.FromHours(50), _target.GetTimeOutsideSLA());
+		}
+
 		private void setupOpenDays()
 		{
 			_target.Open(new DateOnly(2015, 6, 1));
