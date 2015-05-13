@@ -32,7 +32,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 																 BulkInsertDataTable1,
 																 BulkInsertDataTable2,
 																 commonNameDescriptionSetting,
-																 logonInfos);
+																 logonInfos.ToList());
 
 			int affectedPersonRows = _jobParameters.Helper.Repository.PersistPerson(BulkInsertDataTable1);
 			int affectedAcdLoginRows = _jobParameters.Helper.Repository.PersistAcdLogOnPerson(BulkInsertDataTable2);
