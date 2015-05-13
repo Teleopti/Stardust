@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 
 		public void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions, IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService, IOptimizationPreferences optimizationPreferences, bool schedulerHidePointsFairnessSystem28317, bool schedulerSeniority11111)
 		{
-			var personListForTotalDistribution = _filterPersonsForTotalDistribution.Filter(allPersonMatrixList, schedulerHidePointsFairnessSystem28317, schedulerSeniority11111).ToList();
+			var personListForTotalDistribution = _filterPersonsForTotalDistribution.Filter(allPersonMatrixList, schedulerSeniority11111).ToList();
 			if (!personListForTotalDistribution.Any())
 				return;
 
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 			                                                     schedulingOptions.BlockFinderTypeForAdvanceScheduling,
 			                                                     schedulingOptions.GroupOnGroupPageForTeamBlockPer);
 
-			blocksToWorkWith = _filterForEqualNumberOfCategoryFairness.Filter(blocksToWorkWith, schedulerHidePointsFairnessSystem28317, schedulerSeniority11111);
+			blocksToWorkWith = _filterForEqualNumberOfCategoryFairness.Filter(blocksToWorkWith, schedulerSeniority11111);
 			
 			var totalDistribution = _distributionForPersons.CreateSummary(personListForTotalDistribution, scheduleDictionary);
 			blocksToWorkWith = _filterForTeamBlockInSelection.Filter(blocksToWorkWith,

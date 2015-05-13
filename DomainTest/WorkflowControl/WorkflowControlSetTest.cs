@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             Assert.That(_target.PreferenceInputPeriod, Is.EqualTo(new DateOnlyPeriod(2010, 5, 27, 2011, 5, 27)));
             Assert.That(_target.StudentAvailabilityPeriod, Is.EqualTo(new DateOnlyPeriod(2008, 5, 26, 2009, 5, 26)));
             Assert.That(_target.StudentAvailabilityInputPeriod, Is.EqualTo(new DateOnlyPeriod(2008, 5, 27, 2009, 5, 27)));
-            Assert.That(_target.GetFairnessType(true, true), Is.EqualTo(FairnessType.EqualNumberOfShiftCategory));
+            Assert.That(_target.GetFairnessType(true), Is.EqualTo(FairnessType.EqualNumberOfShiftCategory));
         }
 
         [Test]
@@ -374,37 +374,37 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		    var scheduler_HidePointsFairnessSystem_28317 = true;
 		    var seniority_24331 = true;
 			_target.SetFairnessType(FairnessType.FairnessPoints);
-			Assert.AreEqual(FairnessType.EqualNumberOfShiftCategory, _target.GetFairnessType(scheduler_HidePointsFairnessSystem_28317, seniority_24331));
+			Assert.AreEqual(FairnessType.EqualNumberOfShiftCategory, _target.GetFairnessType(seniority_24331));
 			_target.SetFairnessType(FairnessType.EqualNumberOfShiftCategory);
-			Assert.AreEqual(FairnessType.EqualNumberOfShiftCategory, _target.GetFairnessType(scheduler_HidePointsFairnessSystem_28317, seniority_24331));
+			Assert.AreEqual(FairnessType.EqualNumberOfShiftCategory, _target.GetFairnessType(seniority_24331));
 			_target.SetFairnessType(FairnessType.Seniority);
-			Assert.AreEqual(FairnessType.Seniority, _target.GetFairnessType(scheduler_HidePointsFairnessSystem_28317, seniority_24331));
+			Assert.AreEqual(FairnessType.Seniority, _target.GetFairnessType(seniority_24331));
 	    }
 
 		[Test]
 	    public void ShouldReturnFairnessTypeWhenSettingIsAvailable()
 	    {
 			_target.SetFairnessType(FairnessType.FairnessPoints);
-   			Assert.AreEqual(FairnessType.FairnessPoints, _target.GetFairnessType(false,false));
+			Assert.AreEqual(FairnessType.EqualNumberOfShiftCategory, _target.GetFairnessType(false));
 
 			_target.SetFairnessType(FairnessType.EqualNumberOfShiftCategory);
-			Assert.AreEqual(FairnessType.EqualNumberOfShiftCategory, _target.GetFairnessType(true, false));
+			Assert.AreEqual(FairnessType.EqualNumberOfShiftCategory, _target.GetFairnessType(false));
 
 			_target.SetFairnessType(FairnessType.Seniority);
-			Assert.AreEqual(FairnessType.Seniority, _target.GetFairnessType(true, true));
+			Assert.AreEqual(FairnessType.Seniority, _target.GetFairnessType(true));
 
 			_target.SetFairnessType(FairnessType.EqualNumberOfShiftCategory);
-			Assert.AreEqual(FairnessType.EqualNumberOfShiftCategory, _target.GetFairnessType(true, true));
+			Assert.AreEqual(FairnessType.EqualNumberOfShiftCategory, _target.GetFairnessType(true));
 	    }
 
 		[Test]
 	    public void ShouldReturnEqualNumberOfShiftCateoryWhenSettingIsDisabled()
 	    {
 			_target.SetFairnessType(FairnessType.FairnessPoints);
-			Assert.AreEqual(FairnessType.EqualNumberOfShiftCategory, _target.GetFairnessType(true, false));
+			Assert.AreEqual(FairnessType.EqualNumberOfShiftCategory, _target.GetFairnessType(false));
     
 			_target.SetFairnessType(FairnessType.Seniority);
-			Assert.AreEqual(FairnessType.EqualNumberOfShiftCategory, _target.GetFairnessType(false,false));
+			Assert.AreEqual(FairnessType.EqualNumberOfShiftCategory, _target.GetFairnessType(false));
 	    }
     }
 }

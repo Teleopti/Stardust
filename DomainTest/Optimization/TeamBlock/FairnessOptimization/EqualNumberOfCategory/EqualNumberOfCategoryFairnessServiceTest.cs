@@ -297,9 +297,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 
 		private void commonMocks()
 		{
-			_filterPersonsForTotalDistribution.Stub(x => x.Filter(_allMatrixes, true, true)).Return(_selectedPersons);
+			_filterPersonsForTotalDistribution.Stub(x => x.Filter(_allMatrixes, true)).Return(_selectedPersons);
 			_constructTeamBlock.Stub(x => x.Construct(_allMatrixes, new DateOnlyPeriod(), _selectedPersons, _schedulingOptions.BlockFinderTypeForAdvanceScheduling, _schedulingOptions.GroupOnGroupPageForTeamBlockPer)).Return(_teamBlockInfos);
-			_filterForEqualNumberOfCategoryFairness.Stub(x => x.Filter(_teamBlockInfos, true, true)).Return(_teamBlockInfos);
+			_filterForEqualNumberOfCategoryFairness.Stub(x => x.Filter(_teamBlockInfos, true)).Return(_teamBlockInfos);
 
 			_distributionForPersons.Stub(x => x.CreateSummary(_selectedPersons, _sceduleDictionary)).IgnoreArguments().Return(_totalDistributionSummary);
 			_filterForTeamBlockInSelection.Stub(x => x.Filter(_teamBlockInfos, _selectedPersons, new DateOnlyPeriod())).Return(_teamBlockInfos);

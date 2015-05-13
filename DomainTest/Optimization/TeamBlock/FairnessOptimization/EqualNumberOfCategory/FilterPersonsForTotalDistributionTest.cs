@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 
 			using (_mocks.Playback())
 			{
-				var result = _target.Filter(allMatrixes, true, true).ToList();
+				var result = _target.Filter(allMatrixes, true).ToList();
 				Assert.That(result[0].Equals(person3));
 			}
 		}

@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 			foreach (var workflowControlSet in groupMembers.Select(groupMember => groupMember.WorkflowControlSet))
 			{
 				if (workflowControlSet == null) return false;
-				if (workflowControlSet.GetFairnessType(true, schedulerSeniority11111) != FairnessType.Seniority) return false;
+				if (workflowControlSet.GetFairnessType(schedulerSeniority11111) != FairnessType.Seniority) return false;
 			}
 
 			return true;

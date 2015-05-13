@@ -358,17 +358,5 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             
             return changed;
         }
-
-		[Test]
-		public void ShouldDefaultValueBeEqualNumberOfShiftCategoryWithScheduler_HidePointsFairnessSystem_28317IsTrue()
-		{	
-			Assert.AreEqual(FairnessType.EqualNumberOfShiftCategory, _target.GetFairnessType(true, true));
-		}
-
-		[Test]
-		public void ShouldDefaultValueBeEqualFairnessPointWithScheduler_HidePointsFairnessSystem_28317IsFalse()
-		{
-			Assert.AreEqual(FairnessType.FairnessPoints, _target.GetFairnessType(false, true));
-		}
     }
 }

@@ -7,13 +7,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 {
 	public interface IFilterPersonsForTotalDistribution
 	{
-		IEnumerable<IPerson> Filter(IList<IScheduleMatrixPro> allPersonMatrixList, bool schedulerHidePointsFairnessSystem28317, bool schedulerSeniority11111);
+		IEnumerable<IPerson> Filter(IList<IScheduleMatrixPro> allPersonMatrixList, bool schedulerSeniority11111);
 	}
 
 	public class FilterPersonsForTotalDistribution : IFilterPersonsForTotalDistribution
 	{
 
-		public IEnumerable<IPerson> Filter(IList<IScheduleMatrixPro> allPersonMatrixList, bool schedulerHidePointsFairnessSystem28317, bool schedulerSeniority11111)
+		public IEnumerable<IPerson> Filter(IList<IScheduleMatrixPro> allPersonMatrixList, bool schedulerSeniority11111)
 		{
 			var personListForTotalDistribution = new HashSet<IPerson>();
 			foreach (var scheduleMatrixPro in allPersonMatrixList)
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 				var person = scheduleMatrixPro.Person;
 				var workflowControlSet = person.WorkflowControlSet;
 				if (workflowControlSet == null) continue;
-				if (workflowControlSet.GetFairnessType(schedulerHidePointsFairnessSystem28317, schedulerSeniority11111) == FairnessType.EqualNumberOfShiftCategory)
+				if (workflowControlSet.GetFairnessType(schedulerSeniority11111) == FairnessType.EqualNumberOfShiftCategory)
 					personListForTotalDistribution.Add(person);
 			}
 

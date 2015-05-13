@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			if (wfcs == null)
 				return allValues.ToList();
 
-			var fairnessType = wfcs.GetFairnessType(false, false);
+			var fairnessType = wfcs.GetFairnessType(false);
 
             double highestShiftValue = double.MinValue;
             IShiftCategoryFairnessFactors shiftCategoryFairnessFactors = null;

@@ -161,45 +161,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
            _mocks.VerifyAll();
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
-        public void ShouldRunOtherFairnessAndMaxSeatCalculators()
-        {
-			_workFlowControlSet.SetFairnessType(FairnessType.FairnessPoints);
-            var dateOnly = new DateOnly(2011, 4, 28);
-            var maxSeatSkillPeriods = _mocks.StrictMock<IDictionary<ISkill, ISkillStaffPeriodDictionary>>();
-            var shiftCache = _mocks.StrictMock<IShiftProjectionCache>();
-            var projection = _mocks.StrictMock<IVisualLayerCollection>();
-            var allValues = new List<IWorkShiftCalculationResultHolder>
-                              {
-                                  new WorkShiftCalculationResult { Value = 1, ShiftProjection = shiftCache } 
-                              };
-			_options.Fairness = new Percent(0.25d);
-            var dic = _mocks.StrictMock<IScheduleDictionary>();
-            var range = _mocks.StrictMock<IScheduleRange>();
-            var fairnessValueResult = _mocks.StrictMock<IFairnessValueResult>();
-            Expect.Call(_shiftCatFairnessManager.GetFactorsForPersonOnDate(_person, dateOnly)).Return(
-                _shiftCategoryFairnessFactors);
-
-            Expect.Call(_stateHolder.ShiftCategories).Return(_shiftCategories);
-            Expect.Call(_shiftCategory.MaxOfJusticeValues()).Return(15);
-            Expect.Call(_shiftCategoryFairnessFactors.FairnessPointsPerShift).Return(5);
-            Expect.Call(_stateHolder.Schedules).Return(dic);
-            Expect.Call(dic[_person]).Return(range);
-            Expect.Call(range.FairnessPoints()).Return(fairnessValueResult);
-            Expect.Call(shiftCache.ShiftCategoryDayOfWeekJusticeValue).Return(5);
-			Expect.Call(shiftCache.MainShiftProjection).Return(projection).Repeat.AtLeastOnce();
-            Expect.Call(_seatLimitationWorkShiftCalculator.CalculateShiftValue(_person, projection, maxSeatSkillPeriods,
-                                                                               _options.UserOptionMaxSeatsFeature)).Return(55);
-			Expect.Call(_person.WorkflowControlSet).Return(_workFlowControlSet);
-              
-            _mocks.ReplayAll();
-			var result = _target.RecalculateFoundValues(allValues, 3, _person, dateOnly, maxSeatSkillPeriods,
-										   TimeSpan.FromHours(8), _options);
-            Assert.That(result.Count, Is.EqualTo(1));
-            Assert.That(result[0].Value, Is.EqualTo(66));
-            _mocks.VerifyAll();
-        }
-
 		[Test]
 		public void ShouldNotRunFairnessCalculatorsIfNoFairnessValue()
 		{

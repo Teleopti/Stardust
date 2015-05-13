@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 				}
 
 				var fairnessType = _selectedPerson.WorkflowControlSet
-				   .GetFairnessType(_toggleManager.IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317), _toggleManager.IsEnabled(Toggles.Scheduler_Seniority_24331));
+				   .GetFairnessType(_toggleManager.IsEnabled(Toggles.Scheduler_Seniority_24331));
 
 				tableLayoutPanelNoWorkflowControlSet.Visible = false;
 
