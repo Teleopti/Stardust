@@ -139,6 +139,7 @@
     <Compile Include="FakeAgentStateReadModelReader.cs" />
     <Compile Include="FakeAllBusinessUnitsUnitOfWorkAspect.cs" />
     <Compile Include="FakeCurrentApplicationData.cs" />
+    <Compile Include="FakeCurrentBusinessUnit.cs" />
     <Compile Include="FakeData\FakeCurrentIdentity.cs" />
     <Compile Include="FakeEventPublisher.cs" />
     <Compile Include="FakeHangfireEventClient.cs" />

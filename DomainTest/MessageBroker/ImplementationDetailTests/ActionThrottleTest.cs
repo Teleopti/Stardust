@@ -2,9 +2,8 @@
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.MessageBroker;
-using Teleopti.Ccc.Web.Broker;
 
-namespace Teleopti.Ccc.WebTest.Core.MessageBroker.LegacyTests
+namespace Teleopti.Ccc.DomainTest.MessageBroker.ImplementationDetailTests
 {
 	[TestFixture]
 	public class ActionThrottleTest

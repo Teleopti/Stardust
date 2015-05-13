@@ -23,7 +23,8 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 			}
 			if (String.IsNullOrEmpty(subscription.BusinessUnitId) || subscription.BusinessUnitId == Guid.Empty.ToString())
 			{
-				subscription.BusinessUnitId = _currentBusinessUnitId.Current().Id.ToString();
+				if (_currentBusinessUnitId.Current() != null)
+					subscription.BusinessUnitId = _currentBusinessUnitId.Current().Id.ToString();
 			}
 		}
 	}

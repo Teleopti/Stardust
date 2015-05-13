@@ -15,32 +15,16 @@ namespace Teleopti.Ccc.Web.Broker
 
 		private IActionScheduler _actionScheduler;
 		private readonly IMessageBrokerServer _server;
-		private readonly IBeforeSubscribe _beforeSubscribe;
 
-		public MessageBrokerHub(IActionScheduler actionScheduler, IMessageBrokerServer server, IBeforeSubscribe beforeSubscribe)
+		public MessageBrokerHub(IActionScheduler actionScheduler, IMessageBrokerServer server)
 		{
 			_actionScheduler = actionScheduler;
 			_server = server;
-			_beforeSubscribe = beforeSubscribe;
 		}
 
 		public string AddSubscription(Subscription subscription)
 		{
-			_beforeSubscribe.Invoke(subscription);
-
-			var route = subscription.Route();
-			
-			if (Logger.IsDebugEnabled)
-			{
-				Logger.DebugFormat("New subscription from client {0} with route {1} (Id: {2}).", Context.ConnectionId,
-								   route, MessageBrokerServer.RouteToGroupName(route));
-			}
-
-
-			Groups.Add(Context.ConnectionId, MessageBrokerServer.RouteToGroupName(route))
-				  .ContinueWith(t => Logger.InfoFormat("Added subscription {0}.", route));
-
-			return route;
+			return _server.AddSubscription(subscription, Context.ConnectionId);
 		}
 
 		public void RemoveSubscription(string route)

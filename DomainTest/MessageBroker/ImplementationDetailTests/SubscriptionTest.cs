@@ -1,11 +1,10 @@
 ﻿using System;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
 
-namespace Teleopti.Ccc.DomainTest.MessageBroker
+namespace Teleopti.Ccc.DomainTest.MessageBroker.ImplementationDetailTests
 {
 	[TestFixture]
 	public class SubscriptionTest
