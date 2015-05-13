@@ -17,11 +17,16 @@ namespace Teleopti.Ccc.Web.Broker
 	{
 		public ILog Logger = LogManager.GetLogger(typeof(MessageBrokerServer));
 
-		public void AddConnectionToGroup(string groupName, string route, string connectionId)
+		public void AddConnectionToGroup(string groupName, string connectionId)
 		{
 			var context = GlobalHost.ConnectionManager.GetHubContext<MessageBrokerHub>();
-			context.Groups.Add(connectionId, groupName)
-				  .ContinueWith(t => Logger.InfoFormat("Added subscription {0}.", route));
+			context.Groups.Add(connectionId, groupName);
+		}
+
+		public void RemoveConnectionFromGroup(string groupName, string connectionId)
+		{
+			var context = GlobalHost.ConnectionManager.GetHubContext<MessageBrokerHub>();
+			context.Groups.Remove(connectionId, groupName);
 		}
 
 		public void CallOnEventMessage(string groupName, string route, Notification notification)

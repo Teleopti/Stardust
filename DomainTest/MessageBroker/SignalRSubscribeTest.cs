@@ -62,5 +62,17 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 			subscription.BusinessUnitId.Should().Be(businessUnit.Id.Value.ToString());
 		}
 
+		[Test]
+		public void ShouldRemoveSubscriptionFromSignalR()
+		{
+			var subscription = new Subscription();
+			var route = Server.AddSubscription(subscription, "connectionId");
+
+			Server.RemoveSubscription(route, "connectionId");
+
+			SignalR.RemovedConnection.Should().Be("connectionId");
+			SignalR.RemovedConnectionFromGroup.Should().Be(MessageBrokerServer.RouteToGroupName(route));
+		}
+
 	}
 }

@@ -31,9 +31,17 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 			if (Logger.IsDebugEnabled)
 				Logger.DebugFormat("New subscription from client {0} with route {1} (Id: {2}).", connectionId, route, RouteToGroupName(route));
 
-			_signalR.AddConnectionToGroup(RouteToGroupName(route), route, connectionId);
+			_signalR.AddConnectionToGroup(RouteToGroupName(route), connectionId);
 
 			return route;
+		}
+
+		public void RemoveSubscription(string route, string connectionId)
+		{
+			if (Logger.IsDebugEnabled)
+				Logger.DebugFormat("Remove subscription from client {0} with route {1} (Id: {2}).", connectionId, route, RouteToGroupName(route));
+
+			_signalR.RemoveConnectionFromGroup(RouteToGroupName(route), connectionId);
 		}
 
 		public void NotifyClients(Interfaces.MessageBroker.Notification notification)

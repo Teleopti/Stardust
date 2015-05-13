@@ -8,11 +8,24 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 		public string AddedConnection;
 		public string AddedConnectionToGroup;
 
-		public void AddConnectionToGroup(string groupName, string route, string connectionId)
+		public void AddConnectionToGroup(string groupName, string connectionId)
 		{
 			AddedConnection = connectionId;
 			AddedConnectionToGroup = groupName;
 		}
+
+
+
+
+		public string RemovedConnection;
+		public string RemovedConnectionFromGroup;
+
+		public void RemoveConnectionFromGroup(string groupName, string connectionId)
+		{
+			RemovedConnection = connectionId;
+			RemovedConnectionFromGroup = groupName;
+		}
+
 
 
 
