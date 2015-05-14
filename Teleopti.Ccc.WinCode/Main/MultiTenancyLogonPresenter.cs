@@ -2,9 +2,9 @@
 using System.Net;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Infrastructure;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
-using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
@@ -38,17 +38,14 @@ namespace Teleopti.Ccc.WinCode.Main
 		private readonly IMultiTenancyApplicationLogon _applicationLogon;
 		private readonly IMultiTenancyWindowsLogon _multiTenancyWindowsLogon;
 		private readonly ISharedSettingsQuerier _sharedSettingsQuerier;
+		private readonly IRepositoryFactory _repFactory;
 		public const string UserAgent = "WIN";
 
 
-		public MultiTenancyLogonPresenter(ILogonView view, LogonModel model,
-			ILoginInitializer initializer,
-			ILogOnOff logOnOff,
-			IMessageBrokerComposite messageBroker,
-			IMultiTenancyApplicationLogon applicationLogon,
-			IMultiTenancyWindowsLogon multiTenancyWindowsLogon,
-			ISharedSettingsQuerier sharedSettingsQuerier
-			)
+		public MultiTenancyLogonPresenter(ILogonView view, LogonModel model, ILoginInitializer initializer, ILogOnOff logOnOff,
+			IMessageBrokerComposite messageBroker, IMultiTenancyApplicationLogon applicationLogon,
+			IMultiTenancyWindowsLogon multiTenancyWindowsLogon, ISharedSettingsQuerier sharedSettingsQuerier,
+			IRepositoryFactory repFactory)
 		{
 			_view = view;
 			_model = model;
@@ -58,6 +55,7 @@ namespace Teleopti.Ccc.WinCode.Main
 			_applicationLogon = applicationLogon;
 			_multiTenancyWindowsLogon = multiTenancyWindowsLogon;
 			_sharedSettingsQuerier = sharedSettingsQuerier;
+			_repFactory = repFactory;
 			_model.AuthenticationType = AuthenticationTypeOption.Windows;
 		}
 
@@ -178,7 +176,7 @@ namespace Teleopti.Ccc.WinCode.Main
 			}
 			
 			var provider = _model.SelectedDataSourceContainer.AvailableBusinessUnitProvider;
-			_model.AvailableBus = provider.AvailableBusinessUnits().ToList();
+			_model.AvailableBus = provider.AvailableBusinessUnits(_repFactory).ToList();
 			if (_model.AvailableBus.Count == 0)
 			{
 				_view.ShowErrorMessage(Resources.NoAllowedBusinessUnitFoundInCurrentDatabase, Resources.ErrorMessage);
@@ -239,7 +237,7 @@ namespace Teleopti.Ccc.WinCode.Main
 		private void setBusinessUnit()
 		{
 			var businessUnit = _model.SelectedBu;
-			businessUnit = _model.SelectedDataSourceContainer.AvailableBusinessUnitProvider.LoadHierarchyInformation(businessUnit);
+			businessUnit = _model.SelectedDataSourceContainer.AvailableBusinessUnitProvider.LoadHierarchyInformation(businessUnit, _repFactory);
 
 			_logOnOff.LogOn(_model.SelectedDataSourceContainer.DataSource, _model.SelectedDataSourceContainer.User, businessUnit);
 

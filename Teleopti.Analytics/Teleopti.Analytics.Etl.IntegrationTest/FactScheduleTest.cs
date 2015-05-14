@@ -573,7 +573,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		public LogOnHelperFake(IDataSource dataSource, IPerson person)
 		{
 			_dataSources.Add(dataSource);
-			_choosenDb = new DataSourceContainer(dataSource, new RepositoryFactory(), AuthenticationTypeOption.Application);
+			_choosenDb = new DataSourceContainer(dataSource, AuthenticationTypeOption.Application);
 			_choosenDb.SetUser(person);
 			_tenantNames = new List<ITenantName> { new TenantName { DataSourceName = dataSource.DataSourceName } };
 		}
@@ -582,7 +582,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		{
 			if (_buList == null)
 			{
-				_buList = new List<IBusinessUnit>(_choosenDb.AvailableBusinessUnitProvider.AvailableBusinessUnits());
+				_buList = new List<IBusinessUnit>(_choosenDb.AvailableBusinessUnitProvider.AvailableBusinessUnits(new RepositoryFactory()));
 			}
 
 			//Trace.WriteLine("No allowed business unit found in current database.");

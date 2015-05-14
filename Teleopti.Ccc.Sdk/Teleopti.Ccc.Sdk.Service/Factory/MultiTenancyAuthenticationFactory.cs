@@ -2,6 +2,7 @@
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.Sdk.WcfService.LogOn;
@@ -49,7 +50,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 
 			if (!resultDto.Successful) return resultDto;
 			resultDto.Tenant = model.SelectedDataSourceContainer.DataSourceName;
-			var buList = model.SelectedDataSourceContainer.AvailableBusinessUnitProvider.AvailableBusinessUnits();
+			var buList = model.SelectedDataSourceContainer.AvailableBusinessUnitProvider.AvailableBusinessUnits(new RepositoryFactory());
 			buList.ForEach(unit => resultDto.BusinessUnitCollection.Add(new BusinessUnitDto { Id = unit.Id, Name = unit.Name }));
 			addToCache(result, model);
 			return resultDto;
@@ -85,7 +86,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 
 			if (!resultDto.Successful) return resultDto;
 			resultDto.Tenant = model.SelectedDataSourceContainer.DataSourceName;
-			var buList = model.SelectedDataSourceContainer.AvailableBusinessUnitProvider.AvailableBusinessUnits();
+			var buList = model.SelectedDataSourceContainer.AvailableBusinessUnitProvider.AvailableBusinessUnits(new RepositoryFactory());
 			buList.ForEach(unit => resultDto.BusinessUnitCollection.Add(new BusinessUnitDto { Id = unit.Id, Name = unit.Name }));
 			addToCache(result, model);
 			return resultDto;

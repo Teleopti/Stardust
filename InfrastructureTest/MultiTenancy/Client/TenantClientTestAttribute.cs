@@ -1,11 +1,12 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
+namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 {
 	public class TenantClientTestAttribute : IoCTestAttribute
 	{
@@ -16,6 +17,8 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 			builder.RegisterType<PostHttpRequestFake>().As<IPostHttpRequest>().AsSelf().SingleInstance();
 			builder.RegisterType<VerifyTerminalDateFake>().As<IVerifyTerminalDate>().AsSelf().SingleInstance();
 			builder.RegisterType<FakePersonRepository>().As<IPersonRepository>().AsSelf().SingleInstance();
+			builder.RegisterType<RepositoryFactoryFake>().As<IRepositoryFactory>().AsSelf().SingleInstance();
+			builder.RegisterType<FakeWindowUserProvider>().As<IWindowsUserProvider>().AsSelf().SingleInstance();
 		}
 	}
 }

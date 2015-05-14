@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Infrastructure;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.UserTexts;
@@ -27,6 +28,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 		private IMultiTenancyWindowsLogon _winLogon;
 		private IMessageBrokerComposite _mBroker;
 		private ISharedSettingsQuerier _sharedSettingsQuerier;
+		private IRepositoryFactory _repFactory;
 
 		[SetUp]
 		public void Setup()
@@ -39,8 +41,9 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			_winLogon = MockRepository.GenerateMock<IMultiTenancyWindowsLogon>();
 			_mBroker = MockRepository.GenerateMock<IMessageBrokerComposite>();
 			_sharedSettingsQuerier = MockRepository.GenerateMock<ISharedSettingsQuerier>();
+			_repFactory = MockRepository.GenerateMock<IRepositoryFactory>();
 			_target = new MultiTenancyLogonPresenter(_view, _model, _initializer,  _logOnOff,
-				_mBroker, _appLogon, _winLogon, _sharedSettingsQuerier);
+				_mBroker, _appLogon, _winLogon, _sharedSettingsQuerier, _repFactory);
 			_model.AuthenticationType = AuthenticationTypeOption.Application;
 		}
 
@@ -55,7 +58,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 		[Test]
 		public void ShouldNotReloadSdkOnBackFromDataSources()
 		{
-			_model.SelectedDataSourceContainer = new DataSourceContainer(null, null, AuthenticationTypeOption.Application);
+			_model.SelectedDataSourceContainer = new DataSourceContainer(null, AuthenticationTypeOption.Application);
 			_target.CurrentStep = LoginStep.SelectLogonType;
 			_target.BackButtonClicked();
 		}
@@ -92,7 +95,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			person.Stub(x => x.ApplicationAuthenticationInfo).Return(appAuthInfo);
 			appAuthInfo.Stub(x => x.Password = "PASS");
 			dataSourceContainer.Stub(x => x.AvailableBusinessUnitProvider).Return(buProvider);
-			buProvider.Stub(x => x.AvailableBusinessUnits()).Return(new List<IBusinessUnit>());
+			buProvider.Stub(x => x.AvailableBusinessUnits(_repFactory)).Return(new List<IBusinessUnit>());
 			_view.Stub(x => x.ShowErrorMessage(Resources.NoAllowedBusinessUnitFoundInCurrentDatabase, Resources.ErrorMessage));
 			_view.Stub(x => x.ShowStep(true));
 			_target.CurrentStep = LoginStep.Login;
@@ -121,7 +124,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			person.Stub(x => x.ApplicationAuthenticationInfo).Return(appAuthInfo);
 			appAuthInfo.Stub(x => x.Password = "PASS");
 			dataSourceContainer.Stub(x => x.AvailableBusinessUnitProvider).Return(buProvider);
-			buProvider.Stub(x => x.AvailableBusinessUnits()).Return(new List<IBusinessUnit> { bu });
+			buProvider.Stub(x => x.AvailableBusinessUnits(_repFactory)).Return(new List<IBusinessUnit> { bu });
 			_view.Stub(x => x.ClearForm(Resources.InitializingTreeDots));
 			_target.CurrentStep = LoginStep.Login;
 			_target.OkbuttonClicked();
@@ -130,7 +133,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 		[Test]
 		public void ShouldGoToLoginIfApplication()
 		{
-			var dataSourceContainer = new DataSourceContainer(null, null, AuthenticationTypeOption.Application);
+			var dataSourceContainer = new DataSourceContainer(null, AuthenticationTypeOption.Application);
 			_model.SelectedDataSourceContainer = dataSourceContainer;
 			_view.Stub(x => x.ShowStep(false));
 			_target.CurrentStep = LoginStep.SelectLogonType;
@@ -151,7 +154,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 
 			_view.Stub(x => x.ClearForm(Resources.InitializingTreeDots));
 			dataSourceContainer.Stub(x => x.AvailableBusinessUnitProvider).Return(buProvider);
-			buProvider.Stub(x => x.LoadHierarchyInformation(bu)).Return(bu);
+			buProvider.Stub(x => x.LoadHierarchyInformation(bu, _repFactory)).Return(bu);
 			dataSourceContainer.Stub(x => x.User).Return(person);
 			_logOnOff.Stub(x => x.LogOn(dataSource, person, bu));
 			dataSourceContainer.Stub(x => x.DataSource).Return(dataSource);
@@ -177,7 +180,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 
 			_view.Stub(x => x.ClearForm(Resources.InitializingTreeDots));
 			dataSourceContainer.Stub(x => x.AvailableBusinessUnitProvider).Return(buProvider);
-			buProvider.Stub(x => x.LoadHierarchyInformation(bu)).Return(bu);
+			buProvider.Stub(x => x.LoadHierarchyInformation(bu, _repFactory)).Return(bu);
 			dataSourceContainer.Stub(x => x.User).Return(person);
 			_logOnOff.Stub(x => x.LogOn(dataSource, person, bu));
 			dataSourceContainer.Stub(x => x.DataSource).Return(dataSource);
@@ -200,7 +203,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			_model.SelectedDataSourceContainer = dataSourceContainer;
 
 			dataSourceContainer.Stub(x => x.AvailableBusinessUnitProvider).Return(buProvider);
-			buProvider.Stub(x => x.AvailableBusinessUnits()).Return(new List<IBusinessUnit> { bu, bu2 });
+			buProvider.Stub(x => x.AvailableBusinessUnits(_repFactory)).Return(new List<IBusinessUnit> { bu, bu2 });
 			_view.Stub(x => x.ShowStep(true));
 
 			_target.CurrentStep = LoginStep.SelectLogonType;

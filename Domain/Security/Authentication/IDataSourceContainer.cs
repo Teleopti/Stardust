@@ -1,4 +1,3 @@
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.Authentication
@@ -7,7 +6,6 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
 	{
 		IDataSource DataSource { get; }
 		AuthenticationTypeOption AuthenticationTypeOption { get; }
-		IRepositoryFactory RepositoryFactory { get; }
 		IPerson User { get; }
 		void SetUser(IPerson person);
 		IAvailableBusinessUnitsProvider AvailableBusinessUnitProvider { get; }

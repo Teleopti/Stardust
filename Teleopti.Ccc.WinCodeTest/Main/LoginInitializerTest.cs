@@ -23,18 +23,18 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 		private ILogonLicenseChecker _licenseChecker;
 		private IRoleToPrincipalCommand _roleToPrincipalCommand;
 		private IRaptorApplicationFunctionsSynchronizer _raptorSynchronizer;
-	    private ILogonMatrix _logonMatrix;
-	    private ILogonView _view;
+		private ILogonMatrix _logonMatrix;
+		private ILogonView _view;
 
-	    [SetUp]
+		[SetUp]
 		public void Setup()
 		{
 			_licenseChecker = MockRepository.GenerateMock<ILogonLicenseChecker>();
 			_roleToPrincipalCommand = MockRepository.GenerateMock<IRoleToPrincipalCommand>();
 			_raptorSynchronizer = MockRepository.GenerateMock<IRaptorApplicationFunctionsSynchronizer>();
-		    _logonMatrix = MockRepository.GenerateMock<ILogonMatrix>();
-	        _view = MockRepository.GenerateMock<ILogonView>();
-            _target = new LoginInitializer(_roleToPrincipalCommand, _licenseChecker,_view, _raptorSynchronizer, _logonMatrix);
+			_logonMatrix = MockRepository.GenerateMock<ILogonMatrix>();
+			_view = MockRepository.GenerateMock<ILogonView>();
+			_target = new LoginInitializer(_roleToPrincipalCommand, _licenseChecker, _view, _raptorSynchronizer, _logonMatrix);
 		}
 
 		[Test]
@@ -42,83 +42,83 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 		{
 			var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
 			var loggedOnUnitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-			var datasourceContainer = new DataSourceContainer(new DataSource(loggedOnUnitOfWorkFactory, null, null), null, AuthenticationTypeOption.Application);
+			var datasourceContainer = new DataSourceContainer(new DataSource(loggedOnUnitOfWorkFactory, null, null), AuthenticationTypeOption.Application);
 			var raptorApplicationResult = new CheckRaptorApplicationFunctionsResult(new List<IApplicationFunction>(), new List<IApplicationFunction>());
-			
+
 			_licenseChecker.Expect(l => l.HasValidLicense(datasourceContainer)).Return(true);
 			_raptorSynchronizer.Expect(r => r.CheckRaptorApplicationFunctions()).Return(raptorApplicationResult);
 			loggedOnUnitOfWorkFactory.Expect(l => l.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 			_roleToPrincipalCommand.Expect(r => r.Execute(null, null, null)).IgnoreArguments();
-			
+
 			var result = _target.InitializeApplication(datasourceContainer);
 			result.Should().Be.True();
 		}
 
-        [Test]
-        public void InitializeApplication_ReturnFalseIfNoOnDeletedFunctions()
-        {
-            var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
-            var loggedOnUnitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-            var datasourceContainer = new DataSourceContainer(new DataSource(loggedOnUnitOfWorkFactory, null, null), null, AuthenticationTypeOption.Application);
-            var raptorApplicationResult = new CheckRaptorApplicationFunctionsResult(new List<IApplicationFunction>(), new List<IApplicationFunction>{new ApplicationFunction("code")});
-            
-            _licenseChecker.Expect(l => l.HasValidLicense(datasourceContainer)).Return(true);
-            _raptorSynchronizer.Expect(r => r.CheckRaptorApplicationFunctions()).Return(raptorApplicationResult);
-            _view.Expect(v => v.ShowYesNoMessage("", "", MessageBoxDefaultButton.Button1))
-                 .IgnoreArguments()
-                 .Return(DialogResult.No);
-            loggedOnUnitOfWorkFactory.Expect(l => l.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-            _roleToPrincipalCommand.Expect(r => r.Execute(null, null, null)).IgnoreArguments();
+		[Test]
+		public void InitializeApplication_ReturnFalseIfNoOnDeletedFunctions()
+		{
+			var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
+			var loggedOnUnitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			var datasourceContainer = new DataSourceContainer(new DataSource(loggedOnUnitOfWorkFactory, null, null), AuthenticationTypeOption.Application);
+			var raptorApplicationResult = new CheckRaptorApplicationFunctionsResult(new List<IApplicationFunction>(), new List<IApplicationFunction> { new ApplicationFunction("code") });
 
-            var result = _target.InitializeApplication(datasourceContainer);
-            result.Should().Be.False();
-        }
+			_licenseChecker.Expect(l => l.HasValidLicense(datasourceContainer)).Return(true);
+			_raptorSynchronizer.Expect(r => r.CheckRaptorApplicationFunctions()).Return(raptorApplicationResult);
+			_view.Expect(v => v.ShowYesNoMessage("", "", MessageBoxDefaultButton.Button1))
+				  .IgnoreArguments()
+				  .Return(DialogResult.No);
+			loggedOnUnitOfWorkFactory.Expect(l => l.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+			_roleToPrincipalCommand.Expect(r => r.Execute(null, null, null)).IgnoreArguments();
 
-        [Test]
-        public void InitializeApplication_ReturnFalseIfNoOnAddedFunctions()
-        {
-            var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
-            var loggedOnUnitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-            var datasourceContainer = new DataSourceContainer(new DataSource(loggedOnUnitOfWorkFactory, null, null), null, AuthenticationTypeOption.Application);
-            var raptorApplicationResult = new CheckRaptorApplicationFunctionsResult(new List<IApplicationFunction> { new ApplicationFunction("code") }, new List<IApplicationFunction>());
+			var result = _target.InitializeApplication(datasourceContainer);
+			result.Should().Be.False();
+		}
 
-            _licenseChecker.Expect(l => l.HasValidLicense(datasourceContainer)).Return(true);
-            _raptorSynchronizer.Expect(r => r.CheckRaptorApplicationFunctions()).Return(raptorApplicationResult);
-            _view.Expect(v => v.ShowYesNoMessage("", "", MessageBoxDefaultButton.Button1))
-                 .IgnoreArguments()
-                 .Return(DialogResult.No);
-            loggedOnUnitOfWorkFactory.Expect(l => l.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-            _roleToPrincipalCommand.Expect(r => r.Execute(null, null, null)).IgnoreArguments();
+		[Test]
+		public void InitializeApplication_ReturnFalseIfNoOnAddedFunctions()
+		{
+			var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
+			var loggedOnUnitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			var datasourceContainer = new DataSourceContainer(new DataSource(loggedOnUnitOfWorkFactory, null, null), AuthenticationTypeOption.Application);
+			var raptorApplicationResult = new CheckRaptorApplicationFunctionsResult(new List<IApplicationFunction> { new ApplicationFunction("code") }, new List<IApplicationFunction>());
 
-            var result = _target.InitializeApplication(datasourceContainer);
-            result.Should().Be.False();
-        }
+			_licenseChecker.Expect(l => l.HasValidLicense(datasourceContainer)).Return(true);
+			_raptorSynchronizer.Expect(r => r.CheckRaptorApplicationFunctions()).Return(raptorApplicationResult);
+			_view.Expect(v => v.ShowYesNoMessage("", "", MessageBoxDefaultButton.Button1))
+				  .IgnoreArguments()
+				  .Return(DialogResult.No);
+			loggedOnUnitOfWorkFactory.Expect(l => l.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+			_roleToPrincipalCommand.Expect(r => r.Execute(null, null, null)).IgnoreArguments();
+
+			var result = _target.InitializeApplication(datasourceContainer);
+			result.Should().Be.False();
+		}
 
 
-        [Test]
-        public void InitializeApplication_ReturnFalseIfNoPermissions()
-        {
-            var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
-            var loggedOnUnitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-            var datasourceContainer = new DataSourceContainer(new DataSource(loggedOnUnitOfWorkFactory, null, null), null, AuthenticationTypeOption.Application);
-            var raptorApplicationResult = new CheckRaptorApplicationFunctionsResult(new List<IApplicationFunction> (), new List<IApplicationFunction>());
+		[Test]
+		public void InitializeApplication_ReturnFalseIfNoPermissions()
+		{
+			var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
+			var loggedOnUnitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			var datasourceContainer = new DataSourceContainer(new DataSource(loggedOnUnitOfWorkFactory, null, null), AuthenticationTypeOption.Application);
+			var raptorApplicationResult = new CheckRaptorApplicationFunctionsResult(new List<IApplicationFunction>(), new List<IApplicationFunction>());
 
-            _licenseChecker.Expect(l => l.HasValidLicense(datasourceContainer)).Return(true);
-            _raptorSynchronizer.Expect(r => r.CheckRaptorApplicationFunctions()).Return(raptorApplicationResult);
-            _view.Expect(
-                v =>
-                v.ShowErrorMessage(string.Concat(Resources.YouAreNotAuthorizedToRunTheApplication, "  "),
-                                   Resources.AuthenticationFailed));
-                
-            loggedOnUnitOfWorkFactory.Expect(l => l.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-            _roleToPrincipalCommand.Expect(r => r.Execute(null, null, null)).IgnoreArguments();
+			_licenseChecker.Expect(l => l.HasValidLicense(datasourceContainer)).Return(true);
+			_raptorSynchronizer.Expect(r => r.CheckRaptorApplicationFunctions()).Return(raptorApplicationResult);
+			_view.Expect(
+				 v =>
+				 v.ShowErrorMessage(string.Concat(Resources.YouAreNotAuthorizedToRunTheApplication, "  "),
+										  Resources.AuthenticationFailed));
 
-            using (new CustomAuthorizationContext(new PrincipalAuthorizationWithNoPermission()))
-            {
-                var result = _target.InitializeApplication(datasourceContainer);
-                result.Should().Be.False();
-            }
-            
-        }
+			loggedOnUnitOfWorkFactory.Expect(l => l.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+			_roleToPrincipalCommand.Expect(r => r.Execute(null, null, null)).IgnoreArguments();
+
+			using (new CustomAuthorizationContext(new PrincipalAuthorizationWithNoPermission()))
+			{
+				var result = _target.InitializeApplication(datasourceContainer);
+				result.Should().Be.False();
+			}
+
+		}
 	}
 }

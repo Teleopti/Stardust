@@ -23,7 +23,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 
 		internal bool LogOn(DataSourceContainer selectedDataSource, IBusinessUnit businessUnit)
 		{
-			selectedDataSource.AvailableBusinessUnitProvider.LoadHierarchyInformation(businessUnit);
+			selectedDataSource.AvailableBusinessUnitProvider.LoadHierarchyInformation(businessUnit, new RepositoryFactory());
 
 			_logOnOff.LogOn(selectedDataSource.DataSource, selectedDataSource.User, businessUnit);
 

@@ -43,7 +43,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 		{
 			if (_buList == null)
 			{
-				_buList = new List<IBusinessUnit>(_choosenDb.AvailableBusinessUnitProvider.AvailableBusinessUnits());
+				_buList = new List<IBusinessUnit>(_choosenDb.AvailableBusinessUnitProvider.AvailableBusinessUnits(_repositoryFactory));
 			}
 
 			//Trace.WriteLine("No allowed business unit found in current database.");
@@ -120,7 +120,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			}
 			else
 			{
-				_choosenDb = new DataSourceContainer(dataSource, _repositoryFactory, AuthenticationTypeOption.Application);
+				_choosenDb = new DataSourceContainer(dataSource, AuthenticationTypeOption.Application);
 
 				using (var unitOfWork = _choosenDb.DataSource.Application.CreateAndOpenUnitOfWork())
 				{

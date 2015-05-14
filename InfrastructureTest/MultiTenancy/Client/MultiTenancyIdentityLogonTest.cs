@@ -1,88 +1,89 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using NUnit.Framework;
-//using Rhino.Mocks;
-//using SharpTestsEx;
-//using Teleopti.Ccc.Domain.Common;
-//using Teleopti.Ccc.Domain.Repositories;
-//using Teleopti.Ccc.Domain.Security.Authentication;
-//using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
-//using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
-//using Teleopti.Ccc.Infrastructure.UnitOfWork;
-//using Teleopti.Interfaces.Domain;
-//using Teleopti.Interfaces.Infrastructure;
+﻿using System;
+using System.Collections.Generic;
+using NUnit.Framework;
+using Rhino.Mocks;
+using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
-//namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
-//{
-//	[TestFixture]
-//	[TenantClientTest]
-//	public class MultiTenancyIdentityLogonTest
-//	{
-//		private MultiTenancyWindowsLogon _target;
-//		private IRepositoryFactory _repositoryFactory;
-//		private IAuthenticationQuerier _authenticationQuerier;
-//		private IDataSource _dataSource;
-//		private LogonModel _model;
-//		private IDataSourcesFactory _dataSourcesFactory;
-//		private IWindowsUserProvider _windowsUserProvider;
-//		private const string userAgent = "something";
+namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
+{
+	[TestFixture]
+	[TenantClientTest]
+	public class MultiTenancyIdentityLogonTest
+	{
+		public PostHttpRequestFake HttpRequestFake;
+		public IMultiTenancyWindowsLogon Target;
+		public FakePersonRepository PersonRepository;
+		public RepositoryFactoryFake RepositoryFactoryFake;
+		public FakeWindowUserProvider FakeWindowUserProvider;
 
-//		[SetUp]
-//		public void Setup()
-//		{
-//			_repositoryFactory = MockRepository.GenerateMock<IRepositoryFactory>();
-//			_authenticationQuerier = MockRepository.GenerateMock<IAuthenticationQuerier>();
-//			_windowsUserProvider = MockRepository.GenerateMock<IWindowsUserProvider>();
-//			_dataSource = MockRepository.GenerateMock<IDataSource>();
-//			_dataSourcesFactory = MockRepository.GenerateMock<IDataSourcesFactory>();
+		private const string userAgent = "something";
+		
 
+		[Test]
+		public void ShouldReturnSuccessOnSuccess()
+		{
+			var dataSource = MockRepository.GenerateMock<IDataSource>();
+			dataSource.Expect(x => x.DataSourceName).Return("[not set]");
+			var applicationData = new ApplicationDataFake();
+			applicationData.SetDataSource(dataSource);
+			var model = new LogonModel ();
+			var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			var personId = Guid.NewGuid();
+			var person = new Person();
+			person.SetId(personId);
+			PersonRepository.Has(person);
+			RepositoryFactoryFake.PersonRepository = PersonRepository;
+			var dataSourceCfg = new DataSourceConfig
+			{
+				AnalyticsConnectionString = Encryption.EncryptStringToBase64("connstringtoencrypt", EncryptionConstants.Image1, EncryptionConstants.Image2),
+				ApplicationNHibernateConfig = new Dictionary<string, string>()
+			};
 
-//			_dataSource.Expect(x => x.DataSourceName).Return("Teleopti WFM");
-//			_model = new LogonModel { UserName = "kalle", Password = "kula" };
-//			_target = new MultiTenancyWindowsLogon(_repositoryFactory, _authenticationQuerier, _windowsUserProvider, _dataSourcesFactory);
-//		}
+			var queryResult = new AuthenticationQueryResult
+			{
+				PersonId = personId,
+				Success = true,
+				Tenant = "[not set]",
+				DataSourceConfiguration = dataSourceCfg
+			};
+			HttpRequestFake.SetReturnValue(queryResult);
+			FakeWindowUserProvider.DomainName = "TOPTINET";
+			FakeWindowUserProvider.UserName = "USER";
+			dataSource.Stub(x => x.Application).Return(uowFactory);
+			var result = Target.Logon(model,applicationData, userAgent);
 
-//		[Test]
-//		public void ShouldReturnSuccessOnSuccess()
-//		{
-//			var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-//			var uow = MockRepository.GenerateMock<IUnitOfWork>();
-//			var personId = Guid.NewGuid();
-//			var person = new Person();
-//			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
-//			var dataSourceCfg = new DataSourceConfig
-//			{
-//				AnalyticsConnectionString = "",
-//				ApplicationNHibernateConfig = new Dictionary<string, string>()
-//			};
-//			_windowsUserProvider.Stub(x => x.DomainName).Return("TOPTINET");
-//			_windowsUserProvider.Stub(x => x.UserName).Return("KULA");
-//			_authenticationQuerier.Stub(x => x.TryIdentityLogon("TOPTINET\\KULA", userAgent))
-//				.Return(new AuthenticationQueryResult { PersonId = personId, Success = true, Tenant = "Teleopti WFM", DataSourceConfiguration = dataSourceCfg });
-//			_dataSourcesFactory.Stub(x => x.Create(dataSourceCfg.ApplicationNHibernateConfig, dataSourceCfg.AnalyticsConnectionString)).Return(_dataSource);
-//			_dataSource.Stub(x => x.Application).Return(uowFactory);
-//			uowFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
-//			_repositoryFactory.Stub(x => x.CreatePersonRepository(uow)).Return(personRepository);
-//			personRepository.Stub(x => x.LoadOne(personId)).Return(person);
-//			var result = _target.Logon(_model, userAgent);
+			result.Successful.Should().Be.True();
+			model.SelectedDataSourceContainer.User.Should().Be.EqualTo(person);
 
-//			result.Successful.Should().Be.True();
-//			_model.SelectedDataSourceContainer.User.Should().Be.EqualTo(person);
+		}
 
-//		}
+		[Test]
+		public void ShouldReturnFailureOnNoSuccess()
+		{
+			var model = new LogonModel();
+			var queryResult = new AuthenticationQueryResult
+			{
+				Success = false,
+			};
+			HttpRequestFake.SetReturnValue(queryResult);
+			var result = Target.Logon(model, new ApplicationDataFake(), userAgent);
 
-//		[Test]
-//		public void ShouldReturnFailureOnNoSuccess()
-//		{
-//			_windowsUserProvider.Stub(x => x.DomainName).Return("TOPTINET");
-//			_windowsUserProvider.Stub(x => x.UserName).Return("KULA");
-//			_authenticationQuerier.Stub(x => x.TryIdentityLogon("TOPTINET\\KULA", userAgent)).Return(new AuthenticationQueryResult { Success = false });
+			result.Successful.Should().Be.False();
+			model.SelectedDataSourceContainer.Should().Be.Null();
+		}
+	}
 
-//			var result = _target.Logon(_model, userAgent);
-
-//			result.Successful.Should().Be.False();
-//			_model.SelectedDataSourceContainer.Should().Be.Null();
-//		}
-//	}
-
-//}
+	public class FakeWindowUserProvider : IWindowsUserProvider 
+	{
+		public string DomainName { get;  set; }
+		public string UserName { get;  set; }
+	}
+}

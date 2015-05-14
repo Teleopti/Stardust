@@ -5,43 +5,43 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Security.Authentication
 {
-    public interface IAvailableBusinessUnitsProvider
-    {
-        IEnumerable<IBusinessUnit> AvailableBusinessUnits();
-        IBusinessUnit LoadHierarchyInformation(IBusinessUnit businessUnit);
-    }
+	public interface IAvailableBusinessUnitsProvider
+	{
+		IEnumerable<IBusinessUnit> AvailableBusinessUnits(IRepositoryFactory repositoryFactory);
+		IBusinessUnit LoadHierarchyInformation(IBusinessUnit businessUnit, IRepositoryFactory repositoryFactory);
+	}
 
-    public class AvailableBusinessUnitsProvider : IAvailableBusinessUnitsProvider
-    {
-        private readonly IDataSourceContainer _dataSourceContainer;
+	public class AvailableBusinessUnitsProvider : IAvailableBusinessUnitsProvider
+	{
+		private readonly IDataSourceContainer _dataSourceContainer;
 
-        public AvailableBusinessUnitsProvider(IDataSourceContainer dataSourceContainer)
-        {
-            _dataSourceContainer = dataSourceContainer;
-        }
+		public AvailableBusinessUnitsProvider(IDataSourceContainer dataSourceContainer)
+		{
+			_dataSourceContainer = dataSourceContainer;
+		}
 
-        public IEnumerable<IBusinessUnit> AvailableBusinessUnits()
-        {
-            if (_dataSourceContainer.User.PermissionInformation.HasAccessToAllBusinessUnits())
-            {
-                using (IUnitOfWork uow = _dataSourceContainer.DataSource.Application.CreateAndOpenUnitOfWork())
-                {
-                    IBusinessUnitRepository businessUnitRepository = _dataSourceContainer.RepositoryFactory.CreateBusinessUnitRepository(uow);
-                    return businessUnitRepository.LoadAllBusinessUnitSortedByName();
-                }
-            }
+		public IEnumerable<IBusinessUnit> AvailableBusinessUnits(IRepositoryFactory repositoryFactory)
+		{
+			if (_dataSourceContainer.User.PermissionInformation.HasAccessToAllBusinessUnits())
+			{
+				using (IUnitOfWork uow = _dataSourceContainer.DataSource.Application.CreateAndOpenUnitOfWork())
+				{
+					IBusinessUnitRepository businessUnitRepository = repositoryFactory.CreateBusinessUnitRepository(uow);
+					return businessUnitRepository.LoadAllBusinessUnitSortedByName();
+				}
+			}
 
-            return _dataSourceContainer.User.PermissionInformation.BusinessUnitAccessCollection();
-        }
+			return _dataSourceContainer.User.PermissionInformation.BusinessUnitAccessCollection();
+		}
 
-        public IBusinessUnit LoadHierarchyInformation(IBusinessUnit businessUnit)
-        {
-            using (IUnitOfWork uow = _dataSourceContainer.DataSource.Application.CreateAndOpenUnitOfWork())
-            {
-                IBusinessUnitRepository businessUnitRepository = _dataSourceContainer.RepositoryFactory.CreateBusinessUnitRepository(uow);
-                uow.Reassociate(businessUnit);
-                return businessUnitRepository.LoadHierarchyInformation(businessUnit);
-            }
-        }
-    }
+		public IBusinessUnit LoadHierarchyInformation(IBusinessUnit businessUnit, IRepositoryFactory repositoryFactory)
+		{
+			using (IUnitOfWork uow = _dataSourceContainer.DataSource.Application.CreateAndOpenUnitOfWork())
+			{
+				IBusinessUnitRepository businessUnitRepository = repositoryFactory.CreateBusinessUnitRepository(uow);
+				uow.Reassociate(businessUnit);
+				return businessUnitRepository.LoadHierarchyInformation(businessUnit);
+			}
+		}
+	}
 }

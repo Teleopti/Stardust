@@ -185,12 +185,13 @@
     <Compile Include="MultiTenancy\Client\ChangePasswordTest.cs" />
     <Compile Include="MultiTenancy\Client\MultiTenancyApplicationLogonTest.cs" />
     <Compile Include="MultiTenancy\Client\MultiTenancyIdentityLogonTest.cs" />
+    <Compile Include="MultiTenancy\Client\RepositoryFactoryFake.cs" />
     <Compile Include="MultiTenancy\Client\SharedSettingsQuerierForNoWebTest.cs" />
     <Compile Include="MultiTenancy\Client\TenantDataManagerTest.cs" />
     <Compile Include="MultiTenancy\Client\TenantLogonDataManagerTest.cs" />
     <Compile Include="MultiTenancy\Client\TenantServerConfigurationTest.cs" />
     <Compile Include="MultiTenancy\Client\VerifyTerminalDateTest.cs" />
-    <Compile Include="MultiTenancy\PostHttpRequestFake.cs" />
+    <Compile Include="MultiTenancy\Client\PostHttpRequestFake.cs" />
     <Compile Include="MultiTenancy\Server\ApplicationUserQueryTest.cs" />
     <Compile Include="MultiTenancy\Client\AuthenticationQuerierTest.cs" />
     <Compile Include="MultiTenancy\Server\CheckPasswordStrengthTest.cs" />
@@ -205,8 +206,8 @@
     <Compile Include="MultiTenancy\Server\PersistPersonInfoTest.cs" />
     <Compile Include="MultiTenancy\Server\PersistTenantTest.cs" />
     <Compile Include="MultiTenancy\Server\ValidTenantUserTest.cs" />
-    <Compile Include="MultiTenancy\TenantClientTestAttribute.cs" />
-    <Compile Include="MultiTenancy\VerifyTerminalDateFake.cs" />
+    <Compile Include="MultiTenancy\Client\TenantClientTestAttribute.cs" />
+    <Compile Include="MultiTenancy\Client\VerifyTerminalDateFake.cs" />
     <Compile Include="Persisters\Schedules\NoUnitOfWorkModifyNoConflictTest.cs" />
     <Compile Include="PrincipalAndStateTestAttribute.cs" />
     <Compile Include="Repositories\ExistingForecastRepositoryTest.cs" />
