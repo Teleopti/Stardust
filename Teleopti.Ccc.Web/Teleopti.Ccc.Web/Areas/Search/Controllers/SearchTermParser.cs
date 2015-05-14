@@ -27,7 +27,9 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 				new Regex("(?<!\"[^" + keywordsSplitter + "]+)" + keywordsSplitter + "(?![^" + keywordsSplitter + "]+\")");
 
 			values = Regex.Replace(values, @"\s{1,}", " ");
-			var searchTerms = values.Split(new[] {searchTermSplitter}).Select(s => s.Trim()).Where(s => !string.IsNullOrEmpty(s));
+			var searchTerms = values.Split(searchTermSplitter)
+				.Select(s => s.Trim())
+				.Where(s => !string.IsNullOrEmpty(s));
 			foreach (var term in searchTerms)
 			{
 				var splitterPosition = term.IndexOf(keyValueSplitter);
@@ -53,7 +55,7 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 					.Where(x => !string.IsNullOrEmpty(x));
 
 				var searchKeywords = parsedTerms.ContainsKey(searchType)
-					? parsedTerms[searchType].Split(new[] {' '}).ToList()
+					? parsedTerms[searchType].Split(keywordsSplitter).ToList()
 					: new List<string>();
 
 				searchKeywords.AddRange(result);
