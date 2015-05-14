@@ -21,7 +21,7 @@
 }
 .wfm-table.wfm-table-center td {
 	text-align:center; 
-    vertical-align:middle;
+	vertical-align:middle;
 }
 .wfm-dense .wfm-checkbox {
 	padding: 0px !important;
@@ -57,7 +57,7 @@
 }
 
 .m-t-10{
-    margin-top: 10px;
+	margin-top: 10px;
 }
 .move-down-5{
 	position:relative;
@@ -69,28 +69,28 @@
   display: inline-block;
 
   select {	
-    padding-top: 0px !important;
-    padding-bottom: 0px !important;
-    margin-left: 3px;
-    border-radius: 0px !important;
-    background-color: white;
-    -webkit-appearance: none;
-    -webkit-border-radius: 0px;
+	padding-top: 0px !important;
+	padding-bottom: 0px !important;
+	margin-left: 3px;
+	border-radius: 0px !important;
+	background-color: white;
+	-webkit-appearance: none;
+	-webkit-border-radius: 0px;
   }
   input {
-    padding-left: 5px;
+	padding-left: 5px;
 	height:24px;
 
-    &.ng-dirty.ng-invalid {
-      border: 2px solid red;
-    }
-    &.ng-pristine.ng-invalid {
-      border-color: #E0E0E0;
-    }
+	&.ng-dirty.ng-invalid {
+	  border: 2px solid red;
+	}
+	&.ng-pristine.ng-invalid {
+	  border-color: #E0E0E0;
+	}
   }
 
   select::-ms-expand {
-    display: none;
+	display: none;
   }
 }
 
@@ -131,4 +131,25 @@ input.ng-invalid + .input-validation-sign .wrong-sign {
 }
 .nowrap{
 	white-space:nowrap;
+}
+.icon-set-fix{
+	position:relative;
+	min-width:46px;
+	.icon-set{
+		position:absolute;
+		top:2px;
+		right:0;
+	}
+}
+.w-150{
+	width:150px;
+}
+.w-100p{
+	width:100%;
+}
+.wfm-datepicker-wrap{
+	box-shadow:none;
+}
+.m-r-10p{
+	margin-right:10%;
 }
