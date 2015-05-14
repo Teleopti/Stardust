@@ -1,6 +1,7 @@
 using System;
 using System.Text.RegularExpressions;
 using Coypu;
+using Coypu.Matchers;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
 using OpenQA.Selenium;
@@ -120,16 +121,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 		// im not sure about the robustness and the trustworhyness of this but...
 		// ... wfm doesnt have jquery so no :contains selector!
 		// it all really depends on the implementation and the exists selector...
-		public void AssertNoContains(string existsSelector, string collectionSelector, string text)
+		public void AssertNoContains(string existsSelector, string notExistsSelector, string text)
 		{
 			AssertExists(existsSelector);
-			var regex = new Regex(Regex.Escape(text));
-			var snapshot = _browser.FindAllCss(collectionSelector, null, options());
-			snapshot.ForEach(e =>
+
+			try
 			{
-				assert(e.HasNoContentMatch(regex, options()), Is.True,
-					"Failed to assert that " + collectionSelector + " did not find anything containing text " + text);
-			});
+				Assert.That(_browser, Shows.No.Css(notExistsSelector, text: text));
+			}
+			catch (AssertionException)
+			{
+				Assert.Fail("Failed to assert that " + notExistsSelector + " did not contain text " + text);
+			}
 		}
 
 		public void AssertFirstContains(string selector, string text)
