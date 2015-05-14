@@ -129,4 +129,16 @@ describe("PeopleCtrl", function() {
 
 		expect(scope.keyword).toEqual("FirstName: Ashley Smith, Organization: London Shenzhen");
 	}));
+
+	it("should change the advanced search field according to simple search input", inject(function($controller) {
+		var scope = $rootScope.$new();
+		$controller("PeopleCtrl", { $scope: scope, PeopleSearch: mockSearchService });
+
+		scope.keyword = "FirstName: Ashley Smith, Organization: London Shenzhen";
+
+		scope.validateSearchKeywordChanged();
+
+		expect(scope.advancedSearchForm.FirstName).toEqual("Ashley Smith");
+		expect(scope.advancedSearchForm.Organization).toEqual("London Shenzhen");
+	}));
 });

@@ -20,6 +20,50 @@ function PeopleController($scope, $filter, $state, SearchSvrc) {
 
 	$scope.validateSearchKeywordChanged = function () {
 		$scope.searchKeywordChanged = true;
+		if ($scope.keyword.indexOf(':') != -1) {
+			var searchTerms = $scope.keyword.split(',');
+			angular.forEach(searchTerms, function (searchTerm) {
+				var termSplitter = searchTerm.indexOf(':');
+				var type = searchTerm.substring(0, termSplitter).trim();
+				var value = searchTerm.substring(termSplitter + 1, searchTerm.length).trim();
+				if (type == "FirstName") {
+					$scope.advancedSearchForm.FirstName = value;
+				}
+				if (type == "LastName") {
+					$scope.advancedSearchForm.LastName = value;
+				}
+				if (type == "EmploymentNumber") {
+					$scope.advancedSearchForm.EmploymentNumber = value;
+				}
+				if (type == "Organization") {
+					$scope.advancedSearchForm.Organization = value;
+				}
+				if (type == "Role") {
+					$scope.advancedSearchForm.Role = value;
+				}
+				if (type == "Contract") {
+					$scope.advancedSearchForm.Contract = value;
+				}
+				if (type == "ContractSchedule") {
+					$scope.advancedSearchForm.ContractSchedule = value;
+				}
+				if (type == "ShiftBag") {
+					$scope.advancedSearchForm.ShiftBag = value;
+				}
+				if (type == "PartTimePercentage") {
+					$scope.advancedSearchForm.PartTimePercentage = value;
+				}
+				if (type == "Skill") {
+					$scope.advancedSearchForm.Skill = value;
+				}
+				if (type == "BudgetGroup") {
+					$scope.advancedSearchForm.BudgetGroup = value;
+				}
+				if (type == "Note") {
+					$scope.advancedSearchForm.Note = value;
+				}
+			});
+		}
 	};
 
 	$scope.searchKeyword = function () {
@@ -105,6 +149,9 @@ function PeopleController($scope, $filter, $state, SearchSvrc) {
 	$scope.advancedSearch = function () {
 		$scope.showAdvancedSearchOption = false;
 		//triger search
+		if ($scope.searchKeywordChanged) {
+			$scope.currentPageIndex = 1;
+		}
 		var keyword = "";
 		if (!IsUndefinedOrEmpty($scope.advancedSearchForm.FirstName)) {
 			keyword += "FirstName: " + $scope.advancedSearchForm.FirstName + ", ";
