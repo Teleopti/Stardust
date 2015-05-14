@@ -97,13 +97,15 @@
 			});
 		
 			$scope.$on('formLocator.formCampaignParams', function (event) {
-				$scope.formCampaignParams = event.targetScope.formCampaignParams;				
+				$scope.formCampaignParams = event.targetScope.formCampaignParams;
+				$scope.formScope = event.targetScope;
 			});
 
 			$scope.update = function (isAlwaysUpdate) {				
 				if (isAlwaysUpdate || ($scope.formCampaignParams.$dirty && $scope.formCampaignParams.$valid ) ) {
 					OutboundService.updateCampaign($scope.campaign,
 					function () {
+						$scope.formScope.$broadcast("campaign.view.refresh");
 						notifySuccess(growl, "Campaign updated successfully");
 					},
 					function (error) {
