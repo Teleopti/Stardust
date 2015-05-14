@@ -119,74 +119,74 @@
 			<li>
 				<label class="col-md-4">FirstName: </label>
 				<span class="col-md-8">
-					<input id="criteria-first-name" type="text" placeholder="FirstName" ng-model="advancedSearchForm.FirstName"/>
+					<input id="criteria-first-name" type="text" placeholder="FirstName" ng-model="advancedSearchForm.FirstName" ng-keydown="$event.which === 13 && advancedSearch()" />
 				</span>
 			</li>
 			<li>	
 				<label class="col-md-4">LastName: </label>
 				<span class="col-md-8">
-					<input id="criteria-last-name" type="text" placeholder="LastName" ng-model="advancedSearchForm.LastName" />
+					<input id="criteria-last-name" type="text" placeholder="LastName" ng-model="advancedSearchForm.LastName" ng-keydown="$event.which === 13 && advancedSearch()" />
 				</span>
 			</li>
 			<li >
 				<label class="col-md-4">EmploymentNumber: </label>
 				<span class="col-md-8">
-					<input id="criteria-employment-number" type="text" placeholder="EmploymentNumber" ng-model="advancedSearchForm.EmploymentNumber" />
+					<input id="criteria-employment-number" type="text" placeholder="EmploymentNumber" ng-model="advancedSearchForm.EmploymentNumber" ng-keydown="$event.which === 13 && advancedSearch()" />
 				</span>
 			</li>
 			<li >
 				<label class="col-md-4">Organization: </label>
 				<span class="col-md-8">
-					<input id="criteria-organization" type="text" placeholder="Organization" ng-model="advancedSearchForm.Organization" />
+					<input id="criteria-organization" type="text" placeholder="Organization" ng-model="advancedSearchForm.Organization" ng-keydown="$event.which === 13 && advancedSearch()" />
 				</span>
 			</li>
 			<li >
 				<label class="col-md-4">Role: </label>
 				<span class="col-md-8">
-					<input id="criteria-role" type="text" placeholder="Role" ng-model="advancedSearchForm.Role" />
+					<input id="criteria-role" type="text" placeholder="Role" ng-model="advancedSearchForm.Role" ng-keydown="$event.which === 13 && advancedSearch()" />
 				</span>
 			</li>
 			<li >
 				<label class="col-md-4">Contract: </label>
 				<span class="col-md-8">
-					<input id="criteria-contract" type="text" placeholder="Contract" ng-model="advancedSearchForm.Contract" />
+					<input id="criteria-contract" type="text" placeholder="Contract" ng-model="advancedSearchForm.Contract" ng-keydown="$event.which === 13 && advancedSearch()" />
 				</span>
 			</li>
 			<li >
 				<label class="col-md-4">Contract schedule: </label>
 				<span class="col-md-8">
-					<input id="criteria-contract-schedule" type="text" placeholder="Contract schedule" ng-model="advancedSearchForm.ContractSchedule" />
+					<input id="criteria-contract-schedule" type="text" placeholder="Contract schedule" ng-model="advancedSearchForm.ContractSchedule" ng-keydown="$event.which === 13 && advancedSearch()" />
 				</span>
 			</li>
 			<li >
 				<label class="col-md-4">Shift bag: </label>
 				<span class="col-md-8">
-					<input id="criteria-shift-bag" type="text" placeholder="Shift bag" ng-model="advancedSearchForm.ShiftBag" />
+					<input id="criteria-shift-bag" type="text" placeholder="Shift bag" ng-model="advancedSearchForm.ShiftBag" ng-keydown="$event.which === 13 && advancedSearch()" />
 				</span>
 			</li>
 			<li >
 				<label class="col-md-4">Part time percentage: </label>
 				<span class="col-md-8">
-					<input id="criteria-part-time-percentage" type="text" placeholder="Part time percentage" ng-model="advancedSearchForm.PartTimePercentage" />
+					<input id="criteria-part-time-percentage" type="text" placeholder="Part time percentage" ng-model="advancedSearchForm.PartTimePercentage" ng-keydown="$event.which === 13 && advancedSearch()" />
 				</span>
 			</li>
 
 			<li >
 				<label class="col-md-4">Skill: </label>
 				<span class="col-md-8">
-					<input id="criteria-skill" type="text" placeholder="Skill" ng-model="advancedSearchForm.Skill" />
+					<input id="criteria-skill" type="text" placeholder="Skill" ng-model="advancedSearchForm.Skill" ng-keydown="$event.which === 13 && advancedSearch()" />
 				</span>
 			</li>
 			<li >
 				<label class="col-md-4">Budget group: </label>
 				<span class="col-md-8">
-					<input id="criteria-badge-group" type="text" placeholder="Budget group" ng-model="advancedSearchForm.BudgetGroup" />
+					<input id="criteria-badge-group" type="text" placeholder="Budget group" ng-model="advancedSearchForm.BudgetGroup" ng-keydown="$event.which === 13 && advancedSearch()" />
 				</span>
 			</li>
 			<li >
 				<label class="col-md-4">Note: </label>
 				<span class="col-md-8">
-					<input id="criteria-note" type="text" placeholder="Note" ng-model="advancedSearchForm.Note" />
+					<input id="criteria-note" type="text" placeholder="Note" ng-model="advancedSearchForm.Note" ng-keydown="$event.which === 13 && advancedSearch()" />
 				</span>
 			</li>
 			<button id="go-advanced-search" class="wfm-btn wfm-btn-primary float-right" ng-click="advancedSearch()"><i class="mdi mdi-magnify"></i></button>
