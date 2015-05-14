@@ -31,15 +31,15 @@
 				<div ng-show="acToggle1">
 					<form name="formCampaignParams" class="form-horizontal wfm-block input-group" ng-submit="update()" form-locator>
 						<input type="submit" style="position: absolute; left: -9999px"/>
-						<div class=" input-prepend">
-							<span><strong translate>Name</strong></span>
+						<div class=" input-prepend nowrap">
+						    <span><strong translate>Name</strong></span>
 							<input id="name" type="text" ng-model="campaign.Name" ng-blur="update()" ng-minlength="3" ng-maxlength="50" required />
 							<div class="displayinline-block  input-validation-sign">
 								<i class="mdi mdi-check success right-sign"></i>
 								<i class="mdi mdi-close danger wrong-sign"></i>
 							</div>
 						</div>
-						<div class="input-prepend">
+						<div class="input-prepend nowrap">
 							<span><strong translate>CallListLength</strong></span>
 							<input id="callList" type="text" ng-model="campaign.CallListLen" ng-blur="update()" placeholder="call list length" range-validate range-min="0" required />
 							<div class="displayinline-block  input-validation-sign">
@@ -47,7 +47,7 @@
 								<i class="mdi mdi-close danger wrong-sign"></i>
 							</div>
 						</div>						
-						<div class="input-prepend">
+						<div class="input-prepend nowrap">
 							<span><strong translate>ConnectRate</strong></span>
 							<input id="cr" type="text" ng-model="campaign.ConnectRate" ng-blur="update()" placeholder="connect rate" range-validate range-max="100" range-min="0" required />
 							<div class="displayinline-block  input-validation-sign">
@@ -55,7 +55,7 @@
 								<i class="mdi mdi-close danger wrong-sign"></i>
 							</div>
 						</div>
-						<div class="input-prepend">
+						<div class="input-prepend nowrap">
 							<span><strong translate>RPCR</strong></span>
 							<input id="target" type="text" ng-model="campaign.RightPartyConnectRate" ng-blur="update()" placeholder="right party connect rate" range-validate range-max="100" range-min="0" required />
 							<div class="displayinline-block  input-validation-sign">
@@ -63,7 +63,7 @@
 								<i class="mdi mdi-close danger wrong-sign"></i>
 							</div>
 						</div>
-						<div class="input-prepend">
+						<div class="input-prepend nowrap">
 							<span><strong translate>ConnectAHT</strong></span>
 							<input id="cAHT" type="text" ng-model="campaign.ConnectAverageHandlingTime" ng-blur="update()" placeholder="connect average handle time" range-validate range-min="0" required />
 							<div class="displayinline-block  input-validation-sign">
@@ -71,7 +71,7 @@
 								<i class="mdi mdi-close danger wrong-sign"></i>
 							</div>
 						</div>
-						<div class="input-prepend">
+						<div class="input-prepend nowrap">
 							<span><strong translate>RPCAHT</strong></span>
 							<input id="rpcAHT" type="text" ng-model="campaign.RightPartyAverageHandlingTime" ng-blur="update()" placeholder="right party average handle time" range-validate range-min="0" required />
 							<div class="displayinline-block  input-validation-sign">
@@ -79,7 +79,7 @@
 								<i class="mdi mdi-close danger wrong-sign"></i>
 							</div>
 						</div>
-						<div class="input-prepend">
+						<div class="input-prepend nowrap">
 							<span><strong translate>UnproductiveTime</strong></span>
 							<input id="unproductive" type="text" ng-model="campaign.UnproductiveTime" ng-blur="update()" placeholder="unproductive time" range-validate range-min="0" required />
 							<div class="displayinline-block  input-validation-sign">
