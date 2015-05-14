@@ -20,6 +20,8 @@ function PeopleController($scope, $filter, $state, SearchSvrc) {
 
 	$scope.validateSearchKeywordChanged = function () {
 		$scope.searchKeywordChanged = true;
+		$scope.advancedSearchForm = {};
+		console.log($scope.advancedSearchForm.Organization);
 		if ($scope.keyword.indexOf(':') != -1) {
 			var searchTerms = $scope.keyword.split(',');
 			angular.forEach(searchTerms, function (searchTerm) {

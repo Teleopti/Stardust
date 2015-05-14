@@ -140,5 +140,11 @@ describe("PeopleCtrl", function() {
 
 		expect(scope.advancedSearchForm.FirstName).toEqual("Ashley Smith");
 		expect(scope.advancedSearchForm.Organization).toEqual("London Shenzhen");
+
+		scope.keyword = "FirstName: Ashley Smith";
+		scope.validateSearchKeywordChanged();
+
+		expect(scope.advancedSearchForm.FirstName).toEqual("Ashley Smith");
+		expect(scope.advancedSearchForm.Organization).toEqual(undefined);
 	}));
 });
