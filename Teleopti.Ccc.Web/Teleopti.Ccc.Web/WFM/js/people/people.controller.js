@@ -27,40 +27,40 @@ function PeopleController($scope, $filter, $state, SearchSvrc) {
 				var termSplitter = searchTerm.indexOf(':');
 				var type = searchTerm.substring(0, termSplitter).trim();
 				var value = searchTerm.substring(termSplitter + 1, searchTerm.length).trim();
-				if (type == "FirstName") {
+				if (type.toUpperCase() == "FIRSTNAME") {
 					$scope.advancedSearchForm.FirstName = value;
 				}
-				if (type == "LastName") {
+				if (type.toUpperCase() == "LASTNAME") {
 					$scope.advancedSearchForm.LastName = value;
 				}
-				if (type == "EmploymentNumber") {
+				if (type.toUpperCase() == "EMPLOYMENTNUMBER") {
 					$scope.advancedSearchForm.EmploymentNumber = value;
 				}
-				if (type == "Organization") {
+				if (type.toUpperCase() == "ORGANIZATION") {
 					$scope.advancedSearchForm.Organization = value;
 				}
-				if (type == "Role") {
+				if (type.toUpperCase() == "ROLE") {
 					$scope.advancedSearchForm.Role = value;
 				}
-				if (type == "Contract") {
+				if (type.toUpperCase() == "CONTRACT") {
 					$scope.advancedSearchForm.Contract = value;
 				}
-				if (type == "ContractSchedule") {
+				if (type.toUpperCase() == "CONTRACTSCHEDULE") {
 					$scope.advancedSearchForm.ContractSchedule = value;
 				}
-				if (type == "ShiftBag") {
+				if (type.toUpperCase() == "SHIFTBAG") {
 					$scope.advancedSearchForm.ShiftBag = value;
 				}
-				if (type == "PartTimePercentage") {
+				if (type.toUpperCase() == "PARTTIMEPERCENTAGE") {
 					$scope.advancedSearchForm.PartTimePercentage = value;
 				}
-				if (type == "Skill") {
+				if (type.toUpperCase() == "SKILL") {
 					$scope.advancedSearchForm.Skill = value;
 				}
-				if (type == "BudgetGroup") {
+				if (type.toUpperCase() == "BUDGETGROUP") {
 					$scope.advancedSearchForm.BudgetGroup = value;
 				}
-				if (type == "Note") {
+				if (type.toUpperCase() == "NOTE") {
 					$scope.advancedSearchForm.Note = value;
 				}
 			});
@@ -155,40 +155,40 @@ function PeopleController($scope, $filter, $state, SearchSvrc) {
 		}
 		var keyword = "";
 		if (!IsUndefinedOrEmpty($scope.advancedSearchForm.FirstName)) {
-			keyword += "FirstName: " + $scope.advancedSearchForm.FirstName + ", ";
+			keyword += "firstName: " + $scope.advancedSearchForm.FirstName + ", ";
 		}
 		if (!IsUndefinedOrEmpty($scope.advancedSearchForm.LastName)) {
-			keyword += "LastName: " + $scope.advancedSearchForm.LastName + ", ";
+			keyword += "lastName: " + $scope.advancedSearchForm.LastName + ", ";
 		}
 		if (!IsUndefinedOrEmpty($scope.advancedSearchForm.EmploymentNumber)) {
-			keyword += "EmploymentNumber: " + $scope.advancedSearchForm.EmploymentNumber + ", ";
+			keyword += "employmentNumber: " + $scope.advancedSearchForm.EmploymentNumber + ", ";
 		}
 		if (!IsUndefinedOrEmpty($scope.advancedSearchForm.Organization)) {
-			keyword += "Organization: " + $scope.advancedSearchForm.Organization + ", ";
+			keyword += "organization: " + $scope.advancedSearchForm.Organization + ", ";
 		}
 		if (!IsUndefinedOrEmpty($scope.advancedSearchForm.Role)) {
-			keyword += "Role: " + $scope.advancedSearchForm.Role + ", ";
+			keyword += "role: " + $scope.advancedSearchForm.Role + ", ";
 		}
 		if (!IsUndefinedOrEmpty($scope.advancedSearchForm.Contract)) {
-			keyword += "Contract: " + $scope.advancedSearchForm.Contract + ", ";
+			keyword += "contract: " + $scope.advancedSearchForm.Contract + ", ";
 		}
 		if (!IsUndefinedOrEmpty($scope.advancedSearchForm.ContractSchedule)) {
-			keyword += "ContractSchedule: " + $scope.advancedSearchForm.ContractSchedule + ", ";
+			keyword += "contractSchedule: " + $scope.advancedSearchForm.ContractSchedule + ", ";
 		}
 		if (!IsUndefinedOrEmpty($scope.advancedSearchForm.ShiftBag)) {
-			keyword += "ShiftBag: " + $scope.advancedSearchForm.ShiftBag + ", ";
+			keyword += "shiftBag: " + $scope.advancedSearchForm.ShiftBag + ", ";
 		}
 		if (!IsUndefinedOrEmpty($scope.advancedSearchForm.PartTimePercentage)) {
-			keyword += "PartTimePercentage: " + $scope.advancedSearchForm.PartTimePercentage + ", ";
+			keyword += "partTimePercentage: " + $scope.advancedSearchForm.PartTimePercentage + ", ";
 		}
 		if (!IsUndefinedOrEmpty($scope.advancedSearchForm.Skill)) {
-			keyword +=  "Skill: " + $scope.advancedSearchForm.Skill + ", ";
+			keyword +=  "skill: " + $scope.advancedSearchForm.Skill + ", ";
 		}
 		if (!IsUndefinedOrEmpty($scope.advancedSearchForm.BudgetGroup)) {
-			keyword +=  "BudgetGroup: " + $scope.advancedSearchForm.BudgetGroup + ", ";
+			keyword +=  "budgetGroup: " + $scope.advancedSearchForm.BudgetGroup + ", ";
 		}
 		if (!IsUndefinedOrEmpty($scope.advancedSearchForm.Note)) {
-			keyword += "Note: " + $scope.advancedSearchForm.Note + ", ";
+			keyword += "note: " + $scope.advancedSearchForm.Note + ", ";
 		}
 
 		if (keyword != "") {
