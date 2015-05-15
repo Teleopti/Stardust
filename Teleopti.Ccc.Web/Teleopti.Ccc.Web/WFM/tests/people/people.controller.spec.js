@@ -127,7 +127,7 @@ describe("PeopleCtrl", function() {
 		expect(scope.optionalColumns.length).toEqual(1);
 		expect(scope.optionalColumns[0]).toEqual("CellPhone");
 
-		expect(scope.keyword).toEqual("FirstName: Ashley Smith, Organization: London Shenzhen");
+		expect(scope.keyword).toEqual("firstName: Ashley Smith, organization: London Shenzhen");
 	}));
 
 	it("should change the advanced search field according to simple search input", inject(function($controller) {
