@@ -10,24 +10,6 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
         private string _userName;
         private bool _initialized;
 
-        public string DomainName
-        {
-            get
-            {
-                VerifyInitialized();
-                return _domainName;
-            }
-        }
-
-        public string UserName
-        {
-            get
-            {
-                VerifyInitialized();
-                return _userName;
-            }
-        }
-
         private void VerifyInitialized()
         {
             if (!_initialized)
@@ -63,5 +45,11 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
                 _initialized = true;
             }
         }
+
+	    public string Identity()
+	    {
+				VerifyInitialized();
+		    return _domainName + "\\" + _userName;
+	    }
     }
 }

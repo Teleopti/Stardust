@@ -55,8 +55,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 				DataSourceConfiguration = dataSourceCfg
 			};
 			HttpRequestFake.SetReturnValue(queryResult);
-			FakeWindowUserProvider.DomainName = "TOPTINET";
-			FakeWindowUserProvider.UserName = "USER";
+			FakeWindowUserProvider.SetIdentity("TOPTINET\\USER");
 			dataSource.Stub(x => x.Application).Return(uowFactory);
 			var result = Target.Logon(model,applicationData, userAgent);
 
@@ -81,9 +80,18 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 		}
 	}
 
-	public class FakeWindowUserProvider : IWindowsUserProvider 
+	public class FakeWindowUserProvider : IWindowsUserProvider
 	{
-		public string DomainName { get;  set; }
-		public string UserName { get;  set; }
+		private string _identity;
+
+		public void SetIdentity(string identity)
+		{
+			_identity = identity;
+		}
+
+		public string Identity()
+		{
+			return _identity;
+		}
 	}
 }

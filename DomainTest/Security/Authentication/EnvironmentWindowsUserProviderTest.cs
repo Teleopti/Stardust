@@ -7,24 +7,10 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
     [TestFixture]
     public class EnvironmentWindowsUserProviderTest
     {
-        private IWindowsUserProvider target;
-
-        [SetUp]
-        public void Setup()
+      [Test]
+        public void VerifyIdentity()
         {
-            target = new EnvironmentWindowsUserProvider();
-        }
-
-        [Test]
-        public void VerifyDomainName()
-        {
-            Assert.AreEqual(Environment.UserDomainName,target.DomainName);
-        }
-
-        [Test]
-        public void VerifyUserName()
-        {
-            Assert.AreEqual(Environment.UserName, target.UserName);
+					Assert.AreEqual(Environment.UserDomainName + "\\" + Environment.UserName, new EnvironmentWindowsUserProvider().Identity());
         }
     }
 }

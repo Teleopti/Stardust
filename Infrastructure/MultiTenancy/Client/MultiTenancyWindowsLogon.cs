@@ -27,9 +27,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 
 		public AuthenticationResult Logon(LogonModel logonModel, IApplicationData applicationData, string userAgent)
 		{
-			var userId = _windowsUserProvider.UserName;
-			var domain = _windowsUserProvider.DomainName;
-			logonModel.UserName = domain + "\\" + userId;
+			logonModel.UserName = _windowsUserProvider.Identity();
 			var result = _authenticationQuerier.TryLogon(new IdentityLogonClientModel{Identity = logonModel.UserName}, userAgent);
 			if (!result.Success)
 				return new AuthenticationResult
@@ -59,10 +57,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 
 		public bool CheckWindowsIsPossible()
 		{
-			var userId = _windowsUserProvider.UserName;
-			var domain = _windowsUserProvider.DomainName;
-
-			return _authenticationQuerier.TryLogon(new IdentityLogonClientModel{Identity = domain + "\\" + userId}, "").Success;
+			return _authenticationQuerier.TryLogon(new IdentityLogonClientModel{Identity = _windowsUserProvider.Identity()}, "").Success;
 		}
 	}
 }
