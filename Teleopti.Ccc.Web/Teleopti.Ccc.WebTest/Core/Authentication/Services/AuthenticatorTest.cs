@@ -3,7 +3,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
@@ -17,20 +17,20 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 	public class AuthenticatorTest
 	{
 		private IApplicationData applicationData;
-		private IRepositoryFactory repositoryFactory;
 		private Authenticator target;
 		private ITokenIdentityProvider tokenIdentityProvider;
 		private IFindTenantAndPersonIdForIdentity findTenantAndPersonIdForIdentity;
+		private ILoadUserUnauthorized loadUserUnauthorized;
 		const string tenant = "Gurkmajonääääs";
 
 		[SetUp]
 		public void Setup()
 		{
 			applicationData = MockRepository.GenerateMock<IApplicationData>();
-			repositoryFactory = MockRepository.GenerateMock<IRepositoryFactory>();
 			tokenIdentityProvider = MockRepository.GenerateMock<ITokenIdentityProvider>();
 			findTenantAndPersonIdForIdentity = MockRepository.GenerateMock<IFindTenantAndPersonIdForIdentity>();
-			target = new Authenticator(applicationData, tokenIdentityProvider, repositoryFactory, findTenantAndPersonIdForIdentity);
+			loadUserUnauthorized = MockRepository.GenerateStub<ILoadUserUnauthorized>();
+			target = new Authenticator(applicationData, tokenIdentityProvider, findTenantAndPersonIdForIdentity, loadUserUnauthorized);
 		}
 
 		[Test]
@@ -38,20 +38,16 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 		{
 			var dataSource = MockRepository.GenerateMock<IDataSource>();
 			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-			var personRep = MockRepository.GenerateMock<IPersonRepository>();
-			var uow = MockRepository.GenerateMock<IUnitOfWork>();
 			var winAccount = new TokenIdentity { UserIdentifier = @"domain\user", OriginalToken = @"http://fake/domain#user" };
 			var tenantAndPersonId = new TenantAndPersonId {PersonId = Guid.NewGuid(), Tenant = tenant};
 			var person = new Person();
 
 			applicationData.Stub(x => x.Tenant(tenant)).Return(dataSource);
 			dataSource.Stub(x => x.Application).Return(unitOfWorkFactory);
-			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
-			repositoryFactory.Stub(x => x.CreatePersonRepository(uow)).Return(personRep);
+			loadUserUnauthorized.Stub(x => x.LoadFullPersonInSeperateTransaction(unitOfWorkFactory, tenantAndPersonId.PersonId)).Return(person);
 			findTenantAndPersonIdForIdentity.Stub(x => x.Find(winAccount.UserIdentifier)).Return(tenantAndPersonId);
 
 			tokenIdentityProvider.Stub(x => x.RetrieveToken()).Return(winAccount);
-			personRep.Stub(x => x.LoadPersonAndPermissions(tenantAndPersonId.PersonId)).Return(person);
 
 			var result = target.LogonIdentityUser();
 			result.Person.Should().Be.SameInstanceAs(person);
@@ -75,8 +71,6 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 		{
 			var dataSource = MockRepository.GenerateMock<IDataSource>();
 			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-			var personRep = MockRepository.GenerateMock<IPersonRepository>();
-			var uow = MockRepository.GenerateMock<IUnitOfWork>();
 			var winAccount = new TokenIdentity { UserIdentifier = @"domain\user", OriginalToken = @"http://fake/domain#user" };
 			var tenantAndPersonId = new TenantAndPersonId { PersonId = Guid.NewGuid(), Tenant = tenant };
 			var person = new Person();
@@ -84,12 +78,10 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 
 			applicationData.Stub(x => x.Tenant(tenant)).Return(dataSource);
 			dataSource.Stub(x => x.Application).Return(unitOfWorkFactory);
-			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
-			repositoryFactory.Stub(x => x.CreatePersonRepository(uow)).Return(personRep);
 			findTenantAndPersonIdForIdentity.Stub(x => x.Find(winAccount.UserIdentifier)).Return(tenantAndPersonId);
+			loadUserUnauthorized.Stub(x => x.LoadFullPersonInSeperateTransaction(unitOfWorkFactory, tenantAndPersonId.PersonId)).Return(person);
 
 			tokenIdentityProvider.Stub(x => x.RetrieveToken()).Return(winAccount);
-			personRep.Stub(x => x.LoadPersonAndPermissions(tenantAndPersonId.PersonId)).Return(person);
 
 			var result = target.LogonIdentityUser();
 			result.Successful.Should().Be.False();
