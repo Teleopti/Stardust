@@ -42,6 +42,7 @@
 			};
 
 			ngModel.$validators.number = function (modelValue, viewValue) {
+				if (!/^\s*[-+]?[0-9]*\.?[0-9]+\s*$/.test(viewValue)) return false;
 				var parsedvv = parseInt(viewValue);
 				if (isNaN(parsedvv)) return false;
 				return true;
