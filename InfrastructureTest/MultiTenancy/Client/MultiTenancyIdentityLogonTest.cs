@@ -6,8 +6,8 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
+using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
-using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
@@ -17,9 +17,8 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 	{
 		public PostHttpRequestFake HttpRequestFake;
 		public IMultiTenancyWindowsLogon Target;
-		public FakePersonRepository PersonRepository;
-		public RepositoryFactoryFake RepositoryFactoryFake;
 		public FakeWindowUserProvider FakeWindowUserProvider;
+		public LoadUserUnauthorizedFake LoadUserUnauthorized;
 
 		private const string userAgent = "something";
 		
@@ -31,8 +30,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			var personId = Guid.NewGuid();
 			var person = new Person();
 			person.SetId(personId);
-			PersonRepository.Has(person);
-			RepositoryFactoryFake.PersonRepository = PersonRepository;
+			LoadUserUnauthorized.Has(person);
 			var dataSourceCfg = new DataSourceConfig
 			{
 				AnalyticsConnectionString = Encryption.EncryptStringToBase64("connstringtoencrypt", EncryptionConstants.Image1, EncryptionConstants.Image2),

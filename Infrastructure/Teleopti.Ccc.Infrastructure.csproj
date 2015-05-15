@@ -206,6 +206,7 @@
     <Compile Include="ApplicationLayer\UnitOfWorkTransactionEventSyncronization.cs" />
     <Compile Include="Authentication\ILoadUserUnauthorized.cs" />
     <Compile Include="Authentication\LoadUserUnauthorized.cs" />
+    <Compile Include="Authentication\LoadUserUnauthorizedFake.cs" />
     <Compile Include="Config\ThrowingLoadPasswordPolicyService.cs" />
     <Compile Include="DistributedLock\DistributedLockAcquirer.cs" />
     <Compile Include="DistributedLock\DistributedLockException.cs" />

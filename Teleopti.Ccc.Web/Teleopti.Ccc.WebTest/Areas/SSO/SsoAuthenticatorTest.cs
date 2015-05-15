@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
 using Teleopti.Ccc.Web.Areas.SSO.Core;
 using Teleopti.Interfaces.Domain;
@@ -19,7 +20,8 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO
 			var applicationAuthentication = MockRepository.GenerateMock<IApplicationAuthentication>();
 			var applicationData = MockRepository.GenerateMock<IApplicationData>();
 			var datasource = MockRepository.GenerateMock<IDataSource>();
-			var target = new SsoAuthenticator(applicationData, null, applicationAuthentication);
+			var loadUserUnauthorized = MockRepository.GenerateStub<ILoadUserUnauthorized>();
+			var target = new SsoAuthenticator(null, applicationAuthentication, loadUserUnauthorized);
 			applicationAuthentication.Stub(x => x.Logon(userName, password)).Return(new TenantAuthenticationResult
 			{
 				PasswordExpired = true

@@ -1,22 +1,24 @@
 ﻿using System;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
+using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 {
 	public class MultiTenancyApplicationLogon : IMultiTenancyApplicationLogon
 	{
-		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IAuthenticationQuerier _authenticationQuerier;
 		private readonly Func<IApplicationData> _applicationData;
+		private readonly ILoadUserUnauthorized _loadUserUnauthorized;
 
-		public MultiTenancyApplicationLogon(IRepositoryFactory repositoryFactory, IAuthenticationQuerier authenticationQuerier, Func<IApplicationData> applicationData)
+		public MultiTenancyApplicationLogon(IAuthenticationQuerier authenticationQuerier, 
+																		Func<IApplicationData> applicationData,
+																		ILoadUserUnauthorized loadUserUnauthorized)
 		{
-			_repositoryFactory = repositoryFactory;
 			_authenticationQuerier = authenticationQuerier;
 			_applicationData = applicationData;
+			_loadUserUnauthorized = loadUserUnauthorized;
 		}
 
 		public AuthenticationResult Logon(LogonModel logonModel, string userAgent)
@@ -35,11 +37,8 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 			
 			logonModel.SelectedDataSourceContainer = new DataSourceContainer(_applicationData().Tenant(dataSourceName), AuthenticationTypeOption.Application);
 
-			using (var uow = logonModel.SelectedDataSourceContainer.DataSource.Application.CreateAndOpenUnitOfWork())
-			{
-				var person = _repositoryFactory.CreatePersonRepository(uow).LoadPersonAndPermissions(personId);
-				logonModel.SelectedDataSourceContainer.SetUser(person);
-			}
+			var person = _loadUserUnauthorized.LoadFullPersonInSeperateTransaction(logonModel.SelectedDataSourceContainer.DataSource.Application, personId);
+			logonModel.SelectedDataSourceContainer.SetUser(person);
 
 			return new AuthenticationResult
 			{
