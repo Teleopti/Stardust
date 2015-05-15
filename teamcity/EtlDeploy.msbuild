@@ -110,8 +110,8 @@
 	</Target>
 	
 	<Target Name="CleanUp" DependsOnTargets="DropCube;DropSQLDatabases">
-		<exec command="taskkill /IM Teleopti.Analytics.Etl.ServiceConsoleHost.exe /F /FI %22memusage gt 2%22" Timeout="1000" ContinueOnError="true" />
-		<Exec Command ='RMDIR /S /Q "$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\Custom"' ContinueOnError="true" />
+		<exec command="taskkill /IM Teleopti.Analytics.Etl.ServiceConsoleHost.exe /F /FI %22memusage gt 2%22"  />
+		<Exec Command ='RMDIR /S /Q "$(WorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\Custom"' />
 	</Target>
 
 	<Target Name="DropCube">
