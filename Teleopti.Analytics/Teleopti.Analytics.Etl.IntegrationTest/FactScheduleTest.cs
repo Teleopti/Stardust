@@ -18,6 +18,7 @@ using Teleopti.Analytics.Etl.TransformerInfrastructure;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Core;
@@ -613,10 +614,8 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 		public bool SelectDataSourceContainer(string dataSourceName)
 		{
-			using (var unitOfWork = _choosenDb.DataSource.Application.CreateAndOpenUnitOfWork())
-			{
-				_choosenDb.SetUser(new RepositoryFactory().CreatePersonRepository(unitOfWork).LoadPersonAndPermissions(SuperUser.Id_AvoidUsing_This));
-			}
+			var person = new LoadUserUnauthorized().LoadFullPersonInSeperateTransaction(_choosenDb.DataSource.Application, SuperUser.Id_AvoidUsing_This);
+			_choosenDb.SetUser(person);
 			return true;
 		}
 

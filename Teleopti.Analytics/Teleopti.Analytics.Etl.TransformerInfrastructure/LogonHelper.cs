@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -121,11 +122,8 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			else
 			{
 				_choosenDb = new DataSourceContainer(dataSource, AuthenticationTypeOption.Application);
-
-				using (var unitOfWork = _choosenDb.DataSource.Application.CreateAndOpenUnitOfWork())
-				{
-					_choosenDb.SetUser(_repositoryFactory.CreatePersonRepository(unitOfWork).LoadPersonAndPermissions(SuperUser.Id_AvoidUsing_This));
-				}
+				var person = new LoadUserUnauthorized().LoadFullPersonInSeperateTransaction(_choosenDb.DataSource.Application, SuperUser.Id_AvoidUsing_This);
+				_choosenDb.SetUser(person);
 				if (_choosenDb.User == null)
 				{
 					Trace.WriteLine("Error on logon!");
