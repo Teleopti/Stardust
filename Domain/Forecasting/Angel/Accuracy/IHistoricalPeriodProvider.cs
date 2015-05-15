@@ -6,5 +6,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 	{
 		DateOnlyPeriod PeriodForEvaluate(IWorkload workload);
 		DateOnlyPeriod PeriodForForecast(IWorkload workload);
+		DateOnlyPeriod PeriodForDisplay(IWorkload workload);
 	}
 }
