@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.Domain.Optimization
         private bool _useCommmonActivity;
         private Guid?  _commonActivtyId;
         
-        private double _fairnessValue;
         private string _fairnessGroupPageKey;
 
 		//Move elsewhere
