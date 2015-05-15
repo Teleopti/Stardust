@@ -137,7 +137,7 @@
 			                    <div class="sub-header">
 			                        <span translate>StartTimeColon</span> <strong>{{campaign.StartDate.Date | date: format }}</strong>
 			                    </div>
-			                    <datepicker ng-model="campaign.StartDate.Date" max-date="campaign.EndDate.Date" show-weeks="true" class="well well-sm" ng-change="update(true)"></datepicker>
+			                    <datepicker ng-model="campaign.StartDate.Date" max-date="campaign.EndDate.Date" show-weeks="true" class="well well-sm"></datepicker>
 			                </div>
 			            </div>
 			            <div class="pull-left">
@@ -145,7 +145,7 @@
 			                    <div class="sub-header">
 			                        <span translate>EndTimeColon</span> <strong class="end-date">{{campaign.EndDate.Date | date: format }}</strong>
 			                    </div>
-			                    <datepicker ng-model="campaign.EndDate.Date" min-date="campaign.StartDate.Date" show-weeks="true" class="well well-sm" ng-change="update(true)"></datepicker>
+			                    <datepicker ng-model="campaign.EndDate.Date" min-date="campaign.StartDate.Date" show-weeks="true" class="well well-sm"></datepicker>
 			                </div>
 			            </div>
 			        </div>

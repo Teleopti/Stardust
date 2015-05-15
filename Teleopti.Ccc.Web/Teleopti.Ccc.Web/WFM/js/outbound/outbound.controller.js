@@ -91,6 +91,13 @@
 
 			$scope.useMeridian = true;
 
+			$scope.$watch('campaign.StartDate.Date', function() {
+				$scope.update(true);
+			});
+			$scope.$watch('campaign.EndDate.Date', function () {
+				$scope.update(true);
+			});
+
 			$scope.$on('outbound.campaigns.loaded', function() {
 				$scope.campaign = (angular.isDefined($stateParams.Id) && $stateParams.Id != "") ? OutboundService.getCampaignById($stateParams.Id) : null;
 				$scope.showCampaignDetail = angular.isDefined($scope.campaign) && ($scope.campaign != null);
