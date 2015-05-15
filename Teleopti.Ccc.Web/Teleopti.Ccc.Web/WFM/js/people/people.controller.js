@@ -17,54 +17,50 @@ function PeopleController($scope, $filter, $state, SearchSvrc) {
 	$scope.advancedSearchForm = {};
 	$scope.searchCriteriaDic = {};
 
+	var allSearchTypes = [
+		"FirstName",
+		"LastName",
+		"EmploymentNumber",
+		"Organization",
+		"Role",
+		"Contract",
+		"ContractSchedule",
+		"ShiftBag",
+		"PartTimePercentage",
+		"Skill",
+		"BudgetGroup",
+		"Note"
+	];
 
-	$scope.validateSearchKeywordChanged = function () {
-		$scope.searchKeywordChanged = true;
+	function setSearchFormProperty(searchType, searchValue) {
+		angular.forEach(allSearchTypes, function (propName) {
+			if (propName.toLowerCase() == searchType.toLowerCase()) {
+				$scope.advancedSearchForm[propName] = searchValue;
+			}
+		});
+	}
+
+	function parseSearchKeywordInputted() {
 		$scope.advancedSearchForm = {};
 		if ($scope.keyword.indexOf(':') != -1) {
 			var searchTerms = $scope.keyword.split(',');
-			angular.forEach(searchTerms, function (searchTerm) {
+			angular.forEach(searchTerms, function (searchTerm) { 
 				var termSplitter = searchTerm.indexOf(':');
-				var type = searchTerm.substring(0, termSplitter).trim();
-				var value = searchTerm.substring(termSplitter + 1, searchTerm.length).trim();
-				if (type.toUpperCase() == "FIRSTNAME") {
-					$scope.advancedSearchForm.FirstName = value;
+				if (termSplitter < 0) {
+					return;
 				}
-				if (type.toUpperCase() == "LASTNAME") {
-					$scope.advancedSearchForm.LastName = value;
-				}
-				if (type.toUpperCase() == "EMPLOYMENTNUMBER") {
-					$scope.advancedSearchForm.EmploymentNumber = value;
-				}
-				if (type.toUpperCase() == "ORGANIZATION") {
-					$scope.advancedSearchForm.Organization = value;
-				}
-				if (type.toUpperCase() == "ROLE") {
-					$scope.advancedSearchForm.Role = value;
-				}
-				if (type.toUpperCase() == "CONTRACT") {
-					$scope.advancedSearchForm.Contract = value;
-				}
-				if (type.toUpperCase() == "CONTRACTSCHEDULE") {
-					$scope.advancedSearchForm.ContractSchedule = value;
-				}
-				if (type.toUpperCase() == "SHIFTBAG") {
-					$scope.advancedSearchForm.ShiftBag = value;
-				}
-				if (type.toUpperCase() == "PARTTIMEPERCENTAGE") {
-					$scope.advancedSearchForm.PartTimePercentage = value;
-				}
-				if (type.toUpperCase() == "SKILL") {
-					$scope.advancedSearchForm.Skill = value;
-				}
-				if (type.toUpperCase() == "BUDGETGROUP") {
-					$scope.advancedSearchForm.BudgetGroup = value;
-				}
-				if (type.toUpperCase() == "NOTE") {
-					$scope.advancedSearchForm.Note = value;
-				}
+
+				var searchType = searchTerm.substring(0, termSplitter).trim();
+				var searchValue = searchTerm.substring(termSplitter + 1, searchTerm.length).trim();
+
+				setSearchFormProperty(searchType, searchValue);
 			});
 		}
+	}
+
+	$scope.validateSearchKeywordChanged = function () {
+		$scope.searchKeywordChanged = true;
+		parseSearchKeywordInputted();
 	};
 
 	$scope.searchKeyword = function () {
@@ -146,6 +142,9 @@ function PeopleController($scope, $filter, $state, SearchSvrc) {
 		$scope.showAdvancedSearchOption = !$scope.showAdvancedSearchOption;
 	}
 
+	function getSearchCriteria(title, value) {
+		return value != undefined && value != "" ? title + ": " + value + ", " : "";
+	}
 
 	$scope.advancedSearch = function () {
 		$scope.showAdvancedSearchOption = false;
@@ -154,51 +153,23 @@ function PeopleController($scope, $filter, $state, SearchSvrc) {
 			$scope.currentPageIndex = 1;
 		}
 		var keyword = "";
-		if (!IsUndefinedOrEmpty($scope.advancedSearchForm.FirstName)) {
-			keyword += "firstName: " + $scope.advancedSearchForm.FirstName + ", ";
-		}
-		if (!IsUndefinedOrEmpty($scope.advancedSearchForm.LastName)) {
-			keyword += "lastName: " + $scope.advancedSearchForm.LastName + ", ";
-		}
-		if (!IsUndefinedOrEmpty($scope.advancedSearchForm.EmploymentNumber)) {
-			keyword += "employmentNumber: " + $scope.advancedSearchForm.EmploymentNumber + ", ";
-		}
-		if (!IsUndefinedOrEmpty($scope.advancedSearchForm.Organization)) {
-			keyword += "organization: " + $scope.advancedSearchForm.Organization + ", ";
-		}
-		if (!IsUndefinedOrEmpty($scope.advancedSearchForm.Role)) {
-			keyword += "role: " + $scope.advancedSearchForm.Role + ", ";
-		}
-		if (!IsUndefinedOrEmpty($scope.advancedSearchForm.Contract)) {
-			keyword += "contract: " + $scope.advancedSearchForm.Contract + ", ";
-		}
-		if (!IsUndefinedOrEmpty($scope.advancedSearchForm.ContractSchedule)) {
-			keyword += "contractSchedule: " + $scope.advancedSearchForm.ContractSchedule + ", ";
-		}
-		if (!IsUndefinedOrEmpty($scope.advancedSearchForm.ShiftBag)) {
-			keyword += "shiftBag: " + $scope.advancedSearchForm.ShiftBag + ", ";
-		}
-		if (!IsUndefinedOrEmpty($scope.advancedSearchForm.PartTimePercentage)) {
-			keyword += "partTimePercentage: " + $scope.advancedSearchForm.PartTimePercentage + ", ";
-		}
-		if (!IsUndefinedOrEmpty($scope.advancedSearchForm.Skill)) {
-			keyword +=  "skill: " + $scope.advancedSearchForm.Skill + ", ";
-		}
-		if (!IsUndefinedOrEmpty($scope.advancedSearchForm.BudgetGroup)) {
-			keyword +=  "budgetGroup: " + $scope.advancedSearchForm.BudgetGroup + ", ";
-		}
-		if (!IsUndefinedOrEmpty($scope.advancedSearchForm.Note)) {
-			keyword += "note: " + $scope.advancedSearchForm.Note + ", ";
-		}
+		angular.forEach(allSearchTypes, function (searchType) {
+			// Change first letter to lowercase
+			var title = searchType.charAt(0).toLowerCase() + searchType.slice(1);
+			keyword += getSearchCriteria(title, $scope.advancedSearchForm[searchType]);
+		});
 
 		if (keyword != "") {
 			keyword = keyword.substring(0, keyword.length - 2);
 		}
 
 		$scope.keyword = keyword;
-		
-		SearchSvrc.searchWithOption.query(JSON.stringify({ SearchCriteria: $scope.advancedSearchForm, PageSize: $scope.pageSize, CurrentPageIndex: $scope.currentPageIndex }))
-			.$promise.then(function (result) {
+
+		SearchSvrc.searchWithOption.query(JSON.stringify({
+			SearchCriteria: $scope.advancedSearchForm,
+			PageSize: $scope.pageSize,
+			CurrentPageIndex: $scope.currentPageIndex
+		})).$promise.then(function(result) {
 			$scope.searchResult = result.People;
 			$scope.optionalColumns = result.OptionalColumns;
 			$scope.totalPages = result.TotalPages;
@@ -213,6 +184,3 @@ function PeopleController($scope, $filter, $state, SearchSvrc) {
 
 	$scope.searchKeyword();
 }
-function IsUndefinedOrEmpty(value) {
-	return value == undefined || value == "";
-};
