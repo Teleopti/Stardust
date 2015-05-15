@@ -2,7 +2,6 @@
 using System.ServiceModel;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Sdk.Common.WcfExtensions;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.WcfService.LogOn
 {
@@ -18,7 +17,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
             //Genomför inloggning. Kasta exception vid fel.
             //var result = _dataSourceContainer.LogOn(_customWindowsSecurityToken.WindowsIdentity.Name);
 	        var result = TenancyLogonFactory.MultiTenancyWindowsLogon()
-		        .Logon(new LogonModel(), StateHolderReader.Instance.StateReader.ApplicationScopeData, "");
+		        .Logon(new LogonModel(), "");
             if (result.Successful)
             {
                 //Spara person till cache.

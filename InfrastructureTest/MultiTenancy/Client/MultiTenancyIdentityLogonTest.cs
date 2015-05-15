@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security;
@@ -9,12 +8,10 @@ using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 {
-	[TestFixture]
 	[TenantClientTest]
 	public class MultiTenancyIdentityLogonTest
 	{
@@ -30,12 +27,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 		[Test]
 		public void ShouldReturnSuccessOnSuccess()
 		{
-			var dataSource = MockRepository.GenerateMock<IDataSource>();
-			dataSource.Expect(x => x.DataSourceName).Return("[not set]");
-			var applicationData = new ApplicationDataFake();
-			applicationData.SetDataSource(dataSource);
 			var model = new LogonModel ();
-			var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			var personId = Guid.NewGuid();
 			var person = new Person();
 			person.SetId(personId);
@@ -56,8 +48,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			};
 			HttpRequestFake.SetReturnValue(queryResult);
 			FakeWindowUserProvider.SetIdentity("TOPTINET\\USER");
-			dataSource.Stub(x => x.Application).Return(uowFactory);
-			var result = Target.Logon(model,applicationData, userAgent);
+			var result = Target.Logon(model, userAgent);
 
 			result.Successful.Should().Be.True();
 			model.SelectedDataSourceContainer.User.Should().Be.EqualTo(person);
@@ -73,7 +64,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 				Success = false,
 			};
 			HttpRequestFake.SetReturnValue(queryResult);
-			var result = Target.Logon(model, new ApplicationDataFake(), userAgent);
+			var result = Target.Logon(model, userAgent);
 
 			result.Successful.Should().Be.False();
 			model.SelectedDataSourceContainer.Should().Be.Null();

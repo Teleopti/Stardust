@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.Repositories;
+﻿using System;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Interfaces.Domain;
@@ -7,7 +8,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 {
 	public interface IMultiTenancyWindowsLogon
 	{
-		AuthenticationResult Logon(LogonModel logonModel, IApplicationData applicationData, string userAgent);
+		AuthenticationResult Logon(LogonModel logonModel, string userAgent);
 		bool CheckWindowsIsPossible();
 	}
 
@@ -16,16 +17,18 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IAuthenticationQuerier _authenticationQuerier;
 		private readonly IWindowsUserProvider _windowsUserProvider;
+		private readonly Func<IApplicationData> _applicationData;
 
 		public MultiTenancyWindowsLogon(IRepositoryFactory repositoryFactory, IAuthenticationQuerier authenticationQuerier,
-			IWindowsUserProvider windowsUserProvider) 
+			IWindowsUserProvider windowsUserProvider, Func<IApplicationData> applicationData) 
 		{
 			_repositoryFactory = repositoryFactory;
 			_authenticationQuerier = authenticationQuerier;
 			_windowsUserProvider = windowsUserProvider;
+			_applicationData = applicationData;
 		}
 
-		public AuthenticationResult Logon(LogonModel logonModel, IApplicationData applicationData, string userAgent)
+		public AuthenticationResult Logon(LogonModel logonModel, string userAgent)
 		{
 			logonModel.UserName = _windowsUserProvider.Identity();
 			var result = _authenticationQuerier.TryLogon(new IdentityLogonClientModel{Identity = logonModel.UserName}, userAgent);
@@ -40,7 +43,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 			var dataSourceName = result.Tenant;
 			var personId = result.PersonId;
 
-			logonModel.SelectedDataSourceContainer = new DataSourceContainer(applicationData.Tenant(dataSourceName), AuthenticationTypeOption.Application);
+			logonModel.SelectedDataSourceContainer = new DataSourceContainer(_applicationData().Tenant(dataSourceName), AuthenticationTypeOption.Application);
 
 			using (var uow = logonModel.SelectedDataSourceContainer.DataSource.Application.CreateAndOpenUnitOfWork())
 			{

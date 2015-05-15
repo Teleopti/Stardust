@@ -75,8 +75,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			public AuthenticationResult LogonWindows()
 			{
 				var model = new LogonModel();
-				var result = _multiTenancyWindowsLogon.Logon(model, StateHolderReader.Instance.StateReader.ApplicationScopeData,
-					UserAgent);
+				var result = _multiTenancyWindowsLogon.Logon(model, UserAgent);
 				result.DataSource = model.SelectedDataSourceContainer.DataSource;
 				return result;
 			}

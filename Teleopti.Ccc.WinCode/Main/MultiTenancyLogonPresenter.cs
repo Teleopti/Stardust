@@ -204,17 +204,13 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		private bool winLogin()
 		{
-			//var authenticationResult = _multiTenancyWindowsLogon.Logon(_model, UserAgent);
-			var authenticationResult = _multiTenancyWindowsLogon.Logon(_model, StateHolderReader.Instance.StateReader.ApplicationScopeData, UserAgent);
+			var authenticationResult = _multiTenancyWindowsLogon.Logon(_model, UserAgent);
 
 			if (authenticationResult.HasMessage)
 				_model.Warning = authenticationResult.Message;
-				//_view.ShowErrorMessage(string.Concat(authenticationResult.Message, "  "), Resources.ErrorMessage);
 
 			if (authenticationResult.Successful)
 			{
-				//if (!_view.InitStateHolder(_messageBroker, authenticationResult.PasswordPolicy))
-					//return false;
 				return true;
 			}
 			// windows does not work we need to use application

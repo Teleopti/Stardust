@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
 					new AuthenticationQuerier(new TenantServerConfiguration(ConfigurationManager.AppSettings["TenantServer"]),
 						new NhibConfigDecryption(), new PostHttpRequest(),
 						new NewtonsoftJsonSerializer(), () => StateHolder.Instance.StateReader.ApplicationScopeData,
-						new VerifyTerminalDate(() => StateHolder.Instance.StateReader.ApplicationScopeData)), new WebWindowsUserProvider());
+						new VerifyTerminalDate(() => StateHolder.Instance.StateReader.ApplicationScopeData)), new WebWindowsUserProvider(), () => StateHolder.Instance.StateReader.ApplicationScopeData);
 			}
 			return _multiTenancyWindowsLogon;
 		}
