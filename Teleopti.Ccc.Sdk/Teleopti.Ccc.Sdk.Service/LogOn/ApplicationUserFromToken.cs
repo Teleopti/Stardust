@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Globalization;
 using System.ServiceModel;
-using Autofac.Core;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.Common.WcfExtensions;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.WcfService.LogOn
 {
@@ -40,8 +38,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
 	    {
 		    if (attemptSuperUserLogOn()) return new AuthenticationResult {Successful = true, Person = _dataSourceContainer.User};
 		    return TenancyLogonFactory.MultiTenancyApplicationLogon()
-				 .Logon(new LogonModel { UserName = _customUserNameSecurityToken.UserName, Password = _customUserNameSecurityToken.Password }, StateHolderReader.Instance.StateReader.ApplicationScopeData, "");
-		    //return _dataSourceContainer.LogOn(_customUserNameSecurityToken.UserName, _customUserNameSecurityToken.Password);
+				 .Logon(new LogonModel { UserName = _customUserNameSecurityToken.UserName, Password = _customUserNameSecurityToken.Password }, "");
 	    }
 
 	    private bool attemptSuperUserLogOn()

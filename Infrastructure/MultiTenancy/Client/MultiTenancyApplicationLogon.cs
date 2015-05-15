@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.Repositories;
+﻿using System;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Interfaces.Domain;
@@ -9,14 +10,16 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 	{
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IAuthenticationQuerier _authenticationQuerier;
+		private readonly Func<IApplicationData> _applicationData;
 
-		public MultiTenancyApplicationLogon(IRepositoryFactory repositoryFactory, IAuthenticationQuerier authenticationQuerier)
+		public MultiTenancyApplicationLogon(IRepositoryFactory repositoryFactory, IAuthenticationQuerier authenticationQuerier, Func<IApplicationData> applicationData)
 		{
 			_repositoryFactory = repositoryFactory;
 			_authenticationQuerier = authenticationQuerier;
+			_applicationData = applicationData;
 		}
 
-		public AuthenticationResult Logon(LogonModel logonModel, IApplicationData applicationData, string userAgent)
+		public AuthenticationResult Logon(LogonModel logonModel, string userAgent)
 		{
 			var result = _authenticationQuerier.TryLogon(new ApplicationLogonClientModel{UserName = logonModel.UserName, Password = logonModel.Password}, userAgent);
 			if (!result.Success)
@@ -30,7 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 			var dataSourceName = result.Tenant;
 			var personId = result.PersonId;
 			
-			logonModel.SelectedDataSourceContainer = new DataSourceContainer(applicationData.Tenant(dataSourceName), AuthenticationTypeOption.Application);
+			logonModel.SelectedDataSourceContainer = new DataSourceContainer(_applicationData().Tenant(dataSourceName), AuthenticationTypeOption.Application);
 
 			using (var uow = logonModel.SelectedDataSourceContainer.DataSource.Application.CreateAndOpenUnitOfWork())
 			{

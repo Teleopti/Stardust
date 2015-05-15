@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
 						new NhibConfigDecryption(), new PostHttpRequest(),
 						new NewtonsoftJsonSerializer(),
 						() => StateHolder.Instance.StateReader.ApplicationScopeData,
-						new VerifyTerminalDate(() => StateHolder.Instance.StateReader.ApplicationScopeData)));
+						new VerifyTerminalDate(() => StateHolder.Instance.StateReader.ApplicationScopeData)), () => StateHolder.Instance.StateReader.ApplicationScopeData);
 			}
 			return _multiTenancyApplicationLogon;
 		}

@@ -194,7 +194,7 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		private bool login()
 		{
-			var authenticationResult = _applicationLogon.Logon(_model, StateHolderReader.Instance.StateReader.ApplicationScopeData, UserAgent);
+			var authenticationResult = _applicationLogon.Logon(_model, UserAgent);
 
 			if (authenticationResult.HasMessage)
 				_view.ShowErrorMessage(string.Concat(authenticationResult.Message, "  "), Resources.ErrorMessage);
