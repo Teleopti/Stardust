@@ -52,11 +52,11 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	function getUtcNowString() {
 
 		var now = new Date();
-		var dateStr = now.getUTCFullYear().toString() + '-' +
-					(now.getUTCMonth() + 1).toString() + '-' +
-					now.getUTCDate().toString() + ' ' +
-					now.getUTCHours().toString() + ':' +
-					now.getUTCMinutes().toString();
+		var dateStr = (now.getUTCMonth() + 1).toString() + '/' +
+					   now.getUTCDate().toString() + '/' +
+					   now.getUTCFullYear().toString() + ' ' +
+					   now.getUTCHours().toString() + ':' +
+					   now.getUTCMinutes().toString();
 		return dateStr;
 	};
 
