@@ -178,6 +178,7 @@
     <Compile Include="ApplicationLayer\HangfireEventProcessorTest.cs" />
     <Compile Include="ApplicationLayer\HangfireEventPublisherTest.cs" />
     <Compile Include="ApplicationLayer\HangfireOrBusEventPublisherTest.cs" />
+    <Compile Include="Authentication\LoadUserUnauthorizedTest.cs" />
     <Compile Include="Bugs\BugShiftExchangeInvalidUpdate.cs" />
     <Compile Include="DistributedLock\DistributedLockTest.cs" />
     <Compile Include="Foundation\CouldNotCreateTransactionExceptionTest.cs" />

@@ -4,6 +4,7 @@ using Autofac;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Ccc.Infrastructure.Repositories;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
@@ -44,6 +45,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<DefaultScenarioFromRepository>()
 			       .As<ICurrentScenario>()
 			       .InstancePerDependency();
+
+			builder.RegisterType<LoadUserUnauthorized>()
+				.As<ILoadUserUnauthorized>()
+				.SingleInstance();
 		}
 
 		private bool hasCorrectCtor(Type repositoryType)
