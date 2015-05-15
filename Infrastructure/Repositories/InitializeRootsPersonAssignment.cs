@@ -47,17 +47,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 	            LazyLoadingManager.Initialize(personAss.DayOff());
             }
-
-	        foreach (var assignment in assWithShiftCategories)
-	        {
-		        if (assignment.ShiftCategory.DayOfWeekJusticeValues != null)
-		        {
-			        foreach (var pair in assignment.ShiftCategory.DayOfWeekJusticeValues)
-			        {
-								LazyLoadingManager.Initialize(pair);
-			        }
-		        }
-	        }
         }
     }
 }

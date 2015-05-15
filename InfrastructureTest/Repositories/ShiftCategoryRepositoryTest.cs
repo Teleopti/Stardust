@@ -49,32 +49,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(org.Description.ShortName, loadedAggregateFromDatabase.Description.ShortName);
         }
 
-        [Test]
-        public void VerifyDayValuesCanBeSavedAndRead()
-        {
-            IShiftCategory cat = CreateAggregateWithCorrectBusinessUnit();
-            cat.DayOfWeekJusticeValues[DayOfWeek.Thursday] = 4;
-            cat.DayOfWeekJusticeValues[DayOfWeek.Sunday] = 2;
-            PersistAndRemoveFromUnitOfWork(cat);
-
-            IShiftCategory loadedCat = TestRepository(UnitOfWork).Load(cat.Id.Value);
-            Assert.AreEqual(4, loadedCat.DayOfWeekJusticeValues[DayOfWeek.Thursday]);
-            Assert.AreEqual(2, loadedCat.DayOfWeekJusticeValues[DayOfWeek.Sunday]);
-        }
-
-        [Test]
-        public void VerifyDayValuesCanBeSavedAndRead1()
-        {
-            IShiftCategory cat = CreateAggregateWithCorrectBusinessUnit();
-            cat.DayOfWeekJusticeValues[DayOfWeek.Thursday] = 4;
-            cat.DayOfWeekJusticeValues[DayOfWeek.Sunday] = 2;
-            PersistAndRemoveFromUnitOfWork(cat);
-
-            IList<IShiftCategory> loadedCat = ((IShiftCategoryRepository)TestRepository(UnitOfWork)).FindAll();
-            Assert.AreEqual(4, loadedCat[0].DayOfWeekJusticeValues[DayOfWeek.Thursday]);
-            Assert.AreEqual(2, loadedCat[0].DayOfWeekJusticeValues[DayOfWeek.Sunday]);
-        }
-
 		[Test]
 	    public void ShouldPersistRank()
 	    {

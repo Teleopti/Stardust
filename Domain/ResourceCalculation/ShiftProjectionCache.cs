@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         public int ShiftCategoryDayOfWeekJusticeValue
         {
-			get { return TheMainShift.ShiftCategory.DayOfWeekJusticeValues[_dayOfWeek]; }
+			get { return 0; }
         }
 
     	public TimeSpan WorkShiftStartTime

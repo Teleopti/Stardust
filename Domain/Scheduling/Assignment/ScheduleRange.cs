@@ -232,7 +232,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 DayOfWeek dow =
                     TimeZoneHelper.ConvertFromUtc(assignment.Period.StartDateTime,
                                                   Person.PermissionInformation.DefaultTimeZone()).DayOfWeek;
-                ret.FairnessPoints += assignment.ShiftCategory.DayOfWeekJusticeValues[dow];
                 ret.TotalNumberOfShifts += 1;
             }
             //}

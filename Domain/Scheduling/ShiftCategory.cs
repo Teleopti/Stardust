@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
         private Description _description;
         private Color _displayColor;
-				private DayOfWeekIntDictionary _dayOfWeekJusticeValues = new DayOfWeekIntDictionary();
         private bool _isDeleted;
 	    private int? _rank;
 
@@ -73,22 +72,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
             set { _displayColor = value.IsEmpty ? Color.Red : value; }
         }
 
-        public virtual IDictionary<DayOfWeek, int> DayOfWeekJusticeValues
-        {
-            get { return _dayOfWeekJusticeValues; }
-        }
-
-        public virtual int MaxOfJusticeValues()
-        {
-            int result = 0;
-            foreach (KeyValuePair<DayOfWeek, int> pair in _dayOfWeekJusticeValues)
-            {
-                if (pair.Value > result)
-                    result = pair.Value;
-            }
-            return result;
-        }
-
 	    public virtual int? Rank
 	    {
 			get { return _rank; }
@@ -98,12 +81,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	    public virtual bool IsDeleted
         {
             get { return _isDeleted; }
-        }
-
-
-        public virtual void ReinitializeDayOfWeekDictionary()
-        {
-            _dayOfWeekJusticeValues = new DayOfWeekIntDictionary();
         }
 
         #endregion

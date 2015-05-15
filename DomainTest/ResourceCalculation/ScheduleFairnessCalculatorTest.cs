@@ -28,28 +28,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         }
 
         [Test]
-        public void VerifyPersonFairness()
-        {
-            IPerson person = PersonFactory.CreatePerson();
-            IFairnessValueResult totalValue = new FairnessValueResult {TotalNumberOfShifts = 10, FairnessPoints = 15};
-            IFairnessValueResult personValue = new FairnessValueResult {TotalNumberOfShifts = 10, FairnessPoints = 30};
-
-            using (_mocks.Record())
-            {
-                Expect.Call(_resultStateHolder.Schedules).Return(_dic).Repeat.Twice();
-                Expect.Call(_dic.FairnessPoints()).Return(totalValue);
-                Expect.Call(_dic[person]).Return(_range);
-                Expect.Call(_range.FairnessPoints()).Return(personValue);
-            }
-
-            using (_mocks.Playback())
-            {
-                double ret = _target.PersonFairness(person);
-                Assert.AreEqual(2.0d, ret);
-            }  
-        }
-
-        [Test]
         public void VerifyPersonFairnessWhenPersonHasNoShift()
         {
             IPerson person = PersonFactory.CreatePerson();
@@ -90,42 +68,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             {
                 double ret = _target.PersonFairness(person);
                 Assert.AreEqual(1.0d, ret);
-            }
-        }
-
-        [Test]
-        public void VerifyScheduleFairness()
-        {
-            IPerson person1 = PersonFactory.CreatePerson();
-            IPerson person2 = PersonFactory.CreatePerson();
-            IList<IPerson> personColl = new List<IPerson>{person1, person2};
-            IFairnessValueResult totalValue = new FairnessValueResult {TotalNumberOfShifts = 10, FairnessPoints = 15};
-            IFairnessValueResult personValue1 = new FairnessValueResult
-                                                    {
-                                                        TotalNumberOfShifts = 10,
-                                                        FairnessPoints = 30
-                                                    };
-            IFairnessValueResult personValue2 = new FairnessValueResult
-                                                    {
-                                                        TotalNumberOfShifts = 20,
-                                                        FairnessPoints = 30
-                                                    };
-
-            using (_mocks.Record())
-            {
-                Expect.Call(_resultStateHolder.Schedules).Return(_dic).Repeat.Times(3);
-                Expect.Call(_dic.FairnessPoints()).Return(totalValue);
-                Expect.Call(_dic.Keys).Return(personColl);
-                Expect.Call(_dic[person1]).Return(_range);
-                Expect.Call(_range.FairnessPoints()).Return(personValue1);
-                Expect.Call(_dic[person2]).Return(_range);
-                Expect.Call(_range.FairnessPoints()).Return(personValue2);
-            }
-
-            using (_mocks.Playback())
-            {
-                double ret = _target.ScheduleFairness();
-                Assert.AreEqual(0.5d, ret);
             }
         }
     }

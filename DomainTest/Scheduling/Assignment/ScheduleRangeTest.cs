@@ -631,55 +631,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		}
 
 		[Test]
-		public void VerifyShiftCategoryFairness()
-		{
-			DateTimePeriod dtp = new DateTimePeriod(new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc),
-													new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc));
-			IScheduleDateTimePeriod sdtp = new ScheduleDateTimePeriod(dtp);
-			IScheduleDictionary dic1 = new ScheduleDictionary(_scenario, sdtp);
-			IShiftCategory low = ShiftCategoryFactory.CreateShiftCategory("Low");
-			setShiftCategoryJusticeValues(low, 1);
-			IShiftCategory high = ShiftCategoryFactory.CreateShiftCategory("High");
-			setShiftCategoryJusticeValues(high, 5);
-
-			var ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(new Activity("d"), _person,
-			                                                                 new DateTimePeriod(2000, 1, 2, 2000, 1, 3), low,
-			                                                                 _scenario);
-
-			((ScheduleRange)dic1[_person]).Add(ass1);
-
-			Assert.IsNotNull(dic1[_person].CachedShiftCategoryFairness());
-		}
-
-		[Test]
-		public void VerifyFairnessPoints()
-		{
-			DateTimePeriod dtp = new DateTimePeriod(new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc),
-													new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc));
-			IScheduleDateTimePeriod sdtp = new ScheduleDateTimePeriod(dtp);
-			IScheduleDictionary dic1 = new ScheduleDictionary(_scenario, sdtp);
-			IShiftCategory low = ShiftCategoryFactory.CreateShiftCategory("Low");
-			setShiftCategoryJusticeValues(low, 1);
-			IShiftCategory high = ShiftCategoryFactory.CreateShiftCategory("High");
-			setShiftCategoryJusticeValues(high, 5);
-			IPersonAssignment ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person,
-																						   new DateTimePeriod(2000, 1, 2, 2000, 1, 3), low);           
-			IPersonAssignment ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person,
-																						   new DateTimePeriod(2000, 1, 5, 2000, 1, 6), high);
-			IPersonAbsence abs = PersonAbsenceFactory.CreatePersonAbsence(_person, _scenario,
-																		  new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
-
-			((ScheduleRange)dic1[_person]).Add(ass1);
-			Assert.AreEqual(1, dic1[_person].FairnessPoints().FairnessPoints);
-
-			((ScheduleRange)dic1[_person]).Add(ass2);
-			Assert.AreEqual(6, dic1[_person].FairnessPoints().FairnessPoints);
-
-			((ScheduleRange)dic1[_person]).Add(abs);
-			Assert.AreEqual(6, dic1[_person].FairnessPoints().FairnessPoints);
-		}
-
-		[Test]
 		public void VerifyUnsafeDeleteIfDeletedIncludeCurrent([Values(true, false)] bool includeCurrent)
 		{
 			fullPermission(true);
@@ -733,17 +684,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			_target.CalculatedContractTimeHolder.Should().Be.EqualTo(null);
 			_target.CalculatedScheduleDaysOff.Should().Be.EqualTo(null);
-		}
-
-		private static void setShiftCategoryJusticeValues(IShiftCategory shiftCategory, int value)
-		{
-			shiftCategory.DayOfWeekJusticeValues[DayOfWeek.Monday] = value;
-			shiftCategory.DayOfWeekJusticeValues[DayOfWeek.Tuesday] = value;
-			shiftCategory.DayOfWeekJusticeValues[DayOfWeek.Wednesday] = value;
-			shiftCategory.DayOfWeekJusticeValues[DayOfWeek.Thursday] = value;
-			shiftCategory.DayOfWeekJusticeValues[DayOfWeek.Friday] = value;
-			shiftCategory.DayOfWeekJusticeValues[DayOfWeek.Saturday] = value;
-			shiftCategory.DayOfWeekJusticeValues[DayOfWeek.Sunday] = value;
 		}
 
 		private IPersonAbsence createPersonAbsence(DateTimePeriod period)

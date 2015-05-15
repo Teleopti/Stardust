@@ -6,7 +6,6 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -1631,78 +1630,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				Assert.IsTrue(target.Remove(new KeyValuePair<IPerson, IScheduleRange>(dummyPerson, _dummyScheduleRange)));
 			}
 		}
-		[Test]
-		public void VerifyFairnessPoints()
-		{
-			target = new ScheduleDictionaryForTest(scenario, period, dictionary);
-			IScheduleRange range1 = mocks.StrictMock<IScheduleRange>();
-			IScheduleRange range2 = mocks.StrictMock<IScheduleRange>();
-			ICollection<IScheduleRange> collection = new List<IScheduleRange> { range1, range2 };
-
-			IFairnessValueResult result1 = new FairnessValueResult();
-			Assert.AreEqual(0, result1.FairnessPointsPerShift);
-			result1.FairnessPoints = 5;
-			result1.TotalNumberOfShifts = 6;
-			IFairnessValueResult result2 = new FairnessValueResult();
-			result2.FairnessPoints = 10;
-			result2.TotalNumberOfShifts = 20;
-
-
-			using (mocks.Record())
-			{
-				Expect.Call(dictionary.Values)
-				    .Return(collection);
-				Expect.Call(range1.FairnessPoints()).Return(result1);
-				Expect.Call(range2.FairnessPoints()).Return(result2);
-			}
-
-			IFairnessValueResult result = target.FairnessPoints();
-			Assert.IsNotNull(result);
-			Assert.AreEqual(15, result.FairnessPoints);
-			Assert.AreEqual(26, result.TotalNumberOfShifts);
-			Assert.AreEqual(15.0 / 26.0, result.FairnessPointsPerShift);
-		}
-
-		[Test]
-		public void ShouldReturnAverageFairnessOnListOfPersons()
-		{
-			var person1 = mocks.StrictMock<IPerson>();
-			var person2 = mocks.StrictMock<IPerson>();
-			var persons = new List<IPerson> { person1, person2 };
-
-			target = new ScheduleDictionaryForTest(scenario, period, dictionary);
-			var range1 = mocks.StrictMock<IScheduleRange>();
-			var range2 = mocks.StrictMock<IScheduleRange>();
-
-			var result1 = new FairnessValueResult { FairnessPoints = 6, TotalNumberOfShifts = 6 };
-			var result2 = new FairnessValueResult { FairnessPoints = 10, TotalNumberOfShifts = 20 };
-
-			Expect.Call(dictionary[person1]).Return(range1);
-			Expect.Call(dictionary[person2]).Return(range2);
-
-			Expect.Call(range1.FairnessPoints()).Return(result1);
-			Expect.Call(range2.FairnessPoints()).Return(result2);
-			mocks.ReplayAll();
-
-			IFairnessValueResult result = target.AverageFairnessPoints(persons);
-			Assert.IsNotNull(result);
-			Assert.That(result.FairnessPoints, Is.EqualTo(8));
-			Assert.That(result.TotalNumberOfShifts, Is.EqualTo(13));
-			Assert.That(result.FairnessPointsPerShift, Is.EqualTo(8.0 / 13.0));
-			mocks.VerifyAll();
-		}
-
-		[Test]
-		public void ShouldReturnEmptyFairnessWhenPersonListIsEmpty()
-		{
-			var persons = new List<IPerson>();
-
-			var result = target.AverageFairnessPoints(persons);
-			Assert.That(result.FairnessPoints, Is.EqualTo(0));
-			Assert.That(result.TotalNumberOfShifts, Is.EqualTo(0));
-			Assert.That(result.FairnessPointsPerShift, Is.EqualTo(0));
-
-		}
+		
 		#endregion
 	}
 }

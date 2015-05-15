@@ -11,12 +11,7 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 
         public double FairnessPointsPerShift
         {
-            get
-            {
-                if (TotalNumberOfShifts == 0)
-                    return 0;
-                return FairnessPoints/TotalNumberOfShifts;
-            }
+            get { return 0; }
         }
 
     }

@@ -49,7 +49,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             Assert.IsTrue(target.Id.HasValue);
             Assert.AreEqual(string.Empty, target.Description.ShortName);
             Assert.AreEqual(0, target.DisplayColor.ToArgb());
-            Assert.AreEqual(0, target.DayOfWeekJusticeValues[DayOfWeek.Tuesday]);
         }
 
         /// <summary>
@@ -83,26 +82,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         }
 
         [Test]
-        public void CanSetAndGetJusticeValues()
-        {
-            target.DayOfWeekJusticeValues[DayOfWeek.Thursday] = 7;
-            Assert.AreEqual(7, target.DayOfWeekJusticeValues[DayOfWeek.Thursday]);
-        }
-
-        [Test]
-        public void VerifyReinitializeJusticeValues()
-        {
-            target.DayOfWeekJusticeValues[DayOfWeek.Thursday] = 7;
-            Assert.AreEqual(7, target.DayOfWeekJusticeValues[DayOfWeek.Thursday]);
-            target.ReinitializeDayOfWeekDictionary();
-            Assert.AreEqual(0, target.DayOfWeekJusticeValues[DayOfWeek.Thursday]);
-        }
-
-        [Test]
         public void ShouldCreateCloneWithoutId()
         {
-            target.DayOfWeekJusticeValues[DayOfWeek.Thursday] = 7;
-
             ShiftCategory cloneWithoutId = target.NoneEntityClone();
 
             Assert.IsNotNull(cloneWithoutId);
@@ -110,7 +91,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             Assert.AreNotSame(target, cloneWithoutId);
 
             Assert.AreEqual(target.Description, cloneWithoutId.Description);
-            Assert.AreEqual(7, cloneWithoutId.DayOfWeekJusticeValues[DayOfWeek.Thursday]);
             Assert.AreEqual(target.BusinessUnit, cloneWithoutId.BusinessUnit);
             Assert.AreEqual(target.DisplayColor, cloneWithoutId.DisplayColor);
 
@@ -123,8 +103,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         [Test]
         public void ShouldCreateCloneWithId()
         {
-            target.DayOfWeekJusticeValues[DayOfWeek.Thursday] = 7;
-
             ShiftCategory cloneWithId = target.EntityClone();
 
             Assert.IsNotNull(cloneWithId);
@@ -132,7 +110,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             Assert.AreNotSame(target, cloneWithId);
 
             Assert.AreEqual(target.Description, cloneWithId.Description);
-            Assert.AreEqual(7, cloneWithId.DayOfWeekJusticeValues[DayOfWeek.Thursday]);
             Assert.AreEqual(target.BusinessUnit, cloneWithId.BusinessUnit);
             Assert.AreEqual(target.DisplayColor, cloneWithId.DisplayColor);
 
