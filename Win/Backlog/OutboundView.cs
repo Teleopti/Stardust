@@ -5,13 +5,11 @@ using System.Linq;
 using System.Windows.Forms;
 using Autofac;
 using Teleopti.Ccc.Domain.Backlog;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Persisters.Outbound;
@@ -28,6 +26,7 @@ namespace Teleopti.Ccc.Win.Backlog
 		private readonly IComponentContext _container;
 		private BacklogScheduledProvider _backlogScheduledProvider;
 		private DateOnlyPeriod _loadedPeriod;
+		ICollection<Campaign> _campaigns;
 
 		public OutboundView()
 		{
@@ -42,18 +41,30 @@ namespace Teleopti.Ccc.Win.Backlog
 
 		private void outboundViewLoad(object sender, EventArgs e)
 		{
+			load();
+		}
+
+		private void load()
+		{
 			loadCampaigns();
-			updateStatusOnCampaigns();
+			loadAsync();
+		}
+
+		private void loadAsync()
+		{
+			_backlogScheduledProvider = new BacklogScheduledProvider(_container, _loadedPeriod);
+			Enabled = false;
+			backgroundWorker1.RunWorkerAsync();
 		}
 
 		private void loadCampaigns()
 		{
-			ICollection<Campaign> campaigns;
+			
 			// move to method in repository
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				campaigns = new OutboundCampaignRepository(uow).LoadAll().Where(c => c.EndDate > new DateOnly(DateTime.Now).AddDays(-14)).ToList();
-				foreach (var campaign in campaigns)
+				_campaigns = new OutboundCampaignRepository(uow).LoadAll().Where(c => c.EndDate > new DateOnly(DateTime.Now).AddDays(-14)).ToList();
+				foreach (var campaign in _campaigns)
 				{
 					LazyLoadingManager.Initialize(campaign.Skill);
 					LazyLoadingManager.Initialize(campaign.Skill.Activity);
@@ -68,13 +79,13 @@ namespace Teleopti.Ccc.Win.Backlog
 				}
 			}
 
-			var earliestStart = campaigns.Min(c => c.StartDate).Value;
-			var latestEnd = campaigns.Max(c => c.EndDate).Value;
+			var earliestStart = _campaigns.Min(c => c.StartDate).Value;
+			var latestEnd = _campaigns.Max(c => c.EndDate).Value;
 			_loadedPeriod = new DateOnlyPeriod(earliestStart, latestEnd);
 
 			listView1.Items.Clear();
 			listView1.Groups.Clear();
-			foreach (var campaign in campaigns)
+			foreach (var campaign in _campaigns)
 			{
 				if (campaign.IsDeleted)
 					continue;
@@ -107,13 +118,14 @@ namespace Teleopti.Ccc.Win.Backlog
 		}
 
 		private void toolStripButtonAddCampaignClick(object sender, EventArgs e)
-		{		
-				var campaign = createAndPersistCampaign();
-				if(campaign == null)
-					return;
+		{
+			var campaign = createAndPersistCampaign();
+			if (campaign == null)
+				return;
 
-				updateAndPersistCampaignSkillPeriod(campaign);
-				loadCampaigns();		
+			updateAndPersistCampaignSkillPeriod(campaign);
+			loadCampaigns();
+			updateStatusOnCampaigns();
 		}
 
 		private Campaign createAndPersistCampaign()
@@ -171,6 +183,7 @@ namespace Teleopti.Ccc.Win.Backlog
 				if(scheduled != TimeSpan.Zero)
 					incomingTask.SetTimeOnDate(dateOnly, scheduled, PlannedTimeTypeEnum.Scheduled);
 			}
+
 			incomingTask.RecalculateDistribution();
 
 			return incomingTask;
@@ -178,14 +191,10 @@ namespace Teleopti.Ccc.Win.Backlog
 	
 		private void updateSkillDays(ISkill skill, IncomingTask incomingTask)
 		{
-			//var q = _container.Resolve<IFetchAndFillSkillDays>();
-			ICollection<ISkillDay> skillDays;
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var skillDayRepository = new SkillDayRepository(uow);
-				var q = new FetchAndFillSkillDays(skillDayRepository, new DefaultScenarioFromRepository(new ScenarioRepository(uow)),
-					skillDayRepository);
-				skillDays = q.FindRange(incomingTask.SpanningPeriod, skill);
+				ICollection<ISkillDay> skillDays = _container.Resolve<IFetchAndFillSkillDays>()
+					.FindRange(incomingTask.SpanningPeriod, skill);
 				var workload = skill.WorkloadCollection.First();
 				var workLoadDays = new List<IWorkloadDay>();
 				foreach (var skillDay in skillDays)
@@ -212,6 +221,7 @@ namespace Teleopti.Ccc.Win.Backlog
 				}
 				merger.Merge(forecastingTargets, workLoadDays);
 
+				var skillDayRepository = _container.Resolve<ISkillDayRepository>();
 				skillDayRepository.AddRange(skillDays);
 				uow.PersistAll();	
 			}		
@@ -269,16 +279,12 @@ namespace Teleopti.Ccc.Win.Backlog
 			}
 		}
 
-		private void toolStripButton2_Click(object sender, EventArgs e)
-		{
-			_backlogScheduledProvider = new BacklogScheduledProvider(_container, _loadedPeriod);
-			Enabled = false;
-			backgroundWorker1.RunWorkerAsync();
-		}
+		
 
 		private void backgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
 		{
 			_backlogScheduledProvider.Load();
+			
 		}
 
 		private void backgroundWorker1_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
@@ -288,8 +294,13 @@ namespace Teleopti.Ccc.Win.Backlog
 
 		private void backgroundWorker1_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
 		{
+			foreach (var campaign in _campaigns)
+			{
+				updateAndPersistCampaignSkillPeriod(campaign);
+			}
 			Enabled = true;
 			updateStatusOnCampaigns();
+			
 		}
 	}
 
