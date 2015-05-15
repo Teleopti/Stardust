@@ -117,25 +117,28 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 		}
 
-		public DateOnly? QueueStatisticsUpUntilDate(ICollection<IQueueSource> sources)
+		public DateOnlyPeriod? QueueStatisticsUpUntilDate(ICollection<IQueueSource> sources)
 	    {
 			using (IStatelessUnitOfWork uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
-				var mostRecentDate = DateTime.MinValue;
+				var startDate = DateTime.MinValue;
+				var endDate = DateTime.MaxValue;
 				foreach (var source in sources.Batch(500))
 				{
 					var queueList = buildStringQueueList(source);
 					var date = session(uow).CreateSQLQuery("exec mart.raptor_queue_statistics_up_until_date @QueueList=:QueueList")
 						.SetString("QueueList", queueList)
-						.UniqueResult<DateTime?>();
+						.SetResultTransformer(Transformers.AliasToBean(typeof(StatisticPeriod)))
+						.UniqueResult<StatisticPeriod>();
 
-					if (date.HasValue && date.Value > mostRecentDate)
-						mostRecentDate = date.Value;
-
+					if (date.StartDate.HasValue && date.StartDate.Value > startDate)
+						startDate = date.StartDate.Value;
+					if (date.EndDate.HasValue && date.EndDate.Value < endDate)
+						endDate = date.EndDate.Value;
 				}
-				if (mostRecentDate == DateTime.MinValue)
+				if (startDate == DateTime.MinValue)
 					return null;
-				return new DateOnly(mostRecentDate);
+				return new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
 			}
 	    }
 
@@ -457,4 +460,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return identity.DataSource.Statistic;
         }
     }
+
+	public class StatisticPeriod
+	{
+		public DateTime? StartDate { get; set; }
+		public DateTime? EndDate { get; set; }
+	}
 }

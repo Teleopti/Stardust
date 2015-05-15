@@ -21,7 +21,8 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	DECLARE @mostRecentDate as smalldatetime
+	DECLARE @startDate as smalldatetime
+	DECLARE @endDate as smalldatetime
 	DECLARE @TempList table
 	(
 		QueueID int
@@ -31,7 +32,8 @@ BEGIN
 		SELECT * FROM mart.SplitStringInt(@QueueList)
 
 	SELECT
-		@mostRecentDate = MAX(d.date_date)
+		@startDate = MIN(d.date_date),
+		@endDate = MAX(d.date_date)
 	FROM
 		mart.fact_queue fq WITH (NOLOCK)
 	INNER JOIN	mart.dim_date d
@@ -39,6 +41,7 @@ BEGIN
 	INNER JOIN	@TempList q
 		ON fq.queue_id = q.QueueID
 
-	SELECT @mostRecentDate
+	SELECT @startDate as StartDate, 
+	@endDate as EndDate
 END
 GO

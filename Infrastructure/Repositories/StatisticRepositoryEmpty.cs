@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return new List<IStatisticTask>();
 		}
 
-	    public DateOnly? QueueStatisticsUpUntilDate(ICollection<IQueueSource> sources)
+	    public DateOnlyPeriod? QueueStatisticsUpUntilDate(ICollection<IQueueSource> sources)
 	    {
 		    throw new NotImplementedException();
 	    }

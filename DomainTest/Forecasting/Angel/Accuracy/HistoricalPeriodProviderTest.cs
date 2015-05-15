@@ -44,28 +44,26 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 		public void ShouldGetMostRecentTwoYearsForEvaluation()
 		{
 			var statisticRepository = MockRepository.GenerateMock<IStatisticRepository>();
-			var dateOnly = new DateOnly(2014, 5, 5);
 			var workload = new Workload(SkillFactory.CreateSkill("Phone"));
-			statisticRepository.Stub(x => x.QueueStatisticsUpUntilDate(workload.QueueSourceCollection)).Return(dateOnly);
+			var dateOnlyPeriod = new DateOnlyPeriod(2012, 5, 5, 2014, 5, 5);
+			statisticRepository.Stub(x => x.QueueStatisticsUpUntilDate(workload.QueueSourceCollection)).Return(dateOnlyPeriod);
 			var target = new HistoricalPeriodProvider(new Now(), statisticRepository);
 
 			var result = target.PeriodForEvaluate(workload);
-			result.StartDate.Should().Be.EqualTo(new DateOnly(dateOnly.Date.AddYears(-2)));
-			result.EndDate.Should().Be.EqualTo(dateOnly);
+			result.Should().Be.EqualTo(dateOnlyPeriod);
 		}
 
 		[Test]
-		public void ShouldGetMostRecentOneYearsForForecast()
+		public void ShouldGetMostRecentTwoYearsForForecast()
 		{
 			var statisticRepository = MockRepository.GenerateMock<IStatisticRepository>();
-			var dateOnly = new DateOnly(2014, 5, 5);
 			var workload = new Workload(SkillFactory.CreateSkill("Phone"));
-			statisticRepository.Stub(x => x.QueueStatisticsUpUntilDate(workload.QueueSourceCollection)).Return(dateOnly);
+			var dateOnlyPeriod = new DateOnlyPeriod(2012, 5, 5, 2014, 5, 5);
+			statisticRepository.Stub(x => x.QueueStatisticsUpUntilDate(workload.QueueSourceCollection)).Return(dateOnlyPeriod);
 			var target = new HistoricalPeriodProvider(new Now(), statisticRepository);
 
 			var result = target.PeriodForForecast(workload);
-			result.StartDate.Should().Be.EqualTo(new DateOnly(dateOnly.Date.AddYears(-2)));
-			result.EndDate.Should().Be.EqualTo(dateOnly);
+			result.Should().Be.EqualTo(dateOnlyPeriod);
 		}
 	}
 }

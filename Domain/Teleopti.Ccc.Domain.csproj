@@ -518,6 +518,7 @@
     <Compile Include="DistributedLock\IDistributedLockAcquirer.cs" />
     <Compile Include="ETL\RunningEtlJob.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\ForecastMethodProvider.cs" />
+    <Compile Include="Forecasting\Angel\Accuracy\HistoricalPeriodProvider.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\IForecastMethodProvider.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\IHistoricalPeriodProvider.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\MethodAccuracy.cs" />
