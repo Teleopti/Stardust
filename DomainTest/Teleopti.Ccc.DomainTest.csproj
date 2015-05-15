@@ -478,6 +478,7 @@
     <Compile Include="Infrastructure\EventMessageArgsTest.cs" />
     <Compile Include="Infrastructure\PagingDetailTest.cs" />
     <Compile Include="Infrastructure\PagingTest.cs" />
+    <Compile Include="MessageBroker\MailboxTest.cs" />
     <Compile Include="MessageBroker\MessageBrokerServerTestAttribute.cs" />
     <Compile Include="MessageBroker\SignalRPublishTest.cs" />
     <Compile Include="MessageBroker\SignalRSubscribeTest.cs" />

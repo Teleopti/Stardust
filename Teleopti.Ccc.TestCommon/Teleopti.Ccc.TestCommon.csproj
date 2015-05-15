@@ -145,6 +145,7 @@
     <Compile Include="FakeHangfireEventClient.cs" />
     <Compile Include="FakeMbCacheFactory.cs" />
     <Compile Include="FakeReadModelUnitOfWorkAspect.cs" />
+    <Compile Include="FakeRepositories\FakeMailboxRepository.cs" />
     <Compile Include="FakeRepositories\FakePublicNoteRepository.cs" />
     <Compile Include="FakeRepositories\FakeSeatBookingRepository.cs" />
     <Compile Include="FakeRepositories\FakeSeatMapRepository.cs" />

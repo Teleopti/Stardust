@@ -4,8 +4,8 @@ using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.MessageBroker
 {
@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 			builder.RegisterInstance(new FakeCurrentDatasource()).AsSelf().As<ICurrentDataSource>();
 			builder.RegisterInstance(new FakeCurrentBusinessUnit()).AsSelf().As<ICurrentBusinessUnit>();
 
+			builder.RegisterInstance(new FakeMailboxRepository()).AsSelf().As<IMailboxRepository>();
 		}
 	}
 }

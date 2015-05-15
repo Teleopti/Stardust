@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.MessageBroker;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Broker;
 using Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs;
 
@@ -12,7 +13,7 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 		[Test]
 		public void ShouldPongOnPing()
 		{
-			var target = new MessageBrokerHub(new ActionImmediate(), new MessageBrokerServer(new ActionImmediate(), new SignalR(), null));
+			var target = new MessageBrokerHub(new ActionImmediate(), new MessageBrokerServer(new ActionImmediate(), new SignalR(), null, new FakeMailboxRepository()));
 			var hubBuilder = new TestHubBuilder();
 			var _ponged = false;
 			var client = hubBuilder.FakeClient(
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 		[Test]
 		public void Ping_WithAnIdentification_ShouldPongWithsameIdentification()
 		{
-			var target = new MessageBrokerHub(new ActionImmediate(), new MessageBrokerServer(new ActionImmediate(), new SignalR(), null));
+			var target = new MessageBrokerHub(new ActionImmediate(), new MessageBrokerServer(new ActionImmediate(), new SignalR(), null, new FakeMailboxRepository()));
 			var hubBuilder = new TestHubBuilder();
 			var pongedWith = 0d;
 			var client = hubBuilder.FakeClient<double>(
@@ -51,7 +52,7 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 		public void Ping_WithNumberOfMessages_ShouldSendThatNumberOfMessageswithSignalR()
 		{
 			var expectedNumberOfSentMessages = 17;
-			var target = new MessageBrokerHub(new ActionImmediate(), new MessageBrokerServer(new ActionImmediate(), new SignalR(), null));
+			var target = new MessageBrokerHub(new ActionImmediate(), new MessageBrokerServer(new ActionImmediate(), new SignalR(), null, new FakeMailboxRepository()));
 			var hubBuilder = new TestHubBuilder();
 
 			var numberOfpongs = 0;

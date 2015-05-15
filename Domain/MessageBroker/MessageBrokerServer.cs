@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using log4net;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.MessageBroker;
 
 namespace Teleopti.Ccc.Domain.MessageBroker
@@ -12,13 +13,19 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 	{
 		private readonly IActionScheduler _actionScheduler;
 		private readonly ISignalR _signalR;
+		private readonly IMailboxRepository _mailboxRepository;
 		private readonly IBeforeSubscribe _beforeSubscribe;
-		public ILog Logger = LogManager.GetLogger(typeof(MessageBrokerServer));
+		public ILog Logger = LogManager.GetLogger(typeof (MessageBrokerServer));
 
-		public MessageBrokerServer(IActionScheduler actionScheduler, ISignalR signalR, IBeforeSubscribe beforeSubscribe)
+		public MessageBrokerServer(
+			IActionScheduler actionScheduler,
+			ISignalR signalR,
+			IBeforeSubscribe beforeSubscribe,
+			IMailboxRepository mailboxRepository)
 		{
 			_actionScheduler = actionScheduler;
 			_signalR = signalR;
+			_mailboxRepository = mailboxRepository;
 			_beforeSubscribe = beforeSubscribe ?? new SubscriptionPassThrough();
 		}
 
@@ -29,7 +36,8 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 			var route = subscription.Route();
 
 			if (Logger.IsDebugEnabled)
-				Logger.DebugFormat("New subscription from client {0} with route {1} (Id: {2}).", connectionId, route, RouteToGroupName(route));
+				Logger.DebugFormat("New subscription from client {0} with route {1} (Id: {2}).", connectionId, route,
+					RouteToGroupName(route));
 
 			_signalR.AddConnectionToGroup(RouteToGroupName(route), connectionId);
 
@@ -39,9 +47,23 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 		public void RemoveSubscription(string route, string connectionId)
 		{
 			if (Logger.IsDebugEnabled)
-				Logger.DebugFormat("Remove subscription from client {0} with route {1} (Id: {2}).", connectionId, route, RouteToGroupName(route));
+				Logger.DebugFormat("Remove subscription from client {0} with route {1} (Id: {2}).", connectionId, route,
+					RouteToGroupName(route));
 
 			_signalR.RemoveConnectionFromGroup(RouteToGroupName(route), connectionId);
+		}
+
+		public void AddMailbox(Subscription subscription)
+		{
+			_mailboxRepository.Persist(new Mailbox {Route = subscription.Route(), Id = Guid.Parse(subscription.MailboxId)});
+		}
+
+		public IEnumerable<Interfaces.MessageBroker.Notification> PopMessages(string mailboxId)
+		{
+			var mailbox = _mailboxRepository.Get(Guid.Parse(mailboxId));
+			var result = mailbox.PopAll();
+			_mailboxRepository.Persist(mailbox);
+			return result;
 		}
 
 		public void NotifyClients(Interfaces.MessageBroker.Notification notification)
@@ -56,6 +78,11 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 			foreach (var route in routes)
 			{
 				var r = route;
+				_mailboxRepository.Get(route).ForEach(x =>
+				{
+					x.AddNotification(notification);
+					_mailboxRepository.Persist(x);
+				});
 				_actionScheduler.Do(() => _signalR.CallOnEventMessage(RouteToGroupName(r), r, notification));
 			}
 		}
