@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 			var target = new HistoricalPeriodProvider(new Now(), statisticRepository);
 
 			var result = target.PeriodForForecast(workload);
-			result.StartDate.Should().Be.EqualTo(new DateOnly(dateOnly.Date.AddYears(-1)));
+			result.StartDate.Should().Be.EqualTo(new DateOnly(dateOnly.Date.AddYears(-2)));
 			result.EndDate.Should().Be.EqualTo(dateOnly);
 		}
 	}

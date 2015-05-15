@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 		{
 			var endDate = _statisticRepository.QueueStatisticsUpUntilDate(workload.QueueSourceCollection);
 			return endDate.HasValue
-				? new DateOnlyPeriod(new DateOnly(endDate.Value.Date.AddYears(-1)), endDate.Value)
+				? new DateOnlyPeriod(new DateOnly(endDate.Value.Date.AddYears(-2)), endDate.Value)
 				: new DateOnlyPeriod(_now.LocalDateOnly(), _now.LocalDateOnly());
 		}
 	}
