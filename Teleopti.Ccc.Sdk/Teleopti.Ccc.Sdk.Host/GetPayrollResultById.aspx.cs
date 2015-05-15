@@ -15,12 +15,9 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 {
 	public partial class GetPayrollResultById : System.Web.UI.Page
 	{
-
 		protected void Page_Load(object sender, EventArgs e)
 		{
 			var guid = Request.Form["ResultGuid"];
-			var datasource = Request.Form["DataSource"];
-			// var businessUnit = Request.Form["BusinessUnit"];
 			var userName = Request.Form["UserName"];
 			var password = Request.Form["Password"];
 			var useWindowsIdentity = Convert.ToBoolean(Request.Form["UseWindowsIdentity"], CultureInfo.InvariantCulture);
@@ -31,11 +28,11 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 
 			if (useWindowsIdentity)
 			{
-				result = payrollLogon.LogonWindows(datasource);
+				result = payrollLogon.LogonWindows();
 			}
 			else
 			{
-				result = payrollLogon.LogonApplication(userName, password, datasource);
+				result = payrollLogon.LogonApplication(userName, password);
 			}
 
 			if (!result.Successful)
@@ -44,9 +41,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 				return;
 			}
 
-			//var provider = sourceContainer.AvailableBusinessUnitProvider;
 			var logOnOff = new LogOnOff(new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory()));
-			//var bUnit = provider.AvailableBusinessUnits().FirstOrDefault(b => b.Id.ToString().Equals(businessUnit));
 			logOnOff.LogOn(result.DataSource, result.Person, null);// bUnit);
 
 			using (result.DataSource.Application.CreateAndOpenUnitOfWork())
@@ -61,8 +56,8 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 
 		public interface IPayrollLogon
 		{
-			AuthenticationResult LogonWindows(string dataSource);
-			AuthenticationResult LogonApplication(string userName, string password, string dataSource);
+			AuthenticationResult LogonWindows();
+			AuthenticationResult LogonApplication(string userName, string password);
 		}
 
 		public class MultiTenancyPayrollLogon : IPayrollLogon
@@ -77,7 +72,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 				_multiTenancyWindowsLogon = multiTenancyWindowsLogon;
 			}
 
-			public AuthenticationResult LogonWindows(string dataSource)
+			public AuthenticationResult LogonWindows()
 			{
 				var model = new LogonModel();
 				var result = _multiTenancyWindowsLogon.Logon(model, StateHolderReader.Instance.StateReader.ApplicationScopeData,
@@ -86,7 +81,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 				return result;
 			}
 
-			public AuthenticationResult LogonApplication(string userName, string password, string dataSource)
+			public AuthenticationResult LogonApplication(string userName, string password)
 			{
 				var model = new LogonModel { UserName = userName, Password = password };
 				var result = _multiTenancyApplicationLogon.Logon(model, StateHolderReader.Instance.StateReader.ApplicationScopeData,
