@@ -271,9 +271,9 @@ namespace Teleopti.Ccc.Win.Backlog
 
 		private void toolStripButton1_Click(object sender, EventArgs e)
 		{
-			var selectedCampaign = listView1.SelectedItems[0];
-			var incomingTask = createProductionPlan((Campaign) selectedCampaign.Tag);
-			using (var outboundStatusView = new OutboundStatusView(incomingTask))
+			var selectedCampaign = (Campaign)listView1.SelectedItems[0].Tag;
+			var incomingTask = createProductionPlan(selectedCampaign);
+			using (var outboundStatusView = new OutboundStatusView(incomingTask, selectedCampaign.Name))
 			{
 				outboundStatusView.ShowDialog(this);
 			}
@@ -294,10 +294,10 @@ namespace Teleopti.Ccc.Win.Backlog
 
 		private void backgroundWorker1_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
 		{
-			foreach (var campaign in _campaigns)
-			{
-				updateAndPersistCampaignSkillPeriod(campaign);
-			}
+			//foreach (var campaign in _campaigns)
+			//{
+			//	updateAndPersistCampaignSkillPeriod(campaign); //lägger bara upp nya dagar med longterm, gör på annat sätt
+			//}
 			Enabled = true;
 			updateStatusOnCampaigns();
 			

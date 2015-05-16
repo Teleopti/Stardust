@@ -1,4 +1,6 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
+using System.Globalization;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using Teleopti.Ccc.Domain.Backlog;
@@ -12,17 +14,18 @@ namespace Teleopti.Ccc.Win.Backlog
 			InitializeComponent();
 		}
 
-		public OutboundStatusView(IncomingTask incomingTask)
+		public OutboundStatusView(IncomingTask incomingTask, string campaignName)
 		{
 			InitializeComponent();
-			updateChartChart(incomingTask);
+			updateChartChart(incomingTask, campaignName);
 		}
 
-		private void updateChartChart(IncomingTask incomingTask)
+		private void updateChartChart(IncomingTask incomingTask, string campaignName)
 		{
 			chart1.Series.Clear();
 			chart1.ChartAreas[0].AxisX.Interval = 1;
 			chart1.ChartAreas[0].AxisX.IntervalAutoMode = IntervalAutoMode.VariableCount;
+			chart1.Titles[0].Text = campaignName;
 			var series1 = chart1.Series.Add("Estimated outgoing backlog");
 			var series2 = chart1.Series.Add("Planned");		
 			var series3 = chart1.Series.Add("Scheduled");
@@ -60,25 +63,35 @@ namespace Teleopti.Ccc.Win.Backlog
 				DataPoint datapoint = new DataPoint(dataPointIndex, incomingTask.GetEstimatedOutgoingBacklogOnDate(date).TotalHours);
 				datapoint.AxisLabel = date.ToShortDateString();
 				series1.Points.Add(datapoint);
+				datapoint.ToolTip = toolTip(series1, datapoint);
 
 				datapoint = new DataPoint(dataPointIndex, incomingTask.GetPlannedTimeOnDate(date).TotalHours);
 				datapoint.AxisLabel = date.ToShortDateString();
 				series2.Points.Add(datapoint);
+				datapoint.ToolTip = toolTip(series2, datapoint);
 
 				datapoint = new DataPoint(dataPointIndex, incomingTask.GetScheduledTimeOnDate(date).TotalHours);
 				datapoint.AxisLabel = date.ToShortDateString();
 				series3.Points.Add(datapoint);
+				datapoint.ToolTip = toolTip(series3, datapoint);
 
 				datapoint = new DataPoint(dataPointIndex, incomingTask.GetOverstaffTimeOnDate(date).TotalHours);
 				datapoint.AxisLabel = date.ToShortDateString();
 				series4.Points.Add(datapoint);
+				datapoint.ToolTip = toolTip(series4, datapoint);
 
 				datapoint = date == incomingTask.SpanningPeriod.EndDate ? new DataPoint(dataPointIndex, incomingTask.GetTimeOutsideSLA().TotalHours) : new DataPoint(dataPointIndex, 0);
 				datapoint.AxisLabel = date.ToShortDateString();
 				series5.Points.Add(datapoint);
+				datapoint.ToolTip = toolTip(series5, datapoint);
 
 				dataPointIndex++;
 			}
+		}
+
+		private static string toolTip(Series series, DataPoint datapoint)
+		{
+			return series.Name + ": " + Math.Round(datapoint.YValues[0],0).ToString(CultureInfo.InvariantCulture) + " hours";
 		}
 	}
 }
