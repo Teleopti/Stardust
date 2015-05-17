@@ -207,7 +207,8 @@ Try
 
     #Get customer specific config from BlobStorage
     CopyFileFromBlobStorage -destinationFolder "$SupportToolFolder" -filename "$settingsFile"
-    CopyFileFromBlobStorage -destinationFolder "$SupportToolFolder" -filename "*.key"
+    CopyFileFromBlobStorage -destinationFolder "$SupportToolFolder" -filename "decryption.key"
+    CopyFileFromBlobStorage -destinationFolder "$SupportToolFolder" -filename "validation.key"
 	
 	CopyFileFromBlobStorage -destinationFolder "$directory" -filename "$togglesFile"
 	$tempTogglesFile = "$directory\" + $togglesFile
