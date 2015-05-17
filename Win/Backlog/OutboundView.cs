@@ -68,6 +68,7 @@ namespace Teleopti.Ccc.Win.Backlog
 				{
 					LazyLoadingManager.Initialize(campaign.Skill);
 					LazyLoadingManager.Initialize(campaign.Skill.Activity);
+					LazyLoadingManager.Initialize(campaign.Skill.WorkloadCollection);
 					foreach (var campaignWorkingPeriod in campaign.CampaignWorkingPeriods)
 					{
 						LazyLoadingManager.Initialize(campaignWorkingPeriod);
@@ -131,7 +132,7 @@ namespace Teleopti.Ccc.Win.Backlog
 
 			//AddCampaignCommand
 			createAndPersistCampaign(campaign);
-			updateAndPersistCampaignSkillPeriod(campaign);
+			updateAndPersistCampaignSkillPeriod(campaign, true);
 
 			loadCampaigns();
 			updateStatusOnCampaigns();
@@ -155,12 +156,12 @@ namespace Teleopti.Ccc.Win.Backlog
 			}
 		}
 
-		private void updateAndPersistCampaignSkillPeriod(Campaign campaign)
+		private void updateAndPersistCampaignSkillPeriod(Campaign campaign, bool applyDefaultTemplate)
 		{
 			var incomingTask = createProductionPlan(campaign);
 
 			//persist productionPlan
-			updateSkillDays(campaign.Skill, incomingTask);
+			updateSkillDays(campaign.Skill, incomingTask, applyDefaultTemplate);
 		}
 
 		private IncomingTask createProductionPlan(Campaign campaign)
@@ -175,16 +176,17 @@ namespace Teleopti.Ccc.Win.Backlog
 			foreach (var dateOnly in incomingTask.SpanningPeriod.DayCollection())
 			{
 				var scheduled = _backlogScheduledProvider.GetScheduledTimeOnDate(dateOnly, campaign.Skill);
+				var forecasted = _backlogScheduledProvider.GetForecastedTimeOnDate(dateOnly, campaign.Skill);
 				if(scheduled != TimeSpan.Zero)
 					incomingTask.SetTimeOnDate(dateOnly, scheduled, PlannedTimeTypeEnum.Scheduled);
+				else if(forecasted != TimeSpan.Zero)
+					incomingTask.SetTimeOnDate(dateOnly, scheduled, PlannedTimeTypeEnum.Calculated);
 			}
-
-			incomingTask.RecalculateDistribution();
 
 			return incomingTask;
 		}
 	
-		private void updateSkillDays(ISkill skill, IncomingTask incomingTask)
+		private void updateSkillDays(ISkill skill, IncomingTask incomingTask, bool applyDefaultTemplate)
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
@@ -194,10 +196,13 @@ namespace Teleopti.Ccc.Win.Backlog
 				var workLoadDays = new List<IWorkloadDay>();
 				foreach (var skillDay in skillDays)
 				{
-					var dayOfWeek = skillDay.CurrentDate.DayOfWeek;
-					var template = workload.TemplateWeekCollection[(int)dayOfWeek];
 					var workloadDay = skillDay.WorkloadDayCollection.First();
-					workloadDay.ApplyTemplate(template, day => { }, day => { });
+					if(applyDefaultTemplate)
+					{
+						var dayOfWeek = skillDay.CurrentDate.DayOfWeek;
+						var template = workload.TemplateWeekCollection[(int)dayOfWeek];						
+						workloadDay.ApplyTemplate(template, day => { }, day => { });
+					}
 					workLoadDays.Add(workloadDay);
 				}
 				var merger = _container.Resolve<IForecastingTargetMerger>();
@@ -208,8 +213,8 @@ namespace Teleopti.Ccc.Win.Backlog
 					var forecastingTarget = new ForecastingTarget(dateOnly, new OpenForWork(isOpen, isOpen));
 					if(isOpen)
 					{
-						forecastingTarget.Tasks = 1;
-						forecastingTarget.AverageTaskTime = incomingTask.GetTimeOnDate(dateOnly);
+						forecastingTarget.Tasks = incomingTask.GetTimeOnDate(dateOnly).TotalSeconds/incomingTask.AverageWorkTimePerItem.TotalSeconds;
+						forecastingTarget.AverageTaskTime = incomingTask.AverageWorkTimePerItem;
 					}
 
 					forecastingTargets.Add(forecastingTarget);
@@ -289,9 +294,10 @@ namespace Teleopti.Ccc.Win.Backlog
 
 		private void backgroundWorker1_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
 		{
+			//Nix det blev konstigt
 			//foreach (var campaign in _campaigns)
 			//{
-			//	updateAndPersistCampaignSkillPeriod(campaign); //lägger bara upp nya dagar med longterm, gör på annat sätt
+			//	updateAndPersistCampaignSkillPeriod(campaign, false); //lägger bara upp nya dagar med longterm, gör på annat sätt
 			//}
 			Enabled = true;
 			updateStatusOnCampaigns();

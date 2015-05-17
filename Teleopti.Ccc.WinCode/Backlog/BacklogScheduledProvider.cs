@@ -70,6 +70,20 @@ namespace Teleopti.Ccc.WinCode.Backlog
 				TimeSpan.FromHours(SkillStaffPeriodHelper.ScheduledHours(skillDay.SkillStaffPeriodCollection).GetValueOrDefault(0));
 		}
 
+		public TimeSpan GetForecastedTimeOnDate(DateOnly date, ISkill skill)
+		{
+			var skillDay = _stateHolder.SchedulingResultState.SkillDayOnSkillAndDateOnly(skill, date);
+			if (skillDay == null)
+				return TimeSpan.Zero;
+
+			var ret = TimeSpan.Zero;
+			foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
+			{
+				ret = ret.Add(skillStaffPeriod.ForecastedIncomingDemand());
+			}
+			return ret;
+		}
+
 		private void loadCommonStateHolder(IUnitOfWork uow)
 		{
 			_stateHolder.LoadCommonState(uow, new RepositoryFactory());
