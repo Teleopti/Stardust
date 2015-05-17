@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -117,6 +118,21 @@ namespace Teleopti.Ccc.Domain.Outbound
 		{
 			get { return _endDate; }
 			set { _endDate= value; }
+		}
+
+		public virtual DateOnlyPeriod SpanningPeriod //remove start and endate, persist this
+		{
+			get { return new DateOnlyPeriod(_startDate.Value, _endDate.Value); }
+		}
+
+		public virtual int CampaignTasks() //what should be returned, Niclas?
+		{
+			return CallListLen;
+		}
+
+		public virtual TimeSpan AverageTaskHandlingTime() //how should this be calculated, campaigntasks*this should equal total time to complete campaign
+		{
+			return TimeSpan.FromHours((double) ConnectAverageHandlingTime/CallListLen);
 		}
 
 		public virtual CampaignStatus CampaignStatus

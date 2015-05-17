@@ -119,27 +119,26 @@ namespace Teleopti.Ccc.Win.Backlog
 
 		private void toolStripButtonAddCampaignClick(object sender, EventArgs e)
 		{
-			var campaign = createAndPersistCampaign();
-			if (campaign == null)
-				return;
-
-			updateAndPersistCampaignSkillPeriod(campaign);
-			loadCampaigns();
-			updateStatusOnCampaigns();
-		}
-
-		private Campaign createAndPersistCampaign()
-		{
 			Campaign campaign;
 			using (var addCampaign = new AddCampaign())
 			{
 				addCampaign.ShowDialog(this);
 				if (addCampaign.DialogResult != DialogResult.OK)
-					return null;
+					return;
 
 				campaign = addCampaign.CreatedCampaign;
 			}
 
+			//AddCampaignCommand
+			createAndPersistCampaign(campaign);
+			updateAndPersistCampaignSkillPeriod(campaign);
+
+			loadCampaigns();
+			updateStatusOnCampaigns();
+		}
+
+		private void createAndPersistCampaign(Campaign campaign)
+		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var outboundSkillCreator = _container.Resolve<OutboundSkillCreator>();
@@ -154,8 +153,6 @@ namespace Teleopti.Ccc.Win.Backlog
 				campaignRepository.Add(campaign);
 				uow.PersistAll();
 			}
-
-			return campaign;
 		}
 
 		private void updateAndPersistCampaignSkillPeriod(Campaign campaign)
@@ -169,10 +166,8 @@ namespace Teleopti.Ccc.Win.Backlog
 		private IncomingTask createProductionPlan(Campaign campaign)
 		{
 			var incomingTaskFactory = _container.Resolve<OutboundProductionPlanFactory>();
-			var incomingTask =
-				incomingTaskFactory.CreateAndMakeInitialPlan(new DateOnlyPeriod(campaign.StartDate.Value, campaign.EndDate.Value),
-					campaign.CallListLen, TimeSpan.FromHours((double) campaign.ConnectAverageHandlingTime/campaign.CallListLen),
-					campaign.CampaignWorkingPeriods.ToList());
+			var incomingTask = incomingTaskFactory.CreateAndMakeInitialPlan(campaign.SpanningPeriod, campaign.CampaignTasks(),
+				campaign.AverageTaskHandlingTime(), campaign.CampaignWorkingPeriods.ToList());
 
 			if(_backlogScheduledProvider == null)
 				return incomingTask;
