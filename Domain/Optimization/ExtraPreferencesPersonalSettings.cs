@@ -11,7 +11,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private string _groupPageOnTeamKey;
 		private bool _useTeams;
 		private bool _useSameDaysOffForTeams;
-       	private double _fairnessValue;
 
 	    private bool _useGroupSchedulingCommonStart;
 	    private bool _useGroupSchedulingCommonEnd;
