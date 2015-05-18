@@ -107,6 +107,13 @@ BEGIN
 	BEGIN
 		SELECT @searchType = LTRIM(RTRIM(SUBSTRING(@searchString, 0, @splitterIndex)))
 		SELECT @searchValue = LTRIM(RTRIM(SUBSTRING(@searchString, @splitterIndex + 1, LEN(@searchString) - @splitterIndex)))
+		IF @searchValue = ''
+		BEGIN
+			SELECT * FROM #result
+			CLOSE SearchStringCursor
+			DEALLOCATE SearchStringCursor;
+			RETURN
+		END
 
 		SELECT @keywordSplitterIndex = CHARINDEX(';', @searchValue)
 
