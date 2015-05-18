@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			var tenantServer = _configuration.Args().TenantServer;
 			builder.Register(c => new TenantServerConfiguration(tenantServer)).As<ITenantServerConfiguration>().SingleInstance();
+			builder.RegisterType<AuthenticationQuerierResultConverter>().As<IAuthenticationQuerierResultConverter>().SingleInstance();
 			if (isRunFromTest(tenantServer) || tenantServer.IsAnUrl())
 			{
 				builder.RegisterType<AuthenticationQuerier>().As<IAuthenticationQuerier>().SingleInstance();
