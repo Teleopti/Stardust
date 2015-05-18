@@ -39,9 +39,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 		public void ShouldGetUserWithPermission()
 		{
 			IPerson person = _personCollection[4];
-			Assert.IsNotNullOrEmpty(person.AuthenticationInfo.Identity);
-			Assert.That(person.ApplicationAuthenticationInfo, Is.Null);
-
+			
 			var applicationRole = person.PermissionInformation.ApplicationRoleCollection[0];
 			Expect.Call(_permissionExtractor.ExtractPermission(applicationRole.ApplicationFunctionCollection, _unitOfWorkFactory)).Return(PmPermissionType.ReportDesigner);
 			_mocks.ReplayAll();
@@ -58,7 +56,6 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 		public void ShouldNotGetUsersThatLacksPermissionToPm()
 		{
 			IPerson person = _personCollection[7]; // Does not belong to a ApplicationRole
-			Assert.IsNotNullOrEmpty(person.AuthenticationInfo.Identity);
 			Assert.AreEqual(0, person.PermissionInformation.ApplicationRoleCollection.Count);
 
 			var users = _target.GetUsersWithPermissionsToPerformanceManager(new List<IPerson> { person }, _permissionExtractor, _unitOfWorkFactory);

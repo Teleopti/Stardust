@@ -154,7 +154,6 @@
     <Compile Include="ActivityTransformerTest.cs" />
     <Compile Include="FakeData\BusinessUnitFactory.cs" />
     <Compile Include="FakeData\JobMultipleDateFactory.cs" />
-    <Compile Include="FakeData\UserFactory.cs" />
     <Compile Include="FakeData\JobStepResultFactory.cs" />
     <Compile Include="FakeData\SchedulePartFactory.cs" />
     <Compile Include="FakeData\WorkloadQueueFactory.cs" />
