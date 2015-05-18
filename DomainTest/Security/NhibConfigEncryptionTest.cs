@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Reflection;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Security;
@@ -44,13 +43,6 @@ namespace Teleopti.Ccc.DomainTest.Security
 			dataSourceConfig.AnalyticsConnectionString.Should().Be.EqualTo("a very secret connectionstring");
 			dataSourceConfig.ApplicationNHibernateConfig["key1"].Should().Be.EqualTo("some secret value");
 			dataSourceConfig.ApplicationNHibernateConfig["key2"].Should().Be.EqualTo("another secret value");
-		}
-
-		[Test]
-		public void ShouldNotTryToDecryptNullValue()
-		{
-			var target = new NhibConfigDecryption();
-			Assert.DoesNotThrow(() => target.DecryptConfig(null));
 		}
 	}
 }
