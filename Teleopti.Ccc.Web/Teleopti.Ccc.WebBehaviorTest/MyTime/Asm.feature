@@ -107,10 +107,10 @@ Scenario: Agent should from portal be notified when current shift has changed
 
 Scenario: Asm should be automatically reloaded when time passes
 	Given I have the role 'Full access to mytime'
-	And the time is '2030-01-01 23:59Z'
+	And the time is '2030-01-01 15:59Z'
 	When I view ASM
-	Then Now indicator should be at hour '23'
-	When the time is '2030-01-02 00:01Z'
+	Then Now indicator should be at hour '39'
+	When the time is '2030-01-02 00:02Z'
 	Then Now indicator should be at hour '24'
 
 Scenario: Asm should not indicate unread messages if no messages
