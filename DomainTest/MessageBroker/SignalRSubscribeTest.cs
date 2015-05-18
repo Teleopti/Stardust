@@ -9,7 +9,6 @@ using Teleopti.Interfaces.MessageBroker;
 namespace Teleopti.Ccc.DomainTest.MessageBroker
 {
 	[TestFixture]
-	[CLSCompliant(false)]
 	[MessageBrokerServerTest]
 	public class SignalRSubscribeTest
 	{

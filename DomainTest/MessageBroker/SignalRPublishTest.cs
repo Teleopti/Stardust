@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.MessageBroker;
 
 namespace Teleopti.Ccc.DomainTest.MessageBroker
 {
-	[CLSCompliant(false)]
 	[TestFixture]
 	[MessageBrokerServerTest]
 	public class SignalRPublishTest
