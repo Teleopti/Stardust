@@ -1,12 +1,11 @@
 using System;
 using System.Text.RegularExpressions;
 using Coypu;
-using Coypu.Matchers;
+using Coypu.NUnit.Matchers;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
-using Teleopti.Ccc.Domain.Collection;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 {
@@ -99,13 +98,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 
 		public void AssertExists(string selector)
 		{
-			assert(_browser.HasCss(selector, options()), Is.True, "Could not find element matching selector " + selector);
+			assert(_browser.FindCss(selector, options()).Exists(options()), Is.True, "Could not find element matching selector " + selector);
 		}
 
 		public void AssertNotExists(string existsSelector, string notExistsSelector)
 		{
 			AssertExists(existsSelector);
-			assert(_browser.HasNoCss(notExistsSelector, options()), Is.True,
+			assert(_browser.FindCss(notExistsSelector, options()).Missing(options()), Is.True,
 				"Found element matching selector " + notExistsSelector + " although I shouldnt");
 		}
 
@@ -113,26 +112,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 		{
 			Console.WriteLine("Assert exists element match selector \"{0}\" contain text \"{1}\"", selector, text);
 			var regex = new Regex(Regex.Escape(text));
-			var hasCss = _browser.HasCss(selector, regex, options());
+			var hasCss = _browser.FindCss(selector, regex, options()).Exists(options());
 			var message = string.Format("Could not find element matching selector \"{0}\" with text \"{1}\"", selector, text);
 			assert(hasCss, Is.True, message);
 		}
 
-		// im not sure about the robustness and the trustworhyness of this but...
-		// ... wfm doesnt have jquery so no :contains selector!
-		// it all really depends on the implementation and the exists selector...
 		public void AssertNoContains(string existsSelector, string notExistsSelector, string text)
 		{
 			AssertExists(existsSelector);
 
-			try
-			{
-				Assert.That(_browser, Shows.No.Css(notExistsSelector, text: text));
-			}
-			catch (AssertionException)
-			{
-				Assert.Fail("Failed to assert that " + notExistsSelector + " did not contain text " + text);
-			}
+			_browser.RetryUntilTimeout(() => Assert.That(_browser, Shows.No.Css(notExistsSelector, text, options())));
 		}
 
 		public void AssertFirstContains(string selector, string text)
@@ -194,7 +183,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 			const string scriptToGetDomSource = "return document.documentElement.outerHTML;";
 			try
 			{
-				domSource = _browser.ExecuteScript(scriptToGetDomSource);
+				domSource = _browser.ExecuteScript(scriptToGetDomSource).ToString();
 			}
 			catch (Exception ex)
 			{
@@ -218,7 +207,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 		private string retryJavascript(string javascript)
 		{
 			string result = null;
-			_browser.RetryUntilTimeout(() => { result = _browser.ExecuteScript(javascript); }, options());
+			_browser.RetryUntilTimeout(() => { result = _browser.ExecuteScript(javascript).ToString(); }, options());
 			return result;
 		}
 

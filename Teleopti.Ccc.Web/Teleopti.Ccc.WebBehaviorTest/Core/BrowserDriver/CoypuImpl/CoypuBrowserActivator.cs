@@ -25,10 +25,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 		{
 			var configuration = new SessionConfiguration
 				{
-					AppHost = "about:blank",
+					AppHost = "localhost",
 					Port = 80,
 					SSL = false,
-					ConsiderInvisibleElements = true,
+					ConsiderInvisibleElements = false,
 					WaitBeforeClick = TimeSpan.Zero,
 					RetryInterval = retry,
 					Timeout = timeout,
