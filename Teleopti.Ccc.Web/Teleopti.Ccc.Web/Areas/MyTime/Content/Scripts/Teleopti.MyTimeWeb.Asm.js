@@ -34,7 +34,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 
 	function getUtcNowString() {
 
-		var now = new Date();
+		var now = new Date(new Date().getTeleoptiTime());
 		var dateStr = (now.getUTCMonth() + 1).toString() + '/' +
 					   now.getUTCDate().toString() + '/' +
 					   now.getUTCFullYear().toString() + ' ' +
