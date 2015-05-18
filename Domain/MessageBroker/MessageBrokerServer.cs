@@ -8,7 +8,6 @@ using Teleopti.Interfaces.MessageBroker;
 
 namespace Teleopti.Ccc.Domain.MessageBroker
 {
-	[CLSCompliant(false)]
 	public class MessageBrokerServer : IMessageBrokerServer
 	{
 		private readonly IActionScheduler _actionScheduler;
