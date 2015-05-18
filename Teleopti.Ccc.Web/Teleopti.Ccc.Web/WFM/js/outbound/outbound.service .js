@@ -81,9 +81,8 @@ outboundService.service('OutboundService', ['$resource', '$filter', function( $r
 		return campaign;
 	};
 
-	self.updateCampaign = function(campaign, successCb, errorCb) {
-		campaign.$update(
-			function() {
+	self.updateCampaign = function (campaign, successCb, errorCb) {
+		Campaign.update(campaign, function() {
 				if (angular.isDefined(successCb))
 					successCb();
 			},

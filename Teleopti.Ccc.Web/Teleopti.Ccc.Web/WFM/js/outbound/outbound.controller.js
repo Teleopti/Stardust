@@ -108,7 +108,10 @@
 				$scope.formScope = event.targetScope;
 			});
 
-			$scope.update = function (isAlwaysUpdate) {				
+			$scope.update = function (isAlwaysUpdate) {
+				if ($scope.campaign == null) return;
+				if ($scope.formCampaignParams == null) return;
+
 				if (isAlwaysUpdate || ($scope.formCampaignParams.$dirty && $scope.formCampaignParams.$valid ) ) {
 					OutboundService.updateCampaign($scope.campaign,
 					function () {
