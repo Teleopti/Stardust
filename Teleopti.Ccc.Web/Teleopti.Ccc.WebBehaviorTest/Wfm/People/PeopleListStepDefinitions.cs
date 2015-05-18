@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.People
 		[When(@"I search people with keyword '(.*)'")]
 		public void WhenISearchPeopleWithKeyword(string value)
 		{
-			var selector = ".people-search input";
+			var selector = ".people-search #simple-search";
 			Browser.Interactions.Clear(selector);
 			Browser.Interactions.FillWith(selector, value);
 			Browser.Interactions.PressEnter(selector);
