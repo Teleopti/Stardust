@@ -191,7 +191,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<GridlockManager>().As<IGridlockManager>().InstancePerLifetimeScope();
 			builder.RegisterType<MatrixUserLockLocker>().As<IMatrixUserLockLocker>().InstancePerLifetimeScope();
 			builder.RegisterType<MatrixNotPermittedLocker>().As<IMatrixNotPermittedLocker>().InstancePerLifetimeScope();
-			builder.RegisterType<ScheduleFairnessCalculator>().As<IScheduleFairnessCalculator>().InstancePerLifetimeScope();
 			builder.RegisterType<ScheduleMatrixValueCalculatorProFactory>().As<IScheduleMatrixValueCalculatorProFactory>().InstancePerLifetimeScope();
 			builder.RegisterType<WorkShiftLegalStateDayIndexCalculator>().As<IWorkShiftLegalStateDayIndexCalculator>().InstancePerLifetimeScope();
 

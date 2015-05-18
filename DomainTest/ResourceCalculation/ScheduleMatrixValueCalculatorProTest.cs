@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         private ScheduleMatrixValueCalculatorPro _target;
         private IList<DateOnly> _scheduleDays;
         private IOptimizationPreferences _optimizerPreferences;
-        private IScheduleFairnessCalculator _fairnessCalculator;
         
         [SetUp]
         public void Setup()
@@ -32,21 +31,18 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         public void VerifyConstructor()
         {
             SchedulingResultStateHolder stateHolder = new SchedulingResultStateHolder();
-            _fairnessCalculator = _mockRepository.StrictMock<IScheduleFairnessCalculator>();
-            _target = new ScheduleMatrixValueCalculatorPro(_scheduleDays, _optimizerPreferences, stateHolder, _fairnessCalculator);
+            _target = new ScheduleMatrixValueCalculatorPro(_scheduleDays, _optimizerPreferences, stateHolder);
             Assert.IsNotNull(_target);
             Assert.AreSame(_scheduleDays, _target.ScheduleDays);
             Assert.AreSame(stateHolder, _target.StateHolder);
-            Assert.AreSame(_fairnessCalculator, _target.FairnessCalculator);
         }
 
         [Test]
         public void VerifyPeriodValue()
         {
             ISchedulingResultStateHolder stateHolder = createStateHolderForTest(_mockRepository);
-            _fairnessCalculator = new ScheduleFairnessCalculatorForTest();
             _optimizerPreferences.Advanced.UseIntraIntervalDeviation = true;
-            _target = new ScheduleMatrixValueCalculatorPro(_scheduleDays, _optimizerPreferences, stateHolder, _fairnessCalculator);
+            _target = new ScheduleMatrixValueCalculatorPro(_scheduleDays, _optimizerPreferences, stateHolder);
 
             Assert.IsNotNull(_target);
 
@@ -59,9 +55,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         public void VerifyPeriodValue2()
         {
             ISchedulingResultStateHolder stateHolder = createStateHolderForTest(_mockRepository);
-            _fairnessCalculator = new ScheduleFairnessCalculatorForTest();
 			_optimizerPreferences.Advanced.UseIntraIntervalDeviation = true;
-            _target = new ScheduleMatrixValueCalculatorPro(_scheduleDays, _optimizerPreferences, stateHolder, _fairnessCalculator);
+            _target = new ScheduleMatrixValueCalculatorPro(_scheduleDays, _optimizerPreferences, stateHolder);
 
 			Assert.AreEqual(2d, _target.PeriodValue(IterationOperationOption.WorkShiftOptimization), 0.01d);
             stateHolder.Dispose();
@@ -71,10 +66,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         public void VerifyPeriodValueForDayOffOptimization()
         {
             ISchedulingResultStateHolder stateHolder = createStateHolderForTest(_mockRepository);
-            _fairnessCalculator = new ScheduleFairnessCalculatorForTest();
 			_optimizerPreferences.Advanced.UseIntraIntervalDeviation = false;
 
-            _target = new ScheduleMatrixValueCalculatorPro(_scheduleDays, _optimizerPreferences, stateHolder, _fairnessCalculator);
+            _target = new ScheduleMatrixValueCalculatorPro(_scheduleDays, _optimizerPreferences, stateHolder);
 
             Assert.AreEqual(0d, _target.PeriodValue(IterationOperationOption.DayOffOptimization), 0.01d);
             stateHolder.Dispose();

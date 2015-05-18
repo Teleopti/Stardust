@@ -1355,7 +1355,6 @@
     <Compile Include="ResourceCalculation\PreSchedulingStatusChecker.cs" />
     <Compile Include="RealTimeAdherence\AlarmType.cs" />
     <Compile Include="RealTimeAdherence\RtaStateHolder.cs" />
-    <Compile Include="ResourceCalculation\ScheduleFairnessCalculator.cs" />
     <Compile Include="Optimization\ScheduleMatrixPro.cs" />
     <Compile Include="Optimization\RemoveShiftCategoryOnBestDateService.cs" />
     <Compile Include="ResourceCalculation\ShiftProjectionCacheManager.cs" />

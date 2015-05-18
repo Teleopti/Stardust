@@ -242,7 +242,6 @@
     <Compile Include="FakeData\QueueSourceFactory.cs" />
     <Compile Include="FakeData\ScenarioFactory.cs" />
     <Compile Include="FakeData\ScheduleDictionaryForTest.cs" />
-    <Compile Include="FakeData\ScheduleFairnessCalculatorForTest.cs" />
     <Compile Include="FakeData\ScheduleMatrixProFactory.cs" />
     <Compile Include="FakeData\SchedulePartFactoryForDomain.cs" />
     <Compile Include="FakeData\SchedulePeriodFactory.cs" />

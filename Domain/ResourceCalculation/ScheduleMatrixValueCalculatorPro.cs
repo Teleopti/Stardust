@@ -10,30 +10,19 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private readonly IEnumerable<DateOnly> _scheduleDays;
         private readonly IOptimizationPreferences _optimizerPreferences;
         private readonly ISchedulingResultStateHolder _stateHolder;
-        private readonly IScheduleFairnessCalculator _fairnessCalculator;
         private readonly IList<ISkill> _activeSkills;
 
-        public ScheduleMatrixValueCalculatorPro(
-            IEnumerable<DateOnly> scheduleDays,
-			IOptimizationPreferences optimizerPreferences,
-            ISchedulingResultStateHolder stateHolder,
-            IScheduleFairnessCalculator fairnessCalculator,
-            IList<ISkill> activeSkills)
+        public ScheduleMatrixValueCalculatorPro(IEnumerable<DateOnly> scheduleDays, IOptimizationPreferences optimizerPreferences, ISchedulingResultStateHolder stateHolder, IList<ISkill> activeSkills)
         {
             _scheduleDays = scheduleDays;
             _optimizerPreferences = optimizerPreferences;
             _stateHolder = stateHolder;
-            _fairnessCalculator = fairnessCalculator;
             _activeSkills = activeSkills;
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-        public ScheduleMatrixValueCalculatorPro(
-            IEnumerable<DateOnly> scheduleDays,
-			IOptimizationPreferences optimizerPreferences,
-            ISchedulingResultStateHolder stateHolder,
-            IScheduleFairnessCalculator fairnessCalculator)
-            : this(scheduleDays, optimizerPreferences, stateHolder, fairnessCalculator, stateHolder.Skills){}
+        public ScheduleMatrixValueCalculatorPro(IEnumerable<DateOnly> scheduleDays, IOptimizationPreferences optimizerPreferences, ISchedulingResultStateHolder stateHolder)
+            : this(scheduleDays, optimizerPreferences, stateHolder, stateHolder.Skills){}
 
         public IEnumerable<DateOnly> ScheduleDays
         {
@@ -43,11 +32,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public ISchedulingResultStateHolder StateHolder
         {
             get { return _stateHolder; }
-        }
-
-        public IScheduleFairnessCalculator FairnessCalculator
-        {
-            get { return _fairnessCalculator; }
         }
 
         public double PeriodValue(IterationOperationOption iterationOperationOption)

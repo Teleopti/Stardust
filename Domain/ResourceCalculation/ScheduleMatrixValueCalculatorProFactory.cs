@@ -5,17 +5,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
     public class ScheduleMatrixValueCalculatorProFactory : IScheduleMatrixValueCalculatorProFactory
     {
-        public IScheduleMatrixValueCalculatorPro CreateScheduleMatrixValueCalculatorPro(
-            IEnumerable<DateOnly> scheduleDays,
-            IOptimizationPreferences optimizerPreferences,
-            ISchedulingResultStateHolder stateHolder,
-            IScheduleFairnessCalculator fairnessCalculator)
+        public IScheduleMatrixValueCalculatorPro CreateScheduleMatrixValueCalculatorPro(IEnumerable<DateOnly> scheduleDays, IOptimizationPreferences optimizerPreferences, ISchedulingResultStateHolder stateHolder)
         {
             return new ScheduleMatrixValueCalculatorPro
                 (scheduleDays,
                  optimizerPreferences,
-                 stateHolder,
-                 fairnessCalculator);
+                 stateHolder);
         }
     }
 }

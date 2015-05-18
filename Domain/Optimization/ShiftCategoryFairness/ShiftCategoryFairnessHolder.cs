@@ -55,8 +55,6 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
             }
 
         	IFairnessValueResult fairnessValueResult = new FairnessValueResult();
-        	fairnessValueResult.FairnessPoints = _fairnessValueResult.FairnessPoints +
-        	                                     holder.FairnessValueResult.FairnessPoints;
         	fairnessValueResult.TotalNumberOfShifts = _fairnessValueResult.TotalNumberOfShifts +
         	                                          holder.FairnessValueResult.TotalNumberOfShifts;
 

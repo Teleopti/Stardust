@@ -946,7 +946,6 @@
     <Compile Include="ResourceCalculation\DeviationStatisticsDataTest.cs" />
     <Compile Include="ResourceCalculation\PersonSkillPeriodsDataHolderManagerTest.cs" />
     <Compile Include="ResourceCalculation\PreSchedulingStatusCheckerTest.cs" />
-    <Compile Include="ResourceCalculation\ScheduleFairnessCalculatorTest.cs" />
     <Compile Include="Optimization\ScheduleMatrixProTest.cs" />
     <Compile Include="ResourceCalculation\ScheduleMatrixValueCalculatorProTest.cs" />
     <Compile Include="Optimization\RemoveShiftCategoryOnBestDateServiceTest.cs" />

@@ -360,7 +360,6 @@
     <Compile Include="Domain\IScheduleMatrixValueCalculatorPro.cs" />
     <Compile Include="Domain\IPermissionCheck.cs" />
     <Compile Include="Domain\IScheduleDayPro.cs" />
-    <Compile Include="Domain\IScheduleFairnessCalculator.cs" />
     <Compile Include="Domain\IScheduleMatrixValueCalculatorProFactory.cs" />
     <Compile Include="Domain\ISchedulingResultService.cs" />
     <Compile Include="Domain\IScorecard.cs" />
