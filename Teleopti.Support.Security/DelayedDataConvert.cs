@@ -30,6 +30,8 @@ namespace Teleopti.Support.Security
 					
 					command.CommandText = "mart.fact_queue_etl_job_delayed";
 					rowsAffected = AddRowsAffected(command, rowsAffected);
+                    command.CommandText = "mart.fact_imported_queue_etl_job_delayed";
+                    rowsAffected = AddRowsAffected(command, rowsAffected);
 					command.CommandText = "mart.fact_agent_etl_job_delayed";
 					rowsAffected = AddRowsAffected(command, rowsAffected);
                     command.CommandText = "mart.fact_agent_queue_etl_job_delayed";
@@ -45,6 +47,14 @@ namespace Teleopti.Support.Security
 					rowsAffected = AddRowsAffected(command, 0);
 					command.Parameters.Clear();
 					log.Debug("\tfact_queue converted " + rowsAffected + " rows.");
+
+                    log.Debug("Converting Data");
+                    log.Debug("\tfact_queue imported queues...");
+                    command.CommandText = "mart.etl_execute_delayed_job";
+                    command.Parameters.Add(new SqlParameter("@stored_procedure", "mart.etl_imported_queues_fact_queue_reload"));
+                    rowsAffected = AddRowsAffected(command, 0);
+                    command.Parameters.Clear();
+                    log.Debug("\timported queues fact_queue converted " + rowsAffected + " rows.");
 
 					log.Debug("\tfact_agent ...");
 					command.CommandText = "mart.etl_execute_delayed_job";
