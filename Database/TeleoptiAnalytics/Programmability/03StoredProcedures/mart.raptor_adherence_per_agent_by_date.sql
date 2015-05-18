@@ -281,7 +281,8 @@ select distinct
  INNER JOIN mart.dim_time_zone t
 	ON tz.time_zone_id = t.time_zone_id
  where p.business_unit_code = @business_unit_code and d.date_date = @local_date
-   and t.time_zone_code = @time_zone_code;
+   and t.time_zone_code = @time_zone_code
+   and @local_date between p.valid_from_date and p.valid_to_date;
 
 --Create UTC table from: mart.fact_schedule_deviation
 INSERT INTO #fact_schedule_deviation_raw(shift_startdate_local_id,shift_startdate_id,shift_startinterval_id,date_id,interval_id,person_id,deviation_schedule_ready_s,deviation_schedule_s,deviation_contract_s,ready_time_s,is_logged_in,contract_time_s)
@@ -451,6 +452,7 @@ adherence_type_selected,hide_time_zone,count_activity_per_interval)
 	FROM mart.dim_person p
 	INNER JOIN #fact_schedule fs
 		ON fs.person_id=p.person_id
+		AND @local_date between p.valid_from_date and p.valid_to_date
 	LEFT JOIN #fact_schedule_deviation fsd
 		ON fsd.person_id=fs.person_id
 		AND fsd.date_id=fs.schedule_date_id
@@ -511,6 +513,7 @@ adherence_type_selected,hide_time_zone,count_activity_per_interval)
 	FROM mart.dim_person p
 	INNER JOIN #fact_schedule_deviation fsd
 		ON fsd.person_id=p.person_id
+		AND @local_date between p.valid_from_date and p.valid_to_date
 	INNER JOIN #bridge_time_zone b1
 		ON	fsd.shift_startinterval_id= b1.interval_id
 		AND fsd.shift_startdate_id=b1.date_id
