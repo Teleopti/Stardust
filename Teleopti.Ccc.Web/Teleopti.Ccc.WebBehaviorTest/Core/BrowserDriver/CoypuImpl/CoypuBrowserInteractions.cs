@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 
 		public void AssertJavascriptResultContains(string javascript, string text)
 		{
-			eventualAssert(() => _browser.ExecuteScript(javascript).ToString(), Is.StringContaining(text),
+			eventualAssert(() => _browser.ExecuteScript(javascript), Is.StringContaining(text),
 				string.Format("Failed to assert that javascript \"{0}\" returned a value containing \"{1}\"", javascript, text));
 		}
 
