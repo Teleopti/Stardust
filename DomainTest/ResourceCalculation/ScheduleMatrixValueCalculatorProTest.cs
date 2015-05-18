@@ -46,13 +46,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             ISchedulingResultStateHolder stateHolder = createStateHolderForTest(_mockRepository);
             _fairnessCalculator = new ScheduleFairnessCalculatorForTest();
             _optimizerPreferences.Advanced.UseIntraIntervalDeviation = true;
-            _optimizerPreferences.Extra.FairnessValue = 0.1d;
             _target = new ScheduleMatrixValueCalculatorPro(_scheduleDays, _optimizerPreferences, stateHolder, _fairnessCalculator);
 
             Assert.IsNotNull(_target);
 
-            Assert.AreEqual(2d, _target.CalculateInitialValue(IterationOperationOption.IntradayOptimization), 0.01d);
-            Assert.AreEqual(2.3d, _target.PeriodValue(IterationOperationOption.WorkShiftOptimization), 0.01d);
+			Assert.AreEqual(2d, _target.PeriodValue(IterationOperationOption.IntradayOptimization), 0.01d);
+            Assert.AreEqual(2d, _target.PeriodValue(IterationOperationOption.WorkShiftOptimization), 0.01d);
             stateHolder.Dispose();
         }
 
@@ -62,11 +61,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             ISchedulingResultStateHolder stateHolder = createStateHolderForTest(_mockRepository);
             _fairnessCalculator = new ScheduleFairnessCalculatorForTest();
 			_optimizerPreferences.Advanced.UseIntraIntervalDeviation = true;
-			_optimizerPreferences.Extra.FairnessValue = 0.9d;
             _target = new ScheduleMatrixValueCalculatorPro(_scheduleDays, _optimizerPreferences, stateHolder, _fairnessCalculator);
 
-            Assert.AreEqual(2d, _target.CalculateInitialValue(IterationOperationOption.WorkShiftOptimization), 0.01d);
-            Assert.AreEqual(4.7d, _target.PeriodValue(IterationOperationOption.WorkShiftOptimization), 0.01d);
+			Assert.AreEqual(2d, _target.PeriodValue(IterationOperationOption.WorkShiftOptimization), 0.01d);
             stateHolder.Dispose();
         }
 
@@ -76,12 +73,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             ISchedulingResultStateHolder stateHolder = createStateHolderForTest(_mockRepository);
             _fairnessCalculator = new ScheduleFairnessCalculatorForTest();
 			_optimizerPreferences.Advanced.UseIntraIntervalDeviation = false;
-			_optimizerPreferences.Extra.FairnessValue = 0.9d;
 
             _target = new ScheduleMatrixValueCalculatorPro(_scheduleDays, _optimizerPreferences, stateHolder, _fairnessCalculator);
 
-            Assert.AreEqual(0d, _target.CalculateInitialValue(IterationOperationOption.WorkShiftOptimization), 0.01d);
-            Assert.AreEqual(4.5d, _target.PeriodValue(IterationOperationOption.WorkShiftOptimization), 0.01d);
+            Assert.AreEqual(0d, _target.PeriodValue(IterationOperationOption.DayOffOptimization), 0.01d);
             stateHolder.Dispose();
         }
 

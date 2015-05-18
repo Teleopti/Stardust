@@ -307,18 +307,6 @@ namespace Teleopti.Interfaces.Domain
         /// <value>The group page on team.</value>
         GroupPageLight TeamGroupPage { get; set; }
 
-        /// <summary>
-        /// Gets or sets the fairness value.
-        /// </summary>
-        /// <value>The fairness value.</value>
-        double FairnessValue { get; set; }
-
-        /// <summary>
-        /// Gets or sets the group page on compare with.
-        /// </summary>
-        /// <value>The group page on compare with.</value>
-        GroupPageLight GroupPageOnCompareWith { get; set; }
-
 		/// <summary>
 		/// 
 		/// </summary>

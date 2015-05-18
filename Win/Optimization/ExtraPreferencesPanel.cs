@@ -78,10 +78,6 @@ namespace Teleopti.Ccc.Win.Optimization
 			comboBoxTeamGroupPage.DisplayMember = "DisplayName";
 			comboBoxTeamGroupPage.ValueMember = "Key";
 			comboBoxTeamGroupPage.DataSource = _groupPageOnTeams;
-
-			comboBoxGroupPageOnCompareWith.DataSource = _groupPageOnCompareWith;
-			comboBoxGroupPageOnCompareWith.DisplayMember = "Name";
-			comboBoxGroupPageOnCompareWith.ValueMember = "Key";
 		}
 
 		private void bindActivityList()
@@ -99,8 +95,6 @@ namespace Teleopti.Ccc.Win.Optimization
 			Preferences.UseTeamSameEndTime = checkBoxTeamSameEndTime.Checked;
             Preferences.UseTeamSameActivity = checkBoxTeamSameActivity.Checked;
             Preferences.TeamActivityValue = (IActivity)comboBoxTeamActivity.SelectedItem;
-			Preferences.GroupPageOnCompareWith = (GroupPageLight)comboBoxGroupPageOnCompareWith.SelectedItem;
-	        Preferences.FairnessValue = 0d;
 	        getTeamBlockPerDataToSave();
         }
 
@@ -119,11 +113,6 @@ namespace Teleopti.Ccc.Win.Optimization
 			if (comboBoxTeamGroupPage.SelectedValue == null)
 				comboBoxTeamGroupPage.SelectedIndex = 0;
 
-			trackBar1.Value = (int) (Preferences.FairnessValue*100);
-
-			comboBoxGroupPageOnCompareWith.SelectedValue = Preferences.GroupPageOnCompareWith.Key;
-			if (comboBoxGroupPageOnCompareWith.SelectedValue == null)
-				comboBoxGroupPageOnCompareWith.SelectedIndex = 0;
 			setTeamBlockPerData();
 		}
 

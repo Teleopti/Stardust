@@ -45,18 +45,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_extraPreferencesSource.BlockTypeValue = BlockFinderType.SchedulePeriod;
 			_extraPreferencesSource.UseTeams = !_extraPreferencesSource.UseTeams;
 
-            _extraPreferencesSource.FairnessValue = 102d;
-
-		    
-
 			_target.MapFrom(_extraPreferencesSource);
             _target.MapTo(_extraPreferencesTarget, _groupPages, _groupPagesForTeamBlockPer);
 
 				Assert.AreEqual(_extraPreferencesSource.BlockTypeValue, _extraPreferencesTarget.BlockTypeValue);
 			Assert.AreEqual(_extraPreferencesSource.UseTeams, _extraPreferencesTarget.UseTeams);
-            
-            Assert.AreEqual(_extraPreferencesSource.FairnessValue, _extraPreferencesTarget.FairnessValue);
-
 		}
 
         [Test]

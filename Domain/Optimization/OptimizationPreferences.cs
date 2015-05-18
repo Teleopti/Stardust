@@ -85,11 +85,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public bool UseTeams { get; set; }
 		public bool UseTeamSameDaysOff { get; set; }
 		public GroupPageLight TeamGroupPage { get; set; }
-
-		public GroupPageLight GroupPageOnCompareWith { get; set; }
-		public double FairnessValue { get; set; }
-
-		
+	
 		public bool UseTeamSameStartTime { get; set; }
 		public bool UseTeamSameEndTime { get; set; }
 		public bool UseTeamSameShiftCategory { get; set; }

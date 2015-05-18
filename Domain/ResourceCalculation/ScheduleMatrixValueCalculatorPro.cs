@@ -52,10 +52,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         public double PeriodValue(IterationOperationOption iterationOperationOption)
         {
-            double initialValue = CalculateInitialValue(iterationOperationOption);
-            double fairnessValue = _fairnessCalculator.ScheduleFairness();
-            double fairnessSetting = _optimizerPreferences.Extra.FairnessValue;
-            return CalculatePeriodValue(fairnessSetting, fairnessValue, initialValue);
+            return CalculateInitialValue(iterationOperationOption);
         }
 
         public double? DayValueForSkills(DateOnly scheduleDay, IList<ISkill> skillList)
@@ -97,7 +94,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return SkillStaffPeriodHelper.RelativeDifference(skillStaffPeriods);
         }
 
-        public double CalculateInitialValue(IterationOperationOption iterationOperationOption)
+        private double CalculateInitialValue(IterationOperationOption iterationOperationOption)
         {
 	        var values = _scheduleDays.Select(s => DayValue(s, iterationOperationOption)).Where(s => s.HasValue).Select(s => s.Value).ToArray();
 	        if (!values.Any()) return 0;
@@ -105,11 +102,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	        return iterationOperationOption == IterationOperationOption.DayOffOptimization
 		               ? Domain.Calculation.Variances.StandardDeviation(values)
 		               : Domain.Calculation.Variances.RMS(values);
-        }
-
-        public static double CalculatePeriodValue(double fairnessSetting, double fairnessValue, double initialValue)
-        {
-            return (fairnessSetting * fairnessValue) + (initialValue * (1 - fairnessSetting));
         }
 
         public bool IsConsiderMaximumIntraIntervalStandardDeviation()

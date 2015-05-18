@@ -9,7 +9,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public class ExtraPreferencesPersonalSettings : SettingValue
 	{
 		private string _groupPageOnTeamKey;
-		private string _groupPageOnCompareWithKey;
 		private bool _useTeams;
 		private bool _useSameDaysOffForTeams;
        	private double _fairnessValue;
@@ -38,14 +37,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 			{
 				if (_groupPageOnTeamKey == groupPage.Key)
 					target.TeamGroupPage = groupPage;
-				if (_groupPageOnCompareWithKey == groupPage.Key)
-					target.GroupPageOnCompareWith = groupPage;
 			}
 
 			target.UseTeams = _useTeams;
 			target.UseTeamSameDaysOff = _useSameDaysOffForTeams;
-            
-			target.FairnessValue = _fairnessValue;
 
 		    target.UseTeamSameShiftCategory = _useGroupSchedulingCommonCategory;
 		    target.UseTeamSameEndTime = _useGroupSchedulingCommonEnd;
@@ -64,12 +59,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public void MapFrom(IExtraPreferences source)
 		{
 			_groupPageOnTeamKey = source.TeamGroupPage.Key;
-			_groupPageOnCompareWithKey = source.GroupPageOnCompareWith.Key;
 
 			_useTeams = source.UseTeams;
 			_useSameDaysOffForTeams = source.UseTeamSameDaysOff;
-
-            _fairnessValue = source.FairnessValue;
 
 		    _useGroupSchedulingCommonCategory = source.UseTeamSameShiftCategory;
 		    _useGroupSchedulingCommonEnd = source.UseTeamSameEndTime;
