@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Infrastructure.Authentication
 
 		public IPerson LoadFullPersonInSeperateTransaction(IUnitOfWorkFactory unitOfWorkFactory, Guid personId)
 		{
-			return data[personId];
+			return data.ContainsKey(personId) ? data[personId] : null;
 		}
 
 		public void Has(IPerson person)

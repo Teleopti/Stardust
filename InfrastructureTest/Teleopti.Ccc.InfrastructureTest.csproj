@@ -183,6 +183,7 @@
     <Compile Include="DistributedLock\DistributedLockTest.cs" />
     <Compile Include="Foundation\CouldNotCreateTransactionExceptionTest.cs" />
     <Compile Include="MultiTenancy\Client\ApplicationDataFake.cs" />
+    <Compile Include="MultiTenancy\Client\AuthenticationQuerierResultConverterTest.cs" />
     <Compile Include="MultiTenancy\Client\ChangePasswordTest.cs" />
     <Compile Include="MultiTenancy\Client\MultiTenancyApplicationLogonTest.cs" />
     <Compile Include="MultiTenancy\Client\MultiTenancyIdentityLogonTest.cs" />
