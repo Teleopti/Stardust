@@ -1,3 +1,49 @@
 ﻿.people-search {
 	padding: 10px 0px;
 }
+
+.pagination-item {
+	display: inline-block;
+}
+
+.pagination li.disabled a {
+	color: rgba(0,0,0,0.26);
+	pointer-events: none;
+}
+
+.pagination li.disabled {
+	cursor: not-allowed;
+}
+
+.pagination li.active {
+	background-color: rgba(0,0,0,0.06);
+}
+
+.pagination li {
+	padding: 10px;
+	cursor: pointer;
+	background-color: white;
+}
+
+.wfm-list, .ui-grid-menu-items {
+	padding-left: 0px;
+	list-style: none;
+	max-height: 800px;
+	overflow-y: auto;
+	margin: 0;
+}
+
+.wfm-list label {
+	background-color: #99d6ff;
+}
+
+.dropdown ul {
+	width: 500px;
+	position: absolute;
+	background: #ffffff;
+}
+
+.input-prepend span {
+	display: inline-block;
+	width: 0;
+}

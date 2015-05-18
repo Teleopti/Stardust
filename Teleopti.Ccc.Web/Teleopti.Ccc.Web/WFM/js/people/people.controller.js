@@ -44,7 +44,7 @@ function PeopleController($scope, $filter, $state, SearchSvrc) {
 		$scope.advancedSearchForm = {};
 		if ($scope.keyword.indexOf(':') != -1) {
 			var searchTerms = $scope.keyword.split(',');
-			angular.forEach(searchTerms, function (searchTerm) { 
+			angular.forEach(searchTerms, function (searchTerm) {
 				var termSplitter = searchTerm.indexOf(':');
 				if (termSplitter < 0) {
 					return;
@@ -137,10 +137,20 @@ function PeopleController($scope, $filter, $state, SearchSvrc) {
 		$scope.currentPageIndex = this.n;
 		$scope.searchKeyword();
 	};
+
 	$scope.showAdvancedSearchOption = false;
-	$scope.toggleAdvancedSearchOption = function () {
+	$scope.toggleAdvancedSearchOption = function (event) {
 		$scope.showAdvancedSearchOption = !$scope.showAdvancedSearchOption;
-	}
+		event.stopPropagation();
+	};
+
+	//window.onclick = function () {
+	//	var isChild = $element.find(event.target).length > 0;
+	//	if ($scope.showAdvancedSearchOption && !isChild) {
+	//		$scope.showAdvancedSearchOption = false;
+	//		$scope.$apply();
+	//	}
+	//};
 
 	function getSearchCriteria(title, value) {
 		return value != undefined && value != "" ? title + ": " + value + ", " : "";
@@ -169,7 +179,7 @@ function PeopleController($scope, $filter, $state, SearchSvrc) {
 			SearchCriteria: $scope.advancedSearchForm,
 			PageSize: $scope.pageSize,
 			CurrentPageIndex: $scope.currentPageIndex
-		})).$promise.then(function(result) {
+		})).$promise.then(function (result) {
 			$scope.searchResult = result.People;
 			$scope.optionalColumns = result.OptionalColumns;
 			$scope.totalPages = result.TotalPages;
