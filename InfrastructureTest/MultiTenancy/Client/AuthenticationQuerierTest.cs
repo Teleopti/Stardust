@@ -20,10 +20,10 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			var userAgent = RandomName.Make();
 			var applicationLogonClientModel = new ApplicationLogonClientModel();
 			var applicationLogonClientModelSerialized = RandomName.Make();
-			var authQueryResult = new AuthenticationQueryResult();
+			var authQueryResult = new AuthenticationInternalQuerierResult();
 			jsonSerializer.Expect(x => x.SerializeObject(applicationLogonClientModel)).Return(applicationLogonClientModelSerialized);
 			postHttpRequest.Expect(
-				x => x.Send<AuthenticationQueryResult>(pathToTenantServer + "Authenticate/ApplicationLogon", applicationLogonClientModelSerialized, userAgent))
+				x => x.Send<AuthenticationInternalQuerierResult>(pathToTenantServer + "Authenticate/ApplicationLogon", applicationLogonClientModelSerialized, userAgent))
 				.Return(authQueryResult);
 			var result = new AuthenticationQuerierResult();
 			converter.Expect(x => x.Convert(authQueryResult)).Return(result);
@@ -43,10 +43,10 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			var userAgent = RandomName.Make();
 			var identityLogonClientModel = new IdentityLogonClientModel();
 			var identityLogonClientModelSerialized = RandomName.Make();
-			var authQueryResult = new AuthenticationQueryResult();
+			var authQueryResult = new AuthenticationInternalQuerierResult();
 			jsonSerializer.Expect(x => x.SerializeObject(identityLogonClientModel)).Return(identityLogonClientModelSerialized);
 			postHttpRequest.Expect(
-				x => x.Send<AuthenticationQueryResult>(pathToTenantServer + "Authenticate/IdentityLogon", identityLogonClientModelSerialized, userAgent))
+				x => x.Send<AuthenticationInternalQuerierResult>(pathToTenantServer + "Authenticate/IdentityLogon", identityLogonClientModelSerialized, userAgent))
 				.Return(authQueryResult);
 			var result = new AuthenticationQuerierResult();
 			converter.Expect(x => x.Convert(authQueryResult)).Return(result);

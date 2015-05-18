@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 		private AuthenticationQuerierResult doAuthenticationCall(string path, object clientModel, string userAgent)
 		{
 			var json = _jsonSerializer.SerializeObject(clientModel);
-			return _resultConverter.Convert(_postHttpRequest.Send<AuthenticationQueryResult>(path, json, userAgent));
+			return _resultConverter.Convert(_postHttpRequest.Send<AuthenticationInternalQuerierResult>(path, json, userAgent));
 		}
 	}
 }

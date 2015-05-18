@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication
 {
-	public class AuthenticationQueryResult
+	public class AuthenticationInternalQuerierResult
 	{
 		public bool Success { get; set; }
 		public string FailReason { get; set; }

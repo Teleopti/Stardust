@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 			_loadUser = loadUser;
 		}
 
-		public AuthenticationQuerierResult Convert(AuthenticationQueryResult tenantServerResult)
+		public AuthenticationQuerierResult Convert(AuthenticationInternalQuerierResult tenantServerResult)
 		{
 			var ret = new AuthenticationQuerierResult{Success = tenantServerResult.Success};
 			if (tenantServerResult.Success)
@@ -52,6 +52,6 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 
 	public interface IAuthenticationQuerierResultConverter
 	{
-		AuthenticationQuerierResult Convert(AuthenticationQueryResult tenantServerResult);
+		AuthenticationQuerierResult Convert(AuthenticationInternalQuerierResult tenantServerResult);
 	}
 }

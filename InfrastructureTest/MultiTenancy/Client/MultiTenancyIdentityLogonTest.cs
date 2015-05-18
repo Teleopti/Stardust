@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			person.SetId(personId);
 			LoadUserUnauthorized.Has(person);
 
-			var queryResult = new AuthenticationQueryResult
+			var queryResult = new AuthenticationInternalQuerierResult
 			{
 				PersonId = personId,
 				Success = true,
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 		public void ShouldReturnFailureOnNoSuccess()
 		{
 			var model = new LogonModel();
-			var queryResult = new AuthenticationQueryResult
+			var queryResult = new AuthenticationInternalQuerierResult
 			{
 				Success = false,
 			};

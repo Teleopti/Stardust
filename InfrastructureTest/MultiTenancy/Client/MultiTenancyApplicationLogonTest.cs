@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 				ApplicationNHibernateConfig = new Dictionary<string, string>()
 			};
 
-			var queryResult = new AuthenticationQueryResult
+			var queryResult = new AuthenticationInternalQuerierResult
 			{
 				PersonId = personId,
 				Success = true,
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 		[Test]
 		public void ShouldReturnFailureOnNoSuccess()
 		{
-			var queryResult = new AuthenticationQueryResult { Success = false };
+			var queryResult = new AuthenticationInternalQuerierResult { Success = false };
 			HttpRequestFake.SetReturnValue(queryResult);
 			var result = Target.Logon(RandomName.Make(), RandomName.Make(), RandomName.Make());
 

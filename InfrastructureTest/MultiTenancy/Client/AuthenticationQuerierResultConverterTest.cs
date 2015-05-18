@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 		{
 			var failReason = RandomName.Make();
 			var target = new AuthenticationQuerierResultConverter(null, null, null);
-			var result = target.Convert(new AuthenticationQueryResult { Success = false, FailReason = failReason });
+			var result = target.Convert(new AuthenticationInternalQuerierResult { Success = false, FailReason = failReason });
 			shouldBeUnsuccesful(result);
 			result.FailReason.Should().Be.EqualTo(failReason);
 		}
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			var appdb = new Dictionary<string, string> { { "test", RandomName.Make() } };
 			var tenantName = RandomName.Make();
 			applicationData.Expect(x => x.Tenant(tenantName)).Return(new FakeDataSource());
-			var result = target.Convert(new AuthenticationQueryResult
+			var result = target.Convert(new AuthenticationInternalQuerierResult
 				{
 					Tenant = tenantName,
 					Success = true,
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			loadUser.Expect(x => x.LoadFullPersonInSeperateTransaction(uowFactory, personId)).Return(person);
 				
 			var target = new AuthenticationQuerierResultConverter(new NhibConfigDecryption(), () => applicationData, loadUser);
-			var result = target.Convert(new AuthenticationQueryResult
+			var result = target.Convert(new AuthenticationInternalQuerierResult
 			{
 				Success = true, 
 				PersonId = personId,
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			applicationData.SetDataSource(dataSource);
 
 			var target = new AuthenticationQuerierResultConverter(new NhibConfigDecryption(), () => applicationData, loadUnauthorizedUserDoesntMatter);
-			var result = target.Convert(new AuthenticationQueryResult
+			var result = target.Convert(new AuthenticationInternalQuerierResult
 			{
 				Success = true,
 				DataSourceConfiguration = createFakeConfig()
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			loadUser.Expect(x => x.LoadFullPersonInSeperateTransaction(uowFactory, personId)).Return(person);
 
 			var target = new AuthenticationQuerierResultConverter(new NhibConfigDecryption(), () => applicationData, loadUser);
-			var result = target.Convert(new AuthenticationQueryResult
+			var result = target.Convert(new AuthenticationInternalQuerierResult
 			{
 				Success = true,
 				PersonId = personId,
@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			loadUser.Expect(x => x.LoadFullPersonInSeperateTransaction(uowFactory, personId)).Return(person);
 
 			var target = new AuthenticationQuerierResultConverter(new NhibConfigDecryption(), () => applicationData, loadUser);
-			var result = target.Convert(new AuthenticationQueryResult
+			var result = target.Convert(new AuthenticationInternalQuerierResult
 			{
 				Success = true,
 				PersonId = personId,
