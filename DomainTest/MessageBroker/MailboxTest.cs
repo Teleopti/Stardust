@@ -109,6 +109,7 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 
 			messages.Should().Have.Count.EqualTo(0);
 		}
+
 	}
 
 }

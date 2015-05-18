@@ -236,7 +236,7 @@
     <Compile Include="Foundation\AssemblyInfoTest.cs" />
     <Compile Include="Foundation\ConfigurationManagerWrapperTest.cs" />
     <Compile Include="Foundation\ThreadPrincipalContextTest.cs" />
-    <Compile Include="LiteUnitOfWork\ReadModelUnitOfWorkTest.cs" />
+    <Compile Include="ReadModelUnitOfWork\ReadModelUnitOfWorkTest.cs" />
     <Compile Include="Rta\Persisters\AdherencePercentageReadModelPersisterTest.cs" />
     <Compile Include="Repositories\AgentBadgeTransactionRepositoryTest .cs" />
     <Compile Include="Repositories\AgentBadgeWithRankTransactionRepositoryTest.cs" />
