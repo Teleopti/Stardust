@@ -207,7 +207,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 		private string retryJavascript(string javascript)
 		{
 			string result = null;
-			_browser.RetryUntilTimeout(() => { result = _browser.ExecuteScript(javascript).ToString(); }, options());
+			_browser.RetryUntilTimeout(() =>
+			{
+				var value = _browser.ExecuteScript(javascript);
+				result = value != null ? value.ToString() : "";
+			}, options());
 			return result;
 		}
 
