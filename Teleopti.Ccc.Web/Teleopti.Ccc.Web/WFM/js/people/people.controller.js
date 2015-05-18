@@ -139,9 +139,9 @@ function PeopleController($scope, $filter, $state, SearchSvrc) {
 	};
 
 	$scope.showAdvancedSearchOption = false;
-	$scope.toggleAdvancedSearchOption = function (event) {
+	$scope.toggleAdvancedSearchOption = function () {
 		$scope.showAdvancedSearchOption = !$scope.showAdvancedSearchOption;
-		event.stopPropagation();
+		//event.stopPropagation();
 	};
 
 	//window.onclick = function () {
