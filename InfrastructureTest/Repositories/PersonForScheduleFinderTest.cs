@@ -34,15 +34,62 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		private IContract contract2;
 		private IPerson per1;
 		private IPerson per2;
-		private IPerson per3;
+		private IPerson per3;	
 
-		[SetUp]
-		public void Setup()
+		[Test]
+		public void ShouldGetPersonForDayAndTeam()
 		{
 			target = new PersonForScheduleFinder(CurrentUnitOfWork.Make());
 
 			site = SiteFactory.CreateSimpleSite("d");
-	
+
+			PersistAndRemoveFromUnitOfWork(site);
+			team = TeamFactory.CreateSimpleTeam();
+			team.Site = site;
+			team.Description = new Description("sdf");
+			PersistAndRemoveFromUnitOfWork(team);
+
+			contract1 = new Contract("contract1");
+			contract2 = new Contract("contract2");
+
+			PersistAndRemoveFromUnitOfWork(contract1);
+			PersistAndRemoveFromUnitOfWork(contract2);
+
+			per1 = PersonFactory.CreatePerson("roger", "kratz");
+			per2 = PersonFactory.CreatePerson("z", "balog");
+			per3 = PersonFactory.CreatePerson("a", "balog");
+
+			per1.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(contract1), team));
+			per2.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(contract2), team));
+			per3.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(contract2), team));
+
+
+			IWorkflowControlSet workflowControlSet = new WorkflowControlSet("d");
+			workflowControlSet.SchedulePublishedToDate = new DateTime(2000, 1, 10);
+			workflowControlSet.PreferencePeriod = new DateOnlyPeriod(2000, 2, 10, 2000, 2, 11);
+			workflowControlSet.PreferenceInputPeriod = new DateOnlyPeriod(2000, 2, 10, 2000, 2, 11);
+
+			PersistAndRemoveFromUnitOfWork(workflowControlSet);
+
+			per1.WorkflowControlSet = workflowControlSet;
+			per2.WorkflowControlSet = workflowControlSet;
+			per3.WorkflowControlSet = workflowControlSet;
+
+			PersistAndRemoveFromUnitOfWork(per1);
+			PersistAndRemoveFromUnitOfWork(per2);
+			PersistAndRemoveFromUnitOfWork(per3);			
+			
+			var result = target.GetPersonFor(new DateOnly(2012, 2, 2), new List<Guid> { team.Id.Value }, "");
+			result.ToArray().Length.Should().Be.EqualTo(3);
+		}
+
+		[Test]
+		public void ShouldFilterPersonByNameSegment()
+		{
+			target = new PersonForScheduleFinder(CurrentUnitOfWork.Make());
+
+			site = SiteFactory.CreateSimpleSite("d");
+
 			PersistAndRemoveFromUnitOfWork(site);
 			team = TeamFactory.CreateSimpleTeam();
 			team.Site = site;
@@ -78,19 +125,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(per1);
 			PersistAndRemoveFromUnitOfWork(per2);
 			PersistAndRemoveFromUnitOfWork(per3);
-		}
 
-		[Test]
-		public void ShouldGetPersonForDayAndTeam()
-		{								
-			
-			var result = target.GetPersonFor(new DateOnly(2012, 2, 2), new List<Guid> { team.Id.Value }, "");
-			result.ToArray().Length.Should().Be.EqualTo(3);
-		}
-
-		[Test]
-		public void ShouldFilterPersonByNameSegment()
-		{
 			var result = target.GetPersonFor(new DateOnly(2012, 2, 2), new List<Guid> {team.Id.Value}, "roger");
 			result.ToArray().Length.Should().Be.EqualTo(1);
 
@@ -106,6 +141,45 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldGetPersonForDayAndGroup()
 		{
+			target = new PersonForScheduleFinder(CurrentUnitOfWork.Make());
+
+			site = SiteFactory.CreateSimpleSite("d");
+
+			PersistAndRemoveFromUnitOfWork(site);
+			team = TeamFactory.CreateSimpleTeam();
+			team.Site = site;
+			team.Description = new Description("sdf");
+			PersistAndRemoveFromUnitOfWork(team);
+
+			contract1 = new Contract("contract1");
+			contract2 = new Contract("contract2");
+
+			PersistAndRemoveFromUnitOfWork(contract1);
+			PersistAndRemoveFromUnitOfWork(contract2);
+
+			per1 = PersonFactory.CreatePerson("roger", "kratz");
+			per2 = PersonFactory.CreatePerson("z", "balog");
+			per3 = PersonFactory.CreatePerson("a", "balog");
+
+			per1.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(contract1), team));
+			per2.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(contract2), team));
+			per3.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(contract2), team));
+
+
+			IWorkflowControlSet workflowControlSet = new WorkflowControlSet("d");
+			workflowControlSet.SchedulePublishedToDate = new DateTime(2000, 1, 10);
+			workflowControlSet.PreferencePeriod = new DateOnlyPeriod(2000, 2, 10, 2000, 2, 11);
+			workflowControlSet.PreferenceInputPeriod = new DateOnlyPeriod(2000, 2, 10, 2000, 2, 11);
+
+			PersistAndRemoveFromUnitOfWork(workflowControlSet);
+
+			per1.WorkflowControlSet = workflowControlSet;
+			per2.WorkflowControlSet = workflowControlSet;
+			per3.WorkflowControlSet = workflowControlSet;
+
+			PersistAndRemoveFromUnitOfWork(per1);
+			PersistAndRemoveFromUnitOfWork(per2);
+			PersistAndRemoveFromUnitOfWork(per3);
 
 			var groupId = new Guid("B0E35119-4661-4A1B-8772-9B5E015B2564");
 
@@ -115,13 +189,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			 per1.Id.Value, team.Id.Value, site.Id.Value, getBusinessUnitId(), groupId);
 
 			Session.CreateSQLQuery(populateReadModelQuery).ExecuteUpdate();
-
-			var currentUnitOfWork = MockRepository.GenerateMock<ICurrentUnitOfWork>();
-			currentUnitOfWork.Stub(x => x.Current()).Return(UnitOfWork);
-
-			var groupingrm = new GroupingReadOnlyRepository(currentUnitOfWork);
-
-			var pages = groupingrm.AvailableGroupPages();
 
 			var result = target.GetPersonFor(new DateOnly(2012, 2, 2), new List<Guid> { groupId }, "");
 			result.ToArray().Length.Should().Be.EqualTo(1);
