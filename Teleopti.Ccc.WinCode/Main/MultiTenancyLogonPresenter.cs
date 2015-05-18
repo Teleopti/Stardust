@@ -98,10 +98,6 @@ namespace Teleopti.Ccc.WinCode.Main
 		public void BackButtonClicked()
 		{
 			CurrentStep--;
-			if (CurrentStep == LoginStep.Login &&
-				 _model.SelectedDataSourceContainer.AuthenticationTypeOption == AuthenticationTypeOption.Windows)
-				CurrentStep--;
-
 			dataForCurrentStep();
 		}
 
@@ -200,7 +196,7 @@ namespace Teleopti.Ccc.WinCode.Main
 				_view.ShowErrorMessage(string.Concat(authenticationResult.Message, "  "), Resources.ErrorMessage);
 			if (authenticationResult.Successful)
 			{
-				_model.SelectedDataSourceContainer = new DataSourceContainer(authenticationResult.DataSource, AuthenticationTypeOption.Application);
+				_model.SelectedDataSourceContainer = new DataSourceContainer(authenticationResult.DataSource);
 				_model.SelectedDataSourceContainer.SetUser(authenticationResult.Person);
 				return true;
 			}
@@ -217,8 +213,7 @@ namespace Teleopti.Ccc.WinCode.Main
 
 			if (authenticationResult.Successful)
 			{
-				//why auth.application?
-				_model.SelectedDataSourceContainer = new DataSourceContainer(authenticationResult.DataSource, AuthenticationTypeOption.Application);
+				_model.SelectedDataSourceContainer = new DataSourceContainer(authenticationResult.DataSource);
 				_model.SelectedDataSourceContainer.SetUser(authenticationResult.Person);
 				return true;
 			}

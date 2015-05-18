@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
             var dataSource =
                 StateHolderReader.Instance.StateReader.ApplicationScopeData.Tenant(customUserNameSecurityToken.DataSource);
 
-            _dataSourceContainer = new DataSourceContainer(dataSource, AuthenticationTypeOption.Windows);
+            _dataSourceContainer = new DataSourceContainer(dataSource);
         }
 
         public IDataSourceContainer DataSourceContainer { get { return _dataSourceContainer; } }

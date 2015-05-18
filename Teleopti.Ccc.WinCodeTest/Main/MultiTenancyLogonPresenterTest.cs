@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 		[Test]
 		public void ShouldNotReloadSdkOnBackFromDataSources()
 		{
-			_model.SelectedDataSourceContainer = new DataSourceContainer(null, AuthenticationTypeOption.Application);
+			_model.SelectedDataSourceContainer = new DataSourceContainer(null);
 			_target.CurrentStep = LoginStep.SelectLogonType;
 			_target.BackButtonClicked();
 		}
@@ -88,9 +88,6 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			_model.UserName = "USER";
 			_model.Password = "PASS";
 
-			dataSourceContainer.Stub(x => x.AuthenticationTypeOption).Return(AuthenticationTypeOption.Application);
-			//_appLogon.Stub(x => x.Logon(_model,  MultiTenancyLogonPresenter.UserAgent)).Return(new AuthenticationResult { Successful = true }).IgnoreArguments();
-
 			dataSourceContainer.Stub(x => x.User).Return(person);
 			person.Stub(x => x.ApplicationAuthenticationInfo).Return(appAuthInfo);
 			appAuthInfo.Stub(x => x.Password = "PASS");
@@ -116,7 +113,6 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			_model.UserName = "USER";
 			_model.Password = "PASS";
 			_model.SelectedBu = bu;
-			dataSourceContainer.Stub(x => x.AuthenticationTypeOption).Return(AuthenticationTypeOption.Application);
 			dataSourceContainer.Stub(x => x.DataSource).Return(dataSource);
 			dataSource.Stub(x => x.Application).Return(uowFact);
 			//_appLogon.Stub(x => x.Logon(_model, MultiTenancyLogonPresenter.UserAgent)).Return(new AuthenticationResult { Successful = true }).IgnoreArguments();
@@ -133,7 +129,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 		[Test]
 		public void ShouldGoToLoginIfApplication()
 		{
-			var dataSourceContainer = new DataSourceContainer(null, AuthenticationTypeOption.Application);
+			var dataSourceContainer = new DataSourceContainer(null);
 			_model.SelectedDataSourceContainer = dataSourceContainer;
 			_view.Stub(x => x.ShowStep(false));
 			_target.CurrentStep = LoginStep.SelectLogonType;

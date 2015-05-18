@@ -121,7 +121,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			}
 			else
 			{
-				_choosenDb = new DataSourceContainer(dataSource, AuthenticationTypeOption.Application);
+				_choosenDb = new DataSourceContainer(dataSource);
 				var person = new LoadUserUnauthorized().LoadFullPersonInSeperateTransaction(_choosenDb.DataSource.Application, SuperUser.Id_AvoidUsing_This);
 				_choosenDb.SetUser(person);
 				if (_choosenDb.User == null)

@@ -48,8 +48,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 			var resultDto = _authenticationResultAssembler.DomainEntityToDto(result);
 
 			if (!resultDto.Successful) return resultDto;
-			//why auth.application? just using the same behavior as before..
-			model.SelectedDataSourceContainer = new DataSourceContainer(result.DataSource, AuthenticationTypeOption.Application);
+			model.SelectedDataSourceContainer = new DataSourceContainer(result.DataSource);
 			model.SelectedDataSourceContainer.SetUser(result.Person);
 			resultDto.Tenant = model.SelectedDataSourceContainer.DataSourceName;
 			var buList = model.SelectedDataSourceContainer.AvailableBusinessUnitProvider.AvailableBusinessUnits(new RepositoryFactory());
@@ -86,7 +85,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 			var resultDto = _authenticationResultAssembler.DomainEntityToDto(result);
 
 			if (!resultDto.Successful) return resultDto;
-			model.SelectedDataSourceContainer = new DataSourceContainer(result.DataSource, AuthenticationTypeOption.Application);
+			model.SelectedDataSourceContainer = new DataSourceContainer(result.DataSource);
 			model.SelectedDataSourceContainer.SetUser(result.Person);
 			resultDto.Tenant = model.SelectedDataSourceContainer.DataSourceName;
 			var buList = model.SelectedDataSourceContainer.AvailableBusinessUnitProvider.AvailableBusinessUnits(new RepositoryFactory());
