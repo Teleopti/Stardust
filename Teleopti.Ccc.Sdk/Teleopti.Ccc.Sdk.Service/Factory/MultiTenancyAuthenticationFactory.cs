@@ -44,10 +44,13 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 		public AuthenticationResultDto LogOnWindows(DataSourceDto dataSource)
 		{
 			var model = new LogonModel();
-			var result = _multiTenancyWindowsLogon.Logon(model, UserAgent);
+			var result = _multiTenancyWindowsLogon.Logon(UserAgent);
 			var resultDto = _authenticationResultAssembler.DomainEntityToDto(result);
 
 			if (!resultDto.Successful) return resultDto;
+			//why auth.application? just using the same behavior as before..
+			model.SelectedDataSourceContainer = new DataSourceContainer(result.DataSource, AuthenticationTypeOption.Application);
+			model.SelectedDataSourceContainer.SetUser(result.Person);
 			resultDto.Tenant = model.SelectedDataSourceContainer.DataSourceName;
 			var buList = model.SelectedDataSourceContainer.AvailableBusinessUnitProvider.AvailableBusinessUnits(new RepositoryFactory());
 			buList.ForEach(unit => resultDto.BusinessUnitCollection.Add(new BusinessUnitDto { Id = unit.Id, Name = unit.Name }));

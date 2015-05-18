@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
@@ -20,36 +21,32 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 		public FakeWindowUserProvider FakeWindowUserProvider;
 		public LoadUserUnauthorizedFake LoadUserUnauthorized;
 
-		private const string userAgent = "something";
-		
-
 		[Test]
 		public void ShouldReturnSuccessOnSuccess()
 		{
-			var model = new LogonModel ();
 			var personId = Guid.NewGuid();
 			var person = new Person();
 			person.SetId(personId);
 			LoadUserUnauthorized.Has(person);
-			var dataSourceCfg = new DataSourceConfig
-			{
-				AnalyticsConnectionString = Encryption.EncryptStringToBase64("connstringtoencrypt", EncryptionConstants.Image1, EncryptionConstants.Image2),
-				ApplicationNHibernateConfig = new Dictionary<string, string>()
-			};
 
 			var queryResult = new AuthenticationQueryResult
 			{
 				PersonId = personId,
 				Success = true,
 				Tenant = "[not set]",
-				DataSourceConfiguration = dataSourceCfg
+				DataSourceConfiguration = new DataSourceConfig
+				{
+					AnalyticsConnectionString =
+						Encryption.EncryptStringToBase64("connstringtoencrypt", EncryptionConstants.Image1, EncryptionConstants.Image2),
+					ApplicationNHibernateConfig = new Dictionary<string, string>()
+				}
 			};
 			HttpRequestFake.SetReturnValue(queryResult);
 			FakeWindowUserProvider.SetIdentity("TOPTINET\\USER");
-			var result = Target.Logon(model, userAgent);
+			var result = Target.Logon(RandomName.Make());
 
 			result.Successful.Should().Be.True();
-			model.SelectedDataSourceContainer.User.Should().Be.EqualTo(person);
+			result.Person.Should().Be.SameInstanceAs(person);
 
 		}
 
@@ -62,7 +59,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 				Success = false,
 			};
 			HttpRequestFake.SetReturnValue(queryResult);
-			var result = Target.Logon(model, userAgent);
+			var result = Target.Logon(RandomName.Make());
 
 			result.Successful.Should().Be.False();
 			model.SelectedDataSourceContainer.Should().Be.Null();

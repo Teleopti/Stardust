@@ -1,6 +1,5 @@
 ﻿using System.Globalization;
 using System.ServiceModel;
-using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Sdk.Common.WcfExtensions;
 
 namespace Teleopti.Ccc.Sdk.WcfService.LogOn
@@ -10,14 +9,11 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
         private PersonContainer _personContainer;
         private readonly PersonCache _personCache = new PersonCache();
         private CustomWindowsSecurityToken _customWindowsSecurityToken;
-        //private IDataSourceContainer _dataSourceContainer;
 
         private bool TryGetPersonFromStore()
         {
             //Genomför inloggning. Kasta exception vid fel.
-            //var result = _dataSourceContainer.LogOn(_customWindowsSecurityToken.WindowsIdentity.Name);
-	        var result = TenancyLogonFactory.MultiTenancyWindowsLogon()
-		        .Logon(new LogonModel(), "");
+	        var result = TenancyLogonFactory.MultiTenancyWindowsLogon().Logon("");
             if (result.Successful)
             {
                 //Spara person till cache.

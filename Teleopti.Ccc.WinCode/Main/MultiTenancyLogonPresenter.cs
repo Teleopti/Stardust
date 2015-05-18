@@ -204,13 +204,16 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		private bool winLogin()
 		{
-			var authenticationResult = _multiTenancyWindowsLogon.Logon(_model, UserAgent);
+			var authenticationResult = _multiTenancyWindowsLogon.Logon(UserAgent);
 
 			if (authenticationResult.HasMessage)
 				_model.Warning = authenticationResult.Message;
 
 			if (authenticationResult.Successful)
 			{
+				//why auth.application?
+				_model.SelectedDataSourceContainer = new DataSourceContainer(authenticationResult.DataSource, AuthenticationTypeOption.Application);
+				_model.SelectedDataSourceContainer.SetUser(authenticationResult.Person);
 				return true;
 			}
 			// windows does not work we need to use application

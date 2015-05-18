@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 {
 	public interface IMultiTenancyWindowsLogon
 	{
-		AuthenticationResult Logon(LogonModel logonModel, string userAgent);
+		AuthenticationResult Logon(string userAgent);
 		bool CheckWindowsIsPossible();
 	}
 
@@ -28,10 +28,10 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 			_loadUserUnauthorized = loadUserUnauthorized;
 		}
 
-		public AuthenticationResult Logon(LogonModel logonModel, string userAgent)
+		public AuthenticationResult Logon(string userAgent)
 		{
-			logonModel.UserName = _windowsUserProvider.Identity();
-			var result = _authenticationQuerier.TryLogon(new IdentityLogonClientModel{Identity = logonModel.UserName}, userAgent);
+			var identity = _windowsUserProvider.Identity();
+			var result = _authenticationQuerier.TryLogon(new IdentityLogonClientModel{Identity = identity}, userAgent);
 			if (!result.Success)
 				return new AuthenticationResult
 				{
@@ -40,17 +40,12 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 					Message = result.FailReason
 				};
 
-			var dataSourceName = result.Tenant;
-			var personId = result.PersonId;
-
-			logonModel.SelectedDataSourceContainer = new DataSourceContainer(_applicationData().Tenant(dataSourceName), AuthenticationTypeOption.Application);
-			var person = _loadUserUnauthorized.LoadFullPersonInSeperateTransaction(logonModel.SelectedDataSourceContainer.DataSource.Application, personId);
-			logonModel.SelectedDataSourceContainer.SetUser(person);
-
+			var datasource = _applicationData().Tenant(result.Tenant);
 			return new AuthenticationResult
 			{
-				Person = logonModel.SelectedDataSourceContainer.User,
-				Successful = true
+				Person = _loadUserUnauthorized.LoadFullPersonInSeperateTransaction(datasource.Application, result.PersonId),
+				Successful = true,
+				DataSource = datasource
 			};
 		}
 
