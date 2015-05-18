@@ -3,6 +3,7 @@ using System.Globalization;
 using System.ServiceModel;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.Common.WcfExtensions;
 
@@ -45,11 +46,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
 	    {
 		    Guid systemUser;
 		    if (!Guid.TryParse(_customUserNameSecurityToken.UserName, out systemUser) || systemUser != CustomPersonId) return false;
-		    using (var unitOfWork = _dataSourceContainer.DataSource.Application.CreateAndOpenUnitOfWork())
-		    {
-			    var personRep = new PersonRepository(unitOfWork);
-			    _dataSourceContainer.SetUser(personRep.LoadPersonAndPermissions(CustomPersonId));
-		    }
+				_dataSourceContainer.SetUser(new LoadUserUnauthorized().LoadFullPersonInSeperateTransaction(_dataSourceContainer.DataSource.Application, CustomPersonId));
 		    return true;
 	    }
 

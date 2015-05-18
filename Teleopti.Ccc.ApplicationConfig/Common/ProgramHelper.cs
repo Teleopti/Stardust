@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
@@ -85,16 +86,13 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 
 			var dataSourceContainer = new DataSourceContainer(dataSource, AuthenticationTypeOption.Application);
 
+			var unitOfWorkFactory = dataSource.Application;
 			var logOnOff = new LogOnOff(new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory()));
-			using (var unitOfWork = dataSourceContainer.DataSource.Application.CreateAndOpenUnitOfWork())
-			{
-				var personRep = repositoryFactory.CreatePersonRepository(unitOfWork);
-				dataSourceContainer.SetUser(personRep.LoadPersonAndPermissions(SuperUser.Id_AvoidUsing_This));
-			}
+			var user = new LoadUserUnauthorized().LoadFullPersonInSeperateTransaction(unitOfWorkFactory, SuperUser.Id_AvoidUsing_This);
+			dataSourceContainer.SetUser(user);
 
-			logOnOff.LogOn(dataSourceContainer.DataSource, dataSourceContainer.User, businessUnit);
+			logOnOff.LogOn(dataSourceContainer.DataSource, user, businessUnit);
 
-			var unitOfWorkFactory = dataSourceContainer.DataSource.Application;
 			var roleToPrincipalCommand =
 				new RoleToPrincipalCommand(
 					new RoleToClaimSetTransformer(new FunctionsForRoleProvider(new DummyLicensedFunctionsProvider(),

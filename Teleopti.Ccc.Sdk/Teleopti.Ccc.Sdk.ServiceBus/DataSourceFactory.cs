@@ -3,6 +3,7 @@ using System.Globalization;
 using log4net;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
@@ -23,11 +24,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 																												"No datasource matching the name {0} was found.",
 																												tenant));
 		    }
-				using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
-				{
-					var systemId = SuperUser.Id_AvoidUsing_This;
-					ret.SuperUser=repositoryFactory.CreatePersonRepository(uow).LoadPersonAndPermissions(systemId);
-				}
+					ret.SuperUser = new LoadUserUnauthorized().LoadFullPersonInSeperateTransaction(dataSource.Application, SuperUser.Id_AvoidUsing_This);
 					ret.DataSource = dataSource;
 					return ret;
 				}

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Repositories
@@ -96,6 +95,5 @@ namespace Teleopti.Ccc.Domain.Repositories
 		ICollection<IPerson> FindPeople(IEnumerable<IPerson> people);
 	    bool DoesPersonHaveExternalLogOn(DateOnly dateTime, Guid personId);
 		ICollection<IPerson> FindAllWithRolesSortByName();
-		IPerson LoadPersonAndPermissions(Guid id);
 	}
 }
