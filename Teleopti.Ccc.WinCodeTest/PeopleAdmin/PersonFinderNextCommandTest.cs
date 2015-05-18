@@ -13,14 +13,14 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin
         private PersonFinderNextCommand _target;
         private IPersonFinderModel _model;
         private MockRepository _mocks;
-        private IPersonFinderSearchCriteria _personFinderSearchCritera;
+        private IPeoplePersonFinderSearchCriteria _personFinderSearchCritera;
 
         [SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
             _model = _mocks.StrictMock<IPersonFinderModel>();
-            _personFinderSearchCritera = _mocks.StrictMock<IPersonFinderSearchCriteria>();
+				_personFinderSearchCritera = _mocks.StrictMock<IPeoplePersonFinderSearchCriteria>();
             _target = new PersonFinderNextCommand(_model);
         }
 

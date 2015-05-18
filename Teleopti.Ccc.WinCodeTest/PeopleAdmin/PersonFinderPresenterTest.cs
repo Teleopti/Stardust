@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin
         private IPersonFinderView _view;
         private IPersonFinderModel _model;
         private MockRepository _mocks;
-        private IPersonFinderSearchCriteria _personFinderSearchCriteria;
+		  private IPeoplePersonFinderSearchCriteria _personFinderSearchCriteria;
         private ReadOnlyCollection<IPersonFinderDisplayRow> _displayRows;
         private IExecutableCommand _executableCommand;
 
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin
             _mocks = new MockRepository();
             _view = _mocks.StrictMock<IPersonFinderView>();
             _model = _mocks.StrictMock<IPersonFinderModel>();
-            _personFinderSearchCriteria = _mocks.StrictMock<IPersonFinderSearchCriteria>();
+				_personFinderSearchCriteria = _mocks.StrictMock<IPeoplePersonFinderSearchCriteria>();
             _displayRows = new ReadOnlyCollection<IPersonFinderDisplayRow>(new List<IPersonFinderDisplayRow>());
             _executableCommand = _mocks.StrictMock<IExecutableCommand>();
             _target = new PersonFinderPresenter(_view, _model);
