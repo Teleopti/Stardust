@@ -8,8 +8,8 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin
     public interface IPersonFinderView
     {
         IList<Guid> SelectedPersonGuids { get; }
-        IPersonFinderSearchCriteria PersonFinderSearchCriteria { get; }
-        IPersonFinderSearchCriteria PersonFinderSearchCriteriaNextPrevious { get; }
+        IPeoplePersonFinderSearchCriteria PersonFinderSearchCriteria { get; }
+        IPeoplePersonFinderSearchCriteria PersonFinderSearchCriteriaNextPrevious { get; }
         void AddRows(IList<IPersonFinderDisplayRow> rows);
         void UpdatePageOfStatusText();
         void UpdatePreviousNextStatus();
