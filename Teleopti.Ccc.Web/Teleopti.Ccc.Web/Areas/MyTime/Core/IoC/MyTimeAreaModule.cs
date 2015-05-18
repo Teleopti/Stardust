@@ -2,6 +2,7 @@
 using AutoMapper;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
@@ -217,6 +218,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<TeamProvider>().As<ITeamProvider>();
 			builder.RegisterType<DefaultTeamProvider>().As<IDefaultTeamProvider>();
 			builder.RegisterType<GroupingReadOnlyRepository>().As<IGroupingReadOnlyRepository>();
+		
 			//builder.RegisterType<BadgeSettingProvider>().As<IBadgeSettingProvider>();
 			//builder.RegisterType<BadgeProvider>().As<IBadgeProvider>();
 		}
@@ -266,7 +268,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<AbsenceRequestProbabilityProvider>().As<IAbsenceRequestProbabilityProvider>();
 			builder.RegisterType<TeamViewModelFactory>().As<ITeamViewModelFactory>();
 			builder.RegisterType<PersonNameProvider>().As<IPersonNameProvider>().SingleInstance();
-			builder.RegisterType<TimeFilterHelper>().As<ITimeFilterHelper>().SingleInstance();			
+			builder.RegisterType<TimeFilterHelper>().As<ITimeFilterHelper>().SingleInstance();
+			builder.RegisterType<PersonForScheduleFinder>().As<IPersonForScheduleFinder>();
 		}
 	}
 }
