@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 
 		public WorkloadAccuracy Measure(IWorkload workload)
 		{
-			var historicalData = _historicalData.Fetch(workload, _historicalPeriodProvider.PeriodForEvaluate(workload));
+			var historicalData = _historicalData.Fetch(workload, _historicalPeriodProvider.PeriodForForecast(workload));
 			if (!historicalData.TaskOwnerDayCollection.Any())
 				return new WorkloadAccuracy { Id = workload.Id.Value, Name = workload.Name, Accuracies = new MethodAccuracy[] { } };
 

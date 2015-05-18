@@ -13,33 +13,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 	public class HistoricalPeriodProviderTest
 	{
 		[Test]
-		public void ShouldHaveDefaultPeriodIfNoDataForEvaluation()
-		{
-			var statisticRepository = MockRepository.GenerateMock<IStatisticRepository>();
-			var workload = new Workload(SkillFactory.CreateSkill("Phone"));
-			statisticRepository.Stub(x => x.QueueStatisticsUpUntilDate(workload.QueueSourceCollection)).Return(null);
-			var now = new Now();
-			var target = new HistoricalPeriodProvider(now, statisticRepository);
-
-			var result = target.PeriodForEvaluate(workload);
-			result.StartDate.Should().Be.EqualTo(now.LocalDateOnly());
-			result.EndDate.Should().Be.EqualTo(now.LocalDateOnly());
-		}
-
-		[Test]
-		public void ShouldGetMostRecentTwoYearsForEvaluation()
-		{
-			var statisticRepository = MockRepository.GenerateMock<IStatisticRepository>();
-			var workload = new Workload(SkillFactory.CreateSkill("Phone"));
-			var dateOnlyPeriod = new DateOnlyPeriod(2012, 5, 5, 2014, 5, 5);
-			statisticRepository.Stub(x => x.QueueStatisticsUpUntilDate(workload.QueueSourceCollection)).Return(dateOnlyPeriod);
-			var target = new HistoricalPeriodProvider(new Now(), statisticRepository);
-
-			var result = target.PeriodForEvaluate(workload);
-			result.Should().Be.EqualTo(dateOnlyPeriod);
-		}
-
-		[Test]
 		public void ShouldHaveDefaultPeriodIfNoDataForForecast()
 		{
 			var statisticRepository = MockRepository.GenerateMock<IStatisticRepository>();

@@ -15,12 +15,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 			_statisticRepository = statisticRepository;
 		}
 
-		public DateOnlyPeriod PeriodForEvaluate(IWorkload workload)
-		{
-			var availableHistoricalPeriod = _statisticRepository.QueueStatisticsUpUntilDate(workload.QueueSourceCollection);
-			return availableHistoricalPeriod ?? new DateOnlyPeriod(_now.LocalDateOnly(), _now.LocalDateOnly());
-		}
-
 		public DateOnlyPeriod PeriodForForecast(IWorkload workload)
 		{
 			var availableHistoricalPeriod = _statisticRepository.QueueStatisticsUpUntilDate(workload.QueueSourceCollection);

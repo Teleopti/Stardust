@@ -11,8 +11,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 	{
 		protected override IEnumerable<StatisticTask> StatisticTasks()
 		{
-			var statisticTasks1 = new StatisticTask { Interval = HistoricalPeriodForMeasurement.StartDate.Date, StatOfferedTasks = 9 };
-			var statisticTasks2 = new StatisticTask { Interval = HistoricalPeriodForMeasurement.EndDate.Date, StatOfferedTasks = 11 };
+			var statisticTasks1 = new StatisticTask { Interval = HistoricalPeriodForForecast.StartDate.Date, StatOfferedTasks = 9 };
+			var statisticTasks2 = new StatisticTask { Interval = HistoricalPeriodForForecast.EndDate.Date, StatOfferedTasks = 11 };
 			return new[] { statisticTasks1, statisticTasks2 };
 		}
 

@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 {
 	public class NoDataAvailableForForecastingTest : MeasureForecastTest
 	{
-		protected override DateOnlyPeriod HistoricalPeriodForMeasurement
+		protected override DateOnlyPeriod HistoricalPeriodForForecast
 		{
 			get { return new DateOnlyPeriod(2000, 1, 1, 2000, 1, 1); }
 		}

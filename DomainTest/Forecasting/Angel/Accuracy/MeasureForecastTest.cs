@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 			statisticRepository.Stub(
 				x =>
 					x.LoadDailyStatisticForSpecificDates(Workload.QueueSourceCollection,
-						HistoricalPeriodForMeasurement.ToDateTimePeriod(SkillTimeZoneInfo()), Workload.Skill.TimeZone.Id, Workload.Skill.MidnightBreakOffset))
+						HistoricalPeriodForForecast.ToDateTimePeriod(SkillTimeZoneInfo()), Workload.Skill.TimeZone.Id, Workload.Skill.MidnightBreakOffset))
 				.Return(StatisticTasks().ToArray());
 			var dailyStatistics = new DailyStatisticsProvider(statisticRepository);
 
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 			var linearRegressionTrend = MockRepository.GenerateMock<ILinearRegressionTrend>();
 			linearRegressionTrend.Stub(x => x.CalculateTrend(null)).IgnoreArguments().Return(new LinearTrend {Slope = 1, Intercept = 2});
 			var historicalPeriodProvider = MockRepository.GenerateMock<IHistoricalPeriodProvider>();
-			historicalPeriodProvider.Stub(x => x.PeriodForEvaluate(Workload)).Return(HistoricalPeriodForMeasurement);
+			historicalPeriodProvider.Stub(x => x.PeriodForForecast(Workload)).Return(HistoricalPeriodForForecast);
 			var quickForecasterWorkloadEvaluator = new QuickForecastWorkloadEvaluator(new HistoricalData(dailyStatistics), new ForecastingWeightedMeanAbsolutePercentageError(), new ForecastMethodProvider(new IndexVolumes(), linearRegressionTrend), historicalPeriodProvider);
 			var target = new QuickForecastSkillEvaluator(quickForecasterWorkloadEvaluator);
 			var measurementResult = target.Measure(Workload.Skill);
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 
 		protected IScenario DefaultScenario { get; private set; }
 
-		protected virtual DateOnlyPeriod HistoricalPeriodForMeasurement
+		protected virtual DateOnlyPeriod HistoricalPeriodForForecast
 		{
 			get
 			{
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 
 		protected virtual DateOnlyPeriod FuturePeriod
 		{
-			get { return new DateOnlyPeriod(HistoricalPeriodForMeasurement.StartDate.AddDays(7), HistoricalPeriodForMeasurement.EndDate.AddDays(7)); }
+			get { return new DateOnlyPeriod(HistoricalPeriodForForecast.StartDate.AddDays(7), HistoricalPeriodForForecast.EndDate.AddDays(7)); }
 		}
 
 		protected virtual IWorkload Workload
