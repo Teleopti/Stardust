@@ -1,3 +1,4 @@
+using System;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -8,6 +9,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 	{
 		private readonly INow _now;
 		private readonly IStatisticRepository _statisticRepository;
+		private const int threeYears = -3;
 
 		public HistoricalPeriodProvider(INow now, IStatisticRepository statisticRepository)
 		{
@@ -18,7 +20,15 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 		public DateOnlyPeriod PeriodForForecast(IWorkload workload)
 		{
 			var availableHistoricalPeriod = _statisticRepository.QueueStatisticsUpUntilDate(workload.QueueSourceCollection);
-			return availableHistoricalPeriod ?? new DateOnlyPeriod(_now.LocalDateOnly(), _now.LocalDateOnly());
+			if (!availableHistoricalPeriod.HasValue)
+			{
+				return new DateOnlyPeriod(_now.LocalDateOnly(), _now.LocalDateOnly());
+			}
+			var endDate = availableHistoricalPeriod.Value.EndDate;
+			var threeYearsBack = endDate.Date.AddYears(threeYears);
+			return threeYearsBack > availableHistoricalPeriod.Value.StartDate.Date
+				? new DateOnlyPeriod(new DateOnly(threeYearsBack), endDate)
+				: availableHistoricalPeriod.Value;
 		}
 
 		public DateOnlyPeriod PeriodForDisplay(IWorkload workload)

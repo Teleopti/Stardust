@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 
 
 		[Test]
-		public void ShouldGetMostRecentTwoYearsForForecast()
+		public void ShouldGetMostRecentPeriodForForecast()
 		{
 			var statisticRepository = MockRepository.GenerateMock<IStatisticRepository>();
 			var workload = new Workload(SkillFactory.CreateSkill("Phone"));
@@ -38,6 +38,20 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 
 			var result = target.PeriodForForecast(workload);
 			result.Should().Be.EqualTo(dateOnlyPeriod);
+		}
+
+		[Test]
+		public void ShouldGetMaximum3YearsForForecast()
+		{
+			var statisticRepository = MockRepository.GenerateMock<IStatisticRepository>();
+			var workload = new Workload(SkillFactory.CreateSkill("Phone"));
+			var dateOnlyPeriod = new DateOnlyPeriod(2005, 5, 5, 2014, 5, 5);
+			statisticRepository.Stub(x => x.QueueStatisticsUpUntilDate(workload.QueueSourceCollection)).Return(dateOnlyPeriod);
+			var target = new HistoricalPeriodProvider(new Now(), statisticRepository);
+
+			var result = target.PeriodForForecast(workload);
+			result.StartDate.Should().Be.EqualTo(new DateOnly(dateOnlyPeriod.EndDate.Date.AddYears(-3)));
+			result.EndDate.Should().Be.EqualTo(dateOnlyPeriod.EndDate);
 		}
 
 		[Test]
