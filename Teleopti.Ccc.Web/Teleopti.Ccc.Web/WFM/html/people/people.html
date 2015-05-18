@@ -49,7 +49,7 @@
 		<tfoot>
 			<tr>
 				<td colspan="{{6+optionalColumns.length}}">
-					<div class="pagination pull-right">
+					<div class="pagination pull-right" ng-hide="searchResult.length == 0">
 						<ul>
 							<li class="pagination-item" ng-class="{disabled: currentPageIndex == 1}">
 								<a href="" ng-click="prevPage()"><i class="mdi mdi-chevron-double-left"></i>{{'RepViewerPreviousPage'| translate}}</a>
