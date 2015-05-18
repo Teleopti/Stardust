@@ -82,10 +82,12 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 		public AuthenticationResultDto LogOnApplication(string userName, string password, DataSourceDto dataSource)
 		{
 			var model = new LogonModel { UserName = userName, Password = password };
-			var result = _multiTenancyApplicationLogon.Logon(model, UserAgent);
+			var result = _multiTenancyApplicationLogon.Logon(userName, password, UserAgent);
 			var resultDto = _authenticationResultAssembler.DomainEntityToDto(result);
 
 			if (!resultDto.Successful) return resultDto;
+			model.SelectedDataSourceContainer = new DataSourceContainer(result.DataSource, AuthenticationTypeOption.Application);
+			model.SelectedDataSourceContainer.SetUser(result.Person);
 			resultDto.Tenant = model.SelectedDataSourceContainer.DataSourceName;
 			var buList = model.SelectedDataSourceContainer.AvailableBusinessUnitProvider.AvailableBusinessUnits(new RepositoryFactory());
 			buList.ForEach(unit => resultDto.BusinessUnitCollection.Add(new BusinessUnitDto { Id = unit.Id, Name = unit.Name }));

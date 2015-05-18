@@ -4,10 +4,10 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security;
-using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
@@ -19,12 +19,9 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 		public IMultiTenancyApplicationLogon Target;
 		public LoadUserUnauthorizedFake LoadUserUnauthorized;
 
-		private const string userAgent = "something";
-
 		[Test]
 		public void ShouldReturnSuccessOnSuccess()
 		{
-			var model = new LogonModel { UserName = "kalle", Password = "kula" };
 			var personId = Guid.NewGuid();
 			var person = new Person();
 			person.SetId(personId);
@@ -44,10 +41,10 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			};
 			HttpRequestFake.SetReturnValue(queryResult);
 			
-			var result = Target.Logon(model, userAgent);
+			var result = Target.Logon(RandomName.Make(), RandomName.Make(), RandomName.Make());
 
 			result.Successful.Should().Be.True();
-			model.SelectedDataSourceContainer.User.Should().Be.EqualTo(person);
+			result.Person.Should().Be.SameInstanceAs(person);
 		}
 
 		[Test]
@@ -55,12 +52,10 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 		{
 			var queryResult = new AuthenticationQueryResult { Success = false };
 			HttpRequestFake.SetReturnValue(queryResult);
-			var model = new LogonModel { UserName = "kalle", Password = "kula" };
-
-			var result = Target.Logon(model, userAgent);
+			var result = Target.Logon(RandomName.Make(), RandomName.Make(), RandomName.Make());
 
 			result.Successful.Should().Be.False();
-			model.SelectedDataSourceContainer.Should().Be.Null();
+			result.Person.Should().Be.Null();
 		}
 	}
 }

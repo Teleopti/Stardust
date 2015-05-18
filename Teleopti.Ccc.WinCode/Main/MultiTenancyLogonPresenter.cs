@@ -194,12 +194,18 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		private bool login()
 		{
-			var authenticationResult = _applicationLogon.Logon(_model, UserAgent);
+			var authenticationResult = _applicationLogon.Logon(_model.UserName, _model.Password, UserAgent);
 
 			if (authenticationResult.HasMessage)
 				_view.ShowErrorMessage(string.Concat(authenticationResult.Message, "  "), Resources.ErrorMessage);
+			if (authenticationResult.Successful)
+			{
+				_model.SelectedDataSourceContainer = new DataSourceContainer(authenticationResult.DataSource, AuthenticationTypeOption.Application);
+				_model.SelectedDataSourceContainer.SetUser(authenticationResult.Person);
+				return true;
+			}
 
-			return authenticationResult.Successful;
+			return false;
 		}
 
 		private bool winLogin()

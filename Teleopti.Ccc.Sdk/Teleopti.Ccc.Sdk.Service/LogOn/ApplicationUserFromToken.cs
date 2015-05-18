@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
 	    {
 		    if (attemptSuperUserLogOn()) return new AuthenticationResult {Successful = true, Person = _dataSourceContainer.User};
 		    return TenancyLogonFactory.MultiTenancyApplicationLogon()
-				 .Logon(new LogonModel { UserName = _customUserNameSecurityToken.UserName, Password = _customUserNameSecurityToken.Password }, "");
+				 .Logon(_customUserNameSecurityToken.UserName, _customUserNameSecurityToken.Password , "");
 	    }
 
 	    private bool attemptSuperUserLogOn()

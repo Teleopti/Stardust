@@ -4,6 +4,6 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 {
 	public interface IMultiTenancyApplicationLogon
 	{
-		AuthenticationResult Logon(LogonModel logonModel, string userAgent);
+		AuthenticationResult Logon(string userName, string password, string userAgent);
 	}
 }
