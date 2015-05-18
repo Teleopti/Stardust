@@ -25,7 +25,13 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         {
             return CreatePersonContract("dummyContract", "dummyBasicSchedule", "dummyPartTime 75%");
         }
-        
+
+	    public static IPersonContract CreatePersonContract(IContract contract)
+	    {
+		    return CreatePersonContract(contract, "dummyBasicSchedule", "dummyPartTime 75%");
+	    }
+
+
         /// <summary>
         /// Creates the person contract.
         /// </summary>

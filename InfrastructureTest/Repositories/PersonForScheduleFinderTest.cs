@@ -1,41 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Globalization;
 using System.Linq;
-using System.Reflection;
-using System.Threading;
-using Autofac;
-using NHibernate;
+using System.Security.Claims;
+using NHibernate.Impl;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
-using Teleopti.Ccc.Domain.Auditing;
-using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
-using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
-using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.TestCommon.FakeRepositories;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using ConstraintViolationException = Teleopti.Ccc.Infrastructure.Foundation.ConstraintViolationException;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
@@ -47,30 +28,40 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		private PersonForScheduleFinder target;
 
-		[Test]
-		public void ShouldGetPersonForDayOrTeamOrNameSegment()
+		private ISite site;
+		private ITeam team;
+		private IContract contract1;
+		private IContract contract2;
+		private IPerson per1;
+		private IPerson per2;
+		private IPerson per3;
+
+		[SetUp]
+		public void Setup()
 		{
 			target = new PersonForScheduleFinder(CurrentUnitOfWork.Make());
 
-			IBusinessUnit bu = BusinessUnitFactory.CreateSimpleBusinessUnit();
-			PersistAndRemoveFromUnitOfWork(bu);
-
-			ISite site = SiteFactory.CreateSimpleSite("d");
-			bu.AddSite(site);
-
+			site = SiteFactory.CreateSimpleSite("d");
+	
 			PersistAndRemoveFromUnitOfWork(site);
-			ITeam team = TeamFactory.CreateSimpleTeam();
+			team = TeamFactory.CreateSimpleTeam();
 			team.Site = site;
 			team.Description = new Description("sdf");
 			PersistAndRemoveFromUnitOfWork(team);
 
-			IPerson per1 = PersonFactory.CreatePerson("roger", "kratz");
-			IPerson per2 = PersonFactory.CreatePerson("z", "balog");
-			IPerson per3 = PersonFactory.CreatePerson("a", "balog");
+			contract1 = new Contract("contract1");
+			contract2 = new Contract("contract2");
 
-			per1.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(), team));
-			per2.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(), team));
-			per3.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(), team));
+			PersistAndRemoveFromUnitOfWork(contract1);
+			PersistAndRemoveFromUnitOfWork(contract2);
+
+			per1 = PersonFactory.CreatePerson("roger", "kratz");
+			per2 = PersonFactory.CreatePerson("z", "balog");
+			per3 = PersonFactory.CreatePerson("a", "balog");
+
+			per1.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(contract1), team));
+			per2.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(contract2), team));
+			per3.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(contract2), team));
 
 
 			IWorkflowControlSet workflowControlSet = new WorkflowControlSet("d");
@@ -87,15 +78,60 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(per1);
 			PersistAndRemoveFromUnitOfWork(per2);
 			PersistAndRemoveFromUnitOfWork(per3);
+		}
 
-			var result = target.GetPersonFor(new DateOnly(2012, 2, 2), new List<Guid> { team.Id.Value }, "roget kra");
+		[Test]
+		public void ShouldGetPersonForDayAndTeam()
+		{								
+			
+			var result = target.GetPersonFor(new DateOnly(2012, 2, 2), new List<Guid> { team.Id.Value }, "");
+			result.ToArray().Length.Should().Be.EqualTo(3);
+		}
+
+		[Test]
+		public void ShouldFilterPersonByNameSegment()
+		{
+			var result = target.GetPersonFor(new DateOnly(2012, 2, 2), new List<Guid> {team.Id.Value}, "roger");
+			result.ToArray().Length.Should().Be.EqualTo(1);
+
+			result = target.GetPersonFor(new DateOnly(2012, 2, 2), new List<Guid> { team.Id.Value }, "rogerk");
+			result.ToArray().Length.Should().Be.EqualTo(1);
+
+			result = target.GetPersonFor(new DateOnly(2012, 2, 2), new List<Guid> { team.Id.Value }, "kratz");
+			result.ToArray().Length.Should().Be.EqualTo(1);
+
+		}
+
+
+		[Test]
+		public void ShouldGetPersonForDayAndGroup()
+		{
+
+			var groupId = new Guid("B0E35119-4661-4A1B-8772-9B5E015B2564");
+
+			var populateReadModelQuery = string.Format(	@"INSERT INTO [ReadModel].[GroupingReadOnly] 
+                ([PersonId],[StartDate],[TeamId],[SiteId],[BusinessUnitId] ,[GroupId],[PageId])
+			 VALUES ('{0}','2012-02-02 00:00:00' ,'{1}','{2}','{3}','{4}','11610FE4-0130-4568-97DE-9B5E015B2564')",
+			 per1.Id.Value, team.Id.Value, site.Id.Value, getBusinessUnitId(), groupId);
+
+			Session.CreateSQLQuery(populateReadModelQuery).ExecuteUpdate();
+
+			var currentUnitOfWork = MockRepository.GenerateMock<ICurrentUnitOfWork>();
+			currentUnitOfWork.Stub(x => x.Current()).Return(UnitOfWork);
+
+			var groupingrm = new GroupingReadOnlyRepository(currentUnitOfWork);
+
+			var pages = groupingrm.AvailableGroupPages();
+
+			var result = target.GetPersonFor(new DateOnly(2012, 2, 2), new List<Guid> { groupId }, "");
 			result.ToArray().Length.Should().Be.EqualTo(1);
 		}
 
 
-		private IPersonContract createPersonContract(IBusinessUnit otherBusinessUnit = null)
+
+		private IPersonContract createPersonContract(IContract contract, IBusinessUnit otherBusinessUnit = null)
 		{
-			var pContract = PersonContractFactory.CreatePersonContract();
+			var pContract = PersonContractFactory.CreatePersonContract(contract);
 			if (otherBusinessUnit != null)
 			{
 				pContract.Contract.SetBusinessUnit(otherBusinessUnit);
@@ -107,6 +143,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(pContract.PartTimePercentage);
 			return pContract;
 		}
+
+		private Guid getBusinessUnitId()
+		{
+			
+			var businessUnitId = ((ITeleoptiIdentity)ClaimsPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault();
+			
+			return Guid.Parse(businessUnitId.ToString());
+		}
+
 		
 	}
 }
