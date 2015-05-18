@@ -183,12 +183,14 @@ namespace Teleopti.Ccc.Domain.Security
             }
         }
 
-        public static void DecryptDictionary<TKey>(this IDictionary<TKey,string> encryptedDictionary, byte[] key, byte[] iv)
+        public static IDictionary<TKey, string> DecryptDictionary<TKey>(this IDictionary<TKey,string> encryptedDictionary, byte[] key, byte[] iv)
         {
+	        var ret = new Dictionary<TKey, string>(encryptedDictionary.Count);
             foreach (var encryptedKey in encryptedDictionary.Keys.ToList())
             {
-                encryptedDictionary[encryptedKey] = DecryptStringFromBase64(encryptedDictionary[encryptedKey], key, iv);
+                ret[encryptedKey] = DecryptStringFromBase64(encryptedDictionary[encryptedKey], key, iv);
             }
+	        return ret;
         }
     }
 }

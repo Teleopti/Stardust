@@ -14,10 +14,13 @@ namespace Teleopti.Ccc.Domain.Security
 			return dataSourceConfig;
 		}
 
-		public void DecryptConfig(DataSourceConfig dataSourceConfig)
+		public DataSourceConfig DecryptConfig(DataSourceConfig dataSourceConfig)
 		{
-			dataSourceConfig.ApplicationNHibernateConfig.DecryptDictionary(EncryptionConstants.Image1, EncryptionConstants.Image2);
-			dataSourceConfig.AnalyticsConnectionString = Encryption.DecryptStringFromBase64(dataSourceConfig.AnalyticsConnectionString, EncryptionConstants.Image1, EncryptionConstants.Image2);
+			return new DataSourceConfig
+			{
+				AnalyticsConnectionString = Encryption.DecryptStringFromBase64(dataSourceConfig.AnalyticsConnectionString, EncryptionConstants.Image1, EncryptionConstants.Image2),
+				ApplicationNHibernateConfig = dataSourceConfig.ApplicationNHibernateConfig.DecryptDictionary(EncryptionConstants.Image1, EncryptionConstants.Image2)
+			};
 		}
 	}
 }

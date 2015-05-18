@@ -38,11 +38,11 @@ namespace Teleopti.Ccc.DomainTest.Security
 			dataSourceConfig.ApplicationNHibernateConfig["key1"].Should().Be.EqualTo(encryptedOne);
 			dataSourceConfig.ApplicationNHibernateConfig["key2"].Should().Be.EqualTo(encryptedTwo);
 
-			target.DecryptConfig(dataSourceConfig);
+			var result = target.DecryptConfig(dataSourceConfig);
 
-			dataSourceConfig.AnalyticsConnectionString.Should().Be.EqualTo("a very secret connectionstring");
-			dataSourceConfig.ApplicationNHibernateConfig["key1"].Should().Be.EqualTo("some secret value");
-			dataSourceConfig.ApplicationNHibernateConfig["key2"].Should().Be.EqualTo("another secret value");
+			result.AnalyticsConnectionString.Should().Be.EqualTo("a very secret connectionstring");
+			result.ApplicationNHibernateConfig["key1"].Should().Be.EqualTo("some secret value");
+			result.ApplicationNHibernateConfig["key2"].Should().Be.EqualTo("another secret value");
 		}
 	}
 }

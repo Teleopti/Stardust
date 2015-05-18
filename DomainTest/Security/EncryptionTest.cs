@@ -72,9 +72,9 @@ namespace Teleopti.Ccc.DomainTest.Security
             IDictionary<int,string> myEncryptedDictionary = new Dictionary<int, string>();
             myEncryptedDictionary.Add(1,encrypted);
             // Decrypt the bytes to a string.
-            myEncryptedDictionary.DecryptDictionary(_myRijndael.Key, _myRijndael.IV);
+            var result = myEncryptedDictionary.DecryptDictionary(_myRijndael.Key, _myRijndael.IV);
 
-            Assert.AreEqual(_original, myEncryptedDictionary[1]);
+            Assert.AreEqual(_original, result[1]);
         }
 
         private static string typicalConfiguration()
