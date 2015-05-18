@@ -240,11 +240,9 @@
     <Compile Include="MultiTenancy\Client\IMultiTenancyWindowsLogon.cs" />
     <Compile Include="MultiTenancy\Client\IResponseException.cs" />
     <Compile Include="MultiTenancy\Client\ITenantServerConfiguration.cs" />
-    <Compile Include="MultiTenancy\Client\IVerifyTerminalDate.cs" />
     <Compile Include="MultiTenancy\Client\ResponseException.cs" />
     <Compile Include="MultiTenancy\Client\TenantLogonDataManager.cs" />
     <Compile Include="MultiTenancy\Client\TenantServerConfiguration.cs" />
-    <Compile Include="MultiTenancy\Client\VerifyTerminalDate.cs" />
     <Compile Include="MultiTenancy\Server\ApplicationUserQueryFake.cs" />
     <Compile Include="MultiTenancy\Server\CheckPasswordStrength.cs" />
     <Compile Include="MultiTenancy\Server\CheckPasswordStrengthFake.cs" />

@@ -1,8 +1,5 @@
-﻿using System;
-using Teleopti.Ccc.Domain.Security.Authentication;
+﻿using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
-using Teleopti.Ccc.Infrastructure.Authentication;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 {
@@ -10,16 +7,11 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 	{
 		private readonly IAuthenticationQuerier _authenticationQuerier;
 		private readonly IWindowsUserProvider _windowsUserProvider;
-		private readonly Func<IApplicationData> _applicationData;
-		private readonly ILoadUserUnauthorized _loadUserUnauthorized;
 
-		public MultiTenancyWindowsLogon(IAuthenticationQuerier authenticationQuerier,
-			IWindowsUserProvider windowsUserProvider, Func<IApplicationData> applicationData, ILoadUserUnauthorized loadUserUnauthorized) 
+		public MultiTenancyWindowsLogon(IAuthenticationQuerier authenticationQuerier, IWindowsUserProvider windowsUserProvider) 
 		{
 			_authenticationQuerier = authenticationQuerier;
 			_windowsUserProvider = windowsUserProvider;
-			_applicationData = applicationData;
-			_loadUserUnauthorized = loadUserUnauthorized;
 		}
 
 		public AuthenticationResult Logon(string userAgent)
@@ -34,12 +26,11 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 					Message = result.FailReason
 				};
 
-			var datasource = _applicationData().Tenant(result.Tenant);
 			return new AuthenticationResult
 			{
-				Person = _loadUserUnauthorized.LoadFullPersonInSeperateTransaction(datasource.Application, result.PersonId),
+				Person = result.Person,
 				Successful = true,
-				DataSource = datasource
+				DataSource = result.DataSource
 			};
 		}
 

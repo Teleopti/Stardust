@@ -2,7 +2,7 @@
 {
 	public interface IAuthenticationQuerier
 	{
-		AuthenticationQueryResult TryLogon(ApplicationLogonClientModel applicationLogonClientModel, string userAgent);
-		AuthenticationQueryResult TryLogon(IdentityLogonClientModel identityLogonClientModel, string userAgent);
+		AuthenticationQuerierResult TryLogon(ApplicationLogonClientModel applicationLogonClientModel, string userAgent);
+		AuthenticationQuerierResult TryLogon(IdentityLogonClientModel identityLogonClientModel, string userAgent);
 	}
 }

@@ -17,26 +17,26 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 			_applicationData = applicationData;
 		}
 
-		public AuthenticationQueryResult TryLogon(ApplicationLogonClientModel applicationLogonClientModel, string userAgent)
+		public AuthenticationQuerierResult TryLogon(ApplicationLogonClientModel applicationLogonClientModel, string userAgent)
 		{
 			return readFile();
 		}
 
-		public AuthenticationQueryResult TryLogon(IdentityLogonClientModel identityLogonClientModel, string userAgent)
+		public AuthenticationQuerierResult TryLogon(IdentityLogonClientModel identityLogonClientModel, string userAgent)
 		{
 			return readFile();
 		}
 
-		private AuthenticationQueryResult readFile()
+		private AuthenticationQuerierResult readFile()
 		{
 			var path = _tenantServerConfiguration.FullPath(string.Empty);
 			if (!File.Exists(path))
-				return new AuthenticationQueryResult { FailReason = string.Format("No file with name {0}", path), Success = false };
+				return new AuthenticationQuerierResult { FailReason = string.Format("No file with name {0}", path), Success = false };
 
 			var json = File.ReadAllText(path);
 
-			var result = JsonConvert.DeserializeObject<AuthenticationQueryResult>(json);
-			_applicationData().MakeSureDataSourceExists(result.Tenant, result.DataSourceConfiguration.ApplicationNHibernateConfig, result.DataSourceConfiguration.AnalyticsConnectionString);
+			var result = JsonConvert.DeserializeObject<AuthenticationQuerierResult>(json);
+			_applicationData().MakeSureDataSourceExists(result.DataSource.DataSourceName, result.ApplicationNHibernateConfig, result.AnalyticsConnectionString);
 			return result;
 		}
 	}

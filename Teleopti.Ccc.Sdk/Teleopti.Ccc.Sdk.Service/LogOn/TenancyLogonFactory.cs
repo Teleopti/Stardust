@@ -17,9 +17,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
 			if (_multiTenancyApplicationLogon == null)
 			{
 				_multiTenancyApplicationLogon = new MultiTenancyApplicationLogon(
-					new AuthenticationQuerier(new TenantServerConfiguration(ConfigurationManager.AppSettings["TenantServer"]), new NhibConfigDecryption(), new PostHttpRequest(), new NewtonsoftJsonSerializer(),() => StateHolder.Instance.StateReader.ApplicationScopeData, new VerifyTerminalDate(() => StateHolder.Instance.StateReader.ApplicationScopeData)),
-					() => StateHolder.Instance.StateReader.ApplicationScopeData,
-					new LoadUserUnauthorized());
+					new AuthenticationQuerier(new TenantServerConfiguration(ConfigurationManager.AppSettings["TenantServer"]), new PostHttpRequest(), new NewtonsoftJsonSerializer(), new AuthenticationQuerierResultConverter(new NhibConfigDecryption(), () => StateHolder.Instance.StateReader.ApplicationScopeData, new LoadUserUnauthorized())));
 			}
 			return _multiTenancyApplicationLogon;
 		}
@@ -29,10 +27,8 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
 			if (_multiTenancyWindowsLogon == null)
 			{
 				_multiTenancyWindowsLogon = new MultiTenancyWindowsLogon(
-					new AuthenticationQuerier(new TenantServerConfiguration(ConfigurationManager.AppSettings["TenantServer"]), new NhibConfigDecryption(), new PostHttpRequest(), new NewtonsoftJsonSerializer(), () => StateHolder.Instance.StateReader.ApplicationScopeData, new VerifyTerminalDate(() => StateHolder.Instance.StateReader.ApplicationScopeData)),
-					new WebWindowsUserProvider(), 
-					() => StateHolder.Instance.StateReader.ApplicationScopeData,
-					new LoadUserUnauthorized());
+					new AuthenticationQuerier(new TenantServerConfiguration(ConfigurationManager.AppSettings["TenantServer"]), new PostHttpRequest(), new NewtonsoftJsonSerializer(), new AuthenticationQuerierResultConverter(new NhibConfigDecryption(), () => StateHolder.Instance.StateReader.ApplicationScopeData, new LoadUserUnauthorized())),
+					new WebWindowsUserProvider());
 			}
 			return _multiTenancyWindowsLogon;
 		}

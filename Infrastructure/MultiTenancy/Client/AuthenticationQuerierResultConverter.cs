@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 {
-	public class AuthenticationQuerierResultConverter
+	public class AuthenticationQuerierResultConverter : IAuthenticationQuerierResultConverter
 	{
 		private readonly INhibConfigDecryption _nhibDecryption;
 		private readonly Func<IApplicationData> _applicationData;
@@ -48,5 +48,10 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 			}
 			return ret;
 		}
+	}
+
+	public interface IAuthenticationQuerierResultConverter
+	{
+		AuthenticationQuerierResult Convert(AuthenticationQueryResult tenantServerResult);
 	}
 }
