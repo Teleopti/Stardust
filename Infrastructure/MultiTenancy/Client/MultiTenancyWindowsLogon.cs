@@ -6,12 +6,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 {
-	public interface IMultiTenancyWindowsLogon
-	{
-		AuthenticationResult Logon(string userAgent);
-		bool CheckWindowsIsPossible();
-	}
-
 	public class MultiTenancyWindowsLogon : IMultiTenancyWindowsLogon
 	{
 		private readonly IAuthenticationQuerier _authenticationQuerier;
