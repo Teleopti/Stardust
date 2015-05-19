@@ -71,16 +71,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			if (optimizationMethodBackToLegalState)
 			{
-				selectedGroupPage = optimizerOriginalPreferences.SchedulingOptions.GroupPageForShiftCategoryFairness;
+				selectedGroupPage = optimizerOriginalPreferences.SchedulingOptions.GroupOnGroupPageForTeamBlockPer;
 			}
 			else
 			{
 				selectedGroupPage = optimizationPreferences.Extra.TeamGroupPage;
 			}
 
-			groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate = _groupPageCreator.CreateGroupPagePerDate(groupPagePeriod.DayCollection(), _groupScheduleGroupPageDataProvider, selectedGroupPage);
-
-
+			var groupPersonGroupPagePerDate = _groupPageCreator.CreateGroupPagePerDate(groupPagePeriod.DayCollection(), _groupScheduleGroupPageDataProvider, selectedGroupPage);
+			
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
 			var stateHolder = schedulerStateHolder.SchedulingResultState;
 
@@ -140,7 +139,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 						}
 
 						// we need it here for fairness opt. for example
-						groupPagePerDateHolder.GroupPersonGroupPagePerDate = groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate;
+						groupPagePerDateHolder.GroupPersonGroupPagePerDate = groupPersonGroupPagePerDate;
 						scheduleOptimizerHelper.ReOptimize(backgroundWorker, selectedSchedules, schedulingOptions);
 
 						allMatrixes = _matrixListFactory.CreateMatrixListAll(selectedPeriod);

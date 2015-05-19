@@ -1142,11 +1142,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 				// TODO show dialog here too??? Not yet, rotation can not be followed when swapping
 				ISchedulingOptions schedulingOptions = new SchedulingOptions { GroupPageForShiftCategoryFairness = _groupPagesProvider.GetGroups(false)[0], UseRotations = false };
-
-				_groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate = _container.Resolve<IGroupPageCreator>()
-					.CreateGroupPagePerDate(new ScheduleViewSelectedPeriod(_scheduleView), _container.Resolve<IGroupScheduleGroupPageDataProvider>(),
-					schedulingOptions.GroupPageForShiftCategoryFairness);
-
 				var finderService = _container.Resolve<IWorkShiftFinderService>();
 				// This is not working now I presume (SelectedSchedules is probably not correct)
 				foreach (IScheduleDay schedulePart in _scheduleView.SelectedSchedules())

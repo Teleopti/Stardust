@@ -83,11 +83,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			var selectedPersons = selectedScheduleDays.Select(x => x.Person).Distinct().ToList();
 
-			DateOnlyPeriod groupPagePeriod = schedulerStateHolder.RequestedPeriod.DateOnlyPeriod;
-			groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate = _groupPageCreator
-				.CreateGroupPagePerDate(groupPagePeriod.DayCollection(), _groupScheduleGroupPageDataProvider,
-					optimizerOriginalPreferences.SchedulingOptions.GroupPageForShiftCategoryFairness);
-
 			if (schedulingOptions.ScheduleEmploymentType == ScheduleEmploymentType.FixedStaff)
 			{
 				schedulingOptions.OnlyShiftsWhenUnderstaffed = false;

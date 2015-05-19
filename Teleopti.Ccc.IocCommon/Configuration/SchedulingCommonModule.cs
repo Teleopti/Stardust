@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.MatrixLockers;
-using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
@@ -118,9 +117,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<NonBlendWorkShiftCalculator>().As<INonBlendWorkShiftCalculator>().InstancePerLifetimeScope();
 			builder.RegisterType<NonBlendSkillImpactOnPeriodForProjection>()
 				.As<INonBlendSkillImpactOnPeriodForProjection>()
-				.InstancePerLifetimeScope();
-			builder.RegisterType<GroupShiftCategoryFairnessCreator>()
-				.As<IGroupShiftCategoryFairnessCreator>()
 				.InstancePerLifetimeScope();
 			builder.RegisterType<GroupPagePerDateHolder>().As<IGroupPagePerDateHolder>().InstancePerLifetimeScope();
 			builder.RegisterType<DesiredShiftLengthCalculator>().As<IDesiredShiftLengthCalculator>().InstancePerLifetimeScope();

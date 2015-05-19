@@ -1157,7 +1157,6 @@
     <Compile Include="Scheduling\Assignment\ProjectionPayloadMerger.cs" />
     <Compile Include="Scheduling\Assignment\ProjectionProvider.cs" />
     <Compile Include="Scheduling\Assignment\SchedulePartSignificantPartForDisplayDefinitions.cs" />
-    <Compile Include="Scheduling\Assignment\GroupShiftCategoryFairnessCreator.cs" />
     <Compile Include="Scheduling\Assignment\HasContractDayOffDefinition.cs" />
     <Compile Include="Scheduling\Assignment\IRangeProjectionService.cs" />
     <Compile Include="Scheduling\Assignment\NewDynamicDayOffSchedulePeriodTargetCalculator.cs" />

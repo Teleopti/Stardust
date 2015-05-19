@@ -782,7 +782,6 @@
     <Compile Include="ResourceCalculation\WorkShiftCalculatorsManagerTest.cs" />
     <Compile Include="Scheduling\AffectsSameDayAndPersonSpecificationTest.cs" />
     <Compile Include="Scheduling\Assignment\DeleteAndResourceCalculateServiceTest.cs" />
-    <Compile Include="Scheduling\Assignment\GroupShiftCategoryFairnessCreatorTest.cs" />
     <Compile Include="Scheduling\Assignment\HasContractDayOffDefinitionTest.cs" />
     <Compile Include="Scheduling\Assignment\NewDynamicDayOffSchedulePeriodTargetCalculatorTest.cs" />
     <Compile Include="Scheduling\Assignment\NewFixedDayOffSchedulePeriodTargetCalculatorTest.cs" />
