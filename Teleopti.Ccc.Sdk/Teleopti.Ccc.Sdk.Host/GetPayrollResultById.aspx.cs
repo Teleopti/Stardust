@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Globalization;
-using System.Security.Principal;
+using System.Web.UI;
 using Autofac;
 using Autofac.Integration.Wcf;
 using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Logic.Payroll;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.WcfHost
 {
-	public partial class GetPayrollResultById : System.Web.UI.Page
+	public partial class GetPayrollResultById : Page
 	{
 		protected void Page_Load(object sender, EventArgs e)
 		{
@@ -24,25 +23,18 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 
 			var payrollLogon = AutofacHostFactory.Container.Resolve<IPayrollLogon>();
 
-			AuthenticationResult result;
+			var result = useWindowsIdentity ? 
+				payrollLogon.LogonWindows() : 
+				payrollLogon.LogonApplication(userName, password);
 
-			if (useWindowsIdentity)
+			if (!result.Success)
 			{
-				result = payrollLogon.LogonWindows();
-			}
-			else
-			{
-				result = payrollLogon.LogonApplication(userName, password);
-			}
-
-			if (!result.Successful)
-			{
-				Response.Write(result.Message);
+				Response.Write(result.FailReason);
 				return;
 			}
 
 			var logOnOff = new LogOnOff(new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory()));
-			logOnOff.LogOn(result.DataSource, result.Person, null);// bUnit);
+			logOnOff.LogOn(result.DataSource, result.Person, null);
 
 			using (result.DataSource.Application.CreateAndOpenUnitOfWork())
 			{
@@ -56,30 +48,30 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 
 		public interface IPayrollLogon
 		{
-			AuthenticationResult LogonWindows();
-			AuthenticationResult LogonApplication(string userName, string password);
+			AuthenticationQuerierResult LogonWindows();
+			AuthenticationQuerierResult LogonApplication(string userName, string password);
 		}
 
 		public class MultiTenancyPayrollLogon : IPayrollLogon
 		{
-			private readonly IMultiTenancyApplicationLogon _multiTenancyApplicationLogon;
-			private readonly IMultiTenancyWindowsLogon _multiTenancyWindowsLogon;
+			private readonly IAuthenticationQuerier _authenticationQuerier;
+			private readonly IWindowsUserProvider _windowsUserProvider;
 			public const string UserAgent = "SDKPayroll";
 
-			public MultiTenancyPayrollLogon(IMultiTenancyApplicationLogon multiTenancyApplicationLogon, IMultiTenancyWindowsLogon multiTenancyWindowsLogon)
+			public MultiTenancyPayrollLogon(IAuthenticationQuerier authenticationQuerier, IWindowsUserProvider windowsUserProvider)
 			{
-				_multiTenancyApplicationLogon = multiTenancyApplicationLogon;
-				_multiTenancyWindowsLogon = multiTenancyWindowsLogon;
+				_authenticationQuerier = authenticationQuerier;
+				_windowsUserProvider = windowsUserProvider;
 			}
 
-			public AuthenticationResult LogonWindows()
+			public AuthenticationQuerierResult LogonWindows()
 			{
-				return _multiTenancyWindowsLogon.Logon(UserAgent);
+				return _authenticationQuerier.TryLogon(new IdentityLogonClientModel {Identity = _windowsUserProvider.Identity()}, UserAgent);
 			}
 
-			public AuthenticationResult LogonApplication(string userName, string password)
+			public AuthenticationQuerierResult LogonApplication(string userName, string password)
 			{
-				return _multiTenancyApplicationLogon.Logon(userName, password, UserAgent);
+				return _authenticationQuerier.TryLogon(new ApplicationLogonClientModel{UserName = userName, Password = password}, UserAgent);
 			}
 		}
 	}

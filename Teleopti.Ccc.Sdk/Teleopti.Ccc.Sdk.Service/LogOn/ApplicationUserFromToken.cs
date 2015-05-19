@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Configuration;
 using System.Globalization;
 using System.ServiceModel;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.Authentication;
-using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Sdk.Common.WcfExtensions;
 
 namespace Teleopti.Ccc.Sdk.WcfService.LogOn
@@ -21,7 +24,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
         {
 			  
             var result = logOnSystem();
-            if (result.Successful)
+            if (result.Success)
             {
                 _personContainer = new PersonContainer(result.Person)
                                        {
@@ -35,11 +38,23 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
             return false;
         }
 
-	    private AuthenticationResult logOnSystem()
+	    private AuthenticationQuerierResult logOnSystem()
 	    {
-		    if (attemptSuperUserLogOn()) return new AuthenticationResult {Successful = true, Person = _dataSourceContainer.User};
-		    return TenancyLogonFactory.MultiTenancyApplicationLogon()
-				 .Logon(_customUserNameSecurityToken.UserName, _customUserNameSecurityToken.Password , "");
+		    if (attemptSuperUserLogOn()) 
+					return new AuthenticationQuerierResult {Success = true, Person = _dataSourceContainer.User};
+
+		    var authQuerier = new AuthenticationQuerier(new TenantServerConfiguration(ConfigurationManager.AppSettings["TenantServer"]),
+				    new PostHttpRequest(), new NewtonsoftJsonSerializer(),
+				    new AuthenticationQuerierResultConverter(new NhibConfigDecryption(),
+					    () => StateHolder.Instance.StateReader.ApplicationScopeData, new LoadUserUnauthorized()));
+
+		    return authQuerier
+			    .TryLogon(
+				    new ApplicationLogonClientModel
+				    {
+					    UserName = _customUserNameSecurityToken.UserName,
+					    Password = _customUserNameSecurityToken.Password
+				    }, string.Empty);
 	    }
 
 	    private bool attemptSuperUserLogOn()
