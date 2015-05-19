@@ -274,7 +274,7 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="absence">The absence.</param>
         void RemoveAllowedAbsenceForReport(IAbsence absence);
 
-		FairnessType GetFairnessType(bool scheduler_Seniority_24331);
+		FairnessType GetFairnessType();
 
 	    void SetFairnessType(FairnessType fairnessType);
     }

@@ -59,12 +59,9 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
             _name = description;
         }
 
-	    public virtual FairnessType GetFairnessType(bool scheduler_Seniority_24331)
+	    public virtual FairnessType GetFairnessType()
 	    {
-		    var fairnessType = (FairnessType) fairnessTypeAsInt;
-			if(fairnessType == FairnessType.Seniority && scheduler_Seniority_24331 == false)
-				return FairnessType.EqualNumberOfShiftCategory;
-			return fairnessType;
+		    return (FairnessType) fairnessTypeAsInt;
 	    }
 
 	    public virtual void SetFairnessType(FairnessType fairnessType)

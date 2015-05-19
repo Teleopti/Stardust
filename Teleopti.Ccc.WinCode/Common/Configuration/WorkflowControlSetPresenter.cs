@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 	        _view.SetAutoGrant(_selectedModel.AutoGrantShiftTradeRequest);
 			_view.SetAnonymousTrading(_selectedModel.AnonymousTrading);
 			_view.SetLockTrading(_selectedModel.LockTrading);
-			_view.SetFairnessType(_selectedModel.GetFairnessType(_toggleManager.IsEnabled(Toggles.Scheduler_Seniority_24331)));
+			_view.SetFairnessType(_selectedModel.GetFairnessType());
         }
 
         public IWorkflowControlSetModel SelectedModel
@@ -547,13 +547,13 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
         public void OnRadioButtonAdvFairnessEqualCheckChanged(bool value)
         {
 			if(value)
-				_selectedModel.SetFairnessType(FairnessType.EqualNumberOfShiftCategory, _toggleManager.IsEnabled(Toggles.Scheduler_Seniority_24331));
+				_selectedModel.SetFairnessType(FairnessType.EqualNumberOfShiftCategory);
         }
 
 	    public void OnRadioButtonAdvSeniorityCheckedChanged(bool value)
 	    {
 			if (value)
-				_selectedModel.SetFairnessType(FairnessType.Seniority, _toggleManager.IsEnabled(Toggles.Scheduler_Seniority_24331));    
+				_selectedModel.SetFairnessType(FairnessType.Seniority);    
 	    }
 
         public void SetStudentAvailabilityPeriod(DateOnlyPeriod studentAvailabilityPeriod)

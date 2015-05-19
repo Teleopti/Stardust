@@ -6,13 +6,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 {
 	public interface ITeamBlockSeniorityValidator
 	{
-		bool ValidateSeniority(ITeamBlockInfo teamBlockInfo, bool schedulerSeniority11111);
+		bool ValidateSeniority(ITeamBlockInfo teamBlockInfo);
 	}
 
 	public class TeamBlockSeniorityValidator : ITeamBlockSeniorityValidator
 	{
 
-		public bool ValidateSeniority(ITeamBlockInfo teamBlockInfo, bool schedulerSeniority11111)
+		public bool ValidateSeniority(ITeamBlockInfo teamBlockInfo)
 		{
 			var teamInfo = teamBlockInfo.TeamInfo;
 			var groupMembers = teamInfo.GroupMembers;
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 			foreach (var workflowControlSet in groupMembers.Select(groupMember => groupMember.WorkflowControlSet))
 			{
 				if (workflowControlSet == null) return false;
-				if (workflowControlSet.GetFairnessType(schedulerSeniority11111) != FairnessType.Seniority) return false;
+				if (workflowControlSet.GetFairnessType() != FairnessType.Seniority) return false;
 			}
 
 			return true;

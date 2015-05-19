@@ -38,12 +38,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
 				Expect.Call(_teamInfo.GroupMembers).Return(_persons);
 				Expect.Call(_person.WorkflowControlSet).Return(_workflowControlSet);
-				Expect.Call(_workflowControlSet.GetFairnessType(true)).Return(FairnessType.Seniority);
+				Expect.Call(_workflowControlSet.GetFairnessType()).Return(FairnessType.Seniority);
 			}
 
 			using (_mock.Playback())
 			{
-				var result = _target.ValidateSeniority(_teamBlockInfo, true);
+				var result = _target.ValidateSeniority(_teamBlockInfo);
 				Assert.IsTrue(result);
 			}
 		}
@@ -56,12 +56,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
 				Expect.Call(_teamInfo.GroupMembers).Return(_persons);
 				Expect.Call(_person.WorkflowControlSet).Return(_workflowControlSet);
-				Expect.Call(_workflowControlSet.GetFairnessType(true)).Return(FairnessType.EqualNumberOfShiftCategory);
+				Expect.Call(_workflowControlSet.GetFairnessType()).Return(FairnessType.EqualNumberOfShiftCategory);
 			}
 
 			using (_mock.Playback())
 			{
-				var result = _target.ValidateSeniority(_teamBlockInfo, true);
+				var result = _target.ValidateSeniority(_teamBlockInfo);
 				Assert.IsFalse(result);
 			}
 		}

@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 				IList<ITeamBlockInfo> filteredTeamBlocks = new List<ITeamBlockInfo>();
 			    foreach (var teamBlockInfo in listOfAllTeamBlock)
 			    {
-				    if (_teamBlockSeniorityValidator.ValidateSeniority(teamBlockInfo, scheduleSeniority11111))
+				    if (_teamBlockSeniorityValidator.ValidateSeniority(teamBlockInfo))
 				    filteredTeamBlocks.Add(teamBlockInfo);
 			    }
 			    filteredTeamBlocks = _filterForTeamBlockInSelection.Filter(filteredTeamBlocks, selectedPersons, selectedPeriod);

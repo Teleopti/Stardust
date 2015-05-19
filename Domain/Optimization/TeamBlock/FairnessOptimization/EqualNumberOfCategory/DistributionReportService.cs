@@ -28,13 +28,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 			var report = new DistributionReportData();
 			var totalDistribution =
 				_distributionForPersons.CreateSummary(
-					filterOnEqualNumberOfCategorySetting(allFilteredPersons,
-						schedulerSeniority11111), scheduleDictionary);
+					filterOnEqualNumberOfCategorySetting(allFilteredPersons), scheduleDictionary);
 			var personDistribution = _distributionForPersons.CreateSummary(new List<IPerson> {person}, scheduleDictionary);
 			var myTeam = _groupCreator.CreateGroupForPerson(person, groupPageForDate, scheduleDictionary.Keys.ToList());
 			var teamDistribution =
-				_distributionForPersons.CreateSummary(filterOnEqualNumberOfCategorySetting(myTeam.GroupMembers,
-						schedulerSeniority11111), scheduleDictionary);
+				_distributionForPersons.CreateSummary(filterOnEqualNumberOfCategorySetting(myTeam.GroupMembers), scheduleDictionary);
 
 			var involvedCategories = new SortedSet<IShiftCategory>(totalDistribution.PercentDicionary.Keys,
 				new ShiftCategorySorter());
@@ -55,14 +53,14 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 			return report;
 		}
 
-		private IEnumerable<IPerson> filterOnEqualNumberOfCategorySetting(IEnumerable<IPerson> personList, bool schedulerSeniority11111)
+		private IEnumerable<IPerson> filterOnEqualNumberOfCategorySetting(IEnumerable<IPerson> personList)
 		{
 			IList<IPerson> filteredList = new List<IPerson>();
 			foreach (var person in personList)
 			{
 				var wfcs = person.WorkflowControlSet;
 				if (wfcs == null) continue;
-				if (wfcs.GetFairnessType(schedulerSeniority11111) == FairnessType.EqualNumberOfShiftCategory)
+				if (wfcs.GetFairnessType() == FairnessType.EqualNumberOfShiftCategory)
 					filteredList.Add(person);
 			}
 

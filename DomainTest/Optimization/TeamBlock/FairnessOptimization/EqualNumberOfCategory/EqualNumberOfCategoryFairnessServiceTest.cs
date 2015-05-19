@@ -111,8 +111,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 			_equalCategoryDistributionValue.Stub(x => x.CalculateValue(_teamBlockInfo1, _totalDistributionSummary, _sceduleDictionary)).Return(valueAfter);
 			_equalCategoryDistributionValue.Stub(x => x.CalculateValue(_teamBlockInfo2, _totalDistributionSummary, _sceduleDictionary)).Return(valueAfter);
 
-			_target.Execute(_allMatrixes, new DateOnlyPeriod(), _selectedPersons, _schedulingOptions, _sceduleDictionary,
-				_rollbackService, _optimizationPreferences, true);
+			_target.Execute(_allMatrixes, new DateOnlyPeriod(), _selectedPersons, _schedulingOptions, _sceduleDictionary, _rollbackService, _optimizationPreferences);
 
 			_rollbackService.AssertWasNotCalled(x => x.Rollback());
 		}
@@ -142,7 +141,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 			_equalCategoryDistributionValue.Stub(x => x.CalculateValue(_teamBlockInfo2, _totalDistributionSummary, _sceduleDictionary)).Return(valueAfter);
 
 			_target.ReportProgress += _targetReportProgressCancel;
-			_target.Execute(_allMatrixes, new DateOnlyPeriod(), _selectedPersons, _schedulingOptions, _sceduleDictionary, _rollbackService, _optimizationPreferences, true);
+			_target.Execute(_allMatrixes, new DateOnlyPeriod(), _selectedPersons, _schedulingOptions, _sceduleDictionary, _rollbackService, _optimizationPreferences);
 			_target.ReportProgress -= _targetReportProgressCancel;
 
 			_equalCategoryDistributionWorstTeamBlockDecider.AssertWasNotCalled(x => x.FindBlockToWorkWith(_totalDistributionSummary, _teamBlockInfos, _sceduleDictionary), o => o.Repeat.Twice());
@@ -174,7 +173,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 			_equalCategoryDistributionValue.Stub(x => x.CalculateValue(_teamBlockInfo2, _totalDistributionSummary, _sceduleDictionary)).Return(valueAfter);
 
 			_target.ReportProgress += _targetReportProgressUserCancel;
-			_target.Execute(_allMatrixes, new DateOnlyPeriod(), _selectedPersons, _schedulingOptions, _sceduleDictionary, _rollbackService, _optimizationPreferences, true);
+			_target.Execute(_allMatrixes, new DateOnlyPeriod(), _selectedPersons, _schedulingOptions, _sceduleDictionary, _rollbackService, _optimizationPreferences);
 			_target.ReportProgress -= _targetReportProgressUserCancel;
 
 			_equalCategoryDistributionWorstTeamBlockDecider.AssertWasNotCalled(x => x.FindBlockToWorkWith(_totalDistributionSummary, _teamBlockInfos, _sceduleDictionary), o => o.Repeat.Twice());
@@ -185,7 +184,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 		{
 			commonMocks();
 
-			_target.Execute(_allMatrixes, new DateOnlyPeriod(), _selectedPersons, _schedulingOptions, _sceduleDictionary, _rollbackService, _optimizationPreferences, true);
+			_target.Execute(_allMatrixes, new DateOnlyPeriod(), _selectedPersons, _schedulingOptions, _sceduleDictionary, _rollbackService, _optimizationPreferences);
 		}
 
 		[Test]
@@ -213,7 +212,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 			_equalCategoryDistributionValue.Stub(x => x.CalculateValue(_teamBlockInfo1, _totalDistributionSummary, _sceduleDictionary)).Return(valueAfterFail);
 			_equalCategoryDistributionValue.Stub(x => x.CalculateValue(_teamBlockInfo2, _totalDistributionSummary, _sceduleDictionary)).Return(valueAfterFail);
 
-			_target.Execute(_allMatrixes, new DateOnlyPeriod(), _selectedPersons, _schedulingOptions, _sceduleDictionary, _rollbackService, _optimizationPreferences, true);
+			_target.Execute(_allMatrixes, new DateOnlyPeriod(), _selectedPersons, _schedulingOptions, _sceduleDictionary, _rollbackService, _optimizationPreferences);
 			_rollbackService.AssertWasCalled(x => x.Rollback());
 		}
 
@@ -232,7 +231,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 				_teamBlockOptimizationLimits.Stub(x => x.Validate(_teamBlockInfo1, _optimizationPreferences)).Return(true);
 				_teamBlockOptimizationLimits.Stub(x => x.Validate(_teamBlockInfo2, _optimizationPreferences)).Return(false);
 
-			_target.Execute(_allMatrixes, new DateOnlyPeriod(), _selectedPersons, _schedulingOptions, _sceduleDictionary, _rollbackService, _optimizationPreferences, true);
+			_target.Execute(_allMatrixes, new DateOnlyPeriod(), _selectedPersons, _schedulingOptions, _sceduleDictionary, _rollbackService, _optimizationPreferences);
 
 			_rollbackService.AssertWasCalled(x => x.Rollback());
 		}
@@ -255,7 +254,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 
 				_teamBlockShiftCategoryLimitationValidator.Stub(x => x.Validate(_teamBlockInfo1, _teamBlockInfo2, _optimizationPreferences)).Return(false);
 
-				_target.Execute(_allMatrixes, new DateOnlyPeriod(), _selectedPersons, _schedulingOptions, _sceduleDictionary, _rollbackService, _optimizationPreferences, true);
+				_target.Execute(_allMatrixes, new DateOnlyPeriod(), _selectedPersons, _schedulingOptions, _sceduleDictionary, _rollbackService, _optimizationPreferences);
 				_rollbackService.AssertWasCalled(x => x.Rollback());
 		}
 
@@ -280,7 +279,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 			_teamBlockOptimizationLimits.Stub(x => x.ValidateMinWorkTimePerWeek(_teamBlockInfo1)).Return(true);
 			_teamBlockOptimizationLimits.Stub(x => x.ValidateMinWorkTimePerWeek(_teamBlockInfo2)).Return(false);
 
-			_target.Execute(_allMatrixes, new DateOnlyPeriod(), _selectedPersons, _schedulingOptions, _sceduleDictionary, _rollbackService, _optimizationPreferences, true);
+			_target.Execute(_allMatrixes, new DateOnlyPeriod(), _selectedPersons, _schedulingOptions, _sceduleDictionary, _rollbackService, _optimizationPreferences);
 
 			_rollbackService.AssertWasCalled(x => x.Rollback());
 		}
@@ -297,9 +296,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 
 		private void commonMocks()
 		{
-			_filterPersonsForTotalDistribution.Stub(x => x.Filter(_allMatrixes, true)).Return(_selectedPersons);
+			_filterPersonsForTotalDistribution.Stub(x => x.Filter(_allMatrixes)).Return(_selectedPersons);
 			_constructTeamBlock.Stub(x => x.Construct(_allMatrixes, new DateOnlyPeriod(), _selectedPersons, _schedulingOptions.BlockFinderTypeForAdvanceScheduling, _schedulingOptions.GroupOnGroupPageForTeamBlockPer)).Return(_teamBlockInfos);
-			_filterForEqualNumberOfCategoryFairness.Stub(x => x.Filter(_teamBlockInfos, true)).Return(_teamBlockInfos);
+			_filterForEqualNumberOfCategoryFairness.Stub(x => x.Filter(_teamBlockInfos)).Return(_teamBlockInfos);
 
 			_distributionForPersons.Stub(x => x.CreateSummary(_selectedPersons, _sceduleDictionary)).IgnoreArguments().Return(_totalDistributionSummary);
 			_filterForTeamBlockInSelection.Stub(x => x.Filter(_teamBlockInfos, _selectedPersons, new DateOnlyPeriod())).Return(_teamBlockInfos);

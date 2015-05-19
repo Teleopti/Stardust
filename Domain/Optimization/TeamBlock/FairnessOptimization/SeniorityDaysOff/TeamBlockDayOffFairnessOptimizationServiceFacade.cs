@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 {
     public interface ITeamBlockDayOffFairnessOptimizationServiceFacade
     {
-		void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions, IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService, IOptimizationPreferences optimizationPreferences, bool scheduleSeniority11111, ISeniorityWorkDayRanks seniorityWorkDayRanks);
+		void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions, IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService, IOptimizationPreferences optimizationPreferences, ISeniorityWorkDayRanks seniorityWorkDayRanks);
 
         event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
     }
@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 	public class TeamBlockDayOffFairnessOptimizationServiceFacadeSeniorityTurnedOff :
 		ITeamBlockDayOffFairnessOptimizationServiceFacade
 	{
-		public void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions, IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService, IOptimizationPreferences optimizationPreferences, bool scheduleSeniority11111, ISeniorityWorkDayRanks seniorityWorkDayRanks)
+		public void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions, IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService, IOptimizationPreferences optimizationPreferences, ISeniorityWorkDayRanks seniorityWorkDayRanks)
 		{
 		}
 
@@ -35,20 +35,19 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             _teamBlockSchedulingOptions = teamBlockSchedulingOptions;
         }
 
-		public void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions, IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService, IOptimizationPreferences optimizationPreferences, bool scheduleSeniority11111, ISeniorityWorkDayRanks seniorityWorkDayRanks)
+		public void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions, IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService, IOptimizationPreferences optimizationPreferences, ISeniorityWorkDayRanks seniorityWorkDayRanks)
         {
             var weekDayPoints = new WeekDayPoints();
             _dayOffStep1.BlockSwapped += ReportProgress;
             _dayOffStep1.PerformStep1(allPersonMatrixList, selectedPeriod, selectedPersons,rollbackService, scheduleDictionary, weekDayPoints.GetWeekDaysPoints(seniorityWorkDayRanks),
-                                      optimizationPreferences, scheduleSeniority11111);
+                                      optimizationPreferences);
             _dayOffStep1.BlockSwapped -= ReportProgress;
 
             if (!(_teamBlockSchedulingOptions.IsTeamScheduling(schedulingOptions) && schedulingOptions.UseSameDayOffs))
             {
 		            _dayOffStep2.BlockSwapped += ReportProgress;
 		            _dayOffStep2.PerformStep2(schedulingOptions, allPersonMatrixList, selectedPeriod, selectedPersons,
-			            rollbackService, scheduleDictionary, weekDayPoints.GetWeekDaysPoints(seniorityWorkDayRanks),
-						optimizationPreferences, scheduleSeniority11111);
+			            rollbackService, scheduleDictionary, weekDayPoints.GetWeekDaysPoints(seniorityWorkDayRanks), optimizationPreferences);
 		            _dayOffStep2.BlockSwapped -= ReportProgress;
             }
         }

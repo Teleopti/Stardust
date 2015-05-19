@@ -525,7 +525,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			equalNumberOfCategoryFairnessService.ReportProgress += resourceOptimizerPersonOptimized;
 			equalNumberOfCategoryFairnessService.Execute(matrixListForFairness, selectedPeriod, selectedPersons,
 				schedulingOptions, _schedulerStateHolder().Schedules, rollbackService,
-				optimizationPreferences, true);
+				optimizationPreferences);
 			equalNumberOfCategoryFairnessService.ReportProgress -= resourceOptimizerPersonOptimized;
 
 			if (!_toggleManager.IsEnabled(Toggles.Scheduler_Seniority_24331)) return;
@@ -534,7 +534,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			var teamBlockDayOffFairnessOptimizationService = _container.Resolve<ITeamBlockDayOffFairnessOptimizationServiceFacade>();
 			teamBlockDayOffFairnessOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
 			teamBlockDayOffFairnessOptimizationService.Execute(matrixListForFairness, selectedPeriod, selectedPersons, schedulingOptions,
-				_schedulerStateHolder().Schedules, rollbackService, optimizationPreferences, true, _stateHolder().SeniorityWorkDayRanks);
+				_schedulerStateHolder().Schedules, rollbackService, optimizationPreferences, _stateHolder().SeniorityWorkDayRanks);
 			teamBlockDayOffFairnessOptimizationService.ReportProgress -= resourceOptimizerPersonOptimized;
 
 			var teamBlockSeniorityFairnessOptimizationService = _container.Resolve<ITeamBlockSeniorityFairnessOptimizationService>();
