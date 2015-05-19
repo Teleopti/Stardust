@@ -26,10 +26,8 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 			if (tenantServerResult.Success)
 			{
 				var applicationData = _applicationData();
-				var decryptedConfig = _nhibDecryption.DecryptConfig(tenantServerResult.DataSourceConfiguration); //don't do void here!
-				ret.AnalyticsConnectionString = decryptedConfig.AnalyticsConnectionString;
-				ret.ApplicationNHibernateConfig = decryptedConfig.ApplicationNHibernateConfig;
-				applicationData.MakeSureDataSourceExists(tenantServerResult.Tenant, ret.ApplicationNHibernateConfig, ret.AnalyticsConnectionString);
+				var decryptedConfig = _nhibDecryption.DecryptConfig(tenantServerResult.DataSourceConfiguration);
+				applicationData.MakeSureDataSourceExists(tenantServerResult.Tenant, decryptedConfig.ApplicationNHibernateConfig, decryptedConfig.AnalyticsConnectionString);
 				var dataSource = applicationData.Tenant(tenantServerResult.Tenant);
 				var person = _loadUser.LoadFullPersonInSeperateTransaction(dataSource.Application, tenantServerResult.PersonId);
 				if (person.IsTerminated())

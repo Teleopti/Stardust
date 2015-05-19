@@ -47,8 +47,6 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 					DataSourceConfiguration = nhibDecryption.EncryptConfigJustForTest(new DataSourceConfig {AnalyticsConnectionString = analyticsdb, ApplicationNHibernateConfig = appdb})
 				});
 			result.Success.Should().Be.True();
-			result.AnalyticsConnectionString.Should().Be.EqualTo(analyticsdb);
-			result.ApplicationNHibernateConfig["test"].Should().Be.EqualTo(appdb["test"]);
 			applicationData.AssertWasCalled(x => x.MakeSureDataSourceExists(tenantName, appdb, analyticsdb));
 		}
 
@@ -146,8 +144,6 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 		{
 			result.Success.Should().Be.False();
 			result.DataSource.Should().Be.Null();
-			result.ApplicationNHibernateConfig.Should().Be.Null();
-			result.AnalyticsConnectionString.Should().Be.Null();
 			result.Person.Should().Be.Null();
 		}
 

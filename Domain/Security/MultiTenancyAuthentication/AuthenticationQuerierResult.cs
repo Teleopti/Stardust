@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication
 {
@@ -9,7 +8,5 @@ namespace Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication
 		public string FailReason { get; set; }
 		public IPerson Person { get; set; }
 		public IDataSource DataSource { get; set; }
-		public string AnalyticsConnectionString { get; set; }
-		public IDictionary<string, string> ApplicationNHibernateConfig { get; set; }
 	}
 }
