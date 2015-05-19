@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -35,27 +36,26 @@ namespace Teleopti.Ccc.WinCode.Main
 		private readonly ILoginInitializer _initializer;
 		private readonly ILogOnOff _logOnOff;
 		private readonly IMessageBrokerComposite _messageBroker;
-		private readonly IMultiTenancyApplicationLogon _applicationLogon;
-		private readonly IMultiTenancyWindowsLogon _multiTenancyWindowsLogon;
 		private readonly ISharedSettingsQuerier _sharedSettingsQuerier;
 		private readonly IRepositoryFactory _repFactory;
+		private readonly IAuthenticationQuerier _authenticationQuerier;
+		private readonly IWindowsUserProvider _windowsUserProvider;
 		public const string UserAgent = "WIN";
 
 
 		public MultiTenancyLogonPresenter(ILogonView view, LogonModel model, ILoginInitializer initializer, ILogOnOff logOnOff,
-			IMessageBrokerComposite messageBroker, IMultiTenancyApplicationLogon applicationLogon,
-			IMultiTenancyWindowsLogon multiTenancyWindowsLogon, ISharedSettingsQuerier sharedSettingsQuerier,
-			IRepositoryFactory repFactory)
+			IMessageBrokerComposite messageBroker, ISharedSettingsQuerier sharedSettingsQuerier,
+			IRepositoryFactory repFactory, IAuthenticationQuerier authenticationQuerier, IWindowsUserProvider windowsUserProvider)
 		{
 			_view = view;
 			_model = model;
 			_initializer = initializer;
 			_logOnOff = logOnOff;
 			_messageBroker = messageBroker;
-			_applicationLogon = applicationLogon;
-			_multiTenancyWindowsLogon = multiTenancyWindowsLogon;
 			_sharedSettingsQuerier = sharedSettingsQuerier;
 			_repFactory = repFactory;
+			_authenticationQuerier = authenticationQuerier;
+			_windowsUserProvider = windowsUserProvider;
 			_model.AuthenticationType = AuthenticationTypeOption.Windows;
 		}
 
@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.WinCode.Main
 				if (!_view.InitStateHolderWithoutDataSource(_messageBroker, settings))
 					CurrentStep--; //?
 			}
-			if (!_multiTenancyWindowsLogon.CheckWindowsIsPossible())
+			if (!_authenticationQuerier.TryLogon(new IdentityLogonClientModel {Identity = _windowsUserProvider.Identity()}, string.Empty).Success)
 			{
 				_model.AuthenticationType = AuthenticationTypeOption.Application;
 				CurrentStep++;
@@ -190,33 +190,30 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		private bool login()
 		{
-			var authenticationResult = _applicationLogon.Logon(_model.UserName, _model.Password, UserAgent);
-
-			if (authenticationResult.HasMessage)
-				_view.ShowErrorMessage(string.Concat(authenticationResult.Message, "  "), Resources.ErrorMessage);
-			if (authenticationResult.Successful)
+			var authenticationResult = _authenticationQuerier.TryLogon(new ApplicationLogonClientModel{UserName = _model.UserName, Password = _model.Password}, UserAgent);
+				
+			if (authenticationResult.Success)
 			{
 				_model.SelectedDataSourceContainer = new DataSourceContainer(authenticationResult.DataSource);
 				_model.SelectedDataSourceContainer.SetUser(authenticationResult.Person);
 				return true;
 			}
 
+			_view.ShowErrorMessage(string.Concat(authenticationResult.FailReason, "  "), Resources.ErrorMessage);
 			return false;
 		}
 
 		private bool winLogin()
 		{
-			var authenticationResult = _multiTenancyWindowsLogon.Logon(UserAgent);
+			var authenticationResult = _authenticationQuerier.TryLogon(new IdentityLogonClientModel {Identity = _windowsUserProvider.Identity()}, UserAgent);
 
-			if (authenticationResult.HasMessage)
-				_model.Warning = authenticationResult.Message;
-
-			if (authenticationResult.Successful)
+			if (authenticationResult.Success)
 			{
 				_model.SelectedDataSourceContainer = new DataSourceContainer(authenticationResult.DataSource);
 				_model.SelectedDataSourceContainer.SetUser(authenticationResult.Person);
 				return true;
 			}
+			_model.Warning = authenticationResult.FailReason;
 			// windows does not work we need to use application
 			_model.AuthenticationType = AuthenticationTypeOption.Application;
 			return false;

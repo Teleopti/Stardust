@@ -10,6 +10,7 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Main;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
@@ -24,11 +25,10 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 		private ILoginInitializer _initializer;
 		private ILogOnOff _logOnOff;
 		private MultiTenancyLogonPresenter _target;
-		private IMultiTenancyApplicationLogon _appLogon;
-		private IMultiTenancyWindowsLogon _winLogon;
 		private IMessageBrokerComposite _mBroker;
 		private ISharedSettingsQuerier _sharedSettingsQuerier;
 		private IRepositoryFactory _repFactory;
+		private IAuthenticationQuerier _authenticationQuerier;
 
 		[SetUp]
 		public void Setup()
@@ -37,13 +37,12 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			_model = new LogonModel();
 			_initializer = MockRepository.GenerateMock<ILoginInitializer>();
 			_logOnOff = MockRepository.GenerateMock<ILogOnOff>();
-			_appLogon = MockRepository.GenerateMock<IMultiTenancyApplicationLogon>();
-			_winLogon = MockRepository.GenerateMock<IMultiTenancyWindowsLogon>();
+			_authenticationQuerier = MockRepository.GenerateMock<IAuthenticationQuerier>();
 			_mBroker = MockRepository.GenerateMock<IMessageBrokerComposite>();
 			_sharedSettingsQuerier = MockRepository.GenerateMock<ISharedSettingsQuerier>();
 			_repFactory = MockRepository.GenerateMock<IRepositoryFactory>();
 			_target = new MultiTenancyLogonPresenter(_view, _model, _initializer,  _logOnOff,
-				_mBroker, _appLogon, _winLogon, _sharedSettingsQuerier, _repFactory);
+				_mBroker, _sharedSettingsQuerier, _repFactory, _authenticationQuerier, new EnvironmentWindowsUserProvider());
 			_model.AuthenticationType = AuthenticationTypeOption.Application;
 		}
 
@@ -234,7 +233,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 		public void ShouldGoDirectToApplicationIfWindowsNotPossible()
 		{
 			_model.AuthenticationType = AuthenticationTypeOption.Windows;
-			_winLogon.Stub( x => x.CheckWindowsIsPossible()).Return(false);
+			_authenticationQuerier.Stub(x => x.TryLogon(new IdentityLogonClientModel(), null)).IgnoreArguments().Return(new AuthenticationQuerierResult{Success = false});
 
 			_target.Initialize();
 			_target.CurrentStep.Should().Be(LoginStep.Login);
