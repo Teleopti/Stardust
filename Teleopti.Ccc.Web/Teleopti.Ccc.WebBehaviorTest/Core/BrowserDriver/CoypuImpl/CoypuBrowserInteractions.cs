@@ -124,15 +124,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 		public void AssertNoContains(string existsSelector, string notExistsSelector, string text)
 		{
 			AssertExists(existsSelector);
-
-			try
+			var regex = new Regex(Regex.Escape(text));
+			var snapshot = _browser.FindAllCss(notExistsSelector, null, options());
+			snapshot.ForEach(e =>
 			{
-				Assert.That(_browser, Shows.No.Css(notExistsSelector, text: text));
-			}
-			catch (AssertionException)
-			{
-				Assert.Fail("Failed to assert that " + notExistsSelector + " did not contain text " + text);
-			}
+				assert(e.HasNoContentMatch(regex, options()), Is.True, "Failed to assert that " + notExistsSelector + " did not find anything containing text " + text);
+			});
 		}
 
 		public void AssertFirstContains(string selector, string text)
