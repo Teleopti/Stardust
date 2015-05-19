@@ -133,7 +133,7 @@
 			    <div ng-show="acToggle2">
 			        <div class="wfm-block clearfix">
 			            <div class="pull-left">
-			                <div class="wfm-datepicker-wrap campaign-startdate">
+			                <div class="wfm-datepicker-wrap campaign-startdate no-boxshadow">
 			                    <div class="sub-header">
 			                        <span translate>StartTimeColon</span> <strong>{{campaign.StartDate.Date | date: format }}</strong>
 			                    </div>
@@ -141,12 +141,12 @@
 			                </div>
 			            </div>
 			            <div class="pull-left">
-			                <div class="wfm-datepicker-wrap campaign-enddate">
-			                    <div class="sub-header">
-			                        <span translate>EndTimeColon</span> <strong class="end-date">{{campaign.EndDate.Date | date: format }}</strong>
-			                    </div>
-			                    <datepicker ng-model="campaign.EndDate.Date" min-date="campaign.StartDate.Date" show-weeks="true" class="well well-sm"></datepicker>
-			                </div>
+							<div class="wfm-datepicker-wrap campaign-enddate no-boxshadow">
+								<div class="sub-header">
+									<span translate>EndTimeColon</span> <strong class="end-date">{{campaign.EndDate.Date | date: format }}</strong>
+								</div>
+								<datepicker ng-model="campaign.EndDate.Date" min-date="campaign.StartDate.Date" show-weeks="true" class="well well-sm"></datepicker>
+							</div>
 			            </div>
 			        </div>
 			    </div>
