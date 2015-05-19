@@ -43,7 +43,8 @@
 	function fillData(date) {
 		$.ajax({
 		    url: 'MyTime/MyReport/QueueMetricsDetails',
-			dataType: 'json',
+		    dataType: 'json',
+		    cache: false,
 			data: { date: date.clone().utc().toDate().toJSON() },
 			success: function (data) {
 				vm.selectedDateInternal(date);
