@@ -1,23 +1,22 @@
 using System;
-using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 {
-    public class AuthenticationResultAssembler : Assembler<AuthenticationResult,AuthenticationResultDto>
+    public class AuthenticationResultAssembler : Assembler<AuthenticationQuerierResult, AuthenticationResultDto>
     {
-        public override AuthenticationResultDto DomainEntityToDto(AuthenticationResult entity)
+			public override AuthenticationResultDto DomainEntityToDto(AuthenticationQuerierResult entity)
         {
-            AuthenticationResultDto authenticationResultDto = new AuthenticationResultDto
+            return new AuthenticationResultDto
                                                                   {
-                                                                      HasMessage = entity.HasMessage,
-                                                                      Message = entity.Message,
-                                                                      Successful = entity.Successful
+                                                                      HasMessage = !entity.Success,
+                                                                      Message = entity.FailReason,
+                                                                      Successful = entity.Success
                                                                   };
-            return authenticationResultDto;
         }
 
-        public override AuthenticationResult DtoToDomainEntity(AuthenticationResultDto dto)
+			public override AuthenticationQuerierResult DtoToDomainEntity(AuthenticationResultDto dto)
         {
             throw new NotImplementedException();
         }

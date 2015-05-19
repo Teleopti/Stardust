@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.Sdk.WcfService.LogOn;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.WcfService.Factory
 {
@@ -22,18 +22,18 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 
 	public class MultiTenancyAuthenticationFactory : IAuthenticationFactory
 	{
-		private readonly IAssembler<AuthenticationResult, AuthenticationResultDto> _authenticationResultAssembler;
-		private readonly IMultiTenancyApplicationLogon _multiTenancyApplicationLogon;
-		private readonly IMultiTenancyWindowsLogon _multiTenancyWindowsLogon;
+		private readonly IAssembler<AuthenticationQuerierResult, AuthenticationResultDto> _authenticationResultAssembler;
+		private readonly IAuthenticationQuerier _authenticationQuerier;
+		private readonly IWindowsUserProvider _windowsUserProvider;
 		private readonly PersonCache _personCache = new PersonCache();
 		public const string UserAgent = "SDK";
 
-		public MultiTenancyAuthenticationFactory(IAssembler<AuthenticationResult, AuthenticationResultDto> authenticationResultAssembler,
-			IMultiTenancyApplicationLogon multiTenancyApplicationLogon, IMultiTenancyWindowsLogon multiTenancyWindowsLogon)
+		public MultiTenancyAuthenticationFactory(IAssembler<AuthenticationQuerierResult, AuthenticationResultDto> authenticationResultAssembler,
+			IAuthenticationQuerier authenticationQuerier, IWindowsUserProvider windowsUserProvider)
 		{
 			_authenticationResultAssembler = authenticationResultAssembler;
-			_multiTenancyApplicationLogon = multiTenancyApplicationLogon;
-			_multiTenancyWindowsLogon = multiTenancyWindowsLogon;
+			_authenticationQuerier = authenticationQuerier;
+			_windowsUserProvider = windowsUserProvider;
 		}
 
 		public void SetBusinessUnit(BusinessUnitDto businessUnit)
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 		public AuthenticationResultDto LogOnWindows(DataSourceDto dataSource)
 		{
 			var model = new LogonModel();
-			var result = _multiTenancyWindowsLogon.Logon(UserAgent);
+			var result = _authenticationQuerier.TryLogon(new IdentityLogonClientModel { Identity = _windowsUserProvider.Identity() }, UserAgent);
 			var resultDto = _authenticationResultAssembler.DomainEntityToDto(result);
 
 			if (!resultDto.Successful) return resultDto;
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 		public AuthenticationResultDto LogOnApplication(string userName, string password, DataSourceDto dataSource)
 		{
 			var model = new LogonModel { UserName = userName, Password = password };
-			var result = _multiTenancyApplicationLogon.Logon(userName, password, UserAgent);
+			var result = _authenticationQuerier.TryLogon(new ApplicationLogonClientModel {UserName = userName, Password = password}, UserAgent);
 			var resultDto = _authenticationResultAssembler.DomainEntityToDto(result);
 
 			if (!resultDto.Successful) return resultDto;
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 			return resultDto;
 		}
 
-		private void addToCache(AuthenticationResult result, LogonModel model)
+		private void addToCache(AuthenticationQuerierResult result, LogonModel model)
 		{
 			var personContainer = new PersonContainer(result.Person)
 			{

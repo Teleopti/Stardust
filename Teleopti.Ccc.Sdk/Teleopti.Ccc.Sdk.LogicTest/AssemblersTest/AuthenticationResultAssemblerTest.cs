@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 
@@ -10,7 +11,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
     public class AuthenticationResultAssemblerTest
     {
         private AuthenticationResultAssembler _target;
-        private AuthenticationResult _authenticationResultDomain;
+				private AuthenticationQuerierResult _authenticationResultDomain;
         private AuthenticationResultDto _authenticationResultDto;
 
         [SetUp]
@@ -19,12 +20,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             _target = new AuthenticationResultAssembler();
 
             // Create domain object
-            _authenticationResultDomain = new AuthenticationResult
+            _authenticationResultDomain = new AuthenticationQuerierResult
                                               {
-                                                  HasMessage = true,
-                                                  Message = "Change password soon!",
+                                                  FailReason = "Change password soon!",
                                                   Person = null,
-                                                  Successful = true
+                                                  Success = true
                                               };
 
             // Create Dto object
@@ -36,9 +36,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
         {
             AuthenticationResultDto authenticationResultDto = _target.DomainEntityToDto(_authenticationResultDomain);
 
-            Assert.AreEqual(_authenticationResultDomain.HasMessage, authenticationResultDto.HasMessage);
-            Assert.AreEqual(_authenticationResultDomain.Successful, authenticationResultDto.Successful);
-            Assert.AreEqual(_authenticationResultDomain.Message, authenticationResultDto.Message);
+            Assert.AreNotEqual(_authenticationResultDomain.Success, authenticationResultDto.HasMessage);
+            Assert.AreEqual(_authenticationResultDomain.Success, authenticationResultDto.Successful);
+            Assert.AreEqual(_authenticationResultDomain.FailReason, authenticationResultDto.Message);
         }
 
         [Test]
