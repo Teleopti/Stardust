@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		{
 			return new BusinessRulesValidationResult
 			{
-				BusinessRuleCategory = BusinessRuleCategory.SchedulePeriod,
+				BusinessRuleCategory = BusinessRuleCategory.SchedulePeriod.ToString(),
 				Message = UserTexts.Resources.SchedulePeriodNotInRange,
 				Name = x.Name.ToString(NameOrderOption.FirstNameLastName)
 			};

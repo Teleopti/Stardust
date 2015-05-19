@@ -12,7 +12,19 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeScheduleDataReadScheduleRepository : IScheduleRepository
 	{
+
+		public void InitRangeValues(int targetDaysOff, int scheduledDaysOff, TimeSpan targetContractTime, TimeSpan scheduledContractTime)
+		{
+			_targetDaysOff = targetDaysOff;
+			_scheduledDaysOff = scheduledDaysOff;
+			_targetContractTime = targetContractTime;
+			_scheduledContractTime = scheduledContractTime;
+		}
 		private IEnumerable<IScheduleData> _data = new List<IScheduleData>();
+		private int _targetDaysOff;
+		private int _scheduledDaysOff;
+		private TimeSpan _targetContractTime;
+		private TimeSpan _scheduledContractTime;
 
 		public DateTimePeriod ThePeriodThatWasUsedForFindingSchedules { get; private set; }
 
@@ -101,6 +113,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			var dateTimePeriod = period.VisiblePeriod;
 			var schedules = new ScheduleDictionaryForTest(scenario, dateTimePeriod);
 			var range = new ScheduleRange(schedules, new ScheduleParameters(scenario, visiblePersons.FirstOrDefault(), dateTimePeriod));
+			range.CalculatedScheduleDaysOff = _targetDaysOff;
+			range.CalculatedTargetScheduleDaysOff = _scheduledDaysOff;
+			range.CalculatedTargetTimeHolder = _targetContractTime;
+			range.CalculatedContractTimeHolder = _scheduledContractTime;
 			schedules.AddTestItem(visiblePersons.FirstOrDefault(), range);
 			return schedules;
 		}

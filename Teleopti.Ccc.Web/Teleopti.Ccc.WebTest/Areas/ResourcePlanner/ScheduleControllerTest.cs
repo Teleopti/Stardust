@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.ResourcePlanner;
 using Teleopti.Interfaces.Domain;
 
@@ -19,8 +20,8 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		public ScheduleController Target;
 		public IScheduleCommand ScheduleCommand;
 		public IPersonRepository FakePersonRepository;
-		public IDayOffsInPeriodCalculator FakeDayOffsInPeriodCalculator;
 		public ISchedulingResultStateHolder FakeSchedulingResultStateHolder;
+		public IScheduleRepository FakeScheduleDataReadScheduleRepository;
 
 		[Test]
 		public void ShouldScheduleFixedStaff()
@@ -74,7 +75,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			agent1 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(agent1, period.StartDate);
 			agent1.SetId(Guid.NewGuid());
 			FakePersonRepository.Add(agent1);
-			((FakeDayOffsInPeriodCalculator) FakeDayOffsInPeriodCalculator).SetCorrectDayOffValue();
+			((FakeScheduleDataReadScheduleRepository) FakeScheduleDataReadScheduleRepository).InitRangeValues(8,7,TimeSpan.Zero,TimeSpan.Zero); 
 			using (new CustomAuthorizationContext(new PrincipalAuthorizationWithFullPermission()))
 			{
 				var result =
@@ -92,6 +93,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			var period = new DateOnlyPeriod(2015, 5, 1, 2015, 5, 31);
 			IPerson agent1 = PersonFactory.CreatePersonWithPersonPeriodTeamSite(period.StartDate);
 			agent1 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(agent1, period.StartDate, ContractFactory.CreateContract("hourly"),PartTimePercentageFactory.CreatePartTimePercentage("hourly"));
+			((FakeScheduleDataReadScheduleRepository)FakeScheduleDataReadScheduleRepository).InitRangeValues(8, 8, TimeSpan.FromHours(8), TimeSpan.FromHours(7)); 
 			agent1.SetId(Guid.NewGuid());
 			FakePersonRepository.Add(agent1);
 			using (new CustomAuthorizationContext(new PrincipalAuthorizationWithFullPermission()))

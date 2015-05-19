@@ -31,12 +31,11 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		private readonly IScheduleRangePersister _persister;
 		private readonly Func<IPersonSkillProvider> _personSkillProvider;
 		private readonly ViolatedSchedulePeriodBusinessRule _violatedSchedulePeriodBusinessRule;
-		private readonly IDayOffsInPeriodCalculator _dayOffsInPeriodCalculator;
 
 		public ScheduleController(SetupStateHolderForWebScheduling setupStateHolderForWebScheduling,FixedStaffLoader fixedStaffLoader, IDayOffTemplateRepository dayOffTemplateRepository,
 					IActivityRepository activityRepository, Func<IFixedStaffSchedulingService> fixedStaffSchedulingService,Func<IScheduleCommand> scheduleCommand, Func<ISchedulerStateHolder> schedulerStateHolder,
 						Func<IRequiredScheduleHelper> requiredScheduleHelper, Func<IGroupPagePerDateHolder> groupPagePerDateHolder,Func<IScheduleTagSetter> scheduleTagSetter, 
-							Func<IPersonSkillProvider> personSkillProvider,IScheduleRangePersister persister, IDayOffsInPeriodCalculator dayOffsInPeriodCalculator,
+							Func<IPersonSkillProvider> personSkillProvider,IScheduleRangePersister persister,
 									ViolatedSchedulePeriodBusinessRule violatedSchedulePeriodBusinessRule)
 		{
 			_setupStateHolderForWebScheduling = setupStateHolderForWebScheduling;
@@ -51,7 +50,6 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			_scheduleTagSetter = scheduleTagSetter;
 			_personSkillProvider = personSkillProvider;
 			_persister = persister;
-			_dayOffsInPeriodCalculator = dayOffsInPeriodCalculator;
 			_violatedSchedulePeriodBusinessRule = violatedSchedulePeriodBusinessRule;
 		}
 
@@ -99,51 +97,54 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			{
 				conflicts.AddRange(_persister.Persist(schedule.Value));
 			}
-
-			var voilatedBusinessRules = getBusinessRulesValidationResults(people.SelectedPeople, period);
+			var schedulePeriodNotInRange = _violatedSchedulePeriodBusinessRule.GetResult(people.SelectedPeople, period).ToList();
+			var daysOffValidationResult = getDayOffBusinessRulesValidationResults(_schedulerStateHolder().Schedules, schedulePeriodNotInRange);
+			var voilatedBusinessRules = new List<BusinessRulesValidationResult>();
+			voilatedBusinessRules.AddRange(schedulePeriodNotInRange);
+			voilatedBusinessRules.AddRange(daysOffValidationResult);
 			return
 				Ok(new SchedulingResultModel
 				{
 					DaysScheduled = daysScheduled,
 					ConflictCount = conflicts.Count(),
-					//come up with something better or - slap my self -
-					ScheduledAgentsCount = people.SelectedPeople.Count - voilatedBusinessRules.Count(),
+					ScheduledAgentsCount = successfulScheduledAgents(_schedulerStateHolder().Schedules),
 					BusinessRulesValidationResults = voilatedBusinessRules
 				});
 		}
 
-		private IEnumerable<BusinessRulesValidationResult> getBusinessRulesValidationResults(IEnumerable<IPerson> selectedPeople, DateOnlyPeriod period)
+		private static int successfulScheduledAgents(IEnumerable<KeyValuePair<IPerson, IScheduleRange>> schedules)
 		{
-			var result = new List<BusinessRulesValidationResult>();
-			var schedulePeriodNotInRange = _violatedSchedulePeriodBusinessRule.GetResult(selectedPeople, period).ToList();
-			foreach (var person in selectedPeople)
-			{
-				int targetDaysOff;
-				IList<IScheduleDay> dayOffsNow;
-				var virtualSchedulePeriod = person.VirtualSchedulePeriod(period.StartDate);
-				if (virtualSchedulePeriod == null || !virtualSchedulePeriod.IsValid) continue;
-			   var hasCorrectNumberOfDayOff =_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(virtualSchedulePeriod, out targetDaysOff, out dayOffsNow);
-				if (!hasCorrectNumberOfDayOff && isNotAInvalidScheduleRange(schedulePeriodNotInRange, person))
-				{
-					result.Add(new BusinessRulesValidationResult()
-					{
-						BusinessRuleCategory = BusinessRuleCategory.DayOff,
-						Message = string.Format(UserTexts.Resources.TargetDayOffNotFulfilledMessage, targetDaysOff),
-						Name = person.Name.ToString(NameOrderOption.FirstNameLastName)
-					});
-				} 
-
-
-			}
-			result.AddRange(schedulePeriodNotInRange);
-			return result;
+			return
+				schedules.Count(
+					x =>
+						(x.Value.CalculatedContractTimeHolder.HasValue && x.Value.CalculatedTargetTimeHolder.HasValue) &&
+						(x.Value.CalculatedContractTimeHolder.Value != x.Value.CalculatedTargetTimeHolder));
 		}
 
-		private static bool isNotAInvalidScheduleRange(List<BusinessRulesValidationResult> schedulePeriodNotInRange, IPerson person)
+		private IEnumerable<BusinessRulesValidationResult> getDayOffBusinessRulesValidationResults(IEnumerable<KeyValuePair<IPerson, IScheduleRange>> schedules, List<BusinessRulesValidationResult> schedulePeriodNotInRange)
 		{
-			return !schedulePeriodNotInRange.Contains(new BusinessRulesValidationResult()
+			var result = new List<BusinessRulesValidationResult>();
+			foreach (var item in schedules )
 			{
-				BusinessRuleCategory = BusinessRuleCategory.SchedulePeriod,
+				if(isAmongInvalidScheduleRange(schedulePeriodNotInRange,item.Key)) continue;
+				var scheduleRange = item.Value;
+				if(scheduleRange.CalculatedTargetScheduleDaysOff.HasValue && scheduleRange.CalculatedScheduleDaysOff.HasValue )
+					if(scheduleRange.CalculatedTargetScheduleDaysOff != scheduleRange.CalculatedScheduleDaysOff)
+						result.Add(new BusinessRulesValidationResult()
+						{
+							BusinessRuleCategory = BusinessRuleCategory.DayOff.ToString(),
+							Message = string.Format(UserTexts.Resources.TargetDayOffNotFulfilledMessage, scheduleRange.CalculatedTargetScheduleDaysOff),
+							Name = item.Key.Name.ToString(NameOrderOption.FirstNameLastName)
+						});
+			}
+			return result;
+		} 
+
+		private static bool isAmongInvalidScheduleRange(List<BusinessRulesValidationResult> schedulePeriodNotInRange, IPerson person)
+		{
+			return schedulePeriodNotInRange.Contains(new BusinessRulesValidationResult()
+			{
+				BusinessRuleCategory = BusinessRuleCategory.SchedulePeriod.ToString(),
 				Name = person.Name.ToString(NameOrderOption.FirstNameLastName)
 			});
 		}
