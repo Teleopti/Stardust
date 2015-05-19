@@ -7,9 +7,9 @@ namespace Teleopti.Ccc.WinCode.Main
 	{
 		private static TenantCredentials _tenantCredentials;
 
-		public TenantCredentials TenantCredentials
+		public TenantCredentials TenantCredentials()
 		{
-			get{ return _tenantCredentials;}
+			return _tenantCredentials;
 		}
 
 		public static void SetCredentials(Guid personId, string tenantPassword)

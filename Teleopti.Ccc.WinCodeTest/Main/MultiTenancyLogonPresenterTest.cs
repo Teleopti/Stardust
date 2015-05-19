@@ -209,7 +209,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			_target.CurrentStep = LoginStep.SelectBu;
 			_target.OkbuttonClicked();
 
-			var credentials = new WinTenantCredentials().TenantCredentials;
+			var credentials = new WinTenantCredentials().TenantCredentials();
 			credentials.PersonId.Should().Be.EqualTo(personId);
 			credentials.TenantPassword.Should().Be.EqualTo(tenantPassword);
 		}
@@ -230,7 +230,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			_target.CurrentStep = LoginStep.SelectBu;
 			_target.OkbuttonClicked();
 
-			var credentials = new WinTenantCredentials().TenantCredentials;
+			var credentials = new WinTenantCredentials().TenantCredentials();
 			credentials.PersonId.Should().Be.EqualTo(personId);
 			credentials.TenantPassword.Should().Be.EqualTo(tenantPassword);
 		}

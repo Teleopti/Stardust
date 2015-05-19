@@ -2,6 +2,6 @@
 {
 	public interface ICurrentTenantCredentials
 	{
-		TenantCredentials TenantCredentials { get; } 
+		TenantCredentials TenantCredentials();
 	}
 }
