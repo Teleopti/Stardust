@@ -7,7 +7,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 {
 	public class FakeFixedStaffSchedulingService : IFixedStaffSchedulingService
 	{
-		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 		public IList<IWorkShiftFinderResult> FinderResults { get; private set; }
 		public void ClearFinderResults()
 		{
@@ -18,6 +17,12 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			bool breakIfPersonCannotSchedule, ISchedulePartModifyAndRollbackService rollbackService)
 		{
 			throw new NotImplementedException();
+		}
+
+		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled
+		{
+			add { }
+			remove { }
 		}
 	}
 }

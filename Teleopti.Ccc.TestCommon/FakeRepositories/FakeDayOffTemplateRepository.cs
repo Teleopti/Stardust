@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeDayOffTemplateRepository : IDayOffTemplateRepository
 	{
-		private IList<IDayOffTemplate> _dayOffTemplate;
 		public void Add(IDayOffTemplate entity)
 		{
 			throw new NotImplementedException();
