@@ -276,6 +276,9 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 			{
 				if (!logonDataCanBeChanged())
 					return;
+				_tenantData.Password = value;
+				_tenantData.Changed = true;
+
 				if (ContainedEntity.ApplicationAuthenticationInfo == null || string.IsNullOrEmpty(ContainedEntity.ApplicationAuthenticationInfo.ApplicationLogOnName))
 				{
 					_isValid = true;
@@ -286,8 +289,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 				if (!_isValid) //Is there a better solution for this?
 					writeMessage();
 				
-				_tenantData.Password = value;
-				_tenantData.Changed = true;
+				
 			}
 		}
 

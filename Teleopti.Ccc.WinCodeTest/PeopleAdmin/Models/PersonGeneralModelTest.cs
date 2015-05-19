@@ -216,44 +216,18 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 			Assert.AreEqual(setValue, getValue);
 		}
 
-		[Test]
-		public void ShouldCheckPasswordOnChangeOfApplicationLogOnName()
-		{
-			const string setValue = "AppUser123";
-
-			_base = MockRepository.GenerateMock<IPerson>();
-			var userDetail = MockRepository.GenerateMock<IUserDetail>();
-			var authInfo = MockRepository.GenerateMock<IApplicationAuthenticationInfo>();
-
-			_base.Stub(x => x.ApplicationAuthenticationInfo).Return(authInfo).Repeat.AtLeastOnce();
-			authInfo.Stub(x => x.ApplicationLogOnName = setValue);
-			authInfo.Stub(x => x.Password).Return("");
-			authInfo.Stub(x => x.ApplicationLogOnName).Return("AppUser123");
-
-			_principalAuthorization.Stub(
-				x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword, DateOnly.Today, _base))
-				.Return(true);
-			_base.Stub(x => x.ChangePassword("", null, userDetail)).Return(true);
-
-			_target = new PersonGeneralModel(_base, userDetail, _principalAuthorization, new PersonAccountUpdaterDummy(),
-				"Teleopti", new LogonInfoModel()) { ApplicationLogOnName = setValue };
-
-			_target.ApplicationLogOnName.Should().Be.EqualTo(setValue);
-		}
-
+		
 		[Test]
 		public void ShouldSayValidPasswordWhenApplicationLogOnNameIsEmpty()
 		{
-			const string setValue = "";
-			_base = MockRepository.GenerateMock<IPerson>();
+			_base = new Person();
 			var userDetail = MockRepository.GenerateMock<IUserDetail>();
 			_principalAuthorization.Stub(
 				x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword, DateOnly.Today, _base))
 				.Return(true);
-			_base.Stub(x => x.ApplicationAuthenticationInfo = null);
-
+			
 			_target = new PersonGeneralModel(_base, userDetail, _principalAuthorization, new PersonAccountUpdaterDummy(),
-				"Teleopti", new LogonInfoModel()) { ApplicationLogOnName = setValue };
+				"Teleopti", new LogonInfoModel {LogonName = "" });
 			_target.IsValid.Should().Be.True();
 		}
 
@@ -263,17 +237,14 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 			const string setValue = "passwordX07";
 			_base = MockRepository.GenerateMock<IPerson>();
 			var userDetail = MockRepository.GenerateMock<IUserDetail>();
-			var authInfo = MockRepository.GenerateMock<IApplicationAuthenticationInfo>();
-
-			_base.Stub(x => x.ApplicationAuthenticationInfo).Return(authInfo).Repeat.AtLeastOnce();
-			authInfo.Stub(x => x.ApplicationLogOnName).Return("userX07");
+			
 			_principalAuthorization.Stub(
 				x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword, DateOnly.Today, _base))
 				.Return(true);
-			_base.Stub(x => x.ChangePassword(setValue, null, userDetail)).Return(true);
-
 			_target = new PersonGeneralModel(_base, userDetail, _principalAuthorization, new PersonAccountUpdaterDummy(),
-				"Teleopti", new LogonInfoModel()) { Password = setValue };
+				"Teleopti", new LogonInfoModel()) {LogOnName = "userx07", Password = "" };
+			_target.Password = setValue;
+			_target.TenantData.Password.Should().Be.EqualTo(setValue);
 		}
 
 		[Test]
@@ -393,22 +364,20 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 		public void ShouldNotChangeIfUserHasNoPermissionToChangeLogOnAndPassword()
 		{
 			const string oldLogOnInfo = "oldLogOnInfo";
-			_base.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo { ApplicationLogOnName = oldLogOnInfo, Password = oldLogOnInfo };
-			_base.AuthenticationInfo = new AuthenticationInfo { Identity = oldLogOnInfo };
 			_principalAuthorization.Stub(
 				x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword, DateOnly.Today, _base))
 				.Return(false);
 
 			_target = new PersonGeneralModel(_base, new UserDetail(_base), _principalAuthorization,
-				new PersonAccountUpdaterDummy(), "Teleopti", new LogonInfoModel{LogonName = oldLogOnInfo});
-
+				new PersonAccountUpdaterDummy(), "Teleopti", new LogonInfoModel{LogonName = oldLogOnInfo, Identity = oldLogOnInfo});
+			_target.ApplicationLogOnName.Should().Be.EqualTo(oldLogOnInfo);
 			_target.ApplicationLogOnName = "";
 			_target.LogOnName = "";
-			_target.Password = "";
+			_target.Password = "newPass";
 
 			Assert.That(_target.ApplicationLogOnName, Is.EqualTo(oldLogOnInfo));
 			Assert.That(_target.LogOnName, Is.EqualTo(oldLogOnInfo));
-			Assert.That(_target.Password, Is.EqualTo(oldLogOnInfo));
+			Assert.That(_target.Password, Is.EqualTo(""));
 		}
 
 		[Test]
