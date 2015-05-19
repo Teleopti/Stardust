@@ -5,9 +5,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 {
 	public class SuccessfulPasswordPolicy : IVerifyPasswordPolicy
 	{
-		public AuthenticationResult Check(ApplicationLogonInfo userDetail)
+		public PasswordPolicyResult Check(ApplicationLogonInfo userDetail)
 		{
-			return new AuthenticationResult{Successful = true};
+			return new PasswordPolicyResult{Successful = true};
 		}
 	}
 }

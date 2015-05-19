@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 			
 			var checkPasswordChange = MockRepository.GenerateMock<IVerifyPasswordPolicy>();
 			checkPasswordChange.Expect(x => x.Check(personInfo.ApplicationLogonInfo))
-				.Return(new AuthenticationResult { HasMessage = true, Message = "THEMESSAGE", Successful = true, PasswordExpired = false });
+				.Return(new PasswordPolicyResult { HasMessage = true, Message = "THEMESSAGE", Successful = true, PasswordExpired = false });
 
 			var target = new ApplicationAuthentication(findApplicationQuery,
 				new DataSourceConfigurationProviderFake(), () => new DummyPasswordPolicy(), new Now(), checkPasswordChange);
@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 			findApplicationQuery.Expect(x => x.Find(userName)).Return(personInfo);
 			var checkPasswordChange = MockRepository.GenerateMock<IVerifyPasswordPolicy>();
 			checkPasswordChange.Expect(x => x.Check(personInfo.ApplicationLogonInfo))
-				.Return(new AuthenticationResult { HasMessage = true, Message = "THEMESSAGE", Successful = false, PasswordExpired = true});
+				.Return(new PasswordPolicyResult { HasMessage = true, Message = "THEMESSAGE", Successful = false, PasswordExpired = true});
 
 			var target = new ApplicationAuthentication(findApplicationQuery, new DataSourceConfigurationProviderFake(), () => new DummyPasswordPolicy(), new Now(), checkPasswordChange);
 
@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 			findApplicationQuery.Expect(x => x.Find(userName)).Return(personInfo);
 			var checkPasswordChange = MockRepository.GenerateMock<IVerifyPasswordPolicy>();
 			checkPasswordChange.Expect(x => x.Check(personInfo.ApplicationLogonInfo))
-				.Return(new AuthenticationResult { HasMessage = true, Message = "THEMESSAGE", Successful = false });
+				.Return(new PasswordPolicyResult { HasMessage = true, Message = "THEMESSAGE", Successful = false });
 
 			var target = new ApplicationAuthentication(findApplicationQuery,
 				new DataSourceConfigurationProviderFake(), () => new DummyPasswordPolicy(), new Now(), checkPasswordChange);

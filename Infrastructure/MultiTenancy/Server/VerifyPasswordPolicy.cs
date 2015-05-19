@@ -14,12 +14,12 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 			_passwordPolicy = passwordPolicy;
 		}
 
-		public AuthenticationResult Check(ApplicationLogonInfo userDetail)
+		public PasswordPolicyResult Check(ApplicationLogonInfo userDetail)
 		{
 			var lastPasswordChange = userDetail.LastPasswordChange;
 			var passwordValidForDayCount = _passwordPolicy().PasswordValidForDayCount;
 			var maxDays = DateTime.MaxValue.Subtract(lastPasswordChange);
-			var result = new AuthenticationResult { Successful = true };
+			var result = new PasswordPolicyResult { Successful = true };
 			var utcNow = DateTime.UtcNow;
 
 			var expirationDate = DateTime.MaxValue;

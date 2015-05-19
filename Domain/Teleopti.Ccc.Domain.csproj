@@ -1577,7 +1577,7 @@
     <Compile Include="Security\AuthorizationEntities\IApplicationFunctionsProvider.cs" />
     <Compile Include="Security\AuthorizationEntities\SystemFunction.cs" />
     <Compile Include="Security\INhibConfigDecryption.cs" />
-    <Compile Include="Security\Authentication\AuthenticationResult.cs" />
+    <Compile Include="Security\Authentication\PasswordPolicyResult.cs" />
     <Compile Include="Security\Authentication\AvailableBusinessUnitsProvider.cs" />
     <Compile Include="Security\Authentication\DataSourceContainer.cs" />
     <Compile Include="Security\Authentication\DummyPasswordPolicy.cs" />

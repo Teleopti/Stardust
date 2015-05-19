@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 			passwordPolicy.Stub(x => x.PasswordValidForDayCount).Return(int.MaxValue);
 			passwordPolicy.Stub(x => x.PasswordExpireWarningDayCount).Return(6);
 
-			AuthenticationResult result = target.Check(_applicationLogonInfo);
+			PasswordPolicyResult result = target.Check(_applicationLogonInfo);
 			Assert.IsTrue(result.Successful);
 			Assert.IsNotNull(result);
 		}
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 		{
 			passwordPolicy.Stub(x => x.PasswordValidForDayCount).Return(10);
 			var passwordPolicyForUser = new ApplicationLogonInfoTest();
-			AuthenticationResult result = target.Check(passwordPolicyForUser);
+			PasswordPolicyResult result = target.Check(passwordPolicyForUser);
 			Assert.IsFalse(result.Successful);
 			Assert.IsTrue(result.HasMessage);
 			Assert.IsTrue(result.PasswordExpired);
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 			passwordPolicy.Stub(x => x.PasswordValidForDayCount).Return(5);
 			passwordPolicy.Stub(x => x.PasswordExpireWarningDayCount).Return(6);
 
-			AuthenticationResult result = target.Check(_applicationLogonInfo);
+			PasswordPolicyResult result = target.Check(_applicationLogonInfo);
 			Assert.IsTrue(result.Successful);
 			Assert.IsTrue(result.HasMessage);
 			Assert.IsFalse(string.IsNullOrEmpty(result.Message));
