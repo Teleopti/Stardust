@@ -27,13 +27,45 @@ angular.module('wfm.forecasting', [])
 			angular.forEach($scope.targets, function(workload) {
 				workloads.push({ WorkloadId: workload.Id, ForecastMethodId: workload.Method });
 			});
-			$http.post('../api/Forecasting/Forecast', JSON.stringify({ ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate, Workloads: workloads })).
-				success(function(data, status, headers, config) {
-					$scope.result = { success: true, message: 'You now have an updated forecast for the following workloads in your default scenario, based on last year\'s data:' };
-				}).
-				error(function(data, status, headers, config) {
-					$scope.result = { success: false, message: 'The forecast has failed. Please try again later' };
+
+			var forecastForOneWorkload = function(index) {
+				var workload = workloads[index];
+				if (!workload) {
+					return;
+				}
+
+				var findWorkload = function (func) {
+					angular.forEach($scope.targets, function (target) {
+						if (workload.WorkloadId === target.Id) {
+							func(target);
+						}
+					});
+				}
+
+				findWorkload(function (target) {
+					target.ShowProgress = true;
 				});
+
+				$http.post('../api/Forecasting/Forecast', JSON.stringify({ ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate, Workloads: [workload] })).
+					success(function (data, status, headers, config) {
+						findWorkload(function (target) {
+							target.IsSuccess = true;
+						});
+					}).
+					error(function (data, status, headers, config) {
+						findWorkload(function (target) {
+							target.IsFailed = true;
+						});
+					})
+					.finally(function () {
+						forecastForOneWorkload(++index);
+						findWorkload(function (target) {
+							target.ShowProgress = false;
+						});
+					});
+			};
+
+			forecastForOneWorkload(0);
 		}
 	])
 	.controller('ForecastingRunAllCtrl', [
@@ -54,14 +86,6 @@ angular.module('wfm.forecasting', [])
 					workloads.push({ WorkloadId: workload.Id, ForecastMethodId: -1 });
 				});
 
-				angular.forEach(workloads, function(workload) {
-					angular.forEach($scope.targets, function(target) {
-						if (workload.WorkloadId === target.Id) {
-							target.ShowProgress = true;
-						}
-					});
-				});
-
 				var findWorkloads =function(func) {
 					angular.forEach(workloads, function (workload) {
 						angular.forEach($scope.targets, function (target) {
@@ -72,6 +96,10 @@ angular.module('wfm.forecasting', [])
 					});
 				}
 
+				findWorkloads(function (target) {
+					target.ShowProgress = true;
+				});
+
 				$http.post('../api/Forecasting/Forecast', JSON.stringify({ ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate, Workloads: workloads })).
 					success(function (data, status, headers, config) {
 						findWorkloads(function (target) {
@@ -80,10 +108,10 @@ angular.module('wfm.forecasting', [])
 					}).
 					error(function (data, status, headers, config) {
 						findWorkloads(function (target) {
-							target.IsFailed = false;
+							target.IsFailed = true;
 						});
 					})
-					.then(function() {
+					.finally(function () {
 						forecastForOneSkill(++index);
 						findWorkloads(function (target) {
 							target.ShowProgress = false;
@@ -95,7 +123,7 @@ angular.module('wfm.forecasting', [])
 				$scope.skills = result;
 				angular.forEach($scope.skills, function (skill) {
 					angular.forEach(skill.Workloads, function(workload) {
-						$scope.targets.push({ Id: workload.Id, Name: skill.Name + " / " + workload.Name, IsSuccess: false });
+						$scope.targets.push({ Id: workload.Id, Name: skill.Name + " / " + workload.Name });
 					});
 				});
 
