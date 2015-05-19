@@ -1,18 +1,18 @@
 <div class="material-block-content">
 	<div class="row">
-		<div ng-if="!result" class="text-center">
-			<md-progress-linear md-mode="indeterminate"></md-progress-linear>
-		</div>
 		<h4>
 			{{'From' | translate}} {{period.startDate | date : shortDate}} {{'To' | translate}} {{period.endDate | date : shortDate}}
 		</h4>
 	</div>
-	<div ng-if="result" ng-class="result.success ? 'success' : 'fail'">
+	<div>
 		{{result.message}}
 		<div>
 			<ul class="wfm-list">
 				<li ng-repeat="workload in targets">
 					{{workload.Name}}
+					<span class="pull-right" ng-if="workload.IsSuccess"><i class="mdi mdi-check"></i></span>
+					<span class="pull-right" ng-if="workload.IsFailed"><i class="mdi mdi-close"></i></span>
+					<md-progress-linear ng-if="workload.ShowProgress" md-mode="indeterminate"></md-progress-linear>
 				</li>
 			</ul>
 		</div>

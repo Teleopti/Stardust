@@ -37,18 +37,69 @@ angular.module('wfm.forecasting', [])
 		}
 	])
 	.controller('ForecastingRunAllCtrl', [
-		'$scope', '$stateParams', '$http',
-		function($scope, $stateParams, $http) {
+		'$scope', '$stateParams', '$http', 'Forecasting',
+		function ($scope, $stateParams, $http, forecasting) {
 
 			$scope.period = $stateParams.period;
+			$scope.targets = [];
 
-			$http.post('../api/Forecasting/ForecastAll', JSON.stringify({ ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate })).
-				success(function(data, status, headers, config) {
-					$scope.result = { success: true, message: 'You now have an updated forecast in your default scenario, based on last year\'s data.' };
-				}).
-				error(function(data, status, headers, config) {
-					$scope.result = { success: false, message: 'The forecast has failed. Please try again later' };
+
+			var forecastForOneSkill = function(index) {
+				var skill = $scope.skills[index];
+				if (!skill) {
+					return;
+				}
+				var workloads = [];
+				angular.forEach(skill.Workloads, function(workload) {
+					workloads.push({ WorkloadId: workload.Id, ForecastMethodId: -1 });
 				});
 
+				angular.forEach(workloads, function(workload) {
+					angular.forEach($scope.targets, function(target) {
+						if (workload.WorkloadId === target.Id) {
+							target.ShowProgress = true;
+						}
+					});
+				});
+
+				var findWorkloads =function(func) {
+					angular.forEach(workloads, function (workload) {
+						angular.forEach($scope.targets, function (target) {
+							if (workload.WorkloadId === target.Id) {
+								func(target);
+							}
+						});
+					});
+				}
+
+				$http.post('../api/Forecasting/Forecast', JSON.stringify({ ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate, Workloads: workloads })).
+					success(function (data, status, headers, config) {
+						findWorkloads(function (target) {
+							target.IsSuccess = true;
+						});
+					}).
+					error(function (data, status, headers, config) {
+						findWorkloads(function (target) {
+							target.IsFailed = false;
+						});
+					})
+					.then(function() {
+						forecastForOneSkill(++index);
+						findWorkloads(function (target) {
+							target.ShowProgress = false;
+						});
+					});
+			}
+
+			forecasting.skills.query().$promise.then(function (result) {
+				$scope.skills = result;
+				angular.forEach($scope.skills, function (skill) {
+					angular.forEach(skill.Workloads, function(workload) {
+						$scope.targets.push({ Id: workload.Id, Name: skill.Name + " / " + workload.Name, IsSuccess: false });
+					});
+				});
+
+				forecastForOneSkill(0);
+			});
 		}
 	]);
