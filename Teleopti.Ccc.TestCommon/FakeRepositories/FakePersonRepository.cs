@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate.Mapping;
 using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
@@ -141,12 +142,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IEnumerable<Tuple<Guid, Guid>> PeopleSkillMatrix(IScenario scenario, DateTimePeriod period)
 		{
-			throw new NotImplementedException();
+			return new List<Tuple<Guid, Guid>>();
 		}
 
 		public IEnumerable<Guid> PeopleSiteMatrix(DateTimePeriod period)
 		{
-			throw new NotImplementedException();
+			return new List<Guid> {Guid.NewGuid()};
 		}
 
 		public ICollection<IPerson> FindPeopleInOrganizationLight(DateOnlyPeriod period)

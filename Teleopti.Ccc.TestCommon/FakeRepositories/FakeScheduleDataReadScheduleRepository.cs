@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
@@ -96,7 +98,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		                                                   IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
 		                                                   IEnumerable<IPerson> visiblePersons)
 		{
-			throw new NotImplementedException();
+			var dateTimePeriod = period.VisiblePeriod;
+			var schedules = new ScheduleDictionaryForTest(scenario, dateTimePeriod);
+			var range = new ScheduleRange(schedules, new ScheduleParameters(scenario, visiblePersons.FirstOrDefault(), dateTimePeriod));
+			schedules.AddTestItem(visiblePersons.FirstOrDefault(), range);
+			return schedules;
 		}
 
 		public IPersistableScheduleData LoadScheduleDataAggregate(Type scheduleDataType, Guid id)

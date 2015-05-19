@@ -30,14 +30,14 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		private readonly Func<IScheduleTagSetter> _scheduleTagSetter;
 		private readonly IScheduleRangePersister _persister;
 		private readonly Func<IPersonSkillProvider> _personSkillProvider;
-		private readonly VoilatedSchedulePeriodBusinessRule _voilatedSchedulePeriodBusinessRule;
+		private readonly ViolatedSchedulePeriodBusinessRule _violatedSchedulePeriodBusinessRule;
 		private readonly IDayOffsInPeriodCalculator _dayOffsInPeriodCalculator;
 
 		public ScheduleController(SetupStateHolderForWebScheduling setupStateHolderForWebScheduling,FixedStaffLoader fixedStaffLoader, IDayOffTemplateRepository dayOffTemplateRepository,
 					IActivityRepository activityRepository, Func<IFixedStaffSchedulingService> fixedStaffSchedulingService,Func<IScheduleCommand> scheduleCommand, Func<ISchedulerStateHolder> schedulerStateHolder,
 						Func<IRequiredScheduleHelper> requiredScheduleHelper, Func<IGroupPagePerDateHolder> groupPagePerDateHolder,Func<IScheduleTagSetter> scheduleTagSetter, 
 							Func<IPersonSkillProvider> personSkillProvider,IScheduleRangePersister persister, IDayOffsInPeriodCalculator dayOffsInPeriodCalculator,
-									VoilatedSchedulePeriodBusinessRule voilatedSchedulePeriodBusinessRule)
+									ViolatedSchedulePeriodBusinessRule violatedSchedulePeriodBusinessRule)
 		{
 			_setupStateHolderForWebScheduling = setupStateHolderForWebScheduling;
 			_fixedStaffLoader = fixedStaffLoader;
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			_personSkillProvider = personSkillProvider;
 			_persister = persister;
 			_dayOffsInPeriodCalculator = dayOffsInPeriodCalculator;
-			_voilatedSchedulePeriodBusinessRule = voilatedSchedulePeriodBusinessRule;
+			_violatedSchedulePeriodBusinessRule = violatedSchedulePeriodBusinessRule;
 		}
 
 		[HttpPost, Route("api/ResourcePlanner/Schedule/FixedStaff"), Authorize, UnitOfWork]
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		private IEnumerable<BusinessRulesValidationResult> getBusinessRulesValidationResults(IEnumerable<IPerson> selectedPeople, DateOnlyPeriod period)
 		{
 			var result = new List<BusinessRulesValidationResult>();
-			var schedulePeriodNotInRange = _voilatedSchedulePeriodBusinessRule.GetResult(selectedPeople, period).ToList();
+			var schedulePeriodNotInRange = _violatedSchedulePeriodBusinessRule.GetResult(selectedPeople, period).ToList();
 			foreach (var person in selectedPeople)
 			{
 				int targetDaysOff;

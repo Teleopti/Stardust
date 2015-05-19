@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterModule<BackToLegalShiftModule>();
 			builder.RegisterModule<ScheduleOvertimeModule>();
 
-			builder.RegisterType<ClassicScheduleCommand>().InstancePerLifetimeScope();
+			builder.RegisterType<ClassicScheduleCommand>().As<IClassicScheduleCommand>().InstancePerLifetimeScope();
 			builder.RegisterType<ScheduleCommand>().As<IScheduleCommand>().InstancePerLifetimeScope();
 			builder.RegisterType<OptimizationCommand>().InstancePerLifetimeScope();
 			builder.RegisterType<DayOffOptimizationDecisionMakerFactory>().As<IDayOffOptimizationDecisionMakerFactory>().InstancePerLifetimeScope();

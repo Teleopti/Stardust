@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 {
-	public class VoilatedSchedulePeriodBusinessRule
+	public class ViolatedSchedulePeriodBusinessRule
 	{
 		public IEnumerable<BusinessRulesValidationResult> GetResult(IEnumerable<IPerson> persons, DateOnlyPeriod period)
 		{

@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		[Test]
 		public void ShouldReturnMissingScheduleIfNoScheduleIsFound()
 		{
-			var target = new VoilatedSchedulePeriodBusinessRule();
+			var target = new ViolatedSchedulePeriodBusinessRule();
 			var persons = new List<IPerson>() { PersonFactory.CreatePerson("a")};
 			var result = target.GetResult(persons, new DateOnlyPeriod(2015,05,08,2015,05,15));
 			result.ToList().Count.Should().Be.EqualTo(1);
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		[Test]
 		public void ShouldReturnMissingScheduleIfSchedulePeriodIsOutsideRange()
 		{
-			var target = new VoilatedSchedulePeriodBusinessRule();
+			var target = new ViolatedSchedulePeriodBusinessRule();
 			var person = PersonFactory.CreatePerson("a");
 			var persons = new List<IPerson>()
 			{
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		[Test]
 		public void ShouldNotReturnMissingScheduleIfSchedulePeriodIsInRange()
 		{
-			var target = new VoilatedSchedulePeriodBusinessRule();
+			var target = new ViolatedSchedulePeriodBusinessRule();
 			var person = PersonFactory.CreatePerson("a");
 			person = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(person, new DateOnly(2015, 05, 08));
 			var persons = new List<IPerson> {person};
