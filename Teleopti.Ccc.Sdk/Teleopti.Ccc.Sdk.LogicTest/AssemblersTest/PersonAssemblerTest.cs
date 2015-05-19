@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 	{
 		private PersonAssembler _target;
 		private IAssembler<IWorkflowControlSet, WorkflowControlSetDto> _workflowControlSetAssembler;
-		private MockRepository _mocks;
 		private IPersonRepository _personRepository;
 		private IPersonAccountUpdater _personAccountUpdater;
 		private ITenantPeopleLoader _tenantPeopleLoader;
@@ -28,9 +27,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		[SetUp]
 		public void Setup()
 		{
-			_mocks = new MockRepository();
-			_personRepository = _mocks.StrictMock<IPersonRepository>();
-			_workflowControlSetAssembler = _mocks.StrictMock<IAssembler<IWorkflowControlSet, WorkflowControlSetDto>>();
+			_personRepository = MockRepository.GenerateMock<IPersonRepository>();
+			_workflowControlSetAssembler = MockRepository.GenerateMock<IAssembler<IWorkflowControlSet, WorkflowControlSetDto>>();
 			_personAccountUpdater = MockRepository.GenerateMock<IPersonAccountUpdater>();
 			_tenantPeopleLoader = MockRepository.GenerateMock<ITenantPeopleLoader>();
 			_target = new PersonAssembler(_personRepository, _workflowControlSetAssembler, _personAccountUpdater, _tenantPeopleLoader);
@@ -67,21 +65,13 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		public void VerifyDomainEntityToDto()
 		{
 			var person = CreatePerson(true);
-			person.AuthenticationInfo = new AuthenticationInfo { Identity = @"DOM\AIN" };
-			person.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo { ApplicationLogOnName = "App", Password = "Pass" };
-			using (_mocks.Record())
-			{
-				Expect.Call(_workflowControlSetAssembler.DomainEntityToDto(person.WorkflowControlSet))
+			_workflowControlSetAssembler.Stub(x => x.DomainEntityToDto(person.WorkflowControlSet))
 					 .Return(new WorkflowControlSetDto { Id = person.WorkflowControlSet.Id })
 					 .IgnoreArguments()
 					 .Repeat.Once();
-			}
-
-			_mocks.ReplayAll();
 
 			var personDto = _target.DomainEntityToDto(person);
-
-			_mocks.VerifyAll();
+			_tenantPeopleLoader.AssertWasCalled(x => x.FillDtosWithLogonInfo(Arg<List<PersonDto>>.Is.Anything));
 
 			Assert.AreEqual(person.Id, personDto.Id);
 			Assert.AreEqual(person.Name.ToString(), personDto.Name);
@@ -92,10 +82,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			Assert.AreEqual(person.PermissionInformation.CultureLCID(), personDto.CultureLanguageId);
 			Assert.AreEqual(person.PermissionInformation.UICultureLCID(), personDto.UICultureLanguageId);
 			Assert.AreEqual(person.PermissionInformation.DefaultTimeZone().Id, personDto.TimeZoneId);
-			Assert.AreEqual(person.ApplicationAuthenticationInfo.ApplicationLogOnName, personDto.ApplicationLogOnName);
-#pragma warning disable 618
-			Assert.AreEqual(person.AuthenticationInfo.Identity, personDto.WindowsDomain + @"\" + personDto.WindowsLogOnName);
-#pragma warning restore 618
 			Assert.AreEqual(person.PersonPeriodCollection.Count(), personDto.PersonPeriodCollection.Count);
 			Assert.AreEqual(person.WorkflowControlSet.Id, personDto.WorkflowControlSet.Id);
 			Assert.AreEqual(person.Note, personDto.Note);
@@ -107,35 +93,22 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		public void ShouldMapDomainEntityWithoutWorkflowControlSetToDto()
 		{
 			var person = CreatePerson(false);
-
-			_mocks.Record();
-
-			_mocks.ReplayAll();
-
 			var personDto = _target.DomainEntityToDto(person);
 
 			Assert.That(personDto.WorkflowControlSet, Is.Null);
-
-			_mocks.VerifyAll();
 		}
 
 		[Test]
 		public void VerifyCanTransformToDomainObject()
 		{
 			var person = CreatePerson(true);
-			person.AuthenticationInfo = new AuthenticationInfo { Identity = @"DOMATRIX\DONNA" };
-			using (_mocks.Record())
-			{
-				Expect.Call(_personRepository.Get(person.Id.Value))
-					 .Return(person);
+			_personRepository.Stub(x => x.Get(person.Id.Value)).Return(person);
 
-				Expect.Call(_workflowControlSetAssembler.DomainEntityToDto(person.WorkflowControlSet))
-					 .Return(new WorkflowControlSetDto { Id = person.WorkflowControlSet.Id })
-					 .IgnoreArguments()
-					 .Repeat.Any();
-			}
+			_workflowControlSetAssembler.Stub(x => x.DomainEntityToDto(person.WorkflowControlSet))
+				 .Return(new WorkflowControlSetDto { Id = person.WorkflowControlSet.Id })
+				 .IgnoreArguments()
+				 .Repeat.Any();
 
-			_mocks.ReplayAll();
 
 			var personDto = _target.DomainEntityToDto(person);
 			personDto.CultureLanguageId = 1053;
@@ -154,40 +127,32 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			Assert.AreEqual(personDto.EmploymentNumber, personDo.EmploymentNumber);
 			Assert.AreEqual(personDo.PermissionInformation.UICultureLCID(), 1025);
 			Assert.AreEqual(personDo.PermissionInformation.CultureLCID(), 1053);
-			Assert.AreEqual(personDto.ApplicationLogOnName, "");
-			Assert.AreEqual(personDto.ApplicationLogOnPassword, "");
-#pragma warning disable 618
-			Assert.AreEqual(personDto.WindowsDomain + @"\" + personDto.WindowsLogOnName, personDo.AuthenticationInfo.Identity);
-#pragma warning restore 618
+
 			Assert.AreEqual(personDto.Note, personDo.Note);
 			Assert.AreEqual(personDto.TimeZoneId, personDo.PermissionInformation.DefaultTimeZone().DisplayName);
 			Assert.AreEqual(personDto.TerminationDate.DateTime, personDo.TerminalDate.Value.Date);
 			Assert.AreEqual(personDto.Note, personDo.Note);
 			Assert.AreEqual(personDto.IsDeleted, ((Person)personDo).IsDeleted);
-
-			_mocks.VerifyAll();
 		}
 
 		[Test]
 		public void VerifyCanTransformToDomainObjectFromNewPersonDto()
 		{
-			var personDto = new PersonDto();
-#pragma warning disable 618
-			personDto.WindowsLogOnName = "kallekWindows";
-			personDto.WindowsDomain = "toptinet";
-#pragma warning restore 618
-			personDto.ApplicationLogOnName = "kallek";
-			personDto.ApplicationLogOnPassword = "mammamu";
-			personDto.Email = "kalle.kula@teleopti.com";
-			personDto.EmploymentNumber = "abc123";
-			personDto.FirstName = "Kalle";
-			personDto.LastName = "Kula";
-			personDto.TimeZoneId = "W. Europe Standard Time";
-			personDto.WorkflowControlSet = null;
-			personDto.CultureLanguageId = 1053;
-			personDto.UICultureLanguageId = 1025;
-			personDto.Note = "Moahaha";
-			personDto.IsDeleted = true;
+			var personDto = new PersonDto
+			{
+				ApplicationLogOnName = "kallek",
+				ApplicationLogOnPassword = "mammamu",
+				Email = "kalle.kula@teleopti.com",
+				EmploymentNumber = "abc123",
+				FirstName = "Kalle",
+				LastName = "Kula",
+				TimeZoneId = "W. Europe Standard Time",
+				WorkflowControlSet = null,
+				CultureLanguageId = 1053,
+				UICultureLanguageId = 1025,
+				Note = "Moahaha",
+				IsDeleted = true
+			};
 
 			var personDo = _target.DtoToDomainEntity(personDto);
 
@@ -198,9 +163,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			Assert.AreEqual(personDto.EmploymentNumber, personDo.EmploymentNumber);
 			Assert.AreEqual(personDto.UICultureLanguageId, personDo.PermissionInformation.UICultureLCID());
 			Assert.AreEqual(personDto.CultureLanguageId, personDo.PermissionInformation.CultureLCID());
-			//Because it is deleted
-			Assert.That(personDo.AuthenticationInfo, Is.Null);
-			Assert.That(personDo.ApplicationAuthenticationInfo, Is.Null);
 			Assert.AreEqual(personDto.CultureLanguageId, personDo.PermissionInformation.CultureLCID());
 			Assert.AreEqual(personDto.UICultureLanguageId, personDo.PermissionInformation.UICultureLCID());
 			Assert.AreEqual(personDto.IsDeleted, ((Person)personDo).IsDeleted);
@@ -212,7 +174,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			string timeZone = "W. Europe Standard Time";
 			int culture = 1053;
 
-			var personDto = new PersonDto {TimeZoneId = timeZone, CultureLanguageId = culture};
+			var personDto = new PersonDto { TimeZoneId = timeZone, CultureLanguageId = culture };
 
 			_target.DtoToDomainEntity(personDto);
 		}
@@ -221,11 +183,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		public void VerifyCannotUpdatePersonWithoutName()
 		{
 			var personId = Guid.NewGuid();
-			using (_mocks.Record())
-			{
-				Expect.Call(_personRepository.Get(personId))
-					 .Return(PersonFactory.CreatePerson());
-			}
+			_personRepository.Stub(x => x.Get(personId)).Return(PersonFactory.CreatePerson());
+
 			string timeZone = "W. Europe Standard Time";
 			int culture = 1053;
 
@@ -244,7 +203,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			string lastName = "Kula";
 			int culture = 1053;
 
-			var personDto = new PersonDto {FirstName = firstName, LastName = lastName, CultureLanguageId = culture};
+			var personDto = new PersonDto { FirstName = firstName, LastName = lastName, CultureLanguageId = culture };
 
 			_target.DtoToDomainEntity(personDto);
 		}
