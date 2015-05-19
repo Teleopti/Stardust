@@ -75,54 +75,33 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			Assert.That(_model.HasValidLogin(), Is.True);
 		}
 
-
-		[Test, Ignore("Ola: temp")]
+		[Test]
 		public void ShouldGetBusAfterLogin()
 		{
-			var dataSourceContainer = MockRepository.GenerateMock<IDataSourceContainer>();
-			var person = MockRepository.GenerateMock<IPerson>();
-			var appAuthInfo = MockRepository.GenerateMock<IApplicationAuthenticationInfo>();
-			var buProvider = MockRepository.GenerateMock<IAvailableBusinessUnitsProvider>();
-			_model.SelectedDataSourceContainer = dataSourceContainer;
-			_model.UserName = "USER";
-			_model.Password = "PASS";
-
-			dataSourceContainer.Stub(x => x.User).Return(person);
-			person.Stub(x => x.ApplicationAuthenticationInfo).Return(appAuthInfo);
-			appAuthInfo.Stub(x => x.Password = "PASS");
-			dataSourceContainer.Stub(x => x.AvailableBusinessUnitProvider).Return(buProvider);
-			buProvider.Stub(x => x.AvailableBusinessUnits(_repFactory)).Return(new List<IBusinessUnit>());
-			_view.Stub(x => x.ShowErrorMessage(Resources.NoAllowedBusinessUnitFoundInCurrentDatabase, Resources.ErrorMessage));
-			_view.Stub(x => x.ShowStep(true));
-			_target.CurrentStep = LoginStep.Login;
-			_target.OkbuttonClicked();
-		}
-
-		[Test, Ignore("Ola: temp")]
-		public void ShouldGetBusAfterLoginIfOneSkipSelect()
-		{
-			var dataSourceContainer = MockRepository.GenerateMock<IDataSourceContainer>();
 			var dataSource = MockRepository.GenerateMock<IDataSource>();
 			var uowFact = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			var person = MockRepository.GenerateMock<IPerson>();
-			var appAuthInfo = MockRepository.GenerateMock<IApplicationAuthenticationInfo>();
-			var buProvider = MockRepository.GenerateMock<IAvailableBusinessUnitsProvider>();
-			var bu = new BusinessUnit("Bu One");
-			_model.SelectedDataSourceContainer = dataSourceContainer;
+			var permiss = MockRepository.GenerateMock<IPermissionInformation>();
+			var appAuthInfo = new AuthenticationResult{Successful = true, Person = person, DataSource = dataSource};
+			var buRep = MockRepository.GenerateMock<IBusinessUnitRepository>();
+			
 			_model.UserName = "USER";
 			_model.Password = "PASS";
-			_model.SelectedBu = bu;
-			dataSourceContainer.Stub(x => x.DataSource).Return(dataSource);
+
+			_appLogon.Stub(x => x.Logon("USER","PASS", "WIN")).Return(appAuthInfo);
+			
+			person.Stub(x => x.PermissionInformation).Return(permiss);
+			permiss.Stub(x => x.HasAccessToAllBusinessUnits()).Return(true);
 			dataSource.Stub(x => x.Application).Return(uowFact);
-			//_appLogon.Stub(x => x.Logon(_model, MultiTenancyLogonPresenter.UserAgent)).Return(new AuthenticationResult { Successful = true }).IgnoreArguments();
-			dataSourceContainer.Stub(x => x.User).Return(person);
-			person.Stub(x => x.ApplicationAuthenticationInfo).Return(appAuthInfo);
-			appAuthInfo.Stub(x => x.Password = "PASS");
-			dataSourceContainer.Stub(x => x.AvailableBusinessUnitProvider).Return(buProvider);
-			buProvider.Stub(x => x.AvailableBusinessUnits(_repFactory)).Return(new List<IBusinessUnit> { bu });
-			_view.Stub(x => x.ClearForm(Resources.InitializingTreeDots));
+			var uow = MockRepository.GenerateMock<IUnitOfWork>();
+			uowFact.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
+			_repFactory.Stub(x => x.CreateBusinessUnitRepository(uow)).Return(buRep);
+			buRep.Stub(x => x.LoadAllBusinessUnitSortedByName()).Return(new List<IBusinessUnit>());
+			
+			_view.Stub(x => x.ShowStep(true));
 			_target.CurrentStep = LoginStep.Login;
 			_target.OkbuttonClicked();
+			_view.AssertWasCalled(x => x.ShowErrorMessage(Resources.NoAllowedBusinessUnitFoundInCurrentDatabase, Resources.ErrorMessage));
 		}
 
 		[Test]
@@ -187,46 +166,33 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			_target.OkbuttonClicked();
 		}
 
-		[Test, Ignore("Ola: temp")]
+		[Test]
 		public void ShouldGetBusAfterDataSourcesIfWindows()
 		{
-			var dataSourceContainer = MockRepository.GenerateMock<IDataSourceContainer>();
-			var buProvider = MockRepository.GenerateMock<IAvailableBusinessUnitsProvider>();
 			_model.AuthenticationType = AuthenticationTypeOption.Windows;
 			var bu = new BusinessUnit("Bu One");
 			var bu2 = new BusinessUnit("Bu two");
-			_model.SelectedDataSourceContainer = dataSourceContainer;
+			var dataSource = MockRepository.GenerateMock<IDataSource>();
+			var uowFact = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			var person = MockRepository.GenerateMock<IPerson>();
+			var permiss = MockRepository.GenerateMock<IPermissionInformation>();
+			var appAuthInfo = new AuthenticationResult { Successful = true, Person = person, DataSource = dataSource };
+			var buRep = MockRepository.GenerateMock<IBusinessUnitRepository>();
+			
+			_winLogon.Stub(x => x.Logon("WIN")).Return(appAuthInfo);
 
-			dataSourceContainer.Stub(x => x.AvailableBusinessUnitProvider).Return(buProvider);
-			buProvider.Stub(x => x.AvailableBusinessUnits(_repFactory)).Return(new List<IBusinessUnit> { bu, bu2 });
+			person.Stub(x => x.PermissionInformation).Return(permiss);
+			permiss.Stub(x => x.HasAccessToAllBusinessUnits()).Return(true);
+			dataSource.Stub(x => x.Application).Return(uowFact);
+			var uow = MockRepository.GenerateMock<IUnitOfWork>();
+			uowFact.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
+			_repFactory.Stub(x => x.CreateBusinessUnitRepository(uow)).Return(buRep);
+			buRep.Stub(x => x.LoadAllBusinessUnitSortedByName()).Return(new List<IBusinessUnit> { bu, bu2 });
+
 			_view.Stub(x => x.ShowStep(true));
 
 			_target.CurrentStep = LoginStep.SelectLogonType;
 			_target.OkbuttonClicked();
-		}
-
-		[Test, Ignore("Ola: temp")]
-		public void ShouldGoToAppLoginIfWindowsFails()
-		{
-			_model.AuthenticationType = AuthenticationTypeOption.Windows;
-			_view.Stub(x => x.ShowStep(true));
-
-			_target.CurrentStep = LoginStep.SelectLogonType;
-			_target.OkbuttonClicked();
-			_model.AuthenticationType.Should().Be.EqualTo(AuthenticationTypeOption.Application);
-			_model.Warning.Should().Be.EqualTo("ajajaj");
-			_target.CurrentStep.Should().Be.EqualTo(LoginStep.Login);
-		}
-
-		[Test, Ignore("Ola: temp")]
-		public void ShouldGoToDatasourceStepIfWebException()
-		{
-			_model.AuthenticationType = AuthenticationTypeOption.Windows;
-			_view.Stub(x => x.ShowStep(false));
-
-			_target.CurrentStep = LoginStep.SelectLogonType;
-			_target.OkbuttonClicked();
-			_target.CurrentStep.Should().Be.EqualTo(LoginStep.SelectLogonType);
 		}
 
 		[Test]
