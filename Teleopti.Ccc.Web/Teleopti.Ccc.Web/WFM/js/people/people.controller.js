@@ -34,7 +34,7 @@ function PeopleController($scope, $filter, $state, SearchSvrc) {
 
 	function setSearchFormProperty(searchType, searchValue) {
 		angular.forEach(allSearchTypes, function (propName) {
-			if (propName.toLowerCase() == searchType.toLowerCase()) {
+			if (propName.toUpperCase() == searchType.toUpperCase()) {
 				$scope.advancedSearchForm[propName] = searchValue;
 			}
 		});
