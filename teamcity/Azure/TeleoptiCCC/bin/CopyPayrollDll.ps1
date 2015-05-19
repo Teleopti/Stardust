@@ -1,6 +1,43 @@
 ##===========
 ## Functions
 ##===========
+function FilesAreEqual
+{
+   param([System.IO.FileInfo] $first, [System.IO.FileInfo] $second) 
+   $BYTES_TO_READ = 8;
+
+   if ($first.Length -ne $second.Length)
+   {
+        return $false;
+   }
+
+   $iterations = [Math]::Ceiling($first.Length / $BYTES_TO_READ);
+   $fs1 = $first.OpenRead();
+   $fs2 = $second.OpenRead();
+
+   $one = New-Object byte[] $BYTES_TO_READ;
+   $two = New-Object byte[] $BYTES_TO_READ;
+
+   for ($i = 0; $i -lt $iterations; $i = $i + 1)
+   {
+       $fs1.Read($one, 0, $BYTES_TO_READ) | out-null;
+       $fs2.Read($two, 0, $BYTES_TO_READ) | out-null;
+
+       if ([BitConverter]::ToInt64($one, 0) -ne 
+           [BitConverter]::ToInt64($two, 0))
+       {
+           $fs1.Close();
+           $fs2.Close();
+           return $false;
+       }
+   }
+
+   $fs1.Close();
+   $fs2.Close();
+
+   return $true;
+}
+
 function Test-Administrator
 {
 	[CmdletBinding()]
@@ -13,6 +50,26 @@ function Test-Administrator
 	# Check to see if we are currently running "as Administrator"
 	return ($myWindowsPrincipal.IsInRole($adminRole))
 }
+
+function Sync-NewFilesOnly
+{
+    param(
+    $sourceDir,
+    $targetDir    
+    )
+    [int]$counter = 0
+    Get-ChildItem "$sourceDir" | Foreach-Object {
+        $sourceFile = Get-Item $_.FullName
+        $targetFile = $targetDir + "\" + $sourceFile.Name 
+
+        if (!(FilesAreEqual $sourceFile $targetFile)) {
+            Copy-Item "$sourceFile" "$targetDir"
+            $counter = $counter + 1
+        }
+    }
+    return $counter
+}
+
 
 function Roby-Copy
 {
@@ -81,22 +138,22 @@ function EventlogSource-Create {
 ##===========
 ## Main
 ##===========
-function main {
-Param(
-  [string]$directory
-  )
-$TeleoptiServiceBus = "Teleopti Service Bus"
-$computer = gc env:computername
-
-## Name of the job, name of source in Windows Event Log
-$JOB = "Teleopti.Ccc.BlobStorageCopy"
-
 Try
 {
+    $TeleoptiServiceBus = "Teleopti Service Bus"
+    $computer = gc env:computername
+
+    ## Name of the job, name of source in Windows Event Log
+    $JOB = "Teleopti.Ccc.BlobStorageCopy"
+
 	##test if admin
 	If (!(Test-Administrator($myWindowsID=[System.Security.Principal.WindowsIdentity]::GetCurrent()))) {
 		throw "User is not Admin!"
 	}
+
+    #Get local path
+    [string]$global:directory = split-path -parent $MyInvocation.MyCommand.Definition
+    Set-Location $directory
 
     #create event log source
     EventlogSource-Create "$JOB"
@@ -145,12 +202,11 @@ Try
     if ($LastExitCode -ne 0) {
         throw "AsCopy generated an error!"
     }
-    
-    $RoboExitCode = Roby-Copy $DESTINATION $FILEWATCH
+
+    $newFiles = Sync-NewFilesOnly $DESTINATION $FILEWATCH
     
 	##one or more files are new, log info to Eventlog and restart serviceBus
-	If ($RoboExitCode -ge 1) {
-        Write-EventLog -LogName Application -Source $JOB -EventID 0 -EntryType Information -Message "$BlobSource and $FILEWATCH in sync."
+	If ($newFiles -ge 1) {
     	Stop-Service -name $TeleoptiServiceBus
     	write-host "-------------" -ForegroundColor blue
     	Start-Service -name $TeleoptiServiceBus
@@ -167,6 +223,6 @@ Catch [Exception]
 }
 Finally
 {
-    Write-Host "done"
-}
+            Write-EventLog -LogName Application -Source $JOB -EventID 0 -EntryType Information -Message "$newFiles files synced from: $BlobSource to: $FILEWATCH"
+
 }
