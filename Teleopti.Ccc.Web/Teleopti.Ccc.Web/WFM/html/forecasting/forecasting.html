@@ -19,9 +19,10 @@
 			<datepicker ng-model="period.endDate" min-date="period.startDate" show-weeks="true" class="wfm-datepicker"></datepicker>
 		</div>
 		<div>
-			<button class="wfm-btn wfm-btn-primary next-step-all" ng-click="nextStepAll(period)">{{ 'ForecastAll' | translate }}</button>
-			<button class="wfm-btn wfm-btn-default next-step-advanced" ng-click="nextStepAdvanced(period)">{{ 'Advanced' | translate }}<md-tooltip>Select specific workloads</md-tooltip></button>
+			<button class="wfm-btn wfm-btn-primary next-step-all" ng-disabled="moreThanTwoYears()" ng-class="{'wfm-btn-primary-disabled': moreThanTwoYears()}" ng-click="nextStepAll(period)">{{ 'ForecastAll' | translate }}</button>
+			<button class="wfm-btn wfm-btn-default next-step-advanced" ng-disabled="moreThanTwoYears()" ng-class="{'wfm-btn-primary-disabled': moreThanTwoYears()}" ng-click="nextStepAdvanced(period)">{{ 'Advanced' | translate }}<md-tooltip>Select specific workloads</md-tooltip></button>
 		</div>
+		<div class="alert-warning notice-spacer" ng-if="moreThanTwoYears()"><i class='mdi mdi-alert'></i>Forecast period cannot be more than 2 years.</div>
 	</div>
 	<div class="clearfix"></div>
 </div>

@@ -4,9 +4,19 @@ angular.module('wfm.forecasting', [])
 	.controller('ForecastingCtrl', [
 		'$scope', '$state',
 		function($scope, $state) {
-			var startDate = moment().add(1, 'months').startOf('month').format("YYYY-MM-DD");
-			var endDate = moment().add(2, 'months').startOf('month').format("YYYY-MM-DD");
+			var startDate = moment().utc().add(1, 'months').startOf('month').toDate();
+			var endDate = moment().utc().add(2, 'months').startOf('month').toDate();
 			$scope.period = { startDate: startDate, endDate: endDate }; //use moment to get first day of next month
+
+			$scope.moreThanTwoYears = function () {
+				if ($scope.period && $scope.period.endDate && $scope.period.startDate) {
+					var dateDiff = new Date($scope.period.endDate - $scope.period.startDate);
+					dateDiff.setDate(dateDiff.getDate() - 1);
+					return dateDiff.getFullYear() - 1970 >= 2;
+				}
+				else
+					return false;
+			};
 
 			$scope.nextStepAll = function(period) {
 				$state.go('forecasting.runall', { period: period });
