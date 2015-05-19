@@ -29,11 +29,8 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
             if (result.Success)
             {
                 //Spara person till cache.
-                _personContainer = new PersonContainer(result.Person)
-                                       {
-                                           DataSource = _customWindowsSecurityToken.DataSource,
-                                           UserName = _customWindowsSecurityToken.WindowsIdentity.Name
-                                       };
+	            _personContainer = new PersonContainer(result.Person, _customWindowsSecurityToken.WindowsIdentity.Name,
+		            null, _customWindowsSecurityToken.DataSource, result.TenantPassword);
                 _personCache.Add(_personContainer);
                 return true;
             }

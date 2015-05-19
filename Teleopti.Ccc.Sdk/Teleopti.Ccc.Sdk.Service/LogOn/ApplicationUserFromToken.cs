@@ -26,12 +26,8 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
             var result = logOnSystem();
             if (result.Success)
             {
-                _personContainer = new PersonContainer(result.Person)
-                                       {
-                                           DataSource = _customUserNameSecurityToken.DataSource,
-                                           Password = _customUserNameSecurityToken.Password,
-                                           UserName = _customUserNameSecurityToken.UserName
-                                       };
+	            _personContainer = new PersonContainer(result.Person, _customUserNameSecurityToken.UserName,
+		            _customUserNameSecurityToken.Password, _customUserNameSecurityToken.DataSource, result.TenantPassword);
                 _personCache.Add(_personContainer);
                 return true;
             }

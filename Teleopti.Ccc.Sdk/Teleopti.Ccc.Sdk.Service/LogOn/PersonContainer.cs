@@ -1,26 +1,22 @@
-﻿using System;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.WcfService.LogOn
 {
-    public class PersonContainer
-    {
-        private readonly IPerson _person;
+	public class PersonContainer
+	{
+		public PersonContainer(IPerson person, string userName, string password, string dataSource, string tenantPassword)
+		{
+			Person = person;
+			UserName = userName;
+			Password = password;
+			DataSource = dataSource;
+			TenantPassword = tenantPassword;
+		}
 
-        public PersonContainer(IPerson person)
-        {
-            _person = person;
-        }
-
-        public IPerson Person
-        {
-            get { return _person; }
-        }
-
-        public string UserName { get; set; }
-
-        public string Password { get; set; }
-
-        public string DataSource { get; set; }
-    }
+		public IPerson Person { get; private set; }
+		public string UserName { get; private set; }
+		public string Password { get; private set; }
+		public string DataSource { get; private set; }
+		public string TenantPassword { get; set; }
+	}
 }

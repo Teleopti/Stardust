@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IdentityModel.Configuration;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
@@ -96,12 +97,8 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 
 		private void addToCache(AuthenticationQuerierResult result, LogonModel model)
 		{
-			var personContainer = new PersonContainer(result.Person)
-			{
-				DataSource = model.SelectedDataSourceContainer.DataSourceName,
-				Password = model.Password,
-				UserName = model.UserName
-			};
+			var personContainer = new PersonContainer(result.Person, model.UserName, model.Password,
+				model.SelectedDataSourceContainer.DataSourceName, result.TenantPassword);
 			_personCache.Add(personContainer);
 		}
 	}
