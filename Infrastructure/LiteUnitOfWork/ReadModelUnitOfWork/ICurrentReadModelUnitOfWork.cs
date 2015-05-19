@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork
+﻿namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork
 {
 	public interface ICurrentReadModelUnitOfWork
 	{

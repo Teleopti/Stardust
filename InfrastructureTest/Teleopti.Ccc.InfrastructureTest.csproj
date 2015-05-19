@@ -182,6 +182,7 @@
     <Compile Include="Bugs\BugShiftExchangeInvalidUpdate.cs" />
     <Compile Include="DistributedLock\DistributedLockTest.cs" />
     <Compile Include="Foundation\CouldNotCreateTransactionExceptionTest.cs" />
+    <Compile Include="MessageBrokerUnitOfWork\MessageBrokerUnitOfWorkTest.cs" />
     <Compile Include="MultiTenancy\Client\ApplicationDataFake.cs" />
     <Compile Include="MultiTenancy\Client\AuthenticationQuerierResultConverterTest.cs" />
     <Compile Include="MultiTenancy\Client\ChangePasswordTest.cs" />
@@ -634,6 +635,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="LiteUnitOfWork\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

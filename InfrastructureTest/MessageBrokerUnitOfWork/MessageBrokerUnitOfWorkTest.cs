@@ -8,23 +8,21 @@ using Autofac;
 using NHibernate;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork;
-using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
+using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.MessageBrokerUnitOfWork;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.Web;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
+namespace Teleopti.Ccc.InfrastructureTest.MessageBrokerUnitOfWork
 {
-	public class ReadModelUnitOfWorkTestAttribute : InfrastructureTestAttribute
+	public class MessageBrokerUnitOfWorkTestAttribute : InfrastructureTestAttribute
 	{
 		protected override void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
 		{
@@ -35,31 +33,28 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 			builder.RegisterType<NestedService2>().AsSelf().As<NestedBase>().SingleInstance();
 
 			builder.RegisterInstance(new MutableFakeCurrentHttpContext()).AsSelf().As<ICurrentHttpContext>().SingleInstance();
-			builder.RegisterInstance(new MutableFakeCurrentTeleoptiPrincipal()).AsSelf().As<ICurrentTeleoptiPrincipal>().SingleInstance();
 
-			builder.Register(c =>
+			builder.Register(c => new FakeConfigReader
 			{
-				var dataSourcesProvider = new FakeCurrentApplicationData();
-				var dataSource = c.Resolve<IDataSourcesFactory>().Create("App", ConnectionStringHelper.ConnectionStringUsedInTests, null);
-				dataSourcesProvider.RegisteredDataSourceCollection = new List<IDataSource>{dataSource};
-				return dataSourcesProvider;
-			}).AsSelf().As<ICurrentApplicationData>().SingleInstance();
+				ConnectionStrings = new ConnectionStringSettingsCollection
+				{
+					new ConnectionStringSettings("MessageBroker", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix)
+				}
+			}).AsSelf().As<IConfigReader>();
 
 		}
 	}
 
 	[TestFixture]
-	[ReadModelUnitOfWorkTest]
-	public class ReadModelUnitOfWorkTest
+	[MessageBrokerUnitOfWorkTest]
+	public class MessageBrokerUnitOfWorkTest
 	{
 		public TheService TheService;
 		public NestedService NestedService;
 		public NestedService2 NestedService2;
 		public MutableFakeCurrentHttpContext HttpContext;
-		public ICurrentReadModelUnitOfWork UnitOfWork;
-		public MutableFakeCurrentTeleoptiPrincipal Principal;
+		public ICurrentMessageBrokerUnitOfWork UnitOfWork;
 		public IDataSourcesFactory DataSourcesFactory;
-		public FakeCurrentApplicationData ApplicationData;
 		public FakeConfigReader ConfigReader;
 
 		[Test]
@@ -70,7 +65,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 
 			TheService.DoesUpdate(string.Format("INSERT INTO TestTable (Value) VALUES ({0})", value));
 
-			TestTable.Values("TestTable").Single().Should().Be(value);
+			Enumerable.Single<int>(TestTable.Values("TestTable")).Should().Be(value);
 		}
 
 		[Test]
@@ -93,7 +88,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 		public void ShouldProduceUnitOfWorkToNestedServices()
 		{
 			string result = null;
-			NestedService.Action = uow => { result = uow.CreateSqlQuery("SELECT @@VERSION").List<string>().Single(); };
+			NestedService.Action = uow => { result = Enumerable.Single<string>(uow.CreateSqlQuery("SELECT @@VERSION").List<string>()); };
 
 			TheService.CallNestedServices();
 
@@ -150,8 +145,8 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 			thread1.Join();
 			thread2.Join();
 
-			TestTable.Values("TestTable1").Count().Should().Be(1000);
-			TestTable.Values("TestTable2").Count().Should().Be(0);
+			Enumerable.Count<int>(TestTable.Values("TestTable1")).Should().Be(1000);
+			Enumerable.Count<int>(TestTable.Values("TestTable2")).Should().Be(0);
 		}
 
 		[Test]
@@ -167,7 +162,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 				}).Join();
 			});
 
-			TestTable.Values("TestTable").Count().Should().Be(1);
+			Enumerable.Count<int>(TestTable.Values("TestTable")).Should().Be(1);
 		}
 
 		[Test]
@@ -192,8 +187,8 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 			thread1.Join();
 			thread2.Join();
 
-			TestTable.Values("TestTable1").Count().Should().Be(1000);
-			TestTable.Values("TestTable2").Count().Should().Be(0);
+			Enumerable.Count<int>(TestTable.Values("TestTable1")).Should().Be(1000);
+			Enumerable.Count<int>(TestTable.Values("TestTable2")).Should().Be(0);
 		}
 
 		[Test]
@@ -204,77 +199,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 			target.Does(uow => { });
 
 			UnitOfWork.Current().Should().Be.Null();
-		}
-
-		[Test]
-		public void ShouldProduceUnitOfWorkForEachDataSourceOnPrincipal()
-		{
-			using (new TestTable("TestTable", ConnectionStringHelper.ConnectionStringUsedInTests))
-			using (new TestTable("TestTable", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix))
-			{
-				var factory = DataSourcesFactory;
-				var dataSource1 = factory.Create("One", ConnectionStringHelper.ConnectionStringUsedInTests, null);
-				var dataSource2 = factory.Create("Two", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, null);
-
-				Principal.SetPrincipal(new TeleoptiPrincipal(new TeleoptiIdentity("", dataSource1, null, null), null));
-				TheService.DoesUpdate("INSERT INTO TestTable (Value) VALUES (0)");
-
-				Principal.SetPrincipal(new TeleoptiPrincipal(new TeleoptiIdentity("", dataSource2, null, null), null));
-				TheService.DoesUpdate("INSERT INTO TestTable (Value) VALUES (0)");
-
-				TestTable.Values("TestTable", ConnectionStringHelper.ConnectionStringUsedInTests).Count().Should().Be(1);
-				TestTable.Values("TestTable", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix).Count().Should().Be(1);
-			}
-		}
-
-		[Test]
-		[TestTable("TestTable")]
-		public void ShouldProduceUnitOfWorkForDataSourceMatchingRtaConnectionStringIfNoPrincipal()
-		{
-			var rtaConnectionString = new SqlConnectionStringBuilder(ConnectionStringHelper.ConnectionStringUsedInTests).ConnectionString;
-			rtaConnectionString.Should().Not.Be.EqualTo(ConnectionStringHelper.ConnectionStringUsedInTests);
-			ConfigReader.ConnectionStrings = new ConnectionStringSettingsCollection
-				{
-					new ConnectionStringSettings("Wrong", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix),
-					new ConnectionStringSettings("RtaApplication", rtaConnectionString)
-				};
-
-			var factory = DataSourcesFactory;
-			var dataSource1 = factory.Create("Wrong", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, null);
-			var dataSource2 = factory.Create("Correct", ConnectionStringHelper.ConnectionStringUsedInTests, null);
-			ApplicationData.RegisteredDataSourceCollection = new[] { dataSource1, dataSource2 }.Randomize();
-
-			Principal.SetPrincipal(null);
-
-			TheService.DoesUpdate("INSERT INTO TestTable (Value) VALUES (0)");
-
-			TestTable.Values("TestTable").Count().Should().Be(1);
-		}
-
-		[Test]
-		public void ShouldExecuteCodeAfterSuccessfulCommit()
-		{
-			string result = null;
-			NestedService.ActionWSync = (uow, sync) => sync.OnSuccessfulTransaction(() => result = "success");
-
-			TheService.CallNestedServices();
-
-			result.Should().Be("success");
-		}
-
-		[Test]
-		public void ShouldNotExecuteCodeAfterFailedCommit()
-		{
-			var result = "failed";
-			NestedService.ActionWSync = (uow, sync) =>
-			{
-				sync.OnSuccessfulTransaction(() => result = "success");
-				throw new TestException();
-			};
-
-			Assert.Throws<TestException>(TheService.CallNestedServices);
-
-			result.Should().Be("failed");
 		}
 
 		private static Thread onAnotherThread(Action action)
@@ -311,21 +235,21 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 	public class TheService
 	{
 		private readonly IEnumerable<NestedBase> _nested;
-		private readonly ICurrentReadModelUnitOfWork _uow;
+		private readonly ICurrentMessageBrokerUnitOfWork _uow;
 
-		public TheService(IEnumerable<NestedBase> nested, ICurrentReadModelUnitOfWork uow)
+		public TheService(IEnumerable<NestedBase> nested, ICurrentMessageBrokerUnitOfWork uow)
 		{
 			_nested = nested;
 			_uow = uow;
 		}
 
-		[ReadModelUnitOfWork]
+		[MessageBrokerUnitOfWork]
 		public virtual void Does(Action<ILiteUnitOfWork> action)
 		{
 			action(_uow.Current());
 		}
 
-		[ReadModelUnitOfWork]
+		[MessageBrokerUnitOfWork]
 		public virtual void CallNestedServices()
 		{
 			_nested.ForEach(i => i.ExecuteAction());
@@ -334,38 +258,34 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 
 	public class NestedService : NestedBase
 	{
-		public NestedService(ICurrentReadModelUnitOfWork uow, IReadModelTransactionSyncronization syncronization)
-			: base(uow, syncronization)
+		public NestedService(ICurrentMessageBrokerUnitOfWork uow)
+			: base(uow)
 		{
 		}
 	}
 
 	public class NestedService2 : NestedBase
 	{
-		public NestedService2(ICurrentReadModelUnitOfWork uow, IReadModelTransactionSyncronization syncronization)
-			: base(uow, syncronization)
+		public NestedService2(ICurrentMessageBrokerUnitOfWork uow)
+			: base(uow)
 		{
 		}
 	}
 
 	public class NestedBase
 	{
-		private readonly ICurrentReadModelUnitOfWork _uow;
-		private readonly IReadModelTransactionSyncronization _syncronization;
+		private readonly ICurrentMessageBrokerUnitOfWork _uow;
 
-		public NestedBase(ICurrentReadModelUnitOfWork uow, IReadModelTransactionSyncronization syncronization)
+		public NestedBase(ICurrentMessageBrokerUnitOfWork uow)
 		{
 			_uow = uow;
-			_syncronization = syncronization;
 		}
 
 		public Action<ILiteUnitOfWork> Action = u => { };
-		public Action<ILiteUnitOfWork, IReadModelTransactionSyncronization> ActionWSync = (u, s) => { };
 
 		public void ExecuteAction()
 		{
 			Action.Invoke(_uow.Current());
-			ActionWSync.Invoke(_uow.Current(), _syncronization);
 		}
 	}
 
@@ -401,7 +321,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 		private readonly string _connectionString;
 
 		public TestTable(string name)
-			: this(name, ConnectionStringHelper.ConnectionStringUsedInTests)
+			: this(name, ConnectionStringHelper.ConnectionStringUsedInTestsMatrix)
 		{
 		}
 
@@ -414,7 +334,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 
 		public static IEnumerable<int> Values(string tableName)
 		{
-			return Values(tableName, ConnectionStringHelper.ConnectionStringUsedInTests);
+			return Values(tableName, ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
 		}
 
 		public static IEnumerable<int> Values(string tableName, string connectionString)
@@ -444,4 +364,5 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 			}
 		}
 	}
+
 }

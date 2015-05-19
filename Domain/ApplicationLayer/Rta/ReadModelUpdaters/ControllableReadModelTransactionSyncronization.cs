@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 {
-	public class ControllableLiteTransactionSyncronization : ILiteTransactionSyncronization
+	public class ControllableReadModelTransactionSyncronization : IReadModelTransactionSyncronization
 	{
 		private readonly IList<Action> _actionsWhenDone = new List<Action>();
 

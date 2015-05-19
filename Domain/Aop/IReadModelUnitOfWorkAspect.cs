@@ -5,4 +5,5 @@ namespace Teleopti.Ccc.Domain.Aop
 	public interface IReadModelUnitOfWorkAspect : IAspect
 	{
 	}
+
 }

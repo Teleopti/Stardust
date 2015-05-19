@@ -1,14 +1,14 @@
 ﻿using System;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
+using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
 
 namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork
 {
-	public class LiteTransactionSyncronization : ILiteTransactionSyncronization
+	public class ReadModelTransactionSyncronization : IReadModelTransactionSyncronization
 	{
 		private readonly ICurrentReadModelUnitOfWork _unitOfWork;
 
-		public LiteTransactionSyncronization(ICurrentReadModelUnitOfWork unitOfWork)
+		public ReadModelTransactionSyncronization(ICurrentReadModelUnitOfWork unitOfWork)
 		{
 			_unitOfWork = unitOfWork;
 		}

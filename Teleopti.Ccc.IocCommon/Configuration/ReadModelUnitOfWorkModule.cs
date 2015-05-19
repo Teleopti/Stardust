@@ -3,6 +3,7 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork;
+using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
@@ -10,8 +11,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<LiteTransactionSyncronization>()
-				.As<ILiteTransactionSyncronization>()
+			builder.RegisterType<ReadModelTransactionSyncronization>()
+				.As<IReadModelTransactionSyncronization>()
 				.SingleInstance();
 			builder.RegisterType<ReadModelUnitOfWorkState>()
 				.As<ICurrentReadModelUnitOfWork>()

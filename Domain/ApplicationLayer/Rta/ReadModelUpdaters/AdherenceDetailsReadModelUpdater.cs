@@ -19,17 +19,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		IInitializeble
 	{
 		private readonly IAdherenceDetailsReadModelPersister _persister;
-		private readonly ILiteTransactionSyncronization _liteTransactionSyncronization;
+		private readonly IReadModelTransactionSyncronization _readModelTransactionSyncronization;
 		private readonly IPerformanceCounter _performanceCounter;
 		private readonly IComparer<AdherenceState> _adherenceComparer;
 
 		public AdherenceDetailsReadModelUpdater(
 			IAdherenceDetailsReadModelPersister persister,
-			ILiteTransactionSyncronization liteTransactionSyncronization,
+			IReadModelTransactionSyncronization readModelTransactionSyncronization,
 			IPerformanceCounter performanceCounter)
 		{
 			_persister = persister;
-			_liteTransactionSyncronization = liteTransactionSyncronization;
+			_readModelTransactionSyncronization = readModelTransactionSyncronization;
 			_performanceCounter = performanceCounter;
 			_adherenceComparer = new AdherenceStateComparer_DeclarationOrderIsNotToBeTrusted();
 		}
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 				});
 
 			if (_performanceCounter != null && _performanceCounter.IsEnabled)
-				_liteTransactionSyncronization.OnSuccessfulTransaction(() => _performanceCounter.Count());
+				_readModelTransactionSyncronization.OnSuccessfulTransaction(() => _performanceCounter.Count());
 		}
 
 		[ReadModelUnitOfWork]

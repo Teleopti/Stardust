@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				.AsSelf()
 				.SingleInstance();
 
-			builder.RegisterType<ControllableLiteTransactionSyncronization>().As<ILiteTransactionSyncronization>().SingleInstance();
+			builder.RegisterType<ControllableReadModelTransactionSyncronization>().As<IReadModelTransactionSyncronization>().SingleInstance();
 			builder.RegisterType<FakeReadModelUnitOfWorkAspect>().As<IReadModelUnitOfWorkAspect>();
 
 			builder.Register(x => x.Resolve<IEnumerable<IHandleEvent<PersonInAdherenceEvent>>>()

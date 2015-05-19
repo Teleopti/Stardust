@@ -55,6 +55,7 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule(new EventPublisherModule(_configuration));
 			builder.RegisterModule<AspectsModule>();
 			builder.RegisterModule<ReadModelUnitOfWorkModule>();
+			builder.RegisterModule<MessageBrokerUnitOfWorkModule>();
 			builder.RegisterModule<WebModule>();
 			builder.RegisterModule<ServiceBusModule>();
 			builder.RegisterModule(new InitializeModule(_configuration));

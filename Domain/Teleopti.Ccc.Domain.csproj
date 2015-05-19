@@ -149,10 +149,12 @@
     <Compile Include="Aop\Core\IInvocationInfo.cs" />
     <Compile Include="Aop\ILogAspect.cs" />
     <Compile Include="Aop\ILogManagerWrapper.cs" />
+    <Compile Include="Aop\IMessageBrokerUnitOfWorkAspect.cs" />
     <Compile Include="Aop\InfoLogAttribute.cs" />
     <Compile Include="Aop\IUnitOfWorkAspect.cs" />
     <Compile Include="Aop\IAllBusinessUnitsUnitOfWorkAspect.cs" />
     <Compile Include="Aop\LogManagerWrapper.cs" />
+    <Compile Include="Aop\MessageBrokerUnitOfWorkAttribute.cs" />
     <Compile Include="Aop\UnitOfWorkAttribute.cs" />
     <Compile Include="Aop\AllBusinessUnitsUnitOfWorkAttribute.cs" />
     <Compile Include="ApplicationLayer\Commands\AddActivityCommand.cs" />
@@ -250,7 +252,7 @@
     <Compile Include="ApplicationLayer\Rta\Service\CheckForActivityChangeInputModel.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\CurrentBelongsToDate.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\CheckForActivityChangeWebModel.cs" />
-    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\ControllableLiteTransactionSyncronization.cs" />
+    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\ControllableReadModelTransactionSyncronization.cs" />
     <Compile Include="ApplicationLayer\Rta\PulseLoop\DontUpdateAgentStateReadModel.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IActivityEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\IAdherenceDetailsReadModelPersister.cs" />
@@ -263,7 +265,7 @@
     <Compile Include="ApplicationLayer\Rta\Service\IStateCodeAdder.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IStateMapper.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\IInitializeble.cs" />
-    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\ILiteTransactionSyncronization.cs" />
+    <Compile Include="Aop\IReadModelTransactionSyncronization.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\INotificationCreator.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IPersonOrganizationReader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IRtaDecoratingEventPublisher.cs" />

@@ -3,7 +3,7 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Aop.Core;
 using Teleopti.Ccc.Domain.Common;
 
-namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork
+namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork
 {
 	public class ReadModelUnitOfWorkAspect : IReadModelUnitOfWorkAspect
 	{

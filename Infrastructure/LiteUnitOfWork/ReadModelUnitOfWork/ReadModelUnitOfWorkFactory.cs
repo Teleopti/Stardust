@@ -5,7 +5,7 @@ using NHibernate.Dialect;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork
+namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork
 {
 	public class ReadModelUnitOfWorkFactory : IReadModelUnitOfWorkFactory
 	{

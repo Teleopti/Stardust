@@ -153,6 +153,7 @@
     <Compile Include="Configuration\IntraIntervalOptimizationServiceModule.cs" />
     <Compile Include="Configuration\IntraIntervalSolverServiceModule.cs" />
     <Compile Include="Configuration\MessageBrokerServerModule.cs" />
+    <Compile Include="Configuration\MessageBrokerUnitOfWorkModule.cs" />
     <Compile Include="Configuration\ReadModelUnitOfWorkModule.cs" />
     <Compile Include="Configuration\EventPublisherModule.cs" />
     <Compile Include="Configuration\RtaModule.cs" />

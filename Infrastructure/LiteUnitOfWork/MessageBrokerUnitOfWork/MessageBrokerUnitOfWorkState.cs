@@ -1,16 +1,16 @@
 ﻿using System;
 using Teleopti.Ccc.Infrastructure.Web;
 
-namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork
+namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork.MessageBrokerUnitOfWork
 {
-	public class ReadModelUnitOfWorkState : ICurrentReadModelUnitOfWork
+	public class MessageBrokerUnitOfWorkState : ICurrentMessageBrokerUnitOfWork
 	{
-		[ThreadStatic]
+		[ThreadStatic] 
 		private static LiteUnitOfWork _unitOfWork;
 		private readonly ICurrentHttpContext _httpContext;
-		private const string itemsKey = "ReadModelUnitOfWork";
+		private const string itemsKey = "MessageBrokerUnitOfWork";
 
-		public ReadModelUnitOfWorkState(ICurrentHttpContext httpContext)
+		public MessageBrokerUnitOfWorkState(ICurrentHttpContext httpContext)
 		{
 			_httpContext = httpContext;
 		}
@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork
 		public LiteUnitOfWork Get()
 		{
 			if (_httpContext.Current() != null)
-				return (LiteUnitOfWork)_httpContext.Current().Items[itemsKey];
+				return (LiteUnitOfWork) _httpContext.Current().Items[itemsKey];
 			return _unitOfWork;
 		}
 
