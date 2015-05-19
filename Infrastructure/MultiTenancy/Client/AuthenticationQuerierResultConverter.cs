@@ -22,34 +22,31 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 
 		public AuthenticationQuerierResult Convert(AuthenticationInternalQuerierResult tenantServerResult)
 		{
-			var ret = new AuthenticationQuerierResult{Success = tenantServerResult.Success};
-			if (tenantServerResult.Success)
-			{
-				var applicationData = _applicationData();
-				var decryptedConfig = _nhibDecryption.DecryptConfig(tenantServerResult.DataSourceConfiguration);
-				applicationData.MakeSureDataSourceExists(tenantServerResult.Tenant, decryptedConfig.ApplicationNHibernateConfig, decryptedConfig.AnalyticsConnectionString);
-				var dataSource = applicationData.Tenant(tenantServerResult.Tenant);
-				var person = _loadUser.LoadFullPersonInSeperateTransaction(dataSource.Application, tenantServerResult.PersonId);
-				if (person.IsTerminated())
-					return new AuthenticationQuerierResult
-					{
-						Success = false,
-						FailReason = Resources.LogOnFailedInvalidUserNameOrPassword
-					};
-				ret.Person = person;
-				ret.DataSource = dataSource;
-			
-			}
-			else
-			{
-				ret.FailReason = tenantServerResult.FailReason;
-			}
-			return ret;
-		}
-	}
+			if (!tenantServerResult.Success)
+				return new AuthenticationQuerierResult
+				{
+					Success = false,
+					FailReason = tenantServerResult.FailReason
+				};
 
-	public interface IAuthenticationQuerierResultConverter
-	{
-		AuthenticationQuerierResult Convert(AuthenticationInternalQuerierResult tenantServerResult);
+			var applicationData = _applicationData();
+			var decryptedConfig = _nhibDecryption.DecryptConfig(tenantServerResult.DataSourceConfiguration);
+			applicationData.MakeSureDataSourceExists(tenantServerResult.Tenant, decryptedConfig.ApplicationNHibernateConfig, decryptedConfig.AnalyticsConnectionString);
+			var dataSource = applicationData.Tenant(tenantServerResult.Tenant);
+			var person = _loadUser.LoadFullPersonInSeperateTransaction(dataSource.Application, tenantServerResult.PersonId);
+			return person.IsTerminated() ? 
+				new AuthenticationQuerierResult
+				{
+					Success = false,
+					FailReason = Resources.LogOnFailedInvalidUserNameOrPassword
+				}
+				: 
+				new AuthenticationQuerierResult
+				{
+					Success = true,
+					DataSource = dataSource,
+					Person = person
+				};
+		}
 	}
 }

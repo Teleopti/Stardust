@@ -237,6 +237,7 @@
     <Compile Include="MultiTenancy\Client\AuthenticationFromFileQuerier.cs" />
     <Compile Include="MultiTenancy\Client\AuthenticationQuerierResultConverter.cs" />
     <Compile Include="MultiTenancy\Client\ChangePassword.cs" />
+    <Compile Include="MultiTenancy\Client\IAuthenticationQuerierResultConverter.cs" />
     <Compile Include="MultiTenancy\Client\IMultiTenancyWindowsLogon.cs" />
     <Compile Include="MultiTenancy\Client\IResponseException.cs" />
     <Compile Include="MultiTenancy\Client\ITenantServerConfiguration.cs" />
