@@ -34,19 +34,20 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 			applicationData.MakeSureDataSourceExists(tenantServerResult.Tenant, decryptedConfig.ApplicationNHibernateConfig, decryptedConfig.AnalyticsConnectionString);
 			var dataSource = applicationData.Tenant(tenantServerResult.Tenant);
 			var person = _loadUser.LoadFullPersonInSeperateTransaction(dataSource.Application, tenantServerResult.PersonId);
-			return person.IsTerminated() ? 
-				new AuthenticationQuerierResult
+			if (person.IsTerminated())
+				return new AuthenticationQuerierResult
 				{
 					Success = false,
 					FailReason = Resources.LogOnFailedInvalidUserNameOrPassword
-				}
-				: 
-				new AuthenticationQuerierResult
-				{
-					Success = true,
-					DataSource = dataSource,
-					Person = person
 				};
+
+			return new AuthenticationQuerierResult
+			{
+				Success = true,
+				DataSource = dataSource,
+				Person = person,
+				TenantPassword = tenantServerResult.TenantPassword
+			};
 		}
 	}
 }

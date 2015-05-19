@@ -78,8 +78,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 		{
 			var loadUnauthorizedUserDoesntMatter = MockRepository.GenerateStub<ILoadUserUnauthorized>();
 			loadUnauthorizedUserDoesntMatter.Expect(x => x.LoadFullPersonInSeperateTransaction(null, Guid.Empty)).IgnoreArguments().Return(new Person());
-			var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-			var dataSource = new FakeDataSource { Application = uowFactory };
+			var dataSource = new FakeDataSource();
 			var applicationData = new ApplicationDataFake();
 			applicationData.SetDataSource(dataSource);
 
@@ -91,6 +90,28 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			});
 			result.Success.Should().Be.True();
 			result.DataSource.Should().Be.SameInstanceAs(dataSource);
+		}
+
+
+		[Test]
+		public void ShouldSetTenantPasswordIfSuccessful()
+		{
+			var loadUnauthorizedUserDoesntMatter = MockRepository.GenerateStub<ILoadUserUnauthorized>();
+			loadUnauthorizedUserDoesntMatter.Expect(x => x.LoadFullPersonInSeperateTransaction(null, Guid.Empty)).IgnoreArguments().Return(new Person());
+			var dataSource = new FakeDataSource();
+			var applicationData = new ApplicationDataFake();
+			applicationData.SetDataSource(dataSource);
+			var tenantPassword = RandomName.Make();
+
+			var target = new AuthenticationQuerierResultConverter(new NhibConfigDecryption(), () => applicationData, loadUnauthorizedUserDoesntMatter);
+			var result = target.Convert(new AuthenticationInternalQuerierResult
+			{
+				Success = true,
+				DataSourceConfiguration = createFakeConfig(),
+				TenantPassword = tenantPassword
+			});
+			result.Success.Should().Be.True();
+			result.TenantPassword.Should().Be.EqualTo(tenantPassword);
 		}
 
 		[Test]

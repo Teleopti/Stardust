@@ -8,5 +8,6 @@ namespace Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication
 		public string FailReason { get; set; }
 		public IPerson Person { get; set; }
 		public IDataSource DataSource { get; set; }
+		public string TenantPassword { get; set; }
 	}
 }
