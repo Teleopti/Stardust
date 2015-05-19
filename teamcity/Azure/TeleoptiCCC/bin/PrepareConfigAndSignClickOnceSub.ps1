@@ -205,10 +205,14 @@ Try
 		Remove-Item "$fullPathsettingsFile"
 	}
 
+	$DatasourcesPath="$directory\..\Services\ETL\Service"
+	
     #Get customer specific config from BlobStorage
     CopyFileFromBlobStorage -destinationFolder "$SupportToolFolder" -filename "$settingsFile"
     CopyFileFromBlobStorage -destinationFolder "$SupportToolFolder" -filename "decryption.key"
     CopyFileFromBlobStorage -destinationFolder "$SupportToolFolder" -filename "validation.key"
+	#copy the settings for sms (and email) notifications, if any
+    CopyFileFromBlobStorage -destinationFolder "$DatasourcesPath" -filename "NotificationConfig.xml"
 	
 	CopyFileFromBlobStorage -destinationFolder "$directory" -filename "$togglesFile"
 	$tempTogglesFile = "$directory\" + $togglesFile
@@ -225,8 +229,6 @@ Try
 		CopyFileFromBlobStorage -destinationFolder "$directory\..\..\sitesroot\5\bin\FeatureFlags" -filename "$togglesFile"
 		Remove-Item "$tempTogglesFile"
 	}
-
-	$DatasourcesPath="$directory\..\Services\ETL\Service"
 
     #Set static config for all other params
     Add-Content "$fullPathsettingsFile" ""
@@ -247,6 +249,7 @@ Try
     Add-Content "$fullPathsettingsFile" "`$(ETL_TOOL_nhibConfPath)|$DatasourcesPath"
     Add-Content "$fullPathsettingsFile" "`$(SDK_nhibConfPath)|$DatasourcesPath"
     Add-Content "$fullPathsettingsFile" "`$(AGENTPORTALWEB_nhibConfPath)|$DatasourcesPath"
+    Add-Content "$fullPathsettingsFile" "`$(CONFIGURATION_FILES_PATH)|$DatasourcesPath"
     Add-Content "$fullPathsettingsFile" "`$(RTA_STATE_CODE)|ACW,ADMIN,EMAIL,IDLE,InCall,LOGGED ON,OFF,Ready,WEB"
     Add-Content "$fullPathsettingsFile" "`$(RTA_QUEUE_ID)|2001,2002,0063,2000,0019,0068,0085,0202,0238,2003"
     Add-Content "$fullPathsettingsFile" "`$(WEB_BROKER_FOR_WEB)|https://$DataSourceName.teleopticloud.com/Web"
