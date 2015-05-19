@@ -28,7 +28,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				LastAgentsNotification = notification;
 			else
 				LastSiteNotification = notification;
-			AllNotifications.Add(notification);
+			lock (AllNotifications)
+				AllNotifications.Add(notification);
 		}
 
 		public Interfaces.MessageBroker.Notification NotificationOfType<T>()

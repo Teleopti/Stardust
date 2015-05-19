@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				UserCode = "usercode",
 				StateCode = "phone"
 			});
-			publisher.PublishedEvents.Clear();
+			publisher.Clear();
 
 			now.Is("2014-10-20 10:02");
 			target.SaveState(new ExternalUserStateForTest
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				UserCode = "usercode",
 				StateCode = "admin"
 			});
-			publisher.PublishedEvents.Clear();
+			publisher.Clear();
 
 			now.Is("2014-10-20 9:30");
 			database.ClearSchedule(personId);

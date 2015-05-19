@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 				UserCode = "user",
 				StateCode = "state"
 			});
-			EventPublisher.PublishedEvents.Clear();
+			EventPublisher.Clear();
 
 			Target.Initialize();
 			Rta.SaveState(new ExternalUserStateForTest
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 				UserCode = "user",
 				StateCode = "state"
 			});
-			EventPublisher.PublishedEvents.Clear();
+			EventPublisher.Clear();
 
 			var initialize = Task.Factory.StartNew(() =>
 			{

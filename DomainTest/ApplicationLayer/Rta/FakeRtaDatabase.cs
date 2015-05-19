@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		IFakeDataBuilder WithSchedule(Guid personId, Guid activityId, string name, DateOnly date, string start, string end);
 		IFakeDataBuilder WithAlarm(string stateCode, Guid? activityId, Guid? alarmId, int staffingEffect, string name, bool isLoggedOutState, TimeSpan threshold, Adherence? adherence, Guid? platformTypeId);
 		IFakeDataBuilder WithDefaultStateGroup();
+		IFakeDataBuilder WithStateCode(string statecode);
 		FakeRtaDatabase Make();
 	}
 
@@ -207,6 +208,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				defaultStateGroup.SetBusinessUnit(_businessUnit);
 				RtaStateGroupRepository.Add(defaultStateGroup);
 			}
+			return this;
+		}
+
+		public IFakeDataBuilder WithStateCode(string statecode)
+		{
+			var defaultStateGroup = RtaStateGroupRepository.LoadAll().SingleOrDefault(x => x.DefaultStateGroup);
+			if (defaultStateGroup == null)
+				return this;
+			defaultStateGroup.AddState(statecode, statecode, Guid.Parse(_platformTypeId));
 			return this;
 		}
 

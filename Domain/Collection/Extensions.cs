@@ -282,5 +282,13 @@ namespace Teleopti.Ccc.Domain.Collection
 				yield return a;
 			yield return item;
 		}
+
+		public static int IndexOf<T>(this IEnumerable<T> collection, T targetValue)
+		{
+			return collection.Select((value, index) => new { value, index })
+						.Where(pair => pair.value.Equals(targetValue))
+						.Select(pair => pair.index + 1)
+						.FirstOrDefault() - 1;
+		}
 	}
 }
