@@ -23,6 +23,7 @@ var wfm = angular.module('wfm', [
 	'wfm.forecasting',
 	'wfm.forecasting.target',
 	'wfm.resourceplanner',
+	'wfm.resourceplanner.report',
 	'wfm.searching',
 	'wfm.seatMap',
 	'wfm.seatPlan',
@@ -87,6 +88,10 @@ wfm.config([
 			url: '/resourceplanner',
 			templateUrl: 'js/resourceplanner/resourceplanner.html',
 			controller: 'ResourceplannerCtrl'
+		}).state('resourceplannerreport', {
+			params: { result: {} },
+			templateUrl: 'js/resourceplanner/resourceplanner-report.html',
+			controller: 'ResourceplannerReportCtrl'
 		}).state('permissions', {
 			url: '/permissions',
 			templateUrl: 'html/permissions/permissions.html',

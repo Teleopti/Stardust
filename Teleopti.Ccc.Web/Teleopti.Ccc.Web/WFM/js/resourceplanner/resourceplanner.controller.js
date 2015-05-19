@@ -2,18 +2,20 @@
 	'use strict';
 	angular.module('wfm.resourceplanner', [])
 		.controller('ResourceplannerCtrl', [
-			'$scope', 'ResourcePlannerSvrc', function($scope, ResourcePlannerSvrc) {
+			'$scope', '$state', 'ResourcePlannerSvrc', function ($scope, $state, ResourcePlannerSvrc) {
 				//schedulings
 				$scope.scheduledDays = 0;
 				$scope.schedulingPerformed = false;
 				$scope.launchSchedule = function(startDate, endDate) {
 					$scope.schedulingPerformed = false;
 					var planningPeriod = { StartDate: startDate, EndDate: endDate };
-					ResourcePlannerSvrc.launchScheduling.query(JSON.stringify(planningPeriod)).$promise.then(function(result) {
+					ResourcePlannerSvrc.launchScheduling.query(JSON.stringify(planningPeriod)).$promise.then(function (result) {
 						$scope.schedulingPerformed = true;
 						$scope.scheduledDays = result.DaysScheduled;
+						$state.go('resourceplannerreport', { result: result });
 					});
 				};
+
 				//toggle
 				ResourcePlannerSvrc.isEnabled.query({ toggle: 'Wfm_ChangePlanningPeriod_33043' }).$promise.then(function(result) {
 					$scope.isEnabled = result.IsEnabled;
@@ -32,6 +34,7 @@
 						$scope.planningPeriod = result;
 					});
 				};
-			}
+
+		}
 		]);
 })();

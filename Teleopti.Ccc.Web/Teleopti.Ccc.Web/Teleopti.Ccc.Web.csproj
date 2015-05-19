@@ -1215,6 +1215,8 @@
     <Content Include="WFM\js\outbound\outbound.directive.js" />
     <None Include="WFM\css\_forecasting.scss" />
     <Content Include="WFM\js\permissions\permissions.filters.js" />
+    <Content Include="WFM\js\resourceplanner\resourceplanner-report.html" />
+    <Content Include="WFM\js\resourceplanner\resourceplanner.report.controller.js" />
     <Content Include="WFM\js\seatManagement\fabric.fix.js" />
     <Content Include="WFM\js\seatManagement\html\imageLoadWithPreview.html" />
     <Content Include="WFM\js\seatManagement\html\seatmapeditor.html" />
@@ -1965,6 +1967,7 @@
     <Content Include="WFM\css\_seatmap.scss" />
     <Content Include="WFM\css\_permissions.scss" />
     <Content Include="WFM\vendor\c3\c3-angular.min.js.map" />
+    <Content Include="WFM\css\_resourceplanner.scss" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
