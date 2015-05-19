@@ -15,12 +15,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			_skillRepository = skillRepository;
 		}
 
-		public void CreateForecastForAll(DateOnlyPeriod futurePeriod)
-		{
-			var skills = _skillRepository.FindSkillsWithAtLeastOneQueueSource();
-			skills.ForEach(skill => _quickForecaster.ForecastAll(skill, futurePeriod));
-		}
-
 		public void CreateForecastForWorkloads(DateOnlyPeriod futurePeriod, ForecastWorkloadInput[] workloads)
 		{
 			var skills = _skillRepository.FindSkillsWithAtLeastOneQueueSource();

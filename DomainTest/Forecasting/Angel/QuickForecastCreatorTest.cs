@@ -49,26 +49,5 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			quickForecaster.AssertWasCalled(x => x.ForecastWorkloadsWithinSkill(skill1, forecastWorkloadInputs, futurePeriod));
 			quickForecaster.AssertWasCalled(x => x.ForecastWorkloadsWithinSkill(skill2, forecastWorkloadInputs, futurePeriod));
 		}
-
-		[Test]
-		public void ShouldForecastForAll()
-		{
-			var skillRepository = MockRepository.GenerateMock<ISkillRepository>();
-			var skill1 = SkillFactory.CreateSkill("skill1");
-			var skill2 = SkillFactory.CreateSkill("skill2");
-			skillRepository.Stub(x => x.FindSkillsWithAtLeastOneQueueSource()).Return(new[] { skill1, skill2 });
-
-			var quickForecaster = MockRepository.GenerateMock<IQuickForecaster>();
-			var futurePeriod = new DateOnlyPeriod();
-			var now = new Now();
-			var nowDate = now.LocalDateOnly();
-			var historicalPeriodForForecast = new DateOnlyPeriod(new DateOnly(nowDate.Date.AddYears(-1)), nowDate);
-			var historicalPeriodForMeasurement = new DateOnlyPeriod(new DateOnly(nowDate.Date.AddYears(-2)), nowDate);
-
-			var target = new QuickForecastCreator(quickForecaster, skillRepository);
-			target.CreateForecastForAll(futurePeriod);
-			quickForecaster.AssertWasCalled(x => x.ForecastAll(skill1, futurePeriod));
-			quickForecaster.AssertWasCalled(x => x.ForecastAll(skill2, futurePeriod));
-		}
 	}
 }
