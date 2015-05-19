@@ -221,11 +221,6 @@ namespace Teleopti.Interfaces.Domain
         /// </value>
         bool DoNotBreakMaxStaffing { get; set; }
 
-        /// <summary>
-        /// Gets or sets the group page for shift category fairness.
-        /// </summary>
-        /// <value>The group page for shift category fairness.</value>
-        GroupPageLight GroupPageForShiftCategoryFairness { get; set; }		
 		MaxSeatsFeatureOptions UserOptionMaxSeatsFeature { get; set; }	  
 
         /// <summary>

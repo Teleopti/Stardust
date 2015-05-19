@@ -86,7 +86,6 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 					UseStudentAvailability = false,
 					DayOffTemplate = _dayOffTemplateRepository.FindAllDayOffsSortByDescription()[0],
 					ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff,
-					GroupPageForShiftCategoryFairness = new GroupPageLight(UserTexts.Resources.Main, GroupPageType.Hierarchy),
 					GroupOnGroupPageForTeamBlockPer = new GroupPageLight(UserTexts.Resources.Main, GroupPageType.Hierarchy),
 					TagToUseOnScheduling = NullScheduleTag.Instance
 				}), new NoBackgroundWorker(), _schedulerStateHolder(), allSchedules, _groupPagePerDateHolder(),

@@ -46,7 +46,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public bool UseBlock { get; set; }
 
         public bool DoNotBreakMaxStaffing { get; set; }
-        public GroupPageLight GroupPageForShiftCategoryFairness { get; set; }
         public int RefreshRate { get; set; }
 		  public MaxSeatsFeatureOptions UserOptionMaxSeatsFeature { get; set; }
         public bool UseSameDayOffs { get; set; }

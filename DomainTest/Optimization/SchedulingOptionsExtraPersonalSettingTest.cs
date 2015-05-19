@@ -77,8 +77,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 	        _schedulingOptions.TeamSameActivity = true;
 	        _schedulingOptions.CommonActivity = _activity;
 
-	        _schedulingOptions.GroupPageForShiftCategoryFairness = _groupPageLight;
-
             _target.MapFrom(_schedulingOptions);
 			_schedulingOptions = new SchedulingOptions();
 			_target.MapTo(_schedulingOptions, _scheduleTags, _groupPages, _groupPages, _activityList);
@@ -98,9 +96,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Assert.IsTrue(_schedulingOptions.TeamSameStartTime);
 			Assert.IsTrue(_schedulingOptions.TeamSameActivity);
 			Assert.AreEqual(_activity, _schedulingOptions.CommonActivity);
-
-			//Fairness
-			Assert.AreEqual(_groupPageLight, _schedulingOptions.GroupPageForShiftCategoryFairness);
 
         }
 

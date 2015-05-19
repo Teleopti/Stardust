@@ -26,8 +26,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 	    private bool _useGroupSchedulingCommonCategory = true;
         private bool _useCommmonActivity;
         private Guid?  _commonActivtyId;
-        
-        private string _fairnessGroupPageKey;
 
 		//Move elsewhere
 		private Guid? _scheduleTagId;
@@ -67,12 +65,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		    if (activityList != null & _commonActivtyId.HasValue)
 			    schedulingOptions.CommonActivity = activityList.FirstOrDefault(x => x.Id == _commonActivtyId);
 
-		    foreach (var groupPage in groupPages)
-		    {
-			    if (_fairnessGroupPageKey == groupPage.Key)
-				    schedulingOptions.GroupPageForShiftCategoryFairness = groupPage;
-		    }
-
 		    schedulingOptions.ResourceCalculateFrequency = _resourceCalculateFrequency;
 		    if (_resourceCalculateFrequency < 1 || _resourceCalculateFrequency > 10)
 			    schedulingOptions.ResourceCalculateFrequency = 1;
@@ -94,7 +86,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		    _useGroupSchedulingCommonCategory = schedulingOptions.TeamSameShiftCategory;
 		    _useCommmonActivity = schedulingOptions.TeamSameActivity;
 
-		    _fairnessGroupPageKey = schedulingOptions.GroupPageForShiftCategoryFairness.Key;
 		    _resourceCalculateFrequency = schedulingOptions.ResourceCalculateFrequency;
 		    _screenRefreshRate = schedulingOptions.RefreshRate;
 		    _commonActivtyId = schedulingOptions.CommonActivity != null ? schedulingOptions.CommonActivity.Id : null;

@@ -225,7 +225,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			_schedulingOptions.UseTeam = _localSchedulingOptions.UseTeam;
 			_schedulingOptions.GroupOnGroupPageForTeamBlockPer = _localSchedulingOptions.GroupOnGroupPageForTeamBlockPer;
 			_schedulingOptions.DoNotBreakMaxStaffing = _localSchedulingOptions.DoNotBreakMaxStaffing;
-			_schedulingOptions.GroupPageForShiftCategoryFairness = _localSchedulingOptions.GroupPageForShiftCategoryFairness;
 		    _schedulingOptions.UserOptionMaxSeatsFeature = _localSchedulingOptions.UserOptionMaxSeatsFeature;
 			_schedulingOptions.UseSameDayOffs = _localSchedulingOptions.UseSameDayOffs;
 			_schedulingOptions.TagToUseOnScheduling = _localSchedulingOptions.TagToUseOnScheduling;
