@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Forecasting
 		[When(@"Forecast has succeeded")]
 		public void WhenForecastHasSucceeded()
 		{
-			Browser.Interactions.AssertExists("div.success");
+			Browser.Interactions.AssertExists(".wfm-list li:last-child span.success");
 		}
 
 		[Given(@"there is no forecast data")]
