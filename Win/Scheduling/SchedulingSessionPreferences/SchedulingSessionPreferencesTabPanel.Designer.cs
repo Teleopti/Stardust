@@ -49,9 +49,6 @@
 			this.lblUseRestrictions = new System.Windows.Forms.Label();
 			this.tabPageExtra = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-			this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
-			this.label5 = new System.Windows.Forms.Label();
-			this.comboBoxGroupingFairness = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.pnlBlockTeamScheduling = new System.Windows.Forms.Panel();
 			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
 			this.checkBoxTeamSameActivity = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
@@ -105,8 +102,6 @@
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvTag)).BeginInit();
 			this.tabPageExtra.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
-			this.tableLayoutPanel5.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.comboBoxGroupingFairness)).BeginInit();
 			this.pnlBlockTeamScheduling.SuspendLayout();
 			this.tableLayoutPanel4.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxTeamSameActivity)).BeginInit();
@@ -448,7 +443,6 @@
 			// 
 			this.tableLayoutPanel2.ColumnCount = 1;
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel5, 0, 2);
 			this.tableLayoutPanel2.Controls.Add(this.pnlBlockTeamScheduling, 0, 0);
 			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel2.Location = new System.Drawing.Point(10, 10);
@@ -460,51 +454,6 @@
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 35F));
 			this.tableLayoutPanel2.Size = new System.Drawing.Size(498, 564);
 			this.tableLayoutPanel2.TabIndex = 0;
-			// 
-			// tableLayoutPanel5
-			// 
-			this.tableLayoutPanel5.ColumnCount = 4;
-			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 17F));
-			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 259F));
-			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 17F));
-			this.tableLayoutPanel5.Controls.Add(this.label5, 0, 1);
-			this.tableLayoutPanel5.Controls.Add(this.comboBoxGroupingFairness, 2, 1);
-			this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel5.Location = new System.Drawing.Point(0, 374);
-			this.tableLayoutPanel5.Margin = new System.Windows.Forms.Padding(0);
-			this.tableLayoutPanel5.Name = "tableLayoutPanel5";
-			this.tableLayoutPanel5.RowCount = 4;
-			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 104F));
-			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31F));
-			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31F));
-			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel5.Size = new System.Drawing.Size(498, 190);
-			this.tableLayoutPanel5.TabIndex = 25;
-			// 
-			// label5
-			// 
-			this.label5.AutoSize = true;
-			this.tableLayoutPanel5.SetColumnSpan(this.label5, 2);
-			this.label5.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label5.Location = new System.Drawing.Point(3, 104);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(270, 31);
-			this.label5.TabIndex = 21;
-			this.label5.Text = "xxCompareWithTeamsFrom";
-			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// comboBoxGroupingFairness
-			// 
-			this.comboBoxGroupingFairness.BackColor = System.Drawing.Color.White;
-			this.comboBoxGroupingFairness.BeforeTouchSize = new System.Drawing.Size(199, 23);
-			this.comboBoxGroupingFairness.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.comboBoxGroupingFairness.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBoxGroupingFairness.Location = new System.Drawing.Point(279, 107);
-			this.comboBoxGroupingFairness.Name = "comboBoxGroupingFairness";
-			this.comboBoxGroupingFairness.Size = new System.Drawing.Size(199, 23);
-			this.comboBoxGroupingFairness.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
-			this.comboBoxGroupingFairness.TabIndex = 40;
 			// 
 			// pnlBlockTeamScheduling
 			// 
@@ -1089,9 +1038,6 @@
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvTag)).EndInit();
 			this.tabPageExtra.ResumeLayout(false);
 			this.tableLayoutPanel2.ResumeLayout(false);
-			this.tableLayoutPanel5.ResumeLayout(false);
-			this.tableLayoutPanel5.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.comboBoxGroupingFairness)).EndInit();
 			this.pnlBlockTeamScheduling.ResumeLayout(false);
 			this.tableLayoutPanel4.ResumeLayout(false);
 			this.tableLayoutPanel4.PerformLayout();
@@ -1150,10 +1096,7 @@
         private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxTeamSameShiftCategory;
         private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxTeamGroupPage;
         private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxTeamSameStartTime;
-        private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxTeamSameEndTime;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
-		private System.Windows.Forms.Label label5;
-        private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxGroupingFairness;
+		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxTeamSameEndTime;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
         private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxUseMaxSeats;

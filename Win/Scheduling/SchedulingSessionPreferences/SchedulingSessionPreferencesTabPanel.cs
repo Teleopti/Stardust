@@ -137,7 +137,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 				initGroupPages();
 				initBlockType();
 				initCommonActivity();
-				initGroupPagesFairness();
 				initTags();
 				setDataInControls();
 			}
@@ -188,7 +187,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			comboBoxTeamActivity.DataSource = _availableActivity;
 			comboBoxTeamActivity.DisplayMember = "Name";
 			comboBoxTeamActivity.ValueMember = "Name";
-			comboBoxGroupingFairness.ValueMember = "Key";
 			if (_localSchedulingOptions.CommonActivity != null)
 			{
 				comboBoxTeamActivity.SelectedValue = _localSchedulingOptions.CommonActivity.Name;
@@ -200,15 +198,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			comboBoxAdvTag.DataSource = _scheduleTags;
 			comboBoxAdvTag.DisplayMember = "Description";
 			comboBoxAdvTag.SelectedItem = _localSchedulingOptions.TagToUseOnScheduling;
-		}
-
-		private void initGroupPagesFairness()
-		{
-			var tempGroupPages = _groupPages;
-			comboBoxGroupingFairness.DataSource = tempGroupPages;
-			comboBoxGroupingFairness.DisplayMember = "DisplayName";
-			comboBoxGroupingFairness.ValueMember = "Key";
-			comboBoxGroupingFairness.SelectedIndex = 0;
 		}
 
 		private void dataOffline()
@@ -274,9 +263,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 				_localSchedulingOptions.ShiftCategory = (IShiftCategory) comboBoxAdvShiftCategory.SelectedItem;
 			else
 				_localSchedulingOptions.ShiftCategory = null;
-
-			_localSchedulingOptions.GroupPageForShiftCategoryFairness =
-				(GroupPageLight)comboBoxGroupingFairness.SelectedItem;
 			_localSchedulingOptions.UseShiftCategoryLimitations = checkBoxUseShiftCategoryRestrictions.Checked;
 			_localSchedulingOptions.DoNotBreakMaxStaffing = checkBoxDoNotBreakMaxSeats.Checked;
 			 if(checkBoxUseMaxSeats.Checked && checkBoxDoNotBreakMaxSeats.Checked) 
