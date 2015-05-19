@@ -223,18 +223,5 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         void DeleteMeetingFromBroker(Guid id);
 
-        /// <summary>
-        /// Returns the Total fairnessPoints for all Persons.
-        /// And the Total number of Shifts
-        /// </summary>
-        /// <returns></returns>
-        IFairnessValueResult FairnessValue();
-
-    	/// <summary>
-    	/// Averages the fairness points.
-    	/// </summary>
-    	/// <param name="onPersons">The on persons.</param>
-    	/// <returns></returns>
-    	IFairnessValueResult AverageFairnessPoints(IEnumerable<IPerson> onPersons);
     }
 }
