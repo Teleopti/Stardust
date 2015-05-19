@@ -1,6 +1,13 @@
-﻿using System.Globalization;
+﻿using System.Configuration;
+using System.Globalization;
 using System.ServiceModel;
+using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
+using Teleopti.Ccc.Infrastructure.Authentication;
+using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Sdk.Common.WcfExtensions;
+using Teleopti.Ccc.Sdk.WcfService.Factory;
 
 namespace Teleopti.Ccc.Sdk.WcfService.LogOn
 {
@@ -13,8 +20,13 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
         private bool TryGetPersonFromStore()
         {
             //Genomför inloggning. Kasta exception vid fel.
-	        var result = TenancyLogonFactory.MultiTenancyWindowsLogon().Logon("");
-            if (result.Successful)
+	        var authQuerier = new AuthenticationQuerier(new TenantServerConfiguration(ConfigurationManager.AppSettings["TenantServer"]),
+			        new PostHttpRequest(), new NewtonsoftJsonSerializer(),
+			        new AuthenticationQuerierResultConverter(new NhibConfigDecryption(),
+				        () => StateHolder.Instance.StateReader.ApplicationScopeData, new LoadUserUnauthorized()));
+
+					var result = authQuerier.TryLogon(new IdentityLogonClientModel { Identity = new WebWindowsUserProvider().Identity()}, string.Empty);
+            if (result.Success)
             {
                 //Spara person till cache.
                 _personContainer = new PersonContainer(result.Person)

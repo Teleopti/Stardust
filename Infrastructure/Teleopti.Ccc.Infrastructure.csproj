@@ -238,7 +238,6 @@
     <Compile Include="MultiTenancy\Client\AuthenticationQuerierResultConverter.cs" />
     <Compile Include="MultiTenancy\Client\ChangePassword.cs" />
     <Compile Include="MultiTenancy\Client\IAuthenticationQuerierResultConverter.cs" />
-    <Compile Include="MultiTenancy\Client\IMultiTenancyWindowsLogon.cs" />
     <Compile Include="MultiTenancy\Client\IResponseException.cs" />
     <Compile Include="MultiTenancy\Client\ITenantServerConfiguration.cs" />
     <Compile Include="MultiTenancy\Client\ResponseException.cs" />
@@ -280,7 +279,6 @@
     <Compile Include="MultiTenancy\Server\IdentityUserQuery.cs" />
     <Compile Include="MultiTenancy\Client\AuthenticationQuerier.cs" />
     <Compile Include="MultiTenancy\Server\IPersistLogonAttempt.cs" />
-    <Compile Include="MultiTenancy\Client\IMultiTenancyApplicationLogon.cs" />
     <Compile Include="MultiTenancy\Server\ApplicationUserQuery.cs" />
     <Compile Include="MultiTenancy\Server\IApplicationUserQuery.cs" />
     <Compile Include="MultiTenancy\Client\IPostHttpRequest.cs" />
@@ -288,9 +286,7 @@
     <Compile Include="MultiTenancy\Server\NHibernate\TenantUnitOfWorkAspect.cs" />
     <Compile Include="MultiTenancy\Server\NHibernate\TenantUnitOfWorkAttribute.cs" />
     <Compile Include="MultiTenancy\Server\PersistLogonAttempt.cs" />
-    <Compile Include="MultiTenancy\Client\MultiTenancyApplicationLogon.cs" />
     <Compile Include="MultiTenancy\Server\PersistPersonInfo.cs" />
-    <Compile Include="MultiTenancy\Client\MultiTenancyWindowsLogon.cs" />
     <Compile Include="MultiTenancy\Server\PersonInfo.cs" />
     <Compile Include="MultiTenancy\Server\NHibernate\ICurrentTenantSession.cs" />
     <Compile Include="MultiTenancy\Server\NHibernate\ITenantUnitOfWork.cs" />
