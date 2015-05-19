@@ -212,7 +212,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             } }
         }
 
-        private IFairnessValueResult FairnessPoints(DateTimePeriod period)
+        private IFairnessValueResult fairnessValue(DateTimePeriod period)
         {
             IFairnessValueResult ret = new FairnessValueResult();
             //using(PerformanceOutput.ForOperation("Calculating JusicePoints for " + Person.Name))
@@ -238,10 +238,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             return ret;
         }
 
-        public IFairnessValueResult FairnessPoints()
+        public IFairnessValueResult FairnessValue()
         {
             DateTimePeriod period = VisiblePeriodMinusFourWeeksPeriod();
-            return FairnessPoints(period);
+            return fairnessValue(period);
         }
 
 		public TimeSpan? CalculatedContractTimeHolder

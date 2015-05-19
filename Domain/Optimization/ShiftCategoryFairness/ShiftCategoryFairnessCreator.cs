@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 
             }
 
-        	IFairnessValueResult fairnessValueResult = scheduleRange.FairnessPoints();
+        	IFairnessValueResult fairnessValueResult = scheduleRange.FairnessValue();
 
             return new ShiftCategoryFairnessHolder(shiftDic, fairnessValueResult);
         }

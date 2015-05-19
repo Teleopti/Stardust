@@ -58,7 +58,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: micke
         /// Created date: 2009-01-15
         /// </remarks>
-        IFairnessValueResult FairnessPoints();
+        IFairnessValueResult FairnessValue();
 
         /// <summary>
         /// Gets or sets the calculated contract time holder. Used by the result columns in Scheduler.

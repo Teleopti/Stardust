@@ -228,7 +228,7 @@ namespace Teleopti.Interfaces.Domain
         /// And the Total number of Shifts
         /// </summary>
         /// <returns></returns>
-        IFairnessValueResult FairnessPoints();
+        IFairnessValueResult FairnessValue();
 
     	/// <summary>
     	/// Averages the fairness points.

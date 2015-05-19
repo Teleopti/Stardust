@@ -366,7 +366,6 @@
     <Compile Include="Domain\IScorecardPeriod.cs" />
     <Compile Include="Domain\IServiceLevel.cs" />
     <Compile Include="Domain\IShiftCategoryFairnessHolder.cs" />
-    <Compile Include="Domain\IShiftCategoryFairnessShiftValueCalculator.cs" />
     <Compile Include="Domain\IShiftCategoryLimitation.cs" />
     <Compile Include="Domain\IShiftCategoryLimitationChecker.cs" />
     <Compile Include="Domain\IShiftCreatorService.cs" />

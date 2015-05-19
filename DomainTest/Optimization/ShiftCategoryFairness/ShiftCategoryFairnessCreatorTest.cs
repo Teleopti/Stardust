@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
                 Expect.Call(_d3.SignificantPart()).Return(SchedulePartView.MainShift);
                 Expect.Call(_d3.PersonAssignment()).Return(assignment3);
 
-                Expect.Call(_scheduleRange.FairnessPoints())
+                Expect.Call(_scheduleRange.FairnessValue())
                     .Return(new FairnessValueResult())
                     .Repeat.AtLeastOnce();
 
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
                 Expect.Call(_d1.SignificantPart()).Return(SchedulePartView.DayOff);
                 Expect.Call(_d2.SignificantPart()).Return(SchedulePartView.FullDayAbsence);
                 Expect.Call(_d3.SignificantPart()).Return(SchedulePartView.None);
-                Expect.Call(_scheduleRange.FairnessPoints())
+                Expect.Call(_scheduleRange.FairnessValue())
                     .Return(new FairnessValueResult());
 
             }

@@ -64,7 +64,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
              _scheduleDateOnlyPeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2009, 2, 10),_timeZoneInfo);
 			_info = new PermissionInformation(_person);
 			_info.SetDefaultTimeZone(_timeZoneInfo);
-            _mocks.StrictMock<IShiftCategoryFairnessShiftValueCalculator>();
 
         	_workShiftMinMaxCalculator = _mocks.StrictMock<IWorkShiftMinMaxCalculator>();
             _fairnessAndMaxSeatCalculatorsManager = _mocks.StrictMock<IFairnessAndMaxSeatCalculatorsManager>();

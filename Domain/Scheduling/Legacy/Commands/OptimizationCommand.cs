@@ -138,7 +138,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 							break;
 						}
 
-						// we need it here for fairness opt. for example
 						groupPagePerDateHolder.GroupPersonGroupPagePerDate = groupPersonGroupPagePerDate;
 						scheduleOptimizerHelper.ReOptimize(backgroundWorker, selectedSchedules, schedulingOptions);
 

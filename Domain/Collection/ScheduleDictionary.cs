@@ -634,12 +634,12 @@ namespace Teleopti.Ccc.Domain.Collection
 
         #endregion
 
-        public IFairnessValueResult FairnessPoints()
+        public IFairnessValueResult FairnessValue()
         {
             IFairnessValueResult ret = new FairnessValueResult();
             foreach (IScheduleRange range in Values)
             {
-                IFairnessValueResult temp = range.FairnessPoints();
+                IFairnessValueResult temp = range.FairnessValue();
                 ret.TotalNumberOfShifts += temp.TotalNumberOfShifts;
             }
             return ret;
@@ -655,7 +655,7 @@ namespace Teleopti.Ccc.Domain.Collection
 			foreach (var person in onPersons)
 			{
 				var range = _dictionary[person];
-				IFairnessValueResult temp = range.FairnessPoints();
+				IFairnessValueResult temp = range.FairnessValue();
 				ret.TotalNumberOfShifts += temp.TotalNumberOfShifts;
 			}
     		ret.TotalNumberOfShifts = ret.TotalNumberOfShifts/onPersons.Count();

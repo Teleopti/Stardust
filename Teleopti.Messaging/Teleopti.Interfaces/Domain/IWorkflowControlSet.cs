@@ -235,14 +235,6 @@ namespace Teleopti.Interfaces.Domain
         bool AnonymousTrading { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether use shift category fairness or fairness points.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if use shift category fairness; otherwise, <c>false</c>.
-        /// </value>
-        //bool UseShiftCategoryFairness { get; set; }
-
-        /// <summary>
         /// Get absences allowed for preferences
         /// </summary>
         IEnumerable<IAbsence> AllowedPreferenceAbsences { get; }
