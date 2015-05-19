@@ -201,6 +201,14 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBrokerUnitOfWork
 			UnitOfWork.Current().Should().Be.Null();
 		}
 
+		[Test]
+		public void ShouldNotCommitOrDisposeWhenUnitOfWorkNeverUsed()
+		{
+			var target = TheService;
+
+			Assert.DoesNotThrow(target.DoesNothingWithTheUnitOfWork);
+		}
+
 		private static Thread onAnotherThread(Action action)
 		{
 			var thread = new Thread(() => action());
@@ -247,6 +255,11 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBrokerUnitOfWork
 		public virtual void Does(Action<ILiteUnitOfWork> action)
 		{
 			action(_uow.Current());
+		}
+
+		[MessageBrokerUnitOfWork]
+		public virtual void DoesNothingWithTheUnitOfWork()
+		{
 		}
 
 		[MessageBrokerUnitOfWork]

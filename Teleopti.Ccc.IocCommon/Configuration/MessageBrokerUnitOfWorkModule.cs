@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Infrastructure.LiteUnitOfWork;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.MessageBrokerUnitOfWork;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
@@ -11,6 +10,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			builder.RegisterType<MessageBrokerUnitOfWorkState>()
 				.As<ICurrentMessageBrokerUnitOfWork>()
+				.As<IMessageBrokerUnitOfWorkScope>()
 				.SingleInstance();
 			builder.RegisterType<MessageBrokerUnitOfWorkAspect>()
 				.As<IMessageBrokerUnitOfWorkAspect>()
