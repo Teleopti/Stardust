@@ -25,9 +25,6 @@ declare @TemplateStartDate datetime
 set @TemplateEndDate = '2013-03-03'
 set @TemplateStartDate = '2013-02-04'
 
-update $(TELEOPTIANALYTICS).dbo.aspnet_users set LoweredUserName=''
-update $(TELEOPTIANALYTICS).dbo.aspnet_users set UserName=''
-
 --clean out unwanted fact data from Analytics
 set @TemplateStartDate = '2014-02-03'
 set @TemplateEndDate = '2014-03-02'
