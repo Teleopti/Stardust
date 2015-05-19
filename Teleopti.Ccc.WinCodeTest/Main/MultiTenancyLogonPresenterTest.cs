@@ -82,13 +82,13 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			var uowFact = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			var person = MockRepository.GenerateMock<IPerson>();
 			var permiss = MockRepository.GenerateMock<IPermissionInformation>();
-			var appAuthInfo = new AuthenticationResult{Successful = true, Person = person, DataSource = dataSource};
+			var appAuthInfo = new AuthenticationQuerierResult{Success = true,Person = person, DataSource = dataSource};
 			var buRep = MockRepository.GenerateMock<IBusinessUnitRepository>();
 			
 			_model.UserName = "USER";
 			_model.Password = "PASS";
 
-			_appLogon.Stub(x => x.Logon("USER","PASS", "WIN")).Return(appAuthInfo);
+			_authenticationQuerier.Stub(x => x.TryLogon(new ApplicationLogonClientModel(),"WIN")).Return(appAuthInfo).IgnoreArguments();
 			
 			person.Stub(x => x.PermissionInformation).Return(permiss);
 			permiss.Stub(x => x.HasAccessToAllBusinessUnits()).Return(true);
@@ -176,10 +176,10 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			var uowFact = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			var person = MockRepository.GenerateMock<IPerson>();
 			var permiss = MockRepository.GenerateMock<IPermissionInformation>();
-			var appAuthInfo = new AuthenticationResult { Successful = true, Person = person, DataSource = dataSource };
+			var appAuthInfo = new AuthenticationQuerierResult { Success = true, Person = person, DataSource = dataSource };
 			var buRep = MockRepository.GenerateMock<IBusinessUnitRepository>();
 			
-			_winLogon.Stub(x => x.Logon("WIN")).Return(appAuthInfo);
+			_authenticationQuerier.Stub(x => x.TryLogon(new IdentityLogonClientModel(), "WIN")).Return(appAuthInfo).IgnoreArguments();
 
 			person.Stub(x => x.PermissionInformation).Return(permiss);
 			permiss.Stub(x => x.HasAccessToAllBusinessUnits()).Return(true);
