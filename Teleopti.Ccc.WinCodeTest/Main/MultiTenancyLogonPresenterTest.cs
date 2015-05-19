@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -11,6 +12,7 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Main;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
@@ -80,8 +82,8 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 		{
 			var dataSource = MockRepository.GenerateMock<IDataSource>();
 			var uowFact = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-			var person = MockRepository.GenerateMock<IPerson>();
-			var permiss = MockRepository.GenerateMock<IPermissionInformation>();
+			var person = new Person();
+			person.SetId(Guid.NewGuid());
 			var appAuthInfo = new AuthenticationQuerierResult{Success = true,Person = person, DataSource = dataSource};
 			var buRep = MockRepository.GenerateMock<IBusinessUnitRepository>();
 			
@@ -90,8 +92,6 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 
 			_authenticationQuerier.Stub(x => x.TryLogon(new ApplicationLogonClientModel(),"WIN")).Return(appAuthInfo).IgnoreArguments();
 			
-			person.Stub(x => x.PermissionInformation).Return(permiss);
-			permiss.Stub(x => x.HasAccessToAllBusinessUnits()).Return(true);
 			dataSource.Stub(x => x.Application).Return(uowFact);
 			var uow = MockRepository.GenerateMock<IUnitOfWork>();
 			uowFact.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
@@ -174,15 +174,13 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			var bu2 = new BusinessUnit("Bu two");
 			var dataSource = MockRepository.GenerateMock<IDataSource>();
 			var uowFact = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-			var person = MockRepository.GenerateMock<IPerson>();
-			var permiss = MockRepository.GenerateMock<IPermissionInformation>();
+			var person = new Person();
+			person.SetId(Guid.NewGuid());
 			var appAuthInfo = new AuthenticationQuerierResult { Success = true, Person = person, DataSource = dataSource };
 			var buRep = MockRepository.GenerateMock<IBusinessUnitRepository>();
 			
 			_authenticationQuerier.Stub(x => x.TryLogon(new IdentityLogonClientModel(), "WIN")).Return(appAuthInfo).IgnoreArguments();
 
-			person.Stub(x => x.PermissionInformation).Return(permiss);
-			permiss.Stub(x => x.HasAccessToAllBusinessUnits()).Return(true);
 			dataSource.Stub(x => x.Application).Return(uowFact);
 			var uow = MockRepository.GenerateMock<IUnitOfWork>();
 			uowFact.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
@@ -193,6 +191,48 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 
 			_target.CurrentStep = LoginStep.SelectLogonType;
 			_target.OkbuttonClicked();
+		}
+
+		[Test]
+		public void ShouldSetTenantCredentialsAfterWinAuthentication()
+		{
+			WinTenantCredentials.Clear();
+			_model.AuthenticationType = AuthenticationTypeOption.Windows;
+			var tenantPassword = RandomName.Make();
+			var personId = Guid.NewGuid();
+			var person = new Person();
+			person.SetId(personId);
+			var appAuthInfo = new AuthenticationQuerierResult { Success = true, Person = person, TenantPassword = tenantPassword};
+
+			_authenticationQuerier.Stub(x => x.TryLogon(new IdentityLogonClientModel(), "WIN")).Return(appAuthInfo).IgnoreArguments();
+
+			_target.CurrentStep = LoginStep.SelectBu;
+			_target.OkbuttonClicked();
+
+			var credentials = new WinTenantCredentials().TenantCredentials;
+			credentials.PersonId.Should().Be.EqualTo(personId);
+			credentials.TenantPassword.Should().Be.EqualTo(tenantPassword);
+		}
+
+		[Test]
+		public void ShouldSetTenantCredentialsAfterApplicationAuthentication()
+		{
+			WinTenantCredentials.Clear();
+			_model.AuthenticationType = AuthenticationTypeOption.Application;
+			var tenantPassword = RandomName.Make();
+			var personId = Guid.NewGuid();
+			var person = new Person();
+			person.SetId(personId);
+			var appAuthInfo = new AuthenticationQuerierResult { Success = true, Person = person, TenantPassword = tenantPassword };
+
+			_authenticationQuerier.Stub(x => x.TryLogon(new ApplicationLogonClientModel(), "APP")).Return(appAuthInfo).IgnoreArguments();
+
+			_target.CurrentStep = LoginStep.SelectBu;
+			_target.OkbuttonClicked();
+
+			var credentials = new WinTenantCredentials().TenantCredentials;
+			credentials.PersonId.Should().Be.EqualTo(personId);
+			credentials.TenantPassword.Should().Be.EqualTo(tenantPassword);
 		}
 
 		[Test]

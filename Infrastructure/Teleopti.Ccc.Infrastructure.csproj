@@ -238,9 +238,11 @@
     <Compile Include="MultiTenancy\Client\AuthenticationQuerierResultConverter.cs" />
     <Compile Include="MultiTenancy\Client\ChangePassword.cs" />
     <Compile Include="MultiTenancy\Client\IAuthenticationQuerierResultConverter.cs" />
+    <Compile Include="MultiTenancy\Client\ICurrentTenantCredentials.cs" />
     <Compile Include="MultiTenancy\Client\IResponseException.cs" />
     <Compile Include="MultiTenancy\Client\ITenantServerConfiguration.cs" />
     <Compile Include="MultiTenancy\Client\ResponseException.cs" />
+    <Compile Include="MultiTenancy\Client\TenantCredentials.cs" />
     <Compile Include="MultiTenancy\Client\TenantLogonDataManager.cs" />
     <Compile Include="MultiTenancy\Client\TenantServerConfiguration.cs" />
     <Compile Include="MultiTenancy\Server\ApplicationUserQueryFake.cs" />

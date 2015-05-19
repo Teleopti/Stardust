@@ -196,6 +196,7 @@ namespace Teleopti.Ccc.WinCode.Main
 			{
 				_model.SelectedDataSourceContainer = new DataSourceContainer(authenticationResult.DataSource);
 				_model.SelectedDataSourceContainer.SetUser(authenticationResult.Person);
+				WinTenantCredentials.SetCredentials(authenticationResult.Person.Id.Value, authenticationResult.TenantPassword);
 				return true;
 			}
 
@@ -211,6 +212,7 @@ namespace Teleopti.Ccc.WinCode.Main
 			{
 				_model.SelectedDataSourceContainer = new DataSourceContainer(authenticationResult.DataSource);
 				_model.SelectedDataSourceContainer.SetUser(authenticationResult.Person);
+				WinTenantCredentials.SetCredentials(authenticationResult.Person.Id.Value, authenticationResult.TenantPassword);
 				return true;
 			}
 			_model.Warning = authenticationResult.FailReason;
