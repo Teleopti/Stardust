@@ -19,7 +19,7 @@ describe('ForecastingCtrl', function () {
 
 		expect(scope.period).toBe(undefined);
 		$controller('ForecastingCtrl', { $scope: scope, $state: {} });
-		expect(scope.period.startDate).toBe(moment().utc().add(1, 'months').startOf('month').toDate());
-		expect(scope.period.endDate).toBe(moment().utc().add(2, 'months').startOf('month').toDate());
+		expect(scope.period.startDate.toString()).toBe(moment().utc().add(1, 'months').startOf('month').toDate().toString());
+		expect(scope.period.endDate.toString()).toBe(moment().utc().add(2, 'months').startOf('month').toDate().toString());
 	}));
 });
