@@ -2,6 +2,7 @@
 using System.IO;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
+using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
@@ -10,11 +11,15 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 	{
 		private readonly ITenantServerConfiguration _tenantServerConfiguration;
 		private readonly Func<IApplicationData> _applicationData;
+		private readonly ILoadUserUnauthorized _loadUserUnauthorized;
 
-		public AuthenticationFromFileQuerier(ITenantServerConfiguration tenantServerConfiguration, Func<IApplicationData> applicationData)
+		public AuthenticationFromFileQuerier(ITenantServerConfiguration tenantServerConfiguration, 
+																				Func<IApplicationData> applicationData,
+																				ILoadUserUnauthorized loadUserUnauthorized)
 		{
 			_tenantServerConfiguration = tenantServerConfiguration;
 			_applicationData = applicationData;
+			_loadUserUnauthorized = loadUserUnauthorized;
 		}
 
 		public AuthenticationQuerierResult TryLogon(ApplicationLogonClientModel applicationLogonClientModel, string userAgent)
@@ -35,9 +40,17 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 
 			var json = File.ReadAllText(path);
 
-			var result = JsonConvert.DeserializeObject<AuthenticationQuerierResult>(json);
-			_applicationData().MakeSureDataSourceExists(result.DataSource.DataSourceName, result.ApplicationNHibernateConfig, result.AnalyticsConnectionString);
-			return result;
+			var applicationdata = _applicationData();
+			var result = JsonConvert.DeserializeObject<AuthenticationInternalQuerierResult>(json);
+			applicationdata.MakeSureDataSourceExists(result.Tenant, result.DataSourceConfiguration.ApplicationNHibernateConfig, result.DataSourceConfiguration.AnalyticsConnectionString);
+			var datasource = applicationdata.Tenant(result.Tenant);
+			var ret = new AuthenticationQuerierResult
+			{
+				Success = true,
+				Person = _loadUserUnauthorized.LoadFullPersonInSeperateTransaction(datasource.Application, result.PersonId),
+				DataSource = datasource
+			};
+			return ret;
 		}
 	}
 }
