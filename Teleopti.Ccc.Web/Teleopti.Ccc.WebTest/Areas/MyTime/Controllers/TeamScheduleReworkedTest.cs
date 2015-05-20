@@ -14,10 +14,11 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
+	[CLSCompliant(false)]
 	[TestFixture, MyTimeWebTest]
 	public class TeamScheduleReworkedTest
 	{
-		public TeamScheduleController target;
+		public TeamScheduleController Target;
 		
 		public IPersonRepository PersonRepository;
 		public IPersonForScheduleFinder PersonForScheduleFinder;
@@ -69,7 +70,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void TargetControllerNotNull()
 		{
 
-			target.Should().Not.Be.Null();
+			Target.Should().Not.Be.Null();
 		}
 
 
@@ -107,7 +108,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			SetUp();
 
-			var jsonResult = target.TeamSchedule(
+			var jsonResult = Target.TeamSchedule(
 				new DateOnly(2015, 5, 19),
 				new ScheduleFilter() {TeamIds = String.Join(",",TeamRepository.LoadAll().Select(x => x.Id.Value).ToList() ), SearchNameText = ""},
 				new Paging() { Take = 20, Skip = 0}
@@ -124,7 +125,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			SetUp();
 
 
-			var jsonResult = target.TeamSchedule(
+			var jsonResult = Target.TeamSchedule(
 				new DateOnly(2015, 5, 19),
 				new ScheduleFilter() { TeamIds = String.Join(",", TeamRepository.LoadAll().Select(x => x.Id.Value).ToList()), SearchNameText = "1" },
 				new Paging() { Take = 20, Skip = 0 }
@@ -140,7 +141,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			SetUp();
 
 
-			var jsonResult = target.TeamSchedule(
+			var jsonResult = Target.TeamSchedule(
 				new DateOnly(2015, 5, 19),
 				new ScheduleFilter() { TeamIds = String.Join(",", TeamRepository.LoadAll().Select(x => x.Id.Value).ToList()), SearchNameText = "", FilteredStartTimes = "07:45-08:15"},
 				new Paging() { Take = 20, Skip = 0 }
@@ -158,7 +159,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			SetUp();
 
-			var jsonResult = target.TeamSchedule(
+			var jsonResult = Target.TeamSchedule(
 				new DateOnly(2015, 5, 19),
 				new ScheduleFilter() { TeamIds = String.Join(",", TeamRepository.LoadAll().Select(x => x.Id.Value).ToList()), SearchNameText = "" },
 				new Paging() { Take = 20, Skip = 0 }
