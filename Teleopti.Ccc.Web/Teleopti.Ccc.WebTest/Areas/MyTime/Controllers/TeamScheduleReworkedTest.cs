@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 	[TestFixture, MyTimeWebTest]
 	public class TeamScheduleReworkedTest
 	{
-		public TeamScheduleController Target;
+		public TeamScheduleController target;
 		
 		public IPersonRepository PersonRepository;
 		public IPersonForScheduleFinder PersonForScheduleFinder;
@@ -68,7 +68,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void TargetControllerNotNull()
 		{
-			Target.Should().Not.Be.Null();
+
+			target.Should().Not.Be.Null();
 		}
 
 
@@ -106,7 +107,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			SetUp();
 
-			var jsonResult = Target.TeamSchedule(
+			var jsonResult = target.TeamSchedule(
 				new DateOnly(2015, 5, 19),
 				new ScheduleFilter() {TeamIds = String.Join(",",TeamRepository.LoadAll().Select(x => x.Id.Value).ToList() ), SearchNameText = ""},
 				new Paging() { Take = 20, Skip = 0}
@@ -115,6 +116,57 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var result = (TeamScheduleViewModelReworked)jsonResult.Data;
 			result.TimeLine.Max(t => t.EndTime).Should().Be.EqualTo(new DateTime(2015, 5, 19, 19, 15, 0));
 			result.TimeLine.Min(t => t.StartTime).Should().Be.EqualTo(new DateTime(2015, 5, 19, 7, 45, 0));
+		}
+
+		[Test]
+		public void ShouldReturnCorrectAgentSchedulesWithNameSearch()
+		{
+			SetUp();
+
+
+			var jsonResult = target.TeamSchedule(
+				new DateOnly(2015, 5, 19),
+				new ScheduleFilter() { TeamIds = String.Join(",", TeamRepository.LoadAll().Select(x => x.Id.Value).ToList()), SearchNameText = "1" },
+				new Paging() { Take = 20, Skip = 0 }
+				);
+
+			var result = (TeamScheduleViewModelReworked)jsonResult.Data;
+			result.AgentSchedules.Should().Have.Count.EqualTo(1);
+		}
+
+		[Test, Ignore]
+		public void ShouldReturnCorrectAgentSchedulesWithTimeFilter()
+		{
+			SetUp();
+
+
+			var jsonResult = target.TeamSchedule(
+				new DateOnly(2015, 5, 19),
+				new ScheduleFilter() { TeamIds = String.Join(",", TeamRepository.LoadAll().Select(x => x.Id.Value).ToList()), SearchNameText = "", FilteredStartTimes = "07:45-08:15"},
+				new Paging() { Take = 20, Skip = 0 }
+				);
+
+			var result = (TeamScheduleViewModelReworked)jsonResult.Data;
+			result.AgentSchedules.Should().Have.Count.EqualTo(2);
+
+
+		}
+
+
+		[Test]
+		public void ShouldNotSeeScheduleOfUnpublishedAgent()
+		{
+			SetUp();
+
+			var jsonResult = target.TeamSchedule(
+				new DateOnly(2015, 5, 19),
+				new ScheduleFilter() { TeamIds = String.Join(",", TeamRepository.LoadAll().Select(x => x.Id.Value).ToList()), SearchNameText = "" },
+				new Paging() { Take = 20, Skip = 0 }
+				);
+
+			var result = (TeamScheduleViewModelReworked)jsonResult.Data;
+
+			result.AgentSchedules.First(x => x.Name.Contains("Unpublish")).ScheduleLayers.Should().Be.Null();
 		}
 	}
 }

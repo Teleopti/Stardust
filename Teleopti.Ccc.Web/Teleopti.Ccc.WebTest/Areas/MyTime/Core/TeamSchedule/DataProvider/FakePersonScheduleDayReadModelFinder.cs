@@ -47,7 +47,23 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 			string timeSortOrder = "")
 		{
 
-			var assignments = _personAssignmentRepository.LoadAll().Where(a => personIdList.Contains(a.Person.Id.Value) && date == a.Date);
+			var assignments = _personAssignmentRepository.LoadAll().Where(a =>
+			{
+				var timeFiltered = true;
+				if (filterInfo != null)
+				{
+					if (filterInfo.StartTimes.Any() && !filterInfo.StartTimes.Any( period => period.Contains(a.Period.StartDateTime)))
+					{
+						timeFiltered = false;
+					}
+
+					if (filterInfo.EndTimes.Any() && !filterInfo.EndTimes.Any(period => period.Contains(a.Period.EndDateTime)))
+					{
+						timeFiltered = false;
+					}
+				}
+				return personIdList.Contains(a.Person.Id.Value) && date == a.Date && timeFiltered;
+			});
 
 			return assignments.Select(a =>
 			{
