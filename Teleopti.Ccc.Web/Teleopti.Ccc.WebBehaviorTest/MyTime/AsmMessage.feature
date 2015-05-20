@@ -112,6 +112,7 @@ Scenario: Reduce number of unread messages in message tab title
 	And I confirm reading the message with the title 'New message'
 	Then I should be notified that I have '1' unread message(s)
 
+@ignore
 Scenario: Receive a new message when viewing message page
 	Given I have the role 'Full access to mytime'
 	And I am viewing messages
@@ -129,6 +130,7 @@ Scenario: Open unread message where text reply is allowed
 	When I click on the message with the title 'New message'
 	Then I should be able to write a text reply for the message with the title 'New message'
 
+	@ignore
 Scenario: See reply dialogue in message text
 	Given I have the role 'Full access to mytime'
 	And I have an unread message with
