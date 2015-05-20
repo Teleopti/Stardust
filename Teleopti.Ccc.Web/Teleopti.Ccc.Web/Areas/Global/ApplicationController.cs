@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Toggle;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Models.Shared;
 
@@ -48,7 +47,16 @@ namespace Teleopti.Ccc.Web.Areas.Global
 			{
 				return  _toggleManager.IsEnabled(Toggles.Wfm_ResourcePlanner_32892);
 			}
-				return true;
+			if (path.Equals(DefinedRaptorApplicationFunctionPaths.Outbound))
+			{
+				return _toggleManager.IsEnabled(Toggles.Wfm_Outbound_Campaign_32696);
+			}
+			if (path.Equals(DefinedRaptorApplicationFunctionPaths.SeatPlanner))
+			{
+				return _toggleManager.IsEnabled(Toggles.Wfm_SeatPlanner_Logon_32003);
+			}
+				
+			return true;
 		}
 	}
 }

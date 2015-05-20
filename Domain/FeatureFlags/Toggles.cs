@@ -66,7 +66,9 @@
 		Wfm_MinimumScaffolding_32659,
 		Wfm_ResourcePlanner_32892,
 		Wfm_ChangePlanningPeriod_33043,
-		WfmPeople_AdvancedSearch_32973
+		WfmPeople_AdvancedSearch_32973,
+		Wfm_Outbound_Campaign_32696,
+		Wfm_SeatPlanner_Logon_32003
 		// ReSharper restore InconsistentNaming
 	}
 }
