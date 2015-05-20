@@ -25,7 +25,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var vm;
 	var completelyLoaded;
-	var userTimeZoneMinuteOffset = 0;
 	
 	function _bindData(data) {
 		vm.Initialize(data);
@@ -49,40 +48,15 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		});
 	}
 
-	function getUtcNowString() {
-
-		var now = new Date();
-		var dateStr = now.getUTCFullYear().toString() + '-' +
-					(now.getUTCMonth() + 1).toString() + '-' +
-					now.getUTCDate().toString() + ' ' +
-					now.getUTCHours().toString() + ':' +
-					now.getUTCMinutes().toString();
-		return dateStr;
-	};
-
 	function _initTimeIndicator() {
 		var currentDateTimeStart = new Date(new Date().getTeleoptiTime());
 		_setTimeIndicator(currentDateTimeStart);
-
-		setInterval(function() {
-
-			var currentDateTime = new Date(new Date(getUtcNowString()).getTime() + userTimeZoneMinuteOffset * 60000);
-
-			if (timeIndicatorDateTime == undefined || currentDateTime.getHours() != timeIndicatorDateTime.getHours()) {
-
-				ajax.Ajax({
-					url: 'Schedule/GetUserTimeZoneMinuteOffset',
-					dataType: "json",
-					type: 'GET',
-					success: function(data) {
-						userTimeZoneMinuteOffset = data.UserTimeZoneMinuteOffset;
-					}
-				});
+		setInterval(function () {
+			var currentDateTime = new Date(new Date().getTeleoptiTime());
+			if (timeIndicatorDateTime == undefined || currentDateTime.getMinutes() != timeIndicatorDateTime.getMinutes()) {
+				timeIndicatorDateTime = currentDateTime;
+				_setTimeIndicator(timeIndicatorDateTime);
 			}
-
-			timeIndicatorDateTime = currentDateTime;
-			_setTimeIndicator(timeIndicatorDateTime);
-
 		}, 1000);
 	}
 
