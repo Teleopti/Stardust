@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 using System.Globalization;
 using System.Threading;
 using System.Windows;
@@ -8,6 +9,7 @@ using Autofac;
 using Teleopti.Analytics.Etl.ConfigTool.Gui.StartupConfiguration;
 using Teleopti.Analytics.Etl.Transformer;
 using log4net.Config;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.MultipleConfig;
 using Teleopti.Interfaces.Domain;
@@ -60,8 +62,19 @@ namespace Teleopti.Analytics.Etl.ConfigTool
 
 			 builder.RegisterModule(
 			 new CommonModule(configuration));
+		    builder.RegisterType<removeMeWhenNoLongerReadingPersonInfoFromTenant>()
+			    .As<ICurrentTenantCredentials>()
+			    .SingleInstance();
 			 return builder.Build();
 
+	    }
+
+	    private class removeMeWhenNoLongerReadingPersonInfoFromTenant : ICurrentTenantCredentials
+	    {
+		    public TenantCredentials TenantCredentials()
+		    {
+			    return new TenantCredentials(Guid.Empty, string.Empty);
+		    }
 	    }
     }
 }
