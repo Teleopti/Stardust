@@ -1,3 +1,4 @@
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Interfaces.Domain;
 
@@ -5,9 +6,26 @@ namespace Teleopti.Ccc.WebTest
 {
 	public class FakePermissionProvider : IPermissionProvider
 	{
+
+		private readonly bool _canSeeUnpublishedSchedule;
+
+		public FakePermissionProvider()
+		{
+			_canSeeUnpublishedSchedule = true;
+		} 
+
+		public FakePermissionProvider(bool canSeeUnpublishedSchedule)
+		{
+			_canSeeUnpublishedSchedule = canSeeUnpublishedSchedule;
+		}
+
+
 		public bool HasApplicationFunctionPermission(string applicationFunctionPath)
 		{
-			return true;
+
+			return _canSeeUnpublishedSchedule ||
+			       applicationFunctionPath != DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules;
+			
 		}
 
 		public bool HasPersonPermission(string applicationFunctionPath, DateOnly date, IPerson person)
@@ -28,7 +46,11 @@ namespace Teleopti.Ccc.WebTest
 
 		public bool IsPersonSchedulePublished(DateOnly date, IPerson person, ScheduleVisibleReasons reason)
 		{
+			var name = person.Name.FirstName + person.Name.LastName;
+
+			if (name.Contains("Unpublish")) return false;
 			return true;
+						
 		}
 	}
 }
