@@ -1,36 +1,6 @@
-﻿.xl-notice-icon {
-	padding: 8px!important;
-	padding: 15px;
-	line-height: 16px!important;
-	background-color: white;
-	color: #fff;
-	text-align: center;
-	cursor:default;
-	border-radius: 50%;
-	border: none;
-	margin: 5px;
-	transition: all .2s ease-in-out;
-	text-decoration: none!important;
+﻿i::before{
+vertical-align:text-top;
 }
-
-.xl-notice{
-	h4{
-		display: inline;
-		font-weight: bold;
-	}
-
-	p{
-	display: inline;
-
-	}
-
-	i{
-		color: black;
-	}
-}
-
-.schedule-details{
-	.ui-grid-column-menu-button {
-		display:none!important;
-	}
+.grid{
+height:75vh;
 }

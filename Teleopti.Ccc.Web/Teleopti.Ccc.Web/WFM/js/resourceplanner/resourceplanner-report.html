@@ -1,16 +1,9 @@
 ﻿<div >
 	<h4>Scheduling result</h4>
 	<p>{{scheduledAgents}} agents were successfully scheduled</p>
-	<br />
-
-</div>
-<div class="xl-notice">
-	<i style="color: red;" class="mdi mdi-alert-octagon"></i></button
-><p>Found the following {{issuePreview.length}} issues during scheduling</p>
+	<p><i class="text-danger mdi mdi-alert-octagon "style=""></i>{{issues.length}} issues were found during scheduling</p>
 </div>
 <div class="big-table-wrapper material-depth-2">
-	<div class="wfm-block">
-	</div>
-	<div ui-grid="gridOptions" ui-grid-auto-resize class="myGrid schedule-details"></div>
+	<div ui-grid="gridOptions" ui-grid-auto-resize class="grid"></div>
 </div>
 
