@@ -1219,6 +1219,7 @@
     <Content Include="WFM\js\outbound\outbound.directive.js" />
     <None Include="WFM\css\_forecasting.scss" />
     <Content Include="WFM\js\permissions\permissions.filters.js" />
+    <Content Include="WFM\js\permissions\roles.service.js" />
     <Content Include="WFM\js\resourceplanner\resourceplanner-report.html" />
     <Content Include="WFM\js\resourceplanner\resourceplanner.report.controller.js" />
     <Content Include="WFM\js\seatManagement\fabric.fix.js" />

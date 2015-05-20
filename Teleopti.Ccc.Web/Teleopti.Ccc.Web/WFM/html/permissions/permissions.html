@@ -26,7 +26,7 @@
 
 					<div id="searchRoleResults">
 						<ul class="wfm-list roles-list">
-							<li ng-repeat="role in roles | filter:searchRoles" ng-click="showRole(role.Id)" ng-dblclick="editing = true" ng-class="{'active': role.Id==selectedRole}" class="role-btn wfm-block wfm-list-item role">
+							<li ng-repeat="role in roles | filter:searchRoles" ng-click="showRole(role)" ng-dblclick="editing = true" ng-class="{'active': role.Id==selectedRole}" class="role-btn wfm-block wfm-list-item role">
 								<div class="wfm-leave-behind">
 									<span>
 										<i ng-click="copyRole(role.Id)" class="mdi mdi-content-copy">
@@ -39,7 +39,7 @@
 												{{'Edit' | translate}}
 											</md-tooltip>
 										</i>
-										<i ng-click="removeRole(role, $index)" class="mdi mdi-delete">
+										<i ng-click="removeRole(role)" class="mdi mdi-delete">
 											<md-tooltip>
 												{{'Delete' | translate}}
 											</md-tooltip>
@@ -65,40 +65,8 @@
 					</label>
 
 					<section>
-						<div class="tab-container functions-container animate-show" ng-show="roleDetails=='functionsAvailable'" >
-								<div class="row toolbar">
-									<div class="col-md-8">
-										<div class="input-prepend">
-											<i class="mdi mdi-filter-outline"></i>
-											<input type="text" name="filterDetails" ng-model="searchPermissions" placeholder="{{'PermissionsFilterThreeDots' | translate}}" />
-										</div>
-									</div>
-									<div class="col-md-4">
-										<div class="wfm-switch permissions-tree-switch">
-											<input type="checkbox" id="switch1" ng-model="selectedFunctionsToggle" ng-click="node.show = true" />
-											<label for="switch1">
-												<span class="wfm-switch-label" translate>SelectedItems</span>
-												<span class="wfm-switch-toggle"></span>
-											</label>
-										</div>
+						<div class="tab-container functions-container animate-show" ng-include="'js/permissions/permissions.functions.html'" ng-show="roleDetails=='functionsAvailable'">
 
-										<div class="wfm-switch permissions-tree-switch">
-											<input type="checkbox" id="switch2" ng-model="unselectedFunctionsToggle" />
-											<label for="switch2">
-												<span class="wfm-switch-label" translate>NotSelectedItems</span>
-												<span class="wfm-switch-toggle"></span>
-											</label>
-										</div>
-									</div>
-								</div>
-
-								<div class="tree permissions-tree">
-									<div ui-tree data-drag-enabled="false">
-										<ol ui-tree-nodes="" ng-model="functionsDisplayed" id="tree-root" class="tree-line" toggle-focus>
-											<li ng-repeat="node in functionsDisplayed | filter:searchPermissions | selectedFunctions:selectedFunctionsToggle | unselectedFunctions:unselectedFunctionsToggle" ui-tree-node ng-include="'nodes_renderer.html'"></li>
-										</ol>
-									</div>
-								</div>
 						</div>
 					</section>
 					<input type="radio" name="perms-tabs" ng-model="roleDetails" ng-value="'dataAvailable'" id="tab-2" />
@@ -164,26 +132,6 @@
 		</div>
 	</div>
 
-
-
-
-<!-- Nested node template for functions -->
-<script type="text/ng-template" id="nodes_renderer.html">
-	<div class="tree-toggle-group" >
-		<div class="toggle-handle" ng-class="{open: node.show}" ng-click="node.show = !node.show"><i ng-show="childNodes().length > 0" class="mdi mdi-chevron-right"></i></div>
-		<div ui-tree-handle class="ui-tree-handle" ng-class="{selected: node.selected}" ng-click="toggleFunctionForRole(this)">
-			{{node.LocalizedFunctionDescription}} {{nbSelected(childNodes()) }} / {{childNodes().length}} selected
-			<span><i class="mdi mdi-check"></i></span>
-		</div>
-	</div>
-
-	<ol ui-tree-nodes="" ng-model="node.ChildFunctions" ng-show="node.show" >
-		{{$node}}
-		<li ng-repeat="node in node.ChildFunctions | filter:searchPermissions | selectedFunctions:selectedFunctionsToggle | unselectedFunctions:unselectedFunctionsToggle" 
-				ui-tree-node ng-include="'nodes_renderer.html'" ng-hide="applyFilter(this)">
-		</li>
-	</ol>
-</script>
 
 <!-- Nested node template for data -->
 <script type="text/ng-template" id="nodes_bu_renderer.html">

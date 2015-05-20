@@ -7,7 +7,6 @@
 				if (!selectedFunctionToggle) return nodes;
 
 				var filteredNodes = [];
-				console.log(nodes);
 				nodes.forEach(function(node) {
 					if (node.selected || node.nmbSelectedChildren > 0) {
 						filteredNodes.push(node);
@@ -37,7 +36,7 @@
 			}
 		}
 	]);
-
+/*
 	permissionsFilters.filter('unselectedFunctions2', [
 		function () {
 			return function (node, unselectedFunctionToggle) {
@@ -53,6 +52,6 @@
 					}
 				return filteredNode;
 			}
-		}
-	]);
+		
+	]);}*/
 })();
