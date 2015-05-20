@@ -6,7 +6,6 @@
 		TestToggle,
 		//////
 		// ReSharper disable InconsistentNaming
-		Scheduler_Seniority_24331,
 		Forecast_CopySettingsToWorkflow_11112,
 
 		Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635,

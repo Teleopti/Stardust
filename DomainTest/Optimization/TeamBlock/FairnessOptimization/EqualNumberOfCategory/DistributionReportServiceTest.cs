@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 
 			using (_mocks.Playback())
 			{
-				var result = _target.CreateReport(_person1, _groupPageForDate, _allPersons, _scheduleDictionary, true);
+				var result = _target.CreateReport(_person1, _groupPageForDate, _allPersons, _scheduleDictionary);
 				Assert.That(result.DistributionDictionary[category1].Agent.Equals(1));
 				Assert.That(result.DistributionDictionary[category1].Agent.Equals(result.DistributionDictionary[category1].Team));
 				Assert.That(result.DistributionDictionary[category1].Team.Equals(result.DistributionDictionary[category1].All));

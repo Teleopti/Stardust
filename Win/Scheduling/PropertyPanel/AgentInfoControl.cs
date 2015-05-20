@@ -229,9 +229,8 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 				return;
 
 			var service = _container.Resolve<IDistributionReportService>();
-			var seniorityFairness = _toggleManager.IsEnabled(Toggles.Scheduler_Seniority_24331);
 			var report = service.CreateReport(person, _groupPagePerDate.GetGroupPageByDate(dateOnly),
-				state.PersonsInOrganization.ToList(), state.Schedules, seniorityFairness);
+				state.PersonsInOrganization.ToList(), state.Schedules);
 			foreach (var shiftCategory in report.DistributionDictionary.Keys)
 			{
 				var item = new ListViewItem(shiftCategory.Description.Name);

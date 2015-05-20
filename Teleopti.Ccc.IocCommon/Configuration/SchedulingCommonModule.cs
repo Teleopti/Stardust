@@ -284,14 +284,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		private void registerDayOffFairnessOptimizationService(ContainerBuilder builder)
 		{
-			builder.RegisterType<TeamBlockDayOffFairnessOptimizationServiceFacade>();
-			builder.RegisterType<TeamBlockDayOffFairnessOptimizationServiceFacadeSeniorityTurnedOff>()
-				.As<TeamBlockDayOffFairnessOptimizationServiceFacadeSeniorityTurnedOff>();
-			builder.Register(c => c.Resolve<IToggleManager>().IsEnabled(Toggles.Scheduler_Seniority_24331)
-				? (ITeamBlockDayOffFairnessOptimizationServiceFacade) c.Resolve<TeamBlockDayOffFairnessOptimizationServiceFacade>()
-				: c.Resolve<TeamBlockDayOffFairnessOptimizationServiceFacadeSeniorityTurnedOff>())
-				.As<ITeamBlockDayOffFairnessOptimizationServiceFacade>();
-
+			builder.RegisterType<TeamBlockDayOffFairnessOptimizationServiceFacade>().As<ITeamBlockDayOffFairnessOptimizationServiceFacade>();
 			builder.RegisterType<WeekDayPoints>().As<IWeekDayPoints>();
 			builder.RegisterType<DayOffStep1>().As<IDayOffStep1>();
 			builder.RegisterType<DayOffStep2>().As<IDayOffStep2>();

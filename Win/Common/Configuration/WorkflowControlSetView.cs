@@ -52,13 +52,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			timeSpanTextBox1.TimeSpanBoxWidth = timeSpanTextBox1.Width;
 			dateTimePickerAdvViewpoint.SetCultureInfoSafe(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
 
-			if (!toggleManager.IsEnabled(Toggles.Scheduler_Seniority_24331))
-			{
-				radioButtonAdvSeniority.Hide();
-				var rowIndex = tableLayoutPanelBasic.GetRow(radioButtonAdvSeniority);
-				tableLayoutPanelBasic.RowStyles[rowIndex].Height = 0;
-			}
-
 			if (!toggleManager.IsEnabled(Toggles.MyTimeWeb_AbsenceReport_31011))
 			{
 				twoListSelectorAbsencesForReport.Hide();

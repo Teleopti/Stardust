@@ -195,11 +195,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			{
 				allSupportedPages.Add(new BadgeThresholdSettings(_toggleManager));
 			}
-
-			if (_toggleManager.IsEnabled(Toggles.Scheduler_Seniority_24331))
-			{
-				allSupportedPages.Add(new SeniorityControl());
-			}
+			
+			allSupportedPages.Add(new SeniorityControl());
 			
 			if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.PayrollIntegration))
 				allSupportedPages.Add(new MultiplicatorControlView());

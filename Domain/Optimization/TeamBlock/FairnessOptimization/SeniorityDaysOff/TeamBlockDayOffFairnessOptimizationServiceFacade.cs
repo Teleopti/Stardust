@@ -12,16 +12,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
         event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
     }
 
-	public class TeamBlockDayOffFairnessOptimizationServiceFacadeSeniorityTurnedOff :
-		ITeamBlockDayOffFairnessOptimizationServiceFacade
-	{
-		public void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions, IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService, IOptimizationPreferences optimizationPreferences, ISeniorityWorkDayRanks seniorityWorkDayRanks)
-		{
-		}
-
-		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress {add{} remove{}}
-	}
-
     public class TeamBlockDayOffFairnessOptimizationServiceFacade : ITeamBlockDayOffFairnessOptimizationServiceFacade
     {
         private readonly IDayOffStep1 _dayOffStep1;
