@@ -109,7 +109,7 @@ Scenario: Asm should be automatically reloaded when time passes
 	Given I have the role 'Full access to mytime'
 	And the time is '2030-01-01 23:59Z'
 	When I view ASM
-	Then Now indicator should be at hour '23'
+	Then Now indicator should be at hour '47'
 	When the time is '2030-01-02 00:01Z'
 	Then Now indicator should be at hour '24'
 
