@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using Autofac;
+﻿using Autofac;
 using Teleopti.Ccc.Domain.MessageBroker;
+using Teleopti.Ccc.Infrastructure.MessageBroker;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
@@ -12,23 +11,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SubscriptionFiller>().As<IBeforeSubscribe>().SingleInstance();
 			builder.RegisterType<MessageBrokerServer>().As<IMessageBrokerServer>().SingleInstance();
 			builder.RegisterType<MailboxRepository>().As<IMailboxRepository>().SingleInstance();
-		}
-	}
-
-	public class MailboxRepository : IMailboxRepository
-	{
-		public void Persist(Mailbox mailbox)
-		{
-		}
-
-		public Mailbox Get(Guid id)
-		{
-			return null;
-		}
-
-		public IEnumerable<Mailbox> Get(string route)
-		{
-			return new Mailbox[] {};
 		}
 	}
 }
