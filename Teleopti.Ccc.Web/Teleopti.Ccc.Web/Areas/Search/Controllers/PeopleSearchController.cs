@@ -31,11 +31,11 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 			{
 				return Ok(new {});
 			}
-			;
+
 			if (string.IsNullOrEmpty(keyword))
 			{
-				keyword = myTeam.Description.Name;
-				criteriaDictionary = new Dictionary<PersonFinderField, string>{{PersonFinderField.Organization, keyword}};
+				keyword = myTeam.SiteAndTeam;
+				criteriaDictionary = new Dictionary<PersonFinderField, string> {{PersonFinderField.Organization, keyword}};
 			}
 			else
 			{
