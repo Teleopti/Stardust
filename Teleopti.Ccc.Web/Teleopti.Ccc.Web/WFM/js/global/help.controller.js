@@ -15,7 +15,7 @@
 			helpService.currentHelp = {};
 			helpService.helpData.push({
 				name: 'rta',
-				helpDesc: 'bla',
+				helpDesc: 'This is the RTA view',
 				helpUrl: 'http://www.teleopti.com/se/home.aspx'
 			});
 			helpService.stateName = '';
