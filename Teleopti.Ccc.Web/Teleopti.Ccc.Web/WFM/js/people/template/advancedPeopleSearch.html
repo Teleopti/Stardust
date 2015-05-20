@@ -1,111 +1,114 @@
 ﻿<style type="text/css">
-		* {
-			box-sizing: border-box;
+	* {
+		box-sizing: border-box;
+	}
+
+	.advanedContainer {
+		width: auto;
+		padding: 20px 20px;
+		margin-top: -15px;
+		margin-left: 20px;
+		overflow: hidden;
+		position: absolute;
+		background-color: white;
+	}
+
+	.wfm-form-input {
+		position: relative;
+		margin-top: 15px;
+		margin-bottom: 22px;
+	}
+
+	.advancedInput {
+		font-size: 18px;
+		padding: 10px 10px 10px 5px;
+		margin-right: 10px;
+		display: block;
+		height: 30px;
+		border: none;
+		border-bottom: 1px solid #99d6ff;
+	}
+
+		.advancedInput:focus {
+			outline: none;
 		}
 
-		.advanedContainer {
-			width: auto;
-			padding: 20px 20px;
-			margin-top: -15px;
-			margin-left: 20px;
-			overflow: hidden;
-			position: absolute;
-			background-color: white;
-		}
+	input[type=text] {
+		height: 30px;
+	}
 
-		.wfm-form-input {
-			position: relative;
-			margin-bottom: 22px;
-		}
+	.advancedLabel {
+		color: #999;
+		font-size: 18px;
+		font-weight: normal;
+		position: absolute;
+		pointer-events: none;
+		left: 5px;
+		top: -5px;
+		transition: 0.2s ease all;
+		-moz-transition: 0.2s ease all;
+		-webkit-transition: 0.2s ease all;
+		-ms-transition: 0.2s ease all;
+		-o-transition: 0.2s ease all;
+	}
 
-		.advancedInput {
-			font-size: 18px;
-			padding: 10px 10px 10px 5px;
-			margin-right: 10px;
-			display: block;
-			height: 30px;
-			border: none;
-			border-bottom: 1px solid #99d6ff;
-		}
+	.advancedInput:focus ~ label, .advancedInput:valid ~ label {
+		top: -20px;
+		font-size: 14px;
+		color: #ec38a3;
+	}
+</style>
 
-			.advancedInput:focus {
-				outline: none;
-			}
 
-		input[type=text] {
-			height: 30px;
-		}
 
-		.advancedLabel {
-			color: #999;
-			font-size: 18px;
-			font-weight: normal;
-			position: absolute;
-			pointer-events: none;
-			left: 5px;
-			top: -5px;
-			transition: 0.2s ease all;
-			-moz-transition: 0.2s ease all;
-			-webkit-transition: 0.2s ease all;
-			-ms-transition: 0.2s ease all;
-			-o-transition: 0.2s ease all;
-		}
-
-		.advancedInput:focus ~ label, .advancedInput:valid ~ label {
-			top: -20px;
-			font-size: 14px;
-			color: #ec38a3;
-		}
-	</style>
-
-	<div class="advanedContainer material-depth-2" ng-cloak ng-show="showAdvancedSearchOption">
-		<div class="wfm-form-input">
-			<input class="advancedInput" id="criteria-first-name" type="text" ng-model="advancedSearchForm.FirstName" ng-keydown="$event.which === 13 && advancedSearch()" required />
-			<label class="advancedLabel">{{'FirstName' | translate}}</label>
-		</div>
-		<div class="wfm-form-input">
-			<input class="advancedInput" id="criteria-last-name" type="text" ng-model="advancedSearchForm.LastName" ng-keydown="$event.which === 13 && advancedSearch()" required />
-			<label class="advancedLabel">{{'LastName' | translate}}</label>
-		</div>
-		<div class="wfm-form-input">
-			<input class="advancedInput" id="criteria-employment-number" type="text" ng-model="advancedSearchForm.EmploymentNumber" ng-keydown="$event.which === 13 && advancedSearch()" required />
-			<label class="advancedLabel">{{'EmployeeNo' | translate}}</label>
-		</div>
-		<div class="wfm-form-input">
-			<input class="advancedInput" id="criteria-organization" type="text" ng-model="advancedSearchForm.Organization" ng-keydown="$event.which === 13 && advancedSearch()" required />
-			<label class="advancedLabel">{{'PersonFinderFieldOrganization' | translate}}</label>
-		</div>
-		<div class="wfm-form-input">
-			<input class="advancedInput" id="criteria-role" type="text" ng-model="advancedSearchForm.Role" ng-keydown="$event.which === 13 && advancedSearch()" required />
-			<label class="advancedLabel">{{'Role' | translate}}</label>
-		</div>
-		<div class="wfm-form-input">
-			<input class="advancedInput" id="criteria-contract" type="text" ng-model="advancedSearchForm.Contract" ng-keydown="$event.which === 13 && advancedSearch()" required />
-			<label class="advancedLabel">{{'Contract' | translate}}</label>
-		</div>
-		<div class="wfm-form-input">
-			<input class="advancedInput" id="criteria-contract-schedule" type="text" ng-model="advancedSearchForm.ContractSchedule" ng-keydown="$event.which === 13 && advancedSearch()" required />
-			<label class="advancedLabel">{{'ContractSchedule' | translate}}</label>
-		</div>
-		<div class="wfm-form-input">
-			<input class="advancedInput" id="criteria-shift-bag" type="text" ng-model="advancedSearchForm.ShiftBag" ng-keydown="$event.which === 13 && advancedSearch()" required />
-			<label class="advancedLabel">{{'PersonFinderFieldShiftBag' | translate}}</label>
-		</div>
-		<div class="wfm-form-input">
-			<input class="advancedInput" id="criteria-part-time-percentage" type="text" ng-model="advancedSearchForm.PartTimePercentage" ng-keydown="$event.which === 13 && advancedSearch()" required />
-			<label class="advancedLabel">{{'PartTimePercentage' | translate}}</label>
-		</div>
-		<div class="wfm-form-input">
-			<input class="advancedInput" id="criteria-skill" type="text" ng-model="advancedSearchForm.Skill" ng-keydown="$event.which === 13 && advancedSearch()" required />
-			<label class="advancedLabel">{{'Skill' | translate}}</label>
-		</div>
-		<div class="wfm-form-input">
-			<input class="advancedInput" id="criteria-badge-group" type="text" ng-model="advancedSearchForm.BudgetGroup" ng-keydown="$event.which === 13 && advancedSearch()" required />
-			<label class="advancedLabel">{{'BudgetGroup' | translate}}</label>
-		</div>
-		<div class="wfm-form-input">
-			<input class="advancedInput" id="criteria-note" type="text" ng-model="advancedSearchForm.Note" ng-keydown="$event.which === 13 && advancedSearch()" required />
-			<label class="advancedLabel">{{'Note'|translate}}</label>
-		</div>
-		<button id="go-advanced-search" class="wfm-btn wfm-btn-primary float-right" ng-click="advancedSearch()">SEARCH</button>
+<div class="advanedContainer material-depth-2" ng-cloak ng-show="showAdvancedSearchOption">
+	<div class="wfm-form-input">
+		<input class="advancedInput" id="criteria-first-name" type="text" ng-model="advancedSearchForm.FirstName" ng-keydown="$event.which === 13 && advancedSearch()" required />
+		<label class="advancedLabel">{{'FirstName' | translate}}</label>
 	</div>
+	<div class="wfm-form-input">
+		<input class="advancedInput" id="criteria-last-name" type="text" ng-model="advancedSearchForm.LastName" ng-keydown="$event.which === 13 && advancedSearch()" required />
+		<label class="advancedLabel">{{'LastName' | translate}}</label>
+	</div>
+	<div class="wfm-form-input">
+		<input class="advancedInput" id="criteria-employment-number" type="text" ng-model="advancedSearchForm.EmploymentNumber" ng-keydown="$event.which === 13 && advancedSearch()" required />
+		<label class="advancedLabel">{{'EmployeeNo' | translate}}</label>
+	</div>
+	<div class="wfm-form-input">
+		<input class="advancedInput" id="criteria-organization" type="text" ng-model="advancedSearchForm.Organization" ng-keydown="$event.which === 13 && advancedSearch()" required />
+		<label class="advancedLabel">{{'PersonFinderFieldOrganization' | translate}}</label>
+	</div>
+	<div class="wfm-form-input">
+		<input class="advancedInput" id="criteria-role" type="text" ng-model="advancedSearchForm.Role" ng-keydown="$event.which === 13 && advancedSearch()" required />
+		<label class="advancedLabel">{{'Role' | translate}}</label>
+	</div>
+	<div class="wfm-form-input">
+		<input class="advancedInput" id="criteria-contract" type="text" ng-model="advancedSearchForm.Contract" ng-keydown="$event.which === 13 && advancedSearch()" required />
+		<label class="advancedLabel">{{'Contract' | translate}}</label>
+	</div>
+	<div class="wfm-form-input">
+		<input class="advancedInput" id="criteria-contract-schedule" type="text" ng-model="advancedSearchForm.ContractSchedule" ng-keydown="$event.which === 13 && advancedSearch()" required />
+		<label class="advancedLabel">{{'ContractSchedule' | translate}}</label>
+	</div>
+	<div class="wfm-form-input">
+		<input class="advancedInput" id="criteria-shift-bag" type="text" ng-model="advancedSearchForm.ShiftBag" ng-keydown="$event.which === 13 && advancedSearch()" required />
+		<label class="advancedLabel">{{'PersonFinderFieldShiftBag' | translate}}</label>
+	</div>
+	<div class="wfm-form-input">
+		<input class="advancedInput" id="criteria-part-time-percentage" type="text" ng-model="advancedSearchForm.PartTimePercentage" ng-keydown="$event.which === 13 && advancedSearch()" required />
+		<label class="advancedLabel">{{'PartTimePercentage' | translate}}</label>
+	</div>
+	<div class="wfm-form-input">
+		<input class="advancedInput" id="criteria-skill" type="text" ng-model="advancedSearchForm.Skill" ng-keydown="$event.which === 13 && advancedSearch()" required />
+		<label class="advancedLabel">{{'Skill' | translate}}</label>
+	</div>
+	<div class="wfm-form-input">
+		<input class="advancedInput" id="criteria-badge-group" type="text" ng-model="advancedSearchForm.BudgetGroup" ng-keydown="$event.which === 13 && advancedSearch()" required />
+		<label class="advancedLabel">{{'BudgetGroup' | translate}}</label>
+	</div>
+	<div class="wfm-form-input">
+		<input class="advancedInput" id="criteria-note" type="text" ng-model="advancedSearchForm.Note" ng-keydown="$event.which === 13 && advancedSearch()" required />
+		<label class="advancedLabel">{{'Note'|translate}}</label>
+	</div>
+	<button id="go-advanced-search" class="wfm-btn wfm-btn-primary float-right" ng-click="advancedSearch()">SEARCH</button>
+</div>

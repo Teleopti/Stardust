@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.People
 		[When(@"I search with")]
 		public void WhenISearchWith(Table table)
 		{
-			Browser.Interactions.Click("#advanced-search");
+			Browser.Interactions.Click("#simple-search");
 
 			var criterias = table.CreateSet<SearchCriteria>();
 
