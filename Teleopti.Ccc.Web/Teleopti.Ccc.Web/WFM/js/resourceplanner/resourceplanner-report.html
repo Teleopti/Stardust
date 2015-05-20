@@ -1,9 +1,9 @@
-﻿<div >
-	<h4>Scheduling result</h4>
-	<p>{{scheduledAgents}} agents were successfully scheduled</p>
-	<p><i class="text-danger mdi mdi-alert-octagon "style=""></i>{{issues.length}} issues were found during scheduling</p>
-</div>
-<div class="big-table-wrapper material-depth-2">
-	<div ui-grid="gridOptions" ui-grid-auto-resize class="grid"></div>
-</div>
-
+﻿
+	<div>
+		<h4>Scheduling result</h4>
+		<p>{{scheduledAgents}} agents were successfully scheduled</p>
+		<p><i class="resourceplanner-icon text-danger mdi mdi-alert-octagon "></i>{{issues.length}} issues were found during scheduling</p>
+	</div>
+	<div class="resourceplanner-report material-depth-2">
+		<div ui-grid="gridOptions" ui-grid-auto-resize class="grid"></div>
+	</div>

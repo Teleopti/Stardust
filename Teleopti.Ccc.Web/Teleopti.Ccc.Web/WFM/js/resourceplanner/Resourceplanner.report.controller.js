@@ -9,7 +9,7 @@
 					columnDefs: [
 						{ name: 'Agent', field: 'Name', enableColumnMenu: false},
 						{ name: 'Detail', field: 'Message', enableColumnMenu: false },
-						{ name: 'Issue-type', field: 'BusinessRuleCategory', enableColumnMenu: false }
+						{ name: 'Issue-type', field: 'BusinessRuleCategoryText', enableColumnMenu: false }
 					],
 					data: $scope.issues
 				};

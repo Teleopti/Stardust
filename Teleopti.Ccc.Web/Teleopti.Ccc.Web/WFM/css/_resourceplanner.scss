@@ -1,6 +1,12 @@
-﻿i::before{
-vertical-align:text-top;
+﻿.resourceplanner-icon:before{
+	vertical-align: text-top;
 }
-.grid{
-height:75vh;
+.resourceplanner-report{
+	height: 75%; 
+	.ui-grid-viewport{
+		overflow: auto!important;
+	}
+	.grid.ui-grid{
+		height: 100%!important;
+	}
 }
