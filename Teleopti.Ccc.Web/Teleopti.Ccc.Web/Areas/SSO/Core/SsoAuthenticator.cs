@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Core
 			if (result.Success)
 			{
 				var dataSource = _applicationData.Tenant(result.Tenant);
-				var person = _loadUserUnauthorized.LoadFullPersonInSeperateTransaction(dataSource.Application, result.PersonId); //TODO tenant: - don't load permissions here - just needed to get web scenarios to work
+				var person = _loadUserUnauthorized.LoadFullPersonInSeperateTransaction(dataSource.Application, result.PersonId); //TODO: tenant - don't load permissions here - just needed to get web scenarios to work
 				return new AuthenticateResult { DataSource = dataSource, Person = person, Successful = true, HasMessage = !string.IsNullOrEmpty(result.FailReason), Message = result.FailReason, PasswordExpired = false };
 			}
 
