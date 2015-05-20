@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		public void Setup_WillBeChangedWhenMovedAwayFromUnitOfWork()
 		{
 			correctIdentity = RandomName.Make();
-			_tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForTest(ConnectionStringHelper.ConnectionStringUsedInTests);
+			_tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(ConnectionStringHelper.ConnectionStringUsedInTests);
 			var tenant = new FindTenantByNameQuery(_tenantUnitOfWorkManager).Find(Tenant.DefaultName);
 			personId = Guid.NewGuid();
 			var pInfo = new PersonInfo(tenant, personId);
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 				uow.PersistAll();
 				personId = personInDatabase.Id.Value;
 			}
-			_tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForTest(ConnectionStringHelper.ConnectionStringUsedInTests);
+			_tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(ConnectionStringHelper.ConnectionStringUsedInTests);
 			target = new IdentityUserQuery_OldSchema(_tenantUnitOfWorkManager);
 		}
 

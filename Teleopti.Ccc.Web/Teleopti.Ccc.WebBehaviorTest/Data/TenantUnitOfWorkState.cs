@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		private static TenantUnitOfWorkManager tenantUnitOfWorkManager()
 		{
 			return _tenantUnitOfWorkManager ?? 
-			       (_tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForTest(UnitOfWorkFactory.Current.ConnectionString));
+			       (_tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(UnitOfWorkFactory.Current.ConnectionString));
 		}
 
 		public static void TenantUnitOfWorkAction(Action<ICurrentTenantSession> action)

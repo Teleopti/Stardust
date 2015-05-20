@@ -9,9 +9,8 @@ using SharpTestsEx;
 using Teleopti.Analytics.Etl.Transformer;
 using Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition;
 using Teleopti.Analytics.Etl.TransformerTest.FakeData;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -44,7 +43,8 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 			_acdTable.Locale = Thread.CurrentThread.CurrentCulture;
 			PersonInfrastructure.AddColumnsToDataTable(_table);
 			AcdLogOnPersonInfrastructure.AddColumnsToDataTable(_acdTable);
-			PersonTransformer.Transform(_personCollection, _intervalsPerDay, new DateOnly(2000, 1, 1), _table, _acdTable, _commonNameDescriptionSetting, new List<LogonInfoModel>());
+			PersonTransformer.Transform(_personCollection, _intervalsPerDay, new DateOnly(2000, 1, 1), _table, _acdTable,
+				_commonNameDescriptionSetting, new List<LogonInfo>());
 		}
 
 		[Test]
@@ -104,7 +104,8 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 
 			_table.Rows.Clear();
 			_acdTable.Rows.Clear();
-			PersonTransformer.Transform(_personCollection, _intervalsPerDay, new DateOnly(2000, 1, 1), _table, _acdTable, _commonNameDescriptionSetting, new List<LogonInfoModel>());
+			PersonTransformer.Transform(_personCollection, _intervalsPerDay, new DateOnly(2000, 1, 1), _table, _acdTable,
+				_commonNameDescriptionSetting, new List<LogonInfo>());
 
 			Assert.AreEqual(DBNull.Value, _table.Rows[0]["scorecard_code"]);
 		}
@@ -125,7 +126,8 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 
 			_table.Rows.Clear();
 			_acdTable.Rows.Clear();
-			PersonTransformer.Transform(_personCollection, _intervalsPerDay, new DateOnly(2000, 1, 1), _table, _acdTable, _commonNameDescriptionSetting, new List<LogonInfoModel>());
+			PersonTransformer.Transform(_personCollection, _intervalsPerDay, new DateOnly(2000, 1, 1), _table, _acdTable,
+				_commonNameDescriptionSetting, new List<LogonInfo>());
 
 			Assert.AreEqual(DBNull.Value, _table.Rows[0]["scorecard_code"]);
 		}
@@ -243,9 +245,9 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 		{
 			var person = _personCollection.First();
 			person.SetId(Guid.NewGuid());
-			var logonInfos = new List<LogonInfoModel>
+			var logonInfos = new List<LogonInfo>
 			{
-				new LogonInfoModel {Identity = "DOMAIN\\THENAME",  PersonId = person.Id.GetValueOrDefault()}
+				new LogonInfo {Identity = "DOMAIN\\THENAME",  PersonId = person.Id.GetValueOrDefault()}
 			};
 
 			_table = new DataTable {Locale = Thread.CurrentThread.CurrentCulture};

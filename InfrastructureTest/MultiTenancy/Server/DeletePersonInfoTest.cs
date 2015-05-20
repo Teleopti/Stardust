@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		[SetUp]
 		public void Setup()
 		{
-			_uow = TenantUnitOfWorkManager.CreateInstanceForTest(ConnectionStringHelper.ConnectionStringUsedInTests);
+			_uow = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(ConnectionStringHelper.ConnectionStringUsedInTests);
 			var session = _uow.CurrentSession();
 			tenant = new Tenant("som name");
 			person = new PersonInfo(tenant, Guid.NewGuid());

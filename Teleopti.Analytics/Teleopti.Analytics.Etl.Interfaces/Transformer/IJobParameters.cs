@@ -21,7 +21,7 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
 		bool IsPmInstalled { get; }
 		CultureInfo CurrentCulture { get; }
 		IToggleManager ToggleManager { get; }
-		ITenantLogonDataManager TenantLogonDataManager { get; }
+		ITenantLogonInfoLoader TenantLogonInfoLoader { get; }
 		DateTime? NowForTestPurpose { get; set; }
 		bool RunIndexMaintenance { get; }
 	}

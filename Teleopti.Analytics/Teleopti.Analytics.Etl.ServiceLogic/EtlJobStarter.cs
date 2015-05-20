@@ -212,8 +212,8 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 						  iocArgs,
 						  CommonModule.ToggleManagerForIoc(iocArgs));
 
-			builder.RegisterModule(
-			new CommonModule(configuration));
+			builder.RegisterModule(new CommonModule(configuration));
+			builder.RegisterModule(new EtlModule(configuration));
 			return builder.Build();
 
 		}

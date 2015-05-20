@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using Teleopti.Ccc.Domain.Security.Authentication;
-using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -15,7 +15,7 @@ namespace Teleopti.Analytics.Etl.Transformer
 			 MessageId = "0")]
 		 public static void Transform(IEnumerable<IPerson> personCollection, int intervalsPerDay, DateOnly insertDate,
 			 DataTable personTable, DataTable acdLogOnTable, ICommonNameDescriptionSetting commonNameDescriptionSetting,
-			 List<LogonInfoModel> logonInfos)
+			 List<LogonInfo> logonInfos)
 		 {
 			 InParameter.NotNull("personCollection", personCollection);
 
@@ -34,7 +34,7 @@ namespace Teleopti.Analytics.Etl.Transformer
 
 		 private static void createPersonDataRow(IPerson person, DataTable table, TimeZoneInfo timeZoneInfo,
 			 IPersonPeriod personPeriod, int intervalsPerDay, DateOnly insertDate,
-			 ICommonNameDescriptionSetting commonNameDescriptionSetting, List<LogonInfoModel> logonInfos)
+			 ICommonNameDescriptionSetting commonNameDescriptionSetting, List<LogonInfo> logonInfos)
 		 {
 			 DataRow row = table.NewRow();
 
@@ -96,7 +96,7 @@ namespace Teleopti.Analytics.Etl.Transformer
 			 table.Rows.Add(row);
 		 }
 
-		 private static Tuple<string, string> getLogonInfo(IPerson person, List<LogonInfoModel> logonInfos)
+		 private static Tuple<string, string> getLogonInfo(IPerson person, List<LogonInfo> logonInfos)
 		 {
 			 var logOn = person.AuthenticationInfo == null
 				 ? new Tuple<string, string>(string.Empty, string.Empty)

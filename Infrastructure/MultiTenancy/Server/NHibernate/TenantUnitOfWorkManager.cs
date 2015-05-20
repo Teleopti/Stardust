@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 		{
 		}
 
-		public static TenantUnitOfWorkManager CreateInstanceForTest(string connectionString)
+		public static TenantUnitOfWorkManager CreateInstanceForHostsWithOneUser(string connectionString)
 		{
 			return createInstance(connectionString, "call");
 		}

@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		[SetUp]
 		public void InsertPreState()
 		{
-			_tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForTest(ConnectionStringHelper.ConnectionStringUsedInTests);
+			_tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(ConnectionStringHelper.ConnectionStringUsedInTests);
 			target = new PersistPersonInfo(_tenantUnitOfWorkManager);
 
 			tenant = new Tenant(RandomName.Make());

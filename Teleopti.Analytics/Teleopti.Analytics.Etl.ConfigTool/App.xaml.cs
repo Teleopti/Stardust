@@ -1,5 +1,4 @@
-﻿using System;
-using System.Configuration;
+﻿using System.Configuration;
 using System.Globalization;
 using System.Threading;
 using System.Windows;
@@ -9,7 +8,6 @@ using Autofac;
 using Teleopti.Analytics.Etl.ConfigTool.Gui.StartupConfiguration;
 using Teleopti.Analytics.Etl.Transformer;
 using log4net.Config;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.MultipleConfig;
 using Teleopti.Interfaces.Domain;
@@ -17,11 +15,11 @@ using Application = System.Windows.Application;
 
 namespace Teleopti.Analytics.Etl.ConfigTool
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    public partial class App : Application
-    {
+	 /// <summary>
+	 /// Interaction logic for App.xaml
+	 /// </summary>
+	 public partial class App : Application
+	 {
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		private void Application_Startup(object sender, StartupEventArgs e)
 		{
@@ -52,30 +50,20 @@ namespace Teleopti.Analytics.Etl.ConfigTool
 			startWindow.Show();
 		}
 
-	    private static IContainer configureContainer()
-	    {
+		 private static IContainer configureContainer()
+		 {
 			 var builder = new ContainerBuilder();
-		    var iocArgs = new IocArgs(new AppConfigReader());
+			 var iocArgs = new IocArgs(new AppConfigReader());
 			 var configuration = new IocConfiguration(
 							iocArgs,
 							CommonModule.ToggleManagerForIoc(iocArgs));
 
-			 builder.RegisterModule(
-			 new CommonModule(configuration));
-		    builder.RegisterType<removeMeWhenNoLongerReadingPersonInfoFromTenant>()
-			    .As<ICurrentTenantCredentials>()
-			    .SingleInstance();
+			 builder.RegisterModule(new CommonModule(configuration));
+			 builder.RegisterModule(new EtlModule(configuration));
+			 
 			 return builder.Build();
 
-	    }
+		 }
 
-			//TODO: tenant REMOVE ME!
-	    private class removeMeWhenNoLongerReadingPersonInfoFromTenant : ICurrentTenantCredentials
-	    {
-		    public TenantCredentials TenantCredentials()
-		    {
-			    return new TenantCredentials(Guid.Empty, string.Empty);
-		    }
-	    }
-    }
+	 }
 }

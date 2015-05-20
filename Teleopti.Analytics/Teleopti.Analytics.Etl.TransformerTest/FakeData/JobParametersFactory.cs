@@ -5,7 +5,7 @@ using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon.Toggle;
 
@@ -34,10 +34,11 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
 			public FakeContainerHolder()
 			{
 				ToggleManager = new FakeToggleManager();
-				TenantLogonDataManager = new FakeTenantLogonDataManager();
+				TenantLogonInfoLoader = new FakeTenantLogonInfoLoader();
 			}
 			public IToggleManager ToggleManager { get; private set; }
-			public ITenantLogonDataManager TenantLogonDataManager { get; private set; }
+			public ITenantLogonInfoLoader TenantLogonInfoLoader { get; private set; }
+
 
 			public void EnableToggle(Toggles toggle)
 			{
@@ -51,11 +52,11 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
 		}
 	}
 
-	public class FakeTenantLogonDataManager : ITenantLogonDataManager
+	public class FakeTenantLogonInfoLoader : ITenantLogonInfoLoader
 	{
-		public IEnumerable<LogonInfoModel> GetLogonInfoModelsForGuids(IEnumerable<Guid> personGuids)
+		public IEnumerable<LogonInfo> GetLogonInfoModelsForGuids(IEnumerable<Guid> personGuids)
 		{
-			return new List<LogonInfoModel>();
+			return new List<LogonInfo>();
 		}
 	}
 }

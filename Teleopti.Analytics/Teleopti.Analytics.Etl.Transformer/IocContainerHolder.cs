@@ -1,5 +1,5 @@
 ﻿using Autofac;
-using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
+using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Ccc.Infrastructure.Toggle;
 
 namespace Teleopti.Analytics.Etl.Transformer
@@ -7,7 +7,7 @@ namespace Teleopti.Analytics.Etl.Transformer
 	public interface IContainerHolder
 	{
 		IToggleManager ToggleManager { get; }
-		ITenantLogonDataManager TenantLogonDataManager { get; }
+		ITenantLogonInfoLoader TenantLogonInfoLoader { get; }
 	}
 	public class IocContainerHolder : IContainerHolder
 	{
@@ -17,11 +17,11 @@ namespace Teleopti.Analytics.Etl.Transformer
 		{
 			//_container = container;
 			ToggleManager = container.Resolve<IToggleManager>();
-			TenantLogonDataManager = container.Resolve<ITenantLogonDataManager>();
+			TenantLogonInfoLoader = container.Resolve<ITenantLogonInfoLoader>();
 		}
 
 		public IToggleManager ToggleManager { get; private set; }
 
-		public ITenantLogonDataManager TenantLogonDataManager { get; private set; }
+		public ITenantLogonInfoLoader TenantLogonInfoLoader { get; private set; }
 	}
 }

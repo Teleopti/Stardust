@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using Autofac;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job.MultipleDate;
-using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.Toggle;
 
 namespace Teleopti.Analytics.Etl.Transformer.Job
@@ -28,7 +26,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job
 			IsPmInstalled = checkPmInstall(pmInstall);
 			
 			ToggleManager = containerHolder.ToggleManager;
-			TenantLogonDataManager = containerHolder.TenantLogonDataManager;
+			TenantLogonInfoLoader = containerHolder.TenantLogonInfoLoader;
 			
 			
 			RunIndexMaintenance = runIndexMaintenance;
@@ -61,7 +59,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job
 
 		public IToggleManager ToggleManager { get; private set; }
 
-		public ITenantLogonDataManager TenantLogonDataManager { get; private set; }
+		public ITenantLogonInfoLoader TenantLogonInfoLoader { get; private set; }
 
 		public bool RunIndexMaintenance { get; private set; }
 

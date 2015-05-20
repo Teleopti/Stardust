@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		[SetUp]
 		public void Setup()
 		{
-			tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForTest(ConnectionStringHelper.ConnectionStringUsedInTests);
+			tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(ConnectionStringHelper.ConnectionStringUsedInTests);
 			var tenant = new FindTenantByNameQuery(tenantUnitOfWorkManager).Find(Tenant.DefaultName);
 			validPerson = new PersonInfo(tenant, Guid.NewGuid());
 			var personInfoPersister = new PersistPersonInfo(tenantUnitOfWorkManager);

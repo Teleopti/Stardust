@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 		{
 			var databaseHandler = new DatabaseHandler(argument);
 			var defaultDataCreator = new DefaultDataCreator(argument.BusinessUnit, argument.CultureInfo, argument.TimeZone,
-				argument.NewUserName, argument.NewUserPassword, databaseHandler.SessionFactory, TenantUnitOfWorkManager.CreateInstanceForTest(argument.DestinationConnectionString));
+				argument.NewUserName, argument.NewUserPassword, databaseHandler.SessionFactory, TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(argument.DestinationConnectionString));
 
 			DefaultAggregateRoot defaultAggregateRoot = defaultDataCreator.Create();
 			defaultDataCreator.Save(defaultAggregateRoot);
