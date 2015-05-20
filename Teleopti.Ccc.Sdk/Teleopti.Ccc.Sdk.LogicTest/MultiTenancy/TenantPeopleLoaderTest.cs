@@ -8,15 +8,18 @@ using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.MultiTenancy;
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.MultiTenancy
 {
 	[TenantSdkTest]
-	[TestCommon.IoC.Toggle(Toggles.MultiTenancy_LogonUseNewSchema_33049)]
+	[Toggle(Toggles.MultiTenancy_LogonUseNewSchema_33049)]
 	public class TenantPeopleLoaderTest
 	{
 		public PostHttpRequestFake HttpRequestFake;
 		public ITenantPeopleLoader Target { get; set; }
+		//TODO: tenant - remove me when etl no longer go to tenant service
+		public CurrentTenantCredentialsFake CurrentTenantCredentials;
 
 		[Test]
 		public void ShouldSetLogonInfoOnDtos()

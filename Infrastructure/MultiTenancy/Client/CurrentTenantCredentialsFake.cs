@@ -1,6 +1,4 @@
-﻿using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
-
-namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
+﻿namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 {
 	public class CurrentTenantCredentialsFake : ICurrentTenantCredentials
 	{

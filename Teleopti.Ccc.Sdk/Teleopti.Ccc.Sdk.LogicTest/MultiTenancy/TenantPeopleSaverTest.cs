@@ -16,6 +16,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.MultiTenancy
 	{
 		public PostHttpRequestFake HttpRequestFake;
 		public ITenantPeopleSaver Target { get; set; }
+		//TODO: tenant - remove me when etl no longer go to tenant service
+		public CurrentTenantCredentialsFake CurrentTenantCredentials;
 
 		[Test]
 		public void ShouldMakeIdentityOfDomainAndWin()
