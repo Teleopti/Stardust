@@ -9,6 +9,7 @@ using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 
 namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 {
+	//TODO: tenant replace with "new kind of tests" - most tests in Core namespace should be converted as well
 	public class AuthenticateControllerTest
 	{
 		[Test]
