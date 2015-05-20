@@ -1,6 +1,4 @@
-﻿using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
-
-namespace Teleopti.Ccc.Sdk.LogicTest.MultiTenancy
+﻿namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 {
 	public class PostHttpRequestFake : IPostHttpRequest
 	{

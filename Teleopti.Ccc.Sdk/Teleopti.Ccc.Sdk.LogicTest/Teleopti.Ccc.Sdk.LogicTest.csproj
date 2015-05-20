@@ -203,7 +203,6 @@
     <Compile Include="CommandHandler\SavePersonAbsenceRequestCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\SetPersonAccountForPersonCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\SetSchedulePeriodWorktimeOverrideCommandHandlerTest.cs" />
-    <Compile Include="MultiTenancy\PostHttpRequestFake.cs" />
     <Compile Include="MultiTenancy\TenantPeopleSaverTest.cs" />
     <Compile Include="MultiTenancy\TenantPeopleLoaderTest.cs" />
     <Compile Include="OldTests\AbsenceDtoTest.cs" />
