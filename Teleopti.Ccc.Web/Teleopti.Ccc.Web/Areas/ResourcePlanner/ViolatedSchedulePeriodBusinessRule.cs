@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Web.Areas.ResourcePlanner;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
+namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 {
 	public class ViolatedSchedulePeriodBusinessRule
 	{
@@ -31,7 +30,8 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		{
 			return new BusinessRulesValidationResult
 			{
-				BusinessRuleCategory = BusinessRuleCategory.SchedulePeriod.ToString(),
+				BusinessRuleCategory = BusinessRuleCategory.SchedulePeriod,
+				BusinessRuleCategoryText = "Schedule period",
 				Message = UserTexts.Resources.SchedulePeriodNotInRange,
 				Name = x.Name.ToString(NameOrderOption.FirstNameLastName)
 			};

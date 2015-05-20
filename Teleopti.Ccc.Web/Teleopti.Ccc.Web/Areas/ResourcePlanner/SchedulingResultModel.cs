@@ -15,7 +15,9 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 	{
 		public string Name { get; set; }
 		public string Message { get; set; }
-		public string BusinessRuleCategory { get; set; }
+		public BusinessRuleCategory BusinessRuleCategory { get; set; }
+		public string BusinessRuleCategoryText { get; set; }
+
 		public bool Equals(BusinessRulesValidationResult other)
 		{
 			return Name.Equals(other.Name) && BusinessRuleCategory.Equals(other.BusinessRuleCategory);

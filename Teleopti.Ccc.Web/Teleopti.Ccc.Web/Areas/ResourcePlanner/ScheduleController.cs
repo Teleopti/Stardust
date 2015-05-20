@@ -11,7 +11,6 @@ using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
-using Teleopti.Ccc.WebTest.Areas.ResourcePlanner;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
@@ -132,7 +131,9 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 					if(scheduleRange.CalculatedTargetScheduleDaysOff != scheduleRange.CalculatedScheduleDaysOff)
 						result.Add(new BusinessRulesValidationResult()
 						{
-							BusinessRuleCategory = BusinessRuleCategory.DayOff.ToString(),
+							BusinessRuleCategory = BusinessRuleCategory.DayOff,
+							//should be in resource files - not now to prevent translation
+							BusinessRuleCategoryText = "Days off",
 							Message = string.Format(UserTexts.Resources.TargetDayOffNotFulfilledMessage, scheduleRange.CalculatedTargetScheduleDaysOff),
 							Name = item.Key.Name.ToString(NameOrderOption.FirstNameLastName)
 						});
@@ -144,7 +145,9 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		{
 			return schedulePeriodNotInRange.Contains(new BusinessRulesValidationResult()
 			{
-				BusinessRuleCategory = BusinessRuleCategory.SchedulePeriod.ToString(),
+				BusinessRuleCategory = BusinessRuleCategory.SchedulePeriod,
+				//should be in resource files - not now to prevent translation
+				BusinessRuleCategoryText = "Schedule period",
 				Name = person.Name.ToString(NameOrderOption.FirstNameLastName)
 			});
 		}
