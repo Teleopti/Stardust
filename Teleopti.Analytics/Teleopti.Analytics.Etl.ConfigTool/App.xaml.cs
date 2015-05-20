@@ -69,6 +69,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool
 
 	    }
 
+			//TODO: tenant REMOVE ME!
 	    private class removeMeWhenNoLongerReadingPersonInfoFromTenant : ICurrentTenantCredentials
 	    {
 		    public TenantCredentials TenantCredentials()
