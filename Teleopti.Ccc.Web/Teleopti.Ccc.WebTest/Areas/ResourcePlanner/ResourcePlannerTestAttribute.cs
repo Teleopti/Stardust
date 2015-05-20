@@ -11,12 +11,14 @@ using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.ResourcePlanner;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -63,6 +65,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			builder.RegisterType<WeeklyRestSolverCommand>().As<IWeeklyRestSolverCommand>().SingleInstance();
 			builder.RegisterType<OccupiedSeatCalculator>().As<IOccupiedSeatCalculator>().SingleInstance();
 			builder.RegisterType<NonBlendSkillCalculator>().As<INonBlendSkillCalculator>().SingleInstance();
+			builder.RegisterType<FakeScheduleRange>().As<IScheduleRange>().SingleInstance();
 			builder.RegisterType<IPeriodDistributionService>().As<IPeriodDistributionService>().SingleInstance();
 			builder.RegisterGeneric(typeof(PairMatrixService<>)).As(typeof(IPairMatrixService<>)).SingleInstance();
 			builder.RegisterGeneric(typeof(PairDictionaryFactory<>)).As(typeof(IPairDictionaryFactory<>)).SingleInstance();
@@ -70,6 +73,16 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			builder.RegisterType<FixedStaffLoader>();
 			builder.RegisterType<SetupStateHolderForWebScheduling>();
 			builder.RegisterType<ScheduleController>();
+			builder.RegisterType<DayOffBusinessRuleValidation>();
+
+			//for planning period (should be another attribute or?)
+			builder.RegisterType<FakePlanningPeriodRepository>().As<IPlanningPeriodRepository>().SingleInstance();
+			builder.RegisterType<NextPlanningPeriodProvider>().As<INextPlanningPeriodProvider>().SingleInstance();
+			builder.RegisterType<FakeMissingForecastProvider>().As<IMissingForecastProvider>().SingleInstance();
+			builder.RegisterType<PlanningPeriod>().As<IPlanningPeriod>().SingleInstance();
+			builder.RegisterType<PlanningPeriodSuggestions>().As<IPlanningPeriodSuggestions>().SingleInstance();
+			builder.RegisterInstance<INow>(new TestableNow(new DateTime(2015, 4, 1))).SingleInstance();
+			builder.RegisterType<PlanningPeriodController>();
 		}
 	}
 }

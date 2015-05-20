@@ -253,6 +253,7 @@
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\LeaderboardSettingBasedBadgeProviderTest.cs" />
     <Compile Include="Areas\Permissions\OrganizationSelectionControllerTest.cs" />
     <Compile Include="Areas\Permissions\RolesControllerTest.cs" />
+    <Compile Include="Areas\ResourcePlanner\BusinessRuleValidationResultTest.cs" />
     <Compile Include="Areas\ResourcePlanner\FakeMissingForecastProvider.cs" />
     <Compile Include="Areas\ResourcePlanner\FilterControllerTest.cs" />
     <Compile Include="Areas\ResourcePlanner\MissingForecastProviderTest.cs" />

@@ -30,12 +30,17 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		private readonly IScheduleRangePersister _persister;
 		private readonly Func<IPersonSkillProvider> _personSkillProvider;
 		private readonly ViolatedSchedulePeriodBusinessRule _violatedSchedulePeriodBusinessRule;
+		private readonly DayOffBusinessRuleValidation _dayOffBusinessRuleValidation;
 
-		public ScheduleController(SetupStateHolderForWebScheduling setupStateHolderForWebScheduling,FixedStaffLoader fixedStaffLoader, IDayOffTemplateRepository dayOffTemplateRepository,
-					IActivityRepository activityRepository, Func<IFixedStaffSchedulingService> fixedStaffSchedulingService,Func<IScheduleCommand> scheduleCommand, Func<ISchedulerStateHolder> schedulerStateHolder,
-						Func<IRequiredScheduleHelper> requiredScheduleHelper, Func<IGroupPagePerDateHolder> groupPagePerDateHolder,Func<IScheduleTagSetter> scheduleTagSetter, 
-							Func<IPersonSkillProvider> personSkillProvider,IScheduleRangePersister persister,
-									ViolatedSchedulePeriodBusinessRule violatedSchedulePeriodBusinessRule)
+		public ScheduleController(SetupStateHolderForWebScheduling setupStateHolderForWebScheduling,
+			FixedStaffLoader fixedStaffLoader, IDayOffTemplateRepository dayOffTemplateRepository,
+			IActivityRepository activityRepository, Func<IFixedStaffSchedulingService> fixedStaffSchedulingService,
+			Func<IScheduleCommand> scheduleCommand, Func<ISchedulerStateHolder> schedulerStateHolder,
+			Func<IRequiredScheduleHelper> requiredScheduleHelper, Func<IGroupPagePerDateHolder> groupPagePerDateHolder,
+			Func<IScheduleTagSetter> scheduleTagSetter,
+			Func<IPersonSkillProvider> personSkillProvider, IScheduleRangePersister persister,
+			ViolatedSchedulePeriodBusinessRule violatedSchedulePeriodBusinessRule,
+			DayOffBusinessRuleValidation dayOffBusinessRuleValidation)
 		{
 			_setupStateHolderForWebScheduling = setupStateHolderForWebScheduling;
 			_fixedStaffLoader = fixedStaffLoader;
@@ -50,10 +55,11 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			_personSkillProvider = personSkillProvider;
 			_persister = persister;
 			_violatedSchedulePeriodBusinessRule = violatedSchedulePeriodBusinessRule;
+			_dayOffBusinessRuleValidation = dayOffBusinessRuleValidation;
 		}
 
 		[HttpPost, Route("api/ResourcePlanner/Schedule/FixedStaff"), Authorize, UnitOfWork]
-		public virtual IHttpActionResult FixedStaff([FromBody]FixedStaffSchedulingInput input)
+		public virtual IHttpActionResult FixedStaff([FromBody] FixedStaffSchedulingInput input)
 		{
 			var period = new DateOnlyPeriod(new DateOnly(input.StartDate), new DateOnly(input.EndDate));
 
@@ -67,7 +73,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 
 			initializePersonSkillProviderBeforeAccessingItFromOtherThreads(period, people.AllPeople);
 			_scheduleTagSetter().ChangeTagToSet(NullScheduleTag.Instance);
-			
+
 			var daysScheduled = 0;
 			if (allSchedules.Any())
 			{
@@ -97,7 +103,8 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				conflicts.AddRange(_persister.Persist(schedule.Value));
 			}
 			var schedulePeriodNotInRange = _violatedSchedulePeriodBusinessRule.GetResult(people.SelectedPeople, period).ToList();
-			var daysOffValidationResult = getDayOffBusinessRulesValidationResults(_schedulerStateHolder().Schedules, schedulePeriodNotInRange);
+			var daysOffValidationResult = getDayOffBusinessRulesValidationResults(_schedulerStateHolder().Schedules,
+				schedulePeriodNotInRange);
 			var voilatedBusinessRules = new List<BusinessRulesValidationResult>();
 			voilatedBusinessRules.AddRange(schedulePeriodNotInRange);
 			voilatedBusinessRules.AddRange(daysOffValidationResult);
@@ -120,28 +127,32 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 						(x.Value.CalculatedContractTimeHolder != x.Value.CalculatedTargetTimeHolder));
 		}
 
-		private IEnumerable<BusinessRulesValidationResult> getDayOffBusinessRulesValidationResults(IEnumerable<KeyValuePair<IPerson, IScheduleRange>> schedules, List<BusinessRulesValidationResult> schedulePeriodNotInRange)
+		private IEnumerable<BusinessRulesValidationResult> getDayOffBusinessRulesValidationResults(
+			IEnumerable<KeyValuePair<IPerson, IScheduleRange>> schedules,
+			List<BusinessRulesValidationResult> schedulePeriodNotInRange)
 		{
 			var result = new List<BusinessRulesValidationResult>();
-			foreach (var item in schedules )
+			foreach (var item in schedules)
 			{
-				if(isAmongInvalidScheduleRange(schedulePeriodNotInRange,item.Key)) continue;
-				var scheduleRange = item.Value;
-				if(scheduleRange.CalculatedTargetScheduleDaysOff.HasValue)
-					if(scheduleRange.CalculatedTargetScheduleDaysOff != scheduleRange.CalculatedScheduleDaysOff)
-						result.Add(new BusinessRulesValidationResult()
-						{
-							BusinessRuleCategory = BusinessRuleCategory.DayOff,
-							//should be in resource files - not now to prevent translation
-							BusinessRuleCategoryText = "Days off",
-							Message = string.Format(UserTexts.Resources.TargetDayOffNotFulfilledMessage, scheduleRange.CalculatedTargetScheduleDaysOff),
-							Name = item.Key.Name.ToString(NameOrderOption.FirstNameLastName)
-						});
+				if (isAmongInvalidScheduleRange(schedulePeriodNotInRange, item.Key)) continue;
+				if (!_dayOffBusinessRuleValidation.Validate(item.Value))
+				{
+					result.Add(new BusinessRulesValidationResult()
+					{
+						BusinessRuleCategory = BusinessRuleCategory.DayOff,
+						//should be in resource files - not now to prevent translation
+						BusinessRuleCategoryText = "Days off",
+						Message =
+							string.Format(UserTexts.Resources.TargetDayOffNotFulfilledMessage, item.Value.CalculatedTargetScheduleDaysOff),
+						Name = item.Key.Name.ToString(NameOrderOption.FirstNameLastName)
+					});
+				}
 			}
 			return result;
-		} 
+		}
 
-		private static bool isAmongInvalidScheduleRange(List<BusinessRulesValidationResult> schedulePeriodNotInRange, IPerson person)
+		private static bool isAmongInvalidScheduleRange(List<BusinessRulesValidationResult> schedulePeriodNotInRange,
+			IPerson person)
 		{
 			return schedulePeriodNotInRange.Contains(new BusinessRulesValidationResult()
 			{
@@ -152,7 +163,8 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			});
 		}
 
-		private static IList<IScheduleDay> extractAllSchedules(ISchedulingResultStateHolder stateHolder, PeopleSelection people,
+		private static IList<IScheduleDay> extractAllSchedules(ISchedulingResultStateHolder stateHolder,
+			PeopleSelection people,
 			DateOnlyPeriod period)
 		{
 			var allSchedules = new List<IScheduleDay>();
@@ -166,7 +178,8 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			return allSchedules;
 		}
 
-		private void initializePersonSkillProviderBeforeAccessingItFromOtherThreads(DateOnlyPeriod period, IEnumerable<IPerson> allPeople)
+		private void initializePersonSkillProviderBeforeAccessingItFromOtherThreads(DateOnlyPeriod period,
+			IEnumerable<IPerson> allPeople)
 		{
 			var provider = _personSkillProvider();
 			var dayCollection = period.DayCollection();

@@ -507,6 +507,7 @@
     <Compile Include="Areas\Reporting\Index.aspx.designer.cs">
       <DependentUpon>Index.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Areas\ResourcePlanner\DayOffBusinessRuleValidation.cs" />
     <Compile Include="Areas\ResourcePlanner\FilterController.cs" />
     <Compile Include="Areas\ResourcePlanner\FilterGroup.cs" />
     <Compile Include="Areas\ResourcePlanner\FilterItem.cs" />

@@ -168,11 +168,13 @@
     <Compile Include="FakeRepositories\FakeMailboxRepository.cs" />
     <Compile Include="FakeRepositories\FakeDayOffTemplateRepository.cs" />
     <Compile Include="FakeRepositories\FakePersonAbsenceAccountRepository.cs" />
+    <Compile Include="FakeRepositories\FakePlanningPeriodRepository.cs" />
     <Compile Include="FakeRepositories\FakePublicNoteRepository.cs" />
     <Compile Include="FakeRepositories\FakeScheduleRangePersister.cs" />
     <Compile Include="FakeRepositories\FakeSeatBookingRepository.cs" />
     <Compile Include="FakeRepositories\FakeSeatMapRepository.cs" />
     <Compile Include="FakeRepositories\FakeTeamRepository.cs" />
+    <Compile Include="FakeScheduleRange.cs" />
     <Compile Include="FakeServiceBusSender.cs" />
     <Compile Include="FakeSiteOutOfAdherenceReadModelPersister.cs" />
     <Compile Include="FakeTeamOutOfAdherenceReadModelPersister.cs" />

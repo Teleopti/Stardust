@@ -52,6 +52,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 		}
 	}
 
+	//may be remove this fake (no fake at this level)
 	public class FakeNextPlanningPeriodProvider : INextPlanningPeriodProvider
 	{
 		private readonly IPlanningPeriod _planningPeriod;
