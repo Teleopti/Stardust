@@ -14,6 +14,7 @@ namespace Teleopti.Interfaces.Domain
 		AHTGoldBadge,
 		AnsweredCallsBronzeBadge,
 		AnsweredCallsSilverBadge,
-		AnsweredCallsGoldBadge
+		AnsweredCallsGoldBadge,
+		ShiftTradeFromOffer
 	}
 }

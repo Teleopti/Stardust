@@ -349,11 +349,17 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
         public virtual ISendPushMessageService PushMessageWhenAlteredInformation()
         {
+			  MessageType type = MessageType.Information;
             if (IsNew) return null;
             string message = Request.TextForNotification;
+				var shiftTradeRequest = Request as IShiftTradeRequest;
+				if (shiftTradeRequest != null && shiftTradeRequest.Offer != null)
+			  {
+				  type = MessageType.ShiftTradeFromOffer;
+			  }
             string title = String.IsNullOrEmpty(Subject) ? message : Subject;
 
-            return SendPushMessageService.CreateConversation(title, message, false).
+            return SendPushMessageService.CreateConversation(title, message, false, type).
                                           To(Request.ReceiversForNotification).TranslateMessage().AddReplyOption("OK");
         }
 

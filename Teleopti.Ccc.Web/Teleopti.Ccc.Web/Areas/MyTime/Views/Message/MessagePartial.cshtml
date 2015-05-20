@@ -50,7 +50,7 @@
 									</span>
 									<!-- /ko -->
 									<span>@Resources.Sender: </span>
-									<span class="sender" data-bind="text: sender"></span>
+									<span class="sender" data-bind="text: sender, visible: !isNotShowSenderName()"></span>
 									<span>@Resources.Sent: </span>
 									<span class="send-date" data-bind="text: date"></span>
 								</div>
@@ -67,7 +67,7 @@
 								<div>
 									<div>
 										<span>@Resources.Sender: </span>
-										<span data-bind="text: sender"></span>
+										<span data-bind="text: sender, visible: !isNotShowSenderName()"></span>
 										<span>@Resources.Sent: </span>
 										<span data-bind="text: created"></span>
 									</div>

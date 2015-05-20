@@ -18,6 +18,7 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 	function asmMessageListViewModel() {
 		var self = this;
 
+		self.isAnonymous = ko.observable(false);
 		self.asmMessageList = ko.observableArray();
 	    self.asmMessageColumnList = ko.computed(function() {
 	        var list = [];
@@ -39,7 +40,7 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 		self.CreateAsmMessageList = function (dataList) {
 			var asmMessageItems = new Array();
 			$.each(dataList, function (position, element) {
-				asmMessageItems.push(new asmMessageItemViewModel(element));
+				asmMessageItems.push(new asmMessageItemViewModel(element, self.isAnonymous()));
 			});
 
 			self.asmMessageList($.merge(self.asmMessageList(), asmMessageItems));
@@ -48,7 +49,7 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 		self.isBadgeFeatureEnabled = ko.observable(false);
 	}
 
-	function asmMessageItemViewModel(item) {
+	function asmMessageItemViewModel(item, isAnonymous) {
 		var self = this;
 		self.messageType = ko.observable(item.MessageType);
 		self.isAdherenceBronzeBadgeMessage = ko.observable(self.messageType() == 1);
@@ -72,6 +73,9 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 		self.isSending = ko.observable(false);
 		self.reply = ko.observable('');
 		self.selectedReply = ko.observable();
+		self.isNotShowSenderName = ko.computed(function () {
+			return self.messageType() == 10 && isAnonymous;
+		});
 
 		self.replyOptions = ko.utils.arrayMap(item.ReplyOptions, function (data) {
 			return new replyOptionViewModel(data, self);
@@ -142,7 +146,7 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 				vm.asmMessageList.unshift(result[0]);
 				result[0].updateItem(messageItem);
 			} else {
-				vm.asmMessageList.unshift(new asmMessageItemViewModel(messageItem));
+				vm.asmMessageList.unshift(new asmMessageItemViewModel(messageItem), vm.isAnonymous());
 			}
 		}
 	};
@@ -190,6 +194,7 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 		vm = new asmMessageListViewModel();
 		ko.applyBindings(vm, document.getElementById('.asm-messages'));
 		_loadAPage();
+		_getAnonymousInfo();
 		$(window).scroll(_loadAPageIfRequired);
 	}
 
@@ -247,6 +252,19 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 
 		var toggleEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_AgentBadge_28913") || Teleopti.MyTimeWeb.Common.IsToggleEnabled("Portal_DifferentiateBadgeSettingForAgents_31318");
 		vm.isBadgeFeatureEnabled(toggleEnabled);
+	}
+
+	function _getAnonymousInfo() {
+		ajax.Ajax({
+			url: "Requests/ShiftTradeRequestPeriod",
+			dataType: "json",
+			type: 'GET',
+			success: function(data, textStatus, jqXHR) {
+				if (data.HasWorkflowControlSet) {
+					if (Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_AnonymousTrades_31638')) vm.isAnonymous(data.MiscSetting.AnonymousTrading);
+				}
+			}
+		});
 	}
 
 	function _hasMoreToLoad() {
