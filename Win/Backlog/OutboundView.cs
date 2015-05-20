@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Persisters.Outbound;
@@ -121,30 +122,52 @@ namespace Teleopti.Ccc.Win.Backlog
 		private void toolStripButtonAddCampaignClick(object sender, EventArgs e)
 		{
 			Campaign campaign;
-			using (var addCampaign = new AddCampaign())
+			IActivity activity;
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				addCampaign.ShowDialog(this);
-				if (addCampaign.DialogResult != DialogResult.OK)
-					return;
+				var activityRepository = _container.Resolve<IActivityRepository>();
+				var existinActivities = activityRepository.LoadAll();
 
-				campaign = addCampaign.CreatedCampaign;
+				using (var addCampaign = new AddCampaign(existinActivities))
+				{
+					addCampaign.ShowDialog(this);
+					if (addCampaign.DialogResult != DialogResult.OK)
+						return;
+
+					campaign = addCampaign.CreatedCampaign;
+					activity = addCampaign.ExistingActivity;
+					if (activity == null)
+					{
+						activity = new Activity(campaign.Name)
+						{
+							DisplayColor = Color.Black,
+							InContractTime = true,
+							InPaidTime = true,
+							InWorkTime = true,
+							RequiresSkill = true,
+							IsOutboundActivity = true,
+							AllowOverwrite = true
+						};
+						activityRepository.Add(activity);
+						uow.PersistAll();
+					}
+				}
 			}
+			
 
 			//AddCampaignCommand
-			createAndPersistCampaign(campaign);
+			createAndPersistCampaign(campaign, activity);
 			updateAndPersistCampaignSkillPeriod(campaign, true);
 
 			loadCampaigns();
 			updateStatusOnCampaigns();
 		}
 
-		private void createAndPersistCampaign(Campaign campaign)
+		private void createAndPersistCampaign(Campaign campaign, IActivity activity)
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var outboundSkillCreator = _container.Resolve<OutboundSkillCreator>();
-				var activityRepository = _container.Resolve<IActivityRepository>();
-				var activity = activityRepository.LoadAll().First(); //just using first, make this for real
 				var skill = outboundSkillCreator.CreateSkill(activity, campaign);
 				var outboundSkillPersister = _container.Resolve<OutboundSkillPersister>();
 				outboundSkillPersister.PersistAll(skill);
@@ -180,7 +203,7 @@ namespace Teleopti.Ccc.Win.Backlog
 				if(scheduled != TimeSpan.Zero)
 					incomingTask.SetTimeOnDate(dateOnly, scheduled, PlannedTimeTypeEnum.Scheduled);
 				else if(forecasted != TimeSpan.Zero)
-					incomingTask.SetTimeOnDate(dateOnly, scheduled, PlannedTimeTypeEnum.Calculated);
+					incomingTask.SetTimeOnDate(dateOnly, forecasted, PlannedTimeTypeEnum.Calculated);
 			}
 
 			return incomingTask;

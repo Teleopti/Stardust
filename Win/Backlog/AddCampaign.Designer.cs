@@ -38,6 +38,8 @@
 			this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
 			this.label4 = new System.Windows.Forms.Label();
 			this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
+			this.comboBox1 = new System.Windows.Forms.ComboBox();
+			this.label5 = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
 			this.SuspendLayout();
@@ -45,7 +47,7 @@
 			// button1
 			// 
 			this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.button1.Location = new System.Drawing.Point(288, 478);
+			this.button1.Location = new System.Drawing.Point(437, 478);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(75, 23);
 			this.button1.TabIndex = 0;
@@ -56,7 +58,7 @@
 			// button2
 			// 
 			this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.button2.Location = new System.Drawing.Point(207, 477);
+			this.button2.Location = new System.Drawing.Point(356, 477);
 			this.button2.Name = "button2";
 			this.button2.Size = new System.Drawing.Size(75, 23);
 			this.button2.TabIndex = 1;
@@ -79,13 +81,13 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.textBox1.Location = new System.Drawing.Point(55, 13);
 			this.textBox1.Name = "textBox1";
-			this.textBox1.Size = new System.Drawing.Size(308, 20);
+			this.textBox1.Size = new System.Drawing.Size(457, 20);
 			this.textBox1.TabIndex = 3;
 			// 
 			// monthCalendar1
 			// 
-			this.monthCalendar1.CalendarDimensions = new System.Drawing.Size(2, 2);
-			this.monthCalendar1.Location = new System.Drawing.Point(16, 64);
+			this.monthCalendar1.CalendarDimensions = new System.Drawing.Size(3, 2);
+			this.monthCalendar1.Location = new System.Drawing.Point(4, 64);
 			this.monthCalendar1.MaxSelectionCount = 365;
 			this.monthCalendar1.Name = "monthCalendar1";
 			this.monthCalendar1.TabIndex = 4;
@@ -143,11 +145,30 @@
 			this.numericUpDown2.TabIndex = 9;
 			this.numericUpDown2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
+			// comboBox1
+			// 
+			this.comboBox1.FormattingEnabled = true;
+			this.comboBox1.Location = new System.Drawing.Point(323, 387);
+			this.comboBox1.Name = "comboBox1";
+			this.comboBox1.Size = new System.Drawing.Size(189, 21);
+			this.comboBox1.TabIndex = 10;
+			// 
+			// label5
+			// 
+			this.label5.AutoSize = true;
+			this.label5.Location = new System.Drawing.Point(276, 391);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(41, 13);
+			this.label5.TabIndex = 11;
+			this.label5.Text = "Activity";
+			// 
 			// AddCampaign
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(375, 513);
+			this.ClientSize = new System.Drawing.Size(524, 513);
+			this.Controls.Add(this.label5);
+			this.Controls.Add(this.comboBox1);
 			this.Controls.Add(this.numericUpDown2);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.numericUpDown1);
@@ -165,6 +186,7 @@
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "AddCampaign";
+			this.Load += new System.EventHandler(this.AddCampaign_Load);
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
 			this.ResumeLayout(false);
@@ -184,5 +206,7 @@
 		private System.Windows.Forms.NumericUpDown numericUpDown1;
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.NumericUpDown numericUpDown2;
+		private System.Windows.Forms.ComboBox comboBox1;
+		private System.Windows.Forms.Label label5;
 	}
 }

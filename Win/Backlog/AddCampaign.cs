@@ -1,22 +1,38 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Outbound;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Backlog
 {
 	public partial class AddCampaign : Form
 	{
+		private readonly IList<IActivity> _existingActivities;
 		private Campaign _createdCampaign;
+		private IActivity _existingActivity;
 
 		public AddCampaign()
 		{
 			InitializeComponent();
 		}
 
+		public AddCampaign(IList<IActivity> existingActivities)
+		{
+			_existingActivities = new List<IActivity>(existingActivities);
+			InitializeComponent();
+		}
+
 		public Campaign CreatedCampaign
 		{
 			get { return _createdCampaign; }
+		}
+
+		public IActivity ExistingActivity
+		{
+			get { return _existingActivity; }
 		}
 
 		private void button1_Click(object sender, EventArgs e)
@@ -45,7 +61,25 @@ namespace Teleopti.Ccc.Win.Backlog
 
 			campaign.AddWorkingPeriod(campaignWorkingPeriod);
 			_createdCampaign = campaign;
+			if (!(comboBox1.SelectedItem is nullActivity))
+				_existingActivity = (IActivity) comboBox1.SelectedItem;
 			Close();
+		}
+
+		private void AddCampaign_Load(object sender, EventArgs e)
+		{
+			_existingActivities.Insert(0, new nullActivity());
+			comboBox1.DataSource = _existingActivities;
+			comboBox1.DisplayMember = "Name";
+		}
+
+		private class nullActivity : Activity
+		{
+			public nullActivity()
+				: base("New activity")
+			{
+				
+			}
 		}
 	}
 }
