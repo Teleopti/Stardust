@@ -24,12 +24,12 @@ Background:
 	 | Field      | Value      |
 	 | Team       | Team2      |
 	 | Start Date | 2015-01-21 |
-
+@Ignore
 Scenario: Show my team members by default
 	When I view people
 	Then I should see 'John Smith' in people list
 	And I should not see 'Ashley Andeen' in people list
-
+@Ignore
 Scenario: Should search people by keyword
 	When I view people
 	Then I should see 'John Smith' in people list
