@@ -5,6 +5,7 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Sdk.Logic.MultiTenancy;
 using Teleopti.Ccc.Sdk.WcfService.Factory;
+using Teleopti.Ccc.Sdk.WcfService.LogOn;
 
 namespace Teleopti.Ccc.Sdk.WcfService
 {
@@ -23,6 +24,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			builder.RegisterType<MultiTenancyAuthenticationFactory>().As<IAuthenticationFactory>().InstancePerLifetimeScope();
 			builder.RegisterType<TenantPeopleSaver>().As<ITenantPeopleSaver>().InstancePerLifetimeScope();
 			builder.RegisterType<TenantDataManager>().As<ITenantDataManager>().InstancePerLifetimeScope();
+			builder.RegisterType<SdkCurrentTenantCredentials>().As<ICurrentTenantCredentials>().InstancePerLifetimeScope();
 
 			if (_configuration.Toggle(Toggles.MultiTenancy_LogonUseNewSchema_33049))
 				builder.RegisterType<TenantPeopleLoader>().As<ITenantPeopleLoader>().InstancePerLifetimeScope();

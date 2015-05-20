@@ -24,6 +24,7 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon.Configuration;
@@ -41,6 +42,7 @@ using Teleopti.Ccc.Win.Shifts;
 using Teleopti.Ccc.WinCode.Autofac;
 using Teleopti.Ccc.WinCode.Common.ExceptionHandling;
 using Teleopti.Ccc.WinCode.Events;
+using Teleopti.Ccc.WinCode.Main;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Application = System.Windows.Forms.Application;
@@ -194,6 +196,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 					{
 						RepositoryConstructorType = typeof(IUnitOfWorkFactory)
 					});
+				builder.RegisterType<WinTenantCredentials>().As<ICurrentTenantCredentials>().SingleInstance();
 				builder.RegisterModule<EncryptionModule>();
 				builder.RegisterModule<EventAggregatorModule>();
 				builder.RegisterModule(new StartupModule(configuration));

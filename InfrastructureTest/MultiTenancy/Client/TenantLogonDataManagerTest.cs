@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.TestCommon.TestData;
 
 namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 {
@@ -16,6 +17,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 	{
 		public PostHttpRequestFake HttpRequestFake;
 		public ITenantLogonDataManager Target;
+		public CurrentTenantCredentialsFake CurrentTenantCredentials;
 
 		[Test]
 		public void ShouldBatchCallsToGetLogonInfoModelsForGuids()
@@ -35,6 +37,19 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 
 			var result = Target.GetLogonInfoModelsForGuids(guids);
 			result.Count().Should().Be.EqualTo(400);
+		}
+
+
+		[Test]
+		public void ShouldSendTenantWhenPersisting()
+		{
+			var tenantCredentials = new TenantCredentials(Guid.NewGuid(), RandomName.Make());
+			CurrentTenantCredentials.Has(tenantCredentials);
+			HttpRequestFake.SetReturnValue(Enumerable.Empty<LogonInfoModel>());
+
+			Target.GetLogonInfoModelsForGuids(new[]{Guid.NewGuid()});
+
+			HttpRequestFake.SendTenantCredentials.Should().Be.SameInstanceAs(tenantCredentials);
 		}
 	}
 }

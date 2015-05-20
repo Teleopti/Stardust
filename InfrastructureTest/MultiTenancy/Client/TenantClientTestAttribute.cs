@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			builder.RegisterType<PostHttpRequestFake>().As<IPostHttpRequest>().AsSelf().SingleInstance();
 			builder.RegisterType<FakePersonRepository>().As<IPersonRepository>().AsSelf().SingleInstance();
 			builder.RegisterType<LoadUserUnauthorizedFake>().As<ILoadUserUnauthorized>().AsSelf().SingleInstance();
+			builder.RegisterType<CurrentTenantCredentialsFake>().As<ICurrentTenantCredentials>().AsSelf().SingleInstance();
 		}
 	}
 }

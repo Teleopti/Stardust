@@ -10,26 +10,29 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 		private readonly ITenantServerConfiguration _tenantServerConfiguration;
 		private readonly IPostHttpRequest _postHttpRequest;
 		private readonly IJsonSerializer _jsonSerializer;
+		private readonly ICurrentTenantCredentials _currentTenantCredentials;
 
 		public TenantDataManager(ITenantServerConfiguration tenantServerConfiguration, 
 															IPostHttpRequest postHttpRequest,
-															IJsonSerializer jsonSerializer)
+															IJsonSerializer jsonSerializer,
+															ICurrentTenantCredentials currentTenantCredentials)
 		{
 			_tenantServerConfiguration = tenantServerConfiguration;
 			_postHttpRequest = postHttpRequest;
 			_jsonSerializer = jsonSerializer;
+			_currentTenantCredentials = currentTenantCredentials;
 		}
 
 		public void DeleteTenantPersons(IEnumerable<Guid> personsToBeDeleted)
 		{
 			var json = _jsonSerializer.SerializeObject(personsToBeDeleted);
-			_postHttpRequest.Send<object>(_tenantServerConfiguration.FullPath("PersonInfo/Delete"), json);
+			_postHttpRequest.SendSecured<object>(_tenantServerConfiguration.FullPath("PersonInfo/Delete"), json, _currentTenantCredentials.TenantCredentials());
 		}
 
 		public SavePersonInfoResult SaveTenantData(TenantAuthenticationData tenantAuthenticationData)
 		{
 			var json = _jsonSerializer.SerializeObject(tenantAuthenticationData);
-			var tmpResult = _postHttpRequest.Send<PersistPersonInfoResult>(_tenantServerConfiguration.FullPath("PersonInfo/Persist"), json);
+			var tmpResult = _postHttpRequest.SendSecured<PersistPersonInfoResult>(_tenantServerConfiguration.FullPath("PersonInfo/Persist"), json, _currentTenantCredentials.TenantCredentials());
 			var ret = new SavePersonInfoResult {Success = true};
 			
 			if (!tmpResult.PasswordStrengthIsValid)

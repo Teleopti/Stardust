@@ -5,6 +5,7 @@
 		private object _value;
 		public string CalledUrl { get; private set; }
 		public string SentJson { get; private set; }
+		public TenantCredentials SendTenantCredentials { get; private set; }
 
 		public T Send<T>(string url, string json, string userAgent = null)
 		{
@@ -14,6 +15,12 @@
 				return (T)_value;
 
 			return default(T);
+		}
+
+		public T SendSecured<T>(string url, string json, TenantCredentials tenantCredentials)
+		{
+			SendTenantCredentials = tenantCredentials;
+			return Send<T>(url, json);
 		}
 
 		public void SetReturnValue<T>(T value)

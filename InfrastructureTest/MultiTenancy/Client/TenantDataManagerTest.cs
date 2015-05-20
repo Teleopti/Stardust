@@ -4,6 +4,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
+using Teleopti.Ccc.TestCommon.TestData;
 
 namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 {
@@ -13,6 +14,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 	{
 		public PostHttpRequestFake HttpRequestFake;
 		public ITenantDataManager Target;
+		public CurrentTenantCredentialsFake CurrentTenantCredentials;
 
 		[Test]
 		public void ShouldDeleteTenantData()
@@ -66,8 +68,29 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			result.Success.Should().Be.False();
 		}
 
-		
+		[Test]
+		public void ShouldSendTenantWhenDeleting()
+		{
+			var tenantCredentials = new TenantCredentials(Guid.NewGuid(), RandomName.Make());
+			CurrentTenantCredentials.Has(tenantCredentials);
 
-	
+			var personIds = new[] { Guid.NewGuid() };
+			Target.DeleteTenantPersons(personIds);
+
+			HttpRequestFake.SendTenantCredentials.Should().Be.SameInstanceAs(tenantCredentials);
+		}
+
+		[Test]
+		public void ShouldSendTenantWhenPersisting()
+		{
+			var tenantCredentials = new TenantCredentials(Guid.NewGuid(), RandomName.Make());
+			CurrentTenantCredentials.Has(tenantCredentials);
+			var saveResult = new PersistPersonInfoResult { PasswordStrengthIsValid = true, ApplicationLogonNameIsValid = true, IdentityIsValid = true };
+			HttpRequestFake.SetReturnValue(saveResult);
+
+			Target.SaveTenantData(new TenantAuthenticationData());
+
+			HttpRequestFake.SendTenantCredentials.Should().Be.SameInstanceAs(tenantCredentials);
+		}
 	}
 }
