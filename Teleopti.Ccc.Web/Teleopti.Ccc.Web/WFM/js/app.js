@@ -29,6 +29,7 @@ var wfm = angular.module('wfm', [
 	'wfm.notifications',
 	'wfm.notice',
 	'wfm.areas',
+	'wfm.help',
 	'ui.grid',
 	'ui.grid.autoResize',
 	'ui.grid.exporter',
@@ -136,7 +137,7 @@ wfm.config([
 		$translateProvider.preferredLanguage('en');
 	}
 ]).run([
-	'$rootScope', '$http', '$state', '$translate', 'amMoment', function ($rootScope, $http, $state, $translate, angularMoment) {
+	'$rootScope', '$http', '$state', '$translate', 'amMoment', 'HelpService', function ($rootScope, $http, $state, $translate, angularMoment, HelpService) {
 		var timeout = Date.now() + 10000;
 		$rootScope.isAuthenticated = false;
 
@@ -184,6 +185,7 @@ wfm.config([
 			ab1.baseUrl = 'http://wfmta.azurewebsites.net/';
 			$rootScope.$on('$stateChangeSuccess', function (event, next, toParams) {
 				ab1.sendPageView();
+				HelpService.updateState($state.current.name);
 			});
 		});
 	}

@@ -86,26 +86,40 @@
 				</label>
 			</div>
 		</div>
-		<div class="sidenav material-depth-1 right" ng-class="{'is-hidden':toggleRightSide}" ng-controller="NotificationsCtrl">
+		<div class="sidenav material-depth-1 right" layout="column" ng-class="{'is-hidden':toggleRightSide}" ng-controller="NotificationsCtrl">
 			<div>
 				<a href="#"><div class="wfm-block sidenav-header">Notifications</div></a>
 				<ul class="notification-list" ng-repeat="item in notificationResult">
 					<li><i class="mdi mdi-alert-circle"></i>{{item.JobCategory}} '{{item.Status}}' at {{item.Timestamp | date:'HH:mm'}}</li>
 				</ul>
+				<ul class="wfm-list">
+					<li>asd</li>
+					<li>asd</li>
+					<li>asd</li>
+					<li>asd</li>
+					<li>asd</li>
+				</ul>
 			</div>
-			<div>
+			<div flex>
 				<div class="wfm-block sidenav-header">Something</div>
 			</div>
-			<div class="help-widget">
-				<div class="wfm-block sidenav-header">Help</div>
-				<div class="help-text">
-					<h4>This is the main permissions view.</h4>
-					Click on something to learn more about it.
-				</div>
-				<div class="tile-footer">
-					<button class="wfm-btn wfm-btn-invis-primary">go to wiki</button>
-				</div>
-			</div>
+
+			<ul class="wfm-accordion">
+				<li>
+					<div class="wfm-accordion-head sidenav-header" ng-click="helpToggle1 = !helpToggle1">Help<i class="mdi mdi-help-circle"></i></div>
+					<div class="wfm-accordion-content" ng-cloak ng-show="helpToggle1">
+						<div class="wfm-block">
+							<div ng-controller="HelpController">
+								<h4>{{help.currentHelp.name}} view.</h4>
+								<p>{{ help.currentHelp.helpDesc }}</p>
+								<a href="{{help.currentHelp.helpUrl}}">Go to Wiki</a>
+							</div>
+
+						</div>
+					</div>
+				</li>
+			</ul>
+
 		</div>
 	</div>
 </body>
