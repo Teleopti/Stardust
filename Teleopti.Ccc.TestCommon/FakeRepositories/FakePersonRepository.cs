@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IPerson> LoadAll()
 		{
-			throw new NotImplementedException();
+			return _persons;
 		}
 
 		public IPerson Load(Guid id)

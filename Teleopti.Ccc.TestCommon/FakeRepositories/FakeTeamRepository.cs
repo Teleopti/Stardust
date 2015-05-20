@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<ITeam> LoadAll()
 		{
-			throw new NotImplementedException();
+			return _teams;
 		}
 
 		public ITeam Load (Guid id)

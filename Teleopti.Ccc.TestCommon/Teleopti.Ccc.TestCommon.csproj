@@ -159,10 +159,13 @@
     <Compile Include="FakeData\FakeTeamBlockScheduleCommand.cs" />
     <Compile Include="FakeData\FakeUnitOfWork.cs" />
     <Compile Include="FakeData\FakeUnitOfWorkFactory.cs" />
+    <Compile Include="FakeData\PersonScheduleDayReadModelFactory.cs" />
     <Compile Include="FakeEventPublisher.cs" />
     <Compile Include="FakeHangfireEventClient.cs" />
     <Compile Include="FakeMbCacheFactory.cs" />
+    <Compile Include="FakePersonNameProvider.cs" />
     <Compile Include="FakeReadModelUnitOfWorkAspect.cs" />
+    <Compile Include="FakeRepositories\FakeBusinessUnitRepository.cs" />
     <Compile Include="FakeRepositories\FakeMailboxRepository.cs" />
     <Compile Include="FakeRepositories\FakeDayOffTemplateRepository.cs" />
     <Compile Include="FakeRepositories\FakePersonAbsenceAccountRepository.cs" />
@@ -444,6 +447,10 @@
     <ProjectReference Include="..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
       <Project>{DB42D973-9889-4D51-9FC5-BE66AA7F117C}</Project>
       <Name>Teleopti.Ccc.IocCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.Web\Teleopti.Ccc.Web\Teleopti.Ccc.Web.csproj">
+      <Project>{0A5EBAA1-BDC2-4997-873F-4FA43E3BC275}</Project>
+      <Name>Teleopti.Ccc.Web</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
       <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>

@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Add(IPersonAssignment entity)
 		{
-			throw new NotImplementedException();
+			_personAssignments.Add(entity);
 		}
 
 		public void Remove(IPersonAssignment entity)
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IPersonAssignment> LoadAll()
 		{
-			throw new NotImplementedException();
+			return _personAssignments;
 		}
 
 		public IPersonAssignment Load(Guid id)

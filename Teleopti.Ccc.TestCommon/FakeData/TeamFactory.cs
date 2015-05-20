@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.AgentInfo;
+﻿using System;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 
@@ -49,5 +50,12 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
             return team;
         }
+
+	    public static ITeam CreateTeamWithId(string teamName)
+	    {
+		    var team = CreateSimpleTeam(teamName);
+			team.SetId(Guid.NewGuid());
+		    return team;
+	    }
     }
 }

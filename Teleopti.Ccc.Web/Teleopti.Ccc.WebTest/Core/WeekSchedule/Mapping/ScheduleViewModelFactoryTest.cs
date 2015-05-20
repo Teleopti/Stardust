@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
@@ -14,52 +13,17 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
-using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
-using Teleopti.Ccc.Web.Core.IoC;
+using Teleopti.Ccc.WebTest.Core.IoC;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 {
-	public class MyTimeWebTestAttribute : IoCTestAttribute
-	{
-		protected override void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
-		{
-			var scenario = new FakeCurrentScenario();
-			var principalAuthorization = new PrincipalAuthorizationWithFullPermission();
-
-			PrincipalAuthorization.SetInstance(principalAuthorization);
-
-			builder.RegisterModule(new WebModule(configuration, null));
-			builder.RegisterType<FakeLoggedOnUser>().As<ILoggedOnUser>().SingleInstance();
-			builder.RegisterInstance(new FakeScheduleDataReadScheduleRepository()).AsSelf().As<IScheduleRepository>().SingleInstance();
-			builder.RegisterInstance(scenario).As<ICurrentScenario>().SingleInstance();
-			builder.RegisterInstance(principalAuthorization).As<IPrincipalAuthorization>().SingleInstance();
-			builder.RegisterInstance(new FakePersonRequestRepository()).As<IPersonRequestRepository>().SingleInstance();
-			builder.RegisterInstance(new FakeScenarioRepository(scenario.Current())).As<IScenarioRepository>().SingleInstance();
-			builder.RegisterInstance(new FakeBudgetDayRepository()).As<IBudgetDayRepository>().SingleInstance();
-			builder.RegisterInstance(new FakeScheduleProjectionReadOnlyRepository())
-				.As<IScheduleProjectionReadOnlyRepository>()
-				.SingleInstance();
-			builder.RegisterType<AutoMapperConfiguration>().As<AutoMapperConfiguration>().SingleInstance();
-
-		}
-
-		protected override void BeforeInject(IComponentContext container)
-		{
-			container.Resolve<AutoMapperConfiguration>().Execute(null);
-		}
-
-	}
-
 	[TestFixture]
-	[MyTimeWebTestAttribute]
+	[MyTimeWebTest]
 	public class ScheduleViewModelFactoryTest2
 	{
 		public IScheduleViewModelFactory Target;
