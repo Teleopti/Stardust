@@ -70,5 +70,24 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database.AddedStateCode.Should().Be.Null();
 		}
 
+		[Test]
+		public void ShouldAddStateCodeAsNameWhenCheckingForActivityChange()
+		{
+			var personId = Guid.NewGuid();
+			var businessUnitId = Guid.NewGuid();
+			Database
+				.WithBusinessUnit(businessUnitId)
+				.WithDefaultStateGroup()
+				.WithUser("usercode", personId, businessUnitId)
+				.WithExistingState(new AgentState
+				{
+					PersonId = personId,
+					StateCode = "statecode"
+				});
+
+			Target.CheckForActivityChange(personId, businessUnitId);
+
+			Database.AddedStateCode.Name.Should().Be("statecode");
+		}
 	}
 }

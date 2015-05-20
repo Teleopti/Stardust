@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				      g.DefaultStateGroup
 				select g).SingleOrDefault();
 			if (defaultStateGroup != null)
-				defaultStateGroup.AddState(stateDescription, stateCode, platformTypeId);
+				defaultStateGroup.AddState(stateDescription ?? stateCode, stateCode, platformTypeId);
 		}
 	}
 }
