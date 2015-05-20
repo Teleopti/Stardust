@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Configuration;
 using System.Windows.Forms;
 using Autofac;
 using Teleopti.Ccc.Domain.Forecasting.Import;
@@ -30,7 +31,13 @@ namespace Teleopti.Ccc.Win.Forecasting
         {
             builder.RegisterType<SaveImportForecastFileCommand>().As<ISaveImportForecastFileCommand>();
             builder.RegisterType<ValidateImportForecastFileCommand>().As<IValidateImportForecastFileCommand>();
+
+			if (string.IsNullOrEmpty(ConfigurationManager.AppSettings["FreemiumForecast"]))
 				builder.RegisterType<ServiceBusSender>()
+				 .As<IServiceBusSender>()
+				 .SingleInstance();
+			else
+				builder.RegisterType<EmptyServiceBusSender>()
 				 .As<IServiceBusSender>()
 				 .SingleInstance();
             builder.RegisterType<ImportForecastView>()
@@ -126,7 +133,9 @@ namespace Teleopti.Ccc.Win.Forecasting
         }
     }
 
-    public interface IImportForecastViewFactory
+	
+
+	public interface IImportForecastViewFactory
     {
         IImportForecastView Create(ISkill skill);
     }

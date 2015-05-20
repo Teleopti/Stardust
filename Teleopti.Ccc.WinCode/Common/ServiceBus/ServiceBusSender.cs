@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
-using System.ServiceModel;
 using Autofac;
+using log4net;
 using Rhino.ServiceBus;
 using Rhino.ServiceBus.Impl;
 using Rhino.ServiceBus.Internal;
+using Rhino.ServiceBus.SqlQueues.Config;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Win.Common.ServiceBus;
 using Teleopti.Ccc.WinCode.Autofac;
 using Teleopti.Interfaces.Messages;
-using log4net;
 
 namespace Teleopti.Ccc.WinCode.Common.ServiceBus
 {
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WinCode.Common.ServiceBus
 					builder.RegisterType<LargeGuidCollectionSerializer>().As<ICustomElementSerializer>();
 					_customHost = builder.Build();
 
-					Rhino.ServiceBus.SqlQueues.Config.QueueConnectionStringContainer.ConnectionString =
+					QueueConnectionStringContainer.ConnectionString =
 						StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["Queue"];
 
 					new OnewayRhinoServiceBusConfiguration()

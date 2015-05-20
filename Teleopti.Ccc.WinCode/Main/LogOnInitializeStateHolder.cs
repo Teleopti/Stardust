@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WinCode.Main
 				messageBrokerDisabled = true;
 			}
 
-			var sendToServiceBus = new ServiceBusSender();
+			var sendToServiceBus = string.IsNullOrEmpty(ConfigurationManager.AppSettings["FreemiumForecast"])?(IServiceBusSender) new ServiceBusSender():new EmptyServiceBusSender();
 			var populator = EventContextPopulator.Make();
 			var businessUnit = CurrentBusinessUnit.Make();
 			var messageSender = new MessagePopulatingServiceBusSender(sendToServiceBus, populator);
