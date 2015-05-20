@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.Win.Reporting
 					if (targetTime.HasValue) detailData.TargetTime = targetTime.Value.TotalMinutes;
 					detailData.TargetDayOffs = ViewBaseHelper.CalculateTargetDaysOff(virtualSchedulePeriods);
 					detailData.ScheduledTime = ViewBaseHelper.CurrentContractTime(stateHolder.Schedules[personSchedulePeriods.Key], period).TotalMinutes;
-					detailData.ScheduledDayOffs = ViewBaseHelper.CurrentTotalDayOffs(stateHolder.Schedules[personSchedulePeriods.Key], period);
+					detailData.ScheduledDayOffs = stateHolder.Schedules[personSchedulePeriods.Key].CalculatedScheduleDaysOff;
 
 					detailDataList.Add(detailData);
 				}

@@ -201,31 +201,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		}
 
 		[Test]
-		public void VerifyCalculatedContractTimeHolderAndCalculatedScheduleDaysOff()
-		{
-			_target.CalculatedContractTimeHolder = TimeSpan.FromMinutes(24);
-			Assert.AreEqual(TimeSpan.FromMinutes(24), _target.CalculatedContractTimeHolder);
-			IPersistableScheduleData data1 = createPersonAssignment(new DateTimePeriod(2000, 1, 2, 2000, 1, 3));
-
-			using (_mocks.Record())
-			{
-				fullPermission(true);
-                Expect.Call(_principalAuthorization.IsPermitted("", DateOnly.Today, _person)).IgnoreArguments().Return(true).Repeat.Twice();
-			}
-            using (_mocks.Playback())
-            {
-                using (new CustomAuthorizationContext(_principalAuthorization))
-                {
-                    _target.Add(data1);
-                    var part = _target.ScheduledDay(new DateOnly(2000, 1, 2));
-                    _target.ModifyInternal(part);
-                    Assert.IsFalse(_target.CalculatedContractTimeHolder.HasValue);
-                    Assert.IsFalse(_target.CalculatedScheduleDaysOff.HasValue);
-                }
-            }
-		}
-
-		[Test]
 		public void VerifyCalculatedTargetTimeHolder()
 		{
 			_target.CalculatedTargetTimeHolder = TimeSpan.FromMinutes(24);
@@ -673,18 +648,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
             _target.Snapshot.Snapshot.Should().Not.Be.SameInstanceAs(snapshotBefore);
         }
-
-		[Test]
-		public void ShouldReset_CalculatedContractTimeAndDaysOff()
-		{
-			_target.CalculatedContractTimeHolder = new TimeSpan(10,10,10,10);
-			_target.CalculatedScheduleDaysOff = 8;
-
-			_target.ForceRecalculationOfContractTimeAndDaysOff();
-
-			_target.CalculatedContractTimeHolder.Should().Be.EqualTo(null);
-			_target.CalculatedScheduleDaysOff.Should().Be.EqualTo(null);
-		}
 
 		private IPersonAbsence createPersonAbsence(DateTimePeriod period)
 		{

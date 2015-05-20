@@ -382,42 +382,15 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         public static void StyleCurrentContractTimeCell(GridStyleInfo style, IScheduleRange wholeRange, DateOnlyPeriod period)
         {
             style.CellType = "TotalTimeCell";
-            if (!wholeRange.CalculatedContractTimeHolder.HasValue)
-            {
-                TimeSpan contractTime = TimeSpan.Zero;
-                foreach (var scheduleDay in wholeRange.ScheduledDayCollection(period))
-                {
-                    DateOnly dateOnly = scheduleDay.DateOnlyAsPeriod.DateOnly;
-                    IPerson person = scheduleDay.Person;
-                    if (!person.IsAgent(dateOnly))
-                        continue;
-
-                    contractTime = contractTime.Add(scheduleDay.ProjectionService().CreateProjection().ContractTime());
-                }
-                wholeRange.CalculatedContractTimeHolder = contractTime;
-            }
-            style.CellValue = wholeRange.CalculatedContractTimeHolder.Value;
+            style.CellValue = wholeRange.CalculatedContractTimeHolder;
         }
 
 		public static TimeSpan CurrentContractTime(IScheduleRange wholeRange, DateOnlyPeriod period)
 		{
 			if(wholeRange == null)
-				throw new ArgumentNullException("wholeRange");
+				throw new ArgumentNullException("wholeRange");			
 
-			TimeSpan contractTime = TimeSpan.Zero;
-
-			if (!wholeRange.CalculatedContractTimeHolder.HasValue)
-			{
-				
-				foreach (var scheduleDay in wholeRange.ScheduledDayCollection(period))
-				{
-					contractTime = contractTime.Add(scheduleDay.ProjectionService().CreateProjection().ContractTime());
-				}
-
-				return contractTime;
-			}
-
-			return wholeRange.CalculatedContractTimeHolder.Value;
+			return wholeRange.CalculatedContractTimeHolder;
 		}
 
 		public static Boolean CheckOpenPeriodMatchSchedulePeriod(IPerson person, DateOnlyPeriod openPeriod)
@@ -437,38 +410,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         public static void StyleCurrentTotalDayOffCell(GridStyleInfo style, IScheduleRange wholeRange, DateOnlyPeriod period)
         {
             style.CellType = "TotalDayOffCell";
-
-	
-			wholeRange.CalculatedScheduleDaysOff = CurrentTotalDayOffs(wholeRange, period);
-			//}
-            style.CellValue = wholeRange.CalculatedScheduleDaysOff.Value;
+            style.CellValue = wholeRange.CalculatedScheduleDaysOff;
         }
-
-		public static int CurrentTotalDayOffs(IScheduleRange wholeRange, DateOnlyPeriod period)
-		{
-			if(wholeRange == null)
-				throw new ArgumentNullException("wholeRange");
-
-			var totalDayOff = 0;
-
-			if (!wholeRange.CalculatedScheduleDaysOff.HasValue)
-			{
-				foreach (var scheduleDay in wholeRange.ScheduledDayCollection(period))
-				{
-				    DateOnly dateOnly = scheduleDay.DateOnlyAsPeriod.DateOnly;
-				    IPerson person = scheduleDay.Person;
-                    if (!person.IsAgent(dateOnly)) continue;
-
-					SchedulePartView significant = scheduleDay.SignificantPart();
-					if (significant == SchedulePartView.DayOff || significant == SchedulePartView.ContractDayOff)
-						totalDayOff += 1;
-				}
-
-				return totalDayOff;
-			}
-
-			return wholeRange.CalculatedScheduleDaysOff.Value;	
-		}
 
         #endregion
 

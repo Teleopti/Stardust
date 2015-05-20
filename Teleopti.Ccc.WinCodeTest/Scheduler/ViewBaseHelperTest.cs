@@ -8,7 +8,6 @@ using System.IO;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
-using SharpTestsEx;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
@@ -491,130 +490,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             return noRest;
         }
 
-        [Test]
-        public void VerifyStyleCurrentContractTimeCellSetsCellCorrectWithCachedValue()
-        {
-            IVisualLayerCollection visualLayerCollection = VisualLayerCollectionFactory.CreateForWorkShift(new Person(),
-                                                            TimeSpan.FromHours(8), TimeSpan.FromHours(14),
-                                                            new TimePeriod(TimeSpan.FromHours(10), TimeSpan.FromHours(11)));
-        	var totalContractTime = visualLayerCollection.ContractTime();
-
-            var range = _mockRep.StrictMock<IScheduleRange>();
-            var style = new GridStyleInfo();
-
-            using (_mockRep.Record())
-            {
-                Expect.Call(range.CalculatedContractTimeHolder).Return(totalContractTime).Repeat.Twice();
-            }
-
-            using (_mockRep.Playback())
-            {
-                ViewBaseHelper.StyleCurrentContractTimeCell(style, range, new DateOnlyPeriod());
-            }
-
-            Assert.AreEqual(totalContractTime, style.CellValue);
-        }
-
-        [Test]
-        public void ShouldReturnCurrentContractTime()
-        {
-            var visualLayerCollection = VisualLayerCollectionFactory.CreateForWorkShift(new Person(),TimeSpan.FromHours(8), TimeSpan.FromHours(14),new TimePeriod(TimeSpan.FromHours(10), TimeSpan.FromHours(11)));
-            var totalContractTime = visualLayerCollection.ContractTime();
-
-            var range = _mockRep.StrictMock<IScheduleRange>();
-
-            using (_mockRep.Record())
-            {
-                Expect.Call(range.CalculatedContractTimeHolder).Return(totalContractTime).Repeat.Twice();
-            }
-
-            using (_mockRep.Playback())
-            {
-                var currentContractTime = ViewBaseHelper.CurrentContractTime(range, new DateOnlyPeriod());
-                Assert.AreEqual(totalContractTime, currentContractTime);
-            }
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test, ExpectedException(typeof(ArgumentNullException))]
         public void ShouldThrowExceptionOnNullRange()
         {
             ViewBaseHelper.CurrentContractTime(null, new DateOnlyPeriod());    
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
-        public void CurrentContractTimeCellShouldNotCountInvalidDays()
-        {
-            IPerson person = _mockRep.StrictMock<IPerson>();
-
-            IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(), (TimeZoneInfo.Utc));
-
-            TimeSpan totalContractTime = TimeSpan.Zero;
-
-            var part = _mockRep.StrictMock<IScheduleDay>();
-            var range = _mockRep.StrictMock<IScheduleRange>();
-            var style = new GridStyleInfo();
-
-            using (_mockRep.Record())
-            {
-                Expect.Call(range.CalculatedContractTimeHolder).Return(null);
-                range.CalculatedContractTimeHolder = TimeSpan.FromHours(0);
-                LastCall.IgnoreArguments();
-                Expect.Call(range.CalculatedContractTimeHolder).Return(totalContractTime);
-                Expect.Call(range.ScheduledDayCollection(new DateOnlyPeriod())).Return(new List<IScheduleDay> {part}).
-                    Repeat.AtLeastOnce();
-                Expect.Call(part.Person).Return(person);
-                Expect.Call(part.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod);
-                Expect.Call(person.IsAgent(new DateOnly())).Return(false);
-
-            }
-
-            using (_mockRep.Playback())
-            {
-                ViewBaseHelper.StyleCurrentContractTimeCell(style, range, new DateOnlyPeriod());
-            }
-
-            Assert.AreEqual(totalContractTime, style.CellValue);
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
-        public void VerifyStyleCurrentContractTimeCellSetsCellCorrectWithoutCachedValue()
-        {
-            IPerson person = _mockRep.StrictMock<IPerson>();
-            IVisualLayerCollection visualLayerCollection = VisualLayerCollectionFactory.CreateForWorkShift(person, TimeSpan.FromHours(8), TimeSpan.FromHours(14),
-                                                            new TimePeriod(TimeSpan.FromHours(10), TimeSpan.FromHours(11)));
-
-            IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(), (TimeZoneInfo.Utc));
-
-            TimeSpan totalContractTime = visualLayerCollection.ContractTime();
-
-            var part = _mockRep.StrictMock<IScheduleDay>();
-            var projectionService = _mockRep.StrictMock<IProjectionService>();
-            var range = _mockRep.StrictMock<IScheduleRange>();
-            var style = new GridStyleInfo();
-
-            using (_mockRep.Record())
-            {
-                Expect.Call(part.ProjectionService()).Return(projectionService);
-                Expect.Call(projectionService.CreateProjection()).Return(visualLayerCollection);
-                Expect.Call(range.CalculatedContractTimeHolder).Return(null);
-                range.CalculatedContractTimeHolder = TimeSpan.FromHours(5);
-                LastCall.IgnoreArguments();
-                Expect.Call(range.CalculatedContractTimeHolder).Return(totalContractTime);
-                Expect.Call(range.ScheduledDayCollection(new DateOnlyPeriod())).Return(new List<IScheduleDay> {part}).
-                    Repeat.AtLeastOnce();
-                Expect.Call(part.Person).Return(person);
-                Expect.Call(part.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod);
-                Expect.Call(person.IsAgent(new DateOnly())).Return(true);
-            }
-
-            using (_mockRep.Playback())
-            {
-                ViewBaseHelper.StyleCurrentContractTimeCell(style, range, new DateOnlyPeriod());
-            }
-
-            Assert.AreEqual(totalContractTime, style.CellValue);
-        }
-
+        
 		[Test]
 		public void ShouldReturnSchedulePeriodWhenEqualWithOpenPeriod()
 		{
@@ -695,28 +576,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				Assert.AreEqual(UserTexts.Resources.NA, style.CellValue);
 			}
 		}
-		
-        [Test]
-        public void VerifyStyleCurrentDaysOffsetsCellCorrect()
-        { 
-            var range = _mockRep.StrictMock<IScheduleRange>();
-
-            var style = new GridStyleInfo();
-
-            using (_mockRep.Record())
-            {
-				Expect.Call(range.CalculatedScheduleDaysOff).Return(2).Repeat.AtLeastOnce();
-				Expect.Call(() => range.CalculatedScheduleDaysOff = 2);
-            }
-
-            using (_mockRep.Playback())
-            {
-                ViewBaseHelper.StyleCurrentTotalDayOffCell(style, range, new DateOnlyPeriod());
-            }
-
-            Assert.AreEqual(2, style.CellValue);
-        }
-
+		       
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test, ExpectedException(typeof(ArgumentNullException))]
         public void ShouldThrowExceptionOnNullStyle()
         {
@@ -742,43 +602,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         {
             ViewBaseHelper.CalculateTargetTime(null, null, false);
         }   
-
-        [Test]
-        public void VerifyStyleCurrentDaysOffsetsCellCorrectWhenNoCachedValue()
-        {
-            IPerson person = _mockRep.StrictMock<IPerson>();
-
-            IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(), (TimeZoneInfo.Utc));
-
-            var part = _mockRep.StrictMock<IScheduleDay>();
-            var range = _mockRep.StrictMock<IScheduleRange>();
-            var style = new GridStyleInfo();
-
-            using (_mockRep.Record())
-            {
-                Expect.Call(range.CalculatedScheduleDaysOff).Return(null);
-                Expect.Call(range.ScheduledDayCollection(new DateOnlyPeriod())).Return(new List<IScheduleDay> { part }).
-                    Repeat.AtLeastOnce();
-                Expect.Call(part.SignificantPart()).Return(SchedulePartView.DayOff);
-                Expect.Call(part.Person).Return(person);
-                Expect.Call(part.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod);
-                range.CalculatedScheduleDaysOff = 2;
-                LastCall.IgnoreArguments();
-            	Expect.Call(range.CalculatedScheduleDaysOff).Return(2);
-                Expect.Call(person.IsAgent(new DateOnly())).Return(true);
-            }
-
-            using (_mockRep.Playback())
-            {
-                ViewBaseHelper.StyleCurrentTotalDayOffCell(style, range, new DateOnlyPeriod());
-            }
-
-            Assert.AreEqual(2, style.CellValue);
-        }
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"),
-		System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), 
-		Test]
+        
+		[Test]
         public void VerifyGetsTargetContractTimeFromAllSchedulePeriod()
         {
             var contractTime = TimeSpan.FromHours(1);

@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -244,10 +245,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             return fairnessValue(period);
         }
 
-		public TimeSpan? CalculatedContractTimeHolder
+		public TimeSpan CalculatedContractTimeHolder
 		{
-			get { return _calculatedContractTimeHolder; }
-			set { _calculatedContractTimeHolder = value; }
+			get
+			{
+				if (!_calculatedContractTimeHolder.HasValue)
+				{
+					var timeAndDaysOffTuple =	new CurrentScheduleSummaryCalculator().SetCurrent(this);
+					_calculatedContractTimeHolder = timeAndDaysOffTuple.Item1;
+					_calculatedScheduleDaysOff = timeAndDaysOffTuple.Item2;
+				}
+
+				return _calculatedContractTimeHolder.Value;
+			}
 		}
 
 		public TimeSpan? CalculatedTargetTimeHolder
@@ -256,10 +266,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			set { _calculatedTargettTimeHolder = value; }
 		}
 
-        public int? CalculatedScheduleDaysOff
+        public int CalculatedScheduleDaysOff
         {
-            get { return _calculatedScheduleDaysOff; }
-            set { _calculatedScheduleDaysOff = value; }
+	        get
+	        {
+				if (!_calculatedScheduleDaysOff.HasValue)
+				{
+					var timeAndDaysOffTuple = new CurrentScheduleSummaryCalculator().SetCurrent(this);
+					_calculatedContractTimeHolder = timeAndDaysOffTuple.Item1;
+					_calculatedScheduleDaysOff = timeAndDaysOffTuple.Item2;
+				}
+
+		        return _calculatedScheduleDaysOff.Value;
+	        }
         }
 
 		public int? CalculatedTargetScheduleDaysOff
@@ -415,8 +434,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public void ForceRecalculationOfContractTimeAndDaysOff()
 		{
-			CalculatedContractTimeHolder = null;
-			CalculatedScheduleDaysOff = null;
+			_calculatedContractTimeHolder = null;
+			_calculatedScheduleDaysOff = null;
 		}
 
 						public bool IsEmpty()

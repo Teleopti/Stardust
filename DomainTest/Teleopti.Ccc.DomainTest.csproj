@@ -683,6 +683,7 @@
     <Compile Include="ResourceCalculation\PeriodResourceDetailTest.cs" />
     <Compile Include="ResourceCalculation\PersonSkillProviderTest.cs" />
     <Compile Include="ResourceCalculation\WorkShiftFinderResultHolderTest.cs" />
+    <Compile Include="Scheduling\Assignment\CurrentScheduleSummaryCalculatorTest.cs" />
     <Compile Include="Scheduling\Assignment\DayOffMaxFlexCalculatorTest.cs" />
     <Compile Include="Scheduling\Assignment\DayOffTest.cs" />
     <Compile Include="Scheduling\Assignment\MergeScheduleDayTest.cs" />

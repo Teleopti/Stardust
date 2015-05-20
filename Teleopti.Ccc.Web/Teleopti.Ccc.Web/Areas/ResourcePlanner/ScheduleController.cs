@@ -116,8 +116,8 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			return
 				schedules.Count(
 					x =>
-						(x.Value.CalculatedContractTimeHolder.HasValue && x.Value.CalculatedTargetTimeHolder.HasValue) &&
-						(x.Value.CalculatedContractTimeHolder.Value != x.Value.CalculatedTargetTimeHolder));
+						(x.Value.CalculatedTargetTimeHolder.HasValue) &&
+						(x.Value.CalculatedContractTimeHolder != x.Value.CalculatedTargetTimeHolder));
 		}
 
 		private IEnumerable<BusinessRulesValidationResult> getDayOffBusinessRulesValidationResults(IEnumerable<KeyValuePair<IPerson, IScheduleRange>> schedules, List<BusinessRulesValidationResult> schedulePeriodNotInRange)
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			{
 				if(isAmongInvalidScheduleRange(schedulePeriodNotInRange,item.Key)) continue;
 				var scheduleRange = item.Value;
-				if(scheduleRange.CalculatedTargetScheduleDaysOff.HasValue && scheduleRange.CalculatedScheduleDaysOff.HasValue )
+				if(scheduleRange.CalculatedTargetScheduleDaysOff.HasValue)
 					if(scheduleRange.CalculatedTargetScheduleDaysOff != scheduleRange.CalculatedScheduleDaysOff)
 						result.Add(new BusinessRulesValidationResult()
 						{

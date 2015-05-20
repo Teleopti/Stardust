@@ -69,7 +69,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: micke
         /// Created date: 2008-11-21
         /// </remarks>
-        TimeSpan? CalculatedContractTimeHolder { get; set; }
+        TimeSpan CalculatedContractTimeHolder { get;}
 
         /// <summary>
         /// Gets or sets the calculated target time holder. Used by the result columns in Scheduler.
@@ -97,7 +97,7 @@ namespace Teleopti.Interfaces.Domain
 		/// Gets or sets the calculated schedule days off.
 		/// </summary>
 		/// <value>The calculated schedule days off.</value>
-		int? CalculatedScheduleDaysOff { get; set; }
+		int CalculatedScheduleDaysOff { get;}
 
         /// <summary>
         /// Scheduleds the day colletion.
