@@ -322,6 +322,7 @@
     <Compile Include="Areas\SSO\SsoAuthenticatorTest.cs" />
     <Compile Include="Core\Common\DataProvider\DefaultScenarioForStudentAvailabilityScheduleProviderTest.cs" />
     <Compile Include="Core\Common\DataProvider\FakeScheduleProvider.cs" />
+    <Compile Include="Core\Common\FakePersonNameProvider.cs" />
     <Compile Include="Core\IanaTimeZoneProviderTest.cs" />
     <Compile Include="Core\IoC\HangfireModuleTest.cs" />
     <Compile Include="Core\MonthSchedule\Mapping\MonthScheduleDomainDataMappingTest.cs" />

@@ -1,7 +1,7 @@
 ﻿using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.TestCommon
+namespace Teleopti.Ccc.WebTest.Core.Common
 {
 	public class FakePersonNameProvider : IPersonNameProvider
 	{
@@ -15,6 +15,4 @@ namespace Teleopti.Ccc.TestCommon
 			return lastName + " " + firstName;
 		}
 	}
-
-
 }
