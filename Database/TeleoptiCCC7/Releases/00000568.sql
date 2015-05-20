@@ -15,24 +15,20 @@ REFERENCES [BusinessUnit] ([Id])
 GO
 
 -- delete duplicates of state codes
-DELETE [RtaState] 
-FROM [RtaState]
-LEFT OUTER JOIN (
-	SELECT 
-		MIN(CAST(Id AS BINARY(16))) AS Id, 
-		StateCode, 
-		PlatformTypeId, 
-		BusinessUnit
-	FROM [RtaState]
-	GROUP BY
-		StateCode, 
-		PlatformTypeId, 
-		BusinessUnit
-) AS KeepRows ON
-	KeepRows.Id = [RtaState].Id
-WHERE
-	KeepRows.Id IS NULL
+WITH Duplicates
+AS (
+	SELECT s.Id, s.name, s.StateCode, s.PlatformTypeId,s.BusinessUnit, 
+	ROW_NUMBER() OVER 
+	(PARTITION BY s.StateCode, s.PlatformTypeId, s.BusinessUnit 
+	ORDER BY
+	g.IsDeleted ASC,
+	g.UpdatedOn DESC) 
+	AS DuplicateCount FROM RtaState s INNER JOIN RtaStateGroup g ON s.Parent = g.Id)
+delete rs
+from rtastate rs inner join Duplicates d on d.id = rs.id
+where d.DuplicateCount >1;
 GO
+
 
 ALTER TABLE [RtaState] 
 ADD CONSTRAINT UQ_StateCode_PlatFormTypeId_BusinessUnit 
