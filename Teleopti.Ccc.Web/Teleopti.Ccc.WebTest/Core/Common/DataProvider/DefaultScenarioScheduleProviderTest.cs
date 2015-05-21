@@ -47,7 +47,32 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			scheduleDictionary.Stub(x => x[person]).Return(scheduleRange);
 			scheduleRange.Stub(x => x.ScheduledDayCollection(period)).Return(new[] { scheduleDay, scheduleDay });
 
-			var result = _target.GetScheduleForPeriod(period);
+			var result = _target.GetScheduleForPeriod(period).ToList();
+			result.Count().Should().Be.EqualTo(2);
+			result.Any(r => r == null).Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldReturnOneScheduleDayForEachDateInPeriodForStudentAvailability()
+		{
+			var period = new DateOnlyPeriod(2011, 5, 18, 2011, 5, 19);
+			var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
+			var scheduleRange = MockRepository.GenerateMock<IScheduleRange>();
+			var person = MockRepository.GenerateMock<IPerson>();
+			var scenario = MockRepository.GenerateMock<IScenario>();
+			var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
+
+			_loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+			_scenarioProvider.Stub(x => x.Current()).Return(scenario);
+			_scheduleRepository.Stub(x => x.FindSchedulesForPersonOnlyInGivenPeriod(
+				person,
+				new ScheduleDictionaryLoadOptions(true, true),
+				period,
+				scenario)).Return(scheduleDictionary).IgnoreArguments();
+			scheduleDictionary.Stub(x => x[person]).Return(scheduleRange);
+			scheduleRange.Stub(x => x.ScheduledDayCollectionForStudentAvailability(period)).Return(new[] { scheduleDay, scheduleDay });
+
+			var result = _target.GetScheduleForStudentAvailability(period).ToList();
 			result.Count().Should().Be.EqualTo(2);
 			result.Any(r => r == null).Should().Be.False();
 		}

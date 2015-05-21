@@ -54,15 +54,17 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.ViewModelFa
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
 			var scheduleProvider = MockRepository.GenerateMock<IScheduleProvider>();
 			var target = new StudentAvailabilityViewModelFactory(mapper, null, scheduleProvider);
-			var scheduleDays = new IScheduleDay[] { };
+			var scheduleDays = new IScheduleDay[] {};
 			var models = new StudentAvailabilityAndScheduleDayViewModel[] {};
 
-			scheduleProvider.Stub(x => x.GetScheduleForPeriod(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(1))))
-				.Return(scheduleDays);
-			mapper.Stub(x => x.Map<IEnumerable<IScheduleDay>, IEnumerable<StudentAvailabilityAndScheduleDayViewModel>>(scheduleDays))
+			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(1));
+
+			scheduleProvider.Stub(x => x.GetScheduleForStudentAvailability(period)).Return(scheduleDays);
+			mapper.Stub(
+				x => x.Map<IEnumerable<IScheduleDay>, IEnumerable<StudentAvailabilityAndScheduleDayViewModel>>(scheduleDays))
 				.Return(models);
 
-			var result = target.CreateStudentAvailabilityAndSchedulesViewModels(DateOnly.Today, DateOnly.Today.AddDays(1));
+			var result = target.CreateStudentAvailabilityAndSchedulesViewModels(period.StartDate, period.EndDate);
 
 			result.Should().Be.SameInstanceAs(models);
 		}

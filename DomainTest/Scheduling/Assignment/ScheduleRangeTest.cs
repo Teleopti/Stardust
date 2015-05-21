@@ -268,6 +268,27 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		}
 
 		[Test]
+		public void CanSeeUnpublishedSchemaWithoutUnpublishedPermissionWhenGettingStudentAvailability()
+		{
+			using (_mocks.Record())
+			{
+				fullPermission(false);
+			}
+			using (_mocks.Playback())
+			{
+				using (new CustomAuthorizationContext(_principalAuthorization))
+				{
+					_target.Add(createPersonAssignment(new DateTimePeriod(2000, 1, 2, 2000, 1, 3)));
+					var part =
+						_target.ScheduledDayCollectionForStudentAvailability(new DateOnlyPeriod(2000, 1, 2, 2000, 1, 3)).ToList();
+					Assert.AreEqual(part.Count(), 2);
+					Assert.IsFalse(part[0].IsFullyPublished);
+					Assert.IsFalse(part[1].IsFullyPublished);
+				}
+			}
+		}
+
+		[Test]
 		public void CanSeePublishedDataWithNoUnpublishedPermission()
 		{
 			IWorkflowControlSet workflowControlSet = new WorkflowControlSet("d");

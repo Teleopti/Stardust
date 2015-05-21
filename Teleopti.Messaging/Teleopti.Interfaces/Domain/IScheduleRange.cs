@@ -110,6 +110,21 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         IEnumerable<IScheduleDay> ScheduledDayCollection(DateOnlyPeriod dateOnlyPeriod);
 
+		/// <summary>
+		/// Get scheduleds for the day colletion to get student availability
+		/// This method will ignore published date and view unpublished schdule permission setting to get 
+		/// student availability after published date even if current user has no permission to view unpublished schedule.
+		/// It should only be used to get schedule to retrieve student availability.
+		/// Refer to bug #33327: Agents can no longer see Availability they entered for dates that have not been published.
+		/// </summary>
+		/// <param name="dateOnlyPeriod">The date only period.</param>
+		/// <returns></returns>
+		/// <remarks>
+		/// Created by: xinfengl
+		/// Created date: 2015-05-21
+		/// </remarks>
+		IEnumerable<IScheduleDay> ScheduledDayCollectionForStudentAvailability(DateOnlyPeriod dateOnlyPeriod);
+
         /// <summary>
         /// Refetches the schedulepart
         /// </summary>

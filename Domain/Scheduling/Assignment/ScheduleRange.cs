@@ -73,7 +73,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			}
 		}
 
-
 		public IScheduleDay ReFetch(IScheduleDay schedulePart)
 		{
 			return ScheduledDay(schedulePart.DateOnlyAsPeriod.DateOnly);
@@ -289,16 +288,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public IEnumerable<IScheduleDay> ScheduledDayCollection(DateOnlyPeriod dateOnlyPeriod)
 		{
-			var canSeeUnpublished = PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
-			var timeZone = Person.PermissionInformation.DefaultTimeZone();
-			var availablePeriods = AvailablePeriods();
-			var retList = new List<IScheduleDay>();
-			foreach (var date in dateOnlyPeriod.DayCollection())
-			{
-				var dayAndPeriod = new DateOnlyAsDateTimePeriod(date, timeZone);
-				retList.Add(ScheduleDay(dayAndPeriod, canSeeUnpublished, availablePeriods));
-			}
-			return retList;
+			return getScheduledDayCollection(dateOnlyPeriod);
+		}
+
+		/// <summary>
+		/// Get scheduleds for the day colletion to get student availability
+		/// This method will ignore published date and view unpublished schdule permission setting to get 
+		/// student availability after published date even if current user has no permission to view unpublished schedule.
+		/// It should only be used to get schedule to retrieve student availability.
+		/// Refer to bug #33327: Agents can no longer see Availability they entered for dates that have not been published.
+		/// </summary>
+		public IEnumerable<IScheduleDay> ScheduledDayCollectionForStudentAvailability(DateOnlyPeriod dateOnlyPeriod)
+		{
+			return getScheduledDayCollection(dateOnlyPeriod, ScheduleVisibleReasons.StudentAvailability);
 		}
 
         public void TakeSnapshot()
@@ -450,5 +452,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             typedClone._scheduleObjectsWithNoPermissions = new List<IScheduleData>();
             typedClone._shiftCategoryFairnessHolder = null;
         }
+
+	    private IEnumerable<IScheduleDay> getScheduledDayCollection(DateOnlyPeriod dateOnlyPeriod,
+		    ScheduleVisibleReasons visibleReason = ScheduleVisibleReasons.Published)
+	    {
+		    var canSeeUnpublished =
+			    (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules))
+			    || visibleReason.HasFlag(ScheduleVisibleReasons.StudentAvailability);
+			
+		    var timeZone = Person.PermissionInformation.DefaultTimeZone();
+		    var availablePeriods = AvailablePeriods();
+
+			return dateOnlyPeriod.DayCollection()
+				.Select(date => new DateOnlyAsDateTimePeriod(date, timeZone))
+				.Select(dayAndPeriod => ScheduleDay(dayAndPeriod, canSeeUnpublished, availablePeriods));
+	    }
     }
 }

@@ -11,7 +11,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		private readonly IScheduleRepository _scheduleRepository;
 		private readonly ICurrentScenario _scenarioRepository;
 
-		public DefaultScenarioScheduleProvider(ILoggedOnUser loggedOnUser, IScheduleRepository scheduleRepository, ICurrentScenario scenarioRepository)
+		public DefaultScenarioScheduleProvider(ILoggedOnUser loggedOnUser, IScheduleRepository scheduleRepository,
+			ICurrentScenario scenarioRepository)
 		{
 			_loggedOnUser = loggedOnUser;
 			_scheduleRepository = scheduleRepository;
@@ -20,18 +21,18 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 
 		public IEnumerable<IScheduleDay> GetScheduleForPeriod(DateOnlyPeriod period, IScheduleDictionaryLoadOptions options = null)
 		{
-			options = options ?? new ScheduleDictionaryLoadOptions(true, true);
+			return getSchedule(period, options);
+		}
 
-			var person = _loggedOnUser.CurrentUser();
-			var defaultScenario = _scenarioRepository.Current();
-
-			var dictionary = _scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(
-				person,
-				options, 
-				period,
-				defaultScenario);
-
-			return dictionary[person].ScheduledDayCollection(period);
+		/// <summary>
+		/// This method will ignore published date and view unpublished schdule permission setting to get 
+		/// student availability after published date even if current user has no permission to view unpublished schedule.
+		/// It should only be used to get schedule to retrieve student availability.
+		/// Refer to bug #33327: Agents can no longer see Availability they entered for dates that have not been published.
+		/// </summary>
+		public IEnumerable<IScheduleDay> GetScheduleForStudentAvailability(DateOnlyPeriod period, IScheduleDictionaryLoadOptions options = null)
+		{
+			return getSchedule(period, options, ScheduleVisibleReasons.StudentAvailability);
 		}
 
 		public IEnumerable<IScheduleDay> GetScheduleForPersons(DateOnly date, IEnumerable<IPerson> persons)
@@ -46,11 +47,31 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 
 			return dictionary.SchedulesForDay(date);
 		}
+
+		private IEnumerable<IScheduleDay> getSchedule(DateOnlyPeriod period,
+			IScheduleDictionaryLoadOptions options = null,
+			ScheduleVisibleReasons visibleReason = ScheduleVisibleReasons.Published)
+		{
+			options = options ?? new ScheduleDictionaryLoadOptions(true, true);
+
+			var person = _loggedOnUser.CurrentUser();
+			var defaultScenario = _scenarioRepository.Current();
+
+			var dictionary = _scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(
+				person,
+				options,
+				period,
+				defaultScenario);
+
+			var scheduleRange = dictionary[person];
+			return visibleReason.HasFlag(ScheduleVisibleReasons.StudentAvailability)
+				? scheduleRange.ScheduledDayCollectionForStudentAvailability(period)
+				: scheduleRange.ScheduledDayCollection(period);
+		}
 	}
 
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2237:MarkISerializableTypesWithSerializable")]
 	public class MoreThanOneStudentAvailabilityFoundException : Exception
 	{
 	}
-
 }

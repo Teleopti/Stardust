@@ -18,6 +18,11 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			return _scheduleDays;
 		}
 
+		public IEnumerable<IScheduleDay> GetScheduleForStudentAvailability(DateOnlyPeriod period, IScheduleDictionaryLoadOptions options = null)
+		{
+			return _scheduleDays;
+		}
+
 		public IEnumerable<IScheduleDay> GetScheduleForPersons(DateOnly date, IEnumerable<IPerson> persons)
 		{
 			return _scheduleDays;
