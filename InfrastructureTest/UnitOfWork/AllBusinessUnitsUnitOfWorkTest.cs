@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		[Test]
 		public void ShouldNotPersistOnException()
 		{
-			ReadOnlyCollection<IRtaState> stateCollection = null;
+			IList<IRtaState> stateCollection = null;
 			TheService.Does(uow =>
 			{
 				RepositoryNotValidatingUserLogon.Add(new RtaStateGroup(" ", true, true));
