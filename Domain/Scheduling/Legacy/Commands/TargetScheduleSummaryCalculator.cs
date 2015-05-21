@@ -8,9 +8,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public class TargetScheduleSummaryCalculator
 	{
-		public TimeSpan? CalculateTargetTime(IScheduleRange range)
+		public Tuple<TimeSpan?, int?> GetTargets(IScheduleRange range)
 		{
-			TimeSpan ret = TimeSpan.Zero;
+			var targetTime = TimeSpan.Zero;
+			var targetDaysOff = 0;
 			var person = range.Person;
 			var period = range.Owner.Period.VisiblePeriod.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone());
 			var schedulePeriods = extractVirtualPeriods(person, period);
@@ -23,11 +24,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					new NewSchedulePeriodTargetCalculatorFactory(matrix);
 				ISchedulePeriodTargetCalculator calculator = schedulePeriodTargetCalculatorFactory.CreatePeriodTargetCalculator();
 				if (calculator == null)
-					return null;
+					return new Tuple<TimeSpan?, int?>(null, null);
 
-				ret = ret.Add(calculator.PeriodTarget(true));
+				targetTime = targetTime.Add(calculator.PeriodTarget(true));
+				targetDaysOff += virtualSchedulePeriod.DaysOff();
 			}
-			return ret;
+			return new Tuple<TimeSpan?, int?>(targetTime, targetDaysOff);
 		}
 
 		private static IEnumerable<IVirtualSchedulePeriod> extractVirtualPeriods(IPerson person, DateOnlyPeriod period)

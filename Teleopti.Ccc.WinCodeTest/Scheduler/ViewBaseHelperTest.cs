@@ -489,13 +489,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             return noRest;
         }
-
-        public void ShouldThrowExceptionOnNullRange()
-        {
-            ViewBaseHelper.CurrentContractTime(null, new DateOnlyPeriod());    
-        }
-
-        
+    
 		[Test]
 		public void ShouldReturnSchedulePeriodWhenEqualWithOpenPeriod()
 		{
@@ -591,12 +585,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             ViewBaseHelper.StyleTargetScheduleDaysOffCell(style, null, new DateOnlyPeriod(), null);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test, ExpectedException(typeof(ArgumentNullException))]
-        public void ShouldThrowExceptionOnNullVirtualPeriods()
-        {
-            ViewBaseHelper.CalculateTargetDaysOff(null);
-        }
-
         [Test]
         public void VerifyCheckLoadedAndScheduledPeriodDayOff()
         {
@@ -665,78 +653,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Assert.IsTrue(ViewBaseHelper.CheckOverrideTargetTimeLoadedAndScheduledPeriod(person, dateOnlyPeriod));
             }
             
-        }
-
-        /// <summary>
-        /// Verifies the gets target days off are set to cell style value.
-        /// </summary>
-        [Test]
-        public void VerifyGetsTargetDaysOffAreSetToCellStyleValue()
-        {
-            const int daysOff = 7;
-
-            var baseDateTime = new DateOnly(2001, 1, 1);
-            var baseDateTimePeriod = new DateOnlyPeriod(baseDateTime, baseDateTime.AddDays(10));
-            var style = new GridStyleInfo();
-            var person = _mockRep.StrictMock<IPerson>();
-            var permissionInformation = _mockRep.StrictMock<IPermissionInformation>();
-            ISchedulePeriod schedulePeriod = new SchedulePeriod(new DateOnly(2001, 01, 01), SchedulePeriodType.Day, 11);
-			schedulePeriod.SetParent(person);
-            var schedulePeriods = new List<ISchedulePeriod> { schedulePeriod };
-            var vPeriod = _mockRep.StrictMock<IVirtualSchedulePeriod>();
-			var range = _mockRep.StrictMock<IScheduleRange>();
-
-            using (_mockRep.Record())
-            {
-                Expect.Call(person.PermissionInformation).Return(permissionInformation).Repeat.AtLeastOnce();
-                Expect.Call(permissionInformation.Culture()).Return(CultureInfo.CurrentCulture).Repeat.AtLeastOnce();
-                Expect.Call(person.PersonSchedulePeriods(baseDateTimePeriod)).IgnoreArguments().Return(schedulePeriods).Repeat.AtLeastOnce();
-                Expect.Call(person.VirtualSchedulePeriod(new DateOnly())).IgnoreArguments().Return(vPeriod).Repeat.AtLeastOnce();
-            	Expect.Call(vPeriod.DaysOff()).Return(daysOff).Repeat.AtLeastOnce();
-                Expect.Call(vPeriod.IsValid).Return(true).Repeat.AtLeastOnce();
-            	Expect.Call(person.TerminalDate).Return(null).Repeat.AtLeastOnce();
-            	Expect.Call(range.CalculatedTargetScheduleDaysOff).Return(null).Repeat.Once();
-            	Expect.Call(() => range.CalculatedTargetScheduleDaysOff = daysOff).Repeat.Once();
-            	Expect.Call(range.CalculatedTargetScheduleDaysOff).Return(daysOff).Repeat.Once();
-            }
-
-            using (_mockRep.Playback())
-            {
-                ViewBaseHelper.StyleTargetScheduleDaysOffCell(style, person, baseDateTimePeriod, range);
-            }
-
-            Assert.AreEqual(daysOff, style.CellValue);
-
-        }
-
-        [Test]
-        public void VerifyAbsenceDisplayMode()
-        {
-            var period = new DateTimePeriod(2000, 1, 2, 2000, 1, 3);
-            IList<IVisualLayer> layerCollectionAbscence = new List<IVisualLayer>();
-            IList<IVisualLayer> layerCollectionActivity = new List<IVisualLayer>();
-            IVisualLayer actLayer = _layerFactory.CreateShiftSetupLayer(ActivityFactory.CreateActivity("underlying"), period, _agent);
-            layerCollectionAbscence.Add(_layerFactory.CreateAbsenceSetupLayer(AbsenceFactory.CreateAbsence("test"), actLayer, period));
-            IVisualLayerCollection visualLayerCollectionAbsence = new VisualLayerCollection(_agent, layerCollectionAbscence, new ProjectionPayloadMerger());
-            IVisualLayerCollection visualLayerCollectionActivity = new VisualLayerCollection(_agent, layerCollectionActivity, new ProjectionPayloadMerger());
-            
-            IPersonAbsence personAbsenceEndsToday = PersonAbsenceFactory.CreatePersonAbsence(PersonFactory.CreatePerson(), _scenario, _periodEndsToday);
-            IPersonAbsence personAbsenceBeginsToday = PersonAbsenceFactory.CreatePersonAbsence(PersonFactory.CreatePerson(), _scenario, _periodBeginsToday);
-            IPersonAbsence personAbsenceBeginsAndEndsToday = PersonAbsenceFactory.CreatePersonAbsence(PersonFactory.CreatePerson(), _scenario, _periodBeginsAndEndsToday);
-
-            IScheduleDictionary scheduleDictionary = new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period));
-            var schedulePart = ExtractedSchedule.CreateScheduleDay(scheduleDictionary, _agent, new DateOnly(2000,1,2));
-
-            Assert.AreEqual(DisplayMode.EndsToday, ViewBaseHelper.GetAbsenceDisplayMode(personAbsenceEndsToday, schedulePart, visualLayerCollectionActivity));
-            Assert.AreEqual(DisplayMode.BeginsToday, ViewBaseHelper.GetAbsenceDisplayMode(personAbsenceBeginsToday, schedulePart, visualLayerCollectionActivity));
-            Assert.AreEqual(DisplayMode.BeginsAndEndsToday, ViewBaseHelper.GetAbsenceDisplayMode(personAbsenceBeginsAndEndsToday, schedulePart, visualLayerCollectionActivity));
-            Assert.AreEqual(DisplayMode.WholeDay, ViewBaseHelper.GetAbsenceDisplayMode(personAbsenceBeginsAndEndsToday, schedulePart, visualLayerCollectionAbsence));
-
-
-            scheduleDictionary = new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period.MovePeriod(TimeSpan.FromDays(10))));
-            schedulePart = ExtractedSchedule.CreateScheduleDay(scheduleDictionary, _agent, new DateOnly(2000, 1, 2).AddDays(10));
-
-            Assert.AreEqual(DisplayMode.WholeDay, ViewBaseHelper.GetAbsenceDisplayMode(personAbsenceBeginsAndEndsToday, schedulePart, visualLayerCollectionActivity));
         }
 
         [Test]
@@ -841,31 +757,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			catch
 			{}
 		}
-
-		[Test]
-		public void ShouldReturnPeriodFromSchedulePeriods()
-		{
-			var startDate1 = new DateOnly(2011, 1, 1);
-			var startDate2 = new DateOnly(2011, 1, 8);
-			var dateOnlyPeriod = new DateOnlyPeriod(startDate1, startDate2);
-
-			_agent = PersonFactory.CreatePerson("person");
-			var schedulePeriod1 = SchedulePeriodFactory.CreateSchedulePeriod(startDate1, SchedulePeriodType.Week, 1);
-			var schedulePeriod2 = SchedulePeriodFactory.CreateSchedulePeriod(startDate2, SchedulePeriodType.Week, 1);
-
-
-
-			var period = ViewBaseHelper.PeriodFromSchedulePeriods(new List<IPerson> { _agent }, dateOnlyPeriod);
-			Assert.IsFalse(period.HasValue);
-
-			_agent.AddSchedulePeriod(schedulePeriod1);
-			_agent.AddSchedulePeriod(schedulePeriod2);
-
-			period = ViewBaseHelper.PeriodFromSchedulePeriods(new List<IPerson> { _agent }, dateOnlyPeriod);
-			Assert.AreEqual(startDate1, period.Value.StartDate);
-			Assert.AreEqual(startDate2.AddDays(6), period.Value.EndDate);
-		}
-
+	
     	private IPersonAssignment CreatePersonAssignment()
         {
 					IPersonAssignment personAssignment = new PersonAssignment(PersonFactory.CreatePerson(), _scenario, new DateOnly(2008, 11, 1));

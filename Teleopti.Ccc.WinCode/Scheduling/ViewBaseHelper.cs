@@ -18,383 +18,382 @@ using Teleopti.Ccc.WinCode.Scheduling.Panels;
 namespace Teleopti.Ccc.WinCode.Scheduling
 {
 	public static class ViewBaseHelper
-    {
-        public static string GetToolTip(IScheduleDay cell)
-        {
-            var sb = new StringBuilder();
-
-            string assignments = GetToolTipAssignments(cell);
-            string absences = GetToolTipAbsences(cell);
-            string dayOff = GetToolTipDayOff(cell);
-            string businessRuleConflicts = GetToolTipBusinessRuleConflicts(cell);
-            string meetings = GetToolTipMeetings(cell);
-            string overtime = GetToolTipOvertime(cell);
-            
-            if (assignments.Length > 0)
-            {
-                if (sb.Length > 0) sb.AppendLine();
-                sb.Append(assignments);
-            }
-
-            if (absences.Length > 0)
-            {
-                if (sb.Length > 0) sb.AppendLine();
-                sb.Append(absences);
-            }
-
-            if (dayOff.Length > 0)
-            {
-                if (sb.Length > 0) sb.AppendLine();
-                sb.Append(dayOff);
-            }
-
-            if (meetings.Length > 0)
-            {
-                if (sb.Length > 0) sb.AppendLine();
-                sb.Append(meetings);
-            }
-            if (overtime.Length > 0)
-            {
-                if (sb.Length > 0) sb.AppendLine();
-                sb.Append(overtime);
-            }
-
-            if (businessRuleConflicts.Length > 0)
-            {
-                if (sb.Length > 0) sb.AppendLine();
-                sb.Append(businessRuleConflicts);
-            }
-
-            return sb.Length > 0 ? sb.ToString() : string.Empty;
-        }
-
-        /// <summary>
-        /// Gets the tooltip for business rule conflicts.
-        /// </summary>
-        /// <param name="cell">The SchedulePart.</param>
-        /// <returns></returns>
-        /// /// 
-        /// <remarks>
-        ///  Created by: Ola
-        ///  Created date: 2008-08-25    
-        /// /// </remarks>
-				public static string GetToolTipBusinessRuleConflicts(IScheduleDay cell)
-        {
-            var sb = new StringBuilder();
-            int longest = 0;
-            if (cell.BusinessRuleResponseCollection.Count > 0)
-            {
-                foreach (BusinessRuleResponse response in cell.BusinessRuleResponseCollection)
-                {
-                    if (sb.Length > 0) sb.AppendLine();
-                    if (response.Message != null && response.Message.Length > longest)
-                        longest = response.Message.Length;
-
-                    sb.Append(response.Message);
-                }
-            }
-
-            if (sb.Length > 0)
-                sb.Insert(0, new string('-', longest) + Environment.NewLine);
-
-            return sb.ToString();
-        }
-
-        public static string ToLocalStartEndTimeString(DateTimePeriod period, TimeZoneInfo timeZoneInfo)
-        {
-			var culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
-            const string separator = " - ";
-
-            return string.Concat(TimeHelper.TimeOfDayFromTimeSpan(period.StartDateTimeLocal(timeZoneInfo).TimeOfDay, culture), separator,
-                                 TimeHelper.TimeOfDayFromTimeSpan(period.EndDateTimeLocal(timeZoneInfo).TimeOfDay, culture));
-        }
-
-        public static string ToLocalStartEndTimeStringAbsences(DateTimePeriod partPeriod, DateTimePeriod absencePeriod, TimeZoneInfo timeZoneInfo)
-        {
-			var culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
-            const string separator = " - ";
-            DateTimePeriod startTimePeriod = absencePeriod;
-            DateTimePeriod endTimePeriod = absencePeriod;
-
-            if (absencePeriod.StartDateTime < partPeriod.StartDateTime)
-                startTimePeriod = partPeriod;
-
-            if (absencePeriod.EndDateTime > partPeriod.EndDateTime)
-                endTimePeriod = partPeriod;
-
-            return string.Concat(TimeHelper.TimeOfDayFromTimeSpan(startTimePeriod.StartDateTimeLocal(timeZoneInfo).TimeOfDay, culture), separator,
-									TimeHelper.TimeOfDayFromTimeSpan(endTimePeriod.EndDateTimeLocal(timeZoneInfo).TimeOfDay, culture));
-        }
-
-	    /// <summary>
-	    /// Get tooltip for assignments
-	    /// </summary>
-	    /// <param name="scheduleDay"></param>
-	    /// <returns></returns>
-	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
-		    MessageId = "0")]
-	    public static string GetToolTipAssignments(IScheduleDay scheduleDay)
-	    {
-		    var sb = new StringBuilder();
-
-		    IPersonAssignment pa = scheduleDay.PersonAssignment();
-		    if (pa != null)
-		    {
-			    if (sb.Length > 0)
-				    sb.AppendLine();
-			    if (pa.ShiftCategory != null)
-				    sb.Append(pa.ShiftCategory.Description.Name); //name
-			    sb.Append("  ");
-			        sb.Append(ToLocalStartEndTimeString(pa.Period, TimeZoneGuard.Instance.TimeZone )); //time
-
-			    foreach (var layer in pa.PersonalActivities())
-			    {
-				    sb.AppendLine();
-				    sb.AppendFormat(" - {0}: ", Resources.PersonalShift);
-
-				    sb.AppendLine();
-				    sb.Append("    ");
-				    sb.Append(layer.Payload.ConfidentialDescription(pa.Person).Name);
-				    //name
-				    sb.Append(": ");
-                        sb.Append(ToLocalStartEndTimeString(layer.Period, TimeZoneGuard.Instance.TimeZone)); //time
-			    }
-		    }
-		    return sb.ToString();
-	    }
-
-	    /// <summary>
-        /// Get tooltip for absences
-        /// </summary>
-        /// <param name="cell"></param>
-        /// <returns></returns>
-        public static string GetToolTipAbsences(IScheduleDay cell)
-        {
-            var sb = new StringBuilder();
-
-            IList<IPersonAbsence> abses = cell.PersonAbsenceCollection();
-            if (abses.Count > 0)
-            {
-                foreach (IPersonAbsence pa in abses)
-                {
-                    if (sb.Length > 0) sb.AppendLine();
-
-                    sb.Append(pa.Layer.Payload.ConfidentialDescription(pa.Person).Name); //name
-                    sb.Append(": ");
-                    sb.Append(ToLocalStartEndTimeStringAbsences(cell.Period, pa.Layer.Period, TimeZoneGuard.Instance.TimeZone));
-                }
-            }
-
-            return sb.ToString();
-        }
-
-        /// <summary>
-        /// Get tooltip for meetings
-        /// </summary>
-        /// <param name="cell"></param>
-        /// <returns></returns>
-				public static string GetToolTipMeetings(IScheduleDay cell)
-        {
-            var sb = new StringBuilder();
-
-            foreach (IPersonMeeting personMeeting in cell.PersonMeetingCollection())
-            {
-                if (sb.Length > 0) sb.AppendLine();
-
-                sb.Append(personMeeting.BelongsToMeeting.GetSubject(new NoFormatting()));
-                sb.Append(": ");
-                sb.Append(ToLocalStartEndTimeString(personMeeting.Period, TimeZoneGuard.Instance.TimeZone));
-
-                if (personMeeting.Optional)
-                    sb.AppendFormat(" ({0})", Resources.Optional);
-            }
-
-            return sb.ToString();
-        }
-        /// <summary>
-        /// Get tooltip for overtime
-        /// </summary>
-        /// <param name="cell"></param>
-        /// <returns></returns>
-        public static string GetToolTipOvertime(IScheduleDay cell)
-        {
-	        if (!dayHasOvertime(cell)) return string.Empty;
-
-            var sb = new StringBuilder();
-
-            var proj = cell.ProjectionService().CreateProjection();
-
-            foreach (IVisualLayer layer in proj)
-            {
-                if (layer.DefinitionSet == null)
-                    continue;
-
-                if (sb.Length > 0) sb.AppendLine();
-                sb.Append(layer.DefinitionSet.Name);
-                sb.Append(": ");
-                sb.Append(layer.Payload.ConfidentialDescription(cell.Person).Name);
-                sb.Append(": ");
-                sb.Append(ToLocalStartEndTimeString(layer.Period, TimeZoneGuard.Instance.TimeZone));
-            }
-            return sb.ToString();
-        }
-
-	    private static bool dayHasOvertime(IScheduleDay cell)
-	    {
-	        var assignment = cell.PersonAssignment();
-		    return assignment != null && assignment.OvertimeActivities().Any();
-	    }
-
-	    /// <summary>
-        /// Get tooltip for absences
-        /// </summary>
-        /// <param name="cell"></param>
-        /// <returns></returns>
-				public static string GetToolTipDayOff(IScheduleDay cell)
-        {
+	{
+		public static string GetToolTip(IScheduleDay cell)
+		{
 			var sb = new StringBuilder();
-        	var culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
-	        var ass = cell.PersonAssignment();
-					if (ass != null)
-					{
-						var dayOff = ass.DayOff();
-						if (dayOff != null)
-						{
-							sb.AppendLine(dayOff.Description.Name);
-							sb.Append(Resources.TargetLengthColon + " ");
-							sb.AppendLine(TimeHelper.GetLongHourMinuteTimeString(dayOff.TargetLength, culture));
-							sb.Append(Resources.AnchorColon + " ");
-							sb.AppendLine(
-								TimeHelper.TimeOfDayFromTimeSpan(TimeZoneHelper.ConvertFromUtc(dayOff.Anchor, cell.TimeZone).TimeOfDay,
-													 culture));
-							sb.Append(Resources.FlexibilityColon + " ");
-							sb.Append(TimeHelper.GetLongHourMinuteTimeString(dayOff.Flexibility, culture));
-						}
-					}
+
+			string assignments = GetToolTipAssignments(cell);
+			string absences = GetToolTipAbsences(cell);
+			string dayOff = GetToolTipDayOff(cell);
+			string businessRuleConflicts = GetToolTipBusinessRuleConflicts(cell);
+			string meetings = GetToolTipMeetings(cell);
+			string overtime = GetToolTipOvertime(cell);
+
+			if (assignments.Length > 0)
+			{
+				if (sb.Length > 0) sb.AppendLine();
+				sb.Append(assignments);
+			}
+
+			if (absences.Length > 0)
+			{
+				if (sb.Length > 0) sb.AppendLine();
+				sb.Append(absences);
+			}
+
+			if (dayOff.Length > 0)
+			{
+				if (sb.Length > 0) sb.AppendLine();
+				sb.Append(dayOff);
+			}
+
+			if (meetings.Length > 0)
+			{
+				if (sb.Length > 0) sb.AppendLine();
+				sb.Append(meetings);
+			}
+			if (overtime.Length > 0)
+			{
+				if (sb.Length > 0) sb.AppendLine();
+				sb.Append(overtime);
+			}
+
+			if (businessRuleConflicts.Length > 0)
+			{
+				if (sb.Length > 0) sb.AppendLine();
+				sb.Append(businessRuleConflicts);
+			}
+
+			return sb.Length > 0 ? sb.ToString() : string.Empty;
+		}
+
+		/// <summary>
+		/// Gets the tooltip for business rule conflicts.
+		/// </summary>
+		/// <param name="cell">The SchedulePart.</param>
+		/// <returns></returns>
+		/// /// 
+		/// <remarks>
+		///  Created by: Ola
+		///  Created date: 2008-08-25    
+		/// /// </remarks>
+		public static string GetToolTipBusinessRuleConflicts(IScheduleDay cell)
+		{
+			var sb = new StringBuilder();
+			int longest = 0;
+			if (cell.BusinessRuleResponseCollection.Count > 0)
+			{
+				foreach (BusinessRuleResponse response in cell.BusinessRuleResponseCollection)
+				{
+					if (sb.Length > 0) sb.AppendLine();
+					if (response.Message != null && response.Message.Length > longest)
+						longest = response.Message.Length;
+
+					sb.Append(response.Message);
+				}
+			}
+
+			if (sb.Length > 0)
+				sb.Insert(0, new string('-', longest) + Environment.NewLine);
 
 			return sb.ToString();
-        }
+		}
 
-        /// <summary>
-        /// calculate widht for minutes
-        /// </summary>
-        /// <param name="min"></param>
-        /// <param name="hourWidth"></param>
-        /// <returns></returns>
-        public static int GetMinWidth(int min, int hourWidth)
-        {
-            float minPercent = min / (float)60;
-            float minWidth = minPercent * hourWidth;
-
-            return (int)minWidth;
-        }
-
-        /// <summary>
-        /// Return a rectangle to draw from in a timeline view
-        /// </summary>
-        /// <param name="periodBounds">The period bounds.</param>
-        /// <param name="destinationRectangle">The destination rectangle.</param>
-        /// <param name="period">The period.</param>
-        /// <param name="isRightToLeft">if set to <c>true</c> [is right to left].</param>
-        /// <returns></returns>
-        public static Rectangle GetLayerRectangle(DateTimePeriod periodBounds, Rectangle destinationRectangle, DateTimePeriod period, bool isRightToLeft)
-        {
-            DateTimePeriod? periodIntersection = period.Intersection(periodBounds);
-            if (!periodIntersection.HasValue) return new Rectangle();
-
-            LengthToTimeCalculator calculator = new LengthToTimeCalculator(periodBounds, destinationRectangle.Width);
-            Rectangle rect = calculator.RectangleFromDateTimePeriod(periodIntersection.Value, new Point(destinationRectangle.X, destinationRectangle.Y + 2), destinationRectangle.Height - 4, isRightToLeft);
-
-            if (rect.Width == 0)
-                return new Rectangle();
-
-            if (!destinationRectangle.Contains(rect))
-            {
-                rect.Intersect(destinationRectangle);
-            }
-
-            return rect;
-        }
-       
-        /// <summary>
-        /// Returns the a dictionary containing first date of every selected week.
-        /// </summary>
-        /// <remarks>
-        /// Created by: ZoeT
-        /// Created date: 2007-12-05
-        /// </remarks>
-        public static Dictionary<int, DateOnly> AddWeekDates(DateOnlyPeriod selectedPeriod)
-        {
-            var firstDateOfWeek = new Dictionary<int, DateOnly>();
-            
-            foreach (var day in selectedPeriod.DayCollection())
-            {
-                var weekNumber = DateHelper.WeekNumber(day.Date, CultureInfo.CurrentCulture);
-                if (!firstDateOfWeek.ContainsKey(weekNumber))
-                {
-                    firstDateOfWeek.Add(weekNumber, day);
-                }
-            }
-            return firstDateOfWeek;
-        }
-
-        /// <summary>
-        /// Weeks the header dates.
-        /// </summary>
-        /// <param name="week">The week.</param>
-        /// <param name="selectedPeriod">The selected period.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: zoet
-        /// Created date: 2007-12-05
-        /// </remarks>
-        public static DateOnlyPeriod WeekHeaderDates(int week, DateOnlyPeriod selectedPeriod)
-        {
-            bool gotWeek = false;
-            DateOnly? start = null;
-            DateOnly? end = null;
-            IDictionary<int, DateOnly> weekDateDictionary = AddWeekDates(selectedPeriod);
-            foreach (KeyValuePair<int, DateOnly> weekDate in weekDateDictionary)
-            {
-                if (weekDate.Key == week && gotWeek == false)
-                {
-                    start = weekDate.Value;
-                    gotWeek = true;
-                    continue;
-                }
-                if (gotWeek)
-                {
-                    end = weekDate.Value.AddDays(-1);
-                    break;
-                }
-            }
-
-            if (!end.HasValue) end = selectedPeriod.EndDate;
-            if (!start.HasValue) start = selectedPeriod.StartDate;
-            
-            return new DateOnlyPeriod(start.Value,end.Value);
-
-        }
-
-        #region Style current
-
-        public static void StyleCurrentContractTimeCell(GridStyleInfo style, IScheduleRange wholeRange, DateOnlyPeriod period)
-        {
-            style.CellType = "TotalTimeCell";
-            style.CellValue = wholeRange.CalculatedContractTimeHolder;
-        }
-
-		public static TimeSpan CurrentContractTime(IScheduleRange wholeRange, DateOnlyPeriod period)
+		public static string ToLocalStartEndTimeString(DateTimePeriod period, TimeZoneInfo timeZoneInfo)
 		{
-			if(wholeRange == null)
-				throw new ArgumentNullException("wholeRange");			
+			var culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
+			const string separator = " - ";
 
-			return wholeRange.CalculatedContractTimeHolder;
+			return string.Concat(TimeHelper.TimeOfDayFromTimeSpan(period.StartDateTimeLocal(timeZoneInfo).TimeOfDay, culture),
+				separator,
+				TimeHelper.TimeOfDayFromTimeSpan(period.EndDateTimeLocal(timeZoneInfo).TimeOfDay, culture));
+		}
+
+		public static string ToLocalStartEndTimeStringAbsences(DateTimePeriod partPeriod, DateTimePeriod absencePeriod,
+			TimeZoneInfo timeZoneInfo)
+		{
+			var culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
+			const string separator = " - ";
+			DateTimePeriod startTimePeriod = absencePeriod;
+			DateTimePeriod endTimePeriod = absencePeriod;
+
+			if (absencePeriod.StartDateTime < partPeriod.StartDateTime)
+				startTimePeriod = partPeriod;
+
+			if (absencePeriod.EndDateTime > partPeriod.EndDateTime)
+				endTimePeriod = partPeriod;
+
+			return
+				string.Concat(
+					TimeHelper.TimeOfDayFromTimeSpan(startTimePeriod.StartDateTimeLocal(timeZoneInfo).TimeOfDay, culture), separator,
+					TimeHelper.TimeOfDayFromTimeSpan(endTimePeriod.EndDateTimeLocal(timeZoneInfo).TimeOfDay, culture));
+		}
+
+		/// <summary>
+		/// Get tooltip for assignments
+		/// </summary>
+		/// <param name="scheduleDay"></param>
+		/// <returns></returns>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
+			MessageId = "0")]
+		public static string GetToolTipAssignments(IScheduleDay scheduleDay)
+		{
+			var sb = new StringBuilder();
+
+			IPersonAssignment pa = scheduleDay.PersonAssignment();
+			if (pa != null)
+			{
+				if (sb.Length > 0)
+					sb.AppendLine();
+				if (pa.ShiftCategory != null)
+					sb.Append(pa.ShiftCategory.Description.Name); //name
+				sb.Append("  ");
+				sb.Append(ToLocalStartEndTimeString(pa.Period, TimeZoneGuard.Instance.TimeZone)); //time
+
+				foreach (var layer in pa.PersonalActivities())
+				{
+					sb.AppendLine();
+					sb.AppendFormat(" - {0}: ", Resources.PersonalShift);
+
+					sb.AppendLine();
+					sb.Append("    ");
+					sb.Append(layer.Payload.ConfidentialDescription(pa.Person).Name);
+					//name
+					sb.Append(": ");
+					sb.Append(ToLocalStartEndTimeString(layer.Period, TimeZoneGuard.Instance.TimeZone)); //time
+				}
+			}
+			return sb.ToString();
+		}
+
+		/// <summary>
+		/// Get tooltip for absences
+		/// </summary>
+		/// <param name="cell"></param>
+		/// <returns></returns>
+		public static string GetToolTipAbsences(IScheduleDay cell)
+		{
+			var sb = new StringBuilder();
+
+			IList<IPersonAbsence> abses = cell.PersonAbsenceCollection();
+			if (abses.Count > 0)
+			{
+				foreach (IPersonAbsence pa in abses)
+				{
+					if (sb.Length > 0) sb.AppendLine();
+
+					sb.Append(pa.Layer.Payload.ConfidentialDescription(pa.Person).Name); //name
+					sb.Append(": ");
+					sb.Append(ToLocalStartEndTimeStringAbsences(cell.Period, pa.Layer.Period, TimeZoneGuard.Instance.TimeZone));
+				}
+			}
+
+			return sb.ToString();
+		}
+
+		/// <summary>
+		/// Get tooltip for meetings
+		/// </summary>
+		/// <param name="cell"></param>
+		/// <returns></returns>
+		public static string GetToolTipMeetings(IScheduleDay cell)
+		{
+			var sb = new StringBuilder();
+
+			foreach (IPersonMeeting personMeeting in cell.PersonMeetingCollection())
+			{
+				if (sb.Length > 0) sb.AppendLine();
+
+				sb.Append(personMeeting.BelongsToMeeting.GetSubject(new NoFormatting()));
+				sb.Append(": ");
+				sb.Append(ToLocalStartEndTimeString(personMeeting.Period, TimeZoneGuard.Instance.TimeZone));
+
+				if (personMeeting.Optional)
+					sb.AppendFormat(" ({0})", Resources.Optional);
+			}
+
+			return sb.ToString();
+		}
+
+		/// <summary>
+		/// Get tooltip for overtime
+		/// </summary>
+		/// <param name="cell"></param>
+		/// <returns></returns>
+		public static string GetToolTipOvertime(IScheduleDay cell)
+		{
+			if (!dayHasOvertime(cell)) return string.Empty;
+
+			var sb = new StringBuilder();
+
+			var proj = cell.ProjectionService().CreateProjection();
+
+			foreach (IVisualLayer layer in proj)
+			{
+				if (layer.DefinitionSet == null)
+					continue;
+
+				if (sb.Length > 0) sb.AppendLine();
+				sb.Append(layer.DefinitionSet.Name);
+				sb.Append(": ");
+				sb.Append(layer.Payload.ConfidentialDescription(cell.Person).Name);
+				sb.Append(": ");
+				sb.Append(ToLocalStartEndTimeString(layer.Period, TimeZoneGuard.Instance.TimeZone));
+			}
+			return sb.ToString();
+		}
+
+		private static bool dayHasOvertime(IScheduleDay cell)
+		{
+			var assignment = cell.PersonAssignment();
+			return assignment != null && assignment.OvertimeActivities().Any();
+		}
+
+		/// <summary>
+		/// Get tooltip for absences
+		/// </summary>
+		/// <param name="cell"></param>
+		/// <returns></returns>
+		public static string GetToolTipDayOff(IScheduleDay cell)
+		{
+			var sb = new StringBuilder();
+			var culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
+			var ass = cell.PersonAssignment();
+			if (ass != null)
+			{
+				var dayOff = ass.DayOff();
+				if (dayOff != null)
+				{
+					sb.AppendLine(dayOff.Description.Name);
+					sb.Append(Resources.TargetLengthColon + " ");
+					sb.AppendLine(TimeHelper.GetLongHourMinuteTimeString(dayOff.TargetLength, culture));
+					sb.Append(Resources.AnchorColon + " ");
+					sb.AppendLine(
+						TimeHelper.TimeOfDayFromTimeSpan(TimeZoneHelper.ConvertFromUtc(dayOff.Anchor, cell.TimeZone).TimeOfDay,
+							culture));
+					sb.Append(Resources.FlexibilityColon + " ");
+					sb.Append(TimeHelper.GetLongHourMinuteTimeString(dayOff.Flexibility, culture));
+				}
+			}
+
+			return sb.ToString();
+		}
+
+		/// <summary>
+		/// calculate widht for minutes
+		/// </summary>
+		/// <param name="min"></param>
+		/// <param name="hourWidth"></param>
+		/// <returns></returns>
+		public static int GetMinWidth(int min, int hourWidth)
+		{
+			float minPercent = min/(float) 60;
+			float minWidth = minPercent*hourWidth;
+
+			return (int) minWidth;
+		}
+
+		/// <summary>
+		/// Return a rectangle to draw from in a timeline view
+		/// </summary>
+		/// <param name="periodBounds">The period bounds.</param>
+		/// <param name="destinationRectangle">The destination rectangle.</param>
+		/// <param name="period">The period.</param>
+		/// <param name="isRightToLeft">if set to <c>true</c> [is right to left].</param>
+		/// <returns></returns>
+		public static Rectangle GetLayerRectangle(DateTimePeriod periodBounds, Rectangle destinationRectangle,
+			DateTimePeriod period, bool isRightToLeft)
+		{
+			DateTimePeriod? periodIntersection = period.Intersection(periodBounds);
+			if (!periodIntersection.HasValue) return new Rectangle();
+
+			LengthToTimeCalculator calculator = new LengthToTimeCalculator(periodBounds, destinationRectangle.Width);
+			Rectangle rect = calculator.RectangleFromDateTimePeriod(periodIntersection.Value,
+				new Point(destinationRectangle.X, destinationRectangle.Y + 2), destinationRectangle.Height - 4, isRightToLeft);
+
+			if (rect.Width == 0)
+				return new Rectangle();
+
+			if (!destinationRectangle.Contains(rect))
+			{
+				rect.Intersect(destinationRectangle);
+			}
+
+			return rect;
+		}
+
+		/// <summary>
+		/// Returns the a dictionary containing first date of every selected week.
+		/// </summary>
+		/// <remarks>
+		/// Created by: ZoeT
+		/// Created date: 2007-12-05
+		/// </remarks>
+		public static Dictionary<int, DateOnly> AddWeekDates(DateOnlyPeriod selectedPeriod)
+		{
+			var firstDateOfWeek = new Dictionary<int, DateOnly>();
+
+			foreach (var day in selectedPeriod.DayCollection())
+			{
+				var weekNumber = DateHelper.WeekNumber(day.Date, CultureInfo.CurrentCulture);
+				if (!firstDateOfWeek.ContainsKey(weekNumber))
+				{
+					firstDateOfWeek.Add(weekNumber, day);
+				}
+			}
+			return firstDateOfWeek;
+		}
+
+		/// <summary>
+		/// Weeks the header dates.
+		/// </summary>
+		/// <param name="week">The week.</param>
+		/// <param name="selectedPeriod">The selected period.</param>
+		/// <returns></returns>
+		/// <remarks>
+		/// Created by: zoet
+		/// Created date: 2007-12-05
+		/// </remarks>
+		public static DateOnlyPeriod WeekHeaderDates(int week, DateOnlyPeriod selectedPeriod)
+		{
+			bool gotWeek = false;
+			DateOnly? start = null;
+			DateOnly? end = null;
+			IDictionary<int, DateOnly> weekDateDictionary = AddWeekDates(selectedPeriod);
+			foreach (KeyValuePair<int, DateOnly> weekDate in weekDateDictionary)
+			{
+				if (weekDate.Key == week && gotWeek == false)
+				{
+					start = weekDate.Value;
+					gotWeek = true;
+					continue;
+				}
+				if (gotWeek)
+				{
+					end = weekDate.Value.AddDays(-1);
+					break;
+				}
+			}
+
+			if (!end.HasValue) end = selectedPeriod.EndDate;
+			if (!start.HasValue) start = selectedPeriod.StartDate;
+
+			return new DateOnlyPeriod(start.Value, end.Value);
+
+		}
+
+		#region Style current
+
+		public static void StyleCurrentContractTimeCell(GridStyleInfo style, IScheduleRange wholeRange, DateOnlyPeriod period)
+		{
+			style.CellType = "TotalTimeCell";
+			style.CellValue = wholeRange.CalculatedContractTimeHolder;
 		}
 
 		public static Boolean CheckOpenPeriodMatchSchedulePeriod(IPerson person, DateOnlyPeriod openPeriod)
 		{
-			if(person == null)
+			if (person == null)
 				throw new ArgumentNullException("person");
 
 			var schedulePeriods = person.PersonSchedulePeriods(openPeriod);
@@ -406,17 +405,18 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			return startPeriod.Value.StartDate == openPeriod.StartDate && endPeriod.Value.EndDate == openPeriod.EndDate;
 		}
 
-        public static void StyleCurrentTotalDayOffCell(GridStyleInfo style, IScheduleRange wholeRange, DateOnlyPeriod period)
-        {
-            style.CellType = "TotalDayOffCell";
-            style.CellValue = wholeRange.CalculatedScheduleDaysOff;
-        }
+		public static void StyleCurrentTotalDayOffCell(GridStyleInfo style, IScheduleRange wholeRange, DateOnlyPeriod period)
+		{
+			style.CellType = "TotalDayOffCell";
+			style.CellValue = wholeRange.CalculatedScheduleDaysOff;
+		}
 
-        #endregion
+		#endregion
 
-        #region Style target
+		#region Style target
 
-		public static void StyleTargetScheduleContractTimeCell(GridStyleInfo style, IPerson person, DateOnlyPeriod openPeriod, ISchedulingResultStateHolder schedulingResultStateHolder, IScheduleRange wholeRange)
+		public static void StyleTargetScheduleContractTimeCell(GridStyleInfo style, IPerson person, DateOnlyPeriod openPeriod,
+			ISchedulingResultStateHolder schedulingResultStateHolder, IScheduleRange wholeRange)
 		{
 
 			if (style == null)
@@ -443,12 +443,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 		}
 
-    	public static void StyleTargetScheduleDaysOffCell(GridStyleInfo style, IPerson person, DateOnlyPeriod openPeriod, IScheduleRange wholeRange)
-        {
-			if(style == null)
+		public static void StyleTargetScheduleDaysOffCell(GridStyleInfo style, IPerson person, DateOnlyPeriod openPeriod,
+			IScheduleRange wholeRange)
+		{
+			if (style == null)
 				throw new ArgumentNullException("style");
 
-			if(person == null)
+			if (person == null)
 				throw new ArgumentNullException("person");
 
 			if (!CheckOpenPeriodMatchSchedulePeriod(person, openPeriod))
@@ -463,236 +464,148 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				return;
 			}
 
-				style.CellType = "TotalDayOffCell";
-				if(!wholeRange.CalculatedTargetScheduleDaysOff.HasValue)
+			style.CellType = "TotalDayOffCell";
+			style.CellValue = wholeRange.CalculatedTargetScheduleDaysOff;
+		}
+
+
+		private static void setCellNotApplicable(GridStyleInfo style)
+		{
+			style.CellType = "Static";
+			style.CellValue = Resources.NA;
+			style.HorizontalAlignment = GridHorizontalAlignment.Center;
+			style.VerticalAlignment = GridVerticalAlignment.Bottom;
+		}
+
+		public static bool CheckOverrideDayOffAndLoadedAndScheduledPeriod(IPerson person, DateOnlyPeriod period)
+		{
+			IList<ISchedulePeriod> schedulePeriods = person.PersonSchedulePeriods(period);
+			if (period.DayCollection().Select(person.VirtualSchedulePeriod).Any(vPeriod => !vPeriod.IsValid))
+			{
+				return false;
+			}
+			foreach (SchedulePeriod schedulePeriod in schedulePeriods)
+			{
+				if (!schedulePeriod.IsDaysOffOverride)
+					return true;
+
+				var startPeriod = schedulePeriod.GetSchedulePeriod(period.StartDate);
+				if (startPeriod.HasValue && startPeriod.Value.StartDate == period.StartDate)
 				{
-					var virtualSchedulePeriods = ExtractVirtualPeriods(person, openPeriod);
-					wholeRange.CalculatedTargetScheduleDaysOff = CalculateTargetDaysOff(virtualSchedulePeriods);
+					var endPeriod = schedulePeriod.GetSchedulePeriod(period.EndDate);
+					if (endPeriod.HasValue && endPeriod.Value.EndDate == period.EndDate)
+						return true;
 				}
-					
-
-				style.CellValue = wholeRange.CalculatedTargetScheduleDaysOff;
- 
-        }
-
-		public static HashSet<IVirtualSchedulePeriod> ExtractVirtualPeriods(IPerson person, DateOnlyPeriod period)
-		{
-			if (person == null)
-				throw new ArgumentNullException("person");
-
-			var virtualPeriods = new HashSet<IVirtualSchedulePeriod>();
-			foreach (var dateOnly in period.DayCollection())
-			{
-				virtualPeriods.Add(person.VirtualSchedulePeriod(dateOnly));
 			}
-			return virtualPeriods;
+			return false;
 		}
 
-        private static void setCellNotApplicable(GridStyleInfo style) 
-        {
-            style.CellType = "Static";
-            style.CellValue = Resources.NA;
-            style.HorizontalAlignment = GridHorizontalAlignment.Center;
-            style.VerticalAlignment = GridVerticalAlignment.Bottom;
-        }
-
-        public static bool CheckOverrideDayOffAndLoadedAndScheduledPeriod(IPerson person, DateOnlyPeriod period)
-        {
-            IList<ISchedulePeriod> schedulePeriods = person.PersonSchedulePeriods(period);
-            if (period.DayCollection().Select(person.VirtualSchedulePeriod).Any(vPeriod => !vPeriod.IsValid))
-            {
-            	return false;
-            }
-            foreach (SchedulePeriod schedulePeriod in schedulePeriods)
-            {
-                if (!schedulePeriod.IsDaysOffOverride)
-                    return true;
-
-                var startPeriod = schedulePeriod.GetSchedulePeriod(period.StartDate);
-                if (startPeriod.HasValue && startPeriod.Value.StartDate == period.StartDate)
-                {
-                    var endPeriod = schedulePeriod.GetSchedulePeriod(period.EndDate);
-                    if (endPeriod.HasValue && endPeriod.Value.EndDate == period.EndDate)
-                        return true;
-                }
-            }
-            return false;
-        }
-
-		public static int CalculateTargetDaysOff(HashSet<IVirtualSchedulePeriod> extractVirtualPeriods)
+		public static bool CheckOverrideTargetTimeLoadedAndScheduledPeriod(IPerson person, DateOnlyPeriod period)
 		{
-			if(extractVirtualPeriods == null)
-				throw new ArgumentNullException("extractVirtualPeriods");
-
-			var ret = 0;
-
-			foreach (var virtualSchedulePeriod in extractVirtualPeriods)
+			var schedulePeriods = person.PersonSchedulePeriods(period);
+			if (period.DayCollection().Select(person.VirtualSchedulePeriod).Any(vPeriod => !vPeriod.IsValid))
 			{
-				ret += virtualSchedulePeriod.DaysOff();
+				return false;
 			}
-
-			return ret;
+			foreach (ISchedulePeriod schedulePeriod in schedulePeriods)
+			{
+				if (!schedulePeriod.IsAverageWorkTimePerDayOverride)
+					return true;
+				var startPeriod = schedulePeriod.GetSchedulePeriod(period.StartDate);
+				if (startPeriod.HasValue && startPeriod.Value.StartDate == period.StartDate)
+				{
+					var endPeriod = schedulePeriod.GetSchedulePeriod(period.EndDate);
+					if (endPeriod.HasValue && endPeriod.Value.EndDate == period.EndDate)
+						return true;
+				}
+			}
+			return false;
 		}
 
-        public static bool CheckOverrideTargetTimeLoadedAndScheduledPeriod(IPerson person, DateOnlyPeriod period)
-        {
-            var schedulePeriods = person.PersonSchedulePeriods(period);
-            if (period.DayCollection().Select(person.VirtualSchedulePeriod).Any(vPeriod => !vPeriod.IsValid))
-            {
-            	return false;
-            }
-            foreach (ISchedulePeriod schedulePeriod in schedulePeriods)
-            {
-                if (!schedulePeriod.IsAverageWorkTimePerDayOverride)
-                    return true;
-                var startPeriod = schedulePeriod.GetSchedulePeriod(period.StartDate);
-                if (startPeriod.HasValue && startPeriod.Value.StartDate == period.StartDate)
-                {
-                    var endPeriod = schedulePeriod.GetSchedulePeriod(period.EndDate);
-                    if (endPeriod.HasValue && endPeriod.Value.EndDate == period.EndDate)
-                        return true;
-                }
-            }
-            return false;
-        }
+		#endregion
 
-        #endregion
-        
-        /// <summary>
-        /// Gets displaymode for assignment
-        /// </summary>
-        /// <param name="pa">The pa.</param>
-        /// <param name="part">The part.</param>
-        /// <param name="layerCollection">The layer collection.</param>
-        /// <returns></returns>
-				public static DisplayMode GetAbsenceDisplayMode(IPersonAbsence pa, IScheduleDay part, IVisualLayerCollection layerCollection)
-        {
-            DateTimePeriod period = pa.Layer.Period;
-            DateTimePeriod datePeriod = part.Period;
-            if (period.ContainsPart(datePeriod))
-            {
-                if (layerCollection.IsSatisfiedBy(VisualLayerCollectionSpecification.OneAbsenceLayer))
-                    return DisplayMode.WholeDay;
-
-                DateTime layerStartDateTime = period.StartDateTimeLocal(part.TimeZone);
-                DateTime layerEndDateTime = period.EndDateTimeLocal(part.TimeZone);
-                DateTime periodStartDateTime = datePeriod.StartDateTimeLocal(part.TimeZone);
-                DateTime periodEndDateTime = datePeriod.EndDateTimeLocal(part.TimeZone);
-
-                if (layerStartDateTime >= periodStartDateTime && layerEndDateTime<= periodEndDateTime)
-                    return DisplayMode.BeginsAndEndsToday;
-
-                if (layerStartDateTime < periodStartDateTime && layerEndDateTime <= periodEndDateTime)
-                    return DisplayMode.EndsToday;
-
-                if (layerStartDateTime >= periodStartDateTime && layerEndDateTime > periodEndDateTime)
-                    return DisplayMode.BeginsToday;
-            }
-
-            return DisplayMode.WholeDay;
-        }
-
-        /// <summary>
-        /// Gets displaymode for absence
-        /// </summary>
-        /// <param name="pa">The pa.</param>
-        /// <param name="part">The part.</param>
-        /// <returns></returns>
-				public static DisplayMode GetAssignmentDisplayMode(IPeriodized pa, IScheduleDay part)
-        {
-            DateTimePeriod period = pa.Period;
-            DateTimePeriod datePeriod = part.Period;
-
-            DateTime layerStartDateTime = period.StartDateTimeLocal(part.TimeZone);
-            DateTime layerEndDateTime = period.EndDateTimeLocal(part.TimeZone);
-            DateTime periodStartDateTime = datePeriod.StartDateTimeLocal(part.TimeZone);
-            DateTime periodEndDateTime = datePeriod.EndDateTimeLocal(part.TimeZone);
-
-            if (layerStartDateTime >= periodStartDateTime && layerEndDateTime <= periodEndDateTime)
-            {
-                return DisplayMode.BeginsAndEndsToday;
-            }
-            if (layerStartDateTime < periodStartDateTime && layerEndDateTime <= periodEndDateTime)
-            {
-                return DisplayMode.EndsToday;
-            }
-            if (layerStartDateTime >= periodStartDateTime && layerEndDateTime > periodEndDateTime)
-            {
-                return DisplayMode.BeginsToday;
-            }
-            return DisplayMode.WholeDay;
-        }
-
-        //Gets text to show in week view
-        public static IList<string> GetInfoTextWeekView(IScheduleDay schedulePart, SchedulePartView significantPart)
-        {
-            IList<string> returnList = new List<string>();
-            string infoText = string.Empty;
-            string periodText = string.Empty;
-            string timeText = string.Empty;
-
-            IPersonAssignment pa = schedulePart.PersonAssignment();
-
-            if (significantPart == SchedulePartView.FullDayAbsence || significantPart == SchedulePartView.ContractDayOff)
-            {
-                IVisualLayerCollection layerCollection = schedulePart.ProjectionService().CreateProjection();
-                foreach (IVisualLayer layer in layerCollection)
-                {
-                    infoText = layer.DisplayDescription().Name;
-                    break;
-                }
-                if (layerCollection.Count() == 0)
-                {
-                    //we have no underlaying activity = is on top of day off
-                    var absenceCollection = schedulePart.PersonAbsenceCollection();
-                    IPersonAbsence personAbsence = absenceCollection[absenceCollection.Count - 1];
-                    infoText = personAbsence.Layer.Payload.Description.Name;
-                }
-                periodText = "-";
-            }
-
-            if (significantPart == SchedulePartView.DayOff)
-            {
-                infoText = schedulePart.PersonAssignment().DayOff().Description.Name;
-                periodText = "-";
-            }
-
-            if (significantPart == SchedulePartView.MainShift)
-            {
-                infoText = pa.ShiftCategory.Description.Name;
-                periodText = ToLocalStartEndTimeString(pa.Period, TimeZoneGuard.Instance.TimeZone);
-            }
-
-            if(!string.IsNullOrEmpty(infoText))
-            {
-                TimeSpan totalTime = ScheduleHelper.ContractedTime(schedulePart);
-                timeText = DateHelper.HourMinutesString(totalTime.TotalMinutes);
-            }
-
-            returnList.Add(infoText);
-            returnList.Add(periodText);
-            returnList.Add(timeText);
-
-            return returnList;
-        }
-
-		public static DateOnlyPeriod? PeriodFromSchedulePeriods(IEnumerable<IPerson> persons, DateOnlyPeriod period)
+		/// <summary>
+		/// Gets displaymode for absence
+		/// </summary>
+		/// <param name="pa">The pa.</param>
+		/// <param name="part">The part.</param>
+		/// <returns></returns>
+		public static DisplayMode GetAssignmentDisplayMode(IPeriodized pa, IScheduleDay part)
 		{
-			var min = DateOnly.MaxValue;
-			var max = DateOnly.MinValue;
+			DateTimePeriod period = pa.Period;
+			DateTimePeriod datePeriod = part.Period;
 
-			foreach (var schedulePeriod in persons.Select(person => person.PhysicalSchedulePeriods(period)).SelectMany(schedulePeriods => schedulePeriods))
+			DateTime layerStartDateTime = period.StartDateTimeLocal(part.TimeZone);
+			DateTime layerEndDateTime = period.EndDateTimeLocal(part.TimeZone);
+			DateTime periodStartDateTime = datePeriod.StartDateTimeLocal(part.TimeZone);
+			DateTime periodEndDateTime = datePeriod.EndDateTimeLocal(part.TimeZone);
+
+			if (layerStartDateTime >= periodStartDateTime && layerEndDateTime <= periodEndDateTime)
 			{
-				if (schedulePeriod.DateFrom < min)
-					min = schedulePeriod.DateFrom;
+				return DisplayMode.BeginsAndEndsToday;
+			}
+			if (layerStartDateTime < periodStartDateTime && layerEndDateTime <= periodEndDateTime)
+			{
+				return DisplayMode.EndsToday;
+			}
+			if (layerStartDateTime >= periodStartDateTime && layerEndDateTime > periodEndDateTime)
+			{
+				return DisplayMode.BeginsToday;
+			}
+			return DisplayMode.WholeDay;
+		}
 
-				if (schedulePeriod.RealDateTo() > max)
-					max = schedulePeriod.RealDateTo();
+		//Gets text to show in week view
+		public static IList<string> GetInfoTextWeekView(IScheduleDay schedulePart, SchedulePartView significantPart)
+		{
+			IList<string> returnList = new List<string>();
+			string infoText = string.Empty;
+			string periodText = string.Empty;
+			string timeText = string.Empty;
+
+			IPersonAssignment pa = schedulePart.PersonAssignment();
+
+			if (significantPart == SchedulePartView.FullDayAbsence || significantPart == SchedulePartView.ContractDayOff)
+			{
+				IVisualLayerCollection layerCollection = schedulePart.ProjectionService().CreateProjection();
+				foreach (IVisualLayer layer in layerCollection)
+				{
+					infoText = layer.DisplayDescription().Name;
+					break;
+				}
+				if (layerCollection.Count() == 0)
+				{
+					//we have no underlaying activity = is on top of day off
+					var absenceCollection = schedulePart.PersonAbsenceCollection();
+					IPersonAbsence personAbsence = absenceCollection[absenceCollection.Count - 1];
+					infoText = personAbsence.Layer.Payload.Description.Name;
+				}
+				periodText = "-";
 			}
 
-			if (min > max) return null;
+			if (significantPart == SchedulePartView.DayOff)
+			{
+				infoText = schedulePart.PersonAssignment().DayOff().Description.Name;
+				periodText = "-";
+			}
 
-			return new DateOnlyPeriod(min, max);
+			if (significantPart == SchedulePartView.MainShift)
+			{
+				infoText = pa.ShiftCategory.Description.Name;
+				periodText = ToLocalStartEndTimeString(pa.Period, TimeZoneGuard.Instance.TimeZone);
+			}
+
+			if (!string.IsNullOrEmpty(infoText))
+			{
+				TimeSpan totalTime = ScheduleHelper.ContractedTime(schedulePart);
+				timeText = DateHelper.HourMinutesString(totalTime.TotalMinutes);
+			}
+
+			returnList.Add(infoText);
+			returnList.Add(periodText);
+			returnList.Add(timeText);
+
+			return returnList;
 		}
-    }
+	}
 }

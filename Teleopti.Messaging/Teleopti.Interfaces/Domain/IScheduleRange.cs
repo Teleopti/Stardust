@@ -91,7 +91,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: micke
         /// Created date: 2008-11-22
         /// </remarks>
-        int? CalculatedTargetScheduleDaysOff { get; set; }
+        int? CalculatedTargetScheduleDaysOff { get;}
 
 		/// <summary>
 		/// Gets or sets the calculated schedule days off.

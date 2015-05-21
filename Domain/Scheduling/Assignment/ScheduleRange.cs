@@ -265,7 +265,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			{
 				if (!_calculatedTargetTimeHolder.HasValue)
 				{
-					_calculatedTargetTimeHolder = new TargetScheduleSummaryCalculator().CalculateTargetTime(this);
+					var timeAndDaysOffTuple = new TargetScheduleSummaryCalculator().GetTargets(this);
+					_calculatedTargetTimeHolder = timeAndDaysOffTuple.Item1;
+					_calculatedTargetScheduleDaysOff = timeAndDaysOffTuple.Item2;
 				}
 				
 				return _calculatedTargetTimeHolder;
@@ -289,8 +291,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public int? CalculatedTargetScheduleDaysOff
 		{
-			get { return _calculatedTargetScheduleDaysOff; }
-			set { _calculatedTargetScheduleDaysOff = value; }
+			get
+			{
+				if (!_calculatedTargetScheduleDaysOff.HasValue)
+				{
+					var timeAndDaysOffTuple = new TargetScheduleSummaryCalculator().GetTargets(this);
+					_calculatedTargetTimeHolder = timeAndDaysOffTuple.Item1;
+					_calculatedTargetScheduleDaysOff = timeAndDaysOffTuple.Item2;
+				}
+
+				return _calculatedTargetScheduleDaysOff;
+			}
 		}
 
 		public IEnumerable<IScheduleDay> ScheduledDayCollection(DateOnlyPeriod dateOnlyPeriod)

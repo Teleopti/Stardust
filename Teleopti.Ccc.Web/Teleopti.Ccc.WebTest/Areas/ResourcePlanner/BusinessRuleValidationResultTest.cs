@@ -19,13 +19,6 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		}
 
 		[Test]
-		public void ShouldReturnFalseIfScheduleDaysOffIsNull()
-		{
-			FakeScheduleRange.CalculatedTargetScheduleDaysOff = null;
-			Assert.IsFalse(Target.Validate(FakeScheduleRange));
-		}
-
-		[Test]
 		public void ShouldReturnTrueIfTargetDayIsFullfilled()
 		{
 			((FakeScheduleRange)FakeScheduleRange).SetValues(6, 6);

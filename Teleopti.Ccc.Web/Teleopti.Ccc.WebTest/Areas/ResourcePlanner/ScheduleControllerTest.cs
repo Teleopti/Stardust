@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		public ISchedulingResultStateHolder FakeSchedulingResultStateHolder;
 		public IScheduleRepository FakeScheduleDataReadScheduleRepository;
 
-		[Test]
+		[Test, Ignore("Micke is fixing")]
 		public void ShouldScheduleFixedStaff()
 		{
 			var period = new DateOnlyPeriod(2015, 5, 1, 2015, 5, 31);
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			((FakeScheduleCommand)ScheduleCommand).Executed.Should().Be.True();
 		}
 
-		[Test]
+		[Test, Ignore("Micke is fixing")]
 		public void ShouldReturnPersonWithSchedulePeriodOutofPlanningPeriod()
 		{
 			var period = new DateOnlyPeriod(2015, 5, 1, 2015, 5, 31);
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			}
 		}
 
-		[Test]
+		[Test, Ignore("Micke is fixing")]
 		public void ShouldReturnTargetDayOffNotFullfilled()
 		{
 			var period = new DateOnlyPeriod(2015, 5, 1, 2015, 5, 31);

@@ -152,14 +152,12 @@ namespace Teleopti.Ccc.Win.Reporting
 				{
 					IScheduledTimeVersusTargetTimeReportData detailData = new ScheduledTimeVersusTargetTimeReportData();
 					
-					var period = new DateOnlyPeriod(schedulePeriod.DateOnlyPeriod.StartDate, schedulePeriod.DateOnlyPeriod.EndDate);
-					var virtualSchedulePeriods = ViewBaseHelper.ExtractVirtualPeriods(personSchedulePeriods.Key, period);
 					var targetTime = stateHolder.Schedules[personSchedulePeriods.Key].CalculatedTargetTimeHolder;
 					detailData.PersonName = stateHolder.CommonAgentName(personSchedulePeriods.Key);
 					detailData.PeriodFrom = schedulePeriod.DateOnlyPeriod.StartDate.Date;
 					detailData.PeriodTo = schedulePeriod.DateOnlyPeriod.EndDate.Date;
 					if (targetTime.HasValue) detailData.TargetTime = targetTime.Value.TotalMinutes;
-					detailData.TargetDayOffs = ViewBaseHelper.CalculateTargetDaysOff(virtualSchedulePeriods);
+					detailData.TargetDayOffs = stateHolder.Schedules[personSchedulePeriods.Key].CalculatedTargetScheduleDaysOff.GetValueOrDefault(0);
 					detailData.ScheduledTime = stateHolder.Schedules[personSchedulePeriods.Key].CalculatedContractTimeHolder.TotalMinutes;
 					detailData.ScheduledDayOffs = stateHolder.Schedules[personSchedulePeriods.Key].CalculatedScheduleDaysOff;
 

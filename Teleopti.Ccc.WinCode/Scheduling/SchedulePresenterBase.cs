@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                         return SchedulerState.CommonNameDescription.BuildCommonNameDescription(person);
                     default:
                         {
-                            if (styleInfo.CellValue.ToString() == "N/A")
+                            if (styleInfo.CellValue == null || styleInfo.CellValue.ToString() == "N/A")
                                 return null;
 
                             return styleInfo.CellValue; 

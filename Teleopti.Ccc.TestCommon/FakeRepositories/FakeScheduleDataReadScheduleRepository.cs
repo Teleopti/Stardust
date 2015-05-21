@@ -113,7 +113,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			var dateTimePeriod = period.VisiblePeriod;
 			var schedules = new ScheduleDictionaryForTest(scenario, dateTimePeriod);
 			var range = new ScheduleRange(schedules, new ScheduleParameters(scenario, visiblePersons.FirstOrDefault(), dateTimePeriod));
-			range.CalculatedTargetScheduleDaysOff = _scheduledDaysOff;
 			schedules.AddTestItem(visiblePersons.FirstOrDefault(), range);
 			return schedules;
 		}
