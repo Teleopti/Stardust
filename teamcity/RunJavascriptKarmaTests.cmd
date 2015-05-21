@@ -3,6 +3,7 @@
 call ..\.node\npm uninstall karma
 call ..\.node\npm uninstall karma-chrome-launcher
 call ..\.node\npm uninstall karma-jasmine
+call ..\.node\npm uninstall grunt-sass
 
 call ..\.node\npm install -g karma
 call ..\.node\npm install -g karma-teamcity-reporter
