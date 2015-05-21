@@ -440,6 +440,7 @@
     <Compile Include="Areas\Global\UserController.cs" />
     <Compile Include="Areas\MultiTenancy\ChangePasswordController.cs" />
     <Compile Include="Areas\MultiTenancy\Core\ChangePersonPassword.cs" />
+    <Compile Include="Areas\MultiTenancy\Core\CurrentTenantUser.cs" />
     <Compile Include="Areas\MultiTenancy\Core\IChangePersonPassword.cs" />
     <Compile Include="Areas\MultiTenancy\Core\LogLogonAttemptFake.cs" />
     <Compile Include="Areas\MultiTenancy\Core\TenantAuthentication.cs" />

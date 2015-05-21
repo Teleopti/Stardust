@@ -261,6 +261,7 @@
     <Compile Include="MultiTenancy\Server\FindTenantByNameQueryFake.cs" />
     <Compile Include="MultiTenancy\Server\FindPersonInfo.cs" />
     <Compile Include="MultiTenancy\Server\ICheckPasswordStrength.cs" />
+    <Compile Include="MultiTenancy\Server\ICurrentTenantUser.cs" />
     <Compile Include="MultiTenancy\Server\IdentityUserQueryFake.cs" />
     <Compile Include="MultiTenancy\Server\IFindLogonInfo.cs" />
     <Compile Include="MultiTenancy\Server\IFindPersonInfo.cs" />
