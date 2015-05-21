@@ -35,14 +35,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 			var findIdentityQuery = MockRepository.GenerateMock<IIdentityUserQuery>();
 			var nhibHandler = MockRepository.GenerateMock<IDataSourceConfigurationProvider>();
 			var pwPolicyLoader = MockRepository.GenerateMock<ILoadPasswordPolicyService>();
-			nhibHandler.Stub(x => x.ForTenant(queryResult.Tenant)).Return(datasourceConfiguration); 
+			nhibHandler.Stub(x => x.ForTenant(queryResult.Tenant.Name)).Return(datasourceConfiguration); 
 			findIdentityQuery.Expect(x => x.FindUserData(identity)).Return(queryResult);
 			pwPolicyLoader.Expect(x => x.DocumentAsString).Return("somepolicy");
 			var target = new IdentityAuthentication(findIdentityQuery, nhibHandler);
 			var res = target.Logon(identity);
 
 			res.Success.Should().Be.True();
-			res.Tenant.Should().Be.EqualTo(queryResult.Tenant);
+			res.Tenant.Should().Be.EqualTo(queryResult.Tenant.Name);
 			res.PersonId.Should().Be.EqualTo(queryResult.Id);
 			res.DataSourceConfiguration.Should().Be.SameInstanceAs(datasourceConfiguration);
 			res.TenantPassword.Should().Be.EqualTo(queryResult.TenantPassword);
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 			var queryResult = new PersonInfo();
 			var findIdentityQuery = MockRepository.GenerateMock<IIdentityUserQuery>();
 			var nhibHandler = MockRepository.GenerateMock<IDataSourceConfigurationProvider>();
-			nhibHandler.Stub(x => x.ForTenant(queryResult.Tenant)).Return(null);
+			nhibHandler.Stub(x => x.ForTenant(queryResult.Tenant.Name)).Return(null);
 			findIdentityQuery.Expect(x => x.FindUserData(identity)).Return(queryResult);
 
 			var target = new IdentityAuthentication(findIdentityQuery, nhibHandler);

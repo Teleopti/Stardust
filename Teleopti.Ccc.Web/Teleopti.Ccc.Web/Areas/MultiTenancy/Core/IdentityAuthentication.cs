@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 			if (foundUser==null)
 				return createFailingResult(string.Format(Resources.LogOnFailedIdentityNotFound, identity));
 
-			var nhibConfig = _dataSourceConfigurationProvider.ForTenant(foundUser.Tenant);
+			var nhibConfig = _dataSourceConfigurationProvider.ForTenant(foundUser.Tenant.Name);
 			if (nhibConfig==null)
 				return createFailingResult(Resources.NoDatasource);
 			
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 			{
 				Success = true,
 				PersonId = foundUser.Id,
-				Tenant = foundUser.Tenant,
+				Tenant = foundUser.Tenant.Name,
 				DataSourceConfiguration = nhibConfig,
 				TenantPassword = foundUser.TenantPassword
 			};

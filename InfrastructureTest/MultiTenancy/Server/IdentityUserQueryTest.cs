@@ -33,9 +33,8 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		public void ShouldFindTenant()
 		{
 			var result = target.FindUserData(correctIdentity);
-			result.Tenant.Should().Be.EqualTo(Tenant.DefaultName);
+			result.Tenant.Name.Should().Be.EqualTo(Tenant.DefaultName);
 		}
-
 
 		[Test]
 		public void NonExistingUserShouldFail()
@@ -85,9 +84,8 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		public void ShouldFindTenant()
 		{
 			var result = target.FindUserData(correctIdentity);
-			result.Tenant.Should().Be.EqualTo(Tenant.DefaultName);
+			result.Tenant.Name.Should().Be.EqualTo(Tenant.DefaultName);
 		}
-
 		
 		[Test]
 		public void NonExistingUserShouldFail()

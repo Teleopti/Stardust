@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 			if (applicationLogonInfo.IsLocked)
 				return createFailingResult(Resources.LogOnFailedAccountIsLocked);
 
-			var nhibConfig = _dataSourceConfigurationProvider.ForTenant(applicationLogonInfo.PersonInfo.Tenant);
+			var nhibConfig = _dataSourceConfigurationProvider.ForTenant(applicationLogonInfo.PersonInfo.Tenant.Name);
 			if (nhibConfig == null)
 				return createFailingResult(Resources.NoDatasource);
 
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 					FailReason = passwordCheck.Message,
 					PasswordExpired = passwordCheck.PasswordExpired,
 					Success = passwordCheck.Successful,
-					Tenant = personInfo.Tenant,
+					Tenant = personInfo.Tenant.Name,
 					TenantPassword = personInfo.TenantPassword
 				};
 
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 			{
 				Success = true,
 				PersonId = personInfo.Id,
-				Tenant = personInfo.Tenant,
+				Tenant = personInfo.Tenant.Name,
 				DataSourceConfiguration = nhibConfig,
 				TenantPassword = personInfo.TenantPassword
 			};

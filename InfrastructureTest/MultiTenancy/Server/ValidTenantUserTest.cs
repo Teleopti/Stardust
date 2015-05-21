@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		public void HappyPath()
 		{
 			target.IsValidForTenant(validPerson.Id, validPerson.TenantPassword)
-				.Name.Should().Be.EqualTo(validPerson.Tenant);
+				.Name.Should().Be.EqualTo(validPerson.Tenant.Name);
 		}
 
 		[Test]

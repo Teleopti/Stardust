@@ -15,11 +15,11 @@
 		{
 			var identityHit = _identityUserQuery.FindUserData(identity);
 			if (identityHit != null)
-				return new TenantAndPersonId {PersonId = identityHit.Id, Tenant = identityHit.Tenant};
+				return new TenantAndPersonId { PersonId = identityHit.Id, Tenant = identityHit.Tenant.Name };
 
 			var appHit = _applicationUserQuery.Find(identity);
 			if (appHit != null)
-				return new TenantAndPersonId {PersonId = appHit.Id, Tenant = appHit.Tenant};
+				return new TenantAndPersonId { PersonId = appHit.Id, Tenant = appHit.Tenant.Name };
 
 			return null;
 		}

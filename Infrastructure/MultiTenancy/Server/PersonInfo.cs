@@ -37,9 +37,9 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 			protected set { _applicationLogonInfo = value; }
 		}
 
-		public virtual string Tenant
+		public virtual Tenant Tenant
 		{
-			get { return tenant.Name; }
+			get { return tenant; }
 		}
 
 		public virtual void SetApplicationLogonCredentials(ICheckPasswordStrength checkPasswordStrength, string logonName, string password)

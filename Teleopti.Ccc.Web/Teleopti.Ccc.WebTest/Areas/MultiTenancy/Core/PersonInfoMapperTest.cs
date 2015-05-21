@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 			findTenantQuery.Expect(x => x.Find(tenant.Name)).Return(tenant);
 			var target = new PersonInfoMapper(findTenantQuery, new CheckPasswordStrengthFake());
 			var result = target.Map(new PersonInfoModel {Tenant = tenant.Name});
-			result.Tenant.Should().Be.EqualTo(tenant.Name);
+			result.Tenant.Name.Should().Be.EqualTo(tenant.Name);
 		}
 	}
 }

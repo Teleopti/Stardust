@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 
 			var target = new FindTenantAndPersonIdForIdentity(identityUserQuery, MockRepository.GenerateStub<IApplicationUserQuery>());
 			var result = target.Find(identity);
-			result.Tenant.Should().Be.EqualTo(pInfo.Tenant);
+			result.Tenant.Should().Be.EqualTo(pInfo.Tenant.Name);
 			result.PersonId.Should().Be.EqualTo(pInfo.Id);
 		}
 
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 
 			var target = new FindTenantAndPersonIdForIdentity(MockRepository.GenerateStub<IIdentityUserQuery>(), applicationQuery);
 			var result = target.Find(identity);
-			result.Tenant.Should().Be.EqualTo(pInfo.Tenant);
+			result.Tenant.Should().Be.EqualTo(pInfo.Tenant.Name);
 			result.PersonId.Should().Be.EqualTo(pInfo.Id);
 		}
 
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 
 			var target = new FindTenantAndPersonIdForIdentity(identityUserQuery, applicationQuery);
 			var result = target.Find(identity);
-			result.Tenant.Should().Be.EqualTo(pInfo.Tenant);
+			result.Tenant.Should().Be.EqualTo(pInfo.Tenant.Name);
 			result.PersonId.Should().Be.EqualTo(pInfo.Id);
 		}
 
