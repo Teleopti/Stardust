@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 	{
 		public bool Validate(IScheduleRange scheduleRange)
 		{
-			if (!(scheduleRange.CalculatedTargetScheduleDaysOff.HasValue && scheduleRange.CalculatedScheduleDaysOff.HasValue))
+			if (!(scheduleRange.CalculatedTargetScheduleDaysOff.HasValue))
 				return false;
 			return (scheduleRange.CalculatedTargetScheduleDaysOff == scheduleRange.CalculatedScheduleDaysOff);
 		}

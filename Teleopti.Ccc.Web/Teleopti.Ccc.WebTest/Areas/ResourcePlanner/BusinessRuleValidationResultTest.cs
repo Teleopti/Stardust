@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Areas.ResourcePlanner;
 using Teleopti.Interfaces.Domain;
 
@@ -13,15 +14,13 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		[Test]
 		public void ShouldReturnFalseIfTargetDayOffNotFullfilled()
 		{
-			FakeScheduleRange.CalculatedScheduleDaysOff = 7;
-			FakeScheduleRange.CalculatedTargetScheduleDaysOff = 8;
+			((FakeScheduleRange)FakeScheduleRange).SetValues(8,7);
 			Assert.IsFalse(Target.Validate(FakeScheduleRange));
 		}
 
 		[Test]
 		public void ShouldReturnFalseIfScheduleDaysOffIsNull()
 		{
-			FakeScheduleRange.CalculatedScheduleDaysOff = 8;
 			FakeScheduleRange.CalculatedTargetScheduleDaysOff = null;
 			Assert.IsFalse(Target.Validate(FakeScheduleRange));
 		}
@@ -29,8 +28,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		[Test]
 		public void ShouldReturnTrueIfTargetDayIsFullfilled()
 		{
-			FakeScheduleRange.CalculatedScheduleDaysOff = 6;
-			FakeScheduleRange.CalculatedTargetScheduleDaysOff = 6;
+			((FakeScheduleRange)FakeScheduleRange).SetValues(6, 6);
 			Assert.True(Target.Validate(FakeScheduleRange));
 		}
 	}

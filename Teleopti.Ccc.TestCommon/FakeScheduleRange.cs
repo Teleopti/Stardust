@@ -6,6 +6,11 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public class FakeScheduleRange: IScheduleRange
 	{
+		public void SetValues(int targetDaysOff, int scheduledDaysOff)
+		{
+			CalculatedScheduleDaysOff = scheduledDaysOff;
+			CalculatedTargetScheduleDaysOff = targetDaysOff;
+		}
 		public DateTimePeriod Period { get; private set; }
 		public IPerson Person { get; private set; }
 		public IScenario Scenario { get; private set; }
@@ -51,11 +56,20 @@ namespace Teleopti.Ccc.TestCommon
 			throw new NotImplementedException();
 		}
 
-		public TimeSpan? CalculatedContractTimeHolder { get; set; }
+		public TimeSpan CalculatedContractTimeHolder { get; set; }
 		public TimeSpan? CalculatedTargetTimeHolder { get; set; }
 		public int? CalculatedTargetScheduleDaysOff { get; set; }
-		public int? CalculatedScheduleDaysOff { get; set; }
+
+		public int CalculatedScheduleDaysOff { get; private set; }
+
+		
+
 		public IEnumerable<IScheduleDay> ScheduledDayCollection(DateOnlyPeriod dateOnlyPeriod)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IEnumerable<IScheduleDay> ScheduledDayCollectionForStudentAvailability(DateOnlyPeriod dateOnlyPeriod)
 		{
 			throw new NotImplementedException();
 		}
@@ -99,5 +113,7 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			throw new NotImplementedException();
 		}
+
+		
 	}
 }
