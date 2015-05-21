@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Controllers
 			var reportsItems = _reportsNavigationProvider.GetNavigationItems();
 
 			var guids = reportsItems.Select(item => item.Id).ToList();
-			if(!guids.Contains(id.Value))
+			if(!id.Value.Equals(Guid.Empty) && !guids.Contains(id.Value))
 				return View("NoPermission");
 
 			var commonReports =
