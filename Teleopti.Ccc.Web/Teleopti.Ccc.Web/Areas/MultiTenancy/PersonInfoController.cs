@@ -58,7 +58,6 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 
 		[HttpPost]
 		[TenantUnitOfWork]
-		//TODO: tenant - probably return some kind of json result later
 		public virtual void Delete(IEnumerable<Guid> personIdsToDelete)
 		{
 			foreach (var personInfoDelete in personIdsToDelete)

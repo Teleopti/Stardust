@@ -15,6 +15,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.Web;
@@ -114,6 +115,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		}
 
 		[TenantUnitOfWork]
+		[NoTenantAuthentication]
 		public virtual ViewResult Logon(string businessUnitName, string userName, string password)
 		{
 			var result = _authenticator.AuthenticateApplicationUser(userName, password);

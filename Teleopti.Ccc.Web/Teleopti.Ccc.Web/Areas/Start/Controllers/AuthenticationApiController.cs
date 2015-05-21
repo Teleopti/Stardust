@@ -1,6 +1,7 @@
 using System;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Ccc.UserTexts;
@@ -31,6 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 
 		[HttpGet]
 		[TenantUnitOfWork]
+		[NoTenantAuthentication]
 		public virtual JsonResult BusinessUnits()
 		{
 			var result = _identityLogon.LogonIdentityUser();
@@ -42,6 +44,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 
 		[HttpPost]
 		[TenantUnitOfWork]
+		[NoTenantAuthentication]
 		public virtual JsonResult Logon(Guid businessUnitId)
 		{
 			try

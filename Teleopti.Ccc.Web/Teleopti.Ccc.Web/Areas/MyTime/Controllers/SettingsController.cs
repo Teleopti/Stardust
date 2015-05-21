@@ -3,6 +3,7 @@ using System.Web;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
@@ -88,6 +89,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[UnitOfWorkAction]
 		[HttpPostOrPut]
 		[TenantUnitOfWork]
+		[NoTenantAuthentication]
 		public virtual JsonResult ChangePassword(ChangePasswordViewModel model)
 		{
 			var loggedOnUser = _loggedOnUser.CurrentUser();

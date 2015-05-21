@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 
 		[HttpGet]
 		[TenantUnitOfWork]
+		[NoTenantAuthentication]
 		public virtual JsonResult CheckPassword(ApplicationAuthenticationModel model)
 		{
 			var result = model.AuthenticateUser();
@@ -53,6 +54,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 
 		[HttpPostOrPut]
 		[TenantUnitOfWork]
+		[NoTenantAuthentication]
 		public virtual JsonResult ChangePassword(ChangePasswordInput model)
 		{
 			try
