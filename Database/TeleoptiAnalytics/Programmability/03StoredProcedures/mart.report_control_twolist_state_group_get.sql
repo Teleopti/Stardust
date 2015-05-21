@@ -33,7 +33,6 @@ ON
 	b.business_unit_id=d.business_unit_id
 WHERE state_group_id<>-1
 AND b.business_unit_code=@bu_id 
-AND d.is_deleted = 0 
 ORDER BY state_group_name
 
 SELECT id,name
