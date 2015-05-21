@@ -26,10 +26,20 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			if (isRunFromTest(tenantServer) || tenantServer.IsAnUrl())
 			{
 				builder.RegisterType<AuthenticationQuerier>().As<IAuthenticationQuerier>().SingleInstance();
+				if (_configuration.Toggle(Toggles.MultiTenancy_LogonUseNewSchema_33049))
+				{
+					builder.RegisterType<TenantLogonDataManager>().As<ITenantLogonDataManager>().SingleInstance();
+				}
+				else
+				{
+					builder.RegisterType<emptyTenantLogonDataManager>().As<ITenantLogonDataManager>().SingleInstance();
+				}
 			}
 			else
 			{
 				builder.RegisterType<AuthenticationFromFileQuerier>().As<IAuthenticationQuerier>().SingleInstance();
+				// must still register this to work from sikuli
+				builder.RegisterType<emptyTenantLogonDataManager>().As<ITenantLogonDataManager>().SingleInstance();
 			}
 			builder.RegisterType<PostHttpRequest>().As<IPostHttpRequest>().SingleInstance();
 			builder.RegisterType<NhibConfigDecryption>().As<INhibConfigDecryption>().SingleInstance();
@@ -54,14 +64,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			
 			builder.RegisterType<TenantDataManager>().As<ITenantDataManager>().SingleInstance();
 			
-			if (_configuration.Toggle(Toggles.MultiTenancy_LogonUseNewSchema_33049))
-			{
-				builder.RegisterType<TenantLogonDataManager>().As<ITenantLogonDataManager>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<emptyTenantLogonDataManager>().As<ITenantLogonDataManager>().SingleInstance();
-			}
+			
 		}
 
 		private static bool isRunFromTest(string server)
@@ -69,7 +72,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			return server == null;
 		}
 
-		
 		private class emptyTenantLogonDataManager : ITenantLogonDataManager
 		{
 			public IEnumerable<LogonInfoModel> GetLogonInfoModelsForGuids(IEnumerable<Guid> personGuids)
