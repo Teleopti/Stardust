@@ -288,7 +288,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public IEnumerable<IScheduleDay> ScheduledDayCollection(DateOnlyPeriod dateOnlyPeriod)
 		{
-			return getScheduledDayCollection(dateOnlyPeriod);
+			var canSeeUnpublished =
+				PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
+			return getScheduledDayCollection(dateOnlyPeriod, canSeeUnpublished);
 		}
 
 		/// <summary>
@@ -300,7 +302,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		/// </summary>
 		public IEnumerable<IScheduleDay> ScheduledDayCollectionForStudentAvailability(DateOnlyPeriod dateOnlyPeriod)
 		{
-			return getScheduledDayCollection(dateOnlyPeriod, ScheduleVisibleReasons.StudentAvailability);
+			return getScheduledDayCollection(dateOnlyPeriod, true);
 		}
 
         public void TakeSnapshot()
@@ -453,19 +455,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             typedClone._shiftCategoryFairnessHolder = null;
         }
 
-	    private IEnumerable<IScheduleDay> getScheduledDayCollection(DateOnlyPeriod dateOnlyPeriod,
-		    ScheduleVisibleReasons visibleReason = ScheduleVisibleReasons.Published)
+		private IEnumerable<IScheduleDay> getScheduledDayCollection(DateOnlyPeriod dateOnlyPeriod, bool canSeeUnpublished)
 	    {
-		    var canSeeUnpublished =
-			    (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules))
-			    || visibleReason.HasFlag(ScheduleVisibleReasons.StudentAvailability);
-			
 		    var timeZone = Person.PermissionInformation.DefaultTimeZone();
 		    var availablePeriods = AvailablePeriods();
 
-			return dateOnlyPeriod.DayCollection()
-				.Select(date => new DateOnlyAsDateTimePeriod(date, timeZone))
-				.Select(dayAndPeriod => ScheduleDay(dayAndPeriod, canSeeUnpublished, availablePeriods));
+			var retList = new List<IScheduleDay>();
+			foreach (var date in dateOnlyPeriod.DayCollection())
+			{
+				var dayAndPeriod = new DateOnlyAsDateTimePeriod(date, timeZone);
+				retList.Add(ScheduleDay(dayAndPeriod, canSeeUnpublished, availablePeriods));
+			}
+			return retList;
 	    }
     }
 }
