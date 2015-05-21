@@ -8,7 +8,6 @@ using Teleopti.Ccc.Web.Areas.MultiTenancy.Model;
 
 namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 {
-	//TODO: tenant - when adding scenarios for multi tenancy scenario(s), use this controller!
 	public class PersonInfoController : Controller
 	{
 		private readonly IPersistPersonInfo _persister;
@@ -28,7 +27,6 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 		}
 
 		[HttpPost]
-		//TODO: tenant - change later to some sort of authentication
 		//TODO: tenant - change from returning an json object with errors to non 200 http error codes
 		public virtual JsonResult Persist(PersonInfoModel personInfoModel)
 		{
@@ -61,7 +59,6 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 		[HttpPost]
 		[TenantUnitOfWork]
 		//TODO: tenant - probably return some kind of json result later
-		//TODO: tenant - change later to some sort of authentication
 		public virtual void Delete(IEnumerable<Guid> personIdsToDelete)
 		{
 			foreach (var personInfoDelete in personIdsToDelete)
@@ -72,7 +69,6 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 
 		[HttpPost]
 		[TenantUnitOfWork]
-		//TODO: tenant - change later to some sort of authentication
 		//TODO: tenant - make sure to only get user info from calling tenant
 		public virtual JsonResult LogonInfoFromGuids(IEnumerable<Guid> personIdsToGet)
 		{

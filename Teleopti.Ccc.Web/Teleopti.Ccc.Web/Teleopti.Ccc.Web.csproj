@@ -441,6 +441,9 @@
     <Compile Include="Areas\MultiTenancy\ChangePasswordController.cs" />
     <Compile Include="Areas\MultiTenancy\Core\ChangePersonPassword.cs" />
     <Compile Include="Areas\MultiTenancy\Core\IChangePersonPassword.cs" />
+    <Compile Include="Areas\MultiTenancy\Core\LogLogonAttemptFake.cs" />
+    <Compile Include="Areas\MultiTenancy\Core\TenantAuthentication.cs" />
+    <Compile Include="Areas\MultiTenancy\Core\TenantAuthenticationFake.cs" />
     <Compile Include="Areas\MultiTenancy\Model\ChangePasswordModel.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AllowanceDay.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\IAllowanceDay.cs" />
@@ -574,7 +577,7 @@
     <Compile Include="Areas\MultiTenancy\Core\IHttpRequestUserAgent.cs" />
     <Compile Include="Areas\MultiTenancy\Core\ILoginAttemptModelFactory.cs" />
     <Compile Include="Areas\MultiTenancy\Core\LoginAttemptModelFactoryForWeb.cs" />
-    <Compile Include="Areas\MultiTenancy\Core\LogTenancyLogonAttempt.cs" />
+    <Compile Include="Areas\MultiTenancy\Core\LogLogonAttempt.cs" />
     <Compile Include="Areas\MultiTenancy\Core\TenantModule.cs" />
     <Compile Include="Areas\MultiTenancy\Core\IIdentityAuthentication.cs" />
     <Compile Include="Areas\MultiTenancy\AuthenticateController.cs" />

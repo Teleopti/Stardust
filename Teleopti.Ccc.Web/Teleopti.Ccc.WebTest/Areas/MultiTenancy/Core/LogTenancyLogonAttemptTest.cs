@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 			var loginAttemptModel = new LoginAttemptModel();
 			loginAttemptModelFactory.Expect(x => x.Create(userName, null, false)).Return(loginAttemptModel);
 
-			var target = new LogTenancyLogonAttempt(loginAttemptModelFactory, persister);
+			var target = new LogLogonAttempt(loginAttemptModelFactory, persister);
 			target.SaveAuthenticateResult(userName, null, false);
 
 			persister.AssertWasCalled(x=> x.SaveLoginAttempt(loginAttemptModel));
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 			var loginAttemptModel = new LoginAttemptModel();
 			loginAttemptModelFactory.Expect(x => x.Create(userName, personId, true)).Return(loginAttemptModel);
 
-			var target = new LogTenancyLogonAttempt(loginAttemptModelFactory, persister);
+			var target = new LogLogonAttempt(loginAttemptModelFactory, persister);
 			target.SaveAuthenticateResult(userName, personId, true);
 
 			persister.AssertWasCalled(x => x.SaveLoginAttempt(loginAttemptModel));

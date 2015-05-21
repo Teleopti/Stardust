@@ -4,8 +4,10 @@ using System.Web;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.Web.Areas.MultiTenancy;
+using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Model;
 
 namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
@@ -17,6 +19,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		public FindPersonInfoFake FindPersonInfo;
 		public TenantUnitOfWorkFake TenantUnitOfWork;
 		public CheckPasswordStrengthFake CheckPasswordStrength;
+		public TenantAuthenticationFake TenantAuthentication;
 
 		[Test]
 		public void HappyPath()
@@ -33,6 +36,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 
 			Target.Modify(model);
 			TenantUnitOfWork.WasCommitted.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldAcceptAccessWithoutTenantCredentials()
+		{
+			TenantAuthentication.NoAccess();
+			
+			HappyPath();
 		}
 
 		[Test]

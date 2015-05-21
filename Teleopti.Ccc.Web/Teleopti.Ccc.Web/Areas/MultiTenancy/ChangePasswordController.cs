@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Model;
@@ -16,6 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 
 		[TenantUnitOfWork]
 		[HttpPost]
+		[NoTenantAuthentication]
 		public virtual void Modify(ChangePasswordModel model)
 		{
 			_changePersonPassword.Modify(model.PersonId, model.OldPassword, model.NewPassword);

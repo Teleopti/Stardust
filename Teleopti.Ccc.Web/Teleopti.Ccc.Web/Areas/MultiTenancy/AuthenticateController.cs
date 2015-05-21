@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Model;
@@ -24,6 +25,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 
 		[HttpPost]
 		[TenantUnitOfWork]
+		[NoTenantAuthentication]
 		public virtual JsonResult ApplicationLogon(ApplicationLogonModel applicationLogonModel)
 		{
 			var res = _applicationAuthentication.Logon(applicationLogonModel.UserName, applicationLogonModel.Password);
@@ -33,6 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 
 		[HttpPost]
 		[TenantUnitOfWork]
+		[NoTenantAuthentication]
 		public virtual JsonResult IdentityLogon(IdentityLogonModel identityLogonModel)
 		{
 			var res = _identityAuthentication.Logon(identityLogonModel.Identity);

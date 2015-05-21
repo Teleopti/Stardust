@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Web;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Web.Areas.MultiTenancy;
+using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
 using Teleopti.Ccc.WebTest.TestHelper;
 
 namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
@@ -13,6 +17,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 	{
 		public PersonInfoController Target;
 		public FindLogonInfoFake FindLogonInfo;
+		public TenantAuthenticationFake TenantAuthentication;
+		public TenantUnitOfWorkFake TenantUnitOfWork;
 
 		[Test]
 		public void ShouldFetchLogonInfos()
@@ -25,6 +31,17 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 
 			Target.LogonInfoFromGuids(new[] {logonInfo1.PersonId, logonInfo2.PersonId}).Result<IEnumerable<LogonInfo>>()
 				.Should().Have.SameValuesAs(logonInfo1, logonInfo2);
+			TenantUnitOfWork.WasCommitted.Should().Be.True();
+		}
+
+
+		[Test]
+		public void ShouldThrowIfNoValidTenantCredentialsWhenReadingLogonInfo()
+		{
+			TenantAuthentication.NoAccess();
+			var res = Assert.Throws<HttpException>(() => Target.LogonInfoFromGuids(Enumerable.Empty<Guid>()));
+			res.GetHttpCode().Should().Be.EqualTo(TenantUnitOfWorkAspect.NoTenantAccessHttpErrorCode);
+			TenantUnitOfWork.WasCommitted.Should().Be.False();
 		}
 	}
 }

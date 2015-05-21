@@ -1,8 +1,11 @@
-﻿using NUnit.Framework;
+﻿using System.Web;
+using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.Web.Areas.MultiTenancy;
+using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Model;
 using Teleopti.Ccc.WebTest.TestHelper;
 
@@ -16,6 +19,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		public CheckPasswordStrengthFake CheckPasswordStrength;
 		public PersistPersonInfoFake PersistPersonInfo;
 		public TenantUnitOfWorkFake TenantUnitOfWork;
+		public TenantAuthenticationFake TenantAuthentication;
 
 		[Test]
 		public void HappyPath()
@@ -77,6 +81,15 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			var result = Target.Persist(personInfoModel).Result<PersistPersonInfoResult>();
 
 			result.IdentityIsValid.Should().Be.False();
+			TenantUnitOfWork.WasCommitted.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldThrowIfNoValidTenantCredentialsAtPersist()
+		{
+			TenantAuthentication.NoAccess();
+			var res = Assert.Throws<HttpException>(() => Target.Persist(new PersonInfoModel()).Result<PersistPersonInfoResult>());
+			res.GetHttpCode().Should().Be.EqualTo(TenantUnitOfWorkAspect.NoTenantAccessHttpErrorCode);
 			TenantUnitOfWork.WasCommitted.Should().Be.False();
 		}
 	}
