@@ -399,7 +399,6 @@
     <Compile Include="Forecasting\Angel\Historical\HistoricalDataTest.cs" />
     <Compile Include="Forecasting\Angel\QuickForecastCreatorTest.cs" />
     <Compile Include="Forecasting\Angel\QuickForecasterTest.cs" />
-    <Compile Include="Forecasting\Angel\Accuracy\QuickForecastEvaluatorTest.cs" />
     <Compile Include="Forecasting\Angel\QuickForecastSkillWithOneWorkload\ProvideStatisticTasksAndTimesTest.cs" />
     <Compile Include="Forecasting\Angel\QuickForecastSkillWithOneWorkload\ProvideStatisticTasksWithQueueAdjustmentTest.cs" />
     <Compile Include="Forecasting\Angel\LegacyWrappers\LoadStatisticsTest.cs" />

@@ -60,9 +60,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<QuickForecastCreator>()
 				.SingleInstance()
 				.As<IQuickForecastCreator>();
-			builder.RegisterType<QuickForecastEvaluator>()
-				.SingleInstance()
-				.As<IQuickForecastEvaluator>();
 			builder.RegisterType<ForecastVolumeApplier>()
 				.SingleInstance()
 				.As<IForecastVolumeApplier>();

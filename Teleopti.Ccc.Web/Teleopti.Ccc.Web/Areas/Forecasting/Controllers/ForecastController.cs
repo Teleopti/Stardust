@@ -42,12 +42,6 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 				});
 		}
 
-		[UnitOfWork, HttpGet, Route("api/Forecasting/MeasureForecastMethod")]
-		public virtual Task<IEnumerable<SkillAccuracy>> MeasureForecastMethod()
-		{
-			return Task.FromResult(_quickForecastEvaluator.MeasureForecastForAllSkills());
-		}
-
 		[UnitOfWork, HttpPost, Route("api/Forecasting/PreForecast")]
 		public virtual Task<WorkloadForecastViewModel> PreForecast(PreForecastInput model)
 		{

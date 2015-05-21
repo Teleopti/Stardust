@@ -28,17 +28,17 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 			var oneYearBack = new DateOnly(historicalData.EndDate.Date.AddYears(-1));
 			var lastYearData = new TaskOwnerPeriod(DateOnly.MinValue,
 				historicalData.TaskOwnerDayCollection.Where(x => x.CurrentDate > oneYearBack), TaskOwnerPeriodType.Other);
-			var yearBeforeLastYearData = new TaskOwnerPeriod(DateOnly.MinValue,
+			var yearsBeforeLastYearData = new TaskOwnerPeriod(DateOnly.MinValue,
 				historicalData.TaskOwnerDayCollection.Where(x => x.CurrentDate <= oneYearBack), TaskOwnerPeriodType.Other);
 
-			if (!yearBeforeLastYearData.TaskOwnerDayCollection.Any())
+			if (!yearsBeforeLastYearData.TaskOwnerDayCollection.Any())
 				return new WorkloadAccuracy { Id = workload.Id.Value, Name = workload.Name, Accuracies = new MethodAccuracy[] { } };
 
 			var result = new WorkloadAccuracy { Id = workload.Id.Value, Name = workload.Name};
 			var methods = _forecastMethodProvider.All();
 			var list = (from forecastMethod in methods
 				let forecastingMeasureTarget =
-					forecastMethod.Forecast(yearBeforeLastYearData, new DateOnlyPeriod(oneYearBack, historicalData.EndDate))
+					forecastMethod.Forecast(yearsBeforeLastYearData, new DateOnlyPeriod(oneYearBack, historicalData.EndDate))
 				select new MethodAccuracy
 				{
 					MeasureResult = forecastingMeasureTarget.ToArray(),
