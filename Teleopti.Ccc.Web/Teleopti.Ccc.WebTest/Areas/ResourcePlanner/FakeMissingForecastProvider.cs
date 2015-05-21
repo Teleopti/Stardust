@@ -6,14 +6,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 {
 	public class FakeMissingForecastProvider : IMissingForecastProvider
 	{
-		//private readonly MissingForecastModel[] _missingForecast;
-
 		public MissingForecastModel[] MissingForecast { get; set; }
-
-		//public FakeMissingForecastProvider(params MissingForecastModel[] missingForecast)
-		//{
-		//	_missingForecast = missingForecast;
-		//}
 
 		public IEnumerable<MissingForecastModel> GetMissingForecast(DateOnlyPeriod range)
 		{
