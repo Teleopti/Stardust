@@ -103,6 +103,6 @@ namespace Teleopti.Interfaces.Domain
 		/// </remarks>
     	void DeleteState(IRtaState state);
 
-	    void ClearStateCodes();
+	    void ClearStates();
     }
 }

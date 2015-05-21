@@ -11,7 +11,6 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
-
 		public StateGroupPresenter(IUnitOfWorkFactory unitOfWorkFactory)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
@@ -26,7 +25,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 			}
 		}
 
-		public void Save(IList<IRtaStateGroup> stateGroups, IList<IRtaStateGroup> removedGroups)
+		public void Save(IList<IRtaStateGroup> stateGroups, IList<IRtaStateGroup> removedGroups, IList<IRtaStateGroup> groupsWithRemovedStates)
 		{
 			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
@@ -34,14 +33,14 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 				foreach (var removedGroup in removedGroups.Where(x => x.Id.HasValue))
 				{
 					repository.Remove(removedGroup);
-					removedGroup.ClearStateCodes();
-				} 
+					removedGroup.ClearStates();
+				}
+				foreach (var state in groupsWithRemovedStates)
+					repository.Add(state);
 				uow.Flush();
 
 				foreach (var group in stateGroups)
-				{
 					repository.Add(group);
-				}
 				uow.PersistAll();
 			}
 		}

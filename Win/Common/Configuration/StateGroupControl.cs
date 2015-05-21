@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 	{
 		private IList<IRtaStateGroup> _stateGroupCollection;
 		private readonly IList<IRtaStateGroup> _removedGroups = new List<IRtaStateGroup>();
+		private readonly IList<IRtaStateGroup> _groupsWithRemovedStates = new List<IRtaStateGroup>();
 
 		private readonly StateGroupPresenter _presenter;
 
@@ -36,6 +37,44 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			buttonNew.Click += buttonNewClick;
 			buttonDelete.Click += buttonDeleteClick;
 		}
+
+		public void InitializeDialogControl()
+		{
+			setColors();
+			SetTexts();
+		}
+
+		private void setColors()
+		{
+			BackColor = ColorHelper.WizardBackgroundColor();
+			tableLayoutPanelBody.BackColor = ColorHelper.WizardBackgroundColor();
+
+			gradientPanelHeader.BackColor = ColorHelper.OptionsDialogHeaderBackColor();
+			labelHeader.ForeColor = ColorHelper.OptionsDialogHeaderForeColor();
+
+			tableLayoutPanelSubHeader1.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
+			labelSubHeader1.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
+			labelSubHeader1.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
+
+			treeViewAdv1.BackColor = ColorHelper.GridControlGridInteriorColor();
+		}
+
+		public void LoadControl()
+		{
+			_stateGroupCollection = _presenter.LoadStateGroupCollection();
+			initializeTreeview();
+			updateTreeview(null);
+		}
+
+		private void initializeTreeview()
+		{
+			treeViewAdv1.AllowDrop = true;
+			treeViewAdv1.DragOnText = true;
+			treeViewAdv1.LabelEdit = true;
+			treeViewAdv1.AutoScrolling = ScrollBars.Vertical;
+			treeViewAdv1.ContextMenu = new ContextMenu();
+		}
+
 
 		protected override void SetCommonTexts()
 		{
@@ -182,37 +221,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 		}
 
-		public void InitializeDialogControl()
-		{
-			setColors();
-			SetTexts();
-		}
-
-		private void setColors()
-		{
-			BackColor = ColorHelper.WizardBackgroundColor();
-			tableLayoutPanelBody.BackColor = ColorHelper.WizardBackgroundColor();
-
-			gradientPanelHeader.BackColor = ColorHelper.OptionsDialogHeaderBackColor();
-			labelHeader.ForeColor = ColorHelper.OptionsDialogHeaderForeColor();
-
-			tableLayoutPanelSubHeader1.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
-			labelSubHeader1.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
-			labelSubHeader1.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
-
-			treeViewAdv1.BackColor = ColorHelper.GridControlGridInteriorColor();
-		}
-
-		public void LoadControl()
-		{
-			_stateGroupCollection = _presenter.LoadStateGroupCollection();
-			initializeTreeview();
-			updateTreeview(null);
-		}
 
 		public void SaveChanges()
 		{
-			_presenter.Save(_stateGroupCollection, _removedGroups);
+			_presenter.Save(_stateGroupCollection, _removedGroups, _groupsWithRemovedStates);
 		}
 
 		public void Unload()
@@ -233,14 +245,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 		}
 		
-		private void initializeTreeview()
-		{
-			treeViewAdv1.AllowDrop = true;
-			treeViewAdv1.DragOnText = true;
-			treeViewAdv1.LabelEdit = true;
-			treeViewAdv1.AutoScrolling = ScrollBars.Vertical;
-			treeViewAdv1.ContextMenu = new ContextMenu();
-		}
 
 
 
@@ -280,11 +284,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				treeViewAdv1.SelectedNode = treeViewAdv1.Nodes[0];
 		}
 
-		private static void createChildNode(TreeNodeAdv parentNode, IRtaState state)
-		{
-			var node = new TreeNodeAdv(state.Name) { TagObject = state };
-			parentNode.Nodes.Add(node);
-		}
 
 
 		private TreeNodeAdv createNode(IRtaStateGroup stateGroup)
@@ -310,6 +309,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			return node;
 		}
 
+		private static void createChildNode(TreeNodeAdv parentNode, IRtaState state)
+		{
+			var node = new TreeNodeAdv(state.Name) { TagObject = state };
+			parentNode.Nodes.Add(node);
+		}
+
 		private static void setNodeToolTip(TreeNodeAdv node)
 		{
 			var stateGroup = node.TagObject as IRtaStateGroup;
@@ -323,6 +328,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				node.HelpText = Resources.DefaultStateGroup;
 			}
 		}
+
+
+
+
+
 
 
 
@@ -351,7 +361,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		}
 
-		private static void moveState(IEnumerable<TreeNodeAdv> sourceNode, TreeNodeAdv destinationNode)
+		private void moveState(IEnumerable<TreeNodeAdv> sourceNode, TreeNodeAdv destinationNode)
 		{
 			foreach (var treeNodeAdv in sourceNode)
 			{
@@ -359,6 +369,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				var state = treeNodeAdv.TagObject as IRtaState;
 				if (stateGroup != null && state != null)
 				{
+					_groupsWithRemovedStates.Add(state.StateGroup);
 					treeNodeAdv.TagObject = state.StateGroup.MoveStateTo(stateGroup, state);
 				}
 			}

@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
     		_stateCollection.Remove(state);
     	}
 
-		public virtual void ClearStateCodes()
+		public virtual void ClearStates()
 		{
 			_stateCollection.Clear();
 		}
