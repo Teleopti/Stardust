@@ -16,6 +16,8 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 
 		public void Delete(Guid personId)
 		{
+			//delete with a single query if there will be perf issues here.
+
 			var session = _currentTenantSession.CurrentSession();
 			var personInfo = session.Get<PersonInfo>(personId);
 			if (personInfo != null && personInfo.Tenant.Name==_currentTenantUser.CurrentUser().Tenant.Name)
