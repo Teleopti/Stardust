@@ -4,31 +4,58 @@ using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.TestData;
 
 namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 {
 	public class DeletePersonInfoTest
 	{
 		private TenantUnitOfWorkManager _uow;
-		private Tenant tenant;
-		private PersonInfo person;
 
 		[Test]
 		public void ShouldDeletePerson()
 		{
-			var target = new DeletePersonInfo(_uow);
+			var session = _uow.CurrentSession();
+			var tenant = new Tenant("som name");
+			var person = new PersonInfo(tenant, Guid.NewGuid());
+			session.Save(tenant);
+			session.Save(person);
+
+			var loggedOnUser = new PersonInfo(tenant, Guid.NewGuid());
+			var currentUser = new CurrentTenantUserFake();
+			currentUser.Set(loggedOnUser);
+
+			var target = new DeletePersonInfo(_uow, currentUser);
 			target.Delete(person.Id);
 
-			var session = _uow.CurrentSession();
-			session.Flush();
 			session.Get<PersonInfo>(person.Id)
 				.Should().Be.Null();
 		}
 
 		[Test]
+		public void ShouldNotDeletePersonInOtherTenant()
+		{
+			var session = _uow.CurrentSession();
+			var tenant = new Tenant("som name");
+			var person = new PersonInfo(tenant, Guid.NewGuid());
+			session.Save(tenant);
+			session.Save(person);
+
+			var loggedOnUser = new PersonInfo(new Tenant(RandomName.Make()), Guid.NewGuid());
+			var currentUser = new CurrentTenantUserFake();
+			currentUser.Set(loggedOnUser);
+
+			var target = new DeletePersonInfo(_uow, currentUser);
+			target.Delete(person.Id);
+
+			session.Get<PersonInfo>(person.Id)
+				.Should().Not.Be.Null();
+		}
+
+		[Test]
 		public void ShouldDoNothingIfPersonInfoDoesntExist()
 		{
-			var target = new DeletePersonInfo(_uow);
+			var target = new DeletePersonInfo(_uow, new CurrentTenantUserFake());
 			Assert.DoesNotThrow(() =>
 				target.Delete(Guid.NewGuid()));
 		}
@@ -38,12 +65,6 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		public void Setup()
 		{
 			_uow = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(ConnectionStringHelper.ConnectionStringUsedInTests);
-			var session = _uow.CurrentSession();
-			tenant = new Tenant("som name");
-			person = new PersonInfo(tenant, Guid.NewGuid());
-			session.Save(tenant);
-			session.Save(person);
-			session.Flush();
 		}
 
 		[TearDown]

@@ -6,18 +6,19 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 	public class DeletePersonInfo : IDeletePersonInfo
 	{
 		private readonly ICurrentTenantSession _currentTenantSession;
+		private readonly ICurrentTenantUser _currentTenantUser;
 
-		public DeletePersonInfo(ICurrentTenantSession currentTenantSession)
+		public DeletePersonInfo(ICurrentTenantSession currentTenantSession, ICurrentTenantUser currentTenantUser)
 		{
 			_currentTenantSession = currentTenantSession;
+			_currentTenantUser = currentTenantUser;
 		}
 
-		//TODO: tenant make this smarter. Accept enumerable instead and make query instead?
 		public void Delete(Guid personId)
 		{
 			var session = _currentTenantSession.CurrentSession();
 			var personInfo = session.Get<PersonInfo>(personId);
-			if (personInfo != null)
+			if (personInfo != null && personInfo.Tenant.Name==_currentTenantUser.CurrentUser().Tenant.Name)
 			{
 				session.Delete(personInfo);
 			}
