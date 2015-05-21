@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Interfaces.Domain;
@@ -15,11 +18,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 {
 	public partial class StateGroupControl : BaseUserControl, ISettingPage
 	{
-		private IUnitOfWork _uow;
 		private IList<IRtaStateGroup> _stateGroupCollection;
-		// Helps keep track of the node that is being dragged (and which node has contextmenu visible).
+		private readonly IList<IRtaStateGroup> _removedGroups = new List<IRtaStateGroup>();
+
 		private TreeNodeAdv _currentSourceNode;
-		private RtaStateGroupRepository _repository;
 		private bool _cancelValidate;
 
 		public StateGroupControl()
@@ -116,11 +118,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 					}
 				}
 			}
-			_repository.Remove(stateGroupToDelete);
+			_removedGroups.Add(stateGroupToDelete);
 			_stateGroupCollection.Remove(stateGroupToDelete);
 			treeViewAdv1.SelectedNode.Remove();
 			if (reloadTree)
-				updateTreeview(null, false);
+				updateTreeview(null);
 		}
 
 		private TreeNodeAdv findNodeWithState(IRtaState state, TreeNodeAdv node)
@@ -152,7 +154,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private void addStateGroup()
 		{
 			IRtaStateGroup newStateGroup = new RtaStateGroup(Resources.NewStateGroup, false, false);
-			_repository.Add(newStateGroup);
 			_stateGroupCollection.Add(newStateGroup);
 			var parentNode = (createNode(newStateGroup));
 			treeViewAdv1.Nodes.Add(parentNode);
@@ -176,7 +177,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public void SetUnitOfWork(IUnitOfWork value)
 		{
-			_uow = value;
 		}
 
 		public void Persist()
@@ -206,13 +206,36 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public void LoadControl()
 		{
-			loadStateGroups();
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var repository = new RtaStateGroupRepository(uow);
+				_stateGroupCollection = repository.LoadAllCompleteGraph();
+			}
 			initializeTreeview();
-			updateTreeview(null, false);
+			updateTreeview(null);
 		}
 
 		public void SaveChanges()
 		{
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var repository = new RtaStateGroupRepository(uow);
+
+				_removedGroups.Where(x => x.Id.HasValue).ForEach(repository.Remove);
+
+				foreach (var group in _stateGroupCollection)
+				{
+					if (!group.Id.HasValue)
+						repository.Add(group);
+					else
+					{
+						uow.Reassociate(group);
+						uow.Merge(group);
+					}
+				}
+
+				uow.PersistAll();
+			}
 		}
 
 		public void Unload()
@@ -232,13 +255,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		public void OnShow()
 		{
 		}
-
-		private void loadStateGroups()
-		{
-			_repository = new RtaStateGroupRepository(_uow);
-			_stateGroupCollection = _repository.LoadAllCompleteGraph();
-		}
-
+		
 		private void initializeTreeview()
 		{
 			treeViewAdv1.AllowDrop = true;
@@ -248,7 +265,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			treeViewAdv1.ContextMenu = new ContextMenu();
 		}
 
-		private void updateTreeview(IRtaStateGroup stateGroupToSelect, bool isNew)
+		private void updateTreeview(IRtaStateGroup stateGroupToSelect)
 		{
 			treeViewAdv1.Nodes.Clear();
 			TreeNodeAdv selectedNode = null;
@@ -276,18 +293,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			treeViewAdv1.SortWithChildNodes = true;
 			treeViewAdv1.Root.Sort(TreeNodeAdvSortType.Text);
 
-			if (isNew)
-			{
-				//treeViewAdv1.SelectedNode = newNode;
-				treeViewAdv1.BeginEdit(selectedNode);
-			}
-			else
-			{
-				if (selectedNode != null)
-					treeViewAdv1.SelectedNode = selectedNode;
-				else if (treeViewAdv1.Nodes.Count > 0)
-					treeViewAdv1.SelectedNode = treeViewAdv1.Nodes[0];
-			}
+			if (selectedNode != null)
+				treeViewAdv1.SelectedNode = selectedNode;
+			else if (treeViewAdv1.Nodes.Count > 0)
+				treeViewAdv1.SelectedNode = treeViewAdv1.Nodes[0];
 		}
 
 		private TreeNodeAdv createNode(IRtaStateGroup stateGroup)
@@ -570,7 +579,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			if (stateGroupToSet == null) return;
 
 			stateGroupToSet.IsLogOutState = !stateGroupToSet.IsLogOutState;
-			updateTreeview(stateGroupToSet, false);
+			updateTreeview(stateGroupToSet);
 		}
 
 		private void menuitemClick(object sender, EventArgs e)
@@ -595,7 +604,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			}
 
 			stateGroupToSet.DefaultStateGroup = true;
-			updateTreeview(stateGroupToSet, false);
+			updateTreeview(stateGroupToSet);
 		}
 
 		private void treeViewAdv1BeforeEdit(object sender, TreeNodeAdvBeforeEditEventArgs e)
