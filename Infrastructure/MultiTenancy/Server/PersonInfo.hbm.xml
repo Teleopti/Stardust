@@ -44,4 +44,11 @@ from PersonInfo pi
 where pi.Id in (:ids)
 ]]>
 	</query>
+
+	<query name="findUserByCredentials">
+		<![CDATA[
+select p from PersonInfo p 
+where p.Id=:id and p.TenantPassword=:tenantPassword
+]]>
+	</query>
 </hibernate-mapping>
