@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 
@@ -29,5 +30,24 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			Browser.Interactions.AssertUrlContains("forecasting");
 		}
 
+		//Help widget
+		[Given(@"I view permissions")]
+		public void GivenIViewPermissions()
+		{
+			Browser.Interactions.Click(".sidenav.left > section > div > a > div");
+		}
+
+		[When(@"I click on the help widget")]
+		public void WhenIClickOnTheHelpWidget()
+		{
+			Browser.Interactions.Click(".help-widget > .wfm-accordion-head");
+		}
+
+		[Then(@"I should see relevant help")]
+		public void ThenIShouldSeeRelevantHelp()
+		{
+			Browser.Interactions.AssertUrlContains("permissions");
+			Browser.Interactions.AssertAnyContains(".help-widget", "permissions");
+		}
 	}
 }
