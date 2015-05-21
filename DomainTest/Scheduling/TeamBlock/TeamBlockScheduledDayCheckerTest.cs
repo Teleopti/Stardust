@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         private MockRepository _mocks;
         private Group _group;
         private IScheduleMatrixPro _matrix1;
-        private ISchedulingResultStateHolder _schedulingResultStateHolder;
         private IScheduleRange _scheduleRange;
         private IScheduleMatrixPro _matrix2;
 	    private IVirtualSchedulePeriod _schedulePeriod;
@@ -29,7 +28,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             _group = new Group();
             _matrix1 = _mocks.StrictMock<IScheduleMatrixPro>();
             _matrix2 = _mocks.StrictMock<IScheduleMatrixPro>();
-            _schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
             _scheduleRange = _mocks.StrictMock<IScheduleRange>();
 			_schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 			_dateOnly = new DateOnly(2013, 04, 10);
@@ -79,8 +77,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_matrix1.Person).Return(person1).Repeat.AtLeastOnce();
                 Expect.Call(_matrix2.Person).Return(person2).Repeat.AtLeastOnce();
 
-                Expect.Call(_matrix2.SchedulingStateHolder).Return(_schedulingResultStateHolder);
-                Expect.Call(_schedulingResultStateHolder.Schedules[person2]).Return(_scheduleRange);
+                Expect.Call(_matrix2.ActiveScheduleRange).Return(_scheduleRange);
                 Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(scheduleDay);
                 Expect.Call(scheduleDay.IsScheduled()).Return(false);
 
@@ -111,8 +108,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_matrix1.Person).Return(person1).Repeat.AtLeastOnce();
                 Expect.Call(_matrix2.Person).Return(person2).Repeat.AtLeastOnce();
 
-                Expect.Call(_matrix2.SchedulingStateHolder).Return(_schedulingResultStateHolder);
-                Expect.Call(_schedulingResultStateHolder.Schedules[person2]).Return(_scheduleRange);
+                Expect.Call(_matrix2.ActiveScheduleRange).Return(_scheduleRange);
                 Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(scheduleDay);
                 Expect.Call(scheduleDay.IsScheduled()).Return(true);
 
@@ -147,8 +143,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         {
             IPerson person = PersonFactory.CreatePerson("test");
             IScheduleDay scheduleDay = _mocks.StrictMock<IScheduleDay>();
-            Expect.Call(_matrix1.SchedulingStateHolder).Return(_schedulingResultStateHolder);
-            Expect.Call(_schedulingResultStateHolder.Schedules[person]).Return(_scheduleRange);
+            Expect.Call(_matrix1.ActiveScheduleRange).Return(_scheduleRange);
             Expect.Call(_scheduleRange.ScheduledDay(dateOnly)).Return(scheduleDay);
             Expect.Call(_matrix1.Person).Return(person);
 			Expect.Call(_matrix1.SchedulePeriod).Return(_schedulePeriod).Repeat.AtLeastOnce();
@@ -172,15 +167,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             {
                 IPerson person = PersonFactory.CreatePerson("test");
                 var scheduleDay = _mocks.StrictMock<IScheduleDay>();
-                Expect.Call(_matrix1.SchedulingStateHolder).Return(_schedulingResultStateHolder).Repeat.AtLeastOnce();
-                Expect.Call(_schedulingResultStateHolder.Schedules[person]).Return(_scheduleRange);
+                Expect.Call(_matrix1.ActiveScheduleRange).Return(_scheduleRange);
                 Expect.Call(_scheduleRange.ScheduledDay(dateOnly)).Return(scheduleDay).Repeat.AtLeastOnce() ;
                 Expect.Call(_matrix1.Person).Return(person);
 
-                Expect.Call(scheduleDay.IsScheduled()).Return(true);
-                var schedulingResultStateHolder2= _mocks.StrictMock<ISchedulingResultStateHolder>();
-                Expect.Call(_matrix2.SchedulingStateHolder).Return(schedulingResultStateHolder2);
-                Expect.Call(schedulingResultStateHolder2.Schedules[person]).Return(_scheduleRange);
+	            Expect.Call(scheduleDay.IsScheduled()).Return(true);
+                Expect.Call(_matrix2.ActiveScheduleRange).Return(_scheduleRange);
                 Expect.Call(_matrix2.Person).Return(person);
                 
                 Expect.Call(scheduleDay.IsScheduled()).Return(false);
@@ -216,7 +208,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			  var schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 			  var dateOnly = new DateOnly(2013, 04, 10);
 			  var dateOnlyPeriod = new DateOnlyPeriod(dateOnly, dateOnly.AddDays(1));
-			  var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
 			  using (_mocks.Record())
 			  {
 				  Expect.Call(_matrix1.SchedulePeriod).Return(schedulePeriod).Repeat.AtLeastOnce();
@@ -226,9 +217,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				  Expect.Call(_matrix1.Person).Return(person1).Repeat.AtLeastOnce();
 				  Expect.Call(_matrix2.Person).Return(person2).Repeat.AtLeastOnce();
 
-				  Expect.Call(_matrix2.SchedulingStateHolder).Return(_schedulingResultStateHolder).Repeat.Twice();
-				  Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary).Repeat.Twice();
-				  Expect.Call(scheduleDictionary[person2]).Return(_scheduleRange).Repeat.Twice();
+				  Expect.Call(_matrix2.ActiveScheduleRange).Return(_scheduleRange).Repeat.Twice();
 				  Expect.Call(_scheduleRange.ScheduledDay(dateOnly)).Return(scheduleDay1);
 				  Expect.Call(_scheduleRange.ScheduledDay(dateOnly.AddDays(1))).Return(scheduleDay2);
 				  Expect.Call(scheduleDay1.IsScheduled()).Return(true);

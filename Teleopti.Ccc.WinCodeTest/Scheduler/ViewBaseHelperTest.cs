@@ -597,68 +597,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             ViewBaseHelper.CalculateTargetDaysOff(null);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test, ExpectedException(typeof(ArgumentNullException))]
-        public void ShouldThrowExceptionOnNullVirtualPeriodCalculateTargetTime()
-        {
-            ViewBaseHelper.CalculateTargetTime(null, null, false);
-        }   
-        
-		[Test]
-        public void VerifyGetsTargetContractTimeFromAllSchedulePeriod()
-        {
-            var contractTime = TimeSpan.FromHours(1);
-
-            var baseDateTime = new DateOnly(2001, 1, 1);
-            var baseDateTimePeriod = new DateOnlyPeriod(baseDateTime, baseDateTime.AddDays(10));
-            var style = new GridStyleInfo();
-            var person = _mockRep.StrictMock<IPerson>();
-            ISchedulePeriod schedulePeriod = new SchedulePeriod(new DateOnly(2001, 01, 01), SchedulePeriodType.Day, 11);
-			schedulePeriod.SetParent(person);
-            var schedulePeriods = new List<ISchedulePeriod> { schedulePeriod };
-            var vPeriod = _mockRep.StrictMock<IVirtualSchedulePeriod>();
-			var range = _mockRep.StrictMock<IScheduleRange>();
-            IPermissionInformation permissionInformation = _mockRep.StrictMock<IPermissionInformation>();
-			var schedulingResultStateHolder = _mockRep.StrictMock<ISchedulingResultStateHolder>();
-        	var contract = _mockRep.StrictMock<IContract>();
-        	var scheduleDictionary = _mockRep.StrictMock<IScheduleDictionary>();
-        	var scheduleRange = _mockRep.StrictMock<IScheduleRange>();
-
-            using (_mockRep.Record())
-            {
-                Expect.Call(person.PersonSchedulePeriods(baseDateTimePeriod)).IgnoreArguments().Return(schedulePeriods).Repeat.AtLeastOnce();
-                Expect.Call(person.VirtualSchedulePeriod(new DateOnly())).IgnoreArguments().Return(vPeriod).Repeat.AtLeastOnce();
-                Expect.Call(vPeriod.IsValid).Return(true).Repeat.AtLeastOnce();
-            	Expect.Call(person.TerminalDate).Return(null).Repeat.AtLeastOnce();
-            	Expect.Call(range.CalculatedTargetTimeHolder).Return(null).Repeat.Once();
-				Expect.Call(range.CalculatedTargetTimeHolder).Return(contractTime).Repeat.AtLeastOnce();
-            	Expect.Call(() => range.CalculatedTargetTimeHolder = contractTime).Repeat.AtLeastOnce();
-				Expect.Call(vPeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(2009, 2, 2, 2009, 4, 1));
-                Expect.Call(person.FirstDayOfWeek).Return(DayOfWeek.Monday).Repeat.Twice();
-				Expect.Call(person.PermissionInformation).Return(permissionInformation).Repeat.AtLeastOnce();
-				Expect.Call(permissionInformation.Culture()).Return(CultureInfo.CurrentCulture).Repeat.AtLeastOnce();
-
-                Expect.Call(vPeriod.Contract).Return(contract).Repeat.AtLeastOnce();
-				Expect.Call(vPeriod.Person).Return(person).Repeat.AtLeastOnce();
-				Expect.Call(contract.EmploymentType).Return(EmploymentType.FixedStaffNormalWorkTime);
-            	
-                Expect.Call(schedulingResultStateHolder.Schedules).Return(scheduleDictionary);
-            	Expect.Call(scheduleDictionary[person]).Return(scheduleRange);
-            	Expect.Call(vPeriod.Extra).Return(TimeSpan.Zero);
-				Expect.Call(vPeriod.BalanceOut).Return(TimeSpan.Zero);
-				Expect.Call(vPeriod.BalanceIn).Return(TimeSpan.Zero);
-				Expect.Call(vPeriod.PeriodTarget()).Return(contractTime);
-                Expect.Call(vPeriod.Seasonality).Return(new Percent(0));
-            }
-            
-            using (_mockRep.Playback())
-            {
-				ViewBaseHelper.StyleTargetScheduleContractTimeCell(style, person, baseDateTimePeriod, schedulingResultStateHolder, range);
-            }
-
-            Assert.AreEqual(contractTime,style.CellValue);
-			style.Dispose();
-        }
-
         [Test]
         public void VerifyCheckLoadedAndScheduledPeriodDayOff()
         {

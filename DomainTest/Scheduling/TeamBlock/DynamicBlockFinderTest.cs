@@ -17,8 +17,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 	    private DateOnly _date;
 	    private IVirtualSchedulePeriod _schedulePeriod;
 	    private IScheduleMatrixPro _matrixPro2;
-        private ISchedulingResultStateHolder _schedulingResultStateHolder;
-        private IScheduleDictionary _scheduleDictionary;
         private IPerson _person;
         private IScheduleRange _range;
         private IScheduleDay _scheduleDay;
@@ -35,8 +33,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_target = new DynamicBlockFinder();
 			_date = new DateOnly(2013, 02, 22);
 		    _schedulePeriod = _mock.StrictMock<IVirtualSchedulePeriod>();
-            _schedulingResultStateHolder = _mock.StrictMock<ISchedulingResultStateHolder>();
-            _scheduleDictionary = _mock.StrictMock<IScheduleDictionary>();
             _range = _mock.StrictMock<IScheduleRange>();
             _person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill>());
             _scheduleDay = _mock.StrictMock<IScheduleDay>();
@@ -119,9 +115,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             using (_mock.Record())
             {
                 Expect.Call(_teamInfo.MatrixesForGroupAndDate(_date.AddDays(1))).Return(new List<IScheduleMatrixPro> { _matrixPro });
-                Expect.Call(_matrixPro.SchedulingStateHolder).Return(_schedulingResultStateHolder);
-                Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
-                Expect.Call(_scheduleDictionary[_person]).Return(_range);
+				Expect.Call(_matrixPro.ActiveScheduleRange).Return(_range);
                 Expect.Call(_matrixPro.Person).Return(_person);
                 Expect.Call(_range.ScheduledDay(_date.AddDays(1))).Return(_scheduleDay);
                 Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.DayOff);

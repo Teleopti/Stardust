@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             //isSingleAgentTeam can be removed if more scheduling options are needed then we can move the scheduling options.
             if (scheduleMatrixPro == null) throw new ArgumentNullException("scheduleMatrixPro");
 	        var person = scheduleMatrixPro.Person;
-			IScheduleRange rangeForPerson = scheduleMatrixPro.SchedulingStateHolder.Schedules[person];
+			IScheduleRange rangeForPerson = scheduleMatrixPro.ActiveScheduleRange;
 	        
 			IScheduleDay scheduleDay = rangeForPerson.ScheduledDay(providedDateOnly);
             if (isDayOff(scheduleDay))

@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 	    private bool checkScheduleStatus(DateOnly dateOnly, IScheduleMatrixPro matrix)
 	    {
-	        IScheduleRange rangeForPerson = matrix.SchedulingStateHolder.Schedules[matrix.Person];
+	        IScheduleRange rangeForPerson = matrix.ActiveScheduleRange;
 	        IScheduleDay scheduleDay = rangeForPerson.ScheduledDay(dateOnly);
 	        if (!scheduleDay.IsScheduled())
 	        {

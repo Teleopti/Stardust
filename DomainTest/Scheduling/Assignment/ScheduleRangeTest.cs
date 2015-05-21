@@ -201,30 +201,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		}
 
 		[Test]
-		public void VerifyCalculatedTargetTimeHolder()
-		{
-			_target.CalculatedTargetTimeHolder = TimeSpan.FromMinutes(24);
-			Assert.AreEqual(TimeSpan.FromMinutes(24), _target.CalculatedTargetTimeHolder);
-			IPersistableScheduleData data1 = createPersonAssignment(new DateTimePeriod(2000, 1, 2, 2000, 1, 3));
-
-			using (_mocks.Record())
-			{
-				fullPermission(true);
-                Expect.Call(_principalAuthorization.IsPermitted("",DateOnly.Today,_person)).IgnoreArguments().Return(true).Repeat.Twice();
-			}
-            using (_mocks.Playback())
-            {
-                using (new CustomAuthorizationContext(_principalAuthorization))
-                {
-                    _target.Add(data1);
-                    var part = _target.ScheduledDay(new DateOnly(2000, 1, 2));
-                    _target.ModifyInternal(part);
-                    Assert.IsFalse(_target.CalculatedTargetTimeHolder.HasValue);
-                }
-            }
-		}
-
-		[Test]
 		public void VerifyCalculatedTargetScheduleDaysOffHolder()
 		{
 			_target.CalculatedTargetScheduleDaysOff = 7;

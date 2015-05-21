@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         private IList<IScheduleData> _scheduleObjectsWithNoPermissions;
         private ScheduleRange _snapshot;
         private TimeSpan? _calculatedContractTimeHolder;
-        private TimeSpan? _calculatedTargettTimeHolder;
+        private TimeSpan? _calculatedTargetTimeHolder;
         private int? _calculatedTargetScheduleDaysOff;
         private int? _calculatedScheduleDaysOff;
 		private readonly Lazy<IEnumerable<DateOnlyPeriod>> _availablePeriods;
@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		                                                                }));
 
             _calculatedContractTimeHolder = null;
-            _calculatedTargettTimeHolder = null;
+            _calculatedTargetTimeHolder = null;
             _calculatedTargetScheduleDaysOff = null;
             _calculatedScheduleDaysOff = null;
             _shiftCategoryFairnessHolder = null;
@@ -250,7 +250,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			{
 				if (!_calculatedContractTimeHolder.HasValue)
 				{
-					var timeAndDaysOffTuple =	new CurrentScheduleSummaryCalculator().SetCurrent(this);
+					var timeAndDaysOffTuple =	new CurrentScheduleSummaryCalculator().GetCurrent(this);
 					_calculatedContractTimeHolder = timeAndDaysOffTuple.Item1;
 					_calculatedScheduleDaysOff = timeAndDaysOffTuple.Item2;
 				}
@@ -261,8 +261,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public TimeSpan? CalculatedTargetTimeHolder
 		{
-			get { return _calculatedTargettTimeHolder; }
-			set { _calculatedTargettTimeHolder = value; }
+			get
+			{
+				if (!_calculatedTargetTimeHolder.HasValue)
+				{
+					_calculatedTargetTimeHolder = new TargetScheduleSummaryCalculator().CalculateTargetTime(this);
+				}
+				
+				return _calculatedTargetTimeHolder;
+			}
 		}
 
         public int CalculatedScheduleDaysOff
@@ -271,7 +278,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 	        {
 				if (!_calculatedScheduleDaysOff.HasValue)
 				{
-					var timeAndDaysOffTuple = new CurrentScheduleSummaryCalculator().SetCurrent(this);
+					var timeAndDaysOffTuple = new CurrentScheduleSummaryCalculator().GetCurrent(this);
 					_calculatedContractTimeHolder = timeAndDaysOffTuple.Item1;
 					_calculatedScheduleDaysOff = timeAndDaysOffTuple.Item2;
 				}

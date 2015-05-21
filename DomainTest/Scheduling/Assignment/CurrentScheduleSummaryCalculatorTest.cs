@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			using (_mocks.Playback())
 			{
-				var result = _target.SetCurrent(_scheduleRange);
+				var result = _target.GetCurrent(_scheduleRange);
 				Assert.AreEqual(TimeSpan.FromHours(8), result.Item1);
 				Assert.AreEqual(0, result.Item2);
 			}
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			using (_mocks.Playback())
 			{
-				var result = _target.SetCurrent(_scheduleRange);
+				var result = _target.GetCurrent(_scheduleRange);
 				Assert.AreEqual(TimeSpan.Zero, result.Item1);
 				Assert.AreEqual(1, result.Item2);
 			}

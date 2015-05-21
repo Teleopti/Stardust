@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public class CurrentScheduleSummaryCalculator
 	{
-		public Tuple<TimeSpan, int> SetCurrent(IScheduleRange scheduleRange)
+		public Tuple<TimeSpan, int> GetCurrent(IScheduleRange scheduleRange)
 		{
 			var contractTime = TimeSpan.Zero;
 			var numberOfDaysOff = 0;

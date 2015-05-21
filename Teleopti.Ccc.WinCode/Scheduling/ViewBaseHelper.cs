@@ -7,7 +7,6 @@ using System.Text;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
@@ -22,7 +21,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
     {
         public static string GetToolTip(IScheduleDay cell)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             string assignments = GetToolTipAssignments(cell);
             string absences = GetToolTipAbsences(cell);
@@ -81,7 +80,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         /// /// </remarks>
 				public static string GetToolTipBusinessRuleConflicts(IScheduleDay cell)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             int longest = 0;
             if (cell.BusinessRuleResponseCollection.Count > 0)
             {
@@ -171,7 +170,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         /// <returns></returns>
         public static string GetToolTipAbsences(IScheduleDay cell)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             IList<IPersonAbsence> abses = cell.PersonAbsenceCollection();
             if (abses.Count > 0)
@@ -196,7 +195,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         /// <returns></returns>
 				public static string GetToolTipMeetings(IScheduleDay cell)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             foreach (IPersonMeeting personMeeting in cell.PersonMeetingCollection())
             {
@@ -221,7 +220,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         {
 	        if (!dayHasOvertime(cell)) return string.Empty;
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             var proj = cell.ProjectionService().CreateProjection();
 
@@ -253,7 +252,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         /// <returns></returns>
 				public static string GetToolTipDayOff(IScheduleDay cell)
         {
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
         	var culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
 	        var ass = cell.PersonAssignment();
 					if (ass != null)
@@ -428,29 +427,17 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 			if (!CheckOpenPeriodMatchSchedulePeriod(person, openPeriod))
 			{
-				SetCellNotApplicable(style);
+				setCellNotApplicable(style);
 				return;
 			}
 
 			if (!CheckOverrideTargetTimeLoadedAndScheduledPeriod(person, openPeriod))
 			{
-				SetCellNotApplicable(style);
+				setCellNotApplicable(style);
 				return;
 			}
 
 			style.CellType = "TotalTimeCell";
-			if (!wholeRange.CalculatedTargetTimeHolder.HasValue)
-			{
-				HashSet<IVirtualSchedulePeriod> virtualSchedulePeriods = ExtractVirtualPeriods(person, openPeriod);
-				TimeSpan? targetTime = CalculateTargetTime(virtualSchedulePeriods, schedulingResultStateHolder, true);
-				if(!targetTime.HasValue)
-				{
-					SetCellNotApplicable(style);
-					return;
-				}
-				wholeRange.CalculatedTargetTimeHolder = targetTime.Value;
-			}
-
 			style.CellValue = wholeRange.CalculatedTargetTimeHolder;
 
 
@@ -466,20 +453,20 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 			if (!CheckOpenPeriodMatchSchedulePeriod(person, openPeriod))
 			{
-				SetCellNotApplicable(style);
+				setCellNotApplicable(style);
 				return;
 			}
 
 			if (!CheckOverrideDayOffAndLoadedAndScheduledPeriod(person, openPeriod))
 			{
-				SetCellNotApplicable(style);
+				setCellNotApplicable(style);
 				return;
 			}
 
 				style.CellType = "TotalDayOffCell";
 				if(!wholeRange.CalculatedTargetScheduleDaysOff.HasValue)
 				{
-					HashSet<IVirtualSchedulePeriod> virtualSchedulePeriods = ExtractVirtualPeriods(person, openPeriod);
+					var virtualSchedulePeriods = ExtractVirtualPeriods(person, openPeriod);
 					wholeRange.CalculatedTargetScheduleDaysOff = CalculateTargetDaysOff(virtualSchedulePeriods);
 				}
 					
@@ -488,10 +475,23 @@ namespace Teleopti.Ccc.WinCode.Scheduling
  
         }
 
-        private static void SetCellNotApplicable(GridStyleInfo style) 
+		public static HashSet<IVirtualSchedulePeriod> ExtractVirtualPeriods(IPerson person, DateOnlyPeriod period)
+		{
+			if (person == null)
+				throw new ArgumentNullException("person");
+
+			var virtualPeriods = new HashSet<IVirtualSchedulePeriod>();
+			foreach (var dateOnly in period.DayCollection())
+			{
+				virtualPeriods.Add(person.VirtualSchedulePeriod(dateOnly));
+			}
+			return virtualPeriods;
+		}
+
+        private static void setCellNotApplicable(GridStyleInfo style) 
         {
             style.CellType = "Static";
-            style.CellValue = UserTexts.Resources.NA;
+            style.CellValue = Resources.NA;
             style.HorizontalAlignment = GridHorizontalAlignment.Center;
             style.VerticalAlignment = GridVerticalAlignment.Bottom;
         }
@@ -519,19 +519,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             return false;
         }
 
-		public static HashSet<IVirtualSchedulePeriod> ExtractVirtualPeriods(IPerson person, DateOnlyPeriod period)
-		{
-			if(person == null)
-				throw new ArgumentNullException("person");
-
-			HashSet<IVirtualSchedulePeriod> virtualPeriods = new HashSet<IVirtualSchedulePeriod>();
-			foreach (var dateOnly in period.DayCollection())
-			{
-				virtualPeriods.Add(person.VirtualSchedulePeriod(dateOnly));
-			}
-			return virtualPeriods;
-		}
-
 		public static int CalculateTargetDaysOff(HashSet<IVirtualSchedulePeriod> extractVirtualPeriods)
 		{
 			if(extractVirtualPeriods == null)
@@ -544,28 +531,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				ret += virtualSchedulePeriod.DaysOff();
 			}
 
-			return ret;
-		}
-
-		public static TimeSpan? CalculateTargetTime(HashSet<IVirtualSchedulePeriod> extractVirtualPeriods, ISchedulingResultStateHolder schedulingResultStateHolder, bool seasonality)
-		{
-			if(extractVirtualPeriods == null)
-				throw new ArgumentNullException("extractVirtualPeriods");
-
-			TimeSpan ret = TimeSpan.Zero;
-			foreach (var virtualSchedulePeriod in extractVirtualPeriods)
-			{
-				IFullWeekOuterWeekPeriodCreator fullWeekOuterWeekPeriodCreator =
-						new FullWeekOuterWeekPeriodCreator(virtualSchedulePeriod.DateOnlyPeriod, virtualSchedulePeriod.Person);
-				IScheduleMatrixPro matrix = new ScheduleMatrixPro(schedulingResultStateHolder, fullWeekOuterWeekPeriodCreator, virtualSchedulePeriod);
-				ISchedulePeriodTargetCalculatorFactory schedulePeriodTargetCalculatorFactory =
-					new NewSchedulePeriodTargetCalculatorFactory(matrix);
-				ISchedulePeriodTargetCalculator calculator = schedulePeriodTargetCalculatorFactory.CreatePeriodTargetCalculator();
-				if (calculator == null)
-					return null;
-
-				ret = ret.Add(calculator.PeriodTarget(seasonality));
-			}
 			return ret;
 		}
 

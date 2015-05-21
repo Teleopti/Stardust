@@ -330,7 +330,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 							daysOffPreferences,
 							_scheduleDayChangeCallback(),
 							new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling),
-							scheduleMatrixLockableBitArrayConverterEx);
+							scheduleMatrixLockableBitArrayConverterEx,
+							_schedulerStateHolder().SchedulingResultState);
 
 						var restrictionChecker = new RestrictionChecker();
 						var matrix = backToLegalStateSolverContainer.MatrixOriginalStateContainer.ScheduleMatrix;

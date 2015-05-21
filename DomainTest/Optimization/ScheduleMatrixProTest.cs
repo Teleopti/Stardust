@@ -54,7 +54,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         public void TestConstructorsWithDateOnlyPeriod()
         {
             Assert.AreSame(_person, _target.Person);
-            Assert.AreSame(_stateHolder, _target.SchedulingStateHolder);
             Assert.AreEqual(7, _target.EffectivePeriodDays.Count);
             Assert.AreSame(_schedulePeriod, _target.SchedulePeriod);
         }

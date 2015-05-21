@@ -80,7 +80,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: micke
         /// Created date: 2008-11-21
         /// </remarks>
-        TimeSpan? CalculatedTargetTimeHolder { get; set; }
+        TimeSpan? CalculatedTargetTimeHolder { get;}
 
         /// <summary>
         /// Gets or sets the calculated target schedule days off. Used by the result columns in Scheduler.

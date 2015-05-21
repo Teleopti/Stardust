@@ -39,10 +39,20 @@ namespace Teleopti.Ccc.Domain.Optimization
             _activeScheduleRange = stateHolder.Schedules[_person];
             createScheduleDays(periodCreator);
         }
+
+		public ScheduleMatrixPro(IScheduleRange activeScheduleRange, IFullWeekOuterWeekPeriodCreator periodCreator, IVirtualSchedulePeriod schedulePeriod)
+		{
+			_stateHolder = null;
+			_person = periodCreator.Person;
+			_schedulePeriod = schedulePeriod;
+			_activeScheduleRange = activeScheduleRange;
+			createScheduleDays(periodCreator);
+		}
         #endregion
 
         #region Interface
 
+		[Obsolete("Will be removed, do NOT use", true)]
         public ISchedulingResultStateHolder SchedulingStateHolder
         {
             get { return _stateHolder; }
