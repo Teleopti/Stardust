@@ -4,7 +4,6 @@ using Autofac.Configuration;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.SignalR;
 using Autofac.Integration.WebApi;
-using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Rta;
@@ -100,7 +99,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule<CommandDispatcherModule>();
 			builder.RegisterModule<CommandHandlersModule>();
 			builder.RegisterType<EventsMessageSender>().As<IMessageSender>().SingleInstance();
-
+		
 			builder.RegisterType<NumberOfAgentsInSiteReader>().As<INumberOfAgentsInSiteReader>().SingleInstance();
 			builder.RegisterType<NumberOfAgentsInTeamReader>().As<INumberOfAgentsInTeamReader>().SingleInstance();
 			builder.RegisterType<SiteAdherenceAggregator>().As<ISiteAdherenceAggregator>().SingleInstance();

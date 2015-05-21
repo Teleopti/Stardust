@@ -25,17 +25,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 
 		public AgentScheduleViewModelReworked Map(PersonSchedule personSchedule)
 		{
-			if (personSchedule == null)
+			if (personSchedule == null )
 				return null;
 			var canSeeUnpublishedSchedule =
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
-			var isSchedulePublished = _permissionProvider.IsPersonSchedulePublished(personSchedule.Schedule.BelongsToDate,
+			var isSchedulePublished = _permissionProvider.IsPersonSchedulePublished(personSchedule.Date,
 				personSchedule.Person, ScheduleVisibleReasons.Any);
-
-			var teamScheduleReadModel = personSchedule.Schedule.Model != null
-				? JsonConvert.DeserializeObject<Model>(personSchedule.Schedule.Model)
-				: null;
-			
+						
 			var ret = new AgentScheduleViewModelReworked
 			{
 				PersonId = personSchedule.Schedule.PersonId,
@@ -43,6 +39,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 				IsDayOff = false,
 				Name = _personNameProvider.BuildNameFromSetting(personSchedule.Schedule.FirstName, personSchedule.Schedule.LastName),
 			};
+
+
+			if (personSchedule.Schedule == null)
+				return ret;
+
+			var teamScheduleReadModel = personSchedule.Schedule.Model != null
+				? JsonConvert.DeserializeObject<Model>(personSchedule.Schedule.Model)
+				: null;
+
+
 			if(teamScheduleReadModel != null &&(canSeeUnpublishedSchedule||isSchedulePublished))
 			{
 				if ((teamScheduleReadModel.Shift != null) && (teamScheduleReadModel.Shift.Projection.Count > 0))

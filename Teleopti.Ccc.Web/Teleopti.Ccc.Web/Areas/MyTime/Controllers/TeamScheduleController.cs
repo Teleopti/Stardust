@@ -18,27 +18,33 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
-	[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.TeamSchedule)]
-	[CLSCompliant(false)]
+	[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.TeamSchedule)]	
 	public class TeamScheduleController : Controller
 	{
 		private readonly INow _now;
 		private readonly ITeamScheduleViewModelFactory _teamScheduleViewModelFactory;
 		private readonly IDefaultTeamProvider _defaultTeamProvider;
-		private readonly ITeamScheduleViewModelReworkedMapper _teamScheduleViewModelReworked;
+		private readonly ITeamScheduleViewModelReworkedFactory _teamScheduleViewModelReworkedFactory;
 		private readonly ITimeFilterHelper _timeFilterHelper;
 		private readonly IToggleManager _toggleManager;
 		private readonly ILoggedOnUser _loggedOnUser;
 
-		public TeamScheduleController(INow now, ITeamScheduleViewModelFactory teamScheduleViewModelFactory, IDefaultTeamProvider defaultTeamProvider, ITeamScheduleViewModelReworkedMapper teamScheduleViewModelReworked, ITimeFilterHelper timeFilterHelper, IToggleManager toggleManager, ILoggedOnUser loggedOnUser)
+		public TeamScheduleController(
+			INow now, 
+			ITeamScheduleViewModelFactory teamScheduleViewModelFactory, 
+			IDefaultTeamProvider defaultTeamProvider,  
+			ITimeFilterHelper timeFilterHelper, 
+			IToggleManager toggleManager,
+			ILoggedOnUser loggedOnUser, 
+			ITeamScheduleViewModelReworkedFactory teamScheduleViewModelReworkedFactory)
 		{
 			_now = now;
 			_teamScheduleViewModelFactory = teamScheduleViewModelFactory;
 			_defaultTeamProvider = defaultTeamProvider;
-			_teamScheduleViewModelReworked = teamScheduleViewModelReworked;
 			_timeFilterHelper = timeFilterHelper;
 			_toggleManager = toggleManager;
 			_loggedOnUser = loggedOnUser;
+			_teamScheduleViewModelReworkedFactory = teamScheduleViewModelReworkedFactory;
 		}
 
 		[EnsureInPortal]
@@ -101,7 +107,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				SearchNameText = filter.SearchNameText,
 				TimeSortOrder = filter.TimeSortOrder
 			};
-			return Json(_teamScheduleViewModelReworked.Map(data), JsonRequestBehavior.AllowGet);
+			return Json(_teamScheduleViewModelReworkedFactory.GetViewModel(data), JsonRequestBehavior.AllowGet);
 		}
 
 		[UnitOfWorkAction]

@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			builder.RegisterType<FakePersonRepository>().As<IPersonRepository>().SingleInstance();
 			builder.RegisterType<FakePersonNameProvider>().As<IPersonNameProvider>().SingleInstance();
 			builder.RegisterType<FakePersonAssignmentRepository>().As<IPersonAssignmentRepository>().SingleInstance();
-
+			
 
 		}
 

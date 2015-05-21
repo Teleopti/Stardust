@@ -1,15 +1,16 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 
-namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
+namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 {
-	public class TeamScheduleViewModelReworkedMapper : ITeamScheduleViewModelReworkedMapper
+	public class TeamScheduleViewModelReworkedFactory : ITeamScheduleViewModelReworkedFactory
 	{
 		private readonly ITeamSchedulePersonsProvider _teamSchedulePersonsProvider;
 		private readonly IAgentScheduleViewModelReworkedMapper _agentScheduleViewModelReworkedMapper;
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 		private readonly IPersonScheduleDayReadModelFinder _scheduleDayReadModelFinder;
 		private readonly IPersonRepository _personRep;
 
-		public TeamScheduleViewModelReworkedMapper(ITeamSchedulePersonsProvider teamSchedulePersonsProvider, IAgentScheduleViewModelReworkedMapper agentScheduleViewModelReworkedMapper, ITimeLineViewModelReworkedMapper timeLineViewModelReworkedMapper, IPersonScheduleDayReadModelFinder scheduleDayReadModelFinder, IPermissionProvider permissionProvider, IPersonRepository personRep)
+		public TeamScheduleViewModelReworkedFactory(ITeamSchedulePersonsProvider teamSchedulePersonsProvider, IAgentScheduleViewModelReworkedMapper agentScheduleViewModelReworkedMapper, ITimeLineViewModelReworkedMapper timeLineViewModelReworkedMapper, IPersonScheduleDayReadModelFinder scheduleDayReadModelFinder, IPersonRepository personRep)
 		{
 			_teamSchedulePersonsProvider = teamSchedulePersonsProvider;
 			_agentScheduleViewModelReworkedMapper = agentScheduleViewModelReworkedMapper;
@@ -26,7 +27,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 			_personRep = personRep;
 		}
 
-		public TeamScheduleViewModelReworked Map(TeamScheduleViewModelData data)
+
+		public TeamScheduleViewModelReworked GetViewModel(TeamScheduleViewModelData data)
 		{
 			if (data.Paging == null || data.Paging.Take <= 0)
 			{
@@ -34,7 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 			}
 
 			var personIds = _teamSchedulePersonsProvider.RetrievePersons(data).ToList();
-			
+
 			IEnumerable<AgentScheduleViewModelReworked> agentSchedules;
 			int pageCount = 1;
 			if (personIds.Any())
@@ -43,23 +45,23 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 					data.TimeFilter, data.TimeSortOrder);
 				var people = _personRep.FindPeople(personIds);
 				var schedulesWithPersons = from s in personScheduleDays
-						   let person = (from p in people
-								 where p.Id.Value == s.PersonId
-								 select p).SingleOrDefault()
-						   where person != null
-						   select new PersonSchedule()
-						   {
-							   Person = person,
-							   Schedule = s
-						   };
+										   let person = (from p in people
+														 where p.Id.Value == s.PersonId
+														 select p).SingleOrDefault()
+										   where person != null
+										   select new PersonSchedule()
+										   {
+											   Person = person,
+											   Schedule = s
+										   };
 
 				agentSchedules = _agentScheduleViewModelReworkedMapper.Map(schedulesWithPersons).ToList();
 				int scheduleCount = agentSchedules.Any() ? agentSchedules.First().Total : 0;
-				pageCount = (int) Math.Ceiling(((double) scheduleCount)/data.Paging.Take);
+				pageCount = (int)Math.Ceiling(((double)scheduleCount) / data.Paging.Take);
 			}
 			else
 			{
-				agentSchedules = new List<AgentScheduleViewModelReworked>();				
+				agentSchedules = new List<AgentScheduleViewModelReworked>();
 			}
 
 			var timeLineHours = _timeLineViewModelReworkedMapper.Map(agentSchedules, data.ScheduleDate);

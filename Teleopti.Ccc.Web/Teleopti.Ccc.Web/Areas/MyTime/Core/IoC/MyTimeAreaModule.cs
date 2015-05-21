@@ -210,8 +210,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<TeamScheduleViewModelFactory>().As<ITeamScheduleViewModelFactory>();
 			builder.RegisterType<TeamSchedulePersonsProvider>().As<ITeamSchedulePersonsProvider>();
 			builder.RegisterType<TeamScheduleProjectionProvider>().As<ITeamScheduleProjectionProvider>();
-			builder.RegisterType<LayerViewModelReworkedMapper>().As<ILayerViewModelReworkedMapper>();
-			builder.RegisterType<TeamScheduleViewModelReworkedMapper>().As<ITeamScheduleViewModelReworkedMapper>();
+			builder.RegisterType<LayerViewModelReworkedMapper>().As<ILayerViewModelReworkedMapper>();	
+			builder.RegisterType<TeamScheduleViewModelReworkedFactory>().As<ITeamScheduleViewModelReworkedFactory>();
 			builder.RegisterType<TimeLineViewModelReworkedFactory>().As<ITimeLineViewModelReworkedFactory>();
 			builder.RegisterType<TimeLineViewModelReworkedMapper>().As<ITimeLineViewModelReworkedMapper>();
 			builder.RegisterType<AgentScheduleViewModelReworkedMapper>().As<IAgentScheduleViewModelReworkedMapper>();

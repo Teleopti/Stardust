@@ -452,10 +452,10 @@
     <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\ITimeLineViewModelReworkedMapper.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\LayerViewModelReworkedMapper.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\ILayerViewModelReworkedMapper.cs" />
-    <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\ITeamScheduleViewModelReworkedMapper.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\TimeLineViewModelReworkedFactory.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\TimeLineViewModelReworkedMapper.cs" />
-    <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\TeamScheduleViewModelReworkedMapper.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\ViewModelFactory\ITeamScheduleViewModelReworkedFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\ViewModelFactory\TeamScheduleViewModelReworkedFactory.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\AbsenceRequestProbability.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IAbsenceRequestProbability.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IAbsenceRequestProbabilityProvider.cs" />

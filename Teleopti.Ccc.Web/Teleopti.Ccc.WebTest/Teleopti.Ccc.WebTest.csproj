@@ -240,7 +240,6 @@
     <Compile Include="Areas\Global\UserControllerTest.cs" />
     <Compile Include="Areas\MultiTenancy\ChangePasswordTest.cs" />
     <Compile Include="Areas\MultiTenancy\PersonInfoLogonInfoFromGuidsTest.cs" />
-    <Compile Include="Areas\MyTime\Controllers\TeamScheduleReworkedTest.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\FakePersonForScheduleFinder.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\FakePersonScheduleDayReadModelFinder.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\FakePersonScheduleDayReadModelRepository.cs" />
@@ -344,6 +343,7 @@
     <Compile Include="Areas\MyTime\Core\Common\ViewModelFactory\TeamViewModelFactoryTest.cs" />
     <Compile Include="Core\Startup\FindAreaRegistrationsTest.cs" />
     <Compile Include="Core\Startup\RegisterAreasTest.cs" />
+    <Compile Include="Core\TeamSchedule\ViewModelFactory\TeamScheduleViewModelReworkedFactoryTest.cs" />
     <Compile Include="Core\WeekSchedule\DataProvider\AbsenceRequestProbabilityProviderTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftTradeAddPersonScheduleViewModelMapperTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftTradeAddScheduleLayerViewModelMapperTest.cs" />

@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			var shift = new Shift
 			{
-				Projection = new List<SimpleLayer> { new SimpleLayer()}
+				Projection = new List<SimpleLayer>()
 			};
 			var model = new Model
 			{
@@ -64,24 +64,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 				IsDayOff = model.Shift.IsFullDayAbsence
 			};		
 
-
-
-		//	public Guid PersonId { get; set; }
-		//public Guid TeamId { get; set; }
-		//public Guid SiteId { get; set; }
-		//public Guid BusinessUnitId { get; set; }
-		//public string FirstName { get; set; }
-		//public string LastName { get; set; }
-		//public DateTime Date { get; set; }
-		//public DateOnly BelongsToDate { get { return new DateOnly(Date); } }
-		//public DateTime? Start { get; set; }
-		//public DateTime? End { get; set; }
-		//public bool IsDayOff { get; set; }
-		//public string Model { get; set; }
-		//public Guid? ShiftExchangeOffer { get; set; }
-		//public DateTime? MinStart { get; set; }
-		//public bool IsLastPage { get; set; }
-		//public int Total { get; set; }
 		}
 
 	}

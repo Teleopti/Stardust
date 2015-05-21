@@ -1,26 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 {
+
+
 	class FakePersonScheduleDayReadModelFinder : IPersonScheduleDayReadModelFinder
 	{
 
-		//private IPersonRepository _personRepository;
+		private IPersonRepository _personRepository;
 
-		private IPersonAssignmentRepository _personAssignmentRepository;
+		private readonly IPersonAssignmentRepository _personAssignmentRepository;
 
-		public FakePersonScheduleDayReadModelFinder(IPersonAssignmentRepository personAssignmentRepository)
+		public FakePersonScheduleDayReadModelFinder(IPersonAssignmentRepository personAssignmentRepository, IPersonRepository personRepository)
 		{
-			_personAssignmentRepository = personAssignmentRepository;			
+			_personAssignmentRepository = personAssignmentRepository;
+			_personRepository = personRepository;
 		}
 
 		public IEnumerable<PersonScheduleDayReadModel> ForPerson(DateOnly startDate, DateOnly endDate, Guid personId)
@@ -47,39 +47,63 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 			string timeSortOrder = "")
 		{
 
-			var assignments = _personAssignmentRepository.LoadAll().Where(a =>
+			var assignments = _personAssignmentRepository.LoadAll()
+				.Where(a => personIdList.Contains(a.Person.Id.Value) && date == a.Date)
+				.Where(a => filterInfo == null || !filterInfo.StartTimes.Any() || filterInfo.StartTimes.Any(period => period.Contains(a.Period.StartDateTime)))
+				.Where(a => filterInfo == null || !filterInfo.EndTimes.Any() || filterInfo.EndTimes.Any(period => period.Contains(a.Period.EndDateTime)));
+			var persons = _personRepository.LoadAll();
+
+
+			if (filterInfo != null && timeFilterHasValue(filterInfo))
 			{
-				var timeFiltered = true;
-				if (filterInfo != null)
+				return assignments.Select(a =>
 				{
-					if (filterInfo.StartTimes.Any() && !filterInfo.StartTimes.Any( period => period.Contains(a.Period.StartDateTime)))
+					var simpleLayers = a.ShiftLayers.Select(shiftLayer => new SimpleLayer
 					{
-						timeFiltered = false;
-					}
+						Start = shiftLayer.Period.StartDateTime,
+						End = shiftLayer.Period.EndDateTime,
+						Description = shiftLayer.Payload.Name
+					}).ToList();
 
-					if (filterInfo.EndTimes.Any() && !filterInfo.EndTimes.Any(period => period.Contains(a.Period.EndDateTime)))
-					{
-						timeFiltered = false;
-					}
-				}
-				return personIdList.Contains(a.Person.Id.Value) && date == a.Date && timeFiltered;
-			});
-
-			return assignments.Select(a =>
+					return PersonScheduleDayReadModelFactory.CreatePersonScheduleDayReadModelWithSimpleShift(a.Person, date,
+						simpleLayers);
+				});
+			}
+			return personIdList.Select(pid =>
 			{
-				var simpleLayers = a.ShiftLayers.Select(shiftLayer => new SimpleLayer()
+				var assignment = assignments.FirstOrDefault(a => a.Person.Id.Value == pid);
+				if (assignment == default(object))
+				{
+					return PersonScheduleDayReadModelFactory.CreateSimplePersonScheduleDayReadModel(
+						persons.First(p => p.Id.Value == pid),
+						date);
+				}
+
+				var simpleLayers = assignment.ShiftLayers.Select(shiftLayer => new SimpleLayer
 				{
 					Start = shiftLayer.Period.StartDateTime,
 					End = shiftLayer.Period.EndDateTime,
 					Description = shiftLayer.Payload.Name
 				}).ToList();
 
-				return PersonScheduleDayReadModelFactory.CreatePersonScheduleDayReadModelWithSimpleShift(a.Person, a.Date, simpleLayers);
+				return PersonScheduleDayReadModelFactory.CreatePersonScheduleDayReadModelWithSimpleShift(assignment.Person, date,
+					simpleLayers);
 			});
+		}
 
-			//return _personRepository.LoadAll()
-			//	.Where( p => personIdList.Contains(p.Id.Value))
-			//	.Select(PersonScheduleDayReadModelFactory.CreateSimplePersonScheduleDayReadModel);
+
+		private bool timeFilterHasValue(TimeFilterInfo filter)
+		{
+			if (filter.IsWorkingDay)
+			{
+				if ((filter.StartTimes != null && filter.StartTimes.Any()) ||
+				    (filter.EndTimes != null && filter.EndTimes.Any()))
+				{
+					return true;
+				} 				
+			}
+
+			return !(filter.IsWorkingDay && filter.IsDayOff && filter.IsEmptyDay);
 		}
 	}
 }

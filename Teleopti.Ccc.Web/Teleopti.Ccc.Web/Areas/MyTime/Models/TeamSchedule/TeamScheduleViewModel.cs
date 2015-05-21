@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
 	public class PersonSchedule
 	{
 		public IPerson Person { get; set; }
+		public DateOnly Date { get; set; }
 		public IPersonScheduleDayReadModel Schedule { get; set; }
 	}
 

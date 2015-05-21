@@ -1,14 +1,14 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 using Teleopti.Interfaces.Domain;
@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 	[TestFixture]
 	public class TeamScheduleControllerTest
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		[SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnRequestPartialView()
 		{
 			var viewModelFactory = MockRepository.GenerateMock<ITeamScheduleViewModelFactory>();
@@ -30,7 +30,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var id = Guid.NewGuid();
 			var toggleManager = MockRepository.GenerateMock<IToggleManager>();
 			var target = new TeamScheduleController(now, viewModelFactory, MockRepository.GenerateMock<IDefaultTeamProvider>(),
-				MockRepository.GenerateMock<ITeamScheduleViewModelReworkedMapper>(), MockRepository.GenerateMock<ITimeFilterHelper>(), toggleManager, MockRepository.GenerateMock<ILoggedOnUser>());
+				 MockRepository.GenerateMock<ITimeFilterHelper>(), toggleManager, 
+				 MockRepository.GenerateMock<ILoggedOnUser>(),
+				 MockRepository.GenerateMock<ITeamScheduleViewModelReworkedFactory>());
 
 			viewModelFactory.Stub(x => x.CreateViewModel(date, id)).Return(new TeamScheduleViewModel());
 			toggleManager.Stub(x => x.IsEnabled(Toggles.MyTimeWeb_EnhanceTeamSchedule_32580)).Return(false);
@@ -40,7 +42,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Model.Should().Not.Be.Null();
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		[SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldUseTodayWhenDateNotSpecified()
 		{
 			var viewModelFactory = MockRepository.GenerateMock<ITeamScheduleViewModelFactory>();
@@ -48,15 +50,18 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var now = MockRepository.GenerateMock<INow>();
 			now.Stub(x => x.UtcDateTime()).Return(DateTime.UtcNow); 
 			personPeriodProvider.Stub(x => x.HasPersonPeriod(DateOnly.Today)).Return(true);
-			var target = new TeamScheduleController(now, viewModelFactory, MockRepository.GenerateMock<IDefaultTeamProvider>(), MockRepository.GenerateMock<ITeamScheduleViewModelReworkedMapper>(),
-				MockRepository.GenerateMock<ITimeFilterHelper>(), MockRepository.GenerateMock<IToggleManager>(), MockRepository.GenerateMock<ILoggedOnUser>());
+
+			var target = new TeamScheduleController(now, viewModelFactory, MockRepository.GenerateMock<IDefaultTeamProvider>(),
+				 MockRepository.GenerateMock<ITimeFilterHelper>(), MockRepository.GenerateMock<IToggleManager>(),
+				 MockRepository.GenerateMock<ILoggedOnUser>(),
+				 MockRepository.GenerateMock<ITeamScheduleViewModelReworkedFactory>());
 
 			target.Index(null, Guid.Empty);
 
 			viewModelFactory.AssertWasCalled(x => x.CreateViewModel(DateOnly.Today, Guid.Empty));
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		[SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldUseMyTeamsIdWhenNoIdSpecified()
 		{
 			var viewModelFactory = MockRepository.GenerateMock<ITeamScheduleViewModelFactory>();
@@ -65,12 +70,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			now.Stub(x => x.UtcDateTime()).Return(DateTime.UtcNow);
 			var personPeriodProvider = MockRepository.GenerateMock<IPersonPeriodProvider>();
 			personPeriodProvider.Stub(x => x.HasPersonPeriod(DateOnly.Today)).Return(true);
-			var team = new Domain.AgentInfo.Team();
+			var team = new Team();
 			team.SetId(Guid.NewGuid());
 			defaultTeamCalculator.Stub(x => x.DefaultTeam(DateOnly.Today)).Return(team);
 
 			var target = new TeamScheduleController(now,viewModelFactory, defaultTeamCalculator,
-				MockRepository.GenerateMock<ITeamScheduleViewModelReworkedMapper>(), MockRepository.GenerateMock<ITimeFilterHelper>(), MockRepository.GenerateMock<IToggleManager>(), MockRepository.GenerateMock<ILoggedOnUser>());
+				 MockRepository.GenerateMock<ITimeFilterHelper>(), MockRepository.GenerateMock<IToggleManager>(), MockRepository.GenerateMock<ILoggedOnUser>(),
+				 MockRepository.GenerateMock<ITeamScheduleViewModelReworkedFactory>());
 
 			target.Index(DateOnly.Today, null);
 
