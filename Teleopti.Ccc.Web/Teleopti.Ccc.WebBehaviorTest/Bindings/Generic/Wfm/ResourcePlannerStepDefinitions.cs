@@ -20,13 +20,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[Then(@"I should see '(.*)'")]
 		public void ThenIShouldSee(int days)
 		{
-			Browser.Interactions.AssertAnyContains(".schedule-days-message",days.ToString());
+			Browser.Interactions.AssertAnyContains("p", days +" agents were successfully scheduled");
 		}
 
 		[When(@"I click schedule")]
 		public void WhenIClickSchedule()
 		{
 			Browser.Interactions.Click(".schedule-button");
+			Thread.Sleep(2000);
 		}
 
 		[When(@"I click next planning period")]
