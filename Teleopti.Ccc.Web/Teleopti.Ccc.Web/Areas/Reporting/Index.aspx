@@ -15,6 +15,9 @@
 				parent.$('.dropdown').removeClass('open');
 			}
 		});
+		//to refresh if frame in frame
+		if (window.top != window.parent.self)
+			window.parent.parent.location = window.parent.location;
 	</script>
 	<link href="Content/Styles/persianDatepicker-default.css" rel="stylesheet" />
 	<link href="Content/Styles/Styles.css" rel="stylesheet" />

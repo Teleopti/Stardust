@@ -9,6 +9,11 @@
 	<title></title>
 	<script type="text/javascript" src="../../Content/jquery/jquery-1.10.2.min.js"></script>
 	<script type="text/javascript" src="Content/Scripts/persianDatepicker.min.js"></script>
+	<script type="text/javascript">
+		//to refresh if frame in frame
+		if (window.top != window.parent.self)
+			window.parent.parent.location = window.parent.location;
+	</script>
 	<link href="Content/Styles/persianDatepicker-default.css" rel="stylesheet" />
 	<link href="Content/Styles/Styles.css" rel="stylesheet" />
 	<link href="Content/Styles/calendar.css" rel="stylesheet" />
