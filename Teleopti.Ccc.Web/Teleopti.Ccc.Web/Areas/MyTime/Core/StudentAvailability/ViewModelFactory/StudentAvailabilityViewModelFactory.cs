@@ -10,13 +10,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.ViewModelFactor
 	{
 		private readonly IMappingEngine _mapper;
 		private readonly IStudentAvailabilityProvider _studentAvailabilityProvider;
-		private readonly IScheduleProvider _scheduleProvider;
 
-		public StudentAvailabilityViewModelFactory(IMappingEngine mapper, IStudentAvailabilityProvider studentAvailabilityProvider, IScheduleProvider scheduleProvider)
+		public StudentAvailabilityViewModelFactory(IMappingEngine mapper, IStudentAvailabilityProvider studentAvailabilityProvider)
 		{
 			_mapper = mapper;
 			_studentAvailabilityProvider = studentAvailabilityProvider;
-			_scheduleProvider = scheduleProvider;
 		}
 
 		public StudentAvailabilityViewModel CreateViewModel(DateOnly dateInPeriod)
@@ -40,8 +38,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.ViewModelFactor
 			DateOnly from, DateOnly to)
 		{
 			var period = new DateOnlyPeriod(from, to);
-			var scheduleDays = _scheduleProvider.GetScheduleForStudentAvailability(period);
-			return _mapper.Map<IEnumerable<IScheduleDay>, IEnumerable<StudentAvailabilityDayViewModel>>(scheduleDays);
+			var studentAvailabilityDays = _studentAvailabilityProvider.GetStudentAvailabilityDayForPeriod(period);
+
+			return
+				_mapper.Map<IEnumerable<IStudentAvailabilityDay>, IEnumerable<StudentAvailabilityDayViewModel>>(
+					studentAvailabilityDays);
 		}
 	}
 }

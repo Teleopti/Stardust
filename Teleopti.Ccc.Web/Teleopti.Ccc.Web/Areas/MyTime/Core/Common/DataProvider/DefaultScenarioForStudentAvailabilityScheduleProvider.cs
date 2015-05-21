@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			return scheduleDays.Select(s =>
 				(s.PersonRestrictionCollection() == null ||
 				 !s.PersonRestrictionCollection().OfType<IStudentAvailabilityDay>().Any())
-					? new StudentAvailabilityDay(s.Person, s.DateOnlyAsPeriod.DateOnly, null)
+					? new StudentAvailabilityDay(s.Person, s.DateOnlyAsPeriod.DateOnly, new List<IStudentAvailabilityRestriction>())
 					: s.PersonRestrictionCollection().OfType<IStudentAvailabilityDay>().FirstOrDefault());
 		}
 
