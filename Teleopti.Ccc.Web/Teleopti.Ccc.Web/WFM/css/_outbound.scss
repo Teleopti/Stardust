@@ -153,9 +153,13 @@ input.ng-invalid + .input-validation-sign .wrong-sign {
 .m-r-10p{
 	margin-right:10%;
 }
-.p-r-40{
-	padding-right:40px;
-}
+
 .w-160{
 	width:160px;
+}
+.labelfix label{
+	display:inline-block !important;
+	height:20px;
+	min-width:20px;
+	max-width:20px;
 }
