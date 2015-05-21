@@ -33,7 +33,6 @@ INSERT INTO mart.dim_state_group
 	insert_date,
 	update_date,
 	datasource_update_date,
-	is_deleted,
 	is_log_out_state
 	)
 SELECT 
@@ -44,7 +43,6 @@ SELECT
 	insert_date					= getdate(),
 	update_date					= getdate(),
 	datasource_update_date		= getdate(),
-	is_deleted					= 0,
 	is_log_out_state			= -1
 FROM stage.v_stg_state_group s
 WHERE 

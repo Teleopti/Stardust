@@ -36,13 +36,6 @@ namespace Teleopti.Analytics.Etl.Transformer
                 dataRow["insert_date"] = _insertDateTime;
                 dataRow["update_date"] = _insertDateTime;
 				dataRow["datasource_update_date"] = RaptorTransformerHelper.GetUpdatedDate(stateGroup);
-
-				IDeleteTag deleteCheck = stateGroup as IDeleteTag;
-                if (deleteCheck != null)
-                {
-                    dataRow["is_deleted"] = deleteCheck.IsDeleted;
-                }
-
                 dataRow["is_log_out_state"] = stateGroup.IsLogOutState;
 
 				stateGroupTable.Rows.Add(dataRow);
