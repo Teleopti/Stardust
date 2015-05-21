@@ -380,7 +380,6 @@
     <Compile Include="Areas\Anywhere\Hubs\PersonScheduleViewModelMapperTest.cs" />
     <Compile Include="Areas\Anywhere\Hubs\TestHubBuilder.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\MyTimeWebPersonRequestCheckAuthorizationTest.cs" />
-    <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityAndScheduleDayViewModelMappingTest.cs" />
     <Compile Include="Areas\MyTime\Models\StudentAvailability\StudentAvailabilityDayFormTest.cs" />
     <Compile Include="Areas\SSO\Contollers\OpenIdControllerTest.cs" />
     <Compile Include="Areas\SSO\OpenIdProviderWapperTest.cs" />

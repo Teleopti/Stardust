@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
@@ -36,6 +37,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			var period = new DateOnlyPeriod(date, date);
 			var scheduleDays = _scheduleProvider.GetScheduleForPeriod(period);
 			return GetStudentAvailabilityDayForDate(scheduleDays, date);
+		}
+
+		public IEnumerable<IStudentAvailabilityDay> GetStudentAvailabilityDayForPeriod(DateOnlyPeriod period)
+		{
+			var scheduleDays = _scheduleProvider.GetScheduleForStudentAvailability(period);
+
+			return scheduleDays.Select(s =>
+				(s.PersonRestrictionCollection() == null ||
+				 !s.PersonRestrictionCollection().OfType<IStudentAvailabilityDay>().Any())
+					? new StudentAvailabilityDay(s.Person, s.DateOnlyAsPeriod.DateOnly, null)
+					: s.PersonRestrictionCollection().OfType<IStudentAvailabilityDay>().FirstOrDefault());
 		}
 
 		private IStudentAvailabilityDay GetStudentAvailabilityDayForDate(IEnumerable<IScheduleDay> scheduleDays, DateOnly date)

@@ -160,7 +160,7 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 				data = data || [];
 				$.each(data, function (index, element) {
 					var dayViewModel = dayViewModels[element.Date];
-					dayViewModel.ReadStudentAvailability(element.StudentAvailability);
+					dayViewModel.ReadStudentAvailability(element);
 					dayViewModel.IsLoading(false);
 				});
 				deferred.resolve();

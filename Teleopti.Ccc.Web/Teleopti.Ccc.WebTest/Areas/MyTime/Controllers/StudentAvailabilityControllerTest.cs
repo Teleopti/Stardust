@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.DataProvider;
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var viewModelFactory = MockRepository.GenerateMock<IStudentAvailabilityViewModelFactory>();
 			var target = new AvailabilityController(viewModelFactory, null, null);
-			var list = new List<StudentAvailabilityAndScheduleDayViewModel>();
+			var list = new List<StudentAvailabilityDayViewModel>();
 
 			viewModelFactory.Stub(x => x.CreateStudentAvailabilityAndSchedulesViewModels(DateOnly.Today, DateOnly.Today.AddDays(1))).Return(list);
 

@@ -111,13 +111,9 @@ Teleopti.MyTimeWeb.StudentAvailability.DayViewModel = function (ajaxForDate, tog
 	};
 
 	this.ReadStudentAvailability = function (data) {
-		if (!data || !data.AvailableTimeSpan) {
-			self.HasAvailability(false);
-			self.AvailableTimeSpan(null);
-		} else {
-			self.HasAvailability(true);
-			self.AvailableTimeSpan(data.AvailableTimeSpan);
-		}
+		var hasAvailability = data && data.AvailableTimeSpan;
+		self.HasAvailability(hasAvailability);
+		self.AvailableTimeSpan(hasAvailability ? data.AvailableTimeSpan : null);
 	};
 
 	this.LoadFeedback = function () {
