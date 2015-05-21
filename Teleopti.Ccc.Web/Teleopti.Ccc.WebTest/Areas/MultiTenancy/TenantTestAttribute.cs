@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			builder.RegisterType<FindPersonInfoFake>().As<IFindPersonInfo>().AsSelf().SingleInstance();
 			builder.RegisterType<TenantAuthenticationFake>().As<ITenantAuthentication>().AsSelf().SingleInstance();
 			builder.RegisterType<LogLogonAttemptFake>().As<ILogLogonAttempt>().AsSelf().SingleInstance();
+			builder.RegisterType<CurrentTenantUserFake>().As<ICurrentTenantUser>().AsSelf().SingleInstance();
 		}
 	}
 }
