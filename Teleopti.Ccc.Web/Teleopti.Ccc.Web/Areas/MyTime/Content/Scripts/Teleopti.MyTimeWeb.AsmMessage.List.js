@@ -146,7 +146,7 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 				vm.asmMessageList.unshift(result[0]);
 				result[0].updateItem(messageItem);
 			} else {
-				vm.asmMessageList.unshift(new asmMessageItemViewModel(messageItem), vm.isAnonymous());
+				vm.asmMessageList.unshift(new asmMessageItemViewModel(messageItem, vm.isAnonymous()));
 			}
 		}
 	};
