@@ -53,9 +53,9 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
             set { _available = value; }
         }
 
-        public virtual ReadOnlyCollection<IRtaState> StateCollection
+        public virtual IList<IRtaState> StateCollection
         {
-            get { return new ReadOnlyCollection<IRtaState>(_stateCollection.ToList()); }
+            get { return new List<IRtaState>(_stateCollection.ToList()); }
         }
 
         public virtual bool IsLogOutState
@@ -93,7 +93,12 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
     		_stateCollection.Remove(state);
     	}
 
-        public virtual bool IsDeleted
+		public virtual void ClearStateCodes()
+		{
+			_stateCollection.Clear();
+		}
+
+		public virtual bool IsDeleted
         {
             get { return _isDeleted; }
         }

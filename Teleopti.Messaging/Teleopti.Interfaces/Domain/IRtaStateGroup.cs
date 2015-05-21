@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -55,7 +56,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: Jonas N
         /// Created date: 2008-10-03
         /// </remarks>
-        ReadOnlyCollection<IRtaState> StateCollection { get; }
+        IList<IRtaState> StateCollection { get; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is log out state.
@@ -101,5 +102,7 @@ namespace Teleopti.Interfaces.Domain
 		/// Created date: 2012-12-21
 		/// </remarks>
     	void DeleteState(IRtaState state);
+
+	    void ClearStateCodes();
     }
 }

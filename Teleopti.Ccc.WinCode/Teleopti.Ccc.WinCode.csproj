@@ -347,6 +347,7 @@
     <Compile Include="Common\Configuration\IWorkflowControlSetView.cs" />
     <Compile Include="Common\Configuration\ScorecardProvider.cs" />
     <Compile Include="Common\Configuration\SetScorecardPresenter.cs" />
+    <Compile Include="Common\Configuration\StateGroupPresenter.cs" />
     <Compile Include="Common\Configuration\TeamGamificationSettingModel.cs" />
     <Compile Include="Common\Configuration\TeamProvider.cs" />
     <Compile Include="Common\Configuration\TeamScorecardModel.cs" />
