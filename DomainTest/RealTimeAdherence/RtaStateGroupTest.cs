@@ -48,12 +48,5 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
             Assert.AreEqual(state1.StateGroup.Name, _name);
             Assert.AreEqual(1, _target.StateCollection.Count);
         }
-		
-        [Test]
-        public void VerifySetDeleted()
-        {
-            _target.SetDeleted();
-            Assert.IsTrue(_target.IsDeleted);
-        }
     }
 }

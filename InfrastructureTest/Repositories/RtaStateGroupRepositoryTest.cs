@@ -4,6 +4,8 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -95,4 +97,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
     }
+
+	[TestFixture]
+	public class RtaStateGroupRepositoryTestWithoutTransaction : DatabaseTestWithoutTransaction
+	{
+		[Test]
+		public void ShouldHardDelete()
+		{
+			var stateGroup = new RtaStateGroup("group 1", false, true);
+			var target = new RtaStateGroupRepository(UnitOfWork);
+			target.Add(stateGroup);
+			UnitOfWork.PersistAll();
+
+			target.Remove(stateGroup);
+			UnitOfWork.PersistAll();
+
+			UnitOfWork.DisableFilter(QueryFilter.Deleted);
+			target.LoadAll().Should().Be.Empty();
+		}
+	}
 }

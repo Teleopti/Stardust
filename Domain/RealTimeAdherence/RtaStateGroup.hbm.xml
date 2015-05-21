@@ -18,8 +18,6 @@
 			<one-to-many class="RtaState"/>
 		</bag>
 		<many-to-one name="BusinessUnit" class="Teleopti.Ccc.Domain.Common.BusinessUnit" access="nosetter.camelcase-underscore" />
-		<property name="IsDeleted" />
 		<filter name="businessUnitFilter" condition=":businessUnitParameter = BusinessUnit" />
-		<filter name="deletedFlagFilter" condition="IsDeleted = 0" />
 	</class>
 </hibernate-mapping>

@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -13,7 +11,6 @@ namespace Teleopti.Interfaces.Domain
     /// Created date: 2008-10-03
     /// </remarks>
 	public interface IRtaStateGroup : 
-		IDeleteTag, 
 		IBelongsToBusinessUnit, 
 		IVersioned, 
 		IAggregateRoot

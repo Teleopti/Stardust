@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
         private bool _defaultStateGroup;
         private string _name;
         private bool _isLogOutState;
-        private bool _isDeleted;
 
         protected RtaStateGroup()
         {
@@ -97,15 +96,5 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
 		{
 			_stateCollection.Clear();
 		}
-
-		public virtual bool IsDeleted
-        {
-            get { return _isDeleted; }
-        }
-
-        public virtual void SetDeleted()
-        {
-            _isDeleted = true;
-        }
     }
 }
