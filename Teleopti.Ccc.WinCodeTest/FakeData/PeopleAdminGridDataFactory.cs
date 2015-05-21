@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WinCodeTest.FakeData
                  team1);
             person.AddPersonPeriod(personPeriod1);
             var principalAuthorization = new PrincipalAuthorization(new CurrentTeleoptiPrincipal());
-            return new PersonGeneralModel(person, new UserDetail(person), principalAuthorization, new PersonAccountUpdaterDummy(), "Teleopti", new LogonInfoModel());
+            return new PersonGeneralModel(person, new UserDetail(person), principalAuthorization, new PersonAccountUpdaterDummy(), new LogonInfoModel());
         }
     }
 }

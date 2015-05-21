@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.MultiTenancy
 			};
 #pragma warning restore 618
 			HttpRequestFake.SetReturnValue(new PersistPersonInfoResult { ApplicationLogonNameIsValid = true, IdentityIsValid = true, PasswordStrengthIsValid = true});
-			Target.SaveTenantData(dto, id, "Teleopti WFM");
+			Target.SaveTenantData(dto, id);
 			var sent = HttpRequestFake.SentJson;
 			sent.Should().Contain("Identity\":\"DOMÄÄÄN\\\\NAMNET");
 		}
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.MultiTenancy
 			};
 #pragma warning restore 618
 			HttpRequestFake.SetReturnValue(new PersistPersonInfoResult { ApplicationLogonNameIsValid = true, IdentityIsValid = true, PasswordStrengthIsValid = true });
-			Target.SaveTenantData(dto, id, "Teleopti WFM");
+			Target.SaveTenantData(dto, id);
 			var sent = HttpRequestFake.SentJson;
 			sent.Should().Contain("Identity\":\"NAMNET");
 		}
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.MultiTenancy
 			};
 #pragma warning restore 618
 			HttpRequestFake.SetReturnValue(new PersistPersonInfoResult { ApplicationLogonNameIsValid = true, IdentityIsValid = true, PasswordStrengthIsValid = true });
-			Target.SaveTenantData(dto, id, "Teleopti WFM");
+			Target.SaveTenantData(dto, id);
 			var sent = HttpRequestFake.SentJson;
 			sent.Should().Contain("Identity\":\"THEREALIDENTITY");
 		}
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.MultiTenancy
 			};
 
 			HttpRequestFake.SetReturnValue(new PersistPersonInfoResult { ApplicationLogonNameIsValid = true, IdentityIsValid = false, PasswordStrengthIsValid = true });
-			Target.SaveTenantData(dto, id, "Teleopti WFM");
+			Target.SaveTenantData(dto, id);
 
 		}
 	}

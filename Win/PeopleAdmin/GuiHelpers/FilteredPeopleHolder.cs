@@ -440,7 +440,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 			//create new person grid data.
 			var personGridData = new PersonGeneralModel(person, userDetail,
 				new PrincipalAuthorization(new CurrentTeleoptiPrincipal()),
-				new FilteredPeopleAccountUpdater(this, UnitOfWorkFactory.Current), UnitOfWorkFactory.Current.Name, logonInfoModel);
+				new FilteredPeopleAccountUpdater(this, UnitOfWorkFactory.Current), logonInfoModel);
 
 			//set optional columns if any.
 			if (_optionalColumnCollection.Count > 0)

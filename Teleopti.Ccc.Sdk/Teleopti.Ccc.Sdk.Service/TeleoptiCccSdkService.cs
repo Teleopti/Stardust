@@ -801,7 +801,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 				IPerson newPerson = assembler.DtoToDomainEntity(personDto);
 				repository.Add(newPerson);
 				uow.PersistAll();
-				_tenantPeopleSaver.SaveTenantData(personDto, newPerson.Id.Value,UnitOfWorkFactory.Current.Name);
+				_tenantPeopleSaver.SaveTenantData(personDto, newPerson.Id.Value);
 			}
 		}
 		public void UpdatePerson(PersonDto personDto)
@@ -817,7 +817,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 				IPerson person = assembler.DtoToDomainEntity(personDto);
 				repository.Add(person);		
 				uow.PersistAll();
-				_tenantPeopleSaver.SaveTenantData(personDto, person.Id.Value, UnitOfWorkFactory.Current.Name);
+				_tenantPeopleSaver.SaveTenantData(personDto, person.Id.Value);
 			}
 		}
 
@@ -1849,7 +1849,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 				    personAssembler.EnableSaveOrUpdate = true;
 				    var person = personAssembler.DtoToDomainEntity(personDto);
 					unitOfWork.PersistAll();
-					_tenantPeopleSaver.SaveTenantData(personDto, person.Id.Value, UnitOfWorkFactory.Current.Name);
+					_tenantPeopleSaver.SaveTenantData(personDto, person.Id.Value);
 				}
 			}
 			

@@ -34,14 +34,14 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 		}
 
 		public PersonGeneralModel(IPerson person, IUserDetail userDetail, IPrincipalAuthorization principalAuthorization,
-			IPersonAccountUpdater personAccountUpdater, string tenant, LogonInfoModel logonInfoModel)
+			IPersonAccountUpdater personAccountUpdater, LogonInfoModel logonInfoModel)
 			: this()
 		{
 			ContainedEntity = person;
 			_userDetail = userDetail;
 			_principalAuthorization = principalAuthorization;
 			_personAccountUpdater = personAccountUpdater;
-			_tenantData = new TenantAuthenticationData {PersonId = ContainedEntity.Id.GetValueOrDefault(), Tenant = tenant};
+			_tenantData = new TenantAuthenticationData {PersonId = ContainedEntity.Id.GetValueOrDefault()};
 			if (ContainedEntity.AuthenticationInfo != null)
 				_tenantData.Identity = ContainedEntity.AuthenticationInfo.Identity;
 			if (ContainedEntity.ApplicationAuthenticationInfo != null)

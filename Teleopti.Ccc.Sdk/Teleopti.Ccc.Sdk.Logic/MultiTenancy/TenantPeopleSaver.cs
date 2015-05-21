@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Sdk.Logic.MultiTenancy
 {
 	public interface ITenantPeopleSaver
 	{
-		void SaveTenantData(PersonDto personDto, Guid id, string tenant);
+		void SaveTenantData(PersonDto personDto, Guid id);
 	}
 	public class TenantPeopleSaver : ITenantPeopleSaver
 	{
@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Sdk.Logic.MultiTenancy
 			_tenantDataManager = tenantDataManager;
 		}
 
-		public void SaveTenantData(PersonDto personDto, Guid id, string tenant)
+		public void SaveTenantData(PersonDto personDto, Guid id)
 		{
 			if (personDto.IsDeleted)
 			{
@@ -33,8 +33,7 @@ namespace Teleopti.Ccc.Sdk.Logic.MultiTenancy
 				Password = personDto.ApplicationLogOnPassword,
 #pragma warning disable 618
 				Identity = !string.IsNullOrEmpty(personDto.WindowsDomain) && !string.IsNullOrEmpty(personDto.WindowsLogOnName) ? personDto.WindowsDomain + "\\" + personDto.WindowsLogOnName : null,
-				PersonId = id,
-				Tenant = tenant
+				PersonId = id
 			};
 			if (string.IsNullOrEmpty(data.Identity) && !string.IsNullOrEmpty(personDto.WindowsLogOnName))
 				data.Identity = personDto.WindowsLogOnName;

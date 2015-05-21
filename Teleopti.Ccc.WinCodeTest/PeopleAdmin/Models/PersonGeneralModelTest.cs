@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 			_base.AddPersonPeriod(_personPeriod);
 			_principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
 			_target = new PersonGeneralModel(_base, new UserDetail(_base), _principalAuthorization,
-				new PersonAccountUpdaterDummy(), "Teleopti", new LogonInfoModel());
+				new PersonAccountUpdaterDummy(), new LogonInfoModel());
 		}
 
 		[Test]
@@ -227,7 +227,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 				.Return(true);
 			
 			_target = new PersonGeneralModel(_base, userDetail, _principalAuthorization, new PersonAccountUpdaterDummy(),
-				"Teleopti", new LogonInfoModel {LogonName = "" });
+				new LogonInfoModel {LogonName = "" });
 			_target.IsValid.Should().Be.True();
 		}
 
@@ -242,7 +242,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 				x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword, DateOnly.Today, _base))
 				.Return(true);
 			_target = new PersonGeneralModel(_base, userDetail, _principalAuthorization, new PersonAccountUpdaterDummy(),
-				"Teleopti", new LogonInfoModel()) {LogOnName = "userx07", Password = "" };
+				new LogonInfoModel()) {LogOnName = "userx07", Password = "" };
 			_target.Password = setValue;
 			_target.TenantData.Password.Should().Be.EqualTo(setValue);
 		}
@@ -369,7 +369,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 				.Return(false);
 
 			_target = new PersonGeneralModel(_base, new UserDetail(_base), _principalAuthorization,
-				new PersonAccountUpdaterDummy(), "Teleopti", new LogonInfoModel{LogonName = oldLogOnInfo, Identity = oldLogOnInfo});
+				new PersonAccountUpdaterDummy(), new LogonInfoModel{LogonName = oldLogOnInfo, Identity = oldLogOnInfo});
 			_target.ApplicationLogOnName.Should().Be.EqualTo(oldLogOnInfo);
 			_target.ApplicationLogOnName = "";
 			_target.LogOnName = "";
@@ -396,7 +396,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 				.Return(true);
 			_base.Stub(x => x.ChangePassword(setValue, null, userDetail)).Return(true).Repeat.Twice();
 
-			_target = new PersonGeneralModel(_base, userDetail, _principalAuthorization, new PersonAccountUpdaterDummy(), "Teleopti", new LogonInfoModel());
+			_target = new PersonGeneralModel(_base, userDetail, _principalAuthorization, new PersonAccountUpdaterDummy(), new LogonInfoModel());
 
 			_target.TenantData.Changed.Should().Be.False();
 			_target.Password = setValue;

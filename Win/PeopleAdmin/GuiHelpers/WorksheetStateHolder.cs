@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
 	        var gridData = new PersonGeneralModel(newPerson, new UserDetail(newPerson),
 		        new PrincipalAuthorization(new CurrentTeleoptiPrincipal()),
-				  new FilteredPeopleAccountUpdater(filteredPeopleHolder, UnitOfWorkFactory.Current), UnitOfWorkFactory.Current.Name, new LogonInfoModel()) { CanBold = true };
+				  new FilteredPeopleAccountUpdater(filteredPeopleHolder, UnitOfWorkFactory.Current), new LogonInfoModel()) { CanBold = true };
 
         	gridData.SetAvailableRoles(filteredPeopleHolder.ApplicationRoleCollection);
 
@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 	            
 	            var personGridData = new PersonGeneralModel(person, new UserDetail(person),
 		            new PrincipalAuthorization(new CurrentTeleoptiPrincipal()),
-						new FilteredPeopleAccountUpdater(filteredPeopleHolder, UnitOfWorkFactory.Current), UnitOfWorkFactory.Current.Name, new LogonInfoModel()) { CanBold = true };
+						new FilteredPeopleAccountUpdater(filteredPeopleHolder, UnitOfWorkFactory.Current), new LogonInfoModel()) { CanBold = true };
             	personGridData.SetAvailableRoles(filteredPeopleHolder.ApplicationRoleCollection);
 
                 //set optional columns if any.);
