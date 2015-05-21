@@ -101,7 +101,7 @@ describe("PeopleCtrl", function() {
 		scope.searchKeyword();
 		scope.$digest(); // this is needed to resolve the promise
 
-		expect(scope.keyword).toEqual("Paris/Team 1");
+		expect(scope.keyword).toEqual("Paris Team 1");
 	}));
 
 	it("should show agent by search with option", inject(function($controller) {

@@ -34,13 +34,10 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 
 			if (string.IsNullOrEmpty(keyword))
 			{
-				keyword = myTeam.SiteAndTeam;
-				criteriaDictionary = new Dictionary<PersonFinderField, string> {{PersonFinderField.Organization, keyword}};
+				keyword = myTeam.SiteAndTeam.Replace("/"," ");
 			}
-			else
-			{
-				criteriaDictionary = SearchTermParser.Parse(keyword);
-			}
+
+			criteriaDictionary = SearchTermParser.Parse(keyword);
 
 			var result = constructResult(pageSize, currentPageIndex, criteriaDictionary, currentDate);
 			return Ok(result);
