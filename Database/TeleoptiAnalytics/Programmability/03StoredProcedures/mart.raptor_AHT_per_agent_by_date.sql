@@ -27,6 +27,7 @@ select p.person_code,
     on f.acd_login_id = b.acd_login_id
  inner join mart.dim_person p
     on p.person_id = b.person_id
+	and @local_date between p.valid_from_date and p.valid_to_date
  inner join mart.bridge_time_zone tz
     on tz.time_zone_id = p.time_zone_id
    and f.date_id = tz.date_id
@@ -39,7 +40,7 @@ select p.person_code,
    and t.time_zone_code = @time_zone_code
  group by p.person_code,
        d.date_date
-having convert(decimal(18,2),((sum(talk_time_s + after_call_work_time_s))/case when sum(answered_calls)= 0 THEN 1 ELSE sum(answered_calls) END)) < @threshold
+having convert(decimal(18,2),((sum(talk_time_s + after_call_work_time_s))/case when sum(answered_calls)= 0 THEN 1 ELSE sum(answered_calls) END)) <= @threshold
 End
 
 GO

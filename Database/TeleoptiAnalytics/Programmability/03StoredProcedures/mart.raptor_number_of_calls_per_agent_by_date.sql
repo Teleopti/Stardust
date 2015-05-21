@@ -42,7 +42,7 @@ where p.business_unit_code = @business_unit_code and d.date_date = @local_date
 group by
 	p.person_code,
 	d.date_date
-having sum(answered_calls) > @threshold
+having sum(answered_calls) >= @threshold
 End
 
 GO
