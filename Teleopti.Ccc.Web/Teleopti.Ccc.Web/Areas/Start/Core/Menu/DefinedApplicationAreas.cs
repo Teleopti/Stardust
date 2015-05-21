@@ -27,7 +27,14 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Menu
 						.Anywhere,
 				Area = "Anywhere",
 				Name = GetMenuText(DefinedRaptorApplicationFunctionPaths.Anywhere)
+			},
+			new ApplicationArea
+			{
+				ApplicationFunctionPath = DefinedRaptorApplicationFunctionPaths.OpenForecasterPage,
+				Area = "WFM",
+				Name = "WFM"
 			}
+
 		};
 
 		private static string GetMenuText(string applicationFunctionPath)
