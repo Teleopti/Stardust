@@ -51,14 +51,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ChangePassword>().As<IChangePassword>().SingleInstance();
 			
 			builder.RegisterType<ResponseException>().As<IResponseException>();
-			if (_configuration.Toggle(Toggles.MultiTenancy_People_32113))
-			{
-				builder.RegisterType<TenantDataManager>().As<ITenantDataManager>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<emptyTenantDataManager>().As<ITenantDataManager>().SingleInstance();
-			}
+			
+			builder.RegisterType<TenantDataManager>().As<ITenantDataManager>().SingleInstance();
+			
 			if (_configuration.Toggle(Toggles.MultiTenancy_LogonUseNewSchema_33049))
 			{
 				builder.RegisterType<TenantLogonDataManager>().As<ITenantLogonDataManager>().SingleInstance();
@@ -74,21 +69,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			return server == null;
 		}
 
-
-		private class emptyTenantDataManager : ITenantDataManager
-		{
-			public SavePersonInfoResult SaveTenantData(TenantAuthenticationData tenantAuthenticationData)
-			{
-				return new SavePersonInfoResult { Success = true };
-			}
-
-			public void DeleteTenantPersons(IEnumerable<Guid> personsToBeDeleted)
-			{
-			}
-
-			
-		}
-
+		
 		private class emptyTenantLogonDataManager : ITenantLogonDataManager
 		{
 			public IEnumerable<LogonInfoModel> GetLogonInfoModelsForGuids(IEnumerable<Guid> personGuids)
