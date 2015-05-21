@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 				return;
 
 			//include logging here?
-			if(!_tenantAuthentication.HasAccess())
+			if(!_tenantAuthentication.Logon())
 				throw new HttpException(NoTenantAccessHttpErrorCode, "Invalid tenant credentials!");
 		}
 

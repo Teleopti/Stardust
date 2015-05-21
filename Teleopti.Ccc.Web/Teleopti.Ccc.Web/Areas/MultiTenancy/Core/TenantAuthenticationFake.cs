@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 	{
 		private bool _value = true;
 
-		public bool HasAccess()
+		public bool Logon()
 		{
 			return _value;
 		}

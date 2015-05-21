@@ -2,6 +2,6 @@
 {
 	public interface ITenantAuthentication
 	{
-		bool HasAccess();
+		bool Logon();
 	}
 }

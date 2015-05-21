@@ -4,7 +4,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 {
 	public class TenantAuthentication : ITenantAuthentication
 	{
-		public bool HasAccess()
+		public bool Logon()
 		{
 			return true;
 		}
