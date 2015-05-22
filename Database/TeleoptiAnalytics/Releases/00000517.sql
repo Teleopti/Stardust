@@ -34,10 +34,6 @@ CREATE CLUSTERED INDEX [CIX_etl_jobstep_execution_JobExecutionError] ON [mart].[
 )
 
 --Non-clustered index
-USE [Delta_TeleoptiAnalytics]
-GO
-
---DROP INDEX [CIX_etl_jobstep_execution_ErrorId] ON [mart].[etl_jobstep_execution]
 CREATE NONCLUSTERED INDEX [CIX_etl_jobstep_execution_ErrorId] ON [mart].[etl_jobstep_execution]
 (
 	[jobstep_error_id] ASC
