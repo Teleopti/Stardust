@@ -27,7 +27,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.DataProvider
 
 		public WorkTimeMinMaxCalculationResult WorkTimeMinMaxForDate(DateOnly date)
 		{
-			var scheduleDay = _scheduleProvider.GetScheduleForPeriod(new DateOnlyPeriod(date, date)) ?? new IScheduleDay[] {};
+			var period = new DateOnlyPeriod(date, date);
+			var scheduleDay = _scheduleProvider.GetScheduleForStudentAvailability(period) ?? new IScheduleDay[] {};
 			return WorkTimeMinMaxForDate(date, scheduleDay.SingleOrDefault());
 		}
 	}
