@@ -1,25 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 {
 	public class NoDataAvailableForMeasurementTest : MeasureForecastTest
 	{
-		protected override void Assert(SkillAccuracy measurementResult)
-		{
-			measurementResult.Workloads.First().Accuracies.Should().Be.Empty();
-		}
-
 		protected override IEnumerable<StatisticTask> StatisticTasks()
 		{
 			var statisticTasks1 = new StatisticTask { Interval = HistoricalPeriodForForecast.StartDate.Date, StatOfferedTasks = 9 };
 			return new[] { statisticTasks1 };
+		}
+
+		protected override void Assert(WorkloadAccuracy measurementResult)
+		{
+			measurementResult.Accuracies.Should().Be.Empty();
 		}
 	}
 }

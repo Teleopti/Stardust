@@ -10,7 +10,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 {
-	public class QuickForecastCreatorTest
+	public class ForecastCreatorTest
 	{
 		[Test]
 		public void ShouldForecastForWorkloads()

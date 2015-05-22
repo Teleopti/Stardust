@@ -528,7 +528,6 @@
     <Compile Include="Forecasting\Angel\ForecastWorkloadInput.cs" />
     <Compile Include="Forecasting\Angel\HistoricalPeriodProvider.cs" />
     <Compile Include="Forecasting\Angel\IHistoricalPeriodProvider.cs" />
-    <Compile Include="Forecasting\Angel\IPreForecastWorkload.cs" />
     <Compile Include="Forecasting\Angel\Methods\ForecastMethodProvider.cs" />
     <Compile Include="Forecasting\Angel\Methods\ForecastMethodType.cs" />
     <Compile Include="Forecasting\Angel\Methods\IForecastMethod.cs" />
@@ -536,7 +535,6 @@
     <Compile Include="Forecasting\Angel\Methods\TeleoptiClassic.cs" />
     <Compile Include="Forecasting\Angel\Methods\TeleoptiClassicBase.cs" />
     <Compile Include="Forecasting\Angel\Methods\TeleoptiClassicWithTrend.cs" />
-    <Compile Include="Forecasting\Angel\PreForecastWorkload.cs" />
     <Compile Include="Forecasting\Angel\Trend\ILinearRegressionTrend.cs" />
     <Compile Include="Forecasting\Angel\Trend\LinearTrend.cs" />
     <Compile Include="Forecasting\Angel\ForecastingTargetMerger.cs" />

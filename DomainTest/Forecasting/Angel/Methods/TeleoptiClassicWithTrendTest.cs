@@ -10,7 +10,7 @@ using Teleopti.Ccc.Domain.Forecasting.Angel.Trend;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
+namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Methods
 {
 	[TestFixture]
 	public class TeleoptiClassicWithTrendTest

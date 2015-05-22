@@ -7,7 +7,7 @@ using Teleopti.Ccc.Infrastructure.Forecasting.Angel;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
+namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Trend
 {
 	public class LinearRegressionTrendTest
 	{

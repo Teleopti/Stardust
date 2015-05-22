@@ -19,7 +19,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 {
-	public class PreForecasterTest
+	public class ForecastEvaluatorTest
 	{
 		[Test]
 		public void ShouldGetHistoricalData()
@@ -29,9 +29,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			var workload = skill.WorkloadCollection.Single();
 			var preForecastInput = new EvaluateInput
 			{
-				WorkloadId = workload.Id.Value,
-				ForecastStart = new DateTime(2015, 1, 1),
-				ForecastEnd = new DateTime(2015, 1, 31)
+				WorkloadId = workload.Id.Value
 			};
 			workloadRepository.Stub(x => x.Get(preForecastInput.WorkloadId)).Return(workload);
 
@@ -53,14 +51,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			var historicalData = MockRepository.GenerateMock<IHistoricalData>();
 			var taskOwnerPeriod = new TaskOwnerPeriod(DateOnly.MinValue, new List<WorkloadDay>{workloadDay1, workloadDay2}, TaskOwnerPeriodType.Other);
 			historicalData.Stub(x => x.Fetch(workload, historicalPeriodProvider.PeriodForDisplay(workload))).Return(taskOwnerPeriod);
-			var preForecastWorkload = MockRepository.GenerateMock<IPreForecastWorkload>();
-			preForecastWorkload.Stub(
-				x =>
-					x.PreForecast(workload,
-						new DateOnlyPeriod(new DateOnly(preForecastInput.ForecastStart), new DateOnly(preForecastInput.ForecastEnd)),
-						taskOwnerPeriod)).Return(new Dictionary<DateOnly, IDictionary<ForecastMethodType, double>>());
-			var quickForecastWorkloadEvaluator = MockRepository.GenerateMock<IForecastWorkloadEvaluator>();
-			quickForecastWorkloadEvaluator.Stub(x => x.Evaluate(workload))
+
+			var forecastWorkloadEvaluator = MockRepository.GenerateMock<IForecastWorkloadEvaluator>();
+			forecastWorkloadEvaluator.Stub(x => x.Evaluate(workload))
 				.Return(new WorkloadAccuracy
 				{
 					Accuracies =
@@ -89,7 +82,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 							}
 						}
 				});
-			var target = new ForecastEvaluator(quickForecastWorkloadEvaluator, workloadRepository, historicalPeriodProvider, historicalData);
+			var target = new ForecastEvaluator(forecastWorkloadEvaluator, workloadRepository, historicalPeriodProvider, historicalData);
 
 			var result = target.Evaluate(preForecastInput);
 
@@ -115,16 +108,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			var workload = skill.WorkloadCollection.Single();
 			var preForecastInput = new EvaluateInput
 			{
-				WorkloadId = workload.Id.Value,
-				ForecastStart = new DateTime(2015, 1, 1),
-				ForecastEnd = new DateTime(2015, 1, 31)
+				WorkloadId = workload.Id.Value
 			};
 			workloadRepository.Stub(x => x.Get(preForecastInput.WorkloadId)).Return(workload);
-			var quickForecastWorkloadEvaluator = MockRepository.GenerateMock<IForecastWorkloadEvaluator>();
+			var forecastWorkloadEvaluator = MockRepository.GenerateMock<IForecastWorkloadEvaluator>();
 			var statisticRepository = MockRepository.GenerateMock<IStatisticRepository>();
 			statisticRepository.Stub(x => x.QueueStatisticsUpUntilDate(workload.QueueSourceCollection)).Return(new DateOnlyPeriod(2012, 12, 20, 2014, 12, 20));
 			var historicalPeriodProvider = new HistoricalPeriodProvider(new MutableNow(new DateTime(2014, 12, 20, 0, 0, 0, DateTimeKind.Utc)), statisticRepository);
-			quickForecastWorkloadEvaluator.Stub(x => x.Evaluate(workload))
+			forecastWorkloadEvaluator.Stub(x => x.Evaluate(workload))
 				.Return(new WorkloadAccuracy
 				{
 					Accuracies =
@@ -141,7 +132,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			var historicalData = MockRepository.GenerateMock<IHistoricalData>();
 			var taskOwnerPeriod = new TaskOwnerPeriod(DateOnly.MinValue, new List<WorkloadDay>(), TaskOwnerPeriodType.Other);
 			historicalData.Stub(x => x.Fetch(workload, historicalPeriodProvider.PeriodForDisplay(workload))).Return(taskOwnerPeriod);
-			var target = new ForecastEvaluator(quickForecastWorkloadEvaluator, workloadRepository, historicalPeriodProvider, historicalData);
+			var target = new ForecastEvaluator(forecastWorkloadEvaluator, workloadRepository, historicalPeriodProvider, historicalData);
 
 			var result = target.Evaluate(preForecastInput);
 

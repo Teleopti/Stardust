@@ -68,9 +68,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<HistoricalPeriodProvider>()
 				.SingleInstance()
 				.As<IHistoricalPeriodProvider>();
-			builder.RegisterType<PreForecastWorkload>()
-				.SingleInstance()
-				.As<IPreForecastWorkload>();
 		}
 	}
 }

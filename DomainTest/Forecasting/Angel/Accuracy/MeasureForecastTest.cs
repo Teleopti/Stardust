@@ -43,9 +43,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 			linearRegressionTrend.Stub(x => x.CalculateTrend(null)).IgnoreArguments().Return(new LinearTrend {Slope = 1, Intercept = 2});
 			var historicalPeriodProvider = MockRepository.GenerateMock<IHistoricalPeriodProvider>();
 			historicalPeriodProvider.Stub(x => x.PeriodForForecast(Workload)).Return(HistoricalPeriodForForecast);
-			var quickForecasterWorkloadEvaluator = new ForecastWorkloadEvaluator(new HistoricalData(dailyStatistics), new ForecastingWeightedMeanAbsolutePercentageError(), new ForecastMethodProvider(new IndexVolumes(), linearRegressionTrend), historicalPeriodProvider);
-			var target = new QuickForecastSkillEvaluator(quickForecasterWorkloadEvaluator);
-			var measurementResult = target.Measure(Workload.Skill);
+
+			var target = new ForecastWorkloadEvaluator(new HistoricalData(dailyStatistics), new ForecastingWeightedMeanAbsolutePercentageError(), new ForecastMethodProvider(new IndexVolumes(), linearRegressionTrend), historicalPeriodProvider);
+			var measurementResult = target.Evaluate(Workload);
 
 			Assert(measurementResult);
 		}
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 			return skillDayRepository;
 		}
 
-		protected abstract void Assert(SkillAccuracy measurementResult);
+		protected abstract void Assert(WorkloadAccuracy measurementResult);
 	}
 
 	
