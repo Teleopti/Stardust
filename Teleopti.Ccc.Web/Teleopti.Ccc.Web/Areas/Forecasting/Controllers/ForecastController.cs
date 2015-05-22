@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
-using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.Forecasting.Core;
@@ -16,14 +15,12 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.OpenForecasterPage)]
 	public class ForecastController : ApiController
 	{
-		private readonly IQuickForecastEvaluator _quickForecastEvaluator;
 		private readonly IQuickForecastCreator _quickForecastCreator;
 		private readonly ISkillRepository _skillRepository;
 		private readonly IPreForecaster _preForecaster;
 
-		public ForecastController(IQuickForecastEvaluator quickForecastEvaluator, IQuickForecastCreator quickForecastCreator, ISkillRepository skillRepository, IPreForecaster preForecaster)
+		public ForecastController(IQuickForecastCreator quickForecastCreator, ISkillRepository skillRepository, IPreForecaster preForecaster)
 		{
-			_quickForecastEvaluator = quickForecastEvaluator;
 			_quickForecastCreator = quickForecastCreator;
 			_skillRepository = skillRepository;
 			_preForecaster = preForecaster;
