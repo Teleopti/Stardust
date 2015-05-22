@@ -1230,6 +1230,7 @@
     <Content Include="WFM\js\people\template\advancedPeopleSearch.html" />
     <Content Include="WFM\tests\forecasting\forecasting.controller.spec.js" />
     <Content Include="WFM\tests\permissions\permissions.filter.spec.js" />
+    <Content Include="WFM\tests\resourceplanner\resourceplanner.report.controller.spec.js" />
     <Content Include="WFM\tests\search\search.controller.spec.js" />
     <Content Include="WFM\vendor\angular-breadcrumb\angular-breadcrumb.js" />
     <Content Include="WFM\vendor\angular-breadcrumb\uiBreadcrumbs.tpl.html" />
