@@ -4,6 +4,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
+using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 {

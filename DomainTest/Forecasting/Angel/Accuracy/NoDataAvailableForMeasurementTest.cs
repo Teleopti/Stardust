@@ -4,6 +4,7 @@ using System.Linq;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
+using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy

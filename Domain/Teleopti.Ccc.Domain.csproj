@@ -520,28 +520,27 @@
     <Compile Include="DistributedLock\IDistributedLockAcquirer.cs" />
     <Compile Include="ETL\RunningEtlJob.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\MethodAccuracy.cs" />
+    <Compile Include="Forecasting\Angel\Accuracy\SkillAccuracy.cs" />
+    <Compile Include="Forecasting\Angel\Accuracy\WorkloadAccuracy.cs" />
     <Compile Include="Forecasting\Angel\AverageStatistics.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\ForecastingMeanAbsolutePercentageDeviation.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\ForecastingSymmetricMeanAbsolutePercentageError.cs" />
-    <Compile Include="Forecasting\Angel\ForecastDayResult.cs" />
-    <Compile Include="Forecasting\Angel\ForecastDayViewModel.cs" />
     <Compile Include="Forecasting\Angel\ForecastWorkloadInput.cs" />
     <Compile Include="Forecasting\Angel\HistoricalPeriodProvider.cs" />
     <Compile Include="Forecasting\Angel\IHistoricalPeriodProvider.cs" />
-    <Compile Include="Forecasting\Angel\ILinearRegressionTrend.cs" />
     <Compile Include="Forecasting\Angel\IPreForecastWorkload.cs" />
-    <Compile Include="Forecasting\Angel\LinearTrend.cs" />
     <Compile Include="Forecasting\Angel\Methods\ForecastMethodProvider.cs" />
+    <Compile Include="Forecasting\Angel\Methods\ForecastMethodType.cs" />
+    <Compile Include="Forecasting\Angel\Methods\IForecastMethod.cs" />
     <Compile Include="Forecasting\Angel\Methods\IForecastMethodProvider.cs" />
     <Compile Include="Forecasting\Angel\Methods\TeleoptiClassic.cs" />
     <Compile Include="Forecasting\Angel\Methods\TeleoptiClassicBase.cs" />
     <Compile Include="Forecasting\Angel\Methods\TeleoptiClassicWithTrend.cs" />
     <Compile Include="Forecasting\Angel\PreForecastWorkload.cs" />
-    <Compile Include="Forecasting\Angel\WorkloadAccuracy.cs" />
+    <Compile Include="Forecasting\Angel\Trend\ILinearRegressionTrend.cs" />
+    <Compile Include="Forecasting\Angel\Trend\LinearTrend.cs" />
     <Compile Include="Forecasting\Angel\ForecastingTargetMerger.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\ForecastingWeightedMeanAbsolutePercentageError.cs" />
-    <Compile Include="Forecasting\Angel\ForecastMethodType.cs" />
-    <Compile Include="Forecasting\Angel\SkillAccuracy.cs" />
     <Compile Include="Forecasting\Angel\Future\ForecastVolumeApplier.cs" />
     <Compile Include="Forecasting\Angel\Future\FutureData.cs" />
     <Compile Include="Forecasting\Angel\Future\IFutureData.cs" />
@@ -551,7 +550,6 @@
     <Compile Include="Forecasting\Angel\Future\IForecastVolumeApplier.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\IForecastMethodEvaluator.cs" />
     <Compile Include="Forecasting\Angel\IForecastingTargetMerger.cs" />
-    <Compile Include="Forecasting\Angel\IForecastMethod.cs" />
     <Compile Include="Forecasting\Angel\IIndexVolumes.cs" />
     <Compile Include="Forecasting\Angel\IndexVolumes.cs" />
     <Compile Include="Forecasting\Angel\IQuickForecaster.cs" />
@@ -2435,7 +2433,6 @@
     <EmbeddedResource Include="Scheduling\Assignment\ShiftLayer.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Forecasting\Angel\Trend\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>

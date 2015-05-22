@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Ccc.Domain.Forecasting.Angel
+namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 {
 	public class SkillAccuracy
 	{

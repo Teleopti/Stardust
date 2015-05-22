@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Domain.Forecasting.Angel
+﻿namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 {
 	public enum ForecastMethodType
 	{

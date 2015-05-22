@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
+using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
 using Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy;
 using Teleopti.Interfaces.Domain;
 

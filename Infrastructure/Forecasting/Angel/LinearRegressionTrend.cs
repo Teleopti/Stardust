@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using MathNet.Numerics;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
+using Teleopti.Ccc.Domain.Forecasting.Angel.Trend;
 
 namespace Teleopti.Ccc.Infrastructure.Forecasting.Angel
 {

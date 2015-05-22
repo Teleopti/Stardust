@@ -1,3 +1,5 @@
+using Teleopti.Ccc.Domain.Forecasting.Angel.Trend;
+
 namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 {
 	public class ForecastMethodProvider : IForecastMethodProvider

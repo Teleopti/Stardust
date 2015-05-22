@@ -1,7 +1,6 @@
 ﻿using System;
-using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
 
-namespace Teleopti.Ccc.Domain.Forecasting.Angel
+namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 {
 	public class WorkloadAccuracy
 	{

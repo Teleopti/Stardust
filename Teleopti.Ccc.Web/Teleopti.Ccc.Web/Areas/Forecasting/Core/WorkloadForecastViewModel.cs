@@ -1,5 +1,6 @@
 using System;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
+using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
 
 namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 {
