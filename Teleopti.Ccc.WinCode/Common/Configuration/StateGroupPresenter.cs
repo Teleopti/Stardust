@@ -25,25 +25,33 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 			}
 		}
 
-		public void Save(IList<IRtaStateGroup> stateGroups, IList<IRtaStateGroup> removedGroups, IList<IRtaStateGroup> groupsWithRemovedStates)
+		public void Save(IList<IRtaStateGroup> stateGroups, IList<IRtaStateGroup> removedGroups,
+			IList<IRtaStateGroup> groupsWithRemovedStates)
 		{
 			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
-				var repository = new RtaStateGroupRepository(uow);
+				var stateGroupRepository = new RtaStateGroupRepository(uow);
+				var alarmMappingRepository = new StateGroupActivityAlarmRepository(uow);
 				foreach (var removedGroup in removedGroups.Where(x => x.Id.HasValue))
 				{
-					repository.Remove(removedGroup);
+					var group = removedGroup;
+					var mappingsWithStateGroup = alarmMappingRepository.LoadAll();
+					foreach (var matchingMapping in mappingsWithStateGroup
+						.Where(x => x.StateGroup != null &&
+						            x.StateGroup.Id.Value == group.Id.Value))
+						alarmMappingRepository.Remove(matchingMapping);
+
+					stateGroupRepository.Remove(removedGroup);
 					removedGroup.ClearStates();
 				}
-				foreach (var state in groupsWithRemovedStates)
-					repository.Add(state);
+				foreach (var state in groupsWithRemovedStates.Where(x => !removedGroups.Contains(x)))
+					stateGroupRepository.Add(state);
 				uow.Flush();
 
 				foreach (var group in stateGroups)
-					repository.Add(group);
+					stateGroupRepository.Add(group);
 				uow.PersistAll();
 			}
 		}
-
 	}
 }
