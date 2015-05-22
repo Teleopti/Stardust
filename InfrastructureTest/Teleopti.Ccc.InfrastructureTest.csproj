@@ -205,7 +205,6 @@
     <Compile Include="MultiTenancy\Server\NHibernate\TenantUnitOfWorkManagerTest.cs" />
     <Compile Include="MultiTenancy\Server\PersistPersonInfoTest.cs" />
     <Compile Include="MultiTenancy\Server\PersistTenantTest.cs" />
-    <Compile Include="MultiTenancy\Server\ValidTenantUserTest.cs" />
     <Compile Include="MultiTenancy\Client\TenantClientTestAttribute.cs" />
     <Compile Include="Persisters\Schedules\NoUnitOfWorkModifyNoConflictTest.cs" />
     <Compile Include="PrincipalAndStateTestAttribute.cs" />

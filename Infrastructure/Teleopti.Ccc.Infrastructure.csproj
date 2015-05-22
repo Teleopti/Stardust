@@ -269,7 +269,6 @@
     <Compile Include="MultiTenancy\Server\IFindPersonInfo.cs" />
     <Compile Include="MultiTenancy\Server\IFindPersonInfoByCredentials.cs" />
     <Compile Include="MultiTenancy\Server\ITenantAuthentication.cs" />
-    <Compile Include="MultiTenancy\Server\IValidTenantUser.cs" />
     <Compile Include="MultiTenancy\Server\IVerifyPasswordPolicy.cs" />
     <Compile Include="MultiTenancy\Server\LogonInfo.cs" />
     <Compile Include="MultiTenancy\Server\NHibernate\ITenantUnitOfWorkAspect.cs" />
@@ -278,9 +277,7 @@
     <Compile Include="MultiTenancy\Server\PasswordStrengthException.cs" />
     <Compile Include="MultiTenancy\Server\PersistPersonInfoFake.cs" />
     <Compile Include="MultiTenancy\Server\PersistTenant.cs" />
-    <Compile Include="MultiTenancy\Server\TenantPermissionException.cs" />
     <Compile Include="MultiTenancy\Server\TenantUnitOfWorkFake.cs" />
-    <Compile Include="MultiTenancy\Server\ValidTenantUser.cs" />
     <Compile Include="MultiTenancy\Server\VerifyPasswordPolicy.cs" />
     <Compile Include="MultiTenancy\Server\DeletePersonInfo.cs" />
     <Compile Include="MultiTenancy\Server\FindTenantAndPersonIdForIdentity.cs" />
