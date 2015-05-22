@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.DataProvide
 			var workTimeMinMaxCalculator = MockRepository.GenerateMock<IWorkTimeMinMaxCalculator>();
 			var scheduleProvider = MockRepository.GenerateMock<IScheduleProvider>();
 			var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
-			scheduleProvider.Stub(x => x.GetScheduleForPeriod(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today)))
+			scheduleProvider.Stub(x => x.GetScheduleForStudentAvailability(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today)))
 				.Return(new[] {scheduleDay});
 
 			var target = new StudentAvailabilityFeedbackProvider(workTimeMinMaxCalculator,
