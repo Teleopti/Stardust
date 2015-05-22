@@ -68,16 +68,6 @@ FROM Person WITH (NOLOCK) WHERE IsDeleted = 0
 AND Id NOT IN(SELECT PersonId FROM [ReadModel].[FindPerson] WHERE SearchType = 'EmploymentNumber')
 
 INSERT [ReadModel].[FindPerson]
-SELECT Id,FirstName, LastName, EmploymentNumber, Note, TerminalDate, [Identity] as WindowsLogOnName, 'WindowsLogOnName', NULL, NULL, NULL, NULL  
-FROM Person WITH (NOLOCK) INNER JOIN AuthenticationInfo On Id = Person AND IsDeleted = 0
-AND Id NOT IN(SELECT PersonId FROM [ReadModel].[FindPerson] WHERE SearchType = 'WindowsLogOnName')
-
-INSERT [ReadModel].[FindPerson]
-SELECT Id,FirstName, LastName, EmploymentNumber, Note, TerminalDate, ApplicationLogOnName, 'ApplicationLogOnName', NULL, NULL, NULL,NULL  
-FROM Person WITH (NOLOCK) INNER JOIN ApplicationAuthenticationInfo On Id = Person AND IsDeleted = 0
-AND Id NOT IN(SELECT PersonId FROM [ReadModel].[FindPerson] WHERE SearchType = 'ApplicationLogOnName')
-
-INSERT [ReadModel].[FindPerson]
 SELECT DISTINCT p.Id,FirstName, LastName, EmploymentNumber, p.Note, TerminalDate, ptp.Name, 'PartTimePercentage', NULL, NULL, NULL, ptp.Id
 FROM Person p WITH (NOLOCK)
 INNER JOIN PersonPeriod pp ON p.Id = pp.Parent
