@@ -6,6 +6,8 @@ using log4net.Config;
 using log4net;
 using System.Linq;
 using System.Threading;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 
 namespace Teleopti.Support.Security
 {
@@ -48,6 +50,7 @@ namespace Teleopti.Support.Security
 					LicenseStatusChecker.Execute(commandLineArgument);
 					convertDayOffToNewStructure(commandLineArgument);
 					initAuditData(commandLineArgument);
+					tenantUpgrades(commandLineArgument.DestinationConnectionString);
 				}
 			}
 			catch (Exception e)
@@ -58,6 +61,17 @@ namespace Teleopti.Support.Security
 			Thread.Sleep(TimeSpan.FromSeconds(3));
 			log.Debug("Teleopti.Support.Security successful");
 			Environment.ExitCode = 0;
+		}
+
+		private static void tenantUpgrades(string destinationConnectionString)
+		{
+			//todo: tenant what should we do when/if multiple tenants?
+			log.Debug("Updating tenant password...");
+			var tenantUowManager = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(destinationConnectionString);
+			var updatePasswords = new RegenerateAllTenantPasswords(tenantUowManager);
+			updatePasswords.Modify();
+			tenantUowManager.CommitAndDisposeCurrent();
+			log.Debug("Updating tenant password. Done!");
 		}
 
 		private static void initAuditData(CommandLineArgument commandLineArgument)

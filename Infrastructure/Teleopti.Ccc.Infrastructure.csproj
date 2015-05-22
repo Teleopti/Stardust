@@ -235,6 +235,8 @@
     <Compile Include="LiteUnitOfWork\ReadModelUnitOfWork\ReadModelUnitOfWorkFactory.cs" />
     <Compile Include="LiteUnitOfWork\ReadModelUnitOfWork\ReadModelUnitOfWorkState.cs" />
     <Compile Include="MessageBroker\MailboxRepository.cs" />
+    <Compile Include="MultiTenancy\Admin\IRegenerateAllTenantPasswords.cs" />
+    <Compile Include="MultiTenancy\Admin\RegenerateAllTenantPasswords.cs" />
     <Compile Include="MultiTenancy\Client\AuthenticationFromFileQuerier.cs" />
     <Compile Include="MultiTenancy\Client\AuthenticationQuerierResultConverter.cs" />
     <Compile Include="MultiTenancy\Client\ChangePassword.cs" />

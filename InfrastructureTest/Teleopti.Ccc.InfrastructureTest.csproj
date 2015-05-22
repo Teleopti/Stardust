@@ -184,6 +184,7 @@
     <Compile Include="Foundation\CouldNotCreateTransactionExceptionTest.cs" />
     <Compile Include="MessageBrokerUnitOfWork\MessageBrokerUnitOfWorkTest.cs" />
     <Compile Include="MessageBroker\MailboxRepositoryTest.cs" />
+    <Compile Include="MultiTenancy\Admin\RegenerateAllTenantPasswordsTest.cs" />
     <Compile Include="MultiTenancy\Client\ApplicationDataFake.cs" />
     <Compile Include="MultiTenancy\Client\AuthenticationQuerierResultConverterTest.cs" />
     <Compile Include="MultiTenancy\Client\ChangePasswordTest.cs" />
