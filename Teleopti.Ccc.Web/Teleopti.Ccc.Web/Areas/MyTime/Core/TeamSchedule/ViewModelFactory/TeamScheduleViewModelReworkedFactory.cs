@@ -18,7 +18,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 		private readonly IPersonScheduleDayReadModelFinder _scheduleDayReadModelFinder;
 		private readonly IPersonRepository _personRep;
 
-		public TeamScheduleViewModelReworkedFactory(ITeamSchedulePersonsProvider teamSchedulePersonsProvider, IAgentScheduleViewModelReworkedMapper agentScheduleViewModelReworkedMapper, ITimeLineViewModelReworkedMapper timeLineViewModelReworkedMapper, IPersonScheduleDayReadModelFinder scheduleDayReadModelFinder, IPersonRepository personRep)
+		public TeamScheduleViewModelReworkedFactory(ITeamSchedulePersonsProvider teamSchedulePersonsProvider,
+			IAgentScheduleViewModelReworkedMapper agentScheduleViewModelReworkedMapper,
+			ITimeLineViewModelReworkedMapper timeLineViewModelReworkedMapper,
+			IPersonScheduleDayReadModelFinder scheduleDayReadModelFinder, IPersonRepository personRep)
 		{
 			_teamSchedulePersonsProvider = teamSchedulePersonsProvider;
 			_agentScheduleViewModelReworkedMapper = agentScheduleViewModelReworkedMapper;
@@ -45,19 +48,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 					data.TimeFilter, data.TimeSortOrder);
 				var people = _personRep.FindPeople(personIds);
 				var schedulesWithPersons = from s in personScheduleDays
-										   let person = (from p in people
-														 where p.Id.Value == s.PersonId
-														 select p).SingleOrDefault()
-										   where person != null
-										   select new PersonSchedule()
-										   {
-											   Person = person,
-											   Schedule = s
-										   };
+					let person = (from p in people
+						where p.Id.Value == s.PersonId
+						select p).SingleOrDefault()
+					where person != null
+					select new PersonSchedule()
+					{
+						Person = person,
+						Schedule = s
+					};
 
 				agentSchedules = _agentScheduleViewModelReworkedMapper.Map(schedulesWithPersons).ToList();
 				int scheduleCount = agentSchedules.Any() ? agentSchedules.First().Total : 0;
-				pageCount = (int)Math.Ceiling(((double)scheduleCount) / data.Paging.Take);
+				pageCount = (int) Math.Ceiling(((double) scheduleCount)/data.Paging.Take);
 			}
 			else
 			{
@@ -65,7 +68,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 			}
 
 			var timeLineHours = _timeLineViewModelReworkedMapper.Map(agentSchedules, data.ScheduleDate);
-
+		
 			return new TeamScheduleViewModelReworked
 			{
 				AgentSchedules = agentSchedules,
@@ -73,5 +76,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 				PageCount = pageCount
 			};
 		}
+
 	}
 }

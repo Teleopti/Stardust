@@ -50,14 +50,18 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 			var assignments = _personAssignmentRepository.LoadAll()
 				.Where(a => personIdList.Contains(a.Person.Id.Value) && date == a.Date)
 				.Where(a => filterInfo == null || !filterInfo.StartTimes.Any() || filterInfo.StartTimes.Any(period => period.Contains(a.Period.StartDateTime)))
-				.Where(a => filterInfo == null || !filterInfo.EndTimes.Any() || filterInfo.EndTimes.Any(period => period.Contains(a.Period.EndDateTime)));
+				.Where(a => filterInfo == null || !filterInfo.EndTimes.Any() || filterInfo.EndTimes.Any(period => period.Contains(a.Period.EndDateTime))).ToList();
 			var persons = _personRepository.LoadAll();
 
 
 			if (filterInfo != null && timeFilterHasValue(filterInfo))
 			{
-				return assignments.Select(a =>
+				var nonEmptyDayPersonSchedules = assignments.Select(a =>
 				{
+					if (a.DayOff() != null)
+					{
+						return PersonScheduleDayReadModelFactory.CreateDayOffPersonScheduleDayReadModel(a.Person, date);
+					}
 					var simpleLayers = a.ShiftLayers.Select(shiftLayer => new SimpleLayer
 					{
 						Start = shiftLayer.Period.StartDateTime,
@@ -68,6 +72,15 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 					return PersonScheduleDayReadModelFactory.CreatePersonScheduleDayReadModelWithSimpleShift(a.Person, date,
 						simpleLayers);
 				});
+
+				if (!filterInfo.IsEmptyDay) return nonEmptyDayPersonSchedules;
+
+				var emptyDayPersonSchedules = personIdList.Except(assignments.Select(x => x.Person.Id.Value))
+					.Select(pid => PersonScheduleDayReadModelFactory.CreateSimplePersonScheduleDayReadModel(
+						persons.First(p => p.Id.Value == pid),
+						date));
+
+				return nonEmptyDayPersonSchedules.Concat(emptyDayPersonSchedules);
 			}
 			return personIdList.Select(pid =>
 			{
@@ -77,6 +90,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 					return PersonScheduleDayReadModelFactory.CreateSimplePersonScheduleDayReadModel(
 						persons.First(p => p.Id.Value == pid),
 						date);
+				}
+
+				if (assignment.DayOff() != null)
+				{
+					return PersonScheduleDayReadModelFactory.CreateDayOffPersonScheduleDayReadModel(assignment.Person, date);
 				}
 
 				var simpleLayers = assignment.ShiftLayers.Select(shiftLayer => new SimpleLayer

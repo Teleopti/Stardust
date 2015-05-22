@@ -5,8 +5,8 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping;
@@ -73,20 +73,24 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			person1Assignment_2.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 21, 10, 2015, 5, 21, 16));
 
 
-			var person2Assignment = PersonAssignmentFactory.CreatePersonAssignmentWithId(person2, new DateOnly(2015, 5, 19));
-			person2Assignment.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 19, 11, 2015, 5, 19, 20));
+			var person2Assignment_1 = PersonAssignmentFactory.CreatePersonAssignmentWithId(person2, new DateOnly(2015, 5, 19));
+			person2Assignment_1.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 19, 11, 2015, 5, 19, 20));
 
+			var person2Assignment_2 = PersonAssignmentFactory.CreatePersonAssignmentWithId(person2, new DateOnly(2015, 5, 23));
+			person2Assignment_2.SetDayOff(new DayOffTemplate(new Description("Day Off", "DO")));
+			
 			var person3Assignment = PersonAssignmentFactory.CreatePersonAssignmentWithId(person3, new DateOnly(2015, 5, 19));
 			person3Assignment.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 19, 12, 2015, 5, 19, 15));
 			_personAssignmentRepository.Add(person1Assignment_1);
 			_personAssignmentRepository.Add(person1Assignment_2);
-			_personAssignmentRepository.Add(person2Assignment);
+			_personAssignmentRepository.Add(person2Assignment_1);
+			_personAssignmentRepository.Add(person2Assignment_2);
 			_personAssignmentRepository.Add(person3Assignment);
 		}
 
 
 		[Test]
-		public void TargetControllerNotNull()
+		public void TargetFactoryNotNull()
 		{
 			_target.Should().Not.Be.Null();
 		}
@@ -186,9 +190,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				{
 					StartTimes = new List<DateTimePeriod>{ new DateTimePeriod(2015, 5, 19, 7, 2015, 5, 19, 9)},
 					EndTimes = new List<DateTimePeriod> {new DateTimePeriod(2015, 5, 19, 13, 2015, 5, 19, 15)},
-					IsDayOff = true,
+					IsDayOff = false,
 					IsWorkingDay = true,
-					IsEmptyDay = true
+					IsEmptyDay = false
 				},
 				SearchNameText = ""
 			});
@@ -197,7 +201,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		}
 
 		[Test]
-		public void ShouldReturnAgentsWithoutScheduleWhenNoTimeFilter()
+		public void ShouldReturnAllAgentsOfTeamWhenNoTimeFilter()
 		{
 			SetUp();
 
@@ -210,11 +214,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			});
 
 			result.AgentSchedules.Should().Have.Count.EqualTo(3);
-			result.AgentSchedules.ForEach(x => x.ScheduleLayers.Should().Be.Null());
 		}
-
-
-
 
 		[Test]
 		public void ShouldNotSeeScheduleOfUnpublishedAgent()
@@ -230,6 +230,79 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			});
 
 			result.AgentSchedules.First(x => x.Name.Contains("Unpublish")).ScheduleLayers.Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldSeeDayOffAgentScheduleWhenDayOffFilterEnabled()
+		{
+			SetUp();
+
+			var result = _target.GetViewModel(new TeamScheduleViewModelData
+			{
+				ScheduleDate = new DateOnly(2015, 5, 23),
+				TeamIdList = _teamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
+				Paging = new Paging { Take = 20, Skip = 0 },
+				TimeFilter = new TimeFilterInfo
+				{
+					StartTimes = new List<DateTimePeriod>(),
+					EndTimes = new List<DateTimePeriod>(),
+					IsDayOff = true,
+					IsWorkingDay = false,
+					IsEmptyDay = false
+				},
+				SearchNameText = ""
+			});
+
+			result.AgentSchedules.Should().Have.Count.EqualTo(1);			
+		}
+
+		[Test]
+		[Ignore("Ideally this should be included. But with the current implementation the permission check in application is incompatible with the pagingation from repository. So ignored. Discussion welcomed!")]
+		public void ShouldSeeEmptyDayAgentButNotUnpulishedAgentWhenEmptyDayFilterEnabled()
+		{
+			SetUp();
+
+			var result = _target.GetViewModel(new TeamScheduleViewModelData
+			{
+				ScheduleDate = new DateOnly(2015, 5, 23),
+				TeamIdList = _teamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
+				Paging = new Paging { Take = 20, Skip = 0 },
+				TimeFilter = new TimeFilterInfo
+				{
+					StartTimes = new List<DateTimePeriod>(),
+					EndTimes = new List<DateTimePeriod>(),
+					IsDayOff = false,
+					IsWorkingDay = false,
+					IsEmptyDay = true
+				},
+				SearchNameText = ""
+			});
+
+			result.AgentSchedules.Should().Have.Count.EqualTo(1);	
+		}
+
+		[Test]
+		public void ShouldSeeCorrectAgentSchedulesWhenBothDayOffAndEmptyDayFilterEnabled()
+		{
+			SetUp();
+
+			var result = _target.GetViewModel(new TeamScheduleViewModelData
+			{
+				ScheduleDate = new DateOnly(2015, 5, 23),
+				TeamIdList = _teamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
+				Paging = new Paging { Take = 20, Skip = 0 },
+				TimeFilter = new TimeFilterInfo
+				{
+					StartTimes = new List<DateTimePeriod>(),
+					EndTimes = new List<DateTimePeriod>(),
+					IsDayOff = true,
+					IsWorkingDay = false,
+					IsEmptyDay = true
+				},
+				SearchNameText = ""
+			});
+
+			result.AgentSchedules.Should().Have.Count.EqualTo(3);	
 		}
 
 	}

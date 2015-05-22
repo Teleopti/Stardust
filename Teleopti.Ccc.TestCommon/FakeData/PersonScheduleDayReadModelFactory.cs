@@ -36,6 +36,44 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			
 		}
 
+		static public PersonScheduleDayReadModel CreateDayOffPersonScheduleDayReadModel(IPerson person, DateOnly date)
+		{
+			var dayOff = new DayOff
+			{
+				Start = date.Add(new TimeSpan(8, 0, 0)).Date,
+				End = date.Add(new TimeSpan(17, 0, 0)).Date,
+				Title = "Day Off"
+			};
+
+			var shift = new Shift
+			{
+				Projection = new List<SimpleLayer>(),
+				IsFullDayAbsence = false
+			};
+		
+			var model = new Model
+			{
+				FirstName = person.Name.FirstName,
+				LastName = person.Name.LastName,
+				DayOff = dayOff,
+				Shift = shift,
+				Date = date.Date		
+			};
+			return new PersonScheduleDayReadModel
+			{
+				PersonId = person.Id.Value,
+				TeamId = person.MyTeam(date).Id.Value,
+				Start = dayOff.Start.Date,
+				End = dayOff.End.Date,
+				Model = JsonConvert.SerializeObject(model),
+				FirstName = model.FirstName,
+				LastName = model.LastName,
+				Date = date.Date,
+				MinStart = dayOff.Start.Date,
+				IsDayOff = true
+			};		
+		}
+
 
 		static public PersonScheduleDayReadModel CreatePersonScheduleDayReadModelWithSimpleShift(IPerson person, DateOnly date,  IList<SimpleLayer> simpleLayers)		
 		{
