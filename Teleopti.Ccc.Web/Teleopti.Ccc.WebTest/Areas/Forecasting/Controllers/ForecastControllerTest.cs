@@ -3,7 +3,6 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Forecasting.Controllers;
@@ -17,7 +16,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		[Test]
 		public void ShouldGetSkillsAndWorkloads()
 		{
-			var quickForecastEvaluator = MockRepository.GenerateMock<IQuickForecastEvaluator>();
 			var skillRepository = MockRepository.GenerateMock<ISkillRepository>();
 			var skill1 = SkillFactory.CreateSkillWithWorkloadAndSources();
 			skill1.SetId(Guid.NewGuid());

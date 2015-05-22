@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Historical;
 using Teleopti.Ccc.Domain.Forecasting.Angel.LegacyWrappers;
+using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
 using Teleopti.Ccc.Infrastructure.Forecasting.Angel;
 
 namespace Teleopti.Ccc.IocCommon.Configuration

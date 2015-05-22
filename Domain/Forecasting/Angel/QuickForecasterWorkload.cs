@@ -2,6 +2,7 @@
 using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Historical;
+using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel
 {

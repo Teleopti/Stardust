@@ -519,10 +519,6 @@
     <Compile Include="DayOffPlanning\TuiCaseSolver.cs" />
     <Compile Include="DistributedLock\IDistributedLockAcquirer.cs" />
     <Compile Include="ETL\RunningEtlJob.cs" />
-    <Compile Include="Forecasting\Angel\Accuracy\ForecastMethodProvider.cs" />
-    <Compile Include="Forecasting\Angel\Accuracy\HistoricalPeriodProvider.cs" />
-    <Compile Include="Forecasting\Angel\Accuracy\IForecastMethodProvider.cs" />
-    <Compile Include="Forecasting\Angel\Accuracy\IHistoricalPeriodProvider.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\MethodAccuracy.cs" />
     <Compile Include="Forecasting\Angel\AverageStatistics.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\ForecastingMeanAbsolutePercentageDeviation.cs" />
@@ -530,9 +526,13 @@
     <Compile Include="Forecasting\Angel\ForecastDayResult.cs" />
     <Compile Include="Forecasting\Angel\ForecastDayViewModel.cs" />
     <Compile Include="Forecasting\Angel\ForecastWorkloadInput.cs" />
+    <Compile Include="Forecasting\Angel\HistoricalPeriodProvider.cs" />
+    <Compile Include="Forecasting\Angel\IHistoricalPeriodProvider.cs" />
     <Compile Include="Forecasting\Angel\ILinearRegressionTrend.cs" />
     <Compile Include="Forecasting\Angel\IPreForecastWorkload.cs" />
     <Compile Include="Forecasting\Angel\LinearTrend.cs" />
+    <Compile Include="Forecasting\Angel\Methods\ForecastMethodProvider.cs" />
+    <Compile Include="Forecasting\Angel\Methods\IForecastMethodProvider.cs" />
     <Compile Include="Forecasting\Angel\Methods\TeleoptiClassic.cs" />
     <Compile Include="Forecasting\Angel\Methods\TeleoptiClassicBase.cs" />
     <Compile Include="Forecasting\Angel\Methods\TeleoptiClassicWithTrend.cs" />
@@ -558,7 +558,6 @@
     <Compile Include="Forecasting\Angel\IForecastCreator.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\IQuickForecastSkillEvaluator.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\IForecastWorkloadEvaluator.cs" />
-    <Compile Include="Forecasting\Angel\Accuracy\IQuickForecastEvaluator.cs" />
     <Compile Include="Forecasting\Angel\LegacyWrappers\DailyStatisticsToTaskOwnerConverterExtension.cs" />
     <Compile Include="Forecasting\Angel\Historical\HistoricalData.cs" />
     <Compile Include="Forecasting\Angel\Historical\IHistoricalData.cs" />

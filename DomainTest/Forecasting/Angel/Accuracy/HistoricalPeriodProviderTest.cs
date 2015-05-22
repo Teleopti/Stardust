@@ -3,6 +3,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;

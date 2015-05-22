@@ -9,6 +9,4 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 		public bool IsSelected { get; set; }
 		public IForecastingTarget[] MeasureResult { get; set; }
 	}
-
-
 }
