@@ -254,6 +254,7 @@
     <Compile Include="MultiTenancy\Server\CheckPasswordStrength.cs" />
     <Compile Include="MultiTenancy\Server\CheckPasswordStrengthFake.cs" />
     <Compile Include="MultiTenancy\Server\CurrentTenantUserFake.cs" />
+    <Compile Include="MultiTenancy\Server\CurrentTenantFake.cs" />
     <Compile Include="MultiTenancy\Server\DeletePersonInfoFake.cs" />
     <Compile Include="MultiTenancy\Server\DuplicateApplicationLogonNameException.cs" />
     <Compile Include="MultiTenancy\Server\DuplicateIdentityException.cs" />
@@ -263,6 +264,7 @@
     <Compile Include="MultiTenancy\Server\FindPersonInfoFake.cs" />
     <Compile Include="MultiTenancy\Server\FindPersonInfo.cs" />
     <Compile Include="MultiTenancy\Server\ICheckPasswordStrength.cs" />
+    <Compile Include="MultiTenancy\Server\ICurrentTenant.cs" />
     <Compile Include="MultiTenancy\Server\ICurrentTenantUser.cs" />
     <Compile Include="MultiTenancy\Server\IdentityUserQueryFake.cs" />
     <Compile Include="MultiTenancy\Server\IFindLogonInfo.cs" />

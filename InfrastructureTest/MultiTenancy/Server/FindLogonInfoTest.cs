@@ -21,11 +21,10 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 			info.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), RandomName.Make());
 			info.SetIdentity(RandomName.Make());
 			_tenantUnitOfWorkManager.CurrentSession().Save(info);
-			var loggedOnUser = new PersonInfo(tenantPresentInDatabase, Guid.NewGuid());
-			var currentUser = new CurrentTenantUserFake();
-			currentUser.Set(loggedOnUser);
+			var currentTenant = new CurrentTenantFake();
+			currentTenant.Set(tenantPresentInDatabase);
 
-			var target = new FindLogonInfo(_tenantUnitOfWorkManager, currentUser);
+			var target = new FindLogonInfo(_tenantUnitOfWorkManager, currentTenant);
 
 			var result = target.GetForIds(new[] {info.Id}).Single();
 			result.LogonName.Should().Be.EqualTo(info.ApplicationLogonName);
@@ -42,12 +41,10 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 			var loggedOnTenant = new Tenant("_");
 			_tenantUnitOfWorkManager.CurrentSession().Save(info);
 			_tenantUnitOfWorkManager.CurrentSession().Save(loggedOnTenant);
+			var currentTenant = new CurrentTenantFake();
+			currentTenant.Set(tenantPresentInDatabase);
 
-			var loggedOnUser = new PersonInfo(loggedOnTenant, Guid.NewGuid());
-			var currentUser = new CurrentTenantUserFake();
-			currentUser.Set(loggedOnUser);
-
-			var target = new FindLogonInfo(_tenantUnitOfWorkManager, currentUser);
+			var target = new FindLogonInfo(_tenantUnitOfWorkManager, currentTenant);
 
 			target.GetForIds(new[] {info.Id})
 				.Should().Be.Empty();
@@ -56,11 +53,10 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		[Test]
 		public void ShouldSilentlyIgnoreNonExistingIds()
 		{
-			var loggedOnUser = new PersonInfo(tenantPresentInDatabase, Guid.NewGuid());
-			var currentUser = new CurrentTenantUserFake();
-			currentUser.Set(loggedOnUser);
+			var currentTenant = new CurrentTenantFake();
+			currentTenant.Set(tenantPresentInDatabase);
 
-			var target = new FindLogonInfo(_tenantUnitOfWorkManager, currentUser);
+			var target = new FindLogonInfo(_tenantUnitOfWorkManager, currentTenant);
 
 			target.GetForIds(new[] {Guid.NewGuid(), Guid.NewGuid()})
 				.Should().Be.Empty();
@@ -71,11 +67,10 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		{
 			var info = new PersonInfo(tenantPresentInDatabase, Guid.NewGuid());
 			_tenantUnitOfWorkManager.CurrentSession().Save(info);
-			var loggedOnUser = new PersonInfo(tenantPresentInDatabase, Guid.NewGuid());
-			var currentUser = new CurrentTenantUserFake();
-			currentUser.Set(loggedOnUser);
+			var currentTenant = new CurrentTenantFake();
+			currentTenant.Set(tenantPresentInDatabase);
 			
-			var target = new FindLogonInfo(_tenantUnitOfWorkManager, currentUser);
+			var target = new FindLogonInfo(_tenantUnitOfWorkManager, currentTenant);
 
 			var result = target.GetForIds(new[] { info.Id }).Single();
 			result.LogonName.Should().Be.Null();

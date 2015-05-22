@@ -21,11 +21,10 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 			session.Save(tenant);
 			session.Save(person);
 
-			var loggedOnUser = new PersonInfo(tenant, Guid.NewGuid());
-			var currentUser = new CurrentTenantUserFake();
-			currentUser.Set(loggedOnUser);
+			var currentTenant = new CurrentTenantFake();
+			currentTenant.Set(tenant);
 
-			var target = new DeletePersonInfo(_uow, currentUser);
+			var target = new DeletePersonInfo(_uow, currentTenant);
 			target.Delete(person.Id);
 
 			session.Get<PersonInfo>(person.Id)
@@ -40,12 +39,10 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 			var person = new PersonInfo(tenant, Guid.NewGuid());
 			session.Save(tenant);
 			session.Save(person);
+			var currentTenant = new CurrentTenantFake();
+			currentTenant.Set(tenant);
 
-			var loggedOnUser = new PersonInfo(new Tenant(RandomName.Make()), Guid.NewGuid());
-			var currentUser = new CurrentTenantUserFake();
-			currentUser.Set(loggedOnUser);
-
-			var target = new DeletePersonInfo(_uow, currentUser);
+			var target = new DeletePersonInfo(_uow, currentTenant);
 			target.Delete(person.Id);
 
 			session.Get<PersonInfo>(person.Id)
@@ -55,7 +52,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		[Test]
 		public void ShouldDoNothingIfPersonInfoDoesntExist()
 		{
-			var target = new DeletePersonInfo(_uow, new CurrentTenantUserFake());
+			var target = new DeletePersonInfo(_uow, new CurrentTenantFake());
 			Assert.DoesNotThrow(() =>
 				target.Delete(Guid.NewGuid()));
 		}

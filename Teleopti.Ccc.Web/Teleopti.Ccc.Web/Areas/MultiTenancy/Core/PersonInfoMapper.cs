@@ -5,20 +5,20 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 {
 	public class PersonInfoMapper : IPersonInfoMapper
 	{
-		private readonly ICurrentTenantUser _currentTenantUser;
+		private readonly ICurrentTenant _currentTenant;
 		private readonly ICheckPasswordStrength _checkPasswordStrength;
 
-		public PersonInfoMapper(ICurrentTenantUser currentTenantUser, 
+		public PersonInfoMapper(ICurrentTenant currentTenant, 
 														ICheckPasswordStrength checkPasswordStrength)
 		{
-			_currentTenantUser = currentTenantUser;
+			_currentTenant = currentTenant;
 			_checkPasswordStrength = checkPasswordStrength;
 		}
 
 		public PersonInfo Map(PersonInfoModel personInfoModel)
 		{
 			var id = personInfoModel.PersonId;
-			var personInfo = new PersonInfo(_currentTenantUser.CurrentUser().Tenant, id);
+			var personInfo = new PersonInfo(_currentTenant.Current(), id);
 			personInfo.SetIdentity(personInfoModel.Identity);
 			personInfo.SetApplicationLogonCredentials(_checkPasswordStrength, personInfoModel.ApplicationLogonName, personInfoModel.Password);
 			return personInfo;

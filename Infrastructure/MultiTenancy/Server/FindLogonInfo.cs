@@ -8,12 +8,12 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 	public class FindLogonInfo : IFindLogonInfo
 	{
 		private readonly ICurrentTenantSession _currentTenantSession;
-		private readonly ICurrentTenantUser _currentTenantUser;
+		private readonly ICurrentTenant _currentTenant;
 
-		public FindLogonInfo(ICurrentTenantSession currentTenantSession, ICurrentTenantUser currentTenantUser)
+		public FindLogonInfo(ICurrentTenantSession currentTenantSession, ICurrentTenant currentTenant)
 		{
 			_currentTenantSession = currentTenantSession;
-			_currentTenantUser = currentTenantUser;
+			_currentTenant = currentTenant;
 		}
 
 		public IEnumerable<LogonInfo> GetForIds(IEnumerable<Guid> ids)
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 				.GetNamedQuery("findLogonInfo")
 				.SetResultTransformer(Transformers.AliasToBean<LogonInfo>())
 				.SetParameterList("ids", ids)
-				.SetEntity("tenant", _currentTenantUser.CurrentUser().Tenant)
+				.SetEntity("tenant", _currentTenant.Current())
 				.List<LogonInfo>();
 		}
 	}
