@@ -55,7 +55,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 					select new PersonSchedule()
 					{
 						Person = person,
-						Schedule = s
+						Schedule = s,
+						Date = data.ScheduleDate
 					};
 
 				agentSchedules = _agentScheduleViewModelReworkedMapper.Map(schedulesWithPersons).ToList();
