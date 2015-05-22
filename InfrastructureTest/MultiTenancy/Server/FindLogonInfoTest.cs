@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 			_tenantUnitOfWorkManager.CurrentSession().Save(info);
 			_tenantUnitOfWorkManager.CurrentSession().Save(loggedOnTenant);
 			var currentTenant = new CurrentTenantFake();
-			currentTenant.Set(tenantPresentInDatabase);
+			currentTenant.Set(loggedOnTenant);
 
 			var target = new FindLogonInfo(_tenantUnitOfWorkManager, currentTenant);
 

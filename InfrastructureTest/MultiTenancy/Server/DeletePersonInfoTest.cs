@@ -4,7 +4,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.TestData;
 
 namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 {
@@ -35,12 +34,12 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		public void ShouldNotDeletePersonInOtherTenant()
 		{
 			var session = _uow.CurrentSession();
-			var tenant = new Tenant("som name");
+			var tenant = new Tenant("some name");
 			var person = new PersonInfo(tenant, Guid.NewGuid());
 			session.Save(tenant);
 			session.Save(person);
 			var currentTenant = new CurrentTenantFake();
-			currentTenant.Set(tenant);
+			currentTenant.Set(new Tenant("some other"));
 
 			var target = new DeletePersonInfo(_uow, currentTenant);
 			target.Delete(person.Id);
