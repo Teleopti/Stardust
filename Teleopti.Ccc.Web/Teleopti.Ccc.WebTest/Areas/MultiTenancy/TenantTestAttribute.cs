@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		{
 			builder.RegisterModule(new WebModule(configuration, null));
 			builder.RegisterType<PersistPersonInfoFake>().As<IPersistPersonInfo>().AsSelf().SingleInstance();
-			builder.RegisterType<FindTenantByNameQueryFake>().As<IFindTenantByNameQuery>().AsSelf().SingleInstance();
 			builder.RegisterType<CheckPasswordStrengthFake>().As<ICheckPasswordStrength>().AsSelf().SingleInstance();
 			builder.RegisterType<DeletePersonInfoFake>().As<IDeletePersonInfo>().AsSelf().SingleInstance();
 			builder.RegisterType<ApplicationUserQueryFake>().As<IApplicationUserQuery>().AsSelf().SingleInstance();

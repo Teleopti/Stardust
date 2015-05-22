@@ -11,7 +11,6 @@ using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 {
@@ -21,6 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		private string correctIdentity;
 		private IIdentityUserQuery target;
 		private TenantUnitOfWorkManager _tenantUnitOfWorkManager;
+		private string tenantName;
 
 		[Test]
 		public void ShouldFindPersonId()
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		public void ShouldFindTenant()
 		{
 			var result = target.FindUserData(correctIdentity);
-			result.Tenant.Name.Should().Be.EqualTo(Tenant.DefaultName);
+			result.Tenant.Name.Should().Be.EqualTo(tenantName);
 		}
 
 		[Test]
@@ -49,7 +49,9 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		{
 			correctIdentity = RandomName.Make();
 			_tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(ConnectionStringHelper.ConnectionStringUsedInTests);
-			var tenant = new FindTenantByNameQuery(_tenantUnitOfWorkManager).Find(Tenant.DefaultName);
+			tenantName = RandomName.Make();
+			var tenant = new Tenant(tenantName);
+			_tenantUnitOfWorkManager.CurrentSession().Save(tenant);
 			personId = Guid.NewGuid();
 			var pInfo = new PersonInfo(tenant, personId);
 			pInfo.SetIdentity(correctIdentity);
@@ -80,13 +82,6 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 			result.Id.Should().Be.EqualTo(personId);
 		}
 
-		[Test]
-		public void ShouldFindTenant()
-		{
-			var result = target.FindUserData(correctIdentity);
-			result.Tenant.Name.Should().Be.EqualTo(Tenant.DefaultName);
-		}
-		
 		[Test]
 		public void NonExistingUserShouldFail()
 		{

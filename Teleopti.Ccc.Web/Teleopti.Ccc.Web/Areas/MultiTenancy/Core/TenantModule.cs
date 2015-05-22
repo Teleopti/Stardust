@@ -55,7 +55,6 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 			builder.RegisterType<NhibConfigurationEncryption>().As<INhibConfigurationEncryption>().SingleInstance();
 			builder.RegisterType<PersistPersonInfo>().As<IPersistPersonInfo>().SingleInstance();
 			builder.RegisterType<PersonInfoMapper>().As<IPersonInfoMapper>().SingleInstance();
-			builder.RegisterType<FindTenantByNameQuery>().As<IFindTenantByNameQuery>().SingleInstance();
 			builder.RegisterType<DeletePersonInfo>().As<IDeletePersonInfo>().SingleInstance();
 			builder.RegisterType<VerifyPasswordPolicy>().As<IVerifyPasswordPolicy>().SingleInstance();
 			builder.RegisterType<CheckPasswordStrength>().As<ICheckPasswordStrength>().SingleInstance();

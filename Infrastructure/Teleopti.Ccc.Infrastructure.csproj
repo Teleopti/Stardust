@@ -261,7 +261,6 @@
     <Compile Include="MultiTenancy\Server\FindLogonInfoFake.cs" />
     <Compile Include="MultiTenancy\Server\FindPersonInfoByCredentials.cs" />
     <Compile Include="MultiTenancy\Server\FindPersonInfoFake.cs" />
-    <Compile Include="MultiTenancy\Server\FindTenantByNameQueryFake.cs" />
     <Compile Include="MultiTenancy\Server\FindPersonInfo.cs" />
     <Compile Include="MultiTenancy\Server\ICheckPasswordStrength.cs" />
     <Compile Include="MultiTenancy\Server\ICurrentTenantUser.cs" />
@@ -285,10 +284,8 @@
     <Compile Include="MultiTenancy\Server\VerifyPasswordPolicy.cs" />
     <Compile Include="MultiTenancy\Server\DeletePersonInfo.cs" />
     <Compile Include="MultiTenancy\Server\FindTenantAndPersonIdForIdentity.cs" />
-    <Compile Include="MultiTenancy\Server\FindTenantByNameQuery.cs" />
     <Compile Include="MultiTenancy\Server\IDeletePersonInfo.cs" />
     <Compile Include="MultiTenancy\Server\IFindTenantAndPersonIdForIdentity.cs" />
-    <Compile Include="MultiTenancy\Server\IFindTenantByNameQuery.cs" />
     <Compile Include="MultiTenancy\Server\IIdentityUserQuery.cs" />
     <Compile Include="MultiTenancy\Server\IdentityUserQuery.cs" />
     <Compile Include="MultiTenancy\Client\AuthenticationQuerier.cs" />

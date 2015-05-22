@@ -4,6 +4,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.TestData;
 
 namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 {
@@ -52,7 +53,8 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		public void Setup()
 		{
 			tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(ConnectionStringHelper.ConnectionStringUsedInTests);
-			var tenant = new FindTenantByNameQuery(tenantUnitOfWorkManager).Find(Tenant.DefaultName);
+			var tenant = new Tenant(RandomName.Make());
+			tenantUnitOfWorkManager.CurrentSession().Save(tenant);
 			validPerson = new PersonInfo(tenant, Guid.NewGuid());
 			var personInfoPersister = new PersistPersonInfo(tenantUnitOfWorkManager);
 			personInfoPersister.Persist(validPerson);
