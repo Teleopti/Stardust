@@ -33,7 +33,7 @@ namespace Teleopti.Analytics.Etl.Transformer
 				.As<ITenantUnitOfWork>()
 				.As<ICurrentTenantSession>()
 				.SingleInstance();
-			builder.RegisterType<FindLogonInfo>().As<IFindLogonInfo>().SingleInstance();
+			builder.RegisterType<FindTenantLogonInfoUnsecured>().As<IFindLogonInfo>().SingleInstance();
 			if (_configuration.Toggle(Toggles.MultiTenancy_LogonUseNewSchema_33049))
 			{
 				builder.RegisterType<TenantLogonInfoLoader>().As<ITenantLogonInfoLoader>().SingleInstance();
