@@ -4,8 +4,7 @@ INNER JOIN dbo.RtaStateGroup g
 ON g.Id = s.Parent
 WHERE g.IsDeleted = 1
 
-UPDATE dbo.StateGroupActivityAlarm
-SET StateGroup = NULL
+DELETE dbo.StateGroupActivityAlarm
 FROM dbo.StateGroupActivityAlarm m
 INNER JOIN dbo.RtaStateGroup g
 ON m.StateGroup = g.Id
