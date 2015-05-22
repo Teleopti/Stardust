@@ -5,7 +5,7 @@
 ---------------- 
 
 UPDATE [dbo].[ApplicationFunction] SET IsDeleted = 1
-WHERE ForeignSource='Raptor' AND IsDeleted='False' AND ForeignId Like('0120%') AND FunctionCode='Outbound'
+WHERE ForeignSource='Raptor' AND IsDeleted=0 AND ForeignId Like('0120%') AND FunctionCode='Outbound'
 
 UPDATE [dbo].[ApplicationFunction] SET IsDeleted = 1
-WHERE ForeignSource='Raptor' AND IsDeleted='False' AND ForeignId Like('0107%') AND FunctionCode='SeatPlanner'
+WHERE ForeignSource='Raptor' AND IsDeleted=0 AND ForeignId Like('0107%') AND FunctionCode='SeatPlanner'
