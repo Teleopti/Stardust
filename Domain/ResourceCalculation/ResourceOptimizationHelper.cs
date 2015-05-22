@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
@@ -88,12 +89,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private DateTimePeriod getPeriod(DateOnly localDate)
 		{
 			var currentStart = localDate;
-			return new DateOnlyPeriod(currentStart, currentStart).ToDateTimePeriod(_currentTeleoptiPrincipal.Current().Regional.TimeZone);
+			return new DateOnlyPeriod(currentStart, currentStart).ToDateTimePeriod(TimeZoneGuard.Instance.TimeZone);
 		}
 
 		public void ResourceCalculateDate(IResourceCalculationDataContainer relevantProjections,
 		                                   DateOnly localDate, bool useOccupancyAdjustment, bool considerShortBreaks)
 		{
+
 			var timePeriod = getPeriod(localDate);
 			var ordinarySkills = new List<ISkill>();
 			var schedulerStateHolder = _stateHolder();
