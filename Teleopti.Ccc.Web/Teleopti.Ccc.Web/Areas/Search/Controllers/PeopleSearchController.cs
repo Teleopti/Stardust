@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 
 			if (string.IsNullOrEmpty(keyword))
 			{
-				keyword = myTeam.SiteAndTeam.Replace("/"," ");
+				keyword = "\"" + myTeam.Site.Description.Name + "\"" + " \"" + myTeam.Description.Name + "\"";
 			}
 
 			criteriaDictionary = SearchTermParser.Parse(keyword);

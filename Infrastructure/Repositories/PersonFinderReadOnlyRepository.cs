@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			const string quotePattern = "(\"[^\"]*?\")";
 
 			var notParsedSearchValue = Regex.Replace(searchValue, quotePattern, " $1 ");
-			notParsedSearchValue = Regex.Replace(notParsedSearchValue, " {2,}", " ");
+			notParsedSearchValue = Regex.Replace(notParsedSearchValue, " {2,}", "  ");
 
 			const string splitPattern = "(?<!\"[^ ]+) (?![^ ]+\")";
 			var result = Regex.Split(notParsedSearchValue, splitPattern)

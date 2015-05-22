@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldLoadPersonsWithOneWordQuotation()
 		{
-			var crit = new PersonFinderSearchCriteria(PersonFinderField.All, "\"Direct Sales\"", 10,
+			var crit = new PersonFinderSearchCriteria(PersonFinderField.All, "\"Team Preference\" \"London\"", 10,
 				new DateOnly(2016, 1, 1), 1, 1);
 			_target = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.CurrentUnitOfWork());
 			_target.Find(crit);
