@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private readonly IList<IRtaStateGroup> _removedGroups = new List<IRtaStateGroup>();
 		private readonly IList<IRtaStateGroup> _groupsWithRemovedStates = new List<IRtaStateGroup>();
 
-		private readonly StateGroupPresenter _presenter;
+		private readonly StateGroupPersistHelper _persistHelper;
 
 		private TreeNodeAdv _currentSourceNode;
 		private bool _cancelValidate;
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		public StateGroupControl()
 		{
 			InitializeComponent();
-			_presenter = new StateGroupPresenter(UnitOfWorkFactory.Current);
+			_persistHelper = new StateGroupPersistHelper(UnitOfWorkFactory.Current);
 
 			if (DesignMode) return;
 			buttonNew.Click += buttonNewClick;
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public void LoadControl()
 		{
-			_stateGroupCollection = _presenter.LoadStateGroupCollection();
+			_stateGroupCollection = _persistHelper.LoadStateGroupCollection();
 			initializeTreeview();
 			updateTreeview(null);
 		}
@@ -224,7 +224,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public void SaveChanges()
 		{
-			_presenter.Save(_stateGroupCollection, _removedGroups, _groupsWithRemovedStates);
+			_persistHelper.Save(_stateGroupCollection, _removedGroups, _groupsWithRemovedStates);
+			_removedGroups.Clear();
+			_groupsWithRemovedStates.Clear();
 		}
 
 		public void Unload()
