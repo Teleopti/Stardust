@@ -50,8 +50,13 @@ namespace Teleopti.Ccc.DomainTest.Security
         /// </summary>
         protected override IList<IApplicationFunction> LoadDefinedRaptorApplicationFunctions()
         {
-            if (_definedApplicationFunctions == null)
-                return base.LoadDefinedRaptorApplicationFunctions();
+	        if (_definedApplicationFunctions == null)
+	        {
+		        var list = base.LoadDefinedRaptorApplicationFunctions();
+		        foreach (var applicationFunction in list)
+			        applicationFunction.IsPreliminary = false;
+		        return list;
+	        }
             return _definedApplicationFunctions;
         }
 

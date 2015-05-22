@@ -265,6 +265,8 @@ namespace Teleopti.Ccc.Domain.Security
         {
             foreach (IApplicationFunction applicationFunction in definedFunctions)
             {
+				if (applicationFunction.IsPreliminary)
+					continue;
                 if (ApplicationFunction.FindByForeignId(databaseFunctions, applicationFunction.ForeignSource, applicationFunction.ForeignId) == null)
                 {
                     yield return applicationFunction;

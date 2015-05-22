@@ -285,6 +285,7 @@ namespace Teleopti.Ccc.DomainTest.Security
         [Test]
         public void VerifyCheckRaptorApplicationFunctionsAddFunction()
         {
+
             // create test data. We imitate a deletion by adding a function to the database functions
             _databaseApplicationFunctions = RemoveLastApplicationFunction(_definedApplicationFunctions);
 
