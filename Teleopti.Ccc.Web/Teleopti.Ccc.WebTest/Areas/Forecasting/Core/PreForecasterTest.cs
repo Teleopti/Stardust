@@ -92,15 +92,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 
 			var result = target.Evaluate(preForecastInput);
 
-			dynamic firstDay = result.ForecastDays.First();
+			dynamic firstDay = result.Days.First();
 			((object)firstDay.date).Should().Be.EqualTo(date1.Date);
 			((object)firstDay.vh).Should().Be.EqualTo(8d);
 			((object)firstDay.vb).Should().Be.EqualTo(34.1);
-			dynamic secondDay = result.ForecastDays.Second();
+			dynamic secondDay = result.Days.Second();
 			((object)secondDay.date).Should().Be.EqualTo(date2.Date);
 			((object)secondDay.vh).Should().Be.EqualTo(12d);
 			((object)secondDay.vb).Should().Be.EqualTo(34.2);
-			dynamic thirdDay = result.ForecastDays.Last();
+			dynamic thirdDay = result.Days.Last();
 			((object)thirdDay.date).Should().Be.EqualTo(date3.Date);
 			((IDictionary<String, object>)thirdDay).ContainsKey("vh").Should().Be.False();
 			((object)thirdDay.vb).Should().Be.EqualTo(34.3);
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			result.ForecastMethodRecommended.Should().Be.EqualTo(ForecastMethodType.TeleoptiClassicWithTrend);
 			result.ForecastMethods.Any(x=>(int)x.AccuracyNumber==89&&x.ForecastMethodType==ForecastMethodType.TeleoptiClassic).Should().Be.True();
 			result.ForecastMethods.Any(x => (int)x.AccuracyNumber == 92 && x.ForecastMethodType == ForecastMethodType.TeleoptiClassicWithTrend).Should().Be.True();
-			result.ForecastDays.Any().Should().Be.False();
+			result.Days.Any().Should().Be.False();
 		}
 	}
 }

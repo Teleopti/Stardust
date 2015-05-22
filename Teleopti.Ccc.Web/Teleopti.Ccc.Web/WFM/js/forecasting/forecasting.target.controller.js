@@ -25,11 +25,11 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 					$http.post("../api/Forecasting/Evaluate", JSON.stringify({ ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate, WorkloadId: workload.Id })).
 						success(function (data, status, headers, config) {
 							workload.loaded = true;
-							angular.forEach(data.ForecastDays, function(day) {
+							angular.forEach(data.Days, function(day) {
 								day.date = new Date(Date.parse(day.date));
 							});
-							workload.chartData = data.ForecastDays;
-							if (data.ForecastDays.length === 0) {
+							workload.chartData = data.Days;
+							if (data.Days.length === 0) {
 								workload.noHistoricalDataForForecasting = true;
 								return;
 							}

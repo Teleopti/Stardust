@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 		public Guid WorkloadId { get; set; }
 		public string Name { get; set; }
 		public dynamic[] ForecastMethods { get; set; }
-		public dynamic[] ForecastDays { get; set; }
+		public dynamic[] Days { get; set; }
 		public ForecastMethodType ForecastMethodRecommended { get; set; }
 	}
 }

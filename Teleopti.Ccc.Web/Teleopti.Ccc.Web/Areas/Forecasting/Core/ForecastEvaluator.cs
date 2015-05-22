@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 				WorkloadId = workload.Id.Value,
 				ForecastMethodRecommended = (bestAccuracy == null ? ForecastMethodType.None : bestAccuracy.MethodId),
 				ForecastMethods = createMethodViewModels(evaluateResult),
-				ForecastDays = createDayViewModels(workload, bestAccuracy)
+				Days = createDayViewModels(workload, bestAccuracy)
 			};
 
 		}
