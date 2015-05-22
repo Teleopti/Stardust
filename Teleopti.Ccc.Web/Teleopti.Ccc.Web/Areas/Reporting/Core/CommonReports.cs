@@ -37,6 +37,8 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 				_dbTimeout = 180;
 		}
 
+		public int DbTimeout { get { return _dbTimeout; } }
+
 		public DataSet GetReportData(Guid personCode, Guid businessUnitCode, IList<SqlParameter> parameters)
 		{
 			LoadReportInfo();

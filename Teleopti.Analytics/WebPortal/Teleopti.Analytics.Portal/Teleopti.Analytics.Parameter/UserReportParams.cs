@@ -8,5 +8,6 @@ namespace Teleopti.Analytics.Parameters
 		public int LangId { get; set; }
 		public Guid CurrentUserGuid { get; set; }
 		public string ConnectionString { get; set; }
+		public int DbTimeout { get; set; }
 	}
 }

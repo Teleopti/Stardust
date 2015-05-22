@@ -81,7 +81,7 @@ namespace Teleopti.Analytics.Parameters
 			{
 				if (_reader == null)
 				{
-					_reader = new Reader(_userReportParams.ConnectionString, _userReportParams.LangId);
+					_reader = new Reader(_userReportParams.ConnectionString, _userReportParams.LangId, _userReportParams.DbTimeout);
 				}
 				return _reader;
 			}

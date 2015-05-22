@@ -83,7 +83,7 @@ namespace Teleopti.Analytics.Parameters
 			{
 				if (_reader == null)
 				{
-					_reader = new Reader(ConnectionString, userReportParams.LangId);
+					_reader = new Reader(ConnectionString, userReportParams.LangId,userReportParams.DbTimeout);
 					_isReportPermissionGranted = _reader.IsReportPermissionsGranted(_reportId, userReportParams.CurrentUserGuid);
 				}
 
@@ -239,7 +239,7 @@ namespace Teleopti.Analytics.Parameters
 				if (SkipPermissions) return true;
 				if (_reader == null)
 				{
-					_reader = new Reader(ConnectionString, userReportParams.LangId);
+					_reader = new Reader(ConnectionString, userReportParams.LangId, userReportParams.DbTimeout);
 					_isReportPermissionGranted = _reader.IsReportPermissionsGranted(_reportId, userReportParams.CurrentUserGuid);
 				}
 				return _isReportPermissionGranted;
@@ -481,6 +481,12 @@ namespace Teleopti.Analytics.Parameters
 			{
 				_groupPageCode = value;
 			}
+		}
+
+		public int DbTimeout
+		{
+			get { return userReportParams.DbTimeout; }
+			set { userReportParams.DbTimeout = value; }
 		}
 
 		protected override void RenderContents(HtmlTextWriter writer)

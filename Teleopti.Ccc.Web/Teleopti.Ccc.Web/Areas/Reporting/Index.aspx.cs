@@ -66,6 +66,8 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 			ParameterSelector.UserCode = id.GetValueOrDefault();
 			ParameterSelector.BusinessUnitCode = bu.GetValueOrDefault();
 			ParameterSelector.LanguageId = ((TeleoptiPrincipalCacheable)princip).Person.PermissionInformation.UICulture().LCID;
+			var commonReports = new CommonReports(ParameterSelector.ConnectionString, ParameterSelector.ReportId);
+			ParameterSelector.DbTimeout = commonReports.DbTimeout;
 		}
 
 		protected override void OnLoadComplete(EventArgs e)
