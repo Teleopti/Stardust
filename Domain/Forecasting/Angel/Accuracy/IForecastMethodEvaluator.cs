@@ -4,8 +4,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 {
-	public interface IForecastingMeasurer
+	public interface IForecastMethodEvaluator
 	{
-		double Measure(IList<IForecastingTarget> forecastingForLastYear, ReadOnlyCollection<ITaskOwner> historicalDataForLastYear);
+		double Evaluate(IList<IForecastingTarget> forecastingForLastYear, ReadOnlyCollection<ITaskOwner> historicalDataForLastYear);
 	}
 }

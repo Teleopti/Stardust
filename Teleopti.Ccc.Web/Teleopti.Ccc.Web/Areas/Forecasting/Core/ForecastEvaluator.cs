@@ -11,14 +11,14 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 {
-	public class PreForecaster : IPreForecaster
+	public class ForecastEvaluator : IForecastEvaluator
 	{
-		private readonly IQuickForecastWorkloadEvaluator _forecastWorkloadEvaluator;
+		private readonly IForecastWorkloadEvaluator _forecastWorkloadEvaluator;
 		private readonly IWorkloadRepository _workloadRepository;
 		private readonly IHistoricalPeriodProvider _historicalPeriodProvider;
 		private readonly IHistoricalData _historicalData;
 
-		public PreForecaster(IQuickForecastWorkloadEvaluator forecastWorkloadEvaluator, IWorkloadRepository workloadRepository, IHistoricalPeriodProvider historicalPeriodProvider, IHistoricalData historicalData)
+		public ForecastEvaluator(IForecastWorkloadEvaluator forecastWorkloadEvaluator, IWorkloadRepository workloadRepository, IHistoricalPeriodProvider historicalPeriodProvider, IHistoricalData historicalData)
 		{
 			_forecastWorkloadEvaluator = forecastWorkloadEvaluator;
 			_workloadRepository = workloadRepository;
@@ -26,10 +26,10 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 			_historicalData = historicalData;
 		}
 
-		public WorkloadForecastViewModel MeasureAndForecast(PreForecastInput input)
+		public WorkloadForecastViewModel Evaluate(EvaluateInput input)
 		{
 			var workload = _workloadRepository.Get(input.WorkloadId);
-			var evaluateResult = _forecastWorkloadEvaluator.Measure(workload);
+			var evaluateResult = _forecastWorkloadEvaluator.Evaluate(workload);
 			var bestAccuracy = evaluateResult.Accuracies.SingleOrDefault(x => x.IsSelected);
 
 			return new WorkloadForecastViewModel

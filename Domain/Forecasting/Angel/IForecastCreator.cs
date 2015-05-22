@@ -2,7 +2,7 @@
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel
 {
-	public interface IQuickForecastCreator
+	public interface IForecastCreator
 	{
 		void CreateForecastForWorkloads(DateOnlyPeriod futurePeriod, ForecastWorkloadInput[] workloads);
 	}

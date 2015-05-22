@@ -22,7 +22,7 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 					workload.noHistoricalDataForForecasting = false;
 					workload.loaded = false;
 					
-					$http.post("../api/Forecasting/PreForecast", JSON.stringify({ ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate , WorkloadId: workload.Id})).
+					$http.post("../api/Forecasting/Evaluate", JSON.stringify({ ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate, WorkloadId: workload.Id })).
 						success(function (data, status, headers, config) {
 							workload.loaded = true;
 							angular.forEach(data.ForecastDays, function(day) {
@@ -45,7 +45,7 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 							$scope.dataColumns[1].name = "Forecast Method";
 						}).
 						error(function(data, status, headers, config) {
-							$scope.error = { message: "Failed to do the preforecast." };
+							$scope.error = { message: "Failed to do the evaluate." };
 							workload.loaded = true;
 						});
 				};

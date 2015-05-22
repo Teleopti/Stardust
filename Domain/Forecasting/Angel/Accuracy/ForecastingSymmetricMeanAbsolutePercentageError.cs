@@ -8,9 +8,9 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 	/// <summary>
 	/// http://en.wikipedia.org/wiki/Symmetric_mean_absolute_percentage_error
 	/// </summary>
-	public class ForecastingSymmetricMeanAbsolutePercentageError : IForecastingMeasurer
+	public class ForecastingSymmetricMeanAbsolutePercentageError : IForecastMethodEvaluator
 	{
-		public double Measure(IList<IForecastingTarget> forecastingForLastYear, ReadOnlyCollection<ITaskOwner> historicalDataForLastYear)
+		public double Evaluate(IList<IForecastingTarget> forecastingForLastYear, ReadOnlyCollection<ITaskOwner> historicalDataForLastYear)
 		{
 			var diffSum = 0d;
 			foreach (var day in historicalDataForLastYear)

@@ -4,12 +4,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel
 {
-	public class QuickForecastCreator : IQuickForecastCreator
+	public class ForecastCreator : IForecastCreator
 	{
 		private readonly IQuickForecaster _quickForecaster;
 		private readonly ISkillRepository _skillRepository;
 
-		public QuickForecastCreator(IQuickForecaster quickForecaster, ISkillRepository skillRepository)
+		public ForecastCreator(IQuickForecaster quickForecaster, ISkillRepository skillRepository)
 		{
 			_quickForecaster = quickForecaster;
 			_skillRepository = skillRepository;

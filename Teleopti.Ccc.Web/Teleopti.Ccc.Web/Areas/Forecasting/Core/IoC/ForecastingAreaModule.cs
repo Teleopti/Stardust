@@ -6,9 +6,9 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core.IoC
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<PreForecaster>()
+			builder.RegisterType<ForecastEvaluator>()
 				.SingleInstance()
-				.As<IPreForecaster>();
+				.As<IForecastEvaluator>();
 		}
 	}
 }

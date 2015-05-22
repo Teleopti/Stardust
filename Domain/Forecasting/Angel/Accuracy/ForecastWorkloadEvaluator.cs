@@ -4,22 +4,22 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 {
-	public class QuickForecastWorkloadEvaluator : IQuickForecastWorkloadEvaluator
+	public class ForecastWorkloadEvaluator : IForecastWorkloadEvaluator
 	{
 		private readonly IHistoricalData _historicalData;
-		private readonly IForecastingMeasurer _forecastingMeasurer;
+		private readonly IForecastMethodEvaluator _forecastMethodEvaluator;
 		private readonly IForecastMethodProvider _forecastMethodProvider;
 		private readonly IHistoricalPeriodProvider _historicalPeriodProvider;
 
-		public QuickForecastWorkloadEvaluator(IHistoricalData historicalData, IForecastingMeasurer forecastingMeasurer, IForecastMethodProvider forecastMethodProvider, IHistoricalPeriodProvider historicalPeriodProvider)
+		public ForecastWorkloadEvaluator(IHistoricalData historicalData, IForecastMethodEvaluator forecastMethodEvaluator, IForecastMethodProvider forecastMethodProvider, IHistoricalPeriodProvider historicalPeriodProvider)
 		{
 			_historicalData = historicalData;
-			_forecastingMeasurer = forecastingMeasurer;
+			_forecastMethodEvaluator = forecastMethodEvaluator;
 			_forecastMethodProvider = forecastMethodProvider;
 			_historicalPeriodProvider = historicalPeriodProvider;
 		}
 
-		public WorkloadAccuracy Measure(IWorkload workload)
+		public WorkloadAccuracy Evaluate(IWorkload workload)
 		{
 			var historicalData = _historicalData.Fetch(workload, _historicalPeriodProvider.PeriodForForecast(workload));
 			if (!historicalData.TaskOwnerDayCollection.Any())
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 				select new MethodAccuracy
 				{
 					MeasureResult = forecastingMeasureTarget.ToArray(),
-					Number = _forecastingMeasurer.Measure(forecastingMeasureTarget, lastYearData.TaskOwnerDayCollection),
+					Number = _forecastMethodEvaluator.Evaluate(forecastingMeasureTarget, lastYearData.TaskOwnerDayCollection),
 					MethodId = forecastMethod.Id
 				}).ToList();
 			var bestMethod = list.OrderByDescending(x => x.Number).First();

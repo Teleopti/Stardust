@@ -5,11 +5,11 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 {
 	public class QuickForecastSkillEvaluator : IQuickForecastSkillEvaluator
 	{
-		private readonly IQuickForecastWorkloadEvaluator _quickForecastWorkloadEvaluator;
+		private readonly IForecastWorkloadEvaluator _forecastWorkloadEvaluator;
 
-		public QuickForecastSkillEvaluator(IQuickForecastWorkloadEvaluator quickForecastWorkloadEvaluator)
+		public QuickForecastSkillEvaluator(IForecastWorkloadEvaluator forecastWorkloadEvaluator)
 		{
-			_quickForecastWorkloadEvaluator = quickForecastWorkloadEvaluator;
+			_forecastWorkloadEvaluator = forecastWorkloadEvaluator;
 		}
 
 		public SkillAccuracy Measure(ISkill skill)
@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 			{
 				Id = skill.Id.Value,
 				Name = skill.Name,
-				Workloads = skill.WorkloadCollection.Select(workload => _quickForecastWorkloadEvaluator.Measure(workload)).ToArray()
+				Workloads = skill.WorkloadCollection.Select(workload => _forecastWorkloadEvaluator.Evaluate(workload)).ToArray()
 			};
 		}
 	}

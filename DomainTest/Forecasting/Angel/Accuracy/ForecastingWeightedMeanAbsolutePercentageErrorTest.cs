@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 			workloadDay2.Create(date2, new Workload(SkillFactory.CreateSkill("Phone")), new List<TimePeriod>());
 			workloadDay2.MakeOpen24Hours();
 			workloadDay2.TotalStatisticCalculatedTasks = 8d;
-			var result = new ForecastingWeightedMeanAbsolutePercentageError().Measure(new List<IForecastingTarget>
+			var result = new ForecastingWeightedMeanAbsolutePercentageError().Evaluate(new List<IForecastingTarget>
 			{
 				new ForecastingTarget(date1, new OpenForWork(true, true))
 				{
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 			workloadDay1.Create(date1, new Workload(SkillFactory.CreateSkill("Phone")), new List<TimePeriod>());
 			workloadDay1.MakeOpen24Hours();
 			workloadDay1.TotalStatisticCalculatedTasks = 3d;
-			var result = new ForecastingWeightedMeanAbsolutePercentageError().Measure(new List<IForecastingTarget>
+			var result = new ForecastingWeightedMeanAbsolutePercentageError().Evaluate(new List<IForecastingTarget>
 			{
 				new ForecastingTarget(date1, new OpenForWork(true, true))
 				{
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 			workloadDay1.Create(date1, new Workload(SkillFactory.CreateSkill("Phone")), new List<TimePeriod>());
 			workloadDay1.MakeOpen24Hours();
 			workloadDay1.TotalStatisticCalculatedTasks = 1d;
-			var result = new ForecastingWeightedMeanAbsolutePercentageError().Measure(new List<IForecastingTarget>
+			var result = new ForecastingWeightedMeanAbsolutePercentageError().Evaluate(new List<IForecastingTarget>
 			{
 				new ForecastingTarget(date1, new OpenForWork(true, true))
 				{
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 			workloadDay1.MakeOpen24Hours();
 			workloadDay1.TotalStatisticCalculatedTasks = 0d;
 
-			var result = new ForecastingWeightedMeanAbsolutePercentageError().Measure(new List<IForecastingTarget>
+			var result = new ForecastingWeightedMeanAbsolutePercentageError().Evaluate(new List<IForecastingTarget>
 			{
 				new ForecastingTarget(date1, new OpenForWork(true, true))
 				{

@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IForecastingTargetMerger>();
 			builder.RegisterType<ForecastingWeightedMeanAbsolutePercentageError>()
 				.SingleInstance()
-				.As<IForecastingMeasurer>();
+				.As<IForecastMethodEvaluator>();
 			builder.RegisterType<ForecastMethodProvider>()
 				.SingleInstance()
 				.As<IForecastMethodProvider>();
@@ -27,9 +27,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<QuickForecastSkillEvaluator>()
 				.SingleInstance()
 				.As<IQuickForecastSkillEvaluator>();
-			builder.RegisterType<QuickForecastWorkloadEvaluator>()
+			builder.RegisterType<ForecastWorkloadEvaluator>()
 				.SingleInstance()
-				.As<IQuickForecastWorkloadEvaluator>();
+				.As<IForecastWorkloadEvaluator>();
 			builder.RegisterType<IndexVolumes>()
 				.SingleInstance()
 				.As<IIndexVolumes>();
@@ -57,9 +57,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<FutureData>()
 				.SingleInstance()
 				.As<IFutureData>();
-			builder.RegisterType<QuickForecastCreator>()
+			builder.RegisterType<ForecastCreator>()
 				.SingleInstance()
-				.As<IQuickForecastCreator>();
+				.As<IForecastCreator>();
 			builder.RegisterType<ForecastVolumeApplier>()
 				.SingleInstance()
 				.As<IForecastVolumeApplier>();

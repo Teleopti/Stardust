@@ -34,13 +34,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		[Test]
 		public void ShouldPreForecast()
 		{
-			var preForecaster = MockRepository.GenerateMock<IPreForecaster>();
-			var preForecastInputModel = new PreForecastInput();
+			var preForecaster = MockRepository.GenerateMock<IForecastEvaluator>();
+			var preForecastInputModel = new EvaluateInput();
 			var workloadForecastingViewModel = new WorkloadForecastViewModel();
-			preForecaster.Stub(x => x.MeasureAndForecast(preForecastInputModel)).Return(workloadForecastingViewModel);
+			preForecaster.Stub(x => x.Evaluate(preForecastInputModel)).Return(workloadForecastingViewModel);
 			var target = new ForecastController(null, null, preForecaster);
 
-			var result = target.PreForecast(preForecastInputModel);
+			var result = target.Evaluate(preForecastInputModel);
 
 			result.Result.Should().Be.EqualTo(workloadForecastingViewModel);
 		}

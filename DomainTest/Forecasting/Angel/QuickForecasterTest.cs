@@ -29,8 +29,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			workload1.SetId(Guid.NewGuid());
 			var workload2 = WorkloadFactory.CreateWorkload("workload2", skill1);
 			workload2.SetId(Guid.NewGuid());
-			var quickForecastWorkloadEvaluator = MockRepository.GenerateMock<IQuickForecastWorkloadEvaluator>();
-			quickForecastWorkloadEvaluator.Stub(x => x.Measure(workload1))
+			var quickForecastWorkloadEvaluator = MockRepository.GenerateMock<IForecastWorkloadEvaluator>();
+			quickForecastWorkloadEvaluator.Stub(x => x.Evaluate(workload1))
 				.Return(new WorkloadAccuracy
 				{
 					Accuracies =
@@ -79,12 +79,12 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			var quickForecasterWorkload = MockRepository.GenerateMock<IQuickForecasterWorkload>();
 			var workload1 = WorkloadFactory.CreateWorkload("workload1", skill1);
 			workload1.SetId(Guid.NewGuid());
-			var quickForecastWorkloadEvaluator = MockRepository.GenerateMock<IQuickForecastWorkloadEvaluator>();
+			var quickForecastWorkloadEvaluator = MockRepository.GenerateMock<IForecastWorkloadEvaluator>();
 			var historicalPeriodProvider = MockRepository.GenerateMock<IHistoricalPeriodProvider>();
 			historicalPeriodProvider.Stub(x => x.PeriodForForecast(workload1)).Return(historicalPeriodForForecast);
 			var target = new QuickForecaster(quickForecasterWorkload, fetchAndFillSkillDays, quickForecastWorkloadEvaluator, historicalPeriodProvider);
 			target.ForecastWorkloadsWithinSkill(skill1, new[] { new ForecastWorkloadInput { WorkloadId = workload1.Id.Value, ForecastMethodId = ForecastMethodType.TeleoptiClassic} }, futurePeriod);
-			quickForecastWorkloadEvaluator.AssertWasNotCalled(x => x.Measure(workload1));
+			quickForecastWorkloadEvaluator.AssertWasNotCalled(x => x.Evaluate(workload1));
 			quickForecasterWorkload.AssertWasCalled(x => x.Execute(new QuickForecasterWorkloadParams
 			{
 				FuturePeriod = futurePeriod,
@@ -109,8 +109,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			var quickForecasterWorkload = MockRepository.GenerateMock<IQuickForecasterWorkload>();
 			var workload1 = WorkloadFactory.CreateWorkload("workload1", skill1);
 			workload1.SetId(Guid.NewGuid());
-			var quickForecastWorkloadEvaluator = MockRepository.GenerateMock<IQuickForecastWorkloadEvaluator>();
-			quickForecastWorkloadEvaluator.Stub(x => x.Measure(workload1))
+			var quickForecastWorkloadEvaluator = MockRepository.GenerateMock<IForecastWorkloadEvaluator>();
+			quickForecastWorkloadEvaluator.Stub(x => x.Evaluate(workload1))
 				.Return(new WorkloadAccuracy
 				{
 					Accuracies =

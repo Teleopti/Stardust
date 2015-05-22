@@ -428,9 +428,9 @@
     <Compile Include="Areas\Anywhere\Core\GroupScheduleViewModelMapper.cs" />
     <Compile Include="Areas\Anywhere\Core\AgentViewModel.cs" />
     <Compile Include="Areas\Anywhere\Core\TeamViewModel.cs" />
-    <Compile Include="Areas\Forecasting\Controllers\PreForecastInput.cs" />
-    <Compile Include="Areas\Forecasting\Core\IPreForecaster.cs" />
-    <Compile Include="Areas\Forecasting\Core\PreForecaster.cs" />
+    <Compile Include="Areas\Forecasting\Controllers\EvaluateInput.cs" />
+    <Compile Include="Areas\Forecasting\Core\IForecastEvaluator.cs" />
+    <Compile Include="Areas\Forecasting\Core\ForecastEvaluator.cs" />
     <Compile Include="Areas\Forecasting\Core\WorkloadForecastViewModel.cs" />
     <Compile Include="Areas\Global\ApplicationController.cs" />
     <Compile Include="Areas\Global\AreaWithPermissionPath.cs" />
@@ -587,7 +587,7 @@
     <Compile Include="Areas\MultiTenancy\Core\IApplicationAuthentication.cs" />
     <Compile Include="Areas\Forecasting\Controllers\ForecastController.cs" />
     <Compile Include="Areas\Forecasting\Core\IoC\ForecastingAreaModule.cs" />
-    <Compile Include="Areas\Forecasting\Controllers\QuickForecastInput.cs" />
+    <Compile Include="Areas\Forecasting\Controllers\ForecastInput.cs" />
     <Compile Include="Areas\Mart\Controllers\QueueStatsController.cs" />
     <Compile Include="Areas\Mart\Core\DatabaseConnectionHandler.cs" />
     <Compile Include="Areas\Mart\Core\IQueueStatHandler.cs" />

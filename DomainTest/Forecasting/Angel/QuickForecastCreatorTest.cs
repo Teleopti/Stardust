@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			var historicalPeriodForForecast = new DateOnlyPeriod(new DateOnly(nowDate.Date.AddYears(-1)), nowDate);
 			var historicalPeriodForMeasurement = new DateOnlyPeriod(new DateOnly(nowDate.Date.AddYears(-2)), nowDate);
 
-			var target = new QuickForecastCreator(quickForecaster, skillRepository);
+			var target = new ForecastCreator(quickForecaster, skillRepository);
 			var forecastWorkloadInputs = new[]
 			{
 				new ForecastWorkloadInput

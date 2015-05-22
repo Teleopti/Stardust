@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			var skill = SkillFactory.CreateSkillWithWorkloadAndSources();
 			var workloadRepository = MockRepository.GenerateMock<IWorkloadRepository>();
 			var workload = skill.WorkloadCollection.Single();
-			var preForecastInput = new PreForecastInput
+			var preForecastInput = new EvaluateInput
 			{
 				WorkloadId = workload.Id.Value,
 				ForecastStart = new DateTime(2015, 1, 1),
@@ -58,8 +58,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 					x.PreForecast(workload,
 						new DateOnlyPeriod(new DateOnly(preForecastInput.ForecastStart), new DateOnly(preForecastInput.ForecastEnd)),
 						taskOwnerPeriod)).Return(new Dictionary<DateOnly, IDictionary<ForecastMethodType, double>>());
-			var quickForecastWorkloadEvaluator = MockRepository.GenerateMock<IQuickForecastWorkloadEvaluator>();
-			quickForecastWorkloadEvaluator.Stub(x => x.Measure(workload))
+			var quickForecastWorkloadEvaluator = MockRepository.GenerateMock<IForecastWorkloadEvaluator>();
+			quickForecastWorkloadEvaluator.Stub(x => x.Evaluate(workload))
 				.Return(new WorkloadAccuracy
 				{
 					Accuracies =
@@ -88,9 +88,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 							}
 						}
 				});
-			var target = new PreForecaster(quickForecastWorkloadEvaluator, workloadRepository, historicalPeriodProvider, historicalData);
+			var target = new ForecastEvaluator(quickForecastWorkloadEvaluator, workloadRepository, historicalPeriodProvider, historicalData);
 
-			var result = target.MeasureAndForecast(preForecastInput);
+			var result = target.Evaluate(preForecastInput);
 
 			dynamic firstDay = result.ForecastDays.First();
 			((object)firstDay.date).Should().Be.EqualTo(date1.Date);
@@ -112,18 +112,18 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			var skill = SkillFactory.CreateSkillWithWorkloadAndSources();
 			var workloadRepository = MockRepository.GenerateMock<IWorkloadRepository>();
 			var workload = skill.WorkloadCollection.Single();
-			var preForecastInput = new PreForecastInput
+			var preForecastInput = new EvaluateInput
 			{
 				WorkloadId = workload.Id.Value,
 				ForecastStart = new DateTime(2015, 1, 1),
 				ForecastEnd = new DateTime(2015, 1, 31)
 			};
 			workloadRepository.Stub(x => x.Get(preForecastInput.WorkloadId)).Return(workload);
-			var quickForecastWorkloadEvaluator = MockRepository.GenerateMock<IQuickForecastWorkloadEvaluator>();
+			var quickForecastWorkloadEvaluator = MockRepository.GenerateMock<IForecastWorkloadEvaluator>();
 			var statisticRepository = MockRepository.GenerateMock<IStatisticRepository>();
 			statisticRepository.Stub(x => x.QueueStatisticsUpUntilDate(workload.QueueSourceCollection)).Return(new DateOnlyPeriod(2012, 12, 20, 2014, 12, 20));
 			var historicalPeriodProvider = new HistoricalPeriodProvider(new MutableNow(new DateTime(2014, 12, 20, 0, 0, 0, DateTimeKind.Utc)), statisticRepository);
-			quickForecastWorkloadEvaluator.Stub(x => x.Measure(workload))
+			quickForecastWorkloadEvaluator.Stub(x => x.Evaluate(workload))
 				.Return(new WorkloadAccuracy
 				{
 					Accuracies =
@@ -140,9 +140,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			var historicalData = MockRepository.GenerateMock<IHistoricalData>();
 			var taskOwnerPeriod = new TaskOwnerPeriod(DateOnly.MinValue, new List<WorkloadDay>(), TaskOwnerPeriodType.Other);
 			historicalData.Stub(x => x.Fetch(workload, historicalPeriodProvider.PeriodForDisplay(workload))).Return(taskOwnerPeriod);
-			var target = new PreForecaster(quickForecastWorkloadEvaluator, workloadRepository, historicalPeriodProvider, historicalData);
+			var target = new ForecastEvaluator(quickForecastWorkloadEvaluator, workloadRepository, historicalPeriodProvider, historicalData);
 
-			var result = target.MeasureAndForecast(preForecastInput);
+			var result = target.Evaluate(preForecastInput);
 
 			result.WorkloadId.Should().Be.EqualTo(workload.Id.Value);
 			result.Name.Should().Be.EqualTo(workload.Name);

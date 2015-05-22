@@ -15,15 +15,15 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.OpenForecasterPage)]
 	public class ForecastController : ApiController
 	{
-		private readonly IQuickForecastCreator _quickForecastCreator;
+		private readonly IForecastCreator _forecastCreator;
 		private readonly ISkillRepository _skillRepository;
-		private readonly IPreForecaster _preForecaster;
+		private readonly IForecastEvaluator _forecastEvaluator;
 
-		public ForecastController(IQuickForecastCreator quickForecastCreator, ISkillRepository skillRepository, IPreForecaster preForecaster)
+		public ForecastController(IForecastCreator forecastCreator, ISkillRepository skillRepository, IForecastEvaluator forecastEvaluator)
 		{
-			_quickForecastCreator = quickForecastCreator;
+			_forecastCreator = forecastCreator;
 			_skillRepository = skillRepository;
-			_preForecaster = preForecaster;
+			_forecastEvaluator = forecastEvaluator;
 		}
 
 		[UnitOfWork, Route("api/Forecasting/Skills"), HttpGet]
@@ -39,17 +39,17 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 				});
 		}
 
-		[UnitOfWork, HttpPost, Route("api/Forecasting/PreForecast")]
-		public virtual Task<WorkloadForecastViewModel> PreForecast(PreForecastInput model)
+		[UnitOfWork, HttpPost, Route("api/Forecasting/Evaluate")]
+		public virtual Task<WorkloadForecastViewModel> Evaluate(EvaluateInput input)
 		{
-			return Task.FromResult(_preForecaster.MeasureAndForecast(model));
+			return Task.FromResult(_forecastEvaluator.Evaluate(input));
 		}
 
 		[HttpPost, Route("api/Forecasting/Forecast"), UnitOfWork]
-		public virtual Task<bool> Forecast(QuickForecastInput model)
+		public virtual Task<bool> Forecast(ForecastInput input)
 		{
-			var futurePeriod = new DateOnlyPeriod(new DateOnly(model.ForecastStart), new DateOnly(model.ForecastEnd));
-			_quickForecastCreator.CreateForecastForWorkloads(futurePeriod, model.Workloads);
+			var futurePeriod = new DateOnlyPeriod(new DateOnly(input.ForecastStart), new DateOnly(input.ForecastEnd));
+			_forecastCreator.CreateForecastForWorkloads(futurePeriod, input.Workloads);
 			return Task.FromResult(true);
 		}
 	}
