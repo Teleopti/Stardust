@@ -51,6 +51,9 @@ Scenario: View only my team's schedule
 	And I should see my colleague's schedule
 	And I should not see the other colleague's schedule
 
+ 
+
+
 Scenario: View team schedule, day off
 	Given I am an agent in a team
 	And I have a colleague
@@ -60,6 +63,16 @@ Scenario: View team schedule, day off
 	| Date  | 2014-05-02 |
 	When I view group schedule for '2014-05-02'
 	Then I should see my colleague's day off
+
+Scenario: Should not see unpublished schedule
+	Given I am an agent in a team
+	And I have a colleague 'Unpublished Yet'
+	And 'Unpublished Yet' has a day off with
+	| Field | Value      |
+	| Name  | DayOff     |
+	| Date  | 2014-05-02 |
+	When I view group schedule for '2014-05-02'
+	Then Agent 'Unpublished Yet' schedule should be empty
 
 Scenario: View team schedule, absence 
 	Given I am an agent in a team
@@ -122,6 +135,8 @@ Scenario: Can't see colleagues schedule without permission
 	| Date  | 2014-05-02 |
 	When I view group schedule for '2014-05-02'
 	Then I should not see my colleagues schedule
+
+
 
 Scenario: View time line +/- whole quarter of an hour
 	Given I am an agent in a team

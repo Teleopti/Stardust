@@ -111,8 +111,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			DataMaker.Person(colleagueName).Apply(new Agent());
 			DataMaker.Person(colleagueName).Apply(new SchedulePeriod());
 			DataMaker.Person(colleagueName).Apply(new PersonPeriod(DefaultTeam.Get()));
-			DataMaker.Data().Apply(new WorkflowControlSetConfigurable { Name = "Published2", SchedulePublishedToDate = "2030-12-01" });
-			DataMaker.Person(colleagueName).Apply(new WorkflowControlSetForUser { Name = "Published2" });
+
+			if (colleagueName.Contains("Unpublished"))
+			{		
+				DataMaker.Data().Apply(new WorkflowControlSetConfigurable { Name = "Unpublished2", SchedulePublishedToDate = "1990-01-01" , PreferencePeriodIsClosed = true});
+				DataMaker.Person(colleagueName).Apply(new WorkflowControlSetForUser { Name = "Unpublished2" });
+			}
+			else { 
+				DataMaker.Data()
+					.Apply(new WorkflowControlSetConfigurable {Name = "Published2", SchedulePublishedToDate = "2030-12-01"});
+				DataMaker.Person(colleagueName).Apply(new WorkflowControlSetForUser {Name = "Published2"});
+			}			
 		}
 
 
@@ -516,6 +525,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.Click(".filter-time-dropdown-button .end-time-sort-order .glyphicon-arrow-up");
 			
 		}
+
+		[Then(@"Agent '(.*)' schedule should be empty")]
+		public void ThenAgentScheduleShouldBeEmpty(string p0)
+		{
+			Browser.Interactions.AssertAnyContains(".shift-trade-agent-name", p0);
+
+			var tooltipScript =
+				"return $(\".shift-trade-agent-name:contains('" + p0 +"') + .shift-trade-possible-trade-schedule .shift-trade-layer-container\").length ;";
+
+			Browser.Interactions.AssertJavascriptResultContains(tooltipScript, "0");
+		}
+
 
 		private static void AssertAgentIsDisplayed(string name)
 		{

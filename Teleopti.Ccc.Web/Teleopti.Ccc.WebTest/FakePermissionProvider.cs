@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WebTest
 		public bool IsPersonSchedulePublished(DateOnly date, IPerson person, ScheduleVisibleReasons reason)
 		{
 			var name = person.Name.FirstName + person.Name.LastName;
-			if (date < new DateOnly(2015, 1, 1)) return false; // to avoid invalid date
+			if (date < new DateOnly(2015, 1, 1)) return true; // to avoid invalid date
 			if (name.Contains("Unpublish")) return false;
 			return true;
 						
