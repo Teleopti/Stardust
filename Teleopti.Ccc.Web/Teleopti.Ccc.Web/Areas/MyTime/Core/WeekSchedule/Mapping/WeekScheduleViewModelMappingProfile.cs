@@ -57,6 +57,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			base.Configure();
 
 			CreateMap<WeekScheduleDomainData, WeekScheduleViewModel>()
+				.ForMember(d=>d.BaseUtcOffsetInMinutes, c=>c.ResolveUsing(s => _loggedOnUser.Invoke().CurrentUser().PermissionInformation.DefaultTimeZone().BaseUtcOffset.TotalMinutes))
+				.ForMember(d => d.DaylightSavingTimeAdjustment, c => c.ResolveUsing(s =>
+				{
+					var daylightSavingAdjustment = TimeZoneHelper.GetDaylightChanges(_loggedOnUser.Invoke().CurrentUser().PermissionInformation.DefaultTimeZone(), _now.Invoke().LocalDateTime().Year);
+					return daylightSavingAdjustment != null ? new DaylightSavingsTimeAdjustmentViewModel(daylightSavingAdjustment) : null;
+				}))
 				.ForMember(d => d.PeriodSelection, c => c.ResolveUsing(s => _periodSelectionViewModelFactory.Invoke().CreateModel(s.Date)))
 				.ForMember(d => d.Styles, o => o.MapFrom(s => s.Days == null ? null : _scheduleColorProvider.Invoke().GetColors(s.ColorSource)))
 				.ForMember(d => d.TimeLineCulture, o => o.MapFrom(s => _loggedOnUser.Invoke().CurrentUser().PermissionInformation.Culture().ToString()))

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using NodaTime;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.PeriodSelection;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
 
@@ -16,6 +18,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public bool AsmPermission { get; set; }
         public bool IsCurrentWeek { get; set; }
 		public string DatePickerFormat { get; set; }
+		public DaylightSavingsTimeAdjustmentViewModel DaylightSavingTimeAdjustment { get; set; }
+		public double BaseUtcOffsetInMinutes { get; set; }
 	}
 
     public class RequestPermission
@@ -135,5 +139,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public string DayDescription { get; set; }
 		public string DayNumber { get; set; }
 
+	}
+
+	public class DaylightSavingsTimeAdjustmentViewModel
+	{
+		public DateTime StartDateTime { get; set; }
+		public DateTime EndDateTime { get; set; }
+		public double AdjustmentOffsetInMinutes { get; set; }
+		
+		public DaylightSavingsTimeAdjustmentViewModel(DaylightTime daylightTime)
+		{
+			StartDateTime = daylightTime.Start;
+			EndDateTime = daylightTime.End;
+			AdjustmentOffsetInMinutes = daylightTime.Delta.TotalMinutes;
+		}
+
+		
 	}
 }

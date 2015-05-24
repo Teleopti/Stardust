@@ -154,6 +154,55 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			viewModel.TimeLine.Last().TimeLineDisplay.Should().Be("06:15");
 		}
 
+		[Test]
+		public void ShouldMapBaseUtcOffset()
+		{
+			Culture.IsSwedish();
+			TimeZone.IsHawaii();
+			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(TimeZone.TimeZone());
+			User.CurrentUser().PermissionInformation.SetCulture(Culture.GetCulture());
+			Now.Is("2015-03-29 10:00");
+			var date = new DateOnly(Now.UtcDateTime());
+
+			var viewModel = Target.CreateWeekViewModel(date);
+			viewModel.BaseUtcOffsetInMinutes.Should().Be(-10*60);
+		}
+
+
+		[Test]
+		public void ShouldMapDaylightSavingTimeAdjustment()
+		{
+
+			Culture.IsSwedish();
+			TimeZone.IsSweden();
+			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(TimeZone.TimeZone());
+			User.CurrentUser().PermissionInformation.SetCulture(Culture.GetCulture());
+			Now.Is("2015-03-29 10:00");
+			var date = new DateOnly(Now.UtcDateTime());
+			
+			var viewModel = Target.CreateWeekViewModel(date);
+			
+			viewModel.DaylightSavingTimeAdjustment.Should().Not.Be.Null();
+			viewModel.DaylightSavingTimeAdjustment.StartDateTime.Should().Be(new DateTime(2015, 3, 29, 1, 0, 0, DateTimeKind.Utc));
+			viewModel.DaylightSavingTimeAdjustment.EndDateTime.Should().Be(new DateTime(2015, 10, 25, 2, 0, 0, DateTimeKind.Utc));
+			viewModel.DaylightSavingTimeAdjustment.AdjustmentOffsetInMinutes.Should().Be(60);
+		}
+
+		[Test]
+		public void ShouldNotMapDaylightSavingTimeAdjustment()
+		{
+			Culture.IsSwedish();
+			TimeZone.IsChina();
+			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(TimeZone.TimeZone());
+			User.CurrentUser().PermissionInformation.SetCulture(Culture.GetCulture());
+			Now.Is("2015-03-29 10:00");
+			var date = new DateOnly(Now.UtcDateTime());
+
+			var viewModel = Target.CreateWeekViewModel(date);
+			Assert.IsNull(viewModel.DaylightSavingTimeAdjustment);
+
+		}
+
 	}
 
 	public class FakeScheduleProjectionReadOnlyRepository : IScheduleProjectionReadOnlyRepository

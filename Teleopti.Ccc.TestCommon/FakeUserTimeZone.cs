@@ -32,5 +32,10 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			Is(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 		}
+
+		public void IsChina()
+		{
+			Is(TimeZoneInfoFactory.ChinaTimeZoneInfo());
+		}
 	}
 }

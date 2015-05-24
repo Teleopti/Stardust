@@ -25,11 +25,14 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var vm;
 	var completelyLoaded;
+	var daylightSavingAdjustment;
+	var baseUtcOffsetInMinutes;
 	
 	function _bindData(data) {
 		vm.Initialize(data);
+		daylightSavingAdjustment = data.DaylightSavingTimeAdjustment;
+		baseUtcOffsetInMinutes = data.BaseUtcOffsetInMinutes;
 		_initTimeIndicator();
-		
 		$('.body-weekview-inner').show();
 		completelyLoaded();
 	}
@@ -48,16 +51,32 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		});
 	}
 
-	function _initTimeIndicator() {
-		var currentDateTimeStart = new Date(new Date().getTeleoptiTime());
-		_setTimeIndicator(currentDateTimeStart);
+	function _shouldApplyDaylightSavingAdjustment(time) {
+		if (daylightSavingAdjustment != null) {
+			var daylightSavingStart = moment(daylightSavingAdjustment.StartDateTime);
+			var daylightSavingEnd = moment(daylightSavingAdjustment.EndDateTime);
+			if (time <= daylightSavingEnd && time >= daylightSavingStart) {
+				return true;
+			}
+		}
+		return false;
+	};
+
+	function _startUpTimeIndicator() {
 		setInterval(function () {
-			var currentDateTime = new Date(new Date().getTeleoptiTime());
-			if (timeIndicatorDateTime == undefined || currentDateTime.getMinutes() != timeIndicatorDateTime.getMinutes()) {
+			var currentDateTime = moment().utc().add(baseUtcOffsetInMinutes, 'minutes');
+			if (_shouldApplyDaylightSavingAdjustment(currentDateTime)) {
+				currentDateTime.add(daylightSavingAdjustment.AdjustmentOffsetInMinutes, 'minutes');
+			}
+			if (timeIndicatorDateTime == undefined || currentDateTime.minutes() != timeIndicatorDateTime.minutes()) {
 				timeIndicatorDateTime = currentDateTime;
 				_setTimeIndicator(timeIndicatorDateTime);
 			}
 		}, 1000);
+	};
+
+	function _initTimeIndicator() {
+		_startUpTimeIndicator();
 	}
 
 	var WeekScheduleViewModel = function (userTexts, addRequestViewModel, navigateToRequestsMethod, defaultDateTimes, undefined) {
@@ -543,8 +562,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		var offset = 117;
 		var timeindicatorHeight = 2;
 
-		var hours = theDate.getHours();
-		var minutes = theDate.getMinutes();
+		var hours = theDate.hours();
+		var minutes = theDate.minutes();
 		var clientNowMinutes = (hours * 60) + (minutes * 1);
 
 		var timelineStartMinutes = getMinutes(".weekview-timeline", true);
@@ -556,7 +575,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			position = 0;
 		}
 
-		var dayOfWeek = moment(theDate).day();
+		var dayOfWeek = theDate.day();
 		var timeIndicator = $('div[data-mytime-dayofweek="' + dayOfWeek + '"] .weekview-day-time-indicator');
 		var timeIndicatorTimeLine = $('.weekview-day-time-indicator-small');
 

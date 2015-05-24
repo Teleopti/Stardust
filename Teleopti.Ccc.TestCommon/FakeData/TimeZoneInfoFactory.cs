@@ -70,5 +70,9 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return TimeZoneInfo.FindSystemTimeZoneById("Turkey Standard Time");
 		}
 
+	    public static TimeZoneInfo ChinaTimeZoneInfo()
+	    {
+		    return TimeZoneInfo.FindSystemTimeZoneById("China Standard Time");
+	    }
     }
 }
