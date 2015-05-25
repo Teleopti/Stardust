@@ -74,7 +74,7 @@ where [key] not in (
 --Move Queue stat one year forward, monday map to monday.
 ----------------
 declare @DaysToAdd int
-set @DaysToAdd = 364
+set @DaysToAdd = 728
 
 update $(TELEOPTIAGG).dbo.queue_logg
 set date_from = dateadd(day,@DaysToAdd,date_from)
@@ -93,8 +93,8 @@ declare @PeriodsToAdd int
 declare @TemplateLength int
 declare @AddDays int
 
-set @TemplateStartDate = '2014-02-03'
-set @TemplateEndDate = '2014-03-02'
+set @TemplateStartDate = '2015-02-02'
+set @TemplateEndDate = '2015-03-01'
 set @PeriodsToAdd = 0
 select @TemplateLength=datediff(DD,@TemplateStartDate,@TemplateEndDate)+1
 
@@ -179,8 +179,8 @@ declare @PeriodsToAdd int
 declare @TemplateLength int
 declare @AddDays int
 
-set @TemplateStartDate = '2014-02-03'
-set @TemplateEndDate = '2014-03-02'
+set @TemplateStartDate = '2015-02-02'
+set @TemplateEndDate = '2015-03-01'
 
 --create
 exec $(TELEOPTIANALYTICS).mart.etl_fact_schedule_deviation_load @TemplateStartDate,@TemplateEndDate,'928DD0BC-BF40-412E-B970-9B5E015AADEA',0,0
