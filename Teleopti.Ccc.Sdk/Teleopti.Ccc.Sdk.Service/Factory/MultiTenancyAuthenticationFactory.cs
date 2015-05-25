@@ -44,14 +44,15 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 
 		public AuthenticationResultDto LogOnWindows(DataSourceDto dataSource)
 		{
-			var result = _authenticationQuerier.TryLogon(new IdentityLogonClientModel { Identity = _windowsUserProvider.Identity() }, UserAgent);
+			var identity = _windowsUserProvider.Identity();
+			var result = _authenticationQuerier.TryLogon(new IdentityLogonClientModel { Identity = identity }, UserAgent);
 			var resultDto = _authenticationResultAssembler.DomainEntityToDto(result);
 			if (!resultDto.Successful) return resultDto;
 
 			resultDto.Tenant = result.DataSource.DataSourceName;
 			var buList = new AvailableBusinessUnitsProvider(result.Person, result.DataSource).AvailableBusinessUnits(new RepositoryFactory());
 			buList.ForEach(unit => resultDto.BusinessUnitCollection.Add(new BusinessUnitDto { Id = unit.Id, Name = unit.Name }));
-			addToCache(result, null, null);
+			addToCache(result, identity, null);
 			return resultDto;
 		}
 
