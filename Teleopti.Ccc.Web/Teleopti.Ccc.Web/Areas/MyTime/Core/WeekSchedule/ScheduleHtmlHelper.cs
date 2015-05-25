@@ -32,6 +32,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule
 			var jsonResult = new StringBuilder();
 			jsonResult.Append("{");
 			addKeyValuePair("Date", peroidSelection.Date, jsonResult, true, true);
+			addKeyValuePair("StartDate", peroidSelection.StartDate.Date.ToShortDateString(), jsonResult, true, true);
+			addKeyValuePair("EndDate", peroidSelection.EndDate.Date.ToShortDateString(), jsonResult, true, true);
 			addKeyValuePair("Display", peroidSelection.Display, jsonResult, true, true);
 			addKeyValuePair("SelectedDateRange", PeriodDateRangeToJson(peroidSelection.SelectedDateRange), jsonResult, false,
 			                true);

@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		    _setThreadCulture.Expect(t => t.SetCulture(null));
 		    _setThreadCulture.Replay();
 
-            _requestContextInitializer.SetupPrincipalAndCulture();
+            _requestContextInitializer.SetupPrincipalAndCulture(false);
                 _httpContextBase.User.Should().Be.SameInstanceAs(_teleoptiPrincipal);
 
             _setThreadCulture.VerifyAllExpectations();

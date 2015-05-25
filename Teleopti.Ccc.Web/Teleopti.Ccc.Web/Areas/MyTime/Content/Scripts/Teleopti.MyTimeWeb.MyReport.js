@@ -14,7 +14,7 @@
 
 		self.selectedDateInternal = ko.observable(date);
 		self.datePickerFormat = ko.observable('YYYYMMDD');
-		var format = $('#my-report-datepicker-format').val().toUpperCase();
+		var format = Teleopti.MyTimeWeb.Common.DateFormat;
 		self.datePickerFormat(format);
 		self.dataAvailable = ko.observable();
 		self.goToAnotherDay = function (toDate) {
@@ -24,7 +24,7 @@
 			Teleopti.MyTimeWeb.Portal.NavigateTo("MyReport/Adherence" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(self.selectedDateInternal().format('YYYY-MM-DD')));
 		};
 		self.goToQueueMetrics = function () {
-			if(self.queueMetricsEnabled())
+			if (self.queueMetricsEnabled())
 				Teleopti.MyTimeWeb.Portal.NavigateTo("MyReport/QueueMetrics" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(self.selectedDateInternal().format('YYYY-MM-DD')));
 		};
 		self.selectedDate = ko.computed({
@@ -39,10 +39,10 @@
 		self.nextDay = function () {
 			self.goToAnotherDay(self.selectedDate().clone().add('days', 1));
 		};
-		self.previousDay = function() {
+		self.previousDay = function () {
 			self.goToAnotherDay(self.selectedDate().clone().add('days', -1));
 		};
-		self.dateFormat = function() {
+		self.dateFormat = function () {
 			return self.datePickerFormat;
 		};
 		loadDataMethod(date);
@@ -70,7 +70,7 @@
 	}
 
 	function bindData() {
-		return Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function(data) {
+		return Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function (data) {
 			$('.moment-datepicker').attr('data-bind', 'datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: ' + data.WeekStart + ' }');
 			vm = new MyReportViewModel(fillData, getDate());
 			var elementToBind = $('.myreport-daily-metrics')[0];
@@ -78,7 +78,7 @@
 		});
 	}
 
-	
+
 	function getDate() {
 		var date = Teleopti.MyTimeWeb.Portal.ParseHash().dateHash;
 		if (date != '') {
@@ -104,8 +104,8 @@
 		MyReportPartialDispose: function () {
 			$('#page').addClass('fixed-non-responsive');
 		},
-		ForDay: function(date) {
+		ForDay: function (date) {
 			fillData(date);
-		}		
+		}
 	};
 })(jQuery);

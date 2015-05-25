@@ -91,6 +91,7 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 		    
 		    if (!$('#Requests-body-inner').length) {
 		        readyForInteraction();
+		        readyForInteraction();
 		        completelyLoaded();
 		        return;
 		    }
@@ -109,7 +110,7 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 	        requestNavigationViewModel.resetToolbarActiveButtons();
 	    },
 	    ShiftTradeRequest: function (date) {
-		    	requestNavigationViewModel.addShiftTradeRequest(date);
+	    	requestNavigationViewModel.addShiftTradeRequest(date);
 	    },
 		ShiftTradeBulletinBoardRequest: function(date) {
 			requestNavigationViewModel.addShiftTradeBulletinBoardRequest(date);

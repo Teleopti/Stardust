@@ -22,6 +22,7 @@ Teleopti.MyTimeWeb.Ajax = function () {
 		_setupError(options);
 		_setupCache(options);
 		_setupGlobal(options);
+		_setupHeaders(options);
 		_setupRequestStack(options);
 
 		return $.ajax(options);
@@ -80,6 +81,15 @@ Teleopti.MyTimeWeb.Ajax = function () {
 		options.global = options.global || false;
 	}
 
+	function _setupHeaders(options) {
+
+		if (options.headers) {
+			options.headers['X-Use-GregorianCalendar'] = true;
+		} else {
+			options.headers = { 'X-Use-GregorianCalendar': true }
+		}
+	}
+
 	function _setupRequestStack(options) {
 
 		var beforeSendCallback = options.beforeSend;
@@ -130,7 +140,7 @@ Teleopti.MyTimeWeb.Ajax = function () {
 
 };
 
-Teleopti.MyTimeWeb.AjaxSettings = {baseUrl : ''};
+Teleopti.MyTimeWeb.AjaxSettings = { baseUrl: '' };
 
 Teleopti.MyTimeWeb.Ajax.UI = (function ($) {
 

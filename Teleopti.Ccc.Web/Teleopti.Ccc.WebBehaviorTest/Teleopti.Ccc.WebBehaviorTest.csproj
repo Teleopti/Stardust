@@ -246,6 +246,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>HealthCheck.feature</DependentUpon>
     </Compile>
+    <Compile Include="JalaaliCalendarStepDefinitions.cs" />
     <Compile Include="License.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -265,6 +266,11 @@
       <DependentUpon>GamificationOrganisationalBasedLeaderboardWhen31318Enabled.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="MyTime\JalaaliCalendar.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>JalaaliCalendar.feature</DependentUpon>
     </Compile>
     <Compile Include="MyTime\ShiftExchangeOfferForNonWorkingDaysFromWeekSchedule.feature.cs">
       <DependentUpon>ShiftExchangeOfferForNonWorkingDaysFromWeekSchedule.feature</DependentUpon>
@@ -1001,6 +1007,10 @@
     <None Include="MyTime\GamificationOrganisationalBasedLeaderboardWhen31318Enabled.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>GamificationOrganisationalBasedLeaderboardWhen31318Enabled.feature.cs</LastGenOutput>
+    </None>
+    <None Include="MyTime\JalaaliCalendar.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>JalaaliCalendar.feature.cs</LastGenOutput>
     </None>
     <None Include="MyTime\ShiftExchangeOfferForNonWorkingDaysFromWeekSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

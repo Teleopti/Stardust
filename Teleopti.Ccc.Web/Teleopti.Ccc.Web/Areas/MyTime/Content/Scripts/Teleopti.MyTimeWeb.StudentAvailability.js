@@ -69,7 +69,7 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 	    	dataType: "json",
 	    	type: 'GET',
 	    	success: function (data) {
-	    		$('.moment-datepicker').attr('data-bind', 'datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: ' + data.WeekStart + ' }');
+	    		$('.moment-datepicker').attr('data-bind', 'datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: ' + data.WeekStart + ', format: "'+ Teleopti.MyTimeWeb.Common.DateFormat +'" }');
 	    		ko.applyBindings(vm, $('div.subnavbar')[0]);
 	    	}
 	    });

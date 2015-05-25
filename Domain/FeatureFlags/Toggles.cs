@@ -48,6 +48,7 @@
 		MyTimeWeb_TradeWithDayOffAndEmptyDay_31317,
 		MyTimeWeb_SortSchedule_32092,
 		MyTimeWeb_EnhanceTeamSchedule_32580,
+		MyTimeWeb_JalaaliCalendar_32997,
 
 		Backlog_Module_23980,
 

@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Hosting;
@@ -6,9 +7,11 @@ using System.Web.Mvc;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.MessageBroker;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Broker;
 using Teleopti.Ccc.Web.Core.RequestContext.Initialize;
 using Teleopti.Ccc.Web.Core.Startup;
+using Teleopti.Interfaces.Domain;
 
 [assembly: PreApplicationStartMethod(typeof(ApplicationStartModule), "RegisterModule")]
 
@@ -47,11 +50,26 @@ namespace Teleopti.Ccc.Web.Core.Startup
 					.Current
 					.GetService<IRequestContextInitializer>()
 					;
-				requestContextInitializer.SetupPrincipalAndCulture();
+
+
+
+				requestContextInitializer.SetupPrincipalAndCulture(onlyUseGregorianCalendar(HttpContext.Current));
+				
 			};
 
 			if (HasStartupError)
 				application.BeginRequest += onEveryRequest;
+
+
+		}
+
+		private bool onlyUseGregorianCalendar(HttpContext context)
+		{
+			var useGregorianCalendar = String.Empty;
+			var headers = context.Request.Headers;
+			useGregorianCalendar = headers["X-Use-GregorianCalendar"] ?? useGregorianCalendar;
+			if (string.IsNullOrEmpty(useGregorianCalendar)) return false;
+			return Boolean.Parse(useGregorianCalendar);
 		}
 
 		private void onEveryRequest(object sender, EventArgs e)

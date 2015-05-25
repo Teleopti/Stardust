@@ -20,9 +20,13 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		self.isProcessing = ko.observable(false);
 		self.Subject = ko.observable();
 		self.RequestType = ko.observable();
+		self.RequestTypeEnum = ko.observable();
 		self.RequestPayload = ko.observable();
 		self.Status = ko.observable();
-		self.Dates = ko.observable();
+
+		self.StartDateTime = ko.observable();
+		self.EndDateTime = ko.observable();
+
 		self.UpdatedOn = ko.observable();
 		self.TextSegments = ko.observableArray();
 		self.DenyReason = ko.observable();
@@ -47,12 +51,48 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		self.isReferred = ko.observable(false);
 		self.isCreatedByUser = ko.observable(false);
 
+		self.IsFullDay = ko.observable();
+		self.IsShiftTradeRequest = function () {
+			return (self.RequestTypeEnum() == 2);
+		};
+
+
+		var datesAreSame = function(dateOne, dateTwo) {
+			return (dateOne.startOf('day').isSame(dateTwo.startOf('day')));
+		};
+
+		self.GetShiftTradeDisplay = function() {
+			if (datesAreSame(self.StartDateTime(), self.EndDateTime())) {
+				return Teleopti.MyTimeWeb.Common.FormatDate(self.StartDateTime());
+			} else {
+				return Teleopti.MyTimeWeb.Common.FormatDatePeriod(self.StartDateTime(), self.EndDateTime(), false);
+			}
+		};
+
+		self.GetDateDisplay = function() {
+			if (!(self.StartDateTime() && self.EndDateTime())) {
+				return null;
+			}
+
+			if (self.IsShiftTradeRequest()) {
+				return self.GetShiftTradeDisplay();
+			} else {
+
+				return Teleopti.MyTimeWeb.Common.FormatDatePeriod(self.StartDateTime(), self.EndDateTime(), !self.IsFullDay());
+			}
+		};
+
+		self.Dates = ko.computed(function () {
+			return self.GetDateDisplay();
+
+		});
+		
 		self.ShowDetails = function () {
 			if (self.IsSelected()) {
 				self.IsSelected(false);
 				return;
 			}
-			
+
 			if (self.DetailItem === undefined) {
 				ajax.Ajax({
 					url: self.Link(),
@@ -116,7 +156,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 				var vm = new RequestItemViewModel(self);
 				vm.Initialize(item, false);
 				self.Requests.push(vm);
-			}); 
+			});
 		};
 
 		self.ColumnRequests = ko.computed(function () {
@@ -274,9 +314,16 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			self.isProcessing(isProcessing);
 			self.Subject(data.Subject == null ? '' : data.Subject);
 			self.RequestType(data.Type);
+			self.RequestTypeEnum(data.TypeEnum);
 			self.Status(data.Status);
-			self.Dates(data.Dates);
-			self.UpdatedOn(data.UpdatedOn);
+
+			
+			self.IsFullDay(data.IsFullDay);
+			
+			self.StartDateTime(moment(data.DateTimeFrom));
+			self.EndDateTime(moment(data.DateTimeTo));
+			self.UpdatedOn(Teleopti.MyTimeWeb.Common.FormatDate(data.UpdatedOnDateTime));
+
 			self.TextSegments(messageInList);
 			self.ListText(textNoBr.length > 50 ? textNoBr.substring(0, 50) + '...' : textNoBr);
 			self.DenyReason(data.DenyReason);
@@ -289,7 +336,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			self.isCreatedByUser(data.IsCreatedByUser);
 			self.isReferred(data.IsReferred);
 			self.IsSelected(false);
-			if (data.TypeEnum == 2 && !data.IsCreatedByUser) self.CanDelete(false);
+			if (self.IsShiftTradeRequest() && !data.IsCreatedByUser) self.CanDelete(false);
 		}
 	});
 
@@ -334,6 +381,9 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		},
 		AddItemAtTop: function (request, isProcessing) {
 			pageViewModel.AddRequest(request, isProcessing);
+		},
+		GetRequestItemViewModel: function() {
+			return new RequestItemViewModel(null);
 		},
 		Dispose: function () {
 			_unbind();

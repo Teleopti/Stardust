@@ -118,17 +118,31 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "argumentException")]
 		public CultureInfo Culture()
 		{
-			if (!culture.HasValue) return Thread.CurrentThread.CurrentCulture.FixPersianCulture();
+
+			if (TeleoptiPrincipal.CurrentPrincipal == null || !TeleoptiPrincipal.CurrentPrincipal.Regional.ForceUseGregorianCalendar)
+			{
+				if (!culture.HasValue) return Thread.CurrentThread.CurrentCulture.FixPersianCulture();
+
+				try
+				{
+					return CultureInfo.GetCultureInfo(culture.Value).FixPersianCulture();
+				}
+				catch (ArgumentException)
+				{
+					return Thread.CurrentThread.CurrentCulture.FixPersianCulture();
+				}
+			}
+
+			if (!culture.HasValue) return Thread.CurrentThread.CurrentCulture;
 
 			try
 			{
-				return CultureInfo.GetCultureInfo(culture.Value).FixPersianCulture();
+				return CultureInfo.GetCultureInfo(culture.Value);
 			}
 			catch (ArgumentException)
 			{
-				return Thread.CurrentThread.CurrentCulture.FixPersianCulture();
+				return Thread.CurrentThread.CurrentCulture;
 			}
-
 		}
 
 		public int? CultureLCID()
@@ -145,16 +159,32 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "argumentException")]
 		public CultureInfo UICulture()
 		{
-			if (!uiCulture.HasValue) return Thread.CurrentThread.CurrentUICulture.FixPersianCulture();
+
+			if (TeleoptiPrincipal.CurrentPrincipal == null || !TeleoptiPrincipal.CurrentPrincipal.Regional.ForceUseGregorianCalendar)
+			{
+				if (!uiCulture.HasValue) return Thread.CurrentThread.CurrentUICulture.FixPersianCulture();
+
+				try
+				{
+					return CultureInfo.GetCultureInfo(uiCulture.Value).FixPersianCulture();
+				}
+				catch (ArgumentException)
+				{
+					return Thread.CurrentThread.CurrentUICulture.FixPersianCulture();
+				}				
+			}
+
+			if (!uiCulture.HasValue) return Thread.CurrentThread.CurrentUICulture;
 
 			try
 			{
-				return CultureInfo.GetCultureInfo(uiCulture.Value).FixPersianCulture();
+				return CultureInfo.GetCultureInfo(uiCulture.Value);
 			}
 			catch (ArgumentException)
 			{
-				return Thread.CurrentThread.CurrentUICulture.FixPersianCulture();
+				return Thread.CurrentThread.CurrentUICulture;
 			}
+
 		}
 
 		public int? UICultureLCID()

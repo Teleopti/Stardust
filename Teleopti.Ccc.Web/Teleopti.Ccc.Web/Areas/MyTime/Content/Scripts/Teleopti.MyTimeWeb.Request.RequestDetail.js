@@ -60,7 +60,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	}
     
     function _datePickerFormat() {
-        return $('#Request-detail-datepicker-format').val().toUpperCase();
+    	return Teleopti.MyTimeWeb.Common.DateFormat;
     }
 
 	function _hideOthers() {
@@ -92,8 +92,9 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		var model = new Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModelFactory(ajax, _addItemAtTop).Create(defaultTime);
 		model.DateFormat(_datePickerFormat());
 		parentViewModel.requestViewModel(model);
-		var tomorrow = moment(moment().startOf('day').add('days', 1), _datePickerFormat());
-		var requestDay = moment(moment(date), _datePickerFormat());
+
+		var tomorrow = moment().startOf('day').add('days', 1);
+		var requestDay = moment(date);
 		if (requestDay.isBefore(tomorrow)) requestDay = tomorrow;
 		model.DateFrom(requestDay);
 		model.DateTo(requestDay);

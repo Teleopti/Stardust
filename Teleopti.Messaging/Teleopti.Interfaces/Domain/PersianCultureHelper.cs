@@ -63,6 +63,7 @@ namespace Teleopti.Interfaces.Domain
 		/// <returns>A new instance of fixed Persian CultureInfo.</returns> 
 		public static CultureInfo FixPersianCulture(this CultureInfo culture)
 		{
+
 			if (culture == null)
 				culture = new CultureInfo("fa-IR", false);
 			if (culture.LCID != 1065)

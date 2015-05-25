@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
 				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
 				MockRepository.GenerateMock<IBadgeSettingProvider>(), MockRepository.GenerateMock<IToggleManager>(),
-				_personNameProvider,MockRepository.GenerateMock<ITeamGamificationSettingRepository>());
+				_personNameProvider, MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), MockRepository.GenerateMock<IUserCulture>());
 
 			var result = target.CreatePortalViewModel();
 
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 				  _loggedOnUser, MockRepository.GenerateMock<IReportsNavigationProvider>(),
 				MockRepository.GenerateMock<IBadgeProvider>(),
 		        MockRepository.GenerateMock<IBadgeSettingProvider>(), MockRepository.GenerateMock<IToggleManager>(),
-				  _personNameProvider, MockRepository.GenerateMock<ITeamGamificationSettingRepository>());
+				  _personNameProvider, MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), MockRepository.GenerateMock<IUserCulture>());
 
             var result = target.CreatePortalViewModel();
 			NavigationItem message = (from i in result.NavigationItems where i.Controller == "Message" select i).SingleOrDefault();
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 				pushMessageProvider, _loggedOnUser,
 				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
 				MockRepository.GenerateMock<IBadgeSettingProvider>(), MockRepository.GenerateMock<IToggleManager>(),
-				_personNameProvider, MockRepository.GenerateMock<ITeamGamificationSettingRepository>());
+				_personNameProvider, MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), MockRepository.GenerateMock<IUserCulture>());
 
 			var result = target.CreatePortalViewModel();
 			NavigationItem message = (from i in result.NavigationItems where i.Controller == "Message" select i).SingleOrDefault();
