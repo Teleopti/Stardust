@@ -96,10 +96,10 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 				new CurrentHttpContext(),
 				() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging
 				);
-			var application = new InitializeApplication( dataSourcesFactory, null) {MessageBrokerDisabled = true};
+			var application = new InitializeApplication( dataSourcesFactory, null);
 
 			if (!StateHolder.IsInitialized)
-				application.Start(new StateManager(), _nhibConfPath, null, new ConfigurationManagerWrapper(), true);
+				application.Start(new StateManager(), _nhibConfPath, null, new ConfigurationManagerWrapper(), false);
 
 			_logOnOff = new LogOnOff(new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory()));
 			_repositoryFactory = new RepositoryFactory();

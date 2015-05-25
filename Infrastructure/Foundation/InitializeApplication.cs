@@ -21,14 +21,12 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		{
 			this.dataSourcesFactory = dataSourcesFactory;
 			this.messageBroker = messageBroker;
-			MessageBrokerDisabled = false;
 		}
 
 		private IDataSourcesFactory dataSourcesFactory { get; set; }
 		private IMessageBrokerComposite messageBroker { get; set; }
-		public bool MessageBrokerDisabled { get; set; }
 
-		// from Web, ServiceBus, Sdk, ETL, LogonInitializeStateHolder
+		// from Web, ServiceBus, Sdk, ETL
 		public void Start(IState clientCache, string xmlDirectory, ILoadPasswordPolicyService loadPasswordPolicyService,
 			IConfigurationWrapper configurationWrapper, bool startMessageBroker)
 		{
@@ -71,11 +69,6 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 
 		private void startMessageBroker(IDictionary<string, string> appSettings)
 		{
-			if (MessageBrokerDisabled)
-			{
-				log.Debug("Message broker disabled.");
-				return;
-			}
 			try
 			{
 				using(PerformanceOutput.ForOperation("Connecting to message broker"))
@@ -102,11 +95,12 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		}
 
 		// from LogonInitializeStateHolder
-		public void Start(IState clientCache, IDictionary<string, string> appSettings, ILoadPasswordPolicyService loadPasswordPolicyService)
+		public void Start(IState clientCache, IDictionary<string, string> appSettings, ILoadPasswordPolicyService loadPasswordPolicyService, bool startMessageBroker)
 		{
 			StateHolder.Initialize(clientCache);
 
-			startMessageBroker(appSettings);
+			if(startMessageBroker)
+				this.startMessageBroker(appSettings);
 			StateHolder.Instance.State.SetApplicationData(
 				new ApplicationData(appSettings, new List<IDataSource>(), messageBroker,
 										  loadPasswordPolicyService, dataSourcesFactory));

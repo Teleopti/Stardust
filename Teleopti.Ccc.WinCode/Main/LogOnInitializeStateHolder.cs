@@ -43,12 +43,11 @@ namespace Teleopti.Ccc.WinCode.Main
 			if (!appsett.AllKeys.Contains("MessageBrokerLongPolling")) appSettings.Add("MessageBrokerLongPolling", settings.MessageBrokerLongPolling);
 			if (!appsett.AllKeys.Contains("RtaPollingInterval")) appSettings.Add("RtaPollingInterval", settings.RtaPollingInterval);
 
-			bool messageBrokerDisabled = false;
+			var messageBrokerEnabled = false;
 			string messageBrokerDisabledString;
-			if (!appSettings.TryGetValue("MessageBroker", out messageBrokerDisabledString) ||
-				 string.IsNullOrEmpty(messageBrokerDisabledString))
+			if (appSettings.TryGetValue("MessageBroker", out messageBrokerDisabledString) && !string.IsNullOrEmpty(messageBrokerDisabledString))
 			{
-				messageBrokerDisabled = true;
+				messageBrokerEnabled = true;
 			}
 
 			var sendToServiceBus = string.IsNullOrEmpty(ConfigurationManager.AppSettings["FreemiumForecast"])?(IServiceBusSender) new ServiceBusSender():new EmptyServiceBusSender();
@@ -71,12 +70,9 @@ namespace Teleopti.Ccc.WinCode.Main
 						}, DataSourceConfigurationSetter.ForDesktop(),
 						new CurrentHttpContext(),
 						() => messageBroker),
-					messageBroker)
-				{
-					MessageBrokerDisabled = messageBrokerDisabled
-				};
+					messageBroker);
 
-			initializer.Start(new StateManager(), appSettings, passwordPolicyService);
+			initializer.Start(new StateManager(), appSettings, passwordPolicyService, messageBrokerEnabled);
 
 			return true;
 		}

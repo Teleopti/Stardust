@@ -90,12 +90,9 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 						new CurrentHttpContext(),
 						() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging
 						),
-					messageBroker)
-				{
-					MessageBrokerDisabled = messageBrokerDisabled()
-				};
+					messageBroker);
 			string sitePath = Global.sitePath();
-			initializeApplication.Start(new SdkState(), sitePath, new LoadPasswordPolicyService(sitePath), new ConfigurationManagerWrapper(), true);
+			initializeApplication.Start(new SdkState(), sitePath, new LoadPasswordPolicyService(sitePath), new ConfigurationManagerWrapper(), !messageBrokerDisabled());
 
 			var messageBrokerEnabled = !messageBrokerDisabled();
 			var messageBrokerReceiveDisabled = !messageBrokerReceiveEnabled();
