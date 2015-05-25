@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
 
 		public IAvailableBusinessUnitsProvider AvailableBusinessUnitProvider
 		{
-			get { return new AvailableBusinessUnitsProvider(this); }
+			get { return new AvailableBusinessUnitsProvider(User, DataSource); }
 		}
 
 		public string DataSourceName

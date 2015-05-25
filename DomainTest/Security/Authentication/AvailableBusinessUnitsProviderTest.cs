@@ -12,8 +12,6 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
 	[TestFixture]
 	public class AvailableBusinessUnitsProviderTest
 	{
-		private IDataSourceContainer dataSourceContainer;
-		private AvailableBusinessUnitsProvider target;
 		private IPerson person;
 		private IPermissionInformation permissionInformation;
 
@@ -22,8 +20,6 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
 		{
 			person = MockRepository.GenerateMock<IPerson>();
 			permissionInformation = MockRepository.GenerateMock<IPermissionInformation>();
-			dataSourceContainer = MockRepository.GenerateMock<IDataSourceContainer>();
-			target = new AvailableBusinessUnitsProvider(dataSourceContainer);
 		}
 
 		[Test]
@@ -35,8 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
 			var repositoryFactory = MockRepository.GenerateMock<IRepositoryFactory>();
 			var businessUnitRepository = MockRepository.GenerateMock<IBusinessUnitRepository>();
 
-			dataSourceContainer.Stub(x => x.DataSource).Return(dataSource);
-			dataSourceContainer.Stub(x => x.User).Return(person).Repeat.AtLeastOnce();
+			var target = new AvailableBusinessUnitsProvider(person, dataSource);
 			person.Stub(x => x.PermissionInformation).Return(permissionInformation).Repeat.AtLeastOnce();
 			permissionInformation.Stub(x => x.HasAccessToAllBusinessUnits()).Return(true);
 			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
@@ -53,7 +48,8 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
 		[Test]
 		public void VerifyHasAccessToOneBusinessUnit()
 		{
-			dataSourceContainer.Stub(x => x.User).Return(person).Repeat.AtLeastOnce();
+			var target = new AvailableBusinessUnitsProvider(person, null);
+
 			person.Stub(x => x.PermissionInformation).Return(permissionInformation).Repeat.AtLeastOnce();
 			permissionInformation.Stub(x => x.HasAccessToAllBusinessUnits()).Return(false);
 			permissionInformation.Stub(x => x.BusinessUnitAccessCollection()).Return(new List<IBusinessUnit> { null });
@@ -73,7 +69,8 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
 			var businessUnitRepository = MockRepository.GenerateMock<IBusinessUnitRepository>();
 			var businessUnit = MockRepository.GenerateMock<IBusinessUnit>();
 
-			dataSourceContainer.Stub(x => x.DataSource).Return(dataSource);
+			var target = new AvailableBusinessUnitsProvider(null, dataSource);
+
 			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 			repositoryFactory.Stub(x => x.CreateBusinessUnitRepository(unitOfWork)).Return(businessUnitRepository);
 			unitOfWork.Stub(x => x.Reassociate(businessUnit));

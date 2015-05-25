@@ -13,30 +13,32 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
 
 	public class AvailableBusinessUnitsProvider : IAvailableBusinessUnitsProvider
 	{
-		private readonly IDataSourceContainer _dataSourceContainer;
+		private readonly IPerson _loggedOnPerson;
+		private readonly IDataSource _dataSource;
 
-		public AvailableBusinessUnitsProvider(IDataSourceContainer dataSourceContainer)
+		public AvailableBusinessUnitsProvider(IPerson loggedOnPerson, IDataSource dataSource)
 		{
-			_dataSourceContainer = dataSourceContainer;
+			_loggedOnPerson = loggedOnPerson;
+			_dataSource = dataSource;
 		}
 
 		public IEnumerable<IBusinessUnit> AvailableBusinessUnits(IRepositoryFactory repositoryFactory)
 		{
-			if (_dataSourceContainer.User.PermissionInformation.HasAccessToAllBusinessUnits())
+			if (_loggedOnPerson.PermissionInformation.HasAccessToAllBusinessUnits())
 			{
-				using (IUnitOfWork uow = _dataSourceContainer.DataSource.Application.CreateAndOpenUnitOfWork())
+				using (IUnitOfWork uow = _dataSource.Application.CreateAndOpenUnitOfWork())
 				{
 					IBusinessUnitRepository businessUnitRepository = repositoryFactory.CreateBusinessUnitRepository(uow);
 					return businessUnitRepository.LoadAllBusinessUnitSortedByName();
 				}
 			}
 
-			return _dataSourceContainer.User.PermissionInformation.BusinessUnitAccessCollection();
+			return _loggedOnPerson.PermissionInformation.BusinessUnitAccessCollection();
 		}
 
 		public IBusinessUnit LoadHierarchyInformation(IBusinessUnit businessUnit, IRepositoryFactory repositoryFactory)
 		{
-			using (IUnitOfWork uow = _dataSourceContainer.DataSource.Application.CreateAndOpenUnitOfWork())
+			using (IUnitOfWork uow = _dataSource.Application.CreateAndOpenUnitOfWork())
 			{
 				IBusinessUnitRepository businessUnitRepository = repositoryFactory.CreateBusinessUnitRepository(uow);
 				uow.Reassociate(businessUnit);
