@@ -5,6 +5,8 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.MessageBrokerUnitOfWork;
+using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.MessageBroker;
 
@@ -12,6 +14,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 {
 	[TestFixture, Category("LongRunning")]
 	[MessageBrokerUnitOfWorkTest]
+	[Ignore]
 	public class MailboxRepositoryTest
 	{
 		public IMailboxRepository Target;
