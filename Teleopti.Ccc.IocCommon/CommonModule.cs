@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule<JsonSerializationModule>();
 			builder.RegisterModule(new ToggleNetModule(_configuration.Args()));
 			builder.RegisterModule(new MessageBrokerModule(_configuration));
-			builder.RegisterModule(new RepositoryModule() { RepositoryConstructorType = RepositoryConstructorType });
+			builder.RegisterModule(new RepositoryModule { RepositoryConstructorType = RepositoryConstructorType });
 			builder.RegisterModule<UnitOfWorkModule>();
 			builder.RegisterModule<AuthenticationModule>();
 			builder.RegisterModule<ForecasterModule>();
@@ -62,7 +62,6 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule(new TenantClientModule(_configuration));
 			builder.RegisterModule<DistributedLockModule>();
 			builder.RegisterModule(new RtaModule(_configuration));
-			builder.RegisterModule<MailboxModule>();
 
 			// move into HangfireModule when that module can be moved to IoCCommon
 			builder.RegisterType<HangfireEventProcessor>().As<IHangfireEventProcessor>().SingleInstance();
