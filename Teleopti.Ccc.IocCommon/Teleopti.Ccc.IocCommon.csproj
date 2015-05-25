@@ -187,6 +187,7 @@
     <Compile Include="CommonModule.cs" />
     <Compile Include="Configuration\JsonSerializationModule.cs" />
     <Compile Include="Configuration\ServiceBusModule.cs" />
+    <Compile Include="MailboxModule.cs" />
     <Compile Include="MultipleConfig\AppConfigOverrider.cs" />
     <Compile Include="MultipleConfig\AppConfigReader.cs" />
     <Compile Include="MultipleConfig\IAppConfigReader.cs" />

@@ -3,24 +3,14 @@ using System.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
-using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Authentication;
-using Teleopti.Ccc.Infrastructure.MessageBroker;
 using Teleopti.Ccc.Infrastructure.Repositories;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	internal class RepositoryModule : Module
 	{
-		private readonly IIocConfiguration _configuration;
-
-		public RepositoryModule(IIocConfiguration configuration)
-		{
-			_configuration = configuration;
-		}
-
 		public Type RepositoryConstructorType { get; set; }
 
 		protected override void Load(ContainerBuilder builder)
@@ -59,15 +49,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<LoadUserUnauthorized>()
 				.As<ILoadUserUnauthorized>()
 				.SingleInstance();
-
-			if (_configuration.Toggle(Toggles.MessageBroker_Mailbox_32733))
-				builder.RegisterType<MailboxRepository>()
-					.As<IMailboxRepository>()
-					.SingleInstance();
-			else
-				builder.RegisterType<NoMailboxRepository>()
-					.As<IMailboxRepository>()
-					.SingleInstance();
 		}
 
 		private bool hasCorrectCtor(Type repositoryType)
