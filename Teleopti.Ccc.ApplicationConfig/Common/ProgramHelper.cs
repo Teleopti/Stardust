@@ -84,14 +84,11 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 					)
 					.Create(databaseHandler.DataSourceSettings(), "");
 
-			var dataSourceContainer = new DataSourceContainer(dataSource);
-
 			var unitOfWorkFactory = dataSource.Application;
 			var logOnOff = new LogOnOff(new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory()));
 			var user = new LoadUserUnauthorized().LoadFullPersonInSeperateTransaction(unitOfWorkFactory, SuperUser.Id_AvoidUsing_This);
-			dataSourceContainer.SetUser(user);
-
-			logOnOff.LogOn(dataSourceContainer.DataSource, user, businessUnit);
+			
+			logOnOff.LogOn(dataSource, user, businessUnit);
 
 			var roleToPrincipalCommand =
 				new RoleToPrincipalCommand(
