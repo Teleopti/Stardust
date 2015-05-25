@@ -1581,7 +1581,6 @@
     <Compile Include="Security\Authentication\FuncTimeZone.cs" />
     <Compile Include="Security\Authentication\IDataSourceContainer.cs" />
     <Compile Include="Security\Authentication\IdentityHelper.cs" />
-    <Compile Include="Security\Authentication\LogonModel.cs" />
     <Compile Include="Security\Authentication\IWindowsUserProvider.cs" />
     <Compile Include="Security\Authentication\LoggedOnUser.cs" />
     <Compile Include="Security\Authentication\SpecificTimeZone.cs" />

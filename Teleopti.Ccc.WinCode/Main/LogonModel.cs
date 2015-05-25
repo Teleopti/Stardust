@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Security.Authentication
+namespace Teleopti.Ccc.WinCode.Main
 {
 	public class LogonModel
 	{
