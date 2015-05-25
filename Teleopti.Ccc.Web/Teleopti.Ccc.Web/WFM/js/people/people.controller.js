@@ -4,10 +4,25 @@ angular
 	.module('wfm.people', ['peopleService', 'peopleSearchService'])
 	.constant('chunkSize', 50)
 	.controller('PeopleCtrl', [
-		'$scope', '$filter', '$state', 'PeopleSearch', PeopleController
-	]);
+		'$scope', '$filter', '$state', '$document', 'PeopleSearch', PeopleController
+	])
+	.directive('outsideClick', outsideClick);
 
-function PeopleController($scope, $filter, $state, SearchSvrc) {
+function outsideClick($window, $parse) {
+	return {
+		restrict: 'A',
+		link: function (scope, element, attrs) {
+			var clickOutHandler = $parse(attrs.outsideClick);
+			angular.element($window).on('click', function (event) {
+				if (element[0].contains(event.target)) return;
+				clickOutHandler(scope, { $event: event });
+				scope.$apply();
+			});
+		}
+	};
+};
+
+function PeopleController($scope, $filter, $state, $document, SearchSvrc) {
 	$scope.searchResult = [];
 	$scope.pageSize = 20;
 	$scope.keyword = '';
@@ -139,19 +154,15 @@ function PeopleController($scope, $filter, $state, SearchSvrc) {
 	};
 
 	$scope.showAdvancedSearchOption = false;
-	$scope.toggleAdvancedSearchOption = function () {
+	$scope.toggleAdvancedSearchOption = function (event) {
 		$scope.showAdvancedSearchOption = !$scope.showAdvancedSearchOption;
-		//event.stopPropagation();
+		event.stopPropagation();
 	};
 
-	//window.onclick = function () {
-	//	var isChild = $element.find(event.target).length > 0;
-	//	if ($scope.showAdvancedSearchOption && !isChild) {
-	//		$scope.showAdvancedSearchOption = false;
-	//		$scope.$apply();
-	//	}
-	//};
- 
+	$scope.turnOffAdvancedSearch = function () {
+		$scope.showAdvancedSearchOption = false;
+	};
+
 	function getSearchCriteria(title, value) {
 		return value != undefined && value != "" ? title + ": " + value + ", " : "";
 	}

@@ -1,27 +1,11 @@
-﻿<!--<script>
-	document.getElementsByClassName("wfm-table").onclick = function() {
-		if (this.showAdvancedSearchOption) {
-			this.showAdvancedSearchOption = false;
-			apply();
-		}
-	};
-</script>-->
-
-<div class="row">
-	<div class="col-lg-12">
-		<h4 translate>ManagePeople</h4>
-		<p translate>Here you can search for people by name, employment number, role, contract, skill, contract schedule, part time percentage, shift bag or budget group.</p>
-	</div>
-</div>
-
-<div class="row">
+﻿<div class="row">
 	<div class="col-md-4">
 		<div class="input-prepend people-search">
 			<i class="mdi mdi-magnify"></i>
-			<input id ="simple-search" style="width: 90%" type="text" placeholder="{{'Search'|translate}}..." xplaceholder="{{'Name' | translate}},{{'EmployeeNo' | translate}},{{'Role' | translate}},{{'Skill' | translate}},{{'Contract' | translate}},{{'PersonFinderFieldOrganization' | translate}},{{'ContractSchedule' | translate}},{{'PartTimePercentage' | translate}},{{'PersonFinderFieldShiftBag' | translate}},{{'BudgetGroup' | translate}}"
-				   ng-model="keyword" ng-keydown="$event.which === 13 && searchKeyword()" ng-change="validateSearchKeywordChanged()"
-				   ng-click="toggleAdvancedSearchOption()" />
-			<span class="dropdown" tabindex="0" ng-show="isAdvancedSearchEnabled" ng-include src="'js/people/template/advancedPeopleSearch.html'"></span>
+			<input id="simple-search" style="width: 90%" type="text" placeholder="{{'Search'|translate}}..." xplaceholder="{{'Name' | translate}},{{'EmployeeNo' | translate}},{{'Role' | translate}},{{'Skill' | translate}},{{'Contract' | translate}},{{'PersonFinderFieldOrganization' | translate}},{{'ContractSchedule' | translate}},{{'PartTimePercentage' | translate}},{{'PersonFinderFieldShiftBag' | translate}},{{'BudgetGroup' | translate}}"
+			       ng-model="keyword" ng-keydown="$event.which === 13 && searchKeyword()" ng-change="validateSearchKeywordChanged()"
+				   ng-click="toggleAdvancedSearchOption($event)" />
+			<span class="dropdown" tabindex="0" ng-show="isAdvancedSearchEnabled" ng-include src="'js/people/template/advancedPeopleSearch.html'" outside-click="turnOffAdvancedSearch()"></span>
 		</div>
 	</div>
 </div>
@@ -75,4 +59,3 @@
 		</tbody>
 	</table>
 </div>
-
