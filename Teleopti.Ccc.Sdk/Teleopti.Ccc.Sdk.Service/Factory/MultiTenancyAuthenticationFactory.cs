@@ -44,17 +44,14 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 
 		public AuthenticationResultDto LogOnWindows(DataSourceDto dataSource)
 		{
-			var model = new LogonModel();
 			var result = _authenticationQuerier.TryLogon(new IdentityLogonClientModel { Identity = _windowsUserProvider.Identity() }, UserAgent);
 			var resultDto = _authenticationResultAssembler.DomainEntityToDto(result);
-
 			if (!resultDto.Successful) return resultDto;
-			model.SelectedDataSourceContainer = new DataSourceContainer(result.DataSource);
-			model.SelectedDataSourceContainer.SetUser(result.Person);
-			resultDto.Tenant = model.SelectedDataSourceContainer.DataSourceName;
-			var buList = model.SelectedDataSourceContainer.AvailableBusinessUnitProvider.AvailableBusinessUnits(new RepositoryFactory());
+
+			resultDto.Tenant = result.DataSource.DataSourceName;
+			var buList = new AvailableBusinessUnitsProvider(result.Person, result.DataSource).AvailableBusinessUnits(new RepositoryFactory());
 			buList.ForEach(unit => resultDto.BusinessUnitCollection.Add(new BusinessUnitDto { Id = unit.Id, Name = unit.Name }));
-			addToCache(result, model);
+			addToCache(result, null, null);
 			return resultDto;
 		}
 
@@ -81,24 +78,21 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 
 		public AuthenticationResultDto LogOnApplication(string userName, string password, DataSourceDto dataSource)
 		{
-			var model = new LogonModel { UserName = userName, Password = password };
 			var result = _authenticationQuerier.TryLogon(new ApplicationLogonClientModel {UserName = userName, Password = password}, UserAgent);
 			var resultDto = _authenticationResultAssembler.DomainEntityToDto(result);
 
 			if (!resultDto.Successful) return resultDto;
-			model.SelectedDataSourceContainer = new DataSourceContainer(result.DataSource);
-			model.SelectedDataSourceContainer.SetUser(result.Person);
-			resultDto.Tenant = model.SelectedDataSourceContainer.DataSourceName;
-			var buList = model.SelectedDataSourceContainer.AvailableBusinessUnitProvider.AvailableBusinessUnits(new RepositoryFactory());
+			resultDto.Tenant = result.DataSource.DataSourceName;
+			var buList = new AvailableBusinessUnitsProvider(result.Person, result.DataSource).AvailableBusinessUnits(new RepositoryFactory());
 			buList.ForEach(unit => resultDto.BusinessUnitCollection.Add(new BusinessUnitDto { Id = unit.Id, Name = unit.Name }));
-			addToCache(result, model);
+			addToCache(result, userName, password);
 			return resultDto;
 		}
 
-		private void addToCache(AuthenticationQuerierResult result, LogonModel model)
+		private void addToCache(AuthenticationQuerierResult result, string userName, string password)
 		{
-			var personContainer = new PersonContainer(result.Person, model.UserName, model.Password,
-				model.SelectedDataSourceContainer.DataSourceName, result.TenantPassword);
+			var personContainer = new PersonContainer(result.Person, userName, password,
+				result.DataSource.DataSourceName, result.TenantPassword);
 			_personCache.Add(personContainer);
 		}
 	}
