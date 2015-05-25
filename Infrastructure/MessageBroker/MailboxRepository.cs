@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker
 		}
 
 		[MessageBrokerUnitOfWork]
-		public void Persist(Mailbox mailbox)
+		public virtual void Persist(Mailbox mailbox)
 		{
 			var builder = new StringBuilder();
 			IQuery sqlQuery;
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker
 		private const string selectSql = @"SELECT Mailbox.Id, Mailbox.Route, Notification.Message FROM [dbo].[Mailbox] LEFT OUTER JOIN [dbo].[Notification] ON Mailbox.Id = Notification.Parent ";
 
 		[MessageBrokerUnitOfWork]
-		public Mailbox Get(Guid id)
+		public virtual Mailbox Get(Guid id)
 		{
 			var result = get(selectSql + " WHERE Mailbox.Id = :Id", new parameter {Name = "Id", Value = id});
 			return result == null
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker
 		}
 
 		[MessageBrokerUnitOfWork]
-		public IEnumerable<Mailbox> Get(string route)
+		public virtual  IEnumerable<Mailbox> Get(string route)
 		{
 			return get(selectSql + " WHERE Mailbox.Route = :Route", new parameter {Name = "Route", Value = route}) ?? Enumerable.Empty<Mailbox>();
 		}
