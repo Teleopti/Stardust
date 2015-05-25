@@ -26,7 +26,8 @@ namespace Teleopti.Ccc.InfrastructureTest
 			{
 				ConnectionStrings = new ConnectionStringSettingsCollection
 				{
-					new ConnectionStringSettings("RtaApplication", ConnectionStringHelper.ConnectionStringUsedInTests)
+					new ConnectionStringSettings("RtaApplication", ConnectionStringHelper.ConnectionStringUsedInTests),
+					new ConnectionStringSettings("MessageBroker", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix)
 				}
 			}).As<IConfigReader>().AsSelf().SingleInstance();
 

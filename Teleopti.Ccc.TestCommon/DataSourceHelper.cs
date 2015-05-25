@@ -32,6 +32,16 @@ namespace Teleopti.Ccc.TestCommon
 			backupDatabase(ccc7(), dataHash);
 		}
 
+		public static void BackupAnalyticsDatabase(int dataHash)
+		{
+			backupDatabase(analytics(), dataHash);
+		}
+
+		public static void RestoreAnalyticsDatabase(int dataHash)
+		{
+			restoreDatabase(analytics(), dataHash);
+		}
+
 		public static void ClearAnalyticsData()
 		{
 			analytics().CleanByAnalyticsProcedure();

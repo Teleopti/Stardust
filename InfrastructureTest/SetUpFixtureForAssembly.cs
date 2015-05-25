@@ -70,6 +70,16 @@ namespace Teleopti.Ccc.InfrastructureTest
 			DataSourceHelper.RestoreCcc7Database(123);
 		}
 
+		public static void BackupAnalyticsDatabase()
+		{
+			DataSourceHelper.BackupAnalyticsDatabase(123);
+		}
+
+		public static void RestoreAnalyticsDatabase()
+		{
+			DataSourceHelper.RestoreAnalyticsDatabase(123);
+		}
+
 		private static void persistLoggedOnPerson()
 		{
 			using (var uow = DataSource.Application.CreateAndOpenUnitOfWork())

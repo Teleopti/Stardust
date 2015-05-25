@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			builder.RegisterType<SubscriptionFiller>().As<IBeforeSubscribe>().SingleInstance();
 			builder.RegisterType<MessageBrokerServer>().As<IMessageBrokerServer>().SingleInstance();
-			builder.RegisterType<MailboxRepository>().As<IMailboxRepository>().SingleInstance();
 		}
 	}
 }

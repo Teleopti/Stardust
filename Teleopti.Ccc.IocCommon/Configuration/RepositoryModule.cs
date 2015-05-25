@@ -3,8 +3,10 @@ using System.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
+using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Authentication;
+using Teleopti.Ccc.Infrastructure.MessageBroker;
 using Teleopti.Ccc.Infrastructure.Repositories;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
@@ -48,6 +50,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<LoadUserUnauthorized>()
 				.As<ILoadUserUnauthorized>()
+				.SingleInstance();
+
+			builder.RegisterType<MailboxRepository>()
+				.As<IMailboxRepository>()
 				.SingleInstance();
 		}
 
