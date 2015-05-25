@@ -34,7 +34,13 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 
 			if (string.IsNullOrEmpty(keyword))
 			{
-				keyword = "\"" + myTeam.Site.Description.Name + "\"" + " \"" + myTeam.Description.Name + "\"";
+				var siteTerm = myTeam.Site.Description.Name.Contains(" ")
+					? "\"" + myTeam.Site.Description.Name + "\""
+					: myTeam.Site.Description.Name;
+				var teamTerm = myTeam.Description.Name.Contains(" ")
+					? "\"" + myTeam.Description.Name + "\""
+					: myTeam.Description.Name;
+				keyword = siteTerm + " " + teamTerm;
 			}
 
 			criteriaDictionary = SearchTermParser.Parse(keyword);
