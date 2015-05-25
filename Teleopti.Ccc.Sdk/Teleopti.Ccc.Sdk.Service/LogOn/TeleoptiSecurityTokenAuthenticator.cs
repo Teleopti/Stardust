@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
 
         public IDataSource DataSource
         {
-            get { return _applicationDataSourceFromToken.DataSourceContainer.DataSource; }
+            get { return _applicationDataSourceFromToken.DataSource; }
         }
 
         protected override bool CanValidateTokenCore(SecurityToken token)
@@ -52,13 +52,13 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
                 throw new FaultException(string.Format(CultureInfo.InvariantCulture, "The datasource {0} cannot be found.", userNameToken.DataSource));
             }
 
-				_licenseFromToken.SetLicense(_applicationDataSourceFromToken.DataSourceContainer, userNameToken.DataSource);
+				_licenseFromToken.SetLicense(_applicationDataSourceFromToken.DataSource, userNameToken.DataSource);
 
-            _applicationUserFromToken.SetPersonFromToken(userNameToken,_applicationDataSourceFromToken.DataSourceContainer);
+            _applicationUserFromToken.SetPersonFromToken(userNameToken,_applicationDataSourceFromToken.DataSource);
 
             if (userNameToken.HasBusinessUnit)
             {
-                _businessUnitFromToken.SetBusinessUnitFromToken(userNameToken,_applicationDataSourceFromToken.DataSourceContainer);
+                _businessUnitFromToken.SetBusinessUnitFromToken(userNameToken,_applicationDataSourceFromToken.DataSource);
             }
 
             // Create just one Claim instance for the username token - the name of the user.

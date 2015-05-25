@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
     {
         private IBusinessUnit _businessUnit;
         private ITokenWithBusinessUnitAndDataSource _tokenWithBusinessUnit;
-        private IDataSourceContainer _dataSourceContainer;
+        private IDataSource _dataSource;
         private readonly BusinessUnitCache _businessUnitCache = new BusinessUnitCache();
 
         public IBusinessUnit BusinessUnit
@@ -20,10 +20,10 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
             get { return _businessUnit; }
         }
 
-        public void SetBusinessUnitFromToken(ITokenWithBusinessUnitAndDataSource tokenWithBusinessUnit, IDataSourceContainer dataSourceContainer)
+        public void SetBusinessUnitFromToken(ITokenWithBusinessUnitAndDataSource tokenWithBusinessUnit, IDataSource dataSource)
         {
             _tokenWithBusinessUnit = tokenWithBusinessUnit;
-            _dataSourceContainer = dataSourceContainer;
+            _dataSource = dataSource;
             if (TryGetBusinessUnitFromCache())
             {
                 return;
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
 
         private bool TryGetBusinessUnitFromStore()
         {
-            using (var uow = _dataSourceContainer.DataSource.Application.CreateAndOpenUnitOfWork())
+            using (var uow = _dataSource.Application.CreateAndOpenUnitOfWork())
             {
                 _businessUnit =
                     new BusinessUnitRepository(uow).Get(_tokenWithBusinessUnit.BusinessUnit);

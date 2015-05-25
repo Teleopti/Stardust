@@ -3,12 +3,12 @@ using System.Configuration;
 using System.Globalization;
 using System.ServiceModel;
 using Teleopti.Ccc.Domain.Security;
-using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Sdk.Common.WcfExtensions;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.WcfService.LogOn
 {
@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
         private PersonContainer _personContainer;
         private readonly PersonCache _personCache = new PersonCache();
         private CustomUserNameSecurityToken _customUserNameSecurityToken;
-        private IDataSourceContainer _dataSourceContainer;
+        private IDataSource _dataSource;
 	    private readonly Guid CustomPersonId = SuperUser.Id_AvoidUsing_This;
 
         private bool tryGetPersonFromStore()
@@ -36,8 +36,9 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
 
 	    private AuthenticationQuerierResult logOnSystem()
 	    {
-		    if (attemptSuperUserLogOn()) 
-					return new AuthenticationQuerierResult {Success = true, Person = _dataSourceContainer.User};
+		    IPerson superUser;
+		    if (attemptSuperUserLogOn(out superUser)) 
+					return new AuthenticationQuerierResult {Success = true, Person = superUser};
 
 		    var authQuerier = new AuthenticationQuerier(new TenantServerConfiguration(ConfigurationManager.AppSettings["TenantServer"]),
 				    new PostHttpRequest(), new NewtonsoftJsonSerializer(),
@@ -53,12 +54,17 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
 				    }, string.Empty);
 	    }
 
-	    private bool attemptSuperUserLogOn()
+	    private bool attemptSuperUserLogOn(out IPerson superUser)
 	    {
 		    Guid systemUser;
-		    if (!Guid.TryParse(_customUserNameSecurityToken.UserName, out systemUser) || systemUser != CustomPersonId) return false;
-				_dataSourceContainer.SetUser(new LoadUserUnauthorized().LoadFullPersonInSeperateTransaction(_dataSourceContainer.DataSource.Application, CustomPersonId));
-		    return true;
+		    if (Guid.TryParse(_customUserNameSecurityToken.UserName, out systemUser) && systemUser == CustomPersonId)
+		    {
+			    superUser = new LoadUserUnauthorized().LoadFullPersonInSeperateTransaction(_dataSource.Application,
+				    CustomPersonId);
+			    return true;
+		    }
+		    superUser = null;
+		    return false;
 	    }
 
 	    private bool tryGetPersonFromCache()
@@ -67,10 +73,10 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
             return _personContainer != null;
         }
 
-        public void SetPersonFromToken(CustomUserNameSecurityToken customUserNameSecurityToken, IDataSourceContainer dataSourceContainer)
+        public void SetPersonFromToken(CustomUserNameSecurityToken customUserNameSecurityToken, IDataSource dataSource)
         {
             _customUserNameSecurityToken = customUserNameSecurityToken;
-            _dataSourceContainer = dataSourceContainer;
+            _dataSource = dataSource;
             if (tryGetPersonFromCache())
             {
                 return;

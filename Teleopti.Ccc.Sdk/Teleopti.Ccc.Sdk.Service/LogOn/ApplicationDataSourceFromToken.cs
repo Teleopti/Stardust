@@ -1,29 +1,21 @@
-﻿using Autofac.Integration.Wcf;
-using Teleopti.Ccc.Domain.Security.Authentication;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Sdk.Common.WcfExtensions;
+﻿using Teleopti.Ccc.Sdk.Common.WcfExtensions;
 using Teleopti.Interfaces.Domain;
-using Autofac;
 
 namespace Teleopti.Ccc.Sdk.WcfService.LogOn
 {
     public class ApplicationDataSourceFromToken
     {
-        private DataSourceContainer _dataSourceContainer;
-
-        public bool DataSourceNotFound()
+	    public bool DataSourceNotFound()
         {
-            return _dataSourceContainer == null;
+            return DataSource == null;
         }
 
         public void SetDataSource(ITokenWithBusinessUnitAndDataSource customUserNameSecurityToken)
         {
-           var dataSource =
+           DataSource =
                 StateHolderReader.Instance.StateReader.ApplicationScopeData.Tenant(customUserNameSecurityToken.DataSource);
-
-            _dataSourceContainer = new DataSourceContainer(dataSource);
         }
 
-        public IDataSourceContainer DataSourceContainer { get { return _dataSourceContainer; } }
+        public IDataSource DataSource { get; private set; }
     }
 }

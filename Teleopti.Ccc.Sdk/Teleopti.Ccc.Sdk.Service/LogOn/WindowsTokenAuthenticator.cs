@@ -42,13 +42,13 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
                 throw new FaultException(string.Format(CultureInfo.InvariantCulture, "The datasource {0} cannot be found.", windowsSecurityToken.DataSource));
             }
 
-				_licenseFromToken.SetLicense(_windowsDataSourceFromToken.DataSourceContainer, windowsSecurityToken.DataSource);
+				_licenseFromToken.SetLicense(_windowsDataSourceFromToken.DataSource, windowsSecurityToken.DataSource);
 
             _windowsUserFromToken.SetPersonFromToken(windowsSecurityToken);
 
             if (windowsSecurityToken.HasBusinessUnit)
             {
-                _businessUnitFromToken.SetBusinessUnitFromToken(windowsSecurityToken, _windowsDataSourceFromToken.DataSourceContainer);
+                _businessUnitFromToken.SetBusinessUnitFromToken(windowsSecurityToken, _windowsDataSourceFromToken.DataSource);
             }
 
             // Create just one Claim instance for the username token - the name of the user.
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
 	        return policies.AsReadOnly();
         }
 
-        public IDataSource DataSource {get { return _windowsDataSourceFromToken.DataSourceContainer.DataSource; }}
+        public IDataSource DataSource {get { return _windowsDataSourceFromToken.DataSource; }}
 
         public IBusinessUnit BusinessUnit
         {
