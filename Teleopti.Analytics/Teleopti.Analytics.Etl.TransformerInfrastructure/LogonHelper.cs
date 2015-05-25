@@ -172,10 +172,5 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 		{
 			_logonService.LogOff();
 		}
-
-		public DataSourceContainer ChoosenDataSource
-		{
-			get { return _choosenDb; }
-		}
 	}
 }
