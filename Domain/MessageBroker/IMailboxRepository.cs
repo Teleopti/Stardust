@@ -11,6 +11,23 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 		IEnumerable<Mailbox> Get(string route);
 	}
 
+	public class NoMailboxRepository : IMailboxRepository
+	{
+		public void Persist(Mailbox mailbox)
+		{
+		}
+
+		public Mailbox Get(Guid id)
+		{
+			return new Mailbox();
+		}
+
+		public IEnumerable<Mailbox> Get(string route)
+		{
+			return Enumerable.Empty<Mailbox>();
+		}
+	}
+
 	public class Mailbox
 	{
 		public Guid Id { get; set; }

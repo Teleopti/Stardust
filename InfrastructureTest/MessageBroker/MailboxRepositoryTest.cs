@@ -3,8 +3,10 @@ using System.Linq;
 using NHibernate.Transform;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.MessageBrokerUnitOfWork;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.MessageBroker;
 
@@ -12,6 +14,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 {
 	[TestFixture, Category("LongRunning")]
 	[MessageBrokerUnitOfWorkTest]
+	[Toggle(Toggles.MessageBroker_Mailbox_32733)]
 	public class MailboxRepositoryTest
 	{
 		public IMailboxRepository Target;

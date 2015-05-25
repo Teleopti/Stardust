@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule<JsonSerializationModule>();
 			builder.RegisterModule(new ToggleNetModule(_configuration.Args()));
 			builder.RegisterModule(new MessageBrokerModule(_configuration));
-			builder.RegisterModule(new RepositoryModule { RepositoryConstructorType = RepositoryConstructorType });
+			builder.RegisterModule(new RepositoryModule(_configuration) { RepositoryConstructorType = RepositoryConstructorType });
 			builder.RegisterModule<UnitOfWorkModule>();
 			builder.RegisterModule<AuthenticationModule>();
 			builder.RegisterModule<ForecasterModule>();

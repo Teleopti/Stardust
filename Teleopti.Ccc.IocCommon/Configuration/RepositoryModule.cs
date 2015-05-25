@@ -3,6 +3,7 @@ using System.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Authentication;
@@ -13,18 +14,25 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	internal class RepositoryModule : Module
 	{
+		private readonly IIocConfiguration _configuration;
+
+		public RepositoryModule(IIocConfiguration configuration)
+		{
+			_configuration = configuration;
+		}
+
 		public Type RepositoryConstructorType { get; set; }
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			foreach (var type in typeof(PersonRepository).Assembly.GetTypes().Where(t => isRepository(t) && hasCorrectCtor(t)))
+			foreach (var type in typeof (PersonRepository).Assembly.GetTypes().Where(t => isRepository(t) && hasCorrectCtor(t)))
 			{
-				if (type.GetConstructor(new[] { RepositoryConstructorType }) != null)
+				if (type.GetConstructor(new[] {RepositoryConstructorType}) != null)
 				{
 					builder.RegisterType(type)
-								 .UsingConstructor(RepositoryConstructorType)
-								 .AsImplementedInterfaces()
-								 .SingleInstance();					
+						.UsingConstructor(RepositoryConstructorType)
+						.AsImplementedInterfaces()
+						.SingleInstance();
 				}
 			}
 
@@ -45,16 +53,21 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IStatisticRepository>();
 
 			builder.RegisterType<DefaultScenarioFromRepository>()
-			       .As<ICurrentScenario>()
-			       .InstancePerDependency();
+				.As<ICurrentScenario>()
+				.InstancePerDependency();
 
 			builder.RegisterType<LoadUserUnauthorized>()
 				.As<ILoadUserUnauthorized>()
 				.SingleInstance();
 
-			builder.RegisterType<MailboxRepository>()
-				.As<IMailboxRepository>()
-				.SingleInstance();
+			if (_configuration.Toggle(Toggles.MessageBroker_Mailbox_32733))
+				builder.RegisterType<MailboxRepository>()
+					.As<IMailboxRepository>()
+					.SingleInstance();
+			else
+				builder.RegisterType<NoMailboxRepository>()
+					.As<IMailboxRepository>()
+					.SingleInstance();
 		}
 
 		private bool hasCorrectCtor(Type repositoryType)
