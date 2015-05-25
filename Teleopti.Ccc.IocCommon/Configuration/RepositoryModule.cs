@@ -51,10 +51,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<LoadUserUnauthorized>()
 				.As<ILoadUserUnauthorized>()
 				.SingleInstance();
-
-			builder.RegisterType<MailboxRepository>()
-				.As<IMailboxRepository>()
-				.SingleInstance();
 		}
 
 		private bool hasCorrectCtor(Type repositoryType)
