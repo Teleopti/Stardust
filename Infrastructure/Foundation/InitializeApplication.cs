@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 				using(PerformanceOutput.ForOperation("Connecting to message broker"))
 				{
 					string messageBrokerConnection;
-					if (appSettings.TryGetValue("MessageBroker", out messageBrokerConnection))
+					if (appSettings.TryGetValue("MessageBroker", out messageBrokerConnection) && !string.IsNullOrEmpty(messageBrokerConnection))
 					{
 						Uri serverUrl;
 						if (Uri.TryCreate(messageBrokerConnection, UriKind.Absolute, out serverUrl))
@@ -95,12 +95,10 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		}
 
 		// from LogonInitializeStateHolder
-		public void Start(IState clientCache, IDictionary<string, string> appSettings, ILoadPasswordPolicyService loadPasswordPolicyService, bool startMessageBroker)
+		public void Start(IState clientCache, IDictionary<string, string> appSettings, ILoadPasswordPolicyService loadPasswordPolicyService)
 		{
 			StateHolder.Initialize(clientCache);
-
-			if(startMessageBroker)
-				this.startMessageBroker(appSettings);
+			startMessageBroker(appSettings);
 			StateHolder.Instance.State.SetApplicationData(
 				new ApplicationData(appSettings, new List<IDataSource>(), messageBroker,
 										  loadPasswordPolicyService, dataSourcesFactory));
