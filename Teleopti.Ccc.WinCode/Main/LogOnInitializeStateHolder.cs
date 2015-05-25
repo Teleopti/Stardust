@@ -5,7 +5,6 @@ using System.Linq;
 using System.Xml.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
@@ -21,7 +20,7 @@ namespace Teleopti.Ccc.WinCode.Main
 {
 	public static class LogonInitializeStateHolder
 	{
-		public static bool InitWithoutDataSource(LogonModel model, IMessageBrokerComposite messageBroker, SharedSettings settings)
+		public static bool InitWithoutDataSource(IMessageBrokerComposite messageBroker, SharedSettings settings)
 		{
 			LoadPasswordPolicyService passwordPolicyService;
 			if (settings.PasswordPolicy == null)

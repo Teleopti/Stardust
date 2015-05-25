@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Win.Main
 
 		public bool InitStateHolderWithoutDataSource(IMessageBrokerComposite messageBroker, SharedSettings settings)
 		{
-			return LogonInitializeStateHolder.InitWithoutDataSource(_model, messageBroker, settings) || showError();
+			return LogonInitializeStateHolder.InitWithoutDataSource(messageBroker, settings) || showError();
 		}
 
 		private bool showError()
