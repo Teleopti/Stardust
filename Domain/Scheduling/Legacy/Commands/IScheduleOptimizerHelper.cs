@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 	public class RequiredScheduleHelper : IRequiredScheduleHelper
 	{
+		private readonly ISchedulePeriodListShiftCategoryBackToLegalStateService _shiftCategoryBackToLegalState;
 		private readonly IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak _ruleSetBagsOfGroupOfPeopleCanHaveShortBreak;
 		private readonly Func<ISchedulingResultStateHolder> _resultStateHolder;
 		private readonly Func<IFixedStaffSchedulingService> _fixedStaffSchedulingService;
@@ -53,8 +54,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
 		private readonly ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
 
-		public RequiredScheduleHelper(IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak ruleSetBagsOfGroupOfPeopleCanHaveShortBreak, Func<ISchedulingResultStateHolder> resultStateHolder, Func<IFixedStaffSchedulingService> fixedStaffSchedulingService, IStudentSchedulingService studentSchedulingService, Func<IOptimizationPreferences> optimizationPreferences, IScheduleService scheduleService, IResourceOptimizationHelper resourceOptimizationHelper, IGridlockManager gridlockManager, IDaysOffSchedulingService daysOffSchedulingService, Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder, IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleDayEquator scheduleDayEquator, IMatrixListFactory matrixListFactory, ITeamBlockRemoveShiftCategoryBackToLegalService teamBlockRemoveShiftCategoryBackToLegalService, ITeamBlockScheduler teamBlockScheduler, ITeamInfoFactory teamInfoFactory, ITeamBlockInfoFactory teamBlockInfoFactory, ITeamBlockSchedulingOptions teamBlockSchedulingOptions)
+		public RequiredScheduleHelper(ISchedulePeriodListShiftCategoryBackToLegalStateService shiftCategoryBackToLegalState, IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak ruleSetBagsOfGroupOfPeopleCanHaveShortBreak, Func<ISchedulingResultStateHolder> resultStateHolder, Func<IFixedStaffSchedulingService> fixedStaffSchedulingService, IStudentSchedulingService studentSchedulingService, Func<IOptimizationPreferences> optimizationPreferences, IScheduleService scheduleService, IResourceOptimizationHelper resourceOptimizationHelper, IGridlockManager gridlockManager, IDaysOffSchedulingService daysOffSchedulingService, Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder, IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleDayEquator scheduleDayEquator, IMatrixListFactory matrixListFactory, ITeamBlockRemoveShiftCategoryBackToLegalService teamBlockRemoveShiftCategoryBackToLegalService, ITeamBlockScheduler teamBlockScheduler, ITeamInfoFactory teamInfoFactory, ITeamBlockInfoFactory teamBlockInfoFactory, ITeamBlockSchedulingOptions teamBlockSchedulingOptions)
 		{
+			_shiftCategoryBackToLegalState = shiftCategoryBackToLegalState;
 			_ruleSetBagsOfGroupOfPeopleCanHaveShortBreak = ruleSetBagsOfGroupOfPeopleCanHaveShortBreak;
 			_resultStateHolder = resultStateHolder;
 			_fixedStaffSchedulingService = fixedStaffSchedulingService;
@@ -91,15 +93,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				if (backgroundWorker.CancellationPending)
 					return;
 
-				var schedulePartModifyAndRollbackService = new SchedulePartModifyAndRollbackService(_resultStateHolder(), _scheduleDayChangeCallback, new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
-				var shiftNudgeDirective = new ShiftNudgeDirective();
-				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, schedulingOptions.ConsiderShortBreaks);
+		
+				if (schedulingOptions.UseBlock || schedulingOptions.UseTeam)
+				{
+					var schedulePartModifyAndRollbackService = new SchedulePartModifyAndRollbackService(_resultStateHolder(), _scheduleDayChangeCallback, new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
+					var shiftNudgeDirective = new ShiftNudgeDirective();
+					var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, schedulingOptions.ConsiderShortBreaks);
 
-				var unresolvedScheduleDayPros = checkShiftCategoryLimitations(matrixList, schedulingOptions, optimizationPreferences, schedulePartModifyAndRollbackService, resourceCalculateDelayer, shiftNudgeDirective);
-				if (unresolvedScheduleDayPros.IsEmpty()) return;
-				
-				scheduleUnresolvedDays(schedulingOptions,unresolvedScheduleDayPros,matrixList,schedulePartModifyAndRollbackService,resourceCalculateDelayer,shiftNudgeDirective);	
-				checkShiftCategoryLimitations(matrixList, schedulingOptions, optimizationPreferences,schedulePartModifyAndRollbackService,resourceCalculateDelayer,shiftNudgeDirective);
+					var unresolvedScheduleDayPros = checkShiftCategoryLimitations(matrixList, schedulingOptions, optimizationPreferences, schedulePartModifyAndRollbackService, resourceCalculateDelayer, shiftNudgeDirective);
+					if (unresolvedScheduleDayPros.IsEmpty()) return;
+
+					scheduleUnresolvedDays(schedulingOptions, unresolvedScheduleDayPros, matrixList, schedulePartModifyAndRollbackService, resourceCalculateDelayer, shiftNudgeDirective);
+					checkShiftCategoryLimitations(matrixList, schedulingOptions, optimizationPreferences, schedulePartModifyAndRollbackService, resourceCalculateDelayer, shiftNudgeDirective);
+				}
+				else
+				{
+					_shiftCategoryBackToLegalState.Execute(matrixList, schedulingOptions, optimizationPreferences);
+				}
 			}
 		}
 

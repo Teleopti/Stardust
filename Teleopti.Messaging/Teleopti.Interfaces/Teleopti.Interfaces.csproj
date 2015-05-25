@@ -154,6 +154,7 @@
     <Compile Include="Domain\IOutboundSkillTypeProvider.cs" />
     <Compile Include="Domain\IQueueStatsModel.cs" />
     <Compile Include="Domain\IRestrictionExtractor.cs" />
+    <Compile Include="Domain\ISchedulePeriodListShiftCategoryBackToLegalStateService.cs" />
     <Compile Include="Domain\ISeat.cs" />
     <Compile Include="Domain\ISeatBooking.cs" />
     <Compile Include="Domain\ISeatMapLocation.cs" />
