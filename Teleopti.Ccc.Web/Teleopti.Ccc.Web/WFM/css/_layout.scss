@@ -111,3 +111,16 @@ label {
 .growl-container > div.growl-item {
 	background-repeat: no-repeat;
 }
+
+.nav-item{
+	-webkit-transition:0.2s all ease-in-out;
+	-moz-transition:0.2s all ease-in-out;
+	-o-transition:0.2s all ease-in-out;
+	transition:0.2s all ease-in-out;
+}
+
+.nav-item-active > div{
+	background-color:#c2e085!important;
+	box-shadow: inset 0 2px 5px 0 rgba(0,0,0,.26);
+	//#036
+}
