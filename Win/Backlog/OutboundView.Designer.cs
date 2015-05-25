@@ -28,6 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			System.Windows.Forms.ListViewGroup listViewGroup1 = new System.Windows.Forms.ListViewGroup("testgroup", System.Windows.Forms.HorizontalAlignment.Left);
 			System.Windows.Forms.ListViewGroup listViewGroup2 = new System.Windows.Forms.ListViewGroup("another", System.Windows.Forms.HorizontalAlignment.Left);
 			System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("test");
@@ -38,14 +39,19 @@
 			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.viewStatusToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.addActualBacklogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.addManualProductionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
 			this.toolStripButtonAddCampaign = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+			this.replanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripContainer1.ContentPanel.SuspendLayout();
 			this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
 			this.toolStripContainer1.SuspendLayout();
+			this.contextMenuStrip1.SuspendLayout();
 			this.toolStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -75,6 +81,7 @@
             this.columnHeader1,
             this.columnHeader2,
             this.columnHeader3});
+			this.listView1.ContextMenuStrip = this.contextMenuStrip1;
 			this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.listView1.FullRowSelect = true;
 			listViewGroup1.Header = "testgroup";
@@ -111,15 +118,45 @@
 			this.columnHeader3.Text = "Status";
 			this.columnHeader3.Width = 92;
 			// 
+			// contextMenuStrip1
+			// 
+			this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.viewStatusToolStripMenuItem,
+            this.addActualBacklogToolStripMenuItem,
+            this.addManualProductionToolStripMenuItem,
+            this.replanToolStripMenuItem});
+			this.contextMenuStrip1.Name = "contextMenuStrip1";
+			this.contextMenuStrip1.Size = new System.Drawing.Size(211, 114);
+			// 
+			// viewStatusToolStripMenuItem
+			// 
+			this.viewStatusToolStripMenuItem.Name = "viewStatusToolStripMenuItem";
+			this.viewStatusToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+			this.viewStatusToolStripMenuItem.Text = "View status...";
+			this.viewStatusToolStripMenuItem.Click += new System.EventHandler(this.viewStatusToolStripMenuItem_Click);
+			// 
+			// addActualBacklogToolStripMenuItem
+			// 
+			this.addActualBacklogToolStripMenuItem.Name = "addActualBacklogToolStripMenuItem";
+			this.addActualBacklogToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+			this.addActualBacklogToolStripMenuItem.Text = "Add actual backlog...";
+			this.addActualBacklogToolStripMenuItem.Click += new System.EventHandler(this.addActualBacklogToolStripMenuItem_Click);
+			// 
+			// addManualProductionToolStripMenuItem
+			// 
+			this.addManualProductionToolStripMenuItem.Name = "addManualProductionToolStripMenuItem";
+			this.addManualProductionToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+			this.addManualProductionToolStripMenuItem.Text = "Add manual production...";
+			this.addManualProductionToolStripMenuItem.Click += new System.EventHandler(this.addManualProductionToolStripMenuItem_Click);
+			// 
 			// toolStrip1
 			// 
 			this.toolStrip1.Dock = System.Windows.Forms.DockStyle.None;
 			this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonAddCampaign,
-            this.toolStripButton1});
+            this.toolStripButtonAddCampaign});
 			this.toolStrip1.Location = new System.Drawing.Point(3, 0);
 			this.toolStrip1.Name = "toolStrip1";
-			this.toolStrip1.Size = new System.Drawing.Size(205, 25);
+			this.toolStrip1.Size = new System.Drawing.Size(103, 25);
 			this.toolStrip1.TabIndex = 0;
 			// 
 			// toolStripButtonAddCampaign
@@ -131,16 +168,6 @@
 			this.toolStripButtonAddCampaign.Size = new System.Drawing.Size(91, 22);
 			this.toolStripButtonAddCampaign.Text = "Add Campaign";
 			this.toolStripButtonAddCampaign.Click += new System.EventHandler(this.toolStripButtonAddCampaignClick);
-			// 
-			// toolStripButton1
-			// 
-			this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
-			this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButton1.Name = "toolStripButton1";
-			this.toolStripButton1.Size = new System.Drawing.Size(71, 22);
-			this.toolStripButton1.Text = "View Status";
-			this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
 			// 
 			// statusStrip1
 			// 
@@ -157,6 +184,13 @@
 			this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
 			this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
 			// 
+			// replanToolStripMenuItem
+			// 
+			this.replanToolStripMenuItem.Name = "replanToolStripMenuItem";
+			this.replanToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+			this.replanToolStripMenuItem.Text = "Replan";
+			this.replanToolStripMenuItem.Click += new System.EventHandler(this.replanToolStripMenuItem_Click);
+			// 
 			// OutboundView
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -165,6 +199,7 @@
 			this.Controls.Add(this.statusStrip1);
 			this.Controls.Add(this.toolStripContainer1);
 			this.Name = "OutboundView";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "OutboundView";
 			this.Load += new System.EventHandler(this.outboundViewLoad);
 			this.toolStripContainer1.ContentPanel.ResumeLayout(false);
@@ -172,6 +207,7 @@
 			this.toolStripContainer1.TopToolStripPanel.PerformLayout();
 			this.toolStripContainer1.ResumeLayout(false);
 			this.toolStripContainer1.PerformLayout();
+			this.contextMenuStrip1.ResumeLayout(false);
 			this.toolStrip1.ResumeLayout(false);
 			this.toolStrip1.PerformLayout();
 			this.ResumeLayout(false);
@@ -189,8 +225,12 @@
 		private System.Windows.Forms.ToolStrip toolStrip1;
 		private System.Windows.Forms.ToolStripButton toolStripButtonAddCampaign;
 		private System.Windows.Forms.StatusStrip statusStrip1;
-		private System.Windows.Forms.ToolStripButton toolStripButton1;
 		private System.ComponentModel.BackgroundWorker backgroundWorker1;
+		private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+		private System.Windows.Forms.ToolStripMenuItem viewStatusToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem addActualBacklogToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem addManualProductionToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem replanToolStripMenuItem;
 
 	}
 }

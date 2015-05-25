@@ -304,6 +304,12 @@
     <Compile Include="Backlog\AddCampaign.Designer.cs">
       <DependentUpon>AddCampaign.cs</DependentUpon>
     </Compile>
+    <Compile Include="Backlog\AddManualProductionView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Backlog\AddManualProductionView.Designer.cs">
+      <DependentUpon>AddManualProductionView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Backlog\BacklogCategory.cs" />
     <Compile Include="Backlog\BacklogEditableGridRow.cs" />
     <Compile Include="Backlog\BacklogGridExpandedRow.cs" />
@@ -2635,6 +2641,9 @@
     <Compile Include="Sikuli\Helpers\ValidatorHelper.cs" />
     <EmbeddedResource Include="Backlog\AddCampaign.resx">
       <DependentUpon>AddCampaign.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Backlog\AddManualProductionView.resx">
+      <DependentUpon>AddManualProductionView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Backlog\BacklogSelector.resx">
       <DependentUpon>BacklogSelector.cs</DependentUpon>

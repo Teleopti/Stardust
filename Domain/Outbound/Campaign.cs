@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 		private DateOnly? _endDate;
 		private CampaignStatus _campaignStatus;
 		private ISet<CampaignWorkingPeriod> _campaignWorkingPeriods;
+		private IDictionary<DateOnly, TimeSpan> _manualProductionPlanDays = new Dictionary<DateOnly, TimeSpan>(); 
 		private bool _isDeleted;
 
         	public Campaign()
@@ -169,6 +170,32 @@ namespace Teleopti.Ccc.Domain.Outbound
 			{
 				_campaignWorkingPeriods.Remove(workingPeriod);
 			}			
+		}
+
+		public virtual TimeSpan? GetManualProductionPlan(DateOnly date)
+		{
+			TimeSpan? manualTime = null;
+			if(_manualProductionPlanDays.ContainsKey(date))
+				manualTime = _manualProductionPlanDays[date];
+				
+			return manualTime;
+		}
+
+		public virtual void SetManualProductionPlan(DateOnly date, TimeSpan time)
+		{
+			if (_manualProductionPlanDays.ContainsKey(date))
+			{
+				_manualProductionPlanDays[date] = time;
+			}
+			else
+			{
+				_manualProductionPlanDays.Add(date, time);
+			}
+		}
+
+		public virtual void ClearProductionPlan(DateOnly date)
+		{
+			_manualProductionPlanDays.Remove(date);
 		}
 	}
 }

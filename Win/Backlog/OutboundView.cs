@@ -48,10 +48,10 @@ namespace Teleopti.Ccc.Win.Backlog
 		private void load()
 		{
 			loadCampaigns();
-			loadAsync();
+			loadSchedulesAsync();
 		}
 
-		private void loadAsync()
+		private void loadSchedulesAsync()
 		{
 			_backlogScheduledProvider = new BacklogScheduledProvider(_container, _loadedPeriod);
 			Enabled = false;
@@ -157,12 +157,12 @@ namespace Teleopti.Ccc.Win.Backlog
 
 			//AddCampaignCommand
 			createAndPersistCampaign(campaign, activity);
-			updateAndPersistCampaignSkillPeriod(campaign, true);
 
 			loadCampaigns();
 			updateStatusOnCampaigns();
 		}
 
+		//AddCampaignCommand
 		private void createAndPersistCampaign(Campaign campaign, IActivity activity)
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -177,17 +177,13 @@ namespace Teleopti.Ccc.Win.Backlog
 				campaignRepository.Add(campaign);
 				uow.PersistAll();
 			}
+			var incomingTaskFactory = _container.Resolve<OutboundProductionPlanFactory>();
+			var incomingTask = incomingTaskFactory.CreateAndMakeInitialPlan(campaign.SpanningPeriod, campaign.CampaignTasks(),
+				campaign.AverageTaskHandlingTime(), campaign.CampaignWorkingPeriods.ToList());
+			updateSkillDays(campaign.Skill, incomingTask, true);
 		}
 
-		private void updateAndPersistCampaignSkillPeriod(Campaign campaign, bool applyDefaultTemplate)
-		{
-			var incomingTask = createProductionPlan(campaign);
-
-			//persist productionPlan
-			updateSkillDays(campaign.Skill, incomingTask, applyDefaultTemplate);
-		}
-
-		private IncomingTask createProductionPlan(Campaign campaign)
+		private IncomingTask getIncomingTaskFromCampaign(Campaign campaign)
 		{
 			var incomingTaskFactory = _container.Resolve<OutboundProductionPlanFactory>();
 			var incomingTask = incomingTaskFactory.CreateAndMakeInitialPlan(campaign.SpanningPeriod, campaign.CampaignTasks(),
@@ -198,11 +194,14 @@ namespace Teleopti.Ccc.Win.Backlog
 
 			foreach (var dateOnly in incomingTask.SpanningPeriod.DayCollection())
 			{
+				var manualTime = campaign.GetManualProductionPlan(dateOnly);
+				if(manualTime.HasValue)
+					incomingTask.SetTimeOnDate(dateOnly, manualTime.Value, PlannedTimeTypeEnum.Manual);
 				var scheduled = _backlogScheduledProvider.GetScheduledTimeOnDate(dateOnly, campaign.Skill);
 				var forecasted = _backlogScheduledProvider.GetForecastedTimeOnDate(dateOnly, campaign.Skill);
 				if(scheduled != TimeSpan.Zero)
 					incomingTask.SetTimeOnDate(dateOnly, scheduled, PlannedTimeTypeEnum.Scheduled);
-				else if(forecasted != TimeSpan.Zero)
+				else if(forecasted != TimeSpan.Zero && !manualTime.HasValue)
 					incomingTask.SetTimeOnDate(dateOnly, forecasted, PlannedTimeTypeEnum.Calculated);
 			}
 
@@ -279,30 +278,18 @@ namespace Teleopti.Ccc.Win.Backlog
 
 		private CampaignStatus getStatusOnCampaign(Campaign campaign)
 		{
-			var incomingTask = createProductionPlan(campaign);
-			if(incomingTask.GetTimeOutsideSLA() > TimeSpan.Zero)
+			var incomingTask = getIncomingTaskFromCampaign(campaign);
+			if(incomingTask.GetTimeOutsideSLA() > TimeSpan.FromMinutes(1))
 				return CampaignStatus.NotInSLA;
 
 			foreach (var dateOnly in incomingTask.SpanningPeriod.DayCollection())
 			{
-				if(incomingTask.GetOverstaffTimeOnDate(dateOnly) > TimeSpan.Zero)
+				if (incomingTask.GetOverstaffTimeOnDate(dateOnly) > TimeSpan.FromMinutes(1))
 					return CampaignStatus.Overstaffed;
 			}
 
 			return CampaignStatus.Ok;
 		}
-
-		private void toolStripButton1_Click(object sender, EventArgs e)
-		{
-			var selectedCampaign = (Campaign)listView1.SelectedItems[0].Tag;
-			var incomingTask = createProductionPlan(selectedCampaign);
-			using (var outboundStatusView = new OutboundStatusView(incomingTask, selectedCampaign.Name))
-			{
-				outboundStatusView.ShowDialog(this);
-			}
-		}
-
-		
 
 		private void backgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
 		{
@@ -325,6 +312,54 @@ namespace Teleopti.Ccc.Win.Backlog
 			Enabled = true;
 			updateStatusOnCampaigns();
 			
+		}
+
+		private void viewStatusToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			var selectedCampaign = (Campaign)listView1.SelectedItems[0].Tag;
+			var incomingTask = getIncomingTaskFromCampaign(selectedCampaign);
+			using (var outboundStatusView = new OutboundStatusView(incomingTask, selectedCampaign.Name))
+			{
+				outboundStatusView.ShowDialog(this);
+			}
+		}
+
+		private void addActualBacklogToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void addManualProductionToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			var selectedCampaign = (Campaign)listView1.SelectedItems[0].Tag;
+			using (var addManualProductionView = new AddManualProductionView(selectedCampaign))
+			{
+				addManualProductionView.ShowDialog(this);
+				if (addManualProductionView.DialogResult == DialogResult.OK)
+				{
+					using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+					{
+						var campaignRepository = new OutboundCampaignRepository(uow);
+						campaignRepository.Add(selectedCampaign);
+						uow.PersistAll();
+					}
+
+					var incomingTask = getIncomingTaskFromCampaign(selectedCampaign);
+					updateSkillDays(selectedCampaign.Skill, incomingTask, false);
+					updateStatusOnCampaigns();
+				}
+			}
+		}
+
+		private void replanToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			var selectedCampaign = (Campaign)listView1.SelectedItems[0].Tag;
+			var incomingTask = getIncomingTaskFromCampaign(selectedCampaign);
+			incomingTask.RecalculateDistribution();
+			//persist productionPlan
+			updateSkillDays(selectedCampaign.Skill, incomingTask, false);
+			loadSchedulesAsync();
+			//no code after loadSchedulesAsync();
 		}
 	}
 

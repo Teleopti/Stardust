@@ -70,7 +70,13 @@
 			<key column="OutboundCampaign"/>
 			<one-to-many class="CampaignWorkingPeriod"/>				
 		</set>
-	
+
+    <map name="_manualProductionPlanDays" table="OutboundCampaignManualProductionTime" access="field" cascade="all-delete-orphan" lazy="false">
+      <key column="Campaign" foreign-key="FK_OutboundCampaignManualProductionTime_OutboundCampaign"/>
+      <index column="Date" type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure" />
+      <element column="PlannedTime" type="TimeSpan" />
+    </map>
+    
 		<many-to-one name="UpdatedBy"
 								 class="Teleopti.Ccc.Domain.Common.Person"
 								 not-null="true"/>
@@ -93,5 +99,7 @@
 		<filter name="deletedFlagFilter"
 		  condition="IsDeleted = 0" />
 
+    
+    
 	</class>
 </hibernate-mapping>
