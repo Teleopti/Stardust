@@ -47,6 +47,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			using (_mock.Record())
 			{
 				var result = new AgentPreferenceCanCreateResult {Result = true};
+				Expect.Call(_scheduleDay.FullAccess).Return(true);
 				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData>()));
 				Expect.Call(_preferenceDayCreator.CanCreate(_data)).Return(result);
 				Expect.Call(_preferenceDayCreator.Create(_scheduleDay, _data)).Return(_preferenceDay);
@@ -65,6 +66,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			using (_mock.Record())
 			{
 				var result = new AgentPreferenceCanCreateResult {Result = false};
+				Expect.Call(_scheduleDay.FullAccess).Return(true);
 				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData>()));
 				Expect.Call(_preferenceDayCreator.CanCreate(_data)).Return(result);
 			}
@@ -80,12 +82,27 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		{
 			using (_mock.Record())
 			{
+				Expect.Call(_scheduleDay.FullAccess).Return(true);
 				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData> { _preferenceDay }));
 			}
 
 			using (_mock.Playback())
 			{
 				_target.Execute();
+			}
+		}
+
+		[Test]
+		public void ShouldNotBeAbleToExecuteWhenNoFullAccess()
+		{
+			using (_mock.Record())
+			{
+				Expect.Call(_scheduleDay.FullAccess).Return(false);
+			}
+
+			using (_mock.Playback())
+			{
+				Assert.IsFalse(_target.CanExecute());
 			}
 		}
 	}

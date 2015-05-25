@@ -39,6 +39,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 		public bool CanExecute()
 		{
+			if (!_scheduleDay.FullAccess) return false;
+
 			foreach (var persistableScheduleData in _scheduleDay.PersistableScheduleDataCollection())
 			{
 				if (persistableScheduleData is IPreferenceDay) return false;
