@@ -12,7 +12,6 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -29,7 +28,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Meetings
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 	public partial class MeetingImpactView : BaseUserControl, IMeetingImpactView
 	{
 		private readonly MeetingImpactPresenter _presenter;
@@ -44,7 +42,6 @@ namespace Teleopti.Ccc.Win.Meetings
 			InitializeComponent();
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public MeetingImpactView(IMeetingViewModel meetingViewModel, ISchedulerStateHolder schedulerStateHolder, MeetingComposerView meetingComposerView, IToggleManager toggleManager, IIntraIntervalFinderService intraIntervalFinderService)
 			: this()
 		{
@@ -67,7 +64,6 @@ namespace Teleopti.Ccc.Win.Meetings
 																	   new OccupiedSeatCalculator(),
 																	   new NonBlendSkillCalculator(),
 																	   ()=>personSkillProvider, new PeriodDistributionService(), 
-																		new CurrentTeleoptiPrincipal(),
 																		intraIntervalFinderService);
 			var decider = new PeopleAndSkillLoaderDecider(new PersonRepository(UnitOfWorkFactory.Current), new PairMatrixService<Guid>(new PairDictionaryFactory<Guid>()));
 			var gridHandler = new MeetingImpactSkillGridHandler(this, meetingViewModel, schedulerStateHolder,

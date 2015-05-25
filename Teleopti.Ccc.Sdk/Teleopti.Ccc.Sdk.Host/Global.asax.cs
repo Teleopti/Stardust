@@ -5,12 +5,9 @@ using System.Web;
 using Autofac;
 using Autofac.Integration.Wcf;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Web;
@@ -23,8 +20,6 @@ using Teleopti.Ccc.Infrastructure.Config;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon.Configuration;
-using Teleopti.Ccc.Sdk.Common.DataTransferObject;
-using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Common.WcfExtensions;
 using Teleopti.Ccc.Sdk.Logic;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
@@ -46,7 +41,6 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 		private string _messageBrokerReceiveEnabledConfigurationValue;
 		private bool _messageBrokerReceiveEnabled;
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
 		protected void Application_End(object sender, EventArgs e)
 		{
 			Logger.Info("The Application ended.");
@@ -62,8 +56,6 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		protected void Application_Start(object sender, EventArgs e)
 		{
 			XmlConfigurator.Configure();
@@ -112,11 +104,6 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 					messageBroker.Dispose();
 
 			Logger.Info("Initialized application");
-		}
-
-		private static IHandleCommand<DenormalizeNotificationCommandDto> denormalizeHandler()
-		{
-			return AutofacHostFactory.Container.Resolve<IHandleCommand<DenormalizeNotificationCommandDto>>();
 		}
 
 		private bool messageBrokerReceiveEnabled()
@@ -175,6 +162,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			builder.RegisterModule<CommandDispatcherModule>();
 			builder.RegisterModule<CommandHandlersModule>();
 			builder.RegisterModule<UpdateScheduleModule>();
+			builder.RegisterModule<IntraIntervalSolverServiceModule>();
 			builder.RegisterType<WebWindowsUserProvider>()
 				 .As<IWindowsUserProvider>()
 				 .InstancePerDependency();

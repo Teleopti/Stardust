@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
@@ -18,7 +17,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private readonly INonBlendSkillCalculator _nonBlendSkillCalculator;
 		private readonly Func<IPersonSkillProvider> _personSkillProvider;
 		private readonly IPeriodDistributionService _periodDistributionService;
-		private readonly ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
 		private readonly IIntraIntervalFinderService _intraIntervalFinderService;
 
 
@@ -27,7 +25,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			INonBlendSkillCalculator nonBlendSkillCalculator,
 			Func<IPersonSkillProvider> personSkillProvider,
 			IPeriodDistributionService periodDistributionService,
-			ICurrentTeleoptiPrincipal currentTeleoptiPrincipal,
 			IIntraIntervalFinderService intraIntervalFinderService)
 		{
 			_stateHolder = stateHolder;
@@ -35,7 +32,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_nonBlendSkillCalculator = nonBlendSkillCalculator;
 			_personSkillProvider = personSkillProvider;
 			_periodDistributionService = periodDistributionService;
-			_currentTeleoptiPrincipal = currentTeleoptiPrincipal;
 			_intraIntervalFinderService = intraIntervalFinderService;
 		}
 

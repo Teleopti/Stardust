@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
@@ -38,7 +37,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_target = new ResourceOptimizationHelper(()=>_schedulerStateHolder, _occupiedSeatCalculator,
 													 new NonBlendSkillCalculator(),
 														 ()=>_personSkillProvider, _periodDistributionService,
-														 new CurrentTeleoptiPrincipal(),
 														 _intraIntervalFinderService);
 		}
 

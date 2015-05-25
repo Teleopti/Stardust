@@ -22,10 +22,8 @@ namespace SdkTestClientWin.Domain
         public IList<SkillDay> Load()
         {
             IList<SkillDay> retList = new List<SkillDay>();
-            DateOnlyDto dateOnlyDto = new DateOnlyDto();
-            dateOnlyDto.DateTime = _dateOnly.Date;
-            dateOnlyDto.DateTimeSpecified = true;
-            IList<SkillDayDto> temp =
+            DateOnlyDto dateOnlyDto = new DateOnlyDto {DateTime = _dateOnly.Date, DateTimeSpecified = true};
+	        IList<SkillDayDto> temp =
                 new List<SkillDayDto>(
                     _service.ForecastingService.GetSkillDataByQuery(new GetSkillDaysByPeriodQueryDto
                     {
