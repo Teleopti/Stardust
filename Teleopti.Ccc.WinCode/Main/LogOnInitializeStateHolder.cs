@@ -34,14 +34,9 @@ namespace Teleopti.Ccc.WinCode.Main
 				passwordPolicyService = new LoadPasswordPolicyService(passwordPolicyDocument);
 			}
 
-			var appsett = ConfigurationManager.AppSettings;
-			
-			var appSettings = appsett.Keys.Cast<string>().ToDictionary(key => key, key => appsett[key]);
-
-			if (!appsett.AllKeys.Contains("Queue")) appSettings.Add("Queue", settings.Queue);
-			if (!appsett.AllKeys.Contains("MessageBroker")) appSettings.Add("MessageBroker", settings.MessageBroker);
-			if (!appsett.AllKeys.Contains("MessageBrokerLongPolling")) appSettings.Add("MessageBrokerLongPolling", settings.MessageBrokerLongPolling);
-			if (!appsett.AllKeys.Contains("RtaPollingInterval")) appSettings.Add("RtaPollingInterval", settings.RtaPollingInterval);
+			var appSettings =
+				settings.AddToAppSettings(ConfigurationManager.AppSettings.AllKeys.ToDictionary(key => key,
+					key => ConfigurationManager.AppSettings[key]));
 
 			var sendToServiceBus = string.IsNullOrEmpty(ConfigurationManager.AppSettings["FreemiumForecast"])?(IServiceBusSender) new ServiceBusSender():new EmptyServiceBusSender();
 			var populator = EventContextPopulator.Make();
