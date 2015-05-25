@@ -3,14 +3,11 @@ using System.Collections.Generic;
 using System.Configuration;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.TransformerInfrastructure;
-using Teleopti.Ccc.Domain.Security;
-using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Messaging.Client;
 using Teleopti.Messaging.Client.SignalR;
-using IRaptorRepository = Teleopti.Analytics.Etl.Interfaces.Transformer.IRaptorRepository;
 
 namespace Teleopti.Analytics.Etl.Transformer.Job
 {
@@ -72,7 +69,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job
 			return _logHelp.SelectDataSourceContainer(dataSourceName);
 		}
 
-		public IDataSourceContainer SelectedDataSourceContainer{ get { return _logHelp.SelectedDataSourceContainer; }}
+		public IDataSource SelectedDataSource{ get { return _logHelp.SelectedDataSourceContainer.DataSource; }}
 		
 		public bool SetBusinessUnit(IBusinessUnit businessUnit)
 		{

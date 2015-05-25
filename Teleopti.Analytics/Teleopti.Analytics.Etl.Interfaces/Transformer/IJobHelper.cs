@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client;
 
@@ -16,7 +15,7 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
 		bool SelectDataSourceContainer(string dataSourceName);
 		bool SetBusinessUnit(IBusinessUnit businessUnit);
 		void LogOffTeleoptiCccDomain();
-		IDataSourceContainer SelectedDataSourceContainer { get; }
+		IDataSource SelectedDataSource { get; }
 	}
 
 	public interface ITenantName

@@ -231,7 +231,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 			try
 			{
 				_baseConfiguration.JobHelper.SelectDataSourceContainer((string)ComboBoxDataSource.SelectedValue);
-				_dataSourceCollection = new DataSourceValidCollection(true, _baseConfiguration.JobHelper.SelectedDataSourceContainer.DataSource.Statistic.ConnectionString);
+				_dataSourceCollection = new DataSourceValidCollection(true, _baseConfiguration.JobHelper.SelectedDataSource.Statistic.ConnectionString);
 				ComboBoxLogDataSource.DataContext = _dataSourceCollection;
 
 				UpdateControls(null);
