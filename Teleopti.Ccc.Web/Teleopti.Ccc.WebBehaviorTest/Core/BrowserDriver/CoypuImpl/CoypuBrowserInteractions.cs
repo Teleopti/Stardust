@@ -1,12 +1,10 @@
 using System;
 using System.Text.RegularExpressions;
 using Coypu;
-using Coypu.Matchers;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
-using Teleopti.Ccc.Domain.Collection;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 {
@@ -93,7 +91,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 		{
 			var selenium = ((OpenQA.Selenium.Remote.RemoteWebDriver) _browser.Native);
 			var start = selenium.FindElement(By.CssSelector(selector));
-			//var end = selenium.FindElement(By.CssSelector(selector));
 			new Actions(selenium).DragAndDropToOffset(start, x, y).Perform();
 		}
 
@@ -118,18 +115,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 			assert(hasCss, Is.True, message);
 		}
 
-		// im not sure about the robustness and the trustworhyness of this but...
-		// ... wfm doesnt have jquery so no :contains selector!
-		// it all really depends on the implementation and the exists selector...
 		public void AssertNoContains(string existsSelector, string notExistsSelector, string text)
 		{
 			AssertExists(existsSelector);
 			var regex = new Regex(Regex.Escape(text));
-			var snapshot = _browser.FindAllCss(notExistsSelector, null, options());
-			snapshot.ForEach(e =>
+
+			var globalOptions = options();
+			var localOptions = new Options
 			{
-				assert(e.HasNoContentMatch(regex, options()), Is.True, "Failed to assert that " + notExistsSelector + " did not find anything containing text " + text);
-			});
+				ConsiderInvisibleElements = globalOptions.ConsiderInvisibleElements,
+				RetryInterval = globalOptions.RetryInterval,
+				WaitBeforeClick = globalOptions.WaitBeforeClick,
+				Timeout = TimeSpan.FromMilliseconds(20)
+			};
+			assert(_browser.HasNoCss(notExistsSelector, regex, localOptions), Is.True,
+				"Failed to assert that " + notExistsSelector + " did not find anything containing text " + text);
 		}
 
 		public void AssertFirstContains(string selector, string text)
