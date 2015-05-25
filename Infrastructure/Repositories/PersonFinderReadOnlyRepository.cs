@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using NHibernate.Transform;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
@@ -31,28 +30,25 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			const string splitPattern = "[^\\s\"]+|\"[^\"]*\"";
 			var matches = Regex.Matches(notParsedSearchValue, splitPattern);
-			var result = (from object match in matches select match.ToString().Replace("\"", "").Trim()).Where(x => !string.IsNullOrEmpty(x)).ToList();
+			var result =
+				(from object match in matches select match.ToString().Replace("\"", "").Trim())
+				.Where(x => !string.IsNullOrEmpty(x));
 
 			return new HashSet<string>(result);
 		}
 
 		private string createSearchString(IDictionary<PersonFinderField, string> criterias)
 		{
+			const char splitter = ';';
 			var builder = new StringBuilder();
 			
 			foreach (var criteria in criterias)
 			{
-				var valueSplittedWithSemicolon = "";
-				parse(criteria.Value).ForEach(s =>
-				{
-					valueSplittedWithSemicolon = string.Concat(valueSplittedWithSemicolon, s, ";");
-				});
-				if (valueSplittedWithSemicolon.EndsWith(";"))
-				{
-					valueSplittedWithSemicolon = valueSplittedWithSemicolon.TrimEnd(new[] {';'});
-				}
+				var values = parse(criteria.Value)
+					.Aggregate("", (current, value) => string.Concat(current, value, splitter))
+					.TrimEnd(splitter);
 
-				builder.AppendFormat("{0}:{1},", criteria.Key, valueSplittedWithSemicolon);
+				builder.AppendFormat("{0}:{1},", criteria.Key, values);
 			}
 
 			var searchString = builder.ToString();
@@ -71,32 +67,32 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public void Find(IPersonFinderSearchCriteria personFinderSearchCriteria)
 		{
 			personFinderSearchCriteria.TotalRows = 0;
-			int cultureId = Domain.Security.Principal.TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture.LCID;
-			if (personFinderSearchCriteria.TerminalDate < new DateOnly(1753, 1, 1))
-				personFinderSearchCriteria.TerminalDate = new DateOnly(1753, 1, 1);
+			var cultureId = Domain.Security.Principal.TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture.LCID;
+
+			var minDate = new DateOnly(1753, 1, 1);
+			if (personFinderSearchCriteria.TerminalDate < minDate)
+				personFinderSearchCriteria.TerminalDate = minDate;
 			var uow = _currentUnitOfWork.Current();
 
 			if (personFinderSearchCriteria.SearchCriterias.Count == 0)
 			{
 				return;
 			}
-			
-			var	result = ((NHibernateUnitOfWork)uow).Session.CreateSQLQuery(
-					"exec [ReadModel].PersonFinderWithCriteria @search_criterias=:searchCriterias_string, @leave_after=:leave_after, @start_row =:start_row, @end_row=:end_row, @order_by=:order_by, @sort_direction=:sort_direction, @culture=:culture")
-					.SetString("searchCriterias_string",
-						createSearchString(personFinderSearchCriteria.SearchCriterias))
-					.SetDateOnly("leave_after",
-						personFinderSearchCriteria.TerminalDate)
-					.SetInt32("start_row", personFinderSearchCriteria.StartRow)
-					.SetInt32("end_row", personFinderSearchCriteria.EndRow)
-					.SetInt32("order_by", personFinderSearchCriteria.SortColumn)
-					.SetInt32("sort_direction",
-						personFinderSearchCriteria.SortDirection)
-					.SetInt32("culture", cultureId)
-					.SetResultTransformer(
-						Transformers.AliasToBean(typeof(PersonFinderDisplayRow)))
-					.SetReadOnly(true)
-					.List<IPersonFinderDisplayRow>();
+
+			var result = ((NHibernateUnitOfWork) uow).Session.CreateSQLQuery(
+				"exec [ReadModel].PersonFinderWithCriteria @search_criterias=:searchCriterias_string, "
+				+ "@leave_after=:leave_after, @start_row =:start_row, @end_row=:end_row, @order_by=:order_by, "
+				+ "@sort_direction=:sort_direction, @culture=:culture")
+				.SetString("searchCriterias_string", createSearchString(personFinderSearchCriteria.SearchCriterias))
+				.SetDateOnly("leave_after", personFinderSearchCriteria.TerminalDate)
+				.SetInt32("start_row", personFinderSearchCriteria.StartRow)
+				.SetInt32("end_row", personFinderSearchCriteria.EndRow)
+				.SetInt32("order_by", personFinderSearchCriteria.SortColumn)
+				.SetInt32("sort_direction", personFinderSearchCriteria.SortDirection)
+				.SetInt32("culture", cultureId)
+				.SetResultTransformer(Transformers.AliasToBean(typeof (PersonFinderDisplayRow)))
+				.SetReadOnly(true)
+				.List<IPersonFinderDisplayRow>();
 
 			int row = 0;
 			foreach (var personFinderDisplayRow in result)
@@ -115,27 +111,23 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				personFinderSearchCriteria.TerminalDate = new DateOnly(1753, 1, 1);
 
 			var uow = _currentUnitOfWork.Current();
-			var result = ((NHibernateUnitOfWork)uow).Session.CreateSQLQuery(
-				 "exec [ReadModel].PersonFinder @search_string=:search_string, @search_type=:search_type, @leave_after=:leave_after, @start_row =:start_row, @end_row=:end_row, @order_by=:order_by, @sort_direction=:sort_direction, @culture=:culture")
-																  .SetString("search_string",
-																				 personFinderSearchCriteria.SearchValue)
-																  .SetString("search_type",
-																				 Enum.GetName(typeof(PersonFinderField),
-																								  personFinderSearchCriteria.Field))
-												 .SetDateOnly("leave_after",
-																					personFinderSearchCriteria.TerminalDate)
-																  .SetInt32("start_row", personFinderSearchCriteria.StartRow)
-																  .SetInt32("end_row", personFinderSearchCriteria.EndRow)
-																  .SetInt32("order_by", personFinderSearchCriteria.SortColumn)
-																  .SetInt32("sort_direction",
-																				personFinderSearchCriteria.SortDirection)
-																  .SetInt32("culture", cultureId)
-																  .SetResultTransformer(
-																		Transformers.AliasToBean(typeof(PersonFinderDisplayRow)))
-																  .SetReadOnly(true)
-																  .List<IPersonFinderDisplayRow>();
+			var result = ((NHibernateUnitOfWork) uow).Session.CreateSQLQuery(
+				"exec [ReadModel].PersonFinder @search_string=:search_string, @search_type=:search_type, "
+				+ "@leave_after=:leave_after, @start_row =:start_row, @end_row=:end_row, @order_by=:order_by, "
+				+ "@sort_direction=:sort_direction, @culture=:culture")
+				.SetString("search_string", personFinderSearchCriteria.SearchValue)
+				.SetString("search_type", Enum.GetName(typeof (PersonFinderField), personFinderSearchCriteria.Field))
+				.SetDateOnly("leave_after", personFinderSearchCriteria.TerminalDate)
+				.SetInt32("start_row", personFinderSearchCriteria.StartRow)
+				.SetInt32("end_row", personFinderSearchCriteria.EndRow)
+				.SetInt32("order_by", personFinderSearchCriteria.SortColumn)
+				.SetInt32("sort_direction", personFinderSearchCriteria.SortDirection)
+				.SetInt32("culture", cultureId)
+				.SetResultTransformer(Transformers.AliasToBean(typeof (PersonFinderDisplayRow)))
+				.SetReadOnly(true)
+				.List<IPersonFinderDisplayRow>();
 
-			int row = 0;
+			var row = 0;
 			foreach (var personFinderDisplayRow in result)
 			{
 				personFinderSearchCriteria.TotalRows = personFinderDisplayRow.TotalCount;

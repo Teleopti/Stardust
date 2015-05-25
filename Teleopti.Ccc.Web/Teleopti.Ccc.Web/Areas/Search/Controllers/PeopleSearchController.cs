@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
-using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Web.Areas.People.Core.Providers;
 using Teleopti.Interfaces.Domain;
@@ -24,7 +23,6 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 		public virtual IHttpActionResult GetResult(string keyword, int pageSize, int currentPageIndex)
 		{
 			var currentDate = DateOnly.Today;
-			IDictionary<PersonFinderField, string> criteriaDictionary = null;
 			var myTeam = _loggonUser.CurrentUser().MyTeam(currentDate);
 
 			if (string.IsNullOrEmpty(keyword) && myTeam == null)
@@ -43,8 +41,7 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 				keyword = siteTerm + " " + teamTerm;
 			}
 
-			criteriaDictionary = SearchTermParser.Parse(keyword);
-
+			var criteriaDictionary = SearchTermParser.Parse(keyword);
 			var result = constructResult(pageSize, currentPageIndex, criteriaDictionary, currentDate);
 			return Ok(result);
 		}
@@ -62,7 +59,8 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 		}
 
 
-		private object constructResult(int pageSize, int currentPageIndex, IDictionary<PersonFinderField, string> criteriaDictionary, DateOnly currentDate)
+		private object constructResult(int pageSize, int currentPageIndex, IDictionary<PersonFinderField, 
+			string> criteriaDictionary, DateOnly currentDate)
 		{
 			var peopleList = _searchProvider.SearchPeople(criteriaDictionary, pageSize, currentPageIndex, currentDate);
 			var resultPeople = peopleList.People.Select(x => new
