@@ -41,6 +41,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			{
 				bool startTimeError;
 				bool endTimeError;
+				Expect.Call(_scheduleDay.FullAccess).Return(true);
 				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData>()));
 				Expect.Call(_studentAvailabilityDayCreator.CanCreate(_startTime, _endTime, out startTimeError, out endTimeError)).Return(true);
 				Expect.Call(_studentAvailabilityDayCreator.Create(_scheduleDay, _startTime, _endTime)).Return(_studentAvailabilityDay);
@@ -60,6 +61,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			{
 				bool startTimeError;
 				bool endTimeError;
+				Expect.Call(_scheduleDay.FullAccess).Return(true);
 				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData>()));
 				Expect.Call(_studentAvailabilityDayCreator.CanCreate(_startTime, _endTime, out startTimeError, out endTimeError)).Return(false);
 			}
@@ -75,12 +77,27 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		{
 			using (_mock.Record())
 			{
+				Expect.Call(_scheduleDay.FullAccess).Return(true);
 				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData>{_studentAvailabilityDay}));
 			}
 
 			using (_mock.Playback())
 			{
 				_target.Execute();
+			}		
+		}
+
+		[Test]
+		public void ShouldNotBeAbleToExecuteWhenNoFullAccess()
+		{
+			using (_mock.Record())
+			{
+				Expect.Call(_scheduleDay.FullAccess).Return(false);
+			}
+
+			using (_mock.Playback())
+			{
+				Assert.IsFalse(_target.CanExecute());
 			}		
 		}
 	}

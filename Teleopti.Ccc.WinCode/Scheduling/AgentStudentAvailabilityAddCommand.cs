@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			if (CanExecute())
 			{
 				var studentAvailabilityDay = _studentAvailabilityDayCreator.Create(_scheduleDay, _startTime, _endTime);
+
 				if (studentAvailabilityDay != null)
 				{
 				    _scheduleDay.Add(studentAvailabilityDay);
@@ -40,6 +41,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 		public bool CanExecute()
 		{
+			if (!_scheduleDay.FullAccess) return false;
+
 			foreach (var persistableScheduleData in _scheduleDay.PersistableScheduleDataCollection())
 			{
 				if (persistableScheduleData is IStudentAvailabilityDay) return false;
