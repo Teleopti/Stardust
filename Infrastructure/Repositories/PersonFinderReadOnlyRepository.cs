@@ -13,74 +13,73 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-    public class PersonFinderReadOnlyRepository : IPersonFinderReadOnlyRepository
-    {
-        private readonly ICurrentUnitOfWork _currentUnitOfWork;
+	public class PersonFinderReadOnlyRepository : IPersonFinderReadOnlyRepository
+	{
+		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 
-        public PersonFinderReadOnlyRepository(ICurrentUnitOfWork currentUnitOfWork)
-        {
-            _currentUnitOfWork = currentUnitOfWork;
-        }
-	    
+		public PersonFinderReadOnlyRepository(ICurrentUnitOfWork currentUnitOfWork)
+		{
+			_currentUnitOfWork = currentUnitOfWork;
+		}
+		
 		private IEnumerable<string> parse(string searchValue)
 		{
 			const string quotePattern = "(\"[^\"]*?\")";
 
 			var notParsedSearchValue = Regex.Replace(searchValue, quotePattern, " $1 ");
-			notParsedSearchValue = Regex.Replace(notParsedSearchValue, " {2,}", "  ");
+			notParsedSearchValue = Regex.Replace(notParsedSearchValue, " {2,}", " ");
 
-			const string splitPattern = "(?<!\"[^ ]+) (?![^ ]+\")";
-			var result = Regex.Split(notParsedSearchValue, splitPattern)
-			 .Select(x => x.Replace("\"", "").Trim())
-			 .Where(x => !string.IsNullOrEmpty(x)).ToList();
+			const string splitPattern = "[^\\s\"]+|\"[^\"]*\"";
+			var matches = Regex.Matches(notParsedSearchValue, splitPattern);
+			var result = (from object match in matches select match.ToString().Replace("\"", "").Trim()).Where(x => !string.IsNullOrEmpty(x)).ToList();
 
 			return new HashSet<string>(result);
 		}
 
-	    private string createSearchString(IDictionary<PersonFinderField, string> criterias)
-	    {
-		    var builder = new StringBuilder();
-		    
-		    foreach (var criteria in criterias)
-		    {
+		private string createSearchString(IDictionary<PersonFinderField, string> criterias)
+		{
+			var builder = new StringBuilder();
+			
+			foreach (var criteria in criterias)
+			{
 				var valueSplittedWithSemicolon = "";
-			    parse(criteria.Value).ForEach(s =>
-			    {
-				    valueSplittedWithSemicolon = string.Concat(valueSplittedWithSemicolon, s, ";");
-			    });
-			    if (valueSplittedWithSemicolon.EndsWith(";"))
-			    {
-				    valueSplittedWithSemicolon = valueSplittedWithSemicolon.TrimEnd(new[] {';'});
-			    }
+				parse(criteria.Value).ForEach(s =>
+				{
+					valueSplittedWithSemicolon = string.Concat(valueSplittedWithSemicolon, s, ";");
+				});
+				if (valueSplittedWithSemicolon.EndsWith(";"))
+				{
+					valueSplittedWithSemicolon = valueSplittedWithSemicolon.TrimEnd(new[] {';'});
+				}
 
 				builder.AppendFormat("{0}:{1},", criteria.Key, valueSplittedWithSemicolon);
-		    }
+			}
 
-		    var searchString = builder.ToString();
-		    if (searchString.EndsWith(","))
-		    {
-			    searchString = searchString.Substring(0, searchString.Length - 1);
-		    }
+			var searchString = builder.ToString();
+			if (searchString.EndsWith(","))
+			{
+				searchString = searchString.Substring(0, searchString.Length - 1);
+			}
 
-		    return searchString;
-	    }
+			return searchString;
+		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider",
 			MessageId = "System.String.Format(System.String,System.Object[])"),
 		 System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design",
 			 "CA1062:Validate arguments of public methods", MessageId = "0")]
-	    public void Find(IPersonFinderSearchCriteria personFinderSearchCriteria)
-        {
+		public void Find(IPersonFinderSearchCriteria personFinderSearchCriteria)
+		{
 			personFinderSearchCriteria.TotalRows = 0;
 			int cultureId = Domain.Security.Principal.TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture.LCID;
 			if (personFinderSearchCriteria.TerminalDate < new DateOnly(1753, 1, 1))
 				personFinderSearchCriteria.TerminalDate = new DateOnly(1753, 1, 1);
 			var uow = _currentUnitOfWork.Current();
 
-		    if (personFinderSearchCriteria.SearchCriterias.Count == 0)
-		    {
-			    return;
-		    }
+			if (personFinderSearchCriteria.SearchCriterias.Count == 0)
+			{
+				return;
+			}
 			
 			var	result = ((NHibernateUnitOfWork)uow).Session.CreateSQLQuery(
 					"exec [ReadModel].PersonFinderWithCriteria @search_criterias=:searchCriterias_string, @leave_after=:leave_after, @start_row =:start_row, @end_row=:end_row, @order_by=:order_by, @sort_direction=:sort_direction, @culture=:culture")
@@ -99,14 +98,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.SetReadOnly(true)
 					.List<IPersonFinderDisplayRow>();
 
-		    int row = 0;
-            foreach (var personFinderDisplayRow in result)
-            {
-                personFinderSearchCriteria.TotalRows = personFinderDisplayRow.TotalCount;
-                personFinderSearchCriteria.SetRow(row, personFinderDisplayRow);
-                row++;
-            }
-        }
+			int row = 0;
+			foreach (var personFinderDisplayRow in result)
+			{
+				personFinderSearchCriteria.TotalRows = personFinderDisplayRow.TotalCount;
+				personFinderSearchCriteria.SetRow(row, personFinderDisplayRow);
+				row++;
+			}
+		}
 
 		public void FindPeople(IPeoplePersonFinderSearchCriteria personFinderSearchCriteria)
 		{
@@ -145,27 +144,27 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider",
-            MessageId = "System.String.Format(System.String,System.Object)")]
-        public void UpdateFindPerson(ICollection<Guid> ids)
-        {
-            string inputIds = String.Join(",", (from p in ids select p.ToString()).ToArray());
-            var uow = _currentUnitOfWork.Current();
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider",
+			MessageId = "System.String.Format(System.String,System.Object)")]
+		public void UpdateFindPerson(ICollection<Guid> ids)
+		{
+			string inputIds = String.Join(",", (from p in ids select p.ToString()).ToArray());
+			var uow = _currentUnitOfWork.Current();
 
-            ((NHibernateUnitOfWork) uow).Session.CreateSQLQuery(
-                string.Format("exec [ReadModel].[UpdateFindPerson] '{0}'", inputIds)).ExecuteUpdate();
-        }
+			((NHibernateUnitOfWork) uow).Session.CreateSQLQuery(
+				string.Format("exec [ReadModel].[UpdateFindPerson] '{0}'", inputIds)).ExecuteUpdate();
+		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider",
-            MessageId = "System.String.Format(System.String,System.Object)")]
-        public void UpdateFindPersonData(ICollection<Guid> ids)
-        {
-            string inputIds = String.Join(",", (from p in ids select p.ToString()).ToArray());
-            var uow = _currentUnitOfWork.Current();
-            ((NHibernateUnitOfWork) uow).Session.CreateSQLQuery(
-                string.Format("exec [ReadModel].[UpdateFindPersonData] '{0}'", inputIds)).ExecuteUpdate();
-        }
-    }
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider",
+			MessageId = "System.String.Format(System.String,System.Object)")]
+		public void UpdateFindPersonData(ICollection<Guid> ids)
+		{
+			string inputIds = String.Join(",", (from p in ids select p.ToString()).ToArray());
+			var uow = _currentUnitOfWork.Current();
+			((NHibernateUnitOfWork) uow).Session.CreateSQLQuery(
+				string.Format("exec [ReadModel].[UpdateFindPersonData] '{0}'", inputIds)).ExecuteUpdate();
+		}
+	}
 	 public class PeoplePersonFinderSearchCriteria : IPeoplePersonFinderSearchCriteria
 	 {
 		 private readonly PersonFinderField _field;
@@ -359,23 +358,23 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public int SortDirection { get; set; }
 	}
 
-    public class PersonFinderDisplayRow : IPersonFinderDisplayRow
-    {
-        public Guid PersonId { get; set; }
+	public class PersonFinderDisplayRow : IPersonFinderDisplayRow
+	{
+		public Guid PersonId { get; set; }
 
-        public Guid? TeamId { get; set; }
+		public Guid? TeamId { get; set; }
 
-        public Guid? SiteId { get; set; }
+		public Guid? SiteId { get; set; }
 
-        public Guid BusinessUnitId { get; set; }
+		public Guid BusinessUnitId { get; set; }
 
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string EmploymentNumber { get; set; }
-        public string Note { get; set; }
-        public DateTime TerminalDate { get; set; }
-        public bool Grayed { get; set; }
-        public int TotalCount { get; set; }
-        public Int64 RowNumber { get; set; }
-    }
+		public string FirstName { get; set; }
+		public string LastName { get; set; }
+		public string EmploymentNumber { get; set; }
+		public string Note { get; set; }
+		public DateTime TerminalDate { get; set; }
+		public bool Grayed { get; set; }
+		public int TotalCount { get; set; }
+		public Int64 RowNumber { get; set; }
+	}
 }
