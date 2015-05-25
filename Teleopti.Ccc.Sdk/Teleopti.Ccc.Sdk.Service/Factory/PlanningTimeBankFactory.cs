@@ -9,28 +9,24 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 {
     public class PlanningTimeBankFactory
     {
-        //private IPersonRepository _personRepository;
         private readonly IAssembler<IPerson, PersonDto> _personAssembler;
 
         public PlanningTimeBankFactory(IAssembler<IPerson,PersonDto> personAssembler)
         {
-            //_personRepository = personRepository;
             _personAssembler = personAssembler;
         }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+
         public PlanningTimeBankDto GetPlanningTimeBank(PersonDto personDto, DateOnlyDto dateOnlyDto)
         {
-            using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-            {
-                var person = _personAssembler.DtoToDomainEntity(personDto);
-                var timeBankExtractor = new PlanningTimeBankExtractor(person);
-                return timeBankExtractor.GetPlanningTimeBank(new DateOnly(dateOnlyDto.DateTime));    
-            }
-            
+	        using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+	        {
+		        var person = _personAssembler.DtoToDomainEntity(personDto);
+		        var timeBankExtractor = new PlanningTimeBankExtractor(person);
+		        return timeBankExtractor.GetPlanningTimeBank(new DateOnly(dateOnlyDto.DateTime));    
+	        }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-        public void SavePlanningTimeBank(PersonDto personDto, DateOnlyDto dateOnlyDto, int balanceOutMinute)
+	    public void SavePlanningTimeBank(PersonDto personDto, DateOnlyDto dateOnlyDto, int balanceOutMinute)
         {
             var checkDto = GetPlanningTimeBank(personDto, dateOnlyDto);
             if(!checkDto.IsEditable)

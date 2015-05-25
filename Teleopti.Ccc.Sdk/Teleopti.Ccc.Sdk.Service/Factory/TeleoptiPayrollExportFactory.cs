@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
+using Teleopti.Ccc.Sdk.Logic.QueryHandler;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -13,21 +15,21 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 	{
 		private readonly IScheduleRepository _scheduleRepository;
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
-		private readonly IAssembler<IPerson, PersonDto> _personAssembler;
+		private readonly IPersonRepository _personRepository;
 		private readonly IAssembler<DateTimePeriod, DateTimePeriodDto> _dateTimePeriodAssembler;
 		private readonly ICurrentScenario _scenarioRepository;
 		private readonly ISchedulePartAssembler _schedulePartAssembler;
 
 		public TeleoptiPayrollExportFactory(IScheduleRepository scheduleRepository,
 		                                    ICurrentUnitOfWorkFactory unitOfWorkFactory,
-		                                    IAssembler<IPerson, PersonDto> personAssembler,
+		                                    IPersonRepository personRepository,
 		                                    IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler,
 		                                    ICurrentScenario scenarioRepository,
 		                                    ISchedulePartAssembler schedulePartAssembler)
 		{
 			_scheduleRepository = scheduleRepository;
 			_unitOfWorkFactory = unitOfWorkFactory;
-			_personAssembler = personAssembler;
+			_personRepository = personRepository;
 			_dateTimePeriodAssembler = dateTimePeriodAssembler;
 			_scenarioRepository = scenarioRepository;
 			_schedulePartAssembler = schedulePartAssembler;
@@ -81,18 +83,18 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 			                                                                  IList<PayrollBaseExportDto>> buildExportFunction)
 		{
 			var payrollTimeExportDataList = new List<PayrollBaseExportDto>();
-			var timeZone = (TimeZoneInfo.FindSystemTimeZoneById(timeZoneInfoId));
-			var datePeriod = new DateOnlyPeriod(new DateOnly(startDate.DateTime), new DateOnly(endDate.DateTime));
+			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(timeZoneInfoId);
+			var datePeriod = new DateOnlyPeriod(startDate.ToDateOnly(), endDate.ToDateOnly());
 			var period = new DateOnlyPeriod(datePeriod.StartDate, datePeriod.EndDate.AddDays(1));
 			((DateTimePeriodAssembler) _dateTimePeriodAssembler).TimeZone = timeZone;
 
 			using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
-				var personList = _personAssembler.DtosToDomainEntities(personCollection).ToList();
+				var personList = _personRepository.FindPeople(personCollection.Select(p => p.Id.GetValueOrDefault())).ToList();
 				var scheduleDictionary =
 					_scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(
 						personList,
-						new ScheduleDictionaryLoadOptions(true, false),
+						new ScheduleDictionaryLoadOptions(false, false),
 						period,
 						_scenarioRepository.Current()
 						);
@@ -116,13 +118,12 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 			foreach (var person in personList)
 			{
 				var scheduleRange = scheduleDictionary[person];
-				foreach (var dateOnly in datePeriod.DayCollection())
+				foreach (var scheduleDay in scheduleRange.ScheduledDayCollection(datePeriod))
 				{
-					if (afterTerminationDate(person, dateOnly) || isBeforeFirstPeriod(person, dateOnly))
+					if (afterTerminationDate(person, scheduleDay.DateOnlyAsPeriod.DateOnly) || isBeforeFirstPeriod(person, scheduleDay.DateOnlyAsPeriod.DateOnly))
 						continue;
 
-					var scheduleDay = scheduleRange.ScheduledDay(dateOnly);
-					var payrollExportDtos = buildExportFunction(person, dateOnly, scheduleDay);
+					var payrollExportDtos = buildExportFunction(person, scheduleDay.DateOnlyAsPeriod.DateOnly, scheduleDay);
 					if (payrollExportDtos.Any())
 						payrollTimeExportDataList.AddRange(payrollExportDtos);
 				}
@@ -133,13 +134,13 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 		private static bool afterTerminationDate(IPerson person, DateOnly dateOnly)
 		{
 			var terminateDate = person.TerminalDate;
-			return terminateDate != null && dateOnly > terminateDate;
+			return terminateDate.HasValue && dateOnly > terminateDate;
 		}
 
 		private static bool isBeforeFirstPeriod(IPerson person, DateOnly dateOnly)
 		{
 			var firstPeriod = person.PersonPeriodCollection.OrderBy(p => p.Period.StartDate).FirstOrDefault();
-			return firstPeriod != null && dateOnly < firstPeriod.Period.StartDate;
+			return firstPeriod!=null && dateOnly < firstPeriod.Period.StartDate;
 		}
 	}
 }

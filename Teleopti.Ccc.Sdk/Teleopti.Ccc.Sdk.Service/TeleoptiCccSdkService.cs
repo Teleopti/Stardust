@@ -1896,8 +1896,8 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			IList<PersonSkillPeriodDto> personSkillPeriodDtos;
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-			    var personAssembler = _factoryProvider.CreatePersonAssembler();
-			    var personCollection = personAssembler.DtosToDomainEntities(personList);
+				var personRepository = new RepositoryFactory().CreatePersonRepository(uow);
+			    var personCollection = personRepository.FindPeople(personList.Select(p => p.Id.GetValueOrDefault()));
 			    var personPeriods = from p in personCollection
 			                        from pp in p.PersonPeriodCollection
 			                        select pp;

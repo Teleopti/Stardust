@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 			_unitOfWorkFactory = unitOfWorkFactory;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public ICollection<PersonDto> Handle(GetPeopleByGroupPageGroupQueryDto query)
 		{
 			var queryDate = query.QueryDate.ToDateOnly();

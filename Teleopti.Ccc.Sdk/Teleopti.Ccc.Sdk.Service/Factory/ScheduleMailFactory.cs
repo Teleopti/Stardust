@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
             IRepositoryFactory repositoryFactory = new RepositoryFactory();
             IList<PersonWithScheduleStream> returnList;
 
-            var timeZone = (TimeZoneInfo.FindSystemTimeZoneById(timeZoneInfoId));
+            var timeZone = TimeZoneInfo.FindSystemTimeZoneById(timeZoneInfoId);
             DateOnlyPeriod originalDatePeriod = new DateOnlyPeriod(new DateOnly(startDate.DateTime), new DateOnly(endDate.DateTime));
             DateOnlyPeriod datePeriod = new DateOnlyPeriod(originalDatePeriod.StartDate.AddDays(-6), originalDatePeriod.EndDate.AddDays(6));
             var period = new DateOnlyPeriod(datePeriod.StartDate, datePeriod.EndDate.AddDays(1));

@@ -37,7 +37,6 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 			_shiftTradeLightValidator = shiftTradeLightValidator;
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public ICollection<PersonDto> Handle(GetPeopleForShiftTradeByGroupPageGroupQueryDto query)
 		{
 			var queryDate = query.QueryDate.ToDateOnly();
