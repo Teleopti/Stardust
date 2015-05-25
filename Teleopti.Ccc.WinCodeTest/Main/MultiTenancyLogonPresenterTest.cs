@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 		[Test]
 		public void ShouldNotReloadSdkOnBackFromDataSources()
 		{
-			_model.SelectedDataSourceContainer = new DataSourceContainer(null);
+			_model.SelectedDataSourceContainer = new DataSourceContainer(null, null);
 			_target.CurrentStep = LoginStep.SelectLogonType;
 			_target.BackButtonClicked();
 		}
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 		[Test]
 		public void ShouldGoToLoginIfApplication()
 		{
-			var dataSourceContainer = new DataSourceContainer(null);
+			var dataSourceContainer = new DataSourceContainer(null, null);
 			_model.SelectedDataSourceContainer = dataSourceContainer;
 			_view.Stub(x => x.ShowStep(false));
 			_target.CurrentStep = LoginStep.SelectLogonType;

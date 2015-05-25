@@ -569,13 +569,11 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		private readonly DataSourceContainer _choosenDb;
 		private IList<IBusinessUnit> _buList;
 		private readonly List<ITenantName> _tenantNames;
-		private readonly List<IDataSource> _dataSources = new List<IDataSource>();
+	
 
 		public LogOnHelperFake(IDataSource dataSource, IPerson person)
 		{
-			_dataSources.Add(dataSource);
-			_choosenDb = new DataSourceContainer(dataSource);
-			_choosenDb.SetUser(person);
+			_choosenDb = new DataSourceContainer(dataSource, person);
 			_tenantNames = new List<ITenantName> { new TenantName { DataSourceName = dataSource.DataSourceName } };
 		}
 
@@ -614,8 +612,8 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 		public bool SelectDataSourceContainer(string dataSourceName)
 		{
-			var person = new LoadUserUnauthorized().LoadFullPersonInSeperateTransaction(_choosenDb.DataSource.Application, SuperUser.Id_AvoidUsing_This);
-			_choosenDb.SetUser(person);
+		//	var person = new LoadUserUnauthorized().LoadFullPersonInSeperateTransaction(_choosenDb.DataSource.Application, SuperUser.Id_AvoidUsing_This);
+		//	_choosenDb.SetUser(person);
 			return true;
 		}
 

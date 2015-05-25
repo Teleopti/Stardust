@@ -121,9 +121,8 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			}
 			else
 			{
-				_choosenDb = new DataSourceContainer(dataSource);
-				var person = new LoadUserUnauthorized().LoadFullPersonInSeperateTransaction(_choosenDb.DataSource.Application, SuperUser.Id_AvoidUsing_This);
-				_choosenDb.SetUser(person);
+				var person = new LoadUserUnauthorized().LoadFullPersonInSeperateTransaction(dataSource.Application, SuperUser.Id_AvoidUsing_This);
+				_choosenDb = new DataSourceContainer(dataSource, person);
 				if (_choosenDb.User == null)
 				{
 					Trace.WriteLine("Error on logon!");

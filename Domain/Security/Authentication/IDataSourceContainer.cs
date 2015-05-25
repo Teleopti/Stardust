@@ -6,7 +6,6 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
 	{
 		IDataSource DataSource { get; }
 		IPerson User { get; }
-		void SetUser(IPerson person);
 		IAvailableBusinessUnitsProvider AvailableBusinessUnitProvider { get; }
 	}
 }

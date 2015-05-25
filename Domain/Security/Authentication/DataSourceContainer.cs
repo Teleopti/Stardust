@@ -4,9 +4,10 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
 {
 	public class DataSourceContainer : IDataSourceContainer
 	{
-		public DataSourceContainer(IDataSource dataSource)
+		public DataSourceContainer(IDataSource dataSource, IPerson user)
 		{
 			DataSource = dataSource;
+			User = user;
 		}
 
 		public IDataSource DataSource { get; private set; }
@@ -16,11 +17,6 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
 		public IAvailableBusinessUnitsProvider AvailableBusinessUnitProvider
 		{
 			get { return new AvailableBusinessUnitsProvider(User, DataSource); }
-		}
-
-		public void SetUser(IPerson person)
-		{
-			User = person;
 		}
 
 		public override string ToString()
