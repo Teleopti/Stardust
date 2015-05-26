@@ -106,8 +106,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 	{
 		public IConfigurationReader Reader()
 		{
-			var wrapper = new ConfigurationManagerWrapper();
-			var xmlPath = wrapper.AppSettings["ConfigPath"];
+			var xmlPath = ConfigurationManager.AppSettings["ConfigPath"];
 			if (string.IsNullOrWhiteSpace(xmlPath))
 			{
 				xmlPath = AppDomain.CurrentDomain.BaseDirectory;
