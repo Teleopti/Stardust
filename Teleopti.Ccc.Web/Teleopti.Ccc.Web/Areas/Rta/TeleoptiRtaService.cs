@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 					PlatformTypeId = platformTypeId,
 					SourceId = sourceId,
 					BatchId = batchId,
-					IsSnapshot = isLoggedOn
+					IsSnapshot = isSnapshot
 				}));
 		}
 
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 						PlatformTypeId = platformTypeId,
 						SourceId = sourceId,
 						BatchId = s.BatchId,
-						IsSnapshot = s.IsLoggedOn
+						IsSnapshot = s.IsSnapshot
 					};
 				return _rta.SaveStateBatch(states.ToArray());
 			});
