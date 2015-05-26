@@ -88,13 +88,36 @@
 		</div>
 		<div class="sidenav material-depth-1 right" layout="column" ng-class="{'is-hidden':toggleRightSide}" ng-controller="NotificationsCtrl">
 			<div>
-				<a href="#"><div class="wfm-block sidenav-header">Notifications</div></a>
+				<div class="wfm-block sidenav-header">Notifications</div>
 				<ul class="notification-list" ng-repeat="item in notificationResult">
 					<li><i class="mdi mdi-alert-circle"></i>{{item.JobCategory}} '{{item.Status}}' at {{item.Timestamp | date:'HH:mm'}}</li>
 				</ul>
 			</div>
 			<div flex>
 				<div class="wfm-block sidenav-header">Something</div>
+				<div ng-show>
+					<div layout="row" style="justify-content: space-around;display: block;text-align: center;">
+						<button class="wfm-fab success mini">
+							<i class="mdi mdi-plus"></i>
+						</button>
+						<button class="wfm-fab mini">
+							<i class="mdi mdi-delete"></i>
+						</button>
+						<button class="wfm-fab info mini">
+							<i class="mdi mdi-check"></i>
+						</button>
+						<button class="wfm-fab success mini">
+							<i class="mdi mdi-thumb-up"></i>
+						</button>
+						<button class="wfm-fab mini info">
+							<i class="mdi mdi-menu"></i>
+						</button>
+					</div>
+					<div layout="row">
+						<button flex class="wfm-btn wfm-btn-default">One</button>
+						<button flex class="wfm-btn wfm-btn-default">Another</button>
+					</div>
+				</div>
 			</div>
 
 			<ul class="wfm-accordion">
