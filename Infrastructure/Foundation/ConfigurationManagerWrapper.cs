@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Configuration;
-using System.Linq;
+using Teleopti.Ccc.Domain.Common;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
 {
@@ -9,17 +8,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 	{
 		public ConfigurationManagerWrapper()
 		{
-			AppSettings = new Dictionary<string, string>();
-			ConfigurationManager.AppSettings.AllKeys.ToList().ForEach(name => AppSettings.Add(name, ConfigurationManager.AppSettings[name]));
-			var published = (NameValueCollection)ConfigurationManager.GetSection("teleopti/publishedSettings");
-
-			if (published != null)
-			{
-				foreach (string item in published)
-				{
-					AppSettings.Add(item, published.Get(item));
-				}
-			}
+			AppSettings = ConfigurationManager.AppSettings.ToDictionary();
 		}
 
 		public IDictionary<string, string> AppSettings { get; private set; } 
