@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Web.Core;
@@ -11,8 +13,8 @@ namespace Teleopti.Ccc.WebTest.Filters
 		[Test]
 		public void ShouldGetDefaultProvider()
 		{
-			var config = new ConfigurationManagerWrapper();
-			config.AppSettings["DefaultIdentityProvider"] = "Windows";
+			var config = MockRepository.GenerateMock<IConfigurationWrapper>();
+			config.Expect(x => x.AppSettings).Return(new Dictionary<string, string> {{"DefaultIdentityProvider", "Windows"}});
 			var target = new IdentityProviderProvider(config);
 
 			var defaultProvider = target.DefaultProvider();
