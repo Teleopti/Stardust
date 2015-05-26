@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		private IDataSourcesFactory dataSourcesFactory { get; set; }
 		private IMessageBrokerComposite messageBroker { get; set; }
 
-		// from Web, ServiceBus, Sdk, ETL
+		// from Web, ServiceBus, ETL
 		public void Start(IState clientCache, string xmlDirectory, ILoadPasswordPolicyService loadPasswordPolicyService,
 			IDictionary<string, string> appSettings, bool startMessageBroker)
 		{
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			}
 		}
 
-		// from LogonInitializeStateHolder
+		// from desktop, sdk
 		public void Start(IState clientCache, IDictionary<string, string> appSettings, ILoadPasswordPolicyService loadPasswordPolicyService, bool tryStartMessageBroker)
 		{
 			StateHolder.Initialize(clientCache);
