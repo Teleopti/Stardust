@@ -38,7 +38,7 @@ Background:
 	| Field      | Value      |
 	| Start date | 2012-06-18 |
 	| Team       | My team    |
-	And AgentNotInMyTeam has a person period with
+	And OtherAgentNotInMyTeam has a person period with
 	| Field      | Value      |
 	| Start date | 2012-06-18 |
 	| Team		 | Other team |
@@ -323,7 +323,7 @@ Scenario: Show my full day absence
 Scenario: Default to my team
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And AgentNotInMyTeam have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgentNotInMyTeam have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And I have a shift with
 	| Field                 | Value            |
@@ -335,7 +335,7 @@ Scenario: Default to my team
 	| StartTime             | 2030-01-02 10:00 |
 	| EndTime               | 2030-01-02 20:00 |
 	| Shift category		| Late	           |
-	And AgentNotInMyTeam has a shift with
+	And OtherAgentNotInMyTeam has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-02 08:00 |
 	| EndTime               | 2030-01-02 18:00 |
@@ -344,18 +344,18 @@ Scenario: Default to my team
 	When I view Add Shift Trade Request
 	Then the option 'The site/My team' should be selected
 	And I should see a possible schedule trade with 'OtherAgent'
-	And I should not see a possible schedule trade with 'AgentNotInMyTeam'
+	And I should not see a possible schedule trade with 'OtherAgentNotInMyTeam'
 
 Scenario: Change team
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And AgentNotInMyTeam have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgentNotInMyTeam have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And I have a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category		| Day	           |
-	And AgentNotInMyTeam has a shift with
+	And OtherAgentNotInMyTeam has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 08:00 |
 	| EndTime               | 2030-01-01 18:00 |
@@ -365,7 +365,7 @@ Scenario: Change team
 	And I should see a message text saying that no possible shift trades could be found
 	When I select the 'Other team'
 	Then the option 'The site/Other team' should be selected
-	And I should see a possible schedule trade with 'AgentNotInMyTeam'
+	And I should see a possible schedule trade with 'OtherAgentNotInMyTeam'
 
 Scenario: Change date and keep selected team
 	Given I have the role 'Full access to mytime'
@@ -399,7 +399,7 @@ Scenario: Cannot trade shifts when teamless
 Scenario: Show possible shift trades from my team
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And AgentNotInMyTeam have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgentNotInMyTeam have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And I have a shift with
 	| Field                 | Value            |
@@ -411,7 +411,7 @@ Scenario: Show possible shift trades from my team
 	| StartTime             | 2030-01-01 10:00 |
 	| EndTime               | 2030-01-01 20:00 |
 	| Shift category		| Late	           |
-	And AgentNotInMyTeam has a shift with
+	And OtherAgentNotInMyTeam has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 08:00 |
 	| EndTime               | 2030-01-01 18:00 |
@@ -419,7 +419,7 @@ Scenario: Show possible shift trades from my team
 	And the time is '2029-12-27'
 	When I view Add Shift Trade Request for date '2030-01-01'
 	Then I should see a possible schedule trade with 'OtherAgent'
-	And I should not see a possible schedule trade with 'AgentNotInMyTeam'
+	And I should not see a possible schedule trade with 'OtherAgentNotInMyTeam'
 
 Scenario: Sort possible shift trades by starttime for default
 	Given I have the role 'Full access to mytime'
@@ -702,7 +702,7 @@ Scenario: Should cancel the current shift trade when switch to another team to t
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And AgentNotInMyTeam have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgentNotInMyTeam have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And I have a shift with
 	| Field          | Value            |
 	| StartTime      | 2030-01-01 06:00 |
@@ -713,7 +713,7 @@ Scenario: Should cancel the current shift trade when switch to another team to t
 	| StartTime      | 2030-01-01 09:00 |
 	| EndTime        | 2030-01-01 18:00 |
 	| Shift category | Day              |
-	And AgentNotInMyTeam has a shift with
+	And OtherAgentNotInMyTeam has a shift with
 	| Field          | Value            |
 	| StartTime      | 2030-01-01 09:00 |
 	| EndTime        | 2030-01-01 18:00 |
@@ -722,16 +722,16 @@ Scenario: Should cancel the current shift trade when switch to another team to t
 	And I view Add Shift Trade Request for date '2030-01-01'
 	And I choose 'OtherAgent' to make a shift trade
 	When I select the 'Other team'
-	Then I should see 'AgentNotInMyTeam' last in the list
-	And I choose 'AgentNotInMyTeam' to make a shift trade
+	Then I should see 'OtherAgentNotInMyTeam' last in the list
+	And I choose 'OtherAgentNotInMyTeam' to make a shift trade
 	And I should not see schedule on date '2030-01-01' in my shift trade list with 'OtherAgent'
-	And I should see 'AgentNotInMyTeam' in my shift trade list for date '2030-01-01'
+	And I should see 'OtherAgentNotInMyTeam' in my shift trade list for date '2030-01-01'
 
 @OnlyRunIfEnabled('Request_SeePossibleShiftTradesFromAllTeams_28770')
 Scenario: Show possible shift trades from All
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And AgentNotInMyTeam have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgentNotInMyTeam have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And I have a shift with
 	| Field                 | Value            |
@@ -743,7 +743,7 @@ Scenario: Show possible shift trades from All
 	| StartTime             | 2030-01-01 10:00 |
 	| EndTime               | 2030-01-01 20:00 |
 	| Shift category		| Late	           |
-	And AgentNotInMyTeam has a shift with
+	And OtherAgentNotInMyTeam has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 08:00 |
 	| EndTime               | 2030-01-01 18:00 |
@@ -752,7 +752,7 @@ Scenario: Show possible shift trades from All
 	When I view Add Shift Trade Request for date '2030-01-01'
 	And I select the 'All'
 	Then I should see a possible schedule trade with 'OtherAgent'
-	And I should see a possible schedule trade with 'AgentNotInMyTeam' 
+	And I should see a possible schedule trade with 'OtherAgentNotInMyTeam' 
 
 @OnlyRunIfEnabled('MyTimeWeb_SortSchedule_32092')
 Scenario: Show possible shift trades with name filter

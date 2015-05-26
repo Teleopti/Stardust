@@ -34,8 +34,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 				};
 
 		private static registeredActivator _activator;
-		private static string _host;
-		private static int _port;
 
 		static Browser()
 		{
@@ -46,7 +44,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		{
 			if (!_activator.Started)
 			{
-				_activator.Activator.Start(Timeouts.Timeout, Timeouts.Poll, _host,_port);
+				_activator.Activator.Start(Timeouts.Timeout, Timeouts.Poll);
 				_activator.Started = true;
 			}
 			return _activator.Activator;
@@ -78,12 +76,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void Close()
 		{
 			activators.ForEach(a => a.Activator.Close());
-		}
-
-		public static void SetHost(string host, int port)
-		{
-			_host = host;
-			_port = port;
 		}
 	}
 }

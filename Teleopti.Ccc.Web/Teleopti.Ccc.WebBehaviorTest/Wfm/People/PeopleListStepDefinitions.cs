@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.People
 		[Then(@"I should not see '(.*)' in people list")]
 		public void ThenIShouldNotSeeInPeopleList(string name)
 		{
-			const string existSelector = ".people-list .person";
+			const string existSelector = ".people-list";
 			const string notExistSelector = ".people-list .person";
 			Browser.Interactions.AssertNoContains(existSelector,notExistSelector, name);
 		}

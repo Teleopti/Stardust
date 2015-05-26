@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 {
 	public interface IBrowserInteractions
 	{
-		object Javascript(string javascript);
+		string Javascript(string javascript);
 
 		void GoTo(string uri);
 
@@ -19,8 +19,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 
 		void AssertExists(string selector);
 		void AssertNotExists(string existsSelector, string notExistsSelector);
-
-		void AssertNotVisible(string existsSelector, string notExistsSelector);
 
 		void AssertAnyContains(string selector, string text);
 		void AssertNoContains(string existsSelector, string notExistsSelector, string text);

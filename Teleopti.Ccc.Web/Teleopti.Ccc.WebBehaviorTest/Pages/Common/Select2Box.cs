@@ -25,12 +25,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 
 		public static string FirstOptionText
 		{
-			get { return (string)Browser.Interactions.Javascript("return $('.select2-result-selectable .select2-result-label:first-child').text();"); }
+			get { return (string)Browser.Interactions.Javascript("return $('.select2-result-selectable .select2-result-label:first-child');"); }
 		}
 
 		public static string LastOptionText
 		{
-			get { return (string)Browser.Interactions.Javascript("return $('.select2-result-selectable .select2-result-label:last-child').text();"); }
+			get { return (string)Browser.Interactions.Javascript("return $('.select2-result-selectable .select2-result-label:last-child');"); }
 		}
 
 		public static void AssertIsOpen(string select2Id)

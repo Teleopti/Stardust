@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenIShouldNotSeeAnyReportMenu()
 		{
 			Browser.Interactions.AssertNotExists(".navbar-nav", "#reports");
-			Browser.Interactions.AssertNotExists(".navbar-nav", "a[href='#MyReportTab']");
+			Browser.Interactions.AssertNotExists(".navbar-nav", "a[href$='#MyReportTab']");
 		}
 
 		[When(@"I click the report at position '(.*)' in the list")]

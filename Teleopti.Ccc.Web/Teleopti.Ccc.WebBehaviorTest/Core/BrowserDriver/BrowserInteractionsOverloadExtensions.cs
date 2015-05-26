@@ -2,7 +2,7 @@
 {
 	public static class BrowserInteractionsOverloadExtensions
 	{
-		public static object Javascript(this IBrowserInteractions interactions, string javascript, params object[] args)
+		public static string Javascript(this IBrowserInteractions interactions, string javascript, params object[] args)
 		{
 			return interactions.Javascript(string.Format(javascript, args));
 		}
