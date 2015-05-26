@@ -5,6 +5,7 @@ using NUnit.Framework;
 using NUnit.Framework.Constraints;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
+using Shows = Coypu.NUnit.Matchers.Shows;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 {
@@ -31,12 +32,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 					ConsiderInvisibleElements = _configuration.ConsiderInvisibleElements,
 					RetryInterval = _configuration.RetryInterval,
 					Timeout = timeout,
-					WaitBeforeClick = _configuration.WaitBeforeClick
+					WaitBeforeClick = _configuration.WaitBeforeClick,
+					Match = _configuration.Match,
+					TextPrecision = _configuration.TextPrecision
 				};
 			}
 		}
 
-		public string Javascript(string javascript)
+		public object Javascript(string javascript)
 		{
 			return retryJavascript(javascript);
 		}
@@ -83,7 +86,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 			}
 			else
 			{
-				_browser.FindCss(selector, value).Hover();
+				_browser.FindCss(selector, value, options()).Hover();
 			}
 		}
 
@@ -96,21 +99,63 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 
 		public void AssertExists(string selector)
 		{
-			assert(_browser.HasCss(selector, options()), Is.True, "Could not find element matching selector " + selector);
+			var globalOption = options();
+			var option = new Options
+			{
+				ConsiderInvisibleElements = true,
+				RetryInterval = globalOption.RetryInterval,
+				Timeout = globalOption.Timeout,
+				WaitBeforeClick = globalOption.WaitBeforeClick,
+				Match = globalOption.Match,
+				TextPrecision = globalOption.TextPrecision
+			};
+			assert(_browser.FindCss(selector, option).Exists(), Is.True, "Could not find element matching selector " + selector);
+			/*Assert.That(_browser, Shows.Css(selector, options()), "Could not find element matching selector " + selector);*/
 		}
 
 		public void AssertNotExists(string existsSelector, string notExistsSelector)
 		{
 			AssertExists(existsSelector);
-			assert(_browser.HasNoCss(notExistsSelector, options()), Is.True,
-				"Found element matching selector " + notExistsSelector + " although I shouldnt");
+
+			var globalOption = options();
+			var option = new Options
+			{
+				ConsiderInvisibleElements = true,
+				RetryInterval = globalOption.RetryInterval,
+				Timeout = globalOption.Timeout,
+				WaitBeforeClick = globalOption.WaitBeforeClick,
+				Match = globalOption.Match,
+				TextPrecision = globalOption.TextPrecision
+			};
+
+			assert(_browser.FindCss(notExistsSelector, option).Missing(), Is.True, "Found element matching selector " + notExistsSelector + " although I shouldnt");
+			/*Assert.That(_browser, Shows.No.Css(notExistsSelector, options()),
+				"Found element matching selector " + notExistsSelector + " although I shouldnt");*/
+		}
+
+		public void AssertNotVisible(string existsSelector, string notExistsSelector)
+		{
+			AssertExists(existsSelector);
+
+			var globalOption = options();
+			var option = new Options
+			{
+				ConsiderInvisibleElements = false,
+				RetryInterval = globalOption.RetryInterval,
+				Timeout = globalOption.Timeout,
+				WaitBeforeClick = globalOption.WaitBeforeClick,
+				Match = globalOption.Match,
+				TextPrecision = globalOption.TextPrecision
+			};
+
+			assert(_browser.FindCss(notExistsSelector, option).Missing(), Is.True, "Found visible element matching selector " + notExistsSelector + " although I shouldnt");
 		}
 
 		public void AssertAnyContains(string selector, string text)
 		{
 			Console.WriteLine("Assert exists element match selector \"{0}\" contain text \"{1}\"", selector, text);
 			var regex = new Regex(Regex.Escape(text));
-			var hasCss = _browser.HasCss(selector, regex, options());
+			var hasCss = _browser.FindCss(selector, regex, options()).Exists();
 			var message = string.Format("Could not find element matching selector \"{0}\" with text \"{1}\"", selector, text);
 			assert(hasCss, Is.True, message);
 		}
@@ -120,18 +165,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 			AssertExists(existsSelector);
 			var regex = new Regex(Regex.Escape(text));
 
-			var globalOptions = options();
-			var localOptions = new Options
-			{
-				ConsiderInvisibleElements = globalOptions.ConsiderInvisibleElements,
-				RetryInterval = globalOptions.RetryInterval,
-				WaitBeforeClick = globalOptions.WaitBeforeClick,
-				Timeout = TimeSpan.FromMilliseconds(20)
-			};
-			assert(_browser.HasNoCss(notExistsSelector, regex, localOptions), Is.True,
+			assert(_browser.FindCss(notExistsSelector, regex, options()).Missing(), Is.True,
 				"Failed to assert that " + notExistsSelector + " did not find anything containing text " + text);
 		}
-
+		
 		public void AssertFirstContains(string selector, string text)
 		{
 			Console.WriteLine("Assert first element match selector \"{0}\" contain text \"{1}\"", selector, text);
@@ -171,7 +208,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 
 		public void AssertJavascriptResultContains(string javascript, string text)
 		{
-			eventualAssert(() => _browser.ExecuteScript(javascript), Is.StringContaining(text),
+			eventualAssert(() =>
+			{
+				var result = _browser.ExecuteScript(javascript);
+				return result == null ? string.Empty : result.ToString();
+			}, Is.StringContaining(text),
 				string.Format("Failed to assert that javascript \"{0}\" returned a value containing \"{1}\"", javascript, text));
 		}
 
@@ -187,7 +228,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 				return;
 			}
 
-			string domSource;
+			object domSource;
 			const string scriptToGetDomSource = "return document.documentElement.outerHTML;";
 			try
 			{
@@ -212,9 +253,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 			return _options ?? _configuration;
 		}
 
-		private string retryJavascript(string javascript)
+		private object retryJavascript(string javascript)
 		{
-			string result = null;
+			object result = null;
 			_browser.RetryUntilTimeout(() => { result = _browser.ExecuteScript(javascript); }, options());
 
 			return result;

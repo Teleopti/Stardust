@@ -346,8 +346,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should not see schedule on date '(.*)' in my shift trade list with '(.*)'")]
 		public void ThenIShouldNotSeeScheduleDayForInMyShiftTradeListWith(string date, string agentName)
 		{
-			Browser.Interactions.AssertNotExists("#Request-add-shift-trade-detail-section", string.Format("#choose-history-list .trade-date:contains('{0}')", date));
-			Browser.Interactions.AssertNotExists("#Request-add-shift-trade-detail-section", string.Format("#choose-history-list .shift-trade-agent-name:contains('{0}')", agentName));
+			Browser.Interactions.AssertNoContains("#Request-add-shift-trade-detail-section", "#choose-history-list .shift-trade-agent-name", agentName);
 		}
 
 		[Then(@"I should see '(.*)' can be added for date '(.*)'")]

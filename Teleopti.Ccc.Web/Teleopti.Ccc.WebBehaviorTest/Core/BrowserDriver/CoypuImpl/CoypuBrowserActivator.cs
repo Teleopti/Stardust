@@ -21,23 +21,26 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 			_interactions.SetTimeout(timeout);
 		}
 
-		public void Start(TimeSpan timeout, TimeSpan retry)
+		public void Start(TimeSpan timeout, TimeSpan retry, string host, int port)
 		{
 			var configuration = new SessionConfiguration
 				{
 					AppHost = "about:blank",
 					Port = 80,
 					SSL = false,
-					ConsiderInvisibleElements = true,
+					ConsiderInvisibleElements = false,
 					WaitBeforeClick = TimeSpan.Zero,
 					RetryInterval = retry,
 					Timeout = timeout,
 					Driver = _driverConfiguration,
-					Browser = _browserConfiguration
+					Browser = _browserConfiguration,
+					Match = Match.First
 				};
 			_browser = new BrowserSession(configuration);
 			_browser.ResizeTo(1200, 1000);	// an element must be in view to selenium to interact with it
 			_interactions = new CoypuBrowserInteractions(_browser, configuration);
+			configuration.AppHost = host;
+			configuration.Port = port;
 		}
 
 	    public void Close()

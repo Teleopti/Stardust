@@ -25,7 +25,7 @@ Feature: AdvancedSearch
 	 | Field      | Value      |
 	 | Team       | Team Red      |
 	 | Start Date | 2015-01-21 |
-@ignore
+
 Scenario: match all search terms by default
 	When I view people
 	And I search people with keyword 'Red Ashley'
@@ -55,7 +55,7 @@ Scenario: match all search terms in different fields
 	| last name    | Andeen Smith |
 	| organization | Red        |
 	Then I should see 'Ashley Andeen' in people list
-@ignore
+
 Scenario: match entire quoted search term
 	When I view people
 	And I search people with keyword '"Team Blue" Ashley'

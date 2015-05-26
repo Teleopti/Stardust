@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"MyReport tab should be visible")]
 		public void ThenMyReportTabShouldBeVisible()
 		{
-			Browser.Interactions.AssertExists("a[href$='#MyReportTab']");
+			Browser.Interactions.AssertExists("a[href='#MyReportTab']");
 		}
 
 		[Then(@"I should see a message saying I dont have access")]

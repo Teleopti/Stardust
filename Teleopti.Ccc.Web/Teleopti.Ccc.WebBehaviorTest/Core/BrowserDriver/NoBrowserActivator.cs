@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 		{
 		}
 
-		public void Start(TimeSpan timeout, TimeSpan retry)
+		public void Start(TimeSpan timeout, TimeSpan retry, string host, int port)
 		{
 		}
 

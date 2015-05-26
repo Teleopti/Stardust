@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			Browser.Interactions.AssertNotExists(".weekview-timeline",
 			                                     string.Format(
-				                                     "'.weekview-day[data-mytime-date='{0}'] .weekview-day-schedule-layer'",
+				                                     ".weekview-day[data-mytime-date='{0}'] .weekview-day-schedule-layer",
 				                                     date.ToString("yyyy-MM-dd")));
 		}
 

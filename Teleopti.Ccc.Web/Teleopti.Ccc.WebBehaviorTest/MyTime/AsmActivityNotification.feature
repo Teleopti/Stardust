@@ -118,6 +118,7 @@ Scenario: Do not alert agent without permission for ASM
 	And the time is '2030-01-01 10:58:00'
 	Then I should not see any notify
 
+	@ignore
 Scenario: Automatical close pop up notify message
 	Given I have the role 'Full access to mytime'
 	And the time is '2030-01-01 10:57:59'
@@ -126,7 +127,7 @@ Scenario: Automatical close pop up notify message
 	And the time is '2030-01-01 10:58:00'
 	Then I should see a notify message contains text Lunch
 	And I should see a notify message contains text start
-	When the time is '2030-01-01 10:58:30'
+	When the time is '2030-01-01 11:00:30'
 	Then I should not see pop up notify message
 
 Scenario: Should alert agent when now is between 2 shift

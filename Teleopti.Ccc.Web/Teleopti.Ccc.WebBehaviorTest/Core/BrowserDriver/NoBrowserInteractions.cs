@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 	{
 		private const string notAllowedAction = "Not allowed action on this browser interaction.";
 
-		public string Javascript(string javascript)
+		public object Javascript(string javascript)
 		{
 			throw new NotSupportedException(notAllowedAction);
 		}
@@ -56,6 +56,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 		}
 
 		public void AssertNotExists(string existsSelector, string notExistsSelector)
+		{
+			throw new NotSupportedException(notAllowedAction);
+		}
+
+		public void AssertNotVisible(string existsSelector, string notExistsSelector)
 		{
 			throw new NotSupportedException(notAllowedAction);
 		}
