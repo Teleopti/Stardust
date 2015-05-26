@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -111,6 +112,42 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			result.PossibleTradeSchedules.First().Name.Should().Be("1 person");
 		}
 
+		
+		[Test]
+		public void ShouldReturnCorrectAgentSchedulesWithNameSearch()
+		{
+			SetUp();
+
+			var result = _mapper.Map(new ShiftTradeScheduleViewModelData
+			{
+				ShiftTradeDate = new DateOnly(2015, 5, 19),
+				TeamIdList = _teamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
+				Paging = new Paging { Take = 20, Skip = 0 },
+				SearchNameText = "1"
+			});
+
+			result.PossibleTradeSchedules.Single().Name.Should().Be("1 person");
+		}
+
+		[Test]
+		public void ShouldReturnCorrectAgentSchedulesWithDate()
+		{
+			SetUp();
+
+			var person1 = _personRepository.LoadAll().First(p => p.Name.LastName == "1");
+
+			var result = _mapper.Map(new ShiftTradeScheduleViewModelData
+			{
+				ShiftTradeDate = new DateOnly(2015, 5, 21),
+				TeamIdList = _teamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
+				Paging = new Paging { Take = 20, Skip = 0 },
+				SearchNameText = ""
+			});
+
+			var agentSchedule = result.PossibleTradeSchedules.Single(s => s.PersonId == person1.Id.Value);
+			agentSchedule.MinStart.Should().Be.EqualTo(new DateTime(2015, 5, 21, 10, 0, 0));
+		}
+
 		[Test]
 		public void TeamScheduleControllerShouldReturnCorrectTimeLine()
 		{
@@ -127,5 +164,82 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			result.TimeLineHours.Max(t => t.EndTime).Should().Be.EqualTo(new DateTime(2015, 5, 19, 20, 15, 0));
 			result.TimeLineHours.Min(t => t.StartTime).Should().Be.EqualTo(new DateTime(2015, 5, 19, 7, 45, 0));
 		}
+
+
+
+		[Test]
+		public void ShouldReturnCorrectAgentSchedulesWithTimeFilter()
+		{
+			SetUp();
+			var result = _mapper.Map(new ShiftTradeScheduleViewModelData
+			{
+				ShiftTradeDate = new DateOnly(2015, 5, 19),
+				TeamIdList = _teamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
+				Paging = new Paging { Take = 20, Skip = 0 },
+				TimeFilter = new TimeFilterInfo
+				{
+					StartTimes = new List<DateTimePeriod> { new DateTimePeriod(2015, 5, 19, 7, 2015, 5, 19, 9) },
+					EndTimes = new List<DateTimePeriod> { new DateTimePeriod(2015, 5, 19, 13, 2015, 5, 19, 15) },
+					IsDayOff = false,
+					IsWorkingDay = true,
+					IsEmptyDay = false
+				},
+				SearchNameText = ""
+			});
+
+			result.PossibleTradeSchedules.Should().Have.Count.EqualTo(1);
+		}
+
+
+		[Test]
+		public void ShouldSeeDayOffAgentScheduleWhenDayOffFilterEnabled()
+		{
+			SetUp();
+
+			var result = _mapper.Map(new ShiftTradeScheduleViewModelData
+			{
+				ShiftTradeDate = new DateOnly(2015, 5, 23),
+				TeamIdList = _teamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
+				Paging = new Paging { Take = 20, Skip = 0 },
+				TimeFilter = new TimeFilterInfo
+				{
+					StartTimes = new List<DateTimePeriod>(),
+					EndTimes = new List<DateTimePeriod>(),
+					IsDayOff = true,
+					IsWorkingDay = false,
+					IsEmptyDay = false
+				},
+				SearchNameText = ""
+			});
+
+			result.PossibleTradeSchedules.Should().Have.Count.EqualTo(1);			
+		}
+
+
+		[Test]
+		public void ShouldSeeCorrectAgentSchedulesWhenBothDayOffAndEmptyDayFilterEnabled()
+		{
+			SetUp();
+
+			var result = _mapper.Map(new ShiftTradeScheduleViewModelData
+			{
+				ShiftTradeDate = new DateOnly(2015, 5, 23),
+				TeamIdList = _teamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
+				Paging = new Paging { Take = 20, Skip = 0 },
+				TimeFilter = new TimeFilterInfo
+				{
+					StartTimes = new List<DateTimePeriod>(),
+					EndTimes = new List<DateTimePeriod>(),
+					IsDayOff = true,
+					IsWorkingDay = false,
+					IsEmptyDay = true
+				},
+				SearchNameText = ""
+			});
+
+			result.PossibleTradeSchedules.Should().Have.Count.EqualTo(2);
+		}
+
+
 	}
 }
