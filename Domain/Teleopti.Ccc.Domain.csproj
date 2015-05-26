@@ -434,6 +434,7 @@
     <Compile Include="Common\AgentBadgeInfo.cs" />
     <Compile Include="Common\AgentBadge.cs" />
     <Compile Include="Common\Clip.cs" />
+    <Compile Include="Common\ConfigurationManagerExtensions.cs" />
     <Compile Include="Common\GamificationSetting.cs" />
     <Compile Include="Common\AgentBadgeTransaction.cs" />
     <Compile Include="Common\AgentBadgeWithRank.cs" />

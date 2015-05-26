@@ -34,10 +34,7 @@ namespace Teleopti.Ccc.WinCode.Main
 				passwordPolicyService = new LoadPasswordPolicyService(passwordPolicyDocument);
 			}
 
-			//TODO!!!
-			var appSettings =
-				settings.AddToAppSettings(ConfigurationManager.AppSettings.AllKeys.ToDictionary(key => key,
-					key => ConfigurationManager.AppSettings[key]));
+			var appSettings = settings.AddToAppSettings(ConfigurationManager.AppSettings.ToDictionary());
 
 			var sendToServiceBus = string.IsNullOrEmpty(ConfigurationManager.AppSettings["FreemiumForecast"])?(IServiceBusSender) new ServiceBusSender():new EmptyServiceBusSender();
 			var populator = EventContextPopulator.Make();

@@ -74,10 +74,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			var sharedSettingsQuerier = container.Resolve<ISharedSettingsQuerier>();
 
 			var settings=sharedSettingsQuerier.GetSharedSettings();
-			//TODO!!!
-			var appSettings =
-				settings.AddToAppSettings(ConfigurationManager.AppSettings.AllKeys.ToDictionary(key => key,
-					key => ConfigurationManager.AppSettings[key]));
+			var appSettings = settings.AddToAppSettings(ConfigurationManager.AppSettings.ToDictionary());
 
 			var passwordPolicyDocument = XDocument.Parse(settings.PasswordPolicy);
 			var passwordPolicyService = new LoadPasswordPolicyService(passwordPolicyDocument);
