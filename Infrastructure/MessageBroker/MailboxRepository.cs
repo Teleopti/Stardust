@@ -27,8 +27,7 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker
 			_deserializer = deserializer;
 		}
 
-		[MessageBrokerUnitOfWork]
-		public virtual void Persist(Mailbox mailbox)
+		public void Persist(Mailbox mailbox)
 		{
 			var builder = new StringBuilder();
 			IQuery sqlQuery;
@@ -66,7 +65,7 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker
 			var parameters = new List<Pair<Guid, string>>();
 			for (var i = 0; i < notifications.Count(); i++)
 			{
-				sql.Append(string.Format(@"INSERT INTO [msg].[Notification] VALUES (:Id{0}, :Notification{1})" + Environment.NewLine,
+				sql.Append(string.Format(@"INSERT INTO [msg].[Notification] (Parent, Message) VALUES (:Id{0}, :Notification{1})" + Environment.NewLine,
 					i, i));
 				parameters.Add(new Pair<Guid, string>(mailbox.Id, _serializer.SerializeObject(mailbox.Notifications.ElementAt(i))));
 			}
@@ -93,25 +92,19 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker
 
 		private const string selectSql = @"SELECT Mailbox.Id, Mailbox.Route, Notification.Message FROM [msg].[Mailbox] LEFT OUTER JOIN [msg].[Notification] ON Mailbox.Id = Notification.Parent ";
 
-		[MessageBrokerUnitOfWork]
-		public virtual Mailbox Get(Guid id)
+		public Mailbox Get(Guid id)
 		{
 			var result = get(" WHERE Mailbox.Id = :Id", q => q.SetParameter("Id", id));
-			return result == null
-				? null
-				: result.First();
+			return result == null ? null : result.First();
 		}
 
-		[MessageBrokerUnitOfWork]
-		public virtual  IEnumerable<Mailbox> Get(string route)
+		public  IEnumerable<Mailbox> Get(string route)
 		{
 			return get(" WHERE Mailbox.Route = :Route", q => q.SetParameter("Route", route)) ?? Enumerable.Empty<Mailbox>();
 		}
 
-		[MessageBrokerUnitOfWork]
-		public virtual IEnumerable<Mailbox> Get(string[] routes)
+		public IEnumerable<Mailbox> Get(string[] routes)
 		{
-
 			return get(" WHERE Mailbox.Route in (:Routes)", q => q.SetParameterList("Routes", routes)) ?? Enumerable.Empty<Mailbox>();
 		}
 

@@ -28,10 +28,12 @@ namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork.MessageBrokerUnitOfWork
 		private void configure()
 		{
 			if (_sessionFactory != null) return;
-			var configuration = new Configuration();
-			configuration.SetProperty(NHibernate.Cfg.Environment.ConnectionString,
-				_configReader.ConnectionStrings["MessageBroker"].ConnectionString);
-			configuration.SetProperty(NHibernate.Cfg.Environment.Dialect, typeof(MsSql2008Dialect).AssemblyQualifiedName);
+			var configuration = new Configuration()
+				.DataBaseIntegration(db =>
+				{
+					db.ConnectionString = _configReader.ConnectionStrings["MessageBroker"].ConnectionString;
+					db.Dialect<MsSql2008Dialect>();
+				});
 			_sessionFactory = configuration.BuildSessionFactory();
 		}
 

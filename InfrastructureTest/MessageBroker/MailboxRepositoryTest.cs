@@ -232,6 +232,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 
 		private class notificationThing
 		{
+			public Guid Id { get; set; }
 			public Guid Parent { get; set; }
 			public string Message { get; set; }
 		}

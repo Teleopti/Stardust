@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace Teleopti.Ccc.Domain.MessageBroker
@@ -38,22 +39,22 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 	{
 		public Guid Id { get; set; }
 		public string Route { get; set; }
-		public IEnumerable<Interfaces.MessageBroker.Notification> Notifications { get; set; }
+		public ICollection<Interfaces.MessageBroker.Notification> Notifications { get; set; }
 
 		public Mailbox()
 		{
-			Notifications = new Interfaces.MessageBroker.Notification[] { };
+			Notifications = new Collection<Interfaces.MessageBroker.Notification>();
 		}
 
 		public void AddNotification(Interfaces.MessageBroker.Notification notification)
 		{
-			Notifications = Notifications.Concat(new[] { notification });
+			Notifications.Add(notification);
 		}
 
 		public IEnumerable<Interfaces.MessageBroker.Notification> PopAll()
 		{
 			var r = Notifications;
-			Notifications = new Interfaces.MessageBroker.Notification[] { };
+			Notifications = new Collection<Interfaces.MessageBroker.Notification>();
 			return r;
 		}
 	}
