@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker
 			var existingMailbox = Get(mailbox.Id);
 			if (existingMailbox == null)
 			{
-				builder.Append(@"INSERT INTO [dbo].[Mailbox] VALUES (:Id, :Route) " + Environment.NewLine);
+				builder.Append(@"INSERT INTO [msg].[Mailbox] VALUES (:Id, :Route) " + Environment.NewLine);
 
 				var parameters = prepareNotificationSqlAndGetParameterList(mailbox, mailbox.Notifications, builder);
 				sqlQuery = _currentMessageBrokerUnitOfWork.Current()
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker
 			var parameters = new List<Pair<Guid, string>>();
 			for (var i = 0; i < notifications.Count(); i++)
 			{
-				sql.Append(string.Format(@"INSERT INTO [dbo].[Notification] VALUES (:Id{0}, :Notification{1})" + Environment.NewLine,
+				sql.Append(string.Format(@"INSERT INTO [msg].[Notification] VALUES (:Id{0}, :Notification{1})" + Environment.NewLine,
 					i, i));
 				parameters.Add(new Pair<Guid, string>(mailbox.Id, _serializer.SerializeObject(mailbox.Notifications.ElementAt(i))));
 			}
@@ -84,13 +84,13 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker
 
 		private IQuery deleteNotifications(Guid id)
 		{
-			var sql = (@"DELETE FROM [dbo].[Notification] WHERE Parent = :IdToRemove" + Environment.NewLine);
+			var sql = (@"DELETE FROM [msg].[Notification] WHERE Parent = :IdToRemove" + Environment.NewLine);
 			return _currentMessageBrokerUnitOfWork.Current()
 				.CreateSqlQuery(sql)
 				.SetParameter("IdToRemove", id);
 		}
 
-		private const string selectSql = @"SELECT Mailbox.Id, Mailbox.Route, Notification.Message FROM [dbo].[Mailbox] LEFT OUTER JOIN [dbo].[Notification] ON Mailbox.Id = Notification.Parent ";
+		private const string selectSql = @"SELECT Mailbox.Id, Mailbox.Route, Notification.Message FROM [msg].[Mailbox] LEFT OUTER JOIN [msg].[Notification] ON Mailbox.Id = Notification.Parent ";
 
 		[MessageBrokerUnitOfWork]
 		public virtual Mailbox Get(Guid id)

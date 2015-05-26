@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 			Target.Persist(mailbox);
 
 			var result = CurrentMessageBrokerUnitOfWork.Current().CreateSqlQuery(
-				@"SELECT * FROM dbo.Mailbox")
+				@"SELECT * FROM msg.Mailbox")
 				.SetResultTransformer(Transformers.AliasToBean(typeof (mailboxThing)))
 				.List<mailboxThing>()
 				.First();
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 			Target.Persist(mailbox);
 
 			var result = CurrentMessageBrokerUnitOfWork.Current().CreateSqlQuery(
-				string.Format(@"SELECT * FROM dbo.Notification WHERE Parent = '{0}'", mailbox.Id))
+				string.Format(@"SELECT * FROM msg.Notification WHERE Parent = '{0}'", mailbox.Id))
 				.SetResultTransformer(Transformers.AliasToBean(typeof(notificationThing)))
 				.List<notificationThing>()
 				.First();
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 			var harmfulInputFromUser = new Mailbox
 			{
 				Id = Guid.NewGuid(),
-				Route = string.Format("'); DELETE FROM dbo.Mailbox WHERE Id = '{0}' --", id)
+				Route = string.Format("'); DELETE FROM msg.Mailbox WHERE Id = '{0}' --", id)
 			};
 
 			Target.Persist(mailbox1);
@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 			{
 				Id = Guid.NewGuid(),
 				Route = " ",
-				Notifications = new[] { new Notification { BusinessUnitId = string.Format("'); DELETE FROM dbo.Mailbox WHERE dbo.Mailbox.Id = '{0}' ;--", id) }, }
+				Notifications = new[] { new Notification { BusinessUnitId = string.Format("'); DELETE FROM msg.Mailbox WHERE dbo.Mailbox.Id = '{0}' ;--", id) }, }
 			};
 
 
