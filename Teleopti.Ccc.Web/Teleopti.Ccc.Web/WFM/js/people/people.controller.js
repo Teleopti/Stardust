@@ -12,10 +12,10 @@ function outsideClick($window, $parse) {
 	return {
 		restrict: 'A',
 		link: function (scope, element, attrs) {
-			var clickOutHandler = $parse(attrs.outsideClick);
+			var outsideClickHandler = $parse(attrs.outsideClick);
 			angular.element($window).on('click', function (event) {
 				if (element[0].contains(event.target)) return;
-				clickOutHandler(scope, { $event: event });
+				outsideClickHandler(scope, { $event: event });
 				scope.$apply();
 			});
 		}
@@ -154,9 +154,9 @@ function PeopleController($scope, $filter, $state, $document, SearchSvrc) {
 	};
 
 	$scope.showAdvancedSearchOption = false;
-	$scope.toggleAdvancedSearchOption = function (event) {
+	$scope.toggleAdvancedSearchOption = function ($event) {
 		$scope.showAdvancedSearchOption = !$scope.showAdvancedSearchOption;
-		event.stopPropagation();
+		$event.stopPropagation();
 	};
 
 	$scope.turnOffAdvancedSearch = function () {
