@@ -18,8 +18,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			       	{
 			       		Date = dateOnly.ToFixedClientDateOnlyFormat(),
 			       		Display = week.DateString,
-						StartDate = week.StartDate.Date,
-						EndDate = week.EndDate.Date,
 			       		PeriodNavigation =
 			       			new PeriodNavigationViewModel
 			       				{

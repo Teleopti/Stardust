@@ -125,8 +125,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 			CreateMap<StudentAvailabilityDomainData, PeriodSelectionViewModel>()
 				.ForMember(d => d.Date, c => c.MapFrom(s => s.ChoosenDate.ToFixedClientDateOnlyFormat()))
 				.ForMember(d => d.Display, c => c.MapFrom(s => s.Period.DateString))
-				.ForMember(d => d.StartDate, o => o.MapFrom(s => s.Period.StartDate.Date))
-				.ForMember(d => d.EndDate, o => o.MapFrom(s => s.Period.EndDate.Date))
 				.ForMember(d => d.PeriodNavigation, c => c.MapFrom(s => s))
 				.ForMember(d => d.SelectableDateRange, c => c.MapFrom(s => new PeriodDateRangeViewModel
 					{

@@ -111,5 +111,4 @@ $(document).ready(function () {
 
 	    equal(viewModelMonth.weekViewModels()[0].dayViewModels().length, 1);
 	});
-
 });

@@ -12,10 +12,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 		public bool ShowChangePassword { get; set; }
 		public bool HasAsmPermission { get; set; }
 		public bool ShowMeridian { get; set; }
-		public bool UseJalaaliCalendar { get; set; }
-		public string DateFormat { get; set; }
-		public string TimeFormat { get; set; }
-
 		public IEnumerable<BadgeViewModel> Badges { get; set; }
 		public string CurrentLogonAgentName { get; set; }
 
@@ -23,9 +19,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 		/// Indicate if badge should be shown
 		/// </summary>
 		public bool ShowBadge { get; set; }
-
-		public string AMDesignator { get; set; }
-		public string PMDesignator { get; set; }
 	}
 
 	public class NavigationItem

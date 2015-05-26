@@ -14,8 +14,10 @@ Teleopti.MyTimeWeb.Schedule.AbsenceReportViewModel = function AbsenceReportViewM
 	this.StartTime = ko.observable('');
 	this.EndTime = ko.observable('');
 	this.EndTimeNextDay = ko.observable(false);
-	this.DateFormat = ko.observable(Teleopti.MyTimeWeb.Common.DateFormat);
-		
+	this.DateFormat = ko.observable(($('#Request-detail-datepicker-format').val() != undefined
+		&& $('#Request-detail-datepicker-format').val() != null)
+		? $('#Request-detail-datepicker-format').val().toUpperCase() : "");
+
 	this.DateToForDisplay = ko.computed(function () {
 		var date = self.EndTimeNextDay() ? self.DateFrom().clone().add('d', 1) : self.DateFrom().clone();
 		return date.format(self.DateFormat());

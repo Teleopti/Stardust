@@ -17,7 +17,6 @@ if (typeof (Teleopti) === 'undefined') {
 }
 
 Teleopti.MyTimeWeb.Schedule = (function ($) {
-
 	var timeIndicatorDateTime;
 	var scheduleHeight = 668;
 	var timeLineOffset = 110;
@@ -78,10 +77,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 	function _initTimeIndicator() {
 		_startUpTimeIndicator();
-	};
-	function getDateFormat() {
-		return Teleopti.MyTimeWeb.Common.UseJalaaliCalendar ? "DD/MM/YYYY" : Teleopti.MyTimeWeb.Common.DateFormat;
-	};
+	}
 
 	var WeekScheduleViewModel = function (userTexts, addRequestViewModel, navigateToRequestsMethod, defaultDateTimes, undefined) {
 		var self = this;
@@ -170,7 +166,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		function _fillFormData(data) {
 			var requestViewModel = self.requestViewModel().model;
 			requestViewModel.DateFormat(self.datePickerFormat());
-			var requestDay = moment(self.initialRequestDay(), getDateFormat());
+			var requestDay = moment(self.initialRequestDay(),requestViewModel.DateFormat());
 			requestViewModel.DateFrom(requestDay);
 			requestViewModel.DateTo(requestDay);
 			if (requestViewModel.LoadRequestData) {
@@ -191,7 +187,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				return false;
 
 			var momentToday = moment(new Date(new Date().getTeleoptiTime())).startOf('day');
-			var momentInitialRequestDay = moment(self.initialRequestDay(), getDateFormat());
+			var momentInitialRequestDay = moment(self.initialRequestDay(), self.datePickerFormat());
 			var dateDiff = momentInitialRequestDay.diff(momentToday, 'days');
 
 			//Absence report is available only for today and tomorrow.
@@ -315,10 +311,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			self.periodSelection(JSON.stringify(data.PeriodSelection));
 			self.asmPermission(data.AsmPermission);
 			self.isCurrentWeek(data.IsCurrentWeek);
-			self.displayDate(Teleopti.MyTimeWeb.Common.FormatDatePeriod(
-				moment(data.PeriodSelection.StartDate),
-				moment(data.PeriodSelection.EndDate)));
-
+			self.displayDate(data.PeriodSelection.Display);
 			self.setCurrentDate(moment(data.PeriodSelection.Date));
 			self.nextWeekDate(moment(data.PeriodSelection.PeriodNavigation.NextPeriod));
 			self.previousWeekDate(moment(data.PeriodSelection.PeriodNavigation.PrevPeriod));
@@ -349,37 +342,12 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		var self = this;
 
 		self.fixedDate = ko.observable(day.FixedDate);
-		
+		self.dayOfWeek = ko.observable(day.DayOfWeekNumber);
 		self.date = ko.observable(day.Date);
 		self.state = ko.observable(day.State);
-
 		self.headerTitle = ko.observable(day.Header.Title);
-		
-		
-		var dayDescription = "";
-		var dayNumberDisplay = "";
-		
-		var dayDate = moment(day.FixedDate, Teleopti.MyTimeWeb.Common.ServiceDateFormat);
-
-		if (Teleopti.MyTimeWeb.Common.UseJalaaliCalendar) {
-
-			self.dayOfWeek = ko.observable(dayDate.weekday());
-			dayNumberDisplay = dayDate.jDate();
-			
-			if (dayNumberDisplay == 1 || self.dayOfWeek() == 0) {
-				dayDescription = dayDate.format("jMMMM");
-			}
-		} else {
-			self.dayOfWeek = ko.observable(day.DayOfWeekNumber);
-			dayNumberDisplay = dayDate.date();
-			if (dayNumberDisplay == 1 || self.dayOfWeek() == 1) {
-				dayDescription = dayDate.format("MMMM");
-			}
-		}
-		
-		self.headerDayDescription = ko.observable(dayDescription);
-		self.headerDayNumber = ko.observable(dayNumberDisplay);
-		
+		self.headerDayDescription = ko.observable(day.Header.DayDescription);
+		self.headerDayNumber = ko.observable(day.Header.DayNumber);
 		self.textRequestPermission = ko.observable(parent.textPermission());
 		self.requestPermission = ko.observable(parent.requestPermission());
 
@@ -628,9 +596,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 		if (element) {
 			var timeLineViewModel = ko.dataFor(element);
-			if (timeLineViewModel) {
-				return timeLineViewModel.minutes();
-			}
+			return timeLineViewModel.minutes();
 		}
 		return null;
 	}

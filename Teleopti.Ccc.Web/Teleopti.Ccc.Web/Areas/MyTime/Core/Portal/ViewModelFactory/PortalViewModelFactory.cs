@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 		private readonly IBadgeSettingProvider _badgeSettingProvider;
 		private readonly IPersonNameProvider _personNameProvider;
 		private readonly ITeamGamificationSettingRepository _teamGamificationSettingRepo;
-		private readonly IUserCulture _userCulture;
 
 		public PortalViewModelFactory(IPermissionProvider permissionProvider,
 			ILicenseActivatorProvider licenseActivatorProviderProvider,
@@ -38,7 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			IReportsNavigationProvider reportsNavigationProvider,
 			IBadgeProvider badgeProvider, IBadgeSettingProvider badgeSettingProvider,
 			IToggleManager toggleManager, IPersonNameProvider personNameProvider,
-			ITeamGamificationSettingRepository teamGamificationSettingReop, IUserCulture userCulture)
+			ITeamGamificationSettingRepository teamGamificationSettingReop)
 		{
 			_permissionProvider = permissionProvider;
 			_licenseActivatorProvider = licenseActivatorProviderProvider;
@@ -50,7 +49,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			_personNameProvider = personNameProvider;
 			_badgeSettingProvider = badgeSettingProvider;
 			_teamGamificationSettingRepo = teamGamificationSettingReop;
-			_userCulture = userCulture;
 		}
 
 		public PortalViewModel CreatePortalViewModel()
@@ -110,8 +108,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 				badgeFeatureEnabled = badgeSettings.BadgeEnabled;
 			}
 			
+
 			var showBadge = badgeToggleEnabled && badgeFeatureEnabled && hasBadgePermission;
-			var culture = _userCulture == null ? CultureInfo.InvariantCulture : _userCulture.GetCulture();
 
 			return new PortalViewModel
 			{
@@ -123,11 +121,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 				HasAsmPermission =
 					_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger),
 				ShowMeridian = CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern.Contains("t"),
-				UseJalaaliCalendar = CultureInfo.CurrentCulture.IetfLanguageTag == "fa-IR",
-				DateFormat = culture.DateTimeFormat.ShortDatePattern.ToUpper(),
-				TimeFormat = culture.DateTimeFormat.ShortTimePattern,
-				AMDesignator = culture.DateTimeFormat.AMDesignator,
-				PMDesignator = culture.DateTimeFormat.PMDesignator,
+				
 				Badges = showBadge ? _badgeProvider.GetBadges() : null,
 				
 				ShowBadge = showBadge

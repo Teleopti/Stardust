@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using Teleopti.Ccc.Infrastructure.Foundation;
+﻿using Teleopti.Ccc.Infrastructure.Foundation;
 
 namespace Teleopti.Ccc.Web.Core.RequestContext.Initialize
 {
@@ -19,20 +18,13 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Initialize
 			_currentPrincipalContext = currentPrincipalContext;
 		}
 
-		public void SetupPrincipalAndCulture(bool forceUseGregorianCalendar)
+		public void SetupPrincipalAndCulture()
 		{
 			var teleoptiPrincipal = _sessionPrincipalFactory.Generate();
 			if (teleoptiPrincipal == null) return;
-			
+
 			_currentPrincipalContext.SetCurrentPrincipal(teleoptiPrincipal);
-			
-			teleoptiPrincipal.Regional.ForceUseGregorianCalendar = forceUseGregorianCalendar;
-
 			_setThreadCulture.SetCulture(teleoptiPrincipal.Regional);
-		
-
 		}
-		
-		
 	}
 }

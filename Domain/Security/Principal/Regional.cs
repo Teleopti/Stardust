@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.Principal
@@ -10,33 +11,9 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		public int CultureLCID { get; set; }
 		public int UICultureLCID { get; set; }
 
-		public bool ForceUseGregorianCalendar { get; set; }
-		
-		public CultureInfo Culture
-		{
-			get
-			{
-				if (!ForceUseGregorianCalendar)
-				{
-					return (CultureLCID == 0 ? CultureInfo.CurrentCulture : CultureInfo.GetCultureInfo(CultureLCID)).FixPersianCulture(); 
-				}
+		public CultureInfo Culture { get { return (CultureLCID == 0 ? CultureInfo.CurrentCulture : CultureInfo.GetCultureInfo(CultureLCID)).FixPersianCulture(); } }
+		public CultureInfo UICulture { get { return (UICultureLCID == 0 ? CultureInfo.CurrentUICulture : CultureInfo.GetCultureInfo(UICultureLCID)).FixPersianCulture(); } }
 
-				return (CultureLCID == 0 ? CultureInfo.CurrentCulture : CultureInfo.GetCultureInfo (CultureLCID));
-			}
-		}
-
-		public CultureInfo UICulture
-		{
-			get
-			{
-				if (!ForceUseGregorianCalendar)
-				{
-					return (UICultureLCID == 0 ? CultureInfo.CurrentUICulture : CultureInfo.GetCultureInfo(UICultureLCID)).FixPersianCulture();
-				}
-				return (UICultureLCID == 0 ? CultureInfo.CurrentUICulture : CultureInfo.GetCultureInfo(UICultureLCID));
-			}
-		}
-		
 		public TimeZoneInfo TimeZone { get; set; }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]

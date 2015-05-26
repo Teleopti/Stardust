@@ -33,11 +33,9 @@ Teleopti.MyTimeWeb.Schedule.Month = (function ($) {
 	            vm.readData(data);
 
 	            vm.selectedDate.subscribe(function () {
-		            if (vm != null) {
-			            var date = vm.selectedDate();
-			            date.startOf('month');
-			            Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Month" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(date.format('YYYY-MM-DD')));
-		            }
+	                var date = vm.selectedDate();
+	                date.startOf('month');
+	                Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Month" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(date.format('YYYY-MM-DD')));
 	            });
 	            
 	            completelyLoaded();

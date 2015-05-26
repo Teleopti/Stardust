@@ -436,12 +436,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.DoNotUse
 			DataMaker.Person(userName).Apply(new HawaiiTimeZone());
 		}
 
-		[Given(@"I am iranian")]
-		public void GivenIAmIranian()
-		{
-			DataMaker.Data().Apply(new IranianCulture());
-		}
-
 		[Given(@"'?(I)'? am located in [iI]stanbul")]
 		[Given(@"'?(.*)'? is located in [iI]stanbul")]
 		public void GivenIAmLocatedInIstanbul(string userName)

@@ -34,20 +34,11 @@ $(document).ready(function () {
 		equal(viewModel.openPeriodEndDate().format("YYYY-MM-DD"), "1995-12-27");
 	});
 
-	test("should get date with format", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) { return true; };
-		Teleopti.MyTimeWeb.Common.SetupCalendar({
-			UseJalaaliCalendar: false,
-			DateFormat: 'YYYY-MM-DD',
-			TimeFormat: 'HH:mm tt',
-			AMDesignator: 'AM',
-			PMDesignator: 'PM'
-		});
-
+	test("should get date with format", function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
 		viewModel.requestedDateInternal(moment("Dec 25, 1995"));
 
-		var result = viewModel.getFormattedDateForDisplay();
+		var result = viewModel.getDateWithFormat();
 
 		equal(result, "1995-12-25");
 	});

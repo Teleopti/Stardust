@@ -20,7 +20,7 @@ Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel = function OvertimeAva
 	});
 
 	this.ShowMeridian = ($('div[data-culture-show-meridian]').attr('data-culture-show-meridian') == 'true');
-	this.DateFormat = ko.observable(Teleopti.MyTimeWeb.Common.DateFormat);
+	this.DateFormat = ko.observable($('#Request-detail-datepicker-format').val().toUpperCase());
 
 	this.ErrorMessage = ko.observable('');
 	

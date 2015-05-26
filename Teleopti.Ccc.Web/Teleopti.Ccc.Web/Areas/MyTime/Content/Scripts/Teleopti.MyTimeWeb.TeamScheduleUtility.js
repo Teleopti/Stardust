@@ -3,8 +3,7 @@ Teleopti.MyTimeWeb.DayScheduleMixin = function() {
 
 	self.openPeriodStartDate = ko.observable();
 	self.openPeriodEndDate = ko.observable();
-	self.DatePickerFormat = ko.observable(Teleopti.MyTimeWeb.Common.DateFormat);
-	
+	self.DatePickerFormat = ko.observable("YYYY-MM-DD");
 	self.weekStart = ko.observable(1);
 
 	var changeHandler = null;
@@ -35,13 +34,14 @@ Teleopti.MyTimeWeb.DayScheduleMixin = function() {
 	});
 
 	self.requestedDateInternal = ko.observable();
-	self.requestedDate.subscribe(function (newValue) {
-		self.requestedDateInternal(Teleopti.MyTimeWeb.Common.FormatServiceDate(newValue));
+	self.requestedDate.subscribe(function(newValue) {
+		self.requestedDateInternal(newValue.format("YYYY-MM-DD"));
 	});
-	
+
+
 	self.requestedDateInternal.subscribe(function (newValue) {
 		if (changeHandler != null && !changeHandlerSuspended) {
-			changeHandler(Teleopti.MyTimeWeb.Common.FormatServiceDate(self.requestedDateInternal()));
+			changeHandler(self.requestedDateWithFormat());
 		}
 	});
 	

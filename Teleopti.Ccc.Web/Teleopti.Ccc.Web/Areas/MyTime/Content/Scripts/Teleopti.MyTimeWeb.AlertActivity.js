@@ -142,13 +142,12 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 		};
 
 		self.loadViewModel = function (date, callback) {
-			
 			ajax.Ajax({
 				url: 'Asm/Today',
 				dataType: "json",
 				type: 'GET',
 				//pass as string to make sure no time included due to time zone stuff
-				data: { asmZeroLocal: Teleopti.MyTimeWeb.Common.FormatServiceDate(date) },
+				data: { asmZeroLocal: moment(date).format('YYYY-MM-DD') },
 				success: callback
 			});
 		};

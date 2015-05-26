@@ -144,8 +144,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 			CreateMap<TeamScheduleDomainData, PeriodSelectionViewModel>()
 				.ForMember(d => d.Date, o => o.MapFrom(s => s.Date.ToFixedClientDateOnlyFormat()))
 				.ForMember(d => d.Display, o => o.MapFrom(s => s.Date.ToShortDateString()))
-				.ForMember(d => d.StartDate, o => o.MapFrom(s => s.DisplayTimePeriod.StartDateTime.Date))
-				.ForMember(d => d.EndDate, o => o.MapFrom(s => s.DisplayTimePeriod.EndDateTime.Date))
 				.ForMember(d => d.SelectableDateRange, o => o.MapFrom(s => new DateOnlyPeriod(new DateOnly(CultureInfo.CurrentCulture.Calendar.MinSupportedDateTime), new DateOnly(CultureInfo.CurrentCulture.Calendar.MaxSupportedDateTime))))
 				.ForMember(d => d.SelectedDateRange, o => o.MapFrom(s => new DateOnlyPeriod(s.Date, s.Date)))
 				.ForMember(d => d.PeriodNavigation, o => o.MapFrom(s => s))

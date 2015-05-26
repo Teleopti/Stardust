@@ -76,9 +76,9 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
 		self.Subject(data.Subject);
 		self.Message(data.Text);
 		self.DateFrom(moment(new Date(data.DateFromYear, data.DateFromMonth - 1, data.DateFromDayOfMonth)));
-		self.TimeFrom(Teleopti.MyTimeWeb.Common.FormatTime(data.DateTimeFrom));
+		self.TimeFrom(data.RawTimeFrom);
 		self.DateTo(moment(new Date(data.DateToYear, data.DateToMonth - 1, data.DateToDayOfMonth)));
-		self.TimeTo(Teleopti.MyTimeWeb.Common.FormatTime(data.DateTimeTo));
+		self.TimeTo(data.RawTimeTo);
 		self.EntityId(data.Id);
 		self.AbsenceId(data.PayloadId);
 		self.DenyReason(data.DenyReason);

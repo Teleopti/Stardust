@@ -49,13 +49,12 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		self.intervalPointer = null;
 
 		self.loadViewModel = function () {
-
 			ajax.Ajax({
 				url: 'Asm/Today',
 				dataType: "json",
 				type: 'GET',
 				//pass as string to make sure no time included due to time zone stuff
-				data: { asmZeroLocal: Teleopti.MyTimeWeb.Common.FormatServiceDate(self.yesterday())},
+				data: { asmZeroLocal: moment(self.yesterday()).format('YYYY-MM-DD') },
 				success: function (data) {
 					self.hours(data.Hours);
 					self._createLayers(data.Layers);

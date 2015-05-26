@@ -24,26 +24,4 @@ $(document).ready(function() {
 		viewModel.SaveShiftExchangeOffer();
 		equal(ajaxPostData.WishShiftType, option2.Id);
 	});
-
-
-	test("when using persian display should validate time appropriately", function() {
-		
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) { return true; };
-		Teleopti.MyTimeWeb.Common.SetupCalendar({
-			UseJalaaliCalendar: true,
-			DateFormat: 'YYYY/MM/DD',
-			TimeFormat: 'HH:mm tt',
-			AMDesignator: 'ق.ظ',
-			PMDesignator: 'ب.ظ'
-		});
-
-		var shiftExchangeOfferViewModel = new Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel();
-		shiftExchangeOfferViewModel.StartTime("08:00 ق.ظ");
-		shiftExchangeOfferViewModel.EndTime("05:00 ب.ظ");
-
-		equal(shiftExchangeOfferViewModel.IsTimeLegal(), true);
-
-
-
-	});
 });

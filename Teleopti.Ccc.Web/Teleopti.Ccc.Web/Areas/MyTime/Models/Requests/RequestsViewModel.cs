@@ -24,16 +24,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 		public RequestType TypeEnum;
 		public string Dates;
 		public string UpdatedOn;
-
-		public DateTime DateTimeFrom;
-		public DateTime DateTimeTo;
-		public DateTime? UpdatedOnDateTime;
-
 		public string Status;
 		public string Payload;
 		public string PayloadId;
 		public bool IsCreatedByUser;
-		
+		public string RawTimeFrom;
+		public string RawTimeTo;
 		public bool IsFullDay;
 		public string DenyReason;
 		public string From;

@@ -341,8 +341,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
 
-			result.DateTimeFrom.Should().Be.EqualTo(startInCorrectTimezone);
-			result.DateTimeTo.Should().Be.EqualTo(endInCorrectTimezone);
+			result.RawTimeFrom.Should().Be.EqualTo(startInCorrectTimezone.ToShortTimeString());
+			result.RawTimeTo.Should().Be.EqualTo(endInCorrectTimezone.ToShortTimeString());
 		}
 
 		[Test, SetCulture("ar-SA")]

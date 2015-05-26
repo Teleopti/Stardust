@@ -1204,9 +1204,6 @@
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\view.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\vm.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\vm_test.js" />
-    <Content Include="Areas\MyTime\Content\Scripts\moment.timepicker.ext.js" />
-    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Common.Tests.js" />
-    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.List.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.TeamScheduleUtility.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.TeamScheduleViewModel.js" />
     <Content Include="Areas\Reporting\images\icon-show.png" />
@@ -1219,8 +1216,6 @@
     <Content Include="Areas\Reporting\Index.aspx" />
     <Content Include="Areas\Reporting\Views\Report\NoPermission.cshtml" />
     <Content Include="WFM\js\global\help.controller.js" />
-    <Content Include="Content\jalaali-calendar-datepicker\moment-datepicker-jalaali-ext.js" />
-    <Content Include="Content\jalaali-calendar-datepicker\moment-jalaali.js" />
     <Content Include="WFM\js\outbound\outbound.directive.js" />
     <None Include="WFM\css\_forecasting.scss" />
     <Content Include="WFM\js\permissions\permissions.filters.js" />

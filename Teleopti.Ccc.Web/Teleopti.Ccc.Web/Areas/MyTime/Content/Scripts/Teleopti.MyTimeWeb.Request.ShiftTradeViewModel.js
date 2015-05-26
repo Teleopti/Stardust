@@ -8,7 +8,7 @@
 /// <reference path="Teleopti.MyTimeWeb.Request.List.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.js"/>
 
-Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
+Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 	var self = this;
 	self.layerCanvasPixelWidth = ko.observable();
 	self.weekStart = ko.observable(1);
@@ -29,7 +29,9 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 	self.myTeamFilter = ko.observable(false);
 	self.timeLineStartTime = ko.observable();
 	self.timeLineLengthInMinutes = ko.observable();
-	self.DatePickerFormat = ko.observable(Teleopti.MyTimeWeb.Common.DateFormat);
+	self.DatePickerFormat = ko.observable();
+	var datePickerFormat = $('#Request-detail-datepicker-format').val() ? $('#Request-detail-datepicker-format').val().toUpperCase() : "YYYY-MM-DD";
+	self.DatePickerFormat(datePickerFormat);
 	self.availableTeams = ko.observableArray();
 	self.selectedTeamInternal = ko.observable();
 	self.missingMyTeam = ko.observable();
@@ -50,7 +52,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 	self.searchNameText = ko.observable();
 	self.refocusToNameSearch = null;
 
-	self.isDetailVisible = ko.computed(function () {
+	self.isDetailVisible = ko.computed(function() {
 		if (self.agentChoosed() === null) {
 			return false;
 		}
@@ -60,13 +62,13 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 	self.changeInSearchBox = function (data, event) {
 		var $target = $(event.target);
 		self.refocusToNameSearch = function () { $target.focus(); };
-		self.loadSchedule(self.getFormattedDateForServiceCall(), self.selectedTeam());
+		self.loadSchedule(self.getDateWithFormat(), self.selectedTeam());
 	};
 
 
 	self.subject = ko.observable();
 	self.message = ko.observable();
-
+	
 	self.checkMessageLength = function (data, event) {
 		var text = $(event.target)[0].value;
 		if (text.length > 2000) {
@@ -75,17 +77,13 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 	};
 
 
-	self.getFormattedDateForDisplay = function () {
+	self.getDateWithFormat = function () {
 		return self.requestedDateInternal().format(self.DatePickerFormat());
 	};
 
-	self.getFormattedDateForServiceCall = function () {
-		return Teleopti.MyTimeWeb.Common.FormatServiceDate(self.requestedDateInternal());
-	};
-
-	self.sortByDate = function () {
+	self.sortByDate = function() {
 		if (self.chooseHistorys().length > 1) {
-			self.chooseHistorys.sort(function (a, b) {
+			self.chooseHistorys.sort(function(a, b) {
 				return a.selectedDate() > b.selectedDate();
 			});
 		}
@@ -95,21 +93,21 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 	self.isFilterByTimeEnabled = ko.observable(false);
 	self.isTeamScheduleSorttingFeatureEnabled = ko.observable(false);
 	self.chooseHistorys = ko.observableArray();
-	self.requestedDates = ko.computed(function () {
+	self.requestedDates = ko.computed(function() {
 		var dates = [];
 
 		if (self.isTradeForMultiDaysEnabled()) {
-			$.each(self.chooseHistorys(), function (index, chooseHistoryViewModel) {
+			$.each(self.chooseHistorys(), function(index, chooseHistoryViewModel) {
 				dates.push(chooseHistoryViewModel.selectedDateInFormat());
 			});
 		} else {
-			dates.push(self.getFormattedDateForServiceCall());
+			dates.push(self.getDateWithFormat());
 		}
 
 		return dates;
 	});
 	self.selectedInternal = ko.observable(false);
-	self.add = function () {
+	self.add = function() {
 		var currentTrade = {
 			date: self.requestedDate(),
 			hours: self.hours(),
@@ -121,7 +119,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 		if (self.selectedInternal()) {
 			return;
 		}
-		$.each(self.possibleTradeSchedules(), function (index, schedule) {
+		$.each(self.possibleTradeSchedules(), function(index, schedule) {
 			if (self.agentChoosed().agentName == schedule.agentName) {
 				if (self.mySchedule().isDayOff && !schedule.isDayOff) {
 					scheduleStartTime = schedule.scheduleStartTime();
@@ -142,7 +140,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 					}
 				}
 
-				var mappedLayers = ko.utils.arrayMap(schedule.layers, function (layer) {
+				var mappedLayers = ko.utils.arrayMap(schedule.layers, function(layer) {
 					var minutesSinceTimeLineStart = moment(layer.startTime).diff(scheduleStartTime, 'minutes');
 					return new Teleopti.MyTimeWeb.Request.CloneLayerAddShiftTradeViewModel(layer, minutesSinceTimeLineStart);
 				});
@@ -153,7 +151,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 
 		var mappedlayers = [];
 		if (self.mySchedule() != null) {
-			mappedlayers = ko.utils.arrayMap(self.mySchedule().layers, function (layer) {
+			mappedlayers = ko.utils.arrayMap(self.mySchedule().layers, function(layer) {
 				var minutesSinceTimeLineStart = moment(layer.startTime).diff(scheduleStartTime, 'minutes');
 				return new Teleopti.MyTimeWeb.Request.CloneLayerAddShiftTradeViewModel(layer, minutesSinceTimeLineStart);
 			});
@@ -168,18 +166,18 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 		self.isSendEnabled(true);
 	};
 
-	self.remove = function (chooseHistoryViewModel) {
+	self.remove = function(chooseHistoryViewModel) {
 		var date = chooseHistoryViewModel.selectedDate;
-		var dayToDelete = $.grep(self.chooseHistorys(), function (e) { return e.selectedDate == date; })[0];
+		var dayToDelete = $.grep(self.chooseHistorys(), function(e) { return e.selectedDate == date; })[0];
 		self.chooseHistorys.remove(dayToDelete);
 
-		if (chooseHistoryViewModel.selectedDateInFormat() == self.getFormattedDateForDisplay()) {
+		if (chooseHistoryViewModel.selectedDateInFormat() == self.getDateWithFormat()) {
 			self.selectedInternal(false);
 		}
 		if (self.chooseHistorys().length < 1) self.isSendEnabled(false);
 	};
 
-	self.isAddVisible = ko.computed(function () {
+	self.isAddVisible = ko.computed(function() {
 		var addVisible = false;
 		if (self.isDetailVisible() && !self.selectedInternal()) {
 			addVisible = true;
@@ -187,15 +185,15 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 		return addVisible;
 	});
 
-	self.filterStartEndTimeClick = function () {
-		$('.dropdown-menu').on('click', function (e) {
+	self.filterStartEndTimeClick = function() {
+		$('.dropdown-menu').on('click', function(e) {
 			if ($(this).hasClass('filter-time-dropdown-form')) {
 				e.stopPropagation();
 			}
 		});
 	};
 
-	self.isShowList = ko.computed(function () {
+	self.isShowList = ko.computed(function() {
 		var showList = false;
 		if (self.isDetailVisible() && self.chooseHistorys().length > 0) {
 			showList = true;
@@ -203,26 +201,26 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 		return showList;
 	});
 
-	self.tradeCartHeight = ko.computed(function () {
+	self.tradeCartHeight = ko.computed(function() {
 		var oneCandidateDayHeight = 110;
 		return oneCandidateDayHeight * self.chooseHistorys().length + 'px';
 	});
 
-	self.setTimeLineLengthInMinutes = function (firstHour, mins) {
+	self.setTimeLineLengthInMinutes = function(firstHour, mins) {
 		self.timeLineStartTime(firstHour);
 		self.timeLineLengthInMinutes(mins);
 	};
-	self.pixelPerMinute = ko.computed(function () {
+	self.pixelPerMinute = ko.computed(function() {
 		return self.layerCanvasPixelWidth() / self.timeLineLengthInMinutes();
 	});
 
-	self._createMySchedule = function (myScheduleObject) {
+	self._createMySchedule = function(myScheduleObject) {
 		var mappedlayers = [];
 		if (myScheduleObject != null && myScheduleObject.ScheduleLayers != null) {
 			var layers = myScheduleObject.ScheduleLayers;
 			var scheduleStartTime = moment(layers[0].Start);
 			var scheduleEndTime = moment(layers[layers.length - 1].End);
-			mappedlayers = ko.utils.arrayMap(layers, function (layer) {
+			mappedlayers = ko.utils.arrayMap(layers, function(layer) {
 				var minutesSinceTimeLineStart = moment(layer.Start).diff(self.timeLineStartTime(), 'minutes');
 				return new Teleopti.MyTimeWeb.Request.LayerAddShiftTradeViewModel(layer, minutesSinceTimeLineStart, self.pixelPerMinute());
 			});
@@ -232,7 +230,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 		}
 	};
 
-	self._createPossibleTradeSchedules = function (possibleTradeSchedules) {
+	self._createPossibleTradeSchedules = function(possibleTradeSchedules) {
 		self.possibleTradeSchedules.removeAll();
 		var mappedPersonsSchedule = ko.utils.arrayMap(possibleTradeSchedules, function (personSchedule) {
 			var mappedLayers = [];
@@ -241,7 +239,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 				var scheduleStartTime = moment(layers[0].Start);
 				var scheduleEndTime = moment(layers[layers.length - 1].End);
 
-				mappedLayers = ko.utils.arrayMap(personSchedule.ScheduleLayers, function (layer) {
+				mappedLayers = ko.utils.arrayMap(personSchedule.ScheduleLayers, function(layer) {
 					var minutesSinceTimeLineStart = moment(layer.Start).diff(self.timeLineStartTime(), 'minutes');
 					return new Teleopti.MyTimeWeb.Request.LayerAddShiftTradeViewModel(layer, minutesSinceTimeLineStart, self.pixelPerMinute());
 				});
@@ -254,7 +252,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 		self.noPossibleShiftTrades(mappedPersonsSchedule.length == 0 ? true : false);
 	};
 
-	self.setSendEnableStatus = function () {
+	self.setSendEnableStatus = function() {
 		if (self.isTradeForMultiDaysEnabled() && self.chooseHistorys().length < 1) {
 			self.isSendEnabled(false);
 		} else {
@@ -262,10 +260,10 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 		}
 	};
 
-	self.cleanTimeFiler = function () {
+	self.cleanTimeFiler = function() {
 		self.filteredStartTimesText.removeAll();
 		self.filteredEndTimesText.removeAll();
-
+		
 		$.each(self.filterStartTimeList(), function (idx, filter) {
 			if (filter.isChecked()) filter.isChecked(false);
 		});
@@ -281,8 +279,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 		$.each(self.filterStartTimeList(), function (index, item) { item.isChecked(value); });
 		self.IsLoading(false);
 		self.prepareLoad();
-
-		self.loadSchedule(self.getFormattedDateForServiceCall(), self.selectedTeamInternal());
+		self.loadSchedule(self.getDateWithFormat(), self.selectedTeamInternal());
 	});
 
 	self.setAllEndTimeFilter = ko.observable(false);
@@ -291,13 +288,12 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 		$.each(self.filterEndTimeList(), function (index, item) { item.isChecked(value); });
 		self.IsLoading(false);
 		self.prepareLoad();
-		
-		self.loadSchedule(self.getFormattedDateForServiceCall(), self.selectedTeamInternal());
+		self.loadSchedule(self.getDateWithFormat(), self.selectedTeamInternal());
 	});
 
-	self.chooseAgent = function (agent) {
+	self.chooseAgent = function(agent) {
 		//hide or show all agents
-		$.each(self.possibleTradeSchedules(), function (index, value) {
+		$.each(self.possibleTradeSchedules(), function(index, value) {
 			value.isVisible(agent == null);
 		});
 		if (agent != null) {
@@ -320,11 +316,11 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 		}
 	};
 
-	self.hideShiftTradeWindow = function () {
+	self.hideShiftTradeWindow = function() {
 		$('#Request-add-shift-trade').hide();
 	};
 
-	self.saveNewShiftTrade = function () {
+	self.saveNewShiftTrade = function() {
 		ajax.Ajax({
 			url: "Requests/ShiftTradeRequest",
 			dataType: "json",
@@ -336,13 +332,13 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 				Message: self.message(),
 				PersonToId: self.agentChoosed().personId
 			}),
-			success: function (data) {
+			success: function(data) {
 				self.agentChoosed(null);
 				self.setSendEnableStatus();
 				self.hideShiftTradeWindow();
 				Teleopti.MyTimeWeb.Request.List.AddItemAtTop(data);
 			},
-			error: function (jqXHR, textStatus, errorThrown) {
+			error: function(jqXHR, textStatus, errorThrown) {
 				if (jqXHR.status == 400) {
 					var data = $.parseJSON(jqXHR.responseText);
 					self.errorMessage(data.Errors.join('</br>'));
@@ -354,7 +350,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 		});
 	};
 
-	self.sendRequest = function () {
+	self.sendRequest = function() {
 		self.isSendEnabled(false);
 		self.saveNewShiftTrade();
 		self.chooseAgent(null);
@@ -362,7 +358,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 		self.goToFirstPage();
 	};
 
-	self.cancelRequest = function () {
+	self.cancelRequest = function() {
 		self.chooseAgent(null);
 		self.chooseHistorys.removeAll();
 		self.selectedInternal(false);
@@ -375,7 +371,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 		self.goToFirstPage();
 	};
 
-	self._createTimeLine = function (hours) {
+	self._createTimeLine = function(hours) {
 		var firstTimeLineHour = moment(hours[0].StartTime);
 		//modify for daylight save close day
 		var mins = hours[0].LengthInMinutesToDisplay + (hours.length - 1) * 60;
@@ -398,27 +394,27 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 	};
 
 	self.requestedDate = ko.computed({
-		read: function () {
+		read: function() {
 			return self.requestedDateInternal();
 		},
-		write: function (value) {
+		write: function(value) {
 			if (self.requestedDateInternal().diff(value) == 0) return;
 			self.prepareLoad();
 			self.requestedDateInternal(value);
 
-			self.loadMyTeamId(self.getFormattedDateForServiceCall());
+			self.loadMyTeamId(self.getDateWithFormat());
 		}
 	});
 
-	self.isFiltered = function () {
+	self.isFiltered = function() {
 		if (self.filteredStartTimesText().length == 0 && self.filteredEndTimesText().length == 0 && !self.isDayoffFiltered()) {
 			return false;
 		}
 		return true;
 	};
 
-
-	self.getAllTeamIds = function () {
+	
+	self.getAllTeamIds = function() {
 		var allTeamIds = [];
 
 		for (var i = 0; i < self.availableTeams().length; ++i) {
@@ -432,15 +428,15 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 		return allTeamIds;
 	};
 
-	self.loadSchedule = function (date, selectedTeamOption) {
+	self.loadSchedule = function(date, selectedTeamOption) {
 
 		if (selectedTeamOption == undefined) return;
 		if (self.IsLoading()) return;
 
-		var teamIds = (selectedTeamOption == "allTeams") ? self.getAllTeamIds() : [selectedTeamOption];
+		var teamIds = (selectedTeamOption == "allTeams" )? self.getAllTeamIds() : [selectedTeamOption];
 		var take = self.maxShiftsPerPage;
 		var skip = (self.selectedPageIndex() - 1) * take;
-
+		
 		ajax.Ajax({
 			url: "Requests/ShiftTradeRequestSchedule",
 			dataType: "json",
@@ -457,10 +453,10 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 				Skip: skip,
 				TimeSortOrder: self.TimeSortOrder()
 			}),
-			beforeSend: function () {
-				self.IsLoading(true);
+			beforeSend: function() {
+				self.IsLoading(true);		
 			},
-			success: function (data, textStatus, jqXHR) {
+			success: function(data, textStatus, jqXHR) {
 				self.setPagingInfo(data.PageCount);
 				self._createTimeLine(data.TimeLineHours);
 				self._createMySchedule(data.MySchedule);
@@ -470,10 +466,10 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 				// Redraw layers after data loaded
 				self.redrawLayers();
 			},
-			error: function (e) {
+			error: function(e) {
 				//console.log(e);
 			},
-			complete: function () {
+			complete: function() {
 				self.IsLoading(false);
 				self.isReadyLoaded(true);
 				if (self.refocusToNameSearch != null) {
@@ -486,7 +482,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 	};
 
 	self.selectedTeam = ko.computed({
-		read: function () {
+		read: function() {
 			return self.selectedTeamInternal();
 		},
 		write: function (teamId) {
@@ -497,19 +493,19 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 			self.selectedTeamInternal(teamId);
 			if (teamId == null) return;
 			self.prepareLoad();
-			self.loadSchedule(self.getFormattedDateForServiceCall(), teamId);
+			self.loadSchedule(self.getDateWithFormat(), teamId);
 		}
 	});
 
-	self.nextDateValid = ko.computed(function () {
+	self.nextDateValid = ko.computed(function() {
 		return self.openPeriodEndDate().diff(self.requestedDateInternal()) > 0;
 	});
 
-	self.previousDateValid = ko.computed(function () {
+	self.previousDateValid = ko.computed(function() {
 		return self.requestedDateInternal().diff(self.openPeriodStartDate()) > 0;
 	});
 
-	self.prepareLoad = function () {
+	self.prepareLoad = function() {
 		self.possibleTradeSchedulesRaw = [];
 		self.selectedPageIndex(1);
 		//self.selectablePages.removeAll();
@@ -522,7 +518,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 		self.IsLoading(false);
 	};
 
-	self.isRequestedDateValid = function (date) {
+	self.isRequestedDateValid = function(date) {
 		if (date.diff(self.openPeriodStartDate()) < 0) {
 			return false;
 		} else if (self.openPeriodEndDate().diff(date) < 0) {
@@ -531,16 +527,16 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 		return true;
 	};
 
-	self.keepSelectedAgentVisible = function () {
+	self.keepSelectedAgentVisible = function() {
 		if (self.agentChoosed() != null && self.possibleTradeSchedules() != null) {
-			$.each(self.possibleTradeSchedules(), function (index, value) {
+			$.each(self.possibleTradeSchedules(), function(index, value) {
 				value.isVisible(value.agentName == self.agentChoosed().agentName);
 			});
 		}
 
 		var isAddAvaiable = false;
-		$.each(self.chooseHistorys(), function (index, chooseHistoryViewModel) {
-			if (self.getFormattedDateForDisplay() == chooseHistoryViewModel.selectedDateInFormat()) {
+		$.each(self.chooseHistorys(), function(index, chooseHistoryViewModel) {
+			if (self.getDateWithFormat() == chooseHistoryViewModel.selectedDateInFormat()) {
 				isAddAvaiable = true;
 				return false;
 			}
@@ -551,12 +547,12 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 	self.goToFirstPage = function () {
 		self.initSelectablePages(self.pageCount());
 	};
-	self.goToLastPage = function () {
+	self.goToLastPage = function() {
 		var start = Math.floor(self.pageCount() / self.maxPagesVisible) * self.maxPagesVisible + 1;
 		if (start > self.pageCount()) start = Math.max(1, start - self.maxPagesVisible);
 		self.selectablePages.removeAll();
 
-		for (var i = start; i <= self.pageCount() ; ++i) {
+		for (var i = start; i <= self.pageCount(); ++i) {
 			var page = new Teleopti.MyTimeWeb.Request.PageView(i);
 			self.selectablePages.push(page);
 		}
@@ -567,34 +563,34 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 	};
 
 
-	self.initSelectablePages = function (pageCount) {
+	self.initSelectablePages = function(pageCount) {
 		self.selectablePages.removeAll();
-
-		for (var i = 1; i <= Math.min(pageCount, self.maxPagesVisible) ; ++i) {
-			var page = new Teleopti.MyTimeWeb.Request.PageView(i);
-			self.selectablePages.push(page);
+		
+		for (var i = 1; i <= Math.min(pageCount, self.maxPagesVisible); ++i) {
+			var page = new Teleopti.MyTimeWeb.Request.PageView(i);		
+			self.selectablePages.push(page);			
 		}
 
 		self.isPreviousMore(false);
 		self.isMore(pageCount > self.maxPagesVisible);
-		if (pageCount > 0) self.setSelectPage(1);
+		if (pageCount > 0 ) self.setSelectPage(1);
 	};
 
 	self.goNextPages = function () {
 		var end = self.selectablePages().slice(-1)[0].index() + self.maxPagesVisible;
 		self.selectablePages.removeAll();
-
+		
 		var i;
-		for (i = end - self.maxPagesVisible + 1; i <= Math.min(end, self.pageCount()) ; i++) {
+		for (i = end - self.maxPagesVisible + 1; i <= Math.min(end, self.pageCount()); i++) {
 			self.selectablePages.push(new Teleopti.MyTimeWeb.Request.PageView(i));
 		}
-
+		
 		self.isPreviousMore(true);
 		self.isMore(end < self.pageCount());
 		self.setSelectPage(self.selectablePages()[0].index());
 	};
 
-	self.goPreviousPages = function () {
+	self.goPreviousPages = function() {
 		var start = self.selectablePages()[0].index() - self.maxPagesVisible;
 		self.selectablePages.removeAll();
 
@@ -610,7 +606,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 		}
 	};
 
-	self.isSelected = function (page) {
+	self.isSelected = function(page) {
 		return page.index() === self.selectedPageIndex();
 	};
 
@@ -618,13 +614,12 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 		self.setSelectPage(page.index());
 	};
 
-	self.setSelectPage = function (pageIdx) {
+	self.setSelectPage = function(pageIdx) {
 		self.selectedPageIndex(pageIdx);
-
-		self.loadSchedule(self.getFormattedDateForServiceCall(), self.selectedTeamInternal());
+		self.loadSchedule(self.getDateWithFormat(), self.selectedTeamInternal());
 	};
 
-	self.loadMyTeamId = function (date) {
+	self.loadMyTeamId = function(date) {
 		ajax.Ajax({
 			url: "Requests/ShiftTradeRequestMyTeam",
 			dataType: "json",
@@ -633,7 +628,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 			data: {
 				selectedDate: date
 			},
-			success: function (data, textStatus, jqXHR) {
+			success: function(data, textStatus, jqXHR) {
 				if (!data) {
 					self.myTeamId(undefined);
 					self.missingMyTeam(true);
@@ -646,12 +641,12 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 				self.loadTeams(date);
 
 			},
-			error: function (e) {
+			error: function(e) {
 			}
 		});
 	};
 
-	self.setTeamAll = function () {
+	self.setTeamAll = function() {
 		var text = $("#Request-all-permitted-teams").val() ? $("#Request-all-permitted-teams").val() : "Team All";
 
 		if (self.isPossibleSchedulesForAllEnabled()) {
@@ -670,25 +665,25 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 			data: {
 				date: date
 			},
-			success: function (data, textStatus, jqXHR) {
+			success: function(data, textStatus, jqXHR) {
 				self.selectedTeam(null);
 				self.availableTeams(data);
 				self.setTeamAll();
 				self.selectedTeam(teamToSelect);
 
 			},
-			error: function (e) {
+			error: function(e) {
 				//console.log(e);
 			}
 		});
 	};
 
-	self.loadPeriod = function (date) {
+	self.loadPeriod = function(date) {
 		ajax.Ajax({
 			url: "Requests/ShiftTradeRequestPeriod",
 			dataType: "json",
 			type: 'GET',
-			success: function (data, textStatus, jqXHR) {
+			success: function(data, textStatus, jqXHR) {
 				if (data.HasWorkflowControlSet) {
 					var now = moment(new Date(data.NowYear, data.NowMonth - 1, data.NowDay));
 					self.setDatePickerRange(now, data.OpenPeriodRelativeStart, data.OpenPeriodRelativeEnd);
@@ -709,23 +704,22 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 		});
 	};
 
-	self.pageCount.subscribe(function (value) {
-		self.initSelectablePages(value)
-	});
-
-	self.setPagingInfo = function (pageCount) {
+	self.pageCount.subscribe(function(value) {
+		self.initSelectablePages(value) });
+	
+	self.setPagingInfo = function(pageCount) {
 		self.pageCount(pageCount);
 		self.isPageVisible(pageCount > 0);
-
+				
 	};
-
-	self.setPossibleTradeSchedulesRaw = function (date, data) {
+	
+	self.setPossibleTradeSchedulesRaw = function(date, data) {
 		if (self.possibleTradeSchedulesRaw.length > 0) {
 			self.possibleTradeSchedulesRaw = [];
 		}
 
 		var findTradedAgent = false;
-		$.each(data.PossibleTradeSchedules, function (i, item) {
+		$.each(data.PossibleTradeSchedules, function(i, item) {
 			self.possibleTradeSchedulesRaw.push(item);
 			if (self.agentChoosed() && self.isTradeForMultiDaysEnabled()) {
 				if (item.Name == self.agentChoosed().agentName) {
@@ -743,7 +737,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 		}
 	};
 
-	self.getCanvasWidth = function () {
+	self.getCanvasWidth = function() {
 		var canvasWidth;
 		var containerWidth = $("#Request-add-shift-trade").width();
 		var nameCellWidth = $("td.shift-trade-agent-name").width();
@@ -755,7 +749,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 		return canvasWidth;
 	};
 
-	self.redrawLayers = function () {
+	self.redrawLayers = function() {
 		var canvasWidth;
 
 		if (self.isReadyLoaded()) {
@@ -768,31 +762,31 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 		self.layerCanvasPixelWidth(canvasWidth);
 
 		if (self.mySchedule() != undefined) {
-			$.each(self.mySchedule().layers, function (index, selfScheduleAddShiftTrade) {
+			$.each(self.mySchedule().layers, function(index, selfScheduleAddShiftTrade) {
 				selfScheduleAddShiftTrade.pixelPerMinute(self.pixelPerMinute());
 			});
 		}
 
 		if (self.possibleTradeSchedules() != undefined) {
-			$.each(self.possibleTradeSchedules(), function (index, selfPersonScheduleAddShiftTrade) {
-				$.each(selfPersonScheduleAddShiftTrade.layers, function (index, selfScheduleAddShiftTrade) {
+			$.each(self.possibleTradeSchedules(), function(index, selfPersonScheduleAddShiftTrade) {
+				$.each(selfPersonScheduleAddShiftTrade.layers, function(index, selfScheduleAddShiftTrade) {
 					selfScheduleAddShiftTrade.pixelPerMinute(self.pixelPerMinute());
 				});
 			});
 		}
 		if (self.chooseHistorys() != undefined) {
-			$.each(self.chooseHistorys(), function (index, chooseHistory) {
+			$.each(self.chooseHistorys(), function(index, chooseHistory) {
 				chooseHistory.canvasPixelWidth(canvasWidth);
 			});
 		}
 		if (self.hours() != undefined) {
-			$.each(self.hours(), function (index, hour) {
+			$.each(self.hours(), function(index, hour) {
 				hour.pixelPerMinute(self.pixelPerMinute());
 			});
 		}
 	};
 
-	self.filterTime = ko.computed(function () {
+	self.filterTime = ko.computed(function() {
 		self.filteredStartTimesText.removeAll();
 		self.filteredEndTimesText.removeAll();
 
@@ -822,40 +816,39 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 	self.filterTime.subscribe(function () {
 		if (!self.IsLoading()) {
 			self.prepareLoad();
-
-			self.loadSchedule(self.getFormattedDateForServiceCall(), self.selectedTeamInternal());
+			self.loadSchedule(self.getDateWithFormat(), self.selectedTeamInternal());
 		}
 	});
 
-	self.changeRequestedDate = function (movement) {
+	self.changeRequestedDate = function(movement) {
 		var date = moment(self.requestedDateInternal()).add('days', movement);
 		if (self.isRequestedDateValid(date)) {
 			self.requestedDate(date);
 		}
 	};
 
-	self.nextDate = function () {
+	self.nextDate = function() {
 		self.changeRequestedDate(1);
 	};
 
-	self.previousDate = function () {
+	self.previousDate = function() {
 		self.changeRequestedDate(-1);
 	};
 
-	self.featureCheck = function () {
+	self.featureCheck = function() {
 		var tradeForMultiDaysEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled("Request_ShiftTradeRequestForMoreDays_20918");
 		self.isTradeForMultiDaysEnabled(tradeForMultiDaysEnabled);
 
 		var possibleSchedulesForAllEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled("Request_SeePossibleShiftTradesFromAllTeams_28770");
 		self.isPossibleSchedulesForAllEnabled(possibleSchedulesForAllEnabled);
-
+		
 		var filterByTimeEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled("Request_FilterPossibleShiftTradeByTime_24560");
 		self.isFilterByTimeEnabled(filterByTimeEnabled);
 
 		self.isTeamScheduleSorttingFeatureEnabled(Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_SortSchedule_32092"));
 	};
 
-	self.setTimeFilters = function (hourTexts) {
+	self.setTimeFilters = function(hourTexts) {
 		var rangStart = 0;
 		for (var i = 0; i < 24; i += 2) {
 			var rangEnd = rangStart + 2;
@@ -876,9 +869,9 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 				dataType: "json",
 				type: 'GET',
 				contentType: 'application/json; charset=utf-8',
-				success: function (data) {
+				success: function(data) {
 					////set dayoff only in start time filter
-					if (data != null) {
+					if (data != null) {					
 						self.setTimeFilters(data.HourTexts);
 						dayOffNames += data.DayOffShortNames.join();
 						self.filterStartTimeList.push(new Teleopti.MyTimeWeb.Request.FilterStartTimeView(dayOffNames, 0, 24, false, true));
@@ -889,7 +882,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 	};
 
 	self.TimeSortOrder = ko.observable(null);
-	self.setDatePickerRange = function (now, relativeStart, relativeEnd) {
+	self.setDatePickerRange = function(now, relativeStart, relativeEnd) {
 		self.openPeriodStartDate(moment(now).add('days', relativeStart));
 		self.openPeriodEndDate(moment(now).add('days', relativeEnd));
 	};
@@ -900,7 +893,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 		{ Description: 'glyphicon glyphicon-arrow-down', Value: 'start desc', IsStart: true },
 		{ Description: 'glyphicon glyphicon-arrow-down', Value: 'end desc', IsStart: false }
 	]);
-
+	
 	self.updateTimeSortOrder = function (data) {
 		if (self.TimeSortOrder() == data.Value) {
 			self.TimeSortOrder(null);
@@ -913,16 +906,15 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 		return self.TimeSortOrder() == value.Value;
 	}
 
-	self.TimeSortOrder.subscribe(function () {
+	self.TimeSortOrder.subscribe(function() {
 		if (!self.IsLoading()) {
 			self.prepareLoad();
-			
-			self.loadSchedule(self.getFormattedDateForServiceCall(), self.selectedTeamInternal());
+			self.loadSchedule(self.getDateWithFormat(), self.selectedTeamInternal());
 		}
 	});
 
 	self.isStartTimeFilterActived = ko.computed(function () {
-		return (self.filteredStartTimesText().length != 0 || self.isDayoffFiltered() == true || (self.TimeSortOrder() == 'start asc') || (self.TimeSortOrder() == 'start desc'));
+		return (self.filteredStartTimesText().length != 0 || self.isDayoffFiltered()==true || (self.TimeSortOrder() == 'start asc') || (self.TimeSortOrder() == 'start desc'));
 	});
 
 	self.isEndTimeFilterActived = ko.computed(function () {

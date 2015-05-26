@@ -17,6 +17,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 
 		public DateTime TimeLineStartDateTime { get; set; }
 
-		public DateTime Date { get; set; }
+		public string Date { get; set; }
 	}
 }

@@ -1282,11 +1282,6 @@ select.time-input {
 .rtl .clearleftfloat {
 	clear: right;
 }
-
-.rtl .row {
-	margin-right: 0 !important; 	
-}
-
 /*
  * Media queries for responsive design
  * These follow after primary styles so they will successfully override. 

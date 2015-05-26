@@ -6,21 +6,6 @@
 @using Teleopti.Interfaces.Domain
 @model PortalViewModel
 
-<script>
-	
-	$(function() {
-		Teleopti.MyTimeWeb.Common.SetupCalendar(
-		{
-			UseJalaaliCalendar: @Model.UseJalaaliCalendar.ToString().ToLowerInvariant(),
-			DateFormat: "@Model.DateFormat",
-			TimeFormat: "@Model.TimeFormat",
-			AMDesignator: "@Model.AMDesignator",
-			PMDesignator: "@Model.PMDesignator"
-		});
-	}
-	);
-</script>
-
 <div id="autocollapse" class="navbar navbar-default navbar-inverse bdd-mytime-top-menu">
 
 	<div id="innerNavBar" class="container">

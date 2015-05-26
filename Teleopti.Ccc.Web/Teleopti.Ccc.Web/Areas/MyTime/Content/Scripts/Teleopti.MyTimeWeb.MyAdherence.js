@@ -6,7 +6,7 @@
 
 		self.selectedDateInternal = ko.observable(date);
 		self.datePickerFormat = ko.observable('YYYYMMDD');
-		var format = Teleopti.MyTimeWeb.Common.DateFormat; 
+		var format = $('#my-report-datepicker-format').val().toUpperCase();
 		self.datePickerFormat(format);
 		self.dataAvailable = ko.observable();
 		self.goToAnotherDay = function (toDate) {
@@ -24,10 +24,10 @@
 		self.nextDay = function () {
 			self.goToAnotherDay(self.selectedDate().clone().add('days', 1));
 		};
-		self.previousDay = function () {
+		self.previousDay = function() {
 			self.goToAnotherDay(self.selectedDate().clone().add('days', -1));
 		};
-		self.dateFormat = function () {
+		self.dateFormat = function() {
 			return self.datePickerFormat;
 		};
 
@@ -40,14 +40,14 @@
 		self.intervalsPerDay = ko.observable();
 		self.startInterval = ko.observable();
 		self.lastInterval = ko.observable();
-		self.intervalMinutes = ko.computed(function () {
+		self.intervalMinutes = ko.computed(function() {
 			return 1440 / self.intervalsPerDay();
 		});
 		self.intervalsPerHour = ko.computed(function () {
-			return self.intervalsPerDay() / 24;
+			return self.intervalsPerDay()/24;
 		});
 
-		self.timeLines = ko.computed(function () {
+		self.timeLines = ko.computed(function() {
 			var times = [];
 			var startInterval = self.startInterval();
 			var lastInterval = self.lastInterval();
@@ -126,14 +126,14 @@
 	}
 
 	function bindData() {
-		return Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function (data) {
+		return Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function(data) {
 			$('.moment-datepicker').attr('data-bind', 'datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: ' + data.WeekStart + ' }');
 			vm = new MyAdherenceViewModel(fillData, getDate());
 			var elementToBind = $('.myadherence')[0];
 			ko.applyBindings(vm, elementToBind);
 		});
 	}
-
+	
 	function getDate() {
 		var date = Teleopti.MyTimeWeb.Portal.ParseHash().dateHash;
 		if (date != '') {

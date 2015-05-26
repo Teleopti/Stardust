@@ -4,7 +4,6 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Ccc.TestCommon.TestData.Core;
-using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -27,26 +26,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			requestRepository.Add(PersonRequest);
 		}
 	}
-
-	public class ExistingTextRequestCreatedOnTestDate : IUserDataSetup
-	{
-		public PersonRequest PersonRequest;
-		public TextRequest TextRequest;
-
-		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
-		{
-
-			var today = CurrentTime.Value().ToUniversalTime();
-			TextRequest = new TextRequest(new DateTimePeriod(today, today.AddHours(5)));
-			PersonRequest = new PersonRequest(user, TextRequest) {Subject = "I need some cake"};
-			PersonRequest.TrySetMessage("This is some text that is just here to fill a space and demonstrate how this will behave when we have lots and lots of character is a long long text that doesnt really mean anything at all.");
-
-			var requestRepository = new PersonRequestRepository(uow);
-
-			requestRepository.Add(PersonRequest);
-		}
-	}
-	 
 
 	public class ExistingPendingTextRequest : IUserDataSetup
 	{
