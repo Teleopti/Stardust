@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 {
 	[TestFixture, Category("LongRunning")]
 	[MessageBrokerUnitOfWorkTest]
-	[Ignore]
 	public class MailboxRepositoryTest
 	{
 		public IMailboxRepository Target;

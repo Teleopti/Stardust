@@ -15,7 +15,10 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 		{
 			base.RegisterInContainer(builder,configuration);
 			builder.RegisterModule<MessageBrokerServerModule>();
-			
+			builder.RegisterType<MailboxRepository>()
+				.As<IMailboxRepository>()
+				.SingleInstance()
+				.ApplyAspects();
 		}
 
 		protected override void BeforeTest()
