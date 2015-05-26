@@ -4,9 +4,8 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Analytics.Etl.Interfaces.Common;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Analytics.Etl.ConfigToolCode.Gui.StartupConfiguration
+namespace Teleopti.Analytics.Etl.ConfigTool.Code.Gui.StartupConfiguration
 {
 	public class StartupConfigurationModel
 	{

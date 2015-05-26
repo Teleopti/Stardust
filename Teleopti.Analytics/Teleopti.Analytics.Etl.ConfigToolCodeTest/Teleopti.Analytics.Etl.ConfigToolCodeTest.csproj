@@ -123,9 +123,9 @@
       <Project>{34C3B171-160E-4320-AA49-B8162BAD0E36}</Project>
       <Name>Teleopti.Analytics.Etl.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Analytics.Etl.ConfigToolCode\Teleopti.Analytics.Etl.ConfigToolCode.csproj">
-      <Project>{A48E1E01-AA52-44F6-8FC2-44E686A8A391}</Project>
-      <Name>Teleopti.Analytics.Etl.ConfigToolCode</Name>
+    <ProjectReference Include="..\Teleopti.Analytics.Etl.ConfigTool\Teleopti.Analytics.Etl.ConfigTool.csproj">
+      <Project>{8a4806d6-8587-43f2-86fe-915b81c9f863}</Project>
+      <Name>Teleopti.Analytics.Etl.ConfigTool</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Analytics.Etl.Interfaces\Teleopti.Analytics.Etl.Interfaces.csproj">
       <Project>{172807BD-AC1D-4E6D-9013-2D30DCF5B961}</Project>

@@ -1,4 +1,4 @@
-namespace Teleopti.Analytics.Etl.ConfigToolCode.Gui.StartupConfiguration
+namespace Teleopti.Analytics.Etl.ConfigTool.Code.Gui.StartupConfiguration
 {
 	public class LookupStringItem
 	{

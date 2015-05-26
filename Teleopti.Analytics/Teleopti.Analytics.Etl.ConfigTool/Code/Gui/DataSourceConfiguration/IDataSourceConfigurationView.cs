@@ -2,7 +2,7 @@
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Analytics.Etl.ConfigToolCode.Gui.DataSourceConfiguration
+namespace Teleopti.Analytics.Etl.ConfigTool.Code.Gui.DataSourceConfiguration
 {
     public interface IDataSourceConfigurationView
     {

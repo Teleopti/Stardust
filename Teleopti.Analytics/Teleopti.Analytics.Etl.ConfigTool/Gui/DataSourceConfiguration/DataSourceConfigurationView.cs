@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Drawing;
 using System.Windows.Forms;
-using Teleopti.Analytics.Etl.ConfigToolCode.Gui.DataSourceConfiguration;
+using Teleopti.Analytics.Etl.ConfigTool.Code.Gui.DataSourceConfiguration;
 using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Interfaces.Domain;

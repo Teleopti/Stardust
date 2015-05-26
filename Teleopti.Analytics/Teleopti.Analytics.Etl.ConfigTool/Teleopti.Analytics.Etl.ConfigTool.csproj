@@ -76,7 +76,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
     </Reference>
-    <Reference Include="AvalonControlsLibrary, Version=2.0.0.0, Culture=neutral, PublicKeyToken=50c04fcafdb45ca6, processorArchitecture=MSIL" />
     <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
@@ -101,9 +100,6 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Web.Extensions">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -112,13 +108,9 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="UIAutomationProvider">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
     <Reference Include="WindowsBase">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
@@ -135,6 +127,17 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Code\Gui\DataSourceConfiguration\DataSourceConfigurationModel.cs" />
+    <Compile Include="Code\Gui\DataSourceConfiguration\DataSourceConfigurationPresenter.cs" />
+    <Compile Include="Code\Gui\DataSourceConfiguration\DataSourceRow.cs" />
+    <Compile Include="Code\Gui\DataSourceConfiguration\DataSourceState.cs" />
+    <Compile Include="Code\Gui\DataSourceConfiguration\IDataSourceConfigurationView.cs" />
+    <Compile Include="Code\Gui\DataSourceConfiguration\MessageBoxProperties.cs" />
+    <Compile Include="Code\Gui\StartupConfiguration\IStartupConfigurationView.cs" />
+    <Compile Include="Code\Gui\StartupConfiguration\LookupIntegerItem.cs" />
+    <Compile Include="Code\Gui\StartupConfiguration\LookupStringItem.cs" />
+    <Compile Include="Code\Gui\StartupConfiguration\StartupConfigurationModel.cs" />
+    <Compile Include="Code\Gui\StartupConfiguration\StartupConfigurationPresenter.cs" />
     <Compile Include="Gui\DataSourceConfiguration\DataSourceConfigurationView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -260,10 +263,6 @@
     <ProjectReference Include="..\Teleopti.Analytics.Etl.Common\Teleopti.Analytics.Etl.Common.csproj">
       <Project>{34C3B171-160E-4320-AA49-B8162BAD0E36}</Project>
       <Name>Teleopti.Analytics.Etl.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Analytics.Etl.ConfigToolCode\Teleopti.Analytics.Etl.ConfigToolCode.csproj">
-      <Project>{A48E1E01-AA52-44F6-8FC2-44E686A8A391}</Project>
-      <Name>Teleopti.Analytics.Etl.ConfigToolCode</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Analytics.Etl.Interfaces\Teleopti.Analytics.Etl.Interfaces.csproj">
       <Project>{172807BD-AC1D-4E6D-9013-2D30DCF5B961}</Project>

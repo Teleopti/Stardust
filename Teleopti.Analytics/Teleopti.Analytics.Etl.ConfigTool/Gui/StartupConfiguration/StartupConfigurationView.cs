@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Windows.Forms;
-using Teleopti.Analytics.Etl.ConfigToolCode.Gui.StartupConfiguration;
+using Teleopti.Analytics.Etl.ConfigTool.Code.Gui.StartupConfiguration;
 using Teleopti.Analytics.Etl.Interfaces.Common;
 
 namespace Teleopti.Analytics.Etl.ConfigTool.Gui.StartupConfiguration

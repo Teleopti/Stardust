@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Analytics.Etl.ConfigToolCode.Gui.DataSourceConfiguration;
+using Teleopti.Analytics.Etl.ConfigTool.Code.Gui.DataSourceConfiguration;
 using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job.MultipleDate;
