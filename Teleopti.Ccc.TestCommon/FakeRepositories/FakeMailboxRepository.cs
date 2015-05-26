@@ -36,5 +36,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				.ToArray()
 				;
 		}
+
+		public IEnumerable<Mailbox> Get(string[] routes)
+		{
+			return (
+				from m in Data
+				where routes.Contains(m.Route)
+				select m
+				).ToArray();
+		}
 	}
 }

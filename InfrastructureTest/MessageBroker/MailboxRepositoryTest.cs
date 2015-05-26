@@ -201,6 +201,30 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 				.Should().Have.SameValuesAs(new[] { Serializer.SerializeObject(mailbox1), Serializer.SerializeObject(mailbox2) });
 		}
 
+		[Test]
+		public void ShouldGetMailboxesFromRoutes()
+		{
+			var notification = new Notification { BusinessUnitId = Guid.NewGuid().ToString() };
+			var id1 = Guid.NewGuid();
+			var id2 = Guid.NewGuid();
+			var mailbox1 = new Mailbox()
+			{
+				Id = id1,
+				Route = notification.Routes().First()
+			};
+			var mailbox2 = new Mailbox()
+			{
+				Id = id2,
+				Route = notification.Routes().First()
+			};
+			Target.Persist(mailbox1);
+			Target.Persist(mailbox2);
+
+			Target.Get(new[] {mailbox1.Route, mailbox2.Route})
+				.Select(x => Serializer.SerializeObject(x))
+				.Should().Have.SameValuesAs(new[] { Serializer.SerializeObject(mailbox1), Serializer.SerializeObject(mailbox2) });
+		}
+
 		private class mailboxThing
 		{
 			public Guid Id { get; set; }

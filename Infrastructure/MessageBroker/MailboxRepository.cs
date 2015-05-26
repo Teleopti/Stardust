@@ -7,6 +7,7 @@ using NHibernate;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.MessageBroker;
+using Teleopti.Ccc.Infrastructure.LiteUnitOfWork;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.MessageBrokerUnitOfWork;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.MessageBroker;
@@ -95,7 +96,7 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker
 		[MessageBrokerUnitOfWork]
 		public virtual Mailbox Get(Guid id)
 		{
-			var result = get(selectSql + " WHERE Mailbox.Id = :Id", new parameter {Name = "Id", Value = id});
+			var result = get(" WHERE Mailbox.Id = :Id", q => q.SetParameter("Id", id));
 			return result == null
 				? null
 				: result.First();
@@ -104,26 +105,33 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker
 		[MessageBrokerUnitOfWork]
 		public virtual  IEnumerable<Mailbox> Get(string route)
 		{
-			return get(selectSql + " WHERE Mailbox.Route = :Route", new parameter {Name = "Route", Value = route}) ?? Enumerable.Empty<Mailbox>();
+			return get(" WHERE Mailbox.Route = :Route", q => q.SetParameter("Route", route)) ?? Enumerable.Empty<Mailbox>();
 		}
 
-		private IEnumerable<Mailbox> get(string sql, parameter param)
+		[MessageBrokerUnitOfWork]
+		public virtual IEnumerable<Mailbox> Get(string[] routes)
 		{
-			var result =  _currentMessageBrokerUnitOfWork.Current()
-				.CreateSqlQuery(sql)
-				.SetParameter(param.Name, param.Value)
-				.SetResultTransformer(Transformers.AliasToBean<mailboxThing>())
-				.List<mailboxThing>();
 
+			return get(" WHERE Mailbox.Route in (:Routes)", q => q.SetParameterList("Routes", routes)) ?? Enumerable.Empty<Mailbox>();
+		}
+
+		private IEnumerable<Mailbox> get(string sql, Func<ISQLQuery, IQuery> parameterFunc)
+		{
+			var result = parameterFunc(
+				_currentMessageBrokerUnitOfWork.Current()
+					.CreateSqlQuery(selectSql + sql)
+				)
+				.SetResultTransformer(Transformers.AliasToBean<mailboxJoinNotificationObject>())
+				.List<mailboxJoinNotificationObject>();
 			if (!result.Any())
 				return null;
 			return result
-				.Select(x => new {x.Id, x.Route})
+				.Select(x => new { x.Id, x.Route })
 				.Distinct()
 				.Select(mailBoxIdRoutes => createMailbox(mailBoxIdRoutes.Id, mailBoxIdRoutes.Route, result));
 		}
-
-		private Mailbox createMailbox(Guid id, string route, IEnumerable<mailboxThing> result)
+		
+		private Mailbox createMailbox(Guid id, string route, IEnumerable<mailboxJoinNotificationObject> result)
 		{
 			var mailbox = new Mailbox { Id = id, Route = route };
 			foreach (var mailboxThing in result.Where(mailboxThing => mailboxThing.Message != null))
@@ -131,13 +139,7 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker
 			return mailbox;
 		}
 
-		private class parameter
-		{
-			public string Name { get; set; }
-			public object Value { get; set; }
-		}
-
-		private class mailboxThing
+		private class mailboxJoinNotificationObject
 		{
 			public Guid Id { get; set; }
 			public string Route { get; set; }

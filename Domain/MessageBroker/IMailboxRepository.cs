@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 		void Persist(Mailbox mailbox);
 		Mailbox Get(Guid id);
 		IEnumerable<Mailbox> Get(string route);
+		IEnumerable<Mailbox> Get(string[] routes);
 	}
 
 	public class EmtpyMailboxRepository : IMailboxRepository
@@ -23,6 +24,11 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 		}
 
 		public IEnumerable<Mailbox> Get(string route)
+		{
+			return Enumerable.Empty<Mailbox>();
+		}
+
+		public IEnumerable<Mailbox> Get(string[] routes)
 		{
 			return Enumerable.Empty<Mailbox>();
 		}

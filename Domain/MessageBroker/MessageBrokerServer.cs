@@ -74,14 +74,16 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 					notification.DomainUpdateType, string.Join(", ", routes),
 					string.Join(", ", routes.Select(RouteToGroupName)));
 
+			_mailboxRepository.Get(routes)
+				.ForEach(mailbox =>
+				{
+					mailbox.AddNotification(notification);
+					_mailboxRepository.Persist(mailbox);
+				});
+
 			foreach (var route in routes)
 			{
 				var r = route;
-				_mailboxRepository.Get(route).ForEach(x =>
-				{
-					x.AddNotification(notification);
-					_mailboxRepository.Persist(x);
-				});
 				_actionScheduler.Do(() => _signalR.CallOnEventMessage(RouteToGroupName(r), r, notification));
 			}
 		}

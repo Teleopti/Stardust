@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.MessageBroker;
+using Teleopti.Ccc.Infrastructure.MessageBroker;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
