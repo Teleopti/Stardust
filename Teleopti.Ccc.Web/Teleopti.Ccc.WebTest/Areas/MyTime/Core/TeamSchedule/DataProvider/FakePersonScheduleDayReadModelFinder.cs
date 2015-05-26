@@ -30,7 +30,27 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 
 		public PersonScheduleDayReadModel ForPerson(DateOnly date, Guid personId)
 		{
-			throw new NotImplementedException();
+			var assignment = _personAssignmentRepository.LoadAll().SingleOrDefault(a => personId == a.Person.Id.Value && date == a.Date);
+			var persons = _personRepository.LoadAll();
+			
+			if (assignment == default(object))
+			{
+				return PersonScheduleDayReadModelFactory.CreateSimplePersonScheduleDayReadModel(persons.First(p => p.Id.Value == personId), date);
+			}
+
+			if (assignment.DayOff() != null)
+			{
+				return PersonScheduleDayReadModelFactory.CreateDayOffPersonScheduleDayReadModel(assignment.Person, date);
+			}
+
+			var simpleLayers = assignment.ShiftLayers.Select(shiftLayer => new SimpleLayer
+			{
+				Start = shiftLayer.Period.StartDateTime,
+				End = shiftLayer.Period.EndDateTime,
+				Description = shiftLayer.Payload.Name
+			}).ToList();
+
+			return PersonScheduleDayReadModelFactory.CreatePersonScheduleDayReadModelWithSimpleShift(assignment.Person, date, simpleLayers);
 		}
 
 		public IEnumerable<PersonScheduleDayReadModel> ForPeople(DateTimePeriod period, IEnumerable<Guid> personIds)
@@ -49,8 +69,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 
 			var assignments = _personAssignmentRepository.LoadAll()
 				.Where(a => personIdList.Contains(a.Person.Id.Value) && date == a.Date)
-				.Where(a => filterInfo == null || !filterInfo.StartTimes.Any() || filterInfo.StartTimes.Any(period => period.Contains(a.Period.StartDateTime)))
-				.Where(a => filterInfo == null || !filterInfo.EndTimes.Any() || filterInfo.EndTimes.Any(period => period.Contains(a.Period.EndDateTime))).ToList();
+				.Where(a => filterInfo == null || filterInfo.StartTimes == null ||!filterInfo.StartTimes.Any() || filterInfo.StartTimes.Any(period => period.Contains(a.Period.StartDateTime)))
+				.Where(a => filterInfo == null || filterInfo.EndTimes == null || !filterInfo.EndTimes.Any() || filterInfo.EndTimes.Any(period => period.Contains(a.Period.EndDateTime))).ToList();
 			var persons = _personRepository.LoadAll();
 
 

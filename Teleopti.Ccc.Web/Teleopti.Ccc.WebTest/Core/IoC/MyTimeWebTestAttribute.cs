@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Schedule
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -49,7 +50,8 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			builder.RegisterType<FakePersonRepository>().As<IPersonRepository>().SingleInstance();
 			builder.RegisterType<FakePersonNameProvider>().As<IPersonNameProvider>().SingleInstance();
 			builder.RegisterType<FakePersonAssignmentRepository>().As<IPersonAssignmentRepository>().SingleInstance();
-			
+			builder.RegisterType<FakeShiftTradeLightValidator>().As<IShiftTradeLightValidator>().SingleInstance();
+
 
 		}
 
