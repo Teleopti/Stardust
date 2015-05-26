@@ -107,7 +107,8 @@ function EventlogSource-Create {
 function CopyFileFromBlobStorage {
     Param(
       [string]$destinationFolder,
-      [string]$filename
+      [string]$filename,
+	  [string]$sourceFolder
       )
     $BlobPath = TeleoptiDriveMapProperty-get -name "BlobPath"
     $AccountKey = TeleoptiDriveMapProperty-get -name "AccountKey"
@@ -117,7 +118,7 @@ function CopyFileFromBlobStorage {
 	## Options to be added to AzCopy
 	$OPTIONS = @("/XO","/Y","/sourceKey:$AccountKey")
 
-    $BlobSource = $BlobPath + $ContainerName + "/" + $DataSourceName
+    $BlobSource = $BlobPath + $ContainerName + "/" + $DataSourceName + $sourceFolder
 
 	## Wrap all above arguments
 	$cmdArgs = @("$BlobSource","$destinationFolder","$filename", $OPTIONS)
@@ -193,6 +194,7 @@ Try
 	$togglesFile = "toggles.txt"
 	$fullPathTogglesFileForWeb =  "$directory\..\..\sitesroot\3\bin\FeatureFlags\" + $togglesFile
 	$fullPathTogglesFileForRta =  "$directory\..\..\sitesroot\5\bin\FeatureFlags\" + $togglesFile
+	$fullPathCustomReports =  "$directory\..\..\sitesroot\3\Areas\Reporting\Reports\Custom\" 
 
     $DataSourceName = TeleoptiDriveMapProperty-get -name "DataSourceName"
     
@@ -208,13 +210,18 @@ Try
 	$DatasourcesPath="$directory\..\Services\ETL\Service"
 	
     #Get customer specific config from BlobStorage
-    CopyFileFromBlobStorage -destinationFolder "$SupportToolFolder" -filename "$settingsFile"
-    CopyFileFromBlobStorage -destinationFolder "$SupportToolFolder" -filename "decryption.key"
-    CopyFileFromBlobStorage -destinationFolder "$SupportToolFolder" -filename "validation.key"
+    CopyFileFromBlobStorage -destinationFolder "$SupportToolFolder" -filename "$settingsFile" -sourceFolder ""
+    CopyFileFromBlobStorage -destinationFolder "$SupportToolFolder" -filename "decryption.key" -sourceFolder ""
+    CopyFileFromBlobStorage -destinationFolder "$SupportToolFolder" -filename "validation.key" -sourceFolder ""
 	#copy the settings for sms (and email) notifications, if any
-    CopyFileFromBlobStorage -destinationFolder "$DatasourcesPath" -filename "NotificationConfig.xml"
+    CopyFileFromBlobStorage -destinationFolder "$DatasourcesPath" -filename "NotificationConfig.xml" -sourceFolder ""
+    
+	If (!(Test-Path $fullPathCustomReports)) {
+		New-Item -Path $fullPathCustomReports -ItemType Directory
+ 	}
+	CopyFileFromBlobStorage -destinationFolder "$fullPathCustomReports" -filename "*.*" -sourceFolder "CustomReports"
 	
-	CopyFileFromBlobStorage -destinationFolder "$directory" -filename "$togglesFile"
+	CopyFileFromBlobStorage -destinationFolder "$directory" -filename "$togglesFile" -sourceFolder ""
 	$tempTogglesFile = "$directory\" + $togglesFile
 	if (Test-Path "$tempTogglesFile") {
 		Remove-Item "$fullPathTogglesFileForWeb"
@@ -225,8 +232,8 @@ Try
 		if (Test-Path "$fullPathTogglesFileForRta") {
 			Remove-Item "$fullPathTogglesFileForRta"
 		}
-		CopyFileFromBlobStorage -destinationFolder "$directory\..\..\sitesroot\3\bin\FeatureFlags" -filename "$togglesFile"
-		CopyFileFromBlobStorage -destinationFolder "$directory\..\..\sitesroot\5\bin\FeatureFlags" -filename "$togglesFile"
+		CopyFileFromBlobStorage -destinationFolder "$directory\..\..\sitesroot\3\bin\FeatureFlags" -filename "$togglesFile" -sourceFolder ""
+		CopyFileFromBlobStorage -destinationFolder "$directory\..\..\sitesroot\5\bin\FeatureFlags" -filename "$togglesFile" -sourceFolder ""
 		Remove-Item "$tempTogglesFile"
 	}
 
