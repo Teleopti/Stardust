@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using System.Web;
+using System.Xml.Linq;
 using Autofac;
 using Autofac.Integration.Wcf;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -18,6 +20,7 @@ using log4net.Config;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.Config;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.Common.WcfExtensions;
@@ -68,6 +71,16 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			var container = builder.Build();
 			AutofacHostFactory.Container = container;
 			var messageBroker = container.Resolve<IMessageBrokerComposite>();
+			var sharedSettingsQuerier = container.Resolve<ISharedSettingsQuerier>();
+
+			var settings=sharedSettingsQuerier.GetSharedSettings();
+			//TODO!!!
+			var appSettings =
+				settings.AddToAppSettings(ConfigurationManager.AppSettings.AllKeys.ToDictionary(key => key,
+					key => ConfigurationManager.AppSettings[key]));
+
+			var passwordPolicyDocument = XDocument.Parse(settings.PasswordPolicy);
+			var passwordPolicyService = new LoadPasswordPolicyService(passwordPolicyDocument);
 
 			var populator = EventContextPopulator.Make();
 			  var businessUnit = CurrentBusinessUnit.Make();
@@ -91,9 +104,9 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 						() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging
 						),
 					messageBroker);
-			string sitePath = Global.sitePath();
+			//string sitePath = Global.sitePath();
 			var messageBrokerEnabled = !messageBrokerDisabled();
-			initializeApplication.Start(new SdkState(), sitePath, new LoadPasswordPolicyService(sitePath), new ConfigurationManagerWrapper(), messageBrokerEnabled);
+			initializeApplication.Start(new SdkState(), appSettings, passwordPolicyService, messageBrokerEnabled);
 
 			var messageBrokerReceiveDisabled = !messageBrokerReceiveEnabled();
 			if (messageBrokerEnabled && messageBrokerReceiveDisabled)

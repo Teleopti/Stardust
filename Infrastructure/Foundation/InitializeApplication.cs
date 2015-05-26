@@ -95,10 +95,13 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		}
 
 		// from LogonInitializeStateHolder
-		public void Start(IState clientCache, IDictionary<string, string> appSettings, ILoadPasswordPolicyService loadPasswordPolicyService)
+		public void Start(IState clientCache, IDictionary<string, string> appSettings, ILoadPasswordPolicyService loadPasswordPolicyService, bool tryStartMessageBroker)
 		{
 			StateHolder.Initialize(clientCache);
-			startMessageBroker(appSettings);
+			if (tryStartMessageBroker)
+			{
+				startMessageBroker(appSettings);
+			}
 			StateHolder.Instance.State.SetApplicationData(
 				new ApplicationData(appSettings, new List<IDataSource>(), messageBroker,
 										  loadPasswordPolicyService, dataSourcesFactory));

@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.WinCode.Main
 				passwordPolicyService = new LoadPasswordPolicyService(passwordPolicyDocument);
 			}
 
+			//TODO!!!
 			var appSettings =
 				settings.AddToAppSettings(ConfigurationManager.AppSettings.AllKeys.ToDictionary(key => key,
 					key => ConfigurationManager.AppSettings[key]));
@@ -60,7 +61,7 @@ namespace Teleopti.Ccc.WinCode.Main
 						() => messageBroker),
 					messageBroker);
 
-			initializer.Start(new StateManager(), appSettings, passwordPolicyService);
+			initializer.Start(new StateManager(), appSettings, passwordPolicyService, true);
 
 			return true;
 		}
