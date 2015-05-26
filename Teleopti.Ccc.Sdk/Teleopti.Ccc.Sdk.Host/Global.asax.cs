@@ -101,7 +101,6 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 						() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging
 						),
 					messageBroker);
-			//string sitePath = Global.sitePath();
 			var messageBrokerEnabled = !messageBrokerDisabled();
 			initializeApplication.Start(new SdkState(), appSettings, passwordPolicyService, messageBrokerEnabled);
 
@@ -136,21 +135,6 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			return _messageBrokerDisabled;
 		}
 
-		private static string sitePath()
-		{
-			if (_sitePath == null)
-			{
-				_sitePath = ConfigurationManager.AppSettings["SitePath"];
-				if (string.IsNullOrEmpty(_sitePath.Trim()))
-				{
-					_sitePath = AppDomain.CurrentDomain.BaseDirectory;
-				}
-				Logger.InfoFormat("Read site path from configuration. {0}", _sitePath);
-			}
-			return _sitePath;
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		private static ContainerBuilder buildIoc()
 		{
 			var builder = new ContainerBuilder();
