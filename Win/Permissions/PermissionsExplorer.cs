@@ -2059,7 +2059,7 @@ namespace Teleopti.Ccc.Win.Permissions
 				var helper = _container.Resolve<PermissionsExplorerHelper>();
 				var applicationRoles = helper.LoadAllApplicationRoles().ToList();
 				bindThisList(applicationRoles);
-				loadAllApplicationFunctions(helper.LoadAllApplicationFunctions());
+				loadAllApplicationFunctions(helper.LoadAllToggledApplicationFunctions());
 				_availableDataCollection = applicationRoles.Select(getAndInitializeAvailableData).ToList();
 			}
 		}
