@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.WebTest.Core.IoC;
@@ -22,13 +15,27 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 	[TestFixture, MyTimeWebTest]
 	public class ShiftTradeScheduleViewModelMapperByFakeTest
 	{
-		private IShiftTradeScheduleViewModelMapper _mapper;
-
+		private readonly IShiftTradeScheduleViewModelMapper _mapper;
 		private readonly IPersonRepository _personRepository;
 		private readonly IBusinessUnitRepository _businessUnitRepository;
 		private readonly ITeamRepository _teamRepository;
 		private readonly IPersonAssignmentRepository _personAssignmentRepository;
 		private readonly ILoggedOnUser _loggedOnUser;
+
+		public ShiftTradeScheduleViewModelMapperByFakeTest()
+		{
+		}
+
+		public ShiftTradeScheduleViewModelMapperByFakeTest(IShiftTradeScheduleViewModelMapper mapper, IPersonRepository personRepository, IBusinessUnitRepository businessUnitRepository, ITeamRepository teamRepository, IPersonAssignmentRepository personAssignmentRepository, ILoggedOnUser loggedOnUser)
+		{
+			_mapper = mapper;
+			_personRepository = personRepository;
+			_businessUnitRepository = businessUnitRepository;
+			_teamRepository = teamRepository;
+			_personAssignmentRepository = personAssignmentRepository;
+			_loggedOnUser = loggedOnUser;
+		}
+
 
 		protected void SetUp()
 		{
