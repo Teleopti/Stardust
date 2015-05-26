@@ -38,7 +38,6 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 	public class Global : HttpApplication
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(Global));
-		private static string _sitePath;
 		private string _messageBrokerDisabledConfigurationValue;
 		private bool _messageBrokerDisabled;
 		private string _messageBrokerReceiveEnabledConfigurationValue;
@@ -63,7 +62,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 		{
 			XmlConfigurator.Configure();
 
-			Logger.InfoFormat("The Application is starting. {0}", _sitePath);
+			Logger.InfoFormat("The Application is starting. ");
 
 			var busSender = new ServiceBusSender();
 
