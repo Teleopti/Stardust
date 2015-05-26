@@ -11,8 +11,6 @@ using System.Reflection;
 using System.Security.Principal;
 using System.ServiceModel;
 using System.Threading;
-using System.Web.Services.Protocols;
-using System.Xml;
 using System.Xml.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -90,16 +88,9 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		/// </code>
 		/// </example>
 		public IDictionary<string, string> GetAppSettings()
-		{
-			IDictionary<string, string> encryptedAppSettings = new Dictionary<string, string>();
-
-			PublishedSettings.AllKeys.ToList().ForEach(
-				name => encryptedAppSettings.Add(name,
-												 Encryption.EncryptStringToBase64(PublishedSettings[name],
-																				  EncryptionConstants.Image1,
-																				  EncryptionConstants.Image2)));
-			return encryptedAppSettings;
-		}
+        {
+	        return new Dictionary<string, string>();
+        }
 
 		/// <summary>
 		/// Gets the hibernate configuration.
@@ -2191,11 +2182,6 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		{
 			var invoker = _lifetimeScope.Resolve<IInvokeQuery<ICollection<GroupPageGroupDto>>>();
 			return invoker.Invoke(queryDto);
-		}
-
-		internal static NameValueCollection PublishedSettings
-		{
-			get { return (NameValueCollection)ConfigurationManager.GetSection("teleopti/publishedSettings"); }
 		}
 
 		public void Dispose()

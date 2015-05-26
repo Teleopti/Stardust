@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.Sdk.WcfService.Factory
@@ -7,7 +8,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
     {
         internal static MessageBrokerDto RetrieveMessageBrokerConfigurations()
         {
-            string connectionString = TeleoptiCccSdkService.PublishedSettings["MessageBroker"];
+					string connectionString = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["MessageBroker"];
         	
 			Uri serverUrl;
         	if (Uri.TryCreate(connectionString,UriKind.Absolute,out serverUrl))

@@ -10,6 +10,7 @@ using log4net;
 using Rhino.ServiceBus;
 using Rhino.ServiceBus.Impl;
 using Rhino.ServiceBus.Internal;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.Sdk.WcfService.Factory
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 				    _customHost = builder.Build();
 
 				    Rhino.ServiceBus.SqlQueues.Config.QueueConnectionStringContainer.ConnectionString =
-					    ((NameValueCollection) ConfigurationManager.GetSection("teleopti/publishedSettings"))["Queue"];
+					    StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["Queue"];
 
 				    new OnewayRhinoServiceBusConfiguration()
 					    .UseAutofac(_customHost)
