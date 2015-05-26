@@ -116,7 +116,10 @@ wfm.config([
 		}).state('people', {
 			url: '/people',
 			templateUrl: 'html/people/people.html',
-			controller: 'PeopleCtrl'
+			controller: 'PeopleCtrl',
+			ncyBreadcrumb: {
+			label: "{{'People' | translate}}"
+		}
 		}).state('seatPlan', {
 			url: '/seatPlan',
 			templateUrl: 'js/seatManagement/html/seatplan.html',
