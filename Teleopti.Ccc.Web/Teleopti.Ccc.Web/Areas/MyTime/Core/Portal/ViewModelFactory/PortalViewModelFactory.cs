@@ -122,8 +122,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 				ShowChangePassword = showChangePassword(),
 				HasAsmPermission =
 					_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger),
-				ShowMeridian = culture.DateTimeFormat.ShortTimePattern.Contains("t"),
-				UseJalaaliCalendar = culture.IetfLanguageTag == "fa-IR",
+				ShowMeridian = CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern.Contains("t"),
+				UseJalaaliCalendar = CultureInfo.CurrentCulture.IetfLanguageTag == "fa-IR",
 				DateFormat = culture.DateTimeFormat.ShortDatePattern.ToUpper(),
 				TimeFormat = culture.DateTimeFormat.ShortTimePattern,
 				AMDesignator = culture.DateTimeFormat.AMDesignator,
