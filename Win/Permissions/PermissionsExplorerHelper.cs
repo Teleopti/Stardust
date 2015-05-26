@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -11,20 +12,20 @@ namespace Teleopti.Ccc.Win.Permissions
     public class PermissionsExplorerHelper
     {
 	    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-	    private readonly IApplicationFunctionsProvider _applicationFunctionsProvider;
+		private readonly IApplicationFunctionsToggleFilter _applicationFunctionsToggleFilter;
 	    private readonly IApplicationRoleRepository _applicationRoleRepository;
 
 	    public PermissionsExplorerHelper(IUnitOfWorkFactory unitOfWorkFactory,
-		    IApplicationFunctionsProvider applicationFunctionsProvider, IApplicationRoleRepository applicationRoleRepository)
+			IApplicationFunctionsToggleFilter applicationFunctionsToggleFilter, IApplicationRoleRepository applicationRoleRepository)
 	    {
 		    _unitOfWorkFactory = unitOfWorkFactory;
-		    _applicationFunctionsProvider = applicationFunctionsProvider;
+		    _applicationFunctionsToggleFilter = applicationFunctionsToggleFilter;
 		    _applicationRoleRepository = applicationRoleRepository;
 	    }
 
-	    public AllFunctions LoadAllApplicationFunctions()
+	    public AllFunctions LoadAllToggledApplicationFunctions()
         {
-                return _applicationFunctionsProvider.AllFunctions();
+                return _applicationFunctionsToggleFilter.FilteredFunctions();
         }
 
         public ICollection<IPersonInRole> LoadPeopleByApplicationRole(IApplicationRole selectedRole)
