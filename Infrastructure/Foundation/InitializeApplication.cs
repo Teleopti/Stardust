@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 
 		// from Web, ServiceBus, Sdk, ETL
 		public void Start(IState clientCache, string xmlDirectory, ILoadPasswordPolicyService loadPasswordPolicyService,
-			IConfigurationWrapper configurationWrapper, bool startMessageBroker)
+			IDictionary<string, string> appSettings, bool startMessageBroker)
 		{
 			StateHolder.Initialize(clientCache);
 
@@ -46,7 +46,6 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 					dataSources.Add(dataSource);
 				}
 			}
-			var appSettings = configurationWrapper.AppSettings;
 			if (startMessageBroker)
 				this.startMessageBroker(appSettings);
 			StateHolder.Instance.State.SetApplicationData(
@@ -56,13 +55,12 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 
 		//from applicationconfig
 		public void Start(IState clientCache,
-						  IDictionary<string, string> settings,
+						  IDictionary<string, string> databaseSettings,
 						  string statisticConnectionString,
-			IConfigurationWrapper configurationWrapper)
+			IDictionary<string, string> appSettings)
 		{
 			StateHolder.Initialize(clientCache);
-			IDataSource dataSource = dataSourcesFactory.Create(settings, statisticConnectionString);
-			var appSettings = configurationWrapper.AppSettings;
+			IDataSource dataSource = dataSourcesFactory.Create(databaseSettings, statisticConnectionString);
 			startMessageBroker(appSettings);
 			StateHolder.Instance.State.SetApplicationData(new ApplicationData(appSettings, new[]{dataSource},messageBroker, null, dataSourcesFactory));
 		}

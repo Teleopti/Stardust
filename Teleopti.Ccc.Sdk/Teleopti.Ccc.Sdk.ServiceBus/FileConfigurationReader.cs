@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
@@ -42,7 +43,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 							new CurrentHttpContext(),
 							messageBroker),
 						messageBroker());
-				application.Start(new BasicState(), _xmlFilePath, null, new ConfigurationManagerWrapper(), true);
+				application.Start(new BasicState(), _xmlFilePath, null, ConfigurationManager.AppSettings.ToDictionary(), true);
 
 				Logger.Info("Initialized application");
 			}

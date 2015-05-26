@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Drawing;
 using System.Globalization;
 using System.Reflection;
 using System.Text;
 using System.Threading;
 using Teleopti.Ccc.ApplicationConfig.Creators;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -72,7 +74,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 					new CurrentHttpContext(),
 					() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging
 					), null);
-			initializeApplication.Start(new StateNewVersion(), databaseHandler.DataSourceSettings(), "", new ConfigurationManagerWrapper());
+			initializeApplication.Start(new StateNewVersion(), databaseHandler.DataSourceSettings(), "", ConfigurationManager.AppSettings.ToDictionary());
 			var repositoryFactory = new RepositoryFactory();
 			IDataSource dataSource =
 				new DataSourcesFactory(

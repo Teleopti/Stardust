@@ -1,11 +1,13 @@
 using System;
 using System.Reflection;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Authentication;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
@@ -99,7 +101,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			var application = new InitializeApplication( dataSourcesFactory, null);
 
 			if (!StateHolder.IsInitialized)
-				application.Start(new StateManager(), _nhibConfPath, null, new ConfigurationManagerWrapper(), false);
+				application.Start(new StateManager(), _nhibConfPath, null, ConfigurationManager.AppSettings.ToDictionary(), false);
 
 			_logOnOff = new LogOnOff(new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory()));
 			_repositoryFactory = new RepositoryFactory();

@@ -1,16 +1,12 @@
 using System.Collections.Generic;
-using System.Configuration;
-using Teleopti.Ccc.Domain.Common;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
 {
 	public class ConfigurationManagerWrapper : IConfigurationWrapper
 	{
-		public ConfigurationManagerWrapper()
+		public IDictionary<string, string> AppSettings
 		{
-			AppSettings = ConfigurationManager.AppSettings.ToDictionary();
+			get { return StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings; }
 		}
-
-		public IDictionary<string, string> AppSettings { get; private set; } 
 	}
 }
