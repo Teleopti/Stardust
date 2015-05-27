@@ -21,7 +21,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			var existing = Data.SingleOrDefault(x => x.Id.Equals(mailbox.Id));
 			if (existing != null)
 				Data.Remove(existing);
-			Data.Add(JsonConvert.DeserializeObject<Mailbox>(JsonConvert.SerializeObject(mailbox)));
+			Data.Add(JsonConvert.DeserializeObject<Mailbox>(JsonConvert.SerializeObject(mailbox, new JsonSerializerSettings
+			{
+				ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+			})));
 		}
 
 		public Mailbox Load(Guid id)
