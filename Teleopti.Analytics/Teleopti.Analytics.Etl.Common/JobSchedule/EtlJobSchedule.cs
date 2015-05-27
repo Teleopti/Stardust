@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
-using Teleopti.Analytics.Etl.Interfaces.Common;
+using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 
 namespace Teleopti.Analytics.Etl.Common.JobSchedule
 {

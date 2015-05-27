@@ -113,10 +113,6 @@
       <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
       <Name>Teleopti.Interfaces</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Analytics.Etl.Interfaces\Teleopti.Analytics.Etl.Interfaces.csproj">
-      <Project>{172807BD-AC1D-4E6D-9013-2D30DCF5B961}</Project>
-      <Name>Teleopti.Analytics.Etl.Interfaces</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Analytics.Etl.TransformerInfrastructure\Teleopti.Analytics.Etl.TransformerInfrastructure.csproj">
       <Project>{7193C0D2-2B91-4E92-9C47-620095255EDC}</Project>
       <Name>Teleopti.Analytics.Etl.TransformerInfrastructure</Name>

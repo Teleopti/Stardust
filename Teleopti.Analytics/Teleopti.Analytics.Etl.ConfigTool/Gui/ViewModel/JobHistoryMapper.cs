@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Data;
-using Teleopti.Analytics.Etl.Common.Infrastructure;
+using Teleopti.Analytics.Etl.TransformerInfrastructure;
 
 namespace Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel
 {

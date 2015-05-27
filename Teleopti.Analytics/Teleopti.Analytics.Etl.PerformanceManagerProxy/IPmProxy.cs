@@ -1,4 +1,4 @@
-using Teleopti.Analytics.Etl.Interfaces.PerformanceManager;
+using Teleopti.Analytics.Etl.Common.Interfaces.PerformanceManager;
 
 namespace Teleopti.Analytics.Etl.PerformanceManagerProxy
 {

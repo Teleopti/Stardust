@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Analytics.Etl.Common.Interfaces.Common;
+using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.JobLog;
-using Teleopti.Analytics.Etl.Interfaces.Common;
-using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Interfaces.Domain;
-using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
+using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult;
 
 namespace Teleopti.Analytics.Etl.Common
 {

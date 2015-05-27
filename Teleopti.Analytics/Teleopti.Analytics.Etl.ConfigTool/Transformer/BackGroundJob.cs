@@ -9,12 +9,11 @@ using System.Threading;
 using System.Windows.Forms;
 using log4net;
 using Teleopti.Analytics.Etl.Common;
-using Teleopti.Analytics.Etl.Common.Infrastructure;
-using Teleopti.Analytics.Etl.Interfaces.Common;
-using Teleopti.Analytics.Etl.Interfaces.Transformer;
+using Teleopti.Analytics.Etl.Common.Interfaces.Common;
+using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job.Steps;
 using Teleopti.Analytics.Etl.TransformerInfrastructure;
-using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
+using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult;
 
 namespace Teleopti.Analytics.Etl.ConfigTool.Transformer
 {

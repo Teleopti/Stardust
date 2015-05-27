@@ -7,8 +7,8 @@ using System.Security.Authentication;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Analytics.Etl.Common;
+using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.IntegrationTest.TestData;
-using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job;
 using Teleopti.Analytics.Etl.Transformer.Job.Jobs;
@@ -24,7 +24,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Interfaces.Domain;
-using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
+using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult;
 
 namespace Teleopti.Analytics.Etl.IntegrationTest
 {

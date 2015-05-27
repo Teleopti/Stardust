@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Analytics.Etl.Interfaces.Transformer;
+using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer.ScheduleThreading;
 using Teleopti.Analytics.Etl.TransformerInfrastructure;
 using Teleopti.Interfaces.Domain;
-using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
+using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult;
 using RowsUpdatedEventArgs=Teleopti.Analytics.Etl.Transformer.ScheduleThreading.RowsUpdatedEventArgs;
 
 namespace Teleopti.Analytics.Etl.Transformer.Job.Steps

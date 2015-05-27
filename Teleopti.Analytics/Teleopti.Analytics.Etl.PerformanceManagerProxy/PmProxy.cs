@@ -1,5 +1,5 @@
 ﻿using System.ServiceModel;
-using Teleopti.Analytics.Etl.Interfaces.PerformanceManager;
+using Teleopti.Analytics.Etl.Common.Interfaces.PerformanceManager;
 using Teleopti.Analytics.PM.PMServiceHost;
 
 namespace Teleopti.Analytics.Etl.PerformanceManagerProxy

@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using log4net;
-using Teleopti.Analytics.Etl.Interfaces.Common;
+using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 
 namespace Teleopti.Analytics.Etl.ServiceLogic
 {

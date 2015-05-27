@@ -2,11 +2,11 @@
 using System.Configuration;
 using System.Windows;
 using Autofac;
+using Teleopti.Analytics.Etl.Common.Interfaces.Common;
+using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.ConfigTool.Code.Gui.DataSourceConfiguration;
 using Teleopti.Analytics.Etl.ConfigTool.Gui.DataSourceConfiguration;
 using Teleopti.Analytics.Etl.ConfigTool.Transformer;
-using Teleopti.Analytics.Etl.Interfaces.Common;
-using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer;
 
 namespace Teleopti.Analytics.Etl.ConfigTool

@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Analytics.Etl.Interfaces.Transformer;
+using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 
 namespace Teleopti.Analytics.Etl.Transformer.ScheduleThreading
 {

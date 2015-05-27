@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Analytics.Etl.Interfaces.Transformer;
+using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job;
 using Teleopti.Interfaces.Domain;
-using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
+using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult;
 
 namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
 {
@@ -19,14 +19,5 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
 
             return jobStepResult;
         }
-
-        //public static IList<IJobStepResult> GetJobStepResultList()
-        //{
-        //    IList<IJobStepResult> jobStepResult = new List<IJobStepResult>();
-        //    jobStepResult.Add(new Result("Name1", 1, 1));
-        //    jobStepResult.Add(new Result("Name2", 2, 2));
-        //    jobStepResult.Add(new Result("Name3", 3, 3));
-        //    return jobStepResult;
-        //}
     }
 }

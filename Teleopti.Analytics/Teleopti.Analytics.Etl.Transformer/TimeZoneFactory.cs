@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Teleopti.Analytics.Etl.Interfaces.Common;
+using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Interfaces.Domain;
 

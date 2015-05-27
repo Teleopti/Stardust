@@ -2,7 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Analytics.Etl.Interfaces.Common;
+using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Transformer;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;

@@ -2,7 +2,7 @@
 using System.Data;
 using System.Data.SqlClient;
 using System.Threading;
-using Teleopti.Analytics.Etl.Interfaces.Common;
+using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using log4net;
 
 namespace Teleopti.Analytics.Etl.TransformerInfrastructure

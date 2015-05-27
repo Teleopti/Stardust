@@ -1,7 +1,7 @@
 using System;
 using System.Globalization;
-using Teleopti.Analytics.Etl.Interfaces.Common;
-using Teleopti.Analytics.Etl.Interfaces.Transformer;
+using Teleopti.Analytics.Etl.Common.Interfaces.Common;
+using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using log4net;
 
 namespace Teleopti.Analytics.Etl.Transformer

@@ -72,6 +72,7 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -86,10 +87,65 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Entity\BusinessUnitItem.cs" />
+    <Compile Include="Interfaces\Common\AlarmEventArgs.cs" />
+    <Compile Include="Interfaces\Common\BaseConfiguration.cs" />
+    <Compile Include="Interfaces\Common\IBaseConfiguration.cs" />
+    <Compile Include="Interfaces\Common\IConfigurationHandler.cs" />
+    <Compile Include="Interfaces\Common\IEtlJobLock.cs" />
+    <Compile Include="Interfaces\Common\IEtlJobLog.cs" />
+    <Compile Include="Interfaces\Common\IEtlJobLogCollection.cs" />
+    <Compile Include="Interfaces\Common\IEtlJobRelativePeriod.cs" />
+    <Compile Include="Interfaces\Common\IEtlJobSchedule.cs" />
+    <Compile Include="Interfaces\Common\IEtlJobScheduleCollection.cs" />
+    <Compile Include="Interfaces\Common\IEtlRunningInformation.cs" />
+    <Compile Include="Interfaces\Common\IJobHistoryRepository.cs" />
+    <Compile Include="Interfaces\Common\IJobLogRepository.cs" />
+    <Compile Include="Interfaces\Common\IJobRunner.cs" />
+    <Compile Include="Interfaces\Common\IJobScheduleRepository.cs" />
+    <Compile Include="Interfaces\Common\IRunController.cs" />
+    <Compile Include="Interfaces\Common\IRunControllerRepository.cs" />
+    <Compile Include="Interfaces\Common\JobScheduleType.cs" />
+    <Compile Include="Interfaces\Common\PmPermissionType.cs" />
+    <Compile Include="Interfaces\Common\TimeZonePeriod.cs" />
+    <Compile Include="Interfaces\PerformanceManager\IPmPermissionExtractor.cs" />
+    <Compile Include="Interfaces\PerformanceManager\IPmPermissionTransformer.cs" />
+    <Compile Include="Interfaces\PerformanceManager\IPMService.cs" />
+    <Compile Include="Interfaces\PerformanceManager\PmSynchronizeException.cs" />
+    <Compile Include="Interfaces\PerformanceManager\PmUser.cs" />
+    <Compile Include="Interfaces\PerformanceManager\ResultDto.cs" />
+    <Compile Include="Interfaces\PerformanceManager\UserDto.cs" />
+    <Compile Include="Interfaces\Transformer\DayOffEtlLoadSource.cs" />
+    <Compile Include="Interfaces\Transformer\EtlToolStateType.cs" />
+    <Compile Include="Interfaces\Transformer\ICommonStateHolder.cs" />
+    <Compile Include="Interfaces\Transformer\IEtlDayOffSubStep.cs" />
+    <Compile Include="Interfaces\Transformer\IEtlTransform.cs" />
+    <Compile Include="Interfaces\Transformer\IGeneralFunctions.cs" />
+    <Compile Include="Interfaces\Transformer\IGroupPagePersonTransformer.cs" />
+    <Compile Include="Interfaces\Transformer\IIntradayAvailabilityTransformer.cs" />
+    <Compile Include="Interfaces\Transformer\IIntradaySchedulePreferenceTransformer.cs" />
+    <Compile Include="Interfaces\Transformer\IJob.cs" />
+    <Compile Include="Interfaces\Transformer\IJobHelper.cs" />
+    <Compile Include="Interfaces\Transformer\IJobMultipleDate.cs" />
+    <Compile Include="Interfaces\Transformer\IJobMultipleDateItem.cs" />
+    <Compile Include="Interfaces\Transformer\IJobParameters.cs" />
+    <Compile Include="Interfaces\Transformer\IJobResult.cs" />
+    <Compile Include="Interfaces\Transformer\IJobStep.cs" />
+    <Compile Include="Interfaces\Transformer\IJobStepResult.cs" />
+    <Compile Include="Interfaces\Transformer\IPersonRequestTransformer.cs" />
+    <Compile Include="Interfaces\Transformer\IRaptorRepository.cs" />
+    <Compile Include="Interfaces\Transformer\IScheduleDayOffCountTransformer.cs" />
+    <Compile Include="Interfaces\Transformer\IScheduleDayRestrictor.cs" />
+    <Compile Include="Interfaces\Transformer\IScheduleForecastSkill.cs" />
+    <Compile Include="Interfaces\Transformer\IScheduleForecastSkillKey.cs" />
+    <Compile Include="Interfaces\Transformer\IScheduleForecastSkillResourceCalculation.cs" />
+    <Compile Include="Interfaces\Transformer\ISchedulePreferenceTransformer.cs" />
+    <Compile Include="Interfaces\Transformer\IScheduleProjection.cs" />
+    <Compile Include="Interfaces\Transformer\ITaskParameter.cs" />
+    <Compile Include="Interfaces\Transformer\ITenantLogonInfoLoader.cs" />
+    <Compile Include="Interfaces\Transformer\JobCategoryType.cs" />
     <Compile Include="JobLog\EtlJobLog.cs" />
     <Compile Include="JobLog\EtlJobLogCollection.cs" />
     <Compile Include="Entity\EtlJobRelativePeriod.cs" />
-    <Compile Include="Infrastructure\Repository.cs" />
     <Compile Include="JobSchedule\EtlJobSchedule.cs" />
     <Compile Include="JobSchedule\EtlJobScheduleCollection.cs" />
     <Compile Include="Entity\EtlRunningInformation.cs" />
@@ -101,17 +157,13 @@
       <Project>{add1bcdc-cfbb-4632-8fb5-4ff3bd04f666}</Project>
       <Name>Teleopti.Ccc.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Infrastructure\Teleopti.Ccc.Infrastructure.csproj">
+      <Project>{aa4a5374-77af-44f0-85c1-6cabc6701352}</Project>
+      <Name>Teleopti.Ccc.Infrastructure</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
       <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
       <Name>Teleopti.Interfaces</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Analytics.Etl.Interfaces\Teleopti.Analytics.Etl.Interfaces.csproj">
-      <Project>{172807BD-AC1D-4E6D-9013-2D30DCF5B961}</Project>
-      <Name>Teleopti.Analytics.Etl.Interfaces</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Analytics.Etl.TransformerInfrastructure\Teleopti.Analytics.Etl.TransformerInfrastructure.csproj">
-      <Project>{7193C0D2-2B91-4E92-9C47-620095255EDC}</Project>
-      <Name>Teleopti.Analytics.Etl.TransformerInfrastructure</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -137,6 +189,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Infrastructure\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

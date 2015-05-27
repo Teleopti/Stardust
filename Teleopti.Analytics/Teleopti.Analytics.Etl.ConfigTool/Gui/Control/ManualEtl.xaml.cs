@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows.Forms;
 using Autofac;
+using Teleopti.Analytics.Etl.Common.Interfaces.Common;
+using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.ConfigTool.Transformer;
-using Teleopti.Analytics.Etl.Interfaces.Common;
-using Teleopti.Analytics.Etl.Interfaces.Transformer;
 
 namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 {

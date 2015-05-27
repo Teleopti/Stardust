@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using Teleopti.Analytics.Etl.Common.Entity;
-using Teleopti.Analytics.Etl.Common.Infrastructure;
+using Teleopti.Analytics.Etl.TransformerInfrastructure;
 
 namespace Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel
 {

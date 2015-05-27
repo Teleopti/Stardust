@@ -93,12 +93,6 @@
     <Compile Include="PmProxyFactory.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Teleopti.Analytics.Etl.Interfaces\Teleopti.Analytics.Etl.Interfaces.csproj">
-      <Project>{172807BD-AC1D-4E6D-9013-2D30DCF5B961}</Project>
-      <Name>Teleopti.Analytics.Etl.Interfaces</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Teleopti.Ccc.snk" />
   </ItemGroup>
   <ItemGroup>
@@ -120,6 +114,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Teleopti.Analytics.Etl.Common\Teleopti.Analytics.Etl.Common.csproj">
+      <Project>{34c3b171-160e-4320-aa49-b8162bad0e36}</Project>
+      <Name>Teleopti.Analytics.Etl.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

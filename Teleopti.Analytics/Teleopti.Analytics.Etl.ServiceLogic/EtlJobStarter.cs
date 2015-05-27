@@ -6,20 +6,19 @@ using System.Threading;
 using System.Timers;
 using Autofac;
 using Teleopti.Analytics.Etl.Common;
-using Teleopti.Analytics.Etl.Common.Infrastructure;
+using Teleopti.Analytics.Etl.Common.Interfaces.Common;
+using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.JobLog;
 using Teleopti.Analytics.Etl.Common.JobSchedule;
-using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer;
 using Teleopti.Analytics.Etl.TransformerInfrastructure;
 using log4net;
 using log4net.Config;
-using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Analytics.Etl.Transformer.Job;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.MultipleConfig;
 using Teleopti.Interfaces.Domain;
-using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
+using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult;
 using Timer = System.Timers.Timer;
 
 namespace Teleopti.Analytics.Etl.ServiceLogic

@@ -1,5 +1,5 @@
+using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.CommonTest.Infrastructure;
-using Teleopti.Analytics.Etl.Interfaces.Common;
 
 
 namespace Teleopti.Analytics.Etl.CommonTest.FakeData

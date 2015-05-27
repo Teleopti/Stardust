@@ -2,10 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using NUnit.Framework;
-using Teleopti.Analytics.Etl.Interfaces.Transformer;
+using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job;
 using Teleopti.Analytics.Etl.TransformerTest.FakeData;
-using Teleopti.Ccc.Domain.Analytics;
 
 namespace Teleopti.Analytics.Etl.TransformerTest.Job
 {

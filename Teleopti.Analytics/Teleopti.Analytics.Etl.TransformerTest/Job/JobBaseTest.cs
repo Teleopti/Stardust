@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using NUnit.Framework;
-using Teleopti.Analytics.Etl.Interfaces.Transformer;
+using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job;
 using Teleopti.Analytics.Etl.Transformer.Job.MultipleDate;
 using Teleopti.Analytics.Etl.Transformer.Job.Steps;
@@ -10,7 +10,7 @@ using Teleopti.Analytics.Etl.TransformerTest.FakeData;
 using Teleopti.Ccc.Domain.Common;
 using Rhino.Mocks;
 using Teleopti.Interfaces.Domain;
-using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
+using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult;
 
 namespace Teleopti.Analytics.Etl.TransformerTest.Job
 {

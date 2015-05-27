@@ -250,9 +250,9 @@
       <Project>{4F4DF171-4A56-4E0D-90CB-CB2AFDEA4411}</Project>
       <Name>Teleopti.Messaging</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Analytics.Etl.Interfaces\Teleopti.Analytics.Etl.Interfaces.csproj">
-      <Project>{172807BD-AC1D-4E6D-9013-2D30DCF5B961}</Project>
-      <Name>Teleopti.Analytics.Etl.Interfaces</Name>
+    <ProjectReference Include="..\Teleopti.Analytics.Etl.Common\Teleopti.Analytics.Etl.Common.csproj">
+      <Project>{34c3b171-160e-4320-aa49-b8162bad0e36}</Project>
+      <Name>Teleopti.Analytics.Etl.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Analytics.Etl.PerformanceManagerProxy\Teleopti.Analytics.Etl.PerformanceManagerProxy.csproj">
       <Project>{AE2DE329-7681-40C4-BE16-7382280E2BC6}</Project>
