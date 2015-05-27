@@ -68,7 +68,6 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 
 		[HttpPost]
 		[TenantUnitOfWork]
-		//TODO: tenant - make sure to only get user info from calling tenant
 		public virtual JsonResult LogonInfoFromGuids(IEnumerable<Guid> personIdsToGet)
 		{
 			return Json(_findLogonInfo.GetForIds(personIdsToGet));
