@@ -833,6 +833,7 @@
     <Compile Include="MessageBroker\Client\Composite\IMessageListener.cs" />
     <Compile Include="MessageBroker\Client\Composite\IMessageCreator.cs" />
     <Compile Include="MessageBroker\Events\TrackingMessage.cs" />
+    <Compile Include="MessageBroker\Mailbox.cs" />
     <Compile Include="MessageBroker\Notification.cs" />
     <Compile Include="MessageBroker\Subscription.cs" />
     <Compile Include="Messages\Denormalize\ScheduleChanged.cs" />
@@ -879,6 +880,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="MessageBroker\Notification.hbm.xml" />
+    <EmbeddedResource Include="MessageBroker\Mailbox.hbm.xml" />
     <Content Include="Messages.ico" />
   </ItemGroup>
   <ItemGroup>

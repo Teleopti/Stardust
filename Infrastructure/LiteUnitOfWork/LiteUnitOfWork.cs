@@ -15,6 +15,16 @@ namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork
 			_transaction = _session.BeginTransaction();
 		}
 
+		public void Persist(object obj)
+		{
+			_session.Persist(obj);
+		}
+
+		public IQuery NamedQuery(string queryName)
+		{
+			return _session.GetNamedQuery(queryName);
+		}
+
 		public ISQLQuery CreateSqlQuery(string queryString)
 		{
 			return _session.CreateSQLQuery(queryString);

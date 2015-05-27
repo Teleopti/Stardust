@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Interfaces"
+                   namespace="Teleopti.Interfaces.MessageBroker">
+	<class name="Notification" table="msg.Notification">
+		<id name="Id" type="guid">
+			<generator class="guid.comb" />
+		</id>
+		<property name="DataSource"/>
+		<property name="BusinessUnitId"/>
+		<property name="DomainType"/>
+		<property name="DomainQualifiedType"/>
+		<property name="DomainId"/>
+		<property name="ModuleId"/>
+		<property name="DomainReferenceId"/>
+		<property name="DomainReferenceType"/>
+		<property name="EndDate"/>
+		<property name="StartDate"/>
+		<property name="DomainUpdateType"/>
+		<property name="BinaryData"/>
+		<many-to-one name="MailboxParent" class="Mailbox" />
+	</class>
+</hibernate-mapping>

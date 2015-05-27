@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.MessageBroker;
+using Teleopti.Interfaces.MessageBroker;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
@@ -23,21 +24,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			Data.Add(JsonConvert.DeserializeObject<Mailbox>(JsonConvert.SerializeObject(mailbox)));
 		}
 
-		public Mailbox Get(Guid id)
+		public Mailbox Load(Guid id)
 		{
 			return Data
 				.SingleOrDefault(x => x.Id.Equals(id));
 		}
-
-		public IEnumerable<Mailbox> Get(string route)
-		{
-			return Data
-				.Where(x => x.Route.Equals(route))
-				.ToArray()
-				;
-		}
-
-		public IEnumerable<Mailbox> Get(string[] routes)
+		
+		public IEnumerable<Mailbox> Load(string[] routes)
 		{
 			return (
 				from m in Data

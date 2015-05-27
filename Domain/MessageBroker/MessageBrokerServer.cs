@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 
 		public IEnumerable<Interfaces.MessageBroker.Notification> PopMessages(string mailboxId)
 		{
-			var mailbox = _mailboxRepository.Get(Guid.Parse(mailboxId));
+			var mailbox = _mailboxRepository.Load(Guid.Parse(mailboxId));
 			var result = mailbox.PopAll();
 			_mailboxRepository.Persist(mailbox);
 			return result;
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 					notification.DomainUpdateType, string.Join(", ", routes),
 					string.Join(", ", routes.Select(RouteToGroupName)));
 
-			_mailboxRepository.Get(routes)
+			_mailboxRepository.Load(routes)
 				.ForEach(mailbox =>
 				{
 					mailbox.AddNotification(notification);
