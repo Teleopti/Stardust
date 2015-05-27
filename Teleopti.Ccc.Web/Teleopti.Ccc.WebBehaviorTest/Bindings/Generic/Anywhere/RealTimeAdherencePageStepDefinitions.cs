@@ -76,6 +76,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[When(@"I select")]
 		public void WhenISelect(Table table)
 		{
+			Browser.Interactions.AssertExists(".send-message");
 			var persons = table.CreateSet<RealTimeAdherenceAgentStateInfo>();
 			foreach (var person in persons)
 			{
