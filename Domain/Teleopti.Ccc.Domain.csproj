@@ -524,8 +524,6 @@
     <Compile Include="Forecasting\Angel\Accuracy\SkillAccuracy.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\WorkloadAccuracy.cs" />
     <Compile Include="Forecasting\Angel\AverageStatistics.cs" />
-    <Compile Include="Forecasting\Angel\Accuracy\ForecastingMeanAbsolutePercentageDeviation.cs" />
-    <Compile Include="Forecasting\Angel\Accuracy\ForecastingSymmetricMeanAbsolutePercentageError.cs" />
     <Compile Include="Forecasting\Angel\ForecastWorkloadInput.cs" />
     <Compile Include="Forecasting\Angel\HistoricalPeriodProvider.cs" />
     <Compile Include="Forecasting\Angel\IHistoricalPeriodProvider.cs" />

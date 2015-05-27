@@ -386,14 +386,12 @@
     <Compile Include="DayOffPlanning\WorkShiftBackToLegalStateDecisionMakerTest.cs" />
     <Compile Include="DayOffPlanning\WorkShiftLegalStateDayIndexCalculatorTest.cs" />
     <Compile Include="FeatureFlags\AllTogglesTest.cs" />
-    <Compile Include="Forecasting\Angel\Accuracy\ForecastingSymmetricMeanAbsolutePercentageErrorTest.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\ForecastingWeightedMeanAbsolutePercentageErrorTest.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\MeasurementShouldPickTheBestMethodTest.cs" />
     <Compile Include="Forecasting\Angel\HistoricalPeriodProviderTest.cs" />
     <Compile Include="Forecasting\Angel\IndexVolumesFactory.cs" />
     <Compile Include="Forecasting\Angel\Methods\TeleoptiClassicTest.cs" />
     <Compile Include="Forecasting\Angel\Methods\TeleoptiClassicWithTrendTest.cs" />
-    <Compile Include="Forecasting\Angel\Accuracy\ForecastingMeanAbsolutePercentageDeviationTest.cs" />
     <Compile Include="Forecasting\Angel\ForecastingTargetMergerTest.cs" />
     <Compile Include="Forecasting\Angel\Historical\HistoricalDataTest.cs" />
     <Compile Include="Forecasting\Angel\ForecastCreatorTest.cs" />
