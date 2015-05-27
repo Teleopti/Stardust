@@ -76,6 +76,7 @@
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
 
 
+
 	// Default task(s).
 	grunt.registerTask('default', ['uglify:dev', 'sass', 'cssmin', 'watch:dev']); // this task run the main task and then watch for file changes
 	grunt.registerTask('unitTest', ['watch:test']); // this task watchs the js tests files and run the tests if needed
