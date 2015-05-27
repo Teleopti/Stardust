@@ -72,5 +72,5 @@ MultiTenancy_LogonUseNewSchema_33049 = RC
 Wfm_ResourcePlanner_32892 = RC
 Wfm_ChangePlanningPeriod_33043 = RC
 WfmPeople_AdvancedSearch_32973 = RC
-WfmOutbound_Campaign_32696 = RC
-WfmSeatPlanner_Logon_32003 = RC
+Wfm_Outbound_Campaign_32696 = RC
+SeatPlanner_Logon_32003 = RC

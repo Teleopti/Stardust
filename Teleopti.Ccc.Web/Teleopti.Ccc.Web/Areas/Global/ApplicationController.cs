@@ -49,11 +49,11 @@ namespace Teleopti.Ccc.Web.Areas.Global
 			}
 			if (path.Equals(DefinedRaptorApplicationFunctionPaths.Outbound))
 			{
-				return _toggleManager.IsEnabled(Toggles.WfmOutbound_Campaign_32696);
+				return _toggleManager.IsEnabled(Toggles.Wfm_Outbound_Campaign_32696);
 			}
 			if (path.Equals(DefinedRaptorApplicationFunctionPaths.SeatPlanner))
 			{
-				return _toggleManager.IsEnabled(Toggles.WfmSeatPlanner_Logon_32003);
+				return _toggleManager.IsEnabled(Toggles.SeatPlanner_Logon_32003);
 			}
 				
 			return true;
