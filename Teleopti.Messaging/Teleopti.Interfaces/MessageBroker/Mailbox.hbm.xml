@@ -5,7 +5,7 @@
 	<class name="Mailbox" table="msg.Mailbox">
 		<id name="Id" type="guid"/>
 		<property name="Route"/>
-		<bag name="Notifications" cascade="all-delete-orphan" inverse="true">
+		<bag name="Notifications" cascade="save-update" inverse="true">
 			<key column="MailboxParent"/>
 			<one-to-many class="Notification"/>
 		</bag>

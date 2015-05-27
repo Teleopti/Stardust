@@ -14,8 +14,8 @@
 		<property name="ModuleId"/>
 		<property name="DomainReferenceId"/>
 		<property name="DomainReferenceType"/>
-		<property name="EndDate"/>
-		<property name="StartDate"/>
+		<property name="StartDate" type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.StringSavedAsDateTime, Teleopti.Ccc.Infrastructure"/>
+		<property name="EndDate" type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.StringSavedAsDateTime, Teleopti.Ccc.Infrastructure"/>
 		<property name="DomainUpdateType"/>
 		<property name="BinaryData"/>
 		<many-to-one name="MailboxParent" class="Mailbox" />
