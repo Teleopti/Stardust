@@ -5,9 +5,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 {
-	public class ForecastingWeightedMeanAbsolutePercentageError : IForecastMethodEvaluator
+	public class ForecastingWeightedMeanAbsolutePercentageError : IForecastAccuracyCalculator
 	{
-		public double Evaluate(IList<IForecastingTarget> forecastingForLastYear, ReadOnlyCollection<ITaskOwner> historicalDataForLastYear)
+		public double Accuracy(IList<IForecastingTarget> forecastingForLastYear, ReadOnlyCollection<ITaskOwner> historicalDataForLastYear)
 		{
 			var diffSum = 0d;
 			var tasksSum = 0d;

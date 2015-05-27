@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IForecastingTargetMerger>();
 			builder.RegisterType<ForecastingWeightedMeanAbsolutePercentageError>()
 				.SingleInstance()
-				.As<IForecastMethodEvaluator>();
+				.As<IForecastAccuracyCalculator>();
 			builder.RegisterType<ForecastMethodProvider>()
 				.SingleInstance()
 				.As<IForecastMethodProvider>();

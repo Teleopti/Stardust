@@ -8,9 +8,9 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 	/// <summary>
 	/// http://en.wikipedia.org/wiki/Mean_absolute_percentage_error
 	/// </summary>
-	public class ForecastingMeanAbsolutePercentageDeviation : IForecastMethodEvaluator
+	public class ForecastingMeanAbsolutePercentageDeviation : IForecastAccuracyCalculator
 	{
-		public double Evaluate(IList<IForecastingTarget> forecastingForLastYear, ReadOnlyCollection<ITaskOwner> historicalDataForLastYear)
+		public double Accuracy(IList<IForecastingTarget> forecastingForLastYear, ReadOnlyCollection<ITaskOwner> historicalDataForLastYear)
 		{
 			var diffSum = 0d;
 			var numberOfSkipped = 0;

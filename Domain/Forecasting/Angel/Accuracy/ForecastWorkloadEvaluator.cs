@@ -8,14 +8,14 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 	public class ForecastWorkloadEvaluator : IForecastWorkloadEvaluator
 	{
 		private readonly IHistoricalData _historicalData;
-		private readonly IForecastMethodEvaluator _forecastMethodEvaluator;
+		private readonly IForecastAccuracyCalculator _forecastAccuracyCalculator;
 		private readonly IForecastMethodProvider _forecastMethodProvider;
 		private readonly IHistoricalPeriodProvider _historicalPeriodProvider;
 
-		public ForecastWorkloadEvaluator(IHistoricalData historicalData, IForecastMethodEvaluator forecastMethodEvaluator, IForecastMethodProvider forecastMethodProvider, IHistoricalPeriodProvider historicalPeriodProvider)
+		public ForecastWorkloadEvaluator(IHistoricalData historicalData, IForecastAccuracyCalculator forecastAccuracyCalculator, IForecastMethodProvider forecastMethodProvider, IHistoricalPeriodProvider historicalPeriodProvider)
 		{
 			_historicalData = historicalData;
-			_forecastMethodEvaluator = forecastMethodEvaluator;
+			_forecastAccuracyCalculator = forecastAccuracyCalculator;
 			_forecastMethodProvider = forecastMethodProvider;
 			_historicalPeriodProvider = historicalPeriodProvider;
 		}
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 				select new MethodAccuracy
 				{
 					MeasureResult = forecastingMeasureTarget.ToArray(),
-					Number = _forecastMethodEvaluator.Evaluate(forecastingMeasureTarget, lastYearData.TaskOwnerDayCollection),
+					Number = _forecastAccuracyCalculator.Accuracy(forecastingMeasureTarget, lastYearData.TaskOwnerDayCollection),
 					MethodId = forecastMethod.Id
 				}).ToList();
 			var bestMethod = list.OrderByDescending(x => x.Number).First();
