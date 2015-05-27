@@ -793,6 +793,16 @@
     <Compile Include="Main\PreLogonScreen.Designer.cs">
       <DependentUpon>PreLogonScreen.cs</DependentUpon>
     </Compile>
+    <Compile Include="Reporting\IReportDataParameter.cs" />
+    <Compile Include="Reporting\ReportDataPackage.cs" />
+    <Compile Include="Reporting\ReportDataParameter.cs" />
+    <Compile Include="Reporting\ReportViewerControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Reporting\ReportViewerControl.Designer.cs">
+      <DependentUpon>ReportViewerControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Reporting\ReportViewerToolbarTexts.cs" />
     <Compile Include="Scheduling\BackgroundWorkerWrapper.cs" />
     <Compile Include="Scheduling\PublishScheduleDateView.cs">
       <SubType>Form</SubType>
@@ -2983,6 +2993,20 @@
     <EmbeddedResource Include="Permissions\PermissionViewer.resx">
       <DependentUpon>PermissionViewer.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Reports\report_auditing.rdlc">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\report_scheduled_time_per_activity.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\report_schedule_time_vs_target.rdlc">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reporting\ReportViewerControl.resx">
+      <DependentUpon>ReportViewerControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\FilterMultiplePersons.resx">
       <DependentUpon>FilterMultiplePersons.cs</DependentUpon>
     </EmbeddedResource>
@@ -3167,10 +3191,6 @@
     <ProjectReference Include="..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
       <Project>{DB42D973-9889-4D51-9FC5-BE66AA7F117C}</Project>
       <Name>Teleopti.Ccc.IocCommon</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Ccc.OnlineReporting\Teleopti.Ccc.OnlineReporting.csproj">
-      <Project>{6A91B93B-AFD0-4074-9908-F582745FF569}</Project>
-      <Name>Teleopti.Ccc.OnlineReporting</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ClientProxies\Teleopti.Ccc.Sdk.ClientProxies.csproj">
       <Project>{6116fc80-2475-447e-a90a-14b4db59e2a7}</Project>

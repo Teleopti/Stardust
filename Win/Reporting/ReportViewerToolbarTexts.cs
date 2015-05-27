@@ -1,7 +1,7 @@
 ﻿using Microsoft.Reporting.WinForms;
 using Teleopti.Ccc.UserTexts;
 
-namespace Teleopti.Ccc.OnlineReporting
+namespace Teleopti.Ccc.Win.Reporting
 {
 	class ReportViewerToolbarTexts :IReportViewerMessages
 	{

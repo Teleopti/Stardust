@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using Microsoft.Reporting.WinForms;
 using Microsoft.Win32;
 
-namespace Teleopti.Ccc.OnlineReporting
+namespace Teleopti.Ccc.Win.Reporting
 {
     //Presenter
     public partial class ReportViewerControl : UserControl

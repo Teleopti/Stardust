@@ -1,5 +1,5 @@
 ﻿
-namespace Teleopti.Ccc.OnlineReporting
+namespace Teleopti.Ccc.Win.Reporting
 {
     public class ReportDataParameter :IReportDataParameter
     {

@@ -32,7 +32,7 @@
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1302:DoNotHardcodeLocaleSpecificStrings", MessageId = "Start menu")]
         private void InitializeComponent()
         {
-			this.reportViewerControl1 = new Teleopti.Ccc.OnlineReporting.ReportViewerControl();
+			this.reportViewerControl1 = new ReportViewerControl();
 			this.reportSettings1 = new Teleopti.Ccc.Win.Reporting.ReportSettingsHostView();
 			this.SuspendLayout();
 			// 
@@ -75,7 +75,7 @@
 
         #endregion
 
-        private Teleopti.Ccc.OnlineReporting.ReportViewerControl reportViewerControl1;
+        private ReportViewerControl reportViewerControl1;
         private ReportSettingsHostView reportSettings1;
 
     }

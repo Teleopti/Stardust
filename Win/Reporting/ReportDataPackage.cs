@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Teleopti.Ccc.OnlineReporting
+namespace Teleopti.Ccc.Win.Reporting
 {
     public class ReportDataPackage<T>
     {

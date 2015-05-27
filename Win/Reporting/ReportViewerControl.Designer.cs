@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.OnlineReporting
+﻿namespace Teleopti.Ccc.Win.Reporting
 {
     partial class ReportViewerControl
     {
