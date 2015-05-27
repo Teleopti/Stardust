@@ -1,0 +1,51 @@
+﻿
+	<div class="toolbar">
+		<div class="row">
+			<div class="col-md-8">
+				<div class="input-prepend">
+					<i class="mdi mdi-filter-outline"></i>
+					<input type="text" name="filterDetails" ng-model="searchData" placeholder="{{'DataFilterThreeDots' | translate}}" />
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="wfm-switch permissions-tree-switch">
+					<input type="checkbox" id="switch3" ng-model="selectedDataToggle" />
+					<label for="switch3">
+						<span class="wfm-switch-label" translate>SelectedItems</span>
+						<span class="wfm-switch-toggle"></span>
+					</label>
+				</div>
+				<div class="wfm-switch permissions-tree-switch">
+					<input type="checkbox" id="switch4" ng-model="unselectedDataToggle" />
+					<label for="switch4">
+						<span class="wfm-switch-label" translate>NotSelectedItems</span>
+						<span class="wfm-switch-toggle"></span>
+					</label>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="row">
+			<div class="col-md-12">
+				<label translate>AddGlobalAuthorizationLabel</label>
+				<md-select placeholder="Pick" ng-model="dynamicOptionSelected" ng-change="changeOption(dynamicOptionSelected)">
+					<md-option ng-repeat="dynamic in organization.DynamicOptions" ng-value="dynamic.RangeOption">{{dynamic.Name}}</md-option>
+				</md-select>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-12">
+				<label translate>AddSpecificAuthorizationLabel</label>
+			</div>
+		</div>
+	</div>
+	<div class="tree permissions-tree">
+
+		<div ui-tree data-drag-enabled="false">
+			<ol ui-tree-nodes="" ng-model="organization.BusinessUnit" id="tree-root" class="tree-line">
+				<li ng-repeat="node in organization.BusinessUnit | filter:searchData" ui-tree-node ng-include="'nodes_bu_renderer.html'"></li>
+			</ol>
+		</div>
+	</div>

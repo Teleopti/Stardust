@@ -1218,6 +1218,7 @@
     <Content Include="WFM\js\global\help.controller.js" />
     <Content Include="WFM\js\outbound\outbound.directive.js" />
     <None Include="WFM\css\_forecasting.scss" />
+    <Content Include="WFM\js\permissions\permissions.data.html" />
     <Content Include="WFM\js\permissions\permissions.filters.js" />
     <Content Include="WFM\js\permissions\permissions.functions.html" />
     <Content Include="WFM\js\permissions\roles.service.js" />

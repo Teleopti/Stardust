@@ -58,7 +58,7 @@
 			return functions;
 		}
 	]);
-	rolesService.service('RolesFunctions', [
+	rolesService.service('RolesFunctionsService', [
 			'$q', 'PermissionsService', '$filter', function ($q, PermissionsService, $filter) {
 				var parseFunctions = function (functionTab, selectedFunctions, parentNode) {
 					var selectedChildren = 0;
@@ -79,15 +79,15 @@
 				};
 
 
-				var rolesFunctions = {};
-				rolesFunctions.functionsDisplayed = [];
-				rolesFunctions.nmbFunctionsTotal = {};
+				var rolesFunctionsService = {};
+				rolesFunctionsService.functionsDisplayed = [];
+				rolesFunctionsService.nmbFunctionsTotal = {};
 				PermissionsService.applicationFunctions.query().$promise.then(function (result) {
-					parseFunctions(result, [], rolesFunctions.nmbFunctionsTotal);
-					rolesFunctions.functionsDisplayed = result;
+					parseFunctions(result, [], rolesFunctionsService.nmbFunctionsTotal);
+					rolesFunctionsService.functionsDisplayed = result;
 				});
 
-				rolesFunctions.unselectFunction = function (functionNode, selectedRole) {
+				rolesFunctionsService.unselectFunction = function (functionNode, selectedRole) {
 					var deferred = $q.defer();
 					PermissionsService.deleteFunction.query({ Id: selectedRole.Id, FunctionId: [functionNode] }).$promise.then(function (result) {
 						deferred.resolve();
@@ -95,7 +95,7 @@
 					return deferred.promise;
 				};
 
-				rolesFunctions.selectFunction = function (functionNode, selectedRole) {
+				rolesFunctionsService.selectFunction = function (functionNode, selectedRole) {
 					var deferred = $q.defer();
 					PermissionsService.postFunction.query({ Id: selectedRole.Id, Functions: [functionNode] }).$promise.then(function (result) {
 						deferred.resolve();
@@ -103,14 +103,14 @@
 					return deferred.promise;
 				};
 
-				rolesFunctions.refreshFunctions = function (newSelectedRoleId) {
+				rolesFunctionsService.refreshFunctions = function (newSelectedRoleId) {
 					PermissionsService.rolesPermissions.query({ Id: newSelectedRoleId }).$promise.then(function (result) {
 						var permsFunc = result.AvailableFunctions;
-						parseFunctions(rolesFunctions.functionsDisplayed, permsFunc);
+						parseFunctions(rolesFunctionsService.functionsDisplayed, permsFunc);
 					});
 				};
 
-				return rolesFunctions;
+				return rolesFunctionsService;
 			}
 	]);
 

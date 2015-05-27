@@ -37,23 +37,7 @@
 					Roles.copyRole(roleId);
 				};
 
-				$scope.toggleOrganizationSelection = function(node) {
-					var data = {};
-					data.Id = $scope.selectedRole;
 
-					if (node.selected) {
-						data.Type = node.Type;
-						data.DataId = node.Id;
-						Permissions.deleteAvailableData.query(data).$promise.then(function(result) {
-							node.selected = false;
-						});
-					} else {
-						data[node.Type + 's'] = [node.Id];
-						Permissions.assignOrganizationSelection.postData(data).$promise.then(function(result) {
-							node.selected = true;
-						});
-					}
-				};
 
 				$scope.changeOption = function(option) {
 					var data = {};
@@ -107,14 +91,37 @@
 			}
 		]
 	);
+	permissions.controller('RoleDataController', [
+		'$scope', '$filter', 'PermissionsService', 'Roles',
+		function($scope, $filter, PermissionsService, Roles) {
 
+			$scope.toggleOrganizationSelection = function (node) {
+				var data = {};
+				data.Id = $scope.selectedRole;
+
+				if (node.selected) {
+					data.Type = node.Type;
+					data.DataId = node.Id;
+					PermissionsService.deleteAvailableData.query(data).$promise.then(function (result) {
+						node.selected = false;
+					});
+				} else {
+					data[node.Type + 's'] = [node.Id];
+					PermissionsService.assignOrganizationSelection.postData(data).$promise.then(function (result) {
+						node.selected = true;
+					});
+				}
+			};
+
+		}
+	]);
 	permissions.controller('RoleFunctionsController', [
-		'$scope', '$filter', 'RolesFunctions',  'Roles',
-		function ($scope, $filter, RolesFunctions,  Roles) {
+		'$scope', '$filter', 'RolesFunctionsService', 'Roles',
+		function ($scope, $filter, RolesFunctionsService,  Roles) {
 			$scope.unselectedFunctionsToggle = false;
 			$scope.selectedFunctionsToggle = false;
 			$scope.rolesService = Roles;
-			$scope.rolesFunctionsService = RolesFunctions;
+			$scope.rolesFunctionsService = RolesFunctionsService;
 			$scope.selectedRole = $scope.rolesService.selectedRole;
 			$scope.functionsDisplayed = [];
 
@@ -122,11 +129,11 @@
 				function (newSelectedRole) {
 					if (!newSelectedRole.Id) return;
 					$scope.selectedRole = newSelectedRole;
-					RolesFunctions.refreshFunctions(newSelectedRole.Id);
+					RolesFunctionsService.refreshFunctions(newSelectedRole.Id);
 				}
 			);
 
-			$scope.$watch(function () { return RolesFunctions.functionsDisplayed; },
+			$scope.$watch(function () { return RolesFunctionsService.functionsDisplayed; },
 					function (rolesFunctionsData) {
 						$scope.functionsDisplayed = rolesFunctionsData;
 					}
@@ -137,12 +144,12 @@
 			$scope.toggleFunctionForRole = function (node) {
 				var functionNode = node.$modelValue;
 				if (functionNode.selected) { //functionNode
-					RolesFunctions.unselectFunction(functionNode.FunctionId, $scope.selectedRole).then(function () {
+					RolesFunctionsService.unselectFunction(functionNode.FunctionId, $scope.selectedRole).then(function () {
 						functionNode.selected = false;
 						node.$parentNodeScope.$modelValue.nmbSelectedChildren--;
 					});
 				} else {
-					RolesFunctions.selectFunction(functionNode.FunctionId, $scope.selectedRole).then(function () {
+					RolesFunctionsService.selectFunction(functionNode.FunctionId, $scope.selectedRole).then(function () {
 						functionNode.selected = true;
 						node.$parentNodeScope.$modelValue.nmbSelectedChildren++;
 					});
