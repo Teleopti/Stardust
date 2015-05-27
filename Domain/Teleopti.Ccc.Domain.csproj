@@ -534,6 +534,8 @@
     <Compile Include="Forecasting\Angel\Methods\TeleoptiClassic.cs" />
     <Compile Include="Forecasting\Angel\Methods\TeleoptiClassicBase.cs" />
     <Compile Include="Forecasting\Angel\Methods\TeleoptiClassicWithTrend.cs" />
+    <Compile Include="Forecasting\Angel\Outlier\IOutlierRemover.cs" />
+    <Compile Include="Forecasting\Angel\Outlier\OutlierRemover.cs" />
     <Compile Include="Forecasting\Angel\Trend\ILinearRegressionTrend.cs" />
     <Compile Include="Forecasting\Angel\Trend\LinearTrend.cs" />
     <Compile Include="Forecasting\Angel\ForecastingTargetMerger.cs" />

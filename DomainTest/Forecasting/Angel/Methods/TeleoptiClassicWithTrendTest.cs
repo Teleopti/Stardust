@@ -6,6 +6,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
+using Teleopti.Ccc.Domain.Forecasting.Angel.Outlier;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Trend;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -40,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Methods
 
 			_linearRegressionTrend = MockRepository.GenerateMock<ILinearRegressionTrend>();
 			
-			target = new TeleoptiClassicWithTrend(indexVolumes, _linearRegressionTrend);
+			target = new TeleoptiClassicWithTrend(indexVolumes, _linearRegressionTrend, new OutlierRemover());
 		}
 
 		[Test]
@@ -61,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Methods
 			const double totalIndex = indexMonth * indexWeek * indexDay;
 			var tasks = totalIndex * _averageTasks;
 
-			var result = target.Forecast(historicalData, new DateOnlyPeriod(new DateOnly(2014, 1, 1), new DateOnly(2014, 1, 1)));
+			var result = target.Forecast(historicalData, new DateOnlyPeriod(new DateOnly(2014, 1, 1), new DateOnly(2014, 1, 1)), false);
 			var expected = tasks + linearTrend.Slope*new DateOnly(2014, 1, 1).Subtract(LinearTrend.StartDate).Days +
 						   linearTrend.Intercept - tasks;
 			result.Single().Tasks.Should().Be.EqualTo(Math.Round(expected, 4));
@@ -84,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Methods
 			const double totalIndex = indexMonth * indexWeek * indexDay;
 			var tasks = totalIndex * _averageTasks;
 
-			var result = target.Forecast(historicalData, new DateOnlyPeriod(new DateOnly(2014, 1, 1), new DateOnly(2014, 1, 1)));
+			var result = target.Forecast(historicalData, new DateOnlyPeriod(new DateOnly(2014, 1, 1), new DateOnly(2014, 1, 1)), false);
 			var expected = tasks + linearTrend.Slope * new DateOnly(2014, 1, 1).Subtract(LinearTrend.StartDate).Days +
 						   linearTrend.Intercept - tasks;
 			expected = Math.Max(0, expected);

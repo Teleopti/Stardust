@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Forecasting.Angel.Outlier;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Trend;
 using Teleopti.Interfaces.Domain;
 
@@ -10,15 +11,17 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 	{
 		private readonly ILinearRegressionTrend _linearRegressionTrend;
 
-		public TeleoptiClassicWithTrend(IIndexVolumes indexVolumes, ILinearRegressionTrend linearRegressionTrend) : base(indexVolumes)
+		public TeleoptiClassicWithTrend(IIndexVolumes indexVolumes, ILinearRegressionTrend linearRegressionTrend, IOutlierRemover outlierRemover)
+			: base(indexVolumes, outlierRemover)
 		{
 			_linearRegressionTrend = linearRegressionTrend;
 		}
 
-		public override IList<IForecastingTarget> Forecast(TaskOwnerPeriod historicalData, DateOnlyPeriod futurePeriod)
+		public override IList<IForecastingTarget> Forecast(TaskOwnerPeriod historicalData, DateOnlyPeriod futurePeriod, bool removeOutliers)
 		{
 			var trend = _linearRegressionTrend.CalculateTrend(historicalData);
-			var forecastWithoutTrend = base.Forecast(historicalData, futurePeriod);
+			var forecastWithoutTrend = base.Forecast(historicalData, futurePeriod, removeOutliers);
+
 			var averageTasks = forecastWithoutTrend.Average(x => x.Tasks);
 			foreach (var forecastingTarget in forecastWithoutTrend)
 			{

@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 			var methods = _forecastMethodProvider.All();
 			var list = (from forecastMethod in methods
 				let forecastingMeasureTarget =
-					forecastMethod.Forecast(yearsBeforeLastYearData, new DateOnlyPeriod(oneYearBack, historicalData.EndDate))
+					forecastMethod.Forecast(yearsBeforeLastYearData, new DateOnlyPeriod(oneYearBack, historicalData.EndDate), true)
 				select new MethodAccuracy
 				{
 					MeasureResult = forecastingMeasureTarget.ToArray(),

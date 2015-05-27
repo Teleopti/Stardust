@@ -60,9 +60,9 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 
 		private dynamic[] createDayViewModels(IWorkload workload, MethodAccuracy bestAccuracy)
 		{
-			var historicalDataForForecasting = _historicalData.Fetch(workload, _historicalPeriodProvider.PeriodForDisplay(workload));
+			var historicalDataForDisplay = _historicalData.Fetch(workload, _historicalPeriodProvider.PeriodForDisplay(workload));
 			var data = new Dictionary<DateOnly, dynamic>();
-			foreach (var taskOwner in historicalDataForForecasting.TaskOwnerDayCollection)
+			foreach (var taskOwner in historicalDataForDisplay.TaskOwnerDayCollection)
 			{
 				dynamic item = new ExpandoObject();
 				item.date = taskOwner.CurrentDate.Date;

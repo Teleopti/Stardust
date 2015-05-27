@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Historical;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
+using Teleopti.Ccc.Domain.Forecasting.Angel.Outlier;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Forecasting.Angel;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -51,10 +52,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 
 			var futureData =new FutureData();
 			var historicalData = new HistoricalData(dailyStatistics);
-			var quickForecasterWorkload = new QuickForecasterWorkload(historicalData, futureData, new ForecastMethodProvider(new IndexVolumes(), null), new ForecastingTargetMerger());
+			var methodProvider = new ForecastMethodProvider(new IndexVolumes(), new LinearRegressionTrend(), new OutlierRemover());
+			var quickForecasterWorkload = new QuickForecasterWorkload(historicalData, futureData, methodProvider, new ForecastingTargetMerger());
 			var historicalPeriodProvider = MockRepository.GenerateMock<IHistoricalPeriodProvider>();
 			historicalPeriodProvider.Stub(x => x.PeriodForForecast(Workload)).Return(HistoricalPeriodForForecast);
-			var forecastMethodProvider = new ForecastMethodProvider(new IndexVolumes(), new LinearRegressionTrend());
+			var forecastMethodProvider = methodProvider;
 			var quickForecastWorkloadEvaluator = new ForecastWorkloadEvaluator(historicalData, new ForecastingWeightedMeanAbsolutePercentageError(), forecastMethodProvider, historicalPeriodProvider);
 			var target = new QuickForecaster(quickForecasterWorkload,
 				new FetchAndFillSkillDays(SkillDayRepository(skillDays), currentScenario,
