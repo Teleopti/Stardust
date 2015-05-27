@@ -73,7 +73,7 @@ describe('Roles', function() {
 	beforeEach(function () {
 		module('wfm');
 		module(function ($provide) {
-			$provide.service('Permissions', function () { return mockPermissionsService; });
+			$provide.service('PermissionsService', function () { return mockPermissionsService; });
 		});
 	});
 

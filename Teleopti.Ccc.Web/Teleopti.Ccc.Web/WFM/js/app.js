@@ -7,7 +7,6 @@ var wfm = angular.module('wfm', [
 	'ngMaterial',
 	'angularMoment',
 	'pascalprecht.translate',
-	'restService',
 	'restSearchService',
 	'restNotificationService',
 	'restResourcePlannerService',
@@ -16,7 +15,6 @@ var wfm = angular.module('wfm', [
 	'restAreasService',
 	'peopleSearchService',
 	'restRtaService',
-	'rolesService',
 	'wfmCtrls',
 	'wfm.permissions',
 	'wfm.people',
@@ -37,8 +35,7 @@ var wfm = angular.module('wfm', [
 	'ui.grid.exporter',
 	'ui.grid.selection',
 	'wfm.rta',
-	'ncy-angular-breadcrumb',
-	'permissionsFilters'
+	'ncy-angular-breadcrumb'
 ]);
 wfm.config([
 	'$stateProvider', '$urlRouterProvider', '$translateProvider', '$breadcrumbProvider', function ($stateProvider, $urlRouterProvider, $translateProvider, $breadcrumbProvider) {

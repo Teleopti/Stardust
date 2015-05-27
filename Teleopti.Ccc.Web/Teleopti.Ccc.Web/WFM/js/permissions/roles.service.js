@@ -1,19 +1,19 @@
 ﻿(function () {
 	'use strict';
 
-	var rolesService = angular.module('rolesService', []);
-	rolesService.service('Roles', ['$q', 'Permissions',
-		function ($q, Permissions) {
+	var rolesService = angular.module('wfm.permissions');
+	rolesService.service('Roles', ['$q', 'PermissionsService',
+		function ($q, PermissionsService) {
 			var roles = {};
 
 			roles.selectedRole = {};
 
-			roles.list = Permissions.roles.get();
+			roles.list = PermissionsService.roles.get();
 
 			roles.createRole = function (roleName) {
 				var deferred = $q.defer();
 				var roleData = { Description: roleName };
-				Permissions.roles.post(JSON.stringify(roleData)).$promise.then(function (result) {
+				PermissionsService.roles.post(JSON.stringify(roleData)).$promise.then(function (result) {
 					roleData.Id = result.Id;
 					roleData.DescriptionText = result.DescriptionText;
 					roles.list.unshift(roleData);
@@ -25,7 +25,7 @@
 			roles.copyRole = function (roleId) {
 				var roleCopy = {};
 				var deferred = $q.defer();
-				Permissions.duplicateRole.query({ Id: roleId }).$promise.then(function (result) {
+				PermissionsService.duplicateRole.query({ Id: roleId }).$promise.then(function (result) {
 					roleCopy.Id = result.Id;
 					roleCopy.DescriptionText = result.DescriptionText;
 					roles.list.unshift(roleCopy);
@@ -35,7 +35,7 @@
 			};
 
 			roles.removeRole = function (role) {
-				Permissions.manageRole.deleteRole({ Id: role.Id }).$promise.then(function (result) {
+				PermissionsService.manageRole.deleteRole({ Id: role.Id }).$promise.then(function (result) {
 					roles.list.splice(roles.list.indexOf(role), 1);
 				});
 			};
@@ -48,9 +48,9 @@
 		}
 	]);
 	rolesService.service('Functions', [
-		'$q', 'Permissions', function ($q, Permissions) {
+		'$q', 'PermissionsService', function ($q, PermissionsService) {
 			var functions = {};
-			functions.list = Permissions.applicationFunctions.query();
+			functions.list = PermissionsService.applicationFunctions.query();
 			functions.getDisplayedFunctions = function () {
 				var displayedFunction = functions.list;
 				return displayedFunction;
@@ -59,7 +59,7 @@
 		}
 	]);
 	rolesService.service('RolesFunctions', [
-			'$q', 'Permissions', '$filter', function ($q, Permissions, $filter) {
+			'$q', 'PermissionsService', '$filter', function ($q, PermissionsService, $filter) {
 				var parseFunctions = function (functionTab, selectedFunctions, parentNode) {
 					var selectedChildren = 0;
 					functionTab.forEach(function (item) {
@@ -82,14 +82,14 @@
 				var rolesFunctions = {};
 				rolesFunctions.functionsDisplayed = [];
 				rolesFunctions.nmbFunctionsTotal = {};
-				Permissions.applicationFunctions.query().$promise.then(function (result) {
+				PermissionsService.applicationFunctions.query().$promise.then(function (result) {
 					parseFunctions(result, [], rolesFunctions.nmbFunctionsTotal);
 					rolesFunctions.functionsDisplayed = result;
 				});
 
 				rolesFunctions.unselectFunction = function (functionNode, selectedRole) {
 					var deferred = $q.defer();
-					Permissions.deleteFunction.query({ Id: selectedRole.Id, FunctionId: [functionNode] }).$promise.then(function (result) {
+					PermissionsService.deleteFunction.query({ Id: selectedRole.Id, FunctionId: [functionNode] }).$promise.then(function (result) {
 						deferred.resolve();
 					});
 					return deferred.promise;
@@ -97,14 +97,14 @@
 
 				rolesFunctions.selectFunction = function (functionNode, selectedRole) {
 					var deferred = $q.defer();
-					Permissions.postFunction.query({ Id: selectedRole.Id, Functions: [functionNode] }).$promise.then(function (result) {
+					PermissionsService.postFunction.query({ Id: selectedRole.Id, Functions: [functionNode] }).$promise.then(function (result) {
 						deferred.resolve();
 					});
 					return deferred.promise;
 				};
 
 				rolesFunctions.refreshFunctions = function (newSelectedRoleId) {
-					Permissions.rolesPermissions.query({ Id: newSelectedRoleId }).$promise.then(function (result) {
+					PermissionsService.rolesPermissions.query({ Id: newSelectedRoleId }).$promise.then(function (result) {
 						var permsFunc = result.AvailableFunctions;
 						parseFunctions(rolesFunctions.functionsDisplayed, permsFunc);
 					});

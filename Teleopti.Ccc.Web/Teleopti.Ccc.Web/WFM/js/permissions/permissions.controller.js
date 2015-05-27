@@ -1,9 +1,9 @@
 ﻿(function() {
 	'use strict';
 
-	var permissions = angular.module('wfm.permissions', []);
+	var permissions = angular.module('wfm.permissions', ['ngResource']);
 	permissions.controller('PermissionsCtrl', [
-			'$scope', '$filter', 'Permissions', 'Roles',
+			'$scope', '$filter', 'PermissionsService', 'Roles',
 			function($scope, $filter, Permissions, Roles) {
 				$scope.list = [];
 				$scope.roleName = null;
@@ -109,8 +109,8 @@
 	);
 
 	permissions.controller('RoleFunctionsController', [
-		'$scope', '$filter', 'RolesFunctions', 'Permissions', 'Roles',
-		function ($scope, $filter, RolesFunctions, Permissions, Roles) {
+		'$scope', '$filter', 'RolesFunctions',  'Roles',
+		function ($scope, $filter, RolesFunctions,  Roles) {
 			$scope.unselectedFunctionsToggle = false;
 			$scope.selectedFunctionsToggle = false;
 			$scope.rolesService = Roles;

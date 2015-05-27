@@ -63,7 +63,7 @@ describe('PermissionsCtrl', function () {
 	beforeEach(function () {
 		module('wfm');
 		module(function ($provide) {
-			$provide.service('Permissions', function() { return mockPermissionsService; });
+			$provide.service('PermissionsService', function() { return mockPermissionsService; });
 		});
 	});
 
@@ -82,7 +82,7 @@ describe('PermissionsCtrl', function () {
 	it('creates a role in the list', inject(function($controller) {
 		var scope = $rootScope.$new();
 
-		$controller('PermissionsCtrl', { $scope: scope, Permissions: mockPermissionsService });
+		$controller('PermissionsCtrl', { $scope: scope, PermissionsService: mockPermissionsService });
 
 		scope.roleName = 'name';
 		scope.createRole();

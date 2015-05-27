@@ -1,6 +1,6 @@
 ﻿(function() {
 	'use strict';
-	var permissionsFilters = angular.module('permissionsFilters', []);
+	var permissionsFilters = angular.module('wfm.permissions');
 	permissionsFilters.filter('selectedFunctions', [
 		function() {
 			return function(nodes, selectedFunctionToggle) {
@@ -36,22 +36,4 @@
 			}
 		}
 	]);
-/*
-	permissionsFilters.filter('unselectedFunctions2', [
-		function () {
-			return function (node, unselectedFunctionToggle) {
-				if (!unselectedFunctionToggle) return node;
-				var filteredNode = null;
-					var hasUnselectedChildren = false;
-					if (node.ChildFunctions && node.ChildFunctions.length > 0
-						&& node.nmbSelectedChildren < node.ChildFunctions.length)
-						hasUnselectedChildren = true;
-
-					if (!node.selected || hasUnselectedChildren) {
-						filteredNode=node;
-					}
-				return filteredNode;
-			}
-		
-	]);}*/
 })();
