@@ -172,12 +172,10 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, "xxRealTimeAdherenceOverview", DefinedRaptorApplicationFunctionForeignIds.RealTimeAdherenceOverview, null);
 
 			//SeatPlanner
-			var seatPlannerFunction = CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.SeatPlanner, "xxSeatPlanner", DefinedRaptorApplicationFunctionForeignIds.SeatPlanner, null);
-			seatPlannerFunction.IsPreliminary = true;
+			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.SeatPlanner, "xxSeatPlanner", DefinedRaptorApplicationFunctionForeignIds.SeatPlanner, null);
 
 			//Outbound
-			var outboundFunction = CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.Outbound, "xxOutbound", DefinedRaptorApplicationFunctionForeignIds.Outbound, null);
-			outboundFunction.IsPreliminary = true;
+			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.Outbound, "xxOutbound", DefinedRaptorApplicationFunctionForeignIds.Outbound, null);
 
 			return new ReadOnlyCollection<IApplicationFunction>(applicationFunctionList);
 		}
