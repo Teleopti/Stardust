@@ -5,7 +5,10 @@ using System.Web.Http.Results;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.ResourcePlanner;
 using Teleopti.Interfaces.Domain;
@@ -20,6 +23,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		public INow TestableNow;
 		public IMissingForecastProvider FakeMissingForecastProvider;
 		public IPlanningPeriodRepository FakePlanningPeriodRepository;
+		public INow LocalTestableNow;
 
 		[Test]
 		public void ShouldReturnDefaultPlanningPeriodIfNoPeriodExists()
@@ -80,6 +84,20 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		}
 
 		[Test]
+		public void ShouldGetPlanningPeriodSuggestionsInFuture()
+		{
+			((TestableNow)LocalTestableNow).CustomNow = new DateTime(2015, 05, 22);
+			Guid id = Guid.NewGuid();
+			((FakePlanningPeriodRepository)FakePlanningPeriodRepository).CustomPlanningPeriod = new PlanningPeriod(new PlanningPeriodSuggestions(LocalTestableNow, suggestions()));
+			((FakePlanningPeriodRepository)FakePlanningPeriodRepository).CustomSuggestions =
+				new PlanningPeriodSuggestions(LocalTestableNow, suggestions());
+
+
+			var result = (OkNegotiatedContentResult<IEnumerable<SuggestedPlanningPeriodRangeModel>>)Target.GetPlanningPeriodSuggestion(id);
+			result.Content.Where(x=>x.StartDate>=TestableNow.LocalDateTime()).ToList().Count().Should().Be.EqualTo(5);
+		}
+
+		[Test]
 		public void ShouldChangePlanningPeriodRange()
 		{
 			Guid id = Guid.NewGuid();
@@ -100,18 +118,26 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			{
 				new AggregatedSchedulePeriod
 				{
-					Number = 1,
+					Number = 4,
 					Culture = 1053,
-					DateFrom = new DateTime(2015, 04, 01),
+					DateFrom = new DateTime(2011, 05, 02),
 					PeriodType = SchedulePeriodType.Week,
 					Priority = 10
 				},
 				new AggregatedSchedulePeriod
 				{
+					Number = 4,
+					Culture = 1053,
+					DateFrom = new DateTime(2011, 05, 02),
+					PeriodType = SchedulePeriodType.Week,
+					Priority = 11
+				},
+				new AggregatedSchedulePeriod
+				{
 					Number = 1,
 					Culture = 1053,
-					DateFrom = new DateTime(2015, 04, 01),
-					PeriodType = SchedulePeriodType.Day,
+					DateFrom = new DateTime(2011, 01, 03),
+					PeriodType = SchedulePeriodType.Week,
 					Priority = 11
 				}
 			};

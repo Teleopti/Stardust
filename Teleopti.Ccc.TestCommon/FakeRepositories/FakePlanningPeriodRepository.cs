@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	{
 		public bool AddExecuted { get; set; }
 		public IPlanningPeriodSuggestions CustomSuggestions { get; set; }
+		public IPlanningPeriod CustomPlanningPeriod { get; set; }
 		public void Add(IPlanningPeriod entity)
 		{
 			entity.SetId(Guid.NewGuid());
@@ -35,7 +36,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IPlanningPeriod Load(Guid id)
 		{
+			if (CustomPlanningPeriod== null)
 			return new PlanningPeriod(new PlanningPeriodSuggestions(new TestableNow(DateTime.Now),new AggregatedSchedulePeriod[]{} ));
+			return CustomPlanningPeriod;
 		}
 
 		public long CountAllEntities()

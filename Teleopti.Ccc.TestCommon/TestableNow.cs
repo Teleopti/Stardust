@@ -7,6 +7,8 @@ namespace Teleopti.Ccc.TestCommon
 	{
 		private DateTime _time;
 
+		public DateTime CustomNow { get { return _time; } set { _time = value; } }
+
 		public TestableNow(DateTime time)
 		{
 			_time = time;
