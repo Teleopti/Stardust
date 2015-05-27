@@ -3,7 +3,7 @@
 		<div class="input-prepend people-search">
 			<i class="mdi mdi-magnify"></i>
 			<input id="simple-search" style="width: 90%" type="text" placeholder="{{'Search'|translate}}..." xplaceholder="{{'Name' | translate}},{{'EmployeeNo' | translate}},{{'Role' | translate}},{{'Skill' | translate}},{{'Contract' | translate}},{{'PersonFinderFieldOrganization' | translate}},{{'ContractSchedule' | translate}},{{'PartTimePercentage' | translate}},{{'PersonFinderFieldShiftBag' | translate}},{{'BudgetGroup' | translate}}"
-				   ng-model="keyword" ng-keydown="$event.which === 13 && searchKeyword()" ng-change="validateSearchKeywordChanged()"
+				   ng-model="keyword" ng-keydown="$event.which === 13 && searchKeyword() || turnOffAdvancedSearch()" ng-change="validateSearchKeywordChanged()"
 				   ng-click="toggleAdvancedSearchOption($event)" />
 			<span class="dropdown" tabindex="0" ng-show="isAdvancedSearchEnabled" ng-include src="'js/people/template/advancedPeopleSearch.html'" outside-click="turnOffAdvancedSearch()"></span>
 		</div>
