@@ -4,6 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Security
 {
+	//TODO: tenant Can be removed when removing old schema
 	public class UserDetail : SimpleAggregateRoot, IUserDetail
 	{
 		private readonly IPerson _person;

@@ -9,10 +9,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 {
-    /// <summary>
-    /// Hashes a string when it's saved
-    /// and salt hashes it when it gets it from the database.
-    /// </summary>
+    //TODO: tenant this can be deleted when we remove old schema
 		[IsNotDeadCode("Used in NH mapping files.")]
     public class HashedString : IUserType
     {

@@ -2,11 +2,11 @@
 using System.Data;
 using System.Data.SqlClient;
 using Teleopti.Ccc.Domain.Security;
-using log4net.Config;
 using log4net;
 
 namespace Teleopti.Support.Security
 {
+	//TODO: tenant Can (probably?) be removed when removing old schema
     internal class PasswordEncryption : ICommandLineCommand
     {
 		private static readonly ILog log = LogManager.GetLogger(typeof(Program));
