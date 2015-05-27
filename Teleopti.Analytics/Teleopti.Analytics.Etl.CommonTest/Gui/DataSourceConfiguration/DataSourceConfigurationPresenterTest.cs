@@ -12,7 +12,7 @@ using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Interfaces.Domain;
 using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult;
 
-namespace Teleopti.Analytics.Etl.ConfigToolCodeTest.Gui.DataSourceConfiguration
+namespace Teleopti.Analytics.Etl.CommonTest.Gui.DataSourceConfiguration
 {
 	[TestFixture]
 	public class DataSourceConfigurationPresenterTest

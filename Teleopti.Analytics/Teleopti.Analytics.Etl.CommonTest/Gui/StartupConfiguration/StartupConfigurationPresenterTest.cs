@@ -6,7 +6,7 @@ using SharpTestsEx;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.ConfigTool.Code.Gui.StartupConfiguration;
 
-namespace Teleopti.Analytics.Etl.ConfigToolCodeTest.Gui.StartupConfiguration
+namespace Teleopti.Analytics.Etl.CommonTest.Gui.StartupConfiguration
 {
 	[TestFixture]
 	public class StartupConfigurationPresenterTest

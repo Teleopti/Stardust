@@ -95,6 +95,8 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Entity\BusinessUnitItemTest.cs" />
+    <Compile Include="Gui\DataSourceConfiguration\DataSourceConfigurationPresenterTest.cs" />
+    <Compile Include="Gui\StartupConfiguration\StartupConfigurationPresenterTest.cs" />
     <Compile Include="JobLog\EtlJobLogCollectionTest.cs" />
     <Compile Include="JobLog\EtlJobLogTest.cs" />
     <Compile Include="Entity\EtlJobRelativePeriodTest.cs" />
@@ -112,6 +114,10 @@
     <ProjectReference Include="..\..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
       <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
       <Name>Teleopti.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Analytics.Etl.ConfigTool\Teleopti.Analytics.Etl.ConfigTool.csproj">
+      <Project>{8a4806d6-8587-43f2-86fe-915b81c9f863}</Project>
+      <Name>Teleopti.Analytics.Etl.ConfigTool</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Analytics.Etl.TransformerInfrastructure\Teleopti.Analytics.Etl.TransformerInfrastructure.csproj">
       <Project>{7193C0D2-2B91-4E92-9C47-620095255EDC}</Project>

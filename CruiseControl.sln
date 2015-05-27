@@ -136,8 +136,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Support.LicTool", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Web.Broker", "Teleopti.Ccc.Web.Broker\Teleopti.Ccc.Web.Broker.csproj", "{19B0A84C-F943-4006-8DBC-AB5F4BFDB836}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Analytics.Etl.ConfigToolCodeTest", "Teleopti.Analytics\Teleopti.Analytics.Etl.ConfigToolCodeTest\Teleopti.Analytics.Etl.ConfigToolCodeTest.csproj", "{6D1892A0-D986-4E1F-9180-473BCE0A45E8}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Analytics.Portal", "Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\Teleopti.Analytics.Portal\Teleopti.Analytics.Portal.csproj", "{390BE690-1711-43B1-B877-87D035EE683B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Analytics.Parameters", "Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\Teleopti.Analytics.Parameter\Teleopti.Analytics.Parameters.csproj", "{8A8C2FC6-AD5A-4234-B887-21DE7E8D75CD}"
@@ -853,18 +851,6 @@ Global
 		{19B0A84C-F943-4006-8DBC-AB5F4BFDB836}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{19B0A84C-F943-4006-8DBC-AB5F4BFDB836}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{19B0A84C-F943-4006-8DBC-AB5F4BFDB836}.Release|x86.ActiveCfg = Release|Any CPU
-		{6D1892A0-D986-4E1F-9180-473BCE0A45E8}.Debug|.NET.ActiveCfg = Debug|Any CPU
-		{6D1892A0-D986-4E1F-9180-473BCE0A45E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6D1892A0-D986-4E1F-9180-473BCE0A45E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6D1892A0-D986-4E1F-9180-473BCE0A45E8}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{6D1892A0-D986-4E1F-9180-473BCE0A45E8}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{6D1892A0-D986-4E1F-9180-473BCE0A45E8}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{6D1892A0-D986-4E1F-9180-473BCE0A45E8}.Release|.NET.ActiveCfg = Release|Any CPU
-		{6D1892A0-D986-4E1F-9180-473BCE0A45E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6D1892A0-D986-4E1F-9180-473BCE0A45E8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6D1892A0-D986-4E1F-9180-473BCE0A45E8}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{6D1892A0-D986-4E1F-9180-473BCE0A45E8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{6D1892A0-D986-4E1F-9180-473BCE0A45E8}.Release|x86.ActiveCfg = Release|Any CPU
 		{390BE690-1711-43B1-B877-87D035EE683B}.Debug|.NET.ActiveCfg = Debug|Any CPU
 		{390BE690-1711-43B1-B877-87D035EE683B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{390BE690-1711-43B1-B877-87D035EE683B}.Debug|Any CPU.Build.0 = Debug|Any CPU
