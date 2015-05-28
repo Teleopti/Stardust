@@ -71,27 +71,27 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         TimeSpan CalculatedContractTimeHolder { get;}
 
-        /// <summary>
-        /// Gets or sets the calculated target time holder. Used by the result columns in Scheduler.
-        /// This field vill be set to null when Modify method is called.
-        /// </summary>
-        /// <value>The calculated target time holder.</value>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-11-21
-        /// </remarks>
-        TimeSpan? CalculatedTargetTimeHolder { get;}
+	    /// <summary>
+	    /// Gets or sets the calculated target time holder. Used by the result columns in Scheduler.
+	    /// This field vill be set to null when Modify method is called.
+	    /// </summary>
+	    /// <value>The calculated target time holder.</value>
+	    /// <remarks>
+	    /// Created by: micke
+	    /// Created date: 2008-11-21
+	    /// </remarks>
+	    TimeSpan? CalculatedTargetTimeHolder(DateOnlyPeriod periodToCheck);
 
-        /// <summary>
-        /// Gets or sets the calculated target schedule days off. Used by the result columns in Scheduler.
-        /// This field vill be set to null when Modify method is called.
-        /// </summary>
-        /// <value>The calculated target schedule days off.</value>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-11-22
-        /// </remarks>
-        int? CalculatedTargetScheduleDaysOff { get;}
+	    /// <summary>
+	    /// Gets or sets the calculated target schedule days off. Used by the result columns in Scheduler.
+	    /// This field vill be set to null when Modify method is called.
+	    /// </summary>
+	    /// <value>The calculated target schedule days off.</value>
+	    /// <remarks>
+	    /// Created by: micke
+	    /// Created date: 2008-11-22
+	    /// </remarks>
+	    int? CalculatedTargetScheduleDaysOff(DateOnlyPeriod periodToCheck);
 
 		/// <summary>
 		/// Gets or sets the calculated schedule days off.

@@ -26,7 +26,7 @@ using Is = Rhino.Mocks.Constraints.Is;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable"), TestFixture]
+    [TestFixture]
     public class SchedulePresenterBaseTest
     {
         private SchedulePresenterBase _target;
@@ -351,7 +351,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(_viewBase.IsOverviewColumnsHidden).Return(false);
                 Expect.Call(scheduleDictionary[person]).Return(scheduleRange);
                 Expect.Call(person.PersonSchedulePeriods(new DateOnlyPeriod(2009, 2, 2, 2009, 3, 1))).Return(schedulePeriods).Repeat.AtLeastOnce();
-                Expect.Call(scheduleRange.CalculatedTargetScheduleDaysOff).Return(0).Repeat.AtLeastOnce();
+				Expect.Call(scheduleRange.CalculatedTargetScheduleDaysOff(new DateOnlyPeriod(2009, 2, 2, 2009, 3, 1))).Return(0).Repeat.AtLeastOnce();
                 Expect.Call(person.VirtualSchedulePeriod(new DateOnly(2009, 2, 2))).IgnoreArguments().Return(virtualSchedulePeriod).Repeat.AtLeastOnce();
                 Expect.Call(virtualSchedulePeriod.IsValid).Return(true).Repeat.AtLeastOnce();
                 Expect.Call(person.PermissionInformation).Return(permissionInformation).Repeat.AtLeastOnce();
@@ -426,7 +426,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(virtualSchedulePeriod.IsValid).Return(true).Repeat.AtLeastOnce();
                 Expect.Call(person.PermissionInformation).Return(permissionInformation).Repeat.AtLeastOnce();
                 Expect.Call(permissionInformation.Culture()).Return(CultureInfo.CurrentCulture).Repeat.AtLeastOnce();
-                Expect.Call(scheduleRange.CalculatedTargetTimeHolder).Return(TimeSpan.Zero).Repeat.AtLeastOnce();
+				Expect.Call(scheduleRange.CalculatedTargetTimeHolder(new DateOnlyPeriod(2009, 2, 2, 2009, 3, 1))).Return(TimeSpan.Zero).Repeat.AtLeastOnce();
                 Expect.Call(person.TerminalDate).Return(null).Repeat.AtLeastOnce();
             }
 

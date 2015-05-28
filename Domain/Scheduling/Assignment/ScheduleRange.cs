@@ -259,22 +259,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			}
 		}
 
-		public TimeSpan? CalculatedTargetTimeHolder
-		{
-			get
-			{
-				if (!_calculatedTargetTimeHolder.HasValue)
-				{
-					var timeAndDaysOffTuple = new TargetScheduleSummaryCalculator().GetTargets(this);
-					_calculatedTargetTimeHolder = timeAndDaysOffTuple.Item1;
-					_calculatedTargetScheduleDaysOff = timeAndDaysOffTuple.Item2;
-				}
-				
-				return _calculatedTargetTimeHolder;
-			}
-		}
+	    public TimeSpan? CalculatedTargetTimeHolder(DateOnlyPeriod periodToCheck)
+	    {
+		    if (!_calculatedTargetTimeHolder.HasValue)
+		    {
+			    var timeAndDaysOffTuple = new TargetScheduleSummaryCalculator().GetTargets(this, periodToCheck);
+			    _calculatedTargetTimeHolder = timeAndDaysOffTuple.Item1;
+			    _calculatedTargetScheduleDaysOff = timeAndDaysOffTuple.Item2;
+		    }
 
-        public int CalculatedScheduleDaysOff
+		    return _calculatedTargetTimeHolder;
+	    }
+
+	    public int CalculatedScheduleDaysOff
         {
 	        get
 	        {
@@ -289,22 +286,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 	        }
         }
 
-		public int? CalculatedTargetScheduleDaysOff
-		{
-			get
-			{
-				if (!_calculatedTargetScheduleDaysOff.HasValue)
-				{
-					var timeAndDaysOffTuple = new TargetScheduleSummaryCalculator().GetTargets(this);
-					_calculatedTargetTimeHolder = timeAndDaysOffTuple.Item1;
-					_calculatedTargetScheduleDaysOff = timeAndDaysOffTuple.Item2;
-				}
+	    public int? CalculatedTargetScheduleDaysOff(DateOnlyPeriod periodToCheck)
+	    {
+		    if (!_calculatedTargetScheduleDaysOff.HasValue)
+		    {
+			    var timeAndDaysOffTuple = new TargetScheduleSummaryCalculator().GetTargets(this, periodToCheck);
+			    _calculatedTargetTimeHolder = timeAndDaysOffTuple.Item1;
+			    _calculatedTargetScheduleDaysOff = timeAndDaysOffTuple.Item2;
+		    }
 
-				return _calculatedTargetScheduleDaysOff;
-			}
-		}
+		    return _calculatedTargetScheduleDaysOff;
+	    }
 
-		public IEnumerable<IScheduleDay> ScheduledDayCollection(DateOnlyPeriod dateOnlyPeriod)
+	    public IEnumerable<IScheduleDay> ScheduledDayCollection(DateOnlyPeriod dateOnlyPeriod)
 		{
 			var canSeeUnpublished =
 				PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);

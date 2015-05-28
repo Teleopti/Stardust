@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 
 			var schedulePeriodNotInRange = _violatedSchedulePeriodBusinessRule.GetResult(people.SelectedPeople, period).ToList();
 			var daysOffValidationResult = getDayOffBusinessRulesValidationResults(scheduleOfSelectedPeople,
-				schedulePeriodNotInRange);
+				schedulePeriodNotInRange, period);
 			voilatedBusinessRules.AddRange(schedulePeriodNotInRange);
 			voilatedBusinessRules.AddRange(daysOffValidationResult);
 			return
@@ -120,24 +120,25 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				});
 		}
 
-		private static int successfulScheduledAgents(IEnumerable<KeyValuePair<IPerson, IScheduleRange>> schedules)
+		private static int successfulScheduledAgents(IEnumerable<KeyValuePair<IPerson, IScheduleRange>> schedules, DateOnlyPeriod periodToCheck)
 		{
 			return
 				schedules.Count(
 					x =>
-						(x.Value.CalculatedTargetTimeHolder.HasValue) &&
-						(x.Value.CalculatedContractTimeHolder == x.Value.CalculatedTargetTimeHolder));
+						(x.Value.CalculatedTargetTimeHolder(periodToCheck).HasValue) &&
+						(x.Value.CalculatedContractTimeHolder == x.Value.CalculatedTargetTimeHolder(periodToCheck)));
 		}
 
 		private IEnumerable<BusinessRulesValidationResult> getDayOffBusinessRulesValidationResults(
 			IEnumerable<KeyValuePair<IPerson, IScheduleRange>> schedules,
-			List<BusinessRulesValidationResult> schedulePeriodNotInRange)
+			List<BusinessRulesValidationResult> schedulePeriodNotInRange,
+			DateOnlyPeriod periodTocheck)
 		{
 			var result = new List<BusinessRulesValidationResult>();
 			foreach (var item in schedules)
 			{
 				if (isAmongInvalidScheduleRange(schedulePeriodNotInRange, item.Key)) continue;
-				if (!_dayOffBusinessRuleValidation.Validate(item.Value))
+				if (!_dayOffBusinessRuleValidation.Validate(item.Value, periodTocheck))
 				{
 					result.Add(new BusinessRulesValidationResult()
 					{
@@ -145,7 +146,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 						//should be in resource files - not now to prevent translation
 						BusinessRuleCategoryText = "Days off",
 						Message =
-							string.Format(UserTexts.Resources.TargetDayOffNotFulfilledMessage, item.Value.CalculatedTargetScheduleDaysOff),
+							string.Format(UserTexts.Resources.TargetDayOffNotFulfilledMessage, item.Value.CalculatedTargetScheduleDaysOff(periodTocheck)),
 						Name = item.Key.Name.ToString(NameOrderOption.FirstNameLastName)
 					});
 				}

@@ -8,13 +8,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public class TargetScheduleSummaryCalculator
 	{
-		public Tuple<TimeSpan?, int?> GetTargets(IScheduleRange range)
+		public Tuple<TimeSpan?, int?> GetTargets(IScheduleRange range, DateOnlyPeriod visiblePeriod)
 		{
 			var targetTime = TimeSpan.Zero;
 			var targetDaysOff = 0;
 			var person = range.Person;
-			var period = range.Owner.Period.VisiblePeriod.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone());
-			var schedulePeriods = extractVirtualPeriods(person, period);
+			var schedulePeriods = extractVirtualPeriods(person, visiblePeriod);
 			foreach (var virtualSchedulePeriod in schedulePeriods)
 			{
 				IFullWeekOuterWeekPeriodCreator fullWeekOuterWeekPeriodCreator =

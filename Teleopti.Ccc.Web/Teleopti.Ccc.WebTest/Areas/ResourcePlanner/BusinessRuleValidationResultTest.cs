@@ -16,14 +16,16 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		public void ShouldReturnFalseIfTargetDayOffNotFullfilled()
 		{
 			((FakeScheduleRange)FakeScheduleRange).UpdateCalcValues(8, 7,TimeSpan.Zero,TimeSpan.Zero);
-			Assert.IsFalse(Target.Validate(FakeScheduleRange));
+			//FakeScheduleRange will return 8 target days off
+			Assert.IsFalse(Target.Validate(FakeScheduleRange, new DateOnlyPeriod()));
 		}
 
 		[Test]
 		public void ShouldReturnTrueIfTargetDayIsFullfilled()
 		{
 			((FakeScheduleRange)FakeScheduleRange).UpdateCalcValues(6, 6,TimeSpan.Zero,TimeSpan.Zero);
-			Assert.True(Target.Validate(FakeScheduleRange));
+			//FakeScheduleRange will return 8 target days off
+			Assert.True(Target.Validate(FakeScheduleRange, new DateOnlyPeriod()));
 		}
 	}
 }

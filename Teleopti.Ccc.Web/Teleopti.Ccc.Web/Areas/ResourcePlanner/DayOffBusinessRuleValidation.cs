@@ -4,11 +4,11 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 {
 	public class DayOffBusinessRuleValidation
 	{
-		public bool Validate(IScheduleRange scheduleRange)
+		public bool Validate(IScheduleRange scheduleRange, DateOnlyPeriod periodToCheck)
 		{
-			if (!(scheduleRange.CalculatedTargetScheduleDaysOff.HasValue))
+			if (!(scheduleRange.CalculatedTargetScheduleDaysOff(periodToCheck).HasValue))
 				return false;
-			return (scheduleRange.CalculatedTargetScheduleDaysOff == scheduleRange.CalculatedScheduleDaysOff);
+			return (scheduleRange.CalculatedTargetScheduleDaysOff(periodToCheck) == scheduleRange.CalculatedScheduleDaysOff);
 		}
 	}
 }

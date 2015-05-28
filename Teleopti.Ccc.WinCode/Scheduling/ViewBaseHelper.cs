@@ -438,7 +438,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			}
 
 			style.CellType = "TotalTimeCell";
-			style.CellValue = wholeRange.CalculatedTargetTimeHolder;
+			style.CellValue = wholeRange.CalculatedTargetTimeHolder(openPeriod);
 
 
 		}
@@ -465,7 +465,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			}
 
 			style.CellType = "TotalDayOffCell";
-			style.CellValue = wholeRange.CalculatedTargetScheduleDaysOff;
+			style.CellValue = wholeRange.CalculatedTargetScheduleDaysOff(openPeriod);
 		}
 
 

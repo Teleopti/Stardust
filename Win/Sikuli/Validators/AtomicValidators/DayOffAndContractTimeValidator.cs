@@ -34,13 +34,13 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.AtomicValidators
 			{
 				var range = _schedulerState.Schedules[person];
 				var currentContractTime = range.CalculatedContractTimeHolder;
-				var targetContractTime = range.CalculatedTargetTimeHolder;
+				var targetContractTime = range.CalculatedTargetTimeHolder(_schedulerState.RequestedPeriod.DateOnlyPeriod);
 
 				if (currentContractTime != targetContractTime)
 					contractTimeResult = false;
 
 				var currentDaysOff = range.CalculatedScheduleDaysOff;
-				var targetDayOffs = range.CalculatedTargetScheduleDaysOff;
+				var targetDayOffs = range.CalculatedTargetScheduleDaysOff(_schedulerState.RequestedPeriod.DateOnlyPeriod);
 
 				if (currentDaysOff != targetDayOffs)
 					daysOffResult = false;

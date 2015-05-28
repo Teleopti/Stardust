@@ -74,8 +74,14 @@ namespace Teleopti.Ccc.TestCommon
 		}
 
 		public TimeSpan CalculatedContractTimeHolder { get; set; }
-		public TimeSpan? CalculatedTargetTimeHolder { get; set; }
-		public int? CalculatedTargetScheduleDaysOff { get; set; }
+		public TimeSpan? CalculatedTargetTimeHolder(DateOnlyPeriod periodToCheck)
+		{
+			throw new NotImplementedException();
+		}
+		public int? CalculatedTargetScheduleDaysOff(DateOnlyPeriod periodToCheck)
+		{
+			return 8;
+		}
 
 		public int CalculatedScheduleDaysOff { get; private set; }
 
