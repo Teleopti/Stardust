@@ -52,44 +52,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		}
 
 		[Test]
-		public void SuccessfulIdentityLogon()
-		{
-			const string identity = "Hejhej\\Tjoflöjt";
-			
-			var serviceResult = new TenantAuthenticationResult
-			{
-				Success = true,
-				PersonId = Guid.NewGuid(),
-				Tenant = Guid.NewGuid().ToString()
-			};
-			var identityAuthentication = MockRepository.GenerateMock<IIdentityAuthentication>();
-			var target = new AuthenticateController(null, identityAuthentication, MockRepository.GenerateMock<ILogLogonAttempt>());
-			identityAuthentication.Expect(x => x.Logon(identity)).Return(serviceResult);
-
-			var webCall = target.IdentityLogon(new IdentityLogonModel{Identity = identity});
-			var result = ((TenantAuthenticationResult)webCall.Data);
-			result.Should().Be.SameInstanceAs(serviceResult);
-		}
-
-		[Test]
-		public void FailingIdentityLogon()
-		{
-			const string identity = "Hejhej\\Tjoflöjt";
-			var serviceResult = new TenantAuthenticationResult
-			{
-				Success = false,
-				FailReason = "nåt fel"
-			};
-			var identityAuthentication = MockRepository.GenerateMock<IIdentityAuthentication>();
-			var target = new StubbingControllerBuilder().CreateController<AuthenticateController>(null, identityAuthentication, MockRepository.GenerateMock<ILogLogonAttempt>());
-			identityAuthentication.Expect(x => x.Logon(identity)).Return(serviceResult);
-
-			var result = ((TenantAuthenticationResult)target.IdentityLogon(new IdentityLogonModel { Identity = identity }).Data);
-			result.Should().Be.SameInstanceAs(serviceResult);
-			//target.Response.StatusCode.Should().Be.EqualTo(401);
-		}
-
-		[Test]
 		public void ShouldLogApplicationLogon()
 		{
 			const string userName = "sadfasdf";
@@ -103,21 +65,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			target.ApplicationLogon((new ApplicationLogonModel { UserName = userName, Password = password }));
 
 			logger.AssertWasCalled(x => x.SaveAuthenticateResult(userName, serviceResult.PersonId, serviceResult.Success));
-		}
-
-		[Test]
-		public void ShouldLogIdentityLogon()
-		{
-			const string identity = "sadfasdf asdf";
-			var serviceResult = new TenantAuthenticationResult();
-			var idAuthentication = MockRepository.GenerateMock<IIdentityAuthentication>();
-			var logger = MockRepository.GenerateMock<ILogLogonAttempt>();
-			var target = new StubbingControllerBuilder().CreateController<AuthenticateController>(null, idAuthentication, logger);
-			idAuthentication.Expect(x => x.Logon(identity)).Return(serviceResult);
-
-			target.IdentityLogon(new IdentityLogonModel { Identity = identity });
-
-			logger.AssertWasCalled(x => x.SaveAuthenticateResult(identity, serviceResult.PersonId, serviceResult.Success));
 		}
 	}
 }

@@ -7,6 +7,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Core.IoC;
+using Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
@@ -28,6 +29,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			builder.RegisterType<TenantAuthenticationFake>().As<ITenantAuthentication>().AsSelf().SingleInstance();
 			builder.RegisterType<LogLogonAttemptFake>().As<ILogLogonAttempt>().AsSelf().SingleInstance();
 			builder.RegisterType<CurrentTenantUserFake>().As<ICurrentTenantUser>().AsSelf().SingleInstance();
+			builder.RegisterType<DataSourceConfigurationProviderFake>().As<IDataSourceConfigurationProvider>().AsSelf().SingleInstance();
 		}
 	}
 }

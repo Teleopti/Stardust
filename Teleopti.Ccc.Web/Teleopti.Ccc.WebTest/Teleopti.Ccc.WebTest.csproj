@@ -281,7 +281,6 @@
     <Compile Include="Areas\MultiTenancy\Core\DataSourceConfigurationProviderFake.cs" />
     <Compile Include="Areas\MultiTenancy\Core\DataSourceConfigurationProviderUsingNhibFilesTest.cs" />
     <Compile Include="Areas\MultiTenancy\Core\HttpRequestUserAgentFake.cs" />
-    <Compile Include="Areas\MultiTenancy\Core\IdentityAuthenticationTest.cs" />
     <Compile Include="Areas\MultiTenancy\Core\IoCTest.cs" />
     <Compile Include="Areas\MultiTenancy\Core\LogTenancyLogonAttemptTest.cs" />
     <Compile Include="Areas\MultiTenancy\Core\NhibConfigEncryptionTest.cs" />

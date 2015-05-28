@@ -129,13 +129,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), password);
 			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
 			findApplicationQuery.Expect(x => x.Find(userName)).Return(personInfo);
-			
 			var checkPasswordChange = MockRepository.GenerateMock<IVerifyPasswordPolicy>();
 			checkPasswordChange.Expect(x => x.Check(personInfo.ApplicationLogonInfo))
 				.Return(new PasswordPolicyResult { HasMessage = true, Message = "THEMESSAGE", Successful = true, PasswordExpired = false });
+			var datasourceProvider = new DataSourceConfigurationProviderFake();
+			datasourceProvider.Has(personInfo.Tenant.Name, new DataSourceConfiguration());
 
 			var target = new ApplicationAuthentication(findApplicationQuery,
-				new DataSourceConfigurationProviderFake(), () => new DummyPasswordPolicy(), new Now(), checkPasswordChange);
+				datasourceProvider, () => new DummyPasswordPolicy(), new Now(), checkPasswordChange);
 
 			var res = target.Logon(userName, password);
 			res.Success.Should().Be.True();
@@ -155,8 +156,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 			var checkPasswordChange = MockRepository.GenerateMock<IVerifyPasswordPolicy>();
 			checkPasswordChange.Expect(x => x.Check(personInfo.ApplicationLogonInfo))
 				.Return(new PasswordPolicyResult { HasMessage = true, Message = "THEMESSAGE", Successful = false, PasswordExpired = true});
+			var datasourceProvider = new DataSourceConfigurationProviderFake();
+			datasourceProvider.Has(personInfo.Tenant.Name, new DataSourceConfiguration());
 
-			var target = new ApplicationAuthentication(findApplicationQuery, new DataSourceConfigurationProviderFake(), () => new DummyPasswordPolicy(), new Now(), checkPasswordChange);
+			var target = new ApplicationAuthentication(findApplicationQuery, datasourceProvider, () => new DummyPasswordPolicy(), new Now(), checkPasswordChange);
 
 			var res = target.Logon(userName, password);
 			res.Success.Should().Be.False();
@@ -176,9 +179,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 			var checkPasswordChange = MockRepository.GenerateMock<IVerifyPasswordPolicy>();
 			checkPasswordChange.Expect(x => x.Check(personInfo.ApplicationLogonInfo))
 				.Return(new PasswordPolicyResult { HasMessage = true, Message = "THEMESSAGE", Successful = false });
+			var datasourceProvider = new DataSourceConfigurationProviderFake();
+			datasourceProvider.Has(personInfo.Tenant.Name, new DataSourceConfiguration());
+
 
 			var target = new ApplicationAuthentication(findApplicationQuery,
-				new DataSourceConfigurationProviderFake(), () => new DummyPasswordPolicy(), new Now(), checkPasswordChange);
+				datasourceProvider, () => new DummyPasswordPolicy(), new Now(), checkPasswordChange);
 
 			var res = target.Logon(userName, password);
 			res.Success.Should().Be.False();
