@@ -15,6 +15,7 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 				$scope.dataColumns = [{ id: "vh", type: "line", name: "Queue Statistics" },
 									{ id: "vb", type: "line", name: "Forecast Method" }];
 				$scope.dataX = { id: "date" };
+				$scope.IsForecastingTest = false;
 
 				$scope.openModal = function (workload) {
 					workload.modalLaunch = true;
@@ -24,11 +25,18 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 					
 					$http.post("../api/Forecasting/Evaluate", JSON.stringify({ ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate, WorkloadId: workload.Id })).
 						success(function (data, status, headers, config) {
+							$scope.IsForecastingTest = data.IsForecastingTest;
 							workload.loaded = true;
 							angular.forEach(data.Days, function(day) {
 								day.date = new Date(Date.parse(day.date));
 							});
 							workload.chartData = data.Days;
+							if ($scope.IsForecastingTest) {
+								angular.forEach(data.TestDays, function (day) {
+									day.date = new Date(Date.parse(day.date));
+								});
+								workload.chartData2 = data.TestDays;
+							}
 							if (data.Days.length === 0) {
 								workload.noHistoricalDataForForecasting = true;
 								return;
@@ -108,6 +116,7 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 						skill.show = true;
 						angular.forEach(skill.Workloads, function (workload) {
 							workload.chartId = "chart" + workload.Id;
+							workload.chartId2 = "chart" + workload.Id + "2";
 							workload.selectedMethod = -1;
 						});
 					});

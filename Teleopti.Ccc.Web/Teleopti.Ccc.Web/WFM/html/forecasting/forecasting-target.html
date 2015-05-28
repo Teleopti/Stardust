@@ -98,6 +98,18 @@
 										<chart-axis-y axis-id="y" axis-position="outer-middle" axis-label="Number of Calls" />
 									</chart-axis>
 								</c3chart>
+								<div ng-if="IsForecastingTest">
+									<c3chart bindto-id="{{workload.chartId2}}" chart-data="workload.chartData2" chart-columns="dataColumns" chart-x="dataX" show-subchart="true" enable-zoom="true">
+										<chart-axis>
+											<chart-axis-x axis-id="date" axis-type="timeseries">
+												<chart-axis-x-tick tick-format="%Y-%m-%d" />
+											</chart-axis-x>
+										</chart-axis>
+										<chart-axis>
+											<chart-axis-y axis-id="y" axis-position="outer-middle" axis-label="Number of Calls" />
+										</chart-axis>
+									</c3chart>
+								</div>
 							</div>
 						</div>
 					</div>

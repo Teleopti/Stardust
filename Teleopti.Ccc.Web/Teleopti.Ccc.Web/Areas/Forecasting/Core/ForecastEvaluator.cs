@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Dynamic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Historical;
@@ -39,7 +41,9 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 				WorkloadId = workload.Id.Value,
 				ForecastMethodRecommended = (bestAccuracy == null ? ForecastMethodType.None : bestAccuracy.MethodId),
 				ForecastMethods = createMethodViewModels(evaluateResult),
-				Days = createDayViewModels(workload, bestAccuracy)
+				Days = createDayViewModels(workload, bestAccuracy),
+				TestDays = createTestDayViewModels(workload, bestAccuracy),
+				IsForecastingTest = bool.Parse(ConfigurationManager.AppSettings["ForecastingTest"])
 			};
 
 		}
@@ -58,11 +62,23 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 			return methods.ToArray();
 		}
 
+		private dynamic[] createTestDayViewModels(IWorkload workload, MethodAccuracy bestAccuracy)
+		{
+			var isForecastingTest = bool.Parse(ConfigurationManager.AppSettings["ForecastingTest"]);
+			return isForecastingTest
+				? daysForPeriod(bestAccuracy, _historicalData.Fetch(workload, _historicalPeriodProvider.PeriodForForecast(workload)))
+				: new dynamic[] { };
+		}
+
 		private dynamic[] createDayViewModels(IWorkload workload, MethodAccuracy bestAccuracy)
 		{
-			var historicalDataForDisplay = _historicalData.Fetch(workload, _historicalPeriodProvider.PeriodForDisplay(workload));
+			return daysForPeriod(bestAccuracy, _historicalData.Fetch(workload, _historicalPeriodProvider.PeriodForDisplay(workload)));
+		}
+
+		private static dynamic[] daysForPeriod(MethodAccuracy bestAccuracy, TaskOwnerPeriod period)
+		{
 			var data = new Dictionary<DateOnly, dynamic>();
-			foreach (var taskOwner in historicalDataForDisplay.TaskOwnerDayCollection)
+			foreach (var taskOwner in period.TaskOwnerDayCollection)
 			{
 				dynamic item = new ExpandoObject();
 				item.date = taskOwner.CurrentDate.Date;

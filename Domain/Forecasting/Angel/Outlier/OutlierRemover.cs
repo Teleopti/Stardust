@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
@@ -37,8 +38,9 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Outlier
 			foreach (var outlierDate in outlierDates)
 			{
 				var taskOwner = historicalData.TaskOwnerDayCollection.Single(x => x.CurrentDate == outlierDate);
-				if(taskOwner.OpenForWork.IsOpen)
-					taskOwner.Tasks = averageTasks;
+				if (!(Math.Abs(taskOwner.TotalStatisticCalculatedTasks) < 0.001)) 
+					((ValidatedVolumeDay)taskOwner).ValidatedTasks = averageTasks;
+				
 			}
 
 			return historicalData;
