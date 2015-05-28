@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.Register<IPasswordPolicy>(c =>
 			{
 				if (c.Resolve<IApplicationData>().LoadPasswordPolicyService == null)
-					return new DummyPasswordPolicy();
+					return new PasswordPolicyFake();
 				return new PasswordPolicy(c.Resolve<ILoadPasswordPolicyService>());
 			})
 				.As<IPasswordPolicy>()

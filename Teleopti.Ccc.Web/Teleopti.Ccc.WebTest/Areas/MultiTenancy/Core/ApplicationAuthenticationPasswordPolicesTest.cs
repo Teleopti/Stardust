@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 			findApplicationQuery.Expect(x => x.Find(userName)).Return(personInfo);
 
 			var target = new ApplicationAuthentication(findApplicationQuery,
-				new DataSourceConfigurationProviderFake(), () => new DummyPasswordPolicy(), new Now(), new SuccessfulPasswordPolicy());
+				new DataSourceConfigurationProviderFake(), () => new PasswordPolicyFake(), new Now(), new SuccessfulPasswordPolicy());
 			var res = target.Logon(userName, password);
 
 			res.Success.Should().Be.False();
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 			datasourceProvider.Has(personInfo.Tenant, new DataSourceConfiguration());
 
 			var target = new ApplicationAuthentication(findApplicationQuery,
-				datasourceProvider, () => new DummyPasswordPolicy(), new Now(), checkPasswordChange);
+				datasourceProvider, () => new PasswordPolicyFake(), new Now(), checkPasswordChange);
 
 			var res = target.Logon(userName, password);
 			res.Success.Should().Be.True();
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 			var datasourceProvider = new DataSourceConfigurationProviderFake();
 			datasourceProvider.Has(personInfo.Tenant, new DataSourceConfiguration());
 
-			var target = new ApplicationAuthentication(findApplicationQuery, datasourceProvider, () => new DummyPasswordPolicy(), new Now(), checkPasswordChange);
+			var target = new ApplicationAuthentication(findApplicationQuery, datasourceProvider, () => new PasswordPolicyFake(), new Now(), checkPasswordChange);
 
 			var res = target.Logon(userName, password);
 			res.Success.Should().Be.False();
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 
 
 			var target = new ApplicationAuthentication(findApplicationQuery,
-				datasourceProvider, () => new DummyPasswordPolicy(), new Now(), checkPasswordChange);
+				datasourceProvider, () => new PasswordPolicyFake(), new Now(), checkPasswordChange);
 
 			var res = target.Logon(userName, password);
 			res.Success.Should().Be.False();

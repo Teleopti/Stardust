@@ -3,9 +3,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.Authentication
 {
-	public class DummyPasswordPolicy : IPasswordPolicy
+	public class PasswordPolicyFake : IPasswordPolicy
 	{
-		public DummyPasswordPolicy()
+		public PasswordPolicyFake()
 		{
 			InvalidAttemptWindow = TimeSpan.FromMinutes(30);
 			MaxAttemptCount = 3;

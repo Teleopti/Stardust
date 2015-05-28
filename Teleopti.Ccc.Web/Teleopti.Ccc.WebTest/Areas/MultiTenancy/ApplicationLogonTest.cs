@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		public DataSourceConfigurationProviderFake DataSourceConfigurationProvider;
 		public LogLogonAttemptFake LogLogonAttempt;
 		public TenantUnitOfWorkFake TenantUnitOfWork;
-		public DummyPasswordPolicy PasswordPolicy;
+		public PasswordPolicyFake PasswordPolicy;
 
 		[Test]
 		public void ShouldAcceptAccessWithoutTenantCredentials()

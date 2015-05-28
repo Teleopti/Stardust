@@ -1575,7 +1575,7 @@
     <Compile Include="Security\Authentication\PasswordPolicyResult.cs" />
     <Compile Include="Security\Authentication\AvailableBusinessUnitsProvider.cs" />
     <Compile Include="Security\Authentication\DataSourceContainer.cs" />
-    <Compile Include="Security\Authentication\DummyPasswordPolicy.cs" />
+    <Compile Include="Security\Authentication\PasswordPolicyFake.cs" />
     <Compile Include="Security\Authentication\EnvironmentWindowsUserProvider.cs" />
     <Compile Include="Security\Authentication\FuncTimeZone.cs" />
     <Compile Include="Security\Authentication\IDataSourceContainer.cs" />

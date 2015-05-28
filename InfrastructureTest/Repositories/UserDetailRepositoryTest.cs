@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             IUserDetail userDetail = new UserDetail(person);
             userDetail.RegisterPasswordChange();
-            userDetail.RegisterInvalidAttempt(new DummyPasswordPolicy());
+            userDetail.RegisterInvalidAttempt(new PasswordPolicyFake());
             userDetail.Lock();
             return userDetail;
         }
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             var u = new UserDetail(p);
             u.RegisterPasswordChange();
-            u.RegisterInvalidAttempt(new DummyPasswordPolicy());
+            u.RegisterInvalidAttempt(new PasswordPolicyFake());
             u.Lock();
             PersistAndRemoveFromUnitOfWork(u);
 
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             var u1 = new UserDetail(p1);
             u1.RegisterPasswordChange();
-            u1.RegisterInvalidAttempt(new DummyPasswordPolicy());
+            u1.RegisterInvalidAttempt(new PasswordPolicyFake());
             u1.Lock();
             PersistAndRemoveFromUnitOfWork(u1);
 
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             var u = new UserDetail(p);
             u.RegisterPasswordChange();
-            u.RegisterInvalidAttempt(new DummyPasswordPolicy());
+            u.RegisterInvalidAttempt(new PasswordPolicyFake());
             u.Lock();
             PersistAndRemoveFromUnitOfWork(u);
 
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             var u1 = new UserDetail(p1);
             u1.RegisterPasswordChange();
-            u1.RegisterInvalidAttempt(new DummyPasswordPolicy());
+            u1.RegisterInvalidAttempt(new PasswordPolicyFake());
             u1.Lock();
             PersistAndRemoveFromUnitOfWork(u1);
 

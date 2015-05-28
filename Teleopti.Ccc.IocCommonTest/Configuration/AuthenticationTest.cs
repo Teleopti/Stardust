@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			using (var container = builder.Build())
 			{
 				container.Resolve<IPasswordPolicy>()
-					.Should().Be.InstanceOf<DummyPasswordPolicy>();
+					.Should().Be.InstanceOf<PasswordPolicyFake>();
 			}
 		}
 
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			using (var container = builder.Build())
 			{
 				container.Resolve<IPasswordPolicy>()
-					.Should().Not.Be.InstanceOf<DummyPasswordPolicy>();
+					.Should().Not.Be.InstanceOf<PasswordPolicyFake>();
 			}
 		}
 	}

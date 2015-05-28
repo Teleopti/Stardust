@@ -10,12 +10,12 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
     [TestFixture]
     public class DummyPasswordPolicyTest
     {
-        private DummyPasswordPolicy _target;
+        private PasswordPolicyFake _target;
 
         [SetUp]
         public void Setup()
         {
-            _target = new DummyPasswordPolicy();
+            _target = new PasswordPolicyFake();
         }
 
         [Test]
