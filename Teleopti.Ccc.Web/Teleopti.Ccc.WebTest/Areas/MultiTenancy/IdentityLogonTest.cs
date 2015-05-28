@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			var personInfo = new PersonInfo();
 			personInfo.SetIdentity(identity);
 			IdentityUserQuery.Has(personInfo);
-			DataSourceConfigurationProvider.Has(new Tenant(RandomName.Make()), new DataSourceConfiguration());
+			DataSourceConfigurationProvider.Has(new Tenant("another tenant"), new DataSourceConfiguration());
 
 			var result = Target.IdentityLogon(new IdentityLogonModel { Identity = identity }).Result<TenantAuthenticationResult>();
 
