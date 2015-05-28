@@ -23,36 +23,36 @@ namespace Teleopti.Ccc.TestCommon
 			return this;
 		}
 
-		public DateTimePeriod Period { get; private set; }
-		public IPerson Person { get; private set; }
-		public IScenario Scenario { get; private set; }
+		public new DateTimePeriod Period { get; private set; }
+		public new IPerson Person { get; private set; }
+		public new IScenario Scenario { get; private set; }
 		protected override bool CheckPermission(IScheduleData persistableScheduleData)
 		{
 			throw new NotImplementedException();
 		}
 
-		public object Clone()
+		public new object Clone()
 		{
 			throw new NotImplementedException();
 		}
 
 		public IScheduleDictionary Owner { get; private set; }
-		public bool Contains(IScheduleData scheduleData)
+		public new bool Contains(IScheduleData scheduleData)
 		{
 			throw new NotImplementedException();
 		}
 
-		public bool WithinRange(DateTimePeriod period)
+		public new bool WithinRange(DateTimePeriod period)
 		{
 			throw new NotImplementedException();
 		}
 
-		public DateTimePeriod? TotalPeriod()
+		public new DateTimePeriod? TotalPeriod()
 		{
 			throw new NotImplementedException();
 		}
 
-		public IList<IBusinessRuleResponse> BusinessRuleResponseInternalCollection { get; private set; }
+		public new IList<IBusinessRuleResponse> BusinessRuleResponseInternalCollection { get; private set; }
 		public void ExtractAllScheduleData(IScheduleExtractor extractor, DateTimePeriod period)
 		{
 			throw new NotImplementedException();
