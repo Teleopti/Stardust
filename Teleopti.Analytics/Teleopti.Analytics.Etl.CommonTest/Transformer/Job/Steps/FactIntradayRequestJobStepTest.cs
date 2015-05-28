@@ -2,9 +2,9 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
+using Teleopti.Analytics.Etl.Common.Transformer.Job;
+using Teleopti.Analytics.Etl.Common.Transformer.Job.Steps;
 using Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData;
-using Teleopti.Analytics.Etl.Transformer.Job;
-using Teleopti.Analytics.Etl.Transformer.Job.Steps;
 
 namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job.Steps
 {

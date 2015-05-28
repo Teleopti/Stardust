@@ -1,7 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
-using Teleopti.Analytics.Etl.Transformer;
+using Teleopti.Analytics.Etl.Common.Transformer;
 
 namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 {

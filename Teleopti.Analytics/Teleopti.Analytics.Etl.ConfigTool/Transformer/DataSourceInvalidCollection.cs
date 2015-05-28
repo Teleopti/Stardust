@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Teleopti.Analytics.Etl.Transformer;
+using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.ConfigTool.Transformer

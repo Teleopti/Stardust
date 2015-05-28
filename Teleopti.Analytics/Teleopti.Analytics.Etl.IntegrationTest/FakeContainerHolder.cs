@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
-using Teleopti.Analytics.Etl.Transformer;
+using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;

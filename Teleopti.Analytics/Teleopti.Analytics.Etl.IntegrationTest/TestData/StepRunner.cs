@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using NUnit.Framework;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
-using Teleopti.Analytics.Etl.Transformer.Job;
-using Teleopti.Analytics.Etl.Transformer.Job.Jobs;
-using Teleopti.Analytics.Etl.Transformer.Job.Steps;
+using Teleopti.Analytics.Etl.Common.Transformer.Job;
+using Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs;
+using Teleopti.Analytics.Etl.Common.Transformer.Job.Steps;
 
 namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 {
@@ -54,7 +53,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 
 			step = new StageScheduleDayOffCountJobStep(jobParameters);
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
-			
+
 			step = new StageShiftCategoryJobStep(jobParameters);
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 			step = new DimShiftCategoryJobStep(jobParameters);
@@ -64,7 +63,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 			step = new DimOvertimeJobStep(jobParameters);
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
-			
+
 			return result;
 		}
 
@@ -89,7 +88,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 					Result.Success = false;
 					break;
 				}
-				}
+			}
 			jobList.Add(Result);
 			return jobList;
 		}
@@ -106,16 +105,16 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 			return result;
 		}
 
-        public static List<IJobResult> RunIntraday(JobParameters jobParameters)
-        {
-            var result = new List<IJobResult>();
-            var intra = new IntradayJobCollection(jobParameters);
-            foreach (var step in intra)
-            {
-                step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
-            }
+		public static List<IJobResult> RunIntraday(JobParameters jobParameters)
+		{
+			var result = new List<IJobResult>();
+			var intra = new IntradayJobCollection(jobParameters);
+			foreach (var step in intra)
+			{
+				step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+			}
 
-            return result;
-        }
+			return result;
+		}
 	}
 }

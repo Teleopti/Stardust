@@ -5,7 +5,7 @@ using SharpTestsEx;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
-using Teleopti.Analytics.Etl.Transformer;
+using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Interfaces.Domain;
 

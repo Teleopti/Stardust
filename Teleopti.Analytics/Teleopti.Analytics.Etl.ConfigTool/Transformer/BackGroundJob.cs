@@ -12,7 +12,7 @@ using Teleopti.Analytics.Etl.Common;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
-using Teleopti.Analytics.Etl.Transformer.Job.Steps;
+using Teleopti.Analytics.Etl.Common.Transformer.Job.Steps;
 using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult;
 
 namespace Teleopti.Analytics.Etl.ConfigTool.Transformer

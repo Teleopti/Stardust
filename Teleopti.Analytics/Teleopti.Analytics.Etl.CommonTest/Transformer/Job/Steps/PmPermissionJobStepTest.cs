@@ -4,7 +4,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Analytics.Etl.Common.Interfaces.PerformanceManager;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
-using Teleopti.Analytics.Etl.Transformer.Job.Steps;
+using Teleopti.Analytics.Etl.Common.Transformer.Job.Steps;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult;

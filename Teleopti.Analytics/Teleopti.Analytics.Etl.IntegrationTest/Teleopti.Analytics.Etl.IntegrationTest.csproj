@@ -128,10 +128,6 @@
       <Project>{34C3B171-160E-4320-AA49-B8162BAD0E36}</Project>
       <Name>Teleopti.Analytics.Etl.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Analytics.Etl.Transformer\Teleopti.Analytics.Etl.Transformer.csproj">
-      <Project>{B9465B16-1563-4F16-BCD6-353551B0AA20}</Project>
-      <Name>Teleopti.Analytics.Etl.Transformer</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="License.xml">

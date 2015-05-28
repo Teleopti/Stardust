@@ -4,9 +4,9 @@ using System.Globalization;
 using Autofac;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
-using Teleopti.Analytics.Etl.Transformer;
-using Teleopti.Analytics.Etl.Transformer.Job;
-using Teleopti.Analytics.Etl.Transformer.Job.Jobs;
+using Teleopti.Analytics.Etl.Common.Transformer;
+using Teleopti.Analytics.Etl.Common.Transformer.Job;
+using Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs;
 
 namespace Teleopti.Analytics.Etl.ConfigTool.Transformer
 {

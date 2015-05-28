@@ -1,7 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
-using Teleopti.Analytics.Etl.Transformer.Job.MultipleDate;
+using Teleopti.Analytics.Etl.Common.Transformer.Job.MultipleDate;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job.MultipleDate

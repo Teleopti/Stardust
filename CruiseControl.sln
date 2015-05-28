@@ -53,8 +53,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Analytics.Etl.Comm
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Analytics.Etl.ConfigTool", "Teleopti.Analytics\Teleopti.Analytics.Etl.ConfigTool\Teleopti.Analytics.Etl.ConfigTool.csproj", "{8A4806D6-8587-43F2-86FE-915B81C9F863}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Analytics.Etl.Transformer", "Teleopti.Analytics\Teleopti.Analytics.Etl.Transformer\Teleopti.Analytics.Etl.Transformer.csproj", "{B9465B16-1563-4F16-BCD6-353551B0AA20}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.SmartParts", "Teleopti.Ccc.SmartParts\Teleopti.Ccc.SmartParts.csproj", "{2D32D355-5660-4DD7-B45B-655363F42550}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Sdk.Host", "Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Host\Teleopti.Ccc.Sdk.Host.csproj", "{2B1051CD-C944-4730-88E8-95ED8BEA5B7F}"
@@ -395,18 +393,6 @@ Global
 		{8A4806D6-8587-43F2-86FE-915B81C9F863}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{8A4806D6-8587-43F2-86FE-915B81C9F863}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{8A4806D6-8587-43F2-86FE-915B81C9F863}.Release|x86.ActiveCfg = Release|Any CPU
-		{B9465B16-1563-4F16-BCD6-353551B0AA20}.Debug|.NET.ActiveCfg = Debug|Any CPU
-		{B9465B16-1563-4F16-BCD6-353551B0AA20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B9465B16-1563-4F16-BCD6-353551B0AA20}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B9465B16-1563-4F16-BCD6-353551B0AA20}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{B9465B16-1563-4F16-BCD6-353551B0AA20}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{B9465B16-1563-4F16-BCD6-353551B0AA20}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{B9465B16-1563-4F16-BCD6-353551B0AA20}.Release|.NET.ActiveCfg = Release|Any CPU
-		{B9465B16-1563-4F16-BCD6-353551B0AA20}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B9465B16-1563-4F16-BCD6-353551B0AA20}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B9465B16-1563-4F16-BCD6-353551B0AA20}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{B9465B16-1563-4F16-BCD6-353551B0AA20}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{B9465B16-1563-4F16-BCD6-353551B0AA20}.Release|x86.ActiveCfg = Release|Any CPU
 		{2D32D355-5660-4DD7-B45B-655363F42550}.Debug|.NET.ActiveCfg = Debug|Any CPU
 		{2D32D355-5660-4DD7-B45B-655363F42550}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2D32D355-5660-4DD7-B45B-655363F42550}.Debug|Any CPU.Build.0 = Debug|Any CPU

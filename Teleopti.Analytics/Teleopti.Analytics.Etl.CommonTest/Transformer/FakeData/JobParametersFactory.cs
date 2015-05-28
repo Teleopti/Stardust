@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Globalization;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
-using Teleopti.Analytics.Etl.Transformer;
-using Teleopti.Analytics.Etl.Transformer.Job;
+using Teleopti.Analytics.Etl.Common.Transformer;
+using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.Toggle;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
-using Teleopti.Analytics.Etl.Transformer.Job;
+using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;

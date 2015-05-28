@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Rhino.Mocks;
-using Teleopti.Analytics.Etl.Transformer;
+using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.TestCommon.FakeData;

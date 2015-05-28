@@ -6,7 +6,7 @@ using System.Threading;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Analytics.Etl.Common.Infrastructure.DataTableDefinition;
-using Teleopti.Analytics.Etl.Transformer;
+using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;

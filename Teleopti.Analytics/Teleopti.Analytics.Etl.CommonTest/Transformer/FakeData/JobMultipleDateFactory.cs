@@ -1,6 +1,6 @@
 ﻿using System;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
-using Teleopti.Analytics.Etl.Transformer.Job.MultipleDate;
+using Teleopti.Analytics.Etl.Common.Transformer.Job.MultipleDate;
 
 namespace Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData
 {

@@ -8,8 +8,8 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
+using Teleopti.Analytics.Etl.Common.Transformer.Job.MultipleDate;
 using Teleopti.Analytics.Etl.ConfigTool.Transformer;
-using Teleopti.Analytics.Etl.Transformer.Job.MultipleDate;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.Authentication;
 

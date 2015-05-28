@@ -10,10 +10,10 @@ using Teleopti.Analytics.Etl.Common.Entity;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
+using Teleopti.Analytics.Etl.Common.Transformer;
+using Teleopti.Analytics.Etl.Common.Transformer.Job;
+using Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs;
 using Teleopti.Analytics.Etl.ConfigTool.Transformer;
-using Teleopti.Analytics.Etl.Transformer;
-using Teleopti.Analytics.Etl.Transformer.Job;
-using Teleopti.Analytics.Etl.Transformer.Job.Jobs;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.ConfigTool.Gui

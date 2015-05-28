@@ -8,8 +8,8 @@ using SharpTestsEx;
 using Teleopti.Analytics.Etl.Common.Infrastructure.DataTableDefinition;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.PerformanceManager;
+using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData;
-using Teleopti.Analytics.Etl.Transformer;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 

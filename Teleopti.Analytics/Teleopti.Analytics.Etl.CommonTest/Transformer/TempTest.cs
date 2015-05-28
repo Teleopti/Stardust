@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
+using Teleopti.Analytics.Etl.Common.Transformer;
+using Teleopti.Analytics.Etl.Common.Transformer.ScheduleThreading;
 using Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData;
-using Teleopti.Analytics.Etl.Transformer;
-using Teleopti.Analytics.Etl.Transformer.ScheduleThreading;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.CommonTest.Transformer
