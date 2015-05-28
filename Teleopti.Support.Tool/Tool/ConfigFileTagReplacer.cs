@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 
-namespace Teleopti.Support.Code.Tool
+namespace Teleopti.Support.Tool.Tool
 {
 	public interface IConfigFileTagReplacer
 	{

@@ -4,7 +4,7 @@ using System.IO;
 using log4net;
 using log4net.Appender;
 
-namespace Teleopti.Support.Code.Tool
+namespace Teleopti.Support.Tool.Tool
 {
 	public class RefreshConfigsRunner : ISupportCommand
     {

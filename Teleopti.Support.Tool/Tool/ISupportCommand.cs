@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Support.Code.Tool
+﻿namespace Teleopti.Support.Tool.Tool
 {
 	public interface ISupportCommand
 	{

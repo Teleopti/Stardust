@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Teleopti.Support.Code.Tool
+namespace Teleopti.Support.Tool.Tool
 {
 	public class SsoConfigurationRestoreHandler : ISupportCommand
 	{

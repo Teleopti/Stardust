@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace Teleopti.Support.Code.Tool
+namespace Teleopti.Support.Tool.Tool
 {
     public class RefreshConfigFile : IRefreshConfigFile
     {

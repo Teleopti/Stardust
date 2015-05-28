@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 
-namespace Teleopti.Support.Code.Tool
+namespace Teleopti.Support.Tool.Tool
 {
 	public interface ICommandLineArgument
 	{

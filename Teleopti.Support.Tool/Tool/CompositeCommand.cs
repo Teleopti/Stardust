@@ -1,4 +1,5 @@
-namespace Teleopti.Support.Code.Tool
+
+namespace Teleopti.Support.Tool.Tool
 {
 	public class CompositeCommand : ISupportCommand
 	{

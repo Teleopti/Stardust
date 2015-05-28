@@ -2,45 +2,45 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
-using Teleopti.Support.Code.Tool;
+using Teleopti.Support.Tool.Tool;
 
-namespace Teleopti.Support.Tool
+namespace Teleopti.Support.Tool.Controls
 {
-	 public partial class ChangeSettings : UserControl
-	 {
-        private readonly MainForm _mainForm;
-        private IList<SearchReplace> _settings;
+	public partial class ChangeSettings : UserControl
+	{
+		private readonly MainForm _mainForm;
+		private IList<SearchReplace> _settings;
 
-        public ChangeSettings()
-        {
-	        InitializeComponent();
-        }
+		public ChangeSettings()
+		{
+			InitializeComponent();
+		}
 
-        public ChangeSettings(MainForm mainForm)
-        {
-            InitializeComponent();
-            _mainForm = mainForm;
-        }
+		public ChangeSettings(MainForm mainForm)
+		{
+			InitializeComponent();
+			_mainForm = mainForm;
+		}
 
-        private void SettingsForm_Load(object sender, EventArgs e)
-        {
-	        _settings = new SettingsFileManager(new SettingsReader()).GetReplaceList();
-	        dataGridView1.DataSource = _settings;
-	        dataGridView1.Columns[0].ReadOnly = true;
-        }
+		private void SettingsForm_Load(object sender, EventArgs e)
+		{
+			_settings = new SettingsFileManager(new SettingsReader()).GetReplaceList();
+			dataGridView1.DataSource = _settings;
+			dataGridView1.Columns[0].ReadOnly = true;
+		}
 
-        private void buttonSave_Click(object sender, EventArgs e)
-        {
-	        new SettingsFileManager(new SettingsReader()).SaveReplaceList(_settings);
-        }
+		private void buttonSave_Click(object sender, EventArgs e)
+		{
+			new SettingsFileManager(new SettingsReader()).SaveReplaceList(_settings);
+		}
 
-        private void buttonRefreshThem_Click(object sender, EventArgs e)
-        {
-	        var mode = "DEPLOY";
+		private void buttonRefreshThem_Click(object sender, EventArgs e)
+		{
+			var mode = "DEPLOY";
 #if (DEBUG)
-            {
-	            mode = "DEVELOP";
-            }
+			{
+				mode = "DEVELOP";
+			}
 #endif
 			runRefresher(mode);
 		}
@@ -72,9 +72,9 @@ namespace Teleopti.Support.Tool
 				}
 				catch (Exception exception)
 				{
-					MessageBox.Show(exception.Message + Environment.NewLine +  theFile, "Some Error occurred");
+					MessageBox.Show(exception.Message + Environment.NewLine + theFile, "Some Error occurred");
 				}
-				  
+
 			}
 		}
 
@@ -85,11 +85,11 @@ namespace Teleopti.Support.Tool
 
 		}
 
-        private void dataGridView1_Resize(object sender, EventArgs e)
-        {
-            //dataGridView1.Columns[0].Width = Width / 2 - 37;
-            //dataGridView1.Columns[1].Width = Width / 2 - 37;
+		private void dataGridView1_Resize(object sender, EventArgs e)
+		{
+			//dataGridView1.Columns[0].Width = Width / 2 - 37;
+			//dataGridView1.Columns[1].Width = Width / 2 - 37;
 
-        }
-	 }
+		}
+	}
 }

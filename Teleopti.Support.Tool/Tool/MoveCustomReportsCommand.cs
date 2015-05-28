@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using log4net;
 
-namespace Teleopti.Support.Code.Tool
+namespace Teleopti.Support.Tool.Tool
 {
 	public class MoveCustomReportsCommand :ISupportCommand
 	{

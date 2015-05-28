@@ -1,6 +1,5 @@
-﻿using System;
-using System.Windows.Forms;
-using Teleopti.Support.Code.Tool;
+﻿using System.Windows.Forms;
+using Teleopti.Support.Tool.Tool;
 
 namespace Teleopti.Support.Tool
 {
@@ -11,7 +10,8 @@ namespace Teleopti.Support.Tool
 			InitializeComponent();
 		}
 
-		public HelpWindow(string text) : this()
+		public HelpWindow(string text)
+			: this()
 		{
 			textBox1.Text = text;
 			textBox1.SelectionStart = 0;

@@ -1,11 +1,9 @@
-﻿using System;
-using System.IO;
-using NUnit.Framework;
-using Teleopti.Support.Code.Tool;
+﻿using NUnit.Framework;
+using Teleopti.Support.Tool.Tool;
 
 namespace Teleopti.Support.CodeTest.Tool
 {
-    [TestFixture()]
+    [TestFixture]
     public class SettingsFileManagerTests
     {
         [Test()]
