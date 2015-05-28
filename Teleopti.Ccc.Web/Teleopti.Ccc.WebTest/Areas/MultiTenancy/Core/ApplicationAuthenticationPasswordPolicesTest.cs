@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 			checkPasswordChange.Expect(x => x.Check(personInfo.ApplicationLogonInfo))
 				.Return(new PasswordPolicyResult { HasMessage = true, Message = "THEMESSAGE", Successful = true, PasswordExpired = false });
 			var datasourceProvider = new DataSourceConfigurationProviderFake();
-			datasourceProvider.Has(personInfo.Tenant.Name, new DataSourceConfiguration());
+			datasourceProvider.Has(personInfo.Tenant, new DataSourceConfiguration());
 
 			var target = new ApplicationAuthentication(findApplicationQuery,
 				datasourceProvider, () => new DummyPasswordPolicy(), new Now(), checkPasswordChange);
@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 			checkPasswordChange.Expect(x => x.Check(personInfo.ApplicationLogonInfo))
 				.Return(new PasswordPolicyResult { HasMessage = true, Message = "THEMESSAGE", Successful = false, PasswordExpired = true});
 			var datasourceProvider = new DataSourceConfigurationProviderFake();
-			datasourceProvider.Has(personInfo.Tenant.Name, new DataSourceConfiguration());
+			datasourceProvider.Has(personInfo.Tenant, new DataSourceConfiguration());
 
 			var target = new ApplicationAuthentication(findApplicationQuery, datasourceProvider, () => new DummyPasswordPolicy(), new Now(), checkPasswordChange);
 
@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 			checkPasswordChange.Expect(x => x.Check(personInfo.ApplicationLogonInfo))
 				.Return(new PasswordPolicyResult { HasMessage = true, Message = "THEMESSAGE", Successful = false });
 			var datasourceProvider = new DataSourceConfigurationProviderFake();
-			datasourceProvider.Has(personInfo.Tenant.Name, new DataSourceConfiguration());
+			datasourceProvider.Has(personInfo.Tenant, new DataSourceConfiguration());
 
 
 			var target = new ApplicationAuthentication(findApplicationQuery,

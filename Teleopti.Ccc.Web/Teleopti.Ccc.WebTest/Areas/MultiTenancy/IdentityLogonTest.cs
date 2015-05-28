@@ -12,8 +12,6 @@ using Teleopti.Ccc.WebTest.TestHelper;
 
 namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 {
-	//todo: tenant fill with test from authenticationcontrollertest and core here
-
 	[TenantTest]
 	public class IdentityLogonTest
 	{
@@ -50,7 +48,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			var personInfo = new PersonInfo(new Tenant(RandomName.Make()), Guid.NewGuid());
 			personInfo.SetIdentity(identity);
 			IdentityUserQuery.Has(personInfo);
-			DataSourceConfigurationProvider.Has(personInfo.Tenant.Name, datasourceConfiguration);
+			DataSourceConfigurationProvider.Has(personInfo.Tenant, datasourceConfiguration);
 
 			var result = Target.IdentityLogon(new IdentityLogonModel { Identity = identity }).Result<TenantAuthenticationResult>();
 
@@ -68,7 +66,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			var personInfo = new PersonInfo();
 			personInfo.SetIdentity(identity);
 			IdentityUserQuery.Has(personInfo);
-			DataSourceConfigurationProvider.Has(RandomName.Make(), new DataSourceConfiguration());
+			DataSourceConfigurationProvider.Has(new Tenant(RandomName.Make()), new DataSourceConfiguration());
 
 			var result = Target.IdentityLogon(new IdentityLogonModel { Identity = identity }).Result<TenantAuthenticationResult>();
 
@@ -84,7 +82,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			var personInfo = new PersonInfo(new Tenant(RandomName.Make()), Guid.NewGuid());
 			personInfo.SetIdentity(identity);
 			IdentityUserQuery.Has(personInfo);
-			DataSourceConfigurationProvider.Has(personInfo.Tenant.Name, datasourceConfiguration);
+			DataSourceConfigurationProvider.Has(personInfo.Tenant, datasourceConfiguration);
 
 			Target.IdentityLogon(new IdentityLogonModel { Identity = identity }).Result<TenantAuthenticationResult>();
 

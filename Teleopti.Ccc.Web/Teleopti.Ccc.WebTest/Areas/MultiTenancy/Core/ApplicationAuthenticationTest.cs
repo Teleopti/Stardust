@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
 			findApplicationQuery.Expect(x => x.Find(userName)).Return(personInfo);
 			var dataSourceProvider = MockRepository.GenerateStub<IDataSourceConfigurationProvider>();
-			dataSourceProvider.Stub(x => x.ForTenant(personInfo.Tenant.Name)).Return(dataSourceConfiguration);
+			dataSourceProvider.Stub(x => x.ForTenant(personInfo.Tenant)).Return(dataSourceConfiguration);
 			var target = new ApplicationAuthentication(findApplicationQuery,
 				dataSourceProvider, () => MockRepository.GenerateStub<IPasswordPolicy>(), new Now(), new SuccessfulPasswordPolicy());
 			
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
 			findApplicationQuery.Expect(x => x.Find(userName)).Return(personInfo);
 			var nhibHandler = MockRepository.GenerateMock<IDataSourceConfigurationProvider>();
-			nhibHandler.Stub(x => x.ForTenant(personInfo.Tenant.Name)).Return(null);
+			nhibHandler.Stub(x => x.ForTenant(personInfo.Tenant)).Return(null);
 			var target = new ApplicationAuthentication(findApplicationQuery,
 				nhibHandler, () => MockRepository.GenerateStub<IPasswordPolicy>(), new Now(), new SuccessfulPasswordPolicy());
 

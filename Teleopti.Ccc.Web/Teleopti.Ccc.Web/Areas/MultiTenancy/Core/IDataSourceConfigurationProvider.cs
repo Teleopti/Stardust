@@ -1,7 +1,9 @@
-﻿namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
+﻿using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+
+namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 {
 	public interface IDataSourceConfigurationProvider
 	{
-		DataSourceConfiguration ForTenant(string tenant);
+		DataSourceConfiguration ForTenant(Tenant tenant);
 	}
 }

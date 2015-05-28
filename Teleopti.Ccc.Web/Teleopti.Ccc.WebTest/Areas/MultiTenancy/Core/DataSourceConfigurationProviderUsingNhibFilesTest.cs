@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
 
 namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 			readNHibFiles.Expect(x => x.Read()).Return(new Dictionary<string, DataSourceConfiguration> {{"something", expected}});
 			encrypter.Stub(x => x.EncryptConfig(expected)).Return(expected);
 			var target = new DataSourceConfigurationProviderUsingNhibFiles(readNHibFiles, encrypter);
-			target.ForTenant("something")
+			target.ForTenant(new Tenant("something"))
 				.Should().Be.SameInstanceAs(expected);
 		}
 
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 			var encrypter = MockRepository.GenerateMock<INhibConfigurationEncryption>();
 			readNHibFiles.Expect(x => x.Read()).Return(new Dictionary<string, DataSourceConfiguration>());
 			var target = new DataSourceConfigurationProviderUsingNhibFiles(readNHibFiles, encrypter);
-			target.ForTenant("notsomething")
+			target.ForTenant(new Tenant("notsomething"))
 				.Should().Be.Null();
 		}
 
@@ -40,9 +41,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 			readNHibFiles.Expect(x => x.Read()).Return(new Dictionary<string, DataSourceConfiguration>());
 
 			var target = new DataSourceConfigurationProviderUsingNhibFiles(readNHibFiles,encrypter);
-			target.ForTenant("1");
-			target.ForTenant("1");
-			target.ForTenant("2");
+			target.ForTenant(new Tenant("1"));
+			target.ForTenant(new Tenant("1"));
+			target.ForTenant(new Tenant("2"));
 
 			readNHibFiles.AssertWasCalled(x => x.Read(), x => x.Repeat.Once());
 		}
@@ -58,10 +59,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 			encrypter.Stub(x => x.EncryptConfig(expectedTwo)).Return(expectedTwo);
 			readNHibFiles.Expect(x => x.Read()).Return(new Dictionary<string, DataSourceConfiguration> { { "something", expected }, { "somethingElse", expectedTwo } });
 			var target = new DataSourceConfigurationProviderUsingNhibFiles(readNHibFiles,encrypter);
-			target.ForTenant("something")
+			target.ForTenant(new Tenant("something"))
 				.Should().Be.SameInstanceAs(expected);
 
-			target.ForTenant("somethingElse")
+			target.ForTenant(new Tenant("somethingElse"))
 				.Should().Be.SameInstanceAs(expectedTwo);
 		}
 	}

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 
 namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 {
@@ -14,18 +15,15 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 			_nhibConfigurationEncryption = nhibConfigurationEncryption;
 		}
 
-		public DataSourceConfiguration ForTenant(string tenant)
+		//TODO: tenant better to do encryption once!
+		public DataSourceConfiguration ForTenant(Tenant tenant)
 		{
 			if(allConfigs==null)
 				allConfigs = _readNHibFiles.Read();
 	
 			DataSourceConfiguration ret;
-			if (allConfigs.TryGetValue(tenant, out ret))
-			{
-				return _nhibConfigurationEncryption.EncryptConfig(ret);
-			}
-				
-			return null;
+			return allConfigs.TryGetValue(tenant.Name, out ret) ? 
+				_nhibConfigurationEncryption.EncryptConfig(ret) : null;
 		}
 	}
 }

@@ -1,19 +1,20 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
 
 namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 {
 	public class DataSourceConfigurationProviderFake : IDataSourceConfigurationProvider
 	{
-		private readonly IDictionary<string, DataSourceConfiguration> data = new Dictionary<string, DataSourceConfiguration>();
+		private readonly IDictionary<Tenant, DataSourceConfiguration> data = new Dictionary<Tenant, DataSourceConfiguration>();
 
-		public DataSourceConfiguration ForTenant(string tenant)
+		public DataSourceConfiguration ForTenant(Tenant tenant)
 		{
 			DataSourceConfiguration ret;
 			return data.TryGetValue(tenant, out ret) ? ret : null;
 		}
 
-		public void Has(string tenant, DataSourceConfiguration dataSourceConfiguration)
+		public void Has(Tenant tenant, DataSourceConfiguration dataSourceConfiguration)
 		{
 			data[tenant] = dataSourceConfiguration;
 		}
