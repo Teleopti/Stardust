@@ -7,7 +7,7 @@
 		<id name="Id">
 			<generator class="assigned" />
 		</id>
-		<many-to-one name="tenant" class="Tenant" access="field"/>
+		<many-to-one name="Tenant" class="Tenant"/>
 		
 		<property name="Identity" column="[Identity]"/>
 		<property name="ApplicationLogonName"/>
@@ -41,7 +41,7 @@ where pi.ApplicationLogonName=:userName
 		<![CDATA[
 select pi.Id as "PersonId", pi.ApplicationLogonName as "LogonName", pi.Identity as "Identity"
 from PersonInfo pi
-where pi.Id in (:ids) and pi.tenant=:tenant
+where pi.Id in (:ids) and pi.Tenant=:tenant
 ]]>
 	</query>
 

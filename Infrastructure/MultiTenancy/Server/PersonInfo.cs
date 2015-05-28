@@ -5,7 +5,6 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 {
 	public class PersonInfo
 	{
-		private readonly Tenant tenant;
 		private ApplicationLogonInfo _applicationLogonInfo;
 
 		public PersonInfo() : this(new Tenant(string.Empty), Guid.NewGuid())
@@ -14,7 +13,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 
 		public PersonInfo(Tenant tenant, Guid personId)
 		{
-			this.tenant = tenant;
+			Tenant = tenant;
 			Id = personId;
 			RegenerateTenantPassword();
 		}
@@ -25,21 +24,17 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		public virtual string ApplicationLogonName { get; protected set; }
 		//make private when oldschema is gone!
 		public virtual string ApplicationLogonPassword { get; protected set; }
-		//
 		public virtual string Identity { get; protected set; }
+		public virtual Tenant Tenant { get; protected set; }
 
 		public virtual ApplicationLogonInfo ApplicationLogonInfo
 		{
 			get
 			{
+				//TODO: tenant put this in ctor instead
 				return _applicationLogonInfo ?? (_applicationLogonInfo = new ApplicationLogonInfo(this));
 			}
 			protected set { _applicationLogonInfo = value; }
-		}
-
-		public virtual Tenant Tenant
-		{
-			get { return tenant; }
 		}
 
 		public virtual void SetApplicationLogonCredentials(ICheckPasswordStrength checkPasswordStrength, string logonName, string password)

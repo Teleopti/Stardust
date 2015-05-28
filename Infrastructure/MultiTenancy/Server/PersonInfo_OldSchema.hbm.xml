@@ -6,7 +6,7 @@
 		<id name="Id">
 			<generator class="assigned" />
 		</id>
-		<many-to-one name="tenant" entity-name="Tenant_OldSchema" class="Tenant" access="field"/>
+		<many-to-one name="Tenant" entity-name="Tenant_OldSchema" class="Tenant" />
 		
 		<join table="AuthenticationInfo" fetch="join" optional="true">
 			<key column="Person" />
@@ -23,7 +23,6 @@
 			<key column="Person"/>
 			<component name="ApplicationLogonInfo" class="ApplicationLogonInfo">
 				<parent name="PersonInfo" />
-				<!--delete me soon!-->
 				<property name="id" access="field"/>
 				<property name="LastPasswordChange" />
 				<property name="InvalidAttemptsSequenceStart" />
