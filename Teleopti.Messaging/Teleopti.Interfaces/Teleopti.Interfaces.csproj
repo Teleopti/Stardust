@@ -878,8 +878,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="MessageBroker\Notification.hbm.xml" />
-    <EmbeddedResource Include="MessageBroker\Mailbox.hbm.xml" />
     <Content Include="Messages.ico" />
   </ItemGroup>
   <ItemGroup>

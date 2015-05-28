@@ -234,7 +234,6 @@
     <Compile Include="LiteUnitOfWork\ReadModelUnitOfWork\ReadModelUnitOfWorkAspect.cs" />
     <Compile Include="LiteUnitOfWork\ReadModelUnitOfWork\ReadModelUnitOfWorkFactory.cs" />
     <Compile Include="LiteUnitOfWork\ReadModelUnitOfWork\ReadModelUnitOfWorkState.cs" />
-    <Compile Include="NHibernateConfiguration\StringSavedAsDateTime.cs" />
     <Compile Include="MessageBroker\MailboxRepository.cs" />
     <Compile Include="MultiTenancy\Admin\IRegenerateAllTenantPasswords.cs" />
     <Compile Include="MultiTenancy\Admin\RegenerateAllTenantPasswords.cs" />

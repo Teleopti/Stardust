@@ -18,7 +18,7 @@ namespace Teleopti.Interfaces.MessageBroker
 			EndDate = Subscription.DateToString(DateTime.MinValue);
 		}
 
-		public virtual string[] Routes()
+		public string[] Routes()
 		{
 			var dataSources = new[] {DataSource};
 			var businessUnits = new[] {BusinessUnitId};
@@ -66,52 +66,52 @@ namespace Teleopti.Interfaces.MessageBroker
 			return route;
 		}
 
-		public virtual string DataSource { get; set; }
-		public virtual string BusinessUnitId { get; set; }
+		public string DataSource { get; set; }
+		public string BusinessUnitId { get; set; }
 
-		public virtual string DomainType { get; set; }
-		public virtual string DomainQualifiedType { get; set; }
-		public virtual string DomainId { get; set; }
-		public virtual string ModuleId { get; set; }
-		public virtual string DomainReferenceId { get; set; }
-		public virtual string DomainReferenceType { get; set; }
-		public virtual string EndDate { get; set; }
-		public virtual string StartDate { get; set; }
-		public virtual int DomainUpdateType { get; set; }
-		public virtual string BinaryData { get; set; }
+		public string DomainType { get; set; }
+		public string DomainQualifiedType { get; set; }
+		public string DomainId { get; set; }
+		public string ModuleId { get; set; }
+		public string DomainReferenceId { get; set; }
+		public string DomainReferenceType { get; set; }
+		public string EndDate { get; set; }
+		public string StartDate { get; set; }
+		public int DomainUpdateType { get; set; }
+		public string BinaryData { get; set; }
 
 
-		public virtual Guid DomainIdAsGuid()
+		public Guid DomainIdAsGuid()
 		{
 			return XmlConvert.ToGuid(DomainId);
 		}
 
-		public virtual Guid DomainReferenceIdAsGuid()
+		public Guid DomainReferenceIdAsGuid()
 		{
 			return XmlConvert.ToGuid(DomainReferenceId);
 		}
 
-		public virtual Guid ModuleIdAsGuid()
+		public Guid ModuleIdAsGuid()
 		{
 			return XmlConvert.ToGuid(ModuleId);
 		}
 
-		public virtual Guid BusinessUnitIdAsGuid()
+		public Guid BusinessUnitIdAsGuid()
 		{
 			return XmlConvert.ToGuid(BusinessUnitId);
 		}
 
-		public virtual DateTime StartDateAsDateTime()
+		public DateTime StartDateAsDateTime()
 		{
 			return Subscription.AsDateTime(StartDate);
 		}
 
-		public virtual DateTime EndDateAsDateTime()
+		public DateTime EndDateAsDateTime()
 		{
 			return Subscription.AsDateTime(EndDate);
 		}
 
-		public virtual DomainUpdateType DomainUpdateTypeAsDomainUpdateType()
+		public DomainUpdateType DomainUpdateTypeAsDomainUpdateType()
 		{
 			return (DomainUpdateType) DomainUpdateType;
 		}
