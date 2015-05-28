@@ -4,7 +4,7 @@ using NHibernate.Transform;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 
-namespace Teleopti.Analytics.Etl.TransformerInfrastructure
+namespace Teleopti.Analytics.Etl.Common.Infrastructure
 {
 	//special impl to bypass security in tenant service
 	//if there'll be more places like this -> fix!

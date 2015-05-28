@@ -67,6 +67,35 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FSharp.Core, Version=4.3.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\..\packages\FSharp.Core.3.0.0.2\lib\net40\FSharp.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Iesi.Collections.4.0.1.4000\lib\net40\Iesi.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AnalysisServices, Version=10.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Teleopti.AnalysisServices.10.0.0\lib\net40\Microsoft.AnalysisServices.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AnalysisServices.AdomdClient, Version=10.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\..\packages\Teleopti.AnalysisServices.10.0.0\lib\net40\Microsoft.AnalysisServices.AdomdClient.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\NHibernate.4.0.0.4000\lib\net40\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="policy.2.3.FSharp.Core, Version=2.3.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\..\packages\FSharp.Core.3.0.0.2\lib\net40\policy.2.3.FSharp.Core.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core">
@@ -81,12 +110,71 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.112\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+    </Reference>
+    <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.112\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Entity\BusinessUnitItem.cs" />
+    <Compile Include="Infrastructure\BulkWriter.cs" />
+    <Compile Include="Infrastructure\CubeRepository.cs" />
+    <Compile Include="Infrastructure\DatabaseCommand.cs" />
+    <Compile Include="Infrastructure\DataTableDefinition\AbsenceInfrastructure.cs" />
+    <Compile Include="Infrastructure\DataTableDefinition\AcdLogOnPersonInfrastructure.cs" />
+    <Compile Include="Infrastructure\DataTableDefinition\ActivityInfrastructure.cs" />
+    <Compile Include="Infrastructure\DataTableDefinition\BusinessUnitInfrastructure.cs" />
+    <Compile Include="Infrastructure\DataTableDefinition\DateInfrastructure.cs" />
+    <Compile Include="Infrastructure\DataTableDefinition\ForecastWorkloadInfrastructure.cs" />
+    <Compile Include="Infrastructure\DataTableDefinition\GroupPagePersonInfrastructure.cs" />
+    <Compile Include="Infrastructure\DataTableDefinition\HourlyAvailabilityInfrastructure.cs" />
+    <Compile Include="Infrastructure\DataTableDefinition\IntervalInfrastructure.cs" />
+    <Compile Include="Infrastructure\DataTableDefinition\KpiInfrastructure.cs" />
+    <Compile Include="Infrastructure\DataTableDefinition\KpiTargetTeamInfrastructure.cs" />
+    <Compile Include="Infrastructure\DataTableDefinition\OvertimeInfrastructure.cs" />
+    <Compile Include="Infrastructure\DataTableDefinition\PermissionReportInfrastructure.cs" />
+    <Compile Include="Infrastructure\DataTableDefinition\PersonInfrastructure.cs" />
+    <Compile Include="Infrastructure\DataTableDefinition\PersonSkillInfrastructure.cs" />
+    <Compile Include="Infrastructure\DataTableDefinition\PmUserInfrastructure.cs" />
+    <Compile Include="Infrastructure\DataTableDefinition\RequestInfrastructure.cs" />
+    <Compile Include="Infrastructure\DataTableDefinition\ScenarioInfrastructure.cs" />
+    <Compile Include="Infrastructure\DataTableDefinition\ScheduleChangedInfrastructure.cs" />
+    <Compile Include="Infrastructure\DataTableDefinition\ScheduleDayAbsenceCountInfrastructure.cs" />
+    <Compile Include="Infrastructure\DataTableDefinition\ScheduleDayOffCountInfrastructure.cs" />
+    <Compile Include="Infrastructure\DataTableDefinition\ScheduleForecastSkillInfrastructure.cs" />
+    <Compile Include="Infrastructure\DataTableDefinition\ScheduleInfrastructure.cs" />
+    <Compile Include="Infrastructure\DataTableDefinition\SchedulePreferenceInfrastructure.cs" />
+    <Compile Include="Infrastructure\DataTableDefinition\ScorecardInfrastructure.cs" />
+    <Compile Include="Infrastructure\DataTableDefinition\ScorecardKpiInfrastructure.cs" />
+    <Compile Include="Infrastructure\DataTableDefinition\ShiftCategoryInfrastructure.cs" />
+    <Compile Include="Infrastructure\DataTableDefinition\SkillInfrastructure.cs" />
+    <Compile Include="Infrastructure\DataTableDefinition\StateGroupInfrastructure.cs" />
+    <Compile Include="Infrastructure\DataTableDefinition\TimeZoneInfrastructure.cs" />
+    <Compile Include="Infrastructure\DataTableDefinition\WorkloadInfrastructure.cs" />
+    <Compile Include="Infrastructure\DataTableDefinition\WorkloadQueueInfrastructure.cs" />
+    <Compile Include="Infrastructure\EtlJobLock.cs" />
+    <Compile Include="Infrastructure\FindTenantLogonInfoUnsecured.cs" />
+    <Compile Include="Infrastructure\GeneralInfrastructure.cs" />
+    <Compile Include="Infrastructure\HelperFunctions.cs" />
+    <Compile Include="Infrastructure\IGeneralInfrastructure.cs" />
+    <Compile Include="Infrastructure\ILogOnHelper.cs" />
+    <Compile Include="Infrastructure\IThreadPool.cs" />
+    <Compile Include="Infrastructure\LicenseActivator.cs" />
+    <Compile Include="Infrastructure\LogonHelper.cs" />
+    <Compile Include="Infrastructure\LogonService.cs" />
+    <Compile Include="Infrastructure\RaptorRepository.cs" />
+    <Compile Include="Infrastructure\Repository.cs" />
+    <Compile Include="Infrastructure\ScheduleTransformerException.cs" />
+    <Compile Include="Infrastructure\StateManager.cs" />
+    <Compile Include="Infrastructure\TenantCreator.cs" />
+    <Compile Include="Infrastructure\ThreadPool.cs" />
     <Compile Include="Interfaces\Common\AlarmEventArgs.cs" />
     <Compile Include="Interfaces\Common\BaseConfiguration.cs" />
     <Compile Include="Interfaces\Common\IBaseConfiguration.cs" />
@@ -170,6 +258,8 @@
     <None Include="..\..\Teleopti.Ccc.snk">
       <Link>Teleopti.Ccc.snk</Link>
     </None>
+    <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -189,7 +279,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Infrastructure\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

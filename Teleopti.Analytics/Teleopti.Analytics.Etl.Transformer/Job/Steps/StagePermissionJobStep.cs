@@ -1,9 +1,7 @@
 using System.Collections.Generic;
+using Teleopti.Analytics.Etl.Common.Infrastructure.DataTableDefinition;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
-using Teleopti.Analytics.Etl.TransformerInfrastructure;
-using Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Security.Matrix;
 
 namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 {

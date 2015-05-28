@@ -1,7 +1,6 @@
 using System.Collections.Generic;
+using Teleopti.Analytics.Etl.Common.Infrastructure.DataTableDefinition;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
-using Teleopti.Analytics.Etl.TransformerInfrastructure;
-using Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition;
 using Teleopti.Interfaces.Domain;
 using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult;
 
@@ -14,12 +13,12 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 		{
 			Name = "stg_request";
 			Transformer = new RequestTransformer();
-            JobCategory = JobCategoryType.Schedule;
+			JobCategory = JobCategoryType.Schedule;
 			RequestInfrastructure.AddColumnsToDataTable(BulkInsertDataTable1);
 		}
 
 		//public IEtlTransformer<IPersonRequest> Transformer { get; set; }
-        public IPersonRequestTransformer<IPersonRequest> Transformer { get; set; }
+		public IPersonRequestTransformer<IPersonRequest> Transformer { get; set; }
 
 		protected override int RunStep(IList<IJobResult> jobResultCollection, bool isLastBusinessUnit)
 		{
@@ -29,11 +28,11 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 			// 4. return effected rows.
 
 			// this steps moves data from CCC7 to Stage.
-            var period = new DateTimePeriod(JobCategoryDatePeriod.StartDateUtcFloor,
-                                                      JobCategoryDatePeriod.EndDateUtcCeiling);
+			var period = new DateTimePeriod(JobCategoryDatePeriod.StartDateUtcFloor,
+																	JobCategoryDatePeriod.EndDateUtcCeiling);
 
 			var rootList = _jobParameters.Helper.Repository.LoadRequest(period);
-			Transformer.Transform(rootList, _jobParameters.IntervalsPerDay,  BulkInsertDataTable1);
+			Transformer.Transform(rootList, _jobParameters.IntervalsPerDay, BulkInsertDataTable1);
 
 			return _jobParameters.Helper.Repository.PersistRequest(BulkInsertDataTable1);
 		}

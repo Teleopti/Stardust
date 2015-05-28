@@ -248,10 +248,6 @@
       <Project>{8a4806d6-8587-43f2-86fe-915b81c9f863}</Project>
       <Name>Teleopti.Analytics.Etl.ConfigTool</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Analytics.Etl.TransformerInfrastructure\Teleopti.Analytics.Etl.TransformerInfrastructure.csproj">
-      <Project>{7193C0D2-2B91-4E92-9C47-620095255EDC}</Project>
-      <Name>Teleopti.Analytics.Etl.TransformerInfrastructure</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Analytics.Etl.Transformer\Teleopti.Analytics.Etl.Transformer.csproj">
       <Project>{B9465B16-1563-4F16-BCD6-353551B0AA20}</Project>
       <Name>Teleopti.Analytics.Etl.Transformer</Name>
@@ -262,6 +258,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

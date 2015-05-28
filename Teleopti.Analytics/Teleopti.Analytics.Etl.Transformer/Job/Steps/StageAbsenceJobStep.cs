@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
+using Teleopti.Analytics.Etl.Common.Infrastructure.DataTableDefinition;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
-using Teleopti.Analytics.Etl.TransformerInfrastructure;
-using Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition;
 using Teleopti.Interfaces.Domain;
 using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult;
 
@@ -24,7 +22,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
             IList<IAbsence> rootList = _jobParameters.Helper.Repository.LoadAbsence();
 
             //Transform data from Raptor to Matrix format
-            AbsenceTransformer raptorTransformer = new AbsenceTransformer(DateTime.Now);
+            var raptorTransformer = new AbsenceTransformer(DateTime.Now);
             raptorTransformer.Transform(rootList, BulkInsertDataTable1);
 
             //Truncate staging table & Bulk insert data to staging database

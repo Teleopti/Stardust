@@ -5,7 +5,6 @@ using SharpTestsEx;
 using Teleopti.Analytics.Etl.Common;
 using Teleopti.Analytics.Etl.Common.Entity;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
-using Teleopti.Analytics.Etl.TransformerInfrastructure;
 
 
 namespace Teleopti.Analytics.Etl.CommonTest
@@ -21,12 +20,12 @@ namespace Teleopti.Analytics.Etl.CommonTest
 			var repository = MockRepository.GenerateMock<IRunControllerRepository>();
 			IEtlRunningInformation etlRunningInformation1;
 			var etlRunningInformation2 = new EtlRunningInformation
-			                             	{
-			                             		ComputerName = "myPc",
-			                             		StartTime = new DateTime(2012, 4, 4, 2, 0, 0),
-			                             		JobName = "myJob",
-												IsStartedByService = true
-			                             	};
+													{
+														ComputerName = "myPc",
+														StartTime = new DateTime(2012, 4, 4, 2, 0, 0),
+														JobName = "myJob",
+														IsStartedByService = true
+													};
 
 			_target = new RunController(repository);
 			repository.Stub(x => x.IsAnotherEtlRunningAJob(out etlRunningInformation1)).Return(true).OutRef(etlRunningInformation2);
@@ -51,7 +50,7 @@ namespace Teleopti.Analytics.Etl.CommonTest
 		[Test]
 		public void ShouldStartEtlLock()
 		{
-			_target=new RunController(null);
+			_target = new RunController(null);
 			const string jobName = "Job name 1";
 			var etlJobLock = MockRepository.GenerateMock<IEtlJobLock>();
 			etlJobLock.Expect(x => x.CreateLock(jobName, true));

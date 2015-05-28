@@ -3,7 +3,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 
-namespace Teleopti.Analytics.Etl.TransformerInfrastructure
+namespace Teleopti.Analytics.Etl.Common.Infrastructure
 {
 	public static class HelperFunctions
 	{
@@ -34,12 +34,12 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			}
 			Trace.WriteLine("Rows affected by command '" + commandText + "': " + rowsAffected);
 			return rowsAffected;
-        }
+		}
 
 		public static int ExecuteNonQueryMaintenance(CommandType commandType, string commandText, ICollection<SqlParameter> parameterCollection, string connectionString)
 		{
 			var db = new DatabaseCommand(commandType, commandText, connectionString);
-			
+
 			var rowsAffected = db.ExecuteNonQueryMaintenance();
 			if (rowsAffected < 0) //when SET NOCOUNT ON is used inside SP
 			{
@@ -47,7 +47,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			}
 			Trace.WriteLine("Rows affected by command '" + commandText + "': " + rowsAffected);
 			return rowsAffected;
-        }
+		}
 
 		public static DataSet ExecuteDataSet(CommandType commandType, string commandText, ICollection<SqlParameter> parameterCollection, string connectionString)
 		{

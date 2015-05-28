@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Analytics.Etl.Common.Infrastructure.DataTableDefinition;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
-using Teleopti.Analytics.Etl.TransformerInfrastructure;
-using Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition;
 using Teleopti.Interfaces.Domain;
 using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult;
 
@@ -23,7 +22,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
             IList<ISkill> rootList = _jobParameters.StateHolder.SkillCollection;
             
             //Transform data from Raptor to Matrix format
-            SkillTransformer raptorTransformer = new SkillTransformer(DateTime.Now);
+            var raptorTransformer = new SkillTransformer(DateTime.Now);
             raptorTransformer.Transform(rootList, BulkInsertDataTable1);
 
             //Truncate staging table & Bulk insert data to staging database

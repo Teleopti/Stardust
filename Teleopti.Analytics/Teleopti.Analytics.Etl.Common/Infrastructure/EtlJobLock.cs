@@ -2,10 +2,10 @@
 using System.Data;
 using System.Data.SqlClient;
 using System.Threading;
-using Teleopti.Analytics.Etl.Interfaces.Common;
 using log4net;
+using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 
-namespace Teleopti.Analytics.Etl.TransformerInfrastructure
+namespace Teleopti.Analytics.Etl.Common.Infrastructure
 {
 	public class EtlJobLock: IEtlJobLock
 	{

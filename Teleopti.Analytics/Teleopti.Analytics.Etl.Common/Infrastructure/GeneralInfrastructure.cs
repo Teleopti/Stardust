@@ -5,13 +5,12 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-using Teleopti.Analytics.Etl.Interfaces.Common;
+using log4net;
+using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Interfaces.Domain;
-using log4net;
 
-
-namespace Teleopti.Analytics.Etl.TransformerInfrastructure
+namespace Teleopti.Analytics.Etl.Common.Infrastructure
 {
 	public class GeneralInfrastructure : IGeneralInfrastructure
 	{

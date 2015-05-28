@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Analytics.Etl.Common.Infrastructure.DataTableDefinition;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
-using Teleopti.Analytics.Etl.TransformerInfrastructure;
-using Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition;
 using Teleopti.Interfaces.Domain;
 using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult;
 
@@ -29,7 +28,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 			// Find any changes since last ETL, and get those (only)
 			//var rep = _jobParameters.Helper.Repository;
 			var etlIntraday = _jobParameters.Helper.Repository.LastChangedDate(Result.CurrentBusinessUnit, "Requests");
-			
+
 			_jobParameters.StateHolder.SetThisTime(etlIntraday, "Requests");
 
 			if (etlIntraday.LastTime == etlIntraday.ThisTime)
@@ -37,7 +36,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 				_jobParameters.Helper.Repository.TruncateRequest();
 				return 0;
 			}
-			
+
 			var startTimeUtc = DateTime.SpecifyKind(etlIntraday.LastTime, DateTimeKind.Utc);
 
 			//TODO: Get only changed persons

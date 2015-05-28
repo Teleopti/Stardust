@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
+using Teleopti.Analytics.Etl.Common.Infrastructure.DataTableDefinition;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
-using Teleopti.Analytics.Etl.TransformerInfrastructure;
-using Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Interfaces.Domain;
 using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult;
 
@@ -38,8 +35,8 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
             }
 
             //Get a created list of dates from RaptorTransformer (Not from Raptor)
-            DateTimePeriod period = new DateTimePeriod(startDate, endDate);
-            DateTransformer raptorTransformer = new DateTransformer(DateTime.Now);
+            var period = new DateTimePeriod(startDate, endDate);
+            var raptorTransformer = new DateTransformer(DateTime.Now);
             IList<DayDate> dateList = DateTransformer.CreateDateList(period);
             raptorTransformer.Transform(dateList, BulkInsertDataTable1);
 

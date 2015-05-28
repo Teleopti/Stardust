@@ -1,12 +1,12 @@
 using System;
-using System.Reflection;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Security.Authentication;
-using Teleopti.Analytics.Etl.Interfaces.Transformer;
+using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
@@ -20,7 +20,7 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Analytics.Etl.TransformerInfrastructure
+namespace Teleopti.Analytics.Etl.Common.Infrastructure
 {
 	public class LogOnHelper : ILogOnHelper
 	{
@@ -94,11 +94,11 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			if (string.IsNullOrEmpty(_nhibConfPath))
 				_nhibConfPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 			var dataSourcesFactory = new DataSourcesFactory(new EnversConfiguration(), new List<IMessageSender>(),
-				DataSourceConfigurationSetter.ForEtl(), 
+				DataSourceConfigurationSetter.ForEtl(),
 				new CurrentHttpContext(),
 				() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging
 				);
-			var application = new InitializeApplication( dataSourcesFactory, null);
+			var application = new InitializeApplication(dataSourcesFactory, null);
 
 			if (!StateHolder.IsInitialized)
 				application.Start(new StateManager(), _nhibConfPath, null, ConfigurationManager.AppSettings.ToDictionary(), false);

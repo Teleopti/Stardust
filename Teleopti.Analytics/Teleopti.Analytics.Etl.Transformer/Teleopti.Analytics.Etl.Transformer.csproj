@@ -329,10 +329,6 @@
       <Project>{AE2DE329-7681-40C4-BE16-7382280E2BC6}</Project>
       <Name>Teleopti.Analytics.Etl.PerformanceManagerProxy</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Analytics.Etl.TransformerInfrastructure\Teleopti.Analytics.Etl.TransformerInfrastructure.csproj">
-      <Project>{7193C0D2-2B91-4E92-9C47-620095255EDC}</Project>
-      <Name>Teleopti.Analytics.Etl.TransformerInfrastructure</Name>
-    </ProjectReference>
     <ProjectReference Include="..\WebPortal\Teleopti.Analytics.Portal\ReportTexts\Teleopti.Analytics.ReportTexts.csproj">
       <Project>{82A5CB58-9CBC-45A2-B13E-F8917C846B1A}</Project>
       <Name>Teleopti.Analytics.ReportTexts</Name>
@@ -342,6 +338,7 @@
     <None Include="..\..\Teleopti.Ccc.snk">
       <Link>Teleopti.Ccc.snk</Link>
     </None>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

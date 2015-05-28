@@ -9,10 +9,10 @@ using System.Threading;
 using System.Windows.Forms;
 using log4net;
 using Teleopti.Analytics.Etl.Common;
+using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job.Steps;
-using Teleopti.Analytics.Etl.TransformerInfrastructure;
 using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult;
 
 namespace Teleopti.Analytics.Etl.ConfigTool.Transformer
@@ -51,7 +51,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Transformer
 					JobStoppedRunning(sender, new AlarmEventArgs(jobExecutionState.Job));
 					NotifyUser(jobExecutionState);
 				}
-			}		
+			}
 		}
 
 		private static void NotifyUser(JobExecutionState jobExecutionState)
@@ -90,7 +90,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Transformer
 					if (jobResults == null)
 					{
 						MessageBox.Show("Please apply a license from the main client before ETL job is run.", "Warning",
-						                MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, 0);
+											 MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, 0);
 					}
 					else
 					{

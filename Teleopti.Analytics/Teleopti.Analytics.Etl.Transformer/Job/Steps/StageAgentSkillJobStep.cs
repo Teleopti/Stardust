@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using System.Collections.Generic;
+using Teleopti.Analytics.Etl.Common.Infrastructure.DataTableDefinition;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
-using Teleopti.Analytics.Etl.TransformerInfrastructure;
-using Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition;
 using Teleopti.Interfaces.Domain;
 using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult;
 
@@ -26,7 +23,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
         {
             IEnumerable<IPerson> rootList = _jobParameters.StateHolder.PersonCollection;
 
-            AgentSkillTransform transformer = new AgentSkillTransform();
+            var transformer = new AgentSkillTransform();
             transformer.Transform(rootList, BulkInsertDataTable1);
 
             int affectedRows = _jobParameters.Helper.Repository.PersistAgentSkill(BulkInsertDataTable1);    

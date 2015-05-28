@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Analytics.Etl.Common.Infrastructure.DataTableDefinition;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
-using Teleopti.Analytics.Etl.TransformerInfrastructure;
-using Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition;
 using Teleopti.Interfaces.Domain;
 using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult;
 
@@ -24,7 +23,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
             IList<IBusinessUnit> rootList = _jobParameters.Helper.Repository.LoadBusinessUnit();
 
             //Transform data from Raptor to Matrix format
-            BusinessUnitTransformer raptorTransformer = new BusinessUnitTransformer(DateTime.Now);
+            var raptorTransformer = new BusinessUnitTransformer(DateTime.Now);
             raptorTransformer.Transform(rootList, BulkInsertDataTable1);
 
             //Truncate staging table & Bulk insert data to staging database

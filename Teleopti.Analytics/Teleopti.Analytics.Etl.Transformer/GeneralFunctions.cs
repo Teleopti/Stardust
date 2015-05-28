@@ -1,7 +1,7 @@
 using System.Collections.Generic;
+using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
-using Teleopti.Analytics.Etl.TransformerInfrastructure;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 using DataSourceEtl = Teleopti.Ccc.Domain.Analytics.DataSourceEtl;

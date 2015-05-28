@@ -1,30 +1,30 @@
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Analytics.Etl.TransformerInfrastructure
+namespace Teleopti.Analytics.Etl.Common.Infrastructure
 {
-    /// <summary>
-    /// Stores application data for the application lifetime  
-    /// </summary>
-    internal class StateManager : State
-    {
+	 /// <summary>
+	 /// Stores application data for the application lifetime  
+	 /// </summary>
+	 internal class StateManager : State
+	 {
 
 		#region Fields (1)
 
-        private ISessionData _sessData;
+		  private ISessionData _sessData;
 
 		#endregion Fields
 
 		#region Properties (1)
 
-        /// <summary>
-        /// Gets the session data for logged on personItem.
-        /// </summary>
-        /// <value>The session data.</value>
-        public override ISessionData SessionScopeData
-        {
-            get { return _sessData; }
-        }
+		  /// <summary>
+		  /// Gets the session data for logged on personItem.
+		  /// </summary>
+		  /// <value>The session data.</value>
+		  public override ISessionData SessionScopeData
+		  {
+				get { return _sessData; }
+		  }
 
 		#endregion Properties
 
@@ -33,23 +33,23 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 
 		// Public Methods (2)
 
-        /// <summary>
-        /// Clears data kept for logged in session/personItem
-        /// </summary>
-        public override void ClearSession()
-        {
-            _sessData = null;
-        }
+		  /// <summary>
+		  /// Clears data kept for logged in session/personItem
+		  /// </summary>
+		  public override void ClearSession()
+		  {
+				_sessData = null;
+		  }
 
-        /// <summary>
-        /// Sets the session data.
-        /// </summary>
-        /// <param name="sessionData">The sess data.</param>
-        public override void SetSessionData(ISessionData sessionData)
-        {
-            _sessData = sessionData;
-        }
+		  /// <summary>
+		  /// Sets the session data.
+		  /// </summary>
+		  /// <param name="sessionData">The sess data.</param>
+		  public override void SetSessionData(ISessionData sessionData)
+		  {
+				_sessData = sessionData;
+		  }
 
 		#endregion Methods
-    }
+	 }
 }
