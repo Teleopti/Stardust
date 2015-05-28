@@ -143,7 +143,11 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			throw new NotImplementedException();
 		}
 
-		public event EventHandler<ModifyEventArgs> PartModified;
+		public event EventHandler<ModifyEventArgs> PartModified
+		{
+			add { }
+			remove { }
+		}
 		public void SetUndoRedoContainer(IUndoRedoContainer container)
 		{
 			throw new NotImplementedException();

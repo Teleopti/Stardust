@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.TestCommon
 			throw new NotImplementedException();
 		}
 
-		public IScheduleDictionary Owner { get; private set; }
+		public new IScheduleDictionary Owner { get; private set; }
 		public new bool Contains(IScheduleData scheduleData)
 		{
 			throw new NotImplementedException();
