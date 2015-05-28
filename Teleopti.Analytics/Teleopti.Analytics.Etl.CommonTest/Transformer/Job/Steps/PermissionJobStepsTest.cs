@@ -1,0 +1,39 @@
+using System.Collections.Generic;
+using NUnit.Framework;
+using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
+using Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData;
+using Teleopti.Analytics.Etl.Transformer.Job;
+using Teleopti.Analytics.Etl.Transformer.Job.Steps;
+
+namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job.Steps
+{
+	[TestFixture]
+	public class PermissionJobStepsTest
+	{
+		private IJobParameters _jobParameters;
+
+		[SetUp]
+		public void Setup()
+		{
+			_jobParameters = JobParametersFactory.SimpleParameters(false);
+			_jobParameters.Helper = new JobHelper(new RaptorRepositoryForTest(), null, null, null);
+		}
+
+		[Test]
+		public void VerifyStagePermissionJobStep()
+		{
+			var ss = new StagePermissionJobStep(_jobParameters);
+			IJobStepResult jobStepResult = ss.Run(new List<IJobStep>(), null, null, false);
+			Assert.IsNotNull(jobStepResult);
+		}
+
+
+		[Test]
+		public void VerifyPermissionReportJobStep()
+		{
+			var ss = new PermissionReportJobStep(_jobParameters);
+			IJobStepResult jobStepResult = ss.Run(new List<IJobStep>(), null, null, false);
+			Assert.IsNotNull(jobStepResult);
+		}
+	}
+}

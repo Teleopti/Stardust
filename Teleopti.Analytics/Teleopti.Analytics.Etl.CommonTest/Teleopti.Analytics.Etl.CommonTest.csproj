@@ -20,7 +20,7 @@
     </SccAuxPath>
     <SccProvider>
     </SccProvider>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\Teleopti.Ccc.snk</AssemblyOriginatorKeyFile>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -81,6 +81,7 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -105,11 +106,139 @@
     <Compile Include="FakeData\RepositoryFactory.cs" />
     <Compile Include="JobRunnerTest.cs" />
     <Compile Include="RunControllerTest.cs" />
+    <Compile Include="Transformer\AbsenceTransformerTest.cs" />
+    <Compile Include="Transformer\ActivityTransformerTest.cs" />
+    <Compile Include="Transformer\BusinessUnitTransformerTest.cs" />
+    <Compile Include="Transformer\CommonStateHolderTest.cs" />
+    <Compile Include="Transformer\ConfigurationHandlerTest.cs" />
+    <Compile Include="Transformer\DateTransformerTest.cs" />
+    <Compile Include="Transformer\FakeData\AbsenceFactory.cs" />
+    <Compile Include="Transformer\FakeData\ActivityFactory.cs" />
+    <Compile Include="Transformer\FakeData\BusinessUnitFactory.cs" />
+    <Compile Include="Transformer\FakeData\DateFactory.cs" />
+    <Compile Include="Transformer\FakeData\ForecastFactory.cs" />
+    <Compile Include="Transformer\FakeData\JobMultipleDateFactory.cs" />
+    <Compile Include="Transformer\FakeData\JobParametersFactory.cs" />
+    <Compile Include="Transformer\FakeData\JobStepResultFactory.cs" />
+    <Compile Include="Transformer\FakeData\KpiTargetTeamFactory.cs" />
+    <Compile Include="Transformer\FakeData\OvertimeFactory.cs" />
+    <Compile Include="Transformer\FakeData\PersonFactory.cs" />
+    <Compile Include="Transformer\FakeData\ScenarioFactory.cs" />
+    <Compile Include="Transformer\FakeData\ScheduleFactory.cs" />
+    <Compile Include="Transformer\FakeData\SchedulePartFactory.cs" />
+    <Compile Include="Transformer\FakeData\ScorecardFactory.cs" />
+    <Compile Include="Transformer\FakeData\ShiftCategoryFactory.cs" />
+    <Compile Include="Transformer\FakeData\SkillFactory.cs" />
+    <Compile Include="Transformer\FakeData\StateGroupFactory.cs" />
+    <Compile Include="Transformer\FakeData\WorkloadFactory.cs" />
+    <Compile Include="Transformer\FakeData\WorkloadQueueFactory.cs" />
+    <Compile Include="Transformer\ForecastWorkloadTransformerTest.cs" />
+    <Compile Include="Transformer\GeneralFunctionsTest.cs" />
+    <Compile Include="Transformer\GroupPagePersonTransformerTest.cs" />
+    <Compile Include="Transformer\HourlyAvailabilityTransformerTest.cs" />
+    <Compile Include="Transformer\IntervalTransformerTest.cs" />
+    <Compile Include="Transformer\IntradayAvailabilityTransformerTest.cs" />
+    <Compile Include="Transformer\IntradaySchedulePreferenceTransformerTest.cs" />
+    <Compile Include="Transformer\Job\JobBaseTest.cs" />
+    <Compile Include="Transformer\Job\JobHelperTest.cs" />
+    <Compile Include="Transformer\Job\JobParametersTest.cs" />
+    <Compile Include="Transformer\Job\JobResultTest.cs" />
+    <Compile Include="Transformer\Job\JobStepResultTest.cs" />
+    <Compile Include="Transformer\Job\Jobs\AgentStatisticsJobTest.cs" />
+    <Compile Include="Transformer\Job\Jobs\CleanupJobTest.cs" />
+    <Compile Include="Transformer\Job\Jobs\InitialJobTest.cs" />
+    <Compile Include="Transformer\Job\Jobs\JobListTest.cs" />
+    <Compile Include="Transformer\Job\Jobs\KpiJobTest.cs" />
+    <Compile Include="Transformer\Job\Jobs\PermissionJobTest.cs" />
+    <Compile Include="Transformer\Job\Jobs\QueueAndAgentLogOnJobTest.cs" />
+    <Compile Include="Transformer\Job\Jobs\QueueStatisticsJobTest.cs" />
+    <Compile Include="Transformer\Job\Jobs\RequestJobTest.cs" />
+    <Compile Include="Transformer\Job\Jobs\ScheduleJobTest.cs" />
+    <Compile Include="Transformer\Job\Jobs\WorkloadQueuesJobTest.cs" />
+    <Compile Include="Transformer\Job\MultipleDate\JobMultipleDateItemTest.cs" />
+    <Compile Include="Transformer\Job\MultipleDate\JobMultipleDateTest.cs" />
+    <Compile Include="Transformer\Job\Steps\AgentSkillJobStepsTest.cs" />
+    <Compile Include="Transformer\Job\Steps\AgentStatisticsJobStepsTest.cs" />
+    <Compile Include="Transformer\Job\Steps\CleanupJobStepsTest.cs" />
+    <Compile Include="Transformer\Job\Steps\CommonJobStepsTest.cs" />
+    <Compile Include="Transformer\Job\Steps\EtlDayOffSubStepTest.cs" />
+    <Compile Include="Transformer\Job\Steps\FactIntradayRequestJobStepTest.cs" />
+    <Compile Include="Transformer\Job\Steps\FactScheduleDeviationJobStepTest.cs" />
+    <Compile Include="Transformer\Job\Steps\ForecastJobStepsTest.cs" />
+    <Compile Include="Transformer\Job\Steps\IndexMaintenanceJobsTest.cs" />
+    <Compile Include="Transformer\Job\Steps\InitialJobStepsTest.cs" />
+    <Compile Include="Transformer\Job\Steps\IntradayStageAvailabilityJobStepTest.cs" />
+    <Compile Include="Transformer\Job\Steps\IntradayStageRequestJobStepTest.cs" />
+    <Compile Include="Transformer\Job\Steps\IntradayStageScheduleDayOffCountJobStepTest.cs" />
+    <Compile Include="Transformer\Job\Steps\IntradayStageScheduleJobStepTest.cs" />
+    <Compile Include="Transformer\Job\Steps\IntradayStageSchedulePreferenceJobStepTest.cs" />
+    <Compile Include="Transformer\Job\Steps\KpiJobStepsTest.cs" />
+    <Compile Include="Transformer\Job\Steps\LicenseCheckJobStepTest.cs" />
+    <Compile Include="Transformer\Job\Steps\PermissionJobStepsTest.cs" />
+    <Compile Include="Transformer\Job\Steps\PmPermissionJobStepTest.cs" />
+    <Compile Include="Transformer\Job\Steps\QueueAndAgentLogOnJobStepsTest.cs" />
+    <Compile Include="Transformer\Job\Steps\QueueStatisticsJobStepsTest.cs" />
+    <Compile Include="Transformer\Job\Steps\RequestJobsTest.cs" />
+    <Compile Include="Transformer\Job\Steps\ScheduleDayRestrictorTest.cs" />
+    <Compile Include="Transformer\Job\Steps\ScheduleJobStepsTest.cs" />
+    <Compile Include="Transformer\Job\Steps\StageGroupPagePersonJobStepTest.cs" />
+    <Compile Include="Transformer\Job\Steps\StageScheduleDayOffCountJobStepTest.cs" />
+    <Compile Include="Transformer\Job\Steps\StageSchedulePreferenceJobStepTest.cs" />
+    <Compile Include="Transformer\Job\Steps\StatisticsUpdateNotificationJobStepTest.cs" />
+    <Compile Include="Transformer\Job\Steps\WorkloadQueuesJobStepsTest.cs" />
+    <Compile Include="Transformer\KpiTargetTeamTransformerTest.cs" />
+    <Compile Include="Transformer\KpiTransformerTest.cs" />
+    <Compile Include="Transformer\OvertimeTransformerTest.cs" />
+    <Compile Include="Transformer\PermissionReportTransformerTest.cs" />
+    <Compile Include="Transformer\PersonTransformerTest.cs" />
+    <Compile Include="Transformer\PmPermissionExtractorTest.cs" />
+    <Compile Include="Transformer\PmPermissionTransformerTest.cs" />
+    <Compile Include="Transformer\RaptorRepositoryForTest.cs" />
+    <Compile Include="Transformer\RequestTransformTest.cs" />
+    <Compile Include="Transformer\ScenarioTransformerTest.cs" />
+    <Compile Include="Transformer\ScheduleDayOffCountTransformerTest.cs" />
+    <Compile Include="Transformer\ScheduleForecastSkillKeyTest.cs" />
+    <Compile Include="Transformer\ScheduleForecastSkillResourceCalculationTest.cs" />
+    <Compile Include="Transformer\ScheduleForecastSkillTest.cs" />
+    <Compile Include="Transformer\ScheduleForecastSkillTransformerTest.cs" />
+    <Compile Include="Transformer\SchedulePreferenceTransformerHelperTest.cs" />
+    <Compile Include="Transformer\SchedulePreferenceTransformerTest.cs" />
+    <Compile Include="Transformer\ScheduleThreading\DayAbsenceDataRowFactoryTest.cs" />
+    <Compile Include="Transformer\ScheduleThreading\ScheduleDataRowCollectionFactoryTest.cs" />
+    <Compile Include="Transformer\ScheduleThreading\ScheduleDataRowCollectionTest.cs" />
+    <Compile Include="Transformer\ScheduleThreading\ScheduleTransformerTest.cs" />
+    <Compile Include="Transformer\ScheduleThreading\WorkTreadTest.cs" />
+    <Compile Include="Transformer\ScorecardKpiTransformerTest.cs" />
+    <Compile Include="Transformer\ScorecardTransformerTest.cs" />
+    <Compile Include="Transformer\SetupForTestFixtures.cs" />
+    <Compile Include="Transformer\ShiftCategoryTransformerTest.cs" />
+    <Compile Include="Transformer\SkillTransformerTest.cs" />
+    <Compile Include="Transformer\StageScheduleJobStepTest.cs" />
+    <Compile Include="Transformer\StateGroupTransformerTest.cs" />
+    <Compile Include="Transformer\TempTest.cs" />
+    <Compile Include="Transformer\TimeZoneTransformerTest.cs" />
+    <Compile Include="Transformer\WorkloadTransformerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Domain\Teleopti.Ccc.Domain.csproj">
       <Project>{ADD1BCDC-CFBB-4632-8FB5-4FF3BD04F666}</Project>
       <Name>Teleopti.Ccc.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Infrastructure\Teleopti.Ccc.Infrastructure.csproj">
+      <Project>{aa4a5374-77af-44f0-85c1-6cabc6701352}</Project>
+      <Name>Teleopti.Ccc.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
+      <Project>{db42d973-9889-4d51-9fc5-be66aa7f117c}</Project>
+      <Name>Teleopti.Ccc.IocCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Ccc.TestCommon\Teleopti.Ccc.TestCommon.csproj">
+      <Project>{68a028b6-864c-4969-8830-9c3c6bd56a98}</Project>
+      <Name>Teleopti.Ccc.TestCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Ccc.UserTexts\Teleopti.Ccc.UserTexts.csproj">
+      <Project>{98105bfe-6c3b-4c57-9141-6bd065c7e966}</Project>
+      <Name>Teleopti.Ccc.UserTexts</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
       <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
@@ -133,9 +262,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\Teleopti.Ccc.snk">
-      <Link>Teleopti.Ccc.snk</Link>
-    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
