@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.TestCommon.TestData;
@@ -23,6 +24,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		public LogLogonAttemptFake LogLogonAttempt;
 		public TenantUnitOfWorkFake TenantUnitOfWork;
 		public PasswordPolicyFake PasswordPolicy;
+		public MutableNow Now;
 
 		[Test]
 		public void ShouldAcceptAccessWithoutTenantCredentials()
@@ -157,23 +159,63 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			personInfo.ApplicationLogonInfo.IsLocked.Should().Be.True();
 
 			TenantUnitOfWork.WasCommitted.Should().Be.True();
+		}
 
+		[Test]
+		public void SuccessfulLogonShouldStartNewSequence()
+		{
+			var logonName = RandomName.Make();
+			var password = RandomName.Make();
+			var personInfo = new PersonInfo();
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), logonName, password);
+			ApplicationUserQuery.Has(personInfo);
+			PasswordPolicy.MaxAttemptCount = 1;
 
-			//const string userName = "validUserName";
-			//var personInfo = new PersonInfo();
-			//personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), "thePassword");
-			//var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
-			//findApplicationQuery.Expect(x => x.Find(userName)).Return(personInfo);
-			//var pwPolicy = MockRepository.GenerateStub<IPasswordPolicy>();
-			//pwPolicy.Expect(x => x.MaxAttemptCount).Return(1);
-			//pwPolicy.Expect(x => x.InvalidAttemptWindow).Return(TimeSpan.FromHours(1));
+			Target.ApplicationLogon(new ApplicationLogonModel { UserName = logonName, Password = RandomName.Make() });
+			personInfo.ApplicationLogonInfo.InvalidAttempts.Should().Be.EqualTo(1);
+			Target.ApplicationLogon(new ApplicationLogonModel { UserName = logonName, Password = password });
+			personInfo.ApplicationLogonInfo.InvalidAttempts.Should().Be.EqualTo(0);
+			
+			TenantUnitOfWork.WasCommitted.Should().Be.True();
+		}
 
-			//var target = new ApplicationAuthentication(findApplicationQuery,
-			//	new DataSourceConfigurationProviderFake(), () => pwPolicy, new Now(), new SuccessfulPasswordPolicy());
-			//target.Logon(userName, "invalidPassword");
-			//personInfo.ApplicationLogonInfo.IsLocked.Should().Be.False();
-			//target.Logon(userName, "invalidPassword");
-			//personInfo.ApplicationLogonInfo.IsLocked.Should().Be.True();
+		[Test]
+		public void WhenTimePassedShouldStartNewSequence()
+		{
+			var logonName = RandomName.Make();
+			var personInfo = new PersonInfo();
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), logonName, RandomName.Make());
+			ApplicationUserQuery.Has(personInfo);
+			PasswordPolicy.MaxAttemptCount = 100;
+			PasswordPolicy.InvalidAttemptWindow = TimeSpan.FromHours(1);
+
+			Now.Is(DateTime.Now);
+			Target.ApplicationLogon(new ApplicationLogonModel { UserName = logonName, Password = RandomName.Make() });
+			Target.ApplicationLogon(new ApplicationLogonModel { UserName = logonName, Password = RandomName.Make() });
+			personInfo.ApplicationLogonInfo.InvalidAttempts.Should().Be.EqualTo(2);
+
+			//logon two hours later
+			Now.Is(DateTime.Now.AddHours(2));
+			Target.ApplicationLogon(new ApplicationLogonModel { UserName = logonName, Password = RandomName.Make() });
+			personInfo.ApplicationLogonInfo.InvalidAttempts.Should().Be.EqualTo(1);
+
+			TenantUnitOfWork.WasCommitted.Should().Be.True();
+		}
+
+		[Test]
+		public void LockedUserShouldFail()
+		{
+			var logonName = RandomName.Make();
+			var password = RandomName.Make();
+			var personInfo = new PersonInfo();
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), logonName, password);
+			personInfo.ApplicationLogonInfo.Lock();
+			ApplicationUserQuery.Has(personInfo);
+
+			var res = Target.ApplicationLogon(new ApplicationLogonModel { UserName = logonName, Password = password }).Result<TenantAuthenticationResult>();
+
+			res.Success.Should().Be.False();
+			res.FailReason.Should().Be.EqualTo(Resources.LogOnFailedAccountIsLocked);
 		}
 	}
 }

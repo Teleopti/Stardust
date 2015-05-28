@@ -5,7 +5,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.TestCommon.TestData;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
 using Teleopti.Interfaces.Domain;
 
@@ -13,77 +12,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 {
 	public class ApplicationAuthenticationPasswordPolicesTest
 	{
-
-
-		[Test]
-		public void SuccessfulLogonShouldStartNewSequence()
-		{
-			const string userName = "validUserName";
-			const string password = "adsfasdf";
-			var personInfo = new PersonInfo();
-			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), password);
-			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
-			findApplicationQuery.Expect(x => x.Find(userName)).Return(personInfo);
-			var pwPolicy = MockRepository.GenerateStub<IPasswordPolicy>();
-			pwPolicy.Expect(x => x.MaxAttemptCount).Return(1);
-
-			var target = new ApplicationAuthentication(findApplicationQuery,
-				new DataSourceConfigurationProviderFake(), () => pwPolicy, new Now(), new SuccessfulPasswordPolicy());
-			target.Logon(userName, "invalidPassword");
-			personInfo.ApplicationLogonInfo.InvalidAttempts.Should().Be.EqualTo(1);
-			target.Logon(userName, password);
-			personInfo.ApplicationLogonInfo.InvalidAttempts.Should().Be.EqualTo(0);
-		}
-
-
-		[Test]
-		public void WhenTimePassedShouldStartNewSequence()
-		{
-			const string userName = "validUserName";
-			const string password = "adsfasdf";
-			var personInfo = new PersonInfo();
-			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), password);
-			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
-			findApplicationQuery.Expect(x => x.Find(userName)).Return(personInfo);
-			var pwPolicy = MockRepository.GenerateStub<IPasswordPolicy>();
-			pwPolicy.Expect(x => x.MaxAttemptCount).Return(100);
-			pwPolicy.Expect(x => x.InvalidAttemptWindow).Return(TimeSpan.FromHours(1));
-
-			var target = new ApplicationAuthentication(findApplicationQuery,
-				new DataSourceConfigurationProviderFake(), () => pwPolicy, new Now(), new SuccessfulPasswordPolicy());
-			target.Logon(userName, "invalidPassword");
-			target.Logon(userName, "invalidPassword");
-			personInfo.ApplicationLogonInfo.InvalidAttempts.Should().Be.EqualTo(2);
-
-			//logon two hours later
-			var inTwoHours = MockRepository.GenerateMock<INow>();
-			inTwoHours.Expect(x => inTwoHours.UtcDateTime()).Return(DateTime.Now.AddHours(2));
-			var target2 = new ApplicationAuthentication(findApplicationQuery,
-				MockRepository.GenerateMock<IDataSourceConfigurationProvider>(), () => pwPolicy, inTwoHours, new SuccessfulPasswordPolicy());
-			target2.Logon(userName, "invalidPassword");
-			personInfo.ApplicationLogonInfo.InvalidAttempts.Should().Be.EqualTo(1);
-		}
-
-		[Test]
-		public void LockedUserShouldFail()
-		{
-			const string userName = "validUserName";
-			const string password = "somePassword";
-
-			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
-			var personInfo = new PersonInfo();
-			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), password);
-			personInfo.ApplicationLogonInfo.Lock();
-			findApplicationQuery.Expect(x => x.Find(userName)).Return(personInfo);
-
-			var target = new ApplicationAuthentication(findApplicationQuery,
-				new DataSourceConfigurationProviderFake(), () => new PasswordPolicyFake(), new Now(), new SuccessfulPasswordPolicy());
-			var res = target.Logon(userName, password);
-
-			res.Success.Should().Be.False();
-			res.FailReason.Should().Be.EqualTo(Resources.LogOnFailedAccountIsLocked);
-		}
-
 		[Test]
 		public void PasswordThatWillExpireSoonShouldSuccedButHaveFailReasonSet()
 		{

@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Common.Time
 
 		public DateTime UtcDateTime()
 		{
-			return _mutatedUtc.HasValue ? _mutatedUtc.Value : DateTime.UtcNow;
+			return _mutatedUtc ?? DateTime.UtcNow;
 		}
 
 		public void Is(DateTime? utc)
