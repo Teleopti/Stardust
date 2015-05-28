@@ -12,8 +12,6 @@ using Teleopti.Ccc.WebTest.TestHelper;
 
 namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 {
-	//todo: tenant fill with test from authenticationcontrollertest and core here
-
 	[TenantTest]
 	public class ApplicationLogonTest
 	{
@@ -21,6 +19,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		public AuthenticateController Target;
 		public ApplicationUserQueryFake ApplicationUserQuery;
 		public DataSourceConfigurationProviderFake DataSourceConfigurationProvider;
+		public LogLogonAttemptFake LogLogonAttempt;
+		public TenantUnitOfWorkFake TenantUnitOfWork;
 
 		[Test]
 		public void ShouldAcceptAccessWithoutTenantCredentials()
@@ -89,6 +89,38 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			res.PersonId.Should().Be.EqualTo(personInfo.Id);
 			res.DataSourceConfiguration.Should().Be.SameInstanceAs(dataSourceConfiguration);
 			res.TenantPassword.Should().Be.EqualTo(personInfo.TenantPassword);
+		}
+
+		[Test]
+		public void ShouldLogApplicationLogonSuccessful()
+		{
+			var logonName = RandomName.Make();
+			var password = RandomName.Make();
+			var personInfo = new PersonInfo();
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), logonName, password);
+			var datasourceConfiguration = new DataSourceConfiguration();
+			ApplicationUserQuery.Has(personInfo);
+			DataSourceConfigurationProvider.Has(personInfo.Tenant, datasourceConfiguration);
+
+			Target.ApplicationLogon(new ApplicationLogonModel { UserName = logonName, Password = password}).Result<TenantAuthenticationResult>();
+
+			LogLogonAttempt.PersonId.Should().Be.EqualTo(personInfo.Id);
+			LogLogonAttempt.Successful.Should().Be.True();
+			LogLogonAttempt.UserName.Should().Be.EqualTo(logonName);
+			TenantUnitOfWork.WasCommitted.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldLogApplicationLogonUnsuccessful()
+		{
+			var logonName= RandomName.Make();
+
+			Target.ApplicationLogon(new ApplicationLogonModel { UserName = logonName, Password = RandomName.Make() }).Result<TenantAuthenticationResult>();
+
+			LogLogonAttempt.PersonId.Should().Be.EqualTo(Guid.Empty);
+			LogLogonAttempt.Successful.Should().Be.False();
+			LogLogonAttempt.UserName.Should().Be.EqualTo(logonName);
+			TenantUnitOfWork.WasCommitted.Should().Be.True();
 		}
 	}
 }

@@ -287,7 +287,6 @@
     <Compile Include="Areas\MultiTenancy\Core\PersonInfoMapperTest.cs" />
     <Compile Include="Areas\MultiTenancy\Core\ReadNHibFilesTest.cs" />
     <Compile Include="Areas\MultiTenancy\Core\LoginAttemptModelFactoryForWebTest.cs" />
-    <Compile Include="Areas\MultiTenancy\AuthenticateControllerTest.cs" />
     <Compile Include="Areas\Messages\MessagesAreaRegistrationTest.cs" />
     <Compile Include="Areas\Forecasting\Controllers\ForecastControllerTest.cs" />
     <Compile Include="Areas\Mart\Controllers\QueueStatsControllerTest.cs" />
