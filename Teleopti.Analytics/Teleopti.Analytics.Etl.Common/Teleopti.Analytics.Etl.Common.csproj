@@ -67,12 +67,15 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
+    </Reference>
     <Reference Include="FSharp.Core, Version=4.3.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\..\packages\FSharp.Core.3.0.0.2\lib\net40\FSharp.Core.dll</HintPath>
     </Reference>
     <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Iesi.Collections.4.0.1.4000\lib\net40\Iesi.Collections.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
@@ -82,7 +85,6 @@
     <Reference Include="Microsoft.AnalysisServices, Version=10.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Teleopti.AnalysisServices.10.0.0\lib\net40\Microsoft.AnalysisServices.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.AnalysisServices.AdomdClient, Version=10.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -101,6 +103,7 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Drawing" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -239,6 +242,191 @@
     <Compile Include="Entity\EtlRunningInformation.cs" />
     <Compile Include="JobRunner.cs" />
     <Compile Include="RunController.cs" />
+    <Compile Include="Transformer\AbsenceTransformer.cs" />
+    <Compile Include="Transformer\ActivityTransformer.cs" />
+    <Compile Include="Transformer\AgentSkillTransform.cs" />
+    <Compile Include="Transformer\BusinessUnitTransformer.cs" />
+    <Compile Include="Transformer\CommonStateHolder.cs" />
+    <Compile Include="Transformer\ConfigurationHandler.cs" />
+    <Compile Include="Transformer\DateTransformer.cs" />
+    <Compile Include="Transformer\DayDate.cs" />
+    <Compile Include="Transformer\EtlModule.cs" />
+    <Compile Include="Transformer\ForecastWorkloadTransformer.cs" />
+    <Compile Include="Transformer\GeneralFunctions.cs" />
+    <Compile Include="Transformer\GroupPagePersonTransformer.cs" />
+    <Compile Include="Transformer\HourlyAvailabilityTransformer.cs" />
+    <Compile Include="Transformer\Interval.cs" />
+    <Compile Include="Transformer\IntervalBase.cs" />
+    <Compile Include="Transformer\IntervalFactory.cs" />
+    <Compile Include="Transformer\IntervalTransformer.cs" />
+    <Compile Include="Transformer\IntradayHourlyAvailabilityTransformer.cs" />
+    <Compile Include="Transformer\IntradaySchedulePreferenceTransformer.cs" />
+    <Compile Include="Transformer\IocContainerHolder.cs" />
+    <Compile Include="Transformer\Job\JobHelper.cs" />
+    <Compile Include="Transformer\Job\JobResult.cs" />
+    <Compile Include="Transformer\Job\JobsParameters.cs" />
+    <Compile Include="Transformer\Job\JobStepBase.cs" />
+    <Compile Include="Transformer\Job\JobStepResult.cs" />
+    <Compile Include="Transformer\Job\Jobs\AgentSkillCollection.cs" />
+    <Compile Include="Transformer\Job\Jobs\AgentStatisticsJobCollection.cs" />
+    <Compile Include="Transformer\Job\Jobs\CleanupJobCollection.cs" />
+    <Compile Include="Transformer\Job\Jobs\ForecastJobCollection.cs" />
+    <Compile Include="Transformer\Job\Jobs\InitialJobCollection.cs" />
+    <Compile Include="Transformer\Job\Jobs\IntradayJobCollection.cs" />
+    <Compile Include="Transformer\Job\Jobs\JobCollection.cs" />
+    <Compile Include="Transformer\Job\Jobs\KpiJobCollection.cs" />
+    <Compile Include="Transformer\Job\Jobs\NightlyJobCollection.cs" />
+    <Compile Include="Transformer\Job\Jobs\PerformanceManagerJobCollection.cs" />
+    <Compile Include="Transformer\Job\Jobs\PermissionJobCollection.cs" />
+    <Compile Include="Transformer\Job\Jobs\QueueAndAgentLogOnJobCollection.cs" />
+    <Compile Include="Transformer\Job\Jobs\QueueStatisticsJobCollection.cs" />
+    <Compile Include="Transformer\Job\Jobs\ScheduleJobCollection.cs" />
+    <Compile Include="Transformer\Job\Jobs\WorkloadQueuesJobCollection.cs" />
+    <Compile Include="Transformer\Job\MultipleDate\JobMultipleDate.cs" />
+    <Compile Include="Transformer\Job\MultipleDate\JobMultipleDateItem.cs" />
+    <Compile Include="Transformer\Job\Steps\AggIndexMaintenanceJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\AnalyticsIndexMaintenanceJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\AppIndexMaintenanceJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\BridgeAcdLogOnPersonJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\BridgeGroupPagePersonJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\BridgeQueueWorkloadJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\BridgeSkillSetSkillJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\BridgeTimeZoneJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\DimAbsenceJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\DimAcdLogOnJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\DimActivityJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\DimBusinessUnitJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\DimDateJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\DimGroupPageJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\DimIntervalJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\DimKpiJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\DimOvertimeJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\DimPersonDeleteJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\DimPersonJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\DimPersonTrimJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\DimQualityQuestLoadJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\DimQueueJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\DimScenarioDeleteJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\DimScenarioJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\DimScorecardJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\DimShiftCategoryJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\DimShiftLengthJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\DimSiteJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\DimSkillJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\DimSkillSetJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\DimStateGroupJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\DimTeamJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\DimTimeZoneDeleteJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\DimTimeZoneJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\DimWorkloadJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\EtlDayOffSubStep.cs" />
+    <Compile Include="Transformer\Job\Steps\FactAgentJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\FactAgentQueueJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\FactAgentSkillJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\FactAgentStateJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\FactAvailabilityJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\FactForecastWorkloadJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\FactKpiTargetTeamJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\FactQualityLoadJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\FactQueueJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\FactRequestedDaysJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\FactRequestJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\FactScheduleDayCountJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\FactScheduleDeviationJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\FactScheduleForecastSkillJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\FactScheduleJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\FactSchedulePreferenceJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\IntradayFactAgentJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\IntradayFactAgentQueueJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\IntradayFactQueueJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\IntradayStageAvailabilityJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\IntradayStageForecastWorkloadJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\IntradayStageRequestJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\IntradayStageScheduleDayOffCountJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\IntradayStageScheduleJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\IntradayStageSchedulePreferenceJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\JobBase.cs" />
+    <Compile Include="Transformer\Job\Steps\LicenseCheckJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\MaintenanceJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\NotificationFactory.cs" />
+    <Compile Include="Transformer\Job\Steps\PerformanceManagerJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\PermissionReportJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\PmPermissionJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\PurgeJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\RaptorAgentLogOnSynchronizationStep.cs" />
+    <Compile Include="Transformer\Job\Steps\RaptorQueueSynchronizationStep.cs" />
+    <Compile Include="Transformer\Job\Steps\ScheduleDayRestrictor.cs" />
+    <Compile Include="Transformer\Job\Steps\ScorecardKpiJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\SQLServerUpdateStatistics.cs" />
+    <Compile Include="Transformer\Job\Steps\StageAbsenceJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\StageActivityJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\StageAgentSkillJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\StageAvailabilityJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\StageBusinessUnitJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\StageDateJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\StageForecastWorkloadJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\StageGroupPagePersonJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\StageKpiJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\StageKpiTargetTeamJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\StageOvertimeJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\StagePermissionJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\StagePersonJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\StageRequestJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\StageScenarioJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\StageScheduleDayOffCountJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\StageScheduleForecastSkillJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\StageScheduleJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\StageSchedulePreferenceJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\StageScorecardJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\StageScorecardKpiJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\StageShiftCategoryJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\StageSkillJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\StageStateGroupJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\StageTimeZoneBridgeJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\StageTimeZoneJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\StageWorkloadJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\StatisticsUpdateNotificationJobStep.cs" />
+    <Compile Include="Transformer\KpiTargetTeamTransformer.cs" />
+    <Compile Include="Transformer\KpiTransformer.cs" />
+    <Compile Include="Transformer\OvertimeTransformer.cs" />
+    <Compile Include="Transformer\PermissionReportTransformer.cs" />
+    <Compile Include="Transformer\PersonTransformer.cs" />
+    <Compile Include="Transformer\PmPermissionExtractor.cs" />
+    <Compile Include="Transformer\PmPermissionTransformer.cs" />
+    <Compile Include="Transformer\RaptorTransformerHelper.cs" />
+    <Compile Include="Transformer\RequestTransformer.cs" />
+    <Compile Include="Transformer\ScenarioTransformer.cs" />
+    <Compile Include="Transformer\ScheduleDayOffCountTransformer.cs" />
+    <Compile Include="Transformer\ScheduleForecastSkill.cs" />
+    <Compile Include="Transformer\ScheduleForecastSkillEqualComparer.cs" />
+    <Compile Include="Transformer\ScheduleForecastSkillKey.cs" />
+    <Compile Include="Transformer\ScheduleForecastSkillResourceCalculation.cs" />
+    <Compile Include="Transformer\ScheduleForecastSkillTransformer.cs" />
+    <Compile Include="Transformer\SchedulePreferenceTransformer.cs" />
+    <Compile Include="Transformer\SchedulePreferenceTransformerHelper.cs" />
+    <Compile Include="Transformer\ScheduleProjection.cs" />
+    <Compile Include="Transformer\ScheduleThreading\DayAbsenceDataRowFactory.cs" />
+    <Compile Include="Transformer\ScheduleThreading\IScheduleDataRowCollectionFactory.cs" />
+    <Compile Include="Transformer\ScheduleThreading\IScheduleDataRowFactory.cs" />
+    <Compile Include="Transformer\ScheduleThreading\IScheduleTransformer.cs" />
+    <Compile Include="Transformer\ScheduleThreading\ProjectionsForAllAgentSchedulesFactory.cs" />
+    <Compile Include="Transformer\ScheduleThreading\ScheduleDataRowCollectionFactory.cs" />
+    <Compile Include="Transformer\ScheduleThreading\ScheduleDataRowFactory.cs" />
+    <Compile Include="Transformer\ScheduleThreading\ScheduleTransformer.cs" />
+    <Compile Include="Transformer\ScheduleThreading\ThreadObj.cs" />
+    <Compile Include="Transformer\ScheduleThreading\ThreadObjects.cs" />
+    <Compile Include="Transformer\ScheduleThreading\TimeInfo.cs" />
+    <Compile Include="Transformer\ScheduleThreading\TimeInfoObject.cs" />
+    <Compile Include="Transformer\ScheduleThreading\WorkThread.cs" />
+    <Compile Include="Transformer\ScorecardKpiTransformer.cs" />
+    <Compile Include="Transformer\ScorecardTransformer.cs" />
+    <Compile Include="Transformer\ShiftCategoryTransformer.cs" />
+    <Compile Include="Transformer\SkillTransformer.cs" />
+    <Compile Include="Transformer\StateGroupTransformer.cs" />
+    <Compile Include="Transformer\TimeZoneBridge.cs" />
+    <Compile Include="Transformer\TimeZoneFactory.cs" />
+    <Compile Include="Transformer\TimeZoneTransformer.cs" />
+    <Compile Include="Transformer\WorkloadTransformer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Domain\Teleopti.Ccc.Domain.csproj">
@@ -249,9 +437,25 @@
       <Project>{aa4a5374-77af-44f0-85c1-6cabc6701352}</Project>
       <Name>Teleopti.Ccc.Infrastructure</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
+      <Project>{db42d973-9889-4d51-9fc5-be66aa7f117c}</Project>
+      <Name>Teleopti.Ccc.IocCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Ccc.UserTexts\Teleopti.Ccc.UserTexts.csproj">
+      <Project>{98105bfe-6c3b-4c57-9141-6bd065c7e966}</Project>
+      <Name>Teleopti.Ccc.UserTexts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
       <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
       <Name>Teleopti.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Messaging\Teleopti.Messaging\Teleopti.Messaging.csproj">
+      <Project>{4f4df171-4a56-4e0d-90cb-cb2afdea4411}</Project>
+      <Name>Teleopti.Messaging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WebPortal\Teleopti.Analytics.Portal\ReportTexts\Teleopti.Analytics.ReportTexts.csproj">
+      <Project>{7c7067a8-c9ff-462e-8469-78e886c2e002}</Project>
+      <Name>Teleopti.Analytics.ReportTexts</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
