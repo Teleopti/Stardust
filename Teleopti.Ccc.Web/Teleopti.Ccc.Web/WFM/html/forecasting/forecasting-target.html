@@ -55,7 +55,7 @@
 					<i class="mdi mdi-chart-bar forecasting-chart-bar" ng-click="openModal(workload);$event.stopPropagation();">
 						<md-tooltip>View method chart</md-tooltip>
 					</i>
-					<div ng-include="'forecasting-chart.html'"></div>
+					<div ng-include="'forecasting-chart.html'" class="forecasting-chart"></div>
 				</div>
 			</div>
 		</li>
@@ -65,39 +65,41 @@
 <script type="text/ng-template" id="forecasting-chart.html">
 	<div ng-cloak class="modal-box" ng-click="$event.stopPropagation()">
 		<div ng-cloak ng-show="workload.modalLaunch">
-
 			<div class="modalbg">
 				<div class="dialog">
 					<div class="modal-header">
 						{{skill.Name}} - {{workload.Name}}
 					</div>
-					<div ng-if="!workload.loaded" class="modal-inner-content wfm-block">
-						<md-progress-linear md-mode="indeterminate"></md-progress-linear>
-					</div>
-					<div class="modal-inner-content" ng-if="workload.loaded">
+					<div class="modal-inner-content">
+						<div ng-if="!workload.loaded" class="modal-inner-content wfm-block">
+							<md-progress-linear md-mode="indeterminate"></md-progress-linear>
+						</div>
+						<div ng-if="workload.loaded">
 							<div class="alert-warning notice-spacer" ng-show="workload.noHistoricalDataForEvaluation"><i class='mdi mdi-alert'></i> Warning: There is no recommended forecasting method because of lack of historical data.</div>
 							<div class="alert-warning notice-spacer" ng-show="workload.noHistoricalDataForForecasting"><i class='mdi mdi-alert'></i> Warning: There is no historical data available for forecasting.</div>
-						<div class="wfm-block">
-							<div class="row">
-								<div class="col-lg-12">
-									<h4>{{ 'ForecastMethod' | translate }}</h4>
-									<p>This chart shows how well a <i>Forecast Method</i> matches last year's <i>Queue Statistics</i> for workload <i>{{workload.Name}}</i>. Out of several tested forecast methods
-										this one was the most accurate. <br>The chosen forecast method is based on a period of queue statistics prior to the timeframe in the chart and will be used in the upcoming
-										forecast for workload <i>{{workload.Name}}</i>.</p>
+							<div class="wfm-block">
+								<div class="row">
+									<div class="col-lg-12">
+										<h4>{{ 'ForecastMethod' | translate }}</h4>
+										<p>
+											This chart shows how well a <i>Forecast Method</i> matches last year's <i>Queue Statistics</i> for workload <i>{{workload.Name}}</i>. Out of several tested forecast methods
+											this one was the most accurate. <br>The chosen forecast method is based on a period of queue statistics prior to the timeframe in the chart and will be used in the upcoming
+											forecast for workload <i>{{workload.Name}}</i>.
+										</p>
+									</div>
 								</div>
+								<c3chart bindto-id="{{workload.chartId}}" chart-data="workload.chartData" chart-columns="dataColumns" chart-x="dataX" show-subchart="true" enable-zoom="true">
+									<chart-axis>
+										<chart-axis-x axis-id="date" axis-type="timeseries">
+											<chart-axis-x-tick tick-format="%Y-%m-%d" />
+										</chart-axis-x>
+									</chart-axis>
+									<chart-axis>
+										<chart-axis-y axis-id="y" axis-position="outer-middle" axis-label="Number of Calls" />
+									</chart-axis>
+								</c3chart>
 							</div>
-							<c3chart bindto-id="{{workload.chartId}}" chart-data="workload.chartData" chart-columns="dataColumns" chart-x="dataX" show-subchart="true" enable-zoom="true">
-								<chart-axis>
-									<chart-axis-x axis-id="date" axis-type="timeseries">
-										<chart-axis-x-tick tick-format="%Y-%m-%d" />
-									</chart-axis-x>
-								</chart-axis>
-								<chart-axis>
-									<chart-axis-y axis-id="y" axis-position="outer-middle" axis-label="Number of Calls" />
-								</chart-axis>
-							</c3chart>
 						</div>
-
 					</div>
 					<div class="modal-footer">
 						<aside>
