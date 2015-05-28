@@ -78,13 +78,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Teleopti.Support.Code\Teleopti.Support.Code.csproj">
-      <Project>{76C7A806-BCB0-41A5-AB91-FC22D3F2AD0C}</Project>
-      <Name>Teleopti.Support.Code</Name>
-    </ProjectReference>
+    <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Properties\" />
+    <ProjectReference Include="..\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj">
+      <Project>{807a8afe-c46b-4907-b287-bd4aec6dae01}</Project>
+      <Name>Teleopti.Support.Tool</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

@@ -240,6 +240,25 @@
       <DependentUpon>ChangeSettings.cs</DependentUpon>
     </Compile>
     <Compile Include="SettingsInRegistry.cs" />
+    <Compile Include="Tool\CommandLineArgument.cs" />
+    <Compile Include="Tool\CompositeCommand.cs" />
+    <Compile Include="Tool\ConfigFileTagReplacer.cs" />
+    <Compile Include="Tool\CryptoCreator.cs" />
+    <Compile Include="Tool\CustomSection.cs" />
+    <Compile Include="Tool\CustomSectionContainer.cs" />
+    <Compile Include="Tool\ISupportCommand.cs" />
+    <Compile Include="Tool\MachineKeyChecker.cs" />
+    <Compile Include="Tool\ModeFile.cs" />
+    <Compile Include="Tool\MoveCustomReportsCommand.cs" />
+    <Compile Include="Tool\RefreshConfigFile.cs" />
+    <Compile Include="Tool\RefreshConfigsRunner.cs" />
+    <Compile Include="Tool\SearchReplace.cs" />
+    <Compile Include="Tool\SettingsFileManager.cs" />
+    <Compile Include="Tool\SettingsReader.cs" />
+    <Compile Include="Tool\SetToggleModeCommand.cs" />
+    <Compile Include="Tool\SsoConfigurationBackupHandler.cs" />
+    <Compile Include="Tool\SsoConfigurationRestoreHandler.cs" />
+    <Compile Include="Tool\SsoFilePathReader.cs" />
     <EmbeddedResource Include="Controls\ConnectionString\ConnectionSettings.resx">
       <DependentUpon>ConnectionSettings.cs</DependentUpon>
     </EmbeddedResource>
@@ -321,6 +340,18 @@
     <Content Include="config.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="ConfigFiles\AzureConfigFiles.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ConfigFiles\ConfigFiles.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ConfigFiles\DeployConfigFiles.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="settings.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Resources\Teleopti-WFM-main-icon256.png" />
     <None Include="Resources\Teleopti-WFM-main_small.png" />
     <None Include="Resources\ccc_icon.png" />
@@ -372,12 +403,6 @@
   <ItemGroup>
     <Folder Include="Controls\Patch\" />
     <Folder Include="Controls\Resources\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Teleopti.Support.Code\Teleopti.Support.Code.csproj">
-      <Project>{76c7a806-bcb0-41a5-ab91-fc22d3f2ad0c}</Project>
-      <Name>Teleopti.Support.Code</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
