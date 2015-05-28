@@ -2,9 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.MessageBroker;
-using Teleopti.Ccc.Infrastructure.LiteUnitOfWork;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.MessageBrokerUnitOfWork;
 using Teleopti.Interfaces.MessageBroker;
 
@@ -28,10 +26,14 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 				Route = notification.Routes().First()
 			};
 			mailbox.AddNotification(notification);
-
 			Target.Persist(mailbox);
 
-			Target.Load(mailbox.Id).Should().Be.EqualTo(mailbox);
+			var result = Target.Load(mailbox.Id);
+
+			result.Id.Should().Be(mailbox.Id);
+			result.Route.Should().Be(mailbox.Route);
+			result.Notifications.Should().Have.Count.EqualTo(mailbox.Notifications.Count);
+			result.Notifications.Single().BusinessUnitId.Should().Be(notification.BusinessUnitId);
 		}
 
 		[Test]
@@ -44,10 +46,11 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 				Route = notification.Routes().First()
 			};
 			mailbox.AddNotification(notification);
-
 			Target.Persist(mailbox);
 
-			Target.Load(new []{mailbox.Route}).Single().Should().Be.EqualTo(mailbox);
+			var result = Target.Load(new []{mailbox.Route});
+
+			result.Single().Id.Should().Be(mailbox.Id);
 		}
 
 		[Test]
@@ -65,7 +68,6 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 
 			Assert.DoesNotThrow(() => Target.Persist(mailbox));
 		}
-
 
 		[Test]
 		public void ShouldNotThrowWhenLoadingWithoutPersistedData()

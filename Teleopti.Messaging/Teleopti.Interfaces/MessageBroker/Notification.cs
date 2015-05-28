@@ -66,10 +66,6 @@ namespace Teleopti.Interfaces.MessageBroker
 			return route;
 		}
 
-		public virtual Guid Id { get; set; }
-		public virtual Mailbox MailboxParent { get; set; }
-		
-
 		public virtual string DataSource { get; set; }
 		public virtual string BusinessUnitId { get; set; }
 

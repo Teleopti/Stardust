@@ -17,7 +17,6 @@ namespace Teleopti.Interfaces.MessageBroker
 
 		public virtual void AddNotification(Notification notification)
 		{
-			notification.MailboxParent = this;
 			Notifications.Add(notification);
 		}
 

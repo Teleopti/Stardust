@@ -4,10 +4,8 @@ using System.Collections.Generic;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Dialect;
-using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.MessageBroker;
 
 namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork.MessageBrokerUnitOfWork
 {
@@ -36,8 +34,6 @@ namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork.MessageBrokerUnitOfWork
 					db.ConnectionString = _configReader.ConnectionStrings["MessageBroker"].ConnectionString;
 					db.Dialect<MsSql2008Dialect>();
 				});
-			configuration.AddClass(typeof (Mailbox));
-			configuration.AddClass(typeof (Notification));
 			_sessionFactory = configuration.BuildSessionFactory();
 		}
 
