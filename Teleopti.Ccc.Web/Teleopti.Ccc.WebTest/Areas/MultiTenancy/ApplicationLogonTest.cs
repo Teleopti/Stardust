@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.UserTexts;
@@ -21,6 +22,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		public DataSourceConfigurationProviderFake DataSourceConfigurationProvider;
 		public LogLogonAttemptFake LogLogonAttempt;
 		public TenantUnitOfWorkFake TenantUnitOfWork;
+		public DummyPasswordPolicy PasswordPolicy;
 
 		[Test]
 		public void ShouldAcceptAccessWithoutTenantCredentials()
@@ -121,6 +123,57 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			LogLogonAttempt.Successful.Should().Be.False();
 			LogLogonAttempt.UserName.Should().Be.EqualTo(logonName);
 			TenantUnitOfWork.WasCommitted.Should().Be.True();
+		}
+
+		[Test]
+		public void IncorrectPasswordShouldIncreaseInvalidAttempts()
+		{
+			var logonName = RandomName.Make();
+			var personInfo = new PersonInfo();
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), logonName, RandomName.Make());
+			ApplicationUserQuery.Has(personInfo);
+
+			Target.ApplicationLogon(new ApplicationLogonModel { UserName = logonName, Password = RandomName.Make() });
+			Target.ApplicationLogon(new ApplicationLogonModel { UserName = logonName, Password = RandomName.Make() });
+
+			personInfo.ApplicationLogonInfo.InvalidAttempts
+				.Should().Be.EqualTo(2);
+			TenantUnitOfWork.WasCommitted.Should().Be.True();
+		}
+
+		[Test]
+		public void TooManyInvalidAttemptsShouldLockUser()
+		{
+			var logonName = RandomName.Make();
+			var personInfo = new PersonInfo();
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), logonName, RandomName.Make());
+			ApplicationUserQuery.Has(personInfo);
+			PasswordPolicy.MaxAttemptCount = 1;
+			PasswordPolicy.InvalidAttemptWindow = TimeSpan.FromHours(1);
+
+			Target.ApplicationLogon(new ApplicationLogonModel { UserName = logonName, Password = RandomName.Make() });
+			personInfo.ApplicationLogonInfo.IsLocked.Should().Be.False();
+			Target.ApplicationLogon(new ApplicationLogonModel { UserName = logonName, Password = RandomName.Make() });
+			personInfo.ApplicationLogonInfo.IsLocked.Should().Be.True();
+
+			TenantUnitOfWork.WasCommitted.Should().Be.True();
+
+
+			//const string userName = "validUserName";
+			//var personInfo = new PersonInfo();
+			//personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), "thePassword");
+			//var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
+			//findApplicationQuery.Expect(x => x.Find(userName)).Return(personInfo);
+			//var pwPolicy = MockRepository.GenerateStub<IPasswordPolicy>();
+			//pwPolicy.Expect(x => x.MaxAttemptCount).Return(1);
+			//pwPolicy.Expect(x => x.InvalidAttemptWindow).Return(TimeSpan.FromHours(1));
+
+			//var target = new ApplicationAuthentication(findApplicationQuery,
+			//	new DataSourceConfigurationProviderFake(), () => pwPolicy, new Now(), new SuccessfulPasswordPolicy());
+			//target.Logon(userName, "invalidPassword");
+			//personInfo.ApplicationLogonInfo.IsLocked.Should().Be.False();
+			//target.Logon(userName, "invalidPassword");
+			//personInfo.ApplicationLogonInfo.IsLocked.Should().Be.True();
 		}
 	}
 }

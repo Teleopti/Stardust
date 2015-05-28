@@ -3,31 +3,24 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.Authentication
 {
-    public class DummyPasswordPolicy : IPasswordPolicy
-    {
-        public TimeSpan InvalidAttemptWindow
-        {
-            get { return TimeSpan.FromMinutes(30); }
-        }
+	public class DummyPasswordPolicy : IPasswordPolicy
+	{
+		public DummyPasswordPolicy()
+		{
+			InvalidAttemptWindow = TimeSpan.FromMinutes(30);
+			MaxAttemptCount = 3;
+			PasswordValidForDayCount = 60;
+			PasswordExpireWarningDayCount = 5;
+		}
 
-        public int MaxAttemptCount
-        {
-            get { return 3; }
-        }
+		public int PasswordExpireWarningDayCount { get; set; }
+		public int PasswordValidForDayCount { get; set; }
+		public int MaxAttemptCount { get; set; }
+		public TimeSpan InvalidAttemptWindow { get; set; }
 
-        public bool CheckPasswordStrength(string password)
-        {
-            return true;
-        }
-
-        public int PasswordValidForDayCount
-        {
-            get { return 60; }
-        }
-
-        public int PasswordExpireWarningDayCount
-        {
-            get { return 5; }
-        }
-    }
+		public bool CheckPasswordStrength(string password)
+		{
+			return true;
+		}
+	}
 }

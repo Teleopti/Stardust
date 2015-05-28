@@ -13,42 +13,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 {
 	public class ApplicationAuthenticationPasswordPolicesTest
 	{
-		[Test]
-		public void IncorrectPasswordShouldIncreaseInvalidAttempts()
-		{
-			const string userName = "validUserName";
-			var personInfo = new PersonInfo();
-			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), "thePassword");
-			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
-			findApplicationQuery.Expect(x => x.Find(userName)).Return(personInfo);
 
-			var target = new ApplicationAuthentication(findApplicationQuery,
-				new DataSourceConfigurationProviderFake(), () => new DummyPasswordPolicy(), new Now(), new SuccessfulPasswordPolicy());
-			target.Logon(userName, "invalidPassword");
-			target.Logon(userName, "invalidPassword");
-
-			personInfo.ApplicationLogonInfo.InvalidAttempts.Should().Be.EqualTo(2);
-		}
-
-		[Test]
-		public void TooManyInvalidAttemptsShouldLockUser()
-		{
-			const string userName = "validUserName";
-			var personInfo = new PersonInfo();
-			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), "thePassword");
-			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
-			findApplicationQuery.Expect(x => x.Find(userName)).Return(personInfo);
-			var pwPolicy = MockRepository.GenerateStub<IPasswordPolicy>();
-			pwPolicy.Expect(x => x.MaxAttemptCount).Return(1);
-			pwPolicy.Expect(x => x.InvalidAttemptWindow).Return(TimeSpan.FromHours(1));
-
-			var target = new ApplicationAuthentication(findApplicationQuery,
-				new DataSourceConfigurationProviderFake(), () => pwPolicy, new Now(), new SuccessfulPasswordPolicy());
-			target.Logon(userName, "invalidPassword");
-			personInfo.ApplicationLogonInfo.IsLocked.Should().Be.False();
-			target.Logon(userName, "invalidPassword");
-			personInfo.ApplicationLogonInfo.IsLocked.Should().Be.True();
-		}
 
 		[Test]
 		public void SuccessfulLogonShouldStartNewSequence()
