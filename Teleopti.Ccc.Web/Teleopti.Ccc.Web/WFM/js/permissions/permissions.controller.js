@@ -12,15 +12,11 @@
 				$scope.functionsFlat = [];
 				$scope.dataFlat = [];
 				$scope.selectedRole = Roles.selectedRole;
-				$scope.organization = { BusinessUnit: [{ BusinessUnit: { Sites: [] } }], DynamicOptions: [] };
 				$scope.selectedDataToggle = false;
 				$scope.unselectedDataToggle = false;
 
 				$scope.roles = Roles.list;
-				Permissions.organizationSelections.query().$promise.then(function(result) {
-					$scope.organization = { BusinessUnit: [result.BusinessUnit], DynamicOptions: result.DynamicOptions };
-					flatData($scope.organization.BusinessUnit);
-				});
+				
 
 				$scope.createRole = function() {
 					Roles.createRole($scope.roleName).then(function() {
@@ -36,15 +32,6 @@
 				$scope.copyRole = function(roleId) {
 					Roles.copyRole(roleId);
 				};
-
-
-
-				$scope.changeOption = function(option) {
-					var data = {};
-					data.Id = $scope.selectedRole;
-					data['RangeOption'] = option;
-					Permissions.assignOrganizationSelection.postData(data);
-				}
 
 				$scope.removeRole = function(role) {
 					if (confirm('Are you sure you want to delete this?')) {
@@ -79,83 +66,7 @@
 					return nb;
 				};
 
-				var flatData = function(dataTab) {
-					dataTab.forEach(function(item) {
-						$scope.dataFlat.push(item);
-						if (item.ChildNodes && item.ChildNodes.length != 0) {
-							flatData(item.ChildNodes);
-						}
-					});
-				};
-
 			}
 		]
 	);
-	permissions.controller('RoleDataController', [
-		'$scope', '$filter', 'PermissionsService', 'Roles',
-		function($scope, $filter, PermissionsService, Roles) {
-
-			$scope.toggleOrganizationSelection = function (node) {
-				var data = {};
-				data.Id = $scope.selectedRole;
-
-				if (node.selected) {
-					data.Type = node.Type;
-					data.DataId = node.Id;
-					PermissionsService.deleteAvailableData.query(data).$promise.then(function (result) {
-						node.selected = false;
-					});
-				} else {
-					data[node.Type + 's'] = [node.Id];
-					PermissionsService.assignOrganizationSelection.postData(data).$promise.then(function (result) {
-						node.selected = true;
-					});
-				}
-			};
-
-		}
-	]);
-	permissions.controller('RoleFunctionsController', [
-		'$scope', '$filter', 'RolesFunctionsService', 'Roles',
-		function ($scope, $filter, RolesFunctionsService,  Roles) {
-			$scope.unselectedFunctionsToggle = false;
-			$scope.selectedFunctionsToggle = false;
-			$scope.rolesService = Roles;
-			$scope.rolesFunctionsService = RolesFunctionsService;
-			$scope.selectedRole = $scope.rolesService.selectedRole;
-			$scope.functionsDisplayed = [];
-
-			$scope.$watch(function () { return Roles.selectedRole; },
-				function (newSelectedRole) {
-					if (!newSelectedRole.Id) return;
-					$scope.selectedRole = newSelectedRole;
-					RolesFunctionsService.refreshFunctions(newSelectedRole.Id);
-				}
-			);
-
-			$scope.$watch(function () { return RolesFunctionsService.functionsDisplayed; },
-					function (rolesFunctionsData) {
-						$scope.functionsDisplayed = rolesFunctionsData;
-					}
-			);
-
-
-
-			$scope.toggleFunctionForRole = function (node) {
-				var functionNode = node.$modelValue;
-				if (functionNode.selected) { //functionNode
-					RolesFunctionsService.unselectFunction(functionNode.FunctionId, $scope.selectedRole).then(function () {
-						functionNode.selected = false;
-						node.$parentNodeScope.$modelValue.nmbSelectedChildren--;
-					});
-				} else {
-					RolesFunctionsService.selectFunction(functionNode.FunctionId, $scope.selectedRole).then(function () {
-						functionNode.selected = true;
-						node.$parentNodeScope.$modelValue.nmbSelectedChildren++;
-					});
-				}
-			};
-		}
-	]);
-
 })();

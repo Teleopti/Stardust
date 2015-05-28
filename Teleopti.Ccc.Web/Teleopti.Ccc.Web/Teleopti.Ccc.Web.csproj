@@ -1221,6 +1221,10 @@
     <Content Include="WFM\js\permissions\permissions.data.html" />
     <Content Include="WFM\js\permissions\permissions.filters.js" />
     <Content Include="WFM\js\permissions\permissions.functions.html" />
+    <Content Include="WFM\js\permissions\permissions.roledata.controller.js" />
+    <Content Include="WFM\js\permissions\permissions.roledata.service.js" />
+    <Content Include="WFM\js\permissions\permissions.rolefunctions.controller.js" />
+    <Content Include="WFM\js\permissions\permissions.rolefunctions.service.js" />
     <Content Include="WFM\js\permissions\roles.service.js" />
     <Content Include="WFM\js\resourceplanner\resourceplanner-report.html" />
     <Content Include="WFM\js\resourceplanner\resourceplanner.report.controller.js" />
@@ -1233,6 +1237,7 @@
     <Content Include="WFM\js\people\template\advancedPeopleSearch.html" />
     <Content Include="WFM\tests\forecasting\forecasting.controller.spec.js" />
     <Content Include="WFM\tests\permissions\permissions.filter.spec.js" />
+    <Content Include="WFM\tests\permissions\permissions.roledatacontroller.spec.js" />
     <Content Include="WFM\tests\permissions\roles.service.spec.js" />
     <Content Include="WFM\tests\resourceplanner\resourceplanner.report.controller.spec.js" />
     <Content Include="WFM\tests\search\search.controller.spec.js" />
