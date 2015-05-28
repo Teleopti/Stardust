@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				{
 					DaysScheduled = daysScheduled,
 					ConflictCount = conflicts.Count(),
-					ScheduledAgentsCount = successfulScheduledAgents(scheduleOfSelectedPeople),
+					ScheduledAgentsCount = successfulScheduledAgents(scheduleOfSelectedPeople, period),
 					BusinessRulesValidationResults = voilatedBusinessRules
 				});
 		}

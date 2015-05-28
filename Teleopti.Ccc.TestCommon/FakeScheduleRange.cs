@@ -14,11 +14,9 @@ namespace Teleopti.Ccc.TestCommon
 		{
 		}
 
-		public IScheduleRange UpdateCalcValues(int targetScheduledDaysOff, int scheduledDaysOff, TimeSpan targetTimeHolder, TimeSpan contractTimeHolder)
+		public IScheduleRange UpdateCalcValues(int scheduledDaysOff, TimeSpan contractTimeHolder)
 		{
-			CalculatedTargetScheduleDaysOff = targetScheduledDaysOff;
 			CalculatedScheduleDaysOff = scheduledDaysOff;
-			CalculatedTargetTimeHolder = targetTimeHolder;
 			CalculatedContractTimeHolder = contractTimeHolder;
 			return this;
 		}
@@ -76,7 +74,7 @@ namespace Teleopti.Ccc.TestCommon
 		public TimeSpan CalculatedContractTimeHolder { get; set; }
 		public TimeSpan? CalculatedTargetTimeHolder(DateOnlyPeriod periodToCheck)
 		{
-			throw new NotImplementedException();
+			return TimeSpan.FromHours(8);
 		}
 		public int? CalculatedTargetScheduleDaysOff(DateOnlyPeriod periodToCheck)
 		{
