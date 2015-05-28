@@ -284,7 +284,6 @@
     <Compile Include="Areas\MultiTenancy\Core\IoCTest.cs" />
     <Compile Include="Areas\MultiTenancy\Core\LogTenancyLogonAttemptTest.cs" />
     <Compile Include="Areas\MultiTenancy\Core\NhibConfigEncryptionTest.cs" />
-    <Compile Include="Areas\MultiTenancy\Core\PersonInfoMapperTest.cs" />
     <Compile Include="Areas\MultiTenancy\Core\ReadNHibFilesTest.cs" />
     <Compile Include="Areas\MultiTenancy\Core\LoginAttemptModelFactoryForWebTest.cs" />
     <Compile Include="Areas\Messages\MessagesAreaRegistrationTest.cs" />
