@@ -37,7 +37,8 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Outlier
 			foreach (var outlierDate in outlierDates)
 			{
 				var taskOwner = historicalData.TaskOwnerDayCollection.Single(x => x.CurrentDate == outlierDate);
-				taskOwner.Tasks = averageTasks;
+				if(taskOwner.OpenForWork.IsOpen)
+					taskOwner.Tasks = averageTasks;
 			}
 
 			return historicalData;
