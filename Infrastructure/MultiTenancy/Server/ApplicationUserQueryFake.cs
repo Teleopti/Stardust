@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 			return data.TryGetValue(username, out ret) ? ret : null;
 		}
 
-		public void Add(PersonInfo personInfo)
+		public void Has(PersonInfo personInfo)
 		{
 			data[personInfo.ApplicationLogonName] = personInfo;
 		}
