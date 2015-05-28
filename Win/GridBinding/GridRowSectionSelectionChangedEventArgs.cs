@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Ccc.SyncfusionGridBinding
+namespace Teleopti.Ccc.Win.GridBinding
 {
 	public class GridRowSectionSelectionChangedEventArgs : EventArgs
 	{

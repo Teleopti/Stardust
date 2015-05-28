@@ -1,7 +1,7 @@
 ﻿using System;
 using Syncfusion.Windows.Forms.Grid;
 
-namespace Teleopti.Ccc.SyncfusionGridBinding
+namespace Teleopti.Ccc.Win.GridBinding
 {
 	public class GridRangeChange
 	{
@@ -14,34 +14,34 @@ namespace Teleopti.Ccc.SyncfusionGridBinding
 		public GridRangeChange(GridControl gridControl)
 		{
 			_gridControl = gridControl;
-			_gridControl.Model.CommandStackChanged +=Model_CommandStackChanged;
-			_gridControl.ClipboardCanPaste += OnClipboardCanPaste;
-			_gridControl.ClipboardPaste += OnClipboardPaste;
+			_gridControl.Model.CommandStackChanged += modelCommandStackChanged;
+			_gridControl.ClipboardCanPaste += onClipboardCanPaste;
+			_gridControl.ClipboardPaste += onClipboardPaste;
 		}
 
-		private void OnClipboardPaste(object sender, GridCutPasteEventArgs e)
+		private void onClipboardPaste(object sender, GridCutPasteEventArgs e)
 		{
-			TriggerRangeChangedAndResetFlag();
+			triggerRangeChangedAndResetFlag();
 		}
 
-		private void OnClipboardCanPaste(object sender, GridCutPasteEventArgs e)
+		private void onClipboardCanPaste(object sender, GridCutPasteEventArgs e)
 		{
-			TriggerRangeChangingAndSetFlag();
+			triggerRangeChangingAndSetFlag();
 		}
 
-		private void Model_CommandStackChanged(object sender, EventArgs e)
+		private void modelCommandStackChanged(object sender, EventArgs e)
 		{
 			if (_started)
 			{
-				TriggerRangeChangedAndResetFlag();
+				triggerRangeChangedAndResetFlag();
 			}
 			else
 			{
-				TriggerRangeChangingAndSetFlag();
+				triggerRangeChangingAndSetFlag();
 			}
 		}
 
-		private void TriggerRangeChangingAndSetFlag()
+		private void triggerRangeChangingAndSetFlag()
 		{
 			var rangeChanging = RangeChanging;
 			if (rangeChanging != null)
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.SyncfusionGridBinding
 			_started = true;
 		}
 
-		private void TriggerRangeChangedAndResetFlag()
+		private void triggerRangeChangedAndResetFlag()
 		{
 			var rangeChanged = RangeChanged;
 			if (rangeChanged != null)

@@ -6,7 +6,7 @@ using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.SyncfusionGridBinding
+namespace Teleopti.Ccc.Win.GridBinding
 {
 	public class ColumnEntityBinder<T>
 	{
@@ -16,11 +16,11 @@ namespace Teleopti.Ccc.SyncfusionGridBinding
 		private IModelProperty<T> _columnHeaderMember;
 		private IModelProperty<T> _columnParentHeaderMember;
 		private readonly GridRangeChange _rangeChanged;
-	    private bool _delayUpdates;
-        private readonly HashSet<GridRangeInfo> _rangesToUpdate = new HashSet<GridRangeInfo>();
+		private bool _delayUpdates;
+		private readonly HashSet<GridRangeInfo> _rangesToUpdate = new HashSet<GridRangeInfo>();
 		public GridColors GridColors { get; set; }
 
-	    public ColumnEntityBinder(GridControl gridControl)
+		public ColumnEntityBinder(GridControl gridControl)
 		{
 			_gridControl = gridControl;
 			_rangeChanged = new GridRangeChange(gridControl);
@@ -39,15 +39,15 @@ namespace Teleopti.Ccc.SyncfusionGridBinding
 			if (cellDetails.IsRowHeader)
 			{
 				cellDetails.SetCellValue(_gridRows[e.RowIndex - 1 - _gridControl.Rows.HeaderCount].HeaderText);
-                cellDetails.SetCellTipText(_gridRows[e.RowIndex - 1 - _gridControl.Rows.HeaderCount].CellTipText);
-                SetMergedHeaderStyle();
+				cellDetails.SetCellTipText(_gridRows[e.RowIndex - 1 - _gridControl.Rows.HeaderCount].CellTipText);
+				SetMergedHeaderStyle();
 			}
 			T item;
-            if (cellDetails.IsColumnParentHeader)
+			if (cellDetails.IsColumnParentHeader)
 			{
-                item = _collection[e.ColIndex - 1];
-                cellDetails.SetParentCellValue(_columnParentHeaderMember.GetModelValue(item).ToString());
-                SetMergedHeaderStyle();
+				item = _collection[e.ColIndex - 1];
+				cellDetails.SetParentCellValue(_columnParentHeaderMember.GetModelValue(item).ToString());
+				SetMergedHeaderStyle();
 			}
 			if (cellDetails.IsColumnHeader)
 			{
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.SyncfusionGridBinding
 				var dateString = _columnHeaderMember.GetModelValue(item).ToString();
 				Weekend(cellDetails, _columnHeaderMember.GetModelValue(item));
 				cellDetails.SetCellValue(dateString);
-                SetMergedHeaderStyle();
+				SetMergedHeaderStyle();
 			}
 			if (cellDetails.IsContentCell)
 			{
@@ -124,16 +124,16 @@ namespace Teleopti.Ccc.SyncfusionGridBinding
 		{
 			_gridControl.QueryCellInfo += gridControl_QueryCellInfo;
 			_gridControl.SaveCellInfo += gridControl_SaveCellInfo;
-		    _gridControl.ClientSizeChanged += gridControl_ClientSizeChanged;
+			_gridControl.ClientSizeChanged += gridControl_ClientSizeChanged;
 		}
 
-	    private void gridControl_ClientSizeChanged(object sender, EventArgs e)
-	    {
-	        _gridControl.Model.MergeCells.EvaluateMergeCells(GridRangeInfo.Rows(0,1));
-	        _gridControl.Model.MergeCells.EvaluateMergeCells(GridRangeInfo.Cols(0,1));
-	    }
+		private void gridControl_ClientSizeChanged(object sender, EventArgs e)
+		{
+			_gridControl.Model.MergeCells.EvaluateMergeCells(GridRangeInfo.Rows(0, 1));
+			_gridControl.Model.MergeCells.EvaluateMergeCells(GridRangeInfo.Cols(0, 1));
+		}
 
-	    private void ResetGridArea()
+		private void ResetGridArea()
 		{
 			_gridControl.RowCount = 0;
 			_gridControl.ColCount = 0;
@@ -154,12 +154,12 @@ namespace Teleopti.Ccc.SyncfusionGridBinding
 		{
 			_gridControl.QueryCellInfo -= gridControl_QueryCellInfo;
 			_gridControl.SaveCellInfo -= gridControl_SaveCellInfo;
-            _gridControl.ClientSizeChanged -= gridControl_ClientSizeChanged;
+			_gridControl.ClientSizeChanged -= gridControl_ClientSizeChanged;
 		}
 
 		private void model_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			var modelColumnIndex = _collection.IndexOf((T) sender);
+			var modelColumnIndex = _collection.IndexOf((T)sender);
 
 			var gridRows = _gridRows.Where(r => r.ValueMember.PropertyName == e.PropertyName);
 			foreach (var gridRow in gridRows)
@@ -167,39 +167,39 @@ namespace Teleopti.Ccc.SyncfusionGridBinding
 				int rowIndex = _gridRows.IndexOf(gridRow);
 				if (rowIndex >= 0 && modelColumnIndex >= 0)
 				{
-				    var cell = GridRangeInfo.Cell(rowIndex + ContentRowOffset(),
-				                       modelColumnIndex + ContentColumnOffset());
-                    if (_delayUpdates)
-                    {
-                        _rangesToUpdate.Add(cell);
-                    }
-                    else
-                    {
-                        InvalidateCell(cell);
-                    }
+					var cell = GridRangeInfo.Cell(rowIndex + ContentRowOffset(),
+											 modelColumnIndex + ContentColumnOffset());
+					if (_delayUpdates)
+					{
+						_rangesToUpdate.Add(cell);
+					}
+					else
+					{
+						InvalidateCell(cell);
+					}
 				}
 			}
 		}
 
-	    private void InvalidateCell(GridRangeInfo cell)
-	    {
-	        _gridControl.InvalidateRange(cell);
-	    }
+		private void InvalidateCell(GridRangeInfo cell)
+		{
+			_gridControl.InvalidateRange(cell);
+		}
 
-	    public void BeginDelayUpdates()
-        {
-            _delayUpdates = true;
-        }
-        
-        public void EndDelayUpdates()
-        {
-            _delayUpdates = false;
-            foreach (var gridRangeInfo in _rangesToUpdate)
-            {
-                InvalidateCell(gridRangeInfo);
-            }
-            _rangesToUpdate.Clear();
-        }
+		public void BeginDelayUpdates()
+		{
+			_delayUpdates = true;
+		}
+
+		public void EndDelayUpdates()
+		{
+			_delayUpdates = false;
+			foreach (var gridRangeInfo in _rangesToUpdate)
+			{
+				InvalidateCell(gridRangeInfo);
+			}
+			_rangesToUpdate.Clear();
+		}
 
 		private void gridControl_SaveCellInfo(object sender, GridSaveCellInfoEventArgs e)
 		{
@@ -215,7 +215,7 @@ namespace Teleopti.Ccc.SyncfusionGridBinding
 			}
 			e.Handled = true;
 		}
-        
+
 		public void AddRow(GridRow<T> gridRow)
 		{
 			_gridRows.Add(gridRow);
@@ -235,14 +235,14 @@ namespace Teleopti.Ccc.SyncfusionGridBinding
 			ResetGridArea();
 		}
 
-        private void SetMergedHeaderStyle()
-        {
-            _gridControl.Model.Options.MergeCellsMode = GridMergeCellsMode.OnDemandCalculation |
-                                                                      GridMergeCellsMode.MergeColumnsInRow;
+		private void SetMergedHeaderStyle()
+		{
+			_gridControl.Model.Options.MergeCellsMode = GridMergeCellsMode.OnDemandCalculation |
+																						 GridMergeCellsMode.MergeColumnsInRow;
 
-            var rowHeaderStyle = _gridControl.Model.BaseStylesMap["Header"].StyleInfo;
-            rowHeaderStyle.MergeCell = GridMergeCellDirection.ColumnsInRow;
-        }
+			var rowHeaderStyle = _gridControl.Model.BaseStylesMap["Header"].StyleInfo;
+			rowHeaderStyle.MergeCell = GridMergeCellDirection.ColumnsInRow;
+		}
 
 		public int RowCount()
 		{

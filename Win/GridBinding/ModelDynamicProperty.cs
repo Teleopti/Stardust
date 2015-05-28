@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Ccc.SyncfusionGridBinding
+namespace Teleopti.Ccc.Win.GridBinding
 {
 	public class ModelDynamicProperty<T, TItemType, TRowDefinition> : IModelProperty<T>
 	{
@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.SyncfusionGridBinding
 
 		public object GetModelValue(T model)
 		{
-			return _getModelValue(model,_rowDefinition);
+			return _getModelValue(model, _rowDefinition);
 		}
 
 		public void SetModelValue(T model, object value)

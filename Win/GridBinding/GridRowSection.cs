@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
 
-namespace Teleopti.Ccc.SyncfusionGridBinding
+namespace Teleopti.Ccc.Win.GridBinding
 {
 	public class GridRowSection<T>
 	{
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.SyncfusionGridBinding
 
 			_columnEntityBinder.InsertRow(startPosition, gridRow);
 			_gridRowsInSection.Add(gridRow);
-			
+
 		}
 
 		public void DeleteRowWithTag(object tag)
@@ -45,20 +45,20 @@ namespace Teleopti.Ccc.SyncfusionGridBinding
 			}
 		}
 
-        public void ClearRows()
-        {
-            foreach (var gridRow in _gridRowsInSection)
-            {
-                _columnEntityBinder.RemoveRow(gridRow);
-            }
-            _gridRowsInSection.Clear();
-        }
+		public void ClearRows()
+		{
+			foreach (var gridRow in _gridRowsInSection)
+			{
+				_columnEntityBinder.RemoveRow(gridRow);
+			}
+			_gridRowsInSection.Clear();
+		}
 
-        public void UpdateRowHeaderTextWithTag(object tag, string headerText)
-        {
-            var row = _gridRowsInSection.FirstOrDefault(r => r.Tag == tag);
-            row.HeaderText = headerText;
-        }
+		public void UpdateRowHeaderTextWithTag(object tag, string headerText)
+		{
+			var row = _gridRowsInSection.FirstOrDefault(r => r.Tag == tag);
+			row.HeaderText = headerText;
+		}
 
 		private int GetInsertStartPosition()
 		{

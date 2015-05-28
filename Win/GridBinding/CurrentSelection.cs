@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Syncfusion.Windows.Forms.Grid;
 
-namespace Teleopti.Ccc.SyncfusionGridBinding
+namespace Teleopti.Ccc.Win.GridBinding
 {
 	public class CurrentSelection<T>
 	{
@@ -17,19 +17,19 @@ namespace Teleopti.Ccc.SyncfusionGridBinding
 
 		public IEnumerable<T> SelectedEntities()
 		{
-			GridRangeInfoList selectedRanges = GetSelectedRanges();
+			GridRangeInfoList selectedRanges = getSelectedRanges();
 
-			HashSet<T> uniqueEntities = new HashSet<T>();
+			var uniqueEntities = new HashSet<T>();
 			_columnOffset = _columnEntityBinder.ContentColumnOffset();
 			foreach (GridRangeInfo selectedRange in selectedRanges)
 			{
-				AddAllEntitiesIfRowSelected(selectedRange, uniqueEntities);
-				AddEntitiesFromSelectedColumns(selectedRange, uniqueEntities);
+				addAllEntitiesIfRowSelected(selectedRange, uniqueEntities);
+				addEntitiesFromSelectedColumns(selectedRange, uniqueEntities);
 			}
 			return uniqueEntities;
 		}
 
-		private void AddEntitiesFromSelectedColumns(GridRangeInfo selectedRange, HashSet<T> uniqueEntities)
+		private void addEntitiesFromSelectedColumns(GridRangeInfo selectedRange, HashSet<T> uniqueEntities)
 		{
 			var adjustedRange = selectedRange.OffsetRange(0, -_columnOffset);
 			for (int i = adjustedRange.Left; i <= adjustedRange.Right; i++)
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.SyncfusionGridBinding
 			}
 		}
 
-		private void AddAllEntitiesIfRowSelected(GridRangeInfo selectedRange, HashSet<T> uniqueEntities)
+		private void addAllEntitiesIfRowSelected(GridRangeInfo selectedRange, HashSet<T> uniqueEntities)
 		{
 			if (AllEntitiesSelected(selectedRange))
 			{
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.SyncfusionGridBinding
 			return selectedRange.IsRows || selectedRange.IsTable;
 		}
 
-		private GridRangeInfoList GetSelectedRanges()
+		private GridRangeInfoList getSelectedRanges()
 		{
 			GridControl gridControl = _columnEntityBinder.Grid();
 			return gridControl.Selections.Ranges;

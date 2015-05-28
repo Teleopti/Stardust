@@ -1,7 +1,7 @@
 ﻿using System;
 using Syncfusion.Windows.Forms.Grid;
 
-namespace Teleopti.Ccc.SyncfusionGridBinding
+namespace Teleopti.Ccc.Win.GridBinding
 {
 	public class CellDetails
 	{
@@ -20,8 +20,8 @@ namespace Teleopti.Ccc.SyncfusionGridBinding
 			get
 			{
 				return _gridStyleInfo.CellIdentity != null &&
-					   _gridStyleInfo.CellIdentity.RowIndex == 1 &&
-					   _gridStyleInfo.CellIdentity.ColIndex > 0;
+						_gridStyleInfo.CellIdentity.RowIndex == 1 &&
+						_gridStyleInfo.CellIdentity.ColIndex > 0;
 			}
 		}
 
@@ -30,8 +30,8 @@ namespace Teleopti.Ccc.SyncfusionGridBinding
 			get
 			{
 				return _gridStyleInfo.CellIdentity != null &&
-					   _gridStyleInfo.CellIdentity.RowIndex == 0 &&
-					   _gridStyleInfo.CellIdentity.ColIndex > 0;
+						_gridStyleInfo.CellIdentity.RowIndex == 0 &&
+						_gridStyleInfo.CellIdentity.ColIndex > 0;
 			}
 		}
 
@@ -40,8 +40,8 @@ namespace Teleopti.Ccc.SyncfusionGridBinding
 			get
 			{
 				return _gridStyleInfo.CellIdentity != null &&
-					   _gridControl.Cols.HeaderCount + 1 > _gridStyleInfo.CellIdentity.ColIndex &&
-					   _gridStyleInfo.CellIdentity.RowIndex > _gridControl.Rows.HeaderCount;
+						_gridControl.Cols.HeaderCount + 1 > _gridStyleInfo.CellIdentity.ColIndex &&
+						_gridStyleInfo.CellIdentity.RowIndex > _gridControl.Rows.HeaderCount;
 			}
 		}
 
@@ -50,8 +50,8 @@ namespace Teleopti.Ccc.SyncfusionGridBinding
 			get
 			{
 				return _gridStyleInfo.CellIdentity != null &&
-					   _gridControl.Rows.HeaderCount < _gridStyleInfo.CellIdentity.RowIndex &&
-					   _gridControl.Cols.HeaderCount < _gridStyleInfo.CellIdentity.ColIndex;
+						_gridControl.Rows.HeaderCount < _gridStyleInfo.CellIdentity.RowIndex &&
+						_gridControl.Cols.HeaderCount < _gridStyleInfo.CellIdentity.ColIndex;
 			}
 		}
 
@@ -60,10 +60,10 @@ namespace Teleopti.Ccc.SyncfusionGridBinding
 			_gridStyleInfo.CellValue = value;
 		}
 
-        public void SetCellTipText(string value)
-        {
-            _gridStyleInfo.CellTipText = value;
-        }
+		public void SetCellTipText(string value)
+		{
+			_gridStyleInfo.CellTipText = value;
+		}
 
 		public void SetParentCellValue(object value)
 		{
@@ -86,9 +86,9 @@ namespace Teleopti.Ccc.SyncfusionGridBinding
 			_gridStyleInfo.ReadOnly = readOnly;
 			if (readOnly)
 			{
-			    if (GridColors.ReadOnlyBackgroundBrush!=null)
-				    _gridStyleInfo.Interior = GridColors.ReadOnlyBackgroundBrush;
-			    _gridStyleInfo.TextColor = GridColors.ColorReadOnlyCell;
+				if (GridColors.ReadOnlyBackgroundBrush != null)
+					_gridStyleInfo.Interior = GridColors.ReadOnlyBackgroundBrush;
+				_gridStyleInfo.TextColor = GridColors.ColorReadOnlyCell;
 			}
 		}
 
