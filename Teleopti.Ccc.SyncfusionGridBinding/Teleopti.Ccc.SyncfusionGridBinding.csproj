@@ -130,18 +130,6 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="CellDetails.cs" />
-    <Compile Include="ColumnEntityBinder.cs" />
-    <Compile Include="CurrentSelection.cs" />
-    <Compile Include="GridColors.cs" />
-    <Compile Include="GridRangeChange.cs" />
-    <Compile Include="GridRow.cs" />
-    <Compile Include="GridRowSection.cs" />
-    <Compile Include="GridRowSectionSelectionChangedEventArgs.cs" />
-    <Compile Include="IModelProperty.cs" />
-    <Compile Include="ModelDictionaryProperty.cs" />
-    <Compile Include="ModelDynamicProperty.cs" />
-    <Compile Include="ModelProperty.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -780,6 +780,18 @@
     <Compile Include="Forecasting\Forms\ExportControl.Designer.cs">
       <DependentUpon>ExportControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="GridBinding\CellDetails.cs" />
+    <Compile Include="GridBinding\ColumnEntityBinder.cs" />
+    <Compile Include="GridBinding\CurrentSelection.cs" />
+    <Compile Include="GridBinding\GridColors.cs" />
+    <Compile Include="GridBinding\GridRangeChange.cs" />
+    <Compile Include="GridBinding\GridRow.cs" />
+    <Compile Include="GridBinding\GridRowSection.cs" />
+    <Compile Include="GridBinding\GridRowSectionSelectionChangedEventArgs.cs" />
+    <Compile Include="GridBinding\IModelProperty.cs" />
+    <Compile Include="GridBinding\ModelDictionaryProperty.cs" />
+    <Compile Include="GridBinding\ModelDynamicProperty.cs" />
+    <Compile Include="GridBinding\ModelProperty.cs" />
     <Compile Include="Grouping\PersonSelectorViewNew.cs">
       <SubType>UserControl</SubType>
     </Compile>
