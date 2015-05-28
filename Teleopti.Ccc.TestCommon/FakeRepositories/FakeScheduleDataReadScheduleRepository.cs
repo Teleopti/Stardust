@@ -12,19 +12,20 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeScheduleDataReadScheduleRepository : IScheduleRepository
 	{
-
-		public void InitRangeValues(int targetDaysOff, int scheduledDaysOff, TimeSpan targetContractTime, TimeSpan scheduledContractTime)
+		public void InitRangeValues(int targetScheduledDaysOff, int scheduledDaysOff, TimeSpan targetTimeHolder, TimeSpan contractTimeHolder)
 		{
-			_targetDaysOff = targetDaysOff;
-			_scheduledDaysOff = scheduledDaysOff;
-			_targetContractTime = targetContractTime;
-			_scheduledContractTime = scheduledContractTime;
+			_targetScheduleDaysOff = targetScheduledDaysOff;
+			_scheduleDaysOff = scheduledDaysOff;
+			_targetTimeHolder = targetTimeHolder;
+			_contractTimeHolder = contractTimeHolder;
 		}
+
+
 		private IEnumerable<IScheduleData> _data = new List<IScheduleData>();
-		private int _targetDaysOff;
-		private int _scheduledDaysOff;
-		private TimeSpan _targetContractTime;
-		private TimeSpan _scheduledContractTime;
+		private int _targetScheduleDaysOff;
+		private int _scheduleDaysOff;
+		private TimeSpan _targetTimeHolder;
+		private TimeSpan _contractTimeHolder;
 
 		public DateTimePeriod ThePeriodThatWasUsedForFindingSchedules { get; private set; }
 
@@ -112,8 +113,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			var dateTimePeriod = period.VisiblePeriod;
 			var schedules = new ScheduleDictionaryForTest(scenario, dateTimePeriod);
-			var range = new ScheduleRange(schedules, new ScheduleParameters(scenario, visiblePersons.FirstOrDefault(), dateTimePeriod));
-			schedules.AddTestItem(visiblePersons.FirstOrDefault(), range);
+			var  range = new FakeScheduleRange(schedules, new ScheduleParameters(scenario, visiblePersons.FirstOrDefault(), dateTimePeriod));
+			var updatedRange =  range.UpdateCalcValues(_targetScheduleDaysOff,_scheduleDaysOff,_targetTimeHolder,_contractTimeHolder);
+			schedules.AddTestItem(visiblePersons.FirstOrDefault(), updatedRange);
 			return schedules;
 		}
 
@@ -126,5 +128,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			_data = data;
 		}
+
+		
 	}
+
 }

@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		{
 			var suggestion = _planningPeriodRespository.Suggestions(_now);
 			var planningPeriod = _planningPeriodRespository.Load(id);
-			var result = suggestion.SuggestedPeriods(planningPeriod.Range.EndDate);
+			var result = suggestion.SuggestedPeriods(planningPeriod.Range);
 			return
 				Ok(
 					result.Select(

@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
@@ -66,6 +67,8 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			builder.RegisterType<OccupiedSeatCalculator>().As<IOccupiedSeatCalculator>().SingleInstance();
 			builder.RegisterType<NonBlendSkillCalculator>().As<INonBlendSkillCalculator>().SingleInstance();
 			builder.RegisterType<FakeScheduleRange>().As<IScheduleRange>().SingleInstance();
+			builder.RegisterType<FakeScheduleDictionary>().As<IScheduleDictionary>().SingleInstance();
+			builder.RegisterType<FakeScheduleParameters>().As<IScheduleParameters>().SingleInstance();
 			builder.RegisterType<IPeriodDistributionService>().As<IPeriodDistributionService>().SingleInstance();
 			builder.RegisterGeneric(typeof(PairMatrixService<>)).As(typeof(IPairMatrixService<>)).SingleInstance();
 			builder.RegisterGeneric(typeof(PairDictionaryFactory<>)).As(typeof(IPairDictionaryFactory<>)).SingleInstance();
@@ -74,6 +77,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			builder.RegisterType<SetupStateHolderForWebScheduling>();
 			builder.RegisterType<ScheduleController>();
 			builder.RegisterType<DayOffBusinessRuleValidation>();
+
 
 			//for planning period (should be another attribute or?)
 			builder.RegisterType<FakePlanningPeriodRepository>().As<IPlanningPeriodRepository>().SingleInstance();

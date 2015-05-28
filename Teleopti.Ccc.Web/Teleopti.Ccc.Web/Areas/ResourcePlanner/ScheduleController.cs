@@ -102,10 +102,12 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			{
 				conflicts.AddRange(_persister.Persist(schedule.Value));
 			}
-			var schedulePeriodNotInRange = _violatedSchedulePeriodBusinessRule.GetResult(people.SelectedPeople, period).ToList();
-			var daysOffValidationResult = getDayOffBusinessRulesValidationResults(_schedulerStateHolder().Schedules,
-				schedulePeriodNotInRange);
+			var scheduleOfSelectedPeople = _schedulerStateHolder().Schedules.Where(x => people.SelectedPeople.Contains(x.Key)).ToList();
 			var voilatedBusinessRules = new List<BusinessRulesValidationResult>();
+
+			var schedulePeriodNotInRange = _violatedSchedulePeriodBusinessRule.GetResult(people.SelectedPeople, period).ToList();
+			var daysOffValidationResult = getDayOffBusinessRulesValidationResults(scheduleOfSelectedPeople,
+				schedulePeriodNotInRange);
 			voilatedBusinessRules.AddRange(schedulePeriodNotInRange);
 			voilatedBusinessRules.AddRange(daysOffValidationResult);
 			return
@@ -113,7 +115,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				{
 					DaysScheduled = daysScheduled,
 					ConflictCount = conflicts.Count(),
-					ScheduledAgentsCount = successfulScheduledAgents(_schedulerStateHolder().Schedules),
+					ScheduledAgentsCount = successfulScheduledAgents(scheduleOfSelectedPeople),
 					BusinessRulesValidationResults = voilatedBusinessRules
 				});
 		}
@@ -124,7 +126,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				schedules.Count(
 					x =>
 						(x.Value.CalculatedTargetTimeHolder.HasValue) &&
-						(x.Value.CalculatedContractTimeHolder != x.Value.CalculatedTargetTimeHolder));
+						(x.Value.CalculatedContractTimeHolder == x.Value.CalculatedTargetTimeHolder));
 		}
 
 		private IEnumerable<BusinessRulesValidationResult> getDayOffBusinessRulesValidationResults(

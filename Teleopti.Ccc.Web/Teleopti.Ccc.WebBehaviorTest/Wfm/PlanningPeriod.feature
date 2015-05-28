@@ -51,6 +51,6 @@ Scenario: update the next planning period
 	When I view Resource planner
 	And I click next planning period
 	And I update planning period to two week 
-	Then I should see planning period from '2014-04-06'to '2014-04-19'
+	Then I should see planning period from '2014-04-13'to '2014-04-26'
 	
 

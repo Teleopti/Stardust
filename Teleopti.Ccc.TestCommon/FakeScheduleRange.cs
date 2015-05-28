@@ -1,19 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
+using NHibernate.Mapping;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon
 {
-	public class FakeScheduleRange: IScheduleRange
+	public class FakeScheduleRange : Schedule, IScheduleRange
 	{
-		public void SetValues(int targetDaysOff, int scheduledDaysOff)
+		public FakeScheduleRange(IScheduleDictionary owner, IScheduleParameters parameters) : base(owner, parameters)
 		{
-			CalculatedScheduleDaysOff = scheduledDaysOff;
-			CalculatedTargetScheduleDaysOff = targetDaysOff;
 		}
+
+		public IScheduleRange UpdateCalcValues(int targetScheduledDaysOff, int scheduledDaysOff, TimeSpan targetTimeHolder, TimeSpan contractTimeHolder)
+		{
+			CalculatedTargetScheduleDaysOff = targetScheduledDaysOff;
+			CalculatedScheduleDaysOff = scheduledDaysOff;
+			CalculatedTargetTimeHolder = targetTimeHolder;
+			CalculatedContractTimeHolder = contractTimeHolder;
+			return this;
+		}
+
 		public DateTimePeriod Period { get; private set; }
 		public IPerson Person { get; private set; }
 		public IScenario Scenario { get; private set; }
+		protected override bool CheckPermission(IScheduleData persistableScheduleData)
+		{
+			throw new NotImplementedException();
+		}
+
 		public object Clone()
 		{
 			throw new NotImplementedException();
@@ -62,11 +79,12 @@ namespace Teleopti.Ccc.TestCommon
 
 		public int CalculatedScheduleDaysOff { get; private set; }
 
-		
+
 
 		public IEnumerable<IScheduleDay> ScheduledDayCollection(DateOnlyPeriod dateOnlyPeriod)
 		{
-			throw new NotImplementedException();
+			var fac = new SchedulePartFactoryForDomain();
+			return new List<IScheduleDay> { fac.CreatePart() };
 		}
 
 		public IEnumerable<IScheduleDay> ScheduledDayCollectionForStudentAvailability(DateOnlyPeriod dateOnlyPeriod)
@@ -114,6 +132,8 @@ namespace Teleopti.Ccc.TestCommon
 			throw new NotImplementedException();
 		}
 
-		
+
 	}
 }
+
+
