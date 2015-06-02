@@ -299,7 +299,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		private long maxMem = 0;
 		
-
 		private void updateMem(object sender, EventArgs e)
 		{
 			var mem = GC.GetTotalMemory(true);
