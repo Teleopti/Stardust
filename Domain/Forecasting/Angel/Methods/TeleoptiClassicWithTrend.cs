@@ -17,17 +17,18 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 			_linearRegressionTrend = linearRegressionTrend;
 		}
 
-		public override IList<IForecastingTarget> Forecast(TaskOwnerPeriod historicalData, DateOnlyPeriod futurePeriod, bool removeOutliers)
+		public override ForecastResult Forecast(TaskOwnerPeriod historicalData, DateOnlyPeriod futurePeriod, bool removeOutliers)
 		{
 			var trend = _linearRegressionTrend.CalculateTrend(historicalData);
-			var forecastWithoutTrend = base.Forecast(historicalData, futurePeriod, removeOutliers);
+			var forecastResult = base.Forecast(historicalData, futurePeriod, removeOutliers);
+			var forecastTargets = forecastResult.ForecastingTargets;
 
-			var averageTasks = forecastWithoutTrend.Average(x => x.Tasks);
-			foreach (var forecastingTarget in forecastWithoutTrend)
+			var averageTasks = forecastTargets.Average(x => x.Tasks);
+			foreach (var forecastingTarget in forecastTargets)
 			{
 				forecastingTarget.Tasks = Math.Max(0, forecastingTarget.Tasks + forecastingTarget.CurrentDate.Subtract(LinearTrend.StartDate).Days * trend.Slope + trend.Intercept - averageTasks);
 			}
-			return forecastWithoutTrend;
+			return forecastResult;
 		}
 
 		public override ForecastMethodType Id {

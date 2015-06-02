@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 			var evaluateResult = _forecastWorkloadEvaluator.Evaluate(workload);
 			var bestAccuracy = evaluateResult.Accuracies.SingleOrDefault(x => x.IsSelected);
 
+			var isForecastingTest = bool.Parse(ConfigurationManager.AppSettings["ForecastingTest"]);
 			return new WorkloadForecastViewModel
 			{
 				Name = workload.Name,
@@ -42,8 +43,8 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 				ForecastMethodRecommended = (bestAccuracy == null ? ForecastMethodType.None : bestAccuracy.MethodId),
 				ForecastMethods = createMethodViewModels(evaluateResult),
 				Days = createDayViewModels(workload, bestAccuracy),
-				TestDays = createTestDayViewModels(workload, bestAccuracy),
-				IsForecastingTest = bool.Parse(ConfigurationManager.AppSettings["ForecastingTest"])
+				TestDays = isForecastingTest ? createTestDayViewModels(workload, bestAccuracy) : new dynamic[] { },
+				IsForecastingTest = isForecastingTest
 			};
 
 		}
@@ -64,19 +65,17 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 
 		private dynamic[] createTestDayViewModels(IWorkload workload, MethodAccuracy bestAccuracy)
 		{
-			var isForecastingTest = bool.Parse(ConfigurationManager.AppSettings["ForecastingTest"]);
-			return isForecastingTest
-				? daysForPeriod(bestAccuracy, _historicalData.Fetch(workload, _historicalPeriodProvider.PeriodForForecast(workload)))
-				: new dynamic[] { };
+			return daysForPeriod(bestAccuracy, _historicalData.Fetch(workload, _historicalPeriodProvider.PeriodForForecast(workload)), true);
 		}
 
 		private dynamic[] createDayViewModels(IWorkload workload, MethodAccuracy bestAccuracy)
 		{
-			return daysForPeriod(bestAccuracy, _historicalData.Fetch(workload, _historicalPeriodProvider.PeriodForDisplay(workload)));
+			return daysForPeriod(bestAccuracy, _historicalData.Fetch(workload, _historicalPeriodProvider.PeriodForDisplay(workload)), false);
 		}
 
-		private static dynamic[] daysForPeriod(MethodAccuracy bestAccuracy, TaskOwnerPeriod period)
+		private static dynamic[] daysForPeriod(MethodAccuracy bestAccuracy, ITaskOwnerPeriod period, bool isForecastingTest)
 		{
+
 			var data = new Dictionary<DateOnly, dynamic>();
 			foreach (var taskOwner in period.TaskOwnerDayCollection)
 			{
@@ -100,6 +99,24 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 						item.date = dayResult.CurrentDate.Date;
 						item.vb = Math.Round(dayResult.Tasks, 1);
 						data.Add(dayResult.CurrentDate, item);
+					}
+				}
+			}
+
+			if (isForecastingTest)
+			{
+				foreach (var day in bestAccuracy.HistoricalDataRemovedOutliers)
+				{
+					if (data.ContainsKey(day.Date))
+					{
+						data[day.Date].vh2 = Math.Round(day.Tasks, 1);
+					}
+					else
+					{
+						dynamic item = new ExpandoObject();
+						item.date = day.Date;
+						item.vh2 = Math.Round(day.Tasks, 1);
+						data.Add(day.Date, item);
 					}
 				}
 			}

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Outlier;
 using Teleopti.Interfaces.Domain;
 
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 			_outlierRemover = outlierRemover;
 		}
 
-		public virtual IList<IForecastingTarget> Forecast(TaskOwnerPeriod historicalData, DateOnlyPeriod futurePeriod, bool removeOutliers)
+		public virtual ForecastResult Forecast(TaskOwnerPeriod historicalData, DateOnlyPeriod futurePeriod, bool removeOutliers)
 		{
 			historicalData = removeOutliers ? _outlierRemover.RemoveOutliers(historicalData, this) : historicalData;
 			
@@ -42,7 +43,11 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 				targetForecastingList.Add(forecastingTarget);
 			}
 
-			return targetForecastingList;
+			return new ForecastResult
+			{
+				ForecastingTargets = targetForecastingList,
+				HistoricalDataRemovedOutliers = removeOutliers?historicalData.TaskOwnerDayCollection.Select(x => new DateAndTasks{ Date = x.CurrentDate, Tasks = x.TotalStatisticCalculatedTasks }).ToArray():new DateAndTasks[]{}
+			};
 		}
 
 		private void SetComparison(IForecastingTarget day, TotalDayItem totalDayItem, IEnumerable<IVolumeYear> volumes, AverageStatistics averageStatistics)
@@ -77,5 +82,17 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 		}
 
 		public abstract ForecastMethodType Id { get; }
+	}
+
+	public class DateAndTasks
+	{
+		public DateOnly Date { get; set; }
+		public double Tasks { get; set; }
+	}
+
+	public class ForecastResult
+	{
+		public IList<IForecastingTarget> ForecastingTargets { get; set; }
+		public DateAndTasks[] HistoricalDataRemovedOutliers { get; set; }
 	}
 }

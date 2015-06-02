@@ -26,9 +26,9 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			if (!historicalData.TaskOwnerDayCollection.Any())
 				return;
 			var forecastMethod = _forecastMethodProvider.Get(quickForecasterWorkloadParams.ForecastMethodId);
-			var forecastingTargets = forecastMethod.Forecast(historicalData, quickForecasterWorkloadParams.FuturePeriod, true);
+			var forecastResult = forecastMethod.Forecast(historicalData, quickForecasterWorkloadParams.FuturePeriod, true);
 			var futureWorkloadDays = _futureData.Fetch(quickForecasterWorkloadParams);
-			_forecastingTargetMerger.Merge(forecastingTargets, futureWorkloadDays);
+			_forecastingTargetMerger.Merge(forecastResult.ForecastingTargets, futureWorkloadDays);
 		}
 	}
 }
