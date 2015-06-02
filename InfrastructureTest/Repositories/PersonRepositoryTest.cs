@@ -1439,7 +1439,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		public void VerifyFindPersonUser()
+		public void ShouldFindAllPersonsEtlChecksPermissions()
 		{
 			IPerson person1 = PersonFactory.CreatePersonWithIdentityPermissionInfo("sunil");
 			PersistAndRemoveFromUnitOfWork(person1);
@@ -1448,12 +1448,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IPerson person3 = PersonFactory.CreatePerson("Fname", "lname");
 			PersistAndRemoveFromUnitOfWork(person3);
 
-			PersonRepository pr = new PersonRepository(UnitOfWork);
+			var pr = new PersonRepository(UnitOfWork);
 
 			IList<IPerson> personList = pr.FindPersonsThatAlsoAreUsers();
 			Assert.IsTrue(personList.Contains(person1));
 			Assert.IsTrue(personList.Contains(person2));
-			Assert.IsFalse(personList.Contains(person3));
+			Assert.IsTrue(personList.Contains(person3));
 		}
 
 		[Test]

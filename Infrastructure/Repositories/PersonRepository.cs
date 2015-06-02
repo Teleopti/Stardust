@@ -43,19 +43,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IList<IPerson> FindPersonsThatAlsoAreUsers()
 		{
 			return Session.CreateCriteria(typeof(Person), "person")
-				 .SetFetchMode("PersonPeriodCollection", FetchMode.Join)
-				 .SetFetchMode("PersonPeriodCollection.Team", FetchMode.Join)
-				 .SetFetchMode("PersonPeriodCollection.Team.Site", FetchMode.Join)
-				//BusinessUnitExplicit
-				 .SetFetchMode("PersonPeriodCollection.Team.Site.BusinessUnit", FetchMode.Join)
-				 .Add(Restrictions.Or(
-							 Restrictions.Not(
-								  Restrictions.Eq(
-										"ApplicationAuthenticationInfo.ApplicationLogOnName",
-										String.Empty)),
-							 Restrictions.Not(
-								  Restrictions.Eq("AuthenticationInfo.Identity",
-														String.Empty)))).SetResultTransformer(Transformers.DistinctRootEntity).List<IPerson>();
+				 .SetResultTransformer(Transformers.DistinctRootEntity).List<IPerson>();
 		}
 
 		public override bool ValidateUserLoggedOn
