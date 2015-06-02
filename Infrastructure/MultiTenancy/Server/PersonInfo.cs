@@ -1,5 +1,4 @@
 ﻿using System;
-using Teleopti.Ccc.Domain.Security;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 {
@@ -20,10 +19,6 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 
 		public virtual Guid Id { get; protected set; }
 		public virtual string TenantPassword { get; protected set; }
-		//TODO: tenant move these to applicationlogoninfo
-		public virtual string ApplicationLogonName { get; protected set; }
-		//make private when oldschema is gone!
-		public virtual string ApplicationLogonPassword { get; protected set; }
 		public virtual string Identity { get; protected set; }
 		public virtual Tenant Tenant { get; protected set; }
 
@@ -32,7 +27,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 			get
 			{
 				//TODO: tenant put this in ctor instead
-				return _applicationLogonInfo ?? (_applicationLogonInfo = new ApplicationLogonInfo(this));
+				return _applicationLogonInfo ?? (_applicationLogonInfo = new ApplicationLogonInfo());
 			}
 			protected set { _applicationLogonInfo = value; }
 		}
@@ -41,9 +36,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		{
 			if (logonName == null || password == null)
 				return;
-			setPassword(checkPasswordStrength, password);
-			ApplicationLogonName = logonName;
-			ApplicationLogonInfo.RegisterPasswordChange();
+			ApplicationLogonInfo.SetApplicationLogonCredentialsInternal(checkPasswordStrength, logonName, password);
 		}
 
 		public virtual void SetIdentity(string identityName)
@@ -54,13 +47,6 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		public virtual void RegenerateTenantPassword()
 		{
 			TenantPassword = Guid.NewGuid().ToString().Replace('-', 'x');
-		}
-
-		private void setPassword(ICheckPasswordStrength checkPasswordStrength, string newPassword)
-		{
-			checkPasswordStrength.Validate(newPassword);
-			//todo: tenant get rid of domain dependency here
-			ApplicationLogonPassword = new OneWayEncryption().EncryptString(newPassword);
 		}
 	}
 }

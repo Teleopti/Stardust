@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			var result = Target.Persist(personInfoModel).Result<PersistPersonInfoResult>();
 
 			allPropertiesShouldBeTrue(result);
-			PersistPersonInfo.LastPersist.ApplicationLogonName.Should().Be.EqualTo(personInfoModel.ApplicationLogonName);
+			PersistPersonInfo.LastPersist.ApplicationLogonInfo.ApplicationLogonName.Should().Be.EqualTo(personInfoModel.ApplicationLogonName);
 			TenantUnitOfWork.WasCommitted.Should().Be.True();
 		}
 		private static void allPropertiesShouldBeTrue(PersistPersonInfoResult result)

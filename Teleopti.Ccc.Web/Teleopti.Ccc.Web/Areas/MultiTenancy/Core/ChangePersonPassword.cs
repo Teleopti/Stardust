@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 			
 			try
 			{
-				personInfo.SetApplicationLogonCredentials(_checkPasswordStrength, personInfo.ApplicationLogonName, newPassword);
+				personInfo.SetApplicationLogonCredentials(_checkPasswordStrength, personInfo.ApplicationLogonInfo.ApplicationLogonName, newPassword);
 			}
 			catch (PasswordStrengthException)
 			{

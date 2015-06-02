@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 
 		public void Has(PersonInfo personInfo)
 		{
-			data[personInfo.ApplicationLogonName] = personInfo;
+			data[personInfo.ApplicationLogonInfo.ApplicationLogonName] = personInfo;
 		}
 	}
 }

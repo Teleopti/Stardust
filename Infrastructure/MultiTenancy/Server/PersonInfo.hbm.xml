@@ -10,12 +10,11 @@
 		<many-to-one name="Tenant" class="Tenant"/>
 		
 		<property name="Identity" column="[Identity]"/>
-		<property name="ApplicationLogonName"/>
-		<property name="ApplicationLogonPassword"/>
 		<property name="TenantPassword" />
 
 		<component name="ApplicationLogonInfo" class="ApplicationLogonInfo">
-			<parent name="PersonInfo" />
+			<property name="ApplicationLogonName"/>
+			<property name="ApplicationLogonPassword"/>
 			<property name="LastPasswordChange" />
 			<property name="InvalidAttemptsSequenceStart" />
 			<property name="InvalidAttempts" />
@@ -33,13 +32,13 @@ where p.Identity = :identity
 	<query name="applicationUserQuery">
 		<![CDATA[
 select pi from PersonInfo pi
-where pi.ApplicationLogonName=:userName
+where pi.ApplicationLogonInfo.ApplicationLogonName=:userName
 ]]>
 	</query>
 
 	<query name="findLogonInfo">
 		<![CDATA[
-select pi.Id as "PersonId", pi.ApplicationLogonName as "LogonName", pi.Identity as "Identity"
+select pi.Id as "PersonId", pi.ApplicationLogonInfo.ApplicationLogonName as "LogonName", pi.Identity as "Identity"
 from PersonInfo pi
 where pi.Id in (:ids) and pi.Tenant=:tenant
 ]]>

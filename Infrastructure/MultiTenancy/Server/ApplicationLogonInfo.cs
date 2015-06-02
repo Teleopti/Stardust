@@ -8,13 +8,11 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 	{
 		private static readonly OneWayEncryption oneWayEncryption = new OneWayEncryption();
 
-		public ApplicationLogonInfo(PersonInfo personInfo)
+		public ApplicationLogonInfo()
 		{
-			PersonInfo = personInfo;
 			LastPasswordChange=DateTime.UtcNow;
 			InvalidAttemptsSequenceStart = DateTime.UtcNow;
 		}
-		protected ApplicationLogonInfo() { }
 
 		//make private when old schema is gone
 		public virtual DateTime LastPasswordChange { get; protected set; }
@@ -22,8 +20,10 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		//make private when old schema is gone
 		public virtual int InvalidAttempts { get; protected set; }
 		public virtual bool IsLocked { get; protected set; }
-		//remove me when oldschema is gone!
-		public virtual PersonInfo PersonInfo { get; protected set; }
+
+		public virtual string ApplicationLogonName { get; protected set; }
+		//make private when oldschema is gone!
+		public virtual string ApplicationLogonPassword { get; protected set; }
 
 		internal void RegisterPasswordChange()
 		{
@@ -33,6 +33,20 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 			IsLocked = false;
 		}
 
+		protected internal virtual void SetApplicationLogonCredentialsInternal(ICheckPasswordStrength checkPasswordStrength, string logonName, string password)
+		{
+			setPassword(checkPasswordStrength, password);
+			ApplicationLogonName = logonName;
+			RegisterPasswordChange();
+		}
+
+		private void setPassword(ICheckPasswordStrength checkPasswordStrength, string newPassword)
+		{
+			checkPasswordStrength.Validate(newPassword);
+			//todo: tenant get rid of domain dependency here
+			ApplicationLogonPassword = new OneWayEncryption().EncryptString(newPassword);
+		}
+
 		public virtual void Lock()
 		{
 			IsLocked = true;
@@ -40,7 +54,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 
 		public virtual bool IsValidPassword(INow now, IPasswordPolicy passwordPolicy, string unencryptedPassword)
 		{
-			if (PersonInfo.ApplicationLogonName == null)
+			if (ApplicationLogonName == null)
 				return false;
 
 			var encryptedPassword = oneWayEncryption.EncryptString(unencryptedPassword);
@@ -51,7 +65,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 				clearInvalidAttempts(utcNow);
 			}
 
-			var isValid = PersonInfo.ApplicationLogonPassword.Equals(encryptedPassword);
+			var isValid = ApplicationLogonPassword.Equals(encryptedPassword);
 			if (isValid)
 			{
 				clearInvalidAttempts(utcNow);

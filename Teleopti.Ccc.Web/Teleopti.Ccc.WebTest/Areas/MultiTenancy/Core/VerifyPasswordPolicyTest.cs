@@ -18,8 +18,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 		public void Setup()
 		{
 			passwordPolicy =MockRepository.GenerateMock<IPasswordPolicy>();
-			var personInfo = new PersonInfo();
-			_applicationLogonInfo = new ApplicationLogonInfo(personInfo);
+			_applicationLogonInfo = new ApplicationLogonInfo();
 			target = new VerifyPasswordPolicy(() => passwordPolicy);
 		}
 
