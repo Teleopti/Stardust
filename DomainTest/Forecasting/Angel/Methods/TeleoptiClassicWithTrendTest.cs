@@ -62,10 +62,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Methods
 			const double totalIndex = indexMonth * indexWeek * indexDay;
 			var tasks = totalIndex * _averageTasks;
 
-			var result = target.Forecast(historicalData, new DateOnlyPeriod(new DateOnly(2014, 1, 1), new DateOnly(2014, 1, 1)), false);
+			var result = target.Forecast(historicalData, new DateOnlyPeriod(new DateOnly(2014, 1, 1), new DateOnly(2014, 1, 1)));
 			var expected = tasks + linearTrend.Slope*new DateOnly(2014, 1, 1).Subtract(LinearTrend.StartDate).Days +
 						   linearTrend.Intercept - tasks;
-			result.Single().Tasks.Should().Be.EqualTo(Math.Round(expected, 4));
+			result.ForecastingTargets.Single().Tasks.Should().Be.EqualTo(Math.Round(expected, 4));
 		}
 
 		[Test]
@@ -85,11 +85,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Methods
 			const double totalIndex = indexMonth * indexWeek * indexDay;
 			var tasks = totalIndex * _averageTasks;
 
-			var result = target.Forecast(historicalData, new DateOnlyPeriod(new DateOnly(2014, 1, 1), new DateOnly(2014, 1, 1)), false);
+			var result = target.Forecast(historicalData, new DateOnlyPeriod(new DateOnly(2014, 1, 1), new DateOnly(2014, 1, 1)));
 			var expected = tasks + linearTrend.Slope * new DateOnly(2014, 1, 1).Subtract(LinearTrend.StartDate).Days +
 						   linearTrend.Intercept - tasks;
 			expected = Math.Max(0, expected);
-			result.Single().Tasks.Should().Be.EqualTo(Math.Round(expected, 4));
+			result.ForecastingTargets.Single().Tasks.Should().Be.EqualTo(Math.Round(expected, 4));
 		}
 	}
 }

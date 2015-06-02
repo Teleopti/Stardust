@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Methods
 			var outlierRemover = MockRepository.GenerateMock<IOutlierRemover>();
 			var target = new TeleoptiClassic(indexVolumes, outlierRemover);
 			outlierRemover.Stub(x => x.RemoveOutliers(historicalData, target)).Return(historicalData);
-			var result = target.Forecast(historicalData, new DateOnlyPeriod(new DateOnly(2014, 1, 1), new DateOnly(2014, 1, 1)), true);
+			var result = target.Forecast(historicalData, new DateOnlyPeriod(new DateOnly(2014, 1, 1), new DateOnly(2014, 1, 1)));
 			outlierRemover.AssertWasCalled(x => x.RemoveOutliers(historicalData, target));
 		}
 
@@ -64,8 +64,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Methods
 			const double totalIndex = indexMonth * indexWeek * indexDay;
 			var tasks = totalIndex * averageTasks;
 
-			var result = target.Forecast(historicalData, new DateOnlyPeriod(new DateOnly(2014, 1, 1), new DateOnly(2014, 1, 1)), false);
-			result.Single().Tasks.Should().Be.EqualTo(Math.Round(tasks, 4));
+			var result = target.Forecast(historicalData, new DateOnlyPeriod(new DateOnly(2014, 1, 1), new DateOnly(2014, 1, 1)));
+			result.ForecastingTargets.Single().Tasks.Should().Be.EqualTo(Math.Round(tasks, 4));
 		}
 	}
 }

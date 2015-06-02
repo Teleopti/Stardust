@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Outlier
 
 		public TaskOwnerPeriod RemoveOutliers(TaskOwnerPeriod historicalData, IForecastMethod forecastMethod)
 		{
-			var forecastResult = forecastMethod.Forecast(historicalData, new DateOnlyPeriod(historicalData.StartDate, historicalData.EndDate), false);
+			var forecastResult = forecastMethod.Forecast(historicalData, new DateOnlyPeriod(historicalData.StartDate, historicalData.EndDate));
 			var seasonalVariations = forecastResult.ForecastingTargets;
 
 			var averageTasks = historicalData.TotalStatisticCalculatedTasks / historicalData.TaskOwnerDayCollection.Count;

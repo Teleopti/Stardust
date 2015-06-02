@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Forecasting.Angel.Outlier;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
@@ -9,18 +8,14 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 	public abstract class TeleoptiClassicBase : IForecastMethod
 	{
 		private readonly IIndexVolumes _indexVolumes;
-		private readonly IOutlierRemover _outlierRemover;
 
-		protected TeleoptiClassicBase(IIndexVolumes indexVolumes, IOutlierRemover outlierRemover)
+		protected TeleoptiClassicBase(IIndexVolumes indexVolumes)
 		{
 			_indexVolumes = indexVolumes;
-			_outlierRemover = outlierRemover;
 		}
 
-		public virtual ForecastResult Forecast(TaskOwnerPeriod historicalData, DateOnlyPeriod futurePeriod, bool removeOutliers)
+		public virtual ForecastResult Forecast(TaskOwnerPeriod historicalData, DateOnlyPeriod futurePeriod)
 		{
-			historicalData = removeOutliers ? _outlierRemover.RemoveOutliers(historicalData, this) : historicalData;
-			
 			var volumes = _indexVolumes.Create(historicalData);
 			var averageStatistics = new AverageStatistics();
 			if (historicalData.TaskOwnerDayCollection.Count > 0)
@@ -45,8 +40,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 
 			return new ForecastResult
 			{
-				ForecastingTargets = targetForecastingList,
-				HistoricalDataRemovedOutliers = removeOutliers?historicalData.TaskOwnerDayCollection.Select(x => new DateAndTasks{ Date = x.CurrentDate, Tasks = x.TotalStatisticCalculatedTasks }).ToArray():new DateAndTasks[]{}
+				ForecastingTargets = targetForecastingList
 			};
 		}
 

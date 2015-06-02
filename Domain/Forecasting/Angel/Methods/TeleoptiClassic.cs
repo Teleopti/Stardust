@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 	public class TeleoptiClassic : TeleoptiClassicBase
 	{
 		public TeleoptiClassic(IIndexVolumes indexVolumes, IOutlierRemover outlierRemover)
-			: base(indexVolumes, outlierRemover)
+			: base(indexVolumes)
 		{
 		}
 

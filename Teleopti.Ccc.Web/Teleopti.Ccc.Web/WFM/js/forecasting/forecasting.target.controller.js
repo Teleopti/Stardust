@@ -16,7 +16,6 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 									{ id: "vb", type: "line", name: "Forecast Method" }];
 
 				$scope.dataColumns2 = [{ id: "vh", type: "line", name: "Queue Statistics" },
-									{ id: "vb", type: "line", name: "Forecast Method" },
 									{ id: "vh2", type: "line", name: "Queue Statistics without Outliers" }];
 
 				$scope.dataX = { id: "date" };

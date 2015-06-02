@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Historical;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
+using Teleopti.Ccc.Domain.Forecasting.Angel.Outlier;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
@@ -11,13 +13,15 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 		private readonly IForecastAccuracyCalculator _forecastAccuracyCalculator;
 		private readonly IForecastMethodProvider _forecastMethodProvider;
 		private readonly IHistoricalPeriodProvider _historicalPeriodProvider;
+		private readonly IOutlierRemover _outlierRemover;
 
-		public ForecastWorkloadEvaluator(IHistoricalData historicalData, IForecastAccuracyCalculator forecastAccuracyCalculator, IForecastMethodProvider forecastMethodProvider, IHistoricalPeriodProvider historicalPeriodProvider)
+		public ForecastWorkloadEvaluator(IHistoricalData historicalData, IForecastAccuracyCalculator forecastAccuracyCalculator, IForecastMethodProvider forecastMethodProvider, IHistoricalPeriodProvider historicalPeriodProvider, IOutlierRemover outlierRemover)
 		{
 			_historicalData = historicalData;
 			_forecastAccuracyCalculator = forecastAccuracyCalculator;
 			_forecastMethodProvider = forecastMethodProvider;
 			_historicalPeriodProvider = historicalPeriodProvider;
+			_outlierRemover = outlierRemover;
 		}
 
 		public WorkloadAccuracy Evaluate(IWorkload workload)
@@ -37,20 +41,24 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 
 			var result = new WorkloadAccuracy { Id = workload.Id.Value, Name = workload.Name};
 			var methods = _forecastMethodProvider.All();
-			var list = (from forecastMethod in methods
-				let forecastResult =
-					forecastMethod.Forecast(yearsBeforeLastYearData, new DateOnlyPeriod(oneYearBack, historicalData.EndDate), true)
-				select new MethodAccuracy
+			var methodsEvaluationResult = new List<MethodAccuracy>();
+			foreach (var forecastMethod in methods)
+			{
+				var yearsBeforeLastYearDataNoOutliers = _outlierRemover.RemoveOutliers(yearsBeforeLastYearData, forecastMethod);
+				var forecastResult = forecastMethod.Forecast(yearsBeforeLastYearDataNoOutliers, new DateOnlyPeriod(oneYearBack, historicalData.EndDate));
+				var threeYearsHistoricalDataNoOutliers = _outlierRemover.RemoveOutliers(historicalData, forecastMethod);
+				forecastResult.HistoricalDataRemovedOutliers = threeYearsHistoricalDataNoOutliers.TaskOwnerDayCollection.Select(
+					x => new DateAndTasks {Date = x.CurrentDate, Tasks = x.TotalStatisticCalculatedTasks}).ToArray();
+
+				methodsEvaluationResult.Add(new MethodAccuracy
 				{
-					MeasureResult = forecastResult.ForecastingTargets.ToArray(),
-					HistoricalDataRemovedOutliers = forecastResult.HistoricalDataRemovedOutliers,
-					Number = _forecastAccuracyCalculator.Accuracy(forecastResult.ForecastingTargets, lastYearData.TaskOwnerDayCollection),
-					MethodId = forecastMethod.Id
-				}).ToList();
-			var bestMethod = list.OrderByDescending(x => x.Number).First();
+					MeasureResult = forecastResult.ForecastingTargets.ToArray(), HistoricalDataRemovedOutliers = forecastResult.HistoricalDataRemovedOutliers, Number = _forecastAccuracyCalculator.Accuracy(forecastResult.ForecastingTargets, lastYearData.TaskOwnerDayCollection), MethodId = forecastMethod.Id
+				});
+			}
+			var bestMethod = methodsEvaluationResult.OrderByDescending(x => x.Number).First();
 			bestMethod.IsSelected = true;
 
-			result.Accuracies = list.ToArray();
+			result.Accuracies = methodsEvaluationResult.ToArray();
 			return result;
 		}
 	}

@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 {
 	public interface IForecastMethod
 	{
-		ForecastResult Forecast(TaskOwnerPeriod historicalData, DateOnlyPeriod futurePeriod, bool removeOutliers);
+		ForecastResult Forecast(TaskOwnerPeriod historicalData, DateOnlyPeriod futurePeriod);
 		ForecastMethodType Id { get; }
 	}
 }

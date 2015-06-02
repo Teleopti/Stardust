@@ -45,7 +45,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 			var historicalPeriodProvider = MockRepository.GenerateMock<IHistoricalPeriodProvider>();
 			historicalPeriodProvider.Stub(x => x.PeriodForForecast(Workload)).Return(HistoricalPeriodForForecast);
 
-			var target = new ForecastWorkloadEvaluator(new HistoricalData(dailyStatistics), new ForecastingWeightedMeanAbsolutePercentageError(), new ForecastMethodProvider(new IndexVolumes(), linearRegressionTrend, new OutlierRemover()), historicalPeriodProvider);
+			var outlierRemover = new OutlierRemover();
+			var target = new ForecastWorkloadEvaluator(new HistoricalData(dailyStatistics), new ForecastingWeightedMeanAbsolutePercentageError(), new ForecastMethodProvider(new IndexVolumes(), linearRegressionTrend, outlierRemover), historicalPeriodProvider, outlierRemover);
 			var measurementResult = target.Evaluate(Workload);
 
 			Assert(measurementResult);

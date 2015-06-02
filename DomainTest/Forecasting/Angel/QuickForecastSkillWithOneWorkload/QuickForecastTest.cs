@@ -53,11 +53,12 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 			var futureData =new FutureData();
 			var historicalData = new HistoricalData(dailyStatistics);
 			var methodProvider = new ForecastMethodProvider(new IndexVolumes(), new LinearRegressionTrend(), new OutlierRemover());
-			var quickForecasterWorkload = new QuickForecasterWorkload(historicalData, futureData, methodProvider, new ForecastingTargetMerger());
+			var outlierRemover = new OutlierRemover();
+			var quickForecasterWorkload = new QuickForecasterWorkload(historicalData, futureData, methodProvider, new ForecastingTargetMerger(), outlierRemover);
 			var historicalPeriodProvider = MockRepository.GenerateMock<IHistoricalPeriodProvider>();
 			historicalPeriodProvider.Stub(x => x.PeriodForForecast(Workload)).Return(HistoricalPeriodForForecast);
 			var forecastMethodProvider = methodProvider;
-			var quickForecastWorkloadEvaluator = new ForecastWorkloadEvaluator(historicalData, new ForecastingWeightedMeanAbsolutePercentageError(), forecastMethodProvider, historicalPeriodProvider);
+			var quickForecastWorkloadEvaluator = new ForecastWorkloadEvaluator(historicalData, new ForecastingWeightedMeanAbsolutePercentageError(), forecastMethodProvider, historicalPeriodProvider, outlierRemover);
 			var target = new QuickForecaster(quickForecasterWorkload,
 				new FetchAndFillSkillDays(SkillDayRepository(skillDays), currentScenario,
 					new SkillDayRepository(MockRepository.GenerateStrictMock<ICurrentUnitOfWork>())), quickForecastWorkloadEvaluator, historicalPeriodProvider);

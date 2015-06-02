@@ -35,7 +35,8 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 			var evaluateResult = _forecastWorkloadEvaluator.Evaluate(workload);
 			var bestAccuracy = evaluateResult.Accuracies.SingleOrDefault(x => x.IsSelected);
 
-			var isForecastingTest = bool.Parse(ConfigurationManager.AppSettings["ForecastingTest"]);
+			var appSetting = ConfigurationManager.AppSettings["ForecastingTest"];
+			var isForecastingTest = appSetting != null && bool.Parse(appSetting);
 			return new WorkloadForecastViewModel
 			{
 				Name = workload.Name,
