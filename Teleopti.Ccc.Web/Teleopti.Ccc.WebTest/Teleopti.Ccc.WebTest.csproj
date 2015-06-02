@@ -275,7 +275,6 @@
     <Compile Include="Areas\SeatPlanner\Controllers\TeamHierarchyControllerTest.cs" />
     <Compile Include="Areas\Start\Controllers\ConfigControllerTest.cs" />
     <Compile Include="Areas\Start\Core\Config\SharedSettingsFactoryTest.cs" />
-    <Compile Include="Areas\MultiTenancy\Core\SuccessfulTenantCheckPasswordChange.cs" />
     <Compile Include="Areas\MultiTenancy\Core\VerifyPasswordPolicyTest.cs" />
     <Compile Include="Areas\MultiTenancy\Core\DataSourceConfigurationProviderFake.cs" />
     <Compile Include="Areas\MultiTenancy\Core\DataSourceConfigurationProviderUsingNhibFilesTest.cs" />
