@@ -14,20 +14,16 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 			InvalidAttemptsSequenceStart = DateTime.UtcNow;
 		}
 
-		//make private when old schema is gone
 		public virtual DateTime LastPasswordChange { get; protected set; }
-		public virtual DateTime InvalidAttemptsSequenceStart { get; protected set; }
-		//make private when old schema is gone
 		public virtual int InvalidAttempts { get; protected set; }
 		public virtual bool IsLocked { get; protected set; }
-
 		public virtual string ApplicationLogonName { get; protected set; }
-		//make private when oldschema is gone!
-		public virtual string ApplicationLogonPassword { get; protected set; }
 
-		internal void RegisterPasswordChange()
+		protected virtual string ApplicationLogonPassword { get; set; }
+		protected virtual DateTime InvalidAttemptsSequenceStart { get; set; }
+		
+		private void registerPasswordChange()
 		{
-			//make private when old schema is gone
 			LastPasswordChange = DateTime.UtcNow;
 			InvalidAttempts = 0;
 			IsLocked = false;
@@ -37,7 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		{
 			setPassword(checkPasswordStrength, password);
 			ApplicationLogonName = logonName;
-			RegisterPasswordChange();
+			registerPasswordChange();
 		}
 
 		private void setPassword(ICheckPasswordStrength checkPasswordStrength, string newPassword)

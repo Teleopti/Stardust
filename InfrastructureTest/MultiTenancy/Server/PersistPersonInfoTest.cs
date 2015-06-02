@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		[Test]
 		public void ShouldUpdatePersonInfo()
 		{
-			var newPassword = RandomName.Make();
+			var newLogonName = RandomName.Make();
 
 			var session = _tenantUnitOfWorkManager.CurrentSession();
 
@@ -71,13 +71,13 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 			session.Flush();
 			session.Clear();
 
-			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), newPassword);
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), newLogonName, RandomName.Make());
 			target.Persist(personInfo);
 
 			session.Flush();
 			session.Clear();
 			var loaded = session.Get<PersonInfo>(id);
-			loaded.ApplicationLogonInfo.ApplicationLogonPassword.Should().Be.EqualTo(EncryptPassword.ToDbFormat(newPassword));
+			loaded.ApplicationLogonInfo.ApplicationLogonName.Should().Be.EqualTo(newLogonName);
 			loaded.Id.Should().Be.EqualTo(id);
 		}
 
