@@ -1289,50 +1289,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(2, testList.Count);
 		}
 
-		[Test]
-		public void VerifyFindPersonsWithGivenUserCredentials()
-		{
-			IPerson person1 = PersonFactory.CreatePersonWithIdentityPermissionInfo("sunil");
-			PersistAndRemoveFromUnitOfWork(person1);
-			IPerson person2 = PersonFactory.CreatePersonWithIdentityPermissionInfo("kamal");
-			PersistAndRemoveFromUnitOfWork(person2);
-			IPerson person3 = PersonFactory.CreatePersonWithIdentityPermissionInfo("nimal");
-			PersistAndRemoveFromUnitOfWork(person3);
-
-			var pr = new PersonRepository(UnitOfWork);
-
-			IList<IPerson> personList = new List<IPerson>(1);
-			person1.AuthenticationInfo.Identity = "kamal";
-			personList.Add(person1);
-
-			var returned = pr.FindPersonsWithGivenUserCredentials(personList);
-			Assert.That(returned.Count(), Is.GreaterThan(0));
-
-			personList[0].ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo { ApplicationLogOnName = "virajs", Password = "passadej" };
-			returned = pr.FindPersonsWithGivenUserCredentials(personList);
-			Assert.That(returned.Count(), Is.GreaterThan(0));
-		}
-
-		[Test]
-		public void ShouldNotFindPersonsWithGivenUserCredentialsWithEmptyLogOnName()
-		{
-			IPerson person1 = PersonFactory.CreatePersonWithIdentityPermissionInfo("sunil");
-			PersistAndRemoveFromUnitOfWork(person1);
-			IPerson person2 = PersonFactory.CreatePersonWithIdentityPermissionInfo("");
-			PersistAndRemoveFromUnitOfWork(person2);
-			IPerson person3 = PersonFactory.CreatePersonWithIdentityPermissionInfo("nimal");
-			PersistAndRemoveFromUnitOfWork(person3);
-
-			var pr = new PersonRepository(UnitOfWork);
-
-			IList<IPerson> personList = new List<IPerson>(1);
-			person1.AuthenticationInfo.Identity = "";
-			personList.Add(person1);
-
-			var returned = pr.FindPersonsWithGivenUserCredentials(personList);
-			Assert.That(returned.Count(), Is.EqualTo(0));
-		}
-
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Samisk")]
 		[Test, Explicit("This one fails on some enviroments. Xp os? Bug id 6318. Have a look at this again when NH is upgraded to 3.x ")]

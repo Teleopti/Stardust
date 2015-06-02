@@ -589,57 +589,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 											  .Add(Restrictions.Le("StartDate", dateOnlyPeriod.StartDate))));
 		}
 
-		public IList<IPerson> FindPersonsWithGivenUserCredentials(IList<IPerson> persons)
-		{
-			var result = new List<IPerson>();
-			foreach (var personCollection in persons.Batch(200))
-			{
-				var personInfoList = personCollection.Select(p => new
-				{
-					Identity = p.AuthenticationInfo == null ? "" : p.AuthenticationInfo.Identity,
-					ApplicationAuthentication = p.ApplicationAuthenticationInfo == null ? "" : p.ApplicationAuthenticationInfo.ApplicationLogOnName,
-					p.Id
-				}).ToList();
-
-				string[] windowsLogOns = personInfoList.Where(p => !String.IsNullOrEmpty(p.Identity)).Select(p => p.Identity).ToArray();
-				string[] applicationLogOns = personInfoList.Where(p => !String.IsNullOrEmpty(p.ApplicationAuthentication)).Select(p => p.ApplicationAuthentication).ToArray();
-				Guid[] winlogonNullIds =
-					 (from p in personInfoList
-					  where String.IsNullOrEmpty(p.Identity)
-					  select p.Id.GetValueOrDefault()).ToArray();
-				Guid[] ids = (from p in personInfoList
-								  where
-										p.Id.HasValue &&
-										!String.IsNullOrEmpty(p.Identity)
-								  select p.Id.GetValueOrDefault()).ToArray();
-
-				int idsBeforeLength = ids.Length;
-				int idsAfterLength = idsBeforeLength + winlogonNullIds.Length;
-
-				Array.Resize(ref ids, idsAfterLength);
-				Array.Copy(winlogonNullIds, 0, ids, (idsBeforeLength > 0) ? (idsBeforeLength - 1) : 0,
-							  winlogonNullIds.Length);
-
-				result.AddRange(Session.CreateCriteria(typeof(IPerson)).Add
-					  (
-							Restrictions.And
-								 (
-									  Restrictions.Or
-											(
-												 Restrictions.In(
-													  "ApplicationAuthenticationInfo.ApplicationLogOnName",
-													  applicationLogOns),
-												 Restrictions.In(
-																 "AuthenticationInfo.Identity",
-																 windowsLogOns)
-											),
-									  Restrictions.Not(Restrictions.In("Id", ids))
-								 )
-					  ).List<IPerson>());
-			}
-			return result;
-		}
-
 		public IPerson LoadAggregate(Guid id) { return Load(id); }
 
 		public bool DoesPersonHaveExternalLogOn(DateOnly dateTime, Guid personId)

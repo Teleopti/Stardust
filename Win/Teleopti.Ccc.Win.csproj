@@ -1401,12 +1401,6 @@
     <Compile Include="PeopleAdmin\Views\ShiftCategoryLimitationView.Designer.cs">
       <DependentUpon>ShiftCategoryLimitationView.cs</DependentUpon>
     </Compile>
-    <Compile Include="PeopleAdmin\Views\UserCredentialConflicts.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="PeopleAdmin\Views\UserCredentialConflicts.Designer.cs">
-      <DependentUpon>UserCredentialConflicts.cs</DependentUpon>
-    </Compile>
     <Compile Include="PerformanceManager\PerformanceManagerNavigator.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -2962,9 +2956,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="PeopleAdmin\Views\ShiftCategoryLimitationView.resx">
       <DependentUpon>ShiftCategoryLimitationView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PeopleAdmin\Views\UserCredentialConflicts.resx">
-      <DependentUpon>UserCredentialConflicts.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Common\AbstractNavigator.resx">
       <DependentUpon>AbstractNavigator.cs</DependentUpon>

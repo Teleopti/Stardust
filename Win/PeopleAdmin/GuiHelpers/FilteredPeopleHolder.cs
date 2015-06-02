@@ -1305,23 +1305,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 			}
 		}
 
-		public IList<ISameUserCredentialOnOther> CheckForDuplicateUserNames()
-		{
-			var retList = new List<ISameUserCredentialOnOther>();
-			if (_validateUserCredentialsCollection.Count > 0)
-			{
-				using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-				{
-					var rep = new PersonRepository(uow);
-					var sameUserCredentialOnOtherChecker =
-						 new SameUserCredentialOnOtherChecker(rep);
-					retList.AddRange(
-						 sameUserCredentialOnOtherChecker.CheckConflictsBeforeSave(_validateUserCredentialsCollection));
-				}
-			}
-			return retList;
-		}
-
 		public bool CheckBadPasswordPolicy()
 		{
 			return ValidatePasswordPolicy.Count <= 0;

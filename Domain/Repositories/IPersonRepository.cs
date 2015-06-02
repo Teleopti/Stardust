@@ -49,17 +49,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		ICollection<IPerson> FindPeopleInOrganization(DateOnlyPeriod period, bool includeRuleSetData);
 
 		/// <summary>
-		/// Finds the persons with given user credentials.
-		/// </summary>
-		/// <param name="persons">The person collection.</param>
-		/// <returns></returns>
-		/// <remarks>
-		/// Created by:VirajS
-		/// Created date: 2008-10-29
-		/// </remarks>
-		IList<IPerson> FindPersonsWithGivenUserCredentials(IList<IPerson> persons);
-
-		/// <summary>
 		/// Finds the people by employment number
 		/// </summary>
 		/// <param name="employmentNumber">The employment number.</param>

@@ -519,7 +519,6 @@
     <Compile Include="PeopleAdmin\Commands\PersonFinderPreviousCommand.cs" />
     <Compile Include="PeopleAdmin\PersonFinderSettings.cs" />
     <Compile Include="PeopleAdmin\PersonSkillStringParser.cs" />
-    <Compile Include="PeopleAdmin\SameUserCredentialOnOtherChecker.cs" />
     <Compile Include="Permissions\Commands\LoadRolesAndPersonsOnDataRangeLightCommand.cs" />
     <Compile Include="Permissions\Commands\LoadRolesAndPersonsOnDataLightCommand.cs" />
     <Compile Include="Permissions\Commands\LoadDataOnPersonsLightCommand.cs" />

@@ -214,17 +214,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 				return false;
 			}
 
-			//After all other validations done. need to check duplicate user credentials.
-			var conflicts = _filteredPeopleHolder.CheckForDuplicateUserNames();
-			if(conflicts.Count > 0)
-			{
-				using (var conflictForm = new UserCredentialConflicts(conflicts))
-				{
-					conflictForm.ShowDialog();
-				}
-				return false;
-			}
-
 			//Hmm, if a bad password has been entered, the user need to set a good one before save
 			//Actually we dont change it if its bad, but there could be bad passwords in the db, before the "change" was done.
 			if (!_filteredPeopleHolder.CheckBadPasswordPolicy())
