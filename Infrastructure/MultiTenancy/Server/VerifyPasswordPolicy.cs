@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 			{
 				result.HasMessage = true;
 				result.Message = string.Format(CultureInfo.CurrentUICulture, UserTexts.Resources.LogOnWarningPasswordWillSoonExpire,
-										  (int)expirationDate.Subtract(utcNow).TotalDays);
+										  Math.Ceiling(expirationDate.Subtract(utcNow).TotalDays));
 			}
 			return result;
 		}

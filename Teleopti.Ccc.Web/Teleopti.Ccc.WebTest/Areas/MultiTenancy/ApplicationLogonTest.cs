@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
@@ -38,7 +39,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		[Test]
 		public void NonExistingUserShouldFail()
 		{
-			var result = Target.ApplicationLogon(new ApplicationLogonModel {UserName = RandomName.Make(), Password = RandomName.Make()}).Result<TenantAuthenticationResult>();
+			var result =
+				Target.ApplicationLogon(new ApplicationLogonModel {UserName = RandomName.Make(), Password = RandomName.Make()})
+					.Result<TenantAuthenticationResult>();
 
 			result.Success.Should().Be.False();
 			result.FailReason.Should().Be.EqualTo(Resources.LogOnFailedInvalidUserNameOrPassword);
@@ -48,11 +51,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		public void IncorrectPasswordShouldFail()
 		{
 			var logonName = RandomName.Make();
-			var personInfo= new PersonInfo();
+			var personInfo = new PersonInfo();
 			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), logonName, RandomName.Make());
 			ApplicationUserQuery.Has(personInfo);
 
-			var result = Target.ApplicationLogon(new ApplicationLogonModel { UserName = logonName, Password = RandomName.Make() }).Result<TenantAuthenticationResult>();
+			var result =
+				Target.ApplicationLogon(new ApplicationLogonModel {UserName = logonName, Password = RandomName.Make()})
+					.Result<TenantAuthenticationResult>();
 
 			result.Success.Should().Be.False();
 			result.FailReason.Should().Be.EqualTo(Resources.LogOnFailedInvalidUserNameOrPassword);
@@ -68,7 +73,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			ApplicationUserQuery.Has(personInfo);
 			DataSourceConfigurationProvider.Has(new Tenant("another tenant"), new DataSourceConfiguration());
 
-			var result = Target.ApplicationLogon(new ApplicationLogonModel { UserName = logonName, Password = password }).Result<TenantAuthenticationResult>();
+			var result =
+				Target.ApplicationLogon(new ApplicationLogonModel {UserName = logonName, Password = password})
+					.Result<TenantAuthenticationResult>();
 
 			result.Success.Should().Be.False();
 			result.FailReason.Should().Be.EqualTo(Resources.NoDatasource);
@@ -86,7 +93,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			ApplicationUserQuery.Has(personInfo);
 			DataSourceConfigurationProvider.Has(tenant, dataSourceConfiguration);
 
-			var res = Target.ApplicationLogon(new ApplicationLogonModel { UserName = logonName, Password = password }).Result<TenantAuthenticationResult>();
+			var res =
+				Target.ApplicationLogon(new ApplicationLogonModel {UserName = logonName, Password = password})
+					.Result<TenantAuthenticationResult>();
 
 			res.Success.Should().Be.True();
 			res.Tenant.Should().Be.EqualTo(personInfo.Tenant.Name);
@@ -106,7 +115,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			ApplicationUserQuery.Has(personInfo);
 			DataSourceConfigurationProvider.Has(personInfo.Tenant, datasourceConfiguration);
 
-			Target.ApplicationLogon(new ApplicationLogonModel { UserName = logonName, Password = password}).Result<TenantAuthenticationResult>();
+			Target.ApplicationLogon(new ApplicationLogonModel {UserName = logonName, Password = password})
+				.Result<TenantAuthenticationResult>();
 
 			LogLogonAttempt.PersonId.Should().Be.EqualTo(personInfo.Id);
 			LogLogonAttempt.Successful.Should().Be.True();
@@ -117,9 +127,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		[Test]
 		public void ShouldLogApplicationLogonUnsuccessful()
 		{
-			var logonName= RandomName.Make();
+			var logonName = RandomName.Make();
 
-			Target.ApplicationLogon(new ApplicationLogonModel { UserName = logonName, Password = RandomName.Make() }).Result<TenantAuthenticationResult>();
+			Target.ApplicationLogon(new ApplicationLogonModel {UserName = logonName, Password = RandomName.Make()})
+				.Result<TenantAuthenticationResult>();
 
 			LogLogonAttempt.PersonId.Should().Be.EqualTo(Guid.Empty);
 			LogLogonAttempt.Successful.Should().Be.False();
@@ -135,8 +146,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), logonName, RandomName.Make());
 			ApplicationUserQuery.Has(personInfo);
 
-			Target.ApplicationLogon(new ApplicationLogonModel { UserName = logonName, Password = RandomName.Make() });
-			Target.ApplicationLogon(new ApplicationLogonModel { UserName = logonName, Password = RandomName.Make() });
+			Target.ApplicationLogon(new ApplicationLogonModel {UserName = logonName, Password = RandomName.Make()});
+			Target.ApplicationLogon(new ApplicationLogonModel {UserName = logonName, Password = RandomName.Make()});
 
 			personInfo.ApplicationLogonInfo.InvalidAttempts
 				.Should().Be.EqualTo(2);
@@ -153,9 +164,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			PasswordPolicy.MaxAttemptCount = 1;
 			PasswordPolicy.InvalidAttemptWindow = TimeSpan.FromHours(1);
 
-			Target.ApplicationLogon(new ApplicationLogonModel { UserName = logonName, Password = RandomName.Make() });
+			Target.ApplicationLogon(new ApplicationLogonModel {UserName = logonName, Password = RandomName.Make()});
 			personInfo.ApplicationLogonInfo.IsLocked.Should().Be.False();
-			Target.ApplicationLogon(new ApplicationLogonModel { UserName = logonName, Password = RandomName.Make() });
+			Target.ApplicationLogon(new ApplicationLogonModel {UserName = logonName, Password = RandomName.Make()});
 			personInfo.ApplicationLogonInfo.IsLocked.Should().Be.True();
 
 			TenantUnitOfWork.WasCommitted.Should().Be.True();
@@ -171,11 +182,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			ApplicationUserQuery.Has(personInfo);
 			PasswordPolicy.MaxAttemptCount = 1;
 
-			Target.ApplicationLogon(new ApplicationLogonModel { UserName = logonName, Password = RandomName.Make() });
+			Target.ApplicationLogon(new ApplicationLogonModel {UserName = logonName, Password = RandomName.Make()});
 			personInfo.ApplicationLogonInfo.InvalidAttempts.Should().Be.EqualTo(1);
-			Target.ApplicationLogon(new ApplicationLogonModel { UserName = logonName, Password = password });
+			Target.ApplicationLogon(new ApplicationLogonModel {UserName = logonName, Password = password});
 			personInfo.ApplicationLogonInfo.InvalidAttempts.Should().Be.EqualTo(0);
-			
+
 			TenantUnitOfWork.WasCommitted.Should().Be.True();
 		}
 
@@ -190,13 +201,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			PasswordPolicy.InvalidAttemptWindow = TimeSpan.FromHours(1);
 
 			Now.Is(DateTime.Now);
-			Target.ApplicationLogon(new ApplicationLogonModel { UserName = logonName, Password = RandomName.Make() });
-			Target.ApplicationLogon(new ApplicationLogonModel { UserName = logonName, Password = RandomName.Make() });
+			Target.ApplicationLogon(new ApplicationLogonModel {UserName = logonName, Password = RandomName.Make()});
+			Target.ApplicationLogon(new ApplicationLogonModel {UserName = logonName, Password = RandomName.Make()});
 			personInfo.ApplicationLogonInfo.InvalidAttempts.Should().Be.EqualTo(2);
 
 			//logon two hours later
 			Now.Is(DateTime.Now.AddHours(2));
-			Target.ApplicationLogon(new ApplicationLogonModel { UserName = logonName, Password = RandomName.Make() });
+			Target.ApplicationLogon(new ApplicationLogonModel {UserName = logonName, Password = RandomName.Make()});
 			personInfo.ApplicationLogonInfo.InvalidAttempts.Should().Be.EqualTo(1);
 
 			TenantUnitOfWork.WasCommitted.Should().Be.True();
@@ -212,10 +223,49 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			personInfo.ApplicationLogonInfo.Lock();
 			ApplicationUserQuery.Has(personInfo);
 
-			var res = Target.ApplicationLogon(new ApplicationLogonModel { UserName = logonName, Password = password }).Result<TenantAuthenticationResult>();
+			var res =
+				Target.ApplicationLogon(new ApplicationLogonModel {UserName = logonName, Password = password})
+					.Result<TenantAuthenticationResult>();
 
 			res.Success.Should().Be.False();
 			res.FailReason.Should().Be.EqualTo(Resources.LogOnFailedAccountIsLocked);
+		}
+
+		[Test]
+		public void PasswordThatWillExpireSoonShouldSuccedButHaveFailReasonSet()
+		{
+			var logonName = RandomName.Make();
+			var password = RandomName.Make();
+			var personInfo = new PersonInfo(new Tenant(RandomName.Make()), Guid.NewGuid());
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), logonName, password);
+			ApplicationUserQuery.Has(personInfo);
+			DataSourceConfigurationProvider.Has(personInfo.Tenant, new DataSourceConfiguration());
+			PasswordPolicy.PasswordValidForDayCount = 1;
+			PasswordPolicy.PasswordExpireWarningDayCount = 2;
+
+			var result = Target.ApplicationLogon(new ApplicationLogonModel {UserName = logonName, Password = password}).Result<TenantAuthenticationResult>();
+
+			result.Success.Should().Be.True();
+			result.FailReason.Should()
+				.Be.EqualTo(string.Format(CultureInfo.CurrentUICulture, Resources.LogOnWarningPasswordWillSoonExpire, 1));
+		}
+
+		[Test]
+		public void ExpiredPasswordShouldFail()
+		{
+			var logonName = RandomName.Make();
+			var password = RandomName.Make();
+			var personInfo = new PersonInfo(new Tenant(RandomName.Make()), Guid.NewGuid());
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), logonName, password);
+			ApplicationUserQuery.Has(personInfo);
+			DataSourceConfigurationProvider.Has(personInfo.Tenant, new DataSourceConfiguration());
+			PasswordPolicy.PasswordValidForDayCount = 0;
+
+			var result = Target.ApplicationLogon(new ApplicationLogonModel { UserName = logonName, Password = password }).Result<TenantAuthenticationResult>();
+
+			result.Success.Should().Be.False();
+			result.FailReason.Should()
+				.Be.EqualTo(string.Format(CultureInfo.CurrentUICulture, Resources.LogOnFailedPasswordExpired));
 		}
 	}
 }
