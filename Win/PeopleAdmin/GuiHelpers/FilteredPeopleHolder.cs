@@ -13,7 +13,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
@@ -21,7 +20,6 @@ using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.PeopleAdmin.Views;
-using Teleopti.Ccc.WinCode.PeopleAdmin;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -343,24 +341,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 			LoadPersonRotations(foundPeople, today, personRotationRep);
 			LoadPersonAvailabilities(foundPeople, personAvailRep);
 
-			var repositoryFactory = new RepositoryFactory();
-			var repository = repositoryFactory.CreateUserDetailRepository(GetUnitOfWork);
-			var userDetails = repository.FindByUsers(foundPeople);
-
 			foreach (var person in _filteredPersonCollection)
 			{
-				IUserDetail ud;
-				if (userDetails.ContainsKey(person))
-				{
-					ud = userDetails[person];
-				}
-				else
-				{
-					ud = new UserDetail(person);
-					repository.Add(ud);
-				}
-
-				loadFilteredPeopleGridData(person, ud, GetLogonInfoModelFromPersonId(person.Id.GetValueOrDefault()));
+				loadFilteredPeopleGridData(person, GetLogonInfoModelFromPersonId(person.Id.GetValueOrDefault()));
 				getParentPersonPeriods(person, today);
 				GetParentSchedulePeriods(person, today);
 				GetParentPersonAccounts(person, today);
@@ -386,24 +369,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 				LoadPersonRotations(people, today, personRotationRep);
 				LoadPersonAvailabilities(people, personAvailRep);
 
-				var repositoryFactory = new RepositoryFactory();
-				var repository = repositoryFactory.CreateUserDetailRepository(GetUnitOfWork);
-				var userDetails = repository.FindByUsers(people);
-
 				foreach (var person in _filteredPersonCollection)
 				{
-					IUserDetail ud;
-					if (userDetails.ContainsKey(person))
-					{
-						ud = userDetails[person];
-					}
-					else
-					{
-						ud = new UserDetail(person);
-						repository.Add(ud);
-					}
-
-					loadFilteredPeopleGridData(person, ud, GetLogonInfoModelFromPersonId(person.Id.GetValueOrDefault()));
+					loadFilteredPeopleGridData(person, GetLogonInfoModelFromPersonId(person.Id.GetValueOrDefault()));
 					getParentPersonPeriods(person, today);
 					GetParentSchedulePeriods(person, today);
 					GetParentPersonAccounts(person, today);
@@ -435,11 +403,10 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 			_personAccountGridViewAdaptorCollection.Clear();
 		}
 
-		private void loadFilteredPeopleGridData(IPerson person, IUserDetail userDetail, LogonInfoModel logonInfoModel)
+		private void loadFilteredPeopleGridData(IPerson person,   LogonInfoModel logonInfoModel)
 		{
 			//create new person grid data.
-			var personGridData = new PersonGeneralModel(person, userDetail,
-				new PrincipalAuthorization(new CurrentTeleoptiPrincipal()),
+			var personGridData = new PersonGeneralModel(person, new PrincipalAuthorization(new CurrentTeleoptiPrincipal()),
 				new FilteredPeopleAccountUpdater(this, UnitOfWorkFactory.Current), logonInfoModel);
 
 			//set optional columns if any.

@@ -3,7 +3,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
@@ -37,7 +36,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 				  team);
 			_base.AddPersonPeriod(_personPeriod);
 			_principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
-			_target = new PersonGeneralModel(_base, new UserDetail(_base), _principalAuthorization,
+			_target = new PersonGeneralModel(_base, _principalAuthorization,
 				new PersonAccountUpdaterDummy(), new LogonInfoModel());
 		}
 
@@ -221,12 +220,12 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 		public void ShouldSayValidPasswordWhenApplicationLogOnNameIsEmpty()
 		{
 			_base = new Person();
-			var userDetail = MockRepository.GenerateMock<IUserDetail>();
+			
 			_principalAuthorization.Stub(
 				x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword, DateOnly.Today, _base))
 				.Return(true);
 			
-			_target = new PersonGeneralModel(_base, userDetail, _principalAuthorization, new PersonAccountUpdaterDummy(),
+			_target = new PersonGeneralModel(_base,  _principalAuthorization, new PersonAccountUpdaterDummy(),
 				new LogonInfoModel {LogonName = "" });
 			_target.IsValid.Should().Be.True();
 		}
@@ -236,12 +235,12 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 		{
 			const string setValue = "passwordX07";
 			_base = MockRepository.GenerateMock<IPerson>();
-			var userDetail = MockRepository.GenerateMock<IUserDetail>();
+			
 			
 			_principalAuthorization.Stub(
 				x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword, DateOnly.Today, _base))
 				.Return(true);
-			_target = new PersonGeneralModel(_base, userDetail, _principalAuthorization, new PersonAccountUpdaterDummy(),
+			_target = new PersonGeneralModel(_base,  _principalAuthorization, new PersonAccountUpdaterDummy(),
 				new LogonInfoModel()) {LogOnName = "userx07", Password = "" };
 			_target.Password = setValue;
 			_target.TenantData.Password.Should().Be.EqualTo(setValue);
@@ -368,7 +367,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 				x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword, DateOnly.Today, _base))
 				.Return(false);
 
-			_target = new PersonGeneralModel(_base, new UserDetail(_base), _principalAuthorization,
+			_target = new PersonGeneralModel(_base, _principalAuthorization,
 				new PersonAccountUpdaterDummy(), new LogonInfoModel{LogonName = oldLogOnInfo, Identity = oldLogOnInfo});
 			_target.ApplicationLogOnName.Should().Be.EqualTo(oldLogOnInfo);
 			_target.ApplicationLogOnName = "";
@@ -385,7 +384,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 		{
 			const string setValue = "passwordX07";
 			_base = MockRepository.GenerateMock<IPerson>();
-			var userDetail = MockRepository.GenerateMock<IUserDetail>();
+			
 			var authInfo = MockRepository.GenerateMock<IApplicationAuthenticationInfo>();
 
 			_base.Stub(x => x.ApplicationAuthenticationInfo).Return(authInfo).Repeat.AtLeastOnce();
@@ -394,9 +393,9 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 			_principalAuthorization.Stub(
 				x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword, DateOnly.Today, _base))
 				.Return(true);
-			_base.Stub(x => x.ChangePassword(setValue, null, userDetail)).Return(true).Repeat.Twice();
+			_base.Stub(x => x.ChangePassword(setValue, null)).Return(true).Repeat.Twice();
 
-			_target = new PersonGeneralModel(_base, userDetail, _principalAuthorization, new PersonAccountUpdaterDummy(), new LogonInfoModel());
+			_target = new PersonGeneralModel(_base, _principalAuthorization, new PersonAccountUpdaterDummy(), new LogonInfoModel());
 
 			_target.TenantData.Changed.Should().Be.False();
 			_target.Password = setValue;

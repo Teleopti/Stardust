@@ -11,22 +11,11 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 {
-	public class UserLogonDetailConfigurable : IUserDataSetup, ITenantUserSetup
+	public class UserLogonDetailConfigurable :  ITenantUserSetup
 	{
 		public bool? IsLocked { get; set; }
 		public int? LastPasswordChangeXDaysAgo { get; set; }
 
-		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
-		{
-			var userDetail = new UserDetail(user);
-			if (LastPasswordChangeXDaysAgo != null)
-				userDetail.LastPasswordChange = DateTime.UtcNow.AddDays(-LastPasswordChangeXDaysAgo.Value);
-			if (IsLocked != null && IsLocked.Value)
-				userDetail.Lock();
-
-			var userDetailRepository = new UserDetailRepository(uow);
-			userDetailRepository.Add(userDetail);
-		}
 
 		public void Apply(Tenant tenant, ICurrentTenantSession tenantSession, IPerson user)
 		{

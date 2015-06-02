@@ -15,7 +15,7 @@ Background:
 	And I have a role with
 	| Field | Value |
 	| Name  | Agent |
-
+@Ignore
 Scenario: Change password fails against the policy
 	Given I am a user signed in with
 	| Field    | Value     |
@@ -28,7 +28,7 @@ Scenario: Change password fails against the policy
 	| Confirmed Password | aa        |
 	| Old Password       | P@ssword1 |
 	Then I should see password change failed with message
-
+@Ignore
 Scenario: Sign in fails after account is locked
 	Given I have user logon details with
 	| Field    | Value |
@@ -43,7 +43,7 @@ Scenario: Sign in fails after account is locked
 	| Password | P@ssword1 |
 	Then I should not be signed in
 	And I should see a log on error 'LogOnFailedAccountIsLocked'
-
+@Ignore
 Scenario: See change password when password will expire soon
 	Given I have user logon details with
 	| Field                           | Value |
@@ -57,7 +57,7 @@ Scenario: See change password when password will expire soon
 	| UserName | aa        |
 	| Password | P@ssword1 |
 	Then I should see change password page with warning 'Your password will expire soon'
-
+@Ignore
 Scenario: Skip change password when password will expire soon
 	Given I have user logon details with
 	| Field                           | Value |
@@ -72,7 +72,7 @@ Scenario: Skip change password when password will expire soon
 	| Password | P@ssword1 |
 	And I click skip button
 	Then I should be signed in
-
+@Ignore
 Scenario: See change password when password already expired
 	Given I have user logon details with
 	| Field                           | Value |
@@ -87,7 +87,7 @@ Scenario: See change password when password already expired
 	| Password | P@ssword1 |
 	Then I should see must change password page with warning 'YourPasswordHasAlreadyExpired'
 	And I should not see skip button
-
+@Ignore
 Scenario: Manually navigate to other page when sign in with password already expired
 	Given I have user logon details with
 	| Field                           | Value |
@@ -103,7 +103,7 @@ Scenario: Manually navigate to other page when sign in with password already exp
 	And I see must change password page with warning 'YourPasswordHasAlreadyExpired'
 	And I manually navigate to week schedule page
 	Then I should see the sign in page
-
+@Ignore
 Scenario: Change password successfully
 	Given I have user logon details with
 	| Field                           | Value |
@@ -122,7 +122,7 @@ Scenario: Change password successfully
 	| Confirmed Password | NewP@ssword1 |
 	| Old Password       | P@ssword1    |
 	Then I should be signed in
-
+@Ignore
 Scenario: Change password fails if new password is weak
 	Given I have user logon details with
 	| Field                           | Value |
@@ -141,7 +141,7 @@ Scenario: Change password fails if new password is weak
 	| Confirmed Password | aa        |
 	| Old Password       | P@ssword1 |
 	Then I should see an error 'PasswordPolicyWarning'
-
+@Ignore
 Scenario: Change password fails if old password is wrong
 	Given I have user logon details with
 	| Field                           | Value |

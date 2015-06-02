@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 		private IList<IOptionalColumn> _optionalColumns;
 
 		public static IWorkflowControlSet NullWorkflowControlSet = new WorkflowControlSet(string.Empty);
-		private readonly IUserDetail _userDetail;
 		private readonly IPrincipalAuthorization _principalAuthorization;
 		private readonly IPersonAccountUpdater _personAccountUpdater;
 		private bool _isValid = true;
@@ -33,12 +32,11 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 			_optionalColumns = new List<IOptionalColumn>();
 		}
 
-		public PersonGeneralModel(IPerson person, IUserDetail userDetail, IPrincipalAuthorization principalAuthorization,
+		public PersonGeneralModel(IPerson person,  IPrincipalAuthorization principalAuthorization,
 			IPersonAccountUpdater personAccountUpdater, LogonInfoModel logonInfoModel)
 			: this()
 		{
 			ContainedEntity = person;
-			_userDetail = userDetail;
 			_principalAuthorization = principalAuthorization;
 			_personAccountUpdater = personAccountUpdater;
 			_tenantData = new TenantAuthenticationData {PersonId = ContainedEntity.Id.GetValueOrDefault()};
@@ -242,7 +240,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 				else
 					ContainedEntity.ApplicationAuthenticationInfo.ApplicationLogOnName = value;
 				var policyService = StateHolder.Instance.StateReader.ApplicationScopeData.LoadPasswordPolicyService;
-				_isValid = ContainedEntity.ChangePassword(ContainedEntity.ApplicationAuthenticationInfo.Password, policyService, _userDetail);
+				_isValid = ContainedEntity.ChangePassword(ContainedEntity.ApplicationAuthenticationInfo.Password, policyService);
 				if (!_isValid) //Is there a better solution for this?
 					writeMessage();
 				_tenantData.ApplicationLogonName = value;
@@ -270,7 +268,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 					return;
 				}
 				var policyService = StateHolder.Instance.StateReader.ApplicationScopeData.LoadPasswordPolicyService;
-				_isValid = ContainedEntity.ChangePassword(value, policyService, _userDetail);
+				_isValid = ContainedEntity.ChangePassword(value, policyService);
 				if (!_isValid) //Is there a better solution for this?
 					writeMessage();
 				

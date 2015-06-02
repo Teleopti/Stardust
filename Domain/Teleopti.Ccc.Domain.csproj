@@ -1043,7 +1043,6 @@
     <Compile Include="Repositories\IScheduleHistoryReport.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleProjection\IScheduleProjectionReadOnlyRepository.cs" />
     <Compile Include="Repositories\IScheduleTagRepository.cs" />
-    <Compile Include="Repositories\IUserDetailRepository.cs" />
     <Compile Include="Repositories\ScheduleFilter.cs" />
     <Compile Include="Repositories\PagingDetail.cs" />
     <Compile Include="ResourceCalculation\ActivitySkillCombinationFromStorage.cs" />
@@ -1662,7 +1661,6 @@
     <Compile Include="Security\Principal\UserCulture.cs" />
     <Compile Include="Security\RegExpSpecification.cs" />
     <Compile Include="Security\SuperUser.cs" />
-    <Compile Include="Security\UserDetail.cs" />
     <Compile Include="Specification\All.cs" />
     <Compile Include="Specification\PersonRequestSpecification.cs" />
     <Compile Include="SystemSetting\GlobalSettingData.cs" />

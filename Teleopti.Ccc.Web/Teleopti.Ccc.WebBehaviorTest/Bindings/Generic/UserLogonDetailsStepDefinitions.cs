@@ -11,8 +11,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Given(@"I have user logon details with")]
 		public void GivenIHaveUserLogonDetailsWith(Table table)
 		{
-			var userLogonDetai = table.CreateInstance<UserLogonDetailConfigurable>();
-			DataMaker.Data().Apply(userLogonDetai);
+			//todo : tenant write completely new passwordpolicy tests?
+			//var userLogonDetai = table.CreateInstance<UserLogonDetailConfigurable>();
+			//DataMaker.Data().Apply(userLogonDetai);
 		}
 
 	}

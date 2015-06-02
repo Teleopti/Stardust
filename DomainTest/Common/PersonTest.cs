@@ -628,7 +628,7 @@ namespace Teleopti.Ccc.DomainTest.Common
             var mocks = new MockRepository();
             var service = mocks.StrictMock<ILoadPasswordPolicyService>();
             var rule1 = mocks.StrictMock<IPasswordStrengthRule>();
-            var details = mocks.StrictMock<IUserDetail>();
+            
             IList<IPasswordStrengthRule> rules = new List<IPasswordStrengthRule> { rule1 };
 
             var password = "Uggla";
@@ -637,12 +637,12 @@ namespace Teleopti.Ccc.DomainTest.Common
             {
                 Expect.Call(service.LoadPasswordStrengthRules()).Return(rules);
                 Expect.Call(rule1.VerifyPasswordStrength(password)).Return(true);
-                Expect.Call(() => details.RegisterPasswordChange());
+             
             }
 
             using (mocks.Playback())
             {
-                Assert.IsTrue(person.ChangePassword(password, service, details));
+                Assert.IsTrue(person.ChangePassword(password, service));
             }
         }
 
@@ -653,7 +653,6 @@ namespace Teleopti.Ccc.DomainTest.Common
             var mocks = new MockRepository();
             var service = mocks.StrictMock<ILoadPasswordPolicyService>();
             var rule1 = mocks.StrictMock<IPasswordStrengthRule>();
-            var details = mocks.StrictMock<IUserDetail>();
             IList<IPasswordStrengthRule> rules = new List<IPasswordStrengthRule> { rule1 };
 
             var password = "Uggla";
@@ -666,7 +665,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 
             using (mocks.Playback())
             {
-                Assert.IsFalse(person.ChangePassword(password, service, details));
+                Assert.IsFalse(person.ChangePassword(password, service));
             }
         }
 
