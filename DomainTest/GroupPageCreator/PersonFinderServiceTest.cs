@@ -34,11 +34,11 @@ namespace Teleopti.Ccc.DomainTest.GroupPageCreator
         private void SetupPersons()
         {
             var personAccountUpdater = new MockRepository().StrictMock<IPersonAccountUpdater>();
-            findPerson1 = PersonFactory.CreatePersonWithIdentityPermissionInfo("tommy");
-            findPerson2 = PersonFactory.CreatePersonWithIdentityPermissionInfo("jonny");
-            findPerson3 = PersonFactory.CreatePersonWithIdentityPermissionInfo("conny");
-            findPerson4 = PersonFactory.CreatePersonWithIdentityPermissionInfo("ronny");
-            findPerson5 = PersonFactory.CreatePersonWithIdentityPermissionInfo("benny");
+            findPerson1 = PersonFactory.CreatePerson("tommy");
+						findPerson2 = PersonFactory.CreatePerson("jonny");
+						findPerson3 = PersonFactory.CreatePerson("conny");
+						findPerson4 = PersonFactory.CreatePerson("ronny");
+						findPerson5 = PersonFactory.CreatePerson("benny");
             findPerson4.TerminatePerson(new DateOnly(2009,12,30), personAccountUpdater);
            
             findPerson1.AddPersonPeriod(new PersonPeriod(new DateOnly(new DateTime(2010,12,23)),new PersonContract(new Contract("Contract1"),new PartTimePercentage("PartTime3"),new ContractSchedule("CS3")), new Team {Description = new Description("Team1")} ));

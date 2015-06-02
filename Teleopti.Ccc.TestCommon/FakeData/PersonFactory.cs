@@ -235,23 +235,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             return ret;
         }
 
-	    /// <summary>
-	    /// Creates the person with windows permission info.
-	    /// </summary>
-	    /// <param name="logOnName">Name of the log on.</param>
-	    /// <returns></returns>
-	    /// <remarks>
-	    /// Created by: tamasb
-	    /// Created date: 12/4/2007
-	    /// </remarks>
-	    public static IPerson CreatePersonWithIdentityPermissionInfo(string logOnName)
-        {
-            var winPer = new AuthenticationInfo {Identity = logOnName};
-            IPerson ret = CreatePerson("Created", "by object mother");
-            ret.AuthenticationInfo = winPer;
-            return ret;
-        }
-
         /// <summary>
         /// Creates a person with application roles and functions.
         /// </summary>

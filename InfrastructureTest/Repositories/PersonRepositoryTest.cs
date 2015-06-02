@@ -365,7 +365,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldLoadPermissionDataOnLoadOne([Values(true, false)] bool isDeleted)
 		{
-			var userOk = PersonFactory.CreatePersonWithIdentityPermissionInfo(RandomName.Make());
+			var userOk = PersonFactory.CreatePerson(RandomName.Make());
 			userOk.PermissionInformation.AddApplicationRole(createAndPersistApplicationRole());
 			if (isDeleted)
 				((IDeleteTag)userOk).SetDeleted();
@@ -1441,7 +1441,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldFindAllPersonsEtlChecksPermissions()
 		{
-			IPerson person1 = PersonFactory.CreatePersonWithIdentityPermissionInfo("sunil");
+			IPerson person1 = PersonFactory.CreatePerson("sunil");
 			PersistAndRemoveFromUnitOfWork(person1);
 			IPerson person2 = PersonFactory.CreatePersonWithBasicPermissionInfo("kamal", "pwd1");
 			PersistAndRemoveFromUnitOfWork(person2);
@@ -1481,7 +1481,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IExternalLogOn logOn1 = ExternalLogOnFactory.CreateExternalLogOn();
 			IExternalLogOn logOn2 = ExternalLogOnFactory.CreateExternalLogOn();
 
-			IPerson person = PersonFactory.CreatePersonWithIdentityPermissionInfo("sunil");
+			IPerson person = PersonFactory.CreatePerson("sunil");
 			IPersonPeriod personPeriod1 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), team);
 			var personPeriod2 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2001, 3, 31), team);
 			person.AddPersonPeriod(personPeriod1);
