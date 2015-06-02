@@ -31,7 +31,7 @@
 		<ul class="wfm-accordion material-depth-2">
 			<li ng-repeat="skill in planningPeriod.Skills">
 				<div class="wfm-accordion-head" ng-click="skill.toggle = !skill.toggle">
-					{{skill.SkillName}} <i ng-class="{'toggle-icon-open':skill.toggle}" class="mdi mdi-chevron-down"></i>
+					{{skill.SkillName}} <i ng-class="{'toggle-icon-open':skill.toggle}" class="mdi mdi-chevron-right"></i>
 					<span class="pull-right" class="text-muted">{{skill.MissingRanges.length}} {{'IssuesText' | translate }}</span>
 				</div>
 				<div class="wfm-accordion-content" ng-cloak ng-show="skill.toggle">
