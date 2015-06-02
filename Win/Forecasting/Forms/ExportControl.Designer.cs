@@ -39,8 +39,8 @@
 			// tableLayoutPanel1
 			// 
 			this.tableLayoutPanel1.ColumnCount = 2;
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 19F));
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 81F));
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.Controls.Add(this.labelSaveTo, 1, 0);
 			this.tableLayoutPanel1.Controls.Add(this.labelInformation, 1, 1);
 			this.tableLayoutPanel1.Controls.Add(this.pictureBox1, 0, 0);
@@ -50,7 +50,7 @@
 			this.tableLayoutPanel1.RowCount = 2;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 47.88733F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 52.11267F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(359, 71);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(520, 60);
 			this.tableLayoutPanel1.TabIndex = 0;
 			this.tableLayoutPanel1.Click += new System.EventHandler(this.everyMouseClick);
 			this.tableLayoutPanel1.Leave += new System.EventHandler(this.everyMouseLeave);
@@ -62,15 +62,15 @@
 			// 
 			// labelSaveTo
 			// 
-			this.labelSaveTo.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.labelSaveTo.AutoSize = true;
 			this.labelSaveTo.CausesValidation = false;
+			this.labelSaveTo.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.labelSaveTo.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelSaveTo.Location = new System.Drawing.Point(71, 6);
+			this.labelSaveTo.Location = new System.Drawing.Point(53, 4);
+			this.labelSaveTo.Margin = new System.Windows.Forms.Padding(3, 4, 3, 0);
 			this.labelSaveTo.Name = "labelSaveTo";
-			this.labelSaveTo.Size = new System.Drawing.Size(122, 21);
+			this.labelSaveTo.Size = new System.Drawing.Size(464, 24);
 			this.labelSaveTo.TabIndex = 0;
-			this.labelSaveTo.Text = "Save to What if?";
+			this.labelSaveTo.Text = "12345678901234567890123456789012345678901234567890abc";
 			this.labelSaveTo.Click += new System.EventHandler(this.everyMouseClick);
 			this.labelSaveTo.MouseDown += new System.Windows.Forms.MouseEventHandler(this.everyMouseDown);
 			this.labelSaveTo.MouseEnter += new System.EventHandler(this.everyMouseEnter);
@@ -80,7 +80,7 @@
 			// 
 			this.labelInformation.AutoSize = true;
 			this.labelInformation.CausesValidation = false;
-			this.labelInformation.Location = new System.Drawing.Point(71, 37);
+			this.labelInformation.Location = new System.Drawing.Point(53, 31);
 			this.labelInformation.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
 			this.labelInformation.Name = "labelInformation";
 			this.labelInformation.Size = new System.Drawing.Size(207, 15);
@@ -95,7 +95,7 @@
 			// 
 			this.pictureBox1.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.pictureBox1.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Export2;
-			this.pictureBox1.Location = new System.Drawing.Point(10, 20);
+			this.pictureBox1.Location = new System.Drawing.Point(10, 14);
 			this.pictureBox1.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
 			this.pictureBox1.Name = "pictureBox1";
 			this.tableLayoutPanel1.SetRowSpan(this.pictureBox1, 2);
@@ -116,7 +116,7 @@
 			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
 			this.Name = "ExportControl";
-			this.Size = new System.Drawing.Size(359, 71);
+			this.Size = new System.Drawing.Size(520, 60);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();

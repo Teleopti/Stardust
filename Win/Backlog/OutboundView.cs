@@ -48,7 +48,8 @@ namespace Teleopti.Ccc.Win.Backlog
 		private void load()
 		{
 			loadCampaigns();
-			loadSchedulesAsync();
+			if(_campaigns.Any())
+				loadSchedulesAsync();
 		}
 
 		private void loadSchedulesAsync()
@@ -81,9 +82,16 @@ namespace Teleopti.Ccc.Win.Backlog
 				}
 			}
 
-			var earliestStart = _campaigns.Min(c => c.StartDate).Value;
-			var latestEnd = _campaigns.Max(c => c.EndDate).Value;
-			_loadedPeriod = new DateOnlyPeriod(earliestStart, latestEnd);
+			if (!_campaigns.Any())
+			{
+				return;
+			}
+
+				var earliestStart = _campaigns.Min(c => c.StartDate).Value;
+				var latestEnd = _campaigns.Max(c => c.EndDate).Value;
+				_loadedPeriod = new DateOnlyPeriod(earliestStart, latestEnd);
+
+			
 
 			listView1.Items.Clear();
 			listView1.Groups.Clear();
