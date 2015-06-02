@@ -6,11 +6,6 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 {
 	public class ApplicationLogonInfo
 	{
-#pragma warning disable 169
-		//remove me when oldschema is gone!
-		private Guid id;
-#pragma warning restore 169
-
 		private static readonly OneWayEncryption oneWayEncryption = new OneWayEncryption();
 
 		public ApplicationLogonInfo(PersonInfo personInfo)
@@ -18,8 +13,6 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 			PersonInfo = personInfo;
 			LastPasswordChange=DateTime.UtcNow;
 			InvalidAttemptsSequenceStart = DateTime.UtcNow;
-			//todo: tenant - remove me!
-			id = Guid.NewGuid();
 		}
 		protected ApplicationLogonInfo() { }
 
