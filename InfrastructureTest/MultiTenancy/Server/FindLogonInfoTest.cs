@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 			var target = new FindLogonInfo(_tenantUnitOfWorkManager, currentTenant);
 
 			var result = target.GetForIds(new[] {info.Id}).Single();
-			result.LogonName.Should().Be.EqualTo(info.ApplicationLogonInfo.ApplicationLogonName);
+			result.LogonName.Should().Be.EqualTo(info.ApplicationLogonInfo.LogonName);
 			result.Identity.Should().Be.EqualTo(info.Identity);
 			result.PersonId.Should().Be.EqualTo(info.Id);
 		}

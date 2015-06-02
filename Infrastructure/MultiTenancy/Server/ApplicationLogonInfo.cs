@@ -17,9 +17,9 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		public virtual DateTime LastPasswordChange { get; protected set; }
 		public virtual int InvalidAttempts { get; protected set; }
 		public virtual bool IsLocked { get; protected set; }
-		public virtual string ApplicationLogonName { get; protected set; }
+		public virtual string LogonName { get; protected set; }
 
-		protected virtual string ApplicationLogonPassword { get; set; }
+		protected virtual string LogonPassword { get; set; }
 		protected virtual DateTime InvalidAttemptsSequenceStart { get; set; }
 		
 		private void registerPasswordChange()
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		protected internal virtual void SetApplicationLogonCredentialsInternal(ICheckPasswordStrength checkPasswordStrength, string logonName, string password)
 		{
 			setPassword(checkPasswordStrength, password);
-			ApplicationLogonName = logonName;
+			LogonName = logonName;
 			registerPasswordChange();
 		}
 
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		{
 			checkPasswordStrength.Validate(newPassword);
 			//todo: tenant get rid of domain dependency here
-			ApplicationLogonPassword = new OneWayEncryption().EncryptString(newPassword);
+			LogonPassword = new OneWayEncryption().EncryptString(newPassword);
 		}
 
 		public virtual void Lock()
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 
 		public virtual bool IsValidPassword(INow now, IPasswordPolicy passwordPolicy, string unencryptedPassword)
 		{
-			if (ApplicationLogonName == null)
+			if (LogonName == null)
 				return false;
 
 			var encryptedPassword = oneWayEncryption.EncryptString(unencryptedPassword);
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 				clearInvalidAttempts(utcNow);
 			}
 
-			var isValid = ApplicationLogonPassword.Equals(encryptedPassword);
+			var isValid = LogonPassword.Equals(encryptedPassword);
 			if (isValid)
 			{
 				clearInvalidAttempts(utcNow);

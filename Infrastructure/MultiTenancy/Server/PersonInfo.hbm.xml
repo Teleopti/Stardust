@@ -13,8 +13,8 @@
 		<property name="TenantPassword" />
 
 		<component name="ApplicationLogonInfo" class="ApplicationLogonInfo">
-			<property name="ApplicationLogonName"/>
-			<property name="ApplicationLogonPassword"/>
+			<property name="LogonName" column="ApplicationLogonName"/>
+			<property name="LogonPassword" column="ApplicationLogonPassword"/>
 			<property name="LastPasswordChange" />
 			<property name="InvalidAttemptsSequenceStart" />
 			<property name="InvalidAttempts" />
@@ -32,13 +32,13 @@ where p.Identity = :identity
 	<query name="applicationUserQuery">
 		<![CDATA[
 select pi from PersonInfo pi
-where pi.ApplicationLogonInfo.ApplicationLogonName=:userName
+where pi.ApplicationLogonInfo.LogonName=:userName
 ]]>
 	</query>
 
 	<query name="findLogonInfo">
 		<![CDATA[
-select pi.Id as "PersonId", pi.ApplicationLogonInfo.ApplicationLogonName as "LogonName", pi.Identity as "Identity"
+select pi.Id as "PersonId", pi.ApplicationLogonInfo.LogonName as "LogonName", pi.Identity as "Identity"
 from PersonInfo pi
 where pi.Id in (:ids) and pi.Tenant=:tenant
 ]]>
