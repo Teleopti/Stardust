@@ -6,6 +6,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.Repositories.Audit;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -83,6 +84,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 					.Should().Be.Empty();
 			}
 		}
+
+        // Check for lazy loading error: #33575
+        [Test]
+        public void ShouldShiftCategoryAlsoBeLoadedInFoundPersonAssingments()
+        {
+            PersonAssignment assignment = null;
+
+            using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+            {
+                assignment = target.FindSchedules(new Revision {Id = revisionNumberAtSetupStart}, Agent, new DateOnly(Today)).ToList()[0] as PersonAssignment;
+            }
+
+            var description = assignment.ShiftCategory.Description.Name;
+            Assert.IsNotNullOrEmpty(description);
+        }
 
 		[Test]
 		public void ShouldNotFindSchedulesInThePast()
