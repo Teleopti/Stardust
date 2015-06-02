@@ -57,5 +57,10 @@ SET attributeName=value
 SET attributeValue=%ROOTDIR%\nhib\SikulitestConfig.json
 %commonFolder%\XmlSetAttribute.exe %configPath% %nodePath% %attributeName% %attributeValue%
 
+SET nodePath=configuration/appSettings/add[@key='ShowMem']
+SET attributeName=value
+SET attributeValue=true
+%commonFolder%\XmlSetAttribute.exe %configPath% %nodePath% %attributeName% %attributeValue%
+
 ENDLOCAL
 GOTO:EOF
