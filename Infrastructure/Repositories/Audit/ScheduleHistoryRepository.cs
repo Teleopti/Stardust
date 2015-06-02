@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -67,11 +68,18 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 
 		private IEnumerable<PersonAssignment> findAssignment(IPerson agent, DateOnly dateOnly, IRevision revision)
 		{
-			return session().Auditer().CreateQuery()
+			var assignments = session().Auditer().CreateQuery()
 				.ForEntitiesAtRevision<PersonAssignment>(revision.Id)
 				.Add(AuditEntity.Property("Person").Eq(agent))
-				.Add(AuditEntity.Property("Date").Eq(dateOnly))
-				.Results();
+                .Add(AuditEntity.Property("Date").Eq(dateOnly))
+				.Results().ToList();
+
+		    foreach (var assignment in assignments)
+		    {
+                if (!LazyLoadingManager.IsInitialized(assignment.ShiftCategory))
+                    LazyLoadingManager.Initialize(assignment.ShiftCategory);
+		    }
+            return assignments;
 		}
 
 		private IEnumerable<long> findRevisionsForAssignment(IPerson agent, DateOnly dateOnly, int maxSize)
