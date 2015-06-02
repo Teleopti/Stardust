@@ -27,18 +27,26 @@
 
 			$scope.toggleFunctionForRole = function (node) {
 				var functionNode = node.$modelValue;
-				if (functionNode.selected) { //functionNode
+				if (functionNode.selected) { 
 					RolesFunctionsService.unselectFunction(functionNode.FunctionId, $scope.selectedRole).then(function () {
 						functionNode.selected = false;
-						node.$parentNodeScope.$modelValue.nmbSelectedChildren--;
+						increaseParentNumberOfSelectedNodes(node);
 					});
 				} else {
 					RolesFunctionsService.selectFunction(functionNode.FunctionId, $scope.selectedRole).then(function () {
 						functionNode.selected = true;
-						node.$parentNodeScope.$modelValue.nmbSelectedChildren++;
+						decreaseParentNumberOfSelectedNodes(node);
 					});
 				}
 			};
+
+			var increaseParentNumberOfSelectedNodes = function(node) {
+				if (node.$parentNodeScope) node.$parentNodeScope.$modelValue.nmbSelectedChildren--;
+			};
+
+			var decreaseParentNumberOfSelectedNodes = function (node) {
+				if (node.$parentNodeScope) node.$parentNodeScope.$modelValue.nmbSelectedChildren++;
+			}
 		}
 	]);
 
