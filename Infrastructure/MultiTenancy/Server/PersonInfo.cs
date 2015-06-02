@@ -24,11 +24,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 
 		public virtual ApplicationLogonInfo ApplicationLogonInfo
 		{
-			get
-			{
-				//TODO: tenant put this in ctor instead
-				return _applicationLogonInfo ?? (_applicationLogonInfo = new ApplicationLogonInfo());
-			}
+			get { return _applicationLogonInfo ?? (_applicationLogonInfo = new ApplicationLogonInfo());}
 			protected set { _applicationLogonInfo = value; }
 		}
 
