@@ -4,8 +4,6 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 {
 	public class PersonInfo
 	{
-		private ApplicationLogonInfo _applicationLogonInfo;
-
 		public PersonInfo() : this(new Tenant(string.Empty), Guid.NewGuid())
 		{
 		}
@@ -15,18 +13,14 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 			Tenant = tenant;
 			Id = personId;
 			RegenerateTenantPassword();
+			ApplicationLogonInfo = new ApplicationLogonInfo();
 		}
 
 		public virtual Guid Id { get; protected set; }
 		public virtual string TenantPassword { get; protected set; }
 		public virtual string Identity { get; protected set; }
 		public virtual Tenant Tenant { get; protected set; }
-
-		public virtual ApplicationLogonInfo ApplicationLogonInfo
-		{
-			get { return _applicationLogonInfo ?? (_applicationLogonInfo = new ApplicationLogonInfo());}
-			protected set { _applicationLogonInfo = value; }
-		}
+		public virtual ApplicationLogonInfo ApplicationLogonInfo { get; protected set; }
 
 		public virtual void SetApplicationLogonCredentials(ICheckPasswordStrength checkPasswordStrength, string logonName, string password)
 		{
