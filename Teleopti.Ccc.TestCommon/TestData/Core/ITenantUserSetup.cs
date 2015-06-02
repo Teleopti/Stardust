@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Core
 {
-	public interface ITenantUserSetup
+	public interface ITenantUserSetup : IUserSetup
 	{
 		void Apply(Tenant tenant, ICurrentTenantSession tenantSession, IPerson user);
 	}

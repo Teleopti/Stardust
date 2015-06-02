@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
