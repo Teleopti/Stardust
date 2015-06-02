@@ -13,8 +13,8 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 	{
 		private readonly ICurrentTenantSession _currentTenantSession;
 		private const string hql = @"
-select pi.Id as PersonId, pi.ApplicationLogonName as LogonName, pi.Identity as Identity
-from PersonInfo pi
+select pi.Id as PersonId, pi.ApplicationLogonInfo.LogonName as LogonName, pi.Identity as Identity
+from PersonInfo pi 
 where pi.Id in (:ids)";
 
 		public FindTenantLogonInfoUnsecured(ICurrentTenantSession currentTenantSession)
