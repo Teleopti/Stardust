@@ -42,8 +42,6 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 			_principalAuthorization = principalAuthorization;
 			_personAccountUpdater = personAccountUpdater;
 			_tenantData = new TenantAuthenticationData {PersonId = ContainedEntity.Id.GetValueOrDefault()};
-			if (ContainedEntity.AuthenticationInfo != null)
-				_tenantData.Identity = ContainedEntity.AuthenticationInfo.Identity;
 			if (ContainedEntity.ApplicationAuthenticationInfo != null)
 			{
 				_tenantData.ApplicationLogonName = ContainedEntity.ApplicationAuthenticationInfo.ApplicationLogOnName;
@@ -212,24 +210,11 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 			{
 				if (!logonDataCanBeChanged())
 					return;
-				if (ContainedEntity.AuthenticationInfo == null)
-					ContainedEntity.AuthenticationInfo = new AuthenticationInfo { Identity = value };
-				else
-					ContainedEntity.AuthenticationInfo.Identity = value;
-				checkIdentity();
 				_tenantData.Identity = value;
 				_tenantData.Changed = true;
 			}
 		}
 
-		private void checkIdentity()
-		{
-			if (ContainedEntity.AuthenticationInfo != null)
-			{
-				if (string.IsNullOrEmpty(ContainedEntity.AuthenticationInfo.Identity))
-					ContainedEntity.AuthenticationInfo = null;
-			}
-		}
 		public string ApplicationLogOnName
 		{
 			get

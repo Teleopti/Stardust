@@ -81,20 +81,10 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 				personDto.ApplicationLogOnPassword = "";
 			}
 #pragma warning disable 618
-			if (entity.AuthenticationInfo != null)
-			{
-				var identities = IdentityHelper.Split(entity.AuthenticationInfo.Identity);
-				personDto.WindowsDomain = identities.Item1;
-				personDto.WindowsLogOnName = identities.Item2;
-				personDto.Identity = entity.AuthenticationInfo.Identity;
-			}
-			else
-			{
-				personDto.WindowsDomain = "";
-				personDto.WindowsLogOnName = "";
-				personDto.Identity = "";
-			}
+			personDto.WindowsDomain = "";
+			personDto.WindowsLogOnName = "";
 #pragma warning restore 618
+			personDto.Identity = "";
 			personDto.Note = entity.Note;
 			personDto.IsDeleted = ((IDeleteTag)entity).IsDeleted;
 
@@ -171,18 +161,6 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 				person.Email = dto.Email;
 			if (!string.IsNullOrEmpty(dto.EmploymentNumber))
 				person.EmploymentNumber = dto.EmploymentNumber;
-#pragma warning disable 618
-			if (!string.IsNullOrEmpty(dto.WindowsDomain) && !string.IsNullOrEmpty(dto.WindowsLogOnName))
-				person.AuthenticationInfo = new AuthenticationInfo
-				{
-					Identity = IdentityHelper.Merge(dto.WindowsDomain, dto.WindowsLogOnName)
-				};
-			if (string.IsNullOrEmpty(dto.WindowsDomain) && !string.IsNullOrEmpty(dto.WindowsLogOnName))
-				person.AuthenticationInfo = new AuthenticationInfo
-				{
-					Identity = dto.WindowsLogOnName
-				};
-#pragma warning restore 618
 			if (personTerminated(dto, person))
 				person.TerminatePerson(dto.TerminationDate.ToDateOnly(), _personAccountUpdater);
 			if (personActivated(dto, person))

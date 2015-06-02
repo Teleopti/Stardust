@@ -1585,7 +1585,6 @@
     <Compile Include="Security\Authentication\SpecificTimeZone.cs" />
     <Compile Include="Security\Authentication\UserTimeZone.cs" />
     <Compile Include="Security\Authentication\UtcTimeZone.cs" />
-    <Compile Include="Security\AuthorizationEntities\AuthenticationInfo.cs" />
     <Compile Include="Security\AuthorizationEntities\ILicenseActivatorProvider.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccCalendarLinkLicenseOption.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccMyTeamLicenseOption.cs" />

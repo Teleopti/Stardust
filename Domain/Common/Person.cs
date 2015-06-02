@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.Domain.Common
         private DayOfWeek _firstDayOfWeek;
         private IApplicationAuthenticationInfo _applicationAuthenticationInfo;
 		private readonly IList<IOptionalColumnValue> _optionalColumnValueCollection = new List<IOptionalColumnValue>();
-		private IAuthenticationInfo _authenticationInfo;
 		public static readonly DateOnly DefaultTerminalDate = new DateOnly(2059, 12, 31);
 
 
@@ -754,15 +753,6 @@ namespace Teleopti.Ccc.Domain.Common
             return false;
         }
 
-	    public virtual IAuthenticationInfo AuthenticationInfo
-		{
-			get
-			{
-				return _authenticationInfo;
-			}
-			set { _authenticationInfo = value; }
-		}
-
         public virtual IApplicationAuthenticationInfo ApplicationAuthenticationInfo
         {
             get
@@ -859,7 +849,6 @@ namespace Teleopti.Ccc.Domain.Common
 	    public virtual void SetDeleted()
 	    {
 		    _applicationAuthenticationInfo = null;
-			_authenticationInfo = null;
 		    var personPeriodsBefore = gatherPersonPeriodDetails();
 		    _isDeleted = true;
 

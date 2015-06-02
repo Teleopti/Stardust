@@ -56,15 +56,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				user.ApplicationAuthenticationInfo = authenticationInfo;
 			}
 
-			if (WindowsAuthentication)
-			{
-				var authenticationInfo = new AuthenticationInfo
-				{
-					Identity = IdentityHelper.Merge(Environment.UserDomainName, Environment.UserName)
-				};
-				user.AuthenticationInfo = authenticationInfo;
-			}
-
 			if (!string.IsNullOrEmpty(Role))
 			{
 				var roleRepository = new ApplicationRoleRepository(uow);

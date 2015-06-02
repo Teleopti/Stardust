@@ -230,11 +230,6 @@ namespace Teleopti.Interfaces.Domain
         /// <returns></returns>
         bool ChangePassword(string newPassword, ILoadPasswordPolicyService loadPasswordPolicyService, IUserDetail userDetail);
 
-        /// <summary>
-		/// Gets or sets the identity authentication info.
-		/// </summary>
-		/// <value>The identity authentication info.</value>
-		IAuthenticationInfo AuthenticationInfo { get; set; }
 
         /// <summary>
         /// Gets or sets the application authentication info.
