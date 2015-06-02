@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.ApplicationConfigTest
         private static void createTestPerson()
         {
             var personCreator = new PersonCreator(SessionFactory);
-            var person = personCreator.Create("name", "name", "name", "name", new CultureInfo(1033), (TimeZoneInfo.Local));
+            var person = personCreator.Create("name", "name",  new CultureInfo(1033), (TimeZoneInfo.Local));
 
         	personCreator.Save(person);
         	Person = person;

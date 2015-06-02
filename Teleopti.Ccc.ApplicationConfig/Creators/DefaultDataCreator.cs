@@ -164,20 +164,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
 			
 			if (!string.IsNullOrEmpty(_newUserName) && !string.IsNullOrEmpty(_newUserPassword))
 			{
-				var sysAdmin = _personCreator.Create("Admin", "Administrator", _newUserName, _newUserPassword, _cultureInfo,
-								     _timeZone);
-
-				if (!string.IsNullOrEmpty(Environment.UserDomainName) && !string.IsNullOrEmpty(Environment.UserName))
-				{
-					var windowsAuthInfo = new AuthenticationInfo
-								{
-									Identity = IdentityHelper.Merge(Environment.UserDomainName,Environment.UserName)
-								};
-					if (!_personCreator.WindowsUserExists(windowsAuthInfo))
-					{
-						sysAdmin.AuthenticationInfo = windowsAuthInfo;
-					}
-				}
+				var sysAdmin = _personCreator.Create("Admin", "Administrator", _cultureInfo, _timeZone);
 
 				_personCreator.Save(sysAdmin);
 				updateUserWithSuperRole(sysAdmin);
