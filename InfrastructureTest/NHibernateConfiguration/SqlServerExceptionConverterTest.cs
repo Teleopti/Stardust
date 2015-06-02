@@ -8,6 +8,7 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 		{
 			CleanUpAfterTest();
 			var ok = false;
-			var per1 = new Person();
+			var per1 = PersonFactory.CreatePerson();
 			var scenario = new Scenario("dsf");
 			PersistAndRemoveFromUnitOfWork(per1);
 			PersistAndRemoveFromUnitOfWork(scenario);
