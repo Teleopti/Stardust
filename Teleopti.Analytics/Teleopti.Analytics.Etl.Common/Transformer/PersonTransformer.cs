@@ -11,11 +11,9 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 {
 	public static class PersonTransformer
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
-			MessageId = "0")]
 		public static void Transform(IEnumerable<IPerson> personCollection, int intervalsPerDay, DateOnly insertDate,
 			DataTable personTable, DataTable acdLogOnTable, ICommonNameDescriptionSetting commonNameDescriptionSetting,
-			List<LogonInfo> logonInfos)
+			IEnumerable<LogonInfo> logonInfos)
 		{
 			InParameter.NotNull("personCollection", personCollection);
 
@@ -34,7 +32,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 
 		private static void createPersonDataRow(IPerson person, DataTable table, TimeZoneInfo timeZoneInfo,
 			IPersonPeriod personPeriod, int intervalsPerDay, DateOnly insertDate,
-			ICommonNameDescriptionSetting commonNameDescriptionSetting, List<LogonInfo> logonInfos)
+			ICommonNameDescriptionSetting commonNameDescriptionSetting, IEnumerable<LogonInfo> logonInfos)
 		{
 			DataRow row = table.NewRow();
 
@@ -96,20 +94,12 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			table.Rows.Add(row);
 		}
 
-		private static Tuple<string, string> getLogonInfo(IPerson person, List<LogonInfo> logonInfos)
+		private static Tuple<string, string> getLogonInfo(IPerson person, IEnumerable<LogonInfo> logonInfos)
 		{
-			var logOn = person.AuthenticationInfo == null
-				? new Tuple<string, string>(string.Empty, string.Empty)
-				: IdentityHelper.Split(person.AuthenticationInfo.Identity);
-
-			if (logonInfos.Any())
-			{
-				var logonInfo = logonInfos.FirstOrDefault(l => l.PersonId.Equals(person.Id));
-				return logonInfo == null
+			var logonInfo = logonInfos.FirstOrDefault(l => l.PersonId.Equals(person.Id));
+			return logonInfo == null
 				? new Tuple<string, string>(string.Empty, string.Empty)
 				: IdentityHelper.Split(logonInfo.Identity);
-			}
-			return logOn;
 		}
 
 		private static void externalLogOnPerson(IPerson person, DataTable acdLoginTable, TimeZoneInfo timeZoneInfo, IPersonPeriod personPeriod)
