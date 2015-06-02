@@ -60,7 +60,6 @@
 		SeatPlanner_Logon_32003,
 		MyTeam_MakeTeamScheduleConsistent_31897,
 
-		MultiTenancy_LogonUseNewSchema_33049,
 		Wfm_MinimumScaffolding_32659,
 		Wfm_ResourcePlanner_32892,
 		Wfm_ChangePlanningPeriod_33043,

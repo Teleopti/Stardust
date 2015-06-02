@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.IocCommon;
@@ -25,11 +24,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			builder.RegisterType<TenantPeopleSaver>().As<ITenantPeopleSaver>().InstancePerLifetimeScope();
 			builder.RegisterType<TenantDataManager>().As<ITenantDataManager>().InstancePerLifetimeScope();
 			builder.RegisterType<SdkCurrentTenantCredentials>().As<ICurrentTenantCredentials>().InstancePerLifetimeScope();
-
-			if (_configuration.Toggle(Toggles.MultiTenancy_LogonUseNewSchema_33049))
-				builder.RegisterType<TenantPeopleLoader>().As<ITenantPeopleLoader>().InstancePerLifetimeScope();
-			else
-				builder.RegisterType<emptyTenantPeopleLoader>().As<ITenantPeopleLoader>().InstancePerLifetimeScope();
+			builder.RegisterType<TenantPeopleLoader>().As<ITenantPeopleLoader>().InstancePerLifetimeScope();
 		}
 	}	
 }

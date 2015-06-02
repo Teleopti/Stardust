@@ -22,20 +22,11 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 		{
 			builder.RegisterType<ApplicationAuthentication>().As<IApplicationAuthentication>().SingleInstance();
 			builder.RegisterType<IdentityAuthentication>().As<IIdentityAuthentication>().SingleInstance();
-			if (_configuration.Toggle(Toggles.MultiTenancy_LogonUseNewSchema_33049))
-			{
-				builder.RegisterType<IdentityUserQuery>().As<IIdentityUserQuery>().SingleInstance();
-				builder.RegisterType<ApplicationUserQuery>().As<IApplicationUserQuery>().SingleInstance();
-				builder.RegisterType<FindPersonInfo>().As<IFindPersonInfo>().SingleInstance();
-				builder.RegisterType<FindPersonInfoByCredentials>().As<IFindPersonInfoByCredentials>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<IdentityUserQuery_OldSchema>().As<IIdentityUserQuery>().SingleInstance();
-				builder.RegisterType<ApplicationUserQueryOldSchema>().As<IApplicationUserQuery>().SingleInstance();
-				builder.RegisterType<FindPersonInfo_OldSchema>().As<IFindPersonInfo>().SingleInstance();
-				builder.RegisterType<FindPersonInfoByCredentials_UseUntilToggleIsGone>().As<IFindPersonInfoByCredentials>().SingleInstance();
-			}
+			builder.RegisterType<IdentityUserQuery>().As<IIdentityUserQuery>().SingleInstance();
+			builder.RegisterType<ApplicationUserQuery>().As<IApplicationUserQuery>().SingleInstance();
+			builder.RegisterType<FindPersonInfo>().As<IFindPersonInfo>().SingleInstance();
+			builder.RegisterType<FindPersonInfoByCredentials>().As<IFindPersonInfoByCredentials>().SingleInstance();
+
 			builder.RegisterType<FindTenantAndPersonIdForIdentity>().As<IFindTenantAndPersonIdForIdentity>().SingleInstance();
 			builder.Register(c =>
 			{

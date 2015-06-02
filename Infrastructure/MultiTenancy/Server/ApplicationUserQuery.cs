@@ -19,22 +19,4 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 				.UniqueResult<PersonInfo>();
 		}
 	}
-
-	public class ApplicationUserQueryOldSchema : IApplicationUserQuery
-	{
-		private readonly ICurrentTenantSession _currentTenantSession;
-
-		public ApplicationUserQueryOldSchema(ICurrentTenantSession currentTenantSession)
-		{
-			_currentTenantSession = currentTenantSession;
-		}
-
-		public PersonInfo Find(string username)
-		{
-			var session = _currentTenantSession.CurrentSession();
-			return session.GetNamedQuery("applicationUserQuery_OldSchema")
-				.SetString("userName", username)
-				.UniqueResult<PersonInfo>();
-		}
-	}
 }

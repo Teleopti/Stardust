@@ -4,11 +4,11 @@ using NHibernate.Mapping;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -125,17 +125,8 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
                 IPerson user2 = rep2.Load(user.Id.Value);
 
                 //update
-                IAuthenticationInfo authenticationInfo = new AuthenticationInfo
-                                                     {
-                                                         Identity = "Heja änglarna!"
-                                                     };
-                user.AuthenticationInfo = authenticationInfo;
-                IApplicationAuthenticationInfo app = new ApplicationAuthenticationInfo
-                                                         {
-                                                             ApplicationLogOnName = "buuu",
-                                                             Password = "häcken"
-                                                         };
-                user2.ApplicationAuthenticationInfo = app;
+	            user.Name = new Name(RandomName.Make(), RandomName.Make());
+							user2.Name = new Name(RandomName.Make(), RandomName.Make());
 
 
                 //flush

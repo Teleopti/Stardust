@@ -2338,9 +2338,6 @@
     <EmbeddedResource Include="Scheduling\PersonalAccount\PersonAbsenceAccount.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Security\UserDetail.hbm.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Scheduling\Restriction\ExtendedPreferenceTemplate.hbm.xml" />
   </ItemGroup>
   <ItemGroup>

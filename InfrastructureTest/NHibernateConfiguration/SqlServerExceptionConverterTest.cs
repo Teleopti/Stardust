@@ -3,8 +3,7 @@ using System.Reflection;
 using NHibernate;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.InfrastructureTest.Helper;
@@ -24,14 +23,16 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 			CleanUpAfterTest();
 			var ok = false;
 			var per1 = new Person();
-			addLogonInfo(per1);
-			var per2 = new Person();
-			addLogonInfo(per2);
+			var scenario = new Scenario("dsf");
+			PersistAndRemoveFromUnitOfWork(per1);
+			PersistAndRemoveFromUnitOfWork(scenario);
+			var ass1 = new PersonAssignment(per1, scenario, new DateOnly(2000,1,1));
+			var ass2 = new PersonAssignment(per1, scenario, new DateOnly(2000,1,1));
 			try
 			{
-				IPersonRepository rep = new PersonRepository(UnitOfWork);
-				rep.Add(per1);
-				rep.Add(per2);
+				var rep = new PersonAssignmentRepository(UnitOfWork);
+				rep.Add(ass1);
+				rep.Add(ass2);
 				UnitOfWork.PersistAll();
 			}
 			catch (ConstraintViolationException)
@@ -40,14 +41,6 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 			}
 			if (!ok)
 				Assert.Fail("ConstraintViolationException was not thrown!");
-		}
-
-
-		private static void addLogonInfo(IPerson person)
-		{
-			person.PermissionInformation.SetDefaultTimeZone(TimeZoneHelper.CurrentSessionTimeZone);
-		    person.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo
-		                                               {ApplicationLogOnName = "a", Password = "b"};
 		}
 
 		[Test]

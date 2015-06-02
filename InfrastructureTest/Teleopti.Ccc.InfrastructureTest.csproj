@@ -419,7 +419,6 @@
     <Compile Include="Repositories\ScheduleDayReadModelRepositoryTest.cs" />
     <Compile Include="Repositories\ScheduleProjectionReadOnlyRepositoryTest.cs" />
     <Compile Include="Repositories\ScheduleTagRepositoryTest.cs" />
-    <Compile Include="Repositories\UserDetailRepositoryTest.cs" />
     <Compile Include="Repositories\NoteRepositoryTest.cs" />
     <Compile Include="Repositories\PersonAbsenceAccountRepositoryTest.cs" />
     <Compile Include="Repositories\StudentAvailabilityDayRepositoryTest.cs" />

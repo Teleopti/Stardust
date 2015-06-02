@@ -1,4 +1,6 @@
-﻿using Autofac;
+﻿using System.Collections.Generic;
+using Autofac;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.MultiTenancy;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
@@ -20,6 +22,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterType<PayrollExportFeedback>().As<IServiceBusPayrollExportFeedback>();
 			builder.RegisterType<PayrollPeopleLoader>().As<IPayrollPeopleLoader>();
 			builder.RegisterType<emptyTenantPeopleLoader>().As<ITenantPeopleLoader>();
+		}
+
+		private class emptyTenantPeopleLoader : ITenantPeopleLoader
+		{
+			public void FillDtosWithLogonInfo(IList<PersonDto> personDtos)
+			{
+
+			}
 		}
     }
 }

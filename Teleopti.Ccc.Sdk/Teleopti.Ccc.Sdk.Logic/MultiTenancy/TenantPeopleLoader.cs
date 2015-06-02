@@ -52,12 +52,4 @@ namespace Teleopti.Ccc.Sdk.Logic.MultiTenancy
 			}
 		}
 	}
-
-	public class emptyTenantPeopleLoader : ITenantPeopleLoader
-	{
-		public void FillDtosWithLogonInfo(IList<PersonDto> personDtos)
-		{
-
-		}
-	}
 }

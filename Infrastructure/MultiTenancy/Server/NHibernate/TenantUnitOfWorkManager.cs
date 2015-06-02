@@ -39,12 +39,9 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 				});
 			cfg.SetProperty(Environment.CurrentSessionContextClass, sessionContext);
 			//TODO: tenant - if/when tenant stuff is it's own service, we don't have to pick these one-by-one but take all assembly instead.
-			//TODO: tenant - remove "oldschema" stuff when we're done.
 			cfg.AddResources(new[]
 			{
-				"Teleopti.Ccc.Infrastructure.MultiTenancy.Server.PersonInfo_OldSchema.hbm.xml",
 				"Teleopti.Ccc.Infrastructure.MultiTenancy.Server.PersonInfo.hbm.xml",
-				"Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Tenant_OldSchema.hbm.xml",
 				"Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Tenant.hbm.xml"
 			}, typeof (TenantUnitOfWorkManager).Assembly);
 
@@ -104,6 +101,8 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 			if (_sessionFactory == null) return;
 			//to end just current transaction doesn't make sense in real code, but makes testing easier
 			CancelAndDisposeCurrent();
+			_sessionFactory.Dispose();
+			_sessionFactory = null;
 		}
 	}
 }

@@ -1289,27 +1289,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(2, testList.Count);
 		}
 
-		[Test, ExpectedException(typeof(ConstraintViolationException))]
-		public void VerifyCannotSaveTwoUsersWithSameApplicationAuthentication()
-		{
-			IPerson person1 = PersonFactory.CreatePersonWithBasicPermissionInfo("robink", "robink1");
-			PersistAndRemoveFromUnitOfWork(person1);
-
-			//Different password makes no difference!
-			IPerson person2 = PersonFactory.CreatePersonWithBasicPermissionInfo("robink", "robink2");
-			PersistAndRemoveFromUnitOfWork(person2);
-		}
-
-		[Test, ExpectedException(typeof(ConstraintViolationException))]
-		public void VerifyCannotSaveTwoUsersWithSameDomainAuthentication()
-		{
-			IPerson person1 = PersonFactory.CreatePersonWithIdentityPermissionInfo("robink");
-			PersistAndRemoveFromUnitOfWork(person1);
-
-			IPerson person2 = PersonFactory.CreatePersonWithIdentityPermissionInfo("robink");
-			PersistAndRemoveFromUnitOfWork(person2);
-		}
-
 		[Test]
 		public void VerifyFindPersonsWithGivenUserCredentials()
 		{

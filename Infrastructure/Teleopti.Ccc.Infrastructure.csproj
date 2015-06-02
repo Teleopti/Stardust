@@ -323,6 +323,7 @@
     <Compile Include="Repositories\PlanningPeriodRepository.cs" />
     <Compile Include="Repositories\PlanningPeriodSuggestions.cs" />
     <Compile Include="Repositories\SeatBookingRepository.cs" />
+    <Compile Include="Repositories\UserDetailRepository.cs" />
     <Compile Include="Rta\CacheInvalidator.cs" />
     <Compile Include="Rta\Persisters\AdherenceDetailsReadModelPersister.cs" />
     <Compile Include="Rta\Persisters\AdherencePercentageReadModelPersister.cs" />
@@ -531,7 +532,6 @@
     <Compile Include="Repositories\ExtendedPreferenceTemplateRepository.cs" />
     <Compile Include="Repositories\ScheduleTagRepository.cs" />
     <Compile Include="Repositories\SkillLoaderDecider.cs" />
-    <Compile Include="Repositories\UserDetailRepository.cs" />
     <Compile Include="Repositories\NoteRepository.cs" />
     <Compile Include="Repositories\PersonAbsenceAccountRepository.cs" />
     <Compile Include="Repositories\StudentAvailabilityDayRepository.cs" />
@@ -682,8 +682,6 @@
     <Content Include="Config\PolicyForPassword.xml">
       <SubType>Designer</SubType>
     </Content>
-    <EmbeddedResource Include="MultiTenancy\Server\PersonInfo_OldSchema.hbm.xml" />
-    <EmbeddedResource Include="MultiTenancy\Server\Tenant_OldSchema.hbm.xml" />
     <EmbeddedResource Include="MultiTenancy\Server\PersonInfo.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>

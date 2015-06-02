@@ -21,19 +21,4 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 				.UniqueResult<PersonInfo>();
 		}
 	}
-
-	public class FindPersonInfoByCredentials_UseUntilToggleIsGone : IFindPersonInfoByCredentials
-	{
-		private readonly IFindPersonInfo _findPersonInfo;
-
-		public FindPersonInfoByCredentials_UseUntilToggleIsGone(IFindPersonInfo findPersonInfo)
-		{
-			_findPersonInfo = findPersonInfo;
-		}
-
-		public PersonInfo Find(Guid personId, string tenantPassword)
-		{
-			return _findPersonInfo.GetById(personId);
-		}
-	}
 }

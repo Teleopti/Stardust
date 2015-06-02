@@ -133,35 +133,7 @@
       <key column="ReferenceId" />
       <one-to-many class="OptionalColumnValue"/>
     </bag>
-	  
-    <join table="AuthenticationInfo" fetch="join" optional="true">
-		<key column="Person"></key>
-		<component name="AuthenticationInfo"
-			class="Teleopti.Ccc.Domain.Security.AuthorizationEntities.AuthenticationInfo">
-			<property column="[Identity]" name="Identity"
-					not-null="false"
-					length="100"
-					type="string"
-							unique-key="Unique_Identity"/>
-		</component>
-	</join>
-    
-    <join table="ApplicationAuthenticationInfo"  fetch="join" optional="true">
-      <key column="Person"/>
-      <component name="ApplicationAuthenticationInfo"
-					   class="Teleopti.Ccc.Domain.Security.AuthorizationEntities.ApplicationAuthenticationInfo">
-        <property name="ApplicationLogOnName"
-				  not-null="false"
-				  length="50"
-				  type="string"
-						  unique-key="Unique_AppLogOn"/>
-        <property name="Password"
-				not-null="false"
-				length="50"
-				type="Encrypted" />
-      </component>
-    </join>
-    
+
 		<filter name="deletedFlagFilter"
 		  condition="IsDeleted = 0" />
 	</class>

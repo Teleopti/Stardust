@@ -3,16 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
 
 namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 {
 	[TenantClientTest]
-	[Toggle(Toggles.MultiTenancy_LogonUseNewSchema_33049)]
 	public class TenantLogonDataManagerTest
 	{
 		public PostHttpRequestFake HttpRequestFake;

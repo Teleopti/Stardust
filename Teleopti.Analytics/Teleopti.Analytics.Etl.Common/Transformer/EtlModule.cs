@@ -34,14 +34,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 				.As<ICurrentTenantSession>()
 				.SingleInstance();
 			builder.RegisterType<FindTenantLogonInfoUnsecured>().As<IFindLogonInfo>().SingleInstance();
-			if (_configuration.Toggle(Toggles.MultiTenancy_LogonUseNewSchema_33049))
-			{
-				builder.RegisterType<TenantLogonInfoLoader>().As<ITenantLogonInfoLoader>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<emptyTenantLogonInfoLoader>().As<ITenantLogonInfoLoader>().SingleInstance();
-			}
+			builder.RegisterType<TenantLogonInfoLoader>().As<ITenantLogonInfoLoader>().SingleInstance();
 		}
 
 		public class TenantLogonInfoLoader : ITenantLogonInfoLoader
@@ -61,14 +54,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 					ret.AddRange(_findLogonInfo.GetForIds(batch));
 				}
 				return ret;
-			}
-		}
-
-		public class emptyTenantLogonInfoLoader : ITenantLogonInfoLoader
-		{
-			public IEnumerable<LogonInfo> GetLogonInfoModelsForGuids(IEnumerable<Guid> personGuids)
-			{
-				return new List<LogonInfo>();
 			}
 		}
 	}
