@@ -101,6 +101,7 @@ namespace Teleopti.Ccc.Win.Main
 			this.Padding = new System.Windows.Forms.Padding(1);
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Login to Teleopti WFM";
+			this.Load += new System.EventHandler(this.LogonView_Load);
 			this.Shown += new System.EventHandler(this.logonViewShown);
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();

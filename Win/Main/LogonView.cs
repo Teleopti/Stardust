@@ -165,5 +165,11 @@ namespace Teleopti.Ccc.Win.Main
 					break;
 			}
 		}
+
+		private void LogonView_Load(object sender, EventArgs e)
+		{
+			Show();
+			Refresh();
+		}
 	}
 }
