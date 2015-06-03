@@ -1,17 +1,19 @@
-﻿using System.Linq;
-using System.ServiceModel;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
+﻿using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 
 namespace Teleopti.Ccc.Sdk.WcfService.LogOn
 {
 	public class SdkCurrentTenantCredentials : ICurrentTenantCredentials
 	{
+		private readonly ICurrentPersonContainer _currentPersonContainer;
+
+		public SdkCurrentTenantCredentials(ICurrentPersonContainer currentPersonContainer)
+		{
+			_currentPersonContainer = currentPersonContainer;
+		}
+
 		public TenantCredentials TenantCredentials()
 		{
-			var personContainer =
-				OperationContext.Current.ServiceSecurityContext.AuthorizationPolicies.OfType<TeleoptiPrincipalAuthorizationPolicy>()
-					.Single()
-					.PersonContainer;
+			var personContainer = _currentPersonContainer.Current();
 			return new TenantCredentials(personContainer.Person.Id.Value, personContainer.TenantPassword);
 		}
 	}

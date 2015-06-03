@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			builder.RegisterType<TenantPeopleSaver>().As<ITenantPeopleSaver>().InstancePerLifetimeScope();
 			builder.RegisterType<TenantDataManager>().As<ITenantDataManager>().InstancePerLifetimeScope();
 			builder.RegisterType<SdkCurrentTenantCredentials>().As<ICurrentTenantCredentials>().InstancePerLifetimeScope();
+			builder.RegisterType<CurrentPersonContainer>().As<ICurrentPersonContainer>();
 			builder.RegisterType<TenantPeopleLoader>().As<ITenantPeopleLoader>().InstancePerLifetimeScope();
 		}
 	}	
