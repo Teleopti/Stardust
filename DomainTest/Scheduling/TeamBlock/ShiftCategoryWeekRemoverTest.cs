@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -21,7 +20,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private IShiftCategoryLimitation _shiftCategoryLimitation;
 		private IShiftCategory _shiftCategory;
 		private ISchedulingOptions _schedulingOptions;
-		private IScheduleMatrixValueCalculatorPro _scheduleMatrixValueCalculatorPro;
 		private IScheduleMatrixPro _scheduleMatrixPro;
 		private IScheduleDayPro _scheduleDayPro1;
 		private IScheduleDayPro _scheduleDayPro2;
@@ -42,10 +40,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_mock = new MockRepository();
 			_teamBlockRemoveShiftCategoryOnBestDateService = _mock.StrictMock<ITeamBlockRemoveShiftCategoryOnBestDateService>();
 			_shiftCategory = new ShiftCategory("shiftCategory");
-			_shiftCategory.SetId(Guid.NewGuid());
 			_shiftCategoryLimitation = new ShiftCategoryLimitation(_shiftCategory);
 			_schedulingOptions = new SchedulingOptions();
-			_scheduleMatrixValueCalculatorPro = _mock.StrictMock<IScheduleMatrixValueCalculatorPro>();
 			_scheduleMatrixPro = _mock.StrictMock<IScheduleMatrixPro>();
 			_scheduleDayPro1 = _mock.StrictMock<IScheduleDayPro>();
 			_scheduleDayPro2 = _mock.StrictMock<IScheduleDayPro>();
@@ -91,8 +87,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			{
 				var result = _target.Remove(_shiftCategoryLimitation, _schedulingOptions, _scheduleMatrixPro, _optimizationPreferences);
 				Assert.AreEqual(result[0], _scheduleDayPro1);
-				Assert.AreEqual(1,_schedulingOptions.NotAllowedShiftCategories.Count);
-				Assert.AreEqual(_shiftCategory, _schedulingOptions.NotAllowedShiftCategories[0]);
 			}
 		}
 	}

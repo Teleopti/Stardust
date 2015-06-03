@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -43,7 +42,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_dateOnly = new DateOnly(2015, 1, 1);
 			_dateOnlyPeriod = new DateOnlyPeriod(_dateOnly, _dateOnly);
 			_shiftCategory = new ShiftCategory("test");
-			_shiftCategory.SetId(new Guid());
 			_shiftCategoryLimitation = new ShiftCategoryLimitation(_shiftCategory);
 			_shiftCategoryLimitation.MaxNumberOf = 0;
 			_schedulingOptions = new SchedulingOptions();
@@ -70,8 +68,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			{
 				var result = _target.RemoveShiftCategoryOnPeriod(_shiftCategoryLimitation, _schedulingOptions, _scheduleMatrixPro, _optimizationPreferences);
 				Assert.AreEqual(result[0], _scheduleDayPro);
-				Assert.AreEqual(1, _schedulingOptions.NotAllowedShiftCategories.Count);
-				Assert.AreEqual(_shiftCategory, _schedulingOptions.NotAllowedShiftCategories[0]);
 			}
 		}
 	}

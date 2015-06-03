@@ -24,15 +24,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			while (isShiftCategoryOverPeriodLimit(limitation, scheduleMatrixPro))
 			{
 				var thisResult = _teamBlockRemoveShiftCategoryOnBestDateService.Execute(limitation.ShiftCategory, schedulingOptions, scheduleMatrixPro, scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod, optimizationPreferences);
-				if (thisResult != null)
-				{
-					schedulingOptions.NotAllowedShiftCategories.Add(limitation.ShiftCategory);
-					result.Add(thisResult);
-				}
-				else
-				{
-					break;
-				}
+				if (thisResult != null) result.Add(thisResult);
+				else break;	
 			}
 
 			return result;

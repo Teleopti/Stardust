@@ -35,16 +35,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					var periodForWeek = new DateOnlyPeriod(days[o].Day, days[o].Day.AddDays(6));
 					var thisResult = _teamBlockRemoveShiftCategoryOnBestDateService.Execute(shiftCategoryLimitation.ShiftCategory, schedulingOptions, scheduleMatrixPro, periodForWeek, optimizationPreferences);
 
-					if (thisResult != null)
-					{
-						schedulingOptions.NotAllowedShiftCategories.Add(shiftCategoryLimitation.ShiftCategory);
-						result.Add(thisResult);
-					}
-					else
-					{
-						break;
-					}
-
+					if (thisResult != null) result.Add(thisResult);
+					else break;
+					
 					categoryCounter = 0;
 					for (var i = 0; i < 7; i++)
 					{
@@ -55,5 +48,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			return result;	
 		}
+
+
 	}
 }
