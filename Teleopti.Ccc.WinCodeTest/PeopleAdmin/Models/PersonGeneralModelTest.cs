@@ -385,15 +385,10 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 			const string setValue = "passwordX07";
 			_base = MockRepository.GenerateMock<IPerson>();
 			
-			var authInfo = MockRepository.GenerateMock<IApplicationAuthenticationInfo>();
-
-			authInfo.Stub(x => x.ApplicationLogOnName).Return("userX07");
-			authInfo.Stub(x => x.Password).Return(setValue);
 			_principalAuthorization.Stub(
 				x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword, DateOnly.Today, _base))
 				.Return(true);
-			_base.Stub(x => x.ChangePassword(setValue, null)).Return(true).Repeat.Twice();
-
+			
 			_target = new PersonGeneralModel(_base, _principalAuthorization, new PersonAccountUpdaterDummy(), new LogonInfoModel());
 
 			_target.TenantData.Changed.Should().Be.False();
