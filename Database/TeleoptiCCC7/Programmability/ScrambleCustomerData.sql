@@ -214,11 +214,5 @@ END
 		a.LastName			= dbo.Character_Scramble(a.LastName)
 	from Person a
 
-	--===================
-	--login info, delete all but keep super user
-	--===================
-	--delete all login information
-	delete from ApplicationAuthenticationInfo where Person='3F0886AB-7B25-4E95-856A-0D726EDC2A67'
-	delete from AuthenticationInfo
 END
 
