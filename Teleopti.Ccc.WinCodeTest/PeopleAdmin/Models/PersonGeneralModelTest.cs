@@ -387,7 +387,6 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 			
 			var authInfo = MockRepository.GenerateMock<IApplicationAuthenticationInfo>();
 
-			_base.Stub(x => x.ApplicationAuthenticationInfo).Return(authInfo).Repeat.AtLeastOnce();
 			authInfo.Stub(x => x.ApplicationLogOnName).Return("userX07");
 			authInfo.Stub(x => x.Password).Return(setValue);
 			_principalAuthorization.Stub(

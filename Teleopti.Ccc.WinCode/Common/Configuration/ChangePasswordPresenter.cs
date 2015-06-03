@@ -44,7 +44,6 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 				_view.ShowValidationError();
 				return;
 			}
-			_loggedOnPerson.ApplicationAuthenticationInfo.Password = Model.NewPassword;
 			_view.Close();
 		}
 

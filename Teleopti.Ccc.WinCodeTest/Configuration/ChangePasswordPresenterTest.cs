@@ -2,9 +2,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
-using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.WinCode.Common.Configuration;
 using Teleopti.Interfaces.Domain;
 
@@ -23,11 +21,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		{
 			loggedOnPerson = new Person();
 			loggedOnPerson.SetId(Guid.NewGuid());
-			loggedOnPerson.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo
-			{
-				ApplicationLogOnName = RandomName.Make(),
-				Password = RandomName.Make()
-			};
+			
 			view = MockRepository.GenerateMock<IChangePasswordView>();
 			changePw = MockRepository.GenerateMock<IChangePassword>();
 			target = new ChangePasswordPresenter(view, changePw, loggedOnPerson);
@@ -89,7 +83,6 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			target.Model.NewPassword = "newOne";
 			target.Model.ConfirmPassword = "newOne";
 			target.Save();
-			Assert.AreEqual("newOne",loggedOnPerson.ApplicationAuthenticationInfo.Password);
 		}
 
 		[Test]

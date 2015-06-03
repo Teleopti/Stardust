@@ -36,11 +36,6 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 			_principalAuthorization = principalAuthorization;
 			_personAccountUpdater = personAccountUpdater;
 			_tenantData = new TenantAuthenticationData {PersonId = ContainedEntity.Id.GetValueOrDefault()};
-			if (ContainedEntity.ApplicationAuthenticationInfo != null)
-			{
-				_tenantData.ApplicationLogonName = ContainedEntity.ApplicationAuthenticationInfo.ApplicationLogOnName;
-				_tenantData.Password = ContainedEntity.ApplicationAuthenticationInfo.Password;
-			}
 
 			if (logonInfoModel != null)
 			{
