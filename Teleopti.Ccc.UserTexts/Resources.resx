@@ -7471,8 +7471,8 @@ Updated on: {1}</value>
     <comment>Referred</comment>
   </data>
   <data name="TheScheduleHasChanged" xml:space="preserve">
-    <value>The schedule has changed. This requested must be accepted again.</value>
-    <comment>The schedule has changed. This requested must be accepted again.</comment>
+    <value>The schedule has changed. This request must be accepted again.</value>
+    <comment>The schedule has changed. This request must be accepted again.</comment>
   </data>
   <data name="SelectMultipleDates" xml:space="preserve">
     <value>Select multiple dates</value>
