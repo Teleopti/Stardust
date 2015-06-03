@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
@@ -31,6 +31,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			else
 			{
 				builder.RegisterType<AuthenticationFromFileQuerier>().As<IAuthenticationQuerier>().SingleInstance();
+				// must still register this to work from sikuli
+				builder.RegisterType<emptyTenantLogonDataManager>().As<ITenantLogonDataManager>().SingleInstance();
 			}
 			builder.RegisterType<PostHttpRequest>().As<IPostHttpRequest>().SingleInstance();
 			builder.RegisterType<NhibConfigDecryption>().As<INhibConfigDecryption>().SingleInstance();
@@ -48,19 +50,22 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					.As<ISharedSettingsQuerier>()
 					.SingleInstance();
 			}
-			
 			builder.RegisterType<ChangePassword>().As<IChangePassword>().SingleInstance();
-			
 			builder.RegisterType<ResponseException>().As<IResponseException>();
-			
 			builder.RegisterType<TenantDataManager>().As<ITenantDataManager>().SingleInstance();
-			
-			
 		}
 
 		private static bool isRunFromTest(string server)
 		{
 			return server == null;
+		}
+
+		private class emptyTenantLogonDataManager : ITenantLogonDataManager
+		{
+			public IEnumerable<LogonInfoModel> GetLogonInfoModelsForGuids(IEnumerable<Guid> personGuids)
+			{
+				return Enumerable.Empty<LogonInfoModel>();
+			}
 		}
 	}
 }
