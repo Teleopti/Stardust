@@ -122,6 +122,11 @@ Scenario: Replace student availability
 	| Start time | 10:30      |
 	| End time   | 11:00      |
 	And I am viewing student availability for date '2012-06-20'
+	And I should see the student availability with
+	| Field      | Value      |
+	| Date       | 2012-06-20 |
+	| Start time | 10:30      |
+	| End time   | 11:00      |
 	When I select day '2012-06-20' in student availability
 	And I click the edit button in student availability
 	And I input student availability with

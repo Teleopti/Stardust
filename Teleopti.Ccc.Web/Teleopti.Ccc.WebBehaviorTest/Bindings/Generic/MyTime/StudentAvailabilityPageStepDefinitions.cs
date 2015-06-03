@@ -94,11 +94,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		}
 
 		[Then(@"I should see the student availability with")]
+		[Given(@"I should see the student availability with")]
 		public void ThenIShouldSeeTheStudentAvailabilityWith(Table table)
 		{
 			var fields = table.CreateInstance<StudentAvailabilityFields>();
 
 			var studentAvailabilityForDate = CalendarCells.DateSelector(fields.Date);
+
+			Browser.Interactions.AssertNotExists(studentAvailabilityForDate,string.Format("{0} .img.loading-small-gray-blue", studentAvailabilityForDate));
 
 			if (fields.StartTime != null)
 				Browser.Interactions.AssertFirstContainsUsingJQuery(studentAvailabilityForDate, fields.StartTime);
