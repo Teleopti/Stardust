@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 
 		private IPerson CreatePerson(bool createWorkflowControlSet)
 		{
-			var person = PersonFactory.CreatePersonWithBasicPermissionInfo("testuser", "123");
+			var person = PersonFactory.CreatePerson("testuser", "123");
 			person.SetId(Guid.NewGuid());
 			person.PermissionInformation.SetCulture(new CultureInfo(1053));
 			person.PermissionInformation.SetUICulture(new CultureInfo(1025));

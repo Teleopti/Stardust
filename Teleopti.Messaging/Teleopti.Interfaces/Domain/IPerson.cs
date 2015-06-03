@@ -221,9 +221,6 @@ namespace Teleopti.Interfaces.Domain
 		 /// <returns></returns>
 		  IVirtualSchedulePeriod VirtualSchedulePeriodOrNext(DateOnly dateOnly);
 
-        bool ChangePassword(string newPassword, ILoadPasswordPolicyService loadPasswordPolicyService);
-
-
         /// <summary>
         /// Gets or sets the application authentication info.
         /// </summary>

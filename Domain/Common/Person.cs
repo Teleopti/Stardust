@@ -739,20 +739,6 @@ namespace Teleopti.Ccc.Domain.Common
     		return VirtualSchedulePeriod(dateToUse);
     	}
 
-    	public virtual bool ChangePassword(string newPassword, ILoadPasswordPolicyService loadPasswordPolicyService)
-        {
-            if (_applicationAuthenticationInfo == null)
-                _applicationAuthenticationInfo = new ApplicationAuthenticationInfo();
-            IPasswordPolicy policy = new PasswordPolicy(loadPasswordPolicyService);
-            if (policy.CheckPasswordStrength(newPassword))
-            {
-                _applicationAuthenticationInfo.Password = newPassword;
-
-                return true;
-            }
-            return false;
-        }
-
         public virtual IApplicationAuthenticationInfo ApplicationAuthenticationInfo
         {
             get

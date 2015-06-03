@@ -616,57 +616,6 @@ namespace Teleopti.Ccc.DomainTest.Common
             _target.TerminatePerson(dateTime1, _personAccountUpdater);
 
             Assert.IsNull(_target.SchedulePeriod(dateTime));
-
-
-        }
-
-        [Test]
-        public void CanChangePasswordStrengthIsOk()
-        {
-            IPerson person = new Person();
-            //This test just checks that passwordstrength and reset is checked
-            var mocks = new MockRepository();
-            var service = mocks.StrictMock<ILoadPasswordPolicyService>();
-            var rule1 = mocks.StrictMock<IPasswordStrengthRule>();
-            
-            IList<IPasswordStrengthRule> rules = new List<IPasswordStrengthRule> { rule1 };
-
-            var password = "Uggla";
-
-            using (mocks.Record())
-            {
-                Expect.Call(service.LoadPasswordStrengthRules()).Return(rules);
-                Expect.Call(rule1.VerifyPasswordStrength(password)).Return(true);
-             
-            }
-
-            using (mocks.Playback())
-            {
-                Assert.IsTrue(person.ChangePassword(password, service));
-            }
-        }
-
-        [Test]
-        public void CanChangePasswordStrengthIsBad()
-        {
-            IPerson person = new Person();
-            var mocks = new MockRepository();
-            var service = mocks.StrictMock<ILoadPasswordPolicyService>();
-            var rule1 = mocks.StrictMock<IPasswordStrengthRule>();
-            IList<IPasswordStrengthRule> rules = new List<IPasswordStrengthRule> { rule1 };
-
-            var password = "Uggla";
-
-            using (mocks.Record())
-            {
-                Expect.Call(service.LoadPasswordStrengthRules()).Return(rules);
-                Expect.Call(rule1.VerifyPasswordStrength(password)).Return(false);
-            }
-
-            using (mocks.Playback())
-            {
-                Assert.IsFalse(person.ChangePassword(password, service));
-            }
         }
 
         [Test]
