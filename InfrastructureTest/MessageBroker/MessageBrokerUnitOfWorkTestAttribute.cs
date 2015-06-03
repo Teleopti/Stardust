@@ -1,10 +1,8 @@
 ﻿using System;
 using Autofac;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.MessageBroker;
-using Teleopti.Ccc.Infrastructure.Aop;
-using Teleopti.Ccc.Infrastructure.MessageBroker;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Configuration;
 
 namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 {
@@ -14,10 +12,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 		{
 			base.RegisterInContainer(builder,configuration);
 
-			builder.RegisterType<MailboxRepository>()
-				.As<IMailboxRepository>()
-				.ApplyAspects()
-				.SingleInstance();
+			builder.RegisterModule<MessageBrokerServerModule>();
 		}
 
 		protected override void BeforeTest()
