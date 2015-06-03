@@ -1,4 +1,5 @@
 ﻿using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.WinCodeTest.FakeData
                  team1);
             person.AddPersonPeriod(personPeriod1);
             var principalAuthorization = new PrincipalAuthorization(new CurrentTeleoptiPrincipal());
-            return new PersonGeneralModel(person, principalAuthorization, new PersonAccountUpdaterDummy(), new LogonInfoModel());
+						return new PersonGeneralModel(person, principalAuthorization, new PersonAccountUpdaterDummy(), new LogonInfoModel(), new PasswordPolicyFake());
         }
     }
 }

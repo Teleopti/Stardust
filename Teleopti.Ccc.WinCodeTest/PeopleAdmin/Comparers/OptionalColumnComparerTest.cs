@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -42,7 +43,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
             _principalAuthorization = new PrincipalAuthorization(new CurrentTeleoptiPrincipal());
 			// Ses the contained entity
     		_target = new PersonGeneralModel(_person, _principalAuthorization,
-				new PersonAccountUpdaterDummy(), new LogonInfoModel());
+				new PersonAccountUpdaterDummy(), new LogonInfoModel(), new PasswordPolicyFake());
 
 			// Instantiates the person and teh team
 			_person1 = PersonFactory.CreatePerson();
@@ -55,7 +56,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
 			_person.AddPersonPeriod(personPeriod1);
 			// Ses the contained entity
     		_personGeneralModel = new PersonGeneralModel(_person1, _principalAuthorization,
-				new PersonAccountUpdaterDummy(), new LogonInfoModel());
+				new PersonAccountUpdaterDummy(), new LogonInfoModel(), new PasswordPolicyFake());
 		}
 
         /// <summary>

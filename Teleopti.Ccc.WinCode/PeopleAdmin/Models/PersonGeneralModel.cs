@@ -5,11 +5,9 @@ using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
@@ -21,6 +19,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 		public static IWorkflowControlSet NullWorkflowControlSet = new WorkflowControlSet(string.Empty);
 		private readonly IPrincipalAuthorization _principalAuthorization;
 		private readonly IPersonAccountUpdater _personAccountUpdater;
+		private readonly IPasswordPolicy _passwordPolicy;
 		private bool _isValid = true;
 		private RoleCollectionParser _roleCollectionParser;
 		private bool _logonDataCanBeChanged;
@@ -33,12 +32,13 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 		}
 
 		public PersonGeneralModel(IPerson person,  IPrincipalAuthorization principalAuthorization,
-			IPersonAccountUpdater personAccountUpdater, LogonInfoModel logonInfoModel)
+			IPersonAccountUpdater personAccountUpdater, LogonInfoModel logonInfoModel, IPasswordPolicy passwordPolicy)
 			: this()
 		{
 			ContainedEntity = person;
 			_principalAuthorization = principalAuthorization;
 			_personAccountUpdater = personAccountUpdater;
+			_passwordPolicy = passwordPolicy;
 			_tenantData = new TenantAuthenticationData {PersonId = ContainedEntity.Id.GetValueOrDefault()};
 			if (ContainedEntity.ApplicationAuthenticationInfo != null)
 			{
@@ -188,7 +188,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 
 		public TimeZoneInfo TimeZoneInformation
 		{
-			get { return (TimeZoneInfo)ContainedEntity.PermissionInformation.DefaultTimeZone(); }
+			get { return ContainedEntity.PermissionInformation.DefaultTimeZone(); }
 			set
 			{
 				InParameter.NotNull("TimeZoneInfo", value);
@@ -200,8 +200,6 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 		{
 			get
 			{
-				//if (ContainedEntity.AuthenticationInfo == null) return "";
-				//return ContainedEntity.AuthenticationInfo.Identity;
 				return _tenantData.Identity;
 			}
 			set
@@ -217,8 +215,6 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 		{
 			get
 			{
-				//if (ContainedEntity.ApplicationAuthenticationInfo == null) return "";
-				//return ContainedEntity.ApplicationAuthenticationInfo.ApplicationLogOnName;
 				return _tenantData.ApplicationLogonName;
 			}
 			set
@@ -228,19 +224,13 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 
 				if (string.IsNullOrEmpty(value))
 				{
-					ContainedEntity.ApplicationAuthenticationInfo = null;
 					_isValid = true;
 					_tenantData.ApplicationLogonName = "";
 					_tenantData.Password = "";
 					_tenantData.Changed = true;
 					return;
 				}
-				if (ContainedEntity.ApplicationAuthenticationInfo == null)
-					ContainedEntity.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo { ApplicationLogOnName = value };
-				else
-					ContainedEntity.ApplicationAuthenticationInfo.ApplicationLogOnName = value;
-				var policyService = StateHolder.Instance.StateReader.ApplicationScopeData.LoadPasswordPolicyService;
-				_isValid = ContainedEntity.ChangePassword(ContainedEntity.ApplicationAuthenticationInfo.Password, policyService);
+				_isValid = _passwordPolicy.CheckPasswordStrength(value);
 				if (!_isValid) //Is there a better solution for this?
 					writeMessage();
 				_tenantData.ApplicationLogonName = value;
@@ -252,8 +242,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 		{
 			get
 			{
-				if (ContainedEntity.ApplicationAuthenticationInfo == null) return "";
-				return ContainedEntity.ApplicationAuthenticationInfo.Password;
+				return _tenantData.Password ?? string.Empty;
 			}
 			set
 			{
@@ -262,17 +251,14 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 				_tenantData.Password = value;
 				_tenantData.Changed = true;
 
-				if (ContainedEntity.ApplicationAuthenticationInfo == null || string.IsNullOrEmpty(ContainedEntity.ApplicationAuthenticationInfo.ApplicationLogOnName))
+				if (string.IsNullOrEmpty(_tenantData.ApplicationLogonName))
 				{
 					_isValid = true;
 					return;
 				}
-				var policyService = StateHolder.Instance.StateReader.ApplicationScopeData.LoadPasswordPolicyService;
-				_isValid = ContainedEntity.ChangePassword(value, policyService);
+				_isValid = _passwordPolicy.CheckPasswordStrength(value);
 				if (!_isValid) //Is there a better solution for this?
 					writeMessage();
-				
-				
 			}
 		}
 
