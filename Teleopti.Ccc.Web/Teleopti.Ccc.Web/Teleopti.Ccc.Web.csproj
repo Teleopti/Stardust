@@ -1625,7 +1625,6 @@
     <Content Include="Areas\Anywhere\Content\Templates\menu.html" />
     <Content Include="Areas\Anywhere\Content\Templates\teamschedule\view.html" />
     <Content Include="Areas\Anywhere\Content\Translation\TranslationTemplate.txt" />
-    <Content Include="WFM\css\material-spinner.css" />
     <Content Include="Areas\Reporting\Views\Report\Adherence.cshtml" />
     <Content Include="Areas\Reporting\Views\Report\Empty.cshtml" />
     <Content Include=".node\package.json" />
