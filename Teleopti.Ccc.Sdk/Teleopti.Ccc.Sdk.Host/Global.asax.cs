@@ -66,20 +66,20 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 
 			var busSender = new ServiceBusSender();
 
-			var builder = buildIoc();
+			var builder = BuildIoc();
 			var container = builder.Build();
 			AutofacHostFactory.Container = container;
 			var messageBroker = container.Resolve<IMessageBrokerComposite>();
 			var sharedSettingsQuerier = container.Resolve<ISharedSettingsQuerier>();
 
-			var settings=sharedSettingsQuerier.GetSharedSettings();
+			var settings = sharedSettingsQuerier.GetSharedSettings();
 			var appSettings = settings.AddToAppSettings(ConfigurationManager.AppSettings.ToDictionary());
 
 			var passwordPolicyDocument = XDocument.Parse(settings.PasswordPolicy);
 			var passwordPolicyService = new LoadPasswordPolicyService(passwordPolicyDocument);
 
 			var populator = EventContextPopulator.Make();
-			  var businessUnit = CurrentBusinessUnit.Make();
+			var businessUnit = CurrentBusinessUnit.Make();
 			var messageSender = new MessagePopulatingServiceBusSender(busSender, populator);
 			var eventPublisher = new EventPopulatingPublisher(new ServiceBusEventPublisher(busSender), populator);
 			var initializeApplication =
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 						),
 					messageBroker);
 			var messageBrokerEnabled = !messageBrokerDisabled();
-			initializeApplication.Start(new SdkState(), appSettings, passwordPolicyService, messageBrokerEnabled);
+			initializeApplication.Start(new SdkState(), sitePath(), passwordPolicyService, appSettings, messageBrokerEnabled);
 
 			var messageBrokerReceiveDisabled = !messageBrokerReceiveEnabled();
 			if (messageBrokerEnabled && messageBrokerReceiveDisabled)
@@ -109,6 +109,17 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 					messageBroker.Dispose();
 
 			Logger.Info("Initialized application");
+		}
+
+		private static string sitePath()
+		{
+			var sitePath = ConfigurationManager.AppSettings["SitePath"].Trim();
+			if (string.IsNullOrEmpty(sitePath))
+			{
+				sitePath = AppDomain.CurrentDomain.BaseDirectory;
+			}
+			Logger.InfoFormat("Read site path from configuration. {0}", sitePath);
+			return sitePath;
 		}
 
 		private bool messageBrokerReceiveEnabled()
@@ -134,7 +145,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			return _messageBrokerDisabled;
 		}
 
-		private static ContainerBuilder buildIoc()
+		public static ContainerBuilder BuildIoc()
 		{
 			var builder = new ContainerBuilder();
 
@@ -192,6 +203,6 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 		}
 	}
 
-	
+
 
 }
