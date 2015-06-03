@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using log4net;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.MessageBroker;
 
@@ -52,12 +53,14 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 			_signalR.RemoveConnectionFromGroup(RouteToGroupName(route), connectionId);
 		}
 
-		public void AddMailbox(Subscription subscription)
+		[MessageBrokerUnitOfWork]
+		public virtual void AddMailbox(Subscription subscription)
 		{
 			_mailboxRepository.Persist(new Mailbox {Route = subscription.Route(), Id = Guid.Parse(subscription.MailboxId)});
 		}
 
-		public IEnumerable<Message> PopMessages(string mailboxId)
+		[MessageBrokerUnitOfWork]
+		public virtual IEnumerable<Message> PopMessages(string mailboxId)
 		{
 			var mailbox = _mailboxRepository.Load(Guid.Parse(mailboxId));
 			var result = mailbox.PopAllMessages();
@@ -65,7 +68,8 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 			return result;
 		}
 
-		public void NotifyClients(Message message)
+		[MessageBrokerUnitOfWork]
+		public virtual void NotifyClients(Message message)
 		{
 			var routes = message.Routes();
 

@@ -180,6 +180,7 @@
     <Compile Include="FakeScheduleRange.cs" />
     <Compile Include="FakeServiceBusSender.cs" />
     <Compile Include="FakeShiftTradeLightValidator.cs" />
+    <Compile Include="FakeSignalR.cs" />
     <Compile Include="FakeSiteOutOfAdherenceReadModelPersister.cs" />
     <Compile Include="FakeTeamOutOfAdherenceReadModelPersister.cs" />
     <Compile Include="FakeUserCulture.cs" />

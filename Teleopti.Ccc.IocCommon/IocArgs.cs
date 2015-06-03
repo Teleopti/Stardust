@@ -18,6 +18,8 @@ namespace Teleopti.Ccc.IocCommon
 		public string ReportServer { get; set; }
 		public string MatrixWebSiteUrl { get; set; }
 		public bool PublishEventsToServiceBus { get; set; }
+		public bool ThrottleMessages { get; set; }
+		public int MessagesPerSecond { get; set; }
 
 		public bool MessageBrokerListeningEnabled { get; set; }
 		public IContainer SharedContainer { get; set; }
@@ -56,6 +58,8 @@ namespace Teleopti.Ccc.IocCommon
 			ConfigServer = appConfigReader.AppConfig("ConfigServer");
 			ReportServer = appConfigReader.AppConfig("ReportServer");
 			MatrixWebSiteUrl = appConfigReader.AppConfig("MatrixWebSiteUrl");
+			ThrottleMessages = readBoolAppSetting(appConfigReader.AppConfig("ThrottleMessages"), true);
+			MessagesPerSecond = readIntAppSetting(appConfigReader.AppConfig("MessagesPerSecond"), 80);
 			PublishEventsToServiceBus = readBoolAppSetting(appConfigReader.AppConfig("PublishEventsToServiceBus"), true);
 			DataSourceConfigurationSetter = Infrastructure.NHibernateConfiguration.DataSourceConfigurationSetter.ForWeb();
 			ClearCache = false;
@@ -67,6 +71,14 @@ namespace Teleopti.Ccc.IocCommon
 				return @default;
 			bool result;
 			return bool.TryParse(value, out result) ? result : @default;
+		}
+
+		private static int readIntAppSetting(string value, int @default)
+		{
+			if (string.IsNullOrEmpty(value))
+				return @default;
+			int result;
+			return int.TryParse(value, out result) ? result : @default;
 		}
 	}
 }

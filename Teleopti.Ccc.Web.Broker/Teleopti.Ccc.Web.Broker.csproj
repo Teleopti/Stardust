@@ -161,7 +161,7 @@
     <Compile Include="SignalRConfiguration.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Backportability.cs" />
-    <Compile Include="TimeoutSettings.cs" />
+    <Compile Include="SignalRSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

@@ -4,11 +4,11 @@ using System.Globalization;
 
 namespace Teleopti.Ccc.Web.Broker
 {
-	public class TimeoutSettings
+	public class SignalRSettings
 	{
-		public static TimeoutSettings Load()
+		public static SignalRSettings Load()
 		{
-			var settings = new TimeoutSettings();
+			var settings = new SignalRSettings();
 
 			var value = ConfigurationManager.AppSettings["KeepAlive"];
 			if (!string.IsNullOrEmpty(value))
@@ -53,7 +53,6 @@ namespace Teleopti.Ccc.Web.Broker
 
 			return settings;
 		}
-
 
 		public TimeSpan? KeepAlive { get; set; }
 		public TimeSpan? ConnectionTimeout { get; set; }

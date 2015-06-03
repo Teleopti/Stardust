@@ -7,7 +7,6 @@ namespace Teleopti.Ccc.Web.Broker
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.Register(c => SignalRConfiguration.ActionScheduler).As<IActionScheduler>().ExternallyOwned();
 			builder.RegisterType<SignalR>().As<ISignalR>().SingleInstance();
 		}
 	}

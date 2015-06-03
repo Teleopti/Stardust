@@ -392,6 +392,9 @@
     <Compile Include="..\..\Teleopti.Ccc.Web.Broker\MessageBrokerWebModule.cs">
       <Link>Core\MessageBroker\MessageBrokerWebModule.cs</Link>
     </Compile>
+    <Compile Include="..\..\Teleopti.Ccc.Web.Broker\SignalRSettings.cs">
+      <Link>Core\MessageBroker\SignalRSettings.cs</Link>
+    </Compile>
     <Compile Include="Areas\Anywhere\Controllers\AdherenceController.cs" />
     <Compile Include="Areas\Anywhere\Core\GetSiteAdherence.cs" />
     <Compile Include="Areas\Anywhere\Core\GetBusinessUnitId.cs" />
@@ -801,9 +804,6 @@
     </Compile>
     <Compile Include="..\..\Teleopti.Ccc.Web.Broker\SignalRConfiguration.cs">
       <Link>Core\MessageBroker\SignalRConfiguration.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Teleopti.Ccc.Web.Broker\TimeoutSettings.cs">
-      <Link>Core\MessageBroker\TimeoutSettings.cs</Link>
     </Compile>
     <Compile Include="Areas\Anywhere\Controllers\PersonScheduleCommandController.cs" />
     <Compile Include="Areas\Anywhere\Controllers\StaffingMetricsController.cs" />

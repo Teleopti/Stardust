@@ -4,18 +4,13 @@ using System.Threading;
 using Contrib.SignalR.SignalRMessageBus;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Infrastructure;
-using Teleopti.Ccc.Domain.MessageBroker;
 
 namespace Teleopti.Ccc.Web.Broker
 {
 	public static class SignalRConfiguration
 	{
-		public static IActionScheduler ActionScheduler; 
-
-		public static void Configure(Action mapSignalR)
+		public static void Configure(SignalRSettings settingsFromParser, Action mapSignalR)
 		{
-			var settingsFromParser = TimeoutSettings.Load();
-
 			if (settingsFromParser.DefaultMessageBufferSize.HasValue)
 				GlobalHost.Configuration.DefaultMessageBufferSize = settingsFromParser.DefaultMessageBufferSize.Value;
 
@@ -29,25 +24,13 @@ namespace Teleopti.Ccc.Web.Broker
 				GlobalHost.Configuration.ConnectionTimeout = settingsFromParser.ConnectionTimeout.Value;
 
 			if (settingsFromParser.ScaleOutBackplaneUrl != null)
-			{
 				GlobalHost.DependencyResolver.UseSignalRServer(settingsFromParser.ScaleOutBackplaneUrl);
-			}
 
 			if (!settingsFromParser.EnablePerformanceCounters)
 				GlobalHost.DependencyResolver.Register(typeof(IPerformanceCounterManager), () => new FakePerformanceCounterInitializer());
-					
+			
 			mapSignalR();
 
-			if (settingsFromParser.ThrottleMessages)
-			{
-				var actionThrottle = new ActionThrottle(settingsFromParser.MessagesPerSecond);
-				actionThrottle.Start();
-				ActionScheduler = actionThrottle;
-			}
-			else
-			{
-				ActionScheduler = new ActionImmediate();
-			}
 		}
 	}
 

@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		public void Setup()
 		{
 			requestContainer = buildContainer();
-			SignalRConfiguration.Configure(() => { });
+			SignalRConfiguration.Configure(SignalRSettings.Load(), () => { });
 		}
 
 		private ILifetimeScope buildContainer(Toggles toggle, bool value)

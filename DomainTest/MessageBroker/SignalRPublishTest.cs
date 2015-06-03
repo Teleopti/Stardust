@@ -1,8 +1,8 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.MessageBroker;
+using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.DomainTest.MessageBroker
 {

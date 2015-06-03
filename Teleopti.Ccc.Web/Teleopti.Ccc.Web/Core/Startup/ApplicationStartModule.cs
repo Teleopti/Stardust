@@ -3,10 +3,10 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Hosting;
 using System.Web.Mvc;
+using Autofac;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.MessageBroker;
-using Teleopti.Ccc.Web.Broker;
 using Teleopti.Ccc.Web.Core.RequestContext.Initialize;
 using Teleopti.Ccc.Web.Core.Startup;
 
@@ -68,13 +68,18 @@ throw startupException;
 
 	public class ActionThrottleObject : IRegisteredObject
 	{
+		private readonly IContainer _container;
+
+		public ActionThrottleObject(IContainer container)
+		{
+			_container = container;
+		}
+
 		public void Stop(bool immediate)
 		{
-			if (SignalRConfiguration.ActionScheduler is IDisposable)
-			{
-				var actionThrottle = SignalRConfiguration.ActionScheduler as ActionThrottle;
-				if (actionThrottle != null) actionThrottle.Dispose();
-			}
+			var actionScheduler = _container.Resolve<IActionScheduler>();
+			if (actionScheduler is IDisposable)
+				(actionScheduler as IDisposable).Dispose();
 			HostingEnvironment.UnregisterObject(this);
 		}
 	}

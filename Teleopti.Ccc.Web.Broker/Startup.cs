@@ -10,7 +10,10 @@ using Microsoft.AspNet.SignalR;
 using Microsoft.Owin;
 using Owin;
 using Teleopti.Ccc.Domain.MessageBroker;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
+using Teleopti.Ccc.IocCommon.MultipleConfig;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.Web.Broker;
 using RegistrationExtensions = Autofac.Integration.Mvc.RegistrationExtensions;
 
@@ -21,15 +24,17 @@ namespace Teleopti.Ccc.Web.Broker
 	public class Startup
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (Global));
-		private static IContainer _container;
+		public static IContainer _container;
 
 		public void Configuration(IAppBuilder app)
 		{
 			log4net.Config.XmlConfigurator.Configure();
 
+			var settings = SignalRSettings.Load();
+
 			var builder = new ContainerBuilder();
 			builder.RegisterModule<MessageBrokerWebModule>();
-			builder.RegisterModule<MessageBrokerServerModule>();
+			builder.RegisterModule(new MessageBrokerServerModule(settings.ThrottleMessages, settings.MessagesPerSecond));
 			builder.RegisterType<SubscriptionPassThrough>().As<IBeforeSubscribe>().SingleInstance();
 			builder.RegisterHubs(typeof(MessageBrokerHub).Assembly);
 			RegistrationExtensions.RegisterControllers(builder, typeof(MessageBrokerController).Assembly);
@@ -39,7 +44,7 @@ namespace Teleopti.Ccc.Web.Broker
 			GlobalHost.DependencyResolver = new AutofacDependencyResolver(lifetimeScope); 
 			
 			var hubConfiguration = new HubConfiguration { EnableJSONP = true };
-			SignalRConfiguration.Configure(()=>app.MapSignalR(hubConfiguration));
+			SignalRConfiguration.Configure(settings, () => app.MapSignalR(hubConfiguration));
 
 			TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
 

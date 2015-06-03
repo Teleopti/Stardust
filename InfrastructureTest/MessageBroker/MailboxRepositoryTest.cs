@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 {
 	[TestFixture, Category("LongRunning")]
 	[MessageBrokerUnitOfWorkTest]
-	public class MailboxRepositoryTest
+	public class MailboxRepositoryTest2
 	{
 		public IMailboxRepository Target;
 		public ICurrentMessageBrokerUnitOfWork CurrentMessageBrokerUnitOfWork;

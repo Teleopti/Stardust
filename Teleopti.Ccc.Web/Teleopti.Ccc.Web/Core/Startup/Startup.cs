@@ -66,12 +66,12 @@ namespace Teleopti.Ccc.Web.Core.Startup
 		public void OnStart(IAppBuilder application, HttpConfiguration config)
 		{
 			MvcHandler.DisableMvcResponseHeader = true;
-			HostingEnvironment.RegisterObject(new ActionThrottleObject());
 			ApplicationStartModule.ErrorAtStartup = null;
 			try
 			{
 				var pathToToggle = Startup.pathToToggle();
 				var container = _containerConfiguration.Configure(pathToToggle, config);
+				HostingEnvironment.RegisterObject(new ActionThrottleObject(container));
 
 				AutofacHostFactory.Container = container;
 				if (!_testMode)
@@ -85,7 +85,8 @@ namespace Teleopti.Ccc.Web.Core.Startup
 
 				ApplicationStartModule.TasksFromStartup = _bootstrapper.Run(container.Resolve<IEnumerable<IBootstrapperTask>>(), application).ToArray();
 
-				SignalRConfiguration.Configure(() => application.MapSignalR(new HubConfiguration { EnableJSONP = true }));
+				var settings = SignalRSettings.Load();
+				SignalRConfiguration.Configure(settings, () => application.MapSignalR(new HubConfiguration { EnableJSONP = true }));
 				FederatedAuthentication.WSFederationAuthenticationModule.SignedIn += WSFederationAuthenticationModule_SignedIn;
 				FederatedAuthentication.ServiceConfiguration.SecurityTokenHandlers.AddOrReplace(new MachineKeySessionSecurityTokenHandler());
 

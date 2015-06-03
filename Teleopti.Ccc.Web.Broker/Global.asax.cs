@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web;
+using Autofac;
 using Teleopti.Ccc.Domain.MessageBroker;
 
 namespace Teleopti.Ccc.Web.Broker
@@ -12,11 +13,9 @@ namespace Teleopti.Ccc.Web.Broker
 
 		protected void Application_End(object sender, EventArgs e)
 		{
-			if (SignalRConfiguration.ActionScheduler is IDisposable)
-			{
-				var actionThrottle = SignalRConfiguration.ActionScheduler as ActionThrottle;
-				if (actionThrottle != null) actionThrottle.Dispose();
-			}
+			var actionScheduler = Startup._container.Resolve<IActionScheduler>();
+			if (actionScheduler is IDisposable)
+				(actionScheduler as IDisposable).Dispose();
 		}
 
 	    protected void Session_Start(object sender, EventArgs e)

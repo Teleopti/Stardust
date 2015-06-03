@@ -13,7 +13,8 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 	{
 		protected override void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
 		{
-			builder.RegisterModule<MessageBrokerServerModule>();
+			builder.RegisterModule(new MessageBrokerServerModule(configuration));
+
 			builder.RegisterInstance(new FakeSignalR()).AsSelf().As<ISignalR>();
 			builder.RegisterInstance(new ActionImmediate()).As<IActionScheduler>();
 
