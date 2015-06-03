@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 					EmploymentType.FixedStaffNormalWorkTime) daysOffTarget = schedulePeriod.DaysOff();
 				// find out wich period to load
 				DateTimePeriod period = realSchedulePeriod.ToDateTimePeriod(timeZoneInfo);
-				ISchedulerRangeToLoadCalculator rangeToLoadCalculator = new SchedulerRangeToLoadCalculator(period) { JusticeValue = 0 };
+				ISchedulerRangeToLoadCalculator rangeToLoadCalculator = new SchedulerRangeToLoadCalculator(period);
 				period = rangeToLoadCalculator.SchedulerRangeToLoad(person);
 
 				var clientsCulture = GetClientsCulture(personDto, person);

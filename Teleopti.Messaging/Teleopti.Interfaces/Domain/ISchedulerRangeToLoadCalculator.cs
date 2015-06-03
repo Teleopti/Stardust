@@ -29,11 +29,5 @@ namespace Teleopti.Interfaces.Domain
         /// Created date: 2008-05-20
         /// </remarks>
         DateTimePeriod RequestedPeriod { get; }
-
-        /// <summary>
-        /// Gets or sets the justice value.
-        /// </summary>
-        /// <value>The justice value.</value>
-        int JusticeValue { get; set;}
     }
 }

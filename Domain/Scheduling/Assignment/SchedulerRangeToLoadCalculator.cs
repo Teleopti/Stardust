@@ -12,8 +12,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
     {
         private readonly DateTimePeriod _requestedDateTimePeriod;
         private readonly IDictionary<IPerson, DateTimePeriod> _cachedResult;
-        private int _justiceValue = -28;
-
+       
         /// <summary>
         /// Initializes a new instance of the <see cref="SchedulerRangeToLoadCalculator"/> class.
         /// </summary>
@@ -43,16 +42,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             {
                 return _requestedDateTimePeriod;
             }
-        }
-
-        /// <summary>
-        /// Gets or sets the justice value.
-        /// </summary>
-        /// <value>The justice value.</value>
-        public int JusticeValue
-        {
-            get { return _justiceValue; }
-            set { _justiceValue = value;}
         }
 
         /// <summary>
@@ -94,20 +83,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 }
 
 
-                DateTime firstPeriodsFirstDateLocal = getFirstPeriodsFirstDateLocal(minSchedulePeriod, culture, timeZoneInfo);
-                //always load at least one week before
-                if (_justiceValue > -7)
-                    _justiceValue = -7;
-                DateTime justiceStart =
-                    TimeZoneHelper.ConvertFromUtc(_requestedDateTimePeriod.StartDateTime, timeZoneInfo).AddDays(_justiceValue);
-                if (justiceStart < firstPeriodsFirstDateLocal)
-                    firstPeriodsFirstDateLocal = justiceStart;
+				//always load at least one week before
+                var firstPeriodsFirstDateLocal = getFirstPeriodsFirstDateLocal(minSchedulePeriod, culture, timeZoneInfo);
+                var start = TimeZoneHelper.ConvertFromUtc(_requestedDateTimePeriod.StartDateTime, timeZoneInfo).AddDays(-7);
+				if (start < firstPeriodsFirstDateLocal) firstPeriodsFirstDateLocal = start;
 
                 // always load one week after
-                DateTime lastPeriodsLastDateLocal = getLastPeriodsLastDateLocal(maxSchedulePeriod, culture,timeZoneInfo).AddDays(7);
-                DateTime justiceEnd = _requestedDateTimePeriod.EndDateTimeLocal(timeZoneInfo);
-                if (justiceEnd > lastPeriodsLastDateLocal)
-                    lastPeriodsLastDateLocal = justiceEnd;
+                var lastPeriodsLastDateLocal = getLastPeriodsLastDateLocal(maxSchedulePeriod, culture,timeZoneInfo).AddDays(7);
+                var end = _requestedDateTimePeriod.EndDateTimeLocal(timeZoneInfo);
+                if (end > lastPeriodsLastDateLocal)lastPeriodsLastDateLocal = end;
 
                 res = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(firstPeriodsFirstDateLocal, lastPeriodsLastDateLocal, timeZoneInfo);
             }
