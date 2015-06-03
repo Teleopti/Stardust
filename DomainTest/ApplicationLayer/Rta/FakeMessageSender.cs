@@ -9,40 +9,40 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 	{
 		public FakeMessageSender()
 		{
-			AllNotifications = new List<Interfaces.MessageBroker.Notification>();
+			AllNotifications = new List<Interfaces.MessageBroker.Message>();
 		}
 
-		public Interfaces.MessageBroker.Notification LastNotification;
-		public Interfaces.MessageBroker.Notification LastTeamNotification;
-		public Interfaces.MessageBroker.Notification LastSiteNotification;
-		public Interfaces.MessageBroker.Notification LastAgentsNotification;
-		public ICollection<Interfaces.MessageBroker.Notification> AllNotifications;
+		public Interfaces.MessageBroker.Message LastMessage;
+		public Interfaces.MessageBroker.Message LastTeamMessage;
+		public Interfaces.MessageBroker.Message LastSiteMessage;
+		public Interfaces.MessageBroker.Message LastAgentsMessage;
+		public ICollection<Interfaces.MessageBroker.Message> AllNotifications;
 
-		public void Send(Interfaces.MessageBroker.Notification notification)
+		public void Send(Interfaces.MessageBroker.Message message)
 		{
-			LastNotification = notification;
+			LastMessage = message;
 			
-			if (notification.DomainType.Contains("Team"))
-				LastTeamNotification = notification;
-			else if (notification.DomainType.Contains("Agents"))
-				LastAgentsNotification = notification;
+			if (message.DomainType.Contains("Team"))
+				LastTeamMessage = message;
+			else if (message.DomainType.Contains("Agents"))
+				LastAgentsMessage = message;
 			else
-				LastSiteNotification = notification;
+				LastSiteMessage = message;
 			lock (AllNotifications)
-				AllNotifications.Add(notification);
+				AllNotifications.Add(message);
 		}
 
-		public Interfaces.MessageBroker.Notification NotificationOfType<T>()
+		public Interfaces.MessageBroker.Message NotificationOfType<T>()
 		{
 			return NotificationsOfType<T>().FirstOrDefault();
 		}
 
-		public IEnumerable<Interfaces.MessageBroker.Notification> NotificationsOfType<T>()
+		public IEnumerable<Interfaces.MessageBroker.Message> NotificationsOfType<T>()
 		{
 			return AllNotifications.Where(n => n.DomainType.Equals(typeof(T).Name));
 		}
 
-		public void SendMultiple(IEnumerable<Interfaces.MessageBroker.Notification> notifications)
+		public void SendMultiple(IEnumerable<Interfaces.MessageBroker.Message> notifications)
 		{
 			throw new NotImplementedException();
 		}

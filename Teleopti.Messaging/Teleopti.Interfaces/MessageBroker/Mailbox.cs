@@ -8,22 +8,22 @@ namespace Teleopti.Interfaces.MessageBroker
 	{
 		public Guid Id { get; set; }
 		public string Route { get; set; }
-		public ICollection<Notification> Notifications { get; set; }
+		public ICollection<Message> Notifications { get; set; }
 
 		public Mailbox()
 		{
-			Notifications = new Collection<Notification>();
+			Notifications = new Collection<Message>();
 		}
 
-		public void AddNotification(Notification notification)
+		public void AddNotification(Message message)
 		{
-			Notifications.Add(notification);
+			Notifications.Add(message);
 		}
 
-		public IEnumerable<Notification> PopAll()
+		public IEnumerable<Message> PopAll()
 		{
 			var r = Notifications;
-			Notifications = new Collection<Notification>();
+			Notifications = new Collection<Message>();
 			return r;
 		}
 	}

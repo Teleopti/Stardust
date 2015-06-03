@@ -32,9 +32,9 @@ namespace Teleopti.MessagingTest.SignalR.TestDoubles
 			return _hubConnection;
 		}
 
-		public void SendNotification(Notification notification)
+		public void SendNotification(Message message)
 		{
-			_sender.Send(notification);
+			_sender.Send(message);
 		}
 	}
 }

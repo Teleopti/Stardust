@@ -27,7 +27,7 @@ namespace Teleopti.Messaging.Client.SignalR
 		{
 		}
 
-		public void RegisterCallbacks(Action<Notification> onNotification, Action afterConnectionCreated)
+		public void RegisterCallbacks(Action<Message> onNotification, Action afterConnectionCreated)
 		{
 		}
 	}

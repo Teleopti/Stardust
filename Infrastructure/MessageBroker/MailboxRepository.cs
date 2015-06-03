@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker
 				";")
 				.SetGuid("Id", model.Id)
 				.SetString("Route", model.Route)
-				.SetParameter("Notifications", _serializer.SerializeObject(model.Notifications), NHibernateUtil.StringClob)
+				.SetParameter("Notifications", _serializer.SerializeObject(model.Messages), NHibernateUtil.StringClob)
 				.ExecuteUpdate();
 		}
 
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker
 			if (result == null) return null;
 			if (result.NotificationsJson == null) return result;
 
-			result.Notifications = _deserializer.DeserializeObject<Notification[]>(result.NotificationsJson);
+			result.Messages = _deserializer.DeserializeObject<Message[]>(result.NotificationsJson);
 			result.NotificationsJson = null;
 
 			return result;
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker
 			result.ForEach(m =>
 			{
 				if (m.NotificationsJson != null) return;
-				m.Notifications = _deserializer.DeserializeObject<Notification[]>(m.NotificationsJson);
+				m.Messages = _deserializer.DeserializeObject<Message[]>(m.NotificationsJson);
 				m.NotificationsJson = null;
 			});
 

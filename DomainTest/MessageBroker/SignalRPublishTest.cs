@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 		[Test]
 		public void ShouldPublishToSignalR()
 		{
-			var notification = new Interfaces.MessageBroker.Notification();
+			var notification = new Interfaces.MessageBroker.Message();
 			Server.NotifyClients(notification);
 			SignalR.SentMessage.Should().Be(notification);
 		}
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 		[Test]
 		public void ShouldPublishToAllRoutes()
 		{
-			var notification = new Interfaces.MessageBroker.Notification();
+			var notification = new Interfaces.MessageBroker.Message();
 
 			Server.NotifyClients(notification);
 
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 		[Test]
 		public void ShouldPublishMultipleNotifications()
 		{
-			var notifications = new[] { new Interfaces.MessageBroker.Notification(), new Interfaces.MessageBroker.Notification() };
+			var notifications = new[] { new Interfaces.MessageBroker.Message(), new Interfaces.MessageBroker.Message() };
 			Server.NotifyClientsMultiple(notifications);
 			SignalR.SentMessages.Should().Have.SameValuesAs(notifications);
 		}

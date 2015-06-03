@@ -7,10 +7,10 @@ namespace Teleopti.Messaging.Client
 {
 	public class NotificationFactory
 	{
-		public static Notification CreateNotification(DateTime floor, DateTime ceiling, Guid moduleId, Guid domainObjectId,
+		public static Message CreateNotification(DateTime floor, DateTime ceiling, Guid moduleId, Guid domainObjectId,
 		                                              Type domainInterfaceType, string dataSource, Guid businessUnitId)
 		{
-			return new Notification
+			return new Message
 				{
 					StartDate = Subscription.DateToString(floor),
 					EndDate = Subscription.DateToString(ceiling),

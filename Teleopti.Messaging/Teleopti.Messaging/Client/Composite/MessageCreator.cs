@@ -21,7 +21,7 @@ namespace Teleopti.Messaging.Client.Composite
 			_messageFilterManager = messageFilterManager;
 		}
 
-		private IEnumerable<Notification> createNotifications(string dataSource, string businessUnitId,
+		private IEnumerable<Message> createNotifications(string dataSource, string businessUnitId,
 			DateTime eventStartDate, DateTime eventEndDate, Guid moduleId,
 			Guid referenceObjectId, Type referenceObjectType,
 			Guid domainObjectId, Type domainObjectType,
@@ -39,7 +39,7 @@ namespace Teleopti.Messaging.Client.Composite
 				var domainQualifiedTypeString = _messageFilterManager.LookupTypeToSend(domainObjectType);
 				var domainReferenceIdString = Subscription.IdToString(referenceObjectId);
 				var domainObjectString = (domainObject != null) ? Convert.ToBase64String(domainObject) : null;
-				yield return new Notification
+				yield return new Message
 				{
 					StartDate = eventStartDateString,
 					EndDate = eventEndDateString,
@@ -73,7 +73,7 @@ namespace Teleopti.Messaging.Client.Composite
 
 		public void Send(string dataSource, Guid businessUnitId, IEventMessage[] eventMessages)
 		{
-			var notificationList = new List<Notification>();
+			var notificationList = new List<Message>();
 			var businessUnitIdString = Subscription.IdToString(businessUnitId);
 			foreach (var eventMessage in eventMessages)
 			{

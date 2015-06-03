@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.Aggregator
 			Target.SaveState(inAdherence);
 			Target.SaveState(outOfAdherence);
 
-			Sender.LastSiteNotification.DeserializeBindaryData<SiteAdherenceMessage>().OutOfAdherence.Should().Be(1);
+			Sender.LastSiteMessage.DeserializeBindaryData<SiteAdherenceMessage>().OutOfAdherence.Should().Be(1);
 		}
 
 		[Test]
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.Aggregator
 			Target.SaveState(inAdherence);
 			Target.SaveState(outOfAdherence);
 
-			Sender.LastSiteNotification.DeserializeBindaryData<SiteAdherenceMessage>().OutOfAdherence.Should().Be(1);
+			Sender.LastSiteMessage.DeserializeBindaryData<SiteAdherenceMessage>().OutOfAdherence.Should().Be(1);
 		}
 
 		[Test]
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.Aggregator
 			Target.SaveState(outOfAdherence1);
 			Target.SaveState(outOfAdherence2);
 
-			Sender.LastSiteNotification.DeserializeBindaryData<SiteAdherenceMessage>().OutOfAdherence.Should().Be(2);
+			Sender.LastSiteMessage.DeserializeBindaryData<SiteAdherenceMessage>().OutOfAdherence.Should().Be(2);
 		}
 
 
@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.Aggregator
 			Target.SaveState(outOfAdherence1);
 			Target.SaveState(outOfAdherence2);
 
-			Sender.LastSiteNotification.DeserializeBindaryData<SiteAdherenceMessage>().OutOfAdherence.Should().Be(1);
+			Sender.LastSiteMessage.DeserializeBindaryData<SiteAdherenceMessage>().OutOfAdherence.Should().Be(1);
 		}
 	}
 }

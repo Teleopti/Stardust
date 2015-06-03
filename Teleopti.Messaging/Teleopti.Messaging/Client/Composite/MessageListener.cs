@@ -111,7 +111,7 @@ namespace Teleopti.Messaging.Client.Composite
 			_client.Call("AddSubscription", subscription);
 		}
 
-		public void OnNotification(Notification d)
+		public void OnNotification(Message d)
 		{
 			var message = new EventMessage
 			{

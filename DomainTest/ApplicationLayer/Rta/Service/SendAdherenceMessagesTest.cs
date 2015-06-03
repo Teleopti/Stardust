@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 			Target.SaveState(state);
 
-			Sender.LastNotification.DomainId.Should().Be(teamId.ToString());
+			Sender.LastMessage.DomainId.Should().Be(teamId.ToString());
 		}
 
 		[Test]
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				}
 			});
 			
-			var jsonResult = JsonConvert.DeserializeObject<TeamAdherenceMessage>(Sender.LastTeamNotification.BinaryData);
+			var jsonResult = JsonConvert.DeserializeObject<TeamAdherenceMessage>(Sender.LastTeamMessage.BinaryData);
 			jsonResult.OutOfAdherence.Should().Be.EqualTo(1);
 		}
 
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Target.SaveState(state);
 			Target.SaveState(state2);
 
-			var jsonResult = JsonConvert.DeserializeObject<AgentsAdherenceMessage>(Sender.LastAgentsNotification.BinaryData);
+			var jsonResult = JsonConvert.DeserializeObject<AgentsAdherenceMessage>(Sender.LastAgentsMessage.BinaryData);
 			jsonResult.AgentStates.Single().State.Should().Be.EqualTo("my second state");
 		}
 
@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			
 			Target.SaveState(state);
 
-			Sender.LastTeamNotification.BusinessUnitId.Should().Be.EqualTo(businessUnidId.ToString());
+			Sender.LastTeamMessage.BusinessUnitId.Should().Be.EqualTo(businessUnidId.ToString());
 		}
 
 		[Test]
@@ -217,7 +217,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			
 			Target.SaveState(state);
 
-			Sender.LastSiteNotification.BusinessUnitId.Should().Be.EqualTo(businessUnidId.ToString());
+			Sender.LastSiteMessage.BusinessUnitId.Should().Be.EqualTo(businessUnidId.ToString());
 		}
 
 		[Test]

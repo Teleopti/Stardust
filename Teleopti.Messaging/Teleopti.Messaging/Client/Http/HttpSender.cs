@@ -31,12 +31,12 @@ namespace Teleopti.Messaging.Client.Http
 				});
 		}
 
-		public void Send(Notification notification)
+		public void Send(Message message)
 		{
-			call("MessageBroker/NotifyClients", notification);
+			call("MessageBroker/NotifyClients", message);
 		}
 
-		public void SendMultiple(IEnumerable<Notification> notifications)
+		public void SendMultiple(IEnumerable<Message> notifications)
 		{
 			call("MessageBroker/NotifyClientsMultiple", notifications);
 		}

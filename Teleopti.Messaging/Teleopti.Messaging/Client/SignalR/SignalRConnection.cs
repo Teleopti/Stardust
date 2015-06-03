@@ -25,7 +25,7 @@ namespace Teleopti.Messaging.Client.SignalR
 		private readonly ILog _logger = LogManager.GetLogger(typeof(SignalRConnection));
 		private readonly IEnumerable<IConnectionKeepAliveStrategy> _connectionKeepAliveStrategy;
 		private readonly ITime _time;
-		private Action<Notification> _onNotification;
+		private Action<Message> _onNotification;
 
 		public SignalRConnection(
 			Func<IHubConnectionWrapper> hubConnectionFactory, 
@@ -52,7 +52,7 @@ namespace Teleopti.Messaging.Client.SignalR
 
 			_hubProxy.Subscribe("OnEventMessage").Received += obj =>
 			{
-				var d = obj[0].ToObject<Notification>();
+				var d = obj[0].ToObject<Message>();
 				if (_onNotification != null)
 					_onNotification(d);
 			};
@@ -60,7 +60,7 @@ namespace Teleopti.Messaging.Client.SignalR
 			_afterConnectionCreated();
 		}
 
-		public void StartConnection(Action<Notification> onNotification, bool useLongPolling)
+		public void StartConnection(Action<Message> onNotification, bool useLongPolling)
 		{
 			_onNotification = onNotification;
 

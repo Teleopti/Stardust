@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.Aggregator
 			Target.Initialize();
 			Target.SaveState(state);
 
-			Sender.LastTeamNotification.DeserializeBindaryData<TeamAdherenceMessage>().OutOfAdherence.Should().Be(2);
+			Sender.LastTeamMessage.DeserializeBindaryData<TeamAdherenceMessage>().OutOfAdherence.Should().Be(2);
 		}
 
 		[Test]

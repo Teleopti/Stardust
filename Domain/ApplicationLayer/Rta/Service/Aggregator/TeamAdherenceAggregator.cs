@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator
 			_jsonSerializer = jsonSerializer;
 		}
 
-		public Interfaces.MessageBroker.Notification CreateNotification(IAdherenceAggregatorInfo state)
+		public Interfaces.MessageBroker.Message CreateNotification(IAdherenceAggregatorInfo state)
 		{
 			var numberOfOutOfAdherence = _aggregationState.GetOutOfAdherenceForTeam(state.TeamId);
 			return createTeamNotification(numberOfOutOfAdherence, 
@@ -23,14 +23,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator
 				state.SiteId);
 		}
 
-		private Interfaces.MessageBroker.Notification createTeamNotification(int numberOfOutOfAdherence, Guid businessUnitId, Guid teamId, Guid siteId)
+		private Interfaces.MessageBroker.Message createTeamNotification(int numberOfOutOfAdherence, Guid businessUnitId, Guid teamId, Guid siteId)
 		{
 			var teamAdherenceMessage = new TeamAdherenceMessage
 			{
 				OutOfAdherence = numberOfOutOfAdherence
 			};
 
-			return new Interfaces.MessageBroker.Notification
+			return new Interfaces.MessageBroker.Message
 			{
 				BinaryData = _jsonSerializer.SerializeObject(teamAdherenceMessage),
 				BusinessUnitId = businessUnitId.ToString(),

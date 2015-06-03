@@ -4,7 +4,7 @@ namespace Teleopti.Interfaces.MessageBroker.Client
 {
 	public interface IMessageSender
 	{
-		void Send(Notification notification);
-		void SendMultiple(IEnumerable<Notification> notifications);
+		void Send(Message message);
+		void SendMultiple(IEnumerable<Message> notifications);
 	}
 }

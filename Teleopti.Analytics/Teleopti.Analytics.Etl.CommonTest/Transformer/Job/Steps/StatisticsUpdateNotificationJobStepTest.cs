@@ -31,12 +31,12 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job.Steps
 
 			var target = new StatisticsUpdateNotificationJobStep(jobParameters);
 			IJobStepResult jobStepResult = target.Run(new List<IJobStep>(), null, new List<IJobResult>(), true);
-			var arguments = messageSender.GetArgumentsForCallsMadeOn(x => x.Send((Notification) null), a => a.IgnoreArguments());
+			var arguments = messageSender.GetArgumentsForCallsMadeOn(x => x.Send((Message) null), a => a.IgnoreArguments());
 
 			jobStepResult.Status.Should().Be.EqualTo("Done");
 
 			var firstCall = arguments.Single();
-			var notification = (Notification)firstCall.Single();
+			var notification = (Message)firstCall.Single();
 			notification.DomainId.Should().Be(Guid.Empty.ToString());
 			notification.DomainType.Should().Be(typeof(IStatisticTask).Name);
 			

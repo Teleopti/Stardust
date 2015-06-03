@@ -29,10 +29,10 @@ namespace Teleopti.Ccc.Web.Broker
 			context.Groups.Remove(connectionId, groupName);
 		}
 
-		public void CallOnEventMessage(string groupName, string route, Notification notification)
+		public void CallOnEventMessage(string groupName, string route, Message message)
 		{
 			var context = GlobalHost.ConnectionManager.GetHubContext<MessageBrokerHub>();
-			context.Clients.Group(groupName).onEventMessage(notification, route);
+			context.Clients.Group(groupName).onEventMessage(message, route);
 		}
 
 	}

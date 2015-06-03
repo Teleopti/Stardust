@@ -7,10 +7,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public static class ActualAgentStateExtension
 	{
-		public static void SeralizeActualAgentState(this Interfaces.MessageBroker.Notification notification, IJsonSerializer serializer, AgentStateReadModel agentStateReadModel)
+		public static void SeralizeActualAgentState(this Interfaces.MessageBroker.Message message, IJsonSerializer serializer, AgentStateReadModel agentStateReadModel)
 		{
 			var domainObject = serializer.SerializeObject(agentStateReadModel);
-			notification.BinaryData = Convert.ToBase64String(Encoding.UTF8.GetBytes(domainObject));
+			message.BinaryData = Convert.ToBase64String(Encoding.UTF8.GetBytes(domainObject));
 		}
 
 	}

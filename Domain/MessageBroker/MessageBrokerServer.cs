@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 			_mailboxRepository.Persist(new Mailbox {Route = subscription.Route(), Id = Guid.Parse(subscription.MailboxId)});
 		}
 
-		public IEnumerable<Interfaces.MessageBroker.Notification> PopMessages(string mailboxId)
+		public IEnumerable<Message> PopMessages(string mailboxId)
 		{
 			var mailbox = _mailboxRepository.Load(Guid.Parse(mailboxId));
 			var result = mailbox.PopAll();
@@ -65,30 +65,30 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 			return result;
 		}
 
-		public void NotifyClients(Interfaces.MessageBroker.Notification notification)
+		public void NotifyClients(Message message)
 		{
-			var routes = notification.Routes();
+			var routes = message.Routes();
 
 			if (Logger.IsDebugEnabled)
 				Logger.DebugFormat("New notification from client with (DomainUpdateType: {0}) (Routes: {1}) (Id: {2}).",
-					notification.DomainUpdateType, string.Join(", ", routes),
+					message.DomainUpdateType, string.Join(", ", routes),
 					string.Join(", ", routes.Select(RouteToGroupName)));
 
 			_mailboxRepository.Load(routes)
 				.ForEach(mailbox =>
 				{
-					mailbox.AddNotification(notification);
+					mailbox.AddMessage(message);
 					_mailboxRepository.Persist(mailbox);
 				});
 
 			foreach (var route in routes)
 			{
 				var r = route;
-				_actionScheduler.Do(() => _signalR.CallOnEventMessage(RouteToGroupName(r), r, notification));
+				_actionScheduler.Do(() => _signalR.CallOnEventMessage(RouteToGroupName(r), r, message));
 			}
 		}
 
-		public void NotifyClientsMultiple(IEnumerable<Interfaces.MessageBroker.Notification> notifications)
+		public void NotifyClientsMultiple(IEnumerable<Message> notifications)
 		{
 			foreach (var notification in notifications)
 			{

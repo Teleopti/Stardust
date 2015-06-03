@@ -46,7 +46,7 @@ namespace Teleopti.MessagingTest.SignalR
 			target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => wasEventHandlerCalled = true,
 				typeof(IInterfaceForTest));
 
-			var notification = new Notification
+			var notification = new Message
 			{
 				DomainQualifiedType = "IInterfaceForTest",
 				BusinessUnitId = Guid.Empty.ToString(),
@@ -93,7 +93,7 @@ namespace Teleopti.MessagingTest.SignalR
 				typeof(IInterfaceForTest), DateTime.UtcNow.AddHours(-3),
 				DateTime.UtcNow.AddHours(-1));
 
-			var notification = new Notification
+			var notification = new Message
 			{
 				DomainQualifiedType = "IInterfaceForTest",
 				BusinessUnitId = Guid.Empty.ToString(),
@@ -120,7 +120,7 @@ namespace Teleopti.MessagingTest.SignalR
 				typeof(IInterfaceForTest), DateTime.UtcNow.AddHours(1),
 				DateTime.UtcNow.AddHours(3));
 
-			var notification = new Notification
+			var notification = new Message
 			{
 				DomainQualifiedType = "IInterfaceForTest",
 				BusinessUnitId = Guid.Empty.ToString(),

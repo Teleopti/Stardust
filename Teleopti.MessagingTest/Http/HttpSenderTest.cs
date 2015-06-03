@@ -22,7 +22,7 @@ namespace Teleopti.MessagingTest.Http
 			var poster = MockRepository.GenerateMock<IPoster>();
 			var target = new HttpSender(new MutableUrl(), null) {PostAsync = (client, url, content) => poster.PostAsync(client, url, content)};
 			
-			target.Send(new Notification());
+			target.Send(new Message());
 
 			poster.AssertWasCalled(x => x.PostAsync(null, null, null), o => o.IgnoreArguments());
 		}
@@ -42,7 +42,7 @@ namespace Teleopti.MessagingTest.Http
 			var target = new HttpSender(mutableUrl, null) { PostAsync = (c, u, cn) => postedUrl = u };
 			mutableUrl.Configure(url);
 
-			target.Send(new Notification());
+			target.Send(new Message());
 
 			postedUrl.Should().Be(url.TrimEnd('/') + "/MessageBroker/NotifyClients");
 		}
@@ -53,8 +53,8 @@ namespace Teleopti.MessagingTest.Http
 			var calledClients = new List<HttpClient>();
 			var target = new HttpSender(null, null) { PostAsync = (c, u, cn) => calledClients.Add(c)};
 
-			target.Send(new Notification());
-			target.Send(new Notification());
+			target.Send(new Message());
+			target.Send(new Message());
 
 			calledClients[0].Should().Be.SameInstanceAs(calledClients[1]);
 		}
@@ -62,7 +62,7 @@ namespace Teleopti.MessagingTest.Http
 		[Test]
 		public void ShouldPostDataAsJson()
 		{
-			var notification = new Notification();
+			var notification = new Message();
 			var serializer = MockRepository.GenerateMock<IJsonSerializer>();
 			serializer.Stub(x => x.SerializeObject(notification)).Return("serialized!");
 			HttpContent postedContent = null;
@@ -77,7 +77,7 @@ namespace Teleopti.MessagingTest.Http
 		[Test]
 		public void ShouldPostMultiple()
 		{
-			var notifications = new[] {new Notification {DataSource = "one"}, new Notification {DataSource = "two"}};
+			var notifications = new[] {new Message {DataSource = "one"}, new Message {DataSource = "two"}};
 			var serializer = MockRepository.GenerateMock<IJsonSerializer>();
 			serializer.Stub(x => x.SerializeObject(notifications)).Return("many");
 			HttpContent postedContent = null;

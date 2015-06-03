@@ -29,23 +29,23 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 
 
 
-		public Interfaces.MessageBroker.Notification SentMessage;
+		public Interfaces.MessageBroker.Message SentMessage;
 		public string SentToGroup;
 		public string SentRoute;
 
 		public IList<string> SentToGroups = new List<string>();
 		public IList<string> SentRoutes = new List<string>();
-		public IList<Interfaces.MessageBroker.Notification> SentMessages = new List<Interfaces.MessageBroker.Notification>();
+		public IList<Interfaces.MessageBroker.Message> SentMessages = new List<Interfaces.MessageBroker.Message>();
 
-		public void CallOnEventMessage(string groupName, string route, Interfaces.MessageBroker.Notification notification)
+		public void CallOnEventMessage(string groupName, string route, Interfaces.MessageBroker.Message message)
 		{
 			SentToGroup = groupName;
 			SentRoute = route;
-			SentMessage = notification;
+			SentMessage = message;
 
 			SentToGroups.Add(groupName);
 			SentRoutes.Add(route);
-			SentMessages.Add(notification);
+			SentMessages.Add(message);
 		}
 	}
 }

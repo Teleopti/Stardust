@@ -832,7 +832,7 @@
     <Compile Include="MessageBroker\Client\Composite\IMessageCreator.cs" />
     <Compile Include="MessageBroker\Events\TrackingMessage.cs" />
     <Compile Include="MessageBroker\Mailbox.cs" />
-    <Compile Include="MessageBroker\Notification.cs" />
+    <Compile Include="MessageBroker\Message.cs" />
     <Compile Include="MessageBroker\Subscription.cs" />
     <Compile Include="Messages\Denormalize\ScheduleChanged.cs" />
     <Compile Include="Messages\Denormalize\DenormalizeScheduleProjection.cs" />

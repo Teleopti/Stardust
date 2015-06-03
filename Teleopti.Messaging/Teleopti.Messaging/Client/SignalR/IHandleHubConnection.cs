@@ -6,7 +6,7 @@ namespace Teleopti.Messaging.Client.SignalR
 {
 	public interface IHandleHubConnection : IDisposable
 	{
-		void StartConnection(Action<Notification> onNotification, bool useLongPolling);
+		void StartConnection(Action<Message> onNotification, bool useLongPolling);
 		bool IsConnected();
 	}
 }

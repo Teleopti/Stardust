@@ -21,7 +21,7 @@ namespace Teleopti.Messaging.Client.SignalR
 		private IHandleHubConnection _connection;
 		private IStateAccessor _stateAccessor;
 		private readonly ILog _logger = LogManager.GetLogger(typeof(SignalRClient));
-		private Action<Notification> _onNotification = n => { };
+		private Action<Message> _onNotification = n => { };
 		private Action _afterConnectionCreated = () => { };
 
 		public SignalRClient(string serverUrl, IEnumerable<IConnectionKeepAliveStrategy> connectionKeepAliveStrategy, ITime time)
@@ -83,7 +83,7 @@ namespace Teleopti.Messaging.Client.SignalR
 			});
 		}
 
-		public void RegisterCallbacks(Action<Notification> onNotification, Action afterConnectionCreated)
+		public void RegisterCallbacks(Action<Message> onNotification, Action afterConnectionCreated)
 		{
 			_onNotification = onNotification;
 			_afterConnectionCreated = afterConnectionCreated;

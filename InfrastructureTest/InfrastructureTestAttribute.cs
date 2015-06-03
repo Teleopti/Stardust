@@ -39,11 +39,11 @@ namespace Teleopti.Ccc.InfrastructureTest
 
 	public class NoMessageSender : IMessageSender
 	{
-		public void Send(Notification notification)
+		public void Send(Message message)
 		{
 		}
 
-		public void SendMultiple(IEnumerable<Notification> notifications)
+		public void SendMultiple(IEnumerable<Message> notifications)
 		{
 		}
 	}

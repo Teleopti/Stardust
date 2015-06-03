@@ -6,9 +6,9 @@ using Teleopti.Interfaces.MessageBroker.Events;
 namespace Teleopti.Interfaces.MessageBroker
 {
 	[Serializable]
-	public class Notification
+	public class Message
 	{
-		public Notification()
+		public Message()
 		{
 			DomainId = Guid.Empty.ToString();
 			DomainReferenceId = DomainId;

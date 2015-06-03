@@ -20,7 +20,7 @@ namespace Teleopti.Messaging.Client.SignalR
 		{
 		}
 
-		public void Send(Notification notification)
+		public void Send(Message message)
 		{
 		}
 	}

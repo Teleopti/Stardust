@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			{
 				initiatorId = initiatorInfo.InitiatorId;
 			}
-			_sender.Send(new Interfaces.MessageBroker.Notification
+			_sender.Send(new Interfaces.MessageBroker.Message
 			{
 				DataSource = dataSource,
 				BusinessUnitId = businessUnitId.ToString(),

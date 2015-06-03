@@ -32,12 +32,12 @@ namespace Teleopti.Ccc.Web.Broker
 			_server.RemoveSubscription(route, Context.ConnectionId);
 		}
 
-		public void NotifyClients(Notification notification)
+		public void NotifyClients(Message message)
 		{
-			_server.NotifyClients(notification);
+			_server.NotifyClients(message);
 		}
 
-		public void NotifyClientsMultiple(IEnumerable<Notification> notifications)
+		public void NotifyClientsMultiple(IEnumerable<Message> notifications)
 		{
 			_server.NotifyClientsMultiple(notifications);
 		}

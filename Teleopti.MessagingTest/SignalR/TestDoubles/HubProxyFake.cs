@@ -20,8 +20,8 @@ namespace Teleopti.MessagingTest.SignalR.TestDoubles
 		private string _subscriptedToRoute;
 		private bool _connectionBroken;
 
-		public readonly IList<Notification> NotifyClientsInvokedWith = new List<Notification>();
-		public readonly IList<Notification> NotifyClientsMultipleInvokedWith = new List<Notification>();
+		public readonly IList<Message> NotifyClientsInvokedWith = new List<Message>();
+		public readonly IList<Message> NotifyClientsMultipleInvokedWith = new List<Message>();
 
 		public ISubscriptionWrapper Subscribe(string eventName)
 		{
@@ -39,14 +39,14 @@ namespace Teleopti.MessagingTest.SignalR.TestDoubles
 
 			if (method == "NotifyClients")
 			{
-				var notification = (Notification) args.First();
+				var notification = (Message) args.First();
 				NotifyClientsInvokedWith.Add(notification);
 				raiseNotificationSubscription(notification);
 			}
 
 			if (method == "NotifyClientsMultiple")
 			{
-				var notifications = (IEnumerable<Notification>) args.First();
+				var notifications = (IEnumerable<Message>) args.First();
 				notifications.ForEach(notification =>
 				{
 					NotifyClientsMultipleInvokedWith.Add(notification);
@@ -63,15 +63,15 @@ namespace Teleopti.MessagingTest.SignalR.TestDoubles
 			return TaskHelper.MakeDoneTask();
 		}
 
-		private void raiseNotificationSubscription(Notification notification)
+		private void raiseNotificationSubscription(Message message)
 		{
 			if (_connectionBroken)
 				return;
 			if (_subscriptedToRoute == null)
 				return;
-			if (!notification.Routes().Contains(_subscriptedToRoute))
+			if (!message.Routes().Contains(_subscriptedToRoute))
 				return;
-			var token = JObject.Parse(JsonConvert.SerializeObject(notification));
+			var token = JObject.Parse(JsonConvert.SerializeObject(message));
 			notificationSubscription.RaiseRecieved(new List<JToken>(new JToken[] {token}));
 		}
 

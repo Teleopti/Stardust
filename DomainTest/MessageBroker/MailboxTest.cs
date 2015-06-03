@@ -45,14 +45,14 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 				BusinessUnitId = Guid.NewGuid().ToString()
 			};
 			Server.AddMailbox(mailbox);
-			var notification = new Interfaces.MessageBroker.Notification
+			var notification = new Interfaces.MessageBroker.Message
 			{
 				BusinessUnitId = mailbox.BusinessUnitId
 			};
 
 			Server.NotifyClients(notification);
 
-			Mailboxes.Data.Single().PopAll().Single().Routes().Should().Have.SameValuesAs(notification.Routes());
+			Mailboxes.Data.Single().PopAllMessages().Single().Routes().Should().Have.SameValuesAs(notification.Routes());
 		}
 
 		[Test]
@@ -72,15 +72,15 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 			};
 			Server.AddMailbox(mailbox1);
 			Server.AddMailbox(mailbox2);
-			var notification = new Interfaces.MessageBroker.Notification
+			var notification = new Interfaces.MessageBroker.Message
 			{
 				BusinessUnitId = mailbox2.BusinessUnitId
 			};
 
 			Server.NotifyClients(notification);
 
-			Mailboxes.Data.Single(x => x.Id.Equals(mailbox1Id)).PopAll().Should().Have.Count.EqualTo(0);
-			Mailboxes.Data.Single(x => x.Id.Equals(mailbox2Id)).PopAll().Single().Routes().Should().Have.SameValuesAs(notification.Routes());
+			Mailboxes.Data.Single(x => x.Id.Equals(mailbox1Id)).PopAllMessages().Should().Have.Count.EqualTo(0);
+			Mailboxes.Data.Single(x => x.Id.Equals(mailbox2Id)).PopAllMessages().Single().Routes().Should().Have.SameValuesAs(notification.Routes());
 		}
 
 		[Test]
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 		{
 			var subscription = new Subscription { MailboxId = Guid.NewGuid().ToString() };
 			Server.AddMailbox(subscription);
-			var notification = new Interfaces.MessageBroker.Notification();
+			var notification = new Interfaces.MessageBroker.Message();
 			Server.NotifyClients(notification);
 
 			var messages = Server.PopMessages(subscription.MailboxId);
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 		{
 			var subscription = new Subscription { MailboxId = Guid.NewGuid().ToString() };
 			Server.AddMailbox(subscription);
-			var notification = new Interfaces.MessageBroker.Notification();
+			var notification = new Interfaces.MessageBroker.Message();
 			Server.NotifyClients(notification);
 
 			Server.PopMessages(subscription.MailboxId);

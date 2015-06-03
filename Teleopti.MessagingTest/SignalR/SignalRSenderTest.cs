@@ -29,7 +29,7 @@ namespace Teleopti.MessagingTest.SignalR
 			var hubProxy = new HubProxyFake();
 			var target = new SignalRClientForTest(stubHubConnection(hubProxy));
 			target.StartBrokerService();
-			var notification1 = new Notification();
+			var notification1 = new Message();
 
 			target.SendNotification(notification1);
 
@@ -42,7 +42,7 @@ namespace Teleopti.MessagingTest.SignalR
 			var hubProxy = new HubProxyFake();
 			var target = new SignalRClientForTest(stubHubConnection(hubProxy));
 			
-			target.SendNotification(new Notification());
+			target.SendNotification(new Message());
 
 			hubProxy.NotifyClientsInvokedWith.Should().Have.Count.EqualTo(0);
 		}
@@ -55,7 +55,7 @@ namespace Teleopti.MessagingTest.SignalR
 			target.StartBrokerService();
 			target.Dispose();
 
-			target.SendNotification(new Notification());
+			target.SendNotification(new Message());
 
 			hubProxy.NotifyClientsInvokedWith.Should().Have.Count.EqualTo(0);
 		}

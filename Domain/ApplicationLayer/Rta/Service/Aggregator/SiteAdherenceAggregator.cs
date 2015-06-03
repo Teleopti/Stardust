@@ -14,20 +14,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator
 			_jsonSerializer = jsonSerializer;
 		}
 
-		public Interfaces.MessageBroker.Notification CreateNotification(IAdherenceAggregatorInfo state)
+		public Interfaces.MessageBroker.Message CreateNotification(IAdherenceAggregatorInfo state)
 		{
 			var numberOfOutOfAdherence = _aggregationState.GetOutOfAdherenceForSite(state.SiteId);
 			return createSiteNotification(numberOfOutOfAdherence, state.BusinessUnitId, state.SiteId);
 		}
 
-		private Interfaces.MessageBroker.Notification createSiteNotification(int numberOfOutOfAdherence, Guid businessUnitId, Guid siteId)
+		private Interfaces.MessageBroker.Message createSiteNotification(int numberOfOutOfAdherence, Guid businessUnitId, Guid siteId)
 		{
 			var siteAdherenceMessage = new SiteAdherenceMessage
 			{
 				OutOfAdherence = numberOfOutOfAdherence
 			};
 
-			return new Interfaces.MessageBroker.Notification
+			return new Interfaces.MessageBroker.Message
 			{
 				BinaryData = _jsonSerializer.SerializeObject(siteAdherenceMessage),
 				BusinessUnitId = businessUnitId.ToString(),

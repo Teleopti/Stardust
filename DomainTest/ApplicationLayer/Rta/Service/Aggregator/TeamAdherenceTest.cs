@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.Aggregator
 			Target.SaveState(inAdherence);
 			Target.SaveState(outOfAdherence);
 
-			Sender.LastTeamNotification.DeserializeBindaryData<TeamAdherenceMessage>().OutOfAdherence.Should().Be(1);
+			Sender.LastTeamMessage.DeserializeBindaryData<TeamAdherenceMessage>().OutOfAdherence.Should().Be(1);
 		}
 
 		[Test]
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.Aggregator
 			Target.SaveState(inAdherence);
 			Target.SaveState(outOfAdherence);
 
-			Sender.LastTeamNotification.DeserializeBindaryData<TeamAdherenceMessage>().OutOfAdherence.Should().Be(1);
+			Sender.LastTeamMessage.DeserializeBindaryData<TeamAdherenceMessage>().OutOfAdherence.Should().Be(1);
 		}
 
 		[Test]
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.Aggregator
 			Target.SaveState(outOfAdherence1);
 			Target.SaveState(outOfAdherence2);
 
-			Sender.LastTeamNotification.DeserializeBindaryData<TeamAdherenceMessage>().OutOfAdherence.Should().Be(2);
+			Sender.LastTeamMessage.DeserializeBindaryData<TeamAdherenceMessage>().OutOfAdherence.Should().Be(2);
 		}
 
 		[Test]
@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.Aggregator
 			Target.SaveState(outOfAdherence1);
 			Target.SaveState(outOfAdherence2);
 
-			Sender.LastTeamNotification.DeserializeBindaryData<TeamAdherenceMessage>().OutOfAdherence.Should().Be(1);
+			Sender.LastTeamMessage.DeserializeBindaryData<TeamAdherenceMessage>().OutOfAdherence.Should().Be(1);
 		}
 
 		[Test]
@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.Aggregator
 
 			Target.SaveState(state);
 
-			Sender.LastTeamNotification.DomainReferenceId.Should().Be.EqualTo(siteId.ToString());
+			Sender.LastTeamMessage.DomainReferenceId.Should().Be.EqualTo(siteId.ToString());
 		}
 	}
 }

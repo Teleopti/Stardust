@@ -4,6 +4,6 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 	{
 		void AddConnectionToGroup(string groupName, string connectionId);
 		void RemoveConnectionFromGroup(string groupName, string connectionId);
-		void CallOnEventMessage(string groupName, string route, Interfaces.MessageBroker.Notification notification);
+		void CallOnEventMessage(string groupName, string route, Interfaces.MessageBroker.Message message);
 	}
 }

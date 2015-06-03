@@ -39,7 +39,7 @@ namespace Teleopti.MessagingTest.SignalR
 
 			hubProxy1.BreakTheConnection();
 			time.Passes(TimeSpan.FromMinutes(4));
-			var notification = new Notification();
+			var notification = new Message();
 			target.SendNotification(notification);
 
 			hubProxy2.NotifyClientsInvokedWith.Single().Should().Be(notification);
@@ -56,7 +56,7 @@ namespace Teleopti.MessagingTest.SignalR
 
 			hubProxy.BreakTheConnection();
 			time.Passes(TimeSpan.FromSeconds(119));
-			var notification = new Notification();
+			var notification = new Message();
 			target.SendNotification(notification);
 
 			hubProxy.NotifyClientsInvokedWith.Single().Should().Be(notification);
@@ -73,11 +73,11 @@ namespace Teleopti.MessagingTest.SignalR
 			var target = new MultiConnectionSignalRClientForTest(new[] { hubConnection1, hubConnection2 }, new RecreateOnNoPingReply(TimeSpan.FromMinutes(1)), time);
 			target.StartBrokerService();
 
-			var notification1 = new Notification();
+			var notification1 = new Message();
 			target.SendNotification(notification1);
 			hubProxy1.BreakTheConnection();
 			time.Passes(TimeSpan.FromMinutes(2));
-			var notification2 = new Notification();
+			var notification2 = new Message();
 			target.SendNotification(notification2);
 
 			hubProxy1.NotifyClientsInvokedWith.Single().Should().Be(notification1);

@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Performance
 			{
 				LastTimestamp = _now.UtcDateTime();
 				var message = new PerformanceCountDone {StartTime = FirstTimestamp, EndTime = LastTimestamp};
-				_messageSender.Send(new Interfaces.MessageBroker.Notification
+				_messageSender.Send(new Interfaces.MessageBroker.Message
 				{
 					BinaryData = _serializer.SerializeObject(message),
 					DomainType = message.GetType().Name,
