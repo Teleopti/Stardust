@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 		public IEnumerable<Message> PopMessages(string mailboxId)
 		{
 			var mailbox = _mailboxRepository.Load(Guid.Parse(mailboxId));
-			var result = mailbox.PopAll();
+			var result = mailbox.PopAllMessages();
 			_mailboxRepository.Persist(mailbox);
 			return result;
 		}
