@@ -17,18 +17,23 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.MultipleConfig;
 using log4net;
 using log4net.Config;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.Config;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon.Configuration;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.WcfExtensions;
 using Teleopti.Ccc.Sdk.Logic;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
+using Teleopti.Ccc.Sdk.Logic.MultiTenancy;
 using Teleopti.Ccc.Sdk.WcfHost.Ioc;
 using Teleopti.Ccc.Sdk.WcfService;
 using Teleopti.Ccc.Sdk.WcfService.Factory;
+using Teleopti.Ccc.Sdk.WcfService.LogOn;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 
@@ -200,9 +205,30 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 
 			builder.RegisterType<ResourceCalculationPrerequisitesLoader>().As<IResourceCalculationPrerequisitesLoader>().InstancePerLifetimeScope();
 			builder.RegisterType<SkillDayLoadHelper>().As<ISkillDayLoadHelper>().InstancePerLifetimeScope();
+
+			//remove this crap when we get rid of local superuser in appdb
+			builder.Register(c => 
+				new tenantPeopleLoaderButSkipIfSuperUser_Hackish(new TenantPeopleLoader(c.Resolve<ITenantLogonDataManager>()), c.Resolve<ICurrentPersonContainer>()))
+				.As<ITenantPeopleLoader>().InstancePerLifetimeScope();
+		}
+
+		private class tenantPeopleLoaderButSkipIfSuperUser_Hackish : ITenantPeopleLoader
+		{
+			private readonly TenantPeopleLoader _orgLoader;
+			private readonly ICurrentPersonContainer _currentPersonContainer;
+
+			public tenantPeopleLoaderButSkipIfSuperUser_Hackish(TenantPeopleLoader orgLoader, ICurrentPersonContainer currentPersonContainer)
+			{
+				_orgLoader = orgLoader;
+				_currentPersonContainer = currentPersonContainer;
+			}
+
+			public void FillDtosWithLogonInfo(IList<PersonDto> personDtos)
+			{
+				if (_currentPersonContainer.Current().Person.Id.Value == SuperUser.Id_AvoidUsing_This)
+					return;
+				_orgLoader.FillDtosWithLogonInfo(personDtos);
+			}
 		}
 	}
-
-
-
 }
