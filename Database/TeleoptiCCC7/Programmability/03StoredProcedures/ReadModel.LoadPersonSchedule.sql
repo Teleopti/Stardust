@@ -39,7 +39,12 @@ BEGIN
 	SET NOCOUNT ON;
 	--Declares
 	DECLARE @maxIndex INT;
+	DECLARE @scheduleDateStart smalldatetime;
+	DECLARE @scheduleDateEnd smalldatetime;
+
 	SET @maxIndex = @skip + @take;
+	SET @scheduleDateStart = @scheduleDate;
+	SET @scheduleDateEnd = DATEADD(day, 1, @scheduleDate);
 
 	DECLARE @PersonIdList table
 	(
@@ -91,11 +96,11 @@ BEGIN
 	  SELECT DISTINCT 
 	         *,
 			CASE @timeSortOrder
-			WHEN 'start asc'  THEN ROW_NUMBER() OVER (ORDER BY IsEmptySchedule, DayOffFlag, Start)
-			WHEN 'start desc' THEN ROW_NUMBER() OVER (ORDER BY IsEmptySchedule, DayOffFlag, Start DESC) 		
-			WHEN 'end asc' THEN ROW_NUMBER() OVER (ORDER BY IsEmptySchedule, DayOffFlag, [End]) 		
-			WHEN 'end desc' THEN ROW_NUMBER() OVER (ORDER BY IsEmptySchedule, DayOffFlag, [End] DESC)
-			ELSE  ROW_NUMBER() OVER (ORDER BY IsEmptySchedule, DayOffFlag, Start)
+			WHEN 'start asc'  THEN ROW_NUMBER() OVER (ORDER BY IsEmptySchedule, IsFullDayAbsence, DayOffFlag, Start)
+			WHEN 'start desc' THEN ROW_NUMBER() OVER (ORDER BY IsEmptySchedule, IsFullDayAbsence, DayOffFlag, Start DESC) 		
+			WHEN 'end asc' THEN ROW_NUMBER() OVER (ORDER BY IsEmptySchedule, IsFullDayAbsence,DayOffFlag, [End]) 		
+			WHEN 'end desc' THEN ROW_NUMBER() OVER (ORDER BY IsEmptySchedule, IsFullDayAbsence, DayOffFlag, [End] DESC)
+			ELSE  ROW_NUMBER() OVER (ORDER BY IsEmptySchedule, IsFullDayAbsence, DayOffFlag, Start)
 			End
 		    AS 'RowNumber'
 
@@ -110,10 +115,12 @@ BEGIN
 			 sd.[End], 
 			 sd.Model,
 			 sd.IsDayOff AS DayOffFlag,
+			 Case When Start IS NOT NULL AND pa.Id IS NOT NULL   AND sd.Start >= pa.Minimum AND sd.[End] <= pa.Maximum THEN 1 ELSE 0 END AS IsFullDayAbsence,
 			 CASE WHEN Start IS NULL THEN 1 ELSE 0 END As IsEmptySchedule
 			 FROM @PersonIdList p 
 			 JOIN dbo.Person person ON p.Person = person.Id 
-			 LEFT JOIN ReadModel.PersonScheduleDay sd  ON sd.PersonId = p.Person and sd.BelongsToDate = @scheduleDate		 
+			 LEFT JOIN ReadModel.PersonScheduleDay sd  ON sd.PersonId = p.Person and sd.BelongsToDate = @scheduleDate
+			 LEFT JOIN dbo.PersonAbsence pa ON p.Person = pa.Person and pa.Maximum < @scheduleDateEnd and pa.Minimum >= @scheduleDateStart		 
 			 
 			 WHERE 			
 			 -- The following enclosed conditions should be "Or"-ed such that the result is a union of each individual condition

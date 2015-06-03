@@ -215,29 +215,63 @@ Scenario: Sort shifts by time sorting filter
 
 Scenario: Sort full-day absences after shifts
 	Given I am an agent in a team
-	And I have an assigned full-day absence with
-	| Field      | Value      |
+	And I have an assigned shift with
+	| Field     | Value      |
 	| Date      | 2014-05-02 |
+	| StartTime | 8:00       |
+	| EndTime   | 16:00      |
+	And I have an absence with
+	| Field     | Value            |
+	| Name      | Vacation         |
+	| StartTime | 2014-05-02 00:00 |
+	| EndTime   | 2014-05-02 23:59 |
 	And I have a colleague
 	And My colleague has an assigned shift with
-	| Field      | Value      |
+	| Field     | Value      |
 	| Date      | 2014-05-02 |
 	| StartTime | 9:00       |
 	| EndTime   | 17:00      |
 	When I view group schedule for '2014-05-02'
 	Then I should see my colleague before myself
 
-Scenario: Sort day offs after the absences
+Scenario: Sort intra-day absences like there are no absences
 	Given I am an agent in a team
-	And I have an assigned dayoff with
-	| Field      | Value      |
+	And I have an assigned shift with
+	| Field     | Value      |
 	| Date      | 2014-05-02 |
+	| StartTime | 9:00       |
+	| EndTime   | 16:00      |
+	And I have an absence with
+	| Field     | Value            |
+	| Name      | Vacation         |
+	| StartTime | 2014-05-02 10:00 |
+	| EndTime   | 2014-05-02 23:59 |
 	And I have a colleague
-	And My colleague has an assigned full-day absence with
-	| Field		| Value            |
+	And My colleague has an assigned shift with
+	| Field     | Value      |
+	| Date      | 2014-05-02 |
+	| StartTime | 8:00       |
+	| EndTime   | 17:00      |
+	When I view group schedule for '2014-05-02'
+	Then I should see my colleague before myself
+
+Scenario: Sort the absences after day off
+	Given I am an agent in a team
+	And I have an assigned shift with
+	| Field     | Value      |
+	| Date      | 2014-05-02 |
+	| StartTime | 8:00       |
+	| EndTime   | 16:00      |
+	And I have an absence with
+	| Field     | Value            |
 	| Name      | Vacation         |
 	| StartTime | 2014-05-02 00:00 |
 	| EndTime   | 2014-05-02 23:59 |
+	And I have a colleague
+	And My colleague has an assigned dayoff with
+	| Field | Value      |
+	| Name  | DayOff     |
+	| Date  | 2014-05-02 |
 	When I view group schedule for '2014-05-02'
 	Then I should see my colleague before myself
 
