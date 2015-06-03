@@ -75,7 +75,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(person.Name, loadedAggregateFromDatabase.Name);
 			Assert.AreEqual(person.Email, loadedAggregateFromDatabase.Email);
 			Assert.AreEqual(0, loadedAggregateFromDatabase.PermissionInformation.ApplicationRoleCollection.Count);
-			Assert.That(loadedAggregateFromDatabase.ApplicationAuthenticationInfo, Is.Null);
 			Assert.AreEqual(0, loadedAggregateFromDatabase.PersonPeriodCollection.Count());
 
 			Assert.AreEqual(person.WorkflowControlSet, loadedAggregateFromDatabase.WorkflowControlSet);

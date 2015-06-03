@@ -70,16 +70,10 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 				CultureLanguageId = entity.PermissionInformation.CultureLCID(),
 				UICultureLanguageId = entity.PermissionInformation.UICultureLCID()
 			};
-			if (entity.ApplicationAuthenticationInfo != null)
-			{
-				personDto.ApplicationLogOnName = entity.ApplicationAuthenticationInfo.ApplicationLogOnName;
-				personDto.ApplicationLogOnPassword = entity.ApplicationAuthenticationInfo.Password;
-			}
-			else
-			{
-				personDto.ApplicationLogOnName = "";
-				personDto.ApplicationLogOnPassword = "";
-			}
+			
+			personDto.ApplicationLogOnName = "";
+			personDto.ApplicationLogOnPassword = "";
+			
 #pragma warning disable 618
 			personDto.WindowsDomain = "";
 			personDto.WindowsLogOnName = "";
@@ -151,12 +145,6 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 				throw new ArgumentException("Timezone cannot be empty");
 			if (dto.UICultureLanguageId.HasValue)
 				person.PermissionInformation.SetUICulture(new CultureInfo(dto.UICultureLanguageId.Value));
-			if (!string.IsNullOrEmpty(dto.ApplicationLogOnName) && !string.IsNullOrEmpty(dto.ApplicationLogOnPassword))
-				person.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo
-																		 {
-																			 ApplicationLogOnName = dto.ApplicationLogOnName,
-																			 Password = dto.ApplicationLogOnPassword
-																		 };
 			if (!string.IsNullOrEmpty(dto.Email))
 				person.Email = dto.Email;
 			if (!string.IsNullOrEmpty(dto.EmploymentNumber))

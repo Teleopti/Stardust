@@ -944,7 +944,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
 		public void MarkForRemove(IPerson person)
 		{
-			person.ApplicationAuthenticationInfo = null;
 			new Repository(GetUnitOfWork).Remove(person);
 
 			toBeRemovedList.Add(person.Id.GetValueOrDefault());
