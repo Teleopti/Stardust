@@ -1,7 +1,5 @@
 ﻿using NUnit.Framework;
-using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
@@ -17,17 +15,12 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
 	{
 		private WorkflowControlSetComparer _target;
 		private IPrincipalAuthorization _principalAuthorization;
-		private MockRepository _mocks;
-		private IPersonAccountUpdater _personAccountUpdater;
 
 		[SetUp]
 		public void Setup()
 		{
 			_target = new WorkflowControlSetComparer();
 			_principalAuthorization = new PrincipalAuthorization(new CurrentTeleoptiPrincipal());
-			_mocks = new MockRepository();
-			_personAccountUpdater = _mocks.StrictMock<IPersonAccountUpdater>();
-
 		}
 
 		[Test]
@@ -35,12 +28,12 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
 		{
 			IPerson personA = PersonFactory.CreatePerson("Kalle", "Kula");
 			var personGeneralModelX = new PersonGeneralModel(personA, _principalAuthorization,
-				new PersonAccountUpdaterDummy(), new LogonInfoModel(), new PasswordPolicyFake());
+				new PersonAccountUpdaterDummy(), new LogonInfoModel());
 			personGeneralModelX.WorkflowControlSet = new WorkflowControlSet("A set");
 
 			IPerson personB = PersonFactory.CreatePerson("Bosse", "Batong");
 			var personGeneralModelY = new PersonGeneralModel(personB, _principalAuthorization,
-				new PersonAccountUpdaterDummy(), new LogonInfoModel(), new PasswordPolicyFake());
+				new PersonAccountUpdaterDummy(), new LogonInfoModel());
 			personGeneralModelY.WorkflowControlSet = new WorkflowControlSet("B set");
 
 			Assert.AreEqual(-1, _target.Compare(personGeneralModelX, personGeneralModelY));
@@ -52,11 +45,11 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
 		{
 			IPerson personA = PersonFactory.CreatePerson("Kalle", "Kula");
 			var personGeneralModelX = new PersonGeneralModel(personA, _principalAuthorization,
-				new PersonAccountUpdaterDummy(), new LogonInfoModel(), new PasswordPolicyFake());
+				new PersonAccountUpdaterDummy(), new LogonInfoModel());
 
 			IPerson personB = PersonFactory.CreatePerson("Bosse", "Batong");
 			var personGeneralModelY = new PersonGeneralModel(personB, _principalAuthorization,
-				new PersonAccountUpdaterDummy(), new LogonInfoModel(), new PasswordPolicyFake());
+				new PersonAccountUpdaterDummy(), new LogonInfoModel());
 
 			Assert.AreEqual(0, _target.Compare(personGeneralModelX, personGeneralModelY));
 

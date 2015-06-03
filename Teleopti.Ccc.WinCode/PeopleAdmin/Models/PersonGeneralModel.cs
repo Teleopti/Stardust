@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
-using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
@@ -19,7 +17,6 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 		public static IWorkflowControlSet NullWorkflowControlSet = new WorkflowControlSet(string.Empty);
 		private readonly IPrincipalAuthorization _principalAuthorization;
 		private readonly IPersonAccountUpdater _personAccountUpdater;
-		private readonly IPasswordPolicy _passwordPolicy;
 		private bool _isValid = true;
 		private RoleCollectionParser _roleCollectionParser;
 		private bool _logonDataCanBeChanged;
@@ -32,13 +29,12 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 		}
 
 		public PersonGeneralModel(IPerson person,  IPrincipalAuthorization principalAuthorization,
-			IPersonAccountUpdater personAccountUpdater, LogonInfoModel logonInfoModel, IPasswordPolicy passwordPolicy)
+			IPersonAccountUpdater personAccountUpdater, LogonInfoModel logonInfoModel)
 			: this()
 		{
 			ContainedEntity = person;
 			_principalAuthorization = principalAuthorization;
 			_personAccountUpdater = personAccountUpdater;
-			_passwordPolicy = passwordPolicy;
 			_tenantData = new TenantAuthenticationData {PersonId = ContainedEntity.Id.GetValueOrDefault()};
 			if (ContainedEntity.ApplicationAuthenticationInfo != null)
 			{
@@ -230,11 +226,9 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 					_tenantData.Changed = true;
 					return;
 				}
-				_isValid = _passwordPolicy.CheckPasswordStrength(value);
-				if (!_isValid) //Is there a better solution for this?
-					writeMessage();
 				_tenantData.ApplicationLogonName = value;
 				_tenantData.Changed = true;
+				_isValid = !string.IsNullOrEmpty(Password);
 			}
 		}
 
@@ -256,9 +250,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 					_isValid = true;
 					return;
 				}
-				_isValid = _passwordPolicy.CheckPasswordStrength(value);
-				if (!_isValid) //Is there a better solution for this?
-					writeMessage();
+				_isValid = !string.IsNullOrEmpty(value);
 			}
 		}
 
@@ -363,14 +355,6 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 		public void SetOptionalColumns(IList<IOptionalColumn> columns)
 		{
 			_optionalColumns = columns;
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]
-		private static void writeMessage()
-		{
-			MessageBoxAdv.Show(UserTexts.Resources.PasswordPolicyWarning,
-				 UserTexts.Resources.ErrorMessage,
-				 MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1);
 		}
 
 		public bool logonDataCanBeChanged()

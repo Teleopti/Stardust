@@ -3,7 +3,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
@@ -38,7 +37,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 			_base.AddPersonPeriod(_personPeriod);
 			_principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
 			_target = new PersonGeneralModel(_base, _principalAuthorization,
-				new PersonAccountUpdaterDummy(), new LogonInfoModel(), new PasswordPolicyFake());
+				new PersonAccountUpdaterDummy(), new LogonInfoModel());
 		}
 
 		[Test]
@@ -227,7 +226,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 				.Return(true);
 			
 			_target = new PersonGeneralModel(_base,  _principalAuthorization, new PersonAccountUpdaterDummy(),
-				new LogonInfoModel { LogonName = "" }, new PasswordPolicyFake());
+				new LogonInfoModel { LogonName = "" });
 			_target.IsValid.Should().Be.True();
 		}
 
@@ -242,7 +241,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 				x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword, DateOnly.Today, _base))
 				.Return(true);
 			_target = new PersonGeneralModel(_base,  _principalAuthorization, new PersonAccountUpdaterDummy(),
-				new LogonInfoModel(), new PasswordPolicyFake()) { LogOnName = "userx07", Password = "" };
+				new LogonInfoModel()) { LogOnName = "userx07", Password = "" };
 			_target.Password = setValue;
 			_target.TenantData.Password.Should().Be.EqualTo(setValue);
 		}
@@ -369,7 +368,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 				.Return(false);
 
 			_target = new PersonGeneralModel(_base, _principalAuthorization,
-				new PersonAccountUpdaterDummy(), new LogonInfoModel { LogonName = oldLogOnInfo, Identity = oldLogOnInfo }, new PasswordPolicyFake());
+				new PersonAccountUpdaterDummy(), new LogonInfoModel { LogonName = oldLogOnInfo, Identity = oldLogOnInfo });
 			_target.ApplicationLogOnName.Should().Be.EqualTo(oldLogOnInfo);
 			_target.ApplicationLogOnName = "";
 			_target.LogOnName = "";
@@ -396,7 +395,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 				.Return(true);
 			_base.Stub(x => x.ChangePassword(setValue, null)).Return(true).Repeat.Twice();
 
-			_target = new PersonGeneralModel(_base, _principalAuthorization, new PersonAccountUpdaterDummy(), new LogonInfoModel(), new PasswordPolicyFake());
+			_target = new PersonGeneralModel(_base, _principalAuthorization, new PersonAccountUpdaterDummy(), new LogonInfoModel());
 
 			_target.TenantData.Changed.Should().Be.False();
 			_target.Password = setValue;

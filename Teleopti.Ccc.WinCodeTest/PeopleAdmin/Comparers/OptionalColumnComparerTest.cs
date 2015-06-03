@@ -2,33 +2,30 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Security;
-using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.WinCode.PeopleAdmin;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Comparers;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
 {
-    [TestFixture]
-    public class OptionalColumnComparerTest
-    {
+	[TestFixture]
+	public class OptionalColumnComparerTest
+	{
 		private IPerson _person;
 		private IPersonPeriod _personPeriod;
 		private PersonGeneralModel _target;
 		private PersonGeneralModel _personGeneralModel;
 		private OptionalColumnComparer<PersonGeneralModel> _optionalColumnComparer;
-        private IList<IOptionalColumn> _optionalColumns;
+		private IList<IOptionalColumn> _optionalColumns;
 		private int _result;
-        private PrincipalAuthorization _principalAuthorization;
-    	private IPerson _person1;
+		private PrincipalAuthorization _principalAuthorization;
+		private IPerson _person1;
 
 
-    	[SetUp]
+		[SetUp]
 		public void TestInit()
 		{
 			// Instantiates the person and teh team
@@ -40,10 +37,10 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
 				 PersonContractFactory.CreatePersonContract("testContract", "TestSchedule", "TestPartTimePercentage"),
 				 team);
 			_person.AddPersonPeriod(_personPeriod);
-            _principalAuthorization = new PrincipalAuthorization(new CurrentTeleoptiPrincipal());
+			_principalAuthorization = new PrincipalAuthorization(new CurrentTeleoptiPrincipal());
 			// Ses the contained entity
-    		_target = new PersonGeneralModel(_person, _principalAuthorization,
-				new PersonAccountUpdaterDummy(), new LogonInfoModel(), new PasswordPolicyFake());
+			_target = new PersonGeneralModel(_person, _principalAuthorization,
+				new PersonAccountUpdaterDummy(), new LogonInfoModel());
 
 			// Instantiates the person and teh team
 			_person1 = PersonFactory.CreatePerson();
@@ -55,228 +52,228 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
 				 team1);
 			_person.AddPersonPeriod(personPeriod1);
 			// Ses the contained entity
-    		_personGeneralModel = new PersonGeneralModel(_person1, _principalAuthorization,
-				new PersonAccountUpdaterDummy(), new LogonInfoModel(), new PasswordPolicyFake());
+			_personGeneralModel = new PersonGeneralModel(_person1, _principalAuthorization,
+				new PersonAccountUpdaterDummy(), new LogonInfoModel());
 		}
 
-        /// <summary>
-        /// Verifies the compare method with null values for all parameters.
-        /// </summary>
-        /// <remarks>
-        /// Created By: madhurangap
-        /// Created Date: 29-07-2008
-        /// </remarks>
-        [Test]
-        public void VerifyCompareMethodWithNoOptionalColumn()
-        {             
-            // Calls the compares method
-            _optionalColumnComparer = new OptionalColumnComparer<PersonGeneralModel>("FirstColumn");
-            _result = _optionalColumnComparer.Compare(_target, _personGeneralModel);
+		/// <summary>
+		/// Verifies the compare method with null values for all parameters.
+		/// </summary>
+		/// <remarks>
+		/// Created By: madhurangap
+		/// Created Date: 29-07-2008
+		/// </remarks>
+		[Test]
+		public void VerifyCompareMethodWithNoOptionalColumn()
+		{
+			// Calls the compares method
+			_optionalColumnComparer = new OptionalColumnComparer<PersonGeneralModel>("FirstColumn");
+			_result = _optionalColumnComparer.Compare(_target, _personGeneralModel);
 
-            // Checks whether the roles are equal
-            Assert.AreEqual(0, _result);
-        }
+			// Checks whether the roles are equal
+			Assert.AreEqual(0, _result);
+		}
 
-        /// <summary>
-        /// Verifies the compare method with null values for all parameters.
-        /// </summary>
-        /// <remarks>
-        /// Created By: madhurangap
-        /// Created Date: 29-07-2008
-        /// </remarks>
-        [Test]
-        public void VerifyCompareMethodWithAllNull()
-        {
-            // Sets the user Id
-            _target.ContainedEntity.SetId(Guid.NewGuid());
-            _personGeneralModel.ContainedEntity.SetId(Guid.NewGuid());
+		/// <summary>
+		/// Verifies the compare method with null values for all parameters.
+		/// </summary>
+		/// <remarks>
+		/// Created By: madhurangap
+		/// Created Date: 29-07-2008
+		/// </remarks>
+		[Test]
+		public void VerifyCompareMethodWithAllNull()
+		{
+			// Sets the user Id
+			_target.ContainedEntity.SetId(Guid.NewGuid());
+			_personGeneralModel.ContainedEntity.SetId(Guid.NewGuid());
 
-            // Creates the optional column data
-            _optionalColumns = new List<IOptionalColumn>();
-            IOptionalColumn optionalCoumn = new OptionalColumn("FirstColumn");
-            _optionalColumns.Add(optionalCoumn);
+			// Creates the optional column data
+			_optionalColumns = new List<IOptionalColumn>();
+			IOptionalColumn optionalCoumn = new OptionalColumn("FirstColumn");
+			_optionalColumns.Add(optionalCoumn);
 
-            _target.SetOptionalColumns(_optionalColumns);
-            _personGeneralModel.SetOptionalColumns(_optionalColumns);
+			_target.SetOptionalColumns(_optionalColumns);
+			_personGeneralModel.SetOptionalColumns(_optionalColumns);
 
-            // Calls the compares method
-            _optionalColumnComparer = new OptionalColumnComparer<PersonGeneralModel>("FirstColumn");
-            _result = _optionalColumnComparer.Compare(_target, _personGeneralModel);
+			// Calls the compares method
+			_optionalColumnComparer = new OptionalColumnComparer<PersonGeneralModel>("FirstColumn");
+			_result = _optionalColumnComparer.Compare(_target, _personGeneralModel);
 
-            // Checks whether the roles are equal
-            Assert.AreEqual(0, _result);
-        }
+			// Checks whether the roles are equal
+			Assert.AreEqual(0, _result);
+		}
 
-        [Test]
-        public void VerifyCompareMethodWithFirstNull()
-        {
-            Guid id1 = Guid.NewGuid();
-            Guid id2 = Guid.NewGuid();
+		[Test]
+		public void VerifyCompareMethodWithFirstNull()
+		{
+			Guid id1 = Guid.NewGuid();
+			Guid id2 = Guid.NewGuid();
 
-            // Sets the user Id
-            _target.ContainedEntity.SetId(id1);
-            _personGeneralModel.ContainedEntity.SetId(id2);
+			// Sets the user Id
+			_target.ContainedEntity.SetId(id1);
+			_personGeneralModel.ContainedEntity.SetId(id2);
 
-            // Creates the optional column data
-            _optionalColumns = new List<IOptionalColumn>();
-            IOptionalColumn optionalColumn = new OptionalColumn("FirstColumn");
+			// Creates the optional column data
+			_optionalColumns = new List<IOptionalColumn>();
+			IOptionalColumn optionalColumn = new OptionalColumn("FirstColumn");
 
-            IOptionalColumnValue value = new OptionalColumnValue("FirstNull");
-            _person.AddOptionalColumnValue(value, optionalColumn);
-            _optionalColumns.Add(optionalColumn);
-
-            _target.SetOptionalColumns(_optionalColumns);
-
-            _personGeneralModel.SetOptionalColumns(_optionalColumns);
-
-            // Calls the compares method
-            _optionalColumnComparer = new OptionalColumnComparer<PersonGeneralModel>("FirstColumn");
-            _result = _optionalColumnComparer.Compare(_target, _personGeneralModel);
-
-            Assert.AreEqual(1, _result);
-        }
-
-        [Test]
-        public void VerifyCompareMethodWithSecondNull()
-        {
-            Guid id1 = Guid.NewGuid();
-            Guid id2 = Guid.NewGuid();
-
-            // Sets the user Id
-            _target.ContainedEntity.SetId(id1);
-            _personGeneralModel.ContainedEntity.SetId(id2);
-
-            // Creates the optional column data
-            _optionalColumns = new List<IOptionalColumn>();
-            var optionalColumn = new OptionalColumn("FirstColumn");
-
-            var value = new OptionalColumnValue("FirstNull");
-
-            _person.AddOptionalColumnValue(value, optionalColumn);
-            _optionalColumns.Add(optionalColumn);
-
-            _target.SetOptionalColumns(_optionalColumns);
-            _personGeneralModel.SetOptionalColumns(_optionalColumns);
-
-            // Calls the compares method
-            _optionalColumnComparer = new OptionalColumnComparer<PersonGeneralModel>("FirstColumn");
-            _result = _optionalColumnComparer.Compare(_target, _personGeneralModel);
-
-            // Checks whether the roles are equal
-            Assert.AreEqual(1, _result);
-        }
-
-        [Test]
-        public void VerifyCompareMethodAscending()
-        {
-            Guid id1 = Guid.NewGuid();
-            Guid id2 = Guid.NewGuid();
-        	var person = new Person();
-
-            // Sets the user Id
-            _target.ContainedEntity.SetId(id1);
-            _personGeneralModel.ContainedEntity.SetId(id2);
-
-            // Creates the optional column data
-            _optionalColumns = new List<IOptionalColumn>();
-            var optionalColumn = new OptionalColumn("FirstColumn");
-
-            var value = new OptionalColumnValue("FirstNull A");
-            person.AddOptionalColumnValue(value, optionalColumn);
-            _optionalColumns.Add(optionalColumn);
-
-            var value1 = new OptionalColumnValue("FirstNull B");
-            
-            _person1.AddOptionalColumnValue(value1, optionalColumn);
-            _optionalColumns.Add(optionalColumn);
-
-            _target.SetOptionalColumns(_optionalColumns);
-            _personGeneralModel.SetOptionalColumns(_optionalColumns);
-
-            // Calls the compares method
-            _optionalColumnComparer = new OptionalColumnComparer<PersonGeneralModel>("FirstColumn");
-            _result = _optionalColumnComparer.Compare(_target, _personGeneralModel);
-
-            // Checks whether the roles are equal
-            Assert.AreEqual(-1, _result);
-        }
-
- 
-        [Test]
-        public void VerifyCompareMethodDescending()
-        {
-            Guid id1 = Guid.NewGuid();
-            Guid id2 = Guid.NewGuid();
-
-            // Sets the user Id
-            _target.ContainedEntity.SetId(id1);
-            _personGeneralModel.ContainedEntity.SetId(id2);
-
-            // Creates the optional column data
-            _optionalColumns = new List<IOptionalColumn>();
-            var optionalColumn = new OptionalColumn("FirstColumn");
-
-            var value = new OptionalColumnValue("FirstNull B");
-            _person.AddOptionalColumnValue(value, optionalColumn);
-            _optionalColumns.Add(optionalColumn);
-
-            var value1 = new OptionalColumnValue("FirstNull A");
-            _person1.AddOptionalColumnValue(value1, optionalColumn);
-            _optionalColumns.Add(optionalColumn);
-
-            _target.SetOptionalColumns(_optionalColumns);
-            _personGeneralModel.SetOptionalColumns(_optionalColumns);
-
-            // Calls the compares method
-            _optionalColumnComparer = new OptionalColumnComparer<PersonGeneralModel>("FirstColumn");
-            _result = _optionalColumnComparer.Compare(_target, _personGeneralModel);
-
-            // Checks whether the roles are equal
-            Assert.AreEqual(1, _result);
-        }
-
-        [Test]
-        public void VerifyCompareMethodWithSecondWithSame()
-        {
-            Guid id1 = Guid.NewGuid();
-            Guid id2 = Guid.NewGuid();
-
-            // Sets the user Id
-            _target.ContainedEntity.SetId(id1);
-            _personGeneralModel.ContainedEntity.SetId(id2);
-
-            // Creates the optional column data
-            _optionalColumns = new List<IOptionalColumn>();
-            var optionalColumn = new OptionalColumn("FirstColumn");
-
-            var value = new OptionalColumnValue("FirstNull A");
+			IOptionalColumnValue value = new OptionalColumnValue("FirstNull");
 			_person.AddOptionalColumnValue(value, optionalColumn);
-            _optionalColumns.Add(optionalColumn);
+			_optionalColumns.Add(optionalColumn);
 
-            var value1 = new OptionalColumnValue("FirstNull A");
-            _person1.AddOptionalColumnValue(value1, optionalColumn);
-            _optionalColumns.Add(optionalColumn);
+			_target.SetOptionalColumns(_optionalColumns);
 
-            _target.SetOptionalColumns(_optionalColumns);
-            _personGeneralModel.SetOptionalColumns(_optionalColumns);
+			_personGeneralModel.SetOptionalColumns(_optionalColumns);
 
-            // Calls the compares method
-            _optionalColumnComparer = new OptionalColumnComparer<PersonGeneralModel>("FirstColumn");
-            _result = _optionalColumnComparer.Compare(_target, _personGeneralModel);
+			// Calls the compares method
+			_optionalColumnComparer = new OptionalColumnComparer<PersonGeneralModel>("FirstColumn");
+			_result = _optionalColumnComparer.Compare(_target, _personGeneralModel);
 
-            // Checks whether the roles are equal
-            Assert.AreEqual(0, _result);
-        }
+			Assert.AreEqual(1, _result);
+		}
 
-        [Test]
-        public void VerifySetBindingProperty()
-        {
-            const string bindingProperty = "FirstColumn";
-            // Calls the compares method
-            _optionalColumnComparer = new OptionalColumnComparer<PersonGeneralModel>(bindingProperty);
+		[Test]
+		public void VerifyCompareMethodWithSecondNull()
+		{
+			Guid id1 = Guid.NewGuid();
+			Guid id2 = Guid.NewGuid();
 
-            // Checks whether the roles are equal
-            Assert.AreEqual(_optionalColumnComparer.BindingProperty, bindingProperty);
-        }
-    }
+			// Sets the user Id
+			_target.ContainedEntity.SetId(id1);
+			_personGeneralModel.ContainedEntity.SetId(id2);
+
+			// Creates the optional column data
+			_optionalColumns = new List<IOptionalColumn>();
+			var optionalColumn = new OptionalColumn("FirstColumn");
+
+			var value = new OptionalColumnValue("FirstNull");
+
+			_person.AddOptionalColumnValue(value, optionalColumn);
+			_optionalColumns.Add(optionalColumn);
+
+			_target.SetOptionalColumns(_optionalColumns);
+			_personGeneralModel.SetOptionalColumns(_optionalColumns);
+
+			// Calls the compares method
+			_optionalColumnComparer = new OptionalColumnComparer<PersonGeneralModel>("FirstColumn");
+			_result = _optionalColumnComparer.Compare(_target, _personGeneralModel);
+
+			// Checks whether the roles are equal
+			Assert.AreEqual(1, _result);
+		}
+
+		[Test]
+		public void VerifyCompareMethodAscending()
+		{
+			Guid id1 = Guid.NewGuid();
+			Guid id2 = Guid.NewGuid();
+			var person = new Person();
+
+			// Sets the user Id
+			_target.ContainedEntity.SetId(id1);
+			_personGeneralModel.ContainedEntity.SetId(id2);
+
+			// Creates the optional column data
+			_optionalColumns = new List<IOptionalColumn>();
+			var optionalColumn = new OptionalColumn("FirstColumn");
+
+			var value = new OptionalColumnValue("FirstNull A");
+			person.AddOptionalColumnValue(value, optionalColumn);
+			_optionalColumns.Add(optionalColumn);
+
+			var value1 = new OptionalColumnValue("FirstNull B");
+
+			_person1.AddOptionalColumnValue(value1, optionalColumn);
+			_optionalColumns.Add(optionalColumn);
+
+			_target.SetOptionalColumns(_optionalColumns);
+			_personGeneralModel.SetOptionalColumns(_optionalColumns);
+
+			// Calls the compares method
+			_optionalColumnComparer = new OptionalColumnComparer<PersonGeneralModel>("FirstColumn");
+			_result = _optionalColumnComparer.Compare(_target, _personGeneralModel);
+
+			// Checks whether the roles are equal
+			Assert.AreEqual(-1, _result);
+		}
+
+
+		[Test]
+		public void VerifyCompareMethodDescending()
+		{
+			Guid id1 = Guid.NewGuid();
+			Guid id2 = Guid.NewGuid();
+
+			// Sets the user Id
+			_target.ContainedEntity.SetId(id1);
+			_personGeneralModel.ContainedEntity.SetId(id2);
+
+			// Creates the optional column data
+			_optionalColumns = new List<IOptionalColumn>();
+			var optionalColumn = new OptionalColumn("FirstColumn");
+
+			var value = new OptionalColumnValue("FirstNull B");
+			_person.AddOptionalColumnValue(value, optionalColumn);
+			_optionalColumns.Add(optionalColumn);
+
+			var value1 = new OptionalColumnValue("FirstNull A");
+			_person1.AddOptionalColumnValue(value1, optionalColumn);
+			_optionalColumns.Add(optionalColumn);
+
+			_target.SetOptionalColumns(_optionalColumns);
+			_personGeneralModel.SetOptionalColumns(_optionalColumns);
+
+			// Calls the compares method
+			_optionalColumnComparer = new OptionalColumnComparer<PersonGeneralModel>("FirstColumn");
+			_result = _optionalColumnComparer.Compare(_target, _personGeneralModel);
+
+			// Checks whether the roles are equal
+			Assert.AreEqual(1, _result);
+		}
+
+		[Test]
+		public void VerifyCompareMethodWithSecondWithSame()
+		{
+			Guid id1 = Guid.NewGuid();
+			Guid id2 = Guid.NewGuid();
+
+			// Sets the user Id
+			_target.ContainedEntity.SetId(id1);
+			_personGeneralModel.ContainedEntity.SetId(id2);
+
+			// Creates the optional column data
+			_optionalColumns = new List<IOptionalColumn>();
+			var optionalColumn = new OptionalColumn("FirstColumn");
+
+			var value = new OptionalColumnValue("FirstNull A");
+			_person.AddOptionalColumnValue(value, optionalColumn);
+			_optionalColumns.Add(optionalColumn);
+
+			var value1 = new OptionalColumnValue("FirstNull A");
+			_person1.AddOptionalColumnValue(value1, optionalColumn);
+			_optionalColumns.Add(optionalColumn);
+
+			_target.SetOptionalColumns(_optionalColumns);
+			_personGeneralModel.SetOptionalColumns(_optionalColumns);
+
+			// Calls the compares method
+			_optionalColumnComparer = new OptionalColumnComparer<PersonGeneralModel>("FirstColumn");
+			_result = _optionalColumnComparer.Compare(_target, _personGeneralModel);
+
+			// Checks whether the roles are equal
+			Assert.AreEqual(0, _result);
+		}
+
+		[Test]
+		public void VerifySetBindingProperty()
+		{
+			const string bindingProperty = "FirstColumn";
+			// Calls the compares method
+			_optionalColumnComparer = new OptionalColumnComparer<PersonGeneralModel>(bindingProperty);
+
+			// Checks whether the roles are equal
+			Assert.AreEqual(_optionalColumnComparer.BindingProperty, bindingProperty);
+		}
+	}
 }
