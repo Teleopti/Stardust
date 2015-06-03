@@ -103,7 +103,7 @@ where date_id not in (
 	)
 
 GO
-delete from $(TELEOPTIAPP).dbo.WindowsAuthenticationInfo
+
 delete $(TELEOPTIAPP).dbo.license
 delete $(TELEOPTIAPP).dbo.licensestatus
 
