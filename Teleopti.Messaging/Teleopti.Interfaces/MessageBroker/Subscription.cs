@@ -2,6 +2,7 @@
 using System.Collections.Specialized;
 using System.Xml;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.MessageBroker.Core;
 
 namespace Teleopti.Interfaces.MessageBroker
 {
@@ -96,12 +97,12 @@ namespace Teleopti.Interfaces.MessageBroker
 
 		public DateTime LowerBoundaryAsDateTime()
 		{
-			return AsDateTime(LowerBoundary);
+			return LowerBoundary == null ? Consts.MinDate : AsDateTime(LowerBoundary);
 		}
 
 		public DateTime UpperBoundaryAsDateTime()
 		{
-			return AsDateTime(UpperBoundary);
+			return UpperBoundary == null ? Consts.MaxDate : AsDateTime(UpperBoundary);
 		}
 
 		public static DateTime AsDateTime(string dateTime)
