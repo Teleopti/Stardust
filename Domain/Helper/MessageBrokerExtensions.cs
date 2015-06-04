@@ -17,14 +17,12 @@ namespace Teleopti.Ccc.Domain.Helper
 			return new BusinessUnitDetail {BusinessUnitId = businessUnitId, Datasource = datasource};
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public static void RegisterEventSubscription(this IMessageListener broker, EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType)
 		{
 			var detail = GetDetail();
 			broker.RegisterSubscription(detail.Datasource,detail.BusinessUnitId,eventMessageHandler,domainObjectType);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public static void RegisterEventSubscription(this IMessageListener broker, EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType, DateTime startDate, DateTime endDate)
 		{
 			var detail = GetDetail();
@@ -37,7 +35,6 @@ namespace Teleopti.Ccc.Domain.Helper
 			broker.RegisterSubscription(detail.Datasource, detail.BusinessUnitId, eventMessageHandler,referenceObjectId,referenceObjectType, domainObjectType, startDate, endDate);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public static void RegisterEventSubscription(this IMessageListener broker, EventHandler<EventMessageArgs> eventMessageHandler, Guid domainObjectId, Type domainObjectType, DateTime startDate, DateTime endDate)
 		{
 			var detail = GetDetail();
