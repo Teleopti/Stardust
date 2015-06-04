@@ -14,8 +14,6 @@ namespace Teleopti.Interfaces.MessageBroker
 		public Subscription()
 		{
 			BusinessUnitId = Guid.Empty.ToString();
-			LowerBoundary = DateToString(DateTime.MinValue);
-			UpperBoundary = DateToString(DateTime.MinValue);
 		}
 
 		public string Route()
