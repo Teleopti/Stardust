@@ -1,6 +1,6 @@
 ﻿(function() {
 	'use strict';
-	angular.module('wfm.searching', [])
+	angular.module('wfm.searching', ['restSearchService'])
 		.controller('SearchCtrl', [
 			'$scope', '$filter', '$state', 'SearchSvrc',
 			function($scope, $filter, $state, SearchSvrc) {

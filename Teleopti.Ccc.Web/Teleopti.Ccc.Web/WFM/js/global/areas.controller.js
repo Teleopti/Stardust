@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-var notification = angular.module('wfm.areas', []);
+var notification = angular.module('wfm.areas', ['restAreasService']);
 notification.controller('AreasCtrl', [
 	'$scope', 'AreasSvrc',
 	function ($scope, AreasSvrc) {

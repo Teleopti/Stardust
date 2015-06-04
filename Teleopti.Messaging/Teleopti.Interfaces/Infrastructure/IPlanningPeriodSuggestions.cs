@@ -8,6 +8,7 @@ namespace Teleopti.Interfaces.Infrastructure
 	{
 		SuggestedPlanningPeriod Default();
 		IEnumerable<SuggestedPlanningPeriod> SuggestedPeriods(DateOnlyPeriod forDate);
+		IEnumerable<SuggestedPlanningPeriod> NextSuggestedPeriods(DateOnlyPeriod range);
 	}
 
 	public struct SuggestedPlanningPeriod : IEquatable<SuggestedPlanningPeriod>

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces;
@@ -11,12 +12,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	public class FakePlanningPeriodRepository : IPlanningPeriodRepository
 	{
 		private readonly INow _now;
-		private IPlanningPeriod _planinngPeriod;
+		private IList<IPlanningPeriod> _planningPeriods; 
+		//private IPlanningPeriod _planinngPeriod;
 		private IPlanningPeriodSuggestions _planningPeriodSuggestions;
 
 		public FakePlanningPeriodRepository(INow now)
 		{
 			_now = now;
+			_planningPeriods = new List<IPlanningPeriod>();
 		}
 
 		public bool AddExecuted { get; set; }
@@ -24,6 +27,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public void Add(IPlanningPeriod entity)
 		{
 			entity.SetId(Guid.NewGuid());
+			_planningPeriods.Add(entity);
 			AddExecuted = true;
 		}
 
@@ -39,14 +43,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IPlanningPeriod> LoadAll()
 		{
-			return new IPlanningPeriod[] {};
+			return _planningPeriods;
 		}
 
 		public IPlanningPeriod Load(Guid id)
 		{
-			if (_planinngPeriod == null)
+			if (!_planningPeriods.Any())
 				return new PlanningPeriod(new PlanningPeriodSuggestions(_now, new AggregatedSchedulePeriod[] {}));
-			return _planinngPeriod;
+			return _planningPeriods.FirstOrDefault();
 		}
 
 		public long CountAllEntities()
@@ -70,7 +74,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void CustomData(PlanningPeriod planinnPeriod, PlanningPeriodSuggestions planningPeriodSuggestions)
 		{
-			_planinngPeriod = planinnPeriod;
+			if(planinnPeriod != null)
+				_planningPeriods.Add(planinnPeriod);
 			_planningPeriodSuggestions = planningPeriodSuggestions;
 		}
 	}

@@ -1,18 +1,21 @@
 'use strict';
 
-var wfm = angular.module('wfm', [
-	'ui.router',
+var externalModules = angular.module('externalModules', ['ui.router',
 	'ui.bootstrap',
 	'ui.tree',
 	'ngMaterial',
 	'angularMoment',
 	'pascalprecht.translate',
-	'restSearchService',
-	'restNotificationService',
-	'restResourcePlannerService',
+	'ui.grid',
+	'ui.grid.autoResize',
+	'ui.grid.exporter',
+	'ui.grid.selection',
+	'ncy-angular-breadcrumb']);
+
+var wfm = angular.module('wfm', [
+	'externalModules',
 	'forecastingService',
 	'outboundService',
-	'restAreasService',
 	'peopleSearchService',
 	'restRtaService',
 	'wfmCtrls',
@@ -30,12 +33,7 @@ var wfm = angular.module('wfm', [
 	'wfm.notice',
 	'wfm.areas',
 	'wfm.help',
-	'ui.grid',
-	'ui.grid.autoResize',
-	'ui.grid.exporter',
-	'ui.grid.selection',
-	'wfm.rta',
-	'ncy-angular-breadcrumb'
+	'wfm.rta'
 ]);
 wfm.config([
 	'$stateProvider', '$urlRouterProvider', '$translateProvider', '$breadcrumbProvider', function ($stateProvider, $urlRouterProvider, $translateProvider, $breadcrumbProvider) {

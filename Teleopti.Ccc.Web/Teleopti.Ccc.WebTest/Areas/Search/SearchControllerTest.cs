@@ -66,6 +66,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			return _planningPeriod;
 		}
 
+		public IPlanningPeriod Next(SchedulePeriodForRangeCalculation schedulePeriodForRangeCalculation)
+		{
+			throw new NotImplementedException();
+		}
+
 		public IPlanningPeriod Find(Guid id)
 		{
 			return _planningPeriod;

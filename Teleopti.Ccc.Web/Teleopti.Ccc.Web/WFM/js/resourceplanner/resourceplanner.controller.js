@@ -1,6 +1,6 @@
 ﻿(function() {
 	'use strict';
-	angular.module('wfm.resourceplanner', [])
+	angular.module('wfm.resourceplanner', ['restResourcePlannerService'])
 		.controller('ResourceplannerCtrl', [
 			'$scope', '$state', 'ResourcePlannerSvrc', function ($scope, $state, ResourcePlannerSvrc) {
 				//schedulings

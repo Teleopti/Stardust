@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-var notification = angular.module('wfm.notifications', []);
+var notification = angular.module('wfm.notifications', ['restNotificationService']);
 notification.controller('NotificationsCtrl', [
 	'$scope','NotificationsSvrc',
 	function ($scope, NotificationsSvrc) {

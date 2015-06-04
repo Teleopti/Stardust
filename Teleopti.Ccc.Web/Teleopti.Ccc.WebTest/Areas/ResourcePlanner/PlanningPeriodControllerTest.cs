@@ -10,6 +10,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.ResourcePlanner;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -77,9 +78,8 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		[Test]
 		public void ShouldGetPlanningPeriodSuggestions()
 		{
-			((FakePlanningPeriodRepository) FakePlanningPeriodRepository).CustomData(null,
-				new PlanningPeriodSuggestions(TestableNow, suggestions()));
-			var result =
+			((FakePlanningPeriodRepository) FakePlanningPeriodRepository).CustomData(null, new PlanningPeriodSuggestions(TestableNow, suggestions()));
+			var result = 
 				(OkNegotiatedContentResult<IEnumerable<SuggestedPlanningPeriodRangeModel>>)
 					Target.GetPlanningPeriodSuggestion(Guid.NewGuid());
 			result.Content.Count().Should().Be.EqualTo(15);
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		[Test]
 		public void ShouldOnlyGetFuturePlanningPeriodSuggestions()
 		{
-			((TestableNow) LocalTestableNow).CustomNow = new DateTime(2015, 05, 22);
+			changeNowTo(new DateTime(2015, 05, 22));
 			((FakePlanningPeriodRepository) FakePlanningPeriodRepository).CustomData(
 				new PlanningPeriod(new PlanningPeriodSuggestions(LocalTestableNow, suggestions())),
 				new PlanningPeriodSuggestions(LocalTestableNow, suggestions()));
@@ -104,13 +104,106 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		[Test]
 		public void ShouldGetSortedPlanningPeriodSuggestions()
 		{
-			((FakePlanningPeriodRepository) FakePlanningPeriodRepository).CustomData(null,
-				new PlanningPeriodSuggestions(TestableNow, suggestions()));
-			var result =
-				(OkNegotiatedContentResult<IEnumerable<SuggestedPlanningPeriodRangeModel>>)
-					Target.GetPlanningPeriodSuggestion(Guid.NewGuid());
+			((FakePlanningPeriodRepository) FakePlanningPeriodRepository).CustomData(null, new PlanningPeriodSuggestions(TestableNow, suggestions()));
+			var result = (OkNegotiatedContentResult<IEnumerable<SuggestedPlanningPeriodRangeModel>>) Target.GetPlanningPeriodSuggestion(Guid.NewGuid());
 			result.Content.First().StartDate.Should().Be.EqualTo(new DateTime(2015, 04, 27));
 			result.Content.First().EndDate.Should().Be.EqualTo(new DateTime(2015, 05, 24));
+		}
+
+		[Test]
+		public void ShouldReturnSuggestionsForNextPlanningPeriod()
+		{
+			changeNowTo(new DateTime(2015, 05, 23));
+			var aggSchedulePeriod = new AggregatedSchedulePeriod()
+			{
+				Number = 2,
+				Culture = 1053,
+				DateFrom = new DateTime(2015, 05, 04),
+				PeriodType = SchedulePeriodType.Week,
+				Priority = 10
+			};
+			var aggSchedulePeriod2 = new AggregatedSchedulePeriod()
+			{
+				Number = 1,
+				Culture = 1053,
+				DateFrom = new DateTime(2015, 05, 04),
+				PeriodType = SchedulePeriodType.Week,
+				Priority = 6
+			};
+			var suggestion = new PlanningPeriodSuggestions(LocalTestableNow, new List<AggregatedSchedulePeriod>()
+			{
+				aggSchedulePeriod,aggSchedulePeriod2
+			});
+			FakePlanningPeriodRepository.Add(new FakePlanningPeriod(Guid.NewGuid(), new DateOnlyPeriod(new DateOnly(2015, 06, 01), new DateOnly(2015, 06, 14))));
+			((FakePlanningPeriodRepository)FakePlanningPeriodRepository).CustomData(
+				new PlanningPeriod(new PlanningPeriodSuggestions(LocalTestableNow,
+					new List<AggregatedSchedulePeriod>() { aggSchedulePeriod, aggSchedulePeriod2 })), suggestion
+				);
+
+			var result = (OkNegotiatedContentResult<IEnumerable<SuggestedPlanningPeriodRangeModel>>)Target.GetNextPlanningPeriodSuggestions(Guid.NewGuid());
+			result.Content.Count().Should().Be.EqualTo(3);
+		}
+
+		[Test]
+		public void ShouldCreateAndReturnNextPlanningPeriod()
+		{
+			changeNowTo(new DateTime(2015, 05, 23));
+			var aggSchedulePeriod = new AggregatedSchedulePeriod()
+			{
+				Number = 2,
+				Culture = 1053,
+				DateFrom = new DateTime(2015, 05, 04),
+				PeriodType = SchedulePeriodType.Week,
+				Priority = 10
+			};
+			var suggestion = new PlanningPeriodSuggestions(LocalTestableNow, new List<AggregatedSchedulePeriod>()
+			{
+				aggSchedulePeriod
+			});
+			FakePlanningPeriodRepository.Add(new FakePlanningPeriod(Guid.NewGuid(), new DateOnlyPeriod(new DateOnly(2015, 06, 01), new DateOnly(2015, 06, 14))));
+			((FakePlanningPeriodRepository) FakePlanningPeriodRepository).CustomData(
+				new PlanningPeriod(new PlanningPeriodSuggestions(LocalTestableNow,
+					new List<AggregatedSchedulePeriod>() {aggSchedulePeriod})), suggestion
+				);
+
+
+			var result =
+				(OkNegotiatedContentResult<PlanningPeriodModel>)Target.GetNextPlanningPeriod(new PlanningPeriodChangeRangeModel() { DateFrom = new DateTime(2015, 06, 15), Number = 2, PeriodType = SchedulePeriodType.Week});
+			result.Content.StartDate.Should().Be.EqualTo(new DateTime(2015, 06, 15));
+			result.Content.EndDate.Should().Be.EqualTo(new DateTime(2015, 06, 28));
+		}
+
+		[Test]
+		public void ShouldReturnNextPlanningPeriodIfExists()
+		{
+			changeNowTo(new DateTime(2015, 05, 23));
+			var aggSchedulePeriod = new AggregatedSchedulePeriod()
+			{
+				Number = 2,
+				Culture = 1053,
+				DateFrom = new DateTime(2015, 05, 04),
+				PeriodType = SchedulePeriodType.Week,
+				Priority = 10
+			};
+			var suggestion = new PlanningPeriodSuggestions(LocalTestableNow, new List<AggregatedSchedulePeriod>()
+			{
+				aggSchedulePeriod
+			});
+			FakePlanningPeriodRepository.Add(new FakePlanningPeriod(Guid.NewGuid(),new DateOnlyPeriod(new DateOnly(2015,06,01),new DateOnly(2015,06,14) )));
+			FakePlanningPeriodRepository.Add(new FakePlanningPeriod(Guid.NewGuid(),new DateOnlyPeriod(new DateOnly(2015,06,15),new DateOnly(2015,06,28) )));
+			((FakePlanningPeriodRepository)FakePlanningPeriodRepository).CustomData(
+				new PlanningPeriod(new PlanningPeriodSuggestions(LocalTestableNow,
+					new List<AggregatedSchedulePeriod>() { aggSchedulePeriod })), suggestion
+				);
+
+			var result = (OkNegotiatedContentResult<PlanningPeriodModel>)Target.GetNextPlanningPeriod(new PlanningPeriodChangeRangeModel() { DateFrom = new DateTime(2015, 06, 15), Number = 2, PeriodType = SchedulePeriodType.Week });
+			result.Content.StartDate.Should().Be.EqualTo(new DateTime(2015, 06, 15));
+			result.Content.EndDate.Should().Be.EqualTo(new DateTime(2015, 06, 28));
+		}
+
+		private void changeNowTo(DateTime dateTime)
+		{
+			((TestableNow)LocalTestableNow).CustomNow = dateTime;
 		}
 
 		private static List<AggregatedSchedulePeriod> suggestions()
@@ -142,6 +235,36 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 					Priority = 20
 				}
 			};
+		}
+	}
+
+	public class FakePlanningPeriod : IPlanningPeriod
+	{
+		public FakePlanningPeriod(Guid id, DateOnlyPeriod range)
+		{
+			Id = id;
+			Range = range;
+		}
+		public bool Equals(IEntity other)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Guid? Id { get; private set; }
+		public void SetId(Guid? newId)
+		{
+			Id = newId.Value;
+		}
+
+		public void ClearId()
+		{
+			throw new NotImplementedException();
+		}
+
+		public DateOnlyPeriod Range { get; private set; }
+		public void ChangeRange(SchedulePeriodForRangeCalculation schedulePeriodForRangeCalculation)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }
