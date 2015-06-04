@@ -249,7 +249,10 @@ namespace Teleopti.Ccc.Win.Reporting
 		private ReportDataPackage<IScheduledTimeVersusTargetTimeReportData> getReportDataForScheduledTimeVersusTarget(ReportSettingsScheduleTimeVersusTargetTimeModel model)
 		{
 			
-			var data = new Dictionary<string, IList<IScheduledTimeVersusTargetTimeReportData>>();
+			var data = new Dictionary<string, IList<IScheduledTimeVersusTargetTimeReportData>>
+			{
+				{"DataSet1", new List<IScheduledTimeVersusTargetTimeReportData>()}
+			};
 			var parameters = ReportHandler.CreateScheduledTimeVersusTargetParameters(model,_currentCulture);
 			if (model.Persons.Any())
 			{
