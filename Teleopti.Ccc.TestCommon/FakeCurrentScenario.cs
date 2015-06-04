@@ -6,11 +6,16 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public class FakeCurrentScenario : ICurrentScenario
 	{
-		private readonly IScenario _scenario;
+		private IScenario _scenario;
 
 		public FakeCurrentScenario()
 		{
 			_scenario = ScenarioFactory.CreateScenarioWithId("scenario", true);
+		}
+
+		public void FakeScenario(IScenario scenario)
+		{
+			_scenario = scenario;
 		}
 
 		public IScenario Current()
