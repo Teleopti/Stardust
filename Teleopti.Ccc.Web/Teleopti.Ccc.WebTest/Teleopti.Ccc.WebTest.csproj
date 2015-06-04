@@ -259,6 +259,7 @@
     <Compile Include="Areas\Permissions\RolesControllerTest.cs" />
     <Compile Include="Areas\ResourcePlanner\BusinessRuleValidationResultTest.cs" />
     <Compile Include="Areas\ResourcePlanner\FakeMissingForecastProvider.cs" />
+    <Compile Include="Areas\ResourcePlanner\FakePlanningPeriod.cs" />
     <Compile Include="Areas\ResourcePlanner\FilterControllerTest.cs" />
     <Compile Include="Areas\ResourcePlanner\MissingForecastProviderTest.cs" />
     <Compile Include="Areas\ResourcePlanner\PlanningPeriodControllerTest.cs" />

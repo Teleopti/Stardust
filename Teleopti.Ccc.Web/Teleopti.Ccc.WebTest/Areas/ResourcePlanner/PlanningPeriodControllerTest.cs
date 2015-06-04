@@ -10,7 +10,6 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.ResourcePlanner;
-using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -189,6 +188,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			{
 				aggSchedulePeriod
 			});
+			FakePlanningPeriodRepository.Add(new FakePlanningPeriod(Guid.NewGuid(),new DateOnlyPeriod(new DateOnly(2015,05,18),new DateOnly(2015,05,31) )));
 			FakePlanningPeriodRepository.Add(new FakePlanningPeriod(Guid.NewGuid(),new DateOnlyPeriod(new DateOnly(2015,06,01),new DateOnly(2015,06,14) )));
 			FakePlanningPeriodRepository.Add(new FakePlanningPeriod(Guid.NewGuid(),new DateOnlyPeriod(new DateOnly(2015,06,15),new DateOnly(2015,06,28) )));
 			((FakePlanningPeriodRepository)FakePlanningPeriodRepository).CustomData(
@@ -199,6 +199,24 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			var result = (OkNegotiatedContentResult<PlanningPeriodModel>)Target.GetNextPlanningPeriod(new PlanningPeriodChangeRangeModel() { DateFrom = new DateTime(2015, 06, 15), Number = 2, PeriodType = SchedulePeriodType.Week });
 			result.Content.StartDate.Should().Be.EqualTo(new DateTime(2015, 06, 15));
 			result.Content.EndDate.Should().Be.EqualTo(new DateTime(2015, 06, 28));
+		}
+
+		[Test]
+		public void ShouldReturnDefaultPlanningPeriodIfNotCreated()
+		{
+			var result = (OkNegotiatedContentResult<IEnumerable<PlanningPeriodModel>>)Target.GetAvailablePlanningPeriods();
+			result.Content.Count().Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldReturnAvailablePlanningPeriods()
+		{
+			FakePlanningPeriodRepository.Add(new FakePlanningPeriod(Guid.NewGuid(), new DateOnlyPeriod(new DateOnly(2015, 05, 18), new DateOnly(2015, 05, 31))));
+			FakePlanningPeriodRepository.Add(new FakePlanningPeriod(Guid.NewGuid(), new DateOnlyPeriod(new DateOnly(2015, 06, 01), new DateOnly(2015, 06, 14))));
+			FakePlanningPeriodRepository.Add(new FakePlanningPeriod(Guid.NewGuid(), new DateOnlyPeriod(new DateOnly(2015, 06, 15), new DateOnly(2015, 06, 28))));
+
+			var result = (OkNegotiatedContentResult<IEnumerable<PlanningPeriodModel>>)Target.GetAvailablePlanningPeriods();
+			result.Content.Count().Should().Be.EqualTo(3);
 		}
 
 		private void changeNowTo(DateTime dateTime)
@@ -235,36 +253,6 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 					Priority = 20
 				}
 			};
-		}
-	}
-
-	public class FakePlanningPeriod : IPlanningPeriod
-	{
-		public FakePlanningPeriod(Guid id, DateOnlyPeriod range)
-		{
-			Id = id;
-			Range = range;
-		}
-		public bool Equals(IEntity other)
-		{
-			throw new NotImplementedException();
-		}
-
-		public Guid? Id { get; private set; }
-		public void SetId(Guid? newId)
-		{
-			Id = newId.Value;
-		}
-
-		public void ClearId()
-		{
-			throw new NotImplementedException();
-		}
-
-		public DateOnlyPeriod Range { get; private set; }
-		public void ChangeRange(SchedulePeriodForRangeCalculation schedulePeriodForRangeCalculation)
-		{
-			throw new NotImplementedException();
 		}
 	}
 }
