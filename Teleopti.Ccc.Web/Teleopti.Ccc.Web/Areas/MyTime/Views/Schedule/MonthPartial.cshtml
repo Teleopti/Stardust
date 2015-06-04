@@ -66,6 +66,11 @@
 							<!-- /ko -->
 						</div>
 						<!-- /ko -->
+						<!-- ko if: isDayOff && hasOvertime -->
+						<div class="dayoff">
+							<strong class="visible-lg">@Resources.Overtime</strong>
+						</div>
+						<!-- /ko -->
 						<!-- ko if: hasShift && !isFullDayAbsence -->
 						<div class="shift" data-bind="style: { backgroundColor: shiftColor, color: shiftTextColor }, css: { 'part-time': hasAbsence }">
 							<div>

@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.MonthSchedule;
 using Teleopti.Interfaces.Domain;
 
@@ -36,7 +37,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
 								   
 					           ));
 
-
 			CreateMap<MonthScheduleDayDomainData, MonthDayViewModel>()
 				.ForMember(d => d.Date, c => c.ResolveUsing(s => s.ScheduleDay.DateOnlyAsPeriod.DateOnly))
 				.ForMember(d => d.FixedDate,
@@ -59,6 +59,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
 						}
 						return null;
 					}))
+				.ForMember(d => d.HasOvertime, c => c.ResolveUsing(
+					s => s.ScheduleDay != null && s.ScheduleDay.PersonAssignment().ShiftLayers.OfType<OvertimeShiftLayer>().Any()))
 				.ForMember(d => d.IsDayOff, c => c.ResolveUsing(s =>
 					{
 						var significantPart = s.ScheduleDay.SignificantPartForDisplay();

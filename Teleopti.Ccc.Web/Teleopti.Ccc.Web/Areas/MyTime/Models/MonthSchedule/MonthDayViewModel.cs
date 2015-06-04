@@ -1,5 +1,4 @@
 using System;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.MonthSchedule
 {
@@ -11,6 +10,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.MonthSchedule
 	    public bool IsDayOff { get; set; }
 
 	    public ShiftViewModel Shift { get; set; }
+		public bool HasOvertime { get; set; }
     }
 
 	public class ShiftViewModel
