@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces;
@@ -16,6 +14,7 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator
 {
 	public class SimulatedSchedulingScreen
 	{
+		private string _number;
 		private readonly IMessageBrokerUrl _url;
 		private readonly ICurrentDataSource _dataSource;
 		private readonly ICurrentBusinessUnit _businessUnit;
@@ -25,8 +24,8 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator
 
 		public SimulatedSchedulingScreen(
 			IMessageBrokerUrl url,
-			ICurrentDataSource dataSource, 
-			ICurrentBusinessUnit businessUnit, 
+			ICurrentDataSource dataSource,
+			ICurrentBusinessUnit businessUnit,
 			ICurrentScenario scenario,
 			IJsonSerializer serializer)
 		{
@@ -49,13 +48,14 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator
 
 		public void Simulate(int number, string brokerUrl, DateTime startDate, DateTime endDate)
 		{
+			_number = "#" + number;
 			_url.Configure(brokerUrl);
 
 			addMailbox(new Subscription
 			{
 				MailboxId = Guid.NewGuid().ToString(),
 				DomainType = typeof(IScheduleChangedEvent).Name,
-				DomainReferenceId = Subscription.IdToString(_scenario.Current().Id.Value) ,
+				DomainReferenceId = Subscription.IdToString(_scenario.Current().Id.Value),
 				DomainReferenceType = typeof(Scenario).AssemblyQualifiedName,
 				LowerBoundary = Subscription.DateToString(startDate),
 				UpperBoundary = Subscription.DateToString(endDate),
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator
 			addMailbox(new Subscription
 			{
 				MailboxId = Guid.NewGuid().ToString(),
-				DomainType = typeof (IPersistableScheduleData).Name,
+				DomainType = typeof(IPersistableScheduleData).Name,
 				DomainReferenceId = null,
 				DomainReferenceType = null,
 				LowerBoundary = Subscription.DateToString(startDate),
@@ -105,32 +105,24 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator
 		{
 			var content = _serializer.SerializeObject(subscription);
 			post(url("MessageBroker/AddMailbox"), content);
+			Console.WriteLine(_number + "mailbox created " + subscription.MailboxId);
 			startPoll(subscription.MailboxId);
 		}
 
-		private void startPoll(string mailboxId)
+		private async void startPoll(string mailboxId)
 		{
-			return;
-			Task.Factory.StartNew(() =>
+			while (true)
 			{
-				while (true)
-				{
-					Task.Delay(TimeSpan.FromSeconds(30))
-						.ContinueWith(t => Console.WriteLine(get(url("MessageBroker/PopMessages?id=" + mailboxId))))
-						.Wait();
-				}
-			});
+				await Task.Delay(TimeSpan.FromSeconds(5));
+				Console.WriteLine(_number + " polling " + mailboxId + " got " + await get(url("MessageBroker/PopMessages?id=" + mailboxId)));
+			}
 		}
 
 		private async void post(string url, string content)
 		{
-			var x = new Stopwatch();
-			x.Start();
 			var result = await _httpClient.PostAsync(url, new StringContent(content, Encoding.UTF8, "application/json"));
 			if (result.StatusCode != HttpStatusCode.OK)
 				throw new Exception("POST failed! " + result.StatusCode);
-			x.Stop();
-			Console.WriteLine("mailbox created and it took: " + x.ElapsedMilliseconds);
 		}
 
 		private async Task<string> get(string url)

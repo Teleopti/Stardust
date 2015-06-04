@@ -37,10 +37,8 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator
 			builder.RegisterInstance(currentScenario).As<ICurrentScenario>();
 			builder.RegisterInstance(currentDatasource).As<ICurrentDataSource>();
 			builder.RegisterInstance(currentBusinessUnit).As<ICurrentBusinessUnit>();
-			builder.RegisterType<SimulatedSchedulingScreen>();
+			builder.RegisterType<SimulatedSchedulingScreen>().InstancePerDependency();
 			var container = builder.Build();
-
-			var schedulingScreen = container.Resolve<SimulatedSchedulingScreen>();
 
 			var startDate = "2015-01-05".Utc();
 			var endDate = startDate.AddDays(8*7);
@@ -49,11 +47,11 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator
 
 			Enumerable.Range(1, (200 + 5 + 2)).ForEach(i =>
 			{
+				var schedulingScreen = container.Resolve<SimulatedSchedulingScreen>();
 				schedulingScreen.Simulate(i, @"http://localhost:52858/", startDate, endDate);
-				Console.WriteLine("simlated screeen #" + i);
+				Console.WriteLine("#" + i + "starting");
 			});
 
-			Console.WriteLine("started");
 			Console.ReadKey();
 
 		}
