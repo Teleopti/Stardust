@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using System.Web;
+using System.Web.Hosting;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Autofac;
@@ -10,10 +10,7 @@ using Microsoft.AspNet.SignalR;
 using Microsoft.Owin;
 using Owin;
 using Teleopti.Ccc.Domain.MessageBroker;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
-using Teleopti.Ccc.IocCommon.MultipleConfig;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.Web.Broker;
 using RegistrationExtensions = Autofac.Integration.Mvc.RegistrationExtensions;
 
@@ -23,8 +20,7 @@ namespace Teleopti.Ccc.Web.Broker
 {
 	public class Startup
 	{
-		private static readonly ILog Logger = LogManager.GetLogger(typeof (Global));
-		public static IContainer _container;
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(Startup));
 
 		public void Configuration(IAppBuilder app)
 		{
@@ -38,9 +34,11 @@ namespace Teleopti.Ccc.Web.Broker
 			builder.RegisterType<SubscriptionPassThrough>().As<IBeforeSubscribe>().SingleInstance();
 			builder.RegisterHubs(typeof(MessageBrokerHub).Assembly);
 			RegistrationExtensions.RegisterControllers(builder, typeof(MessageBrokerController).Assembly);
-			_container = builder.Build();
+			var container = builder.Build();
 
-			var lifetimeScope = _container.BeginLifetimeScope();
+			HostingEnvironment.RegisterObject(new actionThrottleStopper(container));
+
+			var lifetimeScope = container.BeginLifetimeScope();
 			GlobalHost.DependencyResolver = new AutofacDependencyResolver(lifetimeScope); 
 			
 			var hubConfiguration = new HubConfiguration { EnableJSONP = true };
@@ -51,6 +49,24 @@ namespace Teleopti.Ccc.Web.Broker
 			DependencyResolver.SetResolver(new Autofac.Integration.Mvc.AutofacDependencyResolver(lifetimeScope));
 			AreaRegistration.RegisterAllAreas();
 			RegisterRoutes(RouteTable.Routes);
+		}
+
+		private class actionThrottleStopper : IRegisteredObject
+		{
+			private readonly IComponentContext _container;
+
+			public actionThrottleStopper(IComponentContext container)
+			{
+				_container = container;
+			}
+
+			public void Stop(bool immediate)
+			{
+				var actionScheduler = _container.Resolve<IActionScheduler>();
+				if (actionScheduler is IDisposable)
+					(actionScheduler as IDisposable).Dispose();
+				HostingEnvironment.UnregisterObject(this);
+			}
 		}
 
 		public static void RegisterRoutes(RouteCollection routes)

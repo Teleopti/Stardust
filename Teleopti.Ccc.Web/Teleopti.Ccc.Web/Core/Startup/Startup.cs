@@ -20,6 +20,7 @@ using Microsoft.IdentityModel.Web;
 using Microsoft.Owin;
 using Owin;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Web.Broker;
 using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Ccc.Web.Core.Startup;
@@ -71,7 +72,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			{
 				var pathToToggle = Startup.pathToToggle();
 				var container = _containerConfiguration.Configure(pathToToggle, config);
-				HostingEnvironment.RegisterObject(new ActionThrottleObject(container));
+				HostingEnvironment.RegisterObject(new actionThrottleStopper(container));
 
 				AutofacHostFactory.Container = container;
 				if (!_testMode)
@@ -98,6 +99,24 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			{
 				log.Error(ex);
 				ApplicationStartModule.ErrorAtStartup = ex;
+			}
+		}
+
+		private class actionThrottleStopper : IRegisteredObject
+		{
+			private readonly IComponentContext _container;
+
+			public actionThrottleStopper(IComponentContext container)
+			{
+				_container = container;
+			}
+
+			public void Stop(bool immediate)
+			{
+				var actionScheduler = _container.Resolve<IActionScheduler>();
+				if (actionScheduler is IDisposable)
+					(actionScheduler as IDisposable).Dispose();
+				HostingEnvironment.UnregisterObject(this);
 			}
 		}
 

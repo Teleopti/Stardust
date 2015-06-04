@@ -65,22 +65,4 @@ throw startupException;
 			}
 		}
 	}
-
-	public class ActionThrottleObject : IRegisteredObject
-	{
-		private readonly IContainer _container;
-
-		public ActionThrottleObject(IContainer container)
-		{
-			_container = container;
-		}
-
-		public void Stop(bool immediate)
-		{
-			var actionScheduler = _container.Resolve<IActionScheduler>();
-			if (actionScheduler is IDisposable)
-				(actionScheduler as IDisposable).Dispose();
-			HostingEnvironment.UnregisterObject(this);
-		}
-	}
 }
