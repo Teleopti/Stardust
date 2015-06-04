@@ -25,5 +25,16 @@ namespace Teleopti.Ccc.Web.Broker
 		{
 			_server.NotifyClientsMultiple(notifications);
 		}
+
+		public void AddMailbox(Subscription subscription)
+		{
+			_server.AddMailbox(subscription);
+		}
+
+		public JsonResult PopMessages(string id)
+		{
+			return Json(_server.PopMessages(id), JsonRequestBehavior.AllowGet);
+		}
+
 	}
 }
