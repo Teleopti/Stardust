@@ -1215,6 +1215,8 @@
     <Content Include="Areas\Reporting\ScheduleAdherence.aspx" />
     <Content Include="Areas\Reporting\Index.aspx" />
     <Content Include="Areas\Reporting\Views\Report\NoPermission.cshtml" />
+    <Content Include="WFM\html\left-sidenav.html" />
+    <Content Include="WFM\html\right-sidenav.html" />
     <Content Include="WFM\js\global\help.controller.js" />
     <Content Include="WFM\js\outbound\outbound.directive.js" />
     <None Include="WFM\css\_forecasting.scss" />

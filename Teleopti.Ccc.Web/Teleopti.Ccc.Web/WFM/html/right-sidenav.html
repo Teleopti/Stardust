@@ -1,0 +1,49 @@
+﻿
+	<div ng-controller="NotificationsCtrl">
+		<div class="wfm-block sidenav-header">Notifications</div>
+		<ul class="notification-list" ng-repeat="item in notificationResult">
+			<li><i class="mdi mdi-alert-circle"></i>{{item.JobCategory}} '{{item.Status}}' at {{item.Timestamp | date:'HH:mm'}}</li>
+		</ul>
+	</div>
+	<div flex>
+		<div class="wfm-block sidenav-header">Something</div>
+		<div ng-show>
+			<div layout="row" style="justify-content: space-around;display: block;text-align: center;">
+				<button class="wfm-fab success mini">
+					<i class="mdi mdi-plus"></i>
+				</button>
+				<button class="wfm-fab mini">
+					<i class="mdi mdi-delete"></i>
+				</button>
+				<button class="wfm-fab info mini">
+					<i class="mdi mdi-check"></i>
+				</button>
+				<button class="wfm-fab success mini">
+					<i class="mdi mdi-thumb-up"></i>
+				</button>
+				<button class="wfm-fab mini info">
+					<i class="mdi mdi-menu"></i>
+				</button>
+			</div>
+			<div layout="row">
+				<button flex class="wfm-btn wfm-btn-default">One</button>
+				<button flex class="wfm-btn wfm-btn-default">Another</button>
+			</div>
+		</div>
+	</div>
+
+	<ul class="wfm-accordion" style=" position: absolute; bottom: 0; width: 14.5%;">
+		<li class="help-widget">
+			<div class="wfm-accordion-head sidenav-header" ng-click="helpToggle1 = !helpToggle1">Help<i class="mdi mdi-help-circle"></i></div>
+			<div class="wfm-accordion-content" ng-cloak ng-show="helpToggle1">
+				<div class="wfm-block">
+					<div ng-controller="HelpController">
+						<h4>{{help.currentHelp.name}} view.</h4>
+						<p>{{ help.currentHelp.helpDesc }}</p>
+						<a style="float:right" class="wfm-btn wfm-btn-invis-primary" href="{{help.currentHelp.helpUrl}}">Go to Wiki</a>
+					</div>
+
+				</div>
+			</div>
+		</li>
+	</ul>

@@ -47,13 +47,7 @@
 	<div ng-include="'html/nav.html'" class="material-depth-1 navbar navbar-default navbar-static-top " role="navigation"></div>
 	<div class="layout-container">
 		<div class="sidenav material-depth-1 left" ng-class="{'is-hidden':toggleLeftSide}">
-
-			<section class="wfm-accordion" ng-controller="AreasCtrl" data-ng-init="loadAreas()">
-				<!--Refactor me -->
-				<div ng-repeat="accordionTitle in areas">
-					<a ui-sref={{accordionTitle.InternalName}} ui-sref-active="nav-item-active"><div class="nav-item sidenav-header accordion-head" ng-click="accordionToggle = !accordionToggle">{{accordionTitle.Name}}</div></a>
-				</div>
-			</section>
+			<div ng-include="'html/left-sidenav.html'"></div>
 		</div>
 
 
@@ -85,56 +79,8 @@
 				</label>
 			</div>
 		</div>
-		<div class="sidenav material-depth-1 right" layout="column" ng-class="{'is-hidden':toggleRightSide}" ng-controller="NotificationsCtrl">
-			<div>
-				<div class="wfm-block sidenav-header">Notifications</div>
-				<ul class="notification-list" ng-repeat="item in notificationResult">
-					<li><i class="mdi mdi-alert-circle"></i>{{item.JobCategory}} '{{item.Status}}' at {{item.Timestamp | date:'HH:mm'}}</li>
-				</ul>
-			</div>
-			<div flex>
-				<div class="wfm-block sidenav-header">Something</div>
-				<div ng-show>
-					<div layout="row" style="justify-content: space-around;display: block;text-align: center;">
-						<button class="wfm-fab success mini">
-							<i class="mdi mdi-plus"></i>
-						</button>
-						<button class="wfm-fab mini">
-							<i class="mdi mdi-delete"></i>
-						</button>
-						<button class="wfm-fab info mini">
-							<i class="mdi mdi-check"></i>
-						</button>
-						<button class="wfm-fab success mini">
-							<i class="mdi mdi-thumb-up"></i>
-						</button>
-						<button class="wfm-fab mini info">
-							<i class="mdi mdi-menu"></i>
-						</button>
-					</div>
-					<div layout="row">
-						<button flex class="wfm-btn wfm-btn-default">One</button>
-						<button flex class="wfm-btn wfm-btn-default">Another</button>
-					</div>
-				</div>
-			</div>
-
-			<ul class="wfm-accordion">
-				<li class="help-widget">
-					<div class="wfm-accordion-head sidenav-header" ng-click="helpToggle1 = !helpToggle1">Help<i class="mdi mdi-help-circle"></i></div>
-					<div class="wfm-accordion-content" ng-cloak ng-show="helpToggle1">
-						<div class="wfm-block">
-							<div ng-controller="HelpController">
-								<h4>{{help.currentHelp.name}} view.</h4>
-								<p>{{ help.currentHelp.helpDesc }}</p>
-								<a style="float:right" class="wfm-btn wfm-btn-invis-primary" href="{{help.currentHelp.helpUrl}}">Go to Wiki</a>
-							</div>
-
-						</div>
-					</div>
-				</li>
-			</ul>
-
+		<div class="sidenav material-depth-1 right" layout="column" ng-class="{'is-hidden':toggleRightSide}" >
+			<span ng-include="'html/right-sidenav.html'"></span>
 		</div>
 	</div>
 </body>
