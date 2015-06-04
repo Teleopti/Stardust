@@ -41,25 +41,25 @@
 
 	<!-- Runs NPM command -->
 	<Target Name="RestoreNodePackages">
-		<!--<Exec Command="$(NpmInstallKarmaCmd)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />-->
-		<!--<Exec Command="$(NpmInstallKarmaCliCmd)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />-->
+		<Exec Command="$(NpmInstallKarmaCmd)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
+		<Exec Command="$(NpmInstallKarmaCliCmd)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
 
 		<Message Text="Restore Node Packages Command: $(NpmInstallCmd) /w WorkingDirectory: $(MSBuildProjectDirectory)\WFM" Importance="high" />
-		<!--<Exec Command="$(NpmInstallCmd)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />-->
+		<Exec Command="$(NpmInstallCmd)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
 
 		<Message Text="Install Flatten Node Packages Command: $(NpmInstallFlattenPackages) /w WorkingDirectory: $(MSBuildProjectDirectory)\WFM" Importance="high" />
-		<!--<Exec Command="$(NpmInstallFlattenPackages)" ContinueOnError="false" WorkingDirectory="$(NodeDir)" />-->
+		<Exec Command="$(NpmInstallFlattenPackages)" ContinueOnError="false" WorkingDirectory="$(NodeDir)" />
 		<Message Text="Flatten Node Packages Command: $(NpmFlattenCmd) /w WorkingDirectory: $(MSBuildProjectDirectory)\WFM" Importance="high" />
-		<!--<Exec Command="$(NpmFlattenCmd)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />-->
+		<Exec Command="$(NpmFlattenCmd)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
 		<Message Text="HACK! Removing directory to get below 260 characters" Importance="high" />
-		<!--<Exec Command="rmdir /S /Q $(MSBuildProjectDirectory)\WFM\node_modules\node-sass\test" />-->
+		<Exec Command="rmdir /S /Q $(MSBuildProjectDirectory)\WFM\node_modules\node-sass\test" />
 	</Target>
 
 	<!-- Install protractor -->
 	<Target Name="RestoreNodePackageProtractor">
-		<!--<Exec Command="$(NpmSetServerCmd)"  ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />-->
+		<Exec Command="$(NpmSetServerCmd)"  ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
 		<Message Text="Restore Node Packages Command: $(NpmInstallProtractorCmd) /w WorkingDirectory: $(NodeDir)" Importance="high" />
-		<!--<Exec Command="$(NpmInstallProtractorCmd)" ContinueOnError="false" WorkingDirectory="$(NodeDir)" />-->
+		<Exec Command="$(NpmInstallProtractorCmd)" ContinueOnError="false" WorkingDirectory="$(NodeDir)" />
 	</Target>
 
 	<!-- Executes Build -->
@@ -70,8 +70,8 @@
 	</ItemGroup>
 	<Target Name="RunGruntBuild" Inputs="@(OriginalJsFiles);@(DistCssFiles)" Outputs="@(DistJsFiles);@(DistCssFiles)">
 		<Message Text="Restore Node Packages Command: $(NpmInstallGruntCliCmd) /w WorkingDirectory: $(NodeDir)" Importance="high" />
-		<!--<Exec Command="$(NpmInstallGruntCliCmd)" ContinueOnError="false" WorkingDirectory="$(NodeDir)" />-->
+		<Exec Command="$(NpmInstallGruntCliCmd)" ContinueOnError="false" WorkingDirectory="$(NodeDir)" />
 		<Message Text="Executing Node.JS Builds: $(GruntBuild) /w WorkingDirectory: $(MSBuildProjectDirectory)\WFM" Importance="high" />
-		<!--<Exec ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" Command="$(GruntBuild)" />-->
+		<Exec ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" Command="$(GruntBuild)" />
 	</Target>
 </Project>
