@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			builder.RegisterType<SubscriptionFiller>().As<IBeforeSubscribe>().SingleInstance();
 			builder.RegisterType<MessageBrokerServer>().As<IMessageBrokerServer>().SingleInstance().ApplyAspects();
-			builder.RegisterType<MailboxRepository>().As<IMailboxRepository>().SingleInstance();
+			builder.RegisterType<EmptyMailboxRepository>().As<IMailboxRepository>().SingleInstance();
 
 			if (_throttleMessages)
 			{
