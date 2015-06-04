@@ -1228,6 +1228,9 @@
     <Content Include="WFM\js\permissions\permissions.rolefunctions.controller.js" />
     <Content Include="WFM\js\permissions\permissions.rolefunctions.service.js" />
     <Content Include="WFM\js\permissions\roles.service.js" />
+    <Content Include="WFM\js\resourceplanner\planningperiod.service.js" />
+    <Content Include="WFM\js\resourceplanner\planningperiods.controller.js" />
+    <Content Include="WFM\js\resourceplanner\planningperiods.html" />
     <Content Include="WFM\js\resourceplanner\resourceplanner-report.html" />
     <Content Include="WFM\js\resourceplanner\resourceplanner.report.controller.js" />
     <Content Include="WFM\js\seatManagement\fabric.fix.js" />
