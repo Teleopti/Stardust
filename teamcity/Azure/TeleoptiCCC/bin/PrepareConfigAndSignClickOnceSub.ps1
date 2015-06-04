@@ -163,6 +163,35 @@ function CopyFileToBlobStorage {
         throw "AsCopy generated an error!"
     }
 }
+function CopyReportsFromBlobStorage{
+	$BlobPath = TeleoptiDriveMapProperty-get -name "BlobPath"
+    $AccountKey = TeleoptiDriveMapProperty-get -name "AccountKey"
+    $ContainerName = TeleoptiDriveMapProperty-get -name "ContainerName"
+    $DataSourceName = TeleoptiDriveMapProperty-get -name "DataSourceName"
+	$fullPathCustomReports =  "$directory\..\..\sitesroot\3\Areas\Reporting\Reports\Custom\" 
+	
+	If (!(Test-Path $fullPathCustomReports)) {
+		New-Item -Path $fullPathCustomReports -ItemType Directory
+ 	}
+	
+	## Options to be added to AzCopy
+	$OPTIONS = @("/S","/XO","/Y","/sourceKey:$AccountKey")
+
+    $BlobSource = $BlobPath + $ContainerName + "/" + $DataSourceName
+	## Wrap all above arguments
+	$cmdArgs = @("$BlobSource","$DESTINATION",$OPTIONS)
+
+	$AzCopyExe = $directory + "\ccc7_azure\AzCopy\AzCopy.exe"
+	$AzCopyExe
+
+	## Start the azcopy with above parameters and log errors in Windows Eventlog.
+	& $AzCopyExe @cmdArgs
+    $AzExitCode = $LastExitCode
+    
+    if ($LastExitCode -ne 0) {
+        throw "AsCopy generated an error!"
+    }
+}
 
 ##===========
 ## Main
@@ -193,7 +222,7 @@ Try
 	$togglesFile = "toggles.txt"
 	$fullPathTogglesFileForWeb =  "$directory\..\..\sitesroot\3\bin\FeatureFlags\" + $togglesFile
 	$fullPathTogglesFileForRta =  "$directory\..\..\sitesroot\5\bin\FeatureFlags\" + $togglesFile
-	$fullPathCustomReports =  "$directory\..\..\sitesroot\3\Areas\Reporting\Reports\Custom\" 
+	
 
     $DataSourceName = TeleoptiDriveMapProperty-get -name "DataSourceName"
     
@@ -215,10 +244,8 @@ Try
 	#copy the settings for sms (and email) notifications, if any
     CopyFileFromBlobStorage -destinationFolder "$DatasourcesPath" -filename "NotificationConfig.xml"
     
-	If (!(Test-Path $fullPathCustomReports)) {
-		New-Item -Path $fullPathCustomReports -ItemType Directory
- 	}
-	CopyFileFromBlobStorage -destinationFolder "$fullPathCustomReports" -filename "*.rdlc"
+	#Comment out until I can test
+	#CopyReportsFromBlobStorage
 	
 	CopyFileFromBlobStorage -destinationFolder "$directory" -filename "$togglesFile"
 	$tempTogglesFile = "$directory\" + $togglesFile
