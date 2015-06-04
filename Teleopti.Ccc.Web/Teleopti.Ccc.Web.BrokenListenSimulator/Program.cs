@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using Autofac;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.IocCommon;
@@ -35,15 +37,21 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator
 			builder.RegisterInstance(currentScenario).As<ICurrentScenario>();
 			builder.RegisterInstance(currentDatasource).As<ICurrentDataSource>();
 			builder.RegisterInstance(currentBusinessUnit).As<ICurrentBusinessUnit>();
-			builder.RegisterType<SchedulingScreen>();
+			builder.RegisterType<SimulatedSchedulingScreen>();
 			var container = builder.Build();
 
-			var schedulingScreen = container.Resolve<SchedulingScreen>();
+			var schedulingScreen = container.Resolve<SimulatedSchedulingScreen>();
 
 			var startDate = "2015-01-05".Utc();
 			var endDate = startDate.AddDays(8*7);
 
-			schedulingScreen.Simulate(@"http://localhost:52858/", startDate, endDate);
+			Console.WriteLine("starting...");
+
+			Enumerable.Range(1, (200 + 5 + 2)).ForEach(i =>
+			{
+				schedulingScreen.Simulate(i, @"http://localhost:52858/", startDate, endDate);
+				Console.WriteLine("simlated screeen #" + i);
+			});
 
 			Console.WriteLine("started");
 			Console.ReadKey();
