@@ -13,7 +13,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.IoC;
-using Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider;
 using Teleopti.Ccc.WebTest.Core.Common;
 using Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping;
@@ -32,7 +31,6 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 
 			builder.RegisterModule(new WebModule(configuration, null));
 			builder.RegisterType<FakeLoggedOnUser>().As<ILoggedOnUser>().SingleInstance();
-			builder.RegisterType<FakeNow>().As<INow>().SingleInstance();
 			builder.RegisterInstance(new FakePermissionProvider(false)).As<IPermissionProvider>().SingleInstance();
 			builder.RegisterInstance(new FakeScheduleDataReadScheduleRepository()).AsSelf().As<IScheduleRepository>().SingleInstance();
 			builder.RegisterInstance(scenario).As<ICurrentScenario>().SingleInstance();

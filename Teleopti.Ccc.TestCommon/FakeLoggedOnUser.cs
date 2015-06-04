@@ -7,14 +7,9 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public class FakeLoggedOnUser : ILoggedOnUser
 	{
-		private IPerson _person;
+		private readonly IPerson _person;
 
 		public FakeLoggedOnUser(IPerson person)
-		{
-			_person = person;
-		}
-
-		public void SetFakeLoggedOnUser(IPerson person)
 		{
 			_person = person;
 		}
@@ -29,7 +24,5 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			return _person;
 		}
-
-		
 	}
 }
