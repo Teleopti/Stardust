@@ -12,6 +12,7 @@ Scenario: Navigate through breadcrumb
 	When I click on the breadcrumb forecasting link
 	Then I should see Forecasting
 
+@ignore
 Scenario: View help widget
 	Given I have a role with
 		| Field                                 | Value             |
