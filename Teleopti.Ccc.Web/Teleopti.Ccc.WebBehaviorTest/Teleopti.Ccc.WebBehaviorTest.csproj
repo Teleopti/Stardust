@@ -256,13 +256,13 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="MyTime\AgentBadgeWhen31318Enabled.feature.cs">
-      <DependentUpon>AgentBadgeWhen31318Enabled.feature</DependentUpon>
+    <Compile Include="MyTime\AgentBadge.feature.cs">
+      <DependentUpon>AgentBadge.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="MyTime\GamificationOrganisationalBasedLeaderboardWhen31318Enabled.feature.cs">
-      <DependentUpon>GamificationOrganisationalBasedLeaderboardWhen31318Enabled.feature</DependentUpon>
+    <Compile Include="MyTime\GamificationOrganisationalBasedLeaderboard.feature.cs">
+      <DependentUpon>GamificationOrganisationalBasedLeaderboard.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
@@ -984,13 +984,13 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>NotifyAgents.feature.cs</LastGenOutput>
     </None>
-    <None Include="MyTime\AgentBadgeWhen31318Enabled.feature">
+    <None Include="MyTime\AgentBadge.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>AgentBadgeWhen31318Enabled.feature.cs</LastGenOutput>
+      <LastGenOutput>AgentBadge.feature.cs</LastGenOutput>
     </None>
-    <None Include="MyTime\GamificationOrganisationalBasedLeaderboardWhen31318Enabled.feature">
+    <None Include="MyTime\GamificationOrganisationalBasedLeaderboard.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>GamificationOrganisationalBasedLeaderboardWhen31318Enabled.feature.cs</LastGenOutput>
+      <LastGenOutput>GamificationOrganisationalBasedLeaderboard.feature.cs</LastGenOutput>
     </None>
     <None Include="MyTime\ShiftExchangeOfferForNonWorkingDaysFromWeekSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

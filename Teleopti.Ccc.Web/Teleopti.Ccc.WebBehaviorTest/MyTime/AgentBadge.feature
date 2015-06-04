@@ -1,12 +1,12 @@
 ﻿@OnlyRunIfEnabled('Portal_DifferentiateBadgeSettingForAgents_31318')
-Feature: AgentBadgeWhen31318Enabled
+Feature: AgentBadge
 	As an agent I want to get motivated
 	by getting badges for my performance
 
 Background: 
-Given there is a role with
-		| Field                    | Value                 |
-		| Name                     | Full access to mytime |
+  Given there is a role with
+		| Field | Value                 |
+		| Name  | Full access to mytime |
 	And I have the role 'Full access to mytime'
 	And there is a site named 'The site'
 	And there is a team named 'Team green' on 'The site'
@@ -23,8 +23,8 @@ Given there is a role with
 		| Silver to bronze rate | 5       |
 		| Gold to silver rate   | 5       |
 	And There are teams applied with settings with
-		| Team        | GamificationSetting |
-		| Team green  | setting             |
+		| Team       | GamificationSetting |
+		| Team green | setting             |
 
 Scenario: Show my badge
 Given I have badges based on the specific setting with
@@ -40,7 +40,7 @@ Given I have badges based on the specific setting with
   And I should see I have 3 bronze badges, 0 silver badge and 0 gold badge for Adherence
 
 Scenario: Show zero badge when agent has no badge
-Given I have badges with
-  | Badge type     | Bronze | Silver | Gold |
+Given I have badges based on the specific setting with
+  | Badge type          | Bronze | Silver | Gold | LastCalculatedDate |
  When I am viewing week schedule
  Then I should see I have 0 bronze badge, 0 silver badge and 0 gold badge

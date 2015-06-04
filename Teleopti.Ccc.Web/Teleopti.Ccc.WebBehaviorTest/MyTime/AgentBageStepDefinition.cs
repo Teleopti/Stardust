@@ -86,8 +86,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			var teamSettings = table.CreateSet<TeamGamificationSettingConfigurable>();
 			teamSettings.ForEach(ts => DataMaker.Data().Apply(ts));
 		}
-
 	}
-
-
 }

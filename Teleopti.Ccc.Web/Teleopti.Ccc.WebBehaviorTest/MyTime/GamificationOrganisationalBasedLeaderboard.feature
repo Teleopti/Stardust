@@ -1,6 +1,6 @@
 ﻿@OnlyRunIfEnabled('MyTimeWeb_OrganisationalBasedLeaderboard_31184')
 @OnlyRunIfEnabled('Portal_DifferentiateBadgeSettingForAgents_31318')
-Feature: GamificationOrganisationalBasedLeaderboardWhen31318Enabled
+Feature: GamificationOrganisationalBasedLeaderboard
 	The leaderboard can be based on site/team/everyone
 	As an agent
 	I want to view the leaderboard based on my data hierarchy
@@ -107,5 +107,3 @@ Scenario: The rank is the same when the Gold/Silver/Bronze badge are totally the
 		| 1    | I             |
 		| 1    | Ashley Andeen |
 		| 3    | Pierre Baldi  |
-
-
