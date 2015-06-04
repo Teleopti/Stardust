@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			_loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			_loggedOnUser.Expect(l => l.CurrentUser()).Repeat.Any().Return(_user);
 			_alwaysOpenPeriod = new DateOnlyPeriod(new DateOnly(1900, 1, 1), new DateOnly(2040, 1, 1));
-			_now = new fakeNow(new DateTime(2013, 5, 2));
+			_now = new FakeNow(new DateTime(2013, 5, 2));
 		}
 
 		[Test]
@@ -591,21 +591,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			workflowControlSet.AbsenceRequestOpenPeriods[1].StaffingThresholdValidator = new BudgetGroupAllowanceValidator();
 
 			_user.WorkflowControlSet = workflowControlSet;
-		}
-
-		private class fakeNow : INow
-		{
-			private readonly DateTime _now;
-
-			public fakeNow(DateTime now)
-			{
-				_now = now;
-			}
-
-			public DateTime UtcDateTime()
-			{
-				return _now;
-			}
 		}
 
 		#endregion
