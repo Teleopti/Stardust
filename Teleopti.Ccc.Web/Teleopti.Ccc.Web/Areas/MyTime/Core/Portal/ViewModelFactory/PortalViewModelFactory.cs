@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			var licenseActivator = _licenseActivatorProvider.Current();
 			var customerName = licenseActivator == null ? string.Empty : licenseActivator.CustomerName;
 
-			var badgeToggleEnabled = _toggleManager.IsEnabled(Toggles.MyTimeWeb_AgentBadge_28913)||_toggleManager.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318);
+			var badgeToggleEnabled = _toggleManager.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318);
 			var hasBadgePermission =
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewBadge);
 

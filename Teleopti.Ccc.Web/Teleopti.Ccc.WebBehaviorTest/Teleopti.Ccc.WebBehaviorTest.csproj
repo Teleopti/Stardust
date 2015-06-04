@@ -277,11 +277,6 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="MyTime\AbsenceReportFromMobileWeekScheduleStepDefinitions.cs" />
-    <Compile Include="MyTime\GamificationOrganisationalBasedLeaderboard.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>GamificationOrganisationalBasedLeaderboard.feature</DependentUpon>
-    </Compile>
     <Compile Include="MyTime\GamificationOrganisationalBasedLeaderboardStepDefinitions.cs" />
     <Compile Include="MyTime\ShiftTradeBulletinBoard.feature.cs">
       <DependentUpon>ShiftTradeBulletinBoard.feature</DependentUpon>
@@ -294,11 +289,6 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="MyTime\AbsenceReportFromWeekScheduleStepDefinitions.cs" />
-    <Compile Include="MyTime\AgentBadge.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AgentBadge.feature</DependentUpon>
-    </Compile>
     <Compile Include="MyTime\AgentBageStepDefinition.cs" />
     <Compile Include="Bindings\DoNotUse\DefaultSite.cs" />
     <Compile Include="Bindings\DoNotUse\DefaultTeam.cs" />
@@ -1010,10 +1000,6 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>AbsenceReportFromMobileWeekSchedule.feature.cs</LastGenOutput>
     </None>
-    <None Include="MyTime\GamificationOrganisationalBasedLeaderboard.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>GamificationOrganisationalBasedLeaderboard.feature.cs</LastGenOutput>
-    </None>
     <None Include="MyTime\ShiftTradeBulletinBoard.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ShiftTradeBulletinBoard.feature.cs</LastGenOutput>
@@ -1021,10 +1007,6 @@
     <None Include="MyTime\AbsenceReportFromWeekSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>AbsenceReportFromWeekSchedule.feature.cs</LastGenOutput>
-    </None>
-    <None Include="MyTime\AgentBadge.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>AgentBadge.feature.cs</LastGenOutput>
     </None>
     <None Include="MyTime\MyReportAgentQueueMetrics.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

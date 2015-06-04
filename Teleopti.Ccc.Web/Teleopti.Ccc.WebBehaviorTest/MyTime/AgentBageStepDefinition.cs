@@ -2,7 +2,6 @@
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -16,19 +15,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 	[Binding]
 	public class AgentBageStepDefinition
 	{
-		[Given(@"There is an agent badge settings with")]
-		public void GivenThereIsAAgentBadgeSettingsWith(Table table)
-		{
-			var badgeSetting = table.CreateInstance<BadgeSettingsConfigurable>();
-			DataMaker.Data().Apply(badgeSetting);
-		}
-		[Given(@"(.*) (has|have) badges with")]
-		public void GivenHasBadgesWith(string userName, string hasHave, Table table)
-		{
-			var agentBadges = table.CreateSet<BadgeConfigurable>();
-			agentBadges.ForEach(a => DataMaker.Person(userName).Apply(a));
-		}
-
 		[Given(@"(.*) (has|have) badges based on the specific setting with")]
 		public void GivenHasBadgesBasedOnSettingWith(string userName, string hasHave, Table table)
 		{

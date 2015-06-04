@@ -24,8 +24,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		{
 			var bus = Container.Resolve<IServiceBus>();
 			var toggleManager = Container.Resolve<IToggleManager>();
-			if (!toggleManager.IsEnabled(Toggles.MyTimeWeb_AgentBadge_28913) &&
-			    !toggleManager.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318))
+			if (!toggleManager.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318))
 				return;
 
 			StateHolderReader.Instance.StateReader.ApplicationScopeData.DoOnAllTenants_AvoidUsingThis(tenant =>

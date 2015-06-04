@@ -190,11 +190,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				allSupportedPages.Add(new GamificationSettingControl(_toggleManager));
 				allSupportedPages.Add(new SetGamificationSettingTargetsControl());
 			}
-
-			if (_toggleManager.IsEnabled(Toggles.MyTimeWeb_AgentBadge_28913) && !_toggleManager.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318))
-			{
-				allSupportedPages.Add(new BadgeThresholdSettings(_toggleManager));
-			}
 			
 			allSupportedPages.Add(new SeniorityControl());
 			
