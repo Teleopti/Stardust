@@ -71,28 +71,22 @@ SET	Version					= @version+1,
 WHERE Id = @FreemiumGUID
 AND Version = @version
 
-UPDATE dbo.ApplicationAuthenticationInfo
-SET ApplicationLogOnName	= @FreemiumAppUser,
-	Password				= @FreemiumPwd
-FROM dbo.Person p
-WHERE p.Id = dbo.ApplicationAuthenticationInfo.person
-AND p.Id = @FreemiumGUID
-
---add if not already exist
-INSERT INTO dbo.AuthenticationInfo (person,[Identity])
-SELECT p.Id,'$(USERDOMAIN)\$(USERNAME)'
-FROM dbo.person p
-WHERE
-   NOT EXISTS (SELECT * FROM dbo.AuthenticationInfo win
-              WHERE win.person = p.Id)
-AND p.Id = @FreemiumGUID
-
---if exist, update to current Windows user
-UPDATE dbo.AuthenticationInfo
-SET 	[Identity] = '$(USERDOMAIN)\$(USERNAME)'
-FROM dbo.Person p
-WHERE p.Id = dbo.AuthenticationInfo.person
-AND p.Id = @FreemiumGUID
+----------------
+--Name: Ola
+--Date: 2015-06-05
+--Desc: Change to add logoninfo to Tenant.PersonInfo table
+----------------
+-- hope we have a Tenant at this point
+If NOT EXISTS(SELECT 1 FROM Tenant.PersonInfo WHERE Id = @FreemiumGUID)
+	INSERT Tenant.PersonInfo
+	SELECT @FreemiumGUID, 1, '$(USERDOMAIN)\$(USERNAME)',  @FreemiumAppUser,
+	 @FreemiumPwd, GETUTCDATE(), GETUTCDATE(), 0, 0, replace(newId(),'-','')
+ELSE
+	UPDATE Tenant.PersonInfo
+	SET [ApplicationLogonName] = @FreemiumAppUser,
+	[ApplicationLogonPassword] = @FreemiumPwd,
+	[Identity] =  '$(USERDOMAIN)\$(USERNAME)'
+	WHERE Id = @FreemiumGUID
 
 --Add temporary license
 DELETE FROM License
