@@ -38,6 +38,13 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 				commonReports.LoadReportInfo();
 				Page.Header.Title = commonReports.Name;
 				//labelRepCaption.Text = commonReports.Name;
+				if (ReportId.Equals(Guid.Empty))
+				{
+					buttonShowExcel.Visible = false;
+					buttonShowImage.Visible = false;
+					buttonShowPdf.Visible = false;
+					buttonShowWord.Visible = false;
+				}
 				buttonShowExcel.ToolTip = UserTexts.Resources.ShowExcelReport;
 				buttonShowWord.ToolTip = UserTexts.Resources.ShowWordReport;
 				buttonShowPdf.ToolTip = UserTexts.Resources.ShowPDFReport;
