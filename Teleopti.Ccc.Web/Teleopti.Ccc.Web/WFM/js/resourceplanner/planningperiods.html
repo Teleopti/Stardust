@@ -1,1 +1,14 @@
-﻿<button ng-repeat="p in planningperiods" class="wfm-btn wfm-btn-primary" ui-sref="resourceplanner">{{p.StartEnd}} - {{p.EndDate}}</button>
+﻿<div>
+	<div class="row">
+		<div class="col-lg-12">
+			<h4>Planning periods</h4>
+			<p>Create and manage the different planning periods</p>
+		</div>
+	</div>
+
+
+	<ul class="wfm-list">
+		<li ui-sref="planningperiod">Create a new one <i class="mdi mdi-plus"></i></li>
+		<li ng-repeat="p in planningPeriods" ui-sref="resourceplanner">{{p.StartDate | date : format}} - {{p.EndDate | date : format}}</li>
+	</ul>
+</div>

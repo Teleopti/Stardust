@@ -82,6 +82,7 @@ wfm.config([
 				label: 'forecasting results'
 			}
 		}).state('resourceplanner', {
+			params: {},
 			url: '/resourceplanner',
 			templateUrl: 'js/resourceplanner/resourceplanner.html',
 			controller: 'ResourceplannerCtrl'
@@ -93,6 +94,11 @@ wfm.config([
 			params: { result: {} },
 			templateUrl: 'js/resourceplanner/resourceplanner-report.html',
 			controller: 'ResourceplannerReportCtrl'
+		}).state('planningperiod', {
+			url: '/planningperiod',
+			templateUrl: 'js/resourceplanner/planningperiods-new.html',
+			controller: 'PlanningPeriodNewCtrl',
+
 		}).state('permissions', {
 			url: '/permissions',
 			templateUrl: 'html/permissions/permissions.html',

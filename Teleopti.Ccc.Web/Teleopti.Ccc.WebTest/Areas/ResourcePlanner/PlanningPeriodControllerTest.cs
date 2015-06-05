@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 					new List<AggregatedSchedulePeriod>() { aggSchedulePeriod, aggSchedulePeriod2 })), suggestion
 				);
 
-			var result = (OkNegotiatedContentResult<IEnumerable<SuggestedPlanningPeriodRangeModel>>)Target.GetNextPlanningPeriodSuggestions(Guid.NewGuid());
+			var result = (OkNegotiatedContentResult<IEnumerable<SuggestedPlanningPeriodRangeModel>>)Target.GetNextPlanningPeriodSuggestions();
 			result.Content.Count().Should().Be.EqualTo(3);
 		}
 

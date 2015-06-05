@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			return Ok(planningPeriodModel);
 		}
 
-		[UnitOfWork, HttpGet, Route("api/resourceplanner/nextplanningperiod")]
+		[UnitOfWork, HttpPost, Route("api/resourceplanner/nextplanningperiod")]
 		public virtual IHttpActionResult GetNextPlanningPeriod([FromBody] PlanningPeriodChangeRangeModel model)
 		{
 			var planningPeriod =
@@ -90,11 +90,11 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			return Ok(planningPeriodModel);
 		}
 
-		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod/{id}/nextsuggestions")]
-		public virtual IHttpActionResult GetNextPlanningPeriodSuggestions(Guid id)
+		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod/nextsuggestions")]
+		public virtual IHttpActionResult GetNextPlanningPeriodSuggestions()
 		{
+			var planningPeriod = _nextPlanningPeriodProvider.Current();
 			var suggestion = _planningPeriodRespository.Suggestions(_now);
-			var planningPeriod = _planningPeriodRespository.Load(id);
 			var result = suggestion.NextSuggestedPeriods(planningPeriod.Range);
 			return
 				Ok(
