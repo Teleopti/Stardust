@@ -3641,7 +3641,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			using (PerformanceOutput.ForOperation("Loading requests"))
 			{
-				stateHolder.LoadPersonRequests(uow, new RepositoryFactory(), _personRequestAuthorizationChecker);
+				stateHolder.LoadPersonRequests(uow, new RepositoryFactory(), _personRequestAuthorizationChecker, 14);
 			}
 		}
 

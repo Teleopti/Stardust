@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             }
             using (mocks.Playback())
             {
-                target.LoadPersonRequests(unitOfWork, repositoryFactory, new PersonRequestAuthorizationCheckerForTest());
+                target.LoadPersonRequests(unitOfWork, repositoryFactory, new PersonRequestAuthorizationCheckerForTest(), 10);
             }
 
             Assert.AreSame(requestList[0].Id, target.PersonRequests[0].Id);
@@ -195,9 +195,9 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			    p => p.FindAllRequestModifiedWithinPeriodOrPending(personList, new DateTimePeriod(2001, 1, 1, 2001, 1, 2)))
 		                           .Return(requestList)
 		                           .IgnoreArguments();
-			
 
-			target.LoadPersonRequests(unitOfWork, repositoryFactory, new PersonRequestAuthorizationCheckerForTest());
+
+				target.LoadPersonRequests(unitOfWork, repositoryFactory, new PersonRequestAuthorizationCheckerForTest(), 10);
 
 			target.PersonRequests.Count.Should().Be.EqualTo(0);
 		}
@@ -232,10 +232,28 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 								   .Return(requestList)
 								   .IgnoreArguments();
 
-			target.LoadPersonRequests(unitOfWork, repositoryFactory, new PersonRequestAuthorizationCheckerForTest());
+			target.LoadPersonRequests(unitOfWork, repositoryFactory, new PersonRequestAuthorizationCheckerForTest(), 10);
 
 			target.PersonRequests.Count.Should().Be.EqualTo(0);
 		}
+
+	    [Test]
+	    public void LoadPersonRequests_CheckLoadPeriod()
+	    {
+				var unitOfWork = MockRepository.GenerateStrictMock<IUnitOfWork>();
+				var repositoryFactory = MockRepository.GenerateStrictMock<IRepositoryFactory>();
+				var personRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
+				repositoryFactory.Expect(r => r.CreatePersonRequestRepository(unitOfWork)).Return(personRequestRepository);
+
+		    const int passedNumberOfDays = 12;
+				var expectedPeriod = new DateTimePeriod(DateTime.UtcNow.Date.AddDays(-passedNumberOfDays), DateTime.SpecifyKind(DateTime.MaxValue.Date, DateTimeKind.Utc));
+
+		    personRequestRepository.Expect(x => x.FindAllRequestModifiedWithinPeriodOrPending((IList<IPerson>) null, new DateTimePeriod())).IgnoreArguments().Return(new List<IPersonRequest>());
+
+				target.LoadPersonRequests(unitOfWork, repositoryFactory, new PersonRequestAuthorizationCheckerForTest(), passedNumberOfDays);
+
+				personRequestRepository.AssertWasCalled(x => x.FindAllRequestModifiedWithinPeriodOrPending(Arg<IList<IPerson>>.Is.Anything, Arg<DateTimePeriod>.Is.Equal(expectedPeriod)));
+	    }
 
 		[Test]
 		public void LoadPersonRequests_ShiftTradeAfterLoadedPeriodAndOkByMe_ShouldNotLoad()
@@ -268,7 +286,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 								   .IgnoreArguments();
 
 
-			target.LoadPersonRequests(unitOfWork, repositoryFactory, new PersonRequestAuthorizationCheckerForTest());
+			target.LoadPersonRequests(unitOfWork, repositoryFactory, new PersonRequestAuthorizationCheckerForTest(), 10);
 
 			target.PersonRequests.Count.Should().Be.EqualTo(0);
 		}
@@ -346,7 +364,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             }
             using (mocks.Playback())
             {
-                target.LoadPersonRequests(unitOfWork, repositoryFactory, new PersonRequestAuthorizationCheckerForTest());
+							target.LoadPersonRequests(unitOfWork, repositoryFactory, new PersonRequestAuthorizationCheckerForTest(), 10);
                 IPersonRequest deletedRequest = target.RequestDeleteFromBroker(personRequest.Id.Value);
                 Assert.AreSame(personRequest, deletedRequest);
             }

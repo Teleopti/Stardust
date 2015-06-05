@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;

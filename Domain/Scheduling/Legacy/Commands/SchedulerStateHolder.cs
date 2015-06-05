@@ -36,7 +36,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private IDictionary<Guid, IPerson> _filteredPersonsOvertimeAvailability;
 		private IDictionary<Guid, IPerson> _filteredPersonsHourlyAvailability;
 		private bool _considerShortBreaks = true;
-		private const int _NUMBER_OF_PERSONREQUEST_DAYS = -14;
 	    private bool _filterOnOvertimeAvailability;
 		private bool _filterOnHourlyAvailability;
 		private readonly HashSet<TimeZoneInfo> _detectedTimeZoneInfos = new HashSet<TimeZoneInfo>();
@@ -227,14 +226,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_schedulingResultState.ShiftCategories = CommonStateHolder.ShiftCategories;
 		}
 
-		/// <summary>
-		/// Load requests
-		/// </summary>
-		/// <param name="unitOfWork">The unit of work.</param>
-		/// <param name="repositoryFactory">The repository factory.</param>
-		/// <param name="persons">The persons.</param>
-		/// <param name="authorization">Authorization check for person requests.</param>
-		public void LoadPersonRequests(IUnitOfWork unitOfWork, IRepositoryFactory repositoryFactory, IPersonRequestCheckAuthorization authorization)
+
+		public void LoadPersonRequests(IUnitOfWork unitOfWork, IRepositoryFactory repositoryFactory, IPersonRequestCheckAuthorization authorization, int numberOfDaysToShowNonPendingRequests)
 		{
 			if (_shiftTradeRequestStatusChecker == null)
 				_shiftTradeRequestStatusChecker = new ShiftTradeRequestStatusCheckerWithSchedule(SchedulingResultState.Schedules, authorization);
@@ -247,7 +240,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var afterLoadedPeriodSpecification = new ShiftTradeRequestIsAfterLoadedPeriodSpecification(SchedulingResultState.Schedules.Period.VisiblePeriod);
 			_workingPersonRequests.Clear();
 
-			var period = new DateTimePeriod(DateTime.UtcNow.Date.AddDays(_NUMBER_OF_PERSONREQUEST_DAYS), DateTime.SpecifyKind(DateTime.MaxValue.Date, DateTimeKind.Utc));
+			var period = new DateTimePeriod(DateTime.UtcNow.Date.AddDays(-numberOfDaysToShowNonPendingRequests), DateTime.SpecifyKind(DateTime.MaxValue.Date, DateTimeKind.Utc));
 
 			IList<IPersonRequest> personRequests = new List<IPersonRequest>();
 

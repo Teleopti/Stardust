@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	    HashSet<TimeZoneInfo> DetectedTimeZoneInfos { get; }
 
 	    void LoadPersonRequests(IUnitOfWork unitOfWork, IRepositoryFactory repositoryFactory,
-                                IPersonRequestCheckAuthorization authorization);
+                                IPersonRequestCheckAuthorization authorization, int numberOfDaysToShowNonPendingRequests);
 
         IPersonRequest RequestUpdateFromBroker(IPersonRequestRepository personRequestRepository, Guid personRequestId);
 
