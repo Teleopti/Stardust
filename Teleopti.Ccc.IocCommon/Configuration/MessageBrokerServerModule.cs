@@ -20,12 +20,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			_messagesPerSecond = configuration.Args().MessagesPerSecond;
 		}
 
-		public MessageBrokerServerModule(bool throttleMessages, int messagesPerSecond)
-		{
-			_throttleMessages = throttleMessages;
-			_messagesPerSecond = messagesPerSecond;
-		}
-
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<SubscriptionFiller>().As<IBeforeSubscribe>().SingleInstance();
@@ -36,7 +30,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				var actionThrottle = new ActionThrottle(_messagesPerSecond);
 				actionThrottle.Start();
-				builder.Register(c => actionThrottle).As<IActionScheduler>().ExternallyOwned();
+				builder.RegisterInstance(actionThrottle).As<IActionScheduler>().SingleInstance();
 			}
 			else
 			{

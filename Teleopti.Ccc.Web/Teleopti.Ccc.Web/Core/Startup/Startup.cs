@@ -72,7 +72,6 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			{
 				var pathToToggle = Startup.pathToToggle();
 				var container = _containerConfiguration.Configure(pathToToggle, config);
-				HostingEnvironment.RegisterObject(new actionThrottleStopper(container));
 
 				AutofacHostFactory.Container = container;
 				if (!_testMode)
@@ -86,8 +85,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 
 				ApplicationStartModule.TasksFromStartup = _bootstrapper.Run(container.Resolve<IEnumerable<IBootstrapperTask>>(), application).ToArray();
 
-				var settings = SignalRSettings.Load();
-				SignalRConfiguration.Configure(settings, () => application.MapSignalR(new HubConfiguration { EnableJSONP = true }));
+				SignalRConfiguration.Configure(SignalRSettings.Load(), () => application.MapSignalR(new HubConfiguration { EnableJSONP = true }));
 				FederatedAuthentication.WSFederationAuthenticationModule.SignedIn += WSFederationAuthenticationModule_SignedIn;
 				FederatedAuthentication.ServiceConfiguration.SecurityTokenHandlers.AddOrReplace(new MachineKeySessionSecurityTokenHandler());
 
@@ -99,24 +97,6 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			{
 				log.Error(ex);
 				ApplicationStartModule.ErrorAtStartup = ex;
-			}
-		}
-
-		private class actionThrottleStopper : IRegisteredObject
-		{
-			private readonly IComponentContext _container;
-
-			public actionThrottleStopper(IComponentContext container)
-			{
-				_container = container;
-			}
-
-			public void Stop(bool immediate)
-			{
-				var actionScheduler = _container.Resolve<IActionScheduler>();
-				if (actionScheduler is IDisposable)
-					(actionScheduler as IDisposable).Dispose();
-				HostingEnvironment.UnregisterObject(this);
 			}
 		}
 

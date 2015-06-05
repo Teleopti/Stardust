@@ -28,51 +28,28 @@ namespace Teleopti.Ccc.Web.Broker
 		{
 			log4net.Config.XmlConfigurator.Configure();
 
-			var settings = SignalRSettings.Load();
-
 			var iocArgs = new IocArgs(new AppConfigReader());
 			var configuration = new IocConfiguration(iocArgs, CommonModule.ToggleManagerForIoc(iocArgs));
-
 			var builder = new ContainerBuilder();
 			builder.RegisterModule(new CommonModule(configuration));
 			builder.RegisterModule<MessageBrokerWebModule>();
-			builder.RegisterModule(new MessageBrokerServerModule(settings.ThrottleMessages, settings.MessagesPerSecond));
+			builder.RegisterModule(new MessageBrokerServerModule(configuration));
 			builder.RegisterType<SubscriptionPassThrough>().As<IBeforeSubscribe>().SingleInstance();
 			builder.RegisterHubs(typeof(MessageBrokerHub).Assembly);
 			RegistrationExtensions.RegisterControllers(builder, typeof(MessageBrokerController).Assembly);
 			var container = builder.Build();
 
-			HostingEnvironment.RegisterObject(new actionThrottleStopper(container));
-
 			var lifetimeScope = container.BeginLifetimeScope();
 			GlobalHost.DependencyResolver = new AutofacDependencyResolver(lifetimeScope); 
 			
 			var hubConfiguration = new HubConfiguration { EnableJSONP = true };
-			SignalRConfiguration.Configure(settings, () => app.MapSignalR(hubConfiguration));
+			SignalRConfiguration.Configure(SignalRSettings.Load(), () => app.MapSignalR(hubConfiguration));
 
 			TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
 
 			DependencyResolver.SetResolver(new Autofac.Integration.Mvc.AutofacDependencyResolver(lifetimeScope));
 			AreaRegistration.RegisterAllAreas();
 			RegisterRoutes(RouteTable.Routes);
-		}
-
-		private class actionThrottleStopper : IRegisteredObject
-		{
-			private readonly IComponentContext _container;
-
-			public actionThrottleStopper(IComponentContext container)
-			{
-				_container = container;
-			}
-
-			public void Stop(bool immediate)
-			{
-				var actionScheduler = _container.Resolve<IActionScheduler>();
-				if (actionScheduler is IDisposable)
-					(actionScheduler as IDisposable).Dispose();
-				HostingEnvironment.UnregisterObject(this);
-			}
 		}
 
 		public static void RegisterRoutes(RouteCollection routes)
