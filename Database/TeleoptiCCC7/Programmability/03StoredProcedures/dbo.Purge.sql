@@ -26,6 +26,7 @@ declare @PayrollKeepUntil datetime
 declare @SecurityAuditKeepDays int
 declare @RequestsKeepMonths int
 declare @RequestsKeepUntil datetime
+declare @DenyPendingRequestsAfterNDays int
 
 declare @BatchSize int
 declare @MaxDate datetime
@@ -42,6 +43,7 @@ select @MessageKeepYears = isnull(Value,100) from PurgeSetting where [Key] = 'Ye
 select @PayrollKeepYears = isnull(Value,100) from PurgeSetting where [Key] = 'YearsToKeepPayroll'
 select @SecurityAuditKeepDays = isnull(Value,30) from PurgeSetting where [Key] = 'DaysToKeepSecurityAudit'
 select @RequestsKeepMonths = isnull(Value,120) from PurgeSetting where [Key] = 'MonthsToKeepRequests'
+select @DenyPendingRequestsAfterNDays = isnull(Value,120) from PurgeSetting where [Key] = 'DenyPendingRequestsAfterNDays'
 set @SuperRole='193AD35C-7735-44D7-AC0C-B8EDA0011E5F'
 
 --Create a KeepUntil
@@ -240,6 +242,12 @@ where not exists (
 select 1 from Request r
 where r.Parent = pr.Id)
 
+--Autodeny if not handled in time.
+update PersonRequest set RequestStatus = 1
+from PersonRequest pr inner join Request r on r.Parent = pr.Id
+where r.EndDateTime < dateadd(day,-@DenyPendingRequestsAfterNDays,getdate())
+and pr.RequestStatus = 0 --Pending
+and pr.IsDeleted = 0
 
 --New Adherence read models. Purge for now since we have not yet built or tested with lots of historical data.
 delete ReadModel.AdherencePercentage
