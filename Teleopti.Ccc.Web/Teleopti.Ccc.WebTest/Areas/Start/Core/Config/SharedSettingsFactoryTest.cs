@@ -26,6 +26,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Core.Config
 		}
 
 		[Test]
+		public void ShouldGetNumberOfDaysToShowNonPendingRequests()
+		{
+			const int expected = 123;
+			var appConfig = new FakeConfigReader();
+			appConfig.AppSettings["NumberOfDaysToShowNonPendingRequests"] = expected.ToString();
+
+			var target = new SharedSettingsFactory(appConfig, MockRepository.GenerateStub<ILoadPasswordPolicyService>());
+			var result = target.Create();
+
+			result.NumberOfDaysToShowNonPendingRequests.Should().Be.EqualTo(expected);
+		}
+
+		[Test]
 		public void ShouldGetMessageBrokerLongPolling()
 		{
 			var expected = RandomName.Make();

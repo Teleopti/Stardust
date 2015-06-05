@@ -1,6 +1,6 @@
-﻿using Teleopti.Ccc.Domain.Security;
+﻿using System;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
-using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Core.Config
@@ -26,7 +26,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Config
 				Queue = _configReader.ConnectionStrings["Queue"] == null ? 
 					string.Empty : 
 					Encryption.EncryptStringToBase64(_configReader.ConnectionStrings["Queue"].ToString(), EncryptionConstants.Image1, EncryptionConstants.Image2),
-				PasswordPolicy = _passwordPolicyService.DocumentAsString
+				PasswordPolicy = _passwordPolicyService.DocumentAsString,
+				NumberOfDaysToShowNonPendingRequests = Convert.ToInt32(_configReader.AppSettings["NumberOfDaysToShowNonPendingRequests"])
 			};
 		}
 	}

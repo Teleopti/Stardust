@@ -3641,7 +3641,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			using (PerformanceOutput.ForOperation("Loading requests"))
 			{
-				stateHolder.LoadPersonRequests(uow, new RepositoryFactory(), _personRequestAuthorizationChecker, 14);
+				string numberOfDaysToShowNonPendingRequests;
+				stateHolder.LoadPersonRequests(uow, new RepositoryFactory(), _personRequestAuthorizationChecker,
+					StateHolderReader.Instance.StateReader.ApplicationScopeData.AppSettings.TryGetValue("NumberOfDaysToShowNonPendingRequests", out numberOfDaysToShowNonPendingRequests)
+						? Convert.ToInt32(numberOfDaysToShowNonPendingRequests)
+						: 14);
 			}
 		}
 

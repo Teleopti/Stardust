@@ -40,6 +40,16 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 		}
 
 		[Test]
+		public void NumberOfDaysToShowNonPendingRequestsCanBeOverriden()
+		{
+			const string value = "47";
+			var org = new Dictionary<string, string> { { "NumberOfDaysToShowNonPendingRequests", value } };
+			var target = new SharedSettings { NumberOfDaysToShowNonPendingRequests = 53 };
+			var result = target.AddToAppSettings(org);
+			result["NumberOfDaysToShowNonPendingRequests"].Should().Be.EqualTo("47");
+		}
+
+		[Test]
 		public void MessageBrokerCanBeOverriden()
 		{
 			var value = RandomName.Make();
