@@ -13,6 +13,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.IoC;
+using Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider;
 using Teleopti.Ccc.WebTest.Core.Common;
 using Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping;
@@ -31,6 +32,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 
 			builder.RegisterModule(new WebModule(configuration, null));
 			builder.RegisterType<FakeLoggedOnUser>().As<ILoggedOnUser>().SingleInstance();
+			builder.RegisterType<FakeNow>().As<INow>().SingleInstance();
 			builder.RegisterInstance(new FakePermissionProvider(false)).As<IPermissionProvider>().SingleInstance();
 			builder.RegisterInstance(new FakeScheduleDataReadScheduleRepository()).AsSelf().As<IScheduleRepository>().SingleInstance();
 			builder.RegisterInstance(scenario).As<ICurrentScenario>().SingleInstance();
@@ -38,13 +40,10 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			builder.RegisterInstance(new FakePersonRequestRepository()).As<IPersonRequestRepository>().SingleInstance();
 			builder.RegisterInstance(new FakeScenarioRepository(scenario.Current())).As<IScenarioRepository>().SingleInstance();
 			builder.RegisterInstance(new FakeBudgetDayRepository()).As<IBudgetDayRepository>().SingleInstance();
-			builder.RegisterInstance(new FakeScheduleProjectionReadOnlyRepository())
-				.As<IScheduleProjectionReadOnlyRepository>()
-				.SingleInstance();
+			builder.RegisterInstance(new FakeScheduleProjectionReadOnlyRepository()).As<IScheduleProjectionReadOnlyRepository>().SingleInstance();
 			builder.RegisterType<AutoMapperConfiguration>().As<AutoMapperConfiguration>().SingleInstance();
 			builder.RegisterType<FakePersonScheduleDayReadModelFinder>().As<IPersonScheduleDayReadModelFinder>().SingleInstance();
 			builder.RegisterType<FakePersonForScheduleFinder>().As<IPersonForScheduleFinder>().SingleInstance();
-			builder.RegisterType<FakePersonRepository>().As<IPersonRepository>().SingleInstance();
 			builder.RegisterType<FakeBusinessUnitRepository>().As<IBusinessUnitRepository>().SingleInstance();
 			builder.RegisterType<FakeTeamRepository>().As<ITeamRepository>().SingleInstance();
 			builder.RegisterType<FakePersonRepository>().As<IPersonRepository>().SingleInstance();

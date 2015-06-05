@@ -7,6 +7,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 	{
 		private DateTime _now;
 
+		public FakeNow()
+		{
+			_now = DateTime.UtcNow;
+		}
+
 		public FakeNow(DateTime now)
 		{
 			_now = now;
