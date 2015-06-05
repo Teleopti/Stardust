@@ -10,7 +10,9 @@ using Microsoft.AspNet.SignalR;
 using Microsoft.Owin;
 using Owin;
 using Teleopti.Ccc.Domain.MessageBroker;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
+using Teleopti.Ccc.IocCommon.MultipleConfig;
 using Teleopti.Ccc.Web.Broker;
 using RegistrationExtensions = Autofac.Integration.Mvc.RegistrationExtensions;
 
@@ -28,7 +30,11 @@ namespace Teleopti.Ccc.Web.Broker
 
 			var settings = SignalRSettings.Load();
 
+			var iocArgs = new IocArgs(new AppConfigReader());
+			var configuration = new IocConfiguration(iocArgs, CommonModule.ToggleManagerForIoc(iocArgs));
+
 			var builder = new ContainerBuilder();
+			builder.RegisterModule(new CommonModule(configuration));
 			builder.RegisterModule<MessageBrokerWebModule>();
 			builder.RegisterModule(new MessageBrokerServerModule(settings.ThrottleMessages, settings.MessagesPerSecond));
 			builder.RegisterType<SubscriptionPassThrough>().As<IBeforeSubscribe>().SingleInstance();
