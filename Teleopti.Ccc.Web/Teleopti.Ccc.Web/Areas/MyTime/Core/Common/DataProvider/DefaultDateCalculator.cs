@@ -24,29 +24,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			if (!personPeriods.Any())
 				return _now.LocalDateOnly();
 			var workflowControlSetPeriod = periodInWorkflowControlSet.Invoke(workflowControlSet);
-			var returnDate = workflowControlSetPeriod.StartDate < _now.LocalDateOnly()
-									? _now.LocalDateOnly()
-									: workflowControlSetPeriod.StartDate;
+			var minPersonPeriodStart = personPeriods.Min(p => p.StartDate);
 
-			//is there a person period active on the workflowcontrolsetperiod (preference period or availability period)
-			var activePersonPeriod = personPeriods.FirstOrDefault(pp => 
-				pp.Period.Contains (workflowControlSetPeriod.StartDate) &&
-				pp.StartDate >= _now.LocalDateOnly());
-
-			//if we have found an active person period, then use the workflowcontrolsetperiod start date.
-			if (activePersonPeriod != null)
+			if (workflowControlSetPeriod.Contains(minPersonPeriodStart) && _now.LocalDateOnly() < workflowControlSetPeriod.EndDate)
 			{
-				return workflowControlSetPeriod.StartDate;
+				var personPeriod = personPeriods.FirstOrDefault(pp => _now.LocalDateOnly() < pp.StartDate );
+				return personPeriod == null ? _now.LocalDateOnly() : personPeriod.StartDate;
 			}
 
-			// if we find a future person period then use the future person period start date
-			var futurePersonPeriod = personPeriods.FirstOrDefault(pp => 
-				pp.StartDate > workflowControlSetPeriod.StartDate && pp.StartDate >= _now.LocalDateOnly());
-
-			
-			// otherwise use return date.
-			return futurePersonPeriod == null ? returnDate : futurePersonPeriod.StartDate;
-			 
+			return workflowControlSetPeriod.StartDate < _now.LocalDateOnly() || workflowControlSetPeriod.EndDate<minPersonPeriodStart ?
+							 _now.LocalDateOnly() :
+							 workflowControlSetPeriod.StartDate;
 		}
 	}
 }
