@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public class FakeLoggedOnUser : ILoggedOnUser
 	{
-		private readonly IPerson _person;
+		private IPerson _person;
 
 		public FakeLoggedOnUser(IPerson person)
 		{
@@ -18,6 +18,11 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			_person = PersonFactory.CreatePersonWithId();
 			_person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+		}
+
+		public void SetFakeLoggedOnUser(IPerson person)
+		{
+			_person = person;
 		}
 
 		public IPerson CurrentUser()
