@@ -179,7 +179,7 @@ function CopyReportsFromBlobStorage{
 
     $BlobSource = $BlobPath + $ContainerName + "/" + $DataSourceName
 	## Wrap all above arguments
-	$cmdArgs = @("$BlobSource","$DESTINATION",$OPTIONS)
+	$cmdArgs = @("$BlobSource","$fullPathCustomReports",$OPTIONS)
 
 	$AzCopyExe = $directory + "\ccc7_azure\AzCopy\AzCopy.exe"
 	$AzCopyExe
@@ -191,6 +191,7 @@ function CopyReportsFromBlobStorage{
     if ($LastExitCode -ne 0) {
         throw "AsCopy generated an error!"
     }
+	Remove-Item $fullPathCustomReports\* -exclude *.rdlc
 }
 
 ##===========
@@ -244,8 +245,7 @@ Try
 	#copy the settings for sms (and email) notifications, if any
     CopyFileFromBlobStorage -destinationFolder "$DatasourcesPath" -filename "NotificationConfig.xml"
     
-	#Comment out until I can test
-	#CopyReportsFromBlobStorage
+	CopyReportsFromBlobStorage
 	
 	CopyFileFromBlobStorage -destinationFolder "$directory" -filename "$togglesFile"
 	$tempTogglesFile = "$directory\" + $togglesFile
