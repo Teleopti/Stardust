@@ -55,10 +55,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			TestControllerMethods.ClearConnections();
 			DataSourceHelper.RestoreCcc7Database(globalData.HashValue);
 		}
-
-		public static void SetTenant(string tenantName)
-		{
-			DataSourceHelper.SetTenant(tenantName);
-		}
 	}
 }

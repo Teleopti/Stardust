@@ -217,14 +217,5 @@ namespace Teleopti.Ccc.TestCommon
 				"Failed to create unique index on personassignment in database {0}!", ConnectionStringHelper.ConnectionStringUsedInTests
 				);
 		}
-
-
-		public static void SetTenant(string tenantName)
-		{
-			exceptionToConsole(
-				() => ccc7().ExecuteSql(string.Format("update Tenant set Name='{0}'", tenantName)),
-				"Failed to set default Tenant in database {0}!", ConnectionStringHelper.ConnectionStringUsedInTests
-				);
-		}
 	}
 }
