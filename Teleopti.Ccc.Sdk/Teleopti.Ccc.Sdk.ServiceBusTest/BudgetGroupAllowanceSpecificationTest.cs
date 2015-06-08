@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			_absenceRequest = _mocks.StrictMock<IAbsenceRequest>();
             _skills = prepareSkillListOpenFromMondayToFriday();
 
-			_person = PersonFactory.CreatePersonWithBasicPermissionInfo("billg", "billg");
+			_person = PersonFactory.CreatePerson("billg");
 			_defaultDay = new DateOnly();
 			_defaultDatePeriod = new DateOnlyPeriod();
 			

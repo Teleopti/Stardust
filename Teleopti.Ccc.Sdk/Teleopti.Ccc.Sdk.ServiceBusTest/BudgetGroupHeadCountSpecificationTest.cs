@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             _budgetDayRepository = MockRepository.GenerateMock<IBudgetDayRepository>();
             _scheduleProjectionReadOnlyRepository = MockRepository.GenerateMock<IScheduleProjectionReadOnlyRepository>();
 	        _scenario = ScenarioFactory.CreateScenarioAggregate();
-            _person = PersonFactory.CreatePersonWithBasicPermissionInfo("billg", "billg");
+            _person = PersonFactory.CreatePerson("billg");
             
             _target = new BudgetGroupHeadCountSpecification(_scenarioRepository, _budgetDayRepository,  
                                                             _scheduleProjectionReadOnlyRepository);
