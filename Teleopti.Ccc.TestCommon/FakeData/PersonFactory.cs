@@ -211,31 +211,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         #region Complex factory methods for test packages
 
         /// <summary>
-        /// Creates a person with basic permission info.
-        /// </summary>
-        /// <param name="logOnName">Name of the log on.</param>
-        /// <param name="password">The password.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: tamasb
-        /// Created date: 12/4/2007
-        /// </remarks>
-        public static IPerson CreatePersonWithBasicPermissionInfo(string logOnName, string password)
-        {
-            var applicationPer = new ApplicationAuthenticationInfo
-                                     {
-                                         ApplicationLogOnName = logOnName,
-                                         Password = password
-                                     };
-			 
-            IPerson ret = CreatePerson("created by", "object mother");
-            ret.ApplicationAuthenticationInfo = applicationPer;
-			  
-			  ret.PermissionInformation.SetCulture(new CultureInfo("sv-SE"));
-            return ret;
-        }
-
-        /// <summary>
         /// Creates a person with application roles and functions.
         /// </summary>
         /// <returns></returns>
