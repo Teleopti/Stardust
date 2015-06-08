@@ -16,8 +16,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 
 		public void Apply(Tenant tenant, ICurrentTenantSession tenantSession, IPerson user)
 		{
-			var applicationUserQuery = new ApplicationUserQuery(tenantSession);
-			var personInfo = applicationUserQuery.Find(user.ApplicationAuthenticationInfo.ApplicationLogOnName);
+			var applicationUserQuery = new FindPersonInfo(tenantSession);
+			var personInfo = applicationUserQuery.GetById(user.Id.Value);
 			if (IsLocked.HasValue && IsLocked.Value)
 			{
 				personInfo.ApplicationLogonInfo.Lock();
