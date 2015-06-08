@@ -395,7 +395,11 @@ namespace Teleopti.Ccc.DomainTest.Collection
 
 
 			var overtime = target.Overtime();
+			Assert.AreEqual(2, overtime.TotalHours);
 
+			overtime =
+				target.Overtime(new DateTimePeriod(new DateTime(2000, 1, 1, 5, 0, 0, DateTimeKind.Utc),
+					new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc)));
 			Assert.AreEqual(2, overtime.TotalHours);
 		}
 
@@ -500,6 +504,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		private IVisualLayer createLayerWithOvertime(IMultiplicatorDefinitionSet multiplicatorDefinitionSet, DateTimePeriod period)
 		{
 			IActivity underActivity = ActivityFactory.CreateActivity("for test");
+			underActivity.InWorkTime = true;
 			IVisualLayer ret = visualLayerOvertimeFactory.CreateShiftSetupLayer(underActivity, period, dummyPerson);
 			((VisualLayer)ret).DefinitionSet = multiplicatorDefinitionSet;
 			return ret;

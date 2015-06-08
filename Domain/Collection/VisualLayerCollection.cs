@@ -162,7 +162,8 @@ namespace Teleopti.Ccc.Domain.Collection
 					var sharedPeriod = layer.Period.Intersection(filterPeriod);
 					if (!sharedPeriod.HasValue) continue;
 
-					ret = ret.Add(sharedPeriod.Value.ElapsedTime());
+					var overtime = layer.WorkTime() > TimeSpan.Zero ? sharedPeriod.Value.ElapsedTime() : TimeSpan.Zero;
+					ret = ret.Add(overtime);
 				}
 			}
 			return ret;
