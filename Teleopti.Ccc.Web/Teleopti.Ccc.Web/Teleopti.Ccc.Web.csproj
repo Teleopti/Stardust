@@ -556,6 +556,7 @@
     <Compile Include="Areas\SSO\Core\ISsoAuthenticator.cs" />
     <Compile Include="Areas\SSO\Core\SsoAuthenticator.cs" />
     <Compile Include="Areas\Start\Controllers\ConfigController.cs" />
+    <Compile Include="Areas\Start\Core\Authentication\Services\AuthenticatorResult.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\ILogLogonAttempt.cs" />
     <Compile Include="Areas\Start\Core\Config\ISharedSettingsFactory.cs" />
     <Compile Include="Areas\Start\Core\Config\SharedSettingsFactory.cs" />
@@ -1003,7 +1004,7 @@
     <Compile Include="Areas\Start\Core\Authentication\DataProvider\IBusinessUnitProvider.cs" />
     <Compile Include="Areas\Start\Core\Authentication\DataProvider\ITokenIdentityProvider.cs" />
     <Compile Include="Areas\Start\Core\Authentication\DataProvider\TokenIdentityProvider.cs" />
-    <Compile Include="Areas\Start\Core\Authentication\Services\AuthenticateResult.cs" />
+    <Compile Include="Areas\Start\Core\Authentication\Services\ApplicationUserAuthenticateResult.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\Authenticator.cs" />
     <Compile Include="Core\FormsAuthenticationWrapper.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\IIdentityLogon.cs" />

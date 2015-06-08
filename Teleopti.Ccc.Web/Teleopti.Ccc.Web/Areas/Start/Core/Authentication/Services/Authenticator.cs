@@ -23,18 +23,18 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 			_loadUserUnauthorized = loadUserUnauthorized;
 		}
 
-		public AuthenticateResult LogonIdentityUser()
+		public AuthenticatorResult LogonIdentityUser()
 		{
 			var token = _tokenIdentityProvider.RetrieveToken();
 			var personInfo = _findTenantAndPersonIdForIdentity.Find(token.UserIdentifier);
 			if (personInfo == null)
-				return new AuthenticateResult { Successful = false };
+				return new AuthenticatorResult { Successful = false };
 
 			var dataSource = _applicationData.Tenant(personInfo.Tenant);
 			var foundAppUser = _loadUserUnauthorized.LoadFullPersonInSeperateTransaction(dataSource.Application, personInfo.PersonId);
-			return foundAppUser.IsTerminated() ? 
-				new AuthenticateResult { Successful = false } : 
-				new AuthenticateResult { Successful = true, Person = foundAppUser, DataSource = dataSource };
+			return foundAppUser.IsTerminated() ?
+				new AuthenticatorResult { Successful = false } :
+				new AuthenticatorResult { Successful = true, Person = foundAppUser, DataSource = dataSource };
 		}
 	}
 }

@@ -4,6 +4,6 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Core
 {
 	public interface ISsoAuthenticator
 	{
-		AuthenticateResult AuthenticateApplicationUser(string userName, string password);
+		ApplicationUserAuthenticateResult AuthenticateApplicationUser(string userName, string password);
 	}
 }

@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		public void ShouldAuthenticateUserRetrievingBusinessUnits()
 		{
 			var identityLogon = MockRepository.GenerateMock<IIdentityLogon>();
-			identityLogon.Expect(x => x.LogonIdentityUser()).Return(new AuthenticateResult
+			identityLogon.Expect(x => x.LogonIdentityUser()).Return(new AuthenticatorResult
 			{
 				Successful = true,
 				DataSource = new FakeDataSource(),
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		[Test]
 		public void ShouldRetrieveBusinessUnits()
 		{
-			var authenticationResult = new AuthenticateResult
+			var authenticationResult = new AuthenticatorResult
 				{
 					Successful = true,
 					DataSource = new FakeDataSource(),
@@ -60,17 +60,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		[Test]
 		public void ShouldReturnErrorIfAuthenticationUnsuccessfulRetrievingBusinessUnits()
 		{
-			const string message = "test";
 			var identityLogon = MockRepository.GenerateMock<IIdentityLogon>();
-			identityLogon.Expect(x => x.LogonIdentityUser()).Return(new AuthenticateResult { Successful = false, Message = message });
+			identityLogon.Expect(x => x.LogonIdentityUser()).Return(new AuthenticatorResult { Successful = false });
 			var target = new StubbingControllerBuilder().CreateController<AuthenticationApiController>(null, identityLogon, null, null);
 
 			var result = target.BusinessUnits();
 
 			target.Response.StatusCode.Should().Be(400);
 			target.Response.TrySkipIisCustomErrors.Should().Be.True();
-			target.ModelState.Values.Single().Errors.Single().ErrorMessage.Should().Be.EqualTo(message);
-			(result.Data as ModelStateResult).Errors.Single().Should().Be(message);
+			target.ModelState.Values.Single().Errors.Single().ErrorMessage.Should().Not.Be.Null();
+			(result.Data as ModelStateResult).Errors.Single().Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -78,7 +77,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		{
 			var person = new Person();
 			person.SetId(Guid.NewGuid());
-			var result = new AuthenticateResult
+			var result = new AuthenticatorResult
 				{
 					Successful = true,
 					DataSource = new FakeDataSource(),
@@ -102,7 +101,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			person.SetId(Guid.NewGuid());
 			var businessUnitId = Guid.NewGuid();
 			var identityLogon = MockRepository.GenerateMock<IIdentityLogon>();
-			identityLogon.Expect(x => x.LogonIdentityUser()).Return(new AuthenticateResult
+			identityLogon.Expect(x => x.LogonIdentityUser()).Return(new AuthenticatorResult
 				{
 					Successful = true,
 					DataSource = new FakeDataSource {DataSourceName = "datasource"},
@@ -120,7 +119,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		public void ShouldReturnErrorIfAuthenticationUnsuccessfulLoggingOn()
 		{
 			var identityLogon = MockRepository.GenerateMock<IIdentityLogon>();
-			identityLogon.Expect(x => x.LogonIdentityUser()).Return(new AuthenticateResult{Successful = false});
+			identityLogon.Expect(x => x.LogonIdentityUser()).Return(new AuthenticatorResult { Successful = false });
 			var target = new StubbingControllerBuilder().CreateController<AuthenticationApiController>(null, identityLogon, MockRepository.GenerateStub<ILogLogonAttempt>(), null);
 
 			var result = target.Logon(Guid.NewGuid());
@@ -153,7 +152,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			person.SetId(Guid.NewGuid());
 			var businessUnitId = Guid.NewGuid();
 			var identityLogon = MockRepository.GenerateMock<IIdentityLogon>();
-			identityLogon.Expect(x => x.LogonIdentityUser()).Return(new AuthenticateResult
+			identityLogon.Expect(x => x.LogonIdentityUser()).Return(new AuthenticatorResult
 			{
 				Successful = true,
 				DataSource = new FakeDataSource { DataSourceName = "datasource" },

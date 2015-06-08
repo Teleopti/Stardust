@@ -2,6 +2,6 @@
 {
 	public interface IIdentityLogon
 	{
-		AuthenticateResult LogonIdentityUser();
+		AuthenticatorResult LogonIdentityUser();
 	}
 }

@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Core
 			_loadUserUnauthorized = loadUserUnauthorized;
 		}
 
-		public AuthenticateResult AuthenticateApplicationUser(string userName, string password)
+		public ApplicationUserAuthenticateResult AuthenticateApplicationUser(string userName, string password)
 		{
 			var result = _applicationAuthentication.Logon(userName, password);
 
@@ -29,10 +29,10 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Core
 			{
 				var dataSource = _applicationData.Tenant(result.Tenant);
 				var person = _loadUserUnauthorized.LoadFullPersonInSeperateTransaction(dataSource.Application, result.PersonId); //TODO: tenant - don't load permissions here - just needed to get web scenarios to work
-				return new AuthenticateResult { DataSource = dataSource, Person = person, Successful = true, HasMessage = !string.IsNullOrEmpty(result.FailReason), Message = result.FailReason, PasswordExpired = false };
+				return new ApplicationUserAuthenticateResult { DataSource = dataSource, Person = person, Successful = true, HasMessage = !string.IsNullOrEmpty(result.FailReason), Message = result.FailReason, PasswordExpired = false };
 			}
 
-			return new AuthenticateResult { DataSource = null, Person = null, Successful = false, HasMessage = !string.IsNullOrEmpty(result.FailReason), Message = result.FailReason, PasswordExpired = result.PasswordExpired };
+			return new ApplicationUserAuthenticateResult { DataSource = null, Person = null, Successful = false, HasMessage = !string.IsNullOrEmpty(result.FailReason), Message = result.FailReason, PasswordExpired = result.PasswordExpired };
 		}
 	}
 }

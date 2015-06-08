@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 {
-	public class AuthenticateResult
+	public class ApplicationUserAuthenticateResult
 	{
 		public bool Successful { get; set; }
 		public bool PasswordExpired { get; set; }
