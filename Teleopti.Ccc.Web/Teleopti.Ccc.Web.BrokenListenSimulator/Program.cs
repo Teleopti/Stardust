@@ -14,9 +14,14 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator
 	{
 		static void Main(string[] args)
 		{
-			const string dataSourceName = "Demo";
-			var businessUnitId = Guid.NewGuid();
-			var scenarioId = Guid.NewGuid();
+			const string dataSourceName = "Teleopti WFM";
+			var businessUnitId = Guid.Parse("928DD0BC-BF40-412E-B970-9B5E015AADEA");
+			var scenarioId = Guid.Parse("E21D813C-238C-4C3F-9B49-9B5E015AB432");
+			var startDate = "2015-06-08".Utc();
+			var endDate = "2015-08-03".Utc();
+			const string brokerUrl = @"http://localhost:52858/";
+
+
 
 			var currentDatasource = new FakeCurrentDatasource();
 			currentDatasource.FakeName(dataSourceName);
@@ -40,15 +45,14 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator
 			builder.RegisterType<SimulatedSchedulingScreen>().InstancePerDependency();
 			var container = builder.Build();
 
-			var startDate = "2015-01-05".Utc();
-			var endDate = startDate.AddDays(8*7);
 
 			Console.WriteLine("starting...");
 
 			Enumerable.Range(1, (200 + 5 + 2)).ForEach(i =>
 			{
 				var schedulingScreen = container.Resolve<SimulatedSchedulingScreen>();
-				schedulingScreen.Simulate(i, @"http://localhost:52858/", startDate, endDate);
+				
+				schedulingScreen.Simulate(i, brokerUrl, startDate, endDate);
 				Console.WriteLine("#" + i + "starting");
 			});
 
