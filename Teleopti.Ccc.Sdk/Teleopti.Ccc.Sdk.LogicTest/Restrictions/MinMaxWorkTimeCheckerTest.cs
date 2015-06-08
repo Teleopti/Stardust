@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
         private readonly IEffectiveRestriction _restriction = new EffectiveRestriction(new StartTimeLimitation(null, null),
             new EndTimeLimitation(null, null), new WorkTimeLimitation(null, null), null, null, null, new List<IActivityRestriction>());
         private IPerson _person;
-    	private IVirtualSchedulePeriod _schedulePeriod;
 
     	[SetUp]
         public void Setup()
@@ -39,10 +38,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
     		_workShiftWorkTime = _mocks.StrictMock<IWorkShiftWorkTime>();
             _target = new MinMaxWorkTimeChecker(_workShiftWorkTime);
 
-            _person = PersonFactory.CreatePersonWithBasicPermissionInfo("mycket", "hemligt");
+            _person = PersonFactory.CreatePerson("mycket", "hemligt");
             _person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             _person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo("sv-SE"));
-			_schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
         }
         
         [Test, ExpectedException(typeof(ArgumentNullException))]

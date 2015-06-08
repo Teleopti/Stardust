@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
         private IPerson _person;
         private MockRepository _mocks;
         private DateOnlyPeriod _period;
-        private IDictionary<IPerson, IScheduleRange> _rangeDictionary;
         private IScheduleRange _range;
         private ISchedulingResultStateHolder _stateHolder;
         private IScheduleDictionary _dictionary;
@@ -52,7 +51,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
 			_target = new RestrictionsValidator(_isEditablePredicate, _preferenceDayAssembler, _studentAvailabilityDayAssembler, 
 				_minMaxChecker, new CultureInfo(1053), _preferenceNightRestChecker);
             _workflowControlSet = new WorkflowControlSet("Normal");
-            _person = PersonFactory.CreatePersonWithBasicPermissionInfo("mycket", "hemligt");
+						_person = PersonFactory.CreatePerson("mycket", "hemligt");
             _person.SetId(Guid.NewGuid());
             _person.WorkflowControlSet = _workflowControlSet;
             _person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
@@ -61,10 +60,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
             IRuleSetBag bag = new RuleSetBag();
             personPeriod.RuleSetBag = bag;
             _person.AddPersonPeriod(personPeriod);
-            _rangeDictionary = new Dictionary<IPerson, IScheduleRange>();
             _range = _mocks.StrictMock<IScheduleRange>();
             _stateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
-            _rangeDictionary.Add(_person, _range);
             _dictionary = _mocks.StrictMock<IScheduleDictionary>();
             _part = _mocks.StrictMock<IScheduleDay>();
         }
