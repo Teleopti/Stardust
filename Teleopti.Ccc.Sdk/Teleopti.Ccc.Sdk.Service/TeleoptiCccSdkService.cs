@@ -43,41 +43,41 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.WcfService
 {
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, ConcurrencyMode = ConcurrencyMode.Multiple, Namespace = "http://schemas.ccc.teleopti.com/sdk/2010/04/")]
-	public class TeleoptiCccSdkService :    ITeleoptiCccLogOnService,
+	[ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, ConcurrencyMode = ConcurrencyMode.Multiple, Namespace = "http://schemas.ccc.teleopti.com/sdk/2010/04/")]
+	public class TeleoptiCccSdkService : ITeleoptiCccLogOnService,
 											ITeleoptiCccSdkService,
-											ITeleoptiForecastingService, 
-											ITeleoptiSchedulingService, 
-											ITeleoptiOrganizationService ,
+											ITeleoptiForecastingService,
+											ITeleoptiSchedulingService,
+											ITeleoptiOrganizationService,
 											ITeleoptiCccSdkInternal,
 											IDisposable
 	{
-        private readonly IFactoryProvider _factoryProvider;
-        private readonly ILifetimeScope _lifetimeScope;
-	    private readonly ITenantPeopleSaver _tenantPeopleSaver;
-	    private readonly IChangePassword _changePassword;
-	    private static readonly object PayrollExportLock = new object();
-		private static readonly ILog Logger = LogManager.GetLogger(typeof (TeleoptiCccSdkService));
+		private readonly IFactoryProvider _factoryProvider;
+		private readonly ILifetimeScope _lifetimeScope;
+		private readonly ITenantPeopleSaver _tenantPeopleSaver;
+		private readonly IChangePassword _changePassword;
+		private static readonly object PayrollExportLock = new object();
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(TeleoptiCccSdkService));
 		private readonly IAuthenticationFactory _authenticationFactory;
-        private readonly IPayrollResultFactory _payrollResultFactory;
+		private readonly IPayrollResultFactory _payrollResultFactory;
 
-        public TeleoptiCccSdkService(IAuthenticationFactory authenticationFactory,
-                                        IPayrollResultFactory payrollResultFactory,
-            IFactoryProvider factoryProvider,
-            ILifetimeScope lifetimeScope,
-			  ITenantPeopleSaver tenantPeopleSaver, 
-			  IChangePassword changePassword)
-        {
-            _authenticationFactory = authenticationFactory;
-            _payrollResultFactory = payrollResultFactory;
-            _factoryProvider = factoryProvider;
-            _lifetimeScope = lifetimeScope;
-	        _tenantPeopleSaver = tenantPeopleSaver;
-	        _changePassword = changePassword;
-	        Logger.Info("Creating new instance of the service.");
-        }
+		public TeleoptiCccSdkService(IAuthenticationFactory authenticationFactory,
+												  IPayrollResultFactory payrollResultFactory,
+			 IFactoryProvider factoryProvider,
+			 ILifetimeScope lifetimeScope,
+			ITenantPeopleSaver tenantPeopleSaver,
+			IChangePassword changePassword)
+		{
+			_authenticationFactory = authenticationFactory;
+			_payrollResultFactory = payrollResultFactory;
+			_factoryProvider = factoryProvider;
+			_lifetimeScope = lifetimeScope;
+			_tenantPeopleSaver = tenantPeopleSaver;
+			_changePassword = changePassword;
+			Logger.Info("Creating new instance of the service.");
+		}
 
-        /// <summary>
+		/// <summary>
 		/// Gets the application settings.
 		/// </summary>
 		/// <returns>IDictionary of application settings</returns>
@@ -88,9 +88,9 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		/// </code>
 		/// </example>
 		public IDictionary<string, string> GetAppSettings()
-        {
-	        return new Dictionary<string, string>();
-        }
+		{
+			return new Dictionary<string, string>();
+		}
 
 		/// <summary>
 		/// Gets the hibernate configuration.
@@ -129,40 +129,33 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			return hibConfigs;
 		}
 
-		public string GetPasswordPolicy()
+
+		public void SetWriteProtectionDateOnPerson(PersonWriteProtectionDto personWriteProtectionDto)
 		{
-			XDocument document =
-				((LoadPasswordPolicyService)
-				 StateHolder.Instance.StateReader.ApplicationScopeData.LoadPasswordPolicyService).File;
-			return document.ToString(SaveOptions.None);
+			try
+			{
+				using (var inner = _lifetimeScope.BeginLifetimeScope())
+				{
+					_factoryProvider.CreateWriteProtectionFactory(inner).SetWriteProtectionDate(personWriteProtectionDto);
+				}
+			}
+			catch (PermissionException exception)
+			{
+
+				throw new FaultException(exception.Message);
+			}
+
 		}
 
-        public void SetWriteProtectionDateOnPerson(PersonWriteProtectionDto personWriteProtectionDto)
-        {
-            try
-            {
-                using (var inner = _lifetimeScope.BeginLifetimeScope())
-                {
-                    _factoryProvider.CreateWriteProtectionFactory(inner).SetWriteProtectionDate(personWriteProtectionDto);
-                }
-            }
-            catch (PermissionException exception)
-            {
+		public PersonWriteProtectionDto GetWriteProtectionDateOnPerson(PersonDto personDto)
+		{
+			using (var inner = _lifetimeScope.BeginLifetimeScope())
+			{
+				return _factoryProvider.CreateWriteProtectionFactory(inner).GetWriteProtectionDate(personDto);
+			}
+		}
 
-                throw new FaultException(exception.Message);
-            }
-            
-        }
-
-        public PersonWriteProtectionDto GetWriteProtectionDateOnPerson(PersonDto personDto)
-        {
-            using (var inner = _lifetimeScope.BeginLifetimeScope())
-            {
-                return _factoryProvider.CreateWriteProtectionFactory(inner).GetWriteProtectionDate(personDto);
-            }
-        }
-
-        /// <summary>
+		/// <summary>
 		/// Converts a local DateTime to UTC
 		/// </summary>
 		/// <param name="localDateTime">The local date time.</param>
@@ -214,12 +207,12 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			return _authenticationFactory.LogOnWindows(dataSource);
 		}
 
-	    public AuthenticationResultDto LogOnAsWindowsUser()
-	    {
-		    return _authenticationFactory.LogOnWindows(null);
-	    }
+		public AuthenticationResultDto LogOnAsWindowsUser()
+		{
+			return _authenticationFactory.LogOnWindows(null);
+		}
 
-	    /// <summary>
+		/// <summary>
 		/// Log on application.
 		/// </summary>
 		/// <param name="userName">Name of the user.</param>
@@ -236,12 +229,12 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			return _authenticationFactory.LogOnApplication(userName, password, dataSource);
 		}
 
-	    public AuthenticationResultDto LogOnAsApplicationUser(string userName, string password)
-	    {
-		    return _authenticationFactory.LogOnApplication(userName, password, null);
-	    }
+		public AuthenticationResultDto LogOnAsApplicationUser(string userName, string password)
+		{
+			return _authenticationFactory.LogOnApplication(userName, password, null);
+		}
 
-	    /// <summary>
+		/// <summary>
 		/// Transfers the session.
 		/// </summary>
 		/// <param name="sessionDataDto">The session data dto.</param>
@@ -275,7 +268,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		{
 			//TODO: tenant, do need to do something here? Detect tenant?
 			//wrong - if multidb...
-			
+
 			return _factoryProvider.CreateLicenseFactory().VerifyLicense(UnitOfWorkFactory.Current, "");
 		}
 
@@ -287,9 +280,9 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		{
 			using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-                IPerson currentPerson = TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(unitOfWork));
-			
-                return _factoryProvider.CreatePersonAssembler().DomainEntityToDto(currentPerson);
+				IPerson currentPerson = TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(unitOfWork));
+
+				return _factoryProvider.CreatePersonAssembler().DomainEntityToDto(currentPerson);
 			}
 		}
 
@@ -312,44 +305,44 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			return dto;
 		}
 
-        public ICollection<PayrollExportDto> GetPayrollExportByQuery(QueryDto queryDto)
-        {
-            var invoker = _lifetimeScope.Resolve<IInvokeQuery<ICollection<PayrollExportDto>>>();
-            return invoker.Invoke(queryDto);
-        }
+		public ICollection<PayrollExportDto> GetPayrollExportByQuery(QueryDto queryDto)
+		{
+			var invoker = _lifetimeScope.Resolve<IInvokeQuery<ICollection<PayrollExportDto>>>();
+			return invoker.Invoke(queryDto);
+		}
 
-        public ICollection<PayrollResultDto> GetPayrollResultStatusByQuery(QueryDto queryDto)
-        {
-            var invoker = _lifetimeScope.Resolve<IInvokeQuery<ICollection<PayrollResultDto>>>();
-            return invoker.Invoke(queryDto);
-        }
+		public ICollection<PayrollResultDto> GetPayrollResultStatusByQuery(QueryDto queryDto)
+		{
+			var invoker = _lifetimeScope.Resolve<IInvokeQuery<ICollection<PayrollResultDto>>>();
+			return invoker.Invoke(queryDto);
+		}
 
 		/// <summary>
 		/// Gets the payroll formats.
 		/// </summary>
 		/// <returns>A collection of <see cref="PayrollFormatDto"/>.</returns>
-        public ICollection<PayrollFormatDto> GetPayrollFormats()
+		public ICollection<PayrollFormatDto> GetPayrollFormats()
 		{
-			var dataSource = ((TeleoptiIdentity) TeleoptiPrincipal.CurrentPrincipal.Identity).DataSource.DataSourceName;
-            var formatter = new PayrollFormatHandler(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory));
-		    return formatter.Load(dataSource);
+			var dataSource = ((TeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).DataSource.DataSourceName;
+			var formatter = new PayrollFormatHandler(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory));
+			return formatter.Load(dataSource);
 		}
 
-        //Added this for testing and separation of old stuff, dont know if the name 
-        //is final
-        public void CreateServerPayrollExport(PayrollExportDto payrollExport)
-	    {
-            _payrollResultFactory.RunPayrollOnBus(payrollExport);
-	    }
+		//Added this for testing and separation of old stuff, dont know if the name 
+		//is final
+		public void CreateServerPayrollExport(PayrollExportDto payrollExport)
+		{
+			_payrollResultFactory.RunPayrollOnBus(payrollExport);
+		}
 
-        public void InitializePayrollFormats(ICollection<PayrollFormatDto> payrollFormatDtos)
-        {
-            //Saves to an xml file called internal.storage.xml in the esent folder
-            var formatter = new PayrollFormatHandler(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory));
-            formatter.Save(payrollFormatDtos);
-        }
+		public void InitializePayrollFormats(ICollection<PayrollFormatDto> payrollFormatDtos)
+		{
+			//Saves to an xml file called internal.storage.xml in the esent folder
+			var formatter = new PayrollFormatHandler(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory));
+			formatter.Save(payrollFormatDtos);
+		}
 
-	    public ICollection<string> GetHibernateConfigurationInternal()
+		public ICollection<string> GetHibernateConfigurationInternal()
 		{
 			return GetHibernateConfiguration();
 		}
@@ -374,13 +367,13 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		/// </summary>
 		public void LogOffUser()
 		{
-            var authorizationPolicies = OperationContext.Current.ServiceSecurityContext.AuthorizationPolicies.OfType<TeleoptiPrincipalAuthorizationPolicy>();
-		    var teleoptiAuthPolicy = authorizationPolicies.FirstOrDefault();
-            if (teleoptiAuthPolicy!=null)
-            {
-                var personCache = new PersonCache();
-                personCache.Remove(teleoptiAuthPolicy.PersonContainer);
-            }
+			var authorizationPolicies = OperationContext.Current.ServiceSecurityContext.AuthorizationPolicies.OfType<TeleoptiPrincipalAuthorizationPolicy>();
+			var teleoptiAuthPolicy = authorizationPolicies.FirstOrDefault();
+			if (teleoptiAuthPolicy != null)
+			{
+				var personCache = new PersonCache();
+				personCache.Remove(teleoptiAuthPolicy.PersonContainer);
+			}
 			StateHolder.Instance.StateReader.ClearSession();
 		}
 
@@ -395,7 +388,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			//also wrong if multidb
 			//TODO: tenant, but this is obsolete so it is no problem
 			return (StateHolderReader.Instance.StateReader.IsLoggedIn
-                && new LicenseCache().Get("") != null);
+					 && new LicenseCache().Get("") != null);
 		}
 
 		#endregion
@@ -416,45 +409,44 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		{
 			return
 				GetSchedulesByQuery(new GetSchedulesByPersonQueryDto
-				                    	{
-				                    		StartDate = startDate,
-				                    		EndDate = startDate,
-				                    		PersonId = person.Id.GetValueOrDefault(),
-				                    		TimeZoneId = timeZoneId
-				                    	}).First();
+											{
+												StartDate = startDate,
+												EndDate = startDate,
+												PersonId = person.Id.GetValueOrDefault(),
+												TimeZoneId = timeZoneId
+											}).First();
 		}
 
-        public ICollection<SchedulePartDto> GetScheduleParts(PersonDto person, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId)
-        {
-            if (person == null) throw new FaultException("PersonId cannot be null.");
-            return
-        		GetSchedulesByQuery(new GetSchedulesByPersonQueryDto
-        		                    	{PersonId = person.Id.GetValueOrDefault(), StartDate = startDate, EndDate = endDate, TimeZoneId = timeZoneId});
-        }
-
-        public ICollection<SchedulePartDto> GetSchedulePartsForPersons(PersonDto[] personList, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId)
+		public ICollection<SchedulePartDto> GetScheduleParts(PersonDto person, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId)
 		{
-            using (var inner = _lifetimeScope.BeginLifetimeScope())
-            {
-                return _factoryProvider.CreateScheduleFactory(inner).CreateSchedulePartCollection(personList, startDate,
-                                                                                             endDate, timeZoneId, string.Empty);
-            }
+			if (person == null) throw new FaultException("PersonId cannot be null.");
+			return
+			GetSchedulesByQuery(new GetSchedulesByPersonQueryDto { PersonId = person.Id.GetValueOrDefault(), StartDate = startDate, EndDate = endDate, TimeZoneId = timeZoneId });
+		}
+
+		public ICollection<SchedulePartDto> GetSchedulePartsForPersons(PersonDto[] personList, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId)
+		{
+			using (var inner = _lifetimeScope.BeginLifetimeScope())
+			{
+				return _factoryProvider.CreateScheduleFactory(inner).CreateSchedulePartCollection(personList, startDate,
+																													  endDate, timeZoneId, string.Empty);
+			}
 		}
 
 		public ICollection<PayrollBaseExportDto> GetTeleoptiTimeExportData(PersonDto[] personList, DateOnlyDto startDate, DateOnlyDto endDate,
-                                                     string timeZoneId)
-        {
-            using (var inner = _lifetimeScope.BeginLifetimeScope())
-            {
-                return _factoryProvider.CreateTeleoptiPayrollFactory(inner).GetTeleoptiTimeExportData(personList, startDate,
-                                                                                             endDate, timeZoneId);
-            }
-        }
+																	  string timeZoneId)
+		{
+			using (var inner = _lifetimeScope.BeginLifetimeScope())
+			{
+				return _factoryProvider.CreateTeleoptiPayrollFactory(inner).GetTeleoptiTimeExportData(personList, startDate,
+																													  endDate, timeZoneId);
+			}
+		}
 
 		public ICollection<PayrollBaseExportDto> GetTeleoptiDetailedExportData(PersonDto[] personList, DateOnlyDto startDate, DateOnlyDto endDate,
-                                                         string timeZoneId)
-        {
-            using (var inner = _lifetimeScope.BeginLifetimeScope())
+																			string timeZoneId)
+		{
+			using (var inner = _lifetimeScope.BeginLifetimeScope())
 			{
 				var absences = GetAbsences(new AbsenceLoadOptionDto { LoadDeleted = true });
 				var absenceDictinary = absences
@@ -462,17 +454,17 @@ namespace Teleopti.Ccc.Sdk.WcfService
 					.ToDictionary(a => a.Id.GetValueOrDefault());
 
 				return _factoryProvider.CreateTeleoptiPayrollFactory(inner).GetTeleoptiDetailedExportData(personList, startDate,
-                                                                                             endDate, timeZoneId, absenceDictinary);
-            }
-        }
+																															endDate, timeZoneId, absenceDictinary);
+			}
+		}
 
 		public ICollection<PayrollBaseExportDto> GetTeleoptiActivitiesExportData(PersonDto[] personList, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId)
-        {
-            using (var inner = _lifetimeScope.BeginLifetimeScope())
-            {
-	            var loadDeleted = new LoadOptionDto{LoadDeleted = true};
+		{
+			using (var inner = _lifetimeScope.BeginLifetimeScope())
+			{
+				var loadDeleted = new LoadOptionDto { LoadDeleted = true };
 
-				var absences = GetAbsences(new AbsenceLoadOptionDto {LoadDeleted = true});
+				var absences = GetAbsences(new AbsenceLoadOptionDto { LoadDeleted = true });
 				var absenceDictinary = absences
 					.Where(a => a.Id.HasValue)
 					.ToDictionary(a => a.Id.GetValueOrDefault());
@@ -482,22 +474,22 @@ namespace Teleopti.Ccc.Sdk.WcfService
 					.Select(d => d.Id.GetValueOrDefault())
 					.ToList();
 
-	            var activites = GetActivities(loadDeleted);
-	            var activityDictionary = activites
-		            .Where(a => a.Id.HasValue)
-		            .ToDictionary(a => a.Id.GetValueOrDefault());
+				var activites = GetActivities(loadDeleted);
+				var activityDictionary = activites
+					.Where(a => a.Id.HasValue)
+					.ToDictionary(a => a.Id.GetValueOrDefault());
 
-	            return
-		            _factoryProvider.CreateTeleoptiPayrollFactory(inner)
-		                            .GetTeleoptiPayrollActivitiesExportData(personList, startDate,
-		                                                                    endDate, timeZoneId,
-		                                                                    absenceDictinary,
-																			dayOffCodes,
-																			activityDictionary);
-            }
-        }
+				return
+					_factoryProvider.CreateTeleoptiPayrollFactory(inner)
+										 .GetTeleoptiPayrollActivitiesExportData(personList, startDate,
+																							  endDate, timeZoneId,
+																							  absenceDictinary,
+																		dayOffCodes,
+																		activityDictionary);
+			}
+		}
 
-        public ICollection<SchedulePartDto> GetSchedules(ScheduleLoadOptionDto scheduleLoadOptionDto, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId)
+		public ICollection<SchedulePartDto> GetSchedules(ScheduleLoadOptionDto scheduleLoadOptionDto, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId)
 		{
 			if (scheduleLoadOptionDto == null)
 				throw new FaultException("Parameter scheduleLoadOptionDto cannot be null.");
@@ -506,12 +498,12 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			if (scheduleLoadOptionDto.LoadAll)
 			{
 				query = new GetSchedulesForAllPeopleQueryDto
-				        	{
-				        		StartDate = startDate,
-				        		EndDate = endDate,
-				        		TimeZoneId = timeZoneId,
-				        		SpecialProjection = scheduleLoadOptionDto.SpecialProjection
-				        	};
+							{
+								StartDate = startDate,
+								EndDate = endDate,
+								TimeZoneId = timeZoneId,
+								SpecialProjection = scheduleLoadOptionDto.SpecialProjection
+							};
 			}
 			if (scheduleLoadOptionDto.LoadSite != null)
 			{
@@ -527,34 +519,34 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			if (scheduleLoadOptionDto.LoadTeam != null)
 			{
 				query = new GetSchedulesByTeamQueryDto
-					                    	{
-					                    		StartDate = startDate,
-					                    		EndDate = endDate,
-					                    		TimeZoneId = timeZoneId,
-					                    		TeamId = scheduleLoadOptionDto.LoadTeam.Id.GetValueOrDefault(),
-					                    		SpecialProjection = scheduleLoadOptionDto.SpecialProjection
-					                    	};
+												{
+													StartDate = startDate,
+													EndDate = endDate,
+													TimeZoneId = timeZoneId,
+													TeamId = scheduleLoadOptionDto.LoadTeam.Id.GetValueOrDefault(),
+													SpecialProjection = scheduleLoadOptionDto.SpecialProjection
+												};
 			}
 			if (scheduleLoadOptionDto.LoadPerson != null)
 			{
 				query = new GetSchedulesByPersonQueryDto
-				        	{
-				        		StartDate = startDate,
-				        		EndDate = endDate,
-				        		TimeZoneId = timeZoneId,
-				        		PersonId = scheduleLoadOptionDto.LoadPerson.Id.GetValueOrDefault(),
-				        		SpecialProjection = scheduleLoadOptionDto.SpecialProjection
-				        	};
+							{
+								StartDate = startDate,
+								EndDate = endDate,
+								TimeZoneId = timeZoneId,
+								PersonId = scheduleLoadOptionDto.LoadPerson.Id.GetValueOrDefault(),
+								SpecialProjection = scheduleLoadOptionDto.SpecialProjection
+							};
 			}
-			
-			if (query==null)
+
+			if (query == null)
 			{
 				return new Collection<SchedulePartDto>();
 			}
 			return GetSchedulesByQuery(query);
 		}
 
-    	public ICollection<SchedulePartDto> GetSchedulesByQuery(QueryDto queryDto)
+		public ICollection<SchedulePartDto> GetSchedulesByQuery(QueryDto queryDto)
 		{
 			using (var inner = _lifetimeScope.BeginLifetimeScope())
 			{
@@ -563,40 +555,40 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			}
 		}
 
-    	public ICollection<MultiplicatorDto> GetMultiplicatorsByQuery(QueryDto queryDto)
-    	{
+		public ICollection<MultiplicatorDto> GetMultiplicatorsByQuery(QueryDto queryDto)
+		{
 			using (var inner = _lifetimeScope.BeginLifetimeScope())
 			{
 				var invoker = inner.Resolve<IInvokeQuery<ICollection<MultiplicatorDto>>>();
 				return invoker.Invoke(queryDto);
-			}		
-    	}
+			}
+		}
 
-    	public ICollection<DefinitionSetDto> GetMultiplicatorDefinitionSetByQuery(QueryDto queryDto)
-    	{
+		public ICollection<DefinitionSetDto> GetMultiplicatorDefinitionSetByQuery(QueryDto queryDto)
+		{
 			using (var inner = _lifetimeScope.BeginLifetimeScope())
 			{
 				var invoker = inner.Resolve<IInvokeQuery<ICollection<DefinitionSetDto>>>();
 				return invoker.Invoke(queryDto);
-			}	
-    	}
+			}
+		}
 
 		public ICollection<ScheduleTagDto> GetScheduleTagByQuery(QueryDto queryDto)
-	    {
+		{
 			using (var inner = _lifetimeScope.BeginLifetimeScope())
 			{
 				var invoker = inner.Resolve<IInvokeQuery<ICollection<ScheduleTagDto>>>();
 				return invoker.Invoke(queryDto);
 			}
-	    }
+		}
 
-	    public IAsyncResult BeginCreateServerScheduleDistribution(PersonDto[] personList, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId, AsyncCallback callback, object asyncState)
+		public IAsyncResult BeginCreateServerScheduleDistribution(PersonDto[] personList, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId, AsyncCallback callback, object asyncState)
 		{
 			CreateScheduleDistributionAsyncResult asyncResult = new CreateScheduleDistributionAsyncResult(callback, asyncState);
 			asyncResult.PersonList = personList;
-			asyncResult.DateOnlyPeriod = new DateOnlyPeriodDto {StartDate = startDate, EndDate = endDate};
+			asyncResult.DateOnlyPeriod = new DateOnlyPeriodDto { StartDate = startDate, EndDate = endDate };
 			asyncResult.TimeZone = timeZoneId;
-			asyncResult.Principal = (IPrincipal) ServiceSecurityContext.Current.AuthorizationContext.Properties["Principal"];
+			asyncResult.Principal = (IPrincipal)ServiceSecurityContext.Current.AuthorizationContext.Properties["Principal"];
 
 			ThreadPool.QueueUserWorkItem(
 				CreateServerScheduleDistributionCallback,
@@ -605,48 +597,48 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			return asyncResult;
 		}
 
-        public ICollection<PublicNoteDto> GetPublicNotes(PublicNoteLoadOptionDto publicNoteLoadOptionDto, DateOnlyDto startDate, DateOnlyDto endDate)
-	    {
-            if (publicNoteLoadOptionDto == null)
-                throw new FaultException("Parameter publicNoteLoadOptionDto cannot be null.");
+		public ICollection<PublicNoteDto> GetPublicNotes(PublicNoteLoadOptionDto publicNoteLoadOptionDto, DateOnlyDto startDate, DateOnlyDto endDate)
+		{
+			if (publicNoteLoadOptionDto == null)
+				throw new FaultException("Parameter publicNoteLoadOptionDto cannot be null.");
 
-            ICollection<TeamDto> teamDtos = null;
+			ICollection<TeamDto> teamDtos = null;
 
-            if (publicNoteLoadOptionDto.LoadSite != null)
-                teamDtos = GetTeamsOnSite(publicNoteLoadOptionDto.LoadSite);
+			if (publicNoteLoadOptionDto.LoadSite != null)
+				teamDtos = GetTeamsOnSite(publicNoteLoadOptionDto.LoadSite);
 
-            return _factoryProvider.CreatePublicNoteTypeFactory().GetPublicNotes(publicNoteLoadOptionDto, teamDtos, startDate, endDate);
-	    }
+			return _factoryProvider.CreatePublicNoteTypeFactory().GetPublicNotes(publicNoteLoadOptionDto, teamDtos, startDate, endDate);
+		}
 
-	    public void SavePublicNote(PublicNoteDto publicNoteDto)
-	    {
-	        var publicNotesFactory = _factoryProvider.CreatePublicNoteTypeFactory();
-	        publicNotesFactory.SavePublicNote(publicNoteDto);
-	    }
+		public void SavePublicNote(PublicNoteDto publicNoteDto)
+		{
+			var publicNotesFactory = _factoryProvider.CreatePublicNoteTypeFactory();
+			publicNotesFactory.SavePublicNote(publicNoteDto);
+		}
 
-	    public void DeletePublicNote(PublicNoteDto publicNoteDto)
-	    {
-            var publicNotesFactory = _factoryProvider.CreatePublicNoteTypeFactory();
-            publicNotesFactory.DeletePublicNote(publicNoteDto);
-	    }
+		public void DeletePublicNote(PublicNoteDto publicNoteDto)
+		{
+			var publicNotesFactory = _factoryProvider.CreatePublicNoteTypeFactory();
+			publicNotesFactory.DeletePublicNote(publicNoteDto);
+		}
 
-        public PlanningTimeBankDto GetPlanningTimeBank(PersonDto personDto, DateOnlyDto dateOnlyDto)
-        {
-            using (var inner = _lifetimeScope.BeginLifetimeScope())
-            {
-                return _factoryProvider.CreatePlanningTimeBankFactory(inner).GetPlanningTimeBank(personDto, dateOnlyDto);
-            }
-        }
+		public PlanningTimeBankDto GetPlanningTimeBank(PersonDto personDto, DateOnlyDto dateOnlyDto)
+		{
+			using (var inner = _lifetimeScope.BeginLifetimeScope())
+			{
+				return _factoryProvider.CreatePlanningTimeBankFactory(inner).GetPlanningTimeBank(personDto, dateOnlyDto);
+			}
+		}
 
-        public void SavePlanningTimeBank(PersonDto personDto, DateOnlyDto dateOnlyDto, int balanceOutMinute)
-        {
-            using (var inner = _lifetimeScope.BeginLifetimeScope())
-            {
-                 _factoryProvider.CreatePlanningTimeBankFactory(inner).SavePlanningTimeBank(personDto, dateOnlyDto, balanceOutMinute);
-            }
-        }
+		public void SavePlanningTimeBank(PersonDto personDto, DateOnlyDto dateOnlyDto, int balanceOutMinute)
+		{
+			using (var inner = _lifetimeScope.BeginLifetimeScope())
+			{
+				_factoryProvider.CreatePlanningTimeBankFactory(inner).SavePlanningTimeBank(personDto, dateOnlyDto, balanceOutMinute);
+			}
+		}
 
-        private void CreateServerScheduleDistributionCallback(object state)
+		private void CreateServerScheduleDistributionCallback(object state)
 		{
 			//Need to add a lock here. Otherwise there's a risk that sessions will hijack eachother
 			CreateScheduleDistributionAsyncResult asyncResult = (CreateScheduleDistributionAsyncResult)state;
@@ -676,13 +668,13 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			}
 		}
 
-        private void CreateServerScheduleDistribution(IList<PersonDto> personList, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId)
+		private void CreateServerScheduleDistribution(IList<PersonDto> personList, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId)
 		{
-            using (var inner = _lifetimeScope.BeginLifetimeScope())
-            {
-                _factoryProvider.CreateScheduleMailFactory(inner).SendScheduleMail(personList, startDate, endDate,
-                                                                                   timeZoneId);
-            }
+			using (var inner = _lifetimeScope.BeginLifetimeScope())
+			{
+				_factoryProvider.CreateScheduleMailFactory(inner).SendScheduleMail(personList, startDate, endDate,
+																										 timeZoneId);
+			}
 		}
 
 		/// <summary>
@@ -696,21 +688,21 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		/// </returns>
 		public ICollection<MultiplicatorDataDto> GetPersonMultiplicatorDataForPerson(PersonDto person, DateOnlyDto startDate, DateOnlyDto endDate)
 		{
-            using (var inner = _lifetimeScope.BeginLifetimeScope())
-            {
-                return _factoryProvider.CreateScheduleFactory(inner).CreateMultiplicatorData(new List<PersonDto> {person},
-                                                                                        startDate, endDate,
-                                                                                        person.TimeZoneId);
-            }
+			using (var inner = _lifetimeScope.BeginLifetimeScope())
+			{
+				return _factoryProvider.CreateScheduleFactory(inner).CreateMultiplicatorData(new List<PersonDto> { person },
+																												startDate, endDate,
+																												person.TimeZoneId);
+			}
 		}
 
 		public ICollection<MultiplicatorDataDto> GetPersonMultiplicatorDataForPersons(PersonDto[] personCollection, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId)
 		{
-            using (var inner = _lifetimeScope.BeginLifetimeScope())
-            {
-                return _factoryProvider.CreateScheduleFactory(inner).CreateMultiplicatorData(personCollection, startDate,
-                                                                                        endDate, timeZoneId);
-            }
+			using (var inner = _lifetimeScope.BeginLifetimeScope())
+			{
+				return _factoryProvider.CreateScheduleFactory(inner).CreateMultiplicatorData(personCollection, startDate,
+																												endDate, timeZoneId);
+			}
 		}
 
 		/// <summary>
@@ -735,16 +727,16 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			return AbsenceTypeFactory.GetAbsences(loadOptionDto);
 		}
 
-		 /// <summary>
-		 /// Finds all <see cref="DayOffInfoDto"/>.
-		 /// </summary>
-		 /// <returns>
-		 /// A collection of <see cref="DayOffInfoDto"/>.
-		 /// </returns>
+		/// <summary>
+		/// Finds all <see cref="DayOffInfoDto"/>.
+		/// </summary>
+		/// <returns>
+		/// A collection of <see cref="DayOffInfoDto"/>.
+		/// </returns>
 		public ICollection<DayOffInfoDto> GetDaysOffs(LoadOptionDto loadOptionDto)
-		 {
-			 return DayOffFactory.GetDayOffs(loadOptionDto);
-		 }
+		{
+			return DayOffFactory.GetDayOffs(loadOptionDto);
+		}
 
 		/// <summary>
 		/// Gets all <see cref="ShiftCategoryDto"/>.
@@ -787,8 +779,8 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			{
 				IRepositoryFactory repositoryFactory = new RepositoryFactory();
 				IPersonRepository repository = repositoryFactory.CreatePersonRepository(uow);
-			    var assembler = _factoryProvider.CreatePersonAssembler();
-			    ((PersonAssembler)assembler).EnableSaveOrUpdate = true;
+				var assembler = _factoryProvider.CreatePersonAssembler();
+				((PersonAssembler)assembler).EnableSaveOrUpdate = true;
 				IPerson newPerson = assembler.DtoToDomainEntity(personDto);
 				repository.Add(newPerson);
 				uow.PersistAll();
@@ -803,10 +795,10 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			{
 				IRepositoryFactory repositoryFactory = new RepositoryFactory();
 				IPersonRepository repository = repositoryFactory.CreatePersonRepository(uow);
-                var assembler = _factoryProvider.CreatePersonAssembler();
-                ((PersonAssembler)assembler).EnableSaveOrUpdate = true;
+				var assembler = _factoryProvider.CreatePersonAssembler();
+				((PersonAssembler)assembler).EnableSaveOrUpdate = true;
 				IPerson person = assembler.DtoToDomainEntity(personDto);
-				repository.Add(person);		
+				repository.Add(person);
 				uow.PersistAll();
 				_tenantPeopleSaver.SaveTenantData(personDto, person.Id.Value);
 			}
@@ -814,14 +806,14 @@ namespace Teleopti.Ccc.Sdk.WcfService
 
 		public void AddPersonPeriod(PersonDto personDto, PersonPeriodDto personPeriodDto)
 		{
-		    var command = new ChangePersonEmploymentCommandDto
-		                      {
-                                  Person = personDto,
-		                          Period = personPeriodDto.Period,
-		                          PersonContract = personPeriodDto.PersonContract,
-		                          Team = personPeriodDto.Team
-		                      };
-		    ExecuteCommand(command);
+			var command = new ChangePersonEmploymentCommandDto
+									{
+										Person = personDto,
+										Period = personPeriodDto.Period,
+										PersonContract = personPeriodDto.PersonContract,
+										Team = personPeriodDto.Team
+									};
+			ExecuteCommand(command);
 		}
 
 		public ICollection<SiteDto> GetSitesOnBusinessUnit(BusinessUnitDto businessUnitDto)
@@ -856,7 +848,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 				{
 					if (team.Site.Id.Value == siteDto.Id.Value)
 					{
-						TeamDto dto = new TeamDto { Description = team.Description.Name, Id = team.Id, SiteAndTeam = team.SiteAndTeam};
+						TeamDto dto = new TeamDto { Description = team.Description.Name, Id = team.Id, SiteAndTeam = team.SiteAndTeam };
 						teamsOnSite.Add(dto);
 					}
 				}
@@ -881,7 +873,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 
 				foreach (IPersonPeriod period in personPeriods)
 				{
-					if (period.RuleSetBag==null) continue;
+					if (period.RuleSetBag == null) continue;
 					foreach (IShiftCategory category in period.RuleSetBag.ShiftCategoriesInBag())
 					{
 						IShiftCategory shiftCategory = category;
@@ -933,12 +925,12 @@ namespace Teleopti.Ccc.Sdk.WcfService
 				DateTime calendarDateTime = Convert.ToDateTime(data[0].ToString());
 				DateTime shiftBelongsToDateTime = Convert.ToDateTime(data[29].ToString());
 				int day = 0;
-				
+
 				if (calendarDateTime != shiftBelongsToDateTime)
 					day = 1;
 				TimeSpan startTime = new TimeSpan(day, startHour, startMinutes, 0);
 				TimeSpan endTime = new TimeSpan(day, endHour, endMinutes, 0);
-				
+
 				decimal deviation;
 				decimal dayAdherence;
 				decimal readyTime;
@@ -953,8 +945,8 @@ namespace Teleopti.Ccc.Sdk.WcfService
 					dayAdherence = 0;
 				else
 				{
-					dayAdherence = (decimal) data[13];
-					adherenceForDay = (decimal) data[13];
+					dayAdherence = (decimal)data[13];
+					adherenceForDay = (decimal)data[13];
 				}
 				if (data[17] == null)
 					readyTime = 0;
@@ -965,7 +957,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 				else
 				{
 					adherence = (decimal)data[12];
-					adherenceForPeriod = (decimal) data[12];
+					adherenceForPeriod = (decimal)data[12];
 				}
 				var adherenceDataDto = new AdherenceDataDto(startTime.Ticks, endTime.Ticks, readyTime, deviation, adherenceForPeriod, calendarDateTime, shiftBelongsToDateTime)
 					{
@@ -1042,7 +1034,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 				return adherenceInfoDtos;
 			foreach (object[] data in returnValues)
 			{
-				DateTime dateTime = (DateTime) data[1];
+				DateTime dateTime = (DateTime)data[1];
 				int availableTime;
 				int idleTime;
 				int loggedInTime;
@@ -1054,11 +1046,11 @@ namespace Teleopti.Ccc.Sdk.WcfService
 				if (data[3] == null)
 					loggedInTime = 0;
 				else
-					loggedInTime = (int) data[3];
+					loggedInTime = (int)data[3];
 				if (data[4] == null)
 					idleTime = 0;
 				else
-					idleTime = (int) data[4];
+					idleTime = (int)data[4];
 				if (data[5] == null)
 					availableTime = 0;
 				else
@@ -1079,17 +1071,17 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		public void SavePreference(PreferenceRestrictionDto preferenceRestrictionDto)
 		{
 			IRepositoryFactory repositoryFactory = new RepositoryFactory();
-			
+
 			using (new MessageBrokerSendEnabler())
 			{
 				using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 				{
-					deletePreference(preferenceRestrictionDto,repositoryFactory,uow);
+					deletePreference(preferenceRestrictionDto, repositoryFactory, uow);
 					IPreferenceDayRepository repository = repositoryFactory.CreatePreferenceDayRepository(uow);
-				    var assembler = _factoryProvider.CreatePreferenceDayAssembler();
+					var assembler = _factoryProvider.CreatePreferenceDayAssembler();
 
 					preferenceRestrictionDto.Id = null;
-				    var preferenceDay = assembler.DtoToDomainEntity(preferenceRestrictionDto);
+					var preferenceDay = assembler.DtoToDomainEntity(preferenceRestrictionDto);
 					repository.Add(preferenceDay);
 					uow.PersistAll();
 				}
@@ -1099,7 +1091,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		public void DeletePreference(PreferenceRestrictionDto preferenceRestrictionDto)
 		{
 			IRepositoryFactory repositoryFactory = new RepositoryFactory();
-			
+
 			using (new MessageBrokerSendEnabler())
 			{
 				using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -1110,22 +1102,22 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			}
 		}
 
-	    private static void deletePreference(PreferenceRestrictionDto preferenceRestrictionDto,
-	                                         IRepositoryFactory repositoryFactory, IUnitOfWork uow)
-	    {
-		    var personRepository = repositoryFactory.CreatePersonRepository(uow);
-		    var repository = repositoryFactory.CreatePreferenceDayRepository(uow);
+		private static void deletePreference(PreferenceRestrictionDto preferenceRestrictionDto,
+														 IRepositoryFactory repositoryFactory, IUnitOfWork uow)
+		{
+			var personRepository = repositoryFactory.CreatePersonRepository(uow);
+			var repository = repositoryFactory.CreatePreferenceDayRepository(uow);
 
-		    var person = personRepository.Get(preferenceRestrictionDto.Person.Id.GetValueOrDefault());
-		    if (person == null) throw new FaultException("Given person was not found.");
-		    var days = repository.FindAndLock(preferenceRestrictionDto.RestrictionDate.ToDateOnly(), person);
-		    foreach (IPreferenceDay day in days)
-		    {
-			    repository.Remove(day);
-		    }
-	    }
+			var person = personRepository.Get(preferenceRestrictionDto.Person.Id.GetValueOrDefault());
+			if (person == null) throw new FaultException("Given person was not found.");
+			var days = repository.FindAndLock(preferenceRestrictionDto.RestrictionDate.ToDateOnly(), person);
+			foreach (IPreferenceDay day in days)
+			{
+				repository.Remove(day);
+			}
+		}
 
-	    public void SaveStudentAvailabilityDay(StudentAvailabilityDayDto studentAvailabilityDayDto)
+		public void SaveStudentAvailabilityDay(StudentAvailabilityDayDto studentAvailabilityDayDto)
 		{
 			DeleteStudentAvailabilityDay(studentAvailabilityDayDto);
 			IRepositoryFactory repositoryFactory = new RepositoryFactory();
@@ -1169,10 +1161,10 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			var repositoryFactory = new RepositoryFactory();
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-                var person = TeleoptiPrincipal.CurrentPrincipal.GetPerson(repositoryFactory.CreatePersonRepository(uow));
-                var extendedPreferenceTemplateRepository = repositoryFactory.CreateExtendedPreferenceTemplateRepository(uow);
+				var person = TeleoptiPrincipal.CurrentPrincipal.GetPerson(repositoryFactory.CreatePersonRepository(uow));
+				var extendedPreferenceTemplateRepository = repositoryFactory.CreateExtendedPreferenceTemplateRepository(uow);
 
-				var assembler =  new ExtendedPreferenceTemplateAssembler(person,
+				var assembler = new ExtendedPreferenceTemplateAssembler(person,
 																		new RestrictionAssembler
 																			<IPreferenceRestrictionTemplate,
 																			ExtendedPreferenceTemplateDto, IActivityRestrictionTemplate>(new PreferenceRestrictionTemplateConstructor(),
@@ -1182,11 +1174,11 @@ namespace Teleopti.Ccc.Sdk.WcfService
 																			new DayOffAssembler(
 																				repositoryFactory.CreateDayOffRepository
 																					(uow)),
-																			new ActivityRestrictionAssembler<IActivityRestrictionTemplate>(new ActivityRestrictionTemplateDomainObjectCreator(), 
+																			new ActivityRestrictionAssembler<IActivityRestrictionTemplate>(new ActivityRestrictionTemplateDomainObjectCreator(),
 																				new ActivityAssembler(repositoryFactory.CreateActivityRepository(uow))),
-                                                                            new AbsenceAssembler(repositoryFactory.CreateAbsenceRepository(uow))));
+																									 new AbsenceAssembler(repositoryFactory.CreateAbsenceRepository(uow))));
 				var template = assembler.DtoToDomainEntity(extendedPreferenceTemplateDto);
-			   
+
 				extendedPreferenceTemplateRepository.Add(template);
 				uow.PersistAll();
 			}
@@ -1227,7 +1219,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 																			new ActivityRestrictionAssembler<IActivityRestrictionTemplate>(new ActivityRestrictionTemplateDomainObjectCreator(),
 																				new ActivityAssembler(repositoryFactory.
 																					CreateActivityRepository(uow))),
-                                                                            new AbsenceAssembler(repositoryFactory.CreateAbsenceRepository(uow))));
+																									 new AbsenceAssembler(repositoryFactory.CreateAbsenceRepository(uow))));
 				domainTemplates.ForEach(r => dtoTemplates.Add(assembler.DomainEntityToDto(r)));
 			}
 			return dtoTemplates;
@@ -1237,29 +1229,29 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		{
 			return
 				GetValidatedSchedulePartsOnSchedulePeriodByQuery(new GetValidatedSchedulePartsForPreferenceQueryDto
-				                                                 	{
-				                                                 		Person = person,
-				                                                 		DateInPeriod = dateInPeriod,
-				                                                 		TimeZoneId = timeZoneId
-				                                                 	});
+																					{
+																						Person = person,
+																						DateInPeriod = dateInPeriod,
+																						TimeZoneId = timeZoneId
+																					});
 		}
 
-        public ICollection<ValidatedSchedulePartDto> GetValidatedSchedulePartsOnSchedulePeriodByQuery(QueryDto queryDto)
-        {
+		public ICollection<ValidatedSchedulePartDto> GetValidatedSchedulePartsOnSchedulePeriodByQuery(QueryDto queryDto)
+		{
 			using (var inner = _lifetimeScope.BeginLifetimeScope())
 			{
 				var invoker = inner.Resolve<IInvokeQuery<ICollection<ValidatedSchedulePartDto>>>();
 				return invoker.Invoke(queryDto);
 			}
-        }
+		}
 
 		private IStudentAvailabilityDay GetStudentAvailabilityDomainFromDto(StudentAvailabilityDayDto dto)
 		{
 			IStudentAvailabilityDay studentAvailabilityDay;
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-			    var assembler = _factoryProvider.CreateStudentAvailabilityDayAssembler();
-			    studentAvailabilityDay = assembler.DtoToDomainEntity(dto);
+				var assembler = _factoryProvider.CreateStudentAvailabilityDayAssembler();
+				studentAvailabilityDay = assembler.DtoToDomainEntity(dto);
 			}
 			return studentAvailabilityDay;
 		}
@@ -1276,13 +1268,13 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		/// </returns>
 		public ICollection<PersonRequestDto> GetAllPersonRequests(PersonDto person)
 		{
-            using (var inner = _lifetimeScope.BeginLifetimeScope())
-            {
-                using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-                {
-                    return _factoryProvider.CreatePersonRequestFactory(inner).GetAllRequestsForPerson(person);
-                }
-            }
+			using (var inner = _lifetimeScope.BeginLifetimeScope())
+			{
+				using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+				{
+					return _factoryProvider.CreatePersonRequestFactory(inner).GetAllRequestsForPerson(person);
+				}
+			}
 		}
 
 		/// <summary>
@@ -1297,26 +1289,26 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		public ICollection<PersonRequestDto> GetPersonRequests(PersonDto person, DateTime utcStartDate,
 																  DateTime utcEndDate)
 		{
-            using (var inner = _lifetimeScope.BeginLifetimeScope())
-            {
-                using(UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-                {
-                    return _factoryProvider.CreatePersonRequestFactory(inner).GetPersonRequests(person, utcStartDate, utcEndDate);
-                }
-            }
+			using (var inner = _lifetimeScope.BeginLifetimeScope())
+			{
+				using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+				{
+					return _factoryProvider.CreatePersonRequestFactory(inner).GetPersonRequests(person, utcStartDate, utcEndDate);
+				}
+			}
 		}
 
 		public ICollection<PersonRequestDto> GetAllRequestModifiedWithinPeriodOrPending(PersonDto person, DateTime utcStartDate, DateTime utcEndDate)
 		{
-            using (var inner = _lifetimeScope.BeginLifetimeScope())
-            {
-                using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-                {
-                    return
-                        _factoryProvider.CreatePersonRequestFactory(inner).GetAllRequestModifiedWithinPeriodOrPending(
-                            person, utcStartDate, utcEndDate);
-                }
-            }
+			using (var inner = _lifetimeScope.BeginLifetimeScope())
+			{
+				using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+				{
+					return
+						 _factoryProvider.CreatePersonRequestFactory(inner).GetAllRequestModifiedWithinPeriodOrPending(
+							  person, utcStartDate, utcEndDate);
+				}
+			}
 		}
 
 		/// <summary>
@@ -1325,14 +1317,14 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		/// <param name="personRequestDto">The person request dto.</param>
 		public void DeletePersonRequest(PersonRequestDto personRequestDto)
 		{
-            using (var inner = _lifetimeScope.BeginLifetimeScope())
-            {
-                using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-                {
-                    _factoryProvider.CreatePersonRequestFactory(inner).DeletePersonRequest(personRequestDto, unitOfWork);
-                    unitOfWork.PersistAll();
-                }
-            }
+			using (var inner = _lifetimeScope.BeginLifetimeScope())
+			{
+				using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+				{
+					_factoryProvider.CreatePersonRequestFactory(inner).DeletePersonRequest(personRequestDto, unitOfWork);
+					unitOfWork.PersistAll();
+				}
+			}
 		}
 
 		/// <summary>
@@ -1344,18 +1336,18 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		/// </returns>
 		public PersonRequestDto SavePersonRequest(PersonRequestDto personRequestDto)
 		{
-            using (var inner = _lifetimeScope.BeginLifetimeScope())
-            {
-                var factory = _factoryProvider.CreatePersonRequestFactory(inner);
-                using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-                {
-                    personRequestDto = factory.SavePersonRequest(personRequestDto, unitOfWork);
-                }
-                using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-                {
-                    return factory.GetPersonRequestDto(personRequestDto);
-                }
-            }
+			using (var inner = _lifetimeScope.BeginLifetimeScope())
+			{
+				var factory = _factoryProvider.CreatePersonRequestFactory(inner);
+				using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+				{
+					personRequestDto = factory.SavePersonRequest(personRequestDto, unitOfWork);
+				}
+				using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+				{
+					return factory.GetPersonRequestDto(personRequestDto);
+				}
+			}
 		}
 
 		/// <summary>
@@ -1364,8 +1356,8 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		/// <param name="personRequestDto">The person request dto.</param>
 		public void SavePersonAbsenceRequest(PersonRequestDto personRequestDto)
 		{
-		    var command = new SavePersonAbsenceRequestCommandDto {PersonRequestDto = personRequestDto};
-		    ExecuteCommand(command);
+			var command = new SavePersonAbsenceRequestCommandDto { PersonRequestDto = personRequestDto };
+			ExecuteCommand(command);
 		}
 
 		/// <summary>
@@ -1383,15 +1375,15 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		/// </remarks>
 		public PersonRequestDto CreateShiftTradeRequest(PersonDto requester, string subject, string message, ICollection<ShiftTradeSwapDetailDto> shiftTradeSwapDetailDtos)
 		{
-            using (var inner = _lifetimeScope.BeginLifetimeScope())
-            {
-                using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-                {
-                    return _factoryProvider.CreatePersonRequestFactory(inner).CreateShiftTradeRequest(requester, subject,
-                                                                                                      message,
-                                                                                                      shiftTradeSwapDetailDtos);
-                }
-            }
+			using (var inner = _lifetimeScope.BeginLifetimeScope())
+			{
+				using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+				{
+					return _factoryProvider.CreatePersonRequestFactory(inner).CreateShiftTradeRequest(requester, subject,
+																																 message,
+																																 shiftTradeSwapDetailDtos);
+				}
+			}
 		}
 
 		/// <summary>
@@ -1409,32 +1401,32 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		/// </remarks>
 		public PersonRequestDto SetShiftTradeRequest(PersonRequestDto personRequestDto, string subject, string message, ICollection<ShiftTradeSwapDetailDto> shiftTradeSwapDetailDtos)
 		{
-            using (var inner = _lifetimeScope.BeginLifetimeScope())
-            {
-                using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-                {
-                    return _factoryProvider.CreatePersonRequestFactory(inner).SetShiftTradeRequest(personRequestDto,
-                                                                                                   subject,
-                                                                                                   message,
-                                                                                                   shiftTradeSwapDetailDtos);
-                }
-            }
+			using (var inner = _lifetimeScope.BeginLifetimeScope())
+			{
+				using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+				{
+					return _factoryProvider.CreatePersonRequestFactory(inner).SetShiftTradeRequest(personRequestDto,
+																															 subject,
+																															 message,
+																															 shiftTradeSwapDetailDtos);
+				}
+			}
 		}
 
 		public PersonRequestDto UpdatePersonRequestMessage(PersonRequestDto personRequest)
 		{
-            using (var inner = _lifetimeScope.BeginLifetimeScope())
-            {
-                var factory = _factoryProvider.CreatePersonRequestFactory(inner);
-                using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-                {
-                    personRequest = factory.UpdatePersonRequestMessage(personRequest,unitOfWork);
-                }
-                using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-                {
-                    return factory.GetPersonRequestDto(personRequest);
-                }
-            }
+			using (var inner = _lifetimeScope.BeginLifetimeScope())
+			{
+				var factory = _factoryProvider.CreatePersonRequestFactory(inner);
+				using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+				{
+					personRequest = factory.UpdatePersonRequestMessage(personRequest, unitOfWork);
+				}
+				using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+				{
+					return factory.GetPersonRequestDto(personRequest);
+				}
+			}
 		}
 		/// <summary>
 		/// Accepts the shift trade request.
@@ -1447,19 +1439,19 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		/// </remarks>
 		public PersonRequestDto AcceptShiftTradeRequest(PersonRequestDto personRequest)
 		{
-            using (var inner = _lifetimeScope.BeginLifetimeScope())
-            {
-                var factory = _factoryProvider.CreatePersonRequestFactory(inner);
-                using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-                {
-                    var person = TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(unitOfWork));
-                    personRequest = factory.AcceptShiftTradeRequest(personRequest, unitOfWork, person);
-                }
-                using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-                {
-                    return factory.GetPersonRequestDto(personRequest);
-                }
-            }
+			using (var inner = _lifetimeScope.BeginLifetimeScope())
+			{
+				var factory = _factoryProvider.CreatePersonRequestFactory(inner);
+				using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+				{
+					var person = TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(unitOfWork));
+					personRequest = factory.AcceptShiftTradeRequest(personRequest, unitOfWork, person);
+				}
+				using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+				{
+					return factory.GetPersonRequestDto(personRequest);
+				}
+			}
 		}
 
 		/// <summary>
@@ -1473,18 +1465,18 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		/// </remarks>
 		public PersonRequestDto DenyShiftTradeRequest(PersonRequestDto personRequest)
 		{
-            using (var inner = _lifetimeScope.BeginLifetimeScope())
-            {
-                var factory = _factoryProvider.CreatePersonRequestFactory(inner);
-                using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-                {
-                    personRequest = factory.DenyShiftTradeRequest(personRequest, unitOfWork);
-                }
-                using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-                {
-                    return factory.GetPersonRequestDto(personRequest);
-                }
-            }
+			using (var inner = _lifetimeScope.BeginLifetimeScope())
+			{
+				var factory = _factoryProvider.CreatePersonRequestFactory(inner);
+				using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+				{
+					personRequest = factory.DenyShiftTradeRequest(personRequest, unitOfWork);
+				}
+				using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+				{
+					return factory.GetPersonRequestDto(personRequest);
+				}
+			}
 		}
 
 		#endregion
@@ -1524,30 +1516,30 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			IList<SiteDto> dtos = new List<SiteDto>();
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-			    var localDate = TimeZoneHelper.ConvertFromUtc(utcDateTime);
+				var localDate = TimeZoneHelper.ConvertFromUtc(utcDateTime);
 				teamCollection = OrganizationFactory.CreateTeamCollectionLight(uow, func, new DateOnly(localDate));
 				foreach (ISite site in teamCollection.AllPermittedSites)
 				{
-					dtos.Add(new SiteDto { DescriptionName = site.Description.Name, Id = site.Id});
+					dtos.Add(new SiteDto { DescriptionName = site.Description.Name, Id = site.Id });
 				}
 			}
-			
+
 			return dtos;
 		}
 
-        public ICollection<SiteDto> GetSitesByQuery(QueryDto queryDto)
-        {
-            var invoker = _lifetimeScope.Resolve<IInvokeQuery<ICollection<SiteDto>>>();
-            return invoker.Invoke(queryDto);
-        }
+		public ICollection<SiteDto> GetSitesByQuery(QueryDto queryDto)
+		{
+			var invoker = _lifetimeScope.Resolve<IInvokeQuery<ICollection<SiteDto>>>();
+			return invoker.Invoke(queryDto);
+		}
 
-        public ICollection<BusinessUnitDto> GetBusinessUnitsByQuery(QueryDto queryDto)
-        {
-            var invoker = _lifetimeScope.Resolve<IInvokeQuery<ICollection<BusinessUnitDto>>>();
-            return invoker.Invoke(queryDto);
-        }
+		public ICollection<BusinessUnitDto> GetBusinessUnitsByQuery(QueryDto queryDto)
+		{
+			var invoker = _lifetimeScope.Resolve<IInvokeQuery<ICollection<BusinessUnitDto>>>();
+			return invoker.Invoke(queryDto);
+		}
 
-        /// <summary>
+		/// <summary>
 		/// Gets the team collection.
 		/// </summary>
 		/// <param name="site">The site.</param>
@@ -1561,26 +1553,26 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			List<TeamDto> dtos = new List<TeamDto>();
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-                var localDate = TimeZoneHelper.ConvertFromUtc(utcDateTime);
-				var teamCollection = 
+				var localDate = TimeZoneHelper.ConvertFromUtc(utcDateTime);
+				var teamCollection =
 					OrganizationFactory.CreateTeamCollectionLight(uow, func, new DateOnly(localDate));
 
 				foreach (ITeam team in teamCollection.AllPermittedTeams)
 				{
 					if (team.Site.Id == site.Id.GetValueOrDefault())
 					{
-						dtos.Add(new TeamDto {  Description = team.Description.Name, Id = team.Id, SiteAndTeam = team.SiteAndTeam });
+						dtos.Add(new TeamDto { Description = team.Description.Name, Id = team.Id, SiteAndTeam = team.SiteAndTeam });
 					}
 				}
 			}
 			return dtos;
 		}
 
-        public ICollection<TeamDto> GetTeamsByQuery(QueryDto queryDto)
-        {
-            var invoker = _lifetimeScope.Resolve<IInvokeQuery<ICollection<TeamDto>>>();
-            return invoker.Invoke(queryDto);
-        }
+		public ICollection<TeamDto> GetTeamsByQuery(QueryDto queryDto)
+		{
+			var invoker = _lifetimeScope.Resolve<IInvokeQuery<ICollection<TeamDto>>>();
+			return invoker.Invoke(queryDto);
+		}
 
 		public ICollection<ScenarioDto> GetScenariosByQuery(QueryDto queryDto)
 		{
@@ -1588,38 +1580,38 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			return invoker.Invoke(queryDto);
 		}
 
-    	public ICollection<PersonOptionalValuesDto> GetPersonOptionalValuesByQuery(QueryDto queryDto)
-    	{
+		public ICollection<PersonOptionalValuesDto> GetPersonOptionalValuesByQuery(QueryDto queryDto)
+		{
 			var invoker = _lifetimeScope.Resolve<IInvokeQuery<ICollection<PersonOptionalValuesDto>>>();
 			return invoker.Invoke(queryDto);
-    	}
+		}
 
 		public CommandResultDto SetSchedulePeriodWorktimeOverride(
-		    SetSchedulePeriodWorktimeOverrideCommandDto setSchedulePeriodWorktimeOverrideCommandDto)
-	    {
+			 SetSchedulePeriodWorktimeOverrideCommandDto setSchedulePeriodWorktimeOverrideCommandDto)
+		{
 			return ExecuteCommand(setSchedulePeriodWorktimeOverrideCommandDto);
-	    }
+		}
 
 		public ICollection<RoleDto> GetRolesByQuery(QueryDto queryDto)
-	    {
+		{
 			var invoker = _lifetimeScope.Resolve<IInvokeQuery<ICollection<RoleDto>>>();
 			return invoker.Invoke(queryDto);
-	    }
+		}
 
-	    public CommandResultDto GrantPersonRole(GrantPersonRoleCommandDto grantPersonRoleCommandDto)
-	    {
-			 return ExecuteCommand(grantPersonRoleCommandDto);
-	    }
+		public CommandResultDto GrantPersonRole(GrantPersonRoleCommandDto grantPersonRoleCommandDto)
+		{
+			return ExecuteCommand(grantPersonRoleCommandDto);
+		}
 
-	    public CommandResultDto RevokePersonRole(RevokePersonRoleCommandDto revokePersonRoleCommandDto)
-	    {
-			 return ExecuteCommand(revokePersonRoleCommandDto);
-	    }
+		public CommandResultDto RevokePersonRole(RevokePersonRoleCommandDto revokePersonRoleCommandDto)
+		{
+			return ExecuteCommand(revokePersonRoleCommandDto);
+		}
 
-	    [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		[SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public CommandResultDto ExecuteCommand(CommandDto commandDto)
-        {
-            var invoker = _lifetimeScope.Resolve<ICommandDispatcher>();
+		{
+			var invoker = _lifetimeScope.Resolve<ICommandDispatcher>();
 			try
 			{
 				invoker.Execute(commandDto);
@@ -1629,16 +1621,16 @@ namespace Teleopti.Ccc.Sdk.WcfService
 				if (e.InnerException != null)
 					throw new FaultException(e.InnerException.Message);
 			}
-	        return commandDto.Result;
-        }
+			return commandDto.Result;
+		}
 
-        public ICollection<AgentPortalSettingsDto> GetAgentPortalSettingsByQuery(QueryDto queryDto)
-        {
-            var invoker = _lifetimeScope.Resolve<IInvokeQuery<ICollection<AgentPortalSettingsDto>>>();
-            return invoker.Invoke(queryDto);
-        }
+		public ICollection<AgentPortalSettingsDto> GetAgentPortalSettingsByQuery(QueryDto queryDto)
+		{
+			var invoker = _lifetimeScope.Resolve<IInvokeQuery<ICollection<AgentPortalSettingsDto>>>();
+			return invoker.Invoke(queryDto);
+		}
 
-        /// <summary>
+		/// <summary>
 		/// Gets all permitted teams.
 		/// </summary>
 		/// <param name="applicationFunction">The application function.</param>
@@ -1652,7 +1644,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			IList<TeamDto> dtos = new List<TeamDto>();
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-                var localDate = TimeZoneHelper.ConvertFromUtc(utcDateTime);
+				var localDate = TimeZoneHelper.ConvertFromUtc(utcDateTime);
 				teamCollection = OrganizationFactory.CreateTeamCollectionLight(uow, func, new DateOnly(localDate));
 
 				foreach (ITeam team in teamCollection.AllPermittedTeams)
@@ -1682,14 +1674,14 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			var persons = new List<IPerson>();
 			using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-                var localDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(utcDateTime));
+				var localDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(utcDateTime));
 				IPersonCollection personCollection =
 					OrganizationFactory.CreatePersonCollectionLight(unitOfWork, func, localDate);
 
 				foreach (IPerson person in personCollection.AllPermittedPersons)
 				{
 					DateTime localTime = GetPersonLocalTime(utcDateTime, person);
-					localDate = new DateOnly(localTime); 
+					localDate = new DateOnly(localTime);
 					ITeam personsTeam = person.MyTeam(localDate);
 					if (personsTeam != null &&
 						personsTeam.Id == team.Id.Value)
@@ -1697,8 +1689,8 @@ namespace Teleopti.Ccc.Sdk.WcfService
 						persons.Add(person);
 					}
 				}
-			    
-                return _factoryProvider.CreatePersonAssembler().DomainEntitiesToDtos(persons).ToList();
+
+				return _factoryProvider.CreatePersonAssembler().DomainEntitiesToDtos(persons).ToList();
 			}
 		}
 
@@ -1709,23 +1701,23 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		/// <returns>A TeamDto</returns>
 		public TeamDto GetLoggedOnPersonTeam(DateTime utcDate)
 		{
-            using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-            {
-                IPerson person = TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(unitOfWork));
-                DateTime localTime = GetPersonLocalTime(utcDate, person);
-                DateOnly localDate = new DateOnly(localTime);
-                ITeam loggedOnPersonsTeam = person.MyTeam(localDate);
-                TeamDto returnTeamDto = null;
-                if (loggedOnPersonsTeam != null)
+			using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				IPerson person = TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(unitOfWork));
+				DateTime localTime = GetPersonLocalTime(utcDate, person);
+				DateOnly localDate = new DateOnly(localTime);
+				ITeam loggedOnPersonsTeam = person.MyTeam(localDate);
+				TeamDto returnTeamDto = null;
+				if (loggedOnPersonsTeam != null)
 					returnTeamDto = new TeamDto { Description = loggedOnPersonsTeam.Description.Name, Id = loggedOnPersonsTeam.Id, SiteAndTeam = loggedOnPersonsTeam.SiteAndTeam };
-                return returnTeamDto;
-		    }
+				return returnTeamDto;
+			}
 		}
 
 		private static DateTime GetPersonLocalTime(DateTime utcTime, IPerson person)
 		{
 			TimeZoneInfo timeZone = person.PermissionInformation.DefaultTimeZone();
-            return TimeZoneInfo.ConvertTimeFromUtc(utcTime, timeZone);
+			return TimeZoneInfo.ConvertTimeFromUtc(utcTime, timeZone);
 		}
 		/// <summary>
 		/// Changes the password.
@@ -1745,19 +1737,19 @@ namespace Teleopti.Ccc.Sdk.WcfService
 				OldPassword = oldPassword
 			}).Success;
 
-			if(!ret)
+			if (!ret)
 				throw new FaultException(UserTexts.Resources.ChangePasswordValidationError);//Blir fel språk på klienten? => Isåfall hämta uiculture från state holder
-			
+
 			return true;
 		}
 
-	    public ICollection<SkillDayDto> GetSkillDataByQuery(QueryDto queryDto)
-	    {
-			 var invoker = _lifetimeScope.Resolve<IInvokeQuery<ICollection<SkillDayDto>>>();
-			 return invoker.Invoke(queryDto);
-	    }
+		public ICollection<SkillDayDto> GetSkillDataByQuery(QueryDto queryDto)
+		{
+			var invoker = _lifetimeScope.Resolve<IInvokeQuery<ICollection<SkillDayDto>>>();
+			return invoker.Invoke(queryDto);
+		}
 
-	    /// <summary>
+		/// <summary>
 		/// Gets the skills.
 		/// </summary>
 		/// <returns>A collection of SkillDto</returns>
@@ -1769,7 +1761,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 				using (var inner = _lifetimeScope.BeginLifetimeScope())
 				{
 					var repository = inner.Resolve<ISkillRepository>();
-					var skillAssembler = inner.Resolve<IAssembler<ISkill,SkillDto>>();
+					var skillAssembler = inner.Resolve<IAssembler<ISkill, SkillDto>>();
 					returnList.AddRange(skillAssembler.DomainEntitiesToDtos(repository.LoadAll()));
 				}
 			}
@@ -1788,7 +1780,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			return
 				GetSkillDataByQuery(new GetSkillDaysByPeriodQueryDto
 				{
-					Period = new DateOnlyPeriodDto {StartDate = dateOnlyDto, EndDate = dateOnlyDto},
+					Period = new DateOnlyPeriodDto { StartDate = dateOnlyDto, EndDate = dateOnlyDto },
 					TimeZoneId = timeZoneId
 				});
 		}
@@ -1805,7 +1797,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 
 			using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-                var personAssembler = _factoryProvider.CreatePersonAssembler();
+				var personAssembler = _factoryProvider.CreatePersonAssembler();
 				IPerson thePerson = personAssembler.DtoToDomainEntity(person);
 				TimeZoneInfo timeZoneInfo = thePerson.PermissionInformation.DefaultTimeZone();
 				DateOnly dateOnlyPerson = new DateOnly(TimeZoneHelper.ConvertFromUtc(utcDate, timeZoneInfo).Date);
@@ -1813,8 +1805,8 @@ namespace Teleopti.Ccc.Sdk.WcfService
 
 				if (personPeriodForGivenDate != null)
 				{
-                    IRepositoryFactory repositoryFactory = new RepositoryFactory();
-                    IPersonRepository personRepository = repositoryFactory.CreatePersonRepository(unitOfWork);
+					IRepositoryFactory repositoryFactory = new RepositoryFactory();
+					IPersonRepository personRepository = repositoryFactory.CreatePersonRepository(unitOfWork);
 					ICollection<IPerson> personCollection = personRepository.FindPeopleBelongTeam(personPeriodForGivenDate.Team, personPeriodForGivenDate.Period);
 					dtos = personAssembler.DomainEntitiesToDtos(personCollection);
 				}
@@ -1836,14 +1828,14 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			{
 				using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 				{
-				    PersonAssembler personAssembler = (PersonAssembler) _factoryProvider.CreatePersonAssembler();
-				    personAssembler.EnableSaveOrUpdate = true;
-				    var person = personAssembler.DtoToDomainEntity(personDto);
+					PersonAssembler personAssembler = (PersonAssembler)_factoryProvider.CreatePersonAssembler();
+					personAssembler.EnableSaveOrUpdate = true;
+					var person = personAssembler.DtoToDomainEntity(personDto);
 					unitOfWork.PersistAll();
 					_tenantPeopleSaver.SaveTenantData(personDto, person.Id.Value);
 				}
 			}
-			
+
 		}
 
 		/// <summary>
@@ -1881,18 +1873,18 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			return result;
 		}
 
-	  
+
 		public ICollection<PersonSkillPeriodDto> GetPersonSkillPeriodsForPersons(PersonDto[] personList, DateOnlyDto startDate, DateOnlyDto endDate)
 		{
 			IList<PersonSkillPeriodDto> personSkillPeriodDtos;
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var personRepository = new RepositoryFactory().CreatePersonRepository(uow);
-			    var personCollection = personRepository.FindPeople(personList.Select(p => p.Id.GetValueOrDefault()));
-			    var personPeriods = from p in personCollection
-			                        from pp in p.PersonPeriodCollection
-			                        select pp;
-                personSkillPeriodDtos = new PersonSkillPeriodAssembler().DomainEntitiesToDtos(personPeriods).ToList();
+				var personCollection = personRepository.FindPeople(personList.Select(p => p.Id.GetValueOrDefault()));
+				var personPeriods = from p in personCollection
+										  from pp in p.PersonPeriodCollection
+										  select pp;
+				personSkillPeriodDtos = new PersonSkillPeriodAssembler().DomainEntitiesToDtos(personPeriods).ToList();
 			}
 			return personSkillPeriodDtos;
 		}
@@ -1950,7 +1942,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 					}
 				}
 			}
-			
+
 			foreach (IApplicationFunction function in afUnionCollection)
 			{
 				applicationFunctionCollectionToRetrun.Add(new ApplicationFunctionDto
@@ -1992,46 +1984,46 @@ namespace Teleopti.Ccc.Sdk.WcfService
 						memberList.Remove(TeleoptiPrincipal.CurrentPrincipal.GetPerson(personRep));
 					}
 
-                    var personAssembler = _factoryProvider.CreatePersonAssembler();
-                    personCollection = personAssembler.DomainEntitiesToDtos(memberList).ToList();
+					var personAssembler = _factoryProvider.CreatePersonAssembler();
+					personCollection = personAssembler.DomainEntitiesToDtos(memberList).ToList();
 				}
 			}
 
 			return personCollection;
 		}
 
-        /// <summary>
-        /// Gets all the people with a specific query specified.
-        /// </summary>
-        /// <param name="queryDto">A query type for a specific property of PersonDto.</param>
-        /// <returns>A list of found persons.</returns>
-        public ICollection<PersonDto> GetPersonsByQuery(QueryDto queryDto)
-        {
-            var invoker = _lifetimeScope.Resolve<IInvokeQuery<ICollection<PersonDto>>>();
-            return invoker.Invoke(queryDto);
-        }
+		/// <summary>
+		/// Gets all the people with a specific query specified.
+		/// </summary>
+		/// <param name="queryDto">A query type for a specific property of PersonDto.</param>
+		/// <returns>A list of found persons.</returns>
+		public ICollection<PersonDto> GetPersonsByQuery(QueryDto queryDto)
+		{
+			var invoker = _lifetimeScope.Resolve<IInvokeQuery<ICollection<PersonDto>>>();
+			return invoker.Invoke(queryDto);
+		}
 
-        /// <summary>
+		/// <summary>
 		/// Get person periods depending on the loadOptionDto
 		/// </summary>
 		/// <param name="loadOptionDto"></param>
 		/// <param name="startDate"></param>
 		/// <param name="endDate"></param>
 		/// <returns></returns>
-		public ICollection<PersonPeriodDetailDto> GetPersonPeriods(PersonPeriodLoadOptionDto loadOptionDto, DateOnlyDto startDate, DateOnlyDto endDate )
+		public ICollection<PersonPeriodDetailDto> GetPersonPeriods(PersonPeriodLoadOptionDto loadOptionDto, DateOnlyDto startDate, DateOnlyDto endDate)
 		{
-			if(loadOptionDto == null)
+			if (loadOptionDto == null)
 				throw new ArgumentNullException("loadOptionDto");
 
-			if(startDate == null)
+			if (startDate == null)
 				throw new ArgumentNullException("startDate");
 
-			if(endDate == null)
+			if (endDate == null)
 				throw new ArgumentNullException("endDate");
 
 			IList<PersonPeriodDetailDto> personPeriodDto2List;
-			
-			using(var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+
+			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var startDateDateOnly = new DateOnly(startDate.DateTime);
 				var endDateDateOnly = new DateOnly(endDate.DateTime);
@@ -2053,7 +2045,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 
 
 					IAssembler<IExternalLogOn, ExternalLogOnDto> externalLogonAssembler = new ExternalLogOnAssembler();
-                    personPeriodDto2List = new PersonPeriodAssembler(externalLogonAssembler).DomainEntitiesToDtos(personPeriods).ToList();
+					personPeriodDto2List = new PersonPeriodAssembler(externalLogonAssembler).DomainEntitiesToDtos(personPeriods).ToList();
 				}
 			}
 
@@ -2098,7 +2090,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			{
 				IRepositoryFactory repositoryFactory = new RepositoryFactory();
 				IPushMessageDialogueRepository repository = repositoryFactory.CreatePushMessageDialogueRepository(unitOfWork);
-                var personAssembler = _factoryProvider.CreatePersonAssembler();
+				var personAssembler = _factoryProvider.CreatePersonAssembler();
 				IList<IPushMessageDialogue> pushMessageDialogues =
 					repository.FindAllPersonMessagesNotRepliedTo(personAssembler.DtoToDomainEntity(person));
 
@@ -2117,7 +2109,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 					IPushMessageDialogueRepository repository =
 						repositoryFactory.CreatePushMessageDialogueRepository(unitOfWork);
 					IPushMessageDialogue pushMessageDialogue = repository.Load(pushMessageDialogueDto.Id.GetValueOrDefault());
-					if (pushMessageDialogue!=null)
+					if (pushMessageDialogue != null)
 					{
 						Console.WriteLine(pushMessageDialogue.ToString());
 					}
@@ -2140,10 +2132,10 @@ namespace Teleopti.Ccc.Sdk.WcfService
 				using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 				{
 					IRepositoryFactory repositoryFactory = new RepositoryFactory();
-				    IPushMessageDialogueRepository pushMessageDialogueRepository =
-				        repositoryFactory.CreatePushMessageDialogueRepository(unitOfWork);
-				    IPushMessageDialogue pushMessageDialogue = pushMessageDialogueRepository.Load(pushMessageDialogueDto.Id.Value);
-                    var personAssembler = _factoryProvider.CreatePersonAssembler();
+					IPushMessageDialogueRepository pushMessageDialogueRepository =
+						 repositoryFactory.CreatePushMessageDialogueRepository(unitOfWork);
+					IPushMessageDialogue pushMessageDialogue = pushMessageDialogueRepository.Load(pushMessageDialogueDto.Id.Value);
+					var personAssembler = _factoryProvider.CreatePersonAssembler();
 					pushMessageDialogue.DialogueReply(dialogueReply, personAssembler.DtoToDomainEntity(sender));
 					unitOfWork.PersistAll();
 				}
