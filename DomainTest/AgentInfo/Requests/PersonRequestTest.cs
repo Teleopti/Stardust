@@ -7,7 +7,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Helper;
@@ -253,7 +252,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         [Test]
         public void VerifyPendingDoesNothingWhenNotAllowed()
         {
-            IPerson person = PersonFactory.CreatePersonWithBasicPermissionInfo("Kalle", "kula");
+            IPerson person = PersonFactory.CreatePerson("Kalle", "kula");
             IPersonRequest personRequest = new PersonRequest(person);
             personRequest.Deny(null, null, _authorization);
 

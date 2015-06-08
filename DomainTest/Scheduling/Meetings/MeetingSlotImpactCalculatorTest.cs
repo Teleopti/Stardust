@@ -2,11 +2,9 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -226,7 +224,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
 
 		private static IPerson GetPerson()
 		{
-			var person = PersonFactory.CreatePersonWithBasicPermissionInfo("", "");
+			var person = PersonFactory.CreatePerson("", "");
 			person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("Utc")));
 			return person;
 		}

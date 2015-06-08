@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			overtimePeriodHolderBefore.Add(dateTimePeriodBefore);
 			var overtimePeriodHolders = new List<IOvertimeDateTimePeriodHolder> { overtimePeriodHolderBefore};
 			var dateOnly = new DateOnly(_shiftEndingTime);
-			var person = PersonFactory.CreatePersonWithBasicPermissionInfo("logon", "password");
+			var person = PersonFactory.CreatePerson("logon", "password");
 			IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(dateOnly, person.PermissionInformation.DefaultTimeZone());
 			var dateTimePeriod = new DateTimePeriod(_shiftEndingTime, _shiftEndingTime.AddMinutes(45));
 
