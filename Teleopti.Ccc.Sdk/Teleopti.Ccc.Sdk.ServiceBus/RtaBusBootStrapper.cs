@@ -1,4 +1,5 @@
 ﻿using System.Configuration;
+using System.Threading.Tasks;
 using Autofac;
 using Rhino.ServiceBus;
 
@@ -12,12 +13,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 		protected override void OnEndStart()
 		{
-			var dbConnection = ConfigurationManager.ConnectionStrings["Queue"];
-			QueueClearMessages.ClearMessages(dbConnection.ConnectionString, "rta");
-			
-			//add RTA state checker
-			var rtaChecker = new BusinessUnitStarter(() => Container.Resolve<IServiceBus>());
-			rtaChecker.SendMessage();
+			Task.Factory.StartNew(() =>
+			{
+				var dbConnection = ConfigurationManager.ConnectionStrings["Queue"];
+				QueueClearMessages.ClearMessages(dbConnection.ConnectionString, "rta");
+			}).ContinueWith(_ => {
+				//add RTA state checker
+				var rtaChecker = new BusinessUnitStarter(() => Container.Resolve<IServiceBus>());
+				rtaChecker.SendMessage();
+			}, TaskContinuationOptions.OnlyOnRanToCompletion);
 		}
 	}
 }
