@@ -16,6 +16,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Messaging.Client;
@@ -40,7 +41,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 
 			DataSource = DataSourceHelper.CreateDataSource(null, null);
 
-			loggedOnPerson = PersonFactory.CreatePersonWithBasicPermissionInfo("UserThatClenUpDataSource", string.Empty);
+			loggedOnPerson = PersonFactory.CreatePerson("logged on person");
 
 			MessageBrokerContainerDontUse.Configure(null, null, MessageFilterManager.Instance, new NewtonsoftJsonSerializer());
 			ApplicationData = new ApplicationData(appSettings,
@@ -222,9 +223,7 @@ you have to manually clean up or call CleanUpAfterTest() to restore the database
 		{
 			BusinessUnitFactory.CreateNewBusinessUnitUsedInTest();
 
-			person = PersonFactory.CreatePersonWithBasicPermissionInfo(
-				string.Concat("logOnName", Guid.NewGuid().ToString()),
-				string.Empty);
+			person = PersonFactory.CreatePerson(RandomName.Make());
 		}
 
 		public static void Login(IPerson person)
