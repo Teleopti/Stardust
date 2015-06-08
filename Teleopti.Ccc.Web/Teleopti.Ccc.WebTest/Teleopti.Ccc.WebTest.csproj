@@ -400,7 +400,6 @@
     <Compile Include="Areas\MyTime\Core\Preference\ViewModelFactory\PreferencePeriodFeedbackViewModelFactoryTest.cs" />
     <Compile Include="Areas\MyTime\Models\MessageBroker\UserDataFactoryTest.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\PreferenceDayInputTest.cs" />
-    <Compile Include="Areas\Start\Controllers\ApplicationAuthenticationModelTest.cs" />
     <Compile Include="Areas\Start\Controllers\AuthenticationApiControllerTest.cs" />
     <Compile Include="Areas\Start\Controllers\AuthenticationControllerTest.cs" />
     <Compile Include="Areas\Start\Core\IpAddressResolverTest.cs" />

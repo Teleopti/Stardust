@@ -26,10 +26,10 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 		public void ShouldAuthenticateUser()
 		{
 			var formsAuthentication = MockRepository.GenerateMock<IFormsAuthentication>();
-			var target = new ApplicationAuthenticationApiController(formsAuthentication, null, null);
 			var authenticator = MockRepository.GenerateMock<ISsoAuthenticator>();
 			var result = new AuthenticateResult { Successful = true, DataSource = new FakeDataSource{DataSourceName = RandomName.Make()}};
-			var authenticationModel = new ApplicationAuthenticationModel(authenticator, shouldBeLogged("user", result))
+			var target = new ApplicationAuthenticationApiController(formsAuthentication, null, null, authenticator, shouldBeLogged("user", result));
+			var authenticationModel = new ApplicationAuthenticationModel
 			{
 				UserName = "user",
 				Password = "pwd"
@@ -45,11 +45,11 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 		[Test]
 		public void ShouldReturnErrorIfAuthenticationFailed()
 		{
-			var target = new StubbingControllerBuilder().CreateController<ApplicationAuthenticationApiController>(null, null, null);
 			const string message = "test";
 			var authenticator = MockRepository.GenerateMock<ISsoAuthenticator>();
 			var authResult = new AuthenticateResult {Successful = false, Message = message};
-			var authenticationModel = new ApplicationAuthenticationModel(authenticator, shouldBeLogged(null, authResult));
+			var target = new StubbingControllerBuilder().CreateController<ApplicationAuthenticationApiController>(null, null, null, authenticator, shouldBeLogged(null, authResult));
+			var authenticationModel = new ApplicationAuthenticationModel();
 			authenticator.Stub(x => x.AuthenticateApplicationUser(authenticationModel.UserName, authenticationModel.Password)).Return(authResult);
 
 			var result = target.CheckPassword(authenticationModel);
@@ -63,10 +63,10 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 		[Test]
 		public void ShouldReturnWarningIfPasswordExpired()
 		{
-			var target = new ApplicationAuthenticationApiController(null, null, null);
 			const string message = "test";
 			var authenticator = MockRepository.GenerateMock<ISsoAuthenticator>();
-			var authenticationModel = new ApplicationAuthenticationModel(authenticator, shouldNotBeLogged());
+			var target = new ApplicationAuthenticationApiController(null, null, null, authenticator, shouldNotBeLogged());
+			var authenticationModel = new ApplicationAuthenticationModel();
 			authenticator.Stub(x => x.AuthenticateApplicationUser(authenticationModel.UserName,authenticationModel.Password))
 				.Return(new AuthenticateResult { Successful = false, Message = message, PasswordExpired = true });
 
@@ -80,11 +80,11 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 		[Test]
 		public void ShouldReturnWarningIfPasswordWillExpire()
 		{
-			var target = new ApplicationAuthenticationApiController(MockRepository.GenerateMock<IFormsAuthentication>(), null, null);
 			var authenticator = MockRepository.GenerateMock<ISsoAuthenticator>();
 			const string message = "test";
 			var authResult = new AuthenticateResult { Successful = true, HasMessage = true, Message = message, DataSource = new FakeDataSource { DataSourceName = RandomName.Make() } };
-			var authenticationModel = new ApplicationAuthenticationModel(authenticator, shouldBeLogged(null, authResult));
+			var target = new ApplicationAuthenticationApiController(MockRepository.GenerateMock<IFormsAuthentication>(), null, null, authenticator, shouldBeLogged(null, authResult));
+			var authenticationModel = new ApplicationAuthenticationModel();
 			authenticator.Stub(x => x.AuthenticateApplicationUser(authenticationModel.UserName,authenticationModel.Password))
 				.Return(authResult);
 
@@ -98,10 +98,10 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 		[Test]
 		public void ShouldReturnWarningIfPasswordAlreadyExpire()
 		{
-			var target = new ApplicationAuthenticationApiController(null, null, null);
 			var authenticator = MockRepository.GenerateMock<ISsoAuthenticator>();
 			const string message = "test";
-			var authenticationModel = new ApplicationAuthenticationModel(authenticator, shouldNotBeLogged());
+			var target = new ApplicationAuthenticationApiController(null, null, null, authenticator, shouldNotBeLogged());
+			var authenticationModel = new ApplicationAuthenticationModel();
 			authenticator.Stub(x => x.AuthenticateApplicationUser(authenticationModel.UserName, authenticationModel.Password))
 				.Return(new AuthenticateResult { Successful = false, HasMessage = true, Message = message, PasswordExpired = true });
 
@@ -114,10 +114,10 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 		[Test]
 		public void ShouldNotReturnWarningIfPasswordWillNotExpire()
 		{
-			var target = new ApplicationAuthenticationApiController(MockRepository.GenerateMock<IFormsAuthentication>(), null, null);
 			var authenticator = MockRepository.GenerateMock<ISsoAuthenticator>();
 			var authResult = new AuthenticateResult { Successful = true, HasMessage = false, DataSource = new FakeDataSource { DataSourceName = RandomName.Make() } };
-			var authenticationModel = new ApplicationAuthenticationModel(authenticator, shouldBeLogged(null, authResult));
+			var target = new ApplicationAuthenticationApiController(MockRepository.GenerateMock<IFormsAuthentication>(), null, null, authenticator, shouldBeLogged(null, authResult));
+			var authenticationModel = new ApplicationAuthenticationModel();
 			authenticator.Stub(x => x.AuthenticateApplicationUser(authenticationModel.UserName, authenticationModel.Password)).Return(authResult);
 
 			var result = target.CheckPassword(authenticationModel);
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 			var personInfo = new PersonInfo(new Tenant(string.Empty), Guid.NewGuid());
 			applicationUserQuery.Expect(x => x.Find(input.UserName)).Return(personInfo);
 
-			var target = new ApplicationAuthenticationApiController(MockRepository.GenerateMock<IFormsAuthentication>(), changePassword, applicationUserQuery);
+			var target = new ApplicationAuthenticationApiController(MockRepository.GenerateMock<IFormsAuthentication>(), changePassword, applicationUserQuery, null, null);
 
 			target.ChangePassword(input);
 			changePassword.AssertWasCalled(x => x.Modify(personInfo.Id, input.OldPassword, input.NewPassword));
@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 			changePassword.Expect(x => x.Modify(personInfo.Id, input.OldPassword, input.NewPassword))
 				.Throw(new HttpException(403, string.Empty));
 
-			var target = new StubbingControllerBuilder().CreateController<ApplicationAuthenticationApiController>(MockRepository.GenerateMock<IFormsAuthentication>(), changePassword, applicationUserQuery);
+			var target = new StubbingControllerBuilder().CreateController<ApplicationAuthenticationApiController>(MockRepository.GenerateMock<IFormsAuthentication>(), changePassword, applicationUserQuery, null, null);
 
 			var result = target.ChangePassword(input);
 
