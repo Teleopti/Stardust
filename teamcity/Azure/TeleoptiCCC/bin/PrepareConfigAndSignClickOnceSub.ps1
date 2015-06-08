@@ -244,6 +244,8 @@ Try
     CopyFileFromBlobStorage -destinationFolder "$SupportToolFolder" -filename "validation.key"
 	#copy the settings for sms (and email) notifications, if any
     CopyFileFromBlobStorage -destinationFolder "$DatasourcesPath" -filename "NotificationConfig.xml"
+	#copy the password policy, if any
+    CopyFileFromBlobStorage -destinationFolder "$DatasourcesPath" -filename "PasswordPolicy.xml"
     
 	CopyReportsFromBlobStorage
 	
