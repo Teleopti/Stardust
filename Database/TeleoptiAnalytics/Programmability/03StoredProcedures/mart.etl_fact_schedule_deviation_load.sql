@@ -27,7 +27,7 @@ GO
 --exec mart.etl_fact_schedule_deviation_load @start_date='2013-02-04 00:00:00',@end_date='2013-02-06 00:00:00',@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA',@isIntraday=0
 --exec mart.etl_fact_schedule_deviation_load @start_date='2014-02-17 00:00:00',@end_date='2014-02-23 00:00:00',@business_unit_code='9D812B66-A7BD-4FFF-A2D8-A2D90001CAF1',@isIntraday=1
 --exec mart.etl_fact_schedule_deviation_load @start_date='2014-03-04 00:00:00',@end_date='2014-03-05 00:00:00',@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA',@isIntraday=1
---exec mart.etl_fact_schedule_deviation_load @start_date='2014-10-21 00:00:00',@end_date='2014-10-22 00:00:00',@business_unit_code='0B43736B-4ED5-4D9F-B2E4-A34200A7EF70',@isIntraday=1
+--exec mart.etl_fact_schedule_deviation_load @start_date='2014-10-21 00:00:00',@end_date='2014-10-22 00:00:00',@business_unit_code='0B43736B-4ED5-4D9F-B2E4-A34200A7EF70',@isIntraday=3
 --exec mart.etl_fact_schedule_deviation_load @start_date='2013-06-11 00:00:00',@end_date='2013-06-11 00:00:00',@business_unit_code='13DBFFE3-CA0A-4E7B-8CC8-A3E601034177',@isIntraday=2,@is_delayed_job=NULL,@now_utc=NULL
 --exec mart.etl_fact_schedule_deviation_load @start_date='2013-06-11 00:00:00',@end_date='2013-06-11 00:00:00',@business_unit_code='057E2EE2-315E-4DED-B8DA-A3E700F71835',@isIntraday=2,@is_delayed_job=NULL,@now_utc='2013-06-15 00:00:00'
 CREATE PROCEDURE [mart].[etl_fact_schedule_deviation_load]
@@ -454,7 +454,7 @@ BEGIN
 				dd.date_id,
 				ch.schedule_date_local,
 				p.person_code
-		FROM stage.stg_schedule_changed_servicebus ch
+		FROM stage.stg_schedule_changed_servicebus ch WITH (NOLOCK) 
 		INNER JOIN mart.dim_person p
 			ON p.person_code = ch.person_code
 				AND --trim
@@ -467,14 +467,8 @@ BEGIN
 			ON dd.date_date = ch.schedule_date_local
 		WHERE ch.scenario_code = @scenario_code
 		
-		--delete rows from stage
-		DELETE stage
-		FROM #stg_schedule_changed ch
-		INNER JOIN stage.stg_schedule_changed_servicebus stage
-		ON ch.person_code = stage.person_code
-		AND ch.shift_startdate_local = stage.schedule_date_local
 
-		--REMOVE DATES IN THE FUTURE
+		--REMOVE DATES IN THE FUTURE(SHOULD NOT EXIST BUT ANYWAY)
 		DELETE FROM #stg_schedule_changed
 		WHERE shift_startdate_local > dateadd(dd,1,@now_utc)
 
@@ -833,4 +827,20 @@ BEGIN
 	WHERE business_unit_id = @business_unit_id
 	AND detail_id = @detail_id
 END
+
+IF @isIntraday = 3 --changed day by SB
+BEGIN
+		--delete rows from stage
+		DELETE stage
+		FROM #stg_schedule_changed ch
+		INNER JOIN stage.stg_schedule_changed_servicebus stage
+		ON ch.person_code = stage.person_code
+		AND ch.shift_startdate_local = stage.schedule_date_local
+		AND stage.scenario_code= @scenario_code
+
+		--REMOVE DATES IN THE FUTURE
+		DELETE FROM stage.stg_schedule_changed_servicebus
+		WHERE schedule_date_local > dateadd(dd,1,@now_utc)
+END
+
 GO
