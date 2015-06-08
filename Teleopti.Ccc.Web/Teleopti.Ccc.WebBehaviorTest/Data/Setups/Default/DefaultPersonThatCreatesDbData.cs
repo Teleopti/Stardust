@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default
 	public class DefaultPersonThatCreatesDbData : IHashableDataSetup
 	{
 		public static IPerson PersonThatCreatesDbData =
-			PersonFactory.CreatePersonWithBasicPermissionInfo("UserThatCreatesTestData", DefaultPassword.ThePassword);
+			PersonFactory.CreatePerson("UserThatCreatesTestData");
 
 		public void Apply(IUnitOfWork uow)
 		{
@@ -18,10 +18,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default
 
 		public int HashValue()
 		{
-			return (PersonThatCreatesDbData.ApplicationAuthenticationInfo.ApplicationLogOnName + 
-							PersonThatCreatesDbData.ApplicationAuthenticationInfo.Password + 
-							PersonThatCreatesDbData.PermissionInformation.Culture().DisplayName)
-							.GetHashCode();
+			return PersonThatCreatesDbData.Name.GetHashCode() ^
+							PersonThatCreatesDbData.PermissionInformation.Culture().DisplayName.GetHashCode();
 		}
 	}
 }
