@@ -20,7 +20,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		{
 			var dataSource = DataSourceHelper.CreateDataSource(new IMessageSender[] { }, "TestData");
 
-			var personThatCreatesTestData = PersonFactory.CreatePersonWithBasicPermissionInfo("UserThatCreatesTestData", "password");
+			var personThatCreatesTestData = PersonFactory.CreatePerson("UserThatCreatesTestData", "password");
 
 			TestState.BusinessUnit = BusinessUnitFactory.CreateBusinessUnitWithSitesAndTeams();
 			TestState.BusinessUnit.Name = "BusinessUnit";
