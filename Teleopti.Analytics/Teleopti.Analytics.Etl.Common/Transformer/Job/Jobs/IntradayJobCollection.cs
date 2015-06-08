@@ -40,7 +40,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new StageScorecardJobStep(jobParameters));
 			Add(new StageScorecardKpiJobStep(jobParameters));
 			Add(new StageKpiTargetTeamJobStep(jobParameters));
-			Add(new StagePermissionJobStep(jobParameters, true));
 			Add(new StageGroupPagePersonJobStep(jobParameters));
 			Add(new StageOvertimeJobStep(jobParameters));
 			Add(new IntradayStageRequestJobStep(jobParameters));
@@ -104,10 +103,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new FactRequestJobStep(jobParameters, true));
 			Add(new FactRequestedDaysJobStep(jobParameters, true));
 			Add(new FactAgentSkillJobStep(jobParameters));
-			Add(new PermissionReportJobStep(jobParameters, true));
-
-			if (jobParameters.IsPmInstalled)
-				Add(new PmPermissionJobStep(jobParameters));
+			
 		}
 	}
 
