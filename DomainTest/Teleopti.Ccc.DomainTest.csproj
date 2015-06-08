@@ -388,6 +388,7 @@
     <Compile Include="FeatureFlags\AllTogglesTest.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\ForecastingWeightedMeanAbsolutePercentageErrorTest.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\MeasurementShouldPickTheBestMethodTest.cs" />
+    <Compile Include="Forecasting\Angel\Accuracy\ForecastWorkloadEvaluatorTest.cs" />
     <Compile Include="Forecasting\Angel\HistoricalPeriodProviderTest.cs" />
     <Compile Include="Forecasting\Angel\IndexVolumesFactory.cs" />
     <Compile Include="Forecasting\Angel\Methods\TeleoptiClassicTest.cs" />
@@ -397,6 +398,7 @@
     <Compile Include="Forecasting\Angel\ForecastCreatorTest.cs" />
     <Compile Include="Forecasting\Angel\Outlier\OutlierRemoverTest.cs" />
     <Compile Include="Forecasting\Angel\QuickForecasterTest.cs" />
+    <Compile Include="Forecasting\Angel\QuickForecasterWorkloadTest.cs" />
     <Compile Include="Forecasting\Angel\QuickForecastSkillWithOneWorkload\ProvideStatisticTasksAndTimesTest.cs" />
     <Compile Include="Forecasting\Angel\QuickForecastSkillWithOneWorkload\ProvideStatisticTasksWithQueueAdjustmentTest.cs" />
     <Compile Include="Forecasting\Angel\LegacyWrappers\LoadStatisticsTest.cs" />

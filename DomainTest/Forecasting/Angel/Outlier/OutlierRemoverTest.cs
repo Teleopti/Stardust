@@ -38,42 +38,35 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Outlier
 
 			var target = new OutlierRemover();
 
-			historicalData.TaskOwnerDayCollection
-				.Count.Should().Be.EqualTo(25);
+			historicalData.TaskOwnerDayCollection.Count.Should().Be.EqualTo(25);
 			historicalData.TaskOwnerDayCollection.Single(x => x.CurrentDate == new DateOnly(date))
-				.Tasks.Should().Be.EqualTo(1000);
+				.TotalStatisticCalculatedTasks.Should().Be.EqualTo(1000);
 
-			var result = target.RemoveOutliers(historicalData, new TeleoptiClassic(indexVolumes, target));
+			var result = target.RemoveOutliers(historicalData, new TeleoptiClassic(indexVolumes));
 
-			result.TaskOwnerDayCollection
-				.Count.Should().Be.EqualTo(25);
+			const double outlierFactor = 0.5;
+			result.TaskOwnerDayCollection.Count.Should().Be.EqualTo(25);
 			var averageTasks = historicalData.TotalStatisticCalculatedTasks / historicalData.TaskOwnerDayCollection.Count;
 			result.TaskOwnerDayCollection.Single(x => x.CurrentDate == new DateOnly(date))
-				.Tasks.Should().Be.EqualTo(averageTasks);
+				.TotalStatisticCalculatedTasks.Should().Be.EqualTo(averageTasks * (1 + outlierFactor));
 		}
 
 		private static TaskOwnerHelper generateMockedStatisticsWithOutliers(DateOnly historicalDate, IWorkload workload,
 			DateTime date)
 		{
-			var periodForHelper = SkillDayFactory.GenerateMockedStatistics(historicalDate, workload);
-			IWorkloadDay workloadDay = new WorkloadDay();
+			var periodForHelper = SkillDayFactory.GenerateMockedStatisticsWithValidatedVolumeDays(historicalDate, workload);
+			var workloadDay = new WorkloadDay();
 			workloadDay.Create(new DateOnly(date), workload, new List<TimePeriod> { new TimePeriod(8, 0, 8, 15) });
 
-			workloadDay.Tasks = 1000;
-			workloadDay.AverageAfterTaskTime = TimeSpan.FromSeconds(3);
-			workloadDay.AverageTaskTime = TimeSpan.FromSeconds(2);
+			var validatedVolumeDay = new ValidatedVolumeDay(workload, new DateOnly(date))
+			{
+				ValidatedAverageAfterTaskTime = TimeSpan.FromSeconds(3),
+				ValidatedAverageTaskTime = TimeSpan.FromSeconds(2),
+				TaskOwner = workloadDay,
+				ValidatedTasks = 1000
+			};
 
-
-			workloadDay.TaskPeriodList[0].StatisticTask.StatAbandonedTasks = 0;
-			workloadDay.TaskPeriodList[0].StatisticTask.StatAnsweredTasks = 110;
-			workloadDay.TaskPeriodList[0].StatisticTask.StatAverageAfterTaskTimeSeconds = 10;
-			workloadDay.TaskPeriodList[0].StatisticTask.StatAverageTaskTimeSeconds = 20;
-			workloadDay.TaskPeriodList[0].StatisticTask.StatCalculatedTasks = 1000;
-			workloadDay.TaskPeriodList[0].StatisticTask.StatOfferedTasks = 110;
-
-			workloadDay.Initialize();
-
-			periodForHelper.TaskOwnerDays.Add(workloadDay);
+			periodForHelper.TaskOwnerDays.Add(validatedVolumeDay);
 			return periodForHelper;
 		}
 	}

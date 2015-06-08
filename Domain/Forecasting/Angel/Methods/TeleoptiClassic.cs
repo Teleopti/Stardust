@@ -1,10 +1,8 @@
-﻿using Teleopti.Ccc.Domain.Forecasting.Angel.Outlier;
-
-namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
+﻿namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 {
 	public class TeleoptiClassic : TeleoptiClassicBase
 	{
-		public TeleoptiClassic(IIndexVolumes indexVolumes, IOutlierRemover outlierRemover)
+		public TeleoptiClassic(IIndexVolumes indexVolumes)
 			: base(indexVolumes)
 		{
 		}

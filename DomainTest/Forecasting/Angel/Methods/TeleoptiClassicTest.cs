@@ -6,7 +6,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
-using Teleopti.Ccc.Domain.Forecasting.Angel.Outlier;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -15,29 +14,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Methods
 	[TestFixture]
 	public class TeleoptiClassicTest
 	{
-		[Test]
-		public void ShouldRemoveOutliers()
-		{
-			var skill = SkillFactory.CreateSkill("testSkill");
-			skill.TimeZone = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
-			var workload = WorkloadFactory.CreateWorkload(skill);
-
-			var historicalDate = new DateOnly(2006, 1, 1);
-			var periodForHelper = SkillDayFactory.GenerateMockedStatistics(historicalDate, workload);
-			var historicalData = new TaskOwnerPeriod(historicalDate, periodForHelper.TaskOwnerDays, TaskOwnerPeriodType.Other);
-
-			var indexVolumes = MockRepository.GenerateMock<IIndexVolumes>();
-			var volumes = IndexVolumesFactory.Create();
-			indexVolumes.Stub(x => x.Create(historicalData)).Return(volumes);
-
-
-			var outlierRemover = MockRepository.GenerateMock<IOutlierRemover>();
-			var target = new TeleoptiClassic(indexVolumes, outlierRemover);
-			outlierRemover.Stub(x => x.RemoveOutliers(historicalData, target)).Return(historicalData);
-			var result = target.Forecast(historicalData, new DateOnlyPeriod(new DateOnly(2014, 1, 1), new DateOnly(2014, 1, 1)));
-			outlierRemover.AssertWasCalled(x => x.RemoveOutliers(historicalData, target));
-		}
-
 		[Test]
 		public void ShouldForecastTasksUsingIndexesCorrectly()
 		{
@@ -55,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Methods
 
 			var averageTasks = historicalData.TotalStatisticCalculatedTasks / historicalData.TaskOwnerDayCollection.Count;
 
-			var target = new TeleoptiClassic(indexVolumes, null);
+			var target = new TeleoptiClassic(indexVolumes);
 
 			const double indexMonth = 1d;
 			const double indexWeek = 1.1d;

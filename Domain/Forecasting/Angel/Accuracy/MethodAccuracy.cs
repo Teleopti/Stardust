@@ -9,6 +9,5 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 		public ForecastMethodType MethodId { get; set; }
 		public bool IsSelected { get; set; }
 		public IForecastingTarget[] MeasureResult { get; set; }
-		public DateAndTasks[] HistoricalDataRemovedOutliers { get; set; }
 	}
 }

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
@@ -14,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 			_indexVolumes = indexVolumes;
 		}
 
-		public virtual ForecastResult Forecast(TaskOwnerPeriod historicalData, DateOnlyPeriod futurePeriod)
+		public virtual ForecastResult Forecast(ITaskOwnerPeriod historicalData, DateOnlyPeriod futurePeriod)
 		{
 			var volumes = _indexVolumes.Create(historicalData);
 			var averageStatistics = new AverageStatistics();
@@ -42,6 +41,11 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 			{
 				ForecastingTargets = targetForecastingList
 			};
+		}
+
+		public virtual ForecastResult SeasonalVariation(ITaskOwnerPeriod historicalData)
+		{
+			return Forecast(historicalData, new DateOnlyPeriod(historicalData.StartDate, historicalData.EndDate));
 		}
 
 		private void SetComparison(IForecastingTarget day, TotalDayItem totalDayItem, IEnumerable<IVolumeYear> volumes, AverageStatistics averageStatistics)
@@ -78,15 +82,8 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 		public abstract ForecastMethodType Id { get; }
 	}
 
-	public class DateAndTasks
-	{
-		public DateOnly Date { get; set; }
-		public double Tasks { get; set; }
-	}
-
 	public class ForecastResult
 	{
 		public IList<IForecastingTarget> ForecastingTargets { get; set; }
-		public DateAndTasks[] HistoricalDataRemovedOutliers { get; set; }
 	}
 }

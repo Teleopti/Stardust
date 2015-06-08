@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 							}
 						}
 				});
-			var target = new ForecastEvaluator(forecastWorkloadEvaluator, workloadRepository, historicalPeriodProvider, historicalData);
+			var target = new ForecastEvaluator(forecastWorkloadEvaluator, workloadRepository, historicalPeriodProvider, historicalData, null, null);
 
 			var result = target.Evaluate(preForecastInput);
 
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			var historicalData = MockRepository.GenerateMock<IHistoricalData>();
 			var taskOwnerPeriod = new TaskOwnerPeriod(DateOnly.MinValue, new List<WorkloadDay>(), TaskOwnerPeriodType.Other);
 			historicalData.Stub(x => x.Fetch(workload, historicalPeriodProvider.PeriodForDisplay(workload))).Return(taskOwnerPeriod);
-			var target = new ForecastEvaluator(forecastWorkloadEvaluator, workloadRepository, historicalPeriodProvider, historicalData);
+			var target = new ForecastEvaluator(forecastWorkloadEvaluator, workloadRepository, historicalPeriodProvider, historicalData, null, null);
 
 			var result = target.Evaluate(preForecastInput);
 

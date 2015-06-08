@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using MathNet.Numerics;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Trend;
 
 namespace Teleopti.Ccc.Infrastructure.Forecasting.Angel
@@ -9,7 +8,7 @@ namespace Teleopti.Ccc.Infrastructure.Forecasting.Angel
 	public class LinearRegressionTrend : ILinearRegressionTrend
 	{
 
-		public LinearTrend CalculateTrend(TaskOwnerPeriod historicalData)
+		public LinearTrend CalculateTrend(ITaskOwnerPeriod historicalData)
 		{
 			var xlist = new List<double>();
 			var ylist = new List<double>();

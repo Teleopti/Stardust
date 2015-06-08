@@ -5,7 +5,8 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 {
 	public interface IForecastMethod
 	{
-		ForecastResult Forecast(TaskOwnerPeriod historicalData, DateOnlyPeriod futurePeriod);
+		ForecastResult Forecast(ITaskOwnerPeriod historicalData, DateOnlyPeriod futurePeriod);
 		ForecastMethodType Id { get; }
+		ForecastResult SeasonalVariation(ITaskOwnerPeriod historicalData);
 	}
 }

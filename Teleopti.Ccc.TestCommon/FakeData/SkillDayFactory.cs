@@ -188,6 +188,31 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return new TaskOwnerHelper(workloadDays);
 		}
 
+		public static TaskOwnerHelper GenerateMockedStatisticsWithValidatedVolumeDays(DateOnly startDate, IWorkload workload)
+		{
+			IList<ValidatedVolumeDay> validatedVolumeDays = new List<ValidatedVolumeDay>();
+			var currentDate = DateTime.SpecifyKind(startDate.Date, DateTimeKind.Utc);
+
+			for (var i = 0; i < 24; i++)
+			{
+				var date = currentDate.AddMonths(i);
+
+				var workloadDay = new WorkloadDay();
+				workloadDay.Create(new DateOnly(date), workload, new List<TimePeriod> { new TimePeriod(8, 0, 8, 15) });
+
+				var validatedVolumeDay = new ValidatedVolumeDay(workload, new DateOnly(date))
+				{
+					ValidatedAverageAfterTaskTime = TimeSpan.FromSeconds(3),
+					ValidatedAverageTaskTime = TimeSpan.FromSeconds(2),
+					TaskOwner = workloadDay,
+					ValidatedTasks = i > 6 ? 110 : 80
+				};
+
+				validatedVolumeDays.Add(validatedVolumeDay);
+			}
+			return new TaskOwnerHelper(validatedVolumeDays);
+		}
+
 		public static TaskOwnerHelper GenerateStatisticsForWeekTests(DateTime startDate, IWorkload workload)
 		{
 			IList<IWorkloadDay> workloadDays = new List<IWorkloadDay>();
