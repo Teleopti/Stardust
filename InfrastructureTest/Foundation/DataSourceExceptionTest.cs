@@ -49,11 +49,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         [Test]
         public void ExceptionShouldReturnDataSourceNameFromTheCurrentTeleoptiIdentity()
         {
-            var loggedOnPerson = PersonFactory.CreatePersonWithBasicPermissionInfo("UserThatClenUpDataSource", string.Empty);
+            var loggedOnPerson = PersonFactory.CreatePerson("UserThatClaenUpDataSource", string.Empty);
             var businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
 			var dataSource = MockRepository.GenerateMock<IDataSource>();
 			var identity = new TeleoptiIdentity("test user", dataSource, businessUnit, WindowsIdentity.GetCurrent());

@@ -10,7 +10,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -30,7 +29,6 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using ConstraintViolationException = Teleopti.Ccc.Infrastructure.Foundation.ConstraintViolationException;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
@@ -884,7 +882,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IPerson okPerson2 = PersonFactory.CreatePerson("hejhej2");
 			IPerson noPerson1 = PersonFactory.CreatePerson("bajbaj");
 			IPerson noPerson2 = PersonFactory.CreatePerson("bajbaj");
-			IPerson noPerson3 = PersonFactory.CreatePersonWithBasicPermissionInfo("dra på ", "trissor");
+			IPerson noPerson3 = PersonFactory.CreatePerson("dra på ", "trissor");
 			ITeam team = TeamFactory.CreateSimpleTeam("hola");
 			ISite site = SiteFactory.CreateSimpleSite();
 			site.AddTeam(team);
@@ -1442,7 +1440,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			IPerson person1 = PersonFactory.CreatePerson("sunil");
 			PersistAndRemoveFromUnitOfWork(person1);
-			IPerson person2 = PersonFactory.CreatePersonWithBasicPermissionInfo("kamal", "pwd1");
+			IPerson person2 = PersonFactory.CreatePerson("kamal", "pwd1");
 			PersistAndRemoveFromUnitOfWork(person2);
 			IPerson person3 = PersonFactory.CreatePerson("Fname", "lname");
 			PersistAndRemoveFromUnitOfWork(person3);
