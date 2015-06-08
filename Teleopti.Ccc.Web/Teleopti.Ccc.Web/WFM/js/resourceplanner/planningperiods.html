@@ -5,10 +5,10 @@
 			<p>Create and manage the different planning periods</p>
 		</div>
 	</div>
+	
+	<button ui-sref="planningperiod" class="wfm-btn wfm-btn-primary">Add <i class="mdi mdi-plus"></i></button>
 
-
-	<ul class="wfm-list">
-		<li ui-sref="planningperiod">Create a new one <i class="mdi mdi-plus"></i></li>
+	<ul class="wfm-tiles"layout="row">
 		<li ng-repeat="p in planningPeriods" ui-sref="resourceplanner">{{p.StartDate | date : format}} - {{p.EndDate | date : format}}</li>
 	</ul>
 </div>

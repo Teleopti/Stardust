@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				foundPlanningPeriods.Where(x => x.Range.StartDate > _now.LocalDateOnly())
 					.OrderBy(y => y.Range.StartDate)
 					.FirstOrDefault();
-			var next = foundPlanningPeriods.Where(x => x.Range.StartDate > current.Range.EndDate.AddDays(1))
+			var next = foundPlanningPeriods.Where(x => x.Range.StartDate >= current.Range.EndDate.AddDays(1))
 					.OrderBy(y => y.Range.StartDate)
 					.FirstOrDefault();
 			

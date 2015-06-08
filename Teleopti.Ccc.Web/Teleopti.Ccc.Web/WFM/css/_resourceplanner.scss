@@ -10,3 +10,21 @@
 		height: 100%!important;
 	}
 }
+.wfm-tiles	{
+	justify-content:space-around;
+	list-style: none;
+	padding-left: 0!important;
+	
+	li{
+	margin:5px;
+	padding: 10px; 
+	height:10em;
+	background-color:steelblue!important;
+		display: inline-block;
+		min-width:150px;
+		&:hover{
+		background-color:tomato!important;
+	}
+	}
+
+}
