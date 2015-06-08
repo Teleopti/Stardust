@@ -110,6 +110,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 
 			if (isForecastingTest)
 			{
+				if (bestAccuracy == null) return data.Values.ToArray();
 				var forecastMethod = _forecastMethodProvider.Get(bestAccuracy.MethodId);
 				var threeYearsHistoricalDataNoOutliers = _outlierRemover.RemoveOutliers(historicalData, forecastMethod);
 
