@@ -7,7 +7,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
-using Teleopti.Ccc.Domain.Forecasting.Angel.Outlier;
+using Teleopti.Ccc.Infrastructure.Forecasting.Angel;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -44,11 +44,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Outlier
 
 			var result = target.RemoveOutliers(historicalData, new TeleoptiClassic(indexVolumes));
 
-			const double outlierFactor = 0.5;
 			result.TaskOwnerDayCollection.Count.Should().Be.EqualTo(25);
-			var averageTasks = historicalData.TotalStatisticCalculatedTasks / historicalData.TaskOwnerDayCollection.Count;
-			result.TaskOwnerDayCollection.Single(x => x.CurrentDate == new DateOnly(date))
-				.TotalStatisticCalculatedTasks.Should().Be.EqualTo(averageTasks * (1 + outlierFactor));
+			Math.Round(result.TaskOwnerDayCollection.Single(x => x.CurrentDate == new DateOnly(date))
+				.TotalStatisticCalculatedTasks,3).Should().Be.EqualTo(496.895);
 		}
 
 		private static TaskOwnerHelper generateMockedStatisticsWithOutliers(DateOnly historicalDate, IWorkload workload,
