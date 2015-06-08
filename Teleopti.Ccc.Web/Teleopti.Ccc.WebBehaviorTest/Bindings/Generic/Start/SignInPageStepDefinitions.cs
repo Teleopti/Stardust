@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 		[When(@"I sign in by user name")]
 		public void WhenISignIn()
 		{
-			var userName = DataMaker.Data().MePerson.ApplicationAuthenticationInfo.ApplicationLogOnName;
+			var userName = DataMaker.Me().LogOnName;
 			SignInApplication(userName, DefaultPassword.ThePassword);
 		}
 
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 		[When(@"I sign in by user name and wrong password")]
 		public void WhenISignInByUserNameAndWrongPassword()
 		{
-			var userName = DataMaker.Data().MePerson.ApplicationAuthenticationInfo.ApplicationLogOnName;
+			var userName = DataMaker.Me().LogOnName;
 			SignInApplication(userName, "wrong password");
 		}
 
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 		[When(@"I sign in using my new password '(.*)'")]
 		public void WhenISignInUsingMyNewPassword(string newPassword)
 		{
-			var userName = DataMaker.Data().MePerson.ApplicationAuthenticationInfo.ApplicationLogOnName;
+			var userName = DataMaker.Me().LogOnName;
 			SignInApplication(userName, newPassword);
 		}
 
