@@ -7,9 +7,18 @@
 	</div>
 	
 	<button ui-sref="resourceplanner.newplanningperiod" class="wfm-btn wfm-btn-primary">Add <i class="mdi mdi-plus"></i></button>
+	
+	<div class="card-group">
+		<div class="wfm-card" ng-repeat="p in planningPeriods">
+			<div class="sub-header" ui-sref="resourceplanner">
+				<h4>Test</h4>
+			</div>
+			<span>
+				{{p.StartDate | date : format}}-
+				{{p.EndDate | date : format}}
+			</span>
+		</div>
+		
 
-	<ul class="wfm-tiles"layout="row">
-		<li ng-repeat="p in planningPeriods" ui-sref="resourceplanner">{{p.StartDate | date : format}} - {{p.EndDate | date : format}}</li>
-	</ul>
-
+	</div>
 </div>

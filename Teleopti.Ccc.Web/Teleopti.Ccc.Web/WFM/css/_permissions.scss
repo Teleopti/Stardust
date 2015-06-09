@@ -39,3 +39,30 @@
 p {
 	margin-bottom: 5px;
 }
+	.card-group {
+		display: inline-block; 
+		width: 100%;
+		transition: 1s all ease-in-out;
+	}
+
+	 .wfm-card {
+		 display: block;
+		 width: auto;
+		 /*width:24%;*/
+		 float: left;
+		 min-width: 10rem;
+		 min-height: 150px;
+		 box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
+		 margin: 5px;
+	 }
+
+	.wfm-card span {
+		padding: 5px;
+	}
+
+	@media only screen and (max-width: 841px) {
+		.wfm-card {
+			margin:5px;
+			width: 100%!important;
+		}
+	}
