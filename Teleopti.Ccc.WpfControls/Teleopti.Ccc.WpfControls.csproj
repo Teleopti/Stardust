@@ -543,18 +543,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\PasswordPolicies\PasswordPolicyServicePreview.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\PasswordPolicies\PasswordStrengthRulePreview.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Controls\Progress.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1111,12 +1099,6 @@
     </Compile>
     <Compile Include="Controls\Notes\NotesEditor.xaml.cs">
       <DependentUpon>NotesEditor.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\PasswordPolicies\PasswordPolicyServicePreview.xaml.cs">
-      <DependentUpon>PasswordPolicyServicePreview.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\PasswordPolicies\PasswordStrengthRulePreview.xaml.cs">
-      <DependentUpon>PasswordStrengthRulePreview.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Progress.xaml.cs">
       <DependentUpon>Progress.xaml</DependentUpon>
