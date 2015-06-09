@@ -13,7 +13,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Core
 {
-	public class PersonDataFactory
+	public class PersonDataFactory : ILogonName
 	{
 		private readonly Tenant _tenant;
 		private readonly Action<Action<IUnitOfWork>> _unitOfWorkAction;
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 			var setupTenant = setup as ITenantUserSetup;
 			if (setupTenant != null)
 			{
-				_tenantUnitOfWorkAction(tenantSesssion => setupTenant.Apply(_tenant, tenantSesssion, Person));
+				_tenantUnitOfWorkAction(tenantSesssion => setupTenant.Apply(_tenant, tenantSesssion, Person, this));
 			}
 			_userSetups.Add(setup);
 		}
@@ -57,7 +57,12 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 
 
 		public IEnumerable<object> Applied { get { return _userSetups.Cast<object>().Union(_userDataSetups); } }
-		public string LogOnName { get { return Person.ApplicationAuthenticationInfo.ApplicationLogOnName; } }
+		public string LogOnName { get; private set; }
+		public void Set(string logonName)
+		{
+			LogOnName = logonName;
+		}
+
 		public IPerson Person { get; private set; }
 		public CultureInfo Culture { get { return Person.PermissionInformation.Culture(); } }
 	}

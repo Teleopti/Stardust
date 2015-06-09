@@ -3,7 +3,6 @@ using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Authentication;
-using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -13,7 +12,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 {
-	public class UserConfigurable : IUserSetup, ITenantUserSetup
+	public class UserConfigurable : ITenantUserSetup
 	{
 		public string Name { get; set; }
 
@@ -46,16 +45,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			if (TerminalDate.HasValue)
 				user.TerminatePerson(new DateOnly(TerminalDate.Value), new PersonAccountUpdaterDummy());
 
-			if (changedApplicationLogonCredentials())
-			{
-				var authenticationInfo = new ApplicationAuthenticationInfo
-				{
-					ApplicationLogOnName = UserName,
-					Password = Password
-				};
-				user.ApplicationAuthenticationInfo = authenticationInfo;
-			}
-
 			if (!string.IsNullOrEmpty(Role))
 			{
 				var roleRepository = new ApplicationRoleRepository(uow);
@@ -69,7 +58,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			return !string.IsNullOrEmpty(UserName);
 		}
 
-		public void Apply(Tenant tenant, ICurrentTenantSession tenantSession, IPerson user)
+		public void Apply(Tenant tenant, ICurrentTenantSession tenantSession, IPerson user, ILogonName logonName)
 		{
 			if (!WindowsAuthentication && !changedApplicationLogonCredentials()) return;
 
@@ -94,6 +83,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 					personInfo.ApplicationLogonInfo.Lock();
 				}
 				personInfo.ApplicationLogonInfo.SetLastPasswordChange_OnlyUseFromTests(lastPasswordChangeBefore);
+				logonName.Set(UserName);
 			}
 		}
 	}

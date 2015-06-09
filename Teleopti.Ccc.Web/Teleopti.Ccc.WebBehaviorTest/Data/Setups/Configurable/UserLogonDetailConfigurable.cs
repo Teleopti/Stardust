@@ -13,8 +13,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public bool? IsLocked { get; set; }
 		public int? LastPasswordChangeXDaysAgo { get; set; }
 
-
-		public void Apply(Tenant tenant, ICurrentTenantSession tenantSession, IPerson user)
+		public void Apply(Tenant tenant, ICurrentTenantSession tenantSession, IPerson user, ILogonName logonName)
 		{
 			var applicationUserQuery = new FindPersonInfo(tenantSession);
 			var personInfo = applicationUserQuery.GetById(user.Id.Value);
@@ -24,7 +23,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			}
 			if (LastPasswordChangeXDaysAgo.HasValue)
 			{
-				//hack - should be fixed some other way than manipulating data.
 				personInfo.ApplicationLogonInfo.SetLastPasswordChange_OnlyUseFromTests(DateTime.UtcNow.AddDays(-LastPasswordChangeXDaysAgo.Value));
 			}
 		}
