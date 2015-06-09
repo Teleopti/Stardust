@@ -53,6 +53,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IIntraIntervalOptimizationCommand _intraIntervalOptimizationCommand;
 		private readonly IOptimizerHelperHelper _optimizerHelper;
 		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
+		private readonly ITeamBlockDayOffsInPeriodValidator _teamBlockDayOffsInPeriodValidator;
 
 		public TeamBlockOptimizationCommand(Func<ISchedulerStateHolder> schedulerStateHolder,
 			ITeamBlockClearer teamBlockCleaner,
@@ -83,7 +84,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IScheduleCommandToggle toggleManager,
 			IIntraIntervalOptimizationCommand intraIntervalOptimizationCommand,
 			IOptimizerHelperHelper optimizerHelper,
-			ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator)
+			ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator,
+			ITeamBlockDayOffsInPeriodValidator teamBlockDayOffsInPeriodValidator)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_teamBlockCleaner = teamBlockCleaner;
@@ -116,6 +118,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_intraIntervalOptimizationCommand = intraIntervalOptimizationCommand;
 			_optimizerHelper = optimizerHelper;
 			_teamBlockShiftCategoryLimitationValidator = teamBlockShiftCategoryLimitationValidator;
+			_teamBlockDayOffsInPeriodValidator = teamBlockDayOffsInPeriodValidator;
 		}
 
 		public void Execute(IBackgroundWorkerWrapper backgroundWorker, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
@@ -140,6 +143,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				optimizeTeamBlockDaysOff(selectedPeriod, selectedPersons, optimizationPreferences,
 					allMatrixes, rollbackServiceWithResourceCalculation,
 					schedulingOptions, teamInfoFactory, resourceCalculateDelayer);
+
+			if (optimizationPreferences.General.OptimizationStepDaysOffForFlexibleWorkTime)
+			{
+				var optimizeDayOffs = optimizationPreferences.General.OptimizationStepDaysOff;
+				optimizationPreferences.General.OptimizationStepDaysOff = false;
+				optimizeTeamBlockDaysOff(selectedPeriod, selectedPersons, optimizationPreferences, allMatrixes, rollbackServiceWithResourceCalculation, schedulingOptions, teamInfoFactory, resourceCalculateDelayer);
+				optimizationPreferences.General.OptimizationStepDaysOff = optimizeDayOffs;
+			}
 
 			if (optimizationPreferences.General.OptimizationStepShiftsWithinDay)
 				optimizeTeamBlockIntraday(selectedPeriod, selectedPersons, optimizationPreferences, allMatrixes,
@@ -273,7 +284,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					_teamBlockMaxSeatChecker,
 					teamBlockDaysOffMoveFinder,
 					_teamBlockScheudlingOptions, _allTeamMembersInSelectionSpecification,
-					_teamBlockShiftCategoryLimitationValidator
+					_teamBlockShiftCategoryLimitationValidator,
+					_teamBlockDayOffsInPeriodValidator
 					);
 
 			IList<IDayOffTemplate> dayOffTemplates = (from item in _schedulerStateHolder().CommonStateHolder.DayOffs

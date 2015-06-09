@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.DayOffPlanning;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
@@ -38,6 +39,16 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			// find days off to move within the common matrix period
 			IEnumerable<IDayOffDecisionMaker> decisionMakers =
 				_dayOffOptimizationDecisionMakerFactory.CreateDecisionMakers(originalArray, optimizationPreferences);
+
+			//var workingBitArray = (ILockableBitArray)originalArray.Clone();
+			//var daysOffLegalStateValidatorsFactory =  new DaysOffLegalStateValidatorsFactory();
+			//var validators = daysOffLegalStateValidatorsFactory.CreateLegalStateValidators(workingBitArray, optimizationPreferences);
+			//var test = new ExtendReduceDaysOffDecisionMaker(new ScheduleMatrixLockableBitArrayConverterEx());
+			//var result = test.Execute2(matrix, scheduleResultDataExtractor, validators);
+
+
+			//return result;
+
 			foreach (IDayOffDecisionMaker dayOffDecisionMaker in decisionMakers)
 			{
 				var workingBitArray = (ILockableBitArray)originalArray.Clone();

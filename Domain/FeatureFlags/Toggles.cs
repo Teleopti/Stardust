@@ -65,9 +65,9 @@
 		Wfm_ResourcePlanner_32892,
 		Wfm_ChangePlanningPeriod_33043,
 		WfmPeople_AdvancedSearch_32973,
-		Wfm_Outbound_Campaign_32696
+		Wfm_Outbound_Campaign_32696,
 
-
+		Scheduler_OptimizeFlexibleDayOffs_22409
 		// ReSharper restore InconsistentNaming
 	}
 }

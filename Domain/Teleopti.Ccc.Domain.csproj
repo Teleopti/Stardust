@@ -490,6 +490,7 @@
     <Compile Include="DayOffPlanning\ExtendReduceDaysOffDecisionMaker.cs" />
     <Compile Include="DayOffPlanning\ExtendReduceTimeDecisionMaker.cs" />
     <Compile Include="DayOffPlanning\FiveConsecutiveWorkDaysSolver.cs" />
+    <Compile Include="DayOffPlanning\FlexibelDayOffDecisionMaker.cs" />
     <Compile Include="DayOffPlanning\FreeWeekendDaySolver.cs" />
     <Compile Include="DayOffPlanning\FreeWeekendDayValidator.cs" />
     <Compile Include="DayOffPlanning\FreeWeekendSolver.cs" />
@@ -582,7 +583,9 @@
     <Compile Include="ICurrentApplicationData.cs" />
     <Compile Include="MessageBroker\IMailboxRepository.cs" />
     <Compile Include="Optimization\SchedulePeriodListShiftCategoryBackToLegalStateService.cs" />
+    <Compile Include="Optimization\TeamBlock\TeamBlockDayOffsInPeriodValidator.cs" />
     <Compile Include="Scheduling\Legacy\Commands\CurrentScheduleSummaryCalculator.cs" />
+    <Compile Include="Scheduling\Legacy\Commands\FlexibelDayOffOptimizationDecisionMakerFactory.cs" />
     <Compile Include="Scheduling\Legacy\Commands\TargetScheduleSummaryCalculator.cs" />
     <Compile Include="Scheduling\TeamBlock\ShiftCategoryLimitCounter.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\AuthenticationQuerierResult.cs" />

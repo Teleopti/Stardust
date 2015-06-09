@@ -52,6 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private IAllTeamMembersInSelectionSpecification _allTeamMembersInSelectionSpecification;
 		private ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
+		private ITeamBlockDayOffsInPeriodValidator _teamBlockDayOffsInPeriodValidator;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
 		public void Setup()
@@ -92,6 +93,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 			_resourceCalculateDelayer = _mocks.StrictMock<IResourceCalculateDelayer>();
 			_teamBlockShiftCategoryLimitationValidator = _mocks.StrictMock<ITeamBlockShiftCategoryLimitationValidator>();
+			_teamBlockDayOffsInPeriodValidator = _mocks.StrictMock<ITeamBlockDayOffsInPeriodValidator>();
 			_allTeamMembersInSelectionSpecification = _mocks.StrictMock<IAllTeamMembersInSelectionSpecification>();
 			_target = new TeamBlockDayOffOptimizerService(_teamInfoFactory, _lockableBitArrayFactory, _lockableBitArrayChangesTracker,
 			                                              _teamBlockScheduler, _teamBlockInfoFactory,
@@ -99,7 +101,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			                                              _safeRollbackAndResourceCalculation, _teamDayOffModifier,
 			                                              _teamTeamBlockSteadyStateValidator, _teamBlockClearer,
 														  _teamBlockOptimizationLimits, _teamBlockMaxSeatChecker,
-														  _teamBlockDaysOffMoveFinder, _teamBlockSchedulingOptions, _allTeamMembersInSelectionSpecification, _teamBlockShiftCategoryLimitationValidator);
+														  _teamBlockDaysOffMoveFinder, _teamBlockSchedulingOptions, _allTeamMembersInSelectionSpecification, 
+														  _teamBlockShiftCategoryLimitationValidator,
+														  _teamBlockDayOffsInPeriodValidator);
 			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 		}
 
@@ -579,6 +583,76 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mocks.Playback())
 			{
 				_optimizationPreferences.Extra.UseTeamSameDaysOff = false;
+				_target.OptimizeDaysOff(_matrixList, new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)), _selectedPersons, _optimizationPreferences, _rollbackService, _schedulingOptions, _resourceCalculateDelayer, _schedulingResultStateHolder);
+			}
+		}
+
+		[Test]
+		public void ShouldRollBackAndLockWhenDaysOffOnPeriodIsBrokenOnBlock()
+		{
+			using (_mocks.Record())
+			{
+				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)), _matrixList)).Return(_teamInfo);
+				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(3).Repeat.AtLeastOnce();
+				Expect.Call(() => _rollbackService.ClearModificationCollection()).Repeat.AtLeastOnce();
+				Expect.Call(_matrix.Person).Return(_person).Repeat.AtLeastOnce();
+				Expect.Call(_lockableBitArrayFactory.ConvertFromMatrix(_optimizationPreferences.DaysOff.ConsiderWeekBefore, _optimizationPreferences.DaysOff.ConsiderWeekAfter, _matrix)).Return(_originalArray).Repeat.AtLeastOnce();
+				Expect.Call(_teamBlockDaysOffMoveFinder.TryFindMoves(_matrix, _originalArray, _optimizationPreferences)).Return(_workingArray);
+				Expect.Call(_lockableBitArrayChangesTracker.DaysOffAdded(_originalArray, _workingArray, _matrix, _optimizationPreferences.DaysOff.ConsiderWeekBefore)).IgnoreArguments().Return(new List<DateOnly> { DateOnly.MinValue });
+				Expect.Call(_lockableBitArrayChangesTracker.DaysOffRemoved(_originalArray, _workingArray, _matrix, _optimizationPreferences.DaysOff.ConsiderWeekBefore)).IgnoreArguments().Return(new List<DateOnly> { DateOnly.MinValue.AddDays(1) });
+				Expect.Call(() => _teamDayOffModifier.RemoveDayOffForMember(_rollbackService, _person, DateOnly.MinValue.AddDays(1)));
+				Expect.Call(() => _teamDayOffModifier.AddDayOffForMember(_rollbackService, _person, DateOnly.MinValue, _schedulingOptions.DayOffTemplate, true));
+				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, DateOnly.MinValue.AddDays(1), _schedulingOptions.BlockFinderTypeForAdvanceScheduling, false)).Return(_teamBlockInfo);
+				Expect.Call(_teamTeamBlockSteadyStateValidator.IsTeamBlockInSteadyState(_teamBlockInfo, _schedulingOptions)).Return(false);
+				Expect.Call(() => _teamBlockClearer.ClearTeamBlock(_schedulingOptions, _rollbackService, _teamBlockInfo));
+				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, DateOnly.MinValue.AddDays(1), _schedulingOptions, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, new ShiftNudgeDirective())).IgnoreArguments().Return(true);
+				Expect.Call(_teamBlockDayOffsInPeriodValidator.Validate(_teamInfo, _schedulingResultStateHolder)).Return(false);
+				Expect.Call(() => _safeRollbackAndResourceCalculation.Execute(_rollbackService, _schedulingOptions)).Repeat.AtLeastOnce();
+				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod).Repeat.AtLeastOnce();
+				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1))).Repeat.AtLeastOnce();
+				Expect.Call(() => _matrix.LockPeriod(new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue)));
+				Expect.Call(() => _matrix.LockPeriod(new DateOnlyPeriod(DateOnly.MinValue.AddDays(1), DateOnly.MinValue.AddDays(1))));
+			}
+
+			using (_mocks.Playback())
+			{
+				_optimizationPreferences.Extra.UseTeamSameDaysOff = false;
+				_optimizationPreferences.General.OptimizationStepDaysOff = false;
+				_optimizationPreferences.General.OptimizationStepDaysOffForFlexibleWorkTime = true;
+				_target.OptimizeDaysOff(_matrixList, new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)), _selectedPersons, _optimizationPreferences, _rollbackService, _schedulingOptions, _resourceCalculateDelayer, _schedulingResultStateHolder);
+			}
+		}
+
+		[Test]
+		public void ShouldRollBackAndLockWhenDaysOffOnPeriodIsBrokenOnTeam()
+		{
+			using (_mocks.Record())
+			{
+				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)), _matrixList)).Return(_teamInfo);
+				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(3).Repeat.AtLeastOnce();
+				Expect.Call(() => _rollbackService.ClearModificationCollection()).Repeat.AtLeastOnce();
+				Expect.Call(_lockableBitArrayFactory.ConvertFromMatrix(_optimizationPreferences.DaysOff.ConsiderWeekBefore, _optimizationPreferences.DaysOff.ConsiderWeekAfter, _matrix)).Return(_originalArray).Repeat.AtLeastOnce();
+				Expect.Call(_teamBlockDaysOffMoveFinder.TryFindMoves(_matrix, _originalArray, _optimizationPreferences)).Return(_workingArray);
+				Expect.Call(_lockableBitArrayChangesTracker.DaysOffAdded(_originalArray, _workingArray, _matrix, _optimizationPreferences.DaysOff.ConsiderWeekBefore)).IgnoreArguments().Return(new List<DateOnly> { DateOnly.MinValue });
+				Expect.Call(_lockableBitArrayChangesTracker.DaysOffRemoved(_originalArray, _workingArray, _matrix, _optimizationPreferences.DaysOff.ConsiderWeekBefore)).IgnoreArguments().Return(new List<DateOnly> { DateOnly.MinValue.AddDays(1) });
+				Expect.Call(() => _teamDayOffModifier.RemoveDayOffForTeam(_rollbackService, _teamInfo, DateOnly.MinValue.AddDays(1)));
+				Expect.Call(() => _teamDayOffModifier.AddDayOffForTeamAndResourceCalculate(_rollbackService, _teamInfo, DateOnly.MinValue, _schedulingOptions.DayOffTemplate)).IgnoreArguments();
+				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, DateOnly.MinValue.AddDays(1), _schedulingOptions.BlockFinderTypeForAdvanceScheduling, false)).Return(_teamBlockInfo);
+				Expect.Call(_teamTeamBlockSteadyStateValidator.IsTeamBlockInSteadyState(_teamBlockInfo, _schedulingOptions)).Return(false);
+				Expect.Call(() => _teamBlockClearer.ClearTeamBlock(_schedulingOptions, _rollbackService, _teamBlockInfo));
+				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, DateOnly.MinValue.AddDays(1), _schedulingOptions, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, new ShiftNudgeDirective())).IgnoreArguments().Return(true);
+				Expect.Call(_teamBlockDayOffsInPeriodValidator.Validate(_teamInfo, _schedulingResultStateHolder)).Return(false);
+				Expect.Call(() => _safeRollbackAndResourceCalculation.Execute(_rollbackService, _schedulingOptions)).Repeat.AtLeastOnce();
+				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod).Repeat.AtLeastOnce();
+				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1))).Repeat.AtLeastOnce();
+				Expect.Call(() => _matrix.LockPeriod(new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue)));
+				Expect.Call(() => _matrix.LockPeriod(new DateOnlyPeriod(DateOnly.MinValue.AddDays(1), DateOnly.MinValue.AddDays(1))));
+			}
+
+			using (_mocks.Playback())
+			{
+				_optimizationPreferences.General.OptimizationStepDaysOff = false;
+				_optimizationPreferences.General.OptimizationStepDaysOffForFlexibleWorkTime = true;
 				_target.OptimizeDaysOff(_matrixList, new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)), _selectedPersons, _optimizationPreferences, _rollbackService, _schedulingOptions, _resourceCalculateDelayer, _schedulingResultStateHolder);
 			}
 		}
