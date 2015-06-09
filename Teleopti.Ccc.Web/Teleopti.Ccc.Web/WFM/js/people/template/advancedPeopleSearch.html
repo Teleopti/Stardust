@@ -17,7 +17,7 @@
 		position: relative;
 		margin-top: 15px;
 		margin-bottom: 22px;
-		z-index: 0;
+		z-index: 1;
 	}
 
 	.advancedInput {
@@ -29,12 +29,12 @@
 		height: 30px;
 		border: 3px;
 		border-bottom: 1px solid #99d6ff;
-		z-index: 1;
+		z-index: 0;
 	}
 
 		.advancedInput:focus {
 			outline: none;
-		}
+		}	
 
 	input[type=text] {
 		height: 30px;
@@ -48,11 +48,11 @@
 		pointer-events: none;
 		left: 5px;
 		top: -5px;
-		transition: 0.2s ease all;
 		-moz-transition: 0.2s ease all;
 		-webkit-transition: 0.2s ease all;
 		-ms-transition: 0.2s ease all;
 		-o-transition: 0.2s ease all;
+		transition: 0.2s ease all;
 	}
 
 	.advancedInput:focus ~ label, .advancedInput:valid ~ label {
