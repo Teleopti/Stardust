@@ -182,6 +182,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<PreferenceTemplateProvider>().As<IPreferenceTemplateProvider>();
 			builder.RegisterType<PreferenceWeeklyWorkTimeSettingProvider>().As<IPreferenceWeeklyWorkTimeSettingProvider>();
 			builder.RegisterType<PreferenceTemplatePersister>().As<IPreferenceTemplatePersister>();
+			builder.RegisterType<PersonPreferenceDayOccupationFactory>().As<IPersonPreferenceDayOccupationFactory>().SingleInstance();
 		}
 		 
 		private static void registerStudentAvailabilityTypes(ContainerBuilder builder)

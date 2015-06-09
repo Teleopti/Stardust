@@ -47,6 +47,8 @@
 		MyTimeWeb_TradeWithDayOffAndEmptyDay_31317,
 		MyTimeWeb_SortSchedule_32092,
 		MyTimeWeb_EnhanceTeamSchedule_32580,
+		MyTimeWeb_PreferenceShowNightViolation_33152,
+
 
 		Backlog_Module_23980,
 
@@ -64,6 +66,8 @@
 		Wfm_ChangePlanningPeriod_33043,
 		WfmPeople_AdvancedSearch_32973,
 		Wfm_Outbound_Campaign_32696
+
+
 		// ReSharper restore InconsistentNaming
 	}
 }

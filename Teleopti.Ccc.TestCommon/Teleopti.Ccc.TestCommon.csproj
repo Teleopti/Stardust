@@ -172,6 +172,7 @@
     <Compile Include="FakeRepositories\FakeMailboxRepository.cs" />
     <Compile Include="FakeRepositories\FakeDayOffTemplateRepository.cs" />
     <Compile Include="FakeRepositories\FakePersonAbsenceAccountRepository.cs" />
+    <Compile Include="FakeRepositories\FakePersonAbsenceRepository.cs" />
     <Compile Include="FakeRepositories\FakePlanningPeriodRepository.cs" />
     <Compile Include="FakeRepositories\FakePublicNoteRepository.cs" />
     <Compile Include="FakeRepositories\FakeScheduleRangePersister.cs" />

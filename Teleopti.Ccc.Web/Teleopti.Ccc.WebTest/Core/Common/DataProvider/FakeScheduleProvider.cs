@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Interfaces.Domain;
+using System.Linq;
 
 namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 {
@@ -25,7 +27,12 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 
 		public IEnumerable<IScheduleDay> GetScheduleForPersons(DateOnly date, IEnumerable<IPerson> persons)
 		{
-			return _scheduleDays;
+			
+			return _scheduleDays.Where(sd =>
+			{
+				return persons.Any(p => p == sd.Person || p.Id == sd.Person.Id) && sd.DateOnlyAsPeriod.DateOnly == date;
+			});
+			
 		}
 	}
 }
