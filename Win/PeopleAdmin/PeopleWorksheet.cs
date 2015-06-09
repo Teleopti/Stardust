@@ -512,6 +512,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 
 				if (!_filteredPeopleHolder.GetUnitOfWork.IsDirty())
 				{
+					if (!_gridConstructor.View.ValidateBeforeSave())
+						return;
+					
 					_filteredPeopleHolder.ResetBoldProperty();
 					_gridConstructor.View.Invalidate();
 					_filteredPeopleHolder.PersistTenantData();

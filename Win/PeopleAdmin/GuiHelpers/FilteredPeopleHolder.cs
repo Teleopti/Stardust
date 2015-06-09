@@ -13,6 +13,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
@@ -407,7 +408,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 		{
 			//create new person grid data.
 			var personGridData = new PersonGeneralModel(person, new PrincipalAuthorization(new CurrentTeleoptiPrincipal()),
-				new FilteredPeopleAccountUpdater(this, UnitOfWorkFactory.Current), logonInfoModel);
+				new FilteredPeopleAccountUpdater(this, UnitOfWorkFactory.Current), logonInfoModel,
+				new PasswordPolicy(StateHolderReader.Instance.StateReader.ApplicationScopeData.LoadPasswordPolicyService));
 
 			//set optional columns if any.
 			if (_optionalColumnCollection.Count > 0)

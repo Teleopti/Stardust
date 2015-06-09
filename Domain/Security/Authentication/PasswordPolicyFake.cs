@@ -5,6 +5,7 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
 {
 	public class PasswordPolicyFake : IPasswordPolicy
 	{
+		private bool _valid = true;
 		public PasswordPolicyFake()
 		{
 			InvalidAttemptWindow = TimeSpan.FromMinutes(30);
@@ -20,7 +21,12 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
 
 		public bool CheckPasswordStrength(string password)
 		{
-			return true;
+			return _valid;
+		}
+
+		public void SetInvalid()
+		{
+			_valid = false;
 		}
 	}
 }

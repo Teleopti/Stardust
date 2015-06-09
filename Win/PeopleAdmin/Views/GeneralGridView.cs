@@ -271,12 +271,14 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			if (!e.DataItem.IsValid)
 			{
 				e.QueryCellInfoEventArg.Style.BackColor = Color.Red;
+				e.QueryCellInfoEventArg.Style.CellTipText = Resources.PasswordPolicyWarning;
 				if (!FilteredPeopleHolder.ValidatePasswordPolicy.Contains(e.DataItem))
 					FilteredPeopleHolder.ValidatePasswordPolicy.Add(e.DataItem);
 			}
 			else
 			{
 				e.QueryCellInfoEventArg.Style.BackColor = Color.White;
+				e.QueryCellInfoEventArg.Style.CellTipText = "";
 				FilteredPeopleHolder.ValidatePasswordPolicy.Remove(e.DataItem);
 			}
 		}
