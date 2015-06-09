@@ -12245,4 +12245,22 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="DaysAreScheduled" xml:space="preserve">
     <value>dagar är schemalagda</value>
   </data>
+  <data name="DayOffValueColon" xml:space="preserve">
+    <value>Fridagsvärde:</value>
+  </data>
+  <data name="ShiftCategoryValueColon" xml:space="preserve">
+    <value>Skiftkategorivärde:</value>
+  </data>
+  <data name="PersonFinderFieldEmploymentNumber" xml:space="preserve">
+    <value>Anställningsnummer</value>
+  </data>
+  <data name="PersonFinderFieldFirstName" xml:space="preserve">
+    <value>Förnamn</value>
+  </data>
+  <data name="PersonFinderFieldLastName" xml:space="preserve">
+    <value>Efternamn</value>
+  </data>
+  <data name="PersonFinderFieldNote" xml:space="preserve">
+    <value>Notering</value>
+  </data>
 </root>
