@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 			}
 			else
 			{
+				personInfo.ReuseTenantPassword(oldPersonInfo);
 				session.Merge(personInfo);
 			}
 		}

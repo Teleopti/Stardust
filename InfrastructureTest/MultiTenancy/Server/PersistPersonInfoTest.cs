@@ -142,6 +142,26 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		}
 
 		[Test]
+		public void ShouldNotOverwriteOldTenantPassword()
+		{
+			var session = _tenantUnitOfWorkManager.CurrentSession();
+			var id = Guid.NewGuid();
+
+			var personInfo = new PersonInfo(tenant, id);
+			var oldTenantPassword = personInfo.TenantPassword; 
+			
+			target.Persist(personInfo);
+
+			var personInfoNew = new PersonInfo(tenant, id);
+			target.Persist(personInfoNew);
+			
+			var loaded = session.Get<PersonInfo>(id);
+			var result = loaded.TenantPassword;
+			result.Should().Be.EqualTo(oldTenantPassword);
+			string.IsNullOrEmpty(result).Should().Be.False();
+		}
+
+		[Test]
 		public void ShouldThrowIfExplicitIdIsNotSet()
 		{
 			Assert.Throws<ArgumentException>(() =>

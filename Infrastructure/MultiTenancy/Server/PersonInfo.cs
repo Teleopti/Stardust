@@ -38,5 +38,10 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		{
 			TenantPassword = Guid.NewGuid().ToString().Replace('-', 'x');
 		}
+
+		public virtual void ReuseTenantPassword(PersonInfo otherPersonInfo)
+		{
+			TenantPassword = otherPersonInfo.TenantPassword;
+		}
 	}
 }
