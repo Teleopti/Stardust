@@ -9,29 +9,29 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 	{
 		private readonly IApplicationData _applicationData;
 		private readonly ITokenIdentityProvider _tokenIdentityProvider;
-		private readonly IFindTenantAndPersonIdForIdentity _findTenantAndPersonIdForIdentity;
+		private readonly IFindPersonInfoByIdentity _findPersonInfoByIdentity;
 		private readonly ILoadUserUnauthorized _loadUserUnauthorized;
 
 		public Authenticator(IApplicationData applicationData,
 									ITokenIdentityProvider tokenIdentityProvider,
-									IFindTenantAndPersonIdForIdentity findTenantAndPersonIdForIdentity,
+									IFindPersonInfoByIdentity findPersonInfoByIdentity,
 									ILoadUserUnauthorized loadUserUnauthorized)
 		{
 			_applicationData = applicationData;
 			_tokenIdentityProvider = tokenIdentityProvider;
-			_findTenantAndPersonIdForIdentity = findTenantAndPersonIdForIdentity;
+			_findPersonInfoByIdentity = findPersonInfoByIdentity;
 			_loadUserUnauthorized = loadUserUnauthorized;
 		}
 
 		public AuthenticatorResult LogonIdentityUser()
 		{
 			var token = _tokenIdentityProvider.RetrieveToken();
-			var personInfo = _findTenantAndPersonIdForIdentity.Find(token.UserIdentifier);
+			var personInfo = _findPersonInfoByIdentity.Find(token.UserIdentifier);
 			if (personInfo == null)
 				return new AuthenticatorResult { Successful = false };
 
-			var dataSource = _applicationData.Tenant(personInfo.Tenant);
-			var foundAppUser = _loadUserUnauthorized.LoadFullPersonInSeperateTransaction(dataSource.Application, personInfo.PersonId);
+			var dataSource = _applicationData.Tenant(personInfo.Tenant.Name);
+			var foundAppUser = _loadUserUnauthorized.LoadFullPersonInSeperateTransaction(dataSource.Application, personInfo.Id);
 			return foundAppUser.IsTerminated() ?
 				new AuthenticatorResult { Successful = false } :
 				new AuthenticatorResult { Successful = true, Person = foundAppUser, DataSource = dataSource };

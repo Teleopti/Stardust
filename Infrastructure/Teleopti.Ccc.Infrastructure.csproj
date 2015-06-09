@@ -286,9 +286,9 @@
     <Compile Include="MultiTenancy\Server\TenantUnitOfWorkFake.cs" />
     <Compile Include="MultiTenancy\Server\VerifyPasswordPolicy.cs" />
     <Compile Include="MultiTenancy\Server\DeletePersonInfo.cs" />
-    <Compile Include="MultiTenancy\Server\FindTenantAndPersonIdForIdentity.cs" />
+    <Compile Include="MultiTenancy\Server\FindPersonInfoByIdentity.cs" />
     <Compile Include="MultiTenancy\Server\IDeletePersonInfo.cs" />
-    <Compile Include="MultiTenancy\Server\IFindTenantAndPersonIdForIdentity.cs" />
+    <Compile Include="MultiTenancy\Server\IFindPersonInfoByIdentity.cs" />
     <Compile Include="MultiTenancy\Server\IIdentityUserQuery.cs" />
     <Compile Include="MultiTenancy\Server\IdentityUserQuery.cs" />
     <Compile Include="MultiTenancy\Client\AuthenticationQuerier.cs" />
@@ -308,7 +308,6 @@
     <Compile Include="MultiTenancy\Server\NHibernate\TenantUnitOfWorkManager.cs" />
     <Compile Include="MultiTenancy\Client\PostHttpRequest.cs" />
     <Compile Include="MultiTenancy\Server\Tenant.cs" />
-    <Compile Include="MultiTenancy\Server\TenantAndPersonId.cs" />
     <Compile Include="MultiTenancy\Client\TenantDataManager.cs" />
     <Compile Include="NHibernateConfiguration\SecondLevelCache.cs" />
     <Compile Include="Persisters\Outbound\OutboundSkillPersister.cs" />

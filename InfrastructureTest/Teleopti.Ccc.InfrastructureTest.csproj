@@ -202,7 +202,7 @@
     <Compile Include="MultiTenancy\Server\DeletePersonInfoTest.cs" />
     <Compile Include="MultiTenancy\Server\FindLogonInfoTest.cs" />
     <Compile Include="MultiTenancy\Server\FindPersonInfoByCredentialsTest.cs" />
-    <Compile Include="MultiTenancy\Server\FindTenantAndPersonIdForIdentityTest.cs" />
+    <Compile Include="MultiTenancy\Server\FindPersonInfoByIdentityTest.cs" />
     <Compile Include="MultiTenancy\Server\FindPersonInfoTest.cs" />
     <Compile Include="MultiTenancy\Server\IdentityUserQueryTest.cs" />
     <Compile Include="MultiTenancy\Server\PersistLogonAttemptTest.cs" />
