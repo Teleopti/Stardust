@@ -57,7 +57,7 @@
         <script type="text/javascript" src="Teleopti.MyTimeWeb.Preference.SelectionViewModel.Tests.js?bust=<%=version%>"></script>
         <script type="text/javascript" src="Teleopti.MyTimeWeb.StudentAvailability.PeriodFeedbackViewModel.Tests.js?bust=<%=version%>"></script>
         <script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel.Tests.js?bust=<%=version%>"></script>
-		<script type="text/javascript" src="Teleopti.MyTimeWeb.TeamScheduleViewModelTest.js?bust=<%=version %>"></script>
+		<script type="text/javascript" src="Teleopti.MyTimeWeb.TeamScheduleViewModel.Test.js?bust=<%=version %>"></script>
 
 	</head>
 	<body>
