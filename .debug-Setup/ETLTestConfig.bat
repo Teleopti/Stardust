@@ -15,7 +15,7 @@ set MSBUILD="%windir%\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe"
 SET MySettings=%ROOTDIR%\..\Teleopti.Support.Tool\bin\%Configuration%\settings.txt
 SET DATASOURCE_NAME=ETLTest
 SET PM_INSTALL=False
-SET WEB_BROKER=http://localhost:54903/
+SET WEB_BROKER_FOR_WEB=http://localhost:52858/
 SET URL=%ROOTDIR%\..\Domain\FeatureFlags\toggles.txt
 SET PM_SERVICE=http://localhost:53396/PMService.svc
 SET ETLPM_BINDING_NAME=Etl_Pm_Http_Binding
@@ -29,7 +29,7 @@ ECHO $^(AS_SERVER_NAME^)^|%AS_SERVER_NAME%>>"%MySettings%"
 ECHO $^(ETL_SERVICE_nhibConfPath^)^|%ETL_SERVICE_nhibConfPath%>>"%MySettings%"
 ECHO $^(DATASOURCE_NAME^)^|%DATASOURCE_NAME%>>"%MySettings%"
 ECHO $^(PM_INSTALL^)^|%PM_INSTALL%>>"%MySettings%"
-ECHO $^(WEB_BROKER^)^|%WEB_BROKER%>>"%MySettings%"
+ECHO $^(WEB_BROKER_FOR_WEB^)^|%WEB_BROKER_FOR_WEB%>>"%MySettings%"
 ECHO $^(PM_SERVICE^)^|%PM_SERVICE%>>"%MySettings%"
 ECHO $^(ETLPM_BINDING_NAME^)^|%ETLPM_BINDING_NAME%>>"%MySettings%"
 ECHO $^(URL^)^|%URL%>>"%MySettings%"
