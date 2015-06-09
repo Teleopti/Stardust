@@ -8,6 +8,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 		public bool Successful { get; set; }
 		public IPerson Person { get; set; }
 		public IDataSource DataSource { get; set; }
+		public string TenantPassword { get; set; }
 
 		public Guid? PersonId()
 		{

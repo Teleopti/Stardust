@@ -54,6 +54,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			result.Person.Should().Be.SameInstanceAs(person);
 			result.Successful.Should().Be.True();
 			result.DataSource.Should().Be.SameInstanceAs(dataSource);
+			result.TenantPassword.Should().Be.EqualTo(personInfo.TenantPassword);
 		}
 
 		[Test]
