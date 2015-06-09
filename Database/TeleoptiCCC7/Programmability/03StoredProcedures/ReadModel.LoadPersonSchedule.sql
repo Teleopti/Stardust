@@ -104,7 +104,7 @@ BEGIN
 			End
 		    AS 'RowNumber'
 
-        FROM (select p.Person as PersonId,
+        FROM (SELECT DISTINCT p.Person as PersonId,
 			 sd.TeamId as TeamID, 
 			 sd.SiteId as SiteId, 
 			 sd.BusinessUnitId as BusinessUnitId, 
