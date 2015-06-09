@@ -1220,7 +1220,7 @@
     <Content Include="WFM\html\right-sidenav.html" />
     <Content Include="WFM\js\global\help.controller.js" />
     <Content Include="WFM\js\outbound\outbound.directive.js" />
-    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.TeamScheduleViewModel.Test.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.TeamScheduleViewModel.Tests.js" />
     <Content Include="Areas\Reporting\Views\Shared\Error.cshtml" />
     <None Include="WFM\css\_forecasting.scss" />
     <Content Include="WFM\js\permissions\permissions.data.html" />
