@@ -25,8 +25,6 @@ var wfm = angular.module('wfm', [
 	'wfm.forecasting',
 	'wfm.forecasting.target',
 	'wfm.resourceplanner',
-	'wfm.resourceplanner.report',
-	'wfm.resourceplannerA',
 	'wfm.searching',
 	'wfm.seatMap',
 	'wfm.seatPlan',
@@ -82,28 +80,31 @@ wfm.config([
 				label: 'forecasting results'
 			}
 		}).state('resourceplanner', {
-			params: {},
 			url: '/resourceplanner',
 			templateUrl: 'js/resourceplanner/resourceplanner.html',
 			controller: 'ResourceplannerCtrl'
-		}).state('resourceplannerplanningperiods', {
-			url: '/resourceplanner/planningperiods',
+		}).state('resourceplanner.planningperiods', {
+			url: '/planningperiods',
 			templateUrl: 'js/resourceplanner/planningperiods.html',
-			controller: 'PlanningPeriodsCtrl'
+			controller: 'PlanningPeriodsCtrl',
+			ncyBreadcrumb: {
+				label: 'planningperiods'
+			}
+		}).state('resourceplanner.newplanningperiod', {
+			url: '/newplanningperiod',
+			templateUrl: 'js/resourceplanner/planningperiods-new.html',
+			controller: 'PlanningPeriodNewCtrl',
+			ncyBreadcrumb: {
+				label: 'new planningperiod'
+			}
 		}).state('resourceplannerreport', {
 			params: { result: {} },
 			templateUrl: 'js/resourceplanner/resourceplanner-report.html',
 			controller: 'ResourceplannerReportCtrl'
-		}).state('planningperiod', {
-			url: '/planningperiod',
-			templateUrl: 'js/resourceplanner/planningperiods-new.html',
-			controller: 'PlanningPeriodNewCtrl',
-
 		}).state('permissions', {
 			url: '/permissions',
 			templateUrl: 'html/permissions/permissions.html',
-			controller: 'PermissionsCtrl',
-
+			controller: 'PermissionsCtrl'
 		}).state('outbound', {
 			url: '/outbound',
 			templateUrl: 'html/outbound/campaign-list.html',

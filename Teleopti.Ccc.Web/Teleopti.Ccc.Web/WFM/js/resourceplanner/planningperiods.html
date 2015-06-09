@@ -6,9 +6,10 @@
 		</div>
 	</div>
 	
-	<button ui-sref="planningperiod" class="wfm-btn wfm-btn-primary">Add <i class="mdi mdi-plus"></i></button>
+	<button ui-sref="resourceplanner.newplanningperiod" class="wfm-btn wfm-btn-primary">Add <i class="mdi mdi-plus"></i></button>
 
 	<ul class="wfm-tiles"layout="row">
 		<li ng-repeat="p in planningPeriods" ui-sref="resourceplanner">{{p.StartDate | date : format}} - {{p.EndDate | date : format}}</li>
 	</ul>
+
 </div>

@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var schedulePeriods = extractVirtualPeriods(person, visiblePeriod);
 			foreach (var virtualSchedulePeriod in schedulePeriods)
 			{
+				if(!virtualSchedulePeriod.IsValid) continue;
 				IFullWeekOuterWeekPeriodCreator fullWeekOuterWeekPeriodCreator =
 						new FullWeekOuterWeekPeriodCreator(virtualSchedulePeriod.DateOnlyPeriod, virtualSchedulePeriod.Person);
 				IScheduleMatrixPro matrix = new ScheduleMatrixPro(range, fullWeekOuterWeekPeriodCreator, virtualSchedulePeriod);

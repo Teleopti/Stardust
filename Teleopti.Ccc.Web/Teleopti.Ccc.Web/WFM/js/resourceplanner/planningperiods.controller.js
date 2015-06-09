@@ -1,6 +1,6 @@
 ﻿(function() {
 	'use strict';
-	angular.module('wfm.resourceplannerA', ['restPlanningPeriodService'])
+	angular.module('wfm.resourceplanner')
 		.controller('PlanningPeriodsCtrl', [
 			'$scope', '$state', 'PlanningPeriodSvrc', function ($scope, $state, PlanningPeriodSvrc) {
 			console.log('params',$state.params);
@@ -11,14 +11,14 @@
 				$scope.suggestions = PlanningPeriodNewSvrc.suggestions.query();
 
 				$scope.selectedRange = {};
-				$scope.createNextPlanningPeriod = function() {
-					var selectedRange = $scope.suggestions[$scope.selectedRange];
-					var range = { Number: selectedRange.Number, PeriodType: selectedRange.PeriodType, DateFrom: selectedRange.StartDate };
-					PlanningPeriodNewSvrc.planningperiod.update({}, JSON.stringify(range)).$promise.then(function(result) {
-						$scope.planningPeriod = result;
-						$state.go('resourceplanner', $scope.planningPeriod);
-					});
-				}
-			}
+			$scope.createNextPlanningPeriod = function() {
+				var selectedRange = $scope.suggestions[$scope.selectedRange];
+				var range = { Number: selectedRange.Number, PeriodType: selectedRange.PeriodType, DateFrom: selectedRange.StartDate };
+				PlanningPeriodNewSvrc.planningperiod.update({}, JSON.stringify(range)).$promise.then(function(result) {
+					$scope.planningPeriod = result;
+					$state.go('resourceplanner', $scope.planningPeriod);
+				});
+			};
+		}
 		]);
 })();

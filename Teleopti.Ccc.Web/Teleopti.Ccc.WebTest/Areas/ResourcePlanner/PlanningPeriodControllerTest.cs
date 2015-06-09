@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.Http;
 using System.Web.Http.Results;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -217,6 +218,41 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 
 			var result = (OkNegotiatedContentResult<IEnumerable<PlanningPeriodModel>>)Target.GetAvailablePlanningPeriods();
 			result.Content.Count().Should().Be.EqualTo(3);
+		}
+
+		[Test]
+		public void ShouldReturnNoSuggestionsIfNextPlanningPeriodExists()
+		{
+			changeNowTo(new DateTime(2015, 05, 23));
+			var aggSchedulePeriod = new AggregatedSchedulePeriod()
+			{
+				Number = 2,
+				Culture = 1053,
+				DateFrom = new DateTime(2015, 05, 04),
+				PeriodType = SchedulePeriodType.Week,
+				Priority = 10
+			};
+			var aggSchedulePeriod2 = new AggregatedSchedulePeriod()
+			{
+				Number = 1,
+				Culture = 1053,
+				DateFrom = new DateTime(2015, 05, 04),
+				PeriodType = SchedulePeriodType.Week,
+				Priority = 6
+			};
+			var suggestion = new PlanningPeriodSuggestions(LocalTestableNow, new List<AggregatedSchedulePeriod>()
+			{
+				aggSchedulePeriod,aggSchedulePeriod2
+			});
+			FakePlanningPeriodRepository.Add(new FakePlanningPeriod(Guid.NewGuid(), new DateOnlyPeriod(new DateOnly(2015, 06, 01), new DateOnly(2015, 06, 14))));
+			FakePlanningPeriodRepository.Add(new FakePlanningPeriod(Guid.NewGuid(), new DateOnlyPeriod(new DateOnly(2015, 06, 15), new DateOnly(2015, 06, 28))));
+			((FakePlanningPeriodRepository)FakePlanningPeriodRepository).CustomData(
+				new PlanningPeriod(new PlanningPeriodSuggestions(LocalTestableNow,
+					new List<AggregatedSchedulePeriod>() { aggSchedulePeriod, aggSchedulePeriod2 })), suggestion
+				);
+
+			IHttpActionResult result = Target.GetNextPlanningPeriodSuggestions();
+			result.Should().Be.OfType<NotFoundResult>();
 		}
 
 		private void changeNowTo(DateTime dateTime)

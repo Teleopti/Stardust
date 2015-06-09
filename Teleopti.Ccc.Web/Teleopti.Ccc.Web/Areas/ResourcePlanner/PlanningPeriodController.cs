@@ -94,19 +94,26 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		public virtual IHttpActionResult GetNextPlanningPeriodSuggestions()
 		{
 			var planningPeriod = _nextPlanningPeriodProvider.Current();
-			var suggestion = _planningPeriodRespository.Suggestions(_now);
-			var result = suggestion.NextSuggestedPeriods(planningPeriod.Range);
-			return
-				Ok(
-					result.Select(
-						r =>
-							new SuggestedPlanningPeriodRangeModel
-							{
-								PeriodType = r.PeriodType.ToString(),
-								StartDate = r.Range.StartDate.Date,
-								EndDate = r.Range.EndDate.Date,
-								Number = r.Number
-							}));
+			var allPlanningPeriods = _planningPeriodRespository.LoadAll();
+			var next =
+				allPlanningPeriods.Where(p => p.Range.StartDate >= planningPeriod.Range.EndDate.AddDays(1));
+			if (!next.Any())
+			{
+				var suggestion = _planningPeriodRespository.Suggestions(_now);
+				var result = suggestion.NextSuggestedPeriods(planningPeriod.Range);
+				return
+					Ok(
+						result.Select(
+							r =>
+								new SuggestedPlanningPeriodRangeModel
+								{
+									PeriodType = r.PeriodType.ToString(),
+									StartDate = r.Range.StartDate.Date,
+									EndDate = r.Range.EndDate.Date,
+									Number = r.Number
+								}));
+			}
+			return NotFound();
 		}
 
 		[UnitOfWork, HttpGet, Route("api/resourceplanner/availableplanningperiod")]

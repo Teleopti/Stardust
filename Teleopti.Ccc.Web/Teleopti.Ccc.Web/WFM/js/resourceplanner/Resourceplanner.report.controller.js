@@ -1,6 +1,6 @@
 ﻿(function () {
 	'use strict';
-	angular.module('wfm.resourceplanner.report', [])
+	angular.module('wfm.resourceplanner')
 		.controller('ResourceplannerReportCtrl', [
 			'$scope', '$stateParams', function ($scope, $stateParams) {
 			$scope.issues = $stateParams.result.BusinessRulesValidationResults;
