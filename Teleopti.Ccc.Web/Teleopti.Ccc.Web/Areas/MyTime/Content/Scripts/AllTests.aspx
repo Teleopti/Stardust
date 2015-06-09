@@ -41,6 +41,8 @@
         <script type="text/javascript" src="Teleopti.MyTimeWeb.StudentAvailability.DayViewModel.js?bust=<%=version%>"></script>
         <script type="text/javascript" src="Teleopti.MyTimeWeb.StudentAvailability.PeriodFeedbackViewModel.js?bust=<%=version%>"></script>
         <script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel.js?bust=<%=version%>"></script>
+		<script type="text/javascript" src="Teleopti.MyTimeWeb.TeamScheduleViewModel.js?bust=<%=version %>"></script>
+		<script type="text/javascript" src="Teleopti.MyTimeWeb.TeamScheduleUtility.js?bust=<%=version %>"></script>
 		
         <script type="text/javascript" src="Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel.Tests.js?bust=<%=version%>"></script>
         <script type="text/javascript" src="Teleopti.MyTimeWeb.Settings.SettingsViewModel.Tests.js?bust=<%=version%>"></script>
@@ -55,6 +57,7 @@
         <script type="text/javascript" src="Teleopti.MyTimeWeb.Preference.SelectionViewModel.Tests.js?bust=<%=version%>"></script>
         <script type="text/javascript" src="Teleopti.MyTimeWeb.StudentAvailability.PeriodFeedbackViewModel.Tests.js?bust=<%=version%>"></script>
         <script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel.Tests.js?bust=<%=version%>"></script>
+		<script type="text/javascript" src="Teleopti.MyTimeWeb.TeamScheduleViewModelTest.js?bust=<%=version %>"></script>
 
 	</head>
 	<body>
