@@ -21,6 +21,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 	public class PersonPreferenceDayOccupationFactoryTest
 	{
 		private PersonPreferenceDayOccupationFactory target;
+		private IPerson person;
+
 
 		[SetUp]
 		public void Init()
@@ -28,8 +30,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			var date1 = new DateOnly(2029, 1, 1);
 			var date2 = new DateOnly(2029, 1, 3);
 
-			var loggedOnUser = new FakeLoggedOnUser();
-			var schedule = ScheduleDayFactory.Create(date1, loggedOnUser.CurrentUser());
+			person = PersonFactory.CreatePersonWithGuid("a", "a");
+			var schedule = ScheduleDayFactory.Create(date1, person);
 
 			var start = new DateTime(2029, 1, 1, 8, 0, 0, DateTimeKind.Utc);
 			var end = new DateTime(2029, 1, 1, 17, 0, 0, DateTimeKind.Utc);
@@ -46,13 +48,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 				EndTimeLimitation = new EndTimeLimitation(new TimeSpan(15, 0, 0), new TimeSpan(16, 0, 0))
 			};
 
-			var preferenceDay = new PreferenceDay(loggedOnUser.CurrentUser(), date2, preferenceRestriction);
+			var preferenceDay = new PreferenceDay(person, date2, preferenceRestriction);
 			var personPreferenceProvider = new FakePreferenceProvider(preferenceDay);
 
 
 
-			target = new PersonPreferenceDayOccupationFactory(
-				loggedOnUser, 
+			target = new PersonPreferenceDayOccupationFactory(			
 				scheduleProvider, 
 				personPreferenceProvider);
 		}
@@ -60,7 +61,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 		[Test]
 		public void ShouldReturnCorrectOccupationWithShift()
 		{
-			var occupation = target.GetPreferenceDayOccupation(new DateOnly(2029, 1, 1));
+			var occupation = target.GetPreferenceDayOccupation(person, new DateOnly(2029, 1, 1));
 			occupation.HasShift.Should().Be.EqualTo(true);
 			occupation.StartTimeLimitation.StartTime.Should().Be.EqualTo(new TimeSpan(8, 0, 0));
 			occupation.StartTimeLimitation.EndTime.Should().Be.EqualTo(new TimeSpan(8, 0, 0));
@@ -72,7 +73,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 		[Test]
 		public void ShouldReturnCorrectOccupationWithPreference()
 		{
-			var occupation = target.GetPreferenceDayOccupation(new DateOnly(2029, 1, 3));
+			var occupation = target.GetPreferenceDayOccupation(person, new DateOnly(2029, 1, 3));
 
 			occupation.HasShift.Should().Be.EqualTo(false);
 			occupation.HasPreference.Should().Be.EqualTo(true);

@@ -7,21 +7,19 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 {
 	public class PersonPreferenceDayOccupationFactory : IPersonPreferenceDayOccupationFactory
-	{
-		private readonly ILoggedOnUser _loggedOnUser;
+	{	
 		private readonly IScheduleProvider _scheduleProvider;
 		private readonly IPreferenceProvider _preferenceProvider;
 
-		public PersonPreferenceDayOccupationFactory(ILoggedOnUser loggedOnUser, IScheduleProvider scheduleProvider, IPreferenceProvider preferenceProvider)
+		public PersonPreferenceDayOccupationFactory(IScheduleProvider scheduleProvider, IPreferenceProvider preferenceProvider)
 		{
-			_loggedOnUser = loggedOnUser;
 			_scheduleProvider = scheduleProvider;
 			_preferenceProvider = preferenceProvider;
 		}
 
-		public PersonPreferenceDayOccupation GetPreferenceDayOccupation(DateOnly date)
+		public PersonPreferenceDayOccupation GetPreferenceDayOccupation(IPerson person, DateOnly date)
 		{
-			var schedule = _scheduleProvider.GetScheduleForPersons(date, new List<IPerson>{ _loggedOnUser.CurrentUser() }).FirstOrDefault();
+			var schedule = _scheduleProvider.GetScheduleForPersons(date, new List<IPerson>{ person}).FirstOrDefault();
 
 			var personPreferenceDayOccupation = new PersonPreferenceDayOccupation();
 			if (schedule != null && schedule.PersonAssignment() != null)

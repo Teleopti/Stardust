@@ -12,6 +12,6 @@
 	
 	public interface IPersonPreferenceDayOccupationFactory
 	{
-		PersonPreferenceDayOccupation GetPreferenceDayOccupation(DateOnly date);
+		PersonPreferenceDayOccupation GetPreferenceDayOccupation(IPerson person, DateOnly date);
 	}
 }
