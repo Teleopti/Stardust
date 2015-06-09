@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 		private readonly IBadgeSettingProvider _badgeSettingProvider;
 		private readonly IPersonNameProvider _personNameProvider;
 		private readonly ITeamGamificationSettingRepository _teamGamificationSettingRepo;
+		private readonly ICurrentTenantUser _currentTenantUser;
 
 		public PortalViewModelFactory(IPermissionProvider permissionProvider,
 			ILicenseActivatorProvider licenseActivatorProviderProvider,
@@ -37,7 +38,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			IReportsNavigationProvider reportsNavigationProvider,
 			IBadgeProvider badgeProvider, IBadgeSettingProvider badgeSettingProvider,
 			IToggleManager toggleManager, IPersonNameProvider personNameProvider,
-			ITeamGamificationSettingRepository teamGamificationSettingReop)
+			ITeamGamificationSettingRepository teamGamificationSettingReop,
+			ICurrentTenantUser currentTenantUser)
 		{
 			_permissionProvider = permissionProvider;
 			_licenseActivatorProvider = licenseActivatorProviderProvider;
@@ -49,6 +51,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			_personNameProvider = personNameProvider;
 			_badgeSettingProvider = badgeSettingProvider;
 			_teamGamificationSettingRepo = teamGamificationSettingReop;
+			_currentTenantUser = currentTenantUser;
 		}
 
 		public PortalViewModel CreatePortalViewModel()
@@ -130,8 +133,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 
 		private bool showChangePassword()
 		{
-			var agent = _loggedOnUser.CurrentUser();
-			return agent != null && agent.ApplicationAuthenticationInfo != null && !string.IsNullOrEmpty(agent.ApplicationAuthenticationInfo.ApplicationLogOnName);
+			var currentPersonInfo = _currentTenantUser.CurrentUser();
+			return currentPersonInfo != null &&
+			       !string.IsNullOrEmpty(_currentTenantUser.CurrentUser().ApplicationLogonInfo.LogonName);
 		}
 
 		private static NavigationItem createTeamScheduleNavigationItem()
@@ -164,16 +168,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 				TitleCount = string.Format(Resources.MessagesParenthesis, unreadMessageCount),
 				PayAttention = unreadMessageCount != 0,
 				UnreadMessageCount = unreadMessageCount
-			};
-		}
-
-		private static NavigationItem createMyeReportNavigationItem()
-		{
-			return new NavigationItem
-			{
-				Action = "Index",
-				Controller = "MyReport",
-				Title = Resources.MyReport,
 			};
 		}
 
