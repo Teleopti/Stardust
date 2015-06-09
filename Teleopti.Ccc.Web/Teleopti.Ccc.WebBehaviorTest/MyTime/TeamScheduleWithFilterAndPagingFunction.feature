@@ -390,18 +390,3 @@ Scenario: Navigate next date without team
 	And I am viewing team schedule for '2014-05-02'
 	When I click the next day button in datepicker
 	Then I should see the next day
-
-@OnlyRunIfEnabled('MyTimeWeb_SortSchedule_32092')
-Scenario: View only my colleague`s schedule by searching his name
-	Given I am an agent in a team with access to the whole site
-	And I have an assigned shift with
-	| Field | Value      |
-	| Date  | 2014-05-02 |
-	And I have a colleague
-	And My colleague has an assigned shift with
-	| Field | Value      |
-	| Date  | 2014-05-02 |
-	When I view group schedule for '2014-05-02'
-	And I type 'T' in the name search box
-	Then I should see my colleague's schedule
-	And I should not see myself
