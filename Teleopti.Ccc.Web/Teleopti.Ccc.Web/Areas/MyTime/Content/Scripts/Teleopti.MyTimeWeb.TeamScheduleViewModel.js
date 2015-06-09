@@ -131,8 +131,7 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 };
 
 
-Teleopti.MyTimeWeb.TeamScheduleViewModelFactory = { createViewModel : function(endpoints) {
-	var ajax = new Teleopti.MyTimeWeb.Ajax();
+Teleopti.MyTimeWeb.TeamScheduleViewModelFactory = { createViewModel : function(endpoints,ajax) {
 	var vm = {}; 
 	Teleopti.MyTimeWeb.DayScheduleMixin.call(vm);
 	Teleopti.MyTimeWeb.TeamScheduleDataProviderMixin.call(vm, ajax, endpoints);
@@ -145,8 +144,3 @@ Teleopti.MyTimeWeb.TeamScheduleViewModelFactory = { createViewModel : function(e
 
 	return vm;
 }};
-
-
-
-
-

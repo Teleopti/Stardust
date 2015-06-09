@@ -21,8 +21,8 @@
 			loadTeams: "Team/TeamsAndGroupsWithAllTeam",
 			loadSchedule: "TeamSchedule/TeamSchedule"
 		};
-
-		var vm = Teleopti.MyTimeWeb.TeamScheduleViewModelFactory.createViewModel(endpoints);
+		var ajax = new Teleopti.MyTimeWeb.Ajax();
+		var vm = Teleopti.MyTimeWeb.TeamScheduleViewModelFactory.createViewModel(endpoints, ajax);
 
 		$(window).unbind('resize');
 		$(window).resize(function () {
