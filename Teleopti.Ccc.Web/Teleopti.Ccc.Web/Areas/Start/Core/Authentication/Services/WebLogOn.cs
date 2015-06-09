@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 			_principalAuthorization = principalAuthorization;
 		}
 
-		public void LogOn(string dataSourceName, Guid businessUnitId, Guid personId)
+		public void LogOn(string dataSourceName, Guid businessUnitId, Guid personId, string tenantPassword)
 		{
 			var dataSource = _applicationData.Tenant(dataSourceName);
 			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())

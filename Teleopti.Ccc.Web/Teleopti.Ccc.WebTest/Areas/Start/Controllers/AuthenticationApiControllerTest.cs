@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Start.Controllers;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
@@ -97,6 +98,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		[Test]
 		public void ShouldLogon()
 		{
+			var tenantPassword = RandomName.Make();
 			var person = new Person();
 			person.SetId(Guid.NewGuid());
 			var businessUnitId = Guid.NewGuid();
@@ -105,14 +107,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 				{
 					Successful = true,
 					DataSource = new FakeDataSource {DataSourceName = "datasource"},
-					Person = person
+					Person = person,
+					TenantPassword = tenantPassword
 				});
 			var webLogon = MockRepository.GenerateMock<IWebLogOn>();
 			var target = new AuthenticationApiController(null, identityLogon, MockRepository.GenerateStub<ILogLogonAttempt>(), webLogon);
 
 			target.Logon(businessUnitId);
 
-			webLogon.AssertWasCalled(x => x.LogOn("datasource", businessUnitId, person.Id.Value));
+			webLogon.AssertWasCalled(x => x.LogOn("datasource", businessUnitId, person.Id.Value, tenantPassword));
 		}
 
 		[Test]
@@ -148,6 +151,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		[Test]
 		public void ShouldReturnErrorIfNoPermission()
 		{
+			var tenantPassword = RandomName.Make();
 			var person = new Person();
 			person.SetId(Guid.NewGuid());
 			var businessUnitId = Guid.NewGuid();
@@ -156,10 +160,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			{
 				Successful = true,
 				DataSource = new FakeDataSource { DataSourceName = "datasource" },
-				Person = person
+				Person = person,
+				TenantPassword = tenantPassword
 			});
 			var webLogon = MockRepository.GenerateMock<IWebLogOn>();
-			webLogon.Stub(x => x.LogOn("datasource", businessUnitId, person.Id.Value)).Throw(new PermissionException());
+			webLogon.Stub(x => x.LogOn("datasource", businessUnitId, person.Id.Value, tenantPassword)).Throw(new PermissionException());
 			var target = new StubbingControllerBuilder().CreateController<AuthenticationApiController>(null, identityLogon, MockRepository.GenerateStub<ILogLogonAttempt>(), webLogon);
 
 			var result = target.Logon(businessUnitId);

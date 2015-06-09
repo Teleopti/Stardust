@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using Hangfire;
 using Hangfire.States;
-using MbCache.Core;
 using Microsoft.IdentityModel.Claims;
 using Microsoft.IdentityModel.Protocols.WSFederation;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -20,7 +18,6 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.MessageBroker;
-using Teleopti.Ccc.Web.Areas.Rta;
 using Teleopti.Ccc.Web.Areas.SSO.Core;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
@@ -29,6 +26,7 @@ using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Ccc.Web.Core.Startup.InitializeApplication;
 using Teleopti.Interfaces.Infrastructure;
+using ClaimTypes = System.IdentityModel.Claims.ClaimTypes;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 {
@@ -47,8 +45,9 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private readonly ILoadPasswordPolicyService _loadPasswordPolicyService;
 		private readonly ISettings _settings;
 		private readonly IPhysicalApplicationPath _physicalApplicationPath;
+		private readonly IFindPersonInfo _findPersonInfo;
 
-		public TestController(IMutateNow mutateNow, ICacheInvalidator cacheInvalidator, ISessionSpecificDataProvider sessionSpecificDataProvider, ISsoAuthenticator authenticator, IWebLogOn logon, IBusinessUnitProvider businessUnitProvider, ICurrentHttpContext httpContext, IFormsAuthentication formsAuthentication, IToggleManager toggleManager, IIdentityProviderProvider identityProviderProvider, ILoadPasswordPolicyService loadPasswordPolicyService, ISettings settings, IPhysicalApplicationPath physicalApplicationPath)
+		public TestController(IMutateNow mutateNow, ICacheInvalidator cacheInvalidator, ISessionSpecificDataProvider sessionSpecificDataProvider, ISsoAuthenticator authenticator, IWebLogOn logon, IBusinessUnitProvider businessUnitProvider, ICurrentHttpContext httpContext, IFormsAuthentication formsAuthentication, IToggleManager toggleManager, IIdentityProviderProvider identityProviderProvider, ILoadPasswordPolicyService loadPasswordPolicyService, ISettings settings, IPhysicalApplicationPath physicalApplicationPath, IFindPersonInfo findPersonInfo)
 		{
 			_mutateNow = mutateNow;
 			_cacheInvalidator = cacheInvalidator;
@@ -63,6 +62,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_loadPasswordPolicyService = loadPasswordPolicyService;
 			_settings = settings;
 			_physicalApplicationPath = physicalApplicationPath;
+			_findPersonInfo = findPersonInfo;
 		}
 
 		public ViewResult BeforeScenario(bool enableMyTimeMessageBroker, string defaultProvider = null, bool usePasswordPolicy = false)
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			updateIocNow(null);
 			((IdentityProviderProvider)_identityProviderProvider).SetDefaultProvider(defaultProvider);
 			_loadPasswordPolicyService.ClearFile();
-			_loadPasswordPolicyService.Path = System.IO.Path.Combine(_physicalApplicationPath.Get(), usePasswordPolicy ? "." : _settings.nhibConfPath());
+			_loadPasswordPolicyService.Path = Path.Combine(_physicalApplicationPath.Get(), usePasswordPolicy ? "." : _settings.nhibConfPath());
 			UserDataFactory.EnableMyTimeMessageBroker = enableMyTimeMessageBroker;
 			var viewModel = new TestMessageViewModel
 			{
@@ -121,19 +121,21 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			var result = _authenticator.AuthenticateApplicationUser(userName, password);
 			var businessUnits = _businessUnitProvider.RetrieveBusinessUnitsForPerson(result.DataSource, result.Person);
 			var businessUnit = businessUnits.Single(b => b.Name == businessUnitName);
+			string tenantPassword=null;
 
 			if (result.Successful)
 			{
 				_formsAuthentication.SetAuthCookie(userName + TokenIdentityProvider.ApplicationIdentifier);
+				tenantPassword = _findPersonInfo.GetById(result.Person.Id.Value).TenantPassword;
 			}
 
 			var claims = new List<Claim>
 			{
-				new Claim(System.IdentityModel.Claims.ClaimTypes.NameIdentifier, userName + TokenIdentityProvider.ApplicationIdentifier)
+				new Claim(ClaimTypes.NameIdentifier, userName + TokenIdentityProvider.ApplicationIdentifier)
 			};
 			var claimsIdentity = new ClaimsIdentity(claims, "IssuerForTest");
 			_httpContext.Current().User = new ClaimsPrincipal(new IClaimsIdentity[] { claimsIdentity });
-			_logon.LogOn(result.DataSource.DataSourceName, businessUnit.Id.Value, result.Person.Id.Value);
+			_logon.LogOn(result.DataSource.DataSourceName, businessUnit.Id.Value, result.Person.Id.Value, tenantPassword);
 
 			var viewModel = new TestMessageViewModel
 								{
