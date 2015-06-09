@@ -520,7 +520,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Domain\IAggregateRoot.cs" />
-    <Compile Include="Domain\IApplicationAuthenticationInfo.cs" />
     <Compile Include="Domain\IApplicationData.cs" />
     <Compile Include="Domain\IApplicationFunction.cs" />
     <Compile Include="Domain\IApplicationRole.cs" />

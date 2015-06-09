@@ -1368,7 +1368,6 @@
     <Compile Include="Scheduling\Assignment\RestrictionTest.cs" />
     <Compile Include="Scheduling\WorkShiftTest.cs" />
     <Compile Include="Scheduling\ShiftCategoryTest.cs" />
-    <Compile Include="Security\AuthorizationEntities\ApplicationAuthenticationInfoTest.cs" />
     <Compile Include="Security\AuthorizationEntities\ApplicationFunctionTest.cs" />
     <Compile Include="Security\AuthorizationEntities\ApplicationRoleTest.cs" />
     <Compile Include="Scheduling\ActivityTest.cs" />

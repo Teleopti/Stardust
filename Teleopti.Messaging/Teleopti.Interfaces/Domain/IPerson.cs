@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -199,7 +198,6 @@ namespace Teleopti.Interfaces.Domain
         /// Gets or sets the workflow control set.
         /// </summary>
         /// <value>The workflow control set.</value>
-        /// <remarks>
         IWorkflowControlSet WorkflowControlSet { get; set; }
 
         ///<summary>
@@ -220,12 +218,6 @@ namespace Teleopti.Interfaces.Domain
 		 /// <param name="dateOnly"></param>
 		 /// <returns></returns>
 		  IVirtualSchedulePeriod VirtualSchedulePeriodOrNext(DateOnly dateOnly);
-
-        /// <summary>
-        /// Gets or sets the application authentication info.
-        /// </summary>
-        /// <value>The application authentication info.</value>
-        IApplicationAuthenticationInfo ApplicationAuthenticationInfo { get; set; }
 
 		/// <summary>
 		/// 

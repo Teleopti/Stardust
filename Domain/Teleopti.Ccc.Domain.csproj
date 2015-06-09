@@ -1896,7 +1896,6 @@
     <Compile Include="Scheduling\Assignment\PersonAssignmentRestrictionSet.cs" />
     <Compile Include="Scheduling\WorkShift.cs" />
     <Compile Include="Scheduling\ShiftCategory.cs" />
-    <Compile Include="Security\AuthorizationEntities\ApplicationAuthenticationInfo.cs" />
     <Compile Include="Security\AuthorizationEntities\ApplicationFunction.cs" />
     <Compile Include="Security\AuthorizationEntities\ApplicationRole.cs" />
     <Compile Include="Scheduling\Activity.cs" />

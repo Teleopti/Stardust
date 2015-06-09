@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.PulseLoop;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.Domain.Common
         private static readonly DateOnly MaxDate = new DateOnly(DateTime.MaxValue);
         private IWorkflowControlSet _workflowControlSet;
         private DayOfWeek _firstDayOfWeek;
-        private IApplicationAuthenticationInfo _applicationAuthenticationInfo;
 		private readonly IList<IOptionalColumnValue> _optionalColumnValueCollection = new List<IOptionalColumnValue>();
 		public static readonly DateOnly DefaultTerminalDate = new DateOnly(2059, 12, 31);
 
@@ -739,18 +738,6 @@ namespace Teleopti.Ccc.Domain.Common
     		return VirtualSchedulePeriod(dateToUse);
     	}
 
-        public virtual IApplicationAuthenticationInfo ApplicationAuthenticationInfo
-        {
-            get
-            {
-                return _applicationAuthenticationInfo;
-            }
-            set
-            {
-                _applicationAuthenticationInfo = value;
-            }
-        }
-
 	    public virtual IVirtualSchedulePeriod VirtualSchedulePeriod(DateOnly dateOnly)
         {
             var splitChecker = new VirtualSchedulePeriodSplitChecker(this);
@@ -834,7 +821,6 @@ namespace Teleopti.Ccc.Domain.Common
 
 	    public virtual void SetDeleted()
 	    {
-		    _applicationAuthenticationInfo = null;
 		    var personPeriodsBefore = gatherPersonPeriodDetails();
 		    _isDeleted = true;
 
@@ -853,7 +839,7 @@ namespace Teleopti.Ccc.Domain.Common
 			}
 		}
 
-	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+	    [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public virtual void AddOptionalColumnValue(IOptionalColumnValue value, IOptionalColumn column)
 		{
 			InParameter.NotNull("value", value);
