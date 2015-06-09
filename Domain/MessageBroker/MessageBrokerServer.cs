@@ -64,7 +64,8 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 		{
 			var mailbox = _mailboxRepository.Load(Guid.Parse(mailboxId));
 			var result = mailbox.PopAllMessages();
-			_mailboxRepository.Persist(mailbox);
+			if (result.Any())
+				_mailboxRepository.Persist(mailbox);
 			return result;
 		}
 
