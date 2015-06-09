@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 					throw new PermissionException("You (" + person.Name + ") don't have permission to access the web portal.");
 			}
 
-			var sessionSpecificData = new SessionSpecificData(businessUnitId, dataSourceName, personId);
+			var sessionSpecificData = new SessionSpecificData(businessUnitId, dataSourceName, personId, tenantPassword);
 			_sessionSpecificDataProvider.StoreInCookie(sessionSpecificData);
 		}
 	}

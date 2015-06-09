@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Web;
-using System.Web.Security;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 using log4net;
+using Teleopti.Ccc.TestCommon.TestData;
 
 namespace Teleopti.Ccc.WebTest.Core.RequestContext
 {
@@ -27,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 
 		private static SessionSpecificData generateSessionSpecificData()
 		{
-			return new SessionSpecificData(Guid.NewGuid(), "DataSourceName",  Guid.NewGuid());
+			return new SessionSpecificData(Guid.NewGuid(), "DataSourceName",  Guid.NewGuid(), RandomName.Make());
 		}
 
 		[SetUp]
@@ -82,6 +81,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			result.PersonId.Should().Be.EqualTo(sessionSpecificData.PersonId);
 			result.BusinessUnitId.Should().Be.EqualTo(sessionSpecificData.BusinessUnitId);
 			result.DataSourceName.Should().Be.EqualTo(sessionSpecificData.DataSourceName);
+			result.TenantPassword.Should().Be.EqualTo(sessionSpecificData.TenantPassword);
 		}
 
 		[Test]

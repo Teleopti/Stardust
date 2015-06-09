@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Web;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Ccc.Web.Core.RequestContext.Initialize;
@@ -94,7 +95,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		[Test]
 		public void ShouldReturnNullIfSessionDataPointsToNonExistingDatabase()
 		{
-			var sessionData = new SessionSpecificData(Guid.NewGuid(), "sdf", Guid.NewGuid());
+			var sessionData = new SessionSpecificData(Guid.NewGuid(), "sdf", Guid.NewGuid(), RandomName.Make());
 			using (mocks.Record())
 			{
 				Expect.Call(sessionSpecificDataProvider.GrabFromCookie()).Return(sessionData);
@@ -107,7 +108,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 
 		private static SessionSpecificData createSessionData()
 		{
-			return new SessionSpecificData(Guid.NewGuid(), Guid.NewGuid().ToString(), Guid.NewGuid());
+			return new SessionSpecificData(Guid.NewGuid(), Guid.NewGuid().ToString(), Guid.NewGuid(), RandomName.Make());
 		}
 	}
 }
