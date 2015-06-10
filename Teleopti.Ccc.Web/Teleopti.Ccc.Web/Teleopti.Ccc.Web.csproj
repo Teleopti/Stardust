@@ -564,9 +564,9 @@
     <Compile Include="Areas\Start\Core\Config\ISharedSettingsFactory.cs" />
     <Compile Include="Areas\Start\Core\Config\SharedSettingsFactory.cs" />
     <Compile Include="Areas\MultiTenancy\Core\DataSourceConfiguration.cs" />
-    <Compile Include="Areas\MultiTenancy\Core\DataSourceConfigurationProviderUsingNhibFiles.cs" />
+    <Compile Include="Areas\MultiTenancy\Core\DataSourceConfigurationProvider.cs" />
     <Compile Include="Areas\MultiTenancy\Core\IDataSourceConfigurationProvider.cs" />
-    <Compile Include="Areas\MultiTenancy\Core\INhibConfigurationEncryption.cs" />
+    <Compile Include="Areas\MultiTenancy\Core\IDataSourceConfigurationEncryption.cs" />
     <Compile Include="Areas\MultiTenancy\Core\IParseNhibFile.cs" />
     <Compile Include="Areas\MultiTenancy\Core\IPersonInfoMapper.cs" />
     <Compile Include="Areas\MultiTenancy\Core\IReadDataSourceConfiguration.cs" />

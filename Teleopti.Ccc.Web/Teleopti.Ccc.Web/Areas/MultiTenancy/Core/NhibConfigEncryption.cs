@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 {
-	public class NhibConfigurationEncryption : INhibConfigurationEncryption
+	public class DataSourceConfigurationEncryption : IDataSourceConfigurationEncryption
 	{
 		public DataSourceConfiguration EncryptConfig(DataSourceConfiguration dataSourceConfig)
 		{

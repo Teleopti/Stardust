@@ -280,11 +280,11 @@
     <Compile Include="Areas\Start\Core\Config\SharedSettingsFactoryTest.cs" />
     <Compile Include="Areas\MultiTenancy\Core\VerifyPasswordPolicyTest.cs" />
     <Compile Include="Areas\MultiTenancy\Core\DataSourceConfigurationProviderFake.cs" />
-    <Compile Include="Areas\MultiTenancy\Core\DataSourceConfigurationProviderUsingNhibFilesTest.cs" />
+    <Compile Include="Areas\MultiTenancy\Core\DataSourceConfigurationProviderTest.cs" />
     <Compile Include="Areas\MultiTenancy\Core\HttpRequestUserAgentFake.cs" />
     <Compile Include="Areas\MultiTenancy\Core\IoCTest.cs" />
     <Compile Include="Areas\MultiTenancy\Core\LogTenancyLogonAttemptTest.cs" />
-    <Compile Include="Areas\MultiTenancy\Core\NhibConfigEncryptionTest.cs" />
+    <Compile Include="Areas\MultiTenancy\Core\DataSourceConfigurationEncryptionTest.cs" />
     <Compile Include="Areas\MultiTenancy\Core\ReadDataSourceConfigurationFromNhibFilesTest.cs" />
     <Compile Include="Areas\MultiTenancy\Core\LoginAttemptModelFactoryForWebTest.cs" />
     <Compile Include="Areas\Messages\MessagesAreaRegistrationTest.cs" />

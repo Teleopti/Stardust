@@ -3,16 +3,16 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 
 namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 {
-	public class DataSourceConfigurationProviderUsingNhibFiles : IDataSourceConfigurationProvider
+	public class DataSourceConfigurationProvider : IDataSourceConfigurationProvider
 	{
 		private readonly IReadDataSourceConfiguration _readDataSourceConfiguration;
-		private readonly INhibConfigurationEncryption _nhibConfigurationEncryption;
+		private readonly IDataSourceConfigurationEncryption _dataSourceConfigurationEncryption;
 		private IDictionary<string, DataSourceConfiguration> allConfigs;
 
-		public DataSourceConfigurationProviderUsingNhibFiles(IReadDataSourceConfiguration readDataSourceConfiguration, INhibConfigurationEncryption nhibConfigurationEncryption)
+		public DataSourceConfigurationProvider(IReadDataSourceConfiguration readDataSourceConfiguration, IDataSourceConfigurationEncryption dataSourceConfigurationEncryption)
 		{
 			_readDataSourceConfiguration = readDataSourceConfiguration;
-			_nhibConfigurationEncryption = nhibConfigurationEncryption;
+			_dataSourceConfigurationEncryption = dataSourceConfigurationEncryption;
 		}
 
 		//TODO: tenant better to do encryption once!
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 	
 			DataSourceConfiguration ret;
 			return allConfigs.TryGetValue(tenant.Name, out ret) ? 
-				_nhibConfigurationEncryption.EncryptConfig(ret) : null;
+				_dataSourceConfigurationEncryption.EncryptConfig(ret) : null;
 		}
 	}
 }

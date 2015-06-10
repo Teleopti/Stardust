@@ -8,13 +8,12 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 {
 	[TestFixture]
-	public class NhibConfigEncryptionTest
+	public class DataSourceConfigurationEncryptionTest
 	{
-		private readonly NhibConfigurationEncryption _target = new NhibConfigurationEncryption();
-
 		[Test]
 		public void ShouldEncryptAndDecryptValues()
 		{
+			var target = new DataSourceConfigurationEncryption();
 			var dic = new Dictionary<string, string>
 			{
 				{"key1", "some secret value"},
@@ -32,7 +31,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 			var encryptedTwo = Encryption.EncryptStringToBase64(dic["key2"], EncryptionConstants.Image1, EncryptionConstants.Image2);
 			var encryptedThree = Encryption.EncryptStringToBase64("a very secret connectionstring", EncryptionConstants.Image1, EncryptionConstants.Image2);
 
-			dataSourceConfig = _target.EncryptConfig(dataSourceConfig);
+			dataSourceConfig = target.EncryptConfig(dataSourceConfig);
 
 			dataSourceConfig.AnalyticsConnectionString.Should().Be.EqualTo(encryptedThree);
 			dataSourceConfig.ApplicationNHibernateConfig["key1"].Should().Be.EqualTo(encryptedOne);
