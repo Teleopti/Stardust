@@ -289,7 +289,7 @@ Try
     Add-Content "$fullPathsettingsFile" "`$(RTA_QUEUE_ID)|2001,2002,0063,2000,0019,0068,0085,0202,0238,2003"
     Add-Content "$fullPathsettingsFile" "`$(WEB_BROKER_FOR_WEB)|https://$DataSourceName.teleopticloud.com/Web"
     Add-Content "$fullPathsettingsFile" "`$(WEB_BROKER_BACKPLANE)|https://$DataSourceName.teleopticloud.com/Broker.backplane/backplane"
-	Add-Content "$fullPathsettingsFile" "`$(WEB_BROKER)|https://$DataSourceName.teleopticloud.com/Broker/"
+	Add-Content "$fullPathsettingsFile" "`$(WEB_BROKER)|https://$DataSourceName.teleopticloud.com/Web/"
     Add-Content "$fullPathsettingsFile" "`$(PM_ASMX)|NotImplemented"
     Add-Content "$fullPathsettingsFile" "`$(PM_SERVICE|NotImplemented"
     Add-Content "$fullPathsettingsFile" "`$(AS_DATABASE)|NotImplemented"

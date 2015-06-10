@@ -20,7 +20,7 @@ $(SDK_SSL_MEX_BINDING)|mexHttpBinding
 $(LOCAL_WIKI)|http://REPLACEME/TeleoptiCCC/LocalWiki/
 $(PM_ASMX)|http://REPLACEME/TeleoptiPM/services/Analyzer2005.asmx
 $(WEB_BROKER_FOR_WEB)|http://REPLACEME/TeleoptiCCC/Web
-$(WEB_BROKER)|http://REPLACEME/TeleoptiCCC/Broker/
+$(WEB_BROKER)|http://REPLACEME/TeleoptiCCC/Web/
 $(WEB_BROKER_BACKPLANE)|http://REPLACEME/TeleoptiCCC/Broker.backplane/backplane
 $(RTA_STATE_CODE)|ACW,ADMIN,EMAIL,IDLE,InCall,LOGGED ON,OFF,Ready,WEB
 $(RTA_SERVICE)|http://REPLACEME/TeleoptiCCC/RTA/TeleoptiRtaService.svc
