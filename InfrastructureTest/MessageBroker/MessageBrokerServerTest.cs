@@ -31,5 +31,30 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 			var messages = Broker.PopMessages(mailboxId);
 			messages.Should().Have.Count.EqualTo(1);
 		}
+
+
+		[Test]
+		public void ShouldPublishMultipleMessagesToMailbox()
+		{
+			var mailboxId = Guid.NewGuid().ToString();
+			var businessUnitId = Guid.NewGuid().ToString();
+			Broker.AddMailbox(new Subscription
+			{
+				BusinessUnitId = businessUnitId,
+				MailboxId = mailboxId
+			});
+
+			Broker.NotifyClients(new Message
+			{
+				BusinessUnitId = businessUnitId
+			});
+			Broker.NotifyClients(new Message
+			{
+				BusinessUnitId = businessUnitId
+			});
+
+			var messages = Broker.PopMessages(mailboxId);
+			messages.Should().Have.Count.EqualTo(2);
+		}
 	}
 }

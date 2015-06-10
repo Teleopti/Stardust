@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 				BusinessUnitId = Guid.NewGuid().ToString()
 			};
 			Server.AddMailbox(mailbox);
-			var notification = new Interfaces.MessageBroker.Message
+			var notification = new Message
 			{
 				BusinessUnitId = mailbox.BusinessUnitId
 			};
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 			};
 			Server.AddMailbox(mailbox1);
 			Server.AddMailbox(mailbox2);
-			var notification = new Interfaces.MessageBroker.Message
+			var notification = new Message
 			{
 				BusinessUnitId = mailbox2.BusinessUnitId
 			};
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 		{
 			var subscription = new Subscription { MailboxId = Guid.NewGuid().ToString() };
 			Server.AddMailbox(subscription);
-			var notification = new Interfaces.MessageBroker.Message();
+			var notification = new Message();
 			Server.NotifyClients(notification);
 
 			var messages = Server.PopMessages(subscription.MailboxId);
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 		{
 			var subscription = new Subscription { MailboxId = Guid.NewGuid().ToString() };
 			Server.AddMailbox(subscription);
-			var notification = new Interfaces.MessageBroker.Message();
+			var notification = new Message();
 			Server.NotifyClients(notification);
 
 			Server.PopMessages(subscription.MailboxId);
@@ -110,6 +110,25 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 			messages.Should().Have.Count.EqualTo(0);
 		}
 
+		[Test]
+		public void ShouldUIOU()
+		{
+			var mailbox = new Subscription
+			{
+				MailboxId = Guid.NewGuid().ToString(),
+				BusinessUnitId = Guid.NewGuid().ToString()
+			};
+			Server.AddMailbox(mailbox);
+			var notification = new Message
+			{
+				BusinessUnitId = mailbox.BusinessUnitId
+			};
+
+			Server.NotifyClients(notification);
+			Server.NotifyClients(notification);
+
+			Mailboxes.Data.Single().PopAllMessages().Should().Have.Count.EqualTo(2);
+		}
 	}
 
 }

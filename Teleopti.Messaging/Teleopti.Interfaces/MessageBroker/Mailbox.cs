@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 
 namespace Teleopti.Interfaces.MessageBroker
 {
@@ -8,22 +7,24 @@ namespace Teleopti.Interfaces.MessageBroker
 	{
 		public Guid Id { get; set; }
 		public string Route { get; set; }
-		public ICollection<Message> Messages { get; set; }
+		public IEnumerable<Message> Messages { get { return _messages; }}
+
+		protected List<Message> _messages;
 
 		public Mailbox()
 		{
-			Messages = new Collection<Message>();
+			_messages = new List<Message>();
 		}
 
 		public void AddMessage(Message message)
 		{
-			Messages.Add(message);
+			_messages.Add(message);
 		}
 
 		public IEnumerable<Message> PopAllMessages()
 		{
 			var r = Messages;
-			Messages = new Collection<Message>();
+			_messages = new List<Message>();
 			return r;
 		}
 	}

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using NHibernate;
 using NHibernate.Transform;
@@ -53,59 +54,54 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker
 
 		public Mailbox Load(Guid id)
 		{
-			var result = _unitOfWork.Current().CreateSqlQuery(
-				"SELECT " +
-				"	Id," +
-				"	Route," +
-				"	Notifications AS NotificationsJson " +
-				"FROM [msg].Mailbox WHERE" +
-				"	Id =:Id ")
-				.AddScalar("Id", NHibernateUtil.Guid)
-				.AddScalar("Route", NHibernateUtil.String)
-				.AddScalar("NotificationsJson", NHibernateUtil.StringClob)
-				.SetGuid("Id", id)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(getModel)))
-				.List<getModel>()
-				.SingleOrDefault();
-
-			if (result == null) return null;
-			if (result.NotificationsJson == null) return result;
-
-			result.Messages = _deserializer.DeserializeObject<Message[]>(result.NotificationsJson);
-			result.NotificationsJson = null;
-
-			return result;
+			return Load(id, null).SingleOrDefault();
 		}
 		
 		public IEnumerable<Mailbox> Load(string[] routes)
 		{
-			var result = _unitOfWork.Current().CreateSqlQuery(
+			return Load(null, routes);
+		}
+
+		public IEnumerable<Mailbox> Load(Guid? id, string[] routes)
+		{
+			var where = "Id =:Id";
+			if (routes != null)
+				where = "Route IN (:Routes)";
+
+			var sql = string.Format(
 				"SELECT " +
 				"	Id," +
 				"	Route," +
 				"	Notifications AS NotificationsJson " +
 				"FROM [msg].Mailbox WHERE" +
-				"	Route IN (:Routes) ")
+				"	{0} ", where);
+
+			var query = _unitOfWork.Current().CreateSqlQuery(sql)
 				.AddScalar("Id", NHibernateUtil.Guid)
 				.AddScalar("Route", NHibernateUtil.String)
 				.AddScalar("NotificationsJson", NHibernateUtil.StringClob)
-				.SetParameterList("Routes", routes)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(getModel)))
-				.List<getModel>();
+				;
 
-			result.ForEach(m =>
-			{
-				if (m.NotificationsJson != null) return;
-				m.Messages = _deserializer.DeserializeObject<Message[]>(m.NotificationsJson);
-				m.NotificationsJson = null;
-			});
+			if (routes != null)
+				query.SetParameterList("Routes", routes);
+			else
+				query.SetGuid("Id", id.Value);
 
+			var result = query.List<getModel>();
+			result.ForEach(m => m.ParseJson(_deserializer));
 			return result;
 		}
 
 		private class getModel : Mailbox
 		{
-			public string NotificationsJson { get; set; }
+			public void ParseJson(IJsonDeserializer deserializer)
+			{
+				_messages = deserializer.DeserializeObject<List<Message>>(NotificationsJson);
+				NotificationsJson = null;
+			}
+
+			public string NotificationsJson { private get; set; }
 		}
 
 	}

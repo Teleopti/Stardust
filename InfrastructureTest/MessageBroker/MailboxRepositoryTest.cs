@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 
 			result.Id.Should().Be(mailbox.Id);
 			result.Route.Should().Be(mailbox.Route);
-			result.Messages.Should().Have.Count.EqualTo(mailbox.Messages.Count);
+			result.Messages.Should().Have.Count.EqualTo(mailbox.Messages.Count());
 			result.Messages.Single().BusinessUnitId.Should().Be(notification.BusinessUnitId);
 		}
 
@@ -53,25 +53,53 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 		}
 
 		[Test]
-		public void ShouldHandleMultipleNotifications()
+		public void ShouldReturnNullWhenLoadingNonExistingMailbox()
 		{
-			var notification1 = new Message { BusinessUnitId = Guid.NewGuid().ToString() };
-			var notification2 = new Message { BusinessUnitId = Guid.NewGuid().ToString() };
-			var mailbox = new Mailbox
-			{
-				Id = Guid.NewGuid(),
-				Route = notification1.Routes().First()
-			};
-			mailbox.AddMessage(notification1);
-			mailbox.AddMessage(notification2);
-
-			Assert.DoesNotThrow(() => Target.Persist(mailbox));
+			Target.Load(Guid.NewGuid()).Should().Be.Null();
 		}
 
 		[Test]
-		public void ShouldNotThrowWhenLoadingWithoutPersistedData()
+		public void ShouldPersistAddedNotifications()
 		{
-			Assert.DoesNotThrow(() => Target.Load(Guid.NewGuid()));
+			var businessUnitId = Guid.NewGuid().ToString();
+			var mailboxId = Guid.NewGuid();
+			Target.Persist(new Mailbox
+			{
+				Id = mailboxId,
+				Route = new Message { BusinessUnitId = businessUnitId }.Routes().First()
+			});
+			var mailbox = Target.Load(mailboxId);
+			mailbox.AddMessage(new Message { BusinessUnitId = businessUnitId });
+			Target.Persist(mailbox);
+
+			mailbox = Target.Load(mailboxId);
+			mailbox.AddMessage(new Message { BusinessUnitId = businessUnitId });
+			Target.Persist(mailbox);
+
+			Target.Load(mailboxId).Messages.Should().Have.Count.EqualTo(2);
 		}
+
+		[Test]
+		public void ShouldPersistAddedNotificationsLoadedByRoute()
+		{
+			var businessUnitId = Guid.NewGuid().ToString();
+			var mailboxId = Guid.NewGuid();
+			var route = new Message { BusinessUnitId = businessUnitId }.Routes().First();
+			Target.Persist(new Mailbox
+			{
+				Id = mailboxId,
+				Route = route
+			});
+			var mailbox = Target.Load(new[] {route}).Single();
+			mailbox.AddMessage(new Message { BusinessUnitId = businessUnitId });
+			Target.Persist(mailbox);
+
+			mailbox = Target.Load(new[] {route}).Single();
+			mailbox.AddMessage(new Message { BusinessUnitId = businessUnitId });
+			Target.Persist(mailbox);
+
+			Target.Load(mailboxId).Messages.Should().Have.Count.EqualTo(2);
+		}
+
 	}
 }
