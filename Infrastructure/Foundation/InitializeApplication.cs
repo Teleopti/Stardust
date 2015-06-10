@@ -16,15 +16,14 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 	public class InitializeApplication : IInitializeApplication
 	{
 		private static readonly ILog log = LogManager.GetLogger(typeof (InitializeApplication));
-	    
+		private readonly IDataSourcesFactory _dataSourcesFactory;
+		private readonly IMessageBrokerComposite _messageBroker;
+
 		public InitializeApplication(IDataSourcesFactory dataSourcesFactory, IMessageBrokerComposite messageBroker)
 		{
-			this.dataSourcesFactory = dataSourcesFactory;
-			this.messageBroker = messageBroker;
+			_dataSourcesFactory = dataSourcesFactory;
+			_messageBroker = messageBroker;
 		}
-
-		private IDataSourcesFactory dataSourcesFactory { get; set; }
-		private IMessageBrokerComposite messageBroker { get; set; }
 
 		// from Web, ServiceBus, ETL, sdk
 		public void Start(IState clientCache, string xmlDirectory, ILoadPasswordPolicyService loadPasswordPolicyService,
@@ -41,7 +40,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 					throw new DataSourceException(@"Missing <dataSource> in file " + file);
 				}
 				IDataSource dataSource;
-				if (dataSourcesFactory.TryCreate(element, out dataSource))
+				if (_dataSourcesFactory.TryCreate(element, out dataSource))
 				{
 					dataSources.Add(dataSource);
 				}
@@ -49,8 +48,8 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			if (startMessageBroker)
 				this.startMessageBroker(appSettings);
 			StateHolder.Instance.State.SetApplicationData(
-				new ApplicationData(appSettings, new ReadOnlyCollection<IDataSource>(dataSources), messageBroker,
-					loadPasswordPolicyService, dataSourcesFactory));
+				new ApplicationData(appSettings, new ReadOnlyCollection<IDataSource>(dataSources), _messageBroker,
+					loadPasswordPolicyService, _dataSourcesFactory));
 		}
 
 		//from applicationconfig
@@ -60,9 +59,9 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			IDictionary<string, string> appSettings)
 		{
 			StateHolder.Initialize(clientCache);
-			IDataSource dataSource = dataSourcesFactory.Create(databaseSettings, statisticConnectionString);
+			IDataSource dataSource = _dataSourcesFactory.Create(databaseSettings, statisticConnectionString);
 			startMessageBroker(appSettings);
-			StateHolder.Instance.State.SetApplicationData(new ApplicationData(appSettings, new[]{dataSource},messageBroker, null, dataSourcesFactory));
+			StateHolder.Instance.State.SetApplicationData(new ApplicationData(appSettings, new[]{dataSource}, _messageBroker, null, _dataSourcesFactory));
 		}
 
 		private void startMessageBroker(IDictionary<string, string> appSettings)
@@ -78,8 +77,8 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 						if (Uri.TryCreate(messageBrokerConnection, UriKind.Absolute, out serverUrl))
 						{
 							var useLongPolling = appSettings.GetSettingValue("MessageBrokerLongPolling", bool.Parse);
-							messageBroker.ServerUrl = messageBrokerConnection;
-							messageBroker.StartBrokerService(useLongPolling);
+							_messageBroker.ServerUrl = messageBrokerConnection;
+							_messageBroker.StartBrokerService(useLongPolling);
 						}
 					}
 
@@ -101,8 +100,8 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 				startMessageBroker(appSettings);
 			}
 			StateHolder.Instance.State.SetApplicationData(
-				new ApplicationData(appSettings, new List<IDataSource>(), messageBroker,
-										  loadPasswordPolicyService, dataSourcesFactory));
+				new ApplicationData(appSettings, new List<IDataSource>(), _messageBroker,
+										  loadPasswordPolicyService, _dataSourcesFactory));
 		}
 	}
 }
