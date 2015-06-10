@@ -333,6 +333,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.xxShowLastNumberOfDays = new System.Windows.Forms.ToolStripLabel();
 			this.toolStripComboBoxExFilterDays = new Syncfusion.Windows.Forms.Tools.ToolStripComboBoxEx();
 			this.flowLayoutExportToScenario = new Syncfusion.Windows.Forms.Tools.FlowLayout(this.components);
+			this.toolStripPanelItemSave = new Syncfusion.Windows.Forms.Tools.ToolStripPanelItem();
+			this.toolStripButtonSaveLarge = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButtonRefreshLarge = new System.Windows.Forms.ToolStripButton();
 			this.statusStrip1.SuspendLayout();
 			this.contextMenuViews.SuspendLayout();
 			this.contextMenuStripResultView.SuspendLayout();
@@ -341,6 +344,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			((System.ComponentModel.ISupportInitialize)(this.backStage1)).BeginInit();
 			this.backStage1.SuspendLayout();
 			this.toolStripTabItemHome.Panel.SuspendLayout();
+			this.toolStripExSave.SuspendLayout();
 			this.toolStripExScheduleViews.SuspendLayout();
 			this.toolStripExActions.SuspendLayout();
 			this.toolStripExLocks.SuspendLayout();
@@ -385,14 +389,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// toolStripSpinningProgressControl1
 			// 
 			this.toolStripSpinningProgressControl1.ActiveSegmentColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
-			this.toolStripSpinningProgressControl1.BehindTransitionSegmentIsActive = true;
+			this.toolStripSpinningProgressControl1.BehindTransitionSegmentIsActive = false;
 			this.toolStripSpinningProgressControl1.InactiveSegmentColor = System.Drawing.Color.White;
 			this.toolStripSpinningProgressControl1.Name = "ToolStripSpinningProgress";
 			this.toolStripSpinningProgressControl1.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
 			this.SetShortcut(this.toolStripSpinningProgressControl1, System.Windows.Forms.Keys.None);
 			this.toolStripSpinningProgressControl1.Size = new System.Drawing.Size(25, 24);
 			this.toolStripSpinningProgressControl1.Text = "toolStripSpinningProgressControl1";
-			this.toolStripSpinningProgressControl1.TransitionSegment = 6;
+			this.toolStripSpinningProgressControl1.TransitionSegment = 0;
 			this.toolStripSpinningProgressControl1.TransitionSegmentColor = System.Drawing.Color.SkyBlue;
 			this.toolStripSpinningProgressControl1.Visible = false;
 			// 
@@ -1578,10 +1582,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripExSave.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(59)))), ((int)(((byte)(59)))));
 			this.toolStripExSave.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripExSave.Image = null;
+			this.toolStripExSave.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripPanelItemSave});
 			this.toolStripExSave.Location = new System.Drawing.Point(0, 1);
 			this.toolStripExSave.Name = "toolStripExSave";
 			this.toolStripExSave.Office12Mode = false;
-			this.toolStripExSave.Size = new System.Drawing.Size(59, 87);
+			this.toolStripExSave.Size = new System.Drawing.Size(115, 87);
 			this.toolStripExSave.TabIndex = 17;
 			this.toolStripExSave.Text = "xxSave";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripExSave, true);
@@ -1594,7 +1600,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripExClipboard.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(59)))), ((int)(((byte)(59)))));
 			this.toolStripExClipboard.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripExClipboard.Image = null;
-			this.toolStripExClipboard.Location = new System.Drawing.Point(61, 1);
+			this.toolStripExClipboard.Location = new System.Drawing.Point(117, 1);
 			this.toolStripExClipboard.Name = "toolStripExClipboard";
 			this.toolStripExClipboard.Office12Mode = false;
 			this.toolStripExClipboard.ShowItemToolTips = true;
@@ -1612,7 +1618,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripExEdit2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(59)))), ((int)(((byte)(59)))));
 			this.toolStripExEdit2.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripExEdit2.Image = null;
-			this.toolStripExEdit2.Location = new System.Drawing.Point(169, 1);
+			this.toolStripExEdit2.Location = new System.Drawing.Point(225, 1);
 			this.toolStripExEdit2.Name = "toolStripExEdit2";
 			this.toolStripExEdit2.Office12Mode = false;
 			this.toolStripExEdit2.ShowLauncher = false;
@@ -1631,7 +1637,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripExScheduleViews.Image = null;
 			this.toolStripExScheduleViews.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripPanelItemViews2});
-			this.toolStripExScheduleViews.Location = new System.Drawing.Point(277, 1);
+			this.toolStripExScheduleViews.Location = new System.Drawing.Point(333, 1);
 			this.toolStripExScheduleViews.Name = "toolStripExScheduleViews";
 			this.toolStripExScheduleViews.Office12Mode = false;
 			this.toolStripExScheduleViews.ShowItemToolTips = true;
@@ -1766,7 +1772,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripExActions.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripPanelItemAssignments});
 			this.toolStripExActions.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
-			this.toolStripExActions.Location = new System.Drawing.Point(508, 1);
+			this.toolStripExActions.Location = new System.Drawing.Point(564, 1);
 			this.toolStripExActions.Name = "toolStripExActions";
 			this.toolStripExActions.Office12Mode = false;
 			this.toolStripExActions.ShowCaption = true;
@@ -1937,7 +1943,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripExLocks.Image = null;
 			this.toolStripExLocks.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripPanelItemLocks});
-			this.toolStripExLocks.Location = new System.Drawing.Point(624, 1);
+			this.toolStripExLocks.Location = new System.Drawing.Point(680, 1);
 			this.toolStripExLocks.Name = "toolStripExLocks";
 			this.toolStripExLocks.Office12Mode = false;
 			this.toolStripExLocks.ShowCaption = true;
@@ -2349,7 +2355,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripExTags.Image = null;
 			this.toolStripExTags.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripPanelItemTags});
-			this.toolStripExTags.Location = new System.Drawing.Point(731, 1);
+			this.toolStripExTags.Location = new System.Drawing.Point(787, 1);
 			this.toolStripExTags.Name = "toolStripExTags";
 			this.toolStripExTags.Office12Mode = false;
 			this.toolStripExTags.ShowLauncher = false;
@@ -2417,7 +2423,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripEx1.Image = null;
 			this.toolStripEx1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripPanelItem1});
-			this.toolStripEx1.Location = new System.Drawing.Point(878, 1);
+			this.toolStripEx1.Location = new System.Drawing.Point(934, 1);
 			this.toolStripEx1.MinimumSize = new System.Drawing.Size(0, 90);
 			this.toolStripEx1.Name = "toolStripEx1";
 			this.toolStripEx1.Office12Mode = false;
@@ -2511,7 +2517,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripExLoadOptions.Image = null;
 			this.toolStripExLoadOptions.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripPanelItemLoadOptions});
-			this.toolStripExLoadOptions.Location = new System.Drawing.Point(1069, 1);
+			this.toolStripExLoadOptions.Location = new System.Drawing.Point(1125, 1);
 			this.toolStripExLoadOptions.Name = "toolStripExLoadOptions";
 			this.toolStripExLoadOptions.Office12Mode = false;
 			this.toolStripExLoadOptions.ShowCaption = true;
@@ -2583,7 +2589,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripExFilter.Image = null;
 			this.toolStripExFilter.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripPanelItem3});
-			this.toolStripExFilter.Location = new System.Drawing.Point(1186, 1);
+			this.toolStripExFilter.Location = new System.Drawing.Point(1242, 1);
 			this.toolStripExFilter.Name = "toolStripExFilter";
 			this.toolStripExFilter.Office12Mode = false;
 			this.toolStripExFilter.ShowLauncher = false;
@@ -3473,6 +3479,46 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.flowLayoutExportToScenario.HorzNearMargin = 5;
 			this.flowLayoutExportToScenario.LayoutMode = Syncfusion.Windows.Forms.Tools.FlowLayoutMode.Vertical;
 			// 
+			// toolStripPanelItemSave
+			// 
+			this.toolStripPanelItemSave.CausesValidation = false;
+			this.toolStripPanelItemSave.ForeColor = System.Drawing.Color.MidnightBlue;
+			this.toolStripPanelItemSave.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButtonSaveLarge,
+            this.toolStripButtonRefreshLarge});
+			this.toolStripPanelItemSave.Name = "toolStripPanelItemSave";
+			this.SetShortcut(this.toolStripPanelItemSave, System.Windows.Forms.Keys.None);
+			this.toolStripPanelItemSave.Size = new System.Drawing.Size(96, 73);
+			this.toolStripPanelItemSave.Transparent = true;
+			// 
+			// toolStripButtonSaveLarge
+			// 
+			this.ribbonControlAdv1.SetDescription(this.toolStripButtonSaveLarge, "");
+			this.toolStripButtonSaveLarge.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Save;
+			this.toolStripButtonSaveLarge.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+			this.toolStripButtonSaveLarge.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButtonSaveLarge.Name = "toolStripButtonSaveLarge";
+			this.SetShortcut(this.toolStripButtonSaveLarge, System.Windows.Forms.Keys.None);
+			this.toolStripButtonSaveLarge.Size = new System.Drawing.Size(77, 36);
+			this.toolStripButtonSaveLarge.Text = "xxSave";
+			this.toolStripButtonSaveLarge.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonSaveLarge, true);
+			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonSaveLarge, false);
+			// 
+			// toolStripButtonRefreshLarge
+			// 
+			this.ribbonControlAdv1.SetDescription(this.toolStripButtonRefreshLarge, "");
+			this.toolStripButtonRefreshLarge.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Refresh;
+			this.toolStripButtonRefreshLarge.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+			this.toolStripButtonRefreshLarge.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButtonRefreshLarge.Name = "toolStripButtonRefreshLarge";
+			this.SetShortcut(this.toolStripButtonRefreshLarge, System.Windows.Forms.Keys.None);
+			this.toolStripButtonRefreshLarge.Size = new System.Drawing.Size(92, 36);
+			this.toolStripButtonRefreshLarge.Text = "xxRefresh";
+			this.toolStripButtonRefreshLarge.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonRefreshLarge, true);
+			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonRefreshLarge, false);
+			// 
 			// SchedulingScreen
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3506,6 +3552,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.backStage1.ResumeLayout(false);
 			this.toolStripTabItemHome.Panel.ResumeLayout(false);
 			this.toolStripTabItemHome.Panel.PerformLayout();
+			this.toolStripExSave.ResumeLayout(false);
+			this.toolStripExSave.PerformLayout();
 			this.toolStripExScheduleViews.ResumeLayout(false);
 			this.toolStripExScheduleViews.PerformLayout();
 			this.toolStripExActions.ResumeLayout(false);
@@ -3824,6 +3872,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private ToolStripStatusLabel toolStripStatusLabelNumberOfAgents;
 		private ToolStripMenuItem toolStripMenuItemPublish;
         private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripExSave;
+		private Syncfusion.Windows.Forms.Tools.ToolStripPanelItem toolStripPanelItemSave;
+		private ToolStripButton toolStripButtonSaveLarge;
+		private ToolStripButton toolStripButtonRefreshLarge;
         
         
     }
