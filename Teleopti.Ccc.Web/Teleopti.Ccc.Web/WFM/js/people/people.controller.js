@@ -12,10 +12,8 @@ function outsideClick($window, $parse) {
 	return {
 		restrict: 'A',
 		link: function (scope, element, attrs) {
-			var outsideClickHandler = $parse(attrs.outsideClick);
 			angular.element($window).on('click', function (event) {
 				if (element[0].contains(event.target)) return;
-				outsideClickHandler(scope, { $event: event });
 				scope.$apply();
 			});
 		}
