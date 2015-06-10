@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 			_dataSourceConfigurationEncryption = dataSourceConfigurationEncryption;
 		}
 
-		//TODO: tenant better to do encryption once!
 		public DataSourceConfiguration ForTenant(Tenant tenant)
 		{
 			if(allConfigs==null)

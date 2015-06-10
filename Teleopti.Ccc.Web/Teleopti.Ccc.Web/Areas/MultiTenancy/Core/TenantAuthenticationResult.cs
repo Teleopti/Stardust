@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 
 namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 {
