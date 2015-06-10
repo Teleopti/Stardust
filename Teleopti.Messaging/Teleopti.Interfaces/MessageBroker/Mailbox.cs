@@ -8,7 +8,8 @@ namespace Teleopti.Interfaces.MessageBroker
 		public Guid Id { get; set; }
 		public string Route { get; set; }
 		public IEnumerable<Message> Messages { get { return _messages; }}
-
+		
+		[CLSCompliant(false)]
 		protected List<Message> _messages;
 
 		public Mailbox()
