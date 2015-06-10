@@ -12,8 +12,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 		public string FeedbackError { get; set; }
 
 
-		public bool HasViolationToPreviousDay;
-		public bool HasViolationToNextDay;
+		public bool HasNightRestViolationToPreviousDay;
+		public bool HasNightRestViolationToNextDay;
 		public TimeSpan ExpectedNightRest;
 	
 	}

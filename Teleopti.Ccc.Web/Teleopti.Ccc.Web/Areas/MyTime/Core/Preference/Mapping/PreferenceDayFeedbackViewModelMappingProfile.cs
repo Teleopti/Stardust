@@ -28,8 +28,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 					{
 						Date = s.ToFixedClientDateOnlyFormat(),
 
-						HasViolationToPreviousDay = nightRestResult.HasViolationToPreviousDay,
-						HasViolationToNextDay = nightRestResult.HasViolationToNextDay,
+						HasNightRestViolationToPreviousDay = nightRestResult.HasViolationToPreviousDay,
+						HasNightRestViolationToNextDay = nightRestResult.HasViolationToNextDay,
 						ExpectedNightRest = nightRestResult.ExpectedNightRest
 					};
 
