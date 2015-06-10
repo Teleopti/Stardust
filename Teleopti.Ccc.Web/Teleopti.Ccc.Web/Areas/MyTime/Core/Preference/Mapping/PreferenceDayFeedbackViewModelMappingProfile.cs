@@ -22,36 +22,50 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 		{
 			CreateMap<DateOnly, PreferenceDayFeedbackViewModel>()
 				.ConvertUsing(s =>
-				              	{
-				              		var result = _preferenceFeedbackProvider.WorkTimeMinMaxForDate(s) ?? new WorkTimeMinMaxCalculationResult();
-				              		if (result.WorkTimeMinMax == null)
-				              		{
-				              			if (result.RestrictionNeverHadThePossibilityToMatchWithShifts)
-											return _mapper.Value.Map<Tuple<DateOnly, string>, PreferenceDayFeedbackViewModel>(new Tuple<DateOnly, string>(s, ""));
-										return _mapper.Value.Map<Tuple<DateOnly, string>, PreferenceDayFeedbackViewModel>(new Tuple<DateOnly, string>(s, Resources.NoAvailableShifts));
-									}
-				              		var source = new Tuple<DateOnly, IWorkTimeMinMax>(s, result.WorkTimeMinMax);
-				              		return _mapper.Value.Map<Tuple<DateOnly, IWorkTimeMinMax>, PreferenceDayFeedbackViewModel>(source);
-				              	});
+				{
+					var nightRestResult = _preferenceFeedbackProvider.CheckNightRestViolation(s);
+					var mappedResult = new PreferenceDayFeedbackViewModel
+					{
+						Date = s.ToFixedClientDateOnlyFormat(),
 
-			CreateMap<Tuple<DateOnly, string>, PreferenceDayFeedbackViewModel>()
-				.ForMember(d => d.Date, o => o.MapFrom(s => s.Item1.ToFixedClientDateOnlyFormat()))
-				.ForMember(d => d.FeedbackError, o => o.MapFrom(s => s.Item2))
-				.ForMember(d => d.PossibleStartTimes, o => o.Ignore())
-				.ForMember(d => d.PossibleEndTimes, o => o.Ignore())
-				.ForMember(d => d.PossibleContractTimeMinutesLower, o => o.Ignore())
-				.ForMember(d => d.PossibleContractTimeMinutesUpper, o => o.Ignore())
-				;
+						HasViolationToPreviousDay = nightRestResult.HasViolationToPreviousDay,
+						HasViolationToNextDay = nightRestResult.HasViolationToNextDay,
+						ExpectedNightRest = nightRestResult.ExpectedNightRest
+					};
 
-			CreateMap<Tuple<DateOnly, IWorkTimeMinMax>, PreferenceDayFeedbackViewModel>()
-				.ForMember(d => d.Date, o => o.MapFrom(s => s.Item1.ToFixedClientDateOnlyFormat()))
-				.ForMember(d => d.FeedbackError, o => o.Ignore())
-				.ForMember(d => d.PossibleStartTimes, o => o.MapFrom(s => s.Item2.StartTimeLimitation.StartTimeString.ToLower() + "-" + s.Item2.StartTimeLimitation.EndTimeString.ToLower()))
-				.ForMember(d => d.PossibleEndTimes, o => o.MapFrom(s => s.Item2.EndTimeLimitation.StartTimeString.ToLower() + "-" + s.Item2.EndTimeLimitation.EndTimeString.ToLower()))
-				.ForMember(d => d.PossibleContractTimeMinutesLower, o => o.MapFrom(s => s.Item2.WorkTimeLimitation.StartTime != null ? s.Item2.WorkTimeLimitation.StartTime.Value.TotalMinutes.ToString() : null))
-				.ForMember(d => d.PossibleContractTimeMinutesUpper, o => o.MapFrom(s => s.Item2.WorkTimeLimitation.EndTime != null ? s.Item2.WorkTimeLimitation.EndTime.Value.TotalMinutes.ToString() : null))
-				;
+					var workTimeResult = _preferenceFeedbackProvider.WorkTimeMinMaxForDate(s) ??
+					                     new WorkTimeMinMaxCalculationResult();
 
+					if (workTimeResult.WorkTimeMinMax == null)
+					{
+						mappedResult.FeedbackError = (workTimeResult.RestrictionNeverHadThePossibilityToMatchWithShifts)
+							? ""
+							: Resources.NoAvailableShifts;
+					}
+					else
+					{
+						mappedResult.PossibleStartTimes =
+							workTimeResult.WorkTimeMinMax.StartTimeLimitation.StartTimeString.ToLower() + "-" +
+							workTimeResult.WorkTimeMinMax.StartTimeLimitation.EndTimeString.ToLower();
+
+						mappedResult.PossibleEndTimes =
+							workTimeResult.WorkTimeMinMax.EndTimeLimitation.StartTimeString.ToLower() + "-" +
+							workTimeResult.WorkTimeMinMax.EndTimeLimitation.EndTimeString.ToLower();
+
+						mappedResult.PossibleContractTimeMinutesLower =
+							workTimeResult.WorkTimeMinMax.WorkTimeLimitation.StartTime != null
+								? workTimeResult.WorkTimeMinMax.WorkTimeLimitation.StartTime.Value.TotalMinutes.ToString()
+								: null;
+
+						mappedResult.PossibleContractTimeMinutesUpper =
+							workTimeResult.WorkTimeMinMax.WorkTimeLimitation.EndTime != null
+								? workTimeResult.WorkTimeMinMax.WorkTimeLimitation.EndTime.Value.TotalMinutes.ToString()
+								: null;
+					}
+
+					return mappedResult;
+
+				});
 		}
 	}
 }

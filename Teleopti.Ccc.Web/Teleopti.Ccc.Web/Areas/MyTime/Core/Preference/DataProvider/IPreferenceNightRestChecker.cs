@@ -5,13 +5,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 {
 	public class PreferenceNightRestCheckResult
 	{
-		public bool HasViolation;
-		public string Message;
+		public bool HasViolationToPreviousDay;
+		public bool HasViolationToNextDay;
 		public TimeSpan ExpectedNightRest;
 	}
 
 	public interface IPreferenceNightRestChecker
 	{
-		PreferenceNightRestCheckResult CheckNightRestViolation(DateOnly date);
+		PreferenceNightRestCheckResult CheckNightRestViolation(IPerson person, DateOnly date);
 	}
 }

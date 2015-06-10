@@ -156,6 +156,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<PreferenceTemplateInputMappingProfile.PreferenceTemplateInputToExtendedPreferenceTemplate>().SingleInstance();
 			builder.RegisterType<TextRequestFormMappingProfile.TextRequestFormToPersonRequest>().As<ITypeConverter<TextRequestForm, IPersonRequest>>().SingleInstance();
 			builder.RegisterType<AbsenceRequestFormMappingProfile.AbsenceRequestFormToPersonRequest>().As<ITypeConverter<AbsenceRequestForm, IPersonRequest>>().SingleInstance();
+			builder.RegisterType<PreferenceNightRestChecker>().As<IPreferenceNightRestChecker>().SingleInstance();
 		}
 
 		private static void registerPreferenceTypes(ContainerBuilder builder)

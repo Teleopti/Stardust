@@ -6,5 +6,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 	{
 		WorkTimeMinMaxCalculationResult WorkTimeMinMaxForDate(DateOnly date, IScheduleDay scheduleDay);
 		WorkTimeMinMaxCalculationResult WorkTimeMinMaxForDate(DateOnly date);
+		PreferenceNightRestCheckResult CheckNightRestViolation(DateOnly date);
 	}
 }
