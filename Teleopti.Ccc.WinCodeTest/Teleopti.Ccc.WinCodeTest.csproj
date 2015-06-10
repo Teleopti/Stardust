@@ -694,7 +694,6 @@
     <Compile Include="Scheduler\SmartDayOffBackToLegalStateSolverContainerTest.cs" />
     <Compile Include="Scheduler\SplitLongDayAbsencesTest.cs" />
     <Compile Include="Scheduler\WorkShiftMasterActivityCheckerTest.cs" />
-    <Compile Include="Security\PasswordPolicyServiceViewModelTest.cs" />
     <Compile Include="Settings\AbsenceViewTest.cs" />
     <Compile Include="Settings\PageHelperTest.cs" />
     <Compile Include="Shifts\WorkShiftAddCallbackTest.cs" />
@@ -919,9 +918,6 @@
     <None Include="Forecasting\ImportForecast\EmptyFile.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Content Include="Security\ValidFile.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Common\PersonPicker\" />

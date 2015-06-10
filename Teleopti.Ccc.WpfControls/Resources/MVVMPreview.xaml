@@ -9,9 +9,6 @@
     xmlns:Timeline="clr-namespace:Teleopti.Ccc.WinCode.Common.Time.Timeline;assembly=Teleopti.Ccc.WinCode"
     xmlns:Timeline1="clr-namespace:Teleopti.Ccc.WpfControls.Controls.Time.Timeline"
     xmlns:Scheduling="clr-namespace:Teleopti.Ccc.WinCode.Scheduling;assembly=Teleopti.Ccc.WinCode"
-
-    xmlns:Security="clr-namespace:Teleopti.Ccc.WinCode.Security;assembly=Teleopti.Ccc.WinCode"
-
     xmlns:AddToSchedule="clr-namespace:Teleopti.Ccc.WpfControls.Controls.AddToSchedule">
     
     <!--<Style TargetType="Control">
