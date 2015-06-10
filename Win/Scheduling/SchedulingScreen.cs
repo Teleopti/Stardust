@@ -3667,11 +3667,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void disableSave()
 		{
 			toggleQuickButtonEnabledState(toolStripButtonQuickAccessSave, false);
+			toolStripButtonSaveLarge.Enabled = false;
 		}
 
 		private void enableSave()
 		{
 			toggleQuickButtonEnabledState(toolStripButtonQuickAccessSave, true);
+			toolStripButtonSaveLarge.Enabled = true;
 			enableUndoRedoButtons();
 		}
 
