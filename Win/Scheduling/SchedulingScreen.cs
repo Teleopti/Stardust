@@ -32,6 +32,7 @@ using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.IocCommon.MultipleConfig;
 using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
+using Teleopti.Ccc.Win.Intraday;
 using Teleopti.Ccc.Win.Meetings;
 using Teleopti.Ccc.Win.Optimization;
 using Teleopti.Ccc.Win.Scheduling.AgentRestrictions;
@@ -5626,6 +5627,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		public void SizeOfMessageBrokerQueue(int count)
 		{
 			toolStripButtonRefresh.Enabled = count != 0;
+			toolStripButtonRefreshLarge.Enabled = count != 0;
 		}
 
 		private void toolStripComboBoxExFilterDays_SelectedIndexChanged(object sender, EventArgs e)
@@ -5635,6 +5637,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 		}
 
 		private void toolStripButtonRefresh_Click(object sender, EventArgs e)
+		{
+			refresh();
+		}
+
+		private void refresh()
 		{
 			try
 			{
@@ -6387,6 +6394,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 				publishCommand.Execute();
 				enableSave();
 			}	
+		}
+
+		private void toolStripButtonSaveLarge_Click(object sender, EventArgs e)
+		{
+			save();
+		}
+
+		private void toolStripButtonRefreshLarge_Click(object sender, EventArgs e)
+		{
+			refresh();
 		}
 	}
 }
