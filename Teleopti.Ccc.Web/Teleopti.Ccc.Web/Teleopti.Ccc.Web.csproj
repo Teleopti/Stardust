@@ -569,11 +569,11 @@
     <Compile Include="Areas\MultiTenancy\Core\INhibConfigurationEncryption.cs" />
     <Compile Include="Areas\MultiTenancy\Core\IParseNhibFile.cs" />
     <Compile Include="Areas\MultiTenancy\Core\IPersonInfoMapper.cs" />
-    <Compile Include="Areas\MultiTenancy\Core\IReadNHibFiles.cs" />
+    <Compile Include="Areas\MultiTenancy\Core\IReadDataSourceConfiguration.cs" />
     <Compile Include="Areas\MultiTenancy\Core\NhibConfigEncryption.cs" />
     <Compile Include="Areas\MultiTenancy\Core\ParseNhibFile.cs" />
     <Compile Include="Areas\MultiTenancy\Core\PersonInfoMapper.cs" />
-    <Compile Include="Areas\MultiTenancy\Core\ReadNHibFiles.cs" />
+    <Compile Include="Areas\MultiTenancy\Core\ReadDataSourceConfigurationFromNhibFiles.cs" />
     <Compile Include="Areas\SeatPlanner\Controllers\TeamHierarchyController.cs" />
     <Compile Include="Areas\SeatPlanner\Core\IOC\SeatPlannerAreaModule.cs" />
     <Compile Include="Areas\SeatPlanner\Core\Providers\ITeamsProvider.cs" />

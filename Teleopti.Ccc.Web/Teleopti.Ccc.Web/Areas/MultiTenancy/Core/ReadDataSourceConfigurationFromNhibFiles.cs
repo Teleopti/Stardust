@@ -5,13 +5,13 @@ using Teleopti.Ccc.Web.Core.Startup.InitializeApplication;
 
 namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 {
-	public class ReadNHibFiles : IReadNHibFiles
+	public class ReadDataSourceConfigurationFromNhibFiles : IReadDataSourceConfiguration
 	{
 		private readonly ISettings _settings;
 		private readonly IPhysicalApplicationPath _physicalApplicationPath;
 		private readonly IParseNhibFile _parseNhibFile;
 
-		public ReadNHibFiles(ISettings settings, 
+		public ReadDataSourceConfigurationFromNhibFiles(ISettings settings, 
 												IPhysicalApplicationPath physicalApplicationPath,
 												IParseNhibFile parseNhibFile)
 		{

@@ -5,13 +5,13 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 {
 	public class DataSourceConfigurationProviderUsingNhibFiles : IDataSourceConfigurationProvider
 	{
-		private readonly IReadNHibFiles _readNHibFiles;
+		private readonly IReadDataSourceConfiguration _readDataSourceConfiguration;
 		private readonly INhibConfigurationEncryption _nhibConfigurationEncryption;
 		private IDictionary<string, DataSourceConfiguration> allConfigs;
 
-		public DataSourceConfigurationProviderUsingNhibFiles(IReadNHibFiles readNHibFiles, INhibConfigurationEncryption nhibConfigurationEncryption)
+		public DataSourceConfigurationProviderUsingNhibFiles(IReadDataSourceConfiguration readDataSourceConfiguration, INhibConfigurationEncryption nhibConfigurationEncryption)
 		{
-			_readNHibFiles = readNHibFiles;
+			_readDataSourceConfiguration = readDataSourceConfiguration;
 			_nhibConfigurationEncryption = nhibConfigurationEncryption;
 		}
 
@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 		public DataSourceConfiguration ForTenant(Tenant tenant)
 		{
 			if(allConfigs==null)
-				allConfigs = _readNHibFiles.Read();
+				allConfigs = _readDataSourceConfiguration.Read();
 	
 			DataSourceConfiguration ret;
 			return allConfigs.TryGetValue(tenant.Name, out ret) ? 

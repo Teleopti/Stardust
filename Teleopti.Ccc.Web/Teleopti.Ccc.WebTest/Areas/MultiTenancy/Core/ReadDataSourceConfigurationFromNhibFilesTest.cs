@@ -8,7 +8,7 @@ using Teleopti.Ccc.Web.Core.Startup.InitializeApplication;
 
 namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 {
-	public class ReadNHibFilesTest
+	public class ReadDataSourceConfigurationFromNhibFilesTest
 	{
 		[Test]
 		public void ShouldParseFile()
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 				settings.Stub(x => x.nhibConfPath()).Return(path);
 
 				File.WriteAllText(filename, nhibFile);
-				var target = new ReadNHibFiles(settings, new physicalApplicationPathStub(path), new ParseNhibFile());
+				var target = new ReadDataSourceConfigurationFromNhibFiles(settings, new physicalApplicationPathStub(path), new ParseNhibFile());
 				var res = target.Read()["sessionFactoryName"];
 
 				res.AnalyticsConnectionString.Should().Be.EqualTo("Analytics connection string");

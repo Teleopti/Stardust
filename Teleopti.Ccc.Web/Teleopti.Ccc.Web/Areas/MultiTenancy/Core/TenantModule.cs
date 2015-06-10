@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 			builder.RegisterType<TenantUnitOfWorkAspect>().As<ITenantUnitOfWorkAspect>().SingleInstance();
 			builder.RegisterType<PersistLogonAttempt>().As<IPersistLogonAttempt>().SingleInstance();
 			builder.RegisterType<DataSourceConfigurationProviderUsingNhibFiles>().As<IDataSourceConfigurationProvider>().SingleInstance();
-			builder.RegisterType<ReadNHibFiles>().As<IReadNHibFiles>().SingleInstance();
+			builder.RegisterType<ReadDataSourceConfigurationFromNhibFiles>().As<IReadDataSourceConfiguration>().SingleInstance();
 			builder.RegisterType<ParseNhibFile>().As<IParseNhibFile>().SingleInstance();
 			builder.RegisterType<NhibConfigurationEncryption>().As<INhibConfigurationEncryption>().SingleInstance();
 			builder.RegisterType<PersistPersonInfo>().As<IPersistPersonInfo>().SingleInstance();

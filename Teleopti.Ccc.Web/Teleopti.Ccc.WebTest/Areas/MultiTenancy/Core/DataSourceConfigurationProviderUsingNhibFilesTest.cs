@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 		public void ExistingConfiguration()
 		{
 			var expected = new DataSourceConfiguration();
-			var readNHibFiles = MockRepository.GenerateMock<IReadNHibFiles>();
+			var readNHibFiles = MockRepository.GenerateMock<IReadDataSourceConfiguration>();
 			var encrypter = MockRepository.GenerateMock<INhibConfigurationEncryption>();
 			readNHibFiles.Expect(x => x.Read()).Return(new Dictionary<string, DataSourceConfiguration> {{"something", expected}});
 			encrypter.Stub(x => x.EncryptConfig(expected)).Return(expected);
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 		[Test]
 		public void NonExistingConfiguration()
 		{
-			var readNHibFiles = MockRepository.GenerateMock<IReadNHibFiles>();
+			var readNHibFiles = MockRepository.GenerateMock<IReadDataSourceConfiguration>();
 			var encrypter = MockRepository.GenerateMock<INhibConfigurationEncryption>();
 			readNHibFiles.Expect(x => x.Read()).Return(new Dictionary<string, DataSourceConfiguration>());
 			var target = new DataSourceConfigurationProviderUsingNhibFiles(readNHibFiles, encrypter);
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 		[Test]
 		public void ShouldKeepStateIfReadNhibFiles()
 		{
-			var readNHibFiles = MockRepository.GenerateMock<IReadNHibFiles>();
+			var readNHibFiles = MockRepository.GenerateMock<IReadDataSourceConfiguration>();
 			var encrypter = MockRepository.GenerateMock<INhibConfigurationEncryption>();
 			readNHibFiles.Expect(x => x.Read()).Return(new Dictionary<string, DataSourceConfiguration>());
 
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 		{
 			var expected = new DataSourceConfiguration();
 			var expectedTwo = new DataSourceConfiguration();
-			var readNHibFiles = MockRepository.GenerateMock<IReadNHibFiles>();
+			var readNHibFiles = MockRepository.GenerateMock<IReadDataSourceConfiguration>();
 			var encrypter = MockRepository.GenerateMock<INhibConfigurationEncryption>();
 			encrypter.Stub(x => x.EncryptConfig(expected)).Return(expected);
 			encrypter.Stub(x => x.EncryptConfig(expectedTwo)).Return(expectedTwo);

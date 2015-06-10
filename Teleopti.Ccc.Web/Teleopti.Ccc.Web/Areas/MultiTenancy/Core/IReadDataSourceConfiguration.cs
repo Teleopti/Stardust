@@ -2,7 +2,7 @@
 
 namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 {
-	public interface IReadNHibFiles
+	public interface IReadDataSourceConfiguration
 	{
 		IDictionary<string, DataSourceConfiguration> Read();
 	}
