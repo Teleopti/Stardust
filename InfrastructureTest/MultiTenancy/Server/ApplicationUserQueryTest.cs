@@ -1,39 +1,31 @@
 ﻿using System;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
 
 namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 {
 	public class ApplicationUserQueryTest
 	{
-		private Guid personId;
-		private string correctUserName;
-		private string tenantName;
 		private IApplicationUserQuery target;
 		private TenantUnitOfWorkManager _tenantUnitOfWorkManager;
-
+		private PersonInfo existingPerson;
 
 		[Test]
 		public void ShouldFindPersonId()
 		{
-			var result = target.Find(correctUserName);
-			result.Id.Should().Be.EqualTo(personId);
+			var result = target.Find(existingPerson.ApplicationLogonInfo.LogonName);
+			result.Id.Should().Be.EqualTo(existingPerson.Id);
 		}
 
 		[Test]
 		public void ShouldFindTenant()
 		{
-			var result = target.Find(correctUserName);
-			result.Tenant.Name.Should().Be.EqualTo(tenantName);
+			var result = target.Find(existingPerson.ApplicationLogonInfo.LogonName);
+			result.Tenant.Name.Should().Be.EqualTo(existingPerson.Tenant.Name);
 		}
 
 		[Test]
@@ -46,16 +38,13 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		[SetUp]
 		public void Setup()
 		{
-			correctUserName = RandomName.Make();
 			_tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(ConnectionStringHelper.ConnectionStringUsedInTests);
-			tenantName = RandomName.Make();
-			var tenant = new Tenant(tenantName);
+			var tenant = new Tenant(RandomName.Make());
 			_tenantUnitOfWorkManager.CurrentSession().Save(tenant);
-			personId = Guid.NewGuid();
-			var pInfo = new PersonInfo(tenant, personId);
-			pInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), correctUserName, RandomName.Make());
+			existingPerson = new PersonInfo(tenant, Guid.NewGuid());
+			existingPerson.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), RandomName.Make());
 			var personInfoPersister = new PersistPersonInfo(_tenantUnitOfWorkManager);
-			personInfoPersister.Persist(pInfo);
+			personInfoPersister.Persist(existingPerson);
 			_tenantUnitOfWorkManager.CurrentSession().Flush();
 			target = new ApplicationUserQuery(_tenantUnitOfWorkManager);
 		}
