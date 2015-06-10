@@ -41,7 +41,7 @@
 			// 
 			this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button2.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.button2.Location = new System.Drawing.Point(206, 227);
+			this.button2.Location = new System.Drawing.Point(300, 227);
 			this.button2.Name = "button2";
 			this.button2.Size = new System.Drawing.Size(75, 23);
 			this.button2.TabIndex = 3;
@@ -52,7 +52,8 @@
 			// button1
 			// 
 			this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.button1.Location = new System.Drawing.Point(287, 228);
+			this.button1.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.button1.Location = new System.Drawing.Point(381, 228);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(75, 23);
 			this.button1.TabIndex = 2;
@@ -118,7 +119,7 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.button1;
-			this.ClientSize = new System.Drawing.Size(375, 262);
+			this.ClientSize = new System.Drawing.Size(469, 262);
 			this.Controls.Add(this.button3);
 			this.Controls.Add(this.numericUpDown2);
 			this.Controls.Add(this.monthCalendar1);
@@ -131,7 +132,7 @@
 			this.Name = "AddManualProductionView";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "AddManualProductionView";
+			this.Text = "Manage manual production";
 			this.Load += new System.EventHandler(this.AddManualProductionView_Load);
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
 			this.ResumeLayout(false);

@@ -76,6 +76,12 @@
       <index column="Date" type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure" />
       <element column="PlannedTime" type="TimeSpan" />
     </map>
+
+    <map name="_actualBacklogDays" table="OutboundCampaignActualBacklog" access="field" cascade="all-delete-orphan" lazy="false">
+      <key column="Campaign" foreign-key="FK_OutboundCampaignActualBacklog_OutboundCampaign"/>
+      <index column="Date" type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure" />
+      <element column="ActualBacklog" type="TimeSpan" />
+    </map>
     
 		<many-to-one name="UpdatedBy"
 								 class="Teleopti.Ccc.Domain.Common.Person"

@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Win.Backlog
 				}
 			}
 
-			setBoldDates();
+			//setBoldDates();
 		}
 
 		private void button2_Click(object sender, EventArgs e)

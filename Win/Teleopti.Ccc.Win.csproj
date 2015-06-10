@@ -298,6 +298,12 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Backlog\AddActualBacklogView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Backlog\AddActualBacklogView.Designer.cs">
+      <DependentUpon>AddActualBacklogView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Backlog\AddCampaign.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2649,6 +2655,9 @@
     <Compile Include="Sikuli\Validators\SelftestValidators\SelftestFailValidator.cs" />
     <Compile Include="Sikuli\Validators\SelftestValidators\SelftestPassValidator.cs" />
     <Compile Include="Sikuli\Helpers\ValidatorHelper.cs" />
+    <EmbeddedResource Include="Backlog\AddActualBacklogView.resx">
+      <DependentUpon>AddActualBacklogView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Backlog\AddCampaign.resx">
       <DependentUpon>AddCampaign.cs</DependentUpon>
     </EmbeddedResource>
