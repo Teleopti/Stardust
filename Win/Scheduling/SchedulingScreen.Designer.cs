@@ -389,14 +389,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// toolStripSpinningProgressControl1
 			// 
 			this.toolStripSpinningProgressControl1.ActiveSegmentColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
-			this.toolStripSpinningProgressControl1.BehindTransitionSegmentIsActive = false;
+			this.toolStripSpinningProgressControl1.BehindTransitionSegmentIsActive = true;
 			this.toolStripSpinningProgressControl1.InactiveSegmentColor = System.Drawing.Color.White;
 			this.toolStripSpinningProgressControl1.Name = "ToolStripSpinningProgress";
 			this.toolStripSpinningProgressControl1.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
 			this.SetShortcut(this.toolStripSpinningProgressControl1, System.Windows.Forms.Keys.None);
 			this.toolStripSpinningProgressControl1.Size = new System.Drawing.Size(25, 24);
 			this.toolStripSpinningProgressControl1.Text = "toolStripSpinningProgressControl1";
-			this.toolStripSpinningProgressControl1.TransitionSegment = 11;
+			this.toolStripSpinningProgressControl1.TransitionSegment = 6;
 			this.toolStripSpinningProgressControl1.TransitionSegmentColor = System.Drawing.Color.SkyBlue;
 			this.toolStripSpinningProgressControl1.Visible = false;
 			// 
@@ -1576,7 +1576,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// 
 			// toolStripExSave
 			// 
-			this.toolStripExSave.AutoSize = false;
 			this.ribbonControlAdv1.SetDescription(this.toolStripExSave, "");
 			this.toolStripExSave.Dock = System.Windows.Forms.DockStyle.None;
 			this.toolStripExSave.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(59)))), ((int)(((byte)(59)))));
@@ -1587,7 +1586,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripExSave.Location = new System.Drawing.Point(0, 1);
 			this.toolStripExSave.Name = "toolStripExSave";
 			this.toolStripExSave.Office12Mode = false;
-			this.toolStripExSave.Size = new System.Drawing.Size(115, 87);
+			this.toolStripExSave.ShowCaption = false;
+			this.toolStripExSave.ShowLauncher = false;
+			this.toolStripExSave.Size = new System.Drawing.Size(105, 87);
 			this.toolStripExSave.TabIndex = 17;
 			this.toolStripExSave.Text = "xxSave";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripExSave, true);
@@ -1603,7 +1604,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripPanelItemSave.Name = "toolStripPanelItemSave";
 			this.toolStripPanelItemSave.RowCount = 2;
 			this.SetShortcut(this.toolStripPanelItemSave, System.Windows.Forms.Keys.None);
-			this.toolStripPanelItemSave.Size = new System.Drawing.Size(96, 73);
+			this.toolStripPanelItemSave.Size = new System.Drawing.Size(96, 87);
 			this.toolStripPanelItemSave.Transparent = true;
 			// 
 			// toolStripButtonSaveLarge
@@ -1643,7 +1644,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripExClipboard.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(59)))), ((int)(((byte)(59)))));
 			this.toolStripExClipboard.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripExClipboard.Image = null;
-			this.toolStripExClipboard.Location = new System.Drawing.Point(117, 1);
+			this.toolStripExClipboard.Location = new System.Drawing.Point(107, 1);
 			this.toolStripExClipboard.Name = "toolStripExClipboard";
 			this.toolStripExClipboard.Office12Mode = false;
 			this.toolStripExClipboard.ShowItemToolTips = true;
@@ -1661,13 +1662,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripExEdit2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(59)))), ((int)(((byte)(59)))));
 			this.toolStripExEdit2.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripExEdit2.Image = null;
-			this.toolStripExEdit2.Location = new System.Drawing.Point(225, 1);
+			this.toolStripExEdit2.Location = new System.Drawing.Point(215, 1);
 			this.toolStripExEdit2.Name = "toolStripExEdit2";
 			this.toolStripExEdit2.Office12Mode = false;
 			this.toolStripExEdit2.ShowLauncher = false;
 			this.toolStripExEdit2.Size = new System.Drawing.Size(106, 87);
 			this.toolStripExEdit2.TabIndex = 12;
-			this.toolStripExEdit2.Text = "Edit";
+			this.toolStripExEdit2.Text = "xxEdit";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripExEdit2, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripExEdit2, false);
 			// 
@@ -1680,7 +1681,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripExScheduleViews.Image = null;
 			this.toolStripExScheduleViews.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripPanelItemViews2});
-			this.toolStripExScheduleViews.Location = new System.Drawing.Point(333, 1);
+			this.toolStripExScheduleViews.Location = new System.Drawing.Point(323, 1);
 			this.toolStripExScheduleViews.Name = "toolStripExScheduleViews";
 			this.toolStripExScheduleViews.Office12Mode = false;
 			this.toolStripExScheduleViews.ShowItemToolTips = true;
@@ -1815,7 +1816,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripExActions.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripPanelItemAssignments});
 			this.toolStripExActions.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
-			this.toolStripExActions.Location = new System.Drawing.Point(564, 1);
+			this.toolStripExActions.Location = new System.Drawing.Point(554, 1);
 			this.toolStripExActions.Name = "toolStripExActions";
 			this.toolStripExActions.Office12Mode = false;
 			this.toolStripExActions.ShowCaption = true;
@@ -1986,7 +1987,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripExLocks.Image = null;
 			this.toolStripExLocks.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripPanelItemLocks});
-			this.toolStripExLocks.Location = new System.Drawing.Point(680, 1);
+			this.toolStripExLocks.Location = new System.Drawing.Point(670, 1);
 			this.toolStripExLocks.Name = "toolStripExLocks";
 			this.toolStripExLocks.Office12Mode = false;
 			this.toolStripExLocks.ShowCaption = true;
@@ -2398,7 +2399,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripExTags.Image = null;
 			this.toolStripExTags.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripPanelItemTags});
-			this.toolStripExTags.Location = new System.Drawing.Point(787, 1);
+			this.toolStripExTags.Location = new System.Drawing.Point(777, 1);
 			this.toolStripExTags.Name = "toolStripExTags";
 			this.toolStripExTags.Office12Mode = false;
 			this.toolStripExTags.ShowLauncher = false;
@@ -2466,7 +2467,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripEx1.Image = null;
 			this.toolStripEx1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripPanelItem1});
-			this.toolStripEx1.Location = new System.Drawing.Point(934, 1);
+			this.toolStripEx1.Location = new System.Drawing.Point(924, 1);
 			this.toolStripEx1.MinimumSize = new System.Drawing.Size(0, 90);
 			this.toolStripEx1.Name = "toolStripEx1";
 			this.toolStripEx1.Office12Mode = false;
@@ -2560,7 +2561,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripExLoadOptions.Image = null;
 			this.toolStripExLoadOptions.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripPanelItemLoadOptions});
-			this.toolStripExLoadOptions.Location = new System.Drawing.Point(1125, 1);
+			this.toolStripExLoadOptions.Location = new System.Drawing.Point(1115, 1);
 			this.toolStripExLoadOptions.Name = "toolStripExLoadOptions";
 			this.toolStripExLoadOptions.Office12Mode = false;
 			this.toolStripExLoadOptions.ShowCaption = true;
@@ -2632,7 +2633,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripExFilter.Image = null;
 			this.toolStripExFilter.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripPanelItem3});
-			this.toolStripExFilter.Location = new System.Drawing.Point(1242, 1);
+			this.toolStripExFilter.Location = new System.Drawing.Point(1232, 1);
 			this.toolStripExFilter.Name = "toolStripExFilter";
 			this.toolStripExFilter.Office12Mode = false;
 			this.toolStripExFilter.ShowLauncher = false;
