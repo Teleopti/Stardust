@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					allMatrixes, rollbackServiceWithResourceCalculation,
 					schedulingOptions, teamInfoFactory, resourceCalculateDelayer);
 
-			if (optimizationPreferences.General.OptimizationStepDaysOffForFlexibleWorkTime)
+			if (optimizationPreferences.General.OptimizationStepDaysOffForFlexibleWorkTime && _toggleManager.IsEnabled(Toggles.Scheduler_OptimizeFlexibleDayOffs_22409))
 			{
 				var optimizeDayOffs = optimizationPreferences.General.OptimizationStepDaysOff;
 				optimizationPreferences.General.OptimizationStepDaysOff = false;

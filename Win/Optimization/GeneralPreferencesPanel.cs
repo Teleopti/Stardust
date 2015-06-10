@@ -66,10 +66,8 @@ namespace Teleopti.Ccc.Win.Optimization
 
         public bool IsOptimizationStepsChecked()
         {
-            if ( checkBoxShiftsForFlexibleWorkTime.Checked ||
-                checkBoxDaysOffFromFlexibleWorkTime.Checked)
-                return true;
-            return false;
+	        if (_toggleManager.IsEnabled(Toggles.Scheduler_OptimizeFlexibleDayOffs_22409))return checkBoxShiftsForFlexibleWorkTime.Checked;
+            return checkBoxShiftsForFlexibleWorkTime.Checked || checkBoxDaysOffFromFlexibleWorkTime.Checked;
         }
 
 	    public bool IsTimeBetweenDaysChecked()
