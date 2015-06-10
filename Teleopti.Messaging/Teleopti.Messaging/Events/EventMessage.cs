@@ -6,7 +6,6 @@ namespace Teleopti.Messaging.Events
     public class EventMessage : IEventMessage
     {
         private Type _domainObjectTypeCache;
-        private Type _referenceObjectTypeCache;
 
         public EventMessage()
         {
@@ -17,7 +16,6 @@ namespace Teleopti.Messaging.Events
                             DateTime eventEndDate,
                             Guid moduleId,
                             Guid referenceObjectId,
-                            string referenceObjectType,
                             Guid domainObjectId,
                             string domainObjectType,
                             DomainUpdateType domainUpdateType,
@@ -29,7 +27,6 @@ namespace Teleopti.Messaging.Events
             EventEndDate = eventEndDate;
             ModuleId = moduleId;
             ReferenceObjectId = referenceObjectId;
-            ReferenceObjectType = referenceObjectType;
             DomainObjectId = domainObjectId;
             DomainObjectType = domainObjectType;
             DomainUpdateType = domainUpdateType;
@@ -39,45 +36,23 @@ namespace Teleopti.Messaging.Events
         }
 
         public Guid EventId { get; set; }
-
         public DateTime EventStartDate { get; set; }
-
         public DateTime EventEndDate { get; set; }
-
         public Guid ModuleId { get; set; }
-
         public Guid ReferenceObjectId { get; set; }
-
-        public string ReferenceObjectType { get; set; }
-
-        public Type ReferenceObjectTypeCache
-        {
-            get
-            {
-                if (_referenceObjectTypeCache == null && !string.IsNullOrEmpty(ReferenceObjectType))
-                    _referenceObjectTypeCache = Type.GetType(ReferenceObjectType);
-                return _referenceObjectTypeCache;
-            }
-        }
-
         public Guid DomainObjectId { get; set; }
-
         public string DomainObjectType { get; set; }
 
-        public Type DomainObjectTypeCache
-        {
-            get { return _domainObjectTypeCache ?? (_domainObjectTypeCache = Type.GetType(DomainObjectType)); }
-        }
-
         public Type InterfaceType { get; set; }
-
         public DomainUpdateType DomainUpdateType { get; set; }
-
         public byte[] DomainObject { get; set; }
-
         public string ChangedBy { get; set; }
-
         public DateTime ChangedDateTime { get; set; }
+
+		public Type DomainObjectTypeCache
+		{
+			get { return _domainObjectTypeCache ?? (_domainObjectTypeCache = Type.GetType(DomainObjectType)); }
+		}
 
         public int CompareTo(object obj)
         {

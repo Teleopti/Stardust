@@ -55,8 +55,8 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         	                               DateTime.UtcNow,
         	                               DateTime.UtcNow,
         	                               Guid.NewGuid(), 
-        	                               Guid.NewGuid(), string.Empty,
         	                               Guid.NewGuid(),
+										   Guid.NewGuid(),
         	                               typeof (IStatisticTask).Name,
         	                               DomainUpdateType.Insert,
         	                               string.Empty,
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         	                               DateTime.UtcNow,
         	                               DateTime.UtcNow, 
         	                               Guid.NewGuid(), 
-        	                               Guid.NewGuid(), string.Empty,
+        	                               Guid.NewGuid(), 
         	                               Guid.NewGuid(),
         	                               typeof (IStatisticTask).Name,
         	                               DomainUpdateType.Insert,
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         	                               DateTime.UtcNow,
         	                               DateTime.UtcNow, 
         	                               Guid.NewGuid(),
-        	                               Guid.NewGuid(), string.Empty,
+        	                               Guid.NewGuid(), 
         	                               Guid.NewGuid(),
         	                               typeof (IStatisticTask).Name,
         	                               DomainUpdateType.Insert,
@@ -139,16 +139,16 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         [Test]
         public void ShouldRetryForForecastEvent()
         {
-        	var message = new EventMessage(Guid.NewGuid(),
-        		                                      DateTime.UtcNow,
-        		                                      DateTime.UtcNow, 
-        		                                      Guid.NewGuid(), 
-        		                                      Guid.NewGuid(), string.Empty,
-        		                                      Guid.NewGuid(),
-        		                                      typeof (IForecastData).Name,
-        		                                      DomainUpdateType.Insert,
-        		                                      string.Empty,
-        		                                      DateTime.UtcNow);
+	        var message = new EventMessage(Guid.NewGuid(),
+		        DateTime.UtcNow,
+		        DateTime.UtcNow,
+		        Guid.NewGuid(),
+		        Guid.NewGuid(),
+		        Guid.NewGuid(),
+		        typeof (IForecastData).Name,
+		        DomainUpdateType.Insert,
+		        string.Empty,
+		        DateTime.UtcNow);
             
             using (mocks.Record())
             {
@@ -170,16 +170,16 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         public void ShouldRetryForScheduleEvent()
         {
             var objectId = Guid.NewGuid();
-        	var message = new EventMessage(Guid.NewGuid(),
-        	                               DateTime.UtcNow,
-        	                               DateTime.UtcNow, 
-        	                               Guid.NewGuid(),
-        	                               Guid.NewGuid(), string.Empty,
-        	                               objectId,
-        	                               typeof (IPersonAssignment).Name,
-        	                               DomainUpdateType.Delete,
-        	                               string.Empty,
-        	                               DateTime.UtcNow) {InterfaceType = typeof (IPersonAssignment)};
+	        var message = new EventMessage(Guid.NewGuid(),
+		        DateTime.UtcNow,
+		        DateTime.UtcNow,
+		        Guid.NewGuid(),
+		        Guid.NewGuid(),
+		        objectId,
+		        typeof (IPersonAssignment).Name,
+		        DomainUpdateType.Delete,
+		        string.Empty,
+		        DateTime.UtcNow) {InterfaceType = typeof (IPersonAssignment)};
 
             using (mocks.Record())
             {

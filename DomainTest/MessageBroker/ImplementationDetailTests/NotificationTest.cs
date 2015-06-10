@@ -32,7 +32,6 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker.ImplementationDetailTests
 			         		DomainId = Subscription.IdToString(domainId),
 			         		DomainReferenceId = Subscription.IdToString(domainReferenceId),
 			         		ModuleId = Subscription.IdToString(moduleId),
-			         		DomainReferenceType = "ref",
 			         		DomainType = "type",
 			         		DomainUpdateType = 1,
 			         		StartDate = Subscription.DateToString(startDate),
@@ -50,7 +49,6 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker.ImplementationDetailTests
 			target.DomainReferenceIdAsGuid().Should().Be.EqualTo(domainReferenceId);
 			target.ModuleIdAsGuid().Should().Be.EqualTo(moduleId);
 			target.BusinessUnitIdAsGuid().Should().Be.EqualTo(businessUnitId);
-			target.DomainReferenceType.Should().Be.EqualTo("ref");
 			target.DomainType.Should().Be.EqualTo("type");
 			target.DomainUpdateTypeAsDomainUpdateType().Should().Be.EqualTo(DomainUpdateType.Update);
 			target.StartDateAsDateTime().Should().Be.EqualTo(startDate);

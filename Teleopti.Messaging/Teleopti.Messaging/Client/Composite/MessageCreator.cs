@@ -21,17 +21,20 @@ namespace Teleopti.Messaging.Client.Composite
 			_messageFilterManager = messageFilterManager;
 		}
 
-		private IEnumerable<Message> createNotifications(string dataSource, string businessUnitId,
-			DateTime eventStartDate, DateTime eventEndDate, Guid moduleId,
-			Guid referenceObjectId, Type referenceObjectType,
-			Guid domainObjectId, Type domainObjectType,
-			DomainUpdateType updateType, byte[] domainObject)
+		private IEnumerable<Message> createNotifications(
+			string dataSource, 
+			string businessUnitId,
+			DateTime eventStartDate, 
+			DateTime eventEndDate, 
+			Guid moduleId,
+			Guid referenceObjectId, 
+			Guid domainObjectId, 
+			Type domainObjectType,
+			DomainUpdateType updateType, 
+			byte[] domainObject)
 		{
 			if (_messageFilterManager.HasType(domainObjectType))
 			{
-				var referenceObjectTypeString = (referenceObjectType == null)
-					? null
-					: _messageFilterManager.LookupTypeToSend(referenceObjectType);
 				var eventStartDateString = Subscription.DateToString(eventStartDate);
 				var eventEndDateString = Subscription.DateToString(eventEndDate);
 				var moduleIdString = Subscription.IdToString(moduleId);
@@ -47,7 +50,6 @@ namespace Teleopti.Messaging.Client.Composite
 					DomainType = _messageFilterManager.LookupType(domainObjectType).Name,
 					DomainQualifiedType = domainQualifiedTypeString,
 					DomainReferenceId = domainReferenceIdString,
-					DomainReferenceType = referenceObjectTypeString,
 					ModuleId = moduleIdString,
 					DomainUpdateType = (int)updateType,
 					DataSource = dataSource,
@@ -59,9 +61,16 @@ namespace Teleopti.Messaging.Client.Composite
 
 		public void Send(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
 		{
-			var notificationList = createNotifications(dataSource, Subscription.IdToString(businessUnitId), eventStartDate,
-				eventEndDate, moduleId, referenceObjectId,
-				referenceObjectType, domainObjectId, domainObjectType, updateType,
+			var notificationList = createNotifications(
+				dataSource,
+				Subscription.IdToString(businessUnitId),
+				eventStartDate,
+				eventEndDate,
+				moduleId,
+				referenceObjectId,
+				domainObjectId,
+				domainObjectType,
+				updateType,
 				domainObject);
 			_messageSender.SendMultiple(notificationList);
 		}
@@ -77,11 +86,16 @@ namespace Teleopti.Messaging.Client.Composite
 			var businessUnitIdString = Subscription.IdToString(businessUnitId);
 			foreach (var eventMessage in eventMessages)
 			{
-				notificationList.AddRange(createNotifications(dataSource, businessUnitIdString, eventMessage.EventStartDate,
-					eventMessage.EventEndDate, eventMessage.ModuleId,
-					eventMessage.ReferenceObjectId, eventMessage.ReferenceObjectTypeCache,
+				notificationList.AddRange(
+					createNotifications(
+					dataSource, businessUnitIdString, 
+					eventMessage.EventStartDate,
+					eventMessage.EventEndDate, 
+					eventMessage.ModuleId,
+					eventMessage.ReferenceObjectId, 
 					eventMessage.DomainObjectId,
-					eventMessage.DomainObjectTypeCache, eventMessage.DomainUpdateType,
+					eventMessage.DomainObjectTypeCache,
+					eventMessage.DomainUpdateType,
 					eventMessage.DomainObject));
 
 				if (notificationList.Count > MessagesPerBatch)

@@ -97,7 +97,6 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
                 else
 					eventMessage = _eventMessageFactory.CreateEventMessage(moduleId, 
                                                                     changeWithRoot.MainRoot.Id.Value,
-                                                                    realType(changeWithRoot.MainRoot),
                                                                     rootId, 
                                                                     rootType, 
                                                                     change.Status);
@@ -112,7 +111,6 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
                                                                      period.EndDateTime,
                                                                      moduleId, 
                                                                      changeWithRoot.MainRoot.Id.Value,
-                                                                     realType(changeWithRoot.MainRoot),
                                                                      rootId, 
                                                                      rootType, 
                                                                      change.Status);
@@ -131,9 +129,5 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
     		return Guid.Empty;
     	}
 
-    	private static Type realType(object possibleProxy)
-        {
-            return NHibernateUtil.GetClass(possibleProxy);
-        }
     }
 }

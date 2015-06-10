@@ -74,7 +74,6 @@ namespace Teleopti.Interfaces.MessageBroker
 		public string DomainId { get; set; }
 		public string ModuleId { get; set; }
 		public string DomainReferenceId { get; set; }
-		public string DomainReferenceType { get; set; }
 		public string EndDate { get; set; }
 		public string StartDate { get; set; }
 		public int DomainUpdateType { get; set; }

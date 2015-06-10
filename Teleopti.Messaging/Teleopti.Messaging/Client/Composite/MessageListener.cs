@@ -120,7 +120,6 @@ namespace Teleopti.Messaging.Client.Composite
 				DomainObjectId = d.DomainIdAsGuid(),
 				ModuleId = d.ModuleIdAsGuid(),
 				ReferenceObjectId = d.DomainReferenceIdAsGuid(),
-				ReferenceObjectType = d.DomainReferenceType,
 				EventStartDate = d.StartDateAsDateTime(),
 				EventEndDate = d.EndDateAsDateTime(),
 				DomainUpdateType = d.DomainUpdateTypeAsDomainUpdateType()

@@ -19,7 +19,7 @@ namespace Teleopti.Messaging.Events
 			};
 		}
 
-		public IEventMessage CreateEventMessage(Guid moduleId, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType)
+		public IEventMessage CreateEventMessage(Guid moduleId, Guid referenceObjectId, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType)
 		{
 			return new EventMessage
 			{
@@ -28,7 +28,6 @@ namespace Teleopti.Messaging.Events
 				DomainObjectType = domainObjectType.AssemblyQualifiedName,
 				DomainUpdateType = updateType,
 				ReferenceObjectId = referenceObjectId,
-				ReferenceObjectType = referenceObjectType.AssemblyQualifiedName,
 				EventStartDate = Consts.MinDate,
 				EventEndDate = Consts.MaxDate
 			};
@@ -47,7 +46,7 @@ namespace Teleopti.Messaging.Events
 			};
 		}
 
-		public IEventMessage CreateEventMessage(DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType)
+		public IEventMessage CreateEventMessage(DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid referenceObjectId, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType)
 		{
 			return new EventMessage
 			{
@@ -58,7 +57,6 @@ namespace Teleopti.Messaging.Events
 				EventStartDate = eventStartDate,
 				EventEndDate = eventEndDate,
 				ReferenceObjectId = referenceObjectId,
-				ReferenceObjectType = referenceObjectType.AssemblyQualifiedName,
 			};
 		}
 	}
