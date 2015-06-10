@@ -413,7 +413,6 @@
     <Compile Include="Foundation\InitializeApplication.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="NHibernateConfiguration\HashedString.cs" />
     <Compile Include="NHibernateConfiguration\InterceptorIteration.cs" />
     <Compile Include="Foundation\IState.cs" />
     <Compile Include="Foundation\MatrixRaptorExternalLogOnSynchronization.cs" />

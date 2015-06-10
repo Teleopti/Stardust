@@ -1599,7 +1599,6 @@
     <Compile Include="Security\IOneWayEncryption.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Security\IsPasswordEncryptedSpecification.cs" />
     <Compile Include="Security\ISystemUserSpecification.cs" />
     <Compile Include="Security\Matrix\ApplicationFunctionResolver.cs" />
     <Compile Include="Security\AuthorizationData\ShippedApplicationRoleNames.cs" />

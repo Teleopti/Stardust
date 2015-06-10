@@ -1186,7 +1186,6 @@
     <Compile Include="Security\AuthorizationData\DefinedLicenseDataFactoryTest.cs" />
     <Compile Include="Security\AuthorizationEntities\AllLicenseOptionTest.cs" />
     <Compile Include="Security\AuthorizationEntities\ApplicationFunctionsProviderTest.cs" />
-    <Compile Include="Security\IsPasswordEncryptedSpecificationTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccCalendarLinkLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccMyTeamLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccNotifyLicenseOptionTest.cs" />
