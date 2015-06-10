@@ -1,1 +1,4 @@
-﻿angular.module('wfm.resourceplanner', ['restResourcePlannerService', 'restPlanningPeriodService']);
+﻿(function() {
+
+	angular.module('wfm.resourceplanner', ['restResourcePlannerService', 'restPlanningPeriodService']);
+})();
