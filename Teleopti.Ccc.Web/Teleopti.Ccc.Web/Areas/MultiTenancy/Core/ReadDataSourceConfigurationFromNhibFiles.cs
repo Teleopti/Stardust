@@ -1,31 +1,26 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Xml.Linq;
-using Teleopti.Ccc.Web.Core.Startup.InitializeApplication;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;
 
 namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 {
 	public class ReadDataSourceConfigurationFromNhibFiles : IReadDataSourceConfiguration
 	{
-		private readonly ISettings _settings;
-		private readonly IPhysicalApplicationPath _physicalApplicationPath;
+		private readonly INhibFilePath _nhibFilePath;
 		private readonly IParseNhibFile _parseNhibFile;
+		private const string nhibFileType = "*.nhib.xml";
 
-		public ReadDataSourceConfigurationFromNhibFiles(ISettings settings, 
-												IPhysicalApplicationPath physicalApplicationPath,
-												IParseNhibFile parseNhibFile)
+		public ReadDataSourceConfigurationFromNhibFiles(INhibFilePath nhibFilePath, IParseNhibFile parseNhibFile)
 		{
-			_settings = settings;
-			_physicalApplicationPath = physicalApplicationPath;
+			_nhibFilePath = nhibFilePath;
 			_parseNhibFile = parseNhibFile;
 		}
 
 		public IDictionary<string, DataSourceConfiguration> Read()
 		{
 			var ret = new Dictionary<string, DataSourceConfiguration>();
-			var nhibPath = _settings.nhibConfPath();
-			var fullPathToNhibFolder = Path.Combine(_physicalApplicationPath.Get(), nhibPath);
-			foreach (var nhibFile in Directory.GetFiles(fullPathToNhibFolder, "*.nhib.xml"))
+			foreach (var nhibFile in Directory.GetFiles(_nhibFilePath.Path(), nhibFileType))
 			{
 				var dsCfg = _parseNhibFile.CreateDataSourceConfiguration(XDocument.Load(nhibFile));
 				ret[dsCfg.Item1] = dsCfg.Item2;

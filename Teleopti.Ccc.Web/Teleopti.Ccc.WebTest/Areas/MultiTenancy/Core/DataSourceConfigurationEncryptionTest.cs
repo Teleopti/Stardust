@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
 using Teleopti.Interfaces.Infrastructure;
 

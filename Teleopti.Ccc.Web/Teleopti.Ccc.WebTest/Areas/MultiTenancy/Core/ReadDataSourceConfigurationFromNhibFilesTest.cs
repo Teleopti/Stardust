@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 				settings.Stub(x => x.nhibConfPath()).Return(path);
 
 				File.WriteAllText(filename, nhibFile);
-				var target = new ReadDataSourceConfigurationFromNhibFiles(settings, new physicalApplicationPathStub(path), new ParseNhibFile());
+				var target = new ReadDataSourceConfigurationFromNhibFiles(new NHibFilePathInWeb(settings, new physicalApplicationPathStub(path)), new ParseNhibFile());
 				var res = target.Read()["sessionFactoryName"];
 
 				res.AnalyticsConnectionString.Should().Be.EqualTo("Analytics connection string");

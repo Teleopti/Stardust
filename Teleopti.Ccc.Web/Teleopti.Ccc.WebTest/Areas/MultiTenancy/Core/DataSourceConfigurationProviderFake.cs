@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
 
 namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core

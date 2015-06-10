@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
 
 namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core

@@ -446,6 +446,7 @@
     <Compile Include="Areas\MultiTenancy\Core\CurrentTenantUser.cs" />
     <Compile Include="Areas\MultiTenancy\Core\IChangePersonPassword.cs" />
     <Compile Include="Areas\MultiTenancy\Core\LogLogonAttemptFake.cs" />
+    <Compile Include="Areas\MultiTenancy\Core\NHibFilePathInWeb.cs" />
     <Compile Include="Areas\MultiTenancy\Core\TenantAuthentication.cs" />
     <Compile Include="Areas\MultiTenancy\Core\TenantAuthenticationFake.cs" />
     <Compile Include="Areas\MultiTenancy\Model\ChangePasswordModel.cs" />
@@ -563,13 +564,11 @@
     <Compile Include="Areas\Start\Core\Authentication\Services\ILogLogonAttempt.cs" />
     <Compile Include="Areas\Start\Core\Config\ISharedSettingsFactory.cs" />
     <Compile Include="Areas\Start\Core\Config\SharedSettingsFactory.cs" />
-    <Compile Include="Areas\MultiTenancy\Core\DataSourceConfiguration.cs" />
     <Compile Include="Areas\MultiTenancy\Core\DataSourceConfigurationProvider.cs" />
     <Compile Include="Areas\MultiTenancy\Core\IDataSourceConfigurationProvider.cs" />
     <Compile Include="Areas\MultiTenancy\Core\IDataSourceConfigurationEncryption.cs" />
     <Compile Include="Areas\MultiTenancy\Core\IParseNhibFile.cs" />
     <Compile Include="Areas\MultiTenancy\Core\IPersonInfoMapper.cs" />
-    <Compile Include="Areas\MultiTenancy\Core\IReadDataSourceConfiguration.cs" />
     <Compile Include="Areas\MultiTenancy\Core\NhibConfigEncryption.cs" />
     <Compile Include="Areas\MultiTenancy\Core\ParseNhibFile.cs" />
     <Compile Include="Areas\MultiTenancy\Core\PersonInfoMapper.cs" />

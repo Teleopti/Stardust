@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
+namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config
 {
 	public class DataSourceConfiguration
 	{
