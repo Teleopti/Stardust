@@ -56,6 +56,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 			builder.RegisterType<TenantAuthentication>().As<ITenantAuthentication>().SingleInstance();
 			builder.RegisterType<CurrentTenantUser>().As<ICurrentTenantUser>().SingleInstance();
 			builder.RegisterType<CurrentTenant>().As<ICurrentTenant>().SingleInstance();
+			builder.RegisterType<NHibFilePathInWeb>().As<INhibFilePath>().SingleInstance();
 		}
 	}
 }

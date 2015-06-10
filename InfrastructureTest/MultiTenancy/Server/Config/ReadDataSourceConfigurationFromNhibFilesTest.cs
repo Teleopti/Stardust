@@ -3,10 +3,9 @@ using System.IO;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
-using Teleopti.Ccc.Web.Core.Startup.InitializeApplication;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;
 
-namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
+namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Config
 {
 	public class ReadDataSourceConfigurationFromNhibFilesTest
 	{
@@ -36,11 +35,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 
 			try
 			{
-				var settings = MockRepository.GenerateMock<ISettings>();
-				settings.Stub(x => x.nhibConfPath()).Return(path);
-
 				File.WriteAllText(filename, nhibFile);
-				var target = new ReadDataSourceConfigurationFromNhibFiles(new NHibFilePathInWeb(settings, new physicalApplicationPathStub(path)), new ParseNhibFile());
+				var target = new ReadDataSourceConfigurationFromNhibFiles(new NhibFilePathFixed(path), new ParseNhibFile());
 				var res = target.Read()["sessionFactoryName"];
 
 				res.AnalyticsConnectionString.Should().Be.EqualTo("Analytics connection string");
@@ -50,21 +46,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 			finally
 			{
 				File.Delete(filename);
-			}
-		}
-
-		private class physicalApplicationPathStub : IPhysicalApplicationPath
-		{
-			private readonly string _path;
-
-			public physicalApplicationPathStub(string path)
-			{
-				_path = path;
-			}
-
-			public string Get()
-			{
-				return _path;
 			}
 		}
 	}

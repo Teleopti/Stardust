@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Xml.Linq;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;
 
-namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
+namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config
 {
 	public class ReadDataSourceConfigurationFromNhibFiles : IReadDataSourceConfiguration
 	{

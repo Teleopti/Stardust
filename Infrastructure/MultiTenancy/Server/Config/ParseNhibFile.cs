@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Xml.Linq;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;
 
-namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
+namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config
 {
-	//tested from ReadNHibFilesTest
 	public class ParseNhibFile : IParseNhibFile
 	{
 		private readonly XNamespace nhibNs = "urn:nhibernate-configuration-2.2";
