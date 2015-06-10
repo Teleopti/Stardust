@@ -1,0 +1,54 @@
+﻿<script src="~/Scripts/Home/app.module.js"></script>
+<script src="~/Scripts/Home/homeController.js"></script>
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Manage Tenants</h2>
+
+<div class="row">
+	<div class="col-md-4">
+		<h2>Import existing</h2>
+		<p>
+			if you already have databases (one Application and one Analytics) that you want to include in the multi tenant adminstration you can import it here.
+		</p>
+		<p><a class="btn btn-default" href="#">Start import &raquo;</a></p>
+	</div>
+	<div class="col-md-4">
+		<h2>Create new empty</h2>
+		<p>Lets you create 2 new databases (one Application and one Analytics) and connect the to a new Tenant.</p>
+		<p><a class="btn btn-default" href="#">Create new &raquo;</a></p>
+	</div>
+	<div class="col-md-4">
+		<h2>Something else</h2>
+		<p>Maybe there is more we want to do.</p>
+		<p><a class="btn btn-default" href="#">Do more &raquo;</a></p>
+	</div>
+</div>
+<br/>
+
+<h2>Tenants in this installation</h2>
+
+<div ng-app="homeApp">
+	<div ng-controller="homeController">
+		<table>
+			<thead>
+				<tr>
+					<td>Id</td>
+					<td>Name</td>
+					<td>Application database</td>
+					<td>Analytics database</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="tenant in Tenants" ng-class-odd="'oddRow'">
+					<td>{{tenant.Id}}</td>
+					<td>{{tenant.Name}}</td>
+					<td>{{tenant.AppDatabase}}</td>
+					<td>{{tenant.AnalyticsDatabase}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+</div>
