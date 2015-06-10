@@ -396,7 +396,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.SetShortcut(this.toolStripSpinningProgressControl1, System.Windows.Forms.Keys.None);
 			this.toolStripSpinningProgressControl1.Size = new System.Drawing.Size(25, 24);
 			this.toolStripSpinningProgressControl1.Text = "toolStripSpinningProgressControl1";
-			this.toolStripSpinningProgressControl1.TransitionSegment = 0;
+			this.toolStripSpinningProgressControl1.TransitionSegment = 5;
 			this.toolStripSpinningProgressControl1.TransitionSegmentColor = System.Drawing.Color.SkyBlue;
 			this.toolStripSpinningProgressControl1.Visible = false;
 			// 
@@ -3487,6 +3487,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.toolStripButtonSaveLarge,
             this.toolStripButtonRefreshLarge});
 			this.toolStripPanelItemSave.Name = "toolStripPanelItemSave";
+			this.toolStripPanelItemSave.RowCount = 2;
 			this.SetShortcut(this.toolStripPanelItemSave, System.Windows.Forms.Keys.None);
 			this.toolStripPanelItemSave.Size = new System.Drawing.Size(96, 73);
 			this.toolStripPanelItemSave.Transparent = true;
