@@ -1,5 +1,6 @@
 ﻿using System;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Infrastructure.Web;
 
 namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core

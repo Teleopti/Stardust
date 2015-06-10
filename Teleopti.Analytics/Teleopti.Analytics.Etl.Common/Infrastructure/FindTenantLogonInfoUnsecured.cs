@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NHibernate.Transform;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 
 namespace Teleopti.Analytics.Etl.Common.Infrastructure
 {
