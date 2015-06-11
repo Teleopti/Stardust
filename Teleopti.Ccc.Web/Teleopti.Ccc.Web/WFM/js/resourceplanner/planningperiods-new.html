@@ -1,5 +1,6 @@
-﻿<div >
-	<h4>Choose the next planning period</h4>
+﻿<div ng-switch="error">
+	<h4 ng-switch-when="false">Choose your planning period</h4>
+	<h4 ng-switch-when="true">Sorry. you already have a next planning period defined</h4>
 	<form>
 		<div ng-repeat="op in suggestions">
 			<div class="wfm-radio">
@@ -10,6 +11,6 @@
 				</label>
 			</div>
 		</div>
-		<button class="wfm-btn wfm-btn-primary" ng-click="createNextPlanningPeriod()">Create it</button>
+		<button ng-hide="error" class="wfm-btn wfm-btn-primary" ng-click="createNextPlanningPeriod()">Create it</button>
 	</form>
 </div>

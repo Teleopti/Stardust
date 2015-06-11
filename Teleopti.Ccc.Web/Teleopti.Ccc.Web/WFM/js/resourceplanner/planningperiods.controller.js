@@ -7,8 +7,13 @@
 				$scope.planningPeriods = PlanningPeriodSvrc.getPlanningPeriod.query();
 			}
 		]).controller('PlanningPeriodNewCtrl', [
-			'$scope', '$state', 'PlanningPeriodNewSvrc', function($scope, $state, PlanningPeriodNewSvrc) {
+			'$scope', '$state', 'PlanningPeriodNewSvrc', function ($scope, $state, PlanningPeriodNewSvrc) {
+			$scope.error = false;
 				$scope.suggestions = PlanningPeriodNewSvrc.suggestions.query();
+				if ($scope.suggestions.length === 0) {
+					$scope.error = true;
+
+				}
 
 				$scope.selectedRange = {};
 			$scope.createNextPlanningPeriod = function() {
