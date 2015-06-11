@@ -7,11 +7,15 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 {
 	class FakePreferenceProvider : IPreferenceProvider
 	{
-		private readonly IPreferenceDay[] _preferenceDays;
+		private readonly List<IPreferenceDay> _preferenceDays;
 
 		public FakePreferenceProvider(params IPreferenceDay[] preferenceDays)
 		{
-			_preferenceDays = preferenceDays;
+			_preferenceDays = new List<IPreferenceDay>();
+			foreach (var preferenceDay in preferenceDays)
+			{
+				_preferenceDays.Add(preferenceDay);
+			}
 		}
 
 		public IPreferenceDay GetPreferencesForDate(DateOnly date)
@@ -22,6 +26,12 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 		public IEnumerable<IPreferenceDay> GetPreferencesForPeriod(DateOnlyPeriod period)
 		{
 			return _preferenceDays.Where(pd => period.Contains(pd.RestrictionDate));
-		}		
+		}
+
+		public void AddPreference(IPreferenceDay pd)
+		{
+			_preferenceDays.Add(pd);
+		}
+
 	}
 }

@@ -8,16 +8,20 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 {
 	public class FakeScheduleProvider : IScheduleProvider
 	{
-		private readonly IScheduleDay[] _scheduleDays;
+		private readonly List<IScheduleDay> _scheduleDays;
 
 		public FakeScheduleProvider(params IScheduleDay[] scheduleDays)
 		{
-			_scheduleDays = scheduleDays;
+			_scheduleDays = new List<IScheduleDay>();
+			foreach (var scheduleDay in scheduleDays)
+			{
+				_scheduleDays.Add(scheduleDay);
+			}			
 		}
 
 		public IEnumerable<IScheduleDay> GetScheduleForPeriod(DateOnlyPeriod period, IScheduleDictionaryLoadOptions options = null)
 		{
-			return _scheduleDays;
+			return _scheduleDays.Where(sd => period.Contains(sd.DateOnlyAsPeriod.DateOnly));
 		}
 
 		public IEnumerable<IScheduleDay> GetScheduleForStudentAvailability(DateOnlyPeriod period, IScheduleDictionaryLoadOptions options = null)
@@ -31,8 +35,12 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			return _scheduleDays.Where(sd =>
 			{
 				return persons.Any(p => p == sd.Person || p.Id == sd.Person.Id) && sd.DateOnlyAsPeriod.DateOnly == date;
-			});
-			
+			});			
+		}
+
+		public void AddScheduleDay(IScheduleDay sd)
+		{
+			_scheduleDays.Add(sd);
 		}
 	}
 }

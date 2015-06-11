@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Mapping;
@@ -50,6 +51,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			builder.RegisterType<FakePersonNameProvider>().As<IPersonNameProvider>().SingleInstance();
 			builder.RegisterType<FakePersonAssignmentRepository>().As<IPersonAssignmentRepository>().SingleInstance();
 			builder.RegisterType<FakeShiftTradeLightValidator>().As<IShiftTradeLightValidator>().SingleInstance();
+			builder.RegisterType<FakePersonContractProvider>();
 
 
 		}
