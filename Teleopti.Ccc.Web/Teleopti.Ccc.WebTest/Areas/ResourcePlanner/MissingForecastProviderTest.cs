@@ -10,6 +10,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.ResourcePlanner;
+using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
@@ -144,8 +145,9 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 	{
 		protected override void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
 		{
+			builder.RegisterModule(new WebModule(configuration, null));
+
 			builder.RegisterType<FakeExistingForecastRepository>().As<IExistingForecastRepository>().SingleInstance();
-			builder.RegisterType<MissingForecastProvider>().As<IMissingForecastProvider>().SingleInstance();
 			builder.RegisterInstance<IScenarioRepository>(new FakeScenarioRepository(ScenarioFactory.CreateScenario("Default", true, true))).SingleInstance();
 		}
 		

@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		public string ConnectionString { get; private set; }
 		public IUnitOfWork CreateAndOpenUnitOfWork(TransactionIsolationLevel isolationLevel = TransactionIsolationLevel.Default)
 		{
-			throw new NotImplementedException();
+			return new FakeUnitOfWork();
 		}
 
 		public IUnitOfWork CreateAndOpenUnitOfWork(IInitiatorIdentifier initiator)

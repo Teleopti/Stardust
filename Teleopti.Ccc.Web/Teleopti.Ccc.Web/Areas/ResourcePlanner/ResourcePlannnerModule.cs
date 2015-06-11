@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Secrets.DayOffPlanning;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
@@ -11,13 +10,6 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 {
 	public class ResourcePlannerModule : Module
 	{
-		private readonly IIocConfiguration _configuration;
-
-		public ResourcePlannerModule(IIocConfiguration configuration)
-		{
-			_configuration = configuration;
-		}
-
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<MissingForecastProvider>()

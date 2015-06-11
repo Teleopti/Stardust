@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	{
 		public void Dispose()
 		{
-			throw new NotImplementedException();
+			
 		}
 
 		public IInitiatorIdentifier Initiator()
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public IEnumerable<IRootChangeInfo> PersistAll()
 		{
-			throw new NotImplementedException();
+			return null;
 		}
 
 		public IEnumerable<IRootChangeInfo> PersistAll(IInitiatorIdentifier initiator)
