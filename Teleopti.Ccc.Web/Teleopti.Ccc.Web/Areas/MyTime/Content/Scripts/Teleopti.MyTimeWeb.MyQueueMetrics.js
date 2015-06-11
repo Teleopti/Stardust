@@ -45,7 +45,7 @@
 		    url: 'MyTime/MyReport/QueueMetricsDetails',
 		    dataType: 'json',
 		    cache: false,
-			data: { date: date.clone().utc().toDate().toJSON() },
+		    data: { date: date.format("YYYY-MM-DD") },
 			success: function (data) {
 				vm.selectedDateInternal(date);
 				vm.myQueues(data);
