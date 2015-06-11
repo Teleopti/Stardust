@@ -40,21 +40,26 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 
 		public class TenantLogonInfoLoader : ITenantLogonInfoLoader
 		{
+			private readonly ITenantUnitOfWork _tenantUnitOfWork;
 			private readonly IFindLogonInfo _findLogonInfo;
 
-			public TenantLogonInfoLoader(IFindLogonInfo findLogonInfo)
+			public TenantLogonInfoLoader(ITenantUnitOfWork tenantUnitOfWork, IFindLogonInfo findLogonInfo)
 			{
+				_tenantUnitOfWork = tenantUnitOfWork;
 				_findLogonInfo = findLogonInfo;
 			}
 
 			public IEnumerable<LogonInfo> GetLogonInfoModelsForGuids(IEnumerable<Guid> personGuids)
 			{
-				var ret = new List<LogonInfo>();
-				foreach (var batch in personGuids.Batch(200))
+				using (_tenantUnitOfWork.Start())
 				{
-					ret.AddRange(_findLogonInfo.GetForIds(batch));
+					var ret = new List<LogonInfo>();
+					foreach (var batch in personGuids.Batch(200))
+					{
+						ret.AddRange(_findLogonInfo.GetForIds(batch));
+					}
+					return ret;
 				}
-				return ret;
 			}
 		}
 	}

@@ -3,6 +3,7 @@ using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Context;
 using NHibernate.Dialect;
+using Teleopti.Ccc.Domain;
 using Environment = NHibernate.Cfg.Environment;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
@@ -51,8 +52,6 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 
 		public ISession CurrentSession()
 		{
-			if (!HasCurrentSession())
-				startTransaction();
 			return _sessionFactory.GetCurrentSession();
 		}
 
@@ -61,11 +60,12 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 			return CurrentSessionContext.HasBind(_sessionFactory);
 		}
 
-		private void startTransaction()
+		public IDisposable Start()
 		{
 			var session = _sessionFactory.OpenSession();
 			session.BeginTransaction();
 			CurrentSessionContext.Bind(session);
+			return new GenericDisposable(CommitAndDisposeCurrent);
 		}
 
 		public void CancelAndDisposeCurrent()

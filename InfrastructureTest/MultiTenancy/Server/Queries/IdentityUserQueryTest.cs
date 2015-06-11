@@ -40,6 +40,8 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 		public void Setup_WillBeChangedWhenMovedAwayFromUnitOfWork()
 		{
 			_tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(ConnectionStringHelper.ConnectionStringUsedInTests);
+			_tenantUnitOfWorkManager.Start();
+
 			var tenant = new Tenant(RandomName.Make());
 			_tenantUnitOfWorkManager.CurrentSession().Save(tenant);
 			existingPerson = new PersonInfo(tenant, Guid.NewGuid());

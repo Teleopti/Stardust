@@ -176,13 +176,15 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
 		{
 			if (_tenantUnitOfWorkManager == null)
 				return;
-			var tenantSession = _tenantUnitOfWorkManager.CurrentSession();
-			var tenant = tenantSession.Get<Tenant>(1);
-			var personInfo = new PersonInfo(tenant, sysAdmin.Id.Value);
-			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), _newUserName, _newUserPassword);
-			personInfo.SetIdentity(IdentityHelper.Merge(Environment.UserDomainName, Environment.UserName));
-			tenantSession.Save(personInfo);
-			_tenantUnitOfWorkManager.CommitAndDisposeCurrent();
+			using (_tenantUnitOfWorkManager.Start())
+			{
+				var tenantSession = _tenantUnitOfWorkManager.CurrentSession();
+				var tenant = tenantSession.Get<Tenant>(1);
+				var personInfo = new PersonInfo(tenant, sysAdmin.Id.Value);
+				personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), _newUserName, _newUserPassword);
+				personInfo.SetIdentity(IdentityHelper.Merge(Environment.UserDomainName, Environment.UserName));
+				tenantSession.Save(personInfo);
+			}
 		}
 
 		private void updateUserWithSuperRole(IPerson user)

@@ -20,15 +20,20 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 
 		public void OnBeforeInvocation(IInvocationInfo invocation)
 		{
+			_tenantUnitOfWork.Start();
+
 			var hasNoTenantAuthenticationAttribute =
 				invocation.Method.GetCustomAttributes(typeof (NoTenantAuthenticationAttribute), false).Any();
 
 			if (hasNoTenantAuthenticationAttribute)
 				return;
 
-			//include logging here?
-			if(!_tenantAuthentication.Logon())
+			if (!_tenantAuthentication.Logon())
+			{
+				//include logging here?
+				_tenantUnitOfWork.CancelAndDisposeCurrent();
 				throw new HttpException(NoTenantAccessHttpErrorCode, "Invalid tenant credentials!");
+			}
 		}
 
 		public void OnAfterInvocation(Exception exception, IInvocationInfo invocation)

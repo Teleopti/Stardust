@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using NHibernate;
+using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -11,13 +12,14 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.NHibernate
 		public void InstansationOfSessionShouldBeLazy()
 		{
 			target.HasCurrentSession().Should().Be.False();
-			target.CurrentSession();
+			target.Start();
 			target.HasCurrentSession().Should().Be.True();
 		}
 
 		[Test]
 		public void ShouldGetSession()
 		{
+			target.Start();
 			target.CurrentSession()
 				.Should().Not.Be.Null();
 		}
@@ -25,6 +27,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.NHibernate
 		[Test]
 		public void ShouldReuseSession()
 		{
+			target.Start();
 			target.CurrentSession()
 				.Should().Be.SameInstanceAs(target.CurrentSession());
 		}
@@ -32,6 +35,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.NHibernate
 		[Test]
 		public void CancelShouldRollbackTransaction()
 		{
+			target.Start();
 			var session = target.CurrentSession();
 			var transaction = session.Transaction;
 			target.CancelAndDisposeCurrent();
@@ -50,6 +54,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.NHibernate
 		[Test]
 		public void CommitShouldCommitTransaction()
 		{
+			target.Start();
 			var session = target.CurrentSession();
 			var transaction = session.Transaction;
 			target.CommitAndDisposeCurrent();
@@ -68,12 +73,20 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.NHibernate
 		[Test]
 		public void CommitOnAlreadyRolledbackShouldKeepItRolledback()
 		{
+			target.Start();
 			var session = target.CurrentSession();
 			var transaction = session.Transaction;
 			target.CancelAndDisposeCurrent();
 			target.CommitAndDisposeCurrent();
 			transaction.WasRolledBack.Should().Be.True();
 			transaction.WasCommitted.Should().Be.False();
+		}
+
+		[Test]
+		public void NonStartedShouldThrow()
+		{
+			Assert.Throws<HibernateException>(() =>
+				target.CurrentSession());
 		}
 
 

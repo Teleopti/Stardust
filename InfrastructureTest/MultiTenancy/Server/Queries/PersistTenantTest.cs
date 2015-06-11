@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 		public void Setup()
 		{
 			_tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(ConnectionStringHelper.ConnectionStringUsedInTests);
+			_tenantUnitOfWorkManager.Start();
 			target = new PersistTenant(_tenantUnitOfWorkManager);
 		}
 

@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 		{
 			using (var tenantUowManager = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(UnitOfWorkFactory.Current.ConnectionString))
 			{
+				tenantUowManager.Start();
 				var target = new PersistLogonAttempt(tenantUowManager);
 				var model = new LoginAttemptModel
 				{
@@ -42,6 +43,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 		{
 			using (var tenantUowManager = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(UnitOfWorkFactory.Current.ConnectionString))
 			{
+				tenantUowManager.Start();
 				var target = new PersistLogonAttempt(tenantUowManager);
 				var model = new LoginAttemptModel
 				{

@@ -1,10 +1,16 @@
 ﻿using System;
+using Teleopti.Ccc.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 {
 	public class TenantUnitOfWorkFake : ITenantUnitOfWork
 	{
 		private Exception _exceptionToThrow;
+
+		public IDisposable Start()
+		{
+			return new GenericDisposable(null);
+		}
 
 		public void CancelAndDisposeCurrent()
 		{

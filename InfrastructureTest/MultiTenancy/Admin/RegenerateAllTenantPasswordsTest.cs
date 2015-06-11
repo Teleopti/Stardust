@@ -56,6 +56,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Admin
 		public void InsertPreState()
 		{
 			_tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(ConnectionStringHelper.ConnectionStringUsedInTests);
+			_tenantUnitOfWorkManager.Start();
 		}
 
 		[TearDown]

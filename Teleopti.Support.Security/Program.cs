@@ -68,9 +68,11 @@ namespace Teleopti.Support.Security
 			//todo: tenant what should we do when/if multiple tenants?
 			log.Debug("Updating tenant password...");
 			var tenantUowManager = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(destinationConnectionString);
-			var updatePasswords = new RegenerateAllTenantPasswords(tenantUowManager);
-			updatePasswords.Modify();
-			tenantUowManager.CommitAndDisposeCurrent();
+			using (tenantUowManager.Start())
+			{
+				var updatePasswords = new RegenerateAllTenantPasswords(tenantUowManager);
+				updatePasswords.Modify();	
+			}
 			log.Debug("Updating tenant password. Done!");
 		}
 
