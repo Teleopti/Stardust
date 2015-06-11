@@ -93,6 +93,12 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Teleopti.Wfm.Administration\Teleopti.Wfm.Administration.csproj">
+      <Project>{c7cfbe6b-f899-44fd-bb8d-7acd7131acd9}</Project>
+      <Name>Teleopti.Wfm.Administration</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
