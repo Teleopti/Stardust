@@ -364,7 +364,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			//Using the same module id when saving meeting changes to avoid getting them via MB as well
 			
 			toolStripMenuItemLoggedOnUserTimeZone.Text = _schedulerState.TimeZoneInfo.DisplayName;
-			toolStripButtonRefresh.Text = Resources.Refresh;
 			toolStripMenuItemLoggedOnUserTimeZone.Tag = _schedulerState.TimeZoneInfo;
 			_clipHandlerSchedule = new ClipHandler<IScheduleDay>();
 
@@ -5628,7 +5627,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		public void SizeOfMessageBrokerQueue(int count)
 		{
-			toolStripButtonRefresh.Enabled = count != 0;
 			toolStripButtonRefreshLarge.Enabled = count != 0;
 		}
 
@@ -5638,12 +5636,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_requestView.FilterDays(span);
 		}
 
-		private void toolStripButtonRefresh_Click(object sender, EventArgs e)
-		{
-			refresh();
-		}
-
-		private void refresh()
+		private void refreshData()
 		{
 			try
 			{
@@ -6405,7 +6398,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void toolStripButtonRefreshLarge_Click(object sender, EventArgs e)
 		{
-			refresh();
+			refreshData();
 		}
 	}
 }
