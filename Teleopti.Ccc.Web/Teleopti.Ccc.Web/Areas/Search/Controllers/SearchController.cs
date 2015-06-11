@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 			return result.Select(item => new SearchResultModel
 			{
 				Name = item.Name,
-				Url = "/permission", 
+				Url = "/permissions", 
 				SearchGroup = "Permission"
 			}).ToList();
 		}

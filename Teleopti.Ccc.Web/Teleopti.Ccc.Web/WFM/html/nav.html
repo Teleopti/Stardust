@@ -12,7 +12,13 @@
 					<ul class="wfm-list">
 						<div ng-repeat="gp in searchResultGroups">
 							<li class="animate-repeat" ng-repeat="item in searchResult | filter:{ SearchGroup: gp }">
-								<a ui-sref='resourceplanner' ng-click="ResetSearch()">{{item.Name}}</a>
+								<a href="/wfm/#{{item.Url}}" ng-click="ResetSearch()">
+									<button ng-if="item.Url == '/permissions' " class="wfm-fab mini result-icon"><i class="mdi mdi-account-check"></i></button>
+									<button ng-if="item.Url == '/resourceplanner' " class="wfm-fab mini info result-icon"><i class="mdi mdi-calendar"></i></button>
+
+									{{item.Name}}
+
+								</a>
 							</li>
 							<li class="animate-repeat" ng-if="searchResult.length == 0"></li>
 						</div>
