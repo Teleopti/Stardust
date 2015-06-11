@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			suggestedPeriod.Count().Should().Be.EqualTo(3);
 		}
 
-		[Test, Ignore("Asad: Need to verify this case should it be 7 or 5")]
+		[Test]
 		public void ShouldNotMergeSuggestionsWithSamePeriodDetailsWhenRangeDiffers()
 		{
 			SetupPersonsInOrganizationWithContract(new Func<SchedulePeriod>[]
@@ -100,7 +100,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var planningPeriodSuggestions = repository.Suggestions(new TestableNow(new DateTime(2015, 4, 1)));
 
 			var suggestedPeriod = planningPeriodSuggestions.SuggestedPeriods(new DateOnlyPeriod(new DateOnly(2015, 4, 6), new DateOnly(2015, 4, 12)));
-			suggestedPeriod.Count().Should().Be.EqualTo(5);
+			suggestedPeriod.Count().Should().Be.EqualTo(7);
+		}
+
+		[Test]
+		public void ShouldReturnPlanning()
+		{
+			SetupPersonsInOrganizationWithContract(new Func<SchedulePeriod>[]
+			{
+				() => new SchedulePeriod(_startDate, SchedulePeriodType.Week, 1),
+				() => new SchedulePeriod(_startDate.AddDays(5), SchedulePeriodType.Week, 1)
+			});
+			var repository = new PlanningPeriodRepository(UnitOfWork);
+			var planningPeriodSuggestions = repository.Suggestions(new TestableNow(new DateTime(2015, 4, 1)));
+
+			var suggestedPeriod = planningPeriodSuggestions.SuggestedPeriods(new DateOnlyPeriod(new DateOnly(2015, 4, 6), new DateOnly(2015, 4, 12)));
+			suggestedPeriod.Count().Should().Be.EqualTo(7);
 		}
 
 		private void SetupPersonsInOrganizationWithContract(IEnumerable<Func<SchedulePeriod>> schedulePeriodTypes)

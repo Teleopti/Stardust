@@ -70,5 +70,18 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 return false;
             }
         }
+
+		  public virtual IList<IApplicationRole> LoadAllRolesByName(string role)
+	    {
+			 var appRoles = Session.CreateCriteria(typeof(ApplicationRole))
+				  .SetFetchMode("ApplicationFunctionCollection", FetchMode.Join)
+				  .AddOrder(Order.Asc("Name"))
+				  .SetResultTransformer(new DistinctRootEntityResultTransformer())
+				  .List<IApplicationRole>()
+				  .Where(x => x.Name.ToLower().Contains(role.ToLower()))
+				  .ToList();
+
+			 return appRoles;
+	    }
     }
 }

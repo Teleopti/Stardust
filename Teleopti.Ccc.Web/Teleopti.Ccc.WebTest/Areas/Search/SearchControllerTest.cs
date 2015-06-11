@@ -6,84 +6,48 @@ using System.Web.Http.Results;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon.Toggle;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Search.Controllers;
-using Teleopti.Interfaces;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Search
 {
+	[GlobalSearchTest]
 	public class SearchControllerTest
 	{
+		public SearchController Target;
+		public IToggleManager ToggleManager;
+		public IApplicationRoleRepository ApplicationRoleRepository;
+		public TeleoptiIdentity TeleoptiIdentity;
 
 		[Test, SetCulture("en"), SetUICulture("en")]
 		public void ShouldSearchForPlanningPeriod()
 		{
 			var person = PersonFactory.CreatePerson();
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-			var newIdentity = new TeleoptiIdentity("test2", null, null, null);
-			Thread.CurrentPrincipal = new TeleoptiPrincipal(newIdentity, person);
-			var target =
-				new SearchController(
-					new FakeNextPlanningPeriodProvider(
-						new PlanningPeriod(
-							(new PlanningPeriodSuggestions(new TestableNow(new DateTime(2015, 4, 15)), new List<AggregatedSchedulePeriod>())))),
-					new FakeToggleManager(Toggles.Wfm_ResourcePlanner_32892));
-			var result = (OkNegotiatedContentResult<IEnumerable<SearchResultModel>>)target.GetResult("Next");
+			Thread.CurrentPrincipal = new TeleoptiPrincipal(TeleoptiIdentity, person);
+			var result = (OkNegotiatedContentResult<IEnumerable<SearchResultModel>>)Target.GetResult("Next");
 			result.Content.Count().Should().Be.EqualTo(1);
 		}
 
-		[Test, SetCulture("sv-SE"), SetUICulture("sv-SE")]
-		public void ShouldNotSearchPlanningPeriodIfSchedulingIsDisabled()
+		[Test]
+		public void ShouldNotSearchIfSchedulingIsDisabled()
 		{
-			var target =
-				new SearchController(
-					new FakeNextPlanningPeriodProvider(
-						new PlanningPeriod(
-							(new PlanningPeriodSuggestions(new TestableNow(new DateTime(2015, 4, 15)), new List<AggregatedSchedulePeriod>())))),
-					new FakeToggleManager());
-			var result = (OkNegotiatedContentResult<IEnumerable<SearchResultModel>>)target.GetResult("Next");
+			((FakeToggleManager)ToggleManager).Disable(Toggles.Wfm_ResourcePlanner_32892);
+			var result = (OkNegotiatedContentResult<IEnumerable<SearchResultModel>>)Target.GetResult("Next");
 			result.Content.Count().Should().Be.EqualTo(0);
 		}
-	}
 
-	//may be remove this fake (no fake at this level)
-	public class FakeNextPlanningPeriodProvider : INextPlanningPeriodProvider
-	{
-		private readonly IPlanningPeriod _planningPeriod;
-
-		public FakeNextPlanningPeriodProvider(IPlanningPeriod planningPeriod)
+		[Test]
+		public void ShouldSearchPermissionRole()
 		{
-			_planningPeriod = planningPeriod;
-		}
-		public IPlanningPeriod Current()
-		{
-			return _planningPeriod;
-		}
-
-		public IPlanningPeriod Next(SchedulePeriodForRangeCalculation schedulePeriodForRangeCalculation)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IPlanningPeriod Find(Guid id)
-		{
-			return _planningPeriod;
-		}
-
-		public IEnumerable<SchedulePeriodType> SuggestedPeriods()
-		{
-			throw new NotImplementedException();
-		}
-
-		public IPlanningPeriod Update(SchedulePeriodType periodType, int periodRange)
-		{
-			throw new NotImplementedException();
+			var role = ApplicationRoleFactory.CreateRole("Admin Role", "this is an admin role");
+			ApplicationRoleRepository.Add(role);
+			var result = (OkNegotiatedContentResult<IEnumerable<SearchResultModel>>)Target.GetResult("role");
+			result.Content.Count().Should().Be.EqualTo(1); 
 		}
 	}
 }

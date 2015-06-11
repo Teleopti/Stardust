@@ -17,5 +17,7 @@ namespace Teleopti.Ccc.Domain.Repositories
         /// Created Date: 08-04-2008
         /// </remarks>
         IList<IApplicationRole> LoadAllApplicationRolesSortedByName();
+
+	    IList<IApplicationRole> LoadAllRolesByName(string name);
     }
 }

@@ -78,15 +78,15 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		[UnitOfWork, HttpPost, Route("api/resourceplanner/nextplanningperiod")]
 		public virtual IHttpActionResult GetNextPlanningPeriod([FromBody] PlanningPeriodChangeRangeModel model)
 		{
-			var planningPeriod =
+			var nextPlanningPeriod =
 				_nextPlanningPeriodProvider.Next(new SchedulePeriodForRangeCalculation
 				{
 					Number = model.Number,
 					PeriodType = model.PeriodType,
 					StartDate = new DateOnly(model.DateFrom)
 				});
-			var planningPeriodModel = createPlanningPeriodModel(planningPeriod.Range.StartDate.Date,
-				planningPeriod.Range.EndDate.Date, planningPeriod.Id.GetValueOrDefault(), getMissingForecast(planningPeriod.Range));
+			var planningPeriodModel = createPlanningPeriodModel(nextPlanningPeriod.Range.StartDate.Date,
+				nextPlanningPeriod.Range.EndDate.Date, nextPlanningPeriod.Id.GetValueOrDefault(), getMissingForecast(nextPlanningPeriod.Range));
 			return Ok(planningPeriodModel);
 		}
 
@@ -119,7 +119,6 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		[UnitOfWork, HttpGet, Route("api/resourceplanner/availableplanningperiod")]
 		public virtual IHttpActionResult GetAvailablePlanningPeriods()
 		{
-			// may be only show the previous 10 ? 
 			var availablePlanningPeriods = new List<PlanningPeriodModel>();
 			var allPlanningPeriods = _planningPeriodRespository.LoadAll();
 			if (!allPlanningPeriods.Any())
