@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Autofac;
 using log4net;
 using Rhino.ServiceBus;
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			if (!toggleManager.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318))
 				return;
 
-			StateHolderReader.Instance.StateReader.ApplicationScopeData.DoOnAllTenants_AvoidUsingThis(tenant =>
+			Task.Factory.StartNew(() => StateHolderReader.Instance.StateReader.ApplicationScopeData.DoOnAllTenants_AvoidUsingThis(tenant =>
 			{
 				IList<Guid> businessUnitCollection;
 				using (var unitOfWork = tenant.Application.CreateAndOpenUnitOfWork())
@@ -53,7 +54,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 							businessUnitId);
 					}
 				}
-			});
+			}));
 		}
 	}
 }

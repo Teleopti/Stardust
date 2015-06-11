@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System.Threading.Tasks;
+using Autofac;
 using Rhino.ServiceBus;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
@@ -11,8 +12,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 		protected override void OnEndStart()
 		{
-			var initialLoad = new InitialLoadOfScheduleProjectionReadModel(() => Container.Resolve<IServiceBus>());
-			initialLoad.Check();
+			Task.Factory.StartNew(() =>
+			{
+				var initialLoad = new InitialLoadOfScheduleProjectionReadModel(() => Container.Resolve<IServiceBus>());
+				initialLoad.Check();
+			});
 		}
 	}
 }
