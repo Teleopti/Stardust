@@ -58,7 +58,7 @@ log('navigate to health check');
 client.url(webUrl + '/HealthCheck')
 	.waitForExist(".services li span", 600000, false, function(err, res, response) {
 		if (err || !res) {
-			closeAndThrow('service bus isnot up and running after trying 10 minutes. ' + err);
+			closeAndThrow('service bus isnot up and running after trying 10 minutes. Please visit ' + webUrl + '/HealthCheck , and have a look. ' + err);
 		}
 	});
 log('check service bus and broker');
@@ -68,7 +68,7 @@ client.pause(5000);
 client.refresh()
 	.waitForExist(".services li span", 600000, false, function(err, res, response) {
 		if (err || !res) {
-			closeAndThrow('service bus isnot up and running after trying 10 minutes. ' + err);
+			closeAndThrow('service bus isnot up and running after trying 10 minutes. Please visit ' + webUrl + '/HealthCheck , and have a look. ' + err);
 		}
 	});
 client.pause(5000);
@@ -80,7 +80,7 @@ client.click('#Start-Check')
 			client.refresh()
 				.waitForExist(".services li span", 300000, false, function(err, res, response) {
 					if (err || !res) {
-						closeAndThrow('service bus isnot up and running after trying 5 minutes. ' + err);
+						closeAndThrow('service bus isnot up and running after trying 5 minutes. Please visit ' + webUrl + '/HealthCheck , and have a look. ' + err);
 					}
 				});
 			client.pause(5000);
@@ -88,7 +88,7 @@ client.click('#Start-Check')
 			client.click('#Start-Check')
 				.waitForExist('#Bus-Results', 300000, false, function(err, res, response) {
 					if (err || !res) {
-						closeAndThrow('service bus doesnot work well after trying 10 minutes. ' + err);
+						closeAndThrow('service bus or message broker donot work well after trying 10 minutes. Please visit ' + webUrl + '/HealthCheck , and have a look. ' + err);
 					}else{
 						log('service bus and broker work well');
 					}
