@@ -21,7 +21,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 		[HttpGet]
 		[TenantUnitOfWork]
-		public JsonResult GetAllTenants()
+		public virtual JsonResult GetAllTenants()
 		{
 			return Json(_tenantList.GetTenantList(),JsonRequestBehavior.AllowGet);
 		}
