@@ -943,7 +943,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 	    private void loadQuickAccessState()
 		{
 			var loader = new QuickAccessState(_currentSchedulingScreenSettings, ribbonControlAdv1);
-			loader.Load(toolStripButtonQuickAccessSave, toolStripSplitButtonQuickAccessUndo, toolStripButtonQuickAccessRedo, toolStripButtonQuickAccessCancel, toolStripButtonShowTexts);
+			loader.Load(toolStripButtonSaveLarge, toolStripSplitButtonQuickAccessUndo, toolStripButtonQuickAccessRedo, toolStripButtonQuickAccessCancel, toolStripButtonShowTexts);
 		}
 
 		private void saveQuickAccessState()
@@ -3665,13 +3665,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void disableSave()
 		{
-			toggleQuickButtonEnabledState(toolStripButtonQuickAccessSave, false);
 			toolStripButtonSaveLarge.Enabled = false;
 		}
 
 		private void enableSave()
 		{
-			toggleQuickButtonEnabledState(toolStripButtonQuickAccessSave, true);
 			toolStripButtonSaveLarge.Enabled = true;
 			enableUndoRedoButtons();
 		}
@@ -4913,7 +4911,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 						button.Click -= menuItemClick;
 				}
 			}
-			toolStripButtonQuickAccessSave.Click -= toolStripButtonQuickAccessSaveClick;
+			toolStripButtonSaveLarge.Click -= toolStripButtonSaveLarge_Click;
+			toolStripButtonRefreshLarge.Click -= toolStripButtonRefreshLarge_Click;
 			toolStripButtonQuickAccessCancel.Click -= toolStripButtonQuickAccessCancel_Click;
 			toolStripButtonQuickAccessRedo.MouseUp -= toolStripButtonQuickAccessRedo_Click_1;
 			toolStripMenuItemQuickAccessUndo.Click -= toolStripSplitButtonQuickAccessUndo_ButtonClick;
