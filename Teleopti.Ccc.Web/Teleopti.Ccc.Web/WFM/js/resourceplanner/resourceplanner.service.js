@@ -1,24 +1,20 @@
-﻿(function() {
-	angular.module('restResourcePlannerService', ['ngResource']).service('ResourcePlannerSvrc', [
-		'$resource', function($resource) {
-			//scheduling
-			this.launchScheduling = $resource('../api/ResourcePlanner/Schedule/FixedStaff', {}, {
-				query: { method: 'POST', params: name, isArray: false }
-			});
-			//planning period
-			this.getPlanningPeriod = $resource('../api/resourceplanner/planningperiod', {}, {
-				query: { method: 'GET', params: {}, isArray: false }
-			});
-			this.changeRange = $resource('../api/resourceplanner/planningperiod/:id', { id: "@id" }, {
-				update: { method: 'PUT', params: {} , isArray: false }
-			});
-			this.getSuggestions = $resource('../api/resourceplanner/planningperiod/:id/suggestions', { id: "@id" }, {
+﻿(function () {
+	'use strict';
+	angular.module('restPlanningPeriodService', ['ngResource'])
+		.service('ResourcePlannerSvrc', [
+		'$resource', function ($resource) {
+			this.getPlanningPeriod = $resource('../api/resourceplanner/availableplanningperiod/', {}, {
 				query: { method: 'GET', params: {}, isArray: true }
 			});
-			//toggle
-			this.isEnabled = $resource('../ToggleHandler/IsEnabled?toggle=:toggle', { toggle: "@toggle" }, {
-				query: { method: 'GET', params: {}, isArray: false }
+		}
+		]).service('PlanningPeriodNewSvrc', [
+		'$resource', function ($resource) {
+			this.suggestions = $resource('../api/resourceplanner/planningperiod/nextsuggestions/', {}, {
+				query: { method: 'GET', params: {}, isArray: true }
+			});
+			this.planningperiod = $resource('../api/resourceplanner/nextplanningperiod/', {}, {
+				update: { method: 'POST', params: {}, isArray: false }
 			});
 		}
-	]);
+		]);
 })();

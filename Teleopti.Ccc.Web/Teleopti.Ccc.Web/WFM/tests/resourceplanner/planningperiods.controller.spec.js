@@ -1,5 +1,5 @@
 ﻿'use strict';
-describe('ResourceplannerCtrl', function() {
+describe('PlanningPeriodsCtrl', function () {
 	var $q,
 		$rootScope,
 		$httpBackend;;
@@ -16,7 +16,7 @@ describe('ResourceplannerCtrl', function() {
 
 	it('not null', inject(function($controller) {
 		var scope = $rootScope.$new();
-		var mockResourcePlannerSvrc = {
+		var mockPlanningPeriodSvrc = {
 			getPlanningPeriod: {
 				query: function() {}
 			},
@@ -30,13 +30,13 @@ describe('ResourceplannerCtrl', function() {
 
 		};
 
-		$controller('ResourceplannerCtrl', { $scope: scope, ResourcePlannerSvrc: mockResourcePlannerSvrc });
+		$controller('PlanningPeriodsCtrl', { $scope: scope, PlanningPeriodSvrc: mockPlanningPeriodSvrc });
 		expect($controller).not.toBe(null);
 	}));
 
 	it('returns correct planning period', inject(function($controller) {
 		var scope = $rootScope.$new();
-		var mockResourcePlannerSvrc = {
+		var mockPlanningPeriodSvrc = {
 			getPlanningPeriod: {
 				query: function() {
 					return { StartDate: new Date(20150501), EndDate: new Date(20150531), Id: 'someguid' };
@@ -51,7 +51,7 @@ describe('ResourceplannerCtrl', function() {
 			}
 		};
 
-		$controller('ResourceplannerCtrl', { $scope: scope, ResourcePlannerSvrc: mockResourcePlannerSvrc });
+		$controller('PlanningPeriodsCtrl', { $scope: scope, PlanningPeriodSvrc: mockPlanningPeriodSvrc });
 		expect(scope.planningPeriod.StartDate).toEqual(new Date(20150501));
 		expect(scope.planningPeriod.EndDate).toEqual(new Date(20150531));
 		expect(scope.planningPeriod.Id).toEqual('someguid');
@@ -59,7 +59,7 @@ describe('ResourceplannerCtrl', function() {
 
 	it('returns missing skills with content', inject(function($controller) {
 		var scope = $rootScope.$new();
-		var mockResourcePlannerSvrc = {
+		var mockPlanningPeriodSvrc = {
 			getPlanningPeriod: {
 				query: function() {	
 					return {
@@ -84,7 +84,7 @@ describe('ResourceplannerCtrl', function() {
 			}
 		};
 
-		$controller('ResourceplannerCtrl', { $scope: scope, ResourcePlannerSvrc: mockResourcePlannerSvrc });
+		$controller('PlanningPeriodsCtrl', { $scope: scope, PlanningPeriodSvrc: mockPlanningPeriodSvrc });
 
 		expect(scope.planningPeriod.Skills[0].SkillName).toEqual('Phone');
 		expect(scope.planningPeriod.Skills[0].MissingRanges.length).toEqual(2);

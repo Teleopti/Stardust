@@ -2,6 +2,7 @@
 	As a resource planner
 	I want to work on planning periods
 
+@ignore
 Scenario: show the next planning period
 	Given the time is '2014-04-10'
 	And I have a role with
@@ -11,6 +12,7 @@ Scenario: show the next planning period
 	When I view Resource planner
 	Then I should see planning period from '2014-05-01'to '2014-05-01'
 
+@ignore
 Scenario: schedule the next planning period
 	Given the time is '2014-04-10'
 	And I have a role with
@@ -21,6 +23,7 @@ Scenario: schedule the next planning period
 	And  I click schedule
 	Then I should see '0'
 
+@ignore
 @OnlyRunIfEnabled('Wfm_ChangePlanningPeriod_33043')
 Scenario: update the next planning period
 	Given the time is '2014-04-10' 

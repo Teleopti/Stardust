@@ -1,40 +1,33 @@
 ﻿(function() {
 	'use strict';
 	angular.module('wfm.resourceplanner')
-		.controller('ResourceplannerCtrl', [
+		.controller('ResourcePlannerCtrl', [
 			'$scope', '$state', 'ResourcePlannerSvrc', function ($scope, $state, ResourcePlannerSvrc) {
-				//schedulings
-				$scope.scheduledDays = 0;
-				$scope.schedulingPerformed = false;
-				$scope.launchSchedule = function(startDate, endDate) {
-					$scope.schedulingPerformed = false;
-					var planningPeriod = { StartDate: startDate, EndDate: endDate };
-					ResourcePlannerSvrc.launchScheduling.query(JSON.stringify(planningPeriod)).$promise.then(function (result) {
-						$scope.schedulingPerformed = true;
-						$scope.scheduledDays = result.DaysScheduled;
-						$state.go('resourceplannerreport', { result: result });
-					});
+				$scope.planningPeriods = ResourcePlannerSvrc.getPlanningPeriod.query();
+				$scope.selectedPlanningPeriod = function(p) {
+					$state.go('resourceplanner.planningperiod', { id: p.Id });
 				};
+			}
+		]).controller('PlanningPeriodNewCtrl', [
+			'$scope', '$state', 'PlanningPeriodNewSvrc', function($scope, $state, PlanningPeriodNewSvrc) {
+				$scope.error = false;
+				$scope.suggestions = {};
+				PlanningPeriodNewSvrc.suggestions.query().$promise.then(function(result) {
+					$scope.suggestions = result;
 
-				//toggle
-				ResourcePlannerSvrc.isEnabled.query({ toggle: 'Wfm_ChangePlanningPeriod_33043' }).$promise.then(function(result) {
-					$scope.isEnabled = result.IsEnabled;
+				}, function() {
+					$scope.error = true;
 				});
-				//planningperiod
-				$scope.planningPeriod = ResourcePlannerSvrc.getPlanningPeriod.query({});
-				$scope.suggestions = function (id) {
-					$scope.suggestedPlanningPeriods = [];
-					ResourcePlannerSvrc.getSuggestions.query({ id: id }).$promise.then(function(result) {
-						$scope.suggestedPlanningPeriods = result;
-					});
-				};
-				$scope.rangeUpdated = function(id, rangeDetails) {
-					var planningPeriodChangeRangeModel = { Number: rangeDetails.Number, PeriodType: rangeDetails.PeriodType, DateFrom: rangeDetails.StartDate };
-					ResourcePlannerSvrc.changeRange.update({ id: id },  JSON.stringify(planningPeriodChangeRangeModel) ).$promise.then(function (result) {
+				
+				$scope.selectedRange = {};
+				$scope.createNextPlanningPeriod = function(selectedRange) {
+					var s = $scope.suggestions[selectedRange];
+					var range = { Number: s.Number, PeriodType: s.PeriodType, DateFrom: s.StartDate };
+					PlanningPeriodNewSvrc.planningperiod.update({}, JSON.stringify(range)).$promise.then(function(result) {
 						$scope.planningPeriod = result;
+						$state.go('resourceplanner.planningperiod', { id: $scope.planningPeriod.Id });
 					});
 				};
-
-		}
+			}
 		]);
 })();

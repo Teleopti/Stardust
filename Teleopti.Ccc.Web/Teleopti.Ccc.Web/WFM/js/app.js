@@ -80,23 +80,23 @@ wfm.config([
 				label: 'forecasting results'
 			}
 		}).state('resourceplanner', {
-			url: '/resourceplanner',
-			templateUrl: 'js/resourceplanner/resourceplanner.html',
-			controller: 'ResourceplannerCtrl'
-		}).state('resourceplanner.planningperiods', {
-			url: '/planningperiods',
+				url: '/resourceplanner',
+				templateUrl: 'js/resourceplanner/resourceplanner.html',
+				controller: 'ResourcePlannerCtrl',
+				ncyBreadcrumb: {
+					label: 'resourceplanner'
+				}
+		}).state('resourceplanner.planningperiod', {
+			url: '/planningperiod/:id',
 			templateUrl: 'js/resourceplanner/planningperiods.html',
-			controller: 'PlanningPeriodsCtrl',
-			ncyBreadcrumb: {
-				label: 'planningperiods'
-			}
+			controller: 'PlanningPeriodsCtrl'
 		}).state('resourceplanner.newplanningperiod', {
-			url: '/newplanningperiod',
-			templateUrl: 'js/resourceplanner/planningperiods-new.html',
-			controller: 'PlanningPeriodNewCtrl',
-			ncyBreadcrumb: {
-				label: 'new planningperiod'
-			}
+				url: '/newplanningperiod',
+				templateUrl: 'js/resourceplanner/planningperiods-new.html',
+				controller: 'PlanningPeriodNewCtrl',
+				ncyBreadcrumb: {
+					label: 'new planningperiod'
+				}
 		}).state('resourceplannerreport', {
 			params: { result: {} },
 			templateUrl: 'js/resourceplanner/resourceplanner-report.html',
