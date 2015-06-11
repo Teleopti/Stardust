@@ -37,11 +37,9 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 				var tenantpassword = httpContext.Request.Headers["tenantpassword"];
 				tenantUser = _findPersonByCredentials.Find(Guid.Parse(personId), tenantpassword);
 			}
-			if (tenantUser == null)
-				return false;
 
 			httpContext.Items[PersonInfoKey] = tenantUser;
-			return true;
+			return tenantUser != null;
 		}
 	}
 }
