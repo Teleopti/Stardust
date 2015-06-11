@@ -21,7 +21,7 @@ namespace Teleopti.Wfm.Administration.Tests
 				var configReader = c.Resolve<IConfigReader>();
 				var connStringToTenant = configReader.ConnectionStrings[tenancyConnectionStringKey];
 				var connstringAsString = connStringToTenant == null ? null : connStringToTenant.ConnectionString;
-				return TenantUnitOfWorkManager.CreateInstanceForWeb(connstringAsString);
+				return TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(connstringAsString);
 			})
 				.As<ITenantUnitOfWork>()
 				.As<ICurrentTenantSession>()
