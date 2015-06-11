@@ -37,8 +37,10 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 					},
 					tenantAction =>
 					{
-						tenantAction(tenantUnitOfWorkManager);
-						tenantUnitOfWorkManager.CommitAndDisposeCurrent();
+						using (tenantUnitOfWorkManager.Start())
+						{
+							tenantAction(tenantUnitOfWorkManager);
+						}
 					});
 				testDataFactory.Apply(new PersonThatCreatesTestData(personThatCreatesTestData));
 				testDataFactory.Apply(new LicenseFromFile());
@@ -49,10 +51,13 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		}
 
 		private static Tenant _defaultTenant;
-		private static Tenant defaultTenant(ICurrentTenantSession currentTenantSession)
+		private static Tenant defaultTenant(TenantUnitOfWorkManager tenantUnitOfWorkManager)
 		{
-			return _defaultTenant ??
-			       (_defaultTenant = currentTenantSession.CurrentSession().CreateQuery("select t from Tenant t where t.id=1").UniqueResult<Tenant>());
+			using (tenantUnitOfWorkManager.Start())
+			{
+				return _defaultTenant ??
+							 (_defaultTenant = tenantUnitOfWorkManager.CurrentSession().CreateQuery("select t from Tenant t where t.id=1").UniqueResult<Tenant>());
+			}
 		}
 
 		private static void DisposeUnitOfWork()

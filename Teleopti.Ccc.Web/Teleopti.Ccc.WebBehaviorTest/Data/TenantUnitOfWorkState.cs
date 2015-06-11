@@ -16,8 +16,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public static void TenantUnitOfWorkAction(Action<ICurrentTenantSession> action)
 		{
-			action.Invoke(tenantUnitOfWorkManager());
-			_tenantUnitOfWorkManager.CommitAndDisposeCurrent();
+			var tenantUowManager = tenantUnitOfWorkManager();
+			using (tenantUowManager.Start())
+			{
+				action.Invoke(tenantUowManager);
+			}
 		}
 	}
 }
