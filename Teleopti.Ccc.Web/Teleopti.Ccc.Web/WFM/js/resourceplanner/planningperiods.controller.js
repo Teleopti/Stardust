@@ -12,6 +12,7 @@
 				$scope.suggestions = PlanningPeriodNewSvrc.suggestions.query();
 				if ($scope.suggestions.length === 0) {
 					$scope.error = true;
+					console.log($scope.suggestions);
 
 				}
 

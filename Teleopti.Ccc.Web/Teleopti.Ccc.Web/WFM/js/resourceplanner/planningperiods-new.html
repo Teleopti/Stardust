@@ -1,16 +1,18 @@
 ﻿<div ng-switch="error">
-	<h4 ng-switch-when="false">Choose your planning period</h4>
 	<h4 ng-switch-when="true">Sorry. you already have a next planning period defined</h4>
-	<form>
-		<div ng-repeat="op in suggestions">
-			<div class="wfm-radio">
-				<input type="radio" ng-model="$parent.selectedRange" name="changeRangeGroup" ng-value="$index" id="{{op.PeriodType}}-{{op.Number}}-{{$index}}" />
-				<label for="{{op.PeriodType}}-{{op.Number}}-{{$index}}">
-					<span class="wfm-radio-toggle"></span>
-					<span class="wfm-radio-label"> {{op.StartDate |  amDateFormat:"L"}} {{'ToText' | translate}} {{op.EndDate | amDateFormat:"L"}} {{'HavingRangeOf' | translate}} {{op.Number}} {{op.PeriodType}}</span>
-				</label>
+	<div ng-switch-when="false">
+		<h4>Choose your planning period</h4>
+		<form>
+			<div ng-repeat="op in suggestions">
+				<div class="wfm-radio">
+					<input type="radio" ng-model="$parent.selectedRange" name="changeRangeGroup" ng-value="$index" id="{{op.PeriodType}}-{{op.Number}}-{{$index}}" />
+					<label for="{{op.PeriodType}}-{{op.Number}}-{{$index}}">
+						<span class="wfm-radio-toggle"></span>
+						<span class="wfm-radio-label"> {{op.StartDate |  amDateFormat:"L"}} {{'ToText' | translate}} {{op.EndDate | amDateFormat:"L"}} {{'HavingRangeOf' | translate}} {{op.Number}} {{op.PeriodType}}</span>
+					</label>
+				</div>
 			</div>
-		</div>
-		<button ng-hide="error" class="wfm-btn wfm-btn-primary" ng-click="createNextPlanningPeriod()">Create it</button>
-	</form>
+			<button class="wfm-btn wfm-btn-primary" ng-click="createNextPlanningPeriod()">Create it</button>
+		</form>
+	</div>
 </div>
