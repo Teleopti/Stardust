@@ -1,10 +1,12 @@
-﻿using System.Web.Mvc;
+﻿using System.Collections.Generic;
+using System.Web.Http;
+using System.Web.Http.Results;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Wfm.Administration.Core;
 
 namespace Teleopti.Wfm.Administration.Controllers
 {
-	public class HomeController : Controller
+	public class HomeController : ApiController
 	{
 		private readonly ITenantList _tenantList;
 
@@ -13,17 +15,12 @@ namespace Teleopti.Wfm.Administration.Controllers
 			_tenantList = tenantList;
 		}
 
-		// GET: Home
-		public ActionResult Index()
-		{
-			return View();
-		}
 
 		[HttpGet]
 		[TenantUnitOfWork]
-		public virtual JsonResult GetAllTenants()
+		public virtual JsonResult<IList<TenantModel>> GetAllTenants()
 		{
-			return Json(_tenantList.GetTenantList(),JsonRequestBehavior.AllowGet);
+			return Json(_tenantList.GetTenantList());
 		}
 	}
 }

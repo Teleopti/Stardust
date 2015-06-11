@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Web;
-using System.Web.Mvc;
-using System.Web.Optimization;
-using System.Web.Routing;
 using System.Web.Http;
 using Autofac;
 using Autofac.Integration.Mvc;
+using Autofac.Integration.WebApi;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Interfaces.Infrastructure;
@@ -20,14 +18,13 @@ namespace Teleopti.Wfm.Administration
 		void Application_Start(object sender, EventArgs e)
 		{
 			// Code that runs on application startup
-			AreaRegistration.RegisterAllAreas();
 			GlobalConfiguration.Configure(WebApiConfig.Register);
-			RouteConfig.RegisterRoutes(RouteTable.Routes);
 
 			var builder = new ContainerBuilder();
+			var config = GlobalConfiguration.Configuration;
 
-			// Register your MVC controllers.
-			builder.RegisterControllers(typeof(TenantList).Assembly);
+			// Register your API controllers.
+			builder.RegisterApiControllers(typeof(TenantList).Assembly);
 
 			builder.RegisterType<TenantList>().As<ITenantList>();
 
@@ -59,7 +56,7 @@ namespace Teleopti.Wfm.Administration
 
 			// Set the dependency resolver to be Autofac.
 			var container = builder.Build();
-			DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
+			config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
 		}
 	}
 }

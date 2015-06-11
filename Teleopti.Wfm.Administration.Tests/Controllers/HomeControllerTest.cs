@@ -1,5 +1,5 @@
-﻿using System.Web.Mvc;
-using NUnit.Framework;
+﻿using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Wfm.Administration.Controllers;
 using Teleopti.Wfm.Administration.Core;
 
@@ -9,12 +9,11 @@ namespace Teleopti.Wfm.Administration.Tests.Controllers
 	public class HomeControllerTest
 	{
 		[Test]
-		public void Index()
+		public void GetAllTenantsShouldNoBeNull()
 		{
 			var controller = new HomeController(new TenantListFake());
-			var result = controller.Index() as ViewResult;
-			Assert.IsNotNull(result);
-			
+
+			controller.GetAllTenants().Should().Not.Be.Null();
 		}
 
 		

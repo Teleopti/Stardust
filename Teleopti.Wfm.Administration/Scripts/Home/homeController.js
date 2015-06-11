@@ -7,7 +7,7 @@
 
 	function homeController($scope, $http) {
 		$scope.name = 'ett vanligt namn';
-		$http.get('Home/GetAllTenants').success(function (data) {
+		$http.get('../api/Home/GetAllTenants').success(function (data) {
 			$scope.Tenants = data;
 		}).error(function (xhr, ajaxOptions, thrownError) {
 			console.log(xhr.status + xhr.responseText + thrownError);
