@@ -42,12 +42,12 @@ namespace Teleopti.Ccc.Infrastructure.Forecasting.Angel
 				if (day.Value > upper)
 				{
 					var taskOwner = historicalData.TaskOwnerDayCollection.Single(x => x.CurrentDate == day.Key);
-					((ValidatedVolumeDay)taskOwner).ValidatedTasks = upper;
+					((ValidatedVolumeDay)taskOwner).ValidatedTasks = upper + seasonalVariations.Single(x => x.CurrentDate == day.Key).Tasks;
 				}
 				else if (day.Value < lower)
 				{
 					var taskOwner = historicalData.TaskOwnerDayCollection.Single(x => x.CurrentDate == day.Key);
-					((ValidatedVolumeDay)taskOwner).ValidatedTasks = lower;
+					((ValidatedVolumeDay)taskOwner).ValidatedTasks = lower + seasonalVariations.Single(x => x.CurrentDate == day.Key).Tasks;
 				}
 			}
 

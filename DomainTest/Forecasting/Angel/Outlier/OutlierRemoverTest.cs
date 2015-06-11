@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Outlier
 
 			result.TaskOwnerDayCollection.Count.Should().Be.EqualTo(25);
 			Math.Round(result.TaskOwnerDayCollection.Single(x => x.CurrentDate == new DateOnly(date))
-				.TotalStatisticCalculatedTasks,3).Should().Be.EqualTo(496.895);
+				.TotalStatisticCalculatedTasks, 3).Should().Be.EqualTo(677.999);
 		}
 
 		private static TaskOwnerHelper generateMockedStatisticsWithOutliers(DateOnly historicalDate, IWorkload workload,
