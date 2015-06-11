@@ -38,7 +38,6 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 				initializeApplication.Start(null, null, null, false);
 				LastCall.IgnoreArguments().Constraints(
 					Is.TypeOf(typeof (WebState)),
-					Is.Equal(Path.Combine("applicationPath", "path")),
 					Is.TypeOf(typeof (LoadPasswordPolicyService)),
 					Is.TypeOf(typeof(IDictionary<string, string>)),
 					Is.Equal(false)

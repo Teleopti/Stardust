@@ -1,8 +1,8 @@
 using Autofac;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Interfaces.Infrastructure;
@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void InitializeApplicationIsWired()
 		{
+			containerBuilder.Register(c => new ReadDataSourceConfigurationFromNhibFiles(new NhibFilePathFixed(""), new ParseNhibFile())).As<IReadDataSourceConfiguration>();
 			using (var container = containerBuilder.Build())
 			{
 				var init = container.Resolve<IInitializeApplication>();
@@ -34,6 +35,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void InitializeApplicationShouldBeSingleton()
 		{
+			containerBuilder.Register(c => new ReadDataSourceConfigurationFromNhibFiles(new NhibFilePathFixed(""), new ParseNhibFile())).As<IReadDataSourceConfiguration>();
 			using (var container = containerBuilder.Build())
 			{
 				var init = container.Resolve<IInitializeApplication>();
