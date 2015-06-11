@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Teleopti WFM Administration</title>
+	<link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+	<link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+</head>
+<body>
+	<div class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<!--@Html.ActionLink("Teleopti WFM Administration", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })-->
+				Teleopti WFM Administration
+			</div>
+			<div class="navbar-collapse collapse">
+				<ul class="nav navbar-nav"></ul>
+			</div>
+		</div>
+	</div>
+
+	<div class="container body-content">
+
+		<h2>Manage Tenants</h2>
+
+		<div class="row">
+			<div class="col-md-4">
+				<h2>Import existing</h2>
+				<p>
+					if you already have databases (one Application and one Analytics) that you want to include in the multi tenant adminstration you can import it here.
+				</p>
+				<p><a class="btn btn-default" href="#">Start import &raquo;</a></p>
+			</div>
+			<div class="col-md-4">
+				<h2>Create new empty</h2>
+				<p>Lets you create 2 new databases (one Application and one Analytics) and connect the to a new Tenant.</p>
+				<p><a class="btn btn-default" href="#">Create new &raquo;</a></p>
+			</div>
+			<div class="col-md-4">
+				<h2>Something else</h2>
+				<p>Maybe there is more we want to do.</p>
+				<p><a class="btn btn-default" href="#">Do more &raquo;</a></p>
+			</div>
+		</div>
+		<br />
+
+		<h2>Tenants in this installation</h2>
+
+		<div ng-app="homeApp">
+			<div ng-controller="homeController">
+				<table>
+					<thead>
+						<tr>
+							<td>Id</td>
+							<td>Name</td>
+							<td>Application database</td>
+							<td>Analytics database</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="tenant in Tenants" ng-class-odd="'oddRow'">
+							<td>{{tenant.Id}}</td>
+							<td>{{tenant.Name}}</td>
+							<td>{{tenant.AppDatabase}}</td>
+							<td>{{tenant.AnalyticsDatabase}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+		</div>
+		
+	</div>
+
+	<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+	<script src="~/Scripts/bootstrap.min.js"></script>
+	<script src="~/Scripts/modernizr-2.6.2.js"></script>
+	<script src="~/Scripts/angular.min.js"></script>
+	<script src="~/Scripts/Home/app.module.js"></script>
+	<script src="~/Scripts/Home/homeController.js"></script>
+</body>
+</html>
