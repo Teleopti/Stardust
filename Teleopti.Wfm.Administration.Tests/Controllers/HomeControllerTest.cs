@@ -1,4 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.Web.Mvc;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Teleopti.Wfm.Administration.Controllers;
+using Teleopti.Wfm.Administration.Core;
 
 namespace Teleopti.Wfm.Administration.Tests.Controllers
 {
@@ -8,14 +11,10 @@ namespace Teleopti.Wfm.Administration.Tests.Controllers
 		[TestMethod]
 		public void Index()
 		{
-			// Arrange
-			//HomeController controller = new HomeController();
-
-			//// Act
-			//ViewResult result = controller.Index() as ViewResult;
-
-			//// Assert
-			//Assert.IsNotNull(result);
+			var controller = new HomeController(new TenantListFake());
+			var result = controller.Index() as ViewResult;
+			Assert.IsNotNull(result);
+			
 		}
 
 		

@@ -29,7 +29,7 @@ namespace Teleopti.Wfm.Administration
 			// Register your MVC controllers.
 			builder.RegisterControllers(typeof(TenantList).Assembly);
 
-			builder.RegisterType<TenantList>();
+			builder.RegisterType<TenantList>().As<ITenantList>();
 
 			builder.RegisterType<ConfigReader>().As<IConfigReader>().SingleInstance();
 			builder.Register(c =>

@@ -6,9 +6,9 @@ namespace Teleopti.Wfm.Administration.Controllers
 {
 	public class HomeController : Controller
 	{
-		private readonly TenantList _tenantList;
+		private readonly ITenantList _tenantList;
 
-		public HomeController(TenantList tenantList)
+		public HomeController(ITenantList tenantList)
 		{
 			_tenantList = tenantList;
 		}
