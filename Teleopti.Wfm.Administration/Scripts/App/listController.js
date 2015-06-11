@@ -2,11 +2,10 @@
 	'use strict';
 
 	angular
-		 .module('homeApp')
-		 .controller('homeController', homeController, []);
+		 .module('adminApp')
+		 .controller('listController', listController, []);
 
-	function homeController($scope, $http) {
-		$scope.name = 'ett vanligt namn';
+	function listController($scope, $http) {
 		$http.get('../api/Home/GetAllTenants').success(function (data) {
 			$scope.Tenants = data;
 		}).error(function (xhr, ajaxOptions, thrownError) {

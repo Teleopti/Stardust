@@ -72,7 +72,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="other.html" />
+    <Content Include="empty.html" />
+    <Content Include="import.html" />
     <Content Include="Index.html" />
+    <Content Include="list.html" />
+    <Content Include="Scripts\angular-route.min.js" />
     <Content Include="Scripts\angular.min.js" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
@@ -82,8 +87,8 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
-    <Content Include="Scripts\Home\app.module.js" />
-    <Content Include="Scripts\Home\homeController.js" />
+    <Content Include="Scripts\App\app.module.js" />
+    <Content Include="Scripts\App\listController.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -95,7 +100,6 @@
     <None Include="Scripts\_references.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="Navbar.html" />
     <Content Include="Web.config" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
@@ -130,7 +134,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
     <Folder Include="Properties\" />
-    <Folder Include="Views\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Domain\Teleopti.Ccc.Domain.csproj">
