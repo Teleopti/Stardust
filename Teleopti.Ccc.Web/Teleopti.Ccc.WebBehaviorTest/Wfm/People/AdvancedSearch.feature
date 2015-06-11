@@ -29,24 +29,24 @@ Feature: AdvancedSearch
 Scenario: match all search terms by default
 	When I view people
 	And I search people with keyword 'Red Ashley'
-	Then I should see 'Ashley Andeen' in people list
-	And I should not see 'Ashley Smith' in people list
+	Then I should see 'Andeen' in people list
+	And I should not see 'Smith' in people list
 
 @ignore
 #not implemented
 Scenario: match any search term
 	When I view people
 	And I search people with keyword 'Red Smith' matching any keywords
-	Then I should see 'Ashley Andeen' in people list
-	And I should see 'Ashley Smith' in people list
+	Then I should see 'Andeen' in people list
+	And I should see 'Smith' in people list
 
 Scenario: match any search terms in a field
 	When I view people
 	And I search with
 	| Field        | Value        |
 	| last name    | Andeen Smith |
-	Then I should see 'Ashley Andeen' in people list
-	And I should see 'Ashley Smith' in people list
+	Then I should see 'Andeen' in people list
+	And I should see 'Smith' in people list
 
 Scenario: match all search terms in different fields
 	When I view people
@@ -54,13 +54,13 @@ Scenario: match all search terms in different fields
 	| Field        | Value        |
 	| last name    | Andeen Smith |
 	| organization | Red        |
-	Then I should see 'Ashley Andeen' in people list
+	Then I should see 'Andeen' in people list
 @ignore
 Scenario: match entire quoted search term
 	When I view people
 	And I search people with keyword '"Team Blue" Ashley'
-	Then I should see 'Ashley Smith' in people list
-	And I should not see 'Ashley Andeen' in people list
+	Then I should see 'Smith' in people list
+	And I should not see 'Andeen' in people list
 
 Scenario: match entire quoted search term in different fields
 	When I view people
@@ -68,4 +68,4 @@ Scenario: match entire quoted search term in different fields
 	| Field        | Value      |
 	| last name    | Andeen     |
 	| organization | "Team Red" |
-	Then I should see 'Ashley Andeen' in people list
+	Then I should see 'Andeen' in people list

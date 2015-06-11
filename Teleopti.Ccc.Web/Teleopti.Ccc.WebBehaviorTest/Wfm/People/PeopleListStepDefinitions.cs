@@ -10,14 +10,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.People
 		[Then(@"I should see '(.*)' in people list")]
 		public void ThenIShouldSeeInPeopleList(string name)
 		{
-			Browser.Interactions.AssertAnyContains(".people-list .person", name);
+			Browser.Interactions.AssertAnyContains(".people-list .ui-grid-row", name);
 		}
 
 		[Then(@"I should not see '(.*)' in people list")]
 		public void ThenIShouldNotSeeInPeopleList(string name)
 		{
 			const string existSelector = ".people-list";
-			const string notExistSelector = ".people-list .person";
+			const string notExistSelector = ".people-list .ui-grid-row";
 			Browser.Interactions.AssertNoContains(existSelector,notExistSelector, name);
 		}
 
