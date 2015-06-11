@@ -56,7 +56,8 @@ namespace Teleopti.Ccc.WinCode.Main
 						}, DataSourceConfigurationSetter.ForDesktop(),
 						new CurrentHttpContext(),
 						() => messageBroker),
-					messageBroker);
+					messageBroker,
+					null);
 
 			initializer.Start(new StateManager(), appSettings, passwordPolicyService, true);
 

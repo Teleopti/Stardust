@@ -8,6 +8,7 @@ using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using log4net;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Interfaces.Domain;
@@ -42,7 +43,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 							DataSourceConfigurationSetter.ForServiceBus(),
 							new CurrentHttpContext(),
 							messageBroker),
-						messageBroker());
+						messageBroker(),
+						new ReadDataSourceConfigurationFromNhibFiles(new NhibFilePathFixed(_xmlFilePath), new ParseNhibFile()));
 				application.Start(new BasicState(), _xmlFilePath, null, ConfigurationManager.AppSettings.ToDictionary(), true);
 
 				Logger.Info("Initialized application");

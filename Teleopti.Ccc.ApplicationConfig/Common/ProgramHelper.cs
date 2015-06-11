@@ -14,6 +14,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -73,7 +74,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 					DataSourceConfigurationSetter.ForApplicationConfig(),
 					new CurrentHttpContext(),
 					() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging
-					), null);
+					), null, null);
 			initializeApplication.Start(new StateNewVersion(), databaseHandler.DataSourceSettings(), "", ConfigurationManager.AppSettings.ToDictionary());
 			var repositoryFactory = new RepositoryFactory();
 			IDataSource dataSource =

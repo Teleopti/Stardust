@@ -23,6 +23,7 @@ using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.Config;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
@@ -104,7 +105,9 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 						new CurrentHttpContext(),
 						() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging
 						),
-					messageBroker);
+					messageBroker,
+					new ReadDataSourceConfigurationFromNhibFiles(new NhibFilePathFixed(sitePath()), new ParseNhibFile())
+					);
 			var messageBrokerEnabled = !messageBrokerDisabled();
 			initializeApplication.Start(new SdkState(), sitePath(), passwordPolicyService, appSettings, messageBrokerEnabled);
 

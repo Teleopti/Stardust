@@ -9,7 +9,6 @@ using NHibernate.Cfg;
 using NHibernate.Dialect;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.LiteUnitOfWork;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Web;
@@ -17,6 +16,7 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Environment = NHibernate.Cfg.Environment;
 using Teleopti.Ccc.Domain.Common.Logging;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
@@ -80,6 +80,12 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			}
 			dataSource = null;
 			return false;
+		}
+
+		public IDataSource Create(DataSourceConfiguration dataSourceConfiguration)
+		{
+			//TODO: tenant cleaner here soon
+			return createDataSource(dataSourceConfiguration.ApplicationNHibernateConfig, dataSourceConfiguration.AnalyticsConnectionString);
 		}
 
 		public IDataSource Create(string applicationDataSourceName, string applicationConnectionString, string statisticConnectionString)

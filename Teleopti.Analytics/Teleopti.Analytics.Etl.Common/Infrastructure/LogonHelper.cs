@@ -14,6 +14,7 @@ using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -98,7 +99,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				new CurrentHttpContext(),
 				() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging
 				);
-			var application = new InitializeApplication(dataSourcesFactory, null);
+			var application = new InitializeApplication(dataSourcesFactory, null, new ReadDataSourceConfigurationFromNhibFiles(new NhibFilePathFixed(_nhibConfPath), new ParseNhibFile()));
 
 			if (!StateHolder.IsInitialized)
 				application.Start(new StateManager(), _nhibConfPath, null, ConfigurationManager.AppSettings.ToDictionary(), false);
