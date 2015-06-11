@@ -18,33 +18,19 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 		{
 			var sessionDataProvider = MockRepository.GenerateStub<ISessionSpecificDataProvider>();
 			sessionDataProvider.Expect(x => x.GrabFromCookie()).Return(null);
-			new CurrentTenantUser(new FakeCurrentHttpContext(new FakeHttpContext()), sessionDataProvider, null).CurrentUser()
+			new CurrentTenantUser(new FakeCurrentHttpContext(new FakeHttpContext())).CurrentUser()
 				.Should().Be.Null();
 		}
 
 		[Test]
-		public void ShouldGetPersonInfo_ExternalCalls()
+		public void ShouldGetPersonInfo()
 		{
 			var expected = new PersonInfo();
 			var httpContext = new FakeHttpContext();
 			httpContext.Items[TenantAuthentication.PersonInfoKey] = expected;
 
-			new CurrentTenantUser(new FakeCurrentHttpContext(httpContext), null, null).CurrentUser()
+			new CurrentTenantUser(new FakeCurrentHttpContext(httpContext)).CurrentUser()
 					.Should().Be.SameInstanceAs(expected);
-		}
-
-		[Test]
-		public void ShouldGetPersonInfo_InternalWebCalls()
-		{
-			var expected = new PersonInfo();
-			var sessionData = new SessionSpecificData(Guid.NewGuid(), RandomName.Make(), Guid.NewGuid(), RandomName.Make());
-			var sessionDataProvider = MockRepository.GenerateStub<ISessionSpecificDataProvider>();
-			sessionDataProvider.Expect(x => x.GrabFromCookie()).Return(sessionData);
-			var findPersonInfoByCredentials = MockRepository.GenerateMock<IFindPersonInfoByCredentials>();
-			findPersonInfoByCredentials.Expect(x => x.Find(sessionData.PersonId, sessionData.TenantPassword)).Return(expected);
-			var target = new CurrentTenantUser(new FakeCurrentHttpContext(new FakeHttpContext()), sessionDataProvider, findPersonInfoByCredentials);
-			target.CurrentUser()
-				.Should().Be.SameInstanceAs(expected);
 		}
 	}
 }

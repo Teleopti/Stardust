@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory;
@@ -18,7 +19,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
 		[UnitOfWorkAction]
-		public ActionResult Index()
+		[TenantUnitOfWork]
+		public virtual ActionResult Index()
 		{
 			ViewBag.LayoutBase = _layoutBaseViewModelFactory.CreateLayoutBaseViewModel(Resources.MyTime);
 
