@@ -72,33 +72,52 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			return schedule;
 		}
 
+		private IScheduleDay buildPersonScheduleDayOff(DateOnly date)
+		{
+			var schedule = ScheduleDayFactory.Create(date, _person);
+			schedule.CreateAndAddDayOff(DayOffFactory.CreateDayOff());		
+			return schedule;
+		}
+
 
 		private void Setup()
 		{
 			Mapper.Reset();
 			Mapper.Initialize(x => x.AddProfile(_preferenceDayFeedbackViewModelMappingProfile));
 
-			
-
 			var nightRest1 = new TimeSpan(12, 0, 0);
-			var nightRest2 = new TimeSpan(8, 0, 0);
+			var nightRest2 = new TimeSpan(6, 0, 0);
+
+			var date1 = new DateOnly(2029, 1, 1);
+			var date2 = new DateOnly(2029, 1, 2);
+			var date3 = new DateOnly(2029, 1, 3);
+			var date4 = new DateOnly(2029, 1, 4);
+			var date5 = new DateOnly(2029, 1, 5);
+			var date6 = new DateOnly(2029, 1, 6);
+			var date9 = new DateOnly(2029, 1, 9);
+			var date10 = new DateOnly(2029, 1, 10);
+			var date11 = new DateOnly(2029, 1, 11);
 
 			var personContract1 = _personContractProvider.GetPersonContractWithSpecifiedNightRest("Fake Contract", nightRest1);
 			var personPeriod1 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2028, 1, 1), personContract1, TeamFactory.CreateSimpleTeam());
 			_person.AddPersonPeriod(personPeriod1);
 
-			var date1 = new DateOnly(2029, 1, 1);
-			var date2 = new DateOnly(2029, 1, 2);
-			var date3 = new DateOnly(2029, 1, 3);
+
+
+			var personContract2 = _personContractProvider.GetPersonContractWithSpecifiedNightRest("Another Fake Contract", nightRest2);
+			var personPeriod2 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2029, 1, 11), personContract2, TeamFactory.CreateSimpleTeam());
+			_person.AddPersonPeriod(personPeriod2);
 
 			var schedule1 = buildPersonSchedule(date1, new TimeSpan(8, 0, 0), new TimeSpan(18, 30, 0));
 			var schedule3 = buildPersonSchedule(date3, new TimeSpan(6, 0, 0), new TimeSpan(18, 30, 0));
+			var schedule9 = buildPersonScheduleDayOff(date9);
 			
 			var scheduleProvider = _scheduleProvider as FakeScheduleProvider;
 			if (scheduleProvider != null)
 			{
 				scheduleProvider.AddScheduleDay(schedule1);
 				scheduleProvider.AddScheduleDay(schedule3);
+				scheduleProvider.AddScheduleDay(schedule9);
 			}		
 
 			var preferenceDay2 = new PreferenceDay(_person, date2,  new PreferenceRestriction
@@ -107,10 +126,46 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 				EndTimeLimitation = new EndTimeLimitation(new TimeSpan(19, 0, 0), new TimeSpan(19, 30, 0))
 			});
 
+			var preferenceDay4 = new PreferenceDay(_person, date4, new PreferenceRestriction
+			{
+				StartTimeLimitation = new StartTimeLimitation(new TimeSpan(11, 0, 0), new TimeSpan(12, 0, 0)),
+				EndTimeLimitation = new EndTimeLimitation(new TimeSpan(19, 10, 0), new TimeSpan(19, 30, 0))
+			});
+
+			var preferenceDay5 = new PreferenceDay(_person, date5, new PreferenceRestriction
+			{
+				StartTimeLimitation = new StartTimeLimitation(new TimeSpan(6, 0, 0), new TimeSpan(7, 0, 0)),
+				EndTimeLimitation = new EndTimeLimitation(new TimeSpan(18, 0, 0), new TimeSpan(18, 30, 0))
+			});
+
+			var preferenceDay6 = new PreferenceDay(_person, date6, new PreferenceRestriction
+			{
+				StartTimeLimitation = new StartTimeLimitation(new TimeSpan(4, 0, 0), new TimeSpan(4, 30, 0)),
+				EndTimeLimitation = new EndTimeLimitation(new TimeSpan(18, 0, 0), new TimeSpan(18, 30, 0))
+			});
+
+			var preferenceDay10 = new PreferenceDay(_person, date10, new PreferenceRestriction
+			{
+				StartTimeLimitation = new StartTimeLimitation(new TimeSpan(4, 0, 0), new TimeSpan(4, 30, 0)),
+				EndTimeLimitation = new EndTimeLimitation(new TimeSpan(18, 0, 0), new TimeSpan(18, 30, 0))
+			});
+
+			var preferenceDay11 = new PreferenceDay(_person, date11, new PreferenceRestriction
+			{
+				StartTimeLimitation = new StartTimeLimitation(new TimeSpan(4, 0, 0), new TimeSpan(4, 30, 0)),
+				EndTimeLimitation = new EndTimeLimitation(new TimeSpan(18, 0, 0), new TimeSpan(18, 30, 0))
+			});
+
+
 			var personPreferenceProvider = _preferenceProvider as FakePreferenceProvider;
 			if (personPreferenceProvider != null)
 			{
 				personPreferenceProvider.AddPreference(preferenceDay2);
+				personPreferenceProvider.AddPreference(preferenceDay4);
+				personPreferenceProvider.AddPreference(preferenceDay5);
+				personPreferenceProvider.AddPreference(preferenceDay6);
+				personPreferenceProvider.AddPreference(preferenceDay10);
+				personPreferenceProvider.AddPreference(preferenceDay11);
 			}
 		}
 
@@ -141,6 +196,48 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			targetReturn.HasNightRestViolationToNextDay.Should().Be.True();
 			targetReturn.HasNightRestViolationToPreviousDay.Should().Be.True();
 		}
+
+		[Test]
+		public void ShouldMapHasNightRestViolationWhenTheNeighbouringDayIsEmptyDay()
+		{
+			Setup();
+			var testDate = new DateOnly(2029, 1, 6);
+			var targetReturn = Mapper.Map<DateOnly, PreferenceDayFeedbackViewModel>(testDate);
+			targetReturn.HasNightRestViolationToNextDay.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldMapHasNightRestViolationWhenPreferenceConflictsWithPerferences()
+		{
+			Setup();
+			var testDate = new DateOnly(2029, 1, 5);
+			var targetReturn = Mapper.Map<DateOnly, PreferenceDayFeedbackViewModel>(testDate);
+			targetReturn.HasNightRestViolationToNextDay.Should().Be.True();
+			targetReturn.HasNightRestViolationToPreviousDay.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldMapHasNightRestViolationWhenTheNeighbouringDayIsDayOff()
+		{
+			Setup();
+			var testDate = new DateOnly(2029, 1, 10);
+			var targetReturn = Mapper.Map<DateOnly, PreferenceDayFeedbackViewModel>(testDate);
+			targetReturn.HasNightRestViolationToPreviousDay.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldMapHasNightRestViolationUsingTheRightContract()
+		{
+			Setup();
+			var testDate1 = new DateOnly(2029, 1, 10);
+			var targetReturn1 = Mapper.Map<DateOnly, PreferenceDayFeedbackViewModel>(testDate1);
+			targetReturn1.HasNightRestViolationToNextDay.Should().Be.True();
+
+			var testDate2 = new DateOnly(2029, 1, 10);
+			var targetReturn2 = Mapper.Map<DateOnly, PreferenceDayFeedbackViewModel>(testDate2);
+			targetReturn2.HasNightRestViolationToPreviousDay.Should().Be.False();
+		}
+
 
 	}
 	
