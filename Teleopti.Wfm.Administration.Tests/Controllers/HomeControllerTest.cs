@@ -1,19 +1,26 @@
 ﻿using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Wfm.Administration.Controllers;
-using Teleopti.Wfm.Administration.Core;
 
 namespace Teleopti.Wfm.Administration.Tests.Controllers
 {
-	[TestFixture]
+	[TenantTest]
 	public class HomeControllerTest
 	{
+		public HomeController Target;
+		public ITenantUnitOfWork TenantUnitOfWork;
+
 		[Test]
 		public void GetAllTenantsShouldNoBeNull()
 		{
-			var controller = new HomeController(new TenantListFake());
-
-			controller.GetAllTenants().Should().Not.Be.Null();
+			//create database
+			var dataSource = DataSourceHelper.CreateDataSource(new IMessageSender[] { }, "TestData");
+			TenantUnitOfWork.Start();
+			Target.GetAllTenants().Should().Not.Be.Null();
+			TenantUnitOfWork.CommitAndDisposeCurrent();
 		}
 
 		
