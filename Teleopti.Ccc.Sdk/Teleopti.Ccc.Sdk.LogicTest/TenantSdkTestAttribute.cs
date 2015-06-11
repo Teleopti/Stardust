@@ -1,5 +1,4 @@
-﻿using Autofac;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
+﻿using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Sdk.WcfService;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -8,11 +7,12 @@ namespace Teleopti.Ccc.Sdk.LogicTest
 {
 	public class TenantSdkTestAttribute : IoCTestAttribute
 	{
-		protected override void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
+		protected override void RegisterInContainer(ISystem builder, IIocConfiguration configuration)
 		{
-			builder.RegisterType<PostHttpRequestFake>().As<IPostHttpRequest>().AsSelf().SingleInstance();
 			builder.RegisterModule(new MultiTenancyModule(configuration));
-			builder.RegisterType<CurrentTenantCredentialsFake>().As<ICurrentTenantCredentials>().AsSelf();
+
+			builder.UseTestDouble<PostHttpRequestFake>().For<IPostHttpRequest>();
+			builder.UseTestDouble<CurrentTenantCredentialsFake>().For<ICurrentTenantCredentials>();
 		}
 	}
 }

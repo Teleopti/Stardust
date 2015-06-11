@@ -1,5 +1,4 @@
-﻿using Autofac;
-using Teleopti.Ccc.Domain.Repositories;
+﻿using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.IocCommon;
@@ -10,12 +9,12 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 {
 	public class TenantClientTestAttribute : IoCTestAttribute
 	{
-		protected override void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
+		protected override void RegisterInContainer(ISystem builder, IIocConfiguration configuration)
 		{
-			builder.RegisterType<PostHttpRequestFake>().As<IPostHttpRequest>().AsSelf().SingleInstance();
-			builder.RegisterType<FakePersonRepository>().As<IPersonRepository>().AsSelf().SingleInstance();
-			builder.RegisterType<LoadUserUnauthorizedFake>().As<ILoadUserUnauthorized>().AsSelf().SingleInstance();
-			builder.RegisterType<CurrentTenantCredentialsFake>().As<ICurrentTenantCredentials>().AsSelf().SingleInstance();
+			builder.UseTestDouble<PostHttpRequestFake>().For<IPostHttpRequest>();
+			builder.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
+			builder.UseTestDouble<LoadUserUnauthorizedFake>().For<ILoadUserUnauthorized>();
+			builder.UseTestDouble<CurrentTenantCredentialsFake>().For<ICurrentTenantCredentials>();
 		}
 	}
 }

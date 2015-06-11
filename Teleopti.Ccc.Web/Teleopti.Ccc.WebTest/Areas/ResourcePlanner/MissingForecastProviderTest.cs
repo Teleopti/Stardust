@@ -143,12 +143,13 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 
 	public class ForecastProviderTestAttribute : IoCTestAttribute
 	{
-		protected override void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
+		protected override void RegisterInContainer(ISystem builder, IIocConfiguration configuration)
 		{
 			builder.RegisterModule(new WebModule(configuration, null));
 
-			builder.RegisterType<FakeExistingForecastRepository>().As<IExistingForecastRepository>().SingleInstance();
-			builder.RegisterInstance<IScenarioRepository>(new FakeScenarioRepository(ScenarioFactory.CreateScenario("Default", true, true))).SingleInstance();
+			builder.UseTestDouble<FakeExistingForecastRepository>().For<IExistingForecastRepository>();
+			builder.UseTestDouble(new FakeScenarioRepository(ScenarioFactory.CreateScenario("Default", true, true))).For<IScenarioRepository>();
+
 		}
 		
 	}

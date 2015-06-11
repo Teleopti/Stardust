@@ -1,6 +1,6 @@
 ﻿using System;
-using Autofac;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest
@@ -10,11 +10,11 @@ namespace Teleopti.Ccc.InfrastructureTest
 		private IPerson person;
 		private IDisposable _login;
 
-		protected override void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
+		protected override void RegisterInContainer(ISystem builder, IIocConfiguration configuration)
 		{
 			base.RegisterInContainer(builder, configuration);
 
-			builder.RegisterInstance(this).As<IPrincipalAndStateContext>();
+			builder.AddService(this);
 		}
 
 		protected override void BeforeTest()

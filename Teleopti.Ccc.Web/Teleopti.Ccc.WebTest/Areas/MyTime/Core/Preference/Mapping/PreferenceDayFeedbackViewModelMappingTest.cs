@@ -4,11 +4,13 @@ using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
@@ -23,15 +25,16 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 {
 	public class MyTimeWebPreferenceMappingTestAttribute : MyTimeWebTestAttribute
 	{
-		protected override void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
+		protected override void RegisterInContainer(ISystem builder, IIocConfiguration configuration)
 		{
 			base.RegisterInContainer(builder, configuration);
-			builder.RegisterType<PreferenceDayFeedbackViewModelMappingProfile>();
-			builder.RegisterType<FakePreferenceProvider>().As<IPreferenceProvider>().SingleInstance();
-			builder.RegisterType<FakeScheduleProvider>().As<IScheduleProvider>().SingleInstance();
+
+			builder.AddService<PreferenceDayFeedbackViewModelMappingProfile>();
+			builder.UseTestDouble<FakePreferenceProvider>().For<IPreferenceProvider>();
+			builder.UseTestDouble<FakeScheduleProvider>().For<IScheduleProvider>();
 
 			var person = PersonFactory.CreatePersonWithGuid("a", "a");
-			builder.RegisterInstance(person).As<IPerson>();
+			builder.AddService(person);
 		}
 	}
 
@@ -43,14 +46,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		private readonly IScheduleProvider _scheduleProvider;
 		private readonly IPreferenceProvider _preferenceProvider;
 		private readonly FakePersonContractProvider _personContractProvider;
-		private readonly IPerson _person;
+		private readonly Person _person;
 
 		public PreferenceDayFeedbackViewModelMappingTestByFake()
 		{
 			/* Just to satisfy NUnit, but should not be used neither explictly nor implicitly */
 		}
 
-		public PreferenceDayFeedbackViewModelMappingTestByFake(PreferenceDayFeedbackViewModelMappingProfile preferenceDayFeedbackViewModelMappingProfile, IScheduleProvider scheduleProvider, IPreferenceProvider preferenceProvider, FakePersonContractProvider personContractProvider, IPerson person)
+		public PreferenceDayFeedbackViewModelMappingTestByFake(PreferenceDayFeedbackViewModelMappingProfile preferenceDayFeedbackViewModelMappingProfile, IScheduleProvider scheduleProvider, IPreferenceProvider preferenceProvider, FakePersonContractProvider personContractProvider, Person person)
 		{
 			_preferenceDayFeedbackViewModelMappingProfile = preferenceDayFeedbackViewModelMappingProfile;
 			_scheduleProvider = scheduleProvider;

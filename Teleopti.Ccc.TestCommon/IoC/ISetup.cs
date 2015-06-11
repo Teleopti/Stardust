@@ -17,6 +17,8 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 		void AddService<TService>();
 		void AddService<TService>(TService instance) where TService : class;
+
+		void RegisterModule(Module module);
 	}
 
 	public interface ITestDoubleFor
@@ -63,6 +65,11 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				.AsSelf()
 				.AsImplementedInterfaces()
 				.SingleInstance();
+		}
+
+		public void RegisterModule(Module module)
+		{
+			_builder.RegisterModule(module);
 		}
 	}
 

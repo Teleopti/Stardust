@@ -1,19 +1,29 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 
 namespace Teleopti.Ccc.TestCommon
 {
-	public class FakeCurrentApplicationData:ICurrentApplicationData, IApplicationData
+	public class FakeCurrentApplicationData : ICurrentApplicationData, IApplicationData
 	{
+		private readonly IDataSourcesFactory _dataSourcesFactory;
+
+		public FakeCurrentApplicationData(IDataSourcesFactory dataSourcesFactory)
+		{
+			_dataSourcesFactory = dataSourcesFactory;
+		}
+
+		public IEnumerable<IDataSource> RegisteredDataSources { get; set; }
+
 		public void Dispose()
 		{
 		}
 
-		public IEnumerable<IDataSource> RegisteredDataSourceCollection { get; set; }
 		public IDataSource Tenant(string tenantName)
 		{
 			throw new NotImplementedException();
@@ -31,10 +41,9 @@ namespace Teleopti.Ccc.TestCommon
 
 		public void DoOnAllTenants_AvoidUsingThis(Action<IDataSource> actionOnTenant)
 		{
-			foreach (var dataSource in RegisteredDataSourceCollection)
-			{
-				actionOnTenant(dataSource);
-			}
+			if (RegisteredDataSources == null)
+				RegisteredDataSources = new[] {_dataSourcesFactory.Create("App", ConnectionStringHelper.ConnectionStringUsedInTests, null)};
+			RegisteredDataSources.ForEach(actionOnTenant);
 		}
 
 		public IApplicationData Current()

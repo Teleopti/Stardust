@@ -1,5 +1,4 @@
-﻿using Autofac;
-using Teleopti.Ccc.Domain.Repositories;
+﻿using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
@@ -13,15 +12,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 {
 	public class GlobalSearchTestAttribute : IoCTestAttribute
 	{
-		protected override void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
+		protected override void RegisterInContainer(ISystem builder, IIocConfiguration configuration)
 		{
 			builder.RegisterModule(new WebModule(configuration, null));
 
-			builder.RegisterType<FakeCurrentUnitOfWorkFactory>().As<ICurrentUnitOfWorkFactory>().SingleInstance();
-			builder.RegisterType<FakeUnitOfWorkFactory>().As<IUnitOfWorkFactory>().SingleInstance();
-			builder.RegisterInstance<IToggleManager>(new FakeToggleManager(Domain.FeatureFlags.Toggles.Wfm_ResourcePlanner_32892));
-			builder.RegisterType<FakeNextPlanningPeriodProvider>().As<INextPlanningPeriodProvider>();
-			builder.RegisterType<FakeApplicationRoleRepository>().As<IApplicationRoleRepository>().SingleInstance();
+		    builder.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
+			builder.UseTestDouble<FakeUnitOfWorkFactory>().For<IUnitOfWorkFactory>();
+			builder.UseTestDouble(new FakeToggleManager(Domain.FeatureFlags.Toggles.Wfm_ResourcePlanner_32892)).For<IToggleManager>();
+			builder.UseTestDouble<FakeNextPlanningPeriodProvider>().For<INextPlanningPeriodProvider>();
+			builder.UseTestDouble<FakeApplicationRoleRepository>().For<IApplicationRoleRepository>();
 		}
 	}
 }

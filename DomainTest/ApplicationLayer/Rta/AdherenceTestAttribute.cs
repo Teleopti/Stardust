@@ -22,54 +22,45 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			return toggles;
 		}
 
-		protected override void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
+		protected override void RegisterInContainer(ISystem builder, IIocConfiguration configuration)
 		{
-			base.RegisterInContainer(builder, configuration);
+			builder.UseTestDouble<FakeAdherencePercentageReadModelPersister>().For<IAdherencePercentageReadModelPersister>();
+			builder.UseTestDouble<FakeAdherenceDetailsReadModelPersister>().For<IAdherenceDetailsReadModelPersister>();
+			builder.UseTestDouble<FakeTeamOutOfAdherenceReadModelPersister>().For<ITeamOutOfAdherenceReadModelPersister>();
+			builder.UseTestDouble<FakeSiteOutOfAdherenceReadModelPersister>().For<ISiteOutOfAdherenceReadModelPersister>();
 
-			builder.RegisterType<FakeAdherencePercentageReadModelPersister>()
-				.As<IAdherencePercentageReadModelPersister>()
-				.AsSelf()
-				.SingleInstance();
-			builder.RegisterType<FakeAdherenceDetailsReadModelPersister>()
-				.As<IAdherenceDetailsReadModelPersister>()
-				.AsSelf()
-				.SingleInstance();
-			builder.RegisterType<FakeTeamOutOfAdherenceReadModelPersister>()
-				.As<ITeamOutOfAdherenceReadModelPersister>()
-				.AsSelf()
-				.SingleInstance();
-			builder.RegisterType<FakeSiteOutOfAdherenceReadModelPersister>()
-				.As<ISiteOutOfAdherenceReadModelPersister>()
-				.AsSelf()
-				.SingleInstance();
+			builder.UseTestDouble<ControllableReadModelTransactionSyncronization>().For<IReadModelTransactionSyncronization>();
+			builder.UseTestDouble<FakeReadModelUnitOfWorkAspect>().For<IReadModelUnitOfWorkAspect>();
 
-			builder.RegisterType<ControllableReadModelTransactionSyncronization>().As<IReadModelTransactionSyncronization>().SingleInstance();
-			builder.RegisterType<FakeReadModelUnitOfWorkAspect>().As<IReadModelUnitOfWorkAspect>();
+			builder.AddService<TeamOutOfAdherenceReadModelUpdater>();
+			builder.AddService<SiteOutOfAdherenceReadModelUpdater>();
+			builder.AddService<AdherencePercentageReadModelUpdater>();
+			builder.AddService<AdherenceDetailsReadModelUpdater>();
 
-			builder.Register(x => x.Resolve<IEnumerable<IHandleEvent<PersonInAdherenceEvent>>>()
-				.OfType<TeamOutOfAdherenceReadModelUpdater>()
-				.Single()
-				)
-				.AsSelf()
-				.SingleInstance();
-			builder.Register(x => x.Resolve<IEnumerable<IHandleEvent<PersonInAdherenceEvent>>>()
-				.OfType<SiteOutOfAdherenceReadModelUpdater>()
-				.Single()
-				)
-				.AsSelf()
-				.SingleInstance();
-			builder.Register(x => x.Resolve<IEnumerable<IHandleEvent<PersonInAdherenceEvent>>>()
-				.OfType<AdherencePercentageReadModelUpdater>()
-				.Single()
-				)
-				.AsSelf()
-				.SingleInstance();
-			builder.Register(x => x.Resolve<IEnumerable<IHandleEvent<PersonStateChangedEvent>>>()
-				.OfType<AdherenceDetailsReadModelUpdater>()
-				.Single()
-				)
-				.AsSelf()
-				.SingleInstance();
+			//builder.Register(x => x.Resolve<IEnumerable<IHandleEvent<PersonInAdherenceEvent>>>()
+			//	.OfType<TeamOutOfAdherenceReadModelUpdater>()
+			//	.Single()
+			//	)
+			//	.AsSelf()
+			//	.SingleInstance();
+			//builder.Register(x => x.Resolve<IEnumerable<IHandleEvent<PersonInAdherenceEvent>>>()
+			//	.OfType<SiteOutOfAdherenceReadModelUpdater>()
+			//	.Single()
+			//	)
+			//	.AsSelf()
+			//	.SingleInstance();
+			//builder.Register(x => x.Resolve<IEnumerable<IHandleEvent<PersonInAdherenceEvent>>>()
+			//	.OfType<AdherencePercentageReadModelUpdater>()
+			//	.Single()
+			//	)
+			//	.AsSelf()
+			//	.SingleInstance();
+			//builder.Register(x => x.Resolve<IEnumerable<IHandleEvent<PersonStateChangedEvent>>>()
+			//	.OfType<AdherenceDetailsReadModelUpdater>()
+			//	.Single()
+			//	)
+			//	.AsSelf()
+			//	.SingleInstance();
 		}
 	}
 

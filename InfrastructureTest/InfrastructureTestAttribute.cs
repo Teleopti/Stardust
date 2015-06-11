@@ -16,24 +16,24 @@ namespace Teleopti.Ccc.InfrastructureTest
 {
 	public class InfrastructureTestAttribute : IoCTestAttribute
 	{
-		protected override void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
+		protected override void RegisterInContainer(ISystem builder, IIocConfiguration configuration)
 		{
 			base.RegisterInContainer(builder, configuration);
 
-			builder.RegisterInstance(new FakeDatabaseConnectionStringHandler()).As<IDatabaseConnectionStringHandler>();
+			builder.UseTestDouble(new FakeDatabaseConnectionStringHandler()).For<IDatabaseConnectionStringHandler>();
 
-			builder.RegisterInstance(new FakeConfigReader
+			builder.UseTestDouble(new FakeConfigReader
 			{
 				ConnectionStrings = new ConnectionStringSettingsCollection
 				{
 					new ConnectionStringSettings("RtaApplication", ConnectionStringHelper.ConnectionStringUsedInTests),
 					new ConnectionStringSettings("MessageBroker", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix)
 				}
-			}).As<IConfigReader>().AsSelf().SingleInstance();
+			}).For<IConfigReader>();
 
-			builder.RegisterType<NoMessageSender>().As<IMessageSender>();
+			builder.UseTestDouble<NoMessageSender>().For<IMessageSender>();
 
-			builder.RegisterType<MutableFakeCurrentHttpContext>().AsSelf().As<ICurrentHttpContext>().SingleInstance();
+			builder.UseTestDouble<MutableFakeCurrentHttpContext>().For<ICurrentHttpContext>();
 		}
 	}
 

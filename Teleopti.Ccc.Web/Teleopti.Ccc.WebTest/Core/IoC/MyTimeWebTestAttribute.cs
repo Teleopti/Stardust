@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 {
 	public class MyTimeWebTestAttribute : IoCTestAttribute
 	{
-		protected override void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
+		protected override void RegisterInContainer(ISystem builder, IIocConfiguration configuration)
 		{
 			var scenario = new FakeCurrentScenario();
 			var principalAuthorization = new PrincipalAuthorizationWithFullPermission();
@@ -32,27 +32,28 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			PrincipalAuthorization.SetInstance(principalAuthorization);
 
 			builder.RegisterModule(new WebModule(configuration, null));
-			builder.RegisterType<FakeLoggedOnUser>().As<ILoggedOnUser>().SingleInstance();
-			builder.RegisterType<FakeNow>().As<INow>().SingleInstance();
-			builder.RegisterInstance(new FakePermissionProvider(false)).As<IPermissionProvider>().SingleInstance();
-			builder.RegisterInstance(new FakeScheduleDataReadScheduleRepository()).AsSelf().As<IScheduleRepository>().SingleInstance();
-			builder.RegisterInstance(scenario).As<ICurrentScenario>().SingleInstance();
-			builder.RegisterInstance(principalAuthorization).As<IPrincipalAuthorization>().SingleInstance();
-			builder.RegisterInstance(new FakePersonRequestRepository()).As<IPersonRequestRepository>().SingleInstance();
-			builder.RegisterInstance(new FakeScenarioRepository(scenario.Current())).As<IScenarioRepository>().SingleInstance();
-			builder.RegisterInstance(new FakeBudgetDayRepository()).As<IBudgetDayRepository>().SingleInstance();
-			builder.RegisterInstance(new FakeScheduleProjectionReadOnlyRepository()).As<IScheduleProjectionReadOnlyRepository>().SingleInstance();
-			builder.RegisterType<AutoMapperConfiguration>().As<AutoMapperConfiguration>().SingleInstance();
-			builder.RegisterType<FakePersonScheduleDayReadModelFinder>().As<IPersonScheduleDayReadModelFinder>().SingleInstance();
-			builder.RegisterType<FakePersonForScheduleFinder>().As<IPersonForScheduleFinder>().SingleInstance();
-			builder.RegisterType<FakeBusinessUnitRepository>().As<IBusinessUnitRepository>().SingleInstance();
-			builder.RegisterType<FakeTeamRepository>().As<ITeamRepository>().SingleInstance();
-			builder.RegisterType<FakePersonRepository>().As<IPersonRepository>().SingleInstance();
-			builder.RegisterType<FakePersonNameProvider>().As<IPersonNameProvider>().SingleInstance();
-			builder.RegisterType<FakePersonAssignmentRepository>().As<IPersonAssignmentRepository>().SingleInstance();
-			builder.RegisterType<FakeShiftTradeLightValidator>().As<IShiftTradeLightValidator>().SingleInstance();
-			builder.RegisterType<FakePersonContractProvider>();
 
+			builder.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			builder.UseTestDouble<FakeNow>().For<INow>();
+			builder.UseTestDouble(new FakePermissionProvider(false)).For<IPermissionProvider>();
+			builder.UseTestDouble(new FakeScheduleDataReadScheduleRepository()).For<IScheduleRepository>();
+			builder.UseTestDouble(scenario).For<ICurrentScenario>();
+			builder.UseTestDouble(principalAuthorization).For<IPrincipalAuthorization>();
+			builder.UseTestDouble(new FakePersonRequestRepository()).For<IPersonRequestRepository>();
+			builder.UseTestDouble(new FakeScenarioRepository(scenario.Current())).For<IScenarioRepository>();
+			builder.UseTestDouble(new FakeBudgetDayRepository()).For<IBudgetDayRepository>();
+			builder.UseTestDouble(new FakeScheduleProjectionReadOnlyRepository()).For<IScheduleProjectionReadOnlyRepository>();
+			builder.UseTestDouble<FakePersonScheduleDayReadModelFinder>().For<IPersonScheduleDayReadModelFinder>();
+			builder.UseTestDouble<FakePersonForScheduleFinder>().For<IPersonForScheduleFinder>();
+			builder.UseTestDouble<FakeBusinessUnitRepository>().For<IBusinessUnitRepository>();
+			builder.UseTestDouble<FakeTeamRepository>().For<ITeamRepository>();
+			builder.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
+			builder.UseTestDouble<FakePersonNameProvider>().For<IPersonNameProvider>();
+			builder.UseTestDouble<FakePersonAssignmentRepository>().For<IPersonAssignmentRepository>();
+			builder.UseTestDouble<FakeShiftTradeLightValidator>().For<IShiftTradeLightValidator>();
+			builder.UseTestDouble<FakePersonContractProvider>().For<FakePersonContractProvider>();
+
+			builder.AddService<AutoMapperConfiguration>();
 
 		}
 
@@ -60,7 +61,6 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		{
 			container.Resolve<AutoMapperConfiguration>().Execute(null);
 		}
-
 		
 	}
 }

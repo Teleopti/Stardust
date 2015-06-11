@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 	public interface IIoCTestContext
 	{
 		void Reset();
-		void Reset(Action<ContainerBuilder, IIocConfiguration> registerInContainer);
+		void Reset(Action<ISystem, IIocConfiguration> registerInContainer);
 	};
 
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface, AllowMultiple = false)]
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			return toggles;
 		}
 
-		protected virtual void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
+		protected virtual void RegisterInContainer(ISystem builder, IIocConfiguration configuration)
 		{
 		}
 
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			_method = testDetails.Method;
 		}
 
-		private void buildContainer(Action<ContainerBuilder, IIocConfiguration> registerInContainer)
+		private void buildContainer(Action<ISystem, IIocConfiguration> registerInContainer)
 		{
 			var builder = new ContainerBuilder();
 			var configuration = new IocConfiguration(new IocArgs(new AppConfigReader()) {ClearCache = true}, Toggles());
@@ -103,10 +103,11 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			builder.RegisterInstance(new FakeUserTimeZone(TimeZoneInfo.Utc)).As<IUserTimeZone>().AsSelf().SingleInstance();
 			builder.RegisterInstance(new FakeUserCulture(CultureInfoFactory.CreateSwedishCulture())).As<IUserCulture>().AsSelf().SingleInstance();
 			builder.RegisterInstance(this).As<IIoCTestContext>();
-			RegisterInContainer(builder, configuration);
+			var system = new ContainerBuilderWrapper(builder);
+			RegisterInContainer(system, configuration);
 			if (_fixture is ISetup)
-				(_fixture as ISetup).Setup(new ContainerBuilderWrapper(builder), configuration);
-			registerInContainer(builder, configuration);
+				(_fixture as ISetup).Setup(system, configuration);
+			registerInContainer(system, configuration);
 			_container = builder.Build();
 		}
 
@@ -142,7 +143,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			injectMembers();
 		}
 
-		public void Reset(Action<ContainerBuilder, IIocConfiguration> registerInContainer)
+		public void Reset(Action<ISystem, IIocConfiguration> registerInContainer)
 		{
 			buildContainer(registerInContainer);
 			injectMembers();

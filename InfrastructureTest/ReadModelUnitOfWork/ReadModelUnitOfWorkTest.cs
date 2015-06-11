@@ -4,7 +4,6 @@ using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading;
-using Autofac;
 using NHibernate;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -12,39 +11,30 @@ using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Web;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 {
 	public class ReadModelUnitOfWorkTestAttribute : InfrastructureTestAttribute
 	{
-		protected override void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
+		protected override void RegisterInContainer(ISystem builder, IIocConfiguration configuration)
 		{
 			base.RegisterInContainer(builder, configuration);
 
-			builder.RegisterType<TheService>().ApplyAspects();
-			builder.RegisterType<NestedService>().AsSelf().As<NestedBase>().SingleInstance();
-			builder.RegisterType<NestedService2>().AsSelf().As<NestedBase>().SingleInstance();
+			builder.AddService<TheService>();
+			builder.AddService<NestedService1>();
+			builder.AddService<NestedService2>();
 
-			builder.RegisterInstance(new MutableFakeCurrentHttpContext()).AsSelf().As<ICurrentHttpContext>().SingleInstance();
-			builder.RegisterInstance(new MutableFakeCurrentTeleoptiPrincipal()).AsSelf().As<ICurrentTeleoptiPrincipal>().SingleInstance();
-
-			builder.Register(c =>
-			{
-				var dataSourcesProvider = new FakeCurrentApplicationData();
-				var dataSource = c.Resolve<IDataSourcesFactory>().Create("App", ConnectionStringHelper.ConnectionStringUsedInTests, null);
-				dataSourcesProvider.RegisteredDataSourceCollection = new List<IDataSource>{dataSource};
-				return dataSourcesProvider;
-			}).AsSelf().As<ICurrentApplicationData>().SingleInstance();
-
+			builder.UseTestDouble(new MutableFakeCurrentHttpContext()).For<ICurrentHttpContext>();
+			builder.UseTestDouble(new MutableFakeCurrentTeleoptiPrincipal()).For<ICurrentTeleoptiPrincipal>();
+			builder.UseTestDouble<FakeCurrentApplicationData>().For<ICurrentApplicationData>();
 		}
 	}
 
@@ -53,7 +43,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 	public class ReadModelUnitOfWorkTest
 	{
 		public TheService TheService;
-		public NestedService NestedService;
+		public NestedService1 NestedService1;
 		public NestedService2 NestedService2;
 		public MutableFakeCurrentHttpContext HttpContext;
 		public ICurrentReadModelUnitOfWork UnitOfWork;
@@ -93,7 +83,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 		public void ShouldProduceUnitOfWorkToNestedServices()
 		{
 			string result = null;
-			NestedService.Action = uow => { result = uow.CreateSqlQuery("SELECT @@VERSION").List<string>().Single(); };
+			NestedService1.Action = uow => { result = uow.CreateSqlQuery("SELECT @@VERSION").List<string>().Single(); };
 
 			TheService.CallNestedServices();
 
@@ -104,7 +94,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 		[TestTable("TestTable")]
 		public void ShouldRollbackTransactionForNestedServices()
 		{
-			NestedService.Action = s =>
+			NestedService1.Action = s =>
 			{
 				s.CreateSqlQuery("INSERT INTO TestTable (Value) VALUES (0)").ExecuteUpdate();
 				throw new TestException();
@@ -119,7 +109,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 		[TestTable("TestTable")]
 		public void ShouldSpanTransactionOverAllNestedServices()
 		{
-			NestedService.Action = s => s.CreateSqlQuery("INSERT INTO TestTable (Value) VALUES (1)").ExecuteUpdate();
+			NestedService1.Action = s => s.CreateSqlQuery("INSERT INTO TestTable (Value) VALUES (1)").ExecuteUpdate();
 			NestedService2.Action = s =>
 			{
 				s.CreateSqlQuery("INSERT INTO TestTable (Value) VALUES (2)").ExecuteUpdate();
@@ -242,7 +232,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 			var factory = DataSourcesFactory;
 			var dataSource1 = factory.Create("Wrong", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, null);
 			var dataSource2 = factory.Create("Correct", ConnectionStringHelper.ConnectionStringUsedInTests, null);
-			ApplicationData.RegisteredDataSourceCollection = new[] { dataSource1, dataSource2 }.Randomize();
+			ApplicationData.RegisteredDataSources = new[] { dataSource1, dataSource2 }.Randomize();
 
 			Principal.SetPrincipal(null);
 
@@ -255,7 +245,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 		public void ShouldExecuteCodeAfterSuccessfulCommit()
 		{
 			string result = null;
-			NestedService.ActionWSync = (uow, sync) => sync.OnSuccessfulTransaction(() => result = "success");
+			NestedService1.ActionWSync = (uow, sync) => sync.OnSuccessfulTransaction(() => result = "success");
 
 			TheService.CallNestedServices();
 
@@ -266,7 +256,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 		public void ShouldNotExecuteCodeAfterFailedCommit()
 		{
 			var result = "failed";
-			NestedService.ActionWSync = (uow, sync) =>
+			NestedService1.ActionWSync = (uow, sync) =>
 			{
 				sync.OnSuccessfulTransaction(() => result = "success");
 				throw new TestException();
@@ -310,12 +300,14 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 
 	public class TheService
 	{
-		private readonly IEnumerable<NestedBase> _nested;
+		private readonly NestedService1 _nested1;
+		private readonly NestedService2 _nested2;
 		private readonly ICurrentReadModelUnitOfWork _uow;
 
-		public TheService(IEnumerable<NestedBase> nested, ICurrentReadModelUnitOfWork uow)
+		public TheService(NestedService1 nested1, NestedService2 nested2, ICurrentReadModelUnitOfWork uow)
 		{
-			_nested = nested;
+			_nested1 = nested1;
+			_nested2 = nested2;
 			_uow = uow;
 		}
 
@@ -328,13 +320,14 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 		[ReadModelUnitOfWork]
 		public virtual void CallNestedServices()
 		{
-			_nested.ForEach(i => i.ExecuteAction());
+			_nested1.ExecuteAction();
+			_nested2.ExecuteAction();
 		}
 	}
 
-	public class NestedService : NestedBase
+	public class NestedService1 : NestedBase
 	{
-		public NestedService(ICurrentReadModelUnitOfWork uow, IReadModelTransactionSyncronization syncronization)
+		public NestedService1(ICurrentReadModelUnitOfWork uow, IReadModelTransactionSyncronization syncronization)
 			: base(uow, syncronization)
 		{
 		}

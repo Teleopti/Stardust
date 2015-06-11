@@ -15,22 +15,22 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 {
 	public class TenantTestAttribute : IoCTestAttribute
 	{
-		protected override void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
+		protected override void RegisterInContainer(ISystem builder, IIocConfiguration configuration)
 		{
 			builder.RegisterModule(new WebModule(configuration, null));
-			builder.RegisterType<PersistPersonInfoFake>().As<IPersistPersonInfo>().AsSelf().SingleInstance();
-			builder.RegisterType<CheckPasswordStrengthFake>().As<ICheckPasswordStrength>().AsSelf().SingleInstance();
-			builder.RegisterType<DeletePersonInfoFake>().As<IDeletePersonInfo>().AsSelf().SingleInstance();
-			builder.RegisterType<ApplicationUserQueryFake>().As<IApplicationUserQuery>().AsSelf().SingleInstance();
-			builder.RegisterType<IdentityUserQueryFake>().As<IIdentityUserQuery>().AsSelf().SingleInstance();
-			builder.RegisterType<TenantUnitOfWorkFake>().As<ITenantUnitOfWork>().AsSelf().SingleInstance();
-			builder.RegisterType<PasswordPolicyFake>().As<IPasswordPolicy>().AsSelf().SingleInstance();
-			builder.RegisterType<FindLogonInfoFake>().As<IFindLogonInfo>().AsSelf().SingleInstance();
-			builder.RegisterType<FindPersonInfoFake>().As<IFindPersonInfo>().AsSelf().SingleInstance();
-			builder.RegisterType<TenantAuthenticationFake>().As<ITenantAuthentication>().AsSelf().SingleInstance();
-			builder.RegisterType<LogLogonAttemptFake>().As<ILogLogonAttempt>().AsSelf().SingleInstance();
-			builder.RegisterType<CurrentTenantUserFake>().As<ICurrentTenantUser>().AsSelf().SingleInstance();
-			builder.RegisterType<DataSourceConfigurationProviderFake>().As<IDataSourceConfigurationProvider>().AsSelf().SingleInstance();
+			builder.UseTestDouble<PersistPersonInfoFake>().For<IPersistPersonInfo>();
+			builder.UseTestDouble<CheckPasswordStrengthFake>().For<ICheckPasswordStrength>();
+			builder.UseTestDouble<DeletePersonInfoFake>().For<IDeletePersonInfo>();
+			builder.UseTestDouble<ApplicationUserQueryFake>().For<IApplicationUserQuery>();
+			builder.UseTestDouble<IdentityUserQueryFake>().For<IIdentityUserQuery>();
+			builder.UseTestDouble<TenantUnitOfWorkFake>().For<ITenantUnitOfWork>();
+			builder.UseTestDouble<PasswordPolicyFake>().For<IPasswordPolicy>();
+			builder.UseTestDouble<FindLogonInfoFake>().For<IFindLogonInfo>();
+			builder.UseTestDouble<FindPersonInfoFake>().For<IFindPersonInfo>();
+			builder.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
+			builder.UseTestDouble<LogLogonAttemptFake>().For<ILogLogonAttempt>();
+			builder.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
+			builder.UseTestDouble<DataSourceConfigurationProviderFake>().For<IDataSourceConfigurationProvider>();
 		}
 	}
 }

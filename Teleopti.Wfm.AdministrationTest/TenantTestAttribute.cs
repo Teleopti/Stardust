@@ -1,10 +1,7 @@
-﻿using Autofac;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+﻿using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Wfm.Administration.Controllers;
 using Teleopti.Wfm.Administration.Core;
 
 namespace Teleopti.Wfm.AdministrationTest
@@ -12,22 +9,21 @@ namespace Teleopti.Wfm.AdministrationTest
 	public class TenantTestAttribute : IoCTestAttribute
 	{
 		private const string tenancyConnectionStringKey = "Tenancy";
-		protected override void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
+
+		protected override void RegisterInContainer(ISystem builder, IIocConfiguration configuration)
 		{
-			builder.RegisterModule<WfmAdminModule>();
-			builder.Register(c =>
-			{
-				var configReader = c.Resolve<IConfigReader>();
-				var connStringToTenant = configReader.ConnectionStrings[tenancyConnectionStringKey];
-				var connstringAsString = connStringToTenant == null ? null : connStringToTenant.ConnectionString;
-				return TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(connstringAsString);
-			})
-				.As<ITenantUnitOfWork>()
-				.As<ICurrentTenantSession>()
-				.SingleInstance();
-			builder.RegisterType<ImportController>();
-			builder.RegisterType<DatabaseHelperWrapper>();
-			builder.RegisterType<AdminTenantAuthentication>().As<ITenantAuthentication>().SingleInstance();
+			base.RegisterInContainer(builder, configuration);
+
+			builder.RegisterModule(new WfmAdminModule());
+
+			var configReader = new ConfigReader();
+			var connStringToTenant = configReader.ConnectionStrings[tenancyConnectionStringKey];
+			var connstringAsString = connStringToTenant == null ? null : connStringToTenant.ConnectionString;
+			var service =  TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(connstringAsString);
+			builder.AddService(service);
+
+			builder.AddService<DatabaseHelperWrapper>();
+			builder.AddService<AdminTenantAuthentication>();
 		}
 	}
 }

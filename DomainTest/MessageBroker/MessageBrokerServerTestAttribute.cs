@@ -11,17 +11,18 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 {
 	public class MessageBrokerServerTestAttribute : IoCTestAttribute
 	{
-		protected override void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
+		protected override void RegisterInContainer(ISystem builder, IIocConfiguration configuration)
 		{
-			builder.RegisterType<FakeMessageBrokerUnitOfWorkAspect>().As<IMessageBrokerUnitOfWorkAspect>();
+			
+			builder.UseTestDouble<FakeMessageBrokerUnitOfWorkAspect>().For<IMessageBrokerUnitOfWorkAspect>();
 
-			builder.RegisterInstance(new FakeSignalR()).AsSelf().As<ISignalR>();
-			builder.RegisterInstance(new ActionImmediate()).As<IActionScheduler>();
+			builder.UseTestDouble(new FakeSignalR()).For<ISignalR>();
+			builder.UseTestDouble(new ActionImmediate()).For<IActionScheduler>();
 
-			builder.RegisterInstance(new FakeCurrentDatasource()).AsSelf().As<ICurrentDataSource>();
-			builder.RegisterInstance(new FakeCurrentBusinessUnit()).AsSelf().As<ICurrentBusinessUnit>();
+			builder.UseTestDouble(new FakeCurrentDatasource()).For<ICurrentDataSource>();
+			builder.UseTestDouble(new FakeCurrentBusinessUnit()).For<ICurrentBusinessUnit>();
 
-			builder.RegisterInstance(new FakeMailboxRepository()).AsSelf().As<IMailboxRepository>();
+			builder.UseTestDouble(new FakeMailboxRepository()).For<IMailboxRepository>();
 		}
 	}
 }
