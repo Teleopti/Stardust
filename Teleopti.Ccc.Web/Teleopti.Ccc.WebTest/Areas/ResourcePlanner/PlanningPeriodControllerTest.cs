@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		[Test]
 		public void ShouldReturnDefaultPlanningPeriodIfNoPeriodExists()
 		{
-			var result = (OkNegotiatedContentResult<PlanningPeriodModel>) Target.GetPlanningPeriod();
+			var result = (OkNegotiatedContentResult<PlanningPeriodModel>) Target.GetPlanningPeriod(Guid.NewGuid());
 			result.Content.StartDate.Should().Be(new DateTime(2015, 05, 01));
 			result.Content.EndDate.Should().Be(new DateTime(2015, 05, 31));
 		}
@@ -36,7 +36,8 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		[Test]
 		public void ShouldSaveDefaultPlanningPeriodIfNoPeriodExists()
 		{
-			var result = (OkNegotiatedContentResult<PlanningPeriodModel>) Target.GetPlanningPeriod();
+			Target.GetAvailablePlanningPeriods();
+			var result = (OkNegotiatedContentResult<PlanningPeriodModel>)Target.GetPlanningPeriod(Guid.NewGuid());
 			result.Content.Id.Should().Not.Be.EqualTo(Guid.Empty);
 			((FakePlanningPeriodRepository) FakePlanningPeriodRepository).AddExecuted.Should().Be.True();
 		}
@@ -44,7 +45,8 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		[Test]
 		public void ShouldSaveNewDefaultPlanningPeriodIfPreviousStarted()
 		{
-			var result = (OkNegotiatedContentResult<PlanningPeriodModel>) Target.GetPlanningPeriod();
+			Target.GetAvailablePlanningPeriods();
+			var result = (OkNegotiatedContentResult<PlanningPeriodModel>)Target.GetPlanningPeriod(Guid.NewGuid());
 			result.Content.Id.Should().Not.Be.EqualTo(Guid.Empty);
 			result.Content.StartDate.Should().Be.EqualTo(new DateTime(2015, 5, 1));
 
@@ -55,7 +57,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		public void ShouldReturnEmptyIfForecastIsAvailable()
 		{
 			((FakeMissingForecastProvider) FakeMissingForecastProvider).MissingForecast = new MissingForecastModel[] {};
-			var result = (OkNegotiatedContentResult<PlanningPeriodModel>) Target.GetPlanningPeriod();
+			var result = (OkNegotiatedContentResult<PlanningPeriodModel>)Target.GetPlanningPeriod(Guid.NewGuid());
 			result.Content.Skills.Should().Be.Empty();
 		}
 
@@ -71,7 +73,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 						new[] {new MissingForecastRange {StartDate = new DateTime(2015, 5, 10), EndDate = new DateTime(2015, 5, 16)}}
 				}
 			};
-			var result = (OkNegotiatedContentResult<PlanningPeriodModel>) Target.GetPlanningPeriod();
+			var result = (OkNegotiatedContentResult<PlanningPeriodModel>)Target.GetPlanningPeriod(Guid.NewGuid());
 			result.Content.Skills.Should().Not.Be.Empty();
 		}
 

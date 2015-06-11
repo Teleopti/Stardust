@@ -27,10 +27,10 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			_now = now;
 		}
 
-		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod")]
-		public virtual IHttpActionResult GetPlanningPeriod()
+		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod/{id}")]
+		public virtual IHttpActionResult GetPlanningPeriod(Guid id)
 		{
-			var planningPeriod = _nextPlanningPeriodProvider.Current();
+			var planningPeriod = _planningPeriodRespository.Load(id);
 			var planningPeriodModel = createPlanningPeriodModel(planningPeriod.Range.StartDate.Date,
 				planningPeriod.Range.EndDate.Date, planningPeriod.Id.GetValueOrDefault(), getMissingForecast(planningPeriod.Range));
 			return Ok(planningPeriodModel);
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 							}));
 		}
 
-		[UnitOfWork, HttpPut, Route("api/resourceplanner/planningperiod/{id}")]
+		[UnitOfWork, HttpPut, Route("api/resourceplanner/changeplanningperiod/{id}")]
 		public virtual IHttpActionResult ChangeRange(Guid id, [FromBody] PlanningPeriodChangeRangeModel model)
 		{
 			var planningPeriod = _planningPeriodRespository.Load(id);
