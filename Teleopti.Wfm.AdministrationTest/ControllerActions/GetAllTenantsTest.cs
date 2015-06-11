@@ -5,24 +5,22 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Wfm.Administration.Controllers;
 
-namespace Teleopti.Wfm.Administration.Tests.Controllers
+namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 {
 	[TenantTest]
-	public class HomeControllerTest
+	public class GetAllTenantsTest
 	{
 		public HomeController Target;
 		public ITenantUnitOfWork TenantUnitOfWork;
 
 		[Test]
-		public void GetAllTenantsShouldNoBeNull()
+		public void ShouldNotBeNull()
 		{
 			//create database
-			var dataSource = DataSourceHelper.CreateDataSource(new IMessageSender[] { }, "TestData");
+			DataSourceHelper.CreateDataSource(new IMessageSender[] { }, "TestData");
 			TenantUnitOfWork.Start();
 			Target.GetAllTenants().Should().Not.Be.Null();
 			TenantUnitOfWork.CommitAndDisposeCurrent();
 		}
-
-		
 	}
 }

@@ -173,6 +173,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Wfm.Administration
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Wfm.Administration", "Teleopti.Wfm.Administration\Teleopti.Wfm.Administration.csproj", "{C7CFBE6B-F899-44FD-BB8D-7ACD7131ACD9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Wfm.AdministrationTest", "Teleopti.Wfm.AdministrationTest\Teleopti.Wfm.AdministrationTest.csproj", "{5974BB53-DC66-401B-ACC2-1C1A57610E2B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|.NET = Debug|.NET
@@ -1051,6 +1053,18 @@ Global
 		{C7CFBE6B-F899-44FD-BB8D-7ACD7131ACD9}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{C7CFBE6B-F899-44FD-BB8D-7ACD7131ACD9}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{C7CFBE6B-F899-44FD-BB8D-7ACD7131ACD9}.Release|x86.ActiveCfg = Release|Any CPU
+		{5974BB53-DC66-401B-ACC2-1C1A57610E2B}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{5974BB53-DC66-401B-ACC2-1C1A57610E2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5974BB53-DC66-401B-ACC2-1C1A57610E2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5974BB53-DC66-401B-ACC2-1C1A57610E2B}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{5974BB53-DC66-401B-ACC2-1C1A57610E2B}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{5974BB53-DC66-401B-ACC2-1C1A57610E2B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5974BB53-DC66-401B-ACC2-1C1A57610E2B}.Release|.NET.ActiveCfg = Release|Any CPU
+		{5974BB53-DC66-401B-ACC2-1C1A57610E2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5974BB53-DC66-401B-ACC2-1C1A57610E2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5974BB53-DC66-401B-ACC2-1C1A57610E2B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{5974BB53-DC66-401B-ACC2-1C1A57610E2B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{5974BB53-DC66-401B-ACC2-1C1A57610E2B}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

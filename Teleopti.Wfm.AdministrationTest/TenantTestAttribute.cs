@@ -1,14 +1,13 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Wfm.Administration.Controllers;
 using Teleopti.Wfm.Administration.Core;
 
-namespace Teleopti.Wfm.Administration.Tests
+namespace Teleopti.Wfm.AdministrationTest
 {
 	public class TenantTestAttribute : IoCTestAttribute
 	{
