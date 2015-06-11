@@ -1,8 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
-using Rhino.Mocks;
 
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 {
@@ -12,26 +12,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		public void SetupHub(Hub hub)
 		{
 			hub.Context = new HubCallerContext(null, "connection");
-			hub.Groups = MockRepository.GenerateMock<IGroupManager>();
-			hub.Groups.Stub(x => x.Add(null, null)).IgnoreArguments().Return(DoneTask());
-			hub.Groups.Stub(x => x.Remove(null, null)).IgnoreArguments().Return(DoneTask());
-			hub.Clients = MockRepository.GenerateMock<IHubCallerConnectionContext<dynamic>>();
+			hub.Groups = new FakeGroupManager();
+			hub.Clients = new FakeClients<dynamic>();
 		}
 
 		public void SetupHub(Hub hub, dynamic client)
 		{
 			SetupHub(hub);
-			hub.Clients.Stub(x => x.Caller).Return(client);
-			hub.Clients.Stub(x => x.Group(null)).IgnoreArguments().Return(client);
+			hub.Clients = new FakeClients<dynamic>(client);
 		}
-
-		private Task DoneTask()
-		{
-			var task = Task.Factory.StartNew(() => { });
-			Task.WaitAll(task);
-			return task;
-		}
-
 
 		public dynamic FakeClient(string methodName, Action action)
 		{
@@ -48,4 +37,85 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			return new FakeClientBuilder().Make(methodName, action);
 		}
 	}
+
+	public class FakeGroupManager : IGroupManager
+	{
+		public Task Add(string connectionId, string groupName)
+		{
+			return Task.FromResult(false);
+		}
+
+		public Task Remove(string connectionId, string groupName)
+		{
+			return Task.FromResult(false);
+		}
+	}
+
+	public class FakeClients<T> : IHubCallerConnectionContext<T>
+	{
+		private readonly dynamic _client;
+
+		public FakeClients()
+		{
+		}
+
+		public FakeClients(dynamic client)
+		{
+			_client = client;
+		}
+
+		public T AllExcept(params string[] excludeConnectionIds)
+		{
+			return _client;
+		}
+
+		public T Client(string connectionId)
+		{
+			return _client;
+		}
+
+		public T Clients(IList<string> connectionIds)
+		{
+			return _client;
+		}
+
+		public T Group(string groupName, params string[] excludeConnectionIds)
+		{
+			return _client;
+		}
+
+		public T Groups(IList<string> groupNames, params string[] excludeConnectionIds)
+		{
+			return _client;
+		}
+
+		public T User(string userId)
+		{
+			return _client;
+		}
+
+		public T Users(IList<string> userIds)
+		{
+			return _client;
+		}
+
+		public T All { get { return _client; } }
+
+		public T OthersInGroup(string groupName)
+		{
+			return _client;
+		}
+
+		public T OthersInGroups(IList<string> groupNames)
+		{
+			return _client;
+		}
+
+		public T Caller { get { return _client; } }
+
+		public dynamic CallerState { get; set; }
+
+		public T Others { get { return _client; } }
+	}
+
 }
