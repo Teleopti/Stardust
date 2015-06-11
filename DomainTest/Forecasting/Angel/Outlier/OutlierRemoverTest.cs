@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Outlier
 	public class OutlierRemoverTest
 	{
 		[Test]
-		public void ShouldRemoveOutliersAndUseAverageInstead()
+		public void ShouldRemoveOutliersAndUse3SigmaInstead()
 		{
 			var skill = SkillFactory.CreateSkill("testSkill");
 			skill.TimeZone = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
@@ -47,6 +47,39 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Outlier
 			result.TaskOwnerDayCollection.Count.Should().Be.EqualTo(25);
 			Math.Round(result.TaskOwnerDayCollection.Single(x => x.CurrentDate == new DateOnly(date))
 				.TotalStatisticCalculatedTasks, 3).Should().Be.EqualTo(677.999);
+		}
+
+		[Test]
+		public void ShouldRemoveOutliersAndUse3SigmaInsteadWhenConsiderTrend()
+		{
+			var skill = SkillFactory.CreateSkill("testSkill");
+			skill.TimeZone = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
+			var workload = WorkloadFactory.CreateWorkload(skill);
+
+			var historicalDate = new DateOnly(2006, 1, 1);
+
+			var currentDate = DateTime.SpecifyKind(historicalDate.Date, DateTimeKind.Utc);
+			var date = currentDate.AddMonths(2).AddDays(3);
+
+			var periodForHelper = generateMockedStatisticsWithOutliers(historicalDate, workload, date);
+
+			var historicalData = new TaskOwnerPeriod(historicalDate, periodForHelper.TaskOwnerDays, TaskOwnerPeriodType.Other);
+
+			var indexVolumes = MockRepository.GenerateMock<IIndexVolumes>();
+			var volumes = IndexVolumesFactory.Create();
+			indexVolumes.Stub(x => x.Create(historicalData)).Return(volumes);
+
+			var target = new OutlierRemover();
+
+			historicalData.TaskOwnerDayCollection.Count.Should().Be.EqualTo(25);
+			historicalData.TaskOwnerDayCollection.Single(x => x.CurrentDate == new DateOnly(date))
+				.TotalStatisticCalculatedTasks.Should().Be.EqualTo(1000);
+
+			var result = target.RemoveOutliers(historicalData, new TeleoptiClassicWithTrend(indexVolumes,new LinearRegressionTrend()));
+
+			result.TaskOwnerDayCollection.Count.Should().Be.EqualTo(25);
+			Math.Round(result.TaskOwnerDayCollection.Single(x => x.CurrentDate == new DateOnly(date))
+				.TotalStatisticCalculatedTasks, 3).Should().Be.EqualTo(713.136);
 		}
 
 		private static TaskOwnerHelper generateMockedStatisticsWithOutliers(DateOnly historicalDate, IWorkload workload,

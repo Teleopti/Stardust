@@ -14,40 +14,39 @@ namespace Teleopti.Ccc.Infrastructure.Forecasting.Angel
 
 		public ITaskOwnerPeriod RemoveOutliers(ITaskOwnerPeriod historicalData, IForecastMethod forecastMethod)
 		{
-			var seasonalVariations = forecastMethod.SeasonalVariation(historicalData).ForecastingTargets;
+			var seasonalVariationPossiblyWithTrend = forecastMethod.SeasonalVariation(historicalData).ForecastingTargets;
 
-			var tasksWithoutSeasonalVariations = new Dictionary<DateOnly, double>();
-			
-			foreach (var seasonalDay in seasonalVariations)
+			var normalDistribution = new Dictionary<DateOnly, double>();
+			foreach (var day in seasonalVariationPossiblyWithTrend)
 			{
 				foreach (var historicalDay in historicalData.TaskOwnerDayCollection)
 				{
-					if (seasonalDay.CurrentDate == historicalDay.CurrentDate)
+					if (day.CurrentDate == historicalDay.CurrentDate)
 					{
 						if (Math.Abs(historicalDay.TotalStatisticCalculatedTasks) > 0.001d)
-							tasksWithoutSeasonalVariations.Add(seasonalDay.CurrentDate, historicalDay.TotalStatisticCalculatedTasks - seasonalDay.Tasks);
+							normalDistribution.Add(day.CurrentDate, historicalDay.TotalStatisticCalculatedTasks - day.Tasks);
 						break;
 					}
 				}
 			}
 
-			var descriptiveStatistics=new DescriptiveStatistics(tasksWithoutSeasonalVariations.Values);
+			var descriptiveStatistics = new DescriptiveStatistics(normalDistribution.Values);
 			var mean = descriptiveStatistics.Mean;
 			var stdDev = descriptiveStatistics.StandardDeviation;
 			var upper = mean + 3*stdDev;
 			var lower = mean - 3*stdDev;
 
-			foreach (var day in tasksWithoutSeasonalVariations)
+			foreach (var day in normalDistribution)
 			{
 				if (day.Value > upper)
 				{
 					var taskOwner = historicalData.TaskOwnerDayCollection.Single(x => x.CurrentDate == day.Key);
-					((ValidatedVolumeDay)taskOwner).ValidatedTasks = upper + seasonalVariations.Single(x => x.CurrentDate == day.Key).Tasks;
+					((ValidatedVolumeDay)taskOwner).ValidatedTasks = upper + seasonalVariationPossiblyWithTrend.Single(x => x.CurrentDate == day.Key).Tasks;
 				}
 				else if (day.Value < lower)
 				{
 					var taskOwner = historicalData.TaskOwnerDayCollection.Single(x => x.CurrentDate == day.Key);
-					((ValidatedVolumeDay)taskOwner).ValidatedTasks = lower + seasonalVariations.Single(x => x.CurrentDate == day.Key).Tasks;
+					((ValidatedVolumeDay)taskOwner).ValidatedTasks = lower + seasonalVariationPossiblyWithTrend.Single(x => x.CurrentDate == day.Key).Tasks;
 				}
 			}
 
