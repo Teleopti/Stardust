@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Autofac;
+﻿using Autofac;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.MessageBroker;
-using Teleopti.Interfaces.MessageBroker;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
-	public class MessageBrokerServerModule : Module
+	internal class MessageBrokerServerModule : Module
 	{
 		private readonly bool _throttleMessages;
 		private readonly int _messagesPerSecond;

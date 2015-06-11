@@ -62,6 +62,7 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule(new TenantClientModule(_configuration));
 			builder.RegisterModule<DistributedLockModule>();
 			builder.RegisterModule(new RtaModule(_configuration));
+			builder.RegisterModule(new MessageBrokerServerModule(_configuration));
 
 			// move into HangfireModule when that module can be moved to IoCCommon
 			builder.RegisterType<HangfireEventProcessor>().As<IHangfireEventProcessor>().SingleInstance();

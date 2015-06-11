@@ -3,7 +3,6 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -14,8 +13,6 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 	{
 		protected override void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
 		{
-			builder.RegisterModule(new MessageBrokerServerModule(configuration));
-
 			builder.RegisterType<FakeMessageBrokerUnitOfWorkAspect>().As<IMessageBrokerUnitOfWorkAspect>();
 
 			builder.RegisterInstance(new FakeSignalR()).AsSelf().As<ISignalR>();

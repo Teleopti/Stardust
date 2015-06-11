@@ -1,19 +1,9 @@
-﻿using Autofac;
-using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Configuration;
+﻿using Teleopti.Ccc.Domain.Aop;
 
 namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 {
 	public class MessageBrokerUnitOfWorkTestAttribute : InfrastructureTestAttribute
 	{
-		protected override void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
-		{
-			base.RegisterInContainer(builder,configuration);
-
-			builder.RegisterModule(new MessageBrokerServerModule(configuration));
-		}
-
 		protected override void BeforeTest()
 		{
 			Resolve<IMessageBrokerUnitOfWorkAspect>().OnBeforeInvocation(null);

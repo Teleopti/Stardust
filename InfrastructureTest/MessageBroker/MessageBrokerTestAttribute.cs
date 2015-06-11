@@ -2,7 +2,6 @@
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Infrastructure.MessageBroker;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
@@ -12,8 +11,6 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 		protected override void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
 		{
 			base.RegisterInContainer(builder, configuration);
-
-			builder.RegisterModule(new MessageBrokerServerModule(configuration));
 
 			builder.RegisterType<MailboxRepository>().As<IMailboxRepository>().SingleInstance();
 

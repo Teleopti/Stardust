@@ -33,7 +33,6 @@ namespace Teleopti.Ccc.Web.Broker
 			var builder = new ContainerBuilder();
 			builder.RegisterModule(new CommonModule(configuration));
 			builder.RegisterModule<MessageBrokerWebModule>();
-			builder.RegisterModule(new MessageBrokerServerModule(configuration));
 			builder.RegisterType<SubscriptionPassThrough>().As<IBeforeSubscribe>().SingleInstance();
 			builder.RegisterHubs(typeof(MessageBrokerHub).Assembly);
 			RegistrationExtensions.RegisterControllers(builder, typeof(MessageBrokerController).Assembly);
