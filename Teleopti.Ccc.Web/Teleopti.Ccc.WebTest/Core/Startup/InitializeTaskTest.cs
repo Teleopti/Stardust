@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 			{
 				Expect.Call(settings.nhibConfPath()).Return("path");
 				Expect.Call(physicalApplicationPath.Get()).Return("applicationPath");
-				initializeApplication.Start(null, null, null, null, false);
+				initializeApplication.Start(null, null, null, false);
 				LastCall.IgnoreArguments().Constraints(
 					Is.TypeOf(typeof (WebState)),
 					Is.Equal(Path.Combine("applicationPath", "path")),

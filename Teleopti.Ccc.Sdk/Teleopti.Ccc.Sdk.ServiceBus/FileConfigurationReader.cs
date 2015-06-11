@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 							messageBroker),
 						messageBroker(),
 						new ReadDataSourceConfigurationFromNhibFiles(new NhibFilePathFixed(_xmlFilePath), new ParseNhibFile()));
-				application.Start(new BasicState(), _xmlFilePath, null, ConfigurationManager.AppSettings.ToDictionary(), true);
+				application.Start(new BasicState(), null, ConfigurationManager.AppSettings.ToDictionary(), true);
 
 				Logger.Info("Initialized application");
 			}

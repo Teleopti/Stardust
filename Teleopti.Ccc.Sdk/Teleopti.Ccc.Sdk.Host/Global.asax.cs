@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 					new ReadDataSourceConfigurationFromNhibFiles(new NhibFilePathFixed(sitePath()), new ParseNhibFile())
 					);
 			var messageBrokerEnabled = !messageBrokerDisabled();
-			initializeApplication.Start(new SdkState(), sitePath(), passwordPolicyService, appSettings, messageBrokerEnabled);
+			initializeApplication.Start(new SdkState(), passwordPolicyService, appSettings, messageBrokerEnabled);
 
 			var messageBrokerReceiveDisabled = !messageBrokerReceiveEnabled();
 			if (messageBrokerEnabled && messageBrokerReceiveDisabled)

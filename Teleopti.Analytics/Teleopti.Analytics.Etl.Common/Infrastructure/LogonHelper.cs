@@ -102,7 +102,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			var application = new InitializeApplication(dataSourcesFactory, null, new ReadDataSourceConfigurationFromNhibFiles(new NhibFilePathFixed(_nhibConfPath), new ParseNhibFile()));
 
 			if (!StateHolder.IsInitialized)
-				application.Start(new StateManager(), _nhibConfPath, null, ConfigurationManager.AppSettings.ToDictionary(), false);
+				application.Start(new StateManager(), null, ConfigurationManager.AppSettings.ToDictionary(), false);
 
 			_logOnOff = new LogOnOff(new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory()));
 			_repositoryFactory = new RepositoryFactory();

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -6,6 +5,6 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 {
 	public interface IInitializeApplication
 	{
-		void Start(IState clientCache, string xmlDirectory, ILoadPasswordPolicyService loadPasswordPolicyService, IDictionary<string, string> appSettings, bool startMessageBroker);
+		void Start(IState clientCache, ILoadPasswordPolicyService loadPasswordPolicyService, IDictionary<string, string> appSettings, bool startMessageBroker);
 	}
 }
