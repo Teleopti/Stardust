@@ -8,18 +8,20 @@
 			}
 		]).controller('PlanningPeriodNewCtrl', [
 			'$scope', '$state', 'PlanningPeriodNewSvrc', function ($scope, $state, PlanningPeriodNewSvrc) {
-			$scope.error = false;
-				$scope.suggestions = PlanningPeriodNewSvrc.suggestions.query();
-				if ($scope.suggestions.length === 0) {
-					$scope.error = true;
-					console.log($scope.suggestions);
+				$scope.error = false;
+			$scope.suggestions = {};
+			PlanningPeriodNewSvrc.suggestions.query().$promise.then(function(result) {
+				$scope.suggestions = result;
+				
+			},function() {
+				$scope.error = true;
+			});
 
-				}
 
 				$scope.selectedRange = {};
-			$scope.createNextPlanningPeriod = function() {
-				var selectedRange = $scope.suggestions[$scope.selectedRange];
-				var range = { Number: selectedRange.Number, PeriodType: selectedRange.PeriodType, DateFrom: selectedRange.StartDate };
+				$scope.createNextPlanningPeriod = function (selectedRange) {
+				var s = $scope.suggestions[selectedRange];
+				var range = { Number: s.Number, PeriodType: s.PeriodType, DateFrom: s.StartDate };
 				PlanningPeriodNewSvrc.planningperiod.update({}, JSON.stringify(range)).$promise.then(function(result) {
 					$scope.planningPeriod = result;
 					$state.go('resourceplanner', $scope.planningPeriod);
