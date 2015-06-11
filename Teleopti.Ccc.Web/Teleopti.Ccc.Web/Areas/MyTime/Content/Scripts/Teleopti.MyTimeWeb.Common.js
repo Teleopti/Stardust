@@ -20,6 +20,76 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 			window.console.log(Array.prototype.join.call(arguments, ' '));
 	}
 
+	function _setupCalendar(options) {
+
+		var timeFormat = "";
+
+		if (options.TimeFormat) {
+			timeFormat = _updateMeridiem(options.TimeFormat);
+		}
+
+		var isJalaali = (options.UseJalaaliCalendar && Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_JalaaliCalendar_32997'));
+		Teleopti.MyTimeWeb.Common.UseJalaaliCalendar = isJalaali;
+		Teleopti.MyTimeWeb.Common.DateFormat = isJalaali ? "jYYYY/jMM/jDD" : options.DateFormat;
+		Teleopti.MyTimeWeb.Common.ServiceDateFormat = 'YYYY-MM-DD';
+		Teleopti.MyTimeWeb.Common.TimeFormat = timeFormat;
+		Teleopti.MyTimeWeb.Common.Meridiem = { AM: options.AMDesignator, PM: options.PMDesignator};
+		Teleopti.MyTimeWeb.Common.DateTimeFormat = Teleopti.MyTimeWeb.Common.DateFormat + " " + Teleopti.MyTimeWeb.Common.TimeFormat;
+		if (isJalaali) {
+			moment.loadPersian();
+		}
+
+	};
+
+	function _updateMeridiem(timeFormat) {
+		return timeFormat.replace(/tt|t/gi, "A");
+	};
+
+	function _formatDate(date) {
+		if (moment.isMoment(date)){
+			return date.format(Teleopti.MyTimeWeb.Common.DateFormat);
+		}
+		return moment(date).format(Teleopti.MyTimeWeb.Common.DateFormat);
+	};
+
+	function _formatTime(dateTime) {
+		if (moment.isMoment(dateTime)) {
+			return date.format(Teleopti.MyTimeWeb.Common.TimeFormat);
+		}
+		return moment.utc(dateTime).format(Teleopti.MyTimeWeb.Common.TimeFormat);
+	};
+
+	function _formatMonth(date) {
+
+		if (moment.isMoment(date)) {
+			return Teleopti.MyTimeWeb.Common.UseJalaaliCalendar ? date.format('jMMMM jYYYY') : date.format('MMMM YYYY');
+		}
+		return Teleopti.MyTimeWeb.Common.UseJalaaliCalendar ? moment(date).format('jMMMM jYYYY') : moment(date).format('MMMM YYYY');
+
+	};
+
+	function _formatDatePeriod(start, end, showTime) {
+
+		if (!moment.isMoment(start)) {
+
+			start = moment(start);
+			end = moment(end);
+		}
+
+		if (showTime) {
+				return start.format(Teleopti.MyTimeWeb.Common.DateTimeFormat) + " - " + end.format(Teleopti.MyTimeWeb.Common.DateTimeFormat);
+		}
+
+		return start.format(Teleopti.MyTimeWeb.Common.DateFormat) + " - " + end.format(Teleopti.MyTimeWeb.Common.DateFormat);
+
+	};
+
+	function _formatServiceDate(date) {
+		// prevent locale translation to non-decimal symbols
+		var localeSafeMoment = moment(date).locale('en');
+		return localeSafeMoment.format(Teleopti.MyTimeWeb.Common.ServiceDateFormat);
+	};
+
 	function _isFixedDate(dateString) {
 		return dateString.match(/^\d{4}-\d{2}-\d{2}$/);
 	}
@@ -77,6 +147,32 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		Log: function (logmessage) {
 			_log(logmessage);
 		},
+
+		SetupCalendar: function (options) {
+			_setupCalendar(options);
+		},
+
+		FormatDate : function(date) {
+			return _formatDate(date);
+		},
+
+		FormatTime : function(dateTime) {
+			return _formatTime(dateTime);
+		},
+
+
+		FormatDatePeriod: function (startDate, endDate, showTimes) {
+			return _formatDatePeriod(startDate, endDate, showTimes);
+		},
+
+		FormatMonth : function(date) {
+			return _formatMonth(date);
+		},
+		
+		FormatServiceDate: function(date) {
+			return _formatServiceDate(date);
+		},
+
 		ParseToDate: function (dateString) {
 			return _parseFixedDateStringToDate(dateString);
 		},
@@ -103,7 +199,7 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		IsRtl: function () {
 			return $("html").attr("dir") == "rtl";
 		},
-		IsToggleEnabled: function(toggleName) {
+		IsToggleEnabled: function (toggleName) {
 			var result = false;
 			var ajax = new Teleopti.MyTimeWeb.Ajax();
 			ajax.Ajax({
@@ -121,36 +217,36 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 
 Teleopti.MyTimeWeb.Common.Layout = (function ($) {
 	return {
-		ActivatePlaceHolder: function() {
+		ActivatePlaceHolder: function () {
 			$('textarea, :text, :password').placeholder();
 		},
 
-		Init: function() {
-		    function autocollapse() {
-		    	var navbar = $('#autocollapse');
-		    	var innerNavbar = $('#innerNavBar');
-		    	var button = $('ul.navbar-nav li');
-			    
-			    navbar.removeClass('custom-collapsed'); // set standart view
-			    innerNavbar.addClass('container');  //size according to bootstrap
-			    
-		        if (Math.floor(navbar.innerHeight()) > button.height() + 1) // check if we've got 2 lines
-		        {
-			        innerNavbar.removeClass('container');
-			        navbar.addClass('custom-collapsed'); // force collapse mode
-		        }
-		    }
-		    
-		    $(document).on('ready', autocollapse);
-		    $(window).on('resize', autocollapse);
+		Init: function () {
+			function autocollapse() {
+				var navbar = $('#autocollapse');
+				var innerNavbar = $('#innerNavBar');
+				var button = $('ul.navbar-nav li');
+
+				navbar.removeClass('custom-collapsed'); // set standart view
+				innerNavbar.addClass('container');  //size according to bootstrap
+
+				if (Math.floor(navbar.innerHeight()) > button.height() + 1) // check if we've got 2 lines
+				{
+					innerNavbar.removeClass('container');
+					navbar.addClass('custom-collapsed'); // force collapse mode
+				}
+			}
+
+			$(document).on('ready', autocollapse);
+			$(window).on('resize', autocollapse);
 		},
-		
-		            
-        //Activating tooltip where available
+
+
+		//Activating tooltip where available
 		ActivateTooltip: function () {
 			$('.qtip-tooltip')
 				.each(function () {
-					
+
 					var content = {
 						title: $(this).attr('tooltip-title'),
 						text: $(this).attr('tooltip-text')
@@ -198,7 +294,7 @@ Teleopti.MyTimeWeb.Common.LoadingOverlay = (function ($) {
 			options.element = optionsOrElement;
 		}
 		options.loadingClass = options.loadingClass || 'loading';
-		
+
 		options.element.addClass('relative');
 		$('<div>')
 			.css({
@@ -208,7 +304,7 @@ Teleopti.MyTimeWeb.Common.LoadingOverlay = (function ($) {
 			.addClass('overlay')
 			.appendTo(options.element)
 			.show()
-			;
+		;
 	}
 
 	function _removeOverlay(element) {
@@ -232,7 +328,7 @@ String.prototype.format = function () {
 		return typeof args[number] != 'undefined'
 				? args[number]
 				: match
-			 ;
+		;
 	});
 };
 

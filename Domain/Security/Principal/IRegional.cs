@@ -12,5 +12,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "LCID")]
 		int UICultureLCID { get; }
 		CultureInfo UICulture { get; }
+		bool ForceUseGregorianCalendar { get; set; }
+		
 	}
 }

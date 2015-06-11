@@ -46,7 +46,7 @@
 	@Html.Partial("AddShiftExchangeOfferPartial")
 </script>
 
-<input id="Request-detail-datepicker-format" type="hidden" data-bind="value: datePickerFormat" />
+<!--<input id="Request-detail-datepicker-format" type="hidden" data-bind="value: datePickerFormat" />-->
 
 <div class="navbar navbar-teleopti subnavbar">
 	<div class="container">
@@ -71,7 +71,7 @@
 			</li>
 			<li class="col-xs-12 col-sm-4"><a href="#" id="week-schedule-today" data-bind="click: today">@Resources.Today</a></li>
 			<li class="col-xs-12 col-sm-4 active"><a href="#" id="week-schedule-week" data-bind="click: week">@Resources.Week</a></li>
-			<li class="col-xs-12 col-sm-4"><a href="#" id="week-schedule-month" data-bind="click: month">@Resources.Month</a></li>
+			<li class="col-xs-12 col-sm-4"><a href="#" id="week-schedule-month" data-bind="click: month, visible: !Teleopti.MyTimeWeb.Common.UseJalaaliCalendar">@Resources.Month</a></li>
 		</ul>
 	</div>
 </div>

@@ -15,11 +15,20 @@ if (typeof (Teleopti.MyTimeWeb.Schedule) === 'undefined') {
 }
 
 Teleopti.MyTimeWeb.Schedule.MonthDayViewModel = function (scheduleDate, selectedDate) {
-    var currentDate = moment(scheduleDate.FixedDate, 'YYYY-MM-DD');
 
+	var currentDate = moment(scheduleDate.FixedDate, 'YYYY-MM-DD');
     this.currentDate = currentDate;
-    this.date = scheduleDate.FixedDate;
-    this.dayOfMonth = currentDate.date();
+	this.date = scheduleDate.FixedDate;
+	
+
+	if (Teleopti.MyTimeWeb.Common.UseJalaaliCalendar) {
+		this.dayOfMonth = currentDate.jDate();
+		this.isOutsideMonth = (selectedDate.jMonth() != currentDate.jMonth());
+	} else
+	{
+		this.dayOfMonth = currentDate.date();
+		this.isOutsideMonth = (selectedDate.month() != currentDate.month());
+	}
 	
     this.absenceName = scheduleDate.Absence ? scheduleDate.Absence.Name : null;
     this.absenceShortName = scheduleDate.Absence ? scheduleDate.Absence.ShortName : null;
@@ -52,8 +61,8 @@ Teleopti.MyTimeWeb.Schedule.MonthViewModel = function () {
 
     this.selectedDate = ko.observable(Teleopti.MyTimeWeb.Portal.ParseHash().dateHash ? moment(Teleopti.MyTimeWeb.Portal.ParseHash().dateHash) : moment());
 
-    this.formattedSelectedDate = ko.computed(function() {
-        return self.selectedDate().format('MMMM YYYY');
+    this.formattedSelectedDate = ko.computed(function () {
+    	return Teleopti.MyTimeWeb.Common.FormatMonth(self.selectedDate());
     });
     
     this.nextMonth = function() {
@@ -86,18 +95,37 @@ Teleopti.MyTimeWeb.Schedule.MonthViewModel = function () {
     	Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Month" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(d.format('YYYY-MM-DD')));
     };
 	
-    this.readData = function (data) {
-        self.weekDayNames(data.DayHeaders);
+	this.readData = function (data) {
+
+		var useJalaaliCalendar = Teleopti.MyTimeWeb.Common.UseJalaaliCalendar;
+
+		if (useJalaaliCalendar) {
+			self.weekDayNames(data.DayHeaders.reverse());
+		} else {
+			self.weekDayNames(data.DayHeaders);
+		}
+		
         self.selectedDate(moment(data.FixedDate, 'YYYY-MM-DD'));
         var newWeek;
+        var count = 1;
+	    var base = 0;
         for (var i = 0; i < data.ScheduleDays.length; i++) {
-            if (i % 7 == 0) {
+	        
+        	if (i % 7 == 0) {
+        		base = base + 7;
+		        count = 1;
                 if (newWeek)
                     self.weekViewModels.push(newWeek);
                 newWeek = new Teleopti.MyTimeWeb.Schedule.MonthWeekViewModel();
-            }
+        	}
+	        var newDay;
+        	if (useJalaaliCalendar) {
+		        newDay = new Teleopti.MyTimeWeb.Schedule.MonthDayViewModel(data.ScheduleDays[base - count], self.selectedDate());
+	        } else {
+	        	newDay = new Teleopti.MyTimeWeb.Schedule.MonthDayViewModel(data.ScheduleDays[i], self.selectedDate());
+	        }
 
-            var newDay = new Teleopti.MyTimeWeb.Schedule.MonthDayViewModel(data.ScheduleDays[i], self.selectedDate());
+	        count ++;
             newWeek.dayViewModels.push(newDay);
         }
         self.weekViewModels.push(newWeek);

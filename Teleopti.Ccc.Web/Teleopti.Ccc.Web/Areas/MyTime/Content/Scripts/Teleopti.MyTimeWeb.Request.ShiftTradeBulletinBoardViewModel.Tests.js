@@ -20,10 +20,20 @@ $(document).ready(function () {
 	});
 
 	test("should get date with format", function () {
+
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) { return true; };
+		Teleopti.MyTimeWeb.Common.SetupCalendar({
+			UseJalaaliCalendar: false,
+			DateFormat: 'YYYY-MM-DD',
+			TimeFormat: 'HH:mm tt',
+			AMDesignator: 'AM',
+			PMDesignator: 'PM'
+		});
+
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel();
 		viewModel.requestedDateInternal(moment("Dec 25, 1995"));
 
-		var result = viewModel.getDateWithFormat();
+		var result = viewModel.getFormattedDateForDisplay();
 
 		equal(result, "1995-12-25");
 	});

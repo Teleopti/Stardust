@@ -48,6 +48,7 @@
 		MyTimeWeb_SortSchedule_32092,
 		MyTimeWeb_EnhanceTeamSchedule_32580,
 		MyTimeWeb_PreferenceShowNightViolation_33152,
+		MyTimeWeb_JalaaliCalendar_32997,
 
 
 		Backlog_Module_23980,

@@ -25,6 +25,7 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 		self.isTeamScheduleSorttingFeatureEnabled(Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_SortSchedule_32092"));
 
 		self.isShiftTradeBulletinBoardEnabled(Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_ShiftTradeExchangeBulletin_31296"));
+		
 	};
 
 	self.initializeShiftTrade = function () {
@@ -47,9 +48,6 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 				} else {
 					self.requestedDate(moment(new Date(data.NowYear, data.NowMonth - 1, data.NowDay)));
 				}
-				if (data.DateTimeFormat)
-					self.setDatePickerFormat(data.DateTimeFormat.toUpperCase());
-					
 			},
 			null
 		);
@@ -57,7 +55,7 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 
 	var loadSchedule = function () {
 		self.loadSchedule(
-			self.requestedDateWithFormat(),
+			Teleopti.MyTimeWeb.Common.FormatServiceDate(self.requestedDate()),
 			self.requestedFilter(),
 			(self.requestedPaging != null) ? self.requestedPaging() : null,
 			function () {

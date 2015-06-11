@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Core.RequestContext
 {
@@ -11,6 +12,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext
 				Thread.CurrentThread.CurrentCulture = regional.Culture;
 			if (regional.UICultureLCID > 0)
 				Thread.CurrentThread.CurrentUICulture = regional.UICulture;
+
 		}
 	}
 }

@@ -18,10 +18,9 @@ Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel = function OvertimeAva
 	this.DateToForDisplay = ko.computed(function () {
 		return self.EndTimeNextDay() ? self.DateFrom().clone().add('d', 1) : self.DateFrom().clone();
 	});
-
+	this.DateFormat = ko.observable(Teleopti.MyTimeWeb.Common.DateFormat);
 	this.ShowMeridian = ($('div[data-culture-show-meridian]').attr('data-culture-show-meridian') == 'true');
-	this.DateFormat = ko.observable($('#Request-detail-datepicker-format').val().toUpperCase());
-
+	
 	this.ErrorMessage = ko.observable('');
 	
 	this.ShowError = ko.computed(function () {
@@ -32,7 +31,7 @@ Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel = function OvertimeAva
 		ajax.Ajax({
 			url: "Schedule/OvertimeAvailability",
 			dataType: "json",
-			data: { Date: self.DateFrom().format(self.DateFormat()), StartTime: self.StartTime(), EndTime: self.EndTime(), EndTimeNextDay: self.EndTimeNextDay() },
+			data: { Date: Teleopti.MyTimeWeb.Common.FormatServiceDate(self.DateFrom()), StartTime: self.StartTime(), EndTime: self.EndTime(), EndTimeNextDay: self.EndTimeNextDay() },
 			type: 'POST',
 			success: function (data, textStatus, jqXHR) {
 				displayOvertimeAvailability(data);
@@ -52,7 +51,7 @@ Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel = function OvertimeAva
 		ajax.Ajax({
 			url: "Schedule/DeleteOvertimeAvailability",
 			dataType: "json",
-			data: { Date: self.DateFrom().format(self.DateFormat()) },
+			data: { Date: Teleopti.MyTimeWeb.Common.FormatServiceDate(self.DateFrom()) },
 			type: 'DELETE',
 			success: function (data, textStatus, jqXHR) {
 				displayOvertimeAvailability(data);

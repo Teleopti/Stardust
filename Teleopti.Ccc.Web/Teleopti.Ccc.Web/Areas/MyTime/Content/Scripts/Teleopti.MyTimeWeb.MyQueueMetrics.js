@@ -6,11 +6,11 @@
 
 		self.selectedDateInternal = ko.observable(date);
 		self.datePickerFormat = ko.observable('YYYYMMDD');
-		var format = $('#my-report-datepicker-format').val().toUpperCase();
+		var format = Teleopti.MyTimeWeb.Common.DateFormat;
 		self.datePickerFormat(format);
 		self.dataAvailable = ko.observable();
 		self.goToAnotherDay = function (toDate) {
-		    Teleopti.MyTimeWeb.Portal.NavigateTo("MyReport/QueueMetrics" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(toDate.format('YYYY-MM-DD')));
+			Teleopti.MyTimeWeb.Portal.NavigateTo("MyReport/QueueMetrics" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(toDate.format('YYYY-MM-DD')));
 		};
 		self.selectedDate = ko.computed({
 			read: function () {
@@ -24,10 +24,10 @@
 		self.nextDay = function () {
 			self.goToAnotherDay(self.selectedDate().clone().add('days', 1));
 		};
-		self.previousDay = function() {
+		self.previousDay = function () {
 			self.goToAnotherDay(self.selectedDate().clone().add('days', -1));
 		};
-		self.dateFormat = function() {
+		self.dateFormat = function () {
 			return self.datePickerFormat;
 		};
 
@@ -42,7 +42,7 @@
 
 	function fillData(date) {
 		$.ajax({
-		    url: 'MyTime/MyReport/QueueMetricsDetails',
+			url: 'MyTime/MyReport/QueueMetricsDetails',
 		    dataType: 'json',
 		    cache: false,
 		    data: { date: date.format("YYYY-MM-DD") },
@@ -56,14 +56,14 @@
 	}
 
 	function bindData() {
-		return Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function(data) {
+		return Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function (data) {
 			$('.moment-datepicker').attr('data-bind', 'datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: ' + data.WeekStart + ' }');
 			vm = new MyQueueMetricsViewModel(fillData, getDate());
 			var elementToBind = $('#queueMetric')[0];
 			ko.applyBindings(vm, elementToBind);
 		});
 	}
-	
+
 	function getDate() {
 		var date = Teleopti.MyTimeWeb.Portal.ParseHash().dateHash;
 		if (date != '') {
@@ -75,13 +75,13 @@
 
 	return {
 		Init: function () {
-		    Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('MyReport/QueueMetrics',
+			Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('MyReport/QueueMetrics',
 									Teleopti.MyTimeWeb.MyQueueMetrics.MyQueueMetricsPartialInit, Teleopti.MyTimeWeb.MyQueueMetrics.MyQueueMetricsPartialDispose);
 		},
 
 		MyQueueMetricsPartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
 			//$('#page').removeClass('fixed-non-responsive');
-		    if (!$('#queueMetric').length) {
+			if (!$('#queueMetric').length) {
 				return;
 			}
 

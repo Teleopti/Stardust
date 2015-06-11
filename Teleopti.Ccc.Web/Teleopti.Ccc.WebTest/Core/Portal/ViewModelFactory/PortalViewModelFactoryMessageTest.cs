@@ -1,3 +1,4 @@
+using System.Globalization;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -23,12 +24,17 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 	{
 		private IPersonNameProvider _personNameProvider;
 		private ILoggedOnUser _loggedOnUser;
+		private IUserCulture _userCulture;
 
 		[SetUp]
 		public void Setup()
 		{
 			_loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			_loggedOnUser.Stub(x => x.CurrentUser()).Return(new Person() {Name = new Name()});
+
+			var culture = CultureInfo.GetCultureInfo("sv-SE");
+			_userCulture = MockRepository.GenerateMock<IUserCulture>();
+			_userCulture.Expect(x => x.GetCulture()).Return(culture);
 
 			_personNameProvider = MockRepository.GenerateMock<IPersonNameProvider>();
 			_personNameProvider.Stub(x => x.BuildNameFromSetting(_loggedOnUser.CurrentUser().Name)).Return("A B");
@@ -44,7 +50,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
 				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
 				MockRepository.GenerateMock<IBadgeSettingProvider>(), MockRepository.GenerateMock<IToggleManager>(),
-				_personNameProvider,MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), MockRepository.GenerateStub<ICurrentTenantUser>());
+				_personNameProvider,MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), MockRepository.GenerateStub<ICurrentTenantUser>(), _userCulture);
 
 			var result = target.CreatePortalViewModel();
 
@@ -66,7 +72,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 				  _loggedOnUser, MockRepository.GenerateMock<IReportsNavigationProvider>(),
 				MockRepository.GenerateMock<IBadgeProvider>(),
 		        MockRepository.GenerateMock<IBadgeSettingProvider>(), MockRepository.GenerateMock<IToggleManager>(),
-					_personNameProvider, MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), MockRepository.GenerateStub<ICurrentTenantUser>());
+					_personNameProvider, MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), MockRepository.GenerateStub<ICurrentTenantUser>(), _userCulture);
 
             var result = target.CreatePortalViewModel();
 			NavigationItem message = (from i in result.NavigationItems where i.Controller == "Message" select i).SingleOrDefault();
@@ -86,7 +92,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 				pushMessageProvider, _loggedOnUser,
 				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
 				MockRepository.GenerateMock<IBadgeSettingProvider>(), MockRepository.GenerateMock<IToggleManager>(),
-				_personNameProvider, MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), MockRepository.GenerateStub<ICurrentTenantUser>());
+				_personNameProvider, MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), MockRepository.GenerateStub<ICurrentTenantUser>(), _userCulture);
 
 			var result = target.CreatePortalViewModel();
 			NavigationItem message = (from i in result.NavigationItems where i.Controller == "Message" select i).SingleOrDefault();

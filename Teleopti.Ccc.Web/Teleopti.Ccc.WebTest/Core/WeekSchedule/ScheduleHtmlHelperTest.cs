@@ -64,10 +64,12 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule
 		[Test]
 		public void ShouldCorrectlySerializePeriodSelectionToJson()
 		{
-			var expectedResult =  "{\"Date\": \"2011-05-21\",\"Display\": \"2011-05-16 - 2011-05-22\",\"SelectedDateRange\": {\"MinDate\": \"2011-05-16\",\"MaxDate\": \"2011-05-22\"},\"SelectableDateRange\": {\"MinDate\": \"2011-01-01\",\"MaxDate\": \"2011-12-31\"},\"PeriodNavigation\": {\"NextPeriod\": \"2011-05-23\", \"HasNextPeriod\": true,\"PrevPeriod\": \"2011-05-14\",\"HasPrevPeriod\": false,\"CanPickPeriod\": true}}".Replace(" ", string.Empty);
+			var expectedResult =  "{\"Date\": \"2011-05-21\",\"StartDate\":\"1/1/2011\",\"EndDate\":\"12/31/2011\",\"Display\": \"2011-05-16 - 2011-05-22\",\"SelectedDateRange\": {\"MinDate\": \"2011-05-16\",\"MaxDate\": \"2011-05-22\"},\"SelectableDateRange\": {\"MinDate\": \"2011-01-01\",\"MaxDate\": \"2011-12-31\"},\"PeriodNavigation\": {\"NextPeriod\": \"2011-05-23\", \"HasNextPeriod\": true,\"PrevPeriod\": \"2011-05-14\",\"HasPrevPeriod\": false,\"CanPickPeriod\": true}}".Replace(" ", string.Empty);
 			var model = new PeriodSelectionViewModel
 			                                 	{
 			                                 		Date = new DateOnly(2011, 05, 21).ToFixedClientDateOnlyFormat(),
+													StartDate = new DateTime(2011, 01, 01),
+													EndDate = new DateTime(2011, 12, 31),
 			                                 		Display = "2011-05-16 - 2011-05-22",
 			                                 		SelectedDateRange =
 			                                 			new PeriodDateRangeViewModel

@@ -223,7 +223,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			var result = Mapper.Map<IShiftTradeSwapDetail, ShiftTradeSwapDetailsViewModel>(shiftTrade.ShiftTradeSwapDetails.First());
 
-			result.Date.Should().Be.EqualTo("2001-01-01");
+			result.Date.Should().Be.EqualTo(from);
 		}		
 		
 		[Test]

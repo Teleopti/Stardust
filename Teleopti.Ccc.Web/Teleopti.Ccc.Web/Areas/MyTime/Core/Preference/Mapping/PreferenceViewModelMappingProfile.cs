@@ -92,6 +92,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 
 			CreateMap<PreferenceDomainData, PeriodSelectionViewModel>()
 				.ForMember(d => d.Date, o => o.MapFrom(s => s.SelectedDate.ToFixedClientDateOnlyFormat()))
+				.ForMember (d => d.StartDate, o=>o.MapFrom (s=>s.Period.StartDate.Date))
+				.ForMember(d => d.EndDate, o => o.MapFrom(s => s.Period.EndDate.Date))
 				.ForMember(d => d.Display, o => o.MapFrom(s => s.Period.DateString))
 				.ForMember(d => d.SelectableDateRange, o => o.MapFrom(s => new DateOnlyPeriod(new DateOnly(CultureInfo.CurrentCulture.Calendar.MinSupportedDateTime), new DateOnly(CultureInfo.CurrentCulture.Calendar.MaxSupportedDateTime))))
 				.ForMember(d => d.SelectedDateRange, o => o.MapFrom(s => s.Period))

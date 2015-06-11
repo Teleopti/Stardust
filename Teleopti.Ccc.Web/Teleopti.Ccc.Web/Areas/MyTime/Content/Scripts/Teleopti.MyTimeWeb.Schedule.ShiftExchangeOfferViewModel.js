@@ -27,7 +27,8 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 	self.DenyReason = ko.observable("");
 	self.StartTime = ko.observable();
 	self.EndTime = ko.observable();
-	self.DateFormat = ko.observable();
+	self.DateFormat = ko.observable(Teleopti.MyTimeWeb.Common.DateFormat);
+	
 	self.Id = ko.observable(null);
 	self.WeekStart = ko.observable(1);
 
@@ -41,6 +42,10 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 		return !self.Toggle31317Enabled() || (self.WishShiftTypeOption() && self.WishShiftTypeOption().RequireDetails);
 	});
 
+	self.getFormattedDateForServiceCall = function(date) {
+		return Teleopti.MyTimeWeb.Common.FormatServiceDate(date);
+	};
+	
 	self.LoadOptions = function (setShiftType) {
 		self.Toggle31317Enabled(Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_TradeWithDayOffAndEmptyDay_31317'));
 		self.getWishShiftTypes(setShiftType);
@@ -70,8 +75,10 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 		var date = moment(new Date(offer.DateFromYear, offer.DateFromMonth - 1, offer.DateFromDayOfMonth));
 		self.DateFrom(date);
 		self.DateTo(date);
-		self.StartTime(offer.RawTimeFrom);
-		self.EndTime(offer.RawTimeTo);
+		
+		self.StartTime(Teleopti.MyTimeWeb.Common.FormatTime(offer.DateTimeFrom));
+		self.EndTime(Teleopti.MyTimeWeb.Common.FormatTime(offer.DateTimeTo));
+		
 		self.EndTimeNextDay(offer.IsNextDay);
 		self.Id(offer.Id);
 
@@ -96,9 +103,13 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 		time = time.toUpperCase();
 		var hours = Number(time.match(/^(\d+)/)[1]);
 		var minutes = Number(time.match(/:(\d+)/)[1]);
-		var AMPM = time.match(/\s(.*)$/)[1];
-		if (AMPM == "PM" && hours < 12) hours = hours + 12;
-		if (AMPM == "AM" && hours == 12) hours = hours - 12;
+
+		if (Teleopti.MyTimeWeb.Common.Meridiem.AM !== "") {
+			var AMPM = time.match(/\s(.*)$/)[1];
+			if (AMPM == Teleopti.MyTimeWeb.Common.Meridiem.PM && hours < 12) hours = hours + 12;
+			if (AMPM == Teleopti.MyTimeWeb.Common.Meridiem.AM && hours == 12) hours = hours - 12;
+		}
+
 		var sHours = hours.toString();
 		var sMinutes = minutes.toString();
 		if (hours < 10) sHours = "0" + sHours;
@@ -112,16 +123,16 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 	self.endTimeInternal = ko.observable();
 	self.IsTimeLegal = ko.computed(function () {
 		if (self.StartTime() !== undefined && self.EndTime() !== undefined) {
-			if (self.StartTime().indexOf("am") > -1 || self.StartTime().indexOf("AM") > -1
-				|| self.StartTime().indexOf("pm") > -1 || self.StartTime().indexOf("PM") > -1) {
+			if (self.StartTime().indexOf(Teleopti.MyTimeWeb.Common.Meridiem.AM) > -1 
+				|| self.StartTime().indexOf(Teleopti.MyTimeWeb.Common.Meridiem.PM) > -1 ) {
 				var start = self.convert12To24Hour(self.StartTime());
 				self.startTimeInternal(start);
 			} else {
 				self.startTimeInternal(self.StartTime());
 			}
 
-			if (self.EndTime().indexOf("am") > -1 || self.EndTime().indexOf("AM") > -1
-				|| self.EndTime().indexOf("pm") > -1 || self.EndTime().indexOf("PM") > -1) {
+			if (self.EndTime().indexOf(Teleopti.MyTimeWeb.Common.Meridiem.AM) > -1 
+				|| self.EndTime().indexOf(Teleopti.MyTimeWeb.Common.Meridiem.PM) > -1) {
 				var end = self.convert12To24Hour(self.EndTime());
 				self.endTimeInternal(end);
 			} else {
@@ -144,7 +155,7 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 		},
 		write: function (date) {
 			self.DateTo(date);
-			self.getAbsence(date.format(self.DateFormat()));
+			self.getAbsence(self.getFormattedDateForServiceCall(date));
 			if (!self.IsUpdating() || (self.IsUpdating() && self.OfferValidTo() >= (moment(date)))) {
 				self.OfferValidTo(moment(date).add('days', -1));
 			}
@@ -198,8 +209,8 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 			url: "ShiftExchange/NewOffer",
 			dataType: "json",
 			data: {
-				Date: self.DateTo().format(self.DateFormat()),
-				OfferValidTo: self.OfferValidTo().format(self.DateFormat()),
+				Date: self.getFormattedDateForServiceCall(self.DateTo()),
+				OfferValidTo: self.getFormattedDateForServiceCall(self.OfferValidTo()),
 				StartTime:self.startTimeInternal(),
 				EndTime: self.endTimeInternal(),
 				EndTimeNextDay: self.EndTimeNextDay(),

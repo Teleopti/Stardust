@@ -61,6 +61,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 							return s.Request.Period.ToShortDateTimeString(_userTimeZone.TimeZone());
 						}
 					}))
+				.ForMember(d => d.DateTimeFrom, o => o.ResolveUsing(s => s.Request.Period.StartDateTimeLocal (_userTimeZone.TimeZone())))
+				.ForMember(d => d.DateTimeTo, o => o.ResolveUsing(s => s.Request.Period.EndDateTimeLocal (_userTimeZone.TimeZone())))
+
 				.ForMember(d => d.Status, o => o.ResolveUsing(s =>
 				{
 					return getStatusText(s);
@@ -82,8 +85,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 					var shiftTradeRequest = s.Request as IShiftTradeRequest;
 					return (shiftTradeRequest != null &&
-					        shiftTradeRequest.GetShiftTradeStatus(
-						        _shiftTradeRequestStatusChecker) == ShiftTradeStatus.Referred);
+							shiftTradeRequest.GetShiftTradeStatus(
+								_shiftTradeRequestStatusChecker) == ShiftTradeStatus.Referred);
 				}))
 				.ForMember(d => d.Text, o => o.MapFrom(s => s.GetMessage(new NoFormatting())))
 				.ForMember(d => d.Type, o => o.MapFrom(s => s.Request.RequestTypeDescription))
@@ -91,6 +94,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				.ForMember(d => d.UpdatedOn, o => o.MapFrom(s => s.UpdatedOn.HasValue
 					? TimeZoneInfo.ConvertTimeFromUtc(s.UpdatedOn.Value, _userTimeZone.TimeZone()).ToShortDateTimeString()
 					: null))
+				.ForMember(d => d.UpdatedOnDateTime, o => o.MapFrom(s => s.UpdatedOn.HasValue
+					? TimeZoneInfo.ConvertTimeFromUtc(s.UpdatedOn.Value, _userTimeZone.TimeZone())
+					: default(DateTime?)))
 				.ForMember(d => d.DateFromYear,
 					o =>
 						o.MapFrom(
@@ -127,18 +133,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 							s =>
 								CultureInfo.CurrentCulture.Calendar.GetDayOfMonth(
 									TimeZoneInfo.ConvertTimeFromUtc(s.Request.Period.EndDateTime, _userTimeZone.TimeZone()))))
-				.ForMember(d => d.RawTimeFrom,
-					o =>
-						o.MapFrom(
-							s =>
-								TimeZoneInfo.ConvertTimeFromUtc(s.Request.Period.StartDateTime, _userTimeZone.TimeZone())
-									.ToShortTimeString()))
-				.ForMember(d => d.RawTimeTo,
-					o =>
-						o.MapFrom(
-							s =>
-								TimeZoneInfo.ConvertTimeFromUtc(s.Request.Period.EndDateTime, _userTimeZone.TimeZone())
-									.ToShortTimeString()))
 				.ForMember(d => d.Payload, o => o.MapFrom(s => s.Request.RequestPayloadDescription.Name))
 				.ForMember(d => d.PayloadId, o => o.ResolveUsing(s => resolvePayloadId(s)))
 				.ForMember(d => d.IsFullDay, o => o.ResolveUsing(s => IsRequestFullDay(s)))
@@ -178,7 +172,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 							ValidTo = offer.ValidTo.Date
 						};
 					}
-					
+
 					if (s.Request.RequestType == RequestType.ShiftTradeRequest)
 					{
 						return new ShiftExchangeOfferRequestViewModel
@@ -186,7 +180,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 							IsOfferAvailable = true
 						};
 					}
-					
+
 					return null;
 				})));
 
@@ -209,7 +203,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 						return isRealPending ? "GET, DELETE, PUT" : "GET, DELETE";
 					}
 
-					return new[] {0, 3}.Contains(stateId) ? "GET, DELETE, PUT" : "GET";
+					return new[] { 0, 3 }.Contains(stateId) ? "GET, DELETE, PUT" : "GET";
 				}));
 		}
 
@@ -222,8 +216,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				if (shiftTradeRequest != null)
 				{
 					ret += ", " +
-					       shiftTradeRequest.GetShiftTradeStatus(_shiftTradeRequestStatusChecker)
-						       .ToText(isCreatedByUser(s.Request, _loggedOnUser));
+						   shiftTradeRequest.GetShiftTradeStatus(_shiftTradeRequestStatusChecker)
+							   .ToText(isCreatedByUser(s.Request, _loggedOnUser));
 					return ret;
 				}
 			}
@@ -246,7 +240,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 					personRequest.Request.Period.EndDateTime, _userTimeZone.TimeZone());
 			var allDayEndDateTime = start.AddDays(1).AddMinutes(-1);
 			return start.TimeOfDay == TimeSpan.Zero &&
-			       end.TimeOfDay == allDayEndDateTime.TimeOfDay;
+				   end.TimeOfDay == allDayEndDateTime.TimeOfDay;
 		}
 
 		private string resolvePayloadId(IPersonRequest personRequest)
@@ -254,7 +248,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			if (personRequest.Request.RequestType != RequestType.AbsenceRequest)
 				return null;
 
-			return ((IAbsenceRequest) personRequest.Request).Absence.Id.GetValueOrDefault().ToString();
+			return ((IAbsenceRequest)personRequest.Request).Absence.Id.GetValueOrDefault().ToString();
 		}
 
 		private static bool isCreatedByUser(IRequest request, ILoggedOnUser loggedOnUser)
