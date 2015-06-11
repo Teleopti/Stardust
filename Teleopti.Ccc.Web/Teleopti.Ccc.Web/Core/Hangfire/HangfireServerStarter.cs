@@ -24,14 +24,15 @@ namespace Teleopti.Ccc.Web.Core.Hangfire
 		// - still wont handle the fact that some customers have more than one server running, 
 		//   so you will still have more than one worker
 
-		public void Start(IAppBuilder application)
+		public void Start(IAppBuilder app)
 		{
-			application.UseHangfire(c =>
+			_storageConfiguration.ConfigureStorage();
+			GlobalConfiguration.Configuration.UseAutofacActivator(_lifetimeScope);
+			app.UseHangfireServer(new BackgroundJobServerOptions
 			{
-				_storageConfiguration.ConfigureStorage(c);
-				c.UseAutofacActivator(_lifetimeScope);
-				c.UseServer(setThisToOneAndErikWillHuntYouDownAndKillYouSlowlyAndPainfully);
+				WorkerCount = setThisToOneAndErikWillHuntYouDownAndKillYouSlowlyAndPainfully
 			});
+			app.UseHangfireDashboard();
 		}
 	}
 

@@ -15,16 +15,14 @@ namespace Teleopti.Ccc.Web.Core.Hangfire
 			_config = config;
 		}
 
-		public void ConfigureStorage(IBootstrapperConfiguration configuration)
+		public void ConfigureStorage()
 		{
-			configuration.UseSqlServerStorage(
-				_config.ConnectionStrings["Hangfire"].ConnectionString,
-				new SqlServerStorageOptions
-				{
-					PrepareSchemaIfNecessary = false,
-					QueuePollInterval = TimeSpan.FromSeconds(1)
-				}
-				);
+			var options = new SqlServerStorageOptions
+			{
+				PrepareSchemaIfNecessary = false,
+				QueuePollInterval = TimeSpan.FromSeconds(1)
+			};
+			GlobalConfiguration.Configuration.UseSqlServerStorage(_config.ConnectionStrings["Hangfire"].ConnectionString, options);
 		}
 	}
 }
