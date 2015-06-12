@@ -4,7 +4,6 @@
 ..\ConfigurationFiles\PasswordPolicy.xml.notinuse,BuildArtifacts\PasswordPolicy.xml.notinuse
 ..\TeleoptiCCC\Analytics\web.config,BuildArtifacts\AnalyticsWeb.config
 ..\TeleoptiCCC\Broker.Backplane\Web.config,BuildArtifacts\BrokerBackplaneWeb.config
-..\TeleoptiCCC\Broker\web.config,BuildArtifacts\BrokerWeb.config
 ..\TeleoptiCCC\Client\ClickOnce\Teleopti.Ccc.SmartClientPortal.Shell.exe.config.deploy,BuildArtifacts\AppRaptor.config
 ..\TeleoptiCCC\Client\Teleopti.Ccc.SmartClientPortal.Shell.exe.config.deploy,BuildArtifacts\AppRaptor.config
 ..\TeleoptiCCC\ETL\Service\Teleopti.Analytics.Etl.ServiceHost.exe.config,BuildArtifacts\AppETLService.config
