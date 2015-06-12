@@ -170,6 +170,10 @@
       <Project>{aa4a5374-77af-44f0-85c1-6cabc6701352}</Project>
       <Name>Teleopti.Ccc.Infrastructure</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
+      <Project>{DB42D973-9889-4D51-9FC5-BE66AA7F117C}</Project>
+      <Name>Teleopti.Ccc.IocCommon</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
       <Project>{8d2565f2-7c44-45b7-96ad-2cd900e033a1}</Project>
       <Name>Teleopti.Interfaces</Name>
