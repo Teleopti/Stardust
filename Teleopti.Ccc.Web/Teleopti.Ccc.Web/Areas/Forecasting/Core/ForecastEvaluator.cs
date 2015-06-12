@@ -11,7 +11,6 @@ using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Outlier;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.Forecasting.Controllers;
-using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
@@ -43,24 +42,27 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 
 			var appSetting = ConfigurationManager.AppSettings["ForecastingTest"];
 			var isForecastingTest = appSetting != null && bool.Parse(appSetting);
+			var availablePeriod = _historicalPeriodProvider.AvailablePeriod(workload);
+			var twoPeriods = HistoricalPeriodProvider.DivideIntoTwoPeriods(availablePeriod);
 			return new WorkloadForecastViewModel
 			{
 				Name = workload.Name,
 				WorkloadId = workload.Id.Value,
-				ForecastMethodRecommended = new
-				{
-					Id= (bestAccuracy == null ? ForecastMethodType.None : bestAccuracy.MethodId),
-					PeriodEvaluateOnStart = bestAccuracy.PeriodEvaluateOn.StartDate.Date,
-					PeriodEvaluateOnEnd = bestAccuracy.PeriodEvaluateOn.EndDate.Date,
-					PeriodUsedToEvaluateStart = bestAccuracy.PeriodUsedToEvaluate.StartDate.Date,
-					PeriodUsedToEvaluateEnd = bestAccuracy.PeriodUsedToEvaluate.EndDate.Date
-				},
 				ForecastMethods = createMethodViewModels(evaluateResult),
-				Days = createDayViewModels(workload, bestAccuracy),
-				TestDays = isForecastingTest ? createTestDayViewModels(workload, bestAccuracy) : new dynamic[] { },
-				IsForecastingTest = isForecastingTest
+				Days = createDayViewModels(workload, bestAccuracy, twoPeriods.Item2, false),
+				TestDays = isForecastingTest ? createDayViewModels(workload, bestAccuracy, availablePeriod, true) : new dynamic[] {},
+				IsForecastingTest = isForecastingTest,
+				ForecastMethodRecommended = bestAccuracy == null
+					? (dynamic) new {Id = ForecastMethodType.None}
+					: new
+					{
+						Id = bestAccuracy.MethodId,
+						PeriodEvaluateOnStart = bestAccuracy.PeriodEvaluateOn.StartDate.Date,
+						PeriodEvaluateOnEnd = bestAccuracy.PeriodEvaluateOn.EndDate.Date,
+						PeriodUsedToEvaluateStart = bestAccuracy.PeriodUsedToEvaluate.StartDate.Date,
+						PeriodUsedToEvaluateEnd = bestAccuracy.PeriodUsedToEvaluate.EndDate.Date
+					}
 			};
-
 		}
 
 		private dynamic[] createMethodViewModels(WorkloadAccuracy evaluateResult)
@@ -77,14 +79,9 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 			return methods.ToArray();
 		}
 
-		private dynamic[] createTestDayViewModels(IWorkload workload, MethodAccuracy bestAccuracy)
+		private dynamic[] createDayViewModels(IWorkload workload, MethodAccuracy bestAccuracy, DateOnlyPeriod period, bool isForecastingTest)
 		{
-			return daysForPeriod(bestAccuracy, _historicalData.Fetch(workload, _historicalPeriodProvider.PeriodForForecast(workload)), true);
-		}
-
-		private dynamic[] createDayViewModels(IWorkload workload, MethodAccuracy bestAccuracy)
-		{
-			return daysForPeriod(bestAccuracy, _historicalData.Fetch(workload, _historicalPeriodProvider.PeriodForDisplay(workload)), false);
+			return daysForPeriod(bestAccuracy, _historicalData.Fetch(workload, period), isForecastingTest);
 		}
 
 		private dynamic[] daysForPeriod(MethodAccuracy bestAccuracy, ITaskOwnerPeriod historicalData, bool isForecastingTest)

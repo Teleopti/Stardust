@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 			var linearRegressionTrend = MockRepository.GenerateMock<ILinearRegressionTrend>();
 			linearRegressionTrend.Stub(x => x.CalculateTrend(null)).IgnoreArguments().Return(new LinearTrend {Slope = 1, Intercept = 2});
 			var historicalPeriodProvider = MockRepository.GenerateMock<IHistoricalPeriodProvider>();
-			historicalPeriodProvider.Stub(x => x.PeriodForForecast(Workload)).Return(HistoricalPeriodForForecast);
+			historicalPeriodProvider.Stub(x => x.AvailablePeriod(Workload)).Return(HistoricalPeriodForForecast);
 
 			var outlierRemover = new OutlierRemover();
 			var target = new ForecastWorkloadEvaluator(new HistoricalData(dailyStatistics), new ForecastingWeightedMeanAbsolutePercentageError(), new ForecastMethodProvider(new IndexVolumes(), linearRegressionTrend), historicalPeriodProvider, outlierRemover);

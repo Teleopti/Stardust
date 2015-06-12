@@ -44,8 +44,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 				});
 
 			var historicalPeriodProvider = MockRepository.GenerateMock<IHistoricalPeriodProvider>();
-			historicalPeriodProvider.Stub(x => x.PeriodForForecast(workload1)).Return(historicalPeriodForForecast1);
-			historicalPeriodProvider.Stub(x => x.PeriodForForecast(workload2)).Return(historicalPeriodForForecast2);
+			historicalPeriodProvider.Stub(x => x.AvailablePeriod(workload1)).Return(historicalPeriodForForecast1);
+			historicalPeriodProvider.Stub(x => x.AvailablePeriod(workload2)).Return(historicalPeriodForForecast2);
 			var target = new QuickForecaster(quickForecasterWorkload, fetchAndFillSkillDays, quickForecastWorkloadEvaluator, historicalPeriodProvider);
 			target.ForecastWorkloadsWithinSkill(skill1, new[] { new ForecastWorkloadInput { WorkloadId = workload1.Id.Value, ForecastMethodId = ForecastMethodType.None } }, futurePeriod);
 			quickForecasterWorkload.AssertWasCalled(x => x.Execute(new QuickForecasterWorkloadParams
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			workload1.SetId(Guid.NewGuid());
 			var quickForecastWorkloadEvaluator = MockRepository.GenerateMock<IForecastWorkloadEvaluator>();
 			var historicalPeriodProvider = MockRepository.GenerateMock<IHistoricalPeriodProvider>();
-			historicalPeriodProvider.Stub(x => x.PeriodForForecast(workload1)).Return(historicalPeriodForForecast);
+			historicalPeriodProvider.Stub(x => x.AvailablePeriod(workload1)).Return(historicalPeriodForForecast);
 			var target = new QuickForecaster(quickForecasterWorkload, fetchAndFillSkillDays, quickForecastWorkloadEvaluator, historicalPeriodProvider);
 			target.ForecastWorkloadsWithinSkill(skill1, new[] { new ForecastWorkloadInput { WorkloadId = workload1.Id.Value, ForecastMethodId = ForecastMethodType.TeleoptiClassic} }, futurePeriod);
 			quickForecastWorkloadEvaluator.AssertWasNotCalled(x => x.Evaluate(workload1));
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 						}
 				});
 			var historicalPeriodProvider = MockRepository.GenerateMock<IHistoricalPeriodProvider>();
-			historicalPeriodProvider.Stub(x => x.PeriodForForecast(workload1)).Return(historicalPeriodForForecast);
+			historicalPeriodProvider.Stub(x => x.AvailablePeriod(workload1)).Return(historicalPeriodForForecast);
 			var target = new QuickForecaster(quickForecasterWorkload, fetchAndFillSkillDays, quickForecastWorkloadEvaluator, historicalPeriodProvider);
 			target.ForecastWorkloadsWithinSkill(skill1,new[] {new ForecastWorkloadInput {WorkloadId = workload1.Id.Value, ForecastMethodId = ForecastMethodType.None}}, futurePeriod);
 			quickForecasterWorkload.AssertWasCalled(x => x.Execute(new QuickForecasterWorkloadParams

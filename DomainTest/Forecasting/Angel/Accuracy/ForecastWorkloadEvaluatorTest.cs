@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 
 			var outlierRemover = MockRepository.GenerateMock<IOutlierRemover>();
 			var historicalPeriodProvider = MockRepository.GenerateMock<IHistoricalPeriodProvider>();
-			historicalPeriodProvider.Stub(x => x.PeriodForForecast(workload)).Return(new DateOnlyPeriod(2012, 3, 16, 2015, 3, 15));
+			historicalPeriodProvider.Stub(x => x.AvailablePeriod(workload)).Return(new DateOnlyPeriod(2012, 3, 16, 2015, 3, 15));
 			var target = new ForecastWorkloadEvaluator(historicalData,
 				MockRepository.GenerateMock<IForecastAccuracyCalculator>(), forecastMethodProvider,
 				historicalPeriodProvider, outlierRemover);
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 
 			var outlierRemover = MockRepository.GenerateMock<IOutlierRemover>();
 			var historicalPeriodProvider = MockRepository.GenerateMock<IHistoricalPeriodProvider>();
-			historicalPeriodProvider.Stub(x => x.PeriodForForecast(workload)).Return(new DateOnlyPeriod(2012, 3, 16, 2015, 3, 15));
+			historicalPeriodProvider.Stub(x => x.AvailablePeriod(workload)).Return(new DateOnlyPeriod(2012, 3, 16, 2015, 3, 15));
 			var target = new ForecastWorkloadEvaluator(historicalData,
 				MockRepository.GenerateMock<IForecastAccuracyCalculator>(), forecastMethodProvider,
 				historicalPeriodProvider, outlierRemover);
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 			forecastMethodProvider.Stub(x => x.All()).Return(new[] {forecastMethod,forecastMethod});
 			var outlierRemover = MockRepository.GenerateMock<IOutlierRemover>();
 			var historicalPeriodProvider = MockRepository.GenerateMock<IHistoricalPeriodProvider>();
-			historicalPeriodProvider.Stub(x => x.PeriodForForecast(workload)).Return(new DateOnlyPeriod(2013, 1, 1, 2015, 1, 1));
+			historicalPeriodProvider.Stub(x => x.AvailablePeriod(workload)).Return(new DateOnlyPeriod(2013, 1, 1, 2015, 1, 1));
 			var target = new ForecastWorkloadEvaluator(historicalData,
 				MockRepository.GenerateMock<IForecastAccuracyCalculator>(), forecastMethodProvider, 
 				historicalPeriodProvider, outlierRemover);

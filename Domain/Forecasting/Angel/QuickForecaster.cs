@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 						WorkLoad = workload,
 						FuturePeriod = futurePeriod,
 						SkillDays = skillDays,
-						HistoricalPeriod = _historicalPeriodProvider.PeriodForForecast(workload),
+						HistoricalPeriod = _historicalPeriodProvider.AvailablePeriod(workload),
 						ForecastMethodId = forecastMethodId
 					};
 					_quickForecasterWorkload.Execute(quickForecasterWorkloadParams);

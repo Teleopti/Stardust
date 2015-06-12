@@ -98,7 +98,7 @@
 										<chart-axis-y axis-id="y" axis-position="outer-middle" axis-label="Number of Calls" />
 									</chart-axis>
 								</c3chart>
-								<div class="row">
+								<div class="row" ng-if="!workload.noHistoricalDataForEvaluation">
 									<div class="col-lg-12">
 										<p>
 											We use historical data from <b>{{workload.ForecastMethodRecommended.PeriodUsedToEvaluateStart | date : shortDate}}</b> to <b>{{workload.ForecastMethodRecommended.PeriodUsedToEvaluateEnd | date : shortDate}}</b>, and evaluate forecast methods on the period from <b>{{workload.ForecastMethodRecommended.PeriodEvaluateOnStart | date : shortDate}}</b> to <b>{{workload.ForecastMethodRecommended.PeriodEvaluateOnEnd | date : shortDate}}</b>.
