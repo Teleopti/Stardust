@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			StateHolder.Instance.State.SetApplicationData(appData);
 			_readDataSourceConfiguration.Read().ForEach(dsConf =>
 			{
-				appData.MakeSureDataSourceExists(dsConf.Key, dsConf.Value.ApplicationNHibernateConfig, dsConf.Value.AnalyticsConnectionString);
+				appData.MakeSureDataSourceExists(dsConf.Key, dsConf.Value.ApplicationConnectionString, dsConf.Value.AnalyticsConnectionString, dsConf.Value.ApplicationNHibernateConfig);
 			});
 		}
 

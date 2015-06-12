@@ -28,10 +28,10 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 					Success = false,
 					FailReason = tenantServerResult.FailReason
 				};
-
+			
 			var applicationData = _applicationData();
 			var decryptedConfig = _dataSourceDecryption.DecryptConfig(tenantServerResult.DataSourceConfiguration);
-			applicationData.MakeSureDataSourceExists(tenantServerResult.Tenant, decryptedConfig.ApplicationNHibernateConfig, decryptedConfig.AnalyticsConnectionString);
+			applicationData.MakeSureDataSourceExists(tenantServerResult.Tenant, decryptedConfig.ApplicationConnectionString, decryptedConfig.AnalyticsConnectionString, decryptedConfig.ApplicationNHibernateConfig);
 			var dataSource = applicationData.Tenant(tenantServerResult.Tenant);
 			var person = _loadUser.LoadFullPersonInSeperateTransaction(dataSource.Application, tenantServerResult.PersonId);
 			if (person.IsTerminated())

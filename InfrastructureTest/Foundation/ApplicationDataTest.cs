@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			dataSourcesFactory.Expect(x => x.Create(appNhibConf, statisticConnString)).Return(dataSource);
 			var target = new ApplicationData(new Dictionary<string, string>(), Enumerable.Empty<IDataSource>(), null, null, dataSourcesFactory);
 			target.Tenant(dataSourceName).Should().Be.EqualTo(null);
-			target.MakeSureDataSourceExists(dataSourceName, appNhibConf, statisticConnString);
+			target.MakeSureDataSourceExists(dataSourceName, RandomName.Make(), statisticConnString, appNhibConf);
 			target.Tenant(dataSourceName).Should().Be.SameInstanceAs(dataSource);
 		}
 
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			dataSourcesFactory.Expect(x => x.Create(appNhibConf, statisticConnString)).Return(dataSource);
 			var target = new ApplicationData(new Dictionary<string, string>(), new[]{dataSource}, null, null, dataSourcesFactory);
 			target.Tenant(dataSourceName).Should().Be.SameInstanceAs(dataSource);
-			target.MakeSureDataSourceExists(dataSourceName, appNhibConf, statisticConnString);
+			target.MakeSureDataSourceExists(dataSourceName, RandomName.Make(), statisticConnString, appNhibConf);
 
 			target.Tenant(dataSourceName).Should().Be.SameInstanceAs(dataSource);
 			dataSourcesFactory.AssertWasNotCalled(x=> x.Create(appNhibConf, statisticConnString));

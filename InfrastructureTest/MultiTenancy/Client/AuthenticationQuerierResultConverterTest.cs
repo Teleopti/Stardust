@@ -40,14 +40,15 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			var appdb = new Dictionary<string, string> { { "test", RandomName.Make() } };
 			var tenantName = RandomName.Make();
 			applicationData.Expect(x => x.Tenant(tenantName)).Return(new FakeDataSource());
+			var appConnString = RandomName.Make();
 			var result = target.Convert(new AuthenticationInternalQuerierResult
 				{
 					Tenant = tenantName,
 					Success = true,
-					DataSourceConfiguration = nhibDecryption.EncryptConfigJustForTest(new DataSourceConfig {AnalyticsConnectionString = analyticsdb, ApplicationNHibernateConfig = appdb})
+					DataSourceConfiguration = nhibDecryption.EncryptConfigJustForTest(new DataSourceConfig {AnalyticsConnectionString = analyticsdb, ApplicationNHibernateConfig = appdb, ApplicationConnectionString = appConnString})
 				});
 			result.Success.Should().Be.True();
-			applicationData.AssertWasCalled(x => x.MakeSureDataSourceExists(tenantName, appdb, analyticsdb));
+			applicationData.AssertWasCalled(x => x.MakeSureDataSourceExists(tenantName, appConnString, analyticsdb, appdb));
 		}
 
 		[Test]

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
@@ -42,7 +43,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 
 			var applicationdata = _applicationData();
 			var result = JsonConvert.DeserializeObject<AuthenticationInternalQuerierResult>(json);
-			applicationdata.MakeSureDataSourceExists(result.Tenant, result.DataSourceConfiguration.ApplicationNHibernateConfig, result.DataSourceConfiguration.AnalyticsConnectionString);
+			applicationdata.MakeSureDataSourceExists(result.Tenant, result.DataSourceConfiguration.ApplicationConnectionString, result.DataSourceConfiguration.AnalyticsConnectionString, new Dictionary<string, string>());
 			var datasource = applicationdata.Tenant(result.Tenant);
 			var ret = new AuthenticationQuerierResult
 			{

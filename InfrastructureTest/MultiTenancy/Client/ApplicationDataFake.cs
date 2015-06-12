@@ -22,9 +22,10 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 		public IDictionary<string, string> AppSettings { get; private set; }
 		public ILoadPasswordPolicyService LoadPasswordPolicyService { get; private set; }
 
-		public void MakeSureDataSourceExists(string tenantName, IDictionary<string, string> applicationNhibConfiguration,
-			string analyticsConnectionString)
-		{}
+		public void MakeSureDataSourceExists(string tenantName, string applicationConnectionString, string analyticsConnectionString,
+			IDictionary<string, string> applicationNhibConfiguration)
+		{
+		}
 
 		public void DoOnAllTenants_AvoidUsingThis(Action<IDataSource> actionOnTenant)
 		{

@@ -23,7 +23,8 @@ namespace Teleopti.Ccc.TestCommon
 		public IDictionary<string, string> AppSettings { get; private set; }
 		public ILoadPasswordPolicyService LoadPasswordPolicyService { get; private set; }
 
-		public void MakeSureDataSourceExists(string tenantName, IDictionary<string, string> applicationNhibConfiguration, string analyticsConnectionString)
+		public void MakeSureDataSourceExists(string tenantName, string applicationConnectionString, string analyticsConnectionString,
+			IDictionary<string, string> applicationNhibConfiguration)
 		{
 			throw new NotImplementedException();
 		}
