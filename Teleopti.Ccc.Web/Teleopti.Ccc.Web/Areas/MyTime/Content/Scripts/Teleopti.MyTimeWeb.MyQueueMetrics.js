@@ -45,7 +45,7 @@
 			url: 'MyTime/MyReport/QueueMetricsDetails',
 		    dataType: 'json',
 		    cache: false,
-		    data: { date: date.format("YYYY-MM-DD") },
+		    data: { date: Teleopti.MyTimeWeb.Common.FormatServiceDate(date) },
 			success: function (data) {
 				vm.selectedDateInternal(date);
 				vm.myQueues(data);

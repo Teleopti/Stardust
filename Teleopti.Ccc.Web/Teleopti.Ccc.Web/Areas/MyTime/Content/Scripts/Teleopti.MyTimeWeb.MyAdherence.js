@@ -5,9 +5,8 @@
 		var self = this;
 
 		self.selectedDateInternal = ko.observable(date);
-		self.datePickerFormat = ko.observable('YYYYMMDD');
-		var format = Teleopti.MyTimeWeb.Common.DateFormat; 
-		self.datePickerFormat(format);
+		self.datePickerFormat = ko.observable(Teleopti.MyTimeWeb.Common.DateFormat);
+		
 		self.dataAvailable = ko.observable();
 		self.goToAnotherDay = function (toDate) {
 			Teleopti.MyTimeWeb.Portal.NavigateTo("MyReport/Adherence" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(toDate.format('YYYY-MM-DD')));
@@ -110,7 +109,7 @@
 			url: 'MyTime/MyReport/AdherenceDetails',
 			dataType: 'json',
 			cache: false,
-			data: { date: date.format("YYYY-MM-DD") },
+			data: { date: Teleopti.MyTimeWeb.Common.FormatServiceDate(date) },
 			success: function (data) {
 				vm.selectedDateInternal(date);
 				vm.totalAdherence(data.TotalAdherence);
