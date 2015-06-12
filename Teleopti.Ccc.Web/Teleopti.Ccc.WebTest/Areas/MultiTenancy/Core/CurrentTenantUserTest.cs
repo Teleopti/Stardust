@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 		{
 			var expected = new PersonInfo();
 			var httpContext = new FakeHttpContext();
-			httpContext.Items[TenantAuthentication.PersonInfoKey] = expected;
+			httpContext.Items[WebTenantAuthentication.PersonInfoKey] = expected;
 
 			new CurrentTenantUser(new FakeCurrentHttpContext(httpContext)).CurrentUser()
 					.Should().Be.SameInstanceAs(expected);

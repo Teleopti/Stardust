@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<DataSourceConfigurationEncryption>().As<IDataSourceConfigurationEncryption>().SingleInstance();
 			builder.RegisterType<PersonInfoMapper>().As<IPersonInfoMapper>().SingleInstance();
 			builder.RegisterType<ChangePersonPassword>().As<IChangePersonPassword>().SingleInstance();
-			builder.RegisterType<TenantAuthentication>().As<ITenantAuthentication>().SingleInstance();
+			builder.RegisterType<WebTenantAuthentication>().As<ITenantAuthentication>().SingleInstance();
 			builder.RegisterType<CurrentTenantUser>().As<ICurrentTenantUser>().SingleInstance();
 			builder.RegisterType<NHibFilePathInWeb>().As<INhibFilePath>().SingleInstance();
 		}

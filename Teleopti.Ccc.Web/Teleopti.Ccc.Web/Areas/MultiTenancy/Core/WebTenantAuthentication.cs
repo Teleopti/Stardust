@@ -6,14 +6,14 @@ using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 
 namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 {
-	public class TenantAuthentication : ITenantAuthentication
+	public class WebTenantAuthentication : ITenantAuthentication
 	{
 		private readonly ICurrentHttpContext _currentHttpContext;
 		private readonly IFindPersonInfoByCredentials _findPersonByCredentials;
 		private readonly ISessionSpecificDataProvider _sessionDataProvider;
 		public static string PersonInfoKey = "personinfo";
 
-		public TenantAuthentication(ICurrentHttpContext currentHttpContext, IFindPersonInfoByCredentials findPersonByCredentials, ISessionSpecificDataProvider sessionDataProvider)
+		public WebTenantAuthentication(ICurrentHttpContext currentHttpContext, IFindPersonInfoByCredentials findPersonByCredentials, ISessionSpecificDataProvider sessionDataProvider)
 		{
 			_currentHttpContext = currentHttpContext;
 			_findPersonByCredentials = findPersonByCredentials;

@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 
 		public PersonInfo CurrentUser()
 		{
-			return _currentHttpContext.Current().Items[TenantAuthentication.PersonInfoKey] as PersonInfo;
+			return _currentHttpContext.Current().Items[WebTenantAuthentication.PersonInfoKey] as PersonInfo;
 		}
 	}
 }

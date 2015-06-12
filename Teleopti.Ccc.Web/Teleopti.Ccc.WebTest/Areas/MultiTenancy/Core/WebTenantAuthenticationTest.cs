@@ -13,7 +13,7 @@ using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 
 namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 {
-	public class TenantAuthenticationTest
+	public class WebTenantAuthenticationTest
 	{
 		[Test]
 		public void ShouldSetPersonInfoIfSuccessful_Web()
@@ -28,10 +28,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 			var findPersonByCredentials = MockRepository.GenerateMock<IFindPersonInfoByCredentials>();
 			findPersonByCredentials.Expect(x => x.Find(personId, tenantPassword)).Return(expected);
 
-			var target = new TenantAuthentication(new FakeCurrentHttpContext(httpcontext), findPersonByCredentials, sessionDataProvider);
+			var target = new WebTenantAuthentication(new FakeCurrentHttpContext(httpcontext), findPersonByCredentials, sessionDataProvider);
 			target.Logon()
 				.Should().Be.True();
-			httpcontext.Items[TenantAuthentication.PersonInfoKey].Should().Be.SameInstanceAs(expected);
+			httpcontext.Items[WebTenantAuthentication.PersonInfoKey].Should().Be.SameInstanceAs(expected);
 		}
 
 		[Test]
@@ -46,10 +46,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 			var findPersonByCredentials = MockRepository.GenerateMock<IFindPersonInfoByCredentials>();
 			findPersonByCredentials.Expect(x => x.Find(personId, tenantPassword)).Return(null);
 
-			var target = new TenantAuthentication(new FakeCurrentHttpContext(httpcontext), findPersonByCredentials, sessionDataProvider);
+			var target = new WebTenantAuthentication(new FakeCurrentHttpContext(httpcontext), findPersonByCredentials, sessionDataProvider);
 			target.Logon()
 				.Should().Be.False();
-			httpcontext.Items[TenantAuthentication.PersonInfoKey].Should().Be.Null();
+			httpcontext.Items[WebTenantAuthentication.PersonInfoKey].Should().Be.Null();
 		}
 
 		[Test]
@@ -63,10 +63,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 			var findPersonByCredentials = MockRepository.GenerateMock<IFindPersonInfoByCredentials>();
 			findPersonByCredentials.Expect(x => x.Find(personId, tenantPassword)).Return(expected);
 
-			var target = new TenantAuthentication(new FakeCurrentHttpContext(httpcontext), findPersonByCredentials, MockRepository.GenerateMock<ISessionSpecificDataProvider>());
+			var target = new WebTenantAuthentication(new FakeCurrentHttpContext(httpcontext), findPersonByCredentials, MockRepository.GenerateMock<ISessionSpecificDataProvider>());
 			target.Logon()
 				.Should().Be.True();
-			httpcontext.Items[TenantAuthentication.PersonInfoKey].Should().Be.SameInstanceAs(expected);
+			httpcontext.Items[WebTenantAuthentication.PersonInfoKey].Should().Be.SameInstanceAs(expected);
 		}
 
 		[Test]
@@ -80,10 +80,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 			var findPersonByCredentials = MockRepository.GenerateMock<IFindPersonInfoByCredentials>();
 			findPersonByCredentials.Expect(x => x.Find(personId, tenantPassword)).Return(null);
 
-			var target = new TenantAuthentication(new FakeCurrentHttpContext(httpcontext), findPersonByCredentials, MockRepository.GenerateMock<ISessionSpecificDataProvider>());
+			var target = new WebTenantAuthentication(new FakeCurrentHttpContext(httpcontext), findPersonByCredentials, MockRepository.GenerateMock<ISessionSpecificDataProvider>());
 			target.Logon()
 				.Should().Be.False();
-			httpcontext.Items[TenantAuthentication.PersonInfoKey].Should().Be.Null();
+			httpcontext.Items[WebTenantAuthentication.PersonInfoKey].Should().Be.Null();
 		}
 
 		private static HttpContextBase createHttpContextWithHeadersSet(Guid personId, string tenantPassword)
