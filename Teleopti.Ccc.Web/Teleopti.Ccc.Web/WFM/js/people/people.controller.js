@@ -61,6 +61,7 @@ function PeopleController($scope, $filter, $state, $document,$translate,i18nServ
 		onRegisterApi: function(gridApi) {
 			$scope.gridApi = gridApi;
 			gridApi.pagination.on.paginationChanged($scope, function(newPage, pageSize) {
+				$scope.currentPageIndex = newPage;
 				paginationOptions.pageNumber = newPage;
 				paginationOptions.pageSize = pageSize;
 				getPage();
@@ -169,15 +170,15 @@ function PeopleController($scope, $filter, $state, $document,$translate,i18nServ
 			pageSize: $scope.pageSize*$scope.totalPages,
 			currentPageIndex: 1
 		}).$promise.then(function (result) {
-			$scope.searchResult = result.People;
+			$scope.gridOptions.data = result.People;
 
-			angular.forEach($scope.searchResult, function (person) {
+			angular.forEach($scope.gridOptions.data, function (person) {
 				angular.forEach(person.OptionalColumnValues, function (val) {
 					person[val.Key] = val.Value;
 				});
 
 			});
-			$scope.gridOptions.data = $scope.searchResult;
+
 			angular.forEach(result.OptionalColumns, function (col) {
 				var isFound = false;
 				angular.forEach($scope.gridOptions.columnDefs, function (colDef) {
@@ -194,13 +195,13 @@ function PeopleController($scope, $filter, $state, $document,$translate,i18nServ
 	}
 
 	$scope.defautKeyword = function () {
-		if ($scope.keyword == '' && $scope.searchResult != undefined && $scope.searchResult.length > 0) {
-			return "\"" + $scope.searchResult[0].Team.replace("/", "\" \"") + "\"";
+		if ($scope.keyword == '' && $scope.gridOptions.data != undefined && $scope.gridOptions.data.length > 0) {
+			return "\"" + $scope.gridOptions.data[0].Team.replace("/", "\" \"") + "\"";
 		}
 		return $scope.keyword;
 	};
 
-	$scope.range = function (start, end) {
+	$scope.getVisiblePageNumbers = function (start, end) {
 		var displayPageCount = 5;
 		var ret = [];
 		if (!end) {

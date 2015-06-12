@@ -25,7 +25,7 @@
 	</div>
 	<div ui-grid="gridOptions" ui-grid-exporter ui-grid-auto-resize ui-grid-selection ui-grid-pagination class="grid people-list"></div>
 	
-	<div class="pagination pull-right" ng-hide="searchResult.length == 0" aria-hidden="false">
+	<div class="pagination pull-right" aria-hidden="false">
 		<ul>
 			<li class="pagination-item" ng-class="{disabled: gridApi.pagination.getPage() == 1}">
 				<a href="" ng-click="gridApi.pagination.previousPage()">
@@ -34,7 +34,7 @@
 				</a>
 			</li>
 
-			<li class="pagination-item" ng-repeat="n in range(totalPages)"
+			<li class="pagination-item" ng-repeat="n in getVisiblePageNumbers(totalPages)"
 				ng-class="{active: n == gridApi.pagination.getPage()}"
 				ng-click="gridApi.pagination.seek(n)">
 				<a href="" ng-bind="n"></a>
