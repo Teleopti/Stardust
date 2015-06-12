@@ -10,13 +10,6 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 {
 	public class TenantServerModule : Module
 	{
-		private readonly IIocConfiguration _configuration;
-
-		public TenantServerModule(IIocConfiguration configuration)
-		{
-			_configuration = configuration;
-		}
-
 		private const string tenancyConnectionStringKey = "Tenancy";
 
 		protected override void Load(ContainerBuilder builder)
