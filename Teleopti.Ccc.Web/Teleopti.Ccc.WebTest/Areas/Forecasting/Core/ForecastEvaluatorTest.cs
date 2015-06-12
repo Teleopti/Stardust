@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 
 			result.WorkloadId.Should().Be.EqualTo(workload.Id.Value);
 			result.Name.Should().Be.EqualTo(workload.Name);
-			result.ForecastMethodRecommended.Id.Should().Be.EqualTo(ForecastMethodType.TeleoptiClassicWithTrend);
+			((ForecastMethodType)result.ForecastMethodRecommended.Id).Should().Be.EqualTo(ForecastMethodType.TeleoptiClassicWithTrend);
 			result.ForecastMethods.Any(x=>(int)x.AccuracyNumber==89&&x.ForecastMethodType==ForecastMethodType.TeleoptiClassic).Should().Be.True();
 			result.ForecastMethods.Any(x => (int)x.AccuracyNumber == 92 && x.ForecastMethodType == ForecastMethodType.TeleoptiClassicWithTrend).Should().Be.True();
 			result.Days.Any().Should().Be.False();
