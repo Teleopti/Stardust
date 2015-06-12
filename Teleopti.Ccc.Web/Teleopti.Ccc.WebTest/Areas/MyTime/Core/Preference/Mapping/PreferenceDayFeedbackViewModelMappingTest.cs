@@ -97,6 +97,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var date9 = new DateOnly(2029, 1, 9);
 			var date10 = new DateOnly(2029, 1, 10);
 			var date11 = new DateOnly(2029, 1, 11);
+			var date20 = new DateOnly(2029, 1, 20);
+			var date21 = new DateOnly(2029, 1, 21);
 
 			var personContract1 = _personContractProvider.GetPersonContractWithSpecifiedNightRest("Fake Contract", nightRest1);
 			var personPeriod1 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2028, 1, 1), personContract1, TeamFactory.CreateSimpleTeam());
@@ -156,6 +158,17 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 				EndTimeLimitation = new EndTimeLimitation(new TimeSpan(18, 0, 0), new TimeSpan(18, 30, 0))
 			});
 
+			var preferenceDay20 = new PreferenceDay(_person, date20, new PreferenceRestriction
+			{
+				StartTimeLimitation = new StartTimeLimitation(new TimeSpan(18, 0, 0), new TimeSpan(18, 30, 0)),
+				EndTimeLimitation = new EndTimeLimitation(new TimeSpan(1, 5, 0, 0), new TimeSpan(1, 6, 30, 0))
+			});
+
+			var preferenceDay21 = new PreferenceDay(_person, date21, new PreferenceRestriction
+			{
+				StartTimeLimitation = new StartTimeLimitation(new TimeSpan(8, 0, 0), new TimeSpan(8, 30, 0)),
+				EndTimeLimitation = new EndTimeLimitation(new TimeSpan(14, 0, 0), new TimeSpan(15, 30, 0))
+			});
 
 			var personPreferenceProvider = _preferenceProvider as FakePreferenceProvider;
 			if (personPreferenceProvider != null)
@@ -166,6 +179,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 				personPreferenceProvider.AddPreference(preferenceDay6);
 				personPreferenceProvider.AddPreference(preferenceDay10);
 				personPreferenceProvider.AddPreference(preferenceDay11);
+				personPreferenceProvider.AddPreference(preferenceDay20);
+				personPreferenceProvider.AddPreference(preferenceDay21);
 			}
 		}
 
@@ -238,6 +253,18 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			targetReturn2.HasNightRestViolationToPreviousDay.Should().Be.False();
 		}
 
+		[Test]
+		public void ShouldMapHasNightRestViolationForOverNightPreference()
+		{
+			Setup();
+			var testDate1 = new DateOnly(2029, 1, 20);
+			var targetReturn1 = Mapper.Map<DateOnly, PreferenceDayFeedbackViewModel>(testDate1);
+			targetReturn1.HasNightRestViolationToNextDay.Should().Be.True();
+
+			var testDate2 = new DateOnly(2029, 1, 21);
+			var targetReturn2 = Mapper.Map<DateOnly, PreferenceDayFeedbackViewModel>(testDate2);
+			targetReturn2.HasNightRestViolationToPreviousDay.Should().Be.True();
+		}
 
 	}
 	
