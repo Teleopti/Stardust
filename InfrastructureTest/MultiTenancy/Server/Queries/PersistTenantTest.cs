@@ -38,6 +38,26 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			Assert.Throws<GenericADOException>(() => target.Persist(tenant2));
 		}
 
+		[Test]
+		public void ShouldPersistConnectionStrings()
+		{
+			var appConnString = string.Format("Data source={0};Initial Catalog={1}", RandomName.Make(), RandomName.Make());
+			var analConnString = string.Format("Data source={0};Initial Catalog={1}", RandomName.Make(), RandomName.Make());
+
+			var tenant = new Tenant(RandomName.Make());
+			tenant.SetApplicationConnectingString(appConnString);
+			tenant.SetAnalyticsConnectionString(analConnString);
+			target.Persist(tenant);
+
+			var result = _tenantUnitOfWorkManager.CurrentSession()
+				.CreateQuery("select t from Tenant t where t.Name=:name")
+				.SetString("name", tenant.Name)
+				.UniqueResult<Tenant>();
+
+			result.ApplicationConnectionString.Should().Be.EqualTo(appConnString);
+			result.AnalyticsConnectionString.Should().Be.EqualTo(appConnString);
+		}
+
 		[SetUp]
 		public void Setup()
 		{

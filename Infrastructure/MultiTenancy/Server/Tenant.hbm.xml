@@ -8,6 +8,8 @@
 			<generator class="identity" />
 		</id>
 		<property name="Name" />
+		<property name="ApplicationConnectionString" />
+		<property name="AnalyticsConnectionString" />
 	</class>
 
 	<query name="loadAllTenants">

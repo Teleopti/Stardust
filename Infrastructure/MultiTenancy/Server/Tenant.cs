@@ -14,5 +14,16 @@
 		}
 
 		public virtual string Name { get; protected set; }
+		public virtual string ApplicationConnectionString { get; protected set; }
+		public virtual string AnalyticsConnectionString { get; protected set; }
+
+		public virtual void SetApplicationConnectingString(string applicationConnectionString)
+		{
+
+		}
+
+		public virtual void SetAnalyticsConnectionString(string analyticsConnectionString)
+		{
+		}
 	}
 }
