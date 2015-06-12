@@ -27,12 +27,30 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			_now = now;
 		}
 
+		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod")]
+		public virtual IHttpActionResult GetAllPlanningPeriods()
+		{
+			var availablePlanningPeriods = new List<PlanningPeriodModel>();
+			var allPlanningPeriods = _planningPeriodRespository.LoadAll();
+			if (!allPlanningPeriods.Any())
+			{
+				var planningPeriod = _nextPlanningPeriodProvider.Current();
+				availablePlanningPeriods.Add(createPlanningPeriodModel(planningPeriod.Range, planningPeriod.Id.GetValueOrDefault(), getMissingForecast(planningPeriod.Range)));
+			}
+			else
+			{
+				allPlanningPeriods.ForEach(
+					pp =>
+						availablePlanningPeriods.Add(createPlanningPeriodModel(pp.Range, pp.Id.GetValueOrDefault(), getMissingForecast(pp.Range))));
+			}
+			return Ok(availablePlanningPeriods);
+		}
+
 		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod/{id}")]
 		public virtual IHttpActionResult GetPlanningPeriod(Guid id)
 		{
 			var planningPeriod = _planningPeriodRespository.Load(id);
-			var planningPeriodModel = createPlanningPeriodModel(planningPeriod.Range.StartDate.Date,
-				planningPeriod.Range.EndDate.Date, planningPeriod.Id.GetValueOrDefault(), getMissingForecast(planningPeriod.Range));
+			var planningPeriodModel = createPlanningPeriodModel(planningPeriod.Range, planningPeriod.Id.GetValueOrDefault(), getMissingForecast(planningPeriod.Range));
 			return Ok(planningPeriodModel);
 		}
 
@@ -44,7 +62,6 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod/{id}/suggestions")]
 		public virtual IHttpActionResult GetPlanningPeriodSuggestion(Guid id)
 		{
-
 			var planningPeriod = _planningPeriodRespository.Load(id);
 			var suggestion = _planningPeriodRespository.Suggestions(_now);
 			var result = suggestion.SuggestedPeriods(planningPeriod.Range);
@@ -71,89 +88,41 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				PeriodType = model.PeriodType,
 				StartDate = new DateOnly(model.DateFrom)
 			});
-			var planningPeriodModel = createPlanningPeriodModel(planningPeriod.Range.StartDate.Date,
-				planningPeriod.Range.EndDate.Date, planningPeriod.Id.GetValueOrDefault(), getMissingForecast(planningPeriod.Range));
+			var planningPeriodModel = createPlanningPeriodModel(planningPeriod.Range, planningPeriod.Id.GetValueOrDefault(), getMissingForecast(planningPeriod.Range));
 			return Ok(planningPeriodModel);
 		}
 
 		[UnitOfWork, HttpPost, Route("api/resourceplanner/nextplanningperiod")]
-		public virtual IHttpActionResult GetNextPlanningPeriod([FromBody] PlanningPeriodChangeRangeModel model)
+		public virtual IHttpActionResult GetNextPlanningPeriod()
 		{
-			var nextPlanningPeriod =
-				_nextPlanningPeriodProvider.Next(new SchedulePeriodForRangeCalculation
-				{
-					Number = model.Number,
-					PeriodType = model.PeriodType,
-					StartDate = new DateOnly(model.DateFrom)
-				});
-			var planningPeriodModel = createPlanningPeriodModel(nextPlanningPeriod.Range.StartDate.Date,
-				nextPlanningPeriod.Range.EndDate.Date, nextPlanningPeriod.Id.GetValueOrDefault(), getMissingForecast(nextPlanningPeriod.Range));
-			return Ok(planningPeriodModel);
-		}
-
-		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod/nextsuggestions")]
-		public virtual IHttpActionResult GetNextPlanningPeriodSuggestions()
-		{
-			var planningPeriod = _nextPlanningPeriodProvider.Current();
-			//var nextList = getNextPlanningPeriod(planningPeriod.Range.EndDate.AddDays(1));
-			//if (!nextList.Any())
-			//{
-				var suggestion = _planningPeriodRespository.Suggestions(_now);
-				var result = suggestion.NextSuggestedPeriods(planningPeriod.Range);
-				return
-					Ok(
-						result.Select(
-							r =>
-								new SuggestedPlanningPeriodRangeModel
-								{
-									PeriodType = r.PeriodType.ToString(),
-									StartDate = r.Range.StartDate.Date,
-									EndDate = r.Range.EndDate.Date,
-									Number = r.Number
-								}));
+			var allPlanningPeriods = _planningPeriodRespository.LoadAll();
+			var last = allPlanningPeriods.OrderByDescending(p => p.Range.StartDate).First().NextPlanningPeriod();
 			
+			_planningPeriodRespository.Add(last);
+
+			var id = last.Id.GetValueOrDefault();
+			return Created(Request.RequestUri + "/" + id, new {
+				EndDate = last.Range.EndDate.Date,
+				StartDate = last.Range.StartDate.Date,
+			});
 		}
 
-		private IEnumerable<IPlanningPeriod> getNextPlanningPeriod(DateOnly dateOnly)
-		{
-			var allPlanningPeriods = _planningPeriodRespository.LoadAll();
-			var next =
-				allPlanningPeriods.Where(p => p.Range.StartDate >= dateOnly);
-			return next;
-		}
-
-		[UnitOfWork, HttpGet, Route("api/resourceplanner/availableplanningperiod")]
-		public virtual IHttpActionResult GetAvailablePlanningPeriods()
-		{
-			var availablePlanningPeriods = new List<PlanningPeriodModel>();
-			var allPlanningPeriods = _planningPeriodRespository.LoadAll();
-			if (!allPlanningPeriods.Any())
-			{
-				var planningPeriod = _nextPlanningPeriodProvider.Current();
-				availablePlanningPeriods.Add(createPlanningPeriodModel(planningPeriod.Range.StartDate.Date,
-					planningPeriod.Range.EndDate.Date, planningPeriod.Id.GetValueOrDefault(), getMissingForecast(planningPeriod.Range)));
-			}
-			else
-			{
-				allPlanningPeriods.ForEach(
-					pp =>
-						availablePlanningPeriods.Add(createPlanningPeriodModel(pp.Range.StartDate.Date, pp.Range.EndDate.Date,
-							pp.Id.GetValueOrDefault(), getMissingForecast(pp.Range))));
-			}
-			return Ok(availablePlanningPeriods.AsEnumerable());
-		}
-
-		private PlanningPeriodModel createPlanningPeriodModel(DateTime startDate, DateTime endDate, Guid id,
-			IEnumerable<MissingForecastModel> skills)
+		private PlanningPeriodModel createPlanningPeriodModel(DateOnlyPeriod range, Guid id, IEnumerable<MissingForecastModel> skills)
 		{
 			return new PlanningPeriodModel
 			{
-				StartDate = startDate,
-				EndDate = endDate,
+				StartDate = range.StartDate.Date,
+				EndDate = range.EndDate.Date,
 				Id = id,
-				HasNextPlanningPeriod = getNextPlanningPeriod(new DateOnly(endDate.AddDays(1))).Any(),
+				HasNextPlanningPeriod = hasNextPlanningPeriod(range.EndDate.AddDays(1)),
 				Skills = skills
 			};
+		}
+
+		private bool hasNextPlanningPeriod(DateOnly dateOnly)
+		{
+			var allPlanningPeriods = _planningPeriodRespository.LoadAll();
+			return allPlanningPeriods.Any(p => p.Range.StartDate >= dateOnly);
 		}
 	}
 }
