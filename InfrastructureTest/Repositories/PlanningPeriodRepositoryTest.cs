@@ -6,13 +6,12 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
@@ -27,7 +26,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		protected override IPlanningPeriod CreateAggregateWithCorrectBusinessUnit()
 		{
-			return new PlanningPeriod(new PlanningPeriodSuggestions(new TestableNow(new DateTime(2015,4,1)),new List<AggregatedSchedulePeriod>()));
+			return new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015, 4, 1)), new List<AggregatedSchedulePeriod>()));
 		}
 
 		protected override void VerifyAggregateGraphProperties(IPlanningPeriod loadedAggregateFromDatabase)
@@ -45,7 +44,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			SetupPersonsInOrganizationWithContract(new Func<SchedulePeriod>[] {() => new SchedulePeriod(_startDate, SchedulePeriodType.Week, 1)});
 			var repository = new PlanningPeriodRepository(UnitOfWork);
-			var planningPeriodSuggestions = repository.Suggestions(new TestableNow(new DateTime(2015, 4, 1)));
+			var planningPeriodSuggestions = repository.Suggestions(new MutableNow(new DateTime(2015, 4, 1)));
 			var range = planningPeriodSuggestions.Default().Range;
 			range.StartDate.Should().Be.EqualTo(new DateOnly(2015, 04, 6));
 			range.EndDate.Should().Be.EqualTo(new DateOnly(2015, 04, 12));
@@ -55,7 +54,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldGetMonthAsDefaultWhenNoSchedulePeriods()
 		{
 			var repository = new PlanningPeriodRepository(UnitOfWork);
-			var planningPeriodSuggestions = repository.Suggestions(new TestableNow(new DateTime(2015, 4, 1)));
+			var planningPeriodSuggestions = repository.Suggestions(new MutableNow(new DateTime(2015, 4, 1)));
 
 			var defaultRange = planningPeriodSuggestions.Default().Range;
 			defaultRange.StartDate.Should().Be.EqualTo(new DateOnly(2015, 5, 1));
@@ -67,7 +66,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			SetupPersonsInOrganizationWithContract(new Func<SchedulePeriod>[] { () => new SchedulePeriod(_startDate, SchedulePeriodType.Week, 1) });
 			var repository = new PlanningPeriodRepository(UnitOfWork);
-			var planningPeriodSuggestions = repository.Suggestions(new TestableNow(new DateTime(2015, 4, 1)));
+			var planningPeriodSuggestions = repository.Suggestions(new MutableNow(new DateTime(2015, 4, 1)));
 
 			var suggestedPeriod = planningPeriodSuggestions.SuggestedPeriods(new DateOnlyPeriod(new DateOnly(2015, 4, 6),new DateOnly(2015, 4,12)));
 			suggestedPeriod.Count().Should().Be.EqualTo(3);
@@ -82,7 +81,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				() => new SchedulePeriod(_startDate.AddDays(7), SchedulePeriodType.Week, 1)
 			});
 			var repository = new PlanningPeriodRepository(UnitOfWork);
-			var planningPeriodSuggestions = repository.Suggestions(new TestableNow(new DateTime(2015, 4, 1)));
+			var planningPeriodSuggestions = repository.Suggestions(new MutableNow(new DateTime(2015, 4, 1)));
 
 			var suggestedPeriod = planningPeriodSuggestions.SuggestedPeriods(new DateOnlyPeriod(new DateOnly(2015, 4, 6), new DateOnly(2015, 4, 12)));
 			suggestedPeriod.Count().Should().Be.EqualTo(3);
@@ -97,7 +96,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				() => new SchedulePeriod(_startDate.AddDays(5), SchedulePeriodType.Week, 1)
 			});
 			var repository = new PlanningPeriodRepository(UnitOfWork);
-			var planningPeriodSuggestions = repository.Suggestions(new TestableNow(new DateTime(2015, 4, 1)));
+			var planningPeriodSuggestions = repository.Suggestions(new MutableNow(new DateTime(2015, 4, 1)));
 
 			var suggestedPeriod = planningPeriodSuggestions.SuggestedPeriods(new DateOnlyPeriod(new DateOnly(2015, 4, 6), new DateOnly(2015, 4, 12)));
 			suggestedPeriod.Count().Should().Be.EqualTo(7);
@@ -112,7 +111,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				() => new SchedulePeriod(_startDate.AddDays(5), SchedulePeriodType.Week, 1)
 			});
 			var repository = new PlanningPeriodRepository(UnitOfWork);
-			var planningPeriodSuggestions = repository.Suggestions(new TestableNow(new DateTime(2015, 4, 1)));
+			var planningPeriodSuggestions = repository.Suggestions(new MutableNow(new DateTime(2015, 4, 1)));
 
 			var suggestedPeriod = planningPeriodSuggestions.SuggestedPeriods(new DateOnlyPeriod(new DateOnly(2015, 4, 6), new DateOnly(2015, 4, 12)));
 			suggestedPeriod.Count().Should().Be.EqualTo(7);

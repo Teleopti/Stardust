@@ -10,7 +10,7 @@
 					<h4>{{'NextPlanningPeriodMessage' | translate}} {{planningPeriod.StartDate | amDateFormat:"L"}} {{'ToText' | translate}} {{planningPeriod.EndDate | amDateFormat:"L"}}</h4>
 				</div>
 			</div>
-			<div ng-show="changeDateToggle && isEnabled">
+			<div ng-show="changeDateToggle && isEnabled && !planningPeriod.HasNextPlanningPeriod">
 				{{'ChangePlanningPeriodTo' | translate}}
 				<div ng-repeat="op in suggestedPlanningPeriods">
 					<div class="wfm-radio">

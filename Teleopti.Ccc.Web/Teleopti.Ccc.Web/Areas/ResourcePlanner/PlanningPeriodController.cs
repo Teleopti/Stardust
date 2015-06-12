@@ -102,6 +102,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 
 			var id = last.Id.GetValueOrDefault();
 			return Created(Request.RequestUri + "/" + id, new {
+				Id= id,
 				EndDate = last.Range.EndDate.Date,
 				StartDate = last.Range.StartDate.Date,
 			});

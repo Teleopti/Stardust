@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		[Test, SetCulture("sv-SE")]
 		public void ShouldGetUpcommingMonthAsDefaultPlanningPeriod()
 		{
-			var target = new PlanningPeriod( new PlanningPeriodSuggestions(new TestableNow(new DateTime(2015,4,1)),new List<AggregatedSchedulePeriod>()));
+			var target = new PlanningPeriod( new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015,4,1)),new List<AggregatedSchedulePeriod>()));
 			
 			target.Range.Should().Be.EqualTo(new DateOnlyPeriod(2015, 05, 01, 2015, 05, 31));
 		}
@@ -24,14 +24,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		[Test, SetCulture("sv-SE")]
 		public void ShouldReturnNextPlanningPeriod()
 		{
-			var target = new PlanningPeriod(new PlanningPeriodSuggestions(new TestableNow(new DateTime(2015, 4, 1)), new List<AggregatedSchedulePeriod>()));
+			var target = new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015, 4, 1)), new List<AggregatedSchedulePeriod>()));
 			target.NextPlanningPeriod().Range.Should().Be.EqualTo(new DateOnlyPeriod(2015, 06, 01, 2015, 06, 30));
 		}
 
 		[Test, SetCulture("sv-SE")]
 		public void ShouldReturnNextNextPlanningPeriod()
 		{
-			var target = new PlanningPeriod(new PlanningPeriodSuggestions(new TestableNow(new DateTime(2015, 4, 1)), new List<AggregatedSchedulePeriod>()));
+			var target = new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015, 4, 1)), new List<AggregatedSchedulePeriod>()));
 			target.NextPlanningPeriod().NextPlanningPeriod().Range.Should().Be.EqualTo(new DateOnlyPeriod(2015, 07, 01, 2015, 07, 31));
 		}
 
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				PeriodType = SchedulePeriodType.Week,
 				Priority = 5
 			};
-			var suggestion = new PlanningPeriodSuggestions(new TestableNow(new DateTime(2015, 05, 23)), new List<AggregatedSchedulePeriod>
+			var suggestion = new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015, 05, 23)), new List<AggregatedSchedulePeriod>
 			{
 				aggSchedulePeriod1,aggSchedulePeriod2
 			});
