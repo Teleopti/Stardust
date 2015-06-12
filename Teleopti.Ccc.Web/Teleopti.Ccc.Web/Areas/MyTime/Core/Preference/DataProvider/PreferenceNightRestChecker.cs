@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 
 				if (compareDate2 - compareDate1 < result.ExpectedNightRest)
 				{
+					result.RestTimeToPreviousDay = compareDate2 - compareDate1;
 					result.HasViolationToPreviousDay = true;
 				}
 			}
@@ -52,6 +53,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 
 				if (compareDate1 - compareDate2 < result.ExpectedNightRest)
 				{
+					result.RestTimeToNextDay = compareDate1 - compareDate2;
 					result.HasViolationToNextDay = true;
 				}
 			}
