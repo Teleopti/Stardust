@@ -47,13 +47,15 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 							}
 
 							var selectedMethod;
-							if (data.ForecastMethodRecommended === -1) {
+							if (data.ForecastMethodRecommended.Id === -1) {
 								workload.noHistoricalDataForEvaluation = true;
 								selectedMethod = 0;
 							} else {
-								selectedMethod = data.ForecastMethodRecommended;
+								selectedMethod = data.ForecastMethodRecommended.Id;
 							}
 							workload.selectedMethod = selectedMethod;
+							workload.ForecastMethodRecommended = data.ForecastMethodRecommended;
+							workload.selectedMethodName = methodNames[selectedMethod];
 							$scope.dataColumns[1].name = "Forecast Method";
 						}).
 						error(function(data, status, headers, config) {

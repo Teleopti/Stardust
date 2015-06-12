@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 		public string Name { get; set; }
 		public dynamic[] ForecastMethods { get; set; }
 		public dynamic[] Days { get; set; }
-		public ForecastMethodType ForecastMethodRecommended { get; set; }
+		public dynamic ForecastMethodRecommended { get; set; }
 		public bool IsForecastingTest { get; set; }
 		public dynamic[] TestDays { get; set; }
 	}

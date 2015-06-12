@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			var target = new HistoricalPeriodProvider(new Now(), statisticRepository);
 
 			var result = target.PeriodForForecast(workload);
-			result.StartDate.Should().Be.EqualTo(new DateOnly(dateOnlyPeriod.EndDate.Date.AddYears(-3)));
+			result.StartDate.Should().Be.EqualTo(new DateOnly(dateOnlyPeriod.EndDate.Date.AddYears(-3).AddDays(1)));
 			result.EndDate.Should().Be.EqualTo(dateOnlyPeriod.EndDate);
 		}
 
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 		{
 			var statisticRepository = MockRepository.GenerateMock<IStatisticRepository>();
 			var workload = new Workload(SkillFactory.CreateSkill("Phone"));
-			var dateOnlyPeriod = new DateOnlyPeriod(2013, 5, 5, 2014, 5, 5);
+			var dateOnlyPeriod = new DateOnlyPeriod(2013, 5, 6, 2014, 5, 5);
 			statisticRepository.Stub(x => x.QueueStatisticsUpUntilDate(workload.QueueSourceCollection)).Return(dateOnlyPeriod);
 			var target = new HistoricalPeriodProvider(new Now(), statisticRepository);
 

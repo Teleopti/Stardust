@@ -31,7 +31,8 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 			var methodsEvaluationResult = new List<MethodAccuracy>();
 			foreach (var forecastMethod in methods)
 			{
-				var historicalData = _historicalData.Fetch(workload, _historicalPeriodProvider.PeriodForForecast(workload));
+				var periodForForecast = _historicalPeriodProvider.PeriodForForecast(workload);
+				var historicalData = _historicalData.Fetch(workload, periodForForecast);
 				if (!historicalData.TaskOwnerDayCollection.Any())
 					return new WorkloadAccuracy { Id = workload.Id.Value, Name = workload.Name, Accuracies = new MethodAccuracy[] { } };
 
@@ -43,13 +44,15 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 					return new WorkloadAccuracy { Id = workload.Id.Value, Name = workload.Name, Accuracies = new MethodAccuracy[] { } };
 
 				var yearsBeforeLastYearDataNoOutliers = _outlierRemover.RemoveOutliers(yearsBeforeLastYearData, forecastMethod);
-				var forecastResult = forecastMethod.Forecast(yearsBeforeLastYearDataNoOutliers, new DateOnlyPeriod(oneYearBack, historicalData.EndDate));
+				var forecastResult = forecastMethod.Forecast(yearsBeforeLastYearDataNoOutliers, new DateOnlyPeriod(oneYearBack.AddDays(1), historicalData.EndDate));
 
 				methodsEvaluationResult.Add(new MethodAccuracy
 				{
 					MeasureResult = forecastResult.ForecastingTargets.ToArray(),
 					Number = _forecastAccuracyCalculator.Accuracy(forecastResult.ForecastingTargets, lastYearData.TaskOwnerDayCollection),
-					MethodId = forecastMethod.Id
+					MethodId = forecastMethod.Id,
+					PeriodEvaluateOn = new DateOnlyPeriod(oneYearBack.AddDays(1), periodForForecast.EndDate),
+					PeriodUsedToEvaluate = new DateOnlyPeriod(periodForForecast.StartDate, oneYearBack)
 				});
 			}
 			var bestMethod = methodsEvaluationResult.OrderByDescending(x => x.Number).First();

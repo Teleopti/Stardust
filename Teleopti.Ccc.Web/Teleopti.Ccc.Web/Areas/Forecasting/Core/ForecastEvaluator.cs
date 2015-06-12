@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Outlier;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.Forecasting.Controllers;
+using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
@@ -46,7 +47,14 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 			{
 				Name = workload.Name,
 				WorkloadId = workload.Id.Value,
-				ForecastMethodRecommended = (bestAccuracy == null ? ForecastMethodType.None : bestAccuracy.MethodId),
+				ForecastMethodRecommended = new
+				{
+					Id= (bestAccuracy == null ? ForecastMethodType.None : bestAccuracy.MethodId),
+					PeriodEvaluateOnStart = bestAccuracy.PeriodEvaluateOn.StartDate.Date,
+					PeriodEvaluateOnEnd = bestAccuracy.PeriodEvaluateOn.EndDate.Date,
+					PeriodUsedToEvaluateStart = bestAccuracy.PeriodUsedToEvaluate.StartDate.Date,
+					PeriodUsedToEvaluateEnd = bestAccuracy.PeriodUsedToEvaluate.EndDate.Date
+				},
 				ForecastMethods = createMethodViewModels(evaluateResult),
 				Days = createDayViewModels(workload, bestAccuracy),
 				TestDays = isForecastingTest ? createTestDayViewModels(workload, bestAccuracy) : new dynamic[] { },

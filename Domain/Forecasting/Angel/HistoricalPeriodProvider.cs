@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 				return new DateOnlyPeriod(_now.LocalDateOnly(), _now.LocalDateOnly());
 			}
 			var endDate = availableHistoricalPeriod.Value.EndDate;
-			var threeYearsBack = endDate.Date.AddYears(threeYears);
+			var threeYearsBack = endDate.Date.AddYears(threeYears).AddDays(1);
 			return threeYearsBack > availableHistoricalPeriod.Value.StartDate.Date
 				? new DateOnlyPeriod(new DateOnly(threeYearsBack), endDate)
 				: availableHistoricalPeriod.Value;
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			if (availableHistoricalPeriod.HasValue)
 			{
 				var endDate = availableHistoricalPeriod.Value.EndDate;
-				return new DateOnlyPeriod(new DateOnly(endDate.Date.AddYears(-1)), endDate);
+				return new DateOnlyPeriod(new DateOnly(endDate.Date.AddYears(-1)).AddDays(1), endDate);
 			}
 			return new DateOnlyPeriod(_now.LocalDateOnly(), _now.LocalDateOnly());
 		}
