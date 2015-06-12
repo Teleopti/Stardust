@@ -6,6 +6,8 @@ using Autofac.Integration.SignalR;
 using Autofac.Integration.WebApi;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
@@ -109,6 +111,8 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule<SeatPlannerAreaModule>();
 			builder.RegisterModule<OutboundAreaModule>();
 			builder.RegisterModule<PeopleAreaModule>();
+
+			tenantWebSpecificTypes(builder);
 		}
 
 		private static void registerRequestContextTypes(ContainerBuilder builder)
@@ -150,6 +154,19 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<AuthenticationModule>().As<IAuthenticationModule>().SingleInstance();
 			builder.RegisterType<IdentityProviderProvider>().As<IIdentityProviderProvider>().SingleInstance();
             builder.RegisterType<IanaTimeZoneProvider>().As<IIanaTimeZoneProvider>().SingleInstance();
+		}
+
+		private static void tenantWebSpecificTypes(ContainerBuilder builder)
+		{
+			builder.RegisterType<ApplicationAuthentication>().As<IApplicationAuthentication>().SingleInstance();
+			builder.RegisterType<IdentityAuthentication>().As<IIdentityAuthentication>().SingleInstance();
+			builder.RegisterType<DataSourceConfigurationProvider>().As<IDataSourceConfigurationProvider>().SingleInstance();
+			builder.RegisterType<DataSourceConfigurationEncryption>().As<IDataSourceConfigurationEncryption>().SingleInstance();
+			builder.RegisterType<PersonInfoMapper>().As<IPersonInfoMapper>().SingleInstance();
+			builder.RegisterType<ChangePersonPassword>().As<IChangePersonPassword>().SingleInstance();
+			builder.RegisterType<WebTenantAuthentication>().As<ITenantAuthentication>().SingleInstance();
+			builder.RegisterType<CurrentTenantUser>().As<ICurrentTenantUser>().SingleInstance();
+			builder.RegisterType<NHibFilePathInWeb>().As<INhibFilePath>().SingleInstance();
 		}
 	}
 }
