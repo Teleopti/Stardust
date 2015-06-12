@@ -383,18 +383,6 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\..\Teleopti.Ccc.Web.Broker\Backportability.cs">
-      <Link>Core\MessageBroker\Backportability.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Teleopti.Ccc.Web.Broker\MessageBrokerController.cs">
-      <Link>Core\MessageBroker\MessageBrokerController.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Teleopti.Ccc.Web.Broker\MessageBrokerWebModule.cs">
-      <Link>Core\MessageBroker\MessageBrokerWebModule.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Teleopti.Ccc.Web.Broker\SignalRSettings.cs">
-      <Link>Core\MessageBroker\SignalRSettings.cs</Link>
-    </Compile>
     <Compile Include="Areas\Anywhere\Controllers\AdherenceController.cs" />
     <Compile Include="Areas\Anywhere\Core\GetSiteAdherence.cs" />
     <Compile Include="Areas\Anywhere\Core\GetBusinessUnitId.cs" />
@@ -763,6 +751,12 @@
     <Compile Include="Core\IResourceVersion.cs" />
     <Compile Include="Core\MachineKeyCookieTransform.cs" />
     <Compile Include="Core\MachineKeySessionSecurityTokenHandler.cs" />
+    <Compile Include="Core\MessageBroker\Backportability.cs" />
+    <Compile Include="Core\MessageBroker\MessageBrokerController.cs" />
+    <Compile Include="Core\MessageBroker\MessageBrokerHub.cs" />
+    <Compile Include="Core\MessageBroker\MessageBrokerWebModule.cs" />
+    <Compile Include="Core\MessageBroker\SignalRConfiguration.cs" />
+    <Compile Include="Core\MessageBroker\SignalRSettings.cs" />
     <Compile Include="Core\NameValidator.cs" />
     <Compile Include="Core\PersonNameProvider.cs" />
     <Compile Include="Core\RelativeWSFederationAuthenticationModule.cs" />
@@ -797,12 +791,6 @@
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceTemplateProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceTemplateInputMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceTemplateViewModelMappingProfile.cs" />
-    <Compile Include="..\..\Teleopti.Ccc.Web.Broker\MessageBrokerHub.cs">
-      <Link>Core\MessageBroker\MessageBrokerHub.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Teleopti.Ccc.Web.Broker\SignalRConfiguration.cs">
-      <Link>Core\MessageBroker\SignalRConfiguration.cs</Link>
-    </Compile>
     <Compile Include="Areas\Anywhere\Controllers\PersonScheduleCommandController.cs" />
     <Compile Include="Areas\Anywhere\Controllers\StaffingMetricsController.cs" />
     <Compile Include="Areas\Anywhere\Core\DailyStaffingMetricsViewModel.cs" />
