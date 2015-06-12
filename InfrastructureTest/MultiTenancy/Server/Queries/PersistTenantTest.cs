@@ -1,4 +1,5 @@
-﻿using NHibernate.Exceptions;
+﻿using System;
+using NHibernate.Exceptions;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
@@ -11,7 +12,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 {
 	public class PersistTenantTest
 	{
-		private TenantUnitOfWorkManager _tenantUnitOfWorkManager;
+		private TenantUnitOfWorkManager tenantUnitOfWorkManager;
 		private PersistTenant target;
 
 		[Test]
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 
 			target.Persist(tenant);
 
-			_tenantUnitOfWorkManager.CurrentSession()
+			tenantUnitOfWorkManager.CurrentSession()
 				.CreateQuery("select t from Tenant t where t.Name=:name")
 				.SetString("name", tenant.Name)
 				.UniqueResult<Tenant>()
@@ -45,31 +46,47 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			var analConnString = string.Format("Data source={0};Initial Catalog={1}", RandomName.Make(), RandomName.Make());
 
 			var tenant = new Tenant(RandomName.Make());
-			tenant.SetApplicationConnectingString(appConnString);
+			tenant.SetApplicationConnectionString(appConnString);
 			tenant.SetAnalyticsConnectionString(analConnString);
 			target.Persist(tenant);
 
-			var result = _tenantUnitOfWorkManager.CurrentSession()
+			var result = tenantUnitOfWorkManager.CurrentSession()
 				.CreateQuery("select t from Tenant t where t.Name=:name")
 				.SetString("name", tenant.Name)
 				.UniqueResult<Tenant>();
 
 			result.ApplicationConnectionString.Should().Be.EqualTo(appConnString);
-			result.AnalyticsConnectionString.Should().Be.EqualTo(appConnString);
+			result.AnalyticsConnectionString.Should().Be.EqualTo(analConnString);
+		}
+
+		[Test]
+		public void InvalidApplicationConnectionString()
+		{
+			var tenant = new Tenant(RandomName.Make());
+			Assert.Throws<ArgumentException>(() =>
+				tenant.SetApplicationConnectionString(RandomName.Make()));
+		}
+
+		[Test]
+		public void InvalidAnalyticsConnectionString()
+		{
+			var tenant = new Tenant(RandomName.Make());
+			Assert.Throws<ArgumentException>(() =>
+				tenant.SetAnalyticsConnectionString(RandomName.Make()));
 		}
 
 		[SetUp]
 		public void Setup()
 		{
-			_tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(ConnectionStringHelper.ConnectionStringUsedInTests);
-			_tenantUnitOfWorkManager.Start();
-			target = new PersistTenant(_tenantUnitOfWorkManager);
+			tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(ConnectionStringHelper.ConnectionStringUsedInTests);
+			tenantUnitOfWorkManager.Start();
+			target = new PersistTenant(tenantUnitOfWorkManager);
 		}
 
 		[TearDown]
 		public void Cleanup()
 		{
-			_tenantUnitOfWorkManager.Dispose();
+			tenantUnitOfWorkManager.Dispose();
 		} 
 	}
 }

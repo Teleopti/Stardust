@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
+﻿using System.Data.SqlClient;
+
+namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 {
 	public class Tenant
 	{
@@ -11,19 +13,24 @@
 		public Tenant(string tenantName)
 		{
 			Name = tenantName;
+			ApplicationConnectionString = string.Empty;
+			AnalyticsConnectionString = string.Empty;
 		}
 
 		public virtual string Name { get; protected set; }
 		public virtual string ApplicationConnectionString { get; protected set; }
 		public virtual string AnalyticsConnectionString { get; protected set; }
 
-		public virtual void SetApplicationConnectingString(string applicationConnectionString)
+		public virtual void SetApplicationConnectionString(string applicationConnectionString)
 		{
-
+			new SqlConnectionStringBuilder(applicationConnectionString);
+			ApplicationConnectionString = applicationConnectionString;
 		}
 
 		public virtual void SetAnalyticsConnectionString(string analyticsConnectionString)
 		{
+			new SqlConnectionStringBuilder(analyticsConnectionString);
+			AnalyticsConnectionString = analyticsConnectionString;
 		}
 	}
 }
