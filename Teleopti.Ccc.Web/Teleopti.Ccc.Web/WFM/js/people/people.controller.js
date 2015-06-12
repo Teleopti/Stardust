@@ -4,7 +4,7 @@ angular
 	.module('wfm.people', ['peopleService', 'peopleSearchService', 'ui.grid.pagination'])
 	.constant('chunkSize', 50)
 	.controller('PeopleCtrl', [
-		'$scope', '$filter', '$state', '$document','$translate', 'PeopleSearch', PeopleController
+		'$scope', '$filter', '$state', '$document','$translate','i18nService', 'PeopleSearch', PeopleController
 	])
 	.directive('outsideClick', ['$document', '$parse', function ($window, $parse) {
 		return {
@@ -20,7 +20,7 @@ angular
 		};
 	}]);
 
-function PeopleController($scope, $filter, $state, $document,$translate, SearchSvrc) {
+function PeopleController($scope, $filter, $state, $document,$translate,i18nService, SearchSvrc) {
 	$scope.searchResult = [];
 	$scope.pageSize = 20;
 	$scope.keyword = '';
@@ -29,13 +29,14 @@ function PeopleController($scope, $filter, $state, $document,$translate, SearchS
 	$scope.searchKeywordChanged = false;
 	$scope.advancedSearchForm = {};
 	$scope.searchCriteriaDic = {};
-
+	
 	var dynamicColumnLoaded = false;
 	var paginationOptions = {
 		pageNumber: 1,
 		pageSize: 20,
 		sort: null
 	};
+	i18nService.setCurrentLang($translate.use());
 	$scope.gridOptions = {
 		exporterMenuCsv: true,
 		exporterCsvFilename: 'data.csv',
