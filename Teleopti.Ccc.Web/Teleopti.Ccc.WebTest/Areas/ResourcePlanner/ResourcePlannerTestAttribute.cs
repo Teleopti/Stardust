@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			builder.RegisterType<FakeScheduleParameters>().As<IScheduleParameters>().SingleInstance();
 			builder.RegisterType<FakePlanningPeriodRepository>().As<IPlanningPeriodRepository>().SingleInstance();
 			builder.RegisterType<FakeMissingForecastProvider>().As<IMissingForecastProvider>().SingleInstance();
-			builder.RegisterInstance<INow>(new TestableNow(new DateTime(2015, 4, 1))).SingleInstance();
+			//builder.RegisterInstance<INow>(new MutableNow(new DateTime(2015, 4, 1))).SingleInstance();
 
 		}
 	}

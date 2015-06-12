@@ -14,7 +14,6 @@
 				$scope.suggestions = {};
 				PlanningPeriodNewSvrc.suggestions.query().$promise.then(function(result) {
 					$scope.suggestions = result;
-
 				}, function() {
 					$scope.error = true;
 				});

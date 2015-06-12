@@ -32,5 +32,10 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		{
 			throw new NotImplementedException();
 		}
+
+		public IPlanningPeriod NextPlanningPeriod()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

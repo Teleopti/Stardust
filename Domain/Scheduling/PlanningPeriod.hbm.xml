@@ -26,6 +26,17 @@
 				<property name="Maximum" not-null="false" column="EndDate" type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"/>
 			</component>
 		</component>
+
+		<property name="_periodType"
+						access="field"
+							column="PeriodType"
+				  not-null="true" />
+
+		<property name="_number"
+							column="Number"
+						access="field"
+				  not-null="true"/>
+
 		<many-to-one name="BusinessUnit"
 					 class="Teleopti.Ccc.Domain.Common.BusinessUnit"
 						access="nosetter.camelcase-underscore"

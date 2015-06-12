@@ -1,3 +1,4 @@
+using System.Globalization;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces;
@@ -10,6 +11,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	{
 		private DateOnlyPeriod _range;
 		private static readonly SchedulePeriodRangeCalculator _calculator = new SchedulePeriodRangeCalculator();
+		private SchedulePeriodType _periodType;
+		private  int _number;
 
 		protected PlanningPeriod()
 		{
@@ -17,7 +20,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		
 		public PlanningPeriod(IPlanningPeriodSuggestions planningPeriodSuggestions) : this()
 		{
-			_range = planningPeriodSuggestions.Default().Range;
+			var suggestedPlanningPeriod = planningPeriodSuggestions.Default();
+
+			_periodType = suggestedPlanningPeriod.PeriodType;
+			_number = suggestedPlanningPeriod.Number;
+			_range = suggestedPlanningPeriod.Range;
 		}
 
 		public virtual DateOnlyPeriod Range
@@ -28,6 +35,19 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public virtual void ChangeRange(SchedulePeriodForRangeCalculation schedulePeriodForRangeCalculation)
 		{
 			_range = _calculator.PeriodForType(schedulePeriodForRangeCalculation.StartDate, schedulePeriodForRangeCalculation);
+		}
+
+		public virtual IPlanningPeriod NextPlanningPeriod()
+		{
+			var nextPlanningPeriodStartDate = _range.EndDate.AddDays(1);
+			var range = _calculator.PeriodForType(nextPlanningPeriodStartDate, new SchedulePeriodForRangeCalculation
+			{
+				Culture = CultureInfo.CurrentCulture,
+				Number = _number,
+				PeriodType = _periodType,
+				StartDate =  nextPlanningPeriodStartDate
+			});
+			return new PlanningPeriod {_range = range, _number = _number, _periodType = _periodType };
 		}
 	}
 }

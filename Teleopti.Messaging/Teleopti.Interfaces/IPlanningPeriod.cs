@@ -6,5 +6,6 @@ namespace Teleopti.Interfaces
 	{
 		DateOnlyPeriod Range { get; }
 		void ChangeRange(SchedulePeriodForRangeCalculation schedulePeriodForRangeCalculation);
+		IPlanningPeriod NextPlanningPeriod();
 	}
 }

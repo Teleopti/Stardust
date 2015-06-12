@@ -44,8 +44,9 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod/{id}/suggestions")]
 		public virtual IHttpActionResult GetPlanningPeriodSuggestion(Guid id)
 		{
-			var suggestion = _planningPeriodRespository.Suggestions(_now);
+
 			var planningPeriod = _planningPeriodRespository.Load(id);
+			var suggestion = _planningPeriodRespository.Suggestions(_now);
 			var result = suggestion.SuggestedPeriods(planningPeriod.Range);
 			return
 				Ok(
@@ -94,11 +95,9 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		public virtual IHttpActionResult GetNextPlanningPeriodSuggestions()
 		{
 			var planningPeriod = _nextPlanningPeriodProvider.Current();
-			var allPlanningPeriods = _planningPeriodRespository.LoadAll();
-			var next =
-				allPlanningPeriods.Where(p => p.Range.StartDate >= planningPeriod.Range.EndDate.AddDays(1));
-			if (!next.Any())
-			{
+			//var nextList = getNextPlanningPeriod(planningPeriod.Range.EndDate.AddDays(1));
+			//if (!nextList.Any())
+			//{
 				var suggestion = _planningPeriodRespository.Suggestions(_now);
 				var result = suggestion.NextSuggestedPeriods(planningPeriod.Range);
 				return
@@ -112,8 +111,15 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 									EndDate = r.Range.EndDate.Date,
 									Number = r.Number
 								}));
-			}
-			return NotFound();
+			
+		}
+
+		private IEnumerable<IPlanningPeriod> getNextPlanningPeriod(DateOnly dateOnly)
+		{
+			var allPlanningPeriods = _planningPeriodRespository.LoadAll();
+			var next =
+				allPlanningPeriods.Where(p => p.Range.StartDate >= dateOnly);
+			return next;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/resourceplanner/availableplanningperiod")]
@@ -145,6 +151,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				StartDate = startDate,
 				EndDate = endDate,
 				Id = id,
+				HasNextPlanningPeriod = getNextPlanningPeriod(new DateOnly(endDate.AddDays(1))).Any(),
 				Skills = skills
 			};
 		}
