@@ -54,7 +54,7 @@ function PeopleController($scope, $filter, $state, $document,$translate, SearchS
 		exporterAllDataFn: function () {
 			return loadAllResults();
 		},
-		//paginationPageSize: 20,
+		paginationPageSize: 20,
 		useExternalPagination: true,
 		enablePaginationControls: false,
 		onRegisterApi: function(gridApi) {
@@ -161,6 +161,7 @@ function PeopleController($scope, $filter, $state, $document,$translate, SearchS
 	$scope.searchKeyword = function () {
 		getPage();
 	};
+
 	var loadAllResults = function () {
 		return SearchSvrc.search.query({
 			keyword: $scope.keyword,
@@ -187,11 +188,10 @@ function PeopleController($scope, $filter, $state, $document,$translate, SearchS
 				if (!isFound) {
 					$scope.gridOptions.columnDefs.push({ displayName:col, field: col, headerCellFilter: 'translate' });
 				}
-
 			});
-
 		});
 	}
+
 	$scope.defautKeyword = function () {
 		if ($scope.keyword == '' && $scope.searchResult != undefined && $scope.searchResult.length > 0) {
 			return "\"" + $scope.searchResult[0].Team.replace("/", "\" \"") + "\"";
@@ -283,18 +283,7 @@ function PeopleController($scope, $filter, $state, $document,$translate, SearchS
 
 		$scope.keyword = keyword;
 
-		SearchSvrc.searchWithOption.query(JSON.stringify({
-			SearchCriteria: $scope.advancedSearchForm,
-			PageSize: $scope.pageSize,
-			CurrentPageIndex: $scope.currentPageIndex
-		})).$promise.then(function (result) {
-			$scope.searchResult = result.People;
-			$scope.gridOptions.data = result.People;
-			$scope.optionalColumns = result.OptionalColumns;
-			$scope.totalPages = result.TotalPages;
-			$scope.keyword = $scope.defautKeyword();
-			$scope.searchKeywordChanged = false;
-		});
+		getPage();
 	}
 
 	SearchSvrc.isAdvancedSearchEnabled.query({ toggle: 'WfmPeople_AdvancedSearch_32973' }).$promise.then(function (result) {

@@ -30,77 +30,21 @@
 				<a href="" ng-click="gridApi.pagination.previousPage()">
 					<i class="mdi mdi-chevron-double-left"></i>
 					{{'RepViewerPreviousPage'| translate}}
-
 				</a>
-
 			</li>
 
 			<li class="pagination-item" ng-repeat="n in range(totalPages)"
 				ng-class="{active: n == gridApi.pagination.getPage()}"
 				ng-click="gridApi.pagination.seek(n)">
 				<a href="" ng-bind="n"></a>
-
 			</li>
 
 			<li class="pagination-item" ng-class="{disabled: gridApi.pagination.getPage() == totalPages}">
 				<a href="" ng-click="gridApi.pagination.nextPage()">
 					{{'RepViewerNextPage'| translate}}
 					<i class="mdi mdi-chevron-double-right"></i>
-
 				</a>
-
 			</li>
-
 		</ul>
-
 	</div>
 </div>
-<!--<div class="wrapper row">
-	<table class="wfm-table material-depth-1 table-striped table-condensed table-hover people-list">
-		<thead>
-			<tr>
-				<th>{{'FirstName' | translate}} </th>
-				<th>{{'LastName' | translate}}</th>
-				<th>{{'Team' | translate}}</th>
-				<th>{{'Email' | translate}}</th>
-				<th>{{'EmployeeNo' | translate}}</th>
-				<th ng-repeat="column in optionalColumns">{{column}}</th>
-				<th>{{'TerminalDate' | translate}}</th>
-			</tr>
-		</thead>
-		<tfoot>
-			<tr>
-				<td colspan="{{6+optionalColumns.length}}">
-					<div class="pagination pull-right" ng-hide="searchResult.length == 0">
-						<ul>
-							<li class="pagination-item" ng-class="{disabled: currentPageIndex == 1}">
-								<a href="" ng-click="prevPage()"><i class="mdi mdi-chevron-double-left"></i>{{'RepViewerPreviousPage'| translate}}</a>
-							</li>
-							<li class="pagination-item" ng-repeat="n in range(totalPages)"
-								ng-class="{active: n == currentPageIndex}"
-								ng-click="setPage()">
-								<a href="" ng-bind="n">1</a>
-							</li>
-							<li class="pagination-item" ng-class="{disabled: currentPageIndex == totalPages}">
-								<a href="" ng-click="nextPage()">{{'RepViewerNextPage'| translate}} <i class="mdi mdi-chevron-double-right"></i></a>
-							</li>
-						</ul>
-					</div>
-				</td>
-			</tr>
-		</tfoot>
-		<tbody>
-			<tr class="person" ng-repeat="person in searchResult" ng-click="toggleModal()">
-				<td class="first-name">{{person.FirstName}}</td>
-				<td>{{person.LastName}}</td>
-				<td>{{person.Team}}</td>
-				<td>{{person.Email}}</td>
-				<td>{{person.EmploymentNumber}}</td>
-				<td ng-repeat="optionalColumnValue in person.OptionalColumnValues">
-					{{optionalColumnValue.Value}}
-				</td>
-				<td>{{person.LeavingDate}}</td>
-			</tr>
-		</tbody>
-	</table>
-</div>-->
