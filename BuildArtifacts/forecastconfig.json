@@ -4,8 +4,6 @@
 	"Tenant" : "Teleopti WFM",
 	"DataSourceConfiguration" : {
 		"AnalyticsConnectionString":"Data Source=.\\TELEOPTIFORECAST;User Id=forecast;Password=teleopti;initial Catalog=TeleoptiCCC_Forecasts;Current Language=us_english",
-		"ApplicationNHibernateConfig" : {
-			"connection.connection_string" : "Data Source=.\\TELEOPTIFORECAST;User Id=forecast;Password=teleopti;initial Catalog=TeleoptiCCC_Forecasts;Current Language=us_english"
-		}
+		"ApplicationConnectionString":"Data Source=.\\TELEOPTIFORECAST;User Id=forecast;Password=teleopti;initial Catalog=TeleoptiCCC_Forecasts;Current Language=us_english"
 	}
 }
