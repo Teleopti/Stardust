@@ -9,7 +9,6 @@ xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
         <VirtualApplication name="Web" physicalDirectory="../../Web" />
         <VirtualApplication name="Client" physicalDirectory="../../Client" />
         <VirtualApplication name="RTA" physicalDirectory="../../Web" />
-		<VirtualApplication name="Broker" physicalDirectory="../../Broker" />
 		<VirtualApplication name="Broker.backplane" physicalDirectory="../../BrokerBackplane" />
 		<VirtualApplication name="AuthenticationBridge" physicalDirectory="../../AuthenticationBridge" />
 		<VirtualApplication name="WindowsIdentityProvider" physicalDirectory="../../WindowsIdentityProvider" />
