@@ -1,8 +1,0 @@
-﻿<?xml version="1.0"?>
-<appSettings>
-  <add key="ConnectionTimeout" value="110"/>
-  <add key="KeepAlive" value=""/>
-  <add key="DefaultMessageBufferSize" value="1000"/>
-  <add key="DisconnectTimeout" value="30"/>
-  <!--<add key="ScaleOutBackplaneUrl" value="http://backendserver/broker.backplane/backplane" />-->
-</appSettings>
