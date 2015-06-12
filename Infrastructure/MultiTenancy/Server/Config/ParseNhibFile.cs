@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Xml.Linq;
+using Environment = NHibernate.Cfg.Environment;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config
 {
@@ -20,7 +21,8 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config
 				new DataSourceConfiguration
 				{
 					AnalyticsConnectionString = analyticsConnstring,
-					ApplicationNHibernateConfig = allAppProperties
+					ApplicationNHibernateConfig = allAppProperties,
+					ApplicationConnectionString = allAppProperties[Environment.ConnectionString]
 				});
 		}
 	}

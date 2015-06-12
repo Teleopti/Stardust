@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 			if (applicationLogonInfo.IsLocked)
 				return createFailingResult(Resources.LogOnFailedAccountIsLocked);
 
+			//TODO tenant: no need to keep this when #33685 is done
 			var nhibConfig = _dataSourceConfigurationProvider.ForTenant(personInfo.Tenant);
 			if (nhibConfig == null)
 				return createFailingResult(Resources.NoDatasource);

@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Config
 				var res = target.Read()["sessionFactoryName"];
 
 				res.AnalyticsConnectionString.Should().Be.EqualTo("Analytics connection string");
+				res.ApplicationConnectionString.Should().Be.EqualTo("App connection string");
 				res.ApplicationNHibernateConfig["command_timeout"].Should().Be.EqualTo("60");
 				res.ApplicationNHibernateConfig["connection.connection_string"].Should().Be.EqualTo("App connection string");
 			}
