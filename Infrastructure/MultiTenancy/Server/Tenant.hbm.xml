@@ -14,8 +14,7 @@
 
 	<query name="loadAllTenants">
 		<![CDATA[
-select id As "Id", Name As "Name"  
-from Tenant
+select t from Tenant t
 ]]>
 	</query>
 	

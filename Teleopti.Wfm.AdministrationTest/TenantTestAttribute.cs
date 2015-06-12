@@ -1,10 +1,8 @@
 ﻿using Autofac;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Wfm.Administration.Controllers;
 using Teleopti.Wfm.Administration.Core;
 
 namespace Teleopti.Wfm.AdministrationTest
@@ -14,7 +12,7 @@ namespace Teleopti.Wfm.AdministrationTest
 		private const string tenancyConnectionStringKey = "Tenancy";
 		protected override void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
 		{
-			builder.RegisterType<ConfigReader>().As<IConfigReader>().SingleInstance();
+			builder.RegisterModule<WfmAdminModule>();
 			builder.Register(c =>
 			{
 				var configReader = c.Resolve<IConfigReader>();
@@ -25,8 +23,6 @@ namespace Teleopti.Wfm.AdministrationTest
 				.As<ITenantUnitOfWork>()
 				.As<ICurrentTenantSession>()
 				.SingleInstance();
-			builder.RegisterType<HomeController>().SingleInstance();
-			builder.RegisterType<TenantList>().As<ITenantList>();
 		}
 	}
 }

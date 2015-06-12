@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
@@ -38,6 +39,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<CheckPasswordStrength>().As<ICheckPasswordStrength>().SingleInstance();
 			builder.RegisterType<CurrentTenant>().As<ICurrentTenant>().SingleInstance();
 			builder.RegisterType<FindLogonInfo>().As<IFindLogonInfo>().SingleInstance();
+			builder.RegisterType<LoadAllTenants>().As<ILoadAllTenants>().SingleInstance();
 		}
 	}
 }
