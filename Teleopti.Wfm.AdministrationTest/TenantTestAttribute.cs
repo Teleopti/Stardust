@@ -1,8 +1,10 @@
 ﻿using Autofac;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Wfm.Administration.Controllers;
 using Teleopti.Wfm.Administration.Core;
 
 namespace Teleopti.Wfm.AdministrationTest
@@ -23,6 +25,9 @@ namespace Teleopti.Wfm.AdministrationTest
 				.As<ITenantUnitOfWork>()
 				.As<ICurrentTenantSession>()
 				.SingleInstance();
+			builder.RegisterType<ImportController>();
+			builder.RegisterType<DatabaseHelperWrapper>();
+			builder.RegisterType<AdminTenantAuthentication>().As<ITenantAuthentication>().SingleInstance();
 		}
 	}
 }

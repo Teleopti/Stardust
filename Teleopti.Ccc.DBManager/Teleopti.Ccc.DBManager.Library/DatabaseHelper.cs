@@ -3,11 +3,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using Teleopti.Ccc.DBManager.Library;
-using Teleopti.Ccc.Domain;
-using Teleopti.Ccc.Domain.Collection;
 
-namespace Teleopti.Ccc.TestCommon
+namespace Teleopti.Ccc.DBManager.Library
 {
 	public class DatabaseHelper
 	{
@@ -260,6 +257,28 @@ namespace Teleopti.Ccc.TestCommon
 			var conn = new SqlConnection(connectionStringBuilder.ConnectionString);
 			conn.Open();
 			return conn;
+		}
+
+		public bool IsTenantDb()
+		{
+			const string sql = "SELECT count(*) FROM sys.objects WHERE object_id = OBJECT_ID(N'[Tenant].[PersonInfo]') ";
+			return executeScalar(sql, 0) > 0;
+		}
+
+		private T executeScalar<T>(string sql, T nullValue, params object[] args)
+		{
+			using (var conn = new SqlConnection(ConnectionString))
+			{
+				conn.Open();
+				using (var cmd = conn.CreateCommand())
+				{
+					cmd.CommandText = string.Format(sql, args);
+					var value = cmd.ExecuteScalar();
+					if (value == null)
+						return nullValue;
+					return (T)value;
+				}
+			}
 		}
 	}
 }

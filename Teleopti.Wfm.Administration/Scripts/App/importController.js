@@ -5,8 +5,60 @@
 		 .module('adminApp')
 		 .controller('importController', importController, []);
 
-	function importController($scope, $http) {
-		$scope.viewName = 'IMPORTERA MERA';
+	function importController($http) {
+		var vm = this;
+		vm.Tenant = "";
+		vm.AppDatabase = "";
+		vm.AnalyticsDatabase = "";
+		vm.Server = ".";
+
+		vm.AppDbOk = false;
+		vm.AppDbCheckMessage = "Input connection string";
+
+		vm.AnalDbOk = false;
+		vm.AnalDbCheckMessage = "Input connection string";
+
+		vm.CheckAppDb = function () {
+			$http.post('../api/Import/DbExists', {
+				DbConnectionString: vm.AppDatabase,
+				DbType: 1
+			})
+				.success(function (data) {
+					vm.AppDbOk = data.Exists;
+					vm.AppDbCheckMessage = data.Message;
+				}).error(function (xhr, ajaxOptions, thrownError) {
+					console.log(xhr.status + xhr.responseText + thrownError);
+				});
+		}
+		vm.CheckAnalDb = function () {
+			$http.post('../api/Import/DbExists', {
+				DbConnectionString: vm.AnalyticsDatabase,
+				DbType: 2
+			})
+				.success(function (data) {
+					vm.AnalDbOk = data.Exists;
+					vm.AnalDbCheckMessage = data.Message;
+				}).error(function (xhr, ajaxOptions, thrownError) {
+					console.log(xhr.status + xhr.responseText + thrownError);
+				});
+		}
+
+		vm.startImport = function () {
+
+			$http.post('../api/Import/ImportExisting', {
+				Tenant: vm.Tenant,
+				AppDatabase: vm.AppDatabase,
+				AnalyticsDatabase: vm.AnalyticsDatabase,
+				Server: vm.Server
+			}).
+  success(function (data, status, headers, config) {
+  	vm.Result = data.Success;
+  }).
+  error(function (data, status, headers, config) {
+  	// called asynchronously if an error occurs
+  	// or server returns response with an error status.
+  });
+		};
 		//$http.get('../api/Home/GetAllTenants').success(function (data) {
 		//	$scope.Tenants = data;
 		//}).error(function (xhr, ajaxOptions, thrownError) {

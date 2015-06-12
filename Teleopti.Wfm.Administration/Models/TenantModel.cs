@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Wfm.Administration.Core
+﻿namespace Teleopti.Wfm.Administration.Models
 {
 	public class TenantModel
 	{
@@ -8,4 +8,3 @@
 		public string AnalyticsDatabase { get; set; }
 	}
 }
-

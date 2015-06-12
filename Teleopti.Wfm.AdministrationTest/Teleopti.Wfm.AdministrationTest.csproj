@@ -44,6 +44,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.7\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="NHibernate, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NHibernate.4.0.0.4000\lib\net40\NHibernate.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
     </Reference>
@@ -53,6 +57,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -97,12 +102,17 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="ControllerActions\GetAllTenantsTest.cs" />
+    <Compile Include="ControllerActions\CheckExistingDatabaseTest.cs" />
     <Compile Include="TenantTestAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Infrastructure\Teleopti.Ccc.Infrastructure.csproj">
       <Project>{AA4A5374-77AF-44F0-85C1-6CABC6701352}</Project>
       <Name>Teleopti.Ccc.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.Library\Teleopti.Ccc.DBManager.Library.csproj">
+      <Project>{cf33f7a6-78d3-4167-a42d-20e453f8b1b6}</Project>
+      <Name>Teleopti.Ccc.DBManager.Library</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
       <Project>{DB42D973-9889-4D51-9FC5-BE66AA7F117C}</Project>

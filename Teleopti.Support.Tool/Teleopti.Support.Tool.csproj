@@ -325,7 +325,9 @@
     </EmbeddedResource>
     <None Include="App.config" />
     <None Include="BackupSsoConfig.bat" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

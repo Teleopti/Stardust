@@ -1,6 +1,38 @@
-﻿<div ng-controller="importController">
-	{{viewName}}
+﻿<div ng-controller="importController as importVm" style="margin-left: 50px">
+	<div class="row">
+		<div class="col-md-12">
+			<h2>Import existing</h2>
+			<p>
+				if you already have databases (one Application and one Analytics) that you want to include in the multi tenant adminstration you can import it here.
+			</p>
+		</div>
+		<div class="col-md-6">
+			<div>
+				<div class="importCaption">Tenant name</div>
+				<input type="text" ng-model="importVm.Tenant" placeholder="Tenant name">
+			</div>
+			<div>
+				<div class="importCaption">Application database connections string</div>
+				<div>
+					<!---->
+					<input class="importConnstring" type="text" ng-model="importVm.AppDatabase" ng-blur="importVm.CheckAppDb()" placeholder="Connection string">
+					<div ng-class="(importVm.AppDbOk==true) ? 'dbOk' : 'dbNotOk'">{{importVm.AppDbCheckMessage}}</div>
+				</div>
+
+				<div>
+					<div class="importCaption">Analytics database connection string</div>
+					<input class="importConnstring" type="text" ng-model="importVm.AnalyticsDatabase" ng-blur="importVm.CheckAnalDb()" placeholder="Connection string">
+					<div ng-class="(importVm.AnalDbOk==true) ? 'dbOk' : 'dbNotOk'">{{importVm.AnalDbCheckMessage}}</div>
+					</div>
+				<p></p>
+				<p><button class="btn btn-default" ng-click="importVm.startImport()">Start import</button></p>
+				{{importVm.Result}}
+			</div>
+
+		</div>
+		<div class="col-md-6">
+
+		</div>
+	</div>
 
 </div>
-	
-

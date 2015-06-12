@@ -34,3 +34,20 @@ td {
 .oddRow {
 	background-color:oldlace;
 }
+
+.importCaption {
+	margin-top: 20px;
+	font-weight: bold;
+}
+
+.importConnstring {
+	width:100%;
+	max-width: 100%;
+}
+
+.dbOk {
+	color: green;
+}
+.dbNotOk {
+	color: red;
+}

@@ -19,6 +19,7 @@ namespace Teleopti.Wfm.Administration.Core
 			builder.RegisterApiControllers(typeof(HomeController).Assembly).ApplyAspects();
 			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new AppConfigReader()), new FalseToggleManager())));
 			builder.RegisterType<AdminTenantAuthentication>().As<ITenantAuthentication>().SingleInstance();
+			builder.RegisterType<DatabaseHelperWrapper>().SingleInstance();
 
 			// OPTIONAL: Enable property injection into action filters.
 			builder.RegisterFilterProvider();

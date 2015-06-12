@@ -18,6 +18,7 @@ namespace Teleopti.Wfm.Administration
 
 			var builder = new ContainerBuilder();
 			builder.RegisterModule<WfmAdminModule>();
+			
 
 			// Set the dependency resolver to be Autofac.
 			var container = builder.Build();
