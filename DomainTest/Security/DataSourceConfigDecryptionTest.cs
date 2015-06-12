@@ -9,12 +9,12 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.DomainTest.Security
 {
 	[TestFixture]
-	public class NhibConfigEncryptionTest
+	public class DataSourceConfigDecryptionTest
 	{
 		[Test]
 		public void ShouldEncryptAndDecryptValues()
 		{
-			var target = new NhibConfigDecryption();
+			var target = new DataSourceConfigDecryption();
 
 			var dic = new Dictionary<string, string>
 			{

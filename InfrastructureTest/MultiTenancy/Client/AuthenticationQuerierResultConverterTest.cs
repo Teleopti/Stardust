@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 		public void ShouldDecryptNhibConfigIfSuccessful()
 		{
 			var applicationData = MockRepository.GenerateMock<IApplicationData>();
-			var nhibDecryption = new NhibConfigDecryption();
+			var nhibDecryption = new DataSourceConfigDecryption();
 			var loadUnauthorizedUserDoesntMatter = MockRepository.GenerateStub<ILoadUserUnauthorized>();
 			loadUnauthorizedUserDoesntMatter.Expect(x => x.LoadFullPersonInSeperateTransaction(null, Guid.Empty)).IgnoreArguments().Return(new Person());
 			var target = new AuthenticationQuerierResultConverter(nhibDecryption, () => applicationData, loadUnauthorizedUserDoesntMatter);
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			var person = new Person();
 			loadUser.Expect(x => x.LoadFullPersonInSeperateTransaction(uowFactory, personId)).Return(person);
 				
-			var target = new AuthenticationQuerierResultConverter(new NhibConfigDecryption(), () => applicationData, loadUser);
+			var target = new AuthenticationQuerierResultConverter(new DataSourceConfigDecryption(), () => applicationData, loadUser);
 			var result = target.Convert(new AuthenticationInternalQuerierResult
 			{
 				Success = true, 
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			var applicationData = new ApplicationDataFake();
 			applicationData.SetDataSource(dataSource);
 
-			var target = new AuthenticationQuerierResultConverter(new NhibConfigDecryption(), () => applicationData, loadUnauthorizedUserDoesntMatter);
+			var target = new AuthenticationQuerierResultConverter(new DataSourceConfigDecryption(), () => applicationData, loadUnauthorizedUserDoesntMatter);
 			var result = target.Convert(new AuthenticationInternalQuerierResult
 			{
 				Success = true,
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			applicationData.SetDataSource(dataSource);
 			var tenantPassword = RandomName.Make();
 
-			var target = new AuthenticationQuerierResultConverter(new NhibConfigDecryption(), () => applicationData, loadUnauthorizedUserDoesntMatter);
+			var target = new AuthenticationQuerierResultConverter(new DataSourceConfigDecryption(), () => applicationData, loadUnauthorizedUserDoesntMatter);
 			var result = target.Convert(new AuthenticationInternalQuerierResult
 			{
 				Success = true,
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			person.TerminatePerson(DateOnly.Today.AddDays(-1), new PersonAccountUpdaterDummy());
 			loadUser.Expect(x => x.LoadFullPersonInSeperateTransaction(uowFactory, personId)).Return(person);
 
-			var target = new AuthenticationQuerierResultConverter(new NhibConfigDecryption(), () => applicationData, loadUser);
+			var target = new AuthenticationQuerierResultConverter(new DataSourceConfigDecryption(), () => applicationData, loadUser);
 			var result = target.Convert(new AuthenticationInternalQuerierResult
 			{
 				Success = true,
@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			person.TerminatePerson(DateOnly.Today, new PersonAccountUpdaterDummy());
 			loadUser.Expect(x => x.LoadFullPersonInSeperateTransaction(uowFactory, personId)).Return(person);
 
-			var target = new AuthenticationQuerierResultConverter(new NhibConfigDecryption(), () => applicationData, loadUser);
+			var target = new AuthenticationQuerierResultConverter(new DataSourceConfigDecryption(), () => applicationData, loadUser);
 			var result = target.Convert(new AuthenticationInternalQuerierResult
 			{
 				Success = true,
@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 
 		private static DataSourceConfig createFakeConfig()
 		{
-			return new NhibConfigDecryption().EncryptConfigJustForTest(new DataSourceConfig
+			return new DataSourceConfigDecryption().EncryptConfigJustForTest(new DataSourceConfig
 			{
 				AnalyticsConnectionString = RandomName.Make(),
 				ApplicationNHibernateConfig = new Dictionary<string, string>()

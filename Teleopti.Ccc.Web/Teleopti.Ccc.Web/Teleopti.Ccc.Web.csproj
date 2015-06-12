@@ -568,7 +568,7 @@
     <Compile Include="Areas\MultiTenancy\Core\IDataSourceConfigurationProvider.cs" />
     <Compile Include="Areas\MultiTenancy\Core\IDataSourceConfigurationEncryption.cs" />
     <Compile Include="Areas\MultiTenancy\Core\IPersonInfoMapper.cs" />
-    <Compile Include="Areas\MultiTenancy\Core\NhibConfigEncryption.cs" />
+    <Compile Include="Areas\MultiTenancy\Core\DataSourceConfigurationEncryption.cs" />
     <Compile Include="Areas\MultiTenancy\Core\PersonInfoMapper.cs" />
     <Compile Include="Areas\SeatPlanner\Controllers\TeamHierarchyController.cs" />
     <Compile Include="Areas\SeatPlanner\Core\IOC\SeatPlannerAreaModule.cs" />

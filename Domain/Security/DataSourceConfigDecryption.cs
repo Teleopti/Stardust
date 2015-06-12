@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Security
 {
-	public class NhibConfigDecryption : INhibConfigDecryption
+	public class DataSourceConfigDecryption : IDataSourceConfigDecryption
 	{
 		public DataSourceConfig EncryptConfigJustForTest(DataSourceConfig dataSourceConfig)
 		{

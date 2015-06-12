@@ -2,7 +2,7 @@
 
 namespace Teleopti.Ccc.Domain.Security
 {
-	public interface INhibConfigDecryption
+	public interface IDataSourceConfigDecryption
 	{
 		DataSourceConfig DecryptConfig(DataSourceConfig dataSourceConfig);
 	}

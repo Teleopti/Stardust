@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
             //Genomför inloggning. Kasta exception vid fel.
 	        var authQuerier = new AuthenticationQuerier(new TenantServerConfiguration(ConfigurationManager.AppSettings["TenantServer"]),
 			        new PostHttpRequest(), new NewtonsoftJsonSerializer(),
-			        new AuthenticationQuerierResultConverter(new NhibConfigDecryption(),
+			        new AuthenticationQuerierResultConverter(new DataSourceConfigDecryption(),
 				        () => StateHolder.Instance.StateReader.ApplicationScopeData, new LoadUserUnauthorized()));
 
 					var result = authQuerier.TryLogon(new IdentityLogonClientModel { Identity = new WebWindowsUserProvider().Identity()}, string.Empty);

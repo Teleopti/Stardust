@@ -1330,7 +1330,7 @@
     <Compile Include="Security\Matrix\MatrixPermissionHolderTest.cs" />
     <Compile Include="Security\Matrix\PersonRoleResolverTest.cs" />
     <Compile Include="Security\Matrix\TeamResolverTest.cs" />
-    <Compile Include="Security\NhibConfigEncryptionTest.cs" />
+    <Compile Include="Security\DataSourceConfigDecryptionTest.cs" />
     <Compile Include="Security\PasswordPolicyTest.cs" />
     <Compile Include="Security\PasswordStrengthRuleTest.cs" />
     <Compile Include="Security\Principal\AllowedToSeeUsersNotInOrganizationSpecificationTest.cs" />

@@ -9,13 +9,13 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 {
 	public class AuthenticationQuerierResultConverter : IAuthenticationQuerierResultConverter
 	{
-		private readonly INhibConfigDecryption _nhibDecryption;
+		private readonly IDataSourceConfigDecryption _dataSourceDecryption;
 		private readonly Func<IApplicationData> _applicationData;
 		private readonly ILoadUserUnauthorized _loadUser;
 
-		public AuthenticationQuerierResultConverter(INhibConfigDecryption nhibDecryption, Func<IApplicationData> applicationData, ILoadUserUnauthorized loadUser)
+		public AuthenticationQuerierResultConverter(IDataSourceConfigDecryption dataSourceDecryption, Func<IApplicationData> applicationData, ILoadUserUnauthorized loadUser)
 		{
-			_nhibDecryption = nhibDecryption;
+			_dataSourceDecryption = dataSourceDecryption;
 			_applicationData = applicationData;
 			_loadUser = loadUser;
 		}
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 				};
 
 			var applicationData = _applicationData();
-			var decryptedConfig = _nhibDecryption.DecryptConfig(tenantServerResult.DataSourceConfiguration);
+			var decryptedConfig = _dataSourceDecryption.DecryptConfig(tenantServerResult.DataSourceConfiguration);
 			applicationData.MakeSureDataSourceExists(tenantServerResult.Tenant, decryptedConfig.ApplicationNHibernateConfig, decryptedConfig.AnalyticsConnectionString);
 			var dataSource = applicationData.Tenant(tenantServerResult.Tenant);
 			var person = _loadUser.LoadFullPersonInSeperateTransaction(dataSource.Application, tenantServerResult.PersonId);
