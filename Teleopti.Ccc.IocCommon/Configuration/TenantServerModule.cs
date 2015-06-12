@@ -3,10 +3,9 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
+namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	public class TenantServerModule : Module
 	{
@@ -14,8 +13,6 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<ApplicationAuthentication>().As<IApplicationAuthentication>().SingleInstance();
-			builder.RegisterType<IdentityAuthentication>().As<IIdentityAuthentication>().SingleInstance();
 			builder.RegisterType<IdentityUserQuery>().As<IIdentityUserQuery>().SingleInstance();
 			builder.RegisterType<ApplicationUserQuery>().As<IApplicationUserQuery>().SingleInstance();
 			builder.RegisterType<FindPersonInfo>().As<IFindPersonInfo>().SingleInstance();
@@ -34,20 +31,13 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 				.SingleInstance();
 			builder.RegisterType<TenantUnitOfWorkAspect>().As<ITenantUnitOfWorkAspect>().SingleInstance();
 			builder.RegisterType<PersistLogonAttempt>().As<IPersistLogonAttempt>().SingleInstance();
-			builder.RegisterType<DataSourceConfigurationProvider>().As<IDataSourceConfigurationProvider>().SingleInstance();
 			builder.RegisterType<ReadDataSourceConfigurationFromNhibFiles>().As<IReadDataSourceConfiguration>().SingleInstance();
-			builder.RegisterType<DataSourceConfigurationEncryption>().As<IDataSourceConfigurationEncryption>().SingleInstance();
 			builder.RegisterType<PersistPersonInfo>().As<IPersistPersonInfo>().SingleInstance();
-			builder.RegisterType<PersonInfoMapper>().As<IPersonInfoMapper>().SingleInstance();
 			builder.RegisterType<DeletePersonInfo>().As<IDeletePersonInfo>().SingleInstance();
 			builder.RegisterType<VerifyPasswordPolicy>().As<IVerifyPasswordPolicy>().SingleInstance();
 			builder.RegisterType<CheckPasswordStrength>().As<ICheckPasswordStrength>().SingleInstance();
-			builder.RegisterType<ChangePersonPassword>().As<IChangePersonPassword>().SingleInstance();
-			builder.RegisterType<FindLogonInfo>().As<IFindLogonInfo>().SingleInstance();
-			builder.RegisterType<TenantAuthentication>().As<ITenantAuthentication>().SingleInstance();
-			builder.RegisterType<CurrentTenantUser>().As<ICurrentTenantUser>().SingleInstance();
 			builder.RegisterType<CurrentTenant>().As<ICurrentTenant>().SingleInstance();
-			builder.RegisterType<NHibFilePathInWeb>().As<INhibFilePath>().SingleInstance();
+			builder.RegisterType<FindLogonInfo>().As<IFindLogonInfo>().SingleInstance();
 		}
 	}
 }

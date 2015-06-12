@@ -583,7 +583,6 @@
     <Compile Include="Areas\MultiTenancy\Core\ILoginAttemptModelFactory.cs" />
     <Compile Include="Areas\MultiTenancy\Core\LoginAttemptModelFactoryForWeb.cs" />
     <Compile Include="Areas\MultiTenancy\Core\LogLogonAttempt.cs" />
-    <Compile Include="Areas\MultiTenancy\Core\TenantServerModule.cs" />
     <Compile Include="Areas\MultiTenancy\Core\IIdentityAuthentication.cs" />
     <Compile Include="Areas\MultiTenancy\AuthenticateController.cs" />
     <Compile Include="Areas\MultiTenancy\Core\ApplicationAuthentication.cs" />

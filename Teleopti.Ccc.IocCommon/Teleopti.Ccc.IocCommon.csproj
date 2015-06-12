@@ -161,6 +161,7 @@
     <Compile Include="Configuration\SchedulingCommonModule.cs" />
     <Compile Include="Configuration\TenantClientModule.cs" />
     <Compile Include="Configuration\DistributedLockModule.cs" />
+    <Compile Include="Configuration\TenantServerModule.cs" />
     <Compile Include="Configuration\WeeklyRestSolverModule.cs" />
     <Compile Include="IIocConfiguration.cs" />
     <Compile Include="IocConfiguration.cs" />
