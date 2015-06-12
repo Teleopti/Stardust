@@ -8,11 +8,19 @@ namespace Teleopti.Ccc.Domain.Security
 	{
 		public DataSourceConfig EncryptConfigJustForTest(DataSourceConfig dataSourceConfig)
 		{
-			var dic = dataSourceConfig.ApplicationNHibernateConfig.Keys.ToDictionary(key => key, key => Encryption.EncryptStringToBase64(dataSourceConfig.ApplicationNHibernateConfig[key], EncryptionConstants.Image1, EncryptionConstants.Image2));
-			dataSourceConfig.ApplicationNHibernateConfig = dic;
-			dataSourceConfig.AnalyticsConnectionString = Encryption.EncryptStringToBase64(dataSourceConfig.AnalyticsConnectionString, EncryptionConstants.Image1, EncryptionConstants.Image2);
-			dataSourceConfig.ApplicationConnectionString = Encryption.EncryptStringToBase64(dataSourceConfig.ApplicationConnectionString, EncryptionConstants.Image1, EncryptionConstants.Image2);
-			return dataSourceConfig;
+			return new DataSourceConfig
+			{
+				ApplicationConnectionString =
+					Encryption.EncryptStringToBase64(dataSourceConfig.ApplicationConnectionString, EncryptionConstants.Image1,
+						EncryptionConstants.Image2),
+				AnalyticsConnectionString =
+					Encryption.EncryptStringToBase64(dataSourceConfig.AnalyticsConnectionString, EncryptionConstants.Image1,
+						EncryptionConstants.Image2),
+				ApplicationNHibernateConfig =
+					dataSourceConfig.ApplicationNHibernateConfig.Keys.ToDictionary(key => key,
+						key =>Encryption.EncryptStringToBase64(dataSourceConfig.ApplicationNHibernateConfig[key], EncryptionConstants.Image1,
+								EncryptionConstants.Image2))
+			};
 		}
 
 		public DataSourceConfig DecryptConfig(DataSourceConfig dataSourceConfig)
