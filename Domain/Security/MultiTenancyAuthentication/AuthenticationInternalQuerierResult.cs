@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication
 	public class DataSourceConfig
 	{
 		public string AnalyticsConnectionString { get; set; }
+		public string ApplicationConnectionString { get; set; }
 		public IDictionary<string, string> ApplicationNHibernateConfig { get; set; }
 	}
 }
