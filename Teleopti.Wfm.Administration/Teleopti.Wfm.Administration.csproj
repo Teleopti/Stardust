@@ -136,6 +136,7 @@
     </Compile>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Core\AdminTenantAuthentication.cs" />
     <Compile Include="Core\TenantList.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

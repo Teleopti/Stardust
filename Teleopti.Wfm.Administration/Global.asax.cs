@@ -5,13 +5,11 @@ using Autofac;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.WebApi;
 using Teleopti.Ccc.Infrastructure.Aop;
-using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.IocCommon.MultipleConfig;
 using Teleopti.Ccc.IocCommon.Toggle;
-using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Wfm.Administration.Core;
 
 namespace Teleopti.Wfm.Administration
@@ -30,34 +28,7 @@ namespace Teleopti.Wfm.Administration
 			builder.RegisterApiControllers(typeof(TenantList).Assembly).ApplyAspects();
 			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new AppConfigReader()), new FalseToggleManager())));
 			builder.RegisterType<TenantList>().As<ITenantList>().SingleInstance();
-
-			// Register your API controllers.
-			//builder.RegisterApiControllers(typeof(TenantList).Assembly).ApplyAspects();
-
-			//builder.RegisterType<TenantList>().As<ITenantList>();
-
-			//builder.RegisterType<ConfigReader>().As<IConfigReader>().SingleInstance();
-			//builder.Register(c =>
-			//{
-			//	var configReader = c.Resolve<IConfigReader>();
-			//	var connStringToTenant = configReader.ConnectionStrings[tenancyConnectionStringKey];
-			//	var connstringAsString = connStringToTenant == null ? null : connStringToTenant.ConnectionString;
-			//	return TenantUnitOfWorkManager.CreateInstanceForWeb(connstringAsString);
-			//})
-			//	.As<ITenantUnitOfWork>()
-			//	.As<ICurrentTenantSession>()
-			//	.SingleInstance();
-			//builder.RegisterType<TenantUnitOfWorkAspect>().As<ITenantUnitOfWorkAspect>().SingleInstance();
-
-			//// OPTIONAL: Register model binders that require DI.
-			//builder.RegisterModelBinders(Assembly.GetExecutingAssembly());
-			//builder.RegisterModelBinderProvider();
-
-			//// OPTIONAL: Register web abstractions like HttpContextBase.
-			//builder.RegisterModule<AutofacWebTypesModule>();
-
-			//// OPTIONAL: Enable property injection in view pages.
-			//builder.RegisterSource(new ViewRegistrationSource());
+			builder.RegisterType<AdminTenantAuthentication>().As<ITenantAuthentication>().SingleInstance();
 
 			// OPTIONAL: Enable property injection into action filters.
 			builder.RegisterFilterProvider();
