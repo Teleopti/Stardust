@@ -8,11 +8,11 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 {
-	public class TenantModule : Module
+	public class TenantServerModule : Module
 	{
 		private readonly IIocConfiguration _configuration;
 
-		public TenantModule(IIocConfiguration configuration)
+		public TenantServerModule(IIocConfiguration configuration)
 		{
 			_configuration = configuration;
 		}

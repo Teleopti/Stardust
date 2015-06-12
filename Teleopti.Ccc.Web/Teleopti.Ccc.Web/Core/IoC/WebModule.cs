@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<TeamAdherenceAggregator>().As<ITeamAdherenceAggregator>().SingleInstance();
 
 			builder.RegisterModule(new ConfigurationSettingsReader());
-			builder.RegisterModule(new TenantModule(_configuration));
+			builder.RegisterModule(new TenantServerModule(_configuration));
 			builder.RegisterModule<SeatPlannerAreaModule>();
 			builder.RegisterModule<OutboundAreaModule>();
 			builder.RegisterModule<PeopleAreaModule>();
