@@ -58,16 +58,14 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 		public void EvaluationPartShouldBeOneYearIfAvailablePeriodIsMoreThan2Years()
 		{
 			var result = HistoricalPeriodProvider.DivideIntoTwoPeriods(new DateOnlyPeriod(2013, 3, 16, 2015, 3, 15));
-			result.Item1.Should().Be.EqualTo(new DateOnlyPeriod(2013, 3, 16, 2014, 3, 15));
-			result.Item2.Should().Be.EqualTo(new DateOnlyPeriod(2014, 3, 16, 2015, 3, 15));
+			result.Should().Be.EqualTo(new DateOnly(2014, 3, 15));
 		}
 
 		[Test]
 		public void EvaluationPartShouldBeOneThirdIfAvailablePeriodIsLessThan2Years()
 		{
 			var result = HistoricalPeriodProvider.DivideIntoTwoPeriods(new DateOnlyPeriod(2013, 3, 17, 2015, 3, 15));
-			result.Item1.Should().Be.EqualTo(new DateOnlyPeriod(2013, 3, 17, 2014, 3, 16));
-			result.Item2.Should().Be.EqualTo(new DateOnlyPeriod(2014, 3, 17, 2015, 3, 15));
+			result.Should().Be.EqualTo(new DateOnly(2014, 3, 16));
 		}
 	}
 }

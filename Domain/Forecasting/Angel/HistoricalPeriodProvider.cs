@@ -27,27 +27,14 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			return threeYearsBack > availableHistoricalPeriod.Value.StartDate.Date ? new DateOnlyPeriod(new DateOnly(threeYearsBack), endDate) : availableHistoricalPeriod.Value;
 		}
 
-		public static Tuple<DateOnlyPeriod, DateOnlyPeriod> DivideIntoTwoPeriods(DateOnlyPeriod availablePeriod)
+		public static DateOnly DivideIntoTwoPeriods(DateOnlyPeriod availablePeriod)
 		{
 			var zeroTime = new DateTime(1, 1, 1);
 			var years = (zeroTime + (availablePeriod.EndDate.Date.AddDays(1) - availablePeriod.StartDate.Date)).Year - 1;
 			if (years >= 2)
-			{
-				var lastDayInFirstPart = new DateOnly(availablePeriod.EndDate.Date.AddYears(-1));
-				return
-					new Tuple<DateOnlyPeriod, DateOnlyPeriod>(
-						new DateOnlyPeriod(availablePeriod.StartDate, lastDayInFirstPart),
-						new DateOnlyPeriod(lastDayInFirstPart.AddDays(1), availablePeriod.EndDate));
-			}
-			else
-			{
-				var firstPart = new TimeSpan((availablePeriod.EndDate.Date.AddDays(1) - availablePeriod.StartDate.Date).Ticks/2).Days;
-				var lastDayInFirstPart = availablePeriod.StartDate.AddDays(firstPart);
-				return
-					new Tuple<DateOnlyPeriod, DateOnlyPeriod>(
-						new DateOnlyPeriod(availablePeriod.StartDate, lastDayInFirstPart),
-						new DateOnlyPeriod(lastDayInFirstPart.AddDays(1), availablePeriod.EndDate));
-			}
+				return new DateOnly(availablePeriod.EndDate.Date.AddYears(-1));
+			var firstPart = new TimeSpan((availablePeriod.EndDate.Date.AddDays(1) - availablePeriod.StartDate.Date).Ticks/2).Days;
+			return availablePeriod.StartDate.AddDays(firstPart);
 		}
 	}
 }

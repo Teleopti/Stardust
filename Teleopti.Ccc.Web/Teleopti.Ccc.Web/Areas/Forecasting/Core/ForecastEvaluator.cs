@@ -43,13 +43,12 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 			var appSetting = ConfigurationManager.AppSettings["ForecastingTest"];
 			var isForecastingTest = appSetting != null && bool.Parse(appSetting);
 			var availablePeriod = _historicalPeriodProvider.AvailablePeriod(workload);
-			var twoPeriods = HistoricalPeriodProvider.DivideIntoTwoPeriods(availablePeriod);
 			return new WorkloadForecastViewModel
 			{
 				Name = workload.Name,
 				WorkloadId = workload.Id.Value,
 				ForecastMethods = createMethodViewModels(evaluateResult),
-				Days = createDayViewModels(workload, bestAccuracy, twoPeriods.Item2, false),
+				Days = createDayViewModels(workload, bestAccuracy, new DateOnlyPeriod(HistoricalPeriodProvider.DivideIntoTwoPeriods(availablePeriod).AddDays(1), availablePeriod.EndDate), false),
 				TestDays = isForecastingTest ? createDayViewModels(workload, bestAccuracy, availablePeriod, true) : new dynamic[] {},
 				IsForecastingTest = isForecastingTest,
 				ForecastMethodRecommended = bestAccuracy == null
