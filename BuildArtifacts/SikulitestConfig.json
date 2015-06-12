@@ -4,7 +4,7 @@
 	"Tenant":"Teleopti WFM",
 	"DataSourceConfiguration":{
 		"AnalyticsConnectionString":"Data Source=.;Integrated Security=SSPI;Initial Catalog=Test_SGISikuli_TeleoptiAnalytics;Current Language=us_english",
-		"ApplicationConnectionString":"Data Source=.;Integrated Security=SSPI;Initial Catalog=Test_SGISikuli_TeleoptiAnalytics;Current Language=us_english"
+		"ApplicationConnectionString":"Data Source=.;Integrated Security=SSPI;Initial Catalog=Test_SGISikuli_TeleoptiCCC7;Current Language=us_english"
 	},
 	"Queue":"Data Source=.;Integrated Security=SSPI;Initial Catalog=Test_SGISikuli_TeleoptiAnalytics;Current Language=us_english"
 }
