@@ -1,21 +1,18 @@
 ﻿using System;
 using System.Data.SqlClient;
-using Castle.Components.DictionaryAdapter.Xml;
-using NHibernate.Dialect.Function;
 using Teleopti.Ccc.DBManager.Library;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Wfm.Administration.Models;
 
 namespace Teleopti.Wfm.Administration.Core
 {
 	public class DatabaseHelperWrapper
 	{
-		private readonly ICurrentTenantSession _currentTenantSession;
+		//private readonly ICurrentTenantSession _currentTenantSession;
 
-		public DatabaseHelperWrapper(ICurrentTenantSession currentTenantSession)
-		{
-			_currentTenantSession = currentTenantSession;
-		}
+		//public DatabaseHelperWrapper(ICurrentTenantSession currentTenantSession)
+		//{
+		//	_currentTenantSession = currentTenantSession;
+		//}
 
 		public DbCheckResultModel Exists(string databaseConnectionString, DatabaseType databaseType)
 		{
@@ -26,7 +23,7 @@ namespace Teleopti.Wfm.Administration.Core
 			{
 				new SqlConnectionStringBuilder(databaseConnectionString);
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
 				return new DbCheckResultModel {Exists = false, Message = string.Format("The connection string for {0} is not in the correct format!",dbType)};
 
