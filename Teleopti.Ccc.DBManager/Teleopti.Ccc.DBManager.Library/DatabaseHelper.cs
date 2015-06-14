@@ -259,9 +259,11 @@ namespace Teleopti.Ccc.DBManager.Library
 			return conn;
 		}
 
-		public bool IsTenantDb()
+		public bool IsCorrectDb()
 		{
-			const string sql = "SELECT count(*) FROM sys.objects WHERE object_id = OBJECT_ID(N'[Tenant].[PersonInfo]') ";
+			string sql = "SELECT count(*) FROM sys.objects WHERE object_id = OBJECT_ID(N'[Tenant].[PersonInfo]') ";
+			if (DatabaseType.Equals(DatabaseType.TeleoptiAnalytics))
+				sql = "SELECT count(*) FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[dim_person]') ";
 			return executeScalar(sql, 0) > 0;
 		}
 

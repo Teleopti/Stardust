@@ -38,6 +38,11 @@ namespace Teleopti.Wfm.Administration.Core
 			{
 				return new DbCheckResultModel { Exists = false, Message = string.Format("Can not connect to the {0}. " + e.Message, dbType) };
 			}
+
+			var helper = new DatabaseHelper(databaseConnectionString, databaseType);
+			if(!helper.IsCorrectDb())
+				return new DbCheckResultModel { Exists = false, Message = string.Format("The database is not a {0}.", dbType) };
+
 			//later check so it is not used in other Tenants?
 			return new DbCheckResultModel {Exists = true, Message =  string.Format("{0} exists.",dbType)};
 			
