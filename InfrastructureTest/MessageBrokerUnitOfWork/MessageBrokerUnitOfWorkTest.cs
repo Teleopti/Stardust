@@ -25,17 +25,17 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBrokerUnitOfWork
 {
 	public class MessageBrokerUnitOfWorkTestAttribute : InfrastructureTestAttribute
 	{
-		protected override void RegisterInContainer(ISystem builder, IIocConfiguration configuration)
+		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			base.RegisterInContainer(builder, configuration);
+			base.Setup(system, configuration);
 
-			builder.AddService<TheService>();
-			builder.AddService<NestedService1>();
-			builder.AddService<NestedService2>();
+			system.AddService<TheService>();
+			system.AddService<NestedService1>();
+			system.AddService<NestedService2>();
 
-			builder.UseTestDouble(new MutableFakeCurrentHttpContext()).For<ICurrentHttpContext>();
+			system.UseTestDouble(new MutableFakeCurrentHttpContext()).For<ICurrentHttpContext>();
 
-			builder.UseTestDouble(new FakeConfigReader
+			system.UseTestDouble(new FakeConfigReader
 			{
 				ConnectionStrings = new ConnectionStringSettingsCollection
 				{

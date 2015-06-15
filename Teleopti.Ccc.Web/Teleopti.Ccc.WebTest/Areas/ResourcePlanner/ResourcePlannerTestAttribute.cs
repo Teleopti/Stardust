@@ -19,41 +19,41 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 {
 	public class ResourcePlannerTestAttribute : IoCTestAttribute
 	{
-		protected override void RegisterInContainer(ISystem builder, IIocConfiguration configuration)
+		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			builder.RegisterModule(new WebModule(configuration, null));
-			builder.RegisterModule(new SchedulingCommonModule());
-			builder.RegisterModule(new ResourcePlannerModule());
+			system.AddModule(new WebModule(configuration, null));
+			system.AddModule(new SchedulingCommonModule());
+			system.AddModule(new ResourcePlannerModule());
 
-			builder.UseTestDouble<FakePeopleAndSkillLoaderDecider>().For<IPeopleAndSkillLoaderDecider>();
-			builder.UseTestDouble<FakeRequiredScheduleHelper>().For<IRequiredScheduleHelper>();
-			builder.UseTestDouble<FakeScheduleCommand>().For<IScheduleCommand>();
-			builder.UseTestDouble<FakeDayOffTemplateRepository>().For<IDayOffTemplateRepository>();
-			builder.UseTestDouble<FakeScheduleDataReadScheduleRepository>().For<IScheduleRepository>();
-			builder.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
-			builder.UseTestDouble<FakeDayOffsInPeriodCalculator>().For<IDayOffsInPeriodCalculator>();
-			builder.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
-			builder.UseTestDouble<FakeCommonStateHolder>().For<ICommonStateHolder>();
-			builder.UseTestDouble<FakeSchedulingResultStateHolder>().For<ISchedulingResultStateHolder>();
-			builder.UseTestDouble<FakeScheduleRangePersister>().For<IScheduleRangePersister>();
-			builder.UseTestDouble<FakeActivityRepository>().For<IActivityRepository>();
-			builder.UseTestDouble<FakePersonAbsenceAccountRepository>().For<IPersonAbsenceAccountRepository>();
-			builder.UseTestDouble<FakeFixedStaffSchedulingService>().For<IFixedStaffSchedulingService>();
-			builder.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
-			builder.UseTestDouble<FakeUnitOfWorkFactory>().For<IUnitOfWorkFactory>();
-			builder.UseTestDouble(new FakeScenarioRepository(ScenarioFactory.CreateScenario("Default", true, true))).For<IScenarioRepository>();
-			builder.UseTestDouble(new FakeCurrentTeleoptiPrincipal(new TeleoptiPrincipal(new TeleoptiIdentity("", null, null, null), PersonFactory.CreatePerson(new Name("Anna", "Andersson"), TimeZoneInfo.Utc)))).For<ICurrentTeleoptiPrincipal>();
-			builder.UseTestDouble<FakeScheduleTagSetter>().For<IScheduleTagSetter>();
-			builder.UseTestDouble<FakeGroupPageCreator>().For<IGroupPageCreator>();
-			builder.UseTestDouble<FakeGroupScheduleGroupPageDataProvider>().For<IGroupScheduleGroupPageDataProvider>();
-			builder.UseTestDouble<FakeTeamBlockScheduleCommand>().For<ITeamBlockScheduleCommand>();
-			builder.UseTestDouble<FakeClassicScheduleCommand>().For<IClassicScheduleCommand>();
-			builder.UseTestDouble<FakeResourceOptimizationHelper>().For<IResourceOptimizationHelper>();
-			builder.UseTestDouble<FakeScheduleRange>().For<IScheduleRange>();
-			builder.UseTestDouble<FakeScheduleDictionary>().For<IScheduleDictionary>();
-			builder.UseTestDouble<FakeScheduleParameters>().For<IScheduleParameters>();
-			builder.UseTestDouble<FakePlanningPeriodRepository>().For<IPlanningPeriodRepository>();
-			builder.UseTestDouble<FakeMissingForecastProvider>().For<IMissingForecastProvider>();
+			system.UseTestDouble<FakePeopleAndSkillLoaderDecider>().For<IPeopleAndSkillLoaderDecider>();
+			system.UseTestDouble<FakeRequiredScheduleHelper>().For<IRequiredScheduleHelper>();
+			system.UseTestDouble<FakeScheduleCommand>().For<IScheduleCommand>();
+			system.UseTestDouble<FakeDayOffTemplateRepository>().For<IDayOffTemplateRepository>();
+			system.UseTestDouble<FakeScheduleDataReadScheduleRepository>().For<IScheduleRepository>();
+			system.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
+			system.UseTestDouble<FakeDayOffsInPeriodCalculator>().For<IDayOffsInPeriodCalculator>();
+			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
+			system.UseTestDouble<FakeCommonStateHolder>().For<ICommonStateHolder>();
+			system.UseTestDouble<FakeSchedulingResultStateHolder>().For<ISchedulingResultStateHolder>();
+			system.UseTestDouble<FakeScheduleRangePersister>().For<IScheduleRangePersister>();
+			system.UseTestDouble<FakeActivityRepository>().For<IActivityRepository>();
+			system.UseTestDouble<FakePersonAbsenceAccountRepository>().For<IPersonAbsenceAccountRepository>();
+			system.UseTestDouble<FakeFixedStaffSchedulingService>().For<IFixedStaffSchedulingService>();
+			system.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
+			system.UseTestDouble<FakeUnitOfWorkFactory>().For<IUnitOfWorkFactory>();
+			system.UseTestDouble(new FakeScenarioRepository(ScenarioFactory.CreateScenario("Default", true, true))).For<IScenarioRepository>();
+			system.UseTestDouble(new FakeCurrentTeleoptiPrincipal(new TeleoptiPrincipal(new TeleoptiIdentity("", null, null, null), PersonFactory.CreatePerson(new Name("Anna", "Andersson"), TimeZoneInfo.Utc)))).For<ICurrentTeleoptiPrincipal>();
+			system.UseTestDouble<FakeScheduleTagSetter>().For<IScheduleTagSetter>();
+			system.UseTestDouble<FakeGroupPageCreator>().For<IGroupPageCreator>();
+			system.UseTestDouble<FakeGroupScheduleGroupPageDataProvider>().For<IGroupScheduleGroupPageDataProvider>();
+			system.UseTestDouble<FakeTeamBlockScheduleCommand>().For<ITeamBlockScheduleCommand>();
+			system.UseTestDouble<FakeClassicScheduleCommand>().For<IClassicScheduleCommand>();
+			system.UseTestDouble<FakeResourceOptimizationHelper>().For<IResourceOptimizationHelper>();
+			system.UseTestDouble<FakeScheduleRange>().For<IScheduleRange>();
+			system.UseTestDouble<FakeScheduleDictionary>().For<IScheduleDictionary>();
+			system.UseTestDouble<FakeScheduleParameters>().For<IScheduleParameters>();
+			system.UseTestDouble<FakePlanningPeriodRepository>().For<IPlanningPeriodRepository>();
+			system.UseTestDouble<FakeMissingForecastProvider>().For<IMissingForecastProvider>();
 		}
 	}
 }

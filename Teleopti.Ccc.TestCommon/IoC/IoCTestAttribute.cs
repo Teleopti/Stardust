@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 	public interface IIoCTestContext
 	{
 		void Reset();
-		void Reset(Action<ISystem, IIocConfiguration> registerInContainer);
+		void Reset(Action<ISystem, IIocConfiguration> setup);
 	};
 
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface, AllowMultiple = false)]
@@ -51,11 +51,11 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			return toggles;
 		}
 
-		protected virtual void RegisterInContainer(ISystem builder, IIocConfiguration configuration)
+		protected virtual void Setup(ISystem system, IIocConfiguration configuration)
 		{
 		}
 
-		protected virtual void BeforeInject(IComponentContext container)
+		protected virtual void Startup(IComponentContext container)
 		{
 		}
 
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			fixture(testDetails);
 			method(testDetails);
 			buildContainer((b, c) => { });
-			BeforeInject(_container);
+			Startup(_container);
 			injectMembers();
 			BeforeTest();
 		}
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			_method = testDetails.Method;
 		}
 
-		private void buildContainer(Action<ISystem, IIocConfiguration> registerInContainer)
+		private void buildContainer(Action<ISystem, IIocConfiguration> setup)
 		{
 			var builder = new ContainerBuilder();
 			var configuration = new IocConfiguration(new IocArgs(new AppConfigReader()) {ClearCache = true}, Toggles());
@@ -104,10 +104,10 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			builder.RegisterInstance(new FakeUserCulture(CultureInfoFactory.CreateSwedishCulture())).As<IUserCulture>().AsSelf().SingleInstance();
 			builder.RegisterInstance(this).As<IIoCTestContext>();
 			var system = new ContainerBuilderWrapper(builder);
-			RegisterInContainer(system, configuration);
+			Setup(system, configuration);
 			if (_fixture is ISetup)
 				(_fixture as ISetup).Setup(system, configuration);
-			registerInContainer(system, configuration);
+			setup(system, configuration);
 			_container = builder.Build();
 		}
 
@@ -143,9 +143,9 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			injectMembers();
 		}
 
-		public void Reset(Action<ISystem, IIocConfiguration> registerInContainer)
+		public void Reset(Action<ISystem, IIocConfiguration> setup)
 		{
-			buildContainer(registerInContainer);
+			buildContainer(setup);
 			injectMembers();
 		}
 

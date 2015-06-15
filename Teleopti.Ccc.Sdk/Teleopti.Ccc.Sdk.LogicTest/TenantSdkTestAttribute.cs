@@ -7,12 +7,12 @@ namespace Teleopti.Ccc.Sdk.LogicTest
 {
 	public class TenantSdkTestAttribute : IoCTestAttribute
 	{
-		protected override void RegisterInContainer(ISystem builder, IIocConfiguration configuration)
+		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			builder.RegisterModule(new MultiTenancyModule(configuration));
+			system.AddModule(new MultiTenancyModule(configuration));
 
-			builder.UseTestDouble<PostHttpRequestFake>().For<IPostHttpRequest>();
-			builder.UseTestDouble<CurrentTenantCredentialsFake>().For<ICurrentTenantCredentials>();
+			system.UseTestDouble<PostHttpRequestFake>().For<IPostHttpRequest>();
+			system.UseTestDouble<CurrentTenantCredentialsFake>().For<ICurrentTenantCredentials>();
 		}
 	}
 }

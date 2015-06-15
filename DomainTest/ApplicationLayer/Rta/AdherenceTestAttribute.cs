@@ -22,20 +22,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			return toggles;
 		}
 
-		protected override void RegisterInContainer(ISystem builder, IIocConfiguration configuration)
+		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			builder.UseTestDouble<FakeAdherencePercentageReadModelPersister>().For<IAdherencePercentageReadModelPersister>();
-			builder.UseTestDouble<FakeAdherenceDetailsReadModelPersister>().For<IAdherenceDetailsReadModelPersister>();
-			builder.UseTestDouble<FakeTeamOutOfAdherenceReadModelPersister>().For<ITeamOutOfAdherenceReadModelPersister>();
-			builder.UseTestDouble<FakeSiteOutOfAdherenceReadModelPersister>().For<ISiteOutOfAdherenceReadModelPersister>();
+			system.UseTestDouble<FakeAdherencePercentageReadModelPersister>().For<IAdherencePercentageReadModelPersister>();
+			system.UseTestDouble<FakeAdherenceDetailsReadModelPersister>().For<IAdherenceDetailsReadModelPersister>();
+			system.UseTestDouble<FakeTeamOutOfAdherenceReadModelPersister>().For<ITeamOutOfAdherenceReadModelPersister>();
+			system.UseTestDouble<FakeSiteOutOfAdherenceReadModelPersister>().For<ISiteOutOfAdherenceReadModelPersister>();
 
-			builder.UseTestDouble<ControllableReadModelTransactionSyncronization>().For<IReadModelTransactionSyncronization>();
-			builder.UseTestDouble<FakeReadModelUnitOfWorkAspect>().For<IReadModelUnitOfWorkAspect>();
+			system.UseTestDouble<ControllableReadModelTransactionSyncronization>().For<IReadModelTransactionSyncronization>();
+			system.UseTestDouble<FakeReadModelUnitOfWorkAspect>().For<IReadModelUnitOfWorkAspect>();
 
-			builder.AddService<TeamOutOfAdherenceReadModelUpdater>();
-			builder.AddService<SiteOutOfAdherenceReadModelUpdater>();
-			builder.AddService<AdherencePercentageReadModelUpdater>();
-			builder.AddService<AdherenceDetailsReadModelUpdater>();
+			system.AddService<TeamOutOfAdherenceReadModelUpdater>();
+			system.AddService<SiteOutOfAdherenceReadModelUpdater>();
+			system.AddService<AdherencePercentageReadModelUpdater>();
+			system.AddService<AdherenceDetailsReadModelUpdater>();
 
 			//builder.Register(x => x.Resolve<IEnumerable<IHandleEvent<PersonInAdherenceEvent>>>()
 			//	.OfType<TeamOutOfAdherenceReadModelUpdater>()

@@ -17,23 +17,23 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 {
 	public class RtaTestAttribute : IoCTestAttribute
 	{
-		protected override void RegisterInContainer(ISystem builder, IIocConfiguration configuration)
+		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			builder.UseTestDouble(new FakeMessageSender()).For<IMessageSender>();
-			builder.UseTestDouble(new FakeCurrentDatasource()).For<ICurrentDataSource>();
-			registerFakePublisher(builder, configuration, new FakeEventPublisher());
-			registerFakeDatabase(builder, configuration, new FakeRtaDatabase());
+			system.UseTestDouble(new FakeMessageSender()).For<IMessageSender>();
+			system.UseTestDouble(new FakeCurrentDatasource()).For<ICurrentDataSource>();
+			registerFakePublisher(system, configuration, new FakeEventPublisher());
+			registerFakeDatabase(system, configuration, new FakeRtaDatabase());
 
-			builder.UseTestDouble(new FakeReadModelUnitOfWorkAspect()).For<IReadModelUnitOfWorkAspect>();
-			builder.UseTestDouble(new FakeAllBusinessUnitsUnitOfWorkAspect()).For<IAllBusinessUnitsUnitOfWorkAspect>();
-			builder.UseTestDouble(new FakeDistributedLockAcquirer()).For<IDistributedLockAcquirer>();
+			system.UseTestDouble(new FakeReadModelUnitOfWorkAspect()).For<IReadModelUnitOfWorkAspect>();
+			system.UseTestDouble(new FakeAllBusinessUnitsUnitOfWorkAspect()).For<IAllBusinessUnitsUnitOfWorkAspect>();
+			system.UseTestDouble(new FakeDistributedLockAcquirer()).For<IDistributedLockAcquirer>();
 
-			builder.UseTestDouble(new FakeTeamOutOfAdherenceReadModelPersister()).For<ITeamOutOfAdherenceReadModelPersister>();
-			builder.UseTestDouble(new FakeSiteOutOfAdherenceReadModelPersister()).For<ISiteOutOfAdherenceReadModelPersister>();
-			builder.UseTestDouble(new FakeAdherenceDetailsReadModelPersister()).For<IAdherenceDetailsReadModelPersister>();
-			builder.UseTestDouble(new FakeAdherencePercentageReadModelPersister()).For<IAdherencePercentageReadModelPersister>();
+			system.UseTestDouble(new FakeTeamOutOfAdherenceReadModelPersister()).For<ITeamOutOfAdherenceReadModelPersister>();
+			system.UseTestDouble(new FakeSiteOutOfAdherenceReadModelPersister()).For<ISiteOutOfAdherenceReadModelPersister>();
+			system.UseTestDouble(new FakeAdherenceDetailsReadModelPersister()).For<IAdherenceDetailsReadModelPersister>();
+			system.UseTestDouble(new FakeAdherencePercentageReadModelPersister()).For<IAdherencePercentageReadModelPersister>();
 
-			builder.AddService(this);
+			system.AddService(this);
 		}
 
 		public void SimulateRestartWith(MutableNow now, FakeRtaDatabase database, FakeEventPublisher publisher)

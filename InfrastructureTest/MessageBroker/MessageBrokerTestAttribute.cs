@@ -7,11 +7,11 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 {
 	public class MessageBrokerTestAttribute : InfrastructureTestAttribute
 	{
-		protected override void RegisterInContainer(ISystem builder, IIocConfiguration configuration)
+		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			base.RegisterInContainer(builder, configuration);
+			base.Setup(system, configuration);
 
-			builder.UseTestDouble(new FakeSignalR()).For<ISignalR>();
+			system.UseTestDouble(new FakeSignalR()).For<ISignalR>();
 		}
 
 		protected override void AfterTest()

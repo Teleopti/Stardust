@@ -25,16 +25,16 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 {
 	public class MyTimeWebPreferenceMappingTestAttribute : MyTimeWebTestAttribute
 	{
-		protected override void RegisterInContainer(ISystem builder, IIocConfiguration configuration)
+		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			base.RegisterInContainer(builder, configuration);
+			base.Setup(system, configuration);
 
-			builder.AddService<PreferenceDayFeedbackViewModelMappingProfile>();
-			builder.UseTestDouble<FakePreferenceProvider>().For<IPreferenceProvider>();
-			builder.UseTestDouble<FakeScheduleProvider>().For<IScheduleProvider>();
+			system.AddService<PreferenceDayFeedbackViewModelMappingProfile>();
+			system.UseTestDouble<FakePreferenceProvider>().For<IPreferenceProvider>();
+			system.UseTestDouble<FakeScheduleProvider>().For<IScheduleProvider>();
 
 			var person = PersonFactory.CreatePersonWithGuid("a", "a");
-			builder.AddService(person);
+			system.AddService(person);
 		}
 	}
 

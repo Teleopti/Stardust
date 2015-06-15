@@ -15,22 +15,22 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 {
 	public class TenantTestAttribute : IoCTestAttribute
 	{
-		protected override void RegisterInContainer(ISystem builder, IIocConfiguration configuration)
+		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			builder.RegisterModule(new WebModule(configuration, null));
-			builder.UseTestDouble<PersistPersonInfoFake>().For<IPersistPersonInfo>();
-			builder.UseTestDouble<CheckPasswordStrengthFake>().For<ICheckPasswordStrength>();
-			builder.UseTestDouble<DeletePersonInfoFake>().For<IDeletePersonInfo>();
-			builder.UseTestDouble<ApplicationUserQueryFake>().For<IApplicationUserQuery>();
-			builder.UseTestDouble<IdentityUserQueryFake>().For<IIdentityUserQuery>();
-			builder.UseTestDouble<TenantUnitOfWorkFake>().For<ITenantUnitOfWork>();
-			builder.UseTestDouble<PasswordPolicyFake>().For<IPasswordPolicy>();
-			builder.UseTestDouble<FindLogonInfoFake>().For<IFindLogonInfo>();
-			builder.UseTestDouble<FindPersonInfoFake>().For<IFindPersonInfo>();
-			builder.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
-			builder.UseTestDouble<LogLogonAttemptFake>().For<ILogLogonAttempt>();
-			builder.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
-			builder.UseTestDouble<DataSourceConfigurationProviderFake>().For<IDataSourceConfigurationProvider>();
+			system.AddModule(new WebModule(configuration, null));
+			system.UseTestDouble<PersistPersonInfoFake>().For<IPersistPersonInfo>();
+			system.UseTestDouble<CheckPasswordStrengthFake>().For<ICheckPasswordStrength>();
+			system.UseTestDouble<DeletePersonInfoFake>().For<IDeletePersonInfo>();
+			system.UseTestDouble<ApplicationUserQueryFake>().For<IApplicationUserQuery>();
+			system.UseTestDouble<IdentityUserQueryFake>().For<IIdentityUserQuery>();
+			system.UseTestDouble<TenantUnitOfWorkFake>().For<ITenantUnitOfWork>();
+			system.UseTestDouble<PasswordPolicyFake>().For<IPasswordPolicy>();
+			system.UseTestDouble<FindLogonInfoFake>().For<IFindLogonInfo>();
+			system.UseTestDouble<FindPersonInfoFake>().For<IFindPersonInfo>();
+			system.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
+			system.UseTestDouble<LogLogonAttemptFake>().For<ILogLogonAttempt>();
+			system.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
+			system.UseTestDouble<DataSourceConfigurationProviderFake>().For<IDataSourceConfigurationProvider>();
 		}
 	}
 }

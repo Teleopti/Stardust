@@ -24,40 +24,40 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 {
 	public class MyTimeWebTestAttribute : IoCTestAttribute
 	{
-		protected override void RegisterInContainer(ISystem builder, IIocConfiguration configuration)
+		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			var scenario = new FakeCurrentScenario();
 			var principalAuthorization = new PrincipalAuthorizationWithFullPermission();
 
 			PrincipalAuthorization.SetInstance(principalAuthorization);
 
-			builder.RegisterModule(new WebModule(configuration, null));
+			system.AddModule(new WebModule(configuration, null));
 
-			builder.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
-			builder.UseTestDouble<FakeNow>().For<INow>();
-			builder.UseTestDouble(new FakePermissionProvider(false)).For<IPermissionProvider>();
-			builder.UseTestDouble(new FakeScheduleDataReadScheduleRepository()).For<IScheduleRepository>();
-			builder.UseTestDouble(scenario).For<ICurrentScenario>();
-			builder.UseTestDouble(principalAuthorization).For<IPrincipalAuthorization>();
-			builder.UseTestDouble(new FakePersonRequestRepository()).For<IPersonRequestRepository>();
-			builder.UseTestDouble(new FakeScenarioRepository(scenario.Current())).For<IScenarioRepository>();
-			builder.UseTestDouble(new FakeBudgetDayRepository()).For<IBudgetDayRepository>();
-			builder.UseTestDouble(new FakeScheduleProjectionReadOnlyRepository()).For<IScheduleProjectionReadOnlyRepository>();
-			builder.UseTestDouble<FakePersonScheduleDayReadModelFinder>().For<IPersonScheduleDayReadModelFinder>();
-			builder.UseTestDouble<FakePersonForScheduleFinder>().For<IPersonForScheduleFinder>();
-			builder.UseTestDouble<FakeBusinessUnitRepository>().For<IBusinessUnitRepository>();
-			builder.UseTestDouble<FakeTeamRepository>().For<ITeamRepository>();
-			builder.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
-			builder.UseTestDouble<FakePersonNameProvider>().For<IPersonNameProvider>();
-			builder.UseTestDouble<FakePersonAssignmentRepository>().For<IPersonAssignmentRepository>();
-			builder.UseTestDouble<FakeShiftTradeLightValidator>().For<IShiftTradeLightValidator>();
-			builder.UseTestDouble<FakePersonContractProvider>().For<FakePersonContractProvider>();
+			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			system.UseTestDouble<FakeNow>().For<INow>();
+			system.UseTestDouble(new FakePermissionProvider(false)).For<IPermissionProvider>();
+			system.UseTestDouble(new FakeScheduleDataReadScheduleRepository()).For<IScheduleRepository>();
+			system.UseTestDouble(scenario).For<ICurrentScenario>();
+			system.UseTestDouble(principalAuthorization).For<IPrincipalAuthorization>();
+			system.UseTestDouble(new FakePersonRequestRepository()).For<IPersonRequestRepository>();
+			system.UseTestDouble(new FakeScenarioRepository(scenario.Current())).For<IScenarioRepository>();
+			system.UseTestDouble(new FakeBudgetDayRepository()).For<IBudgetDayRepository>();
+			system.UseTestDouble(new FakeScheduleProjectionReadOnlyRepository()).For<IScheduleProjectionReadOnlyRepository>();
+			system.UseTestDouble<FakePersonScheduleDayReadModelFinder>().For<IPersonScheduleDayReadModelFinder>();
+			system.UseTestDouble<FakePersonForScheduleFinder>().For<IPersonForScheduleFinder>();
+			system.UseTestDouble<FakeBusinessUnitRepository>().For<IBusinessUnitRepository>();
+			system.UseTestDouble<FakeTeamRepository>().For<ITeamRepository>();
+			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
+			system.UseTestDouble<FakePersonNameProvider>().For<IPersonNameProvider>();
+			system.UseTestDouble<FakePersonAssignmentRepository>().For<IPersonAssignmentRepository>();
+			system.UseTestDouble<FakeShiftTradeLightValidator>().For<IShiftTradeLightValidator>();
+			system.UseTestDouble<FakePersonContractProvider>().For<FakePersonContractProvider>();
 
-			builder.AddService<AutoMapperConfiguration>();
+			system.AddService<AutoMapperConfiguration>();
 
 		}
 
-		protected override void BeforeInject(IComponentContext container)
+		protected override void Startup(IComponentContext container)
 		{
 			container.Resolve<AutoMapperConfiguration>().Execute(null);
 		}

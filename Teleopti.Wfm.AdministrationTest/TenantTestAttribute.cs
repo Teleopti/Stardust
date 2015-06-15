@@ -10,20 +10,20 @@ namespace Teleopti.Wfm.AdministrationTest
 	{
 		private const string tenancyConnectionStringKey = "Tenancy";
 
-		protected override void RegisterInContainer(ISystem builder, IIocConfiguration configuration)
+		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			base.RegisterInContainer(builder, configuration);
+			base.Setup(system, configuration);
 
-			builder.RegisterModule(new WfmAdminModule());
+			system.AddModule(new WfmAdminModule());
 
 			var configReader = new ConfigReader();
 			var connStringToTenant = configReader.ConnectionStrings[tenancyConnectionStringKey];
 			var connstringAsString = connStringToTenant == null ? null : connStringToTenant.ConnectionString;
 			var service =  TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(connstringAsString);
-			builder.AddService(service);
+			system.AddService(service);
 
-			builder.AddService<DatabaseHelperWrapper>();
-			builder.AddService<AdminTenantAuthentication>();
+			system.AddService<DatabaseHelperWrapper>();
+			system.AddService<AdminTenantAuthentication>();
 		}
 	}
 }

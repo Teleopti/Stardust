@@ -10,11 +10,11 @@ namespace Teleopti.Ccc.InfrastructureTest
 		private IPerson person;
 		private IDisposable _login;
 
-		protected override void RegisterInContainer(ISystem builder, IIocConfiguration configuration)
+		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			base.RegisterInContainer(builder, configuration);
+			base.Setup(system, configuration);
 
-			builder.AddService(this);
+			system.AddService(this);
 		}
 
 		protected override void BeforeTest()

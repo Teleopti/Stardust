@@ -12,15 +12,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 {
 	public class GlobalSearchTestAttribute : IoCTestAttribute
 	{
-		protected override void RegisterInContainer(ISystem builder, IIocConfiguration configuration)
+		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			builder.RegisterModule(new WebModule(configuration, null));
+			system.AddModule(new WebModule(configuration, null));
 
-		    builder.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
-			builder.UseTestDouble<FakeUnitOfWorkFactory>().For<IUnitOfWorkFactory>();
-			builder.UseTestDouble(new FakeToggleManager(Domain.FeatureFlags.Toggles.Wfm_ResourcePlanner_32892)).For<IToggleManager>();
-			builder.UseTestDouble<FakeNextPlanningPeriodProvider>().For<INextPlanningPeriodProvider>();
-			builder.UseTestDouble<FakeApplicationRoleRepository>().For<IApplicationRoleRepository>();
+		    system.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
+			system.UseTestDouble<FakeUnitOfWorkFactory>().For<IUnitOfWorkFactory>();
+			system.UseTestDouble(new FakeToggleManager(Domain.FeatureFlags.Toggles.Wfm_ResourcePlanner_32892)).For<IToggleManager>();
+			system.UseTestDouble<FakeNextPlanningPeriodProvider>().For<INextPlanningPeriodProvider>();
+			system.UseTestDouble<FakeApplicationRoleRepository>().For<IApplicationRoleRepository>();
 		}
 	}
 }

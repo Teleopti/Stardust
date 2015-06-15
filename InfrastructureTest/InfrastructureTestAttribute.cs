@@ -16,13 +16,13 @@ namespace Teleopti.Ccc.InfrastructureTest
 {
 	public class InfrastructureTestAttribute : IoCTestAttribute
 	{
-		protected override void RegisterInContainer(ISystem builder, IIocConfiguration configuration)
+		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			base.RegisterInContainer(builder, configuration);
+			base.Setup(system, configuration);
 
-			builder.UseTestDouble(new FakeDatabaseConnectionStringHandler()).For<IDatabaseConnectionStringHandler>();
+			system.UseTestDouble(new FakeDatabaseConnectionStringHandler()).For<IDatabaseConnectionStringHandler>();
 
-			builder.UseTestDouble(new FakeConfigReader
+			system.UseTestDouble(new FakeConfigReader
 			{
 				ConnectionStrings = new ConnectionStringSettingsCollection
 				{
@@ -31,9 +31,9 @@ namespace Teleopti.Ccc.InfrastructureTest
 				}
 			}).For<IConfigReader>();
 
-			builder.UseTestDouble<NoMessageSender>().For<IMessageSender>();
+			system.UseTestDouble<NoMessageSender>().For<IMessageSender>();
 
-			builder.UseTestDouble<MutableFakeCurrentHttpContext>().For<ICurrentHttpContext>();
+			system.UseTestDouble<MutableFakeCurrentHttpContext>().For<ICurrentHttpContext>();
 		}
 	}
 
