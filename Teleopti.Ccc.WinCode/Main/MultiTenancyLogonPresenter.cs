@@ -125,8 +125,7 @@ namespace Teleopti.Ccc.WinCode.Main
 			if (!StateHolderReader.IsInitialized)
 			{
 				var settings = _sharedSettingsQuerier.GetSharedSettings();
-				if (!_view.InitStateHolderWithoutDataSource(_messageBroker, settings))
-					CurrentStep--; //?
+				_view.InitStateHolderWithoutDataSource(_messageBroker, settings);
 			}
 			if (!_authenticationQuerier.TryLogon(new IdentityLogonClientModel {Identity = _windowsUserProvider.Identity()}, string.Empty).Success)
 			{

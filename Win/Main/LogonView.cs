@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
-using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
-using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Main.LogonScreens;
@@ -58,19 +56,9 @@ namespace Teleopti.Ccc.Win.Main
 			Refresh();
 		}
 
-		public bool InitStateHolderWithoutDataSource(IMessageBrokerComposite messageBroker, SharedSettings settings)
+		public void InitStateHolderWithoutDataSource(IMessageBrokerComposite messageBroker, SharedSettings settings)
 		{
-			return LogonInitializeStateHolder.InitWithoutDataSource(messageBroker, settings) || showError();
-		}
-
-		private bool showError()
-		{
-			ShowInTaskbar = true;
-			MessageBox.Show(this,
-			                string.Format(CultureInfo.CurrentCulture,
-			                              "The system configuration could not be loaded from the server. Review error message and log files to troubleshoot this error."),
-			                "Configuration error", MessageBoxButtons.OK);
-			return false;
+			LogonInitializeStateHolder.InitWithoutDataSource(messageBroker, settings);
 		}
 
 		private void updatePanel(Control userControl)

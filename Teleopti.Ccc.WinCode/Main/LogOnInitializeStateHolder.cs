@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
 using System.Xml.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
@@ -20,7 +19,7 @@ namespace Teleopti.Ccc.WinCode.Main
 {
 	public static class LogonInitializeStateHolder
 	{
-		public static bool InitWithoutDataSource(IMessageBrokerComposite messageBroker, SharedSettings settings)
+		public static void InitWithoutDataSource(IMessageBrokerComposite messageBroker, SharedSettings settings)
 		{
 			LoadPasswordPolicyService passwordPolicyService;
 			if (settings.PasswordPolicy == null)
@@ -60,8 +59,6 @@ namespace Teleopti.Ccc.WinCode.Main
 					null);
 
 			initializer.Start(new StateManager(), appSettings, passwordPolicyService, true);
-
-			return true;
 		}
 	}
 }
