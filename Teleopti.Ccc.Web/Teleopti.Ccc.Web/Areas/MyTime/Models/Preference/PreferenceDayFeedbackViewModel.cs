@@ -21,6 +21,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 		public string NightRestViolationMessageNextDay { get; set; }
 		
 		public TimeSpan ExpectedNightRest { get; set; }
+		public TimeSpan RestTimeToNextDay { get; set; }
+		public TimeSpan RestTimeToPreviousDay { get; set; }
 	
 	}
 }

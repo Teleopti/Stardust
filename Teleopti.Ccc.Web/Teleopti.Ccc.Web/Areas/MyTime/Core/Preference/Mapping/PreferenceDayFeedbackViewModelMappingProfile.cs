@@ -29,6 +29,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 					{
 						Date = s.ToFixedClientDateOnlyFormat(),
 						DateInternal = s.Date,
+						RestTimeToNextDay = nightRestResult.RestTimeToNextDay,
+						RestTimeToPreviousDay = nightRestResult.RestTimeToPreviousDay,
 						NightRestViolationMessageNextDay = AssembleNightRestViolationMessage(s, s.AddDays(1), nightRestResult.ExpectedNightRest, nightRestResult.RestTimeToNextDay),
 						NightRestViolationMessagePreviousDay = AssembleNightRestViolationMessage(s.AddDays(-1), s, nightRestResult.ExpectedNightRest, nightRestResult.RestTimeToPreviousDay),
 						HasNightRestViolationToPreviousDay = nightRestResult.HasViolationToPreviousDay,
