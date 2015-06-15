@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.Web.Core.Hangfire
 		{
 			_storageConfiguration.ConfigureStorage();
 			GlobalConfiguration.Configuration.UseAutofacActivator(_lifetimeScope);
+			GlobalJobFilters.Filters.Add(new JobExpirationTimeAttribute());
 			app.UseHangfireServer(new BackgroundJobServerOptions
 			{
 				WorkerCount = setThisToOneAndErikWillHuntYouDownAndKillYouSlowlyAndPainfully
@@ -35,5 +36,4 @@ namespace Teleopti.Ccc.Web.Core.Hangfire
 			app.UseHangfireDashboard();
 		}
 	}
-
 }
