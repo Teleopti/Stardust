@@ -13,7 +13,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public ITenantUnitOfWork TenantUnitOfWork;
 		public ICurrentTenantSession CurrentTenantSession;
 
-		[Test]
+		[Test, Ignore]
 		public void ShouldReturnFalseIfNameAlreadyExists()
 		{
 			TenantUnitOfWork.Start();
@@ -23,7 +23,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			TenantUnitOfWork.CancelAndDisposeCurrent();
 		}
 
-		[Test]
+		[Test, Ignore]
 		public void ShouldReturnTrueIfNameNotExists()
 		{
 			TenantUnitOfWork.Start();

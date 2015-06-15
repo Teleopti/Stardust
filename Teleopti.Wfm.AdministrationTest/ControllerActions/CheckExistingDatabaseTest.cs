@@ -70,7 +70,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			TenantUnitOfWork.CommitAndDisposeCurrent();
 		}
 
-		[Test]
+		[Test, Ignore]
 		public void ShouldReturnSuccessTrueWhenDatabaseExists()
 		{
 			TenantUnitOfWork.Start();

@@ -60,7 +60,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			if (_loadAllTenants.TenantExists(tenant))
 				return Json(new ImportTenantResultModel { Message = "There is already a Tenant with this name!", Success = false});
 
-			return Json(new ImportTenantResultModel { Message = "There is no Tenant with this name!", Success = true });
+			return Json(new ImportTenantResultModel { Message = "There is no other Tenant with this name!", Success = true });
 		}
 	}
 }
