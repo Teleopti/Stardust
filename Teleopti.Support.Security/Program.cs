@@ -50,7 +50,7 @@ namespace Teleopti.Support.Security
 					LicenseStatusChecker.Execute(commandLineArgument);
 					convertDayOffToNewStructure(commandLineArgument);
 					initAuditData(commandLineArgument);
-					tenantUpgrades(commandLineArgument.DestinationConnectionString);
+					regenerateTenantPasswords(commandLineArgument.DestinationConnectionString);
 				}
 			}
 			catch (Exception e)
@@ -63,7 +63,7 @@ namespace Teleopti.Support.Security
 			Environment.ExitCode = 0;
 		}
 
-		private static void tenantUpgrades(string destinationConnectionString)
+		private static void regenerateTenantPasswords(string destinationConnectionString)
 		{
 			//todo: tenant what should we do when/if multiple tenants?
 			log.Debug("Updating tenant password...");
