@@ -20,12 +20,9 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 
 				$scope.dataX = { id: "date" };
 				$scope.isQueueStatisticsEnabled = false;
-
-
 				forecasting.isToggleEnabled.query({ toggle: 'WfmForecast_QueueStatistics_32572' }).$promise.then(function (result) {
 					$scope.isQueueStatisticsEnabled = result.IsEnabled;
 				});
-
 
 				var getQueueStatistics = function (workload, methodId) {
 					workload.queueStatisticsLoaded = false;
@@ -47,21 +44,15 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 					workload.modalLaunch = true;
 					workload.noHistoricalDataForEvaluation = false;
 					workload.noHistoricalDataForForecasting = false;
-					workload.loaded = false;
+					workload.evaluationLoaded = false;
 					
 					$http.post("../api/Forecasting/Evaluate", JSON.stringify({ WorkloadId: workload.Id })).
 						success(function (data, status, headers, config) {
-							workload.loaded = true;
+							workload.evaluationLoaded = true;
 							angular.forEach(data.Days, function(day) {
 								day.date = new Date(Date.parse(day.date));
 							});
 							workload.chartData = data.Days;
-							if ($scope.isQueueStatisticsEnabled) {
-								angular.forEach(data.TestDays, function (day) {
-									day.date = new Date(Date.parse(day.date));
-								});
-								workload.chartData2 = data.TestDays;
-							}
 							if (data.Days.length === 0) {
 								workload.noHistoricalDataForForecasting = true;
 								return;
@@ -85,7 +76,7 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 						}).
 						error(function(data, status, headers, config) {
 							$scope.error = { message: "Failed to do the evaluate." };
-							workload.loaded = true;
+							workload.evaluationLoaded = true;
 						});
 				};
 
