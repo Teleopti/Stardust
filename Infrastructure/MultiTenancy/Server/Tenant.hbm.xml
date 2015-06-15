@@ -10,6 +10,11 @@
 		<property name="Name" />
 		<property name="ApplicationConnectionString" />
 		<property name="AnalyticsConnectionString" />
+		<map name="ApplicationNHibernateConfig" table="TenantApplicationNhibernateConfig" schema="Tenant">
+			<key column="TenantId"/>
+			<index column="ConfigKey" type="string"/>
+			<element column="ConfigValue" />
+		</map>
 	</class>
 
 	<query name="loadAllTenants">

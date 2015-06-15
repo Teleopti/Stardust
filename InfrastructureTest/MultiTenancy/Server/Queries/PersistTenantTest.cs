@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NHibernate.Exceptions;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -57,6 +58,48 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 
 			result.ApplicationConnectionString.Should().Be.EqualTo(appConnString);
 			result.AnalyticsConnectionString.Should().Be.EqualTo(analConnString);
+		}
+
+		[Test]
+		public void ShouldPersistApplicationNhibernateConfig()
+		{
+			var tenant = new Tenant(RandomName.Make());
+			var key1 = RandomName.Make();
+			var value1 = RandomName.Make();
+			var key2 = RandomName.Make();
+			var value2 = RandomName.Make();
+			tenant.ApplicationNHibernateConfig = new Dictionary<string, string>
+			{
+				{key1, value1},
+				{key2, value2}
+			};
+
+			target.Persist(tenant);
+			tenantUnitOfWorkManager.CurrentSession().Flush();
+			var result = tenantUnitOfWorkManager.CurrentSession()
+				.CreateQuery("select t from Tenant t where t.Name=:name")
+				.SetString("name", tenant.Name)
+				.UniqueResult<Tenant>();
+
+			result.ApplicationNHibernateConfig
+				.Should()
+				.Have.SameValuesAs(new KeyValuePair<string, string>(key1, value1), new KeyValuePair<string, string>(key2, value2));
+		}
+
+		[Test]
+		public void NoConfigsShouldReturnEmptyInstance()
+		{
+			var tenant = new Tenant(RandomName.Make());
+			target.Persist(tenant);
+			tenantUnitOfWorkManager.CurrentSession().Flush();
+
+			var result = tenantUnitOfWorkManager.CurrentSession()
+				.CreateQuery("select t from Tenant t where t.Name=:name")
+				.SetString("name", tenant.Name)
+				.UniqueResult<Tenant>();
+
+			result.ApplicationNHibernateConfig
+				.Should().Be.Empty();
 		}
 
 		[Test]

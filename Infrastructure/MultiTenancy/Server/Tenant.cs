@@ -1,4 +1,5 @@
-﻿using System.Data.SqlClient;
+﻿using System.Collections.Generic;
+using System.Data.SqlClient;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 {
@@ -15,11 +16,13 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 			Name = tenantName;
 			ApplicationConnectionString = string.Empty;
 			AnalyticsConnectionString = string.Empty;
+			ApplicationNHibernateConfig = new Dictionary<string, string>();
 		}
 
 		public virtual string Name { get; protected set; }
 		public virtual string ApplicationConnectionString { get; protected set; }
 		public virtual string AnalyticsConnectionString { get; protected set; }
+		public virtual IDictionary<string, string> ApplicationNHibernateConfig { get; set; }
 
 		public virtual void SetApplicationConnectionString(string applicationConnectionString)
 		{
