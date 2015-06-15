@@ -127,6 +127,12 @@ namespace Teleopti.Ccc.Domain.Outbound
 			get { return new DateOnlyPeriod(_startDate.Value, _endDate.Value); }
 		}
 
+		public virtual void SetSpanningPeriod(DateOnlyPeriod period)
+		{
+			_startDate = period.StartDate;
+			_endDate = period.EndDate;
+		}
+
 		public virtual int CampaignTasks() //what should be returned, Niclas?
 		{
 			return CallListLen;

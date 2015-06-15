@@ -584,6 +584,8 @@
     <Compile Include="MessageBroker\IMailboxRepository.cs" />
     <Compile Include="Optimization\SchedulePeriodListShiftCategoryBackToLegalStateService.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDayOffsInPeriodValidator.cs" />
+    <Compile Include="Outbound\CreateOrUpdateSkillDays.cs" />
+    <Compile Include="Outbound\OutboundPeriodMover.cs" />
     <Compile Include="Scheduling\Legacy\Commands\CurrentScheduleSummaryCalculator.cs" />
     <Compile Include="Scheduling\Legacy\Commands\FlexibelDayOffOptimizationDecisionMakerFactory.cs" />
     <Compile Include="Scheduling\Legacy\Commands\TargetScheduleSummaryCalculator.cs" />

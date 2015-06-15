@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Outbound;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.Outbound.Models;
 using Teleopti.Interfaces.Domain;
 
@@ -12,12 +10,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping
 
 	public class OutboundCampaignViewModelMapper : IOutboundCampaignViewModelMapper
 	{
-		private readonly ISkillRepository _skillRepository;
-
-		public OutboundCampaignViewModelMapper(ISkillRepository skillRepository)
-		{
-			_skillRepository = skillRepository;
-		}
 
 		public CampaignWorkingPeriodAssignmentViewModel Map(CampaignWorkingPeriodAssignment assignment)
 		{
@@ -53,16 +45,10 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping
 		{
 			if (campaign == null) return null;
 
-			var skills = _skillRepository.LoadAll();
 			var skillVMs = new List<SkillViewModel>();
-			foreach (var skill in skills)
-			{
-				var vm = new SkillViewModel() {Id = skill.Id, IsSelected = false, SkillName = skill.Name};
-				skillVMs.Add(vm);
-			}
 
-			var selectedSkill = skillVMs.First(x => x.Id.Equals(campaign.Skill.Id));
-			selectedSkill.IsSelected = true;
+			var vm = new SkillViewModel() { Id = campaign.Skill.Id, IsSelected = false, SkillName = campaign.Skill.Name };
+				skillVMs.Add(vm);
 
 			var campaignVm = new CampaignViewModel
 			{

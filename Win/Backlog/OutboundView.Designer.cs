@@ -43,11 +43,12 @@
 			this.viewStatusToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.addActualBacklogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.addManualProductionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.replanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
 			this.toolStripButtonAddCampaign = new System.Windows.Forms.ToolStripButton();
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-			this.replanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.changePeriodToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripContainer1.ContentPanel.SuspendLayout();
 			this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
 			this.toolStripContainer1.SuspendLayout();
@@ -124,9 +125,10 @@
             this.viewStatusToolStripMenuItem,
             this.addActualBacklogToolStripMenuItem,
             this.addManualProductionToolStripMenuItem,
-            this.replanToolStripMenuItem});
+            this.replanToolStripMenuItem,
+            this.changePeriodToolStripMenuItem});
 			this.contextMenuStrip1.Name = "contextMenuStrip1";
-			this.contextMenuStrip1.Size = new System.Drawing.Size(211, 114);
+			this.contextMenuStrip1.Size = new System.Drawing.Size(211, 136);
 			// 
 			// viewStatusToolStripMenuItem
 			// 
@@ -148,6 +150,13 @@
 			this.addManualProductionToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
 			this.addManualProductionToolStripMenuItem.Text = "Add manual production...";
 			this.addManualProductionToolStripMenuItem.Click += new System.EventHandler(this.addManualProductionToolStripMenuItem_Click);
+			// 
+			// replanToolStripMenuItem
+			// 
+			this.replanToolStripMenuItem.Name = "replanToolStripMenuItem";
+			this.replanToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+			this.replanToolStripMenuItem.Text = "Replan";
+			this.replanToolStripMenuItem.Click += new System.EventHandler(this.replanToolStripMenuItem_Click);
 			// 
 			// toolStrip1
 			// 
@@ -184,12 +193,12 @@
 			this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
 			this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
 			// 
-			// replanToolStripMenuItem
+			// changePeriodToolStripMenuItem
 			// 
-			this.replanToolStripMenuItem.Name = "replanToolStripMenuItem";
-			this.replanToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
-			this.replanToolStripMenuItem.Text = "Replan";
-			this.replanToolStripMenuItem.Click += new System.EventHandler(this.replanToolStripMenuItem_Click);
+			this.changePeriodToolStripMenuItem.Name = "changePeriodToolStripMenuItem";
+			this.changePeriodToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+			this.changePeriodToolStripMenuItem.Text = "Change period...";
+			this.changePeriodToolStripMenuItem.Click += new System.EventHandler(this.changePeriodToolStripMenuItem_Click);
 			// 
 			// OutboundView
 			// 
@@ -231,6 +240,7 @@
 		private System.Windows.Forms.ToolStripMenuItem addActualBacklogToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem addManualProductionToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem replanToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem changePeriodToolStripMenuItem;
 
 	}
 }

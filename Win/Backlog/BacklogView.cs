@@ -245,7 +245,7 @@ namespace Teleopti.Ccc.Win.Backlog
 			campaignWorkingPeriod.AddAssignment(campaignWorkingPeriodAssignmentFriday);
 
 			campaign.AddWorkingPeriod(campaignWorkingPeriod);
-			var outboundSkillCreator = _container.Resolve<OutboundSkillCreator>();
+			var outboundSkillCreator = _container.Resolve<IOutboundSkillCreator>();
 
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{

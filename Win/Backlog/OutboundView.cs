@@ -71,6 +71,22 @@ namespace Teleopti.Ccc.Win.Backlog
 					LazyLoadingManager.Initialize(campaign.Skill);
 					LazyLoadingManager.Initialize(campaign.Skill.Activity);
 					LazyLoadingManager.Initialize(campaign.Skill.WorkloadCollection);
+					LazyLoadingManager.Initialize(campaign.Skill.WorkloadCollection.First().TemplateWeekCollection);
+					foreach (var workloadDayTemplate in campaign.Skill.WorkloadCollection.First().TemplateWeekCollection)
+					{
+						LazyLoadingManager.Initialize(workloadDayTemplate);
+						LazyLoadingManager.Initialize(workloadDayTemplate.Value.OpenHourList);
+					}
+					LazyLoadingManager.Initialize(campaign.Skill.TemplateWeekCollection);
+					foreach (var skillDayTemplate in campaign.Skill.TemplateWeekCollection)
+					{
+						LazyLoadingManager.Initialize(skillDayTemplate.Value.TemplateSkillDataPeriodCollection);
+						foreach (var templateSkillDataPeriod in skillDayTemplate.Value.TemplateSkillDataPeriodCollection)
+						{
+							LazyLoadingManager.Initialize(templateSkillDataPeriod);
+						}
+					}
+					LazyLoadingManager.Initialize(campaign.Skill.SkillType);
 					foreach (var campaignWorkingPeriod in campaign.CampaignWorkingPeriods)
 					{
 						LazyLoadingManager.Initialize(campaignWorkingPeriod);
@@ -102,8 +118,7 @@ namespace Teleopti.Ccc.Win.Backlog
 				
 				var listItem = listView1.Items.Add(campaign.Name);			
 				listItem.Tag = campaign;
-				listItem.SubItems.Add(new DateOnlyPeriod(campaign.StartDate.Value, campaign.EndDate.Value).ToShortDateString(
-					TeleoptiPrincipal.CurrentPrincipal.Regional.Culture));
+				listItem.SubItems.Add(campaign.SpanningPeriod.ToShortDateString(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture));
 				listItem.SubItems.Add("Unknown");
 
 				var skillActivityName = campaign.Skill.Activity.Name;
@@ -175,7 +190,7 @@ namespace Teleopti.Ccc.Win.Backlog
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var outboundSkillCreator = _container.Resolve<OutboundSkillCreator>();
+				var outboundSkillCreator = _container.Resolve<IOutboundSkillCreator>();
 				var skill = outboundSkillCreator.CreateSkill(activity, campaign);
 				var outboundSkillPersister = _container.Resolve<OutboundSkillPersister>();
 				outboundSkillPersister.PersistAll(skill);
@@ -183,12 +198,11 @@ namespace Teleopti.Ccc.Win.Backlog
 
 				var campaignRepository = new OutboundCampaignRepository(uow);
 				campaignRepository.Add(campaign);
+
+				var createOrUpdateSkillDays = _container.Resolve<ICreateOrUpdateSkillDays>();
+				createOrUpdateSkillDays.Create(campaign.Skill, campaign.SpanningPeriod, campaign.CampaignTasks(), campaign.AverageTaskHandlingTime(), campaign.CampaignWorkingPeriods);
 				uow.PersistAll();
 			}
-			var incomingTaskFactory = _container.Resolve<OutboundProductionPlanFactory>();
-			var incomingTask = incomingTaskFactory.CreateAndMakeInitialPlan(campaign.SpanningPeriod, campaign.CampaignTasks(),
-				campaign.AverageTaskHandlingTime(), campaign.CampaignWorkingPeriods.ToList());
-			updateSkillDays(campaign.Skill, incomingTask, true);
 		}
 
 		private IncomingTask getIncomingTaskFromCampaign(Campaign campaign)
@@ -262,7 +276,8 @@ namespace Teleopti.Ccc.Win.Backlog
 			foreach (var item in listView1.Items)
 			{
 				var listItem = (ListViewItem) item;
-				var status = getStatusOnCampaign((Campaign)listItem.Tag);
+				var campaign = (Campaign) listItem.Tag;
+				var status = getStatusOnCampaign(campaign);
 
 				switch (status)
 				{
@@ -281,6 +296,9 @@ namespace Teleopti.Ccc.Win.Backlog
 						listItem.ForeColor = Color.Red;
 						break;
 				}
+
+				listItem.SubItems[1].Text =
+					campaign.SpanningPeriod.ToShortDateString(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
 			}
 		}
 
@@ -368,6 +386,24 @@ namespace Teleopti.Ccc.Win.Backlog
 			updateSkillDays(selectedCampaign.Skill, incomingTask, false);
 			loadSchedulesAsync();
 			//no code after loadSchedulesAsync();
+		}
+
+		private void changePeriodToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			var selectedCampaign = (Campaign)listView1.SelectedItems[0].Tag;
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var oldPeriod = selectedCampaign.SpanningPeriod;
+				selectedCampaign.SetSpanningPeriod(new DateOnlyPeriod(oldPeriod.StartDate.AddDays(7), oldPeriod.EndDate.AddDays(7)));
+				var outboundCampaignRepo = _container.Resolve<IOutboundCampaignRepository>();
+				outboundCampaignRepo.Add(selectedCampaign);
+
+				var outboundPeriodMover = _container.Resolve<IOutboundPeriodMover>();
+				outboundPeriodMover.Move(selectedCampaign, oldPeriod);
+
+				uow.PersistAll();
+			}
+			updateStatusOnCampaigns();
 		}
 	}
 

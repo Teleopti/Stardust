@@ -4,6 +4,8 @@ using System.Linq;
 using NHibernate;
 using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Infrastructure.Persisters.Outbound;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping;
 using Teleopti.Ccc.Web.Areas.Outbound.Models;
@@ -20,20 +22,31 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 		private readonly ISkillRepository _skillRepository;
 		private readonly IOutboundCampaignMapper _outboundCampaignMapper;
 		private readonly IOutboundCampaignViewModelMapper _outboundCampaignViewModelMapper;
+		private readonly IOutboundSkillCreator _outboundSkillCreator;
+		private readonly IActivityRepository _activityRepository;
+		private readonly IOutboundSkillPersister _outboundSkillPersister;
 
 		public OutboundCampaignPersister(IOutboundCampaignRepository outboundCampaignRepository, ISkillRepository skillRepository, 
-			IOutboundCampaignMapper outboundCampaignMapper, IOutboundCampaignViewModelMapper outboundCampaignViewModelMapper)
+			IOutboundCampaignMapper outboundCampaignMapper, IOutboundCampaignViewModelMapper outboundCampaignViewModelMapper, 
+			IOutboundSkillCreator outboundSkillCreator, IActivityRepository activityRepository, IOutboundSkillPersister outboundSkillPersister)
 		{
 			_outboundCampaignRepository = outboundCampaignRepository;
 			_skillRepository = skillRepository;
 			_outboundCampaignMapper = outboundCampaignMapper;
 			_outboundCampaignViewModelMapper = outboundCampaignViewModelMapper;
+			_outboundSkillCreator = outboundSkillCreator;
+			_activityRepository = activityRepository;
+			_outboundSkillPersister = outboundSkillPersister;
 		}
 
-		public CampaignViewModel Persist(string name)
+		public CampaignViewModel Persist(string name)  //should take an activity as well
 		{
-			var skills = _skillRepository.LoadAll();
-			var campaign = new Campaign(name, skills.FirstOrDefault());
+			var campaign = new Campaign(){Name = name};
+			var activity = _activityRepository.LoadAll().First();
+			var skill = _outboundSkillCreator.CreateSkill(activity, campaign);
+			_outboundSkillPersister.PersistSkill(skill);
+			
+			campaign.Skill = skill;
 			_outboundCampaignRepository.Add(campaign);
 
 			return _outboundCampaignViewModelMapper.Map(campaign);

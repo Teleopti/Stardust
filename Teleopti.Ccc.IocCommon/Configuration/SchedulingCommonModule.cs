@@ -475,15 +475,16 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<PersonalShiftAndMeetingFilter>().As<IPersonalShiftAndMeetingFilter>();
 			builder.RegisterType<PersonalShiftMeetingTimeChecker>().As<IPersonalShiftMeetingTimeChecker>().InstancePerLifetimeScope();
 			builder.RegisterType<DisallowedShiftProjectionCashesFilter>().As<IDisallowedShiftProjectionCashesFilter>().InstancePerLifetimeScope();
-			
-			builder.RegisterType<OutboundSkillCreator>().As<OutboundSkillCreator>().SingleInstance();
+
+			builder.RegisterType<OutboundSkillCreator>().As<IOutboundSkillCreator>().SingleInstance();
 			builder.RegisterType<OutboundSkillTypeProvider>().As<IOutboundSkillTypeProvider>().SingleInstance();
 			builder.RegisterType<OutboundSkillPersister>().As<OutboundSkillPersister>().SingleInstance();
 			builder.RegisterType<IncomingTaskFactory>().As<IncomingTaskFactory>().SingleInstance();
 			builder.RegisterType<FlatDistributionSetter>().As<FlatDistributionSetter>().SingleInstance();
 			builder.RegisterType<OutboundProductionPlanFactory>().As<OutboundProductionPlanFactory>().SingleInstance();
-			builder.RegisterType<OutboundCampaignRepository>().As<OutboundCampaignRepository>().SingleInstance();
-			//OutboundCampaignRepository
+			builder.RegisterType<CreateOrUpdateSkillDays>().As<ICreateOrUpdateSkillDays>().SingleInstance();
+			builder.RegisterType<OutboundPeriodMover>().As<IOutboundPeriodMover>().SingleInstance();
+			//OurboundPeriodMover
 		}
 	}
 }

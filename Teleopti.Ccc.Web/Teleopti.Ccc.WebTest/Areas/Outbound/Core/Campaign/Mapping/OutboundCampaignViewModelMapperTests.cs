@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core.Campaign.Mapping
 	[TestFixture]
 	internal class OutboundCampaignViewModelMapperTests
 	{
-		private ISkillRepository _skillRepository;
 		private IEnumerable<Domain.Outbound.Campaign> _campaigns;
 		private OutboundCampaignViewModelMapper _target;
 		private Domain.Outbound.Campaign _campaign;
@@ -38,10 +37,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core.Campaign.Mapping
 			var workingPeriod = new CampaignWorkingPeriod() {TimePeriod = new TimePeriod()};
 			workingPeriod.AddAssignment(new CampaignWorkingPeriodAssignment(){WeekdayIndex = DayOfWeek.Monday});
 			_campaign.AddWorkingPeriod(workingPeriod);
-			_skillRepository = MockRepository.GenerateMock<ISkillRepository>();
 			_campaigns = new List<Domain.Outbound.Campaign> {_campaign};
-			_skillRepository.Stub(x => x.LoadAll()).Return(_skills);
-			_target = new OutboundCampaignViewModelMapper(_skillRepository);
+			_target = new OutboundCampaignViewModelMapper();
 		}
 
 		[Test]
@@ -56,15 +53,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core.Campaign.Mapping
 		{
 			var result = _target.Map(_campaigns);
 			result.First().Name.Should().Be.EqualTo(_campaign.Name);
-		}
-
-		[Test]
-		public void ShouldMapSkillCount()
-		{
-			var result = _target.Map(_campaigns);
-			var targetSkills = result.First().Skills;
-
-			targetSkills.Count().Should().Be.EqualTo(_skills.Count);
 		}
 
 		[Test]
@@ -83,15 +71,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core.Campaign.Mapping
 			var targetSkill = result.First().Skills.First();
 
 			targetSkill.SkillName.Should().Be.EqualTo(_skills.First().Name);
-		}
-
-		[Test]
-		public void ShouldMapSelectedSkill()
-		{
-			var result = _target.Map(_campaigns);
-			var targetSkills = result.First().Skills;
-
-			targetSkills.ForEach(x => x.IsSelected.Should().Be.EqualTo(x.Id == _selectedSkill.Id));
 		}
 
 		[Test]

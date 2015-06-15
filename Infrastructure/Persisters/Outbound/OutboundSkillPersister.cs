@@ -6,7 +6,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Persisters.Outbound
 {
-	public class OutboundSkillPersister
+	public interface IOutboundSkillPersister
+	{
+		void PersistSkill(ISkill skill);
+	}
+
+	public class OutboundSkillPersister : IOutboundSkillPersister
 	{
 		private readonly ISkillRepository _skillRepository;
 		private readonly IWorkloadRepository _workloadRepository;
@@ -17,7 +22,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Outbound
 			_workloadRepository = workloadRepository;
 		}
 
-		public void PersistAll(ISkill skill)
+		public void PersistAll(ISkill skill)  //only for win
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
@@ -25,6 +30,12 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Outbound
 				_workloadRepository.Add(skill.WorkloadCollection.First());
 				uow.PersistAll();
 			}
+		}
+
+		public void PersistSkill(ISkill skill)
+		{
+			_skillRepository.Add(skill);
+			_workloadRepository.Add(skill.WorkloadCollection.First());
 		}
 	}
 }

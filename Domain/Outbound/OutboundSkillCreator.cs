@@ -8,7 +8,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Outbound
 {
-	public class OutboundSkillCreator
+	public interface IOutboundSkillCreator
+	{
+		ISkill CreateSkill(IActivity activity, Campaign campaign);
+	}
+
+	public class OutboundSkillCreator : IOutboundSkillCreator
 	{
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly IOutboundSkillTypeProvider _outboundSkillTypeProvider;

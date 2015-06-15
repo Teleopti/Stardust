@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		{
 			using (var container = _containerBuilder.Build())
 			{
-				container.Resolve<OutboundSkillCreator>()
+				container.Resolve<IOutboundSkillCreator>()
 								 .Should().Not.Be.Null();
 			}
 		}
