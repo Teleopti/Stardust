@@ -1,5 +1,6 @@
 using System;
 using AutoMapper;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
@@ -27,9 +28,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 					var mappedResult = new PreferenceDayFeedbackViewModel
 					{
 						Date = s.ToFixedClientDateOnlyFormat(),
-
-						RestTimeToNextDay = nightRestResult.RestTimeToNextDay,
-						RestTimeToPreviousDay = nightRestResult.RestTimeToPreviousDay,
+						DateInternal = s.Date,
+						NightRestViolationMessageNextDay = AssembleNightRestViolationMessage(s, s.AddDays(1), nightRestResult.ExpectedNightRest, nightRestResult.RestTimeToNextDay),
+						NightRestViolationMessagePreviousDay = AssembleNightRestViolationMessage(s.AddDays(-1), s, nightRestResult.ExpectedNightRest, nightRestResult.RestTimeToPreviousDay),
 						HasNightRestViolationToPreviousDay = nightRestResult.HasViolationToPreviousDay,
 						HasNightRestViolationToNextDay = nightRestResult.HasViolationToNextDay,
 						ExpectedNightRest = nightRestResult.ExpectedNightRest
@@ -68,6 +69,23 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 					return mappedResult;
 
 				});
+		}
+
+		private string AssembleNightRestViolationMessage(DateOnly start, DateOnly end, TimeSpan nightRest,
+			TimeSpan currentNightRest)
+		{
+			var loggedOnCulture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
+			string startString = start.ToShortDateString();
+			string endString = end.ToShortDateString();
+			string nightRestString = TimeHelper.GetLongHourMinuteTimeString(nightRest, loggedOnCulture);
+			string curNightRestString = TimeHelper.GetLongHourMinuteTimeString(currentNightRest, loggedOnCulture);
+
+			string ret = string.Format(loggedOnCulture,
+									   Resources.BusinessRuleNightlyRestRuleErrorMessage,
+									   nightRestString, startString, endString, curNightRestString);
+			return ret;
+
+
 		}
 	}
 }

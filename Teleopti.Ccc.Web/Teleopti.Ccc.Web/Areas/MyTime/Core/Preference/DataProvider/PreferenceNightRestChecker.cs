@@ -37,9 +37,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 				var compareDate1 = previousDay.Date.AddMinutes(previousDayOccupation.EndTimeLimitation.StartTime.Value.TotalMinutes);
 				var compareDate2 = date.Date.AddMinutes(thisDayOccupation.StartTimeLimitation.EndTime.Value.TotalMinutes);
 
-				if (compareDate2 - compareDate1 < result.ExpectedNightRest)
-				{
-					result.RestTimeToPreviousDay = compareDate2 - compareDate1;
+				result.RestTimeToPreviousDay = compareDate2 - compareDate1;
+				if (result.RestTimeToPreviousDay < result.ExpectedNightRest)
+				{					
 					result.HasViolationToPreviousDay = true;
 				}
 			}
@@ -51,9 +51,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 				var compareDate1 = nextDay.Date.AddMinutes(nextDayOccupation.StartTimeLimitation.EndTime.Value.TotalMinutes);
 				var compareDate2 = date.Date.AddMinutes(thisDayOccupation.EndTimeLimitation.StartTime.Value.TotalMinutes);
 
-				if (compareDate1 - compareDate2 < result.ExpectedNightRest)
+				result.RestTimeToNextDay = compareDate1 - compareDate2;
+				if (result.RestTimeToNextDay < result.ExpectedNightRest)
 				{
-					result.RestTimeToNextDay = compareDate1 - compareDate2;
+					
 					result.HasViolationToNextDay = true;
 				}
 			}
