@@ -10,7 +10,8 @@
 		vm.Tenant = "";
 		vm.AppDatabase = "";
 		vm.AnalyticsDatabase = "";
-
+		vm.TenantMessage = "Enter a new name for the Tenant";
+		vm.TenantOk = false;
 		vm.AppDbOk = false;
 		vm.AppDbCheckMessage = "Input connection string";
 
@@ -19,6 +20,19 @@
 		vm.HeadVersion = null;
 		vm.ImportAppVersion = null;
 		vm.AppVersionOk = null;
+
+		//api/Import/TenantExists
+
+		vm.CheckTenantName = function () {
+			$http.post('../api/Import/IsNewTenant', '"' + vm.Tenant + '"')
+				.success(function (data) {
+					vm.TenantMessage = data.Message;
+					vm.TenantOk = data.Success;
+					
+				}).error(function (xhr, ajaxOptions, thrownError) {
+					console.log(xhr.status + xhr.responseText + thrownError);
+				});
+		}
 
 		vm.CheckAppDb = function () {
 			$http.post('../api/Import/DbExists', {
@@ -48,7 +62,7 @@
 				});
 		}
 
-		vm.CheckVersion = function () {
+		vm.CheckVersions = function () {
 			$http.post('../api/UpgradeDatabases/GetVersions', {
 				AppConnectionString: vm.AppDatabase
 			})

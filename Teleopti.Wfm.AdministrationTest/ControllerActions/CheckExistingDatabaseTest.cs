@@ -102,11 +102,6 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			result.Should().Be.True();
 
 			TenantUnitOfWork.CommitAndDisposeCurrent();
-
-			
-
 		}
-
-
 	}
 }
