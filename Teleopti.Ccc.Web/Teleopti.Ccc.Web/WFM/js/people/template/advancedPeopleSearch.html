@@ -55,53 +55,99 @@
 </style>
 
 <div class="advaned-container material-depth-2" ng-cloak ng-show="showAdvancedSearchOption">
-	<div class="people-form-input">
-		<input class="advanced-input" id="criteria-first-name" type="text" ng-model="advancedSearchForm.FirstName" ng-keydown="$event.which === 13 && advancedSearch()" required />
-		<label class="advanced-label">{{'FirstName' | translate}}</label>
-	</div>
-	<div class="people-form-input">
-		<input class="advanced-input" id="criteria-last-name" type="text" ng-model="advancedSearchForm.LastName" ng-keydown="$event.which === 13 && advancedSearch()" required />
-		<label class="advanced-label">{{'LastName' | translate}}</label>
-	</div>
-	<div class="people-form-input">
-		<input class="advanced-input" id="criteria-employment-number" type="text" ng-model="advancedSearchForm.EmploymentNumber" ng-keydown="$event.which === 13 && advancedSearch()" required />
-		<label class="advanced-label">{{'EmployeeNo' | translate}}</label>
-	</div>
-	<div class="people-form-input">
-		<input class="advanced-input" id="criteria-organization" type="text" ng-model="advancedSearchForm.Organization" ng-keydown="$event.which === 13 && advancedSearch()" required />
-		<label class="advanced-label">{{'PersonFinderFieldOrganization' | translate}}</label>
-	</div>
-	<div class="people-form-input">
-		<input class="advanced-input" id="criteria-role" type="text" ng-model="advancedSearchForm.Role" ng-keydown="$event.which === 13 && advancedSearch()" required />
-		<label class="advanced-label">{{'Role' | translate}}</label>
-	</div>
-	<div class="people-form-input">
-		<input class="advanced-input" id="criteria-contract" type="text" ng-model="advancedSearchForm.Contract" ng-keydown="$event.which === 13 && advancedSearch()" required />
-		<label class="advanced-label">{{'Contract' | translate}}</label>
-	</div>
-	<div class="people-form-input">
-		<input class="advanced-input" id="criteria-contract-schedule" type="text" ng-model="advancedSearchForm.ContractSchedule" ng-keydown="$event.which === 13 && advancedSearch()" required />
-		<label class="advanced-label">{{'ContractSchedule' | translate}}</label>
-	</div>
-	<div class="people-form-input">
-		<input class="advanced-input" id="criteria-shift-bag" type="text" ng-model="advancedSearchForm.ShiftBag" ng-keydown="$event.which === 13 && advancedSearch()" required />
-		<label class="advanced-label">{{'PersonFinderFieldShiftBag' | translate}}</label>
-	</div>
-	<div class="people-form-input">
-		<input class="advanced-input" id="criteria-part-time-percentage" type="text" ng-model="advancedSearchForm.PartTimePercentage" ng-keydown="$event.which === 13 && advancedSearch()" required />
-		<label class="advanced-label">{{'PartTimePercentage' | translate}}</label>
-	</div>
-	<div class="people-form-input">
-		<input class="advanced-input" id="criteria-skill" type="text" ng-model="advancedSearchForm.Skill" ng-keydown="$event.which === 13 && advancedSearch()" required />
-		<label class="advanced-label">{{'Skill' | translate}}</label>
-	</div>
-	<div class="people-form-input">
-		<input class="advanced-input" id="criteria-badge-group" type="text" ng-model="advancedSearchForm.BudgetGroup" ng-keydown="$event.which === 13 && advancedSearch()" required />
-		<label class="advanced-label">{{'BudgetGroup' | translate}}</label>
-	</div>
-	<div class="people-form-input">
-		<input class="advanced-input" id="criteria-note" type="text" ng-model="advancedSearchForm.Note" ng-keydown="$event.which === 13 && advancedSearch()" required />
-		<label class="advanced-label">{{'Note'|translate}}</label>
-	</div>
-	<button id="go-advanced-search" class="wfm-btn wfm-btn-primary float-right" ng-click="advancedSearch()">SEARCH</button>
+	<table>
+		<tbody>
+			<tr>
+				<td>
+					<div class="people-form-input">
+						<input class="advanced-input" id="criteria-first-name" type="text" ng-model="advancedSearchForm.FirstName" ng-keydown="$event.which === 13 && advancedSearch()" required />
+						<label class="advanced-label">{{'FirstName' | translate}}</label>
+					</div>
+				</td>
+				<td>
+					<div class="people-form-input">
+						<input class="advanced-input" id="criteria-last-name" type="text" ng-model="advancedSearchForm.LastName" ng-keydown="$event.which === 13 && advancedSearch()" required />
+						<label class="advanced-label">{{'LastName' | translate}}</label>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div class="people-form-input">
+						<input class="advanced-input" id="criteria-employment-number" type="text" ng-model="advancedSearchForm.EmploymentNumber" ng-keydown="$event.which === 13 && advancedSearch()" required />
+						<label class="advanced-label">{{'EmployeeNo' | translate}}</label>
+					</div>
+				</td>
+				<td>
+					<div class="people-form-input">
+						<input class="advanced-input" id="criteria-organization" type="text" ng-model="advancedSearchForm.Organization" ng-keydown="$event.which === 13 && advancedSearch()" required />
+						<label class="advanced-label">{{'PersonFinderFieldOrganization' | translate}}</label>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div class="people-form-input">
+						<input class="advanced-input" id="criteria-role" type="text" ng-model="advancedSearchForm.Role" ng-keydown="$event.which === 13 && advancedSearch()" required />
+						<label class="advanced-label">{{'Role' | translate}}</label>
+					</div>
+				</td>
+				<td>
+					<div class="people-form-input">
+						<input class="advanced-input" id="criteria-contract" type="text" ng-model="advancedSearchForm.Contract" ng-keydown="$event.which === 13 && advancedSearch()" required />
+						<label class="advanced-label">{{'Contract' | translate}}</label>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div class="people-form-input">
+						<input class="advanced-input" id="criteria-contract-schedule" type="text" ng-model="advancedSearchForm.ContractSchedule" ng-keydown="$event.which === 13 && advancedSearch()" required />
+						<label class="advanced-label">{{'ContractSchedule' | translate}}</label>
+					</div>
+				</td>
+				<td>
+					<div class="people-form-input">
+						<input class="advanced-input" id="criteria-shift-bag" type="text" ng-model="advancedSearchForm.ShiftBag" ng-keydown="$event.which === 13 && advancedSearch()" required />
+						<label class="advanced-label">{{'PersonFinderFieldShiftBag' | translate}}</label>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div class="people-form-input">
+						<input class="advanced-input" id="criteria-part-time-percentage" type="text" ng-model="advancedSearchForm.PartTimePercentage" ng-keydown="$event.which === 13 && advancedSearch()" required />
+						<label class="advanced-label">{{'PartTimePercentage' | translate}}</label>
+					</div>
+				</td>
+				<td>
+					<div class="people-form-input">
+						<input class="advanced-input" id="criteria-skill" type="text" ng-model="advancedSearchForm.Skill" ng-keydown="$event.which === 13 && advancedSearch()" required />
+						<label class="advanced-label">{{'Skill' | translate}}</label>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div class="people-form-input">
+						<input class="advanced-input" id="criteria-badge-group" type="text" ng-model="advancedSearchForm.BudgetGroup" ng-keydown="$event.which === 13 && advancedSearch()" required />
+						<label class="advanced-label">{{'BudgetGroup' | translate}}</label>
+					</div>
+				</td>
+				<td>
+					<div class="people-form-input">
+						<input class="advanced-input" id="criteria-note" type="text" ng-model="advancedSearchForm.Note" ng-keydown="$event.which === 13 && advancedSearch()" required />
+						<label class="advanced-label">{{'Note'|translate}}</label>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<div class="pull-right">
+						<button id="go-advanced-search" class="wfm-btn wfm-btn-primary float-right" ng-click="advancedSearch()">SEARCH</button>
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
 </div>
