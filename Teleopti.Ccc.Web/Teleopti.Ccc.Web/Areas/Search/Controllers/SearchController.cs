@@ -41,13 +41,13 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 
 		private IEnumerable<SearchResultModel> searchApplicationRoles(string keyword)
 		{
-			var result =  _applicationRoleRepository.LoadAllRolesByName(keyword).AsEnumerable();
+			var result =  _applicationRoleRepository.LoadAllRolesByName(keyword);
 			return result.Select(item => new SearchResultModel
 			{
 				Name = item.Name,
 				Url = "/permissions", 
 				SearchGroup = "Permission"
-			}).ToList();
+			});
 		}
 
 
