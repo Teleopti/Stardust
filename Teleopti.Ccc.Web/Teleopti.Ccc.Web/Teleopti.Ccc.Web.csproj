@@ -1222,7 +1222,6 @@
     <Content Include="WFM\js\permissions\permissions.rolefunctions.service.js" />
     <Content Include="WFM\js\permissions\roles.service.js" />
     <Content Include="WFM\js\resourceplanner\resourceplanner.service.js" />
-    <Content Include="WFM\js\resourceplanner\planningperiods-new.html" />
     <Content Include="WFM\js\resourceplanner\resourceplanner.controller.js" />
     <Content Include="WFM\js\resourceplanner\resourceplanner.html" />
     <Content Include="WFM\js\resourceplanner\resourceplanner-report.html" />

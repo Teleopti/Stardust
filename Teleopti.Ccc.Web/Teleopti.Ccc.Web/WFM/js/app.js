@@ -90,13 +90,6 @@ wfm.config([
 			url: '/planningperiod/:id',
 			templateUrl: 'js/resourceplanner/planningperiods.html',
 			controller: 'PlanningPeriodsCtrl'
-		}).state('resourceplanner.newplanningperiod', {
-				url: '/newplanningperiod',
-				templateUrl: 'js/resourceplanner/planningperiods-new.html',
-				controller: 'PlanningPeriodNewCtrl',
-				ncyBreadcrumb: {
-					label: 'new planningperiod'
-				}
 		}).state('resourceplannerreport', {
 			params: { result: {} },
 			templateUrl: 'js/resourceplanner/resourceplanner-report.html',
