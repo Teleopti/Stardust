@@ -19,7 +19,12 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 									{ id: "vh2", type: "line", name: "Queue Statistics without Outliers" }];
 
 				$scope.dataX = { id: "date" };
-				$scope.IsForecastingTest = false;
+				$scope.isQueueStatisticsEnabled = false;
+
+
+				forecasting.isToggleEnabled.query({ toggle: 'WfmForecast_QueueStatistics_32572' }).$promise.then(function (result) {
+					$scope.isQueueStatisticsEnabled = result.IsEnabled;
+				});
 
 				$scope.openModal = function (workload) {
 					workload.modalLaunch = true;
@@ -29,13 +34,12 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 					
 					$http.post("../api/Forecasting/Evaluate", JSON.stringify({ ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate, WorkloadId: workload.Id })).
 						success(function (data, status, headers, config) {
-							$scope.IsForecastingTest = data.IsForecastingTest;
 							workload.loaded = true;
 							angular.forEach(data.Days, function(day) {
 								day.date = new Date(Date.parse(day.date));
 							});
 							workload.chartData = data.Days;
-							if ($scope.IsForecastingTest) {
+							if ($scope.isQueueStatisticsEnabled) {
 								angular.forEach(data.TestDays, function (day) {
 									day.date = new Date(Date.parse(day.date));
 								});

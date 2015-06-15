@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Dynamic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -40,8 +39,6 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 			var evaluateResult = _forecastWorkloadEvaluator.Evaluate(workload);
 			var bestAccuracy = evaluateResult.Accuracies.SingleOrDefault(x => x.IsSelected);
 
-			var appSetting = ConfigurationManager.AppSettings["ForecastingTest"];
-			var isForecastingTest = appSetting != null && bool.Parse(appSetting);
 			var availablePeriod = _historicalPeriodProvider.AvailablePeriod(workload);
 			return new WorkloadForecastViewModel
 			{
@@ -49,8 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 				WorkloadId = workload.Id.Value,
 				ForecastMethods = createMethodViewModels(evaluateResult),
 				Days = createDayViewModels(workload, bestAccuracy, new DateOnlyPeriod(HistoricalPeriodProvider.DivideIntoTwoPeriods(availablePeriod).AddDays(1), availablePeriod.EndDate), false),
-				TestDays = isForecastingTest ? createDayViewModels(workload, bestAccuracy, availablePeriod, true) : new dynamic[] {},
-				IsForecastingTest = isForecastingTest,
+				TestDays = createDayViewModels(workload, bestAccuracy, availablePeriod, true),
 				ForecastMethodRecommended = bestAccuracy == null
 					? (dynamic) new {Id = ForecastMethodType.None}
 					: new

@@ -68,6 +68,7 @@
 		Wfm_ChangePlanningPeriod_33043,
 		WfmPeople_AdvancedSearch_32973,
 		Wfm_Outbound_Campaign_32696,
+		WfmForecast_QueueStatistics_32572,
 
 		Scheduler_OptimizeFlexibleDayOffs_22409
 		// ReSharper restore InconsistentNaming

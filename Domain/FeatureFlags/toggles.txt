@@ -75,3 +75,4 @@ Wfm_Outbound_Campaign_32696 = RC
 SeatPlanner_Logon_32003 = RC
 MyTimeWeb_PreferenceShowNightViolation_33152 = DEV
 Scheduler_OptimizeFlexibleDayOffs_22409 = RC
+WfmForecast_QueueStatistics_32572 = DEV
