@@ -1,5 +1,6 @@
 using System;
 using System.Threading;
+using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -10,11 +11,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 	[Binding]
 	public class ResourcePlannerStepDefinitions
 	{
-		[Then(@"I should see planning period from '(.*)'to '(.*)'")]
+		[Then(@"I should see planning period from '(.*)'to '(.*)'"), SetCulture("sv-SE")]
 		public void ThenIShouldSeePlanningPeriodFromTo(DateTime fromDate, DateTime toDate)
 		{
-			Browser.Interactions.AssertAnyContains(".wfm-accordion-head", fromDate.ToString("yyyy-MM-dd"));
-			Browser.Interactions.AssertAnyContains(".wfm-accordion-head", toDate.ToString("yyyy-MM-dd"));
+			Browser.Interactions.AssertAnyContains(".wfm-card", fromDate.ToString("yyyy-MM-dd"));
+			Browser.Interactions.AssertAnyContains(".wfm-card", toDate.ToString("yyyy-MM-dd"));
 		}
 
 		[Then(@"I should see '(.*)'")]

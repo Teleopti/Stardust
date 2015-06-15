@@ -11,7 +11,7 @@
 	<div class="card-group">
 		<div class="wfm-card" ng-repeat="p in planningPeriods" ng-click="selectedPlanningPeriod(p)">
 			<span>
-				{{p.StartDate | date : format}}-{{p.EndDate | date : format}}
+				{{p.StartDate |  amDateFormat:"L"}}-{{p.EndDate | amDateFormat:"L"}}
 			</span>
 		</div>
 		
