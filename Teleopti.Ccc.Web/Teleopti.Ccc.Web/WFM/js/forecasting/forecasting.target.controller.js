@@ -28,6 +28,7 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 
 
 				var getQueueStatistics = function (workload, methodId) {
+					workload.queueStatisticsLoaded = false;
 					$http.post("../api/Forecasting/QueueStatistics", JSON.stringify({ WorkloadId: workload.Id, MethodId: methodId })).
 						success(function (data, status, headers, config) {
 							workload.queueStatisticsLoaded = true;
@@ -38,7 +39,7 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 						}).
 						error(function (data, status, headers, config) {
 							$scope.error = { message: "Failed to get queue statisctics." };
-							workload.loaded = true;
+							workload.queueStatisticsLoaded = true;
 						});
 				};
 
