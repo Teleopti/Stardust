@@ -7,7 +7,7 @@ using Teleopti.Wfm.Administration.Controllers;
 
 namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 {
-	[TenantTest, Ignore("Will look at this one on Monday")]
+	[TenantTest]
 	public class GetAllTenantsTest
 	{
 		public HomeController Target;
