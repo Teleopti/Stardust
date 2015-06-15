@@ -133,6 +133,12 @@ CREATE TABLE #stg_schedule_changed(
 	[shift_startdate_local] [smalldatetime] NOT NULL,
 	[person_code] [uniqueidentifier]
 )
+CREATE TABLE #bridge_acd_login_person(
+acd_login_id int not null, 
+person_id int not null,
+business_unit_id int not null
+)
+
 
 --get the number of intervals outside shift to consider for adherence calc
 SELECT @interval_length_minutes = 1440/COUNT(*) from mart.dim_interval 
@@ -144,8 +150,8 @@ SELECT @intervals_outside_shift = ISNULL(@minutes_outside_shift,120)/@interval_l
 SET	@start_date = convert(smalldatetime,floor(convert(decimal(18,8),@start_date )))
 SET @end_date	= convert(smalldatetime,floor(convert(decimal(18,8),@end_date )))
 
-SET @start_date_id	=	(SELECT date_id FROM dim_date WHERE @start_date = date_date)
-SET @end_date_id	=	(SELECT date_id FROM dim_date WHERE @end_date = date_date)
+SET @start_date_id	=	(SELECT date_id FROM mart.dim_date WHERE @start_date = date_date)
+SET @end_date_id	=	(SELECT date_id FROM mart.dim_date WHERE @end_date = date_date)
 
 SET @scenario_id	=	(SELECT scenario_id FROM mart.dim_scenario WHERE business_unit_code = @business_unit_code AND default_scenario = 1)
 SET @scenario_code	=	(SELECT scenario_code FROM mart.dim_scenario WHERE business_unit_code = @business_unit_code AND default_scenario = 1)
@@ -189,7 +195,7 @@ BEGIN
 		fs.person_id,
 		fs.business_unit_id,
 		p.person_code
-
+		
 	/* a) Gather agent ready time */
 	INSERT INTO #fact_schedule_deviation
 		(
@@ -286,6 +292,11 @@ BEGIN
 			fs.person_id,
 			fs.business_unit_id,
 			ch.person_code
+	
+		INSERT INTO #bridge_acd_login_person(acd_login_id, person_id, business_unit_id)
+		SELECT b.acd_login_id, b.person_id ,b.business_unit_id
+		FROM mart.bridge_acd_login_person b 
+		INNER JOIN #stg_schedule_changed ch on ch.person_id=b.person_id
 
 		/* a) Gather agent ready time */
 		INSERT INTO #fact_schedule_deviation
@@ -309,14 +320,13 @@ BEGIN
 			is_logged_in			= 1, --marks that we do have logged in time
 			business_unit_id		= b.business_unit_id,
 			person_code				= ch.person_code
-		FROM mart.bridge_acd_login_person b
+		FROM #bridge_acd_login_person b
 		INNER JOIN mart.fact_agent fa
 			ON b.acd_login_id = fa.acd_login_id
 		INNER JOIN #stg_schedule_changed ch
 			ON fa.date_id BETWEEN ch.shift_startdate_local_id-1 AND ch.shift_startdate_local_id+1 --extend stat to cover local date
 			AND ch.person_id			= b.person_id
 			AND b.acd_login_id			= fa.acd_login_id
-			AND EXISTS (SELECT 1 FROM #stg_schedule_changed tmp WHERE tmp.person_id = b.person_id)
 	END
 
 	if (@isIntraday=2)
@@ -448,13 +458,14 @@ BEGIN
 
 	if (@isIntraday=3)--service bus changes
 	BEGIN
-
 		INSERT INTO #stg_schedule_changed
 		SELECT  p.person_id,
 				dd.date_id,
 				ch.schedule_date_local,
 				p.person_code
 		FROM stage.stg_schedule_changed_servicebus ch WITH (NOLOCK) 
+		INNER JOIN mart.dim_date dd
+			ON dd.date_date = ch.schedule_date_local
 		INNER JOIN mart.dim_person p
 			ON p.person_code = ch.person_code
 				AND --trim
@@ -463,8 +474,6 @@ BEGIN
 					AND
 						(ch.schedule_date_local <= p.valid_to_date_local)
 				)
-		INNER JOIN mart.dim_date dd
-			ON dd.date_date = ch.schedule_date_local
 		WHERE ch.scenario_code = @scenario_code
 		
 
@@ -472,7 +481,7 @@ BEGIN
 		DELETE FROM #stg_schedule_changed
 		WHERE shift_startdate_local > dateadd(dd,1,@now_utc)
 
-
+		
 		INSERT INTO #fact_schedule
 		--First get changed day via #stg_schedule_changed (full local agent day)
 		SELECT
@@ -505,7 +514,13 @@ BEGIN
 			fs.person_id,
 			fs.business_unit_id,
 			ch.person_code
-
+		
+		
+		INSERT INTO #bridge_acd_login_person(acd_login_id, person_id, business_unit_id)
+		SELECT b.acd_login_id, b.person_id ,b.business_unit_id
+		FROM mart.bridge_acd_login_person b 
+		INNER JOIN #stg_schedule_changed ch on ch.person_id=b.person_id
+		
 		/* a) Gather agent ready time */
 		INSERT INTO #fact_schedule_deviation
 			(
@@ -518,7 +533,6 @@ BEGIN
 			business_unit_id,
 			person_code
 			)
-
 		SELECT DISTINCT
 			date_id					= fa.date_id, 
 			interval_id				= fa.interval_id,
@@ -528,14 +542,13 @@ BEGIN
 			is_logged_in			= 1, --marks that we do have logged in time
 			business_unit_id		= b.business_unit_id,
 			person_code				= ch.person_code
-		FROM mart.bridge_acd_login_person b
+		FROM #bridge_acd_login_person b
 		INNER JOIN mart.fact_agent fa
 			ON b.acd_login_id = fa.acd_login_id
 		INNER JOIN #stg_schedule_changed ch
 			ON fa.date_id BETWEEN ch.shift_startdate_local_id-1 AND ch.shift_startdate_local_id+1 --extend stat to cover local date
 			AND ch.person_id			= b.person_id
 			AND b.acd_login_id			= fa.acd_login_id
-			AND EXISTS (SELECT 1 FROM #stg_schedule_changed tmp WHERE tmp.person_id = b.person_id)
 	END
 END
 
@@ -834,8 +847,8 @@ BEGIN
 		DELETE stage
 		FROM #stg_schedule_changed ch
 		INNER JOIN stage.stg_schedule_changed_servicebus stage
-		ON ch.person_code = stage.person_code
-		AND ch.shift_startdate_local = stage.schedule_date_local
+		ON  ch.shift_startdate_local = stage.schedule_date_local
+		AND ch.person_code = stage.person_code
 		AND stage.scenario_code= @scenario_code
 
 		--REMOVE DATES IN THE FUTURE
