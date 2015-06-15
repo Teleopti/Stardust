@@ -7,6 +7,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Core.Hangfire
 {
+	[CLSCompliant(false)]
 	public class JobExpirationTimeAttribute : JobFilterAttribute, IApplyStateFilter
 	{
 		public void OnStateApplied(ApplyStateContext context, IWriteOnlyTransaction transaction)
