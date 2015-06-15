@@ -30,12 +30,13 @@ Background:
 	| Skill      | Direct Sales |
 	And the time is '2015-04-22'
 
-
+@ignore
 Scenario: List all active campaigns
 	When I view outbound
 	Then I should see 'Campaign1' in campaign list
 	And I should see 'Campaign2' in campaign list
 
+@ignore
 Scenario: View selected campaign
 	When I view campaign 'Campaign1'
 	Then I should see campaign details with 
