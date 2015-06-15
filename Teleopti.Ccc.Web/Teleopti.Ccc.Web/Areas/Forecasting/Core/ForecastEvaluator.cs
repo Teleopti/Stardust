@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Historical;
@@ -45,8 +44,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 				Name = workload.Name,
 				WorkloadId = workload.Id.Value,
 				ForecastMethods = createMethodViewModels(evaluateResult),
-				Days = createDayViewModels(workload, bestAccuracy, new DateOnlyPeriod(HistoricalPeriodProvider.DivideIntoTwoPeriods(availablePeriod).AddDays(1), availablePeriod.EndDate), false),
-				TestDays = createDayViewModels(workload, bestAccuracy, availablePeriod, true),
+				Days = createEvaluationDayViewModels(workload, bestAccuracy, new DateOnlyPeriod(HistoricalPeriodProvider.DivideIntoTwoPeriods(availablePeriod).AddDays(1), availablePeriod.EndDate)),
 				ForecastMethodRecommended = bestAccuracy == null
 					? (dynamic) new {Id = ForecastMethodType.None}
 					: new
@@ -57,6 +55,17 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 						PeriodUsedToEvaluateStart = bestAccuracy.PeriodUsedToEvaluate.StartDate.Date,
 						PeriodUsedToEvaluateEnd = bestAccuracy.PeriodUsedToEvaluate.EndDate.Date
 					}
+			};
+		}
+
+		public WorkloadQueueStatisticsViewModel QueueStatistics(QueueStatisticsInput input)
+		{
+			var workload = _workloadRepository.Get(input.WorkloadId);
+			var availablePeriod = _historicalPeriodProvider.AvailablePeriod(workload);
+			return new WorkloadQueueStatisticsViewModel
+			{
+				WorkloadId = workload.Id.Value,
+				QueueStatisticsDays = createQueueStatisticsDayViewModels(workload, input.ForecastMethodType, availablePeriod)
 			};
 		}
 
@@ -74,13 +83,9 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 			return methods.ToArray();
 		}
 
-		private dynamic[] createDayViewModels(IWorkload workload, MethodAccuracy bestAccuracy, DateOnlyPeriod period, bool isForecastingTest)
+		private dynamic[] createEvaluationDayViewModels(IWorkload workload, MethodAccuracy bestAccuracy, DateOnlyPeriod period)
 		{
-			return daysForPeriod(bestAccuracy, _historicalData.Fetch(workload, period), isForecastingTest);
-		}
-
-		private dynamic[] daysForPeriod(MethodAccuracy bestAccuracy, ITaskOwnerPeriod historicalData, bool isForecastingTest)
-		{
+			var historicalData = _historicalData.Fetch(workload, period);
 			var data = new Dictionary<DateOnly, dynamic>();
 			foreach (var taskOwner in historicalData.TaskOwnerDayCollection)
 			{
@@ -107,29 +112,37 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 					}
 				}
 			}
+			return data.Values.ToArray();
+		}
 
-			if (isForecastingTest)
+		private dynamic[] createQueueStatisticsDayViewModels(IWorkload workload, ForecastMethodType method, DateOnlyPeriod period)
+		{
+			var historicalData = _historicalData.Fetch(workload, period);
+			var forecastMethod = _forecastMethodProvider.Get(method);
+			var historicalDataNoOutliers = _outlierRemover.RemoveOutliers(historicalData, forecastMethod);
+
+			var data = new Dictionary<DateOnly, dynamic>();
+			foreach (var taskOwner in historicalData.TaskOwnerDayCollection)
 			{
-				if (bestAccuracy == null) return data.Values.ToArray();
-				var forecastMethod = _forecastMethodProvider.Get(bestAccuracy.MethodId);
-				var threeYearsHistoricalDataNoOutliers = _outlierRemover.RemoveOutliers(historicalData, forecastMethod);
-
-				foreach (var day in threeYearsHistoricalDataNoOutliers.TaskOwnerDayCollection)
+				dynamic item = new ExpandoObject();
+				item.date = taskOwner.CurrentDate.Date;
+				item.vh = taskOwner.TotalStatisticCalculatedTasks;
+				data.Add(taskOwner.CurrentDate, item);
+			}
+			foreach (var day in historicalDataNoOutliers.TaskOwnerDayCollection)
+			{
+				if (data.ContainsKey(day.CurrentDate))
 				{
-					if (data.ContainsKey(day.CurrentDate))
-					{
-						data[day.CurrentDate].vh2 = Math.Round(day.TotalStatisticCalculatedTasks, 1);
-					}
-					else
-					{
-						dynamic item = new ExpandoObject();
-						item.date = day.CurrentDate;
-						item.vh2 = Math.Round(day.TotalStatisticCalculatedTasks, 1);
-						data.Add(day.CurrentDate, item);
-					}
+					data[day.CurrentDate].vh2 = Math.Round(day.TotalStatisticCalculatedTasks, 1);
+				}
+				else
+				{
+					dynamic item = new ExpandoObject();
+					item.date = day.CurrentDate;
+					item.vh2 = Math.Round(day.TotalStatisticCalculatedTasks, 1);
+					data.Add(day.CurrentDate, item);
 				}
 			}
-
 			return data.Values.ToArray();
 		}
 	}

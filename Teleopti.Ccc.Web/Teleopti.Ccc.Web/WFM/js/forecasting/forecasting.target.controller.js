@@ -26,13 +26,29 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 					$scope.isQueueStatisticsEnabled = result.IsEnabled;
 				});
 
+
+				var getQueueStatistics = function (workload, methodId) {
+					$http.post("../api/Forecasting/QueueStatistics", JSON.stringify({ WorkloadId: workload.Id, MethodId: methodId })).
+						success(function (data, status, headers, config) {
+							workload.queueStatisticsLoaded = true;
+							angular.forEach(data.QueueStatisticsDays, function (day) {
+								day.date = new Date(Date.parse(day.date));
+							});
+							workload.chartData2 = data.QueueStatisticsDays;
+						}).
+						error(function (data, status, headers, config) {
+							$scope.error = { message: "Failed to get queue statisctics." };
+							workload.loaded = true;
+						});
+				};
+
 				$scope.openModal = function (workload) {
 					workload.modalLaunch = true;
 					workload.noHistoricalDataForEvaluation = false;
 					workload.noHistoricalDataForForecasting = false;
 					workload.loaded = false;
 					
-					$http.post("../api/Forecasting/Evaluate", JSON.stringify({ ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate, WorkloadId: workload.Id })).
+					$http.post("../api/Forecasting/Evaluate", JSON.stringify({ WorkloadId: workload.Id })).
 						success(function (data, status, headers, config) {
 							workload.loaded = true;
 							angular.forEach(data.Days, function(day) {
@@ -61,6 +77,10 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 							workload.ForecastMethodRecommended = data.ForecastMethodRecommended;
 							workload.selectedMethodName = methodNames[selectedMethod];
 							$scope.dataColumns[1].name = "Forecast Method";
+
+							if ($scope.isQueueStatisticsEnabled) {
+								getQueueStatistics(workload, selectedMethod);
+							}
 						}).
 						error(function(data, status, headers, config) {
 							$scope.error = { message: "Failed to do the evaluate." };

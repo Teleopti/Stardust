@@ -30,17 +30,32 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		}
 
 		[Test]
-		public void ShouldPreForecast()
+		public void ShouldEvaluate()
 		{
-			var preForecaster = MockRepository.GenerateMock<IForecastEvaluator>();
-			var preForecastInputModel = new EvaluateInput();
+			var forecastEvaluator = MockRepository.GenerateMock<IForecastEvaluator>();
+			var evaluateInput = new EvaluateInput();
 			var workloadForecastingViewModel = new WorkloadForecastViewModel();
-			preForecaster.Stub(x => x.Evaluate(preForecastInputModel)).Return(workloadForecastingViewModel);
-			var target = new ForecastController(null, null, preForecaster);
+			forecastEvaluator.Stub(x => x.Evaluate(evaluateInput)).Return(workloadForecastingViewModel);
+			var target = new ForecastController(null, null, forecastEvaluator);
 
-			var result = target.Evaluate(preForecastInputModel);
+			var result = target.Evaluate(evaluateInput);
 
 			result.Result.Should().Be.EqualTo(workloadForecastingViewModel);
+		}
+
+
+		[Test]
+		public void ShouldGetQueueStatistics()
+		{
+			var forecastEvaluator = MockRepository.GenerateMock<IForecastEvaluator>();
+			var queueStatisticsInput = new QueueStatisticsInput();
+			var workloadQueueStatisticsViewModel = new WorkloadQueueStatisticsViewModel();
+			forecastEvaluator.Stub(x => x.QueueStatistics(queueStatisticsInput)).Return(workloadQueueStatisticsViewModel);
+			var target = new ForecastController(null, null, forecastEvaluator);
+
+			var result = target.QueueStatistics(queueStatisticsInput);
+
+			result.Result.Should().Be.EqualTo(workloadQueueStatisticsViewModel);
 		}
 	}
 

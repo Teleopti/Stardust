@@ -46,6 +46,12 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			return Task.FromResult(_forecastEvaluator.Evaluate(input));
 		}
 
+		[UnitOfWork, HttpPost, Route("api/Forecasting/QueueStatistics")]
+		public virtual Task<WorkloadQueueStatisticsViewModel> QueueStatistics(QueueStatisticsInput input)
+		{
+			return Task.FromResult(_forecastEvaluator.QueueStatistics(input));
+		}
+
 		[HttpPost, Route("api/Forecasting/Forecast"), UnitOfWork]
 		public virtual Task<bool> Forecast(ForecastInput input)
 		{
@@ -54,4 +60,5 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			return Task.FromResult(true);
 		}
 	}
+
 }

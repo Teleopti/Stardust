@@ -9,6 +9,12 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 		public dynamic[] ForecastMethods { get; set; }
 		public dynamic[] Days { get; set; }
 		public dynamic ForecastMethodRecommended { get; set; }
-		public dynamic[] TestDays { get; set; }
+	}
+
+
+	public class WorkloadQueueStatisticsViewModel
+	{
+		public Guid WorkloadId { get; set; }
+		public dynamic[] QueueStatisticsDays { get; set; }
 	}
 }

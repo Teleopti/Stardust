@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Historical;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Forecasting.Angel;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Forecasting.Controllers;
 using Teleopti.Ccc.Web.Areas.Forecasting.Core;
@@ -46,6 +47,48 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 		}
 
 		[Test]
+		public void ShouldGetQueueStatisticsAndQueueStatisticsNoOutliers()
+		{
+			var skill = SkillFactory.CreateSkillWithWorkloadAndSources();
+			var workloadRepository = MockRepository.GenerateMock<IWorkloadRepository>();
+			var workload = skill.WorkloadCollection.Single();
+
+			var date1 = new DateOnly(2014, 12, 19);
+			var date2 = new DateOnly(2014, 12, 20);
+			var workloadDay1 = new WorkloadDay();
+			workloadDay1.Create(date1, new Workload(SkillFactory.CreateSkill("Phone")), new List<TimePeriod>());
+			workloadDay1.MakeOpen24Hours();
+			workloadDay1.TotalStatisticCalculatedTasks = 8d;
+			var workloadDay2 = new WorkloadDay();
+			workloadDay2.Create(date2, new Workload(SkillFactory.CreateSkill("Phone")), new List<TimePeriod>());
+			workloadDay2.MakeOpen24Hours();
+			workloadDay2.TotalStatisticCalculatedTasks = 12d;
+
+			var availablePeriod = new DateOnlyPeriod(2012, 12, 20, 2014, 12, 20);
+			var historicalPeriodProvider = MockRepository.GenerateMock<IHistoricalPeriodProvider>();
+			historicalPeriodProvider.Stub(x => x.AvailablePeriod(workload)).Return(availablePeriod);
+			var historicalData = MockRepository.GenerateMock<IHistoricalData>();
+			var taskOwnerPeriod = new TaskOwnerPeriod(DateOnly.MinValue, new List<WorkloadDay> { workloadDay1, workloadDay2 }, TaskOwnerPeriodType.Other);
+			historicalData.Stub(x => x.Fetch(workload, availablePeriod)).Return(taskOwnerPeriod);
+			
+			var queueStatisticsInput = new QueueStatisticsInput
+			{
+				WorkloadId = workload.Id.Value,
+				ForecastMethodType = ForecastMethodType.TeleoptiClassic
+			};
+			workloadRepository.Stub(x => x.Get(queueStatisticsInput.WorkloadId)).Return(workload);
+			var target = new ForecastEvaluator(null, workloadRepository, historicalPeriodProvider, historicalData, new OutlierRemover(), new ForecastMethodProvider(new IndexVolumes(), new LinearRegressionTrend()));
+			
+			var result = target.QueueStatistics(queueStatisticsInput);
+
+			result.WorkloadId.Should().Be.EqualTo(workload.Id.Value);
+			dynamic firstDay = result.QueueStatisticsDays.First();
+			((object)firstDay.date).Should().Be.EqualTo(date1.Date);
+			((object)firstDay.vh).Should().Be.EqualTo(8d);
+			((object)firstDay.vh2).Should().Be.EqualTo(8d);
+		}
+
+		[Test]
 		public void ShouldGetHistoricalData()
 		{
 			var skill = SkillFactory.CreateSkillWithWorkloadAndSources();
@@ -57,9 +100,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			};
 			workloadRepository.Stub(x => x.Get(evaluateInput.WorkloadId)).Return(workload);
 
-			var date1 = new DateOnly(2014, 12, 29);
-			var date2 = new DateOnly(2014, 12, 30);
-			var date3 = new DateOnly(2014, 12, 31);
+			var date1 = new DateOnly(2014, 12, 9);
+			var date2 = new DateOnly(2014, 12, 10);
+			var date3 = new DateOnly(2014, 12, 11);
 			var workloadDay1 = new WorkloadDay();
 			workloadDay1.Create(date1, new Workload(SkillFactory.CreateSkill("Phone")), new List<TimePeriod>());
 			workloadDay1.MakeOpen24Hours();
