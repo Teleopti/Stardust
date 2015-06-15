@@ -20,6 +20,7 @@ namespace Teleopti.Wfm.Administration.Core
 			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new AppConfigReader()), new FalseToggleManager())));
 			builder.RegisterType<AdminTenantAuthentication>().As<ITenantAuthentication>().SingleInstance();
 			builder.RegisterType<DatabaseHelperWrapper>().SingleInstance();
+			builder.RegisterType<CheckDatabaseVersions>().SingleInstance();
 
 			// OPTIONAL: Enable property injection into action filters.
 			builder.RegisterFilterProvider();

@@ -692,7 +692,9 @@
     <EmbeddedResource Include="MultiTenancy\Server\PersonInfo.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="MultiTenancy\Server\Tenant.hbm.xml" />
+    <EmbeddedResource Include="MultiTenancy\Server\Tenant.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Licensing\Agreements\TeleoptiLic_De_De_St.txt" />
     <EmbeddedResource Include="Licensing\Agreements\TeleoptiLic_TeleoptiCloud.txt" />
     <EmbeddedResource Include="Licensing\Agreements\TeleoptiLic_En_Sw_Forecasts.txt" />

@@ -101,8 +101,10 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="ControllerActions\CheckNewTenantName.cs" />
     <Compile Include="ControllerActions\GetAllTenantsTest.cs" />
     <Compile Include="ControllerActions\CheckExistingDatabaseTest.cs" />
+    <Compile Include="ControllerActions\GetVersionsTest.cs" />
     <Compile Include="TenantTestAttribute.cs" />
   </ItemGroup>
   <ItemGroup>

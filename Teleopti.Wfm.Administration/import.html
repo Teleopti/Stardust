@@ -25,6 +25,12 @@
 					<div ng-class="(importVm.AnalDbOk==true) ? 'dbOk' : 'dbNotOk'">{{importVm.AnalDbCheckMessage}}</div>
 					</div>
 				<p></p>
+				<div>
+					<label>Version information</label>
+					<span>Head version</span><span>{{importVm.HeadVersion}}</span>
+					<span>Import version</span><span>{{importVm.ImportAppVersion}}</span>
+					<span>The versions are OK</span><span>{{importVm.AppVersionOk}}</span>
+				</div>
 				<p><button class="btn btn-default" ng-click="importVm.startImport()">Start import</button></p>
 				{{importVm.Result}}
 			</div>

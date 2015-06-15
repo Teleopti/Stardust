@@ -10,13 +10,15 @@
 		vm.Tenant = "";
 		vm.AppDatabase = "";
 		vm.AnalyticsDatabase = "";
-		vm.Server = ".";
 
 		vm.AppDbOk = false;
 		vm.AppDbCheckMessage = "Input connection string";
 
 		vm.AnalDbOk = false;
 		vm.AnalDbCheckMessage = "Input connection string";
+		vm.HeadVersion = null;
+		vm.ImportAppVersion = null;
+		vm.AppVersionOk = null;
 
 		vm.CheckAppDb = function () {
 			$http.post('../api/Import/DbExists', {
@@ -26,6 +28,9 @@
 				.success(function (data) {
 					vm.AppDbOk = data.Exists;
 					vm.AppDbCheckMessage = data.Message;
+					if (vm.AppDbOk) {
+						vm.CheckVersions();
+					}
 				}).error(function (xhr, ajaxOptions, thrownError) {
 					console.log(xhr.status + xhr.responseText + thrownError);
 				});
@@ -38,6 +43,19 @@
 				.success(function (data) {
 					vm.AnalDbOk = data.Exists;
 					vm.AnalDbCheckMessage = data.Message;
+				}).error(function (xhr, ajaxOptions, thrownError) {
+					console.log(xhr.status + xhr.responseText + thrownError);
+				});
+		}
+
+		vm.CheckVersion = function () {
+			$http.post('../api/UpgradeDatabases/GetVersions', {
+				AppConnectionString: vm.AppDatabase
+			})
+				.success(function (data) {
+					vm.HeadVersion = data.HeadVersion;
+					vm.ImportAppVersion = data.ImportAppVersion;
+					vm.AppVersionOk = data.AppVersionOk;
 				}).error(function (xhr, ajaxOptions, thrownError) {
 					console.log(xhr.status + xhr.responseText + thrownError);
 				});
