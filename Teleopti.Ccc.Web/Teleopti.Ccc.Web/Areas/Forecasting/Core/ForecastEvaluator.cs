@@ -92,7 +92,6 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 				dynamic item = new ExpandoObject();
 				item.date = taskOwner.CurrentDate.Date;
 				item.vh = taskOwner.TotalStatisticCalculatedTasks;
-
 				data.Add(taskOwner.CurrentDate, item);
 			}
 			if (bestAccuracy != null)
@@ -119,7 +118,6 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 		{
 			var historicalData = _historicalData.Fetch(workload, period);
 			var forecastMethod = _forecastMethodProvider.Get(method);
-			var historicalDataNoOutliers = _outlierRemover.RemoveOutliers(historicalData, forecastMethod);
 
 			var data = new Dictionary<DateOnly, dynamic>();
 			foreach (var taskOwner in historicalData.TaskOwnerDayCollection)
@@ -129,6 +127,8 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 				item.vh = taskOwner.TotalStatisticCalculatedTasks;
 				data.Add(taskOwner.CurrentDate, item);
 			}
+
+			var historicalDataNoOutliers = _outlierRemover.RemoveOutliers(historicalData, forecastMethod);
 			foreach (var day in historicalDataNoOutliers.TaskOwnerDayCollection)
 			{
 				if (data.ContainsKey(day.CurrentDate))
