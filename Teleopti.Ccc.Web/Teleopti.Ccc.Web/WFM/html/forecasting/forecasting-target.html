@@ -67,72 +67,87 @@
 		<div ng-cloak ng-show="workload.modalLaunch">
 			<div class="modalbg">
 				<div class="dialog">
-					<div class="modal-header">
-						{{skill.Name}} - {{workload.Name}}
-					</div>
 					<div class="modal-inner-content">
 						<div ng-if="!workload.loaded" class="modal-inner-content wfm-block">
+							<div class="sub-header">Loadig...</div>
 							<md-progress-linear md-mode="indeterminate"></md-progress-linear>
 						</div>
 						<div ng-if="workload.loaded">
+							<div class="wfm-slide-tabs">
+								<md-content style="paddding:0!important;">
+									<md-tabs md-dynamic-height md-border-bottom>
+										<md-tab label="" style="display:none;"></md-tab>
+										<md-tab label="{{skill.Name}} - {{workload.Name}}" md-active="true">
+											<md-content>
+
+												<div class="wfm-block">
+													<div class="row">
+														<div class="col-lg-12">
+															<h4>{{ 'ForecastMethod' | translate }}</h4>
+															<p>
+																This chart shows how well a <i>Forecast Method</i> matches last year's <i>Queue Statistics</i> for workload <i>{{workload.Name}}</i>. Out of several tested forecast methods
+																this one was the most accurate. <br>The chosen forecast method is based on a period of queue statistics prior to the timeframe in the chart and will be used in the upcoming
+																forecast for workload <i>{{workload.Name}}</i>.
+															</p>
+														</div>
+													</div>
+												</div>
+												<c3chart bindto-id="{{workload.chartId}}" chart-data="workload.chartData" chart-columns="dataColumns" chart-x="dataX" show-subchart="true" enable-zoom="true">
+													<chart-axis>
+														<chart-axis-x axis-id="date" axis-type="timeseries">
+															<chart-axis-x-tick tick-format="%Y-%m-%d" />
+														</chart-axis-x>
+													</chart-axis>
+													<chart-axis>
+														<chart-axis-y axis-id="y" axis-position="outer-middle" axis-label="Number of Calls" />
+													</chart-axis>
+												</c3chart>
+												<div class="row" ng-if="!workload.noHistoricalDataForEvaluation">
+													<div class="col-lg-12">
+														<p>
+															We use historical data from <b>{{workload.ForecastMethodRecommended.PeriodUsedToEvaluateStart | date : shortDate}}</b> to <b>{{workload.ForecastMethodRecommended.PeriodUsedToEvaluateEnd | date : shortDate}}</b>, and evaluate forecast methods on the period from <b>{{workload.ForecastMethodRecommended.PeriodEvaluateOnStart | date : shortDate}}</b> to <b>{{workload.ForecastMethodRecommended.PeriodEvaluateOnEnd | date : shortDate}}</b>.
+														</p>
+														<p>
+															We pick forecast method: <b>{{workload.selectedMethodName}}</b>.
+														</p>
+													</div>
+												</div>
+
+											</md-content>
+										</md-tab>
+										<md-tab label="Queue statistics" md-active="false">
+											<md-content class="md-padding">
+
+												<div class="col-lg-12">
+													<h4>Queue statistics</h4>
+												</div>
+												<c3chart bindto-id="{{workload.chartId2}}" chart-data="workload.chartData2" chart-columns="dataColumns2" chart-x="dataX" show-subchart="true" enable-zoom="true">
+													<chart-axis>
+														<chart-axis-x axis-id="date" axis-type="timeseries">
+															<chart-axis-x-tick tick-format="%Y-%m-%d" />
+														</chart-axis-x>
+													</chart-axis>
+													<chart-axis>
+														<chart-axis-y axis-id="y" axis-position="outer-middle" axis-label="Number of Calls" />
+													</chart-axis>
+												</c3chart>
+
+											</md-content>
+										</md-tab>
+									</md-tabs>
+								</md-content>
+							</div>
 							<div class="alert-warning notice-spacer" ng-show="workload.noHistoricalDataForEvaluation"><i class='mdi mdi-alert'></i> Warning: There is no recommended forecasting method because of lack of historical data.</div>
 							<div class="alert-warning notice-spacer" ng-show="workload.noHistoricalDataForForecasting"><i class='mdi mdi-alert'></i> Warning: There is no historical data available for forecasting.</div>
-							<div class="wfm-block">
-								<div class="row">
-									<div class="col-lg-12">
-										<h4>{{ 'ForecastMethod' | translate }}</h4>
-										<p>
-											This chart shows how well a <i>Forecast Method</i> matches last year's <i>Queue Statistics</i> for workload <i>{{workload.Name}}</i>. Out of several tested forecast methods
-											this one was the most accurate. <br>The chosen forecast method is based on a period of queue statistics prior to the timeframe in the chart and will be used in the upcoming
-											forecast for workload <i>{{workload.Name}}</i>.
-										</p>
-									</div>
-								</div>
-								<c3chart bindto-id="{{workload.chartId}}" chart-data="workload.chartData" chart-columns="dataColumns" chart-x="dataX" show-subchart="true" enable-zoom="true">
-									<chart-axis>
-										<chart-axis-x axis-id="date" axis-type="timeseries">
-											<chart-axis-x-tick tick-format="%Y-%m-%d" />
-										</chart-axis-x>
-									</chart-axis>
-									<chart-axis>
-										<chart-axis-y axis-id="y" axis-position="outer-middle" axis-label="Number of Calls" />
-									</chart-axis>
-								</c3chart>
-								<div class="row" ng-if="!workload.noHistoricalDataForEvaluation">
-									<div class="col-lg-12">
-										<p>
-											We use historical data from <b>{{workload.ForecastMethodRecommended.PeriodUsedToEvaluateStart | date : shortDate}}</b> to <b>{{workload.ForecastMethodRecommended.PeriodUsedToEvaluateEnd | date : shortDate}}</b>, and evaluate forecast methods on the period from <b>{{workload.ForecastMethodRecommended.PeriodEvaluateOnStart | date : shortDate}}</b> to <b>{{workload.ForecastMethodRecommended.PeriodEvaluateOnEnd | date : shortDate}}</b>.
-										</p>
-										<p>
-											We pick forecast method: <b>{{workload.selectedMethodName}}</b>.
-										</p>
-									</div>
-								</div>
-								<div ng-if="IsForecastingTest">
-									<div class="col-lg-12">
-										<h4>Outliers Removal</h4>
-									</div>
-									<c3chart bindto-id="{{workload.chartId2}}" chart-data="workload.chartData2" chart-columns="dataColumns2" chart-x="dataX" show-subchart="true" enable-zoom="true">
-										<chart-axis>
-											<chart-axis-x axis-id="date" axis-type="timeseries">
-												<chart-axis-x-tick tick-format="%Y-%m-%d" />
-											</chart-axis-x>
-										</chart-axis>
-										<chart-axis>
-											<chart-axis-y axis-id="y" axis-position="outer-middle" axis-label="Number of Calls" />
-										</chart-axis>
-									</c3chart>
-									</div>
 							</div>
 						</div>
-					</div>
 					<div class="modal-footer">
 						<aside>
 							<a class="wfm-btn wfm-btn-invis-primary" ng-click="cancelMethod(workload)">{{ 'Close' | translate }}</a>
 						</aside>
 					</div>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
 </script>
