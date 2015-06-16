@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.TestCommon
 	{
 		public static IDataSource CreateDataSource(ICurrentMessageSenders messageSenders, string name)
 		{
-			setupCcc7();
+			setupCcc7(name);
 			setupAnalytics();
 			return makeDataSource(messageSenders, name);
 		}
@@ -75,14 +75,26 @@ namespace Teleopti.Ccc.TestCommon
 			return dictionary;
 		}
 
-		private static void setupCcc7()
+		private static void setupCcc7(string name)
 		{
 			if (tryRestoreDatabase(ccc7(), 0))
 				return;
 			createDatabase(ccc7());
 			createUniqueIndexOnPersonAssignmentBecauseDbManagerIsntRunFromTests();
 			PersistAuditSetting();
+			remove_default_tenant_because_connstrings_arent_set_due_to_securityexe_isnt_run_from_webscenarios();
+			persistDefaultTenant(name);
 			backupDatabase(ccc7(), 0);
+		}
+
+		private static void remove_default_tenant_because_connstrings_arent_set_due_to_securityexe_isnt_run_from_webscenarios()
+		{
+			ccc7().ExecuteSql("delete from tenant.tenant");
+		}
+
+		private static void persistDefaultTenant(string name)
+		{
+			ccc7().ExecuteSql(string.Format("insert into tenant.tenant (name, applicationconnectionstring, analyticsconnectionstring) values ('{0}', '{1}','{2}')", name, ccc7().ConnectionString, analytics().ConnectionString));
 		}
 
 		private static void setupAnalytics()

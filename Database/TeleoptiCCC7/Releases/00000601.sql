@@ -1,0 +1,3 @@
+--Just a dummy to force a new db in tests
+--Did some changes in security.exe that affects db data, 
+--but tests unfortunatly isnt regenerated when changes are made there

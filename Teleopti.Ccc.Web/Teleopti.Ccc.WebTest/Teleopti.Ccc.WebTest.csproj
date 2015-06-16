@@ -552,7 +552,6 @@
     <Compile Include="Core\WeekSchedule\ViewModelFactory\ScheduleViewModelFactoryTest.cs" />
     <Compile Include="Core\WeekSchedule\ViewModelFactory\ScheduleViewModelTestDataFactoryTest.cs" />
     <Compile Include="Core\Startup\BootStrapperTest.cs" />
-    <Compile Include="Core\Startup\InitializeTaskTest.cs" />
     <Compile Include="Core\Startup\RegisterGlobalFiltersTaskTest.cs" />
     <Compile Include="Core\Startup\RegisterRoutesTaskTest.cs" />
     <Compile Include="Core\Startup\VerifyLicenseTaskTest.cs" />

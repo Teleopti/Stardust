@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Linq;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
@@ -38,8 +39,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			Tenant defaultTenant=null;
 			TenantUnitOfWorkState.TenantUnitOfWorkAction(s =>
 			{
-				defaultTenant = new Tenant(TestControllerMethods.TenantName);
-				new PersistTenant(s).Persist(defaultTenant);
+				defaultTenant = new LoadAllTenants(s).Tenants().Single(t => t.Name.Equals(TestControllerMethods.TenantName));
 			});
 			return defaultTenant;
 		}

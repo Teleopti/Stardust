@@ -70,7 +70,9 @@
 		Wfm_Outbound_Campaign_32696,
 		WfmForecast_QueueStatistics_32572,
 
-		Scheduler_OptimizeFlexibleDayOffs_22409
+		Scheduler_OptimizeFlexibleDayOffs_22409,
+
+		Tenant_RemoveNhibFiles_33685
 		// ReSharper restore InconsistentNaming
 	}
 }

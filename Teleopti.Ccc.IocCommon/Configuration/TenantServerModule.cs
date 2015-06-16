@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;
@@ -10,6 +11,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	public class TenantServerModule : Module
 	{
+		private readonly IIocConfiguration _iocConfiguration;
+
+		public TenantServerModule(IIocConfiguration iocConfiguration)
+		{
+			_iocConfiguration = iocConfiguration;
+		}
+
 		private const string tenancyConnectionStringKey = "Tenancy";
 
 		protected override void Load(ContainerBuilder builder)
@@ -32,7 +40,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.SingleInstance();
 			builder.RegisterType<TenantUnitOfWorkAspect>().As<ITenantUnitOfWorkAspect>().SingleInstance();
 			builder.RegisterType<PersistLogonAttempt>().As<IPersistLogonAttempt>().SingleInstance();
-			builder.RegisterType<ReadDataSourceConfigurationFromNhibFiles>().As<IReadDataSourceConfiguration>().SingleInstance();
+			if (_iocConfiguration.Toggle(Toggles.Tenant_RemoveNhibFiles_33685))
+			{
+				builder.RegisterType<ReadDataSourceConfiguration>().As<IReadDataSourceConfiguration>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<ReadDataSourceConfigurationFromNhibFiles>().As<IReadDataSourceConfiguration>().SingleInstance();
+			}
 			builder.RegisterType<PersistPersonInfo>().As<IPersistPersonInfo>().SingleInstance();
 			builder.RegisterType<DeletePersonInfo>().As<IDeletePersonInfo>().SingleInstance();
 			builder.RegisterType<VerifyPasswordPolicy>().As<IVerifyPasswordPolicy>().SingleInstance();

@@ -16,9 +16,11 @@ namespace Teleopti.Wfm.Administration.Core
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterModule<TenantServerModule>();
+			var iocConf = new IocConfiguration(new IocArgs(new AppConfigReader()), new FalseToggleManager());
+
+			builder.RegisterModule(new TenantServerModule(iocConf));
 			builder.RegisterApiControllers(typeof(HomeController).Assembly).ApplyAspects();
-			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new AppConfigReader()), new FalseToggleManager())));
+			builder.RegisterModule(new CommonModule(iocConf));
 			builder.RegisterType<AdminTenantAuthentication>().As<ITenantAuthentication>().SingleInstance();
 			builder.RegisterType<DatabaseHelperWrapper>().SingleInstance();
 			builder.RegisterType<CheckDatabaseVersions>().SingleInstance();
