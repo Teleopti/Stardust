@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Win.Forecasting
 				 .As<IServiceBusSender>()
 				 .SingleInstance();
 			else
-				builder.RegisterType<EmptyServiceBusSender>()
+				builder.RegisterType<NoServiceBusSender>()
 				 .As<IServiceBusSender>()
 				 .SingleInstance();
             builder.RegisterType<ImportForecastView>()

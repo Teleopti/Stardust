@@ -36,7 +36,9 @@ namespace Teleopti.Ccc.WinCode.Main
 
 			var appSettings = settings.AddToAppSettings(ConfigurationManager.AppSettings.ToDictionary());
 
-			var sendToServiceBus = string.IsNullOrEmpty(ConfigurationManager.AppSettings["FreemiumForecast"])?(IServiceBusSender) new ServiceBusSender():new EmptyServiceBusSender();
+			var sendToServiceBus = string.IsNullOrEmpty(ConfigurationManager.AppSettings["FreemiumForecast"])
+				? (IServiceBusSender) new ServiceBusSender()
+				: new NoServiceBusSender();
 			var populator = EventContextPopulator.Make();
 			var businessUnit = CurrentBusinessUnit.Make();
 			var messageSender = new MessagePopulatingServiceBusSender(sendToServiceBus, populator);

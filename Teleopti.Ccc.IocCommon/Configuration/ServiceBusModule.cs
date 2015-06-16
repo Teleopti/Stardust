@@ -8,6 +8,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<MessagePopulatingServiceBusSender>().As<IMessagePopulatingServiceBusSender>().SingleInstance();
+			builder.RegisterType<NoServiceBusSender>().As<IServiceBusSender>().SingleInstance();
 		}
 	}
 }

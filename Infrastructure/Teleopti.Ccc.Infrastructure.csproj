@@ -196,6 +196,7 @@
     <Compile Include="ApplicationLayer\ISyncEventPublisher.cs" />
     <Compile Include="ApplicationLayer\MessagePopulatingServiceBusSender.cs" />
     <Compile Include="ApplicationLayer\EventPopulatingPublisher.cs" />
+    <Compile Include="ApplicationLayer\NoServiceBusSender.cs" />
     <Compile Include="ApplicationLayer\ResolveEventHandlers.cs" />
     <Compile Include="ApplicationLayer\SyncEventPublisher.cs" />
     <Compile Include="ApplicationLayer\IMessagePopulatingServiceBusSender.cs" />
