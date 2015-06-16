@@ -28,15 +28,46 @@ angular.module('wfm.forecasting', [])
 		}
 	])
 	.controller('ForecastingRunCtrl', [
-		'$scope', '$stateParams', '$http',
-		function($scope, $stateParams, $http) {
+		'$scope', '$stateParams', '$http', 'Forecasting',
+		function ($scope, $stateParams, $http, forecasting) {
 
 			$scope.period = $stateParams.period;
 			$scope.targets = $stateParams.targets;
 			var workloads = [];
-			angular.forEach($scope.targets, function(workload) {
+			angular.forEach($scope.targets, function (workload) {
+				workload.chartId = "chart" + workload.Id;
 				workloads.push({ WorkloadId: workload.Id, ForecastMethodId: workload.Method });
 			});
+
+			$scope.dataColumns = [{ id: "vc", type: "line", name: "Number of Calls" }];
+			$scope.dataX = { id: "date" };
+
+			$scope.isQueueStatisticsEnabled = false;
+			forecasting.isToggleEnabled.query({ toggle: 'WfmForecast_QueueStatistics_32572' }).$promise.then(function (result) {
+				$scope.isQueueStatisticsEnabled = result.IsEnabled;
+			});
+
+			$scope.openModal = function (workload) {
+				workload.modalLaunch = true;
+				workload.loaded = false;
+
+				$http.post("../api/Forecasting/ForecastResult", JSON.stringify({ ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate, WorkloadId: workload.Id })).
+					success(function (data, status, headers, config) {
+						angular.forEach(data.Days, function (day) {
+							day.date = new Date(Date.parse(day.date));
+						});
+						workload.chartData = data.Days;
+						workload.loaded = true;
+					}).
+					error(function (data, status, headers, config) {
+						$scope.error = { message: "Failed to get forecast result." };
+						workload.loaded = true;
+					});
+			};
+
+			$scope.cancelMethod = function (workload) {
+				workload.modalLaunch = false;
+			};
 
 			var forecastForOneWorkload = function(index) {
 				var workload = workloads[index];

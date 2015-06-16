@@ -19,12 +19,14 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		private readonly IForecastCreator _forecastCreator;
 		private readonly ISkillRepository _skillRepository;
 		private readonly IForecastEvaluator _forecastEvaluator;
+		private readonly IForecastResultViewModelFactory _forecastResultViewModelFactory;
 
-		public ForecastController(IForecastCreator forecastCreator, ISkillRepository skillRepository, IForecastEvaluator forecastEvaluator)
+		public ForecastController(IForecastCreator forecastCreator, ISkillRepository skillRepository, IForecastEvaluator forecastEvaluator, IForecastResultViewModelFactory forecastResultViewModelFactory)
 		{
 			_forecastCreator = forecastCreator;
 			_skillRepository = skillRepository;
 			_forecastEvaluator = forecastEvaluator;
+			_forecastResultViewModelFactory = forecastResultViewModelFactory;
 		}
 
 		[UnitOfWork, Route("api/Forecasting/Skills"), HttpGet]
@@ -52,6 +54,12 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			return Task.FromResult(_forecastEvaluator.QueueStatistics(input));
 		}
 
+		[HttpPost, Route("api/Forecasting/ForecastResult"), UnitOfWork]
+		public virtual Task<WorkloadForecastResultViewModel> ForecastResult(ForecastResultInput input)
+		{
+			return Task.FromResult(_forecastResultViewModelFactory.Create(input.WorkloadId, new DateOnlyPeriod(new DateOnly(input.ForecastStart), new DateOnly(input.ForecastEnd))));
+		}
+
 		[HttpPost, Route("api/Forecasting/Forecast"), UnitOfWork]
 		public virtual Task<bool> Forecast(ForecastInput input)
 		{
@@ -60,5 +68,4 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			return Task.FromResult(true);
 		}
 	}
-
 }

@@ -6,10 +6,10 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Future
 {
 	public class FutureData : IFutureData
 	{
-		public IEnumerable<ITaskOwner> Fetch(QuickForecasterWorkloadParams quickForecasterWorkloadParams)
+		public IEnumerable<ITaskOwner> Fetch(IWorkload workload, ICollection<ISkillDay> skillDays, DateOnlyPeriod futurePeriod)
 		{
-			new SkillDayCalculator(quickForecasterWorkloadParams.WorkLoad.Skill, quickForecasterWorkloadParams.SkillDays, quickForecasterWorkloadParams.FuturePeriod);
-			return quickForecasterWorkloadParams.SkillDays.SelectMany(s => s.WorkloadDayCollection.Where(w => quickForecasterWorkloadParams.WorkLoad.Equals(w.Workload)));
+			new SkillDayCalculator(workload.Skill, skillDays, futurePeriod);
+			return skillDays.SelectMany(s => s.WorkloadDayCollection.Where(w => workload.Equals(w.Workload)));
 		}
 	}
 }
