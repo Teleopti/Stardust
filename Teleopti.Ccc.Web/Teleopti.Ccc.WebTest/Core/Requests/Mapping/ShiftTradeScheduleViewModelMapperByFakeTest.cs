@@ -15,20 +15,19 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 {
 	[TestFixture, MyTimeWebTest]
-	[CLSCompliant(false)]
 	public class ShiftTradeScheduleViewModelMapperByFakeTest
 	{
-		public IShiftTradeScheduleViewModelMapper _mapper;
-		public IPersonRepository _personRepository;
-		public IBusinessUnitRepository _businessUnitRepository;
-		public ITeamRepository _teamRepository;
-		public IPersonAssignmentRepository _personAssignmentRepository;
-		public ILoggedOnUser _loggedOnUser;
+		public IShiftTradeScheduleViewModelMapper Mapper;
+		public IPersonRepository PersonRepository;
+		public IBusinessUnitRepository BusinessUnitRepository;
+		public ITeamRepository TeamRepository;
+		public IPersonAssignmentRepository PersonAssignmentRepository;
+		public ILoggedOnUser LoggedOnUser;
 
 		protected void SetUp()
 		{
 			var businessUnit = BusinessUnitFactory.CreateWithId("Teleopti");
-			_businessUnitRepository.Add(businessUnit);
+			BusinessUnitRepository.Add(businessUnit);
 
 			var person1 = PersonFactory.CreatePersonWithGuid("person", "1");
 			var person2 = PersonFactory.CreatePersonWithGuid("person", "2");
@@ -36,18 +35,18 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var person4 = PersonFactory.CreatePersonWithGuid("NoShiftTrade", "4");
 
 			ITeam team = TeamFactory.CreateTeamWithId("team1");
-			_teamRepository.Add(team);
+			TeamRepository.Add(team);
 
 			person1.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), PersonContractFactory.CreatePersonContract(), team));
 			person2.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), PersonContractFactory.CreatePersonContract(), team));
 			person3.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), PersonContractFactory.CreatePersonContract(), team));
 			person4.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), PersonContractFactory.CreatePersonContract(), team));
 
-			_personRepository.Add(person1);
-			_personRepository.Add(person2);
-			_personRepository.Add(person3);
-			_personRepository.Add(person4);
-			_personRepository.Add(_loggedOnUser.CurrentUser());
+			PersonRepository.Add(person1);
+			PersonRepository.Add(person2);
+			PersonRepository.Add(person3);
+			PersonRepository.Add(person4);
+			PersonRepository.Add(LoggedOnUser.CurrentUser());
 
 
 			var person1Assignment_1 = PersonAssignmentFactory.CreatePersonAssignmentWithId(person1, new DateOnly(2015, 5, 19));
@@ -67,18 +66,18 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var person4Assignment = PersonAssignmentFactory.CreatePersonAssignmentWithId(person4, new DateOnly(2015, 5, 19));
 			person4Assignment.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 19, 12, 2015, 5, 19, 15));
 
-			_personAssignmentRepository.Add(person1Assignment_1);
-			_personAssignmentRepository.Add(person1Assignment_2);
-			_personAssignmentRepository.Add(person2Assignment_1);
-			_personAssignmentRepository.Add(person2Assignment_2);
-			_personAssignmentRepository.Add(person3Assignment);
+			PersonAssignmentRepository.Add(person1Assignment_1);
+			PersonAssignmentRepository.Add(person1Assignment_2);
+			PersonAssignmentRepository.Add(person2Assignment_1);
+			PersonAssignmentRepository.Add(person2Assignment_2);
+			PersonAssignmentRepository.Add(person3Assignment);
 
 		}
 
 		[Test]
 		public void MapperShouldNotBeNull()
 		{
-			_mapper.Should().Not.Be.Null();
+			Mapper.Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -89,11 +88,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			{
 				Paging = new Paging { Skip = 0, Take = 10,},
 				ShiftTradeDate = new DateOnly(2015, 5, 19),
-				TeamIdList = _teamRepository.LoadAll().Select(t => t.Id.Value).ToList(),
+				TeamIdList = TeamRepository.LoadAll().Select(t => t.Id.Value).ToList(),
 				SearchNameText = "",
 			};
 
-			var result = _mapper.Map(data);
+			var result = Mapper.Map(data);
 
 			result.PossibleTradeSchedules.Count().Should().Be(2);
 			result.PossibleTradeSchedules.First().Name.Should().Be("1 person");
@@ -105,10 +104,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			SetUp();
 
-			var result = _mapper.Map(new ShiftTradeScheduleViewModelData
+			var result = Mapper.Map(new ShiftTradeScheduleViewModelData
 			{
 				ShiftTradeDate = new DateOnly(2015, 5, 19),
-				TeamIdList = _teamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
+				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
 				Paging = new Paging { Take = 20, Skip = 0 },
 				SearchNameText = "1"
 			});
@@ -121,12 +120,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			SetUp();
 
-			var person1 = _personRepository.LoadAll().First(p => p.Name.LastName == "1");
+			var person1 = PersonRepository.LoadAll().First(p => p.Name.LastName == "1");
 
-			var result = _mapper.Map(new ShiftTradeScheduleViewModelData
+			var result = Mapper.Map(new ShiftTradeScheduleViewModelData
 			{
 				ShiftTradeDate = new DateOnly(2015, 5, 21),
-				TeamIdList = _teamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
+				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
 				Paging = new Paging { Take = 20, Skip = 0 },
 				SearchNameText = ""
 			});
@@ -140,10 +139,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			SetUp();
 
-			var result = _mapper.Map(new ShiftTradeScheduleViewModelData
+			var result = Mapper.Map(new ShiftTradeScheduleViewModelData
 			{
 				ShiftTradeDate = new DateOnly(2015, 5, 19),
-				TeamIdList = _teamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
+				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
 				Paging = new Paging { Take = 20, Skip = 0 },
 				SearchNameText = ""
 			});
@@ -158,10 +157,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public void ShouldReturnCorrectAgentSchedulesWithTimeFilter()
 		{
 			SetUp();
-			var result = _mapper.Map(new ShiftTradeScheduleViewModelData
+			var result = Mapper.Map(new ShiftTradeScheduleViewModelData
 			{
 				ShiftTradeDate = new DateOnly(2015, 5, 19),
-				TeamIdList = _teamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
+				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
 				Paging = new Paging { Take = 20, Skip = 0 },
 				TimeFilter = new TimeFilterInfo
 				{
@@ -183,10 +182,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			SetUp();
 
-			var result = _mapper.Map(new ShiftTradeScheduleViewModelData
+			var result = Mapper.Map(new ShiftTradeScheduleViewModelData
 			{
 				ShiftTradeDate = new DateOnly(2015, 5, 23),
-				TeamIdList = _teamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
+				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
 				Paging = new Paging { Take = 20, Skip = 0 },
 				TimeFilter = new TimeFilterInfo
 				{
@@ -208,10 +207,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			SetUp();
 
-			var result = _mapper.Map(new ShiftTradeScheduleViewModelData
+			var result = Mapper.Map(new ShiftTradeScheduleViewModelData
 			{
 				ShiftTradeDate = new DateOnly(2015, 5, 23),
-				TeamIdList = _teamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
+				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
 				Paging = new Paging { Take = 20, Skip = 0 },
 				TimeFilter = new TimeFilterInfo
 				{

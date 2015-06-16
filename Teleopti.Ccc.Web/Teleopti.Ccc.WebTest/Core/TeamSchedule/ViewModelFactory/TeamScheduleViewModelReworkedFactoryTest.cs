@@ -17,37 +17,36 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 {	
 	[TestFixture, MyTimeWebTest]
-	[CLSCompliant(false)]
 	public class TeamScheduleViewModelReworkedFactoryTest
 	{
-		public ITeamScheduleViewModelReworkedFactory _target;
-		public IPersonRepository _personRepository;
-		public IPersonForScheduleFinder _personForScheduleFinder;
-		public IBusinessUnitRepository _businessUnitRepository;
-		public ITeamRepository _teamRepository;
-		public IPersonScheduleDayReadModelFinder _personScheduleDayReadModelFinder;
-		public IPersonAssignmentRepository _personAssignmentRepository;
-		public IPermissionProvider _permissionProvider;
+		public ITeamScheduleViewModelReworkedFactory Target;
+		public IPersonRepository PersonRepository;
+		public IPersonForScheduleFinder PersonForScheduleFinder;
+		public IBusinessUnitRepository BusinessUnitRepository;
+		public ITeamRepository TeamRepository;
+		public IPersonScheduleDayReadModelFinder PersonScheduleDayReadModelFinder;
+		public IPersonAssignmentRepository PersonAssignmentRepository;
+		public IPermissionProvider PermissionProvider;
 
 		protected void SetUp()
 		{
 			var businessUnit = BusinessUnitFactory.CreateWithId("Teleopti");
-			_businessUnitRepository.Add(businessUnit);
+			BusinessUnitRepository.Add(businessUnit);
 
 			var person1 = PersonFactory.CreatePersonWithGuid("person", "1");
 			var person2 = PersonFactory.CreatePersonWithGuid("person", "2");
 			var person3 = PersonFactory.CreatePersonWithGuid("Unpublish_person", "3");
 
 			ITeam team = TeamFactory.CreateTeamWithId("team1");
-			_teamRepository.Add(team);
+			TeamRepository.Add(team);
 
 			person1.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), PersonContractFactory.CreatePersonContract(), team));
 			person2.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), PersonContractFactory.CreatePersonContract(), team));
 			person3.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), PersonContractFactory.CreatePersonContract(), team));
 
-			_personRepository.Add(person1);
-			_personRepository.Add(person2);
-			_personRepository.Add(person3);
+			PersonRepository.Add(person1);
+			PersonRepository.Add(person2);
+			PersonRepository.Add(person3);
 
 
 			var person1Assignment_1 = PersonAssignmentFactory.CreatePersonAssignmentWithId(person1, new DateOnly(2015, 5, 19));
@@ -64,25 +63,25 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			
 			var person3Assignment = PersonAssignmentFactory.CreatePersonAssignmentWithId(person3, new DateOnly(2015, 5, 19));
 			person3Assignment.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 19, 12, 2015, 5, 19, 15));
-			_personAssignmentRepository.Add(person1Assignment_1);
-			_personAssignmentRepository.Add(person1Assignment_2);
-			_personAssignmentRepository.Add(person2Assignment_1);
-			_personAssignmentRepository.Add(person2Assignment_2);
-			_personAssignmentRepository.Add(person3Assignment);
+			PersonAssignmentRepository.Add(person1Assignment_1);
+			PersonAssignmentRepository.Add(person1Assignment_2);
+			PersonAssignmentRepository.Add(person2Assignment_1);
+			PersonAssignmentRepository.Add(person2Assignment_2);
+			PersonAssignmentRepository.Add(person3Assignment);
 		}
 
 
 		[Test]
 		public void TargetFactoryNotNull()
 		{
-			_target.Should().Not.Be.Null();
+			Target.Should().Not.Be.Null();
 		}
 
 
 		[Test]
 		public void PermissionProviderShouldBeUsed()
 		{
-			_permissionProvider.Should().Not.Be.Null();
+			PermissionProvider.Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -90,8 +89,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		{
 			SetUp();
 
-			var team = _teamRepository.LoadAll().First();
-			var persons = _personForScheduleFinder.GetPersonFor(new DateOnly(2015, 5, 19), new[] { team.Id.Value }, "");
+			var team = TeamRepository.LoadAll().First();
+			var persons = PersonForScheduleFinder.GetPersonFor(new DateOnly(2015, 5, 19), new[] { team.Id.Value }, "");
 
 			persons.Should().Have.Count.EqualTo(3);
 		}
@@ -101,8 +100,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		{
 			SetUp();
 
-			var personScheduleReadModels = _personScheduleDayReadModelFinder.ForPersons(new DateOnly(2015, 5, 19),
-				_personRepository.LoadAll().Select(x => x.Id.Value), new Paging());
+			var personScheduleReadModels = PersonScheduleDayReadModelFinder.ForPersons(new DateOnly(2015, 5, 19),
+				PersonRepository.LoadAll().Select(x => x.Id.Value), new Paging());
 
 			personScheduleReadModels.Should().Have.Count.EqualTo(3);
 
@@ -113,10 +112,10 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		{
 			SetUp();
 
-			var result = _target.GetViewModel(new TeamScheduleViewModelData
+			var result = Target.GetViewModel(new TeamScheduleViewModelData
 			{
 				ScheduleDate = new DateOnly(2015, 5, 19),
-				TeamIdList = _teamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
+				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
 				Paging = new Paging {Take = 20, Skip = 0},
 				SearchNameText = ""
 			});
@@ -130,10 +129,10 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		{
 			SetUp();
 	
-			var result = _target.GetViewModel(new TeamScheduleViewModelData
+			var result = Target.GetViewModel(new TeamScheduleViewModelData
 			{
 				ScheduleDate = new DateOnly(2015, 5, 19),
-				TeamIdList = _teamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
+				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
 				Paging = new Paging { Take = 20, Skip = 0 },
 				SearchNameText = "1"
 			});
@@ -146,12 +145,12 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		{
 			SetUp();
 
-			var person1 = _personRepository.LoadAll().First(p => p.Name.LastName == "1");
+			var person1 = PersonRepository.LoadAll().First(p => p.Name.LastName == "1");
 	
-			var result = _target.GetViewModel(new TeamScheduleViewModelData
+			var result = Target.GetViewModel(new TeamScheduleViewModelData
 			{
 				ScheduleDate = new DateOnly(2015, 5, 21),
-				TeamIdList = _teamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
+				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
 				Paging = new Paging { Take = 20, Skip = 0 },
 				SearchNameText = ""
 			});
@@ -164,10 +163,10 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		public void ShouldReturnCorrectAgentSchedulesWithTimeFilter()
 		{
 			SetUp();
-			var result = _target.GetViewModel(new TeamScheduleViewModelData
+			var result = Target.GetViewModel(new TeamScheduleViewModelData
 			{
 				ScheduleDate = new DateOnly(2015, 5, 19),
-				TeamIdList = _teamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
+				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
 				Paging = new Paging { Take = 20, Skip = 0 },
 				TimeFilter = new TimeFilterInfo
 				{
@@ -188,10 +187,10 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		{
 			SetUp();
 
-			var result = _target.GetViewModel(new TeamScheduleViewModelData
+			var result = Target.GetViewModel(new TeamScheduleViewModelData
 			{
 				ScheduleDate = new DateOnly(2015, 5, 20),
-				TeamIdList = _teamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
+				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
 				Paging = new Paging { Take = 20, Skip = 0 },
 				SearchNameText = ""
 			});
@@ -204,10 +203,10 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		{
 			SetUp();
 
-			var result = _target.GetViewModel(new TeamScheduleViewModelData
+			var result = Target.GetViewModel(new TeamScheduleViewModelData
 			{
 				ScheduleDate = new DateOnly(2015, 5, 19),
-				TeamIdList = _teamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
+				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
 				Paging = new Paging { Take = 20, Skip = 0 },
 				SearchNameText = ""
 			});
@@ -220,10 +219,10 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		{
 			SetUp();
 
-			var result = _target.GetViewModel(new TeamScheduleViewModelData
+			var result = Target.GetViewModel(new TeamScheduleViewModelData
 			{
 				ScheduleDate = new DateOnly(2015, 5, 23),
-				TeamIdList = _teamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
+				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
 				Paging = new Paging { Take = 20, Skip = 0 },
 				TimeFilter = new TimeFilterInfo
 				{
@@ -245,10 +244,10 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		{
 			SetUp();
 
-			var result = _target.GetViewModel(new TeamScheduleViewModelData
+			var result = Target.GetViewModel(new TeamScheduleViewModelData
 			{
 				ScheduleDate = new DateOnly(2015, 5, 23),
-				TeamIdList = _teamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
+				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
 				Paging = new Paging { Take = 20, Skip = 0 },
 				TimeFilter = new TimeFilterInfo
 				{
@@ -269,10 +268,10 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		{
 			SetUp();
 
-			var result = _target.GetViewModel(new TeamScheduleViewModelData
+			var result = Target.GetViewModel(new TeamScheduleViewModelData
 			{
 				ScheduleDate = new DateOnly(2015, 5, 23),
-				TeamIdList = _teamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
+				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
 				Paging = new Paging { Take = 20, Skip = 0 },
 				TimeFilter = new TimeFilterInfo
 				{

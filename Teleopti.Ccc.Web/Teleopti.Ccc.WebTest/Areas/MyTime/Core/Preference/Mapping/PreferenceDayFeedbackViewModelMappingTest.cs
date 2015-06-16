@@ -40,18 +40,17 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 
 	[TestFixture]
 	[MyTimeWebPreferenceMappingTest]
-	[CLSCompliant(false)]
 	public class PreferenceDayFeedbackViewModelMappingTestByFake
 	{
-		public PreferenceDayFeedbackViewModelMappingProfile _preferenceDayFeedbackViewModelMappingProfile;
-		public IScheduleProvider _scheduleProvider;
-		public IPreferenceProvider _preferenceProvider;
-		public FakePersonContractProvider _personContractProvider;
-		public Person _person;
+		public PreferenceDayFeedbackViewModelMappingProfile PreferenceDayFeedbackViewModelMappingProfile;
+		public IScheduleProvider ScheduleProvider;
+		public IPreferenceProvider PreferenceProvider;
+		public FakePersonContractProvider PersonContractProvider;
+		public Person Person;
 
 		private IScheduleDay buildPersonSchedule(DateOnly date, TimeSpan startTime, TimeSpan endTime)
 		{
-			var schedule = ScheduleDayFactory.Create(date, _person);
+			var schedule = ScheduleDayFactory.Create(date, Person);
 			var start = new DateTime(date.Year, date.Month, date.Day, startTime.Hours, startTime.Minutes, 0 , DateTimeKind.Utc);
 			var end = new DateTime(date.Year, date.Month, date.Day, endTime.Hours, endTime.Minutes, 0, DateTimeKind.Utc);
 
@@ -64,7 +63,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 
 		private IScheduleDay buildPersonScheduleDayOff(DateOnly date)
 		{
-			var schedule = ScheduleDayFactory.Create(date, _person);
+			var schedule = ScheduleDayFactory.Create(date, Person);
 			schedule.CreateAndAddDayOff(DayOffFactory.CreateDayOff());		
 			return schedule;
 		}
@@ -73,7 +72,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		private void Setup()
 		{
 			Mapper.Reset();
-			Mapper.Initialize(x => x.AddProfile(_preferenceDayFeedbackViewModelMappingProfile));
+			Mapper.Initialize(x => x.AddProfile(PreferenceDayFeedbackViewModelMappingProfile));
 
 			var nightRest1 = new TimeSpan(12, 0, 0);
 			var nightRest2 = new TimeSpan(6, 0, 0);
@@ -90,21 +89,21 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var date20 = new DateOnly(2029, 1, 20);
 			var date21 = new DateOnly(2029, 1, 21);
 
-			var personContract1 = _personContractProvider.GetPersonContractWithSpecifiedNightRest("Fake Contract", nightRest1);
+			var personContract1 = PersonContractProvider.GetPersonContractWithSpecifiedNightRest("Fake Contract", nightRest1);
 			var personPeriod1 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2028, 1, 1), personContract1, TeamFactory.CreateSimpleTeam());
-			_person.AddPersonPeriod(personPeriod1);
+			Person.AddPersonPeriod(personPeriod1);
 
 
 
-			var personContract2 = _personContractProvider.GetPersonContractWithSpecifiedNightRest("Another Fake Contract", nightRest2);
+			var personContract2 = PersonContractProvider.GetPersonContractWithSpecifiedNightRest("Another Fake Contract", nightRest2);
 			var personPeriod2 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2029, 1, 11), personContract2, TeamFactory.CreateSimpleTeam());
-			_person.AddPersonPeriod(personPeriod2);
+			Person.AddPersonPeriod(personPeriod2);
 
 			var schedule1 = buildPersonSchedule(date1, new TimeSpan(8, 0, 0), new TimeSpan(18, 30, 0));
 			var schedule3 = buildPersonSchedule(date3, new TimeSpan(6, 0, 0), new TimeSpan(18, 30, 0));
 			var schedule9 = buildPersonScheduleDayOff(date9);
 			
-			var scheduleProvider = _scheduleProvider as FakeScheduleProvider;
+			var scheduleProvider = ScheduleProvider as FakeScheduleProvider;
 			if (scheduleProvider != null)
 			{
 				scheduleProvider.AddScheduleDay(schedule1);
@@ -112,55 +111,55 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 				scheduleProvider.AddScheduleDay(schedule9);
 			}		
 
-			var preferenceDay2 = new PreferenceDay(_person, date2,  new PreferenceRestriction
+			var preferenceDay2 = new PreferenceDay(Person, date2,  new PreferenceRestriction
 			{
 				StartTimeLimitation = new StartTimeLimitation(new TimeSpan(5, 0, 0), new TimeSpan(6, 0, 0)),
 				EndTimeLimitation = new EndTimeLimitation(new TimeSpan(19, 0, 0), new TimeSpan(19, 30, 0))
 			});
 
-			var preferenceDay4 = new PreferenceDay(_person, date4, new PreferenceRestriction
+			var preferenceDay4 = new PreferenceDay(Person, date4, new PreferenceRestriction
 			{
 				StartTimeLimitation = new StartTimeLimitation(new TimeSpan(11, 0, 0), new TimeSpan(12, 0, 0)),
 				EndTimeLimitation = new EndTimeLimitation(new TimeSpan(19, 10, 0), new TimeSpan(19, 30, 0))
 			});
 
-			var preferenceDay5 = new PreferenceDay(_person, date5, new PreferenceRestriction
+			var preferenceDay5 = new PreferenceDay(Person, date5, new PreferenceRestriction
 			{
 				StartTimeLimitation = new StartTimeLimitation(new TimeSpan(6, 0, 0), new TimeSpan(7, 0, 0)),
 				EndTimeLimitation = new EndTimeLimitation(new TimeSpan(18, 0, 0), new TimeSpan(18, 30, 0))
 			});
 
-			var preferenceDay6 = new PreferenceDay(_person, date6, new PreferenceRestriction
+			var preferenceDay6 = new PreferenceDay(Person, date6, new PreferenceRestriction
 			{
 				StartTimeLimitation = new StartTimeLimitation(new TimeSpan(4, 0, 0), new TimeSpan(4, 30, 0)),
 				EndTimeLimitation = new EndTimeLimitation(new TimeSpan(18, 0, 0), new TimeSpan(18, 30, 0))
 			});
 
-			var preferenceDay10 = new PreferenceDay(_person, date10, new PreferenceRestriction
+			var preferenceDay10 = new PreferenceDay(Person, date10, new PreferenceRestriction
 			{
 				StartTimeLimitation = new StartTimeLimitation(new TimeSpan(4, 0, 0), new TimeSpan(4, 30, 0)),
 				EndTimeLimitation = new EndTimeLimitation(new TimeSpan(18, 0, 0), new TimeSpan(18, 30, 0))
 			});
 
-			var preferenceDay11 = new PreferenceDay(_person, date11, new PreferenceRestriction
+			var preferenceDay11 = new PreferenceDay(Person, date11, new PreferenceRestriction
 			{
 				StartTimeLimitation = new StartTimeLimitation(new TimeSpan(4, 0, 0), new TimeSpan(4, 30, 0)),
 				EndTimeLimitation = new EndTimeLimitation(new TimeSpan(18, 0, 0), new TimeSpan(18, 30, 0))
 			});
 
-			var preferenceDay20 = new PreferenceDay(_person, date20, new PreferenceRestriction
+			var preferenceDay20 = new PreferenceDay(Person, date20, new PreferenceRestriction
 			{
 				StartTimeLimitation = new StartTimeLimitation(new TimeSpan(18, 0, 0), new TimeSpan(18, 30, 0)),
 				EndTimeLimitation = new EndTimeLimitation(new TimeSpan(1, 5, 0, 0), new TimeSpan(1, 6, 30, 0))
 			});
 
-			var preferenceDay21 = new PreferenceDay(_person, date21, new PreferenceRestriction
+			var preferenceDay21 = new PreferenceDay(Person, date21, new PreferenceRestriction
 			{
 				StartTimeLimitation = new StartTimeLimitation(new TimeSpan(8, 0, 0), new TimeSpan(8, 30, 0)),
 				EndTimeLimitation = new EndTimeLimitation(new TimeSpan(14, 0, 0), new TimeSpan(15, 30, 0))
 			});
 
-			var personPreferenceProvider = _preferenceProvider as FakePreferenceProvider;
+			var personPreferenceProvider = PreferenceProvider as FakePreferenceProvider;
 			if (personPreferenceProvider != null)
 			{
 				personPreferenceProvider.AddPreference(preferenceDay2);
