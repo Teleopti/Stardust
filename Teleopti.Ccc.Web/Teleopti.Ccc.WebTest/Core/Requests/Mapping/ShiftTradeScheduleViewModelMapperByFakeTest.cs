@@ -15,6 +15,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 {
 	[TestFixture, MyTimeWebTest]
+	[CLSCompliant(false)]
 	public class ShiftTradeScheduleViewModelMapperByFakeTest
 	{
 		public IShiftTradeScheduleViewModelMapper _mapper;

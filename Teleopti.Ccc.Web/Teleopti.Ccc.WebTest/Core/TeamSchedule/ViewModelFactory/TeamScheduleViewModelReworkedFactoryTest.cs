@@ -17,6 +17,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 {	
 	[TestFixture, MyTimeWebTest]
+	[CLSCompliant(false)]
 	public class TeamScheduleViewModelReworkedFactoryTest
 	{
 		public ITeamScheduleViewModelReworkedFactory _target;

@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 
 	[TestFixture]
 	[MyTimeWebPreferenceMappingTest]
+	[CLSCompliant(false)]
 	public class PreferenceDayFeedbackViewModelMappingTestByFake
 	{
 		public PreferenceDayFeedbackViewModelMappingProfile _preferenceDayFeedbackViewModelMappingProfile;
