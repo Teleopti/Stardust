@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Configuration;
-using Autofac;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Rta;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.InfrastructureTest.Rta;
 using Teleopti.Ccc.IocCommon;
@@ -9,13 +11,17 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.MessageBroker;
-using Teleopti.Interfaces.MessageBroker.Client;
+using Teleopti.Messaging.Client;
+using IMessageSender = Teleopti.Interfaces.MessageBroker.Client.IMessageSender;
 
 namespace Teleopti.Ccc.InfrastructureTest
 {
 	public class InfrastructureTestAttribute : IoCTestAttribute
 	{
+		public IMessageSendersScope MessageSendersScope;
+		public IEnumerable<Infrastructure.UnitOfWork.IMessageSender> MessageSenders;
+		private IDisposable _scope;
+
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			base.Setup(system, configuration);
@@ -34,17 +40,22 @@ namespace Teleopti.Ccc.InfrastructureTest
 			system.UseTestDouble<NoMessageSender>().For<IMessageSender>();
 
 			system.UseTestDouble<MutableFakeCurrentHttpContext>().For<ICurrentHttpContext>();
-		}
-	}
 
-	public class NoMessageSender : IMessageSender
-	{
-		public void Send(Message message)
-		{
+			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
 		}
 
-		public void SendMultiple(IEnumerable<Message> notifications)
+		protected override void BeforeTest()
 		{
+			base.BeforeTest();
+
+			_scope = MessageSendersScope.GloballyUse(MessageSenders);
+		}
+
+		protected override void AfterTest()
+		{
+			base.AfterTest();
+
+			_scope.Dispose();
 		}
 	}
 }

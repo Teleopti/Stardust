@@ -17,34 +17,16 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 {	
 	[TestFixture, MyTimeWebTest]
-	class TeamScheduleViewModelReworkedFactoryTest
+	public class TeamScheduleViewModelReworkedFactoryTest
 	{
-		private readonly ITeamScheduleViewModelReworkedFactory _target;
-
-		private readonly IPersonRepository _personRepository;
-		private readonly IPersonForScheduleFinder _personForScheduleFinder;
-		private readonly IBusinessUnitRepository _businessUnitRepository;
-		private readonly ITeamRepository _teamRepository;
-		private readonly IPersonScheduleDayReadModelFinder _personScheduleDayReadModelFinder;
-		private readonly IPersonAssignmentRepository _personAssignmentRepository;
-		private readonly IPermissionProvider _permissionProvider;
-
-		public TeamScheduleViewModelReworkedFactoryTest()
-		{
-			
-		}
-
-		public TeamScheduleViewModelReworkedFactoryTest(ITeamScheduleViewModelReworkedFactory target, IPersonRepository personRepository, IPersonForScheduleFinder personForScheduleFinder, IBusinessUnitRepository businessUnitRepository, ITeamRepository teamRepository, IPersonScheduleDayReadModelFinder personScheduleDayReadModelFinder, IPersonAssignmentRepository personAssignmentRepository, IPermissionProvider permissionProvider)
-		{
-			_target = target;
-			_personRepository = personRepository;
-			_personForScheduleFinder = personForScheduleFinder;
-			_businessUnitRepository = businessUnitRepository;
-			_teamRepository = teamRepository;
-			_personScheduleDayReadModelFinder = personScheduleDayReadModelFinder;
-			_personAssignmentRepository = personAssignmentRepository;
-			_permissionProvider = permissionProvider;
-		}
+		public ITeamScheduleViewModelReworkedFactory _target;
+		public IPersonRepository _personRepository;
+		public IPersonForScheduleFinder _personForScheduleFinder;
+		public IBusinessUnitRepository _businessUnitRepository;
+		public ITeamRepository _teamRepository;
+		public IPersonScheduleDayReadModelFinder _personScheduleDayReadModelFinder;
+		public IPersonAssignmentRepository _personAssignmentRepository;
+		public IPermissionProvider _permissionProvider;
 
 		protected void SetUp()
 		{

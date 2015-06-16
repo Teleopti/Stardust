@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Linq;
+using Autofac;
 using Teleopti.Ccc.Domain;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Ccc.Domain.Infrastructure;
@@ -14,6 +16,9 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.MultipleConfig;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
@@ -35,11 +40,16 @@ namespace Teleopti.Ccc.InfrastructureTest
 		[SetUp]
 		public void BeforeTestSuite()
 		{
+			var builder = new ContainerBuilder();
+			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new AppConfigReader()) { PublishEventsToServiceBus = false, FeatureToggle = "http://notinuse" }, new FalseToggleManager())));
+			builder.RegisterType<FakeEventPublisher>().As<IEventPublisher>().SingleInstance();
+			var container = builder.Build();
+
 			IDictionary<string, string> appSettings = new Dictionary<string, string>();
 			ConfigurationManager.AppSettings.AllKeys.ToList().ForEach(
 				 name => appSettings.Add(name, ConfigurationManager.AppSettings[name]));
 
-			DataSource = DataSourceHelper.CreateDataSource(new NoMessageSenders(), null);
+			DataSource = DataSourceHelper.CreateDataSource(container.Resolve<ICurrentMessageSenders>(), null);
 
 			loggedOnPerson = PersonFactory.CreatePerson("logged on person");
 

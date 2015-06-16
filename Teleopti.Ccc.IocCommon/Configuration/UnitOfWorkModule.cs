@@ -22,7 +22,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IDataSource>()
 				.ExternallyOwned();
 
-			builder.RegisterType<CurrentMessageSenders>().As<ICurrentMessageSenders>().SingleInstance();
+			builder.RegisterType<CurrentMessageSenders>()
+				.As<ICurrentMessageSenders>()
+				.As<IMessageSendersScope>()
+				.SingleInstance();
+
+			builder.RegisterType<EventsMessageSender>().As<IMessageSender>().SingleInstance();
 
 			builder.RegisterType<CurrentBusinessUnit>().As<ICurrentBusinessUnit>().SingleInstance();
 

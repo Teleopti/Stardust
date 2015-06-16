@@ -144,6 +144,7 @@
     </Compile>
     <Compile Include="Client\Http\HttpSender.cs" />
     <Compile Include="Client\MutableUrl.cs" />
+    <Compile Include="Client\NoMessageSender.cs" />
     <Compile Include="Client\SignalR\DisabledSignalRClient.cs" />
     <Compile Include="Coders\JobResultProgressDecoder.cs" />
     <Compile Include="Coders\JobResultProgressEncoder.cs" />

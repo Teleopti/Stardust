@@ -41,16 +41,16 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
             }
             finally
             {
-                using (IUnitOfWork uowTemp = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork())
-                {
-                    IRepository rep = new Repository(uowTemp);
-                    rep.Remove(ass);
-                    rep.Remove(sc);
-                    rep.Remove(pLoad);
-                    rep.Remove(ass.Scenario);
+				using (IUnitOfWork uowTemp = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork())
+				{
+					IRepository rep = new Repository(uowTemp);
+					rep.Remove(ass);
+					rep.Remove(sc);
+					rep.Remove(pLoad);
+					rep.Remove(ass.Scenario);
 
-                    uowTemp.PersistAll();
-                }
+					uowTemp.PersistAll();
+				}
             }
         }
     }

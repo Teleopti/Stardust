@@ -99,7 +99,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 			builder.RegisterModule<CommandDispatcherModule>();
 			builder.RegisterModule<CommandHandlersModule>();
-			builder.RegisterType<EventsMessageSender>().As<IMessageSender>().SingleInstance();
 		
 			builder.RegisterType<NumberOfAgentsInSiteReader>().As<INumberOfAgentsInSiteReader>().SingleInstance();
 			builder.RegisterType<NumberOfAgentsInTeamReader>().As<INumberOfAgentsInTeamReader>().SingleInstance();

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Autofac;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -11,9 +12,9 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public class FakeCurrentApplicationData : ICurrentApplicationData, IApplicationData
 	{
-		private readonly IDataSourcesFactory _dataSourcesFactory;
+		private readonly Func<IDataSourcesFactory> _dataSourcesFactory;
 
-		public FakeCurrentApplicationData(IDataSourcesFactory dataSourcesFactory)
+		public FakeCurrentApplicationData(Func<IDataSourcesFactory> dataSourcesFactory)
 		{
 			_dataSourcesFactory = dataSourcesFactory;
 		}
@@ -42,7 +43,7 @@ namespace Teleopti.Ccc.TestCommon
 		public void DoOnAllTenants_AvoidUsingThis(Action<IDataSource> actionOnTenant)
 		{
 			if (RegisteredDataSources == null)
-				RegisteredDataSources = new[] {_dataSourcesFactory.Create("App", ConnectionStringHelper.ConnectionStringUsedInTests, null)};
+				RegisteredDataSources = new[] {_dataSourcesFactory.Invoke().Create("App", ConnectionStringHelper.ConnectionStringUsedInTests, null)};
 			RegisteredDataSources.ForEach(actionOnTenant);
 		}
 

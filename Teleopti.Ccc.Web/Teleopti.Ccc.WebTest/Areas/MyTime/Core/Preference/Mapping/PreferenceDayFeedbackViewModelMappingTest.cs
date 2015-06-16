@@ -42,25 +42,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 	[MyTimeWebPreferenceMappingTest]
 	public class PreferenceDayFeedbackViewModelMappingTestByFake
 	{
-		private readonly PreferenceDayFeedbackViewModelMappingProfile _preferenceDayFeedbackViewModelMappingProfile;
-		private readonly IScheduleProvider _scheduleProvider;
-		private readonly IPreferenceProvider _preferenceProvider;
-		private readonly FakePersonContractProvider _personContractProvider;
-		private readonly Person _person;
-
-		public PreferenceDayFeedbackViewModelMappingTestByFake()
-		{
-			/* Just to satisfy NUnit, but should not be used neither explictly nor implicitly */
-		}
-
-		public PreferenceDayFeedbackViewModelMappingTestByFake(PreferenceDayFeedbackViewModelMappingProfile preferenceDayFeedbackViewModelMappingProfile, IScheduleProvider scheduleProvider, IPreferenceProvider preferenceProvider, FakePersonContractProvider personContractProvider, Person person)
-		{
-			_preferenceDayFeedbackViewModelMappingProfile = preferenceDayFeedbackViewModelMappingProfile;
-			_scheduleProvider = scheduleProvider;
-			_preferenceProvider = preferenceProvider;
-			_personContractProvider = personContractProvider;
-			_person = person;
-		}
+		public PreferenceDayFeedbackViewModelMappingProfile _preferenceDayFeedbackViewModelMappingProfile;
+		public IScheduleProvider _scheduleProvider;
+		public IPreferenceProvider _preferenceProvider;
+		public FakePersonContractProvider _personContractProvider;
+		public Person _person;
 
 		private IScheduleDay buildPersonSchedule(DateOnly date, TimeSpan startTime, TimeSpan endTime)
 		{

@@ -19,11 +19,15 @@ namespace Teleopti.Ccc.InfrastructureTest
 
 		protected override void BeforeTest()
 		{
+			base.BeforeTest();
+
 			_login = SetupFixtureForAssembly.CreatePersonAndLogin(out person);
 		}
 
 		protected override void AfterTest()
 		{
+			base.AfterTest();
+
 			_login.Dispose();
 			_login = null;
 		}

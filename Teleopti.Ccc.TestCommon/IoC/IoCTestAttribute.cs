@@ -118,11 +118,17 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 		private void injectMembers()
 		{
-			var properties = _fixtureType.GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
-			properties.ForEach(x => x.SetValue(_fixture, _container.Resolve(x.PropertyType), null));
-			var fields = _fixtureType.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
-			fields.ForEach(x => x.SetValue(_fixture, _container.Resolve(x.FieldType)));
+			injectMembers(GetType(), this);
+			injectMembers(_fixtureType, _fixture);
+		}
 
+		private void injectMembers(IReflect type, object instance)
+		{
+			var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance)
+				.Where(x => x.CanWrite);
+			properties.ForEach(x => x.SetValue(instance, _container.Resolve(x.PropertyType), null));
+			var fields = type.GetFields(BindingFlags.Public | BindingFlags.Instance);
+			fields.ForEach(x => x.SetValue(instance, _container.Resolve(x.FieldType)));
 		}
 
 		protected object Resolve(Type targetType)

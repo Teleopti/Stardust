@@ -500,6 +500,7 @@
     <Compile Include="UnitOfWork\GroupPageChangedMessageSenderTest.cs" />
     <Compile Include="UnitOfWork\HandlingOfUowTest.cs" />
     <Compile Include="UnitOfWork\MeetingMessageSenderTest.cs" />
+    <Compile Include="UnitOfWork\MessageSenders\EventsTest.cs" />
     <Compile Include="UnitOfWork\NHibernateUnitOfWorkCommitCallbackTest.cs" />
     <Compile Include="UnitOfWork\NHibernateUnitOfWorkFactoryUnitTest.cs" />
     <Compile Include="UnitOfWork\NHibernateUnitOfWorkRealTest.cs" />

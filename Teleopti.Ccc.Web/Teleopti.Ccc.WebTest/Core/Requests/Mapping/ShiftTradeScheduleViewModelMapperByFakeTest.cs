@@ -17,26 +17,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 	[TestFixture, MyTimeWebTest]
 	public class ShiftTradeScheduleViewModelMapperByFakeTest
 	{
-		private readonly IShiftTradeScheduleViewModelMapper _mapper;
-		private readonly IPersonRepository _personRepository;
-		private readonly IBusinessUnitRepository _businessUnitRepository;
-		private readonly ITeamRepository _teamRepository;
-		private readonly IPersonAssignmentRepository _personAssignmentRepository;
-		private readonly ILoggedOnUser _loggedOnUser;
-
-		public ShiftTradeScheduleViewModelMapperByFakeTest()
-		{
-		}
-
-		public ShiftTradeScheduleViewModelMapperByFakeTest(IShiftTradeScheduleViewModelMapper mapper, IPersonRepository personRepository, IBusinessUnitRepository businessUnitRepository, ITeamRepository teamRepository, IPersonAssignmentRepository personAssignmentRepository, ILoggedOnUser loggedOnUser)
-		{
-			_mapper = mapper;
-			_personRepository = personRepository;
-			_businessUnitRepository = businessUnitRepository;
-			_teamRepository = teamRepository;
-			_personAssignmentRepository = personAssignmentRepository;
-			_loggedOnUser = loggedOnUser;
-		}
+		public IShiftTradeScheduleViewModelMapper _mapper;
+		public IPersonRepository _personRepository;
+		public IBusinessUnitRepository _businessUnitRepository;
+		public ITeamRepository _teamRepository;
+		public IPersonAssignmentRepository _personAssignmentRepository;
+		public ILoggedOnUser _loggedOnUser;
 
 		protected void SetUp()
 		{

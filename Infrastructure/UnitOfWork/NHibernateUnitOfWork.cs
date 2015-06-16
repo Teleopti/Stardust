@@ -400,24 +400,4 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			return Session.GetHashCode();
 		}
 	}
-
-	public interface ICurrentMessageSenders
-	{
-		IEnumerable<IMessageSender> Current();
-	}
-
-	public class CurrentMessageSenders : ICurrentMessageSenders
-	{
-		private readonly IEnumerable<IMessageSender> _messageSenders;
-
-		public CurrentMessageSenders(IEnumerable<IMessageSender> messageSenders)
-		{
-			_messageSenders = messageSenders;
-		}
-
-		public IEnumerable<IMessageSender> Current()
-		{
-			return _messageSenders;
-		}
-	}
 }
