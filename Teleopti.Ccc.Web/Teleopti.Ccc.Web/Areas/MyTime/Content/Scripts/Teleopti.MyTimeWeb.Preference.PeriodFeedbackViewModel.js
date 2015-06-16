@@ -75,6 +75,37 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewM
 		});
 		return sum;
 	});
+	var possibleNightRestViolationsArray = ko.observableArray();
+
+	function sameNightRestVioloation(obj1, obj2) {
+		return obj1.nightRestTimes === obj2.nightRestTimes
+			&& obj1.firstDay === obj2.firstDay
+			&& obj1.secondDay === obj2.secondDay;
+
+	}
+
+	var toggleShowNightViolation = Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PreferenceShowNightViolation_33152");
+
+	this.PossibleNightRestViolations = function () {
+
+		if (!toggleShowNightViolation) return possibleNightRestViolationsArray;
+
+		possibleNightRestViolationsArray.removeAll();
+		$.each(self.DayViewModels, function (index, day) {
+			
+			if (day.MakeANightRestViolationObj()) {
+
+				var newViolation = day.MakeANightRestViolationObj();
+
+				if (possibleNightRestViolationsArray().filter(function(item) { return sameNightRestVioloation(item, newViolation); }).length === 0) {
+					possibleNightRestViolationsArray.push(day.MakeANightRestViolationObj());
+				}
+				
+			}
+		});
+		return possibleNightRestViolationsArray;
+	};
+
 
 	this.PossibleResultContractTimeMinutesUpper = ko.computed(function () {
 		var sum = 0;

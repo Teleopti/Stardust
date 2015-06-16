@@ -145,9 +145,22 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			});
 		if (promises.length != 0) {
 			$.when.apply(null, promises)
-				.done(function () { periodFeedbackViewModel.LoadFeedback(); });
+				.done(function() {
+				periodFeedbackViewModel.LoadFeedback();
+				loadNeighborFeedback();
+				periodFeedbackViewModel.PossibleNightRestViolations();
+			});
 		}
 
+	}
+
+	function loadNeighborFeedback() {
+		$('#Preference-body-inner .ui-selected').each(function(index, ele) {
+			var date = $(ele).prev().data('mytime-date');
+			preferencesAndScheduleViewModel.DayViewModels[date].LoadFeedback();
+		    date = $(ele).next().data('mytime-date');
+		    preferencesAndScheduleViewModel.DayViewModels[date].LoadFeedback();
+		});
 	}
 
 	function _setMustHave(mustHave) {
@@ -304,12 +317,12 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 				dayViewModelsInPeriod[dayViewModel.Date] = dayViewModel;
 			}
 			ko.applyBindings(dayViewModel, element);
-
 			if ($('li[data-mytime-week]').length > 0) {
 				weekViewModels[Math.floor(index / 7)].DayViewModels.push(dayViewModel);
 			}
 
 		});
+		
 
 
 		var from = $('li[data-mytime-date]').first().data('mytime-date');
@@ -318,6 +331,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		preferencesAndScheduleViewModel = new Teleopti.MyTimeWeb.Preference.PreferencesAndSchedulesViewModel(ajax, dayViewModels);
 		selectionViewModel = new Teleopti.MyTimeWeb.Preference.SelectionViewModel(dayViewModelsInPeriod, $('#Preference-body').data('mytime-maxmusthave'), _setMustHave, _setPreference, _deletePreference);
 		periodFeedbackViewModel = new Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel(ajax, dayViewModelsInPeriod, date, weekViewModels);
+		
 
 		var periodFeedbackElement = $('#Preference-period-feedback-view')[0];
 		if (periodFeedbackElement) {

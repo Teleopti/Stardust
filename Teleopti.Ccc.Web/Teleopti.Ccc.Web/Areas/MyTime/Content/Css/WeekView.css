@@ -135,3 +135,26 @@
    word-wrap: break-word;      /* IE */
    min-width: 184px;
 }
+.cover-me:before {
+	content: '';
+	display: block;
+	height: 100%;
+	width: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+.cover-me img {
+	position: absolute;
+	top: 40%;
+	left: 45%;
+}
+.night-rest-violation {
+	position:absolute;
+	height:3px;
+	width:100%;
+	top:0;
+	left:0;
+	background-color:red;
+}

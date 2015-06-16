@@ -48,15 +48,17 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
 	self.DayOff = ko.observable('');
 	self.Absence = ko.observable('');
 	this.AbsenceContractTime = ko.observable('');
-    this.AbsenceContractTimeMinutes = ko.observable('');
+	this.AbsenceContractTimeMinutes = ko.observable('');
 	self.PersonAssignmentShiftCategory = ko.observable('');
 	self.PersonAssignmentTimeSpan = ko.observable('');
 	self.PersonAssignmentContractTime = ko.observable('');
 	self.ContractTimeMinutes = ko.observable(0);
+	
+	
 
-    self.HasPreferenceCategory = ko.computed(function() {
-        return self.Preference() != undefined && self.Preference() != '';
-    });
+	self.HasPreferenceCategory = ko.computed(function() {
+		return self.Preference() != undefined && self.Preference() != '';
+	});
 
 	self.tooltipText = ko.computed(function() {
 		if (!self.Extended())
@@ -81,35 +83,35 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
 			$('<div/>').text(self.ExtendedTitle()).html(), text);
 	});
 
-    this.HasDayOff = ko.computed(function() {
-        return self.DayOff() != '';
-    });
+	this.HasDayOff = ko.computed(function() {
+		return self.DayOff() != '';
+	});
 
-    this.HasAjaxError = ko.computed(function () {
-        return self.AjaxError() != '';
-    });
+	this.HasAjaxError = ko.computed(function () {
+		return self.AjaxError() != '';
+	});
 
-    this.HasAbsence = ko.computed(function () {
-        return self.Absence() != '';
-    });
+	this.HasAbsence = ko.computed(function () {
+		return self.Absence() != '';
+	});
 
-    this.HasPersonAssignmentShiftCategory = ko.computed(function () {
-        return self.PersonAssignmentShiftCategory() != '';
-    });
+	this.HasPersonAssignmentShiftCategory = ko.computed(function () {
+		return self.PersonAssignmentShiftCategory() != '';
+	});
 
 	this.Meetings = ko.observableArray();
 	this.PersonalShifts = ko.observableArray();
 
 	this.HasMeetings = ko.computed(function () {
-	    return self.Meetings().length>0;
+		return self.Meetings().length>0;
 	});
 
 	this.HasPersonalShifts = ko.computed(function () {
-	    return self.PersonalShifts().length > 0;
+		return self.PersonalShifts().length > 0;
 	});
 
 	this.HasPersonalShiftsOrMeetings = ko.computed(function () {
-	    return self.HasPersonalShifts() || self.HasMeetings();
+		return self.HasPersonalShifts() || self.HasMeetings();
 	});
 
 	this.EditableIsInOpenPeriod = ko.observable(false);
@@ -160,9 +162,9 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
 	};
 
 	this.ReadAbsence = function (data) {
-	    self.Absence(data.Absence);
-	    self.AbsenceContractTimeMinutes(data.AbsenceContractTimeMinutes);
-	    self.AbsenceContractTime(data.AbsenceContractTimeMinutes > 0 ? data.AbsenceContractTime : '');
+		self.Absence(data.Absence);
+		self.AbsenceContractTimeMinutes(data.AbsenceContractTimeMinutes);
+		self.AbsenceContractTime(data.AbsenceContractTimeMinutes > 0 ? data.AbsenceContractTime : '');
 	};
 
 	this.ReadPersonAssignment = function (data) {
@@ -188,6 +190,14 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
 		});
 	};
 
+	this.HasNightRestViolationToPreviousDay = ko.observable();
+	this.HasNightRestViolationToNextDay = ko.observable();
+	this.RawDate = ko.observable();
+	this.Difference = ko.observable();
+	this.RestTimeToNextDay = ko.observable();
+	this.RestTimeToPreviousDay = ko.observable();
+	this.ExpectedNightRest = ko.observable();
+
 	this.LoadFeedback = function () {
 		if (!self.Feedback())
 			return null;
@@ -202,8 +212,54 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
 				self.PossibleEndTimes(data.PossibleEndTimes);
 				self.PossibleContractTimeMinutesLower(data.PossibleContractTimeMinutesLower);
 				self.PossibleContractTimeMinutesUpper(data.PossibleContractTimeMinutesUpper);
+				self.HasNightRestViolationToPreviousDay(data.HasNightRestViolationToPreviousDay);
+				self.HasNightRestViolationToNextDay(data.HasNightRestViolationToNextDay);
+				self.RestTimeToNextDay(data.RestTimeToNextDay.Hours);
+				self.RestTimeToPreviousDay(data.RestTimeToPreviousDay.Hours);
+				self.RawDate(data.DateInternal);
+				self.ExpectedNightRest(data.ExpectedNightRest.Hours);
 			}
 		});
+	};
+
+
+	
+	var toggleShowNightViolation =	Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PreferenceShowNightViolation_33152");
+
+	this.NightRestViolationSwitch = toggleShowNightViolation? ko.computed(function () {
+		return self.HasNightRestViolationToPreviousDay() || self.HasNightRestViolationToNextDay();
+	}) : ko.observable(false);
+	
+	this.MakeANightRestViolationObj = function () {
+		var nightRestViolationObj = {};
+		if (self.NightRestViolationSwitch()==true) {
+
+
+			
+	
+			if (self.HasNightRestViolationToPreviousDay()) {
+				var dateMoment = moment(self.RawDate());
+				nightRestViolationObj.nightRestTimes=self.ExpectedNightRest();
+				nightRestViolationObj.sencondDay = Teleopti.MyTimeWeb.Common.FormatDate(dateMoment);
+				nightRestViolationObj.firstDay = Teleopti.MyTimeWeb.Common.FormatDate(dateMoment.subtract(1, "days"));
+				
+				nightRestViolationObj.hoursBetweenTwoDays = self.RestTimeToPreviousDay();
+			}
+
+			if (self.HasNightRestViolationToNextDay()) {
+				var dateMoment = moment(self.RawDate());
+				nightRestViolationObj.nightRestTimes = self.ExpectedNightRest();
+				nightRestViolationObj.firstDay = Teleopti.MyTimeWeb.Common.FormatDate(dateMoment);
+				nightRestViolationObj.sencondDay = Teleopti.MyTimeWeb.Common.FormatDate(dateMoment.add(1, "days"));
+				nightRestViolationObj.hoursBetweenTwoDays = self.RestTimeToNextDay();
+			}
+			return nightRestViolationObj;
+		}
+
+		return null;
+		
+		
+
 	};
 
 	this.SetPreference = function (value, validationErrorCallback) {

@@ -1,4 +1,5 @@
-﻿@using Teleopti.Ccc.UserTexts
+﻿@using System.Resources
+@using Teleopti.Ccc.UserTexts
 @using Teleopti.Ccc.Web.Areas.MyTime.Core
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 @model PreferenceViewModel
@@ -121,18 +122,23 @@
 			<span class="glyphicon glyphicon-exclamation-sign" title="@Resources.YourPreferenceIsOutOfRange" />
 			<!-- /ko -->
 		</div>
-		<div>
-			<!-- ko if: TargetDaysOffLower() == TargetDaysOffUpper() -->
-			@Html.Raw(string.Format(Resources.YouShouldHaveXDaysOff, "<span data-bind='text: TargetDaysOffLower' class='feedback-detail'>-</span>"))
-			<!-- /ko -->
-			<!-- ko if: TargetDaysOffLower() != TargetDaysOffUpper() -->
-			@Html.Raw(string.Format(Resources.YouShouldHaveBetweenXAndYDaysOff, "<span data-bind='text: TargetDaysOffLower' class='feedback-detail'>-</span>", "<span data-bind='text: TargetDaysOffUpper' class='feedback-detail'>-</span>"))
-			<!-- /ko -->
-			@Html.Raw(string.Format(Resources.YourPreferencesCanResultXDaysOff, "<span data-bind='text: PossibleResultDaysOff' class='feedback-detail'>-</span>"))
-			<!-- ko if: PreferenceDaysOffIsOutOfRange-->
-			<span class="glyphicon glyphicon-exclamation-sign" title="@Resources.YourPreferenceIsOutOfRange" />
-			<!-- /ko -->
-		</div>
+	    <div>
+	        <!-- ko if: TargetDaysOffLower() == TargetDaysOffUpper() -->
+	        @Html.Raw(string.Format(Resources.YouShouldHaveXDaysOff, "<span data-bind='text: TargetDaysOffLower' class='feedback-detail'>-</span>"))
+	        <!-- /ko -->
+	        <!-- ko if: TargetDaysOffLower() != TargetDaysOffUpper() -->
+	        @Html.Raw(string.Format(Resources.YouShouldHaveBetweenXAndYDaysOff, "<span data-bind='text: TargetDaysOffLower' class='feedback-detail'>-</span>", "<span data-bind='text: TargetDaysOffUpper' class='feedback-detail'>-</span>"))
+	        <!-- /ko -->
+	        @Html.Raw(string.Format(Resources.YourPreferencesCanResultXDaysOff, "<span data-bind='text: PossibleResultDaysOff' class='feedback-detail'>-</span>"))
+	        <!-- ko if: PreferenceDaysOffIsOutOfRange-->
+	        <span class="glyphicon glyphicon-exclamation-sign" title="@Resources.YourPreferenceIsOutOfRange" />
+	        <!-- /ko -->
+	    </div>
+	    <div data-bind="foreach:PossibleNightRestViolations()">
+	        <div>
+	        @Html.Raw(string.Format(Resources.BusinessRuleNightlyRestRuleErrorMessage, "<span data-bind='text:nightRestTimes'>-</span>", "<span data-bind='text:firstDay'>-</span>", "<span data-bind='text:sencondDay'>-</span>", "<span data-bind='text:hoursBetweenTwoDays'>-</span>"))
+			</div>
+	    </div>
 		@if (Model.IsWeeklyWorkTimeEnabled)
 		{
 			<!-- ko if: IsWeeklyWorkTimeBroken() -->
@@ -143,17 +149,18 @@
 			<!-- /ko -->
 		}
 		<p></p>
-		<div>
-			@if (Model.PreferencePeriod == null)
-			{
-				@String.Format("{0} : {1}", Resources.PreferencePeriod, Resources.MissingWorkflowControlSet)
-			}
-			else
-			{
-				@String.Format("{0} : {1} | ", Resources.PreferencePeriod, Model.PreferencePeriod.Period)
-				@String.Format("{0} : {1}", Resources.IsOpen, Model.PreferencePeriod.OpenPeriod)
-			}
-		</div>
+	    <div>
+	        @if (Model.PreferencePeriod == null)
+	        {
+	            @String.Format("{0} : {1}", Resources.PreferencePeriod, Resources.MissingWorkflowControlSet)
+	        }
+	        else
+	        {
+	            @String.Format("{0} : {1} | ", Resources.PreferencePeriod, Model.PreferencePeriod.Period)
+	            @String.Format("{0} : {1}", Resources.IsOpen, Model.PreferencePeriod.OpenPeriod)
+	        }
+	    </div>
+		
 	</div>
 
 	<div id="Preference-body" class="clearfix pagebody" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)' data-mytime-maxmusthave="@Model.MaxMustHave">
@@ -201,12 +208,12 @@
 					{
 						var date = Html.Schedule().FormatDate(day.Date);
 						<li class="relative @(day.InPeriod ? "inperiod" : "non-editable")" data-mytime-date="@date" data-mytime-editable="@day.Editable" data-bind="css: StyleClassName, css: { editable: Editable, 'non-editable': !Editable(), feedback: Feedback }">
-							<div>
+							<div class="relative">
 								<div class="day-header">
 									<span class="day-header-left badge day-header-text @(day.Header.DayDescription == "" ? "hide" : "floatleft")">@day.Header.DayDescription</span><span class="floatright day-header-right badge day-header-text">@day.Header.DayNumber</span>
 								</div>
 								<div class="day-content">
-									<img data-bind="visible: IsLoading" src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")" alt="..." />
+									<figure class="cover-me" data-bind="visible: IsLoading"><img src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")" alt="..." /></figure>
 									<!-- ko if: HasAjaxError -->
 									<h2 class="error" data-bind="text: AjaxError"></h2>
 									<!-- /ko -->
@@ -217,7 +224,10 @@
 											<div class="preference-indicator">
 												<span class="preference-must-have" data-bind="css: {'glyphicon glyphicon-heart': MustHave}"></span>
 											</div>
-											<div class="label preference-text" data-bind="text: Preference, attr: { title: Preference }, style: {color: TextColor(), backgroundColor: Color(), opacity: Editable() ? 1 : 0.2 }, css: { hide: !HasPreferenceCategory() }" />
+										    <div class="label preference-text" data-bind="text: Preference, attr: { title: Preference }, style: {color: TextColor(), backgroundColor: Color(), opacity: Editable() ? 1 : 0.2 }, css: { hide: !HasPreferenceCategory() }" />
+										    <!--ko if:NightRestViolationSwitch -->
+										    <div class="night-rest-violation" ></div>
+											<!--/ko-->
 											<div class="preference-indicator">
 												<!-- ko if: tooltipText -->
 												<div class="extended-indication" data-bind="tooltip: { title: tooltipText, html: true }">&raquo;</div>
