@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		}
 
 		// from Web, ServiceBus, ETL, sdk
-		//TODO: tenant remove xmlDirectory
 		public void Start(IState clientCache, ILoadPasswordPolicyService loadPasswordPolicyService, IDictionary<string, string> appSettings, bool startMessageBroker)
 		{
 			StateHolder.Initialize(clientCache);
