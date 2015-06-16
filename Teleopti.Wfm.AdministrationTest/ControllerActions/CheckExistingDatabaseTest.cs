@@ -4,6 +4,8 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Wfm.Administration.Controllers;
 using Teleopti.Wfm.Administration.Models;
@@ -73,6 +75,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		[Test]
 		public void ShouldReturnSuccessTrueWhenDatabaseExists()
 		{
+			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
 			TenantUnitOfWork.Start();
 
 			var connStringBuilder = new SqlConnectionStringBuilder( CurrentTenantSession.CurrentSession().Connection.ConnectionString)

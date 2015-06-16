@@ -9,23 +9,18 @@ namespace Teleopti.Wfm.Administration.Core
 {
 	public class GetImportUsers
 	{
-		private readonly LoadAllPersonInfos _loadAllPersonInfos;
 		private readonly ICurrentTenantSession _currentTenantSession;
 
-		public GetImportUsers(LoadAllPersonInfos loadAllPersonInfos, ICurrentTenantSession currentTenantSession)
+		public GetImportUsers(ICurrentTenantSession currentTenantSession)
 		{
-			_loadAllPersonInfos = loadAllPersonInfos;
 			_currentTenantSession = currentTenantSession;
 		}
 
-		public ConflictModel GetConflictionUsers(string importConnectionString)
+		public ConflictModel GetConflictionUsers(string importConnectionString, string userPrefix)
 		{
 			var mainUsers = _currentTenantSession.CurrentSession()
 				.GetNamedQuery("loadAll")
 				.List<PersonInfo>();
-				
-				//_loadAllPersonInfos.PersonInfos().ToList();
-
 
 			var tenantUowManager = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(importConnectionString);
 			tenantUowManager.Start();
@@ -38,7 +33,7 @@ namespace Teleopti.Wfm.Administration.Core
 				var identity = importUser.Identity;
 				if (logonName != null)
 				{
-					var conflict = mainUsers.FirstOrDefault(x => x.ApplicationLogonInfo.LogonName != null && x.ApplicationLogonInfo.LogonName.Equals(logonName));
+					var conflict = mainUsers.FirstOrDefault(x => x.ApplicationLogonInfo.LogonName != null && x.ApplicationLogonInfo.LogonName.Equals(userPrefix + logonName));
 					if (conflict != null)
 						conflicting.Add(conflict);
 				}

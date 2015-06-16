@@ -20,8 +20,7 @@
 		vm.HeadVersion = null;
 		vm.ImportAppVersion = null;
 		vm.AppVersionOk = null;
-
-		//api/Import/TenantExists
+		vm.UserPrefix = "";
 
 		vm.CheckTenantName = function () {
 			$http.post('../api/Import/IsNewTenant', '"' + vm.Tenant + '"')
@@ -76,6 +75,10 @@
 				});
 		}
 		vm.CheckUsers = function () {
+			if (vm.AppDbOk == false) {
+				vm.Conflicts = null;
+				return;
+			}
 			$http.post('../api/Import/Conflicts', {
 				ConnStringAppDatabase: vm.AppDatabase
 			})
@@ -83,6 +86,7 @@
 					vm.Conflicts = data.ConflictingUserModels;
 					vm.NumberOfConflicting = data.NumberOfConflicting;
 					vm.NumberOfNotConflicting = data.NumberOfNotConflicting;
+					vm.UserPrefix = vm.UserPrefix;
 				}).error(function (xhr, ajaxOptions, thrownError) {
 					console.log(xhr.status + xhr.responseText + thrownError);
 				});

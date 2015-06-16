@@ -30,7 +30,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public void ShouldReadUsersFromDatabaseToImport()
 		{
 			//create database
-			DataSourceHelper.CreateDataSource(new IMessageSender[] { }, "TestData");
+			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
 
 			TenantUnitOfWork.Start();
 
