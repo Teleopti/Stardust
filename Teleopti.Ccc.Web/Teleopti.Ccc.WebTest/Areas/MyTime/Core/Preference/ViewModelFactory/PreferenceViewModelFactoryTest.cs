@@ -63,8 +63,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.ViewModelFactory
 			target.CreateDayViewModel(DateOnly.Today).Should().Be.Null();
 		}
 
-		[Test]
-		[Ignore("Not testing anything. No fix for this.")]
+		[Test]		
 		public void ShouldCreateFeedbackDayViewModelByMapping()
 		{
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();

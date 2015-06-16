@@ -37,12 +37,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory
 		public PreferenceDayFeedbackViewModel CreateDayFeedbackViewModel(DateOnly date)
 		{
 			var result = _mapper.Map<DateOnly, PreferenceDayFeedbackViewModel>(date);
-
-			result.NightRestViolationMessageNextDay = AssembleNightRestViolationMessage(date, date.AddDays(1),
-				result.ExpectedNightRest, result.RestTimeToNextDay);
-			result.NightRestViolationMessagePreviousDay = AssembleNightRestViolationMessage(date.AddDays(-1), date,
-				result.ExpectedNightRest, result.RestTimeToPreviousDay);
-
 			return result;
 		}
 
@@ -77,21 +71,5 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory
 			 };
 		}
 
-		private string AssembleNightRestViolationMessage(DateOnly start, DateOnly end, TimeSpan nightRest,
-		TimeSpan currentNightRest)
-		{
-			var loggedOnCulture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
-			string startString = start.ToShortDateString();
-			string endString = end.ToShortDateString();
-			string nightRestString = TimeHelper.GetLongHourMinuteTimeString(nightRest, loggedOnCulture);
-			string curNightRestString = TimeHelper.GetLongHourMinuteTimeString(currentNightRest, loggedOnCulture);
-
-			string ret = string.Format(loggedOnCulture,
-									   Resources.BusinessRuleNightlyRestRuleErrorMessage,
-									   nightRestString, startString, endString, curNightRestString);
-			return ret;
-
-
-		}
 	}
 }
