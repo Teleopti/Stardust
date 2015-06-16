@@ -74,10 +74,13 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 				new CurrentHttpContext(),
 				() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging
 				);
-			var initializeApplication = new InitializeApplication(dataSourcesFactory, null, null);
-			initializeApplication.Start(new StateNewVersion(), databaseHandler.DataSourceSettings(), "", ConfigurationManager.AppSettings.ToDictionary());
-			var repositoryFactory = new RepositoryFactory();
 			var dataSource = dataSourcesFactory.Create(databaseHandler.DataSourceSettings(), "");
+
+			var state = new StateNewVersion();
+			state.SetApplicationData(new ApplicationData(ConfigurationManager.AppSettings.ToDictionary(), new[] { dataSource }, null, null, dataSourcesFactory));
+			StateHolder.Initialize(state);
+
+			var repositoryFactory = new RepositoryFactory();
 
 			var unitOfWorkFactory = dataSource.Application;
 			var logOnOff = new LogOnOff(new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory()));

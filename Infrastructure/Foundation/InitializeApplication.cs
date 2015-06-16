@@ -42,17 +42,6 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			});
 		}
 
-		//from applicationconfig
-		public void Start(IState clientCache,
-						  IDictionary<string, string> databaseSettings,
-						  string statisticConnectionString,
-			IDictionary<string, string> appSettings)
-		{
-			StateHolder.Initialize(clientCache);
-			IDataSource dataSource = _dataSourcesFactory.Create(databaseSettings, statisticConnectionString);
-			StateHolder.Instance.State.SetApplicationData(new ApplicationData(appSettings, new[]{dataSource}, _messageBroker, null, _dataSourcesFactory));
-		}
-
 		private void startMessageBroker(IDictionary<string, string> appSettings)
 		{
 			try
