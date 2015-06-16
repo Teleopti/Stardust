@@ -107,6 +107,7 @@
     <Compile Include="ControllerActions\CheckNewTenantName.cs" />
     <Compile Include="ControllerActions\GetAllTenantsTest.cs" />
     <Compile Include="ControllerActions\CheckExistingDatabaseTest.cs" />
+    <Compile Include="ControllerActions\GetImportUsersTest.cs" />
     <Compile Include="ControllerActions\GetVersionsTest.cs" />
     <Compile Include="TenantTestAttribute.cs" />
   </ItemGroup>

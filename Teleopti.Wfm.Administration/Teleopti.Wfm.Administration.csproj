@@ -146,6 +146,8 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UpgradeDatabasesController.cs" />
+    <Compile Include="Core\GetImportUsers.cs" />
+    <Compile Include="Models\ConflictingUserModel.cs" />
     <Compile Include="Models\VersionResultModel.cs" />
     <Compile Include="Core\AdminTenantAuthentication.cs" />
     <Compile Include="Core\CheckDatabaseVersions.cs" />

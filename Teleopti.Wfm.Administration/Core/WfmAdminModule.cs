@@ -2,6 +2,7 @@
 using Autofac.Integration.Mvc;
 using Autofac.Integration.WebApi;
 using Teleopti.Ccc.Infrastructure.Aop;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
@@ -21,6 +22,8 @@ namespace Teleopti.Wfm.Administration.Core
 			builder.RegisterType<AdminTenantAuthentication>().As<ITenantAuthentication>().SingleInstance();
 			builder.RegisterType<DatabaseHelperWrapper>().SingleInstance();
 			builder.RegisterType<CheckDatabaseVersions>().SingleInstance();
+			builder.RegisterType<GetImportUsers>().SingleInstance();
+			builder.RegisterType<LoadAllPersonInfos>().SingleInstance();
 
 			// OPTIONAL: Enable property injection into action filters.
 			builder.RegisterFilterProvider();

@@ -97,6 +97,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 				helperAnal.CreateByDbManager();
 				helperAnal.CreateSchemaByDbManager();
 			}
+			
 			var importModel = new ImportDatabaseModel { ConnStringAppDatabase = connString, ConnStringAnalyticsDatabase = connStringAnal, Tenant = RandomName.Make()};
 			bool result = Target.ImportExisting(importModel).Content.Success;
 			result.Should().Be.True();

@@ -33,12 +33,15 @@
 					<label>The versions are OK ?:</label><span>{{importVm.AppVersionOk}}</span><br/>
 				</div>
 				<p><button class="btn btn-default" ng-click="importVm.startImport()">Start import</button></p>
-				{{importVm.Result}}
+				{{importVm.Message}}
 			</div>
 
 		</div>
 		<div class="col-md-6">
-
+			<h3>Conflicting users {{importVm.NumberOfConflicting}}</h3>({{importVm.NumberOfNotConflicting}} are not conflicting)
+			<div ng-repeat="user in importVm.Conflicts" ng-class-odd="'oddRow'">
+				{{user.AppLogon}} {{user.Identity}}
+			</div>
 		</div>
 	</div>
 

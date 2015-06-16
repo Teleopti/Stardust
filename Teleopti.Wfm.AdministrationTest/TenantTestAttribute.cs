@@ -1,4 +1,5 @@
 ﻿using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -24,6 +25,8 @@ namespace Teleopti.Wfm.AdministrationTest
 
 			system.AddService<DatabaseHelperWrapper>();
 			system.AddService<AdminTenantAuthentication>();
+			system.AddService<LoadAllPersonInfos>();
+			system.AddService<GetImportUsers>();
 		}
 	}
 }

@@ -240,6 +240,7 @@
     <Compile Include="MultiTenancy\Admin\ILoadAllTenants.cs" />
     <Compile Include="MultiTenancy\Admin\IRegenerateAllTenantPasswords.cs" />
     <Compile Include="MultiTenancy\Admin\ITenantExists.cs" />
+    <Compile Include="MultiTenancy\Admin\LoadAllPersonInfos.cs" />
     <Compile Include="MultiTenancy\Admin\LoadAllTenants.cs" />
     <Compile Include="MultiTenancy\Admin\RegenerateAllTenantPasswords.cs" />
     <Compile Include="MultiTenancy\Admin\TenantExists.cs" />

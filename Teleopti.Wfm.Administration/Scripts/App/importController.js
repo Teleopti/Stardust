@@ -28,7 +28,7 @@
 				.success(function (data) {
 					vm.TenantMessage = data.Message;
 					vm.TenantOk = data.Success;
-					
+
 				}).error(function (xhr, ajaxOptions, thrownError) {
 					console.log(xhr.status + xhr.responseText + thrownError);
 				});
@@ -44,6 +44,7 @@
 					vm.AppDbCheckMessage = data.Message;
 					if (vm.AppDbOk) {
 						vm.CheckVersions();
+						vm.CheckUsers();
 					}
 				}).error(function (xhr, ajaxOptions, thrownError) {
 					console.log(xhr.status + xhr.responseText + thrownError);
@@ -74,17 +75,29 @@
 					console.log(xhr.status + xhr.responseText + thrownError);
 				});
 		}
+		vm.CheckUsers = function () {
+			$http.post('../api/Import/Conflicts', {
+				ConnStringAppDatabase: vm.AppDatabase
+			})
+				.success(function (data) {
+					vm.Conflicts = data.ConflictingUserModels;
+					vm.NumberOfConflicting = data.NumberOfConflicting;
+					vm.NumberOfNotConflicting = data.NumberOfNotConflicting;
+				}).error(function (xhr, ajaxOptions, thrownError) {
+					console.log(xhr.status + xhr.responseText + thrownError);
+				});
+		}
 
 		vm.startImport = function () {
 
 			$http.post('../api/Import/ImportExisting', {
 				Tenant: vm.Tenant,
-				AppDatabase: vm.AppDatabase,
-				AnalyticsDatabase: vm.AnalyticsDatabase,
-				Server: vm.Server
+				ConnStringAppDatabase: vm.AppDatabase,
+				ConnStringAnalyticsDatabase: vm.AnalyticsDatabase
 			}).
   success(function (data, status, headers, config) {
   	vm.Result = data.Success;
+  	vm.Message = data.Message;
   }).
   error(function (data, status, headers, config) {
   	// called asynchronously if an error occurs

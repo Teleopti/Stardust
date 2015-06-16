@@ -12,11 +12,14 @@ namespace Teleopti.Wfm.Administration.Controllers
 	{
 		private readonly DatabaseHelperWrapper _databaseHelperWrapper;
 		private readonly ITenantExists _tenantExists;
+		private readonly GetImportUsers _getImportUsers;
 
 		public ImportController(DatabaseHelperWrapper databaseHelperWrapper, ITenantExists tenantExists)
+		public ImportController(DatabaseHelperWrapper databaseHelperWrapper, ILoadAllTenants loadAllTenants, GetImportUsers getImportUsers)
 		{
 			_databaseHelperWrapper = databaseHelperWrapper;
 			_tenantExists = tenantExists;
+			_getImportUsers = getImportUsers;
 		}
 
 		[HttpPost]
@@ -33,6 +36,11 @@ namespace Teleopti.Wfm.Administration.Controllers
 			result = _databaseHelperWrapper.Exists(model.ConnStringAnalyticsDatabase, DatabaseType.TeleoptiAnalytics);
 			if (!result.Exists)
 				return Json(new ImportTenantResultModel { Success = false, Message = result.Message });
+
+			// här funkar den inte får ingen session då???
+			//var conflicting = _getImportUsers.GetConflictionUsers(model.ConnStringAppDatabase);
+			//if(conflicting.NumberOfConflicting > 0)
+			//	return Json(new ImportTenantResultModel { Success = false, Message = "There are users conflicting with each other." });
 
 			return Json(new ImportTenantResultModel { Success = true });
 		}
@@ -61,6 +69,15 @@ namespace Teleopti.Wfm.Administration.Controllers
 				return Json(new ImportTenantResultModel { Message = "There is already a Tenant with this name!", Success = false});
 
 			return Json(new ImportTenantResultModel { Message = "There is no other Tenant with this name!", Success = true });
+		}
+
+		[HttpPost]
+		[TenantUnitOfWork]
+		[Route("api/Import/Conflicts")]
+		public virtual JsonResult<ConflictModel> Conflicts(ImportDatabaseModel model)
+		{
+			//funkar här men inte i importen
+			return Json(_getImportUsers.GetConflictionUsers(model.ConnStringAppDatabase));
 		}
 	}
 }
