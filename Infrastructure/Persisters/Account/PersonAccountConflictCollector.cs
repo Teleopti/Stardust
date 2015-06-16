@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Account
 
 		public IEnumerable<IPersonAbsenceAccount> GetConflicts(IEnumerable<IPersonAbsenceAccount> personAbsenceAccounts)
 		{
-			var unitOfWork = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CurrentUnitOfWork();
+			var unitOfWork = _currentUnitOfWorkFactory.Current().CurrentUnitOfWork();
 			return (from e in personAbsenceAccounts
 							let databaseVersion = unitOfWork.DatabaseVersion(e, true)
 							where e.Version != databaseVersion

@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			person.SetId(Guid.NewGuid());
 
 			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-			currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
+			currentUnitOfWorkFactory.Stub(x => x.Current()).Return(unitOfWorkFactory);
 			personRepository.Stub(x => x.Load(person.Id.GetValueOrDefault())).Return(person);
 
 			var target = new GetPersonRolesQueryHandler(personRepository, currentUnitOfWorkFactory);
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			person.SetId(Guid.NewGuid());
 
 			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-			currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
+			currentUnitOfWorkFactory.Stub(x => x.Current()).Return(unitOfWorkFactory);
 			personRepository.Stub(x => x.Load(person.Id.GetValueOrDefault())).Return(person);
 
 			var target = new GetPersonRolesQueryHandler(personRepository, currentUnitOfWorkFactory);

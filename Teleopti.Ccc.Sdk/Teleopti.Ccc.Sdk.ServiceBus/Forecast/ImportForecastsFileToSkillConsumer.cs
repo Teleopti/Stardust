@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Forecasting.Export.IJobResultFeedback.Info(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public void Consume(ImportForecastsFileToSkill message)
         {
-            using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+            using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
             {
                 var jobResult = _jobResultRepository.Get(message.JobId);
                 var skill = _skillRepository.Get(message.TargetSkillId);
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 
         private void notifyServiceBusErrors(OpenAndSplitTargetSkill message, Exception e)
         {
-            using (var uow = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+            using (var uow = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
             {
                 var job = _jobResultRepository.Get(message.JobId);
                 _feedback.SetJobResult(job, _messageBroker);

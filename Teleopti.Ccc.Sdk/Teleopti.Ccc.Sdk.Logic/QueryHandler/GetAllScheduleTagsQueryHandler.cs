@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
         public ICollection<ScheduleTagDto> Handle(GetAllScheduleTagsDto query)
         {
-            using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+            using (_unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
             {
                 var scheduleTags = _scheduleTagRepository.FindAllScheduleTags();
                 return _assembler.DomainEntitiesToDtos(scheduleTags).ToList();

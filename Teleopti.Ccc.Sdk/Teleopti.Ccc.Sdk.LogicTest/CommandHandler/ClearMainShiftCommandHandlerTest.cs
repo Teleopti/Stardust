@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		    var rules = MockRepository.GenerateMock<INewBusinessRuleCollection>();
 
 		    _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-		    _currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+		    _currentUnitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);
 		    _personRepository.Stub(x => x.Load(_clearMainShiftDto.PersonId)).Return(_person);
 			_scheduleRepository.Stub(x => x.FindSchedulesForPersonOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), _scenario))
 		                       .IgnoreArguments()
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var rules = MockRepository.GenerateMock<INewBusinessRuleCollection>();
 
 		    _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-		    _currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+		    _currentUnitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);
 		    _personRepository.Stub(x => x.Load(_clearMainShiftDto.PersonId)).Return(_person);
 			_scheduleRepository.Stub(x => x.FindSchedulesForPersonOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), _scenario)).IgnoreArguments().Return(dictionary);
 		    dictionary.Stub(x => x[_person]).Return(scheduleRangeMock);
@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var tagId = Guid.NewGuid();
 
 			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-			_currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+			_currentUnitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);
 			_personRepository.Stub(x => x.Load(_clearMainShiftDto.PersonId)).Return(_person);
 			_scheduleRepository.Stub(x => x.FindSchedulesForPersonOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), _scenario)).IgnoreArguments().Return(dictionary);
 			dictionary.Stub(x => x[_person]).Return(scheduleRangeMock);

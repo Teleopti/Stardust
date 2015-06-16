@@ -253,7 +253,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void checkSmsLinkLicense(IToggleManager toggleManager)
 		{
-			var dataSource = UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory().Name;
+			var dataSource = UnitOfWorkFactory.CurrentUnitOfWorkFactory().Current().Name;
 			var toggleEnabled = toggleManager.IsEnabled(Toggles.RTA_NotifyViaSMS_31567);
 			var hasLicense = DefinedLicenseDataFactory.HasLicense(dataSource) &&
 			         DefinedLicenseDataFactory.GetLicenseActivator(dataSource)

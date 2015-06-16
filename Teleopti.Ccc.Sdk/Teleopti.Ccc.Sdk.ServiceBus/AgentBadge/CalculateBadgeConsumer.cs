@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				CalculationDate = message.CalculationDate.AddDays(1)
 			};
 
-			using (var uow = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				var setting = _settingsRepository.GetSettings();
 				if (setting == null || !setting.BadgeEnabled)

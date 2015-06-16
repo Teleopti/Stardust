@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             command.Result = new CommandResultDto();
             if (command.OptionalValueCollection.Count == 0) return;
 
-            using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+            using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
             {
                 var person = _personRepository.Get(command.PersonId);
                 if (person == null) throw new FaultException(string.Format(System.Globalization.CultureInfo.InvariantCulture, "No person was found with the given Id ({0}).", command.PersonId));

@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Requests
 			if (!_principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler))
 				return;
 
-			using (var uow = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				foreach (var personRequest in requests)
 				{

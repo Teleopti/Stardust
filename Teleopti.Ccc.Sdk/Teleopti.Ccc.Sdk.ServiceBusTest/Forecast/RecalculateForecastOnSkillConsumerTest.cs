@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			var scenarioId = Guid.NewGuid();
 			_scenario = MockRepository.GenerateStrictMock<IScenario>();
 			var message = new RecalculateForecastOnSkillMessageCollection {ScenarioId = scenarioId};
-			_currentunitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+			_currentunitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);
 			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_uow);
 			_scenarioRepository.Stub(x => x.Get(scenarioId)).Return(_scenario);
 			_scenario.Stub(x => x.DefaultScenario).Return(false);
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			              		ScenarioId = scenarioId,
 			              		MessageCollection = new Collection<RecalculateForecastOnSkillMessage> {skillMessage}
 			              	};
-			_currentunitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+			_currentunitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);
 			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_uow);
 			_scenarioRepository.Stub(x => x.Get(scenarioId)).Return(_scenario);
 			_scenario.Stub(x => x.DefaultScenario).Return(true);
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			var skillDay = MockRepository.GenerateMock<ISkillDay>();
 			var workloadDay = MockRepository.GenerateMock<IWorkloadDay>();
 			var workload = MockRepository.GenerateMock<IWorkload>();
-			_currentunitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+			_currentunitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);
 			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_uow);
 			_scenarioRepository.Stub(x => x.Get(scenarioId)).Return(_scenario);
 			_scenario.Stub(x => x.DefaultScenario).Return(true);
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			var skillDay = MockRepository.GenerateMock<ISkillDay>();
 			var workloadDay = MockRepository.GenerateStrictMock<IWorkloadDay>();
 			var workload = MockRepository.GenerateMock<IWorkload>();
-			_currentunitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+			_currentunitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);
 			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_uow);
 			_scenarioRepository.Stub(x => x.Get(scenarioId)).Return(_scenario);
 			_scenario.Stub(x => x.DefaultScenario).Return(true);

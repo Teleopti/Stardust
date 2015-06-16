@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			var skillStaffPeriods = new ISkillStaffPeriod[] { };
 			var period = new DateOnlyPeriod(2014, 3, 31, 2014, 4, 3);
 
-			currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
+			currentUnitOfWorkFactory.Stub(x => x.Current()).Return(unitOfWorkFactory);
 			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 			personRepository.Stub(x => x.FindPeopleInOrganization(period, true)).Return(new List<IPerson>{new Person()});
 			schedulingResultStateHolder.Stub(x => x.VisibleSkills).Return(skills);
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			var skillStaffPeriods = new ISkillStaffPeriod[] { };
 			var period = new DateOnlyPeriod(2014, 3, 31, 2014, 4, 3);
 
-			currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
+			currentUnitOfWorkFactory.Stub(x => x.Current()).Return(unitOfWorkFactory);
 			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 			personRepository.Stub(x => x.FindPeopleInOrganization(period, true)).Return(new List<IPerson> { new Person() });
 			schedulingResultStateHolder.Stub(x => x.VisibleSkills).Return(skills);
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			var period = new DateOnlyPeriod(2014, 3, 31, 2014, 4, 2);
 			var skillDay = MockRepository.GenerateMock<ISkillDay>();
 
-			currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
+			currentUnitOfWorkFactory.Stub(x => x.Current()).Return(unitOfWorkFactory);
 			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 			personRepository.Stub(x => x.FindPeopleInOrganization(period, true)).Return(new List<IPerson> { new Person() });
 			assembler.Stub(x => x.DomainEntitiesToDtos(skillStaffPeriods)).Return(new List<SkillDataDto>());
@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			var period = new DateOnlyPeriod(2014, 3, 31, 2014, 4, 2);
 			var skillDay = MockRepository.GenerateMock<ISkillDay>();
 
-			currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
+			currentUnitOfWorkFactory.Stub(x => x.Current()).Return(unitOfWorkFactory);
 			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 			personRepository.Stub(x => x.FindPeopleInOrganization(period, true)).Return(new List<IPerson> { new Person() });
 			assembler.Stub(x => x.DomainEntitiesToDtos(skillStaffPeriods)).Return(new List<SkillDataDto>());

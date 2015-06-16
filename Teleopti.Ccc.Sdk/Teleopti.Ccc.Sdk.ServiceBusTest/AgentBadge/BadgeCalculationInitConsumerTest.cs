@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			message.BusinessUnitId = bussinessUnit.Id.GetValueOrDefault();
 			var timezoneList = new List<TimeZoneInfo>{TimeZoneInfo.Local};
 
-			currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(loggedOnUnitOfWorkFactory);
+			currentUnitOfWorkFactory.Stub(x => x.Current()).Return(loggedOnUnitOfWorkFactory);
 			badgeSettingRep.Stub(x => x.GetSettings()).Return(new AgentBadgeSettings() { BadgeEnabled = true });
 			toggleManager.Stub(x => x.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318)).Return(false);
 
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			message.BusinessUnitId = bussinessUnit.Id.GetValueOrDefault();
 			var timezoneList = new List<TimeZoneInfo> { TimeZoneInfo.Local };
 
-			currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(loggedOnUnitOfWorkFactory);
+			currentUnitOfWorkFactory.Stub(x => x.Current()).Return(loggedOnUnitOfWorkFactory);
 			badgeSettingRep.Stub(x => x.GetSettings()).Return(new AgentBadgeSettings() { BadgeEnabled = false });
 			toggleManager.Stub(x => x.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318)).Return(true);
 

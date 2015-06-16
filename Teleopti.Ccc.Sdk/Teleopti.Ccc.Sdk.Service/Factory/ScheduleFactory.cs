@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
             var datePeriod = new DateOnlyPeriod(new DateOnly(startDate.DateTime), new DateOnly(endDate.DateTime));
             var period = new DateOnlyPeriod(datePeriod.StartDate, datePeriod.EndDate.AddDays(1));
             
-            using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+            using (_unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
             {
                 IList<IPerson> personList = _personRepository.FindPeople(personCollection.Select(p => p.Id.GetValueOrDefault())).ToList();
 				IScheduleDictionary scheduleDictonary = _scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(personList, new ScheduleDictionaryLoadOptions(false, false), period, _scenarioRepository.Current());
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
             var period = new DateOnlyPeriod(datePeriod.StartDate,datePeriod.EndDate.AddDays(1));
 
             ((DateTimePeriodAssembler) _dateTimePeriodAssembler).TimeZone = timeZone;
-            using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+            using (_unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
             {
                 IList<IPerson> personList = _personRepository.FindPeople(personCollection.Select(p => p.Id.GetValueOrDefault())).ToList();
 

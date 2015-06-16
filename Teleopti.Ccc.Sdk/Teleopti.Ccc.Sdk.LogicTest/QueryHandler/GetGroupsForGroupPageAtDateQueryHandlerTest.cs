@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			var groupDetailList = new List<ReadOnlyGroupDetail> { groupDetail };
 			var dateOnly = new DateOnly(2012, 4, 30);
 
-			_currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+			_currentUnitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);
 			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
 			_groupingReadOnlyRepository.Stub(x => x.AvailableGroups(readOnlyGroupPage, dateOnly)).Constraints(
 					new Rhino.Mocks.Constraints.PredicateConstraint<ReadOnlyGroupPage>(p => p.PageId == readOnlyGroupPage.PageId),

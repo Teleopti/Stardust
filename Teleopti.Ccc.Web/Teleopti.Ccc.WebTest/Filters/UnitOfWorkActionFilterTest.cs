@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 			var target = new UnitOfWorkActionAttribute();
 
 			dependencyResolver.Stub(x => x.GetService(typeof(ICurrentUnitOfWorkFactory))).Return(currentUnitOfWorkFactory);
-	        currentUnitOfWorkFactory.Expect(x => x.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
+	        currentUnitOfWorkFactory.Expect(x => x.Current()).Return(unitOfWorkFactory);
             target.OnActionExecuting(new ActionExecutingContext());
 
 			unitOfWorkFactory.AssertWasCalled(x => x.CreateAndOpenUnitOfWork());

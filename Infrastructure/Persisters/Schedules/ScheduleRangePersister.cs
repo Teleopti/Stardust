@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 			{
 				return Enumerable.Empty<PersistConflict>();
 			}
-			using (var uow = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				var conflicts = _scheduleRangeConflictCollector.GetConflicts(diff, scheduleRange);
 				if (conflicts.IsNullOrEmpty())

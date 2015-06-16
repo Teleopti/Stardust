@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 
 		public void Handle(CancelOvertimeCommandDto command)
 		{
-			using (var uow = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (var uow = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				var person = _personRepository.Load(command.PersonId);
 				var scenario = getDesiredScenario(command);

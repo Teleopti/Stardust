@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 
 			multiplicatorDefinitionSetRepository.Stub(x => x.FindAllOvertimeDefinitions()).Return(multiplicatorDefinitionSetList);
 			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-			currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
+			currentUnitOfWorkFactory.Stub(x => x.Current()).Return(unitOfWorkFactory);
 
 			var multiplicatorDefinitionSetOvertimeDto = new GetMultiplicatorDefinitionSetOvertimeDto
 				{
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 
 			multiplicatorDefinitionSetRepository.Stub(x => x.FindAllOvertimeDefinitions()).Return(multiplicatorDefinitionSetList);
 			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-			currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
+			currentUnitOfWorkFactory.Stub(x => x.Current()).Return(unitOfWorkFactory);
 
 			var multiplicatorDefinitionSetOvertimeDto = new GetMultiplicatorDefinitionSetOvertimeDto
 			{

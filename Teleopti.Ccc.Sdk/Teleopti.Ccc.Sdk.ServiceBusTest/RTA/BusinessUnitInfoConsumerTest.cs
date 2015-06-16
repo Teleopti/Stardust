@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 			var uow = mocks.DynamicMock<IUnitOfWork>();
 			var loggedOnUnitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
 
-			Expect.Call(unitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(loggedOnUnitOfWorkFactory);
+			Expect.Call(unitOfWorkFactory.Current()).Return(loggedOnUnitOfWorkFactory);
 			Expect.Call(loggedOnUnitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
 			Expect.Call(businessUnitRepository.LoadAllPersonsWithExternalLogOn(Guid.Empty, DateOnly.Today)).IgnoreArguments().Return(personList);
 

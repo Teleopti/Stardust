@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Web.Filters
 			base.OnActionExecuting(filterContext);
 
 			var unitOfWorkFactory = DependencyResolver.Current.GetService<ICurrentUnitOfWorkFactory>();
-			unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork();
+			unitOfWorkFactory.Current().CreateAndOpenUnitOfWork();
 		}
 
 		public override void OnResultExecuted(ResultExecutedContext filterContext)

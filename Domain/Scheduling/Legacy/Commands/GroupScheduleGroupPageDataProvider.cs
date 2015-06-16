@@ -277,11 +277,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			{
 				try
 				{
-					return new emptyDisposable(unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CurrentUnitOfWork());
+					return new emptyDisposable(unitOfWorkFactory.Current().CurrentUnitOfWork());
 				}
 				catch (Exception)
 				{
-					return new disposableUnitOfWork(unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork());
+					return new disposableUnitOfWork(unitOfWorkFactory.Current().CreateAndOpenUnitOfWork());
 				}
 			}
 

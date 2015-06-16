@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			unitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
 			loggedOnUnitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
-			unitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(loggedOnUnitOfWorkFactory);
+			unitOfWorkFactory.Stub(x => x.Current()).Return(loggedOnUnitOfWorkFactory);
 			loggedOnUnitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 			serviceBus = MockRepository.GenerateMock<IServiceBus>();
 			teamSettingsRepository = MockRepository.GenerateMock<ITeamGamificationSettingRepository>();

@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Domain.Security
         /// </summary>
 		public CheckRaptorApplicationFunctionsResult CheckRaptorApplicationFunctions()
         {
-            using (IUnitOfWork unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+            using (IUnitOfWork unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
             {
                 
                 _applicationFunctionRepository = _repFactory.CreateApplicationFunctionRepository(unitOfWork);
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Domain.Security
         /// </summary>
         public void DigestApplicationFunctions()
         {
-			using (IUnitOfWork unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (IUnitOfWork unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
             {
                 CreateLocalRepositories(unitOfWork);
 

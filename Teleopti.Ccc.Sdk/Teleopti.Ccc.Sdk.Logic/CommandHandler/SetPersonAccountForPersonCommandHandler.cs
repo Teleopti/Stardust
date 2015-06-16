@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Handle(SetPersonAccountForPersonCommandDto command)
         {
-            using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+            using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
             {
 				var foundPerson = _personRepository.Get(command.PersonId);
                 if (foundPerson == null) throw new FaultException("Person does not exist.");

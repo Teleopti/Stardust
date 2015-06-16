@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 
 		public ILicenseActivator Current()
 		{
-			var dataSource = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().Name;
+			var dataSource = _currentUnitOfWorkFactory.Current().Name;
 			_checkLicense.Check(dataSource);
 			return DefinedLicenseDataFactory.GetLicenseActivator(dataSource);
 		}

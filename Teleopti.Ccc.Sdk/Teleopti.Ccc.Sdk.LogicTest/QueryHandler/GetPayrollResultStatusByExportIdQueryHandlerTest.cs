@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 				Expect.Call(payrollResultRepository.GetPayrollResultsByPayrollExport(payrollExport)).Return(payrollResultList);
 				Expect.Call(assembler.DomainEntitiesToDtos(payrollResultList)).Return(new[] {dto});
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-				Expect.Call(currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
+				Expect.Call(currentUnitOfWorkFactory.Current()).Return(unitOfWorkFactory);
 			}
 			using (mocks.Playback())
 			{

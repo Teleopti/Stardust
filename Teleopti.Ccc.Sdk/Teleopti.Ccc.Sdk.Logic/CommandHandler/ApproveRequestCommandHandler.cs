@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Handle(ApproveRequestCommandDto command)
 		{
-			using (var uow = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (var uow = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				var personRequest = _personRequestRepository.Get(command.PersonRequestId);
 

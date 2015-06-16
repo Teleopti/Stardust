@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 			var period = new DateOnlyPeriod(datePeriod.StartDate, datePeriod.EndDate.AddDays(1));
 			((DateTimePeriodAssembler) _dateTimePeriodAssembler).TimeZone = timeZone;
 
-			using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (_unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				var personList = _personRepository.FindPeople(personCollection.Select(p => p.Id.GetValueOrDefault())).ToList();
 				var scheduleDictionary =

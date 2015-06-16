@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
 		public ICollection<RoleDto> Handle(GetPersonRolesQueryDto query)
 		{
-			using (_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				var person = _personRepository.Load(query.PersonId);
 				return

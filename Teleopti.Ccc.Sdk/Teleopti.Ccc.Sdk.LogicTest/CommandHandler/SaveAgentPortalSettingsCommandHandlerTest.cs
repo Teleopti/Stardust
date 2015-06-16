@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             
             using(_mock.Record())
             {
-                Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+                Expect.Call(_currentUnitOfWorkFactory.Current()).Return(_unitOfWorkFactory);
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(untiOfWork);
                 Expect.Call(_personalSettingDataRepository.FindValueByKey("AgentPortalSettings",
                                                                           new AgentPortalSettings())).IgnoreArguments().

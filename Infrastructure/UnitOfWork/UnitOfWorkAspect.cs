@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public void OnBeforeInvocation(IInvocationInfo invocation)
 		{
-			_unitOfWork = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork();
+			_unitOfWork = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork();
 			_businessUnitOverrideScope = overrideBusinessUnitFilter();
 		}
 

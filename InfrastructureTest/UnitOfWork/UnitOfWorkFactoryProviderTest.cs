@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			identity.Expect(x => x.IsAuthenticated).Return(true);
 			identity.Expect(x => x.DataSource).Return(dataSource);
 
-			target.LoggedOnUnitOfWorkFactory().Should().Be.SameInstanceAs(expectedUnitOfWorkFactory);
+			target.Current().Should().Be.SameInstanceAs(expectedUnitOfWorkFactory);
 		}
 
 	}

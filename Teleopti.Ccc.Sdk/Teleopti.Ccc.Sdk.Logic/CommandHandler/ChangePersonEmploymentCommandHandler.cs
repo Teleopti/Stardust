@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		public void Handle(ChangePersonEmploymentCommandDto command)
         {
             Guid? affectedId;
-            using (var uow = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+            using (var uow = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
             {
             	var startDate = new DateOnly(command.Period.StartDate.DateTime);
                 var person = _personRepository.Get(command.Person.Id.GetValueOrDefault());

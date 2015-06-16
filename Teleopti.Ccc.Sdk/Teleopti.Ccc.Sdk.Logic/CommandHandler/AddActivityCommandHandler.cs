@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		public void Handle(AddActivityCommandDto command)
         {
-            using (var uow = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+            using (var uow = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
             {
                 var person = _personRepository.Load(command.PersonId);
                 var scenario = getDesiredScenario(command);

@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 				Expect.Call(siteRepository.Get(siteId)).Return(site);
 				Expect.Call(assembler.DomainEntityToDto(site)).Return(new SiteDto { DescriptionName = site.Description.Name, Id = site.Id});
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-				Expect.Call(currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
+				Expect.Call(currentUnitOfWorkFactory.Current()).Return(unitOfWorkFactory);
 			}
 			using (mocks.Playback())
 			{
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			{
 				Expect.Call(siteRepository.Get(siteId)).Return(null);
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-				Expect.Call(currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
+				Expect.Call(currentUnitOfWorkFactory.Current()).Return(unitOfWorkFactory);
 			}
 			using (mocks.Playback())
 			{

@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
         public ICollection<AgentPortalSettingsDto> Handle(GetAgentPortalSettingsQueryDto query)
         {
-            using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+            using (_unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
             {
                 var setting = _personalSettingDataRepository.FindValueByKey("AgentPortalSettings", new AgentPortalSettings{Resolution = 4});
                 return new List<AgentPortalSettingsDto> {new AgentPortalSettingsDto {Resolution = setting.Resolution}};

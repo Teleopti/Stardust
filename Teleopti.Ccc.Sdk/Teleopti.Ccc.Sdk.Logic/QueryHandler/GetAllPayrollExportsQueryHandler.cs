@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
         public ICollection<PayrollExportDto> Handle(GetAllPayrollExportsQueryDto query)
         {
-            using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+            using (_unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
             {
                 var exports = _exportRepository.LoadAll();
                 return _assembler.DomainEntitiesToDtos(exports).ToList();

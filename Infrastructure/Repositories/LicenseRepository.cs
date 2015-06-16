@@ -108,7 +108,7 @@ where s.DefaultScenario = 1 AND pa.ShiftCategory is not null)
 GROUP BY b.Name, FirstName, LastName, Email, EmploymentNumber, p.TerminalDate, p.Id
 ORDER BY LastName, FirstName";
 
-			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().Current().CreateAndOpenStatelessUnitOfWork())
 			{ 
 				return ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(sql)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(ActiveAgent)))

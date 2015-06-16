@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 		public void Consume(InitialLoadScheduleProjection message)
 		{
 			var messages = new List<ScheduleChangedEventBase>();
-			using (var uow = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (var uow = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				var projectionModelInitialized = _scheduleProjectionReadOnlyRepository.IsInitialized();
 				var scheduleDayModelInitialized = _scheduleDayReadModelRepository.IsInitialized();

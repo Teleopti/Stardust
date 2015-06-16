@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 
 			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-			currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
+			currentUnitOfWorkFactory.Stub(x => x.Current()).Return(unitOfWorkFactory);
 			applicationRoleRepository.Stub(x => x.LoadAllApplicationRolesSortedByName()).Return(new IApplicationRole[] {role});
 
 			var target = new GetAllRolesQueryHandler(applicationRoleRepository, currentUnitOfWorkFactory);
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 
 			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-			currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
+			currentUnitOfWorkFactory.Stub(x => x.Current()).Return(unitOfWorkFactory);
 			applicationRoleRepository.Stub(x => x.LoadAllApplicationRolesSortedByName()).Return(new IApplicationRole[] { role });
 
 			var target = new GetAllRolesQueryHandler(applicationRoleRepository, currentUnitOfWorkFactory);

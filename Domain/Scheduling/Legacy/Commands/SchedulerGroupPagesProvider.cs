@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			if (_userDefined == null)
 			{
-				using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+				using (_unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 				{
 					_userDefined = _personSelectorReadOnlyRepository.GetUserDefinedTabs();
 				}

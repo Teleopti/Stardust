@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
 		public ICollection<GroupPageDto> Handle(GetAvailableCustomGroupPagesQueryDto query)
 		{
-			using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (_unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				return
 					_groupingReadOnlyRepository.AvailableGroupPages().Select(

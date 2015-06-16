@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
             using (_mocks.Record())
             {
 	            var uowFactory = _mocks.DynamicMock<IUnitOfWorkFactory>();
-							Expect.Call(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
+							Expect.Call(_unitOfWorkFactory.Current()).Return(uowFactory);
 							Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
                 Expect.Call(_jobResultRepository.Get(jobId)).Return(_jobResult);
                 Expect.Call(_skillRepository.Get(skillId)).Return(skill);

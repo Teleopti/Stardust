@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
 		public ICollection<DefinitionSetDto> Handle(GetMultiplicatorDefinitionSetShiftAllowanceDto query)
 		{
-			using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				IList<IMultiplicatorDefinitionSet> multiplicatorDefinitionSetList;
 				using (unitOfWork.LoadDeletedIfSpecified(query.LoadDeleted))

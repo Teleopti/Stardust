@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests
 			var unitOfWorkFactoryProvider = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
 			var uowFactory = MockRepository.GenerateStub<IUnitOfWorkFactory>();
 			uowFactory.Expect(x => x.Name).Return("gegga");
-			unitOfWorkFactoryProvider.Expect(x => x.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
+			unitOfWorkFactoryProvider.Expect(x => x.Current()).Return(uowFactory);
 			var bsProvider = MockRepository.GenerateMock<ICurrentBusinessUnit>();
 			bsProvider.Expect(x => x.Current()).Return(new BusinessUnit("sdf"));
 			var target = new RespondToShiftTrade(personRequestRepository, shiftTradeRequestCheckSum, personRequestCheckAuthorization, loggedOnUser, mapper, busSender, MockRepository.GenerateMock<INow>());

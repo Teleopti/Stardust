@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.MessageSenders
 		[Test]
 		public void ShouldPublishEvents()
 		{
-			using (var uow = Uow.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (var uow = Uow.Current().CreateAndOpenUnitOfWork())
 			{
 				var scenario = ScenarioFactory.CreateScenario(".", true, false);
 				ScenarioRepository.Add(scenario);

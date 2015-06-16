@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
 		public ICollection<RoleDto> Handle(GetAllRolesQueryDto query)
 		{
-			using (var uow = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				using (uow.LoadDeletedIfSpecified(query.LoadDeleted))
 				{

@@ -28,7 +28,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			StateHolderProxyHelper.SetupFakeState(dataSource, personThatCreatesTestData, TestState.BusinessUnit, new ThreadPrincipalContext(new TeleoptiPrincipalFactory()));
 			var tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(UnitOfWorkFactory.Current.ConnectionString);
 
-			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().Current().CreateAndOpenUnitOfWork())
 			{
 				var testDataFactory = new TestDataFactory(defaultTenant(tenantUnitOfWorkManager), action =>
 					{
@@ -68,7 +68,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 		private static void OpenUnitOfWork()
 		{
-			TestState.UnitOfWork = UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork();
+			TestState.UnitOfWork = UnitOfWorkFactory.CurrentUnitOfWorkFactory().Current().CreateAndOpenUnitOfWork();
 		}
 
 		private static void UnitOfWorkAction(Action<IUnitOfWork> action)

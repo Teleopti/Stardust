@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
             var skill = SkillFactory.CreateSkill("test skill");
             using (_mocks.Record())
             {
-				Expect.Call(_currentunitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+				Expect.Call(_currentunitOfWorkFactory.Current()).Return(_unitOfWorkFactory);
 				Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
                 Expect.Call(_jobResultRepository.Get(jobId)).Return(_jobResult);
                 Expect.Call(_skillRepository.Get(skillId)).Return(skill);

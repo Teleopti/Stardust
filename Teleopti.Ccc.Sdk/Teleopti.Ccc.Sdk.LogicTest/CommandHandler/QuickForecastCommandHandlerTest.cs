@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		[Test]
 		public void ShouldThrowFaultExceptionIfServiceBusIsNotAvailable()
 		{
-			Expect.Call(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork()).Return(_unitOfWork);
+			Expect.Call(_unitOfWorkFactory.Current().CreateAndOpenUnitOfWork()).Return(_unitOfWork);
 			Expect.Call(() => _jobResultRepository.Add(null)).IgnoreArguments();
 			Expect.Call(() => _unitOfWork.PersistAll());
 			Expect.Call(_unitOfWork.Dispose);
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		[Test]
 		public void ShouldSendToServiceBus()
 		{
-			Expect.Call(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork()).Return(_unitOfWork);
+			Expect.Call(_unitOfWorkFactory.Current().CreateAndOpenUnitOfWork()).Return(_unitOfWork);
 			Expect.Call(() => _jobResultRepository.Add(null)).IgnoreArguments();
 			Expect.Call(() => _unitOfWork.PersistAll());
 			Expect.Call(_unitOfWork.Dispose);

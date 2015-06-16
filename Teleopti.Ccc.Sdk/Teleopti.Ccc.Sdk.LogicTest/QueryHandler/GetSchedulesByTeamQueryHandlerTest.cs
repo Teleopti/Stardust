@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 				Expect.Call(personRepository.FindPeopleBelongTeam(null, new DateOnlyPeriod())).IgnoreArguments().Return(new[] {person1, person2});
 				Expect.Call(scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), scenario)).IgnoreArguments().Return(dictionary);
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-				Expect.Call(currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
+				Expect.Call(currentUnitOfWorkFactory.Current()).Return(unitOfWorkFactory);
 				Expect.Call(dictionary[person1]).Return(scheduleRange);
 				Expect.Call(dictionary[person2]).Return(scheduleRange);
 				Expect.Call(scheduleDayAssembler.DomainEntitiesToDtos(null))
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			{
 				Expect.Call(scenarioRepository.Get(scenarioId)).Return(null);
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-				Expect.Call(currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
+				Expect.Call(currentUnitOfWorkFactory.Current()).Return(unitOfWorkFactory);
 			}
 			using (mocks.Playback())
 			{
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 				Expect.Call(personRepository.FindPeopleBelongTeam(null, new DateOnlyPeriod())).IgnoreArguments().Return(new[] { person1, person2 });
 				Expect.Call(scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), scenario)).IgnoreArguments().Return(dictionary);
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-				Expect.Call(currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
+				Expect.Call(currentUnitOfWorkFactory.Current()).Return(unitOfWorkFactory);
 				Expect.Call(dictionary[person1]).Return(scheduleRange);
 				Expect.Call(dictionary[person2]).Return(scheduleRange);
 				Expect.Call(scheduleDayAssembler.DomainEntitiesToDtos(null))

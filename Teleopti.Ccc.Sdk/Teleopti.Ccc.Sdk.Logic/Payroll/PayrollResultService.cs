@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Payroll
             XmlDocument navigable;
             IPayrollResult result;
 
-            using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+            using (_unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
             {
                 result = _payrollResultRepository.Load(id);
                 navigable = new XmlDocument {InnerXml = result.XmlResult.XPathNavigable.CreateNavigator().OuterXml};

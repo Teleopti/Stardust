@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 
 		public void Persist(ICollection<IWorkflowControlSet> workflowControlSets)
 		{
-			using (var unitOfWork = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (var unitOfWork = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				foreach (var workflowControlSet in workflowControlSets)
 				{

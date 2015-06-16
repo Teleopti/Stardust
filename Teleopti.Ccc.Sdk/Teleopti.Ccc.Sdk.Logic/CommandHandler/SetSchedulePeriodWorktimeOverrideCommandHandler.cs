@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 
 		public void Handle(SetSchedulePeriodWorktimeOverrideCommandDto command)
 		{
-			using (var uow = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				var person = _personRepository.Get(command.PersonId);
 				if (person == null)

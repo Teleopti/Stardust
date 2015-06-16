@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.WriteProtection
 
 		public void Persist(ICollection<IPersonWriteProtectionInfo> writeProtections)
 		{
-			using (var unitOfWork = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (var unitOfWork = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				_writeProtectionRepository.AddRange(writeProtections);
 				unitOfWork.PersistAll(_initiatorIdentifier);

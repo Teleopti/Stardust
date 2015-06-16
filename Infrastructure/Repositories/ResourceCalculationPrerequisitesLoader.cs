@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public void Execute()
 		{
-			using (_currentUnitOfWork.LoggedOnUnitOfWorkFactory().CurrentUnitOfWork().DisableFilter(QueryFilter.Deleted))
+			using (_currentUnitOfWork.Current().CurrentUnitOfWork().DisableFilter(QueryFilter.Deleted))
 			{
 				_contractScheduleRepository.LoadAllAggregate();
 				_activityRepository.LoadAll();

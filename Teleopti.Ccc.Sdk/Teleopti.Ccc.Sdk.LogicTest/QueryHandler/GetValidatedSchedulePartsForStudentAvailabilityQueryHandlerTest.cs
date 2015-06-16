@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			using (mocks.Record())
 			{
 				Expect.Call(personRepository.Load(personDto.Id.GetValueOrDefault())).Return(person);
-				Expect.Call(unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork()).Return(unitOfWork);
+				Expect.Call(unitOfWorkFactory.Current().CreateAndOpenUnitOfWork()).Return(unitOfWork);
 				Expect.Call(scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), null)).
 					IgnoreArguments().Return(dictionary);
 				Expect.Call(dictionary[person]).Return(range).Repeat.AtLeastOnce();
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			using (mocks.Record())
 			{
 				Expect.Call(personRepository.Load(personDto.Id.GetValueOrDefault())).Return(person);
-				Expect.Call(unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork()).Return(unitOfWork);
+				Expect.Call(unitOfWorkFactory.Current().CreateAndOpenUnitOfWork()).Return(unitOfWork);
 				Expect.Call(scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), null)).
 				       IgnoreArguments().Return(dictionary);
 				Expect.Call(dictionary[person]).Return(range).Repeat.AtLeastOnce();

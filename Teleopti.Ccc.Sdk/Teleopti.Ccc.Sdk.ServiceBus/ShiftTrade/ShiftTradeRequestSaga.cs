@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
         public void Consume(NewShiftTradeRequestCreated message)
         {
             Logger.DebugFormat("Consuming message for person request with Id = {0}. (Message timestamp = {1})", message.PersonRequestId, message.Timestamp);
-        	using (IUnitOfWork unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+        	using (IUnitOfWork unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
             {
                 loadPersonRequest(message.PersonRequestId);
                 if (!IsRequestReadyForProcessing.IsSatisfiedBy(_personRequest))
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
         public void Consume(AcceptShiftTrade message)
         {
             Logger.DebugFormat("Consuming message for person request with Id = {0}. (Message timestamp = {1})", message.PersonRequestId, message.Timestamp);
-        	using (IUnitOfWork unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+        	using (IUnitOfWork unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
             {
                 Logger.DebugFormat("Loading PersonRequest = {0}", message.PersonRequestId);
                 loadPersonRequest(message.PersonRequestId);

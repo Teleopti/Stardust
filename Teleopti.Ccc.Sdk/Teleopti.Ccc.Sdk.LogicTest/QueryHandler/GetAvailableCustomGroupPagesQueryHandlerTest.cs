@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			var readOnlyGroupPage = new ReadOnlyGroupPage{PageId = Guid.NewGuid(),PageName = "Test"};
 			var readOnlyGroupPageList = new List<ReadOnlyGroupPage> {readOnlyGroupPage};
 			
-			_currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+			_currentUnitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);
 			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
 			_groupingReadOnlyRepository.Stub(x => x.AvailableGroupPages()).Return(readOnlyGroupPageList);
 			var result = target.Handle(new GetAvailableCustomGroupPagesQueryDto());

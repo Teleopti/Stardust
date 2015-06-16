@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WinCode.Meetings.Commands
             IScenario selectedScenario = _model.CurrentScenario;
             
             IList<IActivity> activities;
-            using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+            using (_unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
             {
                 IPerson organizer = TeleoptiPrincipal.CurrentPrincipal.GetPerson(_personRepository);
                 activities = _activityRepository.LoadAllSortByName();

@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Notification
 
 		public void InitiateNotify(ScheduleDayReadModel readModel, DateOnly date, IPerson person)
 		{
-			var dataSource = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().Name;
+			var dataSource = _currentUnitOfWorkFactory.Current().Name;
 			if (!DefinedLicenseDataFactory.HasLicense(dataSource))
 			{
 				if (Logger.IsInfoEnabled)

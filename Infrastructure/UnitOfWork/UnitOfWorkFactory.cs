@@ -4,12 +4,9 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	/// <summary>
-	/// Static class for UnitOfWork
-	/// </summary>
+	//avoid using this one
 	public static class UnitOfWorkFactory
 	{
-		//avoid using this one
 		public static IUnitOfWorkFactory Current
 		{
 			get

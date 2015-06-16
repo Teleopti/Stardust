@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ApplicationLayer
 				{
 					if (initiatorInfo == null)
 					{
-						using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+						using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 						{
 							_populatingPublisher.Publish(@event);
 							unitOfWork.PersistAll();
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ApplicationLayer
 					}
 					else
 					{
-						using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork(new InitiatorIdentifierFromMessage(initiatorInfo)))
+						using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork(new InitiatorIdentifierFromMessage(initiatorInfo)))
 						{
 							_populatingPublisher.Publish(@event);
 							unitOfWork.PersistAll();

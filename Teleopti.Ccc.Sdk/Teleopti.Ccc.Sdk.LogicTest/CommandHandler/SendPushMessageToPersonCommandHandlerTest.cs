@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			using (mock.Record())
 			{
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(untiOfWork);
-				Expect.Call(currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
+				Expect.Call(currentUnitOfWorkFactory.Current()).Return(unitOfWorkFactory);
 				Expect.Call(personRepository.FindPeople(new[] { person.Id.GetValueOrDefault() })).Return(new Collection<IPerson> { person });
 				Expect.Call(() => pushMessageRepository.Add(null, null)).Callback<IPushMessage, IEnumerable<IPerson>>(
 					(m, s) =>
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			using (mock.Record())
 			{
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(untiOfWork);
-				Expect.Call(currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
+				Expect.Call(currentUnitOfWorkFactory.Current()).Return(unitOfWorkFactory);
 				Expect.Call(personRepository.FindPeople(new[] { person.Id.GetValueOrDefault() })).Return(new Collection<IPerson> { person });
 				Expect.Call(() => pushMessageRepository.Add(null, null)).Callback<IPushMessage, IEnumerable<IPerson>>(
 					(m, s) =>
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			using (mock.Record())
 			{
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(untiOfWork);
-                Expect.Call(currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
+                Expect.Call(currentUnitOfWorkFactory.Current()).Return(unitOfWorkFactory);
                 Expect.Call(personRepository.FindPeople(new[] { personId })).Return(new Collection<IPerson>());
 				Expect.Call(() => pushMessageRepository.Add(null, null)).IgnoreArguments().Repeat.Never();
 				Expect.Call(() => untiOfWork.PersistAll()).Repeat.Never();
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			using (mock.Record())
 			{
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(untiOfWork);
-                Expect.Call(currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
+                Expect.Call(currentUnitOfWorkFactory.Current()).Return(unitOfWorkFactory);
                 Expect.Call(personRepository.FindPeople(new[] { person.Id.GetValueOrDefault() })).Return(new Collection<IPerson> { person });
 				Expect.Call(() => pushMessageRepository.Add(null, null)).IgnoreArguments().Repeat.Never();
 				Expect.Call(() => untiOfWork.PersistAll()).Repeat.Never();

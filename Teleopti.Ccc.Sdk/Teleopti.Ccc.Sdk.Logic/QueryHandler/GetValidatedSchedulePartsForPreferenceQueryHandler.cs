@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 				return new List<ValidatedSchedulePartDto>();
 
 			var dateOnlyInPeriod = dateInPeriod.ToDateOnly();
-    		using (IUnitOfWork uow = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+    		using (IUnitOfWork uow = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				using (uow.DisableFilter(QueryFilter.Deleted))
 				{

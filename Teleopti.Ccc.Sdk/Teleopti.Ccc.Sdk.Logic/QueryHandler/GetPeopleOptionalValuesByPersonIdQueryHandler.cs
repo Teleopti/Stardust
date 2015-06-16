@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 		public ICollection<PersonOptionalValuesDto> Handle(GetPeopleOptionalValuesByPersonIdQueryDto query)
 		{
 			verifyNotTooMuchPeople(query.PersonIdCollection);
-			using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				using (unitOfWork.DisableFilter(QueryFilter.Deleted))
 				{

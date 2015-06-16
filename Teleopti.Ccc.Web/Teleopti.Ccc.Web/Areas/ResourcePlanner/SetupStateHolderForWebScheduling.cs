@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			schedulerStateHolder.SetRequestedScenario(scenario);
 			schedulerStateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(period, timeZone);
 			people.AllPeople.ForEach(schedulerStateHolder.AllPermittedPersons.Add);
-			schedulerStateHolder.LoadCommonState(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CurrentUnitOfWork(),
+			schedulerStateHolder.LoadCommonState(_currentUnitOfWorkFactory.Current().CurrentUnitOfWork(),
 				new RepositoryFactory());
 			stateHolder.AllPersonAccounts = _personAbsenceAccountRepository.FindByUsers(people.SelectedPeople);
 			schedulerStateHolder.ResetFilteredPersons();

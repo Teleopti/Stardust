@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public void Consume(PersonPeriodChangedMessage message)
 		{
-			using (var uow = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				_groupingReadOnlyRepository.UpdateGroupingReadModelData(message.PersonIdCollection);
 				uow.PersistAll();

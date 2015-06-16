@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			using (mock.Record())
 			{
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(untiOfWork);
-				Expect.Call(currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
+				Expect.Call(currentUnitOfWorkFactory.Current()).Return(unitOfWorkFactory);
 				Expect.Call(personRepository.Get(person.Id.GetValueOrDefault())).Return(person);
 			    Expect.Call(optionalColumnRepository.GetOptionalColumns<Person>()).Return(new List<IOptionalColumn>{optionalColumn});
 				Expect.Call(() => untiOfWork.PersistAll());
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             using (mock.Record())
             {
                 Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(untiOfWork);
-                Expect.Call(currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
+                Expect.Call(currentUnitOfWorkFactory.Current()).Return(unitOfWorkFactory);
                 Expect.Call(personRepository.Get(person.Id.GetValueOrDefault())).Return(person);
                 Expect.Call(optionalColumnRepository.GetOptionalColumns<Person>()).Return(new List<IOptionalColumn> { optionalColumn });
                 Expect.Call(() => untiOfWork.PersistAll());
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			using (mock.Record())
 			{
                 Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(untiOfWork);
-                Expect.Call(currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
+                Expect.Call(currentUnitOfWorkFactory.Current()).Return(unitOfWorkFactory);
                 Expect.Call(() => untiOfWork.PersistAll());
                 Expect.Call(untiOfWork.Dispose);
 
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			using (mock.Record())
 			{
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(untiOfWork);
-				Expect.Call(currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
+				Expect.Call(currentUnitOfWorkFactory.Current()).Return(unitOfWorkFactory);
 				Expect.Call(personRepository.Get(person.Id.GetValueOrDefault())).Return(person);
 				Expect.Call(optionalColumnRepository.GetOptionalColumns<Person>()).Repeat.Never();
 				Expect.Call(() => untiOfWork.PersistAll()).Repeat.Never();

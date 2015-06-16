@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Payroll
 			{
 				Expect.Call(resultRep.Load(resultGuid)).Return(result);
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-				Expect.Call(currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
+				Expect.Call(currentUnitOfWorkFactory.Current()).Return(unitOfWorkFactory);
 				Expect.Call(unitOfWork.Dispose);
 			}
 

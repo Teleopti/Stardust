@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 			}
 
             Guid jobId;
-            using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+            using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
             {
                 //Save start of processing to job history
                 var period = command.Period.ToDateOnlyPeriod();

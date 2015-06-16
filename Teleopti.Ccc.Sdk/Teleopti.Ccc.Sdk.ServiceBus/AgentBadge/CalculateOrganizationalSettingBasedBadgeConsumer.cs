@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 					message.Datasource, message.TimeZoneCode);
 			}
 
-			using (var uow = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (var uow = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				var teamSettings = _teamSettingsRepository.FindAllTeamGamificationSettingsSortedByTeam();
 				if (teamSettings == null)

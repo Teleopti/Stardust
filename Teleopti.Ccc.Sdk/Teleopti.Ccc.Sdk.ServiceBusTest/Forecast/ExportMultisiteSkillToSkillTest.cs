@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			using (mocks.Record())
 			{
 				var uowFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
-				Expect.Call(unitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
+				Expect.Call(unitOfWorkFactory.Current()).Return(uowFactory);
 				Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 				Expect.Call(unitOfWork.DisableFilter(QueryFilter.BusinessUnit)).Return(disposable);
 				Expect.Call(() => command.Execute(null)).IgnoreArguments();

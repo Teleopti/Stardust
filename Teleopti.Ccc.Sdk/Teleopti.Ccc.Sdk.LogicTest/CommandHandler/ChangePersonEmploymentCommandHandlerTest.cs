@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
 
             _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-            _currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+            _currentUnitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);
             _personRepository.Stub(x => x.Get(_changePersonEmploymentCommandDto.Person.Id.GetValueOrDefault()))
                 .Return(_person);
             _partTimePercentageRepository.Stub(
@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
 
             _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-            _currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+            _currentUnitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);
             _personRepository.Stub(x => x.Get(_changePersonEmploymentCommandDto.Person.Id.GetValueOrDefault()))
                 .Return(_person);
             _partTimePercentageRepository.Stub(
@@ -192,7 +192,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 	    {
 			var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
 			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-			_currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+			_currentUnitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);
 			_personRepository.Stub(x => x.Get(_changePersonEmploymentCommandDto.Person.Id.GetValueOrDefault()))
 				.Return(_person);
 
@@ -211,7 +211,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
 
             _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-            _currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+            _currentUnitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);
             _personRepository.Stub(x => x.Get(_changePersonEmploymentCommandDto.Person.Id.GetValueOrDefault()))
                 .Return(_person);
             _partTimePercentageRepository.Stub(
@@ -248,7 +248,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
 
             _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-            _currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+            _currentUnitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);
             _personRepository.Stub(x => x.Get(_changePersonEmploymentCommandDto.Person.Id.GetValueOrDefault()))
                 .Return(_person);
             _partTimePercentageRepository.Stub(
@@ -285,7 +285,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
 
             _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-            _currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+            _currentUnitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);
             _personRepository.Stub(x => x.Get(_changePersonEmploymentCommandDto.Person.Id.GetValueOrDefault()))
                 .Return(_person);
             _partTimePercentageRepository.Stub(
@@ -323,7 +323,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
 
             _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-            _currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+            _currentUnitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);
             _personRepository.Stub(x => x.Get(_changePersonEmploymentCommandDto.Person.Id.GetValueOrDefault()))
                 .Return(_person);
             _partTimePercentageRepository.Stub(
@@ -360,7 +360,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _person.AddPersonPeriod(personPeriod);
 
             _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-            _currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+            _currentUnitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);
             _personRepository.Stub(x => x.Get(_changePersonEmploymentCommandDto.Person.Id.GetValueOrDefault()))
                 .Return(_person);
             _teamRepository.Stub(x => x.Load(_changePersonEmploymentCommandDto.Team.Id.GetValueOrDefault()))
@@ -391,7 +391,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				_person.AddExternalLogOn(new ExternalLogOn(1, 1, "test Id", "test acd", true), personPeriod);
             
                 _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-                _currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+                _currentUnitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);
                 _personRepository.Stub(x => x.Get(_changePersonEmploymentCommandDto.Person.Id.GetValueOrDefault())).Return(_person);
                 _teamRepository.Stub(x => x.Load(_changePersonEmploymentCommandDto.Team.Id.GetValueOrDefault())).Return(_team);
                 _partTimePercentageRepository.Stub(x => x.Load(_changePersonEmploymentCommandDto.PersonContract.PartTimePercentageId.GetValueOrDefault())).Return(_partTimePercentage);
@@ -414,7 +414,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			_person.AddPersonPeriod(personPeriod);
 			
 			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-			_currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+			_currentUnitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);
 			_personRepository.Stub(x => x.Get(_changePersonEmploymentCommandDto.Person.Id.GetValueOrDefault())).Return(_person);
 			_teamRepository.Stub(x => x.Load(_changePersonEmploymentCommandDto.Team.Id.GetValueOrDefault())).Return(_team);
 			_partTimePercentageRepository.Stub(x => x.Load(_changePersonEmploymentCommandDto.PersonContract.PartTimePercentageId.GetValueOrDefault())).Return(_partTimePercentage);
@@ -439,7 +439,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _person.AddExternalLogOn(new ExternalLogOn(1, 1, "test Id", "test acd", true), personPeriod);
 
             _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-            _currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+            _currentUnitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);
             _personRepository.Stub(x => x.Get(_changePersonEmploymentCommandDto.Person.Id.GetValueOrDefault())).Return(_person);
             _teamRepository.Stub(x => x.Load(_changePersonEmploymentCommandDto.Team.Id.GetValueOrDefault())).Return(_team);
             _partTimePercentageRepository.Stub(x => x.Load(_changePersonEmploymentCommandDto.PersonContract.PartTimePercentageId.GetValueOrDefault())).Return(_partTimePercentage);
@@ -468,7 +468,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _changePersonEmploymentCommandDto.PersonContract = null;
 
             _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-            _currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+            _currentUnitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);
             _personRepository.Stub(x => x.Get(_changePersonEmploymentCommandDto.Person.Id.GetValueOrDefault()))
                 .Return(_person);
 
@@ -485,7 +485,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _changePersonEmploymentCommandDto.Team = null;
 
             _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-            _currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+            _currentUnitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);
             _personRepository.Stub(x => x.Get(_changePersonEmploymentCommandDto.Person.Id.GetValueOrDefault()))
                 .Return(_person);
 
@@ -503,7 +503,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _team.Site.BusinessUnit.SetId(Guid.NewGuid());
 
             _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-            _currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+            _currentUnitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);
             _personRepository.Stub(x => x.Get(_changePersonEmploymentCommandDto.Person.Id.GetValueOrDefault()))
                 .Return(_person);
             _teamRepository.Stub(x => x.Load(_changePersonEmploymentCommandDto.Team.Id.GetValueOrDefault()))

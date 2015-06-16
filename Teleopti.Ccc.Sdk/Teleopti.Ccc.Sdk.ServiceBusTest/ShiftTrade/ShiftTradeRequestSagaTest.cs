@@ -269,7 +269,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
 	    private void prepareUnitOfWork()
         {
 	        var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-	        unitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
+	        unitOfWorkFactory.Stub(x => x.Current()).Return(uowFactory);
 		    uowFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
         }
 

@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			using (mocks.Record())
 			{
 				var uowFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
-				Expect.Call(unitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
+				Expect.Call(unitOfWorkFactory.Current()).Return(uowFactory);
 				Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 				Expect.Call(jobResult.FinishedOk).Return(false);
 				Expect.Call(jobResultRepository.Get(jobId)).Return(jobResult);
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			using (mocks.Record())
 			{
 				var uowFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
-				Expect.Call(unitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
+				Expect.Call(unitOfWorkFactory.Current()).Return(uowFactory);
 				Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 				Expect.Call(jobResult.FinishedOk).Return(true);
 				Expect.Call(jobResultRepository.Get(jobId)).Return(jobResult);

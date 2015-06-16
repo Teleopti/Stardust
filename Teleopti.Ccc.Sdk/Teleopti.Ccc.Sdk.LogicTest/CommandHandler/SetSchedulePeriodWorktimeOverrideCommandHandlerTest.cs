@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		{
 			var id = Guid.NewGuid();
 			var command = new SetSchedulePeriodWorktimeOverrideCommandDto { PersonId = id };
-			Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+			Expect.Call(_currentUnitOfWorkFactory.Current()).Return(_unitOfWorkFactory);
 			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_uow);
 			Expect.Call(_personRep.Get(id)).Return(null);
 
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var person = _mocks.DynamicMock<IPerson>();
 			var id = Guid.NewGuid();
 			var command = new SetSchedulePeriodWorktimeOverrideCommandDto { PersonId = id, Date = new DateOnlyDto(2013, 6, 12) };
-			Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+			Expect.Call(_currentUnitOfWorkFactory.Current()).Return(_unitOfWorkFactory);
 			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_uow);
 			Expect.Call(_personRep.Get(id)).Return(person);
 			Expect.Call(person.SchedulePeriod(new DateOnly(2013, 6, 12))).Return(null);
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var workTime = 300;
 			var period = _mocks.DynamicMock<ISchedulePeriod>();
 			var command = new SetSchedulePeriodWorktimeOverrideCommandDto { PersonId = id, Date = new DateOnlyDto(2013, 6, 12), PeriodTimeInMinutes = workTime };
-			Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+			Expect.Call(_currentUnitOfWorkFactory.Current()).Return(_unitOfWorkFactory);
 			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_uow);
 			Expect.Call(_personRep.Get(id)).Return(person);
 			Expect.Call(person.SchedulePeriod(new DateOnly(2013, 6, 12))).Return(period);

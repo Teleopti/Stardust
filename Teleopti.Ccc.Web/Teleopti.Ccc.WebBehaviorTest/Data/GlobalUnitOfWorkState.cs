@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public static void UnitOfWorkAction(Action<IUnitOfWork> action)
 		{
-			using (var unitOfWork = CurrentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (var unitOfWork = CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				action.Invoke(unitOfWork);
 				unitOfWork.PersistAll();

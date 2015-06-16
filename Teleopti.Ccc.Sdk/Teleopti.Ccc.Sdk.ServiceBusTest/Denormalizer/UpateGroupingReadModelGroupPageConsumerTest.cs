@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
             using (_mocks.Record())
             {
 				Expect.Call(() => _groupReadOnlyRepository.UpdateGroupingReadModelGroupPage(ids));
-				Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+				Expect.Call(_currentUnitOfWorkFactory.Current()).Return(_unitOfWorkFactory);
 				Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
 				Expect.Call(() => _unitOfWork.PersistAll());
             }

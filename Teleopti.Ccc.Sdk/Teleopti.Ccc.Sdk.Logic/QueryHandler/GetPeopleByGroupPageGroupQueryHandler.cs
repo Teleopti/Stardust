@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 		public ICollection<PersonDto> Handle(GetPeopleByGroupPageGroupQueryDto query)
 		{
 			var queryDate = query.QueryDate.ToDateOnly();
-			using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (_unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				var details = _groupingReadOnlyRepository.DetailsForGroup(query.GroupPageGroupId, queryDate);
 

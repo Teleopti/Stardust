@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                                    message.AbsenceId, message.Timestamp);
             }
 
-		    using (IUnitOfWork unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+		    using (IUnitOfWork unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 		    {
 			    foreach (var action in _loadDataActions)
 			    {

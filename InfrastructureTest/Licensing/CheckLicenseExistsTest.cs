@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 			var uowCurrFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
 			var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			uowFactory.Expect(x => x.Name).Return("THISONE");
-			uowCurrFactory.Expect(x => x.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
+			uowCurrFactory.Expect(x => x.Current()).Return(uowFactory);
 
 			Assert.Throws<DataSourceException>(() => new CheckLicenseExists().Check("THISONE")).ToString()
 				.Should().Contain(string.Format(CheckLicenseExists.ErrorMessageIfNoLicenseForDataSource, "THISONE"));

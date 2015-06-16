@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Account
 
 		public void Resolve(IEnumerable<IPersonAbsenceAccount> conflictingPersonAccounts)
 		{
-			var uow = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CurrentUnitOfWork();
+			var uow = _currentUnitOfWorkFactory.Current().CurrentUnitOfWork();
 			conflictingPersonAccounts.ForEach(paa =>
 			{
 				var foundAccount = _personAbsenceAccountRepository.Get(paa.Id.GetValueOrDefault());

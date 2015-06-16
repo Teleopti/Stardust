@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
 		public ICollection<ScenarioDto> Handle(GetAllScenariosQueryDto query)
 		{
-			using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (_unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				return
 					_scenarioRepository.FindAllSorted().Select(

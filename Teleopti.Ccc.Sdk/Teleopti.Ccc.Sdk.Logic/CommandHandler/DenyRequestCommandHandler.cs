@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		public void Handle(DenyRequestCommandDto command)
         {
             IPersonRequest personRequest;
-            using (var uow = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+            using (var uow = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
             {
                 personRequest = _personRequestRepository.Get(command.PersonRequestId);
                 try

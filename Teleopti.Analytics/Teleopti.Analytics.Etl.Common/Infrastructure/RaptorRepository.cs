@@ -326,7 +326,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public ILastChangedReadModel LastChangedDate(IBusinessUnit currentBusinessUnit, string stepName, DateTimePeriod period)
 		{
-			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().Current().CreateAndOpenUnitOfWork())
 			{
 				IEtlReadModelRepository rep = new EtlReadModelRepository(uow);
 				return rep.LastChangedDate(currentBusinessUnit, stepName, period);
@@ -648,7 +648,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public void RemoveDuplicatesWorkaroundFor27636()
 		{
-			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().Current().CreateAndOpenUnitOfWork())
 			{
 				IEtlReadModelRepository rep = new EtlReadModelRepository(uow);
 				rep.WorkAroundFor27636();
@@ -755,7 +755,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public IList<IScheduleChangedReadModel> ChangedDataOnStep(DateTime afterDate, IBusinessUnit currentBusinessUnit, string stepName)
 		{
-			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().Current().CreateAndOpenUnitOfWork())
 			{
 				IEtlReadModelRepository rep = new EtlReadModelRepository(uow);
 				return rep.ChangedDataOnStep(afterDate, currentBusinessUnit, stepName);
@@ -772,7 +772,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public void UpdateLastChangedDate(IBusinessUnit currentBusinessUnit, string stepName, DateTime thisTime)
 		{
-			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().Current().CreateAndOpenUnitOfWork())
 			{
 				IEtlReadModelRepository rep = new EtlReadModelRepository(uow);
 				rep.UpdateLastChangedDate(currentBusinessUnit, stepName, thisTime);
@@ -782,7 +782,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public IEnumerable<IPreferenceDay> ChangedPreferencesOnStep(DateTime lastTime, IBusinessUnit currentBusinessUnit)
 		{
-			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().Current().CreateAndOpenUnitOfWork())
 			{
 				var rep = new PreferenceDayRepository(uow);
 				return rep.FindNewerThan(lastTime);
@@ -792,7 +792,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		public IEnumerable<IStudentAvailabilityDay> ChangedAvailabilityOnStep(DateTime lastTime,
 																			IBusinessUnit currentBusinessUnit)
 		{
-			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().Current().CreateAndOpenUnitOfWork())
 			{
 				var rep = new StudentAvailabilityDayRepository(uow);
 				return rep.FindNewerThan(lastTime);

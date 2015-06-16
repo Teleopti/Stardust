@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 		{
 			var currentUowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			currentUowFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
-			_unitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(currentUowFactory);
+			_unitOfWorkFactory.Stub(x => x.Current()).Return(currentUowFactory);
 		}
 
 		private void createServices()

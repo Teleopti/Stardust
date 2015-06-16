@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 
 		public void Apply(IPerson user, IUnitOfWork iDontUse)
 		{
-			using (var uow = GlobalUnitOfWorkState.CurrentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (var uow = GlobalUnitOfWorkState.CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 
 				var dateTimefrom = DateFrom ?? DateTime.UtcNow.Date;

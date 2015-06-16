@@ -29,19 +29,19 @@ namespace Teleopti.Ccc.DomainTest.Notification
 
 			_currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
 			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-			_currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory())
+			_currentUnitOfWorkFactory.Stub(x => x.Current())
 				.Return(unitOfWorkFactory);
 			unitOfWorkFactory.Stub(x => x.Name).Return("for test");
 
 			_target = new NotificationValidationCheck(_significantChangeChecker, _notifier, _currentUnitOfWorkFactory);
 
-			DefinedLicenseDataFactory.SetLicenseActivator(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().Name, new LicenseActivator("", DateTime.Today.AddDays(100), 1000, 1000,
+			DefinedLicenseDataFactory.SetLicenseActivator(_currentUnitOfWorkFactory.Current().Name, new LicenseActivator("", DateTime.Today.AddDays(100), 1000, 1000,
 																			  LicenseType.Agent, new Percent(.10), null, null));
 		}
 
 		private void setValidLicense()
 		{
-			DefinedLicenseDataFactory.GetLicenseActivator(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().Name).EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccSmsLink);
+			DefinedLicenseDataFactory.GetLicenseActivator(_currentUnitOfWorkFactory.Current().Name).EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccSmsLink);
 		}
 
 		[Test]

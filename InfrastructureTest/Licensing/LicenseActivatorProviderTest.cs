@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 			var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			var checkLicense = MockRepository.GenerateMock<ICheckLicenseExists>();
 			uowFactory.Expect(x => x.Name).Return("fortest");
-			uowCurrFactory.Expect(x => x.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
+			uowCurrFactory.Expect(x => x.Current()).Return(uowFactory);
 
 			var target = new LicenseActivatorProvider(uowCurrFactory, checkLicense);
 
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 			var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			var checkLicense = MockRepository.GenerateMock<ICheckLicenseExists>();
 			uowFactory.Expect(x => x.Name).Return("fortest");
-			uowCurrFactory.Expect(x => x.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
+			uowCurrFactory.Expect(x => x.Current()).Return(uowFactory);
 
 			DefinedLicenseDataFactory.SetLicenseActivator(datasourceName, licenseActivator);
 

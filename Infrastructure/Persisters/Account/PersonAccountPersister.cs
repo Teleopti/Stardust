@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Account
 		public bool Persist(ICollection<IPersonAbsenceAccount> personAbsenceAccounts)
 		{
 			bool hadConflicts;
-			using (var uow = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				var conflictingPersonAccounts = _personAccountConflictCollector.GetConflicts(personAbsenceAccounts);
 				hadConflicts = conflictingPersonAccounts.Any();

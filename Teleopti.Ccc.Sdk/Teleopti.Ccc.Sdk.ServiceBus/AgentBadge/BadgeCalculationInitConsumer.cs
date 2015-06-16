@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			}
 
 			List<TimeZoneInfo> timeZoneList;
-			using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (_unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				var setting = _settingsRepository.GetSettings();
 				if (!_toggleManager.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318))

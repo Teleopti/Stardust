@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 			verifyNotTooManyReceivers(command.Recipients);
 
 			var result = new CommandResultDto();
-			using (var uow = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (var uow = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				var people = _personRepository.FindPeople(command.Recipients).ToList();
 				if (people.Count > 0)

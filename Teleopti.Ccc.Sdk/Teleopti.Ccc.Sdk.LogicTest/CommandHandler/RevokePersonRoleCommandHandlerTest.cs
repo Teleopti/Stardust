@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		{
 			_unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			_currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
-			_currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+			_currentUnitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);
 			_personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			_applicationRoleRepository = MockRepository.GenerateMock<IApplicationRoleRepository>();
 			_target = new RevokePersonRoleCommandHandler(_currentUnitOfWorkFactory, _personRepository, _applicationRoleRepository);

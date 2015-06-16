@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		public void Handle(DeletePersonAccountForPersonCommandDto command)
 		{
 			var result = new CommandResultDto {AffectedId = command.PersonId, AffectedItems = 0};
-            using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+            using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
             {
 				var foundPerson = _personRepository.Get(command.PersonId);
                 if (foundPerson == null) throw new FaultException("Person does not exist.");

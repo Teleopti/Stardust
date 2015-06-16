@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		public void Handle(RevokePersonRoleCommandDto command)
 		{
 		    var result = new CommandResultDto {AffectedId = command.PersonId, AffectedItems = 0};
-			using (var uow = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				var person = _personRepository.Get(command.PersonId);
 				checkIfAuthorized(person);

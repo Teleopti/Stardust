@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		public void Handle(SavePersonAbsenceRequestCommandDto command)
 		{
 			IPersonRequest result;
-			using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				if (!(command.PersonRequestDto.Request is AbsenceRequestDto))
 				{

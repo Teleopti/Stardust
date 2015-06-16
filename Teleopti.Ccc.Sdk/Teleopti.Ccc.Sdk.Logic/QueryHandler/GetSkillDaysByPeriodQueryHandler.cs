@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 				throw new FaultException();
 			ICollection<SkillDayDto> returnList = new List<SkillDayDto>();
 			TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(query.TimeZoneId);
-			using (_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				var requestedScenario = _scenarioRepository.Current();
 				_skillRepository.LoadAll();

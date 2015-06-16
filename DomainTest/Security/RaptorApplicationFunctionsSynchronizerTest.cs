@@ -267,7 +267,7 @@ namespace Teleopti.Ccc.DomainTest.Security
             Expect.Call(_repositoryFactory.CreateApplicationFunctionRepository(_unitOfWork)).Return(_applicationFunctionRepository).Repeat.Once();
 
             Expect.Call(_applicationFunctionRepository.GetAllApplicationFunctionSortedByCode()).Return(_databaseApplicationFunctions).Repeat.Once();
-			Expect.Call(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork()).Return(_unitOfWork).Repeat.Once();
+			Expect.Call(_unitOfWorkFactory.Current().CreateAndOpenUnitOfWork()).Return(_unitOfWork).Repeat.Once();
             _unitOfWork.Dispose();
             LastCall.Repeat.Once();
 
@@ -294,7 +294,7 @@ namespace Teleopti.Ccc.DomainTest.Security
             Expect.Call(_repositoryFactory.CreateApplicationFunctionRepository(_unitOfWork)).Return(_applicationFunctionRepository).Repeat.Once();
 
             Expect.Call(_applicationFunctionRepository.GetAllApplicationFunctionSortedByCode()).Return(_databaseApplicationFunctions).Repeat.Once();
-			Expect.Call(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork()).Return(_unitOfWork).Repeat.Once();
+			Expect.Call(_unitOfWorkFactory.Current().CreateAndOpenUnitOfWork()).Return(_unitOfWork).Repeat.Once();
             _unitOfWork.Dispose();
             LastCall.Repeat.Once();
 
@@ -330,7 +330,7 @@ namespace Teleopti.Ccc.DomainTest.Security
             Expect.Call(_availableDataRepository.LoadAllAvailableData()).Return(_availableDataList).Repeat.Once();
             Expect.Call(_applicationFunctionRepository.GetAllApplicationFunctionSortedByCode()).Return(_databaseApplicationFunctions).Repeat.Once();
             Expect.Call(_applicationRoleRepository.LoadAllApplicationRolesSortedByName()).Return(_applicationRoles).Repeat.Once();
-			Expect.Call(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork()).Return(_unitOfWork).Repeat.Once();
+			Expect.Call(_unitOfWorkFactory.Current().CreateAndOpenUnitOfWork()).Return(_unitOfWork).Repeat.Once();
             _unitOfWork.Dispose();
             LastCall.Repeat.Once();
             _applicationFunctionRepository.Remove(null);

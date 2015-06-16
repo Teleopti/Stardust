@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 			_dateTimePeriodAssembler.TimeZone = timeZone;
 			_scheduleDayAssembler.TimeZone = timeZone;
 						
-			using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (_unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				IScenario scenario = GetGivenScenarioOrDefault(query);
 

@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			multiplicatorDefinitionSetRepository.Stub(x => x.FindAllShiftAllowanceDefinitions())
 			                                    .Return(multiplicatorDefinitionSetList);
 			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-			currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
+			currentUnitOfWorkFactory.Stub(x => x.Current()).Return(unitOfWorkFactory);
 
 			var multiplicatorDefinitionSetShiftAllowanceDto = new GetMultiplicatorDefinitionSetShiftAllowanceDto
 				{
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			multiplicatorDefinitionSetRepository.Stub(x => x.FindAllShiftAllowanceDefinitions())
 												.Return(multiplicatorDefinitionSetList);
 			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-			currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
+			currentUnitOfWorkFactory.Stub(x => x.Current()).Return(unitOfWorkFactory);
 
 			var multiplicatorDefinitionSetShiftAllowanceDto = new GetMultiplicatorDefinitionSetShiftAllowanceDto
 			{

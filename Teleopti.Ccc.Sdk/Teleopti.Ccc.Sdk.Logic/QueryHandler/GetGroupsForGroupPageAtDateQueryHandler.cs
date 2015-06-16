@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 		public ICollection<GroupPageGroupDto> Handle(GetGroupsForGroupPageAtDateQueryDto query)
 		{
 			var queryDate = query.QueryDate.ToDateOnly();
-			using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (_unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				var details = _groupingReadOnlyRepository.AvailableGroups(new ReadOnlyGroupPage {PageId = query.PageId}, queryDate);
 

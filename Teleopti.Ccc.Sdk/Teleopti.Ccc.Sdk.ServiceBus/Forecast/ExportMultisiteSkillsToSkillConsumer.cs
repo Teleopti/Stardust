@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Consume(ExportMultisiteSkillsToSkill message)
 		{
-			using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				var jobResult = _jobResultRepository.Get(message.JobId);
 				LazyLoadingManager.Initialize(jobResult.Details);

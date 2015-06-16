@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
 		private void prepareUnitOfWork(int times, bool persistAll)
 		{
 			var uowFactory = mock.DynamicMock<IUnitOfWorkFactory>();
-			Expect.Call(unitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
+			Expect.Call(unitOfWorkFactory.Current()).Return(uowFactory);
 			Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork).Repeat.Times(times);
 			Expect.Call(unitOfWork.Dispose).Repeat.Times(times);
 			if (persistAll)

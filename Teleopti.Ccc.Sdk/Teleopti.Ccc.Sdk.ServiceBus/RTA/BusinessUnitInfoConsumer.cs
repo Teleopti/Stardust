@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 		public void Consume(StartUpBusinessUnit message)
 		{
 			IList<Guid> persons;
-			using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (_unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				persons = _businessRepository.LoadAllPersonsWithExternalLogOn(message.BusinessUnitId, DateOnly.Today);	
 			}

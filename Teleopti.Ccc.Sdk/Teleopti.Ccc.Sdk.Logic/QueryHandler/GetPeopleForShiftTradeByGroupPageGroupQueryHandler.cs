@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
                 PrincipalAuthorization.Instance().IsPermitted(
                     DefinedRaptorApplicationFunctionPaths.ViewSchedules, queryDate, p));
             var peopleForShiftTrade = new List<IPerson>();
-            using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+            using (_unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
             {
                 var personFrom = _personRepository.Get(query.PersonId);
                 var people = _personRepository.FindPeople(availableDetails.Select(d => d.PersonId));

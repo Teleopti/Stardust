@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			{
 				if (_unitOfWork == null)
 				{
-					_unitOfWork = GlobalUnitOfWorkState.CurrentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork();
+					_unitOfWork = GlobalUnitOfWorkState.CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork();
 					_unitOfWork.DisableFilter(QueryFilter.BusinessUnit);
 				}
 				return _unitOfWork;

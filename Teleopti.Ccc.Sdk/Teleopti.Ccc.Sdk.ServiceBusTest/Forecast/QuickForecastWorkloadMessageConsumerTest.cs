@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 		[Test]
 		public void ShouldExitIfWrongJobId()
 		{
-			_currentunitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+			_currentunitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);
 			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
 			_jobResultRep.Stub(x => x.Get(_jobId)).Return(null);
 			
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 		public void ShouldExitIfWrongWorkloadId()
 		{
 			var jobResult = MockRepository.GenerateMock<IJobResult>();
-			_currentunitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+			_currentunitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);
 			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
 			_jobResultRep.Stub(x => x.Get(_jobId)).Return(jobResult);
 			_workloadRep.Stub(x => x.Get(Guid.NewGuid())).IgnoreArguments().Return(null);
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			var teskOwners = new List<ITaskOwner> {taskOwner};
 			var taskOwnerPeriod = new TaskOwnerPeriod(new DateOnly(2013,1,1),new List<ITaskOwner>(),TaskOwnerPeriodType.Other  );
 			
-			_currentunitOfWorkFactory.Stub(x=> x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+			_currentunitOfWorkFactory.Stub(x=> x.Current()).Return(_unitOfWorkFactory);
 			_unitOfWorkFactory.Stub(x=> x.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
 			_jobResultRep.Stub(x => x.Get(_jobId)).Return(jobResult);
 			_workloadRep.Stub(x => x.Get(Guid.NewGuid())).IgnoreArguments().Return(workload);
@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			var teskOwners = new List<ITaskOwner> { taskOwner };
 			var taskOwnerPeriod = new TaskOwnerPeriod(new DateOnly(2013, 1, 1), new List<ITaskOwner>(), TaskOwnerPeriodType.Other);
 			
-			_currentunitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+			_currentunitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);
 			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
 			_jobResultRep.Stub(x => x.Get(_jobId)).Return(jobResult);
 			_workloadRep.Stub(x => x.Get(Guid.NewGuid())).IgnoreArguments().Return(workload);
@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			var workload = MockRepository.GenerateMock<IWorkload>();
 			var scenario = MockRepository.GenerateMock<IScenario>();
 
-			_currentunitOfWorkFactory.Stub(x=> x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+			_currentunitOfWorkFactory.Stub(x=> x.Current()).Return(_unitOfWorkFactory);
 			_unitOfWorkFactory.Stub(x=> x.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
 			_jobResultRep.Stub(x=> x.Get(_jobId)).Return(jobResult);
 			_workloadRep.Stub(x=> x.Get(Guid.NewGuid())).IgnoreArguments().Return(workload);
@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 		{
 			var jobResult = MockRepository.GenerateMock<IJobResult>();
 
-			_currentunitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+			_currentunitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);
 			_unitOfWorkFactory.Stub(x=> x.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
 			_jobResultRep.Stub(x=> x.Get(_jobId)).Return(jobResult);
 			_workloadRep.Stub(x=> x.Get(Guid.NewGuid())).IgnoreArguments().Throw(new ArgumentOutOfRangeException());

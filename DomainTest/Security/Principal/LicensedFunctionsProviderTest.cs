@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
             functionFactory = new DefinedRaptorApplicationFunctionFactory();
             _currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
             var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-            _currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory())
+            _currentUnitOfWorkFactory.Stub(x => x.Current())
                 .Return(unitOfWorkFactory);
             unitOfWorkFactory.Stub(x => x.Name).Return("for test");
             target = new LicensedFunctionsProvider(functionFactory);
@@ -36,14 +36,14 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 		[TearDown]
 		public void TearDown()
 		{
-		    LicenseSchema.SetActiveLicenseSchema(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().Name, null);
+		    LicenseSchema.SetActiveLicenseSchema(_currentUnitOfWorkFactory.Current().Name, null);
 		}
 
         [Test]
         public void ShouldReturnAllLicensedFunctions()
 		{
 			schema = LicenseDataFactory.CreateDefaultActiveLicenseSchemaForTest();
-			LicenseSchema.SetActiveLicenseSchema(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().Name, schema);
+			LicenseSchema.SetActiveLicenseSchema(_currentUnitOfWorkFactory.Current().Name, schema);
 
         	// changes a bit the default schema
             schema.LicenseOptions[0].Enabled = false;
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 		public void ShouldDoLicenseFunctionWorkOnceOnly()
 		{
 			schema = LicenseDataFactory.CreateDefaultActiveLicenseSchemaForTest();
-			LicenseSchema.SetActiveLicenseSchema(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().Name, schema);
+			LicenseSchema.SetActiveLicenseSchema(_currentUnitOfWorkFactory.Current().Name, schema);
 			var mocks = new MockRepository();
 			var defRaptorAppFactory = mocks.DynamicMock<IDefinedRaptorApplicationFunctionFactory>();
 			target = new LicensedFunctionsProvider(defRaptorAppFactory);
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 		public void ShouldOnlyReturnLicensedBaseFunctions()
 		{
 			schema = LicenseDataFactory.CreateBaseLicenseSchemaForTest();
-			LicenseSchema.SetActiveLicenseSchema(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().Name, schema);
+			LicenseSchema.SetActiveLicenseSchema(_currentUnitOfWorkFactory.Current().Name, schema);
 
 			var result = target.LicensedFunctions("for test");
 

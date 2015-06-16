@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
             var meetingViewModel = _mocks.StrictMock<IMeetingViewModel>();
             var activity = new Activity("akta dej");
             Expect.Call(_model.CurrentScenario).Return(scenario);
-            Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+            Expect.Call(_currentUnitOfWorkFactory.Current()).Return(_unitOfWorkFactory);
 	        Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork());
             Expect.Call(_activityRepository.LoadAllSortByName()).Return(new List<IActivity> {activity});
             Expect.Call(_personRepository.Get(Guid.Empty)).Return(((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person);
