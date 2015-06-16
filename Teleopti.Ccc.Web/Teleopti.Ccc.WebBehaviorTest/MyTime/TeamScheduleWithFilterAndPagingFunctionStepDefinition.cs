@@ -331,7 +331,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see myself before my colleague")]
 		public void ThenIShouldSeeMyselfBeforeMyColleague()
 		{
-			Browser.Interactions.AssertExistsUsingJQuery("input.form-control:enabled");
+			Browser.Interactions.AssertExists("#existsWhenLoadingFinishes");
 			Browser.Interactions.AssertFirstContainsUsingJQuery(string.Format(".shift-trade-agent-name:nth(1)"), DataMaker.Data().MePerson.Name.ToString());
 			Browser.Interactions.AssertFirstContainsUsingJQuery(string.Format(".shift-trade-agent-name:nth(2)"), DataMaker.Person(TeamColleagueName).Person.Name.ToString());
 		}
@@ -521,6 +521,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I click '(.*)' at end time drop down button")]
 		public void ThenIClickAtEndTimeDropDownButton(string p0)
 		{
+			Browser.Interactions.AssertExists("#existsWhenLoadingFinishes");
 			Browser.Interactions.ClickContaining(".row .filter-time-dropdown-button .dropdown-toggle", "Sluttid");
 			Browser.Interactions.Click(".filter-time-dropdown-button .end-time-sort-order .glyphicon-arrow-up");
 			
