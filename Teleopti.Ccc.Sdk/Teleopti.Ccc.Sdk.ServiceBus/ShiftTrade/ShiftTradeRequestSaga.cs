@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using log4net;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
@@ -13,6 +12,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.Requests;
@@ -46,8 +46,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
 
         private IPersonRequestCheckAuthorization _authorization;
     	private IScenario _defaultScenario;
+		private readonly IToggleManager _toggleManager;
 
-		public ShiftTradeRequestSaga(ICurrentUnitOfWorkFactory unitOfWorkFactory, ISchedulingResultStateHolder schedulingResultStateHolder, IShiftTradeValidator validator, IRequestFactory requestFactory, ICurrentScenario scenarioRepository, IPersonRequestRepository personRequestRepository, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IPersonRequestCheckAuthorization personRequestCheckAuthorization, IScheduleDifferenceSaver scheduleDictionarySaver, ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulingDataForRequestWithoutResourceCalculation, IDifferenceCollectionService<IPersistableScheduleData> differenceService)
+		public ShiftTradeRequestSaga(ICurrentUnitOfWorkFactory unitOfWorkFactory, ISchedulingResultStateHolder schedulingResultStateHolder, IShiftTradeValidator validator, IRequestFactory requestFactory, ICurrentScenario scenarioRepository, IPersonRequestRepository personRequestRepository, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IPersonRequestCheckAuthorization personRequestCheckAuthorization, IScheduleDifferenceSaver scheduleDictionarySaver, ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulingDataForRequestWithoutResourceCalculation, IDifferenceCollectionService<IPersistableScheduleData> differenceService, IToggleManager toggleManager)
         {
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
@@ -61,6 +62,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
             _scheduleDictionarySaver = scheduleDictionarySaver;
     	    _loadSchedulingDataForRequestWithoutResourceCalculation = loadSchedulingDataForRequestWithoutResourceCalculation;
 				_differenceService = differenceService;
+			_toggleManager = toggleManager;
 
 			Logger.Info("New instance of Shift Trade saga was created");
         }
@@ -233,7 +235,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
             var rules = NewBusinessRuleCollection.All(_schedulingResultStateHolder);
             rules.Remove(typeof (NewPersonAccountRule));
             rules.Remove(typeof (OpenHoursRule));
-			rules.Add(new NonMainShiftActivityRule());
+				rules.Add(new NonMainShiftActivityRule(new ScheduleCommandToggle(_toggleManager)));
             rules.SetUICulture(_personRequest.Person.PermissionInformation.UICulture());
             return rules;
         }

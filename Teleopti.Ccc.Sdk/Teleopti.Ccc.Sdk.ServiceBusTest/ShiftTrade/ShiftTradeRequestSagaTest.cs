@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
 		    target = new ShiftTradeRequestSaga(unitOfWorkFactory, schedulingResultState, validator, requestFactory,
 		                                       scenarioRepository, personRequestRepository, scheduleRepository,
 		                                       personRepository, personRequestCheckAuthorization, scheduleDictionarySaver,
-		                                       loader, differenceCollectionService);
+		                                       loader, differenceCollectionService, null);
 		    prepareUnitOfWork();
 	    }
 

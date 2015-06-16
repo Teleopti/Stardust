@@ -5,8 +5,10 @@ using System.Globalization;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -18,6 +20,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 	[TestFixture]
 	public class NonMainShiftActivityRuleTest
 	{
+		private IScheduleCommandToggle _toggleManager;
+
+		[SetUp]
+		public void Setup()
+		{
+			_toggleManager = MockRepository.GenerateMock<IScheduleCommandToggle>();
+			_toggleManager.Stub(x => x.IsEnabled(Toggles.MyTimeWeb_AutoShiftTradeWithMeetingAndPersonalActivity_33281))
+				.Return(false);
+		}
+
 		 [Test]
 		 public void ShouldResultInNoBusinessRuleRespone()
 		 {
@@ -29,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			 pa.AddActivity(new Activity("d"), new DateTimePeriod(start, end));
 			 scheduleOk.Add(pa);
 
-			 new NonMainShiftActivityRule()
+			 new NonMainShiftActivityRule(_toggleManager)
 					.Validate(null, new[] {scheduleOk})
 					.Should().Be.Empty();
 		 }
@@ -57,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			pa.AddPersonalActivity(new Activity("p"), assignmentPeriod);
 			scheduleDataWithPersonalActivity.Add(pa);
 
-			var targetRel = new NonMainShiftActivityRule()
+			var targetRel = new NonMainShiftActivityRule(_toggleManager)
 				.Validate(null, new[] {scheduleDataWithPersonalActivity});
 
 			targetRel.Should().Have.SameValuesAs(expected);
@@ -86,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			pa.AddOvertimeActivity(new Activity("p"), assignmentPeriod, new MultiplicatorDefinitionSet("d", MultiplicatorType.Overtime));
 			scheduleDataWithOvertimeActivity.Add(pa);
 
-			var targetRel = new NonMainShiftActivityRule()
+			var targetRel = new NonMainShiftActivityRule(_toggleManager)
 				.Validate(null, new[] { scheduleDataWithOvertimeActivity });
 
 			targetRel.Should().Have.SameValuesAs(expected);
@@ -115,7 +127,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			var expected = new BusinessRuleResponse(typeof(NonMainShiftActivityRule), message, true, false, period.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone()),
 											 scheduleDataWithMeeting.Person, period);
 
-			var targetRel = new NonMainShiftActivityRule()
+			var targetRel = new NonMainShiftActivityRule(_toggleManager)
 				.Validate(null, new[] { scheduleDataWithMeeting });
 
 			targetRel.Should().Have.SameValuesAs(expected);
@@ -154,7 +166,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			pa.AddPersonalActivity(new Activity("p"), assignmentPeriod);
 			scheduleDataWithPersonalActivity.Add(pa);
 
-			var targetRel = new NonMainShiftActivityRule()
+			var targetRel = new NonMainShiftActivityRule(_toggleManager)
 				.Validate(null, new[] {scheduleDataWithPersonalActivity, scheduleDataWithPersonalActivity});
 
 			targetRel.Should().Have.SameValuesAs(expected, expected);
