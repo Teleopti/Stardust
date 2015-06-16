@@ -39,12 +39,16 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 			var bestAccuracy = evaluateResult.Accuracies.SingleOrDefault(x => x.IsSelected);
 
 			var availablePeriod = _historicalPeriodProvider.AvailablePeriod(workload);
+			var evaluationDayViewModels = availablePeriod.HasValue
+				? createEvaluationDayViewModels(workload, bestAccuracy,
+					HistoricalPeriodProvider.DivideIntoTwoPeriods(availablePeriod.Value).Item2)
+				: new dynamic[] {};
 			return new WorkloadForecastViewModel
 			{
 				Name = workload.Name,
 				WorkloadId = workload.Id.Value,
 				ForecastMethods = createMethodViewModels(evaluateResult),
-				Days = createEvaluationDayViewModels(workload, bestAccuracy, new DateOnlyPeriod(HistoricalPeriodProvider.DivideIntoTwoPeriods(availablePeriod).AddDays(1), availablePeriod.EndDate)),
+				Days = evaluationDayViewModels,
 				ForecastMethodRecommended = bestAccuracy == null
 					? (dynamic) new {Id = ForecastMethodType.None}
 					: new
@@ -83,9 +87,11 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 			return methods.ToArray();
 		}
 
-		private dynamic[] createEvaluationDayViewModels(IWorkload workload, MethodAccuracy bestAccuracy, DateOnlyPeriod period)
+		private dynamic[] createEvaluationDayViewModels(IWorkload workload, MethodAccuracy bestAccuracy, DateOnlyPeriod? period)
 		{
-			var historicalData = _historicalData.Fetch(workload, period);
+			if(!period.HasValue)
+				return new dynamic[]{};
+			var historicalData = _historicalData.Fetch(workload, period.Value);
 			var data = new Dictionary<DateOnly, dynamic>();
 			foreach (var taskOwner in historicalData.TaskOwnerDayCollection)
 			{
@@ -114,11 +120,12 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 			return data.Values.ToArray();
 		}
 
-		private dynamic[] createQueueStatisticsDayViewModels(IWorkload workload, ForecastMethodType method, DateOnlyPeriod period)
+		private dynamic[] createQueueStatisticsDayViewModels(IWorkload workload, ForecastMethodType method, DateOnlyPeriod? period)
 		{
-			var historicalData = _historicalData.Fetch(workload, period);
+			if(!period.HasValue)
+				return new dynamic[]{};
+			var historicalData = _historicalData.Fetch(workload, period.Value);
 			var forecastMethod = _forecastMethodProvider.Get(method);
-
 			var data = new Dictionary<DateOnly, dynamic>();
 			foreach (var taskOwner in historicalData.TaskOwnerDayCollection)
 			{

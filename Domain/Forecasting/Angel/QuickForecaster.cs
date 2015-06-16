@@ -39,16 +39,20 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 							? ForecastMethodType.TeleoptiClassic
 							: workloadAccuracy.Accuracies.Single(x => x.IsSelected).MethodId;
 					}
-					
-					var quickForecasterWorkloadParams = new QuickForecasterWorkloadParams
+
+					var availablePeriod = _historicalPeriodProvider.AvailablePeriod(workload);
+					if (availablePeriod.HasValue)
 					{
-						WorkLoad = workload,
-						FuturePeriod = futurePeriod,
-						SkillDays = skillDays,
-						HistoricalPeriod = _historicalPeriodProvider.AvailablePeriod(workload),
-						ForecastMethodId = forecastMethodId
-					};
-					_quickForecasterWorkload.Execute(quickForecasterWorkloadParams);
+						var quickForecasterWorkloadParams = new QuickForecasterWorkloadParams
+						{
+							WorkLoad = workload,
+							FuturePeriod = futurePeriod,
+							SkillDays = skillDays,
+							HistoricalPeriod = availablePeriod.Value,
+							ForecastMethodId = forecastMethodId
+						};
+						_quickForecasterWorkload.Execute(quickForecasterWorkloadParams);
+					}
 				}
 			}
 		}

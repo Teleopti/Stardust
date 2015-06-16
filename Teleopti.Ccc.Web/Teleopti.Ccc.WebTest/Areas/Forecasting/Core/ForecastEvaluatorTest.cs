@@ -198,7 +198,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			dictionary.Add(dateOnly, oneDay);
 			var historicalData = MockRepository.GenerateMock<IHistoricalData>();
 			var taskOwnerPeriod = new TaskOwnerPeriod(DateOnly.MinValue, new List<WorkloadDay>(), TaskOwnerPeriodType.Other);
-			historicalData.Stub(x => x.Fetch(workload, new DateOnlyPeriod(HistoricalPeriodProvider.DivideIntoTwoPeriods(availablePeriod).AddDays(1), availablePeriod.EndDate))).Return(taskOwnerPeriod);
+			historicalData.Stub(x => x.Fetch(workload, HistoricalPeriodProvider.DivideIntoTwoPeriods(availablePeriod).Item2)).Return(taskOwnerPeriod);
 			var target = new ForecastEvaluator(forecastWorkloadEvaluator, workloadRepository, historicalPeriodProvider, historicalData, null, null);
 
 			var result = target.Evaluate(evaluateInput);
