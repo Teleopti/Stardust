@@ -45,18 +45,26 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				var assignment = scheduleDay.PersonAssignment();
 				var dateOnly = assignment.Date;
 				var person = scheduleDay.Person;
-				var hasNonMainShiftActivity = scheduleDay.PersonMeetingCollection().Any();
+				bool hasNonMainShiftMeeting;
+				bool hasNonMainShiftActivity;
+
+				if (_toggleManager.IsEnabled(Toggles.MyTimeWeb_AutoShiftTradeWithMeetingAndPersonalActivity_33281))
+				{
+					hasNonMainShiftMeeting = isMeetingOverSchedule(scheduleDay, scheduleDays);
+					hasNonMainShiftActivity = isPersonalActivityOverSchedule(scheduleDay, scheduleDays);
+				}
+				else
+				{
+					hasNonMainShiftMeeting = scheduleDay.PersonMeetingCollection().Any();
+					hasNonMainShiftActivity = assignment.PersonalActivities() != null && assignment.PersonalActivities().Any();
+				}
+				
 				if (assignment != null)
 				{
-					hasNonMainShiftActivity = hasNonMainShiftActivity || (assignment.PersonalActivities() != null && assignment.PersonalActivities().Any()) || (assignment.OvertimeActivities() != null && assignment.OvertimeActivities().Any());
+					hasNonMainShiftActivity = hasNonMainShiftActivity || hasNonMainShiftMeeting || (assignment.OvertimeActivities() != null && assignment.OvertimeActivities().Any());
 				}
 				if (hasNonMainShiftActivity)
 				{
-					if (_toggleManager.IsEnabled(Toggles.MyTimeWeb_AutoShiftTradeWithMeetingAndPersonalActivity_33281))
-					{
-						if (!isMeetingOverSchedule(scheduleDay, scheduleDays)) return ret;
-					}
-
 					string message = string.Format(CultureInfo.CurrentCulture,
 						Resources.HasNonMainShiftActivityErrorMessage, person.Name,
 						dateOnly.Date.ToShortDateString());
@@ -68,6 +76,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return ret;
 		}
 
+		private bool isPersonalActivityOverSchedule(IScheduleDay currentSchedule, IEnumerable<IScheduleDay> all)
+		{
+			var shiftLayers = new List<IShiftLayer>();
+			foreach (var sd in all)
+			{
+				if (currentSchedule.Person.Id == sd.Person.Id) continue;
+
+				shiftLayers = (List<IShiftLayer>)sd.PersonAssignment().ShiftLayers;
+				var activities = currentSchedule.PersonAssignment().PersonalActivities();
+				if (activities != null && activities.Any(activity => isOverSchedule(activity.Period, shiftLayers)))
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
 		private bool isMeetingOverSchedule(IScheduleDay currentSchedule, IEnumerable<IScheduleDay> all)
 		{
 			var shiftLayers = new List<IShiftLayer>();
@@ -77,25 +102,29 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 				shiftLayers = (List<IShiftLayer>)sd.PersonAssignment().ShiftLayers;
 				var meetings = currentSchedule.PersonMeetingCollection();
-				if (meetings.Count == 0) return true;
-				foreach (var personMeeting in meetings)
+				if (meetings != null && meetings.Any(personMeeting => isOverSchedule(personMeeting.Period, shiftLayers)))
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
+		private bool isOverSchedule(DateTimePeriod period, IEnumerable<IShiftLayer> layers)
 				{
 					var maxPeriod = new DateTimePeriod();
-					foreach (var shiftLayer in shiftLayers)
+			foreach (var shiftLayer in layers)
 					{
 						if (!shiftLayer.Payload.InWorkTime)
 						{
-							if (shiftLayer.Period.ContainsPart(personMeeting.Period)) return true;
+					if (shiftLayer.Period.ContainsPart(period)) return true;
 						}
 						else
 						{
 							if (maxPeriod.ElapsedTime() < shiftLayer.Period.ElapsedTime()) maxPeriod = shiftLayer.Period;
 						}
 
-						if (shiftLayer.Payload.InWorkTime && !maxPeriod.Contains(personMeeting.Period)) return true;
-
-					}
-				}
+				if (shiftLayer.Payload.InWorkTime && !maxPeriod.Contains(period)) return true;
 			}
 			return false;
 		}
