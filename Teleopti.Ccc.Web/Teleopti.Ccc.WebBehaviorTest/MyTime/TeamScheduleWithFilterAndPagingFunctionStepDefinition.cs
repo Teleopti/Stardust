@@ -324,16 +324,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see '(.*)' before myself")]
 		public void ThenIShouldSeeBeforeMyself(string name)
 		{
-			Browser.Interactions.AssertFirstContainsUsingJQuery(string.Format(".shift-trade-agent-name:nth(1)"), name);
-			Browser.Interactions.AssertFirstContainsUsingJQuery(string.Format(".shift-trade-agent-name:nth(2)"), DataMaker.Data().MePerson.Name.ToString());
+			Browser.Interactions.AssertFirstContainsUsingJQuery(".shift-trade-agent-name:nth(1)", name);
+			Browser.Interactions.AssertFirstContainsUsingJQuery(".shift-trade-agent-name:nth(2)", DataMaker.Data().MePerson.Name.ToString());
 		}
 
 		[Then(@"I should see myself before my colleague")]
 		public void ThenIShouldSeeMyselfBeforeMyColleague()
 		{
 			Browser.Interactions.AssertExists("#existsWhenLoadingFinishes");
-			Browser.Interactions.AssertFirstContainsUsingJQuery(string.Format(".shift-trade-agent-name:nth(1)"), DataMaker.Data().MePerson.Name.ToString());
-			Browser.Interactions.AssertFirstContainsUsingJQuery(string.Format(".shift-trade-agent-name:nth(2)"), DataMaker.Person(TeamColleagueName).Person.Name.ToString());
+			Browser.Interactions.AssertFirstContainsUsingJQuery(".shift-trade-agent-name:nth(1)", DataMaker.Data().MePerson.Name.ToString());
+			Browser.Interactions.AssertFirstContainsUsingJQuery(".shift-trade-agent-name:nth(2)", DataMaker.Person(TeamColleagueName).Person.Name.ToString());
 		}
 
 
@@ -518,13 +518,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".name-search input.form-control", partialName);
 		}
 
-		[Then(@"I click '(.*)' at end time drop down button")]
-		public void ThenIClickAtEndTimeDropDownButton(string p0)
+
+		[Then(@"I click sort by end time asc at end time drop down button")]
+		public void ThenIClickSortByEndTimeAscAtEndTimeDropDownButton()
 		{
 			Browser.Interactions.AssertExists("#existsWhenLoadingFinishes");
 			Browser.Interactions.ClickContaining(".row .filter-time-dropdown-button .dropdown-toggle", "Sluttid");
 			Browser.Interactions.Click(".filter-time-dropdown-button .end-time-sort-order .glyphicon-arrow-up");
-			
 		}
 
 		[Then(@"Agent '(.*)' schedule should be empty")]

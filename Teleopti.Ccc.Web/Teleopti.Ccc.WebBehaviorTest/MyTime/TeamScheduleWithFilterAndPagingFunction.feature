@@ -210,7 +210,7 @@ Scenario: Sort shifts by time sorting filter
 	| EndTime   | 18:00      |
 	When I view group schedule for '2014-05-02'
 	Then I should see my colleague before myself
-	Then I click 'sort by end time asc' at end time drop down button
+	Then I click sort by end time asc at end time drop down button
 	And I should see myself before my colleague
 
 Scenario: Sort full-day absences after shifts
