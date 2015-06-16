@@ -36,22 +36,20 @@ namespace Teleopti.Support.Security
 				var commandLineArgument = new CommandLineArgument(args);
 				if (!string.IsNullOrEmpty(commandLineArgument.AggDatabase))
 				{
+					//this if needs to be here to be able to run this from freemium (no anal db)
 					reportTextCommand.Execute(commandLineArgument);
 					CrossDatabaseViewUpdate.Execute(commandLineArgument);
 					DelayedDataConvert.Execute(commandLineArgument);
 				}
-				else
-				{
-					setPersonAssignmentDate(commandLineArgument);
-					removeDuplicateAssignments(commandLineArgument);
-					ForecasterDateAdjustment.Execute(commandLineArgument);
-					PersonFirstDayOfWeekSetter.Execute(commandLineArgument);
-					PasswordEncryption.Execute(commandLineArgument);
-					LicenseStatusChecker.Execute(commandLineArgument);
-					convertDayOffToNewStructure(commandLineArgument);
-					initAuditData(commandLineArgument);
-					regenerateTenantPasswords(commandLineArgument.DestinationConnectionString);
-				}
+				setPersonAssignmentDate(commandLineArgument);
+				removeDuplicateAssignments(commandLineArgument);
+				ForecasterDateAdjustment.Execute(commandLineArgument);
+				PersonFirstDayOfWeekSetter.Execute(commandLineArgument);
+				PasswordEncryption.Execute(commandLineArgument);
+				LicenseStatusChecker.Execute(commandLineArgument);
+				convertDayOffToNewStructure(commandLineArgument);
+				initAuditData(commandLineArgument);
+				regenerateTenantPasswords(commandLineArgument.ApplicationDbConnectionString());
 			}
 			catch (Exception e)
 			{
@@ -102,7 +100,7 @@ namespace Teleopti.Support.Security
 
 		private static void callProcInSeparateTransaction(CommandLineArgument commandLineArgument, string proc)
 		{
-			using (var conn = new SqlConnection(commandLineArgument.DestinationConnectionString))
+			using (var conn = new SqlConnection(commandLineArgument.ApplicationDbConnectionString()))
 			{
 				conn.Open();
 				conn.InfoMessage += _sqlConnection_InfoMessage;
@@ -127,13 +125,13 @@ namespace Teleopti.Support.Security
 		private static void setPersonAssignmentDate(CommandLineArgument commandLineArgument)
 		{
 			//expects all schedules having thedate set to 1800-1-1
-			var allPersonAndTimeZone = new FetchPersonIdAndTimeZone(commandLineArgument.DestinationConnectionString).ForAllPersons();
+			var allPersonAndTimeZone = new FetchPersonIdAndTimeZone(commandLineArgument.ApplicationDbConnectionString()).ForAllPersons();
 			int counter = allPersonAndTimeZone.Count();
 			int i = 0;
 			log.Debug("Converting schedule data for " + counter + " agents");
 
 			var personAssignmentSetter = new PersonAssignmentDateSetter();
-			using (var conn = new SqlConnection(commandLineArgument.DestinationConnectionString))
+			using (var conn = new SqlConnection(commandLineArgument.ApplicationDbConnectionString()))
 			{
 				conn.Open();
 				foreach (var personAndTimeZone in allPersonAndTimeZone)

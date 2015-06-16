@@ -174,8 +174,7 @@
 	</Target>
 
 	<Target Name="DataModifications">
-		<Exec Command ="%22$(SecurityExe)%22 $(SecurityExeString) -DD$(AppDB)" />
-		<Exec Command ="%22$(SecurityExe)%22 $(SecurityExeString) -DD$(MartDB) -CD$(AggDB)" />
+		<Exec Command ="%22$(SecurityExe)%22 $(SecurityExeString) -AP$(AppDB) -AN$(MartDB) -CD$(AggDB)" />
 	</Target>
 	
 	<Target Name="ScriptedTestsRunOnAllDBs" Condition="'$(SQLEdition)'!='$(SQLAzure)'">

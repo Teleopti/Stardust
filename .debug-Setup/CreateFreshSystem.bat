@@ -104,12 +104,8 @@ IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=12 & GOTO :error
 
 CD "%ROOTDIR%"
 
-ECHO Running: scheduleConverter, ForecasterDateAdjustment, PersonFirstDayOfWeekSetter, PasswordEncryption, LicenseStatusChecker
-"%ROOTDIR%\..\Teleopti.Support.Security\bin\%configuration%\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD"%Branch%_%Customer%_TeleoptiCCC7" -EE
-IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=10 & GOTO :error
-
-ECHO Running: CrossDatabaseViewUpdate
-"%ROOTDIR%\..\Teleopti.Support.Security\bin\%configuration%\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD"%Branch%_%Customer%_TeleoptiAnalytics" -CD"%Branch%_%Customer%_TeleoptiCCCAgg" -EE
+ECHO Running: Security exe
+"%ROOTDIR%\..\Teleopti.Support.Security\bin\%configuration%\Teleopti.Support.Security.exe" -DS%INSTANCE% -AP"%Branch%_%Customer%_TeleoptiCCC7" -AN"%Branch%_%Customer%_TeleoptiAnalytics" -CD"%Branch%_%Customer%_TeleoptiCCCAgg" -EE
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
 
 ::FixMyConfig

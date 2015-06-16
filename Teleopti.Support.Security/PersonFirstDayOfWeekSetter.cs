@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
-using log4net.Config;
 using log4net;
 
 namespace Teleopti.Support.Security
@@ -16,7 +15,7 @@ namespace Teleopti.Support.Security
         public int Execute(CommandLineArgument commandLineArgument)
         {
             //Select database version 
-	        using (var connection = new SqlConnection(commandLineArgument.DestinationConnectionString))
+					using (var connection = new SqlConnection(commandLineArgument.ApplicationDbConnectionString()))
 	        {
 
 		        connection.Open();

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using System.Data;
 using System.Data.SqlClient;
-using log4net.Config;
 using log4net;
 
 namespace Teleopti.Support.Security
@@ -15,7 +12,7 @@ namespace Teleopti.Support.Security
 		{
 			log.Debug("Link Analytics to Agg datatbase ...");
 			//Select database version 
-			using (SqlConnection connection = new SqlConnection(commandLineArgument.DestinationConnectionString))
+			using (SqlConnection connection = new SqlConnection(commandLineArgument.AnalyticsDbConnectionString()))
 			{
 				connection.Open();
 

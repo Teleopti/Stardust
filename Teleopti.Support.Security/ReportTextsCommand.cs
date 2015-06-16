@@ -5,7 +5,7 @@ namespace Teleopti.Support.Security
 	{
 		public int Execute(CommandLineArgument commandLineArgument)
 		{
-			return TextLoader.LoadAllTextsToDatabase(commandLineArgument.DestinationConnectionString);
+			return TextLoader.LoadAllTextsToDatabase(commandLineArgument.AnalyticsDbConnectionString());
 		}
 	}
 }

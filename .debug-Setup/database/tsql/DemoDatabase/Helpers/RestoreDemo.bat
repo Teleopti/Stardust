@@ -92,8 +92,7 @@ ECHO patching databases ...
 "%INSTALLDIR%\DatabaseInstaller\DBManager.exe" -S%INSTANCE% -D%TELEOPTICCC% -OTeleoptiCCC7 %SA% -T -R -L%SQLLogin%:%SQLPwd% > "%ROOTDIR%\..\patchDB.log"
 "%INSTALLDIR%\DatabaseInstaller\DBManager.exe" -S%INSTANCE% -D%TELEOPTIAGG% -OTeleoptiCCCAgg %SA% -T -R -L%SQLLogin%:%SQLPwd% >> "%ROOTDIR%\..\patchDB.log"
 "%INSTALLDIR%\DatabaseInstaller\DBManager.exe" -S%INSTANCE% -D%TELEOPTIANALYTICS% -OTeleoptiAnalytics %SA% -T -R -L%SQLLogin%:%SQLPwd% >> "%ROOTDIR%\..\patchDB.log"
-"%INSTALLDIR%\DatabaseInstaller\Enrypted\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD"%TELEOPTICCC%" %SA2% >> "%ROOTDIR%\..\patchDB.log"
-"%INSTALLDIR%\DatabaseInstaller\Enrypted\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD"%TELEOPTIANALYTICS%" -CD"%TELEOPTIAGG%" %SA2% >> "%ROOTDIR%\..\patchDB.log"
+"%INSTALLDIR%\DatabaseInstaller\Enrypted\Teleopti.Support.Security.exe" -DS%INSTANCE% -AP"%TELEOPTICCC%" -AN"%TELEOPTIANALYTICS%" -CD"%TELEOPTIAGG%" %SA2% >> "%ROOTDIR%\..\patchDB.log"
 ECHO patching databases. Done!
 ECHO.
 ECHO Set RC as Toggle for Demo ...

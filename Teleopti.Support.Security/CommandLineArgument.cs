@@ -6,10 +6,11 @@ namespace Teleopti.Support.Security
 	public class CommandLineArgument
 	{
         private string _destinationServer;
-        private string _destinationDatabase;
         private string _destinationUserName;
         private string _destinationPassword;
         private bool _useIntegratedSecurity;
+		private string _destinationAppDbDatabase;
+		private string _destinationAnalDbDatabase;
 
 		public CommandLineArgument(string[] argumentCollection)
         {
@@ -18,26 +19,35 @@ namespace Teleopti.Support.Security
 
 		public string AggDatabase { get; private set; }
 
-		public string DestinationConnectionString
-        {
-            get
-            {
-                SqlConnectionStringBuilder sqlConnectionStringBuilder = new SqlConnectionStringBuilder();
-                sqlConnectionStringBuilder.DataSource = _destinationServer;
-                sqlConnectionStringBuilder.InitialCatalog = _destinationDatabase;
+		public string AnalyticsDbConnectionString()
+		{
+			return createConnectionString(_destinationAnalDbDatabase);
+		}
 
-                if (_useIntegratedSecurity)
-                {
-                    sqlConnectionStringBuilder.IntegratedSecurity = _useIntegratedSecurity;
-                }
-                else
-                {
-                    sqlConnectionStringBuilder.UserID = _destinationUserName;
-                    sqlConnectionStringBuilder.Password = _destinationPassword;
-                }
-                return sqlConnectionStringBuilder.ConnectionString;
-            }
-        }
+		public string ApplicationDbConnectionString()
+		{
+			return createConnectionString(_destinationAppDbDatabase);
+		}
+
+		private string createConnectionString(string initialCatalog)
+		{
+			var sqlConnectionStringBuilder = new SqlConnectionStringBuilder
+			{
+				DataSource = _destinationServer,
+				InitialCatalog = initialCatalog
+			};
+
+			if (_useIntegratedSecurity)
+			{
+				sqlConnectionStringBuilder.IntegratedSecurity = _useIntegratedSecurity;
+			}
+			else
+			{
+				sqlConnectionStringBuilder.UserID = _destinationUserName;
+				sqlConnectionStringBuilder.Password = _destinationPassword;
+			}
+			return sqlConnectionStringBuilder.ConnectionString;
+		}
 
 				private void readArguments(string[] argumentCollection)
         {
@@ -51,9 +61,12 @@ namespace Teleopti.Support.Security
                     case "-DS":   // Destination Server Name.
                         _destinationServer = switchValue;
                         break;
-                    case "-DD":   // Destination Database Name.
-                        _destinationDatabase = switchValue;
-                        break;
+									case "-AP": // Application db database name
+		                _destinationAppDbDatabase = switchValue;
+										break;
+									case "-AN": // Analytics db database name
+		                _destinationAnalDbDatabase = switchValue;
+		                break;
                     case "-DU":   // Destination User Name.
                         _destinationUserName = switchValue;
                         break;

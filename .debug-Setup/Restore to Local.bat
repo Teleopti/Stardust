@@ -304,10 +304,7 @@ ECHO create or patch Add
 "%DBMANAGER%" -S%INSTANCE% -D"%TELEOPTIAGG%" -E -OTeleoptiCCCAgg %TRUNK% %CreateAgg% -F"%DATABASEPATH%" >> "%ROOTDIR%\upgradeDB.log"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=4 & GOTO :error
 
-"%ROOTDIR%\..\Teleopti.Support.Security\bin\%configuration%\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD"%TELEOPTICCC%" -EE >> "%ROOTDIR%\upgradeDB.log"
-IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=10 & GOTO :error
-
-"%ROOTDIR%\..\Teleopti.Support.Security\bin\%configuration%\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD"%TELEOPTIANALYTICS%" -CD"%TELEOPTIAGG%" -EE >> "%ROOTDIR%\upgradeDB.log"
+"%ROOTDIR%\..\Teleopti.Support.Security\bin\%configuration%\Teleopti.Support.Security.exe" -DS%INSTANCE% -AP"%TELEOPTICCC%" -AN"%TELEOPTIANALYTICS%" -CD"%TELEOPTIAGG%" -EE >> "%ROOTDIR%\upgradeDB.log"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
 
 ECHO Upgrade databases. Done!

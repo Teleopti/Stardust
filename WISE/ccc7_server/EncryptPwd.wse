@@ -132,18 +132,10 @@ end
 item: End Block
 end
 item: Remark
-  Text=This command do most magic in CCC7-db via the Security Exe
+  Text=This command runs security exe
 end
 item: Execute Program
   Pathname=CMD
-  Command Line=/C ""%DBINST%Enrypted\Teleopti.Support.Security.exe" -DS"%SRV%" -DD"%DCCC%" %SA%"
-  Flags=00000110
-end
-item: Remark
-  Text=This command fixes the CrossDB view from Analytics into Agg DB
-end
-item: Execute Program
-  Pathname=CMD
-  Command Line=/C ""%DBINST%Enrypted\Teleopti.Support.Security.exe" -DS"%SRV%" -DD"%DMART%" -CD"%DAGG%" %SA%"
+  Command Line=/C ""%DBINST%Enrypted\Teleopti.Support.Security.exe" -DS"%SRV%" -AP"%DCCC%" -AN"%DMART%" -CD"%DAGG%" %SA%"
   Flags=00000110
 end

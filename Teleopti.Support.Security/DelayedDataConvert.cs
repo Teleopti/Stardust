@@ -1,5 +1,4 @@
-﻿using System;
-using System.Data;
+﻿using System.Data;
 using System.Data.SqlClient;
 using log4net;
 
@@ -12,7 +11,7 @@ namespace Teleopti.Support.Security
 		public int Execute(CommandLineArgument commandLineArgument)
 		{
 			//Select database version 
-			using (SqlConnection connection = new SqlConnection(commandLineArgument.DestinationConnectionString))
+			using (SqlConnection connection = new SqlConnection(commandLineArgument.AnalyticsDbConnectionString()))
 			{
 				connection.Open();
 

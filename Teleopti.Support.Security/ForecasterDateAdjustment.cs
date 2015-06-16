@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using log4net.Config;
+using System.Globalization;
 using log4net;
 
 namespace Teleopti.Support.Security
@@ -14,7 +14,7 @@ namespace Teleopti.Support.Security
         public int Execute(CommandLineArgument commandLineArgument)
         {
             //Select database version 
-	        using (SqlConnection connection = new SqlConnection(commandLineArgument.DestinationConnectionString))
+					using (SqlConnection connection = new SqlConnection(commandLineArgument.ApplicationDbConnectionString()))
 	        {
 
 		        connection.Open();
@@ -69,7 +69,7 @@ namespace Teleopti.Support.Security
 				        //Update passwords
 				        using (DataSet ds = new DataSet())
 				        {
-					        ds.Locale = System.Globalization.CultureInfo.InvariantCulture;
+					        ds.Locale = CultureInfo.InvariantCulture;
 					        daPerson.Fill(ds);
 
 					        foreach (DataRow row in ds.Tables[0].Rows)
@@ -101,7 +101,7 @@ namespace Teleopti.Support.Security
 				        //Update passwords
 				        using (DataSet ds = new DataSet())
 				        {
-					        ds.Locale = System.Globalization.CultureInfo.InvariantCulture;
+					        ds.Locale = CultureInfo.InvariantCulture;
 					        daPerson.Fill(ds);
 
 					        foreach (DataRow row in ds.Tables[0].Rows)
@@ -133,7 +133,7 @@ namespace Teleopti.Support.Security
 				        //Update passwords
 				        using (DataSet ds = new DataSet())
 				        {
-					        ds.Locale = System.Globalization.CultureInfo.InvariantCulture;
+					        ds.Locale = CultureInfo.InvariantCulture;
 					        daPerson.Fill(ds);
 
 					        foreach (DataRow row in ds.Tables[0].Rows)
@@ -162,7 +162,7 @@ namespace Teleopti.Support.Security
 				        //Update passwords
 				        using (DataSet ds = new DataSet())
 				        {
-					        ds.Locale = System.Globalization.CultureInfo.InvariantCulture;
+					        ds.Locale = CultureInfo.InvariantCulture;
 					        daPerson.Fill(ds);
 
 					        foreach (DataRow row in ds.Tables[0].Rows)
@@ -183,7 +183,7 @@ namespace Teleopti.Support.Security
 
 		        log.Debug("Updating database version...");
 		        command = connection.CreateCommand();
-		        command.CommandText = string.Format(System.Globalization.CultureInfo.InvariantCulture,
+		        command.CommandText = string.Format(CultureInfo.InvariantCulture,
 			        "INSERT INTO dbo.DatabaseVersion (BuildNumber,SystemVersion,AddedDate,AddedBy) VALUES ('-330','7.1.330.1',GetDate(),'{0}')",
 			        Environment.UserName);
 		        command.Transaction = transaction;

@@ -48,8 +48,7 @@ cscript "%ROOTDIR%\vbs\replace.vbs" "REPLACEME" "%COMPUTERNAME%" "%ROOTDIR%\sett
 COPY "%ROOTDIR%\settings.txt" "%SUPPORTOOLDIR%" /Y
 "%SUPPORTOOLDIR%\Teleopti.Support.Tool.exe" -MODeploy
 
-"%INSTALLDIR%\DatabaseInstaller\Enrypted\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD"%Customer%_TeleoptiCCC7" -EE
-"%INSTALLDIR%\DatabaseInstaller\Enrypted\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD"%Customer%_TeleoptiAnalytics" -CD"%Customer%_TeleoptiCCCAgg" -EE
+"%INSTALLDIR%\DatabaseInstaller\Enrypted\Teleopti.Support.Security.exe" -DS%INSTANCE% -AP"%Customer%_TeleoptiCCC7" -AN"%Customer%_TeleoptiAnalytics" -CD"%Customer%_TeleoptiCCCAgg" -EE
 
 ::restart
 "%SUPPORTOOLDIR%\StartStopSystem\ResetSystem.bat" y

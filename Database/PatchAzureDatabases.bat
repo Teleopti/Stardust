@@ -20,8 +20,7 @@ SET Conn3=-R -L"%SQLAppUser%:%SQLAppPwd%"
 "%ROOTDIR%\DBManager.exe" -S%MyServerInstance% -D%AnalyticsDB% -OTeleoptiAnalytics %Conn1% -T %Conn3%
 
 ::Security stuff
-"%ROOTDIR%\Enrypted\Teleopti.Support.Security.exe" -DS%MyServerInstance% -DD%AppDB% %Conn2%
-"%ROOTDIR%\Enrypted\Teleopti.Support.Security.exe" -DS%MyServerInstance% -DD%AnalyticsDB% -CD"%AnalyticsDB%" %Conn2%
+"%ROOTDIR%\Enrypted\Teleopti.Support.Security.exe" -DS%MyServerInstance% -AP%AppDB% -AN%AnalyticsDB% -CD"%AnalyticsDB%" %Conn2%
 
 ECHO Upgrade of databases successful!
 

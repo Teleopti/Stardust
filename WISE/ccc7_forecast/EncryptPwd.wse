@@ -114,7 +114,7 @@ item: Custom Script Item
 end
 item: Execute Program
   Pathname=.\Encrypted\Teleopti.Support.Security.exe
-  Command Line=-DS"%SRV%" -DD"%DCCC%" %SA%
+  Command Line=-DS"%SRV%" -AP"%DCCC%" %SA%
   Default Directory=%DIR%
   Flags=00000010
 end
