@@ -19,7 +19,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public void ShouldReturnFalseIfNameAlreadyExists()
 		{
 			//new fresh
-			DataSourceHelper.CreateDataSource(new IMessageSender[] { }, "TestData");
+			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
 			TenantUnitOfWork.Start();
 			var tenant = new Tenant("Old One");
 			CurrentTenantSession.CurrentSession().Save(tenant);
@@ -33,7 +33,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public void ShouldReturnTrueIfNameNotExists()
 		{
 			//new fresh
-			DataSourceHelper.CreateDataSource(new IMessageSender[] { }, "TestData");
+			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
 			TenantUnitOfWork.Start();
 			var tenant = new Tenant("Old One");
 			CurrentTenantSession.CurrentSession().Save(tenant);
