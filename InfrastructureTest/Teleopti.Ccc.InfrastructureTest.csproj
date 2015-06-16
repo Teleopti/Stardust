@@ -189,6 +189,7 @@
     <Compile Include="MultiTenancy\Admin\LoadAllTenantsTest.cs" />
     <Compile Include="MultiTenancy\Admin\RegenerateAllTenantPasswordsTest.cs" />
     <Compile Include="MessageBroker\MessageBrokerUnitOfWorkTestAttribute.cs" />
+    <Compile Include="MultiTenancy\Admin\TenantExistsTest.cs" />
     <Compile Include="MultiTenancy\Client\ApplicationDataFake.cs" />
     <Compile Include="MultiTenancy\Client\AuthenticationQuerierResultConverterTest.cs" />
     <Compile Include="MultiTenancy\Client\ChangePasswordTest.cs" />

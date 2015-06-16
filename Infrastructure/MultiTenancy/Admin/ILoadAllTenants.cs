@@ -6,6 +6,5 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Admin
 	public interface ILoadAllTenants
 	{
 		IEnumerable<Tenant> Tenants();
-		bool TenantExists(string name);
 	}
 }

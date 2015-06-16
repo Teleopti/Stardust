@@ -11,12 +11,12 @@ namespace Teleopti.Wfm.Administration.Controllers
 	public class ImportController : ApiController
 	{
 		private readonly DatabaseHelperWrapper _databaseHelperWrapper;
-		private readonly ILoadAllTenants _loadAllTenants;
+		private readonly ITenantExists _tenantExists;
 
-		public ImportController(DatabaseHelperWrapper databaseHelperWrapper, ILoadAllTenants loadAllTenants)
+		public ImportController(DatabaseHelperWrapper databaseHelperWrapper, ITenantExists tenantExists)
 		{
 			_databaseHelperWrapper = databaseHelperWrapper;
-			_loadAllTenants = loadAllTenants;
+			_tenantExists = tenantExists;
 		}
 
 		[HttpPost]
@@ -57,7 +57,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			if (string.IsNullOrEmpty(tenant))
 				return Json(new ImportTenantResultModel { Message = "You must enter a new name for the Tenant!", Success = false });
 
-			if (_loadAllTenants.TenantExists(tenant))
+			if (_tenantExists.Check(tenant))
 				return Json(new ImportTenantResultModel { Message = "There is already a Tenant with this name!", Success = false});
 
 			return Json(new ImportTenantResultModel { Message = "There is no other Tenant with this name!", Success = true });
