@@ -50,7 +50,6 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		{
 			StateHolder.Initialize(clientCache);
 			IDataSource dataSource = _dataSourcesFactory.Create(databaseSettings, statisticConnectionString);
-			startMessageBroker(appSettings);
 			StateHolder.Instance.State.SetApplicationData(new ApplicationData(appSettings, new[]{dataSource}, _messageBroker, null, _dataSourcesFactory));
 		}
 
