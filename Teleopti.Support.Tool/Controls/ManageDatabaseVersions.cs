@@ -30,8 +30,8 @@ namespace Teleopti.Support.Tool.Controls
 		private readonly DBHelper _dbHelper;
 		private string _teleoptiCccBaseInstallFolder;
 		private string _lastSelectedItemText;
-        private string _dbManagerHomeFolder;
-        private IList<NotepadStarter> _notepadStarters;
+		private string _dbManagerHomeFolder;
+		private IList<NotepadStarter> _notepadStarters;
 
 
 		public ManageDatabaseVersions(MainForm mainForm, Version currentVersion, DBHelper dbHelper)
@@ -49,16 +49,17 @@ namespace Teleopti.Support.Tool.Controls
 			_teleoptiCccBaseInstallFolder = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Teleopti\TeleoptiCCC\InstallationSettings", "INSTALLDIR", @"C:\");
 			textBoxNHibFolder.Text = Directory.GetCurrentDirectory() + @"\..\ConfigurationFiles\";
 			RefreshDatabaseList();
-            _dbManagerHomeFolder = _teleoptiCccBaseInstallFolder + @"DatabaseInstaller\";
+			_dbManagerHomeFolder = _teleoptiCccBaseInstallFolder + @"DatabaseInstaller\";
 
 #if (DEBUG)
 			{
-                //c:\Projects\Teleopti\ccc\teleopticcc\Database\
-                _dbManagerHomeFolder = @"c:\Projects\Teleopti\ccc\teleopticcc\Database\";
-            }
+				//c:\Projects\Teleopti\ccc\teleopticcc\Database\
+				//_dbManagerHomeFolder = @"c:\Projects\Teleopti\ccc\teleopticcc\Database\";
+				_dbManagerHomeFolder = @"C:\data\main_clone\Database\";
+			}
 #endif
 
-        }
+		}
 
 		private void buttonBack_Click(object sender, EventArgs e)
 		{
@@ -155,20 +156,23 @@ namespace Teleopti.Support.Tool.Controls
 
 		private ListViewItem[] CreateDatabaseListViewItems(Nhib nhib, ListViewGroup listViewGroup)
 		{
-			Collection<ListViewItem> items = new Collection<ListViewItem>();
+			var items = new Collection<ListViewItem>();
 			ListViewItem listViewItem;
 			NHibDataSource nHibDataSource = nhib.CccDataSource;
 			if (!listViewDatabases.Items.ContainsKey(nHibDataSource.Id))
 			{
 				listViewItem = CreateDatasourceListViewItem(listViewGroup, nHibDataSource);
 				items.Add(listViewItem);
+				nHibDataSource = nhib.AnalyticsDataSource;
+				listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem(listViewItem, nHibDataSource.DatabaseName) { Tag = nHibDataSource });
+				listViewItem.SubItems.Add(new ListViewItem.ListViewSubItem(listViewItem, nHibDataSource.Version));
 			}
-			nHibDataSource = nhib.AnalyticsDataSource;
-			if (!listViewDatabases.Items.ContainsKey(nHibDataSource.Id))
-			{
-				listViewItem = CreateDatasourceListViewItem(listViewGroup, nHibDataSource);
-				items.Add(listViewItem);
-			}
+
+			//if (!listViewDatabases.Items.ContainsKey(nHibDataSource.Id))
+			//{
+			//	listViewItem = CreateDatasourceListViewItem(listViewGroup, nHibDataSource);
+			//	items.Add(listViewItem);
+			//}
 			return items.ToArray();
 		}
 
@@ -193,8 +197,8 @@ namespace Teleopti.Support.Tool.Controls
 			}
 
 			ListViewItem.ListViewSubItem listViewSubItem;
-			listViewSubItem = new ListViewItem.ListViewSubItem(listViewItem, nHibDataSource.CccDatabaseType);
-			listViewItem.SubItems.Add(listViewSubItem);
+			//listViewSubItem = new ListViewItem.ListViewSubItem(listViewItem, nHibDataSource.CccDatabaseType);
+			//listViewItem.SubItems.Add(listViewSubItem);
 			listViewSubItem = new ListViewItem.ListViewSubItem(listViewItem, nHibDataSource.Version);
 
 			listViewItem.SubItems.Add(listViewSubItem);
@@ -247,24 +251,28 @@ namespace Teleopti.Support.Tool.Controls
 			{
 				foreach (ListViewItem listViewItem in listViewDatabases.SelectedItems)
 				{
-					NHibDataSource nHibDataSource = (NHibDataSource)listViewItem.Tag;
+					var nHibDataSource = (NHibDataSource)listViewItem.Tag;
+					var nHibAnalyticsDataSource = (NHibDataSource)listViewItem.SubItems[1].Tag;
 					string databaseTypeString = listViewItem.SubItems[1].Text;
 
 					ProcessStartInfo processStartInfo;
 					processStartInfo = CreateProcessStartInfoForDBManager(nHibDataSource, databaseTypeString);
 					RunProcess(processStartInfo);
 
-					if (databaseTypeString == Nhib.ApplicationDatabaseTextConstant)
-					{
-						processStartInfo = createProcessStartInfoForApplicationSecurity(nHibDataSource);
-						RunProcess(processStartInfo);
-					}
+					processStartInfo = CreateProcessStartInfoForSecurity(nHibDataSource, nHibAnalyticsDataSource);
+					RunProcess(processStartInfo);
 
-					if (databaseTypeString == Nhib.AnalyticsDatabaseTextConstant)
-					{
-						processStartInfo = CreateProcessStartInfoForAnalyticsSecurity(nHibDataSource);
-						RunProcess(processStartInfo);
-					}
+					//if (databaseTypeString == Nhib.ApplicationDatabaseTextConstant)
+					//{
+					//	processStartInfo = createProcessStartInfoForApplicationSecurity(nHibDataSource);
+					//	RunProcess(processStartInfo);
+					//}
+
+					//if (databaseTypeString == Nhib.AnalyticsDatabaseTextConstant)
+					//{
+					//	processStartInfo = CreateProcessStartInfoForAnalyticsSecurity(nHibDataSource);
+					//	RunProcess(processStartInfo);
+					//}
 				}
 
 				AppendText("Database update finished successfully to version " + _currentVersion);
@@ -276,6 +284,10 @@ namespace Teleopti.Support.Tool.Controls
 
 		}
 
+		private ProcessStartInfo CreateProcessStartInfoForSecurity(NHibDataSource nHibDataSourceApp, NHibDataSource nHibDataSourceAnalytics)
+		{
+			return new ProcessStartInfo();
+		}
 
 		//                  3 – If TeleoptiAnalytics DbType
 		//                  Teleopti.Support.Security.exe -DS%MyServerInstance% -DD%DATABASE% -CD%TeleoptiCCCAgg% -EE    
@@ -520,12 +532,12 @@ namespace Teleopti.Support.Tool.Controls
 				clickedNHibDataSource = (NHibDataSource)listViewItem.Tag;
 				if (IsOnSameServer(clickedNHibDataSource))
 				{
-					string clickedVersion = listViewItem.SubItems[2].Text;
-                    string splittedVersion = clickedVersion.Split('-')[0];
-                    if (!string.IsNullOrEmpty(splittedVersion))
+					string clickedVersion = listViewItem.SubItems[1].Text;
+					string splittedVersion = clickedVersion.Split('-')[0];
+					if (!string.IsNullOrEmpty(splittedVersion))
 					{
 						Version dbVersion;
-                        if (Version.TryParse(splittedVersion, out dbVersion))
+						if (Version.TryParse(splittedVersion, out dbVersion))
 						{
 							if (dbVersion <= _currentVersion)
 							{
@@ -535,29 +547,29 @@ namespace Teleopti.Support.Tool.Controls
 						}
 					}
 				}
-                else
-                {
-                    listViewItem.Selected = false;
-                }
+				else
+				{
+					listViewItem.Selected = false;
+				}
 			}
 			_lastSelectedItemText = e.Item.Text;
 		}
 
-        //private bool IsSameOrLowerThanCurrentVersion(Version clickedVersion)
-        //{
-        //    if (clickedVersion.Major <= _currentVersion.Major)
-        //    {
-        //        if (clickedVersion.Minor <= _currentVersion.Minor)
-        //        {
-        //            if (clickedVersion.Build <= _currentVersion.Build)
-        //            {
-        //                return true;
-        //            }
-        //        }
+		//private bool IsSameOrLowerThanCurrentVersion(Version clickedVersion)
+		//{
+		//    if (clickedVersion.Major <= _currentVersion.Major)
+		//    {
+		//        if (clickedVersion.Minor <= _currentVersion.Minor)
+		//        {
+		//            if (clickedVersion.Build <= _currentVersion.Build)
+		//            {
+		//                return true;
+		//            }
+		//        }
 
-        //    }
-        //    return false;
-        //}
+		//    }
+		//    return false;
+		//}
 
 		private void listViewDatabases_SelectedIndexChanged(object sender, EventArgs e)
 		{
@@ -574,11 +586,12 @@ namespace Teleopti.Support.Tool.Controls
 			switch (newImageIndex)
 			{
 				case ImageIndexDatabaseNotConnected:
-					listViewItem.SubItems[2].Text = NHibDataSource.NotConnected;
+					listViewItem.SubItems[1].Text = NHibDataSource.NotConnected;
 					break;
 				case ImageIndexDatabaseVersionNotOk:
 				case ImageIndexDatabaseVersionOk:
-					listViewItem.SubItems[2].Text = nHibDataSource.Version;
+					listViewItem.SubItems[1].Text = nHibDataSource.Version;
+					listViewItem.SubItems[3].Text = ((NHibDataSource)listViewItem.SubItems[2].Tag).Version;
 					if (nHibDataSource.CccDatabaseType == Nhib.AnalyticsDatabaseTextConstant)
 					{
 						SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(_dbHelper.ConnectionString);
@@ -614,44 +627,55 @@ namespace Teleopti.Support.Tool.Controls
 
 
 
-        private int getLatestScriptFileBuildNumber(NHibDataSource nHibDataSource)
-        {
-            string dbTypeText = getCccDbType(nHibDataSource.CccDatabaseType);
-            string scriptFileFolder = _dbManagerHomeFolder + dbTypeText + @"\Releases\";
-            DirectoryInfo releasesDirectoryInfo = new DirectoryInfo(scriptFileFolder);
-            FileInfo[] files = releasesDirectoryInfo.GetFiles("0*.sql", SearchOption.TopDirectoryOnly);
-            List<string> listOfFileNames = new List<string>();
-            foreach (var fileInfo in files)
-            {
-                listOfFileNames.Add(fileInfo.Name);
-            }
-            listOfFileNames.Sort();
-            string lastScriptFile = listOfFileNames.Last<string>();
-            lastScriptFile = lastScriptFile.Replace(".sql", string.Empty);
-            return Convert.ToInt32(lastScriptFile);
-        }
+		private int getLatestScriptFileBuildNumber(NHibDataSource nHibDataSource)
+		{
+			string dbTypeText = getCccDbType(nHibDataSource.CccDatabaseType);
+			string scriptFileFolder = _dbManagerHomeFolder + dbTypeText + @"\Releases\";
+			DirectoryInfo releasesDirectoryInfo = new DirectoryInfo(scriptFileFolder);
+			FileInfo[] files = releasesDirectoryInfo.GetFiles("0*.sql", SearchOption.TopDirectoryOnly);
+			List<string> listOfFileNames = new List<string>();
+			foreach (var fileInfo in files)
+			{
+				listOfFileNames.Add(fileInfo.Name);
+			}
+			listOfFileNames.Sort();
+			string lastScriptFile = listOfFileNames.Last<string>();
+			lastScriptFile = lastScriptFile.Replace(".sql", string.Empty);
+			return Convert.ToInt32(lastScriptFile);
+		}
 
 
 		private void SetListviewIcon(NHibDataSource nHibDataSource, ListViewItem listViewItem)
 		{
 			SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(_dbHelper.ConnectionString);
 			builder.InitialCatalog = nHibDataSource.DatabaseName;
-            int latestScriptFileBuildNumber = getLatestScriptFileBuildNumber(nHibDataSource);
+			int latestScriptFileBuildNumber = getLatestScriptFileBuildNumber(nHibDataSource);
 			DBHelper dbHelper = new DBHelper(builder.ConnectionString);
 			if (dbHelper.TestConnection())
 			{
-                int databaseBuildNumber = dbHelper.GetDatabaseBuildNumber();
+				int databaseBuildNumber = dbHelper.GetDatabaseBuildNumber();
 				nHibDataSource.Version = dbHelper.GetDatabaseVersion();
 
-                string[] s = nHibDataSource.Version.Split('-');
+				string[] s = nHibDataSource.Version.Split('-');
 				Version dbVersion = new Version(s[0]);
-                CallSetListViewIcon(databaseBuildNumber < latestScriptFileBuildNumber ? ImageIndexDatabaseVersionNotOk : ImageIndexDatabaseVersionOk,
-			        listViewItem.Index);
+
+				var dataSource = (NHibDataSource)listViewItem.SubItems[2].Tag;
+				builder.InitialCatalog = dataSource.DatabaseName;
+				dbHelper = new DBHelper(builder.ConnectionString);
+				if (dbHelper.TestConnection())
+				{
+					dataSource.Version = dbHelper.GetDatabaseVersion();
+				}
+				CallSetListViewIcon(databaseBuildNumber < latestScriptFileBuildNumber ? ImageIndexDatabaseVersionNotOk : ImageIndexDatabaseVersionOk,
+				 listViewItem.Index);
 			}
 			else
 			{
 				CallSetListViewIcon(ImageIndexDatabaseNotConnected, listViewItem.Index);
 			}
+
+
+
 		}
 
 		private void CallSetListViewIcon(int imageIndex, int listviewItemIndex)
