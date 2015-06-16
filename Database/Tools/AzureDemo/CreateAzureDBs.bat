@@ -52,7 +52,6 @@ IF "%DESTSERVERLONGNAME%"=="database.windows.net" (
 )
 
 SET DBMANAGER=%ROOTDIR_LOCAL%\..\..\DBManager.exe
-SET SECURITY=%ROOTDIR_LOCAL%\..\..\Enrypted\Teleopti.Support.Security.exe
 SET APPCONFIG=%ROOTDIR_LOCAL%\..\..\..\ApplicationConfiguration\CccAppConfig.exe
 
 ::--------
