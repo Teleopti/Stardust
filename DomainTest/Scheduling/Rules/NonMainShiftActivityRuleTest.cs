@@ -26,8 +26,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		public void Setup()
 		{
 			_toggleManager = MockRepository.GenerateMock<IScheduleCommandToggle>();
-			_toggleManager.Stub(x => x.IsEnabled(Toggles.MyTimeWeb_AutoShiftTradeWithMeetingAndPersonalActivity_33281))
-				.Return(false);
 		}
 
 		 [Test]
@@ -41,6 +39,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			 pa.AddActivity(new Activity("d"), new DateTimePeriod(start, end));
 			 scheduleOk.Add(pa);
 
+			 setToggle(false);
 			 new NonMainShiftActivityRule(_toggleManager)
 					.Validate(null, new[] {scheduleOk})
 					.Should().Be.Empty();
@@ -69,6 +68,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			pa.AddPersonalActivity(new Activity("p"), assignmentPeriod);
 			scheduleDataWithPersonalActivity.Add(pa);
 
+			setToggle(false);
 			var targetRel = new NonMainShiftActivityRule(_toggleManager)
 				.Validate(null, new[] {scheduleDataWithPersonalActivity});
 
@@ -98,6 +98,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			pa.AddOvertimeActivity(new Activity("p"), assignmentPeriod, new MultiplicatorDefinitionSet("d", MultiplicatorType.Overtime));
 			scheduleDataWithOvertimeActivity.Add(pa);
 
+			setToggle(false);
 			var targetRel = new NonMainShiftActivityRule(_toggleManager)
 				.Validate(null, new[] { scheduleDataWithOvertimeActivity });
 
@@ -127,6 +128,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			var expected = new BusinessRuleResponse(typeof(NonMainShiftActivityRule), message, true, false, period.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone()),
 											 scheduleDataWithMeeting.Person, period);
 
+			setToggle(false);
 			var targetRel = new NonMainShiftActivityRule(_toggleManager)
 				.Validate(null, new[] { scheduleDataWithMeeting });
 
@@ -166,11 +168,91 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			pa.AddPersonalActivity(new Activity("p"), assignmentPeriod);
 			scheduleDataWithPersonalActivity.Add(pa);
 
+			setToggle(false);
 			var targetRel = new NonMainShiftActivityRule(_toggleManager)
 				.Validate(null, new[] {scheduleDataWithPersonalActivity, scheduleDataWithPersonalActivity});
 
 			targetRel.Should().Have.SameValuesAs(expected, expected);
 		}
-		
+
+		[Test]
+		public void ShouldResultNothingWhenMeetingInWorkSchedule()
+		{
+			var personMeeting = MockRepository.GenerateMock<IPersonMeeting>();
+			personMeeting.Stub(x => x.Period).Return(new DateTimePeriod(2001, 1, 1, 11, 2001, 1, 1, 12));
+			var personMeetings = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting> { personMeeting });
+			var scheduleDataWithMeeting = MockRepository.GenerateMock<IScheduleDay>();
+			var pa = MockRepository.GenerateMock<IPersonAssignment>();
+			var dateOnly = new DateOnly(2000, 1, 1);
+			var person = PersonFactory.CreatePerson();
+			person.SetId(Guid.NewGuid());
+
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			pa.Stub(p => p.Date).Return(dateOnly);
+			scheduleDataWithMeeting.Stub(s => s.Person).Return(person);
+			scheduleDataWithMeeting.Stub(s => s.PersonAssignment()).Return(pa);
+			scheduleDataWithMeeting.Stub(s => s.PersonMeetingCollection()).Return(personMeetings);
+
+			var scheduleBeTrade = MockRepository.GenerateMock<IScheduleDay>();
+			var person2 = PersonFactory.CreatePerson();
+			person2.SetId(Guid.NewGuid());
+			scheduleBeTrade.Stub(s => s.Person).Return(person2);
+			var shiftLayer = new MainShiftLayer(new Activity("phone"), new DateTimePeriod(2001, 1, 1, 9, 2001, 1, 1, 17));
+			shiftLayer.Payload.InWorkTime = true;
+			pa.Stub(x => x.ShiftLayers).Return(new List<IShiftLayer> { shiftLayer });
+			scheduleBeTrade.Stub(s => s.PersonAssignment()).Return(pa);
+
+			setToggle(true);
+			var targetRel = new NonMainShiftActivityRule(_toggleManager)
+				.Validate(null, new[] { scheduleDataWithMeeting, scheduleBeTrade });
+
+			targetRel.Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldResultWhenMeetingNotInWorkSchedule()
+		{
+			var personMeeting = MockRepository.GenerateMock<IPersonMeeting>();
+			personMeeting.Stub(x => x.Period).Return(new DateTimePeriod(2001, 1, 1, 11, 2001, 1, 1, 12));
+			var personMeetings = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting> { personMeeting });
+			var scheduleDataWithMeeting = MockRepository.GenerateMock<IScheduleDay>();
+			var pa = MockRepository.GenerateMock<IPersonAssignment>();
+			var dateOnly = new DateOnly(2000, 1, 1);
+			var period = new DateOnlyPeriod(dateOnly, dateOnly);
+			var person = PersonFactory.CreatePerson();
+			person.SetId(Guid.NewGuid());
+
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			pa.Stub(p => p.Date).Return(dateOnly);
+			scheduleDataWithMeeting.Stub(s => s.Person).Return(person);
+			scheduleDataWithMeeting.Stub(s => s.PersonAssignment()).Return(pa);
+			scheduleDataWithMeeting.Stub(s => s.PersonMeetingCollection()).Return(personMeetings);
+
+			var scheduleBeTrade = MockRepository.GenerateMock<IScheduleDay>();
+			var person2 = PersonFactory.CreatePerson();
+			person2.SetId(Guid.NewGuid());
+			scheduleBeTrade.Stub(s => s.Person).Return(person2);
+			var shiftLayer =   new MainShiftLayer(new Activity("lunch"), new DateTimePeriod(2001, 1,1,11, 2001,1,1,12));
+			pa.Stub(x => x.ShiftLayers).Return(new List<IShiftLayer> { shiftLayer });
+			scheduleBeTrade.Stub(s => s.PersonAssignment()).Return(pa);
+			scheduleBeTrade.Stub(s => s.PersonMeetingCollection()).Return(new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>()));
+
+			string message = string.Format(CultureInfo.CurrentCulture,
+												 Resources.HasNonMainShiftActivityErrorMessage, scheduleDataWithMeeting.Person.Name,
+												 dateOnly.Date.ToShortDateString());
+			var expected = new BusinessRuleResponse(typeof(NonMainShiftActivityRule), message, true, false, period.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone()),
+											 scheduleDataWithMeeting.Person, period);
+
+			setToggle(true);
+			var targetRel = new NonMainShiftActivityRule(_toggleManager)
+				.Validate(null, new[] { scheduleDataWithMeeting, scheduleBeTrade });
+
+			targetRel.Should().Have.SameValuesAs(expected);
+		}
+
+		private void setToggle(bool flag)
+		{
+			_toggleManager.Stub(x => x.IsEnabled(Toggles.MyTimeWeb_AutoShiftTradeWithMeetingAndPersonalActivity_33281)).Return(flag);
+		}
 	}
 }
