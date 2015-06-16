@@ -22,7 +22,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IDataSource>()
 				.ExternallyOwned();
 
-			builder.RegisterType<CurrentBusinessUnit>().As<ICurrentBusinessUnit>();
+			builder.RegisterType<CurrentMessageSenders>().As<ICurrentMessageSenders>().SingleInstance();
+
+			builder.RegisterType<CurrentBusinessUnit>().As<ICurrentBusinessUnit>().SingleInstance();
 
 			// placed here because at the moment uow is the "owner" of the *current* initiator identifier
 			builder.RegisterType<CurrentInitiatorIdentifier>().As<ICurrentInitiatorIdentifier>();

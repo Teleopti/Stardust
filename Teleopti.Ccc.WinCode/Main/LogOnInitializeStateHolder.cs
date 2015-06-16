@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Runtime.Remoting.Messaging;
 using System.Xml.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
@@ -40,19 +41,22 @@ namespace Teleopti.Ccc.WinCode.Main
 			var businessUnit = CurrentBusinessUnit.Make();
 			var messageSender = new MessagePopulatingServiceBusSender(sendToServiceBus, populator);
 			var eventPublisher = new EventPopulatingPublisher(new ServiceBusEventPublisher(sendToServiceBus), populator);
+			var messageSenders = new CurrentMessageSenders(new IMessageSender[]
+			{
+				new ScheduleMessageSender(eventPublisher, new ClearEvents()),
+				new EventsMessageSender(new SyncEventsPublisher(eventPublisher)),
+				new MeetingMessageSender(eventPublisher),
+				new GroupPageChangedMessageSender(messageSender),
+				new TeamOrSiteChangedMessageSender(eventPublisher, businessUnit),
+				new PersonChangedMessageSender(eventPublisher, businessUnit),
+				new PersonPeriodChangedMessageSender(messageSender)
+			});
 			var initializer =
 				new InitializeApplication(
-					new DataSourcesFactory(new EnversConfiguration(),
-						new List<IMessageSender>
-						{
-							new ScheduleMessageSender(eventPublisher, new ClearEvents()),
-							new EventsMessageSender(new SyncEventsPublisher(eventPublisher)),
-							new MeetingMessageSender(eventPublisher),
-							new GroupPageChangedMessageSender(messageSender),
-							new TeamOrSiteChangedMessageSender(eventPublisher, businessUnit),
-							new PersonChangedMessageSender(eventPublisher, businessUnit),
-							new PersonPeriodChangedMessageSender(messageSender)
-						}, DataSourceConfigurationSetter.ForDesktop(),
+					new DataSourcesFactory(
+						new EnversConfiguration(),
+						messageSenders, 
+						DataSourceConfigurationSetter.ForDesktop(),
 						new CurrentHttpContext(),
 						() => messageBroker),
 					messageBroker,

@@ -502,6 +502,7 @@
     <Compile Include="UnitOfWork\IEventContextPopulator.cs" />
     <Compile Include="UnitOfWork\InitiatorIdentifierFromMessage.cs" />
     <Compile Include="UnitOfWork\ISessionContextBinder.cs" />
+    <Compile Include="UnitOfWork\NoMessageSenders.cs" />
     <Compile Include="UnitOfWork\StaticSessionContextBinder.cs" />
     <Compile Include="UnitOfWork\TeamOrSiteChangedMessageSender.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkAspect.cs" />

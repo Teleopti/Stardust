@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 			var initializeApplication = new InitializeApplication(
 				new DataSourcesFactory(
 					new EnversConfiguration(),
-					new List<IMessageSender>(),
+					new NoMessageSenders(), 
 					DataSourceConfigurationSetter.ForApplicationConfig(),
 					new CurrentHttpContext(),
 					() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 			IDataSource dataSource =
 				new DataSourcesFactory(
 					new EnversConfiguration(),
-					new List<IMessageSender>(),
+					new NoMessageSenders(), 
 					DataSourceConfigurationSetter.ForApplicationConfig(),
 					new CurrentHttpContext(),
 					() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging

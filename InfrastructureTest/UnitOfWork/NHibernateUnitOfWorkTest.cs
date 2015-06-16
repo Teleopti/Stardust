@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Client;
@@ -457,8 +458,8 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 		private class testUnitOfWork : NHibernateUnitOfWork
 		{
-			public testUnitOfWork(ISession mock, IMessageBrokerComposite messageBroker, ISendPushMessageWhenRootAlteredService pushMessageService, IEnumerable<IMessageSender> denormalizers)
-				: base(mock, messageBroker, denormalizers, null, pushMessageService, StaticSessionContextBinder.UnbindStatic, (s, i) => { }, TransactionIsolationLevel.Default, null)
+			public testUnitOfWork(ISession mock, IMessageBrokerComposite messageBroker, ISendPushMessageWhenRootAlteredService pushMessageService, IEnumerable<IMessageSender> messageSenders)
+				: base(mock, messageBroker, new FakeCurrentMessageSenders(messageSenders), null, pushMessageService, StaticSessionContextBinder.UnbindStatic, (s, i) => { }, TransactionIsolationLevel.Default, null)
 			{
 			}
 

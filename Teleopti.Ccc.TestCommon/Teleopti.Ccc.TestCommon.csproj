@@ -140,6 +140,7 @@
     <Compile Include="FakeAllBusinessUnitsUnitOfWorkAspect.cs" />
     <Compile Include="FakeCurrentApplicationData.cs" />
     <Compile Include="FakeCurrentBusinessUnit.cs" />
+    <Compile Include="FakeCurrentMessageSenders.cs" />
     <Compile Include="FakeData\FakeActivityRepository.cs" />
     <Compile Include="FakeData\FakeClassicScheduleCommand.cs" />
     <Compile Include="FakeData\FakeCommonStateHolder.cs" />

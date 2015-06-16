@@ -39,7 +39,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 				var application =
 					new InitializeApplication(
-						new DataSourcesFactory(new EnversConfiguration(), creator.Create(),
+						new DataSourcesFactory(new EnversConfiguration(), 
+							creator.Create(),
 							DataSourceConfigurationSetter.ForServiceBus(),
 							new CurrentHttpContext(),
 							messageBroker),
@@ -85,22 +86,22 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			_serviceBusSender = serviceBusSender;
 		}
 
-		public IList<IMessageSender> Create()
+		public ICurrentMessageSenders Create()
 		{
 			var populator = EventContextPopulator.Make();
 			var businessUnit = CurrentBusinessUnit.Make();
 			var messageSender = new MessagePopulatingServiceBusSender(_serviceBusSender, populator);
 			var eventPublisher = new EventPopulatingPublisher(new ServiceBusEventPublisher(_serviceBusSender), populator);
-			return new List<IMessageSender>
-				{
-					new ScheduleMessageSender(eventPublisher, new ClearEvents()),
-					new EventsMessageSender(new SyncEventsPublisher(eventPublisher)),
-					new MeetingMessageSender(eventPublisher),
-					new GroupPageChangedMessageSender(messageSender),
-					new TeamOrSiteChangedMessageSender(eventPublisher, businessUnit),
-					new PersonChangedMessageSender(eventPublisher, businessUnit),
-					new PersonPeriodChangedMessageSender(messageSender)
-				};
+			return new CurrentMessageSenders(new List<IMessageSender>
+			{
+				new ScheduleMessageSender(eventPublisher, new ClearEvents()),
+				new EventsMessageSender(new SyncEventsPublisher(eventPublisher)),
+				new MeetingMessageSender(eventPublisher),
+				new GroupPageChangedMessageSender(messageSender),
+				new TeamOrSiteChangedMessageSender(eventPublisher, businessUnit),
+				new PersonChangedMessageSender(eventPublisher, businessUnit),
+				new PersonPeriodChangedMessageSender(messageSender)
+			});
 		}
 	}
 

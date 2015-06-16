@@ -25,13 +25,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static void Setup()
 		{
 			var builder = new ContainerBuilder();
-			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new AppConfigReader()) { PublishEventsToServiceBus = false, FeatureToggle = "http://notinuse"}, new FalseToggleManager())));
+			var args = new IocArgs(new AppConfigReader())
+			{
+				PublishEventsToServiceBus = false,
+				FeatureToggle = "http://notinuse"
+			};
+			builder.RegisterModule(new CommonModule(new IocConfiguration(args, new FalseToggleManager())));
 			builder.RegisterType<TeamOrSiteChangedMessageSender>().As<IMessageSender>().SingleInstance();
 			builder.RegisterType<PersonChangedMessageSender>().As<IMessageSender>().SingleInstance();
 			builder.RegisterType<EventsMessageSender>().As<IMessageSender>().SingleInstance();
 			var container = builder.Build();
 
-			datasource = DataSourceHelper.CreateDataSource(container.Resolve<IEnumerable<IMessageSender>>(), TestControllerMethods.TenantName);
+			datasource = DataSourceHelper.CreateDataSource(container.Resolve<ICurrentMessageSenders>(), TestControllerMethods.TenantName);
 			TestSiteConfigurationSetup.StartApplicationAsync();
 
 			StateHolderProxyHelper.SetupFakeState(datasource, DefaultPersonThatCreatesDbData.PersonThatCreatesDbData, DefaultBusinessUnit.BusinessUnitFromFakeState, new ThreadPrincipalContext(new TeleoptiPrincipalFactory()));

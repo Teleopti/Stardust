@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public static class DataSourceHelper
 	{
-		public static IDataSource CreateDataSource(IEnumerable<IMessageSender> messageSenders, string name)
+		public static IDataSource CreateDataSource(ICurrentMessageSenders messageSenders, string name)
 		{
 			setupCcc7();
 			setupAnalytics();
@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.TestCommon
 			return new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, DatabaseType.TeleoptiAnalytics);
 		}
 
-		private static IDataSource makeDataSource(IEnumerable<IMessageSender> messageSenders, string name)
+		private static IDataSource makeDataSource(ICurrentMessageSenders messageSenders, string name)
 		{
 			return exceptionToConsole(
 				() =>

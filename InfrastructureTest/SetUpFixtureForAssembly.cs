@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 			ConfigurationManager.AppSettings.AllKeys.ToList().ForEach(
 				 name => appSettings.Add(name, ConfigurationManager.AppSettings[name]));
 
-			DataSource = DataSourceHelper.CreateDataSource(null, null);
+			DataSource = DataSourceHelper.CreateDataSource(new NoMessageSenders(), null);
 
 			loggedOnPerson = PersonFactory.CreatePerson("logged on person");
 

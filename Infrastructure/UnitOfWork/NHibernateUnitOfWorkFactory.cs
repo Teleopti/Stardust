@@ -13,29 +13,23 @@ using Teleopti.Interfaces.MessageBroker.Client.Composite;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	/// <summary>
-	/// Factory for UnitOfWork. 
-	/// Implemented using nhibernate's ISessionFactory.
-	/// </summary>
 	public class NHibernateUnitOfWorkFactory : IUnitOfWorkFactory
 	{
 		private readonly ISessionFactory _factory;
 		private readonly IAuditSetter _auditSettingProvider;
 
-		private readonly IEnumerable<IMessageSender> _messageSenders;
+		private readonly ICurrentMessageSenders _messageSenders;
 		private readonly Func<IMessageBrokerComposite> _messageBroker;
 
 		protected internal NHibernateUnitOfWorkFactory(
 			ISessionFactory sessionFactory,
 			IAuditSetter auditSettingProvider,
 			string connectionString,
-			IEnumerable<IMessageSender> messageSenders,
+			ICurrentMessageSenders messageSenders,
 			Func<IMessageBrokerComposite> messageBroker)
 		{
 			ConnectionString = connectionString;
 			SessionContextBinder = new StaticSessionContextBinder();
-			InParameter.NotNull("sessionFactory", sessionFactory);
-			sessionFactory.Statistics.IsStatisticsEnabled = true;
 			_factory = sessionFactory;
 			_auditSettingProvider = auditSettingProvider;
 			_messageSenders = messageSenders;

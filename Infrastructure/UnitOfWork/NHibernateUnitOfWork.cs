@@ -34,14 +34,14 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private ITransaction _transaction;
 		private readonly ILog _logger = LogManager.GetLogger(typeof(NHibernateUnitOfWork));
 		private NHibernateFilterManager _filterManager;
-		private IEnumerable<IMessageSender> _messageSenders;
+		private ICurrentMessageSenders _messageSenders;
 		private readonly Action<ISession> _unbind;
 		private readonly Action<ISession, IInitiatorIdentifier> _bindInitiator;
 		private readonly TransactionIsolationLevel _isolationLevel;
 		private ISendPushMessageWhenRootAlteredService _sendPushMessageWhenRootAlteredService;
 		private IInitiatorIdentifier _initiator;
 
-		protected internal NHibernateUnitOfWork(ISession session, IMessageBrokerComposite messageBroker, IEnumerable<IMessageSender> messageSenders, NHibernateFilterManager filterManager, ISendPushMessageWhenRootAlteredService sendPushMessageWhenRootAlteredService, Action<ISession> unbind, Action<ISession, IInitiatorIdentifier> bindInitiator, TransactionIsolationLevel isolationLevel, IInitiatorIdentifier initiator)
+		protected internal NHibernateUnitOfWork(ISession session, IMessageBrokerComposite messageBroker, ICurrentMessageSenders messageSenders, NHibernateFilterManager filterManager, ISendPushMessageWhenRootAlteredService sendPushMessageWhenRootAlteredService, Action<ISession> unbind, Action<ISession, IInitiatorIdentifier> bindInitiator, TransactionIsolationLevel isolationLevel, IInitiatorIdentifier initiator)
 		{
 			InParameter.NotNull("session", session);
 			_session = session;
@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			if (_messageSenders == null) return;
 
-			_messageSenders.ForEach(d =>
+			_messageSenders.Current().ForEach(d =>
 				{
 					using (PerformanceOutput.ForOperation(string.Format(System.Globalization.CultureInfo.InvariantCulture, "Sending message with {0}", d.GetType())))
 					{
@@ -398,6 +398,26 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		public override int GetHashCode()
 		{
 			return Session.GetHashCode();
+		}
+	}
+
+	public interface ICurrentMessageSenders
+	{
+		IEnumerable<IMessageSender> Current();
+	}
+
+	public class CurrentMessageSenders : ICurrentMessageSenders
+	{
+		private readonly IEnumerable<IMessageSender> _messageSenders;
+
+		public CurrentMessageSenders(IEnumerable<IMessageSender> messageSenders)
+		{
+			_messageSenders = messageSenders;
+		}
+
+		public IEnumerable<IMessageSender> Current()
+		{
+			return _messageSenders;
 		}
 	}
 }

@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 	public class DataSourcesFactory : IDataSourcesFactory
 	{
 		private readonly IEnversConfiguration _enversConfiguration;
-		private readonly IEnumerable<IMessageSender> _messageSenders;
+		private readonly ICurrentMessageSenders _messageSenders;
 		private readonly IDataSourceConfigurationSetter _dataSourceConfigurationSetter;
 		private readonly ICurrentHttpContext _httpContext;
 		private readonly Func<IMessageBrokerComposite> _messageBroker;
@@ -31,8 +31,12 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public const string AnalyticsDataSourceName = "AnalyticsDatasource";
 
-		public DataSourcesFactory(IEnversConfiguration enversConfiguration, IEnumerable<IMessageSender> messageSenders,
-			IDataSourceConfigurationSetter dataSourceConfigurationSetter, ICurrentHttpContext httpContext, Func<IMessageBrokerComposite> messageBroker)
+		public DataSourcesFactory(
+			IEnversConfiguration enversConfiguration,
+			ICurrentMessageSenders messageSenders,
+			IDataSourceConfigurationSetter dataSourceConfigurationSetter, 
+			ICurrentHttpContext httpContext, 
+			Func<IMessageBrokerComposite> messageBroker)
 		{
 			_enversConfiguration = enversConfiguration;
 			_messageSenders = messageSenders;
@@ -114,8 +118,13 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			NHibernateUnitOfWorkMatrixFactory statFactory;
 			var appConfig = createApplicationConfiguration(settings);
 			var applicationConnectionString = appConfig.Properties[Environment.ConnectionString];
-			var appFactory = new NHibernateUnitOfWorkFactory(buildSessionFactory(appConfig),
-				_enversConfiguration.AuditSettingProvider, applicationConnectionString, _messageSenders, _messageBroker);
+			var sessionFactory = buildSessionFactory(appConfig);
+			var appFactory = new NHibernateUnitOfWorkFactory(
+				sessionFactory,
+				_enversConfiguration.AuditSettingProvider, 
+				applicationConnectionString,
+				_messageSenders, 
+				_messageBroker);
 
 			if (!string.IsNullOrEmpty(statisticConnectionString))
 			{
@@ -137,7 +146,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			using (PerformanceOutput.ForOperation("Building sessionfactory for " + nhConf.Properties[Environment.SessionFactoryName]))
 			{
-				return nhConf.BuildSessionFactory();
+				var sessionFactory = nhConf.BuildSessionFactory();
+				sessionFactory.Statistics.IsStatisticsEnabled = true;
+				return sessionFactory;
 			}
 		}
 

@@ -18,7 +18,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		[SetUp]
 		public void Setup()
 		{
-			var dataSource = DataSourceHelper.CreateDataSource(new IMessageSender[] { }, "TestData");
+			var dataSource = DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
 
 			var personThatCreatesTestData = PersonFactory.CreatePerson("UserThatCreatesTestData", "password");
 

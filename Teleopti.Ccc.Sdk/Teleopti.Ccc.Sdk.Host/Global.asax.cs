@@ -88,19 +88,21 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			var businessUnit = CurrentBusinessUnit.Make();
 			var messageSender = new MessagePopulatingServiceBusSender(busSender, populator);
 			var eventPublisher = new EventPopulatingPublisher(new ServiceBusEventPublisher(busSender), populator);
+			var messageSenders = new CurrentMessageSenders(new IMessageSender[]
+			{
+				new ScheduleMessageSender(eventPublisher, new ClearEvents()),
+				new EventsMessageSender(new SyncEventsPublisher(eventPublisher)),
+				new MeetingMessageSender(eventPublisher),
+				new GroupPageChangedMessageSender(messageSender),
+				new TeamOrSiteChangedMessageSender(eventPublisher, businessUnit),
+				new PersonChangedMessageSender(eventPublisher, businessUnit),
+				new PersonPeriodChangedMessageSender(messageSender)
+			});
 			var initializeApplication =
 				new InitializeApplication(
-					new DataSourcesFactory(new EnversConfiguration(),
-						new List<IMessageSender>
-						  {
-							  new ScheduleMessageSender(eventPublisher, new ClearEvents()),
-							  new EventsMessageSender(new SyncEventsPublisher(eventPublisher)),
-							  new MeetingMessageSender(eventPublisher),
-							  new GroupPageChangedMessageSender(messageSender),
-							  new TeamOrSiteChangedMessageSender(eventPublisher, businessUnit),
-							  new PersonChangedMessageSender(eventPublisher,businessUnit),
-							  new PersonPeriodChangedMessageSender(messageSender)
-						  },
+					new DataSourcesFactory(
+						new EnversConfiguration(),
+						messageSenders,
 						DataSourceConfigurationSetter.ForSdk(),
 						new CurrentHttpContext(),
 						() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging

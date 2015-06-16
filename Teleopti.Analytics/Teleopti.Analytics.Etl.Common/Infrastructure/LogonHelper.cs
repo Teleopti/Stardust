@@ -94,7 +94,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			// Code that runs on application startup
 			if (string.IsNullOrEmpty(_nhibConfPath))
 				_nhibConfPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-			var dataSourcesFactory = new DataSourcesFactory(new EnversConfiguration(), new List<IMessageSender>(),
+			var dataSourcesFactory = new DataSourcesFactory(new EnversConfiguration(), new NoMessageSenders(), 
 				DataSourceConfigurationSetter.ForEtl(),
 				new CurrentHttpContext(),
 				() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging
