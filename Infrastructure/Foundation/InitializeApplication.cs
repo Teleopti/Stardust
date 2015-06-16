@@ -70,13 +70,10 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		}
 
 		// from desktop
-		public void Start(IState clientCache, IDictionary<string, string> appSettings, ILoadPasswordPolicyService loadPasswordPolicyService, bool tryStartMessageBroker)
+		public void Start(IState clientCache, IDictionary<string, string> appSettings, ILoadPasswordPolicyService loadPasswordPolicyService)
 		{
 			StateHolder.Initialize(clientCache);
-			if (tryStartMessageBroker)
-			{
-				startMessageBroker(appSettings);
-			}
+			startMessageBroker(appSettings);
 			StateHolder.Instance.State.SetApplicationData(
 				new ApplicationData(appSettings, new List<IDataSource>(), _messageBroker,
 										  loadPasswordPolicyService, _dataSourcesFactory));

@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.WinCode.Main
 					messageBroker,
 					null);
 
-			initializer.Start(new StateManager(), appSettings, passwordPolicyService, true);
+			initializer.Start(new StateManager(), appSettings, passwordPolicyService);
 		}
 	}
 }
