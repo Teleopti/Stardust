@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			_readDataSourceConfiguration = readDataSourceConfiguration;
 		}
 
-		// from Web, ServiceBus, ETL, sdk
 		public void Start(IState clientCache, ILoadPasswordPolicyService loadPasswordPolicyService, IDictionary<string, string> appSettings, bool startMessageBroker)
 		{
 			StateHolder.Initialize(clientCache);
@@ -67,16 +66,6 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			{
 				log.Warn("Could not start message broker due to: " + brokerEx.InnerException.Message);
 			}
-		}
-
-		// from desktop
-		public void Start(IState clientCache, IDictionary<string, string> appSettings, ILoadPasswordPolicyService loadPasswordPolicyService)
-		{
-			StateHolder.Initialize(clientCache);
-			startMessageBroker(appSettings);
-			StateHolder.Instance.State.SetApplicationData(
-				new ApplicationData(appSettings, new List<IDataSource>(), _messageBroker,
-										  loadPasswordPolicyService, _dataSourcesFactory));
 		}
 	}
 }

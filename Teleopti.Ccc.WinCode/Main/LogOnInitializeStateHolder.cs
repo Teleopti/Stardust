@@ -13,6 +13,7 @@ using Teleopti.Ccc.WinCode.Common.ServiceBus;
 using Teleopti.Ccc.WinCode.Services;
 using Teleopti.Ccc.Infrastructure.Config;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 
@@ -62,9 +63,9 @@ namespace Teleopti.Ccc.WinCode.Main
 						new CurrentHttpContext(),
 						() => messageBroker),
 					messageBroker,
-					null);
+					new NoDataSourceConfiguration());
 
-			initializer.Start(new StateManager(), appSettings, passwordPolicyService);
+			initializer.Start(new StateManager(), passwordPolicyService, appSettings, true);
 		}
 	}
 }

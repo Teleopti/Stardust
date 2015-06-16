@@ -263,6 +263,7 @@
     <Compile Include="MultiTenancy\Server\Config\IParseNhibFile.cs" />
     <Compile Include="MultiTenancy\Server\Config\IReadDataSourceConfiguration.cs" />
     <Compile Include="MultiTenancy\Server\Config\NhibFilePathFixed.cs" />
+    <Compile Include="MultiTenancy\Server\Config\NoDataSourceConfiguration.cs" />
     <Compile Include="MultiTenancy\Server\Config\ParseNhibFile.cs" />
     <Compile Include="MultiTenancy\Server\Config\ReadDataSourceConfiguration.cs" />
     <Compile Include="MultiTenancy\Server\Config\ReadDataSourceConfigurationFromNhibFiles.cs" />
