@@ -67,25 +67,17 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 
 		public void LogOn(ICommandLineArgument argument, DatabaseHandler databaseHandler, IBusinessUnit businessUnit)
 		{
-			var initializeApplication = new InitializeApplication(
-				new DataSourcesFactory(
-					new EnversConfiguration(),
-					new NoMessageSenders(), 
-					DataSourceConfigurationSetter.ForApplicationConfig(),
-					new CurrentHttpContext(),
-					() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging
-					), null, null);
+			var dataSourcesFactory = new DataSourcesFactory(
+				new EnversConfiguration(),
+				new NoMessageSenders(),
+				DataSourceConfigurationSetter.ForApplicationConfig(),
+				new CurrentHttpContext(),
+				() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging
+				);
+			var initializeApplication = new InitializeApplication(dataSourcesFactory, null, null);
 			initializeApplication.Start(new StateNewVersion(), databaseHandler.DataSourceSettings(), "", ConfigurationManager.AppSettings.ToDictionary());
 			var repositoryFactory = new RepositoryFactory();
-			IDataSource dataSource =
-				new DataSourcesFactory(
-					new EnversConfiguration(),
-					new NoMessageSenders(), 
-					DataSourceConfigurationSetter.ForApplicationConfig(),
-					new CurrentHttpContext(),
-					() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging
-					)
-					.Create(databaseHandler.DataSourceSettings(), "");
+			var dataSource = dataSourcesFactory.Create(databaseHandler.DataSourceSettings(), "");
 
 			var unitOfWorkFactory = dataSource.Application;
 			var logOnOff = new LogOnOff(new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory()));
