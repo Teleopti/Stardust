@@ -76,6 +76,11 @@ namespace Teleopti.Support.Security
 					rowsAffected = AddRowsAffected(command, 0);
 					command.Parameters.Clear();
 					log.Debug("\tfact_schedule converted " + rowsAffected + " rows.");
+
+                    log.Debug("\tRemove old tables if possible ...");
+                    command.CommandText = "mart.remove_old_tables";
+                    rowsAffected = AddRowsAffected(command, rowsAffected);
+                    log.Debug("\tOld tables removed " + rowsAffected + " out of 6.");
 				}
 			}
 
