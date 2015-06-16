@@ -67,24 +67,20 @@
 			<div class="modalbg">
 				<div class="dialog">
 					<div class="modal-inner-content">
-
-								<ul class="wfm-accordion">
-									<li>
-										<div class="wfm-accordion-head" ng-click="accordionToggle1 = !accordionToggle1">{{workload.Name}} - {{ 'ForecastMethod' | translate }}<i ng-class="{'toggle-icon-open':!accordionToggle1}" class="mdi mdi-chevron-right"></i></div>
-										<div class="wfm-accordion-content" ng-cloak ng-hide="accordionToggle1">
-											<div ng-include="'first-forecast-tab.html'"></div>
-										</div>
-									</li>
-									<li>
-										<div class="wfm-accordion-head" ng-click="accordionToggle1 = !accordionToggle1">{{workload.Name}} - Queue statistics<i ng-class="{'toggle-icon-open':accordionToggle1}" class="mdi mdi-chevron-right"></i></div>
-										<div class="wfm-accordion-content" ng-cloak ng-show="accordionToggle1">
-											<div ng-include="'second-forecast-tab.html'"></div>
-										</div>
-									</li>
-								</ul>
-
-
-
+						<ul class="wfm-accordion">
+							<li>
+								<div class="wfm-accordion-head" ng-click="accordionToggle1 = !accordionToggle1">{{workload.Name}} - {{ 'ForecastMethod' | translate }}<i ng-class="{'toggle-icon-open':!accordionToggle1}" class="mdi mdi-chevron-right"></i></div>
+								<div class="wfm-accordion-content" ng-cloak ng-hide="accordionToggle1">
+									<div ng-include="'first-forecast-tab.html'"></div>
+								</div>
+							</li>
+							<li>
+								<div class="wfm-accordion-head" ng-click="accordionToggle1 = !accordionToggle1">{{workload.Name}} - Queue statistics<i ng-class="{'toggle-icon-open':accordionToggle1}" class="mdi mdi-chevron-right"></i></div>
+								<div class="wfm-accordion-content" ng-cloak ng-show="accordionToggle1">
+									<div ng-include="'second-forecast-tab.html'"></div>
+								</div>
+							</li>
+						</ul>
 					</div>
 					<div class="modal-footer">
 						<aside>
@@ -110,10 +106,11 @@
 						this one was the most accurate. <br>The chosen forecast method is based on a period of queue statistics prior to the timeframe in the chart and will be used in the upcoming
 						forecast for workload <i>{{workload.Name}}</i>.
 					</p>
-
 					<div class="row" ng-if="!workload.noHistoricalDataForEvaluation">
 						<p>
 							We use historical data from <b>{{workload.ForecastMethodRecommended.PeriodUsedToEvaluateStart | date : shortDate}}</b> to <b>{{workload.ForecastMethodRecommended.PeriodUsedToEvaluateEnd | date : shortDate}}</b>, and evaluate forecast methods on the period from <b>{{workload.ForecastMethodRecommended.PeriodEvaluateOnStart | date : shortDate}}</b> to <b>{{workload.ForecastMethodRecommended.PeriodEvaluateOnEnd | date : shortDate}}</b>.
+						</p>
+						<p>
 							We pick forecast method: <b>{{workload.selectedMethodName}}</b>.
 						</p>
 					</div>
@@ -146,7 +143,6 @@
 				</div>
 			</div>
 		</div>
-
 		<c3chart bindto-id="{{workload.chartId2}}" chart-data="workload.chartData2" chart-columns="dataColumns2" chart-x="dataX" show-subchart="true" enable-zoom="true" style="margin-left:-13px;">
 			<chart-axis>
 				<chart-axis-x axis-id="date" axis-type="timeseries">
@@ -157,6 +153,5 @@
 				<chart-axis-y axis-id="y" axis-position="outer-middle" axis-label="Number of Calls" />
 			</chart-axis>
 		</c3chart>
-
 	</div>
 </script>
