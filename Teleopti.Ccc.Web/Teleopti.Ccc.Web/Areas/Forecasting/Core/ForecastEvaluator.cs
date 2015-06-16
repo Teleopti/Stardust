@@ -138,17 +138,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 			var historicalDataNoOutliers = _outlierRemover.RemoveOutliers(historicalData, forecastMethod);
 			foreach (var day in historicalDataNoOutliers.TaskOwnerDayCollection)
 			{
-				if (data.ContainsKey(day.CurrentDate))
-				{
-					data[day.CurrentDate].vh2 = Math.Round(day.TotalStatisticCalculatedTasks, 1);
-				}
-				else
-				{
-					dynamic item = new ExpandoObject();
-					item.date = day.CurrentDate;
-					item.vh2 = Math.Round(day.TotalStatisticCalculatedTasks, 1);
-					data.Add(day.CurrentDate, item);
-				}
+				data[day.CurrentDate].vh2 = Math.Round(day.TotalStatisticCalculatedTasks, 1);
 			}
 			return data.Values.ToArray();
 		}
