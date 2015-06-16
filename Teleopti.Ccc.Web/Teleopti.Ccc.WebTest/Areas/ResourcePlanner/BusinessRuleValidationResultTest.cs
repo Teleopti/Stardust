@@ -11,21 +11,19 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 	public class DayOffBusinessRuleValidationTest
 	{
 		public DayOffBusinessRuleValidation Target;
-		public IScheduleRange FakeScheduleRange;
+		public FakeScheduleRange ScheduleRange;
 		[Test]
 		public void ShouldReturnFalseIfTargetDayOffNotFullfilled()
 		{
-			((FakeScheduleRange)FakeScheduleRange).UpdateCalcValues(7,TimeSpan.Zero);
-			//FakeScheduleRange will return 8 target days off and 8 hours target time
-			Assert.IsFalse(Target.Validate(FakeScheduleRange, new DateOnlyPeriod()));
+			ScheduleRange.UpdateCalcValues(7,TimeSpan.Zero);
+			Assert.IsFalse(Target.Validate(ScheduleRange, new DateOnlyPeriod()));
 		}
 
 		[Test]
 		public void ShouldReturnTrueIfTargetDayIsFullfilled()
 		{
-			((FakeScheduleRange)FakeScheduleRange).UpdateCalcValues(8, TimeSpan.Zero);
-			//FakeScheduleRange will return 8 target days off and 8 hours target time
-			Assert.True(Target.Validate(FakeScheduleRange, new DateOnlyPeriod()));
+			ScheduleRange.UpdateCalcValues(8, TimeSpan.Zero);
+			Assert.True(Target.Validate(ScheduleRange, new DateOnlyPeriod()));
 		}
 	}
 }

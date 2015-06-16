@@ -3,7 +3,6 @@ using System.Linq;
 using System.Web.Http.Results;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.TestCommon;
@@ -19,9 +18,9 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 	{
 		public ScheduleController Target;
 		public IScheduleCommand ScheduleCommand;
-		public IPersonRepository FakePersonRepository;
-		public ISchedulingResultStateHolder FakeSchedulingResultStateHolder;
-		public IScheduleRepository FakeScheduleDataReadScheduleRepository;
+		public FakePersonRepository PersonRepository;
+		public FakeSchedulingResultStateHolder SchedulingResultStateHolder;
+		public FakeScheduleDataReadScheduleRepository ScheduleDataReadScheduleRepository;
 
 		[Test]
 		public void ShouldScheduleFixedStaff()
@@ -29,13 +28,13 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			var period = new DateOnlyPeriod(2015, 5, 1, 2015, 5, 31);
 			var agent = PersonFactory.CreatePersonWithPersonPeriodTeamSite(period.StartDate);
 			agent.SetId(Guid.NewGuid());
-			FakePersonRepository.Add(agent);
+			PersonRepository.Add(agent);
 			var scenario = ScenarioFactory.CreateScenario("Default", true, true);
 			var dateTimePeriod = period.ToDateTimePeriod(TimeZoneInfo.Utc);
 			var schedules = new ScheduleDictionaryForTest(scenario, dateTimePeriod);
 			var range = new ScheduleRange(schedules, new ScheduleParameters(scenario, agent, dateTimePeriod));
 			schedules.AddTestItem(agent, range);
-			FakeSchedulingResultStateHolder.Schedules = schedules;
+			SchedulingResultStateHolder.Schedules = schedules;
 			using (new CustomAuthorizationContext(new PrincipalAuthorizationWithFullPermission()))
 			{
 				var result =
@@ -54,7 +53,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			IPerson agent1 = PersonFactory.CreatePersonWithPersonPeriodTeamSite(period.StartDate);
 			agent1 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(agent1, period.StartDate.AddDays(3));
 			agent1.SetId(Guid.NewGuid());
-			FakePersonRepository.Add(agent1);
+			PersonRepository.Add(agent1);
 			
 			using (new CustomAuthorizationContext(new PrincipalAuthorizationWithFullPermission()))
 			{
@@ -74,8 +73,8 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			IPerson agent1 = PersonFactory.CreatePersonWithPersonPeriodTeamSite(period.StartDate);
 			agent1 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(agent1, period.StartDate);
 			agent1.SetId(Guid.NewGuid());
-			FakePersonRepository.Add(agent1);
-			((FakeScheduleDataReadScheduleRepository)FakeScheduleDataReadScheduleRepository).InitRangeValues(8, 7, TimeSpan.Zero, TimeSpan.Zero); 
+			PersonRepository.Add(agent1);
+			ScheduleDataReadScheduleRepository.InitRangeValues(8, 7, TimeSpan.Zero, TimeSpan.Zero); 
 			using (new CustomAuthorizationContext(new PrincipalAuthorizationWithFullPermission()))
 			{
 				var result =
@@ -93,9 +92,9 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			var period = new DateOnlyPeriod(2015, 5, 1, 2015, 5, 31);
 			IPerson agent1 = PersonFactory.CreatePersonWithPersonPeriodTeamSite(period.StartDate);
 			agent1 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(agent1, period.StartDate, ContractFactory.CreateContract("hourly"),PartTimePercentageFactory.CreatePartTimePercentage("hourly"));
-			((FakeScheduleDataReadScheduleRepository)FakeScheduleDataReadScheduleRepository).InitRangeValues(8, 8, TimeSpan.FromHours(8), TimeSpan.FromHours(8)); 
+			ScheduleDataReadScheduleRepository.InitRangeValues(8, 8, TimeSpan.FromHours(8), TimeSpan.FromHours(8)); 
 			agent1.SetId(Guid.NewGuid());
-			FakePersonRepository.Add(agent1);
+			PersonRepository.Add(agent1);
 			using (new CustomAuthorizationContext(new PrincipalAuthorizationWithFullPermission()))
 			{
 				var result =

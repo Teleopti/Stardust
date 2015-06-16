@@ -19,61 +19,64 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 	public class MissingForecastProviderTest
 	{
 		public IMissingForecastProvider Target;
-		public IExistingForecastRepository FakeExistingForecastRepository;
+		public FakeExistingForecastRepository ExistingForecastRepository;
 
 		[Test]
 		public void ShouldReturnMissingForecastForSkill()
 		{
 			var range = new DateOnlyPeriod(2015, 5, 1, 2015, 5, 31);
-			((FakeExistingForecastRepository) FakeExistingForecastRepository).CustomResult = new List
+			ExistingForecastRepository.CustomResult = new List
 				<Tuple<string, IEnumerable<DateOnlyPeriod>>>
 			{
 				new Tuple<string, IEnumerable<DateOnlyPeriod>>("Direct Sales", new DateOnlyPeriod[] {})
 			};
 			var missingForecast = Target.GetMissingForecast(range);
 
-			missingForecast.First().MissingRanges[0].StartDate.Should().Be.EqualTo(range.StartDate.Date);
-			missingForecast.First().MissingRanges[0].EndDate.Should().Be.EqualTo(range.EndDate.Date);
+			var first = missingForecast.First().MissingRanges[0];
+			first.StartDate.Should().Be.EqualTo(range.StartDate.Date);
+			first.EndDate.Should().Be.EqualTo(range.EndDate.Date);
 		}
 
 		[Test]
 		public void ShouldReturnMissingForecastForStartOfMonth()
 		{
 			var range = new DateOnlyPeriod(2015, 5, 1, 2015, 5, 31);
-			((FakeExistingForecastRepository)FakeExistingForecastRepository).CustomResult = new List
+			ExistingForecastRepository.CustomResult = new List
 				<Tuple<string, IEnumerable<DateOnlyPeriod>>>
 			{
 				new Tuple<string, IEnumerable<DateOnlyPeriod>>("Direct Sales", new[] {new DateOnlyPeriod(2015,5,11,2015,5,31)})
 			};
 			var missingForecast = Target.GetMissingForecast(range);
+			var first = missingForecast.First();
 
-			missingForecast.First().MissingRanges.Length.Should().Be.EqualTo(1);
-			missingForecast.First().MissingRanges[0].StartDate.Should().Be.EqualTo(range.StartDate.Date);
-			missingForecast.First().MissingRanges[0].EndDate.Should().Be.EqualTo(new DateTime(2015,5,10));
+			first.MissingRanges.Length.Should().Be.EqualTo(1);
+			first.MissingRanges[0].StartDate.Should().Be.EqualTo(range.StartDate.Date);
+			first.MissingRanges[0].EndDate.Should().Be.EqualTo(new DateTime(2015, 5, 10));
 		}
 
 		[Test]
 		public void ShouldReturnMissingForecastForEndOfMonth()
 		{
 			var range = new DateOnlyPeriod(2015, 5, 1, 2015, 5, 31);
-			((FakeExistingForecastRepository)FakeExistingForecastRepository).CustomResult = new List
+			ExistingForecastRepository.CustomResult = new List
 				<Tuple<string, IEnumerable<DateOnlyPeriod>>>
 			{
 				new Tuple<string, IEnumerable<DateOnlyPeriod>>("Direct Sales", new[] {new DateOnlyPeriod(2015,5,1,2015,5,21)})
 			};
 
 			var missingForecast = Target.GetMissingForecast(range);
+			var first = missingForecast.First();
 
-			missingForecast.First().MissingRanges.Length.Should().Be.EqualTo(1);
-			missingForecast.First().MissingRanges[0].StartDate.Should().Be.EqualTo(new DateTime(2015, 5, 22));
-			missingForecast.First().MissingRanges[0].EndDate.Should().Be.EqualTo(range.EndDate.Date);
+			first.MissingRanges.Length.Should().Be.EqualTo(1);
+			first.MissingRanges[0].StartDate.Should().Be.EqualTo(new DateTime(2015, 5, 22));
+			first.MissingRanges[0].EndDate.Should().Be.EqualTo(range.EndDate.Date);
 		}
 
 		[Test]
 		public void ShouldReturnMissingForecastForStartAndEndOfMonth()
 		{
 			var range = new DateOnlyPeriod(2015, 5, 1, 2015, 5, 31);
-			((FakeExistingForecastRepository)FakeExistingForecastRepository).CustomResult = new List
+			ExistingForecastRepository.CustomResult = new List
 				<Tuple<string, IEnumerable<DateOnlyPeriod>>>
 			{
 				new Tuple<string, IEnumerable<DateOnlyPeriod>>("Direct Sales",
@@ -81,39 +84,38 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			};
 
 			var missingForecast = Target.GetMissingForecast(range);
+			var first = missingForecast.First();
 
-			missingForecast.First().MissingRanges.Length.Should().Be.EqualTo(2);
-
-			missingForecast.First().MissingRanges[0].StartDate.Should().Be.EqualTo(range.StartDate.Date);
-			missingForecast.First().MissingRanges[0].EndDate.Should().Be.EqualTo(new DateTime(2015, 5, 10));
-
-			missingForecast.First().MissingRanges[1].StartDate.Should().Be.EqualTo(new DateTime(2015, 5, 20));
-			missingForecast.First().MissingRanges[1].EndDate.Should().Be.EqualTo(range.EndDate.Date);
+			first.MissingRanges.Length.Should().Be.EqualTo(2);
+			first.MissingRanges[0].StartDate.Should().Be.EqualTo(range.StartDate.Date);
+			first.MissingRanges[0].EndDate.Should().Be.EqualTo(new DateTime(2015, 5, 10));
+			first.MissingRanges[1].StartDate.Should().Be.EqualTo(new DateTime(2015, 5, 20));
+			first.MissingRanges[1].EndDate.Should().Be.EqualTo(range.EndDate.Date);
 		}
 
 		[Test]
 		public void ShouldReturnMissingForecastForAllMonthMinusOneDay()
 		{
 			var range = new DateOnlyPeriod(2015, 5, 1, 2015, 5, 31);
-			((FakeExistingForecastRepository)FakeExistingForecastRepository).CustomResult = new List
+			ExistingForecastRepository.CustomResult = new List
 				<Tuple<string, IEnumerable<DateOnlyPeriod>>>
 			{
 				new Tuple<string, IEnumerable<DateOnlyPeriod>>("Direct Sales",
 					new[] {new DateOnlyPeriod(2015, 5, 31, 2015, 5, 31)})
 			};
 			var missingForecast = Target.GetMissingForecast(range);
+			var first = missingForecast.First();
 
-			missingForecast.First().MissingRanges.Length.Should().Be.EqualTo(1);
-
-			missingForecast.First().MissingRanges[0].StartDate.Should().Be.EqualTo(new DateTime(2015, 5, 1));
-			missingForecast.First().MissingRanges[0].EndDate.Should().Be.EqualTo(new DateTime(2015,5,30));
+			first.MissingRanges.Length.Should().Be.EqualTo(1);
+			first.MissingRanges[0].StartDate.Should().Be.EqualTo(new DateTime(2015, 5, 1));
+			first.MissingRanges[0].EndDate.Should().Be.EqualTo(new DateTime(2015, 5, 30));
 		}
 
 		[Test]
 		public void ShouldNotReturnSkillWithForecast()
 		{
 			var range = new DateOnlyPeriod(2015, 5, 1, 2015, 5, 31);
-			((FakeExistingForecastRepository)FakeExistingForecastRepository).CustomResult = new List
+			ExistingForecastRepository.CustomResult = new List
 				<Tuple<string, IEnumerable<DateOnlyPeriod>>>
 			{
 				new Tuple<string, IEnumerable<DateOnlyPeriod>>("Direct Sales",
@@ -128,7 +130,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		public void ShouldReturnSortedSkills()
 		{
 			var range = new DateOnlyPeriod(2015, 5, 1, 2015, 5, 31);
-			((FakeExistingForecastRepository)FakeExistingForecastRepository).CustomResult = new List
+			ExistingForecastRepository.CustomResult = new List
 				<Tuple<string, IEnumerable<DateOnlyPeriod>>>
 			{
 				new Tuple<string, IEnumerable<DateOnlyPeriod>>("Direct Sales", new DateOnlyPeriod[] {}),
