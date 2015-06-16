@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
-using Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter;
-using log4net.Config;
-using log4net;
 using System.Linq;
 using System.Threading;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
+using log4net;
+using log4net.Config;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
+using Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter;
 
 namespace Teleopti.Support.Security
 {
@@ -34,6 +33,8 @@ namespace Teleopti.Support.Security
 			try
 			{
 				var commandLineArgument = new CommandLineArgument(args);
+				var tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(commandLineArgument.ApplicationDbConnectionString());
+				var updateTenantData = new UpdateTenantData(tenantUnitOfWorkManager);
 				if (!string.IsNullOrEmpty(commandLineArgument.AggDatabase))
 				{
 					//this if needs to be here to be able to run this from freemium (no anal db)
@@ -49,7 +50,7 @@ namespace Teleopti.Support.Security
 				LicenseStatusChecker.Execute(commandLineArgument);
 				convertDayOffToNewStructure(commandLineArgument);
 				initAuditData(commandLineArgument);
-				regenerateTenantPasswords(commandLineArgument.ApplicationDbConnectionString());
+				updateTenantData.RegenerateTenantPasswords();
 			}
 			catch (Exception e)
 			{
@@ -59,19 +60,6 @@ namespace Teleopti.Support.Security
 			Thread.Sleep(TimeSpan.FromSeconds(3));
 			log.Debug("Teleopti.Support.Security successful");
 			Environment.ExitCode = 0;
-		}
-
-		private static void regenerateTenantPasswords(string destinationConnectionString)
-		{
-			//todo: tenant what should we do when/if multiple tenants?
-			log.Debug("Updating tenant password...");
-			var tenantUowManager = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(destinationConnectionString);
-			using (tenantUowManager.Start())
-			{
-				var updatePasswords = new RegenerateAllTenantPasswords(tenantUowManager);
-				updatePasswords.Modify();	
-			}
-			log.Debug("Updating tenant password. Done!");
 		}
 
 		private static void initAuditData(CommandLineArgument commandLineArgument)
