@@ -484,7 +484,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<OutboundProductionPlanFactory>().As<OutboundProductionPlanFactory>().SingleInstance();
 			builder.RegisterType<CreateOrUpdateSkillDays>().As<ICreateOrUpdateSkillDays>().SingleInstance();
 			builder.RegisterType<OutboundPeriodMover>().As<IOutboundPeriodMover>().SingleInstance();
-			//OurboundPeriodMover
+			builder.RegisterType<OutboundCampaignRepository>().As<IOutboundCampaignRepository>().SingleInstance();
+			//OutboundCampaignRepository
 		}
 	}
 }

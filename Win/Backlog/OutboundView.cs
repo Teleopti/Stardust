@@ -18,6 +18,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.WinCode.Backlog;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 using Campaign = Teleopti.Ccc.Domain.Outbound.Campaign;
 
 namespace Teleopti.Ccc.Win.Backlog
@@ -61,11 +62,10 @@ namespace Teleopti.Ccc.Win.Backlog
 
 		private void loadCampaigns()
 		{
-			
 			// move to method in repository
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				_campaigns = new OutboundCampaignRepository(uow).LoadAll().Where(c => c.EndDate > new DateOnly(DateTime.Now).AddDays(-14)).ToList();
+				_campaigns = new OutboundCampaignRepository(uow).LoadAll().Where(c => c.EndDate > new DateOnly(DateTime.Now).AddDays(-30)).ToList();
 				foreach (var campaign in _campaigns)
 				{
 					LazyLoadingManager.Initialize(campaign.Skill);
@@ -159,50 +159,46 @@ namespace Teleopti.Ccc.Win.Backlog
 
 					campaign = addCampaign.CreatedCampaign;
 					activity = addCampaign.ExistingActivity;
-					if (activity == null)
-					{
-						activity = new Activity(campaign.Name)
-						{
-							DisplayColor = Color.Black,
-							InContractTime = true,
-							InPaidTime = true,
-							InWorkTime = true,
-							RequiresSkill = true,
-							IsOutboundActivity = true,
-							AllowOverwrite = true
-						};
-						activityRepository.Add(activity);
-						uow.PersistAll();
-					}
 				}
-			}
-			
 
-			//AddCampaignCommand
-			createAndPersistCampaign(campaign, activity);
+				if (activity == null)
+				{
+					activity = new Activity(campaign.Name)
+					{
+						DisplayColor = Color.Black,
+						InContractTime = true,
+						InPaidTime = true,
+						InWorkTime = true,
+						RequiresSkill = true,
+						IsOutboundActivity = true,
+						AllowOverwrite = true
+					};
+					activityRepository.Add(activity);
+				}
+
+				createAndPersistCampaign(campaign, activity, uow);
+				uow.PersistAll();
+			}
 
 			loadCampaigns();
 			updateStatusOnCampaigns();
 		}
 
 		//AddCampaignCommand
-		private void createAndPersistCampaign(Campaign campaign, IActivity activity)
+		private void createAndPersistCampaign(Campaign campaign, IActivity activity, IUnitOfWork uow)
 		{
-			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				var outboundSkillCreator = _container.Resolve<IOutboundSkillCreator>();
-				var skill = outboundSkillCreator.CreateSkill(activity, campaign);
-				var outboundSkillPersister = _container.Resolve<OutboundSkillPersister>();
-				outboundSkillPersister.PersistAll(skill);
-				campaign.Skill = skill;
+			var outboundSkillCreator = _container.Resolve<IOutboundSkillCreator>();
+			var skill = outboundSkillCreator.CreateSkill(activity, campaign);
+			var outboundSkillPersister = _container.Resolve<OutboundSkillPersister>();
+			outboundSkillPersister.PersistSkill(skill);
+			campaign.Skill = skill;
 
-				var campaignRepository = new OutboundCampaignRepository(uow);
-				campaignRepository.Add(campaign);
+			var campaignRepository = new OutboundCampaignRepository(uow);
+			campaignRepository.Add(campaign);
 
-				var createOrUpdateSkillDays = _container.Resolve<ICreateOrUpdateSkillDays>();
-				createOrUpdateSkillDays.Create(campaign.Skill, campaign.SpanningPeriod, campaign.CampaignTasks(), campaign.AverageTaskHandlingTime(), campaign.CampaignWorkingPeriods);
-				uow.PersistAll();
-			}
+			var createOrUpdateSkillDays = _container.Resolve<ICreateOrUpdateSkillDays>();
+			createOrUpdateSkillDays.Create(campaign.Skill, campaign.SpanningPeriod, campaign.CampaignTasks(),
+				campaign.AverageTaskHandlingTime(), campaign.CampaignWorkingPeriods);
 		}
 
 		private IncomingTask getIncomingTaskFromCampaign(Campaign campaign)
@@ -383,7 +379,7 @@ namespace Teleopti.Ccc.Win.Backlog
 			var incomingTask = getIncomingTaskFromCampaign(selectedCampaign);
 			incomingTask.RecalculateDistribution();
 			//persist productionPlan
-			updateSkillDays(selectedCampaign.Skill, incomingTask, false);
+			updateSkillDays(selectedCampaign.Skill, incomingTask, true);
 			loadSchedulesAsync();
 			//no code after loadSchedulesAsync();
 		}

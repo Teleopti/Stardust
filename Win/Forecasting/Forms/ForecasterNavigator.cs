@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -240,8 +241,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		private ICollection<skillTypeModel> loadSkillTypeCollection(IUnitOfWork uow)
 		{
 			ISkillTypeRepository skillTypeRep = _repositoryFactory.CreateSkillTypeRepository(uow);
-			//remove where to debug outbound
-			ICollection<ISkillType> skillTypes = skillTypeRep.FindAll().Where(s => s.ForecastSource != ForecastSource.OutboundTelephony).ToList();
+			ICollection<ISkillType> skillTypes = skillTypeRep.FindAll();
+			if(!_toggleManager.IsEnabled(Toggles.Backlog_Module_23980))
+				skillTypes = skillTypes.Where(s => s.ForecastSource != ForecastSource.OutboundTelephony).ToList();
+
 			return
 				skillTypes.Select(
 					s =>
@@ -258,8 +261,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		{
 			ISkillRepository skillRep = _repositoryFactory.CreateSkillRepository(uow);
 			ICollection<ISkill> skills = skillRep.FindAllWithWorkloadAndQueues();
-			//remove where to debug outbound
-			skills = skills.Except(skills.OfType<IChildSkill>()).Where(s => s.SkillType.ForecastSource != ForecastSource.OutboundTelephony).ToList();
+			skills = skills.Except(skills.OfType<IChildSkill>()).ToList();
+			if (!_toggleManager.IsEnabled(Toggles.Backlog_Module_23980))
+				skills = skills.Where(s => s.SkillType.ForecastSource != ForecastSource.OutboundTelephony).ToList();
+
 			return skills.Select(createSkillModel).ToList();
 		}
 

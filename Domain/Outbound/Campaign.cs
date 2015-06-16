@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 			set { _endDate= value; }
 		}
 
-		public virtual DateOnlyPeriod SpanningPeriod //remove start and endate, persist this
+		public virtual DateOnlyPeriod SpanningPeriod //remove start and endate, persist this as not nullable
 		{
 			get { return new DateOnlyPeriod(_startDate.Value, _endDate.Value); }
 		}

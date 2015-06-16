@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.Infrastructure.Persisters.Outbound;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.MultipleConfig;
+using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider;
 using Teleopti.Ccc.Web.Areas.Outbound.core.IoC;
 
 namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
@@ -38,9 +39,20 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		{
 			using (var container = _containerBuilder.Build())
 			{
-				container.Resolve<OutboundSkillPersister>()
+				container.Resolve<IOutboundSkillPersister>()
 								 .Should().Not.Be.Null();
 			}
-		} 
+		}
+
+		//IOutboundCampaignPersister
+		[Test]
+		public void ShouldResolveOutboundCampaignPersister()
+		{
+			using (var container = _containerBuilder.Build())
+			{
+				container.Resolve<IOutboundCampaignPersister>()
+								 .Should().Not.Be.Null();
+			}
+		}
 	}
 }
