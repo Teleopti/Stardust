@@ -50,7 +50,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 				.Call(factoryMock.Statistics)
 				.Return(stat)
 				.Repeat.Any();
-			stat.IsStatisticsEnabled = true;
 			StateHolderProxyHelper.ClearAndSetStateHolder(mocks, ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person, null, SetupFixtureForAssembly.ApplicationData, SetupFixtureForAssembly.DataSource, stateMock);
 		}
 
@@ -66,16 +65,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			Assert.IsNotNull(target);
 			Assert.AreSame(factoryMock, target.SessFactory);
 			mocks.VerifyAll();
-		}
-
-		/// <summary>
-		/// Verifies the session factory is not null.
-		/// </summary>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "Teleopti.Ccc.InfrastructureTest.UnitOfWork.NHibernateUnitOfWorkFactoryFake"), Test]
-		[ExpectedException(typeof (ArgumentNullException))]
-		public void VerifySessionFactoryIsNotNull()
-		{
-			new NHibernateUnitOfWorkFactoryFake(null);
 		}
 
 		/// <summary>
