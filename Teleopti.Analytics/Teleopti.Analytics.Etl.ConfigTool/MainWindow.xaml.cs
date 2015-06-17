@@ -166,14 +166,6 @@ namespace Teleopti.Analytics.Etl.ConfigTool
 			get { return ConfigurationManager.AppSettings["datamartConnectionString"]; }
 		}
 
-		private TimeZoneInfo defaultTimeZone
-		{
-			get
-			{
-				return TimeZoneInfo.FindSystemTimeZoneById(_baseConfiguration.TimeZoneCode);
-			}
-		}
-
 		public void Dispose()
 		{
 			Dispose(true);

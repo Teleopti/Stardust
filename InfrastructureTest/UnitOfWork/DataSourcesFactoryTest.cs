@@ -171,33 +171,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			return XElement.Parse(str);
 		}
 
-		private static XElement xmlTextWithAuthenticationSettings(string authenticationSettings)
-		{
-			var str = string.Concat(
-				 @"<?xml version=""1.0"" encoding=""utf-8"" ?>
-						 <datasource>
-						  <hibernate-configuration  xmlns=""urn:nhibernate-configuration-2.2"" >
-							 <session-factory name=""test"">
-								<!-- properties -->
-								<property name=""connection.provider"">NHibernate.Connection.DriverConnectionProvider</property>
-								<property name=""connection.driver_class"">NHibernate.Driver.SqlClientDriver</property>
-								<property name=""connection.connection_string"">",
-			ConnectionStringHelper.ConnectionStringUsedInTests,
-				 @"</property>
-								<property name=""show_sql"">false</property> 
-								<property name=""dialect"">NHibernate.Dialect.MsSql2008Dialect</property>
-								<property name=""default_schema"">nhtest2.dbo</property>
-							 </session-factory >
-						  </hibernate-configuration>
-						  <matrix name=""matrixName""><connectionString>",
-			ConnectionStringHelper.ConnectionStringUsedInTestsMatrix,
-					  @"</connectionString></matrix>
-						  ", authenticationSettings, @"
-						</datasource>
-					 ");
-			return XElement.Parse(str);
-		}
-
 		private static XElement nonValidXmlTextWithAuthenticationSettings(string authenticationSettings)
 		{
 			var str = string.Concat(

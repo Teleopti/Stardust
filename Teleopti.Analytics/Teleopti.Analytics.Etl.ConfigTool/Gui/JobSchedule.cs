@@ -293,14 +293,6 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 			radioButtonRelativePeriodForecast.Checked = true;
 		}
 
-		private void initiateForecastDatePeriodForIntraday()
-		{
-			groupBoxForecast.Enabled = true;
-			numericUpDownRelativePeriodStartForecast.Value = -1;
-			numericUpDownRelativePeriodEndForecast.Value = 7;
-			radioButtonRelativePeriodForecast.Checked = true;
-		}
-
 		private void initiateQueueStatisticsDatePeriod()
 		{
 			groupBoxQueueStats.Enabled = true;

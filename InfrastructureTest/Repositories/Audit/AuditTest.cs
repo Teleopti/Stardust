@@ -70,17 +70,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			}
 		}
 
-		private static void turnOffAudit()
-		{
-			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				var auditSettingRep = new AuditSettingRepository(UnitOfWorkFactory.CurrentUnitOfWork());
-				var auditSetting = auditSettingRep.Read();
-				auditSetting.TurnOffScheduleAuditing(UnitOfWorkFactory.Current.AuditSetting);
-				//not persisting this one
-			}
-		}
-
 		protected virtual void AuditSetup()
 		{
 		}
