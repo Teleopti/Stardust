@@ -18,13 +18,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 {
 	public class FileConfigurationReader : IConfigurationReader
 	{
+		private readonly IReadDataSourceConfiguration _readDataSourceConfiguration;
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(FileConfigurationReader));
-		private readonly string _xmlFilePath;
 		private static readonly object LockObject = new object();
 
-		public FileConfigurationReader(string xmlFilePath)
+		public FileConfigurationReader(IReadDataSourceConfiguration readDataSourceConfiguration)
 		{
-			_xmlFilePath = xmlFilePath;
+			_readDataSourceConfiguration = readDataSourceConfiguration;
 		}
 
 		public void ReadConfiguration(MessageSenderCreator creator, Func<IMessageBrokerComposite> messageBroker)
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 							new CurrentHttpContext(),
 							messageBroker),
 						messageBroker(),
-						new ReadDataSourceConfigurationFromNhibFiles(new NhibFilePathFixed(_xmlFilePath), new ParseNhibFile()));
+						_readDataSourceConfiguration);
 				application.Start(new BasicState(), null, ConfigurationManager.AppSettings.ToDictionary(), true);
 
 				Logger.Info("Initialized application");
@@ -114,8 +114,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			{
 				xmlPath = AppDomain.CurrentDomain.BaseDirectory;
 			}
+			var confReader = new ReadDataSourceConfigurationFromNhibFiles(new NhibFilePathFixed(xmlPath), new ParseNhibFile());
 
-			return new FileConfigurationReader(xmlPath);
+			return new FileConfigurationReader(confReader);
 		}
 	}
 
