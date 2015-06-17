@@ -5,7 +5,6 @@
 		<MountKDirectory>SetFromOutside</MountKDirectory>
 		<SourceDir>$(MountKDirectory)\src</SourceDir>
 		<CCCVersion>SetFromOutside</CCCVersion>
-		
 		<WseCompiler>C:\Program Files (x86)\Altiris\Wise\WiseScript Package Editor\Wise32.exe</WseCompiler>
 		<WsiCompiler>C:\Program Files (x86)\Altiris\Wise\Windows Installer Editor\WfWI.exe</WsiCompiler>
 	</PropertyGroup>
