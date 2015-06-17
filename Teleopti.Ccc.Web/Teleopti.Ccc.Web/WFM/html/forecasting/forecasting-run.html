@@ -39,6 +39,7 @@
 						</div>
 						<div ng-if="workload.loaded" class="wfm-block">
 							<c3chart bindto-id="{{workload.chartId}}" chart-data="workload.chartData" chart-columns="dataColumns" chart-x="dataX" show-subchart="true" enable-zoom="true">
+								<chart-axes values-x="date" y="vc" y2="vaht,vacw" />
 								<chart-axis>
 									<chart-axis-x axis-id="date" axis-type="timeseries">
 										<chart-axis-x-tick tick-format="%Y-%m-%d" />
@@ -46,6 +47,7 @@
 								</chart-axis>
 								<chart-axis>
 									<chart-axis-y axis-id="y" axis-position="outer-middle" axis-label="Number of Calls" />
+									<chart-axis-y axis-id="y2" axis-position="outer-middle" axis-label="Time Spent" />
 								</chart-axis>
 							</c3chart>
 						</div>

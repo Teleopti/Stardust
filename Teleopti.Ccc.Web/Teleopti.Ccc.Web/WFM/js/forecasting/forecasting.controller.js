@@ -39,7 +39,11 @@ angular.module('wfm.forecasting', [])
 				workloads.push({ WorkloadId: workload.Id, ForecastMethodId: workload.Method });
 			});
 
-			$scope.dataColumns = [{ id: "vc", type: "line", name: "Number of Calls" }];
+			$scope.dataColumns = [
+				{ id: "vc", type: "line", name: "Calls" },
+				{ id: "vaht", type: "bar", name: "Talk time" },
+				{ id: "vacw", type: "bar", name: "ACW" }
+			];
 			$scope.dataX = { id: "date" };
 
 			$scope.isQueueStatisticsEnabled = false;
