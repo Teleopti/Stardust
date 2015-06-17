@@ -63,7 +63,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		{
 			get
 			{
-				if (_tenantNames == null || _tenantNames.Count == 0)
+				if (_tenantNames.Count == 0)
 				{
 					throw new DataSourceException("No Tenants found");
 				}
@@ -107,7 +107,11 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			_repositoryFactory = new RepositoryFactory();
 			_logonService =
 				new LogOnService(_logOnOff);
-			_tenantNames = TenantCreator.TenantNames(_nhibConfPath);
+			_tenantNames = new List<ITenantName>();
+			StateHolder.Instance.StateReader.ApplicationScopeData.DoOnAllTenants_AvoidUsingThis(ds =>
+			{
+				_tenantNames.Add(new TenantName{DataSourceName = ds.DataSourceName});
+			});
 		}
 
 
