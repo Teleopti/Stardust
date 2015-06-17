@@ -64,9 +64,11 @@ namespace Teleopti.Ccc.Win.Optimization
             return true;
         }
 
-        public bool IsOptimizationStepsChecked()
+        public bool IsFlexibleWorkTimeOptimizationStepsChecked()
         {
-	        if (_toggleManager.IsEnabled(Toggles.Scheduler_OptimizeFlexibleDayOffs_22409))return checkBoxShiftsForFlexibleWorkTime.Checked;
+	        if (_toggleManager.IsEnabled(Toggles.Scheduler_OptimizeFlexibleDayOffs_22409))
+				return checkBoxShiftsForFlexibleWorkTime.Checked;
+
             return checkBoxShiftsForFlexibleWorkTime.Checked || checkBoxDaysOffFromFlexibleWorkTime.Checked;
         }
 

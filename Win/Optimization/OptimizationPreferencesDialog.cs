@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -176,20 +178,25 @@ namespace Teleopti.Ccc.Win.Optimization
 		{
 			if (ValidateData(ExchangeDataOption.ControlsToDataSource))
 			{
-				if (!extraPreferencesPanel1.ValidateTeamBlockCombination())
+				if (!extraPreferencesPanel1.ValidateTeamBlockSameDaysOffCombination())
 				{
-					MessageBox.Show(this, UserTexts.Resources.IllegalTeamBlockCombination, UserTexts.Resources.OptimizationOptionMessageBox, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+					MessageBox.Show(this, Resources.IllegalTeamBlockCombination, Resources.OptimizationOptionMessageBox, MessageBoxButtons.OK, MessageBoxIcon.Warning);
 					return;
 				}
 
-				if (!validateOptimizationSteps())
+				if (!validateNotImplementedOptimizationSteps())
 				{
-					MessageBox.Show(this, UserTexts.Resources.UnsupportedOptimizationSteps, UserTexts.Resources.OptimizationOptionMessageBox, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+					var steps = Resources.ShiftsForFlexibleWorkTime;
+					if (!_toggleManager.IsEnabled(Toggles.Scheduler_OptimizeFlexibleDayOffs_22409))
+						steps = steps + ", " + Resources.DaysOffFromFlexibleWorkTime;
+
+					var message = String.Format(CultureInfo.CurrentCulture, Resources.UnsupportedTeamBlockOptimizationStep, steps);
+					MessageBox.Show(this, message, Resources.OptimizationOptionMessageBox, MessageBoxButtons.OK, MessageBoxIcon.Warning);
 				}
 
 				if (!validateTimeBetweenDaysAndSameShift())
 				{
-					MessageBox.Show(this, UserTexts.Resources.UnSupportedOptimizationBlockAndTimeBetweendays, UserTexts.Resources.OptimizationOptionMessageBox, MessageBoxButtons.OK, MessageBoxIcon.Warning);	
+					MessageBox.Show(this, Resources.UnSupportedOptimizationBlockAndTimeBetweendays, Resources.OptimizationOptionMessageBox, MessageBoxButtons.OK, MessageBoxIcon.Warning);	
 				}
 
 				ExchangeData(ExchangeDataOption.ControlsToDataSource);
@@ -211,9 +218,12 @@ namespace Teleopti.Ccc.Win.Optimization
 			}
 		}
 
-		private bool validateOptimizationSteps()
+		private bool validateNotImplementedOptimizationSteps()
 		{
-			if (extraPreferencesPanel1.IsTeamOrBlockChecked() && generalPreferencesPanel1.IsOptimizationStepsChecked())
+			if (!extraPreferencesPanel1.IsTeamOrBlockSelected())
+				return true;
+
+			if(generalPreferencesPanel1.IsFlexibleWorkTimeOptimizationStepsChecked())
 				return false;
 
 			return true;

@@ -12263,4 +12263,8 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="PersonFinderFieldNote" xml:space="preserve">
     <value>Notering</value>
   </data>
+  <data name="UnsupportedTeamBlockOptimizationStep" xml:space="preserve">
+    <value>Optimeringssteg(en) {0} kommer inte att köras om team eller block är valt</value>
+    <comment>Optimization step(s) {0} are not executed when team or block are selected.</comment>
+  </data>
 </root>

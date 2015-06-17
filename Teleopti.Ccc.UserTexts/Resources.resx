@@ -13152,4 +13152,8 @@ Reduce the complexity to use these shifts.</value>
   <data name="TargetDayOffNotFulfilledMessage" xml:space="preserve">
     <value>Target of {0} Day Offs is not fulfilled</value>
   </data>
+  <data name="UnsupportedTeamBlockOptimizationStep" xml:space="preserve">
+    <value>Optimization step(s) {0} are not executed when team or block are selected.</value>
+    <comment>Optimization step(s) {0} are not executed when team or block are selected.</comment>
+  </data>
 </root>

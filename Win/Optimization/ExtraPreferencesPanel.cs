@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.Win.Optimization
 	public partial class ExtraPreferencesPanel : BaseUserControl, IDataExchange
     {
         private IList<GroupPageLight> _groupPageOnTeams;
-        private IList<GroupPageLight> _groupPageOnCompareWith;
         private IEnumerable<IActivity> _availableActivity;
         private GroupPageLight _singleAgentEntry;
 
@@ -28,11 +27,9 @@ namespace Teleopti.Ccc.Win.Optimization
         {
             Preferences = extraPreferences;
 		    _availableActivity = availableActivity;
-			_groupPageOnCompareWith = groupPagesProvider.GetGroups(false);
 			_groupPageOnTeams = groupPagesProvider.GetGroups(false);
 			_singleAgentEntry = GroupPageLight.SingleAgentGroup(Resources.NoTeam);
 			_groupPageOnTeams.Insert(0, _singleAgentEntry);
-
 			tableLayoutPanel2.RowStyles[1].Height = 0;
 			tableLayoutPanel2.RowStyles[0].SizeType = SizeType.Percent;
 			tableLayoutPanel2.RowStyles[0].Height = 100;
@@ -116,9 +113,9 @@ namespace Teleopti.Ccc.Win.Optimization
 			setTeamBlockPerData();
 		}
 
-		public bool ValidateTeamBlockCombination()
+		public bool ValidateTeamBlockSameDaysOffCombination()
 		{
-			if (!isTeamEnabled() || !isBlockEnabled())
+			if (!isTeamSelected() || !isBlockSelected())
 				return true;
 
 			if ((BlockFinderType)comboBoxBlockType.SelectedValue != BlockFinderType.BetweenDayOff)
@@ -130,10 +127,11 @@ namespace Teleopti.Ccc.Win.Optimization
 			return false;
 		}
 
-	    public bool IsTeamOrBlockChecked()
+	    public bool IsTeamOrBlockSelected()
 	    {
-            if (BlockFinderType.SingleDay != (BlockFinderType)comboBoxBlockType.SelectedValue || isTeamEnabled())
+			if (isBlockSelected() || isTeamSelected())
                 return true;
+
             return false;
 	    }
 
@@ -144,7 +142,7 @@ namespace Teleopti.Ccc.Win.Optimization
 
 		public bool ValidateDefaultValuesForTeam()
 		{
-			if (isTeamEnabled())
+			if (isTeamSelected())
 			{
 				//check if none of the options are not checked. Set the default values
 				if (
@@ -157,7 +155,7 @@ namespace Teleopti.Ccc.Win.Optimization
 
 		public bool ValidateDefaultValuesForBlock()
 		{
-			if (isBlockEnabled())
+			if (isBlockSelected())
 			{
 				if (!(checkBoxBlockSameShift.Checked || checkBoxBlockSameStartTime.Checked || checkBoxBlockSameShiftCategory.Checked))
 					return false;
@@ -175,10 +173,10 @@ namespace Teleopti.Ccc.Win.Optimization
 
 		private void getTeamBlockPerDataToSave()
 		{
-			Preferences.UseTeamBlockOption = isBlockEnabled();
+			Preferences.UseTeamBlockOption = isBlockSelected();
 			Preferences.BlockTypeValue = (BlockFinderType) comboBoxBlockType.SelectedValue;
 
-			Preferences.UseTeams = isTeamEnabled();
+			Preferences.UseTeams = isTeamSelected();
 			Preferences.TeamGroupPage = (GroupPageLight) comboBoxTeamGroupPage.SelectedItem;
 
 			Preferences.UseBlockSameEndTime = false;
@@ -189,27 +187,27 @@ namespace Teleopti.Ccc.Win.Optimization
 
 		private void comboBoxTeamBlockType_SelectedValueChanged(object sender, EventArgs e)
 		{
-			  var isEnabled = isBlockEnabled();
+			  var isEnabled = isBlockSelected();
 			  checkBoxBlockSameShiftCategory.Enabled = isEnabled;
 			  checkBoxBlockSameStartTime.Enabled = isEnabled;
 			  checkBoxBlockSameShift.Enabled = isEnabled;
-			if(isBlockEnabled() &&  !(checkBoxBlockSameShiftCategory.Checked  || checkBoxBlockSameStartTime.Checked || checkBoxBlockSameShift.Checked  ))
+			if(isBlockSelected() &&  !(checkBoxBlockSameShiftCategory.Checked  || checkBoxBlockSameStartTime.Checked || checkBoxBlockSameShift.Checked  ))
 				checkBoxBlockSameShiftCategory.Checked = true;
 		}
 
 		  private void comboBoxGroupPageOnTeams_SelectedValueChanged(object sender, EventArgs e)
 		  {
-			  var isEnabled = isTeamEnabled();
+			  var isEnabled = isTeamSelected();
 			  checkBoxTeamSameDaysOff.Enabled = isEnabled;
 			  checkBoxTeamSameShiftCategory.Enabled = isEnabled;
 			  checkBoxTeamSameStartTime.Enabled = isEnabled;
 			  checkBoxTeamSameEndTime.Enabled = isEnabled;
 			  checkBoxTeamSameActivity.Enabled = isEnabled;
-			  if (isTeamEnabled() && !(checkBoxTeamSameShiftCategory.Checked || checkBoxTeamSameStartTime.Checked || checkBoxTeamSameEndTime.Checked || checkBoxTeamSameActivity.Checked ))
+			  if (isTeamSelected() && !(checkBoxTeamSameShiftCategory.Checked || checkBoxTeamSameStartTime.Checked || checkBoxTeamSameEndTime.Checked || checkBoxTeamSameActivity.Checked ))
 				  checkBoxTeamSameShiftCategory.Checked = true;
 		  }
 
-		private bool isTeamEnabled()
+		private bool isTeamSelected()
 		{
 			if (comboBoxTeamGroupPage.SelectedValue == null)
 				return false;
@@ -217,7 +215,7 @@ namespace Teleopti.Ccc.Win.Optimization
 			return comboBoxTeamGroupPage.SelectedValue.ToString() != _singleAgentEntry.Key;
 		}
 
-		private bool isBlockEnabled()
+		private bool isBlockSelected()
 		{
 			if (comboBoxBlockType.SelectedValue == null)
 				return false;
