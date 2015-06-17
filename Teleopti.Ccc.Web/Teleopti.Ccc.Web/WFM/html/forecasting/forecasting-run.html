@@ -13,7 +13,7 @@
 						{{workload.Name}}
 						<span class="pull-right success" ng-if="workload.IsSuccess"><md-tooltip>Success</md-tooltip><i class="mdi mdi-check"></i></span>
 						<span class="pull-right" ng-if="workload.IsFailed"><md-tooltip>Failed</md-tooltip><i class="mdi mdi-close"></i></span>
-						<i class="mdi mdi-chart-bar forecasting-chart-bar" ng-click="openModal(workload);$event.stopPropagation();" ng-if="true"><md-tooltip>View result chart</md-tooltip></i>
+						<i class="mdi mdi-chart-bar forecasting-chart-bar" ng-click="openModal(workload);$event.stopPropagation();" ng-if="workload.IsSuccess && isQueueStatisticsEnabled"><md-tooltip>View result chart</md-tooltip></i>
 						<div ng-include="'forecasting-result-chart.html'" class="forecasting-chart"></div>
 						<md-progress-linear ng-if="workload.ShowProgress" md-mode="indeterminate"></md-progress-linear>
 					</div>
