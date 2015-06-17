@@ -105,21 +105,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		}
 	}
 
-	public class ConfigurationReaderFactory
-	{
-		public IConfigurationReader Reader()
-		{
-			var xmlPath = ConfigurationManager.AppSettings["ConfigPath"];
-			if (string.IsNullOrWhiteSpace(xmlPath))
-			{
-				xmlPath = AppDomain.CurrentDomain.BaseDirectory;
-			}
-			var confReader = new ReadDataSourceConfigurationFromNhibFiles(new NhibFilePathFixed(xmlPath), new ParseNhibFile());
-
-			return new FileConfigurationReader(confReader);
-		}
-	}
-
 	public interface IConfigurationReader
 	{
 		void ReadConfiguration(MessageSenderCreator creator, Func<IMessageBrokerComposite> messageBroker);
