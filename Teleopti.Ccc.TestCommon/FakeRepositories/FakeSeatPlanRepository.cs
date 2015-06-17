@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<ISeatPlan> LoadAll()
 		{
-			throw new NotImplementedException();
+			return _seatPlans;
 		}
 
 		public ISeatPlan Load (Guid id)
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IEnumerator<ISeatPlan> GetEnumerator()
 		{
-			throw new NotImplementedException();
+			return _seatPlans.GetEnumerator();
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()

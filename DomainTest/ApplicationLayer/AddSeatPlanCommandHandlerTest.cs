@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		{
 			_currentScenario = new FakeCurrentScenario();
 			_seatBookingRepository = new FakeSeatBookingRepository();
+			_seatPlanRepository = new FakeSeatPlanRepository();
 		}
 
 		#region helper methods
@@ -46,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		{
 			return new AddSeatPlanCommandHandler(new FakeScheduleDataReadScheduleRepository(personAssignment),
 				new FakeTeamRepository(teams), new FakePersonRepository(people.ToArray()), _currentScenario, publicNoteRepository,
-				new FakeSeatMapRepository(seatMapLocations.ToArray()), _seatBookingRepository);
+				new FakeSeatMapRepository(seatMapLocations.ToArray()), _seatBookingRepository, _seatPlanRepository);
 		}
 
 		private AddSeatPlanCommandHandler setupHandler(ITeam[] teams, IEnumerable<IPerson> people, IEnumerable<ISeatMapLocation> seatMapLocations, params IPersonAssignment[] personAssignment)
@@ -310,7 +311,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var endDateDay1 = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
 			var startDateDay2 = startDateDay1.AddDays(1);
 			var endDateDay2 = startDateDay2.AddDays(1);
-			
+
 			var startDateOnlyDay1 = new DateOnly(startDateDay1);
 			var startDateOnlyDay2 = new DateOnly(startDateDay2);
 			var teams = new[]
@@ -620,7 +621,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var team = addTeam("Team");
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDate), team);
-			var personAssignment = addAssignment(person, startDate, startDate.AddHours (8));
+			var personAssignment = addAssignment(person, startDate, startDate.AddHours(8));
 			var personAssignment2 = addAssignment(person, endDate, endDate.AddHours(8));
 
 			var note = new PublicNote(person, new DateOnly(startDate), _currentScenario.Current(), "Original Note");
@@ -631,14 +632,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var command = addSeatPlanCommand(startDate, endDate, new[] { seatMapLocation }, new[] { team });
 			target.Handle(command);
-			
+
 			var seatPlanDayOne = _seatPlanRepository.First();
 			var seatPlanDayTwo = _seatPlanRepository.Last();
 			seatPlanDayOne.Date.Date.Should().Be(command.StartDate.Date);
 			seatPlanDayOne.Status.Should().Be(SeatPlanStatus.Ok);
 			seatPlanDayTwo.Date.Date.Should().Be(command.EndDate.Date);
 			seatPlanDayTwo.Status.Should().Be(SeatPlanStatus.Ok);
-			
+
 		}
 	}
 }
