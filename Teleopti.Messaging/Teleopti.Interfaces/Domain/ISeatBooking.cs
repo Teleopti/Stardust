@@ -14,4 +14,7 @@ namespace Teleopti.Interfaces.Domain
 		bool Intersects (DateTimePeriod period);
 		void Book (ISeat seat);
 	}
+
+	
+
 }

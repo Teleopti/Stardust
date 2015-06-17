@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 		private void loadExistingSeatBookings(SeatMapLocation rootSeatMapLocation)
 		{
-
+			//Robtodo: Review - why are we doing this? are persisted seat bookings not already associated with seats??
 			foreach (var seat in rootSeatMapLocation.Seats)
 			{
 				var seatBookings = _existingSeatBookings.Where(booking => Equals(booking.Seat, seat)).ToList();
@@ -121,8 +121,12 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		private void allocateSeats(SeatAllocator seatAllocator)
 		{
 			seatAllocator.AllocateSeats(getSeatBookingRequests().ToArray());
+
+			//Robtodo: we can persist the seat plan here?
 		
 			persistBookings(_bookingsWithDateAndTeam);
+
+			//Robtodo: we can see the seatbookings that have not been allocated seats and can use these to generate errors.
 
 			_seatBookingRepository.AddRange(_bookingsWithDateAndTeam
 				.Where(groupedBookings => groupedBookings.SeatBooking.Seat != null && !_existingSeatBookings.Contains(groupedBookings.SeatBooking))

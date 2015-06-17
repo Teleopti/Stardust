@@ -222,6 +222,7 @@
     <Compile Include="Repositories\PersonForScheduleFinderTest.cs" />
     <Compile Include="Repositories\PlanningPeriodRepositoryTest.cs" />
     <Compile Include="Repositories\SeatBookingRepositoryTest.cs" />
+    <Compile Include="Repositories\SeatPlanRepositoryTest.cs" />
     <Compile Include="RestoreDatabaseAfterTestAttribute.cs" />
     <Compile Include="Rta\DatabaseReaderTest.cs" />
     <Compile Include="Rta\InfrastructureTest.cs" />
