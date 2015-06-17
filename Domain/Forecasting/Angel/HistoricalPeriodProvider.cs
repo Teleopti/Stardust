@@ -33,13 +33,13 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			var zeroTime = new DateTime(1, 1, 1);
 			var years = (zeroTime + (availablePeriod.EndDate.Date.AddDays(1) - availablePeriod.StartDate.Date)).Year - 1;
 
-			var lastDayInFirstPeriod = years >= 2
-				? new DateOnly(availablePeriod.EndDate.Date.AddYears(-1))
-				: availablePeriod.StartDate.AddDays(new TimeSpan((availablePeriod.EndDate.Date.AddDays(1) - availablePeriod.StartDate.Date).Ticks/2).Days);
+			var firstDayInSecondPart = years >= 2
+				? new DateOnly(availablePeriod.EndDate.Date.AddYears(-1)).AddDays(1)
+				: availablePeriod.StartDate.AddDays((int)Math.Ceiling(new TimeSpan((availablePeriod.EndDate.Date.AddDays(1) - availablePeriod.StartDate.Date).Ticks/2).TotalDays));
 
 			return new Tuple<DateOnlyPeriod, DateOnlyPeriod>(
-				new DateOnlyPeriod(availablePeriod.StartDate, lastDayInFirstPeriod),
-				new DateOnlyPeriod(lastDayInFirstPeriod.AddDays(1), availablePeriod.EndDate));
+				new DateOnlyPeriod(availablePeriod.StartDate, firstDayInSecondPart.AddDays(-1)),
+				new DateOnlyPeriod(firstDayInSecondPart, availablePeriod.EndDate));
 		}
 	}
 }

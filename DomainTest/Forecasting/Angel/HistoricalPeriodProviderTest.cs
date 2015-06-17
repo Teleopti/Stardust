@@ -70,5 +70,15 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			result.Item2.StartDate.Should().Be.EqualTo(new DateOnly(2014, 3, 17));
 			result.Item2.EndDate.Should().Be.EqualTo(new DateOnly(2015, 3, 15));
 		}
+
+		[Test]
+		public void EvaluationPartShouldBeOneThirdIfAvailablePeriodIsLessThan2Years2()
+		{
+			var result = HistoricalPeriodProvider.DivideIntoTwoPeriods(new DateOnlyPeriod(2013, 3, 1, 2013, 3, 7));
+			result.Item1.StartDate.Should().Be.EqualTo(new DateOnly(2013, 3, 1));
+			result.Item1.EndDate.Should().Be.EqualTo(new DateOnly(2013, 3, 4));
+			result.Item2.StartDate.Should().Be.EqualTo(new DateOnly(2013, 3, 5));
+			result.Item2.EndDate.Should().Be.EqualTo(new DateOnly(2013, 3, 7));
+		}
 	}
 }
