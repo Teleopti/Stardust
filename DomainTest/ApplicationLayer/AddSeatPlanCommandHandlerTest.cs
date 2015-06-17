@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 	{
 		private ICurrentScenario _currentScenario;
 		private FakeSeatBookingRepository _seatBookingRepository;
+		private FakeSeatPlanRepository _seatPlanRepository;
 
 		[SetUp]
 		public void SetUp()
@@ -608,6 +609,36 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			Assert.IsTrue(_seatBookingRepository.LoadSeatBookingsForDay(new DateOnly(date)).Count() == 3);
 			Assert.IsTrue(!_seatBookingRepository.LoadSeatBookingsForDay(new DateOnly(date).AddDays(1)).Any());
 
+		}
+
+
+		[Test]
+		public void ShouldPersistSeatPlans()
+		{
+			var startDate = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
+			var endDate = new DateTime(2015, 1, 21, 0, 0, 0, DateTimeKind.Utc);
+
+			var team = addTeam("Team");
+			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDate), team);
+			var personAssignment = addAssignment(person, startDate, startDate.AddHours (8));
+			var personAssignment2 = addAssignment(person, endDate, endDate.AddHours(8));
+
+			var note = new PublicNote(person, new DateOnly(startDate), _currentScenario.Current(), "Original Note");
+			var publicNoteRepository = new FakePublicNoteRepository(note);
+			var seatMapLocation = addLocation("Location", null, new Seat("Seat One", 1));
+
+			var target = setupHandler(new[] { team }, new[] { person }, publicNoteRepository, new[] { seatMapLocation }, personAssignment, personAssignment2);
+
+			var command = addSeatPlanCommand(startDate, endDate, new[] { seatMapLocation }, new[] { team });
+			target.Handle(command);
+			
+			var seatPlanDayOne = _seatPlanRepository.First();
+			var seatPlanDayTwo = _seatPlanRepository.Last();
+			seatPlanDayOne.Date.Date.Should().Be(command.StartDate.Date);
+			seatPlanDayOne.Status.Should().Be(SeatPlanStatus.Ok);
+			seatPlanDayTwo.Date.Date.Should().Be(command.EndDate.Date);
+			seatPlanDayTwo.Status.Should().Be(SeatPlanStatus.Ok);
+			
 		}
 	}
 }
