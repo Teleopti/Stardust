@@ -15,7 +15,7 @@ SET CustomPath=%~6
 
 ::Instance were the Baseline will  be restored
 SET INSTANCE=%SqlInstanceName%
-IF "%INSTANCE%"=="" SET INSTANCE=%COMPUTERNAME%
+IF "%INSTANCE%"=="" SET INSTANCE=.
 
 IF "%Silent%"=="" SET /A Silent=0
 IF NOT "%DefaultDB%"=="" SET IFFLOW=y
