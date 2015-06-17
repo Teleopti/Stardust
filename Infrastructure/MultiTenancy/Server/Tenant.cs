@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data.SqlClient;
+using NHibernate.Cfg;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 {
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 			Name = tenantName;
 			ApplicationConnectionString = string.Empty;
 			AnalyticsConnectionString = string.Empty;
-			ApplicationNHibernateConfig = new Dictionary<string, string>();
+			ApplicationNHibernateConfig = new Dictionary<string, string>{{Environment.CommandTimeout, "60"}};
 		}
 
 		public virtual string Name { get; protected set; }

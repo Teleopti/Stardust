@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NHibernate.Exceptions;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -8,6 +9,7 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData;
+using Environment = NHibernate.Cfg.Environment;
 
 namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 {
@@ -87,22 +89,6 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 		}
 
 		[Test]
-		public void NoConfigsShouldReturnEmptyInstance()
-		{
-			var tenant = new Tenant(RandomName.Make());
-			target.Persist(tenant);
-			tenantUnitOfWorkManager.CurrentSession().Flush();
-
-			var result = tenantUnitOfWorkManager.CurrentSession()
-				.CreateQuery("select t from Tenant t where t.Name=:name")
-				.SetString("name", tenant.Name)
-				.UniqueResult<Tenant>();
-
-			result.ApplicationNHibernateConfig
-				.Should().Be.Empty();
-		}
-
-		[Test]
 		public void InvalidApplicationConnectionString()
 		{
 			var tenant = new Tenant(RandomName.Make());
@@ -116,6 +102,21 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			var tenant = new Tenant(RandomName.Make());
 			Assert.Throws<ArgumentException>(() =>
 				tenant.SetAnalyticsConnectionString(RandomName.Make()));
+		}
+
+		[Test]
+		public void ShouldSetCommandTimeoutWithDefaultValueToFollowOldNhibFile()
+		{
+			//personally I think this could be set in code instead... (and be overriden in entity if needed). But I do as Anders said.
+			var tenant = new Tenant(RandomName.Make());
+			target.Persist(tenant);
+			tenantUnitOfWorkManager.CurrentSession().Flush();
+			var result = tenantUnitOfWorkManager.CurrentSession()
+				.CreateQuery("select t from Tenant t where t.Name=:name")
+				.SetString("name", tenant.Name)
+				.UniqueResult<Tenant>();
+			result.ApplicationNHibernateConfig.Single(cfg => cfg.Key == Environment.CommandTimeout).Value
+				.Should().Be.EqualTo("60");
 		}
 
 		[SetUp]
