@@ -25,10 +25,10 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 				});
 
 				var getQueueStatistics = function (workload, methodId) {
-					workload.queueStatisticsLoaded = false;
+					workload.queueStatisticsLoading = true;
 					$http.post("../api/Forecasting/QueueStatistics", JSON.stringify({ WorkloadId: workload.Id, MethodId: methodId })).
 						success(function (data, status, headers, config) {
-							workload.queueStatisticsLoaded = true;
+							workload.queueStatisticsLoading = false;
 							angular.forEach(data.QueueStatisticsDays, function (day) {
 								day.date = new Date(Date.parse(day.date));
 							});
@@ -36,7 +36,7 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 						}).
 						error(function (data, status, headers, config) {
 							$scope.error = { message: "Failed to get queue statisctics." };
-							workload.queueStatisticsLoaded = true;
+							workload.queueStatisticsLoading = false;
 						});
 				};
 
@@ -44,11 +44,11 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 					workload.modalLaunch = true;
 					workload.noHistoricalDataForEvaluation = false;
 					workload.noHistoricalDataForForecasting = false;
-					workload.evaluationLoaded = false;
+					workload.evaluationLoading = true;
 					
 					$http.post("../api/Forecasting/Evaluate", JSON.stringify({ WorkloadId: workload.Id })).
 						success(function (data, status, headers, config) {
-							workload.evaluationLoaded = true;
+							workload.evaluationLoading = false;
 							angular.forEach(data.Days, function(day) {
 								day.date = new Date(Date.parse(day.date));
 							});
@@ -76,7 +76,7 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 						}).
 						error(function(data, status, headers, config) {
 							$scope.error = { message: "Failed to do the evaluate." };
-							workload.evaluationLoaded = true;
+							workload.evaluationLoading = false;
 						});
 				};
 
