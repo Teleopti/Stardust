@@ -14,6 +14,7 @@ using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -32,10 +33,10 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		private IRepositoryFactory _repositoryFactory;
 		private List<ITenantName> _tenantNames;
 
-		public LogOnHelper(IReadDataSourceConfiguration readDataSourceConfiguration)
+		public LogOnHelper(IReadDataSourceConfiguration readDataSourceConfiguration, ITenantUnitOfWork tenantUnitOfWork)
 		{
 			_readDataSourceConfiguration = readDataSourceConfiguration;
-			initializeStateHolder();
+			initializeStateHolder(tenantUnitOfWork);
 		}
 
 		public IList<IBusinessUnit> GetBusinessUnitCollection()
@@ -84,7 +85,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			return false;
 		}
 
-		private void initializeStateHolder()
+		private void initializeStateHolder(ITenantUnitOfWork tenantUnitOfWork)
 		{
 			// Code that runs on application startup
 			var dataSourcesFactory = new DataSourcesFactory(new EnversConfiguration(), new NoMessageSenders(), 
@@ -94,8 +95,12 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				);
 			var application = new InitializeApplication(dataSourcesFactory, null, _readDataSourceConfiguration);
 
-			if (!StateHolder.IsInitialized)
-				application.Start(new StateManager(), null, ConfigurationManager.AppSettings.ToDictionary(), false);
+			using (tenantUnitOfWork.Start())
+			{
+				//RK: why is this if needed!?
+				if (!StateHolder.IsInitialized)
+					application.Start(new StateManager(), null, ConfigurationManager.AppSettings.ToDictionary(), false);
+			}
 
 			_logOnOff = new LogOnOff(new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory()));
 			_repositoryFactory = new RepositoryFactory();

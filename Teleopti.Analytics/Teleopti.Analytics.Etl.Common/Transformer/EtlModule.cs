@@ -1,15 +1,21 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
+using System.Reflection;
 using Autofac;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Interfaces.Infrastructure;
+using Module = Autofac.Module;
 
 namespace Teleopti.Analytics.Etl.Common.Transformer
 {
@@ -24,6 +30,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 
 		protected override void Load(ContainerBuilder builder)
 		{
+			//TODO: tenant - use tenantmodule instead (with some override for special cases?)?
 			builder.Register(c =>
 			{
 				var configReader = c.Resolve<IConfigReader>();
@@ -36,6 +43,21 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 				.SingleInstance();
 			builder.RegisterType<FindTenantLogonInfoUnsecured>().As<IFindLogonInfo>().SingleInstance();
 			builder.RegisterType<TenantLogonInfoLoader>().As<ITenantLogonInfoLoader>().SingleInstance();
+			builder.RegisterType<LoadAllTenants>().As<ILoadAllTenants>().SingleInstance();
+			if (_configuration.Toggle(Toggles.Tenant_RemoveNhibFiles_33685))
+			{
+				builder.RegisterType<ReadDataSourceConfiguration>().As<IReadDataSourceConfiguration>().SingleInstance();
+			}
+			else
+			{
+				builder.Register(c =>
+				{
+					var path = ConfigurationManager.AppSettings["nhibConfPath"];
+					if (string.IsNullOrEmpty(path))
+						path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+					return new ReadDataSourceConfigurationFromNhibFiles(new NhibFilePathFixed(path), new ParseNhibFile());
+ 				}).As<IReadDataSourceConfiguration>().SingleInstance();
+			}
 		}
 
 		public class TenantLogonInfoLoader : ITenantLogonInfoLoader

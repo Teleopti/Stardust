@@ -5,6 +5,7 @@ using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Messaging.Client;
@@ -19,9 +20,9 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 		private ISignalRClient _messageClient;
 		private IMessageSender _messageSender;
 
-		public JobHelper(IReadDataSourceConfiguration readDataSourceConfiguration)
+		public JobHelper(IReadDataSourceConfiguration readDataSourceConfiguration, ITenantUnitOfWork tenantUnitOfWork)
 		{
-			_logHelp = new LogOnHelper(readDataSourceConfiguration);
+			_logHelp = new LogOnHelper(readDataSourceConfiguration, tenantUnitOfWork);
 			MessageBrokerContainerDontUse.Configure(
 				ConfigurationManager.AppSettings["MessageBroker"],
 				new IConnectionKeepAliveStrategy[] { },

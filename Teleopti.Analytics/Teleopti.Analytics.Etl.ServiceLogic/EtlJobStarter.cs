@@ -18,6 +18,7 @@ using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using log4net;
 using log4net.Config;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.MultipleConfig;
 using Teleopti.Interfaces.Domain;
@@ -51,11 +52,7 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 				_cube = config.Cube;
 				_pmInstallation = config.PmInstallation;
 				_container = configureContainer();
-				var path = ConfigurationManager.AppSettings["nhibConfPath"];
-				if (string.IsNullOrEmpty(path))
-					path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-				var databaseConfigurationReader = new ReadDataSourceConfigurationFromNhibFiles(new NhibFilePathFixed(path), new ParseNhibFile());
-				_jobHelper = new JobHelper(databaseConfigurationReader);
+				_jobHelper = new JobHelper(_container.Resolve<IReadDataSourceConfiguration>(), _container.Resolve<ITenantUnitOfWork>());
 				_timer = new Timer(10000);
 				_timer.Elapsed += Tick;
 			}
