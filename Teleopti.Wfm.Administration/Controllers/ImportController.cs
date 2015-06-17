@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using System.Linq;
+using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
@@ -13,19 +14,24 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private readonly DatabaseHelperWrapper _databaseHelperWrapper;
 		private readonly ITenantExists _tenantExists;
 		private readonly GetImportUsers _getImportUsers;
+		private readonly CheckDatabaseVersions _checkDatabaseVersions;
+		private readonly Import _import;
 
-		public ImportController(DatabaseHelperWrapper databaseHelperWrapper, ITenantExists tenantExists, GetImportUsers getImportUsers)
+		public ImportController(DatabaseHelperWrapper databaseHelperWrapper, ITenantExists tenantExists,
+			GetImportUsers getImportUsers, CheckDatabaseVersions checkDatabaseVersions, Import import)
 		{
 			_databaseHelperWrapper = databaseHelperWrapper;
 			_tenantExists = tenantExists;
 			_getImportUsers = getImportUsers;
+			_checkDatabaseVersions = checkDatabaseVersions;
+			_import = import;
 		}
 
 		[HttpPost]
 		[TenantUnitOfWork]
 		public virtual JsonResult<ImportTenantResultModel> ImportExisting(ImportDatabaseModel model)
 		{
-			var tenantCheck = IsNewTenant(model.Tenant);
+			var tenantCheck = isNewTenantName(model.Tenant);
 			if (!tenantCheck.Content.Success)
 				return tenantCheck;
 
@@ -36,14 +42,21 @@ namespace Teleopti.Wfm.Administration.Controllers
 			if (!result.Exists)
 				return Json(new ImportTenantResultModel { Success = false, Message = result.Message });
 
-			var conflicting = Conflicts(model).Content;
-			if (conflicting.NumberOfConflicting > 0)
-			var conflicts = _getImportUsers.CheckConflicting(model.ConnStringAppDatabase, model.Tenant);
+			var versions =  _checkDatabaseVersions.GetVersions(new VersionCheckModel {AppConnectionString = model.ConnStringAppDatabase});
+			if(!versions.AppVersionOk)
+				return Json(new ImportTenantResultModel { Success = false, Message = "The databases does not have the same version." });
 			
-			if ((conflicts.NumberOfConflicting + conflicts.NumberOfNotConflicting).Equals(0))
+			var conflicts = _getImportUsers.CheckConflicting(model.ConnStringAppDatabase, model.UserPrefix);
 
-			return Json(new ImportTenantResultModel { Success = true });
-			return Json(_import.Execute(model, conflicts));
+			if (!model.SkipConflicts && conflicts.NumberOfConflicting > 0)
+			{
+			}
+
+			if (conflicts.NotConflicting.Count().Equals(0))
+				return Json(new ImportTenantResultModel { Success = false, Message = "There are no users to import." });
+
+
+			return Json(_import.Execute(model, conflicts.NotConflicting.ToList()));
 		}
 
 		[HttpPost]
@@ -63,13 +76,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[Route("api/Import/IsNewTenant")]
 		public virtual JsonResult<ImportTenantResultModel> IsNewTenant([FromBody] string tenant)
 		{
-			if (string.IsNullOrEmpty(tenant))
-				return Json(new ImportTenantResultModel { Message = "You must enter a new name for the Tenant!", Success = false });
-
-			if (_tenantExists.Check(tenant))
-				return Json(new ImportTenantResultModel { Message = "There is already a Tenant with this name!", Success = false});
-
-			return Json(new ImportTenantResultModel { Message = "There is no other Tenant with this name!", Success = true });
+			return isNewTenantName(tenant);
 		}
 
 		[HttpPost]
@@ -77,7 +84,18 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[Route("api/Import/Conflicts")]
 		public virtual JsonResult<ConflictModel> Conflicts(ImportDatabaseModel model)
 		{
-			return Json(_getImportUsers.GetConflictionUsers(model.ConnStringAppDatabase, model.UserPrefix));
+			return Json(_getImportUsers.CheckConflicting(model.ConnStringAppDatabase, model.UserPrefix));
+		}
+
+		private JsonResult<ImportTenantResultModel> isNewTenantName(string tenant)
+		{
+			if (string.IsNullOrEmpty(tenant))
+				return Json(new ImportTenantResultModel { Message = "You must enter a new name for the Tenant!", Success = false });
+
+			if (_tenantExists.Check(tenant))
+				return Json(new ImportTenantResultModel { Message = "There is already a Tenant with this name!", Success = false });
+
+			return Json(new ImportTenantResultModel { Message = "There is no other Tenant with this name!", Success = true });
 		}
 	}
 }

@@ -13,7 +13,7 @@ using Teleopti.Wfm.Administration.Models;
 namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 {
 	[TenantTest]
-	public class CheckExistingDatabaseTest
+	public class ImportTenantTest
 	{
 		public ImportController Target;
 
@@ -56,9 +56,8 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			};
 			//correct format but does not exist
 			var connString = connStringBuilder.ConnectionString;
-			
+
 			var importModel = new ImportDatabaseModel { ConnStringAppDatabase = connString, ConnStringAnalyticsDatabase = RandomName.Make() };
-			
 			Target.ImportExisting(importModel).Content.Success
 				.Should().Be.False();
 		}
@@ -91,6 +90,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 				helperAnal.CreateSchemaByDbManager();
 			}
 			
+
 			var importModel = new ImportDatabaseModel { ConnStringAppDatabase = connString, ConnStringAnalyticsDatabase = connStringAnal, Tenant = RandomName.Make()};
 			Target.ImportExisting(importModel).Content.Success
 				.Should().Be.True();

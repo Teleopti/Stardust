@@ -17,9 +17,8 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public void ShouldReportOkIfSameVersion()
 		{
 			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
-			
-			var result = Target.GetVersions(new VersionCheckModel{AppConnectionString = ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString });
 
+			var result = Target.GetVersions(new VersionCheckModel { AppConnectionString = ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString });
 			result.Content.AppVersionOk.Should().Be.True();
 		}
 	}

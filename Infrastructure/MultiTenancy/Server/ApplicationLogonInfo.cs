@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		public virtual bool IsLocked { get; protected set; }
 		public virtual string LogonName { get; protected set; }
 
-		protected virtual string LogonPassword { get; set; }
+		public virtual string LogonPassword { get; set; }
 		protected virtual DateTime InvalidAttemptsSequenceStart { get; set; }
 		
 		private void registerPasswordChange()

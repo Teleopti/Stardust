@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
 using NHibernate.Event;
@@ -32,10 +33,8 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			//create database
 			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
 
-			TenantUnitOfWork.Start();
-
 			var connStringBuilder =
-				new SqlConnectionStringBuilder(CurrentTenantSession.CurrentSession().Connection.ConnectionString)
+				new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
 				{
 					InitialCatalog = dummy
 				};
@@ -74,11 +73,13 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			{
 				randomName = infos.First().ApplicationLogonInfo.LogonName;
 			}
+			tenantUowManager.CommitAndDisposeCurrent();
+
+			TenantUnitOfWork.Start();
 			var mainTenant = LoadAllTenants.Tenants().First();
 			var personInfo = new PersonInfo(mainTenant, Guid.NewGuid());
 				personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), randomName, RandomName.Make());
 			CurrentTenantSession.CurrentSession().Save(personInfo);
-			tenantUowManager.CommitAndDisposeCurrent();
 			TenantUnitOfWork.CommitAndDisposeCurrent();
 			var conflicting = Target.Conflicts(new ImportDatabaseModel { ConnStringAppDatabase = connString, Tenant = "Importing" });
 			conflicting.Content.ConflictingUserModels.Count().Should().Be.GreaterThan(0);
