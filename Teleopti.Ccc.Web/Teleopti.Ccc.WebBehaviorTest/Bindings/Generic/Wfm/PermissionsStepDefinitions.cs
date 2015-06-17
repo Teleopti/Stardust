@@ -11,12 +11,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[When(@"I create a role '(.*)'")]
 		public void WhenICreateARole(string p0)
 		{
-			Browser.Interactions.Javascript("var inp = document.querySelector('.role-input');" +
-			                                "inp.value = '"+p0+"';" +
-			                                "angular.element(inp).triggerHandler('input');" +
-			                                "var form = document.querySelector('.role-nav form');" +
-			                                "var ngForm = angular.element(form);" +
-			                                "ngForm.triggerHandler('submit');");
+			Browser.Interactions.FillWith(".role-input",p0);
+			Browser.Interactions.PressEnter(".role-input");
 		}
 
 		[Then(@"I should see a role '(.*)' in the list")]

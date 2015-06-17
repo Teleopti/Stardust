@@ -10,9 +10,12 @@
 					$scope.schedulingPerformed = false;
 					var planningPeriod = { StartDate: startDate, EndDate: endDate };
 					PlanningPeriodSvrc.launchScheduling.query(JSON.stringify(planningPeriod)).$promise.then(function (result) {
+						//if not success
 						$scope.schedulingPerformed = true;
 						$scope.scheduledDays = result.DaysScheduled;
 						$state.go('resourceplannerreport', { result: result });
+						//else
+						//optmization
 					});
 				};
 
