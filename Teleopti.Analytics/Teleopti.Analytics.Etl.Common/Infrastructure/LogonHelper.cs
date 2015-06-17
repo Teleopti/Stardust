@@ -32,7 +32,6 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		private ILogOnOff _logOnOff;
 		private IRepositoryFactory _repositoryFactory;
 		private List<ITenantName> _tenantNames;
-		private List<IDataSource> _dataSources;
 
 		private LogOnHelper() { }
 
@@ -109,30 +108,21 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			_logonService =
 				new LogOnService(_logOnOff);
 			_tenantNames = TenantCreator.TenantNames(_nhibConfPath);
-			_dataSources = TenantCreator.DataSources(_nhibConfPath, _repositoryFactory, dataSourcesFactory);
 		}
 
 
 		public bool SelectDataSourceContainer(string dataSourceName)
 		{
 			_buList = null;
-			var dataSource = _dataSources.FirstOrDefault(x => x.DataSourceName.Equals(dataSourceName));
-			if (dataSource == null)
+			var dataSource = StateHolder.Instance.StateReader.ApplicationScopeData.Tenant(dataSourceName);
+			var person = new LoadUserUnauthorized().LoadFullPersonInSeperateTransaction(dataSource.Application, SuperUser.Id_AvoidUsing_This);
+			_choosenDb = new DataSourceContainer(dataSource, person);
+			if (_choosenDb.User == null)
 			{
-				Trace.WriteLine(string.Format("No tenant found with name {0}", dataSourceName));
+				Trace.WriteLine("Error on logon!");
 				_choosenDb = null;
 			}
-			else
-			{
-				var person = new LoadUserUnauthorized().LoadFullPersonInSeperateTransaction(dataSource.Application, SuperUser.Id_AvoidUsing_This);
-				_choosenDb = new DataSourceContainer(dataSource, person);
-				if (_choosenDb.User == null)
-				{
-					Trace.WriteLine("Error on logon!");
-					_choosenDb = null;
-				}
 
-			}
 			return _choosenDb != null;
 		}
 
