@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using NHibernate.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -21,7 +23,20 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public ISeatPlan LoadAggregate (Guid id)
 		{
-			throw new NotImplementedException();
+			return Session.Query<ISeatPlan>()
+				.FirstOrDefault(plan => plan.Id == id);
+		}
+
+		public void UpdateStatusForDate (DateOnly date, SeatPlanStatus seatPlanStatus)
+		{
+
+			var seatPlans = Session.Query<ISeatPlan>().Where (seatPlan => seatPlan.Date == date );
+			foreach (var seatPlan in seatPlans)
+			{
+				seatPlan.Status = seatPlanStatus;
+				Session.Update (seatPlan);
+			}
+			
 		}
 	}
 }

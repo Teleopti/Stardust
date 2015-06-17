@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var seatPlan = new SeatPlan()
 			{
 				Date = new DateOnly(2015,03,02),
-				Status = SeatPlanStatus.Ok
+				Status = SeatPlanStatus.InError
 			};
 
 			return seatPlan;
@@ -31,11 +31,35 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.IsNotNull(loadedAggregateFromDatabase.Id);
 			Assert.IsNotNull(loadedAggregateFromDatabase.Date);
 			Assert.IsNotNull(loadedAggregateFromDatabase.Status);
+			Assert.AreEqual(SeatPlanStatus.InError, loadedAggregateFromDatabase.Status);
 		}
 
 		protected override Repository<ISeatPlan> TestRepository (IUnitOfWork unitOfWork)
 		{
 			return new SeatPlanRepository(unitOfWork); 
+			
+		}
+
+		[Test]
+		public void ShouldChangeSeatPlanStatus()
+		{
+
+			var seatPlan = new SeatPlan()
+			{
+				
+				Date = new DateOnly(2015, 10, 2),
+				Status = SeatPlanStatus.InProgress
+
+			};
+
+			PersistAndRemoveFromUnitOfWork(seatPlan);
+
+			var seatPlanRepo = new SeatPlanRepository (UnitOfWork);
+			seatPlanRepo.UpdateStatusForDate (seatPlan.Date, SeatPlanStatus.Ok);
+
+			var loaded = seatPlanRepo.LoadAggregate(seatPlan.Id.Value);
+
+			Assert.AreEqual(loaded.Status, SeatPlanStatus.Ok);
 			
 		}
 

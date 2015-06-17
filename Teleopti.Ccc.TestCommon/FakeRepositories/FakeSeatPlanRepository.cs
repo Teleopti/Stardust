@@ -55,6 +55,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
+		public void UpdateStatusForDate (DateOnly date, SeatPlanStatus seatPlanStatus)
+		{
+			_seatPlans.Where(seatPlan => seatPlan.Date == date).ForEach (plan => plan.Status = seatPlanStatus);
+		}
+
 		public IEnumerator<ISeatPlan> GetEnumerator()
 		{
 			return _seatPlans.GetEnumerator();

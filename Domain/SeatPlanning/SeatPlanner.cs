@@ -46,9 +46,10 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			_existingSeatBookings = _seatBookingRepository.LoadSeatBookingsForDateOnlyPeriod(bookingPeriodWithSurroundingDays);
 			groupNewBookings(period, people);
 			loadExistingSeatBookings(rootSeatMapLocation);
-			allocateSeats(new SeatAllocator(rootSeatMapLocation));
 
-			_seatPlanRepository.LoadAll().Where(p => period.Contains(p.Date)).ForEach(p => p.Status = SeatPlanStatus.Ok);
+			var hasError = allocateSeats (new SeatAllocator (rootSeatMapLocation));
+			persistSeatPlanResult (period, hasError);
+
 		}
 
 		private List<IPerson> getPeople(IEnumerable<ITeam> teams, DateOnlyPeriod period)
@@ -124,16 +125,17 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			
 		}
 
-		private void allocateSeats(SeatAllocator seatAllocator)
+		private bool allocateSeats(SeatAllocator seatAllocator)
 		{
 			seatAllocator.AllocateSeats(getSeatBookingRequests().ToArray());
 			persistBookings(_bookingsWithDateAndTeam);
 
-			//Robtodo: we can see the seatbookings that have not been allocated seats and can use these to generate errors.
-
 			_seatBookingRepository.AddRange(_bookingsWithDateAndTeam
 				.Where(groupedBookings => groupedBookings.SeatBooking.Seat != null && !_existingSeatBookings.Contains(groupedBookings.SeatBooking))
 				.Select (booking => booking.SeatBooking));
+
+			return _bookingsWithDateAndTeam.Exists(groupedBookings => groupedBookings.SeatBooking.Seat == null);
+
 		}
 
 		private void persistSeatPlans (DateOnlyPeriod period)
@@ -147,6 +149,15 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 				}
 					));
 			_seatPlanRepository.AddRange(seatPlanList);
+		}
+
+		private void persistSeatPlanResult(DateOnlyPeriod period, Boolean inError)
+		{
+			period.DayCollection().ForEach(day =>
+				_seatPlanRepository.UpdateStatusForDate(
+					day, inError ? SeatPlanStatus.InError : SeatPlanStatus.Ok
+					)
+				);
 		}
 
 		private IEnumerable<SeatBookingRequest> getSeatBookingRequests()
