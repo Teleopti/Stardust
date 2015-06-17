@@ -47,11 +47,29 @@ $(document).ready(function () {
 				if (options.url == "PreferenceFeedback/Feedback") {
 					if (options.data.Date == '2012-06-11')
 						options.success({
-							PossibleContractTimeMinutesLower: 6 * 60
+							PossibleContractTimeMinutesLower: 6 * 60,
+							RestTimeToNextDay: {
+								"Hours": 10
+							},
+							RestTimeToPreviousDay: {
+								"Hours": 11
+							},
+							ExpectedNightRest: {
+								"Hours": 11
+							}
 						});
 					if (options.data.Date == '2012-06-12')
 						options.success({
-							PossibleContractTimeMinutesLower: 8 * 60
+							PossibleContractTimeMinutesLower: 8 * 60,
+							RestTimeToNextDay: {
+								"Hours": 10
+							},
+							RestTimeToPreviousDay: {
+								"Hours": 11
+							},
+							ExpectedNightRest: {
+								"Hours": 11
+							}
 						});
 				}
 			}
@@ -85,7 +103,16 @@ $(document).ready(function () {
 				}
 				if (options.url == "PreferenceFeedback/Feedback") {
 					options.success({
-						PossibleContractTimeMinutesLower: 8 * 60
+						PossibleContractTimeMinutesLower: 8 * 60,
+						RestTimeToNextDay: {
+							"Hours": 10
+						},
+						RestTimeToPreviousDay: {
+							"Hours": 11
+						},
+						ExpectedNightRest: {
+							"Hours": 11
+						}
 					});
 				}
 			}
@@ -193,7 +220,16 @@ $(document).ready(function () {
 				if (options.url == "PreferenceFeedback/Feedback") {
 					if (options.data.Date == '2012-06-19' || options.data.Date == '2012-06-20')
 						options.success({
-							PossibleContractTimeMinutesLower: 6 * 60
+							PossibleContractTimeMinutesLower: 6 * 60,
+							RestTimeToNextDay: {
+								"Hours": 10
+							},
+							RestTimeToPreviousDay: {
+								"Hours": 11
+							},
+							ExpectedNightRest: {
+								"Hours": 11
+							}
 						});
 				}
 			}

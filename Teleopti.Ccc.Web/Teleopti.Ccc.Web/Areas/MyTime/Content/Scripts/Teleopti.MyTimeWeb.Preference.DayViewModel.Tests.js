@@ -249,7 +249,16 @@ $(document).ready(function () {
 					PossibleStartTimes: "6:00-9:00",
 					PossibleEndTimes: "16:00-18:00",
 					PossibleContractTimeMinutesLower: 7 * 60,
-					PossibleContractTimeMinutesUpper: 12 * 60
+					PossibleContractTimeMinutesUpper: 12 * 60,
+					RestTimeToNextDay: {
+						 "Hours": 10
+					},
+					RestTimeToPreviousDay: {
+						 "Hours": 11
+					},
+					ExpectedNightRest: {
+						 "Hours": 11
+					}
 				});
 		};
 
