@@ -2,7 +2,7 @@
 ECHO Starting Startup task > Install.log
 ECHO. >> Install.log
 
-SET ETLService=AnalyticsEtlService
+SET ETLService=TeleoptiEtlService
 SET ServiceBus=TeleoptiServiceBus
 
 SET ROOTDIR=%~dp0
@@ -25,8 +25,9 @@ IF NOT ERRORLEVEL 1060 (
 	SC DELETE %ETLService%
 	SC QUERY %ETLService%
 	IF NOT ERRORLEVEL 1060 CALL :ServiceError
+
 )
-"%SystemRoot%\Microsoft.NET\Framework\v4.0.30319\InstallUtil.exe" "..\Services\ETL\Service\Teleopti.Analytics.Etl.ServiceHost.exe" >> Install.log
+sc create %ETLService% binPath= "E:\approot\Services\ETL\Service\Teleopti.Analytics.Etl.ServiceHost.exe" DisplayName= "%ETLService%" >> Install.log
 ECHO Service status after install [%ETLService%] >> Install.log
 SC QUERY %ETLService%  >> Install.log
 ECHO --------------------- >> Install.log
@@ -39,7 +40,7 @@ IF NOT ERRORLEVEL 1060 (
 	SC QUERY %ServiceBus%
 	IF NOT ERRORLEVEL 1060 CALL :ServiceError
 )
-"%SystemRoot%\Microsoft.NET\Framework\v4.0.30319\InstallUtil.exe" "..\Services\ServiceBus\Teleopti.CCC.Sdk.ServiceBus.Host.exe" >> Install.log
+sc create %ServiceBus% binPath= "E:\approot\Services\ServiceBus\Teleopti.CCC.Sdk.ServiceBus.Host.exe" DisplayName= "%ServiceBus%" >> Install.log
 ECHO Service status after install [%ServiceBus%] >> Install.log
 SC QUERY %ServiceBus%  >> Install.log
 
