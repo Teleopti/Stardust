@@ -36,14 +36,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		public void WhenIClickSchedule()
 		{
 			Browser.Interactions.Click(".schedule-button");
-			Thread.Sleep(2000);
 		}
 
 		[When(@"I create new planning period")]
 		public void WhenICreateNewPlanningPeriod()
 		{
+			Browser.Interactions.AssertExists(".wfm-btn");
 			Browser.Interactions.Click(".wfm-btn");
-			Thread.Sleep(2000);
 		}
 
 
@@ -64,7 +63,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		public void WhenIUpdatePlanningPeriodToWeek()
 		{
 			Browser.Interactions.ClickContaining(".wfm-radio-label","2 Week");
-			Thread.Sleep(2000);
 		}
 
 		[Given(@"GroupingReadModel is updated")]
