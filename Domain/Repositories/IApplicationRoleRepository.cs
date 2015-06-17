@@ -18,6 +18,6 @@ namespace Teleopti.Ccc.Domain.Repositories
         /// </remarks>
         IList<IApplicationRole> LoadAllApplicationRolesSortedByName();
 
-	    IList<IApplicationRole> LoadAllRolesByName(string name);
+	    IList<IApplicationRole> LoadAllRolesByDescription(string name);
     }
 }

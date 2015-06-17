@@ -48,5 +48,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			var result = (OkNegotiatedContentResult<IEnumerable<SearchResultModel>>)Target.GetResult("role");
 			result.Content.Count().Should().Be.EqualTo(1); 
 		}
+
+		[Test]
+		public void ShouldSearchPermissionRoleWithId()
+		{
+			var roleId = Guid.NewGuid();
+			var role = ApplicationRoleFactory.CreateRole("Admin Role", "this is an admin role");
+			role.SetId(roleId);
+			ApplicationRoleRepository.Add(role);
+			var result = (OkNegotiatedContentResult<IEnumerable<SearchResultModel>>)Target.GetResult("role");
+			result.Content.First().Id.Should().Be.EqualTo(roleId);
+		}
 	}
 }

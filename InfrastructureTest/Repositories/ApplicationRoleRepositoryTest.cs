@@ -120,12 +120,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		public void ShouldSearchRolesByName()
+		public void ShouldSearchRolesByDescription()
 		{
-			PersistAndRemoveFromUnitOfWork( ApplicationRoleFactory.CreateRole("Admin Role" , "Role Description " ));
-			PersistAndRemoveFromUnitOfWork(  ApplicationRoleFactory.CreateRole("Normal Role" , "Role Description " ));
+			PersistAndRemoveFromUnitOfWork( ApplicationRoleFactory.CreateRole("Admin Name" , "Role Description " ));
+			PersistAndRemoveFromUnitOfWork(  ApplicationRoleFactory.CreateRole("Normal Name" , "Role Description " ));
 			
-			var rolesList = new ApplicationRoleRepository(UnitOfWork).LoadAllRolesByName("Role");
+			var rolesList = new ApplicationRoleRepository(UnitOfWork).LoadAllRolesByDescription("Role");
 			rolesList.Count.Should().Be.EqualTo(2);
 		}
 	}

@@ -12,7 +12,9 @@ describe('Roles', function() {
 				return { $promise: queryDeferred.promise };
 			},
 			get: function () {
-				return [];
+				var queryDeferred = $q.defer();
+				queryDeferred.resolve([{ Id: 1, DescriptionText: 'text' }]);
+				return { $promise: queryDeferred.promise };
 			}
 		},
 		applicationFunctions: {
@@ -86,28 +88,58 @@ describe('Roles', function() {
 		$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, 'mock');
 		}));
 
-	it('should create a role', inject(function (Roles) {
-		//create a role with a name
-		var roleName = 'role';
-		var scope = $rootScope.$new();
-		Roles.createRole(roleName);
+	it('should create a role', function(done) {
+		inject(function(Roles) {
+			//create a role with a name
+			var roleName = 'role';
+			var scope = $rootScope.$new();
+			Roles.createRole(roleName);
 
-		scope.$digest();
+			scope.$digest();
 
-		expect(Roles.list.length).toBe(1);
-		expect(Roles.list[0].Id).toBe(1);
-	}));
+			var testRoles = function(roles) {
+				expect(roles.length).toBe(2);
+				expect(roles[0].Id).toBe(1);
+			};
 
-	it('should copy a role', inject(function (Roles) {
-		var roleId = "1";
-		var roleName = 'role';
-		var scope = $rootScope.$new();
-		Roles.createRole(roleName);
+			var failTest = function(error) {
+				expect(error).toBeUndefined();
+			};
 
-		Roles.copyRole(roleId);
-		scope.$digest();
+			Roles.list.$promise
+				.then(testRoles)
+				.catch(failTest)
+				.finally(done);
 
-		expect(Roles.list.length).toBe(2);
-	}));
+			$httpBackend.flush();
+		});
+	});
+
+	it('should copy a role', function(done) {
+		inject(function(Roles) {
+			var roleId = "1";
+			var roleName = 'role';
+			var scope = $rootScope.$new();
+			Roles.createRole(roleName);
+
+			Roles.copyRole(roleId);
+			scope.$digest();
+
+			var testRoles = function (roles) {
+				expect(roles.length).toBe(3);
+			};
+
+			var failTest = function (error) {
+				expect(error).toBeUndefined();
+			};
+
+			Roles.list.$promise
+				.then(testRoles)
+				.catch(failTest)
+				.finally(done);
+
+			$httpBackend.flush();
+		});
+	});
 
 });

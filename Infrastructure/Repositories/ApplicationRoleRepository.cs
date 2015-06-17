@@ -71,14 +71,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             }
         }
 
-		  public virtual IList<IApplicationRole> LoadAllRolesByName(string role)
+		  public virtual IList<IApplicationRole> LoadAllRolesByDescription(string role)
 	    {
 			 var appRoles = Session.CreateCriteria(typeof(ApplicationRole))
 				  .SetFetchMode("ApplicationFunctionCollection", FetchMode.Join)
-				  .AddOrder(Order.Asc("Name"))
+				  .AddOrder(Order.Asc("DescriptionText"))
 				  .SetResultTransformer(new DistinctRootEntityResultTransformer())
 				  .List<IApplicationRole>()
-				  .Where(x => x.Name.ToLower().Contains(role.ToLower()))
+				  .Where(x => x.DescriptionText.ToLower().Contains(role.ToLower()))
 				  .ToList();
 
 			 return appRoles;

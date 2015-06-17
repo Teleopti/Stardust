@@ -3,8 +3,8 @@
 
 	var permissions = angular.module('wfm.permissions', ['ngResource']);
 	permissions.controller('PermissionsCtrl', [
-			'$scope', '$filter', 'PermissionsService', 'Roles',
-			function($scope, $filter, Permissions, Roles) {
+			'$scope', '$filter', 'PermissionsService', 'Roles', '$stateParams',
+			function($scope, $filter, Permissions, Roles, $stateParams) {
 				$scope.list = [];
 				$scope.roleName = null;
 				$scope.roleDetails = 'functionsAvailable';
@@ -14,10 +14,8 @@
 				$scope.selectedRole = Roles.selectedRole;
 				$scope.selectedDataToggle = false;
 				$scope.unselectedDataToggle = false;
-
-				$scope.roles = Roles.list;
+				$scope.roles = [];
 				
-
 				$scope.createRole = function() {
 					Roles.createRole($scope.roleName).then(function() {
 						//here a notice
@@ -66,6 +64,19 @@
 					return nb;
 				};
 
+				Roles.list.$promise.then(function (result) {
+					$scope.roles = result;
+					if ($stateParams.id != null) {
+						for (var i = 0; i < result.length; i++) {
+							if ($stateParams.id == result[i].Id) {
+								$scope.showRole(result[i]);
+							}
+						}
+					} else {
+						if (result.length > 0)
+							$scope.showRole(result[0]);
+					}
+				});
 			}
 		]
 	);

@@ -7,7 +7,6 @@
 			var roles = {};
 
 			roles.selectedRole = {};
-
 			roles.list = PermissionsService.roles.get();
 
 			roles.createRole = function (roleName) {
@@ -16,7 +15,7 @@
 				PermissionsService.roles.post(JSON.stringify(roleData)).$promise.then(function (result) {
 					roleData.Id = result.Id;
 					roleData.DescriptionText = result.DescriptionText;
-					roles.list.unshift(roleData);
+					roles.list.$promise.then(function(r) { r.unshift(roleData); });
 					deferred.resolve();
 				});
 				return deferred.promise;
@@ -28,7 +27,7 @@
 				PermissionsService.duplicateRole.query({ Id: roleId }).$promise.then(function (result) {
 					roleCopy.Id = result.Id;
 					roleCopy.DescriptionText = result.DescriptionText;
-					roles.list.unshift(roleCopy);
+					roles.list.$promise.then(function (r) { r.unshift(roleCopy); });
 					deferred.resolve();
 				});
 				return deferred.promise;
@@ -36,13 +35,13 @@
 
 			roles.removeRole = function (role) {
 				PermissionsService.manageRole.deleteRole({ Id: role.Id }).$promise.then(function (result) {
-					roles.list.splice(roles.list.indexOf(role), 1);
+					roles.list.$promise.then(function (r) { r.splice(roles.list.indexOf(role), 1); });
 				});
 			};
 
 			roles.selectRole = function (role) {
 				roles.selectedRole = role;
-			}
+			};
 
 			return roles;
 		}

@@ -53,9 +53,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			throw new NotImplementedException();
 		}
 
-		public IList<IApplicationRole> LoadAllRolesByName(string name)
+		public IList<IApplicationRole> LoadAllRolesByDescription(string name)
 		{
-			return _roles.Where(x => x.Name.ToLower().Contains(name.ToLower())).ToList();
+			return _roles.Where(x => x.DescriptionText.ToLower().Contains(name.ToLower())).ToList();
 		}
 	}
 }

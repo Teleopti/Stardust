@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
 
 namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 {
@@ -41,12 +42,13 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 
 		private IEnumerable<SearchResultModel> searchApplicationRoles(string keyword)
 		{
-			var result =  _applicationRoleRepository.LoadAllRolesByName(keyword);
+			var result =  _applicationRoleRepository.LoadAllRolesByDescription(keyword);
 			return result.Select(item => new SearchResultModel
 			{
-				Name = item.Name,
-				Url = "/permissions", 
-				SearchGroup = "Permission"
+				Name = item.DescriptionText,
+				Url = "permissions", 
+				SearchGroup = "Permission",
+				Id = item.Id
 			});
 		}
 
@@ -66,8 +68,9 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 							currentPplanningPeriodRange.StartDate.ToShortDateString(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture) +
 							"-" +
 							currentPplanningPeriodRange.EndDate.ToShortDateString(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture),
-						Url = "/resourceplanner",
-						SearchGroup = UserTexts.Resources.PlanningPeriod
+						Url = "resourceplanner.planningperiod",
+						SearchGroup = UserTexts.Resources.PlanningPeriod,
+						Id = _planningPeriodProvider.Current().Id
 					}
 				});
 			}
@@ -80,6 +83,7 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 	{
 		public string Name { get; set; }
 		public string Url { get; set; }
+		public Guid? Id { get; set; }
 		//can be refactorred to some enum?
 		public string SearchGroup { get; set; }
 	}

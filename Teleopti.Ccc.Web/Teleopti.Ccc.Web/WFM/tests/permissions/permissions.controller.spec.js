@@ -2,7 +2,8 @@
 describe('PermissionsCtrl', function () {
 	var $q,
 	    $rootScope,
-	    $httpBackend;
+	    $httpBackend,
+	    	rolesList = [{ Id: 1, DescriptionText: 'text' }];
 	var mockPermissionsService = {
 		roles: {
 			post: function () {
@@ -11,7 +12,9 @@ describe('PermissionsCtrl', function () {
 				return { $promise: queryDeferred.promise };
 			},
 			get: function () {
-				return [];
+				var queryDeferred = $q.defer();
+				queryDeferred.resolve(rolesList);
+				return { $promise: queryDeferred.promise };
 			}
 		},
 		applicationFunctions: {
@@ -88,7 +91,18 @@ describe('PermissionsCtrl', function () {
 		scope.createRole();
 		scope.$digest(); // this is needed to resolve the promise
 		
-		expect(scope.roles.length).toEqual(1); 
+		expect(scope.roles.length).toEqual(2); 
+	}));
+
+	it('permission is loaded without roles', inject(function ($controller) {
+		var scope = $rootScope.$new();
+
+		rolesList = [];
+		$controller('PermissionsCtrl', { $scope: scope, PermissionsService: mockPermissionsService });
+
+		scope.$digest(); // this is needed to resolve the promise
+
+		expect(scope.roles.length).toEqual(0);
 	}));
 /*
 	it('selects a function for a role', inject(function($controller) {

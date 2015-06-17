@@ -9,6 +9,9 @@
 					$scope.keyword = '';
 					search($scope.keyword);
 				};
+				$scope.clickedItem = function(obj) {
+					$state.go(obj.Url, { id: obj.Id });
+				};
 				$scope.searchKeyword = function() {
 					if ($scope.keyword.length > 1) {
 						search($scope.keyword);

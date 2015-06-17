@@ -26,7 +26,7 @@
 
 					<div id="searchRoleResults">
 						<ul class="wfm-list roles-list">
-							<li ng-repeat="role in roles | filter:searchRoles" ng-click="showRole(role)" ng-dblclick="editing = true" ng-class="{'active': role.Id==selectedRole}" class="role-btn wfm-block wfm-list-item role">
+							<li ng-repeat="role in roles | filter:searchRoles" ng-click="showRole(role)" ng-dblclick="editing = true" ng-class="{'active': role.Id==selectedRole}" class="role-btn wfm-block wfm-list-item role" selection-model>
 								<div class="wfm-leave-behind">
 									<span>
 										<i ng-click="copyRole(role.Id)" class="mdi mdi-content-copy">
