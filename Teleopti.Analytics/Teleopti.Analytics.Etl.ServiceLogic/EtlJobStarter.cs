@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
+using System.IO;
+using System.Reflection;
 using System.Threading;
 using System.Timers;
 using Autofac;
@@ -15,6 +17,7 @@ using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using log4net;
 using log4net.Config;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.MultipleConfig;
 using Teleopti.Interfaces.Domain;
@@ -30,7 +33,7 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 		private readonly string _connectionString;
 		private readonly string _cube;
 		private readonly string _pmInstallation;
-
+		private readonly IContainer _container;
 		private JobHelper _jobHelper;
 		private readonly Timer _timer;
 		private DateTime _serviceStartTime;
@@ -47,7 +50,12 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 				_connectionString = config.ConnectionString;
 				_cube = config.Cube;
 				_pmInstallation = config.PmInstallation;
-				_jobHelper = new JobHelper();
+				_container = configureContainer();
+				var path = ConfigurationManager.AppSettings["nhibConfPath"];
+				if (string.IsNullOrEmpty(path))
+					path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+				var databaseConfigurationReader = new ReadDataSourceConfigurationFromNhibFiles(new NhibFilePathFixed(path), new ParseNhibFile());
+				_jobHelper = new JobHelper(databaseConfigurationReader);
 				_timer = new Timer(10000);
 				_timer.Elapsed += Tick;
 			}
@@ -71,7 +79,6 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 		{
 			bool isStopping = false;
 			_timer.Stop();
-			IContainer container = configureContainer();
 			try
 			{
 				var configHandler = new ConfigurationHandler(new GeneralFunctions(_connectionString));
@@ -97,7 +104,7 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 				IJob jobToRun = JobExtractor.ExtractJobFromSchedule(
 					scheduleToRun, _jobHelper, configHandler.BaseConfiguration.TimeZoneCode,
 					configHandler.BaseConfiguration.IntervalLength.Value, _cube,
-					_pmInstallation, container,
+					_pmInstallation, _container,
 					configHandler.BaseConfiguration.RunIndexMaintenance,
 					culture
 					);

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Security.Authentication;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
@@ -25,20 +24,17 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 {
 	public class LogOnHelper : ILogOnHelper
 	{
+		private readonly IReadDataSourceConfiguration _readDataSourceConfiguration;
 		private DataSourceContainer _choosenDb;
 		private LogOnService _logonService;
-		private string _nhibConfPath;
 		private IList<IBusinessUnit> _buList;
 		private ILogOnOff _logOnOff;
 		private IRepositoryFactory _repositoryFactory;
 		private List<ITenantName> _tenantNames;
 
-		private LogOnHelper() { }
-
-		public LogOnHelper(string hibernateConfPath)
-			: this()
+		public LogOnHelper(IReadDataSourceConfiguration readDataSourceConfiguration)
 		{
-			_nhibConfPath = hibernateConfPath;
+			_readDataSourceConfiguration = readDataSourceConfiguration;
 			initializeStateHolder();
 		}
 
@@ -91,14 +87,12 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		private void initializeStateHolder()
 		{
 			// Code that runs on application startup
-			if (string.IsNullOrEmpty(_nhibConfPath))
-				_nhibConfPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 			var dataSourcesFactory = new DataSourcesFactory(new EnversConfiguration(), new NoMessageSenders(), 
 				DataSourceConfigurationSetter.ForEtl(),
 				new CurrentHttpContext(),
 				() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging
 				);
-			var application = new InitializeApplication(dataSourcesFactory, null, new ReadDataSourceConfigurationFromNhibFiles(new NhibFilePathFixed(_nhibConfPath), new ParseNhibFile()));
+			var application = new InitializeApplication(dataSourcesFactory, null, _readDataSourceConfiguration);
 
 			if (!StateHolder.IsInitialized)
 				application.Start(new StateManager(), null, ConfigurationManager.AppSettings.ToDictionary(), false);

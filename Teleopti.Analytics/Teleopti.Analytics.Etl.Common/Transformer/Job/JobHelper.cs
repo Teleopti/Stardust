@@ -4,6 +4,7 @@ using System.Configuration;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Messaging.Client;
@@ -18,10 +19,9 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 		private ISignalRClient _messageClient;
 		private IMessageSender _messageSender;
 
-		public JobHelper()
+		public JobHelper(IReadDataSourceConfiguration readDataSourceConfiguration)
 		{
-			//insert username, password from logonscreen later, or winlogon?
-			_logHelp = new LogOnHelper(ConfigurationManager.AppSettings["nhibConfPath"]);
+			_logHelp = new LogOnHelper(readDataSourceConfiguration);
 			MessageBrokerContainerDontUse.Configure(
 				ConfigurationManager.AppSettings["MessageBroker"],
 				new IConnectionKeepAliveStrategy[] { },
