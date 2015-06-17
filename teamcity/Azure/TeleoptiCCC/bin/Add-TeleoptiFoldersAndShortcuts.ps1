@@ -1,13 +1,13 @@
 Function Add-TeleoptiWebFolders {
     foreach ($appMapping in $appsArray) {
-        if (Test-Path $appMapping[0]) {
-            $SymName=$appMapping[0]
-            $Path=$appMapping[1]
-
+        $SymName=$appMapping[0]
+        $Path=$appMapping[1]
+        if (Test-Path $Path) {
             New-SymLink -Path "$Path" -SymName "$SymName" -Directory
         }
     }
 }
+
 
 Function Add-TeleoptiToolsAndServices {
     $physicalFolder = $approot + "\Services\ETL\Service"

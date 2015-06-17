@@ -12,6 +12,6 @@ COPY "%srcFile%" "%targetFile%" /Y
 
 ::execute
 if exist "%targetFile%" (
-powershell . .\PrepareConfigAndSignClickOnce.ps1 -ScriptPath "%DIRECTORY%\Add-TeleoptiFoldersAndShortcuts.ps1" >nul
+powershell . .\Add-TeleoptiFoldersAndShortcuts.ps1 >nul
 )
 exit %ERRORLEVEL%
