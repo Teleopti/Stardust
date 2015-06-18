@@ -9,13 +9,15 @@
 				$scope.launchSchedule = function(startDate, endDate) {
 					$scope.schedulingPerformed = false;
 					var planningPeriod = { StartDate: startDate, EndDate: endDate };
-					PlanningPeriodSvrc.launchScheduling.query(JSON.stringify(planningPeriod)).$promise.then(function (result) {
+					PlanningPeriodSvrc.launchScheduling.query(JSON.stringify(planningPeriod)).$promise.then(function (scheduleResult) {
 						//if not success
 						$scope.schedulingPerformed = true;
-						$scope.scheduledDays = result.DaysScheduled;
-						$state.go('resourceplannerreport', { result: result });
+						$scope.scheduledDays = scheduleResult.DaysScheduled;
+						$state.go('resourceplannerreport', { result: scheduleResult });
 						//else
-						//optmization
+						PlanningPeriodSvrc.launchOptimization.query(JSON.stringify(planningPeriod)).$promise.then(function (optimizationResult) {
+							console.log('optimization was called');
+						});
 					});
 				};
 

@@ -513,6 +513,7 @@
     <Compile Include="Areas\ResourcePlanner\FilterItem.cs" />
     <Compile Include="Areas\ResourcePlanner\FixedStaffLoader.cs" />
     <Compile Include="Areas\ResourcePlanner\FixedStaffSchedulingInput.cs" />
+    <Compile Include="Areas\ResourcePlanner\OptimizationController.cs" />
     <Compile Include="Areas\ResourcePlanner\PeopleSelection.cs" />
     <Compile Include="Areas\ResourcePlanner\PlanningPeriodChangeRangeModel.cs" />
     <Compile Include="Areas\ResourcePlanner\ResourcePlannnerModule.cs" />
@@ -2068,6 +2069,7 @@
     <Folder Include="Areas\Outbound\core\Campaign\ViewModelFactory\" />
     <Folder Include="Areas\PerformanceTool\Content\Templates\" />
     <Folder Include="Areas\PerformanceTool\Views\Dangerous\" />
+    <Folder Include="Areas\ResourcePlanner\Views\Optimization\" />
     <Folder Include="Areas\SSO\Views\Authentication\" />
     <Folder Include="Areas\Start\Views\Config\" />
     <Folder Include="Core\Aop\Aspects\" />
