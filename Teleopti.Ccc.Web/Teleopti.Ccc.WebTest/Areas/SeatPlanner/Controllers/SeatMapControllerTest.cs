@@ -21,8 +21,6 @@ namespace Teleopti.Ccc.WebTest.Areas.SeatPlanner.Controllers
 		private ICommandDispatcher _commandDispatcher;
 		private ILoggedOnUser _loggedOnUser;
 
-		//Robtodo: Fix tests!
-
 		[SetUp]
 		public void Setup()
 		{

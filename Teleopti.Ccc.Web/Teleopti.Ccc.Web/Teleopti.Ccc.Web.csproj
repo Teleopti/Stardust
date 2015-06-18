@@ -540,11 +540,14 @@
     <Compile Include="Areas\SeatPlanner\Controllers\SeatPlanController.cs" />
     <Compile Include="Areas\SeatPlanner\Core\Providers\ILocationHierarchyProvider.cs" />
     <Compile Include="Areas\SeatPlanner\Core\Providers\ISeatMapProvider.cs" />
+    <Compile Include="Areas\SeatPlanner\Core\Providers\ISeatPlanProvider.cs" />
     <Compile Include="Areas\SeatPlanner\Core\Providers\LocationHierarchyProvider.cs" />
     <Compile Include="Areas\SeatPlanner\Core\Providers\SeatMapProvider.cs" />
+    <Compile Include="Areas\SeatPlanner\Core\Providers\SeatPlanProvider.cs" />
     <Compile Include="Areas\SeatPlanner\Core\ViewModels\BusinessUnitViewModel.cs" />
     <Compile Include="Areas\SeatPlanner\Core\ViewModels\BusinessUnitWithSitesViewModel.cs" />
     <Compile Include="Areas\SeatPlanner\Core\ViewModels\LocationViewModel.cs" />
+    <Compile Include="Areas\SeatPlanner\Core\ViewModels\SeatPlanViewModel.cs" />
     <Compile Include="Areas\SeatPlanner\Core\ViewModels\SeatViewModel.cs" />
     <Compile Include="Areas\SSO\Core\ISsoAuthenticator.cs" />
     <Compile Include="Areas\SSO\Core\SsoAuthenticator.cs" />

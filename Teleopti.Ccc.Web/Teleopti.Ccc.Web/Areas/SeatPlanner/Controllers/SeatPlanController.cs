@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Web;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers;
+using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers
@@ -14,11 +17,13 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers
 		
 		private readonly ICommandDispatcher _commandDispatcher;
 		private readonly ILoggedOnUser _loggedOnUser;
+		private readonly ISeatPlanProvider _seatPlanProvider;
 
-		public SeatPlanController(ICommandDispatcher commandDispatcher, ILoggedOnUser loggedOnUser)
+		public SeatPlanController(ICommandDispatcher commandDispatcher, ILoggedOnUser loggedOnUser, ISeatPlanProvider seatPlanProvider)
 		{
 			_commandDispatcher = commandDispatcher;
 			_loggedOnUser = loggedOnUser;
+			_seatPlanProvider = seatPlanProvider;
 		}
 
 		[HttpPost, Route("api/SeatPlanner/SeatPlan"), UnitOfWork]
@@ -38,6 +43,18 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers
 			}
 			
 			return Created(Request.RequestUri, new {});
+		}
+
+		[UnitOfWork, Route("api/SeatPlanner/SeatPlan"), HttpGet]
+		public virtual SeatPlanViewModel Get(DateTime date)
+		{
+			return _seatPlanProvider.Get(new DateOnly(date));
+		}
+
+		[UnitOfWork, Route("api/SeatPlanner/SeatPlan"), HttpGet]
+		public virtual List<SeatPlanViewModel> Get(DateTime startDate, DateTime endDate)
+		{
+			return _seatPlanProvider.Get(new DateOnlyPeriod(new DateOnly(startDate),new DateOnly(endDate) ));
 		}
 	}
 }
