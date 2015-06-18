@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using System.Collections.Generic;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 
@@ -24,7 +25,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			_currentPage = 2;
 			_totalRows = 11;
 			_terminalDate = new DateOnly(2011, 2, 2);
-			_target = new PersonFinderSearchCriteria(_field, _searchValue, _pageSize, _terminalDate, 2, 0) { TotalRows = _totalRows };
+			_target = new PersonFinderSearchCriteria(_field, _searchValue, _pageSize, _terminalDate,
+				new Dictionary<string, bool>())
+			{
+				TotalRows = _totalRows
+			};
 			_target.CurrentPage = _currentPage;
 		}
 

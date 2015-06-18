@@ -146,15 +146,6 @@ namespace Teleopti.Interfaces.Domain
 		int EndRow { get; }
 
 		///<summary>
-		///</summary>
-		int SortColumn { get; set; }
-
-		///<summary>
-		///</summary>
-		int SortDirection { get; set; }
-
-
-		///<summary>
 		/// Set row
 		///</summary>
 		///<param name="rowNumber"></param>
@@ -162,5 +153,7 @@ namespace Teleopti.Interfaces.Domain
 		void SetRow(int rowNumber, IPersonFinderDisplayRow theRow);
 
 		IDictionary<PersonFinderField, string> SearchCriterias { get; }
+
+		IDictionary<string, bool> SortColumns { get; set; }
 	}
 }

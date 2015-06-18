@@ -7,7 +7,8 @@ angular
 		this.search = $resource('../api/Search/People/Keyword', {
 			keyword: "@searchKey",
 			pageSize: "@pageSize",
-			currentPageIndex: "@currentPageIndex"
+			currentPageIndex: "@currentPageIndex",
+			sortedColumns: "@sortedColumn"
 		}, {
 			query: {
 				method: 'GET',
@@ -15,6 +16,7 @@ angular
 				isArray: false
 			}
 		});
+
 		this.isAdvancedSearchEnabled = $resource('../ToggleHandler/IsEnabled?toggle=:toggle',
 		{
 			toggle: "@toggle"

@@ -1,6 +1,6 @@
-using System;
 using NUnit.Framework;
 using Rhino.Mocks;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 
 			target = new PeopleSearchController(new FakePeopleSearchProvider(new []{person}, new []{optionalColumn}), loggonUser);
 
-			var result = ((dynamic) target).GetResult("Ashley", 10, 1);
+			var result = ((dynamic)target).GetResult("Ashley", 10, 1, "");
 
 			var optionalColumns = (IEnumerable<string>)result.Content.OptionalColumns;
 			Assert.AreEqual(1, optionalColumns.Count());
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 
 			target = new PeopleSearchController(new FakePeopleSearchProvider(new[] { firstPerson, secondPerson }, new List<IOptionalColumn>()), loggonUser);
 
-			var result = ((dynamic) target).GetResult("a", 10, 1);
+			var result = ((dynamic) target).GetResult("a", 10, 1, "");
 
 			var peopleList = (IEnumerable<dynamic>)result.Content.People;
 			Assert.AreEqual(firstPerson.Name.FirstName, peopleList.First().FirstName);
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 
 			target = new PeopleSearchController(new FakePeopleSearchProvider(new[] { person, currentUser }, new List<IOptionalColumn>()), loggonUser);
 
-			var result = ((dynamic)target).GetResult("", 10, 1);
+			var result = ((dynamic)target).GetResult("", 10, 1, "");
 			var peopleList = (IEnumerable<dynamic>)result.Content.People;
 
 			Assert.AreEqual(2, peopleList.Count());
@@ -122,7 +122,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			};
 		}
 
-		public PeopleSummaryModel SearchPeople(IDictionary<PersonFinderField, string> criteriaDictionary, int pageSize, int currentPageIndex, DateOnly currentDate)
+		public PeopleSummaryModel SearchPeople(IDictionary<PersonFinderField, string> criteriaDictionary, int pageSize, int currentPageIndex,
+			 DateOnly currentDate, IDictionary<string, bool> sortedColumns)
 		{
 			return _model;
 		}

@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.People.Core.Providers;
 using Teleopti.Interfaces.Domain;
@@ -21,7 +20,6 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 		private IPersonRepository personRepository;
 		private PeopleSearchProvider target;
 		private IOptionalColumnRepository optionalColumnRepository;
-		private ILoggedOnUser loggedOnUser;
 
 		[SetUp]
 		public void Setup()
@@ -29,9 +27,8 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 			searchRepository = MockRepository.GenerateMock<IPersonFinderReadOnlyRepository>();
 			personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			optionalColumnRepository = MockRepository.GenerateMock<IOptionalColumnRepository>();
-			loggedOnUser = new FakeLoggedOnUser();
 			target = new PeopleSearchProvider(searchRepository, personRepository,
-				new FakePermissionProvider(), optionalColumnRepository, loggedOnUser);
+				new FakePermissionProvider(), optionalColumnRepository);
 		}
 
 		[Test]
@@ -64,7 +61,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 			personRepository.Stub(x => x.FindPeople(new List<Guid> { personId })).IgnoreArguments().Return(new List<IPerson> { person });
 
 			var optionalColumn = new OptionalColumn("CellPhone");
-			optionalColumnRepository.Stub(x => x.GetOptionalColumns<Person>()).Return(new List<IOptionalColumn>()
+			optionalColumnRepository.Stub(x => x.GetOptionalColumns<Person>()).Return(new List<IOptionalColumn>
 			{
 				optionalColumn
 			});
@@ -78,7 +75,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 					PersonFinderField.All, "Ashley"
 				}
 			};
-			var result = target.SearchPeople(searchCriteria, 10, 1, DateOnly.Today);
+			var result = target.SearchPeople(searchCriteria, 10, 1, DateOnly.Today, new Dictionary<string, bool>());
 
 			var peopleList = result.People;
 			var optionalColumns = result.OptionalColumns;
@@ -121,7 +118,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 					PersonFinderField.All, "Ashley"
 				}
 			};
-			var result = target.SearchPeople(searchCriteria, 10, 1, DateOnly.Today);
+			var result = target.SearchPeople(searchCriteria, 10, 1, DateOnly.Today, new Dictionary<string, bool>());
 			var peopleList = result.People;
 			peopleList.Count().Equals(0);
 		}

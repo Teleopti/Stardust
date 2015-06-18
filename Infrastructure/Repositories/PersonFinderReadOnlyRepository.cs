@@ -81,14 +81,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			var result = ((NHibernateUnitOfWork) uow).Session.CreateSQLQuery(
 				"exec [ReadModel].PersonFinderWithCriteria @search_criterias=:searchCriterias_string, "
-				+ "@leave_after=:leave_after, @start_row =:start_row, @end_row=:end_row, @order_by=:order_by, "
-				+ "@sort_direction=:sort_direction, @culture=:culture")
+				+ "@leave_after=:leave_after, @start_row =:start_row, @end_row=:end_row, @order_by=:order_by, @culture=:culture")
 				.SetString("searchCriterias_string", createSearchString(personFinderSearchCriteria.SearchCriterias))
 				.SetDateOnly("leave_after", personFinderSearchCriteria.TerminalDate)
 				.SetInt32("start_row", personFinderSearchCriteria.StartRow)
 				.SetInt32("end_row", personFinderSearchCriteria.EndRow)
-				.SetInt32("order_by", personFinderSearchCriteria.SortColumn)
-				.SetInt32("sort_direction", personFinderSearchCriteria.SortDirection)
+				.SetString("order_by", generateOrderByString(personFinderSearchCriteria.SortColumns))
 				.SetInt32("culture", cultureId)
 				.SetResultTransformer(Transformers.AliasToBean(typeof (PersonFinderDisplayRow)))
 				.SetReadOnly(true)
@@ -101,6 +99,48 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				personFinderSearchCriteria.SetRow(row, personFinderDisplayRow);
 				row++;
 			}
+		}
+
+		private string generateOrderByString(IDictionary<string, bool> sortColumns)
+		{
+			if (sortColumns == null || !sortColumns.Any())
+			{
+				return "1:1";
+			}
+
+			// This mapping should keep exact same as in SP "ReadModel.PersonFinderWithCriteria"
+			var columnMapping = new Dictionary<string, int>
+			{
+				{"firstname", 0},
+				{"lastname", 1},
+				{"employmentnumber", 2},
+				{"note", 3},
+				{"terminaldate", 4}
+			};
+
+			var orderBy = string.Empty;
+
+			var terminalDateExist = false;
+			foreach (var col in sortColumns)
+			{
+				var columnName = col.Key.Trim();
+				if (columnMapping.ContainsKey(columnName))
+				{
+					orderBy += string.Format("{0}:{1},", columnMapping[columnName], col.Value ? 1 : 0);
+				}
+				else if (!terminalDateExist)
+				{
+					orderBy += string.Format("{0}:{1},", columnMapping["terminaldate"], col.Value ? 1 : 0);
+					terminalDateExist = true;
+				}
+			}
+
+			if (orderBy.EndsWith(","))
+			{
+				orderBy = orderBy.Remove(orderBy.Length - 1, 1);
+			}
+
+			return orderBy;
 		}
 
 		public void FindPeople(IPeoplePersonFinderSearchCriteria personFinderSearchCriteria)
@@ -256,15 +296,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		private readonly IList<IPersonFinderDisplayRow> _displayRows;
 		private DateOnly _terminalDate;
 
-		public PersonFinderSearchCriteria(PersonFinderField field, string searchValue, int pageSize, DateOnly terminalDate, int sortColumn, int sortDirection)
+		public PersonFinderSearchCriteria(PersonFinderField field, string searchValue, int pageSize, DateOnly terminalDate, IDictionary<string, bool> sortColumns)
 		{
 			_searchCriterias = new Dictionary<PersonFinderField, string>();
 			_searchCriterias.Add(field, searchValue);
 			_pageSize = pageSize;
 			_displayRows = new List<IPersonFinderDisplayRow>();
 			_terminalDate = terminalDate;
-			SortColumn = sortColumn;
-			SortDirection = sortDirection;
+			SortColumns = sortColumns;
 			_currentPage = 1;
 
 			for (var i = 0; i < _pageSize; i++)
@@ -274,14 +313,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		}
 
 		public PersonFinderSearchCriteria(IDictionary<PersonFinderField, string> searchCriterias, int pageSize,
-			DateOnly terminalDate, int sortColumn, int sortDirection)
+			DateOnly terminalDate, IDictionary<string, bool> sortColumns)
 		{
 			_searchCriterias = searchCriterias;
 			_pageSize = pageSize;
 			_displayRows = new List<IPersonFinderDisplayRow>();
 			_terminalDate = terminalDate;
-			SortColumn = sortColumn;
-			SortDirection = sortDirection;
+			SortColumns = sortColumns;
 			_currentPage = 1;
 
 			for (var i = 0; i < _pageSize; i++)
@@ -346,8 +384,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			_displayRows[rowNumber] = theRow;
 		}
 
-		public int SortColumn { get; set; }
-		public int SortDirection { get; set; }
+		public IDictionary<string, bool> SortColumns { get; set; }
 	}
 
 	public class PersonFinderDisplayRow : IPersonFinderDisplayRow

@@ -4,7 +4,7 @@ angular
 	.module('wfm.people', ['peopleService', 'peopleSearchService', 'ui.grid.pagination'])
 	.constant('chunkSize', 50)
 	.controller('PeopleCtrl', [
-		'$scope', '$filter', '$state', '$document','$translate','i18nService', 'PeopleSearch', PeopleController
+		'$scope', '$filter', '$state', '$document','$translate','i18nService','uiGridConstants', 'PeopleSearch', PeopleController
 	])
 	.directive('outsideClick', ['$document', '$parse', function ($window, $parse) {
 		return {
@@ -20,7 +20,7 @@ angular
 		};
 	}]);
 
-function PeopleController($scope, $filter, $state, $document,$translate,i18nService, SearchSvrc) {
+function PeopleController($scope, $filter, $state, $document,$translate,i18nService, uiGridConstants, SearchSvrc) {
 	$scope.searchResult = [];
 	$scope.pageSize = 20;
 	$scope.keyword = '';
@@ -34,25 +34,36 @@ function PeopleController($scope, $filter, $state, $document,$translate,i18nServ
 	var paginationOptions = {
 		pageNumber: 1,
 		pageSize: 20,
-		sort: null
+		sortColumns: [{
+			ColumnName: "FirstName",
+			SortASC: true
+		}]
 	};
-	i18nService.setCurrentLang($translate.use());
 	$scope.gridOptions = {
 		exporterMenuCsv: true,
 		exporterCsvFilename: 'data.csv',
 		exporterMenuPdf: false,
 		enableGridMenu: true,
-		enableSorting: true,
+		useExternalSorting: true,
 		columnDefs: [
-		  { displayName: 'FirstName', field: 'FirstName', headerCellFilter: 'translate', cellClass: 'first-name' },
-		  { displayName:'LastName', field: 'LastName', headerCellFilter: 'translate' },
-		  { field: 'Team', headerCellFilter: 'translate' },
-		  { field: 'Email', headerCellFilter: 'translate' },
-		  { displayName:'EmployeeNo', field: 'EmploymentNumber', headerCellFilter: 'translate' },
-		  { displayName:'TerminalDate', field: 'LeavingDate', headerCellFilter: 'translate' }
+			{ displayName: 'FirstName', field: 'FirstName', headerCellFilter: 'translate', cellClass: 'first-name' },
+			{
+				displayName: 'LastName',
+				field: 'LastName',
+				headerCellFilter: 'translate',
+				sort: {
+					direction: uiGridConstants.ASC,
+					priority: 0,
+				}
+			},
+			{ displayName: 'EmployeeNo', field: 'EmploymentNumber', headerCellFilter: 'translate' },
+			{ displayName: 'Team', field: 'Team', headerCellFilter: 'translate', enableSorting: false },
+			{ displayName: 'Email', field: 'Email', headerCellFilter: 'translate', enableSorting: false },
+			{ displayName: 'TerminalDate', field: 'LeavingDate', headerCellFilter: 'translate', enableSorting: false }
 		],
+		i18n: $translate.use(),
 		gridMenuTitleFilter: $translate,
-		exporterAllDataFn: function () {
+		exporterAllDataFn: function() {
 			return loadAllResults();
 		},
 		paginationPageSize: 20,
@@ -66,21 +77,53 @@ function PeopleController($scope, $filter, $state, $document,$translate,i18nServ
 				paginationOptions.pageSize = pageSize;
 				getPage();
 			});
+			$scope.gridApi.core.on.sortChanged($scope, $scope.sortChanged);
 		}
 	};
 
-	var getPage = function() {
+	$scope.sortChanged = function (grid, sortColumns) {
+		paginationOptions.sortColumns = [];
+
+		for (var i = 0; i < sortColumns.length; i++) {
+			var sortColumnName = sortColumns[i].name;
+			for (var j = 0; j < $scope.gridOptions.columnDefs.length; j++) {
+				if (sortColumnName === $scope.gridOptions.columnDefs[j].name) {
+					paginationOptions.sortColumns.push({
+						ColumnName: sortColumnName,
+						SortASC: sortColumns[i].sort.direction == uiGridConstants.ASC
+					});
+					break;
+				}
+			}
+		}
+
+		getPage();
+	};
+
+	var getPage = function () {
 		if ($scope.searchKeywordChanged) {
 			$scope.currentPageIndex = 1;
 		}
+
+		var sortColumnList = "";
+		for (var i = 0; i < paginationOptions.sortColumns.length; i++) {
+			var col = paginationOptions.sortColumns[i];
+			sortColumnList = sortColumnList + col.ColumnName + ":" + col.SortASC + ";";
+		};
+
+		if (sortColumnList != "") {
+			sortColumnList = sortColumnList.substring(0, sortColumnList.length - 1);
+		}
+
 		SearchSvrc.search.query({
 			keyword: $scope.keyword,
 			pageSize: paginationOptions.pageSize,
-			currentPageIndex: paginationOptions.pageNumber
-		}).$promise.then(function(result) {
+			currentPageIndex: paginationOptions.pageNumber,
+			sortColumns: sortColumnList
+		}).$promise.then(function (result) {
 			$scope.searchResult = result.People;
 			$scope.gridOptions.data = result.People;
-			angular.forEach(result.People, function(person) {
+			angular.forEach($scope.searchResult, function (person) {
 				angular.forEach(person.OptionalColumnValues, function(val) {
 					person[val.Key] = val.Value;
 				});
@@ -96,7 +139,7 @@ function PeopleController($scope, $filter, $state, $document,$translate,i18nServ
 						}
 					});
 					if (!isFound) {
-						$scope.gridOptions.columnDefs.push({ displayName: col, field: col, headerCellFilter: 'translate' });
+						$scope.gridOptions.columnDefs.push({ displayName: col, field: col, headerCellFilter: 'translate', enableSorting: false });
 					}
 
 				});
@@ -159,7 +202,7 @@ function PeopleController($scope, $filter, $state, $document,$translate,i18nServ
 		$scope.searchKeywordChanged = true;
 		parseSearchKeywordInputted();
 	};
-	    
+		
 	$scope.searchKeyword = function () {
 		getPage();
 	};
@@ -188,7 +231,7 @@ function PeopleController($scope, $filter, $state, $document,$translate,i18nServ
 					}
 				});
 				if (!isFound) {
-					$scope.gridOptions.columnDefs.push({ displayName:col, field: col, headerCellFilter: 'translate' });
+					$scope.gridOptions.columnDefs.push({ displayName: col, field: col, headerCellFilter: 'translate', enableSorting: false });
 				}
 			});
 		});

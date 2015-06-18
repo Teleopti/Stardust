@@ -3,7 +3,7 @@ IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ReadModel].[
 DROP PROCEDURE [ReadModel].[PersonFinderWithCriteria]
 GO
 
--- EXEC [ReadModel].[PersonFinderWithCriteria] 'FirstName : ashley; pierre, Organization: london', '2001-01-01', 1, 100, 1, 1, 1053
+-- EXEC [ReadModel].[PersonFinderWithCriteria] 'FirstName : ashley; pierre, Organization: london', '2001-01-01', 1, 100, '1:1,2:0', 1053
 -- =============================================
 -- Author:      Xinfeng
 -- Create date: 2005-05-09
@@ -11,16 +11,16 @@ GO
 -- Change Log
 ------------------------------------------------
 -- When         Who       What
--- 2015-05-08   Chundan	  Add mutual search for type 'All' and other specific searchTypes, and make searching in 'All' match all values
--- 2015-05-11   Xinfeng	  Optimize search value parsing
+-- 2015-05-08   Chundan   Add mutual search for type 'All' and other specific searchTypes, and make searching in 'All' match all values
+-- 2015-05-11   Xinfeng   Optimize search value parsing
+-- 2015-06-16   Xinfeng   Add multiple-orderby support
 -- =============================================
 CREATE PROCEDURE [ReadModel].[PersonFinderWithCriteria]
 @search_criterias nvarchar(max),
 @leave_after datetime,
 @start_row int,
 @end_row int,
-@order_by int,
-@sort_direction int,
+@order_by nvarchar(30),
 @culture int
 AS
 SET NOCOUNT ON
@@ -252,23 +252,66 @@ ORDER BY LastName, FirstName
 DECLARE @total int
 SELECT @total = COUNT(*) FROM #result
 
-SELECT @dynamicSQL=''
+-- Combine order by string
+CREATE TABLE #OrderByStrings(
+	OrderByString nvarchar(10),
+)
 
-SELECT @dynamicSQL='SELECT ' + cast(@total as nvarchar(10)) + ' AS TotalCount, *
-    FROM (
-    SELECT *, ROW_NUMBER() OVER(ORDER BY ' +
-        CASE @order_by
+INSERT INTO #OrderByStrings
+SELECT * FROM dbo.SplitStringString(@order_by)
+
+DECLARE @colId INT;
+DECLARE @direction INT;
+
+DECLARE @fullOrderBy NVARCHAR(100)
+SELECT @fullOrderBy = ''
+
+DECLARE @orderByString NVARCHAR(10)
+DECLARE OrderByStringCursor CURSOR FOR
+SELECT RTRIM(LTRIM(OrderByString)) FROM #OrderByStrings;
+OPEN OrderByStringCursor;
+
+FETCH NEXT FROM OrderByStringCursor INTO @orderByString
+
+WHILE @@FETCH_STATUS = 0
+BEGIN
+	SELECT @splitterIndex = CHARINDEX(':', @orderByString)
+	IF @splitterIndex > 0
+	BEGIN
+		SELECT @colId = CONVERT(INT, LTRIM(RTRIM(SUBSTRING(@orderByString, 0, @splitterIndex))))
+		SELECT @direction = CONVERT(INT, LTRIM(RTRIM(SUBSTRING(@orderByString, @splitterIndex + 1, LEN(@orderByString) - @splitterIndex))))
+
+		SELECT @fullOrderBy = @fullOrderBy + CASE @colId
             WHEN 0 THEN 'PC.FirstName collate ' + @collation
             WHEN 1 THEN 'PC.LastName collate ' + @collation
             WHEN 2 THEN 'PC.EmploymentNumber collate ' + @collation
             WHEN 3 THEN 'PC.Note collate ' + @collation
             ELSE 'CONVERT(varchar(50), PC.TerminalDate, 120) collate ' + @collation
         END + ' ' +
-        CASE @sort_direction
-            WHEN 1 THEN 'ASC) AS RowNumber'
-            ELSE 'DESC) AS RowNumber'
-        END + ' ' +
-     ' FROM #result PC) #result WHERE RowNumber >= '+ cast(@start_row as nvarchar(10))
+        CASE @direction
+            WHEN 1 THEN 'ASC'
+            ELSE 'DESC'
+        END + ','
+	END
+	FETCH NEXT FROM OrderByStringCursor INTO @orderByString
+END
+
+IF RIGHT(@fullOrderBy, 1) = ','
+	SELECT @fullOrderBy = SUBSTRING(@fullOrderBy, 1, LEN(@fullOrderBy) - 1)
+
+--debug
+--SELECT @fullOrderBy
+
+CLOSE OrderByStringCursor
+DEALLOCATE OrderByStringCursor;
+Drop Table #OrderByStrings
+
+SELECT @dynamicSQL=''
+
+SELECT @dynamicSQL='SELECT ' + cast(@total as nvarchar(10)) + ' AS TotalCount, *
+    FROM (
+    SELECT *, ROW_NUMBER() OVER(ORDER BY ' + @fullOrderBy + ') AS RowNumber
+      FROM #result PC) #result WHERE RowNumber >= '+ cast(@start_row as nvarchar(10))
      + ' AND RowNumber < '+ cast(@end_row as nvarchar(10))
 
 --debug

@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 
 		[UnitOfWork]
 		[HttpGet, Route("api/Search/People/Keyword")]
-		public virtual IHttpActionResult GetResult(string keyword, int pageSize, int currentPageIndex)
+		public virtual IHttpActionResult GetResult(string keyword, int pageSize, int currentPageIndex, string sortColumns)
 		{
 			var currentDate = DateOnly.Today;
 			var myTeam = _loggonUser.CurrentUser().MyTeam(currentDate);
@@ -41,8 +41,27 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 				keyword = siteTerm + " " + teamTerm;
 			}
 
+			// Key is column name for sort, value is sort by ascending or not
+			var sortColumnList = new Dictionary<string, bool>();
+			if (string.IsNullOrEmpty(sortColumns))
+			{
+				sortColumnList.Add("firstname", true);
+			}
+			else
+			{
+				var columns = sortColumns.Trim().Split(';');
+				foreach (var col in columns)
+				{
+					var parts = col.Split(':');
+					if (parts.Length == 2)
+					{
+						sortColumnList.Add(parts[0].Trim(), parts[1].Trim().ToUpper() == "ASC");
+					}
+				}
+			}
+
 			var criteriaDictionary = SearchTermParser.Parse(keyword);
-			var result = constructResult(pageSize, currentPageIndex, criteriaDictionary, currentDate);
+			var result = constructResult(pageSize, currentPageIndex, sortColumnList, criteriaDictionary, currentDate);
 			return Ok(result);
 		}
 
@@ -54,15 +73,15 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 			var currentDate = DateOnly.Today;
 			var criteriaDictionary = SearchTermParser.Parse(input.SearchCriteria);
 
-			var result = constructResult(input.PageSize, input.CurrentPageIndex, criteriaDictionary, currentDate);
+			var result = constructResult(input.PageSize, input.CurrentPageIndex, input.SortColumns, criteriaDictionary, currentDate);
 			return Ok(result);
 		}
 
 
-		private object constructResult(int pageSize, int currentPageIndex, IDictionary<PersonFinderField, 
+		private object constructResult(int pageSize, int currentPageIndex, IDictionary<string, bool> sortColumns, IDictionary<PersonFinderField, 
 			string> criteriaDictionary, DateOnly currentDate)
 		{
-			var peopleList = _searchProvider.SearchPeople(criteriaDictionary, pageSize, currentPageIndex, currentDate);
+			var peopleList = _searchProvider.SearchPeople(criteriaDictionary, pageSize, currentPageIndex, currentDate, sortColumns);
 			var resultPeople = peopleList.People.Select(x => new
 			{
 				FirstName = x.Name.FirstName,
@@ -78,7 +97,46 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 					return new KeyValuePair<string, string>(c.Name, value);
 				}),
 				Team = x.MyTeam(currentDate) == null ? "" : x.MyTeam(currentDate).SiteAndTeam
-			}).OrderBy(p => p.LastName);
+			});
+
+			/*
+			if (sortedColumn == 0)
+			{
+				switch (sortedDirection)
+				{
+					case 1:
+						resultPeople = resultPeople.OrderBy(x => x.FirstName);
+						break;
+					case 0:
+						resultPeople = resultPeople.OrderByDescending(x => x.FirstName);
+						break;
+				}
+			}
+			if (sortedColumn == 1)
+			{
+				switch (sortedDirection)
+				{
+					case 1:
+						resultPeople = resultPeople.OrderBy(x => x.LastName);
+						break;
+					case 0:
+						resultPeople = resultPeople.OrderByDescending(x => x.LastName);
+						break;
+				}
+			}
+			if (sortedColumn == 2)
+			{
+				switch (sortedDirection)
+				{
+					case 1:
+						resultPeople = resultPeople.OrderBy(x => x.EmploymentNumber);
+						break;
+					case 0:
+						resultPeople = resultPeople.OrderByDescending(x => x.EmploymentNumber);
+						break;
+				}
+			}
+			//*/
 
 			var result = new
 			{
@@ -96,6 +154,7 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 		public PeopleSearchCriteria SearchCriteria { get; set; }
 		public int PageSize { get; set; }
 		public int CurrentPageIndex { get; set; }
+		public IDictionary<string, bool> SortColumns { get; set; }
 	}
 
 	public class PeopleSearchCriteria

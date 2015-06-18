@@ -1,6 +1,6 @@
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using NUnit.Framework;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldMatchAllValuesInAllCriteria()
 		{
 			var crit = new PersonFinderSearchCriteria(PersonFinderField.All, "Ashley Agent", 10,
-															 new DateOnly(2012, 1, 1), 1, 1);
+				new DateOnly(2012, 1, 1), new Dictionary<string, bool>());
 			_target = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.CurrentUnitOfWork());
 			_target.Find(crit);
 			Assert.That(crit.TotalRows, Is.EqualTo(1));
@@ -34,8 +34,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void ShouldLoadPersonsWithOneCriteria()
         {
-            var crit = new PersonFinderSearchCriteria(PersonFinderField.All, "agent", 10,
-                                                             new DateOnly(2012, 1, 1), 1, 1);
+	        var crit = new PersonFinderSearchCriteria(PersonFinderField.All, "agent", 10,
+				new DateOnly(2012, 1, 1), new Dictionary<string, bool>());
             _target = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.CurrentUnitOfWork());
             _target.Find(crit);
             Assert.That(crit.TotalRows, Is.EqualTo(2));
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			criterias.Add(PersonFinderField.FirstName,"Ashley");
 			criterias.Add(PersonFinderField.Role,"Agent");
 			var crit = new PersonFinderSearchCriteria(criterias, 10,
-															 new DateOnly(2012, 1, 1), 1, 1);
+				new DateOnly(2012, 1, 1), new Dictionary<string, bool>());
 			_target = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.CurrentUnitOfWork());
 			_target.Find(crit);
 			Assert.That(crit.TotalRows, Is.EqualTo(1));
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldLoadPersonsWithOneWordQuotation()
 		{
 			var crit = new PersonFinderSearchCriteria(PersonFinderField.All, "\"Team Preference\" \"London\"", 10,
-				new DateOnly(2016, 1, 1), 1, 1);
+				new DateOnly(2016, 1, 1), new Dictionary<string, bool>());
 			_target = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.CurrentUnitOfWork());
 			_target.Find(crit);
 			Assert.That(crit.TotalRows, Is.EqualTo(2));
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldLoadPersonsWithQuotationForOneWord()
 		{
 			var crit = new PersonFinderSearchCriteria(PersonFinderField.All, "\"Ashley\"\"Agent\"", 10,
-															 new DateOnly(2012, 1, 1), 1, 1);
+				new DateOnly(2012, 1, 1), new Dictionary<string, bool>());
 			_target = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.CurrentUnitOfWork());
 			_target.Find(crit);
 			Assert.That(crit.TotalRows, Is.EqualTo(1));
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldHandleTooSmallDate()
 		{
 			var crit = new PersonFinderSearchCriteria(PersonFinderField.All, "hejhej", 10,
-																			 new DateOnly(1012, 1, 1), 1, 1);
+				new DateOnly(1012, 1, 1), new Dictionary<string, bool>());
 			_target = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.CurrentUnitOfWork());
 			_target.Find(crit);
 			Assert.That(crit.TotalRows, Is.EqualTo(0));

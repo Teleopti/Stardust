@@ -16,28 +16,25 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 		private readonly IPersonRepository _personRepository;
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly IOptionalColumnRepository _optionalColumnRepository;
-		private readonly ILoggedOnUser _loggonUser;
 
 		public PeopleSearchProvider(
 			IPersonFinderReadOnlyRepository searchRepository,
 			IPersonRepository personRepository,
 			IPermissionProvider permissionProvider,
-			IOptionalColumnRepository optionalColumnRepository,
-			ILoggedOnUser loggonUser)
+			IOptionalColumnRepository optionalColumnRepository)
 		{
 			_searchRepository = searchRepository;
 			_personRepository = personRepository;
 			_permissionProvider = permissionProvider;
 			_optionalColumnRepository = optionalColumnRepository;
-			_loggonUser = loggonUser;
 		}
 
 		public PeopleSummaryModel SearchPeople(IDictionary<PersonFinderField, string> criteriaDictionary,
-			int pageSize, int currentPageIndex, DateOnly currentDate)
+			int pageSize, int currentPageIndex, DateOnly currentDate, IDictionary<string, bool> sortedColumns)
 		{
 			var optionalColumnCollection = _optionalColumnRepository.GetOptionalColumns<Person>();
 
-			var search = new PersonFinderSearchCriteria(criteriaDictionary, pageSize, currentDate, 1, 1)
+			var search = new PersonFinderSearchCriteria(criteriaDictionary, pageSize, currentDate, sortedColumns)
 			{
 				CurrentPage = currentPageIndex
 			};
