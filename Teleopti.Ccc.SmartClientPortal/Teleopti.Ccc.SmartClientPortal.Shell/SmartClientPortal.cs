@@ -13,6 +13,7 @@ using Autofac;
 using EO.WebBrowser;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.SmartClientPortal.Shell.Controls;
 using Teleopti.Ccc.Win.Backlog;
 using Teleopti.Ccc.Win.Common.Controls.OutlookControls.Workspaces;
@@ -66,6 +67,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		readonly int homeCommand = CommandIds.RegisterUserCommand("StartPage");
 		private bool canAccessInternet = true;
 		private bool _webViewLoaded = true;
+		private MemoryCounter _memoryCounter = new MemoryCounter();
 
 		protected SmartClientShellForm()
 		{
@@ -296,15 +298,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			var t = new Timer { Interval = 1000, Enabled = true };
 			t.Tick += updateMem;
 		}
-
-		private long maxMem = 0;
 		
 		private void updateMem(object sender, EventArgs e)
 		{
-			var mem = GC.GetTotalMemory(true);
-			if (mem > maxMem)
-				maxMem = mem;
-			Roger65(string.Format(CultureInfo.CurrentCulture, "Mem: {0:#.00} MB (max mem: {1:#} MB)", (double)mem/1024/1024, maxMem/1024/1024));
+			Roger65(_memoryCounter.CurrentMemoryConsumption());
 		}
 
 		private void SmartClientShellForm_FormClosing(object sender, FormClosingEventArgs e)
