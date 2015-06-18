@@ -47,3 +47,47 @@
 	display: inline-block;
 	width: 0;
 }
+
+.advaned-container {
+	position: absolute;
+	z-index: 1;
+	overflow: hidden;
+	width: auto;
+	margin-top: -15px;
+	margin-left: 20px;
+	padding: 5px 10px;
+	background-color: #fff;
+}
+
+.people-form-input {
+	position: relative;
+	float: left;
+	margin-top: 20px;
+}
+
+.advanced-input {
+	font-size: 18px;
+	position: relative;
+	overflow: hidden;
+	margin-top: 8px;
+	margin-right: 10px;
+	margin-bottom: 8px;
+}
+
+.advanced-label {
+	font-size: 18px;
+	font-weight: normal;
+	position: absolute;
+	top: -22px;
+	left: 5px;
+	transition: .2s ease all;
+	pointer-events: none;
+	color: #999;
+}
+
+.advanced-input:focus ~ label,
+.advanced-input:valid ~ label {
+	font-size: 14px;
+	top: -25px;
+	color: #ec38a3;
+}
