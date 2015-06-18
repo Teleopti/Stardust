@@ -26,6 +26,11 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 			return createInstance(connectionString, "web");
 		}
 
+		public static TenantUnitOfWorkManager CreateInstanceForThread(string connectionString)
+		{
+			return createInstance(connectionString, "thread_static");
+		}
+
 		private static TenantUnitOfWorkManager createInstance(string connectionString, string sessionContext)
 		{
 			if(connectionString==null)

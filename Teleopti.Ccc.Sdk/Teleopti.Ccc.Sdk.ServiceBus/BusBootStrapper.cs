@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Configuration;
 using Autofac;
 using Rhino.ServiceBus;
 using Rhino.ServiceBus.MessageModules;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
@@ -22,14 +22,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			build.RegisterType<ApplicationLogOnMessageModule>().As<IMessageModule>().Named<IMessageModule>(typeof(ApplicationLogOnMessageModule).FullName);
 			build.Update(Container);
 
-			var xmlPath = ConfigurationManager.AppSettings["ConfigPath"];
-			if (string.IsNullOrWhiteSpace(xmlPath))
-			{
-				xmlPath = AppDomain.CurrentDomain.BaseDirectory;
-			}
-			var confReader = new ReadDataSourceConfigurationFromNhibFiles(new NhibFilePathFixed(xmlPath), new ParseNhibFile());
-			var fileConfigurationReader = new FileConfigurationReader(confReader);
-			fileConfigurationReader.ReadConfiguration(new MessageSenderCreator(new InternalServiceBusSender(() => Container.Resolve<IServiceBus>())), () => Container.Resolve<IMessageBrokerComposite>());
+		    using (Container.Resolve<ITenantUnitOfWork>().Start())
+		    {
+					var fileConfigurationReader = new FileConfigurationReader(Container.Resolve<IReadDataSourceConfiguration>());
+					fileConfigurationReader.ReadConfiguration(new MessageSenderCreator(new InternalServiceBusSender(() => Container.Resolve<IServiceBus>())), () => Container.Resolve<IMessageBrokerComposite>());
+		    }
 		}
 
         protected override bool IsTypeAcceptableForThisBootStrapper(Type t)
