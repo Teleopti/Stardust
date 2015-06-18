@@ -21,25 +21,25 @@ namespace Teleopti.Ccc.Domain.Helper
 		public static void RegisterEventSubscription(this IMessageListener broker, EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType)
 		{
 			var detail = getContext();
-			broker.RegisterSubscription(detail.Datasource,detail.BusinessUnitId,eventMessageHandler,domainObjectType);
+			broker.addSubscription(eventMessageHandler, detail.Datasource, detail.BusinessUnitId, null, null, null, domainObjectType, Consts.MinDate, Consts.MaxDate);
 		}
 
 		public static void RegisterEventSubscription(this IMessageListener broker, EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType, DateTime startDate, DateTime endDate)
 		{
 			var detail = getContext();
-			broker.RegisterSubscription(detail.Datasource, detail.BusinessUnitId, eventMessageHandler, domainObjectType, startDate,endDate);
+			broker.addSubscription(eventMessageHandler, detail.Datasource, detail.BusinessUnitId, null, null, null, domainObjectType, startDate, endDate);
 		}
 
-		public static void RegisterEventSubscription(this IMessageListener broker, EventHandler<EventMessageArgs> eventMessageHandler,Guid referenceObjectId, Type referenceObjectType, Type domainObjectType, DateTime startDate, DateTime endDate)
+		public static void RegisterEventSubscription(this IMessageListener broker, EventHandler<EventMessageArgs> eventMessageHandler,Guid referenceObjectId, Type referenceObjectType, Type domainObjectType, DateTime startDate, DateTime endDate, bool base64BinaryData = true, bool mailBox = false)
 		{
 			var detail = getContext();
-			broker.RegisterSubscription(detail.Datasource, detail.BusinessUnitId, eventMessageHandler,referenceObjectId,referenceObjectType, domainObjectType, startDate, endDate);
+			broker.addSubscription(eventMessageHandler, detail.Datasource, detail.BusinessUnitId, referenceObjectId, referenceObjectType, null, domainObjectType, startDate, endDate, base64BinaryData, mailBox);
 		}
 
 		public static void RegisterEventSubscription(this IMessageListener broker, EventHandler<EventMessageArgs> eventMessageHandler, Guid domainObjectId, Type domainObjectType, DateTime startDate, DateTime endDate)
 		{
 			var detail = getContext();
-			broker.RegisterSubscription(detail.Datasource, detail.BusinessUnitId, eventMessageHandler, domainObjectId, domainObjectType, startDate, endDate);
+			broker.addSubscription(eventMessageHandler, detail.Datasource, detail.BusinessUnitId, null, null, domainObjectId, domainObjectType, startDate, endDate);
 		}
 
 		private class subscriptionContext
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Domain.Helper
 			broker.addSubscription(eventMessageHandler, dataSource, businessUnitId, referenceObjectId, referenceObjectType, null, domainObjectType, startDate, endDate);
 		}
 
-		private static void addSubscription(this IMessageListener broker, EventHandler<EventMessageArgs> eventMessageHandler, string datasource, Guid businessUnitId, Guid? referenceObjectId, Type referenceObjectType, Guid? domainObjectId, Type domainObjectType, DateTime startDate, DateTime endDate)
+		private static void addSubscription(this IMessageListener broker, EventHandler<EventMessageArgs> eventMessageHandler, string datasource, Guid businessUnitId, Guid? referenceObjectId, Type referenceObjectType, Guid? domainObjectId, Type domainObjectType, DateTime startDate, DateTime endDate, bool base64BinaryData = true, bool mailbox = false)
 		{
 			var subscription = new Subscription
 			{
@@ -91,7 +91,18 @@ namespace Teleopti.Ccc.Domain.Helper
 				BusinessUnitId = Subscription.IdToString(businessUnitId),
 			};
 
-			broker.RegisterSubscription(subscription, eventMessageHandler);
+			var handler = eventMessageHandler;
+			if (base64BinaryData)
+			{
+				handler = (s, e) =>
+				{
+					if (!string.IsNullOrEmpty(e.InternalMessage.BinaryData))
+						e.Message.DomainObject = Convert.FromBase64String(e.InternalMessage.BinaryData);
+					e.InternalMessage.BinaryData = null;
+					eventMessageHandler(s, e);
+				};
+			}
+			broker.RegisterSubscription(subscription, handler);
 		}
 	}
 }

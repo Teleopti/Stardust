@@ -53,16 +53,8 @@ namespace Teleopti.Messaging.Client
 				ReferenceObjectId = message.DomainReferenceIdAsGuid(),
 				EventStartDate = message.StartDateAsDateTime(),
 				EventEndDate = message.EndDateAsDateTime(),
-				DomainUpdateType = message.DomainUpdateTypeAsDomainUpdateType()
+				DomainUpdateType = message.DomainUpdateTypeAsDomainUpdateType(),
 			};
-
-			// assuming all binary data sent is base 64?
-			// OHHHHHH NOOOOOOOO!!!!!
-			var domainObject = message.BinaryData;
-			if (!string.IsNullOrEmpty(domainObject))
-			{
-				eventMessage.DomainObject = Convert.FromBase64String(domainObject);
-			}
 
 			var matchingHandlers = from s in _subscriptions
 				from r in message.Routes()
@@ -74,7 +66,7 @@ namespace Teleopti.Messaging.Client
 				select s.Callback;
 
 			foreach (var handler in matchingHandlers)
-				handler(this, new EventMessageArgs(eventMessage));
+				handler(this, new EventMessageArgs(eventMessage) {InternalMessage = message});
 
 
 		}
