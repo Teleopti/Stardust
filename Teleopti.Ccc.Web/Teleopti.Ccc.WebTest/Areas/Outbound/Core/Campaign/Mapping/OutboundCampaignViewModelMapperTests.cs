@@ -3,11 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Outbound;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping;
 using Teleopti.Interfaces.Domain;
@@ -126,14 +123,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core.Campaign.Mapping
 		public void ShouldMapStartDate()
 		{
 			var result = _target.Map(_campaigns);
-			result.First().StartDate.Should().Be.EqualTo(_campaign.StartDate);
-		}
-
+			result.First().StartDate.Should().Be.EqualTo(_campaign.SpanningPeriod.StartDate);
+		}		
+		
 		[Test]
 		public void ShouldMapEndDate()
 		{
 			var result = _target.Map(_campaigns);
-			result.First().EndDate.Should().Be.EqualTo(_campaign.EndDate);
+			result.First().EndDate.Should().Be.EqualTo(_campaign.SpanningPeriod.EndDate);
 		}
 
 		[Test]

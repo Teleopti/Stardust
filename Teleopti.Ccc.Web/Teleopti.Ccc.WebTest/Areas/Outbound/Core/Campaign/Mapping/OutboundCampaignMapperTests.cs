@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core.Campaign.Mapping
 			var target = new OutboundCampaignMapper(_outboundCampaignRepository);
 			var result = target.Map(_campaignViewModel);
 
-			result.StartDate.Should().Be.EqualTo(_campaignViewModel.StartDate);
+			result.SpanningPeriod.StartDate.Should().Be.EqualTo(_campaignViewModel.StartDate);
 		}		
 		
 		[Test]
@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core.Campaign.Mapping
 			var target = new OutboundCampaignMapper(_outboundCampaignRepository);
 			var result = target.Map(_campaignViewModel);
 
-			result.EndDate.Should().Be.EqualTo(_campaignViewModel.EndDate);
+			result.SpanningPeriod.EndDate.Should().Be.EqualTo(_campaignViewModel.EndDate);
 		}
 	}
 }

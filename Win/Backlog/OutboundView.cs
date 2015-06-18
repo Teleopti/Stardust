@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Win.Backlog
 			// move to method in repository
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				_campaigns = new OutboundCampaignRepository(uow).LoadAll().Where(c => c.EndDate > new DateOnly(DateTime.Now).AddDays(-30)).ToList();
+				_campaigns = new OutboundCampaignRepository(uow).LoadAll().Where(c => c.SpanningPeriod.EndDate > new DateOnly(DateTime.Now).AddDays(-30)).ToList();
 				foreach (var campaign in _campaigns)
 				{
 					LazyLoadingManager.Initialize(campaign.Skill);
@@ -103,8 +103,8 @@ namespace Teleopti.Ccc.Win.Backlog
 				return;
 			}
 
-				var earliestStart = _campaigns.Min(c => c.StartDate).Value;
-				var latestEnd = _campaigns.Max(c => c.EndDate).Value;
+				var earliestStart = _campaigns.Min(c => c.SpanningPeriod.StartDate);
+				var latestEnd = _campaigns.Max(c => c.SpanningPeriod.EndDate);
 				_loadedPeriod = new DateOnlyPeriod(earliestStart, latestEnd);
 
 			

@@ -46,8 +46,7 @@ namespace Teleopti.Ccc.Win.Backlog
 			DialogResult = DialogResult.OK;
 			var campaign = new Campaign();
 			campaign.Name = textBox1.Text;
-			campaign.StartDate = new DateOnly(monthCalendar1.SelectionStart);
-			campaign.EndDate = new DateOnly(monthCalendar1.SelectionEnd);
+			campaign.SpanningPeriod = new DateOnlyPeriod(new DateOnly(monthCalendar1.SelectionStart), new DateOnly(monthCalendar1.SelectionEnd));
 			campaign.CallListLen = (int)numericUpDown1.Value;
 			campaign.ConnectAverageHandlingTime = (int) numericUpDown2.Value;
 			var campaignWorkingPeriod = new CampaignWorkingPeriod();

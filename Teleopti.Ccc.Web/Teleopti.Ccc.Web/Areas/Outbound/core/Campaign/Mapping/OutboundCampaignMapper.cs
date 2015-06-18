@@ -1,5 +1,6 @@
 ﻿using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.Outbound.Models;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping
 {
@@ -24,8 +25,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping
 			campaign.ConnectAverageHandlingTime = campaignViewModel.ConnectAverageHandlingTime;
 			campaign.RightPartyConnectRate = campaignViewModel.RightPartyConnectRate;
 			campaign.UnproductiveTime = campaignViewModel.UnproductiveTime;
-			campaign.StartDate = campaignViewModel.StartDate;
-			campaign.EndDate = campaignViewModel.EndDate;
+			campaign.SpanningPeriod = new DateOnlyPeriod(campaignViewModel.StartDate, campaignViewModel.EndDate);
 			return campaign;
 		}
 	}

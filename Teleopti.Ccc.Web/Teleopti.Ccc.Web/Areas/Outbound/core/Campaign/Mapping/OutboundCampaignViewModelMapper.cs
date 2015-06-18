@@ -62,8 +62,8 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping
 				ConnectAverageHandlingTime = campaign.ConnectAverageHandlingTime,
 				RightPartyAverageHandlingTime = campaign.RightPartyAverageHandlingTime,
 				UnproductiveTime = campaign.UnproductiveTime,
-				StartDate = campaign.StartDate,
-				EndDate = campaign.EndDate,
+				StartDate = campaign.SpanningPeriod.StartDate,
+				EndDate = campaign.SpanningPeriod.EndDate,
 				CampaignWorkingPeriods = Map(campaign.CampaignWorkingPeriods).ToList(),
 			};
 

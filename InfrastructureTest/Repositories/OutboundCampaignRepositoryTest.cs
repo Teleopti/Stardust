@@ -49,8 +49,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				ConnectAverageHandlingTime = 30,
 				RightPartyAverageHandlingTime = 120,
 				UnproductiveTime = 30,
-				StartDate = DateOnly.Today,
-				EndDate = DateOnly.Today,
+				SpanningPeriod = new DateOnlyPeriod(DateOnly.Today, DateOnly.MaxValue)
 			};
 
 			return campaign;

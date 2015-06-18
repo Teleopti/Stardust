@@ -17,8 +17,8 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 		public int ConnectAverageHandlingTime;
 		public int RightPartyAverageHandlingTime;
 		public int UnproductiveTime;
-		public DateOnly? StartDate;
-		public DateOnly? EndDate;
+		public DateOnly StartDate;
+		public DateOnly EndDate;
 		public IEnumerable<CampaignWorkingPeriodViewModel> CampaignWorkingPeriods;		
 	}
 

@@ -50,18 +50,6 @@
 		<property name="UnproductiveTime"
 							type="int"
 							not-null="true"/>
-
-		<property name="StartDate"
-							type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"
-							not-null="false"
-					 insert="false"
-					 update="false" />
-
-		<property name="EndDate"
-							type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"
-							not-null="false"
-					 insert="false"
-					 update="false" />
 		
 		<map name="WorkingHours"
                 table="OutboundCampaignWorkingHours"

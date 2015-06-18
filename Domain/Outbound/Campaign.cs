@@ -17,8 +17,6 @@ namespace Teleopti.Ccc.Domain.Outbound
 		private int _connectAverageHandlingTime;
 		private int _rightPartyAverageHandlingTime;
 		private int _unproductiveTime;
-		private DateOnly? _startDate;
-		private DateOnly? _endDate;
 		private ISet<CampaignWorkingPeriod> _campaignWorkingPeriods;
 		private IDictionary<DateOnly, TimeSpan> _manualProductionPlanDays = new Dictionary<DateOnly, TimeSpan>();
 		private IDictionary<DateOnly, TimeSpan> _actualBacklogDays = new Dictionary<DateOnly, TimeSpan>(); 
@@ -43,8 +41,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 			_connectAverageHandlingTime = 30;
 			_rightPartyAverageHandlingTime = 120;
 			_unproductiveTime = 30;
-			_startDate = DateOnly.Today;
-			_endDate = DateOnly.Today;
+			_spanningPeriod = new DateOnlyPeriod(DateOnly.Today, DateOnly.MaxValue);
 			_campaignWorkingPeriods = new HashSet<CampaignWorkingPeriod>();
 		}
 
@@ -102,20 +99,6 @@ namespace Teleopti.Ccc.Domain.Outbound
 		{
 			get { return _unproductiveTime; }
 			set { _unproductiveTime = value; }
-		}
-
-		[Obsolete("Will be removed. Use SpanTimePeriod instead. ")]
-		public virtual DateOnly? StartDate
-		{
-			get { return _startDate; }
-			set { _startDate= value; }
-		}
-
-		[Obsolete("Will be removed. Use SpanTimePeriod instead. ")]
-		public virtual DateOnly? EndDate
-		{
-			get { return _endDate; }
-			set { _endDate= value; }
 		}
 
 		public virtual IDictionary<DayOfWeek, TimePeriod> WorkingHours
