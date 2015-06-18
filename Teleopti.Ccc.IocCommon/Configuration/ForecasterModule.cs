@@ -24,9 +24,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ForecastMethodProvider>()
 				.SingleInstance()
 				.As<IForecastMethodProvider>();
-			builder.RegisterType<LinearRegressionTrend>()
+			builder.RegisterType<LinearRegressionTrendCalculator>()
 				.SingleInstance()
-				.As<ILinearRegressionTrend>();
+				.As<ILinearTrendCalculator>();
 			builder.RegisterType<OutlierRemover>()
 				.SingleInstance()
 				.As<IOutlierRemover>();

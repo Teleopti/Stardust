@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Outlier
 			historicalData.TaskOwnerDayCollection.Single(x => x.CurrentDate == new DateOnly(date))
 				.TotalStatisticCalculatedTasks.Should().Be.EqualTo(1000);
 
-			var result = target.RemoveOutliers(historicalData, new TeleoptiClassicWithTrend(indexVolumes,new LinearRegressionTrend()));
+			var result = target.RemoveOutliers(historicalData, new TeleoptiClassicWithTrend(indexVolumes,new LinearRegressionTrendCalculator()));
 
 			result.TaskOwnerDayCollection.Count.Should().Be.EqualTo(25);
 			Math.Round(result.TaskOwnerDayCollection.Single(x => x.CurrentDate == new DateOnly(date))

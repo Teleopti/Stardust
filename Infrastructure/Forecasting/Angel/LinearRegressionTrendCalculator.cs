@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.Forecasting.Angel.Trend;
 
 namespace Teleopti.Ccc.Infrastructure.Forecasting.Angel
 {
-	public class LinearRegressionTrend : ILinearRegressionTrend
+	public class LinearRegressionTrendCalculator : ILinearTrendCalculator
 	{
 		public LinearTrend CalculateTrend(ITaskOwnerPeriod historicalData)
 		{

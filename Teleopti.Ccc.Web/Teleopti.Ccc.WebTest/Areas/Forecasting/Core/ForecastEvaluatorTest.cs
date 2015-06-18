@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 				ForecastMethodType = ForecastMethodType.TeleoptiClassic
 			};
 			workloadRepository.Stub(x => x.Get(queueStatisticsInput.WorkloadId)).Return(workload);
-			var target = new ForecastEvaluator(null, workloadRepository, historicalPeriodProvider, historicalData, new OutlierRemover(), new ForecastMethodProvider(new DayWeekMonthIndexVolumes(), new LinearRegressionTrend()));
+			var target = new ForecastEvaluator(null, workloadRepository, historicalPeriodProvider, historicalData, new OutlierRemover(), new ForecastMethodProvider(new DayWeekMonthIndexVolumes(), new LinearRegressionTrendCalculator()));
 			
 			var result = target.QueueStatistics(queueStatisticsInput);
 

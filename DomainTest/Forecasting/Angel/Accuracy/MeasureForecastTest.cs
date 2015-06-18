@@ -14,6 +14,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Forecasting.Angel;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
+using LinearTrend = Teleopti.Ccc.Domain.Forecasting.Angel.Trend.LinearTrend;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 {
@@ -40,13 +41,13 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 			var currentScenario = MockRepository.GenerateStub<ICurrentScenario>();
 			currentScenario.Stub(x => x.Current()).Return(DefaultScenario);
 
-			var linearRegressionTrend = MockRepository.GenerateMock<ILinearRegressionTrend>();
-			linearRegressionTrend.Stub(x => x.CalculateTrend(null)).IgnoreArguments().Return(new LinearTrend {Slope = 1, Intercept = 2});
+			var linearTrendMethod = MockRepository.GenerateMock<ILinearTrendCalculator>();
+			linearTrendMethod.Stub(x => x.CalculateTrend(null)).IgnoreArguments().Return(new LinearTrend {Slope = 1, Intercept = 2});
 			var historicalPeriodProvider = MockRepository.GenerateMock<IHistoricalPeriodProvider>();
 			historicalPeriodProvider.Stub(x => x.AvailablePeriod(Workload)).Return(HistoricalPeriodForForecast);
 
 			var outlierRemover = new OutlierRemover();
-			var target = new ForecastWorkloadEvaluator(new HistoricalData(dailyStatistics), new ForecastingWeightedMeanAbsolutePercentageError(), new ForecastMethodProvider(new DayWeekMonthIndexVolumes(), linearRegressionTrend), historicalPeriodProvider, outlierRemover);
+			var target = new ForecastWorkloadEvaluator(new HistoricalData(dailyStatistics), new ForecastingWeightedMeanAbsolutePercentageError(), new ForecastMethodProvider(new DayWeekMonthIndexVolumes(), linearTrendMethod), historicalPeriodProvider, outlierRemover);
 			var measurementResult = target.Evaluate(Workload);
 
 			Assert(measurementResult);

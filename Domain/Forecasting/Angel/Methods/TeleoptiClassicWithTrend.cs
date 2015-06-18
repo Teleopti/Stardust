@@ -7,17 +7,17 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 {
 	public class TeleoptiClassicWithTrend : TeleoptiClassicBase
 	{
-		private readonly ILinearRegressionTrend _linearRegressionTrend;
+		private readonly ILinearTrendCalculator _linearTrendCalculator;
 
-		public TeleoptiClassicWithTrend(IIndexVolumes indexVolumes, ILinearRegressionTrend linearRegressionTrend)
+		public TeleoptiClassicWithTrend(IIndexVolumes indexVolumes, ILinearTrendCalculator linearTrendCalculator)
 			: base(indexVolumes)
 		{
-			_linearRegressionTrend = linearRegressionTrend;
+			_linearTrendCalculator = linearTrendCalculator;
 		}
 
 		public override ForecastResult Forecast(ITaskOwnerPeriod historicalData, DateOnlyPeriod futurePeriod)
 		{
-			var trend = _linearRegressionTrend.CalculateTrend(historicalData);
+			var trend = _linearTrendCalculator.CalculateTrend(historicalData);
 			var forecastResult = base.Forecast(historicalData, futurePeriod);
 			var forecastTargets = forecastResult.ForecastingTargets;
 

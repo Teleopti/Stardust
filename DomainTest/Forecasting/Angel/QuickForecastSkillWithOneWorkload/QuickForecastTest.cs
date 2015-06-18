@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 
 			var futureData =new FutureData();
 			var historicalData = new HistoricalData(dailyStatistics);
-			var methodProvider = new ForecastMethodProvider(new DayWeekMonthIndexVolumes(), new LinearRegressionTrend());
+			var methodProvider = new ForecastMethodProvider(new DayWeekMonthIndexVolumes(), new LinearRegressionTrendCalculator());
 			var outlierRemover = new OutlierRemover();
 			var quickForecasterWorkload = new QuickForecasterWorkload(historicalData, futureData, methodProvider, new ForecastingTargetMerger(), outlierRemover);
 			var historicalPeriodProvider = MockRepository.GenerateMock<IHistoricalPeriodProvider>();

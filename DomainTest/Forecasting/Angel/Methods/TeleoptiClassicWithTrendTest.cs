@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Methods
 		private TaskOwnerPeriod historicalData;
 		private double _averageTasks;
 		private LinearTrend linearTrend;
-		private ILinearRegressionTrend _linearRegressionTrend;
+		private ILinearTrendCalculator _linearTrendCalculator;
 
 		[SetUp]
 		public void Setup()
@@ -38,9 +38,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Methods
 
 			_averageTasks = historicalData.TotalStatisticCalculatedTasks / historicalData.TaskOwnerDayCollection.Count;
 
-			_linearRegressionTrend = MockRepository.GenerateMock<ILinearRegressionTrend>();
+			_linearTrendCalculator = MockRepository.GenerateMock<ILinearTrendCalculator>();
 			
-			target = new TeleoptiClassicWithTrend(indexVolumes, _linearRegressionTrend);
+			target = new TeleoptiClassicWithTrend(indexVolumes, _linearTrendCalculator);
 		}
 
 		[Test]
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Methods
 				Slope = 1,
 				Intercept = 2
 			};
-			_linearRegressionTrend.Stub(x => x.CalculateTrend(historicalData)).Return(linearTrend);
+			_linearTrendCalculator.Stub(x => x.CalculateTrend(historicalData)).Return(linearTrend);
 
 			const double indexMonth = 1d;
 			const double indexWeek = 1.1d;
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Methods
 				Slope = -1,
 				Intercept = 2
 			};
-			_linearRegressionTrend.Stub(x => x.CalculateTrend(historicalData)).Return(linearTrend);
+			_linearTrendCalculator.Stub(x => x.CalculateTrend(historicalData)).Return(linearTrend);
 
 			const double indexMonth = 1d;
 			const double indexWeek = 1.1d;

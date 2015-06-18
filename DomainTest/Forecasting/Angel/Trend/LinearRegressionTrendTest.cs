@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Trend
 			var periodForHelper = SkillDayFactory.GenerateMockedStatistics(historicalDate, workload);
 			var historicalData = new TaskOwnerPeriod(historicalDate, periodForHelper.TaskOwnerDays, TaskOwnerPeriodType.Other);
 
-			var target = new LinearRegressionTrend();
+			var target = new LinearRegressionTrendCalculator();
 			var result = target.CalculateTrend(historicalData);
 
 			Math.Round(result.Slope, 15).Should().Be.EqualTo(0.051061454194126);
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Trend
 			periodForHelper.TaskOwnerDays.Add(workloadDay);
 			var historicalData = new TaskOwnerPeriod(historicalDate, periodForHelper.TaskOwnerDays, TaskOwnerPeriodType.Other);
 
-			var target = new LinearRegressionTrend();
+			var target = new LinearRegressionTrendCalculator();
 			var result = target.CalculateTrend(historicalData);
 
 			Math.Round(result.Slope, 15).Should().Be.EqualTo(0.051061454194126);
