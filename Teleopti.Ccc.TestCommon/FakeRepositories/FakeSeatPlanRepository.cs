@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void UpdateStatusForDate (DateOnly date, SeatPlanStatus seatPlanStatus)
 		{
-			_seatPlans.Where(seatPlan => seatPlan.Date == date).ForEach (plan => plan.Status = seatPlanStatus);
+			
 		}
 
 		public IEnumerator<ISeatPlan> GetEnumerator()
@@ -68,6 +68,16 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return GetEnumerator();
+		}
+
+		public void Update (ISeatPlan seatPlan)
+		{
+			//_seatPlans.Select (plan => plan.Date==seatPlan.Date)
+		}
+
+		public ISeatPlan GetSeatPlanForDate (DateOnly date)
+		{
+			return _seatPlans.SingleOrDefault(seatPlan => seatPlan.Date == date);
 		}
 	}
 }

@@ -37,13 +37,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		protected override Repository<ISeatPlan> TestRepository (IUnitOfWork unitOfWork)
 		{
 			return new SeatPlanRepository(unitOfWork); 
-			
 		}
 
 		[Test]
 		public void ShouldChangeSeatPlanStatus()
 		{
-
 			var seatPlan = new SeatPlan()
 			{
 				
@@ -55,14 +53,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(seatPlan);
 
 			var seatPlanRepo = new SeatPlanRepository (UnitOfWork);
-			seatPlanRepo.UpdateStatusForDate (seatPlan.Date, SeatPlanStatus.Ok);
+			var existingSeatPlan = seatPlanRepo.GetSeatPlanForDate (seatPlan.Date);
+			existingSeatPlan.Status = SeatPlanStatus.Ok;
+			seatPlanRepo.Update(existingSeatPlan);
 
 			var loaded = seatPlanRepo.LoadAggregate(seatPlan.Id.Value);
-
 			Assert.AreEqual(loaded.Status, SeatPlanStatus.Ok);
-			
+			Assert.AreEqual(loaded.Id, seatPlan.Id);
 		}
-
 
 		#region Utility Methods
 

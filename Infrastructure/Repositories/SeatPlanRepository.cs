@@ -27,16 +27,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.FirstOrDefault(plan => plan.Id == id);
 		}
 
-		public void UpdateStatusForDate (DateOnly date, SeatPlanStatus seatPlanStatus)
+		public ISeatPlan GetSeatPlanForDate (DateOnly date)
 		{
+			return 	Session.Query<ISeatPlan>().SingleOrDefault(seatPlan => seatPlan.Date == date );
+		}
 
-			var seatPlans = Session.Query<ISeatPlan>().Where (seatPlan => seatPlan.Date == date );
-			foreach (var seatPlan in seatPlans)
-			{
-				seatPlan.Status = seatPlanStatus;
-				Session.Update (seatPlan);
-			}
-			
+		public void Update (ISeatPlan existingSeatPlan)
+		{
+			Session.Update (existingSeatPlan);
 		}
 	}
 }

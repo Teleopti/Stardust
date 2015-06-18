@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			var teams = _teamRepository.FindTeams (command.Teams);
 			var seatPlanner = new SeatPlanner(_scenario.Current(), _publicNoteRepository, _personRepository, _scheduleRepository, _seatBookingRepository,_seatPlanRepository);
 
-			seatPlanner.CreateSeatPlan (rootLocation, teams, period, command.TrackedCommandInfo);
+			seatPlanner.CreateSeatPlansForPeriod (rootLocation, teams, period, command.TrackedCommandInfo);
 
 		}
 		

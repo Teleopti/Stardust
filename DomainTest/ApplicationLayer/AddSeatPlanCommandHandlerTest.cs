@@ -643,6 +643,39 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		}
 
 		[Test]
+		public void ShouldUpdateExistingSeatPlan()
+		{
+			var startDate = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
+			var endDate = new DateTime(2015, 1, 20, 8, 0, 0, DateTimeKind.Utc);
+
+			var team = addTeam("Team");
+			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDate), team);
+			var personAssignment = addAssignment(person, startDate, startDate.AddHours(8));
+			
+			var note = new PublicNote(person, new DateOnly(startDate), _currentScenario.Current(), "Original Note");
+			var publicNoteRepository = new FakePublicNoteRepository(note);
+			var seatMapLocation = addLocation("Location", null, new Seat("Seat One", 1));
+
+			_seatPlanRepository.Add (new SeatPlan()
+			{
+				Date = new DateOnly(startDate.Date),
+				Status = SeatPlanStatus.InError
+
+			});
+
+			var target = setupHandler(new[] { team }, new[] { person }, publicNoteRepository, new[] { seatMapLocation }, personAssignment);
+
+			var command = addSeatPlanCommand(startDate, endDate, new[] { seatMapLocation }, new[] { team });
+			target.Handle(command);
+
+			var seatPlan = _seatPlanRepository.Single();
+			
+			seatPlan.Date.Date.Should().Be(command.StartDate.Date);
+			seatPlan.Status.Should().Be(SeatPlanStatus.Ok);
+			
+		}
+
+		[Test]
 		public void ShouldPersistSeatPlanWithErrorStatus()
 		{
 			var startDate = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
@@ -665,5 +698,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			seatPlanDayOne.Status.Should().Be(SeatPlanStatus.InError);
 
 		}
+
+
+
 	}
 }

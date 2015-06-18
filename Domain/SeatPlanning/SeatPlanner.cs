@@ -36,20 +36,25 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			_seatPlanRepository = seatPlanRepository;
 		}
 
-		public void CreateSeatPlan(SeatMapLocation rootSeatMapLocation, ICollection<ITeam> teams, DateOnlyPeriod period, TrackedCommandInfo trackedCommandInfo)
+		public void CreateSeatPlansForPeriod(SeatMapLocation rootSeatMapLocation, ICollection<ITeam> teams, DateOnlyPeriod period, TrackedCommandInfo trackedCommandInfo)
 		{
 			persistSeatPlans(period);
 
+			assembleAndGroupData(rootSeatMapLocation, teams, period);
+
+			var hasError = allocateSeats(new SeatAllocator(rootSeatMapLocation));
+			persistSeatPlanResult(period, hasError);
+
+		}
+
+		private void assembleAndGroupData(SeatMapLocation rootSeatMapLocation, ICollection<ITeam> teams, DateOnlyPeriod period)
+		{
 			var people = getPeople(teams, period);
 			var bookingPeriodWithSurroundingDays = new DateOnlyPeriod(period.StartDate.AddDays(-1), period.EndDate.AddDays(1));
 
 			_existingSeatBookings = _seatBookingRepository.LoadSeatBookingsForDateOnlyPeriod(bookingPeriodWithSurroundingDays);
 			groupNewBookings(period, people);
 			loadExistingSeatBookings(rootSeatMapLocation);
-
-			var hasError = allocateSeats (new SeatAllocator (rootSeatMapLocation));
-			persistSeatPlanResult (period, hasError);
-
 		}
 
 		private List<IPerson> getPeople(IEnumerable<ITeam> teams, DateOnlyPeriod period)
@@ -96,7 +101,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			var existingBooking = _existingSeatBookings.SingleOrDefault(booking => (booking.BelongsToDate == date && booking.Person == person));
 			if (existingBooking != null)
 			{
-				existingBooking.Seat.RemoveSeatBooking (existingBooking);
+				existingBooking.Seat.RemoveSeatBooking(existingBooking);
 				_existingSeatBookings.Remove(existingBooking);
 				_seatBookingRepository.Remove(existingBooking);
 			}
@@ -121,8 +126,8 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 				seat.AddSeatBookings(seatBookings);
 			}
 
-			rootSeatMapLocation.ChildLocations.ForEach (loadExistingSeatBookings);
-			
+			rootSeatMapLocation.ChildLocations.ForEach(loadExistingSeatBookings);
+
 		}
 
 		private bool allocateSeats(SeatAllocator seatAllocator)
@@ -132,59 +137,70 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 			_seatBookingRepository.AddRange(_bookingsWithDateAndTeam
 				.Where(groupedBookings => groupedBookings.SeatBooking.Seat != null && !_existingSeatBookings.Contains(groupedBookings.SeatBooking))
-				.Select (booking => booking.SeatBooking));
+				.Select(booking => booking.SeatBooking));
 
 			return _bookingsWithDateAndTeam.Exists(groupedBookings => groupedBookings.SeatBooking.Seat == null);
 
 		}
 
-		private void persistSeatPlans (DateOnlyPeriod period)
+		private void persistSeatPlans(DateOnlyPeriod period)
 		{
-			var seatPlanList = new List<ISeatPlan>();
-			period.DayCollection().ForEach (day =>
-				seatPlanList.Add (new SeatPlan()
-				{
-					Date = day,
-					Status = SeatPlanStatus.InProgress
-				}
-					));
-			_seatPlanRepository.AddRange(seatPlanList);
+
+			foreach (var day in period.DayCollection())
+			{
+				addOrUpdateSeatPlan(day);
+			}
+		}
+
+		private void addOrUpdateSeatPlan (DateOnly day)
+		{
+			var seatPlan = _seatPlanRepository.GetSeatPlanForDate (day);
+			if (seatPlan == null)
+			{
+				seatPlan = new SeatPlan {Date = day, Status = SeatPlanStatus.InProgress};
+				_seatPlanRepository.Add (seatPlan);
+			}
+			else
+			{
+				seatPlan.Status = SeatPlanStatus.InProgress;
+				_seatPlanRepository.Update (seatPlan);
+			}
 		}
 
 		private void persistSeatPlanResult(DateOnlyPeriod period, Boolean inError)
 		{
-			period.DayCollection().ForEach(day =>
-				_seatPlanRepository.UpdateStatusForDate(
-					day, inError ? SeatPlanStatus.InError : SeatPlanStatus.Ok
-					)
-				);
+			foreach (var day in period.DayCollection())
+			{
+				var seatPlan = _seatPlanRepository.GetSeatPlanForDate (day);
+				seatPlan.Status = inError ? SeatPlanStatus.InError : SeatPlanStatus.Ok;
+				_seatPlanRepository.Update (seatPlan);
+			}
 		}
 
 		private IEnumerable<SeatBookingRequest> getSeatBookingRequests()
 		{
-		
 			var seatBookingsByDateAndTeam = _bookingsWithDateAndTeam
-				.GroupBy (booking => booking.SeatBooking.BelongsToDate)
-				.Select (x => new
+				.GroupBy(booking => booking.SeatBooking.BelongsToDate)
+				.Select(x => new
 				{
 					Category = x.Key,
 					TeamGroups = x.ToList()
-						.GroupBy (y => y.Team)
+						.GroupBy(y => y.Team)
 				});
 
 			var seatBookingRequests =
 				from day in seatBookingsByDateAndTeam
 				from teamGroups in day.TeamGroups
-				select teamGroups.Select (team => team.SeatBooking)
-				into teamBookingsforDay
-				select new SeatBookingRequest (teamBookingsforDay.ToArray());
+				select teamGroups.Select(team => team.SeatBooking)
+					into teamBookingsforDay
+					select new SeatBookingRequest(teamBookingsforDay.ToArray());
 
 			return seatBookingRequests;
 		}
 
 		private void persistBookings(IEnumerable<teamGroupedBooking> seatBookings)
 		{
-			
+
 			foreach (var bookingWithDateAndTeam in seatBookings)
 			{
 				var booking = bookingWithDateAndTeam.SeatBooking;
