@@ -1,7 +1,6 @@
 ﻿using System.Configuration;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Wfm.Administration.Controllers;
@@ -13,8 +12,6 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 	public class GetVersionsTest
 	{
 		public UpgradeDatabasesController Target;
-		public ITenantUnitOfWork TenantUnitOfWork;
-		public ICurrentTenantSession CurrentTenantSession;
 
 		[Test]
 		public void ShouldReportOkIfSameVersion()

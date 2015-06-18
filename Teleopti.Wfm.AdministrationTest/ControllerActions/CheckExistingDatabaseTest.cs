@@ -4,7 +4,6 @@ using System.Data.SqlClient;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.DBManager.Library;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData;
@@ -17,8 +16,6 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 	public class CheckExistingDatabaseTest
 	{
 		public ImportController Target;
-		public ITenantUnitOfWork TenantUnitOfWork;
-		public ICurrentTenantSession CurrentTenantSession;
 
 		const string dummy = "CF0DA4E0-DC93-410B-976B-EED9C8A34639";
 		const string dummyAnal = "B1EDB896-9D23-4BCF-A42F-F1F2EE5DD64B";
