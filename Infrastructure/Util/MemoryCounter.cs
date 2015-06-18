@@ -5,6 +5,17 @@ namespace Teleopti.Ccc.Infrastructure.Util
 {
 	public class MemoryCounter
 	{
+		private static MemoryCounter defaultInstance;
+		private static readonly object defaultInstanceLocker = new object();
+
+		public static MemoryCounter DefaultInstance()
+		{
+			lock (defaultInstanceLocker)
+			{
+				return defaultInstance ?? (defaultInstance = new MemoryCounter());
+			}
+		}
+
 		private long maxMem = 0;
 
 		public string CurrentMemoryConsumption()

@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.Win.Sikuli.Helpers;
 using Teleopti.Ccc.Win.Sikuli.Validators.RootValidators;
 using Teleopti.Ccc.Win.Sikuli.Views;
@@ -58,7 +59,8 @@ namespace Teleopti.Ccc.Win.Sikuli
 			if (_timer != null)
 				_timer.SetEnd();
 			var validationResult = validator.Validate(_timer);
-			validationResult.Details.AppendLine("Criteria:" + validator.Description);
+			validationResult.Details.AppendLine("Memory usage: " + MemoryCounter.DefaultInstance().CurrentMemoryConsumption());
+			validationResult.Details.AppendLine("Criteria: " + validator.Description);
 			var testView = new SikuliResultView
 			{
 				Header = "Task Done",
