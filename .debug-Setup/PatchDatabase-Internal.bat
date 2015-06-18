@@ -29,21 +29,9 @@ IF %ERRORLEVEL% EQU 2 SET /a WinAuth=0
 IF %WinAuth% equ 1 Call :WinAuth
 IF %WinAuth% equ 0 Call :SQLAuth
 
-SET /P DATABASE=Database name to patch: 
-
-SET /P DATABASETYPE=Database type [TeleoptiCCC7,TeleoptiCCCAgg,TeleoptiAnalytics]: 
-ECHO %DATABASETYPE% > "%temp%\DATABASETYPE.txt"
-
-findstr /C:"TeleoptiAnalytics" /I "%temp%\DATABASETYPE.txt"
-If %ERRORLEVEL% EQU 0 (
-SET /A CROSSDB=1
-SET /P TeleoptiCCCAgg=Analytics is linked to which Agg-database?: 
-)
-
-FINDSTR /C:"TeleoptiCCC7" /I "%temp%\DATABASETYPE.txt"
-If %ERRORLEVEL% EQU 0 (
-SET /A ISCCC7=1
-)
+SET /P DATABASEAPP=Application database name to patch:
+SET /P DATABASEANAL=Analytics database name to patch:
+SET /P DATABASEAGG=Agg database name to patch:
 
 ::Build Teleopti.Support.Security.exe
 ECHO Building %ROOTDIR%\..\Teleopti.Support.Security\Teleopti.Support.Security.csproj
@@ -68,8 +56,17 @@ GOTO :error
 ::Patch DB
 ::Upgrade DB to latest version, we now always include trunk
 CD "%DBMANAGERPATH%"
-ECHO "%DBMANAGER%" -S%INSTANCE% %Conn1% -D%DATABASE% -O%DATABASETYPE% -R -T -LTeleoptiDemoUser:TeleoptiDemoPwd2 -F"%DATABASEPATH%"
-"%DBMANAGER%" -S%INSTANCE% %Conn1% -D%DATABASE% -O%DATABASETYPE% -R -T -LTeleoptiDemoUser:TeleoptiDemoPwd2 -F"%DATABASEPATH%"
+"%DBMANAGER%" -S%INSTANCE% %Conn1% -D%DATABASEAPP% -OTeleoptiCCC7 -R -T -LTeleoptiDemoUser:TeleoptiDemoPwd2 -F"%DATABASEPATH%"
+IF %ERRORLEVEL% NEQ 0 (
+SET /A ERRORLEV=2
+GOTO :error
+)
+"%DBMANAGER%" -S%INSTANCE% %Conn1% -D%DATABASEANAL% -OTeleoptiAnalytics -R -T -LTeleoptiDemoUser:TeleoptiDemoPwd2 -F"%DATABASEPATH%"
+IF %ERRORLEVEL% NEQ 0 (
+SET /A ERRORLEV=2
+GOTO :error
+)
+"%DBMANAGER%" -S%INSTANCE% %Conn1% -D%DATABASEAGG% -OTeleoptiCCCAgg -R -T -LTeleoptiDemoUser:TeleoptiDemoPwd2 -F"%DATABASEPATH%"
 IF %ERRORLEVEL% NEQ 0 (
 SET /A ERRORLEV=2
 GOTO :error
@@ -77,23 +74,12 @@ GOTO :error
 
 CD "%ROOTDIR%"
 
-IF %ISCCC7% EQU 1 (
-ECHO Running: scheduleConverter, ForecasterDateAdjustment, PersonFirstDayOfWeekSetter, PasswordEncryption, LicenseStatusChecker
-"%ROOTDIR%\..\Teleopti.Support.Security\bin\debug\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD%DATABASE% %Conn2%
-IF %ERRORLEVEL% NEQ 0 (
-SET /A ERRORLEV=10
-GOTO :error
-)
-)
-
-IF %CROSSDB% EQU 1 (
-ECHO Running: CrossDatabaseViewUpdate
-"%ROOTDIR%\..\Teleopti.Support.Security\bin\debug\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD"%DATABASE%" -CD"%TeleoptiCCCAgg%" %Conn2%
+ECHO Running: securityexe
+"%ROOTDIR%\..\Teleopti.Support.Security\bin\debug\Teleopti.Support.Security.exe" -DS%INSTANCE% -AP"%DATABASEAPP%" -AN"%DATABASEANAL%" -CD"%TeleoptiCCCAgg%" %Conn2%
 if %errorlevel% NEQ 0 (
 SET /A ERRORLEV=1
 GOTO :error
-)
-)
+
 
 ::Add license
 IF %ISCCC7% EQU 1 Call :AddLic
@@ -106,8 +92,8 @@ GOTO Finish
 :AddLic
 CHOICE /M "Add license?"
 IF %ERRORLEVEL% EQU 1 (
-ECHO SQLCMD -S%INSTANCE% -E -d"%DATABASE%" -i"%ROOTDIR%\database\tsql\AddLic.sql" -v LicFile="%ROOTDIR%\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml"
-SQLCMD -S%INSTANCE% -E -d"%DATABASE%" -i"%ROOTDIR%\database\tsql\AddLic.sql" -v LicFile="%ROOTDIR%\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml"
+ECHO SQLCMD -S%INSTANCE% -E -d"%DATABASEAPP%" -i"%ROOTDIR%\database\tsql\AddLic.sql" -v LicFile="%ROOTDIR%\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml"
+SQLCMD -S%INSTANCE% -E -d"%DATABASEAPP%" -i"%ROOTDIR%\database\tsql\AddLic.sql" -v LicFile="%ROOTDIR%\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml"
 )
 exit /b
 
