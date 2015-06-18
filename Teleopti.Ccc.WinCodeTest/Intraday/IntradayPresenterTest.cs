@@ -388,9 +388,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 
             Assert.AreEqual(_rtaStateHolder, _target.RtaStateHolder);
             _schedulingResultLoader.AssertWasCalled(x => x.LoadWithIntradayData(uow));
-            _messageBroker.AssertWasCalled(x => x.RegisterEventSubscription(MyEventHandler, null), o=> o.IgnoreArguments().Repeat.Twice());
-            _messageBroker.AssertWasCalled(x => x.RegisterEventSubscription(MyEventHandler, Guid.Empty, typeof(Scenario), null, DateTime.UtcNow, DateTime.UtcNow), o => o.IgnoreArguments());
-            _messageBroker.AssertWasCalled(x => x.RegisterEventSubscription(MyEventHandler, null, DateTime.UtcNow, DateTime.UtcNow), o => o.IgnoreArguments().Repeat.Times(2));
+			_messageBroker.AssertWasCalled(x => x.RegisterSubscription(null, MyEventHandler), o => o.IgnoreArguments().Repeat.AtLeastOnce());
         }
 
         [Test]
@@ -441,9 +439,6 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 
 			Assert.AreEqual(_rtaStateHolder, _target.RtaStateHolder);
             _schedulingResultLoader.AssertWasCalled(x => x.LoadWithIntradayData(uow));
-            _messageBroker.AssertWasCalled(x => x.RegisterEventSubscription(MyEventHandler, null), o => o.IgnoreArguments().Repeat.Twice());
-            _messageBroker.AssertWasCalled(x => x.RegisterEventSubscription(MyEventHandler, Guid.Empty, typeof(Scenario), null, DateTime.UtcNow, DateTime.UtcNow), o => o.IgnoreArguments());
-            _messageBroker.AssertWasCalled(x => x.RegisterEventSubscription(MyEventHandler, null, DateTime.UtcNow, DateTime.UtcNow), o => o.IgnoreArguments());
         }
 
 	    [Test]
