@@ -6,9 +6,9 @@ using SharpTestsEx;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Messaging.Client.SignalR;
 using Teleopti.Messaging.Client.SignalR.Wrappers;
-using Teleopti.MessagingTest.SignalR.TestDoubles;
+using Teleopti.MessagingTest.SignalR.ImplementationDetailsTests.TestDoubles;
 
-namespace Teleopti.MessagingTest.SignalR
+namespace Teleopti.MessagingTest.SignalR.ImplementationDetailsTests
 {
 	[TestFixture]
 	public class SignalRConnectionRestartOnClosedTest

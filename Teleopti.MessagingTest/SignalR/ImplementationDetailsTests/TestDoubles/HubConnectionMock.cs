@@ -6,7 +6,7 @@ using Microsoft.AspNet.SignalR.Client.Transports;
 using Teleopti.Messaging.Client.SignalR;
 using Teleopti.Messaging.Client.SignalR.Wrappers;
 
-namespace Teleopti.MessagingTest.SignalR.TestDoubles
+namespace Teleopti.MessagingTest.SignalR.ImplementationDetailsTests.TestDoubles
 {
 	[CLSCompliant(false)]
 	public class HubConnectionMock :IHubConnectionWrapper

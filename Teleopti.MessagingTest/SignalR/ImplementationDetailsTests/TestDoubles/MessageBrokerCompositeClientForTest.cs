@@ -6,7 +6,7 @@ using Teleopti.Messaging.Client.Composite;
 using Teleopti.Messaging.Client.SignalR;
 using Teleopti.Messaging.Client.SignalR.Wrappers;
 
-namespace Teleopti.MessagingTest.SignalR.TestDoubles
+namespace Teleopti.MessagingTest.SignalR.ImplementationDetailsTests.TestDoubles
 {
 	public class MessageBrokerCompositeClientForTest : MessageBrokerCompositeClient
 	{

@@ -3,13 +3,12 @@ using Microsoft.AspNet.SignalR.Client;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Messaging.Client.SignalR;
 using Teleopti.Messaging.Client.SignalR.Wrappers;
-using Teleopti.MessagingTest.SignalR.TestDoubles;
+using Teleopti.MessagingTest.SignalR.ImplementationDetailsTests.TestDoubles;
 
-namespace Teleopti.MessagingTest.SignalR
+namespace Teleopti.MessagingTest.SignalR.ImplementationDetailsTests
 {
 	[TestFixture]
 	public class SignalRSenderTest

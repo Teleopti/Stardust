@@ -5,13 +5,12 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Messaging.Client.SignalR;
 using Teleopti.Messaging.Client.SignalR.Wrappers;
 using Subscription = Microsoft.AspNet.SignalR.Client.Hubs.Subscription;
 
-namespace Teleopti.MessagingTest.SignalR.TestDoubles
+namespace Teleopti.MessagingTest.SignalR.ImplementationDetailsTests.TestDoubles
 {
 	public class HubProxyFake : IHubProxyWrapper
 	{

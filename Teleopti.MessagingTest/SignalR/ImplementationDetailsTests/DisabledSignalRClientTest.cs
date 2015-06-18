@@ -2,7 +2,7 @@
 using SharpTestsEx;
 using Teleopti.Messaging.Client.SignalR;
 
-namespace Teleopti.MessagingTest.SignalR
+namespace Teleopti.MessagingTest.SignalR.ImplementationDetailsTests
 {
 	[TestFixture]
 	public class DisabledSignalRClientTest

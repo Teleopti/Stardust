@@ -39,27 +39,32 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Http\HttpSenderTest.cs" />
-    <Compile Include="SignalR\DisabledSignalRClientTest.cs" />
+    <Compile Include="SignalR\ImplementationDetailsTests\DisabledSignalRClientTest.cs" />
+    <Compile Include="SignalR\ImplementationDetailsTests\SignalRSubscriptionsTest.cs" />
     <Compile Include="SignalR\SignalRSubscriptionsTest.cs" />
-    <Compile Include="SignalR\TestDoubles\FailingHubProxyFake.cs" />
-    <Compile Include="SignalR\TestDoubles\HubProxyFake.cs" />
-    <Compile Include="SignalR\TestDoubles\MessageFilterManagerFake.cs" />
-    <Compile Include="SignalR\TestDoubles\MultiConnectionMessageBrokerCompositeClientForTest.cs" />
-    <Compile Include="SignalR\TestDoubles\MultiConnectionSignalRClientForTest.cs" />
-    <Compile Include="SignalR\TestDoubles\MessageBrokerCompositeClientForTest.cs" />
-    <Compile Include="SignalR\TestDoubles\HubConnectionMock.cs" />
-    <Compile Include="SignalR\SignalBrokerTest.cs" />
-    <Compile Include="SignalR\SignalRConnectionRestartOnClosedTest.cs" />
-    <Compile Include="SignalR\SignalRConnectionRecreateOnPingLossTest.cs" />
-    <Compile Include="SignalR\SignalRConnectionStrategiesIntegrationTest.cs" />
-    <Compile Include="SignalR\TestDoubles\SignalRClientForTest.cs" />
-    <Compile Include="SignalR\SignalRSenderTest.cs" />
-    <Compile Include="SignalR\TestDoubles\HubProxySubscribableFake.cs" />
+    <Compile Include="SignalR\ImplementationDetailsTests\TestDoubles\FailingHubProxyFake.cs" />
+    <Compile Include="SignalR\ImplementationDetailsTests\TestDoubles\HubProxyFake.cs" />
+    <Compile Include="SignalR\ImplementationDetailsTests\TestDoubles\MessageFilterManagerFake.cs" />
+    <Compile Include="SignalR\ImplementationDetailsTests\TestDoubles\MultiConnectionMessageBrokerCompositeClientForTest.cs" />
+    <Compile Include="SignalR\ImplementationDetailsTests\TestDoubles\MultiConnectionSignalRClientForTest.cs" />
+    <Compile Include="SignalR\ImplementationDetailsTests\TestDoubles\MessageBrokerCompositeClientForTest.cs" />
+    <Compile Include="SignalR\ImplementationDetailsTests\TestDoubles\HubConnectionMock.cs" />
+    <Compile Include="SignalR\ImplementationDetailsTests\SignalBrokerTest.cs" />
+    <Compile Include="SignalR\ImplementationDetailsTests\SignalRConnectionRestartOnClosedTest.cs" />
+    <Compile Include="SignalR\ImplementationDetailsTests\SignalRConnectionRecreateOnPingLossTest.cs" />
+    <Compile Include="SignalR\ImplementationDetailsTests\SignalRConnectionStrategiesIntegrationTest.cs" />
+    <Compile Include="SignalR\ImplementationDetailsTests\TestDoubles\SignalRClientForTest.cs" />
+    <Compile Include="SignalR\ImplementationDetailsTests\SignalRSenderTest.cs" />
+    <Compile Include="SignalR\ImplementationDetailsTests\TestDoubles\HubProxySubscribableFake.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Domain\Teleopti.Ccc.Domain.csproj">
       <Project>{ADD1BCDC-CFBB-4632-8FB5-4FF3BD04F666}</Project>
       <Name>Teleopti.Ccc.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
+      <Project>{DB42D973-9889-4D51-9FC5-BE66AA7F117C}</Project>
+      <Name>Teleopti.Ccc.IocCommon</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.TestCommon\Teleopti.Ccc.TestCommon.csproj">
       <Project>{68A028B6-864C-4969-8830-9C3C6BD56A98}</Project>
@@ -75,6 +80,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.Config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

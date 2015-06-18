@@ -1,10 +1,13 @@
 ﻿using System;
+using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
+namespace Teleopti.Ccc.TestCommon
 {
 	public class FakeSignalRClient : ISignalRClient
 	{
+
+		public Action<Message> RegisteredCallback { get; set; }
 
 		public void Configure(string url)
 		{
@@ -23,8 +26,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		{
 		}
 
-		public void RegisterCallbacks(Action<Interfaces.MessageBroker.Message> onMessage, Action afterConnectionCreated)
+		public void RegisterCallbacks(Action<Message> onMessage, Action afterConnectionCreated)
 		{
+			RegisteredCallback = onMessage;
 		}
 
 		public void Dispose()

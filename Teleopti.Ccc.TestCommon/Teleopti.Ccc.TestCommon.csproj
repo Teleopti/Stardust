@@ -187,6 +187,7 @@
     <Compile Include="FakeServiceBusSender.cs" />
     <Compile Include="FakeShiftTradeLightValidator.cs" />
     <Compile Include="FakeSignalR.cs" />
+    <Compile Include="FakeSignalRClient.cs" />
     <Compile Include="FakeSiteOutOfAdherenceReadModelPersister.cs" />
     <Compile Include="FakeTeamOutOfAdherenceReadModelPersister.cs" />
     <Compile Include="FakeUserCulture.cs" />
