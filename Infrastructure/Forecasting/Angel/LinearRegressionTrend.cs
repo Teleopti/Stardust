@@ -7,7 +7,6 @@ namespace Teleopti.Ccc.Infrastructure.Forecasting.Angel
 {
 	public class LinearRegressionTrend : ILinearRegressionTrend
 	{
-
 		public LinearTrend CalculateTrend(ITaskOwnerPeriod historicalData)
 		{
 			var xlist = new List<double>();

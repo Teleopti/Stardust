@@ -25,13 +25,13 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Methods
 			var periodForHelper = SkillDayFactory.GenerateMockedStatistics(historicalDate, workload);
 			var historicalData = new TaskOwnerPeriod(historicalDate, periodForHelper.TaskOwnerDays, TaskOwnerPeriodType.Other);
 
-			var indexVolumes = MockRepository.GenerateMock<IIndexVolumes>();
+			var indexVolumes = MockRepository.GenerateMock<IDayWeekMonthIndexVolumes>();
 			var volumes = IndexVolumesFactory.CreateDayWeekMonthIndexVolumes();
 			indexVolumes.Stub(x => x.Create(historicalData)).Return(volumes);
 
 			var averageTasks = historicalData.TotalStatisticCalculatedTasks / historicalData.TaskOwnerDayCollection.Count;
 
-			var target = new TeleoptiClassicLongTerm(indexVolumes);
+			var target = new TeleoptiClassic(indexVolumes);
 
 			const double indexMonth = 1d;
 			const double indexWeek = 1.1d;

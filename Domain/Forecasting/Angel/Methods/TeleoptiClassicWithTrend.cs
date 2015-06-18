@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 	{
 		private readonly ILinearRegressionTrend _linearRegressionTrend;
 
-		public TeleoptiClassicWithTrend(IDayWeekMonthIndexVolumes indexVolumes, ILinearRegressionTrend linearRegressionTrend)
+		public TeleoptiClassicWithTrend(IIndexVolumes indexVolumes, ILinearRegressionTrend linearRegressionTrend)
 			: base(indexVolumes)
 		{
 			_linearRegressionTrend = linearRegressionTrend;

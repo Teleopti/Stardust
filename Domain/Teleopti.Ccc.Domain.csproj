@@ -532,6 +532,7 @@
     <Compile Include="Forecasting\Angel\IHistoricalPeriodProvider.cs" />
     <Compile Include="Forecasting\Angel\Methods\ForecastMethodProvider.cs" />
     <Compile Include="Forecasting\Angel\Methods\ForecastMethodType.cs" />
+    <Compile Include="Forecasting\Angel\Methods\ForecastResult.cs" />
     <Compile Include="Forecasting\Angel\Methods\IForecastMethod.cs" />
     <Compile Include="Forecasting\Angel\Methods\IForecastMethodProvider.cs" />
     <Compile Include="Forecasting\Angel\Methods\TeleoptiClassic.cs" />

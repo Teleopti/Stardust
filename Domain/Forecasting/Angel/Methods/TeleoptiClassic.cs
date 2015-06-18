@@ -1,8 +1,8 @@
 ﻿namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 {
-	public class TeleoptiClassicLongTerm : TeleoptiClassicBase
+	public class TeleoptiClassic : TeleoptiClassicBase
 	{
-		public TeleoptiClassicLongTerm(IDayWeekMonthIndexVolumes indexVolumes)
+		public TeleoptiClassic(IIndexVolumes indexVolumes)
 			: base(indexVolumes)
 		{
 		}

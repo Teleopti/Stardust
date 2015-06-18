@@ -4,12 +4,12 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 {
 	public class ForecastMethodProvider : IForecastMethodProvider
 	{
-		private readonly IIndexVolumes _indexVolumes;
+		private readonly IDayWeekMonthIndexVolumes _dayWeekMonthIndexVolumes;
 		private readonly ILinearRegressionTrend _linearRegressionTrend;
 
-		public ForecastMethodProvider(IIndexVolumes indexVolumes, ILinearRegressionTrend linearRegressionTrend)
+		public ForecastMethodProvider(IDayWeekMonthIndexVolumes dayWeekMonthIndexVolumes, ILinearRegressionTrend linearRegressionTrend)
 		{
-			_indexVolumes = indexVolumes;
+			_dayWeekMonthIndexVolumes = dayWeekMonthIndexVolumes;
 			_linearRegressionTrend = linearRegressionTrend;
 		}
 
@@ -17,8 +17,8 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 		{
 			return new IForecastMethod[]
 			{
-				new TeleoptiClassic(_indexVolumes),
-				new TeleoptiClassicWithTrend(_indexVolumes, _linearRegressionTrend)
+				new TeleoptiClassic(_dayWeekMonthIndexVolumes),
+				new TeleoptiClassicWithTrend(_dayWeekMonthIndexVolumes, _linearRegressionTrend)
 			};
 		}
 
@@ -27,9 +27,9 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 			switch (forecastMethodType)
 			{
 				case ForecastMethodType.TeleoptiClassic:
-					return new TeleoptiClassic(_indexVolumes);
+					return new TeleoptiClassic(_dayWeekMonthIndexVolumes);
 				case ForecastMethodType.TeleoptiClassicWithTrend:
-					return new TeleoptiClassicWithTrend(_indexVolumes, _linearRegressionTrend);
+					return new TeleoptiClassicWithTrend(_dayWeekMonthIndexVolumes, _linearRegressionTrend);
 				default:
 					return null;
 			}

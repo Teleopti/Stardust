@@ -31,9 +31,24 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 			{
 				var forecastingTarget = new ForecastingTarget(day, new OpenForWork(true, true));
 
-				var totalDayItem = new TotalDayItem();
+				double totalTaskIndex = 1;
+				double talkTimeIndex = 1;
+				double afterTalkTimeIndex = 1;
 
-				SetComparison(forecastingTarget, totalDayItem, volumes, averageStatistics);
+				foreach (var year in volumes)
+				{
+					totalTaskIndex *= year.TaskIndex(forecastingTarget.CurrentDate);
+					talkTimeIndex *= year.TalkTimeIndex(forecastingTarget.CurrentDate);
+					afterTalkTimeIndex *= year.AfterTalkTimeIndex(forecastingTarget.CurrentDate);
+				}
+
+				if (forecastingTarget.OpenForWork.IsOpenForIncomingWork)
+				{
+					forecastingTarget.Tasks = totalTaskIndex * averageStatistics.AverageTasks;
+					forecastingTarget.AverageTaskTime = new TimeSpan((long)(talkTimeIndex * averageStatistics.TalkTime.Ticks));
+					forecastingTarget.AverageAfterTaskTime = new TimeSpan((long)(afterTalkTimeIndex * averageStatistics.AfterTalkTime.Ticks));
+				}
+
 				targetForecastingList.Add(forecastingTarget);
 			}
 
@@ -43,47 +58,11 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 			};
 		}
 
-		public virtual ForecastResult SeasonalVariation(ITaskOwnerPeriod historicalData)
+		public abstract ForecastMethodType Id { get; }
+
+		public ForecastResult SeasonalVariation(ITaskOwnerPeriod historicalData)
 		{
 			return Forecast(historicalData, new DateOnlyPeriod(historicalData.StartDate, historicalData.EndDate));
 		}
-
-		private void SetComparison(IForecastingTarget day, TotalDayItem totalDayItem, IEnumerable<IVolumeYear> volumes, AverageStatistics averageStatistics)
-		{
-			double totalTaskIndex = 1;
-			double talkTimeIndex = 1;
-			double afterTalkTimeIndex = 1;
-
-			//Accumulate the indexes
-			foreach (var year in volumes)
-			{
-				totalTaskIndex *= year.TaskIndex(day.CurrentDate);
-				talkTimeIndex *= year.TalkTimeIndex(day.CurrentDate);
-				afterTalkTimeIndex *= year.AfterTalkTimeIndex(day.CurrentDate);
-			}
-
-			double currentTotalTaskIndex = totalDayItem.TaskIndex == 0 ? totalTaskIndex : totalDayItem.TaskIndex;
-			double currentTalkTimeIndex = totalDayItem.TalkTimeIndex == 0 ? talkTimeIndex : totalDayItem.TalkTimeIndex;
-			double currentAfterTalkTimeIndex = totalDayItem.AfterTalkTimeIndex == 0
-				? afterTalkTimeIndex
-				: totalDayItem.AfterTalkTimeIndex;
-			if (day.OpenForWork.IsOpenForIncomingWork)
-			{
-				day.AverageTaskTime = new TimeSpan((long)(talkTimeIndex * averageStatistics.TalkTime.Ticks));
-				day.AverageAfterTaskTime = new TimeSpan((long)(afterTalkTimeIndex * averageStatistics.AfterTalkTime.Ticks));
-				day.Tasks = totalTaskIndex * averageStatistics.AverageTasks;
-			}
-			totalDayItem.SetComparisonValues(day, totalTaskIndex, talkTimeIndex, afterTalkTimeIndex, 1d);
-			totalDayItem.TaskIndex = currentTotalTaskIndex;
-			totalDayItem.TalkTimeIndex = currentTalkTimeIndex;
-			totalDayItem.AfterTalkTimeIndex = currentAfterTalkTimeIndex;
-		}
-
-		public abstract ForecastMethodType Id { get; }
-	}
-
-	public class ForecastResult
-	{
-		public IList<IForecastingTarget> ForecastingTargets { get; set; }
 	}
 }
