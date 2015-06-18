@@ -53,11 +53,15 @@
 
 		<property name="StartDate"
 							type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"
-							not-null="false" />
+							not-null="false"
+					 insert="false"
+					 update="false" />
 
 		<property name="EndDate"
 							type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"
-							not-null="false" />
+							not-null="false"
+					 insert="false"
+					 update="false" />
 		
 		<map name="WorkingHours"
                 table="OutboundCampaignWorkingHours"
@@ -80,6 +84,13 @@
 			</composite-element>	
       </map>
 
+		<component name="SpanningPeriod" class="Teleopti.Interfaces.Domain.DateOnlyPeriod, Teleopti.Interfaces">
+			<component class ="Teleopti.Interfaces.Domain.MinMax`1[Teleopti.Interfaces.Domain.DateOnly, Teleopti.Interfaces], Teleopti.Interfaces" name="period" access="field">
+				<property name="Minimum" column="StartDate" not-null="true" type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"/>
+				<property name="Maximum" column="EndDate" not-null="true" type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"/>
+			</component>
+		</component>
+		
 		<set name="CampaignWorkingPeriods"
 				 inverse="true"
 				 cascade="all-delete-orphan"

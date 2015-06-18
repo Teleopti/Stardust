@@ -390,7 +390,7 @@ namespace Teleopti.Ccc.Win.Backlog
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var oldPeriod = selectedCampaign.SpanningPeriod;
-				selectedCampaign.SetSpanningPeriod(new DateOnlyPeriod(oldPeriod.StartDate.AddDays(7), oldPeriod.EndDate.AddDays(7)));
+				selectedCampaign.SpanningPeriod = new DateOnlyPeriod(oldPeriod.StartDate.AddDays(7), oldPeriod.EndDate.AddDays(7));
 				var outboundCampaignRepo = _container.Resolve<IOutboundCampaignRepository>();
 				outboundCampaignRepo.Add(selectedCampaign);
 

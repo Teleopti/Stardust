@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.Outbound
 			campaignWorkingPeriod.AddAssignment(campaignWorkingPeriodAssignmentFriday);
 
 			_campaign.AddWorkingPeriod(campaignWorkingPeriod);
-			_campaign.SetSpanningPeriod(new DateOnlyPeriod(2015, 6, 15, 2015, 6, 15));
+			_campaign.SpanningPeriod = new DateOnlyPeriod(2015, 6, 15, 2015, 6, 15);
 		}
 
 		[Test]

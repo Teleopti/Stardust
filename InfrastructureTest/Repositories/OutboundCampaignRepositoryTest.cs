@@ -193,11 +193,24 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var campaign = CreateCampaignWithWorkingHours(expectedWeekday, expectePeriod);
 
 			var repository = new OutboundCampaignRepository(UnitOfWork);
-
 			var loadedCampaign = repository.Get(campaign.Id.GetValueOrDefault());
 		
 			loadedCampaign.WorkingHours.ContainsKey(expectedWeekday).Should().Be.True();
-		
+			loadedCampaign.WorkingHours[expectedWeekday].Should().Be.EqualTo(expectePeriod);
+		}
+
+		[Test]
+		public void ShouldSetSpanningPeriod()
+		{
+			var expectedPeriod = new DateOnlyPeriod(2015, 6, 18, 2015, 7, 18);
+			var campaign = CreateAggregateWithCorrectBusinessUnit();
+			campaign.SpanningPeriod = expectedPeriod;
+			PersistAndRemoveFromUnitOfWork(campaign);
+
+			var repository = new OutboundCampaignRepository(UnitOfWork);
+			var loadedCampaign = repository.Get(campaign.Id.GetValueOrDefault());
+
+			loadedCampaign.SpanningPeriod.Should().Be.EqualTo(expectedPeriod);
 		}
 
 		private Campaign CreateCampaignWithWorkingHours(DayOfWeek weekday, TimePeriod period)

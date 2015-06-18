@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 		private IDictionary<DateOnly, TimeSpan> _actualBacklogDays = new Dictionary<DateOnly, TimeSpan>(); 
 		private bool _isDeleted;
 		private IDictionary<DayOfWeek, TimePeriod> _workingHours = new Dictionary<DayOfWeek, TimePeriod>();
-		private DateOnlyPeriod _spanTimePeriod;
+		private DateOnlyPeriod _spanningPeriod;
 
         	public Campaign()
 		{
@@ -118,12 +118,6 @@ namespace Teleopti.Ccc.Domain.Outbound
 			set { _endDate= value; }
 		}
 
-		public virtual DateOnlyPeriod SpanTimePeriod
-		{
-			get { return _spanTimePeriod; }
-			set { _spanTimePeriod = value; }
-		}
-
 		public virtual IDictionary<DayOfWeek, TimePeriod> WorkingHours
 		{
 			get { return _workingHours; }
@@ -132,13 +126,8 @@ namespace Teleopti.Ccc.Domain.Outbound
 
 		public virtual DateOnlyPeriod SpanningPeriod //remove start and endate, persist this as not nullable
 		{
-			get { return new DateOnlyPeriod(_startDate.Value, _endDate.Value); }
-		}
-
-		public virtual void SetSpanningPeriod(DateOnlyPeriod period)
-		{
-			_startDate = period.StartDate;
-			_endDate = period.EndDate;
+			get { return _spanningPeriod; }
+			set { _spanningPeriod = value; }
 		}
 
 		public virtual int CampaignTasks() //what should be returned, Niclas?
