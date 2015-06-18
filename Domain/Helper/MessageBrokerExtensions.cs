@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Helper
 
 
 
-		public static void RegisterSubscription(this IMessageListener broker, string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType)
+		public static void RegisterSubscription(this IMessageListener broker, string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType, bool base64BinaryData = true, bool mailbox = false)
 		{
 			broker.addSubscription(eventMessageHandler, dataSource, businessUnitId, null, null, null, domainObjectType, Consts.MinDate, Consts.MaxDate);
 		}

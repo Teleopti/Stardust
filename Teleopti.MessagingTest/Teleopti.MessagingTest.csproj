@@ -39,6 +39,7 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Http\HttpSenderTest.cs" />
+    <Compile Include="Http\SignalRSubscriptionsTest.cs" />
     <Compile Include="SignalR\ImplementationDetailsTests\DisabledSignalRClientTest.cs" />
     <Compile Include="SignalR\ImplementationDetailsTests\SignalRSubscriptionsTest.cs" />
     <Compile Include="SignalR\SignalRSubscriptionsTest.cs" />
