@@ -12,10 +12,10 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Methods
 {
 	[TestFixture]
-	public class TeleoptiClassicTest
+	public class TeleoptiClassicUpdatedBaseTest
 	{
 		[Test]
-		public void ShouldForecastTasksUsingIndexesCorrectly()
+		public void ShouldForecastAhtAndAcwCorrectly()
 		{
 			var skill = SkillFactory.CreateSkill("testSkill");
 			skill.TimeZone = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
@@ -29,19 +29,19 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Methods
 			var volumes = IndexVolumesFactory.CreateDayWeekMonthIndexVolumes();
 			indexVolumes.Stub(x => x.Create(historicalData)).Return(volumes);
 
-			var averageTasks = historicalData.TotalStatisticCalculatedTasks / historicalData.TaskOwnerDayCollection.Count;
-
-			var target = new TeleoptiClassic(indexVolumes);
-
-			const double indexMonth = 1d;
-			const double indexWeek = 1.1d;
-			const double indexDay = 1.2d;
-
-			const double totalIndex = indexMonth * indexWeek * indexDay;
-			var tasks = totalIndex * averageTasks;
+			var simpleAhtAndAcwCalculator = MockRepository.GenerateMock<IAhtAndAcwCalculator>();
+			var acw = new TimeSpan(502);
+			var aht = new TimeSpan(503);
+			simpleAhtAndAcwCalculator.Stub(x => x.Recent3MonthsAverage(historicalData)).Return(new AhtAndAcw
+			{
+				Acw = acw,
+				Aht = aht
+			});
+			var target = new TeleoptiClassicUpdatedBaseFake(indexVolumes, simpleAhtAndAcwCalculator);
 
 			var result = target.Forecast(historicalData, new DateOnlyPeriod(new DateOnly(2014, 1, 1), new DateOnly(2014, 1, 1)));
-			result.ForecastingTargets.Single().Tasks.Should().Be.EqualTo(Math.Round(tasks, 4));
+			result.ForecastingTargets.Single().AverageAfterTaskTime.Should().Be.EqualTo(acw);
+			result.ForecastingTargets.Single().AverageTaskTime.Should().Be.EqualTo(aht);
 		}
 	}
 }

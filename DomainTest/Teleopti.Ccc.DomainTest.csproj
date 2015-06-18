@@ -394,7 +394,11 @@
     <Compile Include="Forecasting\Angel\DayWeekMonthIndexVolumesTest.cs" />
     <Compile Include="Forecasting\Angel\HistoricalPeriodProviderTest.cs" />
     <Compile Include="Forecasting\Angel\IndexVolumesFactory.cs" />
-    <Compile Include="Forecasting\Angel\Methods\TeleoptiClassicTest.cs" />
+    <Compile Include="Forecasting\Angel\Methods\SimpleAhtAndAcwCalculatorTest.cs" />
+    <Compile Include="Forecasting\Angel\Methods\TeleoptiClassicBaseFake.cs" />
+    <Compile Include="Forecasting\Angel\Methods\TeleoptiClassicBaseTest.cs" />
+    <Compile Include="Forecasting\Angel\Methods\TeleoptiClassicUpdatedBaseFake.cs" />
+    <Compile Include="Forecasting\Angel\Methods\TeleoptiClassicUpdatedBaseTest.cs" />
     <Compile Include="Forecasting\Angel\Methods\TeleoptiClassicWithTrendTest.cs" />
     <Compile Include="Forecasting\Angel\ForecastingTargetMergerTest.cs" />
     <Compile Include="Forecasting\Angel\Historical\HistoricalDataTest.cs" />
