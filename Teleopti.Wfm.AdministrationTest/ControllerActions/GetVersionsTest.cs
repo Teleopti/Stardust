@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Configuration;
+using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -19,12 +20,10 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public void ShouldReportOkIfSameVersion()
 		{
 			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
-			TenantUnitOfWork.Start();
 			
-			var result = Target.GetVersions(new VersionCheckModel{AppConnectionString = CurrentTenantSession.CurrentSession().Connection.ConnectionString });
+			var result = Target.GetVersions(new VersionCheckModel{AppConnectionString = ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString });
 
 			result.Content.AppVersionOk.Should().Be.True();
-			TenantUnitOfWork.CommitAndDisposeCurrent();
 		}
 	}
 }

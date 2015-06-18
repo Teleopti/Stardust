@@ -20,13 +20,13 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		{
 			//new fresh
 			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
-			TenantUnitOfWork.Start();
-			var tenant = new Tenant("Old One");
-			CurrentTenantSession.CurrentSession().Save(tenant);
-			TenantUnitOfWork.CommitAndDisposeCurrent();
-			TenantUnitOfWork.Start();
+			using (TenantUnitOfWork.Start())
+			{
+				var tenant = new Tenant("Old One");
+				CurrentTenantSession.CurrentSession().Save(tenant);
+			}
+
 			Target.IsNewTenant("old one").Content.Success.Should().Be.False();
-			TenantUnitOfWork.CancelAndDisposeCurrent();
 		}
 
 		[Test]
@@ -34,13 +34,13 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		{
 			//new fresh
 			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
-			TenantUnitOfWork.Start();
-			var tenant = new Tenant("Old One");
-			CurrentTenantSession.CurrentSession().Save(tenant);
-			TenantUnitOfWork.CommitAndDisposeCurrent();
-			TenantUnitOfWork.Start();
+			using (TenantUnitOfWork.Start())
+			{
+				var tenant = new Tenant("Old One");
+				CurrentTenantSession.CurrentSession().Save(tenant);
+			}
+
 			Target.IsNewTenant("New One").Content.Success.Should().Be.True();
-			TenantUnitOfWork.CancelAndDisposeCurrent();
 		}
 	}
 }

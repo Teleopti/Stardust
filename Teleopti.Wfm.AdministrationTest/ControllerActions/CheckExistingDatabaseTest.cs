@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Data.SqlClient;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -33,13 +34,11 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		[Test]
 		public void ShouldReturnSuccessFalseIfAnalDatabaseNotCorrectFormat()
 		{
-			TenantUnitOfWork.Start();
-
-			var connStringBuilder = new SqlConnectionStringBuilder(CurrentTenantSession.CurrentSession().Connection.ConnectionString)
+			var connStringBuilder = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
 			{
 				InitialCatalog = dummy
 			};
-			string connString = connStringBuilder.ConnectionString;
+			var connString = connStringBuilder.ConnectionString;
 			var helper = new DatabaseHelper(connString, DatabaseType.TeleoptiCCC7);
 			if (!helper.Exists())
 			{
@@ -47,44 +46,38 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 				helper.CreateSchemaByDbManager();
 			}
 			var importModel = new ImportDatabaseModel { ConnStringAppDatabase = connString, ConnStringAnalyticsDatabase = RandomName.Make() };
-			bool result = Target.ImportExisting(importModel).Content.Success;
-			result.Should().Be.False();
-			TenantUnitOfWork.CommitAndDisposeCurrent();
+			Target.ImportExisting(importModel).Content.Success
+				.Should().Be.False();
 		}
 
 		[Test]
 		public void ShouldReturnSuccessFalseIfAnalDatabaseNotExists()
 		{
-			TenantUnitOfWork.Start();
-
-			var connStringBuilder = new SqlConnectionStringBuilder(CurrentTenantSession.CurrentSession().Connection.ConnectionString)
+			var connStringBuilder = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
 			{
 				InitialCatalog = Guid.NewGuid().ToString()
 			};
 			//correct format but does not exist
-			string connString = connStringBuilder.ConnectionString;
+			var connString = connStringBuilder.ConnectionString;
 			
-
 			var importModel = new ImportDatabaseModel { ConnStringAppDatabase = connString, ConnStringAnalyticsDatabase = RandomName.Make() };
-			bool result = Target.ImportExisting(importModel).Content.Success;
-			result.Should().Be.False();
-
-			TenantUnitOfWork.CommitAndDisposeCurrent();
+			
+			Target.ImportExisting(importModel).Content.Success
+				.Should().Be.False();
 		}
 
 		[Test]
 		public void ShouldReturnSuccessTrueWhenDatabaseExists()
 		{
 			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
-			TenantUnitOfWork.Start();
 
-			var connStringBuilder = new SqlConnectionStringBuilder( CurrentTenantSession.CurrentSession().Connection.ConnectionString)
+			var connStringBuilder = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
 			{
 				InitialCatalog = dummy
 			};
-			string connString = connStringBuilder.ConnectionString;
+			var connString = connStringBuilder.ConnectionString;
 			connStringBuilder.InitialCatalog = dummyAnal;
-			string connStringAnal = connStringBuilder.ConnectionString;
+			var connStringAnal = connStringBuilder.ConnectionString;
 
 			var helper = new DatabaseHelper(connString, DatabaseType.TeleoptiCCC7);
 			var helperAnal = new DatabaseHelper(connStringAnal, DatabaseType.TeleoptiAnalytics);
@@ -102,10 +95,8 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			}
 			
 			var importModel = new ImportDatabaseModel { ConnStringAppDatabase = connString, ConnStringAnalyticsDatabase = connStringAnal, Tenant = RandomName.Make()};
-			bool result = Target.ImportExisting(importModel).Content.Success;
-			result.Should().Be.True();
-
-			TenantUnitOfWork.CommitAndDisposeCurrent();
+			Target.ImportExisting(importModel).Content.Success
+				.Should().Be.True();
 		}
 	}
 }

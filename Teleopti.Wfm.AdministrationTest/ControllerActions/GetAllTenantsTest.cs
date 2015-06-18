@@ -18,9 +18,8 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		{
 			//create database
 			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
-			TenantUnitOfWork.Start();
+
 			Target.GetAllTenants().Should().Not.Be.Null();
-			TenantUnitOfWork.CommitAndDisposeCurrent();
 		}
 	}
 }
