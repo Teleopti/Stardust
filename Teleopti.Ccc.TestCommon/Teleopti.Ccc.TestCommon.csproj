@@ -168,6 +168,7 @@
     <Compile Include="FakeHangfireEventClient.cs" />
     <Compile Include="FakeMbCacheFactory.cs" />
     <Compile Include="FakeMessageBrokerUnitOfWorkAspect.cs" />
+    <Compile Include="FakeMessageSender.cs" />
     <Compile Include="FakeReadModelUnitOfWorkAspect.cs" />
     <Compile Include="FakeRepositories\FakeBusinessUnitRepository.cs" />
     <Compile Include="FakeRepositories\FakeExistingForecastRepository.cs" />

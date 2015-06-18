@@ -1,5 +1,6 @@
 ﻿using System;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
@@ -7,6 +8,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 {
 	public class PrincipalAndStateTestAttribute : InfrastructureTestAttribute, IPrincipalAndStateContext
 	{
+		public FakeMessageSender MessageSender;
 		private IPerson person;
 		private IDisposable _login;
 
@@ -22,6 +24,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 			base.BeforeTest();
 
 			_login = SetupFixtureForAssembly.CreatePersonAndLogin(out person);
+			MessageSender.AllNotifications.Clear();
 		}
 
 		protected override void AfterTest()

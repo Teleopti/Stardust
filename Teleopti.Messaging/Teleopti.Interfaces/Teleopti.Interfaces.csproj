@@ -144,6 +144,7 @@
     <Compile Include="Domain\IAgentBadgeWithRankTransaction.cs" />
     <Compile Include="Domain\IAgentBadgeWithRankTransactionRepository.cs" />
     <Compile Include="Domain\IAgentBadgeWithRankRepository.cs" />
+    <Compile Include="Domain\IAggregatedScheduleChange.cs" />
     <Compile Include="Domain\IExtractedRestrictionResult.cs" />
     <Compile Include="Domain\IForecastingTarget.cs" />
     <Compile Include="Domain\IGamificationSetting.cs" />

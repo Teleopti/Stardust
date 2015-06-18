@@ -25,6 +25,8 @@
 		RTA_CalculatePercentageInAgentTimezone_31236,
 		RTA_NeutralAdherence_30930,
 
+		MessageBroker_SchedulingScreenMailbox_32733,
+
 		MyTeam_MoveActivity_25206,
 		MyTeam_StaffingMetrics_25562,
 		MyTeam_Reports_31070,

@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			var actualAgentState = state.MakeActualAgentState();
 
 			var type = typeof(AgentStateReadModel);
-			var notification = new Interfaces.MessageBroker.Message
+			var notification = new Message
 			{
 				StartDate = Subscription.DateToString(actualAgentState.ReceivedTime),
 				EndDate = Subscription.DateToString(actualAgentState.ReceivedTime),

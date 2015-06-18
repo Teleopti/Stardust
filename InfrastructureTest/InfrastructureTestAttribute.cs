@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Runtime.Remoting.Messaging;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -37,11 +38,10 @@ namespace Teleopti.Ccc.InfrastructureTest
 				}
 			}).For<IConfigReader>();
 
-			system.UseTestDouble<NoMessageSender>().For<IMessageSender>();
-
 			system.UseTestDouble<MutableFakeCurrentHttpContext>().For<ICurrentHttpContext>();
 
 			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
+			system.UseTestDouble<FakeMessageSender>().For<IMessageSender>();
 		}
 
 		protected override void BeforeTest()

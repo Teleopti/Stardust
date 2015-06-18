@@ -43,6 +43,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 			var builder = new ContainerBuilder();
 			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new AppConfigReader()) { PublishEventsToServiceBus = false, FeatureToggle = "http://notinuse" }, new FalseToggleManager())));
 			builder.RegisterType<FakeEventPublisher>().As<IEventPublisher>().SingleInstance();
+			builder.RegisterType<NoMessageSender>().As<Interfaces.MessageBroker.Client.IMessageSender>().SingleInstance();
 			var container = builder.Build();
 
 			IDictionary<string, string> appSettings = new Dictionary<string, string>();
