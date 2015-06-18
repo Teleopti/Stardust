@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
@@ -50,7 +51,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				UnproductiveTime = 30,
 				StartDate = DateOnly.Today,
 				EndDate = DateOnly.Today,
-				CampaignStatus = CampaignStatus.Draft,				
 			};
 
 			return campaign;
@@ -183,6 +183,33 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			reloadedCampaign.CampaignWorkingPeriods.First().CampaignWorkingPeriodAssignments
 				.Count().Should().Be.EqualTo(2);
+		}
+
+		[Test]
+		public void CanAddWorkingHoursToCampaign()
+		{
+			var expectedWeekday = DayOfWeek.Monday;
+			var expectePeriod = new TimePeriod(new TimeSpan(8, 0, 0), new TimeSpan(15, 0, 0));
+			var campaign = CreateCampaignWithWorkingHours(expectedWeekday, expectePeriod);
+
+			var repository = new OutboundCampaignRepository(UnitOfWork);
+
+			var loadedCampaign = repository.Get(campaign.Id.GetValueOrDefault());
+		
+			loadedCampaign.WorkingHours.ContainsKey(expectedWeekday).Should().Be.True();
+		
+		}
+
+		private Campaign CreateCampaignWithWorkingHours(DayOfWeek weekday, TimePeriod period)
+		{
+			var campaign = CreateAggregateWithCorrectBusinessUnit();
+
+			var workingHours = new Dictionary<DayOfWeek, TimePeriod>();
+			workingHours.Add(weekday, period);
+			campaign.WorkingHours = workingHours;
+
+			PersistAndRemoveFromUnitOfWork(campaign);
+			return campaign;
 		}
 
 		[Test]

@@ -6,12 +6,6 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Outbound
 {
-	public enum CampaignStatus
-	{
-		Draft,
-		Ongoing
-	};
-
 	public class Campaign : NonversionedAggregateRootWithBusinessUnit, IDeleteTag
 	{
 		private string _name;
@@ -25,11 +19,12 @@ namespace Teleopti.Ccc.Domain.Outbound
 		private int _unproductiveTime;
 		private DateOnly? _startDate;
 		private DateOnly? _endDate;
-		private CampaignStatus _campaignStatus;
 		private ISet<CampaignWorkingPeriod> _campaignWorkingPeriods;
 		private IDictionary<DateOnly, TimeSpan> _manualProductionPlanDays = new Dictionary<DateOnly, TimeSpan>();
 		private IDictionary<DateOnly, TimeSpan> _actualBacklogDays = new Dictionary<DateOnly, TimeSpan>(); 
 		private bool _isDeleted;
+		private IDictionary<DayOfWeek, TimePeriod> _workingHours = new Dictionary<DayOfWeek, TimePeriod>();
+		private DateOnlyPeriod _spanTimePeriod;
 
         	public Campaign()
 		{
@@ -50,7 +45,6 @@ namespace Teleopti.Ccc.Domain.Outbound
 			_unproductiveTime = 30;
 			_startDate = DateOnly.Today;
 			_endDate = DateOnly.Today;
-			_campaignStatus = CampaignStatus.Draft;
 			_campaignWorkingPeriods = new HashSet<CampaignWorkingPeriod>();
 		}
 
@@ -110,16 +104,30 @@ namespace Teleopti.Ccc.Domain.Outbound
 			set { _unproductiveTime = value; }
 		}
 
+		[Obsolete("Will be removed. Use SpanTimePeriod instead. ")]
 		public virtual DateOnly? StartDate
 		{
 			get { return _startDate; }
 			set { _startDate= value; }
 		}
 
+		[Obsolete("Will be removed. Use SpanTimePeriod instead. ")]
 		public virtual DateOnly? EndDate
 		{
 			get { return _endDate; }
 			set { _endDate= value; }
+		}
+
+		public virtual DateOnlyPeriod SpanTimePeriod
+		{
+			get { return _spanTimePeriod; }
+			set { _spanTimePeriod = value; }
+		}
+
+		public virtual IDictionary<DayOfWeek, TimePeriod> WorkingHours
+		{
+			get { return _workingHours; }
+			set { _workingHours = value; }
 		}
 
 		public virtual DateOnlyPeriod SpanningPeriod //remove start and endate, persist this as not nullable
@@ -141,12 +149,6 @@ namespace Teleopti.Ccc.Domain.Outbound
 		public virtual TimeSpan AverageTaskHandlingTime() //how should this be calculated, campaigntasks*this should equal total time to complete campaign
 		{
 			return TimeSpan.FromHours((double) ConnectAverageHandlingTime/CallListLen);
-		}
-
-		public virtual CampaignStatus CampaignStatus
-		{
-			get { return _campaignStatus; }
-			set { _campaignStatus = value; }
 		}
 
 		public virtual ISet<CampaignWorkingPeriod> CampaignWorkingPeriods

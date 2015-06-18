@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 		public int UnproductiveTime;
 		public DateOnly? StartDate;
 		public DateOnly? EndDate;
-		public CampaignStatus CampaignStatus;
 		public IEnumerable<CampaignWorkingPeriodViewModel> CampaignWorkingPeriods;		
 	}
 

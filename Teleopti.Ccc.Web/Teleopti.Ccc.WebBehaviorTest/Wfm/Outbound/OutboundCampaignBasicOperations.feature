@@ -67,3 +67,15 @@ Scenario: Add new working period to campaign
 	When I view campaign 'Campaign1'
 	And I submit new working period with start time '01:01' and end time '22:02'
 	Then I should see working period in the list with start time '01:01 ' and end time '22:02'
+
+@ignore
+@OnlyRunIfEnabled('Wfm_Outbound_Campaign_32696')
+Scenario: Create a new campaign
+Given I view outbound
+When I create a campaign with 
+| Field      | Value      |
+| Name       | MyCampaign |
+| Start Date | 2015-05-21 |
+| End Date   | 2015-05-30 |
+And I save this campaign
+Then I should see campaign 'MyCampaign' in campaign list

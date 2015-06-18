@@ -37,7 +37,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				UnproductiveTime = 30,
 				StartDate = new DateOnly(StartDate),
 				EndDate = new DateOnly(EndDate),
-				CampaignStatus = CampaignStatus.Ongoing
 			};
 
 			new OutboundCampaignRepository(uow).Add(Campaign);

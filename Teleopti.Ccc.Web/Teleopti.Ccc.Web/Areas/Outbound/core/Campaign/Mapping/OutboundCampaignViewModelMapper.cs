@@ -64,7 +64,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping
 				UnproductiveTime = campaign.UnproductiveTime,
 				StartDate = campaign.StartDate,
 				EndDate = campaign.EndDate,
-				CampaignStatus = campaign.CampaignStatus,
 				CampaignWorkingPeriods = Map(campaign.CampaignWorkingPeriods).ToList(),
 			};
 

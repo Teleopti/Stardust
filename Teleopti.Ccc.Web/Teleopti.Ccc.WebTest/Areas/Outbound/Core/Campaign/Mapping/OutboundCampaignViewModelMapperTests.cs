@@ -137,13 +137,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core.Campaign.Mapping
 		}
 
 		[Test]
-		public void ShouldMapCampaignStatus()
-		{
-			var result = _target.Map(_campaigns);
-			result.First().CampaignStatus.Should().Be.EqualTo(_campaign.CampaignStatus);
-		}
-
-		[Test]
 		public void ShouldMapCampaignWorkingPeriodId()
 		{
 			var result = _target.Map(_campaigns);

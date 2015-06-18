@@ -59,9 +59,26 @@
 							type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"
 							not-null="false" />
 		
-		<property name="CampaignStatus"
-							type="int"
-							not-null="true"/>
+		<map name="WorkingHours"
+                table="OutboundCampaignWorkingHours"
+                cascade="all-delete-orphan"
+                lazy="false">
+        <key column="Parent" foreign-key="FK_OutboundCampaignWorkingHours_OutboundCampaign"/>
+        <index type="System.DayOfWeek" column="Weekday"/>
+			<composite-element class="Teleopti.Interfaces.Domain.TimePeriod, Teleopti.Interfaces" >
+				<nested-composite-element class="Teleopti.Interfaces.Domain.MinMax`1[System.TimeSpan], Teleopti.Interfaces"
+										  name="period" access="field">
+					<property name="Minimum" 
+							column="StartTime"
+							not-null="true"
+							type="TimeSpan"/>
+					<property name="Maximum"
+							column="EndTime"
+							not-null="true"
+							type="TimeSpan"/>
+				</nested-composite-element>
+			</composite-element>	
+      </map>
 
 		<set name="CampaignWorkingPeriods"
 				 inverse="true"
