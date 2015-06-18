@@ -59,27 +59,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
                 Expect.Call(() => _view.SetSites(sites));
                 Expect.Call(() => _view.SetScorecards(scorecards));
                 Expect.Call(() => _view.SetSelectedSite(site));
-                Expect.Call(
-                    () =>
-                    _messageBroker.RegisterSubscription(
-						identity.DataSource.DataSourceName,identity.BusinessUnit.Id.GetValueOrDefault(),
-                        (EventHandler<EventMessageArgs>)
-                        Delegate.CreateDelegate(typeof (EventHandler<EventMessageArgs>), _target, _onScorecardEvent),
-                        typeof (IScorecard)));
-                Expect.Call(
-                    () =>
-                    _messageBroker.RegisterSubscription(
-					identity.DataSource.DataSourceName, identity.BusinessUnit.Id.GetValueOrDefault(),
-                        (EventHandler<EventMessageArgs>)
-                        Delegate.CreateDelegate(typeof (EventHandler<EventMessageArgs>), _target, _onTeamEvent),
-                        typeof (ITeam)));
-                Expect.Call(
-                    () =>
-                    _messageBroker.RegisterSubscription(
-					identity.DataSource.DataSourceName, identity.BusinessUnit.Id.GetValueOrDefault(),
-                        (EventHandler<EventMessageArgs>)
-                        Delegate.CreateDelegate(typeof (EventHandler<EventMessageArgs>), _target, _onSiteEvent),
-                        typeof (ISite)));
+	            Expect.Call(() => _messageBroker.RegisterSubscription(null, null)).IgnoreArguments().Repeat.Any();
             }
             using (_mocks.Playback())
             {

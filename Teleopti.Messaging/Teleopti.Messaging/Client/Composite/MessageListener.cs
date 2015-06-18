@@ -1,23 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
-using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Messaging.Events;
-using Teleopti.Messaging.Exceptions;
 
 namespace Teleopti.Messaging.Client.Composite
 {
 	public class MessageListener : IMessageListener
 	{
 		private readonly ISignalRClient _client;
-		private readonly IList<SubscriptionCallback> _subscriptions = new List<SubscriptionCallback>();
+		private readonly IList<subscriptionCallback> _subscriptions = new List<subscriptionCallback>();
 
-		private class SubscriptionCallback
+		private class subscriptionCallback
 		{
 			public Subscription Subscription { get; set; }
 			public EventHandler<EventMessageArgs> Callback { get; set; }
@@ -28,62 +25,15 @@ namespace Teleopti.Messaging.Client.Composite
 			_client = client;
 		}
 
-		public void RegisterSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType)
+		public void RegisterSubscription(Subscription subscription, EventHandler<EventMessageArgs> eventMessageHandler)
 		{
-			addSubscription(dataSource, businessUnitId, eventMessageHandler, null, null, null, domainObjectType, Consts.MinDate, Consts.MaxDate);
-		}
-
-		public void RegisterSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Guid referenceObjectId, Type referenceObjectType, Type domainObjectType)
-		{
-			addSubscription(dataSource, businessUnitId, eventMessageHandler, referenceObjectId, referenceObjectType, null, domainObjectType, Consts.MinDate, Consts.MaxDate);
-		}
-
-		public void RegisterSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType, DateTime startDate, DateTime endDate)
-		{
-			addSubscription(dataSource, businessUnitId, eventMessageHandler, null, null, null, domainObjectType, startDate, endDate);
-		}
-
-		public void RegisterSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Guid domainObjectId, Type domainObjectType, DateTime startDate, DateTime endDate)
-		{
-			addSubscription(dataSource, businessUnitId, eventMessageHandler, null, null, domainObjectId, domainObjectType, startDate, endDate);
-		}
-
-		public void RegisterSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Guid referenceObjectId, Type referenceObjectType, Type domainObjectType, DateTime startDate, DateTime endDate)
-		{
-			addSubscription(dataSource, businessUnitId, eventMessageHandler, referenceObjectId, referenceObjectType, null, domainObjectType, startDate, endDate);
-		}
-
-		private void addSubscription(
-			string datasource,
-			Guid businessUnitId,
-			EventHandler<EventMessageArgs> eventMessageHandler,
-			Guid? referenceObjectId,
-			Type referenceObjectType,
-			Guid? domainObjectId,
-			Type domainObjectType,
-			DateTime startDate,
-			DateTime endDate)
-		{
-			var subscription = new Subscription
-			{
-				DomainId = domainObjectId.HasValue ? Subscription.IdToString(domainObjectId.Value) : null,
-				DomainType = domainObjectType.Name,
-				DomainReferenceId = referenceObjectId.HasValue ? Subscription.IdToString(referenceObjectId.Value) : null,
-				DomainReferenceType =
-					(referenceObjectType == null) ? null : referenceObjectType.AssemblyQualifiedName,
-				LowerBoundary = Subscription.DateToString(startDate),
-				UpperBoundary = Subscription.DateToString(endDate),
-				DataSource = datasource,
-				BusinessUnitId = Subscription.IdToString(businessUnitId),
-			};
-
-			_subscriptions.Add(new SubscriptionCallback
+			_subscriptions.Add(new subscriptionCallback
 			{
 				Subscription = subscription,
 				Callback = eventMessageHandler
 			});
 
-			addSubscription(subscription);
+			_client.Call("AddSubscription", subscription);
 		}
 
 		public void UnregisterSubscription(EventHandler<EventMessageArgs> eventMessageHandler)
@@ -103,12 +53,7 @@ namespace Teleopti.Messaging.Client.Composite
 		public void ReregisterSubscriptions()
 		{
 			foreach (var subscription in _subscriptions)
-				addSubscription(subscription.Subscription);
-		}
-
-		private void addSubscription(Subscription subscription)
-		{
-			_client.Call("AddSubscription", subscription);
+				_client.Call("AddSubscription", subscription.Subscription);
 		}
 
 		public void OnNotification(Message d)

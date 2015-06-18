@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Core;
@@ -52,29 +53,9 @@ namespace Teleopti.Messaging.Client.Composite
 			_messageCreator.Send(dataSource, businessUnitId, eventMessages);
 		}
 
-		public void RegisterSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType)
+		public void RegisterSubscription(Subscription subscription, EventHandler<EventMessageArgs> eventMessageHandler)
 		{
-			_messageListener.RegisterSubscription(dataSource, businessUnitId, eventMessageHandler, domainObjectType);
-		}
-
-		public void RegisterSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Guid referenceObjectId, Type referenceObjectType, Type domainObjectType)
-		{
-			_messageListener.RegisterSubscription(dataSource, businessUnitId, eventMessageHandler, referenceObjectId, referenceObjectType, domainObjectType);
-		}
-
-		public void RegisterSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType, DateTime startDate, DateTime endDate)
-		{
-			_messageListener.RegisterSubscription(dataSource, businessUnitId, eventMessageHandler, domainObjectType, startDate, endDate);
-		}
-
-		public void RegisterSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Guid domainObjectId, Type domainObjectType, DateTime startDate, DateTime endDate)
-		{
-			_messageListener.RegisterSubscription(dataSource, businessUnitId, eventMessageHandler, domainObjectId, domainObjectType, startDate, endDate);
-		}
-
-		public void RegisterSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Guid referenceObjectId, Type referenceObjectType, Type domainObjectType, DateTime startDate, DateTime endDate)
-		{
-			_messageListener.RegisterSubscription(dataSource, businessUnitId, eventMessageHandler, referenceObjectId, referenceObjectType, domainObjectType, startDate, endDate);
+			_messageListener.RegisterSubscription(subscription, eventMessageHandler);
 		}
 
 		public void UnregisterSubscription(EventHandler<EventMessageArgs> eventMessageHandler)
