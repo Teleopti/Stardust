@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel
 {
-	public class DayWeekMonthIndexVolumes : IIndexVolumes
+	public class DayWeekMonthIndexVolumes : IDayWeekMonthIndexVolumes
 	{
 		public IEnumerable<IVolumeYear> Create(ITaskOwnerPeriod historicalData)
 		{
@@ -13,5 +13,9 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 				new MonthOfYear(historicalData, new MonthOfYearCreator())
 			};
 		}
+	}
+
+	public interface IDayWeekMonthIndexVolumes: IIndexVolumes
+	{
 	}
 }

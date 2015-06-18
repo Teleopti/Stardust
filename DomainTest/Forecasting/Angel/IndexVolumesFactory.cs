@@ -33,9 +33,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			return dayOfWeek;
 		}
 
-		public static IVolumeYear[] Create()
+		public static IVolumeYear[] CreateDayWeekMonthIndexVolumes()
 		{
-			return new[] {CreateMonthOfYear(), CreateWeekOfMonth(), CreateDayOfWeek()};
+			return new[] { CreateDayOfWeek(), CreateWeekOfMonth(), CreateMonthOfYear() };
 		}
 	}
 }

@@ -32,8 +32,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Outlier
 
 			var historicalData = new TaskOwnerPeriod(historicalDate, periodForHelper.TaskOwnerDays, TaskOwnerPeriodType.Other);
 
-			var indexVolumes = MockRepository.GenerateMock<IIndexVolumes>();
-			var volumes = IndexVolumesFactory.Create();
+			var indexVolumes = MockRepository.GenerateMock<IDayWeekMonthIndexVolumes>();
+			var volumes = IndexVolumesFactory.CreateDayWeekMonthIndexVolumes();
 			indexVolumes.Stub(x => x.Create(historicalData)).Return(volumes);
 
 			var target = new OutlierRemover();
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Outlier
 			historicalData.TaskOwnerDayCollection.Single(x => x.CurrentDate == new DateOnly(date))
 				.TotalStatisticCalculatedTasks.Should().Be.EqualTo(1000);
 
-			var result = target.RemoveOutliers(historicalData, new TeleoptiClassic(indexVolumes));
+			var result = target.RemoveOutliers(historicalData, new TeleoptiClassicLongTerm(indexVolumes));
 
 			result.TaskOwnerDayCollection.Count.Should().Be.EqualTo(25);
 			Math.Round(result.TaskOwnerDayCollection.Single(x => x.CurrentDate == new DateOnly(date))
@@ -65,8 +65,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Outlier
 
 			var historicalData = new TaskOwnerPeriod(historicalDate, periodForHelper.TaskOwnerDays, TaskOwnerPeriodType.Other);
 
-			var indexVolumes = MockRepository.GenerateMock<IIndexVolumes>();
-			var volumes = IndexVolumesFactory.Create();
+			var indexVolumes = MockRepository.GenerateMock<IDayWeekMonthIndexVolumes>();
+			var volumes = IndexVolumesFactory.CreateDayWeekMonthIndexVolumes();
 			indexVolumes.Stub(x => x.Create(historicalData)).Return(volumes);
 
 			var target = new OutlierRemover();
