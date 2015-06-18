@@ -20,7 +20,11 @@ namespace Teleopti.MessagingTest.Http
 		public void ShouldPost()
 		{
 			var poster = MockRepository.GenerateMock<IPoster>();
-			var target = new HttpSender(new MutableUrl(), null) {PostAsync = (client, url, content) => poster.PostAsync(client, url, content)};
+			var target =
+				new HttpSender(new HttpRequests(new MutableUrl(), null)
+				{
+					PostAsync = (client, url, content) => poster.PostAsync(client, url, content)
+				});
 			
 			target.Send(new Message());
 
@@ -39,7 +43,7 @@ namespace Teleopti.MessagingTest.Http
 		{
 			var postedUrl = "";
 			var mutableUrl = new MutableUrl();
-			var target = new HttpSender(mutableUrl, null) { PostAsync = (c, u, cn) => postedUrl = u };
+			var target = new HttpSender(new HttpRequests(mutableUrl, null) { PostAsync = (c, u, cn) => postedUrl = u });
 			mutableUrl.Configure(url);
 
 			target.Send(new Message());
@@ -51,7 +55,7 @@ namespace Teleopti.MessagingTest.Http
 		public void ShouldReuseSameClient()
 		{
 			var calledClients = new List<HttpClient>();
-			var target = new HttpSender(null, null) { PostAsync = (c, u, cn) => calledClients.Add(c)};
+			var target = new HttpSender(new HttpRequests(null, null) { PostAsync = (c, u, cn) => calledClients.Add(c) });
 
 			target.Send(new Message());
 			target.Send(new Message());
@@ -66,7 +70,7 @@ namespace Teleopti.MessagingTest.Http
 			var serializer = MockRepository.GenerateMock<IJsonSerializer>();
 			serializer.Stub(x => x.SerializeObject(notification)).Return("serialized!");
 			HttpContent postedContent = null;
-			var target = new HttpSender(null, serializer) {PostAsync = (c, u, cn) => { postedContent = cn; }};
+			var target = new HttpSender(new HttpRequests(null, serializer) { PostAsync = (c, u, cn) => { postedContent = cn; } });
 
 			target.Send(notification);
 
@@ -83,14 +87,14 @@ namespace Teleopti.MessagingTest.Http
 			HttpContent postedContent = null;
 			var postedUrl = "";
 			var url = new MutableUrl();
-			var target = new HttpSender(url, serializer)
+			var target = new HttpSender(new HttpRequests(url, serializer)
 			{
 				PostAsync = (c, u, cn) =>
 				{
 					postedUrl = u;
 					postedContent = cn;
 				}
-			};
+			});
 			url.Configure("http://a");
 
 			target.SendMultiple(notifications);

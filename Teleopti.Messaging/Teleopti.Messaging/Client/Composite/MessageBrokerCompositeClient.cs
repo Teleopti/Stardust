@@ -4,21 +4,21 @@ using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Interfaces.MessageBroker.Events;
+using Teleopti.Messaging.Client.SignalR;
 
 namespace Teleopti.Messaging.Client.Composite
 {
 	public class MessageBrokerCompositeClient : IMessageBrokerComposite
 	{
 		private readonly ISignalRClient _signalRClient;
-		private readonly MessageListener _messageListener;
+		private readonly IMessageListener _signalRMessageListener;
 		private readonly MessageCreator _messageCreator;
 
 		public MessageBrokerCompositeClient(IMessageFilterManager typeFilter, ISignalRClient signalRClient, IMessageSender messageSender)
 		{
 			_signalRClient = signalRClient;
-			_messageListener = new MessageListener(_signalRClient);
+			_signalRMessageListener = new SignalRListener(_signalRClient, new EventHandlers());
 			_messageCreator = new MessageCreator(messageSender, typeFilter);
-			_signalRClient.RegisterCallbacks(_messageListener.OnNotification, _messageListener.ReregisterSubscriptions);
 		}
 
 		public void StartBrokerService(bool useLongPolling = false)
@@ -55,12 +55,12 @@ namespace Teleopti.Messaging.Client.Composite
 
 		public void RegisterSubscription(Subscription subscription, EventHandler<EventMessageArgs> eventMessageHandler)
 		{
-			_messageListener.RegisterSubscription(subscription, eventMessageHandler);
+			_signalRMessageListener.RegisterSubscription(subscription, eventMessageHandler);
 		}
 
 		public void UnregisterSubscription(EventHandler<EventMessageArgs> eventMessageHandler)
 		{
-			_messageListener.UnregisterSubscription(eventMessageHandler);
+			_signalRMessageListener.UnregisterSubscription(eventMessageHandler);
 		}
 
 	}

@@ -55,7 +55,7 @@ namespace Teleopti.Messaging.Client
 
 		public static IMessageSender Sender()
 		{
-			return _sender ?? (_sender = new HttpSender(SignalRClient(), _jsonSerializer));
+			return _sender ?? (_sender = new HttpSender(new HttpRequests(SignalRClient(), _jsonSerializer)));
 		}
 	}
 }

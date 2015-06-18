@@ -142,6 +142,9 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Client\EventHandlers.cs" />
+    <Compile Include="Client\Http\HttpRequests.cs" />
+    <Compile Include="Client\Http\HttpListenerSample.cs" />
     <Compile Include="Client\Http\HttpSender.cs" />
     <Compile Include="Client\MutableUrl.cs" />
     <Compile Include="Client\NoMessageSender.cs" />
@@ -162,7 +165,7 @@
     <Compile Include="Client\SignalR\IStateAccessor.cs" />
     <Compile Include="Client\SignalR\IConnectionKeepAliveStrategy.cs" />
     <Compile Include="Events\EventMessageFactory.cs" />
-    <Compile Include="Client\Composite\MessageListener.cs" />
+    <Compile Include="Client\SignalR\SignalRListener.cs" />
     <Compile Include="Client\Composite\MessageCreator.cs" />
     <Compile Include="Client\SignalR\RecreateOnNoPingReply.cs" />
     <Compile Include="Client\SignalR\RestartOnClosed.cs" />

@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		{
 		}
 
-		public void RegisterCallbacks(Action<Interfaces.MessageBroker.Message> onNotification, Action afterConnectionCreated)
+		public void RegisterCallbacks(Action<Interfaces.MessageBroker.Message> onMessage, Action afterConnectionCreated)
 		{
 		}
 

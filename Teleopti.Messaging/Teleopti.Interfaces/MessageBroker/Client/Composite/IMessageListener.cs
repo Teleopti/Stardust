@@ -8,4 +8,5 @@ namespace Teleopti.Interfaces.MessageBroker.Client.Composite
 		void RegisterSubscription(Subscription subscription, EventHandler<EventMessageArgs> eventMessageHandler);
 		void UnregisterSubscription(EventHandler<EventMessageArgs> eventMessageHandler);
 	}
+
 }
