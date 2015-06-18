@@ -17,13 +17,17 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.MultipleConfig;
 using log4net;
 using log4net.Config;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.Config;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
@@ -98,27 +102,39 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 				new PersonChangedMessageSender(eventPublisher, businessUnit),
 				new PersonPeriodChangedMessageSender(messageSender)
 			});
-			var initializeApplication =
-				new InitializeApplication(
-					new DataSourcesFactory(
-						new EnversConfiguration(),
-						messageSenders,
-						DataSourceConfigurationSetter.ForSdk(),
-						new CurrentHttpContext(),
-						() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging
-						),
-					messageBroker,
-					new ReadDataSourceConfigurationFromNhibFiles(new NhibFilePathFixed(sitePath()), new ParseNhibFile())
-					);
 			var messageBrokerEnabled = !messageBrokerDisabled();
-			initializeApplication.Start(new SdkState(), passwordPolicyService, appSettings, messageBrokerEnabled);
-
+			//temp hack - sometime in the future -> no tenant db dep here!
+			var tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
+			using (tenantUnitOfWorkManager.Start())
+			{
+				var readDataSourceCfg = createDataSourceConfigurationReader(tenantUnitOfWorkManager, container.Resolve<IToggleManager>().IsEnabled(Toggles.Tenant_RemoveNhibFiles_33685));
+				var initializeApplication =
+					new InitializeApplication(
+						new DataSourcesFactory(
+							new EnversConfiguration(),
+							messageSenders,
+							DataSourceConfigurationSetter.ForSdk(),
+							new CurrentHttpContext(),
+							() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging
+							),
+						messageBroker,
+						readDataSourceCfg);
+				initializeApplication.Start(new SdkState(), passwordPolicyService, appSettings, messageBrokerEnabled);
+			}
+			tenantUnitOfWorkManager.Dispose();
 			var messageBrokerReceiveDisabled = !messageBrokerReceiveEnabled();
 			if (messageBrokerEnabled && messageBrokerReceiveDisabled)
 				if (messageBroker != null)
 					messageBroker.Dispose();
 
 			Logger.Info("Initialized application");
+		}
+
+		private static IReadDataSourceConfiguration createDataSourceConfigurationReader(ICurrentTenantSession currentTenantSession, bool readFromDb)
+		{
+			return readFromDb
+				? (IReadDataSourceConfiguration) new ReadDataSourceConfiguration(new LoadAllTenants(currentTenantSession))
+				: new ReadDataSourceConfigurationFromNhibFiles(new NhibFilePathFixed(sitePath()), new ParseNhibFile());
 		}
 
 		private static string sitePath()
