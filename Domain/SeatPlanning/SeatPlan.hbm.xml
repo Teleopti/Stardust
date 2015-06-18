@@ -12,7 +12,7 @@
 						unsaved-value="null">
 			<generator class="guid.comb" />
 		</id>
-
+	
 		<property name="Date"
 					 access="property"
 					 type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"

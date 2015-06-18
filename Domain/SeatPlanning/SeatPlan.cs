@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Domain.SeatPlanning
 {
 	[Serializable]
-	public class SeatPlan : VersionedAggregateRootWithBusinessUnit, ISeatPlan
+	public class SeatPlan : NonversionedAggregateRootWithBusinessUnit, ISeatPlan
 	{
 		public virtual DateOnly Date { get; set; }
 		public virtual SeatPlanStatus Status { get; set; }
