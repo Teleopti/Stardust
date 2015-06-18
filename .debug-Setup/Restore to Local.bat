@@ -291,10 +291,9 @@ CD "%DBMANAGERPATH%"
 "%DBMANAGER%" -S%INSTANCE% -D"%TELEOPTICCC%" -E -OTeleoptiCCC7 %TRUNK% -F"%DATABASEPATH%" >> "%ROOTDIR%\upgradeDB.log"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=3 & GOTO :error
 
-IF NOT EXIST "%ROOTDIR%\..\Teleopti.Support.Security\bin\%configuration%\Teleopti.Support.Security.exe" (
-	IF EXIST "%ROOTDIR%\..\Teleopti.Support.Security\Teleopti.Support.Security.csproj" %MSBUILD% "%ROOTDIR%\..\Teleopti.Support.Security\Teleopti.Support.Security.csproj" > "%LogFolder%\build.log"
-	IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=12 & GOTO :error
-)
+
+%MSBUILD% "%ROOTDIR%\..\Teleopti.Support.Security\Teleopti.Support.Security.csproj" > "%LogFolder%\build.log"
+IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=12 & GOTO :error
 
 ECHO create or patch Analytics
 "%DBMANAGER%" -S%INSTANCE% -D"%TELEOPTIANALYTICS%" -E -OTeleoptiAnalytics %TRUNK% %CreateAnalytics% -F"%DATABASEPATH%" > "%ROOTDIR%\upgradeDB.log"
