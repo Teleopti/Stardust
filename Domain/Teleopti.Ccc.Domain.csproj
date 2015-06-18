@@ -525,6 +525,8 @@
     <Compile Include="Forecasting\Angel\Accuracy\SkillAccuracy.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\WorkloadAccuracy.cs" />
     <Compile Include="Forecasting\Angel\AverageStatistics.cs" />
+    <Compile Include="Forecasting\Angel\DayIndexVolumes.cs" />
+    <Compile Include="Forecasting\Angel\DayWeekIndexVolumes.cs" />
     <Compile Include="Forecasting\Angel\ForecastWorkloadInput.cs" />
     <Compile Include="Forecasting\Angel\HistoricalPeriodProvider.cs" />
     <Compile Include="Forecasting\Angel\IHistoricalPeriodProvider.cs" />
@@ -535,6 +537,7 @@
     <Compile Include="Forecasting\Angel\Methods\TeleoptiClassic.cs" />
     <Compile Include="Forecasting\Angel\Methods\TeleoptiClassicBase.cs" />
     <Compile Include="Forecasting\Angel\Methods\TeleoptiClassicWithTrend.cs" />
+    <Compile Include="Forecasting\Angel\MonthlyPatternIndexVolumes.cs" />
     <Compile Include="Forecasting\Angel\Outlier\IOutlierRemover.cs" />
     <Compile Include="Forecasting\Angel\Trend\ILinearRegressionTrend.cs" />
     <Compile Include="Forecasting\Angel\Trend\LinearTrend.cs" />
@@ -550,7 +553,7 @@
     <Compile Include="Forecasting\Angel\Accuracy\IForecastAccuracyCalculator.cs" />
     <Compile Include="Forecasting\Angel\IForecastingTargetMerger.cs" />
     <Compile Include="Forecasting\Angel\IIndexVolumes.cs" />
-    <Compile Include="Forecasting\Angel\IndexVolumes.cs" />
+    <Compile Include="Forecasting\Angel\DayWeekMonthIndexVolumes.cs" />
     <Compile Include="Forecasting\Angel\IQuickForecaster.cs" />
     <Compile Include="Forecasting\Angel\IForecastCreator.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\IQuickForecastSkillEvaluator.cs" />
