@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Project DefaultTargets="InstallDependencies" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+	<PropertyGroup>
+		<WorkingDirectory>..\..\</WorkingDirectory>
+		<NugetExe>$(WorkingDirectory)\.nuget\nuget.exe</NugetExe>
+	</PropertyGroup>
+	
+	<Target Name="InstallDependencies">
+		<Exec Command='$(NugetExe) install log4net -o "$(WorkingDirectory)\teamcity\azure\teleopticcc\bin" -Version 2.0.3"' />
+	</Target>
+</Project>

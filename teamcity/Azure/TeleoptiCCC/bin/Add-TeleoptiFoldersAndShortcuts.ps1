@@ -257,7 +257,7 @@ Try
     Set-Location $scriptPath
 
  	#start log4net
-	$log4netPath = $scriptPath + "\log4net"
+	$log4netPath = $scriptPath + "log4net.2.0.3\lib\net40-full"
     Unblock-File -Path "$log4netPath\log4net.ps1"
     . "$log4netPath\log4net.ps1";
     $configFile = new-object System.IO.FileInfo($log4netPath + "\log4net.config");
