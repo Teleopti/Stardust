@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
@@ -60,9 +61,30 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 
 		public abstract ForecastMethodType Id { get; }
 
-		public ForecastResult SeasonalVariation(ITaskOwnerPeriod historicalData)
+		public IEnumerable<DateAndTasks> SeasonalVariation(ITaskOwnerPeriod historicalData)
 		{
-			return Forecast(historicalData, new DateOnlyPeriod(historicalData.StartDate, historicalData.EndDate));
+			var volumes = _indexVolumes.Create(historicalData);
+			var averageStatistics = new AverageStatistics();
+			if (historicalData.TaskOwnerDayCollection.Count > 0)
+				averageStatistics.AverageTasks = historicalData.TotalStatisticCalculatedTasks / historicalData.TaskOwnerDayCollection.Count;
+			else
+				averageStatistics.AverageTasks = 0d;
+
+			var futurePeriod = new DateOnlyPeriod(historicalData.StartDate, historicalData.EndDate);
+			return (from day in futurePeriod.DayCollection()
+				let totalTaskIndex = volumes.Aggregate<IVolumeYear, double>(1, (current, year) => current*year.TaskIndex(day))
+				let tasks = totalTaskIndex*averageStatistics.AverageTasks
+				select new DateAndTasks
+				{
+					Date = day,
+					Tasks = tasks
+				}).ToList();
 		}
+	}
+
+	public class DateAndTasks
+	{
+		public DateOnly Date { get; set; }
+		public double Tasks { get; set; }
 	}
 }
