@@ -420,8 +420,10 @@
     <Compile Include="Areas\Anywhere\Core\AgentViewModel.cs" />
     <Compile Include="Areas\Anywhere\Core\TeamViewModel.cs" />
     <Compile Include="Areas\Forecasting\Controllers\EvaluateInput.cs" />
+    <Compile Include="Areas\Forecasting\Core\ForecastResultViewModelFactory.cs" />
     <Compile Include="Areas\Forecasting\Core\IForecastEvaluator.cs" />
     <Compile Include="Areas\Forecasting\Core\ForecastEvaluator.cs" />
+    <Compile Include="Areas\Forecasting\Core\IForecastResultViewModelFactory.cs" />
     <Compile Include="Areas\Forecasting\Core\WorkloadForecastViewModel.cs" />
     <Compile Include="Areas\Global\ApplicationController.cs" />
     <Compile Include="Areas\Global\AreaWithPermissionPath.cs" />
