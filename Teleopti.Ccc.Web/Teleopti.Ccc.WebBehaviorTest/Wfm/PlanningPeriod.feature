@@ -66,6 +66,5 @@ Scenario: create the next planning period
 		| Access to resource planner            | True              |
 	When I view Resource planner
 	And I create new planning period
-	Then I should see updated period from '2014-06-01'to '2014-06-30'
-	
-
+	And I view Resource planner
+	Then I should see planning period from '2014-06-01'to '2014-06-30'
