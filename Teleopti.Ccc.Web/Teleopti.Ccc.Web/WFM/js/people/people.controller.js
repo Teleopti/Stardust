@@ -118,7 +118,7 @@ function PeopleController($scope, $filter, $state, $document,$translate,i18nServ
 		SearchSvrc.search.query({
 			keyword: $scope.keyword,
 			pageSize: paginationOptions.pageSize,
-			currentPageIndex: paginationOptions.pageNumber,
+			currentPageIndex: $scope.searchKeywordChanged ? 1 : paginationOptions.pageNumber,
 			sortColumns: sortColumnList
 		}).$promise.then(function (result) {
 			$scope.searchResult = result.People;
