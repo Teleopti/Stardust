@@ -19,13 +19,12 @@ CREATE TABLE [dbo].[OutboundCampaignWorkingHours](
 	[Weekday] [int] NOT NULL,
 	[StartTime] [bigint] NOT NULL,
 	[EndTime] [bigint] NOT NULL,
-
-	 CONSTRAINT [PK_OutboundCampaignWorkingHours] PRIMARY KEY NONCLUSTERED 
-(
-	[Parent] ASC,
-	[Weekday] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, FILLFACTOR = 90) ON [PRIMARY]
-) ON [PRIMARY]
+	CONSTRAINT [PK_OutboundCampaignWorkingHours] PRIMARY KEY NONCLUSTERED 
+	(
+		[Parent] ASC,
+		[Weekday] ASC
+	)
+)
 
 GO
 
