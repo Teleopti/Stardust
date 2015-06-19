@@ -20,7 +20,7 @@ CREATE TABLE [dbo].[OutboundCampaignWorkingHours](
 	[StartTime] [bigint] NOT NULL,
 	[EndTime] [bigint] NOT NULL,
 
-PRIMARY KEY CLUSTERED 
+	 CONSTRAINT [PK_OutboundCampaignWorkingHours] PRIMARY KEY NONCLUSTERED 
 (
 	[Parent] ASC,
 	[Weekday] ASC
