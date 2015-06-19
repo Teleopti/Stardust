@@ -41,7 +41,8 @@ function PeopleController($scope, $filter, $state, $document,$translate,i18nServ
 	};
 	$scope.gridOptions = {
 		exporterMenuCsv: true,
-		exporterCsvFilename: 'data.csv',
+		exporterCsvFilename: 'peoples.csv',
+		exporterHeaderFilter: $filter('translate'),
 		exporterMenuPdf: false,
 		enableGridMenu: true,
 		useExternalSorting: true,
@@ -219,7 +220,6 @@ function PeopleController($scope, $filter, $state, $document,$translate,i18nServ
 				angular.forEach(person.OptionalColumnValues, function (val) {
 					person[val.Key] = val.Value;
 				});
-
 			});
 
 			angular.forEach(result.OptionalColumns, function (col) {
