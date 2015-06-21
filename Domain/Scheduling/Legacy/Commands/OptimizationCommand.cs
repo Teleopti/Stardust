@@ -14,7 +14,16 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
-	public class OptimizationCommand
+	public interface IOptimizationCommand
+	{
+		void Execute(IOptimizerOriginalPreferences optimizerOriginalPreferences, IBackgroundWorkerWrapper backgroundWorker,
+			ISchedulerStateHolder schedulerStateHolder, IList<IScheduleDay> selectedScheduleDays,
+			IGroupPagePerDateHolder groupPagePerDateHolder, IScheduleOptimizerHelper scheduleOptimizerHelper,
+			IOptimizationPreferences optimizationPreferences, bool optimizationMethodBackToLegalState,
+			IDaysOffPreferences daysOffPreferences);
+	}
+
+	public class OptimizationCommand : IOptimizationCommand
 	{
 		private readonly Func<IPersonSkillProvider> _personSkillProvider;
 		private readonly IGroupPageCreator _groupPageCreator;
@@ -24,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly ITeamBlockOptimizationCommand _teamBlockOptimizationCommand;
 		private readonly IMatrixListFactory _matrixListFactory;
 		private readonly IWeeklyRestSolverCommand _weeklyRestSolverCommand;
-		private readonly IOptimizerHelperHelper _optimizerHelper;
+		private readonly Func<IOptimizerHelperHelper> _optimizerHelper;
 		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
 
 		public OptimizationCommand(Func<IPersonSkillProvider> personSkillProvider, IGroupPageCreator groupPageCreator,
@@ -34,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ITeamBlockOptimizationCommand teamBlockOptimizationCommand,
 			IMatrixListFactory matrixListFactory,
 			IWeeklyRestSolverCommand weeklyRestSolverCommand,
-			IOptimizerHelperHelper optimizerHelper,
+			Func<IOptimizerHelperHelper> optimizerHelper,
 			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended)
 		{
 			_personSkillProvider = personSkillProvider;
@@ -63,7 +72,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				_resourceOptimizationHelperExtended().ResourceCalculateAllDays(backgroundWorker, true);
 			}
 			var selectedSchedules = selectedScheduleDays;
-			var selectedPeriod = _optimizerHelper.GetSelectedPeriod(selectedSchedules);
+			var selectedPeriod = _optimizerHelper().GetSelectedPeriod(selectedSchedules);
 			var scheduleMatrixOriginalStateContainers = scheduleOptimizerHelper.CreateScheduleMatrixOriginalStateContainers(selectedSchedules, selectedPeriod);
 			DateOnlyPeriod groupPagePeriod = schedulerStateHolder.RequestedPeriod.DateOnlyPeriod;
 

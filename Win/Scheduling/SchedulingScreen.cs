@@ -3347,8 +3347,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				initMessageBroker(period.LoadedPeriod());
 			}
 
-			var toggleManager = _container.Resolve<IToggleManager>();
-			_scheduleOptimizerHelper = new ScheduleOptimizerHelper(_container, optimizerHelper, toggleManager, _requiredScheduleHelper);
+			_scheduleOptimizerHelper = new ScheduleOptimizerHelper(_container, optimizerHelper, _requiredScheduleHelper);
 
 			if (!_schedulerState.SchedulingResultState.SkipResourceCalculation && !_teamLeaderMode)
 			{
