@@ -8,10 +8,10 @@
 	
 	<Target Name="InstallDependencies">
 		<Exec Command='$(NugetExe) install log4net -o "$(WorkingDirectory)\teamcity\azure\teleopticcc\bin" -Version 2.0.3"' />
-        <Copy
-            SourceFiles="$(WorkingDirectory)\teamcity\azure\teleopticcc\bin\log4net.2.0.3\lib\net40-full\log4net.dll"
-            DestinationFolder="$(WorkingDirectory)\teamcity\azure\teleopticcc\bin\log4net\"
-        />
+		<Copy
+			SourceFiles="$(WorkingDirectory)\teamcity\azure\teleopticcc\bin\log4net.2.0.3\lib\net40-full\log4net.dll"
+			DestinationFolder="$(WorkingDirectory)\teamcity\azure\teleopticcc\bin\log4net\"
+		/>
 
 		<RemoveDir Directories="$(WorkingDirectory)\teamcity\azure\teleopticcc\bin\log4net.2.0.3" />		
 	</Target>
