@@ -231,12 +231,7 @@
     </Compile>
     <Compile Include="Autofac\AutofacServiceBus.cs" />
     <Compile Include="Autofac\SecretSchedulingCommonModule.cs" />
-    <Compile Include="Backlog\BacklogModel.cs" />
-    <Compile Include="Backlog\BacklogProductPlanTask.cs" />
     <Compile Include="Backlog\BacklogScheduledProvider.cs" />
-    <Compile Include="Backlog\BacklogScheduledTask.cs" />
-    <Compile Include="Backlog\BacklogTask.cs" />
-    <Compile Include="Backlog\BacklogTaskForecastedTimePerDateCalculator.cs" />
     <Compile Include="Budgeting\BudgetGroupMonthFilter.cs" />
     <Compile Include="Budgeting\BudgetGroupWeekFilter.cs" />
     <Compile Include="Budgeting\BudgetNavigatorDataService.cs" />

@@ -316,25 +316,6 @@
     <Compile Include="Backlog\AddManualProductionView.Designer.cs">
       <DependentUpon>AddManualProductionView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Backlog\BacklogCategory.cs" />
-    <Compile Include="Backlog\BacklogEditableGridRow.cs" />
-    <Compile Include="Backlog\BacklogGridExpandedRow.cs" />
-    <Compile Include="Backlog\BacklogGridHeaderRow.cs" />
-    <Compile Include="Backlog\BacklogGridPercentRow.cs" />
-    <Compile Include="Backlog\BacklogGridRow.cs" />
-    <Compile Include="Backlog\BacklogGridWorkRow.cs" />
-    <Compile Include="Backlog\BacklogSelector.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Backlog\BacklogSelector.Designer.cs">
-      <DependentUpon>BacklogSelector.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Backlog\BacklogView.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Backlog\BacklogView.Designer.cs">
-      <DependentUpon>BacklogView.cs</DependentUpon>
-    </Compile>
     <Compile Include="Backlog\OutboundStatusView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -346,18 +327,6 @@
     </Compile>
     <Compile Include="Backlog\OutboundView.Designer.cs">
       <DependentUpon>OutboundView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Backlog\SkillMapperDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Backlog\SkillMapperDialog.Designer.cs">
-      <DependentUpon>SkillMapperDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Backlog\SkillSelector.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Backlog\SkillSelector.Designer.cs">
-      <DependentUpon>SkillSelector.cs</DependentUpon>
     </Compile>
     <Compile Include="Budgeting\AddShrinkageForm.cs">
       <SubType>Form</SubType>
@@ -2665,23 +2634,11 @@
     <EmbeddedResource Include="Backlog\AddManualProductionView.resx">
       <DependentUpon>AddManualProductionView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Backlog\BacklogSelector.resx">
-      <DependentUpon>BacklogSelector.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Backlog\BacklogView.resx">
-      <DependentUpon>BacklogView.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Backlog\OutboundStatusView.resx">
       <DependentUpon>OutboundStatusView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Backlog\OutboundView.resx">
       <DependentUpon>OutboundView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Backlog\SkillMapperDialog.resx">
-      <DependentUpon>SkillMapperDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Backlog\SkillSelector.resx">
-      <DependentUpon>SkillSelector.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Budgeting\AddShrinkageForm.resx">
       <DependentUpon>AddShrinkageForm.cs</DependentUpon>
