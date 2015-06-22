@@ -10,6 +10,10 @@ SET NOCOUNT ON
 DECLARE @stored_procedure nvarchar(300)
 SET @stored_procedure=N'mart.etl_imported_queues_fact_queue_reload'
 
+--fact_queue_old
+IF (NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'mart' AND  TABLE_NAME = 'fact_queue_old'))
+RETURN
+
 CREATE TABLE #queues(queue_id int)
 INSERT #queues
 SELECT queue_id 
