@@ -11,6 +11,7 @@ namespace Teleopti.Support.Security
         private bool _useIntegratedSecurity;
 		private string _destinationAppDbDatabase;
 		private string _destinationAnalDbDatabase;
+		private string _baseConnstring;
 
 		public CommandLineArgument(string[] argumentCollection)
         {
@@ -27,6 +28,28 @@ namespace Teleopti.Support.Security
 		public string ApplicationDbConnectionString()
 		{
 			return createConnectionString(_destinationAppDbDatabase);
+		}
+
+		public string AnalyticsDbConnectionStringToStore()
+		{
+			return _baseConnstring == null
+				? createConnectionString(_destinationAnalDbDatabase)
+				: createConnectionStringBasedOnBaseConnstring(_destinationAnalDbDatabase);
+		}
+
+		public string ApplicationDbConnectionStringToStore()
+		{
+			return _baseConnstring == null
+				? createConnectionString(_destinationAppDbDatabase)
+				: createConnectionStringBasedOnBaseConnstring(_destinationAppDbDatabase);
+		}
+
+		private string createConnectionStringBasedOnBaseConnstring(string destinationAnalDbDatabase)
+		{
+			return new SqlConnectionStringBuilder(_baseConnstring)
+			{
+				InitialCatalog = destinationAnalDbDatabase
+			}.ConnectionString;
 		}
 
 		private string createConnectionString(string initialCatalog)
@@ -79,6 +102,9 @@ namespace Teleopti.Support.Security
 					case "-CD":   // Cross Db Name
 						AggDatabase = switchValue;
 						break;
+									case "-CS": //Used by WISE to set conn string, _without_ initial catalog
+		                _baseConnstring = switchValue;
+		                break;
                 }
             }
         }

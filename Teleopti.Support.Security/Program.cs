@@ -51,7 +51,7 @@ namespace Teleopti.Support.Security
 				convertDayOffToNewStructure(commandLineArgument);
 				initAuditData(commandLineArgument);
 				updateTenantData.RegenerateTenantPasswords();
-				updateTenantData.UpdateTenantConnectionStrings(commandLineArgument.ApplicationDbConnectionString(), commandLineArgument.AnalyticsDbConnectionString());
+				updateTenantData.UpdateTenantConnectionStrings(commandLineArgument.ApplicationDbConnectionStringToStore(), commandLineArgument.AnalyticsDbConnectionStringToStore());
 			}
 			catch (Exception e)
 			{
