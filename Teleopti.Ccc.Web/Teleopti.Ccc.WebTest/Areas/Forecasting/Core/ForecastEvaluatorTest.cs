@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			var queueStatisticsInput = new QueueStatisticsInput
 			{
 				WorkloadId = workload.Id.Value,
-				ForecastMethodType = ForecastMethodType.TeleoptiClassicLongTerm
+				MethodId = ForecastMethodType.TeleoptiClassicLongTerm
 			};
 			workloadRepository.Stub(x => x.Get(queueStatisticsInput.WorkloadId)).Return(workload);
 			var target = new ForecastEvaluator(null, workloadRepository, historicalPeriodProvider, historicalData, new OutlierRemover(), new ForecastMethodProvider(new LinearRegressionTrendCalculator()));

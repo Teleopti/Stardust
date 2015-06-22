@@ -59,7 +59,7 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 							var selectedMethod;
 							if (data.ForecastMethodRecommended.Id === -1) {
 								workload.noHistoricalDataForEvaluation = true;
-								selectedMethod = 0;
+								selectedMethod = 1;
 							} else {
 								selectedMethod = data.ForecastMethodRecommended.Id;
 							}

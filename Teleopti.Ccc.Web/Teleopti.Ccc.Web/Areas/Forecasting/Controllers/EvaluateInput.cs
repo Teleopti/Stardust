@@ -12,6 +12,6 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 	public class QueueStatisticsInput
 	{
 		public Guid WorkloadId { get; set; }
-		public ForecastMethodType ForecastMethodType { get; set; }
+		public ForecastMethodType MethodId { get; set; }
 	}
 }

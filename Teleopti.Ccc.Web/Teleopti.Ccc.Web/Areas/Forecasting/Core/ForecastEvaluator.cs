@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 			return new WorkloadQueueStatisticsViewModel
 			{
 				WorkloadId = workload.Id.Value,
-				QueueStatisticsDays = createQueueStatisticsDayViewModels(workload, input.ForecastMethodType, availablePeriod)
+				QueueStatisticsDays = createQueueStatisticsDayViewModels(workload, input.MethodId, availablePeriod)
 			};
 		}
 
