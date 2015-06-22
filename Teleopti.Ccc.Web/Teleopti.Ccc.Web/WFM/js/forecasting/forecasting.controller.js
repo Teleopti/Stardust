@@ -25,6 +25,19 @@ angular.module('wfm.forecasting', [])
 			$scope.nextStepAdvanced = function(period) {
 				$state.go('forecasting.target', { period: period });
 			};
+
+			$scope.setRangeClass = function (date, mode) {
+				if (mode === 'day') {
+					var dayToCheck = new Date(date).setHours(12, 0, 0, 0);
+					var startDay = new Date($scope.period.startDate).setHours(12, 0, 0, 0);
+					var endDay = new Date($scope.period.endDate).setHours(12, 0, 0, 0);
+
+					if (dayToCheck >= startDay && dayToCheck < endDay) {
+						return 'range';
+					}
+				}
+				return '';
+			};
 		}
 	])
 	.controller('ForecastingRunCtrl', [

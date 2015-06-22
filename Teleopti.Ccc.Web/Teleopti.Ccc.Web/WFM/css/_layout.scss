@@ -31,7 +31,7 @@ a:focus {
 	background-color:#003466;
 	color:white;
 }
-
+ 
 /*override bootstrap*/
 .row {
 	margin-right: 0;
@@ -133,4 +133,9 @@ label {
 	color:white!important;
 	padding:0px!important;
 	margin:0px!important;
+}
+
+//remove after styleguide rangepicker push
+.range > button{
+	background-color: #c2e085!important;
 }

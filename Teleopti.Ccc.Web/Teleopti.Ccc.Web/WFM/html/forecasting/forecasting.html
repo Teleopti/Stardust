@@ -9,15 +9,15 @@
 			<div class="sub-header">
 				{{'From' | translate}} <span class="startDate">{{period.startDate | date : format}}</span>
 			</div>
-			<datepicker ng-model="period.startDate" show-weeks="true" max-date="period.endDate" class="wfm-datepicker"></datepicker>
+			<datepicker ng-model="period.startDate" max-date="period.endDate" class="wfm-datepicker"></datepicker>
 		</div>
-
 		<div class="wfm-datepicker-wrap">
 			<div class="sub-header">
-				{{'To' | translate}} <span class="endDate">{{period.endDate | date : format}}</span>
+				To:
 			</div>
-			<datepicker ng-model="period.endDate" min-date="period.startDate" show-weeks="true" class="wfm-datepicker"></datepicker>
+			<datepicker ng-model="period.endDate" min-date="period.startDate" custom-class="setRangeClass(date, mode)" class="wfm-datepicker"></datepicker>
 		</div>
+
 		<div>
 			<button class="wfm-btn wfm-btn-primary next-step-all" ng-disabled="moreThanTwoYears()" ng-class="{'wfm-btn-primary-disabled': moreThanTwoYears()}" ng-click="nextStepAll(period)">{{ 'ForecastAll' | translate }}</button>
 			<button class="wfm-btn wfm-btn-default next-step-advanced" ng-disabled="moreThanTwoYears()" ng-class="{'wfm-btn-primary-disabled': moreThanTwoYears()}" ng-click="nextStepAdvanced(period)">{{ 'Advanced' | translate }}<md-tooltip>Select specific workloads</md-tooltip></button>
@@ -26,3 +26,5 @@
 	</div>
 	<div class="clearfix"></div>
 </div>
+
+
