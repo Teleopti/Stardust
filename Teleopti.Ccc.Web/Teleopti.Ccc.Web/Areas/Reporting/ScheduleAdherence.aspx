@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="ScheduleAdherence.aspx.cs" Inherits="Teleopti.Ccc.Web.Areas.Reporting.ScheduleAdherence" ValidateRequest="false" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" EnableEventValidation="false" CodeBehind="ScheduleAdherence.aspx.cs" Inherits="Teleopti.Ccc.Web.Areas.Reporting.ScheduleAdherence" ValidateRequest="false" %>
 
 <%@ Register TagPrefix="Analytics" Namespace="Teleopti.Analytics.Parameters" Assembly="Teleopti.Analytics.Parameters" %>
 

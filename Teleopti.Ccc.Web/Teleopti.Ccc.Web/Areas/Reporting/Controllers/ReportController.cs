@@ -35,23 +35,23 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Controllers
 			if(!id.Value.Equals(Guid.Empty) && !guids.Contains(id.Value))
 				return View("NoPermission");
 
-			var commonReports =
-				new CommonReports(
-					((TeleoptiIdentity)Thread.CurrentPrincipal.Identity).DataSource.Statistic.ConnectionString, id.Value);
-			commonReports.LoadReportInfo();
-			var name = "";
-			if (!string.IsNullOrEmpty(commonReports.ResourceKey))
-				name = Resources.ResourceManager.GetString(commonReports.ResourceKey, CultureInfo.CurrentUICulture);
-			if (string.IsNullOrEmpty(name))
-				name = commonReports.Name;
-			var helpUrl = string.Format(CultureInfo.InvariantCulture, "{0}/{1}", ConfigurationManager.AppSettings["HelpUrlOnline"], commonReports.HelpKey);
+			using (var commonReports = new CommonReports(((TeleoptiIdentity)Thread.CurrentPrincipal.Identity).DataSource.Statistic.ConnectionString, id.Value))
+			{
+				commonReports.LoadReportInfo();
+				var name = "";
+				if (!string.IsNullOrEmpty(commonReports.ResourceKey))
+					name = Resources.ResourceManager.GetString(commonReports.ResourceKey, CultureInfo.CurrentUICulture);
+				if (string.IsNullOrEmpty(name))
+					name = commonReports.Name;
+				var helpUrl = string.Format(CultureInfo.InvariantCulture, "{0}/{1}", ConfigurationManager.AppSettings["HelpUrlOnline"], commonReports.HelpKey);
 
-			if (id.Equals(new Guid("D1ADE4AC-284C-4925-AEDD-A193676DBD2F")) || id.Equals(new Guid("6A3EB69B-690E-4605-B80E-46D5710B28AF")))
-				return View("Adherence", new ReportModel { Id = id.Value, Name = name, ReportNavigationItems = reportsItems, HelpUrl = helpUrl });
+				if (id.Equals(new Guid("D1ADE4AC-284C-4925-AEDD-A193676DBD2F")) || id.Equals(new Guid("6A3EB69B-690E-4605-B80E-46D5710B28AF")))
+					return View("Adherence", new ReportModel { Id = id.Value, Name = name, ReportNavigationItems = reportsItems, HelpUrl = helpUrl });
 
-			
 
-			return View(new ReportModel { Id = id.Value, Name = name, ReportNavigationItems = reportsItems, HelpUrl = helpUrl });
+
+				return View(new ReportModel { Id = id.Value, Name = name, ReportNavigationItems = reportsItems, HelpUrl = helpUrl });
+			}
 		}
 	}
 }

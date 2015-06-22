@@ -176,31 +176,32 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 
 		private bool GetReportData()
 		{
-			var commonReports = new CommonReports(ParameterSelector.ConnectionString, ReportId);
-
-			var dataset = commonReports.GetReportData(ParameterSelector.UserCode, ParameterSelector.BusinessUnitCode, _sqlParameterList);
-			if (dataset != null && dataset.Tables.Count > 0)
+			using (var commonReports = new CommonReports(ParameterSelector.ConnectionString, ReportId))
 			{
-				_dataTable = dataset.Tables[0];
-			}
+				var dataset = commonReports.GetReportData(ParameterSelector.UserCode, ParameterSelector.BusinessUnitCode, _sqlParameterList);
+				if (dataset != null && dataset.Tables.Count > 0)
+				{
+					_dataTable = dataset.Tables[0];
+				}
 
-			if (_dataTable == null || _dataTable.Rows.Count == 0)
-			{
-				return false;
+				if (_dataTable == null || _dataTable.Rows.Count == 0)
+				{
+					return false;
+				}
+				return true;
 			}
-			return true;
 		}
 
 		private void CreateReportTable()
 		{
 			var aspTable = new Table {CssClass = "ReportTable"};
+			divReportTable.Controls.Clear();
+			divReportTable.Controls.Add(aspTable);
 			aspTable.Rows.Add(GetReportDetailHeaderRowWithTimeLineHour());
 			aspTable.Rows.AddRange(GetReportDetailRows());
 			aspTable.Rows.AddRange(GetIntervalTotalsRows());
 			aspTable.Rows.AddAt(1, GetReportTotalsRow(true));
 			aspTable.Rows.Add(GetReportTotalsRow(false));
-			divReportTable.Controls.Clear();
-			divReportTable.Controls.Add(aspTable);
 		}
 
 		private void CheckParametersCollection()
