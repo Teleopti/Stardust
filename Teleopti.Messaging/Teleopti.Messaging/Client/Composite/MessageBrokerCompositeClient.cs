@@ -1,9 +1,12 @@
 ﻿using System;
+using Teleopti.Interfaces;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Interfaces.MessageBroker.Events;
+using Teleopti.Messaging.Client.Http;
 using Teleopti.Messaging.Client.SignalR;
 
 namespace Teleopti.Messaging.Client.Composite
@@ -13,11 +16,21 @@ namespace Teleopti.Messaging.Client.Composite
 		private readonly ISignalRClient _signalRClient;
 		private readonly IMessageListener _signalRMessageListener;
 		private readonly MessageCreator _messageCreator;
+		private readonly IMessageListener _mailboxListener;
 
-		public MessageBrokerCompositeClient(IMessageFilterManager typeFilter, ISignalRClient signalRClient, IMessageSender messageSender)
+		public MessageBrokerCompositeClient(
+			IMessageFilterManager typeFilter, 
+			ISignalRClient signalRClient, 
+			IMessageSender messageSender, 
+			IJsonSerializer serializer, 
+			IJsonDeserializer deserializer, 
+			ITime time, 
+			IHttpServer httpServer)
 		{
 			_signalRClient = signalRClient;
 			_signalRMessageListener = new SignalRListener(_signalRClient, new EventHandlers());
+			_mailboxListener = new HttpListener(new EventHandlers(),
+				httpServer, _signalRClient, serializer, deserializer, time);
 			_messageCreator = new MessageCreator(messageSender, typeFilter);
 		}
 
@@ -55,7 +68,10 @@ namespace Teleopti.Messaging.Client.Composite
 
 		public void RegisterSubscription(Subscription subscription, EventHandler<EventMessageArgs> eventMessageHandler)
 		{
-			_signalRMessageListener.RegisterSubscription(subscription, eventMessageHandler);
+			if (subscription.MailboxId == null || subscription.MailboxId == Guid.Empty.ToString())
+				_signalRMessageListener.RegisterSubscription(subscription, eventMessageHandler);
+			else
+				_mailboxListener.RegisterSubscription(subscription, eventMessageHandler);
 		}
 
 		public void UnregisterSubscription(EventHandler<EventMessageArgs> eventMessageHandler)

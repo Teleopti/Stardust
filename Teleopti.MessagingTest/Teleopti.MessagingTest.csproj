@@ -38,6 +38,7 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Http\FakeHttpServer.cs" />
     <Compile Include="Http\HttpSenderTest.cs" />
     <Compile Include="Http\SignalRSubscriptionsTest.cs" />
     <Compile Include="SignalR\ImplementationDetailsTests\DisabledSignalRClientTest.cs" />

@@ -1,7 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Net.Http;
+using System.Threading;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -10,11 +9,11 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
+using Teleopti.Messaging.Client.Http;
 
 namespace Teleopti.MessagingTest.Http
 {
@@ -39,7 +38,7 @@ namespace Teleopti.MessagingTest.Http
 			}).For<IConfigReader>();
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldInvokeSubscriptionCallback()
 		{
 			var wasEventHandlerCalled = false;
@@ -50,11 +49,12 @@ namespace Teleopti.MessagingTest.Http
 				BusinessUnitId = Guid.Empty.ToString(),
 				DataSource = string.Empty,
 				DomainQualifiedType = "ITestType",
-				DomainType = "ITestType",
+				DomainType = "ITestType"
 			});
 
-			Assert.That(wasEventHandlerCalled, Is.True.After(500, 10));
+			Assert.That(() => wasEventHandlerCalled, Is.True.After(500, 10));
 		}
+
 
 		private class testMessage : Message
 		{
@@ -70,32 +70,4 @@ namespace Teleopti.MessagingTest.Http
 
 		}
 	}
-
-	public class FakeHttpServer : IHttpServer
-	{
-		private readonly IJsonSerializer _serializer;
-		private readonly IList<Message> _messages = new List<Message>();
-
-		public FakeHttpServer(IJsonSerializer serializer)
-		{
-			_serializer = serializer;
-		}
-
-		public void Has(Message message)
-		{
-			_messages.Add(message);
-		}
-
-		public void PostAsync(HttpClient client, string uri, HttpContent httpContent)
-		{
-		}
-
-		public string Get(HttpClient client, string uri)
-		{
-			var result = _serializer.SerializeObject(_messages);
-			_messages.Clear();
-			return result;
-		}
-	}
-
 }

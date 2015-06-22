@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Core;
@@ -25,7 +26,7 @@ namespace Teleopti.MessagingTest.SignalR.ImplementationDetailsTests.TestDoubles
 			IMessageFilterManager typeFilter,
 			ISignalRClient client,
 			IMessageSender sender)
-			: base(typeFilter, client, sender)
+			: base(typeFilter, client, sender, null, null, null, null)
 		{
 		}
 

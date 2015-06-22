@@ -21,13 +21,20 @@ namespace Teleopti.Messaging.Client
 		private static IMessageSender _sender;
 		private static IMessageBrokerComposite _compositeClient;
 		private static IJsonSerializer _jsonSerializer;
+		private static IJsonDeserializer _jsonDeserializer;
 
-		public static void Configure(string serverUrl, IEnumerable<IConnectionKeepAliveStrategy> connectionKeepAliveStrategy, IMessageFilterManager messageFilter, IJsonSerializer jsonSerializer)
+		public static void Configure(
+			string serverUrl, 
+			IEnumerable<IConnectionKeepAliveStrategy> connectionKeepAliveStrategy,
+			IMessageFilterManager messageFilter, 
+			IJsonSerializer jsonSerializer,
+			IJsonDeserializer jsonDeserializer)
 		{
 			_serverUrl = serverUrl;
 			_connectionKeepAliveStrategy = connectionKeepAliveStrategy;
 			_messageFilter = messageFilter;
 			_jsonSerializer = jsonSerializer;
+			_jsonDeserializer = jsonDeserializer;
 			_client = null;
 			_sender = null;
 			_compositeClient = null;
@@ -50,7 +57,7 @@ namespace Teleopti.Messaging.Client
 
 		public static IMessageBrokerComposite CompositeClient()
 		{
-			return _compositeClient ?? (_compositeClient = new MessageBrokerCompositeClient(messageFilter(), SignalRClient(), Sender()));
+			return _compositeClient ?? (_compositeClient = new MessageBrokerCompositeClient(messageFilter(), SignalRClient(), Sender(), _jsonSerializer, _jsonDeserializer, new Time(new Now()), new HttpServer()));
 		}
 
 		public static IMessageSender Sender()

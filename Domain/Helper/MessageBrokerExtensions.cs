@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.Helper
 
 		public static void RegisterSubscription(this IMessageListener broker, string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType, bool base64BinaryData = true, bool mailbox = false)
 		{
-			broker.addSubscription(eventMessageHandler, dataSource, businessUnitId, null, null, null, domainObjectType, Consts.MinDate, Consts.MaxDate);
+			broker.addSubscription(eventMessageHandler, dataSource, businessUnitId, null, null, null, domainObjectType, Consts.MinDate, Consts.MaxDate, base64BinaryData, mailbox);
 		}
 
 		public static void RegisterSubscription(this IMessageListener broker, string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Guid referenceObjectId, Type referenceObjectType, Type domainObjectType)
@@ -89,6 +89,7 @@ namespace Teleopti.Ccc.Domain.Helper
 				UpperBoundary = Subscription.DateToString(endDate),
 				DataSource = datasource,
 				BusinessUnitId = Subscription.IdToString(businessUnitId),
+				MailboxId = mailbox ? Guid.NewGuid().ToString() : null
 			};
 
 			var handler = eventMessageHandler;

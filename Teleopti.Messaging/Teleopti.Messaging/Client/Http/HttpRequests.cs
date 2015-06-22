@@ -15,6 +15,9 @@ namespace Teleopti.Messaging.Client.Http
 		public Action<HttpClient, string, HttpContent> PostAsync =
 			(client, uri, httpContent) => client.PostAsync(uri, httpContent);
 
+		public Func<HttpClient, string, string> GetAsync =
+			(client, uri) => client.GetAsync(uri).Result.Content.ReadAsStringAsync().Result;
+
 		private readonly HttpClient _httpClient;
 
 		public HttpRequests(IMessageBrokerUrl url, IJsonSerializer serializer)
@@ -26,6 +29,12 @@ namespace Teleopti.Messaging.Client.Http
 				{
 					Credentials = CredentialCache.DefaultNetworkCredentials
 				});
+		}
+
+		public string Get(string call)
+		{
+			var u = url(call);
+			return GetAsync(_httpClient, u);
 		}
 
 		public void Post(string call, object thing)

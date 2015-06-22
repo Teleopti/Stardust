@@ -144,8 +144,9 @@
     </Compile>
     <Compile Include="Client\EventHandlers.cs" />
     <Compile Include="Client\Http\HttpRequests.cs" />
-    <Compile Include="Client\Http\HttpListenerSample.cs" />
+    <Compile Include="Client\Http\HttpListener.cs" />
     <Compile Include="Client\Http\HttpSender.cs" />
+    <Compile Include="Client\Http\HttpServer.cs" />
     <Compile Include="Client\MutableUrl.cs" />
     <Compile Include="Client\NoMessageSender.cs" />
     <Compile Include="Client\SignalR\DisabledSignalRClient.cs" />
