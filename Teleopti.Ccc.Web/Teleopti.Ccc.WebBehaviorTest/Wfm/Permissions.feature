@@ -9,6 +9,7 @@ Scenario: create a role
 		| Access to permissions			            | True              |
 	When I view Permissions
 	And I create a role 'roleA'
+	And I view Permissions
 	Then I should see a role 'roleA' in the list
 
 Scenario: add a function to a role

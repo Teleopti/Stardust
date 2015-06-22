@@ -11,11 +11,14 @@
 				<div class="search-results material-depth-2">
 					<ul class="wfm-list">
 						<div ng-repeat="gp in searchResultGroups">
+							<li class="wfm-search-li">
+								<button ng-if="gp == 'Permission' " class="wfm-fab mini result-icon"><i class="mdi mdi-account-check"></i></button>
+								<button ng-if="gp == 'Planning Period' " class="wfm-fab mini info result-icon"><i class="mdi mdi-calendar"></i></button>
+								{{gp}}
+							</li>
 							<li class="animate-repeat" ng-repeat="item in searchResult | filter:{ SearchGroup: gp }">
-								<!--<a href="/wfm/#{{item.Url}}" ng-click="ResetSearch()">-->
 								<div ng-click="clickedItem(item)">
-									<button ng-if="item.Url == 'permissions' " class="wfm-fab mini result-icon"><i class="mdi mdi-account-check"></i></button>
-									<button ng-if="item.Url == 'resourceplanner.planningperiod' " class="wfm-fab mini info result-icon"><i class="mdi mdi-calendar"></i></button>
+									
 
 									{{item.Name}}
 
