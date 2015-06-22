@@ -27,13 +27,13 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 		public WorkloadAccuracy Evaluate(IWorkload workload)
 		{
 			var result = new WorkloadAccuracy { Id = workload.Id.Value, Name = workload.Name};
-			var methods = _forecastMethodProvider.All();
+			var availablePeriod = _historicalPeriodProvider.AvailablePeriod(workload);
+			if (!availablePeriod.HasValue)
+				return new WorkloadAccuracy { Id = workload.Id.Value, Name = workload.Name, Accuracies = new MethodAccuracy[] { } };
+			var methods = _forecastMethodProvider.Calculate(availablePeriod.Value);
 			var methodsEvaluationResult = new List<MethodAccuracy>();
 			foreach (var forecastMethod in methods)
 			{
-				var availablePeriod = _historicalPeriodProvider.AvailablePeriod(workload);
-				if(!availablePeriod.HasValue)
-					return new WorkloadAccuracy { Id = workload.Id.Value, Name = workload.Name, Accuracies = new MethodAccuracy[] { } };
 				var historicalData = _historicalData.Fetch(workload, availablePeriod.Value);
 				if (!historicalData.TaskOwnerDayCollection.Any())
 					return new WorkloadAccuracy { Id = workload.Id.Value, Name = workload.Name, Accuracies = new MethodAccuracy[] { } };

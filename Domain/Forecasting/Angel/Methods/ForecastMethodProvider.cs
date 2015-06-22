@@ -1,4 +1,5 @@
 using Teleopti.Ccc.Domain.Forecasting.Angel.Trend;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 {
@@ -13,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 			_linearTrendCalculator = linearTrendCalculator;
 		}
 
-		public IForecastMethod[] All()
+		public IForecastMethod[] Calculate(DateOnlyPeriod period)
 		{
 			return new IForecastMethod[]
 			{

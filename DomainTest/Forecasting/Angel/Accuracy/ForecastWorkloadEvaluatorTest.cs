@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 			var forecastMethodProvider = MockRepository.GenerateMock<IForecastMethodProvider>();
 			var forecastMethod = MockRepository.GenerateMock<IForecastMethod>();
 			forecastMethod.Stub(x => x.Forecast(null, new DateOnlyPeriod())).IgnoreArguments().Return(new ForecastResult { ForecastingTargets = new IForecastingTarget[] { } });
-			forecastMethodProvider.Stub(x => x.All()).Return(new[] { forecastMethod });
+			forecastMethodProvider.Stub(x => x.Calculate(Arg<DateOnlyPeriod>.Is.Anything)).Return(new[] { forecastMethod });
 
 			var outlierRemover = MockRepository.GenerateMock<IOutlierRemover>();
 			var historicalPeriodProvider = MockRepository.GenerateMock<IHistoricalPeriodProvider>();
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 			var forecastMethodProvider = MockRepository.GenerateMock<IForecastMethodProvider>();
 			var forecastMethod = MockRepository.GenerateMock<IForecastMethod>();
 			forecastMethod.Stub(x => x.Forecast(null, new DateOnlyPeriod())).IgnoreArguments().Return(new ForecastResult { ForecastingTargets = new IForecastingTarget[] { } });
-			forecastMethodProvider.Stub(x => x.All()).Return(new[] { forecastMethod });
+			forecastMethodProvider.Stub(x => x.Calculate(Arg<DateOnlyPeriod>.Is.Anything)).Return(new[] { forecastMethod });
 
 			var outlierRemover = MockRepository.GenerateMock<IOutlierRemover>();
 			var historicalPeriodProvider = MockRepository.GenerateMock<IHistoricalPeriodProvider>();
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 			var forecastMethodProvider = MockRepository.GenerateMock<IForecastMethodProvider>();
 			var forecastMethod = MockRepository.GenerateMock<IForecastMethod>();
 			forecastMethod.Stub(x => x.Forecast(null, new DateOnlyPeriod())).IgnoreArguments().Return(new ForecastResult {ForecastingTargets = new IForecastingTarget[]{}});
-			forecastMethodProvider.Stub(x => x.All()).Return(new[] {forecastMethod,forecastMethod});
+			forecastMethodProvider.Stub(x => x.Calculate(Arg<DateOnlyPeriod>.Is.Anything)).Return(new[] { forecastMethod, forecastMethod });
 			var outlierRemover = MockRepository.GenerateMock<IOutlierRemover>();
 			var historicalPeriodProvider = MockRepository.GenerateMock<IHistoricalPeriodProvider>();
 			historicalPeriodProvider.Stub(x => x.AvailablePeriod(workload)).Return(new DateOnlyPeriod(2013, 1, 1, 2015, 1, 1));
