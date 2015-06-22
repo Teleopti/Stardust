@@ -225,12 +225,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 					Accuracies =
 						new[]
 						{
-							new MethodAccuracy {Number = 89, MethodId = ForecastMethodType.TeleoptiClassic, IsSelected = false},
+							new MethodAccuracy {Number = 89, MethodId = ForecastMethodType.TeleoptiClassicLongTerm, IsSelected = false},
 							new MethodAccuracy {Number = 92, MethodId = ForecastMethodType.TeleoptiClassicLongTermWithTrend, IsSelected = true, MeasureResult = new IForecastingTarget[]{}}
 						}
 				});
 			var dictionary = new Dictionary<DateOnly, IDictionary<ForecastMethodType, double>>();
-			var oneDay = new Dictionary<ForecastMethodType, double> {{ForecastMethodType.TeleoptiClassic, 80d},{ForecastMethodType.TeleoptiClassicLongTermWithTrend, 90d}};
+			var oneDay = new Dictionary<ForecastMethodType, double> { { ForecastMethodType.TeleoptiClassicLongTerm, 80d }, { ForecastMethodType.TeleoptiClassicLongTermWithTrend, 90d } };
 			var dateOnly = new DateOnly(2015,1,1);
 			dictionary.Add(dateOnly, oneDay);
 			var historicalData = MockRepository.GenerateMock<IHistoricalData>();
@@ -243,7 +243,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			result.WorkloadId.Should().Be.EqualTo(workload.Id.Value);
 			result.Name.Should().Be.EqualTo(workload.Name);
 			((ForecastMethodType)result.ForecastMethodRecommended.Id).Should().Be.EqualTo(ForecastMethodType.TeleoptiClassicLongTermWithTrend);
-			result.ForecastMethods.Any(x => (int) x.AccuracyNumber == 89 && x.ForecastMethodType == ForecastMethodType.TeleoptiClassic).Should().Be.True();
+			result.ForecastMethods.Any(x => (int)x.AccuracyNumber == 89 && x.ForecastMethodType == ForecastMethodType.TeleoptiClassicLongTerm).Should().Be.True();
 			result.ForecastMethods.Any(x => (int)x.AccuracyNumber == 92 && x.ForecastMethodType == ForecastMethodType.TeleoptiClassicLongTermWithTrend).Should().Be.True();
 			result.Days.Any().Should().Be.False();
 		}

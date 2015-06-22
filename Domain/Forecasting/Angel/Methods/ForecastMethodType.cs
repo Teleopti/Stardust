@@ -3,14 +3,14 @@
 	public enum ForecastMethodType
 	{
 		None = -1,
-		TeleoptiClassicLongTermWithTrend = 1,
-		TeleoptiClassicShortTerm,
-		TeleoptiClassicLongTermWithDayInMonth,
-		TeleoptiClassicLongTerm,
-		TeleoptiClassicMediumTerm,
-		TeleoptiClassicMediumTermWithDayInMonth,
-		TeleoptiClassicMediumTermWithTrend,
-		TeleoptiClassicMediumTermWithDayInMonthWithTrend,
-		TeleoptiClassicLongTermWithDayInMonthWithTrend
+		TeleoptiClassicShortTerm = 1,
+		TeleoptiClassicMediumTerm = 2,
+		TeleoptiClassicMediumTermWithDayInMonth = 3,
+		TeleoptiClassicLongTerm = 4,
+		TeleoptiClassicLongTermWithDayInMonth = 5,
+		TeleoptiClassicMediumTermWithTrend = 12,
+		TeleoptiClassicMediumTermWithDayInMonthWithTrend = 13,
+		TeleoptiClassicLongTermWithTrend = 14,
+		TeleoptiClassicLongTermWithDayInMonthWithTrend = 15
 	}
 }

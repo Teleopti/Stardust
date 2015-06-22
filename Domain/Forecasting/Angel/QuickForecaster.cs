@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 					{
 						var workloadAccuracy = _forecastWorkloadEvaluator.Evaluate(workload);
 						forecastMethodId = (workloadAccuracy == null || workloadAccuracy.Accuracies.Length == 0)
-							? ForecastMethodType.TeleoptiClassic
+							? ForecastMethodType.None
 							: workloadAccuracy.Accuracies.Single(x => x.IsSelected).MethodId;
 					}
 

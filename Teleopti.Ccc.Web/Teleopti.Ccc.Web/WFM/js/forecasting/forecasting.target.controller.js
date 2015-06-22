@@ -10,8 +10,6 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 				$scope.showExplaination = false;
 				$scope.selectedIds = [];
 
-
-				var methodNames = ["Teleopti Classic", "Teleopti Classic with Trend"];
 				$scope.dataColumns = [{ id: "vh", type: "line", name: "Queue Statistics" },
 									{ id: "vb", type: "line", name: "Forecast Method" }];
 
@@ -67,8 +65,6 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 							}
 							workload.selectedMethod = selectedMethod;
 							workload.ForecastMethodRecommended = data.ForecastMethodRecommended;
-							workload.selectedMethodName = methodNames[selectedMethod];
-							$scope.dataColumns[1].name = "Forecast Method";
 
 							if ($scope.isQueueStatisticsEnabled) {
 								getQueueStatistics(workload, selectedMethod);
