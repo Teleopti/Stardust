@@ -9,13 +9,13 @@
 			<div class="sub-header">
 				{{'From' | translate}} <span class="startDate">{{period.startDate | date : format}}</span>
 			</div>
-			<datepicker ng-model="period.startDate" max-date="period.endDate" class="wfm-datepicker"></datepicker>
+			<datepicker ng-model="period.startDate" show-weeks="true" max-date="period.endDate" class="wfm-datepicker"></datepicker>
 		</div>
 		<div class="wfm-datepicker-wrap">
 			<div class="sub-header">
-				To:
+				{{'To' | translate}} <span class="endDate">{{period.endDate | date : format}}</span>
 			</div>
-			<datepicker ng-model="period.endDate" min-date="period.startDate" custom-class="setRangeClass(date, mode)" class="wfm-datepicker"></datepicker>
+			<datepicker ng-model="period.endDate" show-weeks="true" min-date="period.startDate" custom-class="setRangeClass(date, mode)" class="wfm-datepicker"></datepicker>
 		</div>
 
 		<div>
