@@ -22,11 +22,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 		protected override void Assert(WorkloadAccuracy measurementResult)
 		{
 			measurementResult.Id.Should().Be.EqualTo(Workload.Id.Value);
-			measurementResult.Accuracies.First().MethodId.Should().Be.EqualTo(ForecastMethodType.TeleoptiClassic);
+			measurementResult.Accuracies.First().MethodId.Should().Be.EqualTo(ForecastMethodType.TeleoptiClassicLongTerm);
 			measurementResult.Accuracies.First().MeasureResult.First().Tasks.Should().Be.EqualTo(9);
 			measurementResult.Accuracies.First().MeasureResult.Count().Should().Be.EqualTo(183);
 			measurementResult.Accuracies.First().Number.Should().Be.EqualTo(Math.Round(100 - (11d - 9d) / 11d * 100, 1));
-			measurementResult.Accuracies.Second().MethodId.Should().Be.EqualTo(ForecastMethodType.TeleoptiClassicWithTrend);
+			measurementResult.Accuracies.Second().MethodId.Should().Be.EqualTo(ForecastMethodType.TeleoptiClassicLongTermWithTrend);
 			measurementResult.Accuracies.Second().Number.Should().Be.EqualTo(Math.Round(100 -((11d - (9d + 1*HistoricalPeriodForForecast.EndDate.Subtract(LinearTrend.StartDate).Days + 2 - 9d)))/11d*100, 1));
 		}
 	}

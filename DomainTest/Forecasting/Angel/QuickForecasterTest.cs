@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 						new[]
 						{
 							new MethodAccuracy{MethodId = ForecastMethodType.TeleoptiClassic},
-							new MethodAccuracy{MethodId = ForecastMethodType.TeleoptiClassicWithTrend, IsSelected = true}
+							new MethodAccuracy{MethodId = ForecastMethodType.TeleoptiClassicLongTermWithTrend, IsSelected = true}
 						}
 				});
 
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 				HistoricalPeriod = historicalPeriodForForecast1,
 				SkillDays = skillDays,
 				WorkLoad = workload1,
-				ForecastMethodId = ForecastMethodType.TeleoptiClassicWithTrend
+				ForecastMethodId = ForecastMethodType.TeleoptiClassicLongTermWithTrend
 			}));
 
 			quickForecasterWorkload.AssertWasNotCalled(x => x.Execute(new QuickForecasterWorkloadParams
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 				HistoricalPeriod = historicalPeriodForForecast2,
 				SkillDays = skillDays,
 				WorkLoad = workload2,
-				ForecastMethodId = ForecastMethodType.TeleoptiClassicWithTrend
+				ForecastMethodId = ForecastMethodType.TeleoptiClassicLongTermWithTrend
 			}));
 		}
 
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 						new[]
 						{
 							new MethodAccuracy{MethodId = ForecastMethodType.TeleoptiClassic},
-							new MethodAccuracy{MethodId = ForecastMethodType.TeleoptiClassicWithTrend, IsSelected = true}
+							new MethodAccuracy{MethodId = ForecastMethodType.TeleoptiClassicLongTermWithTrend, IsSelected = true}
 						}
 				});
 			var historicalPeriodProvider = MockRepository.GenerateMock<IHistoricalPeriodProvider>();
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 				HistoricalPeriod = historicalPeriodForForecast,
 				SkillDays = skillDays,
 				WorkLoad = workload1,
-				ForecastMethodId = ForecastMethodType.TeleoptiClassicWithTrend
+				ForecastMethodId = ForecastMethodType.TeleoptiClassicLongTermWithTrend
 			}));
 		}
 	}

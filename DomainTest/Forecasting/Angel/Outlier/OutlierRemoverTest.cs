@@ -7,6 +7,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
+using Teleopti.Ccc.Domain.Forecasting.Angel.Trend;
 using Teleopti.Ccc.Infrastructure.Forecasting.Angel;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Outlier
 
 			var historicalData = new TaskOwnerPeriod(historicalDate, periodForHelper.TaskOwnerDays, TaskOwnerPeriodType.Other);
 
-			var indexVolumes = MockRepository.GenerateMock<IDayWeekMonthIndexVolumes>();
+			var indexVolumes = MockRepository.GenerateMock<IIndexVolumes>();
 			var volumes = IndexVolumesFactory.CreateDayWeekMonthIndexVolumes();
 			indexVolumes.Stub(x => x.Create(historicalData)).Return(volumes);
 
@@ -42,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Outlier
 			historicalData.TaskOwnerDayCollection.Single(x => x.CurrentDate == new DateOnly(date))
 				.TotalStatisticCalculatedTasks.Should().Be.EqualTo(1000);
 
-			var result = target.RemoveOutliers(historicalData, new TeleoptiClassic(indexVolumes));
+			var result = target.RemoveOutliers(historicalData, new FakeTeleoptiClassic(indexVolumes));
 
 			result.TaskOwnerDayCollection.Count.Should().Be.EqualTo(25);
 			Math.Round(result.TaskOwnerDayCollection.Single(x => x.CurrentDate == new DateOnly(date))
@@ -65,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Outlier
 
 			var historicalData = new TaskOwnerPeriod(historicalDate, periodForHelper.TaskOwnerDays, TaskOwnerPeriodType.Other);
 
-			var indexVolumes = MockRepository.GenerateMock<IDayWeekMonthIndexVolumes>();
+			var indexVolumes = MockRepository.GenerateMock<IIndexVolumes>();
 			var volumes = IndexVolumesFactory.CreateDayWeekMonthIndexVolumes();
 			indexVolumes.Stub(x => x.Create(historicalData)).Return(volumes);
 
@@ -75,15 +76,14 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Outlier
 			historicalData.TaskOwnerDayCollection.Single(x => x.CurrentDate == new DateOnly(date))
 				.TotalStatisticCalculatedTasks.Should().Be.EqualTo(1000);
 
-			var result = target.RemoveOutliers(historicalData, new TeleoptiClassicWithTrend(indexVolumes,new LinearRegressionTrendCalculator()));
+			var result = target.RemoveOutliers(historicalData, new FakeTeleoptiClassicWithTrend(indexVolumes, new LinearRegressionTrendCalculator()));
 
 			result.TaskOwnerDayCollection.Count.Should().Be.EqualTo(25);
 			Math.Round(result.TaskOwnerDayCollection.Single(x => x.CurrentDate == new DateOnly(date))
 				.TotalStatisticCalculatedTasks, 3).Should().Be.EqualTo(713.136);
 		}
 
-		private static TaskOwnerHelper generateMockedStatisticsWithOutliers(DateOnly historicalDate, IWorkload workload,
-			DateTime date)
+		private static TaskOwnerHelper generateMockedStatisticsWithOutliers(DateOnly historicalDate, IWorkload workload, DateTime date)
 		{
 			var periodForHelper = SkillDayFactory.GenerateMockedStatisticsWithValidatedVolumeDays(historicalDate, workload);
 			var workloadDay = new WorkloadDay();
@@ -101,4 +101,31 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Outlier
 			return periodForHelper;
 		}
 	}
+
+	public class FakeTeleoptiClassic : TeleoptiClassic
+	{
+		public FakeTeleoptiClassic(IIndexVolumes indexVolumes)
+			: base(indexVolumes)
+		{
+		}
+
+		public override ForecastMethodType Id
+		{
+			get { return ForecastMethodType.TeleoptiClassicLongTerm; }
+		}
+	}
+
+	public class FakeTeleoptiClassicWithTrend : TeleoptiClassicWithTrend
+	{
+		public FakeTeleoptiClassicWithTrend(IIndexVolumes indexVolumes, ILinearTrendCalculator linearTrendCalculator)
+			: base(indexVolumes, linearTrendCalculator)
+		{
+		}
+
+		public override ForecastMethodType Id
+		{
+			get { return ForecastMethodType.TeleoptiClassicLongTermWithTrend; }
+		}
+	}
+
 }

@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Trend;
+using Teleopti.Ccc.DomainTest.Forecasting.Angel.Outlier;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -40,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Methods
 
 			_linearTrendCalculator = MockRepository.GenerateMock<ILinearTrendCalculator>();
 			
-			target = new TeleoptiClassicWithTrend(indexVolumes, _linearTrendCalculator);
+			target = new FakeTeleoptiClassicWithTrend(indexVolumes, _linearTrendCalculator);
 		}
 
 		[Test]

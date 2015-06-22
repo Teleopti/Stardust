@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Methods
 {
 	public class TeleoptiClassicUpdatedBaseFake : TeleoptiClassicUpdatedBase
 	{
-		public TeleoptiClassicUpdatedBaseFake(IDayWeekMonthIndexVolumes indexVolumes, IAhtAndAcwCalculator ahtAndAcwCalculator):base(indexVolumes, ahtAndAcwCalculator)
+		public TeleoptiClassicUpdatedBaseFake(IIndexVolumes indexVolumes, IAhtAndAcwCalculator ahtAndAcwCalculator):base(indexVolumes, ahtAndAcwCalculator)
 		{
 		}
 

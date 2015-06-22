@@ -1,15 +1,17 @@
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Forecasting.DayInMonthIndex;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel
 {
-	public class DayWeekIndexVolumes : IIndexVolumes
+	public class IndexVolumesMediumTermWithDayInMonth : IIndexVolumes
 	{
 		public IEnumerable<IVolumeYear> Create(ITaskOwnerPeriod historicalData)
 		{
 			return new IVolumeYear[]
 			{
 				new DayOfWeeks(historicalData, new DaysOfWeekCreator()),
-				new WeekOfMonth(historicalData, new WeekOfMonthCreator())
+				new WeekOfMonth(historicalData, new WeekOfMonthCreator()),
+				new DayInMonth(historicalData, new DayInMonthCreator())
 			};
 		}
 	}

@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 		[Test]
 		public void ShouldCreate()
 		{
-			var target = new MonthlyPatternIndexVolumes();
+			var target = new IndexVolumesLongTermWithDayInMonth();
 			var result = target.Create(new TaskOwnerPeriod(new DateOnly(2015, 1, 1), new ITaskOwner[] { }, TaskOwnerPeriodType.Other));
 			var volumeYears = result as IVolumeYear[] ?? result.ToArray();
 			volumeYears[0].GetType().Should().Be.EqualTo(typeof(DayOfWeeks));

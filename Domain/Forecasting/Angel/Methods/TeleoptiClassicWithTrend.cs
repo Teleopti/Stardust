@@ -6,11 +6,11 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 {
-	public class TeleoptiClassicWithTrend : TeleoptiClassicUpdatedBase
+	public abstract class TeleoptiClassicWithTrend : TeleoptiClassicUpdatedBase
 	{
 		private readonly ILinearTrendCalculator _linearTrendCalculator;
 
-		public TeleoptiClassicWithTrend(IIndexVolumes indexVolumes, ILinearTrendCalculator linearTrendCalculator)
+		protected TeleoptiClassicWithTrend(IIndexVolumes indexVolumes, ILinearTrendCalculator linearTrendCalculator)
 			: base(indexVolumes, new SimpleAhtAndAcwCalculator())
 		{
 			_linearTrendCalculator = linearTrendCalculator;
@@ -29,12 +29,55 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 			return dateAndTasks;
 
 		}
+	}
 
-		public override ForecastMethodType Id {
-			get
-			{
-				return ForecastMethodType.TeleoptiClassicWithTrend;
-			}
+	public class TeleoptiClassicLongTermWithTrend : TeleoptiClassicWithTrend
+	{
+		public TeleoptiClassicLongTermWithTrend(ILinearTrendCalculator linearTrendCalculator) : base(new IndexVolumesLongTerm(), linearTrendCalculator)
+		{
+		}
+
+		public override ForecastMethodType Id
+		{
+			get { return ForecastMethodType.TeleoptiClassicLongTermWithTrend; }
+		}
+	}
+
+	public class TeleoptiClassicMediumTermWithTrend : TeleoptiClassicWithTrend
+	{
+		public TeleoptiClassicMediumTermWithTrend(ILinearTrendCalculator linearTrendCalculator) : base(new IndexVolumesMediumTerm(), linearTrendCalculator)
+		{
+		}
+
+		public override ForecastMethodType Id
+		{
+			get { return ForecastMethodType.TeleoptiClassicMediumTermWithTrend; }
+		}
+	}
+
+	public class TeleoptiClassicMediumTermWithDayInMonthWithTrend : TeleoptiClassicWithTrend
+	{
+		public TeleoptiClassicMediumTermWithDayInMonthWithTrend(ILinearTrendCalculator linearTrendCalculator)
+			: base(new IndexVolumesMediumTermWithDayInMonth(), linearTrendCalculator)
+		{
+		}
+
+		public override ForecastMethodType Id
+		{
+			get { return ForecastMethodType.TeleoptiClassicMediumTermWithDayInMonthWithTrend; }
+		}
+	}
+
+	public class TeleoptiClassicLongTermWithDayInMonthWithTrend : TeleoptiClassicWithTrend
+	{
+		public TeleoptiClassicLongTermWithDayInMonthWithTrend(ILinearTrendCalculator linearTrendCalculator)
+			: base(new IndexVolumesLongTermWithDayInMonth(), linearTrendCalculator)
+		{
+		}
+
+		public override ForecastMethodType Id
+		{
+			get { return ForecastMethodType.TeleoptiClassicLongTermWithDayInMonthWithTrend; }
 		}
 	}
 }

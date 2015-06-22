@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Methods
 			var periodForHelper = SkillDayFactory.GenerateMockedStatistics(historicalDate, workload);
 			var historicalData = new TaskOwnerPeriod(historicalDate, periodForHelper.TaskOwnerDays, TaskOwnerPeriodType.Other);
 
-			var indexVolumes = MockRepository.GenerateMock<IDayWeekMonthIndexVolumes>();
+			var indexVolumes = MockRepository.GenerateMock<IIndexVolumes>();
 			var volumes = IndexVolumesFactory.CreateDayWeekMonthIndexVolumes();
 			indexVolumes.Stub(x => x.Create(historicalData)).Return(volumes);
 

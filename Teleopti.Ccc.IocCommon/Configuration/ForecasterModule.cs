@@ -36,9 +36,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ForecastWorkloadEvaluator>()
 				.SingleInstance()
 				.As<IForecastWorkloadEvaluator>();
-			builder.RegisterType<DayWeekMonthIndexVolumes>()
-				.SingleInstance()
-				.As<IDayWeekMonthIndexVolumes>();
 			builder.RegisterType<QuickForecasterWorkload>()
 				.SingleInstance()
 				.As<IQuickForecasterWorkload>();
