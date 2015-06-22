@@ -99,13 +99,23 @@
 										</tr>
 										<tr id="DayButtons" runat="server">
 											<td id="tdDateLabel" runat="server" class="ReportSelectionLabel">xxDate:</td>
-											<td>
-												<asp:ImageButton ID="imageButtonPreviousDay" runat="server"
-													ImageUrl="images/previous.gif" OnClick="imageButtonPreviousDay_Click" /></td>
-											<td id="tdDateText" runat="server" align="center">xx2008-07-02</td>
-											<td>
-												<asp:ImageButton ID="imageButtonNextDay" runat="server"
-													ImageUrl="images/next.gif" OnClick="imageButtonNextDay_Click" /></td>
+											<td></td>
+											<td  runat="server" align="center">
+												<table runat="server" >
+													<tr runat="server" >
+														<td runat="server" >
+															<asp:ImageButton ID="imageButtonPreviousDay" runat="server"
+																ImageUrl="images/previous.gif" OnClick="imageButtonPreviousDay_Click" /></td>
+														<td id="tdDateText" runat="server" align="center">xx2008-07-02</td>
+														<td runat="server" >
+															<asp:ImageButton ID="imageButtonNextDay" runat="server"
+																ImageUrl="images/next.gif" OnClick="imageButtonNextDay_Click" /></td>
+
+													</tr>
+												</table>
+
+											</td>
+											<td></td>
 										</tr>
 									</table>
 								</td>

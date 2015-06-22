@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
-using System.Web.ApplicationServices;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Teleopti.Analytics.Parameters;
@@ -297,26 +296,26 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 		private void SetReportHeaderParmaterLabels()
 		{
 			if (ReportId.Equals(new Guid("6a3eb69b-690e-4605-b80e-46d5710b28af"))) //one agent per day
-				tdReportName.InnerText = Analytics.ReportTexts.Resources.ResReportAdherencePerAgent;
+				tdReportName.InnerText = Resources.ResReportAdherencePerAgent;
 			else
-				tdReportName.InnerText = Analytics.ReportTexts.Resources.ResReportAdherencePerDay;
+				tdReportName.InnerText = Resources.ResReportAdherencePerDay;
 
-			tdDatesLabel.InnerText = Analytics.ReportTexts.Resources.ResShiftStartDateColon;
-			tdGroupPageLabel.InnerText = Analytics.ReportTexts.Resources.ResGroupPageColon;
-			tdGroupPageGroupLabel.InnerText = Analytics.ReportTexts.Resources.ResGroupPageGroupColon;
-			tdGroupPageAgentLabel.InnerText = Analytics.ReportTexts.Resources.ResAgentColon;
+			tdDatesLabel.InnerText = Resources.ResShiftStartDateColon;
+			tdGroupPageLabel.InnerText = Resources.ResGroupPageColon;
+			tdGroupPageGroupLabel.InnerText = Resources.ResGroupPageGroupColon;
+			tdGroupPageAgentLabel.InnerText = Resources.ResAgentColon;
 
-			tdSiteLabel.InnerText = Analytics.ReportTexts.Resources.ResSiteNameColon;
-			tdTeamLabel.InnerText = Analytics.ReportTexts.Resources.ResTeamNameColon;
-			tdAgentLabel.InnerText = Analytics.ReportTexts.Resources.ResAgentColon;
-			tdAdherenceCalculationLabel.InnerText = Analytics.ReportTexts.Resources.ResAdherenceCalculationColon;
-			tdSortOrderLabel.InnerText = Analytics.ReportTexts.Resources.ResSortByColon;
-			tdTimeZoneLabel.InnerText = Analytics.ReportTexts.Resources.ResTimeZoneColon;
-			tdDateLabel.InnerText = Analytics.ReportTexts.Resources.ResShiftStartDateColon;
+			tdSiteLabel.InnerText = Resources.ResSiteNameColon;
+			tdTeamLabel.InnerText = Resources.ResTeamNameColon;
+			tdAgentLabel.InnerText = Resources.ResAgentColon;
+			tdAdherenceCalculationLabel.InnerText = Resources.ResAdherenceCalculationColon;
+			tdSortOrderLabel.InnerText = Resources.ResSortByColon;
+			tdTimeZoneLabel.InnerText = Resources.ResTimeZoneColon;
+			tdDateLabel.InnerText = Resources.ResShiftStartDateColon;
 
 			tdTodaysDateTime.InnerText = DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString();
-			imageButtonPreviousDay.ToolTip = Analytics.ReportTexts.Resources.ResPrevious;
-			imageButtonNextDay.ToolTip = Analytics.ReportTexts.Resources.ResNext;
+			imageButtonPreviousDay.ToolTip = Resources.ResPrevious;
+			imageButtonNextDay.ToolTip = Resources.ResNext;
 
 			// per agent
 			if (ReportId.Equals(new Guid("6A3EB69B-690E-4605-B80E-46D5710B28AF")))
