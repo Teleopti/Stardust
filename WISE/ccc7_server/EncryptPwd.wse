@@ -87,7 +87,7 @@ end
 item: Custom Script Item
   Filename=Get Windows Installer Property.wse
   Variable Name1=_PROPERTYNAME_
-  Variable Value1=SQL_USER_PASSWORD
+  Variable Value1=SQL_SERVER_PASS
   Variable Name2=_PROP_VAR_
   Variable Value2=SPASS
   Variable Name3=HELPFILE
@@ -96,7 +96,7 @@ end
 item: Custom Script Item
   Filename=Get Windows Installer Property.wse
   Variable Name1=_PROPERTYNAME_
-  Variable Value1=SQL_USER_NAME
+  Variable Value1=SQL_SERVER_USER
   Variable Name2=_PROP_VAR_
   Variable Value2=SUSER
   Variable Name3=HELPFILE
@@ -105,7 +105,7 @@ end
 item: Custom Script Item
   Filename=Get Windows Installer Property.wse
   Variable Name1=_PROPERTYNAME_
-  Variable Value1=SQL_USER_AUTH
+  Variable Value1=SQL_SERVER_AUTH
   Variable Name2=_PROP_VAR_
   Variable Value2=SAUTH
   Variable Name3=HELPFILE
