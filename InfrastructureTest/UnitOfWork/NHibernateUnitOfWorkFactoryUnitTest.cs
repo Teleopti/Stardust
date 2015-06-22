@@ -3,7 +3,9 @@ using NHibernate.Engine;
 using NHibernate.Stat;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -13,9 +15,11 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 	public class NHibernateUnitOfWorkFactoryUnitTest
 	{
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+		[Test]
 		public void ShouldReassociateOnCreateAndOpenUnitOfWork()
 		{
+			StateHolderReader.Instance.StateReader.Stub(x => x.ApplicationScopeData)
+				.Return(MockRepository.GenerateStub<IApplicationData>());
 			var session = MockRepository.GenerateMock<ISession>();
 			session.Stub(x => x.EnableFilter(null)).IgnoreArguments().Return(MockRepository.GenerateMock<IFilter>()).IgnoreArguments();
 			session.Stub(x => x.GetSessionImplementation()).Return(MockRepository.GenerateMock<ISessionImplementor>());
