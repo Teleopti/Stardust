@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
-using Teleopti.Ccc.Infrastructure.Forecasting.Angel;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -38,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 					Accuracies =
 						new[]
 						{
-							new MethodAccuracy{MethodId = ForecastMethodType.TeleoptiClassic},
+							new MethodAccuracy{MethodId = ForecastMethodType.TeleoptiClassicLongTerm},
 							new MethodAccuracy{MethodId = ForecastMethodType.TeleoptiClassicLongTermWithTrend, IsSelected = true}
 						}
 				});
@@ -85,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			var historicalPeriodProvider = MockRepository.GenerateMock<IHistoricalPeriodProvider>();
 			historicalPeriodProvider.Stub(x => x.AvailablePeriod(workload1)).Return(historicalPeriodForForecast);
 			var target = new QuickForecaster(quickForecasterWorkload, fetchAndFillSkillDays, quickForecastWorkloadEvaluator, historicalPeriodProvider);
-			target.ForecastWorkloadsWithinSkill(skill1, new[] { new ForecastWorkloadInput { WorkloadId = workload1.Id.Value, ForecastMethodId = ForecastMethodType.TeleoptiClassic} }, futurePeriod);
+			target.ForecastWorkloadsWithinSkill(skill1, new[] { new ForecastWorkloadInput { WorkloadId = workload1.Id.Value, ForecastMethodId = ForecastMethodType.TeleoptiClassicLongTerm} }, futurePeriod);
 			quickForecastWorkloadEvaluator.AssertWasNotCalled(x => x.Evaluate(workload1));
 			quickForecasterWorkload.AssertWasCalled(x => x.Execute(new QuickForecasterWorkloadParams
 			{
@@ -93,7 +92,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 				HistoricalPeriod = historicalPeriodForForecast,
 				SkillDays = skillDays,
 				WorkLoad = workload1,
-				ForecastMethodId = ForecastMethodType.TeleoptiClassic
+				ForecastMethodId = ForecastMethodType.TeleoptiClassicLongTerm
 			}));
 		}
 
@@ -118,7 +117,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 					Accuracies =
 						new[]
 						{
-							new MethodAccuracy{MethodId = ForecastMethodType.TeleoptiClassic},
+							new MethodAccuracy{MethodId = ForecastMethodType.TeleoptiClassicLongTerm},
 							new MethodAccuracy{MethodId = ForecastMethodType.TeleoptiClassicLongTermWithTrend, IsSelected = true}
 						}
 				});

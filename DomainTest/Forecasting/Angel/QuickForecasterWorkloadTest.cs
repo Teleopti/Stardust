@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			{
 				WorkLoad = workload,
 				HistoricalPeriod = new DateOnlyPeriod(2015,1,1,2015,2,1),
-				ForecastMethodId = ForecastMethodType.TeleoptiClassic
+				ForecastMethodId = ForecastMethodType.TeleoptiClassicLongTerm
 			};
 			var outlierRemover = MockRepository.GenerateMock<IOutlierRemover>();
 			var forecastMethodProvider = MockRepository.GenerateMock<IForecastMethodProvider>();

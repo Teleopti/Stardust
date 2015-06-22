@@ -1,3 +1,4 @@
+using System;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Trend;
 using Teleopti.Interfaces.Domain;
 
@@ -14,10 +15,38 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 
 		public IForecastMethod[] Calculate(DateOnlyPeriod period)
 		{
+			var length = period.EndDate.Date - period.StartDate.Date;
+			if (length < TimeSpan.FromDays(60))
+			{
+				return new[]
+				{
+					Get(ForecastMethodType.TeleoptiClassicShortTerm)
+				};
+			}
+			if (length < TimeSpan.FromDays(395))
+			{
+				return new[]
+				{
+					Get(ForecastMethodType.TeleoptiClassicMediumTerm),
+					Get(ForecastMethodType.TeleoptiClassicMediumTermWithDayInMonth)
+				};
+			}
+			if (length < TimeSpan.FromDays(730))
+			{
+				return new[]
+				{
+					Get(ForecastMethodType.TeleoptiClassicMediumTerm),
+					Get(ForecastMethodType.TeleoptiClassicMediumTermWithTrend),
+					Get(ForecastMethodType.TeleoptiClassicMediumTermWithDayInMonth),
+					Get(ForecastMethodType.TeleoptiClassicMediumTermWithDayInMonthWithTrend)
+				};
+			}
 			return new[]
 			{
 				Get(ForecastMethodType.TeleoptiClassicLongTerm),
-				Get(ForecastMethodType.TeleoptiClassicLongTermWithTrend)
+				Get(ForecastMethodType.TeleoptiClassicLongTermWithTrend),
+				Get(ForecastMethodType.TeleoptiClassicLongTermWithDayInMonth),
+				Get(ForecastMethodType.TeleoptiClassicLongTermWithDayInMonthWithTrend)
 			};
 		}
 

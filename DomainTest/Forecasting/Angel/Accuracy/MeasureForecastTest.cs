@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 			get
 			{
 				var date = new DateTime(2000, 1, 1);
-				return new DateOnlyPeriod(new DateOnly(date.AddYears(-1)), new DateOnly(date));
+				return new DateOnlyPeriod(new DateOnly(date.AddYears(-2)), new DateOnly(date));
 			}
 		}
 

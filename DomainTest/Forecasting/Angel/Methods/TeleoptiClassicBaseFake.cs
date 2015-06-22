@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Methods
 
 		public override ForecastMethodType Id
 		{
-			get { return ForecastMethodType.TeleoptiClassic; }
+			get { return ForecastMethodType.TeleoptiClassicLongTerm; }
 		}
 	}
 }

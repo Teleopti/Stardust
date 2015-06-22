@@ -22,12 +22,13 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 		protected override void Assert(WorkloadAccuracy measurementResult)
 		{
 			measurementResult.Id.Should().Be.EqualTo(Workload.Id.Value);
-			measurementResult.Accuracies.First().MethodId.Should().Be.EqualTo(ForecastMethodType.TeleoptiClassicLongTerm);
-			measurementResult.Accuracies.First().MeasureResult.First().Tasks.Should().Be.EqualTo(9);
-			measurementResult.Accuracies.First().MeasureResult.Count().Should().Be.EqualTo(183);
-			measurementResult.Accuracies.First().Number.Should().Be.EqualTo(Math.Round(100 - (11d - 9d) / 11d * 100, 1));
-			measurementResult.Accuracies.Second().MethodId.Should().Be.EqualTo(ForecastMethodType.TeleoptiClassicLongTermWithTrend);
-			measurementResult.Accuracies.Second().Number.Should().Be.EqualTo(Math.Round(100 -((11d - (9d + 1*HistoricalPeriodForForecast.EndDate.Subtract(LinearTrend.StartDate).Days + 2 - 9d)))/11d*100, 1));
+
+			var one = measurementResult.Accuracies.Single(x => x.MethodId == ForecastMethodType.TeleoptiClassicLongTerm);
+			one.MeasureResult.First().Tasks.Should().Be.EqualTo(9);
+			one.MeasureResult.Count().Should().Be.EqualTo(365);
+			one.Number.Should().Be.EqualTo(Math.Round(100 - (11d - 9d) / 11d * 100, 1));
+			var another = measurementResult.Accuracies.Single(x => x.MethodId == ForecastMethodType.TeleoptiClassicLongTermWithTrend);
+			another.Number.Should().Be.EqualTo(Math.Round(100 -((11d - (9d + 1*HistoricalPeriodForForecast.EndDate.Subtract(LinearTrend.StartDate).Days + 2 - 9d)))/11d*100, 1));
 		}
 	}
 }

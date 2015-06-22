@@ -1,7 +1,6 @@
 using System;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
 using Teleopti.Ccc.Domain.Repositories;
@@ -27,10 +26,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			workload2.SetId(id2);
 			var quickForecaster = MockRepository.GenerateMock<IQuickForecaster>();
 			var futurePeriod = new DateOnlyPeriod();
-			var now = new Now();
-			var nowDate = now.LocalDateOnly();
-			var historicalPeriodForForecast = new DateOnlyPeriod(new DateOnly(nowDate.Date.AddYears(-1)), nowDate);
-			var historicalPeriodForMeasurement = new DateOnlyPeriod(new DateOnly(nowDate.Date.AddYears(-2)), nowDate);
 
 			var target = new ForecastCreator(quickForecaster, skillRepository);
 			var forecastWorkloadInputs = new[]
@@ -38,12 +33,12 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 				new ForecastWorkloadInput
 				{
 					WorkloadId = id1,
-					ForecastMethodId = ForecastMethodType.TeleoptiClassic
+					ForecastMethodId = ForecastMethodType.TeleoptiClassicLongTerm
 				},
 				new ForecastWorkloadInput
 				{
 					WorkloadId = id2,
-					ForecastMethodId = ForecastMethodType.TeleoptiClassic
+					ForecastMethodId = ForecastMethodType.TeleoptiClassicLongTerm
 				}
 			};
 			target.CreateForecastForWorkloads(futurePeriod, forecastWorkloadInputs);
