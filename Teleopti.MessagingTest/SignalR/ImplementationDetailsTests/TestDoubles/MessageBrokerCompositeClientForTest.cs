@@ -26,7 +26,7 @@ namespace Teleopti.MessagingTest.SignalR.ImplementationDetailsTests.TestDoubles
 			IMessageFilterManager typeFilter,
 			ISignalRClient client,
 			IMessageSender sender)
-			: base(typeFilter, client, sender, null, null, null, null)
+			: base(typeFilter, client, sender, null, null, null, null, null)
 		{
 		}
 

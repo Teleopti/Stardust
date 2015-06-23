@@ -1,11 +1,13 @@
 ﻿using System.Linq;
 using System.Net;
 using System.Windows.Forms;
+using Autofac;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
@@ -40,12 +42,14 @@ namespace Teleopti.Ccc.WinCode.Main
 		private readonly IRepositoryFactory _repFactory;
 		private readonly IAuthenticationQuerier _authenticationQuerier;
 		private readonly IWindowsUserProvider _windowsUserProvider;
+		private readonly IComponentContext _container;
 		public const string UserAgent = "WIN";
 
 
 		public MultiTenancyLogonPresenter(ILogonView view, LogonModel model, ILoginInitializer initializer, ILogOnOff logOnOff,
 			IMessageBrokerComposite messageBroker, ISharedSettingsQuerier sharedSettingsQuerier,
-			IRepositoryFactory repFactory, IAuthenticationQuerier authenticationQuerier, IWindowsUserProvider windowsUserProvider)
+			IRepositoryFactory repFactory, IAuthenticationQuerier authenticationQuerier, IWindowsUserProvider windowsUserProvider,
+			IComponentContext container)
 		{
 			_view = view;
 			_model = model;
@@ -56,6 +60,7 @@ namespace Teleopti.Ccc.WinCode.Main
 			_repFactory = repFactory;
 			_authenticationQuerier = authenticationQuerier;
 			_windowsUserProvider = windowsUserProvider;
+			_container = container;
 			_model.AuthenticationType = AuthenticationTypeOption.Windows;
 		}
 
@@ -125,7 +130,7 @@ namespace Teleopti.Ccc.WinCode.Main
 			if (!StateHolderReader.IsInitialized)
 			{
 				var settings = _sharedSettingsQuerier.GetSharedSettings();
-				_view.InitStateHolderWithoutDataSource(_messageBroker, settings);
+				_view.InitStateHolderWithoutDataSource(_messageBroker, settings, _container);
 			}
 			if (!_authenticationQuerier.TryLogon(new IdentityLogonClientModel {Identity = _windowsUserProvider.Identity()}, string.Empty).Success)
 			{

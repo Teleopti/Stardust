@@ -17,14 +17,14 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly Interfaces.MessageBroker.Client.IMessageSender _messageSender;
 		private readonly ICurrentDataSource _dataSource;
 		private readonly ICurrentBusinessUnit _businessUnit;
-		private readonly ICurrentScenario _scenario;
+		private readonly Func<ICurrentScenario> _scenario;
 		private readonly IJsonSerializer _serializer;
 
 		public AggregatedScheduleChangeSender(
 			Interfaces.MessageBroker.Client.IMessageSender messageSender,
 			ICurrentDataSource dataSource,
 			ICurrentBusinessUnit businessUnit,
-			ICurrentScenario scenario,
+			Func<ICurrentScenario> scenario,
 			IJsonSerializer serializer
 			)
 		{
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				BusinessUnitId = Subscription.IdToString(_businessUnit.Current().Id.Value),
 				StartDate = Subscription.DateToString(startDate),
 				EndDate = Subscription.DateToString(endDate),
-				DomainReferenceId = _scenario.Current().Id.Value.ToString(),
+				DomainReferenceId = _scenario.Invoke().Current().Id.Value.ToString(),
 				DomainUpdateType = (int) DomainUpdateType.NotApplicable,
 				DomainType = typeof (IAggregatedScheduleChange).Name,
 				BinaryData = _serializer.SerializeObject(personIds)

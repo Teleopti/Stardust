@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Configuration;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
@@ -57,7 +58,7 @@ namespace Teleopti.Messaging.Client
 
 		public static IMessageBrokerComposite CompositeClient()
 		{
-			return _compositeClient ?? (_compositeClient = new MessageBrokerCompositeClient(messageFilter(), SignalRClient(), Sender(), _jsonSerializer, _jsonDeserializer, new Time(new Now()), new HttpServer()));
+			return _compositeClient ?? (_compositeClient = new MessageBrokerCompositeClient(messageFilter(), SignalRClient(), Sender(), _jsonSerializer, _jsonDeserializer, new Time(new Now()), new HttpServer(), null));
 		}
 
 		public static IMessageSender Sender()

@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator
 			addMailbox(new Subscription
 			{
 				MailboxId = Guid.NewGuid().ToString(),
-				DomainType = typeof(IScheduleChangedEvent).Name,
+				DomainType = typeof(IAggregatedScheduleChange).Name,
 				DomainReferenceId = Subscription.IdToString(_scenario.Current().Id.Value),
 				DomainReferenceType = typeof(Scenario).AssemblyQualifiedName,
 				LowerBoundary = Subscription.DateToString(startDate),
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator
 			var content = _serializer.SerializeObject(subscription);
 			post(url("MessageBroker/AddMailbox"), content);
 			Console.WriteLine(_number + "mailbox created " + subscription.MailboxId);
-			startPoll(subscription.MailboxId);
+			//startPoll(subscription.MailboxId);
 		}
 
 		private async void startPoll(string mailboxId)

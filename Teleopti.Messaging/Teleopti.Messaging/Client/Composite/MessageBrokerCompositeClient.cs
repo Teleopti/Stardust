@@ -1,6 +1,7 @@
 ﻿using System;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
@@ -20,17 +21,18 @@ namespace Teleopti.Messaging.Client.Composite
 
 		public MessageBrokerCompositeClient(
 			IMessageFilterManager typeFilter, 
-			ISignalRClient signalRClient, 
+			ISignalRClient signalRClient,
 			IMessageSender messageSender, 
 			IJsonSerializer serializer, 
 			IJsonDeserializer deserializer, 
-			ITime time, 
-			IHttpServer httpServer)
+			ITime time,
+			IHttpServer httpServer, 
+			IConfigReader configReader)
 		{
 			_signalRClient = signalRClient;
 			_signalRMessageListener = new SignalRListener(_signalRClient, new EventHandlers());
 			_mailboxListener = new HttpListener(new EventHandlers(),
-				httpServer, _signalRClient, serializer, deserializer, time);
+				httpServer, _signalRClient, serializer, deserializer, time, configReader);
 			_messageCreator = new MessageCreator(messageSender, typeFilter);
 		}
 

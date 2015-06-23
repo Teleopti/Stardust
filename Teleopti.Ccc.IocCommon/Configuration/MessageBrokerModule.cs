@@ -62,6 +62,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<HttpRequests>().SingleInstance();
 			builder.RegisterType<HttpSender>().As<IMessageSender>().SingleInstance();
+			builder.RegisterType<HttpServer>().As<IHttpServer>().SingleInstance();
 
 		}
 	}

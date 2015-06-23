@@ -23,6 +23,7 @@ namespace Teleopti.MessagingTest.Http
 	public class MailboxSubscriptionsTest : ISetup
 	{
 		public IMessageListener Target;
+		public FakeConfigReader ConfigReader;
 		public FakeHttpServer Server;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
@@ -53,6 +54,28 @@ namespace Teleopti.MessagingTest.Http
 			});
 
 			Assert.That(() => wasEventHandlerCalled, Is.True.After(500, 10));
+		}
+
+		[Test]
+		public void ShouldUseAppsettingsForPollingInterval()
+		{
+			var wasEventHandlerCalled = false;
+			ConfigReader.AppSettings = new NameValueCollection
+			{
+				{"MessageBrokerMailboxPollingInterval", "1000"}
+			};
+			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => wasEventHandlerCalled = true, typeof(ITestType), false, true);
+
+			Server.Has(new testMessage
+			{
+				BusinessUnitId = Guid.Empty.ToString(),
+				DataSource = string.Empty,
+				DomainQualifiedType = "ITestType",
+				DomainType = "ITestType"
+			});
+
+			Assert.That(() => wasEventHandlerCalled, Is.False.After(500));
+			
 		}
 
 

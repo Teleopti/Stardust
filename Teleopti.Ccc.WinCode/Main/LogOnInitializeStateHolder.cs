@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Runtime.Remoting.Messaging;
 using System.Xml.Linq;
+using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.WinCode.Common.ServiceBus;
 using Teleopti.Ccc.WinCode.Services;
@@ -21,7 +23,7 @@ namespace Teleopti.Ccc.WinCode.Main
 {
 	public static class LogonInitializeStateHolder
 	{
-		public static void InitWithoutDataSource(IMessageBrokerComposite messageBroker, SharedSettings settings)
+		public static void InitWithoutDataSource(IMessageBrokerComposite messageBroker, SharedSettings settings, IComponentContext container)
 		{
 			LoadPasswordPolicyService passwordPolicyService;
 			if (settings.PasswordPolicy == null)
@@ -44,7 +46,7 @@ namespace Teleopti.Ccc.WinCode.Main
 			var businessUnit = CurrentBusinessUnit.Make();
 			var messageSender = new MessagePopulatingServiceBusSender(sendToServiceBus, populator);
 			var eventPublisher = new EventPopulatingPublisher(new ServiceBusEventPublisher(sendToServiceBus), populator);
-			var messageSenders = new CurrentMessageSenders(new IMessageSender[]
+			var senders = new List<IMessageSender>
 			{
 				new ScheduleMessageSender(eventPublisher, new ClearEvents()),
 				new EventsMessageSender(new SyncEventsPublisher(eventPublisher)),
@@ -53,7 +55,11 @@ namespace Teleopti.Ccc.WinCode.Main
 				new TeamOrSiteChangedMessageSender(eventPublisher, businessUnit),
 				new PersonChangedMessageSender(eventPublisher, businessUnit),
 				new PersonPeriodChangedMessageSender(messageSender)
-			});
+			};
+			if(container.Resolve<IToggleManager>().IsEnabled(Toggles.MessageBroker_SchedulingScreenMailbox_32733))
+				senders.Add(container.Resolve<AggregatedScheduleChangeSender>());
+			
+			var messageSenders = new CurrentMessageSenders(senders);
 			var initializer =
 				new InitializeApplication(
 					new DataSourcesFactory(
