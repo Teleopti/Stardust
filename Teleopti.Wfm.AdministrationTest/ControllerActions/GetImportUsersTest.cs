@@ -80,7 +80,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			CurrentTenantSession.CurrentSession().Save(personInfo);
 			tenantUowManager.CommitAndDisposeCurrent();
 			TenantUnitOfWork.CommitAndDisposeCurrent();
-			var conflicting = Target.Conflicts(new ImportDatabaseModel {ConnStringAppDatabase = connString});
+			var conflicting = Target.Conflicts(new ImportDatabaseModel { ConnStringAppDatabase = connString, Tenant = "Importing" });
 			conflicting.Content.ConflictingUserModels.Count().Should().Be.GreaterThan(0);
 
 		}

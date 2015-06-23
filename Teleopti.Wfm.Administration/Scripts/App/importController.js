@@ -20,13 +20,14 @@
 		vm.HeadVersion = null;
 		vm.ImportAppVersion = null;
 		vm.AppVersionOk = null;
-		vm.UserPrefix = "";
+
 
 		vm.CheckTenantName = function () {
 			$http.post('../api/Import/IsNewTenant', '"' + vm.Tenant + '"')
 				.success(function (data) {
 					vm.TenantMessage = data.Message;
 					vm.TenantOk = data.Success;
+					vm.CheckUsers();
 
 				}).error(function (xhr, ajaxOptions, thrownError) {
 					console.log(xhr.status + xhr.responseText + thrownError);
@@ -81,12 +82,13 @@
 			}
 			$http.post('../api/Import/Conflicts', {
 				ConnStringAppDatabase: vm.AppDatabase
+				Tenant: vm.Tenant
 			})
 				.success(function (data) {
 					vm.Conflicts = data.ConflictingUserModels;
 					vm.NumberOfConflicting = data.NumberOfConflicting;
 					vm.NumberOfNotConflicting = data.NumberOfNotConflicting;
-					vm.UserPrefix = vm.UserPrefix;
+
 				}).error(function (xhr, ajaxOptions, thrownError) {
 					console.log(xhr.status + xhr.responseText + thrownError);
 				});
@@ -99,13 +101,12 @@
 				ConnStringAppDatabase: vm.AppDatabase,
 				ConnStringAnalyticsDatabase: vm.AnalyticsDatabase
 			}).
-  success(function (data, status, headers, config) {
+  success(function (data) {
   	vm.Result = data.Success;
   	vm.Message = data.Message;
   }).
-  error(function (data, status, headers, config) {
-  	// called asynchronously if an error occurs
-  	// or server returns response with an error status.
+  error(function (xhr, ajaxOptions, thrownError) {
+  	console.log(xhr.status + xhr.responseText + thrownError);
   });
 		};
 		//$http.get('../api/Home/GetAllTenants').success(function (data) {

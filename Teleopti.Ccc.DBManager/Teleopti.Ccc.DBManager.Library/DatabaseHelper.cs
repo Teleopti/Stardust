@@ -34,6 +34,11 @@ namespace Teleopti.Ccc.DBManager.Library
 				var creator = new DatabaseCreator(databaseFolder, conn);
 				creator.CreateDatabase(DatabaseType, DatabaseName);
 			}
+			using (var conn = openConnection())
+			{
+				var databaseVersionInformation = new DatabaseVersionInformation(databaseFolder, conn);
+				databaseVersionInformation.CreateTable();
+			}
 		}
 
 		public void CleanByAnalyticsProcedure()
@@ -47,7 +52,6 @@ namespace Teleopti.Ccc.DBManager.Library
 			using (var conn = openConnection())
 			{
 				var databaseVersionInformation = new DatabaseVersionInformation(databaseFolder, conn);
-				databaseVersionInformation.CreateTable();
 				var schemaVersionInformation = new SchemaVersionInformation(databaseFolder);
 				var schemaCreator = new DatabaseSchemaCreator(
 					databaseVersionInformation,

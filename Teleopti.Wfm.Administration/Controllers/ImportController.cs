@@ -38,9 +38,12 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 			var conflicting = Conflicts(model).Content;
 			if (conflicting.NumberOfConflicting > 0)
-				return Json(new ImportTenantResultModel { Success = false, Message = "There are users conflicting with each other." });
+			var conflicts = _getImportUsers.CheckConflicting(model.ConnStringAppDatabase, model.Tenant);
+			
+			if ((conflicts.NumberOfConflicting + conflicts.NumberOfNotConflicting).Equals(0))
 
 			return Json(new ImportTenantResultModel { Success = true });
+			return Json(_import.Execute(model, conflicts));
 		}
 
 		[HttpPost]

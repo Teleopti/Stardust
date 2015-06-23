@@ -18,6 +18,10 @@ namespace Teleopti.Wfm.Administration.Core
 
 		public ConflictModel GetConflictionUsers(string importConnectionString, string userPrefix)
 		{
+			//don't do the check if not entered Tenant
+			if(string.IsNullOrEmpty(userPrefix))
+				return new ConflictModel();
+
 			var mainUsers = _currentTenantSession.CurrentSession()
 				.GetNamedQuery("loadAll")
 				.List<PersonInfo>();
@@ -26,38 +30,103 @@ namespace Teleopti.Wfm.Administration.Core
 			tenantUowManager.Start();
 			var importUsers = new LoadAllPersonInfos(tenantUowManager).PersonInfos();
 			tenantUowManager.CancelAndDisposeCurrent();
-			var conflicting = new HashSet<PersonInfo>();
+			var conflicting = new HashSet<ImportUserModel>();
+			var notConflicting = new HashSet<ImportUserModel>();
 			foreach (var importUser in importUsers)
 			{
-				var logonName = importUser.ApplicationLogonInfo.LogonName;
-				var identity = importUser.Identity;
-				if (logonName != null)
+				var checkedImport = checkConflict(mainUsers, importUser, userPrefix);
+				var importUserModel = new ImportUserModel
 				{
-					var conflict = mainUsers.FirstOrDefault(x => x.ApplicationLogonInfo.LogonName != null && x.ApplicationLogonInfo.LogonName.Equals(userPrefix + logonName));
-					if (conflict != null)
-						conflicting.Add(conflict);
-				}
-
-				if (identity != null)
-				{
-					var iConflict = mainUsers.FirstOrDefault(x => x.Identity != null && x.Identity.Equals(identity));
-					if (iConflict != null)
-						conflicting.Add(iConflict);
-				}
-					
+					AppLogon = checkedImport.AppLogon,
+					Identity = checkedImport.Identity,
+					AppPassword = importUser.ApplicationLogonInfo.LogonPassword,
+					PersonId = importUser.Id
+				};
+				if (checkedImport.Conflicted)
+					conflicting.Add(importUserModel);
+				else
+					notConflicting.Add(importUserModel);
 			}
 			var retModel = new ConflictModel
 			{
 				NumberOfConflicting = conflicting.Count,
-				NumberOfNotConflicting = mainUsers.Count - conflicting.Count,
-				ConflictingUserModels = conflicting.Select(c => new ConflictingUserModel
-				{
-					AppLogon = c.ApplicationLogonInfo.LogonName,
-					Identity = c.Identity
-				})
+				NumberOfNotConflicting = importUsers.Count - conflicting.Count,
+				ConflictingUserModels = conflicting,
+				NotConflicting = notConflicting
 			};
 
 			return retModel;
 		}
+
+		private CheckConflictResult checkConflict(IList<PersonInfo> allOldOnes, PersonInfo toImport, string tenant)
+		{
+			var logonName = toImport.ApplicationLogonInfo.LogonName;
+			var identity = toImport.Identity;
+			bool conflicting = false;
+			if (logonName != null)
+			{
+				PersonInfo conflictLogonName = allOldOnes.FirstOrDefault(
+					x => x.ApplicationLogonInfo.LogonName != null && x.ApplicationLogonInfo.LogonName.Equals(logonName));
+				if (conflictLogonName != null)
+				{
+					conflicting = true;
+					logonName = tenant + logonName;
+					//hopefully no conflict now
+					conflictLogonName =
+					allOldOnes.FirstOrDefault(
+						x => x.ApplicationLogonInfo.LogonName != null && x.ApplicationLogonInfo.LogonName.Equals(logonName));
+					if (conflictLogonName != null)
+					{
+						int suffix = 0;
+						do
+						{
+							suffix++;
+							logonName = logonName + suffix;
+							conflictLogonName = allOldOnes.FirstOrDefault(
+							x => x.ApplicationLogonInfo.LogonName != null && x.ApplicationLogonInfo.LogonName.Equals(logonName));
+
+						} while (conflictLogonName != null);
+					}
+					
+				}
+			}
+
+			if (identity != null)
+			{
+				PersonInfo conflictIdentity = allOldOnes.FirstOrDefault(x => x.Identity != null && x.Identity.Equals(identity));
+				if (conflictIdentity != null)
+				{
+					conflicting = true;
+					identity = tenant + identity;
+					//hopefully no conflict now
+					conflictIdentity =
+					allOldOnes.FirstOrDefault(x => x.Identity != null && x.Identity.Equals(identity));
+					if (conflictIdentity != null)
+					{
+						int suffix = 0;
+						do
+						{
+							suffix++;
+							identity = identity + suffix;
+							conflictIdentity = allOldOnes.FirstOrDefault(x => x.Identity != null && x.Identity.Equals(identity));
+
+						} while (conflictIdentity != null);
+					}
+
+				}
+			}
+
+			return new CheckConflictResult { Conflicted = conflicting, AppLogon = logonName, Identity = identity };
+
+		}
 	}
+
+	internal class CheckConflictResult
+	{
+		public string AppLogon { get; set; }
+		public string Identity { get; set; }
+		public bool Conflicted { get; set; }
+	}
+
 }
+

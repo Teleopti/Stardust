@@ -3,7 +3,8 @@
 		<div class="col-md-12">
 			<h2>Import existing</h2>
 			<p>
-				if you already have databases (one Application and one Analytics) that you want to include in the multi tenant adminstration you can import it here.
+				When you have databases (one Application and one Analytics) that you want to include in the multi tenant adminstration you can import it here.
+				The Application database must be at the same version as the Tenant database.
 			</p>
 		</div>
 		<div class="col-md-6">
@@ -11,40 +12,43 @@
 				<div class="importCaption">Tenant name</div>
 				<input type="text" ng-model="importVm.Tenant" ng-blur="importVm.CheckTenantName()" placeholder="Tenant name">
 			</div>
-			<div ng-class="(importVm.TenantOk==true) ? 'dbOk' : 'dbNotOk'">{{importVm.TenantMessage}}</div>
-			<div>
+			<label ng-class="(importVm.TenantOk==true) ? 'dbOk' : 'dbNotOk'">{{importVm.TenantMessage}}</label>
+			
 				<div class="importCaption">Application database connections string</div>
 				<div>
 					<!---->
 					<input class="importConnstring" type="text" ng-model="importVm.AppDatabase" ng-blur="importVm.CheckAppDb()" placeholder="Connection string">
-					<div ng-class="(importVm.AppDbOk==true) ? 'dbOk' : 'dbNotOk'">{{importVm.AppDbCheckMessage}}</div>
+					<label ng-class="(importVm.AppDbOk==true) ? 'dbOk' : 'dbNotOk'">{{importVm.AppDbCheckMessage}}</label>
 				</div>
 
 				<div>
 					<div class="importCaption">Analytics database connection string</div>
 					<input class="importConnstring" type="text" ng-model="importVm.AnalyticsDatabase" ng-blur="importVm.CheckAnalDb()" placeholder="Connection string">
-					<div ng-class="(importVm.AnalDbOk==true) ? 'dbOk' : 'dbNotOk'">{{importVm.AnalDbCheckMessage}}</div>
+					<label ng-class="(importVm.AnalDbOk==true) ? 'dbOk' : 'dbNotOk'">{{importVm.AnalDbCheckMessage}}</label>
 				</div>
 				<p></p>
 				<div>
 					<h3>Version information</h3>
 					<label>Head version:</label><span>{{importVm.HeadVersion}}</span><br />
 					<label>Import version:</label><span>{{importVm.ImportAppVersion}}</span><br />
-					<label>The versions are OK ?:</label><span>{{importVm.AppVersionOk}}</span><br />
+					<label ng-class="(importVm.AppVersionOk==true) ? 'dbOk' : 'dbNotOk'">The versions are OK ?:</label><span>{{importVm.AppVersionOk}}</span><br />
 				</div>
-				<p><button class="btn btn-default" ng-click="importVm.startImport()">Start import</button></p>
+				
+				<label ng-class="(importVm.Result==true) ? 'dbOk' : 'dbNotOk'">
 				{{importVm.Message}}
-			</div>
+				</label>
 
 		</div>
 		<div class="col-md-6">
 			<h3>Conflicting users {{importVm.NumberOfConflicting}}</h3>
-			<input value="{{importVm.UserPrefix}} " ng-blur="importVm.CheckUsers()" />
 			({{importVm.NumberOfNotConflicting}} are not conflicting)
-			<div ng-repeat="user in importVm.Conflicts" ng-class-odd="'oddRow'">
-				{{user.AppLogon}} {{user.Identity}}
+			<label style="color:goldenrod" ng-show="importVm.NumberOfConflicting > 0">
+				These users are confliction and will get new Logons. The Tenant name will be added as a prefix to the name.
+			</label>
+				<div ng-repeat="user in importVm.Conflicts" ng-class-odd="'oddRow'">
+					{{user.AppLogon}} {{user.Identity}}
+				</div>
 			</div>
-		</div>
 	</div>
 
 </div>
