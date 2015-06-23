@@ -74,7 +74,7 @@
 									<div ng-include="'first-forecast-tab.html'"></div>
 								</div>
 							</li>
-							<li ng-if="isQueueStatisticsEnabled">
+							<li ng-show="isQueueStatisticsEnabled">
 								<div class="wfm-accordion-head" ng-click="accordionToggle1 = !accordionToggle1">{{workload.Name}} - Queue statistics<i ng-class="{'toggle-icon-open':accordionToggle1}" class="mdi mdi-chevron-right"></i></div>
 								<div class="wfm-accordion-content" ng-cloak ng-show="accordionToggle1">
 									<div ng-include="'second-forecast-tab.html'"></div>
