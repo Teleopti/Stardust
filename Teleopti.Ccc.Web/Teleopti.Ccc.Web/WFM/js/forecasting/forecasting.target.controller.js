@@ -45,7 +45,10 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 					$scope.modalInfo.noHistoricalDataForEvaluation = false;
 					$scope.modalInfo.noHistoricalDataForForecasting = false;
 					$scope.modalInfo.evaluationLoading = true;
-					
+					$scope.modalInfo.queueStatisticsLoading = true;
+					$scope.modalInfo.chartData = [];
+					$scope.modalInfo.chartData2 = [];
+
 					$http.post("../api/Forecasting/Evaluate", JSON.stringify({ WorkloadId: workload.Id })).
 						success(function (data, status, headers, config) {
 							$scope.modalInfo.evaluationLoading = false;
