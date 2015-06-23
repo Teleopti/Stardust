@@ -4,7 +4,9 @@ $(document).ready(function () {
 
 	 module("Teleopti.MyTimeWeb.Preference.WeekViewModel");
 
-	test("should summarize possible weekly contract time", function () {
+	 test("should summarize possible weekly contract time", function () {
+	 	Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) { return true; };
+
 		var viewModelDay1 = new Teleopti.MyTimeWeb.Preference.DayViewModel();
 		var viewModelDay2 = new Teleopti.MyTimeWeb.Preference.DayViewModel();
 		var weekViewModel = new Teleopti.MyTimeWeb.Preference.WeekViewModel();
@@ -24,7 +26,9 @@ $(document).ready(function () {
 		equal(weekViewModel.PossibleResultWeeklyContractTimeMinutesUpper(), 20 * 60);
 	});
 
-	test("should format possible weekly contract time", function () {
+	 test("should format possible weekly contract time", function () {
+	 	Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) { return true; };
+
 		var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel();
 		var weekViewModel = new Teleopti.MyTimeWeb.Preference.WeekViewModel();
 		viewModelDay.PossibleContractTimeMinutesLower(100 * 60 + 30);
@@ -37,7 +41,9 @@ $(document).ready(function () {
 		equal(weekViewModel.PossibleResultWeeklyContractTimeUpper(), "160:05");
 	});
 
-	test("should read weekly work time setting", function () {
+	 test("should read weekly work time setting", function () {
+	 	Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) { return true; };
+
 		var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel();
 		var weekViewModel = new Teleopti.MyTimeWeb.Preference.WeekViewModel();
 		viewModelDay.Date = "2014-05-28";

@@ -121,6 +121,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			}
 		});
 	}
+	var toggleShowNightViolation = Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PreferenceShowNightViolation_33152");
 
 	function _setPreference(preference) {
 		var promises = [];
@@ -146,9 +147,11 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		if (promises.length != 0) {
 			$.when.apply(null, promises)
 				.done(function() {
-				periodFeedbackViewModel.LoadFeedback();
-				loadNeighborFeedback();
-				periodFeedbackViewModel.PossibleNightRestViolations();
+					periodFeedbackViewModel.LoadFeedback();
+					if (toggleShowNightViolation) {
+						loadNeighborFeedback();
+						periodFeedbackViewModel.PossibleNightRestViolations();
+					}
 			});
 		}
 
@@ -157,9 +160,11 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	function loadNeighborFeedback() {
 		$('#Preference-body-inner .ui-selected').each(function(index, ele) {
 			var date = $(ele).prev().data('mytime-date');
-			preferencesAndScheduleViewModel.DayViewModels[date].LoadFeedback();
-		    date = $(ele).next().data('mytime-date');
-		    preferencesAndScheduleViewModel.DayViewModels[date].LoadFeedback();
+			if (preferencesAndScheduleViewModel.DayViewModels[date])
+				preferencesAndScheduleViewModel.DayViewModels[date].LoadNightRestFeedback();
+			date = $(ele).next().data('mytime-date');
+			if (preferencesAndScheduleViewModel.DayViewModels[date])
+				preferencesAndScheduleViewModel.DayViewModels[date].LoadNightRestFeedback();
 		});
 	}
 

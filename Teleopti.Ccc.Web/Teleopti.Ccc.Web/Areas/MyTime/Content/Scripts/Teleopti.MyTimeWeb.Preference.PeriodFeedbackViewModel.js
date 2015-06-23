@@ -93,14 +93,16 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewM
 		possibleNightRestViolationsArray.removeAll();
 		$.each(self.DayViewModels, function (index, day) {
 			
-			if (day.MakeANightRestViolationObj()) {
+			if (day.MakeNightRestViolationObjs().length > 0) {
 
-				var newViolation = day.MakeANightRestViolationObj();
+				var newViolations = day.MakeNightRestViolationObjs();
 
-				if (possibleNightRestViolationsArray().filter(function(item) { return sameNightRestVioloation(item, newViolation); }).length === 0) {
-					possibleNightRestViolationsArray.push(day.MakeANightRestViolationObj());
-				}
-				
+				newViolations.forEach(function(newViolation) {
+					if (possibleNightRestViolationsArray().filter(function (item) { return sameNightRestVioloation(item, newViolation); }).length === 0) {
+						possibleNightRestViolationsArray.push(newViolation);
+					}
+				});
+								
 			}
 		});
 		return possibleNightRestViolationsArray;
