@@ -121,7 +121,9 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			}
 		});
 	}
-	var toggleShowNightViolation = Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PreferenceShowNightViolation_33152");
+	var toggleShowNightViolation = function() {
+		return Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PreferenceShowNightViolation_33152");
+	};
 
 	function _setPreference(preference) {
 		var promises = [];
@@ -148,7 +150,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			$.when.apply(null, promises)
 				.done(function() {
 					periodFeedbackViewModel.LoadFeedback();
-					if (toggleShowNightViolation) {
+					if (toggleShowNightViolation()) {
 						loadNeighborFeedback();
 						periodFeedbackViewModel.PossibleNightRestViolations();
 					}

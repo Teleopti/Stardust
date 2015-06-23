@@ -5,7 +5,7 @@ $(document).ready(function () {
 	 module("Teleopti.MyTimeWeb.Preference.WeekViewModel");
 
 	 test("should summarize possible weekly contract time", function () {
-	 	Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) { return true; };
+	
 
 		var viewModelDay1 = new Teleopti.MyTimeWeb.Preference.DayViewModel();
 		var viewModelDay2 = new Teleopti.MyTimeWeb.Preference.DayViewModel();
@@ -27,7 +27,7 @@ $(document).ready(function () {
 	});
 
 	 test("should format possible weekly contract time", function () {
-	 	Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) { return true; };
+	
 
 		var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel();
 		var weekViewModel = new Teleopti.MyTimeWeb.Preference.WeekViewModel();
@@ -42,7 +42,7 @@ $(document).ready(function () {
 	});
 
 	 test("should read weekly work time setting", function () {
-	 	Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) { return true; };
+	
 
 		var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel();
 		var weekViewModel = new Teleopti.MyTimeWeb.Preference.WeekViewModel();
