@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 							"-" +
 							currentPplanningPeriodRange.EndDate.ToShortDateString(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture),
 						Url = "resourceplanner.planningperiod",
-						SearchGroup = UserTexts.Resources.PlanningPeriod,
+						SearchGroup = "Planning Period",
 						Id = _planningPeriodProvider.Current().Id
 					}
 				});
