@@ -1,17 +1,20 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Secrets.DayOffPlanning;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Ccc.Secrets.WorkShiftPeriodValueCalculator;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 {
 	public class ResourcePlannerModule : Module
 	{
 		protected override void Load(ContainerBuilder builder)
-		{
+		{			
 			builder.RegisterType<MissingForecastProvider>()
 				.SingleInstance()
 				.As<IMissingForecastProvider>();
@@ -24,8 +27,15 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 
 			builder.RegisterType<CurrentUnitOfWorkScheduleRangePersister>().As<IScheduleRangePersister>().InstancePerLifetimeScope();
 			builder.RegisterType<WorkShiftCalculator>().As<IWorkShiftCalculator>().InstancePerLifetimeScope();
+			builder.RegisterType<WorkShiftWorkTime>().As<IWorkShiftWorkTime>().InstancePerLifetimeScope();
 			builder.RegisterType<DayOffBackToLegalStateFunctions>().As<IDayOffBackToLegalStateFunctions>();
 			builder.RegisterType<WorkShiftPeriodValueCalculator>().As<IWorkShiftPeriodValueCalculator>();
+			builder.RegisterType<RuleSetProjectionService>().As<IRuleSetProjectionService>();
+			builder.RegisterType<ShiftCreatorService>().As<IShiftCreatorService>();
+			builder.RegisterType<CreateWorkShiftsFromTemplate>().As<ICreateWorkShiftsFromTemplate>();
+			builder.RegisterType<RuleSetProjectionEntityService>().As<IRuleSetProjectionEntityService>();
+
+			
 			
 			builder.RegisterType<FixedStaffLoader>();
 			builder.RegisterType<SetupStateHolderForWebScheduling>();

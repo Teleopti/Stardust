@@ -598,9 +598,10 @@
     <Compile Include="Outbound\OutboundPeriodMover.cs" />
     <Compile Include="Repositories\ISeatPlanRepository.cs" />
     <Compile Include="Scheduling\Legacy\Commands\CurrentScheduleSummaryCalculator.cs" />
-    <Compile Include="Scheduling\Legacy\Commands\DaysOffOptimizationCommand.cs" />
+    <Compile Include="Scheduling\Legacy\Commands\ClassicDaysOffOptimizationCommand.cs" />
     <Compile Include="Scheduling\Legacy\Commands\FlexibelDayOffOptimizationDecisionMakerFactory.cs" />
     <Compile Include="Scheduling\Legacy\Commands\TargetScheduleSummaryCalculator.cs" />
+    <Compile Include="Scheduling\Legacy\Commands\WorkShiftBackToLegalStateServiceFactory.cs" />
     <Compile Include="Scheduling\TeamBlock\ShiftCategoryLimitCounter.cs" />
     <Compile Include="SeatPlanning\SeatPlan.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\AuthenticationQuerierResult.cs" />

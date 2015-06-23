@@ -3272,7 +3272,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void runBackgroupWorkerOptimization(DoWorkEventArgs e)
 		{
 			var argument = (SchedulingAndOptimizeArgument)e.Argument;
-			var optimizationCommand = _container.Resolve<OptimizationCommand>();
+			var optimizationCommand = _container.Resolve<IOptimizationCommand>();
 			optimizationCommand.Execute(_optimizerOriginalPreferences, new BackgroundWorkerWrapper(_backgroundWorkerOptimization), _schedulerState,
 									argument.SelectedScheduleDays, _groupPagePerDateHolder, _scheduleOptimizerHelper,
 									_optimizationPreferences, argument.OptimizationMethod == OptimizationMethod.BackToLegalState, argument.DaysOffPreferences);

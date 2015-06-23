@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
@@ -12,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
     public class NewDayOffRule : INewDayOffRule
     {
     	private readonly IWorkTimeStartEndExtractor _workTimeStartEndExtractor;
-    	private readonly CultureInfo _loggedOnCulture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
+	    private readonly CultureInfo _loggedOnCulture = Thread.CurrentThread.CurrentCulture;
 
         private bool _haltModify = true;
         private string _errorMessage = "";
