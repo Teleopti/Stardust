@@ -44,11 +44,14 @@
 		 box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
 		 margin: 5px;
 		 cursor:pointer;
-	 }
+		 padding: 10px;
+		 transition:0.2s all ease-in-out;
 
-	.wfm-card span {
-		padding: 5px;
-	}
+		 &:hover{
+		 //material depth 2
+			box-shadow: 0 8px 17px 0 rgba(0,0,0,.2);
+		 }
+	 }
 
 	.wfm-search-li {
 		 margin-left: -10px
