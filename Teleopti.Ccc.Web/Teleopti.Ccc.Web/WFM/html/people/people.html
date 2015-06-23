@@ -1,11 +1,17 @@
 ﻿<style>
-	.ui-grid-menu-button {
-  height: 31px;
+	.people-list.ui-grid-menu-button {
+		height: 31px;
 		top: 0;
-}
+	}
+
 	.grid {
-  height: 650px;
-}
+		height: 650px;
+	}
+
+	.people-list .ui-grid-cell-contents {
+		width: 84%;
+		white-space: normal;
+	}
 </style>
 <div class="row">
 	<h4 translate>Manage People</h4>
@@ -24,7 +30,7 @@
 	<div class="wfm-block">
 	</div>
 	<div ui-grid="gridOptions" ui-grid-exporter ui-grid-auto-resize ui-grid-selection ui-grid-pagination class="grid people-list"></div>
-	
+
 	<div class="pagination pull-right" aria-hidden="false">
 		<ul>
 			<li class="pagination-item" ng-class="{disabled: gridApi.pagination.getPage() == 1}">

@@ -59,7 +59,7 @@ function PeopleController($scope, $filter, $state, $document,$translate,i18nServ
 			},
 			{ displayName: 'EmployeeNo', field: 'EmploymentNumber', headerCellFilter: 'translate' },
 			{ displayName: 'Team', field: 'Team', headerCellFilter: 'translate', enableSorting: false },
-			{ displayName: 'Email', field: 'Email', headerCellFilter: 'translate', enableSorting: false },
+			{ displayName: 'Email', field: 'Email', cellTooltip: true, headerCellFilter: 'translate', enableSorting: false },
 			{ displayName: 'TerminalDate', field: 'LeavingDate', headerCellFilter: 'translate', enableSorting: false }
 		],
 		i18n: $translate.use(),
