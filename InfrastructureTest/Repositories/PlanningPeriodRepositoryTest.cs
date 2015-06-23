@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		public void ShouldReturnPlanning()
+		public void ShouldReturnPlanningPeriodSuggestions()
 		{
 			SetupPersonsInOrganizationWithContract(new Func<SchedulePeriod>[]
 			{
@@ -117,6 +117,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			suggestedPeriod.Count().Should().Be.EqualTo(7);
 		}
 
+	
 		private void SetupPersonsInOrganizationWithContract(IEnumerable<Func<SchedulePeriod>> schedulePeriodTypes)
 		{
 			ITeam team = TeamFactory.CreateSimpleTeam("hola");

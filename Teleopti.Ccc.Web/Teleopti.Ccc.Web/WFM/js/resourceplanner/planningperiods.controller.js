@@ -13,7 +13,7 @@
 						//if not success
 						$scope.schedulingPerformed = true;
 						$scope.scheduledDays = scheduleResult.DaysScheduled;
-						$state.go('resourceplannerreport', { result: scheduleResult });
+						$state.go('resourceplanner.report', { result: scheduleResult });
 						//else
 						PlanningPeriodSvrc.launchOptimization.query(JSON.stringify(planningPeriod)).$promise.then(function (optimizationResult) {
 							console.log('optimization was called');

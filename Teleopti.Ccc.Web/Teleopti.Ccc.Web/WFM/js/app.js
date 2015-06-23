@@ -92,16 +92,22 @@ wfm.config([
 				templateUrl: 'js/resourceplanner/resourceplanner.html',
 				controller: 'ResourcePlannerCtrl',
 				ncyBreadcrumb: {
-					label: 'resourceplanner'
+					label: 'Resource Planner'
 				}
 		}).state('resourceplanner.planningperiod', {
 			url: '/planningperiod/:id',
 			templateUrl: 'js/resourceplanner/planningperiods.html',
-			controller: 'PlanningPeriodsCtrl'
-		}).state('resourceplannerreport', {
+			controller: 'PlanningPeriodsCtrl',
+			ncyBreadcrumb: {
+				label: 'Planning Period'
+			}
+		}).state('resourceplanner.report', {
 			params: { result: {} },
 			templateUrl: 'js/resourceplanner/resourceplanner-report.html',
-			controller: 'ResourceplannerReportCtrl'
+			controller: 'ResourceplannerReportCtrl',
+			ncyBreadcrumb: {
+				label: 'Scheduling Results'
+			}
 		}).state('permissions', {
 			params: { id: {} },
 			url: '/permissions',

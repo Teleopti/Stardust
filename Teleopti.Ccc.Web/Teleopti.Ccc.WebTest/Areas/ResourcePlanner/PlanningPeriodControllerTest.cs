@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.ResourcePlanner;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
@@ -17,6 +18,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 	[ResourcePlannerTest]
 	public class PlanningPeriodControllerTest
 	{
+		//break this test in to multiple
 		public PlanningPeriodController Target;
 		public MutableNow Now;
 		public FakeMissingForecastProvider MissingForecastProvider;
@@ -170,6 +172,14 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 
 			var result = (OkNegotiatedContentResult<PlanningPeriodModel>)Target.GetPlanningPeriod(currentPlanningPeriodId);
 			result.Content.HasNextPlanningPeriod.Should().Be(true);
+		}
+
+		[Test]
+		public void ShouldCreatePlanningPeriodWithNewState()
+		{
+			Now.Is(new DateTime(2015, 4, 1));
+			var result = (OkNegotiatedContentResult<PlanningPeriodModel>)Target.GetPlanningPeriod(Guid.NewGuid());
+			result.Content.State.Should().Be("New");
 		}
 
 		private void changeNowTo(DateTime dateTime)

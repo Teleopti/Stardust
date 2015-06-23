@@ -35,13 +35,13 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			if (!allPlanningPeriods.Any())
 			{
 				var planningPeriod = _nextPlanningPeriodProvider.Current();
-				availablePlanningPeriods.Add(createPlanningPeriodModel(planningPeriod.Range, planningPeriod.Id.GetValueOrDefault(), getMissingForecast(planningPeriod.Range)));
+				availablePlanningPeriods.Add(createPlanningPeriodModel(planningPeriod.Range, planningPeriod.Id.GetValueOrDefault(), getMissingForecast(planningPeriod.Range),planningPeriod.State));
 			}
 			else
 			{
 				allPlanningPeriods.ForEach(
 					pp =>
-						availablePlanningPeriods.Add(createPlanningPeriodModel(pp.Range, pp.Id.GetValueOrDefault(), getMissingForecast(pp.Range))));
+						availablePlanningPeriods.Add(createPlanningPeriodModel(pp.Range, pp.Id.GetValueOrDefault(), getMissingForecast(pp.Range), pp.State)));
 			}
 			return Ok(availablePlanningPeriods);
 		}
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		public virtual IHttpActionResult GetPlanningPeriod(Guid id)
 		{
 			var planningPeriod = _planningPeriodRespository.Load(id);
-			var planningPeriodModel = createPlanningPeriodModel(planningPeriod.Range, planningPeriod.Id.GetValueOrDefault(), getMissingForecast(planningPeriod.Range));
+			var planningPeriodModel = createPlanningPeriodModel(planningPeriod.Range, planningPeriod.Id.GetValueOrDefault(), getMissingForecast(planningPeriod.Range),planningPeriod.State);
 			return Ok(planningPeriodModel);
 		}
 
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				PeriodType = model.PeriodType,
 				StartDate = new DateOnly(model.DateFrom)
 			});
-			var planningPeriodModel = createPlanningPeriodModel(planningPeriod.Range, planningPeriod.Id.GetValueOrDefault(), getMissingForecast(planningPeriod.Range));
+			var planningPeriodModel = createPlanningPeriodModel(planningPeriod.Range, planningPeriod.Id.GetValueOrDefault(), getMissingForecast(planningPeriod.Range), planningPeriod.State);
 			return Ok(planningPeriodModel);
 		}
 
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			});
 		}
 
-		private PlanningPeriodModel createPlanningPeriodModel(DateOnlyPeriod range, Guid id, IEnumerable<MissingForecastModel> skills)
+		private PlanningPeriodModel createPlanningPeriodModel(DateOnlyPeriod range, Guid id, IEnumerable<MissingForecastModel> skills, PlanningPeriodState state)
 		{
 			return new PlanningPeriodModel
 			{
@@ -116,7 +116,8 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				EndDate = range.EndDate.Date,
 				Id = id,
 				HasNextPlanningPeriod = hasNextPlanningPeriod(range.EndDate.AddDays(1)),
-				Skills = skills
+				Skills = skills,
+				State = state.ToString()
 			};
 		}
 

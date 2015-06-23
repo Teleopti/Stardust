@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Interfaces;
 
 namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 {
@@ -10,5 +11,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		public DateTime EndDate { get; set; }
 		public IEnumerable<MissingForecastModel> Skills { get; set; }
 		public bool HasNextPlanningPeriod { get; set; }
+		public string State { get; set; }
 	}
+	
 }

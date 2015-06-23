@@ -37,6 +37,11 @@
 						access="field"
 				  not-null="true"/>
 
+		<property name="_state"
+							column="State"
+						access="field"
+				  not-null="true"/>
+
 		<many-to-one name="BusinessUnit"
 					 class="Teleopti.Ccc.Domain.Common.BusinessUnit"
 						access="nosetter.camelcase-underscore"
