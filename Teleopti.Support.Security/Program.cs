@@ -29,6 +29,7 @@ namespace Teleopti.Support.Security
 			Console.WriteLine("Please be patient, don't close this window!");
 			Console.WriteLine("");
 			log.Debug("Starting Teleopti.Support.Security");
+			log.Debug("Was called with args: " + string.Join(" ", args));
 
 			try
 			{
