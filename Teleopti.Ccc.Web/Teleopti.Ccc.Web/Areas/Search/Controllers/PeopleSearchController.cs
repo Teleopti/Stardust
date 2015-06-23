@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 			var sortColumnList = new Dictionary<string, bool>();
 			if (string.IsNullOrEmpty(sortColumns))
 			{
-				sortColumnList.Add("firstname", true);
+				sortColumnList.Add("lastname", true);
 			}
 			else
 			{
@@ -55,7 +56,7 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 					var parts = col.Split(':');
 					if (parts.Length == 2)
 					{
-						sortColumnList.Add(parts[0].Trim(), parts[1].Trim().ToUpper() == "ASC");
+						sortColumnList.Add(parts[0].Trim(), bool.Parse(parts[1].Trim()));
 					}
 				}
 			}
@@ -76,13 +77,59 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 			var result = constructResult(input.PageSize, input.CurrentPageIndex, input.SortColumns, criteriaDictionary, currentDate);
 			return Ok(result);
 		}
-
-
+		
 		private object constructResult(int pageSize, int currentPageIndex, IDictionary<string, bool> sortColumns, IDictionary<PersonFinderField, 
 			string> criteriaDictionary, DateOnly currentDate)
 		{
 			var peopleList = _searchProvider.SearchPeople(criteriaDictionary, pageSize, currentPageIndex, currentDate, sortColumns);
-			var resultPeople = peopleList.People.Select(x => new
+
+			const string dateFormat = "yyyy-MM-dd";
+			// This list should keep same as in SP "ReadModel.PersonFinderWithCriteria"
+			var columnAndSortFuncMapping = new Dictionary<string, Func<IPerson, string>>
+			{
+				{"firstname", x => x.Name.FirstName},
+				{"lastname", x => x.Name.LastName},
+				{"employmentnumber", x => x.EmploymentNumber},
+				{"note", x => x.Note},
+				{
+					"terminaldate", x => x.TerminalDate.HasValue
+						? x.TerminalDate.Value.Date.ToString(dateFormat)
+						: DateTime.MaxValue.ToString(dateFormat)
+				}
+			};
+
+			if (sortColumns == null || !sortColumns.Any())
+			{
+				sortColumns = new Dictionary<string, bool> {{"lastname", true}};
+			}
+			var firstSortColumn = sortColumns.First();
+			var columnName = firstSortColumn.Key.Trim().ToLower();
+			var sortFunc = columnAndSortFuncMapping[columnName];
+			var orderedPerson = firstSortColumn.Value
+				? peopleList.People.OrderBy(sortFunc)
+				: peopleList.People.OrderByDescending(sortFunc);
+
+			var index = 0;
+			foreach (var sortCol in sortColumns)
+			{
+				if (index == 0)
+				{
+					continue;
+				}
+
+				columnName = sortCol.Key.Trim().ToLower();
+				if (columnAndSortFuncMapping.ContainsKey(columnName))
+				{
+					sortFunc = columnAndSortFuncMapping[columnName];
+					orderedPerson = sortCol.Value
+						? orderedPerson.ThenBy(sortFunc)
+						: orderedPerson.ThenByDescending(sortFunc);
+				}
+
+				index++;
+			}
+
+			var resultPeople = orderedPerson.Select(x => new
 			{
 				FirstName = x.Name.FirstName,
 				LastName = x.Name.LastName,

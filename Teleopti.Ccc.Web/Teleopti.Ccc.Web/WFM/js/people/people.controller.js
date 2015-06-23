@@ -35,7 +35,7 @@ function PeopleController($scope, $filter, $state, $document,$translate,i18nServ
 		pageNumber: 1,
 		pageSize: 20,
 		sortColumns: [{
-			ColumnName: "FirstName",
+			ColumnName: "LastName",
 			SortASC: true
 		}]
 	};

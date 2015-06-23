@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			var terminalDateExist = false;
 			foreach (var col in sortColumns)
 			{
-				var columnName = col.Key.Trim();
+				var columnName = col.Key.Trim().ToLower();
 				if (columnMapping.ContainsKey(columnName))
 				{
 					orderBy += string.Format("{0}:{1},", columnMapping[columnName], col.Value ? 1 : 0);
