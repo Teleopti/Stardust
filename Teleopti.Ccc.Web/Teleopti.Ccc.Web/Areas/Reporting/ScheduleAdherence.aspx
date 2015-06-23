@@ -128,12 +128,13 @@
 				</tr>
 				<tr>
 					<td>
-						<div id="divReportTable" runat="server"></div>
+						
 					</td>
 				</tr>
 			</table>
 		</asp:Panel>
 
 	</form>
+	<div id="divReportTable" runat="server"></div>
 </body>
 </html>
