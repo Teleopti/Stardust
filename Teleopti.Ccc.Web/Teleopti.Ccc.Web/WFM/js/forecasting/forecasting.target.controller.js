@@ -7,15 +7,13 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 				$scope.showSelection = true;
 				$scope.skillsDisplayed = [];
 				$scope.all = { Name: 'All', Selected: false, show: true, numberOfSelectedWorkloads: 0 };
-				$scope.showExplaination = false;
 				$scope.selectedIds = [];
-				$scope.modalInfo = {};
-
-				$scope.dataColumns = [{ id: "vh", type: "line", name: "Queue Statistics" },
-									{ id: "vb", type: "line", name: "Forecast Method" }];
-
-				$scope.dataColumns2 = [{ id: "vh", type: "line", name: "Queue Statistics" },
-									{ id: "vh2", type: "line", name: "Queue Statistics without Outliers" }];
+				$scope.modalInfo = {
+					evaluationChartDataColumns: [{ id: "vh", type: "line", name: "Queue Statistics" },
+									{ id: "vb", type: "line", name: "Forecast Method" }],
+					queueStatisticsChartDataColumns: [{ id: "vh", type: "line", name: "Queue Statistics" },
+									{ id: "vh2", type: "line", name: "Queue Statistics without Outliers" }]
+				};
 
 				$scope.dataX = { id: "date" };
 				$scope.isQueueStatisticsEnabled = false;
@@ -31,7 +29,7 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 							angular.forEach(data.QueueStatisticsDays, function (day) {
 								day.date = new Date(Date.parse(day.date));
 							});
-							$scope.modalInfo.chartData2 = data.QueueStatisticsDays;
+							$scope.modalInfo.queueStatisticsChartData = data.QueueStatisticsDays;
 						}).
 						error(function (data, status, headers, config) {
 							$scope.error = { message: "Failed to get queue statisctics." };
@@ -46,8 +44,8 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 					$scope.modalInfo.noHistoricalDataForForecasting = false;
 					$scope.modalInfo.evaluationLoading = true;
 					$scope.modalInfo.queueStatisticsLoading = true;
-					$scope.modalInfo.chartData = [];
-					$scope.modalInfo.chartData2 = [];
+					$scope.modalInfo.evaluationChartData = [];
+					$scope.modalInfo.queueStatisticsChartData = [];
 
 					$http.post("../api/Forecasting/Evaluate", JSON.stringify({ WorkloadId: workload.Id })).
 						success(function (data, status, headers, config) {
@@ -55,7 +53,7 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 							angular.forEach(data.Days, function(day) {
 								day.date = new Date(Date.parse(day.date));
 							});
-							$scope.modalInfo.chartData = data.Days;
+							$scope.modalInfo.evaluationChartData = data.Days;
 							if (data.Days.length === 0) {
 								$scope.modalInfo.noHistoricalDataForForecasting = true;
 								return;

@@ -29,9 +29,6 @@
 					</ol>
 				</div>
 			</div>
-			<div ng-show="showExplaination">
-				-% Not enough historical data to measure the forecasting method.
-			</div>
 		</div>
 	</div>
 	<div ng-include="'forecasting-chart.html'" class="forecasting-chart"></div>
@@ -118,7 +115,7 @@
 			</div>
 		</div>
 
-		<c3chart bindto-id="evaluationChart" chart-data="modalInfo.chartData" chart-columns="dataColumns" chart-x="dataX" show-subchart="true" enable-zoom="true" style="margin-left:-13px;">
+		<c3chart bindto-id="evaluationChart" chart-data="modalInfo.evaluationChartData" chart-columns="modalInfo.evaluationChartDataColumns" chart-x="dataX" show-subchart="true" enable-zoom="true" style="margin-left:-13px;">
 			<chart-axis>
 				<chart-axis-x axis-id="date" axis-type="timeseries">
 					<chart-axis-x-tick tick-format="%Y-%m-%d" />
@@ -144,7 +141,7 @@
 				</div>
 			</div>
 		</div>
-		<c3chart bindto-id="queueStatisticsChart" chart-data="modalInfo.chartData2" chart-columns="dataColumns2" chart-x="dataX" show-subchart="true" enable-zoom="true" style="margin-left:-13px;">
+		<c3chart bindto-id="queueStatisticsChart" chart-data="modalInfo.queueStatisticsChartData" chart-columns="modalInfo.queueStatisticsChartDataColumns" chart-x="dataX" show-subchart="true" enable-zoom="true" style="margin-left:-13px;">
 			<chart-axis>
 				<chart-axis-x axis-id="date" axis-type="timeseries">
 					<chart-axis-x-tick tick-format="%Y-%m-%d" />
