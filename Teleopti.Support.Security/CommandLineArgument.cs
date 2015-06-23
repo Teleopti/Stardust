@@ -44,11 +44,12 @@ namespace Teleopti.Support.Security
 				: createConnectionStringBasedOnBaseConnstring(_destinationAppDbDatabase);
 		}
 
-		private string createConnectionStringBasedOnBaseConnstring(string destinationAnalDbDatabase)
+		private string createConnectionStringBasedOnBaseConnstring(string initialCatalog)
 		{
 			return new SqlConnectionStringBuilder(_baseConnstring)
 			{
-				InitialCatalog = destinationAnalDbDatabase
+				InitialCatalog = initialCatalog,
+				CurrentLanguage = "us_english"
 			}.ConnectionString;
 		}
 
@@ -57,7 +58,8 @@ namespace Teleopti.Support.Security
 			var sqlConnectionStringBuilder = new SqlConnectionStringBuilder
 			{
 				DataSource = _destinationServer,
-				InitialCatalog = initialCatalog
+				InitialCatalog = initialCatalog,
+				CurrentLanguage = "us_english"
 			};
 
 			if (_useIntegratedSecurity)
