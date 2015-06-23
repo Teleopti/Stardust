@@ -9,6 +9,7 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 				$scope.all = { Name: 'All', Selected: false, show: true, numberOfSelectedWorkloads: 0 };
 				$scope.showExplaination = false;
 				$scope.selectedIds = [];
+				$scope.modalInfo = {};
 
 				$scope.dataColumns = [{ id: "vh", type: "line", name: "Queue Statistics" },
 									{ id: "vb", type: "line", name: "Forecast Method" }];
@@ -22,62 +23,63 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 					$scope.isQueueStatisticsEnabled = result.IsEnabled;
 				});
 
-				var getQueueStatistics = function (workload, methodId) {
-					workload.queueStatisticsLoading = true;
-					$http.post("../api/Forecasting/QueueStatistics", JSON.stringify({ WorkloadId: workload.Id, MethodId: methodId })).
+				var getQueueStatistics = function (workloadId, methodId) {
+					$scope.modalInfo.queueStatisticsLoading = true;
+					$http.post("../api/Forecasting/QueueStatistics", JSON.stringify({ WorkloadId: workloadId, MethodId: methodId })).
 						success(function (data, status, headers, config) {
-							workload.queueStatisticsLoading = false;
+							$scope.modalInfo.queueStatisticsLoading = false;
 							angular.forEach(data.QueueStatisticsDays, function (day) {
 								day.date = new Date(Date.parse(day.date));
 							});
-							workload.chartData2 = data.QueueStatisticsDays;
+							$scope.modalInfo.chartData2 = data.QueueStatisticsDays;
 						}).
 						error(function (data, status, headers, config) {
 							$scope.error = { message: "Failed to get queue statisctics." };
-							workload.queueStatisticsLoading = false;
+							$scope.modalInfo.queueStatisticsLoading = false;
 						});
 				};
 
 				$scope.openModal = function (workload) {
-					workload.modalLaunch = true;
-					workload.noHistoricalDataForEvaluation = false;
-					workload.noHistoricalDataForForecasting = false;
-					workload.evaluationLoading = true;
+					$scope.modalInfo.workloadName = workload.Name;
+					$scope.modalInfo.modalLaunch = true;
+					$scope.modalInfo.noHistoricalDataForEvaluation = false;
+					$scope.modalInfo.noHistoricalDataForForecasting = false;
+					$scope.modalInfo.evaluationLoading = true;
 					
 					$http.post("../api/Forecasting/Evaluate", JSON.stringify({ WorkloadId: workload.Id })).
 						success(function (data, status, headers, config) {
-							workload.evaluationLoading = false;
+							$scope.modalInfo.evaluationLoading = false;
 							angular.forEach(data.Days, function(day) {
 								day.date = new Date(Date.parse(day.date));
 							});
-							workload.chartData = data.Days;
+							$scope.modalInfo.chartData = data.Days;
 							if (data.Days.length === 0) {
-								workload.noHistoricalDataForForecasting = true;
+								$scope.modalInfo.noHistoricalDataForForecasting = true;
 								return;
 							}
 
 							var selectedMethod;
 							if (data.ForecastMethodRecommended.Id === -1) {
-								workload.noHistoricalDataForEvaluation = true;
+								$scope.modalInfo.noHistoricalDataForEvaluation = true;
 								selectedMethod = 1;
 							} else {
 								selectedMethod = data.ForecastMethodRecommended.Id;
 							}
 							workload.selectedMethod = selectedMethod;
-							workload.ForecastMethodRecommended = data.ForecastMethodRecommended;
+							$scope.modalInfo.ForecastMethodRecommended = data.ForecastMethodRecommended;
 
 							if ($scope.isQueueStatisticsEnabled) {
-								getQueueStatistics(workload, selectedMethod);
+								getQueueStatistics(workload.Id, selectedMethod);
 							}
 						}).
 						error(function(data, status, headers, config) {
 							$scope.error = { message: "Failed to do the evaluate." };
-							workload.evaluationLoading = false;
+							$scope.modalInfo.evaluationLoading = false;
 						});
 				};
 
-				$scope.cancelMethod = function (workload) {
-					workload.modalLaunch = false;
+				$scope.cancelMethod = function () {
+					$scope.modalInfo.modalLaunch = false;
 				};
 
 				$scope.hasOneSelected = function() {
@@ -133,8 +135,6 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 					angular.forEach($scope.skillsDisplayed, function (skill) {
 						skill.show = true;
 						angular.forEach(skill.Workloads, function (workload) {
-							workload.chartId = "chart" + workload.Id;
-							workload.chartId2 = "chart" + workload.Id + "2";
 							workload.selectedMethod = -1;
 						});
 					});

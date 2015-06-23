@@ -16,7 +16,8 @@
 					<ol class="angular-ui-tree-nodes tree-line" ng-model="all">
 						<li class="angular-ui-tree-node">
 							<div class="tree-toggle-group">
-								<div class="toggle-handle" ng-class="{open: all.show}" ng-click="all.show = !all.show"><i class="mdi mdi-chevron-right"></i></div>
+								<div class="toggle-handle" ng-class="{open: all.show}" ng-click="all.show = !all.show"><i class="mdi mdi-chevron-right"></i>
+								</div>
 								<div class="angular-ui-tree-handle" ng-class="{selected: all.Selected}" ng-click="toggleAll(all.Selected)">
 									{{all.Name}} <i class="pull-right total-accuracy"><b ng-if="all.numberOfSelectedWorkloads!==0">{{all.numberOfSelectedWorkloads}}/{{all.totalWorkloads}}</b> {{all.Accuracy}}</i>
 								</div>
@@ -33,7 +34,9 @@
 			</div>
 		</div>
 	</div>
+	<div ng-include="'forecasting-chart.html'" class="forecasting-chart"></div>
 </div>
+
 
 <!-- Skill template -->
 <script type="text/ng-template" id="nodes_skill_renderer.html">
@@ -54,7 +57,6 @@
 					<i class="mdi mdi-chart-bar forecasting-chart-bar" ng-click="openModal(workload);$event.stopPropagation();">
 						<md-tooltip>View method chart</md-tooltip>
 					</i>
-					<div ng-include="'forecasting-chart.html'" class="forecasting-chart"></div>
 				</div>
 			</div>
 		</li>
@@ -63,28 +65,28 @@
 
 <script type="text/ng-template" id="forecasting-chart.html">
 	<div ng-cloak class="modal-box" ng-click="$event.stopPropagation()">
-		<div ng-cloak ng-if="workload.modalLaunch">
+		<div ng-cloak ng-if="modalInfo.modalLaunch">
 			<div class="modalbg">
 				<div class="dialog">
-					<div class="modal-inner-content">
-						<ul class="wfm-accordion">
-							<li>
-								<div class="wfm-accordion-head" ng-click="accordionToggle1 = !accordionToggle1">{{workload.Name}} - {{ 'ForecastMethod' | translate }}<i ng-class="{'toggle-icon-open':!accordionToggle1}" class="mdi mdi-chevron-right"></i></div>
-								<div class="wfm-accordion-content" ng-cloak ng-hide="accordionToggle1">
-									<div ng-include="'first-forecast-tab.html'"></div>
-								</div>
-							</li>
-							<li ng-show="isQueueStatisticsEnabled">
-								<div class="wfm-accordion-head" ng-click="accordionToggle1 = !accordionToggle1">{{workload.Name}} - Queue statistics<i ng-class="{'toggle-icon-open':accordionToggle1}" class="mdi mdi-chevron-right"></i></div>
-								<div class="wfm-accordion-content" ng-cloak ng-show="accordionToggle1">
-									<div ng-include="'second-forecast-tab.html'"></div>
-								</div>
-							</li>
-						</ul>
+					<div class="wfm-slide-tabs">
+						<md-content style="padding:0!important;">
+							<md-tabs md-dynamic-height md-border-bottom>
+								<md-tab label="{{ 'ForecastMethod' | translate }}">
+									<md-content class="md-padding">
+										<div ng-include="'first-forecast-tab.html'"></div>
+									</md-content>
+								</md-tab>
+								<md-tab label="Queue statistics" ng-if="isQueueStatisticsEnabled">
+									<md-content class="md-padding">
+										<div ng-include="'second-forecast-tab.html'"></div>
+									</md-content>
+								</md-tab>
+							</md-tabs>
+						</md-content>
 					</div>
 					<div class="modal-footer">
 						<aside>
-							<a class="wfm-btn wfm-btn-invis-primary" ng-click="cancelMethod(workload)">{{ 'Close' | translate }}</a>
+							<a class="wfm-btn wfm-btn-invis-primary" ng-click="cancelMethod()">{{ 'Close' | translate }}</a>
 						</aside>
 					</div>
 				</div>
@@ -94,29 +96,29 @@
 </script>
 
 <script type="text/ng-template" id="first-forecast-tab.html">
-	<div ng-if="workload.evaluationLoading" class="wfm-block">
+	<div ng-if="modalInfo.evaluationLoading" class="wfm-block">
 		<md-progress-linear md-mode="indeterminate"></md-progress-linear>
 	</div>
-	<div class="alert-warning notice-spacer" ng-show="workload.noHistoricalDataForForecasting"><i class='mdi mdi-alert'></i> Warning: There is no historical data available for forecasting.</div>
-	<div ng-if="!workload.evaluationLoading && !workload.noHistoricalDataForForecasting">
+	<div class="alert-warning notice-spacer" ng-show="modalInfo.noHistoricalDataForForecasting"><i class='mdi mdi-alert'></i> Warning: There is no historical data available for forecasting.</div>
+	<div ng-if="!modalInfo.evaluationLoading && !modalInfo.noHistoricalDataForForecasting">
 		<div class="wfm-block">
 			<div class="row">
 				<div class="col-lg-12">
 					<p>
-						This chart shows how well a <i>Forecast Method</i> matches last year's <i>Queue Statistics</i> for workload <i>{{workload.Name}}</i>. Out of several tested forecast methods
+						This chart shows how well a <i>Forecast Method</i> matches last year's <i>Queue Statistics</i> for workload <i>{{modalInfo.workloadName}}</i>. Out of several tested forecast methods
 						this one was the most accurate. <br>The chosen forecast method is based on a period of queue statistics prior to the timeframe in the chart and will be used in the upcoming
-						forecast for workload <i>{{workload.Name}}</i>.
+						forecast for workload <i>{{modalInfo.workloadName}}</i>.
 					</p>
 					<div class="row">
 						<p>
-							We use historical data from <b>{{workload.ForecastMethodRecommended.PeriodUsedToEvaluateStart | date : shortDate}}</b> to <b>{{workload.ForecastMethodRecommended.PeriodUsedToEvaluateEnd | date : shortDate}}</b>, and evaluate forecast methods on the period from <b>{{workload.ForecastMethodRecommended.PeriodEvaluateOnStart | date : shortDate}}</b> to <b>{{workload.ForecastMethodRecommended.PeriodEvaluateOnEnd | date : shortDate}}</b>.
+							We use historical data from <b>{{modalInfo.ForecastMethodRecommended.PeriodUsedToEvaluateStart | date : shortDate}}</b> to <b>{{modalInfo.ForecastMethodRecommended.PeriodUsedToEvaluateEnd | date : shortDate}}</b>, and evaluate forecast methods on the period from <b>{{modalInfo.ForecastMethodRecommended.PeriodEvaluateOnStart | date : shortDate}}</b> to <b>{{modalInfo.ForecastMethodRecommended.PeriodEvaluateOnEnd | date : shortDate}}</b>.
 						</p>
 					</div>
 				</div>
 			</div>
 		</div>
 
-		<c3chart bindto-id="{{workload.chartId}}" chart-data="workload.chartData" chart-columns="dataColumns" chart-x="dataX" show-subchart="true" enable-zoom="true" style="margin-left:-13px;">
+		<c3chart bindto-id="evaluationChart" chart-data="modalInfo.chartData" chart-columns="dataColumns" chart-x="dataX" show-subchart="true" enable-zoom="true" style="margin-left:-13px;">
 			<chart-axis>
 				<chart-axis-x axis-id="date" axis-type="timeseries">
 					<chart-axis-x-tick tick-format="%Y-%m-%d" />
@@ -130,11 +132,11 @@
 </script>
 
 <script type="text/ng-template" id="second-forecast-tab.html">
-	<div ng-if="workload.queueStatisticsLoading">
+	<div ng-if="modalInfo.queueStatisticsLoading">
 		<md-progress-linear md-mode="indeterminate"></md-progress-linear>
 	</div>
-	<div class="alert-warning notice-spacer" ng-show="workload.noHistoricalDataForForecasting"><i class='mdi mdi-alert'></i> Warning: There is no historical data available for forecasting.</div>
-	<div ng-if="!workload.queueStatisticsLoading && !workload.noHistoricalDataForForecasting">
+	<div class="alert-warning notice-spacer" ng-show="modalInfo.noHistoricalDataForForecasting"><i class='mdi mdi-alert'></i> Warning: There is no historical data available for forecasting.</div>
+	<div ng-if="!modalInfo.queueStatisticsLoading && !modalInfo.noHistoricalDataForForecasting">
 		<div class="wfm-block">
 			<div class="row">
 				<div class="col-lg-12">
@@ -142,7 +144,7 @@
 				</div>
 			</div>
 		</div>
-		<c3chart bindto-id="{{workload.chartId2}}" chart-data="workload.chartData2" chart-columns="dataColumns2" chart-x="dataX" show-subchart="true" enable-zoom="true" style="margin-left:-13px;">
+		<c3chart bindto-id="queueStatisticsChart" chart-data="modalInfo.chartData2" chart-columns="dataColumns2" chart-x="dataX" show-subchart="true" enable-zoom="true" style="margin-left:-13px;">
 			<chart-axis>
 				<chart-axis-x axis-id="date" axis-type="timeseries">
 					<chart-axis-x-tick tick-format="%Y-%m-%d" />
