@@ -701,10 +701,10 @@
     <Content Include="Config\PolicyForPassword.xml">
       <SubType>Designer</SubType>
     </Content>
-    <EmbeddedResource Include="MultiTenancy\Server\PersonInfo.hbm.xml">
+    <EmbeddedResource Include="MultiTenancy\Server\PersonInfo.dbconf.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="MultiTenancy\Server\Tenant.hbm.xml">
+    <EmbeddedResource Include="MultiTenancy\Server\Tenant.dbconf.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Licensing\Agreements\TeleoptiLic_De_De_St.txt" />

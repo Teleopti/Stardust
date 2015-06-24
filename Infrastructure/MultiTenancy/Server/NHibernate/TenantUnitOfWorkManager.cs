@@ -47,8 +47,8 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 			//TODO: tenant - if/when tenant stuff is it's own service, we don't have to pick these one-by-one but take all assembly instead.
 			cfg.AddResources(new[]
 			{
-				"Teleopti.Ccc.Infrastructure.MultiTenancy.Server.PersonInfo.hbm.xml",
-				"Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Tenant.hbm.xml"
+				"Teleopti.Ccc.Infrastructure.MultiTenancy.Server.PersonInfo.dbconf.xml",
+				"Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Tenant.dbconf.xml"
 			}, typeof (TenantUnitOfWorkManager).Assembly);
 
 			var ret = new TenantUnitOfWorkManager {_sessionFactory = cfg.BuildSessionFactory()};
