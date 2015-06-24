@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		{
 			if (NameValidator.DescriptionIsInvalid(campaignForm.Name)) return BadRequest(GivenDescriptionIsInvalidErrorMessage);
 
-			var campaignVm = _outboundCampaignPersister.Persist(campaignForm.Name);
+			var campaignVm = _outboundCampaignPersister.Persist(campaignForm);
 
 			return Created(Request.RequestUri + "/" + campaignVm.Id, campaignVm);
 		}		

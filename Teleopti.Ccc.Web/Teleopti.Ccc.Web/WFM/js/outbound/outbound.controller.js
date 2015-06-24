@@ -1,7 +1,10 @@
 ﻿"use strict";
 
-(function() {
-	var outbound = angular.module('wfm.outbound', ['outboundService']);
+(function () {
+
+
+	var outbound = angular.module('wfm.outbound', ['outboundServiceModule']);
+
 
 	var notifySuccess = function (growl, message) {
 		growl.success("<i class='mdi mdi-thumb-up'></i> " + message + ".", {
@@ -17,9 +20,52 @@
 		});
 	}
 
+	outbound.controller('OutboundCreateCtrl', [
+		'$scope', '$state', 'outboundService33699', 'outboundNotificationService',
+		function ($scope, $state, outboundService, outboundNotificationService) {
+
+
+			$scope.$on('formLocator.createCampaignForm', function (event) {
+				$scope.createCampaignForm = event.targetScope.createCampaignForm;
+				$scope.formScope = event.targetScope;
+				console.log($scope.createCampaignForm);
+			});
+
+			reset();
+
+			$scope.addCampaign= function() {
+				outboundService.addCampaign($scope.newCampaign, function (campaign) {
+					reset();
+					show(campaign);
+					outboundNotificationService.notifyCampaignCreationSuccess(campaign);
+				}, function (error) {
+					outboundNotificationService.notifyCampaignCreationFailure(campaign, error);
+				});
+			}
+
+			$scope.reset = reset;
+
+			function reset() {
+				$scope.newCampaign = {};
+
+
+				$scope.acToggle1 = $scope.acToggle2 = $scope.acToggle3 = true;			
+
+				if ($scope.createCampaignForm) {
+					$scope.createCampaignForm.$setPristine();
+				}						
+			}
+
+			function show(campaign) {
+				$state.go('outbound.edit', { Id: campaign.Id });
+			}
+
+		}
+	]);
+
 	outbound.controller('OutboundListCtrl', [
-		'$scope', '$state', 'growl', 'OutboundService',
-		function($scope, $state, growl, OutboundService) {
+		'$scope', '$state', 'growl', 'outboundService',
+		function ($scope, $state, growl, outboundService) {
 
 			$scope.newName = "";
 			$scope.selectedTarget = null;
@@ -30,13 +76,17 @@
 				$scope.form.$setPristine();
 			};
 
-			$scope.campaigns = OutboundService.listCampaign({}, function() {
-				$scope.selectedTarget = OutboundService.getCurrentCampaign();
+			$scope.campaigns = outboundService.listCampaign({}, function () {
+				$scope.selectedTarget = outboundService.getCurrentCampaign();
 				$scope.$broadcast('outbound.campaigns.loaded');
 			});
 
+			$scope.gotoCreateCampaign = function() {
+				$state.go('outbound-create');
+			};
+
 			$scope.create = function() {
-				OutboundService.addCampaign({ name: $scope.newName }, function(_newCampaign_) {
+				outboundService.addCampaign({ name: $scope.newName }, function (_newCampaign_) {
 					$scope.show(_newCampaign_);
 					notifySuccess(growl, "New campaign <strong>" + $scope.newName + "</strong> created");
 				}, function(error) {
@@ -45,7 +95,7 @@
 			};
 
 			$scope.copyNew = function(campaign) {
-				OutboundService.addCampaign({ name: campaign.name + "_Copy" }, function(_newCampaign_) {
+				outboundService.addCampaign({ name: campaign.name + "_Copy" }, function (_newCampaign_) {
 					$scope.show(_newCampaign_);
 					notifySuccess(growl, "New campaign <strong>" + campaign.name + "_Copy"  + "</strong> created");
 				}, function (error) {
@@ -53,7 +103,7 @@
 				});
 			};
 			$scope.update = function(campaign) {
-				OutboundService.updateCampaign(campaign, function() {
+				outboundService.updateCampaign(campaign, function () {
 					notifySuccess(growl, "Campaign updated successfully");
 				}, function(error) {
 					notifyFailure(growl, "Failed to update campaign " + error);
@@ -67,7 +117,7 @@
 			};
 
 			$scope.delete = function(campaign) {
-				OutboundService.deleteCampaign(campaign, function() {
+				outboundService.deleteCampaign(campaign, function () {
 					notifySuccess(growl, "Campaign deleted successfully");
 				}, function(error) {
 					notifyFailure(growl, "Failed to delete campaign " + error);
@@ -78,7 +128,7 @@
 	]);
 
 	outbound.controller('OutboundEditCtrl', [
-		'$scope', '$stateParams', '$state', '$filter', 'growl', 'OutboundService',
+		'$scope', '$stateParams', '$state', '$filter', 'growl', 'outboundService',
 		function($scope, $stateParams, $state, $filter, growl, OutboundService) {
 			$scope.campaign = (angular.isDefined($stateParams.Id) && $stateParams.Id != "") ? OutboundService.getCampaignById($stateParams.Id) : null;
 			$scope.newWorkingPeriod = { StartTime: null, EndTime: null };

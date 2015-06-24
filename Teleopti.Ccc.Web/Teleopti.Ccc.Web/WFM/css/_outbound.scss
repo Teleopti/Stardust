@@ -163,3 +163,9 @@ input.ng-invalid + .input-validation-sign .wrong-sign {
 	min-width:20px;
 	max-width:20px;
 }
+.flow-btn{
+	position:absolute;
+	top:5px;
+	right:30px;
+	transform:scale(0.8);
+}

@@ -14,9 +14,9 @@ var externalModules = angular.module('externalModules', ['ui.router',
 
 var wfm = angular.module('wfm', [
 	'externalModules',
-	'forecastingService',
-	'outboundService',
+	'forecastingService',	
 	'peopleSearchService',
+	'outboundServiceModule',
 	'restRtaService',
 	'wfmCtrls',
 	'wfm.permissions',
@@ -119,6 +119,13 @@ wfm.config([
 			controller: 'OutboundListCtrl',
 			ncyBreadcrumb: {
 				label: "{{'Outbound' | translate}}"
+			}
+		}).state('outbound-create', {
+			url: '/outbound/create',
+			templateUrl: 'html/outbound/campaign-creat.html',
+			controller: 'OutboundCreateCtrl',
+			ncyBreadcrumb: {
+				label: "{{'Outbound Create Campaign' | translate}}"
 			}
 		}).state('outbound.edit', {
 			url: '/campaign/:Id',

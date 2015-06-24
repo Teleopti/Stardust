@@ -30,17 +30,10 @@
 					</div>
 				</div>
 			</div>
-			<div class="wfm-block">
-				<form name="form" ng-submit="create(); reset();">
-					<div class="input-prepend">
-						<i class="mdi mdi-plus"></i>
-						<input type="text" ng-model="newName" placeholder="Create new campaign" class="role-input role" />
-					</div>
-				</form>
-				<!--<div class="input-prepend">
-					<i class="mdi mdi-filter-outline"></i>
-					<input type="text" name="filterRole" ng-model="searchCampaign.name" placeholder="Campaign filter ..." />
-				</div>-->
+			<div class="relative w-100p">
+				<button class="md-fab md-mini md-button md-default-theme flow-btn"  aria-label="Eat cake" ng-click="gotoCreateCampaign()">
+					<i class="mdi mdi-plus m-t-10"></i>
+				</button>
 			</div>
 			<div class="campaign-list role-container">
 				<ul class="wfm-list">

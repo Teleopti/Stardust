@@ -7,6 +7,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 	public interface IOutboundCampaignPersister
 	{
 		CampaignViewModel Persist(string name);
+		CampaignViewModel Persist(CampaignForm form);
 	    Campaign Persist(CampaignViewModel campaignViewModel);
 		Campaign Persist(CampaignWorkingPeriodAssignmentForm form);
 		CampaignWorkingPeriod Persist(CampaignWorkingPeriodForm form);

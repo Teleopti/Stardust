@@ -75,7 +75,13 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 				promises.push(promise);
 			});
 		$.when.apply(null, promises)
-			.done(function () { periodFeedbackViewModel.LoadFeedback(); });
+			.done(function() {
+			periodFeedbackViewModel.LoadFeedback();
+			if (toggleShowNightViolation()) {
+				loadNeighborFeedback();
+				periodFeedbackViewModel.PossibleNightRestViolations();
+			}
+		});
 	}
 
 	function _deletePreferenceTemplate(templateId) {
