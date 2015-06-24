@@ -33,9 +33,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		[Test]
 		public void ShouldEvaluate()
 		{
-			var forecastEvaluator = MockRepository.GenerateMock<IForecastEvaluator>();
+			var forecastEvaluator = MockRepository.GenerateMock<IForecastViewModelFactory>();
 			var evaluateInput = new EvaluateInput();
-			var workloadForecastingViewModel = new WorkloadForecastViewModel();
+			var workloadForecastingViewModel = new WorkloadEvaluateViewModel();
 			forecastEvaluator.Stub(x => x.Evaluate(evaluateInput)).Return(workloadForecastingViewModel);
 			var target = new ForecastController(null, null, forecastEvaluator, null);
 
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		[Test]
 		public void ShouldGetQueueStatistics()
 		{
-			var forecastEvaluator = MockRepository.GenerateMock<IForecastEvaluator>();
+			var forecastEvaluator = MockRepository.GenerateMock<IForecastViewModelFactory>();
 			var queueStatisticsInput = new QueueStatisticsInput();
 			var workloadQueueStatisticsViewModel = new WorkloadQueueStatisticsViewModel();
 			forecastEvaluator.Stub(x => x.QueueStatistics(queueStatisticsInput)).Return(workloadQueueStatisticsViewModel);

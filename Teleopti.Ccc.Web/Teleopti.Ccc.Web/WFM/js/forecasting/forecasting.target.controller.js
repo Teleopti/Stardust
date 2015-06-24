@@ -41,6 +41,11 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 						});
 				};
 
+
+				$scope.goToDev = function (workload) {
+					$state.go("forecasting.dev", { workloadId: workload.Id });
+				};
+
 				$scope.openModal = function (workload) {
 					$scope.modalInfo.workloadName = workload.Name;
 					$scope.modalInfo.modalLaunch = true;

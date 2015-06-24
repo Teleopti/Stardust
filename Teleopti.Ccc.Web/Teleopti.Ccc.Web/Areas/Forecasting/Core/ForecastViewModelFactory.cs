@@ -13,7 +13,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 {
-	public class ForecastEvaluator : IForecastEvaluator
+	public class ForecastViewModelFactory : IForecastViewModelFactory
 	{
 		private readonly IForecastWorkloadEvaluator _forecastWorkloadEvaluator;
 		private readonly IWorkloadRepository _workloadRepository;
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 		private readonly IOutlierRemover _outlierRemover;
 		private readonly IForecastMethodProvider _forecastMethodProvider;
 
-		public ForecastEvaluator(IForecastWorkloadEvaluator forecastWorkloadEvaluator, IWorkloadRepository workloadRepository, IHistoricalPeriodProvider historicalPeriodProvider, IHistoricalData historicalData, IOutlierRemover outlierRemover, IForecastMethodProvider forecastMethodProvider)
+		public ForecastViewModelFactory(IForecastWorkloadEvaluator forecastWorkloadEvaluator, IWorkloadRepository workloadRepository, IHistoricalPeriodProvider historicalPeriodProvider, IHistoricalData historicalData, IOutlierRemover outlierRemover, IForecastMethodProvider forecastMethodProvider)
 		{
 			_forecastWorkloadEvaluator = forecastWorkloadEvaluator;
 			_workloadRepository = workloadRepository;
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 			_forecastMethodProvider = forecastMethodProvider;
 		}
 
-		public WorkloadForecastViewModel Evaluate(EvaluateInput input)
+		public WorkloadEvaluateViewModel Evaluate(EvaluateInput input)
 		{
 			var workload = _workloadRepository.Get(input.WorkloadId);
 			var evaluateResult = _forecastWorkloadEvaluator.Evaluate(workload);
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 				? createEvaluationDayViewModels(workload, bestAccuracy,
 					HistoricalPeriodProvider.DivideIntoTwoPeriods(availablePeriod.Value).Item2)
 				: new dynamic[] {};
-			return new WorkloadForecastViewModel
+			return new WorkloadEvaluateViewModel
 			{
 				Name = workload.Name,
 				WorkloadId = workload.Id.Value,
@@ -69,8 +69,69 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 			return new WorkloadQueueStatisticsViewModel
 			{
 				WorkloadId = workload.Id.Value,
-				QueueStatisticsDays = createQueueStatisticsDayViewModels(workload, input.MethodId, availablePeriod)
+				QueueStatisticsDays = availablePeriod.HasValue
+					? createQueueStatisticsDayViewModels(workload, input.MethodId, availablePeriod.Value)
+					: new dynamic[] {}
 			};
+		}
+
+		public WorkloadEvaluateDevViewModel EvaluateDev(EvaluateDevInput input)
+		{
+			var workload = _workloadRepository.Get(input.WorkloadId);
+			var evaluateResult = _forecastWorkloadEvaluator.Evaluate(workload);
+			var availablePeriod = _historicalPeriodProvider.AvailablePeriod(workload);
+			var result = new WorkloadEvaluateDevViewModel
+			{
+				WorkloadId = workload.Id.Value,
+				WorkloadName = workload.Name
+			};
+
+			if (!availablePeriod.HasValue)
+			{
+				result.Methods = new WorkloadEvaluateDevMethodViewModel[] {};
+				return result;
+			}
+			var historicalData = _historicalData.Fetch(workload, availablePeriod.Value);
+
+			var methods = new List<WorkloadEvaluateDevMethodViewModel>();
+			foreach (var methodAccuracy in evaluateResult.Accuracies)
+			{
+				var data = new Dictionary<DateOnly, dynamic>();
+				foreach (var taskOwner in historicalData.TaskOwnerDayCollection)
+				{
+					dynamic item = new ExpandoObject();
+					item.date = taskOwner.CurrentDate.Date;
+					item.vh = taskOwner.TotalStatisticCalculatedTasks;
+					data.Add(taskOwner.CurrentDate, item);
+				}
+				foreach (var dayResult in methodAccuracy.MeasureResult)
+				{
+					if (data.ContainsKey(dayResult.CurrentDate))
+					{
+						data[dayResult.CurrentDate].vb = Math.Round(dayResult.Tasks, 1);
+					}
+					else
+					{
+						dynamic item = new ExpandoObject();
+						item.date = dayResult.CurrentDate.Date;
+						item.vb = Math.Round(dayResult.Tasks, 1);
+						data.Add(dayResult.CurrentDate, item);
+					}
+				}
+				methods.Add(new WorkloadEvaluateDevMethodViewModel
+				{
+					MethodId = methodAccuracy.MethodId,
+					AccuracyNumber = methodAccuracy.Number,
+					PeriodEvaluateOnStart = methodAccuracy.PeriodEvaluateOn.StartDate.Date,
+					PeriodEvaluateOnEnd = methodAccuracy.PeriodEvaluateOn.EndDate.Date,
+					PeriodUsedToEvaluateStart = methodAccuracy.PeriodUsedToEvaluate.StartDate.Date,
+					PeriodUsedToEvaluateEnd = methodAccuracy.PeriodUsedToEvaluate.EndDate.Date,
+					IsSelected = methodAccuracy.IsSelected,
+					Days = data.Values.ToArray()
+				});
+			}
+			result.Methods = methods.ToArray();
+			return result;
 		}
 
 		private dynamic[] createMethodViewModels(WorkloadAccuracy evaluateResult)
@@ -87,11 +148,9 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 			return methods.ToArray();
 		}
 
-		private dynamic[] createEvaluationDayViewModels(IWorkload workload, MethodAccuracy bestAccuracy, DateOnlyPeriod? period)
+		private dynamic[] createEvaluationDayViewModels(IWorkload workload, MethodAccuracy bestAccuracy, DateOnlyPeriod period)
 		{
-			if(!period.HasValue)
-				return new dynamic[]{};
-			var historicalData = _historicalData.Fetch(workload, period.Value);
+			var historicalData = _historicalData.Fetch(workload, period);
 			var data = new Dictionary<DateOnly, dynamic>();
 			foreach (var taskOwner in historicalData.TaskOwnerDayCollection)
 			{
@@ -120,11 +179,9 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 			return data.Values.ToArray();
 		}
 
-		private dynamic[] createQueueStatisticsDayViewModels(IWorkload workload, ForecastMethodType method, DateOnlyPeriod? period)
+		private dynamic[] createQueueStatisticsDayViewModels(IWorkload workload, ForecastMethodType method, DateOnlyPeriod period)
 		{
-			if(!period.HasValue)
-				return new dynamic[]{};
-			var historicalData = _historicalData.Fetch(workload, period.Value);
+			var historicalData = _historicalData.Fetch(workload, period);
 			var forecastMethod = _forecastMethodProvider.Get(method);
 			var data = new Dictionary<DateOnly, dynamic>();
 			foreach (var taskOwner in historicalData.TaskOwnerDayCollection)

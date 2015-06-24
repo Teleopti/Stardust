@@ -5,11 +5,9 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
-using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Historical;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
 using Teleopti.Ccc.Domain.Repositories;
@@ -21,70 +19,10 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 {
-	public class ForecastResultViewModelFactoryTest
+	public class ForecastViewModelFactoryTest
 	{
 		[Test]
-		public void ShouldCreateForecastResultViewModel()
-		{
-			var skill = SkillFactory.CreateSkillWithWorkloadAndSources();
-			var workload = skill.WorkloadCollection.Single();
-			var workloadRepository = MockRepository.GenerateMock<IWorkloadRepository>();
-			workloadRepository.Stub(x => x.Get(workload.Id.Value)).Return(workload);
-			var skillDayRepository = MockRepository.GenerateMock<ISkillDayRepository>();
-			var currentScenario = MockRepository.GenerateMock<ICurrentScenario>();
-			var scenario = new Scenario("s1");
-			currentScenario.Stub(x => x.Current()).Return(scenario);
-			var futurePeriod = new DateOnlyPeriod(2014, 3, 1, 2014, 3, 1);
-			var skillDays = new List<ISkillDay>();
-			skillDayRepository.Stub(x => x.FindRange(futurePeriod, skill, scenario)).Return(skillDays);
-			var futureData = MockRepository.GenerateMock<IFutureData>();
-
-			var date1 = new DateOnly(2014, 3, 1);
-			var workloadDay1 = new WorkloadDay();
-			workloadDay1.Create(date1, new Workload(skill), new List<TimePeriod>());
-			workloadDay1.MakeOpen24Hours();
-			workloadDay1.Tasks = 8.1d;
-
-			futureData.Stub(x => x.Fetch(workload, skillDays, futurePeriod)).Return(new[] { workloadDay1 });
-			var target = new ForecastResultViewModelFactory(workloadRepository, skillDayRepository, currentScenario, futureData);
-			var result = target.Create(workload.Id.Value, futurePeriod);
-			dynamic firstDay = result.Days.First();
-
-			result.WorkloadId.Should().Be.EqualTo(workload.Id.Value);
-			((object)firstDay.date).Should().Be.EqualTo(date1.Date);
-			(Math.Round((double) firstDay.vc, 1)).Should().Be.EqualTo(Math.Round(8.1d, 1));
-		}
-	}
-
-	public class ForecastEvaluatorTest
-	{
-		[Test]
-		public void ShouldEvaluateOnTheCorrectPeriod()
-		{
-			var historicalPeriodProvider = MockRepository.GenerateMock<IHistoricalPeriodProvider>();
-			var skill = SkillFactory.CreateSkillWithWorkloadAndSources();
-			var workloadRepository = MockRepository.GenerateMock<IWorkloadRepository>();
-			var workload = skill.WorkloadCollection.Single();
-			var evaluateInput = new EvaluateInput
-			{
-				WorkloadId = workload.Id.Value
-			};
-			workloadRepository.Stub(x => x.Get(evaluateInput.WorkloadId)).Return(workload);
-			var historicalData = MockRepository.GenerateMock<IHistoricalData>();
-			var forecastWorkloadEvaluator = MockRepository.GenerateMock<IForecastWorkloadEvaluator>();
-			forecastWorkloadEvaluator.Stub(x => x.Evaluate(workload)).Return(new WorkloadAccuracy() {Accuracies = new MethodAccuracy[] {}});
-			var target = new ForecastEvaluator(forecastWorkloadEvaluator, workloadRepository, historicalPeriodProvider, historicalData, null, null);
-			var availablePeriod = new DateOnlyPeriod(2012, 3, 16, 2015, 3, 15);
-			historicalPeriodProvider.Stub(x => x.AvailablePeriod(workload)).Return(availablePeriod);
-			historicalData.Stub(x => x.Fetch(Arg<IWorkload>.Is.Equal(workload), Arg<DateOnlyPeriod>.Is.Anything)).Return(new TaskOwnerPeriod(DateOnly.Today, new ITaskOwner[] { }, TaskOwnerPeriodType.Other));
-
-			target.Evaluate(evaluateInput);
-
-			historicalData.AssertWasCalled(x => x.Fetch(workload, new DateOnlyPeriod(2014, 3, 16, 2015, 3, 15)));
-		}
-
-		[Test]
-		public void ShouldGetQueueStatisticsAndQueueStatisticsNoOutliers()
+		public void ShouldGetQueueStatisticsAndQueueStatisticsNoOutliersForQueueStatisticsViewModel()
 		{
 			var skill = SkillFactory.CreateSkillWithWorkloadAndSources();
 			var workloadRepository = MockRepository.GenerateMock<IWorkloadRepository>();
@@ -114,7 +52,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 				MethodId = ForecastMethodType.TeleoptiClassicLongTerm
 			};
 			workloadRepository.Stub(x => x.Get(queueStatisticsInput.WorkloadId)).Return(workload);
-			var target = new ForecastEvaluator(null, workloadRepository, historicalPeriodProvider, historicalData, new OutlierRemover(), new ForecastMethodProvider(new LinearRegressionTrendCalculator()));
+			var target = new ForecastViewModelFactory(null, workloadRepository, historicalPeriodProvider, historicalData, new OutlierRemover(), new ForecastMethodProvider(new LinearRegressionTrendCalculator()));
 			
 			var result = target.QueueStatistics(queueStatisticsInput);
 
@@ -126,7 +64,32 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 		}
 
 		[Test]
-		public void ShouldGetHistoricalData()
+		public void ShouldGetCorrectPeriodForEvaluationViewModel()
+		{
+			var historicalPeriodProvider = MockRepository.GenerateMock<IHistoricalPeriodProvider>();
+			var skill = SkillFactory.CreateSkillWithWorkloadAndSources();
+			var workloadRepository = MockRepository.GenerateMock<IWorkloadRepository>();
+			var workload = skill.WorkloadCollection.Single();
+			var evaluateInput = new EvaluateInput
+			{
+				WorkloadId = workload.Id.Value
+			};
+			workloadRepository.Stub(x => x.Get(evaluateInput.WorkloadId)).Return(workload);
+			var historicalData = MockRepository.GenerateMock<IHistoricalData>();
+			var forecastWorkloadEvaluator = MockRepository.GenerateMock<IForecastWorkloadEvaluator>();
+			forecastWorkloadEvaluator.Stub(x => x.Evaluate(workload)).Return(new WorkloadAccuracy() { Accuracies = new MethodAccuracy[] { } });
+			var target = new ForecastViewModelFactory(forecastWorkloadEvaluator, workloadRepository, historicalPeriodProvider, historicalData, null, null);
+			var availablePeriod = new DateOnlyPeriod(2012, 3, 16, 2015, 3, 15);
+			historicalPeriodProvider.Stub(x => x.AvailablePeriod(workload)).Return(availablePeriod);
+			historicalData.Stub(x => x.Fetch(Arg<IWorkload>.Is.Equal(workload), Arg<DateOnlyPeriod>.Is.Anything)).Return(new TaskOwnerPeriod(DateOnly.Today, new ITaskOwner[] { }, TaskOwnerPeriodType.Other));
+
+			target.Evaluate(evaluateInput);
+
+			historicalData.AssertWasCalled(x => x.Fetch(workload, new DateOnlyPeriod(2014, 3, 16, 2015, 3, 15)));
+		}
+
+		[Test]
+		public void ShouldGetHistoricalDataForEvaluationViewModel()
 		{
 			var skill = SkillFactory.CreateSkillWithWorkloadAndSources();
 			var workloadRepository = MockRepository.GenerateMock<IWorkloadRepository>();
@@ -186,7 +149,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 							}
 						}
 				});
-			var target = new ForecastEvaluator(forecastWorkloadEvaluator, workloadRepository, historicalPeriodProvider, historicalData, null, null);
+			var target = new ForecastViewModelFactory(forecastWorkloadEvaluator, workloadRepository, historicalPeriodProvider, historicalData, null, null);
 
 			var result = target.Evaluate(evaluateInput);
 
@@ -205,7 +168,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 		}
 
 		[Test]
-		public void ShouldGetEvaluationResult()
+		public void ShouldGetEvaluationResultForEvaluationViewModel()
 		{
 			var skill = SkillFactory.CreateSkillWithWorkloadAndSources();
 			var workloadRepository = MockRepository.GenerateMock<IWorkloadRepository>();
@@ -236,7 +199,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			var historicalData = MockRepository.GenerateMock<IHistoricalData>();
 			var taskOwnerPeriod = new TaskOwnerPeriod(DateOnly.MinValue, new List<WorkloadDay>(), TaskOwnerPeriodType.Other);
 			historicalData.Stub(x => x.Fetch(workload, HistoricalPeriodProvider.DivideIntoTwoPeriods(availablePeriod).Item2)).Return(taskOwnerPeriod);
-			var target = new ForecastEvaluator(forecastWorkloadEvaluator, workloadRepository, historicalPeriodProvider, historicalData, null, null);
+			var target = new ForecastViewModelFactory(forecastWorkloadEvaluator, workloadRepository, historicalPeriodProvider, historicalData, null, null);
 
 			var result = target.Evaluate(evaluateInput);
 

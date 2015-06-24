@@ -2,10 +2,11 @@ using Teleopti.Ccc.Web.Areas.Forecasting.Controllers;
 
 namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 {
-	public interface IForecastEvaluator
+	public interface IForecastViewModelFactory
 	{
-		WorkloadForecastViewModel Evaluate(EvaluateInput input);
+		WorkloadEvaluateViewModel Evaluate(EvaluateInput input);
 		WorkloadQueueStatisticsViewModel QueueStatistics(QueueStatisticsInput input);
+		WorkloadEvaluateDevViewModel EvaluateDev(EvaluateDevInput input);
 	}
 
 }

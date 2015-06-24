@@ -49,10 +49,12 @@
 				<div class="toggle-handle" ng-class="{open: false}"><i class="mdi mdi-chevron-right ng-hide"></i></div>
 				<div ng-class="{selected: workload.Selected || skill.Selected}" class="workload angular-ui-tree-handle" ng-click="toggleWorkload(workload)">
 					{{workload.Name}}
-					<i class="pull-right workload-accuracy">{{workload.Accuracy}}</i>
 					<span><i class="mdi mdi-check"></i></span>
 					<i class="mdi mdi-chart-bar forecasting-chart-bar" ng-click="openModal(workload);$event.stopPropagation();">
 						<md-tooltip>View method chart</md-tooltip>
+					</i>
+					<i class="mdi mdi-puzzle forecasting-puzzle" ng-click="goToDev(workload);$event.stopPropagation();">
+						<md-tooltip>Dev View</md-tooltip>
 					</i>
 				</div>
 			</div>

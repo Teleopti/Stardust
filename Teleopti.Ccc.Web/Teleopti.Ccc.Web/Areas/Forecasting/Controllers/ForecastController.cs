@@ -18,14 +18,14 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 	{
 		private readonly IForecastCreator _forecastCreator;
 		private readonly ISkillRepository _skillRepository;
-		private readonly IForecastEvaluator _forecastEvaluator;
+		private readonly IForecastViewModelFactory _forecastViewModelFactory;
 		private readonly IForecastResultViewModelFactory _forecastResultViewModelFactory;
 
-		public ForecastController(IForecastCreator forecastCreator, ISkillRepository skillRepository, IForecastEvaluator forecastEvaluator, IForecastResultViewModelFactory forecastResultViewModelFactory)
+		public ForecastController(IForecastCreator forecastCreator, ISkillRepository skillRepository, IForecastViewModelFactory forecastViewModelFactory, IForecastResultViewModelFactory forecastResultViewModelFactory)
 		{
 			_forecastCreator = forecastCreator;
 			_skillRepository = skillRepository;
-			_forecastEvaluator = forecastEvaluator;
+			_forecastViewModelFactory = forecastViewModelFactory;
 			_forecastResultViewModelFactory = forecastResultViewModelFactory;
 		}
 
@@ -43,21 +43,27 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		}
 
 		[UnitOfWork, HttpPost, Route("api/Forecasting/Evaluate")]
-		public virtual Task<WorkloadForecastViewModel> Evaluate(EvaluateInput input)
+		public virtual Task<WorkloadEvaluateViewModel> Evaluate(EvaluateInput input)
 		{
-			return Task.FromResult(_forecastEvaluator.Evaluate(input));
+			return Task.FromResult(_forecastViewModelFactory.Evaluate(input));
 		}
 
 		[UnitOfWork, HttpPost, Route("api/Forecasting/QueueStatistics")]
 		public virtual Task<WorkloadQueueStatisticsViewModel> QueueStatistics(QueueStatisticsInput input)
 		{
-			return Task.FromResult(_forecastEvaluator.QueueStatistics(input));
+			return Task.FromResult(_forecastViewModelFactory.QueueStatistics(input));
 		}
 
 		[HttpPost, Route("api/Forecasting/ForecastResult"), UnitOfWork]
 		public virtual Task<WorkloadForecastResultViewModel> ForecastResult(ForecastResultInput input)
 		{
 			return Task.FromResult(_forecastResultViewModelFactory.Create(input.WorkloadId, new DateOnlyPeriod(new DateOnly(input.ForecastStart), new DateOnly(input.ForecastEnd))));
+		}
+
+		[HttpPost, Route("api/Forecasting/EvaluateDev"), UnitOfWork]
+		public virtual Task<WorkloadEvaluateDevViewModel> EvaluateDev(EvaluateDevInput input)
+		{
+			return Task.FromResult(_forecastViewModelFactory.EvaluateDev(input));
 		}
 
 		[HttpPost, Route("api/Forecasting/Forecast"), UnitOfWork]
@@ -68,4 +74,5 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			return Task.FromResult(true);
 		}
 	}
+
 }

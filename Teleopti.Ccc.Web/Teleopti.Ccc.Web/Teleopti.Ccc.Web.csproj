@@ -421,10 +421,10 @@
     <Compile Include="Areas\Anywhere\Core\TeamViewModel.cs" />
     <Compile Include="Areas\Forecasting\Controllers\EvaluateInput.cs" />
     <Compile Include="Areas\Forecasting\Core\ForecastResultViewModelFactory.cs" />
-    <Compile Include="Areas\Forecasting\Core\IForecastEvaluator.cs" />
-    <Compile Include="Areas\Forecasting\Core\ForecastEvaluator.cs" />
+    <Compile Include="Areas\Forecasting\Core\IForecastViewModelFactory.cs" />
+    <Compile Include="Areas\Forecasting\Core\ForecastViewModelFactory.cs" />
     <Compile Include="Areas\Forecasting\Core\IForecastResultViewModelFactory.cs" />
-    <Compile Include="Areas\Forecasting\Core\WorkloadForecastViewModel.cs" />
+    <Compile Include="Areas\Forecasting\Core\WorkloadEvaluateViewModel.cs" />
     <Compile Include="Areas\Global\ApplicationController.cs" />
     <Compile Include="Areas\Global\AreaWithPermissionPath.cs" />
     <Compile Include="Areas\Global\LanguageController.cs" />
@@ -1211,8 +1211,10 @@
     <Content Include="Areas\Reporting\ScheduleAdherence.aspx" />
     <Content Include="Areas\Reporting\Index.aspx" />
     <Content Include="Areas\Reporting\Views\Report\NoPermission.cshtml" />
+    <Content Include="WFM\html\forecasting\forecasting-dev.html" />
     <Content Include="WFM\html\left-sidenav.html" />
     <Content Include="WFM\html\right-sidenav.html" />
+    <Content Include="WFM\js\forecasting\forecasting.dev.controller.js" />
     <Content Include="WFM\js\global\help.controller.js" />
     <Content Include="Content\jalaali-calendar-datepicker\moment-datepicker-jalaali-ext.js" />
     <Content Include="Content\jalaali-calendar-datepicker\moment-jalaali.js" />

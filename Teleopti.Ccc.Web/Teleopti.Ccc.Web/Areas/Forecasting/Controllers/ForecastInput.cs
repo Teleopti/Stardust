@@ -10,11 +10,15 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		public ForecastWorkloadInput[] Workloads { get; set; }
 	}
 
-
 	public class ForecastResultInput
 	{
 		public DateTime ForecastStart { get; set; }
 		public DateTime ForecastEnd { get; set; }
+		public Guid WorkloadId { get; set; }
+	}
+
+	public class EvaluateDevInput
+	{
 		public Guid WorkloadId { get; set; }
 	}
 }

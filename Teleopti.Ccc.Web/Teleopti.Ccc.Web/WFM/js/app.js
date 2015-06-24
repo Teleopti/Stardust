@@ -24,6 +24,7 @@ var wfm = angular.module('wfm', [
 	'wfm.outbound',
 	'wfm.forecasting',
 	'wfm.forecasting.target',
+	'wfm.forecasting.dev',
 	'wfm.resourceplanner',
 	'wfm.searching',
 	'wfm.seatMap',
@@ -78,6 +79,13 @@ wfm.config([
 			controller: 'ForecastingRunAllCtrl',
 			ncyBreadcrumb: {
 				label: 'forecasting results'
+			}
+		}).state('forecasting.dev', {
+			params: { workloadId: {} },
+			templateUrl: 'html/forecasting/forecasting-dev.html',
+			controller: 'ForecastingDevCtrl',
+			ncyBreadcrumb: {
+				label: 'Forecast Dev view'
 			}
 		}).state('resourceplanner', {
 				url: '/resourceplanner',
