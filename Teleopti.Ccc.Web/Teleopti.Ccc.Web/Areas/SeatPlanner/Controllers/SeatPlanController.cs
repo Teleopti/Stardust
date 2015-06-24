@@ -6,12 +6,15 @@ using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
+using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers
 {
+	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.SeatPlanner)]
 	public class SeatPlanController : ApiController
 	{
 		
@@ -54,7 +57,7 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers
 		[UnitOfWork, Route("api/SeatPlanner/SeatPlan"), HttpGet]
 		public virtual List<SeatPlanViewModel> Get(DateTime startDate, DateTime endDate)
 		{
-			return _seatPlanProvider.Get(new DateOnlyPeriod(new DateOnly(startDate),new DateOnly(endDate) ));
+			return _seatPlanProvider.Get(new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate)));
 		}
 	}
 }

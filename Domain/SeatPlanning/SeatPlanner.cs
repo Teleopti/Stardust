@@ -172,6 +172,9 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			foreach (var day in period.DayCollection())
 			{
 				var seatPlan = _seatPlanRepository.GetSeatPlanForDate (day);
+				//temporary fix;
+				if (seatPlan == null) continue;
+
 				seatPlan.Status = inError ? SeatPlanStatus.InError : SeatPlanStatus.Ok;
 				_seatPlanRepository.Update (seatPlan);
 			}
