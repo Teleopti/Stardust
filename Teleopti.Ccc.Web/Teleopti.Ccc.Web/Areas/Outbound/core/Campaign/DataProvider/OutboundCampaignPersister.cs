@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using NHibernate;
 using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Persisters.Outbound;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping;
@@ -75,7 +74,20 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 				}
 			}
 
-			var activity = _activityRepository.LoadAll().First();
+			IActivity activity = null;
+			if (form.Activity != null)
+			{
+				if (form.Activity.Id != null)
+				{
+					activity = _activityRepository.LoadAll().First(x => x.Id.Equals(form.Activity.Id));
+				}
+				else
+				{
+					activity = new Activity(form.Activity.Name);
+					_activityRepository.Add(activity);
+				}
+			}
+
 			var skill = _outboundSkillCreator.CreateSkill(activity, campaign);
 			_outboundSkillPersister.PersistSkill(skill);
 

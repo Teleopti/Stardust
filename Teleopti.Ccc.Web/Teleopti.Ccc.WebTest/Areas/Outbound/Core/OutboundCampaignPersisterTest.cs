@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		private OutboundCampaignPersister _outboundCampaignPersister;
 		private FakeCampaignRepository _fakeCampaignRepository;
 		private FakeSkillRepository _fakeSkillRepository;
+		private FakeActivityRepository _fakeActivityRepository;
 		private CampaignForm _campaignInput;
 
 		[SetUp]
@@ -36,6 +37,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 				ConnectAverageHandlingTime = 60,
 				RightPartyAverageHandlingTime = 100,
 				UnproductiveTime = 150,
+				Activity = new ActivityViewModel(){Id = null, Name = "myActivity"},
 				StartDate = new DateOnly(2015, 6, 23),
 				EndDate = new DateOnly(2100, 1, 1),
 				WorkingHours = new List<CampaignWorkingHour>()
@@ -55,10 +57,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 
 			_fakeCampaignRepository = new FakeCampaignRepository();
 			_fakeSkillRepository = new FakeSkillRepository();
+			_fakeActivityRepository = new FakeActivityRepository();
 			
 			_outboundCampaignPersister = new OutboundCampaignPersister(_fakeCampaignRepository, _fakeSkillRepository,
 				new OutboundCampaignMapper(_fakeCampaignRepository), new OutboundCampaignViewModelMapper(),
-				skillCreator, new FakeActivityRepository(),
+				skillCreator, _fakeActivityRepository,
 				new OutboundSkillPersister(_fakeSkillRepository, new FakeWorkloadRepository()));
 		}
 
@@ -164,6 +167,23 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			{
 				campaigns[0].WorkingHours[_campaignInput.WorkingHours[i].WeekDay].Should().Be.EqualTo(_campaignInput.WorkingHours[i].WorkingPeriod);
 			}
+		}
+
+		[Test]
+		public void ShouldCreateActivityWhenUserDidNotChooseAnyExisted()
+		{
+			_outboundCampaignPersister.Persist(_campaignInput);
+
+			_fakeActivityRepository.LoadAll().First().Name.Should().Be.EqualTo(_campaignInput.Activity.Name);
+		}		
+		
+		[Test]
+		public void ShouldLoadActivityForUserChosen()
+		{
+			_campaignInput.Activity.Id = _fakeActivityRepository.LoadAll().First().Id;
+			_outboundCampaignPersister.Persist(_campaignInput);
+
+			_fakeActivityRepository.LoadAll().First().Id.Should().Be.EqualTo(_campaignInput.Activity.Id);
 		}
 	}
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -8,9 +9,19 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 {
 	public class FakeActivityRepository : IActivityRepository
 	{
-		public void Add(IActivity entity)
+		private IList<IActivity> _activities;
+		private bool withoutAdd = true;
+		private Activity activity = ActivityFactory.CreateActivity("phone");
+
+		public FakeActivityRepository()
 		{
-			throw new NotImplementedException();
+			_activities = new List<IActivity>();
+		}
+
+		public void Add(IActivity activity)
+		{
+			withoutAdd = false;
+			_activities.Add(activity);
 		}
 
 		public void Remove(IActivity entity)
@@ -25,7 +36,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public IList<IActivity> LoadAll()
 		{
-			return new List<IActivity> { ActivityFactory.CreateActivity("phone") };
+			return withoutAdd ? new List<IActivity> { activity } : _activities;
 		}
 
 		public IActivity Load(Guid id)
