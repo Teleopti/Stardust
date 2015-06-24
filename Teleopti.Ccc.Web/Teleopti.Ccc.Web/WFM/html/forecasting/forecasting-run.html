@@ -14,7 +14,6 @@
 						<span class="pull-right success" ng-if="workload.IsSuccess"><md-tooltip>Success</md-tooltip><i class="mdi mdi-check"></i></span>
 						<span class="pull-right" ng-if="workload.IsFailed"><md-tooltip>Failed</md-tooltip><i class="mdi mdi-close"></i></span>
 						<i class="mdi mdi-chart-bar forecasting-chart-bar" ng-click="openModal(workload);$event.stopPropagation();" ng-if="workload.IsSuccess && isQueueStatisticsEnabled"><md-tooltip>View result chart</md-tooltip></i>
-						<div ng-include="'forecasting-result-chart.html'" class="forecasting-chart"></div>
 						<md-progress-linear ng-if="workload.ShowProgress" md-mode="indeterminate"></md-progress-linear>
 					</div>
 				</li>
@@ -23,38 +22,43 @@
 	</div>
 </div>
 <div class="clearfix"></div>
-
+<div ng-include="'forecasting-result-chart.html'" class="forecasting-chart"></div>
 
 <script type="text/ng-template" id="forecasting-result-chart.html">
-	<div ng-cloak class="modal-box" ng-click="$event.stopPropagation()">
-		<div ng-cloak ng-if="workload.modalLaunch">
+	<div ng-cloak class="modal-box">
+		<div ng-cloak ng-if="modalInfo.modalLaunch">
 			<div class="modalbg">
 				<div class="dialog">
-					<div class="modal-header">
-						{{workload.Name}}
-					</div>
-					<div class="modal-inner-content">
-						<div ng-if="!workload.loaded" class="wfm-block">
-							<md-progress-linear md-mode="indeterminate"></md-progress-linear>
-						</div>
-						<div ng-if="workload.loaded" class="wfm-block">
-							<c3chart bindto-id="{{workload.chartId}}" chart-data="workload.chartData" chart-columns="dataColumns" chart-x="dataX" show-subchart="true" enable-zoom="true">
-								<chart-axes values-x="date" y="vc" y2="vaht,vacw" />
-								<chart-axis>
-									<chart-axis-x axis-id="date" axis-type="timeseries">
-										<chart-axis-x-tick tick-format="%Y-%m-%d" />
-									</chart-axis-x>
-								</chart-axis>
-								<chart-axis>
-									<chart-axis-y axis-id="y" axis-position="outer-middle" axis-label="Number of Calls" />
-									<chart-axis-y axis-id="y2" axis-position="outer-middle" axis-label="Time Spent" />
-								</chart-axis>
-							</c3chart>
-						</div>
+					<div class="wfm-slide-tabs">
+						<md-content style="padding:0!important;">
+							<md-tabs md-dynamic-height md-border-bottom>
+								<md-tab label="{{modalInfo.workloadName}}">
+									<md-content class="md-padding">
+										<div ng-if="!modalInfo.loaded" class="wfm-block">
+											<md-progress-linear md-mode="indeterminate"></md-progress-linear>
+										</div>
+										<div ng-if="modalInfo.loaded" class="wfm-block">
+											<c3chart bindto-id="resultChart" chart-data="modalInfo.resultChartData" chart-columns="modalInfo.resultChartDataColumns" chart-x="modalInfo.dataX" show-subchart="true" enable-zoom="true">
+												<chart-axes values-x="date" y="vc" y2="vaht,vacw" />
+												<chart-axis>
+													<chart-axis-x axis-id="date" axis-type="timeseries">
+														<chart-axis-x-tick tick-format="%Y-%m-%d" />
+													</chart-axis-x>
+												</chart-axis>
+												<chart-axis>
+													<chart-axis-y axis-id="y" axis-position="outer-middle" axis-label="Number of Calls" />
+													<chart-axis-y axis-id="y2" axis-position="outer-middle" axis-label="Time Spent" />
+												</chart-axis>
+											</c3chart>
+										</div>
+									</md-content>
+								</md-tab>
+							</md-tabs>
+						</md-content>
 					</div>
 					<div class="modal-footer">
 						<aside>
-							<a class="wfm-btn wfm-btn-invis-primary" ng-click="cancelMethod(workload)">{{ 'Close' | translate }}</a>
+							<a class="wfm-btn wfm-btn-invis-primary" ng-click="cancelMethod()">{{ 'Close' | translate }}</a>
 						</aside>
 					</div>
 				</div>

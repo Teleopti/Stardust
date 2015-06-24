@@ -9,13 +9,17 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 				$scope.all = { Name: 'All', Selected: false, show: true, numberOfSelectedWorkloads: 0 };
 				$scope.selectedIds = [];
 				$scope.modalInfo = {
-					evaluationChartDataColumns: [{ id: "vh", type: "line", name: "Queue Statistics" },
-									{ id: "vb", type: "line", name: "Forecast Method" }],
-					queueStatisticsChartDataColumns: [{ id: "vh", type: "line", name: "Queue Statistics" },
-									{ id: "vh2", type: "line", name: "Queue Statistics without Outliers" }]
+					evaluationChartDataColumns: [
+						{ id: "vh", type: "line", name: "Queue Statistics" },
+						{ id: "vb", type: "line", name: "Forecast Method" }
+					],
+					queueStatisticsChartDataColumns: [
+						{ id: "vh", type: "line", name: "Queue Statistics" },
+						{ id: "vh2", type: "line", name: "Queue Statistics without Outliers" }
+					],
+					dataX: { id: "date" }
 				};
 
-				$scope.dataX = { id: "date" };
 				$scope.isQueueStatisticsEnabled = false;
 				forecasting.isToggleEnabled.query({ toggle: 'WfmForecast_QueueStatistics_32572' }).$promise.then(function (result) {
 					$scope.isQueueStatisticsEnabled = result.IsEnabled;
@@ -56,6 +60,7 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 							$scope.modalInfo.evaluationChartData = data.Days;
 							if (data.Days.length === 0) {
 								$scope.modalInfo.noHistoricalDataForForecasting = true;
+								$scope.modalInfo.queueStatisticsLoading = false;
 								return;
 							}
 

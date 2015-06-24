@@ -48,16 +48,17 @@ angular.module('wfm.forecasting', [])
 			$scope.targets = $stateParams.targets;
 			var workloads = [];
 			angular.forEach($scope.targets, function (workload) {
-				workload.chartId = "chart" + workload.Id;
 				workloads.push({ WorkloadId: workload.Id, ForecastMethodId: workload.Method });
 			});
 
-			$scope.dataColumns = [
-				{ id: "vc", type: "line", name: "Calls" },
-				{ id: "vaht", type: "bar", name: "Talk time" },
-				{ id: "vacw", type: "bar", name: "ACW" }
-			];
-			$scope.dataX = { id: "date" };
+			$scope.modalInfo = {
+				resultChartDataColumns: [
+					{ id: "vc", type: "line", name: "Calls" },
+					{ id: "vaht", type: "bar", name: "Talk time" },
+					{ id: "vacw", type: "bar", name: "ACW" }
+				],
+				dataX: { id: "date" }
+			};
 
 			$scope.isQueueStatisticsEnabled = false;
 			forecasting.isToggleEnabled.query({ toggle: 'WfmForecast_QueueStatistics_32572' }).$promise.then(function (result) {
@@ -65,25 +66,26 @@ angular.module('wfm.forecasting', [])
 			});
 
 			$scope.openModal = function (workload) {
-				workload.modalLaunch = true;
-				workload.loaded = false;
+				$scope.modalInfo.workloadName = workload.Name;
+				$scope.modalInfo.modalLaunch = true;
+				$scope.modalInfo.loaded = false;
 
 				$http.post("../api/Forecasting/ForecastResult", JSON.stringify({ ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate, WorkloadId: workload.Id })).
 					success(function (data, status, headers, config) {
 						angular.forEach(data.Days, function (day) {
 							day.date = new Date(Date.parse(day.date));
 						});
-						workload.chartData = data.Days;
-						workload.loaded = true;
+						$scope.modalInfo.resultChartData = data.Days;
+						$scope.modalInfo.loaded = true;
 					}).
 					error(function (data, status, headers, config) {
 						$scope.error = { message: "Failed to get forecast result." };
-						workload.loaded = true;
+						$scope.modalInfo.loaded = true;
 					});
 			};
 
-			$scope.cancelMethod = function (workload) {
-				workload.modalLaunch = false;
+			$scope.cancelMethod = function () {
+				$scope.modalInfo.modalLaunch = false;
 			};
 
 			var forecastForOneWorkload = function(index) {
