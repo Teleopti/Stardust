@@ -420,14 +420,10 @@ SELECT
 		scheduled_ready_time_m
 FROM 
 	mart.fact_schedule fs
---INNER JOIN #person_id a
---	ON fs.person_id = a.person_id
-INNER JOIN #bridge_time_zone b
-	ON	fs.shift_startinterval_id= b.interval_id
-	AND fs.shift_startdate_id = b.date_id
-	AND fs.shift_startdate_local_id between b.date_id -1 and b.date_id +1
-WHERE fs.scenario_id=@scenario_id
+WHERE fs.shift_startdate_local_id BETWEEN  @minUtcDateId-1 AND @maxUtcDateId+1
+AND fs.schedule_date_id between @minUtcDateId-1 AND @maxUtcDateId+1
 AND fs.person_id in(SELECT person_id FROM  #person_id)
+and fs.scenario_id=@scenario_id
 
 INSERT #fact_schedule(shift_startdate_local_id,shift_startdate_id,shift_startinterval_id,schedule_date_id,interval_id,person_id,scheduled_time_s,scheduled_ready_time_s,count_activity_per_interval)
 SELECT
