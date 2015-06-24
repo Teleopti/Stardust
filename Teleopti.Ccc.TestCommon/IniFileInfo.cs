@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.TestCommon
 		public static string DB_CCC7 { get; private set; }
 		public static string SQL_LOGIN { get; private set; }
 		public static string SQL_PASSWORD { get; private set; }
-		public static string AGENTPORTALWEB_nhibConfPath { get; private set; }
 		public static string TOGGLE_MODE { get; private set; }
 
 		private static void readIniFile()
@@ -33,7 +32,6 @@ namespace Teleopti.Ccc.TestCommon
 			SQL_LOGIN = ConfigurationManager.AppSettings["SQL_LOGIN"];
 			SQL_PASSWORD = ConfigurationManager.AppSettings["SQL_PASSWORD"];
 			WEB_BROKER_BACKPLANE = ConfigurationManager.AppSettings["WEB_BROKER_BACKPLANE"];
-			AGENTPORTALWEB_nhibConfPath = ConfigurationManager.AppSettings["AGENTPORTALWEB_nhibConfPath"];
 			TOGGLE_MODE = ConfigurationManager.AppSettings["TOGGLEMODE"];
 			buildConnectionString();
 		}
