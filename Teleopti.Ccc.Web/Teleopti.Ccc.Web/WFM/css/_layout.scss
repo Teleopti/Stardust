@@ -20,6 +20,13 @@ a:focus {
 	background-color:#003466;
 	color:white;
 }
+
+.navbar{
+  position:fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
  
 /*override bootstrap*/
 .row {
