@@ -5,7 +5,7 @@
 		</div>
 		<div ng-if="!loading">
 			<div class="alert-warning notice-spacer" ng-if="methods.length===0"><i class='mdi mdi-alert'></i> Warning: There is no historical data available for forecasting.</div>
-			<div ng-if="methods.length!==0" ng-repeat="method in methods">
+			<div ng-if="methods.length!==0" ng-repeat="method in methods" class="wfm-block">
 				<div class="row">
 					<h3>
 						Forecast Method Id: {{method.MethodId}} <i class="mdi mdi-star" ng-if="method.IsSelected"> <md-tooltip>Best method</md-tooltip></i>
@@ -17,16 +17,18 @@
 						We use historical data from <b>{{method.PeriodUsedToEvaluateStart | date : shortDate}}</b> to <b>{{method.PeriodUsedToEvaluateEnd | date : shortDate}}</b>, and evaluate forecast methods on the period from <b>{{method.PeriodEvaluateOnStart | date : shortDate}}</b> to <b>{{method.PeriodEvaluateOnEnd | date : shortDate}}</b>.
 					</p>
 				</div>
-				<c3chart bindto-id="{{method.ChartId}}" chart-data="method.Days" chart-columns="chartDataColumns" chart-x="dataX" show-subchart="true" enable-zoom="true">
-					<chart-axis>
-						<chart-axis-x axis-id="date" axis-type="timeseries">
-							<chart-axis-x-tick tick-format="%Y-%m-%d" />
-						</chart-axis-x>
-					</chart-axis>
-					<chart-axis>
-						<chart-axis-y axis-id="y" axis-position="outer-middle" axis-label="Number of Calls" />
-					</chart-axis>
-				</c3chart>
+				<div class="wfm-block">
+					<c3chart bindto-id="{{method.ChartId}}" chart-data="method.Days" chart-columns="chartDataColumns" chart-x="dataX" show-subchart="true" enable-zoom="true">
+						<chart-axis>
+							<chart-axis-x axis-id="date" axis-type="timeseries">
+								<chart-axis-x-tick tick-format="%Y-%m-%d" />
+							</chart-axis-x>
+						</chart-axis>
+						<chart-axis>
+							<chart-axis-y axis-id="y" axis-position="outer-middle" axis-label="Number of Calls" />
+						</chart-axis>
+					</c3chart>
+				</div>
 			</div>
 		</div>
 	</div>
