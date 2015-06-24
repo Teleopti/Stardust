@@ -158,3 +158,18 @@ label {
 	.wfm-slide-tabs md-ink-bar{
 	  top: 28px;
 	}
+
+	//modal
+	@media(max-width:599px){
+		.modal-box .modalbg .dialog{
+			max-height:90%;
+			overflow-y:auto!important;	
+		}
+	}
+
+	@media(min-width:600px){
+		.modal-box .modalbg .dialog{
+			max-height:70%;
+			overflow-y:auto!important;	
+		}
+	}
