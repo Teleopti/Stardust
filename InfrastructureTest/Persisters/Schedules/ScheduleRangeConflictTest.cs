@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -23,17 +24,17 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			WhenOtherHasChanged(otherRange);
 
 			var myRange = LoadScheduleRange();
-			Target.Persist(otherRange);
+			Target.Persist(otherRange, new List<AggregatedScheduleChangedInfo>());
 
 			WhenImChanging(myRange);
 
 			if (ExpectOptimistLockException)
 			{
-				Assert.Throws<OptimisticLockException>(() => Target.Persist(myRange));
+				Assert.Throws<OptimisticLockException>(() => Target.Persist(myRange, new List<AggregatedScheduleChangedInfo>()));
 			}
 			else
 			{
-				var conflicts = Target.Persist(myRange);
+				var conflicts = Target.Persist(myRange, new List<AggregatedScheduleChangedInfo>());
 				Then(conflicts);
 				Then(myRange);
 

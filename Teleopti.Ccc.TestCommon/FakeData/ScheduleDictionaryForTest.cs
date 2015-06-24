@@ -44,6 +44,15 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			TakeSnapshot();
 		}
 
+		public void AddPersonAssignmentsWithoutSnapshot(params IPersonAssignment[] personAssignments)
+		{
+			var person = personAssignments.First().Person;
+			var scheduleRange = new ScheduleRange(this, new ScheduleParameters(Scenario, person, Period.VisiblePeriod));
+			foreach (var personAssignment in personAssignments)
+				scheduleRange.Add(personAssignment);
+			BaseDictionary.Add(person, scheduleRange);
+		}
+
 
 
 		public static IScheduleDictionary WithPersonAbsence(IScenario scenario, DateTimePeriod period, IPersonAbsence personAbsence)

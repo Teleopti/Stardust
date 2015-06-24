@@ -1,7 +1,6 @@
 using Autofac;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -13,13 +12,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	internal class UnitOfWorkModule : Module
 	{
-		private readonly IIocConfiguration _configuration;
-
-		public UnitOfWorkModule(IIocConfiguration configuration)
-		{
-			_configuration = configuration;
-		}
-
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<CurrentUnitOfWork>().As<ICurrentUnitOfWork>().SingleInstance();
@@ -36,10 +28,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.SingleInstance();
 
 			builder.RegisterType<EventsMessageSender>().As<IMessageSender>().SingleInstance();
-
-			if (_configuration.Toggle(Toggles.MessageBroker_SchedulingScreenMailbox_32733))
-				builder.RegisterType<AggregatedScheduleChangeSender>().As<IMessageSender>().AsSelf().SingleInstance();
-
 			builder.RegisterType<CurrentBusinessUnit>().As<ICurrentBusinessUnit>().SingleInstance();
 
 			// placed here because at the moment uow is the "owner" of the *current* initiator identifier

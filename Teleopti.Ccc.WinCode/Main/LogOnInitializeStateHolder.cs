@@ -5,11 +5,9 @@ using System.Xml.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.WinCode.Common.ServiceBus;
 using Teleopti.Ccc.WinCode.Services;
@@ -56,9 +54,6 @@ namespace Teleopti.Ccc.WinCode.Main
 				new PersonChangedMessageSender(eventPublisher, businessUnit),
 				new PersonPeriodChangedMessageSender(messageSender)
 			};
-			if(container.Resolve<IToggleManager>().IsEnabled(Toggles.MessageBroker_SchedulingScreenMailbox_32733))
-				senders.Add(container.Resolve<AggregatedScheduleChangeSender>());
-			
 			var messageSenders = new CurrentMessageSenders(senders);
 			var initializer =
 				new InitializeApplication(

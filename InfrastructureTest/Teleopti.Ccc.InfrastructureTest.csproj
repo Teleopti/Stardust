@@ -215,6 +215,7 @@
     <Compile Include="MultiTenancy\Server\Queries\PersistTenantTest.cs" />
     <Compile Include="MultiTenancy\Client\TenantClientTestAttribute.cs" />
     <Compile Include="Persisters\Schedules\NoUnitOfWorkModifyNoConflictTest.cs" />
+    <Compile Include="Persisters\Schedules\SchedulePersistMessageSendTest.cs" />
     <Compile Include="PrincipalAndStateTestAttribute.cs" />
     <Compile Include="Repositories\ExistingForecastRepositoryTest.cs" />
     <Compile Include="Repositories\OutboundCampaignRepositoryTest.cs" />
@@ -502,7 +503,6 @@
     <Compile Include="UnitOfWork\HandlingOfUowTest.cs" />
     <Compile Include="UnitOfWork\MeetingMessageSenderTest.cs" />
     <Compile Include="UnitOfWork\MessageSenders\EventsTest.cs" />
-    <Compile Include="UnitOfWork\MessageSenders\NotifyMessageBrokerTest.cs" />
     <Compile Include="UnitOfWork\NHibernateUnitOfWorkCommitCallbackTest.cs" />
     <Compile Include="UnitOfWork\NHibernateUnitOfWorkFactoryUnitTest.cs" />
     <Compile Include="UnitOfWork\NHibernateUnitOfWorkRealTest.cs" />

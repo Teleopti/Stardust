@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 			_scheduleDifferenceSaver = scheduleDifferenceSaver;
 		}
 
-		public IEnumerable<PersistConflict> Persist(IScheduleRange scheduleRange)
+		public IEnumerable<PersistConflict> Persist(IScheduleRange scheduleRange, List<AggregatedScheduleChangedInfo> modifiedPersonAssignments)
 		{
 			var diff = scheduleRange.DifferenceSinceSnapshot(_differenceCollectionService);
 			if (diff.IsNullOrEmpty())

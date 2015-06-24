@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -26,8 +27,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules.Concurrent
 			WhenOtherIsChanging(otherRange);
 			WhenImChanging(myRange);
 
-			var myTask = Task<IEnumerable<PersistConflict>>.Factory.StartNew(() => Target.Persist(myRange));
-			var otherTask = Task<IEnumerable<PersistConflict>>.Factory.StartNew(() => Target.Persist(otherRange));
+			var myTask = Task<IEnumerable<PersistConflict>>.Factory.StartNew(() => Target.Persist(myRange, new List<AggregatedScheduleChangedInfo>()));
+			var otherTask = Task<IEnumerable<PersistConflict>>.Factory.StartNew(() => Target.Persist(otherRange, new List<AggregatedScheduleChangedInfo>()));
 			Task.WaitAll(myTask, otherTask);
 
 			var myConflicts = myTask.Result.ToList();

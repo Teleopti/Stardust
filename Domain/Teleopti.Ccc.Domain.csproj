@@ -597,6 +597,7 @@
     <Compile Include="Outbound\CreateOrUpdateSkillDays.cs" />
     <Compile Include="Outbound\OutboundPeriodMover.cs" />
     <Compile Include="Repositories\ISeatPlanRepository.cs" />
+    <Compile Include="Scheduling\AggregatedScheduleChangedInfo.cs" />
     <Compile Include="Scheduling\Legacy\Commands\CurrentScheduleSummaryCalculator.cs" />
     <Compile Include="Scheduling\Legacy\Commands\ClassicDaysOffOptimizationCommand.cs" />
     <Compile Include="Scheduling\Legacy\Commands\FlexibelDayOffOptimizationDecisionMakerFactory.cs" />

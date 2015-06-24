@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void ShouldGetConflictChecker()
 		{
-			containerBuilder.RegisterModule(SchedulePersistModule.ForScheduler(null, null));
+			containerBuilder.RegisterModule(SchedulePersistModule.ForScheduler(null, null,null));
 			using (var container = containerBuilder.Build())
 			{
 				container.Resolve<IScheduleRangeConflictCollector>()
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		public void ShouldGetExplicitSetOwnMessage()
 		{
 			var reassociater = new reassociater();
-			containerBuilder.RegisterModule(SchedulePersistModule.ForScheduler(null, reassociater));
+			containerBuilder.RegisterModule(SchedulePersistModule.ForScheduler(null, reassociater,null));
 			using (var container = containerBuilder.Build())
 			{
 				container.Resolve<IReassociateDataForSchedules>()
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void ShouldGetExplicitSeMessageBrokerIdentifier()
 		{
-			containerBuilder.RegisterModule(SchedulePersistModule.ForScheduler(new FakeInitiatorIdentifier(), null));
+			containerBuilder.RegisterModule(SchedulePersistModule.ForScheduler(new FakeInitiatorIdentifier(), null,null));
 			using (var container = containerBuilder.Build())
 			{
 				container.Resolve<IInitiatorIdentifier>()

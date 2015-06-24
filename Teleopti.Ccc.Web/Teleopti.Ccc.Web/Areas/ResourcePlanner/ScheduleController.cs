@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
@@ -100,7 +101,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			var conflicts = new List<PersistConflict>();
 			foreach (var schedule in _schedulerStateHolder().Schedules)
 			{
-				conflicts.AddRange(_persister.Persist(schedule.Value));
+				conflicts.AddRange(_persister.Persist(schedule.Value, new List<AggregatedScheduleChangedInfo>()));
 			}
 			var scheduleOfSelectedPeople = _schedulerStateHolder().Schedules.Where(x => people.SelectedPeople.Contains(x.Key)).ToList();
 			var voilatedBusinessRules = new List<BusinessRulesValidationResult>();

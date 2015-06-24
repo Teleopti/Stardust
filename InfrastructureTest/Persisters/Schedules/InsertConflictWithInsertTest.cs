@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Interfaces.Domain;
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 
 		protected override void Then(IScheduleRange myScheduleRange)
 		{
-			Target.Persist(myScheduleRange);
+			Target.Persist(myScheduleRange, new List<AggregatedScheduleChangedInfo>());
 		}
 	}
 

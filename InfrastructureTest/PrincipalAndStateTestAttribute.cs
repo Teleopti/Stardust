@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			base.Setup(system, configuration);
-
+			
 			system.AddService(this);
 		}
 

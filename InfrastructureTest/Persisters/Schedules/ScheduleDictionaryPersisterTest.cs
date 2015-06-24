@@ -4,8 +4,11 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
@@ -22,11 +25,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			var sr2 = MockRepository.GenerateMock<IScheduleRange>();
 			var persister = MockRepository.GenerateMock<IScheduleRangePersister>();
 			var dic = createScheduleDictionaryWith(sr1, sr2);
-			var target = new ScheduleDictionaryPersister(persister);
+			var target = new ScheduleDictionaryPersister(persister, new EmptyAggregatedScheduleChangeSender());
 			target.Persist(dic);
 
-			persister.AssertWasCalled(x => x.Persist(sr1));
-			persister.AssertWasCalled(x => x.Persist(sr2));
+			persister.AssertWasCalled(x => x.Persist(sr1, new List<AggregatedScheduleChangedInfo>()));
+			persister.AssertWasCalled(x => x.Persist(sr2, new List<AggregatedScheduleChangedInfo>()));
 		}
 
 		[Test]
@@ -35,11 +38,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			var persister = MockRepository.GenerateMock<IScheduleRangePersister>();
 			var sr1 = MockRepository.GenerateMock<IScheduleRange>();
 			var sr2 = MockRepository.GenerateMock<IScheduleRange>();
-			persister.Expect(x => x.Persist(sr1)).Return(new List<PersistConflict> {createConflict(), createConflict()});
-			persister.Expect(x => x.Persist(sr2)).Return(new List<PersistConflict> {createConflict()});
+			persister.Expect(x => x.Persist(sr1, new List<AggregatedScheduleChangedInfo>())).Return(new List<PersistConflict> {createConflict(), createConflict()});
+			persister.Expect(x => x.Persist(sr2, new List<AggregatedScheduleChangedInfo>())).Return(new List<PersistConflict> {createConflict()});
 			var dic = createScheduleDictionaryWith(sr1, sr2);
-			
-			var target = new ScheduleDictionaryPersister(persister);
+
+			var target = new ScheduleDictionaryPersister(persister, new EmptyAggregatedScheduleChangeSender());
 			var res = target.Persist(dic);
 
 			res.Count().Should().Be.EqualTo(3);

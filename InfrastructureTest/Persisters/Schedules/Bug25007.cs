@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Interfaces.Domain;
 
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			day.CreateAndAddActivity(Activity, new DateTimePeriod(start, start.AddHours(2)), ShiftCategory);
 			DoModify(day);
 
-			var conflict = Target.Persist(myScheduleRange).Single();
+			var conflict = Target.Persist(myScheduleRange, new List<AggregatedScheduleChangedInfo>()).Single();
 
 			((IUnvalidatedScheduleRangeUpdate)myScheduleRange).SolveConflictBecauseOfExternalInsert(conflict.DatabaseVersion, false);
 			var dayAfterConflict = myScheduleRange.ScheduledDay(date);
