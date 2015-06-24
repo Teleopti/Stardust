@@ -147,7 +147,7 @@ wfm.config([
 		$translateProvider.preferredLanguage('en');
 	}
 ]).run([
-	'$rootScope', '$http', '$state', '$translate', 'amMoment', 'HelpService', function ($rootScope, $http, $state, $translate, angularMoment, HelpService) {
+	'$rootScope', '$http', '$state', '$translate', 'i18nService', 'amMoment', 'HelpService', function ($rootScope, $http, $state, $translate, i18nService, angularMoment, HelpService) {
 		var timeout = Date.now() + 10000;
 		$rootScope.isAuthenticated = false;
 
@@ -188,6 +188,7 @@ wfm.config([
 			$rootScope.isAuthenticated = true;
 			$translate.fallbackLanguage('en');
 			$translate.use(data.Language);
+			i18nService.setCurrentLang(data.Language);
 			angularMoment.changeLocale(data.DateFormat);
 			increaseTimeout();
 

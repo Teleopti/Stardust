@@ -4,7 +4,7 @@ angular
 	.module('wfm.people', ['peopleService', 'peopleSearchService', 'ui.grid.pagination'])
 	.constant('chunkSize', 50)
 	.controller('PeopleCtrl', [
-		'$scope', '$filter', '$state', '$document','$translate','i18nService','uiGridConstants', 'PeopleSearch', PeopleController
+		'$scope', '$filter', '$state', '$document', '$translate', 'i18nService', 'uiGridConstants', 'PeopleSearch', PeopleController
 	])
 	.directive('outsideClick', ['$document', '$parse', function ($window, $parse) {
 		return {
@@ -20,7 +20,7 @@ angular
 		};
 	}]);
 
-function PeopleController($scope, $filter, $state, $document,$translate,i18nService, uiGridConstants, SearchSvrc) {
+function PeopleController($scope, $filter, $state, $document, $translate, i18nService, uiGridConstants, SearchSvrc) {
 	$scope.searchResult = [];
 	$scope.pageSize = 20;
 	$scope.keyword = '';
@@ -29,6 +29,7 @@ function PeopleController($scope, $filter, $state, $document,$translate,i18nServ
 	$scope.searchKeywordChanged = false;
 	$scope.advancedSearchForm = {};
 	$scope.searchCriteriaDic = {};
+	$scope.lang = i18nService.getCurrentLang();
 	
 	var dynamicColumnLoaded = false;
 	var paginationOptions = {
@@ -62,7 +63,6 @@ function PeopleController($scope, $filter, $state, $document,$translate,i18nServ
 			{ displayName: 'Email', field: 'Email', cellTooltip: true, headerCellFilter: 'translate', enableSorting: false },
 			{ displayName: 'TerminalDate', field: 'LeavingDate', headerCellFilter: 'translate', enableSorting: false }
 		],
-		i18n: $translate.use(),
 		gridMenuTitleFilter: $translate,
 		exporterAllDataFn: function() {
 			return loadAllResults();
