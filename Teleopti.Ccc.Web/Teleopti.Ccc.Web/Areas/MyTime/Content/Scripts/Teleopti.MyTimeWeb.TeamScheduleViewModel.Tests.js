@@ -87,4 +87,50 @@ $(document).ready(function() {
 			equal(viewModel.toDrawSchedules()[0].agentName, "Andy Stephen", "view model was created and the agentName is 'Andy Stephen' ");
 		}, 1000);
 	});
+
+	asyncTest("should keep selected team when date change", function () {
+
+		Teleopti.MyTimeWeb.TeamScheduleViewModel.loadSchedule = function () { };
+
+		var ajax = {
+			Ajax: function (options) {
+				if (options.url == endpoints.loadTeams) {
+					options.success({
+						teams: [
+							   {
+							   	text: "team 1",
+							   	id: "0a1cdb27-bc01-4bb9-b0b3-9b5e015ab495"
+							   },
+							   {
+							   	text: "team 2",
+							   	id: "0a1cdb27-bc01-4bb9-b0b3-9b5e015ab496"
+							   }
+						],
+						allTeam: 'All Teams'
+					});
+				} else if (options.url == endpoints.loadDefaultTeam) {
+					options.success({ "DefaultTeam": "0a1cdb27-bc01-4bb9-b0b3-9b5e015ab495" });
+				}
+			}
+		};
+
+		Teleopti.MyTimeWeb.TeamScheduleViewModel.initCurrentDate = function () { };
+		var viewModel = Teleopti.MyTimeWeb.TeamScheduleViewModelFactory.createViewModel(endpoints, ajax);
+
+		viewModel.selectedTeam("0a1cdb27-bc01-4bb9-b0b3-9b5e015ab496");
+
+		setTimeout(function() {
+			viewModel.requestedDate(moment().add(1, 'day').startOf('day'));
+			assert();
+		},1000);
+
+		function assert() {
+			setTimeout(function () {
+				start();
+				equal(viewModel.selectedTeam(), "0a1cdb27-bc01-4bb9-b0b3-9b5e015ab496");
+			}, 1000);
+		};
+
+	});
+
 });

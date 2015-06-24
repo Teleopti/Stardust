@@ -115,6 +115,7 @@ Scenario: Default to my team
 	When I view group schedule for '2013-03-25'
 	Then The team picker should have 'The site/Team green' selected
 
+@ignore
 Scenario: Keep selected group when changing date
 	Given I have the role 'Access to view all group pages'
 	And I have a shift with
