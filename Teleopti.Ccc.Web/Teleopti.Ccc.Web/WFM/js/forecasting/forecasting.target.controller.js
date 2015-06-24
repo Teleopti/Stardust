@@ -25,6 +25,11 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 					$scope.isQueueStatisticsEnabled = result.IsEnabled;
 				});
 
+				$scope.isMethodsComparisonViewEnabled = false;
+				forecasting.isToggleEnabled.query({ toggle: 'WfmForecast_MethodsComparisonView_33610' }).$promise.then(function (result) {
+					$scope.isMethodsComparisonViewEnabled = result.IsEnabled;
+				});
+
 				var getQueueStatistics = function (workloadId, methodId) {
 					$scope.modalInfo.queueStatisticsLoading = true;
 					$http.post("../api/Forecasting/QueueStatistics", JSON.stringify({ WorkloadId: workloadId, MethodId: methodId })).

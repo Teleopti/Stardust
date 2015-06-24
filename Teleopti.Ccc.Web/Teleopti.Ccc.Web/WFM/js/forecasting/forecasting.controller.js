@@ -60,9 +60,9 @@ angular.module('wfm.forecasting', [])
 				dataX: { id: "date" }
 			};
 
-			$scope.isQueueStatisticsEnabled = false;
-			forecasting.isToggleEnabled.query({ toggle: 'WfmForecast_QueueStatistics_32572' }).$promise.then(function (result) {
-				$scope.isQueueStatisticsEnabled = result.IsEnabled;
+			$scope.isResultViewEnabled = false;
+			forecasting.isToggleEnabled.query({ toggle: 'WfmForecast_ResultView_33605' }).$promise.then(function (result) {
+				$scope.isResultViewEnabled = result.IsEnabled;
 			});
 
 			$scope.openModal = function (workload) {

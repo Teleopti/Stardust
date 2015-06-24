@@ -71,6 +71,8 @@
 		WfmPeople_AdvancedSearch_32973,
 		Wfm_Outbound_Campaign_32696,
 		WfmForecast_QueueStatistics_32572,
+		WfmForecast_ResultView_33605,
+		WfmForecast_MethodsComparisonView_33610,
 
 		Scheduler_OptimizeFlexibleDayOffs_22409,
 
