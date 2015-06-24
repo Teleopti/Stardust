@@ -1,6 +1,8 @@
 using System;
 using AutoMapper;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
@@ -12,29 +14,35 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 	{
 		private readonly IPreferenceFeedbackProvider _preferenceFeedbackProvider;
 		private readonly Lazy<IMappingEngine> _mapper;
+		private readonly IToggleManager _toggleManager;
 
-		public PreferenceDayFeedbackViewModelMappingProfile(IPreferenceFeedbackProvider preferenceFeedbackProvider, Lazy<IMappingEngine> mapper)
+		public PreferenceDayFeedbackViewModelMappingProfile(IPreferenceFeedbackProvider preferenceFeedbackProvider, Lazy<IMappingEngine> mapper, IToggleManager toggleManager)
 		{
 			_preferenceFeedbackProvider = preferenceFeedbackProvider;
 			_mapper = mapper;
+			_toggleManager = toggleManager;
 		}
 
 		protected override void Configure()
 		{
 			CreateMap<DateOnly, PreferenceDayFeedbackViewModel>()
 				.ConvertUsing(s =>
-				{
-					var nightRestResult = _preferenceFeedbackProvider.CheckNightRestViolation(s);
+				{					
 					var mappedResult = new PreferenceDayFeedbackViewModel
 					{
 						Date = s.ToFixedClientDateOnlyFormat(),
-						DateInternal = s.Date,
-						RestTimeToNextDay = nightRestResult.RestTimeToNextDay,
-						RestTimeToPreviousDay = nightRestResult.RestTimeToPreviousDay,
-						HasNightRestViolationToPreviousDay = nightRestResult.HasViolationToPreviousDay,
-						HasNightRestViolationToNextDay = nightRestResult.HasViolationToNextDay,
-						ExpectedNightRest = nightRestResult.ExpectedNightRest
+						DateInternal = s.Date,						
 					};
+
+					if (_toggleManager.IsEnabled(Toggles.MyTimeWeb_PreferenceShowNightViolation_33152))
+					{
+						var nightRestResult = _preferenceFeedbackProvider.CheckNightRestViolation(s);
+						mappedResult.RestTimeToNextDay = nightRestResult.RestTimeToNextDay;
+						mappedResult.RestTimeToPreviousDay = nightRestResult.RestTimeToPreviousDay;
+						mappedResult.HasNightRestViolationToPreviousDay = nightRestResult.HasViolationToPreviousDay;
+						mappedResult.HasNightRestViolationToNextDay = nightRestResult.HasViolationToNextDay;
+						mappedResult.ExpectedNightRest = nightRestResult.ExpectedNightRest;
+					}
 
 					var workTimeResult = _preferenceFeedbackProvider.WorkTimeMinMaxForDate(s) ??
 					                     new WorkTimeMinMaxCalculationResult();

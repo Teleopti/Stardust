@@ -8,7 +8,9 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
@@ -35,6 +37,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 
 			var person = PersonFactory.CreatePersonWithGuid("a", "a");
 			system.AddService(person);
+
+			var toggleManager = new FakeToggleManager(Domain.FeatureFlags.Toggles.MyTimeWeb_PreferenceShowNightViolation_33152);
+			system.AddService(toggleManager);
 		}
 	}
 
@@ -264,15 +269,18 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 	public class PreferenceDayFeedbackViewModelMappingTest
 	{
 		private IPreferenceFeedbackProvider preferenceFeedbackProvider;
+		private IToggleManager toggleManager;
 
 		[SetUp]
 		public void Setup()
 		{
+			toggleManager = new FakeToggleManager();
+
 			preferenceFeedbackProvider = MockRepository.GenerateMock<IPreferenceFeedbackProvider>();
 			preferenceFeedbackProvider.Stub(x => x.CheckNightRestViolation(DateOnly.Today)).Return(new PreferenceNightRestCheckResult());
 
 			Mapper.Reset();
-			Mapper.Initialize(x => x.AddProfile(new PreferenceDayFeedbackViewModelMappingProfile(preferenceFeedbackProvider, new Lazy<IMappingEngine>(() => Mapper.Engine))));
+			Mapper.Initialize(x => x.AddProfile(new PreferenceDayFeedbackViewModelMappingProfile(preferenceFeedbackProvider, new Lazy<IMappingEngine>(() => Mapper.Engine), toggleManager)));
 		}
 
 		[Test]
