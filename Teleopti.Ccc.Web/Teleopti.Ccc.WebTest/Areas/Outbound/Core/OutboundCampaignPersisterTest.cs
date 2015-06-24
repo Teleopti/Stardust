@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -15,6 +16,157 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 {
+	[TestFixture]
+	class OutboundCampaignPersisterIntegrationTest
+	{
+		private OutboundCampaignPersister _outboundCampaignPersister;
+		private FakeCampaignRepository _fakeCampaignRepository;
+		private FakeSkillRepository _fakeSkillRepository;
+		private CampaignForm _campaignInput;
+
+		[SetUp]
+		public void Init()
+		{
+			_campaignInput =  new CampaignForm()
+			{
+				Name = "myCampaign",
+				CallListLen = 1000,
+				ConnectRate = 50,
+				RightPartyConnectRate = 30,
+				ConnectAverageHandlingTime = 60,
+				RightPartyAverageHandlingTime = 100,
+				UnproductiveTime = 150,
+				StartDate = new DateOnly(2015,6,23),
+				EndDate = new DateOnly(2100,1,1),
+				WorkingHours = new List<CampaignWorkingHour>()
+				{
+					new CampaignWorkingHour(){WeekDay = DayOfWeek.Monday, WorkingPeriod = new TimePeriod(new TimeSpan(9,0,0), new TimeSpan(17,0,0))},
+					new CampaignWorkingHour(){WeekDay = DayOfWeek.Tuesday, WorkingPeriod = new TimePeriod(new TimeSpan(9,0,0), new TimeSpan(17,0,0))},
+					new CampaignWorkingHour(){WeekDay = DayOfWeek.Wednesday, WorkingPeriod = new TimePeriod(new TimeSpan(9,0,0), new TimeSpan(17,0,0))},
+					new CampaignWorkingHour(){WeekDay = DayOfWeek.Thursday, WorkingPeriod = new TimePeriod(new TimeSpan(9,0,0), new TimeSpan(17,0,0))},
+					new CampaignWorkingHour(){WeekDay = DayOfWeek.Friday, WorkingPeriod = new TimePeriod(new TimeSpan(9,0,0), new TimeSpan(17,0,0))},
+					new CampaignWorkingHour(){WeekDay = DayOfWeek.Saturday, WorkingPeriod = new TimePeriod(new TimeSpan(10,0,0), new TimeSpan(15,0,0))},
+					new CampaignWorkingHour(){WeekDay = DayOfWeek.Sunday, WorkingPeriod = new TimePeriod(new TimeSpan(10,0,0), new TimeSpan(15,0,0))}
+				}
+			};
+
+			var skillCreator = MockRepository.GenerateMock<IOutboundSkillCreator>();
+			skillCreator.Stub(x => x.CreateSkill(null, null)).IgnoreArguments().Return(SkillFactory.CreateSkillWithWorkloadAndSources());
+
+			_fakeCampaignRepository = new FakeCampaignRepository();
+			_fakeSkillRepository = new FakeSkillRepository();
+			
+			_outboundCampaignPersister = new OutboundCampaignPersister(_fakeCampaignRepository, _fakeSkillRepository,
+				new OutboundCampaignMapper(_fakeCampaignRepository), new OutboundCampaignViewModelMapper(),
+				skillCreator, new FakeActivityRepository(),
+				new OutboundSkillPersister(_fakeSkillRepository, new FakeWorkloadRepository()));
+		}
+
+		[Test]
+		public void ShouldPersistSkillWhenPersistingCampaign()
+		{
+			_outboundCampaignPersister.Persist(_campaignInput);
+
+			var campaigns = _fakeCampaignRepository.LoadAll();
+
+			campaigns.Count.Should().Be.EqualTo(1);
+			campaigns[0].Skill.Should().Be.SameInstanceAs(_fakeSkillRepository.LoadAll().First());
+		}		
+		
+		[Test]
+		public void ShouldSetCampaignName()
+		{
+			_outboundCampaignPersister.Persist(_campaignInput);
+
+			var campaigns = _fakeCampaignRepository.LoadAll();
+			campaigns[0].Name.Should().Be.EqualTo(_campaignInput.Name);
+		}
+
+		[Test]
+		public void ShouldSetCallListLen()
+		{
+			_outboundCampaignPersister.Persist(_campaignInput);
+
+			var campaigns = _fakeCampaignRepository.LoadAll();
+			campaigns[0].CallListLen.Should().Be.EqualTo(_campaignInput.CallListLen);
+		}
+
+		[Test]
+		public void ShouldSetTargetRate()
+		{
+			_outboundCampaignPersister.Persist(_campaignInput);
+
+			var campaigns = _fakeCampaignRepository.LoadAll();
+			campaigns[0].TargetRate.Should().Be.EqualTo(_campaignInput.CallListLen * _campaignInput.ConnectRate / 100);
+		}
+
+		[Test]
+		public void ShouldSetConnectRate()
+		{
+			_outboundCampaignPersister.Persist(_campaignInput);
+
+			var campaigns = _fakeCampaignRepository.LoadAll();
+			campaigns[0].ConnectRate.Should().Be.EqualTo(_campaignInput.ConnectRate);
+		}
+
+		[Test]
+		public void ShouldSetRightPartyConnectRate()
+		{
+			_outboundCampaignPersister.Persist(_campaignInput);
+
+			var campaigns = _fakeCampaignRepository.LoadAll();
+			campaigns[0].RightPartyConnectRate.Should().Be.EqualTo(_campaignInput.RightPartyConnectRate);
+		}
+
+		[Test]
+		public void ShouldSetConnectAverageHandlingTime()
+		{
+			_outboundCampaignPersister.Persist(_campaignInput);
+
+			var campaigns = _fakeCampaignRepository.LoadAll();
+			campaigns[0].ConnectAverageHandlingTime.Should().Be.EqualTo(_campaignInput.ConnectAverageHandlingTime);
+		}
+
+		[Test]
+		public void ShouldSetRightPartyAverageHandlingTime()
+		{
+			_outboundCampaignPersister.Persist(_campaignInput);
+
+			var campaigns = _fakeCampaignRepository.LoadAll();
+			campaigns[0].RightPartyAverageHandlingTime.Should().Be.EqualTo(_campaignInput.RightPartyAverageHandlingTime);
+		}
+
+		[Test]
+		public void ShouldSetUnproductiveTime()
+		{
+			_outboundCampaignPersister.Persist(_campaignInput);
+
+			var campaigns = _fakeCampaignRepository.LoadAll();
+			campaigns[0].UnproductiveTime.Should().Be.EqualTo(_campaignInput.UnproductiveTime);
+		}
+
+		[Test]
+		public void ShouldSetSpanningPeriod()
+		{
+			_outboundCampaignPersister.Persist(_campaignInput);
+
+			var campaigns = _fakeCampaignRepository.LoadAll();
+			campaigns[0].SpanningPeriod.Should().Be.EqualTo(new DateOnlyPeriod(_campaignInput.StartDate, _campaignInput.EndDate));
+		}
+
+		[Test]
+		public void ShouldSetWorkingHours()
+		{
+			_outboundCampaignPersister.Persist(_campaignInput);
+			
+			var campaigns = _fakeCampaignRepository.LoadAll();
+			for (var i = 0; i < 7; ++i)
+			{
+				campaigns[0].WorkingHours[_campaignInput.WorkingHours[i].WeekDay].Should().Be.EqualTo(_campaignInput.WorkingHours[i].WorkingPeriod);
+			}
+		}
+	}
+
 	[TestFixture]
 	class OutboundCampaignPersisterTest
 	{

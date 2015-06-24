@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -9,34 +10,41 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 {
 	public class FakeSkillRepository : ISkillRepository
 	{
-		public void Add(ISkill entity)
+		private IList<ISkill> _skills;
+ 
+		public FakeSkillRepository()
 		{
-			throw new NotImplementedException();
+			_skills = new List<ISkill>();
 		}
 
-		public void Remove(ISkill entity)
+		public void Add(ISkill skill)
 		{
-			throw new NotImplementedException();
+			_skills.Add(skill);
+		}
+
+		public void Remove(ISkill skill)
+		{
+			_skills.Remove(_skills.First(x => x.Id == skill.Id));
 		}
 
 		public ISkill Get(Guid id)
 		{
-			throw new NotImplementedException();
+			return _skills.First(x => x.Id == id);
 		}
 
 		public IList<ISkill> LoadAll()
 		{
-			throw new NotImplementedException();
+			return _skills;
 		}
 
 		public ISkill Load(Guid id)
 		{
-			throw new NotImplementedException();
+			return _skills.First(x => x.Id == id);
 		}
 
 		public long CountAllEntities()
 		{
-			throw new NotImplementedException();
+			return _skills.Count;
 		}
 
 		public void AddRange(IEnumerable<ISkill> entityCollection)

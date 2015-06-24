@@ -52,6 +52,39 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			return _outboundCampaignViewModelMapper.Map(campaign);
 		}
 
+		public CampaignViewModel Persist(CampaignForm form)
+		{
+			var campaign = new Campaign()
+			{
+				Name = form.Name,
+				CallListLen = form.CallListLen,
+				ConnectRate = form.ConnectRate,
+				RightPartyConnectRate = form.RightPartyConnectRate,
+				ConnectAverageHandlingTime = form.ConnectAverageHandlingTime,
+				RightPartyAverageHandlingTime = form.RightPartyAverageHandlingTime,
+				UnproductiveTime = form.UnproductiveTime,
+				SpanningPeriod = new DateOnlyPeriod(form.StartDate, form.EndDate)
+			};
+
+			campaign.TargetRate = form.CallListLen * form.ConnectRate / 100;
+			if (form.WorkingHours != null)
+			{
+				foreach (CampaignWorkingHour workingHour in form.WorkingHours)
+				{
+					campaign.WorkingHours.Add(workingHour.WeekDay, workingHour.WorkingPeriod);
+				}
+			}
+
+			var activity = _activityRepository.LoadAll().First();
+			var skill = _outboundSkillCreator.CreateSkill(activity, campaign);
+			_outboundSkillPersister.PersistSkill(skill);
+
+			campaign.Skill = skill;
+			_outboundCampaignRepository.Add(campaign);
+
+			return _outboundCampaignViewModelMapper.Map(campaign);
+		}
+
 		public Campaign Persist(CampaignViewModel campaignViewModel)
 		{
 			var skills = _skillRepository.LoadAll();

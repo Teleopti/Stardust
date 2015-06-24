@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 			set { _workingHours = value; }
 		}
 
-		public virtual DateOnlyPeriod SpanningPeriod //remove start and endate, persist this as not nullable
+		public virtual DateOnlyPeriod SpanningPeriod
 		{
 			get { return _spanningPeriod; }
 			set { _spanningPeriod = value; }

@@ -142,6 +142,7 @@
     <Compile Include="FakeCurrentBusinessUnit.cs" />
     <Compile Include="FakeCurrentMessageSenders.cs" />
     <Compile Include="FakeData\FakeActivityRepository.cs" />
+    <Compile Include="FakeData\FakeCampaignRepository.cs" />
     <Compile Include="FakeData\FakeClassicScheduleCommand.cs" />
     <Compile Include="FakeData\FakeCommonStateHolder.cs" />
     <Compile Include="FakeData\FakeCurrentIdentity.cs" />
@@ -163,6 +164,7 @@
     <Compile Include="FakeData\FakeTeamBlockScheduleCommand.cs" />
     <Compile Include="FakeData\FakeUnitOfWork.cs" />
     <Compile Include="FakeData\FakeUnitOfWorkFactory.cs" />
+    <Compile Include="FakeData\FakeWorkloadRepository.cs" />
     <Compile Include="FakeData\PersonScheduleDayReadModelFactory.cs" />
     <Compile Include="FakeEventPublisher.cs" />
     <Compile Include="FakeHangfireEventClient.cs" />
