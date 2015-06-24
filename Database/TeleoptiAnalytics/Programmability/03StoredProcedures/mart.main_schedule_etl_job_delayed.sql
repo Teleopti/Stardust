@@ -14,6 +14,10 @@ SET @stored_procedure=N'mart.main_convert_fact_schedule_ccc8_run'
 IF EXISTS (select shift_startdate_local_id FROM mart.fact_schedule)
 RETURN
 
+--fact_schedule_old exists
+IF (NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'mart' AND  TABLE_NAME = 'fact_schedule_old'))
+RETURN
+
 --already added to delayed job
 IF EXISTS (select 1 FROM mart.etl_job_delayed WHERE stored_procedured = @stored_procedure)
 RETURN

@@ -14,6 +14,10 @@ SET @stored_procedure=N'mart.etl_fact_agent_queue_load'
 IF EXISTS (select date_id FROM mart.fact_agent_queue)
 RETURN
 
+--fact_agent_queue_old exists
+IF (NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'mart' AND  TABLE_NAME = 'fact_agent_queue_old'))
+RETURN
+
 --already added to delayed job
 IF EXISTS (select 1 FROM mart.etl_job_delayed WHERE stored_procedured = @stored_procedure)
 RETURN
