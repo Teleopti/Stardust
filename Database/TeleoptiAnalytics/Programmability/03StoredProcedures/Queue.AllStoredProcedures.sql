@@ -60,7 +60,7 @@ BEGIN
     
     EXEC Queue.GetAndAddQueue @Endpoint,@Queue,@Subqueue,@QueueId=@QueueId OUTPUT;
 		
-	INSERT INTO Queue.Messages (QueueId,Payload,ProcessingUntil,ExpiresAt,Processed,Headers,CreatedAt) VALUES (@QueueId,@Payload,ISNULL(@ProcessingUntil,GetUtcDate()),@ExpiresAt,0,@Headers,@CreatedAt)
+	INSERT INTO Queue.Messages (QueueId,Payload,ProcessingUntil,ExpiresAt,Processed,Headers,CreatedAt) VALUES (@QueueId,@Payload,GetUtcDate(),@ExpiresAt,0,@Headers,GetUtcDate())
 END
 GO
 ----
