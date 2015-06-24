@@ -36,6 +36,8 @@ namespace Teleopti.Support.Security
 				var commandLineArgument = new CommandLineArgument(args);
 				var tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(commandLineArgument.ApplicationDbConnectionString());
 				var updateTenantData = new UpdateTenantData(tenantUnitOfWorkManager);
+				updateTenantData.UpdateTenantConnectionStrings(commandLineArgument.ApplicationDbConnectionStringToStore(), commandLineArgument.AnalyticsDbConnectionStringToStore());
+				updateTenantData.RegenerateTenantPasswords();
 				if (!string.IsNullOrEmpty(commandLineArgument.AggDatabase))
 				{
 					//this if needs to be here to be able to run this from freemium (no anal db)
@@ -51,8 +53,6 @@ namespace Teleopti.Support.Security
 				LicenseStatusChecker.Execute(commandLineArgument);
 				convertDayOffToNewStructure(commandLineArgument);
 				initAuditData(commandLineArgument);
-				updateTenantData.RegenerateTenantPasswords();
-				updateTenantData.UpdateTenantConnectionStrings(commandLineArgument.ApplicationDbConnectionStringToStore(), commandLineArgument.AnalyticsDbConnectionStringToStore());
 			}
 			catch (Exception e)
 			{
