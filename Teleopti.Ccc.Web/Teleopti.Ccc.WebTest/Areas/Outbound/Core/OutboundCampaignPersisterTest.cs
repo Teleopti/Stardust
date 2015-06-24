@@ -36,8 +36,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 				ConnectAverageHandlingTime = 60,
 				RightPartyAverageHandlingTime = 100,
 				UnproductiveTime = 150,
-				StartDate = new DateOnly(2015,6,23),
-				EndDate = new DateOnly(2100,1,1),
+				StartDate = new DateOnly(2015, 6, 23),
+				EndDate = new DateOnly(2100, 1, 1),
 				WorkingHours = new List<CampaignWorkingHour>()
 				{
 					new CampaignWorkingHour(){WeekDay = DayOfWeek.Monday, WorkingPeriod = new TimePeriod(new TimeSpan(9,0,0), new TimeSpan(17,0,0))},
