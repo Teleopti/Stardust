@@ -135,7 +135,26 @@ label {
 	margin:0px!important;
 }
 
-//remove after styleguide rangepicker push
-.range > button{
-	background-color: #c2e085!important;
-}
+//workaround for missing tab style
+	.wfm-slide-tabs md-content {
+		padding: 10px 5px !important;
+	}
+
+	.wfm-slide-tabs md-tabs .md-tab.md-active {
+	  background-color: #09F!important;
+	  height: 79%;
+	}
+
+	.wfm-slide-tabs md-tabs .md-tab {
+		 margin-top: -8px;
+	}
+
+
+	.wfm-slide-tabs md-tabs-wrapper {
+		height: 30px !important;
+		background-color: #66c2ff !important;
+	}
+
+	.wfm-slide-tabs md-ink-bar{
+	  top: 28px;
+	}
