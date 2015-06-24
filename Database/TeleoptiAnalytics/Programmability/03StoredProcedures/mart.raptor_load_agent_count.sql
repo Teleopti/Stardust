@@ -35,7 +35,7 @@ BEGIN
 
 	insert into #temp
 	select f.date_id, f.interval_id, f.acd_login_id, f.ready_time_s
-	from mart.fact_agent f
+	from mart.fact_agent f WITH (NOLOCK) 
 	inner join mart.dim_date d
 		on d.date_id=f.date_id
 	where d.date_date between convert (varchar (10),@start_date,120) and convert (varchar(10),@end_date,120)
