@@ -10,10 +10,11 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 {
 	public class TenantUnitOfWorkManager : ITenantUnitOfWork, ICurrentTenantSession, IDisposable
 	{
-		private ISessionFactory _sessionFactory;
+		private readonly ISessionFactory _sessionFactory;
 
-		private TenantUnitOfWorkManager()
+		private TenantUnitOfWorkManager(ISessionFactory sessionFactory)
 		{
+			_sessionFactory = sessionFactory;
 		}
 
 		public static TenantUnitOfWorkManager CreateInstanceForHostsWithOneUser(string connectionString)
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 		private static TenantUnitOfWorkManager createInstance(string connectionString, string sessionContext)
 		{
 			if(connectionString==null)
-				return new TenantUnitOfWorkManager();
+				return new TenantUnitOfWorkManager(null);
 
 			var cfg = new Configuration()
 				.DataBaseIntegration(db =>
@@ -51,8 +52,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 				"Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Tenant.dbconf.xml"
 			}, typeof (TenantUnitOfWorkManager).Assembly);
 
-			var ret = new TenantUnitOfWorkManager {_sessionFactory = cfg.BuildSessionFactory()};
-			return ret;
+			return new TenantUnitOfWorkManager(cfg.BuildSessionFactory());
 		}
 
 		public ISession CurrentSession()
@@ -107,7 +107,6 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 			//to end just current transaction doesn't make sense in real code, but makes testing easier
 			CancelAndDisposeCurrent();
 			_sessionFactory.Dispose();
-			_sessionFactory = null;
 		}
 	}
 }
