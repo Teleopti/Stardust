@@ -4,9 +4,12 @@
 			<md-progress-linear md-mode="indeterminate"></md-progress-linear>
 		</div>
 		<div ng-if="!loading">
-			<div ng-repeat="method in methods">
+			<div class="alert-warning notice-spacer" ng-if="methods.length===0"><i class='mdi mdi-alert'></i> Warning: There is no historical data available for forecasting.</div>
+			<div ng-if="methods.length!==0" ng-repeat="method in methods">
 				<div class="row">
-					<h3>Forecast Method Id: {{method.MethodId}} <i class="mdi mdi-star" ng-if="method.IsSelected"> <md-tooltip>Best method</md-tooltip></i></h3> 
+					<h3>
+						Forecast Method Id: {{method.MethodId}} <i class="mdi mdi-star" ng-if="method.IsSelected"> <md-tooltip>Best method</md-tooltip></i>
+					</h3>
 					<h4>Accuracy: {{method.AccuracyNumber}}%</h4>
 				</div>
 				<div class="row">
