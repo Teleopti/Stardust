@@ -75,7 +75,7 @@ GOTO :error
 CD "%ROOTDIR%"
 
 ECHO Running: securityexe
-"%ROOTDIR%\..\Teleopti.Support.Security\bin\debug\Teleopti.Support.Security.exe" -DS%INSTANCE% -AP"%DATABASEAPP%" -AN"%DATABASEANAL%" -CD"%TeleoptiCCCAgg%" %Conn2%
+"%ROOTDIR%\..\Teleopti.Support.Security\bin\debug\Teleopti.Support.Security.exe" -DS%INSTANCE% -AP"%DATABASEAPP%" -AN"%DATABASEANAL%" -CD"%DATABASEAGG%" %Conn2%
 if %errorlevel% NEQ 0 (
 SET /A ERRORLEV=1
 GOTO :error
