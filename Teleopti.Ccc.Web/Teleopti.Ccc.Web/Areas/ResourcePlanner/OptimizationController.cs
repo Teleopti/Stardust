@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Specification;
@@ -77,7 +78,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			var conflicts = new List<PersistConflict>();
 			foreach (var schedule in _schedulerStateHolder().Schedules)
 			{
-				conflicts.AddRange(_persister.Persist(schedule.Value));
+				conflicts.AddRange(_persister.Persist(schedule.Value, new List<AggregatedScheduleChangedInfo>()));
 			}
 			return
 				Ok("Optimization was called");
