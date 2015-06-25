@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 			_connection.ConnectionString = connectionString;
 			_reportId = reportId;
 			int dbTimeOutFromConfig;
-			if (int.TryParse(ConfigurationManager.AppSettings["DbTimeout"], out dbTimeOutFromConfig))
+			if (int.TryParse(ConfigurationManager.AppSettings["DbTimeoutForReports"], out dbTimeOutFromConfig))
 				_dbTimeout = dbTimeOutFromConfig > 600
 									 ? 600
 									 : dbTimeOutFromConfig;
