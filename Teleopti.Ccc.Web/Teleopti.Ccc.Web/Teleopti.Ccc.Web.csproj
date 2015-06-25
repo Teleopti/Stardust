@@ -461,6 +461,8 @@
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IAbsenceRequestProbability.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IAbsenceRequestProbabilityProvider.cs" />
     <Compile Include="Areas\MyTime\Models\Settings\ChangePasswordResultInfo.cs" />
+    <Compile Include="Areas\Outbound\core\Campaign\DataProvider\IOutboundActivityProvider.cs" />
+    <Compile Include="Areas\Outbound\core\Campaign\DataProvider\OutboundActivityProvider.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\OutboundCampaignPersister.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\Mapping\IOutboundCampaignMapper.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\Mapping\IOutboundCampaignViewModelMapper.cs" />
@@ -1211,10 +1213,10 @@
     <Content Include="Areas\Reporting\ScheduleAdherence.aspx" />
     <Content Include="Areas\Reporting\Index.aspx" />
     <Content Include="Areas\Reporting\Views\Report\NoPermission.cshtml" />
-    <Content Include="WFM\html\forecasting\forecasting-dev.html" />
+	<Content Include="WFM\html\forecasting\forecasting-dev.html" />
     <Content Include="WFM\html\left-sidenav.html" />
     <Content Include="WFM\html\right-sidenav.html" />
-    <Content Include="WFM\js\forecasting\forecasting.dev.controller.js" />
+	<Content Include="WFM\js\forecasting\forecasting.dev.controller.js" />
     <Content Include="WFM\js\global\help.controller.js" />
     <Content Include="Content\jalaali-calendar-datepicker\moment-datepicker-jalaali-ext.js" />
     <Content Include="Content\jalaali-calendar-datepicker\moment-jalaali.js" />

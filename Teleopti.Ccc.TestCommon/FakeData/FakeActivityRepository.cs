@@ -18,6 +18,11 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			_activities = new List<IActivity>();
 		}
 
+		public void SetOutboundActivity(bool isOutboundActivity)
+		{
+			activity.IsOutboundActivity = isOutboundActivity;
+		}
+
 		public void Add(IActivity activity)
 		{
 			withoutAdd = false;

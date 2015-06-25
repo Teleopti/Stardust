@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
 			var expectedCampaignViewModel = new CampaignViewModel();
 			_outboundCampaignPersister.Stub(x => x.Persist(campaignForm.Name)).Return(expectedCampaignViewModel);
 
-			var target = new OutboundController(_outboundCampaignPersister, null, null) {Request = new HttpRequestMessage()};
+			var target = new OutboundController(_outboundCampaignPersister, null, null, null) {Request = new HttpRequestMessage()};
 			var result = target.CreateCampaign(campaignForm);
 
 			var contentResult = (CreatedNegotiatedContentResult<CampaignViewModel>)result;
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
 		{
 			var campaignForm = new CampaignForm() { Name = "myCampaign".PadRight(256, 'a') };
 
-			var target = new OutboundController(_outboundCampaignPersister, null, null) { Request = new HttpRequestMessage() };
+			var target = new OutboundController(_outboundCampaignPersister, null, null, null) { Request = new HttpRequestMessage() };
 			var result = target.CreateCampaign(campaignForm);
 
 			result.Should().Be.OfType<BadRequestErrorMessageResult>();
@@ -64,8 +64,20 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
 			_outboundCampaignRepository.Stub(x => x.LoadAll()).Return(campaigns);
 			_outboundCampaignViewModelMapper.Stub(x => x.Map(campaigns)).Return(campaignVMs);
 
-			var target = new OutboundController(null, _outboundCampaignRepository, _outboundCampaignViewModelMapper) { Request = new HttpRequestMessage() };
+			var target = new OutboundController(null, _outboundCampaignRepository, _outboundCampaignViewModelMapper, null) { Request = new HttpRequestMessage() };
 			var result = target.Get();
+
+			result.Count.Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldGetAllOutboundActivities()
+		{
+			var outboundActivityProvider = MockRepository.GenerateMock<IOutboundActivityProvider>();
+			outboundActivityProvider.Stub(x => x.GetAll()).Return(new List<ActivityViewModel>() {new ActivityViewModel()});
+
+			var target = new OutboundController(null, null, null, outboundActivityProvider) { Request = new HttpRequestMessage() };
+			var result = target.GetActivities();
 
 			result.Count.Should().Be.EqualTo(1);
 		}
@@ -79,7 +91,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
 			
 			_outboundCampaignRepository.Stub(x => x.Get(campaignId)).Return(campaign);
 			_outboundCampaignViewModelMapper.Stub((x => x.Map(campaign))).Return(campaignVM);
-			var target = new OutboundController(null, _outboundCampaignRepository, _outboundCampaignViewModelMapper)
+			var target = new OutboundController(null, _outboundCampaignRepository, _outboundCampaignViewModelMapper, null)
 			{
 				Request = new HttpRequestMessage()
 			};
@@ -95,7 +107,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
 			var campaignId = new Guid();
 			_outboundCampaignRepository.Stub(x => x.Get(campaignId)).IgnoreArguments().Return(campaign);
 	
-			var target = new OutboundController(null, _outboundCampaignRepository, null);
+			var target = new OutboundController(null, _outboundCampaignRepository, null, null);
 			target.Remove(campaignId);
 			_outboundCampaignRepository.AssertWasCalled(x=>x.Remove(campaign), o=>o.IgnoreArguments());			
 		}
@@ -104,7 +116,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
 		public void ShouldUpdateCampaignVM()
 		{		
 			var campaignVM = new CampaignViewModel();			
-			var target = new OutboundController(_outboundCampaignPersister, null, null);
+			var target = new OutboundController(_outboundCampaignPersister, null, null, null);
 			target.UpdateCampaign(new Guid(), campaignVM);
 			_outboundCampaignPersister.AssertWasCalled((x=>x.Persist(campaignVM)));
 		}
@@ -115,7 +127,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
 			var form = new CampaignWorkingPeriodAssignmentForm();
 			var formId = new Guid();
 			
-			var target = new OutboundController(_outboundCampaignPersister, null, null);
+			var target = new OutboundController(_outboundCampaignPersister, null, null, null);
 			target.UpdateCampaignWorkingPeriodAssignment(formId, form);
 			_outboundCampaignPersister.AssertWasCalled(x=>x.Persist(form));
 		}
@@ -132,7 +144,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
 			_outboundCampaignRepository.Stub(x => x.Get(Id)).Return(campaign);
 			campaign.Stub(x => x.CampaignWorkingPeriods).Return(new HashSet<CampaignWorkingPeriod>(){workingPeriod});
 
-			var target = new OutboundController(null, _outboundCampaignRepository, null);
+			var target = new OutboundController(null, _outboundCampaignRepository, null, null);
 			target.Remove(Id, workingPeriodId);
 			campaign.AssertWasCalled(x => x.RemoveWorkingPeriod(workingPeriod));
 		}

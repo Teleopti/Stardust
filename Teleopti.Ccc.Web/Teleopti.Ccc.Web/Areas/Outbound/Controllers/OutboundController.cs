@@ -24,12 +24,14 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		private readonly IOutboundCampaignPersister _outboundCampaignPersister;
 		private readonly IOutboundCampaignRepository _outboundCampaignRepository;
 		private readonly IOutboundCampaignViewModelMapper _outboundCampaignViewModelMapper;
+		private readonly IOutboundActivityProvider _outboundActivityProvider;
 
-		public OutboundController(IOutboundCampaignPersister outboundCampaignPersister, IOutboundCampaignRepository outboundCampaignRepository, IOutboundCampaignViewModelMapper outboundCampaignViewModelMapper)
+		public OutboundController(IOutboundCampaignPersister outboundCampaignPersister, IOutboundCampaignRepository outboundCampaignRepository, IOutboundCampaignViewModelMapper outboundCampaignViewModelMapper, IOutboundActivityProvider outboundActivityProvider)
 		{
 			_outboundCampaignPersister = outboundCampaignPersister;
 			_outboundCampaignRepository = outboundCampaignRepository;
 			_outboundCampaignViewModelMapper = outboundCampaignViewModelMapper;
+			_outboundActivityProvider = outboundActivityProvider;
 		}
 
 		[HttpPost, Route("api/Outbound/Campaign"), UnitOfWork]
@@ -49,6 +51,12 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 			var campaignViewModels = _outboundCampaignViewModelMapper.Map(campaigns);
 
 			return campaignViewModels.ToArray();
+		}
+
+		[HttpGet, Route("api/Outbound/Campaign/Activities"), UnitOfWork]
+		public virtual ICollection<ActivityViewModel> GetActivities()
+		{
+			return _outboundActivityProvider.GetAll().ToArray();
 		}
 
 		[HttpGet, Route("api/Outbound/Campaign/{Id}"), UnitOfWork]

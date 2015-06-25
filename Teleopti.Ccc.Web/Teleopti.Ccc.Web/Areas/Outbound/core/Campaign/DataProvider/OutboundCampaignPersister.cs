@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			return _outboundCampaignViewModelMapper.Map(campaign);
 		}
 
-		private IActivity getActivity(SelectedAcitvity selectedActivity)
+		private IActivity getActivity(ActivityViewModel selectedActivity)
 		{
 			var activity = _activityRepository.LoadAll().First();
 			if (selectedActivity == null) return activity;
