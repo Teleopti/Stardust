@@ -13,6 +13,12 @@
 		//to refresh if frame in frame
 		if (window.top != window.parent.self)
 			window.parent.parent.location = window.parent.location;
+		function hideThings() {
+			$("body").css("cursor", "progress");
+			$("#aspnetForm").fadeOut();
+			$("#reportData").fadeOut();
+			$("#divReportTable").fadeOut();
+		}
 	</script>
 	<link href="Content/Styles/persianDatepicker-default.css" rel="stylesheet" />
 	<link href="Content/Styles/Styles.css" rel="stylesheet" />
@@ -32,8 +38,8 @@
 						<asp:Label ID="labelPermissionDenied" runat="server" ForeColor="Red" Font-Size="Large" Visible="false"></asp:Label>
 					</div>
 					<div style="float: right; width: 69%">
-						<div style="float: left; width: 33%;">
-							<asp:ImageButton Style="float: right; margin-right: 25px" OnClick="buttonShowTheReport" ID="buttonShowReport" Width="48" Height="48" ImageUrl="images/icon-show.png" ToolTip='Show report' runat="server" />
+						<div id="buttonId" style="float: left; width: 33%;">
+							<asp:ImageButton Style="float: right; margin-right: 25px" OnClientClick="hideThings();" OnClick="buttonShowTheReport" ID="buttonShowReport" Width="48" Height="48" ImageUrl="images/icon-show.png" ToolTip='Show report' runat="server" />
 						</div>
 					</div>
 				</div>
@@ -105,11 +111,11 @@
 													<tr runat="server" >
 														<td runat="server" >
 															<asp:ImageButton ID="imageButtonPreviousDay" runat="server"
-																ImageUrl="images/previous.gif" OnClick="imageButtonPreviousDay_Click" /></td>
+																ImageUrl="images/previous.gif" OnClientClick="hideThings();" OnClick="imageButtonPreviousDay_Click" /></td>
 														<td id="tdDateText" runat="server" align="center">xx2008-07-02</td>
 														<td runat="server" >
 															<asp:ImageButton ID="imageButtonNextDay" runat="server"
-																ImageUrl="images/next.gif" OnClick="imageButtonNextDay_Click" /></td>
+																ImageUrl="images/next.gif" OnClientClick="hideThings();" OnClick="imageButtonNextDay_Click" /></td>
 
 													</tr>
 												</table>
