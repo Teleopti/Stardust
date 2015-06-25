@@ -39,6 +39,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			return new SchedulePersistModule(null, null, false, null);
 		}
 
+		public static SchedulePersistModule ForTest(Toggles toggle)
+		{
+			var toggleManager = new FakeToggleManager(toggle);
+			return new SchedulePersistModule(null, null, false, toggleManager);
+		}
+
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<ScheduleDictionaryPersister>().As<IScheduleDictionaryPersister>().SingleInstance();

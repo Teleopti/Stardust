@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon;
@@ -16,13 +17,14 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 {
 	[TestFixture]
-	[InfrastructureTest]
 	[Toggle(Toggles.MessageBroker_SchedulingScreenMailbox_32733)]
+	[InfrastructureTest]
 	public class SchedulePersistMessageSendTest : ISetup
 	{
 		public IScheduleDictionaryPersister Target;
@@ -41,7 +43,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.AddModule(SchedulePersistModule.ForOtherModules());
+			system.AddModule(SchedulePersistModule.ForTest(Toggles.MessageBroker_SchedulingScreenMailbox_32733));
 			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
 		}
 
