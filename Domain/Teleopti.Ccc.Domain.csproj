@@ -526,12 +526,14 @@
     <Compile Include="Forecasting\Angel\Accuracy\SkillAccuracy.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\WorkloadAccuracy.cs" />
     <Compile Include="Forecasting\Angel\AverageStatistics.cs" />
+    <Compile Include="Forecasting\Angel\IIntradayForecaster.cs" />
     <Compile Include="Forecasting\Angel\IndexVolumesMediumTermWithDayInMonth.cs" />
     <Compile Include="Forecasting\Angel\IndexVolumesShortTerm.cs" />
     <Compile Include="Forecasting\Angel\IndexVolumesMediumTerm.cs" />
     <Compile Include="Forecasting\Angel\ForecastWorkloadInput.cs" />
     <Compile Include="Forecasting\Angel\HistoricalPeriodProvider.cs" />
     <Compile Include="Forecasting\Angel\IHistoricalPeriodProvider.cs" />
+    <Compile Include="Forecasting\Angel\IntradayForecaster.cs" />
     <Compile Include="Forecasting\Angel\Methods\AhtAndAcw.cs" />
     <Compile Include="Forecasting\Angel\Methods\DateAndTask.cs" />
     <Compile Include="Forecasting\Angel\Methods\ForecastMethodProvider.cs" />

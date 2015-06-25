@@ -5,9 +5,9 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 {
 	public class ForecastingTargetMerger : IForecastingTargetMerger
 	{
-		public void Merge(IList<IForecastingTarget> forecastingTargets, IEnumerable<ITaskOwner> workloadDays)
+		public void Merge(IEnumerable<IForecastingTarget> forecastingTargets, IEnumerable<ITaskOwner> workloadDays)
 		{
-			var taskOwnerHelper = new TaskOwnerHelper(new List<ITaskOwner>(workloadDays));
+			var taskOwnerHelper = new TaskOwnerHelper(workloadDays);
 			taskOwnerHelper.BeginUpdate();
 			foreach (var target in forecastingTargets)
 			{

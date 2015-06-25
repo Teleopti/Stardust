@@ -394,6 +394,7 @@
     <Compile Include="Forecasting\Angel\DayWeekMonthIndexVolumesTest.cs" />
     <Compile Include="Forecasting\Angel\HistoricalPeriodProviderTest.cs" />
     <Compile Include="Forecasting\Angel\IndexVolumesFactory.cs" />
+    <Compile Include="Forecasting\Angel\IntradayForecasterTest.cs" />
     <Compile Include="Forecasting\Angel\Methods\ForecastMethodProviderTest.cs" />
     <Compile Include="Forecasting\Angel\Methods\SimpleAhtAndAcwCalculatorTest.cs" />
     <Compile Include="Forecasting\Angel\Methods\TeleoptiClassicBaseFake.cs" />

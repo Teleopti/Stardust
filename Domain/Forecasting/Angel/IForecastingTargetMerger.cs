@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 {
 	public interface IForecastingTargetMerger
 	{
-		void Merge(IList<IForecastingTarget> forecastingTargets, IEnumerable<ITaskOwner> workloadDays);
+		void Merge(IEnumerable<IForecastingTarget> forecastingTargets, IEnumerable<ITaskOwner> workloadDays);
 	}
 }

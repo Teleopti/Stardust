@@ -27,6 +27,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<LinearRegressionTrendCalculator>()
 				.SingleInstance()
 				.As<ILinearTrendCalculator>();
+			builder.RegisterType<IntradayForecaster>()
+				.SingleInstance()
+				.As<IIntradayForecaster>();
 			builder.RegisterType<OutlierRemover>()
 				.SingleInstance()
 				.As<IOutlierRemover>();
