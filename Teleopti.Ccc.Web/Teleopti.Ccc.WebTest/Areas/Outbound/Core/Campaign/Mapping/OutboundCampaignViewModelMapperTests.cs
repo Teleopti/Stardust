@@ -14,26 +14,24 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core.Campaign.Mapping
 	[TestFixture]
 	internal class OutboundCampaignViewModelMapperTests
 	{
-		private IEnumerable<Domain.Outbound.Campaign> _campaigns;
+		private IList<Domain.Outbound.Campaign> _campaigns;
 		private OutboundCampaignViewModelMapper _target;
 		private Domain.Outbound.Campaign _campaign;
 		private IList<ISkill> _skills;
-		private ISkill _selectedSkill;
+		private ISkill _createdSkill;
 
 		[SetUp]
 		public void Setup()
 		{
-			var skill1 = SkillFactory.CreateSkillWithId("skill1");
-			var skill2 = SkillFactory.CreateSkillWithId("skill2");
-			var skill3 = SkillFactory.CreateSkillWithId("skill3");
+			_createdSkill = SkillFactory.CreateSkillWithId("skill1");
 
-			_skills = new List<ISkill> {skill1, skill2, skill3};
-			_selectedSkill = skill1;
+			_campaign = new Domain.Outbound.Campaign("myCampaign", _createdSkill);
+			_campaign.WorkingHours.Add(DayOfWeek.Monday, new TimePeriod(new TimeSpan(9,0,0), new TimeSpan(17,0,0)));
+			_campaign.WorkingHours.Add(DayOfWeek.Tuesday, new TimePeriod(new TimeSpan(9,0,0), new TimeSpan(17,0,0)));
+			_campaign.WorkingHours.Add(DayOfWeek.Wednesday, new TimePeriod(new TimeSpan(9,0,0), new TimeSpan(17,0,0)));
+			_campaign.WorkingHours.Add(DayOfWeek.Thursday, new TimePeriod(new TimeSpan(9,0,0), new TimeSpan(17,0,0)));
+			_campaign.WorkingHours.Add(DayOfWeek.Friday, new TimePeriod(new TimeSpan(9,0,0), new TimeSpan(17,0,0)));
 
-			_campaign = new Domain.Outbound.Campaign("myCampaign", _selectedSkill);
-			var workingPeriod = new CampaignWorkingPeriod() {TimePeriod = new TimePeriod()};
-			workingPeriod.AddAssignment(new CampaignWorkingPeriodAssignment(){WeekdayIndex = DayOfWeek.Monday});
-			_campaign.AddWorkingPeriod(workingPeriod);
 			_campaigns = new List<Domain.Outbound.Campaign> {_campaign};
 			_target = new OutboundCampaignViewModelMapper();
 		}
@@ -53,21 +51,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core.Campaign.Mapping
 		}
 
 		[Test]
-		public void ShouldMapSkillId()
+		public void ShouldMapActivityId()
 		{
 			var result = _target.Map(_campaigns);
-			var targetSkill = result.First().Skills.First();
+			var target = result.First().ActivityId;
 
-			targetSkill.Id.Should().Be.EqualTo(_skills.First().Id);
-		}
-
-		[Test]
-		public void ShouldMapSkillName()
-		{
-			var result = _target.Map(_campaigns);
-			var targetSkill = result.First().Skills.First();
-
-			targetSkill.SkillName.Should().Be.EqualTo(_skills.First().Name);
+			target.Should().Be.EqualTo(_createdSkill.Activity.Id);
 		}
 
 		[Test]
@@ -134,54 +123,27 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core.Campaign.Mapping
 		}
 
 		[Test]
-		public void ShouldMapCampaignWorkingPeriodId()
+		public void ShouldMapDayOfWeek()
 		{
 			var result = _target.Map(_campaigns);
-			result.First().CampaignWorkingPeriods.First().Id.Should().Be.EqualTo(_campaign.CampaignWorkingPeriods.First().Id);
-		}
+			var workingHours = result.First().WorkingHours.ToList();
 
-		[Test]
-		public void ShouldMapCampaignWorkingPeriodStartTime()
-		{
-			var expactedTime = new TimeSpan(6, 0, 0);
-			_campaigns.First().CampaignWorkingPeriods.First().TimePeriod = new TimePeriod(expactedTime, new TimeSpan(18, 0, 0));
-			var result = _target.Map(_campaigns);
-
-			result.First().CampaignWorkingPeriods.First().StartTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(expactedTime, CultureInfo.CurrentCulture));
+			for (var i = 0; i < 5; ++i)
+			{
+				_campaigns[0].WorkingHours.ContainsKey(workingHours[i].WeekDay).Should().Be.True();
+			}
 		}		
 		
 		[Test]
-		public void ShouldMapCampaignWorkingPeriodEndTime()
+		public void ShouldMapTimePeriod()
 		{
-			var expactedTime = new TimeSpan(18, 0, 0);
-			_campaigns.First().CampaignWorkingPeriods.First().TimePeriod = new TimePeriod(new TimeSpan(6, 0, 0), expactedTime);
 			var result = _target.Map(_campaigns);
+			var workingHours = result.First().WorkingHours.ToList();
 
-			result.First().CampaignWorkingPeriods.First().EndTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(expactedTime, CultureInfo.CurrentCulture));
-		}
-
-		[Test]
-		public void ShouldMapCampaignWorkingPeriodAssignmentsCount()
-		{
-			var result = _target.Map(_campaigns);
-			var assignments = result.First().CampaignWorkingPeriods.First().WorkingPeroidAssignments;
-			assignments.Count().Should().Be.EqualTo(_campaign.CampaignWorkingPeriods.First().CampaignWorkingPeriodAssignments.Count);
-		}			
-		
-		[Test]
-		public void ShouldMapCampaignWorkingPeriodAssignmentId()
-		{
-			var result = _target.Map(_campaigns);
-			var assignment = result.First().CampaignWorkingPeriods.First().WorkingPeroidAssignments.First();
-			assignment.Id.Should().Be.EqualTo(_campaign.CampaignWorkingPeriods.First().CampaignWorkingPeriodAssignments.First().Id);
-		}		
-		
-		[Test]
-		public void ShouldMapCampaignWorkingPeriodAssignmentWeekday()
-		{
-			var result = _target.Map(_campaigns);
-			var assignment = result.First().CampaignWorkingPeriods.First().WorkingPeroidAssignments.First();
-			assignment.WeekDay.Should().Be.EqualTo(_campaign.CampaignWorkingPeriods.First().CampaignWorkingPeriodAssignments.First().WeekdayIndex);
+			for (var i = 0; i < 5; ++i)
+			{
+				_campaigns[0].WorkingHours[workingHours[i].WeekDay].Should().Be.EqualTo(workingHours[i].WorkingPeriod);
+			}
 		}
 	}
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.Web.Areas.Outbound.Models;
@@ -10,7 +11,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping
 
 	public class OutboundCampaignViewModelMapper : IOutboundCampaignViewModelMapper
 	{
-
 		public CampaignWorkingPeriodAssignmentViewModel Map(CampaignWorkingPeriodAssignment assignment)
 		{
 			return new CampaignWorkingPeriodAssignmentViewModel { Id = assignment.Id, WeekDay = assignment.WeekdayIndex };
@@ -45,16 +45,13 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping
 		{
 			if (campaign == null) return null;
 
-			var skillVMs = new List<SkillViewModel>();
-
-			var vm = new SkillViewModel() { Id = campaign.Skill.Id, IsSelected = false, SkillName = campaign.Skill.Name };
-				skillVMs.Add(vm);
+			var workingHours = campaign.WorkingHours.Select(workingHour => new CampaignWorkingHour() {WeekDay = workingHour.Key, WorkingPeriod = workingHour.Value});
 
 			var campaignVm = new CampaignViewModel
 			{
 				Id = campaign.Id,
 				Name = campaign.Name,
-				Skills = skillVMs,
+				ActivityId = (Guid) campaign.Skill.Activity.Id,
 				CallListLen = campaign.CallListLen,
 				TargetRate = campaign.TargetRate,
 				ConnectRate = campaign.ConnectRate,
@@ -64,7 +61,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping
 				UnproductiveTime = campaign.UnproductiveTime,
 				StartDate = campaign.SpanningPeriod.StartDate,
 				EndDate = campaign.SpanningPeriod.EndDate,
-				CampaignWorkingPeriods = Map(campaign.CampaignWorkingPeriods).ToList(),
+				WorkingHours = workingHours
 			};
 
 			return campaignVm;

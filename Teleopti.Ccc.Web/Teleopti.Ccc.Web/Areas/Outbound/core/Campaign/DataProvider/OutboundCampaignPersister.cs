@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using NHibernate;
 using Teleopti.Ccc.Domain.Outbound;
@@ -18,19 +19,17 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 	public class OutboundCampaignPersister  : IOutboundCampaignPersister
 	{		
 		private readonly IOutboundCampaignRepository _outboundCampaignRepository;
-		private readonly ISkillRepository _skillRepository;
 		private readonly IOutboundCampaignMapper _outboundCampaignMapper;
 		private readonly IOutboundCampaignViewModelMapper _outboundCampaignViewModelMapper;
 		private readonly IOutboundSkillCreator _outboundSkillCreator;
 		private readonly IActivityRepository _activityRepository;
 		private readonly IOutboundSkillPersister _outboundSkillPersister;
 
-		public OutboundCampaignPersister(IOutboundCampaignRepository outboundCampaignRepository, ISkillRepository skillRepository, 
+		public OutboundCampaignPersister(IOutboundCampaignRepository outboundCampaignRepository,
 			IOutboundCampaignMapper outboundCampaignMapper, IOutboundCampaignViewModelMapper outboundCampaignViewModelMapper, 
 			IOutboundSkillCreator outboundSkillCreator, IActivityRepository activityRepository, IOutboundSkillPersister outboundSkillPersister)
 		{
 			_outboundCampaignRepository = outboundCampaignRepository;
-			_skillRepository = skillRepository;
 			_outboundCampaignMapper = outboundCampaignMapper;
 			_outboundCampaignViewModelMapper = outboundCampaignViewModelMapper;
 			_outboundSkillCreator = outboundSkillCreator;
@@ -74,32 +73,44 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 				}
 			}
 
-			IActivity activity = null;
-			if (form.Activity != null)
-			{
-				if (form.Activity.Id != null)
-				{
-					activity = _activityRepository.LoadAll().First(x => x.Id.Equals(form.Activity.Id));
-				}
-				else
-				{
-					activity = new Activity(form.Activity.Name);
-					_activityRepository.Add(activity);
-				}
-			}
-
+			var activity = getActivity(form.Activity);
 			var skill = _outboundSkillCreator.CreateSkill(activity, campaign);
 			_outboundSkillPersister.PersistSkill(skill);
-
 			campaign.Skill = skill;
+
 			_outboundCampaignRepository.Add(campaign);
 
 			return _outboundCampaignViewModelMapper.Map(campaign);
 		}
 
+		private IActivity getActivity(SelectedAcitvity selectedActivity)
+		{
+			var activity = _activityRepository.LoadAll().First();
+			if (selectedActivity == null) return activity;
+			if (selectedActivity.Id != null)
+			{
+				activity = _activityRepository.LoadAll().First(x => x.Id.Equals(selectedActivity.Id));
+			}
+			else
+			{
+				activity = new Activity(selectedActivity.Name)
+				{
+					DisplayColor = Color.Black,
+					InContractTime = true,
+					InPaidTime = true,
+					InWorkTime = true,
+					RequiresSkill = true,
+					IsOutboundActivity = true,
+					AllowOverwrite = true
+				};
+				_activityRepository.Add(activity);
+			}
+
+			return activity;
+		}
+
 		public Campaign Persist(CampaignViewModel campaignViewModel)
 		{
-			var skills = _skillRepository.LoadAll();
 			Campaign campaign = null;
 
 			if (campaignViewModel.Id.HasValue)
@@ -107,10 +118,8 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 				campaign = _outboundCampaignMapper.Map(campaignViewModel);
 			}
 
-			if (campaign != null) campaign.Skill = skills.First(x => x.Id.Equals(campaignViewModel.Skills.First(t => t.IsSelected).Id));
 			return campaign;
 		}
-
 
 		public CampaignWorkingPeriod Persist(CampaignWorkingPeriodForm form)
 		{

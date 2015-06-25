@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Outbound.Models
@@ -9,7 +8,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 	{
 		public Guid? Id;
 		public string Name;
-		public IEnumerable<SkillViewModel> Skills;  
+		public Guid ActivityId;  
 		public int CallListLen;
 		public int TargetRate;
 		public int ConnectRate;
@@ -19,6 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 		public int UnproductiveTime;
 		public DateOnly StartDate;
 		public DateOnly EndDate;
+		public IEnumerable<CampaignWorkingHour> WorkingHours { get; set; }
 		public IEnumerable<CampaignWorkingPeriodViewModel> CampaignWorkingPeriods;		
 	}
 
