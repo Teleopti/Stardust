@@ -5,6 +5,7 @@ using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Infrastructure.Persisters.Refresh;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
+using Teleopti.Ccc.IocCommon.Toggle;
 
 namespace Teleopti.Ccc.IocCommonTest.Configuration
 {
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
         [SetUp]
         public void Setup()
         {
-            _module = new ScheduleScreenRefresherModule();
+            _module = new ScheduleScreenRefresherModule(new IocConfiguration(null, new FakeToggleManager()));
 			_containerBuilder = new ContainerBuilder();
 			_containerBuilder.RegisterModule(CommonModule.ForTest());
 			_containerBuilder.RegisterModule(_module);

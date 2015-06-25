@@ -60,7 +60,7 @@ namespace Teleopti.Messaging.Client.Http
 				var interval = TimeSpan.FromSeconds(double.Parse(configInterval, CultureInfo.InvariantCulture));
 				_time.StartTimer(o => _eventHandlers.ForAll(s =>
 				{
-					var rawMessages = _client.Get("PopMessages/" + s.MailboxId);
+					var rawMessages = _client.Get("MessageBroker/PopMessages/" + s.MailboxId);
 					var messages = _jsonDeserializer.DeserializeObject<Message[]>(rawMessages);
 					messages.ForEach(m => _eventHandlers.CallHandlers(m));
 				}), null, interval, interval);

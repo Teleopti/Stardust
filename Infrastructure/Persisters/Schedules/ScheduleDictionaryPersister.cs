@@ -9,7 +9,8 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 		private readonly IScheduleRangePersister _scheduleRangePersister;
 		private readonly IAggregatedScheduleChangeSender _aggregatedScheduleChangeSender;
 
-		public ScheduleDictionaryPersister(IScheduleRangePersister scheduleRangePersister,
+		public ScheduleDictionaryPersister(
+			IScheduleRangePersister scheduleRangePersister,
 			IAggregatedScheduleChangeSender aggregatedScheduleChangeSender)
 		{
 			_scheduleRangePersister = scheduleRangePersister;

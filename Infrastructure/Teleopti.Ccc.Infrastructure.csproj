@@ -237,6 +237,9 @@
     <Compile Include="LiteUnitOfWork\ReadModelUnitOfWork\ReadModelUnitOfWorkFactory.cs" />
     <Compile Include="LiteUnitOfWork\ReadModelUnitOfWork\ReadModelUnitOfWorkState.cs" />
     <Compile Include="MessageBroker\MailboxRepository.cs" />
+    <Compile Include="MessageBroker\Scheduling\IScheduleChangeSubscriber.cs" />
+    <Compile Include="MessageBroker\Scheduling\MailboxSubscriber.cs" />
+    <Compile Include="MessageBroker\Scheduling\SignalRSubscriber.cs" />
     <Compile Include="MultiTenancy\Admin\ILoadAllTenants.cs" />
     <Compile Include="MultiTenancy\Admin\IRegenerateAllTenantPasswords.cs" />
     <Compile Include="MultiTenancy\Admin\ITenantExists.cs" />

@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autofac;
+using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Infrastructure.MessageBroker.Scheduling;
 using Teleopti.Ccc.Infrastructure.Persisters.Refresh;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using log4net;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -25,6 +26,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private readonly Guid _instanceId = Guid.NewGuid();
 		private static readonly ILog Log = LogManager.GetLogger(typeof(SchedulerMessageBrokerHandler));
 		private readonly IList<IEventMessage> _messageQueue = new List<IEventMessage>();
+		private readonly IScheduleChangeSubscriber _scheduleChangeSubscriber;
 
 		public Guid InitiatorId
 		{
@@ -54,33 +56,27 @@ namespace Teleopti.Ccc.Win.Scheduling
 					TypedParameter.From<IMessageQueueRemoval>(this)
 					))
 			);
+			_scheduleChangeSubscriber = container.Resolve<IScheduleChangeSubscriber>();
 		}
 
 		public void Listen(DateTimePeriod period)
 		{
-			// add new message listener here
-			// DO PLEASE DONT! ;)
+			_scheduleChangeSubscriber.Subscribe(_owner.SchedulerState.RequestedScenario.Id.GetValueOrDefault(), period, onEventMessage);
 
-			StateHolder.Instance.StateReader.ApplicationScopeData.Messaging.RegisterEventSubscription(OnEventMessage,
-			                                                                                          _owner.SchedulerState.RequestedScenario.Id.GetValueOrDefault(), typeof (Scenario), typeof (IScheduleChangedEvent),
-			                                                                                          period.StartDateTime,
-			                                                                                          period.EndDateTime);
-			StateHolder.Instance.StateReader.ApplicationScopeData.Messaging.RegisterEventSubscription(OnEventMessage,
-																					   typeof(IPersistableScheduleData),
-																					   period.StartDateTime,
-																					   period.EndDateTime);
-			StateHolder.Instance.StateReader.ApplicationScopeData.Messaging.RegisterEventSubscription(OnEventMessage,
-																					   typeof(IMeeting));
-			StateHolder.Instance.StateReader.ApplicationScopeData.Messaging.RegisterEventSubscription(OnEventMessage,
-																					   typeof(IPersonRequest));
+			StateHolder.Instance.StateReader.ApplicationScopeData.Messaging.RegisterEventSubscription(
+				onEventMessage,
+				typeof(IPersistableScheduleData),
+				period.StartDateTime,
+				period.EndDateTime);
+			StateHolder.Instance.StateReader.ApplicationScopeData.Messaging.RegisterEventSubscription(
+				onEventMessage,
+				typeof(IMeeting));
+			StateHolder.Instance.StateReader.ApplicationScopeData.Messaging.RegisterEventSubscription(
+				onEventMessage,
+				typeof(IPersonRequest));
 		}
-
-		private void stopListen()
-		{
-			StateHolder.Instance.StateReader.ApplicationScopeData.Messaging.UnregisterSubscription(OnEventMessage);
-		}
-
-		private void OnEventMessage(object sender, EventMessageArgs e)
+		
+		private void onEventMessage(object sender, EventMessageArgs e)
 		{
 			if (_owner == null)
 				return;
@@ -90,7 +86,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (e.Message.ModuleId == InitiatorId) return;
 			if (_owner.InvokeRequired)
 			{
-				_owner.BeginInvoke(new EventHandler<EventMessageArgs>(OnEventMessage), sender, e);
+				_owner.BeginInvoke(new EventHandler<EventMessageArgs>(onEventMessage), sender, e);
 			}
 			else
 			{
@@ -349,6 +345,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			stopListen();
 			_owner = null;
+		}
+
+		private void stopListen()
+		{
+			StateHolder.Instance.StateReader.ApplicationScopeData.Messaging.UnregisterSubscription(onEventMessage);
 		}
 
 		#endregion

@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon;
@@ -17,7 +16,6 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
@@ -29,12 +27,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 	{
 		public IScheduleDictionaryPersister Target;
 		public FakeMessageSender MessageSender;
+		public FakeInitiatorIdentifier InitiatorIdentifier;
+
 		public ICurrentDataSource DataSource;
 		public ICurrentBusinessUnit BusinessUnit;
 		public ICurrentScenario CurrentScenario;
 
 		public IJsonDeserializer Deserializer;
-
 		public ICurrentUnitOfWorkFactory UnitOfWorkFactory;
 		public IActivityRepository ActivityRepository;
 		public IShiftCategoryRepository ShiftCategoryRepository;
@@ -45,6 +44,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		{
 			system.AddModule(SchedulePersistModule.ForTest(Toggles.MessageBroker_SchedulingScreenMailbox_32733));
 			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
+			system.UseTestDouble<FakeInitiatorIdentifier>().For<IInitiatorIdentifier>();
 		}
 
 		[Test]
@@ -90,6 +90,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			message.StartDateAsDateTime().Should().Be("2015-06-24 8:00".Utc());
 			message.EndDateAsDateTime().Should().Be("2015-06-24 17:00".Utc());
 			message.DomainReferenceIdAsGuid().Should().Be(scenario.Id.Value);
+			message.DomainQualifiedType.Should().Be(typeof (IAggregatedScheduleChange).AssemblyQualifiedName);
 			message.DomainUpdateType.Should().Be(DomainUpdateType.NotApplicable);
 			message.BinaryData.Should().Contain(person.Id.ToString());
 		}
@@ -218,6 +219,34 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 
 			var message = MessageSender.NotificationsOfDomainType<IAggregatedScheduleChange>().Single();
 			message.EndDateAsDateTime().Should().Be("2015-06-25 17:00".Utc());
+		}
+
+		[Test]
+		public void ShouldSendWithInitiatorId()
+		{
+			InitiatorIdentifier.InitiatorId = Guid.NewGuid();
+			var scenario = new Scenario(".");
+			var person = PersonFactory.CreatePerson();
+			var period = new DateTimePeriod("2015-06-24 8:00".Utc(), "2015-06-24 17:00".Utc());
+			var activity = new Activity(".");
+			var shiftCategory = new ShiftCategory(".");
+			using (var uow = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			{
+				ActivityRepository.Add(activity);
+				ShiftCategoryRepository.Add(shiftCategory);
+				PersonRepository.Add(person);
+				ScenarioRepository.Add(scenario);
+				uow.PersistAll();
+			}
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, period, shiftCategory, scenario);
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, period);
+			scheduleDictionary.TakeSnapshot();
+			scheduleDictionary.AddPersonAssignmentsWithoutSnapshot(personAssignment);
+
+			Target.Persist(scheduleDictionary);
+
+			MessageSender.NotificationsOfDomainType<IAggregatedScheduleChange>().Single()
+				.ModuleIdAsGuid().Should().Be(InitiatorIdentifier.InitiatorId);
 		}
 
 	}
