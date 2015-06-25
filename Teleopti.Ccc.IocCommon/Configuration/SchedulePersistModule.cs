@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		private SchedulePersistModule(IInitiatorIdentifier initiatorIdentifier, IReassociateDataForSchedules reassociateDataForSchedules, bool checkConflicts, IToggleManager toggleManager)
 		{
 			_checkConflicts = checkConflicts;
-			_toggleManager = toggleManager ?? new TrueToggleManager();
+			_toggleManager = toggleManager ?? new FalseToggleManager();
 			_initiatorIdentifier = initiatorIdentifier ?? new EmptyInitiatorIdentifier();
 			_reassociateDataForSchedules = reassociateDataForSchedules ?? new nullReassociateDataForSchedules();
 		}
