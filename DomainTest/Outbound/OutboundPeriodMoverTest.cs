@@ -33,12 +33,8 @@ namespace Teleopti.Ccc.DomainTest.Outbound
 				CallListLen = 100,
 				ConnectAverageHandlingTime = (int)TimeSpan.FromMinutes(100).TotalSeconds
 			};
-			var campaignWorkingPeriod = new CampaignWorkingPeriod { TimePeriod = new TimePeriod(10, 0, 15, 0) };
 
-			var campaignWorkingPeriodAssignmentFriday = new CampaignWorkingPeriodAssignment { WeekdayIndex = DayOfWeek.Monday };
-			campaignWorkingPeriod.AddAssignment(campaignWorkingPeriodAssignmentFriday);
-
-			_campaign.AddWorkingPeriod(campaignWorkingPeriod);
+			_campaign.WorkingHours.Add(DayOfWeek.Friday, new TimePeriod(10, 0, 15, 0));
 			_campaign.SpanningPeriod = new DateOnlyPeriod(2015, 6, 15, 2015, 6, 15);
 		}
 
@@ -47,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Outbound
 		{
 			_scenarioRepository.Stub(x => x.LoadDefaultScenario()).Return(_defultScenario);
 			_createOrUpdateSkillDays.Stub(
-				x => x.Create(_campaign.Skill, _campaign.SpanningPeriod, _campaign.CampaignTasks(), _campaign.AverageTaskHandlingTime(), _campaign.CampaignWorkingPeriods));
+				x => x.Create(_campaign.Skill, _campaign.SpanningPeriod, _campaign.CampaignTasks(), _campaign.AverageTaskHandlingTime(), _campaign.WorkingHours));
 
 			_target.Move(_campaign, new DateOnlyPeriod(2015, 6, 8, 2015, 6, 8));
 
@@ -65,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.Outbound
 
 			_scenarioRepository.Stub(x => x.LoadDefaultScenario()).Return(_defultScenario);
 			_createOrUpdateSkillDays.Stub(
-				x => x.Create(_campaign.Skill, _campaign.SpanningPeriod, _campaign.CampaignTasks(), _campaign.AverageTaskHandlingTime(), _campaign.CampaignWorkingPeriods));
+				x => x.Create(_campaign.Skill, _campaign.SpanningPeriod, _campaign.CampaignTasks(), _campaign.AverageTaskHandlingTime(), _campaign.WorkingHours));
 
 			_target.Move(_campaign, new DateOnlyPeriod(2015, 6, 8, 2015, 6, 8));
 

@@ -198,14 +198,14 @@ namespace Teleopti.Ccc.Win.Backlog
 
 			var createOrUpdateSkillDays = _container.Resolve<ICreateOrUpdateSkillDays>();
 			createOrUpdateSkillDays.Create(campaign.Skill, campaign.SpanningPeriod, campaign.CampaignTasks(),
-				campaign.AverageTaskHandlingTime(), campaign.CampaignWorkingPeriods);
+				campaign.AverageTaskHandlingTime(), campaign.WorkingHours);
 		}
 
 		private IncomingTask getIncomingTaskFromCampaign(Campaign campaign)
 		{
 			var incomingTaskFactory = _container.Resolve<OutboundProductionPlanFactory>();
 			var incomingTask = incomingTaskFactory.CreateAndMakeInitialPlan(campaign.SpanningPeriod, campaign.CampaignTasks(),
-				campaign.AverageTaskHandlingTime(), campaign.CampaignWorkingPeriods.ToList());
+				campaign.AverageTaskHandlingTime(), campaign.WorkingHours);
 
 			if(_backlogScheduledProvider == null)
 				return incomingTask;

@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Outbound
 			_skillDay.Stub(x => x.WorkloadDayCollection).Return(new ReadOnlyCollection<IWorkloadDay>(new List<IWorkloadDay> {_workLoadDay}));
 			_workLoadDay.Stub(x => x.TemplateReference).Return(new TemplateReference());
 			_target.Create(_skill, new DateOnlyPeriod(2015, 6, 15, 2015, 6, 15), 100, TimeSpan.FromMinutes(100),
-				new List<CampaignWorkingPeriod> {new CampaignWorkingPeriod(){}});
+				new Dictionary<DayOfWeek, TimePeriod>());
 			
 			_skillDayRepository.AssertWasCalled(x => x.AddRange(skillDayList));
 		}

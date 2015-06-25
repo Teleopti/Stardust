@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Backlog;
 using Teleopti.Interfaces.Domain;
@@ -16,20 +15,16 @@ namespace Teleopti.Ccc.Domain.Outbound
 		}
 
 		public IncomingTask CreateAndMakeInitialPlan(DateOnlyPeriod campaignPeriod, int campaignTasks,
-			TimeSpan averageTimeForHandlingTasks, IList<CampaignWorkingPeriod> campaignWorkingPeriods)
+			TimeSpan averageTimeForHandlingTasks, IDictionary<DayOfWeek, TimePeriod> workingHours)
 		{
 			var incomingTask = _incomingTaskFactory.Create(campaignPeriod, campaignTasks, averageTimeForHandlingTasks);
 
 			foreach (var date in incomingTask.SpanningPeriod.DayCollection())
 			{
 				incomingTask.Close(date);
-				foreach (var campaignWorkingPeriod in campaignWorkingPeriods)
+				foreach (var workingHour in workingHours)
 				{
-					foreach (var assignment in campaignWorkingPeriod.CampaignWorkingPeriodAssignments)
-					{
-						if (assignment.WeekdayIndex == date.DayOfWeek)
-							incomingTask.Open(date);
-					}
+					if (workingHour.Key == date.DayOfWeek) incomingTask.Open(date);
 				}
 			}
 

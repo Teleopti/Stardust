@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 	public interface ICreateOrUpdateSkillDays
 	{
 		void Create(ISkill skill, DateOnlyPeriod campaignPeriod, int campaignTasks,
-			TimeSpan averageTimeForHandlingTasks, IEnumerable<CampaignWorkingPeriod> campaignWorkingPeriods);
+			TimeSpan averageTimeForHandlingTasks, IDictionary<DayOfWeek, TimePeriod> workingHours);
 	}
 
 	public class CreateOrUpdateSkillDays : ICreateOrUpdateSkillDays
@@ -34,10 +34,10 @@ namespace Teleopti.Ccc.Domain.Outbound
 		}
 
 		public void Create(ISkill skill, DateOnlyPeriod campaignPeriod, int campaignTasks,
-			TimeSpan averageTimeForHandlingTasks, IEnumerable<CampaignWorkingPeriod> campaignWorkingPeriods)
+			TimeSpan averageTimeForHandlingTasks, IDictionary<DayOfWeek, TimePeriod> workingHours)
 		{
 			var incomingTask = _outboundProductionPlanFactory.CreateAndMakeInitialPlan(campaignPeriod, campaignTasks,
-				averageTimeForHandlingTasks, campaignWorkingPeriods.ToList());
+				averageTimeForHandlingTasks, workingHours);
 
 			updateSkillDays(skill, incomingTask);
 		}

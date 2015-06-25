@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Backlog;
 using Teleopti.Ccc.Domain.Outbound;
@@ -23,17 +22,11 @@ namespace Teleopti.Ccc.DomainTest.Outbound
 		public void ShouldCreateCorrectPeriodAndOpenDays()
 		{
 			var campaign = new Campaign { Name = "test" };
-			var campaignWorkingPeriod = new CampaignWorkingPeriod { TimePeriod = new TimePeriod(10, 0, 15, 0) };
+			campaign.WorkingHours.Add(DayOfWeek.Thursday, new TimePeriod(10, 0, 15, 0));
+			campaign.WorkingHours.Add(DayOfWeek.Friday, new TimePeriod(10, 0, 15, 0));
 
-			var campaignWorkingPeriodAssignmentThursday = new CampaignWorkingPeriodAssignment { WeekdayIndex = DayOfWeek.Thursday };
-			campaignWorkingPeriod.AddAssignment(campaignWorkingPeriodAssignmentThursday);
-
-			var campaignWorkingPeriodAssignmentFriday = new CampaignWorkingPeriodAssignment { WeekdayIndex = DayOfWeek.Friday };
-			campaignWorkingPeriod.AddAssignment(campaignWorkingPeriodAssignmentFriday);
-
-			campaign.AddWorkingPeriod(campaignWorkingPeriod);
 			var result = _target.CreateAndMakeInitialPlan(new DateOnlyPeriod(2015, 6, 1, 2015, 6, 7), 10, TimeSpan.FromHours(1),
-				campaign.CampaignWorkingPeriods.ToList());
+				campaign.WorkingHours);
 
 			Assert.AreEqual(new DateOnlyPeriod(2015, 6, 1, 2015, 6, 7), result.SpanningPeriod);
 			Assert.AreEqual(PlannedTimeTypeEnum.Closed, result.PlannedTimeTypeOnDate(new DateOnly(2015, 6, 1)));
@@ -49,17 +42,11 @@ namespace Teleopti.Ccc.DomainTest.Outbound
 		public void ShouldCreateCorrectTotalTimeAndPlan()
 		{
 			var campaign = new Campaign {Name = "test"};
-			var campaignWorkingPeriod = new CampaignWorkingPeriod {TimePeriod = new TimePeriod(10, 0, 15, 0)};
+			campaign.WorkingHours.Add(DayOfWeek.Thursday, new TimePeriod(10, 0, 15, 0));
+			campaign.WorkingHours.Add(DayOfWeek.Friday, new TimePeriod(10, 0, 15, 0));
 
-			var campaignWorkingPeriodAssignmentThursday = new CampaignWorkingPeriodAssignment {WeekdayIndex = DayOfWeek.Thursday};
-			campaignWorkingPeriod.AddAssignment(campaignWorkingPeriodAssignmentThursday);
-
-			var campaignWorkingPeriodAssignmentFriday = new CampaignWorkingPeriodAssignment {WeekdayIndex = DayOfWeek.Friday};
-			campaignWorkingPeriod.AddAssignment(campaignWorkingPeriodAssignmentFriday);
-
-			campaign.AddWorkingPeriod(campaignWorkingPeriod);
 			var result = _target.CreateAndMakeInitialPlan(new DateOnlyPeriod(2015, 6, 1, 2015, 6, 7), 10, TimeSpan.FromHours(1),
-				campaign.CampaignWorkingPeriods.ToList());
+				campaign.WorkingHours);
 
 			Assert.AreEqual(TimeSpan.FromHours(10), result.TotalWorkTime);
 			Assert.AreEqual(10, result.TotalWorkItems);
