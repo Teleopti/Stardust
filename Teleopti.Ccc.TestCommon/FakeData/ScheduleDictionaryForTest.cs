@@ -46,11 +46,20 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public void AddPersonAssignmentsWithoutSnapshot(params IPersonAssignment[] personAssignments)
 		{
-			var person = personAssignments.First().Person;
-			var scheduleRange = new ScheduleRange(this, new ScheduleParameters(Scenario, person, Period.VisiblePeriod));
 			foreach (var personAssignment in personAssignments)
-				scheduleRange.Add(personAssignment);
-			BaseDictionary.Add(person, scheduleRange);
+			{
+				var person = personAssignment.Person;
+				if (BaseDictionary.ContainsKey(person))
+				{
+					((ScheduleRange) BaseDictionary[person]).Add(personAssignment);
+				}
+				else
+				{
+					var scheduleRange = new ScheduleRange(this, new ScheduleParameters(Scenario, person, Period.VisiblePeriod));
+					scheduleRange.Add(personAssignment);
+					BaseDictionary[person] = scheduleRange;
+				}
+			}
 		}
 
 

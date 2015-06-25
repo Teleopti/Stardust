@@ -94,6 +94,37 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			message.BinaryData.Should().Contain(person.Id.ToString());
 		}
 
+		[Test]
+		public void ShouldSendWithAllPersonIds()
+		{
+			var scenario = new Scenario(".");
+			var person1 = PersonFactory.CreatePerson();
+			var person2 = PersonFactory.CreatePerson();
+			var activity = new Activity(".");
+			var shiftCategory = new ShiftCategory(".");
+			using (var uow = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			{
+				ActivityRepository.Add(activity);
+				ShiftCategoryRepository.Add(shiftCategory);
+				PersonRepository.Add(person1);
+				PersonRepository.Add(person2);
+				ScenarioRepository.Add(scenario);
+				uow.PersistAll();
+			}
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario,
+				new DateTimePeriod("2015-06-24 8:00".Utc(), "2015-06-24 17:00".Utc()));
+			scheduleDictionary.TakeSnapshot();
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person1,
+				new DateTimePeriod("2015-06-24 8:00".Utc(), "2015-06-24 17:00".Utc()), shiftCategory, scenario);
+			var personAssignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person2,
+				new DateTimePeriod("2015-06-24 8:00".Utc(), "2015-06-24 17:00".Utc()), shiftCategory, scenario);
+			scheduleDictionary.AddPersonAssignmentsWithoutSnapshot(personAssignment, personAssignment2);
+
+			Target.Persist(scheduleDictionary);
+
+			var message = MessageSender.NotificationsOfDomainType<IAggregatedScheduleChange>().Single();
+			Deserializer.DeserializeObject<Guid[]>(message.BinaryData).Should().Have.SameValuesAs(new []{person1.Id.Value, person2.Id.Value});
+		}
 
 		[Test]
 		public void ShouldNotSendDuplicatePersonIds()
@@ -124,6 +155,69 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 
 			var message = MessageSender.NotificationsOfDomainType<IAggregatedScheduleChange>().Single();
 			Deserializer.DeserializeObject<Guid[]>(message.BinaryData).Count().Should().Be(1);
+		}
+
+		[Test]
+		public void ShouldSendWithEarliestStartDateOfPersonAssignments()
+		{
+			var scenario = new Scenario(".");
+			var person = PersonFactory.CreatePerson();
+			var activity = new Activity(".");
+			var shiftCategory = new ShiftCategory(".");
+			using (var uow = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			{
+				ActivityRepository.Add(activity);
+				ShiftCategoryRepository.Add(shiftCategory);
+				PersonRepository.Add(person);
+				ScenarioRepository.Add(scenario);
+				uow.PersistAll();
+			}
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario,
+				new DateTimePeriod("2015-06-24 8:00".Utc(), "2015-06-25 17:00".Utc()));
+			scheduleDictionary.TakeSnapshot();
+
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person,
+				new DateTimePeriod("2015-06-24 8:00".Utc(), "2015-06-24 17:00".Utc()), shiftCategory, scenario);
+			var personAssignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person,
+				new DateTimePeriod("2015-06-25 8:00".Utc(), "2015-06-25 17:00".Utc()), shiftCategory, scenario);
+			scheduleDictionary.AddPersonAssignmentsWithoutSnapshot(personAssignment, personAssignment2);
+
+			Target.Persist(scheduleDictionary);
+
+			var message = MessageSender.NotificationsOfDomainType<IAggregatedScheduleChange>().Single();
+			message.StartDateAsDateTime().Should().Be("2015-06-24 8:00".Utc());
+		}
+
+
+		[Test]
+		public void ShouldSendWithLatestEndDateOfPersonAssignments()
+		{
+			var scenario = new Scenario(".");
+			var person = PersonFactory.CreatePerson();
+			var activity = new Activity(".");
+			var shiftCategory = new ShiftCategory(".");
+			using (var uow = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			{
+				ActivityRepository.Add(activity);
+				ShiftCategoryRepository.Add(shiftCategory);
+				PersonRepository.Add(person);
+				ScenarioRepository.Add(scenario);
+				uow.PersistAll();
+			}
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario,
+				new DateTimePeriod("2015-06-24 8:00".Utc(), "2015-06-25 17:00".Utc()));
+			scheduleDictionary.TakeSnapshot();
+
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person,
+				new DateTimePeriod("2015-06-24 8:00".Utc(), "2015-06-24 17:00".Utc()), shiftCategory, scenario);
+			var personAssignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person,
+				new DateTimePeriod("2015-06-25 8:00".Utc(), "2015-06-25 17:00".Utc()), shiftCategory, scenario);
+			scheduleDictionary.AddPersonAssignmentsWithoutSnapshot(personAssignment, personAssignment2);
+
+			Target.Persist(scheduleDictionary);
+
+			var message = MessageSender.NotificationsOfDomainType<IAggregatedScheduleChange>().Single();
+			message.EndDateAsDateTime().Should().Be("2015-06-25 17:00".Utc());
 		}
 
 	}
