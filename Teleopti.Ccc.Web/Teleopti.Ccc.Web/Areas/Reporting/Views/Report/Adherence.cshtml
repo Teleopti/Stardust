@@ -11,6 +11,19 @@
 	<link href="~/Content/bootstrap/Content/bootstrap.css" rel="stylesheet" />
 	<script src="~/Content/jquery/jquery-1.10.2.min.js"></script>
 	<script src="~/Content/bootstrap/Scripts/bootstrap.js"></script>
+	<script type="text/javascript">
+		function setCookie() {
+			if (window.location.hash) {
+				var d = new Date();
+				d.setTime(d.getTime() + (5 * 60 * 1000));
+				var expires = "expires=" + d.toUTCString();
+				document.cookie = "returnHash" + "=" + window.location.hash + "; " + expires + "; path=/";
+			}
+			window.location = "/Reporting/Authentication";
+		}
+	</script>
+
+
 </head>
 <body style="margin-top: 0;height:95%">
 	<header>
@@ -22,7 +35,7 @@
 					<span class="icon-bar"></span>
 				</button>
 
-				<a class="navbar-brand" href="#">Teleopti WFM</a>
+				<a class="navbar-brand" href="#@Model.Id">Teleopti WFM</a>
 			</div>
 
 			<div class="navbar-offcanvas navmenu-fixed-right offcanvas menu-top-adjust" id="bs-example-navbar-collapse-1">
@@ -57,11 +70,30 @@
 					}
 				</ul>
 			</div>
-			<div class="nav navbar-nav pull-right" style="margin-top: 12px; margin-right: 50px">
-				<a href="@Model.HelpUrl" target="_blank">
+			<div class="nav navbar-nav pull-right" style="margin-right: 30px">
+				<ul class="nav navbar-nav" style="margin-right: 30px">
+
+					<li class="dropdown " id="user-settings">
+						<a href="#" class="dropdown-toggle user-name-link" data-toggle="dropdown">
+							<i class="glyphicon glyphicon-user"></i>
+							<span class="user-name" title=@Model.CurrentLogonAgentName><small> @Model.CurrentLogonAgentName</small></span> <b class="caret"></b>
+						</a>
+						<ul class="dropdown-menu show-outside-toolbar">
+
+							<li>@Html.ActionLink(@Resources.SignOut, "SignOut", "Authentication", new { area = "Start" }, new { id = "signout" })</li>
+							<li class="divider"></li>
+							<li><a href="#" onclick="setCookie()">@Resources.BusinessUnit</a> </li>
+						</ul>
+					</li>
+
+				</ul>
+				<a style="float: right; margin-top: 10px" href="@Model.HelpUrl" target="_blank">
 					<img id="ImageButtonHelp" src="~/Areas/Reporting/images/Question_16x16.png" alt="Help" />
 				</a>
 
+			</div>
+			<div class="" style="padding-top: 15px; margin-right: 20px;float: right; color: #ffffff;">
+				@Model.CurrentBuName
 			</div>
 			<div class="ReportName" style="padding-top: 2px">
 				@Model.Name
