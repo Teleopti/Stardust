@@ -1,5 +1,4 @@
-﻿using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
+﻿using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
@@ -23,6 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 				return createFailingResult(string.Format(Resources.LogOnFailedIdentityNotFound, identity));
 
 			var nhibConfig = _dataSourceConfigurationProvider.ForTenant(foundUser.Tenant);
+			//TODO tenant: no need to keep this when #33685 is done
 			if (nhibConfig==null)
 				return createFailingResult(Resources.NoDatasource);
 			
