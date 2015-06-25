@@ -20,7 +20,8 @@ namespace Teleopti.Messaging.Client.Http
 		private readonly ITime _time;
 		private readonly IConfigReader _configReader;
 		private readonly HttpRequests _client;
-		private bool _started;
+		private readonly static object startLock = new object();
+		private static bool _started;
 
 		public HttpListener(
 			EventHandlers eventHandlers, 
@@ -49,11 +50,10 @@ namespace Teleopti.Messaging.Client.Http
 			EnsureMessagePopingStarted();
 		}
 
-		private readonly object _startLock = new object();
 		public void EnsureMessagePopingStarted()
 		{
 			if (_started) return;
-			lock(_startLock)
+			lock(startLock)
 			{
 				if (_started) return;
 				var configInterval = _configReader.AppSettings["MessageBrokerMailboxPollingInterval"];

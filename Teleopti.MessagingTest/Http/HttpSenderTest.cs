@@ -4,10 +4,8 @@ using System.Net.Http;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.MessageBroker;
-using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Messaging.Client;
 using Teleopti.Messaging.Client.Http;
 
