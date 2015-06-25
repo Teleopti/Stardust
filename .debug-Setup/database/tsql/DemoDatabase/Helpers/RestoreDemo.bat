@@ -1,6 +1,7 @@
 @echo off
-SET SUSER=%~1
-SET SPASS=%~2
+SET SAUTH=%~1
+SET SUSER=%~2
+SET SPASS=%~3
 
 IF "%SUSER%"=="" (
 SET SA=-E
@@ -92,7 +93,7 @@ ECHO patching databases ...
 "%INSTALLDIR%\DatabaseInstaller\DBManager.exe" -S%INSTANCE% -D%TELEOPTICCC% -OTeleoptiCCC7 %SA% -T -R -L%SQLLogin%:%SQLPwd% > "%ROOTDIR%\..\patchDB.log"
 "%INSTALLDIR%\DatabaseInstaller\DBManager.exe" -S%INSTANCE% -D%TELEOPTIAGG% -OTeleoptiCCCAgg %SA% -T -R -L%SQLLogin%:%SQLPwd% >> "%ROOTDIR%\..\patchDB.log"
 "%INSTALLDIR%\DatabaseInstaller\DBManager.exe" -S%INSTANCE% -D%TELEOPTIANALYTICS% -OTeleoptiAnalytics %SA% -T -R -L%SQLLogin%:%SQLPwd% >> "%ROOTDIR%\..\patchDB.log"
-"%INSTALLDIR%\DatabaseInstaller\Enrypted\Teleopti.Support.Security.exe" -DS%INSTANCE% -AP"%TELEOPTICCC%" -AN"%TELEOPTIANALYTICS%" -CD"%TELEOPTIAGG%" %SA2% >> "%ROOTDIR%\..\patchDB.log"
+"%INSTALLDIR%\DatabaseInstaller\Enrypted\Teleopti.Support.Security.exe" -DS%INSTANCE% -AP"%TELEOPTICCC%" -AN"%TELEOPTIANALYTICS%" -CD"%TELEOPTIAGG%" -CS"%SAUTH%" %SA2% >> "%ROOTDIR%\..\patchDB.log"
 ECHO patching databases. Done!
 ECHO.
 ECHO Set RC as Toggle for Demo ...

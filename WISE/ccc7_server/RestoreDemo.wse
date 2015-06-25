@@ -77,6 +77,15 @@ end
 item: Custom Script Item
   Filename=Get Windows Installer Property.wse
   Variable Name1=_PROPERTYNAME_
+  Variable Value1=SQL_AUTH_STRING
+  Variable Name2=_PROP_VAR_
+  Variable Value2=CONNSTRINGBASE
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
   Variable Value1=DATABASEINSTALLER
   Variable Name2=_PROP_VAR_
   Variable Value2=DIR
@@ -89,7 +98,7 @@ item: If/While Statement
 end
 item: Execute Program
   Pathname=CMD
-  Command Line=/C "%DIR%DemoDatabase\Helpers\RestoreDemo.bat"
+  Command Line=/C ""%DIR%DemoDatabase\Helpers\RestoreDemo.bat" "%SQL_AUTH_STRING%""
   Default Directory=%DIR%
   Flags=00000110
 end
@@ -97,7 +106,7 @@ item: Else Statement
 end
 item: Execute Program
   Pathname=CMD
-  Command Line=/C ""%DIR%DemoDatabase\Helpers\RestoreDemo.bat" %SUSER% %SPASS%"
+  Command Line=/C ""%DIR%DemoDatabase\Helpers\RestoreDemo.bat" "%SQL_AUTH_STRING%" "%SUSER%" "%SPASS%""
   Default Directory=%DIR%
   Flags=00000110
 end

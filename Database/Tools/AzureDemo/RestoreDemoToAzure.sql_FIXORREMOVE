@@ -8,6 +8,7 @@ use master
 GO
 
 DECLARE @XpCommand nvarchar(4000)
+-- need an extra param (-CS) to work properli /Kratz
 SELECT @XpCommand='"C:\Program Files (x86)\Teleopti\DatabaseInstaller\DemoDatabase\Helpers\RestoreDemo.bat"' 
 --restore Demo databases
 exec xp_cmdshell @XpCommand
