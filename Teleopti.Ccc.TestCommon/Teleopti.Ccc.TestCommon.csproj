@@ -143,6 +143,7 @@
     <Compile Include="FakeCurrentMessageSenders.cs" />
     <Compile Include="FakeData\FakeActivityRepository.cs" />
     <Compile Include="FakeData\FakeCampaignRepository.cs" />
+    <Compile Include="FakeData\FakeClassicDaysOffOptimizationCommand.cs" />
     <Compile Include="FakeData\FakeClassicScheduleCommand.cs" />
     <Compile Include="FakeData\FakeCommonStateHolder.cs" />
     <Compile Include="FakeData\FakeCurrentIdentity.cs" />
