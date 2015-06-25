@@ -26,18 +26,19 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 					return;
 				ParameterSelector.ReportId = ReportId;
 
-				
-				var commonReports = new CommonReports(ParameterSelector.ConnectionString, ParameterSelector.ReportId);
-				Guid groupPageComboBoxControlCollectionId = commonReports.GetGroupPageComboBoxControlCollectionId();
-				string groupPageComboBoxControlCollectionIdName = string.Format("ParameterSelector$Drop{0}", groupPageComboBoxControlCollectionId);
+				using (var commonReports = new CommonReports(ParameterSelector.ConnectionString, ReportId))
+				{
+					Guid groupPageComboBoxControlCollectionId = commonReports.GetGroupPageComboBoxControlCollectionId();
+					string groupPageComboBoxControlCollectionIdName = string.Format("ParameterSelector$Drop{0}",
+						groupPageComboBoxControlCollectionId);
 
-				GroupPageCode = string.IsNullOrEmpty(Request.Form.Get(groupPageComboBoxControlCollectionIdName))
-											? Selector.BusinessHierarchyCode
-											: new Guid(Request.Form.Get(groupPageComboBoxControlCollectionIdName));
-				ParameterSelector.GroupPageCode = GroupPageCode;
-				commonReports.LoadReportInfo();
-				Page.Header.Title = commonReports.Name;
-				//labelRepCaption.Text = commonReports.Name;
+					GroupPageCode = string.IsNullOrEmpty(Request.Form.Get(groupPageComboBoxControlCollectionIdName))
+						? Selector.BusinessHierarchyCode
+						: new Guid(Request.Form.Get(groupPageComboBoxControlCollectionIdName));
+					ParameterSelector.GroupPageCode = GroupPageCode;
+					commonReports.LoadReportInfo();
+					Page.Header.Title = commonReports.Name;
+				}
 				if (ReportId.Equals(Guid.Empty))
 				{
 					buttonShowExcel.Visible = false;
@@ -73,8 +74,10 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 			ParameterSelector.UserCode = id.GetValueOrDefault();
 			ParameterSelector.BusinessUnitCode = bu.GetValueOrDefault();
 			ParameterSelector.LanguageId = ((TeleoptiPrincipalCacheable)princip).Person.PermissionInformation.UICulture().LCID;
-			var commonReports = new CommonReports(ParameterSelector.ConnectionString, ParameterSelector.ReportId);
-			ParameterSelector.DbTimeout = commonReports.DbTimeout;
+			using (var commonReports = new CommonReports(ParameterSelector.ConnectionString, ReportId))
+			{
+				ParameterSelector.DbTimeout = commonReports.DbTimeout;
+			}
 		}
 
 		protected override void OnLoadComplete(EventArgs e)
@@ -108,73 +111,76 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 		{
 			if (!ParameterSelector.IsValid) return;
 			//aspnetForm.Target = "_blank";
-			var commonReports = new CommonReports(ParameterSelector.ConnectionString, ParameterSelector.ReportId);
-
-			var sqlParams = ParameterSelector.Parameters;
-			var texts = ParameterSelector.ParameterTexts;
-			commonReports.LoadReportInfo();
-			DataSet dataset = commonReports.GetReportData(ParameterSelector.UserCode, ParameterSelector.BusinessUnitCode, sqlParams);
-
-			string reportName = commonReports.ReportFileName.Replace("~/","");
-			string reportPath = Server.MapPath(reportName);
-			IList<ReportParameter> @params = new List<ReportParameter>();
-			var viewer = new ReportViewer { ProcessingMode = ProcessingMode.Local };
-			viewer.LocalReport.ReportPath = reportPath;
-			ReportParameterInfoCollection repInfos = viewer.LocalReport.GetParameters();
-
-			foreach (ReportParameterInfo repInfo in repInfos)
+			using (var commonReports = new CommonReports(ParameterSelector.ConnectionString, ReportId))
 			{
-				int i = 0;
-				var added = false;
-				foreach (SqlParameter param in sqlParams)
+				var sqlParams = ParameterSelector.Parameters;
+				var texts = ParameterSelector.ParameterTexts;
+				commonReports.LoadReportInfo();
+				DataSet dataset = commonReports.GetReportData(ParameterSelector.UserCode, ParameterSelector.BusinessUnitCode,
+					sqlParams);
+
+				string reportName = commonReports.ReportFileName.Replace("~/", "");
+				string reportPath = Server.MapPath(reportName);
+				IList<ReportParameter> @params = new List<ReportParameter>();
+				var viewer = new ReportViewer {ProcessingMode = ProcessingMode.Local};
+				viewer.LocalReport.ReportPath = reportPath;
+				ReportParameterInfoCollection repInfos = viewer.LocalReport.GetParameters();
+
+				foreach (ReportParameterInfo repInfo in repInfos)
 				{
-					if (repInfo.Name.StartsWith("Res", StringComparison.CurrentCultureIgnoreCase))
+					int i = 0;
+					var added = false;
+					foreach (SqlParameter param in sqlParams)
 					{
-						@params.Add(new ReportParameter(repInfo.Name, Resources.ResourceManager.GetString(repInfo.Name), false));
-						added = true;
+						if (repInfo.Name.StartsWith("Res", StringComparison.CurrentCultureIgnoreCase))
+						{
+							@params.Add(new ReportParameter(repInfo.Name, Resources.ResourceManager.GetString(repInfo.Name), false));
+							added = true;
+						}
+						if (param.ParameterName.ToLower(CultureInfo.CurrentCulture) ==
+						    "@" + repInfo.Name.ToLower(CultureInfo.CurrentCulture))
+						{
+							@params.Add(new ReportParameter(repInfo.Name, texts[i], false));
+							added = true;
+						}
+						if (!added && repInfo.Name == "culture")
+							@params.Add(new ReportParameter("culture", Thread.CurrentThread.CurrentCulture.IetfLanguageTag, false));
+						i += 1;
 					}
-					if (param.ParameterName.ToLower(CultureInfo.CurrentCulture) == "@" + repInfo.Name.ToLower(CultureInfo.CurrentCulture))
-					{
-						@params.Add(new ReportParameter(repInfo.Name, texts[i], false));
-						added = true;
-					}
-					if (!added && repInfo.Name == "culture")
-						@params.Add(new ReportParameter("culture", Thread.CurrentThread.CurrentCulture.IetfLanguageTag, false));
-					i += 1;
 				}
+
+				viewer.LocalReport.SetParameters(@params);
+
+				//The first in the report has to have the name DataSet1
+				dataset.Tables[0].TableName = "DataSet1";
+				foreach (DataTable t in dataset.Tables)
+				{
+					viewer.LocalReport.DataSources.Add(new ReportDataSource(t.TableName, t));
+				}
+				var inlineOrAtt = "inline;";
+				if (format.Equals("Word") || format.Equals("Excel"))
+					inlineOrAtt = "attachment;";
+				// Variables
+				Warning[] warnings;
+				string[] streamIds;
+				string mimeType;
+				string encoding;
+				string extension;
+
+				// Setup the report viewer object and get the array of bytes
+				byte[] bytes = viewer.LocalReport.Render(format, null, out mimeType, out encoding, out extension, out streamIds,
+					out warnings);
+
+				// Now that you have all the bytes representing the PDF report, buffer it and send it to the client.
+				Response.Buffer = true;
+				Response.Clear();
+				Response.ContentType = mimeType;
+				// commonReports + Guid.NewGuid() = to get uniquie name to be able to open more than one with different selections
+				Response.AddHeader("content-disposition",
+					inlineOrAtt + " filename=" + commonReports.Name + Guid.NewGuid() + "." + extension);
+				Response.BinaryWrite(bytes); // create the file
+				Response.Flush(); // send it to the client to download
 			}
-
-			viewer.LocalReport.SetParameters(@params);
-
-			//The first in the report has to have the name DataSet1
-			dataset.Tables[0].TableName = "DataSet1";
-			foreach (DataTable t in dataset.Tables)
-			{
-				viewer.LocalReport.DataSources.Add(new ReportDataSource(t.TableName, t));
-			}
-			var inlineOrAtt = "inline;";
-			if(format.Equals("Word") || format.Equals("Excel"))
-				inlineOrAtt = "attachment;";
-			// Variables
-			Warning[] warnings;
-			string[] streamIds;
-			string mimeType;
-			string encoding;
-			string extension;
-
-			// Setup the report viewer object and get the array of bytes
-			byte[] bytes = viewer.LocalReport.Render(format, null, out mimeType, out encoding, out extension, out streamIds, out warnings);
-
-			// Now that you have all the bytes representing the PDF report, buffer it and send it to the client.
-			Response.Buffer = true;
-			Response.Clear();
-			Response.ContentType = mimeType;
-			// commonReports + Guid.NewGuid() = to get uniquie name to be able to open more than one with different selections
-			Response.AddHeader("content-disposition", inlineOrAtt + " filename=" + commonReports.Name + Guid.NewGuid() + "." + extension);
-			Response.BinaryWrite(bytes); // create the file
-			Response.Flush(); // send it to the client to download
-		}
-
-		
+		}	
 	}
 }
