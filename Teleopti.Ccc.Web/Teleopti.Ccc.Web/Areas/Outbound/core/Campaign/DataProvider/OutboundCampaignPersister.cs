@@ -24,10 +24,11 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 		private readonly IOutboundSkillCreator _outboundSkillCreator;
 		private readonly IActivityRepository _activityRepository;
 		private readonly IOutboundSkillPersister _outboundSkillPersister;
+		private readonly ICreateOrUpdateSkillDays _createOrUpdateSkillDays;
 
-		public OutboundCampaignPersister(IOutboundCampaignRepository outboundCampaignRepository,
-			IOutboundCampaignMapper outboundCampaignMapper, IOutboundCampaignViewModelMapper outboundCampaignViewModelMapper, 
-			IOutboundSkillCreator outboundSkillCreator, IActivityRepository activityRepository, IOutboundSkillPersister outboundSkillPersister)
+		public OutboundCampaignPersister(IOutboundCampaignRepository outboundCampaignRepository, IOutboundCampaignMapper outboundCampaignMapper, 
+			IOutboundCampaignViewModelMapper outboundCampaignViewModelMapper, IOutboundSkillCreator outboundSkillCreator, IActivityRepository activityRepository, 
+			IOutboundSkillPersister outboundSkillPersister, ICreateOrUpdateSkillDays createOrUpdateSkillDays)
 		{
 			_outboundCampaignRepository = outboundCampaignRepository;
 			_outboundCampaignMapper = outboundCampaignMapper;
@@ -35,6 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			_outboundSkillCreator = outboundSkillCreator;
 			_activityRepository = activityRepository;
 			_outboundSkillPersister = outboundSkillPersister;
+			_createOrUpdateSkillDays = createOrUpdateSkillDays;
 		}
 
 		public CampaignViewModel Persist(string name)  //should take an activity as well
@@ -79,6 +81,8 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			campaign.Skill = skill;
 
 			_outboundCampaignRepository.Add(campaign);
+			_createOrUpdateSkillDays.Create(campaign.Skill, campaign.SpanningPeriod, campaign.CampaignTasks(),
+				campaign.AverageTaskHandlingTime(), campaign.WorkingHours);
 
 			return _outboundCampaignViewModelMapper.Map(campaign);
 		}

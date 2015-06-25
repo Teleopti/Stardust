@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 		public int ConnectAverageHandlingTime { get; set; }
 		public int RightPartyAverageHandlingTime { get; set; }
 		public int UnproductiveTime { get; set; }
-		public SelectedAcitvity Activity { get; set; }
+		public ActivityViewModel Activity { get; set; }
 		public DateOnly StartDate { get; set; }
 		public DateOnly EndDate { get; set; }
 		public IList<CampaignWorkingHour> WorkingHours { get; set; }
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 		public TimePeriod WorkingPeriod;
 	}
 
-	public class SelectedAcitvity
+	public class ActivityViewModel
 	{
 		public Guid? Id;
 		public string Name;
