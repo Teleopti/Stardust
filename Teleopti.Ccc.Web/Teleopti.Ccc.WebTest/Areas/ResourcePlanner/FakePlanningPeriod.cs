@@ -39,5 +39,9 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		}
 
 		public PlanningPeriodState State { get; private set; }
+		public void Scheduled()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

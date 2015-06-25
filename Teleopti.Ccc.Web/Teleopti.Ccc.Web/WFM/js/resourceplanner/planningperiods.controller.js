@@ -4,19 +4,21 @@
 		.controller('PlanningPeriodsCtrl', [
 			'$scope', '$state', 'PlanningPeriodSvrc', '$stateParams', function ($scope, $state, PlanningPeriodSvrc, $stateParams) {
 				//schedulings
+			$scope.status = '';
 				$scope.scheduledDays = 0;
 				$scope.schedulingPerformed = false;
-				$scope.launchSchedule = function(startDate, endDate) {
+				$scope.launchSchedule = function(p) {
 					$scope.schedulingPerformed = false;
-					var planningPeriod = { StartDate: startDate, EndDate: endDate };
+					var planningPeriod = { StartDate: p.StartDate, EndDate: p.EndDate };
+					$scope.status = 'Scheduling';
 					PlanningPeriodSvrc.launchScheduling.query(JSON.stringify(planningPeriod)).$promise.then(function (scheduleResult) {
 						//if not success
-						$scope.schedulingPerformed = true;
 						$scope.scheduledDays = scheduleResult.DaysScheduled;
-						$state.go('resourceplanner.report', { result: scheduleResult });
 						//else
-						PlanningPeriodSvrc.launchOptimization.query(JSON.stringify(planningPeriod)).$promise.then(function (optimizationResult) {
-							console.log('optimization was called');
+						$scope.status = 'Optimizing days off';
+						PlanningPeriodSvrc.launchOptimization.query({ id: p.Id }).$promise.then(function () {
+							$scope.schedulingPerformed = true;
+							$state.go('resourceplanner.report', { result: scheduleResult });
 						});
 					});
 				};

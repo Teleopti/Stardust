@@ -5,7 +5,7 @@
 			this.launchScheduling = $resource('../api/ResourcePlanner/Schedule/FixedStaff', {}, {
 				query: { method: 'POST', params: name, isArray: false }
 			});
-			this.launchOptimization = $resource('../api/ResourcePlanner/optimize/FixedStaff', {}, {
+			this.launchOptimization = $resource('../api/ResourcePlanner/optimize/FixedStaff/:id', { id: "@id" }, {
 				query: { method: 'POST', params: name, isArray: false }
 			});
 			//planning period

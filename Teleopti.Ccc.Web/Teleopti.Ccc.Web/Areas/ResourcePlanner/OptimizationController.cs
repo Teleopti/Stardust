@@ -9,9 +9,9 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
-using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 {
@@ -25,12 +25,13 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		private readonly IClassicDaysOffOptimizationCommand _classicDaysOffOptimizationCommand;
 		private readonly Func<IPersonSkillProvider> _personSkillProvider;
 		private readonly IScheduleRangePersister _persister;
+		private readonly IPlanningPeriodRepository _planningPeriodRepository;
 
 		public OptimizationController(SetupStateHolderForWebScheduling setupStateHolderForWebScheduling,
 			FixedStaffLoader fixedStaffLoader, IDayOffTemplateRepository dayOffTemplateRepository,
 			IActivityRepository activityRepository, Func<ISchedulerStateHolder> schedulerStateHolder,
 			IClassicDaysOffOptimizationCommand classicDaysOffOptimizationCommand,
-			Func<IPersonSkillProvider> personSkillProvider, IScheduleRangePersister persister)
+			Func<IPersonSkillProvider> personSkillProvider, IScheduleRangePersister persister, IPlanningPeriodRepository planningPeriodRepository)
 		{
 			_setupStateHolderForWebScheduling = setupStateHolderForWebScheduling;
 			_fixedStaffLoader = fixedStaffLoader;
@@ -40,13 +41,16 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			_classicDaysOffOptimizationCommand = classicDaysOffOptimizationCommand;
 			_personSkillProvider = personSkillProvider;
 			_persister = persister;
+			_planningPeriodRepository = planningPeriodRepository;
 		}
 
-		[HttpPost, Route("api/ResourcePlanner/optimize/FixedStaff"), Authorize,
+		[HttpPost, Route("api/ResourcePlanner/optimize/FixedStaff/{id}"), Authorize,
 		 UnitOfWork]
-		public virtual IHttpActionResult FixedStaff([FromBody] FixedStaffSchedulingInput input)
+		public virtual IHttpActionResult FixedStaff(Guid id)
 		{
-			var period = new DateOnlyPeriod(new DateOnly(input.StartDate), new DateOnly(input.EndDate));
+			var planningPeriod = _planningPeriodRepository.Load(id);
+
+			var period = new DateOnlyPeriod(new DateOnly(planningPeriod.Range.StartDate.Date), new DateOnly(planningPeriod.Range.EndDate.Date));
 
 			makeSurePrereqsAreLoaded();
 
@@ -80,8 +84,9 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			{
 				conflicts.AddRange(_persister.Persist(schedule.Value, new List<AggregatedScheduleChangedInfo>()));
 			}
+			planningPeriod.Scheduled();
 			return
-				Ok("Optimization was called");
+				Ok("Optimization Done");
 		}
 
 		private static IList<IScheduleDay> extractAllSchedules(ISchedulingResultStateHolder stateHolder,

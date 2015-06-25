@@ -7,7 +7,8 @@ namespace Teleopti.Interfaces
 		DateOnlyPeriod Range { get; }
 		void ChangeRange(SchedulePeriodForRangeCalculation schedulePeriodForRangeCalculation);
 		IPlanningPeriod NextPlanningPeriod();
-		PlanningPeriodState State { get; } 
+		PlanningPeriodState State { get; }
+		void Scheduled();
 	}
 
 	public enum PlanningPeriodState

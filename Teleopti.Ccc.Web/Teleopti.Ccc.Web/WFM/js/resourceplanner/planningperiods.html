@@ -40,10 +40,10 @@
 					</div>
 				</li>
 			</ul>
-			<button class="schedule-button wfm-btn wfm-btn-primary" ng-click="launchSchedule(planningPeriod.StartDate,planningPeriod.EndDate) ; scheduleClicked = 'true'">{{'Schedule' | translate }} </button><span class="schedule-days-message" ng-show="schedulingPerformed"><p> {{scheduledDays}} {{'DaysAreScheduled' | translate}}</p></span>
+			<button class="schedule-button wfm-btn wfm-btn-primary" ng-click="launchSchedule(planningPeriod) ; scheduleClicked = 'true'">{{'Schedule' | translate }} </button>
 			<div ng-show="scheduleClicked && !schedulingPerformed">
 				<md-progress-linear md-mode="indeterminate"></md-progress-linear>
-				<p>{{'Scheduling' | translate }} .. </p>
+				<p>{{status}} .. </p>
 			</div>
 		</div>
 	</div>

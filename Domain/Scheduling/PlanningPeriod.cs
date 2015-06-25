@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private static readonly SchedulePeriodRangeCalculator _calculator = new SchedulePeriodRangeCalculator();
 		private SchedulePeriodType _periodType;
 		private  int _number;
-		private readonly PlanningPeriodState _state;
+		private PlanningPeriodState _state;
 
 		protected PlanningPeriod()
 		{
@@ -37,6 +37,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public virtual PlanningPeriodState State
 		{
 			get { return _state; }
+		}
+
+		public virtual void Scheduled()
+		{
+			_state = PlanningPeriodState.Scheduled;
 		}
 
 		public virtual void ChangeRange(SchedulePeriodForRangeCalculation schedulePeriodForRangeCalculation)
