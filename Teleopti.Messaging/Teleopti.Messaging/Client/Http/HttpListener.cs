@@ -16,7 +16,6 @@ namespace Teleopti.Messaging.Client.Http
 	public class HttpListener : IMessageListener
 	{
 		private readonly EventHandlers _eventHandlers;
-		private readonly IHttpServer _httpServer;
 		private readonly IJsonDeserializer _jsonDeserializer;
 		private readonly ITime _time;
 		private readonly IConfigReader _configReader;
@@ -33,13 +32,12 @@ namespace Teleopti.Messaging.Client.Http
 			IConfigReader configReader)
 		{
 			_eventHandlers = eventHandlers;
-			_httpServer = httpServer;
 			_jsonDeserializer = jsonDeserializer;
 			_time = time;
 			_configReader = configReader;
 			_client = new HttpRequests(url, jsonSerializer)
 			{
-				PostAsync = (client, uri, content) => _httpServer.PostAsync(client, uri, content),
+				PostAsync = (client, uri, content) => httpServer.PostAsync(client, uri, content),
 				GetAsync = (client, uri) => httpServer.Get(client, uri)
 			};
 		}
@@ -62,8 +60,9 @@ namespace Teleopti.Messaging.Client.Http
 				var interval = TimeSpan.FromSeconds(double.Parse(configInterval, CultureInfo.InvariantCulture));
 				_time.StartTimer(o => _eventHandlers.ForAll(s =>
 				{
-					var popedMessages = _jsonDeserializer.DeserializeObject<Message[]>(_client.Get("PopMessages/" + s.MailboxId));
-					popedMessages.ForEach(m => _eventHandlers.CallHandlers(m));
+					var rawMessages = _client.Get("PopMessages/" + s.MailboxId);
+					var messages = _jsonDeserializer.DeserializeObject<Message[]>(rawMessages);
+					messages.ForEach(m => _eventHandlers.CallHandlers(m));
 				}), null, interval, interval);
 				_started = true;
 			}
