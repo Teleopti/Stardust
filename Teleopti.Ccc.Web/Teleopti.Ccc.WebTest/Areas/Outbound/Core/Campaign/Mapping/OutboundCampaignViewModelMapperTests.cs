@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping;
 using Teleopti.Interfaces.Domain;
@@ -17,7 +15,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core.Campaign.Mapping
 		private IList<Domain.Outbound.Campaign> _campaigns;
 		private OutboundCampaignViewModelMapper _target;
 		private Domain.Outbound.Campaign _campaign;
-		private IList<ISkill> _skills;
 		private ISkill _createdSkill;
 
 		[SetUp]
