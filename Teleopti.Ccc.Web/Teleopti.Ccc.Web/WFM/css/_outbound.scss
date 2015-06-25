@@ -105,22 +105,39 @@
 }
 
 .wrong-sign, .right-sign {
-	display: none !important;
+	display: none;
 }
 
-input.ng-valid + .input-validation-sign .right-sign {
+.ng-valid + .input-validation-sign .right-sign {
 	display: block !important;
 }
 
-input.ng-invalid + .input-validation-sign .wrong-sign {
-	display: block !important;
+
+.ng-invalid + .input-validation-sign  {
+	.wrong-sign {
+		display: block !important; 
+	}
+
+	&, &.expand {
+		transition: transform 0.3s linear;
+
+		.wrong-sign {
+			transition: color 0.3s linear;
+		}
+	}
+	&.expand {
+	   transform: scale(1.5); 
+	   .wrong-sign {
+			color: red !important;
+	   }
+	}
 }
 
 .right-sign {
-	color: #c2e085 !important;
+	color: #c2e085 ;
 }
 .wrong-sign {
-	color: #ee8f7d !important;
+	color: #ee8f7d ;
 }
 
 .campaign-details {
@@ -168,4 +185,14 @@ input.ng-invalid + .input-validation-sign .wrong-sign {
 	top:5px;
 	right:30px;
 	transform:scale(0.8);
+}
+.datepickerfix{
+	position:absolute;
+	top:8px;
+	right:10px;
+	height:18px;
+	width:18px;
+}
+.relative{
+	position:relative;
 }

@@ -1,4 +1,4 @@
-﻿<div class="wfm-block material-block material-depth-1" >
+﻿<div class="wfm-block material-block" >
 	<div class="material-block-header">
 		<div layout="row">
 			<div class="text-left navigate-to inactive" flex>
@@ -43,23 +43,22 @@
 					<strong>{{newCampaign.Name}}</strong>
 				</div>
 				<div ng-show="acToggle1">
-					<form name="newCampaignForm" class="form-horizontal wfm-block input-group" ng-submit="update()" form-locator>
-						<input type="submit" style="position: absolute; left: -9999px" />
+					<form name="createCampaignForm" class="form-horizontal wfm-block input-group" form-locator>
 						<div layout="row">
 							<div class="w-150"><strong translate>Name</strong></div>
 							<div flex class="icon-set-fix m-r-10p">
-								<input class="w-100p" id="name" type="text" ng-model="newCampaign.Name" ng-blur="update()" ng-minlength="1" ng-maxlength="50" required />
-								<div class="icon-set  input-validation-sign">
+								<input class="w-100p" id="name" type="text" ng-model="newCampaign.Name" ng-minlength="1" ng-maxlength="50" required />
+								<div class="icon-set  input-validation-sign" expandable>
 									<i class="mdi mdi-check success right-sign"></i>
-									<i class="mdi mdi-close danger wrong-sign"></i>
+									<i class="mdi mdi-close danger wrong-sign"></i>   
 								</div>
 							</div>
 						</div>
 						<div layout="row">
 							<div class="w-150"><strong translate>CallListLength</strong></div>
 							<div flex class="icon-set-fix m-r-10p">
-								<input class="w-100p" id="callList" type="text" ng-model="newCampaign.CallListLen" ng-blur="update()" placeholder="call list length" range-validate range-min="0" required />
-								<div class="icon-set  input-validation-sign">
+								<input class="w-100p" id="callList" type="text" ng-model="newCampaign.CallListLen" placeholder="call list length" range-validate range-min="0" required />
+								<div class="icon-set  input-validation-sign" expandable>
 									<i class="mdi mdi-check success right-sign"></i>
 									<i class="mdi mdi-close danger wrong-sign"></i>
 								</div>
@@ -68,8 +67,8 @@
 						<div layout="row">
 							<div class="w-150"><strong translate>ConnectRate</strong></div>
 							<div flex class="icon-set-fix m-r-10p">
-								<input class="w-100p" id="cr" type="text" ng-model="newCampaign.ConnectRate" ng-blur="update()" placeholder="connect rate" range-validate range-max="100" range-min="0" required />
-								<div class="icon-set  input-validation-sign">
+								<input class="w-100p" id="cr" type="text" ng-model="newCampaign.ConnectRate" placeholder="connect rate" range-validate range-max="100" range-min="0" required />
+								<div class="icon-set  input-validation-sign" expandable>
 									<i class="mdi mdi-check success right-sign"></i>
 									<i class="mdi mdi-close danger wrong-sign"></i>
 								</div>
@@ -78,8 +77,8 @@
 						<div layout="row">
 							<div class="w-150"><strong translate>RPCR</strong></div>
 							<div flex class="icon-set-fix m-r-10p">
-								<input class="w-100p" id="target" type="text" ng-model="newCampaign.RightPartyConnectRate" ng-blur="update()" placeholder="right party connect rate" range-validate range-max="100" range-min="0" required />
-								<div class="icon-set  input-validation-sign">
+								<input class="w-100p" id="target" type="text" ng-model="newCampaign.RightPartyConnectRate" placeholder="right party connect rate" range-validate range-max="100" range-min="0" required />
+								<div class="icon-set  input-validation-sign" expandable>
 									<i class="mdi mdi-check success right-sign"></i>
 									<i class="mdi mdi-close danger wrong-sign"></i>
 								</div>
@@ -88,8 +87,8 @@
 						<div layout="row">
 							<div class="w-150"><strong translate>ConnectAHT</strong></div>
 							<div flex class="icon-set-fix m-r-10p">
-								<input class="w-100p" id="cAHT" type="text" ng-model="newCampaign.ConnectAverageHandlingTime" ng-blur="update()" placeholder="connect average handle time" range-validate range-min="0" required />
-								<div class="icon-set  input-validation-sign">
+								<input class="w-100p" id="cAHT" type="text" ng-model="newCampaign.ConnectAverageHandlingTime" placeholder="connect average handle time" range-validate range-min="0" required />
+								<div class="icon-set  input-validation-sign" expandable>
 									<i class="mdi mdi-check success right-sign"></i>
 									<i class="mdi mdi-close danger wrong-sign"></i>
 								</div>
@@ -98,8 +97,8 @@
 						<div layout="row">
 							<div class="w-150"><strong translate>RPCAHT</strong></div>
 							<div flex class="icon-set-fix m-r-10p">
-								<input class="w-100p" id="rpcAHT" type="text" ng-model="newCampaign.RightPartyAverageHandlingTime" ng-blur="update()" placeholder="right party average handle time" range-validate range-min="0" required />
-								<div class="icon-set  input-validation-sign">
+								<input class="w-100p" id="rpcAHT" type="text" ng-model="newCampaign.RightPartyAverageHandlingTime" placeholder="right party average handle time" range-validate range-min="0" required />
+								<div class="icon-set  input-validation-sign" expandable>
 									<i class="mdi mdi-check success right-sign"></i>
 									<i class="mdi mdi-close danger wrong-sign"></i>
 								</div>
@@ -108,8 +107,8 @@
 						<div layout="row">
 							<div class="w-150"><strong translate>UnproductiveTime</strong></div>
 							<div flex class="icon-set-fix m-r-10p">
-								<input class="w-100p" id="unproductive" type="text" ng-model="newCampaign.UnproductiveTime" ng-blur="update()" placeholder="unproductive time" range-validate range-min="0" required />
-								<div class="icon-set  input-validation-sign">
+								<input class="w-100p" id="unproductive" type="text" ng-model="newCampaign.UnproductiveTime" placeholder="unproductive time" range-validate range-min="0" required />
+								<div class="icon-set  input-validation-sign" expandable>
 									<i class="mdi mdi-check success right-sign"></i>
 									<i class="mdi mdi-close danger wrong-sign"></i>
 								</div>
@@ -127,18 +126,26 @@
 					<div class="wfm-block clearfix">
 						<div class="pull-left">
 							<div class="wfm-datepicker-wrap campaign-startdate no-boxshadow">
-								<div class="sub-header">
-									<span translate>StartTimeColon</span> <strong>{{newCampaign.StartDate.Date | date: format }}</strong>
+								<div class="sub-header relative">
+									<span translate>StartTimeColon</span> <strong ng-class="newCampaign.StartDate?'ng-valid':'ng-invalid'">{{newCampaign.StartDate.Date | date: format }}</strong>
+									<div class="icon-set  input-validation-sign datepickerfix" expandable>
+										<i class="mdi mdi-check success right-sign "></i>
+										<i class="mdi mdi-close danger wrong-sign"></i>
+									</div>
 								</div>
-								<datepicker ng-model="newCampaign.StartDate.Date" max-date="newCampaign.EndDate.Date" show-weeks="true" class="well well-sm"></datepicker>
+								<datepicker ng-model="newCampaign.StartDate.Date"  show-weeks="true" class="well well-sm"></datepicker>
 							</div>
 						</div>
 						<div class="pull-left">
 							<div class="wfm-datepicker-wrap campaign-enddate no-boxshadow">
-								<div class="sub-header">
-									<span translate>EndTimeColon</span> <strong class="end-date">{{newCampaign.EndDate.Date | date: format }}</strong>
+								<div class="sub-header relative">
+									<span translate>EndTimeColon</span> <strong ng-class="newCampaign.EndDate?'ng-valid':'ng-invalid'" class="end-date">{{newCampaign.EndDate.Date | date: format }}</strong>
+									<div class="icon-set  input-validation-sign datepickerfix" expandable>
+										<i class="mdi mdi-check success right-sign "></i>
+										<i class="mdi mdi-close danger wrong-sign"></i>
+									</div>
 								</div>
-								<datepicker ng-model="newCampaign.EndDate.Date" min-date="newCampaign.StartDate.Date" show-weeks="true" class="well well-sm"></datepicker>
+								<datepicker ng-model="newCampaign.EndDate.Date"  show-weeks="true" class="well well-sm"></datepicker>
 							</div>
 						</div>
 					</div>
@@ -221,9 +228,9 @@
 						</div>
 					</div>
 				</div>
-			</div>
-			<button class="wfm-btn wfm-btn-invis-primary" ng-click="addCampaign()">complete</button>
-			<button class="wfm-btn wfm-btn-invis-default" ng-click="reset()">Default</button>
+			</div> 
+			<button class="wfm-btn wfm-btn-primary material-depth-1" ng-click="addCampaign()" ng-class="{'wfm-btn-primary-disabled': !isInputValid()}">complete</button>
+			<button class="wfm-btn wfm-btn-default material-depth-1" ng-click="reset()">Default</button>
 		</div>
 	</div>
 </div>

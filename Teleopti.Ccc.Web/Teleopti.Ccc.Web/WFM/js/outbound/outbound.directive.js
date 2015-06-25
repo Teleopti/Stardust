@@ -10,11 +10,29 @@
 			restrict: 'A',
 			link: function(scope, elem, attr) {
 				var identifier = attr['name'];
+				console.log()
 				scope.$emit('formLocator.' + identifier);
 			}
 		}
 	});
 
+	outbound.directive('expandable', [
+		'$animate',
+		function($animate) {
+			return {
+				restrict: 'A',
+				link: postLink,
+				scope: {}
+			};
+
+			function postLink(scope, elem, attrs) {
+				scope.$on('expandable.expand', function() {
+					$animate.addClass(elem, 'expand').then(function() { elem.removeClass('expand'); });
+				});
+
+			}
+		}
+	]);
 
 	outbound.directive('rangeValidate', function() {
 		return {
@@ -409,7 +427,7 @@
 
 	function timepickerTemplate() {
 		return '<input name="hourValueInput" type="text" ng-model="timeValue.hour" hour-input flex required />:<input name="minuteValueInput" type="text" ng-model="timeValue.minute" minute-input flex required/>' +
-		  '<md-select name="meridianValueInput" ng-model="timeValue.meridian" ng-if="useMeridian" flex required><md-option value="0">AM</md-option><md-option value="1">PM</md-option></md-select>';
+		  '<select name="meridianValueInput" ng-model="timeValue.meridian" ng-if="useMeridian" flex required><option value="0">AM</md-option><option value="1">PM</option></select>';
 	}
 
 })();

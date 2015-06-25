@@ -3,7 +3,7 @@
 (function () {
 
 
-	var outbound = angular.module('wfm.outbound', ['outboundServiceModule']);
+	var outbound = angular.module('wfm.outbound', ['outboundServiceModule', 'ngAnimate']);
 
 
 	var notifySuccess = function (growl, message) {
@@ -21,34 +21,53 @@
 	}
 
 	outbound.controller('OutboundCreateCtrl', [
-		'$scope', '$state', 'outboundService33699', 'outboundNotificationService',
-		function ($scope, $state, outboundService, outboundNotificationService) {
+		'$scope', '$state',  'outboundService33699', 'outboundNotificationService',
+		function ($scope, $state,  outboundService, outboundNotificationService) {
 
 
 			$scope.$on('formLocator.createCampaignForm', function (event) {
 				$scope.createCampaignForm = event.targetScope.createCampaignForm;
-				$scope.formScope = event.targetScope;
-				console.log($scope.createCampaignForm);
+				$scope.formScope = event.targetScope;			
 			});
 
 			reset();
 
-			$scope.addCampaign= function() {
+			$scope.addCampaign = function () {
+				if (!isInputValid()) {
+					console.log("input invalid");
+					flashErrorIcons();
+					return;
+				}
 				outboundService.addCampaign($scope.newCampaign, function (campaign) {
 					reset();
 					show(campaign);
 					outboundNotificationService.notifyCampaignCreationSuccess(campaign);
 				}, function (error) {
-					outboundNotificationService.notifyCampaignCreationFailure(campaign, error);
+					outboundNotificationService.notifyCampaignCreationFailure(error);
 				});
 			}
 
 			$scope.reset = reset;
+			$scope.isInputValid = isInputValid;
+
+
+			function isInputValid() {			
+				if (!$scope.createCampaignForm) return false;
+
+				var startDate = deepPropertyAccess($scope, ['newCampaign', 'StartDate', 'Date']);
+				var endDate = deepPropertyAccess($scope, ['newCampaign', 'EndDate', 'Date']);
+
+				if (!(startDate && endDate && startDate <= endDate)) return false;			
+
+				return $scope.createCampaignForm.$valid;
+			}
+
+			function flashErrorIcons() {
+				$scope.$broadcast('expandable.expand');
+			}
 
 			function reset() {
 				$scope.newCampaign = {};
-
-
 				$scope.acToggle1 = $scope.acToggle2 = $scope.acToggle3 = true;			
 
 				if ($scope.createCampaignForm) {
@@ -58,6 +77,16 @@
 
 			function show(campaign) {
 				$state.go('outbound.edit', { Id: campaign.Id });
+			}
+
+			function deepPropertyAccess(obj, propertiesChain) {
+				var curObj = obj;
+				for (var i = 0; i < propertiesChain.length; i += 1) {
+					var curProperty = propertiesChain[i];
+					if (angular.isDefined(curObj[curProperty])) curObj = curObj[curProperty];
+					else return;
+				}
+				return curObj;
 			}
 
 		}

@@ -177,12 +177,12 @@
 		this.notifySuccess = notifySuccess;
 		this.notifyFailure = notifyFailure;
 
-		this.notifyCampaignCreationSuccess = function(campaign) {
+		this.notifyCampaignCreationSuccess = function (campaign) {			
 			notifySuccess("New campaign <strong>" + campaign.name + "</strong> created");
 		}
 
-		this.notifyCampaignCreationFailure = function(campaign, error) {
-			notifyFailure("Failed to create campaign " + campaign.name + " " + error);
+		this.notifyCampaignCreationFailure = function (error) {
+			notifyFailure("Failed to create campaign "  + (error && error.Message? error.Message: error.toString()));
 		}
 
 
