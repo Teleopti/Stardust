@@ -13,15 +13,43 @@
 
 		var createCampaignCommandUrl = '../api/Outbound/Campaign';
 
-		this.addCampaign = function(campaign, successCb, errorCb) {
-			$http.post(createCampaignCommandUrl, campaign).
+		this.addCampaign = function (campaign, successCb, errorCb) {
+
+
+
+			$http.post(createCampaignCommandUrl, formatCampaign(campaign)).
 				success(function(data) {
 					if (successCb != null) successCb(data);
 				}).
 				error(function(data) {
 					if (errorCb != null) errorCb(data);
 				});
+		}
 
+		function formatCampaign(campaign) {
+			var campaign = angular.copy(campaign);
+
+			var formattedWorkingHours = [];
+
+
+			campaign.WorkingHours.forEach(function (d) {
+				d.WeekDaySelections.forEach(function(e) {
+					if (e.Checked) {
+						formattedWorkingHours.push({
+							WeekDay: e.WeekDay,							
+							StartTime: formatTimespanInput(d.StartTime),
+							EndTime: formatTimespanInput(d.EndTime)							
+						});
+					}
+				});						
+			});
+
+			campaign.WorkingHours = formattedWorkingHours;
+			return campaign;
+		}
+
+		function formatTimespanInput(dtObj) {
+			return $filter('date')(dtObj, 'HH:mm');
 		}
 
 

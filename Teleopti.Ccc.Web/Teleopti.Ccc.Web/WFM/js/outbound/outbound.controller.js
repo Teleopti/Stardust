@@ -49,6 +49,17 @@
 
 			$scope.reset = reset;
 			$scope.isInputValid = isInputValid;
+			$scope.addEmptyWorkingPeriod = addEmptyWorkingPeriod;
+			$scope.removeWorkingPeriod = removeWorkingPeriod;
+
+			function addEmptyWorkingPeriod(startTime, endTime) {
+				if (!(startTime && endTime)) return;
+				$scope.newCampaign.WorkingHours.push(createEmptyWorkingPeriod(angular.copy(startTime), angular.copy(endTime)));
+			}
+
+			function removeWorkingPeriod(index) {
+				$scope.newCampaign.WorkingHours.splice(index, 1);
+			}
 
 
 			function isInputValid() {			
@@ -66,13 +77,26 @@
 				$scope.$broadcast('expandable.expand');
 			}
 
-			function reset() {
-				$scope.newCampaign = {};
+			function reset() {				
+				$scope.newCampaign = {
+					WorkingHours: [
+						createEmptyWorkingPeriod(new Date(2000,1,1, 7, 0), new Date(2000,1,1, 12,0)),
+						createEmptyWorkingPeriod(new Date(2000,1,1, 13, 0), new Date(2000,1,1, 18, 0))
+					]
+				};
 				$scope.acToggle1 = $scope.acToggle2 = $scope.acToggle3 = true;			
 
 				if ($scope.createCampaignForm) {
 					$scope.createCampaignForm.$setPristine();
-				}						
+				}				
+			}
+
+			function createEmptyWorkingPeriod(startTime, endTime) {
+				var weekdaySelections = [];
+				for (var i = 0; i < 7; i ++) {
+					weekdaySelections.push({ WeekDay: i, Checked: false });
+				}
+				return { StartTime: startTime, EndTime: endTime, WeekDaySelections: weekdaySelections };
 			}
 
 			function show(campaign) {

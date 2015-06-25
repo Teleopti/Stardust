@@ -170,32 +170,32 @@
 							</div>
 							<div class="wfm-block campaign-working-hours">
 								<ul class="wfm-list">
-									<li ng-repeat="WorkingPeriod in newCampaign.CampaignWorkingPeriods"
+									<li ng-repeat="WorkingPeriod in newCampaign.WorkingHours"
 										ng-class="{'wfm-list-item-selected': WorkingPeriod.selected}"
 										ng-click="$parent.toggleWorkingPeriodSelect(WorkingPeriod)"
 										class="role-btn wfm-block wfm-dense">
 										<div class="wfm-leave-behind wfm-leave-behind-1">
 											<span>
-												<i ng-click="$parent.deleteWorkingPeriod(WorkingPeriod)">
+												<i ng-click="$parent.removeWorkingPeriod($index)">
 													<svg style="width: 18px; height: 18px" viewBox="0 0 24 24">
 														<path fill="#555555" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />
 													</svg>
 													<md-tooltip>
-														<span translate>Delete</span>
+														<span translatewfm-block campaign-working-hours>Delete</span>
 													</md-tooltip>
 												</i>
 											</span>
 										</div>
 										<div class="row labelfix">
 											<div class="col-xs-3 w-160">
-												<span>{{WorkingPeriod.StartTime}}</span>
+												<span>{{WorkingPeriod.StartTime | date: 'HH:mm'}}</span>
 												<span> - </span>
-												<span>{{WorkingPeriod.EndTime}}</span>
+												<span>{{WorkingPeriod.EndTime | date: 'HH:mm'}}</span>
 											</div>
-											<div ng-repeat-start="WeekDay in WorkingPeriod.ExpandedWorkingPeriodAssignments" ng-repeat-end class="col-xs-1">
+											<div ng-repeat-start="WeekDay in WorkingPeriod.WeekDaySelections" ng-repeat-end class="col-xs-1">
 												<div class="wfm-checkbox wfm-checkbox-inline ">
-													<input type="checkbox" id="check_workinghour_{{WorkingPeriod.Id}}_weekday_{{WeekDay.WeekDay}}" ng-model="WeekDay.Checked" ng-change="$parent.$parent.toggleWorkingPeriodAssignment(WorkingPeriod, WeekDay)" />
-													<label for="check_workinghour_{{WorkingPeriod.Id}}_weekday_{{WeekDay.WeekDay}}">
+													<input type="checkbox" id="check_workinghour_{{$parent.$index}}_weekday_{{WeekDay.WeekDay}}" ng-model="WeekDay.Checked" />
+													<label for="check_workinghour_{{$parent.$index}}_weekday_{{WeekDay.WeekDay}}">
 														<span class="wfm-checkbox-toggle"></span>
 														<span class="wfm-checkbox-label"></span>
 													</label>
@@ -208,18 +208,18 @@
 							<div class="wfm-block m-t-10">
 								<form name="newWorkingPeriodForm" ng-submit="">
 									<div class="inline-fix clearfix">
-										<button class="wfm-fab mini success" ng-click="addWorkingPeriod()"><i class="mdi mdi-plus"></i></button>
+										<button class="wfm-fab mini success" ng-click="addEmptyWorkingPeriod(newWorkingPeriodStartTime, newWorkingPeriodEndTime)"><i class="mdi mdi-plus"></i></button>
 										<!--<i class="mdi mdi-plus move-down-5" ng-click="addWorkingPeriod()"></i>-->
 										<!--<input type="time" name="NewTimeRangeStart" ng-model="newWorkingPeriod.StartTime"/>
 										-
 										<input type="time" name="NewTimeRangeEnd" ng-model="newWorkingPeriod.EndTime"/>-->
 
 										<div class="wfm-timepicker-wrapper">
-											<wfm-timepicker ng-model="newWorkingPeriod.StartTime" use-meridian="useMeridian" minute-step="15"></wfm-timepicker>
+											<wfm-timepicker ng-model="newWorkingPeriodStartTime" use-meridian="useMeridian" minute-step="15"></wfm-timepicker>
 										</div>
 										<span class="m-l-40">-</span>
 										<div class="wfm-timepicker-wrapper m-l-10">
-											<wfm-timepicker ng-model="newWorkingPeriod.EndTime" use-meridian="useMeridian" minute-step="15"></wfm-timepicker>
+											<wfm-timepicker ng-model="newWorkingPeriodEndTime" use-meridian="useMeridian" minute-step="15"></wfm-timepicker>
 										</div>
 									</div>
 								</form>

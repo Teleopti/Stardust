@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			{
 				foreach (CampaignWorkingHour workingHour in form.WorkingHours)
 				{
-					campaign.WorkingHours.Add(workingHour.WeekDay, workingHour.WorkingPeriod);
+					campaign.WorkingHours.Add(workingHour.WeekDay, new TimePeriod(workingHour.StartTime, workingHour.EndTime));
 				}
 			}
 

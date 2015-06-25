@@ -43,13 +43,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 				EndDate = new DateOnly(2100, 1, 1),
 				WorkingHours = new List<CampaignWorkingHour>()
 				{
-					new CampaignWorkingHour(){WeekDay = DayOfWeek.Monday, WorkingPeriod = new TimePeriod(new TimeSpan(9,0,0), new TimeSpan(17,0,0))},
-					new CampaignWorkingHour(){WeekDay = DayOfWeek.Tuesday, WorkingPeriod = new TimePeriod(new TimeSpan(9,0,0), new TimeSpan(17,0,0))},
-					new CampaignWorkingHour(){WeekDay = DayOfWeek.Wednesday, WorkingPeriod = new TimePeriod(new TimeSpan(9,0,0), new TimeSpan(17,0,0))},
-					new CampaignWorkingHour(){WeekDay = DayOfWeek.Thursday, WorkingPeriod = new TimePeriod(new TimeSpan(9,0,0), new TimeSpan(17,0,0))},
-					new CampaignWorkingHour(){WeekDay = DayOfWeek.Friday, WorkingPeriod = new TimePeriod(new TimeSpan(9,0,0), new TimeSpan(17,0,0))},
-					new CampaignWorkingHour(){WeekDay = DayOfWeek.Saturday, WorkingPeriod = new TimePeriod(new TimeSpan(10,0,0), new TimeSpan(15,0,0))},
-					new CampaignWorkingHour(){WeekDay = DayOfWeek.Sunday, WorkingPeriod = new TimePeriod(new TimeSpan(10,0,0), new TimeSpan(15,0,0))}
+					new CampaignWorkingHour(){WeekDay = DayOfWeek.Monday, StartTime = new TimeSpan(9,0,0), EndTime = new TimeSpan(17,0,0)},
+					new CampaignWorkingHour(){WeekDay = DayOfWeek.Tuesday, StartTime =new TimeSpan(9,0,0), EndTime = new TimeSpan(17,0,0)},
+					new CampaignWorkingHour(){WeekDay = DayOfWeek.Wednesday, StartTime = new TimeSpan(9,0,0), EndTime = new TimeSpan(17,0,0)},
+					new CampaignWorkingHour(){WeekDay = DayOfWeek.Thursday, StartTime = new TimeSpan(9,0,0), EndTime = new TimeSpan(17,0,0)},
+					new CampaignWorkingHour(){WeekDay = DayOfWeek.Friday, StartTime = new TimeSpan(9,0,0), EndTime = new TimeSpan(17,0,0)},
+					new CampaignWorkingHour(){WeekDay = DayOfWeek.Saturday, StartTime = new TimeSpan(10,0,0), EndTime = new TimeSpan(15,0,0)},
+					new CampaignWorkingHour(){WeekDay = DayOfWeek.Sunday, StartTime = new TimeSpan(10,0,0), EndTime = new TimeSpan(15,0,0)}
 				}
 			};
 
@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var campaigns = _fakeCampaignRepository.LoadAll();
 			for (var i = 0; i < 7; ++i)
 			{
-				campaigns[0].WorkingHours[_campaignInput.WorkingHours[i].WeekDay].Should().Be.EqualTo(_campaignInput.WorkingHours[i].WorkingPeriod);
+				campaigns[0].WorkingHours[_campaignInput.WorkingHours[i].WeekDay].Should().Be.EqualTo(new TimePeriod(_campaignInput.WorkingHours[i].StartTime, (_campaignInput.WorkingHours[i].EndTime)));
 			}
 		}
 

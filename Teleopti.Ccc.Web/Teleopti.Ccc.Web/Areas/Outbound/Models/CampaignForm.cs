@@ -22,7 +22,8 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 	public class CampaignWorkingHour
 	{
 		public DayOfWeek WeekDay;
-		public TimePeriod WorkingPeriod;
+		public TimeSpan StartTime;
+		public TimeSpan EndTime;
 	}
 
 	public class ActivityViewModel
