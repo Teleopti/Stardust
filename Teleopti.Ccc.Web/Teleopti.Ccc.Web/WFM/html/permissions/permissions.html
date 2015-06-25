@@ -25,9 +25,15 @@
 				</div>
 
 				<div id="searchRoleResults" ng-init="editing=false">
-					<ul class="wfm-list roles-list">
-						<li ng-repeat="role in roles | filter:searchRoles" ng-click="showRole(role)" ng-dblclick="editing = true" ng-class="{'active': role.Id==selectedRole}" class="role-btn wfm-block wfm-list-item role" selection-model>
-							<div ng-show="!editing" class="wfm-leave-behind" ng-class="{'dissapear': editing==true}">
+					<ul class="wfm-list">
+						<li ng-repeat="role in roles | filter:searchRoles" ng-click="showRole(role)" ng-dblclick="editing=true" ng-class="{'active': role.Id == selectedRole}" selection-model>
+							<span ng-hide="editing" class="list-item-container" ng-class="{'text-truncation': editing==false}">{{role.DescriptionText}}</span>
+							<span ng-show="editing">
+								<form ng-submit="editing = false; updateRole(role);">
+									<input type="text" class="inline-role-name" ng-model="role.DescriptionText" placeholder="{{'Name' | translate}}" ng-required />
+								</form>
+							</span>
+							<div ng-show="!editing" class="wfm-leave-behind" ng-class="{'hide-list-actions': editing==true}">
 								<span>
 									<i ng-click="copyRole(role.Id)" class="mdi mdi-content-copy">
 										<md-tooltip>
@@ -46,10 +52,6 @@
 									</i>
 								</span>
 							</div>
-							<span ng-hide="editing" class="list-item-container">{{role.DescriptionText}}</span>
-							<form ng-show="editing" ng-submit="editing = false; updateRole(role)">
-								<input type="text" class="inline-role-name" ng-model="role.DescriptionText" placeholder="{{'Name' | translate}}" ng-required />
-							</form>
 						</li>
 					</ul>
 				</div>
