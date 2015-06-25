@@ -9,7 +9,7 @@ using Teleopti.Messaging.Events;
 
 namespace Teleopti.Ccc.Infrastructure.MessageBroker.Scheduling
 {
-	public class MailboxSubscriber : IScheduleChangeSubscriber
+	public class MailboxSubscriber : IScheduleMessageSubscriber
 	{
 		private readonly IJsonDeserializer _deserializer;
 
@@ -47,6 +47,26 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker.Scheduling
 				period.StartDateTime,
 				period.EndDateTime,
 				false,
+				true);
+
+			StateHolder.Instance.StateReader.ApplicationScopeData.Messaging.RegisterEventSubscription(
+				onEventMessage,
+				typeof(IPersistableScheduleData),
+				period.StartDateTime,
+				period.EndDateTime,
+				true,
+				true);
+
+			StateHolder.Instance.StateReader.ApplicationScopeData.Messaging.RegisterEventSubscription(
+				onEventMessage,
+				typeof(IMeeting),
+				true,
+				true);
+
+			StateHolder.Instance.StateReader.ApplicationScopeData.Messaging.RegisterEventSubscription(
+				onEventMessage,
+				typeof(IPersonRequest),
+				true,
 				true);
 		}
 	}

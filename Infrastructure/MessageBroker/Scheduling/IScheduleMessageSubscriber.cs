@@ -4,7 +4,7 @@ using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.Infrastructure.MessageBroker.Scheduling
 {
-	public interface IScheduleChangeSubscriber
+	public interface IScheduleMessageSubscriber
 	{
 		void Subscribe(Guid scenario, DateTimePeriod period, EventHandler<EventMessageArgs> onEventMessage);
 	}

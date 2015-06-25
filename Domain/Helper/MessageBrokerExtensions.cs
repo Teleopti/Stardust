@@ -18,16 +18,16 @@ namespace Teleopti.Ccc.Domain.Helper
 			return new subscriptionContext {BusinessUnitId = businessUnitId, Datasource = datasource};
 		}
 
-		public static void RegisterEventSubscription(this IMessageListener broker, EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType)
+		public static void RegisterEventSubscription(this IMessageListener broker, EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType, bool base64BinaryData = true, bool mailBox = false)
 		{
 			var detail = getContext();
-			broker.addSubscription(eventMessageHandler, detail.Datasource, detail.BusinessUnitId, null, null, null, domainObjectType, Consts.MinDate, Consts.MaxDate);
+			broker.addSubscription(eventMessageHandler, detail.Datasource, detail.BusinessUnitId, null, null, null, domainObjectType, Consts.MinDate, Consts.MaxDate, base64BinaryData, mailBox);
 		}
 
-		public static void RegisterEventSubscription(this IMessageListener broker, EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType, DateTime startDate, DateTime endDate)
+		public static void RegisterEventSubscription(this IMessageListener broker, EventHandler<EventMessageArgs> eventMessageHandler, Type domainObjectType, DateTime startDate, DateTime endDate, bool base64BinaryData = true, bool mailBox = false)
 		{
 			var detail = getContext();
-			broker.addSubscription(eventMessageHandler, detail.Datasource, detail.BusinessUnitId, null, null, null, domainObjectType, startDate, endDate);
+			broker.addSubscription(eventMessageHandler, detail.Datasource, detail.BusinessUnitId, null, null, null, domainObjectType, startDate, endDate, base64BinaryData, mailBox);
 		}
 
 		public static void RegisterEventSubscription(this IMessageListener broker, EventHandler<EventMessageArgs> eventMessageHandler,Guid referenceObjectId, Type referenceObjectType, Type domainObjectType, DateTime startDate, DateTime endDate, bool base64BinaryData = true, bool mailBox = false)

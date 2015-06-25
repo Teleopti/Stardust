@@ -7,7 +7,7 @@ using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.Infrastructure.MessageBroker.Scheduling
 {
-	public class SignalRSubscriber : IScheduleChangeSubscriber
+	public class SignalRSubscriber : IScheduleMessageSubscriber
 	{
 		public void Subscribe(Guid scenario, DateTimePeriod period, EventHandler<EventMessageArgs> onEventMessage)
 		{
@@ -18,6 +18,18 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker.Scheduling
 				typeof(IScheduleChangedEvent),
 				period.StartDateTime,
 				period.EndDateTime);
+
+			StateHolder.Instance.StateReader.ApplicationScopeData.Messaging.RegisterEventSubscription(
+				onEventMessage,
+				typeof(IPersistableScheduleData),
+				period.StartDateTime,
+				period.EndDateTime);
+			StateHolder.Instance.StateReader.ApplicationScopeData.Messaging.RegisterEventSubscription(
+				onEventMessage,
+				typeof(IMeeting));
+			StateHolder.Instance.StateReader.ApplicationScopeData.Messaging.RegisterEventSubscription(
+				onEventMessage,
+				typeof(IPersonRequest));
 		}
 	}
 }

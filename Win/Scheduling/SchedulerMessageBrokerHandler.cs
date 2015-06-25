@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private readonly Guid _instanceId = Guid.NewGuid();
 		private static readonly ILog Log = LogManager.GetLogger(typeof(SchedulerMessageBrokerHandler));
 		private readonly IList<IEventMessage> _messageQueue = new List<IEventMessage>();
-		private readonly IScheduleChangeSubscriber _scheduleChangeSubscriber;
+		private readonly IScheduleMessageSubscriber _scheduleMessageSubscriber;
 
 		public Guid InitiatorId
 		{
@@ -56,24 +56,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 					TypedParameter.From<IMessageQueueRemoval>(this)
 					))
 			);
-			_scheduleChangeSubscriber = container.Resolve<IScheduleChangeSubscriber>();
+			_scheduleMessageSubscriber = container.Resolve<IScheduleMessageSubscriber>();
 		}
 
 		public void Listen(DateTimePeriod period)
 		{
-			_scheduleChangeSubscriber.Subscribe(_owner.SchedulerState.RequestedScenario.Id.GetValueOrDefault(), period, onEventMessage);
+			_scheduleMessageSubscriber.Subscribe(_owner.SchedulerState.RequestedScenario.Id.GetValueOrDefault(), period, onEventMessage);
 
-			StateHolder.Instance.StateReader.ApplicationScopeData.Messaging.RegisterEventSubscription(
-				onEventMessage,
-				typeof(IPersistableScheduleData),
-				period.StartDateTime,
-				period.EndDateTime);
-			StateHolder.Instance.StateReader.ApplicationScopeData.Messaging.RegisterEventSubscription(
-				onEventMessage,
-				typeof(IMeeting));
-			StateHolder.Instance.StateReader.ApplicationScopeData.Messaging.RegisterEventSubscription(
-				onEventMessage,
-				typeof(IPersonRequest));
 		}
 		
 		private void onEventMessage(object sender, EventMessageArgs e)

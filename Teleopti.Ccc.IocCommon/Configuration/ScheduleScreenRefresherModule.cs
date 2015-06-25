@@ -23,9 +23,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
             builder.RegisterType<ScheduleScreenRefresher>().As<IScheduleScreenRefresher>();
 
 		    if (_configuration.Toggle(Toggles.MessageBroker_SchedulingScreenMailbox_32733))
-			    builder.RegisterType<MailboxSubscriber>().As<IScheduleChangeSubscriber>().SingleInstance();
+			    builder.RegisterType<MailboxSubscriber>().As<IScheduleMessageSubscriber>().SingleInstance();
 		    else
-				builder.RegisterType<SignalRSubscriber>().As<IScheduleChangeSubscriber>().SingleInstance();
+				builder.RegisterType<SignalRSubscriber>().As<IScheduleMessageSubscriber>().SingleInstance();
         }
     }
 }
