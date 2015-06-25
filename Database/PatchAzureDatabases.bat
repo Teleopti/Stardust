@@ -14,13 +14,14 @@ SET SQLAppPwd=%7
 SET Conn1=-U%SQLAdmin% -P%SQLAdminPwd%
 SET Conn2=-DU%SQLAdmin% -DP%SQLAdminPwd%
 SET Conn3=-R -L"%SQLAppUser%:%SQLAppPwd%"
+SET CONNSTRINGBASE="Data Source=%MyServerInstance%;User id=%SQLAppUser%;Password=%SQLAppPwd%"
 
 ::Patch Databases
 "%ROOTDIR%\DBManager.exe" -S%MyServerInstance% -D%AppDB% -OTeleoptiCCC7 %Conn1% -T %Conn3%
 "%ROOTDIR%\DBManager.exe" -S%MyServerInstance% -D%AnalyticsDB% -OTeleoptiAnalytics %Conn1% -T %Conn3%
 
 ::Security stuff
-"%ROOTDIR%\Enrypted\Teleopti.Support.Security.exe" -DS%MyServerInstance% -AP%AppDB% -AN%AnalyticsDB% -CD"%AnalyticsDB%" %Conn2%
+"%ROOTDIR%\Enrypted\Teleopti.Support.Security.exe" -DS%MyServerInstance% -AP%AppDB% -AN%AnalyticsDB% -CD"%AnalyticsDB%" -CS%CONNSTRINGBASE% %Conn2%
 
 ECHO Upgrade of databases successful!
 
