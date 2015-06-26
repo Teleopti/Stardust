@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             get 
             {
-                if (RequestStatus == 1)
+                if (RequestStatus == 1 || RequestStatus == 4)
                     return UserTexts.Resources.Denied;
 
                 return UserTexts.Resources.Approved;
