@@ -138,7 +138,7 @@ $(document).ready(function() {
 		});
 
 		var vm = Teleopti.MyTimeWeb.Request.List.GetRequestItemViewModel();
-		var data = getData("/Date(1435276800000)/", "/Date(1435309200000)/", false, false);
+		var data = getData("2014-05-14 8:00", "2014-05-14 17:00", false, false);
 
 		vm.Initialize(data, false);
 

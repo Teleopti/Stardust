@@ -316,12 +316,11 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			self.RequestType(data.Type);
 			self.RequestTypeEnum(data.TypeEnum);
 			self.Status(data.Status);
-
-			
 			self.IsFullDay(data.IsFullDay);
-			
+
 			self.StartDateTime(moment(data.DateTimeFrom));
 			self.EndDateTime(moment(data.DateTimeTo));
+
 			self.UpdatedOn(Teleopti.MyTimeWeb.Common.FormatDate(data.UpdatedOnDateTime));
 
 			self.TextSegments(messageInList);

@@ -57,7 +57,7 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		}
 		return moment(dateTime).format(Teleopti.MyTimeWeb.Common.TimeFormat);
 
-	};
+	};	
 
 	function _formatMonth(date) {
 
