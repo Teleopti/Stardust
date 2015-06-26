@@ -1,12 +1,13 @@
 ﻿
 <div>
-	<div position="absolute">
+	<div position="absolute" class="breadbin-inverse">
 
-		<span ng-show="!vm.isLoading" class="breadbin fadein" ng-repeat="breadcrumb in vm.breadcrumbs">
-			<a ng-if="!$last" href="" ng-click="vm.handleBreadcrumbClick(breadcrumb.Id)">{{breadcrumb.Name}} ></a>
+		<span ng-show="!vm.isLoading" class="breadcrumb-inverse fadein" ng-repeat="breadcrumb in vm.breadcrumbs">
+			<a ng-if="!$last" href="" ng-click="vm.handleBreadcrumbClick(breadcrumb.Id)">{{breadcrumb.Name}}</a>
+			<span class="divider" ng-if="!$last">></span>
 			<span ng-if="$last">{{breadcrumb.Name}}</span>
 		</span>
-		<p/>
+		<p />
 	</div>
 
 	<div id="seatmapcanvas" style="position: relative; margin-top: 20px;">
@@ -22,7 +23,7 @@
 		
 		<div style="position: absolute; bottom: 0px;margin-left: 1px">
 			<button ng-class="{info:!vm.isMoveMode(),success:vm.isMoveMode()}" style="float:left;" class="wfm-fab mini  " ng-click="vm.toggleMoveMode()">
-				<i style="padding-bottom: 8px" class="mdi mdi-gamepad"></i>
+				<i class="mdi mdi-gamepad"></i>
 			</button>
 			<md-slider style="width:200px; margin-left:40px;" ng-model="vm.zoomData.zoomValue" min="{{vm.zoomData.min}}" max="{{vm.zoomData.max}}" step="{{vm.zoomData.step}}" ng-change="vm.zoom()"></md-slider>
 		</div>
