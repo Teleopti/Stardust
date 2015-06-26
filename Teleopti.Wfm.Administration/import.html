@@ -51,9 +51,14 @@
 			<label style="color:goldenrod" ng-show="importVm.NumberOfConflicting > 0">
 				These users are confliction and will get new Logons. The Tenant name will be added as a prefix to the name.
 			</label>
-				<div ng-repeat="user in importVm.Conflicts" ng-class-odd="'oddRow'">
-					{{user.AppLogon}} {{user.Identity}}
-				</div>
+			<table ng-show="importVm.NumberOfConflicting > 0">
+				<tr><th>New application logon</th><th>New identity</th></tr>
+				<tr ng-repeat="user in importVm.Conflicts" ng-class-odd="'oddRow'">
+					<td>{{user.AppLogon}}</td>
+					<td>{{user.Identity}}</td>
+				</tr>
+			</table>
+				
 			</div>
 	</div>
 
