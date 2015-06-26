@@ -61,8 +61,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 							return s.Request.Period.ToShortDateTimeString(_userTimeZone.TimeZone());
 						}
 					}))
-				.ForMember(d => d.DateTimeFrom, o => o.ResolveUsing(s => s.Request.Period.LocalStartDateTime))
-				.ForMember(d => d.DateTimeTo, o => o.ResolveUsing(s => s.Request.Period.LocalEndDateTime))
+				.ForMember(d => d.DateTimeFrom, o => o.ResolveUsing(s => s.Request.Period.StartDateTimeLocal(_userTimeZone.TimeZone())))
+				.ForMember(d => d.DateTimeTo, o => o.ResolveUsing(s => s.Request.Period.EndDateTimeLocal(_userTimeZone.TimeZone())))
+
 				.ForMember(d => d.Status, o => o.ResolveUsing(s =>
 				{
 					return getStatusText(s);
