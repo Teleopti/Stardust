@@ -55,7 +55,8 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		if (moment.isMoment(dateTime)) {
 			return date.format(Teleopti.MyTimeWeb.Common.TimeFormat);
 		}
-		return moment.utc(dateTime).format(Teleopti.MyTimeWeb.Common.TimeFormat);
+		return moment(dateTime).format(Teleopti.MyTimeWeb.Common.TimeFormat);
+
 	};
 
 	function _formatMonth(date) {

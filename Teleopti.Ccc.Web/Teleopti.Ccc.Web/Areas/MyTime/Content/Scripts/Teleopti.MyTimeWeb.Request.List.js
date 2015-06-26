@@ -320,8 +320,8 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			
 			self.IsFullDay(data.IsFullDay);
 			
-			self.StartDateTime(moment.utc(data.DateTimeFrom));
-			self.EndDateTime(moment.utc(data.DateTimeTo));
+			self.StartDateTime(moment(data.DateTimeFrom));
+			self.EndDateTime(moment(data.DateTimeTo));
 			self.UpdatedOn(Teleopti.MyTimeWeb.Common.FormatDate(data.UpdatedOnDateTime));
 
 			self.TextSegments(messageInList);

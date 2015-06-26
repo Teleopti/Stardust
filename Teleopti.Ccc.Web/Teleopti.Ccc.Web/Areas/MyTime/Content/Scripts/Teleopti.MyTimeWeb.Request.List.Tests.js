@@ -126,4 +126,27 @@ $(document).ready(function() {
 
 	});
 
+	test("should display date time periods correctly, with no utc conversion", function () {
+		
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) { return true; };
+		Teleopti.MyTimeWeb.Common.SetupCalendar({
+			UseJalaaliCalendar: false,
+			DateFormat: 'YYYY/MM/DD',
+			TimeFormat: 'HH:mm tt',
+			AMDesignator: 'AM',
+			PMDesignator : 'PM'
+		});
+
+		var vm = Teleopti.MyTimeWeb.Request.List.GetRequestItemViewModel();
+		var data = getData("/Date(1435276800000)/", "/Date(1435309200000)/", false, false);
+
+		vm.Initialize(data, false);
+
+		equal(vm.StartDateTime().hour(),8);
+		equal(vm.EndDateTime().hour(),17);
+
+		resetLocale();
+	});
+	
+
 });
