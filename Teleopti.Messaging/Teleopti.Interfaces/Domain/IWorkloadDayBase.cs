@@ -194,5 +194,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created date: 2010-03-11
         /// </remarks>
         void SetQueueStatistics(IQueueStatisticsProvider queueStatisticsProvider);
+
+		void DistributeTasks(IEnumerable<ITemplateTaskPeriod> templateTaskPeriods);
     }
 }

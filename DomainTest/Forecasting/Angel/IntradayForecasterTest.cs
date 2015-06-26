@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 
 			workloadDay.TemplateReference.DayOfWeek.Should().Be.EqualTo(null);
 
-			target.Apply(workload, templatePeriod, new ITaskOwner[] { workloadDay });
+			target.Apply(workload, templatePeriod, new IWorkloadDayBase[] { workloadDay });
 
 			workloadDay.TemplateReference.DayOfWeek.Value.Should().Be.EqualTo(DayOfWeek.Thursday);
 		}

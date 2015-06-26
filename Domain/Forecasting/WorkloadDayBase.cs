@@ -1541,7 +1541,12 @@ namespace Teleopti.Ccc.Domain.Forecasting
             ResetStatistics();
         }
 
-        protected void ResetStatistics()
+		public virtual void DistributeTasks(IEnumerable<ITemplateTaskPeriod> templateTaskPeriods)
+	    {
+		    throw new NotImplementedException();
+	    }
+
+	    protected void ResetStatistics()
         {
             if (_queueStatisticsProvider == null) return;
             

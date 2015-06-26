@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting.Template;
 using Teleopti.Interfaces.Domain;
@@ -100,7 +101,70 @@ namespace Teleopti.Ccc.Domain.Forecasting
             ResetStatistics();
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		public override void DistributeTasks(IEnumerable<ITemplateTaskPeriod> templateTaskPeriods)
+		{
+			var tasksForDay = Tasks;
+			var originalAverageTaskTime = AverageTaskTime;
+			var originalAfterTaskTime = AverageAfterTaskTime;
+			var tasksSum = 0.0;
+
+			Close();
+			var template = (IWorkloadDayTemplate)Workload.GetTemplateAt(TemplateTarget.Workload, (int)CurrentDate.DayOfWeek);
+			SetOpenHours(template.OpenHourList);
+			innerSplitTemplateTaskPeriods(new List<ITemplateTaskPeriod>(TaskPeriodList), day => day.Lock(), day => { });
+
+			var timeZone = Workload.Skill.TimeZone;
+
+			Lock();
+
+			foreach (var keyValuePair in templateTaskPeriods)
+			{
+				var localTemplatePeriod = keyValuePair.Period.TimePeriod(timeZone);
+				var taskPeriods = TaskPeriodList.Where(t => localTemplatePeriod.Contains(t.Period.TimePeriod(timeZone))).ToList();
+				var taskPeriodCount = taskPeriods.Count;
+				if (taskPeriodCount == 2 &&
+					taskPeriods[0].Period.TimePeriod(timeZone) == taskPeriods[1].Period.TimePeriod(timeZone))
+				{
+					//Do nothing as we wan't to set the same values to both periods in this case (ambigious periods due to change from DST)
+				}
+				else if (taskPeriodCount > 1)
+				{
+					innerMergeTemplateTaskPeriods(taskPeriods, day => day.Lock(), day => { });
+					taskPeriods =
+						TaskPeriodList.Where(t => localTemplatePeriod.StartTime == t.Period.TimePeriod(timeZone).StartTime)
+							.ToList();
+					taskPeriodCount = taskPeriods.Count;
+				}
+				if (taskPeriodCount == 0) continue;
+
+				foreach (var newTaskPeriod in taskPeriods)
+				{
+					tasksSum += keyValuePair.Task.Tasks;
+					newTaskPeriod.Tasks = keyValuePair.Task.Tasks;
+				}
+			}
+
+			if (isOpenForIncomingWork())
+			{
+				if (Math.Abs(tasksForDay) < 0.0001 )
+				{
+					Tasks = tasksSum;
+					if (Math.Abs(tasksSum) < 0.0001)
+					{
+						AverageTaskTime = TimeSpan.Zero;
+						AverageAfterTaskTime = TimeSpan.Zero;
+					}
+				}
+				else
+				{
+					Tasks = tasksForDay;
+					AverageTaskTime = originalAverageTaskTime;
+					AverageAfterTaskTime = originalAfterTaskTime;
+				}
+			}
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         public virtual void ApplyTemplate(IWorkloadDayTemplate workloadDayTemplate, Action<IWorkloadDayBase> lockAction, Action<IWorkloadDayBase> releaseAction)
         {
             double tasks = Tasks;
