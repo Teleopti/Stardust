@@ -215,31 +215,19 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
 
 				if (toggleShowNightViolation) {
 					self.RawDate(data.DateInternal);
+					self.HasNightRestViolationToPreviousDay(data.HasNightRestViolationToPreviousDay);
+					self.HasNightRestViolationToNextDay(data.HasNightRestViolationToNextDay);
+					self.RestTimeToNextDay(data.RestTimeToNextDay == null ? null : data.RestTimeToNextDay.Hours);
+					self.RestTimeToPreviousDay(data.RestTimeToPreviousDay == null ? null : data.RestTimeToPreviousDay.Hours);
+					self.ExpectedNightRest(data.ExpectedNightRest == null ? null : data.ExpectedNightRest.Hours);
+
 				}					
 			}
 		});
 	};
 
 
-	this.LoadNightRestFeedback = function () {
-		if (!toggleShowNightViolation) return;
-		if (!self.Feedback())
-			return null;
-		return ajaxForDate(self, {
-			url: "PreferenceFeedback/Feedback",
-			type: 'GET',
-			data: { Date: self.Date },
-			date: self.Date,
-			success: function (data) {							
-				self.HasNightRestViolationToPreviousDay(data.HasNightRestViolationToPreviousDay);
-				self.HasNightRestViolationToNextDay(data.HasNightRestViolationToNextDay);
-				self.RestTimeToNextDay(data.RestTimeToNextDay == null? null: data.RestTimeToNextDay.Hours);
-				self.RestTimeToPreviousDay(data.RestTimeToPreviousDay == null? null: data.RestTimeToPreviousDay.Hours);
-				self.ExpectedNightRest(data.ExpectedNightRest == null? null:  data.ExpectedNightRest.Hours);				
-			}
-		});
-		
-	};
+
 
 
 
@@ -343,8 +331,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
 			success: self.ReadPreference,
 			complete: function () {
 				deferred.resolve();
-				self.LoadFeedback();
-				self.LoadNightRestFeedback();
+				self.LoadFeedback();			
 			}
 		});
 		return deferred.promise();

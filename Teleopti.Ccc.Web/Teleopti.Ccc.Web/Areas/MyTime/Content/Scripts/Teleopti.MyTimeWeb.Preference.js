@@ -76,12 +76,13 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			});
 		$.when.apply(null, promises)
 			.done(function() {
-			periodFeedbackViewModel.LoadFeedback();
-			if (toggleShowNightViolation()) {
-				loadNeighborFeedback();
-				periodFeedbackViewModel.PossibleNightRestViolations();
+				periodFeedbackViewModel.LoadFeedback();
+				if (toggleShowNightViolation()) {
+					loadNeighborFeedback();
+					periodFeedbackViewModel.PossibleNightRestViolations();
+				}
 			}
-		});
+		);
 	}
 
 	function _deletePreferenceTemplate(templateId) {
@@ -165,14 +166,34 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 
 	}
 
+	
+
 	function loadNeighborFeedback() {
-		$('#Preference-body-inner .ui-selected').each(function(index, ele) {
-			var date = $(ele).prev().data('mytime-date');
-			if (preferencesAndScheduleViewModel.DayViewModels[date])
-				preferencesAndScheduleViewModel.DayViewModels[date].LoadNightRestFeedback();
-			date = $(ele).next().data('mytime-date');
-			if (preferencesAndScheduleViewModel.DayViewModels[date])
-				preferencesAndScheduleViewModel.DayViewModels[date].LoadNightRestFeedback();
+
+		var dates = [];
+		$("#Preference-body-inner").find('li[data-mytime-date]').each(function (i, e) {			
+			dates.push( $(e).data('mytime-date'));			
+		});
+	
+
+		$('#Preference-body-inner .ui-selected').each(function (index, ele) {
+			var date = $(ele).data('mytime-date');
+			var curDateIndex = dates.indexOf(date);
+			
+			var previousDayIndex = curDateIndex - 1;
+			var nextDayIndex =curDateIndex + 1;
+
+			if (nextDayIndex < dates.length) {
+				date = dates[nextDayIndex];
+				if (preferencesAndScheduleViewModel.DayViewModels[date])
+					preferencesAndScheduleViewModel.DayViewModels[date].LoadFeedback();
+			}
+
+			if (previousDayIndex >= 0) {
+				date = dates[previousDayIndex];
+				if (preferencesAndScheduleViewModel.DayViewModels[date])
+					preferencesAndScheduleViewModel.DayViewModels[date].LoadFeedback();
+			}			
 		});
 	}
 
