@@ -20,6 +20,8 @@
 		});
 	}
 
+
+
 	outbound.controller('OutboundCreateCtrl', [
 		'$scope', '$state',  'outboundService33699', 'outboundNotificationService',
 		function ($scope, $state,  outboundService, outboundNotificationService) {
@@ -49,19 +51,7 @@
 
 			$scope.reset = reset;
 			$scope.isInputValid = isInputValid;
-			$scope.addEmptyWorkingPeriod = addEmptyWorkingPeriod;
-			$scope.removeWorkingPeriod = removeWorkingPeriod;
-
-			function addEmptyWorkingPeriod(startTime, endTime) {
-				if (!(startTime && endTime)) return;
-				$scope.newCampaign.WorkingHours.push(createEmptyWorkingPeriod(angular.copy(startTime), angular.copy(endTime)));
-			}
-
-			function removeWorkingPeriod(index) {
-				$scope.newCampaign.WorkingHours.splice(index, 1);
-			}
-
-
+		
 			function isInputValid() {			
 				if (!$scope.createCampaignForm) return false;
 
@@ -80,39 +70,23 @@
 			function reset() {				
 				$scope.newCampaign = {
 					WorkingHours: [
-						createEmptyWorkingPeriod(new Date(2000,1,1, 7, 0), new Date(2000,1,1, 12,0)),
-						createEmptyWorkingPeriod(new Date(2000,1,1, 13, 0), new Date(2000,1,1, 18, 0))
+						outboundService.createEmptyWorkingPeriod(new Date(2000, 1, 1, 7, 0), new Date(2000, 1, 1, 12, 0)),
+						outboundService.createEmptyWorkingPeriod(new Date(2000, 1, 1, 13, 0), new Date(2000, 1, 1, 18, 0))
 					]
 				};
-				$scope.acToggle1 = $scope.acToggle2 = $scope.acToggle3 = true;			
+
+				expandAllSections($scope);
 
 				if ($scope.createCampaignForm) {
 					$scope.createCampaignForm.$setPristine();
 				}				
 			}
-
-			function createEmptyWorkingPeriod(startTime, endTime) {
-				var weekdaySelections = [];
-				for (var i = 0; i < 7; i ++) {
-					weekdaySelections.push({ WeekDay: i, Checked: false });
-				}
-				return { StartTime: startTime, EndTime: endTime, WeekDaySelections: weekdaySelections };
-			}
-
+		
 			function show(campaign) {
 				$state.go('outbound.edit', { Id: campaign.Id });
 			}
 
-			function deepPropertyAccess(obj, propertiesChain) {
-				var curObj = obj;
-				for (var i = 0; i < propertiesChain.length; i += 1) {
-					var curProperty = propertiesChain[i];
-					if (angular.isDefined(curObj[curProperty])) curObj = curObj[curProperty];
-					else return;
-				}
-				return curObj;
-			}
-
+						
 		}
 	]);
 
@@ -181,101 +155,58 @@
 	]);
 
 	outbound.controller('OutboundEditCtrl', [
-		'$scope', '$stateParams', '$state', '$filter', 'growl', 'outboundService',
-		function($scope, $stateParams, $state, $filter, growl, OutboundService) {
-			$scope.campaign = (angular.isDefined($stateParams.Id) && $stateParams.Id != "") ? OutboundService.getCampaignById($stateParams.Id) : null;
-			$scope.newWorkingPeriod = { StartTime: null, EndTime: null };
-			$scope.showCampaignDetail = angular.isDefined($scope.campaign) && ($scope.campaign != null);
-			$scope.isPeriodInValid = false;
+		'$scope', '$stateParams', '$state', '$filter', 'growl', 'outboundService33699', 'outboundNotificationService',
+		function($scope, $stateParams, $state, $filter, growl, outboundService, outboundNotificationService) {
 
-			$scope.acToggle1 = true;
-			$scope.acToggle2 = true;
-			$scope.acToggle3 = true;
+			init();
 
-			$scope.useMeridian = true;
 
-			$scope.$watch('campaign.StartDate.Date', function() {
-				$scope.update(true);
-			});
-			$scope.$watch('campaign.EndDate.Date', function () {
-				$scope.update(true);
-			});
+			function init() {
+				$scope.campagin = null;
 
-			$scope.$on('outbound.campaigns.loaded', function() {
-				$scope.campaign = (angular.isDefined($stateParams.Id) && $stateParams.Id != "") ? OutboundService.getCampaignById($stateParams.Id) : null;
-				$scope.showCampaignDetail = angular.isDefined($scope.campaign) && ($scope.campaign != null);
-			});
-		
-			$scope.$on('formLocator.formCampaignParams', function (event) {
-				$scope.formCampaignParams = event.targetScope.formCampaignParams;
+				var currentCampaignId = (angular.isDefined($stateParams.Id) && $stateParams.Id != "") ? $stateParams.Id : null;
+				if (currentCampaignId == null) return;
+
+				outboundService.getCampaign(currentCampaignId, function(campaign) {
+					$scope.campaign = campaign;
+					expandAllSections($scope);
+				}, function() {
+					outboundNotificationService.notifyCampaignLoadingFailure({ Message: currentCampaignId });
+				});
+			}
+
+
+			$scope.isCampaignLoaded = function() { return angular.isDefined($scope.campaign); };
+
+	
+			$scope.$on('formLocator.createCampaignForm', function (event) {
+				$scope.editCampaignForm = event.targetScope.editCampaignForm;
 				$scope.formScope = event.targetScope;
 			});
 
-			$scope.update = function (isAlwaysUpdate) {
-				if ($scope.campaign == null) return;
-				if ($scope.formCampaignParams == null) return;
+		
+			$scope.editCampaign = function() {
 
-				if (isAlwaysUpdate || ($scope.formCampaignParams.$dirty && $scope.formCampaignParams.$valid ) ) {
-					OutboundService.updateCampaign($scope.campaign,
-					function () {
-						$scope.formScope.$broadcast("campaign.view.refresh");
-						notifySuccess(growl, "Campaign updated successfully");
-					},
-					function (error) {
-						notifyFailure(growl, "Failed to update campaign " + error);
-					});
-				}
-				$scope.formCampaignParams.$setPristine();
 			};
-
-			$scope.navigateToForecasting = function() {
-				$state.go('outbound.forecasting', { Id: $scope.campaign.Id });
-			};
-
-			$scope.navigateToConfiguration = function() {
-				$state.go('outbound.edit', { Id: $scope.campaign.Id });
-			};
-
-			var clearConflictWorkingPeriodAssignments = function(WorkingPeriod, WeekDay) {
-				angular.forEach($scope.campaign.CampaignWorkingPeriods, function(workingPeriod) {
-					workingPeriod.ExpandedWorkingPeriodAssignments[WeekDay.WeekDay].Checked =
-						workingPeriod == WorkingPeriod;
-				});
-			};
-
-
-			$scope.toggleWorkingPeriodAssignment = function(WorkingPeriod, WeekDay) {
-				if (WeekDay.Checked) {
-					clearConflictWorkingPeriodAssignments(WorkingPeriod, WeekDay);
-					OutboundService.addWorkingPeriodAssignment($scope.campaign, WorkingPeriod, WeekDay);
-				} else {
-					OutboundService.deleteWorkingPeriodAssignment($scope.campaign, WorkingPeriod, WeekDay);
-				}
-			};
-
-			$scope.addWorkingPeriod = function () {
-				if ($scope.newWorkingPeriod.EndTime != null && $scope.newWorkingPeriod.StartTime != null)
-				if ($scope.newWorkingPeriod.EndTime >= $scope.newWorkingPeriod.StartTime) {
-					$scope.isPeriodInValid = false;
-					OutboundService.addWorkingPeriod($scope.campaign, angular.copy($scope.newWorkingPeriod));
-				} else {
-					$scope.isPeriodInValid = true;
-				}
-			};
-
-			$scope.deleteWorkingPeriod = function(workingPeriod) {
-				OutboundService.deleteWorkingPeriod($scope.campaign, workingPeriod);
-			};
-
-			$scope.resetWorkingPeriodForm = function() {
-				$scope.newWorkingPeriod = { StartTime: null, EndTime: null };
-			};
-
-			$scope.toggleWorkingPeriodSelect = function(workingPeriod) {
-				workingPeriod.selected = ! workingPeriod.selected;
-			};
-
-
+				
 		}
 	]);
+
+	function expandAllSections(scope) {
+		scope.acToggle1 = true;
+		scope.acToggle2 = true;
+		scope.acToggle3 = true;
+	}
+
+	function deepPropertyAccess(obj, propertiesChain) {
+		var curObj = obj;
+		for (var i = 0; i < propertiesChain.length; i += 1) {
+			var curProperty = propertiesChain[i];
+			if (angular.isDefined(curObj[curProperty])) curObj = curObj[curProperty];
+			else return;
+		}
+		return curObj;
+	}
+
+	
 })();

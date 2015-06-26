@@ -10,27 +10,52 @@
 	
 
 	function outboundService_33699($filter, $http) {
-
+	
 		var createCampaignCommandUrl = '../api/Outbound/Campaign';
+		var getCampaignCommandUrl = '../api/Outbound/Campaign/';
+		var listCampaignCommandUrl = '../api/Outbound/Campaign';
 
-		this.addCampaign = function (campaign, successCb, errorCb) {
+		this.listCampaign = function(filter) {
+			$http.get(listCampaignCommandUrl).success(function(data) {
 
+					if (successCb != null) successCb(data);
+				}).
+				error(function(data) {
+					if (errorCb != null) errorCb(data);
+				});
+		};
 
+		this.getCampaign = function (campaignId, successCb, errorCb) {
 
-			$http.post(createCampaignCommandUrl, formatCampaign(campaign)).
+			console.log("getting campaign", campaignId);
+
+			$http.get(getCampaignCommandUrl + campaignId).
+				success(function (data) {
+					console.log("got campaign", data);
+
+					if (successCb != null) successCb(denormalizeCampaign(data));
+				}).
+				error(function (data) {
+					if (errorCb != null) errorCb(data);
+				});
+		};
+
+		this.addCampaign = function(campaign, successCb, errorCb) {
+			$http.post(createCampaignCommandUrl, normalizeCampaign(campaign)).
 				success(function(data) {
 					if (successCb != null) successCb(data);
 				}).
 				error(function(data) {
 					if (errorCb != null) errorCb(data);
 				});
-		}
+		};
 
-		function formatCampaign(campaign) {
+		this.createEmptyWorkingPeriod = createEmptyWorkingPeriod;
+
+		function normalizeCampaign(campaign) {
 			var campaign = angular.copy(campaign);
 
 			var formattedWorkingHours = [];
-
 
 			campaign.WorkingHours.forEach(function (d) {
 				d.WeekDaySelections.forEach(function(e) {
@@ -52,7 +77,35 @@
 			return $filter('date')(dtObj, 'HH:mm');
 		}
 
+		
+		function denormalizeCampaign(campaign) {
+			var campaign = angular.copy(campaign);
+			var reformattedWorkingHours = [];
+		
+			campaign.WorkingHours.forEach(function (a) {
+				var workingHourRows = reformattedWorkingHours.filter(function(wh) { return wh.StartTime == a.StartTime && wh.EndTime == a.EndTime;});
+				var workingHourRow; 
+				if (workingHourRows.length == 0) {
+					workingHourRow = createEmptyWorkingPeriod(a.StartTime, a.EndTime);					
+					workingHourRow.WeekDaySelections[a.WeekDay].Checked = true;
+					reformattedWorkingHours.push(workingHourRow);
+				} else {
+					workingHourRow = workingHourRows[0];
+					workingHourRow.WeekDaySelections[a.WeekDay].Checked = true;
+				}
+									
+			});
+			campaign.WorkingHours = reformattedWorkingHours;
+			return campaign;
+		};
 
+		function createEmptyWorkingPeriod(startTime, endTime) {
+			var weekdaySelections = [];
+			for (var i = 0; i < 7; i++) {
+				weekdaySelections.push({ WeekDay: i, Checked: false });
+			}
+			return { StartTime: startTime, EndTime: endTime, WeekDaySelections: weekdaySelections };
+		}
 	}
 
 
@@ -129,10 +182,12 @@
 					angular.forEach(campaign.CampaignWorkingPeriods, function (period) {
 						expandWorkingPeriod(period);
 					});
+						
 				});
 			}
 			return campaign;
 		};
+		
 
 		self.updateCampaign = function (campaign, successCb, errorCb) {
 			Campaign.update(campaign, function () {
@@ -210,9 +265,12 @@
 		}
 
 		this.notifyCampaignCreationFailure = function (error) {
-			notifyFailure("Failed to create campaign "  + (error && error.Message? error.Message: error.toString()));
+			notifyFailure("Failed to create campaign "  + (error && error.Message? error.Message: error));
 		}
 
+		this.notifyCampaignLoadingFailure = function(error) {
+			notifyFailure("Failed to load campaign " + (error && error.Message ? error.Message : error));
+		}
 
 		function notifySuccess(message) {
 			$growl.success("<i class='mdi mdi-thumb-up'></i> " + message + ".", {

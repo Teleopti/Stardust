@@ -16,6 +16,57 @@
 		}
 	});
 
+	outbound.directive('workingHoursPicker', [
+		'outboundService33699',
+		function(outboundService) {
+			return {
+				restrict: 'E',
+				scope: {
+					workingHours: '='
+				},
+				templateUrl: 'html/outbound/working-hours-picker.tpl.html',
+				link: postLink
+
+			};
+
+			function postLink(scope, elem, attrs) {
+
+				scope.enforceRadioBehavior = enforceRadioBehavior;
+				scope.addEmptyWorkingPeriod = addEmptyWorkingPeriod;
+				scope.removeWorkingPeriod = removeWorkingPeriod;
+
+
+				function enforceRadioBehavior(refIndex, weekDay) {
+					clearConflictWorkingHourSelection(scope.workingHours, refIndex, weekDay);
+				}
+
+				function addEmptyWorkingPeriod(startTime, endTime) {
+					console.log('add clicked', startTime, endTime);
+					console.log(scope.workingHours);
+					if (!(startTime && endTime)) return;
+					scope.workingHours.push(outboundService.createEmptyWorkingPeriod(angular.copy(startTime), angular.copy(endTime)));
+					console.log(scope.workingHours);
+				}
+
+				function removeWorkingPeriod(index) {
+					scope.workingHours.splice(index, 1);
+				}
+
+
+				function clearConflictWorkingHourSelection(workingHours, refIndex, weekDay) {
+					angular.forEach(workingHours, function(workingHour, i) {
+						if (i == refIndex) return;
+						angular.forEach(workingHour.WeekDaySelections, function(d) {
+							if (weekDay == d.WeekDay) d.Checked = false;
+						});
+					});
+				};
+
+			}
+		}
+	]);
+
+
 	outbound.directive('expandable', [
 		'$animate',
 		function($animate) {
