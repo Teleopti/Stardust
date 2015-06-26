@@ -109,7 +109,7 @@ CLOSE SearchWordCursor;
 DEALLOCATE SearchWordCursor;
 
 --debug
---SELECT @dynamicSQL
+--print @dynamicSQL
 
 --insert into PersonId temp table
 INSERT INTO #PersonId
@@ -117,10 +117,11 @@ EXEC sp_executesql @dynamicSQL
 
 --prepare restult
 INSERT INTO #result
-SELECT DISTINCT a.PersonId, FirstName, LastName, EmploymentNumber, Note, TerminalDate, [TeamId], [SiteId], [BusinessUnitId] 
+SELECT a.PersonId, FirstName, LastName, EmploymentNumber, Note, TerminalDate, min([TeamId]), min([SiteId]), min([BusinessUnitId]) 
 FROM ReadModel.FindPerson a
 INNER JOIN #PersonId b
 ON a.PersonId = b.PersonId
+GROUP BY a.PersonId, FirstName, LastName, EmploymentNumber, Note, TerminalDate
 ORDER BY LastName, FirstName 
 
 --get total count
@@ -147,7 +148,7 @@ SELECT @dynamicSQL='SELECT ' + cast(@total as nvarchar(10)) + ' AS TotalCount, *
         ' FROM    #result PC) #result WHERE  RowNumber >= '+ cast(@start_row as nvarchar(10)) +' AND RowNumber < '+ cast(@end_row as nvarchar(10))
 
 --debug
---SELECT @dynamicSQL
+--print @dynamicSQL
 
 --return
 EXEC sp_executesql @dynamicSQL   
