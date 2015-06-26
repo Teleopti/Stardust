@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.Web.Areas.Outbound.Models;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping
 {
@@ -11,36 +9,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping
 
 	public class OutboundCampaignViewModelMapper : IOutboundCampaignViewModelMapper
 	{
-		public CampaignWorkingPeriodAssignmentViewModel Map(CampaignWorkingPeriodAssignment assignment)
-		{
-			return new CampaignWorkingPeriodAssignmentViewModel { Id = assignment.Id, WeekDay = assignment.WeekdayIndex };
-		}
-
-		public IEnumerable<CampaignWorkingPeriodAssignmentViewModel> Map(
-			IEnumerable<CampaignWorkingPeriodAssignment> assignments)
-		{
-			return assignments.Select(Map);
-		}
-
-		public CampaignWorkingPeriodViewModel Map(CampaignWorkingPeriod workingPeriod)
-		{
-			var startTime = TimeHelper.TimeOfDayFromTimeSpan(workingPeriod.TimePeriod.StartTime);
-			var endTime = TimeHelper.TimeOfDayFromTimeSpan(workingPeriod.TimePeriod.EndTime);
-			var period = new CampaignWorkingPeriodViewModel
-			{
-				Id = workingPeriod.Id, 
-				StartTime = startTime,
-				EndTime = endTime,
-				WorkingPeroidAssignments =Map(workingPeriod.CampaignWorkingPeriodAssignments).ToList()
-			};
-			return period;
-		}
-
-		public IEnumerable<CampaignWorkingPeriodViewModel> Map(IEnumerable<CampaignWorkingPeriod> workingPeriods)
-		{
-			return workingPeriods.Select(Map);
-		}
-
 		public CampaignViewModel Map(Campaign campaign)
 		{
 			if (campaign == null) return null;

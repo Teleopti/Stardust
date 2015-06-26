@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Outbound;
@@ -49,16 +48,12 @@ namespace Teleopti.Ccc.Win.Backlog
 			campaign.SpanningPeriod = new DateOnlyPeriod(new DateOnly(monthCalendar1.SelectionStart), new DateOnly(monthCalendar1.SelectionEnd));
 			campaign.CallListLen = (int)numericUpDown1.Value;
 			campaign.ConnectAverageHandlingTime = (int) numericUpDown2.Value;
-			var campaignWorkingPeriod = new CampaignWorkingPeriod();
-			campaignWorkingPeriod.TimePeriod = new TimePeriod(7, 0, 20, 0);
+			campaign.WorkingHours.Add(DayOfWeek.Monday, new TimePeriod(7, 0, 20, 0));
+			campaign.WorkingHours.Add(DayOfWeek.Tuesday, new TimePeriod(7, 0, 20, 0));
+			campaign.WorkingHours.Add(DayOfWeek.Wednesday, new TimePeriod(7, 0, 20, 0));
+			campaign.WorkingHours.Add(DayOfWeek.Thursday, new TimePeriod(7, 0, 20, 0));
+			campaign.WorkingHours.Add(DayOfWeek.Friday, new TimePeriod(7, 0, 20, 0));
 
-			campaignWorkingPeriod.AddAssignment(new CampaignWorkingPeriodAssignment { WeekdayIndex = DayOfWeek.Monday });
-			campaignWorkingPeriod.AddAssignment(new CampaignWorkingPeriodAssignment { WeekdayIndex = DayOfWeek.Tuesday });
-			campaignWorkingPeriod.AddAssignment(new CampaignWorkingPeriodAssignment { WeekdayIndex = DayOfWeek.Wednesday });
-			campaignWorkingPeriod.AddAssignment(new CampaignWorkingPeriodAssignment { WeekdayIndex = DayOfWeek.Thursday });
-			campaignWorkingPeriod.AddAssignment(new CampaignWorkingPeriodAssignment { WeekdayIndex = DayOfWeek.Friday });
-
-			campaign.AddWorkingPeriod(campaignWorkingPeriod);
 			_createdCampaign = campaign;
 			if (!(comboBox1.SelectedItem is nullActivity))
 				_existingActivity = (IActivity) comboBox1.SelectedItem;

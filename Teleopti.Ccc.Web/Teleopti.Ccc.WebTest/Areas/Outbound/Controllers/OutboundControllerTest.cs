@@ -120,33 +120,5 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
 			target.UpdateCampaign(new Guid(), campaignVM);
 			_outboundCampaignPersister.AssertWasCalled((x=>x.Persist(campaignVM)));
 		}
-
-		[Test]
-		public void ShouldUpdateCampaignWorkingPeriodAssignment()
-		{
-			var form = new CampaignWorkingPeriodAssignmentForm();
-			var formId = new Guid();
-			
-			var target = new OutboundController(_outboundCampaignPersister, null, null, null);
-			target.UpdateCampaignWorkingPeriodAssignment(formId, form);
-			_outboundCampaignPersister.AssertWasCalled(x=>x.Persist(form));
-		}
-
-		[Test]
-		public void ShouldRemoveWorkingPeriod()
-		{
-			var Id = new Guid();
-			var workingPeriodId = new Guid();
-			var workingPeriod = MockRepository.GenerateStub<CampaignWorkingPeriod>();
-			workingPeriod.Stub(x => x.Id).Return(workingPeriodId);		
-
-			var campaign = MockRepository.GenerateMock<Campaign>();
-			_outboundCampaignRepository.Stub(x => x.Get(Id)).Return(campaign);
-			campaign.Stub(x => x.CampaignWorkingPeriods).Return(new HashSet<CampaignWorkingPeriod>(){workingPeriod});
-
-			var target = new OutboundController(null, _outboundCampaignRepository, null, null);
-			target.Remove(Id, workingPeriodId);
-			campaign.AssertWasCalled(x => x.RemoveWorkingPeriod(workingPeriod));
-		}
 	}
 }

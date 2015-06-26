@@ -62,16 +62,13 @@ namespace Teleopti.Ccc.Domain.Outbound
 
 		private static void setOpenHours(Campaign campaign, Workload workLoad)
 		{
-			foreach (var campaignWorkingPeriod in campaign.CampaignWorkingPeriods)
+			foreach (var workingHour in campaign.WorkingHours)
 			{
-				foreach (var campaignWorkingPeriodAssignment in campaignWorkingPeriod.CampaignWorkingPeriodAssignments)
-				{
-					IWorkloadDayTemplate workloadDayTemplate = new WorkloadDayTemplate();
-					workloadDayTemplate.Create(campaignWorkingPeriodAssignment.WeekdayIndex.ToString(), DateTime.UtcNow, workLoad,
-						new List<TimePeriod> {campaignWorkingPeriod.TimePeriod});
+				IWorkloadDayTemplate workloadDayTemplate = new WorkloadDayTemplate();
+				workloadDayTemplate.Create(workingHour.Key.ToString(), DateTime.UtcNow, workLoad,
+					new List<TimePeriod> { workingHour.Value });
 
-					workLoad.SetTemplate(campaignWorkingPeriodAssignment.WeekdayIndex, workloadDayTemplate);
-				}
+				workLoad.SetTemplate(workingHour.Key, workloadDayTemplate);
 			}
 		}
 

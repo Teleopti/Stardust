@@ -17,16 +17,14 @@ namespace Teleopti.Ccc.Domain.Outbound
 		private int _connectAverageHandlingTime;
 		private int _rightPartyAverageHandlingTime;
 		private int _unproductiveTime;
-		private ISet<CampaignWorkingPeriod> _campaignWorkingPeriods;
 		private IDictionary<DateOnly, TimeSpan> _manualProductionPlanDays = new Dictionary<DateOnly, TimeSpan>();
 		private IDictionary<DateOnly, TimeSpan> _actualBacklogDays = new Dictionary<DateOnly, TimeSpan>(); 
 		private bool _isDeleted;
 		private IDictionary<DayOfWeek, TimePeriod> _workingHours = new Dictionary<DayOfWeek, TimePeriod>();
 		private DateOnlyPeriod _spanningPeriod;
 
-        	public Campaign()
+      public Campaign()
 		{
-			_campaignWorkingPeriods = new HashSet<CampaignWorkingPeriod>();
 		}
 
 		public Campaign(string name, ISkill skill)
@@ -42,7 +40,6 @@ namespace Teleopti.Ccc.Domain.Outbound
 			_rightPartyAverageHandlingTime = 120;
 			_unproductiveTime = 30;
 			_spanningPeriod = new DateOnlyPeriod(DateOnly.Today, DateOnly.MaxValue);
-			_campaignWorkingPeriods = new HashSet<CampaignWorkingPeriod>();
 		}
 
 		public virtual string Name 
@@ -123,12 +120,6 @@ namespace Teleopti.Ccc.Domain.Outbound
 			return TimeSpan.FromHours((double) ConnectAverageHandlingTime/CallListLen);
 		}
 
-		public virtual ISet<CampaignWorkingPeriod> CampaignWorkingPeriods
-		{
-			get { return _campaignWorkingPeriods; }
-			set { _campaignWorkingPeriods = value; }
-		}
-
 		public virtual bool IsDeleted
 		{
 			get { return _isDeleted; }
@@ -137,20 +128,6 @@ namespace Teleopti.Ccc.Domain.Outbound
 		public virtual void SetDeleted()
 		{
 			_isDeleted = true;
-		}
-
-		public virtual void AddWorkingPeriod(CampaignWorkingPeriod workingPeriod)
-		{
-			workingPeriod.SetParent(this);
-			_campaignWorkingPeriods.Add(workingPeriod);
-		}
-
-		public virtual void RemoveWorkingPeriod(CampaignWorkingPeriod workingPeriod)
-		{
-			if (_campaignWorkingPeriods.Contains(workingPeriod))
-			{
-				_campaignWorkingPeriods.Remove(workingPeriod);
-			}			
 		}
 
 		public virtual TimeSpan? GetManualProductionPlan(DateOnly date)

@@ -29,15 +29,8 @@ namespace Teleopti.Ccc.DomainTest.Outbound
 		{
 			var activity = ActivityFactory.CreateActivity("TestActivity");
 			var campaign = new Campaign {Name = "test"};
-			var campaignWorkingPeriod = new CampaignWorkingPeriod {TimePeriod = new TimePeriod(10, 0, 15, 0)};
-
-			var campaignWorkingPeriodAssignmentThursday = new CampaignWorkingPeriodAssignment {WeekdayIndex = DayOfWeek.Thursday};
-			campaignWorkingPeriod.AddAssignment(campaignWorkingPeriodAssignmentThursday);
-
-			var campaignWorkingPeriodAssignmentFriday = new CampaignWorkingPeriodAssignment { WeekdayIndex = DayOfWeek.Friday };
-			campaignWorkingPeriod.AddAssignment(campaignWorkingPeriodAssignmentFriday);
-
-			campaign.AddWorkingPeriod(campaignWorkingPeriod);
+			campaign.WorkingHours.Add(DayOfWeek.Thursday, new TimePeriod(10, 0, 15, 0));
+			campaign.WorkingHours.Add(DayOfWeek.Friday, new TimePeriod(10, 0, 15, 0));
 
 			var skill = _target.CreateSkill(activity, campaign);
 
@@ -52,15 +45,8 @@ namespace Teleopti.Ccc.DomainTest.Outbound
 		{
 			var activity = ActivityFactory.CreateActivity("TestActivity");
 			var campaign = new Campaign { Name = "test" };
-			var campaignWorkingPeriod = new CampaignWorkingPeriod {TimePeriod = new TimePeriod(10, 0, 15, 0)};
-
-			var campaignWorkingPeriodAssignmentThursday = new CampaignWorkingPeriodAssignment { WeekdayIndex = DayOfWeek.Thursday };
-			campaignWorkingPeriod.AddAssignment(campaignWorkingPeriodAssignmentThursday);
-
-			var campaignWorkingPeriodAssignmentFriday = new CampaignWorkingPeriodAssignment { WeekdayIndex = DayOfWeek.Friday };
-			campaignWorkingPeriod.AddAssignment(campaignWorkingPeriodAssignmentFriday);
-
-			campaign.AddWorkingPeriod(campaignWorkingPeriod);
+			campaign.WorkingHours.Add(DayOfWeek.Thursday, new TimePeriod(10, 0, 15, 0));
+			campaign.WorkingHours.Add(DayOfWeek.Friday, new TimePeriod(10, 0, 15, 0));
 
 			var skill = _target.CreateSkill(activity, campaign);
 
@@ -75,10 +61,10 @@ namespace Teleopti.Ccc.DomainTest.Outbound
 
 			template = (IWorkloadDayTemplate)workload.GetTemplate(TemplateTarget.Workload, DayOfWeek.Thursday);
 			Assert.AreEqual(1, template.OpenHourList.Count);
-			Assert.AreEqual(campaignWorkingPeriod.TimePeriod, template.OpenHourList.First());
+			Assert.AreEqual(campaign.WorkingHours[DayOfWeek.Thursday], template.OpenHourList.First());
 			template = (IWorkloadDayTemplate)workload.GetTemplate(TemplateTarget.Workload, DayOfWeek.Friday);
 			Assert.AreEqual(1, template.OpenHourList.Count);
-			Assert.AreEqual(campaignWorkingPeriod.TimePeriod, template.OpenHourList.First());
+			Assert.AreEqual(campaign.WorkingHours[DayOfWeek.Thursday], template.OpenHourList.First());
 
 			template = (IWorkloadDayTemplate)workload.GetTemplate(TemplateTarget.Workload, DayOfWeek.Saturday);
 			Assert.AreEqual(0, template.OpenHourList.Count);
@@ -91,17 +77,8 @@ namespace Teleopti.Ccc.DomainTest.Outbound
 		{
 			var activity = ActivityFactory.CreateActivity("TestActivity");
 			var campaign = new Campaign { Name = "test" };
-			var campaignWorkingPeriod1 = new CampaignWorkingPeriod {TimePeriod = new TimePeriod(10, 0, 15, 0)};
-			var campaignWorkingPeriod2 = new CampaignWorkingPeriod {TimePeriod = new TimePeriod(10, 0, 16, 0)};
-
-			var campaignWorkingPeriodAssignmentThursday = new CampaignWorkingPeriodAssignment { WeekdayIndex = DayOfWeek.Thursday };
-			campaignWorkingPeriod1.AddAssignment(campaignWorkingPeriodAssignmentThursday);
-
-			var campaignWorkingPeriodAssignmentFriday = new CampaignWorkingPeriodAssignment { WeekdayIndex = DayOfWeek.Friday };
-			campaignWorkingPeriod2.AddAssignment(campaignWorkingPeriodAssignmentFriday);
-
-			campaign.AddWorkingPeriod(campaignWorkingPeriod1);
-			campaign.AddWorkingPeriod(campaignWorkingPeriod2);
+			campaign.WorkingHours.Add(DayOfWeek.Thursday, new TimePeriod(10, 0, 15, 0));
+			campaign.WorkingHours.Add(DayOfWeek.Friday, new TimePeriod(10, 0, 16, 0));
 
 			var skill = _target.CreateSkill(activity, campaign);
 
@@ -109,13 +86,13 @@ namespace Teleopti.Ccc.DomainTest.Outbound
 			var serviceLevelSeconds =
 				skillTemplate.TemplateSkillDataPeriodCollection.First().ServiceAgreement.ServiceLevel.Seconds;
 			var serviceLevel = TimeSpan.FromSeconds(serviceLevelSeconds);
-			Assert.AreEqual(campaignWorkingPeriod1.TimePeriod.SpanningTime(), serviceLevel);
+			Assert.AreEqual(campaign.WorkingHours[DayOfWeek.Thursday].SpanningTime(), serviceLevel);
 
 			skillTemplate = skill.GetTemplateAt((int)DayOfWeek.Friday);
 			serviceLevelSeconds =
 				skillTemplate.TemplateSkillDataPeriodCollection.First().ServiceAgreement.ServiceLevel.Seconds;
 			serviceLevel = TimeSpan.FromSeconds(serviceLevelSeconds);
-			Assert.AreEqual(campaignWorkingPeriod2.TimePeriod.SpanningTime(), serviceLevel);
+			Assert.AreEqual(campaign.WorkingHours[DayOfWeek.Friday].SpanningTime(), serviceLevel);
 
 			skillTemplate = skill.GetTemplateAt((int)DayOfWeek.Saturday);
 			serviceLevelSeconds =
@@ -129,12 +106,7 @@ namespace Teleopti.Ccc.DomainTest.Outbound
 		{
 			var activity = ActivityFactory.CreateActivity("TestActivity");
 			var campaign = new Campaign { Name = "test" };
-			var campaignWorkingPeriod = new CampaignWorkingPeriod { TimePeriod = new TimePeriod(10, 0, 12, 0) };
-
-			var campaignWorkingPeriodAssignmentThursday = new CampaignWorkingPeriodAssignment { WeekdayIndex = DayOfWeek.Thursday };
-			campaignWorkingPeriod.AddAssignment(campaignWorkingPeriodAssignmentThursday);
-
-			campaign.AddWorkingPeriod(campaignWorkingPeriod);
+			campaign.WorkingHours.Add(DayOfWeek.Thursday, new TimePeriod(10, 0, 12, 0));
 
 			var skill = _target.CreateSkill(activity, campaign);
 

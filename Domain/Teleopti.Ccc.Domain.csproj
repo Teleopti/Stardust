@@ -872,8 +872,6 @@
     <Compile Include="Optimization\WeeklyRestSolver\WeeklyRestSolverService.cs" />
     <Compile Include="Aop\ReadModelUnitOfWorkAttribute.cs" />
     <Compile Include="Outbound\Campaign.cs" />
-    <Compile Include="Outbound\CampaignWorkingPeriod.cs" />
-    <Compile Include="Outbound\CampaignWorkingPeriodAssignment.cs" />
     <Compile Include="Outbound\OutboundProductionPlanFactory.cs" />
     <Compile Include="Outbound\OutboundSkillCreator.cs" />
     <Compile Include="Outbound\OutboundSkillTypeProvider.cs" />
@@ -2452,12 +2450,6 @@
     <EmbeddedResource Include="SeatPlanning\SeatPlan.hbm.xml" />
     <EmbeddedResource Include="Scheduling\PlanningPeriod.hbm.xml" />
     <EmbeddedResource Include="Outbound\Campaign.hbm.xml">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Outbound\CampaignWorkingPeriod.hbm.xml">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Outbound\CampaignWorkingPeriodAssignment.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Payroll\PayrollFormat.hbm.xml">

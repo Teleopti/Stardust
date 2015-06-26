@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Linq;
-using NHibernate;
 using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -37,19 +35,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			_activityRepository = activityRepository;
 			_outboundSkillPersister = outboundSkillPersister;
 			_createOrUpdateSkillDays = createOrUpdateSkillDays;
-		}
-
-		public CampaignViewModel Persist(string name)  //should take an activity as well
-		{
-			var campaign = new Campaign(){Name = name};
-			var activity = _activityRepository.LoadAll().First();
-			var skill = _outboundSkillCreator.CreateSkill(activity, campaign);
-			_outboundSkillPersister.PersistSkill(skill);
-			
-			campaign.Skill = skill;
-			_outboundCampaignRepository.Add(campaign);
-
-			return _outboundCampaignViewModelMapper.Map(campaign);
 		}
 
 		public CampaignViewModel Persist(CampaignForm form)
@@ -124,57 +109,5 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 
 			return campaign;
 		}
-
-		public CampaignWorkingPeriod Persist(CampaignWorkingPeriodForm form)
-		{
-			if (!form.CampaignId.HasValue) return null;
-			var campaign = _outboundCampaignRepository.Get(form.CampaignId.Value);
-			if (campaign == null) return null;
-
-			var campaignWorkingPeriod = new CampaignWorkingPeriod
-			{
-				TimePeriod = new TimePeriod(form.StartTime, form.EndTime),
-				CampaignWorkingPeriodAssignments = new HashSet<CampaignWorkingPeriodAssignment>()
-			};
-
-			NHibernateUtil.Initialize(campaign);
-			campaign.AddWorkingPeriod(campaignWorkingPeriod);
-			return campaignWorkingPeriod;
-		}
-
-		public Campaign Persist(CampaignWorkingPeriodAssignmentForm form)
-		{
-			if (!form.CampaignId.HasValue) return null;
-			var campaign = _outboundCampaignRepository.Get(form.CampaignId.Value);
-			if (campaign == null) return null;
-
-			var specifiedWorkingPeriods = campaign.CampaignWorkingPeriods.Where(workingPeriod =>
-			{
-				return form.CampaignWorkingPeriods.Any(inputWorkingPeriodId => inputWorkingPeriodId == workingPeriod.Id);
-			}).ToList();
-
-                        var unspecifiedWorkingPeriods = campaign.CampaignWorkingPeriods.Except(specifiedWorkingPeriods).ToList();
-
-
-
-			foreach (var p in specifiedWorkingPeriods)
-			{
-				if (p.CampaignWorkingPeriodAssignments.Any(a => a.WeekdayIndex == form.WeekDay)) continue;
-				var assignment = new CampaignWorkingPeriodAssignment { WeekdayIndex = form.WeekDay };
-				p.AddAssignment(assignment);
-			}
-
-			foreach (var p in unspecifiedWorkingPeriods)
-			{
-				var assignments = p.CampaignWorkingPeriodAssignments.Where(a => a.WeekdayIndex == form.WeekDay).ToList();
-				foreach (var a in assignments)
-				{
-					p.RemoveAssignment(a);
-				}
-			}
-			
-			return campaign;
-		}
-
 	}
 }

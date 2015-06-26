@@ -473,7 +473,6 @@
     <Compile Include="Areas\Outbound\Models\CampaignViewModel.cs" />
     <Compile Include="Areas\Outbound\Controllers\OutboundController.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\IOutboundCampaignPersister.cs" />
-    <Compile Include="Areas\Outbound\Models\CampaignWorkingPeriodForm.cs" />
     <Compile Include="Areas\People\Core\IoC\PeopleAreaModule.cs" />
     <Compile Include="Areas\People\Core\Providers\PeopleSearchProvider.cs" />
     <Compile Include="Areas\People\Core\Models\PeopleSummaryModel.cs" />
@@ -1213,11 +1212,11 @@
     <Content Include="Areas\Reporting\ScheduleAdherence.aspx" />
     <Content Include="Areas\Reporting\Index.aspx" />
     <Content Include="Areas\Reporting\Views\Report\NoPermission.cshtml" />
-	<Content Include="WFM\html\forecasting\forecasting-dev.html" />
+    <Content Include="WFM\html\forecasting\forecasting-dev.html" />
     <Content Include="WFM\html\left-sidenav.html" />
     <Content Include="WFM\html\outbound\campaign-creat.html" />
     <Content Include="WFM\html\right-sidenav.html" />
-	<Content Include="WFM\js\forecasting\forecasting.dev.controller.js" />
+    <Content Include="WFM\js\forecasting\forecasting.dev.controller.js" />
     <Content Include="WFM\js\global\help.controller.js" />
     <Content Include="Content\jalaali-calendar-datepicker\moment-datepicker-jalaali-ext.js" />
     <Content Include="Content\jalaali-calendar-datepicker\moment-jalaali.js" />

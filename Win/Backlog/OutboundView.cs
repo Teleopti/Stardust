@@ -87,13 +87,9 @@ namespace Teleopti.Ccc.Win.Backlog
 						}
 					}
 					LazyLoadingManager.Initialize(campaign.Skill.SkillType);
-					foreach (var campaignWorkingPeriod in campaign.CampaignWorkingPeriods)
+					foreach (var workingHour in campaign.WorkingHours)
 					{
-						LazyLoadingManager.Initialize(campaignWorkingPeriod);
-						foreach (var assignment in campaignWorkingPeriod.CampaignWorkingPeriodAssignments)
-						{
-							LazyLoadingManager.Initialize(assignment);
-						}
+						LazyLoadingManager.Initialize(workingHour);
 					}
 				}
 			}

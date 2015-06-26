@@ -19,27 +19,5 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 		public DateOnly StartDate;
 		public DateOnly EndDate;
 		public IEnumerable<CampaignWorkingHour> WorkingHours { get; set; }
-		public IEnumerable<CampaignWorkingPeriodViewModel> CampaignWorkingPeriods;		
-	}
-
-	public class CampaignWorkingPeriodViewModel
-	{
-		public Guid? Id;
-		public string StartTime;
-		public string EndTime;
-		public IEnumerable<CampaignWorkingPeriodAssignmentViewModel> WorkingPeroidAssignments;
-	}
-
-	public class CampaignWorkingPeriodAssignmentViewModel
-	{
-		public Guid? Id;
-		public DayOfWeek WeekDay;
-	}
-
-	public class SkillViewModel
-	{
-		public Guid? Id;
-		public string SkillName;
-		public bool IsSelected;
 	}
 }

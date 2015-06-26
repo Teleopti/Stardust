@@ -79,14 +79,6 @@
 			</component>
 		</component>
 		
-		<set name="CampaignWorkingPeriods"
-				 inverse="true"
-				 cascade="all-delete-orphan"
-				 >
-			<key column="OutboundCampaign"/>
-			<one-to-many class="CampaignWorkingPeriod"/>				
-		</set>
-
     <map name="_manualProductionPlanDays" table="OutboundCampaignManualProductionTime" access="field" cascade="all-delete-orphan" lazy="false">
       <key column="Campaign" foreign-key="FK_OutboundCampaignManualProductionTime_OutboundCampaign"/>
       <index column="Date" type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure" />

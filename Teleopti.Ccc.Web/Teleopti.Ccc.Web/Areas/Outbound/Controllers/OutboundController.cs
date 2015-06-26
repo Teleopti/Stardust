@@ -87,48 +87,5 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 			_outboundCampaignRepository.Remove(campaign);
 			return Ok();
 		}
-
-		[HttpPut, Route("api/Outbound/Campaign/{Id}/WorkingPeriod"), UnitOfWork]
-		public virtual IHttpActionResult UpdateCampaignWorkingPeriodAssignment(Guid Id, CampaignWorkingPeriodAssignmentForm form)
-		{
-			form.CampaignId = Id;
-			var campaign = _outboundCampaignPersister.Persist(form);
-			if (campaign == null)
-			{
-				return BadRequest();
-			}
-			return Ok();
-		}
-
-		[HttpDelete, Route("api/Outbound/Campaign/{Id}/WorkingPeriod/{CampaignWorkingPeriodId}"), UnitOfWork]
-		public virtual void Remove(Guid Id, Guid CampaignWorkingPeriodId)
-		{
-			var campaign = _outboundCampaignRepository.Get(Id);
-			var targets = campaign.CampaignWorkingPeriods.Where(x => CampaignWorkingPeriodId == x.Id).ToList();
-			foreach (var target in targets)
-			{
-				campaign.RemoveWorkingPeriod(target);
-			}			
-		}
-
-		[HttpPost, Route("api/Outbound/Campaign/{Id}/WorkingPeriod")]
-		public virtual IHttpActionResult AddCampaignWorkingPeriod(Guid Id, CampaignWorkingPeriodForm form)
-		{
-			CampaignWorkingPeriodViewModel viewModel;
-			CampaignWorkingPeriod entity;
-			PersistAndMapWorkingPeriod(Id, form, out viewModel, out entity);
-			if (viewModel == null)
-				return BadRequest();
-			viewModel.Id = entity.Id;
-			return Ok(viewModel);
-		}
-
-		[UnitOfWork]
-		public virtual void PersistAndMapWorkingPeriod(Guid Id, CampaignWorkingPeriodForm form, out CampaignWorkingPeriodViewModel viewModel, out CampaignWorkingPeriod entity)
-		{
-			form.CampaignId = Id;
-			entity = _outboundCampaignPersister.Persist(form);			
-			viewModel = (entity != null)? _outboundCampaignViewModelMapper.Map(entity): null;			
-		}
 	}
 }
