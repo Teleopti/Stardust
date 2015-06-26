@@ -1051,7 +1051,21 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 		{
 			if (!ParameterSelector.IsValid) return;
 			CheckParametersCollection();
-			CreateReport();
+			try
+			{
+				CreateReport();
+			}
+			catch (SqlException exception)
+			{
+				//timeout?
+				if (exception.Number == - 2)
+				{
+					labelError.Text = UserTexts.Resources.ReportTimeoutMessage;
+					return;
+				}
+				labelError.Text = exception.Message;
+			}
+			
 			hideSelection(null,new ImageClickEventArgs(0,0));
 		}
 

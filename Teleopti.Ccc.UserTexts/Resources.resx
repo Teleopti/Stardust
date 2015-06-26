@@ -13156,4 +13156,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Optimization step(s) {0} are not executed when team or block are selected.</value>
     <comment>Optimization step(s) {0} are not executed when team or block are selected.</comment>
   </data>
+  <data name="ReportTimeoutMessage" xml:space="preserve">
+    <value>I'm sorry but the system is a bit busy right now. Try a more narrow report selection critera or try again later.</value>
+    <comment>Info to user when there is a database timeout watching reports</comment>
+  </data>
 </root>

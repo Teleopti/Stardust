@@ -50,8 +50,10 @@
 						<asp:ImageButton Style="float:right; " formtarget="_blank" OnClick="ButtonShowClickImage" ID="buttonShowImage" Width="48" Height="48" ImageUrl="images/icon-show.png" ToolTip='' runat="server" />
 					</div>
 				</div>
+				
 			</div>
 	</div>
 	</form>
+	<asp:Label runat="server" ForeColor="red" ID="labelError"></asp:Label>
 </body>
 </html>

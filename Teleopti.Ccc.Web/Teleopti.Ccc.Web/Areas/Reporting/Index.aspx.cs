@@ -90,23 +90,43 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 
 		protected void ButtonShowClickPdf(object sender, ImageClickEventArgs e)
 		{
-			createReport("PDF");
+			doIt("PDF");
 		}
 
 		protected void ButtonShowClickExcel(object sender, ImageClickEventArgs e)
 		{
-			createReport("Excel");
+			doIt("Excel");
 		}
 
 		protected void ButtonShowClickWord(object sender, ImageClickEventArgs e)
 		{
-			createReport("Word");
+			doIt("Word");
 		}
+
 		protected void ButtonShowClickImage(object sender, ImageClickEventArgs e)
 		{
-			createReport("Image");
+			doIt("Image");
 		}
-		
+
+		private void doIt(string format)
+		{
+			try
+			{
+				createReport(format);
+			}
+			catch (SqlException exception)
+			{
+				aspnetForm.Visible = false;
+				//timeout?
+				if (exception.Number == -2)
+				{
+					labelError.Text = UserTexts.Resources.ReportTimeoutMessage;
+					return;
+				}
+				labelError.Text = exception.Message;
+			}
+		}
+
 		private void createReport(string format)
 		{
 			if (!ParameterSelector.IsValid) return;

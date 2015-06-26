@@ -42,6 +42,7 @@
 							<asp:ImageButton Style="float: right; margin-right: 25px" OnClientClick="hideThings();" OnClick="buttonShowTheReport" ID="buttonShowReport" Width="48" Height="48" ImageUrl="images/icon-show.png" ToolTip='Show report' runat="server" />
 						</div>
 					</div>
+					<asp:Label runat="server" ForeColor="red" ID="labelError"></asp:Label>
 				</div>
 			</div>
 		</asp:Panel>
