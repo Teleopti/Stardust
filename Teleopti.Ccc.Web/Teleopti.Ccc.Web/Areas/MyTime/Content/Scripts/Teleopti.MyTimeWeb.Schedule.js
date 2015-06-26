@@ -358,7 +358,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		
 		var dayDescription = "";
 		var dayNumberDisplay = "";
-		
+
 		var dayDate = moment(day.FixedDate, Teleopti.MyTimeWeb.Common.ServiceDateFormat);
 
 		if (Teleopti.MyTimeWeb.Common.UseJalaaliCalendar) {

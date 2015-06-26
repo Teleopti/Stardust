@@ -14,7 +14,7 @@ if (typeof (Teleopti) === 'undefined') {
 
 Teleopti.MyTimeWeb.Common = (function ($) {
 	var _settings = {};
-
+	
 	function _log() {
 		if (window.console && window.console.log)
 			window.console.log(Array.prototype.join.call(arguments, ' '));
@@ -31,7 +31,6 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		var isJalaali = (options.UseJalaaliCalendar && Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_JalaaliCalendar_32997'));
 		Teleopti.MyTimeWeb.Common.UseJalaaliCalendar = isJalaali;
 		Teleopti.MyTimeWeb.Common.DateFormat = isJalaali ? "jYYYY/jMM/jDD" : options.DateFormat;
-		Teleopti.MyTimeWeb.Common.ServiceDateFormat = 'YYYY-MM-DD';
 		Teleopti.MyTimeWeb.Common.TimeFormat = timeFormat;
 		Teleopti.MyTimeWeb.Common.Meridiem = { AM: options.AMDesignator, PM: options.PMDesignator};
 		Teleopti.MyTimeWeb.Common.DateTimeFormat = Teleopti.MyTimeWeb.Common.DateFormat + " " + Teleopti.MyTimeWeb.Common.TimeFormat;
@@ -89,7 +88,7 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		var localeSafeMoment = moment(date).locale('en');
 		return localeSafeMoment.format(Teleopti.MyTimeWeb.Common.ServiceDateFormat);
 	};
-
+	
 	function _isFixedDate(dateString) {
 		return dateString.match(/^\d{4}-\d{2}-\d{2}$/);
 	}
@@ -214,6 +213,8 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 	};
 
 })(jQuery);
+
+Teleopti.MyTimeWeb.Common.ServiceDateFormat = 'YYYY-MM-DD';
 
 Teleopti.MyTimeWeb.Common.Layout = (function ($) {
 	return {
