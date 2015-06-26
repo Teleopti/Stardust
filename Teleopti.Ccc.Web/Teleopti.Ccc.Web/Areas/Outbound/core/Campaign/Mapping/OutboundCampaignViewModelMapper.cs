@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping
 		{
 			if (campaign == null) return null;
 
-			var workingHours = campaign.WorkingHours.Select(workingHour => new CampaignWorkingHour() {WeekDay = workingHour.Key, WorkingPeriod = workingHour.Value});
+			var workingHours = campaign.WorkingHours.Select(workingHour => new CampaignWorkingHour() { WeekDay = workingHour.Key, StartTime = workingHour.Value.StartTime, EndTime = workingHour.Value.EndTime });
 
 			var campaignVm = new CampaignViewModel
 			{

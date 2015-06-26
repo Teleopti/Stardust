@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core.Campaign.Mapping
 
 			for (var i = 0; i < 5; ++i)
 			{
-				_campaigns[0].WorkingHours[workingHours[i].WeekDay].Should().Be.EqualTo(workingHours[i].WorkingPeriod);
+				_campaigns[0].WorkingHours[workingHours[i].WeekDay].Should().Be.EqualTo(new TimePeriod(workingHours[i].StartTime, workingHours[i].EndTime));
 			}
 		}
 	}
