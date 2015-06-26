@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Teleopti.Ccc.Infrastructure.Foundation
+namespace Teleopti.Interfaces.Infrastructure
 {
 	public interface IConfigurationWrapper
 	{

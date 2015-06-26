@@ -1,5 +1,6 @@
 using Microsoft.IdentityModel.Configuration;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Core
 {

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Threading;
 using NUnit.Framework;
@@ -23,20 +24,20 @@ namespace Teleopti.MessagingTest.Http
 	public class MailboxSubscriptionsTest : ISetup
 	{
 		public IMessageListener Target;
-		public FakeConfigReader ConfigReader;
+		public FakeConfiguratoinWrapper ConfigReader;
 		public FakeHttpServer Server;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<FakeSignalRClient>().For<ISignalRClient>();
 			system.UseTestDouble<FakeHttpServer>().For<IHttpServer>();
-			system.UseTestDouble(new FakeConfigReader
+			system.UseTestDouble(new FakeConfiguratoinWrapper
 			{
-				AppSettings = new NameValueCollection
+				AppSettings = new Dictionary<string, string>
 				{
-					{"MessageBrokerMailboxPollingInterval", "0.01"}
+					{"MessageBrokerMailboxPollingIntervalInSeconds", "0.01"}
 				}
-			}).For<IConfigReader>();
+			}).For<IConfigurationWrapper>();
 		}
 
 		[Test]
@@ -60,7 +61,7 @@ namespace Teleopti.MessagingTest.Http
 		public void ShouldUseAppsettingsForPollingInterval()
 		{
 			var wasEventHandlerCalled = false;
-			ConfigReader.AppSettings = new NameValueCollection
+			ConfigReader.AppSettings = new Dictionary<string, string>
 			{
 				{"MessageBrokerMailboxPollingInterval", "1000"}
 			};

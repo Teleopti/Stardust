@@ -10,6 +10,8 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 		public string RtaPollingInterval { get; set; }
 		public string PasswordPolicy { get; set; }
 		public int NumberOfDaysToShowNonPendingRequests { get; set; }
+		public int MessageBrokerMailboxPollingIntervalInSeconds { get; set; }
+		public int MessageBrokerMailboxExpirationInSeconds { get; set; }
 
 		public IDictionary<string, string> AddToAppSettings(IDictionary<string, string> appSettings)
 		{
@@ -32,6 +34,12 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 				},
 				{
 					"NumberOfDaysToShowNonPendingRequests", NumberOfDaysToShowNonPendingRequests.ToString()
+				},
+				{
+					"MessageBrokerMailboxPollingIntervalInSeconds", MessageBrokerMailboxPollingIntervalInSeconds.ToString()
+				},
+				{
+					"MessageBrokerMailboxExpirationInSeconds", MessageBrokerMailboxExpirationInSeconds.ToString()
 				}
 			};
 			foreach (var key in appSettings.Keys)

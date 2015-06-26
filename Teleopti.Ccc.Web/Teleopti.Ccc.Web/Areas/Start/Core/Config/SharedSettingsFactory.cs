@@ -27,7 +27,9 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Config
 					string.Empty : 
 					Encryption.EncryptStringToBase64(_configReader.ConnectionStrings["Queue"].ToString(), EncryptionConstants.Image1, EncryptionConstants.Image2),
 				PasswordPolicy = _passwordPolicyService.DocumentAsString,
-				NumberOfDaysToShowNonPendingRequests = Convert.ToInt32(_configReader.AppSettings["NumberOfDaysToShowNonPendingRequests"])
+				NumberOfDaysToShowNonPendingRequests = Convert.ToInt32(_configReader.AppSettings["NumberOfDaysToShowNonPendingRequests"]),
+				MessageBrokerMailboxPollingIntervalInSeconds = Convert.ToInt32(_configReader.AppSettings["MessageBrokerMailboxPollingIntervalInSeconds"]),
+				MessageBrokerMailboxExpirationInSeconds = Convert.ToInt32(_configReader.AppSettings["MessageBrokerMailboxExpirationInSeconds"])
 			};
 		}
 	}
