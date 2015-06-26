@@ -44,7 +44,7 @@ SELECT p.Id, StartDateTime, EndDateTime, p.FirstName, p.LastName, p.EmploymentNu
 a.Name AS Info, 'ABS' as RequestType, 0 as ShiftTradeStatus, 
 p2.FirstName as SavedByFirstName  , p2.LastName AS SavedByLastName, p2.EmploymentNumber as SavedByEmploymentNumber, pr.UpdatedOn 
 FROM PersonRequest pr INNER JOIN Person p
-ON p.Id = pr.Person AND pr.IsDeleted = 0 AND RequestStatus IN(1,2)
+ON p.Id = pr.Person AND pr.IsDeleted = 0 AND RequestStatus IN(1,2,4)
 INNER JOIN Request r ON r.Parent = pr.Id
 INNER JOIN Person p2 ON p2.Id = pr.UpdatedBy
 INNER JOIN AbsenceRequest ar ON ar.Request = r.Id
