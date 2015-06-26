@@ -33,7 +33,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 			ToggleStepDefinition.CheckIfRunTestDueToToggleFlags();
 
-			addExtraDataSource();
 			CurrentTime.Reset();
 			TestControllerMethods.BeforeScenario();
 
@@ -45,17 +44,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			log.Debug("Starting scenario " + ScenarioContext.Current.ScenarioInfo.Title);
 		}
 
-		private static readonly string targetTestDataNHibFile = Path.Combine(Paths.WebBinPath(), "TestData2.nhib.xml");
-		private void addExtraDataSource()
-		{
-			if (!ScenarioContext.Current.ScenarioInfo.Tags.Contains("ExtraDataSource")) return;
-			FileConfigurator.ConfigureByTags(
-				"Data\\TestData2.nhib.xml",
-				targetTestDataNHibFile,
-				new AllTags()
-				);
-		}
-
 		public void AfterScenario()
 		{
 			log.Debug("Cleaning up after scenario " + ScenarioContext.Current.ScenarioInfo.Title);
@@ -64,7 +52,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 			ScenarioUnitOfWorkState.TryDisposeUnitOfWork();
 			handleScenarioException();
-			File.Delete(targetTestDataNHibFile);
 
 			log.Debug("Finished scenario " + ScenarioContext.Current.ScenarioInfo.Title);
 		}
