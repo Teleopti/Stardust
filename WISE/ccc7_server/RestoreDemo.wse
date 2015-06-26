@@ -98,7 +98,7 @@ item: If/While Statement
 end
 item: Execute Program
   Pathname=CMD
-  Command Line=/C ""%DIR%DemoDatabase\Helpers\RestoreDemo.bat" "%SQL_AUTH_STRING%""
+  Command Line=/C ""%DIR%DemoDatabase\Helpers\RestoreDemo.bat" "%CONNSTRINGBASE%""
   Default Directory=%DIR%
   Flags=00000110
 end
@@ -106,7 +106,7 @@ item: Else Statement
 end
 item: Execute Program
   Pathname=CMD
-  Command Line=/C ""%DIR%DemoDatabase\Helpers\RestoreDemo.bat" "%SQL_AUTH_STRING%" "%SUSER%" "%SPASS%""
+  Command Line=/C ""%DIR%DemoDatabase\Helpers\RestoreDemo.bat" "%CONNSTRINGBASE%" "%SUSER%" "%SPASS%""
   Default Directory=%DIR%
   Flags=00000110
 end
