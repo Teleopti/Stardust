@@ -16,10 +16,10 @@ namespace Teleopti.Wfm.Administration.Core
 			_currentTenantSession = currentTenantSession;
 		}
 
-		public ConflictModel CheckConflicting(string importConnectionString, string userPrefix)
+		public ConflictModel GetConflictionUsers(string importConnectionString, string userPrefix)
 		{
 			//don't do the check if not entered Tenant
-			if(string.IsNullOrEmpty(userPrefix))
+			if (string.IsNullOrEmpty(userPrefix))
 				return new ConflictModel();
 
 			var mainUsers = _currentTenantSession.CurrentSession()
@@ -31,7 +31,7 @@ namespace Teleopti.Wfm.Administration.Core
 			var importUsers = new LoadAllPersonInfos(tenantUowManager).PersonInfos().ToList();
 			tenantUowManager.CancelAndDisposeCurrent();
 			var conflicting = new HashSet<ImportUserModel>();
-			var notConflicting = new HashSet<PersonInfo>();
+			var notConflicting = new HashSet<ImportUserModel>();
 			foreach (var importUser in importUsers)
 			{
 				var checkedImport = checkConflict(mainUsers, importUser, userPrefix);
@@ -39,10 +39,10 @@ namespace Teleopti.Wfm.Administration.Core
 				{
 					AppLogon = checkedImport.AppLogon,
 					Identity = checkedImport.Identity,
-					{
+					AppPassword = importUser.ApplicationLogonInfo.LogonPassword,
 					PersonId = importUser.Id
-						continue;
-					}
+				};
+				if (checkedImport.Conflicted)
 					conflicting.Add(importUserModel);
 				else
 					notConflicting.Add(importUserModel);
@@ -50,7 +50,7 @@ namespace Teleopti.Wfm.Administration.Core
 			var retModel = new ConflictModel
 			{
 				NumberOfConflicting = conflicting.Count,
-				NumberOfNotConflicting = importUsers.Count - conflicting.Count,
+				NumberOfNotConflicting = importUsers.Count() - conflicting.Count,
 				ConflictingUserModels = conflicting,
 				NotConflicting = notConflicting
 			};
@@ -62,10 +62,10 @@ namespace Teleopti.Wfm.Administration.Core
 		{
 			var logonName = toImport.ApplicationLogonInfo.LogonName;
 			var identity = toImport.Identity;
-					{
+			bool conflicting = false;
 			if (logonName != null)
-						continue;
-					}
+			{
+				PersonInfo conflictLogonName = allOldOnes.FirstOrDefault(
 					x => x.ApplicationLogonInfo.LogonName != null && x.ApplicationLogonInfo.LogonName.Equals(logonName));
 				if (conflictLogonName != null)
 				{
@@ -88,25 +88,24 @@ namespace Teleopti.Wfm.Administration.Core
 						} while (conflictLogonName != null);
 					}
 
-				notConflicting.Add(importUser);
 				}
 			}
 
 			if (identity != null)
 			{
 				PersonInfo conflictIdentity = allOldOnes.FirstOrDefault(x => x.Identity != null && x.Identity.Equals(identity));
-				NumberOfNotConflicting = importUsers.Count - conflicting.Count,
+				if (conflictIdentity != null)
 				{
 					conflicting = true;
 					identity = tenant + identity;
-				}),
-				NotConflicting = notConflicting.Select(c => new NotConflictingUserModel
-				{
-					PersonId = c.Id,
-					AppLogon = c.ApplicationLogonInfo.LogonName,
-					Password = c.ApplicationLogonInfo.LogonPassword,
-					Identity = c.Identity
-				}),
+					//hopefully no conflict now
+					conflictIdentity =
+					allOldOnes.FirstOrDefault(x => x.Identity != null && x.Identity.Equals(identity));
+					if (conflictIdentity != null)
+					{
+						int suffix = 0;
+						do
+						{
 							suffix++;
 							identity = identity + suffix;
 							conflictIdentity = allOldOnes.FirstOrDefault(x => x.Identity != null && x.Identity.Equals(identity));
@@ -130,4 +129,3 @@ namespace Teleopti.Wfm.Administration.Core
 	}
 
 }
-

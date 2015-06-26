@@ -13,11 +13,6 @@
 				<input type="text" ng-model="importVm.Tenant" ng-blur="importVm.CheckTenantName()" placeholder="Tenant name">
 			</div>
 			<label ng-class="(importVm.TenantOk==true) ? 'dbOk' : 'dbNotOk'">{{importVm.TenantMessage}}</label>
-			
-				<div class="importCaption">Add this as prefix to Logon Name to avoid conflicts</div>
-				<input type="text" ng-model="importVm.UserPrefix" ng-blur="importVm.CheckUsers()" placeholder="Prefix">
-			</div>
-
 			<div>
 				<div class="importCaption">Application database connections string</div>
 				<div>
@@ -38,11 +33,9 @@
 					<label>Import version:</label><span>{{importVm.ImportAppVersion}}</span><br />
 					<label ng-class="(importVm.AppVersionOk==true) ? 'dbOk' : 'dbNotOk'">The versions are OK ?:</label><span>{{importVm.AppVersionOk}}</span><br />
 				</div>
-				<div>
-					<input type="checkbox" ng-model="importVm.SkipConflicts" > Skip conflicting users
-				</div>
+
 				<br/>
-				{{importVm.SkipConflicts}}
+
 				<p>
 					<button class="btn btn-default" ng-click="importVm.startImport()">Start import</button>
 				</p>

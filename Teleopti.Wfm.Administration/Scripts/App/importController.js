@@ -21,8 +21,6 @@
 		vm.ImportAppVersion = null;
 		vm.AppVersionOk = null;
 
-		vm.SkipConflicts = true;
-
 		vm.CheckTenantName = function () {
 			$http.post('../api/Import/IsNewTenant', '"' + vm.Tenant + '"')
 				.success(function (data) {
@@ -83,40 +81,35 @@
 			}
 			$http.post('../api/Import/Conflicts', {
 				ConnStringAppDatabase: vm.AppDatabase,
-				UserPrefix: vm.UserPrefix
+				Tenant: vm.Tenant
 			})
 				.success(function (data) {
 					vm.Conflicts = data.ConflictingUserModels;
 					vm.NumberOfConflicting = data.NumberOfConflicting;
 					vm.NumberOfNotConflicting = data.NumberOfNotConflicting;
-					
+
 				}).error(function (xhr, ajaxOptions, thrownError) {
 					console.log(xhr.status + xhr.responseText + thrownError);
 				});
 		}
 
 		vm.startImport = function () {
-
 			$http.post('../api/Import/ImportExisting', {
 				Tenant: vm.Tenant,
 				ConnStringAppDatabase: vm.AppDatabase,
 				ConnStringAnalyticsDatabase: vm.AnalyticsDatabase,
-				SkipConflicts: vm.SkipConflicts,
-				UserPrefix: vm.UserPrefix
-			}).
-  success(function (data) {
-  	vm.Result = data.Success;
-  	vm.Message = data.Message;
-  }).
-  error(function (xhr, ajaxOptions, thrownError) {
-  	console.log(xhr.status + xhr.responseText + thrownError);
-  });
+				SkipConflicts: vm.SkipConflicts
+			})
+				.success(function (data) {
+					vm.Success = data.Success;
+					vm.Message = data.Message;
+				})
+				.error(function (xhr, ajaxOptions, thrownError) {
+					vm.Message = xhr.status + xhr.responseText + thrownError;
+					vm.Success = false;
+					console.log(xhr.status + xhr.responseText + thrownError);
+				});
 		};
-		//$http.get('../api/Home/GetAllTenants').success(function (data) {
-		//	$scope.Tenants = data;
-		//}).error(function (xhr, ajaxOptions, thrownError) {
-		//	console.log(xhr.status + xhr.responseText + thrownError);
-		//});
 	}
 
 })();

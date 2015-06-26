@@ -15,26 +15,34 @@ namespace Teleopti.Wfm.Administration.Core
 			_currentTenantSession = currentTenantSession;
 		}
 
-		public ImportTenantResultModel Execute(ImportDatabaseModel model, List<NotConflictingUserModel> users)
+		public ImportTenantResultModel Execute(ImportDatabaseModel model, ConflictModel conflictModel)
 		{
 			var newTenant = new Tenant(model.Tenant);
 			newTenant.SetApplicationConnectionString(model.ConnStringAppDatabase);
 			newTenant.SetAnalyticsConnectionString(model.ConnStringAnalyticsDatabase);
 			_currentTenantSession.CurrentSession().Save(newTenant);
 
-			foreach (var userModel in users)
-			{
-				var check = new CheckPasswordStrengthFake();
-				var personInfo = new PersonInfo(newTenant, userModel.PersonId);
-				personInfo.SetApplicationLogonCredentials(check,userModel.AppLogon, userModel.Password);
-				personInfo.SetIdentity(userModel.Identity);
-				_currentTenantSession.CurrentSession().Save(personInfo);
-			}
+			saveToDb(conflictModel.NotConflicting, newTenant);
+			saveToDb(conflictModel.ConflictingUserModels, newTenant);
+			
 			return new ImportTenantResultModel
 			{
 				Success = true,
-				Message = string.Format("Succesfully imported a new Tenant with {0} user.", users.Count())
+				Message = string.Format("Succesfully imported a new Tenant with {0} user.", conflictModel.NumberOfConflicting + conflictModel.NumberOfNotConflicting)
 			};
+		}
+
+		private void saveToDb(IEnumerable<ImportUserModel> userModels, Tenant newTenant)
+		{
+			foreach (var userModel in userModels)
+			{
+				var check = new CheckPasswordStrengthFake();
+				var personInfo = new PersonInfo(newTenant, userModel.PersonId);
+				personInfo.SetApplicationLogonCredentials(check, userModel.AppLogon, "");
+				personInfo.SetIdentity(userModel.Identity);
+				personInfo.ApplicationLogonInfo.ReuseLogonPassword(userModel.AppPassword);
+				_currentTenantSession.CurrentSession().Save(personInfo);
+			}
 		}
 	}
 }

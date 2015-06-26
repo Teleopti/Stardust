@@ -46,17 +46,14 @@ namespace Teleopti.Wfm.Administration.Controllers
 			if(!versions.AppVersionOk)
 				return Json(new ImportTenantResultModel { Success = false, Message = "The databases does not have the same version." });
 			
-			var conflicts = _getImportUsers.CheckConflicting(model.ConnStringAppDatabase, model.UserPrefix);
+			var conflicts = _getImportUsers.GetConflictionUsers(model.ConnStringAppDatabase, model.Tenant);
 
-			if (!model.SkipConflicts && conflicts.NumberOfConflicting > 0)
-			{
-			}
 
-			if (conflicts.NotConflicting.Count().Equals(0))
+			if (conflicts.NumberOfNotConflicting + conflicts.NumberOfConflicting == 0)
 				return Json(new ImportTenantResultModel { Success = false, Message = "There are no users to import." });
 
 
-			return Json(_import.Execute(model, conflicts.NotConflicting.ToList()));
+			return Json(_import.Execute(model, conflicts));
 		}
 
 		[HttpPost]
@@ -84,7 +81,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[Route("api/Import/Conflicts")]
 		public virtual JsonResult<ConflictModel> Conflicts(ImportDatabaseModel model)
 		{
-			return Json(_getImportUsers.CheckConflicting(model.ConnStringAppDatabase, model.UserPrefix));
+			return Json(_getImportUsers.GetConflictionUsers(model.ConnStringAppDatabase, model.Tenant));
 		}
 
 		private JsonResult<ImportTenantResultModel> isNewTenantName(string tenant)

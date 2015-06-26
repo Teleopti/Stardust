@@ -2,7 +2,6 @@
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
-using NHibernate.Event;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.DBManager.Library;

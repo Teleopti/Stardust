@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		public virtual bool IsLocked { get; protected set; }
 		public virtual string LogonName { get; protected set; }
 
-		public virtual string LogonPassword { get; set; }
+		public virtual string LogonPassword { get; protected set; }
 		protected virtual DateTime InvalidAttemptsSequenceStart { get; set; }
 		
 		private void registerPasswordChange()
@@ -86,6 +86,12 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		public void SetLastPasswordChange_OnlyUseFromTests(DateTime lastPasswordChange)
 		{
 			LastPasswordChange = lastPasswordChange;
+		}
+
+		//used when importing tenant, we don't want to encrypt what is encrypted already
+		public virtual void ReuseLogonPassword(string oldPassword)
+		{
+			LogonPassword = oldPassword;
 		}
 	}
 }
