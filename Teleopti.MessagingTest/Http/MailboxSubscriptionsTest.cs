@@ -24,14 +24,14 @@ namespace Teleopti.MessagingTest.Http
 	public class MailboxSubscriptionsTest : ISetup
 	{
 		public IMessageListener Target;
-		public FakeConfiguratoinWrapper ConfigReader;
+		public FakeConfigurationWrapper ConfigReader;
 		public FakeHttpServer Server;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<FakeSignalRClient>().For<ISignalRClient>();
 			system.UseTestDouble<FakeHttpServer>().For<IHttpServer>();
-			system.UseTestDouble(new FakeConfiguratoinWrapper
+			system.UseTestDouble(new FakeConfigurationWrapper
 			{
 				AppSettings = new Dictionary<string, string>
 				{

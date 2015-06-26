@@ -5,6 +5,8 @@ using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker;
 
 namespace Teleopti.Ccc.Domain.MessageBroker
@@ -14,19 +16,25 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 		private readonly IActionScheduler _actionScheduler;
 		private readonly ISignalR _signalR;
 		private readonly IMailboxRepository _mailboxRepository;
+		private readonly INow _now;
 		private readonly IBeforeSubscribe _beforeSubscribe;
 		public ILog Logger = LogManager.GetLogger(typeof (MessageBrokerServer));
+		private int _expirationInterval;
 
 		public MessageBrokerServer(
 			IActionScheduler actionScheduler,
 			ISignalR signalR,
 			IBeforeSubscribe beforeSubscribe,
-			IMailboxRepository mailboxRepository)
+			IMailboxRepository mailboxRepository,
+			IConfigReader configuration,
+			INow now)
 		{
 			_actionScheduler = actionScheduler;
 			_signalR = signalR;
 			_mailboxRepository = mailboxRepository;
+			_now = now;
 			_beforeSubscribe = beforeSubscribe ?? new SubscriptionPassThrough();
+			_expirationInterval = int.Parse(configuration.AppSettings["MessageBrokerMailboxExpirationInSeconds"]);
 		}
 
 		public string AddSubscription(Subscription subscription, string connectionId)
@@ -56,7 +64,13 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 		[MessageBrokerUnitOfWork]
 		public virtual void AddMailbox(Subscription subscription)
 		{
-			_mailboxRepository.Persist(new Mailbox {Route = subscription.Route(), Id = Guid.Parse(subscription.MailboxId)});
+			_mailboxRepository.Purge(_now.UtcDateTime());
+			_mailboxRepository.Persist(new Mailbox
+			{
+				Route = subscription.Route(),
+				Id = Guid.Parse(subscription.MailboxId),
+				ExpiresAt = _now.UtcDateTime().AddSeconds(_expirationInterval)
+			});
 		}
 
 		[MessageBrokerUnitOfWork]
@@ -64,8 +78,12 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 		{
 			var mailbox = _mailboxRepository.Load(Guid.Parse(mailboxId));
 			var result = mailbox.PopAllMessages();
-			if (result.Any())
+			var updateExpiration = _now.UtcDateTime().AddSeconds(_expirationInterval*0.5) >= mailbox.ExpiresAt;
+			if (updateExpiration || result.Any())
+			{
+				mailbox.ExpiresAt = _now.UtcDateTime().AddSeconds(_expirationInterval);
 				_mailboxRepository.Persist(mailbox);
+			}
 			return result;
 		}
 

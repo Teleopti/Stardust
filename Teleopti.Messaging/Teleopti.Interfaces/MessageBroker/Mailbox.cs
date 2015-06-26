@@ -8,7 +8,8 @@ namespace Teleopti.Interfaces.MessageBroker
 		public Guid Id { get; set; }
 		public string Route { get; set; }
 		public IEnumerable<Message> Messages { get { return _messages; }}
-		
+		public DateTime? ExpiresAt { get; set; }
+
 		[CLSCompliant(false)]
 		protected List<Message> _messages;
 

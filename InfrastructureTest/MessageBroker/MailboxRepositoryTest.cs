@@ -2,6 +2,8 @@
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.MessageBrokerUnitOfWork;
 using Teleopti.Interfaces.MessageBroker;
@@ -14,7 +16,8 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 	{
 		public IMailboxRepository Target;
 		public ICurrentMessageBrokerUnitOfWork CurrentMessageBrokerUnitOfWork;
-
+		public MutableNow Now;
+		
 		[Test]
 		public void ShouldGetFromId()
 		{
@@ -101,5 +104,34 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 			Target.Load(mailboxId).Messages.Should().Have.Count.EqualTo(2);
 		}
 
+		[Test]
+		public void ShouldPersistExpireAt()
+		{
+			var mailbox = new Mailbox
+			{
+				Id = Guid.NewGuid(),
+				ExpiresAt = "2015-06-26 08:30".Utc()
+			};
+			Target.Persist(mailbox);
+
+			var result = Target.Load(mailbox.Id);
+
+			result.ExpiresAt.Should().Be("2015-06-26 08:30".Utc());
+		}
+
+		[Test]
+		public void ShouldPurgeExpiredMailbox()
+		{
+			var mailbox = new Mailbox
+			{
+				Id = Guid.NewGuid(),
+				ExpiresAt = "2015-06-26 08:30".Utc()
+			};
+			Target.Persist(mailbox);
+
+			Target.Purge("2015-06-26 08:31".Utc());
+
+			Target.Load(mailbox.Id).Should().Be.Null();
+		}
 	}
 }

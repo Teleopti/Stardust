@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Interfaces.MessageBroker;
 
@@ -40,6 +41,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				where routes.Contains(m.Route)
 				select m
 				).ToArray();
+		}
+
+		public void Purge(DateTime utcDateTime)
+		{
+			var mailboxesToDelete = Data.Where(x => utcDateTime > x.ExpiresAt).ToArray();
+			mailboxesToDelete.ForEach(x => Data.Remove(x));
 		}
 	}
 }

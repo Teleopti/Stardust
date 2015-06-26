@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using NHibernate;
 using NHibernate.Transform;
@@ -18,7 +17,9 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker
 		private readonly IJsonSerializer _serializer;
 		private readonly IJsonDeserializer _deserializer;
 
-		public MailboxRepository(ICurrentMessageBrokerUnitOfWork unitOfWork, IJsonSerializer serializer, IJsonDeserializer deserializer)
+		public MailboxRepository(ICurrentMessageBrokerUnitOfWork unitOfWork,
+			IJsonSerializer serializer,
+			IJsonDeserializer deserializer)
 		{
 			_unitOfWork = unitOfWork;
 			_serializer = serializer;
@@ -36,19 +37,23 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker
 				"	(" +
 				"		Id," +
 				"		Route," +
-				"		Notifications " +
+				"		Notifications, " +
+				"		ExpiresAt " +
 				"	) VALUES (" +
 				"		:Id," +
 				"		:Route," +
-				"		:Notifications " +
+				"		:Notifications, " +
+				"		:ExpiresAt " +
 				"	) " +
 				"WHEN MATCHED THEN " +
 				"	UPDATE SET" +
-				"		Notifications = :Notifications" +
+				"		Notifications = :Notifications," +
+				"		ExpiresAt = :ExpiresAt" +
 				";")
 				.SetGuid("Id", model.Id)
 				.SetString("Route", model.Route)
 				.SetParameter("Notifications", _serializer.SerializeObject(model.Messages), NHibernateUtil.StringClob)
+				.SetParameter("ExpiresAt", model.ExpiresAt)
 				.ExecuteUpdate();
 		}
 
@@ -62,6 +67,15 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker
 			return Load(null, routes);
 		}
 
+		public void Purge(DateTime utcDateTime)
+		{
+			_unitOfWork.Current().CreateSqlQuery(
+				"DELETE FROM [msg].Mailbox "+
+				"WHERE ExpiresAt < :utcDateTime;")
+				.SetParameter("utcDateTime", utcDateTime)
+				.ExecuteUpdate();
+		}
+
 		public IEnumerable<Mailbox> Load(Guid? id, string[] routes)
 		{
 			var where = "Id =:Id";
@@ -72,7 +86,8 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker
 				"SELECT " +
 				"	Id," +
 				"	Route," +
-				"	Notifications AS NotificationsJson " +
+				"	Notifications AS NotificationsJson, " +
+				"	ExpiresAt " +
 				"FROM [msg].Mailbox WHERE" +
 				"	{0} ", where);
 
@@ -80,6 +95,7 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker
 				.AddScalar("Id", NHibernateUtil.Guid)
 				.AddScalar("Route", NHibernateUtil.String)
 				.AddScalar("NotificationsJson", NHibernateUtil.StringClob)
+				.AddScalar("ExpiresAt", NHibernateUtil.DateTime)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(getModel)))
 				;
 

@@ -138,6 +138,7 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="FakeAgentStateReadModelReader.cs" />
     <Compile Include="FakeAllBusinessUnitsUnitOfWorkAspect.cs" />
+    <Compile Include="FakeConfigurationWrapper.cs" />
     <Compile Include="FakeCurrentApplicationData.cs" />
     <Compile Include="FakeCurrentBusinessUnit.cs" />
     <Compile Include="FakeCurrentMessageSenders.cs" />
