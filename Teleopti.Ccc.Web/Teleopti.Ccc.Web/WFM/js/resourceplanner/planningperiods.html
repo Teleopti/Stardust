@@ -22,24 +22,26 @@
 					</div>
 				</div>
 			</div>
-
-
-			<p ng-show="planningPeriod.Skills.length>0">{{'PlanningPeriodMissingMessage' | translate}}</p>
-			<div ng-show="planningPeriod.Skills.length>0">
-				{{'MissingSkills' | translate }}
+			
+			<div ng-show="planningPeriod.Skills.length>0 && planningPeriod.State == 'New'">
+				<p>{{'PlanningPeriodMissingMessage' | translate}}</p>
+				{{'MissingSkills' | translate }} 
+				
+				<ul class="wfm-accordion material-depth-2">
+					<li ng-repeat="skill in planningPeriod.Skills">
+						<div class="wfm-accordion-head" ng-click="skill.toggle = !skill.toggle">
+							{{skill.SkillName}} <i ng-class="{'toggle-icon-open':skill.toggle}" class="mdi mdi-chevron-right"></i>
+							<span class="pull-right" class="text-muted">{{skill.MissingRanges.length}} {{'IssuesText' | translate }}</span>
+						</div>
+						<div class="wfm-accordion-content" ng-cloak ng-show="skill.toggle">
+							<div ng-repeat="range in skill.MissingRanges">{{'MissingForecastFrom' | translate }} {{range.StartDate | amDateFormat:"L"}} {{'ToText' | translate}} {{range.EndDate | amDateFormat:"L"}}</div>
+						</div>
+					</li>
+				</ul>
 			</div>
-
-			<ul class="wfm-accordion material-depth-2">
-				<li ng-repeat="skill in planningPeriod.Skills">
-					<div class="wfm-accordion-head" ng-click="skill.toggle = !skill.toggle">
-						{{skill.SkillName}} <i ng-class="{'toggle-icon-open':skill.toggle}" class="mdi mdi-chevron-right"></i>
-						<span class="pull-right" class="text-muted">{{skill.MissingRanges.length}} {{'IssuesText' | translate }}</span>
-					</div>
-					<div class="wfm-accordion-content" ng-cloak ng-show="skill.toggle">
-						<div ng-repeat="range in skill.MissingRanges">{{'MissingForecastFrom' | translate }} {{range.StartDate | amDateFormat:"L"}} {{'ToText' | translate}} {{range.EndDate | amDateFormat:"L"}}</div>
-					</div>
-				</li>
-			</ul>
+			<div ng-if="planningPeriod.State != 'New'" class="text-success">
+				Planning Period is scheduled.
+			</div>
 			<button class="schedule-button wfm-btn wfm-btn-primary" ng-click="launchSchedule(planningPeriod) ; scheduleClicked = 'true'">{{'Schedule' | translate }} </button>
 			<div ng-show="scheduleClicked && !schedulingPerformed">
 				<md-progress-linear md-mode="indeterminate"></md-progress-linear>

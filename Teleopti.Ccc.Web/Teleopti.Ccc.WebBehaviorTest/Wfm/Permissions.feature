@@ -1,4 +1,5 @@
-﻿Feature: Permissions
+﻿@ignore
+Feature: Permissions
 	As a resource planner
 	I want to work on permissions
 

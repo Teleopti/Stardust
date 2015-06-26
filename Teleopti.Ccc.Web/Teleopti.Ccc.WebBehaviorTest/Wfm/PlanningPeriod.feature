@@ -57,6 +57,7 @@ Scenario: update the next planning period
 	And I update planning period to two week 
 	Then I should see updated period from '2014-04-13'to '2014-04-26'
 
+@ignore
 Scenario: create the next planning period
 	Given the time is '2014-04-10'
 	And I am swedish
