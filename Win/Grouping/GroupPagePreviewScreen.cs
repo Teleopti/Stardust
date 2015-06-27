@@ -961,5 +961,19 @@ namespace Teleopti.Ccc.Win.Grouping
 
 			base.OnKeyDown(e);
 		}
+
+		protected override void OnGiveFeedback(GiveFeedbackEventArgs gfbevent)
+		{
+			try
+			{
+				base.OnGiveFeedback(gfbevent);
+			}
+// ReSharper disable EmptyGeneralCatchClause
+			catch
+// ReSharper restore EmptyGeneralCatchClause
+			{
+				//eat the f***ing exception, should be safe here
+			}
+		}
 	}
 }
