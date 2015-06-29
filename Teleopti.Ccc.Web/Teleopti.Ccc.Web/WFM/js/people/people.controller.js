@@ -102,9 +102,7 @@ function PeopleController($scope, $filter, $state, $document, $translate, i18nSe
 	};
 
 	var getPage = function () {
-		if ($scope.searchKeywordChanged) {
-			$scope.currentPageIndex = 1;
-		}
+		$scope.currentPageIndex = $scope.searchKeywordChanged ? 1 : paginationOptions.pageNumber;
 
 		var sortColumnList = "";
 		for (var i = 0; i < paginationOptions.sortColumns.length; i++) {
@@ -119,7 +117,7 @@ function PeopleController($scope, $filter, $state, $document, $translate, i18nSe
 		SearchSvrc.search.query({
 			keyword: $scope.keyword,
 			pageSize: paginationOptions.pageSize,
-			currentPageIndex: $scope.searchKeywordChanged ? 1 : paginationOptions.pageNumber,
+			currentPageIndex: $scope.currentPageIndex,
 			sortColumns: sortColumnList
 		}).$promise.then(function (result) {
 			$scope.searchResult = result.People;
