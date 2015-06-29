@@ -2,13 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
-using System.IO;
-using System.Reflection;
 using System.Security.Authentication;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Infrastructure;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.Authentication;
@@ -31,7 +28,6 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		private LogOnService _logonService;
 		private IList<IBusinessUnit> _buList;
 		private ILogOnOff _logOnOff;
-		private IRepositoryFactory _repositoryFactory;
 		private List<ITenantName> _tenantNames;
 
 		public LogOnHelper(IReadDataSourceConfiguration readDataSourceConfiguration, 
@@ -52,8 +48,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 			if (_buList == null || _buList.Count == 0)
 			{
-				throw new AuthenticationException("No allowed business unit found in current database '" +
-											_choosenDb + "'.");
+				throw new AuthenticationException("No allowed business unit found in current database '" + _choosenDb + "'.");
 			}
 
 			return _buList;
@@ -106,7 +101,6 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			}
 
 			_logOnOff = new LogOnOff(new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory()));
-			_repositoryFactory = new RepositoryFactory();
 			_logonService =
 				new LogOnService(_logOnOff, new AvailableBusinessUnitsProvider(new RepositoryFactory()));
 			_tenantNames = new List<ITenantName>();
