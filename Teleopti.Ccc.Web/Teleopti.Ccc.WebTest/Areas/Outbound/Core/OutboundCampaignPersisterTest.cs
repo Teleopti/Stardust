@@ -236,6 +236,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			{
 				Name = "myCampaign",
 				CallListLen = 1000,
+				TargetRate = 50,
 				ConnectRate = 50,
 				RightPartyConnectRate = 30,
 				ConnectAverageHandlingTime = 60,
