@@ -14,11 +14,6 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
 
 		public IPerson User { get; private set; }
 
-		public IAvailableBusinessUnitsProvider AvailableBusinessUnitProvider
-		{
-			get { return new AvailableBusinessUnitsProvider(User, DataSource); }
-		}
-
 		public override string ToString()
 		{
 			return DataSource != null ? DataSource.DataSourceName : "";

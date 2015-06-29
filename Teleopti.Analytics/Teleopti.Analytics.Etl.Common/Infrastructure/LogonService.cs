@@ -13,16 +13,18 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 	internal class LogOnService : ILicenseFeedback
 	{
 		private readonly ILogOnOff _logOnOff;
+		private readonly IAvailableBusinessUnitsProvider _availableBusinessUnitsProvider;
 		private readonly ILog _logger = LogManager.GetLogger(typeof(LogOnService));
 
-		internal LogOnService(ILogOnOff logOnOff)
+		internal LogOnService(ILogOnOff logOnOff, IAvailableBusinessUnitsProvider availableBusinessUnitsProvider)
 		{
 			_logOnOff = logOnOff;
+			_availableBusinessUnitsProvider = availableBusinessUnitsProvider;
 		}
 
 		internal bool LogOn(DataSourceContainer selectedDataSource, IBusinessUnit businessUnit)
 		{
-			selectedDataSource.AvailableBusinessUnitProvider.LoadHierarchyInformation(businessUnit, new RepositoryFactory());
+			_availableBusinessUnitsProvider.LoadHierarchyInformation(selectedDataSource.DataSource, businessUnit);
 
 			_logOnOff.LogOn(selectedDataSource.DataSource, selectedDataSource.User, businessUnit);
 

@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
 			var repositoryFactory = MockRepository.GenerateMock<IRepositoryFactory>();
 			var businessUnitRepository = MockRepository.GenerateMock<IBusinessUnitRepository>();
 
-			var target = new AvailableBusinessUnitsProvider(person, dataSource);
+			var target = new AvailableBusinessUnitsProvider(repositoryFactory);
 			person.Stub(x => x.PermissionInformation).Return(permissionInformation).Repeat.AtLeastOnce();
 			permissionInformation.Stub(x => x.HasAccessToAllBusinessUnits()).Return(true);
 			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
 			dataSource.Stub(x => x.Application).Return(unitOfWorkFactory);
 			unitOfWork.Stub(x => x.Dispose());
 
-			var result = target.AvailableBusinessUnits(repositoryFactory);
+			var result = target.AvailableBusinessUnits(person, dataSource);
 			Assert.AreEqual(1, result.Count());
 
 		}
@@ -48,13 +48,13 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
 		[Test]
 		public void VerifyHasAccessToOneBusinessUnit()
 		{
-			var target = new AvailableBusinessUnitsProvider(person, null);
+			var target = new AvailableBusinessUnitsProvider(null);
 
 			person.Stub(x => x.PermissionInformation).Return(permissionInformation).Repeat.AtLeastOnce();
 			permissionInformation.Stub(x => x.HasAccessToAllBusinessUnits()).Return(false);
 			permissionInformation.Stub(x => x.BusinessUnitAccessCollection()).Return(new List<IBusinessUnit> { null });
 
-			var result = target.AvailableBusinessUnits(null);
+			var result = target.AvailableBusinessUnits(person, null);
 			Assert.AreEqual(1, result.Count());
 
 		}
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
 			var businessUnitRepository = MockRepository.GenerateMock<IBusinessUnitRepository>();
 			var businessUnit = MockRepository.GenerateMock<IBusinessUnit>();
 
-			var target = new AvailableBusinessUnitsProvider(null, dataSource);
+			var target = new AvailableBusinessUnitsProvider(repositoryFactory);
 
 			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 			repositoryFactory.Stub(x => x.CreateBusinessUnitRepository(unitOfWork)).Return(businessUnitRepository);
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
 			dataSource.Stub(x => x.Application).Return(unitOfWorkFactory);
 			unitOfWork.Stub(x => x.Dispose());
 
-			var result = target.LoadHierarchyInformation(businessUnit, repositoryFactory);
+			var result = target.LoadHierarchyInformation(dataSource, businessUnit);
 			Assert.AreEqual(businessUnit, result);
 
 		}

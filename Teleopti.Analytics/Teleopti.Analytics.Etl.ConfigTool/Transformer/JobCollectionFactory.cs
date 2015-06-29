@@ -7,6 +7,7 @@ using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 
@@ -37,7 +38,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Transformer
 					new IocContainerHolder(_container), 
 					_baseConfiguration.RunIndexMaintenance
 					);
-				_baseConfiguration.JobHelper = new JobHelper(_container.Resolve<IReadDataSourceConfiguration>(), _container.Resolve<ITenantUnitOfWork>());
+				_baseConfiguration.JobHelper = new JobHelper(_container.Resolve<IReadDataSourceConfiguration>(), _container.Resolve<ITenantUnitOfWork>(), _container.Resolve<IAvailableBusinessUnitsProvider>());
 				jobParameters.Helper = _baseConfiguration.JobHelper;
 
 				var jobCollection = new JobCollection(jobParameters);

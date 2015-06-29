@@ -12,6 +12,7 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Main;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			_sharedSettingsQuerier = MockRepository.GenerateMock<ISharedSettingsQuerier>();
 			_repFactory = MockRepository.GenerateMock<IRepositoryFactory>();
 			_target = new MultiTenancyLogonPresenter(_view, _model, _initializer,  _logOnOff,
-				_mBroker, _sharedSettingsQuerier, _repFactory, _authenticationQuerier, new EnvironmentWindowsUserProvider(),null);
+				_mBroker, _sharedSettingsQuerier, _authenticationQuerier, new EnvironmentWindowsUserProvider(), new AvailableBusinessUnitsProvider(new RepositoryFactory()), null);
 			_model.AuthenticationType = AuthenticationTypeOption.Application;
 		}
 
@@ -127,8 +128,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			_model.SelectedBu = bu;
 
 			_view.Stub(x => x.ClearForm(Resources.InitializingTreeDots));
-			dataSourceContainer.Stub(x => x.AvailableBusinessUnitProvider).Return(buProvider);
-			buProvider.Stub(x => x.LoadHierarchyInformation(bu, _repFactory)).Return(bu);
+			buProvider.Stub(x => x.LoadHierarchyInformation(dataSource, bu)).Return(bu);
 			dataSourceContainer.Stub(x => x.User).Return(person);
 			_logOnOff.Stub(x => x.LogOn(dataSource, person, bu));
 			dataSourceContainer.Stub(x => x.DataSource).Return(dataSource);
@@ -153,8 +153,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			_model.SelectedBu = bu;
 
 			_view.Stub(x => x.ClearForm(Resources.InitializingTreeDots));
-			dataSourceContainer.Stub(x => x.AvailableBusinessUnitProvider).Return(buProvider);
-			buProvider.Stub(x => x.LoadHierarchyInformation(bu, _repFactory)).Return(bu);
+			buProvider.Stub(x => x.LoadHierarchyInformation(dataSource, bu)).Return(bu);
 			dataSourceContainer.Stub(x => x.User).Return(person);
 			_logOnOff.Stub(x => x.LogOn(dataSource, person, bu));
 			dataSourceContainer.Stub(x => x.DataSource).Return(dataSource);

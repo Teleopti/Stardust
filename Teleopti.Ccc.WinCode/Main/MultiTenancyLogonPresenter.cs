@@ -1,13 +1,12 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
 using System.Net;
 using System.Windows.Forms;
 using Autofac;
 using Teleopti.Ccc.Domain.Infrastructure;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
@@ -39,17 +38,17 @@ namespace Teleopti.Ccc.WinCode.Main
 		private readonly ILogOnOff _logOnOff;
 		private readonly IMessageBrokerComposite _messageBroker;
 		private readonly ISharedSettingsQuerier _sharedSettingsQuerier;
-		private readonly IRepositoryFactory _repFactory;
 		private readonly IAuthenticationQuerier _authenticationQuerier;
 		private readonly IWindowsUserProvider _windowsUserProvider;
+		private readonly IAvailableBusinessUnitsProvider _availableBusinessUnitsProvider;
 		private readonly IComponentContext _container;
 		public const string UserAgent = "WIN";
 
 
 		public MultiTenancyLogonPresenter(ILogonView view, LogonModel model, ILoginInitializer initializer, ILogOnOff logOnOff,
 			IMessageBrokerComposite messageBroker, ISharedSettingsQuerier sharedSettingsQuerier,
-			IRepositoryFactory repFactory, IAuthenticationQuerier authenticationQuerier, IWindowsUserProvider windowsUserProvider,
-			IComponentContext container)
+			IAuthenticationQuerier authenticationQuerier, IWindowsUserProvider windowsUserProvider,
+			IAvailableBusinessUnitsProvider availableBusinessUnitsProvider, IComponentContext container)
 		{
 			_view = view;
 			_model = model;
@@ -57,9 +56,9 @@ namespace Teleopti.Ccc.WinCode.Main
 			_logOnOff = logOnOff;
 			_messageBroker = messageBroker;
 			_sharedSettingsQuerier = sharedSettingsQuerier;
-			_repFactory = repFactory;
 			_authenticationQuerier = authenticationQuerier;
 			_windowsUserProvider = windowsUserProvider;
+			_availableBusinessUnitsProvider = availableBusinessUnitsProvider;
 			_container = container;
 			_model.AuthenticationType = AuthenticationTypeOption.Windows;
 		}
@@ -174,9 +173,8 @@ namespace Teleopti.Ccc.WinCode.Main
 				
 				return;
 			}
-			
-			var provider = _model.SelectedDataSourceContainer.AvailableBusinessUnitProvider;
-			_model.AvailableBus = provider.AvailableBusinessUnits(_repFactory).ToList();
+
+			_model.AvailableBus = _availableBusinessUnitsProvider.AvailableBusinessUnits(_model.SelectedDataSourceContainer.User, _model.SelectedDataSourceContainer.DataSource).ToList();
 			if (_model.AvailableBus.Count == 0)
 			{
 				_view.ShowErrorMessage(Resources.NoAllowedBusinessUnitFoundInCurrentDatabase, Resources.ErrorMessage);
@@ -238,7 +236,7 @@ namespace Teleopti.Ccc.WinCode.Main
 		private void setBusinessUnit()
 		{
 			var businessUnit = _model.SelectedBu;
-			businessUnit = _model.SelectedDataSourceContainer.AvailableBusinessUnitProvider.LoadHierarchyInformation(businessUnit, _repFactory);
+			businessUnit = _availableBusinessUnitsProvider.LoadHierarchyInformation(_model.SelectedDataSourceContainer.DataSource, businessUnit);
 
 			_logOnOff.LogOn(_model.SelectedDataSourceContainer.DataSource, _model.SelectedDataSourceContainer.User, businessUnit);
 

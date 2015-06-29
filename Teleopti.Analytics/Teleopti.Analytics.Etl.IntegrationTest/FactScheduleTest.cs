@@ -567,19 +567,21 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		private readonly DataSourceContainer _choosenDb;
 		private IList<IBusinessUnit> _buList;
 		private readonly List<ITenantName> _tenantNames;
+		private IAvailableBusinessUnitsProvider _availableBusinessUnitsProvider;
 	
 
 		public LogOnHelperFake(IDataSource dataSource, IPerson person)
 		{
 			_choosenDb = new DataSourceContainer(dataSource, person);
 			_tenantNames = new List<ITenantName> { new TenantName { DataSourceName = dataSource.DataSourceName } };
+			_availableBusinessUnitsProvider = new AvailableBusinessUnitsProvider(new RepositoryFactory());
 		}
 
 		public IList<IBusinessUnit> GetBusinessUnitCollection()
 		{
 			if (_buList == null)
 			{
-				_buList = new List<IBusinessUnit>(_choosenDb.AvailableBusinessUnitProvider.AvailableBusinessUnits(new RepositoryFactory()));
+				_buList = new List<IBusinessUnit>(_availableBusinessUnitsProvider.AvailableBusinessUnits(_choosenDb.User, _choosenDb.DataSource));
 			}
 
 			//Trace.WriteLine("No allowed business unit found in current database.");

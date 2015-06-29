@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 			if (!resultDto.Successful) return resultDto;
 
 			resultDto.Tenant = result.DataSource.DataSourceName;
-			var buList = new AvailableBusinessUnitsProvider(result.Person, result.DataSource).AvailableBusinessUnits(new RepositoryFactory());
+			var buList = new AvailableBusinessUnitsProvider(new RepositoryFactory()).AvailableBusinessUnits(result.Person, result.DataSource);
 			buList.ForEach(unit => resultDto.BusinessUnitCollection.Add(new BusinessUnitDto { Id = unit.Id, Name = unit.Name }));
 			addToCache(result, identity, null);
 			return resultDto;
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 
 			if (!resultDto.Successful) return resultDto;
 			resultDto.Tenant = result.DataSource.DataSourceName;
-			var buList = new AvailableBusinessUnitsProvider(result.Person, result.DataSource).AvailableBusinessUnits(new RepositoryFactory());
+			var buList = new AvailableBusinessUnitsProvider(new RepositoryFactory()).AvailableBusinessUnits(result.Person, result.DataSource);
 			buList.ForEach(unit => resultDto.BusinessUnitCollection.Add(new BusinessUnitDto { Id = unit.Id, Name = unit.Name }));
 			addToCache(result, userName, password);
 			return resultDto;

@@ -26,6 +26,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 	public class LogOnHelper : ILogOnHelper
 	{
 		private readonly IReadDataSourceConfiguration _readDataSourceConfiguration;
+		private readonly IAvailableBusinessUnitsProvider _availableBusinessUnitsProvider;
 		private DataSourceContainer _choosenDb;
 		private LogOnService _logonService;
 		private IList<IBusinessUnit> _buList;
@@ -33,9 +34,12 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		private IRepositoryFactory _repositoryFactory;
 		private List<ITenantName> _tenantNames;
 
-		public LogOnHelper(IReadDataSourceConfiguration readDataSourceConfiguration, ITenantUnitOfWork tenantUnitOfWork)
+		public LogOnHelper(IReadDataSourceConfiguration readDataSourceConfiguration, 
+									ITenantUnitOfWork tenantUnitOfWork,
+									IAvailableBusinessUnitsProvider availableBusinessUnitsProvider)
 		{
 			_readDataSourceConfiguration = readDataSourceConfiguration;
+			_availableBusinessUnitsProvider = availableBusinessUnitsProvider;
 			initializeStateHolder(tenantUnitOfWork);
 		}
 
@@ -43,10 +47,9 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		{
 			if (_buList == null)
 			{
-				_buList = new List<IBusinessUnit>(_choosenDb.AvailableBusinessUnitProvider.AvailableBusinessUnits(_repositoryFactory));
+				_buList = new List<IBusinessUnit>(_availableBusinessUnitsProvider.AvailableBusinessUnits(_choosenDb.User, _choosenDb.DataSource));
 			}
 
-			//Trace.WriteLine("No allowed business unit found in current database.");
 			if (_buList == null || _buList.Count == 0)
 			{
 				throw new AuthenticationException("No allowed business unit found in current database '" +
@@ -105,7 +108,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			_logOnOff = new LogOnOff(new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory()));
 			_repositoryFactory = new RepositoryFactory();
 			_logonService =
-				new LogOnService(_logOnOff);
+				new LogOnService(_logOnOff, new AvailableBusinessUnitsProvider(new RepositoryFactory()));
 			_tenantNames = new List<ITenantName>();
 			StateHolder.Instance.StateReader.ApplicationScopeData.DoOnAllTenants_AvoidUsingThis(ds =>
 			{

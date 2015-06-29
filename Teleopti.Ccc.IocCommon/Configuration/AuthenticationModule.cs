@@ -33,6 +33,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RepositoryFactory>()
 				.As<IRepositoryFactory>()
 				.SingleInstance();
+			builder.RegisterType<AvailableBusinessUnitsProvider>()
+				.As<IAvailableBusinessUnitsProvider>()
+				.SingleInstance();
 
 			builder.Register<IPasswordPolicy>(c =>
 			{
