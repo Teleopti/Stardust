@@ -40,15 +40,12 @@
 			  not-null="true" />
 
     <property name="AllowDialogueReply"
-			  not-null="true"
-        type="boolean" />
+			  not-null="true"/>
 
     <property name="TranslateMessage"
-			  not-null="true"
-        type="boolean" />
+			  not-null="true" />
 
 		<property name="MessageType"
-							type="int"
 							not-null="true" />
 
     <many-to-one name="Sender"

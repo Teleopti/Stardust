@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
@@ -166,5 +167,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IPushMessageRepository repository = new RepositoryFactory().CreatePushMessageRepository(UnitOfWork);
 			Assert.AreEqual(1, repository.Find(_sender, new PagingDetail { Take = 10 }).Count);
         }
+
+	    [Test]
+		public void ShouldNotUpdateNonChanged_Bug33806()
+	    {
+		    var pushMessage = new PushMessage();
+			PersistAndRemoveFromUnitOfWork(pushMessage);
+			var versionBeforeRead = pushMessage.Version;
+
+		    var pushMessageRead = Session.Get<PushMessage>(pushMessage.Id.Value);
+			PersistAndRemoveFromUnitOfWork(pushMessageRead);
+
+			pushMessageRead.Version.Should().Be.EqualTo(versionBeforeRead);
+			UnitOfWork.IsDirty().Should().Be.False();
+	    }
     }
 }
