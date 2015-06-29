@@ -110,9 +110,9 @@ namespace Teleopti.Ccc.Domain.Outbound
 			set { _spanningPeriod = value; }
 		}
 
-		public virtual int CampaignTasks() //what should be returned, Niclas?
+		public virtual int CampaignTasks()
 		{
-			return CallListLen;
+			return CallListLen*TargetRate/RightPartyConnectRate;
 		}
 
 		public virtual TimeSpan AverageTaskHandlingTime() //how should this be calculated, campaigntasks*this should equal total time to complete campaign

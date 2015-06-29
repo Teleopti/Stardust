@@ -43,6 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			{
 				Name = form.Name,
 				CallListLen = form.CallListLen,
+				TargetRate = form.TargetRate,
 				ConnectRate = form.ConnectRate,
 				RightPartyConnectRate = form.RightPartyConnectRate,
 				ConnectAverageHandlingTime = form.ConnectAverageHandlingTime,
@@ -51,7 +52,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 				SpanningPeriod = new DateOnlyPeriod(form.StartDate, form.EndDate)
 			};
 
-			campaign.TargetRate = form.CallListLen * form.ConnectRate / 100;
 			if (form.WorkingHours != null)
 			{
 				foreach (CampaignWorkingHour workingHour in form.WorkingHours)

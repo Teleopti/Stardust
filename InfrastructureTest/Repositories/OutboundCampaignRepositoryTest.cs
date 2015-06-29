@@ -56,7 +56,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		protected override void VerifyAggregateGraphProperties(Campaign loadedAggregateFromDatabase)
 		{
 			loadedAggregateFromDatabase.Name.Should().Be.EqualTo("Sept Sales");
-			
 		}
 
 		protected override Repository<Campaign> TestRepository(IUnitOfWork unitOfWork)
@@ -65,7 +64,115 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		public void CanAddWorkingHoursToCampaign()
+		public void ShouldPersistCampaignName()
+		{
+			var campaign = CreateAggregateWithCorrectBusinessUnit();
+			PersistAndRemoveFromUnitOfWork(campaign);
+
+			var repository = new OutboundCampaignRepository(UnitOfWork);
+			var loadedCampaign = repository.Get(campaign.Id.GetValueOrDefault());
+
+			loadedCampaign.Name.Should().Be.EqualTo(campaign.Name);
+		}			
+		
+		[Test]
+		public void ShouldPersistCallListLength()
+		{
+			var campaign = CreateAggregateWithCorrectBusinessUnit();
+			PersistAndRemoveFromUnitOfWork(campaign);
+
+			var repository = new OutboundCampaignRepository(UnitOfWork);
+			var loadedCampaign = repository.Get(campaign.Id.GetValueOrDefault());
+
+			loadedCampaign.CallListLen.Should().Be.EqualTo(campaign.CallListLen);
+		}			
+		
+		[Test]
+		public void ShouldPersistTargetRate()
+		{
+			var campaign = CreateAggregateWithCorrectBusinessUnit();
+			PersistAndRemoveFromUnitOfWork(campaign);
+
+			var repository = new OutboundCampaignRepository(UnitOfWork);
+			var loadedCampaign = repository.Get(campaign.Id.GetValueOrDefault());
+
+			loadedCampaign.TargetRate.Should().Be.EqualTo(campaign.TargetRate);
+		}		
+		
+		[Test]
+		public void ShouldPersistSkill()
+		{
+			var campaign = CreateAggregateWithCorrectBusinessUnit();
+			PersistAndRemoveFromUnitOfWork(campaign);
+
+			var repository = new OutboundCampaignRepository(UnitOfWork);
+			var loadedCampaign = repository.Get(campaign.Id.GetValueOrDefault());
+
+			loadedCampaign.Skill.Id.Should().Be.EqualTo(campaign.Skill.Id);
+		}			
+		
+		[Test]
+		public void ShouldPersistConnectRate()
+		{
+			var campaign = CreateAggregateWithCorrectBusinessUnit();
+			PersistAndRemoveFromUnitOfWork(campaign);
+
+			var repository = new OutboundCampaignRepository(UnitOfWork);
+			var loadedCampaign = repository.Get(campaign.Id.GetValueOrDefault());
+
+			loadedCampaign.ConnectRate.Should().Be.EqualTo(campaign.ConnectRate);
+		}			
+		
+		[Test]
+		public void ShouldPersistRightPartyConnectRate()
+		{
+			var campaign = CreateAggregateWithCorrectBusinessUnit();
+			PersistAndRemoveFromUnitOfWork(campaign);
+
+			var repository = new OutboundCampaignRepository(UnitOfWork);
+			var loadedCampaign = repository.Get(campaign.Id.GetValueOrDefault());
+
+			loadedCampaign.RightPartyConnectRate.Should().Be.EqualTo(campaign.RightPartyConnectRate);
+		}			
+		
+		[Test]
+		public void ShouldPersistConnectAverageHandlingTime()
+		{
+			var campaign = CreateAggregateWithCorrectBusinessUnit();
+			PersistAndRemoveFromUnitOfWork(campaign);
+
+			var repository = new OutboundCampaignRepository(UnitOfWork);
+			var loadedCampaign = repository.Get(campaign.Id.GetValueOrDefault());
+
+			loadedCampaign.ConnectAverageHandlingTime.Should().Be.EqualTo(campaign.ConnectAverageHandlingTime);
+		}			
+		
+		[Test]
+		public void ShouldPersistRightPartyConectAverageHandlingTime()
+		{
+			var campaign = CreateAggregateWithCorrectBusinessUnit();
+			PersistAndRemoveFromUnitOfWork(campaign);
+
+			var repository = new OutboundCampaignRepository(UnitOfWork);
+			var loadedCampaign = repository.Get(campaign.Id.GetValueOrDefault());
+
+			loadedCampaign.RightPartyAverageHandlingTime.Should().Be.EqualTo(campaign.RightPartyAverageHandlingTime);
+		}				
+		
+		[Test]
+		public void ShouldPersistUnproductiveTime()
+		{
+			var campaign = CreateAggregateWithCorrectBusinessUnit();
+			PersistAndRemoveFromUnitOfWork(campaign);
+
+			var repository = new OutboundCampaignRepository(UnitOfWork);
+			var loadedCampaign = repository.Get(campaign.Id.GetValueOrDefault());
+
+			loadedCampaign.UnproductiveTime.Should().Be.EqualTo(campaign.UnproductiveTime);
+		}	
+		
+		[Test]
+		public void ShouldPersistWorkingHours()
 		{
 			var expectedWeekday = DayOfWeek.Monday;
 			var expectePeriod = new TimePeriod(new TimeSpan(8, 0, 0), new TimeSpan(15, 0, 0));
@@ -79,7 +186,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		public void ShouldSetSpanningPeriod()
+		public void ShouldPersistSpanningPeriod()
 		{
 			var expectedPeriod = new DateOnlyPeriod(2015, 6, 18, 2015, 7, 18);
 			var campaign = CreateAggregateWithCorrectBusinessUnit();
@@ -90,6 +197,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var loadedCampaign = repository.Get(campaign.Id.GetValueOrDefault());
 
 			loadedCampaign.SpanningPeriod.Should().Be.EqualTo(expectedPeriod);
+		}
+
+		[Test]
+		public void ShouldGetCampaignTask()
+		{
+			var campaign = CreateAggregateWithCorrectBusinessUnit();
+			var expectedCampaignTask = campaign.CallListLen*campaign.TargetRate/campaign.RightPartyConnectRate;
+
+			campaign.CampaignTasks().Should().Be.EqualTo(expectedCampaignTask);
 		}
 
 		private Campaign CreateCampaignWithWorkingHours(DayOfWeek weekday, TimePeriod period)

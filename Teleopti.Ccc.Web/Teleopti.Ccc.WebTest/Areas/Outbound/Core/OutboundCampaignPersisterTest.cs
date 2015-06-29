@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			{
 				Name = "myCampaign",
 				CallListLen = 1000,
+				TargetRate = 50,
 				ConnectRate = 50,
 				RightPartyConnectRate = 30,
 				ConnectAverageHandlingTime = 60,
@@ -103,7 +104,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			_outboundCampaignPersister.Persist(_campaignInput);
 
 			var campaigns = _fakeCampaignRepository.LoadAll();
-			campaigns[0].TargetRate.Should().Be.EqualTo(_campaignInput.CallListLen * _campaignInput.ConnectRate / 100);
+			campaigns[0].TargetRate.Should().Be.EqualTo(_campaignInput.TargetRate);
 		}
 
 		[Test]

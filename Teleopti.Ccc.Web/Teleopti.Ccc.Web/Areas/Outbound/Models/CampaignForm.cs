@@ -8,6 +8,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 	{
 		public string Name { get; set; }
 		public int CallListLen { get; set; }
+		public int TargetRate { get; set; }
 		public int ConnectRate { get; set; }
 		public int RightPartyConnectRate { get; set; }
 		public int ConnectAverageHandlingTime { get; set; }
