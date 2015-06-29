@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 		private LogonModel _model;
 		private ILoginInitializer _initializer;
 		private ILogOnOff _logOnOff;
-		private MultiTenancyLogonPresenter _target;
+		private LogonPresenter _target;
 		private IMessageBrokerComposite _mBroker;
 		private ISharedSettingsQuerier _sharedSettingsQuerier;
 		private IRepositoryFactory _repFactory;
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			_mBroker = MockRepository.GenerateMock<IMessageBrokerComposite>();
 			_sharedSettingsQuerier = MockRepository.GenerateMock<ISharedSettingsQuerier>();
 			_repFactory = MockRepository.GenerateMock<IRepositoryFactory>();
-			_target = new MultiTenancyLogonPresenter(_view, _model, _initializer,  _logOnOff,
+			_target = new LogonPresenter(_view, _model, _initializer,  _logOnOff,
 				_mBroker, _sharedSettingsQuerier, _authenticationQuerier, new EnvironmentWindowsUserProvider(), new AvailableBusinessUnitsProvider(new RepositoryFactory()), null);
 			_model.AuthenticationType = AuthenticationTypeOption.Application;
 		}

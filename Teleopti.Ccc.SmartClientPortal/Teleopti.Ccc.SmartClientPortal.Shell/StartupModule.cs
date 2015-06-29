@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			builder.RegisterType<SystemCheckerValidator>();
 			builder.RegisterType<OutlookPanelContentWorker>();
 
-			builder.RegisterType<MultiTenancyLogonPresenter>().As<ILogonPresenter>().SingleInstance();
+			builder.RegisterType<LogonPresenter>().As<ILogonPresenter>().SingleInstance();
 
 			builder.RegisterType<LogonModel>().SingleInstance();
 

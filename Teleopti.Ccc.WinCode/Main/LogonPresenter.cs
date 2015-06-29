@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
 using System.Windows.Forms;
 using Autofac;
@@ -13,24 +12,7 @@ using Teleopti.Interfaces.MessageBroker.Client.Composite;
 
 namespace Teleopti.Ccc.WinCode.Main
 {
-	public interface ILogonPresenter
-	{
-		void OkbuttonClicked();
-		void BackButtonClicked();
-		void Initialize();
-		bool Start();
-		LoginStep CurrentStep { get; set; }
-	}
-
-	public enum LoginStep
-	{
-		SelectLogonType = 0,
-		Login = 1,
-		SelectBu = 2,
-		Loading = 3
-	}
-
-	public class MultiTenancyLogonPresenter : ILogonPresenter
+	public class LogonPresenter : ILogonPresenter
 	{
 		private readonly ILogonView _view;
 		private readonly LogonModel _model;
@@ -45,7 +27,7 @@ namespace Teleopti.Ccc.WinCode.Main
 		public const string UserAgent = "WIN";
 
 
-		public MultiTenancyLogonPresenter(ILogonView view, LogonModel model, ILoginInitializer initializer, ILogOnOff logOnOff,
+		public LogonPresenter(ILogonView view, LogonModel model, ILoginInitializer initializer, ILogOnOff logOnOff,
 			IMessageBrokerComposite messageBroker, ISharedSettingsQuerier sharedSettingsQuerier,
 			IAuthenticationQuerier authenticationQuerier, IWindowsUserProvider windowsUserProvider,
 			IAvailableBusinessUnitsProvider availableBusinessUnitsProvider, IComponentContext container)
