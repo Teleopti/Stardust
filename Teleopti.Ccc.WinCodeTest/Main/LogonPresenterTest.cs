@@ -1,21 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Infrastructure;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Main;
-using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 
 namespace Teleopti.Ccc.WinCodeTest.Main
@@ -30,8 +27,8 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 		private LogonPresenter _target;
 		private IMessageBrokerComposite _mBroker;
 		private ISharedSettingsQuerier _sharedSettingsQuerier;
-		private IRepositoryFactory _repFactory;
 		private IAuthenticationQuerier _authenticationQuerier;
+		private IAvailableBusinessUnitsProvider _availableBusinessUnitsProvider;
 
 		[SetUp]
 		public void Setup()
@@ -43,9 +40,9 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			_authenticationQuerier = MockRepository.GenerateMock<IAuthenticationQuerier>();
 			_mBroker = MockRepository.GenerateMock<IMessageBrokerComposite>();
 			_sharedSettingsQuerier = MockRepository.GenerateMock<ISharedSettingsQuerier>();
-			_repFactory = MockRepository.GenerateMock<IRepositoryFactory>();
+			_availableBusinessUnitsProvider = MockRepository.GenerateMock<IAvailableBusinessUnitsProvider>();
 			_target = new LogonPresenter(_view, _model, _initializer,  _logOnOff,
-				_mBroker, _sharedSettingsQuerier, _authenticationQuerier, new EnvironmentWindowsUserProvider(), new AvailableBusinessUnitsProvider(new RepositoryFactory()), null);
+				_mBroker, _sharedSettingsQuerier, _authenticationQuerier, new EnvironmentWindowsUserProvider(), _availableBusinessUnitsProvider, null);
 			_model.AuthenticationType = AuthenticationTypeOption.Application;
 		}
 
@@ -82,22 +79,16 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 		public void ShouldGetBusAfterLogin()
 		{
 			var dataSource = MockRepository.GenerateMock<IDataSource>();
-			var uowFact = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			var person = new Person();
 			person.SetId(Guid.NewGuid());
 			var appAuthInfo = new AuthenticationQuerierResult{Success = true,Person = person, DataSource = dataSource};
-			var buRep = MockRepository.GenerateMock<IBusinessUnitRepository>();
 			
 			_model.UserName = "USER";
 			_model.Password = "PASS";
 
 			_authenticationQuerier.Stub(x => x.TryLogon(new ApplicationLogonClientModel(),"WIN")).Return(appAuthInfo).IgnoreArguments();
-			
-			dataSource.Stub(x => x.Application).Return(uowFact);
-			var uow = MockRepository.GenerateMock<IUnitOfWork>();
-			uowFact.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
-			_repFactory.Stub(x => x.CreateBusinessUnitRepository(uow)).Return(buRep);
-			buRep.Stub(x => x.LoadAllBusinessUnitSortedByName()).Return(new List<IBusinessUnit>());
+			_availableBusinessUnitsProvider.Stub(x => x.AvailableBusinessUnits(person, dataSource)).Return(Enumerable.Empty<IBusinessUnit>());
+
 			
 			_view.Stub(x => x.ShowStep(true));
 			_target.CurrentStep = LoginStep.Login;
@@ -120,19 +111,16 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 		{
 			var dataSourceContainer = MockRepository.GenerateMock<IDataSourceContainer>();
 			var dataSource = MockRepository.GenerateMock<IDataSource>();
-			var uowFact = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			var person = MockRepository.GenerateMock<IPerson>();
-			var buProvider = MockRepository.GenerateMock<IAvailableBusinessUnitsProvider>();
 			var bu = new BusinessUnit("Bu One");
 			_model.SelectedDataSourceContainer = dataSourceContainer;
 			_model.SelectedBu = bu;
 
 			_view.Stub(x => x.ClearForm(Resources.InitializingTreeDots));
-			buProvider.Stub(x => x.LoadHierarchyInformation(dataSource, bu)).Return(bu);
+			_availableBusinessUnitsProvider.Stub(x => x.LoadHierarchyInformation(dataSource, bu)).Return(bu);
 			dataSourceContainer.Stub(x => x.User).Return(person);
 			_logOnOff.Stub(x => x.LogOn(dataSource, person, bu));
 			dataSourceContainer.Stub(x => x.DataSource).Return(dataSource);
-			dataSource.Stub(x => x.Application).Return(uowFact);
 			_initializer.Stub(x => x.InitializeApplication(dataSourceContainer)).Return(true);
 			_view.Stub(x => x.Exit(DialogResult.OK));
 
@@ -145,19 +133,16 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 		{
 			var dataSourceContainer = MockRepository.GenerateMock<IDataSourceContainer>();
 			var dataSource = MockRepository.GenerateMock<IDataSource>();
-			var uowFact = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			var person = MockRepository.GenerateMock<IPerson>();
-			var buProvider = MockRepository.GenerateMock<IAvailableBusinessUnitsProvider>();
 			var bu = new BusinessUnit("Bu One");
 			_model.SelectedDataSourceContainer = dataSourceContainer;
 			_model.SelectedBu = bu;
 
 			_view.Stub(x => x.ClearForm(Resources.InitializingTreeDots));
-			buProvider.Stub(x => x.LoadHierarchyInformation(dataSource, bu)).Return(bu);
+			_availableBusinessUnitsProvider.Stub(x => x.LoadHierarchyInformation(dataSource, bu)).Return(bu);
 			dataSourceContainer.Stub(x => x.User).Return(person);
 			_logOnOff.Stub(x => x.LogOn(dataSource, person, bu));
 			dataSourceContainer.Stub(x => x.DataSource).Return(dataSource);
-			dataSource.Stub(x => x.Application).Return(uowFact);
 			_initializer.Stub(x => x.InitializeApplication(dataSourceContainer)).Return(false);
 			_view.Stub(x => x.Exit(DialogResult.Cancel));
 
@@ -172,19 +157,12 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			var bu = new BusinessUnit("Bu One");
 			var bu2 = new BusinessUnit("Bu two");
 			var dataSource = MockRepository.GenerateMock<IDataSource>();
-			var uowFact = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			var person = new Person();
 			person.SetId(Guid.NewGuid());
 			var appAuthInfo = new AuthenticationQuerierResult { Success = true, Person = person, DataSource = dataSource };
-			var buRep = MockRepository.GenerateMock<IBusinessUnitRepository>();
 			
 			_authenticationQuerier.Stub(x => x.TryLogon(new IdentityLogonClientModel(), "WIN")).Return(appAuthInfo).IgnoreArguments();
-
-			dataSource.Stub(x => x.Application).Return(uowFact);
-			var uow = MockRepository.GenerateMock<IUnitOfWork>();
-			uowFact.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
-			_repFactory.Stub(x => x.CreateBusinessUnitRepository(uow)).Return(buRep);
-			buRep.Stub(x => x.LoadAllBusinessUnitSortedByName()).Return(new List<IBusinessUnit> { bu, bu2 });
+			_availableBusinessUnitsProvider.Stub(x => x.AvailableBusinessUnits(person, dataSource)).Return(new[]{bu, bu2});
 
 			_view.Stub(x => x.ShowStep(true));
 
@@ -203,6 +181,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			person.SetId(personId);
 			var appAuthInfo = new AuthenticationQuerierResult { Success = true, Person = person, TenantPassword = tenantPassword};
 
+			_availableBusinessUnitsProvider.Stub(x => x.AvailableBusinessUnits(null, null)).IgnoreArguments().Return(new[] { new BusinessUnit("_") });
 			_authenticationQuerier.Stub(x => x.TryLogon(new IdentityLogonClientModel(), "WIN")).Return(appAuthInfo).IgnoreArguments();
 
 			_target.CurrentStep = LoginStep.SelectBu;
@@ -224,6 +203,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			person.SetId(personId);
 			var appAuthInfo = new AuthenticationQuerierResult { Success = true, Person = person, TenantPassword = tenantPassword };
 
+			_availableBusinessUnitsProvider.Stub(x => x.AvailableBusinessUnits(null, null)).IgnoreArguments().Return(new[] { new BusinessUnit("_") });
 			_authenticationQuerier.Stub(x => x.TryLogon(new ApplicationLogonClientModel(), "APP")).Return(appAuthInfo).IgnoreArguments();
 
 			_target.CurrentStep = LoginStep.SelectBu;
@@ -238,6 +218,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 		public void ShouldGoDirectToApplicationIfWindowsNotPossible()
 		{
 			_model.AuthenticationType = AuthenticationTypeOption.Windows;
+			_availableBusinessUnitsProvider.Stub(x => x.AvailableBusinessUnits(null, null)).IgnoreArguments().Return(new[] { new BusinessUnit("_") });
 			_authenticationQuerier.Stub(x => x.TryLogon(new IdentityLogonClientModel(), null)).IgnoreArguments().Return(new AuthenticationQuerierResult{Success = false});
 
 			_target.Initialize();
