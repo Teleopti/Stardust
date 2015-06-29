@@ -121,7 +121,7 @@ SELECT a.PersonId, FirstName, LastName, EmploymentNumber, Note, TerminalDate, mi
 FROM ReadModel.FindPerson a
 INNER JOIN #PersonId b
 ON a.PersonId = b.PersonId
-GROUP BY a.PersonId, FirstName, LastName, EmploymentNumber, Note
+GROUP BY a.PersonId, FirstName, LastName, EmploymentNumber, Note, TerminalDate, [BusinessUnitId]
 ORDER BY LastName, FirstName 
 
 --get total count
