@@ -5,9 +5,10 @@ namespace Teleopti.Ccc.Domain.Notification
 {
 	public class Notifier : INotifier
 	{
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(Notifier));
+		private static readonly ILog logger = LogManager.GetLogger(typeof(Notifier));
 		private readonly INotificationSenderFactory _notificationSenderFactory;
 		private readonly INotificationChecker _notificationChecker;
+		private static bool alreadyWarned;
 
 		public Notifier(INotificationSenderFactory notificationSenderFactory, INotificationChecker notificationChecker)
 		{
@@ -39,7 +40,13 @@ namespace Teleopti.Ccc.Domain.Notification
 				}
 			}
 			else
-				Logger.Warn("No notification sender was found. Review the configuration.");
+			{
+				if (!alreadyWarned)
+				{
+					logger.Warn("No notification sender was found. Review the configuration.");
+					alreadyWarned = true;
+				}
+			}
 		}
 	}
 }
