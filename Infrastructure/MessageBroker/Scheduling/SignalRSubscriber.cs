@@ -31,5 +31,10 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker.Scheduling
 				onEventMessage,
 				typeof(IPersonRequest));
 		}
+
+		public void Unsubscribe(EventHandler<EventMessageArgs> onEventMessage)
+		{
+			StateHolder.Instance.StateReader.ApplicationScopeData.Messaging.UnregisterSubscription(onEventMessage);
+		}
 	}
 }

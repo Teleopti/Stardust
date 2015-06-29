@@ -12,6 +12,7 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Events;
@@ -27,6 +28,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private static readonly ILog Log = LogManager.GetLogger(typeof(SchedulerMessageBrokerHandler));
 		private readonly IList<IEventMessage> _messageQueue = new List<IEventMessage>();
 		private readonly IScheduleMessageSubscriber _scheduleMessageSubscriber;
+		private readonly IJsonDeserializer _deserializer;
 
 		public Guid InitiatorId
 		{
@@ -57,6 +59,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					))
 			);
 			_scheduleMessageSubscriber = container.Resolve<IScheduleMessageSubscriber>();
+			_deserializer = container.Resolve<IJsonDeserializer>();
 		}
 
 		public void Listen(DateTimePeriod period)
@@ -64,7 +67,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_scheduleMessageSubscriber.Subscribe(_owner.SchedulerState.RequestedScenario.Id.GetValueOrDefault(), period, onEventMessage);
 
 		}
-		
+
 		private void onEventMessage(object sender, EventMessageArgs e)
 		{
 			if (_owner == null)
@@ -76,13 +79,35 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (_owner.InvokeRequired)
 			{
 				_owner.BeginInvoke(new EventHandler<EventMessageArgs>(onEventMessage), sender, e);
+				return;
 			}
-			else
+			if (e.Message.InterfaceType.IsAssignableFrom(typeof (IAggregatedScheduleChange)))
 			{
-				if (!messageIsRelevant(e.Message)) return;
+				dispatchAggregatedScheduleChangeEvent(sender, e);
+			}
 
-				_messageQueue.Add(e.Message);
-				_owner.SizeOfMessageBrokerQueue(_messageQueue.Count);
+			if (!messageIsRelevant(e.Message)) return;
+			_messageQueue.Add(e.Message);
+			_owner.SizeOfMessageBrokerQueue(_messageQueue.Count);
+		}
+
+		private void dispatchAggregatedScheduleChangeEvent(object sender, EventMessageArgs e)
+		{
+			var message = e.InternalMessage;
+			foreach (var personId in _deserializer.DeserializeObject<Guid[]>(message.BinaryData))
+			{
+				_owner.BeginInvoke(new EventHandler<EventMessageArgs>(onEventMessage), sender,
+					new EventMessageArgs(new EventMessage
+					{
+						InterfaceType = typeof (IScheduleChangedEvent),
+						DomainObjectType = typeof (IScheduleChangedEvent).Name,
+						DomainObjectId = personId,
+						ModuleId = message.ModuleIdAsGuid(),
+						ReferenceObjectId = message.DomainReferenceIdAsGuid(),
+						EventStartDate = message.StartDateAsDateTime(),
+						EventEndDate = message.EndDateAsDateTime(),
+						DomainUpdateType = message.DomainUpdateTypeAsDomainUpdateType(),
+					}));
 			}
 		}
 
@@ -338,7 +363,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void stopListen()
 		{
-			StateHolder.Instance.StateReader.ApplicationScopeData.Messaging.UnregisterSubscription(onEventMessage);
+			_scheduleMessageSubscriber.Unsubscribe(onEventMessage);
 		}
 
 		#endregion

@@ -1,7 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
-using System.Net.Http;
-using System.Text;
+using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
@@ -20,8 +20,7 @@ namespace Teleopti.Messaging.Client.Http
 		private readonly ITime _time;
 		private readonly IConfigurationWrapper _configurationWrapper;
 		private readonly HttpRequests _client;
-		private readonly static object startLock = new object();
-		private static bool _started;
+		private readonly List<mailboxTimerInfo> _timers = new List<mailboxTimerInfo>(); 
 
 		public HttpListener(
 			EventHandlers eventHandlers, 
@@ -48,24 +47,22 @@ namespace Teleopti.Messaging.Client.Http
 		{
 			_eventHandlers.Add(subscription, eventMessageHandler);
 			_client.Post("MessageBroker/AddMailbox", subscription);
-			EnsureMessagePopingStarted();
+			EnsureMessagePopingStarted(subscription.MailboxId, eventMessageHandler);
 		}
 
-		public void EnsureMessagePopingStarted()
+		public void EnsureMessagePopingStarted(string mailboxId, EventHandler<EventMessageArgs> eventMessageHandler)
 		{
-			if (_started) return;
-			lock(startLock)
-			{
-				if (_started) return;
-				var interval = getPollingIntervalFromConfig();
-				_time.StartTimer(o => _eventHandlers.ForAll(s =>
+			var interval = getPollingIntervalFromConfig();
+			_timers.Add(new mailboxTimerInfo
 				{
-					var rawMessages = _client.Get("MessageBroker/PopMessages/" + s.MailboxId);
-					var messages = _jsonDeserializer.DeserializeObject<Message[]>(rawMessages);
-					messages.ForEach(m => _eventHandlers.CallHandlers(m));
-				}), null, interval, interval);
-				_started = true;
-			}
+					EventMessageHandler = eventMessageHandler,
+					Timer = _time.StartTimer(o =>
+					{
+						var rawMessages = _client.Get("MessageBroker/PopMessages/" + mailboxId);
+						var messages = _jsonDeserializer.DeserializeObject<Message[]>(rawMessages);
+						messages.ForEach(m => _eventHandlers.CallHandlers(m));
+					}, null, interval, interval)
+				});
 		}
 
 		private TimeSpan getPollingIntervalFromConfig()
@@ -82,6 +79,21 @@ namespace Teleopti.Messaging.Client.Http
 		public void UnregisterSubscription(EventHandler<EventMessageArgs> eventMessageHandler)
 		{
 			_eventHandlers.Remove(eventMessageHandler);
+			_timers
+				.Where(x => x.EventMessageHandler == eventMessageHandler)
+				.ToArray()
+				.ForEach(x =>
+				{
+					_time.DisposeTimer(x.Timer);
+					_timers.Remove(x);
+				});
+		}
+
+		private class mailboxTimerInfo
+		{
+			public EventHandler<EventMessageArgs> EventMessageHandler { get; set; }
+			public object Timer { get; set; }
 		}
 	}
+
 }

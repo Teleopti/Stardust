@@ -89,21 +89,11 @@ namespace Teleopti.Ccc.Domain.Helper
 				UpperBoundary = Subscription.DateToString(endDate),
 				DataSource = datasource,
 				BusinessUnitId = Subscription.IdToString(businessUnitId),
+				Base64BinaryData = base64BinaryData,
 				MailboxId = mailbox ? Guid.NewGuid().ToString() : null
 			};
 
-			var handler = eventMessageHandler;
-			if (base64BinaryData)
-			{
-				handler = (s, e) =>
-				{
-					if (!string.IsNullOrEmpty(e.InternalMessage.BinaryData))
-						e.Message.DomainObject = Convert.FromBase64String(e.InternalMessage.BinaryData);
-					e.InternalMessage.BinaryData = null;
-					eventMessageHandler(s, e);
-				};
-			}
-			broker.RegisterSubscription(subscription, handler);
+			broker.RegisterSubscription(subscription, eventMessageHandler);
 		}
 	}
 }

@@ -29,6 +29,7 @@ namespace Teleopti.Interfaces.Domain
 		public void DisposeTimer(object timer)
 		{
 			var t = (Timer) timer;
+			_timers.Remove(t);
 			t.Dispose();
 		}
 	}

@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 		private readonly INow _now;
 		private readonly IBeforeSubscribe _beforeSubscribe;
 		public ILog Logger = LogManager.GetLogger(typeof (MessageBrokerServer));
-		private int _expirationInterval;
+		private readonly int _expirationInterval;
 
 		public MessageBrokerServer(
 			IActionScheduler actionScheduler,
@@ -34,7 +34,10 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 			_mailboxRepository = mailboxRepository;
 			_now = now;
 			_beforeSubscribe = beforeSubscribe ?? new SubscriptionPassThrough();
-			_expirationInterval = int.Parse(configuration.AppSettings["MessageBrokerMailboxExpirationInSeconds"]);
+
+			if (configuration == null ||
+			    !int.TryParse(configuration.AppSettings["MessageBrokerMailboxExpirationInSeconds"], out _expirationInterval))
+				_expirationInterval = 900;
 		}
 
 		public string AddSubscription(Subscription subscription, string connectionId)

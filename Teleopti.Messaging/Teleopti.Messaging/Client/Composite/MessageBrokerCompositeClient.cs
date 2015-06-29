@@ -30,8 +30,9 @@ namespace Teleopti.Messaging.Client.Composite
 			IConfigurationWrapper configurationWrapper)
 		{
 			_signalRClient = signalRClient;
-			_signalRMessageListener = new SignalRListener(_signalRClient, new EventHandlers());
-			_mailboxListener = new HttpListener(new EventHandlers(),
+			var eventHandlers = new EventHandlers();
+			_signalRMessageListener = new SignalRListener(_signalRClient, eventHandlers);
+			_mailboxListener = new HttpListener(eventHandlers,
 				httpServer, _signalRClient, serializer, deserializer, time, configurationWrapper);
 			_messageCreator = new MessageCreator(messageSender, typeFilter);
 		}
@@ -79,6 +80,7 @@ namespace Teleopti.Messaging.Client.Composite
 		public void UnregisterSubscription(EventHandler<EventMessageArgs> eventMessageHandler)
 		{
 			_signalRMessageListener.UnregisterSubscription(eventMessageHandler);
+			_mailboxListener.UnregisterSubscription(eventMessageHandler);
 		}
 
 	}

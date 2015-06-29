@@ -14,6 +14,7 @@ using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
+using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Messaging.Client.Http;
 
 namespace Teleopti.MessagingTest.Http
@@ -76,9 +77,59 @@ namespace Teleopti.MessagingTest.Http
 			});
 
 			Assert.That(() => wasEventHandlerCalled, Is.False.After(500));
-			
 		}
 
+		[Test]
+		public void ShouldUnsubscribe()
+		{
+			Target.RegisterSubscription(string.Empty, Guid.Empty, EventMessageHandler, typeof(ITestType), false, true);
+			Target.UnregisterSubscription(EventMessageHandler);
+
+			Server.Has(new testMessage
+			{
+				BusinessUnitId = Guid.Empty.ToString(),
+				DataSource = string.Empty,
+				DomainQualifiedType = "ITestType",
+				DomainType = "ITestType",
+				BinaryData = "false"
+			});
+
+			Assert.That(() => wasCalled_pleaseForgiveMeForSharingState, Is.False.After(500));
+			wasCalled_pleaseForgiveMeForSharingState = false;
+		}
+
+		[Test]
+		public void ShouldUnsubscribeWithBase64Encoding()
+		{
+			Target.RegisterSubscription(string.Empty, Guid.Empty, EventMessageHandler, typeof(ITestType), true, true);
+			Server.Has(new testMessage
+			{
+				BusinessUnitId = Guid.Empty.ToString(),
+				DataSource = string.Empty,
+				DomainQualifiedType = "ITestType",
+				DomainType = "ITestType",
+			});
+			Assert.That(() => wasCalled_pleaseForgiveMeForSharingState, Is.True.After(500, 10));
+			wasCalled_pleaseForgiveMeForSharingState = false;
+
+			Target.UnregisterSubscription(EventMessageHandler);
+			Server.Has(new testMessage
+			{
+				BusinessUnitId = Guid.Empty.ToString(),
+				DataSource = string.Empty,
+				DomainQualifiedType = "ITestType",
+				DomainType = "ITestType",
+			});
+
+			Assert.That(() => wasCalled_pleaseForgiveMeForSharingState, Is.False.After(500));
+			wasCalled_pleaseForgiveMeForSharingState = false;
+		}
+
+		private bool wasCalled_pleaseForgiveMeForSharingState;
+		private void EventMessageHandler(object o, EventMessageArgs eventMessageArgs)
+		{
+			wasCalled_pleaseForgiveMeForSharingState = true;
+		}
 
 		private class testMessage : Message
 		{

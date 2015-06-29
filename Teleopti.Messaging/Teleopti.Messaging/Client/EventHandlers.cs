@@ -35,6 +35,11 @@ namespace Teleopti.Messaging.Client
 			toRemove.ForEach(s => _subscriptions.Remove(s));
 		}
 
+		public bool HasSubscription(EventHandler<EventMessageArgs> eventMessageHandler)
+		{
+			return _subscriptions.Any(x => x.Callback == eventMessageHandler);
+		}
+
 		public void ForAll(Action<Subscription> action)
 		{
 			_subscriptions
@@ -63,10 +68,18 @@ namespace Teleopti.Messaging.Client
 					route == r &&
 					s.Subscription.LowerBoundaryAsDateTime() <= eventMessage.EventEndDate &&
 					s.Subscription.UpperBoundaryAsDateTime() >= eventMessage.EventStartDate
-				select s.Callback;
+				select s;
 
-			foreach (var handler in matchingHandlers)
-				handler(this, new EventMessageArgs(eventMessage) {InternalMessage = message});
+			foreach (var subscription in matchingHandlers)
+			{
+				var e = new EventMessageArgs(eventMessage) {InternalMessage = message};
+				if (subscription.Subscription.Base64BinaryData && !string.IsNullOrEmpty(e.InternalMessage.BinaryData))
+				{
+					e.Message.DomainObject = Convert.FromBase64String(e.InternalMessage.BinaryData);
+					e.InternalMessage.BinaryData = null;
+				}
+				subscription.Callback(this, e);
+			}
 
 
 		}

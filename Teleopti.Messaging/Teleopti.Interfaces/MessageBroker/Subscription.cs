@@ -82,12 +82,7 @@ namespace Teleopti.Interfaces.MessageBroker
 		public string DomainReferenceType { get; set; }
 		public string LowerBoundary { get; set; }
 		public string UpperBoundary { get; set; }
-
-
-
-
-
-
+		public bool Base64BinaryData { get; set; }
 
 
 		public Guid BusinessUnitIdAsGuid()
