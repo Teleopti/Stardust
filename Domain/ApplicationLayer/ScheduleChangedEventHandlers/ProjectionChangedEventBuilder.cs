@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 							break;
 					}
 
-					foreach (var layer in projection)
+					foreach (var layer in ((VisualLayerCollection)projection).UnMergedCollection)
 					{
 						var isPayloadAbsence = (layer.Payload is IAbsence);
 						var description = isPayloadAbsence
