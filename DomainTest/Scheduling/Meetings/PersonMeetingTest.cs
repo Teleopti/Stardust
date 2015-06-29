@@ -50,8 +50,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
 			 * but I couldn't figure out how to properly create a personmeeting 
 			 * instance so I gave it up :(
 			 */
-			var dayBefore = new DateOnlyAsDateTimePeriod(new DateOnly(2007, 12, 31),
-														 SetupFixtureForAssembly.loggedOnPerson.PermissionInformation.DefaultTimeZone());
+			var dayBefore = new DateOnlyAsDateTimePeriod(new DateOnly(2007, 12, 31), TimeZoneInfo.Utc);
 			_target.BelongsToPeriod(dayBefore)
 				.Should().Be.True();
 		}
@@ -59,8 +58,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
         [Test]
         public void MeetingsShouldBeConsideredToBeIncludedInDayBeforeAsWell2()
         {
-            var dayBefore = new DateOnlyAsDateTimePeriod(new DateOnly(2007, 12, 31),
-                                                         SetupFixtureForAssembly.loggedOnPerson.PermissionInformation.DefaultTimeZone());
+	        var dayBefore = new DateOnlyAsDateTimePeriod(new DateOnly(2007, 12, 31), TimeZoneInfo.Utc);
             _target.BelongsToPeriod(new DateOnlyPeriod(dayBefore.DateOnly, dayBefore.DateOnly))
                 .Should().Be.True();
         }

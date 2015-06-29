@@ -6,7 +6,6 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 
 namespace Teleopti.Ccc.DomainTest
@@ -14,8 +13,6 @@ namespace Teleopti.Ccc.DomainTest
     [SetUpFixture]
     public class SetupFixtureForAssembly
     {
-        internal static IPerson loggedOnPerson;
-        
         [SetUp]
         public void RunBeforeAnyTest()
         {
@@ -24,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest
 
 						var dataSource = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("for test"), null, null);
             var applicationData = StateHolderProxyHelper.CreateApplicationData(mocks.StrictMock<IMessageBrokerComposite>(), dataSource);
-            loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
+            var loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
             var sessionData = StateHolderProxyHelper.CreateSessionData(loggedOnPerson, dataSource, BusinessUnitFactory.BusinessUnitUsedInTest);
 
             StateHolderProxyHelper.SetStateReaderExpectations(stateMock, applicationData, sessionData);
