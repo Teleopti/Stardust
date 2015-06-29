@@ -117,11 +117,10 @@ EXEC sp_executesql @dynamicSQL
 
 --prepare restult
 INSERT INTO #result
-SELECT a.PersonId, FirstName, LastName, EmploymentNumber, Note, TerminalDate, min([TeamId]), min([SiteId]), [BusinessUnitId]
+SELECT DISTINCT a.PersonId, FirstName, LastName, EmploymentNumber, Note, TerminalDate, [TeamId], [SiteId], [BusinessUnitId]
 FROM ReadModel.FindPerson a
 INNER JOIN #PersonId b
 ON a.PersonId = b.PersonId
-GROUP BY a.PersonId, FirstName, LastName, EmploymentNumber, Note, TerminalDate, [BusinessUnitId]
 ORDER BY LastName, FirstName 
 
 --get total count
