@@ -43,6 +43,7 @@ function PeopleController($scope, $filter, $state, $document, $translate, i18nSe
 	$scope.gridOptions = {
 		exporterMenuCsv: true,
 		exporterCsvFilename: 'peoples.csv',
+		exporterOlderExcelCompatibility: true,
 		exporterHeaderFilter: $filter('translate'),
 		exporterMenuPdf: false,
 		enableGridMenu: true,
