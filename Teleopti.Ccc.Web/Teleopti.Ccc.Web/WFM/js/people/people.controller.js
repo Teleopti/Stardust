@@ -210,8 +210,9 @@ function PeopleController($scope, $filter, $state, $document, $translate, i18nSe
 	var loadAllResults = function () {
 		return SearchSvrc.search.query({
 			keyword: $scope.keyword,
-			pageSize: $scope.pageSize*$scope.totalPages,
-			currentPageIndex: 1
+			pageSize: $scope.gridOptions.totalItems,
+			currentPageIndex: 1,
+			sortColumns: "LastName:true"
 		}).$promise.then(function (result) {
 			$scope.gridOptions.data = result.People;
 
