@@ -102,6 +102,8 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 					dynamic item = new ExpandoObject();
 					item.date = taskOwner.CurrentDate.Date;
 					item.vh = taskOwner.TotalStatisticCalculatedTasks;
+					item.vacw = taskOwner.TotalStatisticAverageAfterTaskTime;
+					item.vaht = taskOwner.TotalStatisticAverageTaskTime;
 					data.Add(taskOwner.CurrentDate, item);
 				}
 				foreach (var dayResult in methodAccuracy.MeasureResult)
