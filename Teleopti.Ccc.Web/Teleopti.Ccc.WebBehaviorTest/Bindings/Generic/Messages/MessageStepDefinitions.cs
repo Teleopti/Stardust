@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Messages
 		[Then(@"I should see receivers as")]
 		public void ThenIShouldSeeReceiversAs(Table table)
 		{
+			Browser.Interactions.AssertExists(".message-send-feedback");
 			var persons = table.CreateSet<RealTimeAdherenceAgentStateInfo>();
 			foreach (var person in persons)
 			{
