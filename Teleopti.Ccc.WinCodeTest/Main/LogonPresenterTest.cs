@@ -21,7 +21,7 @@ using Teleopti.Interfaces.MessageBroker.Client.Composite;
 namespace Teleopti.Ccc.WinCodeTest.Main
 {
 	[TestFixture]
-	public class MultiTenancyLogonPresenterTest
+	public class LogonPresenterTest
 	{
 		private ILogonView _view;
 		private LogonModel _model;
