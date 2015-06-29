@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 angular
-	.module('wfm.people', ['peopleService', 'peopleSearchService', 'ui.grid.pagination'])
+	.module('wfm.people', ['peopleService', 'peopleSearchService', 'ui.grid.pagination', 'ui.grid.resizeColumns'])
 	.constant('chunkSize', 50)
 	.controller('PeopleCtrl', [
 		'$scope', '$filter', '$state', '$document', '$translate', 'i18nService', 'uiGridConstants', 'PeopleSearch', PeopleController
@@ -61,7 +61,7 @@ function PeopleController($scope, $filter, $state, $document, $translate, i18nSe
 			},
 			{ displayName: 'EmployeeNo', field: 'EmploymentNumber', headerCellFilter: 'translate' },
 			{ displayName: 'Team', field: 'Team', cellTooltip: true, headerCellFilter: 'translate', enableSorting: false },
-			{ displayName: 'Email', field: 'Email', cellTooltip: true, headerCellFilter: 'translate', enableSorting: false },
+			{ displayName: 'Email', field: 'Email', headerCellFilter: 'translate', enableSorting: false, enableColumnResizing: true },
 			{ displayName: 'TerminalDate', field: 'LeavingDate', headerCellFilter: 'translate', enableSorting: false }
 		],
 		gridMenuTitleFilter: $translate,
