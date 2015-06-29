@@ -33,6 +33,9 @@ namespace Teleopti.Ccc.DomainTest.Outbound
 				CallListLen = 100,
 				TargetRate = 20,
 				RightPartyConnectRate = 20,
+				ConnectRate = 20,
+				RightPartyAverageHandlingTime = 120,
+				UnproductiveTime = 30,
 				ConnectAverageHandlingTime = (int)TimeSpan.FromMinutes(100).TotalSeconds
 			};
 

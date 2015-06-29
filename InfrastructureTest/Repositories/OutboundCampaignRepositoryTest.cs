@@ -206,6 +206,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var expectedCampaignTask = campaign.CallListLen*campaign.TargetRate/campaign.RightPartyConnectRate;
 
 			campaign.CampaignTasks().Should().Be.EqualTo(expectedCampaignTask);
+		}		
+		
+		[Test]
+		public void ShouldGetAverageTaskHandlingTime()
+		{
+			var campaign = CreateAggregateWithCorrectBusinessUnit();
+			campaign.CallListLen = 1000;
+			campaign.TargetRate = 50;
+			campaign.RightPartyAverageHandlingTime = 100;
+			campaign.UnproductiveTime = 10;
+			campaign.RightPartyConnectRate = 20;
+			campaign.ConnectAverageHandlingTime = 10;
+			campaign.ConnectRate = 100;
+
+			campaign.AverageTaskHandlingTime().Should().Be.EqualTo(new TimeSpan(0, 0, 38));
 		}
 
 		private Campaign CreateCampaignWithWorkingHours(DayOfWeek weekday, TimePeriod period)

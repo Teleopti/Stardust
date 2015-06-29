@@ -115,9 +115,15 @@ namespace Teleopti.Ccc.Domain.Outbound
 			return CallListLen*TargetRate/RightPartyConnectRate;
 		}
 
-		public virtual TimeSpan AverageTaskHandlingTime() //how should this be calculated, campaigntasks*this should equal total time to complete campaign
+		public virtual TimeSpan AverageTaskHandlingTime()
 		{
-			return TimeSpan.FromHours((double) ConnectAverageHandlingTime/CallListLen);
+			var target = CallListLen*TargetRate/100;
+			var rightPartyTotalHandlingTime = target*(RightPartyAverageHandlingTime + UnproductiveTime);
+			var wrongPartyTotalHandlingTime = (target/RightPartyConnectRate*100 - target)*(ConnectAverageHandlingTime+UnproductiveTime);
+			var manualConnectingTime = (target*100*100/(ConnectRate*RightPartyConnectRate) - target/RightPartyConnectRate*100)*UnproductiveTime;
+			var personHours = (double)(rightPartyTotalHandlingTime + wrongPartyTotalHandlingTime + manualConnectingTime)/60/60;
+
+			return TimeSpan.FromHours(personHours / CampaignTasks());
 		}
 
 		public virtual bool IsDeleted
