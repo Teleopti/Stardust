@@ -85,3 +85,31 @@ p {
 .hide-list-actions{
 	transition:none!important;
 }
+
+
+.wfm-radio input[type=radio]:checked ~ .wfm-radio-toggle {
+    background-color: #66c2ff;
+}
+
+ .toolbar > form > .wfm-radio {
+        width: initial;
+        display:block;
+    }
+
+
+    .permission-radio-buttons {
+        display: inline-flex;
+        margin-top: 10px;
+    }
+
+
+    .data-auth {
+        margin-top:15px;
+    }
+
+    @media only screen and (max-width: 841px) {
+        .permission-radio-buttons {
+            display: inline;
+        }
+    }
+

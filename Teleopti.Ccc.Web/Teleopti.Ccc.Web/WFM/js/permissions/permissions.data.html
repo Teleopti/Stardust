@@ -1,67 +1,81 @@
-﻿
-	<div class="toolbar">
-		<div class="row">
-			<div class="col-md-8">
-				<div class="input-prepend">
-					<i class="mdi mdi-filter-outline"></i>
-					<input type="text" name="filterDetails" ng-model="searchData" placeholder="{{'DataFilterThreeDots' | translate}}" />
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="wfm-switch permissions-tree-switch">
-					<input type="checkbox" id="switch3" ng-model="selectedDataToggle" />
-					<label for="switch3">
-						<span class="wfm-switch-label" translate>SelectedItems</span>
-						<span class="wfm-switch-toggle"></span>
-					</label>
-				</div>
-				<div class="wfm-switch permissions-tree-switch">
-					<input type="checkbox" id="switch4" ng-model="unselectedDataToggle" />
-					<label for="switch4">
-						<span class="wfm-switch-label" translate>NotSelectedItems</span>
-						<span class="wfm-switch-toggle"></span>
-					</label>
-				</div>
-			</div>
-		</div>
+﻿<div class="toolbar">
+            <div class="input-prepend">
+                <i class="mdi mdi-filter-outline"></i>
+                <input type="text" name="filterDetails" ng-model="searchData" placeholder="{{'DataFilterThreeDots' | translate}}" />
+            </div>
 
 
-		<div class="row">
-			<div class="col-md-12">
-				<label translate>AddGlobalAuthorizationLabel</label>
-				<md-select placeholder="Pick" ng-model="dynamicOptionSelected" ng-change="changeOption(dynamicOptionSelected)">
-					<md-option ng-repeat="dynamic in organization.DynamicOptions" ng-value="dynamic.RangeOption">{{dynamic.Name}}</md-option>
-				</md-select>
-			</div>
-		</div>
 
-		<div class="row">
-			<div class="col-md-12">
-				<label translate>AddSpecificAuthorizationLabel</label>
-			</div>
-		</div>
-	</div>
+        <form class="permission-radio-buttons">
+            <div class="wfm-radio">
+                <label>
+                    <span class="wfm-radio-label" style="margin:0!important;">Show: </span>
+                </label>
+            </div>
+            <div class="wfm-radio">
+                <label ng-click="unselectedDataToggle = false; selectedDataToggle = false">
+                    <input type="radio" checked name="tree-toggle">
+                    <span class="wfm-radio-toggle"></span>
+                    <span class="wfm-radio-label">All</span>
+                </label>
+            </div>
+            <div class="wfm-radio">
+                <label ng-click="unselectedDataToggle = false">
+                    <input type="radio" name="tree-toggle" ng-model="selectedDataToggle" value="true">
+                    <span class="wfm-radio-toggle"></span>
+                    <span class="wfm-radio-label">Selected</span>
+                </label>
+            </div>
+            <div class="wfm-radio">
+                <label ng-click="selectedDataToggle = false">
+                    <input type="radio" name="tree-toggle" ng-model="unselectedDataToggle" value="true">
+                    <span class="wfm-radio-toggle"></span>
+                    <span class="wfm-radio-label">Unselected</span>
+                </label>
+            </div>
+        </form>
+
+    <div class="data-auth">
+        <label translate>AddGlobalAuthorizationLabel</label>
+        <md-select placeholder="Pick" ng-model="dynamicOptionSelected" ng-change="changeOption(dynamicOptionSelected)" style="padding:0;">
+            <md-option ng-repeat="dynamic in organization.DynamicOptions" ng-value="dynamic.RangeOption">{{dynamic.Name}}</md-option>
+        </md-select>
+    </div>
+</div>
+
+
+
+
+
+<!--<div class="row">
+    <div class="col-md-12">
+        <label translate>AddSpecificAuthorizationLabel</label>
+    </div>
+</div>-->
+
+
+
 <div class="tree permissions-tree">
 
-	<div ui-tree data-drag-enabled="false">
-		<ol ui-tree-nodes="" ng-model="organization.BusinessUnit" id="tree-root" class="tree-line">
-			<li ng-repeat="node in organization.BusinessUnit | filter:searchData" ui-tree-node ng-include="'nodes_bu_renderer.html'"></li>
-		</ol>
-	</div>
+    <div ui-tree data-drag-enabled="false">
+        <ol ui-tree-nodes="" ng-model="organization.BusinessUnit" id="tree-root" class="tree-line">
+            <li ng-repeat="node in organization.BusinessUnit | filter:searchData  | selectedData:selectedDataToggle | unselectedData:unselectedDataToggle" ui-tree-node ng-include="'nodes_bu_renderer.html'"></li>
+        </ol>
+    </div>
 </div>
 
 <!-- Nested node template for data -->
 <script type="text/ng-template" id="nodes_bu_renderer.html">
-	<div class="tree-toggle-group">
-		<div class="toggle-handle" ng-class="{open: node.show}" ng-click="node.show = !node.show"><i ng-show="node.ChildNodes.length > 0" class="mdi mdi-chevron-right"></i></div>
-		<div ui-tree-handle class="ui-tree-handle" ng-class="{selected: node.selected}" ng-click="toggleOrganizationSelection(node)" ng-hide="selectedDataToggle">
-			{{node.Name}}
-			<span><i class="mdi mdi-check"></i></span>
-		</div>
-	</div>
+    <div class="tree-toggle-group">
+        <div class="toggle-handle" ng-class="{open: node.show}" ng-click="node.show = !node.show"><i ng-show="node.ChildNodes.length > 0" class="mdi mdi-chevron-right"></i></div>
+        <div ui-tree-handle class="ui-tree-handle" ng-class="{selected: node.selected}" ng-click="toggleOrganizationSelection(node); node.selected = !node.selected" >
+            {{node.Name}}
+            <span><i class="mdi mdi-check"></i></span>
+        </div>
+    </div>
 
-	<ol ui-tree-nodes="" ng-model="node.ChildNodes" ng-show="node.show">
-		<li ng-repeat="node in node.ChildNodes | filter:searchData" ui-tree-node ng-include="'nodes_bu_renderer.html'">
-		</li>
-	</ol>
+    <ol ui-tree-nodes="" ng-model="node.ChildNodes" ng-show="node.show" ng-click="node.selected= true;">
+        <li ng-repeat="node in node.ChildNodes | filter:searchData  | selectedData:selectedDataToggle | unselectedData:unselectedDataToggle" ng-click="node.selected= true;" ui-tree-node ng-include="'nodes_bu_renderer.html'">
+        </li>
+    </ol>
 </script>

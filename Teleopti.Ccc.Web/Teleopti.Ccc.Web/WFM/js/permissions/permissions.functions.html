@@ -1,27 +1,38 @@
-﻿<div class="row toolbar">
-	<div class="col-md-8">
-		<div class="input-prepend">
-			<i class="mdi mdi-filter-outline"></i>
-			<input type="text" name="filterDetails" ng-model="searchPermissions" placeholder="{{'PermissionsFilterThreeDots' | translate}}" />
-		</div>
-	</div>
-	<div class="col-md-4">
-		<div class="wfm-switch permissions-tree-switch">
-			<input type="checkbox" id="switch1" ng-model="selectedFunctionsToggle" ng-click="node.show = true" />
-			<label for="switch1">
-				<span class="wfm-switch-label" translate>SelectedItems</span>
-				<span class="wfm-switch-toggle"></span>
-			</label>
-		</div>
+﻿<div class="toolbar">
 
-		<div class="wfm-switch permissions-tree-switch">
-			<input type="checkbox" id="switch2" ng-model="unselectedFunctionsToggle" />
-			<label for="switch2">
-				<span class="wfm-switch-label" translate>NotSelectedItems</span>
-				<span class="wfm-switch-toggle"></span>
-			</label>
-		</div>
-	</div>
+        <div class="input-prepend">
+            <i class="mdi mdi-filter-outline"></i>
+            <input type="text" name="filterDetails" ng-model="searchPermissions" placeholder="{{'PermissionsFilterThreeDots' | translate}}" />
+        </div>
+
+    <form class="permission-radio-buttons">
+            <div class="wfm-radio" >
+                <label>
+                    <span class="wfm-radio-label" style="margin:0!important;">Show: </span>
+                </label>
+            </div>
+           <div class="wfm-radio">
+                <label ng-click="unselectedFunctionsToggle = false; selectedFunctionsToggle = false">
+                    <input type="radio" checked name="tree-toggle">
+                    <span class="wfm-radio-toggle"></span>
+                    <span class="wfm-radio-label">All</span>
+                </label>
+            </div>
+            <div class="wfm-radio">
+                <label ng-click="unselectedFunctionsToggle = false">
+                    <input type="radio" name="tree-toggle" ng-model="selectedFunctionsToggle" value="true">
+                    <span class="wfm-radio-toggle"></span>
+                    <span class="wfm-radio-label">Selected</span>
+                </label>
+            </div>
+            <div class="wfm-radio">
+                <label ng-click="selectedFunctionsToggle = false">
+                    <input type="radio" name="tree-toggle" ng-model="unselectedFunctionsToggle" value="true">
+                    <span class="wfm-radio-toggle"></span>
+                    <span class="wfm-radio-label">Unselected</span>
+                </label>
+            </div>
+    </form>
 </div>
 
 <div class="tree permissions-tree">
