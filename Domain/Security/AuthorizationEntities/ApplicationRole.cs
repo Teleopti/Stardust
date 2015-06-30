@@ -39,7 +39,9 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         {
             get
             {
-                return _userTextTranslator.TranslateText(base.DescriptionText);
+				if (BuiltIn)
+					return _userTextTranslator.TranslateText(base.DescriptionText);
+	            return base.DescriptionText;
             }
         }
 
