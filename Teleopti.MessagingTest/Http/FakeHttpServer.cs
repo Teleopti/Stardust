@@ -22,8 +22,9 @@ namespace Teleopti.MessagingTest.Http
 			_messages.Add(message);
 		}
 
-		public void PostAsync(HttpClient client, string uri, HttpContent httpContent)
+		public Task<HttpResponseMessage> PostAsync(HttpClient client, string uri, HttpContent httpContent)
 		{
+			return Task.FromResult(new HttpResponseMessage());
 		}
 
 		public Task<HttpResponseMessage> GetAsync(HttpClient client, string uri)

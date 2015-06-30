@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading.Tasks;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -23,7 +24,7 @@ namespace Teleopti.MessagingTest.Http
 				{
 					PostAsync = (client, url, content) => poster.PostAsync(client, url, content)
 				});
-			
+
 			target.Send(new Message());
 
 			poster.AssertWasCalled(x => x.PostAsync(null, null, null), o => o.IgnoreArguments());
@@ -33,7 +34,7 @@ namespace Teleopti.MessagingTest.Http
 		[Test]
 		public void ShouldPostToCorrectUrl(
 			[Values(
-				"http://a/", 
+				"http://a/",
 				"http://a",
 				"http://a/b/c/",
 				"http://a/b/c"
@@ -41,7 +42,14 @@ namespace Teleopti.MessagingTest.Http
 		{
 			var postedUrl = "";
 			var mutableUrl = new MutableUrl();
-			var target = new HttpSender(new HttpRequests(mutableUrl, null) { PostAsync = (c, u, cn) => postedUrl = u });
+			var target = new HttpSender(new HttpRequests(mutableUrl, null)
+			{
+				PostAsync = (c, u, cn) =>
+					{
+						postedUrl = u;
+						return Task.FromResult(new HttpResponseMessage());
+					}
+			});
 			mutableUrl.Configure(url);
 
 			target.Send(new Message());
@@ -53,7 +61,14 @@ namespace Teleopti.MessagingTest.Http
 		public void ShouldReuseSameClient()
 		{
 			var calledClients = new List<HttpClient>();
-			var target = new HttpSender(new HttpRequests(null, null) { PostAsync = (c, u, cn) => calledClients.Add(c) });
+			var target = new HttpSender(new HttpRequests(null, null)
+			{
+				PostAsync = (c, u, cn) =>
+				{
+					calledClients.Add(c);
+					return Task.FromResult(new HttpResponseMessage());
+				}
+			});
 
 			target.Send(new Message());
 			target.Send(new Message());
@@ -68,7 +83,14 @@ namespace Teleopti.MessagingTest.Http
 			var serializer = MockRepository.GenerateMock<IJsonSerializer>();
 			serializer.Stub(x => x.SerializeObject(notification)).Return("serialized!");
 			HttpContent postedContent = null;
-			var target = new HttpSender(new HttpRequests(null, serializer) { PostAsync = (c, u, cn) => { postedContent = cn; } });
+			var target = new HttpSender(new HttpRequests(null, serializer)
+			{
+				PostAsync = (c, u, cn) =>
+				{
+					postedContent = cn;
+					return Task.FromResult(new HttpResponseMessage());
+				}
+			});
 
 			target.Send(notification);
 
@@ -79,7 +101,7 @@ namespace Teleopti.MessagingTest.Http
 		[Test]
 		public void ShouldPostMultiple()
 		{
-			var notifications = new[] {new Message {DataSource = "one"}, new Message {DataSource = "two"}};
+			var notifications = new[] { new Message { DataSource = "one" }, new Message { DataSource = "two" } };
 			var serializer = MockRepository.GenerateMock<IJsonSerializer>();
 			serializer.Stub(x => x.SerializeObject(notifications)).Return("many");
 			HttpContent postedContent = null;
@@ -91,6 +113,7 @@ namespace Teleopti.MessagingTest.Http
 				{
 					postedUrl = u;
 					postedContent = cn;
+					return Task.FromResult(new HttpResponseMessage());
 				}
 			});
 			url.Configure("http://a");
@@ -103,7 +126,7 @@ namespace Teleopti.MessagingTest.Http
 
 		public interface IPoster
 		{
-			void PostAsync(HttpClient client, string url, HttpContent content);
+			Task<HttpResponseMessage> PostAsync(HttpClient client, string url, HttpContent content);
 		}
 
 	}

@@ -40,17 +40,16 @@ namespace Teleopti.Messaging.Client.Http
 				PostAsync = (client, uri, content) => httpServer.PostAsync(client, uri, content),
 				GetAsync = (client, uri) => httpServer.GetAsync(client, uri)
 			};
-			
 		}
 
 		public void RegisterSubscription(Subscription subscription, EventHandler<EventMessageArgs> eventMessageHandler)
 		{
 			_eventHandlers.Add(subscription, eventMessageHandler);
-			_client.Post("MessageBroker/AddMailbox", subscription);
-			EnsureMessagePopingStarted(subscription.MailboxId, eventMessageHandler);
+			_client.Post("MessageBroker/AddMailbox", subscription).Wait(TimeSpan.FromSeconds(30));
+			StartPopingTimer(subscription.MailboxId, eventMessageHandler);
 		}
 
-		public void EnsureMessagePopingStarted(string mailboxId, EventHandler<EventMessageArgs> eventMessageHandler)
+		public void StartPopingTimer(string mailboxId, EventHandler<EventMessageArgs> eventMessageHandler)
 		{
 			var interval = getPollingIntervalFromConfig();
 			_timers.Add(new mailboxTimerInfo

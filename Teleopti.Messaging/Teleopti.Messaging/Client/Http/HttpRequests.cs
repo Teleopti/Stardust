@@ -13,7 +13,7 @@ namespace Teleopti.Messaging.Client.Http
 		private readonly IMessageBrokerUrl _url;
 		private readonly IJsonSerializer _serializer;
 
-		public Action<HttpClient, string, HttpContent> PostAsync =
+		public Func<HttpClient, string, HttpContent, Task<HttpResponseMessage>> PostAsync =
 			(client, uri, httpContent) => client.PostAsync(uri, httpContent);
 
 		public Func<HttpClient, string, Task<HttpResponseMessage>> GetAsync =
@@ -38,11 +38,11 @@ namespace Teleopti.Messaging.Client.Http
 			return GetAsync(_httpClient, u);
 		}
 
-		public void Post(string call, object thing)
+		public Task<HttpResponseMessage> Post(string call, object thing)
 		{
 			var content = _serializer.SerializeObject(thing);
 			var u = url(call);
-			PostAsync(_httpClient, u, new StringContent(content, Encoding.UTF8, "application/json"));
+			return PostAsync(_httpClient, u, new StringContent(content, Encoding.UTF8, "application/json"));
 		}
 
 		private string url(string call)
