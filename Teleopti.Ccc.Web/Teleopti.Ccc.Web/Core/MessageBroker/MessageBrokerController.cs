@@ -35,6 +35,5 @@ namespace Teleopti.Ccc.Web.Broker
 		{
 			return Json(_server.PopMessages(id), JsonRequestBehavior.AllowGet);
 		}
-
 	}
 }

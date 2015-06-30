@@ -131,6 +131,13 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 		}
 
 		[Test]
+		public void ShouldReturnNullWhenPoppingFromNonExistingMailbox()
+		{
+			Server.PopMessages(Guid.NewGuid().ToString())
+				.Should().Be.Null();
+		}
+
+		[Test]
 		public void ShouldUIOU()
 		{
 			var mailbox = new Subscription

@@ -80,6 +80,7 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 		public virtual IEnumerable<Message> PopMessages(string mailboxId)
 		{
 			var mailbox = _mailboxRepository.Load(Guid.Parse(mailboxId));
+			if (mailbox == null) return null;
 			var result = mailbox.PopAllMessages();
 			var updateExpiration = _now.UtcDateTime().AddSeconds(_expirationInterval*0.5) >= mailbox.ExpiresAt;
 			if (updateExpiration || result.Any())
