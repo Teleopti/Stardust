@@ -151,7 +151,6 @@ function PeopleController($scope, $filter, $state, $document, $translate, i18nSe
 			$scope.totalPages = result.TotalPages;
 			$scope.keyword = $scope.defautKeyword();
 			$scope.searchKeywordChanged = false;
-
 			$scope.gridOptions.totalItems = result.TotalPages * paginationOptions.pageSize;
 		});
 	};
@@ -312,10 +311,7 @@ function PeopleController($scope, $filter, $state, $document, $translate, i18nSe
 
 	$scope.advancedSearch = function () {
 		$scope.showAdvancedSearchOption = false;
-		//triger search
-		if ($scope.searchKeywordChanged) {
-			$scope.currentPageIndex = 1;
-		}
+		
 		var keyword = "";
 		angular.forEach(allSearchTypes, function (searchType) {
 			// Change first letter to lowercase
@@ -326,7 +322,9 @@ function PeopleController($scope, $filter, $state, $document, $translate, i18nSe
 		if (keyword != "") {
 			keyword = keyword.substring(0, keyword.length - 2);
 		}
-
+		if (keyword != "" && keyword != $scope.keyword) {
+			$scope.searchKeywordChanged = true;
+		}
 		$scope.keyword = keyword;
 
 		getPage();

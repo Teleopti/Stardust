@@ -20,7 +20,7 @@
 
 	<div class="pagination pull-right" aria-hidden="false">
 		<ul>
-			<li class="pagination-item" ng-class="{disabled: currentPageIndex == 1}">
+			<li class="pagination-item" ng-class="{disabled: currentPageIndex == 1 || totalPages == 0}">
 				<a href="" ng-click="gridApi.pagination.previousPage()">
 					<i class="mdi mdi-chevron-double-left"></i>
 					{{'RepViewerPreviousPage'| translate}}
@@ -33,7 +33,7 @@
 				<a href="" ng-bind="n"></a>
 			</li>
 
-			<li class="pagination-item" ng-class="{disabled: currentPageIndex == totalPages}">
+			<li class="pagination-item" ng-class="{disabled: currentPageIndex == totalPages || totalPages == 0}">
 				<a href="" ng-click="gridApi.pagination.nextPage()">
 					{{'RepViewerNextPage'| translate}}
 					<i class="mdi mdi-chevron-double-right"></i>
