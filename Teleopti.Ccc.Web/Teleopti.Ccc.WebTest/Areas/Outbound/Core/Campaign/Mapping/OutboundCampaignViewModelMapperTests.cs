@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core.Campaign.Mapping
 		{
 			_createdSkill = SkillFactory.CreateSkillWithId("skill1");
 
-			_campaign = new Domain.Outbound.Campaign("myCampaign", _createdSkill);
+			_campaign = new Domain.Outbound.Campaign {Name = "myCampaign", Skill = _createdSkill};
 			_campaign.WorkingHours.Add(DayOfWeek.Monday, new TimePeriod(new TimeSpan(9,0,0), new TimeSpan(17,0,0)));
 			_campaign.WorkingHours.Add(DayOfWeek.Tuesday, new TimePeriod(new TimeSpan(9,0,0), new TimeSpan(17,0,0)));
 			_campaign.WorkingHours.Add(DayOfWeek.Wednesday, new TimePeriod(new TimeSpan(9,0,0), new TimeSpan(17,0,0)));

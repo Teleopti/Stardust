@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
 		public void ShouldGetAllCampaigns()
 		{
 			var skill = SkillFactory.CreateSkill("mySkill");
-			var campaigns = new List<Campaign>(){new Campaign("myCampaign", skill)};
+			var campaigns = new List<Campaign>() { new Campaign() { Name = "myCampaign", Skill = skill } };
 			var campaignVMs = new List<CampaignViewModel>(){new CampaignViewModel()};
 			_outboundCampaignRepository.Stub(x => x.LoadAll()).Return(campaigns);
 			_outboundCampaignViewModelMapper.Stub(x => x.Map(campaigns)).Return(campaignVMs);

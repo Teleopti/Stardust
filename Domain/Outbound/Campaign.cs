@@ -23,25 +23,6 @@ namespace Teleopti.Ccc.Domain.Outbound
 		private IDictionary<DayOfWeek, TimePeriod> _workingHours = new Dictionary<DayOfWeek, TimePeriod>();
 		private DateOnlyPeriod _spanningPeriod;
 
-      public Campaign()
-		{
-		}
-
-		public Campaign(string name, ISkill skill)
-			:this()
-		{
-			_name = name;
-			_callListLen = 100;
-			_targetRate = 50;
-			_skill = skill;
-			_connectRate = 20;
-			_rightPartyConnectRate = 20;
-			_connectAverageHandlingTime = 30;
-			_rightPartyAverageHandlingTime = 120;
-			_unproductiveTime = 30;
-			_spanningPeriod = new DateOnlyPeriod(DateOnly.Today, DateOnly.MaxValue);
-		}
-
 		public virtual string Name 
 		{
 			get { return _name; }
