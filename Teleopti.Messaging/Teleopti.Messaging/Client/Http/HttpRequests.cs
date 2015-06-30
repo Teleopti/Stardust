@@ -2,6 +2,7 @@ using System;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.MessageBroker.Client;
 
@@ -15,8 +16,8 @@ namespace Teleopti.Messaging.Client.Http
 		public Action<HttpClient, string, HttpContent> PostAsync =
 			(client, uri, httpContent) => client.PostAsync(uri, httpContent);
 
-		public Func<HttpClient, string, string> GetAsync =
-			(client, uri) => client.GetAsync(uri).Result.Content.ReadAsStringAsync().Result;
+		public Func<HttpClient, string, Task<HttpResponseMessage>> GetAsync =
+			(client, uri) => client.GetAsync(uri);
 
 		private readonly HttpClient _httpClient;
 
@@ -31,7 +32,7 @@ namespace Teleopti.Messaging.Client.Http
 				});
 		}
 
-		public string Get(string call)
+		public Task<HttpResponseMessage> Get(string call)
 		{
 			var u = url(call);
 			return GetAsync(_httpClient, u);

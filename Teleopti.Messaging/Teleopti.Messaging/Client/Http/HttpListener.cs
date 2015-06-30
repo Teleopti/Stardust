@@ -38,7 +38,7 @@ namespace Teleopti.Messaging.Client.Http
 			_client = new HttpRequests(url, jsonSerializer)
 			{
 				PostAsync = (client, uri, content) => httpServer.PostAsync(client, uri, content),
-				GetAsync = (client, uri) => httpServer.Get(client, uri)
+				GetAsync = (client, uri) => httpServer.GetAsync(client, uri)
 			};
 			
 		}
@@ -58,7 +58,8 @@ namespace Teleopti.Messaging.Client.Http
 					EventMessageHandler = eventMessageHandler,
 					Timer = _time.StartTimer(o =>
 					{
-						var rawMessages = _client.Get("MessageBroker/PopMessages/" + mailboxId);
+						var rawMessages = _client.Get("MessageBroker/PopMessages/" + mailboxId)
+							.Result.Content.ReadAsStringAsync().Result;
 						var messages = _jsonDeserializer.DeserializeObject<Message[]>(rawMessages);
 						messages.ForEach(m => _eventHandlers.CallHandlers(m));
 					}, null, interval, interval)

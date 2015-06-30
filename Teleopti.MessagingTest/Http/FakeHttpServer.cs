@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading.Tasks;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Messaging.Client.Http;
@@ -25,11 +26,11 @@ namespace Teleopti.MessagingTest.Http
 		{
 		}
 
-		public string Get(HttpClient client, string uri)
+		public Task<HttpResponseMessage> GetAsync(HttpClient client, string uri)
 		{
 			var result = _serializer.SerializeObject(_messages);
 			_messages.Clear();
-			return result;
+			return Task.FromResult(new HttpResponseMessage {Content = new StringContent(result)});
 		}
 	}
 }
