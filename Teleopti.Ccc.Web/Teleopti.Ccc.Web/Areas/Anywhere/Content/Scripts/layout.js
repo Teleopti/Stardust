@@ -36,13 +36,11 @@ define([
 		timezoneCurrent,
 		signalrhubs) {
 
-	var currentView;
 	var defaultView = 'teamschedule';
 	
 	var menu = new menuViewModel(resources);
 	var contentPlaceHolder;
 	var defaultBu;
-	var currentBu;
 	var trackingPersonId;
 
 	function _displayView(routeInfo) {
@@ -65,22 +63,18 @@ define([
 
 			view.ready = false;
 
-			if (view != currentView || routeInfo.buid != currentBu) {
-				if (currentView && currentView.dispose)
-					currentView.dispose(routeInfo);
-				currentView = view;
-				currentBu = routeInfo.buid;
-				view.initialize(routeInfo);
-			}
+			if (view && view.dispose)
+				view.dispose(routeInfo);
+			view.initialize(routeInfo);
 
 			var promise = view.display(routeInfo);
-                        if (view.clearaction)
+			if (view.clearaction)
 				view.clearaction(routeInfo);
 			if (routeInfo.action)
 				view[routeInfo.action](routeInfo);
 
 			if (promise) {
-				promise.done(function () {	
+				promise.done(function () {
 
 					view.ready = true;
 				});
