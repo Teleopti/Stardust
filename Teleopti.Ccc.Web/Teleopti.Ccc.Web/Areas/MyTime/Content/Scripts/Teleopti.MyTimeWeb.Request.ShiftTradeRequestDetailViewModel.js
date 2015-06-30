@@ -428,7 +428,7 @@ ShiftTradeRequestDetailedDayViewModel = function(data) {
 Teleopti.MyTimeWeb.Request.ChooseHistoryViewModel = function(chooseHistory, canvasPixelWidth) {
 	var self = this;
 	self.agentName = chooseHistory.tradedSchedule.agentName;
-	self.selectedDateInFormat = ko.observable( Teleopti.MyTimeWeb.Common.FormatServiceDate(chooseHistory.date));
+	self.selectedDateInFormat = ko.observable(chooseHistory.date.format(Teleopti.MyTimeWeb.Common.DateFormat));
 	self.selectedDate = ko.observable(chooseHistory.date);
 	self.timeLineStartTime = ko.observable();
 	self.timeLineLengthInMinutes = ko.observable();
@@ -518,18 +518,24 @@ Teleopti.MyTimeWeb.Request.ChooseHistoryViewModel = function(chooseHistory, canv
 	});
 
 
-	self.mySchedule = ko.computed(function() {
-		$.each(chooseHistory.mySchedule.layers, function(index, vmScheduleAddShiftTrade) {
-			vmScheduleAddShiftTrade.pixelPerMinute(self.pixelPerMinute());
-		});
-		return chooseHistory.mySchedule;
+	self.mySchedule = ko.computed(function () {
+		if (chooseHistory.mySchedule != undefined) {
+			$.each(chooseHistory.mySchedule.layers, function(index, vmScheduleAddShiftTrade) {
+				vmScheduleAddShiftTrade.pixelPerMinute(self.pixelPerMinute());
+			});
+			return chooseHistory.mySchedule;
+		}
+		return undefined;
 	});
 
-	self.selectedSchedule = ko.computed(function() {
-		$.each(chooseHistory.tradedSchedule.layers, function(index, vmScheduleAddShiftTrade) {
-			vmScheduleAddShiftTrade.pixelPerMinute(self.pixelPerMinute());
-		});
-		return chooseHistory.tradedSchedule;
+	self.selectedSchedule = ko.computed(function () {
+		if (chooseHistory.tradedSchedule != undefined) {
+			$.each(chooseHistory.tradedSchedule.layers, function(index, vmScheduleAddShiftTrade) {
+				vmScheduleAddShiftTrade.pixelPerMinute(self.pixelPerMinute());
+			});
+			return chooseHistory.tradedSchedule;
+		}
+		return undefined;
 	});
 };
 

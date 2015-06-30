@@ -3,6 +3,24 @@ $(document).ready(function () {
 
 	module("Teleopti.MyTimeWeb.Request.ShiftTradeViewModel");
 
+	test("should unselect current date when remove from view model list", function() {
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
+		viewModel.requestedDateInternal(moment("Dec 25, 1995"));
+		var currentTrade = {
+			date: moment("Dec 25, 1995"),
+			hours: self.hours,
+			mySchedule: undefined,
+			tradedSchedule: {agentName:"aa", layers:[]}
+		};
+		var chooseHistoryViewModel = new Teleopti.MyTimeWeb.Request.ChooseHistoryViewModel(currentTrade, self.layerCanvasPixelWidth);
+		viewModel.chooseHistorys.push(chooseHistoryViewModel);
+		viewModel.selectedInternal(true);
+
+		viewModel.remove(chooseHistoryViewModel);
+
+		equal(viewModel.selectedInternal(), false);
+	});
+
 	test("should clean filter when choose agent", function () {
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
 		viewModel.filteredStartTimesText.push("6:00-8:00");
