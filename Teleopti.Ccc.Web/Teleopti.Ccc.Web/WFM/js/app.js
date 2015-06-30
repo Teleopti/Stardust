@@ -209,9 +209,23 @@ wfm.config([
 			$rootScope.isAuthenticated = true;
 			$translate.fallbackLanguage('en');
 			$translate.use(data.Language);
-			i18nService.setCurrentLang(data.Language);
 			angularMoment.changeLocale(data.DateFormat);
 			increaseTimeout();
+
+			// i18nService is for UI Grid localization.
+			// Languages supported by it is less than languages in server side (Refer to http://ui-grid.info/docs/#/tutorial/104_i18n).
+			// Need do some primary language checking.
+			var currentLang = "en";
+			var serverSideLang = data.Language.toLowerCase();
+			var dashIndex = serverSideLang.indexOf("-");
+			var primaryLang = dashIndex > -1 ? serverSideLang.substring(0, dashIndex) : serverSideLang;
+			var langs = i18nService.getAllLangs();
+			if (langs.indexOf(serverSideLang) > -1) {
+				currentLang = serverSideLang;
+			} else if (langs.indexOf(primaryLang) > -1) {
+				currentLang = primaryLang;
+			}
+			i18nService.setCurrentLang(currentLang);
 
 			var ab1 = new ABmetrics();
 			ab1.baseUrl = 'http://wfmta.azurewebsites.net/';
