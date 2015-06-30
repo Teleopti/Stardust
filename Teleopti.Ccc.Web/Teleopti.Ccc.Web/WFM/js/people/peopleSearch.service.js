@@ -27,14 +27,5 @@ angular
 				isArray: false
 			}
 		});
-
-		this.searchWithOption = $resource('../api/Search/People/Criteria',{},
-		 {
-			query: {
-				method: 'POST',
-				params: {},
-				isArray: false
-			}
-		});
 	}
 ]);

@@ -65,18 +65,6 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 			var result = constructResult(pageSize, currentPageIndex, sortColumnList, criteriaDictionary, currentDate);
 			return Ok(result);
 		}
-
-
-		[UnitOfWork]
-		[HttpPost, Route("api/Search/People/Criteria")]
-		public virtual IHttpActionResult GetAdvancedSearchResult(AdvancedSearchInput input)
-		{
-			var currentDate = DateOnly.Today;
-			var criteriaDictionary = SearchTermParser.Parse(input.SearchCriteria);
-
-			var result = constructResult(input.PageSize, input.CurrentPageIndex, input.SortColumns, criteriaDictionary, currentDate);
-			return Ok(result);
-		}
 		
 		private object constructResult(int pageSize, int currentPageIndex, IDictionary<string, bool> sortColumns, IDictionary<PersonFinderField, 
 			string> criteriaDictionary, DateOnly currentDate)
@@ -145,45 +133,6 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 				}),
 				Team = x.MyTeam(currentDate) == null ? "" : x.MyTeam(currentDate).SiteAndTeam
 			});
-
-			/*
-			if (sortedColumn == 0)
-			{
-				switch (sortedDirection)
-				{
-					case 1:
-						resultPeople = resultPeople.OrderBy(x => x.FirstName);
-						break;
-					case 0:
-						resultPeople = resultPeople.OrderByDescending(x => x.FirstName);
-						break;
-				}
-			}
-			if (sortedColumn == 1)
-			{
-				switch (sortedDirection)
-				{
-					case 1:
-						resultPeople = resultPeople.OrderBy(x => x.LastName);
-						break;
-					case 0:
-						resultPeople = resultPeople.OrderByDescending(x => x.LastName);
-						break;
-				}
-			}
-			if (sortedColumn == 2)
-			{
-				switch (sortedDirection)
-				{
-					case 1:
-						resultPeople = resultPeople.OrderBy(x => x.EmploymentNumber);
-						break;
-					case 0:
-						resultPeople = resultPeople.OrderByDescending(x => x.EmploymentNumber);
-						break;
-				}
-			}
-			//*/
 
 			var result = new
 			{

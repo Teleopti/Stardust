@@ -49,30 +49,6 @@ describe("PeopleCtrl", function() {
 				});
 				return { $promise: queryDeferred.promise };
 			}
-		},
-		searchWithOption: {
-			query: function() {
-				var queryDeferred = $q.defer();
-				queryDeferred.resolve({
-					People: [
-						{
-							FirstName: "Ashley",
-							LastName: "Andeen",
-							EmploymentNumber: "12345",
-							LeavingDate: "2015-04-09",
-							OptionalColumnValues: [
-								{
-									"Key": "CellPhone",
-									"Value": "123456"
-								}
-							],
-							Team: "Paris/Team 1"
-						}
-					],
-					OptionalColumns: ["CellPhone"]
-				});
-				return { $promise: queryDeferred.promise };
-			}
 		}
 	};
 
