@@ -9,6 +9,7 @@ using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common;
@@ -287,9 +288,21 @@ namespace Teleopti.Ccc.Win.Grouping
 
 		private void buttonAdvOkClick(object sender, EventArgs e)
 		{
-			_groupPageHelper.UpdateCurrent();
+			try
+			{
+				_groupPageHelper.UpdateCurrent();
 
-			DialogResult = DialogResult.OK;
+				DialogResult = DialogResult.OK;
+			}
+			catch (OptimisticLockException)
+			{
+				ViewBase.ShowInformationMessage(this,string.Concat(
+					UserTexts.Resources.SomeoneElseHaveChanged, ". ",
+					UserTexts.Resources.YourChangesWillBeDiscarded, Environment.NewLine,
+					UserTexts.Resources.PleaseTryAgainLater),
+					UserTexts.Resources.ErrorMessage);
+				DialogResult = DialogResult.Cancel;
+			}
 		}
 
 		private void buttonAdvCancelClick(object sender, EventArgs e)
