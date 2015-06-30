@@ -48,6 +48,7 @@ function PeopleController($scope, $filter, $state, $document, $translate, i18nSe
 		exporterMenuPdf: false,
 		enableGridMenu: true,
 		useExternalSorting: true,
+		enableColumnResizing: true,
 		columnDefs: [
 			{ displayName: 'FirstName', field: 'FirstName', headerCellFilter: 'translate', cellClass: 'first-name' },
 			{
@@ -61,7 +62,7 @@ function PeopleController($scope, $filter, $state, $document, $translate, i18nSe
 			},
 			{ displayName: 'EmployeeNo', field: 'EmploymentNumber', headerCellFilter: 'translate' },
 			{ displayName: 'Team', field: 'Team', cellTooltip: true, headerCellFilter: 'translate', enableSorting: false },
-			{ displayName: 'Email', field: 'Email', headerCellFilter: 'translate', enableSorting: false, enableColumnResizing: true },
+			{ displayName: 'Email', field: 'Email', headerCellFilter: 'translate', enableSorting: false  },
 			{ displayName: 'TerminalDate', field: 'LeavingDate', headerCellFilter: 'translate', enableSorting: false }
 		],
 		gridMenuTitleFilter: $translate,

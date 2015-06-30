@@ -91,3 +91,17 @@
 	top: -25px;
 	color: #ec38a3;
 }
+
+.people-list .ui-grid-menu-button {
+	height: 31px;
+	top: 0;
+}
+
+.people-list.grid {
+	height: 650px;
+}
+
+.people-list .ui-grid-cell-contents {
+	width: 84%;
+	white-space: normal;
+}
