@@ -255,7 +255,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		[Test]
 		public void ShouldUpdateCampaign()
 		{
-			var campaignVM = new CampaignViewModel { Id = new Guid(), ActivityId = new Guid()};
+			var campaignVM = new CampaignViewModel { Id = new Guid(), Activity = new ActivityViewModel()};
 			var target = new OutboundCampaignPersister(_outboundCampaignRepository, _outboundCampaignMapper, null, null, null, null, null);
 			var expectedCampaign = new Domain.Outbound.Campaign();
 			_outboundCampaignMapper.Stub(x => x.Map(campaignVM)).Return(expectedCampaign);

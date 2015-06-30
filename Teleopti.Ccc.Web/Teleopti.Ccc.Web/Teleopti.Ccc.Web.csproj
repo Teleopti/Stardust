@@ -1214,7 +1214,8 @@
     <Content Include="Areas\Reporting\Views\Report\NoPermission.cshtml" />
     <Content Include="WFM\html\forecasting\forecasting-dev.html" />
     <Content Include="WFM\html\left-sidenav.html" />
-    <Content Include="WFM\html\outbound\campaign-creat.html" />
+    <Content Include="WFM\html\outbound\activity-picker.tpl.html" />
+    <Content Include="WFM\html\outbound\campaign-create.html" />
     <Content Include="WFM\html\outbound\working-hours-picker.tpl.html" />
     <Content Include="WFM\html\right-sidenav.html" />
     <Content Include="WFM\js\forecasting\forecasting.dev.controller.js" />

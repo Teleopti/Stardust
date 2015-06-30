@@ -122,7 +122,7 @@ wfm.config([
 			}
 		}).state('outbound-create', {
 			url: '/outbound/create',
-			templateUrl: 'html/outbound/campaign-creat.html',
+			templateUrl: 'html/outbound/campaign-create.html',
 			controller: 'OutboundCreateCtrl',
 			ncyBreadcrumb: {
 				label: "{{'Outbound Create Campaign' | translate}}"

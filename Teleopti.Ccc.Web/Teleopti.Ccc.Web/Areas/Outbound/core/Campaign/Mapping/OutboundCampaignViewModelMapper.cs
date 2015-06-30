@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping
 			{
 				Id = campaign.Id,
 				Name = campaign.Name,
-				ActivityId = (Guid) campaign.Skill.Activity.Id,
+				Activity = new ActivityViewModel { Id = campaign.Skill.Activity.Id, Name= campaign.Skill.Activity.Name} ,
 				CallListLen = campaign.CallListLen,
 				TargetRate = campaign.TargetRate,
 				ConnectRate = campaign.ConnectRate,

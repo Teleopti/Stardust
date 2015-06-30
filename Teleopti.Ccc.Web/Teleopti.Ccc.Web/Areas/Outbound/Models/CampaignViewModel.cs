@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 	{
 		public Guid? Id;
 		public string Name;
-		public Guid ActivityId;  
+		public ActivityViewModel Activity;  
 		public int CallListLen;
 		public int TargetRate;
 		public int ConnectRate;

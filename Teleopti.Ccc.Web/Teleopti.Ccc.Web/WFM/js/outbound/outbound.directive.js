@@ -16,6 +16,74 @@
 		}
 	});
 
+	outbound.directive('activityPicker', [
+		'outboundActivityService',
+		function (outboundActivityService) {
+			return {
+				restrict: 'E',
+				require: ['ngModel'],
+				scope: {															 
+				},
+				templateUrl: 'html/outbound/activity-picker.tpl.html',
+				link: postLink
+			};
+
+			function postLink(scope, elem, attrs, ctrls) {
+				var ngModel = ctrls[0];
+
+				scope.inputs = { Id: null, Name: '', useExisting: false };
+				scope.allActivities = outboundActivityService.listActivity();
+				scope.$watch(function () {					
+					return scope.inputs;
+				}, function () {
+					ngModel.$setViewValue(angular.copy(scope.inputs));
+				}, true);
+				
+				ngModel.$parsers.push(parser);
+				ngModel.$formatters.push(formatter);
+
+				ngModel.$validators.notEmpty = function (modelValue, viewValue) {
+					return (viewValue.useExisting) ?
+						viewValue.Id !== null && (scope.allActivities.filter(attrValueFilter('Id', viewValue.Id)).length > 0) :
+						viewValue.Name != null && viewValue.Name != '';
+				}
+
+				ngModel.$validators.alreadyExists = function(modelValue, viewValue) {
+					if (viewValue.useExisting) return true;
+					return scope.allActivities.filter(attrValueFilter('Name', viewValue.Name)).length == 0;
+				}
+
+				ngModel.$render = renderer;
+
+				function renderer() {
+					scope.inputs = ngModel.$viewValue || { Id: null, Name: '', useExisting: false };					
+				}
+
+				function formatter(modelValue) {
+					if (modelValue) {
+						return { Name: modelValue.Name, Id: modelValue.Id, useExisting: true };
+					} else {
+						return { Id: null, Name: '', useExisting: false };
+					} 
+				}
+
+				function parser(viewValue) {
+					if (viewValue.useExisting) {
+						return scope.allActivities.filter(attrValueFilter('Id', viewValue.Id))[0];
+					} else {
+						return { Name: viewValue.Name, Id: null };
+					}
+				}
+
+				function attrValueFilter(attr, value) {
+					return function(e) {
+						return e[attr] == value;
+					};
+				}				
+			}
+		}
+	]);
+
 	outbound.directive('workingHoursPicker', [
 		'outboundService33699',
 		function(outboundService) {
@@ -40,12 +108,9 @@
 					clearConflictWorkingHourSelection(scope.workingHours, refIndex, weekDay);
 				}
 
-				function addEmptyWorkingPeriod(startTime, endTime) {
-					console.log('add clicked', startTime, endTime);
-					console.log(scope.workingHours);
+				function addEmptyWorkingPeriod(startTime, endTime) {				
 					if (!(startTime && endTime)) return;
-					scope.workingHours.push(outboundService.createEmptyWorkingPeriod(angular.copy(startTime), angular.copy(endTime)));
-					console.log(scope.workingHours);
+					scope.workingHours.push(outboundService.createEmptyWorkingPeriod(angular.copy(startTime), angular.copy(endTime)));					
 				}
 
 				function removeWorkingPeriod(index) {

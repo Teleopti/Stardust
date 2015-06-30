@@ -1,0 +1,15 @@
+﻿<div class="polymorphic-input-body">
+	<input type="text" ng-model="inputs.Name" ng-if="!inputs.useExisting"/>
+	<md-select ng-if="inputs.useExisting" placeholder="Choose" ng-model="inputs.Id">
+		<md-option ng-repeat="activityOption in allActivities" value="{{activityOption.Id}}">{{activityOption.Name}}</md-option>
+	</md-select>
+
+</div>
+<div class="divider"></div>
+<div class="wfm-checkbox morph-switch">
+	<input type="checkbox" id="UseExistingActivity" ng-model="inputs.useExisting" />
+	<label for="UseExistingActivity">
+		<span class="wfm-checkbox-toggle"></span>
+		<span class="wfm-checkbox-label">Use existing activity</span>
+	</label>
+</div>

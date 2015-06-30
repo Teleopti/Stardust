@@ -6,14 +6,59 @@
 	angular.module('outboundServiceModule', ['ngResource'])
 		.service('outboundService', ['$resource', '$filter', outboundService])
 		.service('outboundNotificationService', ['growl', outboundNotificationService])
-		.service('outboundService33699', ['$filter', '$http', outboundService_33699]);
+		.service('outboundService33699', ['$filter', '$http', 'outboundActivityService', outboundService_33699])
+		.service('outboundActivityService', ['$http', outboundActivityService]);
 	
 
-	function outboundService_33699($filter, $http) {
+	function outboundActivityService($http) {
+
+		var listActivityCommandUrl = '../api/Outbound/Campaign/Activities';
+		var activities = [];
+		var sync = false;
+
+		this.listActivity = function () {			
+			if (!sync) {
+				activities.splice(0, activities.length);
+				$http.get(listActivityCommandUrl).success(function(data) {
+					if (angular.isArray(data)) {
+						angular.forEach(data, function(e) {
+							activities.push(e);
+						});
+					}
+					sync = true;
+				});
+			}
+			return activities;
+		};
+
+		this.nullActivity = function() {
+			return {
+				Id: null,
+				Name: ''
+			};
+		};
+		
+		this.refresh = function() { sync = false; };
+	}
+
+	function outboundService_33699($filter, $http, outboundActivityService) {
 	
 		var createCampaignCommandUrl = '../api/Outbound/Campaign';
 		var getCampaignCommandUrl = '../api/Outbound/Campaign/';
 		var listCampaignCommandUrl = '../api/Outbound/Campaign';
+		
+
+		this.listActivity = function(filter) {
+			$http.get(listActivityCommandUrl).success(function (data) {
+					if (angular.isArray(data)) {
+						data.unshift({ Id: null, Name: 'Create New' });
+					}
+					if (successCb != null) successCb(data);
+				}).
+				error(function(data) {
+					if (errorCb != null) errorCb(data);
+				});
+		};
 
 		this.listCampaign = function(filter) {
 			$http.get(listCampaignCommandUrl).success(function(data) {
@@ -26,13 +71,8 @@
 		};
 
 		this.getCampaign = function (campaignId, successCb, errorCb) {
-
-			console.log("getting campaign", campaignId);
-
 			$http.get(getCampaignCommandUrl + campaignId).
-				success(function (data) {
-					console.log("got campaign", data);
-
+				success(function (data) {					
 					if (successCb != null) successCb(denormalizeCampaign(data));
 				}).
 				error(function (data) {
@@ -42,7 +82,8 @@
 
 		this.addCampaign = function(campaign, successCb, errorCb) {
 			$http.post(createCampaignCommandUrl, normalizeCampaign(campaign)).
-				success(function(data) {
+				success(function (data) {
+					outboundActivityService.refresh();
 					if (successCb != null) successCb(data);
 				}).
 				error(function(data) {
@@ -95,7 +136,7 @@
 				}
 									
 			});
-			campaign.WorkingHours = reformattedWorkingHours;
+			campaign.WorkingHours = reformattedWorkingHours;	
 			return campaign;
 		};
 
@@ -261,7 +302,7 @@
 		this.notifyFailure = notifyFailure;
 
 		this.notifyCampaignCreationSuccess = function (campaign) {			
-			notifySuccess("New campaign <strong>" + campaign.name + "</strong> created");
+			notifySuccess("New campaign <strong>" + campaign.Name + "</strong> created");
 		}
 
 		this.notifyCampaignCreationFailure = function (error) {

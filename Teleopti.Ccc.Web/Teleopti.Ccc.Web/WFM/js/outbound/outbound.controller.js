@@ -23,44 +23,48 @@
 
 
 	outbound.controller('OutboundCreateCtrl', [
-		'$scope', '$state',  'outboundService33699', 'outboundNotificationService',
-		function ($scope, $state,  outboundService, outboundNotificationService) {
-
-
-			$scope.$on('formLocator.createCampaignForm', function (event) {
-				$scope.createCampaignForm = event.targetScope.createCampaignForm;
-				$scope.formScope = event.targetScope;			
-			});
+		'$scope', '$state',  'outboundService33699', 'outboundNotificationService', 'outboundActivityService',
+		function ($scope, $state,  outboundService, outboundNotificationService, outboundActivityService) {
 
 			reset();
 
-			$scope.addCampaign = function () {
-				if (!isInputValid()) {
-					console.log("input invalid");
-					flashErrorIcons();
-					return;
-				}
-				outboundService.addCampaign($scope.newCampaign, function (campaign) {
-					reset();
-					show(campaign);
-					outboundNotificationService.notifyCampaignCreationSuccess(campaign);
-				}, function (error) {
-					outboundNotificationService.notifyCampaignCreationFailure(error);
-				});
-			}
-
+			$scope.addCampaign = addCampaign;
 			$scope.reset = reset;
 			$scope.isInputValid = isInputValid;
 		
+			$scope.$on('formLocator.campaignGeneralForm', function (event) {
+				$scope.campaignGeneralForm = event.targetScope.campaignGeneralForm;
+				$scope.formScope = event.targetScope;
+			});
+
+			$scope.$on('formLocator.campaignWorkloadForm', function (event) {
+				$scope.campaignWorkloadForm = event.targetScope.campaignWorkloadForm;
+				$scope.formScope = event.targetScope;
+			});
+
 			function isInputValid() {			
-				if (!$scope.createCampaignForm) return false;
+				if (!$scope.campaignGeneralForm) return false;
+				if (!$scope.campaignWorkloadForm) return false;
 
 				var startDate = deepPropertyAccess($scope, ['newCampaign', 'StartDate', 'Date']);
 				var endDate = deepPropertyAccess($scope, ['newCampaign', 'EndDate', 'Date']);
 
 				if (!(startDate && endDate && startDate <= endDate)) return false;			
+				return $scope.campaignGeneralForm.$valid && $scope.campaignWorkloadForm.$valid;
+			}
 
-				return $scope.createCampaignForm.$valid;
+			function addCampaign() {
+				if (!isInputValid()) {					
+					flashErrorIcons();
+					return;
+				}
+				outboundService.addCampaign($scope.newCampaign, function (campaign) {				
+					outboundNotificationService.notifyCampaignCreationSuccess(angular.copy(campaign));
+					reset();
+					show(campaign);
+				}, function (error) {
+					outboundNotificationService.notifyCampaignCreationFailure(error);
+				});
 			}
 
 			function flashErrorIcons() {
@@ -69,6 +73,7 @@
 
 			function reset() {				
 				$scope.newCampaign = {
+					activity: {},
 					WorkingHours: [
 						outboundService.createEmptyWorkingPeriod(new Date(2000, 1, 1, 7, 0), new Date(2000, 1, 1, 12, 0)),
 						outboundService.createEmptyWorkingPeriod(new Date(2000, 1, 1, 13, 0), new Date(2000, 1, 1, 18, 0))
@@ -77,9 +82,13 @@
 
 				expandAllSections($scope);
 
-				if ($scope.createCampaignForm) {
-					$scope.createCampaignForm.$setPristine();
-				}				
+				if ($scope.campaignGeneralForm) {
+					$scope.campaignGeneralForm.$setPristine();
+				}
+
+				if ($scope.campaignWorkloadForm) {
+					$scope.campaignWorkloadForm.$setPristine();
+				}
 			}
 		
 			function show(campaign) {
@@ -193,6 +202,7 @@
 	]);
 
 	function expandAllSections(scope) {
+		scope.acToggle0 = true;
 		scope.acToggle1 = true;
 		scope.acToggle2 = true;
 		scope.acToggle3 = true;

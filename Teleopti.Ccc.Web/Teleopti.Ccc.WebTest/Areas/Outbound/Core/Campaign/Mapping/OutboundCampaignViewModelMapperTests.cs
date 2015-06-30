@@ -48,12 +48,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core.Campaign.Mapping
 		}
 
 		[Test]
-		public void ShouldMapActivityId()
+		public void ShouldMapActivity()
 		{
 			var result = _target.Map(_campaigns);
-			var target = result.First().ActivityId;
+			var target = result.First().Activity;
 
-			target.Should().Be.EqualTo(_createdSkill.Activity.Id);
+			target.Id.Should().Be.EqualTo(_createdSkill.Activity.Id);
 		}
 
 		[Test]
