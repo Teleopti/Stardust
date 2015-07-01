@@ -23,14 +23,15 @@
 
 
 	outbound.controller('OutboundCreateCtrl', [
-		'$scope', '$state',  'outboundService33699', 'outboundNotificationService', 'outboundActivityService',
-		function ($scope, $state,  outboundService, outboundNotificationService, outboundActivityService) {
+		'$scope', '$state',  'outboundService33699', 'outboundNotificationService', 
+		function ($scope, $state,  outboundService, outboundNotificationService) {
 
 			reset();
 
 			$scope.addCampaign = addCampaign;
 			$scope.reset = reset;
 			$scope.isInputValid = isInputValid;
+			$scope.backToList = backToList;
 		
 			$scope.$on('formLocator.campaignGeneralForm', function (event) {
 				$scope.campaignGeneralForm = event.targetScope.campaignGeneralForm;
@@ -42,6 +43,13 @@
 				$scope.formScope = event.targetScope;
 			});
 
+			$scope.$watch(function () {
+				return $scope.newCampaign;				
+			}, function() {
+				$scope.estimatedWorkload = $scope.campaignWorkloadForm && $scope.campaignWorkloadForm.$valid ?
+					outboundService.calculateCampaignPersonHour($scope.newCampaign) + ' person-hour' : '';
+			}, true);
+
 			function isInputValid() {			
 				if (!$scope.campaignGeneralForm) return false;
 				if (!$scope.campaignWorkloadForm) return false;
@@ -52,6 +60,7 @@
 				if (!(startDate && endDate && startDate <= endDate)) return false;			
 				return $scope.campaignGeneralForm.$valid && $scope.campaignWorkloadForm.$valid;
 			}
+
 
 			function addCampaign() {
 				if (!isInputValid()) {					
@@ -95,6 +104,9 @@
 				$state.go('outbound.edit', { Id: campaign.Id });
 			}
 
+			function backToList() {
+				$state.go('outbound.edit');
+			}
 						
 		}
 	]);
@@ -169,7 +181,6 @@
 
 			init();
 
-
 			function init() {
 				$scope.campagin = null;
 
@@ -184,15 +195,25 @@
 				});
 			}
 
+			$scope.$watch(function () {
+				return $scope.campaign;
+			}, function () {
+				$scope.estimatedWorkload = $scope.campaignWorkloadForm && $scope.campaignWorkloadForm.$valid ?
+					outboundService.calculateCampaignPersonHour($scope.campaign) + ' person-hour' : '';
+			}, true);
 
 			$scope.isCampaignLoaded = function() { return angular.isDefined($scope.campaign); };
 
 	
-			$scope.$on('formLocator.createCampaignForm', function (event) {
-				$scope.editCampaignForm = event.targetScope.editCampaignForm;
+			$scope.$on('formLocator.campaignWorkloadForm', function (event) {
+				$scope.campaignWorkloadForm = event.targetScope.campaignWorkloadForm;
 				$scope.formScope = event.targetScope;
 			});
 
+			$scope.$on('formLocator.campaignGeneralForm', function (event) {
+				$scope.campaignGeneralForm = event.targetScope.campaignGeneralForm;
+				$scope.formScope = event.targetScope;
+			});
 		
 			$scope.editCampaign = function() {
 

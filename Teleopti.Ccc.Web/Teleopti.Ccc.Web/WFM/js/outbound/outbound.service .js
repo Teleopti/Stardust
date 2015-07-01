@@ -47,19 +47,6 @@
 		var getCampaignCommandUrl = '../api/Outbound/Campaign/';
 		var listCampaignCommandUrl = '../api/Outbound/Campaign';
 		
-
-		this.listActivity = function(filter) {
-			$http.get(listActivityCommandUrl).success(function (data) {
-					if (angular.isArray(data)) {
-						data.unshift({ Id: null, Name: 'Create New' });
-					}
-					if (successCb != null) successCb(data);
-				}).
-				error(function(data) {
-					if (errorCb != null) errorCb(data);
-				});
-		};
-
 		this.listCampaign = function(filter) {
 			$http.get(listCampaignCommandUrl).success(function(data) {
 
@@ -92,6 +79,22 @@
 		};
 
 		this.createEmptyWorkingPeriod = createEmptyWorkingPeriod;
+		this.calculateCampaignPersonHour = calculateCampaignPersonHour;
+
+		function calculateCampaignPersonHour(campaign) {
+			var Target = campaign.CallListLen * campaign.TargetRate / 100,
+				RPCR = campaign.RightPartyConnectRate / 100,
+				CR = campaign.ConnectRate / 100,
+				Unproductive = campaign.UnproductiveTime,
+				ConnectAHT = campaign.ConnectAverageHandlingTime,
+				RPCAHT = campaign.RightPartyAverageHandlingTime;
+
+			if (RPCAHT == 0 || CR == 0) return 0;
+
+			return Math.ceil((Target * (RPCAHT + Unproductive)
+				+ (Target / RPCR - Target) * (ConnectAHT + Unproductive)
+				+ (Target / (CR * RPCR) - Target / RPCR) * Unproductive) / 60 / 60);
+		}
 
 		function normalizeCampaign(campaign) {
 			var campaign = angular.copy(campaign);

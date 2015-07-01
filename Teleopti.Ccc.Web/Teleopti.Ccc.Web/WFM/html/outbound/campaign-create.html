@@ -1,7 +1,7 @@
 ﻿<div class="wfm-block material-block" >
 	<div class="material-block-header">
 		<div layout="row">
-			<div class="text-left navigate-to inactive" flex>
+			<div class="text-left navigate-to active" ng-click="backToList()" flex>
 				<div class="pull-left">
 					<svg width="20" height="20" viewBox="0 0 24 24">
 						<path d="M2,12C2,6.48 6.48,2 12,2C17.52,2 22,6.48 22,12C22,17.52 17.52,22 12,22C6.48,22 2,17.52 2,12M17,12L12,7V10H8V14H12V17L17,12Z" transform="rotate(180, 12, 12)" />
@@ -12,29 +12,8 @@
 			<div class="text-center" flex>
 				<span translate>Create Campaign</span>
 			</div>
-			<div flex></div>
-			
-		</div>
-		<!--<div class="row">
-			<div class="navigate-to inactive pull-left">
-				<div class="pull-left">
-					<svg width="20" height="20" viewBox="0 0 24 24">
-						<path d="M2,12C2,6.48 6.48,2 12,2C17.52,2 22,6.48 22,12C22,17.52 17.52,22 12,22C6.48,22 2,17.52 2,12M17,12L12,7V10H8V14H12V17L17,12Z" transform="rotate(180, 12, 12)" />
-					</svg>
-				</div>
-				<span translate>Goto configuration</span>
-			</div>
-			<div class="col-xs-offset-3 col-xs-2" translate>Configuration</div>
-
-			<div class="navigate-to active pull-right" ng-click="navigateToForecasting()">
-				<div class="pull-right">
-					<svg width="20" height="20" viewBox="0 0 24 24">
-						<path d="M2,12C2,6.48 6.48,2 12,2C17.52,2 22,6.48 22,12C22,17.52 17.52,22 12,22C6.48,22 2,17.52 2,12M17,12L12,7V10H8V14H12V17L17,12Z"/>
-					</svg>
-				</div>
-				<span translate>Goto forecasting</span>
-			</div>
-		</div>-->
+			<div flex></div>			
+		</div>	
 	</div>
 	<div class="material-block-content campaign-details">
 		<div class=" wfm-accordion">
@@ -70,7 +49,8 @@
 			</div>
 			<div class="wfm-block">
 				<div class="sub-header accordion-head" ng-click="acToggle1 = !acToggle1">
-					<span translate>Workload</span>					
+					<span translate>Workload</span>	
+					<span class="pull-right sub-header-message">{{estimatedWorkload}}</span>			
 				</div>
 				<div ng-show="acToggle1">
 					<form name="campaignWorkloadForm" class="form-horizontal wfm-block input-group" form-locator>
@@ -197,8 +177,9 @@
 					<working-hours-picker working-hours="newCampaign.WorkingHours"></working-hours-picker>
 				</div>
 			</div>
-			<button class="wfm-btn wfm-btn-primary material-depth-1" ng-click="addCampaign()" ng-class="{'wfm-btn-primary-disabled': !isInputValid()}">complete</button>
-			<button class="wfm-btn wfm-btn-default material-depth-1" ng-click="reset()">Default</button>
+			<div layout="row" layout-align="center">
+				<button class="wfm-btn wfm-btn-primary material-depth-1" ng-click="addCampaign()" ng-class="{'wfm-btn-primary-disabled': !isInputValid()}">Create</button>						
+			</div>
 		</div>
 	</div>
 </div>
