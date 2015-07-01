@@ -44,11 +44,11 @@
 			this.addActualBacklogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.addManualProductionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.replanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.changePeriodToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
 			this.toolStripButtonAddCampaign = new System.Windows.Forms.ToolStripButton();
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-			this.changePeriodToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripContainer1.ContentPanel.SuspendLayout();
 			this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
 			this.toolStripContainer1.SuspendLayout();
@@ -128,7 +128,7 @@
             this.replanToolStripMenuItem,
             this.changePeriodToolStripMenuItem});
 			this.contextMenuStrip1.Name = "contextMenuStrip1";
-			this.contextMenuStrip1.Size = new System.Drawing.Size(211, 136);
+			this.contextMenuStrip1.Size = new System.Drawing.Size(211, 114);
 			// 
 			// viewStatusToolStripMenuItem
 			// 
@@ -158,6 +158,13 @@
 			this.replanToolStripMenuItem.Text = "Replan";
 			this.replanToolStripMenuItem.Click += new System.EventHandler(this.replanToolStripMenuItem_Click);
 			// 
+			// changePeriodToolStripMenuItem
+			// 
+			this.changePeriodToolStripMenuItem.Name = "changePeriodToolStripMenuItem";
+			this.changePeriodToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+			this.changePeriodToolStripMenuItem.Text = "Change period...";
+			this.changePeriodToolStripMenuItem.Click += new System.EventHandler(this.changePeriodToolStripMenuItem_Click);
+			// 
 			// toolStrip1
 			// 
 			this.toolStrip1.Dock = System.Windows.Forms.DockStyle.None;
@@ -165,7 +172,7 @@
             this.toolStripButtonAddCampaign});
 			this.toolStrip1.Location = new System.Drawing.Point(3, 0);
 			this.toolStrip1.Name = "toolStrip1";
-			this.toolStrip1.Size = new System.Drawing.Size(103, 25);
+			this.toolStrip1.Size = new System.Drawing.Size(134, 25);
 			this.toolStrip1.TabIndex = 0;
 			// 
 			// toolStripButtonAddCampaign
@@ -176,6 +183,7 @@
 			this.toolStripButtonAddCampaign.Name = "toolStripButtonAddCampaign";
 			this.toolStripButtonAddCampaign.Size = new System.Drawing.Size(91, 22);
 			this.toolStripButtonAddCampaign.Text = "Add Campaign";
+			this.toolStripButtonAddCampaign.Visible = false;
 			this.toolStripButtonAddCampaign.Click += new System.EventHandler(this.toolStripButtonAddCampaignClick);
 			// 
 			// statusStrip1
@@ -192,13 +200,6 @@
 			this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
 			this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
 			this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
-			// 
-			// changePeriodToolStripMenuItem
-			// 
-			this.changePeriodToolStripMenuItem.Name = "changePeriodToolStripMenuItem";
-			this.changePeriodToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
-			this.changePeriodToolStripMenuItem.Text = "Change period...";
-			this.changePeriodToolStripMenuItem.Click += new System.EventHandler(this.changePeriodToolStripMenuItem_Click);
 			// 
 			// OutboundView
 			// 

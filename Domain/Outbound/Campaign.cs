@@ -93,6 +93,9 @@ namespace Teleopti.Ccc.Domain.Outbound
 
 		public virtual int CampaignTasks()
 		{
+			if (RightPartyConnectRate == 0)
+				return 0;
+
 			return CallListLen*TargetRate/RightPartyConnectRate;
 		}
 
