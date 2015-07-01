@@ -22,7 +22,7 @@
 			return {
 				restrict: 'E',
 				require: ['ngModel'],
-				scope: {															 
+				scope: {					
 				},
 				templateUrl: 'html/outbound/activity-picker.tpl.html',
 				link: postLink
@@ -30,7 +30,7 @@
 
 			function postLink(scope, elem, attrs, ctrls) {
 				var ngModel = ctrls[0];
-
+						
 				scope.inputs = { Id: null, Name: '', useExisting: false };
 				scope.allActivities = outboundActivityService.listActivity();
 				scope.$watch(function () {					
@@ -38,7 +38,7 @@
 				}, function () {
 					ngModel.$setViewValue(angular.copy(scope.inputs));
 				}, true);
-				
+					
 				ngModel.$parsers.push(parser);
 				ngModel.$formatters.push(formatter);
 
@@ -56,11 +56,11 @@
 				ngModel.$render = renderer;
 
 				function renderer() {
-					scope.inputs = ngModel.$viewValue || { Id: null, Name: '', useExisting: false };					
+					scope.inputs = ngModel.$viewValue || { Id: null, Name: '', useExisting: false };
 				}
 
 				function formatter(modelValue) {
-					if (modelValue) {
+					if (modelValue && modelValue.Id) {
 						return { Name: modelValue.Name, Id: modelValue.Id, useExisting: true };
 					} else {
 						return { Id: null, Name: '', useExisting: false };

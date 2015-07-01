@@ -1,5 +1,5 @@
 ﻿<div class="polymorphic-input-body">
-	<input type="text" ng-model="inputs.Name" ng-if="!inputs.useExisting"/>
+	<input type="text" ng-model="inputs.Name" ng-if="!inputs.useExisting" placeholder="new activity name"/>
 	<md-select ng-if="inputs.useExisting" placeholder="Choose" ng-model="inputs.Id">
 		<md-option ng-repeat="activityOption in allActivities" value="{{activityOption.Id}}">{{activityOption.Name}}</md-option>
 	</md-select>

@@ -31,6 +31,8 @@
 			$scope.addCampaign = addCampaign;
 			$scope.reset = reset;
 			$scope.isInputValid = isInputValid;
+			$scope.isDateValid = isDateValid;
+			$scope.validWorkingHours = validWorkingHours;
 			$scope.backToList = backToList;
 		
 			$scope.$on('formLocator.campaignGeneralForm', function (event) {
@@ -54,13 +56,33 @@
 				if (!$scope.campaignGeneralForm) return false;
 				if (!$scope.campaignWorkloadForm) return false;
 
-				var startDate = deepPropertyAccess($scope, ['newCampaign', 'StartDate', 'Date']);
-				var endDate = deepPropertyAccess($scope, ['newCampaign', 'EndDate', 'Date']);
+				return isDateValid(true) && isDateValid(false) &&
+					$scope.campaignGeneralForm.$valid && $scope.campaignWorkloadForm.$valid
+					&& validWorkingHours();
 
-				if (!(startDate && endDate && startDate <= endDate)) return false;			
-				return $scope.campaignGeneralForm.$valid && $scope.campaignWorkloadForm.$valid;
 			}
 
+			function isDateValid(isStart) {
+				var startDate = deepPropertyAccess($scope, ['newCampaign', 'StartDate', 'Date']);
+				var endDate = deepPropertyAccess($scope, ['newCampaign', 'EndDate', 'Date']);
+				if (isStart) {
+					if (!startDate) return false;					
+				} else {
+					if (!endDate) return false;					
+				}
+				if (endDate && startDate && startDate > endDate) return false;
+				return true;
+			}
+
+			function validWorkingHours() {		
+				var i, j;
+				for (i = 0; i < $scope.newCampaign.WorkingHours.length; i++) {
+					for (j = 0; j < $scope.newCampaign.WorkingHours[i].WeekDaySelections.length; j++) {
+						if ($scope.newCampaign.WorkingHours[i].WeekDaySelections[j].Checked) return true;
+					}
+				}
+				return false;				
+			}
 
 			function addCampaign() {
 				if (!isInputValid()) {					

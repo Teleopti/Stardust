@@ -108,12 +108,11 @@
 	display: none;
 }
 
-.ng-valid + .input-validation-sign .right-sign {
+.ng-valid + .input-validation-sign .right-sign, .custom-valid + .input-validation-sign .right-sign {
 	display: block !important;
 }
 
-
-.ng-invalid + .input-validation-sign  {
+.ng-invalid + .input-validation-sign, .custom-invalid + .input-validation-sign   {
 	.wrong-sign {
 		display: block !important; 
 	}
@@ -226,4 +225,15 @@ activity-picker {
 }
 .sub-header span.pull-right.sub-header-message {
 	margin-right: 20%;
+}
+.in-place-container {
+	position: relative;
+	width: 100%;
+	height: 0;
+
+	.in-place-element {
+		position: absolute;
+		right: 10%;
+		top: 12px;
+	}
 }

@@ -27,7 +27,7 @@
 						<div layout="row">
 							<div class="w-150"><strong translate>Name</strong></div>
 							<div flex class="icon-set-fix m-r-10p">
-								<input class="w-100p" id="name" type="text" ng-model="newCampaign.Name" ng-minlength="1" ng-maxlength="50" required />
+								<input class="w-100p" id="name" type="text" ng-model="newCampaign.Name" placeholder="new campaign name"  ng-minlength="1" ng-maxlength="50" required />
 								<div class="icon-set  input-validation-sign" expandable>
 									<i class="mdi mdi-check success right-sign"></i>
 									<i class="mdi mdi-close danger wrong-sign"></i>
@@ -37,7 +37,7 @@
 						<div layout="row">
 							<div class="w-150"><strong translate>Activity</strong></div>
 							<div flex class="icon-set-fix m-r-10p">
-								<activity-picker ng-model="newCampaign.activity"></activity-picker>
+								<activity-picker ng-model="newCampaign.activity" default-name="{{newCampaign.Name}}"></activity-picker>
 								<div class="icon-set  input-validation-sign" expandable>
 									<i class="mdi mdi-check success right-sign"></i>
 									<i class="mdi mdi-close danger wrong-sign"></i>
@@ -145,7 +145,7 @@
 						<div class="pull-left">
 							<div class="wfm-datepicker-wrap campaign-startdate no-boxshadow">
 								<div class="sub-header relative">
-									<span translate>StartTimeColon</span> <strong ng-class="newCampaign.StartDate?'ng-valid':'ng-invalid'">{{newCampaign.StartDate.Date | date: format }}</strong>
+									<span translate>StartTimeColon</span> <strong ng-class="isDateValid(true)?'ng-valid':'ng-invalid'">{{newCampaign.StartDate.Date | date: format }}</strong>
 									<div class="icon-set  input-validation-sign datepickerfix" expandable>
 										<i class="mdi mdi-check success right-sign "></i>
 										<i class="mdi mdi-close danger wrong-sign"></i>
@@ -157,7 +157,7 @@
 						<div class="pull-left">
 							<div class="wfm-datepicker-wrap campaign-enddate no-boxshadow">
 								<div class="sub-header relative">
-									<span translate>EndTimeColon</span> <strong ng-class="newCampaign.EndDate?'ng-valid':'ng-invalid'" class="end-date">{{newCampaign.EndDate.Date | date: format }}</strong>
+									<span translate>EndTimeColon</span> <strong ng-class="isDateValid(false)?'ng-valid':'ng-invalid'" class="end-date">{{newCampaign.EndDate.Date | date: format }}</strong>
 									<div class="icon-set  input-validation-sign datepickerfix" expandable>
 										<i class="mdi mdi-check success right-sign "></i>
 										<i class="mdi mdi-close danger wrong-sign"></i>
@@ -174,6 +174,15 @@
 					<span translate>WorkingHours</span>
 				</div>
 				<div ng-show="acToggle3">
+					<div class="in-place-container">
+						<div class="in-place-element">
+							<input type="text" ng-class="validWorkingHours()?'custom-valid':'custom-invalid'" ng-show="false" />
+							<div class="icon-set  input-validation-sign" expandable>
+								<i class="mdi mdi-check success right-sign"></i>
+								<i class="mdi mdi-close danger wrong-sign"></i>
+							</div>
+						</div>
+					</div>
 					<working-hours-picker working-hours="newCampaign.WorkingHours"></working-hours-picker>
 				</div>
 			</div>
