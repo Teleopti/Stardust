@@ -283,7 +283,7 @@ Try
         }
     $TeleoptiCCCPath = "C:\Program Files (x86)\Teleopti\TeleoptiCCC"
     $WfmIco = "$approot\Tools\SupportTools\BuildArtifacts\ccc_Menu.ico"
-    $restartScript = "$approot\bin\Restart.cmd"
+    $restartScript = "$approot\bin\RestartTeleopti.cmd"
     $DataSourceName = TeleoptiDriveMapProperty-get -name "DataSourceName"
     $StartUrl = "https://$DataSourceName.teleopticloud.com/"
 	$EtlToolExe "$approot\Services\ETL\Tool\Teleopti.Analytics.Etl.ConfigTool.exe"
