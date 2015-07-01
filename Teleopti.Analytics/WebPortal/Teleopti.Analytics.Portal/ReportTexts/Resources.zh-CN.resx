@@ -553,7 +553,7 @@
     <value>排班的状态就绪的座席代表</value>
   </data>
   <data name="ResDeviationMinute" xml:space="preserve">
-    <value>偏差 (秒)</value>
+    <value>偏差 （分钟）</value>
   </data>
   <data name="ResNext" xml:space="preserve">
     <value>下一步</value>
@@ -565,7 +565,7 @@
     <value>遵时率/间隔 (%)</value>
   </data>
   <data name="ResDeviationPerIntervalMinute" xml:space="preserve">
-    <value>偏差/间隔 (秒)</value>
+    <value>偏差/间隔 （分钟）</value>
   </data>
   <data name="ResQueueColon" xml:space="preserve">
     <value>队列：</value>
