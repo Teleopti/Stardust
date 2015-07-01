@@ -3,6 +3,7 @@ DROP PROCEDURE [ReadModel].[PersonFinder]
 GO
 
 -- exec [ReadModel].PersonFinder 'b', 'All', '2001-01-01', 1, 100, 1, 1, 1053
+-- exec sp_executesql N'exec [ReadModel].PersonFinder @search_string=@p0, @search_type=@p1, @leave_after=@p2, @start_row =@p3, @end_row=@p4, @order_by=@p5, @sort_direction=@p6, @culture=@p7',N'@p0 nvarchar(4000),@p1 nvarchar(4000),@p2 datetime,@p3 int,@p4 int,@p5 int,@p6 int,@p7 int',@p0=N'2011',@p1=N'All',@p2='2015-07-01 00:00:00',@p3=1,@p4=11,@p5=0,@p6=0,@p7=2057
 -- =============================================
 -- Author:		Ola
 -- Create date: 2011-12-19
@@ -91,7 +92,7 @@ FETCH NEXT FROM SearchWordCursor INTO @cursorString, @cursorCount
 WHILE @@FETCH_STATUS = 0
  BEGIN
 	
-	SELECT @dynamicSQL = @dynamicSQL + 'SELECT PersonId FROM ReadModel.FindPerson WHERE ISNULL(TerminalDate, ''2100-01-01'') >= '''+ @leave_after_ISO + ''' AND SearchValue like N''%' + @cursorString + '%'''
+	SELECT @dynamicSQL = @dynamicSQL + 'SELECT DISTINCT PersonId, FirstName, LastName, EmploymentNumber, Note, TerminalDate, TeamId, SiteId, BusinessUnitId FROM ReadModel.FindPerson WHERE ISNULL(TerminalDate, ''2100-01-01'') >= '''+ @leave_after_ISO + ''' AND SearchValue like N''%' + @cursorString + '%'''
 
 	--If 'All' set searchtype as a separate AND condition
 	IF @search_type <> 'All'
@@ -111,17 +112,9 @@ DEALLOCATE SearchWordCursor;
 --debug
 --print @dynamicSQL
 
---insert into PersonId temp table
-INSERT INTO #PersonId
+--insert into #Result directly instead of having a second query that opens up for duplicate results and deadlocks
+INSERT INTO #Result
 EXEC sp_executesql @dynamicSQL
-
---prepare restult
-INSERT INTO #result
-SELECT DISTINCT a.PersonId, FirstName, LastName, EmploymentNumber, Note, TerminalDate, [TeamId], [SiteId], [BusinessUnitId]
-FROM ReadModel.FindPerson a
-INNER JOIN #PersonId b
-ON a.PersonId = b.PersonId
-ORDER BY LastName, FirstName 
 
 --get total count
 DECLARE @total int 
