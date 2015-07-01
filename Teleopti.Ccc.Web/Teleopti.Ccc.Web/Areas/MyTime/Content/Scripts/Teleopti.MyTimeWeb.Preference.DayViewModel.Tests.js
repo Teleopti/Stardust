@@ -349,76 +349,80 @@ $(document).ready(function () {
 
 		equal(viewModelDay.MustHave(), true);
 	});
-	//test("should make night rest violation objects", function () {
+	test("should make night rest violation objects", function () {
 
 
-	//	Teleopti.MyTimeWeb.Common.SetupCalendar({
-	//		UseJalaaliCalendar: false,
-	//		DateFormat: 'YYYY-MM-DD',
-	//		TimeFormat: 'HH:mm tt',
-	//		AMDesignator: 'AM',
-	//		PMDesignator: 'PM'
-	//	});
+		Teleopti.MyTimeWeb.Common.SetupCalendar({
+			UseJalaaliCalendar: false,
+			DateFormat: 'YYYY-MM-DD',
+			TimeFormat: 'HH:mm tt',
+			AMDesignator: 'AM',
+			PMDesignator: 'PM'
+		});
 
 
+		var date = "\/Date(1454515200000)\/";
+		var currentDay = moment(date);
+		var minusOneDay = moment(date).subtract(1, 'days');
+		var plusOneDay = moment(date).add(1, 'days');
 
-	//	var ajax = function (model, options) {
-	//		options.success({
-	//			RestTimeToNextDay: {
-	//				"Hours": 10
-	//			},
-	//			RestTimeToPreviousDay: {
-	//				"Hours": 10
-	//			},
-	//			ExpectedNightRest: {
-	//				"Hours": 11
-	//			},
-	//			HasNightRestViolationToPreviousDay: true,
-	//			HasNightRestViolationToNextDay: true,
-	//			DateInternal: "\/Date(1454515200000)\/",				
+		var ajax = function (model, options) {
+			options.success({
+				RestTimeToNextDay: {
+					"Hours": 10
+				},
+				RestTimeToPreviousDay: {
+					"Hours": 10
+				},
+				ExpectedNightRest: {
+					"Hours": 11
+				},
+				HasNightRestViolationToPreviousDay: true,
+				HasNightRestViolationToNextDay: true,
+				DateInternal: "\/Date(1454515200000)\/",				
 
-	//		});
-	//	};
-	//	var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel(ajax);
-	//	viewModelDay.Feedback(true);
-	//	viewModelDay.LoadFeedback();
+			});
+		};
+		var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel(ajax);
+		viewModelDay.Feedback(true);
+		viewModelDay.LoadFeedback();
 
-	//	var nightRestViolationObjs = viewModelDay.MakeNightRestViolationObjs();
+		var nightRestViolationObjs = viewModelDay.MakeNightRestViolationObjs();
 
-	//	equal(nightRestViolationObjs[0].firstDay, Teleopti.MyTimeWeb.Common.FormatDate(moment("\/Date(1454454000000)\/")));//"2016-02-03"
-	//	equal(nightRestViolationObjs[0].sencondDay, Teleopti.MyTimeWeb.Common.FormatDate(moment("\/Date(1454515200000)\/")));//"2016-02-04"
-	//	equal(nightRestViolationObjs[0].nightRestTimes, 11);
-	//	equal(nightRestViolationObjs[0].hoursBetweenTwoDays, 10);
+		equal(nightRestViolationObjs[0].firstDay, Teleopti.MyTimeWeb.Common.FormatDate(minusOneDay)); //"2016-02-03"
+		equal(nightRestViolationObjs[0].sencondDay, Teleopti.MyTimeWeb.Common.FormatDate(currentDay)); //"2016-02-04"
+		equal(nightRestViolationObjs[0].nightRestTimes, 11);
+		equal(nightRestViolationObjs[0].hoursBetweenTwoDays, 10);
 
-	//	equal(nightRestViolationObjs[1].firstDay, Teleopti.MyTimeWeb.Common.FormatDate(moment("\/Date(1454515200000)\/")));//"2016-02-04"
-	//	equal(nightRestViolationObjs[1].sencondDay, Teleopti.MyTimeWeb.Common.FormatDate(moment("\/Date(1454626800000)\/")));// "2016-02-05"
-	//	equal(nightRestViolationObjs[1].nightRestTimes, 11);
-	//	equal(nightRestViolationObjs[1].hoursBetweenTwoDays, 10);
-	//});
+		equal(nightRestViolationObjs[1].firstDay, Teleopti.MyTimeWeb.Common.FormatDate(currentDay)); //"2016-02-04"
+		equal(nightRestViolationObjs[1].sencondDay, Teleopti.MyTimeWeb.Common.FormatDate(plusOneDay)); // "2016-02-05"
+		equal(nightRestViolationObjs[1].nightRestTimes, 11);
+		equal(nightRestViolationObjs[1].hoursBetweenTwoDays, 10);
+	});
 
-	//test("should turn on the night rest violation switch", function () {
+	test("should turn on the night rest violation switch", function () {
 
-	//	var ajax = function (model, options) {
-	//		options.success({
-	//			RestTimeToNextDay: {
-	//				"Hours": 10
-	//			},
-	//			RestTimeToPreviousDay: {
-	//				"Hours": 10
-	//			},
-	//			ExpectedNightRest: {
-	//				"Hours": 11
-	//			},
-	//			HasNightRestViolationToPreviousDay: true,
-	//			HasNightRestViolationToNextDay: false,
+		var ajax = function (model, options) {
+			options.success({
+				RestTimeToNextDay: {
+					"Hours": 10
+				},
+				RestTimeToPreviousDay: {
+					"Hours": 10
+				},
+				ExpectedNightRest: {
+					"Hours": 11
+				},
+				HasNightRestViolationToPreviousDay: true,
+				HasNightRestViolationToNextDay: false,
 
-	//		});
-	//	};
-	//	var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel(ajax);
-	//	viewModelDay.Feedback(true);
-	//	viewModelDay.LoadFeedback();
+			});
+		};
+		var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel(ajax);
+		viewModelDay.Feedback(true);
+		viewModelDay.LoadFeedback();
 
-	//	equal(viewModelDay.NightRestViolationSwitch(),true );
-	//});
+		equal(viewModelDay.NightRestViolationSwitch(),true );
+	});
 
 });
