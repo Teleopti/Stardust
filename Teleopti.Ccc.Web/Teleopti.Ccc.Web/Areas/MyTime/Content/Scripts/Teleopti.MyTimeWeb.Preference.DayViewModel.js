@@ -234,9 +234,9 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
 	
 	var toggleShowNightViolation =	Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PreferenceShowNightViolation_33152");
 
-	this.NightRestViolationSwitch = toggleShowNightViolation? ko.computed(function () {
-		return self.HasNightRestViolationToPreviousDay() || self.HasNightRestViolationToNextDay();
-	}) : ko.observable(false);
+	this.NightRestViolationSwitch = toggleShowNightViolation
+		? ko.computed(function () { return self.HasNightRestViolationToPreviousDay() || self.HasNightRestViolationToNextDay(); })
+		: ko.observable(false);
 	
 	this.MakeNightRestViolationObjs = function () {
 		if (!toggleShowNightViolation) return [];

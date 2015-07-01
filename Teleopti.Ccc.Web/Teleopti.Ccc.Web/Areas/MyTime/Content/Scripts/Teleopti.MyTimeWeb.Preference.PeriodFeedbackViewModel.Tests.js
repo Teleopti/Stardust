@@ -58,4 +58,77 @@ $(document).ready(function () {
 		equal(viewModel.TargetContractTimeUpper(), "45:00");
 	});
 
+	test("should make possible night rest violation array", function () {
+
+		Teleopti.MyTimeWeb.Common.SetupCalendar({
+			UseJalaaliCalendar: false,
+			DateFormat: 'YYYY-MM-DD',
+			TimeFormat: 'HH:mm tt',
+			AMDesignator: 'AM',
+			PMDesignator: 'PM'
+		});
+
+		var ajax1 = function (model, options) {
+			options.success({
+				RestTimeToNextDay: {
+					"Hours": 10
+				},
+				RestTimeToPreviousDay: {
+					"Hours": 10
+				},
+				ExpectedNightRest: {
+					"Hours": 11
+				},
+				HasNightRestViolationToNextDay: true,
+				DateInternal: "\/Date(1454515200000)\/",//2016-02-04
+
+			});
+		};
+		var viewModelDay1 = new Teleopti.MyTimeWeb.Preference.DayViewModel(ajax1);
+		viewModelDay1.Feedback(true);
+		viewModelDay1.LoadFeedback();
+		var ajax2 = function (model, options) {
+			options.success({
+				RestTimeToNextDay: {
+					"Hours": 10
+				},
+				RestTimeToPreviousDay: {
+					"Hours": 10
+				},
+				ExpectedNightRest: {
+					"Hours": 11
+				},
+				HasNightRestViolationToPreviousDay: true,
+				HasNightRestViolationToNextDay: true,
+				DateInternal: "\/Date(1453737600000)\/",//2016-01-26
+
+			});
+		};
+		var viewModelDay2 = new Teleopti.MyTimeWeb.Preference.DayViewModel(ajax2);
+		viewModelDay2.Feedback(true);
+		viewModelDay2.LoadFeedback();
+
+
+
+		var viewModel = new Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel(null, [viewModelDay1, viewModelDay2], null, []);
+		console.log(viewModel);
+
+		equal(viewModel.PossibleNightRestViolations()()[0].firstDay, "2016-02-04");
+		equal(viewModel.PossibleNightRestViolations()()[0].sencondDay, "2016-02-05");
+		equal(viewModel.PossibleNightRestViolations()()[0].hoursBetweenTwoDays, 10);
+		equal(viewModel.PossibleNightRestViolations()()[0].nightRestTimes, 11);
+
+		equal(viewModel.PossibleNightRestViolations()()[1].firstDay, "2016-01-25");
+		equal(viewModel.PossibleNightRestViolations()()[1].sencondDay, "2016-01-26");
+		equal(viewModel.PossibleNightRestViolations()()[1].hoursBetweenTwoDays, 10);
+		equal(viewModel.PossibleNightRestViolations()()[1].nightRestTimes, 11);
+
+		equal(viewModel.PossibleNightRestViolations()()[2].firstDay, "2016-01-26");
+		equal(viewModel.PossibleNightRestViolations()()[2].sencondDay, "2016-01-27");
+		equal(viewModel.PossibleNightRestViolations()()[2].hoursBetweenTwoDays, 10);
+		equal(viewModel.PossibleNightRestViolations()()[2].nightRestTimes, 11);
+
+	
+	});
+
 });

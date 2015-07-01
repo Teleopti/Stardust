@@ -349,5 +349,76 @@ $(document).ready(function () {
 
 		equal(viewModelDay.MustHave(), true);
 	});
+	test("should make night rest violation objects", function () {
+
+
+		Teleopti.MyTimeWeb.Common.SetupCalendar({
+			UseJalaaliCalendar: false,
+			DateFormat: 'YYYY-MM-DD',
+			TimeFormat: 'HH:mm tt',
+			AMDesignator: 'AM',
+			PMDesignator: 'PM'
+		});
+
+
+
+		var ajax = function (model, options) {
+			options.success({
+				RestTimeToNextDay: {
+					"Hours": 10
+				},
+				RestTimeToPreviousDay: {
+					"Hours": 10
+				},
+				ExpectedNightRest: {
+					"Hours": 11
+				},
+				HasNightRestViolationToPreviousDay: true,
+				HasNightRestViolationToNextDay: true,
+				DateInternal: "\/Date(1454515200000)\/",				
+
+			});
+		};
+		var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel(ajax);
+		viewModelDay.Feedback(true);
+		viewModelDay.LoadFeedback();
+
+		var nightRestViolationObjs = viewModelDay.MakeNightRestViolationObjs();
+
+		equal(nightRestViolationObjs[0].firstDay, "2016-02-03");
+		equal(nightRestViolationObjs[0].sencondDay, "2016-02-04");
+		equal(nightRestViolationObjs[0].nightRestTimes, 11);
+		equal(nightRestViolationObjs[0].hoursBetweenTwoDays, 10);
+
+		equal(nightRestViolationObjs[1].firstDay, "2016-02-04");
+		equal(nightRestViolationObjs[1].sencondDay, "2016-02-05");
+		equal(nightRestViolationObjs[1].nightRestTimes, 11);
+		equal(nightRestViolationObjs[1].hoursBetweenTwoDays, 10);
+	});
+
+	test("should turn on the night rest violation switch", function () {
+
+		var ajax = function (model, options) {
+			options.success({
+				RestTimeToNextDay: {
+					"Hours": 10
+				},
+				RestTimeToPreviousDay: {
+					"Hours": 10
+				},
+				ExpectedNightRest: {
+					"Hours": 11
+				},
+				HasNightRestViolationToPreviousDay: true,
+				HasNightRestViolationToNextDay: false,
+
+			});
+		};
+		var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel(ajax);
+		viewModelDay.Feedback(true);
+		viewModelDay.LoadFeedback();
+
+		equal(viewModelDay.NightRestViolationSwitch(),true );
+	});
 
 });
