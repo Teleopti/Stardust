@@ -78,7 +78,8 @@
             }
 
             that.refreshColor = function (newColor) {
-            	if (newColor !== undefined && newColor !== "#000000" && that.color !== newColor) {
+            	if (newColor === "#000000") newColor = "#FFFFFF";
+            	if (newColor !== undefined && that.color !== newColor) {
                     var rgb = that.hexToRgb(newColor);
                     that.AlarmColor('rgba(' + rgb + ', 0.6)');
                     that.TextColor(helpers.TextColor.BasedOnBackgroundColor('(' + rgb + ')'));
@@ -87,8 +88,7 @@
                         that.TextWeight(500);
                     }, 4000);
                     that.color = newColor;
-                }
-                
+            	}
             }
 
             that.hexToRgb = function (hex) {
