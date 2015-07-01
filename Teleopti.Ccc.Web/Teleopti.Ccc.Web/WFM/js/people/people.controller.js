@@ -54,7 +54,10 @@ function PeopleController($scope, $filter, $state, $document, $translate, i18nSe
 		],
 		gridMenuTitleFilter: $translate,
 		exporterAllDataFn: function() {
-			return loadAllResults();
+			return loadAllResults()
+			.then(function () {
+				getPage();
+			});
 		},
 		paginationPageSize: 20,
 		useExternalPagination: true,
@@ -195,11 +198,21 @@ function PeopleController($scope, $filter, $state, $document, $translate, i18nSe
 	};
 
 	var loadAllResults = function () {
+		var sortColumnList = "";
+		for (var i = 0; i < paginationOptions.sortColumns.length; i++) {
+			var col = paginationOptions.sortColumns[i];
+			sortColumnList = sortColumnList + col.ColumnName + ":" + col.SortASC + ";";
+		};
+
+		if (sortColumnList != "") {
+			sortColumnList = sortColumnList.substring(0, sortColumnList.length - 1);
+		}
+
 		return SearchSvrc.search.query({
 			keyword: $scope.keyword,
 			pageSize: $scope.gridOptions.totalItems,
 			currentPageIndex: 1,
-			sortColumns: "LastName:true"
+			sortColumns: sortColumnList
 		}).$promise.then(function (result) {
 			$scope.gridOptions.data = result.People;
 
