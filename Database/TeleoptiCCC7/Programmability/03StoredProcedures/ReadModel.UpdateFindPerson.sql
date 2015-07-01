@@ -142,7 +142,7 @@ SELECT @date = CONVERT(DATETIME, CONVERT(varchar(10), GETDATE(), 101))
 
 INSERT INTO #CurrentPeriod (Parent, Team)
 SELECT Parent,Team
-FROM [PersonPeriodWithEndDate] pp
+FROM [PersonPeriodWithEndDate] pp WITH (NOLOCK)
 WHERE pp.StartDate < @date AND pp.EndDate >= @date
 
 UPDATE [ReadModel].[FindPerson] SET [TeamId] = t.Id,
@@ -158,7 +158,7 @@ WHERE t.IsDeleted = 0 AND s.IsDeleted = 0
 INSERT INTO #last
 SELECT Parent,Team,EndDate FROM
 (
-SELECT Parent, Team, EndDate, ROW_NUMBER () OVER (PARTITION BY Parent ORDER BY Parent,enddate DESC) row FROM PersonPeriodWithEndDate
+SELECT Parent, Team, EndDate, ROW_NUMBER () OVER (PARTITION BY Parent ORDER BY Parent,enddate DESC) row FROM PersonPeriodWithEndDate WITH (NOLOCK)
 ) AS LastPersonPeriod WHERE row=1
 
 UPDATE [ReadModel].[FindPerson] SET [TeamId] = t.Id,
