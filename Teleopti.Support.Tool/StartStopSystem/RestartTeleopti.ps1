@@ -58,27 +58,17 @@ function fnIsAzure {
 }
 
 function TeleoptiWindowsServices-Stop {
-param([bool]$IsAzure)
-    if (!$isAzure) {
-        $EtlService = "TeleoptiEtlService"
-        $ServiceBus = "TeleoptiServiceBus"
-    } else {
-        $EtlService = "AnalyticsEtlService"
-        $ServiceBus = "TeleoptiServiceBus"
-    }
+    $EtlService = "TeleoptiEtlService"
+    $ServiceBus = "TeleoptiServiceBus"
+
 	fnServiceStop -ServiceName $ServiceBus
 	fnServiceStop -ServiceName $EtlService
 }
 
 function TeleoptiWindowsServices-Start {
-param([bool]$IsAzure)
-    if (!$isAzure) {
-        $EtlService = "TeleoptiEtlService"
-        $ServiceBus = "TeleoptiServiceBus"
-    } else {
-        $EtlService = "AnalyticsEtlService"
-        $ServiceBus = "TeleoptiServiceBus"
-    }
+    $EtlService = "TeleoptiEtlService"
+    $ServiceBus = "TeleoptiServiceBus"
+
 	fnServiceStart -ServiceName $ServiceBus
 	fnServiceStart -ServiceName $EtlService
     & sc.exe failure $ServiceBus reset= 0 actions= restart/60000/restart/60000/restart/60000
@@ -245,12 +235,12 @@ Try
 
 	$isAzure = fnIsAzure
 	$BaseUrl = BaseUrl-get $isAzure
-	TeleoptiWindowsServices-Stop $isAzure
+	TeleoptiWindowsServices-Stop
 	IIS-Restart
 	write-host "sleep 5 seconds for IIS to restart ..."
 	Start-Sleep -Seconds 5       
 	AppPools-Start $isAzure
-	TeleoptiWindowsServices-Start $isAzure
+	TeleoptiWindowsServices-Start
 }
 
 Catch [Exception]
