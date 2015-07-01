@@ -45,6 +45,11 @@ namespace Teleopti.Ccc.TestCommon
 			return TimeSpan.FromSeconds(Convert.ToInt32(value));
 		}
 
+		public static TimeSpan Milliseconds(this string value)
+		{
+			return TimeSpan.FromMilliseconds(Convert.ToInt32(value));
+		}
+
 		public static DateOnly Date(this string dateString)
 		{
 			return new DateOnly(dateString.Utc());

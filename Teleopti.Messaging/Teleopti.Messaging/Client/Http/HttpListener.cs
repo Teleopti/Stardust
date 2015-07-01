@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
@@ -13,14 +16,16 @@ using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Messaging.Client.Http
 {
-	public class HttpListener : IMessageListener
+	public class HttpListener : IMessageListener, IDisposable
 	{
 		private readonly EventHandlers _eventHandlers;
 		private readonly IJsonDeserializer _jsonDeserializer;
 		private readonly ITime _time;
 		private readonly IConfigurationWrapper _configurationWrapper;
 		private readonly HttpRequests _client;
-		private readonly List<mailboxTimerInfo> _timers = new List<mailboxTimerInfo>(); 
+		private readonly List<mailboxTimerInfo> _timers = new List<mailboxTimerInfo>();
+		private object _addMailboxTimer;
+		
 
 		public HttpListener(
 			EventHandlers eventHandlers, 
@@ -42,11 +47,32 @@ namespace Teleopti.Messaging.Client.Http
 			};
 		}
 
+		private TimeSpan getPollingIntervalFromConfig()
+		{
+			string rawInteraval;
+			var pollingInterval = _configurationWrapper.AppSettings.TryGetValue(
+				"MessageBrokerMailboxPollingIntervalInSeconds", out rawInteraval)
+				? Convert.ToDouble(rawInteraval, CultureInfo.InvariantCulture)
+				: 60;
+			return TimeSpan.FromSeconds(pollingInterval);
+		}
+
 		public void RegisterSubscription(Subscription subscription, EventHandler<EventMessageArgs> eventMessageHandler)
 		{
+			var interval = getPollingIntervalFromConfig();
 			_eventHandlers.Add(subscription, eventMessageHandler);
-			_client.Post("MessageBroker/AddMailbox", subscription).Wait(TimeSpan.FromSeconds(30));
-			StartPopingTimer(subscription.MailboxId, eventMessageHandler);
+			var mailboxWasCreated = false;
+			_addMailboxTimer = _time.StartTimer(o =>
+			{
+				if (mailboxWasCreated)
+					return;
+				if (_client.Post("MessageBroker/AddMailbox", subscription).Result.IsSuccessStatusCode)
+				{
+					mailboxWasCreated = true;
+					StartPopingTimer(subscription.MailboxId, eventMessageHandler);
+				}
+			}, null, TimeSpan.Zero, interval);
+
 		}
 
 		public void StartPopingTimer(string mailboxId, EventHandler<EventMessageArgs> eventMessageHandler)
@@ -57,23 +83,14 @@ namespace Teleopti.Messaging.Client.Http
 					EventMessageHandler = eventMessageHandler,
 					Timer = _time.StartTimer(o =>
 					{
-						var rawMessages = _client.Get("MessageBroker/PopMessages/" + mailboxId)
-							.Result.Content.ReadAsStringAsync().Result;
+						var httpResponseMessage = _client.Get("MessageBroker/PopMessages/" + mailboxId).Result;
+						if (httpResponseMessage.Content == null)
+							return;
+						var rawMessages = httpResponseMessage.Content.ReadAsStringAsync().Result;
 						var messages = _jsonDeserializer.DeserializeObject<Message[]>(rawMessages);
 						messages.ForEach(m => _eventHandlers.CallHandlers(m));
 					}, null, interval, interval)
 				});
-		}
-
-		private TimeSpan getPollingIntervalFromConfig()
-		{
-			string rawInteraval;
-			var pollingInterval = _configurationWrapper.AppSettings.TryGetValue(
-				"MessageBrokerMailboxPollingIntervalInSeconds", out rawInteraval)
-				? Convert.ToDouble(rawInteraval, CultureInfo.InvariantCulture)
-				: 60;
-			var interval = TimeSpan.FromSeconds(pollingInterval);
-			return interval;
 		}
 
 		public void UnregisterSubscription(EventHandler<EventMessageArgs> eventMessageHandler)
@@ -93,6 +110,11 @@ namespace Teleopti.Messaging.Client.Http
 		{
 			public EventHandler<EventMessageArgs> EventMessageHandler { get; set; }
 			public object Timer { get; set; }
+		}
+
+		public void Dispose()
+		{
+			_time.DisposeTimer(_addMailboxTimer);
 		}
 	}
 

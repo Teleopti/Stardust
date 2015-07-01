@@ -53,11 +53,15 @@ namespace Teleopti.Ccc.TestCommon
 				NextDueTimeHasPassed = false,
 			};
 			_timers.Add(timer);
+			if (dueTime == TimeSpan.Zero)
+				handleCallbackCall();
 			return timer;
 		}
 
 		public void DisposeTimer(object timer)
 		{
+			if (timer == null)
+				throw new ArgumentNullException();
 			_timers.Remove((FakeTimer) timer);
 		}
 
@@ -75,7 +79,7 @@ namespace Teleopti.Ccc.TestCommon
 
 		private void handleCallbackCall()
 		{
-			foreach (var timer in _timers)
+			foreach (var timer in _timers.ToArray())
 			{
 				if (timer.Callback != null)
 				{

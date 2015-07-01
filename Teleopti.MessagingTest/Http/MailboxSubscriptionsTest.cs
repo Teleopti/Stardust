@@ -1,15 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Threading;
+using System.Net;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
@@ -27,16 +26,21 @@ namespace Teleopti.MessagingTest.Http
 		public IMessageListener Target;
 		public FakeConfigurationWrapper ConfigReader;
 		public FakeHttpServer Server;
+		public FakeTime Time;
+		public ISystemCheck SystemCheck;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<FakeSignalRClient>().For<ISignalRClient>();
+			var fakeSignalRClient = new FakeSignalRClient();
+			fakeSignalRClient.Configure("http://someserver/");
+			system.UseTestDouble(fakeSignalRClient).For<ISignalRClient>();
 			system.UseTestDouble<FakeHttpServer>().For<IHttpServer>();
+			system.UseTestDouble<FakeTime>().For<ITime>();
 			system.UseTestDouble(new FakeConfigurationWrapper
 			{
 				AppSettings = new Dictionary<string, string>
 				{
-					{"MessageBrokerMailboxPollingIntervalInSeconds", "0.01"}
+					{"MessageBrokerMailboxPollingIntervalInSeconds", "60"}
 				}
 			}).For<IConfigurationWrapper>();
 		}
@@ -54,34 +58,23 @@ namespace Teleopti.MessagingTest.Http
 				DomainQualifiedType = "ITestType",
 				DomainType = "ITestType"
 			});
+			Time.Passes("60".Seconds());
 
-			Assert.That(() => wasEventHandlerCalled, Is.True.After(500, 10));
+			wasEventHandlerCalled.Should().Be.True();
 		}
 
 		[Test]
-		public void ShouldUseAppsettingsForPollingInterval()
+		public void ShouldOnlyCallServerForSubscriptionOnce()
 		{
-			var wasEventHandlerCalled = false;
-			ConfigReader.AppSettings = new Dictionary<string, string>
-			{
-				{"MessageBrokerMailboxPollingInterval", "1000"}
-			};
-			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => wasEventHandlerCalled = true, typeof(ITestType), false, true);
-
-			Server.Has(new testMessage
-			{
-				BusinessUnitId = Guid.Empty.ToString(),
-				DataSource = string.Empty,
-				DomainQualifiedType = "ITestType",
-				DomainType = "ITestType"
-			});
-
-			Assert.That(() => wasEventHandlerCalled, Is.False.After(500));
+			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => { }, typeof (ITestType), false, true);
+			Time.Passes("15".Minutes());
+			Server.CallsToCreateMailbox.Should().Be(1);
 		}
 
 		[Test]
 		public void ShouldUnsubscribe()
 		{
+			wasCalled_pleaseForgiveMeForSharingState = false;
 			Target.RegisterSubscription(string.Empty, Guid.Empty, EventMessageHandler, typeof(ITestType), false, true);
 			Target.UnregisterSubscription(EventMessageHandler);
 
@@ -93,14 +86,16 @@ namespace Teleopti.MessagingTest.Http
 				DomainType = "ITestType",
 				BinaryData = "false"
 			});
+			Time.Passes("60".Seconds());
 
-			Assert.That(() => wasCalled_pleaseForgiveMeForSharingState, Is.False.After(500));
+			wasCalled_pleaseForgiveMeForSharingState.Should().Be.False();
 			wasCalled_pleaseForgiveMeForSharingState = false;
 		}
 
 		[Test]
 		public void ShouldUnsubscribeWithBase64Encoding()
 		{
+			wasCalled_pleaseForgiveMeForSharingState = false;
 			Target.RegisterSubscription(string.Empty, Guid.Empty, EventMessageHandler, typeof(ITestType), true, true);
 			Server.Has(new testMessage
 			{
@@ -109,7 +104,8 @@ namespace Teleopti.MessagingTest.Http
 				DomainQualifiedType = "ITestType",
 				DomainType = "ITestType",
 			});
-			Assert.That(() => wasCalled_pleaseForgiveMeForSharingState, Is.True.After(500, 10));
+			Time.Passes("60".Seconds());
+			wasCalled_pleaseForgiveMeForSharingState.Should().Be.True();
 			wasCalled_pleaseForgiveMeForSharingState = false;
 
 			Target.UnregisterSubscription(EventMessageHandler);
@@ -120,8 +116,9 @@ namespace Teleopti.MessagingTest.Http
 				DomainQualifiedType = "ITestType",
 				DomainType = "ITestType",
 			});
+			Time.Passes("60".Seconds());
 
-			Assert.That(() => wasCalled_pleaseForgiveMeForSharingState, Is.False.After(500));
+			wasCalled_pleaseForgiveMeForSharingState.Should().Be.False();
 			wasCalled_pleaseForgiveMeForSharingState = false;
 		}
 
@@ -129,6 +126,79 @@ namespace Teleopti.MessagingTest.Http
 		private void EventMessageHandler(object o, EventMessageArgs eventMessageArgs)
 		{
 			wasCalled_pleaseForgiveMeForSharingState = true;
+		}
+
+
+		[Test]
+		public void ShouldTellIfPollingIsNotWorking()
+		{
+			Target.RegisterSubscription(string.Empty, Guid.Empty,(sender, args)=>{}, typeof(ITestType), false, true);
+			Time.Passes("60".Seconds());
+
+			Server.Fails(HttpStatusCode.ServiceUnavailable);
+			Time.Passes("60".Seconds());
+
+			SystemCheck.IsRunningOk().Should().Be.False();
+		}
+
+		[Test, Ignore]
+		public void ShouldTellIfPollingIsWorking()
+		{
+			Target.RegisterSubscription(string.Empty, Guid.Empty,(sender, args)=>{}, typeof(ITestType), false, true);
+			Server.Has(new testMessage
+			{
+				BusinessUnitId = Guid.Empty.ToString(),
+				DataSource = string.Empty,
+				DomainQualifiedType = "ITestType",
+				DomainType = "ITestType",
+			});
+			Time.Passes("60".Seconds());
+
+			SystemCheck.IsRunningOk().Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldRetryToAddMailboxIfItFails()
+		{
+			var wasEventHandlerCalled = false;
+			Server.Fails(HttpStatusCode.ServiceUnavailable);
+			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => wasEventHandlerCalled = true, typeof(ITestType), false, true);
+			Time.Passes("60".Seconds());
+			Server.Succed();
+
+			Server.Has(new testMessage
+			{
+				BusinessUnitId = Guid.Empty.ToString(),
+				DataSource = string.Empty,
+				DomainQualifiedType = "ITestType",
+				DomainType = "ITestType",
+			});
+			Time.Passes("120".Seconds());
+
+			wasEventHandlerCalled.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldRetryAddingMailboxBasedOnTimer()
+		{
+			Server.Fails(HttpStatusCode.ServiceUnavailable);
+			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => { }, typeof(ITestType), false, true);
+			Time.Passes("60".Seconds());
+
+			Server.CallsToCreateMailbox.Should().Be.EqualTo(2);
+		}
+
+		[Test]
+		public void ShouldRetryAddingMailboxBasedOnTimerForTwoSubscriptions()
+		{
+			Server.Fails(HttpStatusCode.ServiceUnavailable);
+			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => { }, typeof(ITestType), false, true);
+			Time.Passes("30".Seconds());
+			Server.Succed();
+			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => { }, typeof(ITestType), false, true);
+			Time.Passes("30".Seconds());
+
+			Server.CallsToCreateMailbox.Should().Be.EqualTo(3);
 		}
 
 		private class testMessage : Message

@@ -17,7 +17,7 @@ namespace Teleopti.Messaging.Client.Composite
 		private readonly ISignalRClient _signalRClient;
 		private readonly IMessageListener _signalRMessageListener;
 		private readonly MessageCreator _messageCreator;
-		private readonly IMessageListener _mailboxListener;
+		private readonly HttpListener _mailboxListener;
 
 		public MessageBrokerCompositeClient(
 			IMessageFilterManager typeFilter, 
@@ -47,9 +47,15 @@ namespace Teleopti.Messaging.Client.Composite
 			get { return _signalRClient.IsAlive; }
 		}
 
+		public bool IsPollingAlive
+		{
+			get { return false; }
+		}
+
 		public void Dispose()
 		{
 			_signalRClient.Dispose();
+			_mailboxListener.Dispose();
 		}
 
 		public string ServerUrl { get { return _signalRClient.Url; } set { _signalRClient.Configure(value); } }
