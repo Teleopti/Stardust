@@ -181,7 +181,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 
 	self.isAddVisible = ko.computed(function () {
 		var addVisible = false;
-		if (self.isDetailVisible() && !self.selectedInternal()) {
+		if (self.isDetailVisible() && !self.selectedInternal() && !self.IsLoading()) {
 			addVisible = true;
 		}
 		return addVisible;

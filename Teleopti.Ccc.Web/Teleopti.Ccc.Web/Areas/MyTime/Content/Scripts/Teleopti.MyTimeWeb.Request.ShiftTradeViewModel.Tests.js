@@ -3,6 +3,43 @@ $(document).ready(function () {
 
 	module("Teleopti.MyTimeWeb.Request.ShiftTradeViewModel");
 
+
+	test("should show add button", function () {
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
+		viewModel.agentChoosed({});
+		viewModel.selectedInternal(false);
+		viewModel.IsLoading(false);
+
+		equal(viewModel.isAddVisible(), true);
+	});
+
+	test("should not show add button when no detail", function () {
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
+		viewModel.agentChoosed(null);
+		viewModel.selectedInternal(false);
+		viewModel.IsLoading(false);
+
+		equal(viewModel.isAddVisible(), false);
+	});
+
+	test("should not show add button when it has been selected", function () {
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
+		viewModel.agentChoosed({});
+		viewModel.selectedInternal(true);
+		viewModel.IsLoading(false);
+
+		equal(viewModel.isAddVisible(), false);
+	});
+
+	test("should not show add button when loading", function () {
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
+		viewModel.agentChoosed({});
+		viewModel.selectedInternal(false);
+		viewModel.IsLoading(true);
+
+		equal(viewModel.isAddVisible(), false);
+	});
+
 	test("should unselect current date when remove from view model list", function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
 		viewModel.requestedDateInternal(moment("Dec 25, 1995"));
