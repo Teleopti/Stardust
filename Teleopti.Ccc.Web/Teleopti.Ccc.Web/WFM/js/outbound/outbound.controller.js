@@ -34,6 +34,7 @@
 			$scope.isDateValid = isDateValid;
 			$scope.validWorkingHours = validWorkingHours;
 			$scope.backToList = backToList;
+			$scope.setRangeClass = setDateRangeClass;
 		
 			$scope.$on('formLocator.campaignGeneralForm', function (event) {
 				$scope.campaignGeneralForm = event.targetScope.campaignGeneralForm;
@@ -46,11 +47,39 @@
 			});
 
 			$scope.$watch(function () {
-				return $scope.newCampaign;				
-			}, function() {
-				$scope.estimatedWorkload = $scope.campaignWorkloadForm && $scope.campaignWorkloadForm.$valid ?
-					outboundService.calculateCampaignPersonHour($scope.newCampaign) + ' person-hour' : '';
+				return $scope.campaignWorkloadForm && $scope.campaignWorkloadForm.$valid ?
+					outboundService.calculateCampaignPersonHour($scope.newCampaign) + ' person-hour' : '';								
+			}, function(newValue) {
+				$scope.estimatedWorkload = newValue;
+				$scope.$broadcast('refreshDatepickers');
+			});
+
+			$scope.$watch(function () {
+				var startDate = deepPropertyAccess($scope, ['newCampaign', 'StartDate', 'Date']);
+				var endDate = deepPropertyAccess($scope, ['newCampaign', 'EndDate', 'Date']);
+				return { startDate: startDate, endDate: endDate };
+			}, function (value) {				
+				$scope.newCampaign.StartDate = { Date: angular.copy(value.startDate) };
+				$scope.newCampaign.EndDate = { Date: angular.copy(value.endDate) };
 			}, true);
+
+			function setDateRangeClass(date, mode) {		
+				if (mode === 'day') {
+					var startDate = deepPropertyAccess($scope, ['newCampaign', 'StartDate', 'Date']);
+					var endDate = deepPropertyAccess($scope, ['newCampaign', 'EndDate', 'Date']);
+
+					if (startDate && endDate && startDate <= endDate) {
+						var dayToCheck = new Date(date).setHours(12, 0, 0, 0);
+						var start = new Date(startDate).setHours(12, 0, 0, 0);
+						var end = new Date(endDate).setHours(12, 0, 0, 0);
+											
+						if (dayToCheck >= start && dayToCheck <= end) {						
+							return 'in-date-range';
+						}
+					}					
+				}
+				return '';				
+			}
 
 			function isInputValid() {			
 				if (!$scope.campaignGeneralForm) return false;
@@ -59,7 +88,6 @@
 				return isDateValid(true) && isDateValid(false) &&
 					$scope.campaignGeneralForm.$valid && $scope.campaignWorkloadForm.$valid
 					&& validWorkingHours();
-
 			}
 
 			function isDateValid(isStart) {
@@ -105,10 +133,9 @@
 			function reset() {				
 				$scope.newCampaign = {
 					activity: {},
-					WorkingHours: [
-						outboundService.createEmptyWorkingPeriod(new Date(2000, 1, 1, 7, 0), new Date(2000, 1, 1, 12, 0)),
-						outboundService.createEmptyWorkingPeriod(new Date(2000, 1, 1, 13, 0), new Date(2000, 1, 1, 18, 0))
-					]
+					StartDate: { Date: new Date() },
+					EndDate: { Date: new Date() },
+					WorkingHours: []											
 				};
 
 				expandAllSections($scope);
