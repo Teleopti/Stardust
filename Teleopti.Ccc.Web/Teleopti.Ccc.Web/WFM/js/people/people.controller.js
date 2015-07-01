@@ -5,20 +5,7 @@ angular
 	.constant('chunkSize', 50)
 	.controller('PeopleCtrl', [
 		'$scope', '$filter', '$state', '$document', '$translate', 'i18nService', 'uiGridConstants', 'PeopleSearch', PeopleController
-	])
-	.directive('outsideClick', ['$document', '$parse', function ($window, $parse) {
-		return {
-			restrict: 'A',
-			link: function (scope, element, attrs) {
-				var outsideClickHandler = $parse(attrs.outsideClick);
-				angular.element($window).on('click', function (event) {
-					if (element[0].contains(event.target)) return;
-					outsideClickHandler(scope, { $event: event });
-					scope.$apply();
-				});
-			}
-		};
-	}]);
+	]);
 
 function PeopleController($scope, $filter, $state, $document, $translate, i18nService, uiGridConstants, SearchSvrc) {
 	$scope.searchResult = [];

@@ -1226,6 +1226,7 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.TeamScheduleViewModel.Tests.js" />
     <Content Include="Areas\Reporting\Views\Shared\Error.cshtml" />
     <None Include="WFM\css\_forecasting.scss" />
+    <Content Include="WFM\js\people\people.outsideClick.directive.js" />
     <Content Include="WFM\js\permissions\permissions.data.html" />
     <Content Include="WFM\js\permissions\permissions.filters.js" />
     <Content Include="WFM\js\permissions\permissions.functions.html" />
