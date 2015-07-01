@@ -477,6 +477,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 				if (rowIndex > row)
 					tableLayoutPanel2.SetRow(control, rowIndex - 1);
 			}
+			tabPageExtra.Hide();
 		}
 
 		private void getTeamBlockDataToSave()
