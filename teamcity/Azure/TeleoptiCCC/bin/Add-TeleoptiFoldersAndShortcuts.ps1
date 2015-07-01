@@ -54,6 +54,11 @@ Function Add-DesktopShortcuts {
     $Shortcut.TargetPath = "%windir%\system32\services.msc"
     $Shortcut.Save()
 
+	$Shortcut = $WshShell.CreateShortcut("$desktopPublic\EtlTool.lnk")
+	$Shortcut.TargetPath "$EtlToolExe"
+    $Shortcut.IconLocation = "$WfmIco"
+    $Shortcut.Save()
+	
     [System.Runtime.Interopservices.Marshal]::ReleaseComObject($WshShell)
     Remove-Variable WshShell
 
@@ -281,6 +286,7 @@ Try
     $restartScript = "$approot\bin\Restart.cmd"
     $DataSourceName = TeleoptiDriveMapProperty-get -name "DataSourceName"
     $StartUrl = "https://$DataSourceName.teleopticloud.com/"
+	$EtlToolExe "$approot\Services\ETL\Tool\Teleopti.Analytics.Etl.ConfigTool.exe"
     
     #Array describing "SymLink,Pysicalpath"
     $appsArray = @(
