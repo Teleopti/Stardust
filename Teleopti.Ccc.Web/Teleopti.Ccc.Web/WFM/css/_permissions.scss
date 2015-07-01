@@ -31,8 +31,6 @@
 	width:100%;
 }
 
-
-
 .permissions-radio {
 	display: inline; 
 
@@ -44,37 +42,6 @@
 
 p {
 	margin-bottom: 5px;
-}
-
-
-
-
-
-
-
-.wfm-list {
-	position: relative;
-	overflow-x: hidden;
-}
-
-.wfm-leave-behind {
-  height: 37px;
-  width: 0;
-  /* top: 0; */
-  display: inline!important;
-  position: absolute!important;
-  right: 0;
-  /* float: right; */
-  overflow: hidden;
-  margin-top: -5px;
-  /* margin-bottom: -15px; */
-  /* margin-right: -5px; */
-  transition: all .5s ease-in-out;
-  padding-top: 8px;
-  /* padding-bottom: 5px; */
-  background-color: #cacaca;
-  z-index: 999;
-  border-bottom: 8px solid transparent;
 }
 
 .text-truncation {
