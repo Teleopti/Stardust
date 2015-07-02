@@ -49,7 +49,7 @@ namespace Teleopti.Messaging.Client.Composite
 
 		public bool IsPollingAlive
 		{
-			get { return false; }
+			get { return _mailboxListener.IsAlive(); }
 		}
 
 		public void Dispose()

@@ -24,8 +24,7 @@ namespace Teleopti.Messaging.Client.Http
 		private readonly IConfigurationWrapper _configurationWrapper;
 		private readonly HttpRequests _client;
 		private readonly List<mailboxTimerInfo> _timers = new List<mailboxTimerInfo>();
-		private object _addMailboxTimer;
-		
+		private readonly List<mailboxTimerInfo> _addMailboxTimers = new List<mailboxTimerInfo>();
 
 		public HttpListener(
 			EventHandlers eventHandlers, 
@@ -47,6 +46,27 @@ namespace Teleopti.Messaging.Client.Http
 			};
 		}
 
+		public void RegisterSubscription(Subscription subscription, EventHandler<EventMessageArgs> eventMessageHandler)
+		{
+			var interval = getPollingIntervalFromConfig();
+			_eventHandlers.Add(subscription, eventMessageHandler);
+			var mailboxTimerInfo = new mailboxTimerInfo();
+			mailboxTimerInfo.Timer = _time.StartTimer(o =>
+			{
+				var mailboxInfo = (mailboxTimerInfo) o;
+				if (mailboxInfo.IsCreated)
+					return;
+				if (_client.Post("MessageBroker/AddMailbox", subscription).Result.IsSuccessStatusCode)
+				{
+					mailboxInfo.IsCreated = true;
+					mailboxInfo.IsAlive = true;
+					startPopingTimer(subscription.MailboxId, interval);
+				}
+			}, mailboxTimerInfo, TimeSpan.Zero, interval);
+
+			_addMailboxTimers.Add(mailboxTimerInfo);
+		}
+
 		private TimeSpan getPollingIntervalFromConfig()
 		{
 			string rawInteraval;
@@ -57,41 +77,26 @@ namespace Teleopti.Messaging.Client.Http
 			return TimeSpan.FromSeconds(pollingInterval);
 		}
 
-		public void RegisterSubscription(Subscription subscription, EventHandler<EventMessageArgs> eventMessageHandler)
+		private void startPopingTimer(string mailboxId, TimeSpan interval)
 		{
-			var interval = getPollingIntervalFromConfig();
-			_eventHandlers.Add(subscription, eventMessageHandler);
-			var mailboxWasCreated = false;
-			_addMailboxTimer = _time.StartTimer(o =>
+			var mailboxTimerInfo = new mailboxTimerInfo {IsCreated = true, IsAlive = true };
+			mailboxTimerInfo.Timer = _time.StartTimer(o =>
 			{
-				if (mailboxWasCreated)
+				var mailboxInfo = (mailboxTimerInfo) o;
+				var httpResponseMessage = _client.Get("MessageBroker/PopMessages/" + mailboxId).Result;
+				if (httpResponseMessage.Content == null)
+				{
+					mailboxInfo.IsAlive = false;
 					return;
-				if (_client.Post("MessageBroker/AddMailbox", subscription).Result.IsSuccessStatusCode)
-				{
-					mailboxWasCreated = true;
-					StartPopingTimer(subscription.MailboxId, eventMessageHandler);
 				}
-			}, null, TimeSpan.Zero, interval);
-
+				mailboxInfo.IsAlive = true;
+				var rawMessages = httpResponseMessage.Content.ReadAsStringAsync().Result;
+				var messages = _jsonDeserializer.DeserializeObject<Message[]>(rawMessages);
+				messages.ForEach(m => _eventHandlers.CallHandlers(m));
+			}, mailboxTimerInfo, interval, interval);
+			_timers.Add(mailboxTimerInfo);
 		}
 
-		public void StartPopingTimer(string mailboxId, EventHandler<EventMessageArgs> eventMessageHandler)
-		{
-			var interval = getPollingIntervalFromConfig();
-			_timers.Add(new mailboxTimerInfo
-				{
-					EventMessageHandler = eventMessageHandler,
-					Timer = _time.StartTimer(o =>
-					{
-						var httpResponseMessage = _client.Get("MessageBroker/PopMessages/" + mailboxId).Result;
-						if (httpResponseMessage.Content == null)
-							return;
-						var rawMessages = httpResponseMessage.Content.ReadAsStringAsync().Result;
-						var messages = _jsonDeserializer.DeserializeObject<Message[]>(rawMessages);
-						messages.ForEach(m => _eventHandlers.CallHandlers(m));
-					}, null, interval, interval)
-				});
-		}
 
 		public void UnregisterSubscription(EventHandler<EventMessageArgs> eventMessageHandler)
 		{
@@ -110,11 +115,19 @@ namespace Teleopti.Messaging.Client.Http
 		{
 			public EventHandler<EventMessageArgs> EventMessageHandler { get; set; }
 			public object Timer { get; set; }
+			public bool IsAlive { get; set; }
+			public bool IsCreated { get; set; }
 		}
 
 		public void Dispose()
 		{
-			_time.DisposeTimer(_addMailboxTimer);
+			_addMailboxTimers.ForEach(x => _time.DisposeTimer(x.Timer));
+		}
+
+		public bool IsAlive()
+		{
+			return _addMailboxTimers.All(x => x.IsCreated && x.IsAlive)
+			       && _timers.All(x => x.IsCreated && x.IsAlive);
 		}
 	}
 

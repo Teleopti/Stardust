@@ -53,7 +53,7 @@ namespace Teleopti.MessagingTest.Http
 			_statusCode = statusCode;
 		}
 
-		public void Succed()
+		public void Succeds()
 		{
 			_shouldFail = false;
 			_statusCode = HttpStatusCode.OK;

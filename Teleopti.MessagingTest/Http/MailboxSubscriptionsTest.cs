@@ -141,7 +141,7 @@ namespace Teleopti.MessagingTest.Http
 			SystemCheck.IsRunningOk().Should().Be.False();
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldTellIfPollingIsWorking()
 		{
 			Target.RegisterSubscription(string.Empty, Guid.Empty,(sender, args)=>{}, typeof(ITestType), false, true);
@@ -158,13 +158,47 @@ namespace Teleopti.MessagingTest.Http
 		}
 
 		[Test]
+		public void ShouldNotTellThatPollingIsNotWorkingBeforeTrying()
+		{
+			SystemCheck.IsRunningOk().Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldTellIfCreatingMailboxIsNotWorking()
+		{
+			Server.Fails(HttpStatusCode.ServiceUnavailable);
+			
+			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => { }, typeof(ITestType), false, true);
+			
+			SystemCheck.IsRunningOk().Should().Be.False();
+		}
+
+
+		[Test]
+		public void ShouldTellIfAnyCreationOfMailboxIsNotWorking()
+		{
+			Server.Fails(HttpStatusCode.ServiceUnavailable);
+
+			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => { }, typeof(ITestType), false, true);
+			Time.Passes("30".Seconds());
+			Server.Succeds();
+			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => { }, typeof(ITestType), false, true);
+
+			SystemCheck.IsRunningOk().Should().Be.False();
+
+			Time.Passes("30".Seconds());
+			SystemCheck.IsRunningOk().Should().Be.True();
+		}
+
+		
+		[Test]
 		public void ShouldRetryToAddMailboxIfItFails()
 		{
 			var wasEventHandlerCalled = false;
 			Server.Fails(HttpStatusCode.ServiceUnavailable);
 			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => wasEventHandlerCalled = true, typeof(ITestType), false, true);
 			Time.Passes("60".Seconds());
-			Server.Succed();
+			Server.Succeds();
 
 			Server.Has(new testMessage
 			{
@@ -194,7 +228,7 @@ namespace Teleopti.MessagingTest.Http
 			Server.Fails(HttpStatusCode.ServiceUnavailable);
 			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => { }, typeof(ITestType), false, true);
 			Time.Passes("30".Seconds());
-			Server.Succed();
+			Server.Succeds();
 			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => { }, typeof(ITestType), false, true);
 			Time.Passes("30".Seconds());
 
