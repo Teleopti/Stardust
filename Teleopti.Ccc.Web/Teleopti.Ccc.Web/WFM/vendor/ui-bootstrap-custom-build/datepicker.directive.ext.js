@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-/*
+
 (function () {
 
 	angular.module('ui.bootstrap.datepicker').config(function ($provide) {
@@ -34,4 +34,3 @@
 	});
 }());
 
-*/
