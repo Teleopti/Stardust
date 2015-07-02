@@ -19,25 +19,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		}
 
 		[Test]
-		public void ShouldGetOutboundActivity()
+		public void ShouldAllActivities()
 		{
-			_activityRepository.SetOutboundActivity(true);
 			_target = new OutboundActivityProvider(_activityRepository);
 
 			var result = _target.GetAll();
 
-			result.First().Id.Should().Be.EqualTo(_activityRepository.LoadAll().First().Id);
-		}
-
-		[Test]
-		public void ShouldNotGetNotOutboundActivity()
-		{
-			_activityRepository.SetOutboundActivity(false);
-			_target = new OutboundActivityProvider(_activityRepository);
-
-			var result = _target.GetAll();
-
-			result.Count().Should().Be.EqualTo(0);
+			result.Count().Should().Be.EqualTo(1);
 		}
 	}
 }
