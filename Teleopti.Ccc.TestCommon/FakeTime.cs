@@ -58,6 +58,11 @@ namespace Teleopti.Ccc.TestCommon
 			return timer;
 		}
 
+		public int ActiveTimers()
+		{
+			return _timers.Count;
+		}
+
 		public void DisposeTimer(object timer)
 		{
 			if (timer == null)

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -122,6 +123,16 @@ namespace Teleopti.MessagingTest.Http
 			wasCalled_pleaseForgiveMeForSharingState = false;
 		}
 
+		[Test]
+		public void ShouldStopTimersWhenUnsubscribing_SemiImplementationDetailed()
+		{
+			Target.RegisterSubscription(string.Empty, Guid.Empty, EventMessageHandler, typeof(ITestType), false, true);
+			
+			Target.UnregisterSubscription(EventMessageHandler);
+
+			Time.ActiveTimers().Should().Be(0);
+		}
+
 		private bool wasCalled_pleaseForgiveMeForSharingState;
 		private void EventMessageHandler(object o, EventMessageArgs eventMessageArgs)
 		{
@@ -158,6 +169,49 @@ namespace Teleopti.MessagingTest.Http
 		}
 
 		[Test]
+		public void ShouldHandleHttpRequestExceptionWhenRegistratingSubscription()
+		{
+			Server.Throws(new AggregateException(new HttpRequestException()));
+			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => { }, typeof(ITestType), false, true);
+
+			Time.Passes("60".Seconds());
+
+			SystemCheck.IsRunningOk().Should().Be.False();
+		}
+
+
+		[Test]
+		public void ShouldThrowIfSomeOtherExecptionWhenRegistratingSubscription()
+		{
+			Server.Throws(new AggregateException(new NullReferenceException()));
+
+			Assert.Throws<AggregateException>(
+				() => Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => { }, typeof (ITestType), false, true));
+		}
+
+
+		[Test]
+		public void ShouldHandleHttpRequestExceptionWhenPolling()
+		{
+			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => { }, typeof(ITestType), false, true);
+
+			Server.Throws(new AggregateException(new HttpRequestException()));
+			Time.Passes("60".Seconds());
+
+			SystemCheck.IsRunningOk().Should().Be.False();
+		}
+
+
+		[Test]
+		public void ShouldThrowIfSomeOtherExecptionWhenPolling()
+		{
+			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => { }, typeof(ITestType), false, true);
+			Server.Throws(new AggregateException(new NullReferenceException()));
+
+			Assert.Throws<AggregateException>(() => Time.Passes("60".Seconds()));
+		}
+
+		[Test]
 		public void ShouldNotTellThatPollingIsNotWorkingBeforeTrying()
 		{
 			SystemCheck.IsRunningOk().Should().Be.True();
@@ -171,6 +225,12 @@ namespace Teleopti.MessagingTest.Http
 			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => { }, typeof(ITestType), false, true);
 			
 			SystemCheck.IsRunningOk().Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldGiveWarningMessage()
+		{
+			SystemCheck.WarningText.Should().Be("Could not get messages from message broker");
 		}
 
 

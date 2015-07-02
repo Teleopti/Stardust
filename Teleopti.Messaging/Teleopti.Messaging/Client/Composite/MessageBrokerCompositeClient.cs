@@ -77,7 +77,7 @@ namespace Teleopti.Messaging.Client.Composite
 
 		public void RegisterSubscription(Subscription subscription, EventHandler<EventMessageArgs> eventMessageHandler)
 		{
-			if (subscription.MailboxId == null || subscription.MailboxId == Guid.Empty.ToString())
+			if (subscription.MailboxId == null)
 				_signalRMessageListener.RegisterSubscription(subscription, eventMessageHandler);
 			else
 				_mailboxListener.RegisterSubscription(subscription, eventMessageHandler);

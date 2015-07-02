@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
@@ -15,6 +16,7 @@ namespace Teleopti.MessagingTest.Http
 		private readonly IList<Message> _messages = new List<Message>();
 		private bool _shouldFail;
 		private HttpStatusCode _statusCode;
+		private Exception _exception;
 
 		public FakeHttpServer(IJsonSerializer serializer)
 		{
@@ -30,15 +32,21 @@ namespace Teleopti.MessagingTest.Http
 
 		public Task<HttpResponseMessage> PostAsync(HttpClient client, string uri, HttpContent httpContent)
 		{
-			if (uri.Contains("AddMailbox")) 
+			if (uri.Contains("AddMailbox"))
 				CallsToCreateMailbox++;
+
+			if (_exception != null)
+				throw _exception;
 			if (_shouldFail)
 				return Task.FromResult(new HttpResponseMessage {StatusCode = _statusCode});
+
 			return Task.FromResult(new HttpResponseMessage());
 		}
 
 		public Task<HttpResponseMessage> GetAsync(HttpClient client, string uri)
 		{
+			if (_exception != null)
+				throw _exception;
 			if (_shouldFail)
 				return Task.FromResult(new HttpResponseMessage { StatusCode = _statusCode });
 
@@ -57,6 +65,11 @@ namespace Teleopti.MessagingTest.Http
 		{
 			_shouldFail = false;
 			_statusCode = HttpStatusCode.OK;
+		}
+
+		public void Throws(Exception type)
+		{
+			_exception = type;
 		}
 	}
 }

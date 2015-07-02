@@ -17,6 +17,9 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck
 			return _messageBrokerComposite.IsPollingAlive;
 		}
 
-		public string WarningText { get; private set; }
+		public string WarningText
+		{
+			get { return UserTexts.Resources.CouldNotGetMessagesFromMessageBroker; }
+		}
 	}
 }

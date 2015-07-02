@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -30,6 +31,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 					 .As<IWindowsUserProvider>()
 					 .SingleInstance();
 			builder.RegisterType<CheckMessageBroker>().As<ISystemCheck>();
+			if (_configuration.Toggle(Toggles.MessageBroker_SchedulingScreenMailbox_32733))
+				builder.RegisterType<CheckMessageBrokerMailBox>().As<ISystemCheck>();
 			builder.RegisterType<SystemCheckerValidator>();
 			builder.RegisterType<OutlookPanelContentWorker>();
 

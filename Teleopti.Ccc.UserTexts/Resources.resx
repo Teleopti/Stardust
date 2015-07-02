@@ -13210,4 +13210,8 @@ Reduce the complexity to use these shifts.</value>
   <data name="TeamsOrLocationsAreUnselected" xml:space="preserve">
     <value>teams or locations are unselected</value>
   </data>
+  <data name="CouldNotGetMessagesFromMessageBroker" xml:space="preserve">
+    <value>Could not get messages from message broker</value>
+    <comment>Could not get messages from message broker</comment>
+  </data>
 </root>
