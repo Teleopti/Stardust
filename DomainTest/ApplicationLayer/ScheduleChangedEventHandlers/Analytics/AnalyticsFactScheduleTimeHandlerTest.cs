@@ -134,6 +134,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				ContractTime = TimeSpan.FromMinutes(10),
 				PayloadId = _guidAbsInPaid,
 				WorkTime = TimeSpan.FromMinutes(10),
+				PaidTime = TimeSpan.FromMinutes(10),
 				StartDateTime = start,
 				EndDateTime = start.AddMinutes(10)
 			};

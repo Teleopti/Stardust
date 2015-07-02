@@ -65,6 +65,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             return false;
         }
 
+		internal TimeSpan ThisLayerWorkTime()
+		{
+			return hasWorkTime() ? Period.ElapsedTime() : TimeSpan.Zero;
+		}
+
+		internal TimeSpan ThisLayerPaidTime()
+		{
+			return hasPaidTime() ? Period.ElapsedTime() : TimeSpan.Zero;
+		}
+
         //tested from VisualLayerCollectionTest
         public TimeSpan ReadyTime()
         {

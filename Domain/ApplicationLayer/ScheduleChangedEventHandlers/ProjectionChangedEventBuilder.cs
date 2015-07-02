@@ -99,6 +99,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 							                  : layer.DisplayDescription();
 						var contractTime = projection.ContractTime(layer.Period);
 						var overTime = projection.Overtime(layer.Period);
+						var paidTime = projection.PaidTime(layer.Period);
+						var workTime = projection.WorkTime(layer.Period);
 						var requiresSeat = false;
 						var activity = layer.Payload.UnderlyingPayload as IActivity;
 						if (activity != null)
@@ -118,7 +120,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 								DisplayColor =
 									isPayloadAbsence ? (layer.Payload as IAbsence).DisplayColor.ToArgb() : layer.DisplayColor().ToArgb(),
 								RequiresSeat = requiresSeat,
-								WorkTime = layer.WorkTime(),
+								WorkTime = workTime,
+								PaidTime = paidTime,
 								StartDateTime = layer.Period.StartDateTime,
 								EndDateTime = layer.Period.EndDateTime,
 								IsAbsenceConfidential = isPayloadAbsence && (layer.Payload as IAbsence).Confidential

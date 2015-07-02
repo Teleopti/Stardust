@@ -47,6 +47,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 							EndDateTime = intersectionPeriod.Value.EndDateTime,
 							WorkTime = layer.WorkTime == TimeSpan.Zero ? TimeSpan.Zero: intersectionPeriod.Value.ElapsedTime(),
 							ContractTime = layer.ContractTime == TimeSpan.Zero ? TimeSpan.Zero : intersectionPeriod.Value.ElapsedTime(),
+							PaidTime = layer.PaidTime == TimeSpan.Zero ? TimeSpan.Zero : intersectionPeriod.Value.ElapsedTime(),
 							Overtime = layer.Overtime == TimeSpan.Zero ? TimeSpan.Zero : intersectionPeriod.Value.ElapsedTime(),
 							Name = layer.Name,
 							ShortName = layer.ShortName,

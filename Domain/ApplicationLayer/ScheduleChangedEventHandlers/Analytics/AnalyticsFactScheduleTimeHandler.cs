@@ -54,11 +54,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 				ret.ContractTimeAbsenceMinutes = (int)layer.ContractTime.TotalMinutes;
 				ret.WorkTimeAbsenceMinutes = (int)layer.WorkTime.TotalMinutes;
 				ret.ScheduledAbsenceMinutes = layerMinutes;
-				if (absence.InPaidTime)
-				{
-					ret.PaidTimeMinutes = layerMinutes;
-					ret.PaidTimeAbsenceMinutes = layerMinutes;
-				}
+				ret.PaidTimeMinutes = (int)layer.PaidTime.TotalMinutes;
+				ret.PaidTimeAbsenceMinutes = (int)layer.PaidTime.TotalMinutes;
+				
 			}
 			return ret;
 		}

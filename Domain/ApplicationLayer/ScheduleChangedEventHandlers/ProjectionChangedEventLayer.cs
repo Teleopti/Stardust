@@ -24,5 +24,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		public bool IsAbsenceConfidential { get; set; }
 		public TimeSpan Overtime { get; set; }
 		public Guid MultiplicatorDefinitionSetId { get; set; }
+		public TimeSpan PaidTime { get; set; }
 	}
 }

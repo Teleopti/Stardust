@@ -434,6 +434,19 @@ namespace Teleopti.Ccc.DomainTest.Collection
 
 			Assert.AreEqual(new TimeSpan(1, 0, 0, 0), target.PaidTime());
 		}
+
+		[Test]
+		public void VerifyPaidTimeWithAbsenceOnFilteredPeriod()
+		{
+			//yes
+			internalCollection.Add(createLayerInPaidTime(true, true, new DateTimePeriod(2000, 1, 1, 2000, 1, 2)));
+			//three no:s
+			internalCollection.Add(createLayerInPaidTime(true, false, new DateTimePeriod(2000, 1, 2, 2000, 1, 3)));
+			internalCollection.Add(createLayerInPaidTime(false, true, new DateTimePeriod(2000, 1, 3, 2000, 1, 4)));
+			internalCollection.Add(createLayerInPaidTime(false, false, new DateTimePeriod(2000, 1, 4, 2000, 1, 5)));
+
+			Assert.AreEqual(new TimeSpan(1, 0, 0, 0), target.PaidTime(new DateTimePeriod(2000, 1, 1, 2000, 1, 2)));
+		}
 		#endregion
 
 		#region WorkTime tests

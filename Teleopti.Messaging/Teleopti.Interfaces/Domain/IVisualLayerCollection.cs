@@ -183,6 +183,9 @@ namespace Teleopti.Interfaces.Domain
 		/// <param name="filterPeriod">The period of interest.</param>
 		/// <returns></returns>
 		TimeSpan Overtime(DateTimePeriod filterPeriod);
+
+		TimeSpan PaidTime(DateTimePeriod filterPeriod);
+		TimeSpan WorkTime(DateTimePeriod filterPeriod);
 	}
 
 	///<summary>
