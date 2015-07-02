@@ -13160,4 +13160,54 @@ Reduce the complexity to use these shifts.</value>
     <value>I'm sorry but the system is a bit busy right now. Try a more narrow report selection critera or try again later.</value>
     <comment>Info to user when there is a database timeout watching reports</comment>
   </data>
+  <data name="SeatPlanStatusError" xml:space="preserve">
+    <value>Some agents were not able to be allocated seats on this day</value>
+    <comment>Some agents were not able to be allocated seats on this day</comment>
+  </data>
+  <data name="SeatPlanStatusInProgress" xml:space="preserve">
+    <value>Seat planning is currently in progress for this day</value>
+    <comment>Seat planning is currently in progress for this day</comment>
+  </data>
+  <data name="SeatPlanStatusNoSeatPlanned" xml:space="preserve">
+    <value>There have been no seats planned on this date</value>
+    <comment>There have been no seats planned on this date</comment>
+  </data>
+  <data name="SeatPlanStatusOK" xml:space="preserve">
+    <value>All chosen agents were allocated seats</value>
+    <comment>All chosen agents were allocated seats</comment>
+  </data>
+  <data name="AgentCountTitle" xml:space="preserve">
+    <value>agents</value>
+    <comment>Used to display the number of agents for a location</comment>
+  </data>
+  <data name="FilterLocations" xml:space="preserve">
+    <value>Filter Locations</value>
+    <comment>Filter Locations</comment>
+  </data>
+  <data name="LoadingSeatPlanStatus" xml:space="preserve">
+    <value>Loading Seat Plan Status</value>
+    <comment>Loading prompt on the seat planning form</comment>
+  </data>
+  <data name="NoLocationsAvailable" xml:space="preserve">
+    <value>No locations available</value>
+    <comment>Used in Seat Planning</comment>
+  </data>
+  <data name="PlanningPeriodsFor" xml:space="preserve">
+    <value>Planning Periods For</value>
+    <comment>Title on the seat planning form, showing the planning periods for the chosen month</comment>
+  </data>
+  <data name="PlanSeats" xml:space="preserve">
+    <value>Plan Seats</value>
+    <comment>Used to initiate the seat planning process</comment>
+  </data>
+  <data name="SeatCountTitle" xml:space="preserve">
+    <value>seats</value>
+    <comment>Used to display the number of seats for a location</comment>
+  </data>
+  <data name="SeatPlanSubmittedOK" xml:space="preserve">
+    <value>Seat plan was submitted successfully</value>
+  </data>
+  <data name="TeamsOrLocationsAreUnselected" xml:space="preserve">
+    <value>teams or locations are unselected</value>
+  </data>
 </root>

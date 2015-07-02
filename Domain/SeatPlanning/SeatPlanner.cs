@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		private readonly ISeatBookingRepository _seatBookingRepository;
 		private readonly ISeatPlanRepository _seatPlanRepository;
 		private readonly List<teamGroupedBooking> _bookingsWithDateAndTeam = new List<teamGroupedBooking>();
+		private readonly List<SeatPlan> _seatPlansToUpdate = new List<SeatPlan>();
 		private IList<ISeatBooking> _existingSeatBookings;
 
 		public SeatPlanner(IScenario currentScenario,
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			assembleAndGroupData(rootSeatMapLocation, teams, period);
 
 			var hasError = allocateSeats(new SeatAllocator(rootSeatMapLocation));
-			persistSeatPlanResult(period, hasError);
+			persistSeatPlanResult(hasError);
 
 		}
 
@@ -145,14 +146,13 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 		private void persistSeatPlans(DateOnlyPeriod period)
 		{
-
 			foreach (var day in period.DayCollection())
 			{
-				addOrUpdateSeatPlan(day);
+				_seatPlansToUpdate.Add(addOrUpdateSeatPlan(day));
 			}
 		}
 
-		private void addOrUpdateSeatPlan (DateOnly day)
+		private SeatPlan addOrUpdateSeatPlan (DateOnly day)
 		{
 			var seatPlan = _seatPlanRepository.GetSeatPlanForDate (day);
 			if (seatPlan == null)
@@ -165,19 +165,18 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 				seatPlan.Status = SeatPlanStatus.InProgress;
 				_seatPlanRepository.Update (seatPlan);
 			}
+
+			return seatPlan as SeatPlan;
 		}
 
-		private void persistSeatPlanResult(DateOnlyPeriod period, Boolean inError)
+		private void persistSeatPlanResult(Boolean inError)
 		{
-			foreach (var day in period.DayCollection())
+			foreach (var seatPlan in _seatPlansToUpdate)
 			{
-				var seatPlan = _seatPlanRepository.GetSeatPlanForDate (day);
-				//temporary fix;
-				if (seatPlan == null) continue;
-
 				seatPlan.Status = inError ? SeatPlanStatus.InError : SeatPlanStatus.Ok;
-				_seatPlanRepository.Update (seatPlan);
+				_seatPlanRepository.Update(seatPlan);
 			}
+			
 		}
 
 		private IEnumerable<SeatBookingRequest> getSeatBookingRequests()

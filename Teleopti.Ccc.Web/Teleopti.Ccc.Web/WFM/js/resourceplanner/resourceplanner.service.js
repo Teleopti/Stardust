@@ -6,6 +6,14 @@
 			this.getPlanningPeriod = $resource('../api/resourceplanner/planningperiod', {}, {
 				query: { method: 'GET', params: {}, isArray: true }
 			});
+			this.getPlanningPeriodsForRange = $resource('../api/resourceplanner/planningperiodsforrange?startDate=:startDate&endDate=:endDate', {},
+				{
+					startDate: "@startDate",
+					endDate: "@endDate"
+				},{
+				query: { method: 'GET', params: {}, isArray: true }
+			});
+			
 		}
 		]).service('PlanningPeriodNewSvrc', [
 		'$resource', function ($resource) {

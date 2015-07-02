@@ -1,0 +1,88 @@
+﻿@charset "UTF-8";
+
+.teleopti-card-list {
+	width: 100%;
+}
+
+.teleopti-card-list-container {
+	max-height: 450px;
+}
+
+
+md-card {
+}
+
+.teleopti-card-unselected {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	cursor: pointer;
+	width: 90%;
+	margin-left: auto !important;
+	margin-right: auto !important;
+}
+
+.teleopti-card-selected {
+	margin-top: 25px;
+	margin-bottom: 25px;
+	cursor: pointer;
+	width: 95%;
+	margin-left: auto !important;
+	margin-right: auto !important;
+	transition-property: width, height;
+	transition-duration: 0.2s;
+	transition-timing-function: ease-out;
+}
+
+.planningPeriodProgressBar {
+	margin-top: 25px;
+	margin-bottom: 25px;
+	width: 90%;
+	margin-left: auto !important;
+	margin-right: auto !important;
+}
+
+.calendarProgress {
+	margin-top: 85px;
+	margin-left: 170px;
+	margin-right: 170px;
+	height: 139px;
+}
+
+teleopti-card:first-child .teleopti-card-selected {
+	margin-top: 10px;
+}
+
+teleopti-card:last-child .teleopti-card-selected {
+	margin-bottom: 10px;
+}
+
+.teleopti-card-title {
+	min-height: 35px;
+	line-height: 35px;
+	padding: 0 16px;
+	background-color: #99D6FF;
+}
+
+.teleopti-card-content {
+	padding: 10px 16px;
+	background-color: white;
+}
+
+.planningPeriodTitle {
+	margin-left: 30px;
+}
+
+.success button span {
+	background-color: lightgreen;
+	padding: 3px;
+}
+
+.inprogress button span {
+	background-color: burlywood;
+	padding: 3px;
+}
+
+.error button span {
+	background-color: lightcoral;
+	padding: 3px;
+}

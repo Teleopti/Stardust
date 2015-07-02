@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Http;
@@ -55,9 +56,9 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers
 		}
 
 		[UnitOfWork, Route("api/SeatPlanner/SeatPlan"), HttpGet]
-		public virtual List<SeatPlanViewModel> Get(DateTime startDate, DateTime endDate)
+		public virtual ICollection<SeatPlanViewModel> Get(DateTime startDate, DateTime endDate)
 		{
-			return _seatPlanProvider.Get(new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate)));
+			return _seatPlanProvider.Get(new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate))).ToArray();
 		}
 	}
 }

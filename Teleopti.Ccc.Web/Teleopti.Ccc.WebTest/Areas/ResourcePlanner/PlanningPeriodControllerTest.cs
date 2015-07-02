@@ -133,6 +133,19 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		}
 
 		[Test]
+		public void ShouldReturnAvailablePlanningPeriodsForRange()
+		{
+			PlanningPeriodRepository.Add(new FakePlanningPeriod(Guid.NewGuid(), new DateOnlyPeriod(new DateOnly(2015, 05, 18), new DateOnly(2015, 05, 31))));
+			PlanningPeriodRepository.Add(new FakePlanningPeriod(Guid.NewGuid(), new DateOnlyPeriod(new DateOnly(2015, 06, 01), new DateOnly(2015, 06, 14))));
+			PlanningPeriodRepository.Add(new FakePlanningPeriod(Guid.NewGuid(), new DateOnlyPeriod(new DateOnly(2015, 06, 15), new DateOnly(2015, 06, 28))));
+
+			var result = (OkNegotiatedContentResult<List<PlanningPeriodModel>>)
+				Target.GetAllPlanningPeriods(new DateTime(2015, 06, 01), new DateTime(2015, 06, 16));
+			result.Content.Count().Should().Be.EqualTo(2);
+		}
+
+
+		[Test]
 		public void ShouldReturnNextPlanningPeriod()
 		{
 			changeNowTo(new DateTime(2015, 05, 23));

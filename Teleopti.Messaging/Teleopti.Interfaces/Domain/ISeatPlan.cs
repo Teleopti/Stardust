@@ -8,8 +8,8 @@
 
 	public enum SeatPlanStatus
 	{
-		Ok,
-		InProgress,
-		InError
+		Ok =0,
+		InProgress =1,
+		InError =2
 	};
 }

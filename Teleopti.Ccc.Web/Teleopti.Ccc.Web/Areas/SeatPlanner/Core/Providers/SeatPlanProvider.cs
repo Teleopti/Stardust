@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
@@ -21,28 +22,24 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 
 		public SeatPlanViewModel Get(DateOnly date)
 		{
-			SeatPlanViewModel seatPlanViewModel = null;
-
 			var seatPlan = _seatPlanRepository.GetSeatPlanForDate(date);
 
 			if (seatPlan != null)
 			{
-				seatPlanViewModel = new SeatPlanViewModel()
+				return new SeatPlanViewModel()
 				{
 					Id = seatPlan.Id.Value,
 					Date = seatPlan.Date.Date,
 					Status = (int)seatPlan.Status
 				};
 			}
-			return seatPlanViewModel;
+		
+			return null;
 		}
 
 		public List<SeatPlanViewModel> Get (DateOnlyPeriod dateOnlyPeriod)
 		{
-			var seatPlanViewModels = new List<SeatPlanViewModel>();
-			dateOnlyPeriod.DayCollection().ForEach (day => seatPlanViewModels.Add (Get (day)));
-			return seatPlanViewModels;
+			return dateOnlyPeriod.DayCollection().Select (Get).Where (seatPlanModel => seatPlanModel != null).ToList();
 		}
-		
 	}
 }

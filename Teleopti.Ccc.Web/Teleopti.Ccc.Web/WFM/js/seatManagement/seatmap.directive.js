@@ -13,12 +13,12 @@
 		};
 	};
 
-	angular.module('wfm.seatMap')
-		.directive('seatmapCanvas', directive);
-
 	function linkFunction(scope, element, attributes, vm) {
 		vm.readonly = 'readonly' in attributes;
 	};
+
+	angular.module('wfm.seatMap')
+		.directive('seatmapCanvas', directive);
 		
 }());
 

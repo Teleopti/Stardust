@@ -1,115 +1,162 @@
 ﻿'use strict';
 
-angular.module('wfm.seatPlan')
-	.controller('SeatPlanCtrl', ['seatPlanService','growl',
-	function (seatPlanService, growl) {
+(function () {
+
+	var getPreviousMonthStart = function (dateMoment) {
+		return moment(dateMoment).subtract(1, 'months').startOf('month').format("YYYY-MM-DD");
+	};
+
+	var getNextMonthEnd = function (dateMoment) {
+		return moment(dateMoment).add(1, 'months').endOf('month').format("YYYY-MM-DD");
+	};
+
+	var seatPlanStatusClass = ['success', 'inprogress', 'error'];
+
+	angular.module('wfm.seatPlan').controller('SeatPlanCtrl', seatPlanDirectiveController);
+
+	seatPlanDirectiveController.$inject = ['ResourcePlannerSvrc', 'seatPlanService', '$translate'];
+
+	function seatPlanDirectiveController(resourcePlannerService, seatPlanService, translate) {
 
 		var vm = this;
+		
+		vm.setupTranslatedStrings = function () {
 
-		var startDate = moment.utc().add(1, 'months').startOf('month').toDate();
-		var endDate = moment.utc().add(2, 'months').startOf('month').toDate();
+			vm.translatedStrings = {};
+			vm.setupTranslatedString("LoadingSeatPlanStatus");
+			
+			vm.seatPlanStatus = {};
+			vm.translateSeatPlanStatus(0, 'SeatPlanStatusOK');
+			vm.translateSeatPlanStatus(2, 'SeatPlanStatusError');
+			vm.translateSeatPlanStatus(1, 'SeatPlanStatusInProgress');
+			vm.translateSeatPlanStatus(3, 'SeatPlanStatusNoSeatPlanned');
+		}
 
-		vm.period = { startDate: startDate, endDate: endDate };
-		vm.locations = [];
-		vm.teams = [];
-
-		vm.locations.push(seatPlanService.locations.get());
-		vm.teams.push(seatPlanService.teams.get());
-
-		vm.getLocationDisplayText = function (location) {
-			if (location.Name == undefined) {
-				return "No Locations available.";
-			}
-			return location.Name + " (seats: {0})".replace("{0}", location.Seats.length);
-
+		vm.setupTranslatedString = function (key) {
+			translate(key).then(function (result) {
+				vm.translatedStrings[key] = result;
+			});
 		};
 
-		vm.getTeamDisplayText = function (teamHierarchyNode) {
-			if (teamHierarchyNode.NumberOfAgents) {
-				return teamHierarchyNode.Name + " (agents: {0})".replace("{0}", teamHierarchyNode.NumberOfAgents);
-			} else {
-				return teamHierarchyNode.Name;
-			}
-
+		vm.translateSeatPlanStatus = function (key, translationConstant) {
+			translate(translationConstant).then(function (result) {
+				vm.seatPlanStatus[key] = result;
+			});
 		};
 
-		vm.addSeatPlan = function () {
-			var selectedTeams = [];
-			if (vm.teams.length > 0) {
-				getSelectedTeams(vm.teams[0], selectedTeams);
-			}
+		vm.loadMonthDetails = function (dateMoment) {
 
-			var selectedLocations = [];
-			if (vm.locations.length > 0) {
-				getSelectedLocations(vm.locations[0], selectedLocations);
-			}
+			vm.currentMonth = dateMoment.month();
 
-			var addSeatPlanCommand = {
-				StartDate: vm.period.startDate,
-				EndDate: vm.period.endDate,
-				Teams: selectedTeams,
-				Locations: selectedLocations
+			vm.loadCalendarDetails(dateMoment);
+			vm.loadPlanningPeriods(dateMoment);
+		};
+
+		vm.loadCalendarDetails = function (dateMoment) {
+
+			vm.isLoadingCalendar = true;
+			vm.seatPlanDateStatuses = [];
+
+			var seatPlansParams = {
+				startDate: getPreviousMonthStart(dateMoment),
+				endDate: getNextMonthEnd(dateMoment)
 			};
 
-			if (selectedTeams.length == 0 || selectedLocations.length == 0) {
-
-				onSelectedTeamsLocationsEmpty("teams or locations are unselected");
-
-			} else {
-
-				seatPlanService.addSeatPlan(addSeatPlanCommand).$promise.then(function(result) {
-					onSuccessAddSeatPlan("Seat plan added successfully");
+			seatPlanService.seatPlans
+				.query(seatPlansParams)
+				.$promise.then(function (data) {
+					vm.seatPlanDateStatuses = data;
+					vm.selectedDate = dateMoment.toDate();
+					vm.isLoadingCalendar = false;
 				});
+		};
 
+		vm.loadPlanningPeriods = function (dateMoment) {
+			vm.isLoadingPlanningPeriods = true;
+
+			var planningPeriodParams = {
+				startDate: moment(dateMoment).startOf('month').format('YYYY-MM-DD'),
+				endDate: moment(dateMoment).endOf('month').format('YYYY-MM-DD')
+			};
+
+			resourcePlannerService.getPlanningPeriodsForRange
+			   .query(planningPeriodParams)
+			   .$promise.then(function (data) {
+			   	vm.isLoadingPlanningPeriods = false;
+			   	vm.planningPeriods = data;
+			   });
+		};
+
+		vm.getDateString = function (date) {
+			return moment(date).format('YYYY-MM-DD');
+		};
+
+
+		//ROBTODO: really need this below declaration???
+		vm.setupTranslatedStrings();
+		var now = moment();
+		vm.loadMonthDetails(now);
+
+		vm.onChangeOfDate = function () {
+
+			if (vm.currentMonth != moment(vm.selectedDate).month()) {
+				vm.loadMonthDetails(moment(vm.selectedDate));
 			}
 		};
 
-		vm.selectTeam = function (team) {
-			team.selected = team.NumberOfAgents && team.NumberOfAgents > 0 ? !team.selected : team.selected;
+		vm.onChangeOfMonth = function (date) {
+			var dateMoment = moment(date);
+			if (dateMoment.month() != vm.currentMonth) {
+				vm.loadMonthDetails(dateMoment);
+			}
 		};
 
-		vm.selectLocation = function (location) {
-			location.selected = location.Seats && location.Seats.length > 0 ? !location.selected : location.selected;
+		vm.onSeatPlanComplete = function () {
+
+			vm.loadMonthDetails(moment(vm.selectedDate));
 		};
 
-		function getSelectedTeams(node, teams) {
+		vm.getSelectedMonthName = function () {
+			return moment(vm.selectedDate).format("MMMM");
+		};
 
-			if (node.NumberOfAgents && node.NumberOfAgents > 0 && node.selected) {
-				teams.push(node.Id);
+		vm.getToDayInfo = function () {
+
+			if (vm.isLoadingCalendar) {
+				return vm.translatedStrings["LoadingSeatPlanStatus"];
 			}
 
-			if (node.Children) {
-				for (var i in node.Children) {
-					getSelectedTeams(node.Children[i], teams);
+			var dayInfoString = vm.seatPlanStatus[3];
+
+			vm.seatPlanDateStatuses.forEach(function (dateEvent) {
+
+				if (moment(vm.selectedDate).isSame(dateEvent.Date, 'day')) {
+					dayInfoString = vm.seatPlanStatus[dateEvent.Status];
 				}
-			}
-		};
-
-		function getSelectedLocations(node, locations) {
-			if (node.selected && node.Seats && node.Seats.length > 0) {
-				locations.push(node.Id);
-			}
-			if (node.Children) {
-				for (var i in node.Children) {
-					getSelectedLocations(node.Children[i], locations);
-				}
-			}
-
-		};
-
-		function onSuccessAddSeatPlan(message) {
-			growl.success("<i class='mdi mdi-thumb-up'></i> "+message+".", {
-				ttl: 5000,
-				disableCountDown: true
 			});
+
+			return dayInfoString;
 		};
 
-		function onSelectedTeamsLocationsEmpty(message) {
-			growl.error("<i class='mdi  mdi-alert-octagon'></i> " + message + ".", {
-				ttl: 5000,
-				disableCountDown: true
-			});
-		};
+		vm.getDayClass = function (date, mode) {
+			if (mode === 'day') {
 
-	}]
-);
+				var dayClass = '';
+				var dayToCheck = moment(date);
+
+				vm.seatPlanDateStatuses.forEach(function (status) {
+
+					if (dayToCheck.isSame(moment(status.Date), 'day')) {
+						dayClass = seatPlanStatusClass[status.Status];
+					}
+				});
+			}
+			return dayClass;
+		}
+
+
+
+	}
+}());
+
+

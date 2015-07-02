@@ -4,7 +4,7 @@ angular.module('wfm.seatPlan')
 	.factory('seatPlanService', ['$resource', function ($resource) {
 
 		var seatPlanService = {};
-		
+
 		seatPlanService.addSeatPlan = function (seatPlanCommand) {
 			return seatPlanService.seatPlan.add(seatPlanCommand);
 		}
@@ -20,6 +20,17 @@ angular.module('wfm.seatPlan')
 		seatPlanService.seatPlan = $resource('../api/SeatPlanner/SeatPlan', {}, {
 			add: { method: 'POST', params: { Teams: {}, Locations: {}, StartDate: {}, EndDate: {} }, isArray: false }
 		});
+
+		seatPlanService.seatPlans = $resource('../api/SeatPlanner/SeatPlan?startDate=:startDate&endDate=:endDate', {},
+			{
+				startDate: "@startDate",
+				endDate: "@endDate"
+			},
+			{
+				query: { method: 'GET', params: {}, isArray: true }
+			}
+		);
+
 
 		return seatPlanService;
 

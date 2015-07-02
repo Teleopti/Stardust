@@ -1241,19 +1241,27 @@
     <Content Include="WFM\js\resourceplanner\resourceplanner-report.html" />
     <Content Include="WFM\js\resourceplanner\resourceplanner.report.controller.js" />
     <Content Include="WFM\js\resourceplanner\_modules.js" />
+    <Content Include="WFM\js\seatManagement\datepicker.directive.ext.js" />
     <Content Include="WFM\js\seatManagement\fabric.fix.js" />
     <Content Include="WFM\js\seatManagement\html\imageLoadWithPreview.html" />
     <Content Include="WFM\js\seatManagement\html\seatmapeditor.html" />
+    <Content Include="WFM\js\seatManagement\html\seatplaninit.html" />
+    <Content Include="WFM\js\seatManagement\html\teleopticard.html" />
+    <Content Include="WFM\js\seatManagement\html\teleopticardlist.html" />
     <Content Include="WFM\js\seatManagement\imageloadwithpreview.directive.js" />
     <Content Include="WFM\js\seatManagement\seatmapedit.controller.js" />
     <Content Include="WFM\js\seatManagement\seatmapedit.directive.js" />
     <Content Include="WFM\js\people\template\advancedPeopleSearch.html" />
+    <Content Include="WFM\js\seatManagement\seatplaninit.directive.js" />
+    <Content Include="WFM\js\seatManagement\teleopticard.directive.js" />
+    <Content Include="WFM\js\seatManagement\teleopticardlist.directive.js" />
     <Content Include="WFM\tests\forecasting\forecasting.controller.spec.js" />
     <Content Include="WFM\tests\permissions\permissions.filter.spec.js" />
     <Content Include="WFM\tests\permissions\permissions.roledatacontroller.spec.js" />
     <Content Include="WFM\tests\permissions\roles.service.spec.js" />
     <Content Include="WFM\tests\resourceplanner\resourceplanner.report.controller.spec.js" />
     <Content Include="WFM\tests\search\search.controller.spec.js" />
+    <Content Include="WFM\tests\seatmanagement\seatplan.controller.spec.js" />
     <Content Include="WFM\vendor\angular-breadcrumb\angular-breadcrumb.js" />
     <Content Include="WFM\vendor\angular-breadcrumb\uiBreadcrumbs.tpl.html" />
     <Content Include="WFM\vendor\c3\c3-angular.min.js" />
@@ -1991,6 +1999,7 @@
     <Content Include="WFM\css\_permissions.scss" />
     <Content Include="WFM\vendor\c3\c3-angular.min.js.map" />
     <Content Include="WFM\css\_resourceplanner.scss" />
+    <Content Include="WFM\css\_seatplan.scss" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

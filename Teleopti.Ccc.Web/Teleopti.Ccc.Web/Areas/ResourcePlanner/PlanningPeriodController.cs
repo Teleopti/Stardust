@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -32,18 +33,16 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		{
 			var availablePlanningPeriods = new List<PlanningPeriodModel>();
 			var allPlanningPeriods = _planningPeriodRespository.LoadAll();
-			if (!allPlanningPeriods.Any())
-			{
-				var planningPeriod = _nextPlanningPeriodProvider.Current();
-				availablePlanningPeriods.Add(createPlanningPeriodModel(planningPeriod.Range, planningPeriod.Id.GetValueOrDefault(), getMissingForecast(planningPeriod.Range),planningPeriod.State));
-			}
-			else
-			{
-				allPlanningPeriods.ForEach(
-					pp =>
-						availablePlanningPeriods.Add(createPlanningPeriodModel(pp.Range, pp.Id.GetValueOrDefault(), getMissingForecast(pp.Range), pp.State)));
-			}
-			return Ok(availablePlanningPeriods);
+			return buildPlanningPeriodViewModels(allPlanningPeriods, availablePlanningPeriods, true);
+		}
+
+		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiodsforrange")]
+		public virtual IHttpActionResult GetAllPlanningPeriods(DateTime startDate, DateTime endDate)
+		{
+			var availablePlanningPeriods = new List<PlanningPeriodModel>();
+			var period = new DateOnlyPeriod (new DateOnly (startDate), new DateOnly (endDate));
+			var allPlanningPeriods = _planningPeriodRespository.LoadAll().Where (planningPeriod => (period.Intersection(planningPeriod.Range) != null));
+			return buildPlanningPeriodViewModels(allPlanningPeriods, availablePlanningPeriods, false);
 		}
 
 		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod/{id}")]
@@ -106,6 +105,32 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				EndDate = last.Range.EndDate.Date,
 				StartDate = last.Range.StartDate.Date,
 			});
+		}
+
+
+		private IHttpActionResult buildPlanningPeriodViewModels(
+					IEnumerable<IPlanningPeriod> allPlanningPeriods, 
+					List<PlanningPeriodModel> availablePlanningPeriods, 
+					bool createDefaultPlanningPeriod)
+		{
+			if (!allPlanningPeriods.Any())
+			{
+				if (createDefaultPlanningPeriod)
+				{
+					var planningPeriod = _nextPlanningPeriodProvider.Current();
+					availablePlanningPeriods.Add (createPlanningPeriodModel (planningPeriod.Range,
+						planningPeriod.Id.GetValueOrDefault(),
+						getMissingForecast (planningPeriod.Range), planningPeriod.State));
+				}
+			}
+			else
+			{
+				allPlanningPeriods.ForEach(
+					pp =>
+						availablePlanningPeriods.Add(createPlanningPeriodModel(pp.Range, pp.Id.GetValueOrDefault(),
+							getMissingForecast(pp.Range), pp.State)));
+			}
+			return Ok(availablePlanningPeriods);
 		}
 
 		private PlanningPeriodModel createPlanningPeriodModel(DateOnlyPeriod range, Guid id, IEnumerable<MissingForecastModel> skills, PlanningPeriodState state)
