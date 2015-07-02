@@ -49,7 +49,7 @@ describe('SeatPlanCtrl', function () {
 		expect(dayClass).toEqual('error');
 	}));
 	
-	it('returns the correct info for a seatplan status', inject(function ($controller, $translate) {
+	it('returns the correct info for a seatplan status', inject(function ($controller) {
 		var scope = $rootScope.$new();
 		
 		var controller = $controller('SeatPlanCtrl', { $scope: scope, ResourcePlannerSvrc: mockResourcePlannerService, seatPlanService: mockSeatPlanService });
