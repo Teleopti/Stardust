@@ -130,12 +130,17 @@
 				var workingHourRows = reformattedWorkingHours.filter(function(wh) { return wh.StartTime == a.StartTime && wh.EndTime == a.EndTime;});
 				var workingHourRow; 
 				if (workingHourRows.length == 0) {
-					workingHourRow = createEmptyWorkingPeriod(a.StartTime, a.EndTime);					
-					workingHourRow.WeekDaySelections[a.WeekDay].Checked = true;
+					workingHourRow = createEmptyWorkingPeriod(a.StartTime, a.EndTime);
+
+					angular.forEach(workingHourRow.WeekDaySelections, function(e) {
+						if (e.WeekDay == a.WeekDay) e.Checked = true;
+					});				
 					reformattedWorkingHours.push(workingHourRow);
 				} else {
 					workingHourRow = workingHourRows[0];
-					workingHourRow.WeekDaySelections[a.WeekDay].Checked = true;
+					angular.forEach(workingHourRow.WeekDaySelections, function (e) {
+						if (e.WeekDay == a.WeekDay) e.Checked = true;
+					});					
 				}
 									
 			});
@@ -145,9 +150,13 @@
 
 		function createEmptyWorkingPeriod(startTime, endTime) {
 			var weekdaySelections = [];
+			var startDow = (moment.localeData()._week) ? moment.localeData()._week.dow : 0;
+	
 			for (var i = 0; i < 7; i++) {
-				weekdaySelections.push({ WeekDay: i, Checked: false });
+				var curDow = (startDow + i) % 7;
+				weekdaySelections.push({ WeekDay: curDow, Checked: false });
 			}
+
 			return { StartTime: startTime, EndTime: endTime, WeekDaySelections: weekdaySelections };
 		}
 	}

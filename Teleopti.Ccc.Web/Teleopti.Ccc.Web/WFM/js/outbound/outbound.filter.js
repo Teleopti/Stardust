@@ -27,20 +27,20 @@ outboundFilter.filter('showWorkinghours', function () {
 }).filter('showWeekdays', function() {
 	return function(input) {
 		var weekdays = [
+			"Sun",
 			"Mon",
 			"Tue",
 			"Wed",
 			"Thu",
 			"Fri",
-			"Sat",
-			"Sun"
+			"Sat"			
 		];
-		if (input >= weekdays.length) {
+		if (input.WeekDay >= weekdays.length) {
 			return "";
 		}
 		if (input < 0)
 			return weekdays;
-		return weekdays[input];
+		return weekdays[input.WeekDay];
 	};
 });
 

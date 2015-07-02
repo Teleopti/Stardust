@@ -103,10 +103,12 @@
 				scope.addEmptyWorkingPeriod = addEmptyWorkingPeriod;
 				scope.removeWorkingPeriod = removeWorkingPeriod;
 
-
+				scope.weekDays = outboundService.createEmptyWorkingPeriod().WeekDaySelections;
+				
 				function enforceRadioBehavior(refIndex, weekDay) {
 					clearConflictWorkingHourSelection(scope.workingHours, refIndex, weekDay);
 				}
+				
 
 				function addEmptyWorkingPeriod(startTime, endTime) {				
 					if (!(startTime && endTime)) return;

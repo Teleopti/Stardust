@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 
 		public virtual TimeSpan AverageTaskHandlingTime()
 		{
-			var target = CallListLen*TargetRate/100;
+			var target = CallListLen*TargetRate/100.0;
 			var rightPartyTotalHandlingTime = target*(RightPartyAverageHandlingTime + UnproductiveTime);
 			var wrongPartyTotalHandlingTime = (target/RightPartyConnectRate*100 - target)*(ConnectAverageHandlingTime+UnproductiveTime);
 			var manualConnectingTime = (target*100*100/(ConnectRate*RightPartyConnectRate) - target/RightPartyConnectRate*100)*UnproductiveTime;
