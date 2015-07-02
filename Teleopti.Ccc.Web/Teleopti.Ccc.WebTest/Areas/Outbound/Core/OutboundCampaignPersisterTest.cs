@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Persisters.Outbound;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping;
 using Teleopti.Ccc.Web.Areas.Outbound.Models;
@@ -66,7 +69,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			_outboundCampaignPersister = new OutboundCampaignPersister(_fakeCampaignRepository,
 				new OutboundCampaignMapper(_fakeCampaignRepository), new OutboundCampaignViewModelMapper(),
 				skillCreator, _fakeActivityRepository,
-				new OutboundSkillPersister(_fakeSkillRepository, new FakeWorkloadRepository()), _createOrUpdateSkillDays);
+				new OutboundSkillPersister(_fakeSkillRepository, new FakeWorkloadRepository()), _createOrUpdateSkillDays, null);
 		}
 
 		[Test]
@@ -209,7 +212,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		private IOutboundSkillCreator _outboundSkillCreator;
 		private IActivityRepository _activityRepository;
 		private IOutboundSkillPersister _outboundSkillPersister;
-
+		private IProductionReplanHelper _productionReplanHelper;
+		private OutboundCampaignPersister _target;
+		private IList<IActivity> _activityList;
+			
 		[SetUp]
 		public void Setup()
 		{
@@ -219,8 +225,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			_outboundSkillCreator = MockRepository.GenerateMock<IOutboundSkillCreator>();
 			_activityRepository = MockRepository.GenerateMock<IActivityRepository>();
 			_outboundSkillPersister = MockRepository.GenerateMock<IOutboundSkillPersister>();
-			var activityList = new List<IActivity>() {ActivityFactory.CreateActivity("asfdsa")};
-			_activityRepository.Stub(x => x.LoadAll()).Return(activityList);
+			_productionReplanHelper = MockRepository.GenerateMock<IProductionReplanHelper>();
+			_activityList = new List<IActivity>() { ActivityFactory.CreateActivity("aa") };
+			_activityRepository.Stub(x => x.LoadAll()).Return(_activityList);
+			_productionReplanHelper.Stub(x => x.Replan(null)).IgnoreArguments();
+			_target = new OutboundCampaignPersister(_outboundCampaignRepository, _outboundCampaignMapper, null, null, _activityRepository, null, null, _productionReplanHelper);
 		}
 
 		[Test]
@@ -229,7 +238,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var expectedVM = new CampaignViewModel();
 			var createOrUpdateSkillDays = MockRepository.GenerateMock<ICreateOrUpdateSkillDays>();
 			createOrUpdateSkillDays.Stub(x => x.Create(null, new DateOnlyPeriod(), 0, new TimeSpan(), null)).IgnoreArguments();
-			var target = new OutboundCampaignPersister(_outboundCampaignRepository, null, _outboundCampaignViewModelMapper, _outboundSkillCreator, _activityRepository, _outboundSkillPersister, createOrUpdateSkillDays);
+			var target = new OutboundCampaignPersister(_outboundCampaignRepository, null, _outboundCampaignViewModelMapper, _outboundSkillCreator, _activityRepository, _outboundSkillPersister, createOrUpdateSkillDays, null);
 			_outboundCampaignViewModelMapper.Stub(x => x.Map(new Domain.Outbound.Campaign())).IgnoreArguments().Return(expectedVM);
 
 			var result = target.Persist(new CampaignForm()
@@ -256,8 +265,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		public void ShouldUpdateCampaign()
 		{
 			var campaignVM = new CampaignViewModel { Id = new Guid(), Activity = new ActivityViewModel()};
-			var target = new OutboundCampaignPersister(_outboundCampaignRepository, _outboundCampaignMapper, null, null, null, null, null);
+			var target = new OutboundCampaignPersister(_outboundCampaignRepository, _outboundCampaignMapper, null, null, null, null, null, _productionReplanHelper);
 			var expectedCampaign = new Domain.Outbound.Campaign();
+			_outboundCampaignRepository.Stub(x => x.Load((Guid)campaignVM.Id)).Return(expectedCampaign);
 			_outboundCampaignMapper.Stub(x => x.Map(campaignVM)).Return(expectedCampaign);
 
 			var result = target.Persist(campaignVM);
@@ -265,6 +275,171 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			result.Should().Be.SameInstanceAs(expectedCampaign);
 		}
 
+		[Test]
+		public void ShouldReplanWhenCampaignCallListUpdated()
+		{
+			var campaignId = new Guid();
+			var oldCampaign = new Domain.Outbound.Campaign(){CallListLen = 1000};
+			oldCampaign.SetId(campaignId);
+			var newCampaign = new Domain.Outbound.Campaign() { CallListLen = 2000 };
+			newCampaign.SetId(campaignId);
+
+			var campaignVM = new CampaignViewModel { Id = oldCampaign.Id, Activity = new ActivityViewModel() };
+			_outboundCampaignRepository.Stub(x => x.Load((Guid) campaignVM.Id)).Return(oldCampaign);
+			_outboundCampaignMapper.Stub(x => x.Map(campaignVM)).Return(newCampaign);
+
+			_target.Persist(campaignVM);
+
+			_productionReplanHelper.AssertWasCalled(x => x.Replan(newCampaign));
+		}		
+		
+		[Test]
+		public void ShouldReplanWhenCampaignTargetRateUpdated()
+		{
+			var campaignId = new Guid();
+			var oldCampaign = new Domain.Outbound.Campaign(){TargetRate = 50};
+			oldCampaign.SetId(campaignId);
+			var newCampaign = new Domain.Outbound.Campaign() { TargetRate = 60 };
+			newCampaign.SetId(campaignId);
+
+			var campaignVM = new CampaignViewModel { Id = oldCampaign.Id, Activity = new ActivityViewModel()};
+			_outboundCampaignRepository.Stub(x => x.Load((Guid) campaignVM.Id)).Return(oldCampaign);
+			_outboundCampaignMapper.Stub(x => x.Map(campaignVM)).Return(newCampaign);
+
+			_target.Persist(campaignVM);
+
+			_productionReplanHelper.AssertWasCalled(x => x.Replan(newCampaign));
+		}		
+		
+		[Test]
+		public void ShouldReplanWhenCampaignConnectRateUpdated()
+		{
+			var campaignId = new Guid();
+			var oldCampaign = new Domain.Outbound.Campaign(){ConnectRate = 100};
+			oldCampaign.SetId(campaignId);
+			var newCampaign = new Domain.Outbound.Campaign() { ConnectRate = 60 };
+			newCampaign.SetId(campaignId);
+
+			var campaignVM = new CampaignViewModel { Id = oldCampaign.Id, Activity = new ActivityViewModel()};
+			_outboundCampaignRepository.Stub(x => x.Load((Guid) campaignVM.Id)).Return(oldCampaign);
+			_outboundCampaignMapper.Stub(x => x.Map(campaignVM)).Return(newCampaign);
+
+			_target.Persist(campaignVM);
+
+			_productionReplanHelper.AssertWasCalled(x => x.Replan(newCampaign));
+		}		
+		
+		[Test]
+		public void ShouldReplanWhenCampaignRightPartyConnectRateUpdated()
+		{
+			var campaignId = new Guid();
+			var oldCampaign = new Domain.Outbound.Campaign(){RightPartyConnectRate = 100};
+			oldCampaign.SetId(campaignId);
+			var newCampaign = new Domain.Outbound.Campaign() { RightPartyConnectRate = 60 };
+			newCampaign.SetId(campaignId);
+
+			var campaignVM = new CampaignViewModel { Id = oldCampaign.Id, Activity = new ActivityViewModel() };
+			_outboundCampaignRepository.Stub(x => x.Load((Guid) campaignVM.Id)).Return(oldCampaign);
+			_outboundCampaignMapper.Stub(x => x.Map(campaignVM)).Return(newCampaign);
+
+			_target.Persist(campaignVM);
+
+			_productionReplanHelper.AssertWasCalled(x => x.Replan(newCampaign));
+		}		
+		
+		[Test]
+		public void ShouldReplanWhenCampaignConnectAverageHandlingTimeUpdated()
+		{
+			var campaignId = new Guid();
+			var oldCampaign = new Domain.Outbound.Campaign(){ConnectAverageHandlingTime = 100};
+			oldCampaign.SetId(campaignId);
+			var newCampaign = new Domain.Outbound.Campaign() { ConnectAverageHandlingTime = 60 };
+			newCampaign.SetId(campaignId);
+
+			var campaignVM = new CampaignViewModel { Id = oldCampaign.Id, Activity = new ActivityViewModel() };
+			_outboundCampaignRepository.Stub(x => x.Load((Guid) campaignVM.Id)).Return(oldCampaign);
+			_outboundCampaignMapper.Stub(x => x.Map(campaignVM)).Return(newCampaign);
+
+			_target.Persist(campaignVM);
+
+			_productionReplanHelper.AssertWasCalled(x => x.Replan(newCampaign));
+		}		
+		
+		[Test]
+		public void ShouldReplanWhenCampaignRightPartyAverageHandlingTimeUpdated()
+		{
+			var campaignId = new Guid();
+			var oldCampaign = new Domain.Outbound.Campaign(){RightPartyAverageHandlingTime = 100};
+			oldCampaign.SetId(campaignId);
+			var newCampaign = new Domain.Outbound.Campaign() { RightPartyAverageHandlingTime = 60 };
+			newCampaign.SetId(campaignId);
+
+			var campaignVM = new CampaignViewModel { Id = oldCampaign.Id, Activity = new ActivityViewModel() };
+			_outboundCampaignRepository.Stub(x => x.Load((Guid) campaignVM.Id)).Return(oldCampaign);
+			_outboundCampaignMapper.Stub(x => x.Map(campaignVM)).Return(newCampaign);
+
+			_target.Persist(campaignVM);
+
+			_productionReplanHelper.AssertWasCalled(x => x.Replan(newCampaign));
+		}		
+		
+		[Test]
+		public void ShouldReplanWhenCampaignUnproductiveTimeUpdated()
+		{
+			var campaignId = new Guid();
+			var oldCampaign = new Domain.Outbound.Campaign(){UnproductiveTime = 100};
+			oldCampaign.SetId(campaignId);
+			var newCampaign = new Domain.Outbound.Campaign() { UnproductiveTime = 60 };
+			newCampaign.SetId(campaignId);
+
+			var campaignVM = new CampaignViewModel { Id = oldCampaign.Id, Activity = new ActivityViewModel() };
+			_outboundCampaignRepository.Stub(x => x.Load((Guid) campaignVM.Id)).Return(oldCampaign);
+			_outboundCampaignMapper.Stub(x => x.Map(campaignVM)).Return(newCampaign);
+
+			_target.Persist(campaignVM);
+
+			_productionReplanHelper.AssertWasCalled(x => x.Replan(newCampaign));
+		}		
+		
+		[Test]
+		public void ShouldUpdateConnectedSkillNameWhenCampaignNameUpdated()
+		{
+			var campaignId = new Guid();
+			var oldCampaign = new Domain.Outbound.Campaign(){Name = "oldName"};
+			oldCampaign.SetId(campaignId);
+			var newCampaign = new Domain.Outbound.Campaign() { Name = "newName", Skill = SkillFactory.CreateSkill("oldName") };
+			newCampaign.SetId(campaignId);
+
+			var campaignVM = new CampaignViewModel { Id = oldCampaign.Id, Activity = new ActivityViewModel() };
+			_outboundCampaignRepository.Stub(x => x.Load((Guid) campaignVM.Id)).Return(oldCampaign);
+			_outboundCampaignMapper.Stub(x => x.Map(campaignVM)).Return(newCampaign);
+
+			var result = _target.Persist(campaignVM);
+
+			result.Skill.Name.Should().Be.EqualTo("newName");
+			_productionReplanHelper.AssertWasNotCalled(x => x.Replan(newCampaign));
+		}		
+		
+		[Test]
+		public void ShouldUpdateConnectedSkillActivityWhenActivityUpdated()
+		{
+			var skill = SkillFactory.CreateSkill("old");
+			skill.Activity = ActivityFactory.CreateActivity("myActivity");
+			var campaignId = new Guid();
+			var oldCampaign = new Domain.Outbound.Campaign() { Name = "old", Skill = skill };
+			oldCampaign.SetId(campaignId);
+			var newCampaign = new Domain.Outbound.Campaign() { Name = "old", Skill = skill };
+			newCampaign.SetId(campaignId);
+
+			var campaignVM = new CampaignViewModel { Id = oldCampaign.Id, Activity = new ActivityViewModel() { Id = _activityList.First().Id, Name = _activityList.First().Name} };
+			_outboundCampaignRepository.Stub(x => x.Load((Guid) campaignVM.Id)).Return(oldCampaign);
+			_outboundCampaignMapper.Stub(x => x.Map(campaignVM)).Return(newCampaign);
+
+			var result = _target.Persist(campaignVM);
+
+			result.Skill.Activity.Name.Should().Be.EqualTo(_activityList.First().Name);
+			_productionReplanHelper.AssertWasNotCalled(x => x.Replan(newCampaign));
+		}
 
 	}
 }

@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Linq;
 using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.Domain.Repositories;
@@ -23,10 +24,11 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 		private readonly IActivityRepository _activityRepository;
 		private readonly IOutboundSkillPersister _outboundSkillPersister;
 		private readonly ICreateOrUpdateSkillDays _createOrUpdateSkillDays;
+		private readonly IProductionReplanHelper _productionReplanHelper;
 
 		public OutboundCampaignPersister(IOutboundCampaignRepository outboundCampaignRepository, IOutboundCampaignMapper outboundCampaignMapper, 
 			IOutboundCampaignViewModelMapper outboundCampaignViewModelMapper, IOutboundSkillCreator outboundSkillCreator, IActivityRepository activityRepository, 
-			IOutboundSkillPersister outboundSkillPersister, ICreateOrUpdateSkillDays createOrUpdateSkillDays)
+			IOutboundSkillPersister outboundSkillPersister, ICreateOrUpdateSkillDays createOrUpdateSkillDays, IProductionReplanHelper productionReplanHelper)
 		{
 			_outboundCampaignRepository = outboundCampaignRepository;
 			_outboundCampaignMapper = outboundCampaignMapper;
@@ -35,6 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			_activityRepository = activityRepository;
 			_outboundSkillPersister = outboundSkillPersister;
 			_createOrUpdateSkillDays = createOrUpdateSkillDays;
+			_productionReplanHelper = productionReplanHelper;
 		}
 
 		public CampaignViewModel Persist(CampaignForm form)
@@ -100,10 +103,36 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 		public Campaign Persist(CampaignViewModel campaignViewModel)
 		{
 			Campaign campaign = null;
+			var isNeedReplan = false;
+			var isNeedMovePeriod = false;
 
 			if (campaignViewModel.Id.HasValue)
 			{
+				var oldCampaign = _outboundCampaignRepository.Load((Guid) campaignViewModel.Id);
 				campaign = _outboundCampaignMapper.Map(campaignViewModel);
+
+				if (oldCampaign.Name != campaign.Name)
+				{
+					campaign.Skill.Name = campaign.Name;
+				}
+
+				if (campaignViewModel.Activity.Id != null && oldCampaign.Skill.Activity.Id != campaignViewModel.Activity.Id)
+				{
+					campaign.Skill.Activity = getActivity(campaignViewModel.Activity);
+				}
+
+				if (oldCampaign.CallListLen != campaign.CallListLen
+				    || oldCampaign.TargetRate != campaign.TargetRate
+					|| oldCampaign.ConnectRate != campaign.ConnectRate
+					|| oldCampaign.RightPartyConnectRate != campaign.RightPartyConnectRate
+					|| oldCampaign.ConnectAverageHandlingTime != campaign.ConnectAverageHandlingTime
+					|| oldCampaign.RightPartyAverageHandlingTime != campaign.RightPartyAverageHandlingTime
+					|| oldCampaign.UnproductiveTime != campaign.UnproductiveTime)
+				{
+					isNeedReplan = true;
+				}
+
+				if (isNeedReplan) _productionReplanHelper.Replan(campaign);
 			}
 
 			return campaign;
