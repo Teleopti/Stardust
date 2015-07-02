@@ -64,7 +64,8 @@
             that.refreshAlarmTime = function() {
                 if (!that.EnteredCurrentAlarm()) return;
                 var duration = moment.duration(((new Date).getTime() - moment.utc(that.EnteredCurrentAlarm())));
-                that.AlarmTime(Math.floor(duration.asHours()) + moment(duration.asMilliseconds()).format(":mm:ss"));
+                if (that.Alarm() === '') that.AlarmTime('');
+                else that.AlarmTime(Math.floor(duration.asHours()) + moment(duration.asMilliseconds()).format(":mm:ss"));
 
                 if (!that.HaveNewAlarm
                     || that.shouldWaitWithUpdatingAlarm()) return;
