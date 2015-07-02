@@ -2,6 +2,7 @@
 	As a resource planner
 	I want to have some global featues
 
+@ignore
 Scenario: Navigate through breadcrumb
 	Given I have a role with
 		| Field                                 | Value             |
