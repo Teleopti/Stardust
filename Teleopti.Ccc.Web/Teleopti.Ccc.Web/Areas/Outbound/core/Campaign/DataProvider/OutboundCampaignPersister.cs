@@ -74,8 +74,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 
 		private IActivity getActivity(ActivityViewModel selectedActivity)
 		{
-			var activity = _activityRepository.LoadAll().First();
-			if (selectedActivity == null) return activity;
+			IActivity activity;
 			if (selectedActivity.Id != null)
 			{
 				activity = _activityRepository.LoadAll().First(x => x.Id.Equals(selectedActivity.Id));

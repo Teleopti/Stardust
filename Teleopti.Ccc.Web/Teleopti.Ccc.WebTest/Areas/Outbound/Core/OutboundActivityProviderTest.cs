@@ -19,12 +19,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		}
 
 		[Test]
-		public void ShouldAllActivities()
+		public void ShouldLoadAllActivitiesThatRequiresSkill()
 		{
 			_target = new OutboundActivityProvider(_activityRepository);
+			//add one activity that req skill and are outbound (A1)
+			//add one activity that req skill and are not outbound (A2)
+			//add one activity that not req skill and are outbound (A3)
+			//add one activity that not req skill and are not outbound (A4)
 
 			var result = _target.GetAll();
-
+			//result should be A1 and A2
 			result.Count().Should().Be.EqualTo(1);
 		}
 	}
