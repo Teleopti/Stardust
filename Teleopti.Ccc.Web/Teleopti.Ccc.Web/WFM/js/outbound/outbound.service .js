@@ -47,7 +47,7 @@
 		var getCampaignCommandUrl = '../api/Outbound/Campaign/';
 		var listCampaignCommandUrl = '../api/Outbound/Campaign';
 		
-		this.listCampaign = function(filter) {
+		this.listCampaign = function (filter, successCb, errorCb) {
 			$http.get(listCampaignCommandUrl).success(function(data) {
 
 					if (successCb != null) successCb(data);

@@ -48,10 +48,9 @@
 
 			$scope.$watch(function () {
 				return $scope.campaignWorkloadForm && $scope.campaignWorkloadForm.$valid ?
-					outboundService.calculateCampaignPersonHour($scope.newCampaign) + ' person-hour' : '';								
+					outboundService.calculateCampaignPersonHour($scope.newCampaign) : '';								
 			}, function(newValue) {
-				$scope.estimatedWorkload = newValue;
-				$scope.$broadcast('refreshDatepickers');
+				$scope.estimatedWorkload = newValue;				
 			});
 
 			$scope.$watch(function () {
@@ -132,7 +131,7 @@
 
 			function reset() {				
 				$scope.newCampaign = {
-					activity: {},
+					Activity: {},
 					StartDate: { Date: new Date() },
 					EndDate: { Date: new Date() },
 					WorkingHours: []											
