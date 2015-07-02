@@ -24,7 +24,6 @@ namespace Teleopti.Messaging.Client.Http
 		private readonly IConfigurationWrapper _configurationWrapper;
 		private readonly HttpRequests _client;
 		private readonly List<mailboxTimerInfo> _timers = new List<mailboxTimerInfo>();
-		private readonly List<mailboxTimerInfo> _addMailboxTimers = new List<mailboxTimerInfo>();
 
 		public HttpListener(
 			EventHandlers eventHandlers, 
@@ -54,17 +53,15 @@ namespace Teleopti.Messaging.Client.Http
 			mailboxTimerInfo.Timer = _time.StartTimer(o =>
 			{
 				var mailboxInfo = (mailboxTimerInfo) o;
-				if (mailboxInfo.IsCreated)
+				if (mailboxInfo.IsAlive)
 					return;
 				if (_client.Post("MessageBroker/AddMailbox", subscription).Result.IsSuccessStatusCode)
 				{
-					mailboxInfo.IsCreated = true;
 					mailboxInfo.IsAlive = true;
 					startPopingTimer(subscription.MailboxId, interval);
 				}
 			}, mailboxTimerInfo, TimeSpan.Zero, interval);
-
-			_addMailboxTimers.Add(mailboxTimerInfo);
+			_timers.Add(mailboxTimerInfo);
 		}
 
 		private TimeSpan getPollingIntervalFromConfig()
@@ -79,7 +76,7 @@ namespace Teleopti.Messaging.Client.Http
 
 		private void startPopingTimer(string mailboxId, TimeSpan interval)
 		{
-			var mailboxTimerInfo = new mailboxTimerInfo {IsCreated = true, IsAlive = true };
+			var mailboxTimerInfo = new mailboxTimerInfo { IsAlive = true };
 			mailboxTimerInfo.Timer = _time.StartTimer(o =>
 			{
 				var mailboxInfo = (mailboxTimerInfo) o;
@@ -116,18 +113,16 @@ namespace Teleopti.Messaging.Client.Http
 			public EventHandler<EventMessageArgs> EventMessageHandler { get; set; }
 			public object Timer { get; set; }
 			public bool IsAlive { get; set; }
-			public bool IsCreated { get; set; }
 		}
 
 		public void Dispose()
 		{
-			_addMailboxTimers.ForEach(x => _time.DisposeTimer(x.Timer));
+			_timers.ForEach(x => _time.DisposeTimer(x.Timer));
 		}
 
 		public bool IsAlive()
 		{
-			return _addMailboxTimers.All(x => x.IsCreated && x.IsAlive)
-			       && _timers.All(x => x.IsCreated && x.IsAlive);
+			return _timers.All(x => x.IsAlive);
 		}
 	}
 
