@@ -58,29 +58,29 @@ wfm.config([
 			controller: 'ForecastingCtrl',
 			ncyBreadcrumb: {
 				label: "{{'Forecasts' | translate}}"
-			},
-		}).state('forecasting.target', {
+			}
+		}).state('forecasting-target', {
 			params: { period: {} },
 			templateUrl: 'html/forecasting/forecasting-target.html',
 			controller: 'ForecastingTargetCtrl',
 			ncyBreadcrumb: {
 				label: "{{'Advanced' | translate}}"
 			}
-		}).state('forecasting.run', {
+		}).state('forecasting-run', {
 			params: { period: {}, targets: {} },
 			templateUrl: 'html/forecasting/forecasting-run.html',
 			controller: 'ForecastingRunCtrl',
 			ncyBreadcrumb: {
 				label: 'forecasting results'
 			}
-		}).state('forecasting.runall', {
+		}).state('forecasting-runall', {
 			params: { period: {} },
 			templateUrl: 'html/forecasting/forecasting-run.html',
 			controller: 'ForecastingRunAllCtrl',
 			ncyBreadcrumb: {
 				label: 'forecasting results'
 			}
-		}).state('forecasting.dev', {
+		}).state('forecasting-dev', {
 			params: { workloadId: {} },
 			templateUrl: 'html/forecasting/forecasting-dev.html',
 			controller: 'ForecastingDevCtrl',

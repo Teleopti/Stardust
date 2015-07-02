@@ -19,11 +19,11 @@ angular.module('wfm.forecasting', [])
 			};
 
 			$scope.nextStepAll = function(period) {
-				$state.go('forecasting.runall', { period: period });
+				$state.go('forecasting-runall', { period: period });
 			};
 
 			$scope.nextStepAdvanced = function(period) {
-				$state.go('forecasting.target', { period: period });
+				$state.go('forecasting-target', { period: period });
 			};
 
 			$scope.setRangeClass = function (date, mode) {

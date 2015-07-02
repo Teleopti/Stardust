@@ -48,7 +48,7 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 
 
 				$scope.goToDev = function (workload) {
-					$state.go("forecasting.dev", { workloadId: workload.Id });
+					$state.go("forecasting-dev", { workloadId: workload.Id });
 				};
 
 				$scope.openModal = function (workload) {
@@ -169,7 +169,7 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 
 				$scope.nextStep = function () {
 					if ($scope.hasOneSelected())
-						$state.go("forecasting.run", { period: $stateParams.period, targets: $scope.targets() });
+						$state.go("forecasting-run", { period: $stateParams.period, targets: $scope.targets() });
 				};
 
 				$scope.back = function () {
