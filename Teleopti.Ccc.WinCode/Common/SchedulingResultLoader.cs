@@ -179,7 +179,7 @@ namespace Teleopti.Ccc.WinCode.Common
             personsInOrganizationProvider.DoLoadByPerson =
                 _loadScheduleByPersonSpecification.IsSatisfiedBy(_deciderResult);
 
-            IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
+            var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false, true);
 
             var schedulePeriod = new ScheduleDateTimePeriod(requestedPeriod, SchedulerState.AllPermittedPersons);
             SchedulerState.LoadSchedules(scheduleRepository, personsInOrganizationProvider, scheduleDictionaryLoadOptions, schedulePeriod);

@@ -24,56 +24,40 @@ namespace Teleopti.Ccc.WinCodeTest.Common
     {
         private readonly DateOnlyPeriod _requestedPeriod = new DateOnlyPeriod(2008, 10, 20, 2008,10,20);
         private IList<IPerson> _permittedPeople;
-        private IScenario _scenario;
         private ISchedulerStateHolder _schedulerState;
         private IRepositoryFactory _repositoryFactory;
-    	private ILazyLoadingManager _lazyManager;
         private IUnitOfWork _uow;
-        private readonly IEventAggregator _eventAggregator=new EventAggregator();
-        private ISkillDayLoadHelper _skillDayLoadHelper;
-        private IPeopleLoader _peopleLoader;
-        private IPeopleAndSkillLoaderDecider _peopleAndSkillLoaderDecider;
-        private IResourceOptimizationHelper _resourceOptimizationHelper;
         private ISchedulingResultLoader target;
-        private LoadScheduleByPersonSpecification _loadScheduleByPersonSpecification;
-	    private ISkill _skill;
 
 	    [SetUp]
         public void Setup()
         {
             _repositoryFactory = MockRepository.GenerateMock<IRepositoryFactory>();
-        	_lazyManager = MockRepository.GenerateMock<ILazyLoadingManager>();
-        	_skillDayLoadHelper = MockRepository.GenerateMock<ISkillDayLoadHelper>();
-        	_peopleLoader = MockRepository.GenerateMock<IPeopleLoader>();
-        	_peopleAndSkillLoaderDecider = MockRepository.GenerateMock<IPeopleAndSkillLoaderDecider>();
-        	_resourceOptimizationHelper = MockRepository.GenerateMock<IResourceOptimizationHelper>();
-            _loadScheduleByPersonSpecification = MockRepository.GenerateMock<LoadScheduleByPersonSpecification>();
             _uow = MockRepository.GenerateMock<IUnitOfWork>();
             
             _permittedPeople = new List<IPerson> { MockRepository.GenerateMock<IPerson>() };
-            _scenario = MockRepository.GenerateMock<IScenario>();
-		    _skill = SkillFactory.CreateSkill("Phone");
-
-		    _peopleAndSkillLoaderDecider.Stub(x => x.Execute(_scenario, new DateTimePeriod(), _permittedPeople))
+            var scenario = new Scenario("_");
+		    var peopleAndSkillLoaderDecider = MockRepository.GenerateMock<IPeopleAndSkillLoaderDecider>();
+		    peopleAndSkillLoaderDecider.Stub(x => x.Execute(scenario, new DateTimePeriod(), _permittedPeople))
 			    .IgnoreArguments()
 			    .Return(MockRepository.GenerateMock<ILoaderDeciderResult>());
 
-			_schedulerState = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_requestedPeriod, TimeZoneInfoFactory.UtcTimeZoneInfo()), _permittedPeople, new DisableDeletedFilter(new FixedCurrentUnitOfWork(_uow)), new SchedulingResultStateHolder());
+			_schedulerState = new SchedulerStateHolder(scenario, new DateOnlyPeriodAsDateTimePeriod(_requestedPeriod, TimeZoneInfoFactory.UtcTimeZoneInfo()), _permittedPeople, new DisableDeletedFilter(new FixedCurrentUnitOfWork(_uow)), new SchedulingResultStateHolder());
 
-            target = new SchedulingResultLoader(_schedulerState, _repositoryFactory, _eventAggregator, _lazyManager, _peopleAndSkillLoaderDecider, _peopleLoader, _skillDayLoadHelper, _resourceOptimizationHelper, _loadScheduleByPersonSpecification);
+			target = new SchedulingResultLoader(_schedulerState, _repositoryFactory, new EventAggregator(), MockRepository.GenerateMock<ILazyLoadingManager>(), peopleAndSkillLoaderDecider, MockRepository.GenerateMock<IPeopleLoader>(), MockRepository.GenerateMock<ISkillDayLoadHelper>(), MockRepository.GenerateMock<IResourceOptimizationHelper>(), MockRepository.GenerateMock<LoadScheduleByPersonSpecification>());
         }
 
         [Test]
         public void VerifyOnEventForecastDataMessageHandler()
         {
             var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
-			
-			createSkillInitializeExpectation();
+	        var skill = SkillFactory.CreateSkill("Phone");
+			createSkillInitializeExpectation(skill);
             
 			target.SchedulerState.SchedulingResultState.Schedules = scheduleDictionary;
             target.ReloadForecastData(_uow);
 
-            Assert.IsTrue(target.SchedulerState.SchedulingResultState.Skills.Contains(_skill));
+            Assert.IsTrue(target.SchedulerState.SchedulingResultState.Skills.Contains(skill));
             Assert.AreSame(scheduleDictionary, target.SchedulerState.SchedulingResultState.Schedules);
         }
 
@@ -113,7 +97,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             createContractScheduleInitializationExpectation();
             createContractLoadingExpectation();
             createMultiplicatorDefinitionSetLoadingExpectation();
-            createSkillInitializeExpectation();
+            createSkillInitializeExpectation(SkillFactory.CreateSkill("_"));
             createScheduleInitializationExpectation();
             createInitializeCommonStateHolderExpectation();
 			createPersonalAccountLoadingExpectation();
@@ -181,12 +165,12 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             multiplicatorDefinitionSetRepository.Stub(x => x.FindAllOvertimeDefinitions()).Return(new List<IMultiplicatorDefinitionSet>());
         }
 
-        private void createSkillInitializeExpectation()
+        private void createSkillInitializeExpectation(ISkill skill)
         {
             var skillRepository = MockRepository.GenerateMock<ISkillRepository>();
             
 			_repositoryFactory.Stub(x=>x.CreateSkillRepository(_uow)).Return(skillRepository);
-	        skillRepository.Stub(x => x.FindAllWithSkillDays(_requestedPeriod)).Return(new List<ISkill> {_skill});
+	        skillRepository.Stub(x => x.FindAllWithSkillDays(_requestedPeriod)).Return(new List<ISkill> {skill});
         }
 
         private IScheduleDictionary createScheduleInitializationExpectation()
@@ -202,7 +186,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         				x =>
         				x.VisiblePeriod.StartDateTime == period.StartDateTime.AddHours(-24) &&
         				x.VisiblePeriod.EndDateTime == period.EndDateTime.AddHours(24))),
-        		Rhino.Mocks.Constraints.Is.Equal(_scenario), Rhino.Mocks.Constraints.Is.Anything(),
+        		Rhino.Mocks.Constraints.Is.Equal(_schedulerState.RequestedScenario), Rhino.Mocks.Constraints.Is.Anything(),
         		Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Equal(_permittedPeople)).Return(
         			scheduleDictionary);
 
