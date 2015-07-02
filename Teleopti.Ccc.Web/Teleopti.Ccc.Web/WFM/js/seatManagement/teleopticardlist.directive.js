@@ -2,40 +2,6 @@
 
 (function () {
 
-	angular.module("wfm.seatPlan")
-		.factory("TranscludeTeleoptiCard", function () {
-			return {
-				transclude: function (iElem, transcludeFn) {
-					transcludeFn(function (clone) {
-
-						angular.forEach(clone, function (cloneEl) {
-
-							if (cloneEl.nodeType === 3) { return; }
-
-							var tag;
-
-							if (cloneEl.nodeName == "CARD-HEADER") {
-								tag = '[transclude-id="header"]';
-							}
-							if (cloneEl.nodeName == "CARD-BODY") {
-								tag = '[transclude-id="body"]';
-							}
-
-							var destination = angular.element(iElem[0].querySelector(tag));
-
-							if (destination != null && destination.length) {
-								destination.append(cloneEl);
-
-							} else {
-								cloneEl.remove();
-
-							}
-						});
-					});
-				}
-			}
-		});
-
 
 	angular.module('wfm.seatPlan').controller('TeleoptiCardCtrl', seatPlanCardDirectiveController);
 
@@ -52,7 +18,8 @@
 		}
 	};
 
-	var directive = function (TranscludeTeleoptiCard) {
+
+	var directive = function () {
 
 		return {
 			controller: 'TeleoptiCardCtrl',
@@ -68,7 +35,34 @@
 				var parentVm = ctrl[1];
 				vm.parentVm = parentVm;
 
-				TranscludeTeleoptiCard.transclude(elem, transcludeFn);
+				transcludeFn(function (clone) {
+
+					angular.forEach(clone, function (cloneEl) {
+
+						if (cloneEl.nodeType === 3) {
+							return;
+						}
+
+						var tag;
+
+						if (cloneEl.nodeName == "CARD-HEADER") {
+							tag = '[transclude-id="header"]';
+						}
+						if (cloneEl.nodeName == "CARD-BODY") {
+							tag = '[transclude-id="body"]';
+						}
+
+						var destination = angular.element(elem[0].querySelector(tag));
+
+						if (destination != null && destination.length) {
+							destination.append(cloneEl);
+
+						} else {
+							cloneEl.remove();
+
+						}
+					});
+				});
 			}
 		};
 	};
