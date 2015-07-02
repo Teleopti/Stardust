@@ -1,10 +1,11 @@
 <div class="material-block-content">
 	<div class="row">
+		<button class="wfm-btn wfm-btn-default" ng-click="back();">{{ 'Back' | translate }} <md-tooltip>Target selection</md-tooltip> </button>
 		<h4>
 			{{'From' | translate}} {{period.startDate | date : shortDate}} {{'To' | translate}} {{period.endDate | date : shortDate}}
 		</h4>
 	</div>
-	<div>
+	<div class="row">
 		{{result.message}}
 		<div>
 			<ul class="wfm-list">

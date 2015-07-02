@@ -41,8 +41,8 @@ angular.module('wfm.forecasting', [])
 		}
 	])
 	.controller('ForecastingRunCtrl', [
-		'$scope', '$stateParams', '$http', 'Forecasting',
-		function ($scope, $stateParams, $http, forecasting) {
+		'$scope', '$stateParams', '$http', 'Forecasting', '$state',
+		function ($scope, $stateParams, $http, forecasting, $state) {
 
 			$scope.period = $stateParams.period;
 			$scope.targets = $stateParams.targets;
@@ -86,6 +86,10 @@ angular.module('wfm.forecasting', [])
 
 			$scope.cancelMethod = function () {
 				$scope.modalInfo.modalLaunch = false;
+			};
+
+			$scope.back = function () {
+				$state.go('forecasting.target', { period: $scope.period });
 			};
 
 			var forecastForOneWorkload = function(index) {

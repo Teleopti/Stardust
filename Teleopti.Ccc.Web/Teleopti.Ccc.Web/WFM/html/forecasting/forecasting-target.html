@@ -5,7 +5,7 @@
 		</div>
 	</div>
 	<div class="material-block-content" ng-if="showSelection">
-		<div class="row col-lg-12">
+		<div class="row ">
 			<button class="wfm-btn wfm-btn-default" ng-click="back()">{{ 'Back' | translate }} <md-tooltip>Period selection</md-tooltip> </button>
 			<button class="wfm-btn apply pull-right" ng-class="{'wfm-btn-primary-disabled': !hasOneSelected(), 'wfm-btn-primary':hasOneSelected()}" ng-click="nextStep()">{{ 'Apply' | translate }}<md-tooltip>Generate forecast</md-tooltip></button>
 			<p>Select forcasting target(s) for period {{period.startDate | date : shortDate}} {{'To' | translate}} {{period.endDate | date : shortDate}}:</p>
