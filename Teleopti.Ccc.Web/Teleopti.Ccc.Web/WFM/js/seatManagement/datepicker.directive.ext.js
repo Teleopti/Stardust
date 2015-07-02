@@ -1,8 +1,9 @@
 ﻿'use strict';
 
+/*
 (function () {
 
-	angular.module('wfm.seatPlan').config(function ($provide) {
+	angular.module('ui.bootstrap.datepicker').config(function ($provide) {
 		$provide.decorator('datepickerDirective', function ($delegate) {
 			var directive = $delegate[0];
 			var link = directive.link;
@@ -32,3 +33,5 @@
 		});
 	});
 }());
+
+*/
