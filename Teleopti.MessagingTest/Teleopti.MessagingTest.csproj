@@ -40,7 +40,12 @@
     </Compile>
     <Compile Include="Http\FakeHttpServer.cs" />
     <Compile Include="Http\HttpSenderTest.cs" />
-    <Compile Include="Http\MailboxSubscriptionsTest.cs" />
+    <Compile Include="Http\Mailbox\ITestType.cs" />
+    <Compile Include="Http\Mailbox\RetryTest.cs" />
+    <Compile Include="Http\Mailbox\ErrorHandlingTest.cs" />
+    <Compile Include="Http\Mailbox\SystemCheckTests.cs" />
+    <Compile Include="Http\Mailbox\SubscriptionsTest.cs" />
+    <Compile Include="Http\Mailbox\TestMessage.cs" />
     <Compile Include="SignalR\ImplementationDetailsTests\DisabledSignalRClientTest.cs" />
     <Compile Include="SignalR\ImplementationDetailsTests\SignalRSubscriptionsTest.cs" />
     <Compile Include="SignalR\SignalRSubscriptionsTest.cs" />
