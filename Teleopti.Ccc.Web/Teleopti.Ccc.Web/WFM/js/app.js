@@ -36,15 +36,8 @@ var wfm = angular.module('wfm', [
 	'wfm.rta'
 ]);
 wfm.config([
-	'$stateProvider', '$urlRouterProvider', '$translateProvider', '$breadcrumbProvider', function ($stateProvider, $urlRouterProvider, $translateProvider, $breadcrumbProvider) {
-		$breadcrumbProvider.setOptions({
-			template: '<ol class="breadcrumb">' +
-            '<li ng-repeat="step in steps" ng-class="{active: $last}" ng-switch="$last || !!step.abstract">' +
-            '<a ng-switch-when="false" ui-sref="{{step.name}}" ui-sref-opts="{ reload: true}">{{step.ncyBreadcrumbLabel}}</a>' +
-            '<span ng-switch-when="true">{{step.ncyBreadcrumbLabel}}</span>' +
-            '</li>' +
-            '</ol>'
-		});
+	'$stateProvider', '$urlRouterProvider', '$translateProvider', function ($stateProvider, $urlRouterProvider, $translateProvider) {
+
 
 
 		$urlRouterProvider.otherwise("forecasting");
@@ -55,59 +48,35 @@ wfm.config([
 		}).state('forecasting', {
 			url: '/forecasting',
 			templateUrl: 'html/forecasting/forecasting.html',
-			controller: 'ForecastingCtrl',
-			ncyBreadcrumb: {
-				label: "{{'Forecasts' | translate}}"
-			}
+			controller: 'ForecastingCtrl'
 		}).state('forecasting-target', {
 			params: { period: {} },
 			templateUrl: 'html/forecasting/forecasting-target.html',
-			controller: 'ForecastingTargetCtrl',
-			ncyBreadcrumb: {
-				label: "{{'Advanced' | translate}}"
-			}
+			controller: 'ForecastingTargetCtrl'
 		}).state('forecasting-run', {
 			params: { period: {}, targets: {} },
 			templateUrl: 'html/forecasting/forecasting-run.html',
-			controller: 'ForecastingRunCtrl',
-			ncyBreadcrumb: {
-				label: 'forecasting results'
-			}
+			controller: 'ForecastingRunCtrl'
 		}).state('forecasting-runall', {
 			params: { period: {} },
 			templateUrl: 'html/forecasting/forecasting-run.html',
-			controller: 'ForecastingRunAllCtrl',
-			ncyBreadcrumb: {
-				label: 'forecasting results'
-			}
+			controller: 'ForecastingRunAllCtrl'
 		}).state('forecasting-dev', {
 			params: { workloadId: {} },
 			templateUrl: 'html/forecasting/forecasting-dev.html',
-			controller: 'ForecastingDevCtrl',
-			ncyBreadcrumb: {
-				label: 'Forecast Dev view'
-			}
+			controller: 'ForecastingDevCtrl'
 		}).state('resourceplanner', {
 				url: '/resourceplanner',
 				templateUrl: 'js/resourceplanner/resourceplanner.html',
-				controller: 'ResourcePlannerCtrl',
-				ncyBreadcrumb: {
-					label: 'Resource Planner'
-				}
+				controller: 'ResourcePlannerCtrl'
 		}).state('resourceplanner.planningperiod', {
 			url: '/planningperiod/:id',
 			templateUrl: 'js/resourceplanner/planningperiods.html',
-			controller: 'PlanningPeriodsCtrl',
-			ncyBreadcrumb: {
-				label: 'Planning Period'
-			}
+			controller: 'PlanningPeriodsCtrl'
 		}).state('resourceplanner.report', {
 			params: { result: {} },
 			templateUrl: 'js/resourceplanner/resourceplanner-report.html',
-			controller: 'ResourceplannerReportCtrl',
-			ncyBreadcrumb: {
-				label: 'Scheduling Results'
-			}
+			controller: 'ResourceplannerReportCtrl'
 		}).state('permissions', {
 			params: { id: {} },
 			url: '/permissions',
@@ -116,17 +85,11 @@ wfm.config([
 		}).state('outbound', {
 			url: '/outbound',
 			templateUrl: 'html/outbound/campaign-list.html',
-			controller: 'OutboundListCtrl',
-			ncyBreadcrumb: {
-				label: "{{'Outbound' | translate}}"
-			}
+			controller: 'OutboundListCtrl'
 		}).state('outbound-create', {
 			url: '/outbound/create',
 			templateUrl: 'html/outbound/campaign-create.html',
-			controller: 'OutboundCreateCtrl',
-			ncyBreadcrumb: {
-				label: "{{'Outbound Create Campaign' | translate}}"
-			}
+			controller: 'OutboundCreateCtrl'
 		}).state('outbound.edit', {
 			url: '/campaign/:Id',
 			templateUrl: 'html/outbound/campaign-edit.html',
@@ -138,30 +101,18 @@ wfm.config([
 		}).state('people', {
 			url: '/people',
 			templateUrl: 'html/people/people.html',
-			controller: 'PeopleCtrl',
-			ncyBreadcrumb: {
-			label: "{{'People' | translate}}"
-		}
+			controller: 'PeopleCtrl'
 		}).state('seatPlan', {
 			url: '/seatPlan',
 			templateUrl: 'js/seatManagement/html/seatplan.html',
-			controller: 'SeatPlanCtrl as seatplan',
-			ncyBreadcrumb: {
-				label: "{{'SeatPlan' | translate}}"
-			}
+			controller: 'SeatPlanCtrl as seatplan'
 		}).state('seatMap', {
 			url: '/seatMap',
-			templateUrl: 'js/seatManagement/html/seatmap.html',
-			ncyBreadcrumb: {
-				label: "{{'SeatMap' | translate}}"
-			}
+			templateUrl: 'js/seatManagement/html/seatmap.html'
 		}).state('rta', {
 			url: '/rta',
 			templateUrl: 'js/rta/html/rta.html',
-			controller: 'RtaCtrl',
-			ncyBreadcrumb: {
-				label: "{{'RealTimeAdherenceOverview' | translate}}"
-			}
+			controller: 'RtaCtrl'
 		});
 
 		$translateProvider.useUrlLoader('../api/Global/Language');
