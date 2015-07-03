@@ -15,47 +15,83 @@ GO
 CREATE PROCEDURE [dbo].[Purge]
 AS
 BEGIN
-declare @ForecastKeepYears int
-declare @ForecastsKeepUntil datetime
-declare @ScheduleKeepYears int
-declare @ScheduleKeepUntil datetime
-declare @MessageKeepYears int
-declare @MessageKeepUntil datetime
-declare @PayrollKeepYears int
-declare @PayrollKeepUntil datetime
-declare @SecurityAuditKeepDays int
-declare @RequestsKeepMonths int
-declare @RequestsKeepUntil datetime
-declare @DenyPendingRequestsAfterNDays int
-
+declare @KeepUntil datetime
 declare @BatchSize int
 declare @MaxDate datetime
-
 declare @SuperRole uniqueidentifier
+
+set @SuperRole='193AD35C-7735-44D7-AC0C-B8EDA0011E5F'
+set @BatchSize = 14
+
 /*
 exec Purge
 */
 
---Get values
-select @ForecastKeepYears = isnull(Value,100) from PurgeSetting where [Key] = 'YearsToKeepForecast'
-select @ScheduleKeepYears = isnull(Value,100) from PurgeSetting where [Key] = 'YearsToKeepSchedule'
-select @MessageKeepYears = isnull(Value,100) from PurgeSetting where [Key] = 'YearsToKeepMessage'
-select @PayrollKeepYears = isnull(Value,100) from PurgeSetting where [Key] = 'YearsToKeepPayroll'
-select @SecurityAuditKeepDays = isnull(Value,30) from PurgeSetting where [Key] = 'DaysToKeepSecurityAudit'
-select @RequestsKeepMonths = isnull(Value,120) from PurgeSetting where [Key] = 'MonthsToKeepRequests'
-select @DenyPendingRequestsAfterNDays = isnull(Value,120) from PurgeSetting where [Key] = 'DenyPendingRequestsAfterNDays'
-set @SuperRole='193AD35C-7735-44D7-AC0C-B8EDA0011E5F'
+--Set up (i.e. skip migration scripts just for the purpose of populating the config table)
+if not exists (select 1 from PurgeSetting where [key] = 'YearsToKeepForecast')
+	insert into PurgeSetting ([Key], [Value]) values ('YearsToKeepForecast', 10)
+if not exists (select 1 from PurgeSetting where [key] = 'YearsToKeepMessage')
+	insert into PurgeSetting ([Key], [Value]) values ('YearsToKeepMessage', 10)
+if not exists (select 1 from PurgeSetting where [key] = 'YearsToKeepPayroll')
+	insert into PurgeSetting ([Key], [Value]) values ('YearsToKeepPayroll', 20)
+if not exists (select 1 from PurgeSetting where [key] = 'YearsToKeepSchedule')
+	insert into PurgeSetting ([Key], [Value]) values ('YearsToKeepSchedule', 10)
+if not exists (select 1 from PurgeSetting where [key] = 'DaysToKeepSecurityAudit')
+	insert into PurgeSetting ([Key], [Value]) values ('DaysToKeepSecurityAudit', 30)
+if not exists (select 1 from PurgeSetting where [key] = 'MonthsToKeepRequests')
+	insert into PurgeSetting ([Key], [Value]) values ('MonthsToKeepRequests', 120)
+if not exists (select 1 from PurgeSetting where [key] = 'DenyPendingRequestsAfterNDays')
+	insert into PurgeSetting ([Key], [Value]) values ('DenyPendingRequestsAfterNDays', 14)
+if not exists (select 1 from PurgeSetting where [key] = 'YearsToKeepPersons')
+	insert into PurgeSetting ([Key], [Value]) values ('YearsToKeepPersons', 10)
 
---Create a KeepUntil
-select @ForecastsKeepUntil = dateadd(year,-1*@ForecastKeepYears,getdate())
-select @ScheduleKeepUntil = dateadd(year,-1*@ScheduleKeepYears,getdate())
-select @MessageKeepUntil = dateadd(year,-1*@MessageKeepYears,getdate())
-select @PayrollKeepUntil = dateadd(year,-1*@MessageKeepYears,getdate())
-select @RequestsKeepUntil = dateadd(month,-1*@RequestsKeepMonths,getdate())
+--Persons who has left, i.e. with a since long past leaving date
+select @KeepUntil = dateadd(year,-1*(select isnull(Value,100) from PurgeSetting where [Key] = 'YearsToKeepPersons'),getdate())
 
-select @BatchSize = 14
+update person set IsDeleted = 1
+where isnull(TerminalDate,'20591231') < @KeepUntil
+
+delete SchedulePeriodShiftCategoryLimitation
+from SchedulePeriodShiftCategoryLimitation scl
+inner join SchedulePeriod sp on scl.SchedulePeriod = sp.Id
+inner join Person p on sp.Parent = p.Id
+where p.IsDeleted = 1
+
+delete SchedulePeriod
+from SchedulePeriod sp
+inner join Person p on sp.Parent = p.Id
+where p.IsDeleted = 1
+
+delete PersonSkill
+from PersonSkill ps
+inner join PersonPeriod pp on ps.Parent = ps.Id
+inner join Person p on ps.Parent = p.Id
+where p.IsDeleted = 1
+
+delete PersonPeriod
+from PersonPeriod pp
+inner join Person p on pp.Parent = p.Id
+where p.IsDeleted = 1
+
+delete Auditing.Revision
+from Auditing.Revision r
+inner join Auditing.PersonAssignment_AUD pa on pa.REV = r.Id
+inner join person p on pa.Person = p.Id
+where p.IsDeleted = 1
+
+delete Auditing.Revision
+from Auditing.Revision r
+inner join Auditing.PersonAbsence_AUD pa on pa.REV = r.Id
+inner join person p on pa.Person = p.Id
+where p.IsDeleted = 1
+
+/*
+exec Purge
+*/
 
 --Forecast
+select @KeepUntil = dateadd(year,-1*(select isnull(Value,100) from PurgeSetting where [Key] = 'YearsToKeepForecast'),getdate())
+
 select @MaxDate = dateadd(day,@BatchSize,isnull(min(WorkloadDate),'19900101'))
 from WorkloadDayBase wdb
 inner join WorkloadDay wd on wdb.id = wd.WorkloadDayBase
@@ -66,7 +102,7 @@ from TemplateTaskPeriod ttp
 inner join WorkloadDayBase wdb on ttp.Parent = wdb.Id
 inner join WorkloadDay wd on wdb.id = wd.WorkloadDayBase
 where 1=1
-and wdb.WorkloadDate < @ForecastsKeepUntil
+and wdb.WorkloadDate < @KeepUntil
 and wdb.WorkloadDate < @MaxDate
 and wdb.WorkloadDate > '19600101' --Avoid hitting templates
 
@@ -74,7 +110,7 @@ delete WorkloadDay
 from WorkloadDay wd
 inner join WorkloadDayBase wdb on wdb.id = wd.WorkloadDayBase
 where 1=1
-and wdb.WorkloadDate < @ForecastsKeepUntil
+and wdb.WorkloadDate < @KeepUntil
 and wdb.WorkloadDate < @MaxDate
 and wdb.WorkloadDate > '19600101' --Avoid hitting templates
 
@@ -82,7 +118,7 @@ delete OpenhourList
 from OpenhourList ol
 inner join WorkloadDayBase wdb on wdb.id = ol.Parent
 where 1=1
-and wdb.WorkloadDate < @ForecastsKeepUntil
+and wdb.WorkloadDate < @KeepUntil
 and wdb.WorkloadDate < @MaxDate
 and wdb.WorkloadDate > '19600101' --Avoid hitting templates
 
@@ -92,7 +128,7 @@ from WorkloadDayBase wdb
 where 1=1
 and Not exists (select 1 from WorkloadDayTemplate wdt
 				where wdt.WorkloadDayBase = wdb.Id) --At one customer I found templates on incorrect dates, avoid those and do not try to fix them here in the purge.
-and wdb.WorkloadDate < @ForecastsKeepUntil
+and wdb.WorkloadDate < @KeepUntil
 and wdb.WorkloadDate < @MaxDate
 and wdb.WorkloadDate > '19600101' --Avoid hitting templates
 
@@ -100,41 +136,42 @@ delete SkillDataPeriod
 from SkillDataPeriod sdp
 inner join SkillDay sd on sdp.Parent = sd.Id
 where 1=1
-and sd.SkillDayDate < @ForecastsKeepUntil
+and sd.SkillDayDate < @KeepUntil
 and sd.SkillDayDate < @MaxDate
 
 delete SkillDay
 from SkillDay sd
 where 1=1
-and sd.SkillDayDate < @ForecastsKeepUntil
+and sd.SkillDayDate < @KeepUntil
 and sd.SkillDayDate < @MaxDate
 
 
 --Schedule
+select @KeepUntil = dateadd(year,-1*(select isnull(Value,100) from PurgeSetting where [Key] = 'YearsToKeepSchedule'),getdate())
 select @MaxDate = dateadd(day,@BatchSize,isnull(min(Date),'19900101')) from PersonAssignment
 
 delete PersonAssignment --Lovely, cascade delete is on...
 from PersonAssignment pa
 where 1 = 1
-and pa.Date < @ScheduleKeepUntil
+and pa.Date < @KeepUntil
 and pa.Date < @MaxDate
 
 delete PersonAbsence --Lovely, cascade delete is on...
 from PersonAbsence pa
 where 1 = 1
-and pa.Maximum < @ScheduleKeepUntil
+and pa.Maximum < @KeepUntil
 and pa.Maximum < @MaxDate
 
 delete Note
 from Note n
 where 1 = 1
-and n.NoteDate < @ScheduleKeepUntil
+and n.NoteDate < @KeepUntil
 and n.NoteDate < @MaxDate
 
 delete AgentDayScheduleTag
 from AgentDayScheduleTag ad
 where 1 = 1
-and ad.TagDate < @ScheduleKeepUntil
+and ad.TagDate < @KeepUntil
 and ad.TagDate < @MaxDate
 
 --Remove deleted skills from persons
@@ -157,17 +194,18 @@ inner join BudgetGroup bg on pp.BudgetGroup = bg.Id
 where bg.IsDeleted = 1
 
 --Messages
+select @KeepUntil = dateadd(year,-1*(select isnull(Value,100) from PurgeSetting where [Key] = 'YearsToKeepMessage'),getdate())
 select @MaxDate = dateadd(day,@BatchSize,isnull(min(UpdatedOn),'19900101')) from PushMessageDialogue
 
 delete DialogueMessage
 from DialogueMessage dm
 inner join PushMessageDialogue pmd on pmd.Id = dm.Parent
-where pmd.UpdatedOn < @MessageKeepUntil
+where pmd.UpdatedOn < @KeepUntil
 and pmd.UpdatedOn < @MaxDate
 
 delete PushMessageDialogue
 from PushMessageDialogue pmd
-where pmd.UpdatedOn < @MessageKeepUntil
+where pmd.UpdatedOn < @KeepUntil
 and pmd.UpdatedOn < @MaxDate
 
 delete ReplyOptions
@@ -180,44 +218,47 @@ from PushMessage pm
 where not exists (select 1 from PushMessageDialogue pmd where pmd.PushMessage = pm.Id)
 
 --Payroll
+select @KeepUntil = dateadd(year,-1*(select isnull(Value,100) from PurgeSetting where [Key] = 'YearsToKeepPayroll'),getdate())
 select @MaxDate = dateadd(day,@BatchSize,isnull(min(UpdatedOn),'19900101')) from PayrollResult
 
 delete PayrollResultDetail
 from PayrollResultDetail prd
 inner join PayrollResult pr on prd.Parent = pr.Id
-where pr.UpdatedOn < @PayrollKeepUntil
+where pr.UpdatedOn < @KeepUntil
 and pr.UpdatedOn < @Maxdate
 
 delete PayrollResult
 from PayrollResult pr
-where pr.UpdatedOn < @PayrollKeepUntil
+where pr.UpdatedOn < @KeepUntil
 and pr.UpdatedOn < @Maxdate
 
 --Requests
 --AF: Need to remove top (50000) as this caused corrupt data...
+select @KeepUntil = dateadd(month,-1*(select isnull(Value,100) from PurgeSetting where [Key] = 'MonthsToKeepRequests'),getdate())
+
 update ShiftTradeRequest
 set Offer = NULL
 from ShiftTradeRequest a 
 inner join ShiftExchangeOffer b on a.Offer=b.Request
 inner join Request r on r.id = b.Request
-where r.EndDateTime < @RequestsKeepUntil
+where r.EndDateTime < @KeepUntil
 and a.Offer is not null
 
 delete ShiftExchangeOffer 
 from ShiftExchangeOffer a
 inner join Request r on r.id = a.Request
-where r.EndDateTime < @RequestsKeepUntil
+where r.EndDateTime < @KeepUntil
 
 delete ShiftTradeSwapDetail
 from ShiftTradeSwapDetail a
 inner join ShiftTradeRequest st on st.Request = a.Parent
 inner join Request r on r.id = st.Request
-where r.EndDateTime < @RequestsKeepUntil
+where r.EndDateTime < @KeepUntil
 
 delete ShiftTradeRequest
 from ShiftTradeRequest a
 inner join Request r on r.id = a.Request
-where r.EndDateTime < @RequestsKeepUntil
+where r.EndDateTime < @KeepUntil
 and not exists (
 	select 1 from ShiftTradeSwapDetail stsd
 	where stsd.Parent = a.Request)
@@ -225,16 +266,16 @@ and not exists (
 delete AbsenceRequest
 from AbsenceRequest a
 inner join Request r on r.id = a.Request
-where r.EndDateTime < @RequestsKeepUntil
+where r.EndDateTime < @KeepUntil
 
 delete TextRequest
 from TextRequest a
 inner join Request r on r.id = a.Request
-where r.EndDateTime < @RequestsKeepUntil
+where r.EndDateTime < @KeepUntil
 
 delete Request
 from Request r
-where r.EndDateTime < @RequestsKeepUntil
+where r.EndDateTime < @KeepUntil
 
 delete PersonRequest
 from PersonRequest pr
@@ -242,10 +283,12 @@ where not exists (
 select 1 from Request r
 where r.Parent = pr.Id)
 
---Autodeny if not handled in time.
+--Autodeny requests if not handled in time.
+select @KeepUntil = dateadd(day,-1*(select isnull(Value,120) from PurgeSetting where [Key] = 'DenyPendingRequestsAfterNDays'),getdate())
+
 update PersonRequest set RequestStatus = 1
 from PersonRequest pr inner join Request r on r.Parent = pr.Id
-where r.EndDateTime < dateadd(day,-@DenyPendingRequestsAfterNDays,getdate())
+where r.EndDateTime < @KeepUntil
 and pr.RequestStatus = 0 --Pending
 and pr.IsDeleted = 0
 
