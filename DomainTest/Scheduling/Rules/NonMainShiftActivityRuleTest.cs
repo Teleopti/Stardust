@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -265,12 +266,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
 			var pa = new PersonAssignment(scheduleDataWithPersonalActivity.Person, scheduleDataWithPersonalActivity.Scenario, dateOnly);
 			pa.AddPersonalActivity(new Activity("p"), assignmentPeriod);
+			pa.ShiftLayers.First().Payload.InWorkTime = true;
 			scheduleDataWithPersonalActivity.Add(pa);
 
 			var scheduleBeTrade = MockRepository.GenerateMock<IScheduleDay>();
 			var person2 = PersonFactory.CreatePerson();
 			person2.SetId(Guid.NewGuid());
 			scheduleBeTrade.Stub(s => s.Person).Return(person2);
+
 			var shiftLayer = new MainShiftLayer(new Activity("phone"), new DateTimePeriod(2001, 1, 1, 9, 2001, 1, 1, 17));
 			shiftLayer.Payload.InWorkTime = true;
 			var pa2 = MockRepository.GenerateMock<IPersonAssignment>();
