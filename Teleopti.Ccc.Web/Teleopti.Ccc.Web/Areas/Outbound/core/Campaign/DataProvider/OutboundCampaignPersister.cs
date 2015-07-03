@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Teleopti.Ccc.Domain.Outbound;
@@ -25,10 +26,11 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 		private readonly IOutboundSkillPersister _outboundSkillPersister;
 		private readonly ICreateOrUpdateSkillDays _createOrUpdateSkillDays;
 		private readonly IProductionReplanHelper _productionReplanHelper;
+		private readonly IOutboundPeriodMover _outboundPeriodMover;
 
 		public OutboundCampaignPersister(IOutboundCampaignRepository outboundCampaignRepository, IOutboundCampaignMapper outboundCampaignMapper, 
 			IOutboundCampaignViewModelMapper outboundCampaignViewModelMapper, IOutboundSkillCreator outboundSkillCreator, IActivityRepository activityRepository, 
-			IOutboundSkillPersister outboundSkillPersister, ICreateOrUpdateSkillDays createOrUpdateSkillDays, IProductionReplanHelper productionReplanHelper)
+			IOutboundSkillPersister outboundSkillPersister, ICreateOrUpdateSkillDays createOrUpdateSkillDays, IProductionReplanHelper productionReplanHelper, IOutboundPeriodMover outboundPeriodMover)
 		{
 			_outboundCampaignRepository = outboundCampaignRepository;
 			_outboundCampaignMapper = outboundCampaignMapper;
@@ -38,6 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			_outboundSkillPersister = outboundSkillPersister;
 			_createOrUpdateSkillDays = createOrUpdateSkillDays;
 			_productionReplanHelper = productionReplanHelper;
+			_outboundPeriodMover = outboundPeriodMover;
 		}
 
 		public CampaignViewModel Persist(CampaignForm form)
@@ -103,7 +106,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 		public Campaign Persist(CampaignViewModel campaignViewModel)
 		{
 			Campaign campaign = null;
-			//var isNeedMovePeriod = false;
 
 			if (campaignViewModel.Id.HasValue)
 			{
@@ -121,9 +123,35 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 				}
 
 				if (isNeedReplan(oldCampaign, campaign)) _productionReplanHelper.Replan(campaign);
+
+				if (isMovePeriod(oldCampaign, campaign)) _outboundPeriodMover.Move(campaign, oldCampaign.SpanningPeriod);
 			}
 
 			return campaign;
+		}
+
+		private bool isWorkingHoursUpdated(IDictionary<DayOfWeek, TimePeriod> oldWorkingHours, IDictionary<DayOfWeek, TimePeriod> newWorkingHours)
+		{
+			for (var weekDay = DayOfWeek.Sunday; weekDay <= DayOfWeek.Saturday; ++weekDay)
+			{
+				if (!oldWorkingHours.ContainsKey(weekDay) && !newWorkingHours.ContainsKey(weekDay)) continue;
+				
+				if ( (oldWorkingHours.ContainsKey(weekDay) && !newWorkingHours.ContainsKey(weekDay))
+					|| (!oldWorkingHours.ContainsKey(weekDay) && newWorkingHours.ContainsKey(weekDay))
+					|| !oldWorkingHours[weekDay].Equals(newWorkingHours[weekDay]))
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
+		private bool isMovePeriod(Campaign oldCampaign, Campaign campaign)
+		{
+			if (!oldCampaign.SpanningPeriod.Equals(campaign.SpanningPeriod)
+			    || isWorkingHoursUpdated(oldCampaign.WorkingHours, campaign.WorkingHours)) return true;
+
+			return false;
 		}
 
 		private bool isNeedReplan(Campaign oldCampaign, Campaign campaign)

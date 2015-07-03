@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Persisters.Outbound;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping;
 using Teleopti.Ccc.Web.Areas.Outbound.Models;
@@ -69,7 +66,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			_outboundCampaignPersister = new OutboundCampaignPersister(_fakeCampaignRepository,
 				new OutboundCampaignMapper(_fakeCampaignRepository), new OutboundCampaignViewModelMapper(),
 				skillCreator, _fakeActivityRepository,
-				new OutboundSkillPersister(_fakeSkillRepository, new FakeWorkloadRepository()), _createOrUpdateSkillDays, null);
+				new OutboundSkillPersister(_fakeSkillRepository, new FakeWorkloadRepository()), _createOrUpdateSkillDays, null, null);
 		}
 
 		[Test]
@@ -215,6 +212,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		private IProductionReplanHelper _productionReplanHelper;
 		private OutboundCampaignPersister _target;
 		private IList<IActivity> _activityList;
+		private IOutboundPeriodMover _outboundPeriodMover;
 			
 		[SetUp]
 		public void Setup()
@@ -226,10 +224,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			_activityRepository = MockRepository.GenerateMock<IActivityRepository>();
 			_outboundSkillPersister = MockRepository.GenerateMock<IOutboundSkillPersister>();
 			_productionReplanHelper = MockRepository.GenerateMock<IProductionReplanHelper>();
+			_outboundPeriodMover = MockRepository.GenerateMock<IOutboundPeriodMover>();
 			_activityList = new List<IActivity>() { ActivityFactory.CreateActivity("aa") };
 			_activityRepository.Stub(x => x.LoadAll()).Return(_activityList);
 			_productionReplanHelper.Stub(x => x.Replan(null)).IgnoreArguments();
-			_target = new OutboundCampaignPersister(_outboundCampaignRepository, _outboundCampaignMapper, null, null, _activityRepository, null, null, _productionReplanHelper);
+			_outboundPeriodMover.Stub(x => x.Move(null, new DateOnlyPeriod())).IgnoreArguments();
+			_target = new OutboundCampaignPersister(_outboundCampaignRepository, _outboundCampaignMapper, null, null, _activityRepository, null, null, _productionReplanHelper, _outboundPeriodMover);
 		}
 
 		[Test]
@@ -238,7 +238,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var expectedVM = new CampaignViewModel();
 			var createOrUpdateSkillDays = MockRepository.GenerateMock<ICreateOrUpdateSkillDays>();
 			createOrUpdateSkillDays.Stub(x => x.Create(null, new DateOnlyPeriod(), 0, new TimeSpan(), null)).IgnoreArguments();
-			var target = new OutboundCampaignPersister(_outboundCampaignRepository, null, _outboundCampaignViewModelMapper, _outboundSkillCreator, _activityRepository, _outboundSkillPersister, createOrUpdateSkillDays, null);
+			var target = new OutboundCampaignPersister(_outboundCampaignRepository, null, _outboundCampaignViewModelMapper, _outboundSkillCreator, _activityRepository, _outboundSkillPersister, createOrUpdateSkillDays, null, null);
 			_outboundCampaignViewModelMapper.Stub(x => x.Map(new Domain.Outbound.Campaign())).IgnoreArguments().Return(expectedVM);
 
 			var result = target.Persist(new CampaignForm()
@@ -265,7 +265,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		public void ShouldUpdateCampaign()
 		{
 			var campaignVM = new CampaignViewModel { Id = new Guid(), Activity = new ActivityViewModel()};
-			var target = new OutboundCampaignPersister(_outboundCampaignRepository, _outboundCampaignMapper, null, null, null, null, null, _productionReplanHelper);
+			var target = new OutboundCampaignPersister(_outboundCampaignRepository, _outboundCampaignMapper, null, null, null, null, null, _productionReplanHelper, _outboundPeriodMover);
 			var expectedCampaign = new Domain.Outbound.Campaign();
 			_outboundCampaignRepository.Stub(x => x.Load((Guid)campaignVM.Id)).Return(expectedCampaign);
 			_outboundCampaignMapper.Stub(x => x.Map(campaignVM)).Return(expectedCampaign);
@@ -279,7 +279,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		public void ShouldReplanWhenCampaignCallListUpdated()
 		{
 			var campaignId = new Guid();
-			var oldCampaign = new Domain.Outbound.Campaign(){CallListLen = 1000};
+			var oldCampaign = new Domain.Outbound.Campaign() { CallListLen = 1000 };
 			oldCampaign.SetId(campaignId);
 			var newCampaign = new Domain.Outbound.Campaign() { CallListLen = 2000 };
 			newCampaign.SetId(campaignId);
@@ -439,6 +439,111 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 
 			result.Skill.Activity.Name.Should().Be.EqualTo(_activityList.First().Name);
 			_productionReplanHelper.AssertWasNotCalled(x => x.Replan(newCampaign));
+		}		
+		
+		[Test]
+		public void ShouldMovePeroidWhenSpanningPeriodUpdated()
+		{
+			var oldPeriod = new DateOnlyPeriod(new DateOnly(2015,7,3), new DateOnly(2015,8,3));
+			var campaignId = new Guid();
+			var oldCampaign = new Domain.Outbound.Campaign();
+			oldCampaign.SetId(campaignId);
+			oldCampaign.SpanningPeriod = oldPeriod;
+			var newCampaign = new Domain.Outbound.Campaign();
+			newCampaign.SetId(campaignId);
+			newCampaign.SpanningPeriod = new DateOnlyPeriod(new DateOnly(2015,7,4), new DateOnly(2015,8,3));
+
+			var campaignVM = new CampaignViewModel { Id = oldCampaign.Id, Activity = new ActivityViewModel()};
+			_outboundCampaignRepository.Stub(x => x.Load((Guid) campaignVM.Id)).Return(oldCampaign);
+			_outboundCampaignMapper.Stub(x => x.Map(campaignVM)).Return(newCampaign);
+
+			_target.Persist(campaignVM);
+
+			_outboundPeriodMover.AssertWasCalled(x => x.Move(newCampaign, oldPeriod));
+		}		
+		
+		[Test]
+		public void ShouldNotMovePeroidWhenAnyPeriodNotUpdated()
+		{
+			var oldPeriod = new DateOnlyPeriod(new DateOnly(2015,7,3), new DateOnly(2015,8,3));
+			var campaignId = new Guid();
+			var oldCampaign = new Domain.Outbound.Campaign();
+			oldCampaign.SetId(campaignId);
+			oldCampaign.SpanningPeriod = oldPeriod;
+			var newCampaign = new Domain.Outbound.Campaign();
+			newCampaign.SetId(campaignId);
+			newCampaign.SpanningPeriod = oldPeriod;
+
+			var campaignVM = new CampaignViewModel { Id = oldCampaign.Id, Activity = new ActivityViewModel()};
+			_outboundCampaignRepository.Stub(x => x.Load((Guid) campaignVM.Id)).Return(oldCampaign);
+			_outboundCampaignMapper.Stub(x => x.Map(campaignVM)).Return(newCampaign);
+
+			_target.Persist(campaignVM);
+
+			_outboundPeriodMover.AssertWasNotCalled(x => x.Move(newCampaign, oldPeriod));
+		}
+
+		[Test]
+		public void ShouldMovePeroidWhenWorkHoursUpdated()
+		{
+			var oldPeriod = new TimePeriod(new TimeSpan(9,0,0), new TimeSpan(15,0,0));
+			var campaignId = new Guid();
+			var oldCampaign = new Domain.Outbound.Campaign() { SpanningPeriod = new DateOnlyPeriod(new DateOnly(2015, 7, 4), new DateOnly(2015, 8, 3)) };
+			oldCampaign.SetId(campaignId);
+			oldCampaign.WorkingHours.Add(DayOfWeek.Monday, oldPeriod);
+			var newCampaign = new Domain.Outbound.Campaign() { SpanningPeriod = new DateOnlyPeriod(new DateOnly(2015, 7, 4), new DateOnly(2015, 8, 3)) };
+			newCampaign.SetId(campaignId);
+			newCampaign.WorkingHours.Add(DayOfWeek.Monday, new TimePeriod());
+
+			var campaignVM = new CampaignViewModel { Id = oldCampaign.Id, Activity = new ActivityViewModel() };
+			_outboundCampaignRepository.Stub(x => x.Load((Guid)campaignVM.Id)).Return(oldCampaign);
+			_outboundCampaignMapper.Stub(x => x.Map(campaignVM)).Return(newCampaign);
+
+			_target.Persist(campaignVM);
+
+			_outboundPeriodMover.AssertWasCalled(x => x.Move(newCampaign, oldCampaign.SpanningPeriod));
+		}		
+		
+		[Test]
+		public void ShouldMovePeroidWhenWeekDayAdded()
+		{
+			var oldPeriod = new TimePeriod(new TimeSpan(9,0,0), new TimeSpan(15,0,0));
+			var campaignId = new Guid();
+			var oldCampaign = new Domain.Outbound.Campaign() { SpanningPeriod = new DateOnlyPeriod(new DateOnly(2015, 7, 4), new DateOnly(2015, 8, 3)) };
+			oldCampaign.SetId(campaignId);
+			oldCampaign.WorkingHours.Add(DayOfWeek.Monday, oldPeriod);
+			var newCampaign = new Domain.Outbound.Campaign() { SpanningPeriod = new DateOnlyPeriod(new DateOnly(2015, 7, 4), new DateOnly(2015, 8, 3)) };
+			newCampaign.SetId(campaignId);
+			newCampaign.WorkingHours.Add(DayOfWeek.Thursday, oldPeriod);
+
+			var campaignVM = new CampaignViewModel { Id = oldCampaign.Id, Activity = new ActivityViewModel() };
+			_outboundCampaignRepository.Stub(x => x.Load((Guid)campaignVM.Id)).Return(oldCampaign);
+			_outboundCampaignMapper.Stub(x => x.Map(campaignVM)).Return(newCampaign);
+
+			_target.Persist(campaignVM);
+
+			_outboundPeriodMover.AssertWasCalled(x => x.Move(newCampaign, oldCampaign.SpanningPeriod));
+		}		
+		
+		[Test]
+		public void ShouldMovePeroidWhenWeekDayRemoved()
+		{
+			var oldPeriod = new TimePeriod(new TimeSpan(9,0,0), new TimeSpan(15,0,0));
+			var campaignId = new Guid();
+			var oldCampaign = new Domain.Outbound.Campaign() { SpanningPeriod = new DateOnlyPeriod(new DateOnly(2015, 7, 4), new DateOnly(2015, 8, 3)) };
+			oldCampaign.SetId(campaignId);
+			oldCampaign.WorkingHours.Add(DayOfWeek.Monday, oldPeriod);
+			var newCampaign = new Domain.Outbound.Campaign() { SpanningPeriod = new DateOnlyPeriod(new DateOnly(2015, 7, 4), new DateOnly(2015, 8, 3)) };
+			newCampaign.SetId(campaignId);
+			newCampaign.WorkingHours.Remove(DayOfWeek.Monday);
+
+			var campaignVM = new CampaignViewModel { Id = oldCampaign.Id, Activity = new ActivityViewModel() };
+			_outboundCampaignRepository.Stub(x => x.Load((Guid)campaignVM.Id)).Return(oldCampaign);
+			_outboundCampaignMapper.Stub(x => x.Map(campaignVM)).Return(newCampaign);
+
+			_target.Persist(campaignVM);
+
+			_outboundPeriodMover.AssertWasCalled(x => x.Move(newCampaign, oldCampaign.SpanningPeriod));
 		}
 
 	}
