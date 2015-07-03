@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Backlog;
@@ -8,7 +7,6 @@ using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.WinCode.Backlog;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
@@ -16,15 +14,15 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 	public class ProductionReplanHelper : IProductionReplanHelper
 	{
 		private readonly OutboundProductionPlanFactory _outboundProductionPlanFactory;
-		private readonly BacklogScheduledProvider _backlogScheduledProvider;
+		//private readonly BacklogScheduledProvider _backlogScheduledProvider;
 		private readonly IFetchAndFillSkillDays _fetchAndFillSkillDays;
 		private readonly IForecastingTargetMerger _forecastingTargetMerger;
 		private readonly ISkillDayRepository _skillDayRepository;
 
-		public ProductionReplanHelper(OutboundProductionPlanFactory outboundProductionPlanFactory, BacklogScheduledProvider backlogScheduledProvider, IFetchAndFillSkillDays fetchAndFillSkillDays, ISkillDayRepository skillDayRepository, IForecastingTargetMerger forecastingTargetMerger)
+		public ProductionReplanHelper(OutboundProductionPlanFactory outboundProductionPlanFactory, IFetchAndFillSkillDays fetchAndFillSkillDays, ISkillDayRepository skillDayRepository, IForecastingTargetMerger forecastingTargetMerger)
 		{
 			_outboundProductionPlanFactory = outboundProductionPlanFactory;
-			_backlogScheduledProvider = backlogScheduledProvider;
+			//_backlogScheduledProvider = backlogScheduledProvider;
 			_fetchAndFillSkillDays = fetchAndFillSkillDays;
 			_skillDayRepository = skillDayRepository;
 			_forecastingTargetMerger = forecastingTargetMerger;
@@ -83,20 +81,20 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			var incomingTask = _outboundProductionPlanFactory.CreateAndMakeInitialPlan(campaign.SpanningPeriod, campaign.CampaignTasks(),
 				campaign.AverageTaskHandlingTime(), campaign.WorkingHours);
 
-			if (_backlogScheduledProvider == null)
-				return incomingTask;
+			//if (_backlogScheduledProvider == null)
+			//	return incomingTask;
 
 			foreach (var dateOnly in incomingTask.SpanningPeriod.DayCollection())
 			{
 				var manualTime = campaign.GetManualProductionPlan(dateOnly);
 				if (manualTime.HasValue)
 					incomingTask.SetTimeOnDate(dateOnly, manualTime.Value, PlannedTimeTypeEnum.Manual);
-				var scheduled = _backlogScheduledProvider.GetScheduledTimeOnDate(dateOnly, campaign.Skill);
-				var forecasted = _backlogScheduledProvider.GetForecastedTimeOnDate(dateOnly, campaign.Skill);
-				if (scheduled != TimeSpan.Zero)
-					incomingTask.SetTimeOnDate(dateOnly, scheduled, PlannedTimeTypeEnum.Scheduled);
-				else if (forecasted != TimeSpan.Zero && !manualTime.HasValue)
-					incomingTask.SetTimeOnDate(dateOnly, forecasted, PlannedTimeTypeEnum.Calculated);
+				//var scheduled = _backlogScheduledProvider.GetScheduledTimeOnDate(dateOnly, campaign.Skill);
+				//var forecasted = _backlogScheduledProvider.GetForecastedTimeOnDate(dateOnly, campaign.Skill);
+				//if (scheduled != TimeSpan.Zero)
+				//	incomingTask.SetTimeOnDate(dateOnly, scheduled, PlannedTimeTypeEnum.Scheduled);
+				//else if (forecasted != TimeSpan.Zero && !manualTime.HasValue)
+				//	incomingTask.SetTimeOnDate(dateOnly, forecasted, PlannedTimeTypeEnum.Calculated);
 			}
 
 			return incomingTask;

@@ -31,10 +31,10 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.IoC
 			builder.RegisterType<OutboundProductionPlanFactory>().As<OutboundProductionPlanFactory>().SingleInstance();
 			builder.RegisterType<CreateOrUpdateSkillDays>().As<ICreateOrUpdateSkillDays>().SingleInstance();
 
-			builder.RegisterType<BacklogScheduledProvider>().As<BacklogScheduledProvider>().SingleInstance();
-			builder.RegisterType<FetchAndFillSkillDays>().As<IFetchAndFillSkillDays>().SingleInstance();
-			builder.RegisterType<ForecastingTargetMerger>().As<IForecastingTargetMerger>().SingleInstance();
-			builder.RegisterType<SkillDayRepository>().As<ISkillDayRepository>().SingleInstance();
+			//builder.RegisterType<BacklogScheduledProvider>().As<BacklogScheduledProvider>().SingleInstance();
+			//builder.RegisterType<FetchAndFillSkillDays>().As<IFetchAndFillSkillDays>().SingleInstance();
+			//builder.RegisterType<ForecastingTargetMerger>().As<IForecastingTargetMerger>().SingleInstance();
+			//builder.RegisterType<SkillDayRepository>().As<ISkillDayRepository>().SingleInstance();
 		}
 	}
 }
