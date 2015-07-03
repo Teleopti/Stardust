@@ -64,8 +64,8 @@ where p.IsDeleted = 1
 
 delete PersonSkill
 from PersonSkill ps
-inner join PersonPeriod pp on ps.Parent = ps.Id
-inner join Person p on ps.Parent = p.Id
+inner join PersonPeriod pp on ps.Parent = pp.Id
+inner join Person p on pp.Parent = p.Id
 where p.IsDeleted = 1
 
 delete PersonPeriod
