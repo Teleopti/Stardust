@@ -103,8 +103,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 		public Campaign Persist(CampaignViewModel campaignViewModel)
 		{
 			Campaign campaign = null;
-			var isNeedReplan = false;
-			var isNeedMovePeriod = false;
+			//var isNeedMovePeriod = false;
 
 			if (campaignViewModel.Id.HasValue)
 			{
@@ -121,6 +120,14 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 					campaign.Skill.Activity = getActivity(campaignViewModel.Activity);
 				}
 
+				if (isNeedReplan(oldCampaign, campaign)) _productionReplanHelper.Replan(campaign);
+			}
+
+			return campaign;
+		}
+
+		private bool isNeedReplan(Campaign oldCampaign, Campaign campaign)
+		{
 				if (oldCampaign.CallListLen != campaign.CallListLen
 				    || oldCampaign.TargetRate != campaign.TargetRate
 					|| oldCampaign.ConnectRate != campaign.ConnectRate
@@ -129,13 +136,10 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 					|| oldCampaign.RightPartyAverageHandlingTime != campaign.RightPartyAverageHandlingTime
 					|| oldCampaign.UnproductiveTime != campaign.UnproductiveTime)
 				{
-					isNeedReplan = true;
+				return true;
 				}
 
-				if (isNeedReplan) _productionReplanHelper.Replan(campaign);
-			}
-
-			return campaign;
+			return false;
 		}
 	}
 }
