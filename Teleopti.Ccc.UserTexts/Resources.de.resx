@@ -4904,7 +4904,7 @@ Periods</comment>
     <comment>Queue Statistics</comment>
   </data>
   <data name="ResReportScheduledAgentsPerIntervalAndTeam" xml:space="preserve">
-    <value>Geplante Agenen pro Intervall und Team</value>
+    <value>Geplante Agenten pro Intervall und Team</value>
     <comment>Scheduled Agents per Interval and Team</comment>
   </data>
   <data name="ResReportScheduledTimePerActivity" xml:space="preserve">
