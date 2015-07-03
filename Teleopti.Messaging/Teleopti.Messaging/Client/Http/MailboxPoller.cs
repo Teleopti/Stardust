@@ -16,14 +16,14 @@ namespace Teleopti.Messaging.Client.Http
 		private readonly ICollection<MailboxTimerInfo> _timers = new Collection<MailboxTimerInfo>();
 		private readonly EventHandlers _eventHandlers;
 		private readonly ITime _time;
-		private readonly HttpRequests _client;
+		private readonly MailboxServerCaller _serverCaller;
 		private readonly IJsonDeserializer _jsonDeserializer;
 
 		public MailboxPoller(EventHandlers eventHandlers, ITime time, HttpRequests client, IJsonDeserializer jsonDeserializer)
 		{
 			_eventHandlers = eventHandlers;
 			_time = time;
-			_client = client;
+			_serverCaller = new MailboxServerCaller(client);
 			_jsonDeserializer = jsonDeserializer;
 		}
 
@@ -35,11 +35,10 @@ namespace Teleopti.Messaging.Client.Http
 				o =>
 				{
 					var mailboxInfo = (MailboxTimerInfo) o;
-					if (mailboxInfo.IsAlive || !tryAddMailbox(subscription))
+					if (mailboxInfo.IsAlive || !_serverCaller.TryAddMailbox(subscription))
 						return;
 					mailboxInfo.IsAlive = true;
-
-					startPopingTimer(subscription.MailboxId, interval, eventMessageHandler);
+					startPollingTimer(subscription.MailboxId, interval, eventMessageHandler);
 				},
 				mailboxTimerInfo,
 				TimeSpan.Zero,
@@ -48,55 +47,23 @@ namespace Teleopti.Messaging.Client.Http
 			_timers.Add(mailboxTimerInfo);
 		}
 
-		private bool tryAddMailbox(Subscription subscription)
-		{
-			try
-			{
-				return _client.Post("MessageBroker/AddMailbox", subscription).Result.IsSuccessStatusCode;
-			}
-			catch (AggregateException e)
-			{
-				if (e.InnerException.GetType() == typeof(HttpRequestException))
-					return false;
-				throw;
-			}
-		}
-
-		private void startPopingTimer(string mailboxId, TimeSpan interval, EventHandler<EventMessageArgs> eventMessageHandler)
+		private void startPollingTimer(string mailboxId, TimeSpan interval, EventHandler<EventMessageArgs> eventMessageHandler)
 		{
 			var mailboxTimerInfo = new MailboxTimerInfo { IsAlive = true, EventMessageHandler = eventMessageHandler };
 			mailboxTimerInfo.Timer = _time.StartTimer(
 				o =>
 				{
 					var mailboxInfo = (MailboxTimerInfo) o;
-					var httpResponseMessage = tryGetMessagesFromServer(mailboxId);
-					if (httpResponseMessage == null || httpResponseMessage.Content == null)
-						mailboxInfo.IsAlive = false;
-					else
-					{
-						mailboxInfo.IsAlive = true;
-						invokeHandlersForMessages(httpResponseMessage.Content);
-					}
+					var httpContent = _serverCaller.TryGetMessagesFromServer(mailboxId);
+					mailboxInfo.IsAlive = httpContent != null;
+					if (mailboxInfo.IsAlive)
+						invokeHandlersForMessages(httpContent);
 				},
 				mailboxTimerInfo,
 				interval,
 				interval)
 				;
 			_timers.Add(mailboxTimerInfo);
-		}
-
-		private HttpResponseMessage tryGetMessagesFromServer(string mailboxId)
-		{
-			try
-			{
-				return _client.Get("MessageBroker/PopMessages/" + mailboxId).Result;
-			}
-			catch (AggregateException e)
-			{
-				if (e.InnerException.GetType() == typeof(HttpRequestException))
-					return null;
-				throw;
-			}
 		}
 
 		private void invokeHandlersForMessages(HttpContent content)

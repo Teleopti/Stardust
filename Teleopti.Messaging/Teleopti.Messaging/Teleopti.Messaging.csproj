@@ -148,6 +148,7 @@
     <Compile Include="Client\Http\HttpSender.cs" />
     <Compile Include="Client\Http\HttpServer.cs" />
     <Compile Include="Client\Http\MailboxPoller.cs" />
+    <Compile Include="Client\Http\MailboxServerCaller.cs" />
     <Compile Include="Client\Http\MailboxTimerInfo.cs" />
     <Compile Include="Client\MutableUrl.cs" />
     <Compile Include="Client\NoMessageSender.cs" />
