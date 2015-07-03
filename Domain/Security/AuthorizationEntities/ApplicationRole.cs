@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         {
             get
             {
-					if (Enum.IsDefined(typeof(ShippedCustomRoles), base.DescriptionText) || _builtIn)
+					if (!string.IsNullOrEmpty(base.DescriptionText) &&( Enum.IsDefined(typeof(ShippedCustomRoles), base.DescriptionText) || _builtIn))
 						return _userTextTranslator.TranslateText(base.DescriptionText);
 	            return base.DescriptionText;
             }
