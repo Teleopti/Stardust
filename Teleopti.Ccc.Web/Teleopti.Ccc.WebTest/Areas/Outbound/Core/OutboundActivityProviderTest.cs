@@ -21,15 +21,36 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		[Test]
 		public void ShouldLoadAllActivitiesThatRequiresSkill()
 		{
+			var activity1 = ActivityFactory.CreateActivity("a1");
+			activity1.RequiresSkill = true;
+			_activityRepository.Add(activity1);
+			var activity2 = ActivityFactory.CreateActivity("a2");
+			activity2.RequiresSkill = false;
+			_activityRepository.Add(activity2);
+
 			_target = new OutboundActivityProvider(_activityRepository);
-			//add one activity that req skill and are outbound (A1)
-			//add one activity that req skill and are not outbound (A2)
-			//add one activity that not req skill and are outbound (A3)
-			//add one activity that not req skill and are not outbound (A4)
 
 			var result = _target.GetAll();
-			//result should be A1 and A2
+
 			result.Count().Should().Be.EqualTo(1);
+			result.First().Name.Should().Be.EqualTo("a1");
+		}		
+		
+		[Test]
+		public void ShouldLoadNothingWhenActivityNotRequiresSkill()
+		{
+			var activity1 = ActivityFactory.CreateActivity("a1");
+			activity1.RequiresSkill = false;
+			_activityRepository.Add(activity1);
+			var activity2 = ActivityFactory.CreateActivity("a2");
+			activity2.RequiresSkill = false;
+			_activityRepository.Add(activity2);
+
+			_target = new OutboundActivityProvider(_activityRepository);
+
+			var result = _target.GetAll();
+
+			result.Count().Should().Be.EqualTo(0);
 		}
 	}
 }

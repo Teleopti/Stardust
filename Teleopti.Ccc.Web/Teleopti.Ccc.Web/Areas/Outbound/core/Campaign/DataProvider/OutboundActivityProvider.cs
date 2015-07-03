@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 
 			foreach (var activity in _activityRepository.LoadAll())
 			{
-				activities.Add(new ActivityViewModel(){Id = activity.Id, Name = activity.Name});
+				if (activity.RequiresSkill) activities.Add(new ActivityViewModel(){Id = activity.Id, Name = activity.Name});
 			}
 
 			return activities;
