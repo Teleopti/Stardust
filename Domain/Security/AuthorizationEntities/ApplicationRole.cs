@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
@@ -39,13 +40,13 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         {
             get
             {
-				if (BuiltIn)
-					return _userTextTranslator.TranslateText(base.DescriptionText);
+					if (Enum.IsDefined(typeof(ShippedCustomRoles), base.DescriptionText) || _builtIn)
+						return _userTextTranslator.TranslateText(base.DescriptionText);
 	            return base.DescriptionText;
             }
         }
 
-        public virtual IAvailableData AvailableData
+		  public virtual IAvailableData AvailableData
         {
             get { return _availableData; }
             set { _availableData = value; }

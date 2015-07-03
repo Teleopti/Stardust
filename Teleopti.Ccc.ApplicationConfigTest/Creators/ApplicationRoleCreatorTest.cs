@@ -44,5 +44,19 @@ namespace Teleopti.Ccc.ApplicationConfigTest.Creators
             IApplicationRole applicationRole = _target.Create(applicationRoleName, description, false);
             _target.Save(applicationRole);
         }
+
+	    [Test,SetUICulture("sv-SE")]
+	    public void ShouldTranslateTheShippedRoles()
+	    {
+			 IApplicationRole applicationRole = _target.Create("business role creator", "xxBuiltInBusinessUnitAdministratorRole", false);
+			 Assert.AreEqual(applicationRole.DescriptionText, "Affärsenhetsadministratör");
+	    }
+
+		 [Test, SetUICulture("sv-SE")]
+		 public void ShouldNotTranslateNonShippedRoles()
+		 {
+			 IApplicationRole applicationRole = _target.Create("yes", "xxYes", false);
+			 Assert.AreEqual(applicationRole.DescriptionText, "xxYes");
+		 }
     }
 }

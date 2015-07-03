@@ -62,23 +62,23 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
 			_availableDataCreator = new AvailableDataCreator(_person, _sessionFactory);
 
 			//BuiltInAdministrator
-			IApplicationRole builtInAdministratorRole = _applicationRoleCreator.Create(ShippedApplicationRoleNames.AdministratorRole, "xxBuiltInAdministratorRole", false);
+			IApplicationRole builtInAdministratorRole = _applicationRoleCreator.Create(ShippedApplicationRoleNames.AdministratorRole, ShippedCustomRoles.xxBuiltInAdministratorRole.ToString(), false);
 			defaultAggregateRoot.AdministratorRole = builtInAdministratorRole;
 
 			//BuiltinBusinessUnitAdministrator
-			IApplicationRole businessUnitAdministratorRole = _applicationRoleCreator.Create(ShippedApplicationRoleNames.BusinessUnitAdministratorRole, "xxBuiltInBusinessUnitAdministratorRole", false);
+			IApplicationRole businessUnitAdministratorRole = _applicationRoleCreator.Create(ShippedApplicationRoleNames.BusinessUnitAdministratorRole, ShippedCustomRoles.xxBuiltInBusinessUnitAdministratorRole.ToString(), false);
 			defaultAggregateRoot.BusinessUnitAdministratorRole = businessUnitAdministratorRole;
 
 			//SiteManagerRole
-			IApplicationRole siteManagerRole = _applicationRoleCreator.Create(ShippedApplicationRoleNames.SiteManagerRole, "xxBuiltInSiteManagerRole", false);
+			IApplicationRole siteManagerRole = _applicationRoleCreator.Create(ShippedApplicationRoleNames.SiteManagerRole, ShippedCustomRoles.xxBuiltInSiteManagerRole.ToString(), false);
 			defaultAggregateRoot.SiteManagerRole = siteManagerRole;
 
 			//TeamLeaderRole
-			IApplicationRole teamLeaderRole = _applicationRoleCreator.Create(ShippedApplicationRoleNames.TeamLeaderRole, "xxBuiltInTeamLeaderRole", false);
+			IApplicationRole teamLeaderRole = _applicationRoleCreator.Create(ShippedApplicationRoleNames.TeamLeaderRole, ShippedCustomRoles.xxBuiltInTeamLeaderRole.ToString(), false);
 			defaultAggregateRoot.TeamLeaderRole = teamLeaderRole;
 
 			//AgentRole
-			IApplicationRole agentRole = _applicationRoleCreator.Create(ShippedApplicationRoleNames.AgentRole, "xxBuildInStandardAgentRole", false);
+			IApplicationRole agentRole = _applicationRoleCreator.Create(ShippedApplicationRoleNames.AgentRole, ShippedCustomRoles.xxBuildInStandardAgentRole.ToString(), false);
 			defaultAggregateRoot.AgentRole = agentRole;
 
 			_skillTypeCreator = new SkillTypeCreator(_person, _sessionFactory);

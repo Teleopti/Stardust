@@ -40,7 +40,7 @@ wfm.config([
 
 
 
-		$urlRouterProvider.otherwise("forecasting");
+		$urlRouterProvider.otherwise("main");
 		$stateProvider.state('main', {
 			url: '/',
 			templateUrl: 'html/main.html',
