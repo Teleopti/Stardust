@@ -89,7 +89,7 @@ angular.module('wfm.forecasting', [])
 			};
 
 			$scope.back = function () {
-				$state.go('forecasting.target', { period: $scope.period });
+				$state.go('forecasting-target', { period: $scope.period });
 			};
 
 			var forecastForOneWorkload = function(index) {
