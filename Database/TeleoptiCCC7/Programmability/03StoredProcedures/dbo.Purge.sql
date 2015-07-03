@@ -27,6 +27,22 @@ set @BatchSize = 14
 exec Purge
 */
 
+--Set up (i.e. skip migration scripts just for the purpose of populating the config table)
+if not exists (select 1 from PurgeSetting where [key] = 'YearsToKeepForecast')
+	insert into PurgeSetting ([Key], [Value]) values ('YearsToKeepForecast', 10)
+if not exists (select 1 from PurgeSetting where [key] = 'YearsToKeepMessage')
+	insert into PurgeSetting ([Key], [Value]) values ('YearsToKeepMessage', 10)
+if not exists (select 1 from PurgeSetting where [key] = 'YearsToKeepPayroll')
+	insert into PurgeSetting ([Key], [Value]) values ('YearsToKeepPayroll', 20)
+if not exists (select 1 from PurgeSetting where [key] = 'YearsToKeepSchedule')
+	insert into PurgeSetting ([Key], [Value]) values ('YearsToKeepSchedule', 10)
+if not exists (select 1 from PurgeSetting where [key] = 'DaysToKeepSecurityAudit')
+	insert into PurgeSetting ([Key], [Value]) values ('DaysToKeepSecurityAudit', 30)
+if not exists (select 1 from PurgeSetting where [key] = 'MonthsToKeepRequests')
+	insert into PurgeSetting ([Key], [Value]) values ('MonthsToKeepRequests', 120)
+if not exists (select 1 from PurgeSetting where [key] = 'DenyPendingRequestsAfterNDays')
+	insert into PurgeSetting ([Key], [Value]) values ('DenyPendingRequestsAfterNDays', 14)
+
 --Forecast
 select @KeepUntil = dateadd(year,-1*(select isnull(Value,100) from PurgeSetting where [Key] = 'YearsToKeepForecast'),getdate())
 
