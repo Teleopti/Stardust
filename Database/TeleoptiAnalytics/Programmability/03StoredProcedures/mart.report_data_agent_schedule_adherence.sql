@@ -273,11 +273,11 @@ SELECT
 	date_id				= b.date_id,
 	interval_id			= b.interval_id,
 	date_date			= d.date_date		
-FROM mart.bridge_time_zone b
-INNER JOIN mart.dim_date d 
+FROM mart.bridge_time_zone b WITH (NOLOCK)
+INNER JOIN mart.dim_date d WITH (NOLOCK)
 	ON b.local_date_id = d.date_id
 	AND d.date_date BETWEEN @date_from AND @date_to
-INNER JOIN mart.dim_interval i
+INNER JOIN mart.dim_interval i WITH (NOLOCK)
 	ON b.local_interval_id = i.interval_id
 WHERE b.time_zone_id = @time_zone_id
 
@@ -291,11 +291,11 @@ FROM #bridge_time_zone b
 SELECT
 	@nowLocalDateId = b.local_date_id,
 	@nowLocalIntervalId = b.local_interval_id
-FROM bridge_time_zone b
+FROM bridge_time_zone b WITH (NOLOCK)
 INNER JOIN mart.dim_date d 
 	ON b.date_id = d.date_id
 	AND d.date_date = @nowUtcDateOnly
-INNER JOIN mart.dim_interval i
+INNER JOIN mart.dim_interval i WITH (NOLOCK)
 	ON b.interval_id = i.interval_id
 	AND @nowUtcInterval between i.interval_start and i.interval_end
 WHERE b.time_zone_id=@time_zone_id
@@ -455,7 +455,7 @@ FROM #fact_schedule_raw fs
 	AND SchTemp.person_id=fs.person_id
 	AND SchTemp.interval_id=fs.interval_id
 	AND SchTemp.shift_startdate_local_id=fs.shift_startdate_local_id--in case overlapping shifts
-INNER JOIN mart.dim_activity a
+INNER JOIN mart.dim_activity a WITH (NOLOCK)
 	ON a.activity_id=fs.activity_id
 WHERE a.in_ready_time=1
 
@@ -468,7 +468,7 @@ FROM #fact_schedule_raw fs
 	AND SchTemp.person_id=fs.person_id
 	AND SchTemp.interval_id=fs.interval_id
 	AND SchTemp.shift_startdate_local_id=fs.shift_startdate_local_id--in case overlapping shifts
-INNER JOIN mart.dim_activity a
+INNER JOIN mart.dim_activity a WITH (NOLOCK)
 	ON a.activity_id=fs.activity_id
 WHERE SchTemp.activity_id IS NULL
 
@@ -534,12 +534,12 @@ adherence_type_selected,hide_time_zone,count_activity_per_interval,shift_interva
 	INNER JOIN #bridge_time_zone b1
 		ON	fs.shift_startinterval_id= b1.interval_id
 		AND fs.shift_startdate_id=b1.date_id
-	INNER JOIN bridge_time_zone b2
+	INNER JOIN bridge_time_zone b2 WITH (NOLOCK)
 		ON	fs.interval_id= b2.interval_id
 		AND fs.schedule_date_id= b2.date_id
 	INNER JOIN mart.dim_interval i
 		ON b2.local_interval_id = i.interval_id			
-	INNER JOIN mart.dim_date d 
+	INNER JOIN mart.dim_date d WITH (NOLOCK)
 		ON b2.local_date_id = d.date_id
 	AND b2.time_zone_id=@time_zone_id
 
@@ -588,12 +588,12 @@ adherence_type_selected,hide_time_zone,count_activity_per_interval, shift_interv
 	INNER JOIN #bridge_time_zone b1
 		ON	fsd.shift_startinterval_id= b1.interval_id
 		AND fsd.shift_startdate_id=b1.date_id
-	INNER JOIN bridge_time_zone b2
+	INNER JOIN bridge_time_zone b2 WITH (NOLOCK)
 		ON	fsd.interval_id= b2.interval_id
 		AND fsd.date_id= b2.date_id
-	INNER JOIN mart.dim_interval i
+	INNER JOIN mart.dim_interval i WITH (NOLOCK)
 		ON b2.local_interval_id = i.interval_id			
-	INNER JOIN mart.dim_date d 
+	INNER JOIN mart.dim_date d WITH (NOLOCK)
 		ON b2.local_date_id = d.date_id
 	AND b2.time_zone_id=@time_zone_id
 	WHERE NOT EXISTS (SELECT 1 FROM #result r where r.person_id=fsd.person_id and r.interval_id=i.interval_id and r.date_id=d.date_id)--WHERE NO MATCH ON SCHEDULE
@@ -682,13 +682,13 @@ FROM #team_adh_tot a
 /*Set display color and name on activity or absence*/
 UPDATE #result
 SET display_color=a.display_color,activity_absence_name=absence_name
-FROM mart.dim_absence a 
+FROM mart.dim_absence a WITH (NOLOCK)
 INNER JOIN #result r
 	ON r.absence_id=a.absence_id AND r.activity_id = -1
 
 UPDATE #result
 SET display_color=a.display_color,activity_absence_name=activity_name
-FROM mart.dim_activity a 
+FROM mart.dim_activity a WITH (NOLOCK)
 INNER JOIN #result r
 	ON r.activity_id=a.activity_id and r.absence_id = -1
 
@@ -696,7 +696,7 @@ INNER JOIN #result r
 UPDATE #result
 SET display_color=a.display_color,activity_absence_name=activity_name
 FROM #result  r
-INNER JOIN mart.dim_activity a on a.activity_id =-1
+INNER JOIN mart.dim_activity a WITH (NOLOCK) on a.activity_id =-1
 WHERE r.count_activity_per_interval >1
 
 
