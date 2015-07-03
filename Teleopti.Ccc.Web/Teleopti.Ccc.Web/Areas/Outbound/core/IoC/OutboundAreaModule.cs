@@ -1,14 +1,9 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.Backlog;
-using Teleopti.Ccc.Domain.Forecasting.Angel;
-using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Ccc.Domain.Outbound;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Persisters.Outbound;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping;
-using Teleopti.Ccc.WinCode.Backlog;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Outbound.core.IoC
