@@ -42,6 +42,52 @@ if not exists (select 1 from PurgeSetting where [key] = 'MonthsToKeepRequests')
 	insert into PurgeSetting ([Key], [Value]) values ('MonthsToKeepRequests', 120)
 if not exists (select 1 from PurgeSetting where [key] = 'DenyPendingRequestsAfterNDays')
 	insert into PurgeSetting ([Key], [Value]) values ('DenyPendingRequestsAfterNDays', 14)
+if not exists (select 1 from PurgeSetting where [key] = 'YearsToKeepPersons')
+	insert into PurgeSetting ([Key], [Value]) values ('YearsToKeepPersons', 10)
+
+--Persons who has left, i.e. with a since long past leaving date
+select @KeepUntil = dateadd(year,-1*(select isnull(Value,100) from PurgeSetting where [Key] = 'YearsToKeepPersons'),getdate())
+
+update person set IsDeleted = 1
+where isnull(TerminalDate,'20591231') < @KeepUntil
+
+delete SchedulePeriodShiftCategoryLimitation
+from SchedulePeriodShiftCategoryLimitation scl
+inner join SchedulePeriod sp on scl.SchedulePeriod = sp.Id
+inner join Person p on sp.Parent = p.Id
+where p.IsDeleted = 1
+
+delete SchedulePeriod
+from SchedulePeriod sp
+inner join Person p on sp.Parent = p.Id
+where p.IsDeleted = 1
+
+delete PersonSkill
+from PersonSkill ps
+inner join PersonPeriod pp on ps.Parent = ps.Id
+inner join Person p on ps.Parent = p.Id
+where p.IsDeleted = 1
+
+delete PersonPeriod
+from PersonPeriod pp
+inner join Person p on pp.Parent = p.Id
+where p.IsDeleted = 1
+
+delete Auditing.Revision
+from Auditing.Revision r
+inner join Auditing.PersonAssignment_AUD pa on pa.REV = r.Id
+inner join person p on pa.Person = p.Id
+where p.IsDeleted = 1
+
+delete Auditing.Revision
+from Auditing.Revision r
+inner join Auditing.PersonAbsence_AUD pa on pa.REV = r.Id
+inner join person p on pa.Person = p.Id
+where p.IsDeleted = 1
+
+/*
+exec Purge
+*/
 
 --Forecast
 select @KeepUntil = dateadd(year,-1*(select isnull(Value,100) from PurgeSetting where [Key] = 'YearsToKeepForecast'),getdate())
@@ -237,7 +283,7 @@ where not exists (
 select 1 from Request r
 where r.Parent = pr.Id)
 
---Autodeny if not handled in time.
+--Autodeny requests if not handled in time.
 select @KeepUntil = dateadd(day,-1*(select isnull(Value,120) from PurgeSetting where [Key] = 'DenyPendingRequestsAfterNDays'),getdate())
 
 update PersonRequest set RequestStatus = 1
