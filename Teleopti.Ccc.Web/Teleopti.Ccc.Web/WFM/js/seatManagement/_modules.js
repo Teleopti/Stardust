@@ -1,2 +1,2 @@
 ﻿angular.module('wfm.seatMap', ['ngImageInputWithPreview', 'angular-growl', 'ngAnimate', 'ng-mfb']);
-angular.module('wfm.seatPlan', ['angular-growl', 'ngAnimate', 'restPlanningPeriodService']);
+angular.module('wfm.seatPlan', ['angular-growl', 'ngAnimate', 'restPlanningPeriodService','teleopti.wfm.cardList']);

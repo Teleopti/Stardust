@@ -1,11 +1,12 @@
-﻿
+﻿'use strict';
+
+(function () {
+	angular.module('teleopti.wfm.cardList', []);
+})();
 
 (function () {
 
-
-	angular.module('wfm.seatPlan').controller('TeleoptiCardCtrl', seatPlanCardDirectiveController);
-
-	function seatPlanCardDirectiveController() {
+	function teleoptiCardDirectiveController() {
 
 		var vm = this;
 
@@ -18,15 +19,14 @@
 		}
 	};
 
-
-	var directive = function () {
+	function teleoptiCardDirective() {
 
 		return {
 			controller: 'TeleoptiCardCtrl',
 			controllerAs: 'vm',
 			bindToController: true,
 			scope: {},
-			templateUrl: "js/seatManagement/html/teleopticard.html",
+			templateUrl: "js/global/teleopti.wfm.cardList/teleopticard.html",
 			transclude: true,
 			require: ['teleoptiCard', '^teleoptiCardList'],
 			link: function (scope, elem, attr, ctrl, transcludeFn) {
@@ -67,35 +67,8 @@
 		};
 	};
 
-	angular.module('wfm.seatPlan').directive('teleoptiCard', directive);
+	angular.module('teleopti.wfm.cardList').controller('TeleoptiCardCtrl', teleoptiCardDirectiveController);
 
-}());
-
-(function () {
-	angular.module('wfm.seatPlan')
-		.controller('CardListCtrl', function () {
-
-			var vm = this;
-			vm.selectedCard = null;
-			vm.selectCard = function (card) {
-				vm.selectedCard = vm.isSelectedCard(card) ? null : card;
-			};
-			vm.isSelectedCard = function (card) {
-				return vm.selectedCard == card;
-			};
-		}
-		);
-
-	angular.module("wfm.seatPlan")
-		.directive("teleoptiCardList", function () {
-			return {
-				controller: 'CardListCtrl',
-				controllerAs: 'vm',
-				bindToController: true,
-				transclude: true,
-				templateUrl: "js/seatManagement/html/teleopticardlist.html"
-
-			};
-		});
+	angular.module('teleopti.wfm.cardList').directive('teleoptiCard', teleoptiCardDirective);
 
 }());

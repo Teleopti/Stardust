@@ -1224,6 +1224,10 @@
     <Content Include="WFM\js\global\help.controller.js" />
     <Content Include="Content\jalaali-calendar-datepicker\moment-datepicker-jalaali-ext.js" />
     <Content Include="Content\jalaali-calendar-datepicker\moment-jalaali.js" />
+    <Content Include="WFM\js\global\teleopti.wfm.cardList\teleopticard.directive.js" />
+    <Content Include="WFM\js\global\teleopti.wfm.cardList\teleoptiCard.html" />
+    <Content Include="WFM\js\global\teleopti.wfm.cardList\teleopticardlist.directive.js" />
+    <Content Include="WFM\js\global\teleopti.wfm.cardList\teleopticardlist.html" />
     <Content Include="WFM\js\outbound\outbound.directive.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.TeamScheduleViewModel.Tests.js" />
     <Content Include="Areas\Reporting\Views\Shared\Error.cshtml" />
@@ -1248,14 +1252,11 @@
     <Content Include="WFM\js\seatManagement\html\imageLoadWithPreview.html" />
     <Content Include="WFM\js\seatManagement\html\seatmapeditor.html" />
     <Content Include="WFM\js\seatManagement\html\seatplaninit.html" />
-    <Content Include="WFM\js\seatManagement\html\teleopticard.html" />
-    <Content Include="WFM\js\seatManagement\html\teleopticardlist.html" />
     <Content Include="WFM\js\seatManagement\imageloadwithpreview.directive.js" />
     <Content Include="WFM\js\seatManagement\seatmapedit.controller.js" />
     <Content Include="WFM\js\seatManagement\seatmapedit.directive.js" />
     <Content Include="WFM\js\people\template\advancedPeopleSearch.html" />
     <Content Include="WFM\js\seatManagement\seatplaninit.directive.js" />
-    <Content Include="WFM\js\seatManagement\teleopticardlist.directive.js" />
     <Content Include="WFM\tests\forecasting\forecasting.controller.spec.js" />
     <Content Include="WFM\tests\permissions\permissions.filter.spec.js" />
     <Content Include="WFM\tests\permissions\permissions.roledatacontroller.spec.js" />
@@ -2000,7 +2001,7 @@
     <Content Include="WFM\css\_permissions.scss" />
     <Content Include="WFM\vendor\c3\c3-angular.min.js.map" />
     <Content Include="WFM\css\_resourceplanner.scss" />
-    <Content Include="WFM\css\_seatplan.scss" />
+    <Content Include="WFM\css\_cardlist.scss" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
