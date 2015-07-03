@@ -9,8 +9,8 @@ var externalModules = angular.module('externalModules', ['ui.router',
 	'ui.grid',
 	'ui.grid.autoResize',
 	'ui.grid.exporter',
-	'ui.grid.selection',
-	'ncy-angular-breadcrumb']);
+	'ui.grid.selection'
+]);
 
 var wfm = angular.module('wfm', [
 	'externalModules',
