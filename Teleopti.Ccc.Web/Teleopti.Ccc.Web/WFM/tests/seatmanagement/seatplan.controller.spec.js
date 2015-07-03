@@ -64,6 +64,7 @@ describe('SeatPlanCtrl', function () {
 
 	}));
 
+
 	it('returns the correct month name for a seatplan status', inject(function ($controller) {
 		var scope = $rootScope.$new();
 		var controller = $controller('SeatPlanCtrl', { $scope: scope, ResourcePlannerSvrc: mockResourcePlannerService, seatPlanService: mockSeatPlanService });

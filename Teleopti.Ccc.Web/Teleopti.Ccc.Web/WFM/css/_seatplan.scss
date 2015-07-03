@@ -1,0 +1,35 @@
+﻿.planningPeriodProgressBar {
+	margin-top: 25px;
+	margin-bottom: 25px;
+	width: 90%;
+	margin-left: auto !important;
+	margin-right: auto !important;
+}
+
+.calendarProgress {
+	margin-top: 85px;
+	margin-left: 170px;
+	margin-right: 170px;
+	height: 139px;
+}
+
+.planningPeriodTitle {
+	margin-left: 30px;
+}
+
+.seatplan-status-success button span {
+	background-color: lightgreen;
+	padding: 3px;
+}
+
+.seatplan-status-inprogress button span {
+	background-color: burlywood;
+	padding: 3px;
+}
+
+.seatplan-status-error button span {
+	background-color: lightcoral;
+	padding: 3px;
+}
+
+

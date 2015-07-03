@@ -339,7 +339,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoSeatMap();
 		}
 
-
+		[When(@"I view Seat plan")]
+		public void WhenIViewSeatPlan()
+		{
+			TestControllerMethods.Logon();
+			Navigation.GotoSeatPlan(null);
+		}
+		
+		[When(@"I view Seat plan on ""(.*)""")]
+		public void WhenIViewSeatPlanOn(DateTime date)
+		{
+			TestControllerMethods.Logon();
+			Navigation.GotoSeatPlan(date);
+		}
+		
 		[When(@"I view Real time adherence overview")]
 		public void WhenIViewRealTimeAdherenceOverview()
 		{

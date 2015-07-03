@@ -328,6 +328,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 			GoToPage("wfm/#/seatMap");
 		}
 
+		public static void GotoSeatPlan(DateTime? date)
+		{
+			if (date.HasValue)
+			{
+				GoToPage("wfm/#/seatPlan/" + date.Value.ToString("yyyy-MM-dd"));
+			}
+			else
+			{
+				GoToPage("wfm/#/seatPlan");
+			}
+		}
+
 
 		public static void GotoAnywhereRealTimeAdherenceOverview(Guid buId, Guid siteId)
 		{

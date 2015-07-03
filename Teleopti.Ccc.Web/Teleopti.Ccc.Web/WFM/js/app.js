@@ -103,7 +103,7 @@ wfm.config([
 			templateUrl: 'html/people/people.html',
 			controller: 'PeopleCtrl'
 		}).state('seatPlan', {
-			url: '/seatPlan',
+			url: '/seatPlan/:viewDate',
 			templateUrl: 'js/seatManagement/html/seatplan.html',
 			controller: 'SeatPlanCtrl as seatplan'
 		}).state('seatMap', {

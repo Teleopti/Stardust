@@ -224,6 +224,9 @@
     <Compile Include="TestData\Core\ITenantUserSetup.cs" />
     <Compile Include="TestData\Setups\Configurable\OutboundCampaignConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\PersonEmptyDayConfigurable.cs" />
+    <Compile Include="TestData\Setups\Configurable\PlanningPeriodConfigurable.cs" />
+    <Compile Include="TestData\Setups\Configurable\SeatMapLocationConfigurable.cs" />
+    <Compile Include="TestData\Setups\Configurable\SeatPlanConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\ShiftExchangeOfferConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\QueueSourceConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\WorkloadConfigurable.cs" />

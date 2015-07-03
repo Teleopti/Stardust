@@ -2,21 +2,11 @@
 
 (function () {
 
-	var getPreviousMonthStart = function (dateMoment) {
-		return moment(dateMoment).subtract(1, 'months').startOf('month').format("YYYY-MM-DD");
-	};
-
-	var getNextMonthEnd = function (dateMoment) {
-		return moment(dateMoment).add(1, 'months').endOf('month').format("YYYY-MM-DD");
-	};
-
-	var seatPlanStatusClass = ['success', 'inprogress', 'error'];
-
 	angular.module('wfm.seatPlan').controller('SeatPlanCtrl', seatPlanDirectiveController);
 
-	seatPlanDirectiveController.$inject = ['ResourcePlannerSvrc', 'seatPlanService', '$translate'];
+	seatPlanDirectiveController.$inject = ['ResourcePlannerSvrc', 'seatPlanService', '$translate','$stateParams'];
 
-	function seatPlanDirectiveController(resourcePlannerService, seatPlanService, translate) {
+	function seatPlanDirectiveController(resourcePlannerService, seatPlanService, translate, params) {
 
 		var vm = this;
 		
@@ -32,6 +22,17 @@
 			vm.translateSeatPlanStatus(3, 'SeatPlanStatusNoSeatPlanned');
 		}
 
+
+		vm.getPreviousMonthStart = function (dateMoment) {
+			return moment(dateMoment).subtract(1, 'months').startOf('month').format("YYYY-MM-DD");
+		};
+
+		vm.getNextMonthEnd = function (dateMoment) {
+			return moment(dateMoment).add(1, 'months').endOf('month').format("YYYY-MM-DD");
+		};
+
+		vm.seatPlanStatusClass = ['seatplan-status-success', 'seatplan-status-inprogress', 'seatplan-status-error'];
+
 		vm.setupTranslatedString = function (key) {
 			translate(key).then(function (result) {
 				vm.translatedStrings[key] = result;
@@ -44,6 +45,7 @@
 			});
 		};
 
+		
 		vm.loadMonthDetails = function (dateMoment) {
 
 			vm.currentMonth = dateMoment.month();
@@ -58,8 +60,8 @@
 			vm.seatPlanDateStatuses = [];
 
 			var seatPlansParams = {
-				startDate: getPreviousMonthStart(dateMoment),
-				endDate: getNextMonthEnd(dateMoment)
+				startDate: vm.getPreviousMonthStart(dateMoment),
+				endDate: vm.getNextMonthEnd(dateMoment)
 			};
 
 			seatPlanService.seatPlans
@@ -91,20 +93,16 @@
 			return moment(date).format('YYYY-MM-DD');
 		};
 
-
-		//ROBTODO: really need this below declaration???
-		vm.setupTranslatedStrings();
-		var now = moment();
-		vm.loadMonthDetails(now);
-
 		vm.onChangeOfDate = function () {
-
 			if (vm.currentMonth != moment(vm.selectedDate).month()) {
 				vm.loadMonthDetails(moment(vm.selectedDate));
 			}
 		};
 
 		vm.onChangeOfMonth = function (date) {
+			if (vm.isLoadingCalendar) {
+				return;
+			}
 			var dateMoment = moment(date);
 			if (dateMoment.month() != vm.currentMonth) {
 				vm.loadMonthDetails(dateMoment);
@@ -147,15 +145,23 @@
 				vm.seatPlanDateStatuses.forEach(function (status) {
 
 					if (dayToCheck.isSame(moment(status.Date), 'day')) {
-						dayClass = seatPlanStatusClass[status.Status];
+						dayClass = vm.seatPlanStatusClass[status.Status];
 					}
 				});
 			}
 			return dayClass;
 		}
 
+		vm.setupTranslatedStrings();
 
+		var date = (angular.isDefined(params.viewDate) && params.viewDate != "") ? params.viewDate : null;
 
+		if (date != null) {
+			vm.loadMonthDetails(moment(params.viewDate));
+		} else {
+			vm.loadMonthDetails(moment());
+		}
+	
 	}
 }());
 

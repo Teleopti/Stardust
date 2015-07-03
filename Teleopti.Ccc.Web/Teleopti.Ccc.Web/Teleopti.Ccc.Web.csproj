@@ -1999,6 +1999,7 @@
     <Content Include="WFM\vendor\c3\c3-angular.min.js.map" />
     <Content Include="WFM\css\_resourceplanner.scss" />
     <Content Include="WFM\css\_cardlist.scss" />
+    <Content Include="WFM\css\_seatplan.scss" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
