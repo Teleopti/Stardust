@@ -84,8 +84,9 @@ describe('Roles', function() {
 		$q = _$q_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
-		$httpBackend.expectGET("../api/Global/Language?lang=en").respond(200, 'mock');
-		$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, 'mock');
+		$httpBackend.expectGET("../api/Global/Language?lang=en").respond(200, 'en');
+		$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, {Language: 'en', DateFormat: 'en'});
+		
 		}));
 
 	it('should create a role', function(done) {
