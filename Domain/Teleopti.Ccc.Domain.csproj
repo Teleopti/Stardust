@@ -137,6 +137,7 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AgentInfo\ExtractBudgetGroupPeriods.cs" />
+    <Compile Include="AgentInfo\PeopleSelection.cs" />
     <Compile Include="AgentInfo\Requests\EmptyShiftTradeRequestChecker.cs" />
     <Compile Include="AgentInfo\Requests\FullDayAbsenceRequestPeriodUtil.cs" />
     <Compile Include="AgentInfo\Requests\IBatchShiftTradeRequestStatusChecker.cs" />
@@ -596,6 +597,8 @@
     <Compile Include="Optimization\TeamBlock\TeamBlockDayOffsInPeriodValidator.cs" />
     <Compile Include="Outbound\CreateOrUpdateSkillDays.cs" />
     <Compile Include="Outbound\OutboundPeriodMover.cs" />
+    <Compile Include="Outbound\OutboundScheduledResourcesProvider.cs" />
+    <Compile Include="Outbound\OutboundAssignedStaffProvider.cs" />
     <Compile Include="Repositories\ISeatPlanRepository.cs" />
     <Compile Include="Scheduling\AggregatedScheduleChangedInfo.cs" />
     <Compile Include="Scheduling\Legacy\Commands\CurrentScheduleSummaryCalculator.cs" />

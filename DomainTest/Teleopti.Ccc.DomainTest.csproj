@@ -674,6 +674,7 @@
     <Compile Include="Optimization\WorkShiftRuleSetHasShortBreakTest.cs" />
     <Compile Include="Outbound\CampaignTest.cs" />
     <Compile Include="Outbound\CreateOrUpdateSkillDaysTest.cs" />
+    <Compile Include="Outbound\OutboundAssignedStaffProviderTest.cs" />
     <Compile Include="Outbound\OutboundPeriodMoverTest.cs" />
     <Compile Include="Outbound\OutboundProductionPlanFactoryTest.cs" />
     <Compile Include="Outbound\OutboundSkillCreatorTest.cs" />

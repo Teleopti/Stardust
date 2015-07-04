@@ -33,7 +33,6 @@
 			System.Windows.Forms.ListViewGroup listViewGroup2 = new System.Windows.Forms.ListViewGroup("another", System.Windows.Forms.HorizontalAlignment.Left);
 			System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("test");
 			System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem("anothe test");
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OutboundView));
 			this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
 			this.listView1 = new System.Windows.Forms.ListView();
 			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -45,15 +44,11 @@
 			this.addManualProductionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.replanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.changePeriodToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-			this.toolStripButtonAddCampaign = new System.Windows.Forms.ToolStripButton();
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
 			this.toolStripContainer1.ContentPanel.SuspendLayout();
-			this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
 			this.toolStripContainer1.SuspendLayout();
 			this.contextMenuStrip1.SuspendLayout();
-			this.toolStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// toolStripContainer1
@@ -65,16 +60,12 @@
 			// toolStripContainer1.ContentPanel
 			// 
 			this.toolStripContainer1.ContentPanel.Controls.Add(this.listView1);
-			this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(937, 511);
+			this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(937, 536);
 			this.toolStripContainer1.Location = new System.Drawing.Point(0, 1);
 			this.toolStripContainer1.Name = "toolStripContainer1";
 			this.toolStripContainer1.Size = new System.Drawing.Size(937, 536);
 			this.toolStripContainer1.TabIndex = 1;
 			this.toolStripContainer1.Text = "toolStripContainer1";
-			// 
-			// toolStripContainer1.TopToolStripPanel
-			// 
-			this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip1);
 			// 
 			// listView1
 			// 
@@ -99,7 +90,7 @@
             listViewItem2});
 			this.listView1.Location = new System.Drawing.Point(0, 0);
 			this.listView1.Name = "listView1";
-			this.listView1.Size = new System.Drawing.Size(937, 511);
+			this.listView1.Size = new System.Drawing.Size(937, 536);
 			this.listView1.TabIndex = 0;
 			this.listView1.UseCompatibleStateImageBehavior = false;
 			this.listView1.View = System.Windows.Forms.View.Details;
@@ -165,27 +156,6 @@
 			this.changePeriodToolStripMenuItem.Text = "Change period...";
 			this.changePeriodToolStripMenuItem.Click += new System.EventHandler(this.changePeriodToolStripMenuItem_Click);
 			// 
-			// toolStrip1
-			// 
-			this.toolStrip1.Dock = System.Windows.Forms.DockStyle.None;
-			this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonAddCampaign});
-			this.toolStrip1.Location = new System.Drawing.Point(3, 0);
-			this.toolStrip1.Name = "toolStrip1";
-			this.toolStrip1.Size = new System.Drawing.Size(134, 25);
-			this.toolStrip1.TabIndex = 0;
-			// 
-			// toolStripButtonAddCampaign
-			// 
-			this.toolStripButtonAddCampaign.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.toolStripButtonAddCampaign.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonAddCampaign.Image")));
-			this.toolStripButtonAddCampaign.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButtonAddCampaign.Name = "toolStripButtonAddCampaign";
-			this.toolStripButtonAddCampaign.Size = new System.Drawing.Size(91, 22);
-			this.toolStripButtonAddCampaign.Text = "Add Campaign";
-			this.toolStripButtonAddCampaign.Visible = false;
-			this.toolStripButtonAddCampaign.Click += new System.EventHandler(this.toolStripButtonAddCampaignClick);
-			// 
 			// statusStrip1
 			// 
 			this.statusStrip1.Location = new System.Drawing.Point(0, 540);
@@ -213,13 +183,9 @@
 			this.Text = "OutboundView";
 			this.Load += new System.EventHandler(this.outboundViewLoad);
 			this.toolStripContainer1.ContentPanel.ResumeLayout(false);
-			this.toolStripContainer1.TopToolStripPanel.ResumeLayout(false);
-			this.toolStripContainer1.TopToolStripPanel.PerformLayout();
 			this.toolStripContainer1.ResumeLayout(false);
 			this.toolStripContainer1.PerformLayout();
 			this.contextMenuStrip1.ResumeLayout(false);
-			this.toolStrip1.ResumeLayout(false);
-			this.toolStrip1.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -232,8 +198,6 @@
 		private System.Windows.Forms.ColumnHeader columnHeader1;
 		private System.Windows.Forms.ColumnHeader columnHeader2;
 		private System.Windows.Forms.ColumnHeader columnHeader3;
-		private System.Windows.Forms.ToolStrip toolStrip1;
-		private System.Windows.Forms.ToolStripButton toolStripButtonAddCampaign;
 		private System.Windows.Forms.StatusStrip statusStrip1;
 		private System.ComponentModel.BackgroundWorker backgroundWorker1;
 		private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;

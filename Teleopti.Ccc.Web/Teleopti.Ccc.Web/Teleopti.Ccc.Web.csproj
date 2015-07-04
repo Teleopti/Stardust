@@ -519,7 +519,6 @@
     <Compile Include="Areas\ResourcePlanner\FixedStaffLoader.cs" />
     <Compile Include="Areas\ResourcePlanner\FixedStaffSchedulingInput.cs" />
     <Compile Include="Areas\ResourcePlanner\OptimizationController.cs" />
-    <Compile Include="Areas\ResourcePlanner\PeopleSelection.cs" />
     <Compile Include="Areas\ResourcePlanner\PlanningPeriodChangeRangeModel.cs" />
     <Compile Include="Areas\ResourcePlanner\ResourcePlannnerModule.cs" />
     <Compile Include="Areas\ResourcePlanner\IMissingForecastProvider.cs" />

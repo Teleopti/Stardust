@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
+namespace Teleopti.Ccc.Domain.AgentInfo
 {
 	public class PeopleSelection
 	{

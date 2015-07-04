@@ -10,15 +10,11 @@ using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.Persisters.Outbound;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.WinCode.Backlog;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 using Campaign = Teleopti.Ccc.Domain.Outbound.Campaign;
 
 namespace Teleopti.Ccc.Win.Backlog
@@ -26,7 +22,7 @@ namespace Teleopti.Ccc.Win.Backlog
 	public partial class OutboundView : Form
 	{
 		private readonly IComponentContext _container;
-		private BacklogScheduledProvider _backlogScheduledProvider;
+		private OutboundScheduledResourcesProvider _outboundScheduledResourcesProvider;
 		private DateOnlyPeriod _loadedPeriod;
 		ICollection<Campaign> _campaigns;
 
@@ -55,7 +51,8 @@ namespace Teleopti.Ccc.Win.Backlog
 
 		private void loadSchedulesAsync()
 		{
-			_backlogScheduledProvider = new BacklogScheduledProvider(_container, _loadedPeriod);
+			_outboundScheduledResourcesProvider = _container.Resolve<OutboundScheduledResourcesProvider>();
+
 			Enabled = false;
 			backgroundWorker1.RunWorkerAsync();
 		}
@@ -138,72 +135,13 @@ namespace Teleopti.Ccc.Win.Backlog
 			}
 		}
 
-		private void toolStripButtonAddCampaignClick(object sender, EventArgs e)
-		{
-			Campaign campaign;
-			IActivity activity;
-			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				var activityRepository = _container.Resolve<IActivityRepository>();
-				var existinActivities = activityRepository.LoadAll();
-
-				using (var addCampaign = new AddCampaign(existinActivities))
-				{
-					addCampaign.ShowDialog(this);
-					if (addCampaign.DialogResult != DialogResult.OK)
-						return;
-
-					campaign = addCampaign.CreatedCampaign;
-					activity = addCampaign.ExistingActivity;
-				}
-
-				if (activity == null)
-				{
-					activity = new Activity(campaign.Name)
-					{
-						DisplayColor = Color.Black,
-						InContractTime = true,
-						InPaidTime = true,
-						InWorkTime = true,
-						RequiresSkill = true,
-						IsOutboundActivity = true,
-						AllowOverwrite = true
-					};
-					activityRepository.Add(activity);
-				}
-
-				createAndPersistCampaign(campaign, activity, uow);
-				uow.PersistAll();
-			}
-
-			loadCampaigns();
-			updateStatusOnCampaigns();
-		}
-
-		//AddCampaignCommand
-		private void createAndPersistCampaign(Campaign campaign, IActivity activity, IUnitOfWork uow)
-		{
-			var outboundSkillCreator = _container.Resolve<IOutboundSkillCreator>();
-			var skill = outboundSkillCreator.CreateSkill(activity, campaign);
-			var outboundSkillPersister = _container.Resolve<OutboundSkillPersister>();
-			outboundSkillPersister.PersistSkill(skill);
-			campaign.Skill = skill;
-
-			var campaignRepository = new OutboundCampaignRepository(uow);
-			campaignRepository.Add(campaign);
-
-			var createOrUpdateSkillDays = _container.Resolve<ICreateOrUpdateSkillDays>();
-			createOrUpdateSkillDays.Create(campaign.Skill, campaign.SpanningPeriod, campaign.CampaignTasks(),
-				campaign.AverageTaskHandlingTime(), campaign.WorkingHours);
-		}
-
 		private IncomingTask getIncomingTaskFromCampaign(Campaign campaign)
 		{
 			var incomingTaskFactory = _container.Resolve<OutboundProductionPlanFactory>();
 			var incomingTask = incomingTaskFactory.CreateAndMakeInitialPlan(campaign.SpanningPeriod, campaign.CampaignTasks(),
 				campaign.AverageTaskHandlingTime(), campaign.WorkingHours);
 
-			if(_backlogScheduledProvider == null)
+			if (_outboundScheduledResourcesProvider == null)
 				return incomingTask;
 
 			foreach (var dateOnly in incomingTask.SpanningPeriod.DayCollection())
@@ -211,11 +149,11 @@ namespace Teleopti.Ccc.Win.Backlog
 				var manualTime = campaign.GetManualProductionPlan(dateOnly);
 				if(manualTime.HasValue)
 					incomingTask.SetTimeOnDate(dateOnly, manualTime.Value, PlannedTimeTypeEnum.Manual);
-				var scheduled = _backlogScheduledProvider.GetScheduledTimeOnDate(dateOnly, campaign.Skill);
-				var forecasted = _backlogScheduledProvider.GetForecastedTimeOnDate(dateOnly, campaign.Skill);
-				if(scheduled != TimeSpan.Zero)
+				var scheduled = _outboundScheduledResourcesProvider.GetScheduledTimeOnDate(dateOnly, campaign.Skill);
+				var forecasted = _outboundScheduledResourcesProvider.GetForecastedTimeOnDate(dateOnly, campaign.Skill);
+				if (scheduled != TimeSpan.Zero)
 					incomingTask.SetTimeOnDate(dateOnly, scheduled, PlannedTimeTypeEnum.Scheduled);
-				else if(forecasted != TimeSpan.Zero && !manualTime.HasValue)
+				else if (forecasted != TimeSpan.Zero && !manualTime.HasValue)
 					incomingTask.SetTimeOnDate(dateOnly, forecasted, PlannedTimeTypeEnum.Calculated);
 			}
 
@@ -311,7 +249,11 @@ namespace Teleopti.Ccc.Win.Backlog
 
 		private void backgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
 		{
-			_backlogScheduledProvider.Load();
+
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				_outboundScheduledResourcesProvider.Load(_campaigns.ToList(), _loadedPeriod);
+			}
 			
 		}
 
@@ -322,14 +264,8 @@ namespace Teleopti.Ccc.Win.Backlog
 
 		private void backgroundWorker1_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
 		{
-			//Nix det blev konstigt
-			//foreach (var campaign in _campaigns)
-			//{
-			//	updateAndPersistCampaignSkillPeriod(campaign, false); //lägger bara upp nya dagar med longterm, gör på annat sätt
-			//}
 			Enabled = true;
-			updateStatusOnCampaigns();
-			
+			updateStatusOnCampaigns();		
 		}
 
 		private void viewStatusToolStripMenuItem_Click(object sender, EventArgs e)
