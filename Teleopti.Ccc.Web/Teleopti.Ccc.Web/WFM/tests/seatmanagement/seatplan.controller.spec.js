@@ -46,7 +46,7 @@ describe('SeatPlanCtrl', function () {
 		scope.$digest();
 		var dayClass = controller.getDayClass("2015/03/02", 'day');
 
-		expect(dayClass).toEqual('error');
+		expect(dayClass).toEqual('seatplan-status-error');
 	}));
 	
 	it('returns the correct info for a seatplan status', inject(function ($controller) {
