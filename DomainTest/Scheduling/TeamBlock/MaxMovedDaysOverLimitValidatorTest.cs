@@ -144,7 +144,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 commonMocks();
 
                 Expect.Call(_originalScheduleDay.SignificantPart()).Return(SchedulePartView.DayOff);
-                //Expect.Call(_scheduleDayEquator.MainShiftEquals(_originalScheduleDay, _currentScheduleDay)).Return(true);
                 Expect.Call(_scheduleDayEquator.DayOffEquals(scheduleDay, scheduleDay)).IgnoreArguments().Return(false );
             }
 
@@ -177,5 +176,23 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Assert.IsFalse(result);
             }
         }
+
+		  [Test]
+		  public void ShouldReturnFalseWhenPersonIsNotFound()
+		  {
+
+			  var optimizerPrefrences = _optimizationPreferences;
+			  optimizerPrefrences.DaysOff.UseKeepExistingDaysOff = true;
+			  using (_mocks.Record())
+			  {
+				  Expect.Call(_matrix.Person).Return(PersonFactory.CreatePerson("some","person"));
+			  }
+
+			  using (_mocks.Playback())
+			  {
+				  bool result = _target.ValidateMatrix(_matrix, _optimizationPreferences);
+				  Assert.IsFalse(result);
+			  }
+		  }
 	}
 }

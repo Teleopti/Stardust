@@ -33,7 +33,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (!optimizationPreferences.Shifts.KeepShifts && !optimizationPreferences.DaysOff.UseKeepExistingDaysOff)
 				return true;
 
-			IScheduleRange rangeCloneForMatrix = _allSelectedScheduleRangeClones[matrix.Person];
+			//IScheduleRange rangeCloneForMatrix = null;
+			IScheduleRange rangeCloneForMatrix;
+			if(!_allSelectedScheduleRangeClones.TryGetValue(matrix.Person,out rangeCloneForMatrix))
+				return false;
 			foreach (var scheduleDayPro in matrix.EffectivePeriodDays)
 			{
 				IScheduleDay currentScheduleDay = scheduleDayPro.DaySchedulePart();
