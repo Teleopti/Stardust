@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker
 		{
 			_unitOfWork.Current().CreateSqlQuery(
 				"MERGE INTO [msg].Mailbox AS T " +
-				"USING (VALUES (:Id, :Route )) AS S (Id, Route) " +
+				"USING (VALUES (:Id, :Route, :Notifications )) AS S (Id, Route, Notifications) " +
 				"ON T.Id = S.Id AND T.Route = S.Route " +
 				"WHEN NOT MATCHED THEN " +
 				"	INSERT " +
@@ -40,14 +40,14 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker
 				"		Notifications, " +
 				"		ExpiresAt " +
 				"	) VALUES (" +
-				"		:Id," +
-				"		:Route," +
-				"		:Notifications, " +
+				"		S.Id," +
+				"		S.Route," +
+				"		S.Notifications, " +
 				"		:ExpiresAt " +
 				"	) " +
 				"WHEN MATCHED THEN " +
 				"	UPDATE SET" +
-				"		Notifications = :Notifications," +
+				"		Notifications = S.Notifications," +
 				"		ExpiresAt = :ExpiresAt" +
 				";")
 				.SetGuid("Id", model.Id)
