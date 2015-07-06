@@ -1,3 +1,4 @@
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
@@ -8,6 +9,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			dynamic x = @event;
 			x.BelongsToDate = info.BelongsToDate;
+			if (@event is PersonShiftEndEvent)
+				x.BelongsToDate = info.PreviousActivity.BelongsToDate;
 		}
 	}
 }

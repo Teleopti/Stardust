@@ -265,5 +265,25 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.Single()
 				.BelongsToDate.Should().Be("2015-02-19".Date());
 		}
+		
+		[Test]
+		public void ShouldPublishWithShiftNotEndedYesterday()
+		{
+			var personId = Guid.NewGuid();
+			var activityId = Guid.NewGuid();
+			var businessUnitId = Guid.NewGuid();
+			Database
+				.WithDefaultsFromState(new ExternalUserStateForTest())
+				.WithUser("usercode", personId, businessUnitId)
+				.WithSchedule(personId, activityId, "2015-07-05 10:00", "2015-07-05 11:00")
+				.WithSchedule(personId, activityId, "2015-07-06 10:00", "2015-07-06 11:00");
+
+			Now.Is("2015-07-05 10:59");
+			Target.CheckForActivityChange(personId, businessUnitId);
+			Now.Is("2015-07-06 09:01");
+			Target.CheckForActivityChange(personId, businessUnitId);
+			var @event = Publisher.PublishedEvents.OfType<PersonShiftEndEvent>().Single();
+			@event.BelongsToDate.Should().Be("2015-07-05".Date());
+		}
 	}
 }
