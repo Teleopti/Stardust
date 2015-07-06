@@ -10092,7 +10092,7 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
     <value>Maximum Agenten müssen größer oder gleich der Minimum Agenten sein.</value>
   </data>
   <data name="ResReportScheduledAgentsPerActivity" xml:space="preserve">
-    <value>Geplante Agents pro Aktivität</value>
+    <value>Geplante Agenten pro Aktivität</value>
   </data>
   <data name="YourScheduleHasChanged" xml:space="preserve">
     <value>Ihr Dienstplan wurde geändert!</value>
