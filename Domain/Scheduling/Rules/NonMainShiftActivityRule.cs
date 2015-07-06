@@ -78,9 +78,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 		private bool isPersonalActivityOverSchedule(IScheduleDay currentSchedule)
 		{
-			var shiftLayers = new List<IShiftLayer>();
-
-			shiftLayers = (List<IShiftLayer>)currentSchedule.PersonAssignment().ShiftLayers;
+			var shiftLayers = (List<IShiftLayer>)currentSchedule.PersonAssignment().ShiftLayers;
 			var activities = currentSchedule.PersonAssignment().PersonalActivities();
 			if (activities != null && activities.Any(activity => isOverSchedule(activity.Period, shiftLayers)))
 			{
@@ -92,9 +90,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 		private bool isMeetingOverSchedule(IScheduleDay currentSchedule)
 		{
-			var shiftLayers = new List<IShiftLayer>();
-
-			shiftLayers = (List<IShiftLayer>)currentSchedule.PersonAssignment().ShiftLayers;
+			var shiftLayers = (List<IShiftLayer>)currentSchedule.PersonAssignment().ShiftLayers;
 			var meetings = currentSchedule.PersonMeetingCollection();
 			if (meetings != null && meetings.Any(personMeeting => isOverSchedule(personMeeting.Period, shiftLayers)))
 			{
