@@ -1231,6 +1231,7 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.TeamScheduleViewModel.Tests.js" />
     <Content Include="Areas\Reporting\Views\Shared\Error.cshtml" />
     <None Include="WFM\css\_forecasting.scss" />
+    <Content Include="WFM\js\outbound\_modules.js" />
     <Content Include="WFM\js\people\people.outsideClick.directive.js" />
     <Content Include="WFM\js\permissions\permissions.data.html" />
     <Content Include="WFM\js\permissions\permissions.filters.js" />
@@ -1246,6 +1247,7 @@
     <Content Include="WFM\js\resourceplanner\resourceplanner-report.html" />
     <Content Include="WFM\js\resourceplanner\resourceplanner.report.controller.js" />
     <Content Include="WFM\js\resourceplanner\_modules.js" />
+    <Content Include="WFM\tests\outbound\outbound.filter.spec.js" />
     <Content Include="WFM\vendor\ui-bootstrap-custom-build\datepicker.directive.ext.js" />
     <Content Include="WFM\js\seatManagement\fabric.fix.js" />
     <Content Include="WFM\js\seatManagement\html\imageLoadWithPreview.html" />

@@ -1,5 +1,4 @@
-﻿
-(function() {
+﻿(function() {
 	
 	'use strict';
 
@@ -89,11 +88,13 @@
 				ConnectAHT = campaign.ConnectAverageHandlingTime,
 				RPCAHT = campaign.RightPartyAverageHandlingTime;
 
-			if (RPCAHT == 0 || CR == 0) return 0;
+			if (RPCAHT == 0 || CR == 0) return null;
 
-			return Math.ceil((Target * (RPCAHT + Unproductive)
+			var hours = (Target * (RPCAHT + Unproductive)
 				+ (Target / RPCR - Target) * (ConnectAHT + Unproductive)
-				+ (Target / (CR * RPCR) - Target / RPCR) * Unproductive) / 60 / 60);
+				+ (Target / (CR * RPCR) - Target / RPCR) * Unproductive) / 60 / 60;
+
+			return hours;
 		}
 
 		function normalizeCampaign(campaign) {

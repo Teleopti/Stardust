@@ -1,4 +1,4 @@
-﻿<div class="wfm-block material-block" >
+﻿<div class="outbound wfm-block material-block" >
 	<div class="material-block-header">
 		<div layout="row">
 			<div class="text-left navigate-to active" ng-click="backToList()" flex>
@@ -25,7 +25,7 @@
 				<div ng-show="acToggle0">
 					<form name="campaignGeneralForm" class="form-horizontal wfm-block input-group" form-locator>
 						<div layout="row">
-							<div class="w-150"><strong translate>Name</strong></div>
+							<div class="w-150"><span translate>Name</span></div>
 							<div flex class="icon-set-fix m-r-10p">
 								<input class="w-100p" id="name" type="text" ng-model="newCampaign.Name" placeholder="new campaign name"  ng-minlength="1" ng-maxlength="50" required />
 								<div class="icon-set  input-validation-sign" expandable>
@@ -35,9 +35,9 @@
 							</div>
 						</div>
 						<div layout="row">
-							<div class="w-150"><strong translate>Activity</strong></div>
+							<div class="w-150"><span translate>Activity</span></div>
 							<div flex class="icon-set-fix m-r-10p">
-								<activity-picker ng-model="newCampaign.activity" default-name="{{newCampaign.Name}}"></activity-picker>
+								<activity-picker ng-model="newCampaign.activity" sync-name="{{newCampaign.Name}}"></activity-picker>
 								<div class="icon-set  input-validation-sign" expandable>
 									<i class="mdi mdi-check success right-sign"></i>
 									<i class="mdi mdi-close danger wrong-sign"></i>
@@ -49,13 +49,12 @@
 			</div>
 			<div class="wfm-block">
 				<div class="sub-header accordion-head" ng-click="acToggle1 = !acToggle1">
-					<span translate>Workload</span>	
-					<span class="pull-right sub-header-message">{{estimatedWorkload}}</span>			
+					<span translate>Workload</span>								
 				</div>
 				<div ng-show="acToggle1">
 					<form name="campaignWorkloadForm" class="form-horizontal wfm-block input-group" form-locator>
 						<div layout="row">
-							<div class="w-150"><strong translate>CallListLength</strong>
+							<div class="w-150"><span translate>CallListLength</span>
 							</div>
 							<div flex class="icon-set-fix m-r-10p">
 								<input class="w-100p" id="callList" type="text" ng-model="newCampaign.CallListLen" placeholder="call list length" range-validate range-min="0" required/>
@@ -67,7 +66,7 @@
 						</div>
 						<div layout="row">
 							<div class="w-150">
-								<strong translate>TargetRate</strong>
+								<span translate>TargetRate</span>
 							</div>
 							<div flex class="icon-set-fix m-r-10p">
 								<input class="w-100p" id="callList" type="text" ng-model="newCampaign.TargetRate" placeholder="target rate" range-validate range-min="0" required />
@@ -78,7 +77,7 @@
 							</div>
 						</div>
 						<div layout="row">
-							<div class="w-150"><strong translate>ConnectRate</strong>
+							<div class="w-150"><span translate>ConnectRate</span>
 							</div>
 							<div flex class="icon-set-fix m-r-10p">
 								<input class="w-100p" id="cr" type="text" ng-model="newCampaign.ConnectRate" placeholder="connect rate" range-validate range-max="100" range-min="0" required/>
@@ -89,7 +88,7 @@
 							</div>
 						</div>
 						<div layout="row">
-							<div class="w-150"><strong translate>RPCR</strong>
+							<div class="w-150"><span translate>RPCR</span>
 							</div>
 							<div flex class="icon-set-fix m-r-10p">
 								<input class="w-100p" id="target" type="text" ng-model="newCampaign.RightPartyConnectRate" placeholder="right party connect rate" range-validate range-max="100" range-min="0" required/>
@@ -100,7 +99,7 @@
 							</div>
 						</div>
 						<div layout="row">
-							<div class="w-150"><strong translate>ConnectAHT</strong>
+							<div class="w-150"><span translate>ConnectAHT</span>
 							</div>
 							<div flex class="icon-set-fix m-r-10p">
 								<input class="w-100p" id="cAHT" type="text" ng-model="newCampaign.ConnectAverageHandlingTime" placeholder="connect average handle time" range-validate range-min="0" required/>
@@ -111,7 +110,7 @@
 							</div>
 						</div>
 						<div layout="row">
-							<div class="w-150"><strong translate>RPCAHT</strong>
+							<div class="w-150"><span translate>RPCAHT</span>
 							</div>
 							<div flex class="icon-set-fix m-r-10p">
 								<input class="w-100p" id="rpcAHT" type="text" ng-model="newCampaign.RightPartyAverageHandlingTime" placeholder="right party average handle time" range-validate range-min="0" required/>
@@ -122,7 +121,7 @@
 							</div>
 						</div>
 						<div layout="row">
-							<div class="w-150"><strong translate>UnproductiveTime</strong>
+							<div class="w-150"><span translate>UnproductiveTime</span>
 							</div>
 							<div flex class="icon-set-fix m-r-10p">
 								<input class="w-100p" id="unproductive" type="text" ng-model="newCampaign.UnproductiveTime" placeholder="unproductive time" range-validate range-min="0" required/>
@@ -132,6 +131,17 @@
 								</div>
 							</div>
 						</div>
+						<br/>
+						<div layout="row">
+							<div class="w-150">
+								<strong translate>Needed Hours</strong>
+							</div>
+							<div flex class="icon-set-fix m-r-10p">
+								<strong>{{estimatedWorkload | showTimespan }}</strong>
+							</div>
+
+						</div>
+
 					</form>
 				</div>
 			</div>

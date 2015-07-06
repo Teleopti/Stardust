@@ -1,69 +1,71 @@
 ﻿@charset "UTF-8";
-.input-prepend {
-	width: 100%;
-}
-.input-prepend span {
-	display: inline-block;
-	min-width: 140px;
-	white-space:nowrap;
-}
-.input-prepend span + input {
-	display: inline-block;
-	width: 65% !important;
-	margin-bottom: 1px;
-}
-.input-prepend span + select {
-	display: inline-block;
-	width: 65% !important;
-}
-.wfm-checkbox.wfm-checkbox-inline {
-	width: auto;
-}
-.wfm-table.wfm-table-center td {
-	text-align:center; 
-	vertical-align:middle;
-}
-.wfm-dense .wfm-checkbox {
-	padding: 0px !important;
-}
-.wfm-table.wfm-dense td{
-	height: 22px;
-}
-.navigate-to.active {
-	cursor: pointer;
-}
-.navigate-to.active path {	
-	fill: #0099FF;
-}
-.navigate-to.active span {
-	color: #0099FF;	
-}
-.navigate-to.inactive path {
-	fill: #E0E0E0;
-}
-.navigate-to.inactive span {
-	color: #E0E0E0;
-}
-.sub-header div.column-label {
-	border-color: white;
-	border-width: 1px;
-	border-right-style: solid;
-}
-.wfm-list li:hover > .wfm-leave-behind.wfm-leave-behind-1 {
-  width: 40px; 
-}
-.wfm-list li:hover .wfm-checkbox-toggle:after {
-	background-color: white;
-}
 
-.m-t-10{
-	margin-top: 10px;
-}
-.move-down-5{
-	position:relative;
-	bottom:-5px;
-}
+.outbound {
+	.input-prepend {
+		width: 100%;
+	}
+	.input-prepend span {
+		display: inline-block;
+		min-width: 140px;
+		white-space:nowrap;
+	}
+	.input-prepend span + input {
+		display: inline-block;
+		width: 65% !important;
+		margin-bottom: 1px;
+	}
+	.input-prepend span + select {
+		display: inline-block;
+		width: 65% !important;
+	}
+	.wfm-checkbox.wfm-checkbox-inline {
+		width: auto;
+	}
+	.wfm-table.wfm-table-center td {
+		text-align:center; 
+		vertical-align:middle;
+	}
+	.wfm-dense .wfm-checkbox {
+		padding: 0px !important;
+	}
+	.wfm-table.wfm-dense td{
+		height: 22px;
+	}
+	.navigate-to.active {
+		cursor: pointer;
+	}
+	.navigate-to.active path {	
+		fill: #0099FF;
+	}
+	.navigate-to.active span {
+		color: #0099FF;	
+	}
+	.navigate-to.inactive path {
+		fill: #E0E0E0;
+	}
+	.navigate-to.inactive span {
+		color: #E0E0E0;
+	}
+	.sub-header div.column-label {
+		border-color: white;
+		border-width: 1px;
+		border-right-style: solid;
+	}
+	.wfm-list li:hover > .wfm-leave-behind.wfm-leave-behind-1 {
+	  width: 40px; 
+	}
+	.wfm-list li:hover .wfm-checkbox-toggle:after {
+		background-color: white;
+	}
 
+	.m-t-10{
+		margin-top: 10px;
+	}
+	.move-down-5{
+		position:relative;
+		bottom:-5px;
+	}
+}
 .wfm-timepicker-wrapper {
   width: 120px;
   display: inline-block;
@@ -201,26 +203,31 @@ activity-picker {
 
 	.polymorphic-input-body {
 		width: 40%;
-
 		input, md-select, md-select-label {
 			width: 100% !important;
 		} 
+		input[readonly] {
+			background-color: #E0E0E0;
+			border-radius: 8px;
+			border-bottom: none !important;
+		}
 	}
-
 	.divider {
 		width: 10%;
 	}
-
 	.morph-switch {
 		width: 20%;
-		font-weight: normal;
-		font-style: italic;
+		label {
+			font-style: italic;
+			font-weight: 300;
+		}
+		&.wfm-checkbox {
+			padding: 3px;
+		}
 	}
-
-	md-select {
-		padding-top: 0 !important;
-		padding-bottom: 0 !important;
-	}
+	md-select {				
+		padding: 0 10px !important;
+	}	
 
 }
 .sub-header span.pull-right.sub-header-message {
@@ -239,4 +246,11 @@ activity-picker {
 }
 .wfm-datepicker-wrap td.in-date-range button {
 	background-color: #31b0d5;
+}
+.outbound {
+	input {
+		padding-left: 10px;
+		margin-top: 1px;
+		margin-bottom: 1px;
+	}
 }

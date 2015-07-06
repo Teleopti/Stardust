@@ -1,10 +1,9 @@
-﻿'use strict';
+﻿(function () {
 
-(function () {
+	'use strict';
 
-	var outbound = angular.isDefined(angular.module('wfm.outbound')) ?
-		angular.module('wfm.outbound') : angular.module('wfm.outbound', []);
-
+	var outbound = angular.module('wfm.outbound');
+		
 	outbound.directive('formLocator', function() {
 		return {
 			restrict: 'A',
@@ -30,15 +29,31 @@
 
 			function postLink(scope, elem, attrs, ctrls) {
 				var ngModel = ctrls[0];
-						
+				var initializing = true;
+
+				scope.disableInput = false;
+				scope.inputPlaceholder = 'new activity name';
+					
 				scope.inputs = { Id: null, Name: '', useExisting: false };
 				scope.allActivities = outboundActivityService.listActivity();
-				scope.$watch(function () {					
+				scope.$watch(function () {
 					return scope.inputs;
 				}, function () {
-					ngModel.$setViewValue(angular.copy(scope.inputs));
+					if (initializing) {
+						initializing = false;
+					} else {
+						ngModel.$setViewValue(angular.copy(scope.inputs));
+					}
 				}, true);
-					
+				
+				if (angular.isDefined(attrs.syncName)) {
+					attrs.$observe('syncName', function(newValue) {
+						scope.inputs.Name = newValue;
+					});
+					scope.disableInput = true;
+					scope.inputPlaceholder = 'same as campaign name';
+				}
+
 				ngModel.$parsers.push(parser);
 				ngModel.$formatters.push(formatter);
 

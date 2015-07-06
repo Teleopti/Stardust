@@ -1,9 +1,8 @@
-﻿"use strict";
+﻿(function () {
+	"use strict";
 
-(function () {
-
-
-	var outbound = angular.module('wfm.outbound', ['outboundServiceModule', 'ngAnimate']);
+	angular.module('wfm.outbound')
+		.controller('OutboundCreateCtrl', ['$scope', '$state', 'outboundService33699', 'outboundNotificationService', createCtrl]);
 
 
 	var notifySuccess = function (growl, message) {
@@ -20,144 +19,142 @@
 		});
 	}
 
-
-
-	outbound.controller('OutboundCreateCtrl', [
-		'$scope', '$state',  'outboundService33699', 'outboundNotificationService', 
-		function ($scope, $state,  outboundService, outboundNotificationService) {
-
-			reset();
-
-			$scope.addCampaign = addCampaign;
-			$scope.reset = reset;
-			$scope.isInputValid = isInputValid;
-			$scope.isDateValid = isDateValid;
-			$scope.validWorkingHours = validWorkingHours;
-			$scope.backToList = backToList;
-			$scope.setRangeClass = setDateRangeClass;
+	function createCtrl($scope, $state, outboundService, outboundNotificationService) {
 		
-			$scope.$on('formLocator.campaignGeneralForm', function (event) {
-				$scope.campaignGeneralForm = event.targetScope.campaignGeneralForm;
-				$scope.formScope = event.targetScope;
-			});
+		reset();
 
-			$scope.$on('formLocator.campaignWorkloadForm', function (event) {
-				$scope.campaignWorkloadForm = event.targetScope.campaignWorkloadForm;
-				$scope.formScope = event.targetScope;
-			});
+		$scope.addCampaign = addCampaign;
+		$scope.reset = reset;
+		$scope.isInputValid = isInputValid;
+		$scope.isDateValid = isDateValid;
+		$scope.validWorkingHours = validWorkingHours;
+		$scope.backToList = backToList;
+		$scope.setRangeClass = setDateRangeClass;
 
-			$scope.$watch(function () {
-				return $scope.campaignWorkloadForm && $scope.campaignWorkloadForm.$valid ?
-					outboundService.calculateCampaignPersonHour($scope.newCampaign) : '';								
-			}, function(newValue) {
-				$scope.estimatedWorkload = newValue;				
-			});
+		$scope.$on('formLocator.campaignGeneralForm', function (event) {
+			$scope.campaignGeneralForm = event.targetScope.campaignGeneralForm;
+			$scope.formScope = event.targetScope;
+		});
 
-			$scope.$watch(function () {
+		$scope.$on('formLocator.campaignWorkloadForm', function (event) {
+			$scope.campaignWorkloadForm = event.targetScope.campaignWorkloadForm;
+			$scope.formScope = event.targetScope;
+		});
+
+		$scope.$watch(function () {
+			return $scope.campaignWorkloadForm && $scope.campaignWorkloadForm.$valid ?
+				outboundService.calculateCampaignPersonHour($scope.newCampaign) : null;
+		}, function (newValue) {
+			$scope.estimatedWorkload = newValue;
+		});
+
+		$scope.$watch(function () {
+			var startDate = deepPropertyAccess($scope, ['newCampaign', 'StartDate', 'Date']);
+			var endDate = deepPropertyAccess($scope, ['newCampaign', 'EndDate', 'Date']);
+			return { startDate: startDate, endDate: endDate };
+		}, function (value) {
+			$scope.newCampaign.StartDate = { Date: angular.copy(value.startDate) };
+			$scope.newCampaign.EndDate = { Date: angular.copy(value.endDate) };
+		}, true);
+
+		function setDateRangeClass(date, mode) {
+			if (mode === 'day') {
 				var startDate = deepPropertyAccess($scope, ['newCampaign', 'StartDate', 'Date']);
 				var endDate = deepPropertyAccess($scope, ['newCampaign', 'EndDate', 'Date']);
-				return { startDate: startDate, endDate: endDate };
-			}, function (value) {				
-				$scope.newCampaign.StartDate = { Date: angular.copy(value.startDate) };
-				$scope.newCampaign.EndDate = { Date: angular.copy(value.endDate) };
-			}, true);
 
-			function setDateRangeClass(date, mode) {		
-				if (mode === 'day') {
-					var startDate = deepPropertyAccess($scope, ['newCampaign', 'StartDate', 'Date']);
-					var endDate = deepPropertyAccess($scope, ['newCampaign', 'EndDate', 'Date']);
+				if (startDate && endDate && startDate <= endDate) {
+					var dayToCheck = new Date(date).setHours(12, 0, 0, 0);
+					var start = new Date(startDate).setHours(12, 0, 0, 0);
+					var end = new Date(endDate).setHours(12, 0, 0, 0);
 
-					if (startDate && endDate && startDate <= endDate) {
-						var dayToCheck = new Date(date).setHours(12, 0, 0, 0);
-						var start = new Date(startDate).setHours(12, 0, 0, 0);
-						var end = new Date(endDate).setHours(12, 0, 0, 0);
-											
-						if (dayToCheck >= start && dayToCheck <= end) {						
-							return 'in-date-range';
-						}
-					}					
-				}
-				return '';				
-			}
-
-			function isInputValid() {			
-				if (!$scope.campaignGeneralForm) return false;
-				if (!$scope.campaignWorkloadForm) return false;
-
-				return isDateValid(true) && isDateValid(false) &&
-					$scope.campaignGeneralForm.$valid && $scope.campaignWorkloadForm.$valid
-					&& validWorkingHours();
-			}
-
-			function isDateValid(isStart) {
-				var startDate = deepPropertyAccess($scope, ['newCampaign', 'StartDate', 'Date']);
-				var endDate = deepPropertyAccess($scope, ['newCampaign', 'EndDate', 'Date']);
-				if (isStart) {
-					if (!startDate) return false;					
-				} else {
-					if (!endDate) return false;					
-				}
-				if (endDate && startDate && startDate > endDate) return false;
-				return true;
-			}
-
-			function validWorkingHours() {		
-				var i, j;
-				for (i = 0; i < $scope.newCampaign.WorkingHours.length; i++) {
-					for (j = 0; j < $scope.newCampaign.WorkingHours[i].WeekDaySelections.length; j++) {
-						if ($scope.newCampaign.WorkingHours[i].WeekDaySelections[j].Checked) return true;
+					if (dayToCheck >= start && dayToCheck <= end) {
+						return 'in-date-range';
 					}
 				}
-				return false;				
 			}
-
-			function addCampaign() {
-				if (!isInputValid()) {					
-					flashErrorIcons();
-					return;
-				}
-				outboundService.addCampaign($scope.newCampaign, function (campaign) {				
-					outboundNotificationService.notifyCampaignCreationSuccess(angular.copy(campaign));
-					reset();
-					show(campaign);
-				}, function (error) {
-					outboundNotificationService.notifyCampaignCreationFailure(error);
-				});
-			}
-
-			function flashErrorIcons() {
-				$scope.$broadcast('expandable.expand');
-			}
-
-			function reset() {				
-				$scope.newCampaign = {
-					Activity: {},
-					StartDate: { Date: new Date() },
-					EndDate: { Date: new Date() },
-					WorkingHours: []											
-				};
-
-				expandAllSections($scope);
-
-				if ($scope.campaignGeneralForm) {
-					$scope.campaignGeneralForm.$setPristine();
-				}
-
-				if ($scope.campaignWorkloadForm) {
-					$scope.campaignWorkloadForm.$setPristine();
-				}
-			}
-		
-			function show(campaign) {
-				$state.go('outbound.edit', { Id: campaign.Id });
-			}
-
-			function backToList() {
-				$state.go('outbound.edit');
-			}
-						
+			return '';
 		}
-	]);
+
+		function isInputValid() {
+			if (!$scope.campaignGeneralForm) return false;
+			if (!$scope.campaignWorkloadForm) return false;
+
+			return isDateValid(true) && isDateValid(false) &&
+				$scope.campaignGeneralForm.$valid && $scope.campaignWorkloadForm.$valid
+				&& validWorkingHours();
+		}
+
+		function isDateValid(isStart) {
+			var startDate = deepPropertyAccess($scope, ['newCampaign', 'StartDate', 'Date']);
+			var endDate = deepPropertyAccess($scope, ['newCampaign', 'EndDate', 'Date']);
+			if (isStart) {
+				if (!startDate) return false;
+			} else {
+				if (!endDate) return false;
+			}
+			if (endDate && startDate && startDate > endDate) return false;
+			return true;
+		}
+
+		function validWorkingHours() {
+			var i, j;
+			for (i = 0; i < $scope.newCampaign.WorkingHours.length; i++) {
+				for (j = 0; j < $scope.newCampaign.WorkingHours[i].WeekDaySelections.length; j++) {
+					if ($scope.newCampaign.WorkingHours[i].WeekDaySelections[j].Checked) return true;
+				}
+			}
+			return false;
+		}
+
+		function addCampaign() {
+			if (!isInputValid()) {
+				flashErrorIcons();
+				return;
+			}
+			outboundService.addCampaign($scope.newCampaign, function (campaign) {
+				outboundNotificationService.notifyCampaignCreationSuccess(angular.copy(campaign));
+				reset();
+				show(campaign);
+			}, function (error) {
+				outboundNotificationService.notifyCampaignCreationFailure(error);
+			});
+		}
+
+		function flashErrorIcons() {
+			$scope.$broadcast('expandable.expand');
+		}
+
+		function reset() {
+			$scope.newCampaign = {
+				Activity: {},
+				StartDate: { Date: new Date() },
+				EndDate: { Date: new Date() },
+				WorkingHours: []
+			};
+
+			expandAllSections($scope);
+
+			if ($scope.campaignGeneralForm) {
+				$scope.campaignGeneralForm.$setPristine();
+			}
+
+			if ($scope.campaignWorkloadForm) {
+				$scope.campaignWorkloadForm.$setPristine();
+			}
+		}
+
+		function show(campaign) {
+			$state.go('outbound.edit', { Id: campaign.Id });
+		}
+
+		function backToList() {
+			$state.go('outbound.edit');
+		}
+
+	}
+
+
+	var outbound = angular.module('wfm.outbound');
 
 	outbound.controller('OutboundListCtrl', [
 		'$scope', '$state', 'growl', 'outboundService',
