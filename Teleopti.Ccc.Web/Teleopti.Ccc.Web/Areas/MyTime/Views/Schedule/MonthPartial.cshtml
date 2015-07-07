@@ -66,8 +66,8 @@
 							<!-- /ko -->
 						</div>
 						<!-- /ko -->
-						<!-- ko if: isDayOff && hasOvertime -->
-						<div class="dayoff">
+						<!-- ko if: hasOvertime -->
+						<div class="overtime" data-bind="css: { 'dayoff': isDayOff }">
 							<strong class="visible-lg">@Resources.Overtime</strong>
 						</div>
 						<!-- /ko -->

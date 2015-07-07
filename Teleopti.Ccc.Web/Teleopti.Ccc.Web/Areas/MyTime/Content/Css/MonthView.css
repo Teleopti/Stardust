@@ -134,6 +134,10 @@ span[data-cal-date] {
 	padding-top: 40px;
 }
 
+.cal-month-day .overtime {
+	padding-top: 40px;
+}
+
 .cal-weekday-header {
 	border-left: 1px solid #dfdfdf !important;
 	border-right: 1px solid #dfdfdf !important;
