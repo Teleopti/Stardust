@@ -43,7 +43,10 @@
 						if (node.$parentNodeScope !== null) {
 							var parentNode = node.$parentNodeScope.$modelValue;
 							parentNode.selected = true;
-
+							if (node.$parentNodeScope.$parentNodeScope !== null) {
+								var parentParentNode = node.$parentNodeScope.$parentNodeScope.$modelValue;
+								parentParentNode.selected = true;
+							}
 						} 
 					});
 				}
