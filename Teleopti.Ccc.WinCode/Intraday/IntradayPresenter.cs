@@ -311,20 +311,24 @@ namespace Teleopti.Ccc.WinCode.Intraday
                 _schedulingResultLoader.LoadWithIntradayData(uow);
                 initializeRtaStateHolder();
             }
-            _eventAggregator.GetEvent<IntradayLoadProgress>().Publish(UserTexts.Resources.RegisteringWithMessageBrokerThreeDots);
-            listenForMessageBroker();
-            _eventAggregator.GetEvent<IntradayLoadProgress>().Publish(UserTexts.Resources.LoadingInitialStatesThreeDots);
-			if (!_realTimeAdherenceEnabled || HistoryOnly) return;
-	        if (PollingEnabled.Equals(true))
-		    {
-		        string pollingInterval;
-		        if (!StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings.TryGetValue("RtaPollingInterval", out pollingInterval))
-			        pollingInterval = "5000";
-				 _poller.Poll(Convert.ToInt32(pollingInterval),loadExternalAgentStates);
-	        }
-	        else
-				loadExternalAgentStates();
         }
+
+	    public void LoadAgentStates()
+		{
+			_eventAggregator.GetEvent<IntradayLoadProgress>().Publish(UserTexts.Resources.RegisteringWithMessageBrokerThreeDots);
+			listenForMessageBroker();
+			_eventAggregator.GetEvent<IntradayLoadProgress>().Publish(UserTexts.Resources.LoadingInitialStatesThreeDots);
+			if (!_realTimeAdherenceEnabled || HistoryOnly) return;
+			if (PollingEnabled.Equals(true))
+			{
+				string pollingInterval;
+				if (!StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings.TryGetValue("RtaPollingInterval", out pollingInterval))
+					pollingInterval = "5000";
+				_poller.Poll(Convert.ToInt32(pollingInterval), loadExternalAgentStates);
+			}
+			else
+				loadExternalAgentStates();
+	    }
 
 	    private void loadExternalAgentStates()
 	    {

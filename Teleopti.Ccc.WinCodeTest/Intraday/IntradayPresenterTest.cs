@@ -388,7 +388,6 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 
             Assert.AreEqual(_rtaStateHolder, _target.RtaStateHolder);
             _schedulingResultLoader.AssertWasCalled(x => x.LoadWithIntradayData(uow));
-			_messageBroker.AssertWasCalled(x => x.RegisterSubscription(null, MyEventHandler), o => o.IgnoreArguments().Repeat.AtLeastOnce());
         }
 
         [Test]
@@ -453,7 +452,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			    _statisticCommand, _forecastCommand, _scheduleCommand, _meetingCommand, _loadStatisticCommand, poller,
 			    _toggleManger);
 		    
-		    _target.Initialize();
+		    _target.LoadAgentStates();
 
 		    poller.AssertWasCalled(x => x.Poll(1, null), o => o.IgnoreArguments());
 	    }
@@ -557,6 +556,25 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             Assert.AreEqual("test", test);
         }
 
+		[Test]
+		public void ShouldNotUpdateWhenThereIsNoStateChange()
+		{
+			var person = PersonFactory.CreatePerson().WithId();
+			var actualAgentState = new AgentStateReadModel
+			{
+				PersonId = person.Id.Value,
+				ReceivedTime = "2015-07-07 10:00".Utc()
+			};
+			var stateHolder = new RtaStateHolder(new SchedulingResultStateHolder(), MockRepository.GenerateMock<IRtaStateGroupRepository>());
+			var eventHandler = MockRepository.GenerateMock<EventHandler<CustomEventArgs<AgentStateReadModel>>>();
+			stateHolder.SetFilteredPersons(new[] { person });
+			stateHolder.AgentstateUpdated += eventHandler;
+
+			stateHolder.SetActualAgentState(actualAgentState);
+			stateHolder.SetActualAgentState(actualAgentState);
+
+			eventHandler.AssertWasCalled(x => x.Invoke(null, null), o => o.IgnoreArguments().Repeat.Once());
+		}
 
         public void Dispose()
         {

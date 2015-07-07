@@ -287,9 +287,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 
 			daylayerModel.HasAlarm.Should().Be.False();
 		}
-
-
-	}
+    }
 
     public class TestDispatcher : IDispatcherWrapper
     {

@@ -578,6 +578,8 @@ namespace Teleopti.Ccc.Win.Intraday
 
 			finalizeGallery();
 			selectDefaultView();
+
+			Presenter.LoadAgentStates();
 			FinishProgress();
 		}
 

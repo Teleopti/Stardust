@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -50,15 +49,18 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
 	        var person = FilteredPersons.FirstOrDefault(p => p.Id.GetValueOrDefault() == agentStateReadModel.PersonId);
 	        if (person == null || person.Id == null)
                 return;
-	        _actualAgentStates.AddOrUpdate((Guid) person.Id, agentStateReadModel, (key, oldState) =>
+	        var shouldUpdateUI = true;
+			_actualAgentStates.AddOrUpdate((Guid) person.Id, agentStateReadModel, (key, oldState) =>
 		        {
-			        if (oldState.ReceivedTime > agentStateReadModel.ReceivedTime)
+			        if (agentStateReadModel.ReceivedTime <= oldState.ReceivedTime)
+			        {
+				        shouldUpdateUI = false;
 				        return oldState;
-
+			        }
 			        return agentStateReadModel;
 		        });
 	        var handler = AgentstateUpdated;
-			if (handler != null)
+			if (handler != null && shouldUpdateUI)
 				handler.Invoke(this, new CustomEventArgs<AgentStateReadModel>(agentStateReadModel));
         }
 
