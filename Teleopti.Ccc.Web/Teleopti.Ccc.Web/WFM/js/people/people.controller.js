@@ -1,7 +1,6 @@
 ﻿'use strict';
 
-angular
-	.module('wfm.people', ['peopleService', 'peopleSearchService', 'ui.grid.pagination', 'ui.grid.resizeColumns'])
+angular.module('wfm.people')
 	.constant('chunkSize', 50)
 	.controller('PeopleCtrl', [
 		'$scope', '$filter', '$state', '$document', '$translate', 'i18nService', 'uiGridConstants', 'PeopleSearch', PeopleController
