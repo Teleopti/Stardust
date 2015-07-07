@@ -2,26 +2,45 @@
 	"use strict";
 
 	angular.module('wfm.outbound')
+		.controller('OutboundListCtrl', [
+			'$scope', '$state', '$stateParams', 'outboundService33699',
+			listCtrl
+		])
 		.controller('OutboundCreateCtrl', [
 			'$scope', '$state', 'outboundService33699', 'outboundNotificationService',
-			createCtrl])
+			createCtrl
+		])
 		.controller('OutboundEditCtrl', [
 			'$scope', '$state', '$stateParams', '$timeout', 'outboundService33699', 'outboundNotificationService',
-			editCtrl]);
+			editCtrl
+		]);
 
 
-	var notifySuccess = function (growl, message) {
-		growl.success("<i class='mdi mdi-thumb-up'></i> " + message + ".", {
-			ttl: 5000,
-			disableCountDown: true
-		});
-	}
+	function listCtrl($scope, $state, $stateParams, outboundService) {
 
-	var notifyFailure = function (growl, message) {
-		growl.error("<i class='mdi  mdi-alert-octagon'></i> " + message + ".", {
-			ttl: 5000,
-			disableCountDown: true
-		});
+		init();
+
+		$scope.gotoCreateCampaign = function () {
+			$state.go('outbound-create');
+		};
+
+		$scope.show = function (campaign) {
+			if (angular.isDefined(campaign)) $scope.currentCampaignId = campaign.Id;
+			$state.go('outbound.edit', { Id: $scope.currentCampaignId });
+		};
+
+		function init() {
+			$scope.campaigns = [];		
+
+			$scope.currentCampaignId = null;
+			$scope.$on('outbound.campaign.selected', function (e, data) {		
+				$scope.currentCampaignId = data.Id;
+			});
+		
+			outboundService.listCampaign(null, function success(campaigns) {				
+				$scope.campaigns = campaigns;				
+			});
+		}							
 	}
 
 	function editCtrl($scope, $state, $stateParams, $timeout, outboundService, outboundNotificationService) {
@@ -32,8 +51,7 @@
 
 		$scope.init = init;
 		$scope.editCampaign = editCampaign;
-		$scope.reset = reset;
-		$scope.dirtyWorkingHours = false;
+		$scope.reset = reset;		
 			
 		function editCampaign() {
 			if (!$scope.isInputValid()) {
@@ -49,18 +67,8 @@
 		}
 
 		function reset() {
-			$scope.campaign = angular.copy(originalCampaign);
-			
-			$scope.campaignGeneralForm.$setPristine();
-			$scope.campaignWorkloadForm.$setPristine();
-			$scope.campaignSpanningPeriodForm.$setPristine();
-
-			muteDirtyWorkingHoursWatcher = true;
-			$scope.dirtyWorkingHours = false;
-			$timeout(function () {
-				muteDirtyWorkingHoursWatcher = false;
-			});
-						
+			$scope.campaign = angular.copy(originalCampaign);					
+			setPristineForms();
 		}
 
 		function init() {
@@ -74,10 +82,14 @@
 				originalCampaign = campaign;
 				$scope.campaign = angular.copy(campaign);
 
+				$scope.$emit('outbound.campaign.selected', { Id: campaign.Id });
+
 				expandAllSections($scope);
 				registerCampaignForms($scope);
 				registerPersonHourFeedback($scope, outboundService);
 				setupValidators($scope);
+
+				setPristineForms();
 				
 				$scope.$watch(function () {
 					return $scope.campaign.WorkingHours;
@@ -89,6 +101,18 @@
 
 			}, function () {
 				outboundNotificationService.notifyCampaignLoadingFailure({ Message: currentCampaignId });
+			});
+		}
+
+		function setPristineForms() {
+			if ($scope.campaignGeneralForm) $scope.campaignGeneralForm.$setPristine();
+			if ($scope.campaignWorkloadForm) $scope.campaignWorkloadForm.$setPristine();
+			if ($scope.campaignSpanningPeriodForm) $scope.campaignSpanningPeriodForm.$setPristine();
+
+			muteDirtyWorkingHoursWatcher = true;
+			$scope.dirtyWorkingHours = false;
+			$timeout(function () {
+				muteDirtyWorkingHoursWatcher = false;
 			});
 		}
 	}
@@ -237,75 +261,6 @@
 			scope.$broadcast('expandable.expand');
 		}
 	} 
-
-
-	var outbound = angular.module('wfm.outbound');
-
-	outbound.controller('OutboundListCtrl', [
-		'$scope', '$state', 'growl', 'outboundService',
-		function ($scope, $state, growl, outboundService) {
-
-			$scope.newName = "";
-			$scope.selectedTarget = null;
-			$scope.showMoreHeaderFields = false;
-			
-			$scope.reset = function() {
-				$scope.newName = "";
-				$scope.form.$setPristine();
-			};
-
-			$scope.campaigns = outboundService.listCampaign({}, function () {
-				$scope.selectedTarget = outboundService.getCurrentCampaign();
-				$scope.$broadcast('outbound.campaigns.loaded');
-			});
-
-			$scope.gotoCreateCampaign = function() {
-				$state.go('outbound-create');
-			};
-
-			$scope.create = function() {
-				outboundService.addCampaign({ name: $scope.newName }, function (_newCampaign_) {
-					$scope.show(_newCampaign_);
-					notifySuccess(growl, "New campaign <strong>" + $scope.newName + "</strong> created");
-				}, function(error) {
-					notifyFailure(growl, "Failed to create campaign " + error);
-				});
-			};
-
-			$scope.copyNew = function(campaign) {
-				outboundService.addCampaign({ name: campaign.name + "_Copy" }, function (_newCampaign_) {
-					$scope.show(_newCampaign_);
-					notifySuccess(growl, "New campaign <strong>" + campaign.name + "_Copy"  + "</strong> created");
-				}, function (error) {
-					notifyFailure(growl, "Failed to clone campaign " + error);
-				});
-			};
-			$scope.update = function(campaign) {
-				outboundService.updateCampaign(campaign, function () {
-					notifySuccess(growl, "Campaign updated successfully");
-				}, function(error) {
-					notifyFailure(growl, "Failed to update campaign " + error);
-				});
-			};
-
-			$scope.show = function(campaign) {
-				if (angular.isDefined(campaign)) $scope.selectedTarget = campaign;
-				$state.go('outbound.edit', { Id: $scope.selectedTarget.Id });
-				$scope.showMoreHeaderFields = false;
-			};
-
-			$scope.delete = function(campaign) {
-				outboundService.deleteCampaign(campaign, function () {
-					notifySuccess(growl, "Campaign deleted successfully");
-				}, function(error) {
-					notifyFailure(growl, "Failed to delete campaign " + error);
-				});
-				$state.go('outbound.edit', { Id: null });
-			}
-		}
-	]);
-
-	
 
 	function expandAllSections(scope) {
 		scope.acToggle0 = true;

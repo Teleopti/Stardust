@@ -35,7 +35,7 @@
 					</div>
 					<div class="campaign-list role-container">
 						<ul class="wfm-list">
-							<li ng-repeat="campaign in campaigns | filter:searchCampaign" ng-click="show(campaign)" ng-dblclick="editing = true" ng-class="{'active': selectedTarget && campaign.Id == selectedTarget.Id}" class="role-btn wfm-block wfm-list-item role">
+							<li ng-repeat="campaign in campaigns" ng-click="show(campaign)" ng-dblclick="editing = true" ng-class="{'active': currentCampaignId && campaign.Id == currentCampaignId}" class="role-btn wfm-block wfm-list-item role">
 								<div class="wfm-leave-behind wfm-leave-behind-1">
 									<span>
 										<i ng-click="modalLaunch1 = !modalLaunch1" class="delete-campaign-toggle">
@@ -68,7 +68,7 @@
 										</div>
 									</div>
 								</div>
-								<div >
+								<div>
 									<span ng-class="outbound-campaign-name" ng-hide="editing">{{campaign.Name}}</span>
 								</div>
 							</li>
