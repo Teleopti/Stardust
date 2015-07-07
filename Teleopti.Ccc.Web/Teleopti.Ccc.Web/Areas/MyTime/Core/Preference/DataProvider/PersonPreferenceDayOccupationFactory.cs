@@ -10,11 +10,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 	{	
 		private readonly IScheduleProvider _scheduleProvider;
 		private readonly IPreferenceProvider _preferenceProvider;
+		private readonly IUserTimeZone _userTimezone;
 
-		public PersonPreferenceDayOccupationFactory(IScheduleProvider scheduleProvider, IPreferenceProvider preferenceProvider)
+
+		public PersonPreferenceDayOccupationFactory(IScheduleProvider scheduleProvider, IPreferenceProvider preferenceProvider, IUserTimeZone userTimezone)
 		{
 			_scheduleProvider = scheduleProvider;
 			_preferenceProvider = preferenceProvider;
+			_userTimezone = userTimezone;
 		}
 
 		public PersonPreferenceDayOccupation GetPreferenceDayOccupation(IPerson person, DateOnly date)
@@ -32,8 +35,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 				{
 					personPreferenceDayOccupation.HasShift = true;
 
-					var startTime = new TimeSpan(personAssignment.Period.StartDateTime.Hour, personAssignment.Period.StartDateTime.Minute, personAssignment.Period.StartDateTime.Second);
-					var endTime = new TimeSpan(personAssignment.Period.EndDateTime.Hour, personAssignment.Period.EndDateTime.Minute, personAssignment.Period.EndDateTime.Second);
+					var localStartDateTime = TimeZoneInfo.ConvertTimeFromUtc(personAssignment.Period.StartDateTime,
+						_userTimezone.TimeZone());
+					var localEndDateTime = TimeZoneInfo.ConvertTimeFromUtc(personAssignment.Period.EndDateTime,
+						_userTimezone.TimeZone());
+
+					var startTime = new TimeSpan(localStartDateTime.Hour, localStartDateTime.Minute, localStartDateTime.Second);
+					var endTime = new TimeSpan(localEndDateTime.Hour, localEndDateTime.Minute, localEndDateTime.Second);
 
 					personPreferenceDayOccupation.StartTimeLimitation = new StartTimeLimitation(startTime, startTime);
 					personPreferenceDayOccupation.EndTimeLimitation = new EndTimeLimitation(endTime, endTime);

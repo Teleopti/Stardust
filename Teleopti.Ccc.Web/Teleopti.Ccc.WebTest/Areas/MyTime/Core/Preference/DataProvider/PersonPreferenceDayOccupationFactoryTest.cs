@@ -4,6 +4,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.WebTest.Core.Common.DataProvider;
@@ -46,11 +47,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			var preferenceDay = new PreferenceDay(person, date2, preferenceRestriction);
 			var personPreferenceProvider = new FakePreferenceProvider(preferenceDay);
 
-
+			var userTimeZone = new FakeUserTimeZone(TimeZoneInfo.Utc);
 
 			target = new PersonPreferenceDayOccupationFactory(			
 				scheduleProvider, 
-				personPreferenceProvider);
+				personPreferenceProvider,
+				userTimeZone);
 		}
 
 		[Test]
