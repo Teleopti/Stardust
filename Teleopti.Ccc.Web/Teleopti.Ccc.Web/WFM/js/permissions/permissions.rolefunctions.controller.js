@@ -27,7 +27,9 @@
 
 			$scope.toggleFunctionForRole = function (node) {
 				var functionNode = node.$modelValue;
-				var parentNode = node.$parentNodeScope.$modelValue;
+
+				
+
 				if (functionNode.selected) { 
 					RolesFunctionsService.unselectFunction(functionNode.FunctionId, $scope.selectedRole).then(function () {
 						functionNode.selected = false;
@@ -38,7 +40,11 @@
 					RolesFunctionsService.selectFunction(functionNode.FunctionId, $scope.selectedRole).then(function () {
 						functionNode.selected = true;
 						decreaseParentNumberOfSelectedNodes(node);
-						parentNode.selected = true;
+						if (node.$parentNodeScope !== null) {
+							var parentNode = node.$parentNodeScope.$modelValue;
+							parentNode.selected = true;
+
+						} 
 					});
 				}
 			};
