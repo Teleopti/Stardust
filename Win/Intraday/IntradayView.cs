@@ -575,6 +575,7 @@ namespace Teleopti.Ccc.Win.Intraday
             
             FinalizeGallery();
             selectDefaultView();
+			Presenter.LoadAgentStates();
             FinishProgress();
         }
 

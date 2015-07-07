@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
-using System.Linq;
 using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
 using NUnit.Framework;
@@ -10,9 +9,9 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -337,10 +336,6 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             _schedulingResultLoader.AssertWasCalled(x => x.LoadWithIntradayData(uow));
         }
 
-		private static void MyEventHandler(object sender, EventMessageArgs e)
-		{
-		}
-
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void VerifyOnLoadWithoutRtaEnabled()
 		{
@@ -362,9 +357,6 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 
 			Assert.AreEqual(_rtaStateHolder, _target.RtaStateHolder);
             _schedulingResultLoader.AssertWasCalled(x => x.LoadWithIntradayData(uow));
-            _messageBroker.AssertWasCalled(x => x.RegisterEventSubscription(MyEventHandler, null), o => o.IgnoreArguments().Repeat.Twice());
-            _messageBroker.AssertWasCalled(x => x.RegisterEventSubscription(MyEventHandler, Guid.Empty, typeof(Scenario), null, DateTime.UtcNow, DateTime.UtcNow), o => o.IgnoreArguments());
-            _messageBroker.AssertWasCalled(x => x.RegisterEventSubscription(MyEventHandler, null, DateTime.UtcNow, DateTime.UtcNow), o => o.IgnoreArguments());
         }
 
         [Test]
@@ -466,6 +458,26 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             Assert.AreEqual("test", test);
         }
 
+		[Test]
+		public void ShouldNotUpdateWhenThereIsNoStateChange()
+		{
+			var person = PersonFactory.CreatePerson();
+			person.SetId(Guid.NewGuid());
+			var actualAgentState = new ActualAgentState
+			{
+				PersonId = person.Id.Value,
+				ReceivedTime = new DateTime(2015, 7, 7, 10, 0, 0)
+			};
+			var stateHolder = new RtaStateHolder(new SchedulingResultStateHolder(), MockRepository.GenerateMock<IRtaStateGroupRepository>());
+			var eventHandler = MockRepository.GenerateMock<EventHandler<CustomEventArgs<IActualAgentState>>>();
+			stateHolder.SetFilteredPersons(new[] { person });
+			stateHolder.AgentstateUpdated += eventHandler;
+
+			stateHolder.SetActualAgentState(actualAgentState);
+			stateHolder.SetActualAgentState(actualAgentState);
+
+			eventHandler.AssertWasCalled(x => x.Invoke(null, null), o => o.IgnoreArguments().Repeat.Once());
+		}
 
         public void Dispose()
         {

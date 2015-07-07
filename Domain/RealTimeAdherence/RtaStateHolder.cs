@@ -49,14 +49,18 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
 	        var person = FilteredPersons.FirstOrDefault(p => p.Id.GetValueOrDefault() == actualAgentState.PersonId);
 	        if (person == null || person.Id == null)
                 return;
+			var shouldUpdateUI = true;
 	        _actualAgentStates.AddOrUpdate((Guid) person.Id, actualAgentState, (key, oldState) =>
+	        {
+		        if (actualAgentState.ReceivedTime <= oldState.ReceivedTime)
 		        {
-			        if (oldState.ReceivedTime > actualAgentState.ReceivedTime)
-				        return oldState;
-			        return actualAgentState;
-		        });
+			        shouldUpdateUI = false;
+			        return oldState;
+		        }
+		        return actualAgentState;
+	        });
 	        var handler = AgentstateUpdated;
-			if (handler != null)
+			if (handler != null && shouldUpdateUI)
 				handler.Invoke(this, new CustomEventArgs<IActualAgentState>(actualAgentState));
         }
 
