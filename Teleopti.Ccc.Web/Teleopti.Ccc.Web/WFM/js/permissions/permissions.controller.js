@@ -1,8 +1,7 @@
 ﻿(function() {
 	'use strict';
-
-	var permissions = angular.module('wfm.permissions', ['ngResource']);
-	permissions.controller('PermissionsCtrl', [
+	angular.module('wfm.permissions')
+        .controller('PermissionsCtrl', [
 			'$scope', '$filter', 'PermissionsService', 'Roles', '$stateParams',
 			function($scope, $filter, Permissions, Roles, $stateParams) {
 				$scope.list = [];
