@@ -10673,7 +10673,7 @@ These options are activated:
     <comment>You should have X days off.</comment>
   </data>
   <data name="Anywhere" xml:space="preserve">
-    <value>Anywhere</value>
+    <value>Web</value>
     <comment>The name of the team leader tool module used in permission</comment>
   </data>
   <data name="YouShouldHaveBetweenXAndYDaysOff" xml:space="preserve">
@@ -13213,5 +13213,9 @@ Reduce the complexity to use these shifts.</value>
   <data name="CouldNotGetMessagesFromMessageBroker" xml:space="preserve">
     <value>Could not get messages from message broker</value>
     <comment>Could not get messages from message broker</comment>
+  </data>
+  <data name="MyTeamSchedules" xml:space="preserve">
+    <value>My Team Schedules</value>
+    <comment>My Team Schedules for MyTeam in Permission Module</comment>
   </data>
 </root>
