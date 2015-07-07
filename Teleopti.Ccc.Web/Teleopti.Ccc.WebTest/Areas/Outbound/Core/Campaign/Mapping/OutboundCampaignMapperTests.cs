@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -154,6 +156,29 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core.Campaign.Mapping
 			var result = target.Map(_campaignViewModel);
 
 			result.SpanningPeriod.EndDate.Should().Be.EqualTo(_campaignViewModel.EndDate);
+		}		
+		
+		[Test]
+		public void ShouldMapWorkingHours()
+		{
+			var campaign = new Domain.Outbound.Campaign();
+			campaign.WorkingHours.Add(DayOfWeek.Wednesday, new TimePeriod());
+			campaign.WorkingHours.Add(DayOfWeek.Thursday, new TimePeriod());
+			campaign.WorkingHours.Add(DayOfWeek.Friday, new TimePeriod());
+			
+			_outboundCampaignRepository.Stub(x => x.Get(_campaignViewModel.Id.Value)).Return(campaign);
+			_campaignViewModel.WorkingHours = new List<CampaignWorkingHour>()
+			{
+				new CampaignWorkingHour(){WeekDay = DayOfWeek.Monday, StartTime = new TimeSpan(9,0,0), EndTime = new TimeSpan(17,0,0)},
+				new CampaignWorkingHour(){WeekDay = DayOfWeek.Tuesday, StartTime =new TimeSpan(9,0,0), EndTime = new TimeSpan(17,0,0)}
+			};
+
+			var target = new OutboundCampaignMapper(_outboundCampaignRepository);
+			var result = target.Map(_campaignViewModel);
+
+			result.WorkingHours.Count.Should().Be.EqualTo(2);
+			result.WorkingHours.ToList()[0].Key.Should().Be.EqualTo(DayOfWeek.Monday);
+			result.WorkingHours.ToList()[1].Key.Should().Be.EqualTo(DayOfWeek.Tuesday);
 		}
 	}
 }

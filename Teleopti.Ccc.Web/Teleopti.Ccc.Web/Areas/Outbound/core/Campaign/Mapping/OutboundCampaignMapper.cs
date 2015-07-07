@@ -26,6 +26,14 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping
 			campaign.RightPartyConnectRate = campaignViewModel.RightPartyConnectRate;
 			campaign.UnproductiveTime = campaignViewModel.UnproductiveTime;
 			campaign.SpanningPeriod = new DateOnlyPeriod(campaignViewModel.StartDate, campaignViewModel.EndDate);
+			campaign.WorkingHours.Clear();
+			if (campaignViewModel.WorkingHours != null)
+			{
+				foreach (CampaignWorkingHour workingHour in campaignViewModel.WorkingHours)
+				{
+					campaign.WorkingHours.Add(workingHour.WeekDay, new TimePeriod(workingHour.StartTime, workingHour.EndTime));
+				}
+			}
 			return campaign;
 		}
 	}
