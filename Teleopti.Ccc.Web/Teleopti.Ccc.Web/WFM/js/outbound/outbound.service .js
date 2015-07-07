@@ -45,6 +45,7 @@
 		var createCampaignCommandUrl = '../api/Outbound/Campaign';
 		var getCampaignCommandUrl = '../api/Outbound/Campaign/';
 		var listCampaignCommandUrl = '../api/Outbound/Campaign';
+		var editCampaignCommandUrl = '../api/Outbound/Campaign/';
 		
 		this.listCampaign = function (filter, successCb, errorCb) {
 			$http.get(listCampaignCommandUrl).success(function(data) {
@@ -73,6 +74,16 @@
 					if (successCb != null) successCb(data);
 				}).
 				error(function(data) {
+					if (errorCb != null) errorCb(data);
+				});
+		};
+
+		this.editCampaign = function(campaign, successCb, errorCb) {
+			$http.put(editCampaignCommandUrl + campaign.Id, normalizeCampaign(campaign))
+				.success(function(data) {
+					if (successCb != null) successCb(data);
+				})
+				.error(function(data) {
 					if (errorCb != null) errorCb(data);
 				});
 		};
@@ -122,20 +133,43 @@
 			return $filter('date')(dtObj, 'HH:mm');
 		}
 
+		function parseTimespanString(t) {
+			if (!angular.isString(t) ) return t;
+			var parts = t.match(/^(\d{1,2}):(\d{1,2})(:|$)/);
+			if (parts) {
+				var d = new Date();
+				d.setHours(parts[1]);
+				d.setMinutes(parts[2]);
+				return d;
+			}
+
+		}
 		
 		function denormalizeCampaign(campaign) {
 			var campaign = angular.copy(campaign);
+
+			if (campaign.StartDate) campaign.StartDate.Date = new Date(campaign.StartDate.Date);
+			if (campaign.EndDate) campaign.EndDate.Date = new Date(campaign.EndDate.Date);
+
 			var reformattedWorkingHours = [];
 		
+
 			campaign.WorkingHours.forEach(function (a) {
-				var workingHourRows = reformattedWorkingHours.filter(function(wh) { return wh.StartTime == a.StartTime && wh.EndTime == a.EndTime;});
+
+				var startTime = parseTimespanString(a.StartTime);
+				var endTime = parseTimespanString(a.EndTime);
+
+				var workingHourRows = reformattedWorkingHours.filter(function (wh) {					
+					return formatTimespanInput(wh.StartTime) == formatTimespanInput(startTime)
+						&& formatTimespanInput(wh.EndTime) == formatTimespanInput(endTime);
+				});
 				var workingHourRow; 
 				if (workingHourRows.length == 0) {
-					workingHourRow = createEmptyWorkingPeriod(a.StartTime, a.EndTime);
+					workingHourRow = createEmptyWorkingPeriod(startTime, endTime);
 
 					angular.forEach(workingHourRow.WeekDaySelections, function(e) {
 						if (e.WeekDay == a.WeekDay) e.Checked = true;
-					});				
+					});					
 					reformattedWorkingHours.push(workingHourRow);
 				} else {
 					workingHourRow = workingHourRows[0];
@@ -318,8 +352,16 @@
 			notifySuccess("New campaign <strong>" + campaign.Name + "</strong> created");
 		}
 
+		this.notifyCampaignUpdateSuccess = function (campaign) {
+			notifySuccess("Campaign <strong>" + campaign.Name + "</strong> was updated successfully");
+		}
+
 		this.notifyCampaignCreationFailure = function (error) {
-			notifyFailure("Failed to create campaign "  + (error && error.Message? error.Message: error));
+			notifyFailure("Failed to create campaign. "  + (error && error.Message? error.Message: error));
+		}
+
+		this.notifyCampaignUpdateFailure = function (error) {
+			notifyFailure("Failed to update campaign. " + (error && error.Message ? error.Message : error));
 		}
 
 		this.notifyCampaignLoadingFailure = function(error) {

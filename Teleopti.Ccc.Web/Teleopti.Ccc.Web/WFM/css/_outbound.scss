@@ -109,31 +109,6 @@
 .wrong-sign, .right-sign {
 	display: none;
 }
-
-.ng-valid + .input-validation-sign .right-sign, .custom-valid + .input-validation-sign .right-sign {
-	display: block !important;
-}
-
-.ng-invalid + .input-validation-sign, .custom-invalid + .input-validation-sign   {
-	.wrong-sign {
-		display: block !important; 
-	}
-
-	&, &.expand {
-		transition: transform 0.3s linear;
-
-		.wrong-sign {
-			transition: color 0.3s linear;
-		}
-	}
-	&.expand {
-	   transform: scale(1.5); 
-	   .wrong-sign {
-			color: red !important;
-	   }
-	}
-}
-
 .right-sign {
 	color: #c2e085 ;
 }
@@ -141,7 +116,68 @@
 	color: #ee8f7d ;
 }
 
-.campaign-details {
+.campaign-create {
+	.ng-valid + .input-validation-sign .right-sign, 
+	.custom-valid + .input-validation-sign .right-sign,
+	form.ng-valid .form-validation-sign .right-sign {
+		display: block !important;
+	}
+
+	.ng-invalid + .input-validation-sign, 
+	.custom-invalid + .input-validation-sign,
+	form.ng-invalid .form-validation-sign   {
+		.wrong-sign {
+			display: block !important; 
+		}
+
+		&, &.expand {
+			transition: transform 0.3s linear;
+
+			.wrong-sign {
+				transition: color 0.3s linear;
+			}
+		}
+		&.expand {
+		   transform: scale(1.5); 
+		   .wrong-sign {
+				color: red !important;
+		   }
+		}
+	}
+}
+
+.campaign-edit {
+	.ng-dirty.ng-valid + .input-validation-sign .right-sign, 
+	.ng-dirty.custom-valid + .input-validation-sign .right-sign,
+	form.ng-dirty.ng-valid .form-validation-sign .right-sign {
+		display: block !important;
+	}
+
+	.ng-dirty.ng-invalid + .input-validation-sign, 
+	.ng-dirty.custom-invalid + .input-validation-sign,
+	form.ng-dirty.ng-invalid .form-validation-sign  {
+		.wrong-sign {
+			display: block !important; 
+		}
+
+		&, &.expand {
+			transition: transform 0.3s linear;
+
+			.wrong-sign {
+				transition: color 0.3s linear;
+			}
+		}
+		&.expand {
+		   transform: scale(1.5); 
+		   .wrong-sign {
+				color: red !important;
+		   }
+		}
+	}
+}
+
+
+.campaign-create, .campaign-edit {
 
 	input[type="text"] {
 		height: 23px;

@@ -1,12 +1,11 @@
 ﻿<div class="polymorphic-input-body">
-	<input type="text" ng-model="inputs.Name" ng-if="!inputs.useExisting" placeholder="{{inputPlaceholder}}" ng-readonly="disableInput" />
-	<md-select ng-if="inputs.useExisting" placeholder="Choose" ng-model="inputs.Id">
+	<input type="text" ng-model="inputs.Name" ng-if="!(disableCreate || inputs.useExisting)" placeholder="{{inputPlaceholder}}" ng-readonly="disableInput" />
+	<md-select ng-if="disableCreate || inputs.useExisting" placeholder="Choose" ng-model="inputs.Id">
 		<md-option ng-repeat="activityOption in allActivities" value="{{activityOption.Id}}">{{activityOption.Name}}</md-option>
 	</md-select>
-
 </div>
 <div class="divider"></div>
-<div class="wfm-checkbox morph-switch">
+<div class="wfm-checkbox morph-switch" ng-if="!disableCreate">
 	<input type="checkbox" id="UseExistingActivity" ng-model="inputs.useExisting" />
 	<label for="UseExistingActivity">
 		<span class="wfm-checkbox-toggle"></span>

@@ -51,11 +51,7 @@
 			<form name="newWorkingPeriodForm" ng-submit="">
 				<div class="inline-fix clearfix">
 					<button class="wfm-fab mini success" ng-click="addEmptyWorkingPeriod(newWorkingPeriodStartTime, newWorkingPeriodEndTime)"><i class="mdi mdi-plus"></i></button>
-					<!--<i class="mdi mdi-plus move-down-5" ng-click="addWorkingPeriod()"></i>-->
-					<!--<input type="time" name="NewTimeRangeStart" ng-model="newWorkingPeriod.StartTime"/>
-					-
-					<input type="time" name="NewTimeRangeEnd" ng-model="newWorkingPeriod.EndTime"/>-->
-
+					
 					<div class="wfm-timepicker-wrapper">
 						<wfm-timepicker ng-model="newWorkingPeriodStartTime" use-meridian="useMeridian" minute-step="15"></wfm-timepicker>
 					</div>

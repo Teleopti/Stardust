@@ -1,103 +1,85 @@
-﻿<div class="outbound">
-	<div class="row">
-		<div class="col-lg-12">
-			<h4 translate>OutboundCampaigns</h4>			
-		</div>
-		<div class="col-lg-9">
-			<p translate>OutboundIntroduction</p>
-		</div>
-		<!--<div class="col-lg-3">
-			<md-checkbox id="slide1" ng-model="showMoreHeaderFields"><span translate>showMoreHeaderFields</span></md-checkbox>
-		</div>-->
-	</div>
-	
-	<div ng-class="{'col-lg-4' : !showMoreHeaderFields , 'col-lg-12': showMoreHeaderFields   }">
-		<div class="role-nav material-depth-1 container-block">
-			<div class="wfm-block sub-header">
-				<div ng-show="!showMoreHeaderFields" translate>Campaigns</div>
-				<div class="row" ng-show="showMoreHeaderFields">
-					<div class="col-lg-4 column-label">
-						<span translate>CampaignName</span>
-					</div>
-					<div class="col-lg-2 column-label">
-						<span translate>Start</span>
-					</div>
-					<div class="col-lg-2 column-label">
-						<span translate>End</span>
-					</div>
-					<div class="col-lg-2">
-						<span translate>Progress</span>
+﻿<div class="row outbound ">
+	<h4 translate>OutboundCampaigns</h4>
+	<div class="col-lg-4 campaign-list">
+		<div class="wfm-block material-block">
+			<div class="material-block-header">
+				<div layout="row">
+					<div class="text-center" flex>
+						<span translate>OutboundIntroduction</span>
 					</div>
 				</div>
 			</div>
-			<div class="relative w-100p">
-				<button class="md-fab md-mini md-button md-default-theme flow-btn"  aria-label="Eat cake" ng-click="gotoCreateCampaign()">
-					<i class="mdi mdi-plus m-t-10"></i>
-				</button>
-			</div>
-			<div class="campaign-list role-container">
-				<ul class="wfm-list">
-					<li ng-repeat="campaign in campaigns | filter:searchCampaign" ng-click="show(campaign)" ng-dblclick="editing = true" ng-class="{'active': selectedTarget && campaign.Id == selectedTarget.Id}" class="role-btn wfm-block wfm-list-item role">
-						<div class="wfm-leave-behind wfm-leave-behind-1">
-							<span>
-								<!--<i ng-click="$parent.copyNew(campaign);">
-									<svg style="width: 18px; height: 18px" viewBox="0 0 24 24">
-										<path fill="#555555" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
-									</svg>
-									<md-tooltip>
-										<span translate>Duplicate</span>
-									</md-tooltip>
-								</i>-->
-								<i ng-click="modalLaunch1 = !modalLaunch1" class="delete-campaign-toggle">
-									<svg style="width: 18px; height: 18px" viewBox="0 0 24 24">
-										<path fill="#555555" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />
-									</svg>
-									<md-tooltip>
-										<span translate>Delete</span>
-									</md-tooltip>
-								</i>
-							</span>
+			<div class="material-block-content">
+				<div class="wfm-block role-nav material-depth-1 container-block">
+					<div class="wfm-block sub-header">
+						<div ng-show="!showMoreHeaderFields" translate>Campaigns</div>
+						<div class="row" ng-show="showMoreHeaderFields">
+							<div class="col-lg-4 column-label">
+								<span translate>CampaignName</span>
+							</div>
+							<div class="col-lg-2 column-label">
+								<span translate>Start</span>
+							</div>
+							<div class="col-lg-2 column-label">
+								<span translate>End</span>
+							</div>
+							<div class="col-lg-2">
+								<span translate>Progress</span>
+							</div>
 						</div>
-						<div ng-cloak class="modal-box">
-							<div ng-cloak ng-show="modalLaunch1">
-								<div class="modalbg">
-									<div class="dialog">
-										<div class="modal-header" translate>
-											DeleteCampaign
-										</div>
-										<div class="modal-inner-content">
-											<div class="wfm-block" translate>AreYouSureYouWantToDeleteThisCampaign</div>
-										</div>
-										<div class="modal-footer">
-											<aside>
-												<a ng-click="modalLaunch1 = !modalLaunch1" class="wfm-btn wfm-btn-invis-primary" translate>DISMISS</a>
-												<a ng-click="$parent.delete(campaign, $index)" class=" wfm-btn wfm-btn-invis-primary" translate>AGREE</a>
-											</aside>
+					</div>
+					<div class="relative w-100p">
+						<button class="md-fab md-mini md-button md-default-theme flow-btn" aria-label="Eat cake" ng-click="gotoCreateCampaign()">
+							<i class="mdi mdi-plus m-t-10"></i>
+						</button>
+					</div>
+					<div class="campaign-list role-container">
+						<ul class="wfm-list">
+							<li ng-repeat="campaign in campaigns | filter:searchCampaign" ng-click="show(campaign)" ng-dblclick="editing = true" ng-class="{'active': selectedTarget && campaign.Id == selectedTarget.Id}" class="role-btn wfm-block wfm-list-item role">
+								<div class="wfm-leave-behind wfm-leave-behind-1">
+									<span>
+										<i ng-click="modalLaunch1 = !modalLaunch1" class="delete-campaign-toggle">
+											<svg style="width: 18px; height: 18px" viewBox="0 0 24 24">
+												<path fill="#555555" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />
+											</svg>
+											<md-tooltip>
+												<span translate>Delete</span>
+											</md-tooltip>
+										</i>
+									</span>
+								</div>
+								<div ng-cloak class="modal-box">
+									<div ng-cloak ng-show="modalLaunch1">
+										<div class="modalbg">
+											<div class="dialog">
+												<div class="modal-header" translate>
+													DeleteCampaign
+												</div>
+												<div class="modal-inner-content">
+													<div class="wfm-block" translate>AreYouSureYouWantToDeleteThisCampaign</div>
+												</div>
+												<div class="modal-footer">
+													<aside>
+														<a ng-click="modalLaunch1 = !modalLaunch1" class="wfm-btn wfm-btn-invis-primary" translate>DISMISS</a>
+														<a ng-click="$parent.delete(campaign, $index)" class=" wfm-btn wfm-btn-invis-primary" translate>AGREE</a>
+													</aside>
+												</div>
+											</div>
 										</div>
 									</div>
 								</div>
-							</div>
-						</div>
-						<div class="row">
-							<div ng-class="{'col-lg-4': showMoreHeaderFields}">
-								<span ng-class="outbound-campaign-name" ng-hide="editing">{{campaign.Name}}</span>
-								<form ng-show="editing" ng-submit="editing = false; update(campaign)">
-									<input type="text" class="inline-role-name" ng-model="campaign.Name" placeholder="Name" ng-required />
-								</form>
-							</div>
-							<div ng-show="showMoreHeaderFields">
-								<span class="col-lg-2">{{campaign.period.startDate}}</span>
-								<span class="col-lg-2">{{campaign.period.endDate}}</span>
-								<span class="col-lg-2">{{campaign.params.target}} / {{campaign.params.callList}}</span>
-							</div>
-						</div>
-					</li>
-				</ul>
+								<div >
+									<span ng-class="outbound-campaign-name" ng-hide="editing">{{campaign.Name}}</span>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
 			</div>
+
 		</div>
 	</div>
-
-	<div class="col-lg-8" ng-if="!showMoreHeaderFields">
+	<div class="col-lg-8 campaign-edit">
 		<div ui-view></div>
-	</div>
+	</div>	
 </div>

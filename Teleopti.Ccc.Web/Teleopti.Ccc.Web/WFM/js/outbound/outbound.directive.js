@@ -9,7 +9,6 @@
 			restrict: 'A',
 			link: function(scope, elem, attr) {
 				var identifier = attr['name'];
-				console.log()
 				scope.$emit('formLocator.' + identifier);
 			}
 		}
@@ -32,6 +31,7 @@
 				var initializing = true;
 
 				scope.disableInput = false;
+				scope.disableCreate = false;
 				scope.inputPlaceholder = 'new activity name';
 					
 				scope.inputs = { Id: null, Name: '', useExisting: false };
@@ -52,14 +52,16 @@
 					});
 					scope.disableInput = true;
 					scope.inputPlaceholder = 'same as campaign name';
+				} else if (angular.isDefined(attrs.disableCreate)) {
+					scope.disableCreate = true;					
 				}
 
 				ngModel.$parsers.push(parser);
 				ngModel.$formatters.push(formatter);
 
-				ngModel.$validators.notEmpty = function (modelValue, viewValue) {
+				ngModel.$validators.notEmpty = function (modelValue, viewValue) {				
 					return (viewValue.useExisting) ?
-						viewValue.Id !== null && (scope.allActivities.filter(attrValueFilter('Id', viewValue.Id)).length > 0) :
+						viewValue.Id !== null  :
 						viewValue.Name != null && viewValue.Name != '';
 				}
 
@@ -74,7 +76,7 @@
 					scope.inputs = ngModel.$viewValue || { Id: null, Name: '', useExisting: false };
 				}
 
-				function formatter(modelValue) {
+				function formatter(modelValue) {				
 					if (modelValue && modelValue.Id) {
 						return { Name: modelValue.Name, Id: modelValue.Id, useExisting: true };
 					} else {
@@ -119,12 +121,11 @@
 				scope.removeWorkingPeriod = removeWorkingPeriod;
 
 				scope.weekDays = outboundService.createEmptyWorkingPeriod().WeekDaySelections;
-				
+			
 				function enforceRadioBehavior(refIndex, weekDay) {
 					clearConflictWorkingHourSelection(scope.workingHours, refIndex, weekDay);
 				}
 				
-
 				function addEmptyWorkingPeriod(startTime, endTime) {				
 					if (!(startTime && endTime)) return;
 					scope.workingHours.push(outboundService.createEmptyWorkingPeriod(angular.copy(startTime), angular.copy(endTime)));					
@@ -133,7 +134,6 @@
 				function removeWorkingPeriod(index) {
 					scope.workingHours.splice(index, 1);
 				}
-
 
 				function clearConflictWorkingHourSelection(workingHours, refIndex, weekDay) {
 					angular.forEach(workingHours, function(workingHour, i) {

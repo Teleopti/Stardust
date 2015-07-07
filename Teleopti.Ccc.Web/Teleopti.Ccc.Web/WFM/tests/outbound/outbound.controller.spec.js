@@ -41,26 +41,26 @@ describe('OutboundCreateCtrl', function() {
 
 	it('Name should be empty to start with', function() {	
 		var test = setUpTarget();
-		expect(test.scope.newCampaign.Name).not.toBeDefined();
+		expect(test.scope.campaign.Name).not.toBeDefined();
 
 	});
 
 	it('Working hours should be empty to start with', function() {
 		var test = setUpTarget();
-		expect(test.scope.newCampaign.WorkingHours).toBeDefined();
-		expect(test.scope.newCampaign.WorkingHours.length).toEqual(0);
+		expect(test.scope.campaign.WorkingHours).toBeDefined();
+		expect(test.scope.campaign.WorkingHours.length).toEqual(0);
 	});
 
 	it('Activity should be empty to start with', function() {
 		var test = setUpTarget();
-		expect(test.scope.newCampaign.Activity).toBeDefined();
-		expect(test.scope.newCampaign.Activity.Id).not.toBeDefined();
+		expect(test.scope.campaign.Activity).toBeDefined();
+		expect(test.scope.campaign.Activity.Id).not.toBeDefined();
 	});
 
 	it('Start Day and End Day should be set to start with', function() {
 		var test = setUpTarget();
-		expect(test.scope.newCampaign.StartDate).toBeDefined();
-		expect(test.scope.newCampaign.EndDate).toBeDefined();
+		expect(test.scope.campaign.StartDate).toBeDefined();
+		expect(test.scope.campaign.EndDate).toBeDefined();
 	});
 
 	it('Default to invalid', function() {
@@ -72,7 +72,7 @@ describe('OutboundCreateCtrl', function() {
 		var test = setUpTarget();
 
 		test.scope.campaignWorkloadForm = { $valid: true };
-		test.scope.newCampaign.calculatedPersonHour = 1;
+		test.scope.campaign.calculatedPersonHour = 1;
 
 		test.scope.$digest();
 		expect(test.scope.estimatedWorkload).toEqual(1);
@@ -84,8 +84,9 @@ describe('OutboundCreateCtrl', function() {
 
 		test.scope.campaignWorkloadForm = { $valid: true };
 		test.scope.campaignGeneralForm = { $valid: true };
+		test.scope.campaignSpanningPeriodForm = { $valid: true };
 
-		completeValidCampaign(test.scope.newCampaign);
+		completeValidCampaign(test.scope.campaign);
 		expect(test.scope.isInputValid()).toBeTruthy();
 	});
 
@@ -100,21 +101,23 @@ describe('OutboundCreateCtrl', function() {
 	it('Should submit valid campaign', function() {
 		var test = setUpTarget();
 		test.scope.campaignWorkloadForm = { $valid: true, $setPristine: function() {} };
-		test.scope.campaignGeneralForm = { $valid: true, $setPristine: function () {} };
-		completeValidCampaign(test.scope.newCampaign);
+		test.scope.campaignGeneralForm = { $valid: true, $setPristine: function () { } };
+		test.scope.campaignSpanningPeriodForm = { $valid: true, $setPristine: function () { } };
+		completeValidCampaign(test.scope.campaign);
 		test.scope.addCampaign();
 		var campaigns;
 		outboundService.listCampaign(null, function(data) { campaigns = data; });
 		expect(campaigns.length).toEqual(1);
 	});
 
-	it('Should rest after valid submission', function() {
+	it('Should reset after valid submission', function() {
 		var test = setUpTarget();
 		test.scope.campaignWorkloadForm = { $valid: true, $setPristine: function () { } };
 		test.scope.campaignGeneralForm = { $valid: true, $setPristine: function () { } };
-		completeValidCampaign(test.scope.newCampaign);
+		test.scope.campaignSpanningPeriodForm = { $valid: true, $setPristine: function () { } };
+		completeValidCampaign(test.scope.campaign);
 		test.scope.addCampaign();
-		expect(test.scope.newCampaign.WorkingHours.length).toEqual(0);
+		expect(test.scope.campaign.WorkingHours.length).toEqual(0);
 	});
 
 	it('Invalid date range should fail', function() {
@@ -122,9 +125,9 @@ describe('OutboundCreateCtrl', function() {
 		var test = setUpTarget();
 		test.scope.campaignWorkloadForm = { $valid: true, $setPristine: function() {} };
 		test.scope.campaignGeneralForm = { $valid: true, $setPristine: function() {} };
-		completeValidCampaign(test.scope.newCampaign);
-		test.scope.newCampaign.StartDate.Date = new Date();
-		test.scope.newCampaign.EndDate.Date = (new Date()).setDate((new Date()).getDate() - 1);
+		completeValidCampaign(test.scope.campaign);
+		test.scope.campaign.StartDate.Date = new Date();
+		test.scope.campaign.EndDate.Date = (new Date()).setDate((new Date()).getDate() - 1);
 		expect(test.scope.isInputValid()).not.toBeTruthy();
 	});
 
@@ -132,9 +135,10 @@ describe('OutboundCreateCtrl', function() {
 		var test = setUpTarget();
 		test.scope.campaignWorkloadForm = { $valid: true, $setPristine: function () { } };
 		test.scope.campaignGeneralForm = { $valid: true, $setPristine: function () { } };
-		completeValidCampaign(test.scope.newCampaign);
+		test.scope.campaignSpanningPeriodForm = { $valid: true, $setPristine: function () { } };
+		completeValidCampaign(test.scope.campaign);
 
-		angular.forEach(test.scope.newCampaign.WorkingHours[0].WeekDaySelections, function(e) {
+		angular.forEach(test.scope.campaign.WorkingHours[0].WeekDaySelections, function(e) {
 			e.Checked = false;
 		});
 		expect(test.scope.isInputValid()).not.toBeTruthy();
@@ -144,7 +148,8 @@ describe('OutboundCreateCtrl', function() {
 		var test = setUpTarget();
 		test.scope.campaignWorkloadForm = { $valid: true, $setPristine: function () { } };
 		test.scope.campaignGeneralForm = { $valid: true, $setPristine: function () { } };
-		completeValidCampaign(test.scope.newCampaign);
+		test.scope.campaignSpanningPeriodForm = { $valid: true, $setPristine: function () { } };
+		completeValidCampaign(test.scope.campaign);
 		test.scope.addCampaign();
 		expect(stateService.getWhere()).toEqual('outbound.edit');
 	});
