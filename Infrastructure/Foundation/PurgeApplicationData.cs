@@ -15,8 +15,9 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 
 		public void Execute()
 		{
+			const int fiveMinutes = 300;
 			var unitOfWork = (NHibernateUnitOfWork)_unitOfWorkFactory.CurrentUnitOfWork();
-			unitOfWork.Session.CreateSQLQuery("exec dbo.Purge").ExecuteUpdate();
+			unitOfWork.Session.CreateSQLQuery("exec dbo.Purge").SetTimeout(fiveMinutes).ExecuteUpdate();
 		}
 	}
 }
