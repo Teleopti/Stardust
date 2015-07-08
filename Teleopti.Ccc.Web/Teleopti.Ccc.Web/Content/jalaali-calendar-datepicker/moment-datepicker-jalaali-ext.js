@@ -76,9 +76,11 @@ datepicker.fillJalaaliCal = function() {
 	this.fillYearPicker(jYear, jStartDate, jEndDate);
 };
 
-datepicker.displayMonthText = function(jMonth, jYear) {
+datepicker.displayMonthText = function (jMonth, jYear) {
+	//render html and use &lrm; to ensure the year appears on the right.
 	this.picker.find('.datepicker-days th:eq(1)')
-		.text(moment.langData().jMonths(moment().jMonth(jMonth)) + ' ' + jYear);
+		.html(moment.langData().jMonths(moment().jMonth(jMonth)) + " &lrm; " + jYear);
+
 };
 
 datepicker.fillDayDisplay = function (jYear, jMonth, jStartDate, jEndDate) {
