@@ -326,7 +326,172 @@ AND fs.[file_id] = mf.[file_id]
 ORDER BY avg_io_stall_ms DESC OPTION (RECOMPILE);
 
 -------
--- DISK STATS - now
+--DISK STATS - now
+-------
+/*
+Calculates and present the I/O figures summed up over all disks, grouped by drive letter, grouped by file.
+It will not cost any overhead I/O on the server to run this script.
+Default is 30 min. But the longer the better (to catch ETL and CTI I/O)
+
+Our System requirements states "latency"
+[avg write latency (ms)] < 5ms (Ideally < 1ms)
+[avg read latency (ms)] < 15ms
+
+NOTE: The latency figures must(!) stay under these values. If they don't - we are in a situation where we probably should stop supporting the customer.
+Ask the customer to upgrade their storage or add more RAM to mitigate the problem.
+
+However please make sure we don't saturate (overload) the disks!
+e.g you get something like:
+All Drives	0.20	OK	146.29	Warning!	18	Warning!
+
+In that case Teleopti have some piece of code that put too much I/O load on the server. If the disk load is greater than its capability to satisfy the latency requirements above it's a Teleopti problem! Find the most expensive I/O query and report it to PS Tech R&D.
+
+These are the values used to detect such a condition:
+[Kbyte read/sec/agent] < 7.5
+[Kbyte written/sec/agent] < 2.5
+[IOPS/agent] < 1.0
+
+*/
+--> Run in your App database, in order to fetch current number of agents
+SET NOCOUNT ON
+DECLARE @WaitTime datetime
+DECLARE @Agents int
+SET @WaitTime = '00:30:00'
+
+--current threshold for I/O
+DECLARE @readOverloadPerAgent decimal(2,1) = 7.5
+DECLARE @writeOverloadPerAgent decimal(2,1) = 2.5
+DECLARE @IOPSOverloadPerAgent decimal(2,1) = 1.0
+DECLARE @OK as varchar(5) = 'OK'
+DECLARE @Warning as varchar(20) = 'Warning!'
+SET @Agents = (
+	SELECT COUNT(*)
+	from dbo.personPeriodWithEndDate pp 
+	inner join dbo.person p
+	on p.Id = pp.Parent
+	where getdate() between pp.StartDate and pp.EndDate
+	and p.isDeleted = 0
+)
+
+IF OBJECT_ID('tempdb..##lastResult') IS NOT NULL DROP TABLE ##lastResult
+
+DECLARE @IOStats TABLE (
+        [database_id] [smallint] NOT NULL,
+        [file_id] [smallint] NOT NULL,
+        [num_of_reads] [bigint] NOT NULL,
+        [num_of_bytes_read] [bigint] NOT NULL,
+        [io_stall_read_ms] [bigint] NOT NULL,
+        [num_of_writes] [bigint] NOT NULL,
+        [num_of_bytes_written] [bigint] NOT NULL,
+        [io_stall_write_ms] [bigint] NOT NULL)
+INSERT INTO @IOStats
+SELECT
+	database_id,
+	vio.file_id,
+	num_of_reads,
+	num_of_bytes_read,
+	io_stall_read_ms,
+	num_of_writes,
+	num_of_bytes_written,
+	io_stall_write_ms
+FROM sys.dm_io_virtual_file_stats (NULL, NULL) vio
+DECLARE @StartTime datetime, @DurationInSecs int
+SET @StartTime = GETDATE()
+WAITFOR DELAY @WaitTime
+SET @DurationInSecs = DATEDIFF(ss, @startTime, GETDATE())
+
+SELECT
+	mf.name AS [Logical name],
+
+	--read  figures
+	CONVERT(DEC(14,2), ((vio.num_of_bytes_read - old.num_of_bytes_read) / 1048576.0) / @DurationInSecs) AS [Mb read/sec],
+	CONVERT(DEC(14,2), (vio.num_of_reads - old.num_of_reads) / (@DurationInSecs * 1.00)) AS [reads IOPS],
+	(vio.io_stall_read_ms - old.io_stall_read_ms) / CASE (vio.num_of_reads-old.num_of_reads) WHEN 0 THEN 1 ELSE vio.num_of_reads-old.num_of_reads END AS [avg read latency (ms)],
+
+	--write figures
+	CONVERT(DEC(14,2), ((vio.num_of_bytes_written - old.num_of_bytes_written)/1024/1024) / @DurationInSecs) AS [Mb written/sec],
+	CONVERT(DEC(14,2), (vio.num_of_writes - old.num_of_writes) / (@DurationInSecs * 1.00)) AS [write IOPS],
+	(vio.io_stall_write_ms - old.io_stall_write_ms) / CASE (vio.num_of_writes-old.num_of_writes) WHEN 0 THEN 1 ELSE vio.num_of_writes-old.num_of_writes END AS [avg write latency (ms)],
+
+	--extra info
+	(vio.io_stall_read_ms - old.io_stall_read_ms) AS [Tot read stall ms],
+	vio.num_of_reads - old.num_of_reads AS [No of reads over period],
+	CONVERT(DEC(14,2), (vio.num_of_bytes_read - old.num_of_bytes_read)/1024/1024) AS [Tot MB read over period],
+	(vio.num_of_bytes_read - old.num_of_bytes_read) / CASE (vio.num_of_reads-old.num_of_reads) WHEN 0 THEN 1 ELSE vio.num_of_reads-old.num_of_reads END AS [avg read size (bytes)],
+	(vio.io_stall_write_ms - old.io_stall_write_ms) AS [Tot write stall ms],
+	vio.num_of_writes - old.num_of_writes AS [No of writes over period],
+	CONVERT(DEC(14,2), (vio.num_of_bytes_written - old.num_of_bytes_written)/1024/1024) AS [Tot MB written over period],
+	(vio.num_of_bytes_written-old.num_of_bytes_written) / CASE (vio.num_of_writes-old.num_of_writes) WHEN 0 THEN 1 ELSE vio.num_of_writes-old.num_of_writes END AS [avg write size (bytes)],
+	mf.physical_name AS [Physical file name],
+	size_on_disk_bytes/1048576 AS [File size on disk (MB)],
+	DB_NAME(vio.database_id) AS [Database],
+	mf.type_desc AS [Type]
+INTO ##lastResult
+FROM sys.dm_io_virtual_file_stats (NULL, NULL) vio,
+        sys.master_files mf,
+        @IOStats old
+WHERE mf.database_id = vio.database_id AND
+        mf.file_id = vio.file_id AND
+        old.database_id = vio.database_id AND
+        old.file_id = vio.file_id AND
+        ((vio.num_of_bytes_read - old.num_of_bytes_read) + (vio.num_of_bytes_written - old.num_of_bytes_written)) > 0
+ORDER BY ((vio.num_of_bytes_read - old.num_of_bytes_read) + (vio.num_of_bytes_written - old.num_of_bytes_written)) DESC
+
+--overloaded?
+SELECT
+	'All Drives' as [Drive letter],
+	CONVERT(DEC(14,2), sum([Mb read/sec])*1024/@Agents) as [kbytes read/sec/agent],
+	CASE WHEN CONVERT(DEC(14,2), sum([Mb read/sec])*1024/@Agents) > @readOverloadPerAgent THEN @Warning
+		ELSE @OK
+	END as [Teleopti reads overload],
+	CONVERT(DEC(14,2), sum([Mb written/sec])*1024/@Agents) as [kbytes written/sec/agent],
+	CASE WHEN CONVERT(DEC(14,2), sum([Mb written/sec])*1024/@Agents) > @writeOverloadPerAgent THEN @Warning
+		ELSE @OK
+	END as [Teleopti write overload],
+	sum([No of reads over period] + [No of writes over period])/@Agents as [IOPS/agent],
+	CASE WHEN sum([No of reads over period] + [No of writes over period])/@Agents > @IOPSOverloadPerAgent THEN @Warning
+		ELSE @OK
+	END as [Teleopti IOPS overload]
+FROM ##lastResult
+
+--over all drives
+SELECT
+	'All Drives' as [Drive letter],
+	CONVERT(DEC(14,2), sum([Tot MB read over period])/@DurationInSecs) as [Mb read/sec],
+	CONVERT(DEC(14,2), sum([No of reads over period])/@DurationInSecs) as [read IOPS],
+	CASE sum([No of reads over period])
+		WHEN 0 THEN 0 ELSE sum([Tot read stall ms])/sum([No of reads over period])
+	END as [avg read latency (ms)],
+
+	CONVERT(DEC(14,2), sum([Tot MB written over period])/@DurationInSecs) as [Mb written/sec],
+	CONVERT(DEC(14,2), sum([No of writes over period])/@DurationInSecs) as [write IOPS],
+	CASE sum([No of writes over period])
+		WHEN 0 THEN 0 ELSE sum([Tot write stall ms])/sum([No of writes over period])
+	END as [avg write latency (ms)]
+FROM ##lastResult
+
+--by drive
+SELECT
+	SUBSTRING([Physical file name],1,2) as [Drive letter],
+	CONVERT(DEC(14,2), sum([Tot MB read over period])/@DurationInSecs) as [Mb read/sec],
+	CONVERT(DEC(14,2), sum([No of reads over period])/@DurationInSecs) as [read IOPS],
+	CASE sum([No of reads over period])
+		WHEN 0 THEN 0 ELSE sum([Tot read stall ms])/sum([No of reads over period])
+	END as [Avg read latency (ms)],
+
+	CONVERT(DEC(14,2), sum([Tot MB written over period])/@DurationInSecs) as [Mb written/sec],
+	CONVERT(DEC(14,2), sum([No of writes over period])/@DurationInSecs) as [write IOPS],
+	CASE sum([No of writes over period])
+		WHEN 0 THEN 0 ELSE sum([Tot write stall ms])/sum([No of writes over period])
+	END as [avg write latency (ms)]
+FROM ##lastResult
+GROUP BY SUBSTRING([Physical file name],1,2)
+
+--by file
+SELECT * FROM ##lastResult
+
+-------
+-- DISK STATS - Every week (bugs exists) Please report!
 -------
 -- We now call a Teleopti Stored Procedure in Analytics to collect and save the data.
 -- EXEC [dbo].[DBA_VirtualFilestats_Load]
@@ -365,7 +530,7 @@ Shows the worst interval, worst file
 4) top 3 worst interval by "Total write latency"
 Shows the worst interval, worst file
 
-From Teleopti CCC Pre-reqs:
+From Teleopti WFM Pre-reqs:
 SQL Server storage MUST be configured properly for high IO performance.
 Under sustained load "Ave read speed (ms)" must be <=5ms and "Ave read speed (ms)"  <=20ms. 
 To achieve this there must at least be separate physical disks (and controllers) for 
