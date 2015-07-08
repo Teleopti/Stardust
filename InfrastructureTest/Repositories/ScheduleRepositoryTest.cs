@@ -234,7 +234,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			person3.TerminatePerson(new DateOnly(2000, 1, 8), new PersonAccountUpdaterDummy());
 			var pAss1 = AddPersonAssignment(person1, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
             var pAss2 = AddPersonAssignment(person3, new DateTimePeriod(2000, 1, 5, 2000, 1, 6));
-			var pAss3 = AddPersonAssignment(person3, new DateTimePeriod(2000, 1, 9, 2000, 1, 10));
+			var pAss3 = AddPersonAssignment(person3, new DateTimePeriod(2000, 1, 9, 1, 2000, 1, 10, 20));
 			var pAbs = AddAbsence(person1);
 
             AddMeeting(person1);
@@ -316,6 +316,40 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			Assert.IsNotNull(((ScheduleRange)retDic[person1]).Snapshot);
 			Assert.IsTrue(retDic[person1].ScheduledDay(new DateOnly(2000, 6, 1)).PersonMeetingCollection().Count == 1);
+		}
+
+		[Test]
+		public void VerifyCanLoadLastDaySchduleBasedOnPersonsAndPeriodAndScenario()
+		{
+			IList<IPerson> visiblePeople = new List<IPerson>();
+			IList<IPerson> peopleInOrganization = new List<IPerson>();
+			IScheduleDictionary retDic;
+
+			//setup fake objects
+			IPerson person3 = PersonFactory.CreatePerson("xxxxxx");
+			peopleInOrganization.Add(person3);
+			IPersonProvider personsProvider = new PersonsInOrganizationProvider(peopleInOrganization) { DoLoadByPerson = true };
+			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
+
+			person3.TerminatePerson(new DateOnly(2000, 1, 8), new PersonAccountUpdaterDummy());
+			var pAss2 = AddPersonAssignment(person3, new DateTimePeriod(2000, 1, 5, 2000, 1, 6));
+			var pAssLastDay = AddPersonAssignment(person3, new DateTimePeriod(2000, 1, 8, 20, 2000, 1, 9, 6));
+			var pAss3 = AddPersonAssignment(person3, new DateTimePeriod(2000, 1, 9, 6, 2000, 1, 9, 15));
+
+			using (_mocks.Record())
+			{
+				ExpectScheduleLoadByPerson(visiblePeople, peopleInOrganization);
+			}
+			using (_mocks.Playback())
+			{
+				retDic = _target.FindSchedulesForPersons(_schedPeriod, _scenario, personsProvider, scheduleDictionaryLoadOptions, visiblePeople);
+			}
+			Assert.AreEqual(1, retDic.Count);
+			Assert.IsTrue(retDic[person3].Contains(pAss2));
+			Assert.IsTrue(retDic[person3].Contains(pAssLastDay));
+			Assert.IsFalse(retDic[person3].Contains(pAss3));
+
+			Assert.IsNotNull(((ScheduleRange)retDic[person3]).Snapshot);
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]

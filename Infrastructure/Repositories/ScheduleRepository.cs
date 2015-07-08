@@ -474,7 +474,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 	    private static bool checkIfPersonLeft(IPerson person, DateTimePeriod period)
 	    {
-		    return person.TerminalDate.HasValue && person.TerminalDate.Value.Date.AddDays(1) < period.EndDateTime;
+			bool retValue = false;
+			if (person.TerminalDate.HasValue)
+			{
+				var timezone = person.PermissionInformation.DefaultTimeZone();
+				var convertedTerminalDate = TimeZoneHelper.ConvertToUtc(person.TerminalDate.Value.Date, timezone);
+	            retValue = convertedTerminalDate.AddDays(1) < period.StartDateTime;
+			}
+
+            return retValue;
 	    }
     }    
 }
