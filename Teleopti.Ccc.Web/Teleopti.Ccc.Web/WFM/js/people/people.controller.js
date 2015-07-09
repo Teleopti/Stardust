@@ -3,10 +3,10 @@
 angular.module('wfm.people')
 	.constant('chunkSize', 50)
 	.controller('PeopleCtrl', [
-		'$scope', '$filter', '$state', '$document', '$translate', 'i18nService', 'uiGridConstants', 'PeopleSearch', PeopleController
+		'$scope', '$filter', '$state', '$document', '$translate', 'Upload', 'i18nService', 'uiGridConstants', 'PeopleSearch', PeopleController
 	]);
 
-function PeopleController($scope, $filter, $state, $document, $translate, i18nService, uiGridConstants, SearchSvrc) {
+function PeopleController($scope, $filter, $state, $document, $translate, Upload, i18nService, uiGridConstants, SearchSvrc) {
 	$scope.searchResult = [];
 	$scope.pageSize = 20;
 	$scope.keyword = '';
@@ -16,6 +16,24 @@ function PeopleController($scope, $filter, $state, $document, $translate, i18nSe
 	$scope.advancedSearchForm = {};
 	$scope.searchCriteriaDic = {};
 	$scope.lang = i18nService.getCurrentLang();
+	$scope.isImportUsersEnabled = false;
+	$scope.showImportPanel = false;
+
+
+	$scope.buttons = [{
+		label: 'Import Users',
+		icon: 'mdi-file',
+		action: toggleImportPeople
+	}];
+
+	function toggleImportPeople() {
+		console.log("Importing...");
+		$scope.showImportPanel = !$scope.showImportPanel;
+	};
+
+	$scope.floatingButtonClick = function(action) {
+		action();
+	} 
 	
 	var dynamicColumnLoaded = false;
 	var paginationOptions = {
@@ -328,10 +346,45 @@ function PeopleController($scope, $filter, $state, $document, $translate, i18nSe
 
 		getPage();
 	}
-
-	SearchSvrc.isAdvancedSearchEnabled.query({ toggle: 'WfmPeople_AdvancedSearch_32973' }).$promise.then(function (result) {
+	
+	SearchSvrc.isFeatureEnabled.query({ toggle: 'WfmPeople_AdvancedSearch_32973' }).$promise.then(function (result) {
 		$scope.isAdvancedSearchEnabled = result.IsEnabled;
 	});
 
+	SearchSvrc.isFeatureEnabled.query({ toggle: 'WfmPeople_ImportUsers_33665' }).$promise.then(function (result) {
+		$scope.isImportUsersEnabled = result.IsEnabled;
+	});
+
 	$scope.searchKeyword();
+
+ 	$scope.$watch('files', function () {
+			$scope.upload($scope.files);
+		});
+	$scope.log = '';
+
+	$scope.upload = function(files) {
+		if (files && files.length) {
+			for (var i = 0; i < files.length; i++) {
+				var file = files[i];
+				$scope.log = 'Uploaded file: ' + file.name;
+				/*
+				Upload.upload({
+					url: 'https://angular-file-upload-cors-srv.appspot.com/upload',
+					fields: {
+						'username': $scope.username
+					},
+					file: file
+				}).progress(function (evt) {
+					var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+					$scope.log = 'progress: ' + progressPercentage + '% ' + evt.config.file.name + '\n' + $scope.log;
+				}).success(function (data, status, headers, config) {
+					$timeout(function () {
+						$scope.log = 'file: ' + config.file.name + ', Response: ' + JSON.stringify(data) + '\n' + $scope.log;
+					});
+				});
+				*/
+			}
+		}
+	};
+	//*/
 }

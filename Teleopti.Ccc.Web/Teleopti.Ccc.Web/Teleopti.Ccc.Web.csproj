@@ -1233,6 +1233,7 @@
     <None Include="WFM\css\_forecasting.scss" />
     <Content Include="WFM\js\outbound\_modules.js" />
     <Content Include="WFM\js\people\people.outsideClick.directive.js" />
+    <Content Include="WFM\js\people\template\importPeople.html" />
     <Content Include="WFM\js\people\_modules.js" />
     <Content Include="WFM\js\permissions\permissions.data.html" />
     <Content Include="WFM\js\permissions\permissions.filters.js" />

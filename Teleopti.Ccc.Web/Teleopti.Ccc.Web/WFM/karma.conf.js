@@ -28,6 +28,8 @@ module.exports = function(config) {
 		'vendor/angular-aria/angular-aria.min.js',
 		'vendor/angular-animate/angular-animate.min.js',
 		'vendor/angular-growl.js',
+		'node_modules/ng-file-upload/dist/ng-file-upload-shim.min.js',
+		'node_modules/ng-file-upload/dist/ng-file-upload.min.js',
 		'vendor/ui-grid/ui-grid-unstable.min.js',
 		'vendor/hammerjs/hammer.min.js',
 		'vendor/angular-material/angular-material.min.js',

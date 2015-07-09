@@ -17,7 +17,7 @@ angular
 			}
 		});
 
-		this.isAdvancedSearchEnabled = $resource('../ToggleHandler/IsEnabled?toggle=:toggle',
+		this.isFeatureEnabled = $resource('../ToggleHandler/IsEnabled?toggle=:toggle',
 		{
 			toggle: "@toggle"
 		}, {

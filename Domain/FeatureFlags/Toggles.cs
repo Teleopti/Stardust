@@ -69,6 +69,7 @@
 		Wfm_ResourcePlanner_32892,
 		Wfm_ChangePlanningPeriod_33043,
 		WfmPeople_AdvancedSearch_32973,
+		WfmPeople_ImportUsers_33665,
 		Wfm_Outbound_Campaign_32696,
 		WfmForecast_QueueStatistics_32572,
 		WfmForecast_ResultView_33605,
