@@ -224,12 +224,6 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
 			}
 		});
 	};
-
-
-
-
-
-
 	
 	var toggleShowNightViolation =	Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PreferenceShowNightViolation_33152");
 

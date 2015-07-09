@@ -1,8 +1,8 @@
 ﻿<div class="polymorphic-input-body">
 	<input type="text" ng-model="inputs.Name" ng-if="!(disableCreate || inputs.useExisting)" placeholder="{{inputPlaceholder}}" ng-readonly="disableInput" />
-	<md-select ng-if="disableCreate || inputs.useExisting" placeholder="Choose" ng-model="inputs.Id">
-		<md-option ng-repeat="activityOption in allActivities" value="{{activityOption.Id}}">{{activityOption.Name}}</md-option>
-	</md-select>
+	<select ng-if="disableCreate || inputs.useExisting" placeholder="Choose" ng-model="inputs.Id">
+		<option ng-repeat="activityOption in allActivities" value="{{activityOption.Id}}">{{activityOption.Name}}</option>
+	</select>
 </div>
 <div class="divider"></div>
 <div class="wfm-checkbox morph-switch" ng-if="!disableCreate">
