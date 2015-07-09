@@ -62,6 +62,12 @@ from SchedulePeriod sp
 inner join Person p on sp.Parent = p.Id
 where p.IsDeleted = 1
 
+delete ExternalLogOnCollection
+from ExternalLogOnCollection ex
+inner join PersonPeriod pp on ex.PersonPeriod = pp.Id
+inner join Person p on pp.Parent = p.Id
+where p.IsDeleted = 1
+
 delete PersonSkill
 from PersonSkill ps
 inner join PersonPeriod pp on ps.Parent = pp.Id
