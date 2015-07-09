@@ -93,8 +93,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Forecasting
 				{
 					var skillDay = allSkillDays.SingleOrDefault(x => x.CurrentDate == dateOnly);
 					skillDay.Should().Not.Be.Null();
-					skillDay.WorkloadDayCollection.SingleOrDefault(x => x.Workload.Id == workloadId).TaskPeriodList.Single().Task.Tasks
-						.Should().Not.Be.EqualTo(0);
+					var taskPeriods = skillDay.WorkloadDayCollection.SingleOrDefault(x => x.Workload.Id == workloadId).TaskPeriodList;
+					taskPeriods.First().Task.Tasks.Should().Not.Be.EqualTo(0);
+					taskPeriods.Count.Should().Be.EqualTo(96);
 				}
 			});
 		}
