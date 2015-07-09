@@ -10,8 +10,15 @@
 		vm.locations = [];
 		vm.teams = [];
 
-		vm.locations.push(seatPlanService.locations.get());
-		vm.teams.push(seatPlanService.teams.get());
+		seatPlanService.locations.get().$promise.then(function (locations) {
+			locations.show = true;
+			vm.locations.push(locations);
+		});
+
+		seatPlanService.teams.get().$promise.then(function (teams) {
+			teams.show = true;
+			vm.teams.push(teams);
+		});
 
 		vm.loadDefaultDates = function () {
 			if (vm.start != null) {

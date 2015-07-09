@@ -27,7 +27,7 @@
 				<input type="text" name="filterLocations" ng-model="searchLocations" placeholder="{{ 'FilterLocations' | translate }}" />
 			</div>
 
-			<div class="tree" style="height:220px;">
+			<div class="tree">
 				<div ui-tree data-drag-enabled="false">
 					<ol ui-tree-nodes="" ng-model="vm.locations" id="tree-root-locations" class="tree-line" toggle-focus>
 						<li ng-repeat="node in vm.locations | filter:searchLocations" ui-tree-node ng-include=" 'locations_renderer.html' "></li>
@@ -41,7 +41,7 @@
 				<input type="text" name="filterTeams" ng-model="searchTeams" placeholder="{{ 'FilterTeams' | translate }}" />
 			</div>
 
-			<div class="tree" style="height:220px;">
+			<div class="tree">
 				<div ui-tree data-drag-enabled=" false">
 					<ol ui-tree-nodes="" ng-model="vm.teams" id="tree-root-teams" class="tree-line" toggle-focus>
 						<li ng-repeat="node in vm.teams | filter:searchTeams" ui-tree-node ng-include="'teams_renderer.html'"></li>
@@ -51,8 +51,8 @@
 		</div>
 	</div>
 	<p />
-	<div>
-		<button class="wfm-btn wfm-btn-primary next-step" ng-click="vm.addSeatPlan()">{{ 'PlanSeats' | translate }}</button>
+	<div style="padding-left:10px">
+		<button class="wfm-btn wfm-btn-primary next-step"  ng-click="vm.addSeatPlan()">{{ 'PlanSeats' | translate }}</button>
 	</div>
 </div>
 
