@@ -39,14 +39,13 @@
 				return deferred.promise;
 			};
 
-			rolesFunctionsService.selectFunction = function(functionNode, selectedRole) {
+			rolesFunctionsService.selectFunction = function(nodes, selectedRole) {
 				var deferred = $q.defer();
-				PermissionsService.postFunction.query({ Id: selectedRole.Id, Functions: [functionNode] }).$promise.then(function(result) {
-					deferred.resolve();
-				});
+					PermissionsService.postFunction.query({ Id: selectedRole.Id, Functions: nodes }).$promise.then(function (result) {
+					});
+				deferred.resolve();
 				return deferred.promise;
 			};
-
 			rolesFunctionsService.refreshFunctions = function(newSelectedRoleId) {
 				PermissionsService.rolesPermissions.query({ Id: newSelectedRoleId }).$promise.then(function(result) {
 					var permsFunc = result.AvailableFunctions;

@@ -31,7 +31,7 @@
 			});
 
 			this.postFunction = $resource('../api/Permissions/Roles/:Id/Functions', { Id: "@Id" }, {
-				query: { method: 'POST', params: { Functions: [] }, isArray: false },
+				query: { method: 'POST', params: { Functions: [] }, isArray: true },
 			});
 
 			this.deleteFunction = $resource('../api/Permissions/Roles/:Id/Function/:FunctionId', { Id: "@Id", FunctionId: "@FunctionId" }, {

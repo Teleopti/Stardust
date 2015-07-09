@@ -27,6 +27,7 @@
 
 			$scope.toggleFunctionForRole = function (node) {
 				var functionNode = node.$modelValue;
+				var nodes = [];
 
 				
 
@@ -34,20 +35,22 @@
 					RolesFunctionsService.unselectFunction(functionNode.FunctionId, $scope.selectedRole).then(function () {
 						functionNode.selected = false;
 						increaseParentNumberOfSelectedNodes(node);
-
 					});
 				} else {
-					RolesFunctionsService.selectFunction(functionNode.FunctionId, $scope.selectedRole).then(function () {
-						functionNode.selected = true;
-						decreaseParentNumberOfSelectedNodes(node);
-						if (node.$parentNodeScope !== null) {
-							var parentNode = node.$parentNodeScope.$modelValue;
-							parentNode.selected = true;
-							if (node.$parentNodeScope.$parentNodeScope !== null) {
-								var parentParentNode = node.$parentNodeScope.$parentNodeScope.$modelValue;
-								parentParentNode.selected = true;
+					nodes.push(functionNode.FunctionId);
+					functionNode.selected = true;
+					decreaseParentNumberOfSelectedNodes(node);
+					if (node.$nodeScope.$parentNodeScope !== null) {
+						var parent = node.$nodeScope.$parentNodeScope;
+						while (parent !== null) {
+							if (parent.$modelValue.selected === false) {
+								nodes.push(parent.$modelValue.FunctionId);
+								parent.$modelValue.selected = true;
 							}
-						} 
+							parent = parent.$parentNodeScope;
+						}
+					}
+					RolesFunctionsService.selectFunction(nodes, $scope.selectedRole).then(function () {
 					});
 				}
 			};
