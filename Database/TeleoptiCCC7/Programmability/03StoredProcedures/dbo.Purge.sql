@@ -294,10 +294,10 @@ and pr.IsDeleted = 0
 
 --New Adherence read models. Purge for now since we have not yet built or tested with lots of historical data.
 delete ReadModel.AdherencePercentage
-where BelongsToDate < dateadd(day,-7,getdate())
+where BelongsToDate < dateadd(day,-1,getdate())
 
 delete ReadModel.AdherenceDetails
-where BelongsToDate < dateadd(day,-7,getdate())
+where BelongsToDate < dateadd(day,-1,getdate())
 
 END
 
