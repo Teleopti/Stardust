@@ -33,8 +33,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			{
 				futureWorkloadDay.DistributeTasks(sortedTemplateTaskPeriodsDic[futureWorkloadDay.CurrentDate.DayOfWeek]);
 			}
-
-			// TODO  will add smoothing
 		}
 
 		private IEnumerable<ITemplateTaskPeriod> createExtendedTaskPeriodList(IEnumerable<IWorkloadDayBase> workloadDays, DateTime startTimeTemplate)
@@ -63,6 +61,17 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 				}
 			}
 			return taskPeriods;
+		}
+
+		private void Smoothing(IList<ITemplateTaskPeriod> list)
+		{
+			IDictionary<DateTimePeriod, double> numbers = list.ToDictionary(templateTaskPeriod => templateTaskPeriod.Period,
+				templateTaskPeriod => templateTaskPeriod.Tasks);
+			numbers = new StatisticalSmoothing(numbers).CalculateRunningAverage(smoothing);
+			foreach (var templateTaskPeriod in list)
+			{
+				templateTaskPeriod.SetTasks(numbers[templateTaskPeriod.Period]);
+			}
 		}
 
 		private IEnumerable<ITemplateTaskPeriod> calculateTemplateTaskPeriods(IEnumerable<IWorkloadDayBase> workloadDaysToCalculateTemplate, IWorkload workload)
@@ -96,6 +105,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			}
 
 			var list = templateTaskPeriods.OrderBy(tp => tp.Period.StartDateTime).ToList();
+			Smoothing(list);
 			return new ReadOnlyCollection<ITemplateTaskPeriod>(list);
 		}
 	}
