@@ -37,6 +37,13 @@
 	background-color: #99d6ff;
 }
 
+.dropdown{
+    position:absolute;
+	z-index: 1;
+    top: 5rem;
+    left: 0rem;
+}
+
 .dropdown ul {
 	width: 500px;
 	position: absolute;
@@ -50,9 +57,6 @@
 
 .advaned-container {
 	position: absolute;
-	z-index: 1;
-	overflow: hidden;
-	width: auto;
 	margin-top: -15px;
 	margin-left: 20px;
 	padding: 5px 10px;
