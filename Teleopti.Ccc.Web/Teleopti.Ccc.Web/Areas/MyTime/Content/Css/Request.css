@@ -500,7 +500,7 @@ border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 
 .schedule-filter-component {
 	margin: 8px 0;
-	z-index: 150;
+	/*z-index: 150; */
 }
 .btn.dropdown-toggle {
 	width: 100%;
