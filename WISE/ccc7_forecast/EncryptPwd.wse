@@ -83,6 +83,15 @@ item: Custom Script Item
   Variable Name3=HELPFILE
   Variable Value3=C:\Program Files\Altiris\Wise\Help\WiseScriptPackageEditor.chm
 end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=SQL_AUTH_STRING
+  Variable Name2=_PROP_VAR_
+  Variable Value2=CONNSTRINGBASE
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
 item: Set Variable
   Variable=FAILED_MESS
   Value=Failed to encrypt Pwd in application database
@@ -114,7 +123,7 @@ item: Custom Script Item
 end
 item: Execute Program
   Pathname=.\Encrypted\Teleopti.Support.Security.exe
-  Command Line=-DS"%SRV%" -AP"%DCCC%" %SA%
+  Command Line=-DS"%SRV%" -AP"%DCCC%" -CS"%CONNSTRINGBASE%" %SA%
   Default Directory=%DIR%
   Flags=00000010
 end
