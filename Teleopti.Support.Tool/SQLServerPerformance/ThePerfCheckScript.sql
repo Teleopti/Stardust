@@ -448,8 +448,8 @@ SELECT
 	CASE WHEN CONVERT(DEC(14,2), sum([Mb written/sec])*1024/@Agents) > @writeOverloadPerAgent THEN @Warning
 		ELSE @OK
 	END as [Teleopti write overload],
-	sum([No of reads over period] + [No of writes over period])/@Agents as [IOPS/agent],
-	CASE WHEN sum([No of reads over period] + [No of writes over period])/@Agents > @IOPSOverloadPerAgent THEN @Warning
+	sum([No of reads over period] + [No of writes over period])/@DurationInSecs/@Agents as [IOPS/agent],
+	CASE WHEN sum([No of reads over period] + [No of writes over period])/@DurationInSecs/@Agents > @IOPSOverloadPerAgent THEN @Warning
 		ELSE @OK
 	END as [Teleopti IOPS overload]
 FROM ##lastResult
@@ -489,6 +489,7 @@ GROUP BY SUBSTRING([Physical file name],1,2)
 
 --by file
 SELECT * FROM ##lastResult
+
 
 -------
 -- DISK STATS - Every week (bugs exists) Please report!
