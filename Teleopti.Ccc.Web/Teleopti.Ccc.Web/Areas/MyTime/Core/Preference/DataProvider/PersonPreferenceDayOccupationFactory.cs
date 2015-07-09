@@ -41,7 +41,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 						_userTimezone.TimeZone());
 
 					var startTime = new TimeSpan(localStartDateTime.Hour, localStartDateTime.Minute, localStartDateTime.Second);
-					var endTime = new TimeSpan(localEndDateTime.Hour, localEndDateTime.Minute, localEndDateTime.Second);
+
+				    var endTime =
+				        localEndDateTime.Date != localStartDateTime.Date
+				            ? new TimeSpan(1, localEndDateTime.Hour, localEndDateTime.Minute, localEndDateTime.Second)
+				            : new TimeSpan(localEndDateTime.Hour, localEndDateTime.Minute, localEndDateTime.Second);
+                        
 
 					personPreferenceDayOccupation.StartTimeLimitation = new StartTimeLimitation(startTime, startTime);
 					personPreferenceDayOccupation.EndTimeLimitation = new EndTimeLimitation(endTime, endTime);

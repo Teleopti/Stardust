@@ -217,10 +217,9 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
 					self.RawDate(data.DateInternal);
 					self.HasNightRestViolationToPreviousDay(data.HasNightRestViolationToPreviousDay);
 					self.HasNightRestViolationToNextDay(data.HasNightRestViolationToNextDay);
-					self.RestTimeToNextDay(data.RestTimeToNextDay == null ? null : data.RestTimeToNextDay.Hours);
-					self.RestTimeToPreviousDay(data.RestTimeToPreviousDay == null ? null : data.RestTimeToPreviousDay.Hours);
-					self.ExpectedNightRest(data.ExpectedNightRest == null ? null : data.ExpectedNightRest.Hours);
-
+					self.RestTimeToNextDay(data.RestTimeToNextDay == null ? null : data.RestTimeToNextDay.Hours + ':' + (data.RestTimeToNextDay.Minutes < 10 ? '0' : '') + data.RestTimeToNextDay.Minutes.toString());
+					self.RestTimeToPreviousDay(data.RestTimeToPreviousDay == null ? null : data.RestTimeToPreviousDay.Hours + ':' + (data.RestTimeToPreviousDay.Minutes < 10 ? '0' : '') + data.RestTimeToPreviousDay.Minutes.toString());
+					self.ExpectedNightRest(data.ExpectedNightRest == null ? null : data.ExpectedNightRest.Hours + ':' + (data.ExpectedNightRest.Minutes < 10 ? '0' : '') + data.ExpectedNightRest.Minutes.toString());				    
 				}					
 			}
 		});
