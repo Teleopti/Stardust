@@ -80,13 +80,16 @@ $(document).ready(function () {
 		var ajax1 = function(model, options) {
 			options.success({
 				RestTimeToNextDay: {
-					"Hours": 10
+				    "Hours": 10,
+				    "Minutes": 0
 				},
 				RestTimeToPreviousDay: {
-					"Hours": 10
+				    "Hours": 10,
+				    "Minutes": 0
 				},
 				ExpectedNightRest: {
-					"Hours": 11
+				    "Hours": 11,
+				    "Minutes": 0
 				},
 				HasNightRestViolationToPreviousDay: false,
 				HasNightRestViolationToNextDay: true,
@@ -102,13 +105,16 @@ $(document).ready(function () {
 		var ajax2 = function(model, options) {
 			options.success({
 				RestTimeToNextDay: {
-					"Hours": 10
+				    "Hours": 10,
+				    "Minutes": 0
 				},
 				RestTimeToPreviousDay: {
-					"Hours": 10
+				    "Hours": 10,
+				    "Minutes": 0
 				},
 				ExpectedNightRest: {
-					"Hours": 11
+				    "Hours": 11,
+				    "Minutes": 0
 				},
 				HasNightRestViolationToPreviousDay: true,
 				HasNightRestViolationToNextDay: true,
@@ -129,18 +135,18 @@ $(document).ready(function () {
 
 		equal(viewModel.PossibleNightRestViolations()()[0].firstDay, Teleopti.MyTimeWeb.Common.FormatDate(currentDay1));// 2016-02-04
 		equal(viewModel.PossibleNightRestViolations()()[0].sencondDay, Teleopti.MyTimeWeb.Common.FormatDate(plusOneDay1));// 2016-02-03
-		equal(viewModel.PossibleNightRestViolations()()[0].hoursBetweenTwoDays, 10);
-		equal(viewModel.PossibleNightRestViolations()()[0].nightRestTimes, 11);
+		equal(viewModel.PossibleNightRestViolations()()[0].hoursBetweenTwoDays, '10:00');
+		equal(viewModel.PossibleNightRestViolations()()[0].nightRestTimes, '11:00');
 
 		equal(viewModel.PossibleNightRestViolations()()[1].firstDay, Teleopti.MyTimeWeb.Common.FormatDate(minusOneDay2));//2016-01-25
 		equal(viewModel.PossibleNightRestViolations()()[1].sencondDay, Teleopti.MyTimeWeb.Common.FormatDate(currentDay2));//2016-01-26
-		equal(viewModel.PossibleNightRestViolations()()[1].hoursBetweenTwoDays, 10);
-		equal(viewModel.PossibleNightRestViolations()()[1].nightRestTimes, 11);
+		equal(viewModel.PossibleNightRestViolations()()[1].hoursBetweenTwoDays, '10:00');
+		equal(viewModel.PossibleNightRestViolations()()[1].nightRestTimes, '11:00');
 
 		equal(viewModel.PossibleNightRestViolations()()[2].firstDay, Teleopti.MyTimeWeb.Common.FormatDate(currentDay2));//2016-01-26
 		equal(viewModel.PossibleNightRestViolations()()[2].sencondDay, Teleopti.MyTimeWeb.Common.FormatDate(plusOneDay2));//2016-01-27
-		equal(viewModel.PossibleNightRestViolations()()[2].hoursBetweenTwoDays, 10);
-		equal(viewModel.PossibleNightRestViolations()()[2].nightRestTimes, 11);
+		equal(viewModel.PossibleNightRestViolations()()[2].hoursBetweenTwoDays, '10:00');
+		equal(viewModel.PossibleNightRestViolations()()[2].nightRestTimes, '11:00');
 
 	
 	});
