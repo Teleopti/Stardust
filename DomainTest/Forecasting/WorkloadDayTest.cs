@@ -4,7 +4,9 @@ using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Forecasting.Template;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -428,7 +430,55 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreEqual(workloadDayTemplate.Name, workloadDay.TemplateReference.TemplateName);
         }
 
-        [Test]
+	    [Test]
+	    public void CanDistributeTasks()
+	    {
+			DateOnly createDate = new DateOnly(2008, 01, 14);
+			var createLocalDate = TimeZoneInfo.ConvertTimeFromUtc(createDate.Date, _workload.Skill.TimeZone);
+			string templateName = "JULDAGEN";
+			IWorkloadDayTemplate workloadDayTemplate = new WorkloadDayTemplate();
+
+			IList<TimePeriod> openHours = new List<TimePeriod>();
+			IWorkloadDay workloadDay = CreateWorkloadDay(openHours, workloadDayTemplate, templateName, createDate);
+			int originalTemplateVersionNumber = workloadDayTemplate.VersionNumber;
+			Assert.AreEqual(originalTemplateVersionNumber, workloadDay.TemplateReference.VersionNumber);
+
+			//change Monday's open hour in workload template
+			_workload.TemplateWeekCollection[1].ChangeOpenHours(new[] { openHours[0], openHours[1] });
+
+			//Add som changes to the template
+			ChangeTemplate(workloadDayTemplate);
+
+			int latestTemplateVersionNumber = workloadDayTemplate.VersionNumber;
+			Assert.Less(originalTemplateVersionNumber, latestTemplateVersionNumber);
+			var expectedTemplateName = string.Format(CultureInfo.CurrentUICulture, "<{0} {1} {2}>", templateName, createLocalDate.ToShortDateString(), createLocalDate.ToShortTimeString());
+			Assert.AreEqual(expectedTemplateName, workloadDay.TemplateReference.TemplateName);
+
+			//Calculate the sums
+			double sumOfTemplateTasks = workloadDayTemplate.TotalTasks;
+
+			//Set some values on the real workload
+			workloadDay.Tasks = 10000;
+			workloadDay.AverageTaskTime = new TimeSpan(0, 0, 100);
+			workloadDay.AverageAfterTaskTime = new TimeSpan(0, 0, 33);
+			workloadDay.ChangeOpenHours(_openHours);
+
+			Assert.AreEqual(_openHours[0], workloadDay.OpenHourList[0]);
+
+			workloadDay.DistributeTasks(workloadDayTemplate.SortedTaskPeriodList);
+
+			Assert.AreNotEqual(_openHours[0], workloadDay.OpenHourList[0]);
+			Assert.AreEqual(openHours[0], workloadDay.OpenHourList[0]);
+			Assert.AreEqual(openHours[1], workloadDay.OpenHourList[1]);
+
+			double newSumOfTasks = workloadDay.Tasks;
+
+			Assert.AreEqual((workloadDayTemplate.SortedTaskPeriodList[3].Tasks / sumOfTemplateTasks) * newSumOfTasks, workloadDay.SortedTaskPeriodList[3].Tasks);
+			Assert.AreEqual(workloadDay.AverageTaskTime, workloadDay.SortedTaskPeriodList[3].AverageTaskTime);
+			Assert.AreEqual(workloadDay.AverageAfterTaskTime, workloadDay.SortedTaskPeriodList[3].AverageAfterTaskTime);
+	    }
+
+	    [Test]
         public void CanApplyTemplate()
         {
             DateOnly createDate = new DateOnly(2008, 01, 14);

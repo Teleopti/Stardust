@@ -1541,7 +1541,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             ResetStatistics();
         }
 
-		public virtual void DistributeTasks(IEnumerable<ITemplateTaskPeriod> templateTaskPeriods)
+		public virtual void DistributeTasks(IEnumerable<ITemplateTaskPeriod> sortedTemplateTaskPeriods)
 	    {
 		    throw new NotImplementedException();
 	    }

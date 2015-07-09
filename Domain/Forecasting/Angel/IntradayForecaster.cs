@@ -22,19 +22,23 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 		{
 			var workloadDays = _loadStatistics.LoadWorkloadDay(workload, templatePeriod).ToArray();
 
-			var sortedTemplateTaskPeriods = calculateTemplateTaskPeriods(workloadDays, workload);
+			var sortedTemplateTaskPeriodsDic = new Dictionary<DayOfWeek, IEnumerable<ITemplateTaskPeriod>>();
+			foreach (DayOfWeek day in Enum.GetValues(typeof (DayOfWeek)))
+			{
+				var workloadDaysForDay = workloadDays.Where(w => w.CurrentDate.DayOfWeek == day);
+				sortedTemplateTaskPeriodsDic.Add(day, calculateTemplateTaskPeriods(workloadDaysForDay, workload));
+			}
 
 			foreach (var futureWorkloadDay in futureWorkloadDays)
 			{
-				futureWorkloadDay.DistributeTasks(sortedTemplateTaskPeriods);
+				futureWorkloadDay.DistributeTasks(sortedTemplateTaskPeriodsDic[futureWorkloadDay.CurrentDate.DayOfWeek]);
 			}
 
 			// TODO  will add smoothing
 		}
 
-		private static IEnumerable<ITemplateTaskPeriod> createExtendedTaskPeriodList(IEnumerable<IWorkloadDayBase> workloadDays, DateTime startTimeTemplate)
+		private IEnumerable<ITemplateTaskPeriod> createExtendedTaskPeriodList(IEnumerable<IWorkloadDayBase> workloadDays, DateTime startTimeTemplate)
 		{
-			//All taskperiods on skillday into one list and create dummy date
 			var taskPeriods = new List<ITemplateTaskPeriod>();
 			foreach (var workloadDay in workloadDays)
 			{
@@ -61,7 +65,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			return taskPeriods;
 		}
 
-		private IList<ITemplateTaskPeriod> calculateTemplateTaskPeriods(IEnumerable<IWorkloadDayBase> workloadDaysToCalculateTemplate, IWorkload workload)
+		private IEnumerable<ITemplateTaskPeriod> calculateTemplateTaskPeriods(IEnumerable<IWorkloadDayBase> workloadDaysToCalculateTemplate, IWorkload workload)
 		{
 			var raptorTimeZoneInfo = workload.Skill.TimeZone;
 			var startDateTime = raptorTimeZoneInfo.SafeConvertTimeToUtc(SkillDayTemplate.BaseDate.Date);
@@ -76,8 +80,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 							select new
 							{
 								Period = g.Key,
-								Task = g.Average(t => t.StatisticTask.StatCalculatedTasks),
-								SumTasks = g.Sum(t => t.StatisticTask.StatCalculatedTasks)
+								Task = g.Average(t => t.StatisticTask.StatCalculatedTasks)
 							};
 
 			//Create the template from the extended list

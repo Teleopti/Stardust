@@ -17,12 +17,15 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 		public void ShouldApplyIntradayTemplate()
 		{
 			var workload = WorkloadFactory.CreateWorkload(SkillFactory.CreateSkillWithId("skill1"));
+			var openHours = new TimePeriod(8, 0, 8, 15);
+			workload.TemplateWeekCollection[6].ChangeOpenHours(new[] { openHours });
 			var workloadDay = new WorkloadDay();
-			workloadDay.Create(new DateOnly(2015, 1, 1), workload, new List<TimePeriod> { new TimePeriod(8, 0, 8, 15) });
+			workloadDay.Create(new DateOnly(2015, 1, 3), workload, new List<TimePeriod> { openHours });
 
 			var workloadDay2 = new WorkloadDay();
 			var dateOnly2 = new DateOnly(2014, 3, 15);
-			workloadDay2.Create(dateOnly2, workload, new List<TimePeriod> { new TimePeriod(8, 0, 8, 15) });
+			workloadDay2.Create(dateOnly2, workload, new List<TimePeriod> { openHours });
+			workloadDay2.SortedTaskPeriodList[0].StatisticTask.StatCalculatedTasks = 108;
 
 			var templatePeriod = new DateOnlyPeriod(2014, 3, 1, 2014, 5, 31);
 			var loadStatistics = MockRepository.GenerateMock<ILoadStatistics>();
@@ -33,7 +36,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 
 			target.Apply(workload, templatePeriod, new IWorkloadDayBase[] { workloadDay });
 
-			workloadDay.TemplateReference.DayOfWeek.Value.Should().Be.EqualTo(DayOfWeek.Thursday);
+			workloadDay.TemplateReference.DayOfWeek.Should().Be.EqualTo(null);
+			workloadDay.SortedTaskPeriodList[0].Task.Tasks.Should().Be.EqualTo(108);
 		}
 	}
 }

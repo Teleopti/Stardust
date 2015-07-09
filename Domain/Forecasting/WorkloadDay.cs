@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             ResetStatistics();
         }
 
-		public override void DistributeTasks(IEnumerable<ITemplateTaskPeriod> templateTaskPeriods)
+		public override void DistributeTasks(IEnumerable<ITemplateTaskPeriod> sortedTemplateTaskPeriods)
 		{
 			var tasksForDay = Tasks;
 			var originalAverageTaskTime = AverageTaskTime;
@@ -117,13 +117,12 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 			Lock();
 
-			foreach (var keyValuePair in templateTaskPeriods)
+			foreach (var templateTaskPeriod in sortedTemplateTaskPeriods)
 			{
-				var localTemplatePeriod = keyValuePair.Period.TimePeriod(timeZone);
+				var localTemplatePeriod = templateTaskPeriod.Period.TimePeriod(timeZone);
 				var taskPeriods = TaskPeriodList.Where(t => localTemplatePeriod.Contains(t.Period.TimePeriod(timeZone))).ToList();
 				var taskPeriodCount = taskPeriods.Count;
-				if (taskPeriodCount == 2 &&
-					taskPeriods[0].Period.TimePeriod(timeZone) == taskPeriods[1].Period.TimePeriod(timeZone))
+				if (taskPeriodCount == 2 && taskPeriods[0].Period.TimePeriod(timeZone) == taskPeriods[1].Period.TimePeriod(timeZone))
 				{
 					//Do nothing as we wan't to set the same values to both periods in this case (ambigious periods due to change from DST)
 				}
@@ -139,8 +138,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 				foreach (var newTaskPeriod in taskPeriods)
 				{
-					tasksSum += keyValuePair.Task.Tasks;
-					newTaskPeriod.Tasks = keyValuePair.Task.Tasks;
+					tasksSum += templateTaskPeriod.Task.Tasks;
+					newTaskPeriod.Tasks = templateTaskPeriod.Task.Tasks;
 				}
 			}
 
