@@ -19,6 +19,20 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 {
+	public class IntradayPatternViewModelFactoryTest
+	{
+		[Test]
+		public void ShouldCreateViewModel()
+		{
+			var target = new IntradayPatternViewModelFactory(MockRepository.GenerateMock<IIntradayForecaster>());
+			var result = target.Create(new EvaluateDevInput()
+			{
+				WorkloadId = Guid.NewGuid()
+			});
+
+		}
+	}
+
 	public class ForecastViewModelFactoryTest
 	{
 		[Test]

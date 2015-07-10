@@ -43,4 +43,8 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 		public DateTime PeriodUsedToEvaluateStart { get; set; }
 		public DateTime PeriodUsedToEvaluateEnd { get; set; }
 	}
+
+	public class IntradayPatternViewModel
+	{
+	}
 }

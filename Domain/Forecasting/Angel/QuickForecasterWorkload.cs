@@ -3,7 +3,6 @@ using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Historical;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Outlier;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel
 {
@@ -37,9 +36,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			var futureWorkloadDays = _futureData.Fetch(quickForecasterWorkloadParams.WorkLoad, quickForecasterWorkloadParams.SkillDays, quickForecasterWorkloadParams.FuturePeriod);
 			_forecastingTargetMerger.Merge(forecastResult.ForecastingTargets, futureWorkloadDays);
 
-			var threeMonthsAgo = historicalData.EndDate.Date.AddMonths(-3);
-			var recent3Months = new DateOnlyPeriod(new DateOnly(threeMonthsAgo > historicalData.StartDate.Date ? threeMonthsAgo : historicalData.StartDate.Date), historicalData.EndDate);
-			_intradayForecaster.Apply(quickForecasterWorkloadParams.WorkLoad, recent3Months, futureWorkloadDays);
+			_intradayForecaster.Apply(quickForecasterWorkloadParams.WorkLoad, quickForecasterWorkloadParams.IntradayTemplatePeriod, futureWorkloadDays);
 		}
 	}
 }

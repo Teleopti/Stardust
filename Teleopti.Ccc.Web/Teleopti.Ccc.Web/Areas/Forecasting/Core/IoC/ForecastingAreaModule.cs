@@ -9,10 +9,12 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core.IoC
 			builder.RegisterType<ForecastViewModelFactory>()
 				.SingleInstance()
 				.As<IForecastViewModelFactory>();
-
 			builder.RegisterType<ForecastResultViewModelFactory>()
 				.SingleInstance()
 				.As<IForecastResultViewModelFactory>();
+			builder.RegisterType<IntradayPatternViewModelFactory>()
+				.SingleInstance()
+				.As<IIntradayPatternViewModelFactory>();
 		}
 	}
 }

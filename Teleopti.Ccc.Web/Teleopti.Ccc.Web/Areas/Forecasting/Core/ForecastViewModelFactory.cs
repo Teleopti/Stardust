@@ -13,6 +13,22 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 {
+
+	public class IntradayPatternViewModelFactory : IIntradayPatternViewModelFactory
+	{
+		private readonly IIntradayForecaster _intradayForecaster;
+
+		public IntradayPatternViewModelFactory(IIntradayForecaster intradayForecaster)
+		{
+			_intradayForecaster = intradayForecaster;
+		}
+
+		public IntradayPatternViewModel Create(EvaluateDevInput input)
+		{
+			return null;
+		}
+	}
+
 	public class ForecastViewModelFactory : IForecastViewModelFactory
 	{
 		private readonly IForecastWorkloadEvaluator _forecastWorkloadEvaluator;

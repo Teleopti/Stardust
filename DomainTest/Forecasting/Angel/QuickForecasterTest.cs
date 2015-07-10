@@ -44,7 +44,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 
 			var historicalPeriodProvider = MockRepository.GenerateMock<IHistoricalPeriodProvider>();
 			historicalPeriodProvider.Stub(x => x.AvailablePeriod(workload1)).Return(historicalPeriodForForecast1);
+			var templatePeriod = new DateOnlyPeriod(2014, 10, 1, 2014, 12, 31);
+			historicalPeriodProvider.Stub(x => x.AvailableIntradayTemplatePeriod(historicalPeriodForForecast1)).Return(templatePeriod);
 			historicalPeriodProvider.Stub(x => x.AvailablePeriod(workload2)).Return(historicalPeriodForForecast2);
+			historicalPeriodProvider.Stub(x => x.AvailableIntradayTemplatePeriod(historicalPeriodForForecast2)).Return(templatePeriod);
 			var target = new QuickForecaster(quickForecasterWorkload, fetchAndFillSkillDays, quickForecastWorkloadEvaluator, historicalPeriodProvider);
 			target.ForecastWorkloadsWithinSkill(skill1, new[] { new ForecastWorkloadInput { WorkloadId = workload1.Id.Value, ForecastMethodId = ForecastMethodType.None } }, futurePeriod);
 			quickForecasterWorkload.AssertWasCalled(x => x.Execute(new QuickForecasterWorkloadParams
@@ -53,7 +56,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 				HistoricalPeriod = historicalPeriodForForecast1,
 				SkillDays = skillDays,
 				WorkLoad = workload1,
-				ForecastMethodId = ForecastMethodType.TeleoptiClassicLongTermWithTrend
+				ForecastMethodId = ForecastMethodType.TeleoptiClassicLongTermWithTrend,
+				IntradayTemplatePeriod = templatePeriod
 			}));
 
 			quickForecasterWorkload.AssertWasNotCalled(x => x.Execute(new QuickForecasterWorkloadParams
@@ -62,7 +66,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 				HistoricalPeriod = historicalPeriodForForecast2,
 				SkillDays = skillDays,
 				WorkLoad = workload2,
-				ForecastMethodId = ForecastMethodType.TeleoptiClassicLongTermWithTrend
+				ForecastMethodId = ForecastMethodType.TeleoptiClassicLongTermWithTrend,
+				IntradayTemplatePeriod = templatePeriod
 			}));
 		}
 
@@ -83,6 +88,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			var quickForecastWorkloadEvaluator = MockRepository.GenerateMock<IForecastWorkloadEvaluator>();
 			var historicalPeriodProvider = MockRepository.GenerateMock<IHistoricalPeriodProvider>();
 			historicalPeriodProvider.Stub(x => x.AvailablePeriod(workload1)).Return(historicalPeriodForForecast);
+			var templatePeriod = new DateOnlyPeriod(2014, 10, 1, 2014, 12, 31);
+			historicalPeriodProvider.Stub(x => x.AvailableIntradayTemplatePeriod(historicalPeriodForForecast)).Return(templatePeriod);
 			var target = new QuickForecaster(quickForecasterWorkload, fetchAndFillSkillDays, quickForecastWorkloadEvaluator, historicalPeriodProvider);
 			target.ForecastWorkloadsWithinSkill(skill1, new[] { new ForecastWorkloadInput { WorkloadId = workload1.Id.Value, ForecastMethodId = ForecastMethodType.TeleoptiClassicLongTerm} }, futurePeriod);
 			quickForecastWorkloadEvaluator.AssertWasNotCalled(x => x.Evaluate(workload1));
@@ -92,7 +99,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 				HistoricalPeriod = historicalPeriodForForecast,
 				SkillDays = skillDays,
 				WorkLoad = workload1,
-				ForecastMethodId = ForecastMethodType.TeleoptiClassicLongTerm
+				ForecastMethodId = ForecastMethodType.TeleoptiClassicLongTerm,
+				IntradayTemplatePeriod = templatePeriod
 			}));
 		}
 
@@ -123,6 +131,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 				});
 			var historicalPeriodProvider = MockRepository.GenerateMock<IHistoricalPeriodProvider>();
 			historicalPeriodProvider.Stub(x => x.AvailablePeriod(workload1)).Return(historicalPeriodForForecast);
+			var templatePeriod = new DateOnlyPeriod(2014, 10, 1, 2014, 12, 31);
+			historicalPeriodProvider.Stub(x => x.AvailableIntradayTemplatePeriod(historicalPeriodForForecast)).Return(templatePeriod);
 			var target = new QuickForecaster(quickForecasterWorkload, fetchAndFillSkillDays, quickForecastWorkloadEvaluator, historicalPeriodProvider);
 			target.ForecastWorkloadsWithinSkill(skill1,new[] {new ForecastWorkloadInput {WorkloadId = workload1.Id.Value, ForecastMethodId = ForecastMethodType.None}}, futurePeriod);
 			quickForecasterWorkload.AssertWasCalled(x => x.Execute(new QuickForecasterWorkloadParams
@@ -131,7 +141,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 				HistoricalPeriod = historicalPeriodForForecast,
 				SkillDays = skillDays,
 				WorkLoad = workload1,
-				ForecastMethodId = ForecastMethodType.TeleoptiClassicLongTermWithTrend
+				ForecastMethodId = ForecastMethodType.TeleoptiClassicLongTermWithTrend,
+				IntradayTemplatePeriod = templatePeriod
 			}));
 		}
 	}

@@ -20,13 +20,15 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		private readonly ISkillRepository _skillRepository;
 		private readonly IForecastViewModelFactory _forecastViewModelFactory;
 		private readonly IForecastResultViewModelFactory _forecastResultViewModelFactory;
+		private readonly IIntradayPatternViewModelFactory _intradayPatternViewModelFactory;
 
-		public ForecastController(IForecastCreator forecastCreator, ISkillRepository skillRepository, IForecastViewModelFactory forecastViewModelFactory, IForecastResultViewModelFactory forecastResultViewModelFactory)
+		public ForecastController(IForecastCreator forecastCreator, ISkillRepository skillRepository, IForecastViewModelFactory forecastViewModelFactory, IForecastResultViewModelFactory forecastResultViewModelFactory, IIntradayPatternViewModelFactory intradayPatternViewModelFactory)
 		{
 			_forecastCreator = forecastCreator;
 			_skillRepository = skillRepository;
 			_forecastViewModelFactory = forecastViewModelFactory;
 			_forecastResultViewModelFactory = forecastResultViewModelFactory;
+			_intradayPatternViewModelFactory = intradayPatternViewModelFactory;
 		}
 
 		[UnitOfWork, Route("api/Forecasting/Skills"), HttpGet]
@@ -73,6 +75,11 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			_forecastCreator.CreateForecastForWorkloads(futurePeriod, input.Workloads);
 			return Task.FromResult(true);
 		}
-	}
 
+		[HttpPost, Route("api/Forecasting/IntradayPattern"), UnitOfWork]
+		public virtual Task<IntradayPatternViewModel> IntradayPattern(EvaluateDevInput input)
+		{
+			return Task.FromResult(_intradayPatternViewModelFactory.Create(input));
+		}
+	}
 }

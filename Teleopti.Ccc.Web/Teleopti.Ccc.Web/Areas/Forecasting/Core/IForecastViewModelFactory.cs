@@ -9,4 +9,10 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 		WorkloadEvaluateDevViewModel EvaluateDev(EvaluateDevInput input);
 	}
 
+
+	public interface IIntradayPatternViewModelFactory
+	{
+		IntradayPatternViewModel Create(EvaluateDevInput input);
+	}
+
 }
