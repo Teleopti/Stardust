@@ -50,6 +50,15 @@ end
 item: Custom Script Item
   Filename=Get Windows Installer Property.wse
   Variable Name1=_PROPERTYNAME_
+  Variable Value1=DB_ANALYTICS
+  Variable Name2=_PROP_VAR_
+  Variable Value2=DMART
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
   Variable Value1=SQL_SERVER_NAME
   Variable Name2=_PROP_VAR_
   Variable Value2=SRV
@@ -123,7 +132,7 @@ item: Custom Script Item
 end
 item: Execute Program
   Pathname=.\Encrypted\Teleopti.Support.Security.exe
-  Command Line=-DS"%SRV%" -AP"%DCCC%" -CS"%CONNSTRINGBASE%" %SA%
+  Command Line=-DS"%SRV%" -AP"%DCCC%" -AN"%DMART%" -CS"%CONNSTRINGBASE%" %SA%
   Default Directory=%DIR%
   Flags=00000010
 end
