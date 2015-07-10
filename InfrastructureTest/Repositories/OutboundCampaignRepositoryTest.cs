@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -261,8 +262,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var result = repository.GetOnGoingCampaigns();
 
 			result.Count.Should().Be.EqualTo(2);
-			result[0].Id.Should().Be.EqualTo(campaign1.Id);
-			result[1].Id.Should().Be.EqualTo(campaign2.Id);
+			foreach (var shouldTrue in result.Select(campaign => campaign.Id == campaign1.Id || campaign.Id == campaign2.Id))
+			{
+				shouldTrue.Should().Be.True();
+			}
 		}
 
 		private Campaign createCampaignWithSpanningPeriod(DateOnlyPeriod period)
