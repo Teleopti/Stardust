@@ -133,11 +133,15 @@ angular.module('wfm.forecasting', [])
 		}
 	])
 	.controller('ForecastingRunAllCtrl', [
-		'$scope', '$stateParams', '$http', 'Forecasting',
-		function ($scope, $stateParams, $http, forecasting) {
+		'$scope', '$stateParams', '$http', 'Forecasting', '$state',
+		function ($scope, $stateParams, $http, forecasting, $state) {
 
 			$scope.period = $stateParams.period;
 			$scope.targets = [];
+
+			$scope.back = function () {
+				$state.go('forecasting');
+			};
 
 
 			var forecastForOneSkill = function(index) {
