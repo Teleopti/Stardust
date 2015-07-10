@@ -203,6 +203,18 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 
 		}
 
+		[Test]
+		public void ShouldValidatePeriodSelectionStartDateAndEndDateFormatCorrectly()
+		{
+			Culture.IsSwedish();
+			TimeZone.IsSweden();
+			var date = new DateOnly(2015, 07, 06);
+			var viewModel = Target.CreateWeekViewModel(date);
+			
+
+			Assert.AreEqual( "2015-07-06",viewModel.CurrentWeekStartDate);
+			Assert.AreEqual( "2015-07-12",viewModel.CurrentWeekEndDate);
+		}
 	}
 
 	public class FakeScheduleProjectionReadOnlyRepository : IScheduleProjectionReadOnlyRepository

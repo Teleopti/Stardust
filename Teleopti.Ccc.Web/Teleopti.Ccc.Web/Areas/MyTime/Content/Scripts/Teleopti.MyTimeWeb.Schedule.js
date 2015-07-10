@@ -316,8 +316,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			self.asmPermission(data.AsmPermission);
 			self.isCurrentWeek(data.IsCurrentWeek);
 			self.displayDate(Teleopti.MyTimeWeb.Common.FormatDatePeriod(
-				moment(data.PeriodSelection.StartDate),
-				moment(data.PeriodSelection.EndDate)));
+				moment(data.CurrentWeekStartDate),
+				moment(data.CurrentWeekEndDate)));
 
 			self.setCurrentDate(moment(data.PeriodSelection.Date));
 			self.nextWeekDate(moment(data.PeriodSelection.PeriodNavigation.NextPeriod));

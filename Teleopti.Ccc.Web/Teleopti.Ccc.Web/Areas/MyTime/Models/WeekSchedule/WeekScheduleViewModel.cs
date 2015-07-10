@@ -20,6 +20,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public string DatePickerFormat { get; set; }
 		public DaylightSavingsTimeAdjustmentViewModel DaylightSavingTimeAdjustment { get; set; }
 		public double BaseUtcOffsetInMinutes { get; set; }
+		public string CurrentWeekEndDate { get; set; }
+		public string CurrentWeekStartDate { get; set; }
 	}
 
     public class RequestPermission

@@ -63,6 +63,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 					var daylightSavingAdjustment = TimeZoneHelper.GetDaylightChanges(_loggedOnUser.Invoke().CurrentUser().PermissionInformation.DefaultTimeZone(), _now.Invoke().LocalDateTime().Year);
 					return daylightSavingAdjustment != null ? new DaylightSavingsTimeAdjustmentViewModel(daylightSavingAdjustment) : null;
 				}))
+				.ForMember(d => d.CurrentWeekStartDate, c => c.ResolveUsing(s => DateHelper.GetFirstDateInWeek(s.Date, _culture().GetCulture().DateTimeFormat.FirstDayOfWeek).Date.ToString("yyyy-MM-dd")))
+				.ForMember(d => d.CurrentWeekEndDate, c => c.ResolveUsing(s => DateHelper.GetFirstDateInWeek(s.Date, _culture().GetCulture().DateTimeFormat.FirstDayOfWeek).AddDays(6).Date.ToString("yyyy-MM-dd")))
 				.ForMember(d => d.PeriodSelection, c => c.ResolveUsing(s => _periodSelectionViewModelFactory.Invoke().CreateModel(s.Date)))
 				.ForMember(d => d.Styles, o => o.MapFrom(s => s.Days == null ? null : _scheduleColorProvider.Invoke().GetColors(s.ColorSource)))
 				.ForMember(d => d.TimeLineCulture, o => o.MapFrom(s => _loggedOnUser.Invoke().CurrentUser().PermissionInformation.Culture().ToString()))
