@@ -4,7 +4,11 @@
 			<md-progress-linear md-mode="indeterminate"></md-progress-linear>
 		</div>
 		<div ng-if="!loading">
-			<div class="alert-warning notice-spacer" ng-if="methods.length===0"><i class='mdi mdi-alert'></i> Warning: There is no historical data available for forecasting.</div>
+			<div class="alert-warning notice-spacer" ng-if="methods.length===0"><i class='mdi mdi-alert'></i> Warning: There is no historical data available for forecasting.
+			</div>
+			<h3>
+				{{workloadName}}
+			</h3>
 			<div ng-if="methods.length!==0" ng-repeat="method in methods" class="wfm-block">
 				<div class="row">
 					<h3>
@@ -29,6 +33,12 @@
 						</chart-axis>
 					</c3chart>
 				</div>
+			</div>
+			<div ng-repeat="weekDay in weekDays" class="wfm-block">
+				<h4>
+					{{weekDay.DayOfWeek}}
+				</h4>
+				<div id="{{weekDay.ChartId}}"></div>
 			</div>
 		</div>
 	</div>

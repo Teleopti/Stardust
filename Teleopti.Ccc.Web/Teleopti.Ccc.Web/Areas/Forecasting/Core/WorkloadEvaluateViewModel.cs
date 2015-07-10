@@ -1,6 +1,6 @@
 using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 {
@@ -46,5 +46,14 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 
 	public class IntradayPatternViewModel
 	{
+		public Guid WorkloadId { get; set; }
+		public IEnumerable<IntradayPatternDayViewModel> WeekDays { get; set; }
+	}
+
+	public class IntradayPatternDayViewModel
+	{
+		public DayOfWeek DayOfWeek { get; set; }
+		public IEnumerable<string> Periods { get; set; }
+		public IEnumerable<double> Tasks { get; set; }
 	}
 }
