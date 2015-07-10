@@ -15,6 +15,26 @@ if (typeof (Teleopti) === 'undefined') {
 Teleopti.MyTimeWeb.Common = (function ($) {
 	var _settings = {};
 	
+	var toggleCache = {};
+
+	function isToggleEnabled(toggleName) {
+	    var result = false;
+	    if (toggleCache[toggleName] !== undefined) {
+	        return toggleCache[toggleName];
+	    }
+
+	    var ajax = new Teleopti.MyTimeWeb.Ajax();
+	    ajax.Ajax({
+	        url: "../ToggleHandler/IsEnabled?toggle=" + toggleName,
+	        async: false,
+	        success: function (data) {
+	            result = data.IsEnabled;
+	            toggleCache[toggleName] = result;
+	        }
+	    });
+	    return result;
+	}
+
 	function _log() {
 		if (window.console && window.console.log)
 			window.console.log(Array.prototype.join.call(arguments, ' '));
@@ -199,18 +219,7 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		IsRtl: function () {
 			return $("html").attr("dir") == "rtl";
 		},
-		IsToggleEnabled: function (toggleName) {
-			var result = false;
-			var ajax = new Teleopti.MyTimeWeb.Ajax();
-			ajax.Ajax({
-				url: "../ToggleHandler/IsEnabled?toggle=" + toggleName,
-				async: false,
-				success: function (data) {
-					result = data.IsEnabled;
-				}
-			});
-			return result;
-		}
+		IsToggleEnabled: isToggleEnabled
 	};
 
 })(jQuery);
