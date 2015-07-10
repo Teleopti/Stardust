@@ -33,8 +33,8 @@ describe('OutboundFilters', function() {
 		var output1 = filter(input1);
 		var output2 = filter(input2);
 
-		expect(output1).toEqual('Sun');
-		expect(output2).toEqual('Sat');
+		expect(output1).toEqual('SundayShort');
+		expect(output2).toEqual('SaturdayShort');
 
 
 	}));

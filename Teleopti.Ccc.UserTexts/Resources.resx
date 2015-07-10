@@ -13218,4 +13218,88 @@ Reduce the complexity to use these shifts.</value>
     <value>My Team Schedules</value>
     <comment>My Team Schedules for MyTeam in Permission Module</comment>
   </data>
+  <data name="FridayShort" xml:space="preserve">
+    <value>Fri</value>
+    <comment>Friday Short</comment>
+  </data>
+  <data name="MondayShort" xml:space="preserve">
+    <value>Mon</value>
+    <comment>Monday short</comment>
+  </data>
+  <data name="SaturdayShort" xml:space="preserve">
+    <value>Sat</value>
+    <comment>Saturday Short</comment>
+  </data>
+  <data name="SundayShort" xml:space="preserve">
+    <value>Sun</value>
+    <comment>Sunday Short</comment>
+  </data>
+  <data name="ThursdayShort" xml:space="preserve">
+    <value>Thu</value>
+    <comment>Thursday Short</comment>
+  </data>
+  <data name="TuesdayShort" xml:space="preserve">
+    <value>Tue</value>
+    <comment>Tuesday short</comment>
+  </data>
+  <data name="WednesdayShort" xml:space="preserve">
+    <value>Wed</value>
+    <comment>Wednesday short</comment>
+  </data>
+  <data name="CreateCampaign" xml:space="preserve">
+    <value>Create Campaign</value>
+    <comment>Create new outbound campaign</comment>
+  </data>
+  <data name="EditCampaign" xml:space="preserve">
+    <value>Edit Campaign</value>
+    <comment>Edit outbound campaign</comment>
+  </data>
+  <data name="NeededPersonHours" xml:space="preserve">
+    <value>Needed Hours</value>
+    <comment>Needed Person Hours</comment>
+  </data>
+  <data name="StartTimeAndEndTimeMustBeSet" xml:space="preserve">
+    <value>Must set the start time and end time.</value>
+    <comment>Must set the start time and end time</comment>
+  </data>
+  <data name="CampaignCreated" xml:space="preserve">
+    <value>Campaign {0} has been created.</value>
+    <comment>Notification for creation of outbound campaign.</comment>
+  </data>
+  <data name="CampaignFailedCreation" xml:space="preserve">
+    <value>Failed to create campaign: {0} .</value>
+    <comment>Notification for outbound campaign creation failure.</comment>
+  </data>
+  <data name="CampaignFailedLoading" xml:space="preserve">
+    <value>Failed to load campaign: {0}.</value>
+    <comment>Notification for outbound campaign loading failure.</comment>
+  </data>
+  <data name="CampaignFailedUpdate" xml:space="preserve">
+    <value>Failed to update campaign: {0} .</value>
+    <comment>Notification for outbound campaign update failure.</comment>
+  </data>
+  <data name="CampaignUpdated" xml:space="preserve">
+    <value>Campaign {0} has been updated.</value>
+    <comment>Notification for update of outbound campaign.</comment>
+  </data>
+  <data name="LargeValueRange" xml:space="preserve">
+    <value>0 ~ 1000000</value>
+    <comment>Input placeholder for big numeric value</comment>
+  </data>
+  <data name="NewActivityName" xml:space="preserve">
+    <value>New activity name</value>
+    <comment>New activity name</comment>
+  </data>
+  <data name="RateRange" xml:space="preserve">
+    <value>1 ~ 100</value>
+    <comment>Input placeholder for percentage value</comment>
+  </data>
+  <data name="UseExistingActivity" xml:space="preserve">
+    <value>Use existing activity</value>
+    <comment>Use existing activity in outbound campaign activity picker</comment>
+  </data>
+  <data name="ValueRange" xml:space="preserve">
+    <value>0 ~ 9999</value>
+    <comment>Input placeholder for numeric value</comment>
+  </data>
 </root>

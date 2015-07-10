@@ -10,19 +10,17 @@
 	function showWeekdays() {
 		return function (input) {
 			var weekdays = [
-				"Sun",
-				"Mon",
-				"Tue",
-				"Wed",
-				"Thu",
-				"Fri",
-				"Sat"
+				"SundayShort",
+				"MondayShort",
+				"TuesdayShort",
+				"WednesdayShort",
+				"ThursdayShort",
+				"FridayShort",
+				"SaturdayShort"
 			];
 			if (input.WeekDay >= weekdays.length) {
 				return "";
-			}
-			if (input < 0)
-				return weekdays;
+			}			
 			return weekdays[input.WeekDay];
 		};
 	}

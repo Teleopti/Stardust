@@ -116,6 +116,18 @@
 	color: #ee8f7d ;
 }
 
+.error-msg-container {
+	display: none;
+}
+
+.ng-invalid-order  .error-msg-container.invalid-order {
+	display: block !important;
+}
+
+.ng-invalid-empty  .error-msg-container.invalid-empty {
+	display: block !important;
+}
+
 .campaign-create {
 	.ng-valid + .input-validation-sign .right-sign, 
 	.custom-valid + .input-validation-sign .right-sign,

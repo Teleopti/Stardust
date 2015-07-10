@@ -1,7 +1,7 @@
 ﻿<div class="polymorphic-input-body">
-	<input type="text" ng-model="inputs.Name" ng-if="!(disableCreate || inputs.useExisting)" placeholder="{{inputPlaceholder}}" ng-readonly="disableInput" />
+	<input type="text" ng-model="inputs.Name" ng-if="!(disableCreate || inputs.useExisting)" placeholder="{{inputPlaceholder | translate }}" ng-readonly="disableInput" />
 	<select ng-if="disableCreate || inputs.useExisting" placeholder="Choose" ng-model="inputs.Id">
-		<option ng-repeat="activityOption in allActivities" value="{{activityOption.Id}}">{{activityOption.Name}}</option>
+        <option ng-repeat="activityOption in allActivities" value="{{activityOption.Id}}" ng-selected="activityOption.Id == inputs.Id">{{activityOption.Name}}</option>
 	</select>
 </div>
 <div class="divider"></div>
@@ -9,6 +9,6 @@
 	<input type="checkbox" id="UseExistingActivity" ng-model="inputs.useExisting" />
 	<label for="UseExistingActivity">
 		<span class="wfm-checkbox-toggle"></span>
-		<span class="wfm-checkbox-label">Use existing activity</span>
+		<span class="wfm-checkbox-label" translate>UseExistingActivity</span>
 	</label>
 </div>

@@ -2,32 +2,22 @@
 	
 	'use strict';
 
-	angular.module('outboundServiceModule', ['ngResource'])
-		.service('outboundService', ['$resource', '$filter', outboundService])
-		.service('outboundNotificationService', ['growl', outboundNotificationService])
-		.service('outboundService33699', ['$filter', '$http', 'outboundActivityService', outboundService_33699])
-		.service('outboundActivityService', ['$http', outboundActivityService]);
+    angular.module('outboundServiceModule')
+		.service('outboundNotificationService', ['growl', '$translate', outboundNotificationService])
+		.service('outboundService', ['$filter', '$http', 'outboundActivityService', outboundService])
+		.service('outboundActivityService', ['$http', '$q', outboundActivityService]);
 	
 
-	function outboundActivityService($http) {
+	function outboundActivityService($http, $q) {
 
 		var listActivityCommandUrl = '../api/Outbound/Campaign/Activities';
-		var activities = [];
-		var sync = false;
-
-		this.listActivity = function () {			
-			if (!sync) {
-				activities.splice(0, activities.length);
-				$http.get(listActivityCommandUrl).success(function(data) {
-					if (angular.isArray(data)) {
-						angular.forEach(data, function(e) {
-							activities.push(e);
-						});
-					}
-					sync = true;
-				});
-			}
-			return activities;
+		
+		this.listActivity = function () {
+		    var deferred = $q.defer();		
+			$http.get(listActivityCommandUrl).success(function(data) {
+			    deferred.resolve(data);
+			});
+		    return deferred.promise;
 		};
 
 		this.nullActivity = function() {
@@ -36,11 +26,9 @@
 				Name: ''
 			};
 		};
-		
-		this.refresh = function() { sync = false; };
 	}
 
-	function outboundService_33699($filter, $http, outboundActivityService) {
+	function outboundService($filter, $http, outboundActivityService) {
 	
 		var createCampaignCommandUrl = '../api/Outbound/Campaign';
 		var getCampaignCommandUrl = '../api/Outbound/Campaign/';
@@ -69,8 +57,7 @@
 
 		this.addCampaign = function(campaign, successCb, errorCb) {
 			$http.post(createCampaignCommandUrl, normalizeCampaign(campaign)).
-				success(function (data) {
-					outboundActivityService.refresh();
+				success(function (data) {					
 					if (successCb != null) successCb(data);
 				}).
 				error(function(data) {
@@ -196,190 +183,59 @@
 		}
 	}
 
-
-	function outboundService($resource, $filter) {
-		var self = this;
-		var Campaign = $resource('../api/Outbound/Campaign/:Id', { Id: '@Id' }, {
-			update: { method: 'PUT' }
-		});
-
-		var CampaignWorkingPeriod = $resource('../api/Outbound/Campaign/:CampaignId/WorkingPeriod/:WorkingPeriodId', {
-			CampaignId: '@CampaignId',
-			WorkingPeriodId: '@WorkingPeriodId'
-		}, {
-			update: { method: 'PUT' }
-		});
-
-		var expandWorkingPeriod = function (workingPeriod) {
-			var assignments = angular.isDefined(workingPeriod.WorkingPeroidAssignments) ? workingPeriod.WorkingPeroidAssignments : [];
-			var expandedAssignments = [];
-			for (var i = 0; i < 7; i++) {
-				var assigned = assignments.filter(function (x) { return x.WeekDay == i; });
-				expandedAssignments.push({ WeekDay: i, Checked: assigned.length > 0 });
-			}
-			workingPeriod.ExpandedWorkingPeriodAssignments = expandedAssignments;
-		};
-
-		self.campaigns = [];
-		self.currentCampaignId = null;
-
-		self.getCurrentCampaign = function () {
-			if (self.currentCampaignId == null) return null;
-			var matched = self.campaigns.filter(function (campaign) { return campaign.Id == self.currentCampaignId; });
-			if (matched.length == 0) return null;
-			else return matched[0];
-		};
-
-		self.addCampaign = function (campaign, successCb, errorCb) {
-			var newCampaign = new Campaign(campaign);
-			newCampaign.$save(
-				function () {
-					if (angular.isDefined(successCb))
-						successCb(newCampaign);
-				},
-				function (data) {
-					if (angular.isDefined(errorCb))
-						errorCb(data);
-				});
-
-			self.campaigns.push(newCampaign);
-			return newCampaign;
-		};
-
-		self.listCampaign = function (campaignFilter, successCb, errorCb) {
-			self.campaigns = Campaign.query({},
-				function () {
-					if (angular.isDefined(successCb))
-						successCb();
-				},
-				function (data) {
-					if (angular.isDefined(errorCb))
-						errorCb(data);
-				});
-			return self.campaigns;
-		};
-
-		self.getCampaignById = function (Id) {
-			self.currentCampaignId = Id;
-			var matched = self.campaigns.filter(function (campaign) { return campaign.Id === Id; });
-			if (matched.length === 0) return null;
-			var campaign = matched[0];
-			if (!(angular.isDefined(campaign.IsFull) && campaign.IsFull)) {
-				var fetched = Campaign.get({ Id: Id }, function () {
-					campaign = angular.extend(campaign, fetched, { IsFull: true });
-					angular.forEach(campaign.CampaignWorkingPeriods, function (period) {
-						expandWorkingPeriod(period);
-					});
-						
-				});
-			}
-			return campaign;
-		};
+	function outboundNotificationService($growl, $translate) {
 		
-
-		self.updateCampaign = function (campaign, successCb, errorCb) {
-			Campaign.update(campaign, function () {
-				if (angular.isDefined(successCb))
-					successCb();
-			},
-				function (data) {
-					if (angular.isDefined(errorCb))
-						errorCb(data);
-				});
-		};
-
-		self.deleteCampaign = function (campaign, successCb, errorCb) {
-			Campaign.remove({ Id: campaign.Id },
-				function () {
-					if (angular.isDefined(successCb))
-						successCb();
-				},
-				function (data) {
-					if (angular.isDefined(errorCb))
-						errorCb(data);
-				});
-			self.campaigns.splice(self.campaigns.indexOf(campaign), 1);
-		}
-
-		self.addWorkingPeriod = function (campaign, workingPeriod) {
-			var newWorkingPeriod = new CampaignWorkingPeriod();
-			newWorkingPeriod.CampaignId = campaign.Id;
-			newWorkingPeriod.StartTime = $filter('date')(workingPeriod.StartTime, 'HH:mm');
-			newWorkingPeriod.EndTime = $filter('date')(workingPeriod.EndTime, 'HH:mm');
-			newWorkingPeriod.WorkingPeriod = {
-				period: {
-					_minimum: $filter('date')(workingPeriod.StartTime, 'HH:mm:ss'),
-					_maximum: $filter('date')(workingPeriod.EndTime, 'HH:mm:ss')
-				}
-			};
-			newWorkingPeriod.$save(function () {
-				expandWorkingPeriod(newWorkingPeriod);
-				campaign.CampaignWorkingPeriods.push(newWorkingPeriod);
-			});
-		};
-
-		self.deleteWorkingPeriod = function (campaign, workingPeriod) {
-			CampaignWorkingPeriod.remove({ CampaignId: campaign.Id, WorkingPeriodId: workingPeriod.Id });
-			campaign.CampaignWorkingPeriods.splice(campaign.CampaignWorkingPeriods.indexOf(workingPeriod), 1);
-		}
-
-		self.addWorkingPeriodAssignment = function (campaign, workingPeriod, weekDay) {
-			CampaignWorkingPeriod.update({
-				CampaignId: campaign.Id,
-				WeekDay: weekDay.WeekDay,
-				CampaignWorkingPeriods: [workingPeriod.Id]
-			});
-		};
-
-		self.deleteWorkingPeriodAssignment = function (campaign, workingPeriod, weekDay) {
-			CampaignWorkingPeriod.update({
-				CampaignId: campaign.Id,
-				WeekDay: weekDay.WeekDay,
-				CampaignWorkingPeriods: []
-			});
-		};
-
-
-	}
-
-	function outboundNotificationService($growl) {
-		
-
 		this.notifySuccess = notifySuccess;
 		this.notifyFailure = notifyFailure;
 
-		this.notifyCampaignCreationSuccess = function (campaign) {			
-			notifySuccess("New campaign <strong>" + campaign.Name + "</strong> created");
+		this.notifyCampaignCreationSuccess = function (campaign) {
+		    notifySuccess('CampaignCreated', [
+		        '<strong>' + campaign.Name + '</strong>'
+		    ]);               
 		}
 
 		this.notifyCampaignUpdateSuccess = function (campaign) {
-			notifySuccess("Campaign <strong>" + campaign.Name + "</strong> was updated successfully");
+		    notifySuccess('CampaignUpdated', [
+               '<strong>' + campaign.Name + '</strong>'
+		    ]);
 		}
 
 		this.notifyCampaignCreationFailure = function (error) {
-			notifyFailure("Failed to create campaign. "  + (error && error.Message? error.Message: error));
+		    notifyFailure('CampaignFailedCreation', [
+		        (error && error.Message ? error.Message : error)
+		    ]);
 		}
 
 		this.notifyCampaignUpdateFailure = function (error) {
-			notifyFailure("Failed to update campaign. " + (error && error.Message ? error.Message : error));
+		    notifyFailure('CampaignFailedUpdate', [
+                (error && error.Message ? error.Message : error)
+		    ]);
 		}
 
 		this.notifyCampaignLoadingFailure = function(error) {
-			notifyFailure("Failed to load campaign " + (error && error.Message ? error.Message : error));
+		    notifyFailure('CampaignFailedLoading', [
+		        (error && error.Message ? error.Message : error)
+		    ]);
 		}
 
-		function notifySuccess(message) {
-			$growl.success("<i class='mdi mdi-thumb-up'></i> " + message + ".", {
-				ttl: 5000,
-				disableCountDown: true
-			});
+		function notifySuccess(message, params) {
+		    $translate(message).then(function(text) {
+		        $growl.success("<i class='mdi mdi-thumb-up'></i> "
+		            + text.replace('{0}', params[0]), {
+		            ttl: 5000,
+		            disableCountDown: true
+		        });
+		    });
 		}
 
-		function notifyFailure(message) {
-			$growl.error("<i class='mdi  mdi-alert-octagon'></i> " + message + ".", {
-				ttl: 5000,
-				disableCountDown: true
-			});
+		function notifyFailure(message, params) {
+		    $translate(message).then(function (text) {
+		        $growl.error("<i class='mdi  mdi-alert-octagon'></i> "
+                    + text.replace('{0}', params[0]), {
+		            ttl: 5000,
+		            disableCountDown: true
+		        });
+		    });
 		}
 
 	}

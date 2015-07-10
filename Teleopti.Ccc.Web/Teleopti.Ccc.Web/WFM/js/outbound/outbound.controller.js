@@ -3,15 +3,15 @@
 
 	angular.module('wfm.outbound')
 		.controller('OutboundListCtrl', [
-			'$scope', '$state', '$stateParams', 'outboundService33699',
+			'$scope', '$state', '$stateParams', 'outboundService',
 			listCtrl
 		])
 		.controller('OutboundCreateCtrl', [
-			'$scope', '$state', 'outboundService33699', 'outboundNotificationService',
+			'$scope', '$state', 'outboundService', 'outboundNotificationService',
 			createCtrl
 		])
 		.controller('OutboundEditCtrl', [
-			'$scope', '$state', '$stateParams', '$timeout', 'outboundService33699', 'outboundNotificationService',
+			'$scope', '$state', '$stateParams', '$timeout', 'outboundService', 'outboundNotificationService',
 			editCtrl
 		]);
 
@@ -205,9 +205,9 @@
 		}, function (value) {
 			if (scope.campaignSpanningPeriodForm) {
 				if (!isDateValid(value.startDate, value.endDate)) {									
-					scope.campaignSpanningPeriodForm.$setValidity('time-range', false);
+					scope.campaignSpanningPeriodForm.$setValidity('order', false);
 				} else {
-					scope.campaignSpanningPeriodForm.$setValidity('time-range', true);
+					scope.campaignSpanningPeriodForm.$setValidity('order', true);
 				}
 			}		
 			scope.campaign.StartDate = { Date: angular.copy(value.startDate) };

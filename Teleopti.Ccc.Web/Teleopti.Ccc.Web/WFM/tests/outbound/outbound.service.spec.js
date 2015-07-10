@@ -18,12 +18,12 @@ describe('OutboundService Test', function () {
 	});
 
 
-	beforeEach(inject(function (_$httpBackend_, _$q_, _$rootScope_, _outboundService33699_) {
+	beforeEach(inject(function (_$httpBackend_, _$q_, _$rootScope_, _outboundService_) {
 
 		$q = _$q_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
-		outboundService = _outboundService33699_;
+		outboundService = _outboundService_;
 		
 		$httpBackend.resetExpectations();	
 	}));

@@ -28,22 +28,30 @@
 
 			function postLink(scope, elem, attrs, ctrls) {
 				var ngModel = ctrls[0];
-				var initializing = true;
-
+			
 				scope.disableInput = false;
 				scope.disableCreate = false;
-				scope.inputPlaceholder = 'new activity name';
+				scope.inputPlaceholder = 'NewActivityName';
 					
 				scope.inputs = { Id: null, Name: '', useExisting: false };
-				scope.allActivities = outboundActivityService.listActivity();
+			    scope.allActivities = [];
+
+                outboundActivityService.listActivity().then(function(data) {
+                    scope.allActivities = data;
+                    ngModel.$parsers.push(parser);
+                    ngModel.$render();
+                });
+
 				scope.$watch(function () {
 					return scope.inputs;
-				}, function () {
-					if (initializing) {
-						initializing = false;
-					} else {
-						ngModel.$setViewValue(angular.copy(scope.inputs));
-					}
+				}, function (newValue, oldValue) {
+					
+				    ngModel.$setViewValue(angular.copy(scope.inputs));
+				    ngModel.$render();				 
+                    if (newValue == oldValue) {
+                        ngModel.$setPristine();
+                    }
+					
 				}, true);
 				
 				if (angular.isDefined(attrs.syncName)) {
@@ -51,12 +59,11 @@
 						scope.inputs.Name = newValue;
 					});
 					scope.disableInput = true;
-					scope.inputPlaceholder = 'same as campaign name';
 				} else if (angular.isDefined(attrs.disableCreate)) {
 					scope.disableCreate = true;					
 				}
 
-				ngModel.$parsers.push(parser);
+				
 				ngModel.$formatters.push(formatter);
 
 				ngModel.$validators.notEmpty = function (modelValue, viewValue) {				
@@ -73,7 +80,7 @@
 				ngModel.$render = renderer;
 
 				function renderer() {
-					scope.inputs = ngModel.$viewValue || { Id: null, Name: '', useExisting: false };
+				    scope.inputs = ngModel.$viewValue || { Id: null, Name: '', useExisting: false };				   
 				}
 
 				function formatter(modelValue) {				
@@ -102,8 +109,8 @@
 	]);
 
 	outbound.directive('workingHoursPicker', [
-		'outboundService33699',
-		function(outboundService) {
+        '$q', '$translate', '$filter', 'outboundService',
+		function($q, $translate, $filter, outboundService) {
 			return {
 				restrict: 'E',
 				scope: {
@@ -120,14 +127,38 @@
 				scope.addEmptyWorkingPeriod = addEmptyWorkingPeriod;
 				scope.removeWorkingPeriod = removeWorkingPeriod;
 
-				scope.weekDays = outboundService.createEmptyWorkingPeriod().WeekDaySelections;
-			
+				var weekDays = outboundService.createEmptyWorkingPeriod().WeekDaySelections;
+				var translations = [];
+			    var i;
+                for (i = 0; i < weekDays.length; i ++) {
+                    translations.push($translate($filter('showWeekdays')(weekDays[i])));
+                }
+
+                $q.all(translations).then(function (ts) {                  
+			        for (i = 0; i < weekDays.length; i++) {
+			            weekDays[i].Text = ts[i];
+			        }
+			        scope.weekDays = weekDays;
+			    });						
+
 				function enforceRadioBehavior(refIndex, weekDay) {
 					clearConflictWorkingHourSelection(scope.workingHours, refIndex, weekDay);
 				}
 				
-				function addEmptyWorkingPeriod(startTime, endTime) {				
-					if (!(startTime && endTime)) return;
+				function addEmptyWorkingPeriod(startTime, endTime) {
+				    scope.newWorkingPeriodForm.$setValidity('empty', true);
+				    scope.newWorkingPeriodForm.$setValidity('order', true);
+
+				    if (!(startTime && endTime)) {
+				        scope.newWorkingPeriodForm.$setValidity('empty', false);
+					    return;
+				    }
+				   
+				    if (startTime >= endTime) {
+				        scope.newWorkingPeriodForm.$setValidity('order', false);
+				        return;
+				    }
+				    				   
 					scope.workingHours.push(outboundService.createEmptyWorkingPeriod(angular.copy(startTime), angular.copy(endTime)));					
 				}
 
@@ -330,6 +361,7 @@
 			scope.timeValue = { hour: null, minute: null, meridian: null };
 
 			scope.$watch('useMeridian', function (newValue, oldValue) {
+			    if (newValue == oldValue) return;
 				timepicker.updateRange(newValue, scope.hourStep, scope.minuteStep);
 				if (ngModel.$modelValue) {
 					setViewValue(timepicker.readTime(ngModel.$modelValue, newValue));
@@ -337,11 +369,13 @@
 				ngModel.$render();
 			});
 
-			scope.$watch('hourStep', function (newValue) {
-				timepicker.updateRange(scope.useMeridian, newValue, scope.minuteStep);
+			scope.$watch('hourStep', function (newValue, oldValue) {
+			    if (newValue == oldValue) return;
+			    timepicker.updateRange(scope.useMeridian, newValue, scope.minuteStep);
 			});
 
-			scope.$watch('minuteStep', function (newValue) {
+			scope.$watch('minuteStep', function (newValue, oldValue) {
+			    if (newValue == oldValue) return;
 				timepicker.updateRange(scope.useMeridian, scope.hourStep, newValue);
 			});
 
@@ -392,6 +426,8 @@
 
 
 			function setViewValue(newValue, oldValue) {
+
+			    if (newValue == oldValue) return;
 				ngModel.$setViewValue(angular.copy(newValue));
 			};
 
@@ -559,8 +595,8 @@
 	}
 
 	function timepickerTemplate() {
-		return '<input name="hourValueInput" type="text" ng-model="timeValue.hour" hour-input flex required />:<input name="minuteValueInput" type="text" ng-model="timeValue.minute" minute-input flex required/>' +
-		  '<select name="meridianValueInput" ng-model="timeValue.meridian" ng-if="useMeridian" flex required><option value="0">AM</md-option><option value="1">PM</option></select>';
+		return '<input name="hourValueInput" type="text" ng-model="timeValue.hour" hour-input flex  />:<input name="minuteValueInput" type="text" ng-model="timeValue.minute" minute-input flex />' +
+		  '<select name="meridianValueInput" ng-model="timeValue.meridian" ng-if="useMeridian" flex ><option value="0">AM</md-option><option value="1">PM</option></select>';
 	}
 
 })();

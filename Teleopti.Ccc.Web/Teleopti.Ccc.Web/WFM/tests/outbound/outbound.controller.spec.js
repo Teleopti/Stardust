@@ -16,7 +16,7 @@ describe('OutboundCreateCtrl', function() {
 		stateService = new fakeStateService();
 
 		module(function($provide) {
-			$provide.service('outboundService33699', function () {
+			$provide.service('outboundService', function () {
 				return outboundService;
 			});
 			
@@ -160,7 +160,7 @@ describe('OutboundCreateCtrl', function() {
 		var target = $controller('OutboundCreateCtrl', {
 			$scope: scope,
 			$state: stateService,
-			outboundService33699: outboundService,
+			outboundService: outboundService,
 			outboundNotificationService: outboundNotificationService
 		});
 		return { target: target, scope: scope };
