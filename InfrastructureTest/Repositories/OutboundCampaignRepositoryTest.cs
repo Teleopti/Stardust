@@ -223,6 +223,57 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			campaign.AverageTaskHandlingTime().Should().Be.EqualTo(new TimeSpan(0, 0, 38));
 		}
 
+		[Test]
+		public void ShouldGetPlannedCampaigns()
+		{
+			var campaign1 = createCampaignWithSpanningPeriod(new DateOnlyPeriod(DateOnly.Today.AddDays(1), DateOnly.MaxValue));
+			createCampaignWithSpanningPeriod(new DateOnlyPeriod(DateOnly.Today, DateOnly.MaxValue));
+			var repository = new OutboundCampaignRepository(UnitOfWork);
+
+			var result = repository.GetPlannedCampaigns();
+
+			result.Count.Should().Be.EqualTo(1);
+			result[0].Id.Should().Be.EqualTo(campaign1.Id);
+		}		
+		
+		[Test]
+		public void ShouldGetDoneCampaigns()
+		{
+			var campaign1 = createCampaignWithSpanningPeriod(new DateOnlyPeriod(DateOnly.Today.AddDays(-10), DateOnly.Today.AddDays(-8)));
+			createCampaignWithSpanningPeriod(new DateOnlyPeriod(DateOnly.Today, DateOnly.MaxValue));
+			var repository = new OutboundCampaignRepository(UnitOfWork);
+
+			var result = repository.GetDoneCampaigns();
+
+			result.Count.Should().Be.EqualTo(1);
+			result[0].Id.Should().Be.EqualTo(campaign1.Id);
+		}		
+		
+		[Test]
+		public void ShouldGetOnGoingCampaigns()
+		{
+			var campaign1 = createCampaignWithSpanningPeriod(new DateOnlyPeriod(DateOnly.Today.AddDays(-10), DateOnly.Today));
+			var campaign2 = createCampaignWithSpanningPeriod(new DateOnlyPeriod(DateOnly.Today, DateOnly.MaxValue));
+			createCampaignWithSpanningPeriod(new DateOnlyPeriod(DateOnly.Today.AddDays(-10), DateOnly.Today.AddDays(-8)));
+			createCampaignWithSpanningPeriod(new DateOnlyPeriod(DateOnly.Today.AddDays(8), DateOnly.Today.AddDays(10)));
+			var repository = new OutboundCampaignRepository(UnitOfWork);
+
+			var result = repository.GetOnGoingCampaigns();
+
+			result.Count.Should().Be.EqualTo(2);
+			result[0].Id.Should().Be.EqualTo(campaign1.Id);
+			result[1].Id.Should().Be.EqualTo(campaign2.Id);
+		}
+
+		private Campaign createCampaignWithSpanningPeriod(DateOnlyPeriod period)
+		{
+			var campaign = CreateAggregateWithCorrectBusinessUnit();
+			campaign.SpanningPeriod = period;
+
+			PersistAndRemoveFromUnitOfWork(campaign);
+			return campaign;
+		}
+
 		private Campaign CreateCampaignWithWorkingHours(DayOfWeek weekday, TimePeriod period)
 		{
 			var campaign = CreateAggregateWithCorrectBusinessUnit();

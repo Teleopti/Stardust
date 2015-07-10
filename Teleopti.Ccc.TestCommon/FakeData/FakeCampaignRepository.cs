@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -51,5 +52,19 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		}
 
 		public IUnitOfWork UnitOfWork { get; private set; }
+		public IList<Campaign> GetPlannedCampaigns()
+		{
+			throw new NotImplementedException();
+		}
+
+		public IList<Campaign> GetDoneCampaigns()
+		{
+			throw new NotImplementedException();
+		}
+
+		public IList<Campaign> GetOnGoingCampaigns()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
