@@ -45,6 +45,31 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.People
 
 			Browser.Interactions.Click("#go-advanced-search");
 		}
+
+		[When(@"I open the action panel")]
+		public void WhenIOpenTheActionPanel()
+		{
+			Browser.Interactions.Click(".action-panel");
+		}
+
+		[Then(@"I should see import user command")]
+		public void ThenIShouldSeeImportUserCommand()
+		{
+			Browser.Interactions.AssertExists(".action-panel .mdi-file");
+		}
+
+		[When(@"I open the import user command")]
+		public void WhenIOpenTheImportUserCommand()
+		{
+			Browser.Interactions.Click(".action-panel .mdi-file");
+		}
+
+		[Then(@"I should see import panel")]
+		public void ThenIShouldSeeImportPanel()
+		{
+			Browser.Interactions.AssertExists(".import-people");
+		}
+
 	}
 
 	public class SearchCriteria
