@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
@@ -42,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			return AllNotifications.Where(n => n.DomainType.Equals(typeof(T).Name));
 		}
 
-		public void SendMultiple(IEnumerable<Interfaces.MessageBroker.Message> notifications)
+		public void SendMultiple(IEnumerable<Message> messages)
 		{
 			throw new NotImplementedException();
 		}

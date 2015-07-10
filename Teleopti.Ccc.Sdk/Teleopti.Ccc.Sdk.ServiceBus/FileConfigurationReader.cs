@@ -1,17 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using Autofac;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using log4net;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Web;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
@@ -80,10 +85,22 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 	public class MessageSenderCreator
 	{
 		private readonly IServiceBusSender _serviceBusSender;
+		private readonly IToggleManager _toggleManager;
+		private readonly Interfaces.MessageBroker.Client.IMessageSender _messageSender;
+		private readonly IJsonSerializer _serializer;
+		private readonly ICurrentInitiatorIdentifier _initiatorIdentifier;
 
-		public MessageSenderCreator(IServiceBusSender serviceBusSender)
+		public MessageSenderCreator(IServiceBusSender serviceBusSender, 
+			IToggleManager toggleManager, 
+			Interfaces.MessageBroker.Client.IMessageSender messageSender,
+			IJsonSerializer serializer, 
+			ICurrentInitiatorIdentifier initiatorIdentifier)
 		{
 			_serviceBusSender = serviceBusSender;
+			_toggleManager = toggleManager;
+			_messageSender = messageSender;
+			_serializer = serializer;
+			_initiatorIdentifier = initiatorIdentifier;
 		}
 
 		public ICurrentMessageSenders Create()
@@ -92,7 +109,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			var businessUnit = CurrentBusinessUnit.Make();
 			var messageSender = new MessagePopulatingServiceBusSender(_serviceBusSender, populator);
 			var eventPublisher = new EventPopulatingPublisher(new ServiceBusEventPublisher(_serviceBusSender), populator);
-			return new CurrentMessageSenders(new List<IMessageSender>
+			var senders = new List<IMessageSender>
 			{
 				new ScheduleMessageSender(eventPublisher, new ClearEvents()),
 				new EventsMessageSender(new SyncEventsPublisher(eventPublisher)),
@@ -101,7 +118,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				new TeamOrSiteChangedMessageSender(eventPublisher, businessUnit),
 				new PersonChangedMessageSender(eventPublisher, businessUnit),
 				new PersonPeriodChangedMessageSender(messageSender)
-			});
+			};
+			if (_toggleManager.IsEnabled(Toggles.MessageBroker_SchedulingScreenMailbox_32733))
+				senders.Add(new AggregatedScheduleChangeMessageSender(_messageSender, CurrentDataSource.Make(), businessUnit, _serializer,
+					_initiatorIdentifier));
+			return new CurrentMessageSenders(senders);
 		}
 	}
 

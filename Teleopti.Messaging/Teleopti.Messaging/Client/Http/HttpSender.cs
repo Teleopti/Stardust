@@ -18,9 +18,9 @@ namespace Teleopti.Messaging.Client.Http
 			_client.Post("MessageBroker/NotifyClients", message);
 		}
 
-		public void SendMultiple(IEnumerable<Message> notifications)
+		public void SendMultiple(IEnumerable<Message> messages)
 		{
-			_client.Post("MessageBroker/NotifyClientsMultiple", notifications);
+			_client.Post("MessageBroker/NotifyClientsMultiple", messages);
 		}
 
 	}

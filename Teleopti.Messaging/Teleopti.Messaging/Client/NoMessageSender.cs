@@ -10,7 +10,7 @@ namespace Teleopti.Messaging.Client
 		{
 		}
 
-		public void SendMultiple(IEnumerable<Message> notifications)
+		public void SendMultiple(IEnumerable<Message> messages)
 		{
 		}
 	}

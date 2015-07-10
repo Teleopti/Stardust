@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -15,6 +16,7 @@ namespace Teleopti.Messaging.Client.Composite
 	public class MessageBrokerCompositeClient : IMessageBrokerComposite
 	{
 		private readonly ISignalRClient _signalRClient;
+		private readonly IMessageSender _messageSender;
 		private readonly IMessageListener _signalRMessageListener;
 		private readonly MessageCreator _messageCreator;
 		private readonly HttpListener _mailboxListener;
@@ -30,6 +32,7 @@ namespace Teleopti.Messaging.Client.Composite
 			IConfigurationWrapper configurationWrapper)
 		{
 			_signalRClient = signalRClient;
+			_messageSender = messageSender;
 			var eventHandlers = new EventHandlers();
 			_signalRMessageListener = new SignalRListener(_signalRClient, eventHandlers);
 			_mailboxListener = new HttpListener(eventHandlers,
@@ -73,6 +76,16 @@ namespace Teleopti.Messaging.Client.Composite
 		public void Send(string dataSource, Guid businessUnitId, IEventMessage[] eventMessages)
 		{
 			_messageCreator.Send(dataSource, businessUnitId, eventMessages);
+		}
+
+		public void Send(Message message)
+		{
+			_messageSender.Send(message);
+		}
+
+		public void SendMultiple(IEnumerable<Message> messages)
+		{
+			_messageSender.SendMultiple(messages);
 		}
 
 		public void RegisterSubscription(Subscription subscription, EventHandler<EventMessageArgs> eventMessageHandler)

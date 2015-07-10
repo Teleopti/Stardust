@@ -1,0 +1,250 @@
+﻿using System;
+using System.Linq;
+using NUnit.Framework;
+using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Interfaces;
+using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Events;
+
+namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.MessageSenders
+{
+	[TestFixture]
+	[Toggle(Toggles.MessageBroker_SchedulingScreenMailbox_32733)]
+	[PrincipalAndStateTest]
+	public class AggregatedScheduleChangeMessageTest
+	{
+		public FakeMessageSender MessageSender;
+
+		public ICurrentDataSource DataSource;
+		public ICurrentBusinessUnit BusinessUnit;
+
+		public IJsonDeserializer Deserializer;
+		public ICurrentUnitOfWorkFactory Uow;
+		public IActivityRepository ActivityRepository;
+		public IPersonRepository PersonRepository;
+		public IScenarioRepository ScenarioRepository;
+		public IPersonAssignmentRepository PersonAssignmentRepository;
+
+		[Test]
+		public void ShouldSendAggregatedScheduleChangeMessage()
+		{
+			var scenario = ScenarioFactory.CreateScenario(".", true, false);
+			var person = PersonFactory.CreatePerson();
+
+			using (var uow = Uow.Current().CreateAndOpenUnitOfWork())
+			{
+				ScenarioRepository.Add(scenario);
+
+				PersonRepository.Add(person);
+
+				var activity = new Activity(".");
+				ActivityRepository.Add(activity);
+
+				var personAssignment = new PersonAssignment(person, scenario, new DateOnly(2015, 6, 24));
+				personAssignment.AddActivity(activity, new DateTimePeriod("2015-06-24 8:00".Utc(), "2015-06-24 17:00".Utc()));
+
+				PersonAssignmentRepository.Add(personAssignment);
+
+				uow.PersistAll();
+			}
+
+			MessageSender.NotificationsOfDomainType<IAggregatedScheduleChange>().Should().Have.Count.EqualTo(1);
+		}
+		
+		[Test]
+		public void ShouldSendWithProperties()
+		{
+			var scenario = ScenarioFactory.CreateScenario(".", true, false);
+			var person = PersonFactory.CreatePerson();
+
+			using (var uow = Uow.Current().CreateAndOpenUnitOfWork())
+			{
+				ScenarioRepository.Add(scenario);
+
+				PersonRepository.Add(person);
+
+				var activity = new Activity(".");
+				ActivityRepository.Add(activity);
+
+				var personAssignment = new PersonAssignment(person, scenario, new DateOnly(2015, 6, 24));
+				personAssignment.AddActivity(activity, new DateTimePeriod("2015-06-24 8:00".Utc(), "2015-06-24 17:00".Utc()));
+
+				PersonAssignmentRepository.Add(personAssignment);
+
+				uow.PersistAll();
+			}
+
+			var message = MessageSender.NotificationsOfDomainType<IAggregatedScheduleChange>().Single();
+			message.DataSource.Should().Be(DataSource.CurrentName());
+			message.BusinessUnitIdAsGuid().Should().Be(BusinessUnit.Current().Id.Value);
+			message.StartDateAsDateTime().Should().Be("2015-06-24 8:00".Utc());
+			message.EndDateAsDateTime().Should().Be("2015-06-24 17:00".Utc());
+			message.DomainReferenceIdAsGuid().Should().Be(scenario.Id.Value);
+			message.DomainQualifiedType.Should().Be(typeof (IAggregatedScheduleChange).AssemblyQualifiedName);
+			message.DomainUpdateType.Should().Be(DomainUpdateType.NotApplicable);
+			message.BinaryData.Should().Contain(person.Id.ToString());
+		}
+
+		[Test]
+		public void ShouldSendWithAllPersonIds()
+		{
+			var scenario = ScenarioFactory.CreateScenario(".", true, false);
+			var person1 = PersonFactory.CreatePerson();
+			var person2 = PersonFactory.CreatePerson();
+
+			using (var uow = Uow.Current().CreateAndOpenUnitOfWork())
+			{
+				ScenarioRepository.Add(scenario);
+
+				PersonRepository.Add(person1);
+				PersonRepository.Add(person2);
+
+				var activity = new Activity(".");
+				ActivityRepository.Add(activity);
+
+				var personAssignment1 = new PersonAssignment(person1, scenario, new DateOnly(2015, 6, 24));
+				personAssignment1.AddActivity(activity, new DateTimePeriod("2015-06-24 8:00".Utc(), "2015-06-24 17:00".Utc()));
+				var personAssignment2 = new PersonAssignment(person2, scenario, new DateOnly(2015, 6, 24));
+				personAssignment2.AddActivity(activity, new DateTimePeriod("2015-06-24 8:00".Utc(), "2015-06-24 17:00".Utc()));
+
+				PersonAssignmentRepository.Add(personAssignment1);
+				PersonAssignmentRepository.Add(personAssignment2);
+
+				uow.PersistAll();
+			}
+			var message = MessageSender.NotificationsOfDomainType<IAggregatedScheduleChange>().Single();
+			Deserializer.DeserializeObject<Guid[]>(message.BinaryData).Should().Have.SameValuesAs(new []{person1.Id.Value, person2.Id.Value});
+		}
+
+		[Test]
+		public void ShouldNotSendDuplicatePersonIds()
+		{
+			var scenario = ScenarioFactory.CreateScenario(".", true, false);
+			var person = PersonFactory.CreatePerson();
+
+			using (var uow = Uow.Current().CreateAndOpenUnitOfWork())
+			{
+				ScenarioRepository.Add(scenario);
+
+				PersonRepository.Add(person);
+
+				var activity = new Activity(".");
+				ActivityRepository.Add(activity);
+
+				var personAssignment1 = new PersonAssignment(person, scenario, new DateOnly(2015, 6, 24));
+				personAssignment1.AddActivity(activity, new DateTimePeriod("2015-06-24 8:00".Utc(), "2015-06-24 17:00".Utc()));
+				var personAssignment2 = new PersonAssignment(person, scenario, new DateOnly(2015, 6, 25));
+				personAssignment2.AddActivity(activity, new DateTimePeriod("2015-06-25 8:00".Utc(), "2015-06-25 17:00".Utc()));
+
+				PersonAssignmentRepository.Add(personAssignment1);
+				PersonAssignmentRepository.Add(personAssignment2);
+
+				uow.PersistAll();
+			}
+
+			var message = MessageSender.NotificationsOfDomainType<IAggregatedScheduleChange>().Single();
+			Deserializer.DeserializeObject<Guid[]>(message.BinaryData).Count().Should().Be(1);
+		}
+
+		[Test]
+		public void ShouldSendWithEarliestStartDateOfPersonAssignments()
+		{
+			var scenario = ScenarioFactory.CreateScenario(".", true, false);
+			var person = PersonFactory.CreatePerson();
+
+			using (var uow = Uow.Current().CreateAndOpenUnitOfWork())
+			{
+				ScenarioRepository.Add(scenario);
+
+				PersonRepository.Add(person);
+
+				var activity = new Activity(".");
+				ActivityRepository.Add(activity);
+
+				var personAssignment1 = new PersonAssignment(person, scenario, new DateOnly(2015, 6, 24));
+				personAssignment1.AddActivity(activity, new DateTimePeriod("2015-06-24 8:00".Utc(), "2015-06-24 17:00".Utc()));
+				var personAssignment2 = new PersonAssignment(person, scenario, new DateOnly(2015, 6, 25));
+				personAssignment2.AddActivity(activity, new DateTimePeriod("2015-06-25 8:00".Utc(), "2015-06-25 17:00".Utc()));
+
+				PersonAssignmentRepository.Add(personAssignment1);
+				PersonAssignmentRepository.Add(personAssignment2);
+
+				uow.PersistAll();
+			}
+
+			var message = MessageSender.NotificationsOfDomainType<IAggregatedScheduleChange>().Single();
+			message.StartDateAsDateTime().Should().Be("2015-06-24 8:00".Utc());
+		}
+
+
+		[Test]
+		public void ShouldSendWithLatestEndDateOfPersonAssignments()
+		{
+			var scenario = ScenarioFactory.CreateScenario(".", true, false);
+			var person = PersonFactory.CreatePerson();
+
+			using (var uow = Uow.Current().CreateAndOpenUnitOfWork())
+			{
+				ScenarioRepository.Add(scenario);
+
+				PersonRepository.Add(person);
+
+				var activity = new Activity(".");
+				ActivityRepository.Add(activity);
+
+				var personAssignment1 = new PersonAssignment(person, scenario, new DateOnly(2015, 6, 24));
+				personAssignment1.AddActivity(activity, new DateTimePeriod("2015-06-24 8:00".Utc(), "2015-06-24 17:00".Utc()));
+				var personAssignment2 = new PersonAssignment(person, scenario, new DateOnly(2015, 6, 25));
+				personAssignment2.AddActivity(activity, new DateTimePeriod("2015-06-25 8:00".Utc(), "2015-06-25 17:00".Utc()));
+
+				PersonAssignmentRepository.Add(personAssignment1);
+				PersonAssignmentRepository.Add(personAssignment2);
+
+				uow.PersistAll();
+			}
+
+			var message = MessageSender.NotificationsOfDomainType<IAggregatedScheduleChange>().Single();
+			message.EndDateAsDateTime().Should().Be("2015-06-25 17:00".Utc());
+		}
+
+		[Test]
+		public void ShouldSendWithInitiatorId()
+		{
+			var InitiatorIdentifier = new FakeInitiatorIdentifier { InitiatorId = Guid.NewGuid() };
+
+			var scenario = ScenarioFactory.CreateScenario(".", true, false);
+			var person = PersonFactory.CreatePerson();
+
+			using (var uow = Uow.Current().CreateAndOpenUnitOfWork())
+			{
+				ScenarioRepository.Add(scenario);
+
+				PersonRepository.Add(person);
+
+				var activity = new Activity(".");
+				ActivityRepository.Add(activity);
+
+				var personAssignment = new PersonAssignment(person, scenario, new DateOnly(2015, 6, 24));
+				personAssignment.AddActivity(activity, new DateTimePeriod("2015-06-24 8:00".Utc(), "2015-06-24 17:00".Utc()));
+
+				PersonAssignmentRepository.Add(personAssignment);
+
+				uow.PersistAll(InitiatorIdentifier);
+			}
+
+			MessageSender.NotificationsOfDomainType<IAggregatedScheduleChange>().Single()
+				.ModuleIdAsGuid().Should().Be(InitiatorIdentifier.InitiatorId);
+		}
+
+	}
+}

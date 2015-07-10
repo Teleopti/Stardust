@@ -215,7 +215,7 @@
     <Compile Include="MultiTenancy\Server\Queries\PersistTenantTest.cs" />
     <Compile Include="MultiTenancy\Client\TenantClientTestAttribute.cs" />
     <Compile Include="Persisters\Schedules\NoUnitOfWorkModifyNoConflictTest.cs" />
-    <Compile Include="Persisters\Schedules\SchedulePersistMessageSendTest.cs" />
+    <Compile Include="UnitOfWork\MessageSenders\AggregatedScheduleChangeMessageTest.cs" />
     <Compile Include="PrincipalAndStateTestAttribute.cs" />
     <Compile Include="Repositories\ExistingForecastRepositoryTest.cs" />
     <Compile Include="Repositories\OutboundCampaignRepositoryTest.cs" />

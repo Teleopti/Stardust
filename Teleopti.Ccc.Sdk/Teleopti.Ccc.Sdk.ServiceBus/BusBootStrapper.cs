@@ -4,6 +4,9 @@ using Rhino.ServiceBus;
 using Rhino.ServiceBus.MessageModules;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
+using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
@@ -25,7 +28,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		    using (Container.Resolve<ITenantUnitOfWork>().Start())
 		    {
 					var fileConfigurationReader = new FileConfigurationReader(Container.Resolve<IReadDataSourceConfiguration>());
-					fileConfigurationReader.ReadConfiguration(new MessageSenderCreator(new InternalServiceBusSender(() => Container.Resolve<IServiceBus>())), () => Container.Resolve<IMessageBrokerComposite>());
+			    fileConfigurationReader.ReadConfiguration(
+					new MessageSenderCreator(new InternalServiceBusSender(() => Container.Resolve<IServiceBus>()),
+						Container.Resolve<IToggleManager>(), 
+						Container.Resolve<Interfaces.MessageBroker.Client.IMessageSender>(),
+						Container.Resolve<IJsonSerializer>(),
+						Container.Resolve<ICurrentInitiatorIdentifier>()),
+				    () => Container.Resolve<IMessageBrokerComposite>());
 		    }
 		}
 

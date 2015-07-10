@@ -3,7 +3,7 @@ using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Interfaces.MessageBroker.Client.Composite
 {
-	public interface IMessageBrokerComposite : IDisposable, IMessageCreator, IMessageListener
+	public interface IMessageBrokerComposite : IDisposable, IMessageCreator, IMessageListener, IMessageSender
 	{
 		bool IsAlive { get; }
 		bool IsPollingAlive { get; }

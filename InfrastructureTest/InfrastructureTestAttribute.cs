@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 		public IMessageSendersScope MessageSendersScope;
 		public IEnumerable<Infrastructure.UnitOfWork.IMessageSender> MessageSenders;
 		private IDisposable _scope;
+		public FakeMessageSender MessageSender;
 
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{

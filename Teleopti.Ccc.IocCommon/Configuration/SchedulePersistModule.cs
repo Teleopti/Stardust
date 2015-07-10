@@ -49,10 +49,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			builder.RegisterType<ScheduleDictionaryPersister>().As<IScheduleDictionaryPersister>().SingleInstance();
 			builder.RegisterType<ScheduleRangePersister>().As<IScheduleRangePersister>().SingleInstance();
-			if (_toggleManager.IsEnabled(Toggles.MessageBroker_SchedulingScreenMailbox_32733))
-				builder.RegisterType<AggregatedScheduleChangeSender>().As<IAggregatedScheduleChangeSender>().SingleInstance();
-			else
-				builder.RegisterType<EmptyAggregatedScheduleChangeSender>().As<IAggregatedScheduleChangeSender>().SingleInstance();
 			builder.RegisterGeneric(typeof(DifferenceEntityCollectionService<>)).As(typeof(IDifferenceCollectionService<>)).SingleInstance();
 			if (_checkConflicts)
 			{

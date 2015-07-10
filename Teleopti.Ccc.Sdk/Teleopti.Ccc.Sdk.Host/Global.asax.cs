@@ -39,7 +39,9 @@ using Teleopti.Ccc.Sdk.WcfHost.Ioc;
 using Teleopti.Ccc.Sdk.WcfService;
 using Teleopti.Ccc.Sdk.WcfService.Factory;
 using Teleopti.Ccc.Sdk.WcfService.LogOn;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 
 namespace Teleopti.Ccc.Sdk.WcfHost
@@ -92,7 +94,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			var businessUnit = CurrentBusinessUnit.Make();
 			var messageSender = new MessagePopulatingServiceBusSender(busSender, populator);
 			var eventPublisher = new EventPopulatingPublisher(new ServiceBusEventPublisher(busSender), populator);
-			var messageSenders = new CurrentMessageSenders(new IMessageSender[]
+			var senders = new List<IMessageSender>
 			{
 				new ScheduleMessageSender(eventPublisher, new ClearEvents()),
 				new EventsMessageSender(new SyncEventsPublisher(eventPublisher)),
@@ -101,7 +103,12 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 				new TeamOrSiteChangedMessageSender(eventPublisher, businessUnit),
 				new PersonChangedMessageSender(eventPublisher, businessUnit),
 				new PersonPeriodChangedMessageSender(messageSender)
-			});
+			};
+			if (container.Resolve<IToggleManager>().IsEnabled(Toggles.MessageBroker_SchedulingScreenMailbox_32733))
+				senders.Add(new AggregatedScheduleChangeMessageSender(container.Resolve<Interfaces.MessageBroker.Client.IMessageSender>(),
+					CurrentDataSource.Make(), businessUnit, container.Resolve<IJsonSerializer>(),
+					container.Resolve<ICurrentInitiatorIdentifier>()));
+			var messageSenders = new CurrentMessageSenders(senders);
 			var messageBrokerEnabled = !messageBrokerDisabled();
 			//temp hack - sometime in the future -> no tenant db dep here!
 			var tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);

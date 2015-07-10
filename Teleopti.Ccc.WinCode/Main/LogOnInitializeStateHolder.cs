@@ -5,9 +5,11 @@ using System.Xml.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.WinCode.Common.ServiceBus;
 using Teleopti.Ccc.WinCode.Services;
@@ -15,6 +17,8 @@ using Teleopti.Ccc.Infrastructure.Config;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Interfaces;
+using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 
 namespace Teleopti.Ccc.WinCode.Main
@@ -54,6 +58,14 @@ namespace Teleopti.Ccc.WinCode.Main
 				new PersonChangedMessageSender(eventPublisher, businessUnit),
 				new PersonPeriodChangedMessageSender(messageSender)
 			};
+			if (container.Resolve<IToggleManager>().IsEnabled(Toggles.MessageBroker_SchedulingScreenMailbox_32733))
+				senders.Add(new AggregatedScheduleChangeMessageSender(
+					messageBroker, 
+					CurrentDataSource.Make(), 
+					businessUnit, 
+					new NewtonsoftJsonSerializer(), 
+					new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make()))
+					);
 			var messageSenders = new CurrentMessageSenders(senders);
 			var initializer =
 				new InitializeApplication(

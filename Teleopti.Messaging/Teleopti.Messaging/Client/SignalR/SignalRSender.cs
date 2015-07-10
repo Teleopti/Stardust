@@ -19,9 +19,9 @@ namespace Teleopti.Messaging.Client.SignalR
 			_client.Call("NotifyClients", message);
 		}
 
-		public void SendMultiple(IEnumerable<Message> notifications)
+		public void SendMultiple(IEnumerable<Message> messages)
 		{
-			_client.Call("NotifyClientsMultiple", notifications);
+			_client.Call("NotifyClientsMultiple", messages);
 		}
 	}
 }
