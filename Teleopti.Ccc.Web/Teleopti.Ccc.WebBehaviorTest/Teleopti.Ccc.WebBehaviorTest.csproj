@@ -845,6 +845,11 @@
       <DependentUpon>OutboundCampaignBasicOperations.feature</DependentUpon>
     </Compile>
     <Compile Include="Wfm\Outbound\OutboundCampaignStepDefinitions.cs" />
+    <Compile Include="Wfm\People\ImportUsers.feature.cs">
+      <DependentUpon>ImportUsers.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Wfm\People\AdvancedSearch.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1196,6 +1201,10 @@
       <LastGenOutput>Global.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\Global.feature" />
+    <None Include="Wfm\People\ImportUsers.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ImportUsers.feature.cs</LastGenOutput>
+    </None>
     <None Include="Wfm\People\AdvancedSearch.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>AdvancedSearch.feature.cs</LastGenOutput>

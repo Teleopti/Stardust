@@ -43,7 +43,37 @@
 		</div>
 		
 	</div>
-	<div ng-cloak ng-show="showImportPanel" class="modal-box" ng-include src="'js/people/template/importPeople.html'"></div>
+	<!--<div ng-cloak ng-show="showImportPanel" class="modal-box" ng-include src="'js/people/template/importPeople.html'"></div>-->
+	<div ng-cloak ng-show="showImportPanel" class="modal-box" >
+		<div class="modalbg">
+			<div class="dialog">
+				<div class="modal-header">
+					Import users
+				</div>
+				<div class="modal-inner-content">
+					<div class="wfm-block">
+
+						<div ngf-drop ngf-select ng-model="files" class="drop-box"
+							 ngf-drag-over-class="dragover" ngf-multiple="true" ngf-allow-dir="true"
+							 accept="text/*">
+							Drag and Drop .csv files here or click to upload
+						</div>
+						Files:
+						<ul>
+							<li ng-repeat="f in files">{{f.name}}</li>
+						</ul>
+						Upload Log:
+						<pre>{{log}}</pre>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<aside>
+						<a ng-click="showImportPanel = !showImportPanel" class="wfm-btn wfm-btn-invis">Back</a>
+					</aside>
+				</div>
+			</div>
+		</div>
+	</div>
 		
 	<div ui-i18n="{{lang}}" class="big-table-wrapper material-depth-1" style="position: relative">
 		<div ui-grid="gridOptions" ui-grid-exporter ui-grid-auto-resize ui-grid-selection ui-grid-pagination ui-grid-resize-columns class="grid people-list"></div>

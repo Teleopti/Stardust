@@ -19,7 +19,6 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 	$scope.isImportUsersEnabled = false;
 	$scope.showImportPanel = false;
 
-
 	$scope.buttons = [{
 		label: 'Import Users',
 		icon: 'mdi-file',
@@ -357,17 +356,19 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 
 	$scope.searchKeyword();
 
- 	$scope.$watch('files', function () {
+	$scope.files = [];
+	$scope.$watch('files', function () {
+		console.log("In $watch.");
 			$scope.upload($scope.files);
 		});
 	$scope.log = '';
 
-	$scope.upload = function(files) {
+	$scope.upload = function (files) {
+		console.log('Here!');
 		if (files && files.length) {
 			for (var i = 0; i < files.length; i++) {
 				var file = files[i];
-				$scope.log = 'Uploaded file: ' + file.name;
-				/*
+				console.log("File: ", file);
 				Upload.upload({
 					url: 'https://angular-file-upload-cors-srv.appspot.com/upload',
 					fields: {
@@ -382,9 +383,7 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 						$scope.log = 'file: ' + config.file.name + ', Response: ' + JSON.stringify(data) + '\n' + $scope.log;
 					});
 				});
-				*/
 			}
 		}
 	};
-	//*/
 }
