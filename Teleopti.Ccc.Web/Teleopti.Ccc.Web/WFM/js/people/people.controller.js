@@ -26,7 +26,6 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 	}];
 
 	function toggleImportPeople() {
-		console.log("Importing...");
 		$scope.showImportPanel = !$scope.showImportPanel;
 	};
 
@@ -358,17 +357,14 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 
 	$scope.files = [];
 	$scope.$watch('files', function () {
-		console.log("In $watch.");
 			$scope.upload($scope.files);
 		});
 	$scope.log = '';
 
 	$scope.upload = function (files) {
-		console.log('Here!');
 		if (files && files.length) {
 			for (var i = 0; i < files.length; i++) {
 				var file = files[i];
-				console.log("File: ", file);
 				Upload.upload({
 					url: 'https://angular-file-upload-cors-srv.appspot.com/upload',
 					fields: {
