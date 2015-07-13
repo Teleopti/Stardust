@@ -78,6 +78,7 @@ Scheduler_OptimizeFlexibleDayOffs_22409 = true
 WfmForecast_QueueStatistics_32572 = RC
 WfmForecast_ResultView_33605 = DEV
 WfmForecast_MethodsComparisonView_33610 = DEV
+WfmForecast_IntradayPatternView_33069 = DEV
 MyTimeWeb_AutoShiftTradeWithMeetingAndPersonalActivity_33281 = RC
 MessageBroker_SchedulingScreenMailbox_32733 = DEV
 Tenant_RemoveNhibFiles_33685 = RC

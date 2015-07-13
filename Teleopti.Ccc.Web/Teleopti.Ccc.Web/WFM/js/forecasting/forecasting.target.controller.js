@@ -30,6 +30,11 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 					$scope.isMethodsComparisonViewEnabled = result.IsEnabled;
 				});
 
+				$scope.isIntradayPatternViewEnabled = false;
+				forecasting.isToggleEnabled.query({ toggle: 'WfmForecast_IntradayPatternView_33069' }).$promise.then(function (result) {
+					$scope.isIntradayPatternViewEnabled = result.IsEnabled;
+				});
+
 				var getQueueStatistics = function (workloadId, methodId) {
 					$scope.modalInfo.queueStatisticsLoading = true;
 					$http.post("../api/Forecasting/QueueStatistics", JSON.stringify({ WorkloadId: workloadId, MethodId: methodId })).
@@ -47,7 +52,11 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 				};
 
 
-				$scope.goToMethod = function (workload) {
+				$scope.goToMethodsView = function (workload) {
+					$state.go("forecasting-method", { workloadId: workload.Id });
+				};
+
+				$scope.goToIntradayPatternView = function (workload) {
 					$state.go("forecasting-method", { workloadId: workload.Id });
 				};
 
