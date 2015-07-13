@@ -13,31 +13,87 @@ if (typeof (Teleopti) === 'undefined') {
 }
 
 Teleopti.MyTimeWeb.Common = (function ($) {
+
+	var _ajax = new Teleopti.MyTimeWeb.Ajax();
 	var _settings = {};
-	
+	var _userData = null;
+	var _userDataCallQueue = [];
+	var _userDataFetchInProgress = false;
+
 	var toggleCache = {};
 
 	function isToggleEnabled(toggleName) {
-	    var result = false;
-	    if (toggleCache[toggleName] !== undefined) {
-	        return toggleCache[toggleName];
-	    }
+		var result = false;
+		if (toggleCache[toggleName] !== undefined) {
+			return toggleCache[toggleName];
+		}
 
-	    var ajax = new Teleopti.MyTimeWeb.Ajax();
-	    ajax.Ajax({
-	        url: "../ToggleHandler/IsEnabled?toggle=" + toggleName,
-	        async: false,
-	        success: function (data) {
-	            result = data.IsEnabled;
-	            toggleCache[toggleName] = result;
-	        }
-	    });
-	    return result;
+		_ajax.Ajax({
+			url: "../ToggleHandler/IsEnabled?toggle=" + toggleName,
+			async: false,
+			success: function (data) {
+				result = data.IsEnabled;
+				toggleCache[toggleName] = result;
+			}
+		});
+		return result;
 	}
 
 	function _log() {
 		if (window.console && window.console.log)
 			window.console.log(Array.prototype.join.call(arguments, ' '));
+	}
+
+	function _addSubscription(options) {
+
+		Teleopti.MyTimeWeb.MessageBroker.AddSubscription({
+			url: _userData.Url,
+			referenceId: _userData.AgentId,
+			callback: options.successCallback,
+			errCallback: options.errorCallback,
+			domainType: options.domainType
+		});
+	}
+
+	function _getUserData(callback) {
+
+		if (_userData !== null) {
+			callback(_userData);
+			return;
+		};
+		
+		if (_userDataFetchInProgress) {
+			_userDataCallQueue.push(callback);
+			return;
+		};
+
+		_userDataFetchInProgress = true;
+
+		_ajax.Ajax({
+			url: 'UserData/FetchUserData',
+			dataType: "json",
+			type: 'GET',
+			success: function (data) {
+				_userData = data;
+				callback(data);
+				for (var queuedRequestIdx in _userDataCallQueue) {
+					_userDataCallQueue[queuedRequestIdx](data);
+				}
+			}
+		});
+	}
+
+	function _subscribeToMessageBroker(options) {
+
+		if (_userData == null) {
+			var onSuccessCallback = function (data) {
+				_addSubscription(options);
+			}
+
+			_getUserData(onSuccessCallback);
+			return;
+		}
+		_addSubscription(options);
 	}
 
 	function _setupCalendar(options) {
@@ -52,7 +108,7 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		Teleopti.MyTimeWeb.Common.UseJalaaliCalendar = isJalaali;
 		Teleopti.MyTimeWeb.Common.DateFormat = isJalaali ? "jYYYY/jMM/jDD" : options.DateFormat;
 		Teleopti.MyTimeWeb.Common.TimeFormat = timeFormat;
-		Teleopti.MyTimeWeb.Common.Meridiem = { AM: options.AMDesignator, PM: options.PMDesignator};
+		Teleopti.MyTimeWeb.Common.Meridiem = { AM: options.AMDesignator, PM: options.PMDesignator };
 		Teleopti.MyTimeWeb.Common.DateTimeFormat = Teleopti.MyTimeWeb.Common.DateFormat + " " + Teleopti.MyTimeWeb.Common.TimeFormat;
 		if (isJalaali) {
 			moment.loadPersian();
@@ -65,7 +121,7 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 	};
 
 	function _formatDate(date) {
-		if (moment.isMoment(date)){
+		if (moment.isMoment(date)) {
 			return date.format(Teleopti.MyTimeWeb.Common.DateFormat);
 		}
 		return moment(date).format(Teleopti.MyTimeWeb.Common.DateFormat);
@@ -77,7 +133,7 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		}
 		return moment(dateTime).format(Teleopti.MyTimeWeb.Common.TimeFormat);
 
-	};	
+	};
 
 	function _formatMonth(date) {
 
@@ -97,7 +153,7 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		}
 
 		if (showTime) {
-				return start.format(Teleopti.MyTimeWeb.Common.DateTimeFormat) + " - " + end.format(Teleopti.MyTimeWeb.Common.DateTimeFormat);
+			return start.format(Teleopti.MyTimeWeb.Common.DateTimeFormat) + " - " + end.format(Teleopti.MyTimeWeb.Common.DateTimeFormat);
 		}
 
 		return start.format(Teleopti.MyTimeWeb.Common.DateFormat) + " - " + end.format(Teleopti.MyTimeWeb.Common.DateFormat);
@@ -109,7 +165,7 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		var localeSafeMoment = moment(date).locale('en');
 		return localeSafeMoment.format(Teleopti.MyTimeWeb.Common.ServiceDateFormat);
 	};
-	
+
 	function _isFixedDate(dateString) {
 		return dateString.match(/^\d{4}-\d{2}-\d{2}$/);
 	}
@@ -172,11 +228,11 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 			_setupCalendar(options);
 		},
 
-		FormatDate : function(date) {
+		FormatDate: function (date) {
 			return _formatDate(date);
 		},
 
-		FormatTime : function(dateTime) {
+		FormatTime: function (dateTime) {
 			return _formatTime(dateTime);
 		},
 
@@ -185,11 +241,11 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 			return _formatDatePeriod(startDate, endDate, showTimes);
 		},
 
-		FormatMonth : function(date) {
+		FormatMonth: function (date) {
 			return _formatMonth(date);
 		},
-		
-		FormatServiceDate: function(date) {
+
+		FormatServiceDate: function (date) {
 			return _formatServiceDate(date);
 		},
 
@@ -219,6 +275,9 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		IsRtl: function () {
 			return $("html").attr("dir") == "rtl";
 		},
+
+		SubscribeToMessageBroker: _subscribeToMessageBroker,
+		GetUserData: _getUserData,
 		IsToggleEnabled: isToggleEnabled
 	};
 

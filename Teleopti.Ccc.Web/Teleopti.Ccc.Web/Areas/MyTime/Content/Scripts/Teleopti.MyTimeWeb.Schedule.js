@@ -636,19 +636,12 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	}
 
 	function _subscribeForChanges() {
-		ajax.Ajax({
-			url: 'UserData/FetchUserData',
-			dataType: "json",
-			type: 'GET',
-			success: function (data) {
-				Teleopti.MyTimeWeb.MessageBroker.AddSubscription({
-					url: data.Url,
-					callback: Teleopti.MyTimeWeb.Schedule.ReloadScheduleListener,
-					domainType: 'IScheduleChangedInDefaultScenario',
-					referenceId: data.AgentId
-				});
-			}
+		
+		Teleopti.MyTimeWeb.Common.SubscribeToMessageBroker({
+			successCallback: Teleopti.MyTimeWeb.Schedule.ReloadScheduleListener,
+			domainType: 'IScheduleChangedInDefaultScenario'
 		});
+
 	}
 	
 	function _cleanBindings() {

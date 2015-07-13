@@ -193,18 +193,10 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	}
 
 	function _listenForEvents(listeners) {
-		ajax.Ajax({
-			url: 'UserData/FetchUserData',
-			dataType: "json",
-			type: 'GET',
-			success: function (data) {
-				Teleopti.MyTimeWeb.MessageBroker.AddSubscription({
-					url: data.Url,
-					callback: listeners,
-					domainType: 'IScheduleChangedInDefaultScenario',
-					referenceId: data.AgentId
-				});
-			}
+		
+		Teleopti.MyTimeWeb.Common.SubscribeToMessageBroker({
+			successCallback: listeners,
+			domainType: 'IScheduleChangedInDefaultScenario'
 		});
 	}
 
@@ -221,16 +213,13 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	}
     
 	function _makeSureWeAreLoggedOn() {
-	    var ajax = new Teleopti.MyTimeWeb.Ajax();
-	    ajax.Ajax({
-	    	url: 'UserData/FetchUserData',
-	        dataType: "json",
-	        async: false,
-	        type: 'GET',
-	        success: function () {
-	            setTimeout(_makeSureWeAreLoggedOn, 20 * 60 * 1000);
-	        }
-	    });
+
+		var onSuccess = function (data) {
+			setTimeout(_makeSureWeAreLoggedOn, 20 * 60 * 1000);
+		};
+
+		Teleopti.MyTimeWeb.Common.GetUserData(onSuccess);
+		
 	}
 
     function _startPollingToAvoidLogOut() {
