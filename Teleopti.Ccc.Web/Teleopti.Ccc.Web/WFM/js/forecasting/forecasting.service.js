@@ -7,7 +7,6 @@ forecastingService.service('Forecasting', ['$resource', function ($resource) {
 		get: { method: 'GET', params: {}, isArray: true }
 	});
 
-
 	this.isToggleEnabled = $resource('../ToggleHandler/IsEnabled?toggle=:toggle',
 	{
 		toggle: "@toggle"

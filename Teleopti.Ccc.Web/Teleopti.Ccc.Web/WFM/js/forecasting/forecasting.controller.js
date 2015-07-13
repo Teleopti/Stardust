@@ -1,8 +1,7 @@
 ﻿'use strict';
 
 angular.module('wfm.forecasting', [])
-	.controller('ForecastingCtrl', [
-		'$scope', '$state',
+	.controller('ForecastingCtrl', ['$scope', '$state',
 		function($scope, $state) {
 			var startDate = moment().utc().add(1, 'months').startOf('month').toDate();
 			var endDate = moment().utc().add(2, 'months').startOf('month').toDate();

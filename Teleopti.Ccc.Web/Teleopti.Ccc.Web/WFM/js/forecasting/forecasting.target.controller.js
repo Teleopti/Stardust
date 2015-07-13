@@ -53,11 +53,11 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 
 
 				$scope.goToMethodsView = function (workload) {
-					$state.go("forecasting-method", { workloadId: workload.Id });
+					$state.go("forecasting-method", { workloadId: workload.Id, period: $stateParams.period });
 				};
 
 				$scope.goToIntradayPatternView = function (workload) {
-					$state.go("forecasting-method", { workloadId: workload.Id });
+					$state.go("forecasting-intraday", { workloadId: workload.Id, period: $stateParams.period });
 				};
 
 				$scope.openModal = function (workload) {

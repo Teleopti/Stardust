@@ -25,6 +25,7 @@ var wfm = angular.module('wfm', [
 	'wfm.forecasting',
 	'wfm.forecasting.target',
 	'wfm.forecasting.method',
+	'wfm.forecasting.intraday',
 	'wfm.resourceplanner',
 	'wfm.searching',
 	'wfm.seatMap',
@@ -62,9 +63,13 @@ wfm.config([
 			templateUrl: 'html/forecasting/forecasting-run.html',
 			controller: 'ForecastingRunAllCtrl'
 		}).state('forecasting-method', {
-			params: { workloadId: {} },
+			params: { workloadId: {}, period: {} },
 			templateUrl: 'html/forecasting/forecasting-method.html',
 			controller: 'ForecastingMethodCtrl'
+		}).state('forecasting-intraday', {
+			params: { workloadId: {}, period: {} },
+			templateUrl: 'html/forecasting/forecasting-intraday.html',
+			controller: 'ForecastingIntradayCtrl'
 		}).state('resourceplanner', {
 				url: '/resourceplanner',
 				templateUrl: 'js/resourceplanner/resourceplanner.html',
