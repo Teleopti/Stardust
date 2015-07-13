@@ -55,5 +55,6 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 		public DayOfWeek DayOfWeek { get; set; }
 		public IEnumerable<string> Periods { get; set; }
 		public IEnumerable<double> Tasks { get; set; }
+		public string DayOfWeekDisplayName { get; set; }
 	}
 }

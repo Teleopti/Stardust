@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.Forecasting.Controllers;
+using Teleopti.Ccc.Web.Areas.MyTime.Core;
 
 namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 {
@@ -33,18 +34,21 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 			var pattern = _intradayForecaster.CalculatePattern(workload, availableIntradayTemplatePeriod.Value);
 			var weekdays = new List<IntradayPatternDayViewModel>();
 			var timeZone = workload.Skill.TimeZone;
+			var culture = new System.Globalization.CultureInfo("en-US");
+
 			foreach (DayOfWeek day in Enum.GetValues(typeof (DayOfWeek)))
 			{
 				var intradayPatternDayViewModel = new IntradayPatternDayViewModel
 				{
-					DayOfWeek = day
+					DayOfWeek = day,
+					DayOfWeekDisplayName = culture.DateTimeFormat.GetDayName(day)
 				};
 				var tasksList = new List<double>();
 				var periodList = new List<string>();
 				foreach (var templateTaskPeriod in pattern[day])
 				{
 					var localPeriod=templateTaskPeriod.Period.TimePeriod(timeZone);
-					tasksList.Add(templateTaskPeriod.Tasks);
+					tasksList.Add(Math.Round(templateTaskPeriod.Tasks, 3));
 					periodList.Add(localPeriod.ToShortTimeString());
 				}
 

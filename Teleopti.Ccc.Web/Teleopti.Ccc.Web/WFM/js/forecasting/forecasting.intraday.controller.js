@@ -38,8 +38,15 @@ angular.module('wfm.forecasting')
 									axis: {
 										x: {
 											type: 'category',
-											categories: weekDay.Periods
+											categories: weekDay.Periods,
+											tick: {
+												fit: false,
+												culling: true
+											}
 										}
+									},
+									legend: {
+										hide: true
 									},
 									bar: {
 										width: {
