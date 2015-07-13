@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var workloadId = Guid.NewGuid();
 			var intradayPatternViewModelFactory = MockRepository.GenerateMock<IIntradayPatternViewModelFactory>();
 			var intradayPatternViewModel = new IntradayPatternViewModel();
-			var input = new EvaluateMethodsInput
+			var input = new IntradayPatternInput
 			{
 				WorkloadId = workloadId
 			};
