@@ -311,19 +311,43 @@ ORDER BY [Cached Size (MB)] DESC OPTION (RECOMPILE);
 --DISK STATS - historic
 -------
 --Calculates average stalls per read, per write, and per total input/output for each database file. 
--- io_stall_write_ms, should stay below 5ms. Idealy keep it close to 1ms
--- io_stall_read_ms,  should stay below 10ms
-SELECT DB_NAME(fs.database_id) AS [Database Name], mf.physical_name, io_stall_read_ms, num_of_reads,
-CAST(io_stall_read_ms/(1.0 + num_of_reads) AS NUMERIC(10,1)) AS [avg_read_stall_ms],io_stall_write_ms, 
-num_of_writes,CAST(io_stall_write_ms/(1.0+num_of_writes) AS NUMERIC(10,1)) AS [avg_write_stall_ms],
-io_stall_read_ms + io_stall_write_ms AS [io_stalls], num_of_reads + num_of_writes AS [total_io],
-CAST((io_stall_read_ms + io_stall_write_ms)/(1.0 + num_of_reads + num_of_writes) AS NUMERIC(10,1)) 
-AS [avg_io_stall_ms]
+--Our System requirements states "latency"
+--[avg write latency (ms)] < 5ms (Ideally < 1ms)
+--[avg read latency (ms)] < 15ms
+--ETL-Nighly + DB-maint + DB-backups + other massvive SAN I/O might skew figures over night.
+--please compare with the "now"-script 30-60 min (below) during office hours to get a better picture
+
+declare @DurationInSecs int
+select @DurationInSecs=datediff(ss,sqlserver_start_time, GETDATE()) FROM sys.dm_os_sys_info --SQL Server starttime
+
+SELECT 
+mf.name AS [Logical name],
+--read  figures
+CONVERT(DEC(14,2), fs.num_of_bytes_read/1024/1024/@DurationInSecs) as [Mb read/sec],
+CONVERT(DEC(14,2), fs.num_of_reads/@DurationInSecs) as [read IOPS],
+CASE fs.num_of_reads
+	WHEN 0 THEN 0 ELSE fs.io_stall_read_ms/fs.num_of_reads
+END as [avg read latency (ms)],
+	
+--write figures
+CONVERT(DEC(14,2), fs.num_of_bytes_written/1024/1024/@DurationInSecs) as [Mb written/sec],
+CONVERT(DEC(14,2), fs.num_of_writes/@DurationInSecs) as [write IOPS],
+CASE fs.num_of_writes
+	WHEN 0 THEN 0 ELSE fs.io_stall_write_ms/fs.num_of_writes
+END as [avg write latency (ms)],
+
+DB_NAME(fs.database_id) AS [Database Name], mf.physical_name, io_stall_read_ms, num_of_reads,
+io_stall_write_ms, 
+num_of_writes,
+io_stall_read_ms + io_stall_write_ms AS [io_stalls],
+num_of_reads + num_of_writes AS [total_io]
 FROM sys.dm_io_virtual_file_stats(null,null) AS fs
 INNER JOIN sys.master_files AS mf
 ON fs.database_id = mf.database_id
 AND fs.[file_id] = mf.[file_id]
-ORDER BY avg_io_stall_ms DESC OPTION (RECOMPILE);
+ORDER BY num_of_writes DESC OPTION (RECOMPILE);
+GO
+
 
 -------
 --DISK STATS - now
