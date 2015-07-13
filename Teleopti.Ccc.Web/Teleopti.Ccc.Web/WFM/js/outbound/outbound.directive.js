@@ -72,10 +72,13 @@
 						viewValue.Name != null && viewValue.Name != '';
 				}
 
-				ngModel.$validators.alreadyExists = function(modelValue, viewValue) {
-					if (viewValue.useExisting) return true;
-					return scope.allActivities.filter(attrValueFilter('Name', viewValue.Name)).length == 0;
-				}
+
+			    // It is not decided whether we should forbide use to create duplicate activities yet.
+
+				//ngModel.$validators.alreadyExists = function(modelValue, viewValue) {
+				//	if (viewValue.useExisting) return true;
+				//	return scope.allActivities.filter(attrValueFilter('Name', viewValue.Name)).length == 0;
+				//}
 
 				ngModel.$render = renderer;
 
@@ -127,6 +130,12 @@
 				scope.addEmptyWorkingPeriod = addEmptyWorkingPeriod;
 				scope.removeWorkingPeriod = removeWorkingPeriod;
 
+				scope.newWorkingPeriodStartTime = new Date();
+				scope.newWorkingPeriodEndTime = new Date();
+
+				resetTime(scope.newWorkingPeriodStartTime);
+			    resetTime(scope.newWorkingPeriodEndTime);
+
 				var weekDays = outboundService.createEmptyWorkingPeriod().WeekDaySelections;
 				var translations = [];
 			    var i;
@@ -140,6 +149,11 @@
 			        }
 			        scope.weekDays = weekDays;
 			    });						
+
+                function resetTime(datetime) {
+                    datetime.setHours(0);
+                    datetime.setMinutes(0);
+                }
 
 				function enforceRadioBehavior(refIndex, weekDay) {
 					clearConflictWorkingHourSelection(scope.workingHours, refIndex, weekDay);
@@ -224,7 +238,7 @@
 			};
 
 			ngModel.$validators.number = function (modelValue, viewValue) {
-				if (!/^\s*[-+]?[0-9]*\.?[0-9]+\s*$/.test(viewValue)) return false;
+				if (!/^\s*[-+]?[0-9]*\s*$/.test(viewValue)) return false;
 				var parsedvv = parseInt(viewValue);
 				if (isNaN(parsedvv)) return false;
 				return true;
@@ -299,6 +313,8 @@
 			};
 
 			self.changeByKeyPress = function (evt, ngModel, ceiling) {
+			    console.log(evt);
+
 				var action;
 				if (evt.which === 38) {
 					evt.preventDefault();
@@ -595,7 +611,7 @@
 	}
 
 	function timepickerTemplate() {
-		return '<input name="hourValueInput" type="text" ng-model="timeValue.hour" hour-input flex  />:<input name="minuteValueInput" type="text" ng-model="timeValue.minute" minute-input flex />' +
+		return '<input name="hourValueInput" type="text" ng-model="timeValue.hour" hour-input flex tabindex="1" />:<input name="minuteValueInput" type="text" ng-model="timeValue.minute" minute-input flex tabindex="1"/>' +
 		  '<select name="meridianValueInput" ng-model="timeValue.meridian" ng-if="useMeridian" flex ><option value="0">AM</md-option><option value="1">PM</option></select>';
 	}
 

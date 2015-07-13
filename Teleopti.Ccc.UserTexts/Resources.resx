@@ -13302,4 +13302,8 @@ Reduce the complexity to use these shifts.</value>
     <value>0 ~ 9999</value>
     <comment>Input placeholder for numeric value</comment>
   </data>
+  <data name="NewCampaignName" xml:space="preserve">
+    <value>New campaign name</value>
+    <comment>New Campaign Name</comment>
+  </data>
 </root>

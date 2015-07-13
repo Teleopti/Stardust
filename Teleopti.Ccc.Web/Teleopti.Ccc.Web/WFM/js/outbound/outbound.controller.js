@@ -141,6 +141,9 @@
 				$scope.flashErrorIcons();
 				return;
 			}
+
+		    $scope.isCreating = true;
+
 			outboundService.addCampaign($scope.campaign, function (campaign) {
 				outboundNotificationService.notifyCampaignCreationSuccess(angular.copy(campaign));
 				init();
@@ -157,6 +160,8 @@
 				EndDate: { Date: new Date() },
 				WorkingHours: []
 			};
+
+		    $scope.isCreating = false;
 
 			expandAllSections($scope);
 			registerCampaignForms($scope);

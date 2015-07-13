@@ -15352,6 +15352,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New campaign name.
+        /// </summary>
+        public static string NewCampaignName {
+            get {
+                return ResourceManager.GetString("NewCampaignName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New Contract.
         /// </summary>
         public static string NewContract {
