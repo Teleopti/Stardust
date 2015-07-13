@@ -1,8 +1,7 @@
 ﻿'use strict';
 
-angular.module('wfm.forecasting.method', ['gridshore.c3js.chart'])
-	.controller('ForecastingMethodCtrl', [
-		'$scope', '$state', '$stateParams', '$http',
+angular.module('wfm.forecasting')
+	.controller('ForecastingMethodCtrl', ['$scope', '$state', '$stateParams', '$http',
 		function ($scope, $state, $stateParams, $http) {
 			$scope.workloadId = $stateParams.workloadId;
 			$scope.workloadName = "";

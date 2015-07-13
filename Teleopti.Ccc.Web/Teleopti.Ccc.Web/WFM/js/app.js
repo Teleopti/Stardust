@@ -14,7 +14,6 @@ var externalModules = angular.module('externalModules', ['ui.router',
 
 var wfm = angular.module('wfm', [
 	'externalModules',
-	'forecastingService',	
 	'peopleSearchService',
 	'outboundServiceModule',
 	'restRtaService',
@@ -23,9 +22,6 @@ var wfm = angular.module('wfm', [
 	'wfm.people',
 	'wfm.outbound',
 	'wfm.forecasting',
-	'wfm.forecasting.target',
-	'wfm.forecasting.method',
-	'wfm.forecasting.intraday',
 	'wfm.resourceplanner',
 	'wfm.searching',
 	'wfm.seatMap',
