@@ -55,8 +55,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		self.IsShiftTradeRequest = function () {
 			return (self.RequestTypeEnum() == 2);
 		};
-
-
+		
 		var datesAreSame = function(dateOne, dateTwo) {
 			return (dateOne.startOf('day').isSame(dateTwo.startOf('day')));
 		};
@@ -87,7 +86,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 
 		});
 		
-		self.ShowDetails = function () {
+		self.ShowDetails = function ( ) {
 			if (self.IsSelected()) {
 				self.IsSelected(false);
 				return;
