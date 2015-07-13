@@ -14,7 +14,6 @@ var externalModules = angular.module('externalModules', ['ui.router',
 
 var wfm = angular.module('wfm', [
 	'externalModules',
-	'forecastingService',	
 	'peopleSearchService',
 	'outboundServiceModule',
 	'restRtaService',
@@ -23,8 +22,6 @@ var wfm = angular.module('wfm', [
 	'wfm.people',
 	'wfm.outbound',
 	'wfm.forecasting',
-	'wfm.forecasting.target',
-	'wfm.forecasting.dev',
 	'wfm.resourceplanner',
 	'wfm.searching',
 	'wfm.seatMap',
@@ -61,10 +58,14 @@ wfm.config([
 			params: { period: {} },
 			templateUrl: 'html/forecasting/forecasting-run.html',
 			controller: 'ForecastingRunAllCtrl'
-		}).state('forecasting-dev', {
-			params: { workloadId: {} },
-			templateUrl: 'html/forecasting/forecasting-dev.html',
-			controller: 'ForecastingDevCtrl'
+		}).state('forecasting-method', {
+			params: { workloadId: {}, period: {} },
+			templateUrl: 'html/forecasting/forecasting-method.html',
+			controller: 'ForecastingMethodCtrl'
+		}).state('forecasting-intraday', {
+			params: { workloadId: {}, period: {} },
+			templateUrl: 'html/forecasting/forecasting-intraday.html',
+			controller: 'ForecastingIntradayCtrl'
 		}).state('resourceplanner', {
 				url: '/resourceplanner',
 				templateUrl: 'js/resourceplanner/resourceplanner.html',

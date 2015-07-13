@@ -1,8 +1,7 @@
 ﻿'use strict';
 
-angular.module('wfm.forecasting', [])
-	.controller('ForecastingCtrl', [
-		'$scope', '$state',
+angular.module('wfm.forecasting')
+	.controller('ForecastingCtrl', ['$scope', '$state',
 		function($scope, $state) {
 			var startDate = moment().utc().add(1, 'months').startOf('month').toDate();
 			var endDate = moment().utc().add(2, 'months').startOf('month').toDate();
@@ -133,11 +132,15 @@ angular.module('wfm.forecasting', [])
 		}
 	])
 	.controller('ForecastingRunAllCtrl', [
-		'$scope', '$stateParams', '$http', 'Forecasting',
-		function ($scope, $stateParams, $http, forecasting) {
+		'$scope', '$stateParams', '$http', 'Forecasting', '$state',
+		function ($scope, $stateParams, $http, forecasting, $state) {
 
 			$scope.period = $stateParams.period;
 			$scope.targets = [];
+
+			$scope.back = function () {
+				$state.go('forecasting');
+			};
 
 
 			var forecastForOneSkill = function(index) {

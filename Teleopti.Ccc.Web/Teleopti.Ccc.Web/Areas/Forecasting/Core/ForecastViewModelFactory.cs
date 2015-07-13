@@ -75,12 +75,12 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 			};
 		}
 
-		public WorkloadEvaluateDevViewModel EvaluateDev(EvaluateDevInput input)
+		public WorkloadEvaluateMethodsViewModel EvaluateMethods(EvaluateMethodsInput input)
 		{
 			var workload = _workloadRepository.Get(input.WorkloadId);
 			var evaluateResult = _forecastWorkloadEvaluator.Evaluate(workload);
 			var availablePeriod = _historicalPeriodProvider.AvailablePeriod(workload);
-			var result = new WorkloadEvaluateDevViewModel
+			var result = new WorkloadEvaluateMethodsViewModel
 			{
 				WorkloadId = workload.Id.Value,
 				WorkloadName = workload.Name
@@ -88,12 +88,12 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 
 			if (!availablePeriod.HasValue)
 			{
-				result.Methods = new WorkloadEvaluateDevMethodViewModel[] {};
+				result.Methods = new WorkloadEvaluateMethodViewModel[] {};
 				return result;
 			}
 			var historicalData = _historicalData.Fetch(workload, availablePeriod.Value);
 
-			var methods = new List<WorkloadEvaluateDevMethodViewModel>();
+			var methods = new List<WorkloadEvaluateMethodViewModel>();
 			foreach (var methodAccuracy in evaluateResult.Accuracies)
 			{
 				var data = new Dictionary<DateOnly, dynamic>();
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 						data.Add(dayResult.CurrentDate, item);
 					}
 				}
-				methods.Add(new WorkloadEvaluateDevMethodViewModel
+				methods.Add(new WorkloadEvaluateMethodViewModel
 				{
 					MethodId = methodAccuracy.MethodId,
 					AccuracyNumber = methodAccuracy.Number,

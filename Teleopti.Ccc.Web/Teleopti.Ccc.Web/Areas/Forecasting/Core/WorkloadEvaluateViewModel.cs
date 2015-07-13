@@ -1,6 +1,6 @@
 using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 {
@@ -25,14 +25,14 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 		public dynamic[] QueueStatisticsDays { get; set; }
 	}
 
-	public class WorkloadEvaluateDevViewModel
+	public class WorkloadEvaluateMethodsViewModel
 	{
 		public Guid WorkloadId { get; set; }
 		public string WorkloadName { get; set; }
-		public WorkloadEvaluateDevMethodViewModel[] Methods { get; set; }
+		public WorkloadEvaluateMethodViewModel[] Methods { get; set; }
 	}
 
-	public class WorkloadEvaluateDevMethodViewModel
+	public class WorkloadEvaluateMethodViewModel
 	{
 		public dynamic[] Days { get; set; }
 		public ForecastMethodType MethodId { get; set; }
@@ -42,5 +42,19 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 		public DateTime PeriodEvaluateOnEnd { get; set; }
 		public DateTime PeriodUsedToEvaluateStart { get; set; }
 		public DateTime PeriodUsedToEvaluateEnd { get; set; }
+	}
+
+	public class IntradayPatternViewModel
+	{
+		public Guid WorkloadId { get; set; }
+		public IEnumerable<IntradayPatternDayViewModel> WeekDays { get; set; }
+	}
+
+	public class IntradayPatternDayViewModel
+	{
+		public DayOfWeek DayOfWeek { get; set; }
+		public IEnumerable<string> Periods { get; set; }
+		public IEnumerable<double> Tasks { get; set; }
+		public string DayOfWeekDisplayName { get; set; }
 	}
 }

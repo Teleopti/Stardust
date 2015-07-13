@@ -236,6 +236,7 @@
     </Compile>
     <Compile Include="Areas\Forecasting\Core\ForecastViewModelFactoryTest.cs" />
     <Compile Include="Areas\Forecasting\Core\ForecastResultViewModelFactoryTest.cs" />
+    <Compile Include="Areas\Forecasting\Core\IntradayPatternViewModelFactoryTest.cs" />
     <Compile Include="Areas\Global\ApplicationControllerTest.cs" />
     <Compile Include="Areas\Global\NotificationsControllerTest.cs" />
     <Compile Include="Areas\Global\UserControllerTest.cs" />

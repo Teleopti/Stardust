@@ -64,54 +64,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 		}
 
 		[Test]
-		public void ShouldApplyIntradayPatternWhenHistoricalDataLessThan3Months()
-		{
-			var workload = WorkloadFactory.CreateWorkload(SkillFactory.CreateSkillWithId("skill1"));
-			var quickForecasterWorkloadParams = new QuickForecasterWorkloadParams()
-			{
-				WorkLoad = workload,
-				HistoricalPeriod = new DateOnlyPeriod(2015, 1, 1, 2015, 2, 1),
-				ForecastMethodId = ForecastMethodType.TeleoptiClassicLongTerm,
-				SkillDays = new List<ISkillDay>(),
-				FuturePeriod = new DateOnlyPeriod(2015, 3, 1, 2015, 3, 1)
-			};
-			var outlierRemover = MockRepository.GenerateMock<IOutlierRemover>();
-			var forecastMethodProvider = MockRepository.GenerateMock<IForecastMethodProvider>();
-			var method = MockRepository.GenerateMock<IForecastMethod>();
-			method.Stub(x => x.Forecast(null, new DateOnlyPeriod())).IgnoreArguments().Return(new ForecastResult());
-			forecastMethodProvider.Stub(x => x.Get(quickForecasterWorkloadParams.ForecastMethodId)).Return(method);
-			var historicalData = MockRepository.GenerateMock<IHistoricalData>();
-			var dateOnly = new DateOnly(2015, 1, 1);
-
-			var workloadDay = new WorkloadDay();
-			workloadDay.Create(dateOnly, workload, new List<TimePeriod> { new TimePeriod(8, 0, 8, 15) });
-
-			var validatedVolumeDay = new ValidatedVolumeDay(workload, dateOnly)
-			{
-				ValidatedAverageAfterTaskTime = TimeSpan.FromSeconds(3),
-				ValidatedAverageTaskTime = TimeSpan.FromSeconds(2),
-				TaskOwner = workloadDay,
-				ValidatedTasks = 110
-			};
-
-			var taskOwnerPeriod = new TaskOwnerPeriod(dateOnly, new ITaskOwner[] { validatedVolumeDay }, TaskOwnerPeriodType.Other);
-			historicalData.Stub(
-				x => x.Fetch(quickForecasterWorkloadParams.WorkLoad, quickForecasterWorkloadParams.HistoricalPeriod))
-				.Return(taskOwnerPeriod);
-			var intradayForecaster = MockRepository.GenerateMock<IIntradayForecaster>();
-			var futureData = MockRepository.GenerateMock<IFutureData>();
-			var futureWorkloadDays = new IWorkloadDay[]{};
-			futureData.Stub(x=>x.Fetch(workload,quickForecasterWorkloadParams.SkillDays,quickForecasterWorkloadParams.FuturePeriod)).Return(futureWorkloadDays);
-			var target = new QuickForecasterWorkload(historicalData,
-				futureData,
-				forecastMethodProvider,
-				MockRepository.GenerateMock<IForecastingTargetMerger>(), outlierRemover, intradayForecaster);
-
-			target.Execute(quickForecasterWorkloadParams);
-			intradayForecaster.AssertWasCalled(x => x.Apply(workload, new DateOnlyPeriod(2015, 1, 1, 2015, 1, 1), futureWorkloadDays));
-		}
-
-		[Test]
 		public void ShouldApplyIntradayPattern()
 		{
 			var workload = WorkloadFactory.CreateWorkload(SkillFactory.CreateSkillWithId("skill1"));
@@ -121,7 +73,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 				HistoricalPeriod = new DateOnlyPeriod(2014, 1, 1, 2015, 2, 1),
 				ForecastMethodId = ForecastMethodType.TeleoptiClassicLongTerm,
 				SkillDays = new List<ISkillDay>(),
-				FuturePeriod = new DateOnlyPeriod(2015, 3, 1, 2015, 3, 1)
+				FuturePeriod = new DateOnlyPeriod(2015, 3, 1, 2015, 3, 1),
+				IntradayTemplatePeriod = new DateOnlyPeriod(2014, 11, 1, 2015, 2, 1)
 			};
 			var outlierRemover = MockRepository.GenerateMock<IOutlierRemover>();
 			var forecastMethodProvider = MockRepository.GenerateMock<IForecastMethodProvider>();
@@ -167,7 +120,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 				MockRepository.GenerateMock<IForecastingTargetMerger>(), outlierRemover, intradayForecaster);
 
 			target.Execute(quickForecasterWorkloadParams);
-			intradayForecaster.AssertWasCalled(x => x.Apply(workload, new DateOnlyPeriod(2014, 10, 1, 2015, 1, 1), futureWorkloadDays));
+			intradayForecaster.AssertWasCalled(x => x.Apply(workload, new DateOnlyPeriod(2014, 11, 1, 2015, 2, 1), futureWorkloadDays));
 		}
 	}
 

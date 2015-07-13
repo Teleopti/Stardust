@@ -53,8 +53,11 @@
 					<i class="mdi mdi-chart-bar forecasting-chart-bar" ng-click="openModal(workload);$event.stopPropagation();">
 						<md-tooltip>View method chart</md-tooltip>
 					</i>
-					<i class="mdi mdi-puzzle forecasting-puzzle" ng-click="goToDev(workload);$event.stopPropagation();" ng-if="isMethodsComparisonViewEnabled">
-						<md-tooltip>Dev View</md-tooltip>
+					<i class="mdi mdi-puzzle forecasting-puzzle" ng-click="goToMethodsView(workload);$event.stopPropagation();" ng-if="isMethodsComparisonViewEnabled">
+						<md-tooltip>View methods comparision</md-tooltip>
+					</i>
+					<i class="mdi mdi-view-day forecasting-view-day" ng-click="goToIntradayPatternView(workload);$event.stopPropagation();" ng-if="isIntradayPatternViewEnabled">
+						<md-tooltip>View Intraday pattern</md-tooltip>
 					</i>
 				</div>
 			</div>

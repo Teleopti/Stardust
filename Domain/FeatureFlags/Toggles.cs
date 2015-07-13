@@ -74,6 +74,7 @@
 		WfmForecast_QueueStatistics_32572,
 		WfmForecast_ResultView_33605,
 		WfmForecast_MethodsComparisonView_33610,
+		WfmForecast_IntradayPatternView_33069,
 
 		Scheduler_OptimizeFlexibleDayOffs_22409,
 

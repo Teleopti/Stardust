@@ -424,6 +424,7 @@
     <Compile Include="Areas\Forecasting\Core\IForecastViewModelFactory.cs" />
     <Compile Include="Areas\Forecasting\Core\ForecastViewModelFactory.cs" />
     <Compile Include="Areas\Forecasting\Core\IForecastResultViewModelFactory.cs" />
+    <Compile Include="Areas\Forecasting\Core\IntradayPatternViewModelFactory.cs" />
     <Compile Include="Areas\Forecasting\Core\WorkloadEvaluateViewModel.cs" />
     <Compile Include="Areas\Global\ApplicationController.cs" />
     <Compile Include="Areas\Global\AreaWithPermissionPath.cs" />
@@ -1216,13 +1217,16 @@
     <Content Include="Areas\Reporting\ScheduleAdherence.aspx" />
     <Content Include="Areas\Reporting\Index.aspx" />
     <Content Include="Areas\Reporting\Views\Report\NoPermission.cshtml" />
-    <Content Include="WFM\html\forecasting\forecasting-dev.html" />
+    <Content Include="WFM\html\forecasting\forecasting-intraday.html" />
+    <Content Include="WFM\html\forecasting\forecasting-method.html" />
     <Content Include="WFM\html\left-sidenav.html" />
     <Content Include="WFM\html\outbound\activity-picker.tpl.html" />
     <Content Include="WFM\html\outbound\campaign-create.html" />
     <Content Include="WFM\html\outbound\working-hours-picker.tpl.html" />
     <Content Include="WFM\html\right-sidenav.html" />
-    <Content Include="WFM\js\forecasting\forecasting.dev.controller.js" />
+    <Content Include="WFM\js\forecasting\forecasting.intraday.controller.js" />
+    <Content Include="WFM\js\forecasting\forecasting.method.controller.js" />
+    <Content Include="WFM\js\forecasting\_modules.js" />
     <Content Include="WFM\js\global\help.controller.js" />
     <Content Include="Content\jalaali-calendar-datepicker\moment-datepicker-jalaali-ext.js" />
     <Content Include="Content\jalaali-calendar-datepicker\moment-jalaali.js" />

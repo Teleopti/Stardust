@@ -20,6 +20,16 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 
 		public void Apply(IWorkload workload, DateOnlyPeriod templatePeriod, IEnumerable<IWorkloadDayBase> futureWorkloadDays)
 		{
+			var sortedTemplateTaskPeriodsDic = CalculatePattern(workload, templatePeriod);
+
+			foreach (var futureWorkloadDay in futureWorkloadDays)
+			{
+				futureWorkloadDay.DistributeTasks(sortedTemplateTaskPeriodsDic[futureWorkloadDay.CurrentDate.DayOfWeek]);
+			}
+		}
+
+		public IDictionary<DayOfWeek, IEnumerable<ITemplateTaskPeriod>> CalculatePattern(IWorkload workload, DateOnlyPeriod templatePeriod)
+		{
 			var workloadDays = _loadStatistics.LoadWorkloadDay(workload, templatePeriod).ToArray();
 
 			var sortedTemplateTaskPeriodsDic = new Dictionary<DayOfWeek, IEnumerable<ITemplateTaskPeriod>>();
@@ -28,11 +38,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 				var workloadDaysForDay = workloadDays.Where(w => w.CurrentDate.DayOfWeek == day);
 				sortedTemplateTaskPeriodsDic.Add(day, calculateTemplateTaskPeriods(workloadDaysForDay, workload));
 			}
-
-			foreach (var futureWorkloadDay in futureWorkloadDays)
-			{
-				futureWorkloadDay.DistributeTasks(sortedTemplateTaskPeriodsDic[futureWorkloadDay.CurrentDate.DayOfWeek]);
-			}
+			return sortedTemplateTaskPeriodsDic;
 		}
 
 		private IEnumerable<ITemplateTaskPeriod> createExtendedTaskPeriodList(IEnumerable<IWorkloadDayBase> workloadDays, DateTime startTimeTemplate)

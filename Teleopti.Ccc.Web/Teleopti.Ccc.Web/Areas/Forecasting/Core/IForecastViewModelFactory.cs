@@ -6,7 +6,13 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 	{
 		WorkloadEvaluateViewModel Evaluate(EvaluateInput input);
 		WorkloadQueueStatisticsViewModel QueueStatistics(QueueStatisticsInput input);
-		WorkloadEvaluateDevViewModel EvaluateDev(EvaluateDevInput input);
+		WorkloadEvaluateMethodsViewModel EvaluateMethods(EvaluateMethodsInput input);
+	}
+
+
+	public interface IIntradayPatternViewModelFactory
+	{
+		IntradayPatternViewModel Create(IntradayPatternInput input);
 	}
 
 }
