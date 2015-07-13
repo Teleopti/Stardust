@@ -62,10 +62,10 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			return Task.FromResult(_forecastResultViewModelFactory.Create(input.WorkloadId, new DateOnlyPeriod(new DateOnly(input.ForecastStart), new DateOnly(input.ForecastEnd))));
 		}
 
-		[HttpPost, Route("api/Forecasting/EvaluateDev"), UnitOfWork]
-		public virtual Task<WorkloadEvaluateDevViewModel> EvaluateDev(EvaluateDevInput input)
+		[HttpPost, Route("api/Forecasting/EvaluateMethods"), UnitOfWork]
+		public virtual Task<WorkloadEvaluateMethodsViewModel> EvaluateMethods(EvaluateMethodsInput input)
 		{
-			return Task.FromResult(_forecastViewModelFactory.EvaluateDev(input));
+			return Task.FromResult(_forecastViewModelFactory.EvaluateMethods(input));
 		}
 
 		[HttpPost, Route("api/Forecasting/Forecast"), UnitOfWork]
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		}
 
 		[HttpPost, Route("api/Forecasting/IntradayPattern"), UnitOfWork]
-		public virtual Task<IntradayPatternViewModel> IntradayPattern(EvaluateDevInput input)
+		public virtual Task<IntradayPatternViewModel> IntradayPattern(IntradayPatternInput input)
 		{
 			return Task.FromResult(_intradayPatternViewModelFactory.Create(input));
 		}

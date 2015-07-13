@@ -17,7 +17,12 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		public Guid WorkloadId { get; set; }
 	}
 
-	public class EvaluateDevInput
+	public class EvaluateMethodsInput
+	{
+		public Guid WorkloadId { get; set; }
+	}
+
+	public class IntradayPatternInput
 	{
 		public Guid WorkloadId { get; set; }
 	}

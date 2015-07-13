@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-angular.module('wfm.forecasting.dev', ['gridshore.c3js.chart'])
-	.controller('ForecastingDevCtrl', [
+angular.module('wfm.forecasting.method', ['gridshore.c3js.chart'])
+	.controller('ForecastingMethodCtrl', [
 		'$scope', '$state', '$stateParams', '$http',
 		function ($scope, $state, $stateParams, $http) {
 			$scope.workloadId = $stateParams.workloadId;
@@ -58,7 +58,7 @@ angular.module('wfm.forecasting.dev', ['gridshore.c3js.chart'])
 			};
 
 			$scope.loading = true;
-			$http.post("../api/Forecasting/EvaluateDev", JSON.stringify({ WorkloadId: $scope.workloadId })).
+			$http.post("../api/Forecasting/EvaluateMethods", JSON.stringify({ WorkloadId: $scope.workloadId })).
 				success(function(data, status, headers, config) {
 					$scope.loading = false;
 					$scope.workloadName = data.WorkloadName;
@@ -74,7 +74,7 @@ angular.module('wfm.forecasting.dev', ['gridshore.c3js.chart'])
 					loadIntradayPattern();
 				}).
 				error(function(data, status, headers, config) {
-					$scope.error = { message: "Failed to do the evaluate dev." };
+					$scope.error = { message: "Failed to do the methods evaluation." };
 					$scope.loading = false;
 				});
 		}

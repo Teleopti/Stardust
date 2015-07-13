@@ -25,14 +25,14 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 		public dynamic[] QueueStatisticsDays { get; set; }
 	}
 
-	public class WorkloadEvaluateDevViewModel
+	public class WorkloadEvaluateMethodsViewModel
 	{
 		public Guid WorkloadId { get; set; }
 		public string WorkloadName { get; set; }
-		public WorkloadEvaluateDevMethodViewModel[] Methods { get; set; }
+		public WorkloadEvaluateMethodViewModel[] Methods { get; set; }
 	}
 
-	public class WorkloadEvaluateDevMethodViewModel
+	public class WorkloadEvaluateMethodViewModel
 	{
 		public dynamic[] Days { get; set; }
 		public ForecastMethodType MethodId { get; set; }
