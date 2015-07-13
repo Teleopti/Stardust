@@ -1153,6 +1153,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="tzdb2015e.nzd" />
     <Content Include=".node\Gruntfile.js" />
     <Content Include="Areas\Anywhere\Content\feature.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\ajax.js" />

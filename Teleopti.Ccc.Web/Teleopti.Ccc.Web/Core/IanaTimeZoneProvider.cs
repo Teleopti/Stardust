@@ -1,10 +1,21 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
+using NodaTime.TimeZones;
 
 namespace Teleopti.Ccc.Web.Core
 {
     public class IanaTimeZoneProvider : IIanaTimeZoneProvider
     {
+        private readonly TzdbDateTimeZoneSource _tzdbSource;
+
+        public IanaTimeZoneProvider()
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            var tzdbStream = assembly.GetManifestResourceStream("Teleopti.Ccc.Web.tzdb2015e.nzd");
+            _tzdbSource = tzdbStream == null ? TzdbDateTimeZoneSource.Default : TzdbDateTimeZoneSource.FromStream(tzdbStream);
+        }
+
         // This will return the Windows zone that matches the IANA zone, if one exists.
         public string IanaToWindows(string ianaZoneId)
         {
@@ -12,14 +23,13 @@ namespace Teleopti.Ccc.Web.Core
             if (utcZones.Contains(ianaZoneId, StringComparer.OrdinalIgnoreCase))
                 return "UTC";
 
-            var tzdbSource = NodaTime.TimeZones.TzdbDateTimeZoneSource.Default;
-
+           
             // resolve any link, since the CLDR doesn't necessarily use canonical IDs
-            var links = tzdbSource.CanonicalIdMap
+            var links = _tzdbSource.CanonicalIdMap
               .Where(x => x.Value.Equals(ianaZoneId, StringComparison.OrdinalIgnoreCase))
               .Select(x => x.Key);
 
-            var mappings = tzdbSource.WindowsMapping.MapZones;
+            var mappings = _tzdbSource.WindowsMapping.MapZones;
             var item = mappings.FirstOrDefault(x => x.TzdbIds.Any(links.Contains));
             if (item == null) return null;
             return item.WindowsId;
@@ -31,11 +41,10 @@ namespace Teleopti.Ccc.Web.Core
         {
             if (windowsZoneId.Equals("UTC", StringComparison.OrdinalIgnoreCase))
                 return "Etc/UTC";
-
-            var tzdbSource = NodaTime.TimeZones.TzdbDateTimeZoneSource.Default;
+        
             var tzi = TimeZoneInfo.FindSystemTimeZoneById(windowsZoneId);
-            var tzid = tzdbSource.MapTimeZoneId(tzi);
-            return tzdbSource.CanonicalIdMap[tzid];
+            var tzid = _tzdbSource.MapTimeZoneId(tzi);
+            return _tzdbSource.CanonicalIdMap[tzid];
         }
     }
 }
