@@ -1417,10 +1417,10 @@
     <value>Inserisci le tue credenziali di autenticazione per favore</value>
   </data>
   <data name="Add" xml:space="preserve">
-    <value>Aggingi</value>
+    <value>Aggiungi</value>
   </data>
   <data name="AddAbsence" xml:space="preserve">
-    <value>Aggiunti assenza</value>
+    <value>Aggiungi assenza</value>
   </data>
   <data name="AddActivity" xml:space="preserve">
     <value>Aggiungi attività</value>
