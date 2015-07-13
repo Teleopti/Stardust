@@ -553,7 +553,7 @@
     <value>已排定的状态就绪的座席代表</value>
   </data>
   <data name="ResDeviationMinute" xml:space="preserve">
-    <value>偏差（分钟） </value>
+    <value>偏差（分钟）</value>
   </data>
   <data name="ResNext" xml:space="preserve">
     <value>下一步</value>
@@ -868,10 +868,10 @@
     <value>班次规则集包</value>
   </data>
   <data name="ResGroupPageColon" xml:space="preserve">
-    <value>分组：</value>
+    <value>组：</value>
   </data>
   <data name="ResGroupPageGroupColon" xml:space="preserve">
-    <value>分组：</value>
+    <value>组</value>
   </data>
   <data name="Skill" xml:space="preserve">
     <value>技能</value>
