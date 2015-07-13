@@ -24,13 +24,15 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		private readonly IOutboundCampaignRepository _outboundCampaignRepository;
 		private readonly IOutboundCampaignViewModelMapper _outboundCampaignViewModelMapper;
 		private readonly IOutboundActivityProvider _outboundActivityProvider;
+		private readonly ICampaignStatisticsProvider _campaignStatisticsProvider;
 
-		public OutboundController(IOutboundCampaignPersister outboundCampaignPersister, IOutboundCampaignRepository outboundCampaignRepository, IOutboundCampaignViewModelMapper outboundCampaignViewModelMapper, IOutboundActivityProvider outboundActivityProvider)
+		public OutboundController(IOutboundCampaignPersister outboundCampaignPersister, IOutboundCampaignRepository outboundCampaignRepository, IOutboundCampaignViewModelMapper outboundCampaignViewModelMapper, IOutboundActivityProvider outboundActivityProvider, ICampaignStatisticsProvider campaignStatisticsProvider)
 		{
 			_outboundCampaignPersister = outboundCampaignPersister;
 			_outboundCampaignRepository = outboundCampaignRepository;
 			_outboundCampaignViewModelMapper = outboundCampaignViewModelMapper;
 			_outboundActivityProvider = outboundActivityProvider;
+			_campaignStatisticsProvider = campaignStatisticsProvider;
 		}
 
 		[HttpPost, Route("api/Outbound/Campaign"), UnitOfWork]
@@ -85,6 +87,12 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 
 			_outboundCampaignRepository.Remove(campaign);
 			return Ok();
+		}
+
+		[HttpGet, Route("api/Outbound/Campaign/Statistics"), UnitOfWork]
+		public virtual CampaignStatistics GetStatistics()
+		{
+			return _campaignStatisticsProvider.GetWholeStatistics();
 		}
 	}
 }

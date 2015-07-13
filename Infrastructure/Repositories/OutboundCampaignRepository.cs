@@ -44,11 +44,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IList<Campaign> GetOnGoingCampaigns()
 		{
-			var startLittleThanToday = Restrictions.Le("SpanningPeriod.period.Minimum", DateOnly.Today);
-			var endGreaterThanToday = Restrictions.Ge("SpanningPeriod.period.Maximum", DateOnly.Today);
+			var startEarlierThanToday = Restrictions.Le("SpanningPeriod.period.Minimum", DateOnly.Today);
+			var endLaterThanToday = Restrictions.Ge("SpanningPeriod.period.Maximum", DateOnly.Today);
 
 			return Session.CreateCriteria<Campaign>()
-				.Add(Restrictions.And(startLittleThanToday, endGreaterThanToday))
+				.Add(Restrictions.And(startEarlierThanToday, endLaterThanToday))
 				.List<Campaign>();
 		}
 	}

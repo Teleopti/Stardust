@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.IoC
 			builder.RegisterType<OutboundSkillPersister>().As<IOutboundSkillPersister>().SingleInstance();
 			builder.RegisterType<ProductionReplanHelper>().As<IProductionReplanHelper>().SingleInstance();
 			builder.RegisterType<OutboundPeriodMover>().As<IOutboundPeriodMover>().SingleInstance();
+			builder.RegisterType<CampaignStatisticsProvider>().As<ICampaignStatisticsProvider>().SingleInstance();
 
 			builder.RegisterType<IncomingTaskFactory>().As<IncomingTaskFactory>().SingleInstance();
 			builder.RegisterType<FlatDistributionSetter>().As<FlatDistributionSetter>().SingleInstance();

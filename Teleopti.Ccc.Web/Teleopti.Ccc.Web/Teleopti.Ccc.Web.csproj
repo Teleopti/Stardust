@@ -461,6 +461,7 @@
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IAbsenceRequestProbability.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IAbsenceRequestProbabilityProvider.cs" />
     <Compile Include="Areas\MyTime\Models\Settings\ChangePasswordResultInfo.cs" />
+    <Compile Include="Areas\Outbound\core\Campaign\DataProvider\ICampaignStatisticsProvider.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\IOutboundActivityProvider.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\IProductionReplanHelper.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\OutboundActivityProvider.cs" />
@@ -469,6 +470,7 @@
     <Compile Include="Areas\Outbound\core\Campaign\Mapping\IOutboundCampaignMapper.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\Mapping\IOutboundCampaignViewModelMapper.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\Mapping\OutboundCampaignMapper.cs" />
+    <Compile Include="Areas\Outbound\core\Campaign\DataProvider\CampaignStatisticsProvider.cs" />
     <Compile Include="Areas\Outbound\core\IoC\OutboundAreaModule.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\Mapping\OutboundCampaignViewModelMapper.cs" />
     <Compile Include="Areas\Outbound\Models\CampaignForm.cs" />
