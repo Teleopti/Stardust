@@ -6312,12 +6312,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 				if (tryGetFirstSelectedSchedule(out scheduleDay))
 				{
 					var person = scheduleDay.Person;
-					var skills = aggregateSkills(person, scheduleDay.DateOnlyAsPeriod.DateOnly).ToList();
-					if (skills.Count > 0)
+					if (scheduleDay.DateOnlyAsPeriod.DateOnly < person.TerminalDate)
 					{
-						var skillResolutionProvider = _container.Resolve<ISkillResolutionProvider>();
-						resolution = skillResolutionProvider.MinimumResolution(skills);
+						var skills = aggregateSkills(person, scheduleDay.DateOnlyAsPeriod.DateOnly).ToList();
+						if (skills.Count > 0)
+						{
+							var skillResolutionProvider = _container.Resolve<ISkillResolutionProvider>();
+							resolution = skillResolutionProvider.MinimumResolution(skills);
+						}
 					}
+					
 				}
 
 				using (var options = new OvertimePreferencesDialog(_schedulerState.CommonStateHolder.ActiveScheduleTags, "OvertimePreferences", _schedulerState.CommonStateHolder.ActiveActivities, resolution, definitionSets))
