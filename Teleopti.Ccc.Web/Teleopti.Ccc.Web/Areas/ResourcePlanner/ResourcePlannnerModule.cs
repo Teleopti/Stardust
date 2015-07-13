@@ -2,7 +2,6 @@
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Secrets.DayOffPlanning;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
