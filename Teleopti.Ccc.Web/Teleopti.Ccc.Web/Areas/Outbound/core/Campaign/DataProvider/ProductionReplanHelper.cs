@@ -15,12 +15,12 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 	public class ProductionReplanHelper : IProductionReplanHelper
 	{
 		private readonly OutboundProductionPlanFactory _outboundProductionPlanFactory;
-		private readonly OutboundScheduledResourcesProvider _scheduledResourcesProvider;
+		private readonly IOutboundScheduledResourcesProvider _scheduledResourcesProvider;
 		private readonly IFetchAndFillSkillDays _fetchAndFillSkillDays;
 		private readonly IForecastingTargetMerger _forecastingTargetMerger;
 		private readonly ISkillDayRepository _skillDayRepository;
 
-		public ProductionReplanHelper(OutboundProductionPlanFactory outboundProductionPlanFactory, IFetchAndFillSkillDays fetchAndFillSkillDays, ISkillDayRepository skillDayRepository, IForecastingTargetMerger forecastingTargetMerger, OutboundScheduledResourcesProvider scheduledResourcesProvider)
+		public ProductionReplanHelper(OutboundProductionPlanFactory outboundProductionPlanFactory, IFetchAndFillSkillDays fetchAndFillSkillDays, ISkillDayRepository skillDayRepository, IForecastingTargetMerger forecastingTargetMerger, IOutboundScheduledResourcesProvider scheduledResourcesProvider)
 		{
 			_outboundProductionPlanFactory = outboundProductionPlanFactory;
 			_fetchAndFillSkillDays = fetchAndFillSkillDays;

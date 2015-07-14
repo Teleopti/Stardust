@@ -13,7 +13,14 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Outbound
 {
-	public class OutboundScheduledResourcesProvider
+	public interface IOutboundScheduledResourcesProvider
+	{
+		void Load(IList<IOutboundCampaign> campaigns, DateOnlyPeriod period);
+		TimeSpan GetScheduledTimeOnDate(DateOnly date, ISkill skill);
+		TimeSpan GetForecastedTimeOnDate(DateOnly date, ISkill skill);
+	}
+
+	public class OutboundScheduledResourcesProvider : IOutboundScheduledResourcesProvider
 	{
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly IUserTimeZone _userTimeZone;

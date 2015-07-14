@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 	public class CampaignStatistics
 	{
 		public int Planned;
+		public int PlannedWarning;
 		public int Scheduled;
 		public int ScheduledWarning;
 		public int OnGoing;

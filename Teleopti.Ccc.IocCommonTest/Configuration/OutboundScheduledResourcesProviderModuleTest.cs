@@ -1,13 +1,10 @@
 ﻿using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Outbound;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.IocCommon.MultipleConfig;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.IocCommonTest.Configuration
 {
@@ -32,7 +29,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			using (var ioc = _containerBuilder.Build())
 			{
-				var provider = ioc.Resolve<OutboundScheduledResourcesProvider>();
+				var provider = ioc.Resolve<IOutboundScheduledResourcesProvider>();
 				provider.Should().Not.Be.Null();
 			}
 		}

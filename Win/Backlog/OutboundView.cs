@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Win.Backlog
 	public partial class OutboundView : Form
 	{
 		private readonly IComponentContext _container;
-		private OutboundScheduledResourcesProvider _outboundScheduledResourcesProvider;
+		private IOutboundScheduledResourcesProvider _outboundScheduledResourcesProvider;
 		private DateOnlyPeriod _loadedPeriod;
         ICollection<IOutboundCampaign> _campaigns;
 
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Win.Backlog
 
 		private void loadSchedulesAsync()
 		{
-			_outboundScheduledResourcesProvider = _container.Resolve<OutboundScheduledResourcesProvider>();
+			_outboundScheduledResourcesProvider = _container.Resolve<IOutboundScheduledResourcesProvider>();
 
 			Enabled = false;
 			backgroundWorker1.RunWorkerAsync();
