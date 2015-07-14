@@ -14,7 +14,7 @@ if (typeof (Teleopti) === 'undefined') {
 
 Teleopti.MyTimeWeb.Common = (function ($) {
 
-	var _ajax = new Teleopti.MyTimeWeb.Ajax();
+	
 	var _settings = {};
 	var _userData = null;
 	var _userDataCallQueue = [];
@@ -27,6 +27,8 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		if (toggleCache[toggleName] !== undefined) {
 			return toggleCache[toggleName];
 		}
+
+		var ajax = new Teleopti.MyTimeWeb.Ajax();
 
 		_ajax.Ajax({
 			url: "../ToggleHandler/IsEnabled?toggle=" + toggleName,
@@ -68,6 +70,8 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		};
 
 		_userDataFetchInProgress = true;
+
+		var ajax = new Teleopti.MyTimeWeb.Ajax();
 
 		_ajax.Ajax({
 			url: 'UserData/FetchUserData',
