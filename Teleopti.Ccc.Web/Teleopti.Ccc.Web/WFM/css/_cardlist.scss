@@ -5,17 +5,17 @@
 }
 
 .teleopti-card-list-container {
-	/*max-height: 450px;*/
 }
 
+md-content {
+	padding-bottom: 10px;
 
-md-card {
 }
 
 .teleopti-card-unselected {
 	margin-top: 10px;
 	margin-bottom: 10px;
-	cursor: pointer;
+	
 	width: 90%;
 	margin-left: auto !important;
 	margin-right: auto !important;
@@ -24,7 +24,6 @@ md-card {
 .teleopti-card-selected {
 	margin-top: 25px;
 	margin-bottom: 25px;
-	cursor: pointer;
 	width: 95%;
 	margin-left: auto !important;
 	margin-right: auto !important;
@@ -42,10 +41,27 @@ teleopti-card:last-child .teleopti-card-selected {
 }
 
 .teleopti-card-title {
+	cursor: pointer;
 	min-height: 35px;
 	line-height: 35px;
 	padding: 0 16px;
-	background-color: #99D6FF;
+}
+
+.teleopti-card-unselected{
+	background-color: rgba(152,214,255,0.7);
+	transition: background-color 0.3s linear;
+	transition: box-shadow 0.3s linear;
+}
+
+.teleopti-card-unselected:hover{
+	background-color: rgba(152,214,255,1);
+	box-shadow: 0 8px 17px 0 rgba(0,0,0,.2);
+}
+
+.teleopti-card-selected .teleopti-card-title{
+	background-color: rgba(152,214,255,1);
+	transition: background-color 0.3s linear;
+	transition: box-shadow 0.3s linear;
 }
 
 .teleopti-card-content {
