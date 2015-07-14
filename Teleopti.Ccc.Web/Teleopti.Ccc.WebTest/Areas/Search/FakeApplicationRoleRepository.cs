@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 		public IUnitOfWork UnitOfWork { get; private set; }
 		public IList<IApplicationRole> LoadAllApplicationRolesSortedByName()
 		{
-			throw new NotImplementedException();
+			return _roles.OrderBy(x => x.Name).ToList();
 		}
 
 		public IList<IApplicationRole> LoadAllRolesByDescription(string name)
