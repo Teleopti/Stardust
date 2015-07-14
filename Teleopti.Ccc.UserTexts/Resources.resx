@@ -13306,12 +13306,44 @@ Reduce the complexity to use these shifts.</value>
     <value>New campaign name</value>
     <comment>New Campaign Name</comment>
   </data>
+  <data name="BothFirstnameAndLastnameAreEmptyErrorMsgSemicolon" xml:space="preserve">
+    <value>both firstname and lastname are empty;</value>
+    <comment>error msg for validating data when importing users in People</comment>
+  </data>
   <data name="CampaignNameInvalid" xml:space="preserve">
     <value>The given campaign name is invalid. It can contain at most 255 characters.</value>
     <comment>use in web WFM, an error info when user define/modified a campaign name is too long</comment>
   </data>
+  <data name="EmptyPasswordErrorMsgSemicolon" xml:space="preserve">
+    <value>empty password;</value>
+    <comment>error msg for validating data when importing users in People</comment>
+  </data>
   <data name="OnGoing" xml:space="preserve">
     <value>OnGoing</value>
     <comment>use in web wfm, campaign status</comment>
+  </data>
+  <data name="NoLogonAccountErrorMsgSemicolon" xml:space="preserve">
+    <value>no logon account;</value>
+    <comment>error msg for validating data when importing users in People</comment>
+  </data>
+  <data name="RoleXNotExistErrorMsgSemicolon" xml:space="preserve">
+    <value>role {0} not exist;</value>
+    <comment>error msg for validating data when importing users in People</comment>
+  </data>
+  <data name="TooLongApplicationUserIdErrorMsgSemicolon" xml:space="preserve">
+    <value>too long application user id;</value>
+    <comment>error msg for validating data when importing users in People</comment>
+  </data>
+  <data name="TooLongFirstnameErrorMsgSemicolon" xml:space="preserve">
+    <value>too long firstname;</value>
+    <comment>error msg for validating data when importing users in People</comment>
+  </data>
+  <data name="TooLongLastnameErrorMsgSemicolon" xml:space="preserve">
+    <value>too long lastname;</value>
+    <comment>error msg for validating data when importing users in People</comment>
+  </data>
+  <data name="WindowsUserNameIsInvalidErrorMsgSemicolon" xml:space="preserve">
+    <value>windows user name is invalid;</value>
+    <comment>error msg for validating data when importing users in People</comment>
   </data>
 </root>
