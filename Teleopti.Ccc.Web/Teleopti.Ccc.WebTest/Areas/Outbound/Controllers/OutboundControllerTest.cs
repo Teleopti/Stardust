@@ -12,6 +12,7 @@ using Teleopti.Ccc.Web.Areas.Outbound.Controllers;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping;
 using Teleopti.Ccc.Web.Areas.Outbound.Models;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
 {
@@ -59,7 +60,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
 		public void ShouldGetAllCampaigns()
 		{
 			var skill = SkillFactory.CreateSkill("mySkill");
-			var campaigns = new List<Campaign>() { new Campaign() { Name = "myCampaign", Skill = skill } };
+            var campaigns = new List<IOutboundCampaign>() { new Campaign() { Name = "myCampaign", Skill = skill } };
 			var campaignVMs = new List<CampaignViewModel>(){new CampaignViewModel()};
 			_outboundCampaignRepository.Stub(x => x.LoadAll()).Return(campaigns);
 			_outboundCampaignViewModelMapper.Stub(x => x.Map(campaigns)).Return(campaignVMs);

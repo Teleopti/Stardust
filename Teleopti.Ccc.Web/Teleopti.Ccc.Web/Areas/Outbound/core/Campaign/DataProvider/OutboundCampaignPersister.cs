@@ -103,9 +103,9 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			return activity;
 		}
 
-		public Campaign Persist(CampaignViewModel campaignViewModel)
+        public IOutboundCampaign Persist(CampaignViewModel campaignViewModel)
 		{
-			Campaign campaign = null;
+            IOutboundCampaign campaign = null;
 
 			if (campaignViewModel.Id.HasValue)
 			{
@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			return false;
 		}
 
-		private bool isMovePeriod(Campaign oldCampaign, Campaign campaign)
+        private bool isMovePeriod(IOutboundCampaign oldCampaign, IOutboundCampaign campaign)
 		{
 			if (!oldCampaign.SpanningPeriod.Equals(campaign.SpanningPeriod)
 			    || isWorkingHoursUpdated(oldCampaign.WorkingHours, campaign.WorkingHours)) return true;
@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			return false;
 		}
 
-		private bool isNeedReplan(Campaign oldCampaign, Campaign campaign)
+        private bool isNeedReplan(IOutboundCampaign oldCampaign, IOutboundCampaign campaign)
 		{
 				if (oldCampaign.CallListLen != campaign.CallListLen
 				    || oldCampaign.TargetRate != campaign.TargetRate

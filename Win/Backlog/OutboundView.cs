@@ -15,7 +15,6 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
-using Campaign = Teleopti.Ccc.Domain.Outbound.Campaign;
 
 namespace Teleopti.Ccc.Win.Backlog
 {
@@ -24,7 +23,7 @@ namespace Teleopti.Ccc.Win.Backlog
 		private readonly IComponentContext _container;
 		private OutboundScheduledResourcesProvider _outboundScheduledResourcesProvider;
 		private DateOnlyPeriod _loadedPeriod;
-		ICollection<Campaign> _campaigns;
+        ICollection<IOutboundCampaign> _campaigns;
 
 		public OutboundView()
 		{
@@ -135,7 +134,7 @@ namespace Teleopti.Ccc.Win.Backlog
 			}
 		}
 
-		private IncomingTask getIncomingTaskFromCampaign(Campaign campaign)
+        private IncomingTask getIncomingTaskFromCampaign(IOutboundCampaign campaign)
 		{
 			var incomingTaskFactory = _container.Resolve<OutboundProductionPlanFactory>();
 			var incomingTask = incomingTaskFactory.CreateAndMakeInitialPlan(campaign.SpanningPeriod, campaign.CampaignTasks(),
@@ -206,7 +205,7 @@ namespace Teleopti.Ccc.Win.Backlog
 			foreach (var item in listView1.Items)
 			{
 				var listItem = (ListViewItem) item;
-				var campaign = (Campaign) listItem.Tag;
+                var campaign = (IOutboundCampaign)listItem.Tag;
 				var status = getStatusOnCampaign(campaign);
 
 				switch (status)
@@ -232,7 +231,7 @@ namespace Teleopti.Ccc.Win.Backlog
 			}
 		}
 
-		private CampaignStatus getStatusOnCampaign(Campaign campaign)
+        private CampaignStatus getStatusOnCampaign(IOutboundCampaign campaign)
 		{
 			var incomingTask = getIncomingTaskFromCampaign(campaign);
 			if(incomingTask.GetTimeOutsideSLA() > TimeSpan.FromMinutes(1))
@@ -270,7 +269,7 @@ namespace Teleopti.Ccc.Win.Backlog
 
 		private void viewStatusToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			var selectedCampaign = (Campaign)listView1.SelectedItems[0].Tag;
+            var selectedCampaign = (IOutboundCampaign)listView1.SelectedItems[0].Tag;
 			var incomingTask = getIncomingTaskFromCampaign(selectedCampaign);
 			using (var outboundStatusView = new OutboundStatusView(incomingTask, selectedCampaign.Name))
 			{
@@ -285,7 +284,7 @@ namespace Teleopti.Ccc.Win.Backlog
 
 		private void addManualProductionToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			var selectedCampaign = (Campaign)listView1.SelectedItems[0].Tag;
+            var selectedCampaign = (IOutboundCampaign)listView1.SelectedItems[0].Tag;
 			using (var addManualProductionView = new AddManualProductionView(selectedCampaign))
 			{
 				addManualProductionView.ShowDialog(this);
@@ -307,7 +306,7 @@ namespace Teleopti.Ccc.Win.Backlog
 
 		private void replanToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			var selectedCampaign = (Campaign)listView1.SelectedItems[0].Tag;
+            var selectedCampaign = (IOutboundCampaign)listView1.SelectedItems[0].Tag;
 			var incomingTask = getIncomingTaskFromCampaign(selectedCampaign);
 			incomingTask.RecalculateDistribution();
 			//persist productionPlan
@@ -318,7 +317,7 @@ namespace Teleopti.Ccc.Win.Backlog
 
 		private void changePeriodToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			var selectedCampaign = (Campaign)listView1.SelectedItems[0].Tag;
+            var selectedCampaign = (IOutboundCampaign)listView1.SelectedItems[0].Tag;
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var oldPeriod = selectedCampaign.SpanningPeriod;

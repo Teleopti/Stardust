@@ -4,6 +4,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 {
@@ -21,9 +22,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		[Test]
 		public void ShouldProvidePlannedCampaign()
 		{
-			_campaignRepository.Stub(x => x.GetPlannedCampaigns()).Return(new List<Domain.Outbound.Campaign>(){new Domain.Outbound.Campaign()});
-			_campaignRepository.Stub(x => x.GetOnGoingCampaigns()).Return(new List<Domain.Outbound.Campaign>());
-			_campaignRepository.Stub(x => x.GetDoneCampaigns()).Return(new List<Domain.Outbound.Campaign>());
+            _campaignRepository.Stub(x => x.GetPlannedCampaigns()).Return(new List<IOutboundCampaign>() { new Domain.Outbound.Campaign() });
+            _campaignRepository.Stub(x => x.GetOnGoingCampaigns()).Return(new List<IOutboundCampaign>());
+            _campaignRepository.Stub(x => x.GetDoneCampaigns()).Return(new List<IOutboundCampaign>());
 			var provider = new CampaignStatisticsProvider(_campaignRepository);
 
 			var result = provider.GetWholeStatistics();
@@ -34,9 +35,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		[Test]
 		public void ShouldProvideOnGoingCampaign()
 		{
-			_campaignRepository.Stub(x => x.GetPlannedCampaigns()).Return(new List<Domain.Outbound.Campaign>());
-			_campaignRepository.Stub(x => x.GetDoneCampaigns()).Return(new List<Domain.Outbound.Campaign>());
-			_campaignRepository.Stub(x => x.GetOnGoingCampaigns()).Return(new List<Domain.Outbound.Campaign>(){new Domain.Outbound.Campaign()});
+            _campaignRepository.Stub(x => x.GetPlannedCampaigns()).Return(new List<IOutboundCampaign>());
+            _campaignRepository.Stub(x => x.GetDoneCampaigns()).Return(new List<IOutboundCampaign>());
+            _campaignRepository.Stub(x => x.GetOnGoingCampaigns()).Return(new List<IOutboundCampaign>() { new Domain.Outbound.Campaign() });
 			var provider = new CampaignStatisticsProvider(_campaignRepository);
 
 			var result = provider.GetWholeStatistics();
@@ -47,9 +48,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		[Test]
 		public void ShouldProvideDoneCampaign()
 		{
-			_campaignRepository.Stub(x => x.GetPlannedCampaigns()).Return(new List<Domain.Outbound.Campaign>());
-			_campaignRepository.Stub(x => x.GetDoneCampaigns()).Return(new List<Domain.Outbound.Campaign>() { new Domain.Outbound.Campaign() });
-			_campaignRepository.Stub(x => x.GetOnGoingCampaigns()).Return(new List<Domain.Outbound.Campaign>());
+            _campaignRepository.Stub(x => x.GetPlannedCampaigns()).Return(new List<IOutboundCampaign>());
+            _campaignRepository.Stub(x => x.GetDoneCampaigns()).Return(new List<IOutboundCampaign>() { new Domain.Outbound.Campaign() });
+            _campaignRepository.Stub(x => x.GetOnGoingCampaigns()).Return(new List<IOutboundCampaign>());
 			var provider = new CampaignStatisticsProvider(_campaignRepository);
 
 			var result = provider.GetWholeStatistics();

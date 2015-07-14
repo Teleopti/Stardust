@@ -1,11 +1,11 @@
 ﻿using Teleopti.Ccc.Web.Areas.Outbound.Models;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 {
-	using Campaign = Domain.Outbound.Campaign;
 	public interface IOutboundCampaignPersister
 	{
 		CampaignViewModel Persist(CampaignForm form);
-	    Campaign Persist(CampaignViewModel campaignViewModel);
+        IOutboundCampaign Persist(CampaignViewModel campaignViewModel);
 	}
 }

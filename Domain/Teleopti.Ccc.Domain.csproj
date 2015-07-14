@@ -2449,6 +2449,7 @@
     <EmbeddedResource Include="Scheduling\Assignment\ShiftLayer.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Outbound\Rules\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>

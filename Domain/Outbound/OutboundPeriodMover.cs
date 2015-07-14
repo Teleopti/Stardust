@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 {
 	public interface IOutboundPeriodMover
 	{
-		void Move(Campaign campaign, DateOnlyPeriod oldPeriod);
+        void Move(IOutboundCampaign campaign, DateOnlyPeriod oldPeriod);
 	}
 
 	public class OutboundPeriodMover : IOutboundPeriodMover
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 			_createOrUpdateSkillDays = createOrUpdateSkillDays;
 		}
 
-		public void Move(Campaign campaign, DateOnlyPeriod oldPeriod)
+        public void Move(IOutboundCampaign campaign, DateOnlyPeriod oldPeriod)
 		{
 			_skillDayRepository.Delete(oldPeriod, campaign.Skill, _scenarioRepository.LoadDefaultScenario());
 			foreach (var dateOnly in oldPeriod.DayCollection())

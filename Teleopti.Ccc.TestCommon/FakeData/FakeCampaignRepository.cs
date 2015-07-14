@@ -3,40 +3,41 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
 {
 	public class FakeCampaignRepository : IOutboundCampaignRepository
 	{
-		private IList<Domain.Outbound.Campaign> _campaigns; 
+		private IList<IOutboundCampaign> _campaigns; 
 
 		public FakeCampaignRepository()
 		{
-			_campaigns = new List<Domain.Outbound.Campaign>();
+            _campaigns = new List<IOutboundCampaign>();
 		}
 
-		public void Add(Domain.Outbound.Campaign campaign)
+        public void Add(IOutboundCampaign campaign)
 		{
 			_campaigns.Add(campaign);
 		}
 
-		public void Remove(Domain.Outbound.Campaign campaign)
+        public void Remove(IOutboundCampaign campaign)
 		{
 			_campaigns.Remove(_campaigns.First(x => x.Id == campaign.Id));
 		}
 
-		public Domain.Outbound.Campaign Get(Guid id)
+        public IOutboundCampaign Get(Guid id)
 		{
 			return _campaigns.First(x => x.Id == id);
 		}
 
-		public IList<Domain.Outbound.Campaign> LoadAll()
+        public IList<IOutboundCampaign> LoadAll()
 		{
 			return _campaigns;
 		}
 
-		public Domain.Outbound.Campaign Load(Guid id)
+        public IOutboundCampaign Load(Guid id)
 		{
 			return Get(id);
 		}
@@ -46,23 +47,23 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return _campaigns.Count;
 		}
 
-		public void AddRange(IEnumerable<Domain.Outbound.Campaign> entityCollection)
-		{
-			throw new NotImplementedException();
-		}
+	    public void AddRange(IEnumerable<IOutboundCampaign> entityCollection)
+	    {
+	        throw new NotImplementedException();
+	    }	  
 
 		public IUnitOfWork UnitOfWork { get; private set; }
-		public IList<Campaign> GetPlannedCampaigns()
+        public IList<IOutboundCampaign> GetPlannedCampaigns()
 		{
 			throw new NotImplementedException();
 		}
 
-		public IList<Campaign> GetDoneCampaigns()
+        public IList<IOutboundCampaign> GetDoneCampaigns()
 		{
 			throw new NotImplementedException();
 		}
 
-		public IList<Campaign> GetOnGoingCampaigns()
+        public IList<IOutboundCampaign> GetOnGoingCampaigns()
 		{
 			throw new NotImplementedException();
 		}

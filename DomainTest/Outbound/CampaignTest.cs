@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Outbound;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Outbound
 {
@@ -8,7 +9,7 @@ namespace Teleopti.Ccc.DomainTest.Outbound
 	[TestFixture]
 	public class CampaignTest
 	{
-		private Campaign _target;
+        private IOutboundCampaign _target;
 
 		[SetUp]
 		public void Setup()

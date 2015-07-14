@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.Outbound
 		private IPersonRepository _personRepository;
 		private ISkill _campaignSkill;
 		private ISkill _skill;
-		private Campaign _campaign;
+        private IOutboundCampaign _campaign;
 
 		[SetUp]
 		public void Setup()
@@ -35,8 +35,8 @@ namespace Teleopti.Ccc.DomainTest.Outbound
 			var person2 = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(), new List<ISkill> { _campaignSkill });
 			_personRepository.Add(person1);
 			_personRepository.Add(person2);
-			
-			var result = _target.Load(new List<Campaign> {_campaign}, new DateOnlyPeriod());
+
+            var result = _target.Load(new List<IOutboundCampaign> { _campaign }, new DateOnlyPeriod());
 
 			result.AllPeople.Should().Equals(new List<IPerson> {person1, person2});
 			result.SelectedPeople.Should().Equals(new List<IPerson> { person2 });
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.Outbound
 			_personRepository.Add(person1);
 			_personRepository.Add(person2);
 
-			var result = _target.Load(new List<Campaign> { _campaign }, new DateOnlyPeriod());
+            var result = _target.Load(new List<IOutboundCampaign> { _campaign }, new DateOnlyPeriod());
 
 			result.AllPeople.Should().Equals(new List<IPerson> { person1, person2 });
 			result.SelectedPeople.Should().Equals(new List<IPerson> { person1 });

@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping
 			_outboundCampaignRepository = outboundCampaignRepository;
 		}
 
-		public Domain.Outbound.Campaign Map(CampaignViewModel campaignViewModel)
+        public IOutboundCampaign Map(CampaignViewModel campaignViewModel)
 		{
 			var campaign = _outboundCampaignRepository.Get(campaignViewModel.Id.Value);
 			if (campaign == null) return null;

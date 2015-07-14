@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Backlog
 {
 	public partial class AddManualProductionView : Form
 	{
-		private readonly Campaign _campaign;
+        private readonly IOutboundCampaign _campaign;
 		private IDictionary<DateOnly, TimeSpan> _manualProductionPlanDays = new Dictionary<DateOnly, TimeSpan>(); 
 
 		public AddManualProductionView()
@@ -16,7 +15,7 @@ namespace Teleopti.Ccc.Win.Backlog
 			InitializeComponent();
 		}
 
-		public AddManualProductionView(Campaign campaign)
+        public AddManualProductionView(IOutboundCampaign campaign)
 		{
 			InitializeComponent();
 			_campaign = campaign;

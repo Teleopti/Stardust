@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			_scheduledResourcesProvider = scheduledResourcesProvider;
 		}
 
-		public void Replan(Domain.Outbound.Campaign campaign)
+        public void Replan(IOutboundCampaign campaign)
 		{
 			if (campaign == null) return;
 
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			}	
 		}
 
-		private IncomingTask getIncomingTaskFromCampaign(Domain.Outbound.Campaign campaign)
+        private IncomingTask getIncomingTaskFromCampaign(IOutboundCampaign campaign)
 		{
 			var incomingTask = _outboundProductionPlanFactory.CreateAndMakeInitialPlan(campaign.SpanningPeriod, campaign.CampaignTasks(),
 				campaign.AverageTaskHandlingTime(), campaign.WorkingHours);

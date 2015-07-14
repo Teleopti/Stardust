@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Core;
-using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 {
 	public class OutboundCampaignConfigurable : IDataSetup
 	{
-		public Campaign Campaign;
+        public IOutboundCampaign Campaign;
 
 		public string Name { get; set; }
 		public DateTime StartDate { get; set; }

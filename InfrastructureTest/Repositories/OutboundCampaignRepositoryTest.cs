@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
 	[TestFixture]
 	[Category("LongRunning")]
-	class OutboundCampaignRepositoryTest : RepositoryTest<Campaign>
+    class OutboundCampaignRepositoryTest : RepositoryTest<IOutboundCampaign>
 	{
 		private SkillType _skillType;
 		private ISkill _skill;
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(_skill);
 		}
 
-		protected override Campaign CreateAggregateWithCorrectBusinessUnit()
+        protected override IOutboundCampaign CreateAggregateWithCorrectBusinessUnit()
 		{
 
 			var campaign = new Campaign()
@@ -54,12 +54,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			return campaign;
 		}
 
-		protected override void VerifyAggregateGraphProperties(Campaign loadedAggregateFromDatabase)
+        protected override void VerifyAggregateGraphProperties(IOutboundCampaign loadedAggregateFromDatabase)
 		{
 			loadedAggregateFromDatabase.Name.Should().Be.EqualTo("Sept Sales");
 		}
 
-		protected override Repository<Campaign> TestRepository(IUnitOfWork unitOfWork)
+        protected override Repository<IOutboundCampaign> TestRepository(IUnitOfWork unitOfWork)
 		{
 			return new OutboundCampaignRepository(unitOfWork);
 		}
@@ -268,7 +268,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			}
 		}
 
-		private Campaign createCampaignWithSpanningPeriod(DateOnlyPeriod period)
+        private IOutboundCampaign createCampaignWithSpanningPeriod(DateOnlyPeriod period)
 		{
 			var campaign = CreateAggregateWithCorrectBusinessUnit();
 			campaign.SpanningPeriod = period;
@@ -277,7 +277,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			return campaign;
 		}
 
-		private Campaign CreateCampaignWithWorkingHours(DayOfWeek weekday, TimePeriod period)
+        private IOutboundCampaign CreateCampaignWithWorkingHours(DayOfWeek weekday, TimePeriod period)
 		{
 			var campaign = CreateAggregateWithCorrectBusinessUnit();
 

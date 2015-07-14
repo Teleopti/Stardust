@@ -7,7 +7,7 @@ using Campaign = Teleopti.Ccc.Domain.Outbound.Campaign;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-	public class OutboundCampaignRepository : Repository<Campaign>, IOutboundCampaignRepository
+	public class OutboundCampaignRepository : Repository<IOutboundCampaign>, IOutboundCampaignRepository
 	{
 		public OutboundCampaignRepository(IUnitOfWork unitOfWork)
             : base(unitOfWork)
@@ -28,28 +28,28 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 		}
 
-		public IList<Campaign> GetPlannedCampaigns()
+        public IList<IOutboundCampaign> GetPlannedCampaigns()
 		{
 			return Session.CreateCriteria<Campaign>()
 			  .Add(Restrictions.Gt("SpanningPeriod.period.Minimum", DateOnly.Today))
-			  .List<Campaign>();
+              .List<IOutboundCampaign>();
 		}
 
-		public IList<Campaign> GetDoneCampaigns()
+        public IList<IOutboundCampaign> GetDoneCampaigns()
 		{
 			return Session.CreateCriteria<Campaign>()
 				.Add(Restrictions.Lt("SpanningPeriod.period.Maximum", DateOnly.Today))
-				.List<Campaign>();
+                .List<IOutboundCampaign>();
 		}
 
-		public IList<Campaign> GetOnGoingCampaigns()
+        public IList<IOutboundCampaign> GetOnGoingCampaigns()
 		{
 			var startEarlierThanToday = Restrictions.Le("SpanningPeriod.period.Minimum", DateOnly.Today);
 			var endLaterThanToday = Restrictions.Ge("SpanningPeriod.period.Maximum", DateOnly.Today);
 
 			return Session.CreateCriteria<Campaign>()
 				.Add(Restrictions.And(startEarlierThanToday, endLaterThanToday))
-				.List<Campaign>();
+                .List<IOutboundCampaign>();
 		}
 	}
 }

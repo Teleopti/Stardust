@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 			_personSkillProvider = personSkillProvider;
 		}
 
-		public void Load(IList<Campaign> campaigns, DateOnlyPeriod period)
+        public void Load(IList<IOutboundCampaign> campaigns, DateOnlyPeriod period)
 		{
 			var scenario = _scenarioRepository.LoadDefaultScenario();
 			var timeZone = _userTimeZone.TimeZone();

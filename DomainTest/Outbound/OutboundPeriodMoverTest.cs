@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.Outbound
 		private IScenarioRepository _scenarioRepository;
 		private ICreateOrUpdateSkillDays _createOrUpdateSkillDays;
 		private IScenario _defultScenario;
-		private Campaign _campaign;
+        private IOutboundCampaign _campaign;
 
 		[SetUp]
 		public void Setup()

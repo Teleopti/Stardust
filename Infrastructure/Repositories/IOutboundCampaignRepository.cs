@@ -4,10 +4,10 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-	public interface IOutboundCampaignRepository : IRepository<Campaign>
+    public interface IOutboundCampaignRepository : IRepository<IOutboundCampaign>
 	{
-		IList<Campaign> GetPlannedCampaigns();
-		IList<Campaign> GetDoneCampaigns();
-		IList<Campaign> GetOnGoingCampaigns();
+        IList<IOutboundCampaign> GetPlannedCampaigns();
+        IList<IOutboundCampaign> GetDoneCampaigns();
+        IList<IOutboundCampaign> GetOnGoingCampaigns();
 	}
 }

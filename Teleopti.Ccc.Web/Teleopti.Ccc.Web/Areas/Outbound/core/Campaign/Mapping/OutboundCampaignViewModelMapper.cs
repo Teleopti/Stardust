@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Web.Areas.Outbound.Models;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping
-{
-	using Campaign = Domain.Outbound.Campaign;
+{	
 
 	public class OutboundCampaignViewModelMapper : IOutboundCampaignViewModelMapper
 	{
-		public CampaignViewModel Map(Campaign campaign)
+        public CampaignViewModel Map(IOutboundCampaign campaign)
 		{
 			if (campaign == null) return null;
 
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping
 			return campaignVm;
 		}
 
-		public IEnumerable<CampaignViewModel> Map(IEnumerable<Campaign> campaigns)
+        public IEnumerable<CampaignViewModel> Map(IEnumerable<IOutboundCampaign> campaigns)
 		{
 			return campaigns.Select(Map);
 		}

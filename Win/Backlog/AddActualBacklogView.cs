@@ -1,20 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Backlog
 {
 	public partial class AddActualBacklogView : Form
 	{
-		private readonly Campaign _campaign;
+        private readonly IOutboundCampaign _campaign;
 		private IDictionary<DateOnly, TimeSpan> _actualBacklogDays = new Dictionary<DateOnly, TimeSpan>(); 
 
 		public AddActualBacklogView()
@@ -22,7 +15,7 @@ namespace Teleopti.Ccc.Win.Backlog
 			InitializeComponent();
 		}
 
-		public AddActualBacklogView(Campaign camapign)
+        public AddActualBacklogView(IOutboundCampaign camapign)
 		{
 			InitializeComponent();
 			_campaign = camapign;

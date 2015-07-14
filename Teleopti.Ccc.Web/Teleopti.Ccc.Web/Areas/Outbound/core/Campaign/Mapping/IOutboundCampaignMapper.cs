@@ -1,9 +1,10 @@
 ﻿using Teleopti.Ccc.Web.Areas.Outbound.Models;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping
 {
 	public interface IOutboundCampaignMapper
 	{
-		Domain.Outbound.Campaign Map(CampaignViewModel campaignViewModel);
+        IOutboundCampaign Map(CampaignViewModel campaignViewModel);
 	}
 }

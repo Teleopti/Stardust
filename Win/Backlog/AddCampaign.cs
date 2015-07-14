@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Win.Backlog
 	public partial class AddCampaign : Form
 	{
 		private readonly IList<IActivity> _existingActivities;
-		private Campaign _createdCampaign;
+        private IOutboundCampaign _createdCampaign;
 		private IActivity _existingActivity;
 
 		public AddCampaign()
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Win.Backlog
 			InitializeComponent();
 		}
 
-		public Campaign CreatedCampaign
+        public IOutboundCampaign CreatedCampaign
 		{
 			get { return _createdCampaign; }
 		}

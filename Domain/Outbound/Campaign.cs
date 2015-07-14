@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Outbound
 {
-	public class Campaign : NonversionedAggregateRootWithBusinessUnit, IDeleteTag
+    public class Campaign : NonversionedAggregateRootWithBusinessUnit, IOutboundCampaign
 	{
 		private string _name;
 		private ISkill _skill;
