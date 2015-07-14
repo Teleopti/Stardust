@@ -53,7 +53,7 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 			errCallback: options.errorCallback,
 			domainType: options.domainType
 		});
-	}
+	};
 
 	function _getUserData(callback) {
 
@@ -81,7 +81,7 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 				}
 			}
 		});
-	}
+	};
 
 	function _subscribeToMessageBroker(options) {
 
@@ -94,7 +94,7 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 			return;
 		}
 		_addSubscription(options);
-	}
+	};
 
 	function _setupCalendar(options) {
 
