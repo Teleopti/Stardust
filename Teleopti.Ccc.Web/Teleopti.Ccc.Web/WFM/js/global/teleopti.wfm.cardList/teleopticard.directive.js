@@ -32,9 +32,11 @@
 			link: function (scope, elem, attr, ctrl, transcludeFn) {
 
 				var vm = ctrl[0];
+				vm.id = scope.$id;
+
 				var parentVm = ctrl[1];
 				vm.parentVm = parentVm;
-
+				
 				transcludeFn(function (clone) {
 
 					angular.forEach(clone, function (cloneEl) {
@@ -68,7 +70,6 @@
 	};
 
 	angular.module('teleopti.wfm.cardList').controller('TeleoptiCardCtrl', teleoptiCardDirectiveController);
-
 	angular.module('teleopti.wfm.cardList').directive('teleoptiCard', teleoptiCardDirective);
 
 }());
