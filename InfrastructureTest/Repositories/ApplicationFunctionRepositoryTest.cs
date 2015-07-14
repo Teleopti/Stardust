@@ -103,6 +103,25 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(functions[0], applicationFunction);
         }
 
+		  [Test]
+		  public void ShouldGetChildFunctions()
+		  {
+			  ApplicationFunction parent = new ApplicationFunction("Parent");
+			  ApplicationFunction child1 = new ApplicationFunction("Child1");
+			  child1.Parent = parent;
+			  ApplicationFunction child2 = new ApplicationFunction("Child3");
+			  child2.Parent = parent;
+
+			  PersistAndRemoveFromUnitOfWork(parent);
+			  PersistAndRemoveFromUnitOfWork(child1);
+			  PersistAndRemoveFromUnitOfWork(child2);
+
+			  IList<IApplicationFunction> functions = new ApplicationFunctionRepository(UnitOfWork).GetChildFunctions(parent.Id.Value);
+
+			  //load
+			  Assert.AreEqual(functions.Count, 2);
+		  }
+
         protected override Repository<IApplicationFunction> TestRepository(IUnitOfWork unitOfWork)
         {
             return new ApplicationFunctionRepository(unitOfWork);

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
@@ -15,5 +16,7 @@ namespace Teleopti.Ccc.Domain.Repositories
         IList<IApplicationFunction> GetAllApplicationFunctionSortedByCode();
 
         IEnumerable<IApplicationFunction> ExternalApplicationFunctions();
+
+	    IList<IApplicationFunction> GetChildFunctions(Guid id);
     }
 }

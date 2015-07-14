@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -78,6 +79,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			{
 				SynchronizeRaptorApplicationFunctions(applicationFunction);
 			}
+		}
+
+		public IList<IApplicationFunction> GetChildFunctions(Guid id)
+		{
+			IList<IApplicationFunction> functions = Session.CreateCriteria(typeof(ApplicationFunction))
+				.Add(Restrictions.Eq("Parent.Id",id))
+				.List<IApplicationFunction>();
+			return functions;
 		}
 	}
 }
