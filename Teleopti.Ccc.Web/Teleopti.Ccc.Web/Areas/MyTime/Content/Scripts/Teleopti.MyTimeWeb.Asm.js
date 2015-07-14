@@ -213,12 +213,17 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	}
     
 	function _makeSureWeAreLoggedOn() {
-
-		var onSuccess = function (data) {
-			setTimeout(_makeSureWeAreLoggedOn, 20 * 60 * 1000);
-		};
-
-		Teleopti.MyTimeWeb.Common.GetUserData(onSuccess);
+		
+		var ajax = new Teleopti.MyTimeWeb.Ajax();
+		ajax.Ajax({
+			url: 'UserData/FetchUserData',
+			dataType: "json",
+			async: false,
+			type: 'GET',
+			success: function () {
+				setTimeout(_makeSureWeAreLoggedOn, 20 * 60 * 1000);
+			}
+		});
 		
 	}
 
