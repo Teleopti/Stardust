@@ -312,9 +312,7 @@
 				return timeModel;
 			};
 
-			self.changeByKeyPress = function (evt, ngModel, ceiling) {
-			    console.log(evt);
-
+			self.changeByKeyPress = function (evt, ngModel, ceiling) {			   
 				var action;
 				if (evt.which === 38) {
 					evt.preventDefault();
