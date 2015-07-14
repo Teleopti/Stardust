@@ -30,7 +30,7 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 
 		var ajax = new Teleopti.MyTimeWeb.Ajax();
 
-		_ajax.Ajax({
+		ajax.Ajax({
 			url: "../ToggleHandler/IsEnabled?toggle=" + toggleName,
 			async: false,
 			success: function (data) {
@@ -73,7 +73,7 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 
 		var ajax = new Teleopti.MyTimeWeb.Ajax();
 
-		_ajax.Ajax({
+		ajax.Ajax({
 			url: 'UserData/FetchUserData',
 			dataType: "json",
 			type: 'GET',
