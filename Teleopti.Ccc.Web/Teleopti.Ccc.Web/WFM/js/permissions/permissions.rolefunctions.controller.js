@@ -24,16 +24,46 @@
 						$scope.functionsDisplayed = rolesFunctionsData;
 					}
 			);
-
 			$scope.toggleFunctionForRole = function (node) {
 				var functionNode = node.$modelValue;
 				var nodes = [];
 
-				
+				if (functionNode.selected) {
 
-				if (functionNode.selected) { 
 					RolesFunctionsService.unselectFunction(functionNode.FunctionId, $scope.selectedRole).then(function () {
+						console.log(nodes);
+						$scope.deselectNode = function (childNode) {
+							childNode.selected = false;
+						}
+						$scope.push = function (nodeTarget) {
+							nodes.push(nodeTarget.FunctionId);
+						}
+						$scope.loopAround = function (a) {
+							var b = a.ChildFunctions;
+							for (var i = 0; i < b.length; i++) {
+
+								if (b[i].ChildFunctions.length === 0) {
+									$scope.deselectNode(b[i]);
+								} else {
+									$scope.deselectNode(b[i]);
+									$scope.loopAround(b[i]);
+								}
+							}
+						}
 						functionNode.selected = false;
+						nodes.push(functionNode.FunctionId);
+
+						var a = node.$nodeScope.$modelValue.ChildFunctions;
+						for (var i = 0; i < a.length; i++) {
+							if (a[i].ChildFunctions.length === 0) {
+								$scope.deselectNode(a[i]);
+
+							} else {
+								$scope.deselectNode(a[i]);
+								$scope.loopAround(a[i]);
+							}
+						}
+						
 						increaseParentNumberOfSelectedNodes(node);
 					});
 				} else {

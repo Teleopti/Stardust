@@ -31,11 +31,12 @@
 				rolesFunctionsService.functionsDisplayed = result;
 			});
 
-			rolesFunctionsService.unselectFunction = function(functionNode, selectedRole) {
+			rolesFunctionsService.unselectFunction = function (nodes, selectedRole) {
+				console.log(nodes, "in the service")
 				var deferred = $q.defer();
-				PermissionsService.deleteFunction.query({ Id: selectedRole.Id, FunctionId: [functionNode] }).$promise.then(function(result) {
-					deferred.resolve();
+				PermissionsService.deleteFunction.query({ Id: selectedRole.Id, FunctionId: nodes }).$promise.then(function (result) {
 				});
+				deferred.resolve();
 				return deferred.promise;
 			};
 
