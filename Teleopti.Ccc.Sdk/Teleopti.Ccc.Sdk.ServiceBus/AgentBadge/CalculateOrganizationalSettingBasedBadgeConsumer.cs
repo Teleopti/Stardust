@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		private readonly IAgentBadgeWithRankRepository _badgeWithRankRepository;
 		private readonly INow _now;
 		private readonly IToggleManager _toggleManager;
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(CalculateBadgeConsumer));
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(CalculateOrganizationalSettingBasedBadgeConsumer));
 		private readonly IGlobalSettingDataRepository _globalSettingRep;
 		private readonly IPersonRepository _personRepository;
 

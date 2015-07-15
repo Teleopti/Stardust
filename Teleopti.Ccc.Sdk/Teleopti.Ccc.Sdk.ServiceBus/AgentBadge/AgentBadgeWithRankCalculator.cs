@@ -166,87 +166,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 
 		public IEnumerable<IAgentBadgeWithRankTransaction> CalculateAdherenceBadges(IEnumerable<IPerson> allPersons,
 			string timezoneCode, DateOnly date, AdherenceReportSettingCalculationMethod adherenceCalculationMethod,
-			IAgentBadgeSettings setting, Guid businessUnitId)
-		{
-			if (logger.IsDebugEnabled)
-			{
-				logger.DebugFormat(
-					"Calculate adherence badges for timezone: {0}, date: {1:yyyy-MM-dd HH:mm:ss}, AdherenceReportSettingCalculationMethod: {2},"
-					+ "bronze badge threshold: {3}, silver badge threshold: {4}, gold badge threshold: {5}", timezoneCode, date.Date,
-					adherenceCalculationMethod, setting.AdherenceBronzeThreshold, setting.AdherenceSilverThreshold,
-					setting.AdherenceGoldThreshold, businessUnitId);
-			}
-
-			var personList = allPersons.ToList();
-			var newAwardedBadges = new List<IAgentBadgeWithRankTransaction>();
-			var agentAdherenceList =
-				_statisticRepository.LoadAgentsOverThresholdForAdherence(adherenceCalculationMethod, timezoneCode, date.Date,
-					setting.AdherenceBronzeThreshold, businessUnitId);
-
-			if (agentAdherenceList.Count > 0)
-			{
-				var agentsWithAdherence = agentAdherenceList.Cast<object[]>()
-					.ToDictionary(data => (Guid) data[0], data => double.Parse(data[2].ToString()));
-				//var personIdList = (from object[] data in agentAdherenceList select (Guid)data[0]).ToList();
-				var personIdList = agentsWithAdherence.Keys;
-				var personsList = _personRepository.FindPeople(personIdList);
-				var schedules = _scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(personsList,
-					new ScheduleDictionaryLoadOptions(true, false),
-					new DateOnlyPeriod(date, date),
-					_scenarioRepository.LoadDefaultScenario());
-
-				var agentsWithAdherenceShouldGetBadge = new Dictionary<Guid, double>();
-				foreach (var personWithAdherence in agentsWithAdherence)
-				{
-					var personId = personWithAdherence.Key;
-					var adherence = personWithAdherence.Value;
-					var person = personsList.First(x => x.Id == personId);
-					var scheduleDay = schedules[person].ScheduledDay(date);
-					var isFullDayAbsence = scheduleDay.SignificantPartForDisplay() == SchedulePartView.FullDayAbsence;
-
-					// Agent scheduled full day absence should not get badge (Refer to bug #32388)
-					if (isFullDayAbsence)
-					{
-						if (logger.IsDebugEnabled)
-						{
-							logger.DebugFormat(
-								"Agent {0} (ID: {1}) scheduled full day absence for {2:yyyy-MM-dd} and will not get badge.",
-								person.Name, person.Id, date.Date);
-						}
-						continue;
-					}
-
-					agentsWithAdherenceShouldGetBadge[personId] = adherence;
-				}
-
-				if (logger.IsDebugEnabled)
-				{
-					logger.DebugFormat("{0} agents will get badge for adherence", agentsWithAdherenceShouldGetBadge.Count);
-				}
-
-				var newAwardedAdherenceBadge = AddBadge(personList, agentsWithAdherenceShouldGetBadge, BadgeType.Adherence,
-					setting.AdherenceBronzeThreshold.Value,
-					setting.AdherenceSilverThreshold.Value, setting.AdherenceGoldThreshold.Value, true, date);
-				newAwardedBadges.AddRange(newAwardedAdherenceBadge);
-			}
-			else
-			{
-				if (logger.IsDebugEnabled)
-				{
-					logger.DebugFormat("No agents will get badge for adherence");
-				}
-			}
-
-			if (logger.IsDebugEnabled)
-			{
-				logger.DebugFormat("Total {0} new badge(s) been awarded to agents for adherence.", newAwardedBadges.Count);
-			}
-
-			return newAwardedBadges;
-		}
-
-		public IEnumerable<IAgentBadgeWithRankTransaction> CalculateAdherenceBadges(IEnumerable<IPerson> allPersons,
-			string timezoneCode, DateOnly date, AdherenceReportSettingCalculationMethod adherenceCalculationMethod,
 			IGamificationSetting setting, Guid businessUnitId)
 		{
 			if (logger.IsDebugEnabled)
@@ -326,50 +245,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			return newAwardedBadges;
 		}
 
-		public virtual IEnumerable<IAgentBadgeWithRankTransaction> CalculateAHTBadges(IEnumerable<IPerson> allPersons, string timezoneCode, DateOnly date, IAgentBadgeSettings setting, Guid businessUnitId)
-		{
-			if (logger.IsDebugEnabled)
-			{
-				logger.DebugFormat(
-					"Calculate AHT badges for timezone: {0}, date: {1:yyyy-MM-dd HH:mm:ss},"
-					+ "bronze badge threshold: {2}, silver badge threshold: {3}, gold badge threshold: {4}", timezoneCode, date.Date,
-					setting.AHTBronzeThreshold, setting.AHTSilverThreshold, setting.AHTGoldThreshold);
-			}
-
-			var personList = allPersons.ToList();
-			var newAwardedBadges = new List<IAgentBadgeWithRankTransaction>();
-			var agentsList = _statisticRepository.LoadAgentsUnderThresholdForAHT(timezoneCode, date.Date, setting.AHTBronzeThreshold, businessUnitId);
-
-			if (agentsList.Count > 0)
-			{
-				if (logger.IsDebugEnabled)
-				{
-					logger.DebugFormat("{0} agents will get badge for AHT", agentsList.Count);
-				}
-
-				var agentsWithAHT = agentsList.Cast<object[]>()
-					.ToDictionary(data => (Guid)data[0], data => double.Parse(data[2].ToString()));
-
-				var newAwardedAhtBadges = AddBadge(personList, agentsWithAHT, BadgeType.AverageHandlingTime,
-					setting.AHTBronzeThreshold.TotalSeconds,
-					setting.AHTSilverThreshold.TotalSeconds, setting.AHTGoldThreshold.TotalSeconds, false, date);
-				newAwardedBadges.AddRange(newAwardedAhtBadges);
-			}
-			else
-			{
-				if (logger.IsDebugEnabled)
-				{
-					logger.DebugFormat("No agents will get badge for AHT");
-				}
-			}
-			if (logger.IsDebugEnabled)
-			{
-				logger.DebugFormat("Total {0} new badge(s) been awarded to agents for AHT.", newAwardedBadges.Count);
-			}
-
-			return newAwardedBadges;
-		}
-		
 		public virtual IEnumerable<IAgentBadgeWithRankTransaction> CalculateAHTBadges(IEnumerable<IPerson> allPersons,
 			string timezoneCode, DateOnly date, IGamificationSetting setting, Guid businessUnitId)
 		{
@@ -415,52 +290,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			return newAwardedBadges;
 		}
 
-		public virtual IEnumerable<IAgentBadgeWithRankTransaction> CalculateAnsweredCallsBadges(IEnumerable<IPerson> allPersons, string timezoneCode, DateOnly date, IAgentBadgeSettings setting, Guid businessUnitId)
-		{
-			if (logger.IsDebugEnabled)
-			{
-				logger.DebugFormat(
-					"Calculate answered calls badges for timezone: {0}, date: {1:yyyy-MM-dd HH:mm:ss},"
-					+ "bronze badge threshold: {2}, silver badge threshold: {3}, gold badge threshold: {4}", timezoneCode, date.Date,
-					setting.AnsweredCallsBronzeThreshold, setting.AnsweredCallsSilverThreshold, setting.AnsweredCallsGoldThreshold);
-			}
-
-			var personList = allPersons.ToList();
-			var newAwardedBadges = new List<IAgentBadgeWithRankTransaction>();
-			var agentsList = _statisticRepository.LoadAgentsOverThresholdForAnsweredCalls(timezoneCode, date.Date, setting.AnsweredCallsBronzeThreshold, businessUnitId);
-
-
-			if (agentsList.Count > 0)
-			{
-				if (logger.IsDebugEnabled)
-				{
-					logger.DebugFormat("{0} agents will get badge for answered calls", agentsList.Count);
-				}
-
-				var agentsWithAdherence = agentsList.Cast<object[]>()
-					.ToDictionary(data => (Guid)data[0], data => int.Parse(data[2].ToString()));
-
-				var newAwardedAnsweredCallsBadges = AddBadge(personList, agentsWithAdherence, BadgeType.AnsweredCalls,
-					setting.AnsweredCallsBronzeThreshold,
-					setting.AnsweredCallsSilverThreshold, setting.AnsweredCallsGoldThreshold, true, date);
-				newAwardedBadges.AddRange(newAwardedAnsweredCallsBadges);
-			}
-			else
-			{
-				if (logger.IsDebugEnabled)
-				{
-					logger.DebugFormat("No agents will get badge for answered calls");
-				}
-			}
-
-			if (logger.IsDebugEnabled)
-			{
-				logger.DebugFormat("Total {0} new badge(s) been awarded to agents for answered calls.", newAwardedBadges.Count);
-			}
-
-			return newAwardedBadges;
-		}
-		
 		public virtual IEnumerable<IAgentBadgeWithRankTransaction> CalculateAnsweredCallsBadges(
 			IEnumerable<IPerson> allPersons, string timezoneCode, DateOnly date, IGamificationSetting setting, Guid businessUnitId)
 		{
