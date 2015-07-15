@@ -5,6 +5,7 @@ using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping;
 using Teleopti.Ccc.Web.Areas.Outbound.Models;
@@ -17,8 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.Outbound)]
 	public class OutboundController : ApiController
 	{
-		private const string GivenDescriptionIsInvalidErrorMessage =
-			"The given campaign name is invalid. It can contain at most 255 characters.";
+		private readonly string GivenDescriptionIsInvalidErrorMessage = Resources.CampaignNameInvalid;
 
 		private readonly IOutboundCampaignPersister _outboundCampaignPersister;
 		private readonly IOutboundCampaignRepository _outboundCampaignRepository;

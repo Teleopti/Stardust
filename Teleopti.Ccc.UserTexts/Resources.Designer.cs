@@ -4269,6 +4269,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The given campaign name is invalid. It can contain at most 255 characters..
+        /// </summary>
+        public static string CampaignNameInvalid {
+            get {
+                return ResourceManager.GetString("CampaignNameInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Campaigns.
         /// </summary>
         public static string Campaigns {

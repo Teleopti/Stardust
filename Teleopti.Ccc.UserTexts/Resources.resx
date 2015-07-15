@@ -13306,4 +13306,8 @@ Reduce the complexity to use these shifts.</value>
     <value>New campaign name</value>
     <comment>New Campaign Name</comment>
   </data>
+  <data name="CampaignNameInvalid" xml:space="preserve">
+    <value>The given campaign name is invalid. It can contain at most 255 characters.</value>
+    <comment>use in web WFM, an error info when user define/modified a campaign name is too long</comment>
+  </data>
 </root>
