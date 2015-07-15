@@ -17020,6 +17020,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to OnGoing.
+        /// </summary>
+        public static string OnGoing {
+            get {
+                return ResourceManager.GetString("OnGoing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Real Time Reports.
         /// </summary>
         public static string OnlineReports {

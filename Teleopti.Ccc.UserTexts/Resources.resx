@@ -13310,4 +13310,8 @@ Reduce the complexity to use these shifts.</value>
     <value>The given campaign name is invalid. It can contain at most 255 characters.</value>
     <comment>use in web WFM, an error info when user define/modified a campaign name is too long</comment>
   </data>
+  <data name="OnGoing" xml:space="preserve">
+    <value>OnGoing</value>
+    <comment>use in web wfm, campaign status</comment>
+  </data>
 </root>

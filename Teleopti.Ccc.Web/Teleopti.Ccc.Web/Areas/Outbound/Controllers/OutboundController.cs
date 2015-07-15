@@ -72,13 +72,13 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 				var warningCampaigns = _campaignStatisticsProvider.GetOnGoingWarningCamapigns();
 				if (warningCampaigns.Count != 0)
 				{
-					campaignList.WarningCampaigns = _campaignListViewModelMapper.Map(warningCampaigns, "OnGoing");
+					campaignList.WarningCampaigns = _campaignListViewModelMapper.Map(warningCampaigns, Resources.OnGoing);
 				}
 
 				var onGoingCampaigns = _campaignStatisticsProvider.GetOnGoingCampaigns();
 				if (onGoingCampaigns.Count != 0)
 				{
-					campaignList.Campaigns = _campaignListViewModelMapper.Map(onGoingCampaigns, "OnGoing");
+					campaignList.Campaigns = _campaignListViewModelMapper.Map(onGoingCampaigns, Resources.OnGoing);
 				}
 			}
 
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 				var plannedCampaigns = _campaignStatisticsProvider.GetPlannedCampaigns();
 				if (plannedCampaigns.Count != 0)
 				{
-					campaignList.Campaigns.AddRange(_campaignListViewModelMapper.Map(plannedCampaigns, "Planned"));
+					campaignList.Campaigns.AddRange(_campaignListViewModelMapper.Map(plannedCampaigns, Resources.Planned));
 				}
 			}
 
@@ -96,13 +96,13 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 				var warningCampaigns = _campaignStatisticsProvider.GetScheduledWarningCampaigns();
 				if (warningCampaigns.Count != 0)
 				{
-					campaignList.WarningCampaigns.AddRange(_campaignListViewModelMapper.Map(warningCampaigns, "Scheduled"));
+					campaignList.WarningCampaigns.AddRange(_campaignListViewModelMapper.Map(warningCampaigns, Resources.Scheduled));
 				}
 
 				var scheduledCampaigns = _campaignStatisticsProvider.GetScheduledCampaigns();
 				if (scheduledCampaigns.Count != 0)
 				{
-					campaignList.Campaigns.AddRange(_campaignListViewModelMapper.Map(scheduledCampaigns, "Scheduled"));
+					campaignList.Campaigns.AddRange(_campaignListViewModelMapper.Map(scheduledCampaigns, Resources.Scheduled));
 				}
 				
 			}
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 				var doneCampaigns = _campaignStatisticsProvider.GetDoneCampaigns();
 				if (doneCampaigns.Count != 0)
 				{
-					campaignList.Campaigns.AddRange(_campaignListViewModelMapper.Map(doneCampaigns, "Done"));
+					campaignList.Campaigns.AddRange(_campaignListViewModelMapper.Map(doneCampaigns, Resources.Done));
 				}
 			}
 
