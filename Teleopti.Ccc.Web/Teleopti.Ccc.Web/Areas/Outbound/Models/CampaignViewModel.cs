@@ -21,6 +21,21 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 		public IEnumerable<CampaignWorkingHour> WorkingHours { get; set; }
 	}
 
+	public class CampaignListViewModel
+	{
+		public string Name;
+		public DateOnly StartDate;
+		public DateOnly EndDate;
+		public string Status;
+		public string WarningInfo;
+	}
+
+	public class CampaignList
+	{
+		public IList<CampaignListViewModel> WarningCampaigns;
+		public IList<CampaignListViewModel> Campaigns;
+	}
+
 	public class CampaignStatistics
 	{
 		public int Planned;

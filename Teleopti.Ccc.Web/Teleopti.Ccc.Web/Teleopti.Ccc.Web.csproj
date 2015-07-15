@@ -468,8 +468,10 @@
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\OutboundActivityProvider.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\OutboundCampaignPersister.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\ProductionReplanHelper.cs" />
+    <Compile Include="Areas\Outbound\core\Campaign\Mapping\IOutboundCampaignListViewModelMapper.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\Mapping\IOutboundCampaignMapper.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\Mapping\IOutboundCampaignViewModelMapper.cs" />
+    <Compile Include="Areas\Outbound\core\Campaign\Mapping\OutboundCampaignListViewModelMapper.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\Mapping\OutboundCampaignMapper.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\CampaignStatisticsProvider.cs" />
     <Compile Include="Areas\Outbound\core\IoC\OutboundAreaModule.cs" />
