@@ -7,9 +7,9 @@ namespace Teleopti.Ccc.Domain.Outbound
     public class CampaignTaskManager 
     {
         private readonly OutboundProductionPlanFactory _outboundProductionPlanFactory;
-        private readonly OutboundScheduledResourcesProvider _outboundScheduledResourcesProvider;
+        private readonly IOutboundScheduledResourcesProvider _outboundScheduledResourcesProvider;
 
-        public CampaignTaskManager(OutboundProductionPlanFactory outboundProductionPlanFactory, OutboundScheduledResourcesProvider outboundScheduledResourcesProvider)
+        public CampaignTaskManager(OutboundProductionPlanFactory outboundProductionPlanFactory, IOutboundScheduledResourcesProvider outboundScheduledResourcesProvider)
         {
             _outboundProductionPlanFactory = outboundProductionPlanFactory;
             _outboundScheduledResourcesProvider = outboundScheduledResourcesProvider;

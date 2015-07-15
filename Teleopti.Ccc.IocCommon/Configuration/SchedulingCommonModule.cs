@@ -488,6 +488,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<OutboundPeriodMover>().As<IOutboundPeriodMover>().SingleInstance();
 			builder.RegisterType<OutboundCampaignRepository>().As<IOutboundCampaignRepository>().SingleInstance();
 		    builder.RegisterType<CampaignTaskManager>().AsSelf();
+		    builder.RegisterType<OutboundScheduledResourcesProvider>()
+		        .As<IOutboundScheduledResourcesProvider>()
+		        .SingleInstance();
 		    //OutboundCampaignRepository
 		}
 	}
