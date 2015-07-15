@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Threading;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using System.Linq;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using log4net;
@@ -267,8 +269,19 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			            unitOfWork.Merge(personAccount);
 		            }
 	            }
-	            unitOfWork.PersistAll();
-
+				// Thread.Sleep(TimeSpan.FromSeconds(30)); // this is a suspending code for testing the OptimisticLockException
+	            try
+	            {
+		            unitOfWork.PersistAll();
+	            }
+	            catch (OptimisticLockException ex)
+	            {
+					// in the case of an optimistic lock, the prosess steps out. If the request has been deleted, it will not pick it up again,
+					// if the request has been edited, it will pick up again the next time. // Tamas
+		            Logger.Error("A optimistic locking error occurred. Review the error log. Processing cannot continue this time.", ex);
+		            ClearStateHolder();
+		            return;
+	            }
 	            updateScheduleReadModelsIfRequestWasApproved(unitOfWork, dateOnlyPeriod);
             }
 	        ClearStateHolder();
