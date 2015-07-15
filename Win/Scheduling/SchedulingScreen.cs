@@ -3744,11 +3744,18 @@ namespace Teleopti.Ccc.Win.Scheduling
 				{
 					BusinessRuleResponseDialog.ShowDialogFromWinForms(_personAbsenceAccountPersistValidationBusinessRuleResponses);
 				}
-				
+
 			}
 			catch (CouldNotCreateTransactionException ex)
 			{
 				using (var view = new SimpleExceptionHandlerView(ex, Resources.OpenTeleoptiCCC, Resources.ServerUnavailable))
+				{
+					view.ShowDialog();
+				}
+			}
+			catch (OptimisticLockException ex)
+			{
+				using (var view = new SimpleExceptionHandlerView(ex, Resources.OpenTeleoptiCCC, Resources.SomeoneChangedTheSameDataBeforeYouDot + " " + Resources.PleaseTryAgainLater))
 				{
 					view.ShowDialog();
 				}
