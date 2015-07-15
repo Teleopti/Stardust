@@ -597,11 +597,19 @@
     <Compile Include="MessageBroker\IMailboxRepository.cs" />
     <Compile Include="Optimization\SchedulePeriodListShiftCategoryBackToLegalStateService.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDayOffsInPeriodValidator.cs" />
+    <Compile Include="Outbound\CampaignRuleChecker.cs" />
     <Compile Include="Outbound\CampaignTaskManager.cs" />
     <Compile Include="Outbound\CreateOrUpdateSkillDays.cs" />
     <Compile Include="Outbound\OutboundPeriodMover.cs" />
+    <Compile Include="Outbound\OutboundRuleConfigurationProvider.cs" />
     <Compile Include="Outbound\OutboundScheduledResourcesProvider.cs" />
     <Compile Include="Outbound\OutboundAssignedStaffProvider.cs" />
+    <Compile Include="Outbound\Rules\OutboundOverstaffRule.cs" />
+    <Compile Include="Outbound\Rules\OutboundOverstaffRuleConfiguration.cs" />
+    <Compile Include="Outbound\Rules\OutboundRule.cs" />
+    <Compile Include="Outbound\Rules\OutboundRuleConfiguration.cs" />
+    <Compile Include="Outbound\Rules\OutboundUnderSLARule.cs" />
+    <Compile Include="Outbound\Rules\OutboundUnderSLARuleConfiguration.cs" />
     <Compile Include="Repositories\ISeatPlanRepository.cs" />
     <Compile Include="Scheduling\AggregatedScheduleChangedInfo.cs" />
     <Compile Include="Scheduling\Legacy\Commands\CurrentScheduleSummaryCalculator.cs" />
@@ -2450,7 +2458,6 @@
     <EmbeddedResource Include="Scheduling\Assignment\ShiftLayer.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Outbound\Rules\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>

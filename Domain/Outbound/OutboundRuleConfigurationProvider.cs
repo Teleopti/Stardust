@@ -1,0 +1,31 @@
+﻿using System;
+using Teleopti.Ccc.Domain.Outbound.Rules;
+
+namespace Teleopti.Ccc.Domain.Outbound
+{
+    public class OutboundRuleConfigurationProvider
+    {
+        public OutboundRuleConfiguration GetConfiguration(Type rule)
+        {
+            if (rule == typeof (OutboundOverstaffRule))
+            {
+                return new OutboundOverstaffRuleConfiguration
+                {
+                    Threshold = 1,
+                    ThresholdType = ThresholdType.Absolute                    
+                };
+            }
+
+            if (rule == typeof (OutboundUnderSLARule))
+            {
+                return new OutboundUnderSLARuleConfiguration
+                {
+                    Threshold = 1,
+                    ThresholdType = ThresholdType.Absolute
+                };
+            }
+
+            return null;
+        }
+    }
+}
