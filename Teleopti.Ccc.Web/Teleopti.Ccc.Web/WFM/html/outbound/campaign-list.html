@@ -35,41 +35,9 @@
 					</div>
 					<div class="campaign-list role-container">
 						<ul class="wfm-list">
-							<li ng-repeat="campaign in campaigns" ng-click="show(campaign)" ng-dblclick="editing = true" ng-class="{'active': currentCampaignId && campaign.Id == currentCampaignId}" class="role-btn wfm-block wfm-list-item role">
-								<div class="wfm-leave-behind wfm-leave-behind-1">
-									<span>
-										<i ng-click="modalLaunch1 = !modalLaunch1" class="delete-campaign-toggle">
-											<svg style="width: 18px; height: 18px" viewBox="0 0 24 24">
-												<path fill="#555555" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />
-											</svg>
-											<md-tooltip>
-												<span translate>Delete</span>
-											</md-tooltip>
-										</i>
-									</span>
-								</div>
-								<div ng-cloak class="modal-box">
-									<div ng-cloak ng-show="modalLaunch1">
-										<div class="modalbg">
-											<div class="dialog">
-												<div class="modal-header" translate>
-													DeleteCampaign
-												</div>
-												<div class="modal-inner-content">
-													<div class="wfm-block" translate>AreYouSureYouWantToDeleteThisCampaign</div>
-												</div>
-												<div class="modal-footer">
-													<aside>
-														<a ng-click="modalLaunch1 = !modalLaunch1" class="wfm-btn wfm-btn-invis-primary" translate>DISMISS</a>
-														<a ng-click="$parent.delete(campaign, $index)" class=" wfm-btn wfm-btn-invis-primary" translate>AGREE</a>
-													</aside>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
+							<li ng-repeat="campaign in campaigns" ng-click="show(campaign)" ng-dblclick="editing = true" ng-class="{'active': currentCampaignId && campaign.Id == currentCampaignId}" class="role-btn wfm-block wfm-list-item role">								
 								<div>
-									<span ng-class="outbound-campaign-name" ng-hide="editing">{{campaign.Name}}</span>
+									<span ng-class="outbound-campaign-name">{{campaign.Name}}</span>
 								</div>
 							</li>
 						</ul>

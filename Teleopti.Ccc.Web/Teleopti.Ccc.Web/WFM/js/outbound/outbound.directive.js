@@ -153,6 +153,7 @@
                 function resetTime(datetime) {
                     datetime.setHours(0);
                     datetime.setMinutes(0);
+                    datetime.setSeconds(0);
                 }
 
 				function enforceRadioBehavior(refIndex, weekDay) {
@@ -163,12 +164,17 @@
 				    scope.newWorkingPeriodForm.$setValidity('empty', true);
 				    scope.newWorkingPeriodForm.$setValidity('order', true);
 
+				    startTime.setSeconds(0);
+				    endTime.setSeconds(0);
+				   
 				    if (!(startTime && endTime)) {
 				        scope.newWorkingPeriodForm.$setValidity('empty', false);
 					    return;
 				    }
 				   
 				    if (startTime >= endTime) {
+				        
+
 				        scope.newWorkingPeriodForm.$setValidity('order', false);
 				        return;
 				    }
