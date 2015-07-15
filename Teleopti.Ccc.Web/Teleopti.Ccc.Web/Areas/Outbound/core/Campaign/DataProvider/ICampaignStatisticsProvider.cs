@@ -9,5 +9,9 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 		CampaignStatistics GetWholeStatistics();
 		IList<IOutboundCampaign> GetScheduledCampaigns();
 		IList<IOutboundCampaign> GetPlannedCampaigns();
+		IList<IOutboundCampaign> GetOnGoingWarningCamapigns();
+		IList<IOutboundCampaign> GetOnGoingCampaigns();
+		IList<IOutboundCampaign> GetScheduledWarningCampaigns();
+		IList<IOutboundCampaign> GetDoneCampaigns	();
 	}
 }

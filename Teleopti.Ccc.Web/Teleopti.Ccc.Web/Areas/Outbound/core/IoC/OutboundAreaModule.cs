@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.IoC
 		{
 			builder.RegisterType<OutboundCampaignPersister>().As<IOutboundCampaignPersister>().SingleInstance();
 			builder.RegisterType<OutboundCampaignViewModelMapper>().As<IOutboundCampaignViewModelMapper>().SingleInstance();
+			builder.RegisterType<OutboundCampaignListViewModelMapper>().As<IOutboundCampaignListViewModelMapper>().SingleInstance();
 			builder.RegisterType<OutboundCampaignMapper>().As<IOutboundCampaignMapper>().SingleInstance();
 			builder.RegisterType<OutboundActivityProvider>().As<IOutboundActivityProvider>().SingleInstance();
 			builder.RegisterType<OutboundSkillCreator>().As<IOutboundSkillCreator>().SingleInstance();

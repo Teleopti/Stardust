@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Web.Areas.Outbound.Models;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping
-{	
-
+{
 	public class OutboundCampaignViewModelMapper : IOutboundCampaignViewModelMapper
 	{
         public CampaignViewModel Map(IOutboundCampaign campaign)

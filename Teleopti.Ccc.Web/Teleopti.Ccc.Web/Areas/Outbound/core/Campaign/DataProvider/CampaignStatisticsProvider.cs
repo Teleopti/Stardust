@@ -24,8 +24,8 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			return new CampaignStatistics()
 			{
 				Planned = GetPlannedCampaigns().Count,
-				OnGoing = _outboundCampaignRepository.GetOnGoingCampaigns().Count,
-				Done = _outboundCampaignRepository.GetDoneCampaigns().Count
+				OnGoing = GetOnGoingCampaigns().Count,
+				Done = GetDoneCampaigns().Count
 			};
 		}
 
@@ -65,6 +65,26 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			}
 
 			return planned;
+		}
+
+		public IList<IOutboundCampaign> GetOnGoingWarningCamapigns()
+		{
+			return new List<IOutboundCampaign>();
+		}
+
+		public IList<IOutboundCampaign> GetOnGoingCampaigns()
+		{
+			return _outboundCampaignRepository.GetOnGoingCampaigns();
+		}
+
+		public IList<IOutboundCampaign> GetScheduledWarningCampaigns()
+		{
+			return new List<IOutboundCampaign>();
+		}
+
+		public IList<IOutboundCampaign> GetDoneCampaigns()
+		{
+			return _outboundCampaignRepository.GetDoneCampaigns();
 		}
 	}
 }

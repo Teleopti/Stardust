@@ -252,6 +252,7 @@
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\FakePersonScheduleDayReadModelRepository.cs" />
     <Compile Include="Areas\Outbound\Controllers\OutboundControllerTest.cs" />
     <Compile Include="Areas\Outbound\Core\CampaignStatisticsProviderTest.cs" />
+    <Compile Include="Areas\Outbound\Core\Campaign\Mapping\OutboundCampaignListViewModelMapperTests.cs" />
     <Compile Include="Areas\Outbound\Core\Campaign\Mapping\OutboundCampaignMapperTests.cs" />
     <Compile Include="Areas\Outbound\Core\OutboundAreaModuleTest.cs" />
     <Compile Include="Areas\Outbound\Core\OutboundActivityProviderTest.cs" />

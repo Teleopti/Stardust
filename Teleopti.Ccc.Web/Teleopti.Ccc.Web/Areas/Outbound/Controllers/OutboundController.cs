@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using DotNetOpenAuth.Messaging;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -25,14 +26,16 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		private readonly IOutboundCampaignViewModelMapper _outboundCampaignViewModelMapper;
 		private readonly IOutboundActivityProvider _outboundActivityProvider;
 		private readonly ICampaignStatisticsProvider _campaignStatisticsProvider;
+		private readonly IOutboundCampaignListViewModelMapper _campaignListViewModelMapper;
 
-		public OutboundController(IOutboundCampaignPersister outboundCampaignPersister, IOutboundCampaignRepository outboundCampaignRepository, IOutboundCampaignViewModelMapper outboundCampaignViewModelMapper, IOutboundActivityProvider outboundActivityProvider, ICampaignStatisticsProvider campaignStatisticsProvider)
+		public OutboundController(IOutboundCampaignPersister outboundCampaignPersister, IOutboundCampaignRepository outboundCampaignRepository, IOutboundCampaignViewModelMapper outboundCampaignViewModelMapper, IOutboundActivityProvider outboundActivityProvider, ICampaignStatisticsProvider campaignStatisticsProvider, IOutboundCampaignListViewModelMapper campaignListViewModelMapper)
 		{
 			_outboundCampaignPersister = outboundCampaignPersister;
 			_outboundCampaignRepository = outboundCampaignRepository;
 			_outboundCampaignViewModelMapper = outboundCampaignViewModelMapper;
 			_outboundActivityProvider = outboundActivityProvider;
 			_campaignStatisticsProvider = campaignStatisticsProvider;
+			_campaignListViewModelMapper = campaignListViewModelMapper;
 		}
 
 		[HttpPost, Route("api/Outbound/Campaign"), UnitOfWork]
@@ -52,6 +55,68 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 			var campaignViewModels = _outboundCampaignViewModelMapper.Map(campaigns);
 
 			return campaignViewModels.ToArray();
+		}
+
+		[HttpPost, Route("api/Outbound/Campaigns"), UnitOfWork]
+		public virtual CampaignList GetCamapigns(int flag)
+		{
+			if (flag == 0) flag = 15;
+			var campaignList = new CampaignList()
+			{
+				WarningCampaigns = new List<CampaignListViewModel>(),
+				Campaigns = new List<CampaignListViewModel>()
+			};
+
+			if ((flag & 4) == 4)
+			{
+				var warningCampaigns = _campaignStatisticsProvider.GetOnGoingWarningCamapigns();
+				if (warningCampaigns.Count != 0)
+				{
+					campaignList.WarningCampaigns = _campaignListViewModelMapper.Map(warningCampaigns, "OnGoing");
+				}
+
+				var onGoingCampaigns = _campaignStatisticsProvider.GetOnGoingCampaigns();
+				if (onGoingCampaigns.Count != 0)
+				{
+					campaignList.Campaigns = _campaignListViewModelMapper.Map(onGoingCampaigns, "OnGoing");
+				}
+			}
+
+			if ((flag & 1) == 1)
+			{
+				var plannedCampaigns = _campaignStatisticsProvider.GetPlannedCampaigns();
+				if (plannedCampaigns.Count != 0)
+				{
+					campaignList.Campaigns.AddRange(_campaignListViewModelMapper.Map(plannedCampaigns, "Planned"));
+				}
+			}
+
+			if ((flag & 2) == 2)
+			{
+				var warningCampaigns = _campaignStatisticsProvider.GetScheduledWarningCampaigns();
+				if (warningCampaigns.Count != 0)
+				{
+					campaignList.WarningCampaigns.AddRange(_campaignListViewModelMapper.Map(warningCampaigns, "Scheduled"));
+				}
+
+				var scheduledCampaigns = _campaignStatisticsProvider.GetScheduledCampaigns();
+				if (scheduledCampaigns.Count != 0)
+				{
+					campaignList.Campaigns.AddRange(_campaignListViewModelMapper.Map(scheduledCampaigns, "Scheduled"));
+				}
+				
+			}
+
+			if ((flag & 8) == 8)
+			{
+				var doneCampaigns = _campaignStatisticsProvider.GetDoneCampaigns();
+				if (doneCampaigns.Count != 0)
+				{
+					campaignList.Campaigns.AddRange(_campaignListViewModelMapper.Map(doneCampaigns, "Done"));
+				}
+			}
+
+			return campaignList;
 		}
 
 		[HttpGet, Route("api/Outbound/Campaign/Activities"), UnitOfWork]
