@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Backlog;
@@ -14,26 +13,24 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 {
 	public class ProductionReplanHelper : IProductionReplanHelper
 	{
-		private readonly OutboundProductionPlanFactory _outboundProductionPlanFactory;
-		private readonly IOutboundScheduledResourcesProvider _scheduledResourcesProvider;
+        private readonly CampaignTaskManager _campaignTaskManager;	
 		private readonly IFetchAndFillSkillDays _fetchAndFillSkillDays;
 		private readonly IForecastingTargetMerger _forecastingTargetMerger;
 		private readonly ISkillDayRepository _skillDayRepository;
 
-		public ProductionReplanHelper(OutboundProductionPlanFactory outboundProductionPlanFactory, IFetchAndFillSkillDays fetchAndFillSkillDays, ISkillDayRepository skillDayRepository, IForecastingTargetMerger forecastingTargetMerger, IOutboundScheduledResourcesProvider scheduledResourcesProvider)
-		{
-			_outboundProductionPlanFactory = outboundProductionPlanFactory;
+		public ProductionReplanHelper(IFetchAndFillSkillDays fetchAndFillSkillDays, ISkillDayRepository skillDayRepository, IForecastingTargetMerger forecastingTargetMerger, CampaignTaskManager campaignTaskManager)
+		{			
 			_fetchAndFillSkillDays = fetchAndFillSkillDays;
 			_skillDayRepository = skillDayRepository;
 			_forecastingTargetMerger = forecastingTargetMerger;
-			_scheduledResourcesProvider = scheduledResourcesProvider;
+		    _campaignTaskManager = campaignTaskManager;
 		}
 
         public void Replan(IOutboundCampaign campaign)
 		{
 			if (campaign == null) return;
 
-			var incomingTask = getIncomingTaskFromCampaign(campaign);
+			var incomingTask = _campaignTaskManager.GetIncomingTaskFromCampaign(campaign);
 			incomingTask.RecalculateDistribution();
 			//persist productionPlan
 			updateSkillDays(campaign.Skill, incomingTask, true);
@@ -77,25 +74,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			}	
 		}
 
-        private IncomingTask getIncomingTaskFromCampaign(IOutboundCampaign campaign)
-		{
-			var incomingTask = _outboundProductionPlanFactory.CreateAndMakeInitialPlan(campaign.SpanningPeriod, campaign.CampaignTasks(),
-				campaign.AverageTaskHandlingTime(), campaign.WorkingHours);
-
-			foreach (var dateOnly in incomingTask.SpanningPeriod.DayCollection())
-			{
-				var manualTime = campaign.GetManualProductionPlan(dateOnly);
-				if (manualTime.HasValue)
-					incomingTask.SetTimeOnDate(dateOnly, manualTime.Value, PlannedTimeTypeEnum.Manual);
-				var scheduled = _scheduledResourcesProvider.GetScheduledTimeOnDate(dateOnly, campaign.Skill);
-				var forecasted = _scheduledResourcesProvider.GetForecastedTimeOnDate(dateOnly, campaign.Skill);
-				if (scheduled != TimeSpan.Zero)
-					incomingTask.SetTimeOnDate(dateOnly, scheduled, PlannedTimeTypeEnum.Scheduled);
-				else if (forecasted != TimeSpan.Zero && !manualTime.HasValue)
-					incomingTask.SetTimeOnDate(dateOnly, forecasted, PlannedTimeTypeEnum.Calculated);
-			}
-
-			return incomingTask;
-		}
+       
 	}
 }
