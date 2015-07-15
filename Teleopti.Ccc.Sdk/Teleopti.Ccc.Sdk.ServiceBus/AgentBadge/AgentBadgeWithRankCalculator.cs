@@ -267,10 +267,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 					logger.DebugFormat("{0} agents will get badge for AHT", agentsList.Count);
 				}
 
-				var agentsWithAHT = agentsList.Cast<object[]>()
+				var agentsWithAht = agentsList.Cast<object[]>()
 					.ToDictionary(data => (Guid)data[0], data => double.Parse(data[2].ToString()));
 
-				var newAwardedAhtBadges = AddBadge(personList, agentsWithAHT, BadgeType.AverageHandlingTime,
+				var newAwardedAhtBadges = AddBadge(personList, agentsWithAht, BadgeType.AverageHandlingTime,
 					setting.AHTBronzeThreshold.TotalSeconds,
 					setting.AHTSilverThreshold.TotalSeconds, setting.AHTGoldThreshold.TotalSeconds, false, date);
 				newAwardedBadges.AddRange(newAwardedAhtBadges);

@@ -18,7 +18,7 @@ using Teleopti.Interfaces.Messages.General;
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 {
 	[TestFixture]
-	public class CalculateOrganizationalSettingBasedBadgeConsumerTest
+	public class CalculateBadgeConsumerTest
 	{
 		private ICurrentUnitOfWorkFactory unitOfWorkFactory;
 		private IServiceBus serviceBus;
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		private IAgentBadgeWithRankRepository badgeWithRankRepository;
 		private IPersonRepository personRepository;
 		private IPushMessagePersister msgRepository;
-		private CalculateOrganizationalSettingBasedBadgeConsumer target;
+		private CalculateBadgeConsumer target;
 		private IAgentBadgeCalculator calculator;
 		private INow now;
 		private IUnitOfWorkFactory loggedOnUnitOfWorkFactory;
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			// Mock badge with rank calculator
 			badgeWithRankCalculator = MockRepository.GenerateMock<IAgentBadgeWithRankCalculator>();
 
-			target = new CalculateOrganizationalSettingBasedBadgeConsumer(serviceBus, teamSettingsRepository, 
+			target = new CalculateBadgeConsumer(serviceBus, teamSettingsRepository, 
 				msgRepository, unitOfWorkFactory, calculator, badgeWithRankCalculator, badgeRepository, badgeWithRankRepository, now, toggleManager, globalSettingRep,personRepository);
 
 		}
@@ -317,6 +317,5 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 								&& msg.CalculationDate == message.CalculationDate.AddDays(1);
 						}))));
 		}
-
 	}
 }

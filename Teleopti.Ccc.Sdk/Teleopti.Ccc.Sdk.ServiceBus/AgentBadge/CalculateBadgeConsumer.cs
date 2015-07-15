@@ -1,5 +1,4 @@
 ﻿using log4net;
-using log4net.Repository.Hierarchy;
 using Rhino.ServiceBus;
 using System;
 using System.Collections.Generic;
@@ -18,7 +17,7 @@ using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 {
-	public class CalculateOrganizationalSettingBasedBadgeConsumer : ConsumerOf<CalculateBadgeMessage>
+	public class CalculateBadgeConsumer : ConsumerOf<CalculateBadgeMessage>
 	{
 		private readonly IServiceBus _serviceBus;
 		private readonly ITeamGamificationSettingRepository _teamSettingsRepository;
@@ -30,23 +29,23 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		private readonly IAgentBadgeWithRankRepository _badgeWithRankRepository;
 		private readonly INow _now;
 		private readonly IToggleManager _toggleManager;
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(CalculateOrganizationalSettingBasedBadgeConsumer));
+		private static readonly ILog logger = LogManager.GetLogger(typeof(CalculateBadgeConsumer));
 		private readonly IGlobalSettingDataRepository _globalSettingRep;
 		private readonly IPersonRepository _personRepository;
 
-		public CalculateOrganizationalSettingBasedBadgeConsumer(IServiceBus serviceBus, 
-																ITeamGamificationSettingRepository teamSettingsRepository,
-																IPushMessagePersister msgRepository, 
-																ICurrentUnitOfWorkFactory unitOfWorkFactory, 
-																IAgentBadgeCalculator calculator, 
-																IAgentBadgeWithRankCalculator badgeWithRankCalculator, 
-																IAgentBadgeRepository badgeRepository, 
-																IAgentBadgeWithRankRepository badgeWithRankRepository, 
-																INow now, 
-																IToggleManager toggleManager, 
-																IGlobalSettingDataRepository globalSettingRep, 
-																IPersonRepository personRepository
-																)
+		public CalculateBadgeConsumer(IServiceBus serviceBus,
+			ITeamGamificationSettingRepository teamSettingsRepository,
+			IPushMessagePersister msgRepository,
+			ICurrentUnitOfWorkFactory unitOfWorkFactory,
+			IAgentBadgeCalculator calculator,
+			IAgentBadgeWithRankCalculator badgeWithRankCalculator,
+			IAgentBadgeRepository badgeRepository,
+			IAgentBadgeWithRankRepository badgeWithRankRepository,
+			INow now,
+			IToggleManager toggleManager,
+			IGlobalSettingDataRepository globalSettingRep,
+			IPersonRepository personRepository
+			)
 		{
 			_serviceBus = serviceBus;
 			_teamSettingsRepository = teamSettingsRepository;
@@ -66,19 +65,19 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		{
 			var toggleCalculateBadgeWithRankEnabled = _toggleManager.IsEnabled(Toggles.Gamification_NewBadgeCalculation_31185);
 
-			if (Logger.IsDebugEnabled)
+			if (logger.IsDebugEnabled)
 			{
-				Logger.DebugFormat("Consume CalculateBadgeMessage with BusinessUnit {0}, DataSource {1} and timezone {2}", message.BusinessUnitId,
+				logger.DebugFormat("Consume CalculateBadgeMessage with BusinessUnit {0}, DataSource {1} and timezone {2}", message.BusinessUnitId,
 					message.Datasource, message.TimeZoneCode);
 			}
 
 			using (var uow = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
-				var teamSettings = _teamSettingsRepository.FindAllTeamGamificationSettingsSortedByTeam();
-				if (teamSettings == null)
+				var teamSettings = _teamSettingsRepository.FindAllTeamGamificationSettingsSortedByTeam().ToList();
+				if (!teamSettings.Any())
 				{
 					//error happens
-					Logger.Error("No gamification setting applied to any team");
+					logger.Error("No gamification setting applied to any team");
 					resendMessage(message);
 					return;
 				}
@@ -88,11 +87,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 
 				foreach (var setting in settings)
 				{
+					var settingId = setting.Id;
 					if (setting.IsDeleted||(!setting.AHTBadgeEnabled && !setting.AdherenceBadgeEnabled && !setting.AnsweredCallsBadgeEnabled ))
 					{
-						if (Logger.IsDebugEnabled)
+						if (logger.IsDebugEnabled)
 						{
-							Logger.DebugFormat("No badge type is enabled or setting is deleted. nothing will be done for setting {0} "
+							logger.DebugFormat("No badge type is enabled or setting is deleted. nothing will be done for setting {0} "
 											   + "in BusinessUnit {1}, DataSource {2} and timezone {3} setting status {4}",
 								setting.Id, message.BusinessUnitId, message.Datasource, message.TimeZoneCode,setting.IsDeleted);
 						}
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 					}
 
 					var agentsWithSetting = new List<IPerson>();
-					foreach (var teamSetting in teamSettings.Where(teamSetting => teamSetting.GamificationSetting.Id == setting.Id))
+					foreach (var teamSetting in teamSettings.Where(teamSetting => teamSetting.GamificationSetting.Id == settingId))
 					{
 						agentsWithSetting.AddRange(_personRepository.FindPeopleBelongTeam(teamSetting.Team, new DateOnlyPeriod(today.AddDays(-1), today.AddDays(1))));
 					}
@@ -117,9 +117,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 							var newAwardedBadgesWithRankForAdherence =
 								_badgeWithRankCalculator.CalculateAdherenceBadges(agentsWithSetting, message.TimeZoneCode, calculateDate,
 									adherenceReportSetting.CalculationMethod, setting, message.BusinessUnitId).ToList();
-							if (Logger.IsDebugEnabled)
+							if (logger.IsDebugEnabled)
 							{
-								Logger.DebugFormat("Total {0} agents will get new badge for adherence", newAwardedBadgesWithRankForAdherence.Count());
+								logger.DebugFormat("Total {0} agents will get new badge for adherence", newAwardedBadgesWithRankForAdherence.Count());
 							}
 							sendMessagesToPeopleGotABadge(newAwardedBadgesWithRankForAdherence, setting, calculateDate, BadgeType.Adherence);
 						}
@@ -128,9 +128,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 							var newAwardedBadgesForAdherence =
 								_calculator.CalculateAdherenceBadges(agentsWithSetting, message.TimeZoneCode, calculateDate,
 									adherenceReportSetting.CalculationMethod, setting, message.BusinessUnitId).ToList();
-							if (Logger.IsDebugEnabled)
+							if (logger.IsDebugEnabled)
 							{
-								Logger.DebugFormat("Total {0} agents will get new badge for adherence", newAwardedBadgesForAdherence.Count());
+								logger.DebugFormat("Total {0} agents will get new badge for adherence", newAwardedBadgesForAdherence.Count());
 							}
 							sendMessagesToPeopleGotABadge(newAwardedBadgesForAdherence, setting, calculateDate, BadgeType.Adherence);
 						}
@@ -140,23 +140,23 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 					{
 						if (toggleCalculateBadgeWithRankEnabled && isRuleWithDifferentThreshold)
 						{
-							var newAwardedBadgesWithRankForAHT =
+							var newAwardedBadgesWithRankForAht =
 								_badgeWithRankCalculator.CalculateAHTBadges(agentsWithSetting, message.TimeZoneCode, calculateDate, setting, message.BusinessUnitId).ToList();
-							if (Logger.IsDebugEnabled)
+							if (logger.IsDebugEnabled)
 							{
-								Logger.DebugFormat("Total {0} agents will get new badge for AHT", newAwardedBadgesWithRankForAHT.Count());
+								logger.DebugFormat("Total {0} agents will get new badge for AHT", newAwardedBadgesWithRankForAht.Count());
 							}
-							sendMessagesToPeopleGotABadge(newAwardedBadgesWithRankForAHT, setting, calculateDate, BadgeType.AverageHandlingTime);
+							sendMessagesToPeopleGotABadge(newAwardedBadgesWithRankForAht, setting, calculateDate, BadgeType.AverageHandlingTime);
 						}
 						else
 						{
-							var newAwardedBadgesForAHT =
+							var newAwardedBadgesForAht =
 								_calculator.CalculateAHTBadges(agentsWithSetting, message.TimeZoneCode, calculateDate, setting, message.BusinessUnitId).ToList();
-							if (Logger.IsDebugEnabled)
+							if (logger.IsDebugEnabled)
 							{
-								Logger.DebugFormat("Total {0} agents will get new badge for AHT", newAwardedBadgesForAHT.Count());
+								logger.DebugFormat("Total {0} agents will get new badge for AHT", newAwardedBadgesForAht.Count());
 							}
-							sendMessagesToPeopleGotABadge(newAwardedBadgesForAHT, setting, calculateDate, BadgeType.AverageHandlingTime);
+							sendMessagesToPeopleGotABadge(newAwardedBadgesForAht, setting, calculateDate, BadgeType.AverageHandlingTime);
 						}
 					}
 
@@ -167,9 +167,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 							var newAwardedBadgesWithRankForAnsweredCalls =
 								_badgeWithRankCalculator.CalculateAnsweredCallsBadges(agentsWithSetting, message.TimeZoneCode, calculateDate, setting, message.BusinessUnitId)
 									.ToList();
-							if (Logger.IsDebugEnabled)
+							if (logger.IsDebugEnabled)
 							{
-								Logger.DebugFormat("Total {0} agents will get new badge for answered calls",
+								logger.DebugFormat("Total {0} agents will get new badge for answered calls",
 									newAwardedBadgesWithRankForAnsweredCalls.Count());
 							}
 							sendMessagesToPeopleGotABadge(newAwardedBadgesWithRankForAnsweredCalls, setting, calculateDate,
@@ -179,9 +179,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 						{
 							var newAwardedBadgesForAnsweredCalls = _calculator.CalculateAnsweredCallsBadges(agentsWithSetting, message.TimeZoneCode,
 								calculateDate, setting, message.BusinessUnitId).ToList();
-							if (Logger.IsDebugEnabled)
+							if (logger.IsDebugEnabled)
 							{
-								Logger.DebugFormat("Total {0} agents will get new badge for answered calls",
+								logger.DebugFormat("Total {0} agents will get new badge for answered calls",
 									newAwardedBadgesForAnsweredCalls.Count());
 							}
 							sendMessagesToPeopleGotABadge(newAwardedBadgesForAnsweredCalls, setting, calculateDate, BadgeType.AnsweredCalls);
@@ -216,9 +216,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 
 			_serviceBus.DelaySend(nextMessageShouldBeProcessed, newMessage);
 
-			if (Logger.IsDebugEnabled)
+			if (logger.IsDebugEnabled)
 			{
-				Logger.DebugFormat(
+				logger.DebugFormat(
 						"Delay Sending CalculateBadgeMessage to Service Bus for Timezone={0} on next calculation time={1:yyyy-MM-dd HH:mm:ss}",
 						newMessage.TimeZoneCode, nextMessageShouldBeProcessed);
 			}
@@ -444,9 +444,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 
 		private void sendBadgeMessage(IPerson person, BadgeType badgeType, BadgeRank badgeRank, string message)
 		{
-			if (Logger.IsDebugEnabled)
+			if (logger.IsDebugEnabled)
 			{
-				Logger.DebugFormat("Send {3} badge message to agent {0} (ID: {1}) for badge type: {2}", person.Name, person.Id,
+				logger.DebugFormat("Send {3} badge message to agent {0} (ID: {1}) for badge type: {2}", person.Name, person.Id,
 					badgeType, badgeRank);
 			}
 
