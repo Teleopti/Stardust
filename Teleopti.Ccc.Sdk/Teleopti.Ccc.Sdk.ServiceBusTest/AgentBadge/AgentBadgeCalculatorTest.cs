@@ -4,12 +4,15 @@ using Rhino.Mocks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Sdk.ServiceBus.AgentBadge;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
@@ -29,12 +32,23 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		private INow _now;
 		private IDefinedRaptorApplicationFunctionFactory appFunctionFactory;
 
+		private IPersonRepository personRepository;
+		private IScheduleRepository scheduleRepository;
+		private IScenarioRepository scenarioRepository;
+
 		private ApplicationRole _badgeRole;
 		private Guid _businessUnitId;
+
+		private IPerson lastPerson;
+		private IScenario defaultScenario;
+		private DateTime now;
 
 		[SetUp]
 		public void Setup()
 		{
+			now = DateTime.Now;
+			_calculateDateOnly = new DateOnly(now);
+
 			var badgeFunctionCode = ApplicationFunction.GetCode(DefinedRaptorApplicationFunctionPaths.ViewBadge);
 			var badgeFunction = new ApplicationFunction(badgeFunctionCode)
 			{
@@ -56,38 +70,37 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				SilverToBronzeBadgeRate = 5
 			};
 			_allPersons = new List<IPerson>();
-
+			
 			IPerson person = null;
 			for (var i = 0; i < 2; i++)
 			{
-				person = new Person();
+				person = PersonFactory.CreatePersonWithPersonPeriod(_calculateDateOnly);
 				person.SetId(Guid.NewGuid());
 				person.PermissionInformation.AddApplicationRole(_badgeRole);
 				_allPersons.Add(person);
 			}
+			lastPerson = person;
 			_businessUnitId = new Guid();
-			
-			_calculateDateOnly = new DateOnly(2014, 08, 11);
 
 			_lastPersonId = (Guid) person.Id;
 			_statisticRepository = MockRepository.GenerateMock<IStatisticRepository>();
 			_statisticRepository.Stub(
 				x =>
 					x.LoadAgentsOverThresholdForAdherence(AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,
-						timezoneCode, DateTime.Now, _badgeSetting.AdherenceThreshold, _businessUnitId))
-				.IgnoreArguments().Return(new ArrayList { new object[] { _lastPersonId, DateTime.Now, 0.01 } });
+						timezoneCode, now, _badgeSetting.AdherenceThreshold, _businessUnitId))
+				.IgnoreArguments().Return(new ArrayList {new object[] {_lastPersonId, now, 0.01}});
 
 			_statisticRepository.Stub(
 				x =>
-					x.LoadAgentsOverThresholdForAnsweredCalls(timezoneCode, DateTime.Now, _badgeSetting.AnsweredCallsThreshold, _businessUnitId))
+					x.LoadAgentsOverThresholdForAnsweredCalls(timezoneCode, now, _badgeSetting.AnsweredCallsThreshold, _businessUnitId))
 				.IgnoreArguments()
-				.Return(new ArrayList { new object[] { _lastPersonId, DateTime.Now, 100 } });
+				.Return(new ArrayList {new object[] {_lastPersonId, now, 100}});
 
 			_statisticRepository.Stub(
 				x =>
-					x.LoadAgentsUnderThresholdForAHT(timezoneCode, DateTime.Now, _badgeSetting.AHTThreshold, _businessUnitId))
+					x.LoadAgentsUnderThresholdForAHT(timezoneCode, now, _badgeSetting.AHTThreshold, _businessUnitId))
 				.IgnoreArguments()
-				.Return(new ArrayList { new object[] { _lastPersonId, DateTime.Now, 120 } });
+				.Return(new ArrayList {new object[] {_lastPersonId, now, 120}});
 
 			_badgeTransactionRepository = MockRepository.GenerateMock<IAgentBadgeTransactionRepository>();
 			_badgeTransactionRepository.Stub(x => x.Find(person, BadgeType.Adherence)).IgnoreArguments().Return(null);
@@ -100,7 +113,27 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				badgeFunction
 			});
 
-			_calculator = new AgentBadgeCalculator(_statisticRepository, _badgeTransactionRepository, appFunctionFactory, _now);
+			// Stub for personRepository
+			personRepository = MockRepository.GenerateMock<IPersonRepository>();
+			var personIdList = _allPersons.Select(x => x.Id.Value);
+			personRepository.Stub(x => x.FindPeople(personIdList)).IgnoreArguments().Return(_allPersons);
+
+			// Stub for scenarioRepository;
+			scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
+			defaultScenario = new Scenario("default");
+			scenarioRepository.Stub(x => x.LoadDefaultScenario()).Return(defaultScenario);
+
+			// Stub for schedule
+			scheduleRepository = MockRepository.GenerateMock<IScheduleRepository>();
+			scheduleRepository.Stub(
+				x =>
+					x.FindSchedulesForPersonsOnlyInGivenPeriod(_allPersons, new ScheduleDictionaryLoadOptions(true, false),
+						new DateOnlyPeriod(_calculateDateOnly, _calculateDateOnly), defaultScenario))
+				.IgnoreArguments()
+				.Return(new ScheduleDictionaryForTest(defaultScenario, now));
+
+			_calculator = new AgentBadgeCalculator(_statisticRepository, _badgeTransactionRepository, appFunctionFactory,
+				personRepository, scheduleRepository, scenarioRepository, _now);
 		}
 
 		[Test]
@@ -117,7 +150,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		}
 
 		[Test]
-		public void ShouldCalculateAHTBadgeForCorrectAgents()
+		public void ShouldCalculateAhtBadgeForCorrectAgents()
 		{
 			var result = _calculator.CalculateAHTBadges(_allPersons, timezoneCode, _calculateDateOnly,
 				_badgeSetting, _businessUnitId);
@@ -141,7 +174,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		}
 
 		[Test]
-		public void ShouldNotAwardCalculateAnsweredCallsBadgeForAgentsWithoutPermission()
+		public void ShouldNotAwardAnsweredCallsBadgeForAgentsWithoutPermission()
 		{
 			foreach (var person in _allPersons)
 			{
@@ -154,7 +187,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			Assert.AreEqual(result.Any(), false);
 		}
 		[Test]
-		public void ShouldNotAwardAdherenceBadgeForCorrectAgentsWithoutPermission()
+		public void ShouldNotAwardAdherenceBadgeForAgentsWithoutPermission()
 		{
 			foreach (var person in _allPersons)
 			{
@@ -169,7 +202,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		}
 
 		[Test]
-		public void ShouldNotAwardAHTBadgeForCorrectAgentsWithoutPermission()
+		public void ShouldNotAwardAhtBadgeForAgentsWithoutPermission()
 		{
 			foreach (var person in _allPersons)
 			{
@@ -177,6 +210,37 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			}
 
 			var result = _calculator.CalculateAHTBadges(_allPersons, timezoneCode, _calculateDateOnly,
+				_badgeSetting, _businessUnitId);
+
+			Assert.AreEqual(result.Any(), false);
+		}
+
+		[Test]
+		public void ShouldNotAwardAdherenceBadgeForAgentsOnFullDayAbsence()
+		{
+			// Create a schedule with full day abasence
+			var utcNow = now.ToUniversalTime();
+			var period = new DateTimePeriod(utcNow.Date.AddDays(-10), utcNow.Date.AddDays(10));
+			var scheduleDict = new ScheduleDictionaryForTest(defaultScenario, now);
+
+			var absence = new Absence { Description = new Description("TestAbsence") };
+			var absenceLayer = new AbsenceLayer(absence, period);
+			var personAbsence = new PersonAbsence(lastPerson, defaultScenario, absenceLayer);
+			scheduleDict.AddPersonAbsence(personAbsence);
+
+			scheduleRepository = MockRepository.GenerateMock<IScheduleRepository>();
+			scheduleRepository.Stub(
+				x =>
+					x.FindSchedulesForPersonsOnlyInGivenPeriod(_allPersons, new ScheduleDictionaryLoadOptions(true, false),
+						new DateOnlyPeriod(_calculateDateOnly, _calculateDateOnly), defaultScenario))
+				.IgnoreArguments()
+				.Return(scheduleDict);
+
+			_calculator = new AgentBadgeCalculator(_statisticRepository, _badgeTransactionRepository, appFunctionFactory,
+				personRepository, scheduleRepository, scenarioRepository, _now);
+
+			var result = _calculator.CalculateAdherenceBadges(_allPersons, timezoneCode, _calculateDateOnly,
+				AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,
 				_badgeSetting, _businessUnitId);
 
 			Assert.AreEqual(result.Any(), false);

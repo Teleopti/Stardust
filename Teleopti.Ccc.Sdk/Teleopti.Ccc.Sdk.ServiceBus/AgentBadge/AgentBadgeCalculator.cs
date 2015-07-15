@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
@@ -15,16 +16,25 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		private readonly IStatisticRepository _statisticRepository;
 		private readonly IAgentBadgeTransactionRepository _transactionRepository;
 		private readonly IDefinedRaptorApplicationFunctionFactory _appFunctionFactory;
+		private readonly IScheduleRepository _scheduleRepository;
+		private readonly IScenarioRepository _scenarioRepository;
+		private readonly IPersonRepository _personRepository;
 		private readonly INow _now;
 
 		public AgentBadgeCalculator(IStatisticRepository statisticRepository,
 			IAgentBadgeTransactionRepository transactionRepository,
 			IDefinedRaptorApplicationFunctionFactory appFunctionFactory,
+			IPersonRepository personRepository,
+			IScheduleRepository scheduleRepository,
+			IScenarioRepository scenarioRepository,
 			INow now)
 		{
 			_statisticRepository = statisticRepository;
 			_transactionRepository = transactionRepository;
 			_appFunctionFactory = appFunctionFactory;
+			_scheduleRepository = scheduleRepository;
+			_scenarioRepository = scenarioRepository;
+			_personRepository = personRepository;
 			_now = now;
 		}
 
@@ -73,7 +83,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 							badgeType, person.Name, person.Id);
 					}
 
-					var newBadge = new Domain.Common.AgentBadgeTransaction
+					var newBadge = new AgentBadgeTransaction
 					{
 						Person = person,
 						Amount = 1,
@@ -100,36 +110,64 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			return newAwardedBadges;
 		}
 
-		public virtual IEnumerable<IAgentBadgeTransaction> CalculateAdherenceBadges(IEnumerable<IPerson> allPersons, string timezoneCode, DateOnly date, AdherenceReportSettingCalculationMethod adherenceCalculationMethod, IAgentBadgeSettings setting, Guid businessUnitId)
+		public virtual IEnumerable<IAgentBadgeTransaction> CalculateAdherenceBadges(IEnumerable<IPerson> allPersons,
+			string timezoneCode, DateOnly date, AdherenceReportSettingCalculationMethod adherenceCalculationMethod,
+			IAgentBadgeSettings setting, Guid businessUnitId)
 		{
 			if (Logger.IsDebugEnabled)
 			{
 				Logger.DebugFormat(
 					"Calculate adherence badges for timezone: {0}, date: {1:yyyy-MM-dd HH:mm:ss}, AdherenceReportSettingCalculationMethod: {2},"
-					+ "silver to bronze badge rate: {3}, gold to silver badge rate: {4}, adherenceThreshold: {5}", timezoneCode, date.Date,
-					adherenceCalculationMethod, setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate, setting.AdherenceThreshold);
+					+ "silver to bronze badge rate: {3}, gold to silver badge rate: {4}, adherenceThreshold: {5}", timezoneCode,
+					date.Date, adherenceCalculationMethod, setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate,
+					setting.AdherenceThreshold);
 			}
 
-			var personList = allPersons.ToList();
 			var newAwardedBadges = new List<IAgentBadgeTransaction>();
-			var agentsList =
-				_statisticRepository.LoadAgentsOverThresholdForAdherence(adherenceCalculationMethod, timezoneCode, date.Date, setting.AdherenceThreshold, businessUnitId);
 
-			var agents = new List<Guid>();
-			if (agentsList.Count > 0)
-			{
-				agents.AddRange(from object[] data in agentsList select (Guid)data[0]);
-			}
+			var allPersonList = allPersons.ToList();
+			var agentAdherenceList =
+				_statisticRepository.LoadAgentsOverThresholdForAdherence(adherenceCalculationMethod, timezoneCode, date.Date,
+					setting.AdherenceThreshold, businessUnitId);
 
-			if (agents.Any())
+			if (agentAdherenceList.Count > 0)
 			{
-				if (Logger.IsDebugEnabled)
+				var personIdList = (from object[] data in agentAdherenceList select (Guid) data[0]).ToList();
+				var personsList = _personRepository.FindPeople(personIdList);
+				var schedules = _scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(personsList,
+					new ScheduleDictionaryLoadOptions(true, false),
+					new DateOnlyPeriod(date, date),
+					_scenarioRepository.LoadDefaultScenario());
+
+				var idListOfPersonShouldGetBadge = new List<Guid>();
+				foreach (var personId in personIdList)
 				{
-					Logger.DebugFormat("{0} agents will get badge for adherence", agents.Count());
+					var person = personsList.First(x => x.Id == personId);
+					var scheduleDay = schedules[person].ScheduledDay(date);
+					var isFullDayAbsence = scheduleDay.SignificantPartForDisplay() == SchedulePartView.FullDayAbsence;
+
+					// Agent scheduled full day absence should not get badge (Refer to bug #32388)
+					if (isFullDayAbsence)
+					{
+						if (Logger.IsDebugEnabled)
+						{
+							Logger.DebugFormat(
+								"Agent {0} (ID: {1}) scheduled full day absence for {2:yyyy-MM-dd} and will not get badge.",
+								person.Name, person.Id, date.Date);
+						}
+						continue;
+					}
+
+					idListOfPersonShouldGetBadge.Add(personId);
 				}
 
-				var newAwardedBadge = AddBadge(personList, agents, BadgeType.Adherence, setting.SilverToBronzeBadgeRate,
-					setting.GoldToSilverBadgeRate, date);
+				if (Logger.IsDebugEnabled)
+				{
+					Logger.DebugFormat("{0} agents will get badge for adherence", idListOfPersonShouldGetBadge.Count());
+				}
+
+				var newAwardedBadge = AddBadge(allPersonList, idListOfPersonShouldGetBadge, BadgeType.Adherence,
+					setting.SilverToBronzeBadgeRate, setting.GoldToSilverBadgeRate, date);
 				newAwardedBadges.AddRange(newAwardedBadge);
 			}
 			else
@@ -148,7 +186,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			return newAwardedBadges;
 		}
 
-		public virtual IEnumerable<IAgentBadgeTransaction> CalculateAHTBadges(IEnumerable<IPerson> allPersons, string timezoneCode, DateOnly date, IAgentBadgeSettings setting, Guid businessUnitId)
+		public virtual IEnumerable<IAgentBadgeTransaction> CalculateAHTBadges(IEnumerable<IPerson> allPersons, string timezoneCode,
+			DateOnly date, IAgentBadgeSettings setting, Guid businessUnitId)
 		{
 			if (Logger.IsDebugEnabled)
 			{
@@ -254,23 +293,45 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 
 			var personList = allPersons.ToList();
 			var newAwardedBadges = new List<IAgentBadgeTransaction>();
-			var agentsList =
+			var agentAdherenceList =
 				_statisticRepository.LoadAgentsOverThresholdForAdherence(adherenceCalculationMethod, timezoneCode, date.Date, setting.AdherenceThreshold, businessUnitId);
-
-			var agents = new List<Guid>();
-			if (agentsList.Count > 0)
+			
+			if (agentAdherenceList.Count > 0)
 			{
-				agents.AddRange(from object[] data in agentsList select (Guid)data[0]);
-			}
+				var personIdList = (from object[] data in agentAdherenceList select (Guid)data[0]).ToList();
+				var personsList = _personRepository.FindPeople(personIdList);
+				var schedules = _scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(personsList,
+					new ScheduleDictionaryLoadOptions(true, false), new DateOnlyPeriod(date, date),
+					_scenarioRepository.LoadDefaultScenario());
 
-			if (agents.Any())
-			{
-				if (Logger.IsDebugEnabled)
+				var idListOfPersonShouldGetBadge = new List<Guid>();
+				foreach (var personId in personIdList)
 				{
-					Logger.DebugFormat("{0} agents will get badge for adherence", agents.Count());
+					var person = personsList.First(x => x.Id == personId);
+					var scheduleDay = schedules[person].ScheduledDay(date);
+					var isFullDayAbsence = scheduleDay.SignificantPartForDisplay() == SchedulePartView.FullDayAbsence;
+
+					// Agent scheduled full day absence should not get badge (Refer to bug #32388)
+					if (isFullDayAbsence)
+					{
+						if (Logger.IsDebugEnabled)
+						{
+							Logger.DebugFormat(
+								"Agent {0} (ID: {1}) scheduled full day absence for {2:yyyy-MM-dd} and will not get badge.",
+								person.Name, person.Id, date.Date);
+						}
+						continue;
+					}
+
+					idListOfPersonShouldGetBadge.Add(personId);
 				}
 
-				var newAwardedBadge = AddBadge(personList, agents, BadgeType.Adherence, setting.SilverToBronzeBadgeRate,
+				if (Logger.IsDebugEnabled)
+				{
+					Logger.DebugFormat("{0} agents will get badge for adherence", idListOfPersonShouldGetBadge.Count());
+				}
+
+				var newAwardedBadge = AddBadge(personList, idListOfPersonShouldGetBadge, BadgeType.Adherence, setting.SilverToBronzeBadgeRate,
 					setting.GoldToSilverBadgeRate, date);
 				newAwardedBadges.AddRange(newAwardedBadge);
 			}
