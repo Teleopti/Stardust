@@ -3,6 +3,7 @@ using System.Data.SqlClient;
 using Castle.DynamicProxy;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.DistributedLock;
+using Teleopti.Ccc.Domain.MultipleConfig;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.DistributedLock

@@ -1,22 +1,20 @@
-using Microsoft.IdentityModel.Configuration;
-using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Ccc.Domain.MultipleConfig;
 
 namespace Teleopti.Ccc.Web.Core
 {
 	public class IdentityProviderProvider : IIdentityProviderProvider
 	{
-		private readonly IConfigurationWrapper _configurationWrapper;
+		private readonly IConfigReader _configReader;
 	    private string _overrideProvider;
 
-	    public IdentityProviderProvider(IConfigurationWrapper configurationWrapper)
+	    public IdentityProviderProvider(IConfigReader configReader)
 		{
-			_configurationWrapper = configurationWrapper;
+			_configReader = configReader;
 		}
 
 		public string DefaultProvider()
 		{
-            return "urn:" + (_overrideProvider ?? _configurationWrapper.AppSettings["DefaultIdentityProvider"]);
+            return "urn:" + (_overrideProvider ?? _configReader.AppSettings["DefaultIdentityProvider"]);
 		}
 
 	    internal void SetDefaultProvider(string provider)

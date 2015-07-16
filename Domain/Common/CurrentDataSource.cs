@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.SqlClient;
+using Teleopti.Ccc.Domain.MultipleConfig;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;

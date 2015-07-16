@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.MultipleConfig;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -29,14 +30,13 @@ namespace Teleopti.Messaging.Client.Composite
 			IJsonDeserializer deserializer, 
 			ITime time,
 			IHttpServer httpServer, 
-			IConfigurationWrapper configurationWrapper)
+			IConfigReader config)
 		{
 			_signalRClient = signalRClient;
 			_messageSender = messageSender;
 			var eventHandlers = new EventHandlers();
 			_signalRMessageListener = new SignalRListener(_signalRClient, eventHandlers);
-			_mailboxListener = new HttpListener(eventHandlers,
-				httpServer, _signalRClient, serializer, deserializer, time, configurationWrapper);
+			_mailboxListener = new HttpListener(eventHandlers, httpServer, _signalRClient, serializer, deserializer, time, config);
 			_messageCreator = new MessageCreator(messageSender, typeFilter);
 		}
 

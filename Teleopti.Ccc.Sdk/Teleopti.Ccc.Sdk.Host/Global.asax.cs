@@ -9,12 +9,12 @@ using Autofac.Integration.Wcf;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.MultipleConfig;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.MultipleConfig;
 using log4net;
 using log4net.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -43,6 +43,7 @@ using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
+using ConfigReader = Teleopti.Ccc.Domain.MultipleConfig.ConfigReader;
 
 namespace Teleopti.Ccc.Sdk.WcfHost
 {
@@ -182,7 +183,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 		{
 			var builder = new ContainerBuilder();
 
-			var iocArgs = new IocArgs(new AppConfigReader());
+			var iocArgs = new IocArgs(new ConfigReader());
 			var configuration = new IocConfiguration(iocArgs, CommonModule.ToggleManagerForIoc(iocArgs));
 			builder.RegisterModule(new CommonModule(configuration));
 			builder.RegisterModule(new RuleSetModule(configuration, true));

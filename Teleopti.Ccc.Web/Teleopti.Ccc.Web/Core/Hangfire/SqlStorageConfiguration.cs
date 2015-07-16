@@ -1,6 +1,7 @@
 using System;
 using Hangfire;
 using Hangfire.SqlServer;
+using Teleopti.Ccc.Domain.MultipleConfig;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Core.Hangfire

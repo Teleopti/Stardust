@@ -5,8 +5,8 @@ using Autofac;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.MultipleConfig;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.MultipleConfig;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		private void buildContainer(Action<ISystem, IIocConfiguration> setup)
 		{
 			var builder = new ContainerBuilder();
-			var configuration = new IocConfiguration(new IocArgs(new AppConfigReader()) {ClearCache = true}, Toggles());
+			var configuration = new IocConfiguration(new IocArgs(new ConfigReader()) {ClearCache = true}, Toggles());
 			builder.RegisterModule(new CommonModule(configuration));
 			builder.RegisterInstance(new MutableNow("2014-12-18 13:31")).As<INow>().AsSelf();
 			builder.RegisterInstance(new FakeUserTimeZone(TimeZoneInfo.Utc)).As<IUserTimeZone>().AsSelf().SingleInstance();

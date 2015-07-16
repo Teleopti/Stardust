@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain.Helper;
@@ -70,6 +71,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void onEventMessage(object sender, EventMessageArgs e)
 		{
+			Debug.WriteLine("onEventMessage");
+			Debug.WriteLine(e.Message.DomainObjectType);
+			if (e.Message.ModuleId == InitiatorId)
+				Debug.WriteLine("FROM ME");
+			Debug.WriteLine("/onEventMessage");
 			if (_owner == null)
 				return;
 			if (_owner.IsDisposed) return;

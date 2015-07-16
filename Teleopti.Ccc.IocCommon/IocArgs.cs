@@ -3,9 +3,10 @@ using System.Runtime.Caching;
 using Autofac;
 using MbCache.Configuration;
 using MbCache.ProxyImpl.LinFu;
+using Teleopti.Ccc.Domain;
+using Teleopti.Ccc.Domain.MultipleConfig;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.IocCommon.Configuration;
-using Teleopti.Ccc.IocCommon.MultipleConfig;
 
 namespace Teleopti.Ccc.IocCommon
 {
@@ -50,35 +51,20 @@ namespace Teleopti.Ccc.IocCommon
 			}
 		}
 
-		public IocArgs(IAppConfigReader appConfigReader)
+		public IocArgs(IConfigReader configReader)
 		{
-			FeatureToggle = appConfigReader.AppConfig("FeatureToggle");
-			ToggleMode = appConfigReader.AppConfig("ToggleMode");
-			TenantServer = appConfigReader.AppConfig("TenantServer");
-			ConfigServer = appConfigReader.AppConfig("ConfigServer");
-			ReportServer = appConfigReader.AppConfig("ReportServer");
-			MatrixWebSiteUrl = appConfigReader.AppConfig("MatrixWebSiteUrl");
-			ThrottleMessages = readBoolAppSetting(appConfigReader.AppConfig("ThrottleMessages"), true);
-			MessagesPerSecond = readIntAppSetting(appConfigReader.AppConfig("MessagesPerSecond"), 80);
-			PublishEventsToServiceBus = readBoolAppSetting(appConfigReader.AppConfig("PublishEventsToServiceBus"), true);
+			FeatureToggle = configReader.AppConfig("FeatureToggle");
+			ToggleMode = configReader.AppConfig("ToggleMode");
+			TenantServer = configReader.AppConfig("TenantServer");
+			ConfigServer = configReader.AppConfig("ConfigServer");
+			ReportServer = configReader.AppConfig("ReportServer");
+			MatrixWebSiteUrl = configReader.AppConfig("MatrixWebSiteUrl");
+			ThrottleMessages = configReader.ReadValue("ThrottleMessages", true);
+			MessagesPerSecond = configReader.ReadValue("MessagesPerSecond", 80);
+			PublishEventsToServiceBus = configReader.ReadValue("PublishEventsToServiceBus", true);
 			DataSourceConfigurationSetter = Infrastructure.NHibernateConfiguration.DataSourceConfigurationSetter.ForWeb();
 			ClearCache = false;
 		}
 
-		private static bool readBoolAppSetting(string value, bool @default)
-		{
-			if (string.IsNullOrEmpty(value))
-				return @default;
-			bool result;
-			return bool.TryParse(value, out result) ? result : @default;
-		}
-
-		private static int readIntAppSetting(string value, int @default)
-		{
-			if (string.IsNullOrEmpty(value))
-				return @default;
-			int result;
-			return int.TryParse(value, out result) ? result : @default;
-		}
 	}
 }

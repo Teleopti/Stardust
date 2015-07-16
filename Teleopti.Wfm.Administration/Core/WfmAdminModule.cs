@@ -1,12 +1,12 @@
 ﻿using Autofac;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.WebApi;
+using Teleopti.Ccc.Domain.MultipleConfig;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
-using Teleopti.Ccc.IocCommon.MultipleConfig;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Wfm.Administration.Controllers;
 
@@ -16,7 +16,7 @@ namespace Teleopti.Wfm.Administration.Core
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			var iocConf = new IocConfiguration(new IocArgs(new AppConfigReader()), new FalseToggleManager());
+			var iocConf = new IocConfiguration(new IocArgs(new ConfigReader()), new FalseToggleManager());
 
 			builder.RegisterModule(new TenantServerModule(iocConf));
 			builder.RegisterApiControllers(typeof(HomeController).Assembly).ApplyAspects();

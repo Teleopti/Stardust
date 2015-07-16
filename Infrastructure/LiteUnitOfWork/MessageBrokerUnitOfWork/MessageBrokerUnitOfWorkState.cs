@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Dialect;
+using Teleopti.Ccc.Domain.MultipleConfig;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Interfaces.Infrastructure;
 

@@ -8,9 +8,9 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.Domain.MultipleConfig;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.MultipleConfig;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 {
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		private static IContainer buildContainer()
 		{
 			var builder = new ContainerBuilder();
-			var config = new IocConfiguration(new IocArgs(new AppConfigReader()) { DataSourceConfigurationSetter = DataSourceConfigurationSetter.ForTest() }, null);
+			var config = new IocConfiguration(new IocArgs(new ConfigReader()) { DataSourceConfigurationSetter = DataSourceConfigurationSetter.ForTest() }, null);
 			builder.RegisterModule(new CommonModule(config));
 			return builder.Build();
 		}

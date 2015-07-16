@@ -1,5 +1,7 @@
 using System;
 using System.Globalization;
+using Teleopti.Ccc.Domain;
+using Teleopti.Ccc.Domain.MultipleConfig;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -13,7 +15,7 @@ namespace Teleopti.Messaging.Client.Http
 	public class HttpListener : IMessageListener, IDisposable
 	{
 		private readonly MailboxPoller _mailboxPoller;
-		private readonly IConfigurationWrapper _configurationWrapper;
+		private readonly IConfigReader _config;
 
 		public HttpListener(
 			EventHandlers eventHandlers, 
@@ -22,9 +24,9 @@ namespace Teleopti.Messaging.Client.Http
 			IJsonSerializer jsonSerializer,
 			IJsonDeserializer jsonDeserializer,
 			ITime time, 
-			IConfigurationWrapper configurationWrapper)
+			IConfigReader config)
 		{
-			_configurationWrapper = configurationWrapper;
+			_config = config;
 			var client = new HttpRequests(url, jsonSerializer)
 			{
 				PostAsync = (c, uri, content) => httpServer.PostAsync(c, uri, content),
@@ -35,17 +37,10 @@ namespace Teleopti.Messaging.Client.Http
 		
 		public void RegisterSubscription(Subscription subscription, EventHandler<EventMessageArgs> eventMessageHandler)
 		{
-			_mailboxPoller.StartPollingFor(subscription, eventMessageHandler, getPollingIntervalFromConfig());
-		}
-
-		private TimeSpan getPollingIntervalFromConfig()
-		{
-			string rawInteraval;
-			var pollingInterval = _configurationWrapper.AppSettings.TryGetValue(
-				"MessageBrokerMailboxPollingIntervalInSeconds", out rawInteraval)
-				? Convert.ToDouble(rawInteraval, CultureInfo.InvariantCulture)
-				: 60;
-			return TimeSpan.FromSeconds(pollingInterval);
+			_mailboxPoller.StartPollingFor(
+				subscription, 
+				eventMessageHandler,
+				TimeSpan.FromSeconds(_config.ReadValue("MessageBrokerMailboxPollingIntervalInSeconds", 60)));
 		}
 
 		public bool IsAlive()

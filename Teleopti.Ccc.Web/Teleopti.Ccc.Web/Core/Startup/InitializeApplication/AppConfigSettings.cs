@@ -1,5 +1,6 @@
 ﻿using System.Configuration;
 using Teleopti.Ccc.Domain;
+using Teleopti.Ccc.Domain.MultipleConfig;
 
 namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 {
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 
 		public bool MessageBrokerLongPolling()
 		{
-			return ConfigurationManager.AppSettings.GetBoolSetting("MessageBrokerLongPolling", () => true);
+			return ConfigurationManager.AppSettings.ReadValue("MessageBrokerLongPolling", () => true);
 		}
 	}
 }

@@ -1,10 +1,10 @@
 ﻿using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.MultipleConfig;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
-using Teleopti.Ccc.IocCommon.MultipleConfig;
 using Teleopti.Ccc.Web.Areas.Outbound.core.IoC;
 using Teleopti.Ccc.Web.Areas.ResourcePlanner;
 using Teleopti.Interfaces.Domain;
@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		[SetUp]
 		public void Setup()
 		{
-			var configuration = new IocConfiguration(new IocArgs(new AppConfigReader()), null);
+			var configuration = new IocConfiguration(new IocArgs(new ConfigReader()), null);
 			_containerBuilder = new ContainerBuilder();
 			_containerBuilder.RegisterModule(new CommonModule(configuration));
 			_containerBuilder.RegisterModule(new SchedulingCommonModule());

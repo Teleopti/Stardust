@@ -5,6 +5,7 @@ using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Resolvers;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator;
+using Teleopti.Ccc.Domain.MultipleConfig;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 

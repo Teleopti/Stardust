@@ -8,8 +8,8 @@ using Autofac;
 using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Analytics.Etl.ConfigTool.Gui.StartupConfiguration;
 using log4net.Config;
+using Teleopti.Ccc.Domain.MultipleConfig;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.MultipleConfig;
 using Teleopti.Interfaces.Domain;
 using Application = System.Windows.Application;
 
@@ -53,7 +53,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool
 		 private static IContainer configureContainer()
 		 {
 			 var builder = new ContainerBuilder();
-			 var iocArgs = new IocArgs(new AppConfigReader());
+			 var iocArgs = new IocArgs(new ConfigReader());
 			 var configuration = new IocConfiguration(
 							iocArgs,
 							CommonModule.ToggleManagerForIoc(iocArgs));

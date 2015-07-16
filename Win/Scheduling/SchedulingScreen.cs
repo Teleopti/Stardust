@@ -15,6 +15,7 @@ using Autofac.Core;
 using MbCache.Core;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Infrastructure;
+using Teleopti.Ccc.Domain.MultipleConfig;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Scheduling.BackToLegalShift;
@@ -29,7 +30,6 @@ using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.Infrastructure.Persisters.WriteProtection;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon.Configuration;
-using Teleopti.Ccc.IocCommon.MultipleConfig;
 using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Ccc.Win.Intraday;
@@ -1540,7 +1540,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					builder.Append(",");
 			}
 
-			var url = _container.Resolve<IAppConfigReader>().AppConfig("FeatureToggle") + "Messages#" + builder;
+			var url = _container.Resolve<IConfigReader>().AppConfig("FeatureToggle") + "Messages#" + builder;
 			if(url.IsAnUrl())
 				Process.Start(url);
 		}

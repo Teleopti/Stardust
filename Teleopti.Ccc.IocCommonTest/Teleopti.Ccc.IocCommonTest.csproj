@@ -136,7 +136,6 @@
     <Compile Include="Configuration\TenantClientModuleTest.cs" />
     <Compile Include="Configuration\UnitOfWorkModuleTest.cs" />
     <Compile Include="MultipleConfig\AppConfigOverriderTest.cs" />
-    <Compile Include="MultipleConfig\FakeAppConfigReader.cs" />
     <Compile Include="Toggle\CustomerTest.cs" />
     <Compile Include="Toggle\DeveloperTest.cs" />
     <Compile Include="Toggle\GeneralTest.cs" />

@@ -2,6 +2,7 @@
 using System.Collections.Specialized;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.MultipleConfig;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -47,7 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.MessageBroker
 		private static string replaceDummyHostName(NameValueCollection appSettings)
 		{
 			var url = appSettings[MessageBrokerUrlKey];
-			if (!appSettings.GetBoolSetting("UseRelativeConfiguration")) return url;
+			if (!appSettings.ReadValue("UseRelativeConfiguration")) return url;
 
 			var uri = new Uri(url);
 			return "/" + new Uri(uri.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped)).MakeRelativeUri(uri);

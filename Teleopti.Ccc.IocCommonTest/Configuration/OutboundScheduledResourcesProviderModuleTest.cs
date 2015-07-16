@@ -1,10 +1,10 @@
 ﻿using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.MultipleConfig;
 using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
-using Teleopti.Ccc.IocCommon.MultipleConfig;
 
 namespace Teleopti.Ccc.IocCommonTest.Configuration
 {
@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[SetUp]
 		public void Setup()
 		{
-			var configuration = new IocConfiguration(new IocArgs(new AppConfigReader()), null);
+			var configuration = new IocConfiguration(new IocArgs(new ConfigReader()), null);
 			_containerBuilder = new ContainerBuilder();
 			_containerBuilder.RegisterModule(new CommonModule(configuration));
 			_containerBuilder.RegisterModule(new OutboundScheduledResourcesProviderModule());

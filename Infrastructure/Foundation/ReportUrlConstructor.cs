@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using Teleopti.Ccc.Domain;
+using Teleopti.Ccc.Domain.MultipleConfig;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			var url = string.Format(CultureInfo.InvariantCulture, "{0}Reporting/Report/{1}#{2}",
 											matrixWebsiteUrl, reportId, reportId);
 			var uri = new Uri(url, UriKind.RelativeOrAbsolute);
-			return _configReader.AppSettings.GetBoolSetting("UseRelativeConfiguration")
+			return _configReader.AppSettings.ReadValue("UseRelativeConfiguration")
 				? "/" + new Uri(uri.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped)).MakeRelativeUri(uri)
 				: uri.ToString();
 		}

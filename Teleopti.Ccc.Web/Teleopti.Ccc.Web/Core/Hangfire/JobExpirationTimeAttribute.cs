@@ -3,6 +3,7 @@ using Hangfire;
 using Hangfire.Common;
 using Hangfire.States;
 using Hangfire.Storage;
+using Teleopti.Ccc.Domain.MultipleConfig;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Core.Hangfire

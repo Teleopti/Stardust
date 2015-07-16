@@ -1,4 +1,5 @@
 using Autofac;
+using Teleopti.Ccc.Domain.MultipleConfig;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;
@@ -25,7 +26,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<OneWayEncryption>().As<IOneWayEncryption>().SingleInstance();
 			builder.RegisterType<EnversConfiguration>().As<IEnversConfiguration>().SingleInstance();
 			builder.RegisterType<ConfigReader>().As<IConfigReader>().SingleInstance();
-			builder.RegisterType<ConfigurationManagerWrapper>().As<IConfigurationWrapper>().SingleInstance();
 			builder.RegisterType<ParseNhibFile>().As<IParseNhibFile>().SingleInstance();
 		}
 	}

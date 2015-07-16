@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using Autofac;
 using MbCache.Core;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.MultipleConfig;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
-using Teleopti.Ccc.IocCommon.MultipleConfig;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.IocCommonTest.Configuration
@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		public void VerifyProjectionServiceIsCached([Values(true, false)] bool perLifeTimeScope)
 		{
 			var containerBuilder = new ContainerBuilder();
-			var configuration = new IocConfiguration(new IocArgs(new AppConfigReader()), null);
+			var configuration = new IocConfiguration(new IocArgs(new ConfigReader()), null);
 			containerBuilder.RegisterModule(new CommonModule(configuration))
 				.RegisterModule(new RuleSetModule(configuration, perLifeTimeScope));
 			var callback = new WorkShiftAddStopperCallback();
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		public void ProjectionServiceIsCachedPerScope()
 		{
 			var containerBuilder = new ContainerBuilder();
-			var configuration = new IocConfiguration(new IocArgs(new AppConfigReader()), null);
+			var configuration = new IocConfiguration(new IocArgs(new ConfigReader()), null);
 			containerBuilder.RegisterModule(new CommonModule(configuration))
 				.RegisterModule(new RuleSetModule(configuration, true));
 			var wsRs = createRuleset(true);
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		public void ShouldCacheWorkShiftWorkTime([Values(true, false)] bool perLifeTimeScope)
 		{
 			var containerBuilder = new ContainerBuilder();
-			var configuration = new IocConfiguration(new IocArgs(new AppConfigReader()), null);
+			var configuration = new IocConfiguration(new IocArgs(new ConfigReader()), null);
 			containerBuilder.RegisterModule(new CommonModule(configuration))
 				.RegisterModule(new RuleSetModule(configuration, perLifeTimeScope));
 
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		public void CacheShouldBeInvalidatedWhenContainerScopeIsDead()
 		{
 			var containerBuilder = new ContainerBuilder();
-			var configuration = new IocConfiguration(new IocArgs(new AppConfigReader()), null);
+			var configuration = new IocConfiguration(new IocArgs(new ConfigReader()), null);
 			containerBuilder.RegisterModule(new CommonModule(configuration))
 				.RegisterModule(new RuleSetModule(configuration, true));
 			var wsRs = createRuleset(true);
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		public void ShouldCacheWithDifferentCallbacks([Values(true, false)] bool perLifeTimeScope)
 		{
 			var containerBuilder = new ContainerBuilder();
-			var configuration = new IocConfiguration(new IocArgs(new AppConfigReader()), null);
+			var configuration = new IocConfiguration(new IocArgs(new ConfigReader()), null);
 			containerBuilder.RegisterModule(new CommonModule(configuration))
 				.RegisterModule(new RuleSetModule(configuration, perLifeTimeScope));
 			using (var container = containerBuilder.Build())
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		public void ShouldNotCacheRuleSetWithNoId([Values(true, false)] bool perLifeTimeScope)
 		{
 			var containerBuilder = new ContainerBuilder();
-			var configuration = new IocConfiguration(new IocArgs(new AppConfigReader()), null);
+			var configuration = new IocConfiguration(new IocArgs(new ConfigReader()), null);
 			containerBuilder.RegisterModule(new CommonModule(configuration))
 				.RegisterModule(new RuleSetModule(configuration, perLifeTimeScope));
 			var wsRs = createRuleset(false);

@@ -6,6 +6,7 @@ using System.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.MultipleConfig;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Ccc.Domain.Infrastructure;
@@ -17,7 +18,6 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.MultipleConfig;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -25,6 +25,7 @@ using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Messaging.Client;
+using ConfigReader = Teleopti.Ccc.Domain.MultipleConfig.ConfigReader;
 
 
 namespace Teleopti.Ccc.InfrastructureTest
@@ -41,7 +42,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 		public void BeforeTestSuite()
 		{
 			var builder = new ContainerBuilder();
-			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new AppConfigReader()) { PublishEventsToServiceBus = false, FeatureToggle = "http://notinuse" }, new FalseToggleManager())));
+			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()) { PublishEventsToServiceBus = false, FeatureToggle = "http://notinuse" }, new FalseToggleManager())));
 			builder.RegisterType<FakeEventPublisher>().As<IEventPublisher>().SingleInstance();
 			builder.RegisterType<NoMessageSender>().As<Interfaces.MessageBroker.Client.IMessageSender>().SingleInstance();
 			var container = builder.Build();

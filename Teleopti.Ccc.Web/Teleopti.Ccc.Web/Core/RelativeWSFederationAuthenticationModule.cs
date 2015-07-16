@@ -9,6 +9,7 @@ using System.Web;
 using Microsoft.IdentityModel.Protocols.WSFederation;
 using Microsoft.IdentityModel.Web;
 using Teleopti.Ccc.Domain;
+using Teleopti.Ccc.Domain.MultipleConfig;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Web.Filters;
 
@@ -20,7 +21,7 @@ namespace Teleopti.Ccc.Web.Core
 		{
 			base.InitializePropertiesFromConfiguration(serviceName);
 
-			if (!ConfigurationManager.AppSettings.GetBoolSetting("UseRelativeConfiguration")) return;
+			if (!ConfigurationManager.AppSettings.ReadValue("UseRelativeConfiguration")) return;
 
 			var field = typeof(WSFederationAuthenticationModule).GetField("_issuer",
 				BindingFlags.NonPublic | BindingFlags.Instance);

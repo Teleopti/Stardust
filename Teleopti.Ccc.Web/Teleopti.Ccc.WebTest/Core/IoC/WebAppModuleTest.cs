@@ -16,6 +16,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.MultipleConfig;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -25,7 +26,6 @@ using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.WebReports;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.MultipleConfig;
 using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
@@ -61,6 +61,7 @@ using Teleopti.Ccc.Web.Core.Startup.Booter;
 using Teleopti.Ccc.Web.Core.Startup.InitializeApplication;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using ConfigReader = Teleopti.Ccc.Domain.MultipleConfig.ConfigReader;
 using ITeamScheduleViewModelFactory = Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory.ITeamScheduleViewModelFactory;
 
 namespace Teleopti.Ccc.WebTest.Core.IoC
@@ -84,13 +85,13 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 
 		private ILifetimeScope buildContainer()
 		{
-			return buildContainer(CommonModule.ToggleManagerForIoc(new IocArgs(new AppConfigReader())));
+			return buildContainer(CommonModule.ToggleManagerForIoc(new IocArgs(new ConfigReader())));
 		}
 
 		private ILifetimeScope buildContainer(IToggleManager toggleManager)
 		{
 			var builder = new ContainerBuilder();
-			builder.RegisterModule(new WebAppModule(new IocConfiguration(new IocArgs(new AppConfigReader()), toggleManager)));
+			builder.RegisterModule(new WebAppModule(new IocConfiguration(new IocArgs(new ConfigReader()), toggleManager)));
 			builder.RegisterInstance(MockRepository.GenerateMock<IApplicationData>()).As<IApplicationData>();
 			builder.RegisterInstance(new FakeHttpContext("")).As<HttpContextBase>();
 			return builder.Build();

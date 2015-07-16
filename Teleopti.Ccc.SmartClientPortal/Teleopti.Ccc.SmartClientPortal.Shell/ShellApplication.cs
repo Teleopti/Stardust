@@ -10,9 +10,9 @@ using Autofac;
 using log4net;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.MultipleConfig;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.MultipleConfig;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.SmartClientPortal.Shell.Common.Constants;
 using Teleopti.Ccc.SmartClientPortal.Shell.Common.Library;
@@ -46,6 +46,7 @@ using Teleopti.Ccc.WinCode.Main;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Application = System.Windows.Forms.Application;
+using ConfigReader = Teleopti.Ccc.Domain.MultipleConfig.ConfigReader;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell
 {
@@ -158,13 +159,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		{ }
 
 
-		private static IAppConfigReader appConfigReader;
+		private static IConfigReader configReader;
 		private static bool createAppConfigReader()
 		{
 			var appSettingsOverrides = ServerInstallations.FetchServerInstallations();
 			if (appSettingsOverrides.IsEmpty())
 			{
-				appConfigReader = new AppConfigReader();
+				configReader = new ConfigReader();
 			}
 			else
 			{
@@ -174,7 +175,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 					if (preLogonView.DialogResult != DialogResult.OK)
 						return false;
 
-					appConfigReader = new AppConfigOverrider(new AppConfigReader(), appSettingsOverrides[preLogonView.GetData()]);
+					configReader = new ConfigOverrider(new ConfigReader(), appSettingsOverrides[preLogonView.GetData()]);
 				}
 			}
 			return true;
@@ -186,7 +187,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			{
 				var builder = new ContainerBuilder();
 
-				var iocArgs = new IocArgs(appConfigReader) { MessageBrokerListeningEnabled = true };
+				var iocArgs = new IocArgs(configReader) { MessageBrokerListeningEnabled = true };
 				var configuration = new IocConfiguration(
 							iocArgs,
 							CommonModule.ToggleManagerForIoc(iocArgs));
@@ -221,7 +222,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				builder.Register(context => context.Resolve<ICurrentUnitOfWorkFactory>().Current()).ExternallyOwned().As<IUnitOfWorkFactory>();
 				builder.RegisterType<CurrentUnitOfWorkFactory>().As<ICurrentUnitOfWorkFactory>().SingleInstance();
 				//////
-				builder.Register(c => appConfigReader).As<IAppConfigReader>().SingleInstance();
+				builder.Register(c => configReader).As<IConfigReader>().SingleInstance();
 				return builder.Build();
 			}
 		}
@@ -273,7 +274,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			AppDomain.CurrentDomain.UnhandledException -= appDomainUnhandledException;
 			string fallBack = string.Empty;
 
-			var iocArgs = new IocArgs(appConfigReader);
+			var iocArgs = new IocArgs(configReader);
 			var tempContainerBecauseWeDontHaveAGlobalOneHere = new ContainerBuilder();
 			tempContainerBecauseWeDontHaveAGlobalOneHere.RegisterModule(new CommonModule(new IocConfiguration(iocArgs, CommonModule.ToggleManagerForIoc(iocArgs))));
 			ITogglesActive toggles;

@@ -3,8 +3,7 @@ using System.Data;
 using System.Globalization;
 using System.Threading;
 using NHibernate.Driver;
-using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Ccc.Domain.MultipleConfig;
 
 namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 {

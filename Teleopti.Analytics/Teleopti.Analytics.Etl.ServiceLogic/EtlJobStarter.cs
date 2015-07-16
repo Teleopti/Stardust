@@ -17,11 +17,11 @@ using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using log4net;
 using log4net.Config;
+using Teleopti.Ccc.Domain.MultipleConfig;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.MultipleConfig;
 using Teleopti.Interfaces.Domain;
 using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult;
 using Timer = System.Timers.Timer;
@@ -211,7 +211,7 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 		private static IContainer configureContainer()
 		{
 			var builder = new ContainerBuilder();
-			var iocArgs = new IocArgs(new AppConfigReader());
+			var iocArgs = new IocArgs(new ConfigReader());
 			var configuration = new IocConfiguration(
 						  iocArgs,
 						  CommonModule.ToggleManagerForIoc(iocArgs));

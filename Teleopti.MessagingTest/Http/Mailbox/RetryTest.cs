@@ -6,6 +6,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.MultipleConfig;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -23,7 +24,6 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 	public class RetryTest : ISetup
 	{
 		public IMessageListener Target;
-		public FakeConfigurationWrapper ConfigReader;
 		public FakeHttpServer Server;
 		public FakeTime Time;
 		public ISystemCheck SystemCheck;
@@ -35,13 +35,9 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 			system.UseTestDouble(fakeSignalRClient).For<ISignalRClient>();
 			system.UseTestDouble<FakeHttpServer>().For<IHttpServer>();
 			system.UseTestDouble<FakeTime>().For<ITime>();
-			system.UseTestDouble(new FakeConfigurationWrapper
-			{
-				AppSettings = new Dictionary<string, string>
-				{
-					{"MessageBrokerMailboxPollingIntervalInSeconds", "60"}
-				}
-			}).For<IConfigurationWrapper>();
+			var config = new FakeConfigReader();
+			config.AppSettings["MessageBrokerMailboxPollingIntervalInSeconds"] = "60";
+			system.UseTestDouble(config).For<IConfigReader>();
 		}
 
 		[Test]

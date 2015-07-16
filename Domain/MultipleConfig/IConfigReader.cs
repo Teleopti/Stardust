@@ -1,12 +1,13 @@
 ﻿using System.Collections.Specialized;
 using System.Configuration;
 
-namespace Teleopti.Interfaces.Infrastructure
+namespace Teleopti.Ccc.Domain.MultipleConfig
 {
-	//don't use this one - put it in IocArgs instead and (that uses IAppConfigReader)
 	public interface IConfigReader
 	{
+		string AppConfig(string name);
 		NameValueCollection AppSettings { get; }
 		ConnectionStringSettingsCollection ConnectionStrings { get; }
 	}
+
 }

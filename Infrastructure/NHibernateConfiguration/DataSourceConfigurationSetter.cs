@@ -1,8 +1,7 @@
 ﻿using System.Data.SqlClient;
 using NHibernate.Cfg;
 using NHibernate.Dialect;
-using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Ccc.Domain.MultipleConfig;
 using Environment = NHibernate.Cfg.Environment;
 
 namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration

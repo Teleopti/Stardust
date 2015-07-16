@@ -6,7 +6,6 @@ using Rhino.ServiceBus.MessageModules;
 using SharpTestsEx;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
-using Teleopti.Ccc.IocCommon.MultipleConfig;
 using Teleopti.Ccc.Sdk.ServiceBus;
 using Teleopti.Ccc.Secrets.DayOffPlanning;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;

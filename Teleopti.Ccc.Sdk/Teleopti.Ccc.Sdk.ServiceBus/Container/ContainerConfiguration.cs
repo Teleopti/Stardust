@@ -5,13 +5,13 @@ using Rhino.ServiceBus.Internal;
 using Rhino.ServiceBus.Sagas.Persisters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.PulseLoop;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.MultipleConfig;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
-using Teleopti.Ccc.IocCommon.MultipleConfig;
 using Teleopti.Ccc.Sdk.ServiceBus.AgentBadge;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 			var build = new ContainerBuilder();
 			build.RegisterGeneric(typeof(InMemorySagaPersister<>)).As(typeof(ISagaPersister<>));
 
-			build.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new AppConfigReader()) { SharedContainer = sharedContainer }, _toggleManager)));
+			build.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()) { SharedContainer = sharedContainer }, _toggleManager)));
 
 			build.RegisterModule<ShiftTradeModule>();
 			build.RegisterModule<AuthorizationContainerInstaller>();

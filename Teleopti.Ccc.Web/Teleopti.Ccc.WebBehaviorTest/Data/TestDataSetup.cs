@@ -2,17 +2,18 @@
 using System.Threading;
 using Autofac;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.MultipleConfig;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.MultipleConfig;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client;
+using ConfigReader = Teleopti.Ccc.Domain.MultipleConfig.ConfigReader;
 using IMessageSender = Teleopti.Ccc.Infrastructure.UnitOfWork.IMessageSender;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static void Setup()
 		{
 			var builder = new ContainerBuilder();
-			var args = new IocArgs(new AppConfigReader())
+			var args = new IocArgs(new ConfigReader())
 			{
 				PublishEventsToServiceBus = false,
 				FeatureToggle = "http://notinuse"

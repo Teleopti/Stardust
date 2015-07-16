@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.IocCommon.MultipleConfig;
+using Teleopti.Ccc.Domain.MultipleConfig;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData;
 
 namespace Teleopti.Ccc.IocCommonTest.MultipleConfig
@@ -11,7 +12,7 @@ namespace Teleopti.Ccc.IocCommonTest.MultipleConfig
 		[Test]
 		public void ShouldReturnNullForNonExistingKey()
 		{
-			var target = new AppConfigOverrider(new FakeAppConfigReader(), new Dictionary<string, string>());
+			var target = new ConfigOverrider(new FakeConfigReader(), new Dictionary<string, string>());
 			target.AppConfig(RandomName.Make())
 					.Should().Be.Null();
 		}
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.IocCommonTest.MultipleConfig
 		{
 			var key = RandomName.Make();
 			var value = RandomName.Make();
-			var target = new AppConfigOverrider(new FakeAppConfigReader(new Dictionary<string, string> {{key, value}}),
+			var target = new ConfigOverrider(new FakeConfigReader(new Dictionary<string, string> {{key, value}}),
 				new Dictionary<string, string>());
 			target.AppConfig(key)
 				.Should().Be.EqualTo(value);
@@ -33,8 +34,8 @@ namespace Teleopti.Ccc.IocCommonTest.MultipleConfig
 			var key = RandomName.Make();
 			var value = RandomName.Make();
 			var target =
-				new AppConfigOverrider(
-					new FakeAppConfigReader(new Dictionary<string, string> {{key, value}}),
+				new ConfigOverrider(
+					new FakeConfigReader(new Dictionary<string, string> {{key, value}}),
 					new Dictionary<string, string> {{key, value}});
 			target.AppConfig(key)
 				.Should().Be.EqualTo(value);
