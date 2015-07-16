@@ -59,34 +59,34 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 
 		[HttpPost, Route("api/Outbound/Campaigns"), UnitOfWork]
 		public virtual CampaignList GetCamapigns(int flag)
-		{
-			if (flag == 0) flag = 15;
+		{			
+		    var campaignStatus = (CampaignStatus) flag;
+
 			var campaignList = new CampaignList()
 			{
 				WarningCampaigns = new List<CampaignListViewModel>(),
 				Campaigns = new List<CampaignListViewModel>()
 			};
 
-			if ((flag & 4) == 4)
-			{
-				getOnGoingCampaigns(campaignList);
-			}
+		    if (campaignStatus.HasFlag(CampaignStatus.Planned))
+		    {
+                getPlannedCampaigns(campaignList);
+               
+		    }
+		    if (campaignStatus.HasFlag(CampaignStatus.Scheduled))
+		    {
+                getScheduledCampaigns(campaignList);
+		    }
+		    if (campaignStatus.HasFlag(CampaignStatus.Ongoing))
+		    {
+                getOnGoingCampaigns(campaignList);
+		    }
+		    if (campaignStatus.HasFlag(CampaignStatus.Done))
+		    {
+                getDoneCampaigns(campaignList);
+		    }
 
-			if ((flag & 1) == 1)
-			{
-				getPlannedCampaigns(campaignList);
-			}
-
-			if ((flag & 2) == 2)
-			{
-				getScheduledCampaigns(campaignList);
-			}
-
-			if ((flag & 8) == 8)
-			{
-				getDoneCampaigns(campaignList);
-			}
-
+			
 			return campaignList;
 		}
 

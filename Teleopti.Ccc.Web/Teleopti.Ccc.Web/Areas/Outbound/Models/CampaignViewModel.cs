@@ -4,6 +4,16 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 {
+    [Flags]
+    public enum CampaignStatus
+    {
+        None = 0,
+        Planned = 1,
+        Scheduled = 2,
+        Ongoing = 4,
+        Done = 8        
+    }
+
 	public class CampaignViewModel
 	{
 		public Guid? Id;
