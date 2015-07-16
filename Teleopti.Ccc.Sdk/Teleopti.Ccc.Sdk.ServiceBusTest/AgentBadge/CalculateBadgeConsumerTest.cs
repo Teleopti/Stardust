@@ -229,6 +229,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				AnsweredCallsBadgeEnabled = false
 			};
 
+			teamSettingsRepository.Stub(x => x.FindAllTeamGamificationSettingsSortedByTeam())
+				.Return(new List<TeamGamificationSetting>());
+
 			var calculationDate = TimeZoneInfo.ConvertTime(now.LocalDateTime().AddDays(-1), TimeZoneInfo.Local, timezone);
 			var message = new CalculateBadgeMessage
 			{
