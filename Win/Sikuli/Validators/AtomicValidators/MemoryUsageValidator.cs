@@ -28,9 +28,9 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.AtomicValidators
 			if (_memoryCounter.CurrentMemoryConsumption() > _memoryUsageLimit)
 				result.Result = SikuliValidationResult.ResultValue.Warn;
 
-			result.AppendResultLine("Memory:", 
+			result.AppendResultLine("Memory", 
 				string.Format(CultureInfo.CurrentCulture, "{0:#} MB", _memoryUsageLimit), 
-				string.Format(CultureInfo.CurrentCulture, "{0:#} MB (max: {1:#} MB)", _memoryCounter.CurrentMemoryConsumption(), _memoryCounter.MaximumMemoryConsumption), result.Result);
+				string.Format(CultureInfo.CurrentCulture, "{0:#} MB", _memoryCounter.CurrentMemoryConsumption()), result.Result);
 			
 			return result;
 		}
