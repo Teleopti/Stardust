@@ -251,8 +251,8 @@
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\FakePersonScheduleDayReadModelFinder.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\FakePersonScheduleDayReadModelRepository.cs" />
     <Compile Include="Areas\Outbound\Controllers\OutboundControllerTest.cs" />
-    <Compile Include="Areas\Outbound\Core\CampaignStatisticsProviderTest.cs" />
-    <Compile Include="Areas\Outbound\Core\Campaign\Mapping\OutboundCampaignListViewModelMapperTests.cs" />
+    <Compile Include="Areas\Outbound\Core\CampaignListProviderTest.cs" />
+    <Compile Include="Areas\Outbound\Core\CampaignSummaryViewModelFactoryTest.cs" />
     <Compile Include="Areas\Outbound\Core\Campaign\Mapping\OutboundCampaignMapperTests.cs" />
     <Compile Include="Areas\Outbound\Core\OutboundAreaModuleTest.cs" />
     <Compile Include="Areas\Outbound\Core\OutboundActivityProviderTest.cs" />
@@ -330,8 +330,11 @@
     <Compile Include="Core\Authentication\DataProvider\BadgeProviderTest.cs" />
     <Compile Include="Areas\SSO\SsoAuthenticatorTest.cs" />
     <Compile Include="Core\Common\DataProvider\DefaultScenarioForStudentAvailabilityScheduleProviderTest.cs" />
+    <Compile Include="Core\Common\DataProvider\FakeOutboundCampaignListOrderProvider.cs" />
+    <Compile Include="Core\Common\DataProvider\FakeOutboundRuleChecker.cs" />
     <Compile Include="Core\Common\DataProvider\FakePreferenceProvider.cs" />
     <Compile Include="Core\Common\DataProvider\FakeScheduleProvider.cs" />
+    <Compile Include="Core\Common\DataProvider\FakeScheduleResourceProvider.cs" />
     <Compile Include="Core\Common\FakePersonNameProvider.cs" />
     <Compile Include="Core\IanaTimeZoneProviderTest.cs" />
     <Compile Include="Core\IoC\HangfireModuleTest.cs" />

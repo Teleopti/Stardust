@@ -3,8 +3,8 @@ using Teleopti.Ccc.Domain.Outbound.Rules;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Outbound
-{
-    public class CampaignRuleChecker 
+{   
+    public class CampaignRuleChecker : IOutboundRuleChecker
     {
         private readonly OutboundRuleConfigurationProvider _outboundRuleConfigurationProvider;
         private readonly OutboundUnderSLARule _outboundUnderSlaRule;

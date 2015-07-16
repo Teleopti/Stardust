@@ -4,6 +4,7 @@ using Teleopti.Ccc.Infrastructure.Persisters.Outbound;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping;
+using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.ViewModelFactory;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Outbound.core.IoC
@@ -14,7 +15,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.IoC
 		{
 			builder.RegisterType<OutboundCampaignPersister>().As<IOutboundCampaignPersister>().SingleInstance();
 			builder.RegisterType<OutboundCampaignViewModelMapper>().As<IOutboundCampaignViewModelMapper>().SingleInstance();
-			builder.RegisterType<OutboundCampaignListViewModelMapper>().As<IOutboundCampaignListViewModelMapper>().SingleInstance();
 			builder.RegisterType<OutboundCampaignMapper>().As<IOutboundCampaignMapper>().SingleInstance();
 			builder.RegisterType<OutboundActivityProvider>().As<IOutboundActivityProvider>().SingleInstance();
 			builder.RegisterType<OutboundSkillCreator>().As<IOutboundSkillCreator>().SingleInstance();
@@ -22,7 +22,9 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.IoC
 			builder.RegisterType<OutboundSkillPersister>().As<IOutboundSkillPersister>().SingleInstance();
 			builder.RegisterType<ProductionReplanHelper>().As<IProductionReplanHelper>().SingleInstance();
 			builder.RegisterType<OutboundPeriodMover>().As<IOutboundPeriodMover>().SingleInstance();
-			builder.RegisterType<CampaignStatisticsProvider>().As<ICampaignStatisticsProvider>().SingleInstance();
+		    builder.RegisterType<CampaignListOrderProvider>().As<ICampaignListOrderProvider>().SingleInstance();
+            builder.RegisterType<CampaignListProvider>().As<ICampaignListProvider>().SingleInstance();
+		    builder.RegisterType<CampaignSummaryViewModelFactory>().As<ICampaignSummaryViewModelFactory>().SingleInstance();
 
 			//dependences
 			builder.RegisterModule(new SchedulingCommonModule());

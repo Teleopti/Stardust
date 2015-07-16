@@ -154,6 +154,7 @@
     <Compile Include="Domain\INotificationSender.cs" />
     <Compile Include="Domain\IOutboundCampaign.cs" />
     <Compile Include="Domain\IOutboundCampaignTaskManager.cs" />
+    <Compile Include="Domain\IOutboundRuleChecker.cs" />
     <Compile Include="Domain\IOutboundSkillTypeProvider.cs" />
     <Compile Include="Domain\IPersonPreferenceDayOccupationFactory.cs" />
     <Compile Include="Domain\IQueueStatsModel.cs" />

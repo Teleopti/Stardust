@@ -1,5 +1,6 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.Outbound.Rules;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Outbound
 {

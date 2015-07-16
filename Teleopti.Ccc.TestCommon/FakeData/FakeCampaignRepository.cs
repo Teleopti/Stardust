@@ -54,18 +54,18 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public IUnitOfWork UnitOfWork { get; private set; }
         public IList<IOutboundCampaign> GetPlannedCampaigns()
-		{
-			throw new NotImplementedException();
-		}
+        {
+            return _campaigns.Where(c => c.SpanningPeriod.StartDate.Date > DateOnly.Today.Date).ToList();
+        }
 
         public IList<IOutboundCampaign> GetDoneCampaigns()
-		{
-			throw new NotImplementedException();
-		}
+        {
+            return _campaigns.Where(c => c.SpanningPeriod.EndDate.Date < DateOnly.Today.Date).ToList();
+        }
 
         public IList<IOutboundCampaign> GetOnGoingCampaigns()
-		{
-			throw new NotImplementedException();
-		}
+        {
+            return _campaigns.Where(c => c.SpanningPeriod.Contains(DateOnly.Today)).ToList();
+        }
 	}
 }

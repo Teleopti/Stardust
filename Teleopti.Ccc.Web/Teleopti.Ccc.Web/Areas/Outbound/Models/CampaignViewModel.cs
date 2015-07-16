@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Outbound.Models
@@ -12,6 +13,60 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
         Scheduled = 2,
         Ongoing = 4,
         Done = 8        
+    }
+
+    public class CampaignSummary
+    {
+        public Guid? Id;
+        public string Name;
+        public DateOnly StartDate;
+        public DateOnly EndDate;
+        public CampaignStatus Status;
+        public IEnumerable<OutboundRuleResponse> WarningInfo;
+    }
+
+    public class OutboundWarningViewModel
+    {
+        public string TypeOfRule { get; set; }
+        public int? Threshold { get; set; }
+        public ThresholdType ThresholdType { get; set; }
+        public int? TargetValue { get; set; }
+        public DateOnly Date { get; set; }
+
+        public OutboundWarningViewModel(OutboundRuleResponse response)
+        {
+            TypeOfRule = response.TypeOfRule.Name;
+            Threshold = response.Threshold;
+            ThresholdType = response.ThresholdType;
+            TargetValue = response.TargetValue;
+            Date = new DateOnly(response.Date);
+        }
+    }
+
+    public class CampaignSummaryViewModel
+    {
+        public Guid? Id;
+        public string Name;
+        public DateOnly StartDate;
+        public DateOnly EndDate;
+        public CampaignStatus Status;
+        public IEnumerable<OutboundWarningViewModel> WarningInfo;
+
+        public CampaignSummaryViewModel(CampaignSummary campaign)
+        {
+            Id = campaign.Id;
+            Name = campaign.Name;
+            StartDate = campaign.StartDate;
+            EndDate = campaign.EndDate;
+            Status = campaign.Status;
+            WarningInfo = campaign.WarningInfo.Select(w => new OutboundWarningViewModel(w));
+        }
+    }
+
+    public class CampaignSummaryListViewModel
+    {
+        public List<CampaignSummaryViewModel> CampaignsWithWarning;
+        public List<CampaignSummaryViewModel> CampaignsWithoutWarning;
     }
 
 	public class CampaignViewModel
@@ -29,21 +84,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 		public DateOnly StartDate;
 		public DateOnly EndDate;
 		public IEnumerable<CampaignWorkingHour> WorkingHours { get; set; }
-	}
-
-	public class CampaignListViewModel
-	{
-		public string Name;
-		public DateOnly StartDate;
-		public DateOnly EndDate;
-		public string Status;
-		public string WarningInfo;
-	}
-
-	public class CampaignList
-	{
-		public IList<CampaignListViewModel> WarningCampaigns;
-		public IList<CampaignListViewModel> Campaigns;
 	}
 
 	public class CampaignStatistics

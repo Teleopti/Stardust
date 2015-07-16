@@ -462,18 +462,20 @@
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IAbsenceRequestProbability.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IAbsenceRequestProbabilityProvider.cs" />
     <Compile Include="Areas\MyTime\Models\Settings\ChangePasswordResultInfo.cs" />
-    <Compile Include="Areas\Outbound\core\Campaign\DataProvider\ICampaignStatisticsProvider.cs" />
+    <Compile Include="Areas\Outbound\core\Campaign\DataProvider\CampaignListOrderProvider.cs" />
+    <Compile Include="Areas\Outbound\core\Campaign\DataProvider\CampaignListProvider.cs" />
+    <Compile Include="Areas\Outbound\core\Campaign\DataProvider\ICampaignListOrderProvider.cs" />
+    <Compile Include="Areas\Outbound\core\Campaign\DataProvider\ICampaignListProvider.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\IOutboundActivityProvider.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\IProductionReplanHelper.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\OutboundActivityProvider.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\OutboundCampaignPersister.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\ProductionReplanHelper.cs" />
-    <Compile Include="Areas\Outbound\core\Campaign\Mapping\IOutboundCampaignListViewModelMapper.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\Mapping\IOutboundCampaignMapper.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\Mapping\IOutboundCampaignViewModelMapper.cs" />
-    <Compile Include="Areas\Outbound\core\Campaign\Mapping\OutboundCampaignListViewModelMapper.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\Mapping\OutboundCampaignMapper.cs" />
-    <Compile Include="Areas\Outbound\core\Campaign\DataProvider\CampaignStatisticsProvider.cs" />
+    <Compile Include="Areas\Outbound\core\Campaign\ViewModelFactory\CampaignSummaryViewModelFactory.cs" />
+    <Compile Include="Areas\Outbound\core\Campaign\ViewModelFactory\ICampaignSummaryViewModelFactory.cs" />
     <Compile Include="Areas\Outbound\core\IoC\OutboundAreaModule.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\Mapping\OutboundCampaignViewModelMapper.cs" />
     <Compile Include="Areas\Outbound\Models\CampaignForm.cs" />
@@ -2112,7 +2114,6 @@
   <ItemGroup>
     <Folder Include="Areas\Mart\Views\Shared\" />
     <Folder Include="Areas\MyTime\Core\BadgeLeaderBoardReport\DataProvider\" />
-    <Folder Include="Areas\Outbound\core\Campaign\ViewModelFactory\" />
     <Folder Include="Areas\PerformanceTool\Content\Templates\" />
     <Folder Include="Areas\PerformanceTool\Views\Dangerous\" />
     <Folder Include="Areas\ResourcePlanner\Views\Optimization\" />
