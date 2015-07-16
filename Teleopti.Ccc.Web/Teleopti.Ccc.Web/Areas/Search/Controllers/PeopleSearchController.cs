@@ -65,6 +65,7 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 			var result = constructResult(pageSize, currentPageIndex, sortColumnList, criteriaDictionary, currentDate);
 			return Ok(result);
 		}
+
 		
 		private object constructResult(int pageSize, int currentPageIndex, IDictionary<string, bool> sortColumns, IDictionary<PersonFinderField, 
 			string> criteriaDictionary, DateOnly currentDate)
@@ -145,27 +146,4 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 		}
 	}
 
-	public class AdvancedSearchInput
-	{
-		public PeopleSearchCriteria SearchCriteria { get; set; }
-		public int PageSize { get; set; }
-		public int CurrentPageIndex { get; set; }
-		public IDictionary<string, bool> SortColumns { get; set; }
-	}
-
-	public class PeopleSearchCriteria
-	{
-		public string FirstName { get; set; }
-		public string LastName { get; set; }
-		public string EmploymentNumber { get; set; }
-		public string BudgetGroup { get; set; }
-		public string Contract { get; set; }
-		public string ContractSchedule { get; set; }
-		public string Note { get; set; }
-		public string Organization { get; set; }
-		public string PartTimePercentage { get; set; }
-		public string Role { get; set; }
-		public string ShiftBag { get; set; }
-		public string Skill { get; set; }
-	}
 }

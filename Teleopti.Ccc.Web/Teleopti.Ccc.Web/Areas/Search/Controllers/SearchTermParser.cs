@@ -66,26 +66,6 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 			return parsedTerms;
 		}
 
-		public static IDictionary<PersonFinderField, string> Parse(PeopleSearchCriteria form)
-		{
-			var criterias = new Dictionary<PersonFinderField, string>();
-
-			addSearchCriteria(criterias, PersonFinderField.FirstName, form.FirstName);
-			addSearchCriteria(criterias, PersonFinderField.LastName, form.LastName);
-			addSearchCriteria(criterias, PersonFinderField.BudgetGroup, form.BudgetGroup);
-			addSearchCriteria(criterias, PersonFinderField.Contract, form.Contract);
-			addSearchCriteria(criterias, PersonFinderField.ContractSchedule, form.ContractSchedule);
-			addSearchCriteria(criterias, PersonFinderField.EmploymentNumber, form.EmploymentNumber);
-			addSearchCriteria(criterias, PersonFinderField.Note, form.Note);
-			addSearchCriteria(criterias, PersonFinderField.Organization, form.Organization);
-			addSearchCriteria(criterias, PersonFinderField.PartTimePercentage, form.PartTimePercentage);
-			addSearchCriteria(criterias, PersonFinderField.Role, form.Role);
-			addSearchCriteria(criterias, PersonFinderField.ShiftBag, form.ShiftBag);
-			addSearchCriteria(criterias, PersonFinderField.Skill, form.Skill);
-
-			return criterias;
-		}
-
 		private static void addSearchCriteria(IDictionary<PersonFinderField, string> criterias,
 			PersonFinderField searchType, string searchValue)
 		{

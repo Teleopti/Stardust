@@ -96,20 +96,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 		}
 
 		[Test]
-		public void ShouldParseSearchCriterias()
-		{
-			var criteria = new PeopleSearchCriteria {FirstName = "a b", Organization = "London"};
-
-			var result = SearchTermParser.Parse(criteria);
-
-			Assert.AreEqual(2, result.Count());
-			Assert.AreEqual(PersonFinderField.FirstName, result.First().Key);
-			Assert.AreEqual("a b", result.First().Value);
-			Assert.AreEqual(PersonFinderField.Organization, result.Second().Key);
-			Assert.AreEqual("London", result.Second().Value);
-		}
-
-		[Test]
 		public void ShouldRemoveDuplicateKeywordForDuplicateSearchType()
 		{
 			const string searchTerm = "Firstname: aa bb, Firstname: aa ee";
