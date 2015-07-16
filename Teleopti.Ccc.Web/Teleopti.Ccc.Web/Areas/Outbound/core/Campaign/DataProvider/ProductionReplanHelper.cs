@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			updateSkillDays(campaign.Skill, incomingTask, true);
 		}
 
-		private void updateSkillDays(ISkill skill, IncomingTask incomingTask, bool applyDefaultTemplate)
+		private void updateSkillDays(ISkill skill, IBacklogTask incomingTask, bool applyDefaultTemplate)
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{

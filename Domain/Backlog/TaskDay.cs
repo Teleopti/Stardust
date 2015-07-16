@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Backlog
 {
@@ -51,11 +52,5 @@ namespace Teleopti.Ccc.Domain.Backlog
 		}
 	}
 
-	public enum PlannedTimeTypeEnum
-	{
- 		Scheduled,
-		Calculated,
-		Manual,
-		Closed
-	}
+	
 }

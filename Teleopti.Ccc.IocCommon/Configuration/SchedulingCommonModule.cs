@@ -13,6 +13,7 @@ using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization;
 using Teleopti.Ccc.Domain.Outbound;
+using Teleopti.Ccc.Domain.Outbound.Rules;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
@@ -487,10 +488,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<CreateOrUpdateSkillDays>().As<ICreateOrUpdateSkillDays>().SingleInstance();
 			builder.RegisterType<OutboundPeriodMover>().As<IOutboundPeriodMover>().SingleInstance();
 			builder.RegisterType<OutboundCampaignRepository>().As<IOutboundCampaignRepository>().SingleInstance();
-		    builder.RegisterType<CampaignTaskManager>().AsSelf();
-		    builder.RegisterType<OutboundScheduledResourcesProvider>()
-		        .As<IOutboundScheduledResourcesProvider>()
-		        .SingleInstance();
+		    builder.RegisterType<CampaignTaskManager>().As<IOutboundCampaignTaskManager>().SingleInstance();
+		    builder.RegisterType<OutboundScheduledResourcesProvider>().As<IOutboundScheduledResourcesProvider>().SingleInstance();
+		    builder.RegisterType<OutboundOverstaffRule>().AsSelf();
+		    builder.RegisterType<OutboundUnderSLARule>().AsSelf();
+		    builder.RegisterType<CampaignRuleChecker>().AsSelf();
+		    builder.RegisterType<OutboundRuleConfigurationProvider>().AsSelf();
+
 		    //OutboundCampaignRepository
 		}
 	}

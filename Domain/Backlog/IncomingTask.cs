@@ -4,9 +4,9 @@ using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Backlog
-{
-	public class IncomingTask
-	{
+{   
+    public class IncomingTask : IBacklogTask
+    {
 		private readonly DateOnlyPeriod _spanningPeriod;
 		private readonly int _totalWorkItems;
 		private readonly TimeSpan _averageWorkTimePerItem;

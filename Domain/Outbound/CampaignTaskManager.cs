@@ -3,8 +3,10 @@ using Teleopti.Ccc.Domain.Backlog;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Outbound
-{    
-    public class CampaignTaskManager 
+{
+   
+
+    public class CampaignTaskManager : IOutboundCampaignTaskManager
     {
         private readonly OutboundProductionPlanFactory _outboundProductionPlanFactory;
         private readonly IOutboundScheduledResourcesProvider _outboundScheduledResourcesProvider;
@@ -15,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Outbound
             _outboundScheduledResourcesProvider = outboundScheduledResourcesProvider;
         }
 
-        public IncomingTask GetIncomingTaskFromCampaign(IOutboundCampaign campaign)
+        public IBacklogTask GetIncomingTaskFromCampaign(IOutboundCampaign campaign)
         {
             var incomingTask = _outboundProductionPlanFactory.CreateAndMakeInitialPlan(campaign.SpanningPeriod, campaign.CampaignTasks(),
                 campaign.AverageTaskHandlingTime(), campaign.WorkingHours);
