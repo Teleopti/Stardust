@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 		{
 			_schedulerState = schedulerState;
 			_totalSkill = totalSkill;
-			durationLimit = TimeSpan.FromMinutes(1);
+			durationLimit = TimeSpan.FromMinutes(1).Add(TimeSpan.FromSeconds(20));
 		}
 
 		public string Description
