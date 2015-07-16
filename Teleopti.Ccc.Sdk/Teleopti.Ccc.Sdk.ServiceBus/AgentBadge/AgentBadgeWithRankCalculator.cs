@@ -200,6 +200,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				{
 					var personId = personWithAdherence.Key;
 					var adherence = personWithAdherence.Value;
+					if (personList.All(x => x.Id != personId))
+					{
+						if (logger.IsDebugEnabled)
+						{
+							logger.DebugFormat(
+								"Agent with ID \"{0}\" could not be found in people list, no badge will be awarded.",
+								personId);
+						}
+						continue;
+					}
 					var person = personsList.First(x => x.Id == personId);
 					var scheduleDay = schedules[person].ScheduledDay(date);
 					var isFullDayAbsence = scheduleDay.SignificantPartForDisplay() == SchedulePartView.FullDayAbsence;
