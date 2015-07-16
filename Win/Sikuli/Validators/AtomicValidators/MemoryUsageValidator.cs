@@ -1,17 +1,19 @@
 ﻿using System;
+using System.Globalization;
+using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.Win.Sikuli.Helpers;
 
 namespace Teleopti.Ccc.Win.Sikuli.Validators.AtomicValidators
 {
 	internal class MemoryUsageValidator : IAtomicValidator
 	{
-		private readonly TimeSpan _durationLimit;
-		private readonly ITestDuration _testDurationuration;
+		private readonly double _memoryUsageLimit;
+		private readonly MemoryCounter _memoryCounter;
 
-		public MemoryUsageValidator(TimeSpan durationLimit, ITestDuration testDurationuration)
+		public MemoryUsageValidator(Double memoryUsageLimit, MemoryCounter memoryCounter)
 		{
-			_durationLimit = durationLimit;
-			_testDurationuration = testDurationuration;
+			_memoryUsageLimit = memoryUsageLimit;
+			_memoryCounter = memoryCounter;
 		}
 
 		public string Description
@@ -23,10 +25,12 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.AtomicValidators
 		{
 			var result = new SikuliValidationResult();
 
-			if (_testDurationuration.GetDuration() > _durationLimit)
+			if (_memoryCounter.CurrentMemoryConsumption() > _memoryUsageLimit)
 				result.Result = SikuliValidationResult.ResultValue.Warn;
 
-			result.AppendResultLine("Duration", _durationLimit.ToString(@"mm\:ss"),  _testDurationuration.GetDurationString(), result.Result);
+			result.AppendResultLine("Memory:", 
+				string.Format(CultureInfo.CurrentCulture, "{0:#} MB", _memoryUsageLimit), 
+				string.Format(CultureInfo.CurrentCulture, "{0:#} MB (max: {1:#} MB)", _memoryCounter.CurrentMemoryConsumption(), _memoryCounter.MaximumMemoryConsumption), result.Result);
 			
 			return result;
 		}

@@ -7,6 +7,7 @@ namespace Teleopti.Ccc.Infrastructure.Util
 	{
 		private static MemoryCounter defaultInstance;
 		private static readonly object defaultInstanceLocker = new object();
+		private long _maxMem = 0;
 
 		public static MemoryCounter DefaultInstance()
 		{
@@ -16,14 +17,22 @@ namespace Teleopti.Ccc.Infrastructure.Util
 			}
 		}
 
-		private long maxMem = 0;
+		public double MaximumMemoryConsumption
+		{
+			get { return (double) _maxMem/1024/1024; } 
+		}
 
-		public string CurrentMemoryConsumption()
+		public double CurrentMemoryConsumption()
 		{
 			var mem = GC.GetTotalMemory(true);
-			if (mem > maxMem)
-				maxMem = mem;
-			return string.Format(CultureInfo.CurrentCulture, "Mem: {0:#.00} MB (max mem: {1:#} MB)", (double)mem / 1024 / 1024, maxMem / 1024 / 1024);
+			if (mem > _maxMem)
+				_maxMem = mem;
+			return (double) mem/1024/1024;
+		}
+
+		public string CurrentMemoryConsumptionString()
+		{
+			return string.Format(CultureInfo.CurrentCulture, "Mem: {0:#.00} MB (max mem: {1:#} MB)", CurrentMemoryConsumption(), MaximumMemoryConsumption);
 		}
 	}
 }

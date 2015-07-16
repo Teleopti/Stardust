@@ -15,9 +15,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Util
 		}
 
 		[Test]
+		public void VerifyResultIsNotZero()
+		{
+			Assert.AreNotEqual(0d, _target.CurrentMemoryConsumption());
+		}
+
+		[Test]
 		public void VerifyResultIsValidString()
 		{
-			Assert.IsNotNullOrEmpty(_target.CurrentMemoryConsumption());
+			Assert.IsNotNullOrEmpty(_target.CurrentMemoryConsumptionString());
 		}
 	}
 }

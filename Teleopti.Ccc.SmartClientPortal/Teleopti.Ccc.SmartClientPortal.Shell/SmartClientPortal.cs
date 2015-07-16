@@ -301,7 +301,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		
 		private void updateMem(object sender, EventArgs e)
 		{
-			Roger65(MemoryCounter.DefaultInstance().CurrentMemoryConsumption());
+			Roger65(MemoryCounter.DefaultInstance().CurrentMemoryConsumptionString());
 		}
 
 		private void SmartClientShellForm_FormClosing(object sender, FormClosingEventArgs e)

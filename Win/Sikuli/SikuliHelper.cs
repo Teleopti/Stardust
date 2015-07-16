@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Win.Sikuli
 			if (_timer != null)
 				_timer.SetEnd();
 			var validationResult = validator.Validate(_timer);
-			validationResult.Details.AppendLine("Memory usage: " + MemoryCounter.DefaultInstance().CurrentMemoryConsumption());
+			validationResult.Details.AppendLine("Memory: " + MemoryCounter.DefaultInstance().CurrentMemoryConsumptionString());
 			validationResult.Details.AppendLine("Criteria: " + validator.Description);
 			var testView = new SikuliResultView
 			{
