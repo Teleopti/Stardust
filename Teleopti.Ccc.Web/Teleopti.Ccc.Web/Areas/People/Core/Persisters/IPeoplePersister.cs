@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 using Teleopti.Ccc.Web.Areas.People.Controllers;
 
-namespace Teleopti.Ccc.Web.Areas.People.Core
+namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 {
 	public interface IPeoplePersister
 	{

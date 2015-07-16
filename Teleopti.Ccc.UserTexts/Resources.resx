@@ -13346,4 +13346,16 @@ Reduce the complexity to use these shifts.</value>
     <value>windows user name is invalid;</value>
     <comment>error msg for validating data when importing users in People</comment>
   </data>
+  <data name="DuplicatedApplicationLogonErrorMsgSemicolon" xml:space="preserve">
+    <value>duplicated application user id;</value>
+    <comment>invalid user date message in People Import Users</comment>
+  </data>
+  <data name="DuplicatedWindowsLogonErrorMsgSemicolon" xml:space="preserve">
+    <value>duplicated windows user;</value>
+    <comment>invalid user date message in People Import Users</comment>
+  </data>
+  <data name="PasswordPolicyErrorMsgSemicolon" xml:space="preserve">
+    <value>password does not follow the password policy;</value>
+    <comment>invalid user date message in People Import Users</comment>
+  </data>
 </root>

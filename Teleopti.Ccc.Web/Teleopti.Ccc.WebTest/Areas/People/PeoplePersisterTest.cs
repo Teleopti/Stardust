@@ -6,10 +6,15 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
+using Teleopti.Ccc.Web.Areas.MultiTenancy.Model;
 using Teleopti.Ccc.Web.Areas.People.Controllers;
 using Teleopti.Ccc.Web.Areas.People.Core;
+using Teleopti.Ccc.Web.Areas.People.Core.Persisters;
 using Teleopti.Ccc.WebTest.Areas.Search;
 using Teleopti.Interfaces.Domain;
 
@@ -18,7 +23,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 	[TestFixture]
 	public class PeoplePersisterTest
 	{
-		private PeoplePersister target = new PeoplePersister(new FakeApplicationRoleRepository(), new FakeTenantDataManager(), new FakePersonRepository());
+		private PeoplePersister target = new PeoplePersister(new FakeApplicationRoleRepository(), new PersistPersonInfoFake(), new PersonInfoMapperFake() , new FakePersonRepository());
 
 
 		[Test]
@@ -28,24 +33,24 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			{
 				new RawUser
 				{
-					FirstName = "Jenny",
+					Firstname = "Jenny",
 					ApplicationUserId = "abc",
-					LastName = "Morgan",
+					Lastname = "Morgan",
 					Password = "password",
 					WindowsUser = "teleopti\\jennym"
 				},
 				new RawUser
 				{
-					FirstName = "Jan",
+					Firstname = "Jan",
 					ApplicationUserId = "abcde",
-					LastName = "Morgan",
+					Lastname = "Morgan",
 					Password = "",
 					WindowsUser = "teleopti\\janm"
 				}
 			};
 			var errorData = (IEnumerable<RawUser>)((dynamic)target).Persist(rawUserData).InvalidUsers;
 			Assert.AreEqual(1, errorData.Count());
-			Assert.AreEqual("Jan", errorData.First().FirstName);
+			Assert.AreEqual("Jan", errorData.First().Firstname);
 			Assert.AreEqual("empty password", errorData.First().ErrorMessage);
 		}
 
@@ -56,17 +61,17 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			{
 				new RawUser
 				{
-					FirstName = "Jenny",
+					Firstname = "Jenny",
 					ApplicationUserId = "abc",
-					LastName = "Morgan",
+					Lastname = "Morgan",
 					Password = "password",
 					WindowsUser = "teleopti\\jennym"
 				},
 				new RawUser
 				{
-					FirstName = "Jan",
+					Firstname = "Jan",
 					ApplicationUserId = "",
-					LastName = "Morgan",
+					Lastname = "Morgan",
 					Password = "psss",
 					WindowsUser = ""
 				}
@@ -74,44 +79,44 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 
 			var errorData = (IEnumerable<RawUser>)((dynamic)target).Persist(rawUserData).InvalidUsers;
 			Assert.AreEqual(1, errorData.Count());
-			Assert.AreEqual("Jan", errorData.First().FirstName);
+			Assert.AreEqual("Jan", errorData.First().Firstname);
 			Assert.AreEqual("no logon account", errorData.First().ErrorMessage);
 		}
 
 		[Test]
-		public void ValidateDataWhenFirstNameOrLastNameIsInvalid()
+		public void ValidateDataWhenFirstnameOrLastnameIsInvalid()
 		{
 			var rawUserData = new List<RawUser>
 			{
 				new RawUser
 				{
-					FirstName = "FirstName0",
+					Firstname = "Firstname0",
 					ApplicationUserId = "logon0",
-					LastName = "",
+					Lastname = "",
 					Password = "password",
 					WindowsUser = "teleopti\\winlogon0"
 				},
 				new RawUser
 				{
-					FirstName = "",
+					Firstname = "",
 					ApplicationUserId = "logon1",
-					LastName = "",
+					Lastname = "",
 					Password = "password",
 					WindowsUser = "teleopti\\winlogon1"
 				},
 				new RawUser
 				{
-					FirstName = "ALooooooooooooongFirstName",
+					Firstname = "ALooooooooooooongFirstname",
 					ApplicationUserId = "logon2",
-					LastName = "LastName2",
+					Lastname = "Lastname2",
 					Password = "password",
 					WindowsUser = "teleopti\\winlogon2"
 				},
 				new RawUser
 				{
-					FirstName = "FirstName3",
+					Firstname = "Firstname3",
 					ApplicationUserId = "logon3",
-					LastName = "ALoooooooooooooongLastName",
+					Lastname = "ALoooooooooooooongLastname",
 					Password = "password",
 					WindowsUser = "teleopti\\winlogon3"
 				}
@@ -140,17 +145,17 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			{
 				new RawUser
 				{
-					FirstName = "Jenny",
+					Firstname = "Jenny",
 					ApplicationUserId = "abc",
-					LastName = "Morgan",
+					Lastname = "Morgan",
 					Password = "password",
 					WindowsUser = "teleopti\\logon0"
 				},
 				new RawUser
 				{
-					FirstName = "",
+					Firstname = "",
 					ApplicationUserId = "",
-					LastName = "",
+					Lastname = "",
 					Password = "",
 					WindowsUser = "teleopti\\logon1"
 				}
@@ -169,18 +174,18 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			{
 				new RawUser
 				{
-					FirstName = "Jenny",
+					Firstname = "Jenny",
 					ApplicationUserId = "abc",
-					LastName = "Morgan",
+					Lastname = "Morgan",
 					Password = "password",
 					Role = "Agent",
 					WindowsUser = "teleopti\\logon0"
 				},
 				new RawUser
 				{
-					FirstName = "firstName1",
+					Firstname = "Firstname1",
 					ApplicationUserId = "",
-					LastName = "",
+					Lastname = "",
 					Password = "psss",
 					Role = "agent,sss0, sss1",
 					WindowsUser = "teleopti\\logon1"
@@ -190,7 +195,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var roleRepo = new FakeApplicationRoleRepository();
 			roleRepo.Add(new ApplicationRole {DescriptionText = "Agent"});
 
-			target = new PeoplePersister(roleRepo, new FakeTenantDataManager(), new FakePersonRepository());
+			target = new PeoplePersister(roleRepo, new PersistPersonInfoFake(), new PersonInfoMapperFake(), new FakePersonRepository());
 			var errorData = (IEnumerable<RawUser>)((dynamic)target).Persist(rawUserData).InvalidUsers;
 			Assert.AreEqual(1, errorData.Count());
 			Assert.AreEqual("teleopti\\logon1", errorData.First().WindowsUser);
@@ -204,18 +209,18 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			{
 				new RawUser
 				{
-					FirstName = "Jenny",
+					Firstname = "Jenny",
 					ApplicationUserId = "abc",
-					LastName = "Morgan",
+					Lastname = "Morgan",
 					Password = "password",
 					Role = "",
 					WindowsUser = "teleopti\\jennym"
 				},
 				new RawUser
 				{
-					FirstName = "Jan",
+					Firstname = "Jan",
 					ApplicationUserId = "abcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabcabc",
-					LastName = "Morgan",
+					Lastname = "Morgan",
 					Password = "psss",
 					Role = "",
 					WindowsUser = "teleopti\\jennym"
@@ -224,7 +229,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 
 			var errorData = (IEnumerable<RawUser>)((dynamic)target).Persist(rawUserData).InvalidUsers;
 			Assert.AreEqual(1, errorData.Count());
-			Assert.AreEqual("Jan", errorData.First().FirstName);
+			Assert.AreEqual("Jan", errorData.First().Firstname);
 			Assert.AreEqual("too long application user id", errorData.First().ErrorMessage);
 		}
 
@@ -235,18 +240,18 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			{
 				new RawUser
 				{
-					FirstName = "Jenny",
+					Firstname = "Jenny",
 					ApplicationUserId = "notExistingId",
-					LastName = "Morgan",
+					Lastname = "Morgan",
 					Password = "password",
 					Role = "role1",
 					WindowsUser = ""
 				},
 				new RawUser
 				{
-					FirstName = "Jan",
+					Firstname = "Jan",
 					ApplicationUserId = "existingId",
-					LastName = "Morgan",
+					Lastname = "Morgan",
 					Password = "psss",
 					Role = "role2",
 					WindowsUser = ""
@@ -255,17 +260,29 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var fakeApplicationRoleRepository = new FakeApplicationRoleRepository();
 			fakeApplicationRoleRepository.Add(new ApplicationRole{DescriptionText = "role1"});
 			fakeApplicationRoleRepository.Add(new ApplicationRole{DescriptionText = "role2"});
-			var fakeTenantDataManager = new FakeTenantDataManager();
+			var personInfoPersister = new PersistPersonInfoFake();
+			var personInfoMapper = new PersonInfoMapperFake();
 			var person1 = new Person { Name = new Name("Jenny", "Morgan") };
 			person1.SetId(Guid.NewGuid());
 			var person2 = new Person { Name = new Name("Jan", "Morgan") };
 			person2.SetId(Guid.NewGuid());
 			var fakePersonRepository = new FakePersonRepository(new []{person1, person2});
-			target = new PeoplePersister(fakeApplicationRoleRepository, fakeTenantDataManager, fakePersonRepository);
+			target = new PeoplePersister(fakeApplicationRoleRepository, personInfoPersister,personInfoMapper, fakePersonRepository);
 			var errorData = (IEnumerable<RawUser>)((dynamic)target).Persist(rawUserData).InvalidUsers;
 			Assert.AreEqual(1, errorData.Count());
-			Assert.AreEqual("Jan", errorData.First().FirstName);
-			Assert.AreEqual("dupicated application user id", errorData.First().ErrorMessage);
+			Assert.AreEqual("Jan", errorData.First().Firstname);
+			Assert.AreEqual("duplicated application user id", errorData.First().ErrorMessage);
+		}
+	}
+
+	public class PersonInfoMapperFake:IPersonInfoMapper
+	{
+		public PersonInfo Map(PersonInfoModel personInfoModel)
+		{
+			var personInfo = new PersonInfo(new Tenant("Test"), personInfoModel.PersonId);
+			personInfo.SetIdentity(personInfoModel.Identity);
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), personInfoModel.ApplicationLogonName,personInfoModel.Password);
+			return personInfo;
 		}
 	}
 

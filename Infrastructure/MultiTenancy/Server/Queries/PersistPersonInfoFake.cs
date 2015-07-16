@@ -5,6 +5,10 @@
 		public void Persist(PersonInfo personInfo)
 		{
 			LastPersist = personInfo;
+			if (personInfo.ApplicationLogonInfo.LogonName == "existingId")
+			{
+				throw new DuplicateApplicationLogonNameException();
+			}
 		}
 
 		public PersonInfo LastPersist { get; private set; }

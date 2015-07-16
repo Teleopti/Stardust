@@ -1,39 +1,48 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Web;
-using Microsoft.ReportingServices.ReportProcessing.ReportObjectModel;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
+using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
+using Teleopti.Ccc.Web.Areas.MultiTenancy.Model;
 using Teleopti.Ccc.Web.Areas.People.Controllers;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.People.Core
+namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 {
 	public class PeoplePersister: IPeoplePersister
 	{
-		private IApplicationRoleRepository _roleRepository;
-		private readonly ITenantDataManager _tenantDataManager;
+		private readonly IApplicationRoleRepository _roleRepository;
+		private readonly IPersistPersonInfo _personInfoPersister;
+		private readonly IPersonInfoMapper _mapper;
 		private readonly IPersonRepository _personRepository;
 		private const int MaxNameLength = 25;
 		private const int MaxApplicationUserIdLength = 50;
 
-		public PeoplePersister(IApplicationRoleRepository roleRepository, ITenantDataManager tenantDataManager, IPersonRepository personRepository)
+		public PeoplePersister(IApplicationRoleRepository roleRepository,IPersistPersonInfo personInfoPersister, IPersonInfoMapper mapper,IPersonRepository personRepository)
 		{
 			_roleRepository = roleRepository;
-			_tenantDataManager = tenantDataManager;
+			_personInfoPersister = personInfoPersister;
+			_mapper = mapper;
 			_personRepository = personRepository;
 		}
 
 		public dynamic Persist(IEnumerable<RawUser> users)
 		{
 			var availableRoles = new Dictionary<string, IApplicationRole>();
-			_roleRepository.LoadAllApplicationRolesSortedByName().ForEach(r => availableRoles.Add(r.DescriptionText.ToUpper(), r));
+			var allRoles = _roleRepository.LoadAllApplicationRolesSortedByName();
+			allRoles.ForEach(r =>
+			{
+				if (!availableRoles.ContainsKey(r.DescriptionText.ToUpper()))
+				{
+					availableRoles.Add(r.DescriptionText.ToUpper(), r);
+				}
+			});
 			//validate
 			// DB persist
 			var invalidUsers = new List<RawUser>();
@@ -53,19 +62,19 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 					isUserValid = false;
 				}
 
-				if (string.IsNullOrEmpty(user.FirstName) && string.IsNullOrEmpty(user.LastName))
+				if (string.IsNullOrEmpty(user.Firstname) && string.IsNullOrEmpty(user.Lastname))
 				{
 					errorMsgBuilder.Append(Resources.BothFirstnameAndLastnameAreEmptyErrorMsgSemicolon + " ");
 					isUserValid = false;
 				}
 
-				if (user.FirstName.Length > MaxNameLength)
+				if (user.Firstname.Length > MaxNameLength)
 				{
 					errorMsgBuilder.Append(Resources.TooLongFirstnameErrorMsgSemicolon + " ");
 					isUserValid = false;
 				}
 
-				if (user.LastName.Length > MaxNameLength)
+				if (user.Lastname.Length > MaxNameLength)
 				{
 					errorMsgBuilder.Append(Resources.TooLongLastnameErrorMsgSemicolon + " ");
 					isUserValid = false;
@@ -100,24 +109,38 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 					}
 					else if (isUserValid)
 					{
-						var person = new Person { Name = new Name(user.FirstName, user.LastName) };
+						var person = new Person { Name = new Name(user.Firstname, user.Lastname) };
 						roles.ForEach(r => person.PermissionInformation.AddApplicationRole(availableRoles[r.ToUpper()]));
 						_personRepository.Add(person);
 
-						var tenantUserData = new TenantAuthenticationData()
+						var tenantUserData = new PersonInfoModel()
 						{
 							ApplicationLogonName = user.ApplicationUserId,
 							Identity = user.WindowsUser,
 							Password = user.Password,
 							PersonId = person.Id.GetValueOrDefault()
 						};
-						var result = _tenantDataManager.SaveTenantData(tenantUserData);
 
-						if (!result.Success)
+						try
 						{
-							errorMsgBuilder.Append(result.FailReason + "; ");
-							isUserValid = false;
+							_personInfoPersister.Persist(_mapper.Map(tenantUserData));
 						}
+						catch (PasswordStrengthException)
+						{
+							isUserValid = false;
+							errorMsgBuilder.Append(Resources.PasswordPolicyErrorMsgSemicolon + " ");
+						}
+						catch (DuplicateIdentityException)
+						{
+							isUserValid = false;
+							errorMsgBuilder.Append(Resources.DuplicatedWindowsLogonErrorMsgSemicolon + " ");
+						}
+						catch (DuplicateApplicationLogonNameException)
+						{
+							isUserValid = false;
+							errorMsgBuilder.Append(Resources.DuplicatedApplicationLogonErrorMsgSemicolon + " ");
+						}
+
 					}
 				}
 

@@ -7870,11 +7870,29 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to duplicated application user id;.
+        /// </summary>
+        public static string DuplicatedApplicationLogonErrorMsgSemicolon {
+            get {
+                return ResourceManager.GetString("DuplicatedApplicationLogonErrorMsgSemicolon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Duplicate day offs on {0}.
         /// </summary>
         public static string DuplicateDaysOffValidationError {
             get {
                 return ResourceManager.GetString("DuplicateDaysOffValidationError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to duplicated windows user;.
+        /// </summary>
+        public static string DuplicatedWindowsLogonErrorMsgSemicolon {
+            get {
+                return ResourceManager.GetString("DuplicatedWindowsLogonErrorMsgSemicolon", resourceCulture);
             }
         }
         
@@ -18133,6 +18151,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string PasswordOld {
             get {
                 return ResourceManager.GetString("PasswordOld", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to password does not follow the password policy;.
+        /// </summary>
+        public static string PasswordPolicyErrorMsgSemicolon {
+            get {
+                return ResourceManager.GetString("PasswordPolicyErrorMsgSemicolon", resourceCulture);
             }
         }
         

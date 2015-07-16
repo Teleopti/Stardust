@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Web.Areas.People.Core;
+using Teleopti.Ccc.Web.Areas.People.Core.Persisters;
+using Teleopti.Ccc.Web.Areas.People.Core.Providers;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.People.Controllers
 {
@@ -14,9 +16,9 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			_peoplePersister = peoplePersister;
 		}
 
-		[UnitOfWork]
-		[HttpPost, Route("api/People/ImportPeople/Users")]
-		public virtual IHttpActionResult ImportUsers(RawUserData rawUsersData)
+
+		[UnitOfWork, Route("api/People/ImportPeople"), HttpPost]
+		public virtual IHttpActionResult ImportUsers([FromBody]RawUserData rawUsersData)
 		{
 			var result = _peoplePersister.Persist(rawUsersData.Users);
 
@@ -27,13 +29,13 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 
 	public class RawUserData
 	{
-		public IEnumerable<RawUser> Users { get; set; }
+		public IList<RawUser> Users { get; set; }
 	}
 
 	public class RawUser
 	{
-		public string FirstName { get; set; }
-		public string LastName { get; set; }
+		public string Firstname { get; set; }
+		public string Lastname { get; set; }
 		public string WindowsUser { get; set; }
 		public string ApplicationUserId { get; set; }
 		public string Password { get; set; }
