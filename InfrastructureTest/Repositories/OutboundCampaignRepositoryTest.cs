@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -228,30 +227,34 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldGetPlannedCampaigns()
 		{
 			var campaign1 = createCampaignWithSpanningPeriod(new DateOnlyPeriod(DateOnly.Today.AddDays(1), DateOnly.MaxValue));
+			var campaign2 = createCampaignWithSpanningPeriod(new DateOnlyPeriod(DateOnly.Today.AddDays(2), DateOnly.MaxValue));
 			createCampaignWithSpanningPeriod(new DateOnlyPeriod(DateOnly.Today, DateOnly.MaxValue));
 			var repository = new OutboundCampaignRepository(UnitOfWork);
 
 			var result = repository.GetPlannedCampaigns();
 
-			result.Count.Should().Be.EqualTo(1);
+			result.Count.Should().Be.EqualTo(2);
 			result[0].Id.Should().Be.EqualTo(campaign1.Id);
+			result[1].Id.Should().Be.EqualTo(campaign2.Id);
 		}		
 		
 		[Test]
-		public void ShouldGetDoneCampaigns()
+		public void ShouldGetDoneCampaignsWithSequence()
 		{
 			var campaign1 = createCampaignWithSpanningPeriod(new DateOnlyPeriod(DateOnly.Today.AddDays(-10), DateOnly.Today.AddDays(-8)));
+			var campaign2 = createCampaignWithSpanningPeriod(new DateOnlyPeriod(DateOnly.Today.AddDays(-9), DateOnly.Today.AddDays(-8)));
 			createCampaignWithSpanningPeriod(new DateOnlyPeriod(DateOnly.Today, DateOnly.MaxValue));
 			var repository = new OutboundCampaignRepository(UnitOfWork);
 
 			var result = repository.GetDoneCampaigns();
 
-			result.Count.Should().Be.EqualTo(1);
-			result[0].Id.Should().Be.EqualTo(campaign1.Id);
+			result.Count.Should().Be.EqualTo(2);
+			result[0].Id.Should().Be.EqualTo(campaign2.Id);
+			result[1].Id.Should().Be.EqualTo(campaign1.Id);
 		}		
 		
 		[Test]
-		public void ShouldGetOnGoingCampaigns()
+		public void ShouldGetOnGoingCampaignsWithSequence()
 		{
 			var campaign1 = createCampaignWithSpanningPeriod(new DateOnlyPeriod(DateOnly.Today.AddDays(-10), DateOnly.Today));
 			var campaign2 = createCampaignWithSpanningPeriod(new DateOnlyPeriod(DateOnly.Today, DateOnly.MaxValue));
@@ -262,10 +265,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var result = repository.GetOnGoingCampaigns();
 
 			result.Count.Should().Be.EqualTo(2);
-			foreach (var shouldTrue in result.Select(campaign => campaign.Id == campaign1.Id || campaign.Id == campaign2.Id))
-			{
-				shouldTrue.Should().Be.True();
-			}
+			result[0].Id.Should().Be.EqualTo(campaign2.Id);
+			result[1].Id.Should().Be.EqualTo(campaign1.Id);
 		}
 
         private IOutboundCampaign createCampaignWithSpanningPeriod(DateOnlyPeriod period)
