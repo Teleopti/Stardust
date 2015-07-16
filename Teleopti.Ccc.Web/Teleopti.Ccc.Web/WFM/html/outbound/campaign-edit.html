@@ -145,7 +145,7 @@
 			<div class="wfm-block">
 				<div class="sub-header accordion-head" ng-click="acToggle2 = !acToggle2">
 					<span translate>Duration</span>
-					<span ng-show="!acToggle2"> <span translate>DateFrom </span><strong>{{campaign.StartDate.Date | date: format }}</strong> <span translate>DateTo</span> <strong>{{campaign.EndDate.Date | date: format }}</strong></span>
+					<span ng-show="!acToggle2"> <span translate>DateFrom </span><strong>{{campaign.StartDate.Date | amDateFormat: 'LL' }}</strong> <span translate>DateTo</span> <strong>{{campaign.EndDate.Date | amDateFormat: 'LL' }}</strong></span>
 				</div>
 				<div ng-show="acToggle2">
 					<form name="campaignSpanningPeriodForm" class="form-horizontal wfm-block input-group" form-locator>
@@ -153,7 +153,7 @@
 					        <div class="pull-left">
 					            <div class="wfm-datepicker-wrap campaign-startdate no-boxshadow">
 					                <div class="sub-header relative">
-					                    <span translate>StartTimeColon</span> <strong >{{campaign.StartDate.Date | date: format }}</strong>
+					                    <span translate>StartTimeColon</span> <strong >{{campaign.StartDate.Date | amDateFormat: 'LL' }}</strong>
 					                    <div class="icon-set  form-validation-sign datepickerfix" expandable>
 					                        <i class="mdi mdi-check success right-sign "></i>
 					                        <i class="mdi mdi-close danger wrong-sign"></i>
@@ -165,7 +165,7 @@
 					        <div class="pull-left">
 					            <div class="wfm-datepicker-wrap campaign-enddate no-boxshadow">
 					                <div class="sub-header relative">
-					                    <span translate>EndTimeColon</span> <strong class="end-date">{{campaign.EndDate.Date | date: format }}</strong>
+					                    <span translate>EndTimeColon</span> <strong class="end-date">{{campaign.EndDate.Date | amDateFormat: 'LL' }}</strong>
 					                    <div class="icon-set  form-validation-sign datepickerfix" expandable>
 					                        <i class="mdi mdi-check success right-sign "></i>
 					                        <i class="mdi mdi-close danger wrong-sign"></i>

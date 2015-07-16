@@ -10283,15 +10283,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fri.
-        /// </summary>
-        public static string FridayShort {
-            get {
-                return ResourceManager.GetString("FridayShort", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to From.
         /// </summary>
         public static string From {
@@ -14511,15 +14502,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Monday {
             get {
                 return ResourceManager.GetString("Monday", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Mon.
-        /// </summary>
-        public static string MondayShort {
-            get {
-                return ResourceManager.GetString("MondayShort", resourceCulture);
             }
         }
         
@@ -22171,15 +22153,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sat.
-        /// </summary>
-        public static string SaturdayShort {
-            get {
-                return ResourceManager.GetString("SaturdayShort", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Save.
         /// </summary>
         public static string Save {
@@ -26141,15 +26114,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sun.
-        /// </summary>
-        public static string SundayShort {
-            get {
-                return ResourceManager.GetString("SundayShort", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Super Administrator Role.
         /// </summary>
         public static string SuperRole {
@@ -27133,15 +27097,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Thu.
-        /// </summary>
-        public static string ThursdayShort {
-            get {
-                return ResourceManager.GetString("ThursdayShort", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Time.
         /// </summary>
         public static string Time {
@@ -27741,15 +27696,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Tuesday {
             get {
                 return ResourceManager.GetString("Tuesday", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Tue.
-        /// </summary>
-        public static string TuesdayShort {
-            get {
-                return ResourceManager.GetString("TuesdayShort", resourceCulture);
             }
         }
         
@@ -29190,15 +29136,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Wednesday {
             get {
                 return ResourceManager.GetString("Wednesday", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Wed.
-        /// </summary>
-        public static string WednesdayShort {
-            get {
-                return ResourceManager.GetString("WednesdayShort", resourceCulture);
             }
         }
         

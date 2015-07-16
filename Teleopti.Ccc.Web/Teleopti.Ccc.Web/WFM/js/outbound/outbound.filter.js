@@ -7,17 +7,10 @@
 		.filter('showTimespan', showTimespan);
 
 
-	function showWeekdays() {
+	function showWeekdays() {	    
 		return function (input) {
-			var weekdays = [
-				"SundayShort",
-				"MondayShort",
-				"TuesdayShort",
-				"WednesdayShort",
-				"ThursdayShort",
-				"FridayShort",
-				"SaturdayShort"
-			];
+		    var weekdays = moment.weekdaysShort();
+
 			if (input.WeekDay >= weekdays.length) {
 				return "";
 			}			

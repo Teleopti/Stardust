@@ -13218,34 +13218,6 @@ Reduce the complexity to use these shifts.</value>
     <value>My Team Schedules</value>
     <comment>My Team Schedules for MyTeam in Permission Module</comment>
   </data>
-  <data name="FridayShort" xml:space="preserve">
-    <value>Fri</value>
-    <comment>Friday Short</comment>
-  </data>
-  <data name="MondayShort" xml:space="preserve">
-    <value>Mon</value>
-    <comment>Monday short</comment>
-  </data>
-  <data name="SaturdayShort" xml:space="preserve">
-    <value>Sat</value>
-    <comment>Saturday Short</comment>
-  </data>
-  <data name="SundayShort" xml:space="preserve">
-    <value>Sun</value>
-    <comment>Sunday Short</comment>
-  </data>
-  <data name="ThursdayShort" xml:space="preserve">
-    <value>Thu</value>
-    <comment>Thursday Short</comment>
-  </data>
-  <data name="TuesdayShort" xml:space="preserve">
-    <value>Tue</value>
-    <comment>Tuesday short</comment>
-  </data>
-  <data name="WednesdayShort" xml:space="preserve">
-    <value>Wed</value>
-    <comment>Wednesday short</comment>
-  </data>
   <data name="CreateCampaign" xml:space="preserve">
     <value>Create Campaign</value>
     <comment>Create new outbound campaign</comment>
