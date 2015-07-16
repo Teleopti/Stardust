@@ -26,10 +26,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		[Test]
 		public void ShouldProvidePlannedCampaign()
 		{
-            _campaignRepository.Stub(x => x.GetPlannedCampaigns()).Return(new List<IOutboundCampaign>() { new Domain.Outbound.Campaign() });
-            _campaignRepository.Stub(x => x.GetOnGoingCampaigns()).Return(new List<IOutboundCampaign>());
-            _campaignRepository.Stub(x => x.GetDoneCampaigns()).Return(new List<IOutboundCampaign>());
-				_campaignRepository.Stub(x => x.LoadAll()).Return(new List<IOutboundCampaign>());
+         _campaignRepository.Stub(x => x.GetPlannedCampaigns()).Return(new List<IOutboundCampaign>() { new Domain.Outbound.Campaign() });
+         _campaignRepository.Stub(x => x.GetOnGoingCampaigns()).Return(new List<IOutboundCampaign>());
+         _campaignRepository.Stub(x => x.GetDoneCampaigns()).Return(new List<IOutboundCampaign>());
+			_campaignRepository.Stub(x => x.LoadAll()).Return(new List<IOutboundCampaign>());
 			_scheduledResourcesProvider.Stub(x=>x.GetScheduledTimeOnDate(new DateOnly(), null)).IgnoreArguments().Return(TimeSpan.Zero);
 
 			var provider = new CampaignStatisticsProvider(_campaignRepository, _scheduledResourcesProvider);
@@ -56,10 +56,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		[Test]
 		public void ShouldProvideOnGoingCampaign()
 		{
-            _campaignRepository.Stub(x => x.GetPlannedCampaigns()).Return(new List<IOutboundCampaign>());
-            _campaignRepository.Stub(x => x.GetDoneCampaigns()).Return(new List<IOutboundCampaign>());
-            _campaignRepository.Stub(x => x.GetOnGoingCampaigns()).Return(new List<IOutboundCampaign>() { new Domain.Outbound.Campaign() });
-				_campaignRepository.Stub(x => x.LoadAll()).Return(new List<IOutboundCampaign>());
+         _campaignRepository.Stub(x => x.GetPlannedCampaigns()).Return(new List<IOutboundCampaign>());
+         _campaignRepository.Stub(x => x.GetDoneCampaigns()).Return(new List<IOutboundCampaign>());
+         _campaignRepository.Stub(x => x.GetOnGoingCampaigns()).Return(new List<IOutboundCampaign>() { new Domain.Outbound.Campaign() });
+			_campaignRepository.Stub(x => x.LoadAll()).Return(new List<IOutboundCampaign>());
 			_scheduledResourcesProvider.Stub(x => x.GetScheduledTimeOnDate(new DateOnly(), null)).IgnoreArguments().Return(TimeSpan.Zero);
 
 			var provider = new CampaignStatisticsProvider(_campaignRepository, _scheduledResourcesProvider);
@@ -71,20 +71,38 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		[Test]
 		public void ShouldProvideDoneCampaign()
 		{
-            _campaignRepository.Stub(x => x.GetPlannedCampaigns()).Return(new List<IOutboundCampaign>());
-            _campaignRepository.Stub(x => x.GetDoneCampaigns()).Return(new List<IOutboundCampaign>() { new Domain.Outbound.Campaign() });
-            _campaignRepository.Stub(x => x.GetOnGoingCampaigns()).Return(new List<IOutboundCampaign>());
-				_campaignRepository.Stub(x => x.LoadAll()).Return(new List<IOutboundCampaign>());
+         _campaignRepository.Stub(x => x.GetPlannedCampaigns()).Return(new List<IOutboundCampaign>());
+         _campaignRepository.Stub(x => x.GetDoneCampaigns()).Return(new List<IOutboundCampaign>() { new Domain.Outbound.Campaign() });
+         _campaignRepository.Stub(x => x.GetOnGoingCampaigns()).Return(new List<IOutboundCampaign>());
+			_campaignRepository.Stub(x => x.LoadAll()).Return(new List<IOutboundCampaign>());
 			_scheduledResourcesProvider.Stub(x => x.GetScheduledTimeOnDate(new DateOnly(), null)).IgnoreArguments().Return(TimeSpan.Zero);
 
 			var provider = new CampaignStatisticsProvider(_campaignRepository, _scheduledResourcesProvider);
 			var result = provider.GetWholeStatistics();
 
 			result.Done.Should().Be.EqualTo(1);
+		}		
+		
+		[Test]
+		public void ShouldProvideScheduledCampaign()
+		{
+			var campaign = new Domain.Outbound.Campaign();
+			campaign.SpanningPeriod = new DateOnlyPeriod(DateOnly.MaxValue, DateOnly.MaxValue);
+         _campaignRepository.Stub(x => x.GetPlannedCampaigns()).Return(new List<IOutboundCampaign>());
+         _campaignRepository.Stub(x => x.GetDoneCampaigns()).Return(new List<IOutboundCampaign>());
+         _campaignRepository.Stub(x => x.LoadAll()).Return(new List<IOutboundCampaign>() {campaign});
+         _campaignRepository.Stub(x => x.GetOnGoingCampaigns()).Return(new List<IOutboundCampaign>());
+			_campaignRepository.Stub(x => x.LoadAll()).Return(new List<IOutboundCampaign>());
+			_scheduledResourcesProvider.Stub(x => x.GetScheduledTimeOnDate(new DateOnly(), null)).IgnoreArguments().Return(TimeSpan.FromHours(1));
+
+			var provider = new CampaignStatisticsProvider(_campaignRepository, _scheduledResourcesProvider);
+			var result = provider.GetWholeStatistics();
+
+			result.Scheduled.Should().Be.EqualTo(1);
 		}
 
 		[Test]
-		public void ShouldScheduledCampaign()
+		public void ShouldGetScheduledCampaigns()
 		{
 			var campaign = new Domain.Outbound.Campaign();
 			campaign.SpanningPeriod = new DateOnlyPeriod(DateOnly.MaxValue, DateOnly.MaxValue);
@@ -123,6 +141,30 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var result = provider.GetScheduledCampaigns();
 
 			result.Count.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldGetOnGoingCampaigns()
+		{
+			var campaign = new Domain.Outbound.Campaign(){Name = "myCampaign"};
+			_campaignRepository.Stub(x => x.GetOnGoingCampaigns()).Return(new List<IOutboundCampaign>() { campaign });
+
+			var provider = new CampaignStatisticsProvider(_campaignRepository, null);
+			var result = provider.GetOnGoingCampaigns();
+
+			result[0].Name.Should().Be.EqualTo("myCampaign");
+		}		
+		
+		[Test]
+		public void ShouldGetDoneCampaigns()
+		{
+			var campaign = new Domain.Outbound.Campaign(){Name = "myCampaign"};
+			_campaignRepository.Stub(x => x.GetDoneCampaigns()).Return(new List<IOutboundCampaign>() { campaign });
+
+			var provider = new CampaignStatisticsProvider(_campaignRepository, null);
+			var result = provider.GetDoneCampaigns();
+
+			result[0].Name.Should().Be.EqualTo("myCampaign");
 		}
 	}
 }

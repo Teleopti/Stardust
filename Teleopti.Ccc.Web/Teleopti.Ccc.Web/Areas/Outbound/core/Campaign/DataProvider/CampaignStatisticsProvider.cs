@@ -25,6 +25,9 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			{
 				Planned = GetPlannedCampaigns().Count,
 				OnGoing = GetOnGoingCampaigns().Count,
+				OnGoingWarning = GetOnGoingWarningCamapigns().Count,
+				Scheduled = GetScheduledCampaigns().Count,
+				ScheduledWarning = GetScheduledWarningCampaigns().Count,
 				Done = GetDoneCampaigns().Count
 			};
 		}

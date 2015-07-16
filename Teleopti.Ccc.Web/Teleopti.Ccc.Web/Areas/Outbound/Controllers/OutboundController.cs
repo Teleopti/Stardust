@@ -69,54 +69,73 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 
 			if ((flag & 4) == 4)
 			{
-				var warningCampaigns = _campaignStatisticsProvider.GetOnGoingWarningCamapigns();
-				if (warningCampaigns.Count != 0)
-				{
-					campaignList.WarningCampaigns = _campaignListViewModelMapper.Map(warningCampaigns, Resources.OnGoing);
-				}
-
-				var onGoingCampaigns = _campaignStatisticsProvider.GetOnGoingCampaigns();
-				if (onGoingCampaigns.Count != 0)
-				{
-					campaignList.Campaigns = _campaignListViewModelMapper.Map(onGoingCampaigns, Resources.OnGoing);
-				}
+				getOnGoingCampaigns(campaignList);
 			}
 
 			if ((flag & 1) == 1)
 			{
-				var plannedCampaigns = _campaignStatisticsProvider.GetPlannedCampaigns();
-				if (plannedCampaigns.Count != 0)
-				{
-					campaignList.Campaigns.AddRange(_campaignListViewModelMapper.Map(plannedCampaigns, Resources.Planned));
-				}
+				getPlannedCampaigns(campaignList);
 			}
 
 			if ((flag & 2) == 2)
 			{
-				var warningCampaigns = _campaignStatisticsProvider.GetScheduledWarningCampaigns();
-				if (warningCampaigns.Count != 0)
-				{
-					campaignList.WarningCampaigns.AddRange(_campaignListViewModelMapper.Map(warningCampaigns, Resources.Scheduled));
-				}
-
-				var scheduledCampaigns = _campaignStatisticsProvider.GetScheduledCampaigns();
-				if (scheduledCampaigns.Count != 0)
-				{
-					campaignList.Campaigns.AddRange(_campaignListViewModelMapper.Map(scheduledCampaigns, Resources.Scheduled));
-				}
-				
+				getScheduledCampaigns(campaignList);
 			}
 
 			if ((flag & 8) == 8)
 			{
-				var doneCampaigns = _campaignStatisticsProvider.GetDoneCampaigns();
-				if (doneCampaigns.Count != 0)
-				{
-					campaignList.Campaigns.AddRange(_campaignListViewModelMapper.Map(doneCampaigns, Resources.Done));
-				}
+				getDoneCampaigns(campaignList);
 			}
 
 			return campaignList;
+		}
+
+		private void getDoneCampaigns(CampaignList campaignList)
+		{
+			var doneCampaigns = _campaignStatisticsProvider.GetDoneCampaigns();
+			if (doneCampaigns.Count != 0)
+			{
+				campaignList.Campaigns.AddRange(_campaignListViewModelMapper.Map(doneCampaigns, Resources.Done));
+			}
+		}
+
+		private void getScheduledCampaigns(CampaignList campaignList)
+		{
+			var warningCampaigns = _campaignStatisticsProvider.GetScheduledWarningCampaigns();
+			if (warningCampaigns.Count != 0)
+			{
+				campaignList.WarningCampaigns.AddRange(_campaignListViewModelMapper.Map(warningCampaigns, Resources.Scheduled));
+			}
+
+			var scheduledCampaigns = _campaignStatisticsProvider.GetScheduledCampaigns();
+			if (scheduledCampaigns.Count != 0)
+			{
+				campaignList.Campaigns.AddRange(_campaignListViewModelMapper.Map(scheduledCampaigns, Resources.Scheduled));
+			}
+		}
+
+		private void getPlannedCampaigns(CampaignList campaignList)
+		{
+			var plannedCampaigns = _campaignStatisticsProvider.GetPlannedCampaigns();
+			if (plannedCampaigns.Count != 0)
+			{
+				campaignList.Campaigns.AddRange(_campaignListViewModelMapper.Map(plannedCampaigns, Resources.Planned));
+			}
+		}
+
+		private void getOnGoingCampaigns(CampaignList campaignList)
+		{
+			var warningCampaigns = _campaignStatisticsProvider.GetOnGoingWarningCamapigns();
+			if (warningCampaigns.Count != 0)
+			{
+				campaignList.WarningCampaigns = _campaignListViewModelMapper.Map(warningCampaigns, Resources.OnGoing);
+			}
+
+			var onGoingCampaigns = _campaignStatisticsProvider.GetOnGoingCampaigns();
+			if (onGoingCampaigns.Count != 0)
+			{
+				campaignList.Campaigns = _campaignListViewModelMapper.Map(onGoingCampaigns, Resources.OnGoing);
+			}
 		}
 
 		[HttpGet, Route("api/Outbound/Campaign/Activities"), UnitOfWork]
