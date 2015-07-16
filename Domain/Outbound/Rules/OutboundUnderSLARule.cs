@@ -6,12 +6,12 @@ namespace Teleopti.Ccc.Domain.Outbound.Rules
 {
     public class OutboundUnderSLARule : OutboundRule
     {
-        private readonly CampaignTaskManager _campaignTaskManager;
+        private readonly IOutboundCampaignTaskManager _campaignTaskManager;
 
         private int threshold;
         private ThresholdType thresholdType;
 
-        public OutboundUnderSLARule(CampaignTaskManager campaignTaskManager)
+        public OutboundUnderSLARule(IOutboundCampaignTaskManager campaignTaskManager)
         {
             _campaignTaskManager = campaignTaskManager;
         }

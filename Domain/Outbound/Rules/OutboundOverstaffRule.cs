@@ -7,12 +7,12 @@ namespace Teleopti.Ccc.Domain.Outbound.Rules
     public class OutboundOverstaffRule : OutboundRule
     {
 
-        private readonly CampaignTaskManager _campaignTaskManager;
+        private readonly IOutboundCampaignTaskManager _campaignTaskManager;
 
         private int threshold;
         private ThresholdType thresholdType;
 
-        public OutboundOverstaffRule(CampaignTaskManager campaignTaskManager)
+        public OutboundOverstaffRule(IOutboundCampaignTaskManager campaignTaskManager)
         {
             _campaignTaskManager = campaignTaskManager;
         }
