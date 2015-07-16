@@ -61,12 +61,24 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		public virtual CampaignList GetCamapigns(int flag)
 		{			
 		    var campaignStatus = (CampaignStatus) flag;
+		    if (campaignStatus == CampaignStatus.None)
+		    {
+		        campaignStatus = CampaignStatus.Ongoing 
+                    | CampaignStatus.Planned 
+                    | CampaignStatus.Scheduled 
+                    | CampaignStatus.Done;
+		    }
 
 			var campaignList = new CampaignList()
 			{
 				WarningCampaigns = new List<CampaignListViewModel>(),
 				Campaigns = new List<CampaignListViewModel>()
 			};
+
+            if (campaignStatus.HasFlag(CampaignStatus.Ongoing))
+            {
+                getOnGoingCampaigns(campaignList);
+            }
 
 		    if (campaignStatus.HasFlag(CampaignStatus.Planned))
 		    {
@@ -77,10 +89,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		    {
                 getScheduledCampaigns(campaignList);
 		    }
-		    if (campaignStatus.HasFlag(CampaignStatus.Ongoing))
-		    {
-                getOnGoingCampaigns(campaignList);
-		    }
+		    
 		    if (campaignStatus.HasFlag(CampaignStatus.Done))
 		    {
                 getDoneCampaigns(campaignList);
