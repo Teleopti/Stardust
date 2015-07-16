@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Specialized;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.MessageBroker;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Models.MessageBroker
 {
@@ -17,7 +15,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Models.MessageBroker
 		private ICurrentBusinessUnit buProvider;
 		private IDataSource dataSource;
 		private IUserDataFactory target;
-		private IConfigReader configReader;
+		private FakeConfigReader configReader;
 		private ILoggedOnUser loggedOnUser;
 
 		[SetUp]
@@ -25,7 +23,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Models.MessageBroker
 		{
 			buProvider = MockRepository.GenerateMock<ICurrentBusinessUnit>();
 			dataSource = MockRepository.GenerateMock<IDataSource>();
-			configReader = MockRepository.GenerateMock<IConfigReader>();
+			configReader = new FakeConfigReader();
 			loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			target = new UserDataFactory(buProvider, () => dataSource, configReader, loggedOnUser);
 		}
@@ -55,9 +53,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Models.MessageBroker
 		public void ShouldSetMessageBrokerUrl()
 		{
 			const string expected = "http://donkeyXXX.com";
-			var nameValue = new NameValueCollection();
-			nameValue.Add(UserDataFactory.MessageBrokerUrlKey, expected);
-			configReader.Expect(mock => mock.AppSettings_DontUse).Return(nameValue);
+			configReader.AppSettings_DontUse[UserDataFactory.MessageBrokerUrlKey] = expected;
 
 			var result = target.CreateViewModel();
 			result.Url.Should().Be.EqualTo(expected);
@@ -67,10 +63,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Models.MessageBroker
 		public void ShouldSetMessageBrokerUrlFromContextWhenSetToReplace()
 		{
 			const string configured = "http://myserver/broker/signalr/";
-			var nameValue = new NameValueCollection();
-			nameValue.Add(UserDataFactory.MessageBrokerUrlKey, configured);
-			nameValue.Add("UseRelativeConfiguration", "true");
-			configReader.Expect(mock => mock.AppSettings_DontUse).Return(nameValue);
+			configReader.AppSettings_DontUse[UserDataFactory.MessageBrokerUrlKey] = configured;
+			configReader.AppSettings_DontUse["UseRelativeConfiguration"] = "true";
 
 			var result = target.CreateViewModel();
 			result.Url.Should().Be.EqualTo("/broker/signalr/");

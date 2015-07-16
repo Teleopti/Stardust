@@ -21,6 +21,13 @@ namespace Teleopti.Ccc.TestCommon
 			ConnectionStrings_DontUse = new ConnectionStringSettingsCollection();
 		}
 
+		public FakeConfigReader(string name, string value)
+		{
+			AppSettings_DontUse = new NameValueCollection();
+			AppSettings_DontUse[name] = value;
+			ConnectionStrings_DontUse = new ConnectionStringSettingsCollection();
+		}
+
 		public string AppConfig(string name)
 		{
 			return AppSettings_DontUse[name];

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -12,7 +10,6 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker;
 
 namespace Teleopti.Ccc.DomainTest.MessageBroker
@@ -27,13 +24,7 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble(new FakeConfigReader
-			{
-				AppSettings_DontUse = new NameValueCollection
-				{
-					{"MessageBrokerMailboxExpirationInSeconds", "1800"}
-				}
-			}).For<IConfigReader>();
+			system.UseTestDouble(new FakeConfigReader("MessageBrokerMailboxExpirationInSeconds", "1800")).For<IConfigReader>();
 		}
 
 		[Test]
