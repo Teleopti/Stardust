@@ -2,12 +2,11 @@
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.MultipleConfig;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
-using ConfigReader = Teleopti.Ccc.Domain.MultipleConfig.ConfigReader;
+using ConfigReader = Teleopti.Ccc.Domain.Config.ConfigReader;
 
 namespace Teleopti.Ccc.IocCommonTest.Toggle
 {

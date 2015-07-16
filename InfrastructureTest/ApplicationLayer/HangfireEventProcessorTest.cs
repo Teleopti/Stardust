@@ -9,7 +9,7 @@ using Autofac.Extras.DynamicProxy2;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.MultipleConfig;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.IocCommon;
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 
 			system.UseTestDouble(new FakeConfigReader
 			{
-				ConnectionStrings = new ConnectionStringSettingsCollection
+				ConnectionStrings_DontUse = new ConnectionStringSettingsCollection
 				{
 					new ConnectionStringSettings("RtaApplication", ConnectionStringHelper.ConnectionStringUsedInTests)
 				}

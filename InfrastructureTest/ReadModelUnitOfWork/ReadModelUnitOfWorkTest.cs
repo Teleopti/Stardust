@@ -223,7 +223,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 		{
 			var rtaConnectionString = new SqlConnectionStringBuilder(ConnectionStringHelper.ConnectionStringUsedInTests).ConnectionString;
 			rtaConnectionString.Should().Not.Be.EqualTo(ConnectionStringHelper.ConnectionStringUsedInTests);
-			ConfigReader.ConnectionStrings = new ConnectionStringSettingsCollection
+			ConfigReader.ConnectionStrings_DontUse = new ConnectionStringSettingsCollection
 				{
 					new ConnectionStringSettings("Wrong", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix),
 					new ConnectionStringSettings("RtaApplication", rtaConnectionString)

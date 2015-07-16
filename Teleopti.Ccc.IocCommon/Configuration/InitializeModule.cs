@@ -1,5 +1,5 @@
 using Autofac;
-using Teleopti.Ccc.Domain.MultipleConfig;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;

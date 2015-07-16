@@ -10,7 +10,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.MultipleConfig;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.MessageBrokerUnitOfWork;
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBrokerUnitOfWork
 
 			system.UseTestDouble(new FakeConfigReader
 			{
-				ConnectionStrings = new ConnectionStringSettingsCollection
+				ConnectionStrings_DontUse = new ConnectionStringSettingsCollection
 				{
 					new ConnectionStringSettings("MessageBroker", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix)
 				}

@@ -1,7 +1,7 @@
 using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.MultipleConfig;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;

@@ -3,7 +3,7 @@ using Hangfire;
 using Hangfire.Common;
 using Hangfire.States;
 using Hangfire.Storage;
-using Teleopti.Ccc.Domain.MultipleConfig;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Core.Hangfire
@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Web.Core.Hangfire
 		public void OnStateApplied(ApplyStateContext context, IWriteOnlyTransaction transaction)
 		{
 			var configReader = (IConfigReader)JobActivator.Current.ActivateJob(typeof(IConfigReader));
-			context.JobExpirationTimeout = TimeSpan.FromSeconds(int.Parse(configReader.AppSettings["HangfireJobExpirationSeconds"]));
+			context.JobExpirationTimeout = TimeSpan.FromSeconds(int.Parse(configReader.AppSettings_DontUse["HangfireJobExpirationSeconds"]));
 		}
 
 		public void OnStateUnapplied(ApplyStateContext context, IWriteOnlyTransaction transaction)

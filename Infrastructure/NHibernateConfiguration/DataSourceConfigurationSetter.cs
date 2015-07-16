@@ -1,7 +1,7 @@
 ﻿using System.Data.SqlClient;
 using NHibernate.Cfg;
 using NHibernate.Dialect;
-using Teleopti.Ccc.Domain.MultipleConfig;
+using Teleopti.Ccc.Domain.Config;
 using Environment = NHibernate.Cfg.Environment;
 
 namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			UseDistributedTransactionFactory = useDistributedTransactionFactory;
 			SessionContext = sessionContext;
 			ApplicationName = applicationName ?? string.Empty;
-			if (!string.IsNullOrEmpty(configReader.AppSettings["latency"]))
+			if (!string.IsNullOrEmpty(configReader.AppSettings_DontUse["latency"]))
 				UseLatency = true;
 		}
 

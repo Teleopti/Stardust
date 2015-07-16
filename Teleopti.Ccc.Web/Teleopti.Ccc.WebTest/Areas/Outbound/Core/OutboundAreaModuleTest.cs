@@ -1,7 +1,7 @@
 ﻿using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.MultipleConfig;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.Infrastructure.Persisters.Outbound;
 using Teleopti.Ccc.IocCommon;

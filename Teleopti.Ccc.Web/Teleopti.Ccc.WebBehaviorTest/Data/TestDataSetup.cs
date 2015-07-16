@@ -2,7 +2,6 @@
 using System.Threading;
 using Autofac;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.MultipleConfig;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -13,7 +12,7 @@ using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client;
-using ConfigReader = Teleopti.Ccc.Domain.MultipleConfig.ConfigReader;
+using ConfigReader = Teleopti.Ccc.Domain.Config.ConfigReader;
 using IMessageSender = Teleopti.Ccc.Infrastructure.UnitOfWork.IMessageSender;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data

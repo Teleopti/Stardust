@@ -4,7 +4,7 @@ using Autofac;
 using MbCache.Configuration;
 using MbCache.ProxyImpl.LinFu;
 using Teleopti.Ccc.Domain;
-using Teleopti.Ccc.Domain.MultipleConfig;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.IocCommon.Configuration;
 
@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.IocCommon
 		public bool PublishEventsToServiceBus { get; set; }
 		public bool ThrottleMessages { get; set; }
 		public int MessagesPerSecond { get; set; }
+		public bool EnableNewResourceCalculation { get; set; }
 
 		public bool MessageBrokerListeningEnabled { get; set; }
 		public IContainer SharedContainer { get; set; }
@@ -63,6 +64,7 @@ namespace Teleopti.Ccc.IocCommon
 			MessagesPerSecond = configReader.ReadValue("MessagesPerSecond", 80);
 			PublishEventsToServiceBus = configReader.ReadValue("PublishEventsToServiceBus", true);
 			DataSourceConfigurationSetter = Infrastructure.NHibernateConfiguration.DataSourceConfigurationSetter.ForWeb();
+			EnableNewResourceCalculation = configReader.ReadValue("EnableNewResourceCalculation", false);
 			ClearCache = false;
 		}
 

@@ -3,7 +3,7 @@ using System.IO;
 using System.Net;
 using Autofac;
 using log4net.Config;
-using Teleopti.Ccc.Domain.MultipleConfig;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Sdk.ServiceBus.Container;

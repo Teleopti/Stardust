@@ -6,7 +6,7 @@ using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.MultipleConfig;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker;
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 			_beforeSubscribe = beforeSubscribe ?? new SubscriptionPassThrough();
 
 			if (configuration == null ||
-			    !int.TryParse(configuration.AppSettings["MessageBrokerMailboxExpirationInSeconds"], out _expirationInterval))
+			    !int.TryParse(configuration.AppConfig("MessageBrokerMailboxExpirationInSeconds"), out _expirationInterval))
 				_expirationInterval = 900;
 		}
 

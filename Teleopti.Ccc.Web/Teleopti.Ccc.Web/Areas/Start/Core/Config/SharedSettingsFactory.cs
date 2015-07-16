@@ -1,5 +1,5 @@
 ﻿using System;
-using Teleopti.Ccc.Domain.MultipleConfig;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Interfaces.Infrastructure;
@@ -21,16 +21,16 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Config
 		{
 			return new SharedSettings
 			{
-				MessageBroker = _configReader.AppSettings["MessageBroker"],
-				MessageBrokerLongPolling = _configReader.AppSettings["MessageBrokerLongPolling"],
-				RtaPollingInterval = _configReader.AppSettings["RtaPollingInterval"],
-				Queue = _configReader.ConnectionStrings["Queue"] == null ? 
+				MessageBroker = _configReader.AppSettings_DontUse["MessageBroker"],
+				MessageBrokerLongPolling = _configReader.AppSettings_DontUse["MessageBrokerLongPolling"],
+				RtaPollingInterval = _configReader.AppSettings_DontUse["RtaPollingInterval"],
+				Queue = _configReader.ConnectionStrings_DontUse["Queue"] == null ? 
 					string.Empty : 
-					Encryption.EncryptStringToBase64(_configReader.ConnectionStrings["Queue"].ToString(), EncryptionConstants.Image1, EncryptionConstants.Image2),
+					Encryption.EncryptStringToBase64(_configReader.ConnectionStrings_DontUse["Queue"].ToString(), EncryptionConstants.Image1, EncryptionConstants.Image2),
 				PasswordPolicy = _passwordPolicyService.DocumentAsString,
-				NumberOfDaysToShowNonPendingRequests = Convert.ToInt32(_configReader.AppSettings["NumberOfDaysToShowNonPendingRequests"]),
-				MessageBrokerMailboxPollingIntervalInSeconds = Convert.ToInt32(_configReader.AppSettings["MessageBrokerMailboxPollingIntervalInSeconds"]),
-				MessageBrokerMailboxExpirationInSeconds = Convert.ToInt32(_configReader.AppSettings["MessageBrokerMailboxExpirationInSeconds"])
+				NumberOfDaysToShowNonPendingRequests = Convert.ToInt32(_configReader.AppSettings_DontUse["NumberOfDaysToShowNonPendingRequests"]),
+				MessageBrokerMailboxPollingIntervalInSeconds = Convert.ToInt32(_configReader.AppSettings_DontUse["MessageBrokerMailboxPollingIntervalInSeconds"]),
+				MessageBrokerMailboxExpirationInSeconds = Convert.ToInt32(_configReader.AppSettings_DontUse["MessageBrokerMailboxExpirationInSeconds"])
 			};
 		}
 	}

@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Core.Config
 		{
 			var expected = RandomName.Make();
 			var appConfig = new FakeConfigReader();
-			appConfig.AppSettings["MessageBroker"] = expected;
+			appConfig.AppSettings_DontUse["MessageBroker"] = expected;
 
 			var target = new SharedSettingsFactory(appConfig, MockRepository.GenerateStub<ILoadPasswordPolicyService>());
 			var result = target.Create();
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Core.Config
 		{
 			const int expected = 123;
 			var appConfig = new FakeConfigReader();
-			appConfig.AppSettings["NumberOfDaysToShowNonPendingRequests"] = expected.ToString();
+			appConfig.AppSettings_DontUse["NumberOfDaysToShowNonPendingRequests"] = expected.ToString();
 
 			var target = new SharedSettingsFactory(appConfig, MockRepository.GenerateStub<ILoadPasswordPolicyService>());
 			var result = target.Create();
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Core.Config
 		{
 			var expected = RandomName.Make();
 			var appConfig = new FakeConfigReader();
-			appConfig.AppSettings["MessageBrokerLongPolling"] = expected;
+			appConfig.AppSettings_DontUse["MessageBrokerLongPolling"] = expected;
 
 			var target = new SharedSettingsFactory(appConfig, MockRepository.GenerateStub<ILoadPasswordPolicyService>());
 			var result = target.Create();
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Core.Config
 		{
 			var expected = RandomName.Make();
 			var appConfig = new FakeConfigReader();
-			appConfig.AppSettings["RtaPollingInterval"] = expected;
+			appConfig.AppSettings_DontUse["RtaPollingInterval"] = expected;
 
 			var target = new SharedSettingsFactory(appConfig, MockRepository.GenerateStub<ILoadPasswordPolicyService>());
 			var result = target.Create();
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Core.Config
 			var expected = RandomName.Make();
 			var appConfig = new FakeConfigReader
 			{
-				ConnectionStrings = new ConnectionStringSettingsCollection
+				ConnectionStrings_DontUse = new ConnectionStringSettingsCollection
 				{
 					new ConnectionStringSettings("Queue", expected)
 				}

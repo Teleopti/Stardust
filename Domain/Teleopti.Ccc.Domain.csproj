@@ -477,7 +477,7 @@
     <Compile Include="Common\PersonsInOrganizationProvider.cs" />
     <Compile Include="ApplicationLayer\ICommandDispatcher.cs" />
     <Compile Include="ApplicationLayer\IHandleCommand.cs" />
-    <Compile Include="MultipleConfig\ConfigReaderExtensions.cs" />
+    <Compile Include="Config\ConfigReaderExtensions.cs" />
     <Compile Include="CurrentApplicationData.cs" />
     <Compile Include="DayOffPlanning\CMSBCaseSolver.cs" />
     <Compile Include="DayOffPlanning\CMSBOneFreeWeekendMax5WorkingDaysDecisionMaker.cs" />
@@ -595,9 +595,9 @@
     <Compile Include="Helper\IBackgroundWorkerWrapper.cs" />
     <Compile Include="ICurrentApplicationData.cs" />
     <Compile Include="MessageBroker\IMailboxRepository.cs" />
-    <Compile Include="MultipleConfig\ConfigOverrider.cs" />
-    <Compile Include="MultipleConfig\ConfigReader.cs" />
-    <Compile Include="MultipleConfig\IConfigReader.cs" />
+    <Compile Include="Config\ConfigOverrider.cs" />
+    <Compile Include="Config\ConfigReader.cs" />
+    <Compile Include="Config\IConfigReader.cs" />
     <Compile Include="Optimization\SchedulePeriodListShiftCategoryBackToLegalStateService.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDayOffsInPeriodValidator.cs" />
     <Compile Include="Outbound\CampaignRuleChecker.cs" />

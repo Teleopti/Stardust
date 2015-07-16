@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Autofac;
 using MbCache.Core;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.MultipleConfig;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.IocCommon;

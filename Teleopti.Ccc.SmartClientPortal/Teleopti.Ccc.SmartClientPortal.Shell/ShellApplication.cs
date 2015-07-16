@@ -9,8 +9,8 @@ using System.Windows.Markup;
 using Autofac;
 using log4net;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.MultipleConfig;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
@@ -46,7 +46,7 @@ using Teleopti.Ccc.WinCode.Main;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Application = System.Windows.Forms.Application;
-using ConfigReader = Teleopti.Ccc.Domain.MultipleConfig.ConfigReader;
+using ConfigReader = Teleopti.Ccc.Domain.Config.ConfigReader;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell
 {

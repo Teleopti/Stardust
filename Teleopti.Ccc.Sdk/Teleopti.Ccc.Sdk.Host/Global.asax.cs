@@ -9,7 +9,6 @@ using Autofac.Integration.Wcf;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.MultipleConfig;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -43,7 +42,7 @@ using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
-using ConfigReader = Teleopti.Ccc.Domain.MultipleConfig.ConfigReader;
+using ConfigReader = Teleopti.Ccc.Domain.Config.ConfigReader;
 
 namespace Teleopti.Ccc.Sdk.WcfHost
 {

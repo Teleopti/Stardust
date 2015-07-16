@@ -2,9 +2,9 @@ using System;
 using System.Net;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.MultipleConfig;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -34,7 +34,7 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 			system.UseTestDouble<FakeHttpServer>().For<IHttpServer>();
 			system.UseTestDouble<FakeTime>().For<ITime>();
 			var config = new FakeConfigReader();
-			config.AppSettings["MessageBrokerMailboxPollingIntervalInSeconds"] = "60";
+			config.AppSettings_DontUse["MessageBrokerMailboxPollingIntervalInSeconds"] = "60";
 			system.UseTestDouble(config).For<IConfigReader>();
 		}
 

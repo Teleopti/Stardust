@@ -3,7 +3,7 @@ using System.Data.SqlClient;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.MultipleConfig;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 			var configReader = MockRepository.GenerateMock<IConfigReader>();
 			target.ConfigReader = configReader;
 
-			configReader.Expect(cr => cr.AppSettings).Return(namevaluecoll);
+			configReader.Expect(cr => cr.AppSettings_DontUse).Return(namevaluecoll);
 
 			target.Latency.Should().Be.EqualTo(latency);
 		}
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 			var configReader = MockRepository.GenerateStrictMock<IConfigReader>();
 			target.ConfigReader = configReader;
 
-			configReader.Expect(cr => cr.AppSettings).Return(new NameValueCollection());
+			configReader.Expect(cr => cr.AppSettings_DontUse).Return(new NameValueCollection());
 
 			target.CreateCommand();
 			target.CreateCommand();

@@ -1,4 +1,4 @@
-using Teleopti.Ccc.Domain.MultipleConfig;
+using Teleopti.Ccc.Domain.Config;
 
 namespace Teleopti.Ccc.Web.Core
 {
@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Web.Core
 
 		public string DefaultProvider()
 		{
-            return "urn:" + (_overrideProvider ?? _configReader.AppSettings["DefaultIdentityProvider"]);
+            return "urn:" + (_overrideProvider ?? _configReader.AppSettings_DontUse["DefaultIdentityProvider"]);
 		}
 
 	    internal void SetDefaultProvider(string provider)

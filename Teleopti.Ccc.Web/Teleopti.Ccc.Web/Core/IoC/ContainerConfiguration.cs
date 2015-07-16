@@ -1,7 +1,7 @@
 ﻿using System.Web.Http;
 using Autofac;
 using MbCache.Configuration;
-using Teleopti.Ccc.Domain.MultipleConfig;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.IocCommon;
 

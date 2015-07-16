@@ -16,7 +16,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.MultipleConfig;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -61,7 +60,7 @@ using Teleopti.Ccc.Web.Core.Startup.Booter;
 using Teleopti.Ccc.Web.Core.Startup.InitializeApplication;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using ConfigReader = Teleopti.Ccc.Domain.MultipleConfig.ConfigReader;
+using ConfigReader = Teleopti.Ccc.Domain.Config.ConfigReader;
 using ITeamScheduleViewModelFactory = Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory.ITeamScheduleViewModelFactory;
 
 namespace Teleopti.Ccc.WebTest.Core.IoC

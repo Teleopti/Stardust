@@ -1,7 +1,7 @@
 ﻿using System.Collections.Specialized;
 using System.Configuration;
 
-namespace Teleopti.Ccc.Domain.MultipleConfig
+namespace Teleopti.Ccc.Domain.Config
 {
 	public class ConfigReader : IConfigReader
 	{
@@ -10,12 +10,12 @@ namespace Teleopti.Ccc.Domain.MultipleConfig
 			return ConfigurationManager.AppSettings[name];
 		}
 
-		public NameValueCollection AppSettings
+		public NameValueCollection AppSettings_DontUse
 		{
 			get { return ConfigurationManager.AppSettings; }
 		}
 
-		public ConnectionStringSettingsCollection ConnectionStrings
+		public ConnectionStringSettingsCollection ConnectionStrings_DontUse
 		{
 			get { return ConfigurationManager.ConnectionStrings; }
 		}

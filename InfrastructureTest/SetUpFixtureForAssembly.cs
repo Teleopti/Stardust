@@ -6,7 +6,6 @@ using System.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.MultipleConfig;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Ccc.Domain.Infrastructure;
@@ -25,7 +24,7 @@ using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Messaging.Client;
-using ConfigReader = Teleopti.Ccc.Domain.MultipleConfig.ConfigReader;
+using ConfigReader = Teleopti.Ccc.Domain.Config.ConfigReader;
 
 
 namespace Teleopti.Ccc.InfrastructureTest

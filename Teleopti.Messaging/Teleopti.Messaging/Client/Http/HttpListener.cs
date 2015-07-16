@@ -1,7 +1,7 @@
 using System;
 using System.Globalization;
 using Teleopti.Ccc.Domain;
-using Teleopti.Ccc.Domain.MultipleConfig;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;

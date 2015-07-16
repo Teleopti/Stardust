@@ -5,7 +5,7 @@ using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Resolvers;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator;
-using Teleopti.Ccc.Domain.MultipleConfig;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				);
 
 			Log.Info("The real time adherence service is now started");
-			_authenticationKey = configReader.AppSettings["AuthenticationKey"];
+			_authenticationKey = configReader.AppSettings_DontUse["AuthenticationKey"];
 			if (string.IsNullOrEmpty(_authenticationKey))
 				_authenticationKey = DefaultAuthenticationKey;
 		}

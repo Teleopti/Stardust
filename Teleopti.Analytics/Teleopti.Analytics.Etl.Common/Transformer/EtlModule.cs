@@ -7,8 +7,8 @@ using Autofac;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.MultipleConfig;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;
@@ -35,7 +35,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			builder.Register(c =>
 			{
 				var configReader = c.Resolve<IConfigReader>();
-				var connStringToTenant = configReader.ConnectionStrings["Tenancy"];
+				var connStringToTenant = configReader.ConnectionStrings_DontUse["Tenancy"];
 				var connstringAsString = connStringToTenant == null ? null : connStringToTenant.ConnectionString;
 				return TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(connstringAsString);
 			})

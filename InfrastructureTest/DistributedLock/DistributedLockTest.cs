@@ -4,8 +4,8 @@ using System.Threading;
 using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.DistributedLock;
-using Teleopti.Ccc.Domain.MultipleConfig;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.DistributedLock;
 using Teleopti.Ccc.IocCommon;
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.InfrastructureTest.DistributedLock
 			system.UseTestDouble(
 				new FakeConfigReader
 				{
-					ConnectionStrings = new ConnectionStringSettingsCollection
+					ConnectionStrings_DontUse = new ConnectionStringSettingsCollection
 					{
 						new ConnectionStringSettings("RtaApplication", ConnectionStringHelper.ConnectionStringUsedInTests)
 					}
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.InfrastructureTest.DistributedLock
 		[Test]
 		public void ShouldNotRunOnTimeout()
 		{
-			ConfigReader.AppSettings.Add("DistributedLockTimeout", ((int)TimeSpan.FromMilliseconds(100).TotalMilliseconds).ToString());
+			ConfigReader.AppSettings_DontUse.Add("DistributedLockTimeout", ((int)TimeSpan.FromMilliseconds(100).TotalMilliseconds).ToString());
 			var isLocking = new ManualResetEvent(false);
 			var ran = false;
 
@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.InfrastructureTest.DistributedLock
 		[Test]
 		public void ShouldThrowOnTimeout()
 		{
-			ConfigReader.AppSettings.Add("DistributedLockTimeout", ((int)TimeSpan.FromMilliseconds(100).TotalMilliseconds).ToString());
+			ConfigReader.AppSettings_DontUse.Add("DistributedLockTimeout", ((int)TimeSpan.FromMilliseconds(100).TotalMilliseconds).ToString());
 			var isLocking = new ManualResetEvent(false);
 
 			var locking = onAnotherThread(() =>

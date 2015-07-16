@@ -4,7 +4,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.MultipleConfig;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.MessageBroker;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Models.MessageBroker
 			const string expected = "http://donkeyXXX.com";
 			var nameValue = new NameValueCollection();
 			nameValue.Add(UserDataFactory.MessageBrokerUrlKey, expected);
-			configReader.Expect(mock => mock.AppSettings).Return(nameValue);
+			configReader.Expect(mock => mock.AppSettings_DontUse).Return(nameValue);
 
 			var result = target.CreateViewModel();
 			result.Url.Should().Be.EqualTo(expected);
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Models.MessageBroker
 			var nameValue = new NameValueCollection();
 			nameValue.Add(UserDataFactory.MessageBrokerUrlKey, configured);
 			nameValue.Add("UseRelativeConfiguration", "true");
-			configReader.Expect(mock => mock.AppSettings).Return(nameValue);
+			configReader.Expect(mock => mock.AppSettings_DontUse).Return(nameValue);
 
 			var result = target.CreateViewModel();
 			result.Url.Should().Be.EqualTo("/broker/signalr/");

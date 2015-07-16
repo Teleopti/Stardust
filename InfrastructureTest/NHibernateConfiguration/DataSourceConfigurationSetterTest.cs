@@ -4,7 +4,7 @@ using NHibernate.Dialect;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.MultipleConfig;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Interfaces.Infrastructure;
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 		{
 			var cfg = new Configuration();
 			var configReader = MockRepository.GenerateMock<IConfigReader>();
-			configReader.Expect(cr => cr.AppSettings).Return(new NameValueCollection { { "latency", "3" } });
+			configReader.Expect(cr => cr.AppSettings_DontUse).Return(new NameValueCollection { { "latency", "3" } });
 
 			var target = new dataSourceConfigurationSetterForTest(false, true, null, null, configReader);
 

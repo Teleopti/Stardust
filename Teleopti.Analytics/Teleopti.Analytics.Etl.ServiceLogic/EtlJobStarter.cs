@@ -17,7 +17,7 @@ using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using log4net;
 using log4net.Config;
-using Teleopti.Ccc.Domain.MultipleConfig;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;

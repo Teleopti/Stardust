@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.MultipleConfig;
+using Teleopti.Ccc.Domain.Config;
 
 namespace Teleopti.Ccc.TestCommon
 {
@@ -10,24 +10,24 @@ namespace Teleopti.Ccc.TestCommon
 	{
 		public FakeConfigReader(IEnumerable<KeyValuePair<string, string>> config)
 		{
-			AppSettings = new NameValueCollection();
-			config.ForEach(x => AppSettings[x.Key] = x.Value);
-			ConnectionStrings = new ConnectionStringSettingsCollection();
+			AppSettings_DontUse = new NameValueCollection();
+			config.ForEach(x => AppSettings_DontUse[x.Key] = x.Value);
+			ConnectionStrings_DontUse = new ConnectionStringSettingsCollection();
 		}
 
 		public FakeConfigReader()
 		{
-			AppSettings = new NameValueCollection();
-			ConnectionStrings = new ConnectionStringSettingsCollection();
+			AppSettings_DontUse = new NameValueCollection();
+			ConnectionStrings_DontUse = new ConnectionStringSettingsCollection();
 		}
 
 		public string AppConfig(string name)
 		{
-			return AppSettings[name];
+			return AppSettings_DontUse[name];
 		}
 
-		public NameValueCollection AppSettings { get; set; }
+		public NameValueCollection AppSettings_DontUse { get; set; }
 
-		public ConnectionStringSettingsCollection ConnectionStrings { get; set; }
+		public ConnectionStringSettingsCollection ConnectionStrings_DontUse { get; set; }
 	}
 }

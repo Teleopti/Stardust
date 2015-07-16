@@ -4,8 +4,8 @@ using Autofac;
 using Rhino.ServiceBus.Internal;
 using Rhino.ServiceBus.Sagas.Persisters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.PulseLoop;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.MultipleConfig;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 			build.Register(c =>
 			{
 				var configReader = c.Resolve<IConfigReader>();
-				var connStringToTenant = configReader.ConnectionStrings["Tenancy"];
+				var connStringToTenant = configReader.ConnectionStrings_DontUse["Tenancy"];
 				var connstringAsString = connStringToTenant == null ? null : connStringToTenant.ConnectionString;
 				return TenantUnitOfWorkManager.CreateInstanceForThread(connstringAsString);
 			})

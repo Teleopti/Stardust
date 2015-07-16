@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Data.SqlClient;
-using Teleopti.Ccc.Domain.MultipleConfig;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Common
 
 		private IDataSource dataSourceFromRtaConfiguration()
 		{
-			var configString = new SqlConnectionStringBuilder(_configReader.ConnectionStrings["RtaApplication"].ConnectionString);
+			var configString = new SqlConnectionStringBuilder(_configReader.ConnectionStrings_DontUse["RtaApplication"].ConnectionString);
 			IDataSource dataSource = null;
 			_applicationData.Current().DoOnAllTenants_AvoidUsingThis(tenant =>
 			{

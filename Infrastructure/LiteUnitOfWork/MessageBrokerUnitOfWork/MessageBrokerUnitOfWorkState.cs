@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Dialect;
-using Teleopti.Ccc.Domain.MultipleConfig;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork.MessageBrokerUnitOfWork
 			var configuration = new Configuration()
 				.DataBaseIntegration(db =>
 				{
-					db.ConnectionString = _configReader.ConnectionStrings["MessageBroker"].ConnectionString;
+					db.ConnectionString = _configReader.ConnectionStrings_DontUse["MessageBroker"].ConnectionString;
 					db.Dialect<MsSql2008Dialect>();
 				});
 			_sessionFactory = configuration.BuildSessionFactory();

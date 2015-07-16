@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Specialized;
 
-namespace Teleopti.Ccc.Domain.MultipleConfig
+namespace Teleopti.Ccc.Domain.Config
 {
 	public static class ConfigReaderExtensions
 	{
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.MultipleConfig
 
 		public static double ReadValue(this IConfigReader reader, string name, double @default)
 		{
-			var value = reader.AppSettings[name];
+			var value = reader.AppConfig(name);
 			if (string.IsNullOrEmpty(value))
 				return @default;
 			double result;
