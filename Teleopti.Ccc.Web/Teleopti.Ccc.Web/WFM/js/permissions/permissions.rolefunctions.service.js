@@ -31,22 +31,25 @@
 				rolesFunctionsService.functionsDisplayed = result;
 			});
 
-			rolesFunctionsService.unselectFunction = function (nodes, selectedRole) {
-				console.log(nodes, "in the service")
+			rolesFunctionsService.unselectFunction = function (functionId, selectedRole) {
 				var deferred = $q.defer();
-				PermissionsService.deleteFunction.query({ Id: selectedRole.Id, FunctionId: nodes }).$promise.then(function (result) {
+				PermissionsService.deleteFunction.query({ Id: selectedRole.Id, FunctionId: functionId }).$promise.then(function (result) {
+					deferred.resolve();
 				});
-				deferred.resolve();
+				
 				return deferred.promise;
 			};
 
-			rolesFunctionsService.selectFunction = function(nodes, selectedRole) {
+			rolesFunctionsService.selectFunction = function (functionId, selectedRole) {
 				var deferred = $q.defer();
-					PermissionsService.postFunction.query({ Id: selectedRole.Id, Functions: nodes }).$promise.then(function (result) {
-					});
-				deferred.resolve();
+				PermissionsService.postFunction.query({ Id: selectedRole.Id, Functions: functionId }).$promise.then(function (result) {
+					deferred.resolve();
+
+				});
+				
 				return deferred.promise;
 			};
+
 			rolesFunctionsService.refreshFunctions = function(newSelectedRoleId) {
 				PermissionsService.rolesPermissions.query({ Id: newSelectedRoleId }).$promise.then(function(result) {
 					var permsFunc = result.AvailableFunctions;

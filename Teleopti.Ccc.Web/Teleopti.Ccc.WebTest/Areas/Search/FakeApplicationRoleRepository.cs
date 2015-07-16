@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 
 		public IApplicationRole Get(Guid id)
 		{
-			throw new NotImplementedException();
+			return _roles.FirstOrDefault();
 		}
 
 		public IList<IApplicationRole> LoadAll()

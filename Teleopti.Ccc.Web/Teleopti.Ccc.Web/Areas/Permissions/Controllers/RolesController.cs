@@ -45,11 +45,11 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 
 		private IApplicationRole createNewRole(string description)
 		{
-			var role = new ApplicationRole {DescriptionText = description,Name = descriptionToName(description)};
+			var role = new ApplicationRole { DescriptionText = description, Name = descriptionToName(description) };
 			role.SetBusinessUnit(_currentBusinessUnit.Current());
 			_roleRepository.Add(role);
 
-			var availableData = new AvailableData {ApplicationRole = role};
+			var availableData = new AvailableData { ApplicationRole = role };
 			_availableDataRepository.Add(availableData);
 
 			role.AvailableData = availableData;
@@ -76,20 +76,20 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 		{
 			var role = _roleRepository.Get(roleId);
 			return new
-				{
-					role.Name,
-					role.Id,
-					role.BuiltIn,
-					role.DescriptionText,
-					role.AvailableData.AvailableDataRange,
-					AvailableBusinessUnits = role.AvailableData.AvailableBusinessUnits.Select(b => new { b.Name, b.Id }).ToArray(),
-					AvailableSites = role.AvailableData.AvailableSites.Select(s => new { s.Description.Name, s.Id }).ToArray(),
-					AvailableTeams = role.AvailableData.AvailableTeams.Select(t => new { t.Description.Name, t.Id }).ToArray(),
-					AvailableFunctions = role.ApplicationFunctionCollection.Select(f => new { f.Id, f.FunctionCode, f.FunctionPath, f.LocalizedFunctionDescription }).ToArray()
-				};
+			{
+				role.Name,
+				role.Id,
+				role.BuiltIn,
+				role.DescriptionText,
+				role.AvailableData.AvailableDataRange,
+				AvailableBusinessUnits = role.AvailableData.AvailableBusinessUnits.Select(b => new { b.Name, b.Id }).ToArray(),
+				AvailableSites = role.AvailableData.AvailableSites.Select(s => new { s.Description.Name, s.Id }).ToArray(),
+				AvailableTeams = role.AvailableData.AvailableTeams.Select(t => new { t.Description.Name, t.Id }).ToArray(),
+				AvailableFunctions = role.ApplicationFunctionCollection.Select(f => new { f.Id, f.FunctionCode, f.FunctionPath, f.LocalizedFunctionDescription }).ToArray()
+			};
 		}
 
-		[UnitOfWork, Route("api/Permissions/Roles/{roleId}/Functions"),HttpPost]
+		[UnitOfWork, Route("api/Permissions/Roles/{roleId}/Functions"), HttpPost]
 		public virtual IHttpActionResult AddFunctions(Guid roleId, [FromBody]FunctionsForRoleInput model)
 		{
 			var role = _roleRepository.Get(roleId);
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 		{
 			var role = _roleRepository.Load(roleId);
 			if (role.BuiltIn) return BadRequest(CannotModifyBuiltInRoleErrorMessage);
-			
+
 			_roleRepository.Remove(role);
 			return Ok();
 		}
@@ -116,13 +116,29 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 		{
 			var role = _roleRepository.Get(roleId);
 			if (role.BuiltIn) return BadRequest(CannotModifyBuiltInRoleErrorMessage);
+			var children = _applicationFunctionRepository.GetChildFunctions(functionId);
+			foreach (var child in children)
+				if (child.Id.HasValue) removeChildren(child.Id.Value, role);
 
 			role.RemoveApplicationFunction(_applicationFunctionRepository.Load(functionId));
-			
 			return Ok();
 		}
 
-		[UnitOfWork, Route("api/Permissions/Roles/{roleId}"),HttpPut]
+
+		private void removeChildren(Guid functionId, IApplicationRole role)
+		{
+			var functionIds = _applicationFunctionRepository.GetChildFunctions(functionId);
+			foreach (var child in functionIds)
+			{
+				if (!child.Id.HasValue) continue;
+				if (_applicationFunctionRepository.GetChildFunctions(child.Id.Value).Any())
+					removeChildren(child.Id.Value, role);
+				role.RemoveApplicationFunction(_applicationFunctionRepository.Load(child.Id.Value));
+			}
+			role.RemoveApplicationFunction(_applicationFunctionRepository.Load(functionId));
+		}
+
+		[UnitOfWork, Route("api/Permissions/Roles/{roleId}"), HttpPut]
 		public virtual IHttpActionResult RenameRole(Guid roleId, [FromBody]RoleNameInput model)
 		{
 			if (descriptionIsInvalid(model.NewDescription)) return BadRequest(GivenDescriptionIsInvalidErrorMessage);
@@ -138,14 +154,14 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 
 		private bool descriptionIsInvalid(string newDescription)
 		{
-			return string.IsNullOrEmpty(newDescription) || newDescription.Length>255;
+			return string.IsNullOrEmpty(newDescription) || newDescription.Length > 255;
 		}
 
-		[UnitOfWork, Route("api/Permissions/Roles/{roleId}/Copy"),HttpPost]
+		[UnitOfWork, Route("api/Permissions/Roles/{roleId}/Copy"), HttpPost]
 		public virtual IHttpActionResult CopyExistingRole(Guid roleId)
 		{
 			var roleToCopy = _roleRepository.Get(roleId);
-			var newRole = createNewRole(string.Format(CultureInfo.CurrentUICulture,"{0} {1}", UserTexts.Resources.CopyOf, roleToCopy.DescriptionText));
+			var newRole = createNewRole(string.Format(CultureInfo.CurrentUICulture, "{0} {1}", UserTexts.Resources.CopyOf, roleToCopy.DescriptionText));
 			roleToCopy.ApplicationFunctionCollection.ForEach(newRole.AddApplicationFunction);
 			roleToCopy.AvailableData.AvailableBusinessUnits.ForEach(newRole.AvailableData.AddAvailableBusinessUnit);
 			roleToCopy.AvailableData.AvailableSites.ForEach(newRole.AvailableData.AddAvailableSite);
