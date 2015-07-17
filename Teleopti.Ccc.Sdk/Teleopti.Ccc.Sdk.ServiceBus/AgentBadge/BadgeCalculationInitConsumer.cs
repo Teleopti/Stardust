@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 	public class BadgeCalculationInitConsumer : ConsumerOf<BadgeCalculationInitMessage>
 	{
 		private readonly IServiceBus _serviceBus;
-		private readonly IGamificationSettingRepository _settingsRepository;
+		private readonly ITeamGamificationSettingRepository _teamGamificationSettingRepository;
 		private readonly IBusinessUnitRepository _buRepository;
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private static readonly ILog logger = LogManager.GetLogger(typeof(BadgeCalculationInitConsumer));
@@ -26,15 +26,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		/// TODO:existed problem: new added timezone to the system will not be calculated now.
 		/// </summary>
 		/// <param name="serviceBus"></param>
-		/// <param name="settingsRepository"></param>
+		/// <param name="teamGamificationSettingRepository"></param>
 		/// <param name="buRepository"></param>
 		/// <param name="unitOfWorkFactory"></param>
 		/// <param name="toggleManager"></param>
-		public BadgeCalculationInitConsumer(IServiceBus serviceBus, IGamificationSettingRepository settingsRepository,
-			IBusinessUnitRepository buRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, IToggleManager toggleManager)
+		public BadgeCalculationInitConsumer(IServiceBus serviceBus,
+			ITeamGamificationSettingRepository teamGamificationSettingRepository, IBusinessUnitRepository buRepository,
+			ICurrentUnitOfWorkFactory unitOfWorkFactory, IToggleManager toggleManager)
 		{
 			_serviceBus = serviceBus;
-			_settingsRepository = settingsRepository;
+			_teamGamificationSettingRepository = teamGamificationSettingRepository;
 			_buRepository = buRepository;
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_toggleManager = toggleManager;
@@ -57,16 +58,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			List<TimeZoneInfo> timeZoneList;
 			using (_unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
-				var settings = _settingsRepository.FindAllGamificationSettingsSortedByDescription();
-				if (!_toggleManager.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318))
+				if (_toggleManager.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318))
 				{
+					var settings = _teamGamificationSettingRepository.FindAllTeamGamificationSettingsSortedByTeam();
 					if (settings == null || !settings.Any())
 					{
 						_serviceBus.DelaySend(DateTime.Today.AddDays(1), message);
 						if (logger.IsDebugEnabled)
 						{
 							logger.DebugFormat(
-								"Badge not enabled for all teams. Delay Sending BadgeCalculationInitMessage to Service Bus for "
+								"Badge disabled for all teams. Delay Sending BadgeCalculationInitMessage to Service Bus for "
 								+ "BusinessUnitId={0} in DataSource={1} tommorrow", message.BusinessUnitId,
 								message.Datasource);
 						}
