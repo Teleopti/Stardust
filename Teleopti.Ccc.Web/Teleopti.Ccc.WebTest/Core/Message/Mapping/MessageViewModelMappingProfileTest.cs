@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.WebTest.Core.Message.Mapping
 			_result = Mapper.Map<IList<IPushMessageDialogue>, IList<MessageViewModel>>(_domainMessages);
 
 			var localDateTimeString = TimeZoneInfo.ConvertTimeFromUtc(_pushMessageDialogue.UpdatedOn.Value,_cccTimeZone).ToShortDateTimeString();
-			_result.First().Date.Should().Be.EqualTo(localDateTimeString);
+			_result.First().Date.Value.ToShortDateTimeString().Should().Be.EqualTo(localDateTimeString);
 		}
 
 		[Test]
