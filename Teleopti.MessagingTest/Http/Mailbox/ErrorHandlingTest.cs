@@ -50,8 +50,7 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 		{
 			Server.Throws(new AggregateException(new NullReferenceException()));
 
-			Assert.Throws<AggregateException>(
-				() => Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => { }, typeof (ITestType), false, true));
+			Assert.Throws<AggregateException>(() => Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => { }, typeof (ITestType), false, true));
 		}
 
 		// "ShouldHandle..." and then an assert with IsRunningOk that should be false? I dont understand...

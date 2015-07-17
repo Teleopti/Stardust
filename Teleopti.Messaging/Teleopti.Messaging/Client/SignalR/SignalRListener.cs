@@ -1,9 +1,9 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
-using Teleopti.Messaging.Client.Composite;
 
 namespace Teleopti.Messaging.Client.SignalR
 {
@@ -21,7 +21,7 @@ namespace Teleopti.Messaging.Client.SignalR
 
 		public void RegisterSubscription(Subscription subscription, EventHandler<EventMessageArgs> eventMessageHandler)
 		{
-			_eventHandlers.Add(subscription, eventMessageHandler);
+			_eventHandlers.Add(subscription, eventMessageHandler, false);
 			_client.Call("AddSubscription", subscription);
 		}
 
@@ -37,7 +37,7 @@ namespace Teleopti.Messaging.Client.SignalR
 
 		public void AfterConnectionCreated()
 		{
-			_eventHandlers.ForAll(s => _client.Call("AddSubscription", s));
+			_eventHandlers.All().ForEach(s => _client.Call("AddSubscription", s.Subscription));
 		}
 
 	}

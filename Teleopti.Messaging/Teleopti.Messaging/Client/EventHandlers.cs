@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Messaging.Events;
@@ -10,20 +9,22 @@ namespace Teleopti.Messaging.Client
 {
 	public class EventHandlers
 	{
-		private readonly IList<subscriptionCallback> _subscriptions = new List<subscriptionCallback>();
+		private readonly IList<SubscriptionInfo> _subscriptions = new List<SubscriptionInfo>();
 
-		private class subscriptionCallback
+		public class SubscriptionInfo
 		{
 			public Subscription Subscription { get; set; }
+			public bool MailboxAdded { get; set; }
 			public EventHandler<EventMessageArgs> Callback { get; set; }
 		}
 
-		public void Add(Subscription subscription, EventHandler<EventMessageArgs> eventMessageHandler)
+		public void Add(Subscription subscription, EventHandler<EventMessageArgs> eventMessageHandler, bool mailboxAdded)
 		{
-			_subscriptions.Add(new subscriptionCallback
+			_subscriptions.Add(new SubscriptionInfo
 			{
 				Subscription = subscription,
-				Callback = eventMessageHandler
+				Callback = eventMessageHandler,
+				MailboxAdded = mailboxAdded
 			});
 		}
 
@@ -35,12 +36,10 @@ namespace Teleopti.Messaging.Client
 			toRemove.ForEach(s => _subscriptions.Remove(s));
 		}
 
-		public void ForAll(Action<Subscription> action)
+		public IEnumerable<SubscriptionInfo> All()
 		{
-			_subscriptions
-				.Select(x => x.Subscription)
-				.ForEach(action);
-		}
+			return _subscriptions.ToArray();
+		} 
 
 		public void CallHandlers(Message message)
 		{

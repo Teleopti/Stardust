@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using Teleopti.Ccc.Domain.Collection;
@@ -18,15 +17,8 @@ namespace Teleopti.Messaging.Client.Http
 		private readonly IJsonDeserializer _jsonDeserializer;
 		private readonly ITime _time;
 		private readonly HttpClientM _client;
-		private readonly IList<mailboxTimerInfo> _timers = new List<mailboxTimerInfo>();
 		private readonly TimeSpan _interval;
-
-		private class mailboxTimerInfo
-		{
-			public EventHandler<EventMessageArgs> EventMessageHandler { get; set; }
-			public object Timer { get; set; }
-			public bool IsAlive { get; set; }
-		}
+		private object _timer;
 
 		public HttpListener(
 			EventHandlers eventHandlers, 
@@ -44,65 +36,37 @@ namespace Teleopti.Messaging.Client.Http
 		
 		public void RegisterSubscription(Subscription subscription, EventHandler<EventMessageArgs> eventMessageHandler)
 		{
-			_eventHandlers.Add(subscription, eventMessageHandler);
-			var mailboxTimerInfo = new mailboxTimerInfo {IsAlive = false, EventMessageHandler = eventMessageHandler};
-			mailboxTimerInfo.Timer = _time.StartTimer(
-				o =>
-				{
-					var mailboxInfo = mailboxTimerInfo;
-					if (mailboxInfo.IsAlive || !tryAddMailbox(subscription))
-						return;
-					mailboxInfo.IsAlive = true;
-					startPollingTimer(subscription.MailboxId, eventMessageHandler);
-				},
-				null,
-				TimeSpan.Zero,
-				_interval)
-				;
-			_timers.Add(mailboxTimerInfo);
+			if (_timer == null)
+				_timer = _time.StartTimer(timer, null, _interval, _interval);
+			var mailboxAdded = tryAddMailbox(subscription);
+			_eventHandlers.Add(subscription, eventMessageHandler, mailboxAdded);
 		}
 
-		private void startPollingTimer(string mailboxId, EventHandler<EventMessageArgs> eventMessageHandler)
+		private void timer(object state)
 		{
-			var mailboxTimerInfo = new mailboxTimerInfo { IsAlive = true, EventMessageHandler = eventMessageHandler };
-			mailboxTimerInfo.Timer = _time.StartTimer(
-				o =>
-				{
-					var mailboxInfo = (mailboxTimerInfo)o;
-					var content = tryGetMessagesFromServer(mailboxId);
-					mailboxInfo.IsAlive = content != null;
-					if (!mailboxInfo.IsAlive) return;
-					var messages = _jsonDeserializer.DeserializeObject<Message[]>(content);
-					messages.ForEach(m => _eventHandlers.CallHandlers(m));
-				},
-				mailboxTimerInfo,
-				_interval,
-				_interval)
-				;
-			_timers.Add(mailboxTimerInfo);
-		}
+			_eventHandlers.All().ForEach(e =>
+			{
+				if (!e.MailboxAdded)
+					e.MailboxAdded = tryAddMailbox(e.Subscription);
+				if (!e.MailboxAdded)
+					return;
 
-		public bool IsAlive()
-		{
-			return _timers.All(x => x.IsAlive);
-		}
-
-		public void UnregisterSubscription(EventHandler<EventMessageArgs> eventMessageHandler)
-		{
-			_eventHandlers.Remove(eventMessageHandler);
-			_timers
-				.Where(x => x.EventMessageHandler == eventMessageHandler)
-				.ToArray()
-				.ForEach(x =>
+				HttpContent content = null;
+				ignoreHttpRequestExceptions(() =>
 				{
-					_time.DisposeTimer(x.Timer);
-					_timers.Remove(x);
+					content = _client.Get("MessageBroker/PopMessages/" + e.Subscription.MailboxId).Content;
 				});
-		}
+				// safe to assume that no content means an error? Im not so sure, but keeping the behavior
+				if (content == null)
+				{
+					e.MailboxAdded = false;
+					return;
+				}
 
-		public void Dispose()
-		{
-			_timers.ForEach(x => _time.DisposeTimer(x.Timer));
+				var contentString = content.ReadAsStringAsync().Result;
+				var messages = _jsonDeserializer.DeserializeObject<Message[]>(contentString);
+				messages.ForEach(m => _eventHandlers.CallHandlers(m));
+			});
 		}
 
 		private bool tryAddMailbox(Subscription subscription)
@@ -115,17 +79,20 @@ namespace Teleopti.Messaging.Client.Http
 			return result;
 		}
 
-		private string tryGetMessagesFromServer(string mailboxId)
+		public bool IsAlive()
 		{
-			string result = null;
-			ignoreHttpRequestExceptions(() =>
-			{
-				var content = _client.Get("MessageBroker/PopMessages/" + mailboxId).Content;
-				if (content == null)
-					return;
-				result = content.ReadAsStringAsync().Result;
-			});
-			return result;
+			return _eventHandlers.All().All(x => x.MailboxAdded);
+		}
+
+		public void UnregisterSubscription(EventHandler<EventMessageArgs> eventMessageHandler)
+		{
+			_eventHandlers.Remove(eventMessageHandler);
+		}
+
+		public void Dispose()
+		{
+			if (_timer != null)
+				_time.DisposeTimer(_timer);
 		}
 
 		private void ignoreHttpRequestExceptions(Action action)

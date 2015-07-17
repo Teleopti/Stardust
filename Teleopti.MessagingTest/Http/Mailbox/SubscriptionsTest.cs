@@ -120,14 +120,5 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 			wasCalled_pleaseForgiveMeForSharingState = false;
 		}
 
-		[Test]
-		public void ShouldStopTimersWhenUnsubscribing()
-		{
-			Target.RegisterSubscription(string.Empty, Guid.Empty, EventMessageHandler, typeof(ITestType), false, true);
-			
-			Target.UnregisterSubscription(EventMessageHandler);
-
-			Time.ActiveTimers().Should().Be(0);
-		}
 	}
 }
