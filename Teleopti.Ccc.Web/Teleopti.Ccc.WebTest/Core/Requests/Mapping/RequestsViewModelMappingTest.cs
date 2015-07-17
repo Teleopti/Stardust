@@ -30,12 +30,15 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		private IPerson _loggedOnPerson;
 		private IUserCulture _userCulture;
 		private IPersonNameProvider _personNameProvider;
+		private TimeZoneInfo _timeZone;
 
 		[SetUp]
 		public void Setup()
 		{
 			_userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
-			_userTimeZone.Stub(x => x.TimeZone()).Return(TimeZoneInfo.Local);
+			_timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			_userTimeZone.Stub(x => x.TimeZone()).Return(_timeZone);
+
 			_linkProvider = MockRepository.GenerateMock<ILinkProvider>();
 			_loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			_loggedOnPerson = PersonFactory.CreatePerson("LoggedOn", "Agent");
@@ -218,7 +221,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public void ShouldMapSubject()
 		{
 			var request = new PersonRequest(new Person()){Subject = "Test"};
-
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
 
 			result.Subject.Should().Be("Test");
@@ -227,56 +229,51 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldMapDate()
 		{
-			var timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-			_userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
-
 			var period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddHours(5));
-
 			var request = new PersonRequest(new Person(), new TextRequest(period));
-
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
 
-			result.Dates.Should().Be.EqualTo(period.ToShortDateTimeString(timeZone));
+			result.DateTimeFrom.ToShortDateTimeString().Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(period.StartDateTime, _timeZone).ToShortDateTimeString());
+			result.DateTimeTo.ToShortDateTimeString().Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(period.EndDateTime, _timeZone).ToShortDateTimeString());
 		}
 
 		[Test]
 		public void ShouldMapDatesForShiftRequestForOneDate()
 		{
-			var timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-			_userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
-			_loggedOnPerson.PermissionInformation.SetDefaultTimeZone(timeZone);
+			_loggedOnPerson.PermissionInformation.SetDefaultTimeZone(_timeZone);
 
 			var startDate = new DateOnly(DateTime.UtcNow);
 			var request = createShiftTrade(_loggedOnPerson, PersonFactory.CreatePerson("Receiver"),
 										   startDate, startDate);
 
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
-
-			result.Dates.Should().Be.EqualTo(startDate.ToShortDateString());
+			result.IsSingleDay.Should().Be.EqualTo (true);
+			
 		}
 
 		[Test]
 		public void ShouldMapDatesForShiftRequestForDatePeriod()
 		{
-			var timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-			_userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
-			_loggedOnPerson.PermissionInformation.SetDefaultTimeZone(timeZone);
+			_loggedOnPerson.PermissionInformation.SetDefaultTimeZone(_timeZone);
 
 			var startDate = new DateOnly(DateTime.UtcNow);
 			var endDate = startDate.AddDays(5);
+
 			var request = createShiftTrade(_loggedOnPerson, PersonFactory.CreatePerson("Receiver"),
 										   startDate, endDate);
 
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
-
-			result.Dates.Should().Be.EqualTo(new DateOnlyPeriod(startDate, endDate).ToShortDateString(_userCulture.GetCulture()));
+			
+			new DateOnly(result.DateTimeFrom).Should().Be.EqualTo (startDate);
+			new DateOnly(result.DateTimeTo).Should().Be.EqualTo(endDate.AddDays (1));
+			result.IsSingleDay.Should().Be (false);
+			
 		}
 
 		[Test]
 		public void ShouldMapType()
 		{
 			var request = new PersonRequest(new Person(), new TextRequest(new DateTimePeriod()));
-
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
 
 			result.Type.Should().Be(request.Request.RequestTypeDescription);
@@ -286,7 +283,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public void ShouldMapRequestTypeEnum()
 		{
 			var request = new PersonRequest(new Person(), new TextRequest(new DateTimePeriod()));
-
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
 
 			result.TypeEnum.Should().Be(RequestType.TextRequest);
@@ -295,14 +291,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldMapUpdatedOn()
 		{
-			var timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-			_userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
-
 			var request = new PersonRequest(new Person(), new TextRequest(new DateTimePeriod())) {UpdatedOn = DateTime.UtcNow};
-
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
 
-			result.UpdatedOn.Should().Be(TimeZoneInfo.ConvertTimeFromUtc(request.UpdatedOn.Value, timeZone).ToShortDateTimeString());
+			result.UpdatedOn.Should().Be(TimeZoneInfo.ConvertTimeFromUtc(request.UpdatedOn.Value, _timeZone).ToShortDateTimeString());
 		}
 
 		[Test]
@@ -320,7 +312,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public void ShouldMapStatus()
 		{
 			var request = new PersonRequest(new Person(), new TextRequest(new DateTimePeriod()));
-
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
 
 			result.Status.Should().Be.EqualTo(request.StatusText);
@@ -329,9 +320,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldMapRawTimeInfo()
 		{
-			var timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
-			_userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
-
 			var start = new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc);
 			var end = new DateTime(2000, 1, 2, 3, 0, 0, DateTimeKind.Utc);
 			var period = new DateTimePeriod(start, end);
@@ -341,16 +329,13 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
 
-			result.DateTimeFrom.Should().Be.EqualTo(startInCorrectTimezone);
-			result.DateTimeTo.Should().Be.EqualTo(endInCorrectTimezone);
+			result.DateTimeFrom.ToShortDateTimeString().Should().Be.EqualTo(startInCorrectTimezone.ToShortDateTimeString());
+			result.DateTimeTo.ToShortDateTimeString().Should().Be.EqualTo(endInCorrectTimezone.ToShortDateTimeString());
 		}
 
 		[Test, SetCulture("ar-SA")]
 		public void ShouldMapYearMonthAndDayParts()
 		{
-			var timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
-			_userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
-
 			var start = new DateTime(2013, 3, 18, 0, 0, 0, DateTimeKind.Utc);
 			var end = new DateTime(2013, 3, 19, 0, 0, 0, DateTimeKind.Utc);
 			var period = new DateTimePeriod(start, end);
@@ -359,8 +344,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
 
 			var calendar = CultureInfo.CurrentCulture.Calendar;
-			var dateFrom = TimeZoneInfo.ConvertTimeFromUtc(request.Request.Period.StartDateTime, timeZone);
-			var dateTo = TimeZoneInfo.ConvertTimeFromUtc(request.Request.Period.EndDateTime, timeZone);
+			var dateFrom = TimeZoneInfo.ConvertTimeFromUtc(request.Request.Period.StartDateTime, _timeZone);
+			var dateTo = TimeZoneInfo.ConvertTimeFromUtc(request.Request.Period.EndDateTime, _timeZone);
 
 			result.DateFromYear.Should().Be.EqualTo(calendar.GetYear(dateFrom));
 			result.DateFromMonth.Should().Be.EqualTo(calendar.GetMonth(dateFrom));

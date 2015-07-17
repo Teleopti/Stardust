@@ -39,9 +39,18 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Message.Mapping
                                                           		return message;
                                                           	}))
 				.ForMember(d => d.Sender, o => o.MapFrom(m => _personNameProvider.BuildNameFromSetting(m.PushMessage.Sender.Name)))
-				.ForMember(d => d.Date, o => o.MapFrom(s => s.UpdatedOn.HasValue
-																	? TimeZoneInfo.ConvertTimeFromUtc(s.UpdatedOn.Value,_userTimeZone.Invoke().TimeZone()).ToShortDateTimeString()
-																	: null))
+				.ForMember(d => d.Date, o => o.ResolveUsing(m =>
+				{
+					if (m.UpdatedOn.HasValue)
+					{
+						return TimeZoneInfo.ConvertTimeFromUtc(m.UpdatedOn.Value, _userTimeZone.Invoke().TimeZone());
+					}
+					return null;
+				}))
+
+				//.ForMember(d => d.Date, o => o.MapFrom(s => s.UpdatedOn.HasValue
+				//													? TimeZoneInfo.ConvertTimeFromUtc(s.UpdatedOn.Value, _userTimeZone.Invoke().TimeZone()).ToShortDateTimeString()
+				//													: null))
 				.ForMember(d => d.IsRead, o => o.MapFrom(m => m.IsReplied))
 				.ForMember(d => d.AllowDialogueReply, o => o.MapFrom(m => m.PushMessage.AllowDialogueReply))
 				.ForMember(d => d.DialogueMessages, o => o.MapFrom(m => m.DialogueMessages))

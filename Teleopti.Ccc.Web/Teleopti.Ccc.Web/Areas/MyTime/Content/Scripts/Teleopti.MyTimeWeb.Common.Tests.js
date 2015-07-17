@@ -148,6 +148,21 @@ $(document).ready(function () {
 		equal(formattedDate, "23/10/2015 08:30 AM - 02/11/2015 16:30 PM");
 	});
 
+	test("should format date and time period on same day to exclude second date", function () {
+
+		common.IsToggleEnabled = function (x) { return true; };
+		common.SetupCalendar({
+			UseJalaaliCalendar: false,
+			DateFormat: 'DD/MM/YYYY',
+			TimeFormat: 'HH:mm tt',
+			AMDesignator: 'AM',
+			PMDesignator: 'PM'
+		});
+		var formattedDate = common.FormatDatePeriod(new Date(2015, 10 - 1, 23, 8, 30, 00), new Date(2015, 10 - 1, 23, 16, 30, 00), true);
+
+		equal(formattedDate, "23/10/2015 08:30 AM - 16:30 PM");
+	});
+
 	test("should format jalaali date and time period", function () {
 
 		common.IsToggleEnabled = function (x) { return true; };

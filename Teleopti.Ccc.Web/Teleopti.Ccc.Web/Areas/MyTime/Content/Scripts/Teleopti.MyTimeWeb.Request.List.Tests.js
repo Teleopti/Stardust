@@ -3,13 +3,14 @@ $(document).ready(function() {
 
 	module("Teleopti.MyTimeWeb.Request.List");
 
-	var getData = function(from, to , isFullDay, isShiftTrade) {
+	var getData = function(from, to , isFullDay, isShiftTrade, isShiftTradeForSingleDay) {
 
 		return {
 			DateTimeFrom: from,
 			DateTimeTo: to,
 			UpdatedOnDateTime: "2014-05-01 10:00",
 			IsFullDay: isFullDay,
+			IsSingleDay: isShiftTradeForSingleDay,
 			TypeEnum: isShiftTrade ? 2 : 1,
 			Text: 'test',
 			Link: {
@@ -42,7 +43,7 @@ $(document).ready(function() {
 		});
 
 		var vm = Teleopti.MyTimeWeb.Request.List.GetRequestItemViewModel();
-		var data = getData("2014-05-14 08:00:00", "2014-05-15 17:00:00", true, false);
+		var data = getData("2014-05-14 08:00:00", "2014-05-15 17:00:00", true, false, false);
 
 		vm.Initialize(data, false);
 		equal(vm.GetDateDisplay(), "2014/05/14 - 2014/05/15");
@@ -60,10 +61,10 @@ $(document).ready(function() {
 
 
 		var vm = Teleopti.MyTimeWeb.Request.List.GetRequestItemViewModel();
-		var data = getData("2014-05-14 08:00:00", "2014-05-14 17:00:00", false, false);
+		var data = getData("2014-05-14 08:00:00", "2014-05-14 17:00:00", false, false, false);
 
 		vm.Initialize(data, false);
-		equal(vm.GetDateDisplay(), "2014/05/14 08:00 AM - 2014/05/14 17:00 PM");
+		equal(vm.GetDateDisplay(), "2014/05/14 08:00 AM - 17:00 PM");
 
 	});
 
@@ -79,7 +80,7 @@ $(document).ready(function() {
 
 
 		var vm = Teleopti.MyTimeWeb.Request.List.GetRequestItemViewModel();
-		var data = getData("2014-05-14 08:00:00", "2014-05-14 17:00:00", false, true);
+		var data = getData("2014-05-14 08:00:00", "2014-05-14 17:00:00", false, true, true);
 		
 		vm.Initialize(data, false);
 		equal(vm.GetDateDisplay(), "2014/05/14");
@@ -96,7 +97,7 @@ $(document).ready(function() {
 		});
 
 		var vm = Teleopti.MyTimeWeb.Request.List.GetRequestItemViewModel();
-		var data = getData("2014-05-14 08:00:00", "2014-05-15 17:00:00", false, true);
+		var data = getData("2014-05-14 08:00:00", "2014-05-15 17:00:00", false, true, false);
 		
 		vm.Initialize(data, false);
 		equal(vm.GetDateDisplay(), "2014/05/14 - 2014/05/15");
@@ -115,7 +116,7 @@ $(document).ready(function() {
 		});
 
 		var vm = Teleopti.MyTimeWeb.Request.List.GetRequestItemViewModel();
-		var data = getData("2014-05-14", "2014-05-21", false, true);
+		var data = getData("2014-05-14", "2014-05-21", false, true, false);
 
 		vm.Initialize(data, false);
 
@@ -138,7 +139,7 @@ $(document).ready(function() {
 		});
 
 		var vm = Teleopti.MyTimeWeb.Request.List.GetRequestItemViewModel();
-		var data = getData("2014-05-14 8:00", "2014-05-14 17:00", false, false);
+		var data = getData("2014-05-14 8:00", "2014-05-14 17:00", false, false, false);
 
 		vm.Initialize(data, false);
 

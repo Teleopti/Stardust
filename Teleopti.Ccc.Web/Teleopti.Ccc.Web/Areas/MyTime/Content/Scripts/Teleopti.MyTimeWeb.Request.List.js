@@ -27,6 +27,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		self.StartDateTime = ko.observable();
 		self.EndDateTime = ko.observable();
 
+		self.IsSingleDay = ko.observable();
 		self.UpdatedOn = ko.observable();
 		self.TextSegments = ko.observableArray();
 		self.DenyReason = ko.observable();
@@ -56,12 +57,8 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			return (self.RequestTypeEnum() == 2);
 		};
 		
-		var datesAreSame = function(dateOne, dateTwo) {
-			return (dateOne.startOf('day').isSame(dateTwo.startOf('day')));
-		};
-
 		self.GetShiftTradeDisplay = function() {
-			if (datesAreSame(self.StartDateTime(), self.EndDateTime())) {
+			if (self.IsSingleDay()) {
 				return Teleopti.MyTimeWeb.Common.FormatDate(self.StartDateTime());
 			} else {
 				return Teleopti.MyTimeWeb.Common.FormatDatePeriod(self.StartDateTime(), self.EndDateTime(), false);
@@ -319,6 +316,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 
 			self.StartDateTime(moment(data.DateTimeFrom));
 			self.EndDateTime(moment(data.DateTimeTo));
+			self.IsSingleDay(data.IsSingleDay);
 
 			self.UpdatedOn(Teleopti.MyTimeWeb.Common.FormatDate(data.UpdatedOnDateTime));
 

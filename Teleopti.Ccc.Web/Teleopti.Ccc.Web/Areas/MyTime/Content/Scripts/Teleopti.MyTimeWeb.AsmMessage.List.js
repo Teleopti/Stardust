@@ -63,8 +63,9 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 		self.isAnsweredCallsGoldBadgeMessage = ko.observable(self.messageType() == 9);
 		self.title = ko.observable(item.Title);
 		self.message = ko.observable(item.Message);
-	    self.errorMessage = ko.observable();
-		self.date = ko.observable(item.Date);
+		self.errorMessage = ko.observable();
+
+		self.date = ko.observable(Teleopti.MyTimeWeb.Common.FormatDateTime(item.Date));
 		self.sender = ko.observable(item.Sender);
 		self.messageId = ko.observable(item.MessageId);
 		self.isRead = ko.observable(item.IsRead);

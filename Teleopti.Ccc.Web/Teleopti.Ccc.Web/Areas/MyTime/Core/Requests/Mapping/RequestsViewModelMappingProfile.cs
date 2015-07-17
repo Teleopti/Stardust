@@ -36,33 +36,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			_personNameProvider = personNameProvider;
 		}
 
+		
 		protected override void Configure()
 		{
 			CreateMap<IPersonRequest, RequestViewModel>()
-				.ForMember(d => d.Link, o => o.MapFrom(s => s))
-				.ForMember(d => d.Subject, o => o.MapFrom(s => s.GetSubject(new NoFormatting())))
-				.ForMember(d => d.Dates,
-					o => o.ResolveUsing(s =>
-					{
-						if (s.Request.RequestType == RequestType.ShiftTradeRequest)
-						{
-							var dateOnlyPeriod = s.Request.Period.ToDateOnlyPeriod(_userTimeZone.TimeZone());
-							return dateOnlyPeriod.StartDate == dateOnlyPeriod.EndDate
-								? dateOnlyPeriod.StartDate.ToShortDateString(_userCulture.GetCulture())
-								: dateOnlyPeriod.ToShortDateString(_userCulture.GetCulture());
-						}
-						else
-						{
-							if (IsRequestFullDay(s))
-							{
-								return s.Request.Period.ToShortDateOnlyString(_userTimeZone.TimeZone());
-							}
-
-							return s.Request.Period.ToShortDateTimeString(_userTimeZone.TimeZone());
-						}
-					}))
-				.ForMember(d => d.DateTimeFrom, o => o.ResolveUsing(s => TimeZoneInfo.ConvertTimeFromUtc(s.Request.Period.StartDateTime, _userTimeZone.TimeZone()).ToShortDateTimeString()))
-				.ForMember(d => d.DateTimeTo, o => o.ResolveUsing(s => TimeZoneInfo.ConvertTimeFromUtc(s.Request.Period.EndDateTime, _userTimeZone.TimeZone()).ToShortDateTimeString()))
+				.ForMember (d => d.Link, o => o.MapFrom (s => s))
+				.ForMember (d => d.Subject, o => o.MapFrom (s => s.GetSubject (new NoFormatting())))
+				.ForMember(d => d.DateTimeFrom, o => o.ResolveUsing(s => ConvertDateTimeToUserTimeZone(s.Request.Period.StartDateTime)))
+				.ForMember(d => d.DateTimeTo, o => o.ResolveUsing(s => ConvertDateTimeToUserTimeZone(s.Request.Period.EndDateTime)))
+				.ForMember(d => d.IsSingleDay, o => o.ResolveUsing(s =>
+				{
+					var dateOnlyPeriod = s.Request.Period.ToDateOnlyPeriod(_userTimeZone.TimeZone());
+					return dateOnlyPeriod.StartDate == dateOnlyPeriod.EndDate;
+				}))
 
 				.ForMember(d => d.Status, o => o.ResolveUsing(s =>
 				{
@@ -92,7 +78,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				.ForMember(d => d.Type, o => o.MapFrom(s => s.Request.RequestTypeDescription))
 				.ForMember(d => d.TypeEnum, o => o.MapFrom(s => s.Request.RequestType))
 				.ForMember(d => d.UpdatedOn, o => o.MapFrom(s => s.UpdatedOn.HasValue
-					? TimeZoneInfo.ConvertTimeFromUtc(s.UpdatedOn.Value, _userTimeZone.TimeZone()).ToShortDateTimeString()
+					? ConvertDateTimeToUserTimeZone (s.UpdatedOn.Value)
 					: null))
 				.ForMember(d => d.UpdatedOnDateTime, o => o.MapFrom(s => s.UpdatedOn.HasValue
 					? TimeZoneInfo.ConvertTimeFromUtc(s.UpdatedOn.Value, _userTimeZone.TimeZone())
@@ -205,6 +191,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 					return new[] { 0, 3 }.Contains(stateId) ? "GET, DELETE, PUT" : "GET";
 				}));
+		}
+
+		protected String ConvertDateTimeToUserTimeZone(DateTime dateTime)
+		{
+
+			return TimeZoneInfo.ConvertTimeFromUtc(dateTime, _userTimeZone.TimeZone()).ToShortDateTimeString();
 		}
 
 		private string getStatusText(IPersonRequest s)

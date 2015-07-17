@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 		public string Text;
 		public string Type;
 		public RequestType TypeEnum;
-		public string Dates;
 		public string UpdatedOn;
 
 		public DateTime DateTimeFrom;
@@ -51,6 +50,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 		public int DateToDayOfMonth { get; set; }
 		public bool IsReferred { get; set; }
 		public ShiftExchangeOfferRequestViewModel ExchangeOffer { get; set; }
+		public bool IsSingleDay { get; set; }
 	}
 
 	public class ShiftExchangeOfferRequestViewModel

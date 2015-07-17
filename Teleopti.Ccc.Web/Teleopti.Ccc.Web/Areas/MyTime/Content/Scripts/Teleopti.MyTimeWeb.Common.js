@@ -131,6 +131,14 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		return moment(date).format(Teleopti.MyTimeWeb.Common.DateFormat);
 	};
 
+	function _formatDateTime(dateTime) {
+		
+		if (moment.isMoment(dateTime)) {
+			return dateTime.format(Teleopti.MyTimeWeb.Common.DateTimeFormat);
+		}
+		return moment(dateTime).format(Teleopti.MyTimeWeb.Common.DateTimeFormat);
+	};
+	
 	function _formatTime(dateTime) {
 		if (moment.isMoment(dateTime)) {
 			return date.format(Teleopti.MyTimeWeb.Common.TimeFormat);
@@ -148,6 +156,10 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 
 	};
 
+	 function _datesAreSame(dateOne, dateTwo) {
+			return (dateOne.isSame(dateTwo,'day'));
+	};
+
 	function _formatDatePeriod(start, end, showTime) {
 
 		if (!moment.isMoment(start)) {
@@ -157,6 +169,11 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		}
 
 		if (showTime) {
+
+			if (_datesAreSame(start, end)) {
+				return start.format(Teleopti.MyTimeWeb.Common.DateTimeFormat) + " - " + end.format(Teleopti.MyTimeWeb.Common.TimeFormat);
+			}
+
 			return start.format(Teleopti.MyTimeWeb.Common.DateTimeFormat) + " - " + end.format(Teleopti.MyTimeWeb.Common.DateTimeFormat);
 		}
 
@@ -234,6 +251,10 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 
 		FormatDate: function (date) {
 			return _formatDate(date);
+		},
+
+		FormatDateTime: function (dateTime) {
+			return _formatDateTime(dateTime);
 		},
 
 		FormatTime: function (dateTime) {
