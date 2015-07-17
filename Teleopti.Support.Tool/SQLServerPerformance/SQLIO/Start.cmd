@@ -1,7 +1,10 @@
 @ECHO off
+ECHO List available drives:
 fsutil fsinfo drives
+ECHO.
 SET /P DriveLetter=please provid drive letter to test:
-SET DriveLetter=%DriveLetter:~0,-1%
+SET DriveLetter=%DriveLetter:~0,1%
+ECHO %DriveLetter%
 
 powershell set-executionpolicy -scope CurrentUser unrestricted
 SET resultFile=%~dp0%DriveLetter%_result.txt
