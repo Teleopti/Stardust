@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 {
 	public class LeaderboardSettingBasedBadgeProvider : ILeaderboardSettingBasedBadgeProvider
 	{
-		private class AgentWithBadge
+		private class agentWithBadge
 		{
 			public Guid Person { get; set; }
 			public int BronzeBadgeAmount { get; set; }
@@ -33,11 +34,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		private readonly IGroupingReadOnlyRepository _groupingRepository;
 		private bool toggleEnabled;
 
-		private static readonly Guid PageMain = new Guid("6CE00B41-0722-4B36-91DD-0A3B63C545CF");
-
 		private ReadOnlyGroupDetail[] permittedPersonList;
-		private ITeamGamificationSettingRepository _teamSettingRepository;
-		private IPersonRepository _personRepo;
+		private readonly ITeamGamificationSettingRepository _teamSettingRepository;
+		private readonly IPersonRepository _personRepo;
 		private IEnumerable<ITeamGamificationSetting> teamSettings;
 
 		public LeaderboardSettingBasedBadgeProvider(IAgentBadgeRepository agentBadgeRepository,
@@ -45,7 +44,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			IPermissionProvider permissionProvider,
 			IPersonNameProvider personNameProvider,
 			ISiteRepository siteRepository, ITeamRepository teamRepository,
-			IToggleManager toggleManager, IGroupingReadOnlyRepository groupingRepository, ITeamGamificationSettingRepository teamSettingRepository, IPersonRepository personRepo)
+			IToggleManager toggleManager, IGroupingReadOnlyRepository groupingRepository,
+			ITeamGamificationSettingRepository teamSettingRepository, IPersonRepository personRepo)
 		{
 			_agentBadgeRepository = agentBadgeRepository;
 			_agentBadgeWithRankRepository = agentBadgeWithRankRepository;
@@ -57,17 +57,18 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			_groupingRepository = groupingRepository;
 			_teamSettingRepository = teamSettingRepository;
 			_personRepo = personRepo;
-			
+
 			toggleEnabled = _toggleManager.IsEnabled(Toggles.Gamification_NewBadgeCalculation_31185);
 		}
 
-		public IEnumerable<AgentBadgeOverview> PermittedAgentBadgeOverviewsForEveryoneOrMyOwn(string functionPath, LeaderboardQuery query)
+		public IEnumerable<AgentBadgeOverview> PermittedAgentBadgeOverviewsForEveryoneOrMyOwn(string functionPath,
+			LeaderboardQuery query)
 		{
 			teamSettings = _teamSettingRepository.FindAllTeamGamificationSettingsSortedByTeam();
 			toggleEnabled = _toggleManager.IsEnabled(Toggles.Gamification_NewBadgeCalculation_31185);
 			var queryDate = query.Date;
-			
-			var detailsForPage = _groupingRepository.AvailableGroups(new ReadOnlyGroupPage { PageId = PageMain }, queryDate);
+
+			var detailsForPage = _groupingRepository.AvailableGroups(new ReadOnlyGroupPage {PageId = Group.PageMainId}, queryDate);
 			var agentsInSite = new List<ReadOnlyGroupDetail>();
 			detailsForPage.ForEach(
 				x => agentsInSite.AddRange(_groupingRepository.DetailsForGroup(x.GroupId, queryDate)));
@@ -108,14 +109,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			return getPermittedAgentOverviews(permittedAgentBadgeList);
 		}
 
-		private IEnumerable<AgentWithBadge> mergeAgentWithBadges(IEnumerable<AgentWithBadge> agentWithBadges1,
-			IEnumerable<AgentWithBadge> agentWithBadges2)
+		private IEnumerable<agentWithBadge> mergeAgentWithBadges(IEnumerable<agentWithBadge> agentWithBadges1,
+			IEnumerable<agentWithBadge> agentWithBadges2)
 		{
 			var list1 = agentWithBadges1.ToList();
 			var list2 = agentWithBadges2.ToList();
 			var result = list1.Concat(list2)
 				.GroupBy(badge => badge.Person)
-				.Select(group => new AgentWithBadge
+				.Select(group => new agentWithBadge
 				{
 					Person = group.Key,
 					BronzeBadgeAmount = group.Sum(x => x.BronzeBadgeAmount),
@@ -125,14 +126,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			return result;
 		}
 
-		private IEnumerable<AgentWithBadge> getPermittedAgentBadgeListBasedOnSpecificSetting(string functionPath, IEnumerable<ReadOnlyGroupDetail> allAgents,
+		private IEnumerable<agentWithBadge> getPermittedAgentBadgeListBasedOnSpecificSetting(string functionPath,
+			IEnumerable<ReadOnlyGroupDetail> allAgents,
 			DateOnly date)
 		{
 			permittedPersonList = getPermittedAgents(functionPath, allAgents, date);
-			var permittedPersonIdList = permittedPersonList.Select(x => x.PersonId);
+			var permittedPersonIdList = permittedPersonList.Select(x => x.PersonId).ToList();
 
-			
-			var agentWithBadgesConvertedFromRatio = new List<AgentWithBadge>();
+			var agentWithBadgesConvertedFromRatio = new List<agentWithBadge>();
 			var agentIdListWithDifferentThreshold = new List<Guid>();
 			foreach (var teamSetting in teamSettings)
 			{
@@ -158,15 +159,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 				var agentWithRankedBadges = getAgentWithBadges(agentBadgesWithRank).ToList();
 				return mergeAgentWithBadges(agentWithBadgesConvertedFromRatio, agentWithRankedBadges);
 			}
-			return agentWithBadgesConvertedFromRatio;		
+			return agentWithBadgesConvertedFromRatio;
 		}
 
-		private static IEnumerable<AgentWithBadge> getAgentWithBadges(IEnumerable<IAgentBadge> agentBadges,
+		private static IEnumerable<agentWithBadge> getAgentWithBadges(IEnumerable<IAgentBadge> agentBadges,
 			int silverToBronzeRate, int goldToSilverRate)
 		{
 
-			var result = agentBadges==null? new List<AgentWithBadge>() : agentBadges.GroupBy(x => x.Person)
-				.Select(group => new AgentWithBadge
+			var result = agentBadges == null
+				? new List<agentWithBadge>()
+				: agentBadges.GroupBy(x => x.Person)
+					.Select(group => new agentWithBadge
 					{
 						Person = group.Key,
 						GoldBadgeAmount = group.Sum(x => x.GetGoldBadge(silverToBronzeRate, goldToSilverRate)),
@@ -177,10 +180,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			return result;
 		}
 
-		private static IEnumerable<AgentWithBadge> getAgentWithBadges(IEnumerable<IAgentBadgeWithRank> agentBadges)
+		private static IEnumerable<agentWithBadge> getAgentWithBadges(IEnumerable<IAgentBadgeWithRank> agentBadges)
 		{
-			var result = agentBadges == null ? new List<AgentWithBadge>() : agentBadges.GroupBy(x => x.Person)
-				.Select(group => new AgentWithBadge
+			var result = agentBadges == null
+				? new List<agentWithBadge>()
+				: agentBadges.GroupBy(x => x.Person)
+					.Select(group => new agentWithBadge
 					{
 						Person = group.Key,
 						GoldBadgeAmount = group.Sum(x => x.GoldBadgeAmount),
@@ -191,7 +196,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			return result;
 		}
 
-		private IEnumerable<AgentBadgeOverview> getPermittedAgentOverviews(IEnumerable<AgentWithBadge> permittedAgentBadgeList)
+		private IEnumerable<AgentBadgeOverview> getPermittedAgentOverviews(IEnumerable<agentWithBadge> permittedAgentBadgeList)
 		{
 			var permittedPersons = permittedPersonList.ToList();
 			var dic = new Dictionary<Guid, AgentBadgeOverview>();
@@ -209,7 +214,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 					};
 					dic.Add(personId, overview);
 				}
-				
+
 				overview.Gold += agentBadge.GoldBadgeAmount;
 				overview.Silver += agentBadge.SilverBadgeAmount;
 				overview.Bronze += agentBadge.BronzeBadgeAmount;
@@ -217,7 +222,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			return dic.Values;
 		}
 
-		private ReadOnlyGroupDetail[] getPermittedAgents(string functionPath, IEnumerable<ReadOnlyGroupDetail> personList, DateOnly date)
+		private ReadOnlyGroupDetail[] getPermittedAgents(string functionPath, IEnumerable<ReadOnlyGroupDetail> personList,
+			DateOnly date)
 		{
 			return (from t in personList
 				where _permissionProvider.HasOrganisationDetailPermission(functionPath, date, t)

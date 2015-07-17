@@ -3,6 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
@@ -30,7 +31,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldLoadAvailableGroupsWithPageIdFromReadModel()
 		{
-			var items = _target.AvailableGroups(new ReadOnlyGroupPage{PageId = new Guid("6CE00B41-0722-4B36-91DD-0A3B63C545CF"),PageName = "xxMain"},DateOnly.Today);
+			var items = _target.AvailableGroups(new ReadOnlyGroupPage {PageId = Group.PageMainId, PageName = "xxMain"},
+				DateOnly.Today);
 			items.Count().Should().Be.EqualTo(0);
 		}
 

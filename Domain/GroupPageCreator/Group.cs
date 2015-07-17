@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.GroupPageCreator
@@ -7,6 +8,11 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
 	{
 		private readonly IList<IPerson> _groupMembers = new List<IPerson>();
 		private string _name;
+
+		/// <summary>
+		/// The ID for main page, hardcoded in both code and database.
+		/// </summary>
+		public static readonly Guid PageMainId = new Guid("6CE00B41-0722-4B36-91DD-0A3B63C545CF");
 
 		public Group()
 		{}

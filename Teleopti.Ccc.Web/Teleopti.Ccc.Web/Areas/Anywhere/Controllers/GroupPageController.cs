@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 
@@ -14,7 +15,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		private readonly IGroupingReadOnlyRepository _groupingReadOnlyRepository;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IUserTextTranslator _userTextTranslator;
-		private static readonly Guid PageMain = new Guid("6CE00B41-0722-4B36-91DD-0A3B63C545CF");
 
 		public GroupPageController(IGroupingReadOnlyRepository groupingReadOnlyRepository, ILoggedOnUser loggedOnUser, IUserTextTranslator userTextTranslator)
 		{
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 				{
 					readOnlyGroupPage.PageName = name;
 
-					if (readOnlyGroupPage.PageId == PageMain)
+					if (readOnlyGroupPage.PageId == Group.PageMainId)
 						businessHierarchyPage = readOnlyGroupPage;
 					else
 						buildInGroupPages.Add(readOnlyGroupPage);
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 							Name = name,
 							Groups = _groupingReadOnlyRepository.AvailableGroups(gp, new DateOnly(date)).Select(g => new
 								{
-									Name = gp.PageId == PageMain ? g.GroupName : name + "/" + g.GroupName,
+									Name = gp.PageId == Group.PageMainId ? g.GroupName : name + "/" + g.GroupName,
 									Id = g.GroupId
 								}).Distinct().ToArray()
 						};
