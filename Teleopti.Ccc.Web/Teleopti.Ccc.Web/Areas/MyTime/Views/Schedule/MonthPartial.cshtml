@@ -74,8 +74,7 @@
 						<!-- ko if: hasShift && !isFullDayAbsence -->
 						<div class="shift" data-bind="style: { backgroundColor: shiftColor, color: shiftTextColor }, css: { 'part-time': hasAbsence }">
 							<div>
-								<strong class="visible-lg" data-bind="text: shiftName"></strong>
-								<strong class="visible-md" data-bind="text: shiftName"></strong>
+								<strong class="visible-lg visible-md" data-bind="text: shiftName"></strong>
 								<div class="hidden-md hidden-lg">
 									<strong data-bind="text: shiftShortName"></strong>
 								</div>
