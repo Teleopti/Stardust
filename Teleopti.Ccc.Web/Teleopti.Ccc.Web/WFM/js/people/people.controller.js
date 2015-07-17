@@ -366,21 +366,15 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 		enableGridMenu: true,
 		importerDataAddCallback: function(grid, newObjects) {
 			$scope.rawUsersData = newObjects;
-			var data = { Users: [{ApplicationUserId: "js",
-				Firstname: "John",
-				Lastname: "Smith",
-				Password: "js",
-				Role: "agent",
-				WindowsUser: ""}] }
-			console.log("Imported data ", newObjects);
+			var data = { Users: $scope.rawUsersData }
 			SearchSvrc.importUsers.post(data)
 				.$promise.then(function(result) {
-					$scope.dataWithError = result;
+					$scope.dataWithError = result.InvalidUsers;
+					$scope.gridOptionForImport.data = $scope.dataWithError;
 				});
 		},
 		onRegisterApi: function (gridApi) {
 			$scope.gridApi = gridApi;
-			//gridApi.rowEdit.on.saveRow($scope, $scope.saveRow);
 		}
 		
 	};

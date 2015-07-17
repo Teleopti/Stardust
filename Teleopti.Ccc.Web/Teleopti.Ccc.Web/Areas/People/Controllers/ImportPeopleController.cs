@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Web.Areas.People.Core.Persisters;
 using Teleopti.Ccc.Web.Areas.People.Core.Providers;
 using Teleopti.Interfaces.Domain;
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			_peoplePersister = peoplePersister;
 		}
 
-
+		[TenantUnitOfWork]
 		[UnitOfWork, Route("api/People/ImportPeople"), HttpPost]
 		public virtual IHttpActionResult ImportUsers([FromBody]RawUserData rawUsersData)
 		{

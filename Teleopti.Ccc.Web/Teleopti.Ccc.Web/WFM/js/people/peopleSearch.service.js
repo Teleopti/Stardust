@@ -32,7 +32,7 @@ angular
 				post: {
 					method: 'POST',
 					params: {},
-					isArray: true
+					isArray: false
 				},
 
 			});

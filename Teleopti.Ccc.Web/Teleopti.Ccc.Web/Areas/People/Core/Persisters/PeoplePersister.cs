@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
@@ -21,15 +22,19 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 		private readonly IPersistPersonInfo _personInfoPersister;
 		private readonly IPersonInfoMapper _mapper;
 		private readonly IPersonRepository _personRepository;
+		private readonly ILoggedOnUser _currentLoggedOnUser;
+		private readonly ITenantUnitOfWork _tenantUnitOfWork;
 		private const int MaxNameLength = 25;
 		private const int MaxApplicationUserIdLength = 50;
 
-		public PeoplePersister(IApplicationRoleRepository roleRepository,IPersistPersonInfo personInfoPersister, IPersonInfoMapper mapper,IPersonRepository personRepository)
+		public PeoplePersister(IApplicationRoleRepository roleRepository,IPersistPersonInfo personInfoPersister, IPersonInfoMapper mapper,IPersonRepository personRepository, ILoggedOnUser currentLoggedOnUser,ITenantUnitOfWork tenantUnitOfWork)
 		{
 			_roleRepository = roleRepository;
 			_personInfoPersister = personInfoPersister;
 			_mapper = mapper;
 			_personRepository = personRepository;
+			_currentLoggedOnUser = currentLoggedOnUser;
+			_tenantUnitOfWork = tenantUnitOfWork;
 		}
 
 		public dynamic Persist(IEnumerable<RawUser> users)
@@ -111,6 +116,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 					{
 						var person = new Person { Name = new Name(user.Firstname, user.Lastname) };
 						roles.ForEach(r => person.PermissionInformation.AddApplicationRole(availableRoles[r.ToUpper()]));
+						person.PermissionInformation.SetDefaultTimeZone(_currentLoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone());
 						_personRepository.Add(person);
 
 						var tenantUserData = new PersonInfoModel()
@@ -120,28 +126,32 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 							Password = user.Password,
 							PersonId = person.Id.GetValueOrDefault()
 						};
+						
+							try
+							{
+								using (_tenantUnitOfWork.Start())
+								{
+									_personInfoPersister.Persist(_mapper.Map(tenantUserData));
+								}
+							}
+							catch (PasswordStrengthException)
+							{
+								isUserValid = false;
+								errorMsgBuilder.Append(Resources.PasswordPolicyErrorMsgSemicolon + " ");
+							}
+							catch (DuplicateIdentityException)
+							{
+								isUserValid = false;
+								errorMsgBuilder.Append(Resources.DuplicatedWindowsLogonErrorMsgSemicolon + " ");
+							}
+							catch (DuplicateApplicationLogonNameException)
+							{
+								isUserValid = false;
+								errorMsgBuilder.Append(Resources.DuplicatedApplicationLogonErrorMsgSemicolon + " ");
+							}
 
-						try
-						{
-							_personInfoPersister.Persist(_mapper.Map(tenantUserData));
 						}
-						catch (PasswordStrengthException)
-						{
-							isUserValid = false;
-							errorMsgBuilder.Append(Resources.PasswordPolicyErrorMsgSemicolon + " ");
-						}
-						catch (DuplicateIdentityException)
-						{
-							isUserValid = false;
-							errorMsgBuilder.Append(Resources.DuplicatedWindowsLogonErrorMsgSemicolon + " ");
-						}
-						catch (DuplicateApplicationLogonNameException)
-						{
-							isUserValid = false;
-							errorMsgBuilder.Append(Resources.DuplicatedApplicationLogonErrorMsgSemicolon + " ");
-						}
-
-					}
+					
 				}
 
 				if (isUserValid) continue;

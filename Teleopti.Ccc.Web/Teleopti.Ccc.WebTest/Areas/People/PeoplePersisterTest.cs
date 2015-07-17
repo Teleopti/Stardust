@@ -7,8 +7,10 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Model;
@@ -23,7 +25,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 	[TestFixture]
 	public class PeoplePersisterTest
 	{
-		private PeoplePersister target = new PeoplePersister(new FakeApplicationRoleRepository(), new PersistPersonInfoFake(), new PersonInfoMapperFake() , new FakePersonRepository());
+		private PeoplePersister target = new PeoplePersister(new FakeApplicationRoleRepository(), new PersistPersonInfoFake(), new PersonInfoMapperFake() , new FakePersonRepository(),new FakeLoggedOnUser(), new TenantUnitOfWorkFake() );
 
 
 		[Test]
@@ -195,7 +197,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var roleRepo = new FakeApplicationRoleRepository();
 			roleRepo.Add(new ApplicationRole {DescriptionText = "Agent"});
 
-			target = new PeoplePersister(roleRepo, new PersistPersonInfoFake(), new PersonInfoMapperFake(), new FakePersonRepository());
+			target = new PeoplePersister(roleRepo, new PersistPersonInfoFake(), new PersonInfoMapperFake(), new FakePersonRepository(),new FakeLoggedOnUser(), new TenantUnitOfWorkFake() );
 			var errorData = (IEnumerable<RawUser>)((dynamic)target).Persist(rawUserData).InvalidUsers;
 			Assert.AreEqual(1, errorData.Count());
 			Assert.AreEqual("teleopti\\logon1", errorData.First().WindowsUser);
@@ -267,7 +269,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var person2 = new Person { Name = new Name("Jan", "Morgan") };
 			person2.SetId(Guid.NewGuid());
 			var fakePersonRepository = new FakePersonRepository(new []{person1, person2});
-			target = new PeoplePersister(fakeApplicationRoleRepository, personInfoPersister,personInfoMapper, fakePersonRepository);
+			target = new PeoplePersister(fakeApplicationRoleRepository, personInfoPersister,personInfoMapper, fakePersonRepository, new FakeLoggedOnUser(), new TenantUnitOfWorkFake());
 			var errorData = (IEnumerable<RawUser>)((dynamic)target).Persist(rawUserData).InvalidUsers;
 			Assert.AreEqual(1, errorData.Count());
 			Assert.AreEqual("Jan", errorData.First().Firstname);
