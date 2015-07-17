@@ -57,13 +57,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 				return new List<BadgeViewModel>();
 			}
 
-			var badges = new List<IAgentBadgeWithRank>();
-			if (teamBasedGamificationSettingEnabled)
-			{
-				badges.Add(_badgeWithRankRepository.Find(person, BadgeType.Adherence));
-				badges.Add(_badgeWithRankRepository.Find(person, BadgeType.AverageHandlingTime));
-				badges.Add(_badgeWithRankRepository.Find(person, BadgeType.AnsweredCalls));
-			}
+			var badges = !teamBasedGamificationSettingEnabled
+				? new List<IAgentBadgeWithRank>()
+				: new List<IAgentBadgeWithRank>
+				{
+					_badgeWithRankRepository.Find(person, BadgeType.Adherence),
+					_badgeWithRankRepository.Find(person, BadgeType.AverageHandlingTime),
+					_badgeWithRankRepository.Find(person, BadgeType.AnsweredCalls)
+				};
 
 			var badgeVmList = badges.Select(x => new BadgeViewModel
 			{

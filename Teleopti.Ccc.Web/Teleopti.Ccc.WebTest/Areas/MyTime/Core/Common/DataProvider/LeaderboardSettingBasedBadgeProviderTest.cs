@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 
 		private readonly ReadOnlyGroupDetail personDetail1 = new ReadOnlyGroupDetail
 		{
-			PersonId = new Guid("65228D77-67BB-4474-93FC-C58CC49CD5E8"),
+			PersonId = Guid.NewGuid(),
 			FirstName = "first1",
 			LastName = "last1"
 		};
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 
 		private readonly ReadOnlyGroupDetail personDetail2 = new ReadOnlyGroupDetail
 		{
-			PersonId = new Guid("99228D77-67BB-4474-93FC-C58CC49CD5E8"),
+			PersonId = Guid.NewGuid(),
 			FirstName = "first2",
 			LastName = "last2"
 		};
