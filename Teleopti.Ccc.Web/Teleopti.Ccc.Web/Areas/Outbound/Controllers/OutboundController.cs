@@ -54,18 +54,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
         public virtual CampaignSummaryListViewModel GetCamapigns(CampaignStatus flag)
 		{
 		    return _campaignSummaryViewModelFactory.GetCampaignSummaryList(flag);
-		    if (campaignStatus == CampaignStatus.None)
-		    {
-		        campaignStatus = CampaignStatus.Ongoing 
-                    | CampaignStatus.Planned 
-                    | CampaignStatus.Scheduled 
-                    | CampaignStatus.Done;
-		    }
-            if (campaignStatus.HasFlag(CampaignStatus.Ongoing))
-            {
-                getOnGoingCampaigns(campaignList);
-            }
-
 		}
 
 		[HttpGet, Route("api/Outbound/Campaign/Activities"), UnitOfWork]
