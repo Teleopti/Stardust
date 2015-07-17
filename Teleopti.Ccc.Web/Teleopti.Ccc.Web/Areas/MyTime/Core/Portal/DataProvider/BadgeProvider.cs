@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -61,9 +62,33 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 				? new List<IAgentBadgeWithRank>()
 				: new List<IAgentBadgeWithRank>
 				{
-					_badgeWithRankRepository.Find(person, BadgeType.Adherence),
-					_badgeWithRankRepository.Find(person, BadgeType.AverageHandlingTime),
-					_badgeWithRankRepository.Find(person, BadgeType.AnsweredCalls)
+					_badgeWithRankRepository.Find(person, BadgeType.Adherence) ??
+					new AgentBadgeWithRank
+					{
+						BadgeType = BadgeType.Adherence,
+						Person = person.Id.Value,
+						BronzeBadgeAmount = 0,
+						SilverBadgeAmount = 0,
+						GoldBadgeAmount = 0
+					},
+					_badgeWithRankRepository.Find(person, BadgeType.AverageHandlingTime) ??
+					new AgentBadgeWithRank
+					{
+						BadgeType = BadgeType.Adherence,
+						Person = person.Id.Value,
+						BronzeBadgeAmount = 0,
+						SilverBadgeAmount = 0,
+						GoldBadgeAmount = 0
+					},
+					_badgeWithRankRepository.Find(person, BadgeType.AnsweredCalls) ??
+					new AgentBadgeWithRank
+					{
+						BadgeType = BadgeType.Adherence,
+						Person = person.Id.Value,
+						BronzeBadgeAmount = 0,
+						SilverBadgeAmount = 0,
+						GoldBadgeAmount = 0
+					}
 				};
 
 			var badgeVmList = badges.Select(x => new BadgeViewModel
@@ -85,9 +110,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 
 			var badges = new List<IAgentBadge>
 			{
-				_badgeRepository.Find(person, BadgeType.Adherence),
-				_badgeRepository.Find(person, BadgeType.AverageHandlingTime),
-				_badgeRepository.Find(person, BadgeType.AnsweredCalls)
+				_badgeRepository.Find(person, BadgeType.Adherence) ??
+				new AgentBadge {BadgeType = BadgeType.Adherence, Person = person.Id.Value, TotalAmount = 0},
+				_badgeRepository.Find(person, BadgeType.AverageHandlingTime) ??
+				new AgentBadge {BadgeType = BadgeType.AverageHandlingTime, Person = person.Id.Value, TotalAmount = 0},
+				_badgeRepository.Find(person, BadgeType.AnsweredCalls) ??
+				new AgentBadge {BadgeType = BadgeType.AnsweredCalls, Person = person.Id.Value, TotalAmount = 0}
 			};
 
 			var setting = _teamGamificationSetting.GamificationSetting;
