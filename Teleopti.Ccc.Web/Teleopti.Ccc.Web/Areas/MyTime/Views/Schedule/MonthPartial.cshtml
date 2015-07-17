@@ -66,9 +66,9 @@
 							<!-- /ko -->
 						</div>
 						<!-- /ko -->
-						<!-- ko if: hasOvertime -->
-						<div class="overtime" data-bind="css: { 'dayoff': isDayOff }">
-							<strong class="visible-lg">@Resources.Overtime</strong>
+						<!-- ko if: !hasShift && hasOvertime && !isDayOff -->
+						<div class="overtime">
+							<strong>@Resources.Overtime</strong>
 						</div>
 						<!-- /ko -->
 						<!-- ko if: hasShift && !isFullDayAbsence -->
@@ -82,10 +82,20 @@
 							</div>
 							<div class="hidden-xs hidden-sm" data-bind="text: shiftTimeSpan"></div>
 							<div class="hidden-xs hidden-sm" data-bind="text: shiftWorkingHours"></div>
+							<!-- ko if: hasOvertime -->
+							<div>
+								<strong>@Resources.Overtime</strong>
+							</div>
+							<!-- /ko -->
 						</div>
 						<!-- /ko -->
 						<!-- ko if: isDayOff && !hasAbsence -->
 						<div class="dayoff">
+							<!-- ko if: hasOvertime -->
+							<div>
+								<strong>@Resources.Overtime</strong>
+							</div>
+							<!-- /ko -->
 						</div>
 						<!-- /ko -->
 
