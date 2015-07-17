@@ -143,10 +143,12 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Client\EventHandlers.cs" />
-    <Compile Include="Client\Http\HttpRequests.cs" />
+    <Compile Include="Client\FakeUrl.cs" />
+    <Compile Include="Client\Http\HttpClientM.cs" />
     <Compile Include="Client\Http\HttpListener.cs" />
     <Compile Include="Client\Http\HttpSender.cs" />
     <Compile Include="Client\Http\HttpServer.cs" />
+    <Compile Include="Client\Http\IHttpServer.cs" />
     <Compile Include="Client\Http\MailboxPoller.cs" />
     <Compile Include="Client\Http\MailboxServerCaller.cs" />
     <Compile Include="Client\Http\MailboxTimerInfo.cs" />

@@ -3,28 +3,28 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Teleopti.Interfaces;
+using Newtonsoft.Json;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Messaging.Client.Http;
-using Teleopti.Messaging.Client.SignalR;
 
 namespace Teleopti.MessagingTest.Http
 {
 	public class FakeHttpServer : IHttpServer
 	{
-		private readonly IJsonSerializer _serializer;
 		private readonly IList<Message> _messages = new List<Message>();
 		private bool _shouldFail;
 		private HttpStatusCode _statusCode;
 		private Exception _exception;
 
-		public FakeHttpServer(IJsonSerializer serializer)
+		public class RequestInfo
 		{
-			_serializer = serializer;
+			public HttpClient Client;
+			public string Uri;
+			public HttpContent HttpContent;
 		}
 
-		public int CallsToCreateMailbox { get; private set; }
-
+		public readonly IList<RequestInfo> Requests = new List<RequestInfo>();
+		
 		public void Has(Message message)
 		{
 			_messages.Add(message);
@@ -32,8 +32,7 @@ namespace Teleopti.MessagingTest.Http
 
 		public Task<HttpResponseMessage> PostAsync(HttpClient client, string uri, HttpContent httpContent)
 		{
-			if (uri.Contains("AddMailbox"))
-				CallsToCreateMailbox++;
+			Requests.Add(new RequestInfo {Client = client, Uri = uri, HttpContent = httpContent});
 
 			if (_exception != null)
 				throw _exception;
@@ -45,13 +44,16 @@ namespace Teleopti.MessagingTest.Http
 
 		public Task<HttpResponseMessage> GetAsync(HttpClient client, string uri)
 		{
+			Requests.Add(new RequestInfo {Client = client, Uri = uri});
+
 			if (_exception != null)
 				throw _exception;
 			if (_shouldFail)
 				return Task.FromResult(new HttpResponseMessage { StatusCode = _statusCode });
 
-			var result = _serializer.SerializeObject(_messages);
+			var result = JsonConvert.SerializeObject(_messages);
 			_messages.Clear();
+
 			return Task.FromResult(new HttpResponseMessage {Content = new StringContent(result)});
 		}
 

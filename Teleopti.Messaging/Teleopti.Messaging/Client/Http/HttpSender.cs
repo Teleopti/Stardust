@@ -6,9 +6,9 @@ namespace Teleopti.Messaging.Client.Http
 {
 	public class HttpSender : IMessageSender
 	{
-		private readonly HttpRequests _client;
+		private readonly HttpClientM _client;
 
-		public HttpSender(HttpRequests client)
+		public HttpSender(HttpClientM client)
 		{
 			_client = client;
 		}

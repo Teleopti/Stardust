@@ -19,7 +19,7 @@ namespace Teleopti.Messaging.Client.Http
 		private readonly MailboxServerCaller _serverCaller;
 		private readonly IJsonDeserializer _jsonDeserializer;
 
-		public MailboxPoller(EventHandlers eventHandlers, ITime time, HttpRequests client, IJsonDeserializer jsonDeserializer)
+		public MailboxPoller(EventHandlers eventHandlers, ITime time, HttpClientM client, IJsonDeserializer jsonDeserializer)
 		{
 			_eventHandlers = eventHandlers;
 			_time = time;

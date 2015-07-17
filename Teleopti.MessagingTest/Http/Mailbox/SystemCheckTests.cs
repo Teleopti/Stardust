@@ -12,6 +12,7 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
+using Teleopti.Messaging.Client;
 using Teleopti.Messaging.Client.Http;
 
 namespace Teleopti.MessagingTest.Http.Mailbox
@@ -28,14 +29,10 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			var fakeSignalRClient = new FakeSignalRClient();
-			fakeSignalRClient.Configure("http://someserver/");
-			system.UseTestDouble(fakeSignalRClient).For<ISignalRClient>();
+			system.UseTestDouble(new FakeUrl("http://someserver/")).For<IMessageBrokerUrl>();
 			system.UseTestDouble<FakeHttpServer>().For<IHttpServer>();
 			system.UseTestDouble<FakeTime>().For<ITime>();
-			var config = new FakeConfigReader();
-			config.AppSettings_DontUse["MessageBrokerMailboxPollingIntervalInSeconds"] = "60";
-			system.UseTestDouble(config).For<IConfigReader>();
+			system.UseTestDouble(new FakeConfigReader("MessageBrokerMailboxPollingIntervalInSeconds", "60")).For<IConfigReader>();
 		}
 
 		[Test]

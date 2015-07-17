@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using NUnit.Framework;
@@ -14,6 +15,7 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
+using Teleopti.Messaging.Client;
 using Teleopti.Messaging.Client.Http;
 
 namespace Teleopti.MessagingTest.Http.Mailbox
@@ -30,14 +32,10 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			var fakeSignalRClient = new FakeSignalRClient();
-			fakeSignalRClient.Configure("http://someserver/");
-			system.UseTestDouble(fakeSignalRClient).For<ISignalRClient>();
+			system.UseTestDouble(new FakeUrl("http://someserver/")).For<IMessageBrokerUrl>();
 			system.UseTestDouble<FakeHttpServer>().For<IHttpServer>();
 			system.UseTestDouble<FakeTime>().For<ITime>();
-			var config = new FakeConfigReader();
-			config.AppSettings_DontUse["MessageBrokerMailboxPollingIntervalInSeconds"] = "60";
-			system.UseTestDouble(config).For<IConfigReader>();
+			system.UseTestDouble(new FakeConfigReader("MessageBrokerMailboxPollingIntervalInSeconds", "60")).For<IConfigReader>();
 		}
 
 		[Test]
@@ -68,7 +66,7 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => { }, typeof(ITestType), false, true);
 			Time.Passes("60".Seconds());
 
-			Server.CallsToCreateMailbox.Should().Be.EqualTo(2);
+			Server.Requests.Where(x => x.Uri.Contains("AddMailbox")).Should().Have.Count.EqualTo(2);
 		}
 
 		[Test]
@@ -81,7 +79,7 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => { }, typeof(ITestType), false, true);
 			Time.Passes("30".Seconds());
 
-			Server.CallsToCreateMailbox.Should().Be.EqualTo(3);
+			Server.Requests.Where(x => x.Uri.Contains("AddMailbox")).Should().Have.Count.EqualTo(3);
 		}
 	}
 }

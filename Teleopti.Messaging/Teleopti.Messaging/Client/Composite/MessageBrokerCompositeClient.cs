@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
@@ -24,19 +23,18 @@ namespace Teleopti.Messaging.Client.Composite
 
 		public MessageBrokerCompositeClient(
 			IMessageFilterManager typeFilter, 
-			ISignalRClient signalRClient,
+			ISignalRClient signalRClient, 
 			IMessageSender messageSender, 
-			IJsonSerializer serializer, 
 			IJsonDeserializer deserializer, 
-			ITime time,
-			IHttpServer httpServer, 
-			IConfigReader config)
+			ITime time, 
+			IConfigReader config, 
+			HttpClientM client)
 		{
 			_signalRClient = signalRClient;
 			_messageSender = messageSender;
 			var eventHandlers = new EventHandlers();
 			_signalRMessageListener = new SignalRListener(_signalRClient, eventHandlers);
-			_mailboxListener = new HttpListener(eventHandlers, httpServer, _signalRClient, serializer, deserializer, time, config);
+			_mailboxListener = new HttpListener(eventHandlers, deserializer, time, config, client);
 			_messageCreator = new MessageCreator(messageSender, typeFilter);
 		}
 

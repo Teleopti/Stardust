@@ -1,17 +1,14 @@
 using System;
-using System.Globalization;
-using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker;
-using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Messaging.Client.Http
 {
+
 	public class HttpListener : IMessageListener, IDisposable
 	{
 		private readonly MailboxPoller _mailboxPoller;
@@ -19,19 +16,12 @@ namespace Teleopti.Messaging.Client.Http
 
 		public HttpListener(
 			EventHandlers eventHandlers, 
-			IHttpServer httpServer, 
-			IMessageBrokerUrl url,
-			IJsonSerializer jsonSerializer,
-			IJsonDeserializer jsonDeserializer,
+			IJsonDeserializer jsonDeserializer, 
 			ITime time, 
-			IConfigReader config)
+			IConfigReader config, 
+			HttpClientM client)
 		{
 			_config = config;
-			var client = new HttpRequests(url, jsonSerializer)
-			{
-				PostAsync = (c, uri, content) => httpServer.PostAsync(c, uri, content),
-				GetAsync = (c, uri) => httpServer.GetAsync(c, uri)
-			};
 			_mailboxPoller = new MailboxPoller(eventHandlers, time, client, jsonDeserializer);
 		}
 		

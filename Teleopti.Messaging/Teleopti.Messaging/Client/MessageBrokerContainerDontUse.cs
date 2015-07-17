@@ -19,6 +19,7 @@ namespace Teleopti.Messaging.Client
 		private static IMessageFilterManager _messageFilter;
 
 		private static ISignalRClient _client;
+		private static HttpClientM _httpClient;
 		private static IMessageSender _sender;
 		private static IMessageBrokerComposite _compositeClient;
 		private static IJsonSerializer _jsonSerializer;
@@ -37,6 +38,7 @@ namespace Teleopti.Messaging.Client
 			_jsonSerializer = jsonSerializer;
 			_jsonDeserializer = jsonDeserializer;
 			_client = null;
+			_httpClient = null;
 			_sender = null;
 			_compositeClient = null;
 		}
@@ -56,14 +58,19 @@ namespace Teleopti.Messaging.Client
 			return _client ?? (_client = new SignalRClient(_serverUrl, connectionKeepAliveStrategy(), new Time(new Now())));
 		}
 
+		private static HttpClientM httpClient()
+		{
+			return _httpClient ?? (_httpClient = new HttpClientM(new HttpServer(), SignalRClient(), _jsonSerializer));
+		}
+
 		public static IMessageBrokerComposite CompositeClient()
 		{
-			return _compositeClient ?? (_compositeClient = new MessageBrokerCompositeClient(messageFilter(), SignalRClient(), Sender(), _jsonSerializer, _jsonDeserializer, new Time(new Now()), new HttpServer(), null));
+			return _compositeClient ?? (_compositeClient = new MessageBrokerCompositeClient(messageFilter(), SignalRClient(), Sender(), _jsonDeserializer, new Time(new Now()), null, httpClient()));
 		}
 
 		public static IMessageSender Sender()
 		{
-			return _sender ?? (_sender = new HttpSender(new HttpRequests(SignalRClient(), _jsonSerializer)));
+			return _sender ?? (_sender = new HttpSender(httpClient()));
 		}
 	}
 }

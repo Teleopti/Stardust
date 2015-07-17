@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Threading.Tasks;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -18,16 +16,12 @@ namespace Teleopti.MessagingTest.Http
 		[Test]
 		public void ShouldPost()
 		{
-			var poster = MockRepository.GenerateMock<IPoster>();
-			var target =
-				new HttpSender(new HttpRequests(new MutableUrl(), null)
-				{
-					PostAsync = (client, url, content) => poster.PostAsync(client, url, content)
-				});
+			var server = new FakeHttpServer();
+			var target =new HttpSender(new HttpClientM(server, new MutableUrl(), null));
 
 			target.Send(new Message());
 
-			poster.AssertWasCalled(x => x.PostAsync(null, null, null), o => o.IgnoreArguments());
+			server.Requests.Should().Have.Count.EqualTo(1);
 		}
 
 		[CLSCompliant(false)]
@@ -40,40 +34,26 @@ namespace Teleopti.MessagingTest.Http
 				"http://a/b/c"
 				)] string url)
 		{
-			var postedUrl = "";
 			var mutableUrl = new MutableUrl();
-			var target = new HttpSender(new HttpRequests(mutableUrl, null)
-			{
-				PostAsync = (c, u, cn) =>
-					{
-						postedUrl = u;
-						return Task.FromResult(new HttpResponseMessage());
-					}
-			});
+			var server = new FakeHttpServer();
+			var target = new HttpSender(new HttpClientM(server, mutableUrl, null));
 			mutableUrl.Configure(url);
 
 			target.Send(new Message());
 
-			postedUrl.Should().Be(url.TrimEnd('/') + "/MessageBroker/NotifyClients");
+			server.Requests.Single().Uri.Should().Be(url.TrimEnd('/') + "/MessageBroker/NotifyClients");
 		}
 
 		[Test]
 		public void ShouldReuseSameClient()
 		{
-			var calledClients = new List<HttpClient>();
-			var target = new HttpSender(new HttpRequests(null, null)
-			{
-				PostAsync = (c, u, cn) =>
-				{
-					calledClients.Add(c);
-					return Task.FromResult(new HttpResponseMessage());
-				}
-			});
+			var server = new FakeHttpServer();
+			var target = new HttpSender(new HttpClientM(server, null, null));
 
 			target.Send(new Message());
 			target.Send(new Message());
 
-			calledClients[0].Should().Be.SameInstanceAs(calledClients[1]);
+			server.Requests.ElementAt(0).Client.Should().Be.SameInstanceAs(server.Requests.ElementAt(1).Client);
 		}
 
 		[Test]
@@ -82,20 +62,13 @@ namespace Teleopti.MessagingTest.Http
 			var notification = new Message();
 			var serializer = MockRepository.GenerateMock<IJsonSerializer>();
 			serializer.Stub(x => x.SerializeObject(notification)).Return("serialized!");
-			HttpContent postedContent = null;
-			var target = new HttpSender(new HttpRequests(null, serializer)
-			{
-				PostAsync = (c, u, cn) =>
-				{
-					postedContent = cn;
-					return Task.FromResult(new HttpResponseMessage());
-				}
-			});
+			var server = new FakeHttpServer();
+			var target = new HttpSender(new HttpClientM(server, null, serializer));
 
 			target.Send(notification);
 
-			postedContent.ReadAsStringAsync().Result.Should().Be("serialized!");
-			postedContent.Headers.ContentType.MediaType.Should().Be("application/json");
+			server.Requests.Single().HttpContent.ReadAsStringAsync().Result.Should().Be("serialized!");
+			server.Requests.Single().HttpContent.Headers.ContentType.MediaType.Should().Be("application/json");
 		}
 
 		[Test]
@@ -104,29 +77,15 @@ namespace Teleopti.MessagingTest.Http
 			var notifications = new[] { new Message { DataSource = "one" }, new Message { DataSource = "two" } };
 			var serializer = MockRepository.GenerateMock<IJsonSerializer>();
 			serializer.Stub(x => x.SerializeObject(notifications)).Return("many");
-			HttpContent postedContent = null;
-			var postedUrl = "";
 			var url = new MutableUrl();
-			var target = new HttpSender(new HttpRequests(url, serializer)
-			{
-				PostAsync = (c, u, cn) =>
-				{
-					postedUrl = u;
-					postedContent = cn;
-					return Task.FromResult(new HttpResponseMessage());
-				}
-			});
+			var server = new FakeHttpServer();
+			var target = new HttpSender(new HttpClientM(server, url, serializer));
 			url.Configure("http://a");
 
 			target.SendMultiple(notifications);
 
-			postedContent.ReadAsStringAsync().Result.Should().Be("many");
-			postedUrl.Should().Be("http://a/MessageBroker/NotifyClientsMultiple");
-		}
-
-		public interface IPoster
-		{
-			Task<HttpResponseMessage> PostAsync(HttpClient client, string url, HttpContent content);
+			server.Requests.Single().HttpContent.ReadAsStringAsync().Result.Should().Be("many");
+			server.Requests.Single().Uri.Should().Be("http://a/MessageBroker/NotifyClientsMultiple");
 		}
 
 	}

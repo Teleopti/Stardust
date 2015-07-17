@@ -1,9 +1,6 @@
 using System.Configuration;
-using System.Net.Http;
 using Autofac;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Infrastructure.SystemCheck;
 using Teleopti.Interfaces.Domain;
@@ -62,7 +59,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					.SingleInstance();
 			}
 
-			builder.RegisterType<HttpRequests>().SingleInstance();
+			builder.RegisterType<HttpClientM>().SingleInstance();
 			builder.RegisterType<HttpSender>().As<IMessageSender>().SingleInstance();
 			builder.RegisterType<HttpServer>().As<IHttpServer>().SingleInstance();
 			builder.RegisterType<CheckMessageBrokerMailBox>().As<ISystemCheck>().SingleInstance();

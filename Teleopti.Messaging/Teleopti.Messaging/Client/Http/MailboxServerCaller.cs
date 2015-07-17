@@ -7,9 +7,9 @@ namespace Teleopti.Messaging.Client.Http
 {
 	public class MailboxServerCaller
 	{
-		private readonly HttpRequests _client;
+		private readonly HttpClientM _client;
 
-		public MailboxServerCaller(HttpRequests client)
+		public MailboxServerCaller(HttpClientM client)
 		{
 			_client = client;
 		}
