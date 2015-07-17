@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.BadgeLeaderBoard.ViewModelFacto
 			var toggleManager = MockRepository.GenerateMock<IToggleManager>();
 			toggleManager.Stub(x => x.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318)).Return(true);
 
-			var overview_original = new[]
+			var overviewOriginal = new[]
 			{
 				new AgentBadgeOverview
 				{
@@ -90,16 +90,16 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.BadgeLeaderBoard.ViewModelFacto
 			var leaderboardSettingBasedBadgeProvider = MockRepository.GenerateMock<ILeaderboardSettingBasedBadgeProvider>();
 			leaderboardSettingBasedBadgeProvider.Stub(
 				x => x.PermittedAgentBadgeOverviewsForSite(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard, option))
-				.Return(overview_original);
+				.Return(overviewOriginal);
 
 			var target = new BadgeLeaderBoardReportViewModelFactory(toggleManager, leaderboardSettingBasedBadgeProvider);
-			var result = target.CreateBadgeLeaderBoardReportViewModel(option);
+			var agentBadges = target.CreateBadgeLeaderBoardReportViewModel(option).Agents.ToList();
 
-			result.Agents.ElementAt(0).AgentName.Should().Equals("cc");
-			result.Agents.ElementAt(1).AgentName.Should().Equals("bb");
-			result.Agents.ElementAt(2).AgentName.Should().Equals("aa");
-			result.Agents.ElementAt(0).AgentName.Should().Equals("ee");
-			result.Agents.ElementAt(0).AgentName.Should().Equals("dd");
+			agentBadges.ElementAt(0).AgentName.Should().Be("cc");
+			agentBadges.ElementAt(1).AgentName.Should().Be("bb");
+			agentBadges.ElementAt(2).AgentName.Should().Be("aa");
+			agentBadges.ElementAt(3).AgentName.Should().Be("ee");
+			agentBadges.ElementAt(4).AgentName.Should().Be("dd");
 		}
 
 	}
