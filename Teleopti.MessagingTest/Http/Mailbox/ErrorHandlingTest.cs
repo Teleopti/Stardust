@@ -46,7 +46,7 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 		}
 
 		[Test]
-		public void ShouldThrowIfSomeOtherExecptionWhenRegistratingSubscription()
+		public void ShouldThrowIfSomeOtherExceptionWhenRegistratingSubscription()
 		{
 			Server.Throws(new AggregateException(new NullReferenceException()));
 
@@ -54,7 +54,7 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 				() => Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => { }, typeof (ITestType), false, true));
 		}
 
-
+		// "ShouldHandle..." and then an assert with IsRunningOk that should be false? I dont understand...
 		[Test]
 		public void ShouldHandleHttpRequestExceptionWhenPolling()
 		{
@@ -66,7 +66,9 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 			SystemCheck.IsRunningOk().Should().Be.False();
 		}
 
-
+		// Is this really correct?
+		// The assert is kinda unclear, but it basically says the timer should stop, because for "real" the "time passes" on another thread
+		// Do we really want the polling to stop when a single poll gets some random exception?
 		[Test]
 		public void ShouldThrowIfSomeOtherExecptionWhenPolling()
 		{

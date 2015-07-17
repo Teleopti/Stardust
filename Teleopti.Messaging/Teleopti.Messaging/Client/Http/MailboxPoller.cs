@@ -66,9 +66,9 @@ namespace Teleopti.Messaging.Client.Http
 			_timers.Add(mailboxTimerInfo);
 		}
 
-		private void invokeHandlersForMessages(HttpContent content)
+		private void invokeHandlersForMessages(string rawMessages)
 		{
-			var rawMessages = content.ReadAsStringAsync().Result;
+			//var rawMessages = content.ReadAsStringAsync().Result;
 			var messages = _jsonDeserializer.DeserializeObject<Message[]>(rawMessages);
 			messages.ForEach(m => _eventHandlers.CallHandlers(m));
 		}

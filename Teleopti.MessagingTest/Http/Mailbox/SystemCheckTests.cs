@@ -94,7 +94,7 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 
 			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => { }, typeof(ITestType), false, true);
 			Time.Passes("30".Seconds());
-			Server.Succeds();
+			Server.Succeeds();
 			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => { }, typeof(ITestType), false, true);
 
 			SystemCheck.IsRunningOk().Should().Be.False();

@@ -1,18 +1,17 @@
 using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace Teleopti.Messaging.Client.Http
 {
 	public class HttpServer : IHttpServer
 	{
-		public Task<HttpResponseMessage> PostAsync(HttpClient client, string uri, HttpContent httpContent)
+		public HttpResponseMessage PostAsync(HttpClient client, string uri, HttpContent httpContent)
 		{
-			return client.PostAsync(uri, httpContent);
+			return client.PostAsync(uri, httpContent).Result;
 		}
 
-		public Task<HttpResponseMessage> GetAsync(HttpClient client, string uri)
+		public HttpResponseMessage Get(HttpClient client, string uri)
 		{
-			return client.GetAsync(uri);
+			return client.GetAsync(uri).Result;
 		}
 	}
 }

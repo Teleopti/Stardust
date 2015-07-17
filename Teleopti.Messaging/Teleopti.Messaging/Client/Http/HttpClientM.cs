@@ -1,7 +1,7 @@
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Text;
-using System.Threading.Tasks;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.MessageBroker.Client;
 
@@ -28,13 +28,13 @@ namespace Teleopti.Messaging.Client.Http
 				});
 		}
 
-		public Task<HttpResponseMessage> Get(string call)
+		public HttpResponseMessage Get(string call)
 		{
 			var u = url(call);
-			return _server.GetAsync(_httpClient, u);
+			return _server.Get(_httpClient, u);
 		}
 
-		public Task<HttpResponseMessage> Post(string call, object thing)
+		public HttpResponseMessage Post(string call, object thing)
 		{
 			var content = _serializer.SerializeObject(thing);
 			var u = url(call);

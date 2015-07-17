@@ -45,7 +45,7 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 			Server.Fails(HttpStatusCode.ServiceUnavailable);
 			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => wasEventHandlerCalled = true, typeof(ITestType), false, true);
 			Time.Passes("60".Seconds());
-			Server.Succeds();
+			Server.Succeeds();
 
 			Server.Has(new testMessage
 			{
@@ -75,7 +75,7 @@ namespace Teleopti.MessagingTest.Http.Mailbox
 			Server.Fails(HttpStatusCode.ServiceUnavailable);
 			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => { }, typeof(ITestType), false, true);
 			Time.Passes("30".Seconds());
-			Server.Succeds();
+			Server.Succeeds();
 			Target.RegisterSubscription(string.Empty, Guid.Empty, (sender, args) => { }, typeof(ITestType), false, true);
 			Time.Passes("30".Seconds());
 

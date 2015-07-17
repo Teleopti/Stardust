@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Messaging.Client.Http;
@@ -30,31 +29,31 @@ namespace Teleopti.MessagingTest.Http
 			_messages.Add(message);
 		}
 
-		public Task<HttpResponseMessage> PostAsync(HttpClient client, string uri, HttpContent httpContent)
+		public HttpResponseMessage PostAsync(HttpClient client, string uri, HttpContent httpContent)
 		{
 			Requests.Add(new RequestInfo {Client = client, Uri = uri, HttpContent = httpContent});
 
 			if (_exception != null)
 				throw _exception;
 			if (_shouldFail)
-				return Task.FromResult(new HttpResponseMessage {StatusCode = _statusCode});
+				return new HttpResponseMessage {StatusCode = _statusCode};
 
-			return Task.FromResult(new HttpResponseMessage());
+			return new HttpResponseMessage();
 		}
 
-		public Task<HttpResponseMessage> GetAsync(HttpClient client, string uri)
+		public HttpResponseMessage Get(HttpClient client, string uri)
 		{
 			Requests.Add(new RequestInfo {Client = client, Uri = uri});
 
 			if (_exception != null)
 				throw _exception;
 			if (_shouldFail)
-				return Task.FromResult(new HttpResponseMessage { StatusCode = _statusCode });
+				return new HttpResponseMessage { StatusCode = _statusCode };
 
 			var result = JsonConvert.SerializeObject(_messages);
 			_messages.Clear();
 
-			return Task.FromResult(new HttpResponseMessage {Content = new StringContent(result)});
+			return new HttpResponseMessage {Content = new StringContent(result)};
 		}
 
 		public void Fails(HttpStatusCode statusCode)
@@ -63,7 +62,7 @@ namespace Teleopti.MessagingTest.Http
 			_statusCode = statusCode;
 		}
 
-		public void Succeds()
+		public void Succeeds()
 		{
 			_shouldFail = false;
 			_statusCode = HttpStatusCode.OK;

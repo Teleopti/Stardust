@@ -1,6 +1,5 @@
 using System;
 using System.Net.Http;
-using System.Threading.Tasks;
 using Teleopti.Interfaces.MessageBroker;
 
 namespace Teleopti.Messaging.Client.Http
@@ -16,23 +15,26 @@ namespace Teleopti.Messaging.Client.Http
 
 		public bool TryAddMailbox(Subscription subscription)
 		{
-			var result = callServer(() => _client.Post("MessageBroker/AddMailbox", subscription));
-			return result != null && result.IsSuccessStatusCode;
+			try
+			{
+				return _client.Post("MessageBroker/AddMailbox", subscription).IsSuccessStatusCode;
+			}
+			catch (AggregateException e)
+			{
+				if (e.InnerException.GetType() == typeof (HttpRequestException))
+					return false;
+				throw;
+			}
 		}
 
-		public HttpContent TryGetMessagesFromServer(string mailboxId)
-		{
-			var result = callServer(() => _client.Get("MessageBroker/PopMessages/" + mailboxId));
-			return result == null
-				? null
-				: result.Content;
-		}
-
-		private static HttpResponseMessage callServer(Func<Task<HttpResponseMessage>> call)
+		public string TryGetMessagesFromServer(string mailboxId)
 		{
 			try
 			{
-				return call().Result;
+				var content = _client.Get("MessageBroker/PopMessages/" + mailboxId).Content;
+				if (content == null)
+					return null;
+				return content.ReadAsStringAsync().Result;
 			}
 			catch (AggregateException e)
 			{
@@ -41,5 +43,6 @@ namespace Teleopti.Messaging.Client.Http
 				throw;
 			}
 		}
+
 	}
 }
