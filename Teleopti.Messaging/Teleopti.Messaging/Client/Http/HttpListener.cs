@@ -21,13 +21,12 @@ namespace Teleopti.Messaging.Client.Http
 		private object _timer;
 
 		public HttpListener(
-			EventHandlers eventHandlers, 
 			IJsonDeserializer jsonDeserializer, 
 			ITime time, 
 			IConfigReader config, 
 			HttpClientM client)
 		{
-			_eventHandlers = eventHandlers;
+			_eventHandlers = new EventHandlers();
 			_jsonDeserializer = jsonDeserializer;
 			_time = time;
 			_interval = TimeSpan.FromSeconds(config.ReadValue("MessageBrokerMailboxPollingIntervalInSeconds", 60));

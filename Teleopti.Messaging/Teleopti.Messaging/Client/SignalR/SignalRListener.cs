@@ -12,10 +12,10 @@ namespace Teleopti.Messaging.Client.SignalR
 		private readonly ISignalRClient _client;
 		private readonly EventHandlers _eventHandlers;
 
-		public SignalRListener(ISignalRClient client, EventHandlers eventHandlers)
+		public SignalRListener(ISignalRClient client)
 		{
 			_client = client;
-			_eventHandlers = eventHandlers;
+			_eventHandlers = new EventHandlers();
 			client.RegisterCallbacks(_eventHandlers.CallHandlers, AfterConnectionCreated);
 		}
 

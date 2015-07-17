@@ -32,9 +32,8 @@ namespace Teleopti.Messaging.Client.Composite
 		{
 			_signalRClient = signalRClient;
 			_messageSender = messageSender;
-			var eventHandlers = new EventHandlers();
-			_signalRMessageListener = new SignalRListener(_signalRClient, eventHandlers);
-			_mailboxListener = new HttpListener(eventHandlers, deserializer, time, config, client);
+			_signalRMessageListener = new SignalRListener(_signalRClient);
+			_mailboxListener = new HttpListener(deserializer, time, config, client);
 			_messageCreator = new MessageCreator(messageSender, typeFilter);
 		}
 
