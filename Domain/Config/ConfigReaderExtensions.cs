@@ -24,6 +24,8 @@ namespace Teleopti.Ccc.Domain.Config
 
 		public static int ReadValue(this IConfigReader reader, string name, int @default)
 		{
+			if (reader == null)
+				return @default;
 			var value = reader.AppConfig(name);
 			if (string.IsNullOrEmpty(value))
 				return @default;

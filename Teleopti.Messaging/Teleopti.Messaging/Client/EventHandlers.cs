@@ -35,11 +35,6 @@ namespace Teleopti.Messaging.Client
 			toRemove.ForEach(s => _subscriptions.Remove(s));
 		}
 
-		public bool HasSubscription(EventHandler<EventMessageArgs> eventMessageHandler)
-		{
-			return _subscriptions.Any(x => x.Callback == eventMessageHandler);
-		}
-
 		public void ForAll(Action<Subscription> action)
 		{
 			_subscriptions
