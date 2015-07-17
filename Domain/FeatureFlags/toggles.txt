@@ -80,5 +80,5 @@ WfmForecast_ResultView_33605 = RC
 WfmForecast_MethodsComparisonView_33610 = RC
 WfmForecast_IntradayPatternView_33069 = RC
 MyTimeWeb_AutoShiftTradeWithMeetingAndPersonalActivity_33281 = RC
-MessageBroker_SchedulingScreenMailbox_32733 = RC
+MessageBroker_SchedulingScreenMailbox_32733 = DEV
 Tenant_RemoveNhibFiles_33685 = RC
