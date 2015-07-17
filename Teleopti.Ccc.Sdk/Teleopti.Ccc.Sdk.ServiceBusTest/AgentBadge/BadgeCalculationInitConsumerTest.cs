@@ -39,20 +39,22 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		}
 
 		[Test]
-		public void ShouldSendCalculateTimeZoneMessageWhen31318FeatureCloseAndAgentBadgeEnable()
+		public void ShouldSendCalculateTimeZoneMessageWhenAgentBadgeEnable()
 		{
 			var bussinessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit("TestBU");
 			bussinessUnit.SetId(Guid.NewGuid());
 
-			var message = new BadgeCalculationInitMessage();
-			message.Timestamp = DateTime.Now;
-			message.BusinessUnitId = bussinessUnit.Id.GetValueOrDefault();
+			var message = new BadgeCalculationInitMessage
+			{
+				Timestamp = DateTime.Now,
+				BusinessUnitId = bussinessUnit.Id.GetValueOrDefault()
+			};
 			var timezoneList = new List<TimeZoneInfo> {TimeZoneInfo.Local};
 
 			currentUnitOfWorkFactory.Stub(x => x.Current()).Return(loggedOnUnitOfWorkFactory);
 			badgeSettingRep.Stub(x => x.FindTeamGamificationSettingsByTeam(new Team())).IgnoreArguments()
 				.Return(
-					new TeamGamificationSetting()
+					new TeamGamificationSetting
 					{
 						GamificationSetting = new GamificationSetting("TestSetting")
 					});
@@ -69,16 +71,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 							new Predicate<object[]>(m => ((CalculateTimeZoneMessage) m[0]).TimeZoneCode == TimeZoneInfo.Local.Id))));
 		}
 
-		[Ignore]
 		[Test]
-		public void ShouldSendCalculateTimeZoneMessageWhen31318FeatrueOpenAndAgentBadgeDisable()
+		public void ShouldResendCalculateInitMessageWhenAgentBadgeDisabledForAllTeam()
 		{
 			var bussinessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit("TestBU");
 			bussinessUnit.SetId(Guid.NewGuid());
 
-			var message = new BadgeCalculationInitMessage();
-			message.Timestamp = DateTime.Now;
-			message.BusinessUnitId = bussinessUnit.Id.GetValueOrDefault();
+			var now = DateTime.Now;
+			var message = new BadgeCalculationInitMessage
+			{
+				Timestamp = now,
+				BusinessUnitId = bussinessUnit.Id.GetValueOrDefault()
+			};
 			var timezoneList = new List<TimeZoneInfo> { TimeZoneInfo.Local };
 
 			currentUnitOfWorkFactory.Stub(x => x.Current()).Return(loggedOnUnitOfWorkFactory);
@@ -90,11 +94,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 
 			target.Consume(message);
 
-			serviceBus.AssertWasCalled(x => x.Send(new object()),
+			serviceBus.AssertWasCalled(x => x.DelaySend(DateTime.Now, new object()),
 				o =>
 					o.Constraints(
+						Rhino.Mocks.Constraints.Is.Matching(new Predicate<DateTime>(m => m == now.Date.AddDays(1))),
 						Rhino.Mocks.Constraints.Is.Matching(
-							new Predicate<object[]>(m => ((CalculateTimeZoneMessage)m[0]).TimeZoneCode == TimeZoneInfo.Local.Id))));
+							new Predicate<object[]>(m => ((BadgeCalculationInitMessage) m[0]).Identity == message.Identity))));
 		}
 	}
 }
