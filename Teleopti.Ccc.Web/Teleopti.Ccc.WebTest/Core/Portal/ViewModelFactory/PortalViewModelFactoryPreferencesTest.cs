@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		public void Setup()
 		{
 			_loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			_loggedOnUser.Stub(x => x.CurrentUser()).Return(new Person() { Name = new Name() });
+			_loggedOnUser.Stub(x => x.CurrentUser()).Return(new Person { Name = new Name() });
 
 			var culture = CultureInfo.GetCultureInfo("sv-SE");
 			_userCulture = MockRepository.GenerateMock<IUserCulture>();
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivatorProvider>(),
 				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
 				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
-				MockRepository.GenerateMock<IBadgeSettingProvider>(), MockRepository.GenerateMock<IToggleManager>(), _personNameProvider,
+				MockRepository.GenerateMock<IToggleManager>(), _personNameProvider,
 				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), MockRepository.GenerateStub<ICurrentTenantUser>(), _userCulture);
 
 			var result = target.CreatePortalViewModel();
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivatorProvider>(),
 				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
 				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
-				MockRepository.GenerateMock<IBadgeSettingProvider>(), MockRepository.GenerateMock<IToggleManager>(), _personNameProvider,
+				MockRepository.GenerateMock<IToggleManager>(), _personNameProvider,
 				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), MockRepository.GenerateStub<ICurrentTenantUser>(), _userCulture);
 
 			var result = target.CreatePortalViewModel();
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivatorProvider>(),
 				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
 				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
-				MockRepository.GenerateMock<IBadgeSettingProvider>(), MockRepository.GenerateMock<IToggleManager>(), _personNameProvider,
+				MockRepository.GenerateMock<IToggleManager>(), _personNameProvider,
 				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), MockRepository.GenerateStub<ICurrentTenantUser>(), _userCulture);
 
 			var result = target.CreatePortalViewModel();

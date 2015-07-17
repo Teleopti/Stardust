@@ -9,7 +9,6 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;
 using Teleopti.Ccc.Infrastructure.Rta;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC;
@@ -129,7 +128,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<PushMessageProvider>().As<IPushMessageProvider>();
 			builder.RegisterType<ReportsProvider>().As<IReportsProvider>();
 			builder.RegisterType<ReportsNavigationProvider>().As<IReportsNavigationProvider>();
-			builder.RegisterType<BadgeSettingProvider>().As<IBadgeSettingProvider>();
 			builder.RegisterType<BadgeProvider>().As<IBadgeProvider>();
 		}
 

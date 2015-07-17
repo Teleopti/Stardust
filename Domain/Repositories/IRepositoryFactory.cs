@@ -1,4 +1,3 @@
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Interfaces.Domain;
@@ -435,17 +434,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		IPersonScheduleDayReadModelFinder CreatePersonScheduleDayReadModelFinder(IUnitOfWork unitOfWork);
 		IOvertimeAvailabilityRepository CreateOvertimeAvailabilityRepository(IUnitOfWork unitOfWork);
 		IPersonalSettingDataRepository CreatePersonalSettingDataRepository(IUnitOfWork unitOfWork);
-
-		/// <summary>
-		/// Create agent badge setting repository
-		/// </summary>
-		/// <param name="unitOfWork"></param>
-		/// <returns></returns>
-		/// <remarks>
-		/// Created by: xinfeng
-		/// Created date: 2014-08-01
-		/// </remarks>
-		IAgentBadgeSettingsRepository CreateAgentBadgeSettingsRepository(IUnitOfWork unitOfWork);
 		IGamificationSettingRepository CreateGamificationSettingRepository(IUnitOfWork unitOfWork);
 		ITeamGamificationSettingRepository CreateTeamGamificationSettingRepository(IUnitOfWork unitOfWork);
 	}

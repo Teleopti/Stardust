@@ -10,13 +10,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.BadgeLeaderBoardReport.ViewModelFac
 {
 	public class BadgeLeaderBoardReportViewModelFactory : IBadgeLeaderBoardReportViewModelFactory
 	{
-		private readonly ILeaderboardAgentBadgeProvider _leaderboardAgentBadgeProvider;
 		private readonly IToggleManager _toggleManager;
 		private readonly ILeaderboardSettingBasedBadgeProvider _leaderboardSettingBasedBadgeProvider;
 
-		public BadgeLeaderBoardReportViewModelFactory( ILeaderboardAgentBadgeProvider leaderboardAgentBadgeProvider, IToggleManager toggleManager, ILeaderboardSettingBasedBadgeProvider leaderboardSettingBasedBadgeProvider)
+		public BadgeLeaderBoardReportViewModelFactory( IToggleManager toggleManager, ILeaderboardSettingBasedBadgeProvider leaderboardSettingBasedBadgeProvider)
 		{
-			_leaderboardAgentBadgeProvider = leaderboardAgentBadgeProvider;
 			_toggleManager = toggleManager;
 			_leaderboardSettingBasedBadgeProvider = leaderboardSettingBasedBadgeProvider;
 		}
@@ -48,11 +46,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.BadgeLeaderBoardReport.ViewModelFac
 						break;
 				}
 			}
-			else
-			{
-				personList = _leaderboardAgentBadgeProvider.GetPermittedAgents(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard, query).ToList();
-			}
-			 
 
 			var sortedList = personList.OrderByDescending(x => x.Gold).ThenByDescending(x => x.Silver).ThenByDescending(x => x.Bronze).ToList();
 

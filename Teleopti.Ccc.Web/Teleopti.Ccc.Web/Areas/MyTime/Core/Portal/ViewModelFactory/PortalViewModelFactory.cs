@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 		private readonly IReportsNavigationProvider _reportsNavigationProvider;
 		private readonly IBadgeProvider _badgeProvider;
 		private readonly IToggleManager _toggleManager;
-		private readonly IBadgeSettingProvider _badgeSettingProvider;
 		private readonly IPersonNameProvider _personNameProvider;
 		private readonly ITeamGamificationSettingRepository _teamGamificationSettingRepo;
 		private readonly ICurrentTenantUser _currentTenantUser;
@@ -37,7 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			ILicenseActivatorProvider licenseActivatorProviderProvider,
 			IPushMessageProvider pushMessageProvider, ILoggedOnUser loggedOnUser,
 			IReportsNavigationProvider reportsNavigationProvider,
-			IBadgeProvider badgeProvider, IBadgeSettingProvider badgeSettingProvider,
+			IBadgeProvider badgeProvider,
 			IToggleManager toggleManager, IPersonNameProvider personNameProvider,
 			ITeamGamificationSettingRepository teamGamificationSettingReop,
 			ICurrentTenantUser currentTenantUser,
@@ -51,7 +50,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			_badgeProvider = badgeProvider;
 			_toggleManager = toggleManager;
 			_personNameProvider = personNameProvider;
-			_badgeSettingProvider = badgeSettingProvider;
 			_teamGamificationSettingRepo = teamGamificationSettingReop;
 			_currentTenantUser = currentTenantUser;
 			_userCulture = userCulture;
@@ -98,7 +96,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			var hasBadgePermission =
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewBadge);
 
-			bool badgeFeatureEnabled;
+			bool badgeFeatureEnabled = false;
 			if (_toggleManager.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318))
 			{
 				ITeamGamificationSetting teamSetting = null;
@@ -107,11 +105,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 					teamSetting = _teamGamificationSettingRepo.FindTeamGamificationSettingsByTeam(_loggedOnUser.CurrentUser().MyTeam(DateOnly.Today));
 				}
 				badgeFeatureEnabled = (teamSetting != null);
-			}
-			else
-			{
-				var badgeSettings = _badgeSettingProvider.GetBadgeSettings() ?? new AgentBadgeSettings();
-				badgeFeatureEnabled = badgeSettings.BadgeEnabled;
 			}
 			
 			var showBadge = badgeToggleEnabled && badgeFeatureEnabled && hasBadgePermission;

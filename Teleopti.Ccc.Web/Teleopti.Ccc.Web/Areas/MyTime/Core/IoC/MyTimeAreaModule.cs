@@ -220,9 +220,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<TeamProvider>().As<ITeamProvider>();
 			builder.RegisterType<DefaultTeamProvider>().As<IDefaultTeamProvider>();
 			builder.RegisterType<GroupingReadOnlyRepository>().As<IGroupingReadOnlyRepository>();
-		
-			//builder.RegisterType<BadgeSettingProvider>().As<IBadgeSettingProvider>();
-			//builder.RegisterType<BadgeProvider>().As<IBadgeProvider>();
 		}
 
 		private static void registerPortalTypes(ContainerBuilder builder)
@@ -248,7 +245,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 		{
 			builder.RegisterType<BadgeLeaderBoardReportViewModelFactory>().As<IBadgeLeaderBoardReportViewModelFactory>();
 			builder.RegisterType<BadgeLeaderBoardReportOptionFactory>().As<IBadgeLeaderBoardReportOptionFactory>();
-			builder.RegisterType<LeaderboardAgentBadgeProvider>().As<ILeaderboardAgentBadgeProvider>();
 			builder.RegisterType<LeaderboardSettingBasedBadgeProvider>().As<ILeaderboardSettingBasedBadgeProvider>();
 		}
 

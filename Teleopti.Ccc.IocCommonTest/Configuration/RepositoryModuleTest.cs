@@ -56,15 +56,6 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		}
 
 		[Test]
-		public void ShouldResolveTheAgentBadgeSettingRepository()
-		{
-			using (var container = builder.Build())
-			{
-				container.Resolve<IAgentBadgeSettingsRepository>().Should().Not.Be.Null();
-			}
-		}
-
-		[Test]
 		public void ShouldResolveEtlLogObjectRepository()
 		{
 			using (var container = builder.Build())

@@ -6,7 +6,6 @@ using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Sdk.ServiceBus.AgentBadge;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -19,7 +18,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 	public class BadgeCalculationInitConsumerTest
 	{
 		private IBusinessUnitRepository businessUnitRepository;
-		private IAgentBadgeSettingsRepository badgeSettingRep;
+		private IGamificationSettingRepository badgeSettingRep;
 		private IServiceBus serviceBus;
 		private BadgeCalculationInitConsumer target;
 		private ICurrentUnitOfWorkFactory currentUnitOfWorkFactory;
@@ -30,7 +29,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		public void Setup()
 		{
 			businessUnitRepository = MockRepository.GenerateMock<IBusinessUnitRepository>();
-			badgeSettingRep = MockRepository.GenerateMock<IAgentBadgeSettingsRepository>();
+			badgeSettingRep = MockRepository.GenerateMock<IGamificationSettingRepository>();
 			serviceBus = MockRepository.GenerateMock<IServiceBus>();
 			currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
 			loggedOnUnitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
@@ -50,7 +49,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			var timezoneList = new List<TimeZoneInfo>{TimeZoneInfo.Local};
 
 			currentUnitOfWorkFactory.Stub(x => x.Current()).Return(loggedOnUnitOfWorkFactory);
-			badgeSettingRep.Stub(x => x.GetSettings()).Return(new AgentBadgeSettings() { BadgeEnabled = true });
+			badgeSettingRep.Stub(x => x.FindAllGamificationSettingsSortedByDescription()).Return(
+				new List<GamificationSetting> {new GamificationSetting("TestSetting")});
 			toggleManager.Stub(x => x.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318)).Return(false);
 
 			businessUnitRepository.Stub(x => x.LoadAllTimeZones()).Return(timezoneList);
@@ -76,7 +76,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			var timezoneList = new List<TimeZoneInfo> { TimeZoneInfo.Local };
 
 			currentUnitOfWorkFactory.Stub(x => x.Current()).Return(loggedOnUnitOfWorkFactory);
-			badgeSettingRep.Stub(x => x.GetSettings()).Return(new AgentBadgeSettings() { BadgeEnabled = false });
+			badgeSettingRep.Stub(x => x.FindAllGamificationSettingsSortedByDescription()).Return(
+				new List<GamificationSetting> { new GamificationSetting("TestSetting") });
 			toggleManager.Stub(x => x.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318)).Return(true);
 
 			businessUnitRepository.Stub(x => x.LoadAllTimeZones()).Return(timezoneList);

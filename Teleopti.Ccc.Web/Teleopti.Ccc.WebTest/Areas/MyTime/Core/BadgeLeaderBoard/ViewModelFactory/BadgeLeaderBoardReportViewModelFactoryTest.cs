@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Toggle;
-using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.BadgeLeaderBoardReport.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.BadgeLeaderBoardReport;
@@ -20,21 +19,16 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.BadgeLeaderBoard.ViewModelFacto
 		[Test]
 		public void ShouldReturnBadgeLeaderBoardViewModel()
 		{
-			var badgesProvider = MockRepository.GenerateMock<ILeaderboardAgentBadgeProvider>();
 			var toggleManager = MockRepository.GenerateMock<IToggleManager>();
 			var leaderboardSettingBasedBadgeProvider =MockRepository.GenerateMock<ILeaderboardSettingBasedBadgeProvider>();
 
-			var target = new BadgeLeaderBoardReportViewModelFactory(badgesProvider,toggleManager,leaderboardSettingBasedBadgeProvider);
-			var list = new List<AgentBadgeOverview>();
+			var target = new BadgeLeaderBoardReportViewModelFactory(toggleManager,leaderboardSettingBasedBadgeProvider);
 			var option = new LeaderboardQuery
 			{
 				Date = DateOnly.Today,
 				SelectedId = Guid.NewGuid(),
 				Type = LeadboardQueryType.Team
 			};
-			badgesProvider.Stub(
-				x => x.GetPermittedAgents( DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard, option))
-				.Return(list);
 
 			var result = target.CreateBadgeLeaderBoardReportViewModel(option);
 
@@ -44,11 +38,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.BadgeLeaderBoard.ViewModelFacto
 		[Test]
 		public void ShouldReturnSortedAgents()
 		{
-			var badgesProvider = MockRepository.GenerateMock<ILeaderboardAgentBadgeProvider>();
 			var toggleManager = MockRepository.GenerateMock<IToggleManager>();
-			var leaderboardSettingBasedBadgeProvider = MockRepository.GenerateMock<ILeaderboardSettingBasedBadgeProvider>();
+			toggleManager.Stub(x => x.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318)).Return(true);
 
-			var target = new BadgeLeaderBoardReportViewModelFactory(badgesProvider, toggleManager, leaderboardSettingBasedBadgeProvider);
 			var overview_original = new[]
 			{
 				new AgentBadgeOverview
@@ -87,15 +79,20 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.BadgeLeaderBoard.ViewModelFacto
 					Bronze = 18
 				}
 			};
+
 			var option = new LeaderboardQuery
 			{
 				Date = DateOnly.Today,
 				SelectedId = Guid.NewGuid(),
 				Type = LeadboardQueryType.Site
 			};
-			badgesProvider.Stub(x => x.GetPermittedAgents(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard, option))
+
+			var leaderboardSettingBasedBadgeProvider = MockRepository.GenerateMock<ILeaderboardSettingBasedBadgeProvider>();
+			leaderboardSettingBasedBadgeProvider.Stub(
+				x => x.PermittedAgentBadgeOverviewsForSite(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard, option))
 				.Return(overview_original);
 
+			var target = new BadgeLeaderBoardReportViewModelFactory(toggleManager, leaderboardSettingBasedBadgeProvider);
 			var result = target.CreateBadgeLeaderBoardReportViewModel(option);
 
 			result.Agents.ElementAt(0).AgentName.Should().Equals("cc");

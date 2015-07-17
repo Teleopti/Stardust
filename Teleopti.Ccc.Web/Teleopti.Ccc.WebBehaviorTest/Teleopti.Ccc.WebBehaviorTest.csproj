@@ -298,8 +298,6 @@
     <Compile Include="MyTime\AgentBageStepDefinition.cs" />
     <Compile Include="Bindings\DoNotUse\DefaultSite.cs" />
     <Compile Include="Bindings\DoNotUse\DefaultTeam.cs" />
-    <Compile Include="Data\Setups\Configurable\BadgeSettingsConfigurable.cs" />
-    <Compile Include="Data\Setups\Configurable\BadgeConfigurable.cs" />
     <Compile Include="MyTime\31296_ShiftExchangeOfferFromWeekSchedule.feature.cs">
       <DependentUpon>31296_ShiftExchangeOfferFromWeekSchedule.feature</DependentUpon>
       <AutoGen>True</AutoGen>

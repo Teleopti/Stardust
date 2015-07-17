@@ -897,7 +897,6 @@
     <Compile Include="Repositories\ISeatBookingRepository.cs" />
     <Compile Include="Repositories\ISeatMapLocationRepository.cs" />
     <Compile Include="Repositories\ITeamGamificationSettingRepository.cs" />
-    <Compile Include="Repositories\IAgentBadgeSettingsRepository.cs" />
     <Compile Include="Repositories\IGamificationSettingRepository.cs" />
     <Compile Include="Repositories\IGlobalSettingDataRepository.cs" />
     <Compile Include="Repositories\Paging.cs" />
@@ -1699,7 +1698,6 @@
     <Compile Include="SystemSetting\GlobalSettingData.cs" />
     <Compile Include="SystemSetting\GlobalSetting\AdherenceReportSetting.cs" />
     <Compile Include="SystemSetting\GlobalSetting\AdherenceReportSettingCalculationMethod.cs" />
-    <Compile Include="SystemSetting\GlobalSetting\AgentBadgeSettings.cs" />
     <Compile Include="SystemSetting\GlobalSetting\AsmAlertTime.cs" />
     <Compile Include="SystemSetting\GlobalSetting\NameFormatSettings.cs" />
     <Compile Include="SystemSetting\GlobalSetting\CalendarLinkSettings.cs" />
