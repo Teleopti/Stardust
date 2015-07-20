@@ -12,15 +12,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	[Category ("LongRunning")]
 	internal class SeatPlanRepositoryTest : RepositoryTest<ISeatPlan>
 	{
-
+		private int _callCount;
+		
 		protected override ISeatPlan CreateAggregateWithCorrectBusinessUnit()
 		{
 
 			var seatPlan = new SeatPlan()
 			{
-				Date = new DateOnly(2015,03,02),
+				Date = DateOnly.Today.AddDays (_callCount),
 				Status = SeatPlanStatus.InError
 			};
+
+			_callCount++;
 
 			return seatPlan;
 			
@@ -42,6 +45,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldChangeSeatPlanStatus()
 		{
+
 			var seatPlan = new SeatPlan()
 			{
 				

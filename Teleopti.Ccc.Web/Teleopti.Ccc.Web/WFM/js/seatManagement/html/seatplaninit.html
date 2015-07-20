@@ -52,7 +52,7 @@
 	</div>
 	<p />
 	<div style="padding-left:10px">
-		<button class="wfm-btn wfm-btn-primary next-step"  ng-click="vm.addSeatPlan()">{{ 'PlanSeats' | translate }}</button>
+		<button class="wfm-btn wfm-btn-primary next-step" ng-click="vm.addSeatPlan()" ng-disabled="vm.processingSeatPlan">{{ 'PlanSeats' | translate }}</button>
 	</div>
 </div>
 

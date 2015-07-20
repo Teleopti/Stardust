@@ -75,6 +75,9 @@
 		};
 
 		vm.addSeatPlan = function () {
+
+			vm.processingSeatPlan = true;
+
 			var selectedTeams = [];
 			if (vm.teams.length > 0) {
 				getSelectedTeams(vm.teams[0], selectedTeams);
@@ -99,6 +102,7 @@
 
 				seatPlanService.addSeatPlan(addSeatPlanCommand).$promise.then(function (result) {
 					onSuccessAddSeatPlan(vm.translatedStrings["SeatPlanSubmittedOK"]);
+					vm.processingSeatPlan = false;
 					vm.onSeatPlanComplete();
 				});
 

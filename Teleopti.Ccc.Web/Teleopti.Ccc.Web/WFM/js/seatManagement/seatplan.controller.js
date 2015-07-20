@@ -110,7 +110,6 @@
 		};
 
 		vm.onSeatPlanComplete = function () {
-
 			vm.loadMonthDetails(moment(vm.selectedDate));
 		};
 
