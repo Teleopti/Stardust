@@ -19,7 +19,9 @@
 				var expires = "expires=" + d.toUTCString();
 				document.cookie = "returnHash" + "=" + window.location.hash + "; " + expires + "; path=/";
 			}
-			window.location = "/Reporting/Authentication";
+			var re = new RegExp(/^.*\//);
+			var loc = re.exec(window.location.href);
+			window.location = loc + "../Authentication";
 		}
 	</script>
 
