@@ -189,6 +189,26 @@ describe('OutboundService Test', function () {
 		});
 	});
 
+	it('should have expected phase stastistics', function () {
+		$httpBackend.whenGET('../api/Outbound/Campaign/Statistics').respond(200, JSON.stringify({ "Planned": 1, "Scheduled": 2, "ScheduledWarning": 3, "OnGoing": 4, "OnGoingWarning": 5, "Done": 6 }));
+
+		var phase;
+
+		outboundService.getCampaignStatistics(null, function(data) {
+			phase = data;
+		});
+
+		$httpBackend.flush();
+
+		expect(phase.Planned).toEqual(1);
+		expect(phase.Scheduled).toEqual(2);
+		expect(phase.ScheduledWarning).toEqual(3);
+		expect(phase.OnGoing).toEqual(4);
+		expect(phase.OnGoingWarning).toEqual(5);
+		expect(phase.Done).toEqual(6);
+
+	});
+
 
 	function presetCampaigns() {
 		return [

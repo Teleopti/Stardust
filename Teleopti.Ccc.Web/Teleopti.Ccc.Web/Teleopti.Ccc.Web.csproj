@@ -1225,6 +1225,7 @@
     <Content Include="WFM\html\left-sidenav.html" />
     <Content Include="WFM\html\outbound\activity-picker.tpl.html" />
     <Content Include="WFM\html\outbound\campaign-create.html" />
+    <Content Include="WFM\html\outbound\phase-picker.tpl.html" />
     <Content Include="WFM\html\outbound\working-hours-picker.tpl.html" />
     <Content Include="WFM\html\right-sidenav.html" />
     <Content Include="WFM\js\forecasting\forecasting.intraday.controller.js" />
@@ -1238,6 +1239,8 @@
     <Content Include="WFM\js\global\teleopti.wfm.cardList\teleopticardlist.directive.js" />
     <Content Include="WFM\js\global\teleopti.wfm.cardList\teleopticardlist.html" />
     <Content Include="WFM\js\outbound\outbound.activity.service.js" />
+    <Content Include="WFM\js\outbound\outbound.campaignSummary.controller.js" />
+    <Content Include="WFM\js\outbound\outbound.campaignPhase.directive .js" />
     <Content Include="WFM\js\outbound\outbound.activityPicker.directive.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.TeamScheduleViewModel.Tests.js" />
     <Content Include="Areas\Reporting\Views\Shared\Error.cshtml" />

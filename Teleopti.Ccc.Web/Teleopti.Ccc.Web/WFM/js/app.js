@@ -94,7 +94,7 @@ wfm.config([
 		}).state('outbound-prototype', {
 			url: '/outbound/prototype',
 			templateUrl: 'html/outbound/campaign-prototype.html',
-			controller: 'OutboundListCtrl'
+			controller: 'OutboundSummaryCtrl'
 		}).state('outbound.edit', {
 			url: '/campaign/:Id',
 			templateUrl: 'html/outbound/campaign-edit.html',

@@ -112,6 +112,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public IList<ISkillDay> SkillDaysOnDateOnly(IList<DateOnly> theDateList)
         {
             IList<ISkillDay> ret = new List<ISkillDay>();
+			if (SkillDays == null) return ret;
+
             foreach (KeyValuePair<ISkill, IList<ISkillDay>> pair in SkillDays)
             {
                 foreach (ISkillDay skillDay in pair.Value)

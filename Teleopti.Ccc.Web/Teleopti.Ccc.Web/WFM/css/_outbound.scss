@@ -65,6 +65,120 @@
 		position:relative;
 		bottom:-5px;
 	}
+	.border-bottom{
+	    border-bottom:1px solid rgba(0,0,0,0.12);
+    }
+	.create-campaignfix{
+		position:absolute;
+		top:-5px;
+		right:5%;
+	}
+	.campaign-phase{
+		margin-top:10px;
+		margin-bottom:30px !important;
+	}
+	.campaign-phase li{
+		float:left;
+		padding:5px 20px;
+		list-style:none;
+		background-color:#66C2FF;
+		border:1px solid rgba(0,0,0,.06);
+		cursor:pointer;
+		box-shadow:0 2px 5px 0 rgba(0,0,0,.26);
+	}
+	.campaign-phase li:hover{
+		box-shadow: none;
+	}
+	.campaign-phase li:hover .campaign-warning-icon{
+		box-shadow: none;
+	}
+	.phase-active{
+		background-color:#C2E085 !important;
+		box-shadow: inset 0 2px 5px 0 rgba(0,0,0,.26) !important;
+	}
+	.phase-active .campaign-warning-icon{
+		box-shadow:0 2px 5px 0 rgba(0,0,0,.26);
+	}
+	.center{
+		margin-right:auto;
+		margin-left:auto;
+	}
+	.campaign-warning-icon{
+		height:20px;
+		line-height:18px;
+		min-width:20px;
+		border:1px solid rgba(0,0,0,0.12);
+		background-color: #F44336;
+		border-radius:50%;
+		font-size:15px;
+		text-align:center;
+		font-weight:bold;
+		box-shadow:inset 0 2px 5px 0 rgba(0,0,0,.26);
+		color:#fff;
+		display:inline-block;
+		padding-right:3px;
+		padding-left:3px;
+		position:relative;
+	}
+	.campaign-warning-iconfix{
+		position:absolute;
+		top:24%;
+		right: 100px;
+		padding-right:4px;
+	}
+	.campaign-phase-label{
+		height:100%;
+		position:absolute;
+		top:0;
+		right: 0;
+		background-color: rgba(0,0,0,0.5);
+		font-size:15px;
+		text-align:center;
+		padding-left:10px;
+		padding-right:10px;
+		color:#fff;
+		width:82px;
+	}
+	.m-r-5{
+		margin-right:5px;
+	}
+	.m-l-10{
+		margin-left:10px;
+	}
+	.campaign-message{
+		background-color:#F44336;
+		padding:5px 10px;
+		display:inline-block;
+		color:#fff;
+		box-shadow:0 2px 5px 0 rgba(0,0,0,.26);
+	}
+
+	.chart{
+		overflow-x:scroll;
+		overflow-y:hidden;
+	}
+	.campaign-warning-icon-messagefix{
+		color:#F44336;
+		background-color:#fff;
+		margin-right:10px;
+		padding-right:4px;
+	}
+	.campaign-warning-icon-phasefix{
+		margin-left:10px;
+	}
+	.campaign-warning-icon-phasefix:after{
+		content:"/";
+		position:absolute;
+		top:0;
+		right:-10px;
+		color:#000;
+	}
+	.campaign-namefix{
+		position:absolute;
+		left:0;
+		top:0;
+	}
+
 }
 .wfm-timepicker-wrapper {
   width: 120px;
@@ -301,97 +415,4 @@ activity-picker {
 		margin-top: 1px;
 		margin-bottom: 1px;
 	}
-}
-.border-bottom{
-	border-bottom:1px solid rgba(0,0,0,0.12);
-}
-.create-campaignfix{
-	position:absolute;
-	top:-5px;
-	right:5%;
-}
-.campaign-phase{
-	
-}
-.campaign-phase li{
-	float:left;
-	padding:5px 20px;
-	list-style:none;
-	background-color:#66C2FF;
-	border:1px solid rgba(0,0,0,.06);
-	cursor:pointer;
-	box-shadow:0 2px 5px 0 rgba(0,0,0,.26);
-}
-.campaign-phase li:hover{
-	box-shadow: none;
-}
-.campaign-phase li:hover .campaign-warning-icon{
-	box-shadow: none;
-}
-.phase-active{
-	background-color:#C2E085 !important;
-	box-shadow: inset 0 2px 5px 0 rgba(0,0,0,.26) !important;
-}
-.phase-active .campaign-warning-icon{
-	box-shadow:0 2px 5px 0 rgba(0,0,0,.26);
-}
-.center{
-	margin-right:auto;
-	margin-left:auto;
-}
-.campaign-warning-icon{
-	height:20px;
-	line-height:20px;
-	min-width:20px;
-	border:1px solid rgba(0,0,0,0.12);
-	background-color: #F44336;
-	border-radius:50%;
-	font-size:15px;
-	text-align:center;
-	font-weight:bold;
-	box-shadow:inset 0 2px 5px 0 rgba(0,0,0,.26);
-	color:#fff;
-	display:inline-block;
-}
-.campaign-warning-iconfix{
-	position:absolute;
-	top:25%;
-	right: 2%;
-	padding-right:1px;
-}
-.campaign-phase-label{
-	height:100%;
-	position:absolute;
-	top:0;
-	right: 10%;
-	background-color: rgba(0,0,0,0.4);
-	font-size:15px;
-	text-align:center;
-	padding-left:10px;
-	padding-right:10px;
-	color:#fff;
-}
-.m-r-5{
-	margin-right:5px;
-}
-.m-l-10{
-	margin-left:10px;
-}
-.campaign-message{
-	background-color:#F44336;
-	padding:5px 10px;
-	display:inline-block;
-	color:#fff;
-	box-shadow:0 2px 5px 0 rgba(0,0,0,.26);
-}
-
-.chart{
-	overflow-x:scroll;
-	overflow-y:hidden;
-}
-.campaign-warning-icon-messagefix{
-	color:#F44336;
-	background-color:#fff;
-	margin-right:10px;
-	padding-right:1px;
 }
