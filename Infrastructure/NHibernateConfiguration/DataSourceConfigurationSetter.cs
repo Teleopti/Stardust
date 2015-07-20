@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		}
 		public static IDataSourceConfigurationSetter ForEtl()
 		{
-			return new DataSourceConfigurationSetter(false, false, "thread_static", "Teleopti.Analytics.ETL.nhib", new ConfigReader());
+			return new DataSourceConfigurationSetter(false, false, "thread_static", "Teleopti.Analytics.ETL.Tool", new ConfigReader());
 		}
 		public static IDataSourceConfigurationSetter ForApplicationConfig()
 		{
