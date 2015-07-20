@@ -45,8 +45,8 @@
 				<i class="mdi mdi-magnify"></i>
 				<input id="simple-search" style="width: 90%; height: 23px;" type="text" placeholder="{{'Search'|translate}}..."
 					   ng-model="keyword" ng-keydown="$event.which === 13 && searchKeyword() || turnOffAdvancedSearch()" ng-change="validateSearchKeywordChanged()"
-					   ng-click="toggleAdvancedSearchOption($event);" />
-				<span class="dropdown" tabindex="0" ng-show="isAdvancedSearchEnabled" ng-include src="'js/people/template/advancedPeopleSearch.html'" outside-click="turnOffAdvancedSearch()"></span>
+					   ng-click="toggleAdvancedSearchOption($event)" />
+				<advance-search class="dropdown" ng-cloak ng-show="showAdvancedSearchOption" outside-click="turnOffAdvancedSearch()"></advance-search>
 			</div>
 		</div>
 	</div>
