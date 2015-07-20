@@ -2196,7 +2196,9 @@
     <EmbeddedResource Include="AgentInfo\Requests\AbsenceRequest.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="AgentInfo\ExternalLogOn.hbm.xml" />
+    <EmbeddedResource Include="AgentInfo\ExternalLogOn.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scheduling\Meetings\MeetingPerson.hbm.xml" />
@@ -2396,7 +2398,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Budgeting\BudgetGroup.hbm.xml" />
+    <EmbeddedResource Include="Budgeting\BudgetGroup.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Budgeting\CustomShrinkage.hbm.xml" />
@@ -2407,7 +2411,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Budgeting\CustomEfficiencyShrinkage.hbm.xml" />
+    <EmbeddedResource Include="Budgeting\CustomEfficiencyShrinkage.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Payroll\PayrollResultDetail.hbm.xml" />

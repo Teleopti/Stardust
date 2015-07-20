@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                                             and a.Requestable = 1
 	                                        inner join Person p
 	                                        on sp.PersonId = p.Id
-	                                        inner join PersonPeriodWithEndDate pp
+	                                        inner join PersonPeriod pp
                                             on pp.Parent = p.Id
 	                                        and pp.BudgetGroup = :budgetGroupId
                                             and :currentDate BETWEEN pp.StartDate and pp.EndDate

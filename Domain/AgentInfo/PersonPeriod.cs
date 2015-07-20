@@ -56,6 +56,12 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			return nextPeriod.StartDate.AddDays(-1);
 		}
 
+		public virtual DateOnly internalEndDate
+		{
+			get { return EndDate(); }
+			set { }
+		}
+
 		public virtual DateOnlyPeriod Period
 		{
 			get

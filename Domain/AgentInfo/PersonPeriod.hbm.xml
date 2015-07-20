@@ -15,6 +15,12 @@
 				type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"
 		  not-null="true" />
 
+    <property name="internalEndDate"
+              column="EndDate"
+		  		access="readonly"
+				type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"
+		  not-null="true" />
+
     <many-to-one name="Team"
          class="Team"
          not-null="true" foreign-key="FK_PersonPeriod_Team"/>

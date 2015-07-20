@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             const string query = @"SELECT p.Id, FirstName, LastName , ISNULL(t.Name, '') Team
                         FROM Person p INNER JOIN PersonInApplicationRole a ON p.Id = a.Person 
                         AND a.ApplicationRole = :role
-                        LEFT JOIN PersonPeriodWithEndDate ON Parent = p.Id
+                        LEFT JOIN PersonPeriod ON Parent = p.Id
                         AND StartDate <= :onDate AND EndDate >= :onDate
                         LEFT JOIN Team t ON t.Id = Team";
             return ((NHibernateStatelessUnitOfWork)_unitOfWork).Session.CreateSQLQuery(query)
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             var ids = new List<Guid>();
             ids.AddRange(personsIds);
             const string query = @"SELECT p.Id, FirstName, LastName , ISNULL(t.Name, '') Team
-                        FROM Person p LEFT JOIN PersonPeriodWithEndDate ON Parent = p.Id
+                        FROM Person p LEFT JOIN PersonPeriod ON Parent = p.Id
                         AND StartDate <= :onDate AND EndDate >= :onDate
                         LEFT JOIN Team t ON t.Id = Team
                         WHERE  p.Id In (:persons)
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             var onDate = DateTime.Today.Date;
             const string query = @"SELECT p.Id, FirstName, LastName , ISNULL(t.Name, '') Team
-                        FROM Person p LEFT JOIN PersonPeriodWithEndDate ON Parent = p.Id
+                        FROM Person p LEFT JOIN PersonPeriod ON Parent = p.Id
                         AND StartDate <= :onDate AND EndDate >= :onDate
                         LEFT JOIN Team t ON t.Id = Team";
             return ((NHibernateStatelessUnitOfWork)_unitOfWork).Session.CreateSQLQuery(query)
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             const string query = @"SELECT DISTINCT p.Id, FirstName, LastName , ISNULL(t.Name, '') Team
                                 FROM Person p INNER JOIN PersonInApplicationRole a ON p.Id = a.Person AND IsDeleted = 0
                                 AND ApplicationRole IN(SELECT ApplicationRole FROM ApplicationFunctionInRole WHERE ApplicationFunction = :function)
-                                LEFT JOIN PersonPeriodWithEndDate ON Parent = p.Id
+                                LEFT JOIN PersonPeriod ON Parent = p.Id
                                 AND StartDate <= :onDate AND EndDate >= :onDate
                                 LEFT JOIN Team t ON t.Id = Team";
             return ((NHibernateStatelessUnitOfWork)_unitOfWork).Session.CreateSQLQuery(query)
@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                         FROM Person p INNER JOIN PersonInApplicationRole a ON p.Id = a.Person 
                         AND a.ApplicationRole IN( :roles )
                         AND IsDeleted = 0
-                        LEFT JOIN PersonPeriodWithEndDate ON Parent = p.Id
+                        LEFT JOIN PersonPeriod ON Parent = p.Id
                         AND StartDate <= :onDate AND EndDate >= :onDate
                         LEFT JOIN Team t ON t.Id = Team";
             return ((NHibernateStatelessUnitOfWork)_unitOfWork).Session.CreateSQLQuery(query)
