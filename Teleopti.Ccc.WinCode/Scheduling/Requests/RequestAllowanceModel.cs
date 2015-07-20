@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
                 var absenceDict = new Dictionary<string, double>();
                 foreach (var absence in AbsencesInBudgetGroup)
                 {
-                    var payloadWorkTime = _usedAbsences.FirstOrDefault(ua => ua.PayloadId.Equals(absence.Id.GetValueOrDefault()) && ua.BelongsToDate.Equals(currentDate));
+                    var payloadWorkTime = _usedAbsences.FirstOrDefault(ua => ua.PayloadId.Equals(absence.Id.GetValueOrDefault()) && ua.BelongsToDate.Equals(currentDate.Date));
                     if (payloadWorkTime != null)
                     {
                         var usedFTEs =_fteCollection[i] != 0 ? TimeSpan.FromTicks(payloadWorkTime.TotalContractTime).TotalMinutes*1d/TimeDefinition.MinutesPerHour/_fteCollection[i] : 0d;

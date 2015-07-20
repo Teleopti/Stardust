@@ -209,7 +209,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
                                             select COUNT(*) NumberOfRequests, t.BelongsToDate 
 	                                        from (
-	                                        SELECT distinct sp.*
+	                                        SELECT distinct sp.PersonId, sp.BelongsToDate
 	                                        from Absence a
 	                                        inner join ReadModel.ScheduleProjectionReadOnly sp 
 	                                        on a.Id = sp.PayloadId

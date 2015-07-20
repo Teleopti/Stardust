@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(person);
 
 			absence = AbsenceFactory.CreateAbsence("Vacation");
+			absence.Requestable = true;
 			PersistAndRemoveFromUnitOfWork(absence);
 
 			budgetGroup = new BudgetGroup{Name = "My Budget",TimeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone};
@@ -163,5 +164,47 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             var headCounts = target.GetNumberOfAbsencesPerDayAndBudgetGroup(budgetGroupId, currentDate);
             Assert.AreEqual(headCounts,0);
         }
+
+		[Test]
+		public void ShouldReturnNumberOfHeadCountsHavingAbsenceApprovedWhenAbsenceIsSplitted()
+		{
+			var period =
+				new DateOnlyPeriod(DateOnly.Today, DateOnly.Today).ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
+			var layer = new ProjectionChangedEventLayer
+			{
+				ContractTime = TimeSpan.FromHours(8),
+				WorkTime = TimeSpan.FromHours(8),
+				DisplayColor = Color.Bisque.ToArgb(),
+				Name = "holiday",
+				ShortName = "ho",
+				StartDateTime = period.StartDateTime,
+				EndDateTime = period.EndDateTime,
+				PayloadId = absence.Id.GetValueOrDefault()
+			};
+			target.AddProjectedLayer(DateOnly.Today, scenarioId, person.Id.GetValueOrDefault(), layer);
+
+			layer = new ProjectionChangedEventLayer
+			{
+				ContractTime = TimeSpan.FromHours(8),
+				WorkTime = TimeSpan.FromHours(8),
+				DisplayColor = Color.Bisque.ToArgb(),
+				Name = "holiday",
+				ShortName = "ho",
+				StartDateTime = period.StartDateTime,
+				EndDateTime = period.EndDateTime,
+				PayloadId = absence.Id.GetValueOrDefault()
+			};
+			target.AddProjectedLayer(DateOnly.Today, scenarioId, person.Id.GetValueOrDefault(), layer);
+
+			using (NHibernateUnitOfWork unitOfWork = (NHibernateUnitOfWork)UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				ISession session = getSession(unitOfWork);
+				using (var trans = session.BeginTransaction(IsolationLevel.ReadUncommitted))
+				{
+					setTransaction(unitOfWork, trans);
+					target.GetNumberOfAbsencesPerDayAndBudgetGroup(budgetGroup.Id.GetValueOrDefault(), DateOnly.Today).Should().Be.EqualTo(1);
+				}
+			}
+		}
 	}
 }
