@@ -371,5 +371,21 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 				Assert.AreEqual(_issusesBefore, result);
 			}
 		}
+
+		[Test]
+		public void ShouldNotContinueIfTeamBlockInfoIsNull()
+		{
+			using (_mock.Record())
+			{
+				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnly, _allScheduleMatrixPros)).Return(_teamInfo);
+				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _dateOnly, _schedulingOptions.BlockFinderTypeForAdvanceScheduling, true)).Return(null);
+			}
+
+			using (_mock.Playback())
+			{
+				var result = _target.Optimize(_schedulingOptions, _optimizationPreferences, _rollbackService, _schedulingResultStateHolder, _person, _dateOnly, _allScheduleMatrixPros, _resourceCalculateDelayer, _skill, _issusesBefore, false);
+				Assert.AreEqual(_issusesBefore, result);
+			}
+		}
 	}
 }

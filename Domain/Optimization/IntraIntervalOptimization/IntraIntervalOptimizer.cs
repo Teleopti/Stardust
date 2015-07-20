@@ -60,6 +60,8 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 
 			var teamInfo = _teamInfoFactory.CreateTeamInfo(person, dateOnly, allScheduleMatrixPros);
 			var teamBlock = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly, schedulingOptions.BlockFinderTypeForAdvanceScheduling, true);
+			if (teamBlock == null)
+				return intervalIssuesBefore;
 			var totalScheduleRange = schedulingResultStateHolder.Schedules[person];
 
 			rollbackService.ClearModificationCollection();
