@@ -224,7 +224,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		public void ShouldGetPlannedCampaigns()
+		public void ShouldGetPlannedCampaignsWithSequence()
 		{
 			var campaign1 = createCampaignWithSpanningPeriod(new DateOnlyPeriod(DateOnly.Today.AddDays(1), DateOnly.MaxValue));
 			var campaign2 = createCampaignWithSpanningPeriod(new DateOnlyPeriod(DateOnly.Today.AddDays(2), DateOnly.MaxValue));
