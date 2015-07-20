@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 
 		public IList<IApplicationRole> LoadAll()
 		{
-			throw new NotImplementedException();
+			return _roles;
 		}
 
 		public IApplicationRole Load(Guid id)
