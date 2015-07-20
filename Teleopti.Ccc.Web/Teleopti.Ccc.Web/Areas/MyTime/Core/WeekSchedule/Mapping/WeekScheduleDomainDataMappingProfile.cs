@@ -234,27 +234,5 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 											};
 								});
 		}
-
-		public DateTime getMarginPointOfDST(TimeZoneInfo timezone, DateTime start, DateTime end)
-		{
-			if (timezone.IsDaylightSavingTime(start) == timezone.IsDaylightSavingTime(end)) return new DateTime();
-			if (DateTime.Compare(start, end) != -1) return new DateTime();
-
-			while (timezone.IsDaylightSavingTime(start.AddMonths(1)) != timezone.IsDaylightSavingTime(end))
-			{
-				start = start.AddMonths(1);
-			}
-
-			while (timezone.IsDaylightSavingTime(start.AddDays(1)) != timezone.IsDaylightSavingTime(end))
-			{
-				start = start.AddDays(1);
-			}
-
-			while (timezone.IsDaylightSavingTime(start) != timezone.IsDaylightSavingTime(end))
-			{
-				start = start.AddHours(1);
-			}
-			return new DateTime(start.Year, start.Month, start.Day, start.Hour, 0, 0, DateTimeKind.Utc);
-		}
 	}
 }
