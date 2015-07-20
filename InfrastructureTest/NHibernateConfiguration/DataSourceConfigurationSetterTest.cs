@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 			target.UseSecondLevelCache.Should().Be.False();
 			target.UseDistributedTransactionFactory.Should().Be.False();
 			target.SessionContext.Should().Be.EqualTo("thread_static");
-			target.ApplicationName.Should().Be.EqualTo("Teleopti.Analytics.ETL.nhib");
+			target.ApplicationName.Should().Be.EqualTo("Teleopti.Analytics.ETL.Tool");
 		}
 
 		[Test]
