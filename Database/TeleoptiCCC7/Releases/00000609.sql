@@ -1,0 +1,4 @@
+
+ALTER TABLE dbo.SeatPlan
+ADD CONSTRAINT [AK_Date] UNIQUE (Date)
+GO
