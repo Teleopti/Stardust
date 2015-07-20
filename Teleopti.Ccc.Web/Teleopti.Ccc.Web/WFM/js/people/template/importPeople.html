@@ -1,31 +1,30 @@
-﻿	<div class="modalbg import-people">
-	<div class="dialog">
-		<div class="modal-header">
-			Import users
-		</div>
-		<div class="modal-inner-content">
-			<div class="wfm-block">
-
-				<div ngf-drop ngf-select ng-model="files" ng-model-rejected="rejFiles" class="drop-box"
-					 ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" ngf-change="upload($files)" ngf-multiple="true" ngf-allow-dir="true"
-					 accept="'.csv'" ngf-accept="'.csv'" ngf-drop-available="dropAvailable">
-					Drag and Drop .csv files here or click to upload
-				</div>
-				Files:
-				<ul>
-					<li ng-repeat="f in files">{{f.name}}</li>
-
-				</ul>
-				Upload Log:
-				<pre>{{log}}</pre>
-				
-				<div ui-grid="gridOptionForImport" ui-grid-importer class="grid" ></div>
+﻿<div class="modal-box">
+	<div class="modalbg import-people">
+		<div class="dialog">
+			<div class="modal-header">
+				Import users
 			</div>
-		</div>
-		<div class="modal-footer">
-			<aside>
-				<a ng-click="showImportPanel = !showImportPanel" class="wfm-btn wfm-btn-invis">Back</a>
-			</aside>
+			<div class="modal-inner-content">
+				<div class="wfm-block">
+					<div ngf-drop ngf-select ng-model="files" ng-model-rejected="rejFiles" class="drop-box"
+						 ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" ngf-change="upload($files)" ngf-multiple="true" ngf-allow-dir="true"
+						 accept="'.csv'" ngf-accept="'.csv'" ngf-drop-available="dropAvailable">
+						Drag and Drop .csv files here or click to upload
+					</div>
+					Files:
+					<ul>
+						<li ng-repeat="f in files">{{f.name}}</li>
+					</ul>
+					Upload Log:
+					<pre>{{log}}</pre>
+					<div ui-grid="gridOptionForImport" ui-grid-importer class="grid"></div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<aside>
+					<a ng-click="toggleImportPeople()" class="wfm-btn wfm-btn-invis">Back</a>
+				</aside>
+			</div>
 		</div>
 	</div>
 </div>

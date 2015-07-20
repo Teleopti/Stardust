@@ -22,17 +22,17 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 	$scope.buttons = [{
 		label: 'Import Users',
 		icon: 'mdi-file',
-		action: toggleImportPeople
+		action: $scope.toggleImportPeople
 	}];
 
-	function toggleImportPeople() {
+	$scope.toggleImportPeople = function() {
 		$scope.showImportPanel = !$scope.showImportPanel;
 	};
 
-	$scope.floatingButtonClick = function(action) {
-		action();
-	} 
-	
+	$scope.floatingButtonClick = function () {
+		$scope.toggleImportPeople();
+	}
+
 	var dynamicColumnLoaded = false;
 	var paginationOptions = {
 		pageNumber: 1,
@@ -64,11 +64,11 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 			},
 			{ displayName: 'EmployeeNo', field: 'EmploymentNumber', headerCellFilter: 'translate' },
 			{ displayName: 'Team', field: 'Team', headerCellFilter: 'translate', enableSorting: false },
-			{ displayName: 'Email', field: 'Email', headerCellFilter: 'translate', enableSorting: false  },
+			{ displayName: 'Email', field: 'Email', headerCellFilter: 'translate', enableSorting: false },
 			{ displayName: 'TerminalDate', field: 'LeavingDate', headerCellFilter: 'translate', enableSorting: false }
 		],
 		gridMenuTitleFilter: $translate,
-		exporterAllDataFn: function() {
+		exporterAllDataFn: function () {
 			return loadAllResults()
 			.then(function () {
 				getPage();
@@ -77,9 +77,9 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 		paginationPageSize: 20,
 		useExternalPagination: true,
 		enablePaginationControls: false,
-		onRegisterApi: function(gridApi) {
+		onRegisterApi: function (gridApi) {
 			$scope.gridApi = gridApi;
-			gridApi.pagination.on.paginationChanged($scope, function(newPage, pageSize) {
+			gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
 				$scope.currentPageIndex = newPage;
 				paginationOptions.pageNumber = newPage;
 				paginationOptions.pageSize = pageSize;
@@ -130,7 +130,7 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 			$scope.searchResult = result.People;
 			$scope.gridOptions.data = result.People;
 			angular.forEach($scope.searchResult, function (person) {
-				angular.forEach(person.OptionalColumnValues, function(val) {
+				angular.forEach(person.OptionalColumnValues, function (val) {
 					person[val.Key] = val.Value;
 				});
 			});
@@ -207,7 +207,7 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 		$scope.searchKeywordChanged = true;
 		parseSearchKeywordInputted();
 	};
-		
+
 	$scope.searchKeyword = function () {
 		getPage();
 	};
@@ -326,7 +326,7 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 
 	$scope.advancedSearch = function () {
 		$scope.showAdvancedSearchOption = false;
-		
+
 		var keyword = "";
 		angular.forEach(allSearchTypes, function (searchType) {
 			// Change first letter to lowercase
@@ -344,7 +344,7 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 
 		getPage();
 	}
-	
+
 	SearchSvrc.isFeatureEnabled.query({ toggle: 'WfmPeople_AdvancedSearch_32973' }).$promise.then(function (result) {
 		$scope.isAdvancedSearchEnabled = result.IsEnabled;
 	});
@@ -364,11 +364,11 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 
 	$scope.gridOptionForImport = {
 		enableGridMenu: true,
-		importerDataAddCallback: function(grid, newObjects) {
+		importerDataAddCallback: function (grid, newObjects) {
 			$scope.rawUsersData = newObjects;
 			var data = { Users: $scope.rawUsersData }
 			SearchSvrc.importUsers.post(data)
-				.$promise.then(function(result) {
+				.$promise.then(function (result) {
 					$scope.dataWithError = result.InvalidUsers;
 					$scope.gridOptionForImport.data = $scope.dataWithError;
 				});
@@ -376,7 +376,7 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 		onRegisterApi: function (gridApi) {
 			$scope.gridApi = gridApi;
 		}
-		
+
 	};
 
 	$scope.upload = function (files) {
@@ -387,4 +387,4 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 			}
 		}
 	};
-}
+};
