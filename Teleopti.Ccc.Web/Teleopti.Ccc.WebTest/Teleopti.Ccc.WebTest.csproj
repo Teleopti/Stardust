@@ -263,7 +263,10 @@
     <Compile Include="Areas\People\Providers\PeopleSearchProviderTest.cs" />
     <Compile Include="Areas\Permissions\ApplicationFunctionsControllerTest.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\LeaderboardSettingBasedBadgeProviderTest.cs" />
+    <Compile Include="Areas\Permissions\FakeApplicationFunctionRepository.cs" />
+    <Compile Include="Areas\Permissions\FakeAvailableDataRepository.cs" />
     <Compile Include="Areas\Permissions\OrganizationSelectionControllerTest.cs" />
+    <Compile Include="Areas\Permissions\PermissionsTestAttribute.cs" />
     <Compile Include="Areas\Permissions\RolesControllerTest.cs" />
     <Compile Include="Areas\ResourcePlanner\BusinessRuleValidationResultTest.cs" />
     <Compile Include="Areas\ResourcePlanner\FakeMissingForecastProvider.cs" />
