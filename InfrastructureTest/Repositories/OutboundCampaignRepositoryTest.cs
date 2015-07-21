@@ -272,9 +272,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldNotGetDeletedPlannedCampaign()
 		{
-			createCampaignWithSpanningPeriod(new DateOnlyPeriod(DateOnly.Today.AddDays(1), DateOnly.MaxValue), true);
+			var deletedCamapign = createCampaignWithSpanningPeriod(new DateOnlyPeriod(DateOnly.Today.AddDays(1), DateOnly.MaxValue));
 			var campaign2 = createCampaignWithSpanningPeriod(new DateOnlyPeriod(DateOnly.Today.AddDays(2), DateOnly.MaxValue));
 			var repository = new OutboundCampaignRepository(UnitOfWork);
+			deleteCampaign(repository, deletedCamapign);
 
 			var result = repository.GetPlannedCampaigns();
 
@@ -284,9 +285,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldNotGetDeletedOnGoingCampaign()
 		{
-			createCampaignWithSpanningPeriod(new DateOnlyPeriod(DateOnly.Today.AddDays(-10), DateOnly.Today), true);
+			var deletedCamapign = createCampaignWithSpanningPeriod(new DateOnlyPeriod(DateOnly.Today.AddDays(-10), DateOnly.Today));
 			var campaign2 =  createCampaignWithSpanningPeriod(new DateOnlyPeriod(DateOnly.Today, DateOnly.MaxValue));
 			var repository = new OutboundCampaignRepository(UnitOfWork);
+			deleteCampaign(repository, deletedCamapign);
 
 			var result = repository.GetOnGoingCampaigns();
 
@@ -296,26 +298,32 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldNotGetDeletedDoneCampaign()
 		{
-			createCampaignWithSpanningPeriod(new DateOnlyPeriod(DateOnly.Today.AddDays(-10), DateOnly.Today.AddDays(-8)), true);
+			var deletedCamapign = createCampaignWithSpanningPeriod(new DateOnlyPeriod(DateOnly.Today.AddDays(-10), DateOnly.Today.AddDays(-8)));
 			var campaign2 = createCampaignWithSpanningPeriod(new DateOnlyPeriod(DateOnly.Today.AddDays(-9), DateOnly.Today.AddDays(-8)));
 			var repository = new OutboundCampaignRepository(UnitOfWork);
+			deleteCampaign(repository, deletedCamapign);
 
 			var result = repository.GetDoneCampaigns();
 
 			result[0].Id.Should().Be.EqualTo(campaign2.Id);
 		}
 
-        private IOutboundCampaign createCampaignWithSpanningPeriod(DateOnlyPeriod period, bool isDeleted = false)
+		private void deleteCampaign(IOutboundCampaignRepository repository, IOutboundCampaign campaign)
+		{
+			repository.Remove(campaign);
+			PersistAndRemoveFromUnitOfWork(campaign);
+		}
+
+      private IOutboundCampaign createCampaignWithSpanningPeriod(DateOnlyPeriod period)
 		{
 			var campaign = CreateAggregateWithCorrectBusinessUnit();
 			campaign.SpanningPeriod = period;
-	      if (isDeleted) campaign.SetDeleted();
 
 			PersistAndRemoveFromUnitOfWork(campaign);
 			return campaign;
 		}
 
-        private IOutboundCampaign CreateCampaignWithWorkingHours(DayOfWeek weekday, TimePeriod period)
+      private IOutboundCampaign CreateCampaignWithWorkingHours(DayOfWeek weekday, TimePeriod period)
 		{
 			var campaign = CreateAggregateWithCorrectBusinessUnit();
 
