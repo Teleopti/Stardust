@@ -16120,6 +16120,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to no application logon account;.
+        /// </summary>
+        public static string NoApplicationLogonAccountErrorMsgSemicolon {
+            get {
+                return ResourceManager.GetString("NoApplicationLogonAccountErrorMsgSemicolon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No availability defined for {0}.
         /// </summary>
         public static string NoAvailabilityDefinedFor {

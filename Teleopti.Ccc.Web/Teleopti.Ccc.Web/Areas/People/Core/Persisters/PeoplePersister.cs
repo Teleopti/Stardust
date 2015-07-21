@@ -55,17 +55,25 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 			{
 				var isUserValid = true;
 				var errorMsgBuilder = new StringBuilder();
+
+				if (string.IsNullOrEmpty(user.ApplicationUserId) && string.IsNullOrEmpty(user.WindowsUser))
+				{
+					errorMsgBuilder.Append(Resources.NoLogonAccountErrorMsgSemicolon + " ");
+					isUserValid = false;
+				}
+				else if (string.IsNullOrEmpty(user.ApplicationUserId))
+				{
+					errorMsgBuilder.Append(Resources.NoApplicationLogonAccountErrorMsgSemicolon + " ");
+					isUserValid = false;
+				}
+
 				if (string.IsNullOrEmpty(user.Password))
 				{
 					errorMsgBuilder.Append(Resources.EmptyPasswordErrorMsgSemicolon + " ");
 					isUserValid = false;
 				}
 
-				if (string.IsNullOrEmpty(user.ApplicationUserId) && string.IsNullOrEmpty(user.WindowsUser))
-				{
-					errorMsgBuilder.Append(Resources.NoLogonAccountErrorMsgSemicolon +" ");
-					isUserValid = false;
-				}
+
 
 				if (string.IsNullOrEmpty(user.Firstname) && string.IsNullOrEmpty(user.Lastname))
 				{
@@ -164,7 +172,9 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 			
 			return new
 			{
-				InvalidUsers = invalidUsers
+				InvalidUsers = invalidUsers,
+				SuccessfulCount = users.Count() - invalidUsers.Count,
+				InvalidCount = invalidUsers.Count
 			};
 		}
 	}

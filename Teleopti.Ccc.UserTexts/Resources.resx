@@ -13330,4 +13330,8 @@ Reduce the complexity to use these shifts.</value>
     <value>password does not follow the password policy;</value>
     <comment>invalid user date message in People Import Users</comment>
   </data>
+  <data name="NoApplicationLogonAccountErrorMsgSemicolon" xml:space="preserve">
+    <value>no application logon account;</value>
+    <comment>invalid user msg in People-import users</comment>
+  </data>
 </root>

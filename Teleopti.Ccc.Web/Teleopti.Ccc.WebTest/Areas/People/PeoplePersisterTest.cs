@@ -55,6 +55,33 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			Assert.AreEqual("Jan", errorData.First().Firstname);
 			Assert.AreEqual("empty password", errorData.First().ErrorMessage);
 		}
+		[Test]
+		public void ValidateDataWhenApplicationLogonIsEmpty()
+		{
+			var rawUserData = new List<RawUser>
+			{
+				new RawUser
+				{
+					Firstname = "Jenny",
+					ApplicationUserId = "",
+					Lastname = "Morgan",
+					Password = "password",
+					WindowsUser = "teleopti\\jennym"
+				},
+				new RawUser
+				{
+					Firstname = "Jan",
+					ApplicationUserId = "abcde",
+					Lastname = "Morgan",
+					Password = "password",
+					WindowsUser = "teleopti\\janm"
+				}
+			};
+			var errorData = (IEnumerable<RawUser>)((dynamic)target).Persist(rawUserData).InvalidUsers;
+			Assert.AreEqual(1, errorData.Count());
+			Assert.AreEqual("Jenny", errorData.First().Firstname);
+			Assert.AreEqual("no application logon account", errorData.First().ErrorMessage);
+		}
 
 		[Test]
 		public void ValidateDataWhenWithoutLogonAccount()
@@ -156,7 +183,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 				new RawUser
 				{
 					Firstname = "",
-					ApplicationUserId = "",
+					ApplicationUserId = "app1",
 					Lastname = "",
 					Password = "",
 					WindowsUser = "teleopti\\logon1"
@@ -186,7 +213,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 				new RawUser
 				{
 					Firstname = "Firstname1",
-					ApplicationUserId = "",
+					ApplicationUserId = "app1",
 					Lastname = "",
 					Password = "psss",
 					Role = "agent,sss0, sss1",
