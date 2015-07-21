@@ -9,3 +9,4 @@ Client;True
 TeleoptiWFM;True
 AuthenticationBridge;False
 WindowsIdentityProvider;True
+Administration;False

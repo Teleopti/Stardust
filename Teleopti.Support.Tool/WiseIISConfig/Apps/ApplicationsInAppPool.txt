@@ -9,3 +9,4 @@ Level2;Broker.backplane;Teleopti Broker;v4.0;app;None;aspnet_isapi;Broker.backpl
 Level2;Web;Teleopti Web;v4.0;app;None;aspnet_isapi;Web
 Level2;AuthenticationBridge;Teleopti Web;v4.0;app;None;aspnet_isapi;AuthenticationBridge
 Level2;WindowsIdentityProvider;Teleopti Web;v4.0;app;None;aspnet_isapi;WindowsIdentityProvider
+Level2;Administration;Teleopti Web;v4.0;app;None;aspnet_isapi;Administration

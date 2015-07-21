@@ -8,3 +8,4 @@ Web;False
 Client;False
 AuthenticationBridge;False
 WindowsIdentityProvider;True
+Administration;False

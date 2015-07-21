@@ -7,3 +7,4 @@ SDK;False
 Web;False
 AuthenticationBridge;False
 WindowsIdentityProvider;False
+Administration;False

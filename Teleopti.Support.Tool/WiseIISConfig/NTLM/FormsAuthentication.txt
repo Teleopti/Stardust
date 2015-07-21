@@ -7,3 +7,4 @@ SDK;Windows
 Web;None
 AuthenticationBridge;None
 WindowsIdentityProvider;Windows
+Administration;None
