@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 
 			target.Publish(@event);
 
-			bus.SentMessages.Single().Should().Be(@event);
+			bus.SentMessages.Single().Should().Be.SameInstanceAs(@event);
 		}
 
 		[Test]

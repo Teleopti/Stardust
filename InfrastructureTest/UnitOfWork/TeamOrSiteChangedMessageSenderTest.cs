@@ -1,18 +1,17 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Rhino.Mocks.Constraints;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Events;
-using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 {
@@ -42,7 +41,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			using (_mocks.Record())
 			{
 				Expect.Call(() => _serviceBusSender.Publish(message))
-				      .Constraints(new Rhino.Mocks.Constraints.PredicateConstraint<PersonCollectionChangedEvent>(m => m.SerializedPeople == Guid.Empty.ToString()));
+				      .Constraints(new Rhino.Mocks.Constraints.PredicateConstraint<IEvent[]>(m => ((PersonCollectionChangedEvent)m.First()).SerializedPeople == Guid.Empty.ToString()));
 			}
 			using (_mocks.Playback())
 			{
@@ -61,7 +60,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			using (_mocks.Record())
 			{
 				Expect.Call(() => _serviceBusSender.Publish(message))
-				      .Constraints(new Rhino.Mocks.Constraints.PredicateConstraint<PersonCollectionChangedEvent>(m => m.SerializedPeople == Guid.Empty.ToString()));
+				      .Constraints(new Rhino.Mocks.Constraints.PredicateConstraint<IEvent[]>(m => ((PersonCollectionChangedEvent)m.First()).SerializedPeople == Guid.Empty.ToString()));
 			}
 			using (_mocks.Playback())
 			{

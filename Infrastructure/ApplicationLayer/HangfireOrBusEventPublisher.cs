@@ -15,12 +15,15 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			_serviceBusPublisher = serviceBusPublisher;
 		}
 
-		public void Publish(IEvent @event)
+		public void Publish(params IEvent[] events)
 		{
-			if (@event is IGoToHangfire)
-				_hangfirePublisher.Publish(@event);
-			else
-				_serviceBusPublisher.Publish(@event);
+			foreach (var @event in events)
+			{
+				if (@event is IGoToHangfire)
+					_hangfirePublisher.Publish(@event);
+				else
+					_serviceBusPublisher.Publish(@event);
+			}
 		}
 	}
 
@@ -35,12 +38,15 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			_syncEventPublisher = syncEventPublisher;
 		}
 
-		public void Publish(IEvent @event)
+		public void Publish(params IEvent[] events)
 		{
-			if (@event is IGoToHangfire)
-				_hangfirePublisher.Publish(@event);
-			else
-				_syncEventPublisher.Publish(@event);
+			foreach (var @event in events)
+			{
+				if (@event is IGoToHangfire)
+					_hangfirePublisher.Publish(@event);
+				else
+					_syncEventPublisher.Publish(@event);
+			}
 		}
 	}
 

@@ -5,11 +5,11 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public class FakeServiceBusSender : IServiceBusSender
 	{
-		public IList<object> SentMessages = new List<object>();
+		public List<object> SentMessages = new List<object>();
  
-		public void Send(object message, bool throwOnNoBus)
+		public void Send(bool throwOnNoBus, params object[] message)
 		{
-			SentMessages.Add(message);
+			SentMessages.AddRange(message);
 		}
 
 		public void Dispose()

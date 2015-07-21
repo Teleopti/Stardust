@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Collection;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer
@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 
 		public void Publish(IEnumerable<IEvent> events)
 		{
-			events.ForEach(e => _eventPopulatingPublisher.Publish(e));
+			_eventPopulatingPublisher.Publish(events.ToArray());
 		}
 	}
 }

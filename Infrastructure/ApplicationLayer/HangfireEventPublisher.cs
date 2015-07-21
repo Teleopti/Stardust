@@ -17,16 +17,20 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			_resolveEventHandlers = resolveEventHandlers;
 		}
 
-		public void Publish(IEvent @event)
+		public void Publish(params IEvent[] events)
 		{
-			var type = @event.GetType();
-			var serialized = _serializer.SerializeObject(@event);
-			var handlers = _resolveEventHandlers.ResolveHandlersForEvent(@event);
-
-			foreach (var handler in handlers)
+			foreach (var @event in events)
 			{
-				var handlerType = ProxyUtil.GetUnproxiedType(handler);
-				_client.Enqueue(type.Name  + " to " + handlerType.Name, type.AssemblyQualifiedName, serialized, handlerType.AssemblyQualifiedName);
+				var type = @event.GetType();
+				var serialized = _serializer.SerializeObject(@event);
+				var handlers = _resolveEventHandlers.ResolveHandlersForEvent(@event);
+
+				foreach (var handler in handlers)
+				{
+					var handlerType = ProxyUtil.GetUnproxiedType(handler);
+					_client.Enqueue(type.Name + " to " + handlerType.Name, type.AssemblyQualifiedName, serialized,
+						handlerType.AssemblyQualifiedName);
+				}
 			}
 		}
 	}

@@ -4,7 +4,7 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public class DummyContextPopulator : IEventContextPopulator
 	{
-		public void PopulateEventContext(object @event)
+		public void PopulateEventContext(params object[] events)
 		{
 		}
 	}

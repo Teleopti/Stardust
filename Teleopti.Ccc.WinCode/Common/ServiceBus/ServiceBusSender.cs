@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using Autofac;
 using log4net;
 using Rhino.ServiceBus;
@@ -55,8 +56,9 @@ namespace Teleopti.Ccc.WinCode.Common.ServiceBus
 			}
 		}
 
-		public void Send(object message, bool throwOnNoBus)
+		public void Send(bool throwOnNoBus, params object[] message)
 		{
+			if (message.Length==0) return;
 			if (!EnsureBus())
 			{
 				if (throwOnNoBus)
@@ -70,13 +72,13 @@ namespace Teleopti.Ccc.WinCode.Common.ServiceBus
 			{
 				var identity = "<unknown>";
 				var datasource = "<unknown>";
-				var raptorDomainMessage = message as ILogOnInfo;
+				var raptorDomainMessage = message.First() as ILogOnInfo;
 				if (raptorDomainMessage != null)
 				{
 					datasource = raptorDomainMessage.Datasource;
 				}
 				Logger.Debug(string.Format(CultureInfo.InvariantCulture,
-										   "Sending message with identity: {0} (Data source = {1})",
+										   "Sending messages with identity: {0} (Data source = {1})",
 										   identity, datasource));
 			}
 

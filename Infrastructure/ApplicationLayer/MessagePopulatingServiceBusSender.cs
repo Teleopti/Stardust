@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		public void Send(object message, bool throwOnNoBus)
 		{
 			_eventContextPopulator.PopulateEventContext(message);
-			_serviceBus.Send(message, throwOnNoBus);
+			_serviceBus.Send(throwOnNoBus, message);
 		}
 	}
 }

@@ -2,6 +2,6 @@
 {
 	public interface IEventContextPopulator
 	{
-		void PopulateEventContext(object @event);
+		void PopulateEventContext(params object[] events);
 	}
 }

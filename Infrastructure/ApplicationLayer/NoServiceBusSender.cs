@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		{
 		}
 
-		public void Send(object message, bool throwOnNoBus)
+		public void Send(bool throwOnNoBus, params object[] message)
 		{
 		}
 	}

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using Autofac;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
@@ -16,7 +15,6 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
@@ -71,7 +69,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		{
 		}
 
-		public void Send(object message, bool throwOnNoBus)
+		public void Send(bool throwOnNoBus, params object[] message)
 		{
 			_serviceBus().Send(message);
 		}

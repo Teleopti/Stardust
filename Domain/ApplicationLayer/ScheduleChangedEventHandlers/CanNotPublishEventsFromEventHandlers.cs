@@ -4,7 +4,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 {
 	public class CannotPublishEventsFromEventHandlers : IPublishEventsFromEventHandlers
 	{
-		public void Publish(IEvent @event)
+		public void Publish(params IEvent[] events)
 		{
 			throw new System.NotImplementedException();
 		}

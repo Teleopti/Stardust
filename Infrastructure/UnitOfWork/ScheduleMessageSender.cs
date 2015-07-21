@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 			var people = scheduleData.Select(s => s.Person).Distinct();
 			var scenarios = scheduleData.Select(s => s.Scenario).Distinct();
+			var messages = new List<ScheduleChangedEvent>();
 
 			foreach (var person in people)
 			{
@@ -41,15 +42,19 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 					var startDateTime = matchedItems.Min(s => s.Period.StartDateTime);
 					var endDateTime = matchedItems.Max(s => s.Period.EndDateTime);
 
-					var message = new ScheduleChangedEvent
+					messages.Add(new ScheduleChangedEvent
 					              	{
 					              		ScenarioId = scenario.Id.GetValueOrDefault(),
 										StartDateTime = startDateTime,
 					              		EndDateTime = endDateTime,
 					              		PersonId = person.Id.GetValueOrDefault(),
-					              	};
-					_eventPopulatingPublisher.Publish(message);
+					              	});
 				}
+			}
+
+			if (messages.Any())
+			{
+				_eventPopulatingPublisher.Publish(messages.ToArray());
 			}
 		}
 

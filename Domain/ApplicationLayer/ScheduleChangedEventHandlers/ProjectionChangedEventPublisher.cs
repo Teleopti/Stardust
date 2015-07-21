@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 			var data = getData(@event);
 			if (data == null) return;
 			_projectionChangedEventBuilder.Build<T>(@event, data.ScheduleRange, data.RealPeriod)
-										  .ForEach(_publisher.Publish);
+										  .ForEach(e => _publisher.Publish(e));
 		}
 
 		private class range

@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.ApplicationLayer;
+﻿using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
@@ -7,9 +8,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 	{
 		private IEvent _published;
 
-		public void Publish(IEvent @event)
+		public void Publish(params IEvent[] events)
 		{
-			_published = @event;
+			_published = events.Single();
 		}
 
 		public T Published<T>() where T : class 

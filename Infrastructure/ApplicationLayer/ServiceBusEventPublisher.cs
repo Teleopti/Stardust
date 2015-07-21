@@ -1,4 +1,6 @@
-﻿using Teleopti.Ccc.Domain.ApplicationLayer;
+﻿using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
@@ -12,9 +14,9 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			_sender = sender;
 		}
 
-		public void Publish(IEvent @event)
+		public void Publish(params IEvent[] events)
 		{
-			_sender.Send(@event, true);
+			events.Batch(100).ForEach(b => _sender.Send(true, b.ToArray()));
 		}
 
 		public IEventPublisher Current()

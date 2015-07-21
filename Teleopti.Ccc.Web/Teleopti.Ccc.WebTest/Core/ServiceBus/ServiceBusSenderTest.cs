@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Core.ServiceBus
 				var bus = MockRepository.GenerateMock<IOnewayBus>();
 				sender.Resolveable = bus;
 				var message = new TestMessage();
-				sender.Send(message, false);
+				sender.Send(false, message);
 				bus.AssertWasCalled(x => x.Send(message));
 			}
 		}

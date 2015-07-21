@@ -15,10 +15,10 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			_eventContextPopulator = eventContextPopulator;
 		}
 
-		public void Publish(IEvent @event)
+		public void Publish(params IEvent[] events)
 		{
-			_eventContextPopulator.PopulateEventContext(@event);
-			_eventPublisher.Current().Publish(@event);
+			_eventContextPopulator.PopulateEventContext(events);
+			_eventPublisher.Current().Publish(events);
 		}
 	}
 }

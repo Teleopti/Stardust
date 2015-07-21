@@ -19,10 +19,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			_eventContextPopulator = eventContextPopulator;
 		}
 
-		public void Publish(IEvent @event)
+		public void Publish(params IEvent[] events)
 		{
-			_eventContextPopulator.PopulateEventContext(@event);
-			_bus.Send(@event);
+			_eventContextPopulator.PopulateEventContext(events);
+			_bus.Send(events);
 		}
 
 		public void DelaySend(DateTime time, object message)

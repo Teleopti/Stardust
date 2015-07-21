@@ -4,6 +4,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
 	public interface IEventPublisher
 	{
-		void Publish(IEvent @event);
+		void Publish(params IEvent[] events);
 	}
 }

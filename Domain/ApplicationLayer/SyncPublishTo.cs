@@ -18,27 +18,30 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			_handlers = handlers;
 		}
 
-		public void Publish(IEvent @event)
+		public void Publish(params IEvent[] events)
 		{
-			foreach (var handler in _handlers)
+			foreach (var @event in events)
 			{
-				var method = handler
-					.GetType()
-					.GetMethods()
-					.FirstOrDefault(m => m.Name == "Handle" && m.GetParameters().Single().ParameterType == @event.GetType());
-				if (method == null)
-					continue;
-				try
+				foreach (var handler in _handlers)
 				{
-					method.Invoke(handler, new[] { @event });
-				}
-				catch (TargetInvocationException e)
-				{
-					PreserveStack.ForInnerOf(e);
-					throw e;
-				}
+					var method = handler
+						.GetType()
+						.GetMethods()
+						.FirstOrDefault(m => m.Name == "Handle" && m.GetParameters().Single().ParameterType == @event.GetType());
+					if (method == null)
+						continue;
+					try
+					{
+
+						method.Invoke(handler, new[] { @event });
+					}
+					catch (TargetInvocationException e)
+					{
+						PreserveStack.ForInnerOf(e);
+						throw e;
+					}
+				}				
 			}
 		}
-		
 	}
 }

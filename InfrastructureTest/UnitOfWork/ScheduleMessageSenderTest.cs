@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 			target.Execute(new[] { rootChangeInfo });
 
-			serviceBusSender.AssertWasCalled(x => x.Send(null, false), o => o.IgnoreArguments());
+			serviceBusSender.AssertWasCalled(x => x.Send(false, null), o => o.IgnoreArguments());
 		}
 
 		[Test]
@@ -63,7 +64,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 			target.Execute(new[] {rootChangeInfo});
 
-			serviceBusSender.AssertWasNotCalled(x => x.Send(null, false), o => o.IgnoreArguments());
+			serviceBusSender.AssertWasNotCalled(x => x.Send(false,null), o => o.IgnoreArguments());
 		}
 
 		[Test]
@@ -77,7 +78,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 			target.Execute(new[] {rootChangeInfo});
 			
-			serviceBusSender.AssertWasNotCalled(x => x.Send(null, false), o => o.IgnoreArguments());
+			serviceBusSender.AssertWasNotCalled(x => x.Send( false, null), o => o.IgnoreArguments());
 		}
 
 		[Test]
@@ -93,7 +94,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 			target.Execute(new[] {rootChangeInfo});
 
-			serviceBusSender.AssertWasNotCalled(x => x.Send(null, false), o => o.IgnoreArguments());
+			serviceBusSender.AssertWasNotCalled(x => x.Send(false, null), o => o.IgnoreArguments());
 		}
 
 		[Test]
@@ -109,7 +110,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 			target.Execute(new[] {rootChangeInfo});
 
-			serviceBusSender.AssertWasNotCalled(x => x.Send(null, false), o => o.IgnoreArguments());
+			serviceBusSender.AssertWasNotCalled(x => x.Send(false, null), o => o.IgnoreArguments());
 		}
 
         [Test]
@@ -125,7 +126,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
             target.Execute(new[] { rootChangeInfo });
 
-            serviceBusSender.AssertWasNotCalled(x => x.Send(null, false), o => o.IgnoreArguments());
+            serviceBusSender.AssertWasNotCalled(x => x.Send(false, null), o => o.IgnoreArguments());
         }
 
 		[Test]
@@ -142,9 +143,9 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 			target.Execute(new[] { rootChangeInfo });
 
-			serviceBusSender.AssertWasCalled(x => x.Send(Arg<object>.Matches(e =>
-				((ScheduleChangedEvent)e).InitiatorId == initiatorIdentifier.InitiatorId
-				), Arg<bool>.Is.Anything));
+			serviceBusSender.AssertWasCalled(x => x.Send(Arg<bool>.Is.Anything, Arg<object[]>.Matches(e =>
+				((ScheduleChangedEvent[])e).First().InitiatorId == initiatorIdentifier.InitiatorId
+				)));
 		}
 
 		[Test]
@@ -167,9 +168,9 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		{
 			public ScheduleChangedEvent PublishedEvent;
 
-			public void Publish(IEvent @event)
+			public void Publish(params IEvent[] events)
 			{
-				PublishedEvent = (ScheduleChangedEvent) @event;
+				PublishedEvent = (ScheduleChangedEvent) events.Single();
 			}
 
 		}

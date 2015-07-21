@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using Autofac;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using log4net;
@@ -52,8 +53,9 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 		    }
 	    }
 
-		public void Send(object message, bool throwOnNoBus)
+		public void Send(bool throwOnNoBus, params object[] message)
 		{
+			if (message.Length == 0) return;
 			if (!EnsureBus())
 			{
 				if (throwOnNoBus)
@@ -67,7 +69,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 			{
 				var identity = "<unknown>";
 				var datasource = "<unknown>";
-				var raptorDomainMessage = message as ILogOnInfo;
+				var raptorDomainMessage = message.First() as ILogOnInfo;
 				if (raptorDomainMessage != null)
 				{
 					datasource = raptorDomainMessage.Datasource;

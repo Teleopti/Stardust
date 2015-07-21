@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 
 			target.Publish(@event);
 
-			serviceBusSender.AssertWasCalled(x => x.Send(@event, true));
+			serviceBusSender.AssertWasCalled(x => x.Send(true, @event));
 		}
 
 	}

@@ -28,14 +28,17 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_initiatorIdentifier = initiatorIdentifier;
 		}
 
-		public void PopulateEventContext(object @event)
+		public void PopulateEventContext(params object[] events)
 		{
-			var initiatorInfo = @event as IInitiatorInfo;
-			if (initiatorInfo != null)
-				setInitiator(initiatorInfo);
-			var logOnInfo = @event as ILogOnInfo;
-			if (logOnInfo != null)
-				setLogOnInfo(logOnInfo);
+			foreach (var @event in events)
+			{
+				var initiatorInfo = @event as IInitiatorInfo;
+				if (initiatorInfo != null)
+					setInitiator(initiatorInfo);
+				var logOnInfo = @event as ILogOnInfo;
+				if (logOnInfo != null)
+					setLogOnInfo(logOnInfo);
+			}
 		}
 
 		private void setInitiator(IInitiatorInfo @event)

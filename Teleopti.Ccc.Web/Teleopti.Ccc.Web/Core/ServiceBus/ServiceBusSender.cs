@@ -2,6 +2,7 @@ using System;
 using System.Configuration;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.ServiceModel;
 using Autofac;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
@@ -56,8 +57,9 @@ namespace Teleopti.Ccc.Web.Core.ServiceBus
 			return _customHost.Resolve<T>();
 		}
 
-		public void Send(object message, bool throwOnNoBus)
+		public void Send(bool throwOnNoBus, params object[] message)
 		{
+			if (message.Length==0)return;
 			if (!EnsureBus())
 			{
 				if (throwOnNoBus)
@@ -67,12 +69,12 @@ namespace Teleopti.Ccc.Web.Core.ServiceBus
 
 			var bus = Resolve<IOnewayBus>();
 
-			var raptorDomainMessage = message as ILogOnInfo;
-
 			if (Logger.IsDebugEnabled)
 			{
 				var identity = "<unknown>";
 				var datasource = "<unknown>";
+
+				var raptorDomainMessage = message.First() as ILogOnInfo;
 				if (raptorDomainMessage != null)
 				{
 					datasource = raptorDomainMessage.Datasource;

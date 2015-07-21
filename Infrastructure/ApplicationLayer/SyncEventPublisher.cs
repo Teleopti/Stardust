@@ -15,23 +15,26 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			_resolver = resolver;
 		}
 
-		public void Publish(IEvent @event)
+		public void Publish(params IEvent[] events)
 		{
-			var handlers = _resolver.ResolveHandlersForEvent(@event);
-			if (handlers == null) return;
-
-			foreach (var handler in handlers)
+			foreach (var @event in events)
 			{
-				var method = handler.GetType().GetMethods()
-					.Single(m => m.Name == "Handle" && m.GetParameters().Single().ParameterType == @event.GetType());
-				try
+				var handlers = _resolver.ResolveHandlersForEvent(@event);
+				if (handlers == null) return;
+
+				foreach (var handler in handlers)
 				{
-					method.Invoke(handler, new[] { @event });
-				}
-				catch (TargetInvocationException e)
-				{
-					PreserveStack.ForInnerOf(e);
-					throw e;
+					var method = handler.GetType().GetMethods()
+						.Single(m => m.Name == "Handle" && m.GetParameters().Single().ParameterType == @event.GetType());
+					try
+					{
+						method.Invoke(handler, new[] {@event});
+					}
+					catch (TargetInvocationException e)
+					{
+						PreserveStack.ForInnerOf(e);
+						throw e;
+					}
 				}
 			}
 		}
