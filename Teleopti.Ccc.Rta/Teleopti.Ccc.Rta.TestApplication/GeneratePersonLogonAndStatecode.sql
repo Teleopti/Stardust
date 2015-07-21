@@ -37,7 +37,7 @@ inner join site s
 	on s.BusinessUnit = bu.Id
 inner join Team t
 	on t.Site	=s.Id
-inner join PersonPeriodWithEndDate pp
+inner join PersonPeriod pp
 	on pp.Team = t.Id
 	and getdate() between pp.StartDate and pp.EndDate
 inner join Person p
@@ -55,7 +55,7 @@ inner join site s
 	on s.BusinessUnit = bu.Id
 inner join Team t
 	on t.Site	=s.Id
-inner join PersonPeriodWithEndDate pp
+inner join PersonPeriod pp
 	on pp.Team = t.Id
 	and getdate() between pp.StartDate and pp.EndDate
 inner join Person p
@@ -69,7 +69,7 @@ inner join site s
 	on s.BusinessUnit = bu.Id
 inner join Team t
 	on t.Site	=s.Id
-inner join PersonPeriodWithEndDate pp
+inner join PersonPeriod pp
 	on pp.Team = t.Id
 	and getdate() between pp.StartDate and pp.EndDate
 inner join Person p
@@ -99,7 +99,7 @@ inner join site s
 	on s.BusinessUnit = bu.Id
 inner join Team t
 	on t.Site	=s.Id
-inner join PersonPeriodWithEndDate pp
+inner join PersonPeriod pp
 	on pp.Team = t.Id
 	and getdate() between pp.StartDate and pp.EndDate
 inner join Person p

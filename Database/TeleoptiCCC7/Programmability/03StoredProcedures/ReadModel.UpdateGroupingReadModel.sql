@@ -75,7 +75,7 @@ END
 			p.terminaldate as leavingdate
 	from site s 
 	inner join team t on t.site=s.id
-	inner join PersonPeriodWithEndDate pp on pp.team=t.id 
+	inner join PersonPeriod pp on pp.team=t.id 
 	inner join person p on p.id=pp.parent and p.isdeleted=0 
 	inner join #ids i on i.person = p.Id
 	
@@ -95,7 +95,7 @@ END
 	pp.EndDate,
 	p.terminaldate as leavingdate 
 	from team t 
-	inner join PersonPeriodWithEndDate pp on pp.team=t.id 
+	inner join PersonPeriod pp on pp.team=t.id 
 	inner join contract c on pp.contract=c.id 
 	inner join person p on p.id=pp.parent and p.isdeleted=0 
 	inner join #ids i on i.person = p.Id
@@ -116,7 +116,7 @@ END
 	pp.EndDate,
 	p.terminaldate as leavingdate 
 	from team t 
-	inner join PersonPeriodWithEndDate pp on pp.team=t.id 
+	inner join PersonPeriod pp on pp.team=t.id 
 	inner join parttimepercentage c on pp.parttimepercentage=c.id 
 	inner join person p on p.id=pp.parent and p.isdeleted=0 
 	inner join #ids i on i.person = p.Id
@@ -136,7 +136,7 @@ END
 	pp.EndDate,
 	p.terminaldate as leavingdate 
 	from team t 
-	inner join PersonPeriodWithEndDate pp on pp.team=t.id 
+	inner join PersonPeriod pp on pp.team=t.id 
 	inner join contractschedule c on pp.contractschedule=c.id 
 	inner join person p on p.id=pp.parent and p.isdeleted=0 
 	inner join #ids i on i.person = p.Id
@@ -157,7 +157,7 @@ END
 	pp.EndDate,
 	p.terminaldate as leavingdate 
 	from team t 
-	inner join PersonPeriodWithEndDate pp on pp.team=t.id 
+	inner join PersonPeriod pp on pp.team=t.id 
 	inner join rulesetbag c on pp.rulesetbag=c.id 
 	inner join person p on p.id=pp.parent and p.isdeleted=0 
 	inner join #ids i on i.person = p.Id
@@ -179,7 +179,7 @@ END
 		pp.EndDate,
 		p.terminaldate as leavingdate 
 	from team t 
-	inner join PersonPeriodWithEndDate pp
+	inner join PersonPeriod pp
 		on	pp.team=t.id
 	inner join personskill c
 		on	pp.id=c.parent
@@ -269,7 +269,7 @@ END
 		ON p.id=pg.person AND p.isdeleted=0
 	INNER JOIN #ids i
 		ON i.person = p.Id
-	LEFT JOIN PersonPeriodWithEndDate pp
+	LEFT JOIN PersonPeriod pp
 		ON pp.parent=p.id
 	LEFT JOIN team t
 		ON t.id=pp.team

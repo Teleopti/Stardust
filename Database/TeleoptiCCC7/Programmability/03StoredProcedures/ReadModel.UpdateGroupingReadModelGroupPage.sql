@@ -101,7 +101,7 @@ BEGIN
 		ON pg.persongroup=tr.queryid
 	INNER JOIN person p
 		ON p.id=pg.person AND p.isdeleted=0
-	LEFT JOIN PersonPeriodWithEndDate pp
+	LEFT JOIN PersonPeriod pp
 		ON pp.parent=p.id
 	LEFT JOIN team t
 		ON t.id=pp.team

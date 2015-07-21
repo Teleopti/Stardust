@@ -84,7 +84,7 @@ SELECT @dynamicSQL=''
 	UPDATE #endResult
 	SET TeamId = Team.Id, SiteId = Site.Id
 	FROM #endResult
-	INNER  JOIN PersonPeriodWithEndDate pp ON PersonId = pp.Parent AND StartDate <= @ondate AND EndDate >= @ondate
+	INNER JOIN PersonPeriod pp ON PersonId = pp.Parent AND StartDate <= @ondate AND EndDate >= @ondate
 	INNER JOIN Team ON Team.Id = pp.Team
 	INNER JOIN Site ON Site.id = Site and Site.BusinessUnit = @bu
 	

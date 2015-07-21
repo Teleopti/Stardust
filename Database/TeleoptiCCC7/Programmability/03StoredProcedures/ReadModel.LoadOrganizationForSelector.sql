@@ -76,7 +76,7 @@ BEGIN
 	INSERT INTO #TempPersonPeriodWithEndDate 
 		SELECT Person.Id, FirstName, LastName, EmploymentNumber,Team, Parent, [Contract], [ContractSchedule], 
 		PartTimePercentage, RuleSetBag, pp.Id, pp.Note
-		FROM PersonPeriodWithEndDate pp
+		FROM PersonPeriod pp
 		INNER JOIN Person ON pp.Parent = Person.Id AND Person.IsDeleted = 0 AND StartDate <= @enddate AND EndDate >= @ondate
 		and ISNULL(TerminalDate, '2100-01-01') >= @ondate
 

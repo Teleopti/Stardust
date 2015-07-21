@@ -390,7 +390,7 @@ DECLARE @OK as varchar(5) = 'OK'
 DECLARE @Warning as varchar(20) = 'Warning!'
 SET @Agents = (
 	SELECT COUNT(*)
-	from dbo.personPeriodWithEndDate pp 
+	from dbo.personPeriod pp 
 	inner join dbo.person p
 	on p.Id = pp.Parent
 	where getdate() between pp.StartDate and pp.EndDate

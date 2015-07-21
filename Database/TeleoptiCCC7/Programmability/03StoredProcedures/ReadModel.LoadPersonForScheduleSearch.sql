@@ -36,7 +36,7 @@ BEGIN
 	SELECT * FROM dbo.SplitStringString(@teamIdList)
 
 	SELECT pp.Parent as PersonId, pp.Team as TeamId, t.Site as SiteId, s.BusinessUnit as BusinessUnitId
-	FROM PersonPeriodWithEndDate pp
+	FROM PersonPeriod pp
 		INNER JOIN Team t ON pp.Team = t.id
 		INNER JOIN Site s ON t.Site = s.Id
 		INNER JOIN Person p ON pp.Parent = p.Id

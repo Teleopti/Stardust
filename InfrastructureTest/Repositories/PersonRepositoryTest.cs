@@ -563,7 +563,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			//verify
 			personList.Remove(LoggedOnPerson);
 			Assert.AreEqual(0, personList.Count);
-			//IPerson retPerson = personList[0];
 		}
 
 		/// <summary>
@@ -932,6 +931,36 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(okPerson);
 			PersistAndRemoveFromUnitOfWork(okPerson2);
 		}
+
+		[Test]
+		public void VerifyCanChangePersonPeriodStartDate()
+		{
+			//setup
+			ISite site = SiteFactory.CreateSimpleSite("for test");
+			ITeam team = TeamFactory.CreateSimpleTeam("for test");
+			site.AddTeam(team);
+
+			PersistAndRemoveFromUnitOfWork(site);
+			PersistAndRemoveFromUnitOfWork(team);
+
+			IPerson per = PersonFactory.CreatePerson("Test", "Testorson");
+			IPersonPeriod personPeriod =
+				 PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), team);
+			per.AddPersonPeriod(personPeriod);
+			DateOnly secondPersonPeriodStartDate = personPeriod.StartDate.AddDays(40);
+			per.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(secondPersonPeriodStartDate,personPeriod.PersonContract,team));
+
+			PersistAndRemoveFromUnitOfWork(personPeriod.PersonContract.ContractSchedule);
+			PersistAndRemoveFromUnitOfWork(personPeriod.PersonContract.PartTimePercentage);
+			PersistAndRemoveFromUnitOfWork(personPeriod.PersonContract.Contract);
+			PersistAndRemoveFromUnitOfWork(per);
+
+			IPersonRepository repository = new PersonRepository(UnitOfWork);
+			IList<IPerson> personList = new List<IPerson>(repository.LoadAllPeopleWithHierarchyDataSortByName(new DateOnly(2000,2,1)));
+			((PersonPeriod) personList[0].Period(new DateOnly(2000, 1, 10))).internalEndDate.Should()
+				.Be.EqualTo(secondPersonPeriodStartDate.AddDays(-1));
+		}
+
 		[Test]
 		public void VerifyFindPersonInOrganizationLight()
 		{
