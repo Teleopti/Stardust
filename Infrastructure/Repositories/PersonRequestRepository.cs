@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using NHibernate.Criterion;
 using NHibernate.SqlCommand;
@@ -127,7 +127,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return returnPersonRequest;
 		}
 
-		public IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person) { return findAllRequestsForAgent(person, null); }
 		public IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person, Paging paging)
 		{
 			var personRequests = getAllRequests(person);
@@ -205,8 +204,16 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 		}
 
+		public IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person)
+		{
+			return findAllRequestsForAgent(person, null);
+		}
 
-		public IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person, DateTimePeriod period) { return findAllRequestsForAgent(person, period); }
+		public IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person, DateTimePeriod period)
+		{
+			return findAllRequestsForAgent(person, period);
+		}
+
 		private IEnumerable<IPersonRequest> findAllRequestsForAgent(IPerson person, DateTimePeriod? period)
 		{
 			var shiftTradeDetailsForAgent = DetachedCriteria.For<ShiftTradeSwapDetail>()
@@ -233,12 +240,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			if (period != null)
 			{
-				var requestsForPeriod = DetachedCriteria.For<Request>()
-					.SetProjection(Projections.Property("Parent"))
+				personRequests
+					.CreateCriteria("requests", JoinType.LeftOuterJoin)
 					.Add(Restrictions.Ge("Period.period.Maximum", period.Value.StartDateTime))
-					.Add(Restrictions.Le("Period.period.Minimum", period.Value.EndDateTime))
-					;
-				personRequests.Add(Subqueries.PropertyIn("requests", requestsForPeriod));
+					.Add(Restrictions.Le("Period.period.Minimum", period.Value.EndDateTime));
 			}
 
 			return personRequests.List<IPersonRequest>();
