@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			target.Execute(new[] { rootChangeInfo });
 
 			serviceBusSender.AssertWasCalled(x => x.Send(Arg<bool>.Is.Anything, Arg<object[]>.Matches(e =>
-				((ScheduleChangedEvent[])e).First().InitiatorId == initiatorIdentifier.InitiatorId
+				((ScheduleChangedEvent)e.First()).InitiatorId == initiatorIdentifier.InitiatorId
 				)));
 		}
 
