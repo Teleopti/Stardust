@@ -1,21 +1,6 @@
-var timepicker = $.fn.timepicker.Constructor.prototype;
+﻿var timepicker = $.fn.timepicker.Constructor.prototype;
 
-
-//RobToDo: review - looks like this wasnt being used!
-/*timepicker.setDefaultTimeOriginal = timepicker.setDefaultTime;
-
-timepicker.setDefaultTime = function (defaultTime) {
-
-	this.setDefaultTimeOriginal(defaultTime);
-	if (this.meridian == 'AM') {
-		this.meridian = Teleopti.MyTimeWeb.Common.Meridiem.AM;
-	} else {
-		this.meridian = Teleopti.MyTimeWeb.Common.Meridiem.PM;
-	}
-
-};*/
-
-timepicker.setTime = function(time) {
+timepicker.setTime = function (time) {
 	var arr,
 		timeArray;
 
@@ -84,11 +69,11 @@ timepicker.setTime = function(time) {
 	this.update();
 };
 
-timepicker.meridianMatchesAgentDateCulture = function() {
+timepicker.meridianMatchesAgentDateCulture = function () {
 	return (this.meridian === Teleopti.MyTimeWeb.Common.Meridiem.AM || this.meridian === Teleopti.MyTimeWeb.Common.Meridiem.PM);
 };
 
-timepicker.toggleMeridian = function() {
+timepicker.toggleMeridian = function () {
 	this.meridian = this.meridian === Teleopti.MyTimeWeb.Common.Meridiem.AM ? Teleopti.MyTimeWeb.Common.Meridiem.PM : Teleopti.MyTimeWeb.Common.Meridiem.AM;
 	this.update();
 };

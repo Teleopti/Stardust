@@ -100,7 +100,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 
 		if (self.isTradeForMultiDaysEnabled()) {
 			$.each(self.chooseHistorys(), function (index, chooseHistoryViewModel) {
-				dates.push(chooseHistoryViewModel.selectedDateInFormat());
+				dates.push(Teleopti.MyTimeWeb.Common.FormatServiceDate(chooseHistoryViewModel.selectedDate()));
 			});
 		} else {
 			dates.push(self.getFormattedDateForServiceCall());

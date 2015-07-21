@@ -1,15 +1,6 @@
 ﻿
-// Moment-jalaali extensions
-moment.fromJalaali = function (year, month, date) {
-
-	var greg = this.jConvert.toGregorian(year, month, date);
-	return moment([greg.gy, greg.gm + 1, greg.gd]);
-}
-
-
-moment.originalLoadPersian = moment.loadPersian;
-moment.loadPersian = function () {
-	moment.originalLoadPersian();
+// Use normal numbers for persian display
+(function () {
 	var symbolMap = {
 		'1': '1',
 		'2': '2',
@@ -30,14 +21,22 @@ moment.loadPersian = function () {
 			}).replace(/,/g, '،');
 		}
 	});
-};
+
+}());
+
+// Moment-jalaali extensions
+moment.fromJalaali = function (year, month, date) {
+
+	var greg = this.jConvert.toGregorian(year, month, date);
+	return moment([greg.gy, greg.gm + 1, greg.gd]);
+}
 
 var datepicker = $.fn.datepicker.Constructor.prototype;
 datepicker.fillMonthsGregorian = datepicker.fillMonths;
 
 datepicker.fillMonthsJalaali = function () {
 	var html = '';
-	var i = 0
+	var i = 0;
 	var monthsShort = $.proxy(moment.langData().jMonthsShort, moment.langData());
 	while (i < 12) {
 		html += '<span class="month">' + monthsShort(moment().jMonth(i)) + '</span>';
@@ -56,7 +55,7 @@ datepicker.fillMonths = function () {
 
 datepicker.fillGregorianCal = datepicker.fill;
 
-datepicker.fillJalaaliCal = function() {
+datepicker.fillJalaaliCal = function () {
 
 	if (!this.viewDate.isValid() || this.viewDate.year() <= 0) {
 		return;
@@ -69,9 +68,9 @@ datepicker.fillJalaaliCal = function() {
 	// the jalaali date is actually the gregorian date we wish to use.
 	var jStartDate = this.startDate ? moment([this.startDate.jYear(), this.startDate.jMonth(), this.startDate.jDate()]) : null;
 	var jEndDate = this.endDate ? moment([this.endDate.jYear(), this.endDate.jMonth(), this.endDate.jDate()]) : null;
-	
+
 	this.displayMonthText(jMonth, jYear);
-	this.fillDayDisplay(jYear, jMonth,  jStartDate, jEndDate);
+	this.fillDayDisplay(jYear, jMonth, jStartDate, jEndDate);
 	this.fillMonthPicker(jYear, jStartDate, jEndDate);
 	this.fillYearPicker(jYear, jStartDate, jEndDate);
 };
@@ -90,7 +89,7 @@ datepicker.fillDayDisplay = function (jYear, jMonth, jStartDate, jEndDate) {
 	var year = this.viewDate.year();
 	var currentDate = currentMoment ? currentMoment.valueOf() : null;
 	var month = this.viewDate.month();
-	
+
 	var prevMonth = this.getLastWorkingDayOfPrevMonth(jYear, jMonth);
 	var nextMonthVal = moment(prevMonth).add('days', 42).valueOf();
 
@@ -116,7 +115,7 @@ datepicker.fillDayDisplay = function (jYear, jMonth, jStartDate, jEndDate) {
 		} else if (prevMonth.year() > year || (prevMonth.year() == year && prevMonth.month() > month)) {
 			clsName += ' greNew';
 		}
-		
+
 		if (prevMonth.valueOf() === currentDate) {
 			clsName += ' active';
 		}
@@ -137,7 +136,7 @@ datepicker.fillDayDisplay = function (jYear, jMonth, jStartDate, jEndDate) {
 	this.picker.find('.datepicker-days tbody').empty().append(html.join(''));
 };
 
-datepicker.getLastWorkingDayOfPrevMonth = function(jYear, jMonth) {
+datepicker.getLastWorkingDayOfPrevMonth = function (jYear, jMonth) {
 	// using jalaali dates get the last day of the previous month and iterate backwards until we find the start of the week.
 	var dateString = jYear + "/" + (jMonth > 9 ? jMonth : "0" + jMonth) + "/" + moment.jDaysInMonth(jYear, jMonth);
 	var jPrevMonth = moment(dateString, "jYYYY/jMM/jDD");
@@ -155,7 +154,7 @@ datepicker.fillMonthPicker = function (jYear, jStartDate, jEndDate) {
 
 	var currentJMonth = currentMoment ? currentMoment.jMonth() : null;
 	var currentJYear = currentMoment ? currentMoment.jYear() : null;
-	
+
 	var months = this.picker.find('.datepicker-months')
 				.find('th:eq(1)')
 					.text(jYear)
@@ -182,7 +181,7 @@ datepicker.fillYearPicker = function (jYear, jStartDate, jEndDate) {
 
 	var year = this.viewDate.year();
 	var currentMoment = this.get();
-	
+
 	var currentJYear = currentMoment ? currentMoment.jYear() : null;
 
 	var html = '';

@@ -173,9 +173,9 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		    Subject: model.Subject(),
 			AbsenceId: absenceId,
 			Period: {
-			    StartDate: model.DateFrom().format('YYYY-MM-DD'),
+			    StartDate: Teleopti.MyTimeWeb.Common.FormatServiceDate(model.DateFrom()),
 			    StartTime: model.TimeFrom(),
-			    EndDate: model.DateTo().format('YYYY-MM-DD'),
+			    EndDate: Teleopti.MyTimeWeb.Common.FormatServiceDate(model.DateTo()),
 			    EndTime: model.TimeTo()
 			},
 			Message: model.Message(),
