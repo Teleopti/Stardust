@@ -269,10 +269,47 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			result[1].Id.Should().Be.EqualTo(campaign1.Id);
 		}
 
-        private IOutboundCampaign createCampaignWithSpanningPeriod(DateOnlyPeriod period)
+		[Test]
+		public void ShouldNotGetDeletedPlannedCampaign()
+		{
+			createCampaignWithSpanningPeriod(new DateOnlyPeriod(DateOnly.Today.AddDays(1), DateOnly.MaxValue), true);
+			var campaign2 = createCampaignWithSpanningPeriod(new DateOnlyPeriod(DateOnly.Today.AddDays(2), DateOnly.MaxValue));
+			var repository = new OutboundCampaignRepository(UnitOfWork);
+
+			var result = repository.GetPlannedCampaigns();
+
+			result[0].Id.Should().Be.EqualTo(campaign2.Id);
+		}
+
+		[Test]
+		public void ShouldNotGetDeletedOnGoingCampaign()
+		{
+			createCampaignWithSpanningPeriod(new DateOnlyPeriod(DateOnly.Today.AddDays(-10), DateOnly.Today), true);
+			var campaign2 =  createCampaignWithSpanningPeriod(new DateOnlyPeriod(DateOnly.Today, DateOnly.MaxValue));
+			var repository = new OutboundCampaignRepository(UnitOfWork);
+
+			var result = repository.GetOnGoingCampaigns();
+
+			result[0].Id.Should().Be.EqualTo(campaign2.Id);
+		}
+
+		[Test]
+		public void ShouldNotGetDeletedDoneCampaign()
+		{
+			createCampaignWithSpanningPeriod(new DateOnlyPeriod(DateOnly.Today.AddDays(-10), DateOnly.Today.AddDays(-8)), true);
+			var campaign2 = createCampaignWithSpanningPeriod(new DateOnlyPeriod(DateOnly.Today.AddDays(-9), DateOnly.Today.AddDays(-8)));
+			var repository = new OutboundCampaignRepository(UnitOfWork);
+
+			var result = repository.GetDoneCampaigns();
+
+			result[0].Id.Should().Be.EqualTo(campaign2.Id);
+		}
+
+        private IOutboundCampaign createCampaignWithSpanningPeriod(DateOnlyPeriod period, bool isDeleted = false)
 		{
 			var campaign = CreateAggregateWithCorrectBusinessUnit();
 			campaign.SpanningPeriod = period;
+	      if (isDeleted) campaign.SetDeleted();
 
 			PersistAndRemoveFromUnitOfWork(campaign);
 			return campaign;
