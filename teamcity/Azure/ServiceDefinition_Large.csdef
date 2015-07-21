@@ -12,6 +12,7 @@ xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
 		<VirtualApplication name="Broker.backplane" physicalDirectory="../../BrokerBackplane" />
 		<VirtualApplication name="AuthenticationBridge" physicalDirectory="../../AuthenticationBridge" />
 		<VirtualApplication name="WindowsIdentityProvider" physicalDirectory="../../WindowsIdentityProvider" />
+		<VirtualApplication name="Administration" physicalDirectory="../../Administration" />
         <Bindings>
           <Binding name="HttpsIn" endpointName="HttpsIn" />
         </Bindings>

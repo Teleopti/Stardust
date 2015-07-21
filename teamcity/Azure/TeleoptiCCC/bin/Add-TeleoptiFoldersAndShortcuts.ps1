@@ -297,6 +297,7 @@ Try
                 ("$TeleoptiCCCPath\BrokerBackplane","$sitesroot\6"),
                 ("$TeleoptiCCCPath\AuthenticationBridge","$sitesroot\7"),
                 ("$TeleoptiCCCPath\WindowsIdentityProvider","$sitesroot\8")
+                ("$TeleoptiCCCPath\Administration","$sitesroot\9")
             )
 
 
