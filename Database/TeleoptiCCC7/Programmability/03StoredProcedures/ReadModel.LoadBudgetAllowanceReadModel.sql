@@ -10,6 +10,7 @@ GO
 --				2013-05-23	ErikS			Added distinct to disregard duplicate rows in ReadModel
 --				2013-05-24	DeeFlex & ErikS	Improved last change
 --				2014-10-06	Ola				Removed temptable to reduce writes, reads and cpu usage (bug #30425 )
+--				2015-07-21  RobW			Removed slow join to PersonPeriodWithEndDate, instead use PersonPeriod table now that it has enddate
 -- =============================================
 
 CREATE PROCEDURE [ReadModel].[LoadBudgetAllowanceReadModel]
@@ -28,7 +29,7 @@ BEGIN
 		SUM(sp.ContractTime) as TotalContractTime,
 		Count(*) as HeadCounts
 	FROM ReadModel.ScheduleProjectionReadOnly sp
-	INNER JOIN  dbo.PersonPeriodWithEndDate t	
+	INNER JOIN  dbo.PersonPeriod t	
 		ON t.parent = sp.PersonId
 		AND t.budgetgroup=@BudgetGroupId
 		AND sp.BelongsToDate BETWEEN t.startdate AND t.enddate
