@@ -3,10 +3,10 @@
 angular.module('wfm.people')
 	.constant('chunkSize', 50)
 	.controller('PeopleCtrl', [
-		'$scope', '$filter', '$state', '$document', '$translate', 'Upload', 'i18nService', 'uiGridConstants', 'PeopleSearch', PeopleController
+		'$scope', '$filter', '$state', '$document', '$translate', 'Upload', 'i18nService', 'uiGridConstants','uiGridExporterConstants','$timeout', 'PeopleSearch', PeopleController
 	]);
 
-function PeopleController($scope, $filter, $state, $document, $translate, Upload, i18nService, uiGridConstants, SearchSvrc) {
+function PeopleController($scope, $filter, $state, $document, $translate, Upload, i18nService, uiGridConstants,uiGridExporterConstants, $timeout, SearchSvrc) {
 	$scope.searchResult = [];
 	$scope.pageSize = 20;
 	$scope.keyword = '';
@@ -362,20 +362,44 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 
 	$scope.log = '';
 
+	$scope.isImportReady = false;
 	$scope.gridOptionForImport = {
-		enableGridMenu: true,
+		exporterCsvFilename: 'invalidUsers.csv',
+		exporterOlderExcelCompatibility: true,
 		importerDataAddCallback: function (grid, newObjects) {
 			$scope.rawUsersData = newObjects;
 			var data = { Users: $scope.rawUsersData }
 			SearchSvrc.importUsers.post(data)
 				.$promise.then(function (result) {
+					$scope.isImportReady = true;
 					$scope.dataWithError = result.InvalidUsers;
-					$scope.gridOptionForImport.data = $scope.dataWithError;
+					$scope.successfulCount = result.SuccessfulCount;
+					$scope.invalidCount = result.InvalidCount;
+
+					$timeout(function () {//just make it be digested. better to be replaced with better idea, if found.
+						$scope.gridOptionForImport.data = $scope.dataWithError;
+						$scope.export();
+					});
+					
 				});
 		},
+		enableSorting: false,
+		disableColumnMenu: true,
+		disableHiding: true,
+		columnDefs: [
+			{ displayName: 'Firstname', field: 'Firstname', disableHiding: true },
+			{displayName: 'Lastname',field: 'Lastname'},
+			{ displayName: 'WindowsUser', field: 'WindowsUser' },
+			{ displayName: 'ApplicationUserId', field: 'ApplicationUserId' },
+			{ displayName: 'Password', field: 'Password' },
+			{ displayName: 'Role', field: 'Role' },
+			{ displayName: 'ErrorMessage', field: 'ErrorMessage' }
+			
+		],
 		onRegisterApi: function (gridApi) {
-			$scope.gridApi = gridApi;
-		}
+			$scope.gridForImportApi = gridApi;
+		},
+		data: 'dataWithError'
 
 	};
 
@@ -383,8 +407,16 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 		if (files && files.length) {
 			for (var i = 0; i < files.length; i++) {
 				var file = files[i];
-				$scope.gridApi.importer.importFile(file);
+				$scope.gridForImportApi.importer.importFile(file);
 			}
 		}
+	};
+
+	$scope.export = function () {
+		if ($scope.isImportReady) {
+			$scope.gridForImportApi.exporter.csvExport(uiGridExporterConstants.ALL, uiGridExporterConstants.ALL);
+		}
+		
+
 	};
 };

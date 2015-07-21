@@ -88,6 +88,42 @@
 						label="{{button.label}}" ng-repeat="button in buttons"></button>
 			</nav>
 		</div>
+	</div>
+	
+	<!--<div ng-cloak ng-show="showImportPanel" class="modal-box" ng-include src="'js/people/template/importPeople.html'"></div>-->
+	<div ng-cloak ng-show="showImportPanel" class="modal-box import-people-form" >
+		<div class="modalbg import-people">
+			<div class="dialog">
+				<div class="modal-header">
+					Import users
+				</div>
+				<div class="modal-inner-content">
+					<div class="wfm-block">
+
+						<div ngf-drop ngf-select ng-model="files" ng-model-rejected="rejFiles" class="drop-box"
+							 ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" ngf-change="upload($files)" ngf-multiple="true" ngf-allow-dir="true"
+							 accept="'.csv'" ngf-accept="'.csv'" ngf-drop-available="dropAvailable">
+							Drag and Drop .csv files here or click to upload
+						</div>
+						Files:
+						<ul>
+							<li ng-repeat="f in files">{{f.name}}</li>
+
+						</ul>
+						<pre ng-show="isImportReady">{{successfulCount}} users are imported successfully, {{invalidCount}} are invalid. Please export the invalid data to correct it.</pre>
+						
+						<button ng-show="isImportReady" ng-click="export()">Export</button>
+
+						<div ng-show="isImportReady" ui-grid="gridOptionForImport" ui-grid-importer ui-grid-exporter class="grid"></div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<aside>
+						<a ng-click="showImportPanel = !showImportPanel" class="wfm-btn wfm-btn-invis">Back</a>
+					</aside>
+				</div>
+			</div>
+		</div>
 		<import-people ng-show="showImportPanel"></import-people>
 	</div>
 </div>

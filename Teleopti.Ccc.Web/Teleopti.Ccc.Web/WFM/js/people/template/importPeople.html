@@ -1,5 +1,5 @@
 ﻿<div class="modal-box">
-	<div class="modalbg import-people">
+<div class="modalbg import-people">
 		<div class="dialog">
 			<div class="modal-header">
 				Import users
@@ -15,9 +15,11 @@
 					<ul>
 						<li ng-repeat="f in files">{{f.name}}</li>
 					</ul>
-					Upload Log:
-					<pre>{{log}}</pre>
-					<div ui-grid="gridOptionForImport" ui-grid-importer class="grid"></div>
+				<pre ng-show="isImportReady">{{successfulCount}} users are imported successfully, {{invalidCount}} are invalid. Please export the invalid data to correct it.</pre>
+
+				<button ng-show="isImportReady" ng-click="export()">Export</button>
+
+				<div ng-show="isImportReady" ui-grid="gridOptionForImport" ui-grid-importer ui-grid-exporter class="grid"></div>
 				</div>
 			</div>
 			<div class="modal-footer">

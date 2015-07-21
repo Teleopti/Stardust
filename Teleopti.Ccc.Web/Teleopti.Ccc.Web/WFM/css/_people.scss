@@ -100,7 +100,9 @@
 	color: #ec38a3;
 }
 
-.people-list .ui-grid-menu-button {
+.people-list .ui-grid-menu-button,
+.import-people-form .ui-grid-menu-button
+ {
 	height: 31px;
 	top: 0;
 }
