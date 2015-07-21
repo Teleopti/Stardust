@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 
 		private IEnumerable<PayloadWorkTime> getAbsenceTime(DateOnlyPeriod period, IBudgetGroup budgetGroup, IScenario scenario)
 		{
-			var cacheKey = period.DateString + budgetGroup.Id + scenario.Id;
+			var cacheKey = GetCacheKey(period, budgetGroup, scenario);
 			return getAbsenceTimeFromCache(cacheKey) ?? getAbsenceTimeFromRepository (period, budgetGroup, scenario, cacheKey);
 		}
 
@@ -77,11 +77,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 
 			return absenceTime;
 		}
-		
+
 		private static void addAbsenceTimeToCache(String cacheKey, IEnumerable<PayloadWorkTime> absenceTime)
 		{
 			HttpRuntime.Cache.Add (cacheKey, absenceTime, null, Cache.NoAbsoluteExpiration, 
 				new TimeSpan (0, 0, 5, 0), CacheItemPriority.Normal, null);
+		}
+
+		public static String GetCacheKey(DateOnlyPeriod period, IBudgetGroup budgetGroup, IScenario scenario)
+		{
+			return period.DateString + budgetGroup.Id + scenario.Id;
 		}
 	}
 }

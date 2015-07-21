@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo;
@@ -38,6 +39,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			_personWithPersonPeriod.PersonPeriodCollection.First().BudgetGroup = _budgetGroup;
 			_loggedOnUser = MockRepository.GenerateStub<ILoggedOnUser>();
 			_loggedOnUser.Expect(l => l.CurrentUser()).Return(_personWithPersonPeriod).Repeat.Any();
+
+			HttpRuntime.Cache.Remove (AbsenceTimeProvider.GetCacheKey (_period, _budgetGroup, _scenario ));
+
 		}
 
 		[Test]
