@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			var personAssignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), date);
 			var phone = new Activity("p");
 			personAssignment.AddActivity(phone, new DateTimePeriod("2015-03-29 08:00".Utc(), "2015-03-29 17:00".Utc()));
-			ScheduleData.Set(new IScheduleData[] {personAssignment});
+			ScheduleData.Set(new IScheduleData[] { personAssignment });
 
 			var viewModel = Target.CreateWeekViewModel(date);
 
@@ -109,11 +109,11 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			Now.Is("2015-03-29 10:00");
 			var date = new DateOnly(Now.UtcDateTime());
 			var phone = new Activity("p");
-			var personAssignment1 = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2015,3,28));
+			var personAssignment1 = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2015, 3, 28));
 			personAssignment1.AddActivity(phone, new DateTimePeriod("2015-03-28 00:00".Utc(), "2015-03-28 04:00".Utc()));
 			var personAssignment2 = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2015, 3, 29));
 			personAssignment2.AddActivity(phone, new DateTimePeriod("2015-03-29 00:00".Utc(), "2015-03-29 04:00".Utc()));
-			ScheduleData.Set(new IScheduleData[] { personAssignment1,personAssignment2 });
+			ScheduleData.Set(new IScheduleData[] { personAssignment1, personAssignment2 });
 
 			var viewModel = Target.CreateWeekViewModel(date);
 
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			viewModel.TimeLine.ElementAt(6).TimeLineDisplay.Should().Be("06:00");
 			viewModel.TimeLine.Last().TimeLineDisplay.Should().Be("06:15");
 		}
-		
+
 		[Test]
 		public void ShouldMapTimeLineCorrectlyOnEndDstDayAndNightShift()
 		{
@@ -137,11 +137,11 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			Now.Is("2015-10-25 10:00");
 			var date = new DateOnly(Now.UtcDateTime());
 			var phone = new Activity("p");
-			var personAssignment1 = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2015,10,24));
+			var personAssignment1 = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2015, 10, 24));
 			personAssignment1.AddActivity(phone, new DateTimePeriod("2015-10-24 00:00".Utc(), "2015-10-24 04:00".Utc()));
 			var personAssignment2 = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2015, 10, 25));
 			personAssignment2.AddActivity(phone, new DateTimePeriod("2015-10-25 00:00".Utc(), "2015-10-25 04:00".Utc()));
-			ScheduleData.Set(new IScheduleData[] { personAssignment1,personAssignment2 });
+			ScheduleData.Set(new IScheduleData[] { personAssignment1, personAssignment2 });
 
 			var viewModel = Target.CreateWeekViewModel(date);
 
@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			var date = new DateOnly(Now.UtcDateTime());
 
 			var viewModel = Target.CreateWeekViewModel(date);
-			viewModel.BaseUtcOffsetInMinutes.Should().Be(-10*60);
+			viewModel.BaseUtcOffsetInMinutes.Should().Be(-10 * 60);
 		}
 
 
@@ -179,9 +179,9 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			User.CurrentUser().PermissionInformation.SetCulture(Culture.GetCulture());
 			Now.Is("2015-03-29 10:00");
 			var date = new DateOnly(Now.UtcDateTime());
-			
+
 			var viewModel = Target.CreateWeekViewModel(date);
-			
+
 			viewModel.DaylightSavingTimeAdjustment.Should().Not.Be.Null();
 			viewModel.DaylightSavingTimeAdjustment.StartDateTime.Should().Be(new DateTime(2015, 3, 29, 1, 0, 0, DateTimeKind.Utc));
 			viewModel.DaylightSavingTimeAdjustment.EndDateTime.Should().Be(new DateTime(2015, 10, 25, 2, 0, 0, DateTimeKind.Utc));
@@ -210,10 +210,10 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			TimeZone.IsSweden();
 			var date = new DateOnly(2015, 07, 06);
 			var viewModel = Target.CreateWeekViewModel(date);
-			
 
-			Assert.AreEqual( "2015-07-06",viewModel.CurrentWeekStartDate);
-			Assert.AreEqual( "2015-07-12",viewModel.CurrentWeekEndDate);
+
+			Assert.AreEqual("2015-07-06", viewModel.CurrentWeekStartDate);
+			Assert.AreEqual("2015-07-12", viewModel.CurrentWeekEndDate);
 		}
 	}
 
@@ -311,9 +311,10 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 
 	public class FakePersonRequestRepository : IPersonRequestRepository
 	{
+		private IList<IPersonRequest> _requestRepository = new List<IPersonRequest>();
 		public void Add(IPersonRequest entity)
 		{
-			throw new NotImplementedException();
+			_requestRepository.Add(entity);
 		}
 
 		public void Remove(IPersonRequest entity)
@@ -399,7 +400,9 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 
 		public IList<IPersonRequest> FindAllRequestsExceptOffer(IPerson person, Paging paging)
 		{
-			throw new NotImplementedException();
+			return _requestRepository.Where(request => request.Request.RequestType != RequestType.ShiftExchangeOffer
+													&& request.Person.Id.GetValueOrDefault() == person.Id.GetValueOrDefault())
+									 .ToList();
 		}
 
 		public IList<IShiftExchangeOffer> FindOfferByStatus(IPerson person, DateOnly date, ShiftExchangeOfferStatus status)

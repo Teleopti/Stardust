@@ -4,48 +4,71 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
 {
-    public class PersonRequestFactory
-    {
-        public IPerson Person { get; set; }
-        public Request Request { get; set; }
+	public class PersonRequestFactory
+	{
+		public IPerson Person { get; set; }
+		public Request Request { get; set; }
 
-        public PersonRequestFactory()
-        {
-            Person = PersonFactory.CreatePerson();
-            Request = new TextRequest(new DateTimePeriod());
-        }
+		public PersonRequestFactory()
+		{
+			Person = PersonFactory.CreatePerson();
+			Request = new TextRequest(new DateTimePeriod());
+		}
 
-        public IPersonRequest CreateNewPersonRequest()
-        {
-            var request = new PersonRequest(Person, Request);
-            return request;
-        }
+		public IPersonRequest CreateNewPersonRequest()
+		{
+			var request = new PersonRequest(Person, Request);
+			return request;
+		}
 
-        public IPersonRequest CreatePersonRequest()
-        {
-            var request = CreateNewPersonRequest();
-            request.Pending();
-            return request;
-        }
+		public IPersonRequest CreatePersonRequest()
+		{
+			var request = CreateNewPersonRequest();
+			request.Pending();
+			return request;
+		}
 
-        public IAbsenceRequest CreateAbsenceRequest(IAbsence absence, DateTimePeriod dateTimePeriod)
-        {
-            Request = new AbsenceRequest(absence, dateTimePeriod);
-            return (IAbsenceRequest) CreatePersonRequest().Request;
-        }
+		public IPersonRequest CreatePersonRequest(IPerson person)
+		{
+			Person = person;
 
-        public IAbsenceRequest CreateNewAbsenceRequest(IAbsence absence, DateTimePeriod dateTimePeriod)
-        {
-            Request = new AbsenceRequest(absence, dateTimePeriod);
-            return (IAbsenceRequest)CreateNewPersonRequest().Request;
-        }
+			var request = CreateNewPersonRequest();
+			request.Pending();
+			return request;
+		}
 
-        public IPersonRequest CreateApprovedPersonRequest()
-        {
-            IPersonRequest personRequest = CreatePersonRequest();
-            personRequest.Approve(new ApprovalServiceForTest(), new PersonRequestAuthorizationCheckerForTest());
+		public IPersonRequest CreatePersonShiftTradeRequest(IPerson personTo, DateOnly requestDateOnly)
+		{
+			var shiftTradeSwapDetails = new IShiftTradeSwapDetail[]
+			{
+				new ShiftTradeSwapDetail(Person, personTo, requestDateOnly, requestDateOnly) 
+			};
+			Person = personTo;
+			Request = new ShiftTradeRequest(shiftTradeSwapDetails);
 
-            return personRequest;
-        }
-    }
+			var request = CreateNewPersonRequest();
+			request.Pending();
+			return request;
+		}
+
+		public IAbsenceRequest CreateAbsenceRequest(IAbsence absence, DateTimePeriod dateTimePeriod)
+		{
+			Request = new AbsenceRequest(absence, dateTimePeriod);
+			return (IAbsenceRequest)CreatePersonRequest().Request;
+		}
+
+		public IAbsenceRequest CreateNewAbsenceRequest(IAbsence absence, DateTimePeriod dateTimePeriod)
+		{
+			Request = new AbsenceRequest(absence, dateTimePeriod);
+			return (IAbsenceRequest)CreateNewPersonRequest().Request;
+		}
+
+		public IPersonRequest CreateApprovedPersonRequest()
+		{
+			IPersonRequest personRequest = CreatePersonRequest();
+			personRequest.Approve(new ApprovalServiceForTest(), new PersonRequestAuthorizationCheckerForTest());
+
+			return personRequest;
+		}
+	}
 }
