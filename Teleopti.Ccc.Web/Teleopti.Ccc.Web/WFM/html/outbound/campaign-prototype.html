@@ -1,4 +1,6 @@
 ﻿<div class="outbound wfm-block material-block">
+	<div class="loading-whole-page" ng-show="!isLoadFinished"><md-progress-circular md-mode="indeterminate"></md-progress-circular></div>
+
 	<div class="material-block-header relative">
 		<h3 class="border-bottom" translate>OutboundCampaigns</h3>
 		<button ng-click="gotoCreateCampaign()" class="wfm-fab success create-campaignfix material-depth-1"><i class="mdi mdi-plus"></i></button>
@@ -22,51 +24,51 @@
 					</div>
 
 
-				</card-header>
-				<card-body>
-					<div class="relative">
+					</card-header>
+					<card-body>
+						<div class="relative">
 						<p class="campaign-message m-r-5" ng-repeat="info in campaign.WarningInfo"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span translate>{{info.TypeOfRule}}</span></p>
-						<div class="chart text-center">
-							<div id="chart"></div>
+							<div class="chart text-center">
+								<div id="chart"></div>
+							</div>
+							<button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="show(campaign)">edit</button>
+							<button class="wfm-btn wfm-btn-invis-primary pull-right">schedule</button>
+							<button class="wfm-btn wfm-btn-invis-primary pull-right">add backlog</button>
+							<button class="wfm-btn wfm-btn-invis-primary pull-right">production plan</button>
 						</div>
-						<button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="show(campaign)">edit</button>
-						<button class="wfm-btn wfm-btn-invis-primary pull-right">schedule</button>
-						<button class="wfm-btn wfm-btn-invis-primary pull-right">add backlog</button>
-						<button class="wfm-btn wfm-btn-invis-primary pull-right">production plan</button>
-					</div>
-				</card-body>
-			</teleopti-card>
-		</teleopti-card-list>
+					</card-body>
+				</teleopti-card>
+			</teleopti-card-list>
 
 		<h4 class="border-bottom"><span translate>CampaignsInGoodShape</span><span ng-bind="CampaignsLength" style="margin-left:5px;"></span></h4>
-		<teleopti-card-list multi-select>
-			<teleopti-card ng-repeat="campaign in Campaigns" ng-click="generateChart()">
-				<card-header>
-					<div class="text-center relative">
-						<span class="campaign-namefix" ng-bind="campaign.Name"></span>
+			<teleopti-card-list multi-select>
+				<teleopti-card ng-repeat="campaign in Campaigns" ng-click="generateChart()">
+					<card-header>
+						<div class="text-center relative">
+							<span class="campaign-namefix" ng-bind="campaign.Name"></span>
 						<span ng-bind="campaign.StartDate.Date | amDateFormat: 'LL'"></span>
-						<span>-</span>
+							<span>-</span>
 						<span ng-bind="campaign.EndDate.Date | amDateFormat: 'LL'"></span>
-						<span class="campaign-warning-icon campaign-warning-iconfix" ng-if="campaign.WarningInfo.length > 0">!</span>
+							<span class="campaign-warning-icon campaign-warning-iconfix" ng-if="campaign.WarningInfo.length > 0">!</span>
 						<span class="campaign-phase-label" translate>{{campaign.Status | showPhase}}</span>
 
-					</div>
-
-
-				</card-header>
-				<card-body>
-					<div class="relative">
-						<p class="campaign-message m-r-5" ng-repeat="info in campaign.WarningInfo"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span translate>{{info.TypeOfRule | warningMessage}}</span></p>
-						<div class="chart text-center">
-							<div id="chart"></div>
 						</div>
+
+
+					</card-header>
+					<card-body>
+						<div class="relative">
+						<p class="campaign-message m-r-5" ng-repeat="info in campaign.WarningInfo"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span translate>{{info.TypeOfRule}}</span></p>
+							<div class="chart text-center">
+								<div id="chart"></div>
+							</div>
 						<button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="show(campaign)" translate>Edit</button>
 						<button class="wfm-btn wfm-btn-invis-primary pull-right" translate>Schedule</button>
 						<button class="wfm-btn wfm-btn-invis-primary pull-right" translate>AddBacklog</button>
 						<button class="wfm-btn wfm-btn-invis-primary pull-right" translate>ProductionPlan</button>
-					</div>
-				</card-body>
-			</teleopti-card>
-		</teleopti-card-list>
-	</div>
+						</div>
+					</card-body>
+				</teleopti-card>
+			</teleopti-card-list>
+		</div>
 </div>

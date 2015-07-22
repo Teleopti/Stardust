@@ -8,8 +8,8 @@
 
 	function summaryCtrl($scope, $state, $stateParams, outboundService) {
 		$scope.isLoadFinished = false;
-    	outboundService.load(function success(data) {
-    		$scope.isLoadFinished = data;
+    	outboundService.load(function handleSuccess(isLoad) {
+    		$scope.isLoadFinished = isLoad;
     		init();
 
     		$scope.$watch('activePhaseCode', function (newValue, oldValue) {
