@@ -42,8 +42,9 @@ namespace Teleopti.Wfm.Administration.Core
 
 				result.AppVersionOk = result.HeadVersion.Equals(result.ImportAppVersion);
 			}
-			catch (Exception)
+			catch (Exception e)
 			{
+				result.Error = e.Message;
 				return result;
 			}
 
