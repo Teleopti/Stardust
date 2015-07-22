@@ -13330,8 +13330,32 @@ Reduce the complexity to use these shifts.</value>
     <value>password does not follow the password policy;</value>
     <comment>invalid user date message in People Import Users</comment>
   </data>
-  <data name="NoApplicationLogonAccountErrorMsgSemicolon" xml:space="preserve">
+   <data name="NoApplicationLogonAccountErrorMsgSemicolon" xml:space="preserve">
     <value>no application logon account;</value>
     <comment>invalid user msg in People-import users</comment>
+  </data>
+  <data name="AddBacklog" xml:space="preserve">
+    <value>add backlog</value>
+    <comment>for campaigns to add backlog</comment>
+  </data>
+  <data name="CampaignsInGoodShape" xml:space="preserve">
+    <value>Campaigns in good shape</value>
+    <comment>outbound campaigns without error</comment>
+  </data>
+  <data name="CampaignsRequiringAction" xml:space="preserve">
+    <value>Campaigns requiring action</value>
+    <comment>outbound campaigns have error and require action </comment>
+  </data>
+  <data name="OutboundOverstaffRule" xml:space="preserve">
+    <value>Overstaff</value>
+    <comment>campaign error type</comment>
+  </data>
+  <data name="OutboundUnderSLARule" xml:space="preserve">
+    <value>UnderSLA</value>
+    <comment>campaign error type</comment>
+  </data>
+  <data name="ProductionPlan" xml:space="preserve">
+    <value>production plan</value>
+    <comment>for campaigns to modify production plan</comment>
   </data>
 </root>

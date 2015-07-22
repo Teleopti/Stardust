@@ -5,25 +5,14 @@
 	angular.module('wfm.outbound')
 		.filter('showWeekdays', ['$translate', showWeekdays])
 		.filter('showPhase', [showPhase])
-		.filter('warningMessage', [warningMessage])
 		.filter('showTimespan', showTimespan);
-
-	function warningMessage() {
-		return function(info) {
-			var mapping= {
-				OutboundOverstaffRule: 'Overstaffed',
-				OutboundUnderSLARule: 'UnderSLA'
-			}
-			return mapping[info];
-		}
-	};
 
 	function showPhase() {
 		return function(statusCode) {
 			var mapping = {
 				1: 'Planned',
 				2: 'Scheduled',
-				4: 'Ongoning',
+				4: 'Ongoing',
 				8: 'Done'
 			}
 			return mapping[statusCode];

@@ -1,23 +1,23 @@
 ﻿<div class="outbound wfm-block material-block">
 	<div class="material-block-header relative">
-		<h3 class="border-bottom">Outbound Campaigns</h3>
+		<h3 class="border-bottom" translate>OutboundCampaigns</h3>
 		<button ng-click="gotoCreateCampaign()" class="wfm-fab success create-campaignfix material-depth-1"><i class="mdi mdi-plus"></i></button>
 	</div>
 	<div class="material-block-content">
 		<div class="opration-area">
 			<phase-picker active-phase-code="activePhaseCode" phase-statistics="phaseStatistics"></phase-picker>
 </div>
-		<h4 class="border-bottom">Campaigns requiring action<span ng-bind="WarningCampaignsLength" style="margin-left:5px;"></span></h4>
+		<h4 class="border-bottom"><span translate>CampaignsRequiringAction</span><span ng-bind="WarningCampaignsLength" style="margin-left:5px;"></span></h4>
 		<teleopti-card-list multi-select>
 			<teleopti-card ng-repeat="campaign in WarningCampaigns" ng-click="generateChart()">
 				<card-header>
 					<div class="text-center relative">
 						<span class="campaign-namefix" ng-bind="campaign.Name"></span>
-						<span ng-bind="campaign.StartDate.Date"></span>
+						<span ng-bind="campaign.StartDate.Date | amDateFormat: 'LL'"></span>
 						<span>-</span>
-						<span ng-bind="campaign.EndDate.Date"></span>
+						<span ng-bind="campaign.EndDate.Date | amDateFormat: 'LL'"></span>
 						<span class="campaign-warning-icon campaign-warning-iconfix" ng-if="campaign.WarningInfo.length > 0">!</span>
-						<span class="campaign-phase-label" ng-bind="campaign.Status | showPhase"></span>
+						<span class="campaign-phase-label" translate>{{campaign.Status | showPhase}}</span>
 
 					</div>
 
@@ -25,9 +25,8 @@
 				</card-header>
 				<card-body>
 					<div class="relative">
-						<p class="campaign-message m-r-5" ng-repeat="info in campaign.WarningInfo"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span ng-bind="info.TypeOfRule"></span></p>
+						<p class="campaign-message m-r-5" ng-repeat="info in campaign.WarningInfo"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span translate>{{info.TypeOfRule}}</span></p>
 						<div class="chart text-center">
-							<campaign></campaign>
 							<div id="chart"></div>
 						</div>
 						<button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="show(campaign)">edit</button>
@@ -39,17 +38,17 @@
 			</teleopti-card>
 		</teleopti-card-list>
 
-		<h4 class="border-bottom">Campaigns in good shape<span ng-bind="CampaignsLength" style="margin-left:5px;"></span></h4>
+		<h4 class="border-bottom"><span translate>CampaignsInGoodShape</span><span ng-bind="CampaignsLength" style="margin-left:5px;"></span></h4>
 		<teleopti-card-list multi-select>
 			<teleopti-card ng-repeat="campaign in Campaigns" ng-click="generateChart()">
 				<card-header>
 					<div class="text-center relative">
 						<span class="campaign-namefix" ng-bind="campaign.Name"></span>
-						<span ng-bind="campaign.StartDate.Date"></span>
+						<span ng-bind="campaign.StartDate.Date | amDateFormat: 'LL'"></span>
 						<span>-</span>
-						<span ng-bind="campaign.EndDate.Date"></span>
+						<span ng-bind="campaign.EndDate.Date | amDateFormat: 'LL'"></span>
 						<span class="campaign-warning-icon campaign-warning-iconfix" ng-if="campaign.WarningInfo.length > 0">!</span>
-						<span class="campaign-phase-label" ng-bind="campaign.Status | showPhase"></span>
+						<span class="campaign-phase-label" translate>{{campaign.Status | showPhase}}</span>
 
 					</div>
 
@@ -57,15 +56,14 @@
 				</card-header>
 				<card-body>
 					<div class="relative">
-						<p class="campaign-message m-r-5" ng-repeat="info in campaign.WarningInfo"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span ng-bind="info.TypeOfRule | warningMessage" translate></span></p>
+						<p class="campaign-message m-r-5" ng-repeat="info in campaign.WarningInfo"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span translate>{{info.TypeOfRule | warningMessage}}</span></p>
 						<div class="chart text-center">
-							<campaign></campaign>
 							<div id="chart"></div>
 						</div>
-						<button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="show(campaign)">edit</button>
-						<button class="wfm-btn wfm-btn-invis-primary pull-right">schedule</button>
-						<button class="wfm-btn wfm-btn-invis-primary pull-right">add backlog</button>
-						<button class="wfm-btn wfm-btn-invis-primary pull-right">production plan</button>
+						<button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="show(campaign)" translate>Edit</button>
+						<button class="wfm-btn wfm-btn-invis-primary pull-right" translate>Schedule</button>
+						<button class="wfm-btn wfm-btn-invis-primary pull-right" translate>AddBacklog</button>
+						<button class="wfm-btn wfm-btn-invis-primary pull-right" translate>ProductionPlan</button>
 					</div>
 				</card-body>
 			</teleopti-card>
