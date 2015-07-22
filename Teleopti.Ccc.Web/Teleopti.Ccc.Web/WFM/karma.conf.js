@@ -44,7 +44,8 @@ module.exports = function(config) {
 		'vendor/c3/c3-angular.min.js',
 		'js/ABmetrics.min.js',
 		'dist/main.min.js', 
-		'tests/**/*.js'
+		'tests/**/*.js',
+		'**/*.tpl.html'
 	],
 
 
@@ -57,6 +58,7 @@ module.exports = function(config) {
 	// preprocess matching files before serving them to the browser
 	// available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
 	preprocessors: {
+		'**/*.html': ['ng-html2js']
 	},
 
 
