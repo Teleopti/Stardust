@@ -21,34 +21,33 @@
 			});
 		}
 
-        this.getCampaignStatistics = function(filter,successCb,errorCb) {
-        				$http.get(getCampaignStatisticsUrl).success(function (data) {
-        		
-								if (successCb != null) successCb(data);
-        					}).
-							error(function (data) {
-									if (errorCb != null) errorCb(data);
-								});
-        			};
+        this.getCampaignStatistics = function(filter, successCb, errorCb) {
+            $http.get(getCampaignStatisticsUrl).success(function(data) {
+                    if (successCb != null) successCb(data);
+                }).
+                error(function(data) {
+                    if (errorCb != null) errorCb(data);
+                });
+        };
 
-        this.listFilteredCampaigns = function (filter, successCb, errorCb) {
-        				$http.post(getFilteredCampaignsUrl, filter).
-							success(function (data) {
-								if (successCb != null) successCb(data);
-								}).
-							error(function (data) {
-									if (errorCb != null) errorCb(data);
-								});
-        			};
+        this.listFilteredCampaigns = function(filter, successCb, errorCb) {
+            $http.post(getFilteredCampaignsUrl, filter).
+                success(function(data) {
+                    if (successCb != null)
+                        successCb(data);
+                }).
+                error(function(data) {
+                    if (errorCb != null) errorCb(data);
+                });
+        };
 
-        this.listCampaign = function (filter, successCb, errorCb) {
-            $http.get(listCampaignCommandUrl).success(function (data) {
-
-                if (successCb != null) successCb(data);
-            }).
-				error(function (data) {
-				    if (errorCb != null) errorCb(data);
-				});
+        this.listCampaign = function(filter, successCb, errorCb) {
+            $http.get(listCampaignCommandUrl).success(function(data) {
+                    if (successCb != null) successCb(data);
+                }).
+                error(function(data) {
+                    if (errorCb != null) errorCb(data);
+                });
         };
 
         this.getCampaign = function (campaignId, successCb, errorCb) {

@@ -9,12 +9,13 @@
 			templateUrl: 'html/outbound/phase-picker.tpl.html',
 			scope: {
 				'phaseStatistics': '=?',
-				'activePhaseCode': '='
+				'activePhaseCode': '=',
+                'disableAction': '=?'
 			}
 		};
 
 		function phasePickerCtrl($scope, $element) {
-			
+
 			$scope.phases = [
 				{
 					phaseCode: 1,

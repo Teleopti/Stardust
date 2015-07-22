@@ -6,47 +6,54 @@
 			summaryCtrl
 		]);
 
-	function summaryCtrl($scope, $state, $stateParams, outboundService) {
-		$scope.isLoadFinished = false;
+    function summaryCtrl($scope, $state, $stateParams, outboundService) {
+        $scope.isLoadFinished = false;
+        $scope.listCampaignFinished = false;
+       
     	outboundService.load(function handleSuccess(isLoad) {
-    		$scope.isLoadFinished = isLoad;
-    		init();
+    		
+            init();
+            $scope.$watch('activePhaseCode', function(newValue, oldValue) {               
+                clearCampaignList();
+                outboundService.listFilteredCampaigns(newValue, function success(data) {
+                    $scope.Campaigns = data.CampaignsWithoutWarning;                
+                    $scope.WarningCampaigns = data.CampaignsWithWarning;               
+                    $scope.listCampaignFinished = true;
+                    $scope.isLoadFinished = true;
+                });
+            });
+        });
 
-    		$scope.$watch('activePhaseCode', function (newValue, oldValue) {
-    				outboundService.listFilteredCampaigns(newValue, function success(data) {
-    					$scope.Campaigns = data.CampaignsWithoutWarning;
-    					$scope.CampaignsLength = data.CampaignsWithoutWarning.length;
-    					$scope.WarningCampaigns = data.CampaignsWithWarning;
-    					$scope.WarningCampaignsLength = data.CampaignsWithWarning.length;
-    				});
-    		});
-    	});
 
-    	
-    	$scope.activePhaseCode = 4;
+        $scope.activePhaseCode = 4;
 
-        $scope.gotoCreateCampaign = function () {
+        $scope.gotoCreateCampaign = function() {
             $state.go('outbound-create');
         };
-        $scope.generateChart = function () {
+        $scope.generateChart = function() {
             var chart = c3.generate({
                 bindto: '#chart',
                 data: {
                     columns: [
-					  ['data1', 30, 200, 100, 300, 150, 250],
-					  ['data2', 50, 20, 10, 40, 15, 25]
+                        ['data1', 30, 200, 100, 300, 150, 250],
+                        ['data2', 50, 20, 10, 40, 15, 25]
                     ]
                 }
             });
         };
 
-        function init() {
-		        outboundService.getCampaignStatistics(null, function success(data) {
-			        $scope.phaseStatistics = data;
-		        });
-	        }
-    }
+        function init() {         
+            outboundService.getCampaignStatistics(null, function success(data) {
+                $scope.phaseStatistics = data;
+            });
+        }
 
+        function clearCampaignList() {
+            $scope.listCampaignFinished = false;
+            $scope.Campaigns = [];
+            $scope.WarningCampaigns = [];
+        }
+    }
 
 
 })();
