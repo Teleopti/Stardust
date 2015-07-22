@@ -216,16 +216,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		private IEnumerable<IPersonRequest> findAllRequestsForAgent(IPerson person, DateTimePeriod? period)
 		{
-			var shiftTradeDetailsForAgent = DetachedCriteria.For<ShiftTradeSwapDetail>()
+			var shiftTradeRequestsForAgent = DetachedCriteria.For<ShiftTradeRequest>()
+				.CreateCriteria("ShiftTradeSwapDetails", "swapDetail", JoinType.InnerJoin)
 				.SetProjection(Projections.Property("Parent"))
 				.Add(Restrictions.Or(
-					Restrictions.Eq("PersonFrom", person),
-					Restrictions.Eq("PersonTo", person))
-				);
-
-			var shiftTradeRequestsForAgent = DetachedCriteria.For<ShiftTradeRequest>()
-				.SetProjection(Projections.Property("Parent"))
-				.Add(Subqueries.PropertyIn("ShiftTradeSwapDetails", shiftTradeDetailsForAgent));
+					Restrictions.Eq("swapDetail.PersonFrom", person),
+					Restrictions.Eq("swapDetail.PersonTo", person)));
 
 			var personRequests = Session.CreateCriteria<PersonRequest>()
 				.SetFetchMode("requests", FetchMode.Join)
