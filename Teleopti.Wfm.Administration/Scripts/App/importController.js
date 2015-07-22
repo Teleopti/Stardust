@@ -22,7 +22,7 @@
 		vm.AppVersionOk = null;
 
 		vm.CheckTenantName = function () {
-			$http.post('../api/Import/IsNewTenant', '"' + vm.Tenant + '"')
+			$http.post('./api/Import/IsNewTenant', '"' + vm.Tenant + '"')
 				.success(function (data) {
 					vm.TenantMessage = data.Message;
 					vm.TenantOk = data.Success;
@@ -34,7 +34,7 @@
 		}
 
 		vm.CheckAppDb = function () {
-			$http.post('../api/Import/DbExists', {
+			$http.post('./api/Import/DbExists', {
 				DbConnectionString: vm.AppDatabase,
 				DbType: 1
 			})
@@ -50,7 +50,7 @@
 				});
 		}
 		vm.CheckAnalDb = function () {
-			$http.post('../api/Import/DbExists', {
+			$http.post('./api/Import/DbExists', {
 				DbConnectionString: vm.AnalyticsDatabase,
 				DbType: 2
 			})
@@ -63,7 +63,7 @@
 		}
 
 		vm.CheckVersions = function () {
-			$http.post('../api/UpgradeDatabases/GetVersions', {
+			$http.post('./api/UpgradeDatabases/GetVersions', {
 				AppConnectionString: vm.AppDatabase
 			})
 				.success(function (data) {
@@ -79,7 +79,7 @@
 				vm.Conflicts = null;
 				return;
 			}
-			$http.post('../api/Import/Conflicts', {
+			$http.post('./api/Import/Conflicts', {
 				ConnStringAppDatabase: vm.AppDatabase,
 				Tenant: vm.Tenant
 			})
@@ -94,7 +94,7 @@
 		}
 
 		vm.startImport = function () {
-			$http.post('../api/Import/ImportExisting', {
+			$http.post('./api/Import/ImportExisting', {
 				Tenant: vm.Tenant,
 				ConnStringAppDatabase: vm.AppDatabase,
 				ConnStringAnalyticsDatabase: vm.AnalyticsDatabase,

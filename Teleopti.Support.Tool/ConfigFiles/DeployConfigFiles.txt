@@ -17,6 +17,7 @@
 ..\TeleoptiCCC\Web\Areas\MyTime\Views\web.config,BuildArtifacts\Web.MyTime.Web.config
 ..\TeleoptiCCC\Web\Areas\Start\Views\web.config,BuildArtifacts\Web.Start.Web.config
 ..\TeleoptiCCC\Web\Web.config,BuildArtifacts\Web.Root.Web.config
+..\TeleoptiCCC\Administration\web.config,BuildArtifacts\Web.Administration.Web.config
 ..\TeleoptiCCC\AuthenticationBridge\Web.config,BuildArtifacts\Web.AuthenticationBridge.Web.config
 ..\TeleoptiCCC\WindowsIdentityProvider\Web.config,BuildArtifacts\Web.WindowsIdentityProvider.Web.config
 ..\TeleoptiCCC\RuntimeEnvironment\Teleopti.exe.config,BuildArtifacts\Runtime.Environment.config

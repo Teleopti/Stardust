@@ -1,16 +1,16 @@
 ﻿(function () {
-	'use strict';
+    'use strict';
 
-	angular
+    angular
 		 .module('adminApp')
 		 .controller('listController', listController, []);
 
-	function listController($scope, $http) {
-		$http.get('../api/Home/GetAllTenants').success(function (data) {
-			$scope.Tenants = data;
-		}).error(function (xhr, ajaxOptions, thrownError) {
-			console.log(xhr.status + xhr.responseText + thrownError);
-		});
-	}
+    function listController($scope, $http) {
+		$http.get("./api/Home/GetAllTenants").success(function (data) {
+            $scope.Tenants = data;
+        }).error(function (xhr, ajaxOptions, thrownError) {
+            console.log(xhr.status + xhr.responseText + thrownError);
+        });
+    }
 
 })();
