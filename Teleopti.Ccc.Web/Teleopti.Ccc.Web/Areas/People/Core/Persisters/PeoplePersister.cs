@@ -19,120 +19,37 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 {
 	public class PeoplePersister: IPeoplePersister
 	{
-		private readonly IApplicationRoleRepository _roleRepository;
 		private readonly IPersistPersonInfo _personInfoPersister;
 		private readonly IPersonInfoMapper _mapper;
 		private readonly IPersonRepository _personRepository;
 		private readonly ILoggedOnUser _currentLoggedOnUser;
 		private readonly ITenantUnitOfWork _tenantUnitOfWork;
-		private const int MaxNameLength = 25;
-		private const int MaxApplicationUserIdLength = 50;
+		private readonly IUserValidator _userValidator;
 
-		public PeoplePersister(IApplicationRoleRepository roleRepository,IPersistPersonInfo personInfoPersister, IPersonInfoMapper mapper,IPersonRepository personRepository, ILoggedOnUser currentLoggedOnUser,ITenantUnitOfWork tenantUnitOfWork)
+		public PeoplePersister(IPersistPersonInfo personInfoPersister, IPersonInfoMapper mapper,IPersonRepository personRepository, ILoggedOnUser currentLoggedOnUser,ITenantUnitOfWork tenantUnitOfWork, IUserValidator userValidator)
 		{
-			_roleRepository = roleRepository;
 			_personInfoPersister = personInfoPersister;
 			_mapper = mapper;
 			_personRepository = personRepository;
 			_currentLoggedOnUser = currentLoggedOnUser;
 			_tenantUnitOfWork = tenantUnitOfWork;
+			_userValidator = userValidator;
 		}
 
 		public dynamic Persist(IEnumerable<RawUser> users)
 		{
-			var availableRoles = new Dictionary<string, IApplicationRole>();
-			var allRoles = _roleRepository.LoadAllApplicationRolesSortedByName();
-			allRoles.ForEach(r =>
-			{
-				if (!availableRoles.ContainsKey(r.DescriptionText.ToUpper()))
-				{
-					availableRoles.Add(r.DescriptionText.ToUpper(), r);
-				}
-			});
-			//validate
-			// DB persist
 			var invalidUsers = new List<RawUser>();
 			foreach (var user in users)
 			{
-				var isUserValid = true;
-				var errorMsgBuilder = new StringBuilder();
+				var isUserValid = _userValidator.Validate(user);
+				var errorMsgBuilder = new StringBuilder(_userValidator.ErrorMessage);
 
-				var person = new Person { Name = new Name(user.Firstname, user.Lastname) };
-				person.PermissionInformation.SetDefaultTimeZone(
-							_currentLoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone());
-
-				if (string.IsNullOrEmpty(user.ApplicationUserId) && string.IsNullOrEmpty(user.WindowsUser))
-				{
-					errorMsgBuilder.Append(Resources.NoLogonAccountErrorMsgSemicolon + " ");
-					isUserValid = false;
-				}
-				else if (string.IsNullOrEmpty(user.ApplicationUserId))
-				{
-					errorMsgBuilder.Append(Resources.NoApplicationLogonAccountErrorMsgSemicolon + " ");
-					isUserValid = false;
-				}
-
-				if (string.IsNullOrEmpty(user.Password))
-				{
-					errorMsgBuilder.Append(Resources.EmptyPasswordErrorMsgSemicolon + " ");
-					isUserValid = false;
-				}
-
-
-
-				if (string.IsNullOrEmpty(user.Firstname) && string.IsNullOrEmpty(user.Lastname))
-				{
-					errorMsgBuilder.Append(Resources.BothFirstnameAndLastnameAreEmptyErrorMsgSemicolon + " ");
-					isUserValid = false;
-				}
-
-				if (user.Firstname.Length > MaxNameLength)
-				{
-					errorMsgBuilder.Append(Resources.TooLongFirstnameErrorMsgSemicolon + " ");
-					isUserValid = false;
-				}
-
-				if (user.Lastname.Length > MaxNameLength)
-				{
-					errorMsgBuilder.Append(Resources.TooLongLastnameErrorMsgSemicolon + " ");
-					isUserValid = false;
-				}
-
-				if (user.ApplicationUserId.Length > MaxApplicationUserIdLength)
-				{
-					errorMsgBuilder.Append(Resources.TooLongApplicationUserIdErrorMsgSemicolon + " ");
-					isUserValid = false;
-				}
-
-				if (!string.IsNullOrEmpty(user.Role))
-				{
-					var roles = user.Role.Split(',').Select(x => x.Trim()).ToList();
-					var invalidRolesBuilder = new StringBuilder();
-					var hasInvalidRole = false;
-
-					foreach (var role in roles.Where(role => !availableRoles.ContainsKey(role.ToUpper())))
-					{
-						hasInvalidRole = true;
-						var roleNotExist = role + ", ";
-						invalidRolesBuilder.Append(roleNotExist);
-					}
-
-					if (hasInvalidRole)
-					{
-						var errorRolesMsg = invalidRolesBuilder.ToString();
-						errorRolesMsg = errorRolesMsg.Substring(0, errorRolesMsg.Length - 2);
-						errorRolesMsg = string.Format(Resources.RoleXNotExistErrorMsgSemicolon + " ", errorRolesMsg);
-						errorMsgBuilder.Append(errorRolesMsg);
-						isUserValid = false;
-					}
-					else if (isUserValid)
-					{
-						roles.ForEach(r => person.PermissionInformation.AddApplicationRole(availableRoles[r.ToUpper()]));
-					}
-
-				}
 				if (isUserValid)
 				{
+					var person = new Person { Name = new Name(user.Firstname, user.Lastname) };
+					person.PermissionInformation.SetDefaultTimeZone(
+								_currentLoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone());
+					_userValidator.ValidRoles.ForEach(r =>person.PermissionInformation.AddApplicationRole(r));
 					_personRepository.Add(person);
 					var tenantUserData = new PersonInfoModel()
 					{
@@ -169,10 +86,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 					}
 				}
 
-				if (isUserValid)
-				{
-					continue;
-				}
+				if (isUserValid) continue;
 
 				var errorMsg = errorMsgBuilder.ToString();
 				errorMsg = errorMsg.Substring(0, errorMsg.Length - 2);

@@ -486,7 +486,9 @@
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\IOutboundCampaignPersister.cs" />
     <Compile Include="Areas\People\Core\IoC\PeopleAreaModule.cs" />
     <Compile Include="Areas\People\Core\Persisters\IPeoplePersister.cs" />
+    <Compile Include="Areas\People\Core\Persisters\IUserValidator.cs" />
     <Compile Include="Areas\People\Core\Persisters\PeoplePersister.cs" />
+    <Compile Include="Areas\People\Core\Persisters\UserValidator.cs" />
     <Compile Include="Areas\People\Core\Providers\PeopleSearchProvider.cs" />
     <Compile Include="Areas\People\Core\Models\PeopleSummaryModel.cs" />
     <Compile Include="Areas\People\Controllers\ImportPeopleController.cs" />

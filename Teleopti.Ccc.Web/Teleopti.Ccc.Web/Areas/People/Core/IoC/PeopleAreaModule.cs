@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.IoC
 		{
 			builder.RegisterType<PeopleSearchProvider>().As<IPeopleSearchProvider>();
 			builder.RegisterType<PeoplePersister>().As<IPeoplePersister>();
+			builder.RegisterType<UserValidator>().As<IUserValidator>();
 		}
 	}
 }
