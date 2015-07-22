@@ -34,7 +34,7 @@
         this.listFilteredCampaigns = function (filter, successCb, errorCb) {
         				$http.post(getFilteredCampaignsUrl, filter).
 							success(function (data) {
-								if (successCb != null) successCb(formatDate(data));
+								if (successCb != null) successCb(data);
 								}).
 							error(function (data) {
 									if (errorCb != null) errorCb(data);
@@ -83,21 +83,6 @@
 
         this.createEmptyWorkingPeriod = createEmptyWorkingPeriod;
         this.calculateCampaignPersonHour = calculateCampaignPersonHour;
-
-        function formatDate(data) {
-        	var data = angular.copy(data);
-        	data.CampaignsWithoutWarning.forEach(function (e) {
-		        if (e.StartDate) e.StartDate.Date = new moment(e.StartDate.Date).format("L");
-		        if (e.EndDate) e.EndDate.Date = new moment(e.EndDate.Date).format("L");
-	        });
-	        data.CampaignsWithWarning.forEach(function (e) {
-	        	if (e.StartDate) e.StartDate.Date = new moment(e.StartDate.Date).format("L");
-	        	if (e.EndDate) e.EndDate.Date = new moment(e.EndDate.Date).format("L");
-	        });
-	        return data;
-
-
-        }
 
         function calculateCampaignPersonHour(campaign) {
             var Target = campaign.CallListLen * campaign.TargetRate / 100,
