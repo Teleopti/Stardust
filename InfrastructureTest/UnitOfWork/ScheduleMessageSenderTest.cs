@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.SqlClient;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -151,7 +152,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		[Test]
 		public void Execute_WhenTheSchedulesHasChanged_ShouldSetTheStartDateTimeForTheMessageToTheStartTimeOfTheChangedSchedule()
 		{
-			var serviceBusSender = MockRepository.GenerateMock<IServiceBusSender>();
 			var beforeSendEvents = MockRepository.GenerateMock<IBeforeSendEvents>();
 			var person = PersonFactory.CreatePerson();
 			var scenario = ScenarioFactory.CreateScenarioAggregate();
@@ -164,6 +164,41 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			Assert.That(publisher.PublishedEvent.StartDateTime, Is.EqualTo(personAssignment.Period.StartDateTime));
 		}
 
+		[Test]
+		public void ShouldRetryPublishEventOneMoreTimeOnSqlException()
+		{
+			var beforeSendEvents = MockRepository.GenerateMock<IBeforeSendEvents>();
+			var person = PersonFactory.CreatePerson();
+			var scenario = ScenarioFactory.CreateScenarioAggregate();
+			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, scenario);
+			IRootChangeInfo rootChangeInfo = new RootChangeInfo(personAssignment, DomainUpdateType.Update);
+			var publisher = new eventPopulatingPublisherTrowingSqlExeption();
+			var target = new ScheduleMessageSender(publisher, beforeSendEvents);
+			try
+			{
+				target.Execute(new[] { rootChangeInfo });
+			}
+			catch (Exception)
+			{
+				//do nothing
+			}
+			Assert.AreEqual(2, publisher.Calls);
+		}
+
+		[Test, ExpectedException(typeof(SqlException))]
+		public void ShouldThrowSqlExceptionIfRetryFailed()
+		{
+			var beforeSendEvents = MockRepository.GenerateMock<IBeforeSendEvents>();
+			var person = PersonFactory.CreatePerson();
+			var scenario = ScenarioFactory.CreateScenarioAggregate();
+			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, scenario);
+			IRootChangeInfo rootChangeInfo = new RootChangeInfo(personAssignment, DomainUpdateType.Update);
+			var publisher = new eventPopulatingPublisherTrowingSqlExeption();
+			var target = new ScheduleMessageSender(publisher, beforeSendEvents);
+
+			target.Execute(new[] { rootChangeInfo });
+		}
+
 		private class eventPopulatingPublisherProbe : IEventPopulatingPublisher
 		{
 			public ScheduleChangedEvent PublishedEvent;
@@ -171,6 +206,19 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			public void Publish(params IEvent[] events)
 			{
 				PublishedEvent = (ScheduleChangedEvent) events.Single();
+			}
+
+		}
+
+		private class eventPopulatingPublisherTrowingSqlExeption : IEventPopulatingPublisher
+		{
+			public int Calls;
+
+			public void Publish(params IEvent[] events)
+			{
+				Calls++;
+				var sqlException = SqlExceptionConstructor.CreateSqlException("Timeout", 123);
+				throw sqlException;
 			}
 
 		}

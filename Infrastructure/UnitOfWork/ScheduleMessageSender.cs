@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -54,6 +55,19 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 			if (messages.Any())
 			{
+				var retries = 0;
+				while (retries < 1)
+				{
+					try
+					{
+						retries++;
+						_eventPopulatingPublisher.Publish(messages.ToArray());
+						return;
+					}
+					catch (SqlException)
+					{ }
+				}
+
 				_eventPopulatingPublisher.Publish(messages.ToArray());
 			}
 		}
