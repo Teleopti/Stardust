@@ -14,7 +14,7 @@
     <issuers>
 	  <issuer uri="urn:Windows" thumbprint="" displayName="Windows"/>
 	  <issuer uri="urn:Teleopti" thumbprint="" displayName="Teleopti"/>
-	  <issuer uri="urn:AzureAd" thumbprint="" displayName="Azure active directory"/>
+	  <issuer uri="urn:AzureAd" thumbprint="" displayName="AzureAd"/>
 		<!-- custom section starts here -->
 		<!--<issuer uri="urn:SalesForce" thumbprint="" displayName="SalesForce"/>-->
 		<!-- custom section ends here -->
