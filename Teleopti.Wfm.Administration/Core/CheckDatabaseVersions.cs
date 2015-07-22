@@ -25,8 +25,8 @@ namespace Teleopti.Wfm.Administration.Core
 				{
 					sqlConn.Open();
 
-					var versionInfo = new DatabaseVersionInformation(new DatabaseFolder(new DbManagerFolder()), sqlConn);
-					result.HeadVersion = versionInfo.GetDatabaseVersion();
+					//var versionInfo = new DatabaseVersionInformation(new DatabaseFolder(new DbManagerFolder()), sqlConn);
+					result.HeadVersion = getVersion(sqlConn);
 					sqlConn.Close();
 				}
 				
@@ -35,9 +35,9 @@ namespace Teleopti.Wfm.Administration.Core
 				{
 					sqlConn.Open();
 
-					var versionInfo = new DatabaseVersionInformation(new DatabaseFolder(new DbManagerFolder()), sqlConn);
-					result.ImportAppVersion = versionInfo.GetDatabaseVersion();
-					sqlConn.Close();
+					//var versionInfo = new DatabaseVersionInformation(new DatabaseFolder(new DbManagerFolder()), sqlConn);
+					result.ImportAppVersion = getVersion(sqlConn);
+                    sqlConn.Close();
 				}
 
 				result.AppVersionOk = result.HeadVersion.Equals(result.ImportAppVersion);
@@ -49,6 +49,20 @@ namespace Teleopti.Wfm.Administration.Core
 			}
 
 			return result;
+		}
+
+		private int getVersion(SqlConnection conn)
+		{
+			const string sql = "SELECT MAX(BuildNumber) FROM dbo.[DatabaseVersion]";
+
+			using (var cmd = conn.CreateCommand())
+			{
+				cmd.CommandText = sql;
+				var value = cmd.ExecuteScalar();
+				if (value == null)
+					return 0;
+				return (int)value;
+			}
 		}
 	}
 }
