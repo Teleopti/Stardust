@@ -34,7 +34,6 @@ namespace Teleopti.Wfm.Administration.Core
 				using (var sqlConn = new SqlConnection(builder.ConnectionString))
 				{
 					sqlConn.Open();
-
 					//var versionInfo = new DatabaseVersionInformation(new DatabaseFolder(new DbManagerFolder()), sqlConn);
 					result.ImportAppVersion = getVersion(sqlConn);
                     sqlConn.Close();
