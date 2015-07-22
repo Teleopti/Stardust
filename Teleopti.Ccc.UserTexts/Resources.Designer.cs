@@ -4305,20 +4305,20 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Campaigns in good shape.
+        ///   Looks up a localized string similar to Campaigns without warning.
         /// </summary>
-        public static string CampaignsInGoodShape {
+        public static string CampaignsWithoutWarning {
             get {
-                return ResourceManager.GetString("CampaignsInGoodShape", resourceCulture);
+                return ResourceManager.GetString("CampaignsWithoutWarning", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Campaigns requiring action.
+        ///   Looks up a localized string similar to Campaigns with warning.
         /// </summary>
-        public static string CampaignsRequiringAction {
+        public static string CampaignsWithWarning {
             get {
-                return ResourceManager.GetString("CampaignsRequiringAction", resourceCulture);
+                return ResourceManager.GetString("CampaignsWithWarning", resourceCulture);
             }
         }
         
@@ -17849,7 +17849,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Overstaff.
+        ///   Looks up a localized string similar to Overstaffing.
         /// </summary>
         public static string OutboundOverstaffRule {
             get {
@@ -17858,7 +17858,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to UnderSLA.
+        ///   Looks up a localized string similar to Under SLA.
         /// </summary>
         public static string OutboundUnderSLARule {
             get {

@@ -13330,7 +13330,7 @@ Reduce the complexity to use these shifts.</value>
     <value>password does not follow the password policy;</value>
     <comment>invalid user date message in People Import Users</comment>
   </data>
-   <data name="NoApplicationLogonAccountErrorMsgSemicolon" xml:space="preserve">
+  <data name="NoApplicationLogonAccountErrorMsgSemicolon" xml:space="preserve">
     <value>no application logon account;</value>
     <comment>invalid user msg in People-import users</comment>
   </data>
@@ -13338,20 +13338,20 @@ Reduce the complexity to use these shifts.</value>
     <value>add backlog</value>
     <comment>for campaigns to add backlog</comment>
   </data>
-  <data name="CampaignsInGoodShape" xml:space="preserve">
-    <value>Campaigns in good shape</value>
+  <data name="CampaignsWithoutWarning" xml:space="preserve">
+    <value>Campaigns without warning</value>
     <comment>outbound campaigns without error</comment>
   </data>
-  <data name="CampaignsRequiringAction" xml:space="preserve">
-    <value>Campaigns requiring action</value>
+  <data name="CampaignsWithWarning" xml:space="preserve">
+    <value>Campaigns with warning</value>
     <comment>outbound campaigns have error and require action </comment>
   </data>
   <data name="OutboundOverstaffRule" xml:space="preserve">
-    <value>Overstaff</value>
+    <value>Overstaffing</value>
     <comment>campaign error type</comment>
   </data>
   <data name="OutboundUnderSLARule" xml:space="preserve">
-    <value>UnderSLA</value>
+    <value>Under SLA</value>
     <comment>campaign error type</comment>
   </data>
   <data name="ProductionPlan" xml:space="preserve">

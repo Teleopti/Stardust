@@ -9,7 +9,7 @@
 		<div class="opration-area">
 			<phase-picker active-phase-code="activePhaseCode" phase-statistics="phaseStatistics"></phase-picker>
 </div>
-		<h4 class="border-bottom"><span translate>CampaignsRequiringAction</span><span ng-bind="WarningCampaignsLength" style="margin-left:5px;"></span></h4>
+		<h4 class="border-bottom"><span translate>CampaignsWithWarning</span><span ng-bind="WarningCampaignsLength" style="margin-left:5px;"></span></h4>
 		<teleopti-card-list multi-select>
 			<teleopti-card ng-repeat="campaign in WarningCampaigns" ng-click="generateChart()">
 				<card-header>
@@ -40,7 +40,7 @@
 				</teleopti-card>
 			</teleopti-card-list>
 
-		<h4 class="border-bottom"><span translate>CampaignsInGoodShape</span><span ng-bind="CampaignsLength" style="margin-left:5px;"></span></h4>
+		<h4 class="border-bottom"><span translate>CampaignsWithoutWarning</span><span ng-bind="CampaignsLength" style="margin-left:5px;"></span></h4>
 			<teleopti-card-list multi-select>
 				<teleopti-card ng-repeat="campaign in Campaigns" ng-click="generateChart()">
 					<card-header>
