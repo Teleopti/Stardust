@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		public void ShouldReturnShiftTradeRequestIfHasShiftTradePermission()
 		{
 			var person = PersonFactory.CreatePerson("John");
-			var requestDate = new DateOnly(2015, 7, 21);
+			var requestDate = DateOnly.Today;
 			var shiftTradeRequest = new PersonRequestFactory().CreatePersonShiftTradeRequest(person, requestDate);
 
 			((FakeLoggedOnUser)LoggedOnUser).SetFakeLoggedOnUser(person);
@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		public void ShouldReturnTextRequestWithoutShiftTradePermission()
 		{
 			var person = PersonFactory.CreatePerson("John");
-			var requestDate = new DateOnly(2015, 7, 21);
+			var requestDate = DateOnly.Today;
 			var shiftTradeRequest = new PersonRequestFactory().CreatePersonShiftTradeRequest(person, requestDate);
 			var textRequest = new PersonRequestFactory().CreatePersonRequest(person);
 
