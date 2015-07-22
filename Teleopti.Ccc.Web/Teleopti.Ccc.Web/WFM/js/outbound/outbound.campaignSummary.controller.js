@@ -1,24 +1,29 @@
 ﻿(function() {
 
-    angular.module('wfm.outbound')
+	angular.module('wfm.outbound')
 		.controller('OutboundSummaryCtrl', [
 			'$scope', '$state', '$stateParams', 'outboundService',
 			summaryCtrl
-		])
+		]);
 
-    function summaryCtrl($scope, $state, $stateParams, outboundService) {
+	function summaryCtrl($scope, $state, $stateParams, outboundService) {
+		$scope.isLoadFinished = false;
+    	outboundService.load(function success(data) {
+    		$scope.isLoadFinished = data;
+    		init();
 
-    	init();
+    		$scope.$watch('activePhaseCode', function (newValue, oldValue) {
+    				outboundService.listFilteredCampaigns(newValue, function success(data) {
+    					$scope.Campaigns = data.CampaignsWithoutWarning;
+    					$scope.CampaignsLength = data.CampaignsWithoutWarning.length;
+    					$scope.WarningCampaigns = data.CampaignsWithWarning;
+    					$scope.WarningCampaignsLength = data.CampaignsWithWarning.length;
+    				});
+    		});
+    	});
+
+    	
     	$scope.activePhaseCode = 4;
-
-	    $scope.$watch('activePhaseCode', function(newValue, oldValue) {
-	    	outboundService.listFilteredCampaigns(newValue, function success(data) {
-	    		$scope.Campaigns = data.CampaignsWithoutWarning;
-	    		$scope.CampaignsLength = data.CampaignsWithoutWarning.length;
-	    		$scope.WarningCampaigns = data.CampaignsWithWarning;
-	    		$scope.WarningCampaignsLength = data.CampaignsWithWarning.length;
-		    });
-	    });
 
         $scope.gotoCreateCampaign = function () {
             $state.go('outbound-create');
@@ -36,12 +41,10 @@
         };
 
         function init() {
-
-            outboundService.getCampaignStatistics(null, function success(data) {
-            	$scope.phaseStatistics = data;
-            });
-
-        }
+		        outboundService.getCampaignStatistics(null, function success(data) {
+			        $scope.phaseStatistics = data;
+		        });
+	        }
     }
 
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Web.Areas.Outbound.Models;
 using Teleopti.Interfaces.Domain;
 
@@ -23,7 +24,17 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
             _campaignListOrderProvider = campaignListOrderProvider;
         }
 
-        public CampaignStatistics GetCampaignStatistics()
+	    public void LoadData()
+	    {
+			 var campaigns = _outboundCampaignRepository.LoadAll();
+			 var earliestStart = campaigns.Min(c => c.SpanningPeriod.StartDate);
+			 var latestEnd = campaigns.Max(c => c.SpanningPeriod.EndDate);
+			 var period = new DateOnlyPeriod(earliestStart, latestEnd);
+
+		    _scheduledResourcesProvider.Load(campaigns, period);
+	    }
+
+	    public CampaignStatistics GetCampaignStatistics()
         {
             Func<CampaignSummary, bool> campaignHasWarningPredicate = campaign => campaign.WarningInfo.Any();
 

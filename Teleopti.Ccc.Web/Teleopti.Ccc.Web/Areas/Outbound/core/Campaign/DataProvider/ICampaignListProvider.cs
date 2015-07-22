@@ -12,5 +12,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
         IEnumerable<CampaignSummary> ListDoneCampaign();
 
         CampaignStatistics GetCampaignStatistics();
+	    void LoadData();
     }
 }

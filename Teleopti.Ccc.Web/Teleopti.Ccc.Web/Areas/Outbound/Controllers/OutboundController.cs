@@ -95,6 +95,13 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		public virtual CampaignStatistics GetStatistics()
 		{
 			return _campaignSummaryViewModelFactory.GetCampaignStatistics();
+		}		
+		
+		[HttpGet, Route("api/Outbound/Campaign/Load"), UnitOfWork]
+		public virtual bool LoadData()
+		{
+			_campaignSummaryViewModelFactory.Load();
+			return true;
 		}
 	}
 }

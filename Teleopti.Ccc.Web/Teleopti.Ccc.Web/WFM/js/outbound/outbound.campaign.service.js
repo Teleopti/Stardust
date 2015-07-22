@@ -9,10 +9,17 @@
 
         var createCampaignCommandUrl = '../api/Outbound/Campaign';
         var getCampaignCommandUrl = '../api/Outbound/Campaign/';
+        var getCampaignLoadUrl = '../api/Outbound/Campaign/Load';
         var listCampaignCommandUrl = '../api/Outbound/Campaign';
         var editCampaignCommandUrl = '../api/Outbound/Campaign/';
         var getCampaignStatisticsUrl = '../api/Outbound/Campaign/Statistics';
         var getFilteredCampaignsUrl = '../api/Outbound/Campaigns';
+
+		this.load = function(successCb) {
+			$http.get(getCampaignLoadUrl).success(function(data) {
+				if (successCb != null) successCb(data);
+			});
+		}
 
         this.getCampaignStatistics = function(filter,successCb,errorCb) {
         				$http.get(getCampaignStatisticsUrl).success(function (data) {

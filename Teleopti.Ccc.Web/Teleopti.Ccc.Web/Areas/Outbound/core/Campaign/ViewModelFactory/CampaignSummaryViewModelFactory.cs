@@ -33,5 +33,10 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.ViewModelFactory
         {
             return _campaignListProvider.GetCampaignStatistics();
         }
+
+	    public void Load()
+	    {
+		    _campaignListProvider.LoadData();
+	    }
     }
 }
