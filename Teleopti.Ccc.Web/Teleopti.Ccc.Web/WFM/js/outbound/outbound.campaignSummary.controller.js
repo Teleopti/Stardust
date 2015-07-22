@@ -10,14 +10,15 @@
         $scope.isLoadFinished = false;
         $scope.listCampaignFinished = false;
        
-    	outboundService.load(function handleSuccess(isLoad) {
-    		
+    	outboundService.load(function handleSuccess(isLoad) {    		
             init();
             $scope.$watch('activePhaseCode', function(newValue, oldValue) {               
                 clearCampaignList();
                 outboundService.listFilteredCampaigns(newValue, function success(data) {
-                    $scope.Campaigns = data.CampaignsWithoutWarning;                
-                    $scope.WarningCampaigns = data.CampaignsWithWarning;               
+                    $scope.Campaigns = data.CampaignsWithoutWarning;
+                    $scope.WarningCampaigns = data.CampaignsWithWarning;
+                    attachShowToCampaigns($scope.Campaigns);
+                    attachShowToCampaigns($scope.WarningCampaigns);
                     $scope.listCampaignFinished = true;
                     $scope.isLoadFinished = true;
                 });
@@ -41,6 +42,15 @@
                 }
             });
         };
+        
+        function attachShowToCampaigns(campaigns) {
+            angular.forEach(campaigns, function(c) {
+                c.show = function () {
+                    console.log('going to edit', c.Id);
+                    $state.go('outbound.edit', { Id: c.Id });
+                };
+            });
+        }
 
         function init() {         
             outboundService.getCampaignStatistics(null, function success(data) {
