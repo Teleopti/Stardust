@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Teleopti.Ccc.Domain.Collection;
@@ -55,6 +56,10 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 			{
 				var isUserValid = true;
 				var errorMsgBuilder = new StringBuilder();
+
+				var person = new Person { Name = new Name(user.Firstname, user.Lastname) };
+				person.PermissionInformation.SetDefaultTimeZone(
+							_currentLoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone());
 
 				if (string.IsNullOrEmpty(user.ApplicationUserId) && string.IsNullOrEmpty(user.WindowsUser))
 				{
@@ -122,47 +127,52 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 					}
 					else if (isUserValid)
 					{
-						var person = new Person { Name = new Name(user.Firstname, user.Lastname) };
 						roles.ForEach(r => person.PermissionInformation.AddApplicationRole(availableRoles[r.ToUpper()]));
-						person.PermissionInformation.SetDefaultTimeZone(_currentLoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone());
-						_personRepository.Add(person);
+					}
 
-						var tenantUserData = new PersonInfoModel()
+				}
+				if (isUserValid)
+				{
+					_personRepository.Add(person);
+					var tenantUserData = new PersonInfoModel()
+					{
+						ApplicationLogonName = user.ApplicationUserId,
+						Identity = user.WindowsUser,
+						Password = user.Password,
+						PersonId = person.Id.GetValueOrDefault()
+					};
+
+					try
+					{
+						using (_tenantUnitOfWork.Start())
 						{
-							ApplicationLogonName = user.ApplicationUserId,
-							Identity = user.WindowsUser,
-							Password = user.Password,
-							PersonId = person.Id.GetValueOrDefault()
-						};
-						
-							try
-							{
-								using (_tenantUnitOfWork.Start())
-								{
-									_personInfoPersister.Persist(_mapper.Map(tenantUserData));
-								}
-							}
-							catch (PasswordStrengthException)
-							{
-								isUserValid = false;
-								errorMsgBuilder.Append(Resources.PasswordPolicyErrorMsgSemicolon + " ");
-							}
-							catch (DuplicateIdentityException)
-							{
-								isUserValid = false;
-								errorMsgBuilder.Append(Resources.DuplicatedWindowsLogonErrorMsgSemicolon + " ");
-							}
-							catch (DuplicateApplicationLogonNameException)
-							{
-								isUserValid = false;
-								errorMsgBuilder.Append(Resources.DuplicatedApplicationLogonErrorMsgSemicolon + " ");
-							}
-
+							_personInfoPersister.Persist(_mapper.Map(tenantUserData));
 						}
-					
+					}
+					catch (PasswordStrengthException)
+					{
+						isUserValid = false;
+						errorMsgBuilder.Append(Resources.PasswordPolicyErrorMsgSemicolon + " ");
+						_personRepository.Remove(person);
+					}
+					catch (DuplicateIdentityException)
+					{
+						isUserValid = false;
+						errorMsgBuilder.Append(Resources.DuplicatedWindowsLogonErrorMsgSemicolon + " ");
+						_personRepository.Remove(person);
+					}
+					catch (DuplicateApplicationLogonNameException)
+					{
+						isUserValid = false;
+						errorMsgBuilder.Append(Resources.DuplicatedApplicationLogonErrorMsgSemicolon + " ");
+						_personRepository.Remove(person);
+					}
 				}
 
-				if (isUserValid) continue;
+				if (isUserValid)
+				{
+					continue;
+				}
 
 				var errorMsg = errorMsgBuilder.ToString();
 				errorMsg = errorMsg.Substring(0, errorMsg.Length - 2);

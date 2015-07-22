@@ -9,13 +9,11 @@ using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Model;
 using Teleopti.Ccc.Web.Areas.People.Controllers;
-using Teleopti.Ccc.Web.Areas.People.Core;
 using Teleopti.Ccc.Web.Areas.People.Core.Persisters;
 using Teleopti.Ccc.WebTest.Areas.Search;
 using Teleopti.Interfaces.Domain;
@@ -283,6 +281,47 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 					Lastname = "Morgan",
 					Password = "psss",
 					Role = "role2",
+					WindowsUser = ""
+				}
+			};
+			var fakeApplicationRoleRepository = new FakeApplicationRoleRepository();
+			fakeApplicationRoleRepository.Add(new ApplicationRole{DescriptionText = "role1"});
+			fakeApplicationRoleRepository.Add(new ApplicationRole{DescriptionText = "role2"});
+			var personInfoPersister = new PersistPersonInfoFake();
+			var personInfoMapper = new PersonInfoMapperFake();
+			var person1 = new Person { Name = new Name("Jenny", "Morgan") };
+			person1.SetId(Guid.NewGuid());
+			var person2 = new Person { Name = new Name("Jan", "Morgan") };
+			person2.SetId(Guid.NewGuid());
+			var fakePersonRepository = new FakePersonRepository(new []{person1, person2});
+			target = new PeoplePersister(fakeApplicationRoleRepository, personInfoPersister,personInfoMapper, fakePersonRepository, new FakeLoggedOnUser(), new TenantUnitOfWorkFake());
+			var errorData = (IEnumerable<RawUser>)((dynamic)target).Persist(rawUserData).InvalidUsers;
+			Assert.AreEqual(1, errorData.Count());
+			Assert.AreEqual("Jan", errorData.First().Firstname);
+			Assert.AreEqual("duplicated application user id", errorData.First().ErrorMessage);
+		}
+
+		[Test]
+		public void ValidateDataWhenHavingDuplicatedLogonAccountAndNoRole()
+		{
+			var rawUserData = new List<RawUser>
+			{
+				new RawUser
+				{
+					Firstname = "Jenny",
+					ApplicationUserId = "notExistingId",
+					Lastname = "Morgan",
+					Password = "password",
+					Role = "",
+					WindowsUser = ""
+				},
+				new RawUser
+				{
+					Firstname = "Jan",
+					ApplicationUserId = "existingId",
+					Lastname = "Morgan",
+					Password = "psss",
+					Role = "",
 					WindowsUser = ""
 				}
 			};
