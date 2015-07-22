@@ -16,10 +16,11 @@
 				$scope.roles = [];
 				
 				$scope.createRole = function() {
-					Roles.createRole($scope.roleName).then(function() {
+				    Roles.createRole($scope.roleName).then(function () {
 						//here a notice
-						$scope.reset();
-					});
+				        $scope.reset();
+				        $scope.showRole($scope.roles[0]);
+				    });
 				};
 
 				$scope.reset = function() {

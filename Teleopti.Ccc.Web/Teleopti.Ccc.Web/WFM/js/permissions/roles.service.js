@@ -13,7 +13,8 @@
 				var deferred = $q.defer();
 				var roleData = { Description: roleName };
 				PermissionsService.roles.post(JSON.stringify(roleData)).$promise.then(function (result) {
-					roleData.Id = result.Id;
+				    roleData.Id = result.Id;
+				    roleData.BuiltIn = false;
 					roleData.DescriptionText = result.DescriptionText;
 					roles.list.$promise.then(function(r) { r.unshift(roleData); });
 					deferred.resolve();
