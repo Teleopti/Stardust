@@ -441,7 +441,9 @@
     <Compile Include="Areas\MultiTenancy\Core\WebTenantAuthentication.cs" />
     <Compile Include="Areas\MultiTenancy\Core\TenantAuthenticationFake.cs" />
     <Compile Include="Areas\MultiTenancy\Model\ChangePasswordModel.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\AbsenceTimeProviderCache.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AllowanceDay.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\IAbsenceTimeProviderCache.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\IAllowanceDay.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferenceNightRestChecker.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PersonPreferenceDayOccupationFactory.cs" />
