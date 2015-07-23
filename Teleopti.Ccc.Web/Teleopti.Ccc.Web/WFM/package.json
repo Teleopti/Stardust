@@ -22,7 +22,8 @@
 	"grunt-contrib-uglify": "0.7.0",
 	"grunt-contrib-watch": "0.6.1",
 	"grunt-http-download": "0.1.0",
-	"moment": "2.8.3"
+    "moment": "2.8.3",
+    "teleopti-styleguide":  "https://github.com/Teleopti/styleguide/raw/Release/teleopti-styleguide-0.0.1.tgz"
   },
   "devDependencies": {
 	"grunt-contrib-cssmin": "0.12.2",

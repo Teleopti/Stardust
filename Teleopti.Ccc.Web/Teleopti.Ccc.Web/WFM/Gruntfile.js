@@ -58,19 +58,11 @@
 					'dist/main.min.js': ['js/**/*.js']
 				}
 			}
-		},
-
-		download: {
-			dist: {
-				src: ['http://teleopti.github.io/styleguide/css/main.min.css'],
-				dest: 'css/'
-			},
 		}
 	});
 
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
-	grunt.loadNpmTasks('grunt-http-download');
 	grunt.loadNpmTasks('grunt-sass');
 	grunt.loadNpmTasks('grunt-karma');
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
