@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_intervalOptimizationService = intervalOptimizationService;
 		}
 
-		public void Execute(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences,
+		public void Execute(IOptimizationPreferences optimizationPreferences,
 			DateOnlyPeriod selectedPeriod, IList<IScheduleDay> selectedSchedules, ISchedulingResultStateHolder schedulingResultStateHolder, 
 			IList<IScheduleMatrixPro> allScheduleMatrixPros, ISchedulePartModifyAndRollbackService rollbackService, 
 			IResourceCalculateDelayer resourceCalculateDelayer, IBackgroundWorkerWrapper backgroundWorker)
@@ -24,8 +24,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_optimizationstep = UserTexts.Resources.IntraIntervalOptimization + ": ";
 			_backgroundWorker = backgroundWorker;
 			_intervalOptimizationService.ReportProgress += intervalOptimizationServiceReportProgress;
-			_intervalOptimizationService.Execute(schedulingOptions, optimizationPreferences, selectedPeriod, selectedSchedules, schedulingResultStateHolder, allScheduleMatrixPros, rollbackService, resourceCalculateDelayer);
-			_intervalOptimizationService.Execute(schedulingOptions, optimizationPreferences, selectedPeriod, selectedSchedules, schedulingResultStateHolder, allScheduleMatrixPros, rollbackService, resourceCalculateDelayer);
+			_intervalOptimizationService.Execute(optimizationPreferences, selectedPeriod, selectedSchedules, schedulingResultStateHolder, allScheduleMatrixPros, rollbackService, resourceCalculateDelayer);
+			_intervalOptimizationService.Execute(optimizationPreferences, selectedPeriod, selectedSchedules, schedulingResultStateHolder, allScheduleMatrixPros, rollbackService, resourceCalculateDelayer);
 			_intervalOptimizationService.ReportProgress -= intervalOptimizationServiceReportProgress;
 		}
 

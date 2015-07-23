@@ -194,7 +194,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			if (optimizationPreferences.General.OptimizationStepIntraInterval)
 			{
-				_intraIntervalOptimizationCommand.Execute(schedulingOptions, optimizationPreferences, selectedPeriod, selectedSchedules, _schedulerStateHolder().SchedulingResultState, allMatrixes, rollbackServiceWithResourceCalculation, resourceCalculateDelayer, _backgroundWorker);
+				_intraIntervalOptimizationCommand.Execute(optimizationPreferences, selectedPeriod, selectedSchedules, _schedulerStateHolder().SchedulingResultState, allMatrixes, rollbackServiceWithResourceCalculation, resourceCalculateDelayer, _backgroundWorker);
 			}
 
 			allMatrixes = _matrixListFactory.CreateMatrixListAll(selectedPeriod);

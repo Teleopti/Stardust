@@ -544,7 +544,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder(), _scheduleDayChangeCallback(), tagSetter);
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, schedulingOptions.ConsiderShortBreaks);
 			var intraIntervalOptimizationCommand = _container.Resolve<IIntraIntervalOptimizationCommand>();
-			intraIntervalOptimizationCommand.Execute(schedulingOptions, optimizationPreferences, selectedPeriod, selectedDays, _schedulerStateHolder().SchedulingResultState, allMatrixes, rollbackService, resourceCalculateDelayer, _backgroundWorker);
+			intraIntervalOptimizationCommand.Execute(optimizationPreferences, selectedPeriod, selectedDays, _schedulerStateHolder().SchedulingResultState, allMatrixes, rollbackService, resourceCalculateDelayer, _backgroundWorker);
 		}
 
 		private IList<IScheduleMatrixOriginalStateContainer> createMatrixContainerList(IEnumerable<IScheduleMatrixPro> matrixList)

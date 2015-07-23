@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 {
 	public interface IIntraIntervalOptimizationService
 	{
-		void Execute(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, DateOnlyPeriod selectedPeriod, IList<IScheduleDay> selectedSchedules, ISchedulingResultStateHolder schedulingResultStateHolder, IList<IScheduleMatrixPro> allScheduleMatrixPros, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer);
+		void Execute(IOptimizationPreferences optimizationPreferences, DateOnlyPeriod selectedPeriod, IList<IScheduleDay> selectedSchedules, ISchedulingResultStateHolder schedulingResultStateHolder, IList<IScheduleMatrixPro> allScheduleMatrixPros, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer);
 		event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 	}
 
@@ -16,18 +16,24 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 		private readonly IScheduleDayIntraIntervalIssueExtractor _scheduleDayIntraIntervalIssueExtractor;
 		private readonly IIntraIntervalOptimizer _intraIntervalOptimizer;
 		private readonly IIntraIntervalIssueCalculator _intraIntervalIssueCalculator;
+		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 
-		public IntraIntervalOptimizationService(IScheduleDayIntraIntervalIssueExtractor scheduleDayIntraIntervalIssueExtractor, IIntraIntervalOptimizer intraIntervalOptimizer, IIntraIntervalIssueCalculator intraIntervalIssueCalculator)
+		public IntraIntervalOptimizationService(
+			IScheduleDayIntraIntervalIssueExtractor scheduleDayIntraIntervalIssueExtractor,
+			IIntraIntervalOptimizer intraIntervalOptimizer, IIntraIntervalIssueCalculator intraIntervalIssueCalculator,
+			ISchedulingOptionsCreator schedulingOptionsCreator)
 		{
 			_scheduleDayIntraIntervalIssueExtractor = scheduleDayIntraIntervalIssueExtractor;
 			_intraIntervalOptimizer = intraIntervalOptimizer;
 			_intraIntervalIssueCalculator = intraIntervalIssueCalculator;
+			_schedulingOptionsCreator = schedulingOptionsCreator;
 		}
 
-		public void Execute(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, DateOnlyPeriod selectedPeriod, IList<IScheduleDay> selectedSchedules,
+		public void Execute(IOptimizationPreferences optimizationPreferences, DateOnlyPeriod selectedPeriod, IList<IScheduleDay> selectedSchedules,
 			ISchedulingResultStateHolder schedulingResultStateHolder, IList<IScheduleMatrixPro> allScheduleMatrixPros, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer)
 		{
+			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
 			var personHashSet = new HashSet<IPerson>();
 			var cultureInfo = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
 			
@@ -135,7 +141,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 
 	public class IntraIntervalOptimizationServiceToggle29846Off : IIntraIntervalOptimizationService
 	{
-		public void Execute(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences,
+		public void Execute(IOptimizationPreferences optimizationPreferences,
 			DateOnlyPeriod selectedPeriod, IList<IScheduleDay> selectedSchedules, ISchedulingResultStateHolder schedulingResultStateHolder,
 			IList<IScheduleMatrixPro> allScheduleMatrixPros, ISchedulePartModifyAndRollbackService rollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer)

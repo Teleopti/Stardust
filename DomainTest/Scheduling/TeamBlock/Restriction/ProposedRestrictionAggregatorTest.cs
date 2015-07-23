@@ -27,6 +27,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 		private DateOnly _dateOnly;
 		private IPerson _person;
 		private IShiftProjectionCache _shift;
+		private IEffectiveRestrictionCreator _effectiveRestrictionCreator;
+		private ISchedulingResultStateHolder _schedulingResultStateHolder;
+		private IScheduleDictionary _scheduleDictionary;
 
 		[SetUp]
 		public void Setup()
@@ -38,8 +41,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 			_teamBlockSchedulingOptions = _mocks.StrictMock<ITeamBlockSchedulingOptions>();
 			_person = PersonFactory.CreatePerson("Bill");
 			_shift = _mocks.StrictMock<IShiftProjectionCache>();
+			_effectiveRestrictionCreator = _mocks.StrictMock<IEffectiveRestrictionCreator>();
+			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_target = new ProposedRestrictionAggregator(_teamRestrictionAggregator, _blockRestrictionAggregator,
-														_teamBlockRestrictionAggregator, _teamBlockSchedulingOptions);
+														_teamBlockRestrictionAggregator, _teamBlockSchedulingOptions,
+														_effectiveRestrictionCreator, () => _schedulingResultStateHolder);
 
 			_schedulingOptions = new SchedulingOptions();
 			_dateOnly = new DateOnly(2013, 11, 14);
@@ -51,10 +57,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 			ITeamInfo teamInfo = new TeamInfo(group, groupMatrixes);
 			var blockPeriod = new DateOnlyPeriod(_dateOnly, _dateOnly.AddDays(1));
 			_teamBlockInfo = new TeamBlockInfo(teamInfo, new BlockInfo(blockPeriod));
+			_scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
 		}
 
 		[Test]
-		public void ShouldReturnEmptyIfNotTeamOrBlockScheduling()
+		public void ShouldReturnRestrictionForSinglePersonIfNotTeamOrBlockScheduling()
 		{
 			var exprectedResult = new EffectiveRestriction(new StartTimeLimitation(),
 														   new EndTimeLimitation(),
@@ -65,6 +72,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 				Expect.Call(_teamBlockSchedulingOptions.IsTeamScheduling(_schedulingOptions)).Return(false);
 				Expect.Call(_teamBlockSchedulingOptions.IsBlockScheduling(_schedulingOptions)).Return(false);
 				Expect.Call(_teamBlockSchedulingOptions.IsTeamBlockScheduling(_schedulingOptions)).Return(false);
+				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
+				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestrictionForSinglePerson(_person, _dateOnly,
+					_schedulingOptions, _scheduleDictionary)).Return(exprectedResult);
 			}
 			using (_mocks.Playback())
 			{
