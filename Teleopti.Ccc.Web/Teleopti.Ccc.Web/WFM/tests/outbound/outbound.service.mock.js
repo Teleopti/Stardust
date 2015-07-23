@@ -44,19 +44,11 @@ outboundService.factory('outboundServiceMock', function () {
 	};
 
 	outboundService.deleteCampaign = function(campaign) {
-		//if (campaigns[idx].id == campaign.id) {
-		//	campaigns.splice(idx, 1);		
-		//	return true;
-		//} 
 		if (campaigns.splice(campaigns.indexOf(campaign), 1)) {
 			return true;
 		} else {
 			return false;
 		}
-	};
-
-	outboundService.listCampaign = function( campaignFilter) {
-		return campaigns;
 	};
 
 	outboundService.getCampaignById = function(id) {

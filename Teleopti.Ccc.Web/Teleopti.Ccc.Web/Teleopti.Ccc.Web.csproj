@@ -1259,7 +1259,6 @@
     <Content Include="WFM\js\outbound\outbound.campaign.service.js" />
     <Content Include="WFM\js\outbound\outbound.expandable.directive.js" />
     <Content Include="WFM\js\outbound\outbound.formLocator.directive.js" />
-    <Content Include="WFM\js\outbound\outbound.campaignList.controller.js" />
     <Content Include="WFM\js\outbound\outbound.notification.service.js" />
     <Content Include="WFM\js\outbound\outbound.rangeValidate.directive.js" />
     <Content Include="WFM\js\outbound\outbound.timepicker.directive.js" />
@@ -1320,8 +1319,6 @@
     <Content Include="WFM\Gruntfile.js" />
     <Content Include="WFM\html\forecasting\forecasting-target.html" />
     <Content Include="WFM\html\outbound\campaign-edit.html" />
-    <Content Include="WFM\html\outbound\campaign-forecasting.html" />
-    <Content Include="WFM\html\outbound\campaign-list.html" />
     <Content Include="WFM\html\outbound\outbound.html" />
     <Content Include="WFM\html\people\people.html" />
     <Content Include="WFM\js\forecasting\forecasting.controller.js" />

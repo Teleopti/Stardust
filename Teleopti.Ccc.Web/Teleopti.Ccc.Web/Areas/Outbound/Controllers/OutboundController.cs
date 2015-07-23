@@ -39,15 +39,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 			var campaignVm = _outboundCampaignPersister.Persist(campaignForm);
 
             return Created(Request.RequestUri + "/" + campaignVm.Id, campaignVm);
-		}		
-		
-		[HttpGet, Route("api/Outbound/Campaign"), UnitOfWork]
-		public virtual ICollection<CampaignViewModel> Get()
-		{
-			var campaigns = _outboundCampaignRepository.LoadAll();
-			var campaignViewModels = _outboundCampaignViewModelMapper.Map(campaigns);
-
-			return campaignViewModels.ToArray();
 		}
 
 		[HttpPost, Route("api/Outbound/Campaigns"), UnitOfWork]

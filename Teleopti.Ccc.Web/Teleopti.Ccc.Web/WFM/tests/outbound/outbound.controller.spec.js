@@ -1,5 +1,4 @@
 ﻿'use strict';
-
 describe('OutboundCreateCtrl', function() {
 	var $q,
 		$rootScope,
@@ -90,26 +89,6 @@ describe('OutboundCreateCtrl', function() {
 		expect(test.scope.isInputValid()).toBeTruthy();
 	});
 
-	it('Should not sumbit invalid campaign', function() {
-		var test = setUpTarget();
-		test.scope.addCampaign();
-		var campaigns;
-		outboundService.listCampaign(null, function (data) { campaigns = data; });
-		expect(campaigns.length).toEqual(0);
-	});
-
-	it('Should submit valid campaign', function() {
-		var test = setUpTarget();
-		test.scope.campaignWorkloadForm = { $valid: true, $setPristine: function() {} };
-		test.scope.campaignGeneralForm = { $valid: true, $setPristine: function () { } };
-		test.scope.campaignSpanningPeriodForm = { $valid: true, $setPristine: function () { } };
-		completeValidCampaign(test.scope.campaign);
-		test.scope.addCampaign();
-		var campaigns;
-		outboundService.listCampaign(null, function(data) { campaigns = data; });
-		expect(campaigns.length).toEqual(1);
-	});
-
 	it('Should reset after valid submission', function() {
 		var test = setUpTarget();
 		test.scope.campaignWorkloadForm = { $valid: true, $setPristine: function () { } };
@@ -183,10 +162,6 @@ describe('OutboundCreateCtrl', function() {
 	function fakeOutboundService() {
 
 		var campaigns = [];
-
-		this.listCampaign = function (filter, successCb, errorCb) {
-			successCb(campaigns);
-		};
 
 		this.getCampaign = function (campaignId, successCb, errorCb) {
 		};

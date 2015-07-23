@@ -7,13 +7,11 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Outbound.Controllers;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.Outbound.Models;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
 {
@@ -62,24 +60,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
             var result = target.CreateCampaign(campaignForm);
 
             result.Should().Be.OfType<BadRequestErrorMessageResult>();
-        }
-
-        [Test]
-        public void ShouldGetAllCampaigns()
-        {
-            var skill = SkillFactory.CreateSkill("mySkill");
-            var campaigns = new List<IOutboundCampaign>() { new Campaign() { Name = "myCampaign", Skill = skill } };
-            var campaignVMs = new List<CampaignViewModel>() { new CampaignViewModel() };
-            _outboundCampaignRepository.Stub(x => x.LoadAll()).Return(campaigns);
-            _outboundCampaignViewModelMapper.Stub(x => x.Map(campaigns)).Return(campaignVMs);
-
-            var target = new OutboundController(null, _outboundCampaignRepository, _outboundCampaignViewModelMapper, null, null)
-            {
-                Request = new HttpRequestMessage()
-            };
-            var result = target.Get();
-
-            result.Count.Should().Be.EqualTo(1);
         }
 
         [Test]

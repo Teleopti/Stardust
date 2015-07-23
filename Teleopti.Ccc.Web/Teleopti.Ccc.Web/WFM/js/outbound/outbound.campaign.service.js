@@ -1,5 +1,4 @@
 ﻿(function () {
-
     'use strict';
 
     angular.module('outboundServiceModule')
@@ -10,7 +9,6 @@
         var createCampaignCommandUrl = '../api/Outbound/Campaign';
         var getCampaignCommandUrl = '../api/Outbound/Campaign/';
         var getCampaignLoadUrl = '../api/Outbound/Campaign/Load';
-        var listCampaignCommandUrl = '../api/Outbound/Campaign';
         var editCampaignCommandUrl = '../api/Outbound/Campaign/';
         var getCampaignStatisticsUrl = '../api/Outbound/Campaign/Statistics';
         var getFilteredCampaignsUrl = '../api/Outbound/Campaigns';
@@ -35,15 +33,6 @@
                 success(function(data) {
                     if (successCb != null)
                         successCb(data);
-                }).
-                error(function(data) {
-                    if (errorCb != null) errorCb(data);
-                });
-        };
-
-        this.listCampaign = function(filter, successCb, errorCb) {
-            $http.get(listCampaignCommandUrl).success(function(data) {
-                    if (successCb != null) successCb(data);
                 }).
                 error(function(data) {
                     if (errorCb != null) errorCb(data);

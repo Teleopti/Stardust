@@ -28,21 +28,6 @@ describe('OutboundService Test', function () {
 		$httpBackend.resetExpectations();	
 	}));
 
-	
-	it('List campaign should work', function () {
-
-		$httpBackend.whenGET('../api/Outbound/Campaign').respond(200, JSON.stringify(presetCampaigns()));
-
-		var campaigns;
-		outboundService.listCampaign(null, function (data) {		
-			campaigns = data;
-		});
-
-		$httpBackend.flush();
-
-		expect(campaigns.length).toEqual(2);
-	});
-
 	it('Get campaign should work', function() {
 		$httpBackend.whenGET('../api/Outbound/Campaign/1').respond(200, JSON.stringify(presetCampaigns()[0]));
 
