@@ -73,5 +73,5 @@
 	grunt.registerTask('default', ['uglify:dev', 'sass', 'cssmin', 'watch:dev']); // this task run the main task and then watch for file changes
 	grunt.registerTask('unitTest', ['watch:test']); // this task watchs the js tests files and run the tests if needed
 
-	grunt.registerTask('dist', ['uglify:dist', 'download', 'sass', 'cssmin']); // this task should only be used by the build. It's kind of packaging for production.
+	grunt.registerTask('dist', ['uglify:dist', 'sass', 'cssmin']); // this task should only be used by the build. It's kind of packaging for production.
 };
