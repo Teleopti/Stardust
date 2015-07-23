@@ -10,7 +10,6 @@
             <phase-picker active-phase-code="activePhaseCode" phase-statistics="phaseStatistics" disable-action="!listCampaignFinished"></phase-picker>
         </div>
 
-        
         <h4 class="border-bottom"><span translate>CampaignsWithWarning</span><span ng-bind="WarningCampaigns.length" style="margin-left:5px;"></span></h4>
         <div class="loading-whole-section" ng-show="!listCampaignFinished && isLoadFinished"><md-progress-circular md-mode="indeterminate"></md-progress-circular></div>
         <teleopti-card-list multi-select>
@@ -23,21 +22,19 @@
                         <span ng-bind="campaign.EndDate.Date | amDateFormat: 'LL'"></span>
                         <span class="campaign-warning-icon campaign-warning-iconfix" ng-if="campaign.WarningInfo.length > 0">!</span>
                         <span class="campaign-phase-label" translate>{{campaign.Status | showPhase}}</span>
-
                     </div>
-
-
                 </card-header>
                 <card-body>
                     <div class="relative">
-                        <p class="campaign-message m-r-5" ng-repeat="info in campaign.WarningInfo"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span translate>{{info.TypeOfRule}}</span></p>
-                        <div class="chart text-center">
-                            <div id="Chart_{{campaign.Id}}"></div>
-                        </div>
-                        <button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="show(campaign)">edit</button>
-                        <button class="wfm-btn wfm-btn-invis-primary pull-right">schedule</button>
-                        <button class="wfm-btn wfm-btn-invis-primary pull-right">add backlog</button>
-                        <button class="wfm-btn wfm-btn-invis-primary pull-right">production plan</button>
+                       <p class="campaign-message m-r-5" ng-repeat="info in campaign.WarningInfo"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span translate>{{info.TypeOfRule}}</span></p>
+	                    <div class="chart text-center relative">
+		                    <div style="position: absolute; top: 40%; left: 45%; height: 40px; background-color: rgba(0,0,0,0.5); color: #fff;line-height:40px;padding:0 10px;">this chart is fake data now</div>
+		                    <div id="Chart_{{campaign.Id}}"></div>
+	                    </div>
+                       <button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="show(campaign)">edit</button>
+                       <button class="wfm-btn wfm-btn-invis-primary pull-right">schedule</button>
+                       <button class="wfm-btn wfm-btn-invis-primary pull-right">add backlog</button>
+                       <button class="wfm-btn wfm-btn-invis-primary pull-right">production plan</button>
                     </div>
                 </card-body>
             </teleopti-card>
@@ -54,17 +51,16 @@
                         <span ng-bind="campaign.EndDate.Date | amDateFormat: 'LL'"></span>
                         <span class="campaign-warning-icon campaign-warning-iconfix" ng-if="campaign.WarningInfo.length > 0">!</span>
                         <span class="campaign-phase-label" translate>{{campaign.Status | showPhase}}</span>
-
                     </div>
-
-
                 </card-header>
                 <card-body>
                     <div class="relative">
                         <p class="campaign-message m-r-5" ng-repeat="info in campaign.WarningInfo"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span translate>{{info.TypeOfRule}}</span></p>
-                        <div class="chart text-center">
-                            <div id="Chart_{{campaign.Id}}"></div>
-                        </div>
+	                     <div class="chart text-center relative">
+		                     <!--fake data-->
+		                     <div style="position: absolute; top: 40%; left: 45%; height: 40px; background-color: rgba(0,0,0,0.5); color: #fff;line-height:40px;padding:0 10px;">this chart is fake data now</div>
+                           <div id="Chart_{{campaign.Id}}"></div>
+	                     </div>
                         <button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="show(campaign)" translate>Edit</button>
                         <button class="wfm-btn wfm-btn-invis-primary pull-right" translate>Schedule</button>
                         <button class="wfm-btn wfm-btn-invis-primary pull-right" translate>AddBacklog</button>
