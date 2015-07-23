@@ -26,10 +26,11 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 
 	    public void LoadData()
 	    {
-			 var campaigns = _outboundCampaignRepository.LoadAll();
-			 var earliestStart = campaigns.Min(c => c.SpanningPeriod.StartDate);
-			 var latestEnd = campaigns.Max(c => c.SpanningPeriod.EndDate);
-			 var period = new DateOnlyPeriod(earliestStart, latestEnd);
+		    var campaigns = _outboundCampaignRepository.LoadAll();
+		    if (campaigns.Count == 0) return;
+		    var earliestStart = campaigns.Min(c => c.SpanningPeriod.StartDate);
+		    var latestEnd = campaigns.Max(c => c.SpanningPeriod.EndDate);
+		    var period = new DateOnlyPeriod(earliestStart, latestEnd);
 
 		    _scheduledResourcesProvider.Load(campaigns, period);
 	    }
