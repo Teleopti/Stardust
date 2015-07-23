@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.Outbound
                 new OutboundOverstaffRule(campaignTaskManager));
 
             var response = target.CheckCampaign(campaign);
-            response.ToList().Count().Should().Be.EqualTo(3);
+            response.ToList().Count().Should().Be.EqualTo(1);
 
         } 
 

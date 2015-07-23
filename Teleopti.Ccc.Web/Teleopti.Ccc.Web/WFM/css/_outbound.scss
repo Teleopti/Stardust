@@ -68,6 +68,9 @@
 	.border-bottom{
 	    border-bottom:1px solid rgba(0,0,0,0.12);
     }
+	.wfm-datepicker .btn-info.active {
+		background-color: #99d6ff!important;
+	}
 	.create-campaignfix{
 		position:absolute;
 		top:-5px;
@@ -108,7 +111,7 @@
 	.center{
 		margin-right:auto;
 		margin-left:auto;
-	}
+	}	
 	.campaign-warning-icon{
 		margin-top: 7px;
 		height:20px;
@@ -125,7 +128,10 @@
 		display:inline-block;
 		padding-right:3px;
 		padding-left:3px;
-		position:relative;
+		position:relative;		
+	}
+	p > span.campaign-warning-icon {
+		margin-top: 0 !important;
 	}
 	.campaign-warning-iconfix{
 		position:absolute;	
@@ -416,7 +422,7 @@ activity-picker {
 	}
 }
 .wfm-datepicker-wrap td.in-date-range button {
-	background-color: #31b0d5;
+	background-color: #c2e085;
 }
 .outbound {
 	position:relative;
