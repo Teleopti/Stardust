@@ -43,7 +43,6 @@
 
 
         $scope.show = function (campaign) {
-            console.log('summary ctrl', campaign, campaign.Id);
             $state.go('outbound-edit', { Id: campaign.Id });
         };               
 
