@@ -14,7 +14,7 @@
         <h4 class="border-bottom"><span translate>CampaignsWithWarning</span><span ng-bind="WarningCampaigns.length" style="margin-left:5px;"></span></h4>
         <div class="loading-whole-section" ng-show="!listCampaignFinished && isLoadFinished"><md-progress-circular md-mode="indeterminate"></md-progress-circular></div>
         <teleopti-card-list multi-select>
-            <teleopti-card ng-repeat="campaign in WarningCampaigns" ng-click="generateChart()">
+            <teleopti-card ng-repeat="campaign in WarningCampaigns" ng-click="generateChart(campaign)">
                 <card-header>
                     <div class="text-center relative">
                         <span class="campaign-namefix" ng-bind="campaign.Name"></span>
@@ -32,7 +32,7 @@
                     <div class="relative">
                         <p class="campaign-message m-r-5" ng-repeat="info in campaign.WarningInfo"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span translate>{{info.TypeOfRule}}</span></p>
                         <div class="chart text-center">
-                            <div id="chart"></div>
+                            <div id="Chart_{{campaign.Id}}"></div>
                         </div>
                         <button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="show(campaign)">edit</button>
                         <button class="wfm-btn wfm-btn-invis-primary pull-right">schedule</button>
@@ -45,7 +45,7 @@
 
         <h4 class="border-bottom"><span translate>CampaignsWithoutWarning</span><span ng-bind="Campaigns.length" style="margin-left:5px;"></span></h4>
         <teleopti-card-list multi-select>
-            <teleopti-card ng-repeat="campaign in Campaigns" ng-click="generateChart()">
+            <teleopti-card ng-repeat="campaign in Campaigns" ng-click="generateChart(campaign)">
                 <card-header>
                     <div class="text-center relative">
                         <span class="campaign-namefix" ng-bind="campaign.Name"></span>
@@ -63,7 +63,7 @@
                     <div class="relative">
                         <p class="campaign-message m-r-5" ng-repeat="info in campaign.WarningInfo"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span translate>{{info.TypeOfRule}}</span></p>
                         <div class="chart text-center">
-                            <div id="chart"></div>
+                            <div id="Chart_{{campaign.Id}}"></div>
                         </div>
                         <button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="show(campaign)" translate>Edit</button>
                         <button class="wfm-btn wfm-btn-invis-primary pull-right" translate>Schedule</button>

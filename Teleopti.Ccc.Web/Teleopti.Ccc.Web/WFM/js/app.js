@@ -91,7 +91,7 @@ wfm.config([
 			url: '/outbound/create',
 			templateUrl: 'html/outbound/campaign-create.html',
 			controller: 'OutboundCreateCtrl'
-		}).state('outbound.edit', {
+		}).state('outbound-edit', {
 			url: '/campaign/:Id',
 			templateUrl: 'html/outbound/campaign-edit.html',
 			controller: 'OutboundEditCtrl'

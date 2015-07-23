@@ -52,7 +52,7 @@
         }
 
         function backToList() {
-            $state.go('outbound.edit');
+            $state.go('outbound');
         }
 
     }

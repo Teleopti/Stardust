@@ -17,6 +17,7 @@
         $scope.init = init;
         $scope.editCampaign = editCampaign;
         $scope.reset = reset;
+        $scope.backToList = backToList;
 
         function editCampaign() {
             if (!$scope.isInputValid()) {
@@ -79,6 +80,10 @@
             $timeout(function () {
                 muteDirtyWorkingHoursWatcher = false;
             });
+        }
+
+        function backToList() {
+            $state.go('outbound');
         }
     }
 

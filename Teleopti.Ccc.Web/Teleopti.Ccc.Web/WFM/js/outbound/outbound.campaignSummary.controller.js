@@ -16,9 +16,7 @@
                 clearCampaignList();
                 outboundService.listFilteredCampaigns(newValue, function success(data) {
                     $scope.Campaigns = data.CampaignsWithoutWarning;
-                    $scope.WarningCampaigns = data.CampaignsWithWarning;
-                    attachShowToCampaigns($scope.Campaigns);
-                    attachShowToCampaigns($scope.WarningCampaigns);
+                    $scope.WarningCampaigns = data.CampaignsWithWarning;                  
                     $scope.listCampaignFinished = true;
                     $scope.isLoadFinished = true;
                 });
@@ -31,9 +29,9 @@
         $scope.gotoCreateCampaign = function() {
             $state.go('outbound-create');
         };
-        $scope.generateChart = function() {
+        $scope.generateChart = function(campaign) {
             var chart = c3.generate({
-                bindto: '#chart',
+                bindto: '#Chart_'+campaign.Id,
                 data: {
                     columns: [
                         ['data1', 30, 200, 100, 300, 150, 250],
@@ -42,15 +40,12 @@
                 }
             });
         };
-        
-        function attachShowToCampaigns(campaigns) {
-            angular.forEach(campaigns, function(c) {
-                c.show = function () {
-                    console.log('going to edit', c.Id);
-                    $state.go('outbound.edit', { Id: c.Id });
-                };
-            });
-        }
+
+
+        $scope.show = function (campaign) {
+            console.log('summary ctrl', campaign, campaign.Id);
+            $state.go('outbound-edit', { Id: campaign.Id });
+        };               
 
         function init() {         
             outboundService.getCampaignStatistics(null, function success(data) {

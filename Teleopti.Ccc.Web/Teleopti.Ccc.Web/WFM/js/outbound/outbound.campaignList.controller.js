@@ -16,7 +16,7 @@
 
         $scope.show = function (campaign) {
             if (angular.isDefined(campaign)) $scope.currentCampaignId = campaign.Id;
-            $state.go('outbound.edit', { Id: $scope.currentCampaignId });
+            $state.go('outbound-edit', { Id: $scope.currentCampaignId });
         };
 
         function init() {
