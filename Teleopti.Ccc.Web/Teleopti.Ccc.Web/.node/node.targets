@@ -19,28 +19,27 @@
 		<GruntBuild>"$(GruntCmd)" dist --verbose --no-color </GruntBuild>
 
 		<!-- NPM install command -->
-		<NpmInstallCmd>"$(NpmCmd)" update</NpmInstallCmd>
+		<NpmInstallCmd>"$(NpmCmd)" install</NpmInstallCmd>
 		<NpmSetServerCmd>"$(NpmCmd)" set registry http://hestia:4873</NpmSetServerCmd>
 
 		<!-- NPM flatten command -->
 		<NpmFlattenCmd>$(NodeDir)flatten-packages</NpmFlattenCmd>
-		<NpmInstallFlattenPackages>"$(NpmCmd)" install -g flatten-packages@0.1.4 -save-dev</NpmInstallFlattenPackages>
-		
-		<!-- Protractor install command -->
-		<NpmInstallProtractorCmd>"$(NpmCmd)" update -g protractor -save-dev</NpmInstallProtractorCmd>
+		<NpmInstallFlattenPackages>"$(NpmCmd)" install -g flatten-packages@0.1.4</NpmInstallFlattenPackages>
 		
 		<!-- Karma install command -->
-		<NpmInstallKarmaCmd>"$(NpmCmd)" update -g karma -save-dev</NpmInstallKarmaCmd>
+		<NpmInstallKarmaCmd>"$(NpmCmd)" install -g karma@0.13.3</NpmInstallKarmaCmd>
 
 		<!-- Karma cli install command -->
-		<NpmInstallKarmaCliCmd>"$(NpmCmd)" update -g karma-cli -save-dev</NpmInstallKarmaCliCmd>
+		<NpmInstallKarmaCliCmd>"$(NpmCmd)" install -g karma-cli@0.1.0</NpmInstallKarmaCliCmd>
 
 		<!-- grunt-cli install command -->
-		<NpmInstallGruntCliCmd>"$(NpmCmd)" install -g grunt-cli@0.1.13 -save-dev</NpmInstallGruntCliCmd>
+		<NpmInstallGruntCliCmd>"$(NpmCmd)" install -g grunt-cli@0.1.13</NpmInstallGruntCliCmd>
 	</PropertyGroup>
 
 	<!-- Runs NPM command -->
 	<Target Name="RestoreNodePackages">
+    <Exec Command="$(NpmSetServerCmd)"  ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
+    
 		<Exec Command="$(NpmInstallKarmaCmd)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
 		<Exec Command="$(NpmInstallKarmaCliCmd)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
 
@@ -53,13 +52,6 @@
 		<Exec Command="$(NpmFlattenCmd)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
 		<Message Text="HACK! Removing directory to get below 260 characters" Importance="high" />
 		<Exec Command="rmdir /S /Q $(MSBuildProjectDirectory)\WFM\node_modules\node-sass\test" />
-	</Target>
-
-	<!-- Install protractor -->
-	<Target Name="RestoreNodePackageProtractor">
-		<Exec Command="$(NpmSetServerCmd)"  ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
-		<Message Text="Restore Node Packages Command: $(NpmInstallProtractorCmd) /w WorkingDirectory: $(NodeDir)" Importance="high" />
-		<Exec Command="$(NpmInstallProtractorCmd)" ContinueOnError="false" WorkingDirectory="$(NodeDir)" />
 	</Target>
 
 	<!-- Executes Build -->
