@@ -151,7 +151,7 @@ describe('OutboundCreateCtrl', function() {
 		test.scope.campaignSpanningPeriodForm = { $valid: true, $setPristine: function () { } };
 		completeValidCampaign(test.scope.campaign);
 		test.scope.addCampaign();
-		expect(stateService.getWhere()).toEqual('outbound.edit');
+		expect(stateService.getWhere()).toEqual('outbound-edit');
 	});
 
 
