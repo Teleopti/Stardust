@@ -27,7 +27,7 @@
 		<NpmInstallFlattenPackages>"$(NpmCmd)" install -g flatten-packages@0.1.4</NpmInstallFlattenPackages>
 		
 		<!-- Karma install command -->
-		<NpmInstallKarmaCmd>"$(NpmCmd)" install -g karma@0.13.3</NpmInstallKarmaCmd>
+		<NpmInstallKarmaCmd>"$(NpmCmd)" update -g karma@0.13.3</NpmInstallKarmaCmd>
 
 		<!-- Karma cli install command -->
 		<NpmInstallKarmaCliCmd>"$(NpmCmd)" install -g karma-cli@0.1.0</NpmInstallKarmaCliCmd>
@@ -45,7 +45,7 @@
 		<Exec Command="$(NpmInstallKarmaCliCmd)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
 
 		<Message Text="Restore Node Packages Command: $(NpmInstallCmd) /w WorkingDirectory: $(MSBuildProjectDirectory)\WFM" Importance="high" />
-		<Exec Command="PATH $(NodeDir) &amp;&amp; $(NpmInstallCmd)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
+		<Exec Command="PATH=&quot;$(NodeDir)&quot; &amp;&amp; $(NpmInstallCmd)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
 
 		<Message Text="Install Flatten Node Packages Command: $(NpmInstallFlattenPackages) /w WorkingDirectory: $(MSBuildProjectDirectory)\WFM" Importance="high" />
 		<Exec Command="$(NpmInstallFlattenPackages)" ContinueOnError="false" WorkingDirectory="$(NodeDir)" />
