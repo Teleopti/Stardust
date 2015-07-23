@@ -85,16 +85,12 @@ wfm.config([
 			controller: 'PermissionsCtrl'
 		}).state('outbound', {
 			url: '/outbound',
-			templateUrl: 'html/outbound/campaign-list.html',
-			controller: 'OutboundListCtrl'
+			templateUrl: 'html/outbound/campaign-summary.html',
+			controller: 'OutboundSummaryCtrl'
 		}).state('outbound-create', {
 			url: '/outbound/create',
 			templateUrl: 'html/outbound/campaign-create.html',
 			controller: 'OutboundCreateCtrl'
-		}).state('outbound-prototype', {
-			url: '/outbound/prototype',
-			templateUrl: 'html/outbound/campaign-prototype.html',
-			controller: 'OutboundSummaryCtrl'
 		}).state('outbound.edit', {
 			url: '/campaign/:Id',
 			templateUrl: 'html/outbound/campaign-edit.html',
