@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Outbound.Rules;
 using Teleopti.Interfaces.Domain;
 
@@ -25,9 +26,12 @@ namespace Teleopti.Ccc.Domain.Outbound
             {
                 var config = _outboundRuleConfigurationProvider.GetConfiguration(rule.GetType());
                 rule.Configure(config);
-                response.AddRange(rule.Validate(campaign));
-            }
-           
+                var result = rule.Validate(campaign).ToList();
+                if (result.Count > 0)
+                {
+                    response.Add(result.First());
+                }              
+            }           
             return response;
         }       
     }
