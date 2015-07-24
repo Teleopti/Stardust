@@ -45,16 +45,6 @@
 
 
 
-
-
-<!--<div class="row">
-    <div class="col-md-12">
-        <label translate>AddSpecificAuthorizationLabel</label>
-    </div>
-</div>-->
-
-
-
 <div class="tree permissions-tree">
 
     <div ui-tree data-drag-enabled="false">
@@ -68,13 +58,13 @@
 <script type="text/ng-template" id="nodes_bu_renderer.html">
     <div class="tree-toggle-group">
 		<div class="toggle-handle" ng-class="{open: node.show}" ng-click="$event.stopPropagation(); node.show = !node.show"><i ng-show="node.ChildNodes.length > 0" class="mdi mdi-chevron-right"></i></div>
-		<div ui-tree-handle class="ui-tree-handle" ng-class="{selected: node.selected}" ng-click="toggleOrganizationSelection(node); node.selected = true;">
+		<div ui-tree-handle class="ui-tree-handle" ng-class="{selected: node.selected}" ng-click="toggleOrganizationSelection(node);">
 			{{node.Name}}
 			<span><i class="mdi mdi-check"></i></span>
 		</div>
     </div>
 
-	<ol ui-tree-nodes="" ng-model="node.ChildNodes" ng-show="node.show" ng-click="node.selected= true;">
+	<ol ui-tree-nodes="" ng-model="node.ChildNodes" ng-show="node.show" >
 		<li ng-repeat="node in node.ChildNodes | filter:searchData  | selectedData:selectedDataToggle | unselectedData:unselectedDataToggle" ui-tree-node ng-include="'nodes_bu_renderer.html'">
 		</li>
 	</ol>

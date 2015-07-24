@@ -2,8 +2,8 @@
 	'use strict';
 
 	angular.module('wfm.permissions').controller('RoleDataController', [
-		'$scope', '$filter', 'RoleDataService',
-		function ($scope, $filter, RoleDataService) {
+		'$scope', '$filter', 'RoleDataService','Roles',
+		function ($scope, $filter, RoleDataService, Roles) {
 			$scope.organization = {};
 
 			$scope.$watch(function () { return RoleDataService.organization; },
@@ -11,22 +11,21 @@
 					$scope.organization = RoleDataService.organization;
 				}
 			);
-
 			$scope.toggleOrganizationSelection = function (node) {
-				if (node.selected) {
-					RoleDataService.deleteAvailableData($scope.selectedRole, node.Type, node.Id).then(function () {
-						node.selected = false;
-					});
-				} else {
-					RoleDataService.assignOrganizationSelection($scope.selectedRole, node.Type, node.Id).then(function () {
-						node.selected = true;
-					});
-
-				}
+			    if (Roles.selectedRole.BuiltIn === false) {
+			        if (node.selected) {
+			            node.selected = false;
+			            RoleDataService.deleteAvailableData($scope.selectedRole, node.Type, node.Id).then(function () {
+			            });
+			        } else {
+			            node.selected = true;
+			            RoleDataService.assignOrganizationSelection($scope.selectedRole, node.Type, node.Id).then(function () {
+			            });
+			        }
+			    }
 			};
-
 			$scope.changeOption = function (option) {
-				RoleDataService.assignAuthorizationLevel($scope.selectedRole, option);
+			    RoleDataService.assignAuthorizationLevel($scope.selectedRole, option);
 			}
 		}
 	]);
