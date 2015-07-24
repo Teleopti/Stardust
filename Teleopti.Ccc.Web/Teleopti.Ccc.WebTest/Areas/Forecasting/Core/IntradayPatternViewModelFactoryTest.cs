@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Template;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Forecasting.Controllers;
 using Teleopti.Ccc.Web.Areas.Forecasting.Core;
@@ -46,7 +47,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 					{DayOfWeek.Saturday, new List<ITemplateTaskPeriod>()},
 					{DayOfWeek.Sunday, new List<ITemplateTaskPeriod>()}
 				});
-			var target = new IntradayPatternViewModelFactory(intradayForecaster, workloadRepository, historicalPeriodProvider);
+			var userCulture = MockRepository.GenerateMock<IUserCulture>();
+			userCulture.Stub(x => x.GetCulture()).Return(new System.Globalization.CultureInfo("en-US"));
+			var target = new IntradayPatternViewModelFactory(intradayForecaster, workloadRepository, historicalPeriodProvider, userCulture);
 			
 			var result = target.Create(input);
 
@@ -54,8 +57,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			result.WeekDays.Second().DayOfWeek.Should().Be.EqualTo(DayOfWeek.Monday);
 			result.WeekDays.Second().Tasks.First().Should().Be.EqualTo(150);
 			var localPeriod = dateTimePeriod.TimePeriod(workload.Skill.TimeZone);
+			result.WeekDays.First().DayOfWeek.Should().Be.EqualTo(DayOfWeek.Sunday);
 			result.WeekDays.Second().Periods.First().Should().Be.EqualTo(localPeriod.ToShortTimeString());
-
 		}
 	}
 }
