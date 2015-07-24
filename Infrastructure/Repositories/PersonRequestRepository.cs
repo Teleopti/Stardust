@@ -45,15 +45,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IList<IPersonRequest> Find<T>(IPerson person, DateTimePeriod period) where T : Request
 		{
-			var requestForPeriod = createRequestForPeriodCriteria(period).Add(Restrictions.Eq("class", typeof(T)));
+			var requestForPeriod = createRequestForPeriodCriteria(period).Add(Restrictions.Eq("class", typeof (T)));
 			return findRequestsByRequestPeriod(person, requestForPeriod);
 		}
 
 		public IList<IPersonRequest> FindByStatus<T>(IPerson person, DateTime startDateTime, int status) where T : Request
 		{
-			var requestForPeriod = createRequestForPeriodCriteria(startDateTime).Add(Restrictions.Eq("class", typeof(T)));
+			var requestForPeriod = createRequestForPeriodCriteria(startDateTime).Add(Restrictions.Eq("class", typeof (T)));
 			return findRequestsByRequestPeriod(person, requestForPeriod, status);
-		}		
+		}
 
 		public IList<IShiftExchangeOffer> FindOfferByStatus(IPerson person, DateOnly date, ShiftExchangeOfferStatus status)
 		{
@@ -67,8 +67,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IPersonRequest FindPersonRequestByRequestId(Guid id)
 		{
 			return Session.GetNamedQuery("findPersonRequestByRequestId")
-						.SetGuid("Id", id)
-						.UniqueResult<IPersonRequest>();
+				.SetGuid("Id", id)
+				.UniqueResult<IPersonRequest>();
 		}
 
 		public IList<IPersonRequest> Find(IPerson person, DateTimePeriod period)
@@ -86,19 +86,19 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return requestForPeriod;
 		}
 
-
 		private static DetachedCriteria createRequestForPeriodCriteria(DateTime startDateTime)
 		{
 			var requestForPeriod = DetachedCriteria.For<Request>()
 				.SetProjection(Projections.Property("Parent"))
 				.Add(Restrictions.Eq("Period.period.Minimum", startDateTime))
-				.Add(Restrictions.Not(Restrictions.Eq("class", typeof(ShiftTradeRequest))))
-				.Add(Restrictions.Not(Restrictions.Eq("class", typeof(AbsenceRequest))))
-				.Add(Restrictions.Not(Restrictions.Eq("class", typeof(TextRequest))));
+				.Add(Restrictions.Not(Restrictions.Eq("class", typeof (ShiftTradeRequest))))
+				.Add(Restrictions.Not(Restrictions.Eq("class", typeof (AbsenceRequest))))
+				.Add(Restrictions.Not(Restrictions.Eq("class", typeof (TextRequest))));
 			return requestForPeriod;
 		}
 
-		private IList<IPersonRequest> findRequestsByRequestPeriod(IPerson person, DetachedCriteria requestForPeriod, int status = 0)
+		private IList<IPersonRequest> findRequestsByRequestPeriod(IPerson person, DetachedCriteria requestForPeriod,
+			int status = 0)
 		{
 			return Session.CreateCriteria<IPersonRequest>("req")
 				.Add(Restrictions.Eq("Person", person))
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IPersonRequest Find(Guid id)
 		{
-			var returnPersonRequest = Session.CreateCriteria(typeof(PersonRequest), "req")
+			var returnPersonRequest = Session.CreateCriteria(typeof (PersonRequest), "req")
 				.Add(Restrictions.Eq("Id", id))
 				.SetFetchMode("requests", FetchMode.Join)
 				.SetFetchMode("Person", FetchMode.Join)
@@ -145,20 +145,16 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			return personRequests.List<IPersonRequest>();
 		}
-		
+
 		private ICriteria getAllRequests(IPerson person)
 		{
 			var shiftTradeDetailsForAgentPersonTo = DetachedCriteria.For<ShiftTradeSwapDetail>()
 				.SetProjection(Projections.Property("Parent"))
-				.Add(
-					Restrictions.Eq("PersonTo", person)
-				);
+				.Add(Restrictions.Eq("PersonTo", person));
 
 			var shiftTradeDetailsForAgentPersonFrom = DetachedCriteria.For<ShiftTradeSwapDetail>()
 				.SetProjection(Projections.Property("Parent"))
-				.Add(
-					Restrictions.Eq("PersonFrom", person)
-				);
+				.Add(Restrictions.Eq("PersonFrom", person));
 
 			var shiftTradeRequestsForAgentPersonTo = DetachedCriteria.For<ShiftTradeRequest>()
 				.SetProjection(Projections.Property("Parent"))
@@ -168,17 +164,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetProjection(Projections.Property("Parent"))
 				.Add(Subqueries.PropertyIn("ShiftTradeSwapDetails", shiftTradeDetailsForAgentPersonFrom));
 
-
 			var personRequests = Session.CreateCriteria<PersonRequest>()
 				.SetFetchMode("requests", FetchMode.Join)
 				.SetResultTransformer(Transformers.DistinctRootEntity)
 				.AddOrder(Order.Desc("UpdatedOn"));
 
-			
 			var requestsForAgent = Restrictions.Or(Restrictions.Or(
 				Restrictions.And(Subqueries.PropertyIn("requests", shiftTradeRequestsForAgentPersonTo),
-					Restrictions.Not(Restrictions.Eq("requestStatus", 4))) // hide auto denied shift trade requests for receiptors
-				, Subqueries.PropertyIn("requests", shiftTradeRequestsForAgentPersonFrom)),
+					Restrictions.Not(Restrictions.Eq("requestStatus", 4))), // hide auto denied shift trade requests for receiptors
+				Subqueries.PropertyIn("requests", shiftTradeRequestsForAgentPersonFrom)),
 				Restrictions.Eq("Person", person));
 
 			personRequests.Add(requestsForAgent);
@@ -189,19 +183,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			var requestForPeriod = DetachedCriteria.For<Request>()
 				.SetProjection(Projections.Property("Parent"))
-				.Add(Restrictions.Not(Restrictions.Eq("class", typeof(ShiftExchangeOffer))));
+				.Add(Restrictions.Not(Restrictions.Eq("class", typeof (ShiftExchangeOffer))));
 
-			personRequests
-				.Add(Subqueries.PropertyIn("Id", requestForPeriod));
+			personRequests.Add(Subqueries.PropertyIn("Id", requestForPeriod));
 		}
 
 		private static void applyPagingToResults(Paging paging, ICriteria personRequests)
 		{
-			if (paging != null)
-			{
-				personRequests.SetMaxResults(paging.Take);
-				personRequests.SetFirstResult(paging.Skip);
-			}
+			if (paging == null) return;
+
+			personRequests.SetMaxResults(paging.Take);
+			personRequests.SetFirstResult(paging.Skip);
 		}
 
 		public IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person)
@@ -258,63 +250,57 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IList<IPersonRequest> FindAllRequestModifiedWithinPeriodOrPending(IPerson person, DateTimePeriod period)
 		{
 			//Alla request där UpdatedOn innanför period
-			IEnumerable<IPersonRequest> allRequestsBy = FindModifiedWithinPeriodOrPending(person, period);
+			IEnumerable<IPersonRequest> allRequestsBy = findModifiedWithinPeriodOrPending(person, period);
 
 			//Alla shiftTrades där UpdatedOn innanför Period
-			IEnumerable<IPersonRequest> allShiftTradesTo = FindShiftTradesModifiedWithinPeriod(person, period);
+			IEnumerable<IPersonRequest> allShiftTradesTo = findShiftTradesModifiedWithinPeriod(person, period);
 
 			return allRequestsBy.Union(allShiftTradesTo).ToList();
 		}
 
-		private IEnumerable<IPersonRequest> FindShiftTradesModifiedWithinPeriod(IPerson person, DateTimePeriod period)
+		private IEnumerable<IPersonRequest> findShiftTradesModifiedWithinPeriod(IPerson person, DateTimePeriod period)
 		{
 			var personFrom = Subqueries.PropertyIn("requests",
-												   DetachedCriteria.For(typeof(ShiftTradeRequest))
-																   .SetProjection(Projections.Property("Parent"))
-																   .Add(Subqueries.PropertyIn("ShiftTradeSwapDetails",
-																							  DetachedCriteria
-																								  .For<ShiftTradeSwapDetail>()
-																								  .SetProjection(
-																									  Projections.Property("Parent"))
-																								  .Add(Restrictions.Eq("PersonFrom",
-																													  person)))));
+				DetachedCriteria.For(typeof (ShiftTradeRequest))
+					.SetProjection(Projections.Property("Parent"))
+					.Add(Subqueries.PropertyIn("ShiftTradeSwapDetails",
+						DetachedCriteria.For<ShiftTradeSwapDetail>()
+							.SetProjection(Projections.Property("Parent"))
+							.Add(Restrictions.Eq("PersonFrom", person)))));
 			var personTo = Subqueries.PropertyIn("requests",
-												 DetachedCriteria.For(typeof(ShiftTradeRequest))
-																 .SetProjection(Projections.Property("Parent"))
-																 .Add(Subqueries.PropertyIn("ShiftTradeSwapDetails",
-																							DetachedCriteria
-																								.For<ShiftTradeSwapDetail>()
-																								.SetProjection(
-																									Projections.Property("Parent"))
-																								.Add(Restrictions.Eq("PersonTo",
-																													 person)))));
+				DetachedCriteria.For(typeof (ShiftTradeRequest))
+					.SetProjection(Projections.Property("Parent"))
+					.Add(Subqueries.PropertyIn("ShiftTradeSwapDetails",
+						DetachedCriteria.For<ShiftTradeSwapDetail>()
+							.SetProjection(Projections.Property("Parent"))
+							.Add(Restrictions.Eq("PersonTo", person)))));
 
 			var personFromRestriction =
 				Restrictions.And(
 					Restrictions.Or(Restrictions.Between("UpdatedOn", period.StartDateTime, period.EndDateTime),
-									Restrictions.Eq("requestStatus", 0)), personFrom);
+						Restrictions.Eq("requestStatus", 0)), personFrom);
 			var personToRestriction =
 				Restrictions.And(
 					Restrictions.Or(
 						Restrictions.And(Restrictions.Between("UpdatedOn", period.StartDateTime, period.EndDateTime),
-										 Restrictions.Not(Restrictions.Eq("requestStatus", 4))), Restrictions.Eq("requestStatus", 0)),
+							Restrictions.Not(Restrictions.Eq("requestStatus", 4))), Restrictions.Eq("requestStatus", 0)),
 					personTo);
-			IList<IPersonRequest> retList =
-				Session.CreateCriteria(typeof(PersonRequest))
+
+			var retList =
+				Session.CreateCriteria(typeof (PersonRequest))
 					.Add(Restrictions.Or(personToRestriction, personFromRestriction))
 					.SetFetchMode("requests", FetchMode.Join)
 					.List<IPersonRequest>();
 
 			return retList;
-
 		}
 
-		private IEnumerable<IPersonRequest> FindModifiedWithinPeriodOrPending(IPerson person, DateTimePeriod period)
+		private IEnumerable<IPersonRequest> findModifiedWithinPeriodOrPending(IPerson person, DateTimePeriod period)
 		{
-			IList<IPersonRequest> retList = Session.CreateCriteria(typeof(PersonRequest))
+			var retList = Session.CreateCriteria(typeof (PersonRequest))
 				.Add(Restrictions.Eq("Person", person))
 				.Add(Restrictions.Or(Restrictions.Between("UpdatedOn", period.StartDateTime, period.EndDateTime),
-											Restrictions.Eq("requestStatus", 0)))
+					Restrictions.Eq("requestStatus", 0)))
 				.SetFetchMode("requests", FetchMode.Join)
 				.List<IPersonRequest>();
 			return retList;
@@ -323,52 +309,51 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IList<IPersonRequest> FindPersonRequestUpdatedAfter(DateTime lastTime)
 		{
 			return Session.CreateCriteria<PersonRequest>()
-						  .Add(Restrictions.Not(Restrictions.Eq("requestStatus", 3)))
-						  .Add(Restrictions.Ge("UpdatedOnServerUtc", lastTime))
-						  .SetFetchMode("requests", FetchMode.Join)
-						  .SetFetchMode("Person", FetchMode.Join)
-						  .SetFetchMode("requests.ShiftTradeSwapDetails", FetchMode.Join)
-						  .SetResultTransformer(Transformers.DistinctRootEntity)
-						  .List<IPersonRequest>();
+				.Add(Restrictions.Not(Restrictions.Eq("requestStatus", 3)))
+				.Add(Restrictions.Ge("UpdatedOnServerUtc", lastTime))
+				.SetFetchMode("requests", FetchMode.Join)
+				.SetFetchMode("Person", FetchMode.Join)
+				.SetFetchMode("requests.ShiftTradeSwapDetails", FetchMode.Join)
+				.SetResultTransformer(Transformers.DistinctRootEntity)
+				.List<IPersonRequest>();
 		}
-
 
 		public IList<IPersonRequest> FindPersonRequestWithinPeriod(DateTimePeriod period)
 		{
-			IList<IPersonRequest> allRequestExceptShiftTrade = FindPersonRequestWithinPeriodExceptShiftTrade(period);
-			IList<IPersonRequest> allShiftTradeRequests = FindShiftTradeRequestWithinPeriod(period);
+			var allRequestExceptShiftTrade = findPersonRequestWithinPeriodExceptShiftTrade(period);
+			var allShiftTradeRequests = findShiftTradeRequestWithinPeriod(period);
 
 			return allRequestExceptShiftTrade.Union(allShiftTradeRequests).ToList();
 		}
 
-		private IList<IPersonRequest> FindPersonRequestWithinPeriodExceptShiftTrade(DateTimePeriod period)
+		private IEnumerable<IPersonRequest> findPersonRequestWithinPeriodExceptShiftTrade(DateTimePeriod period)
 		{
 			var requestForPeriod = DetachedCriteria.For<Request>()
-				 .SetProjection(Projections.Property("Parent"))
-				 .Add(Restrictions.Between("Period.period.Minimum", period.StartDateTime, period.EndDateTime))
-				 .Add(Restrictions.Not(Restrictions.Eq("class", typeof(ShiftTradeRequest))));
+				.SetProjection(Projections.Property("Parent"))
+				.Add(Restrictions.Between("Period.period.Minimum", period.StartDateTime, period.EndDateTime))
+				.Add(Restrictions.Not(Restrictions.Eq("class", typeof (ShiftTradeRequest))));
 
 			return Session.CreateCriteria<IPersonRequest>()
-					  .Add(Restrictions.Not(Restrictions.Eq("requestStatus", 3)))
-					  .SetFetchMode("requests", FetchMode.Join)
-					  .SetFetchMode("Person", FetchMode.Join)
-					  .Add(Subqueries.PropertyIn("Id", requestForPeriod))
-					  .List<IPersonRequest>();
+				.Add(Restrictions.Not(Restrictions.Eq("requestStatus", 3)))
+				.SetFetchMode("requests", FetchMode.Join)
+				.SetFetchMode("Person", FetchMode.Join)
+				.Add(Subqueries.PropertyIn("Id", requestForPeriod))
+				.List<IPersonRequest>();
 		}
 
-		private IList<IPersonRequest> FindShiftTradeRequestWithinPeriod(DateTimePeriod period)
+		private IEnumerable<IPersonRequest> findShiftTradeRequestWithinPeriod(DateTimePeriod period)
 		{
 			var requestForPeriod = DetachedCriteria.For<ShiftTradeRequest>()
-				 .SetProjection(Projections.Property("Parent"))
-				 .Add(Restrictions.Between("Period.period.Minimum", period.StartDateTime, period.EndDateTime));
+				.SetProjection(Projections.Property("Parent"))
+				.Add(Restrictions.Between("Period.period.Minimum", period.StartDateTime, period.EndDateTime));
 
 			return Session.CreateCriteria<IPersonRequest>()
-				 .Add(Restrictions.Not(Restrictions.Eq("requestStatus", 3)))
-				 .SetFetchMode("requests", FetchMode.Join)
-				 .SetFetchMode("Person", FetchMode.Join)
-				 .SetFetchMode("requests.ShiftTradeSwapDetails", FetchMode.Join)
-				 .Add(Subqueries.PropertyIn("Id", requestForPeriod))
-				 .List<IPersonRequest>();
+				.Add(Restrictions.Not(Restrictions.Eq("requestStatus", 3)))
+				.SetFetchMode("requests", FetchMode.Join)
+				.SetFetchMode("Person", FetchMode.Join)
+				.SetFetchMode("requests.ShiftTradeSwapDetails", FetchMode.Join)
+				.Add(Subqueries.PropertyIn("Id", requestForPeriod))
+				.List<IPersonRequest>();
 		}
 
 		/// <summary>
@@ -377,19 +362,21 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		/// <param name="persons"></param>
 		/// <param name="period"></param>
 		/// <returns></returns>
-		public IList<IPersonRequest> FindAllRequestModifiedWithinPeriodOrPending(ICollection<IPerson> persons, DateTimePeriod period)
+		public IList<IPersonRequest> FindAllRequestModifiedWithinPeriodOrPending(ICollection<IPerson> persons,
+			DateTimePeriod period)
 		{
 			//Alla request där UpdatedOn innanför period
-			IEnumerable<IPersonRequest> allRequestsBy = FindModifiedWithinPeriodOrPendingExceptShiftTrades(persons, period);
+			var allRequestsBy = findModifiedWithinPeriodOrPendingExceptShiftTrades(persons, period);
 
 			//Alla shiftTrades där UpdatedOn innanför Period
-			IEnumerable<IPersonRequest> allShiftTradesTo = FindShiftTradesModifiedWithinPeriod(persons, period);
+			var allShiftTradesTo = findShiftTradesModifiedWithinPeriod(persons, period);
 
 			return allRequestsBy.Union(allShiftTradesTo).ToList();
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
-		private IEnumerable<IPersonRequest> FindShiftTradesModifiedWithinPeriod(IEnumerable<IPerson> persons, DateTimePeriod period)
+		private IEnumerable<IPersonRequest> findShiftTradesModifiedWithinPeriod(IEnumerable<IPerson> persons,
+			DateTimePeriod period)
 		{
 			// parameter limit is 2100, and the person id list is passed twice
 			const int personChunkSize = 1000;
@@ -400,31 +387,35 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				from personChunk in personChunks
 				let personChunkList = personChunk.ToArray()
 				select
-				Session.CreateCriteria(typeof(PersonRequest))
-				 .SetFetchMode("requests", FetchMode.Join)
-				 .SetFetchMode("requests.ShiftTradeSwapDetails", FetchMode.Join)
-				 .Add
-				 (
-					 Restrictions.Or(
-					 Restrictions.Between("UpdatedOn", period.StartDateTime, period.EndDateTime),
-					 Restrictions.Eq("requestStatus", 0))
-				 )
-				.Add(Subqueries.PropertyIn("requests", DetachedCriteria.For(typeof(ShiftTradeRequest))
-						.SetProjection(Projections.Property("Parent"))
-						.Add(Subqueries.PropertyIn("ShiftTradeSwapDetails", DetachedCriteria.For<ShiftTradeSwapDetail>().SetProjection(Projections.Property("Parent"))
-							.CreateAlias("PersonTo", "personTo", JoinType.InnerJoin)
-							.CreateAlias("PersonFrom", "personFrom", JoinType.InnerJoin)
-							.Add(Restrictions.Eq("personTo.IsDeleted", false))
-							.Add(Restrictions.Eq("personFrom.IsDeleted", false))
-							.Add(Restrictions.Or(Restrictions.IsNull("personTo.TerminalDate"), Restrictions.Gt("personTo.TerminalDate", DateOnly.Today)))
-							.Add(Restrictions.Or(Restrictions.IsNull("personFrom.TerminalDate"), Restrictions.Gt("personFrom.TerminalDate", DateOnly.Today)))
-							.Add(Restrictions.Or(Restrictions.InG("PersonFrom", personChunkList), Restrictions.InG("PersonTo", personChunkList)))))))
-				.List<IPersonRequest>();
+					Session.CreateCriteria(typeof (PersonRequest))
+						.SetFetchMode("requests", FetchMode.Join)
+						.SetFetchMode("requests.ShiftTradeSwapDetails", FetchMode.Join)
+						.Add
+						(
+							Restrictions.Or(
+								Restrictions.Between("UpdatedOn", period.StartDateTime, period.EndDateTime),
+								Restrictions.Eq("requestStatus", 0))
+						)
+						.Add(Subqueries.PropertyIn("requests", DetachedCriteria.For(typeof (ShiftTradeRequest))
+							.SetProjection(Projections.Property("Parent"))
+							.Add(Subqueries.PropertyIn("ShiftTradeSwapDetails",
+								DetachedCriteria.For<ShiftTradeSwapDetail>().SetProjection(Projections.Property("Parent"))
+									.CreateAlias("PersonTo", "personTo", JoinType.InnerJoin)
+									.CreateAlias("PersonFrom", "personFrom", JoinType.InnerJoin)
+									.Add(Restrictions.Eq("personTo.IsDeleted", false))
+									.Add(Restrictions.Eq("personFrom.IsDeleted", false))
+									.Add(Restrictions.Or(Restrictions.IsNull("personTo.TerminalDate"),
+										Restrictions.Gt("personTo.TerminalDate", DateOnly.Today)))
+									.Add(Restrictions.Or(Restrictions.IsNull("personFrom.TerminalDate"),
+										Restrictions.Gt("personFrom.TerminalDate", DateOnly.Today)))
+									.Add(Restrictions.Or(Restrictions.InG("PersonFrom", personChunkList),
+										Restrictions.InG("PersonTo", personChunkList)))))))
+						.List<IPersonRequest>();
 
 			var personRequests =
 				(from result in personRequestResults
-				 from request in result
-				 select request).Distinct();
+					from request in result
+					select request).Distinct();
 
 			var personRequestList = personRequests.ToList();
 
@@ -439,19 +430,20 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return personRequestList;
 		}
 
-		private IEnumerable<IPersonRequest> FindModifiedWithinPeriodOrPendingExceptShiftTrades(IEnumerable<IPerson> persons, DateTimePeriod period)
+		private IEnumerable<IPersonRequest> findModifiedWithinPeriodOrPendingExceptShiftTrades(IEnumerable<IPerson> persons,
+			DateTimePeriod period)
 		{
 			var retList = new List<IPersonRequest>();
 
 			foreach (var item in persons.Batch(2000))
 			{
-				retList.AddRange(Session.CreateCriteria(typeof(PersonRequest))
-										.SetFetchMode("requests", FetchMode.Join)
-										.SetFetchMode("requests.ShiftTradeSwapDetails", FetchMode.Join)
-										.Add(Restrictions.InG("Person", item.ToArray()))
-										.Add(Restrictions.Or(Restrictions.Between("UpdatedOn", period.StartDateTime, period.EndDateTime),
-																	Restrictions.Eq("requestStatus", 0)))
-										.List<IPersonRequest>());
+				retList.AddRange(Session.CreateCriteria(typeof (PersonRequest))
+					.SetFetchMode("requests", FetchMode.Join)
+					.SetFetchMode("requests.ShiftTradeSwapDetails", FetchMode.Join)
+					.Add(Restrictions.InG("Person", item.ToArray()))
+					.Add(Restrictions.Or(Restrictions.Between("UpdatedOn", period.StartDateTime, period.EndDateTime),
+						Restrictions.Eq("requestStatus", 0)))
+					.List<IPersonRequest>());
 			}
 
 			//sjukt korkat - men finns inget lämpligt att filtrera p?i frågan ovan (varför en lista av requests!?)
@@ -482,7 +474,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.Add(Restrictions.Eq("Date", shiftTradeDate))
 				.Add(Restrictions.In("Person", personList.ToList()))
 				.Add(Restrictions.Ge("Criteria.ValidTo", new DateOnly(DateTime.UtcNow.Date)))
-				.Add(Restrictions.Eq("Status", ShiftExchangeOfferStatus.Pending))				
+				.Add(Restrictions.Eq("Status", ShiftExchangeOfferStatus.Pending))
 				.List<ShiftExchangeOffer>();
 		}
 	}
