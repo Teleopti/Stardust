@@ -262,33 +262,47 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		private IEnumerable<IPersonRequest> findAllRequestsForAgent(IPerson person, DateTimePeriod? period)
 		{
-			var shiftTradeRequestsForAgent = DetachedCriteria.For<ShiftTradeRequest>()
-				.CreateCriteria("ShiftTradeSwapDetails", "swapDetail", JoinType.InnerJoin)
-				.SetProjection(Projections.Property("Parent"))
-				.Add(Restrictions.Or(
-					Restrictions.Eq("swapDetail.PersonFrom", person),
-					Restrictions.Eq("swapDetail.PersonTo", person)));
+			#region Get all requests created by agent
 
-			var personRequests = Session.CreateCriteria<PersonRequest>()
+			var criteriaPersonRequestsCreatedByPerson = Session.CreateCriteria<PersonRequest>()
 				.SetFetchMode("requests", FetchMode.Join)
 				.SetResultTransformer(Transformers.DistinctRootEntity)
-				.AddOrder(Order.Desc("UpdatedOn"));
+				.Add(Restrictions.Eq("Person", person));
 
-			var requestsForAgent = Restrictions.Or(
-				Subqueries.PropertyIn("requests", shiftTradeRequestsForAgent),
-				Restrictions.Eq("Person", person));
+			applyPeriodRestriction(criteriaPersonRequestsCreatedByPerson, period);
 
-			personRequests.Add(requestsForAgent);
+			var requestsCreatedByPerson = criteriaPersonRequestsCreatedByPerson.List<IPersonRequest>();
 
-			if (period != null)
-			{
-				personRequests
-					.CreateCriteria("requests", JoinType.LeftOuterJoin)
-					.Add(Restrictions.Ge("Period.period.Maximum", period.Value.StartDateTime))
-					.Add(Restrictions.Le("Period.period.Minimum", period.Value.EndDateTime));
-			}
+			#endregion
 
-			return personRequests.List<IPersonRequest>();
+			#region Get shift trade request created by other agent but trade with current person
+
+			var subQueryShiftTradeRequestsWithPerson = DetachedCriteria.For<ShiftTradeRequest>()
+				.SetProjection(Projections.Property("Parent"))
+				.CreateCriteria("ShiftTradeSwapDetails", "swapDetail", JoinType.InnerJoin)
+				.Add(Restrictions.Eq("swapDetail.PersonTo", person));
+
+			var criteriaShiftTradeRequestsWithPerson = Session.CreateCriteria<PersonRequest>()
+				.SetFetchMode("requests", FetchMode.Join)
+				.SetResultTransformer(Transformers.DistinctRootEntity)
+				.Add(Subqueries.PropertyIn("requests", subQueryShiftTradeRequestsWithPerson));
+
+			applyPeriodRestriction(criteriaShiftTradeRequestsWithPerson, period);
+
+			var shiftTradeRequestsWithPerson = criteriaShiftTradeRequestsWithPerson.List<IPersonRequest>();
+
+			#endregion
+
+			return requestsCreatedByPerson.Union(shiftTradeRequestsWithPerson).OrderBy(x => x.UpdatedOn);
+		}
+
+		private void applyPeriodRestriction(ICriteria criteria, DateTimePeriod? period)
+		{
+			if (period == null) return;
+
+			criteria.CreateCriteria("requests", JoinType.LeftOuterJoin)
+				.Add(Restrictions.Ge("Period.period.Maximum", period.Value.StartDateTime))
+				.Add(Restrictions.Le("Period.period.Minimum", period.Value.EndDateTime));
 		}
 
 		/// <summary>
@@ -304,10 +318,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IList<IPersonRequest> FindAllRequestModifiedWithinPeriodOrPending(IPerson person, DateTimePeriod period)
 		{
 			//Alla request där UpdatedOn innanför period
-			IEnumerable<IPersonRequest> allRequestsBy = findModifiedWithinPeriodOrPending(person, period);
+			var allRequestsBy = findModifiedWithinPeriodOrPending(person, period);
 
 			//Alla shiftTrades där UpdatedOn innanför Period
-			IEnumerable<IPersonRequest> allShiftTradesTo = findShiftTradesModifiedWithinPeriod(person, period);
+			var allShiftTradesTo = findShiftTradesModifiedWithinPeriod(person, period);
 
 			return allRequestsBy.Union(allShiftTradesTo).ToList();
 		}
