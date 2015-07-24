@@ -82,14 +82,14 @@
 	}
 	.campaign-phase li{
 		float:left;	
-		list-style:none;		
-		border:1px solid rgba(0,0,0,.06);
-		cursor:pointer;	
+		margin-right:1px;
+		list-style:none;
 		.md-button {
-			height: 35px;
+			height: 37px;
 			margin: 0 !important;
 			background-color:#66C2FF;
-
+			box-shadow:0 2px 5px 0 rgba(0,0,0,.26);
+			border-radius:0 !important;
 			&[disabled] {
 				background-color: lightgrey;
 			}
@@ -98,7 +98,7 @@
 	.campaign-phase li:hover{
 		box-shadow: none;
 	}
-	.campaign-phase li:hover .campaign-warning-icon{
+	.campaign-phase li:hover .campaign-warning-icon,.campaign-phase li:hover .md-button{
 		box-shadow: none;
 	}
 	.phase-active{
@@ -128,7 +128,8 @@
 		display:inline-block;
 		padding-right:3px;
 		padding-left:3px;
-		position:relative;		
+		position:relative;	
+		transition:box-shadow .4s;	
 	}
 	p > span.campaign-warning-icon {
 		margin-top: 0 !important;
@@ -230,9 +231,6 @@
 }
 .m-l-40{
 	margin-left:40px;
-}
-.m-l-10{
-	margin-left:10px;
 }
 
 .wrong-sign, .right-sign {
@@ -442,13 +440,12 @@ activity-picker {
 	z-index:1000;
 	height: 100%;
 	width:100%;
-	background-color:#E0E0E0;
-	opacity:0.5;
+	background-color:rgba(0,0,0,0.5);
 
 	md-progress-circular {
 	position:absolute;
-	top:50%;
-	left:50%;
+	top:40%;
+	left:48%;
 	}
 }
 
@@ -460,7 +457,7 @@ activity-picker {
 
 	md-progress-circular {
 		position:absolute;
-		top:50%;
-		left:50%;
+		top:48%;
+		left:48%;
 	}
 }
