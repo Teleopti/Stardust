@@ -23,6 +23,7 @@ namespace Teleopti.Wfm.AdministrationTest
 			system.AddService<AdminTenantAuthentication>();
 			system.AddService<LoadAllPersonInfos>();
 			system.AddService<GetImportUsers>();
+			system.AddService<LoadAllTenants>();
 		}
 	}
 }

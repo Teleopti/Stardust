@@ -18,5 +18,14 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Admin
 				.SetString("name", tenantName)
 				.UniqueResult<long>() == 1;
 		}
+
+		public bool CheckNewName(string newTenantName, string oldTenantName)
+		{
+			return _currentTenantSession.CurrentSession()
+				.CreateQuery("select count(id) from Tenant t where t.Name=:newTenantName and t.Name != :oldTenantName ")
+				.SetString("newTenantName", newTenantName)
+				.SetString("oldTenantName", oldTenantName)
+				.UniqueResult<long>() == 1;
+		}
 	}
 }

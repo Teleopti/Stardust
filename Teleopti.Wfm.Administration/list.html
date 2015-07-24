@@ -5,13 +5,13 @@
 		<div class="col-md-4">
 			<h2>Import existing</h2>
 			<p>
-				if you already have databases (one Application and one Analytics) that you want to include in the multi tenant adminstration you can import it here.
+				if you already have databases (one Application and one Analytics) that you want to include in the multi tenant administration you can import it here.
 			</p>
 			<p><a class="btn btn-default" href="#import">Start import &raquo;</a></p>
 		</div>
 		<div class="col-md-4">
 			<h2>Create new empty</h2>
-			<p>Lets you create 2 new databases (one Application and one Analytics) and connect the to a new Tenant.</p>
+			<p>Lets you create 2 new databases (one Application and one Analytics) and connect them to a new Tenant.</p>
 			<p><a class="btn btn-default" href="#empty">Create new &raquo;</a></p>
 		</div>
 		<div class="col-md-4">
@@ -36,9 +36,9 @@
 				</thead>
 				<tbody>
 					<tr ng-repeat="tenant in Tenants" ng-class-odd="'oddRow'">
-						<td>{{tenant.Name}}</td>
-						<td>{{tenant.AppDatabase}}</td>
-						<td>{{tenant.AnalyticsDatabase}}</td>
+						<td><a href="#details\{{tenant.Name}}">{{tenant.Name}}</a>   </td>
+						<td><a href="#details\{{tenant.Name}}">{{tenant.AppDatabase}}</a>   </td>
+						<td><a href="#details\{{tenant.Name}}">{{tenant.AnalyticsDatabase}}</a>   </td>
 					</tr>
 				</tbody>
 			</table>

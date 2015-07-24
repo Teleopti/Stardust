@@ -104,6 +104,7 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="ControllerActions\SaveTenant.cs" />
     <Compile Include="ControllerActions\CheckNewTenantName.cs" />
     <Compile Include="ControllerActions\GetAllTenantsTest.cs" />
     <Compile Include="ControllerActions\ImportTenantTest.cs" />

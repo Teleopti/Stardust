@@ -7,7 +7,10 @@
 			templateUrl: 'list.html',
 			controller: 'listController'
 		})
-
+		.when('/details/:tenant', {
+			templateUrl: 'details.html',
+			controller: 'detailsController'
+		})
 		.when('/import', {
 			templateUrl: 'import.html',
 			controller: 'importController'

@@ -27,6 +27,8 @@ namespace Teleopti.Wfm.Administration.Core
 			builder.RegisterType<GetImportUsers>().SingleInstance();
 			builder.RegisterType<LoadAllPersonInfos>().SingleInstance();
 			builder.RegisterType<Import>().SingleInstance();
+			builder.RegisterType<SaveTenant>().SingleInstance();
+
 
 			// OPTIONAL: Enable property injection into action filters.
 			builder.RegisterFilterProvider();
