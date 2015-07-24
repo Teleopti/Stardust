@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
             var expectedCampaignViewModel = new CampaignViewModel();
             _outboundCampaignPersister.Stub(x => x.Persist(campaignForm)).Return(expectedCampaignViewModel);
 
-            var target = new OutboundController(_outboundCampaignPersister, null, null, null, null)
+            var target = new OutboundController(_outboundCampaignPersister, null, null, null, null, null)
             {
                 Request = new HttpRequestMessage()
             };
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
         {
             var campaignForm = new CampaignForm() { Name = "myCampaign".PadRight(256, 'a') };
 
-            var target = new OutboundController(_outboundCampaignPersister, null, null, null, null)
+            var target = new OutboundController(_outboundCampaignPersister, null, null, null, null, null)
             {
                 Request = new HttpRequestMessage()
             };
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
             var outboundActivityProvider = MockRepository.GenerateMock<IOutboundActivityProvider>();
             outboundActivityProvider.Stub(x => x.GetAll()).Return(new List<ActivityViewModel>() { new ActivityViewModel() });
 
-            var target = new OutboundController(null, null, null, outboundActivityProvider, null)
+            var target = new OutboundController(null, null, null, outboundActivityProvider, null, null)
             {
                 Request = new HttpRequestMessage()
             };
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
 
             _outboundCampaignRepository.Stub(x => x.Get(campaignId)).Return(campaign);
             _outboundCampaignViewModelMapper.Stub((x => x.Map(campaign))).Return(campaignVM);
-            var target = new OutboundController(null, _outboundCampaignRepository, _outboundCampaignViewModelMapper, null, null)
+            var target = new OutboundController(null, _outboundCampaignRepository, _outboundCampaignViewModelMapper, null, null, null)
             {
                 Request = new HttpRequestMessage()
             };
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
             var campaignId = new Guid();
             _outboundCampaignRepository.Stub(x => x.Get(campaignId)).IgnoreArguments().Return(campaign);
 
-            var target = new OutboundController(null, _outboundCampaignRepository, null, null, null);
+            var target = new OutboundController(null, _outboundCampaignRepository, null, null, null, null);
             target.Remove(campaignId);
             _outboundCampaignRepository.AssertWasCalled(x => x.Remove(campaign), o => o.IgnoreArguments());
         }
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
         public void ShouldUpdateCampaignVM()
         {
             var campaignVM = new CampaignViewModel();
-            var target = new OutboundController(_outboundCampaignPersister, null, null, null, null);
+            var target = new OutboundController(_outboundCampaignPersister, null, null, null, null, null);
             target.UpdateCampaign(new Guid(), campaignVM);
             _outboundCampaignPersister.AssertWasCalled((x => x.Persist(campaignVM)));
         }
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
             var campaignStatistic = new CampaignStatistics();
             var factory = MockRepository.GenerateMock<ICampaignSummaryViewModelFactory>();
             factory.Stub(x => x.GetCampaignStatistics()).Return(campaignStatistic);
-            var target = new OutboundController(_outboundCampaignPersister, null, null, null, factory);
+            var target = new OutboundController(_outboundCampaignPersister, null, null, null, factory, null);
             var result = target.GetStatistics();
 
             result.Should().Be.SameInstanceAs(campaignStatistic);
@@ -133,14 +133,24 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
         {
             var factory = MockRepository.GenerateMock<ICampaignSummaryViewModelFactory>();
            
-            
-
-            var target = new OutboundController(null, null, null, null, factory);
+            var target = new OutboundController(null, null, null, null, factory, null);
             target.GetCamapigns(CampaignStatus.Done);
 
             factory.AssertWasCalled(x => x.GetCampaignSummaryList(CampaignStatus.Done));
+        }
 
-            
-        }      
+	    [Test]
+	    public void ShouldGetCampaignVisualization()
+	    {
+		    var expectedVisualizationVM = new CampaignVisualizationViewModel();
+		    var id = new Guid();
+		    var visualizationProvider = MockRepository.GenerateMock<ICampaignVisualizationProvider>();
+			 visualizationProvider.Stub(x => x.ProvideVisualization(id)).Return(expectedVisualizationVM);
+			 
+			 var target = new OutboundController(null, null, null, null, null, visualizationProvider);
+			 var result = target.GetVisualization(id);
+
+		    result.Should().Be.SameInstanceAs(expectedVisualizationVM);
+	    }
     }
 }

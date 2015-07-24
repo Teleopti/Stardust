@@ -22,9 +22,10 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.IoC
 			builder.RegisterType<OutboundSkillPersister>().As<IOutboundSkillPersister>().SingleInstance();
 			builder.RegisterType<ProductionReplanHelper>().As<IProductionReplanHelper>().SingleInstance();
 			builder.RegisterType<OutboundPeriodMover>().As<IOutboundPeriodMover>().SingleInstance();
-		    builder.RegisterType<CampaignListOrderProvider>().As<ICampaignListOrderProvider>().SingleInstance();
-            builder.RegisterType<CampaignListProvider>().As<ICampaignListProvider>().SingleInstance();
-		    builder.RegisterType<CampaignSummaryViewModelFactory>().As<ICampaignSummaryViewModelFactory>().SingleInstance();
+			builder.RegisterType<CampaignListOrderProvider>().As<ICampaignListOrderProvider>().SingleInstance();
+			builder.RegisterType<CampaignListProvider>().As<ICampaignListProvider>().SingleInstance();
+			builder.RegisterType<CampaignSummaryViewModelFactory>().As<ICampaignSummaryViewModelFactory>().SingleInstance();
+			builder.RegisterType<CampaignVisualizationProvider>().As<ICampaignVisualizationProvider>().SingleInstance();
 
 			//dependences
 			builder.RegisterModule(new SchedulingCommonModule());

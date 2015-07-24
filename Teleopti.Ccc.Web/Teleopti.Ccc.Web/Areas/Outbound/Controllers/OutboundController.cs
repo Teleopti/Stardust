@@ -21,16 +21,20 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		private readonly IOutboundCampaignRepository _outboundCampaignRepository;
 		private readonly IOutboundCampaignViewModelMapper _outboundCampaignViewModelMapper;
 		private readonly IOutboundActivityProvider _outboundActivityProvider;
-	    private readonly ICampaignSummaryViewModelFactory _campaignSummaryViewModelFactory;
+		private readonly ICampaignSummaryViewModelFactory _campaignSummaryViewModelFactory;
+		private readonly ICampaignVisualizationProvider _campaignVisualizationProvider;
 	
 
-		public OutboundController(IOutboundCampaignPersister outboundCampaignPersister, IOutboundCampaignRepository outboundCampaignRepository, IOutboundCampaignViewModelMapper outboundCampaignViewModelMapper, IOutboundActivityProvider outboundActivityProvider, ICampaignSummaryViewModelFactory campaignSummaryViewModelFactory)
+		public OutboundController(IOutboundCampaignPersister outboundCampaignPersister, IOutboundCampaignRepository outboundCampaignRepository, 
+			IOutboundCampaignViewModelMapper outboundCampaignViewModelMapper, IOutboundActivityProvider outboundActivityProvider, 
+			ICampaignSummaryViewModelFactory campaignSummaryViewModelFactory, ICampaignVisualizationProvider campaignVisualizationProvider)
 		{
 			_outboundCampaignPersister = outboundCampaignPersister;
 			_outboundCampaignRepository = outboundCampaignRepository;
 			_outboundCampaignViewModelMapper = outboundCampaignViewModelMapper;
 			_outboundActivityProvider = outboundActivityProvider;
 		    _campaignSummaryViewModelFactory = campaignSummaryViewModelFactory;
+			_campaignVisualizationProvider = campaignVisualizationProvider;
 		}
 
 		[HttpPost, Route("api/Outbound/Campaign"), UnitOfWork]
@@ -58,6 +62,12 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		{
 			var campaign = _outboundCampaignRepository.Get(Id);
 			return _outboundCampaignViewModelMapper.Map(campaign);			
+		}		
+		
+		[HttpPost, Route("api/Outbound/Campaign/Visualization"), UnitOfWork]
+		public virtual CampaignVisualizationViewModel GetVisualization([FromBody] Guid id)
+		{
+			return _campaignVisualizationProvider.ProvideVisualization(id);
 		}
 
 		[HttpPut, Route("api/Outbound/Campaign/{Id}"), UnitOfWork]

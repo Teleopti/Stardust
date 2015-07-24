@@ -464,6 +464,8 @@
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IAbsenceRequestProbability.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IAbsenceRequestProbabilityProvider.cs" />
     <Compile Include="Areas\MyTime\Models\Settings\ChangePasswordResultInfo.cs" />
+    <Compile Include="Areas\Outbound\core\Campaign\DataProvider\CampaignVisualizationProvider.cs" />
+    <Compile Include="Areas\Outbound\core\Campaign\DataProvider\ICampaignVisualizationProvider.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\CampaignListOrderProvider.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\CampaignListProvider.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\ICampaignListOrderProvider.cs" />

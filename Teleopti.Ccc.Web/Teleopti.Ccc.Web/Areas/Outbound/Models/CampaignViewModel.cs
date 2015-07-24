@@ -96,4 +96,12 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 		public int OnGoingWarning;
 		public int Done;
 	}
+
+	public class CampaignVisualizationViewModel
+	{
+		public IList<DateOnly> Dates;
+		public IList<TimeSpan> PlannedPersonHours;
+		public IList<TimeSpan> BacklogPersonHours;
+		public IList<TimeSpan> ScheduledPersonHours;
+	}
 }
