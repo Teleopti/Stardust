@@ -136,17 +136,44 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return personRequests.List<IPersonRequest>();
 		}
 
-		public IList<IPersonRequest> FindAllRequestsExceptOffer(IPerson person, Paging paging)
+		public IEnumerable<IPersonRequest> FindAllRequestsForAgentByType(IPerson person, Paging paging, params RequestType[] requestTypes)
 		{
-			var personRequests = getAllRequests(person);
+			var requestsForAgent = getShiftTradeRequestsForAgent(person);
+			var personRequests =  Session.CreateCriteria<PersonRequest>()
+				.SetFetchMode("requests", FetchMode.Join)
+				.SetResultTransformer(Transformers.DistinctRootEntity)
+				.AddOrder(Order.Desc("UpdatedOn"));
+		
+			var specificRequest = DetachedCriteria.For<Request>()
+				.SetProjection(Projections.Property("Parent"));
+			var targetRequestTypes = new List<Tuple<RequestType, Type>>()
+			{
+				new Tuple<RequestType, Type>(RequestType.ShiftTradeRequest,typeof(ShiftTradeRequest) ),
+				new Tuple<RequestType, Type>(RequestType.TextRequest,typeof(TextRequest) ),
+				new Tuple<RequestType, Type>(RequestType.AbsenceRequest,typeof(AbsenceRequest) ),
+				new Tuple<RequestType, Type>(RequestType.ShiftExchangeOffer,typeof(ShiftExchangeOffer) )
+			};
+			var foundRequestTypes = targetRequestTypes.Where(requestType => requestTypes.Contains(requestType.Item1)).ToList();
 
-			excludeShiftExchangeOffers(personRequests);
+			ICriterion restrictions = null;
+			foreach (var type in foundRequestTypes)
+			{
+				restrictions = restrictions == null
+					? Restrictions.Eq("class", type.Item2)
+					: Restrictions.Or(restrictions, Restrictions.Eq("class", type.Item2));
+
+				if (type.Item1.Equals(RequestType.ShiftTradeRequest))
+					personRequests.Add(requestsForAgent);
+			}
+
+			specificRequest.Add(restrictions);
+			personRequests.Add(Subqueries.PropertyIn("Id", specificRequest));
 			applyPagingToResults(paging, personRequests);
 
 			return personRequests.List<IPersonRequest>();
 		}
 
-		private ICriteria getAllRequests(IPerson person)
+		private static AbstractCriterion getShiftTradeRequestsForAgent(IPerson person)
 		{
 			var shiftTradeDetailsForAgentPersonTo = DetachedCriteria.For<ShiftTradeSwapDetail>()
 				.SetProjection(Projections.Property("Parent"))
@@ -164,16 +191,32 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetProjection(Projections.Property("Parent"))
 				.Add(Subqueries.PropertyIn("ShiftTradeSwapDetails", shiftTradeDetailsForAgentPersonFrom));
 
-			var personRequests = Session.CreateCriteria<PersonRequest>()
-				.SetFetchMode("requests", FetchMode.Join)
-				.SetResultTransformer(Transformers.DistinctRootEntity)
-				.AddOrder(Order.Desc("UpdatedOn"));
-
 			var requestsForAgent = Restrictions.Or(Restrictions.Or(
 				Restrictions.And(Subqueries.PropertyIn("requests", shiftTradeRequestsForAgentPersonTo),
 					Restrictions.Not(Restrictions.Eq("requestStatus", 4))), // hide auto denied shift trade requests for receiptors
 				Subqueries.PropertyIn("requests", shiftTradeRequestsForAgentPersonFrom)),
 				Restrictions.Eq("Person", person));
+
+			return requestsForAgent;
+		}
+
+		public IList<IPersonRequest> FindAllRequestsExceptOffer(IPerson person, Paging paging)
+		{
+			var personRequests = getAllRequests(person);
+
+			excludeShiftExchangeOffers(personRequests);
+			applyPagingToResults(paging, personRequests);
+
+			return personRequests.List<IPersonRequest>();
+		}
+
+		private ICriteria getAllRequests(IPerson person)
+		{
+			var personRequests = Session.CreateCriteria<PersonRequest>()
+				.SetFetchMode("requests", FetchMode.Join)
+				.SetResultTransformer(Transformers.DistinctRootEntity)
+				.AddOrder(Order.Desc("UpdatedOn"));
+			var requestsForAgent = getShiftTradeRequestsForAgent(person);
 
 			personRequests.Add(requestsForAgent);
 			return personRequests;
@@ -470,7 +513,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IEnumerable<IShiftExchangeOffer> FindShiftExchangeOffersForBulletin(IEnumerable<IPerson> personList,
 			DateOnly shiftTradeDate)
 		{
-			return Session.CreateCriteria(typeof (IShiftExchangeOffer))
+			return Session.CreateCriteria(typeof(IShiftExchangeOffer))
 				.Add(Restrictions.Eq("Date", shiftTradeDate))
 				.Add(Restrictions.In("Person", personList.ToList()))
 				.Add(Restrictions.Ge("Criteria.ValidTo", new DateOnly(DateTime.UtcNow.Date)))

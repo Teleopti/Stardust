@@ -30,16 +30,27 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 
 		public IEnumerable<IPersonRequest> RetrieveRequests(Paging paging)
 		{
-			var requests = _toggleManager.IsEnabled(Toggles.MyTimeWeb_SeeAnnouncedShifts_31639) ?
-				_repository.FindAllRequestsForAgent(_loggedOnUser.CurrentUser(), paging) :
-				_repository.FindAllRequestsExceptOffer(_loggedOnUser.CurrentUser(), paging);
-
-			if (!_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb, DateOnly.Today, _loggedOnUser.CurrentUser()))
+			var types = new List<RequestType>
 			{
-				requests = requests.Where(request => request.Request.RequestType != RequestType.ShiftTradeRequest);
+				RequestType.AbsenceRequest,RequestType.ShiftExchangeOffer,RequestType.ShiftTradeRequest,RequestType.TextRequest
+			};
+			if (!_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb, DateOnly.Today,
+					_loggedOnUser.CurrentUser()))
+			{
+				types.Remove(RequestType.ShiftExchangeOffer);
+				types.Remove(RequestType.ShiftTradeRequest);
 			}
 
-			return requests;
+			if (_toggleManager.IsEnabled(Toggles.MyTimeWeb_SeeAnnouncedShifts_31639))
+			{
+				return _repository.FindAllRequestsForAgentByType(_loggedOnUser.CurrentUser(), paging, types.ToArray());
+			}
+			else
+			{
+				types.Remove(RequestType.ShiftExchangeOffer);
+				return _repository.FindAllRequestsForAgentByType(_loggedOnUser.CurrentUser(), paging, types.ToArray());
+			}
+
 		}
 
 		public IEnumerable<IPersonRequest> RetrieveRequests(DateOnlyPeriod period)

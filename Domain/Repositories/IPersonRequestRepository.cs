@@ -54,6 +54,19 @@ namespace Teleopti.Ccc.Domain.Repositories
 		/// Created date: 2011-10-27
 		/// </remarks>
 		IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person, DateTimePeriod period);
+		
+		/// <summary>
+		/// Finds all specific types requests from and to a person for given page.
+		/// </summary>
+		/// <param name="person">The person.</param>
+		/// <param name="paging">Paging information.</param>
+		/// <param name="requestTypes">Paging information.</param>
+		/// <returns></returns>
+		/// <remarks>
+		/// Created by: jianfeng
+		/// Created date: 2015-07-22
+		/// </remarks>
+		IEnumerable<IPersonRequest> FindAllRequestsForAgentByType(IPerson person, Paging paging, params RequestType[] requestTypes);
 
 		/// <summary>
 		/// Finds all requests modified within or pending.

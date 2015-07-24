@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -16,6 +17,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.WebTest.Core.IoC;
 using Teleopti.Interfaces.Domain;
+using System.Collections.Generic;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 {
@@ -93,13 +95,16 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				new PersonRequestFactory().CreatePersonRequest(),
 				new PersonRequestFactory().CreatePersonRequest()
 			};
-
+			var requestTypes = new List<RequestType>
+			{
+				RequestType.AbsenceRequest,RequestType.TextRequest
+			};
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
-			repository.Stub(x => x.FindAllRequestsForAgent(person, paging)).Return(personRequests);
+			repository.Stub(x => x.FindAllRequestsForAgentByType(person, paging, requestTypes.ToArray())).Return(personRequests);
 
 			Assert.That(personRequests.Length, Is.EqualTo(target.RetrieveRequests(paging).Count()));
 
-			repository.AssertWasCalled(x => x.FindAllRequestsForAgent(person, paging));
+			repository.AssertWasCalled(x => x.FindAllRequestsForAgentByType(person, paging, requestTypes.ToArray()));
 		}
 
 		[Test]
@@ -111,18 +116,21 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			toggleManager.Stub(x => x.IsEnabled(Toggles.MyTimeWeb_SeeAnnouncedShifts_31639)).Return(false);
 			var target = new PersonRequestProvider(repository, loggedOnUser, null, toggleManager, new FakePermissionProvider());
 			var person = new Person();
-			var paging = new Paging();
+			var paging = new Paging{ Skip = 0, Take = 5 };
 			var personRequests = new[]
 			{
 				new PersonRequestFactory().CreatePersonRequest(),
 				new PersonRequestFactory().CreatePersonRequest()
 			};
-
+			var requestTypes = new List<RequestType>
+			{
+				RequestType.AbsenceRequest,RequestType.TextRequest
+			};
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
-			repository.Stub(x => x.FindAllRequestsExceptOffer(person, paging)).Return(personRequests);
+			repository.Stub(x => x.FindAllRequestsForAgentByType(person, paging, requestTypes.ToArray())).Return(personRequests);
 
 			Assert.That(personRequests.Length, Is.EqualTo(target.RetrieveRequests(paging).Count()));
-			repository.AssertWasCalled(x => x.FindAllRequestsExceptOffer(person, paging));
+			repository.AssertWasCalled(x => x.FindAllRequestsForAgentByType(person, paging, requestTypes.ToArray()));
 		}
 
 		[Test]
@@ -177,6 +185,33 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			requestQueue.Count().Should().Be(1);
 			Assert.IsTrue(requestQueue.Any(requestFromProvider =>
 				requestFromProvider.Request.RequestType == RequestType.TextRequest));
+		}
+
+		[Test]
+		public void ShouldReturnCorrectAmounteOfRequestIfHasPermission()
+		{
+			var person = PersonFactory.CreatePerson("John");
+			var requestDate = DateOnly.Today;
+			var shiftTradeRequest = new PersonRequestFactory().CreatePersonShiftTradeRequest(person, requestDate);
+			var textRequest = new PersonRequestFactory().CreatePersonRequest(person);
+			var absence = AbsenceFactory.CreateAbsence("Sick leave");
+			var period = new DateTimePeriod(
+				new DateTime(2008, 7, 10, 0, 0, 0, DateTimeKind.Utc),
+				new DateTime(2008, 7, 11, 0, 0, 0, DateTimeKind.Utc));
+			IPersonRequest request = new PersonRequest(person);
+			IAbsenceRequest absenceRequest = new AbsenceRequest(absence, period);
+			request.Request = absenceRequest;
+
+			((FakeLoggedOnUser)LoggedOnUser).SetFakeLoggedOnUser(person);
+			RequestRepository.Add(shiftTradeRequest);
+			RequestRepository.Add(textRequest);
+			RequestRepository.Add(request);
+
+			var requestQueue = RequestProvider.RetrieveRequests(new Paging { Skip = 0, Take = 5 }).ToArray();
+
+			requestQueue.Count().Should().Be(2);
+			Assert.IsTrue(requestQueue.Any(requestFromProvider =>
+				requestFromProvider.Request.RequestType == RequestType.TextRequest || requestFromProvider.Request.RequestType == RequestType.ShiftTradeRequest));
 		}
 	}
 }

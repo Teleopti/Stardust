@@ -137,7 +137,29 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             return new PersonRequestRepository(unitOfWork);
         }
 
-		[Test]
+
+	    private void setUpGetRequestsByTypeTests()
+		{
+			var personFrom = PersonFactory.CreatePerson("personFrom");
+			PersistAndRemoveFromUnitOfWork(personFrom);
+
+			var requestDate = DateOnly.Today;
+			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail>
+		    {
+			   new ShiftTradeSwapDetail(personFrom, _person, requestDate,requestDate)
+		    });
+			var shiftTradePersonRequest = new PersonRequest(personFrom) { Request = shiftTradeRequest };
+			var textRequest = new PersonRequest(_person, new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow)));
+			var absenceRequest = CreateAggregateWithCorrectBusinessUnit();
+			var offerRequest = createShiftExchangeOffer(new DateTime(2008, 4, 1, 0, 0, 0, DateTimeKind.Utc));
+
+			PersistAndRemoveFromUnitOfWork(shiftTradePersonRequest);
+			PersistAndRemoveFromUnitOfWork(textRequest);
+			PersistAndRemoveFromUnitOfWork(absenceRequest);
+			PersistAndRemoveFromUnitOfWork(offerRequest);
+		}
+
+	    [Test]
 		public void FindNonExistingShouldReturnNull()
 		{
 			new PersonRequestRepository(UnitOfWork).Find(Guid.NewGuid())
@@ -825,100 +847,155 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 															rep.Remove(request));
 		 }
 
-			[Test]
-			public void ShouldNotIncludeShiftTradeOfDeletedPersonTo()
-			{
-				var personTo = PersonFactory.CreatePerson("person to");
-				((IDeleteTag)personTo).SetDeleted();
-				var personFrom = PersonFactory.CreatePerson("person from");
-				PersistAndRemoveFromUnitOfWork(personTo);
-				PersistAndRemoveFromUnitOfWork(personFrom);
+		[Test]
+		public void ShouldNotIncludeShiftTradeOfDeletedPersonTo()
+		{
+			var personTo = PersonFactory.CreatePerson("person to");
+			((IDeleteTag)personTo).SetDeleted();
+			var personFrom = PersonFactory.CreatePerson("person from");
+			PersistAndRemoveFromUnitOfWork(personTo);
+			PersistAndRemoveFromUnitOfWork(personFrom);
 
-				var persons = new List<IPerson> { personFrom, personTo };
+			var persons = new List<IPerson> { personFrom, personTo };
 
-				var shiftTradeRequest = new ShiftTradeRequest(
-						new List<IShiftTradeSwapDetail>
-                    {
-                        new ShiftTradeSwapDetail(personFrom, personTo, new DateOnly(2008, 7, 16),new DateOnly(2008, 7, 16))
-                    });
-				var shiftTradePersonRequest = new PersonRequest(personFrom) {Request = shiftTradeRequest};
-				shiftTradePersonRequest.Pending();
-				PersistAndRemoveFromUnitOfWork(shiftTradePersonRequest);
+			var shiftTradeRequest = new ShiftTradeRequest(
+					new List<IShiftTradeSwapDetail>
+                {
+                    new ShiftTradeSwapDetail(personFrom, personTo, new DateOnly(2008, 7, 16),new DateOnly(2008, 7, 16))
+                });
+			var shiftTradePersonRequest = new PersonRequest(personFrom) {Request = shiftTradeRequest};
+			shiftTradePersonRequest.Pending();
+			PersistAndRemoveFromUnitOfWork(shiftTradePersonRequest);
 
-				new PersonRequestRepository(UnitOfWork).FindAllRequestModifiedWithinPeriodOrPending(persons, new DateTimePeriod(2000, 1, 1, 2010, 1, 1))
-				        .Should().Be.Empty();
-			}
+			new PersonRequestRepository(UnitOfWork).FindAllRequestModifiedWithinPeriodOrPending(persons, new DateTimePeriod(2000, 1, 1, 2010, 1, 1))
+				    .Should().Be.Empty();
+		}
 
-			[Test]
-			public void ShouldNotIncludeShiftTradeOfTerminatedPersonTo()
-			{
-				var personTo = PersonFactory.CreatePerson("person to");
-				personTo.TerminatePerson(new DateOnly(1900,1,1), MockRepository.GenerateMock<IPersonAccountUpdater>());
-				var personFrom = PersonFactory.CreatePerson("person from");
-				PersistAndRemoveFromUnitOfWork(personTo);
-				PersistAndRemoveFromUnitOfWork(personFrom);
+		[Test]
+		public void ShouldNotIncludeShiftTradeOfTerminatedPersonTo()
+		{
+			var personTo = PersonFactory.CreatePerson("person to");
+			personTo.TerminatePerson(new DateOnly(1900,1,1), MockRepository.GenerateMock<IPersonAccountUpdater>());
+			var personFrom = PersonFactory.CreatePerson("person from");
+			PersistAndRemoveFromUnitOfWork(personTo);
+			PersistAndRemoveFromUnitOfWork(personFrom);
 
-				var persons = new List<IPerson> { personFrom, personTo };
+			var persons = new List<IPerson> { personFrom, personTo };
 
-				var shiftTradeRequest = new ShiftTradeRequest(
-						new List<IShiftTradeSwapDetail>
-                    {
-                        new ShiftTradeSwapDetail(personFrom, personTo, new DateOnly(2008, 7, 16),new DateOnly(2008, 7, 16))
-                    });
-				var shiftTradePersonRequest = new PersonRequest(personFrom) { Request = shiftTradeRequest };
-				shiftTradePersonRequest.Pending();
-				PersistAndRemoveFromUnitOfWork(shiftTradePersonRequest);
+			var shiftTradeRequest = new ShiftTradeRequest(
+					new List<IShiftTradeSwapDetail>
+                {
+                    new ShiftTradeSwapDetail(personFrom, personTo, new DateOnly(2008, 7, 16),new DateOnly(2008, 7, 16))
+                });
+			var shiftTradePersonRequest = new PersonRequest(personFrom) { Request = shiftTradeRequest };
+			shiftTradePersonRequest.Pending();
+			PersistAndRemoveFromUnitOfWork(shiftTradePersonRequest);
 
-				new PersonRequestRepository(UnitOfWork).FindAllRequestModifiedWithinPeriodOrPending(persons, new DateTimePeriod(2000, 1, 1, 2010, 1, 1))
-								.Should().Be.Empty();
-			}
+			new PersonRequestRepository(UnitOfWork).FindAllRequestModifiedWithinPeriodOrPending(persons, new DateTimePeriod(2000, 1, 1, 2010, 1, 1))
+							.Should().Be.Empty();
+		}
 
-			[Test]
-			public void ShouldNotIncludeShiftTradeOfDeletedPersonFrom()
-			{
-				var personTo = PersonFactory.CreatePerson("person to");
-				var personFrom = PersonFactory.CreatePerson("person from");
-				((IDeleteTag)personFrom).SetDeleted();
-				PersistAndRemoveFromUnitOfWork(personTo);
-				PersistAndRemoveFromUnitOfWork(personFrom);
+		[Test]
+		public void ShouldNotIncludeShiftTradeOfDeletedPersonFrom()
+		{
+			var personTo = PersonFactory.CreatePerson("person to");
+			var personFrom = PersonFactory.CreatePerson("person from");
+			((IDeleteTag)personFrom).SetDeleted();
+			PersistAndRemoveFromUnitOfWork(personTo);
+			PersistAndRemoveFromUnitOfWork(personFrom);
 
-				var persons = new List<IPerson> { personFrom, personTo };
+			var persons = new List<IPerson> { personFrom, personTo };
 
-				var shiftTradeRequest = new ShiftTradeRequest(
-						new List<IShiftTradeSwapDetail>
-                    {
-                        new ShiftTradeSwapDetail(personFrom, personTo, new DateOnly(2008, 7, 16),new DateOnly(2008, 7, 16))
-                    });
-				var shiftTradePersonRequest = new PersonRequest(personFrom) { Request = shiftTradeRequest };
-				shiftTradePersonRequest.Pending();
-				PersistAndRemoveFromUnitOfWork(shiftTradePersonRequest);
+			var shiftTradeRequest = new ShiftTradeRequest(
+					new List<IShiftTradeSwapDetail>
+                {
+                    new ShiftTradeSwapDetail(personFrom, personTo, new DateOnly(2008, 7, 16),new DateOnly(2008, 7, 16))
+                });
+			var shiftTradePersonRequest = new PersonRequest(personFrom) { Request = shiftTradeRequest };
+			shiftTradePersonRequest.Pending();
+			PersistAndRemoveFromUnitOfWork(shiftTradePersonRequest);
 
-				new PersonRequestRepository(UnitOfWork).FindAllRequestModifiedWithinPeriodOrPending(persons, new DateTimePeriod(2000, 1, 1, 2010, 1, 1))
-								.Should().Be.Empty();
-			}
+			new PersonRequestRepository(UnitOfWork).FindAllRequestModifiedWithinPeriodOrPending(persons, new DateTimePeriod(2000, 1, 1, 2010, 1, 1))
+							.Should().Be.Empty();
+		}
 
-			[Test]
-			public void ShouldNotIncludeShiftTradeOfTerminatedPersonFrom()
-			{
-				var personTo = PersonFactory.CreatePerson("person to");
-				var personFrom = PersonFactory.CreatePerson("person from");
-				personFrom.TerminatePerson(new DateOnly(1900,1,1), MockRepository.GenerateMock<IPersonAccountUpdater>());
-				PersistAndRemoveFromUnitOfWork(personTo);
-				PersistAndRemoveFromUnitOfWork(personFrom);
+		[Test]
+		public void ShouldNotIncludeShiftTradeOfTerminatedPersonFrom()
+		{
+			var personTo = PersonFactory.CreatePerson("person to");
+			var personFrom = PersonFactory.CreatePerson("person from");
+			personFrom.TerminatePerson(new DateOnly(1900,1,1), MockRepository.GenerateMock<IPersonAccountUpdater>());
+			PersistAndRemoveFromUnitOfWork(personTo);
+			PersistAndRemoveFromUnitOfWork(personFrom);
 
-				var persons = new List<IPerson> { personFrom, personTo };
+			var persons = new List<IPerson> { personFrom, personTo };
 
-				var shiftTradeRequest = new ShiftTradeRequest(
-						new List<IShiftTradeSwapDetail>
-                    {
-                        new ShiftTradeSwapDetail(personFrom, personTo, new DateOnly(2008, 7, 16),new DateOnly(2008, 7, 16))
-                    });
-				var shiftTradePersonRequest = new PersonRequest(personFrom) { Request = shiftTradeRequest };
-				shiftTradePersonRequest.Pending();
-				PersistAndRemoveFromUnitOfWork(shiftTradePersonRequest);
+			var shiftTradeRequest = new ShiftTradeRequest(
+					new List<IShiftTradeSwapDetail>
+                {
+                    new ShiftTradeSwapDetail(personFrom, personTo, new DateOnly(2008, 7, 16),new DateOnly(2008, 7, 16))
+                });
+			var shiftTradePersonRequest = new PersonRequest(personFrom) { Request = shiftTradeRequest };
+			shiftTradePersonRequest.Pending();
+			PersistAndRemoveFromUnitOfWork(shiftTradePersonRequest);
 
-				new PersonRequestRepository(UnitOfWork).FindAllRequestModifiedWithinPeriodOrPending(persons, new DateTimePeriod(2000, 1, 1, 2010, 1, 1))
-								.Should().Be.Empty();
-			}
-    }
+			new PersonRequestRepository(UnitOfWork).FindAllRequestModifiedWithinPeriodOrPending(persons, new DateTimePeriod(2000, 1, 1, 2010, 1, 1))
+							.Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldOnlyGetShiftTradeRequests()
+		{
+			var paging = new Paging { Skip = 0, Take = 5 };
+			setUpGetRequestsByTypeTests();
+
+			var result = new PersonRequestRepository(UnitOfWork).FindAllRequestsForAgentByType(_person, paging, RequestType.ShiftTradeRequest);
+			result.Single().Request.RequestType.Should().Be(RequestType.ShiftTradeRequest);
+
+		}
+
+		[Test]
+		public void ShouldOnlyGetTextRequests()
+		{
+			var paging = new Paging { Skip = 0, Take = 5 };
+			setUpGetRequestsByTypeTests();
+
+			var result = new PersonRequestRepository(UnitOfWork).FindAllRequestsForAgentByType(_person, paging, RequestType.TextRequest);
+			result.Single().Request.RequestType.Should().Be(RequestType.TextRequest);
+		}
+
+		[Test]
+		public void ShouldOnlyGetAbsenceRequests()
+		{
+			var paging = new Paging { Skip = 0, Take = 5 };
+			setUpGetRequestsByTypeTests();
+
+			var result = new PersonRequestRepository(UnitOfWork).FindAllRequestsForAgentByType(_person, paging, RequestType.AbsenceRequest);
+			result.Single().Request.RequestType.Should().Be(RequestType.AbsenceRequest);
+		}
+
+		[Test]
+		public void ShouldOnlyGetExchangeOfferRequests()
+		{
+			var paging = new Paging { Skip = 0, Take = 5 };
+			setUpGetRequestsByTypeTests();
+
+			var result = new PersonRequestRepository(UnitOfWork).FindAllRequestsForAgentByType(_person, paging, RequestType.ShiftExchangeOffer);
+			result.Single().Request.RequestType.Should().Be(RequestType.ShiftExchangeOffer);
+		}
+
+		[Test]
+		public void ShouldGetShiftTradeAndShiftExchangeOfferRequests()
+		{
+			var paging = new Paging { Skip = 0, Take = 5 };
+			setUpGetRequestsByTypeTests();
+
+			var result = new PersonRequestRepository(UnitOfWork).FindAllRequestsForAgentByType(_person, paging, RequestType.ShiftExchangeOffer, RequestType.ShiftTradeRequest).ToArray();
+			result.Count().Should().Be(2);
+			Assert.IsTrue(result.Any(request => request.Request.RequestType == RequestType.ShiftExchangeOffer));
+			Assert.IsTrue(result.Any(request => request.Request.RequestType == RequestType.ShiftTradeRequest));
+		}
+
+	}
+    
 }

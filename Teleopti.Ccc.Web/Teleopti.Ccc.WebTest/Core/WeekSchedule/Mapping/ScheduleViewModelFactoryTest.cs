@@ -368,6 +368,11 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			return new List<PersonRequest>();
 		}
 
+		public IEnumerable<IPersonRequest> FindAllRequestsForAgentByType(IPerson person, Paging paging, params RequestType[] requestTypes)
+		{
+			return _requestRepository.Where(request => requestTypes.Contains(request.Request.RequestType));		
+		}
+
 		public IList<IPersonRequest> FindAllRequestModifiedWithinPeriodOrPending(IPerson person, DateTimePeriod period)
 		{
 			throw new NotImplementedException();
