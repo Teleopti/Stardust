@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var result = target.ProvideVisualization(id);
 
 			result.PlannedPersonHours.Count.Should().Be.EqualTo(1);
-			result.PlannedPersonHours[0].Should().Be.EqualTo(hour);
+			result.PlannedPersonHours[0].Should().Be.EqualTo(hour.Hours);
 		}		
 		
 		[Test]
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var result = target.ProvideVisualization(id);
 
 			result.BacklogPersonHours.Count.Should().Be.EqualTo(1);
-			result.BacklogPersonHours[0].Should().Be.EqualTo(hour);
+			result.BacklogPersonHours[0].Should().Be.EqualTo(hour.Hours);
 		}
 
 		[Test]
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var result = target.ProvideVisualization(id);
 
 			result.ScheduledPersonHours.Count.Should().Be.EqualTo(1);
-			result.ScheduledPersonHours[0].Should().Be.EqualTo(hour);
+			result.ScheduledPersonHours[0].Should().Be.EqualTo(hour.Hours);
 		}		
 		
 		[Test]

@@ -22,9 +22,9 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			var visualizationVM =  new CampaignVisualizationViewModel()
 			{
 				Dates = new List<DateOnly>(),
-				PlannedPersonHours = new List<TimeSpan>(),
-				BacklogPersonHours = new List<TimeSpan>(),
-				ScheduledPersonHours = new List<TimeSpan>()
+				PlannedPersonHours = new List<double>(),
+				BacklogPersonHours = new List<double>(),
+				ScheduledPersonHours = new List<double>()
 			};
 
 			IOutboundCampaign campaign = _campaignRepository.Get(id);
@@ -33,10 +33,14 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			var incomingTask = _campaignTaskManager.GetIncomingTaskFromCampaign(campaign);
 			foreach (var date in campaign.SpanningPeriod.DayCollection())
 			{
+				var plannedHours = incomingTask.GetPlannedTimeOnDate(date);
+				var backlogHours = incomingTask.GetTimeOnDate(date);
+				var scheduledHours = incomingTask.GetScheduledTimeOnDate(date);
+
 				visualizationVM.Dates.Add(date);
-				visualizationVM.PlannedPersonHours.Add(incomingTask.GetPlannedTimeOnDate(date));
-				visualizationVM.BacklogPersonHours.Add(incomingTask.GetTimeOnDate(date));
-				visualizationVM.ScheduledPersonHours.Add(incomingTask.GetScheduledTimeOnDate(date));
+				visualizationVM.PlannedPersonHours.Add(plannedHours.Hours + (double)plannedHours.Minutes/60);
+				visualizationVM.BacklogPersonHours.Add(backlogHours.Hours + (double)backlogHours.Minutes/60);
+				visualizationVM.ScheduledPersonHours.Add(scheduledHours.Hours + (double)scheduledHours.Minutes/60);
 			}
 			
 			return visualizationVM;

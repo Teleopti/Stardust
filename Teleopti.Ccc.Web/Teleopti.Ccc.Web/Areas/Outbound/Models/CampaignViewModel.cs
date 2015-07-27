@@ -100,8 +100,8 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 	public class CampaignVisualizationViewModel
 	{
 		public IList<DateOnly> Dates;
-		public IList<TimeSpan> PlannedPersonHours;
-		public IList<TimeSpan> BacklogPersonHours;
-		public IList<TimeSpan> ScheduledPersonHours;
+		public IList<double> PlannedPersonHours;
+		public IList<double> BacklogPersonHours;
+		public IList<double> ScheduledPersonHours;
 	}
 }
