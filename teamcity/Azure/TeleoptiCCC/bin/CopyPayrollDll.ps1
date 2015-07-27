@@ -154,7 +154,7 @@ Try
 	
 	log-info "running: $ScriptFileName"
 	
-    $TeleoptiServiceBus = "Teleopti Service Bus"
+    $TeleoptiServiceBus = "TeleoptiServiceBus"
     $computer = gc env:computername
 
     ## Name of the job, name of source in Windows Event Log
