@@ -3,8 +3,20 @@
 (function () {
 	var directive = function () {
 		return {
-			templateUrl: "js/people/template/importPeople.html"
+			controller: 'ImportPeopleCtrl',
+			controllerAs: 'vm',
+			bindToController: true,
+			require: ['importPeople', '^people'],
+			templateUrl: "js/people/template/importPeople.html",
+			linkFunction: linkFunction
 		};
 	};
-	angular.module('wfm.people').directive('importPeople', directive);
+	angular.module('wfm.people')
+		.directive('importPeople', directive);
+
+	function linkFunction(scope, element, attributes, controllers) {
+		var vm = controllers[0];
+		var parentVm = controllers[1];
+		vm.parentVm = parentVm;
+	};
 }());

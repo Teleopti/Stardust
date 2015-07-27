@@ -1,25 +1,27 @@
 ﻿<div class="modal-box">
-<div class="modalbg import-people">
+	<div class="modalbg import-people">
 		<div class="dialog">
 			<div class="modal-header">
 				Import users
 			</div>
 			<div class="modal-inner-content">
 				<div class="wfm-block">
-					<div ngf-drop ngf-select ng-model="files" ng-model-rejected="rejFiles" class="drop-box"
-						 ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" ngf-change="upload($files)" ngf-multiple="true" ngf-allow-dir="true"
+					<div ngf-drop ngf-select ng-model="vm.files" ng-model-rejected="vm.rejFiles" class="drop-box"
+						 ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" ngf-change="vm.upload($files)" ngf-multiple="true" ngf-allow-dir="true"
 						 accept="'.csv'" ngf-accept="'.csv'" ngf-drop-available="dropAvailable">
 						Drag and Drop .csv files here or click to upload
 					</div>
 					Files:
 					<ul>
-						<li ng-repeat="f in files">{{f.name}}</li>
+						<li ng-repeat="f in vm.files">{{f.name}}</li>
 					</ul>
-				<pre ng-show="isImportReady">{{successfulCount}} users are imported successfully, {{invalidCount}} are invalid. Please export the invalid data to correct it.</pre>
+					<div ng-show="vm.isImportReady">
+						<pre>{{vm.successfulCount}} users are imported successfully, {{vm.invalidCount}} are invalid. Please export the invalid data to correct it.</pre>
 
-				<button ng-show="isImportReady" ng-click="export()">Export</button>
+						<button  ng-click="vm.export()">Export</button>
 
-				<div ng-show="isImportReady" ui-grid="gridOptionForImport" ui-grid-importer ui-grid-exporter class="grid"></div>
+						<div  ui-grid="vm.gridOptionForImport" ui-grid-importer ui-grid-resize-columns ui-grid-exporter class="grid"></div>
+					</div>
 				</div>
 			</div>
 			<div class="modal-footer">
