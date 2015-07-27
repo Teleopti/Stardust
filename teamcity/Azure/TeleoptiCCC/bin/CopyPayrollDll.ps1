@@ -140,6 +140,20 @@ function EventlogSource-Create {
 ##===========
 Try
 {
+	#Get local path
+    [string]$global:directory = split-path -parent $MyInvocation.MyCommand.Definition
+    [string]$global:ScriptFileName = $MyInvocation.MyCommand.Name
+    Set-Location $directory
+
+ 	#start log4net
+	$log4netPath = $directory + "\log4net"
+    Unblock-File -Path "$log4netPath\log4net.ps1"
+    . "$log4netPath\log4net.ps1";
+    $configFile = new-object System.IO.FileInfo($log4netPath + "\log4net.config");
+    configure-logging -configFile "$configFile" -serviceName "$serviceName"
+	
+	log-info "running: $ScriptFileName"
+	
     $TeleoptiServiceBus = "Teleopti Service Bus"
     $computer = gc env:computername
 
@@ -148,12 +162,9 @@ Try
 
 	##test if admin
 	If (!(Test-Administrator($myWindowsID=[System.Security.Principal.WindowsIdentity]::GetCurrent()))) {
+		log-error "User is not Admin!"
 		throw "User is not Admin!"
 	}
-
-    #Get local path
-    [string]$global:directory = split-path -parent $MyInvocation.MyCommand.Definition
-    Set-Location $directory
 
     #create event log source
     EventlogSource-Create "$JOB"
@@ -195,11 +206,13 @@ Try
 	$AzCopyExe = $directory + "\ccc7_azure\AzCopy\AzCopy.exe"
 	$AzCopyExe
 
+	log-info "Copying Payroll from blob storage..."
 	## Start the azcopy with above parameters and log errors in Windows Eventlog.
 	& $AzCopyExe @cmdArgs
     $AzExitCode = $LastExitCode
     
     if ($LastExitCode -ne 0) {
+		log-error "AsCopy generated an error!"
         throw "AsCopy generated an error!"
     }
 
@@ -207,8 +220,10 @@ Try
     
 	##one or more files are new, log info to Eventlog and restart serviceBus
 	If ($newFiles -ge 1) {
+		log-info "Stopping service bus..."
     	Stop-Service -name $TeleoptiServiceBus
     	write-host "-------------" -ForegroundColor blue
+		log-info "Starting service bus..."
     	Start-Service -name $TeleoptiServiceBus
 	}
     
@@ -219,10 +234,12 @@ Catch [Exception]
 {
     $ErrorMessage = $_.Exception.Message
     Write-EventLog -LogName Application -Source $JOB -EventID 1 -EntryType Error -Message "$ErrorMessage"
-	Throw "Script failed, Check Windows event log for detils"
+	log-error "Script failed, Check Windows event log for details!"
+	Throw "Script failed, Check Windows event log for details"
 }
 Finally
 {
-            Write-EventLog -LogName Application -Source $JOB -EventID 0 -EntryType Information -Message "$newFiles files synced from: $BlobSource to: $FILEWATCH"
+	log-info "Done."
+	Write-EventLog -LogName Application -Source $JOB -EventID 0 -EntryType Information -Message "$newFiles files synced from: $BlobSource to: $FILEWATCH"
 
 }
