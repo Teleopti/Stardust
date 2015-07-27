@@ -13,22 +13,22 @@
         <h4 class="border-bottom"><span translate>CampaignsWithWarning</span><span ng-bind="WarningCampaigns.length" style="margin-left:5px;"></span></h4>
         <div class="loading-whole-section" ng-show="!listCampaignFinished && isLoadFinished"><md-progress-circular md-mode="indeterminate"></md-progress-circular></div>
         <teleopti-card-list multi-select>
-            <teleopti-card ng-repeat="campaign in WarningCampaigns" ng-click="generateChart(campaign)">
-                <card-header>
-                    <div class="text-center relative">
-                        <span class="campaign-namefix" ng-bind="campaign.Name"></span>
-                        <span ng-bind="campaign.StartDate.Date | amDateFormat: 'LL'"></span>
-                        <span>-</span>
-                        <span ng-bind="campaign.EndDate.Date | amDateFormat: 'LL'"></span>
-                        <span class="campaign-warning-icon campaign-warning-iconfix" ng-if="campaign.WarningInfo.length > 0">!</span>
-                        <span class="campaign-phase-label" translate>{{campaign.Status | showPhase}}</span>
-                    </div>
-                </card-header>
+            <teleopti-card ng-repeat="campaign in WarningCampaigns">
+				<card-header ng-click="generateChart(campaign)">
+					<div class="text-center relative">
+						<span class="campaign-namefix" ng-bind="campaign.Name"></span>
+						<span ng-bind="campaign.StartDate.Date | amDateFormat: 'LL'"></span>
+						<span>-</span>
+						<span ng-bind="campaign.EndDate.Date | amDateFormat: 'LL'"></span>
+						<span class="campaign-warning-icon campaign-warning-iconfix" ng-if="campaign.WarningInfo.length > 0">!</span>
+						<span class="campaign-phase-label" translate>{{campaign.Status | showPhase}}</span>
+					</div>
+				</card-header>
                 <card-body>
                     <div class="relative">
                        <p class="campaign-message m-r-5" ng-repeat="info in campaign.WarningInfo"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span translate>{{info.TypeOfRule}}</span></p>
 	                    <div class="chart text-center relative">
-		                    <div style="position: absolute; top: 40%; left: 45%; height: 40px; background-color: rgba(0,0,0,0.5); color: #fff;line-height:40px;padding:0 10px;">this chart is fake data now</div>
+		                    <!--<div style="position: absolute; top: 40%; left: 45%; height: 40px; background-color: rgba(0,0,0,0.5); color: #fff;line-height:40px;padding:0 10px;">this chart is fake data now</div>-->
 		                    <div id="Chart_{{campaign.Id}}"></div>
 	                    </div>
                        <button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="show(campaign)">edit</button>
@@ -42,23 +42,22 @@
 
         <h4 class="border-bottom"><span translate>CampaignsWithoutWarning</span><span ng-bind="Campaigns.length" style="margin-left:5px;"></span></h4>
         <teleopti-card-list multi-select>
-            <teleopti-card ng-repeat="campaign in Campaigns" ng-click="generateChart(campaign)">
-                <card-header>
-                    <div class="text-center relative">
-                        <span class="campaign-namefix" ng-bind="campaign.Name"></span>
-                        <span ng-bind="campaign.StartDate.Date | amDateFormat: 'LL'"></span>
-                        <span>-</span>
-                        <span ng-bind="campaign.EndDate.Date | amDateFormat: 'LL'"></span>
-                        <span class="campaign-warning-icon campaign-warning-iconfix" ng-if="campaign.WarningInfo.length > 0">!</span>
-                        <span class="campaign-phase-label" translate>{{campaign.Status | showPhase}}</span>
-                    </div>
-                </card-header>
+            <teleopti-card ng-repeat="campaign in Campaigns">
+				<card-header ng-click="generateChart(campaign)">
+					<div class="text-center relative">
+						<span class="campaign-namefix" ng-bind="campaign.Name"></span>
+						<span ng-bind="campaign.StartDate.Date | amDateFormat: 'LL'"></span>
+						<span>-</span>
+						<span ng-bind="campaign.EndDate.Date | amDateFormat: 'LL'"></span>
+						<span class="campaign-warning-icon campaign-warning-iconfix" ng-if="campaign.WarningInfo.length > 0">!</span>
+						<span class="campaign-phase-label" translate>{{campaign.Status | showPhase}}</span>
+					</div>
+				</card-header>
                 <card-body>
                     <div class="relative">
                         <p class="campaign-message m-r-5" ng-repeat="info in campaign.WarningInfo"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span translate>{{info.TypeOfRule}}</span></p>
 	                     <div class="chart text-center relative">
-		                     <!--fake data-->
-		                     <div style="position: absolute; top: 40%; left: 45%; height: 40px; background-color: rgba(0,0,0,0.5); color: #fff;line-height:40px;padding:0 10px;">this chart is fake data now</div>
+		                     <!--<div style="position: absolute; top: 40%; left: 45%; height: 40px; background-color: rgba(0,0,0,0.5); color: #fff;line-height:40px;padding:0 10px;">this chart is fake data now</div>-->
                            <div id="Chart_{{campaign.Id}}"></div>
 	                     </div>
                         <button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="show(campaign)" translate>Edit</button>

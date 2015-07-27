@@ -12,6 +12,17 @@
         var editCampaignCommandUrl = '../api/Outbound/Campaign/';
         var getCampaignStatisticsUrl = '../api/Outbound/Campaign/Statistics';
         var getFilteredCampaignsUrl = '../api/Outbound/Campaigns';
+        var getCampaignVisualizationUrl = '../api/Outbound/Campaign/Visualization/';
+
+        this.getCampaignVisualization = function (campaignId, successCb, errorCb) {
+        	$http.post(getCampaignVisualizationUrl + campaignId) 
+				.success(function (data) {
+					if (successCb != null) successCb(data);
+				})
+				.error(function (data) {
+					if (errorCb != null) errorCb(data);
+				});
+        };
 
 		this.load = function(successCb) {
 			$http.get(getCampaignLoadUrl).success(function(data) {
