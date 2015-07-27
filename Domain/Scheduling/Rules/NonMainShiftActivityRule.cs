@@ -99,22 +99,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return false;
 		}
 
-		private bool isOverSchedule(DateTimePeriod period, IEnumerable<IShiftLayer> layers)
+		private bool isOverSchedule(DateTimePeriod period, IList<IShiftLayer> layers)
 		{
-			var maxPeriod = new DateTimePeriod();
+			var maxPeriod = new DateTimePeriod( layers.Min(p => p.Period.StartDateTime) , layers.Max(p=>p.Period.EndDateTime));
+
 			foreach (var shiftLayer in layers)
 			{
 				if (!shiftLayer.Payload.InWorkTime)
 				{
-					if (shiftLayer.Period.ContainsPart(period)) return true;
+					if ((shiftLayer.Period.StartDateTime < period.EndDateTime && shiftLayer.Period.EndDateTime > period.StartDateTime)
+						||( shiftLayer.Period.EndDateTime > period.StartDateTime && shiftLayer.Period.StartDateTime < period.EndDateTime)) return true;
 				}
-				else
-				{
-					if (maxPeriod.ElapsedTime() < shiftLayer.Period.ElapsedTime()) maxPeriod = shiftLayer.Period;
-				}
-
-				if (shiftLayer.Payload.InWorkTime && !maxPeriod.Contains(period)) return true;
 			}
+			if (period.EndDateTime <= maxPeriod.StartDateTime || period.StartDateTime >= maxPeriod.EndDateTime) return true;
+
 			return false;
 		}
 
