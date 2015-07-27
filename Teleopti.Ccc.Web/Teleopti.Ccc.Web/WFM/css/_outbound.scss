@@ -93,6 +93,9 @@
 			&[disabled] {
 				background-color: lightgrey;
 			}
+			& span {
+				margin: 0 4px;
+			}
 		}
 	}
 	.campaign-phase li:hover{
@@ -194,13 +197,18 @@
 		left:0;
 		top:0;
 	}
-
+	.inline-fix {
+		& div {
+			display: inline-block;
+		}
+	}	
 }
 .wfm-timepicker-wrapper {
-  width: 120px;
+  height: 20px;
   display: inline-block;
 
   select {	
+	max-width: 40px;
 	padding-top: 0px !important;
 	padding-bottom: 0px !important;
 	margin-left: 3px;
@@ -212,6 +220,8 @@
   input {
 	padding-left: 5px;
 	height:24px;
+	max-width: 40px;
+
 
 	&.ng-dirty.ng-invalid {
 	  border: 2px solid red;
