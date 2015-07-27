@@ -83,7 +83,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		return Teleopti.MyTimeWeb.Common.UseJalaaliCalendar ? "DD/MM/YYYY" : Teleopti.MyTimeWeb.Common.DateFormat;
 	};
 
-	var WeekScheduleViewModel = function (userTexts, addRequestViewModel, navigateToRequestsMethod, defaultDateTimes, undefined) {
+	var WeekScheduleViewModel = function (userTexts, addRequestViewModel, navigateToRequestsMethod, defaultDateTimes, weekStart, undefined) {
 		var self = this;
 		self.navigateToRequestsMethod = navigateToRequestsMethod;
 		self.userTexts = userTexts;
@@ -103,6 +103,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.minDate = ko.observable(moment());
 		self.maxDate = ko.observable(moment());
 
+		self.weekStart = weekStart;
 		self.displayDate = ko.observable();
 		self.nextWeekDate = ko.observable(moment());
 		self.previousWeekDate = ko.observable(moment());
@@ -355,10 +356,9 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 		self.headerTitle = ko.observable(day.Header.Title);
 		
-		
 		var dayDescription = "";
 		var dayNumberDisplay = "";
-
+		console.log(day);
 		var dayDate = moment(day.FixedDate, Teleopti.MyTimeWeb.Common.ServiceDateFormat);
 
 		if (Teleopti.MyTimeWeb.Common.UseJalaaliCalendar) {
@@ -366,18 +366,19 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			self.dayOfWeek = ko.observable(dayDate.weekday());
 			dayNumberDisplay = dayDate.jDate();
 			
-			if (dayNumberDisplay == 1 || self.dayOfWeek() == 0) {
+			if (dayNumberDisplay == 1 || self.dayOfWeek() == parent.weekStart) {
 				dayDescription = dayDate.format("jMMMM");
 			}
 		} else {
 			self.dayOfWeek = ko.observable(day.DayOfWeekNumber);
 			dayNumberDisplay = dayDate.date();
-			if (dayNumberDisplay == 1 || self.dayOfWeek() == 1) {
+			if (dayNumberDisplay == 1 || self.dayOfWeek() == parent.weekStart) {
 				dayDescription = dayDate.format("MMMM");
 			}
 		}
 		
 		self.headerDayDescription = ko.observable(dayDescription);
+	
 		self.headerDayNumber = ko.observable(dayNumberDisplay);
 		
 		self.textRequestPermission = ko.observable(parent.textPermission());
@@ -685,7 +686,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 					return model;
 				};
 
-				vm = new WeekScheduleViewModel(userTexts, addRequestViewModel, _navigateToRequests, defaultDateTimes);
+				vm = new WeekScheduleViewModel(userTexts, addRequestViewModel, _navigateToRequests, defaultDateTimes, data.WeekStart);
 
 				$('.moment-datepicker').attr('data-bind', 'datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: ' + data.WeekStart + ' }');
 				ko.applyBindings(vm, $('#page')[0]);
