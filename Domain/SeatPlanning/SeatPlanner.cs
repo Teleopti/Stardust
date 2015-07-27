@@ -143,10 +143,13 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 		private void updateSeatPlanStatus()
 		{
-			foreach (var booking in _bookingsWithDateAndTeam)
+			foreach (var seatPlan in _seatPlansToUpdate )
 			{
-				var seatPlan = _seatPlanRepository.GetSeatPlanForDate (booking.SeatBooking.BelongsToDate);
-				seatPlan.Status = booking.SeatBooking.Seat == null ? SeatPlanStatus.InError : SeatPlanStatus.Ok;
+				var bookingsForDay = _bookingsWithDateAndTeam
+					.Where (booking => booking.SeatBooking.BelongsToDate == seatPlan.Date)
+					.Select (booking => booking.SeatBooking);
+				
+				seatPlan.Status = bookingsForDay.Any (booking => booking.Seat == null) ? SeatPlanStatus.InError : SeatPlanStatus.Ok;
 				_seatPlanRepository.Update (seatPlan);
 			}
 		}
