@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 
 		public virtual string GetConfigValue()
 		{
-			return WebConfigurationManager.AppSettings["AbsenceTimeCacheExpiryInSeconds"];
+			return WebConfigurationManager.AppSettings["BudgetGroupAbsenceTimeCacheExpiryInSeconds"];
 		}
 
 		public IEnumerable<PayloadWorkTime> Get()
