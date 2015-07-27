@@ -354,5 +354,4 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 	});
 
 	$scope.searchKeyword();
-
 };
