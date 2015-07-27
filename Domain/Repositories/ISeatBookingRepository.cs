@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 		IList<ISeatBooking> LoadSeatBookingsForDay (DateOnly date);
 		void RemoveSeatBookingsForSeats(IEnumerable<ISeat> seats);
 		void RemoveSeatBookingsForSeat (ISeat seat);
-		
+		IList<ISeatBooking> GetSeatBookingsForSeat (ISeat seat);
+
 	}
 }

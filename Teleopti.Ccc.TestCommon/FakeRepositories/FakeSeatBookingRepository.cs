@@ -85,8 +85,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void RemoveSeatBookingsForSeat (ISeat seat)
 		{
-			var bookingsToRemove = _seatBookings.Where(booking => booking.Seat == seat);
-			bookingsToRemove.ToList().ForEach(booking => _seatBookings.Remove(booking));
+			GetSeatBookingsForSeat (seat)
+				.ForEach(booking => _seatBookings.Remove(booking));
+		}
+
+		public IList<ISeatBooking> GetSeatBookingsForSeat (ISeat seat)
+		{
+			return _seatBookings.Where(booking => booking.Seat == seat).ToList();
 		}
 
 		public IEnumerator<ISeatBooking> GetEnumerator()

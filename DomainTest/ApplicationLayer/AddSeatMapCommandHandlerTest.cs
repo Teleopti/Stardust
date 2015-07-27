@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using NHibernate.Criterion;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -9,6 +10,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SeatPlanning;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
@@ -23,6 +25,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		private AddSeatMapCommandHandler _target;
 		private LocationInfo _childLocation2;
 		private FakeSeatBookingRepository _seatBookingRepository;
+		private FakeSeatPlanRepository _seatPlanRepository;
 
 		[SetUp]
 		public void Setup()
@@ -37,9 +40,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 
 			_seatBookingRepository = new FakeSeatBookingRepository();
+			_seatPlanRepository = new FakeSeatPlanRepository();
 
 			_target = new AddSeatMapCommandHandler(_seatMapLocationRepository,
-				_buRepository, _currentBusinessUnit, _seatBookingRepository);
+				_buRepository, _currentBusinessUnit, _seatBookingRepository, _seatPlanRepository);
 			_childLocationInfo = new LocationInfo()
 			{
 				Name = "Chongqing",
@@ -256,6 +260,105 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			Assert.IsTrue(!_seatMapLocationRepository.First().Seats.Any());
 			Assert.IsTrue(!_seatBookingRepository.Any());
+
+		}
+
+
+		[Test]
+		public void ShouldDeleteSeatPlanWhenDeletingLocationRemovesAllSeatBookingsForDay()
+		{
+			var seatMapLocation = new SeatMapLocation();
+			var seatPlanProvider = new SeatPlanProvider(_seatPlanRepository);
+
+			var belongsToDate = new DateOnly (2015, 03, 02);
+
+			const string seatMapData = @"{""objects"":[{""type"":""seat"",""originX"":""left"",""originY"":""top"",""left"":495,""top"":228.5,""width"":36,""height"":47,""fill"":""rgb(0,0,0)"",""stroke"":null,""strokeWidth"":1,""strokeDashArray"":null,""strokeLineCap"":""butt"",""strokeLineJoin"":""miter"",""strokeMiterLimit"":10,""scaleX"":1,""scaleY"":1,""angle"":0,""flipX"":false,""flipY"":false,""opacity"":1,""shadow"":null,""visible"":true,""clipTo"":null,""backgroundColor"":"""",""fillRule"":""nonzero"",""globalCompositeOperation"":""source-over"",""src"":""http://localhost:52858/Areas/SeatPlanner/Content/Images/seat.svg"",""filters"":[],""crossOrigin"":"""",""alignX"":""none"",""alignY"":""none"",""meetOrSlice"":""meet"",""id"":""f19f90e8-f629-237b-2493-f2ed39e5c13b"",""name"":""Unnamed seat"",""priority"":1}],""background"":""""}";
+
+			seatMapLocation.SetLocation(seatMapData, "rootLocation");
+			seatMapLocation.SetId(Guid.NewGuid());
+			var seat = seatMapLocation.AddSeat("Seat1", 1);
+			_seatMapLocationRepository.Add(seatMapLocation);
+			
+			var seatBooking = new SeatBooking(new Person(), belongsToDate, new DateTime(2015, 03, 02, 8, 0, 0), new DateTime(2015, 03, 02, 17, 0, 0));
+			seatBooking.Book(seat);
+
+			_seatBookingRepository.Add(seatBooking);
+
+			var seatPlan = new SeatPlan() {Date = belongsToDate, Status = SeatPlanStatus.Ok};
+			seatPlan.SetId (Guid.NewGuid());
+			_seatPlanRepository.Add ( seatPlan );
+
+			var command = new SaveSeatMapCommand()
+			{
+				Id = seatMapLocation.Id,
+				SeatMapData = @"{""objects"":[],""background"":""""}",
+				ChildLocations = new LocationInfo[0],
+				TrackedCommandInfo = new TrackedCommandInfo()
+				{
+					OperatedPersonId = Guid.NewGuid(),
+					TrackId = Guid.NewGuid()
+				}
+			};
+
+			_target.Handle(command);
+
+			Assert.IsNull(seatPlanProvider.Get (belongsToDate));
+
+		}
+
+		[Test]
+		public void ShouldNotDeleteSeatPlanWhenDeletingLocationRemovesASubsetOfSeatBookingsForDay()
+		{
+
+
+			var seatMapLocation = new SeatMapLocation();
+			var seatPlanProvider = new SeatPlanProvider(_seatPlanRepository);
+
+			var belongsToDate = new DateOnly(2015, 03, 02);
+
+			const string seatMapData = @"{""objects"":[{""type"":""seat"",""originX"":""left"",""originY"":""top"",""left"":589.55,""top"":345.74,""width"":35.9,""height"":46.52,""fill"":""rgb(0,0,0)"",""stroke"":null,""strokeWidth"":1,""strokeDashArray"":null,""strokeLineCap"":""butt"",""strokeLineJoin"":""miter"",""strokeMiterLimit"":10,""scaleX"":1,""scaleY"":1,""angle"":0,""flipX"":false,""flipY"":false,""opacity"":1,""shadow"":null,""visible"":true,""clipTo"":null,""backgroundColor"":"""",""fillRule"":""nonzero"",""globalCompositeOperation"":""source-over"",""src"":""http://localhost:52858/wfm/js/SeatManagement/Images/seat.svg"",""filters"":[],""crossOrigin"":"""",""alignX"":""none"",""alignY"":""none"",""meetOrSlice"":""meet"",""id"":""09d00b0b-f366-4fa9-bd94-fa2af9025d7e"",""name"":""Unnamed seat"",""priority"":1},{""type"":""seat"",""originX"":""left"",""originY"":""top"",""left"":645.45,""top"":345.74,""width"":35.9,""height"":46.52,""fill"":""rgb(0,0,0)"",""stroke"":null,""strokeWidth"":1,""strokeDashArray"":null,""strokeLineCap"":""butt"",""strokeLineJoin"":""miter"",""strokeMiterLimit"":10,""scaleX"":1,""scaleY"":1,""angle"":0,""flipX"":false,""flipY"":false,""opacity"":1,""shadow"":null,""visible"":true,""clipTo"":null,""backgroundColor"":"""",""fillRule"":""nonzero"",""globalCompositeOperation"":""source-over"",""src"":""http://localhost:52858/wfm/js/SeatManagement/Images/seat.svg"",""filters"":[],""crossOrigin"":"""",""alignX"":""none"",""alignY"":""none"",""meetOrSlice"":""meet"",""id"":""0af609cb-ba3e-fd55-4bc2-df0ec0dbfd77"",""name"":""Unnamed seat"",""priority"":2}],""background"":""""}";
+
+			seatMapLocation.SetLocation(seatMapData, "rootLocation");
+			seatMapLocation.SetId(Guid.NewGuid());
+			var seat = seatMapLocation.AddSeat("Seat1", 1);
+			seat.SetId(new Guid("09d00b0b-f366-4fa9-bd94-fa2af9025d7e"));
+			var seat2 = seatMapLocation.AddSeat("Seat2", 2);
+			seat2.SetId (new Guid ("0af609cb-ba3e-fd55-4bc2-df0ec0dbfd77"));
+
+			_seatMapLocationRepository.Add(seatMapLocation);
+
+			var seatBooking = new SeatBooking(new Person(), belongsToDate, new DateTime(2015, 03, 02, 8, 0, 0), new DateTime(2015, 03, 02, 17, 0, 0));
+			seatBooking.Book(seat);
+
+			var seatBooking2 = new SeatBooking(new Person(), belongsToDate, new DateTime(2015, 03, 02, 17, 0, 1), new DateTime(2015, 03, 02, 22, 0, 0));
+			seatBooking2.Book(seat2);
+
+			_seatBookingRepository.Add(seatBooking);
+			_seatBookingRepository.Add(seatBooking2);
+
+			var seatPlan = new SeatPlan() { Date = belongsToDate, Status = SeatPlanStatus.Ok };
+			seatPlan.SetId(Guid.NewGuid());
+			_seatPlanRepository.Add(seatPlan);
+
+			var command = new SaveSeatMapCommand()
+			{
+				Id = seatMapLocation.Id,
+				SeatMapData = @"{""objects"":[{""type"":""seat"",""originX"":""left"",""originY"":""top"",""left"":589.55,""top"":345.74,""width"":35.9,""height"":46.52,""fill"":""rgb(0,0,0)"",""stroke"":null,""strokeWidth"":1,""strokeDashArray"":null,""strokeLineCap"":""butt"",""strokeLineJoin"":""miter"",""strokeMiterLimit"":10,""scaleX"":1,""scaleY"":1,""angle"":0,""flipX"":false,""flipY"":false,""opacity"":1,""shadow"":null,""visible"":true,""clipTo"":null,""backgroundColor"":"""",""fillRule"":""nonzero"",""globalCompositeOperation"":""source-over"",""src"":""http://localhost:52858/wfm/js/SeatManagement/Images/seat.svg"",""filters"":[],""crossOrigin"":"""",""alignX"":""none"",""alignY"":""none"",""meetOrSlice"":""meet"",""id"":""09d00b0b-f366-4fa9-bd94-fa2af9025d7e"",""name"":""Unnamed seat"",""priority"":1}],""background"":""""}",
+				ChildLocations = new LocationInfo[0],
+				Seats = new[]
+				{
+					new SeatInfo(){ Id = Guid.Parse("09d00b0b-f366-4fa9-bd94-fa2af9025d7e"), IsNew = false, Name = "New Seat"}
+				},
+				TrackedCommandInfo = new TrackedCommandInfo()
+				{
+					OperatedPersonId = Guid.NewGuid(),
+					TrackId = Guid.NewGuid()
+				}
+			};
+
+			_target.Handle(command);
+
+			Assert.IsNotNull(seatPlanProvider.Get(belongsToDate));
 
 		}
 

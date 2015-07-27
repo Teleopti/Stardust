@@ -50,14 +50,18 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.Where(booking => booking.BelongsToDate == date).ToList();
 		}
 
+		public IList<ISeatBooking> GetSeatBookingsForSeat (ISeat seat)
+		{
+			return Session.Query<ISeatBooking>().Where (booking => booking.Seat == seat).ToList();
+		}
+
 		public void RemoveSeatBookingsForSeats(IEnumerable<ISeat>seats)
 		{
 			seats.ForEach (RemoveSeatBookingsForSeat);
 		}
-
 		public void RemoveSeatBookingsForSeat(ISeat seat)
 		{
-			Session.Query<ISeatBooking>().Where(booking => booking.Seat == seat)
+			GetSeatBookingsForSeat (seat)
 				.ForEach(booking => Session.Delete(booking));
 		}
 

@@ -685,8 +685,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDate), team);
 			var personAssignment = addAssignment(person, startDate, endDate);
 			
-			var note = new PublicNote(person, new DateOnly(startDate), _currentScenario.Current(), "Original Note");
-			var publicNoteRepository = new FakePublicNoteRepository(note);
+			var publicNoteRepository = new FakePublicNoteRepository();
 			var seatMapLocation = addLocation("Location", null, null);
 
 			var target = setupHandler(new[] { team }, new[] { person }, publicNoteRepository, new[] { seatMapLocation }, personAssignment);
@@ -699,7 +698,39 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 		}
 
+		[Test]
+		public void ShouldPersistSeatPlanWithDifferentStatusInsidePlanningPeriod()
+		{
+			var startDate1 = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
+			var endDate1 = new DateTime(2015, 1, 20, 8, 0, 0, DateTimeKind.Utc);
+			var startDate2 = new DateTime(2015, 1, 21, 0, 0, 0, DateTimeKind.Utc);
+			var endDate2 = new DateTime(2015, 1, 21, 8, 0, 0, DateTimeKind.Utc);
 
+			var team = addTeam("Team");
+			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDate1), team);
+			var person2 = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDate1), team);
+			
+			var personAssignment = addAssignment(person, startDate1, endDate1);
+			var personAssignmentPerson2 = addAssignment(person2, startDate2, endDate2);
+			var personAssignment2 = addAssignment(person, startDate2, endDate2);
+			
+
+			var publicNoteRepository = new FakePublicNoteRepository();
+			var seatMapLocation = addLocation("Location", null, new Seat("Seat One", 1));
+
+			var target = setupHandler(new[] { team }, new[] { person, person2 }, publicNoteRepository, new[] { seatMapLocation }, new[] { personAssignment, personAssignmentPerson2, personAssignment2 });
+
+			var command = addSeatPlanCommand(startDate1, endDate2, new[] { seatMapLocation }, new[] { team });
+			target.Handle(command);
+
+			var seatPlanDayOne = _seatPlanRepository.First();
+			var seatPlanDayTwo = _seatPlanRepository.Last();
+
+			_seatPlanRepository.Count().Should().Be (2);
+
+			seatPlanDayOne.Status.Should().Be(SeatPlanStatus.Ok);
+			seatPlanDayTwo.Status.Should().Be(SeatPlanStatus.InError);
+		}
 
 	}
 }

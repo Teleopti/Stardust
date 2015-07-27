@@ -42,9 +42,9 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			persistSeatPlans(period);
 
 			assembleAndGroupData(rootSeatMapLocation, teams, period);
+			allocateSeats(new SeatAllocator(rootSeatMapLocation));
 
-			var hasError = allocateSeats(new SeatAllocator(rootSeatMapLocation));
-			persistSeatPlanResult(hasError);
+			updateSeatPlanStatus();
 
 		}
 
@@ -120,7 +120,6 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 		private void loadExistingSeatBookings(SeatMapLocation rootSeatMapLocation)
 		{
-			//Robtodo: Review - why are we doing this? are persisted seat bookings not already associated with seats??
 			foreach (var seat in rootSeatMapLocation.Seats)
 			{
 				var seatBookings = _existingSeatBookings.Where(booking => Equals(booking.Seat, seat)).ToList();
@@ -131,7 +130,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 		}
 
-		private bool allocateSeats(SeatAllocator seatAllocator)
+		private void allocateSeats(SeatAllocator seatAllocator)
 		{
 			seatAllocator.AllocateSeats(getSeatBookingRequests().ToArray());
 			persistBookings(_bookingsWithDateAndTeam);
@@ -140,8 +139,16 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 				.Where(groupedBookings => groupedBookings.SeatBooking.Seat != null && !_existingSeatBookings.Contains(groupedBookings.SeatBooking))
 				.Select(booking => booking.SeatBooking));
 
-			return _bookingsWithDateAndTeam.Exists(groupedBookings => groupedBookings.SeatBooking.Seat == null);
+		}
 
+		private void updateSeatPlanStatus()
+		{
+			foreach (var booking in _bookingsWithDateAndTeam)
+			{
+				var seatPlan = _seatPlanRepository.GetSeatPlanForDate (booking.SeatBooking.BelongsToDate);
+				seatPlan.Status = booking.SeatBooking.Seat == null ? SeatPlanStatus.InError : SeatPlanStatus.Ok;
+				_seatPlanRepository.Update (seatPlan);
+			}
 		}
 
 		private void persistSeatPlans(DateOnlyPeriod period)
@@ -168,17 +175,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 			return seatPlan as SeatPlan;
 		}
-
-		private void persistSeatPlanResult(Boolean inError)
-		{
-			foreach (var seatPlan in _seatPlansToUpdate)
-			{
-				seatPlan.Status = inError ? SeatPlanStatus.InError : SeatPlanStatus.Ok;
-				_seatPlanRepository.Update(seatPlan);
-			}
-			
-		}
-
+		
 		private IEnumerable<SeatBookingRequest> getSeatBookingRequests()
 		{
 			var seatBookingsByDateAndTeam = _bookingsWithDateAndTeam

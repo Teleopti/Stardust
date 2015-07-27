@@ -14,17 +14,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private readonly IBusinessUnitRepository _businessUnitRepository;
 		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 		private readonly ISeatBookingRepository _seatBookingRepository;
+		private readonly ISeatPlanRepository _seatPlanRepository;
+	
 
-		public AddSeatMapCommandHandler(IWriteSideRepository<ISeatMapLocation>seatMapLocationRepository, IBusinessUnitRepository businessUnitRepository, ICurrentBusinessUnit currentBusinessUnit, ISeatBookingRepository seatBookingRepository )
+		public AddSeatMapCommandHandler(IWriteSideRepository<ISeatMapLocation>seatMapLocationRepository, IBusinessUnitRepository businessUnitRepository, ICurrentBusinessUnit currentBusinessUnit, ISeatBookingRepository seatBookingRepository, ISeatPlanRepository seatPlanRepository)
 		{
 			_seatMapLocationRepository = seatMapLocationRepository;
 			_businessUnitRepository = businessUnitRepository;
 			_currentBusinessUnit = currentBusinessUnit;
 			_seatBookingRepository = seatBookingRepository;
+			_seatPlanRepository = seatPlanRepository;
 		}
 
 		public void Handle(SaveSeatMapCommand command)
 		{
+			
 			var seatMap = command.Id.HasValue ? updateExistingSeatMap(command) : createNewRootSeatMap(command);
 			deleteRemovedSeats(command, seatMap);
 			updateChildSeatMaps(command, seatMap);
@@ -101,6 +105,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			createSeats(command, seatMapLocation);
 		}
 
+		private static void createSeats(SaveSeatMapCommand command, SeatMapLocation seatMapLocation)
+		{
+			if (command.Seats == null) return;
+
+			foreach (var seatMapInfo in command.Seats.Where(seat => seat.IsNew))
+			{
+				var seat = seatMapLocation.AddSeat(seatMapInfo.Name, seatMapInfo.Priority);
+				seatMapLocation.UpdateSeatMapTemporaryId(seatMapInfo.Id, seat.Id);
+			}
+		}
+
 		private void deleteRemovedSeats(SaveSeatMapCommand command, SeatMapLocation seatMapLocation)
 		{
 			IEnumerable<ISeat> seatsToDelete;
@@ -112,29 +127,47 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			else
 			{
 				seatsToDelete =
-					(from seat in seatMapLocation.Seats
-						where command.Seats.All (currentSeat => currentSeat.Id != seat.Id)
-						select seat).ToList();
+					from seat in seatMapLocation.Seats
+					where command.Seats.All (currentSeat => currentSeat.Id != seat.Id)
+					select seat;
 			}
 
+
+			var seatBookingDates = getSeatPlanDatesAffectedBySeatDeletion(seatsToDelete);
 			deleteSeatsAndBookingsFromLocation(seatMapLocation, seatsToDelete);
+			updateSeatPlans(seatBookingDates);
+			
+		}
+
+		private void updateSeatPlans(IEnumerable<DateOnly> seatBookingDates)
+		{
+			foreach (var seatPlan in seatBookingDates.Select (date => _seatPlanRepository.GetSeatPlanForDate(date))
+				.Where (seatPlan => seatPlan != null && seatPlan.Status != SeatPlanStatus.InProgress))
+			{
+				if(_seatBookingRepository.LoadSeatBookingsForDay (seatPlan.Date).Count == 0)
+				{
+					_seatPlanRepository.Remove(seatPlan);	
+				}
+
+			}
+			
+		}
+
+		private IEnumerable<DateOnly> getSeatPlanDatesAffectedBySeatDeletion (IEnumerable<ISeat> seatsToDelete)
+		{
+			var seatPlanDates = from seat in seatsToDelete
+				from booking in _seatBookingRepository.GetSeatBookingsForSeat (seat)
+				select booking.BelongsToDate;
+			
+			return seatPlanDates.Distinct().ToList();
 		}
 
 		private void deleteSeatsAndBookingsFromLocation (ISeatMapLocation seatMapLocation, IEnumerable<ISeat> seatsToDelete)
 		{
 			_seatBookingRepository.RemoveSeatBookingsForSeats (seatsToDelete);
 			seatsToDelete.ToList().ForEach (seat => seatMapLocation.Seats.Remove (seat));
-		}
 
-		private static void createSeats(SaveSeatMapCommand command, SeatMapLocation seatMapLocation)
-		{
-			if (command.Seats == null) return;
-
-			foreach (var seatMapInfo in command.Seats.Where(seat => seat.IsNew))
-			{
-				var seat = seatMapLocation.AddSeat(seatMapInfo.Name, seatMapInfo.Priority);
-				seatMapLocation.UpdateSeatMapTemporaryId(seatMapInfo.Id, seat.Id);
-			}
 		}
+		
 	}
 }
