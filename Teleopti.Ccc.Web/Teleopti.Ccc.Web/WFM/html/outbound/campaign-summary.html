@@ -28,7 +28,7 @@
 	                <div class="relative">
 						<div class="clearfix m-b-10">
 							<p class="campaign-message m-r-5" ng-repeat="info in campaign.WarningInfo"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span translate>{{info.TypeOfRule}}</span></p>
-							<md-switch class="pull-right m-t-0" ng-click="toggleChartDisplay(campaign)" ng-if="campaign.Status!=1">view scheduled details</md-switch>
+							<md-switch class="pull-right m-t-0" ng-click="toggleChartDisplay(campaign)" ng-if="campaign.Status!=1">Analyze Schedule</md-switch>
 						</div>
 		                <div class="chart text-center relative">
 			                <div id="Chart_{{campaign.Id}}"></div>
@@ -59,7 +59,7 @@
 	                <div class="relative">
 						<div class="clearfix m-b-10">
 							<p class="campaign-message m-r-5" ng-repeat="info in campaign.WarningInfo"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span translate>{{info.TypeOfRule}}</span></p>
-							<md-switch class="pull-right m-t-0" ng-click="toggleChartDisplay(campaign)" ng-if="campaign.Status!=1">view scheduled details</md-switch>
+							<md-switch class="pull-right m-t-0" ng-click="toggleChartDisplay(campaign)" ng-if="hidePlannedAnalyzeButton(campaign.Status)">Analyze Schedule</md-switch>
 						</div>
 		                <div class="chart text-center relative">
 			                <div id="Chart_{{campaign.Id}}"></div>

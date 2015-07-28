@@ -2,11 +2,11 @@
 
 	angular.module('wfm.outbound')
 		.controller('OutboundSummaryCtrl', [
-			'$scope', '$state', '$stateParams', 'outboundService',
+			'$scope', '$state', '$stateParams', 'outboundService', 'outboundChartService', '$filter',
 			summaryCtrl
 		]);
 
-    function summaryCtrl($scope, $state, $stateParams, outboundService) {
+	function summaryCtrl($scope, $state, $stateParams, outboundService, outboundChartService, $filter) {
         $scope.isLoadFinished = false;
         $scope.listCampaignFinished = false;
        
@@ -23,6 +23,9 @@
             });
         });
 
+    	$scope.hidePlannedAnalyzeButton = function (d) {
+		   return ($filter('showPhase')(d) == 'Planned') ? false : true;
+	    };
 
         $scope.activePhaseCode = 4;
 
@@ -31,21 +34,16 @@
         };
 		
         $scope.generateChart = function (campaign) {
-	        console.log("Status", campaign.Status);
 	        campaign.viewScheduleDiffToggle = false;
-	        outboundService.getCampaignVisualization(campaign.Id, function success(data) {
+	        outboundChartService.getCampaignVisualization(campaign.Id, function success(data) {
 	        	campaign.chartData = data;
-	        	campaign.chart = outboundService.makeGraph(null, '#Chart_' + campaign.Id, campaign.viewScheduleDiffToggle, data, campaign.Status);
-
-		        console.log('after drawing', campaign);
+	        	campaign.chart = outboundChartService.makeGraph(null, '#Chart_' + campaign.Id, campaign.viewScheduleDiffToggle, data, campaign.Status, campaign.WarningInfo);
 	        });	       
         };
 
         $scope.toggleChartDisplay = function (campaign) {
         	campaign.viewScheduleDiffToggle = !campaign.viewScheduleDiffToggle;
-
-	        console.log('before toggling', campaign);
-	        outboundService.makeGraph(campaign.chart, '#Chart_' + campaign.Id, campaign.viewScheduleDiffToggle, campaign.chartData, campaign.Status);
+        	outboundChartService.makeGraph(campaign.chart, '#Chart_' + campaign.Id, campaign.viewScheduleDiffToggle, campaign.chartData, campaign.Status, campaign.WarningInfo);
 	    };
 
         $scope.show = function (campaign) {
@@ -61,7 +59,7 @@
         function clearCampaignList() {
             $scope.listCampaignFinished = false;
             $scope.Campaigns = [];
-            $scope.WarningCampaigns = [];
+            $scope.WarningCampaigns = []; 
         }
     }
 
