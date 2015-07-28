@@ -8,7 +8,7 @@
 			controller: 'SeatMapCanvasCtrl',
 			controllerAs: 'vm',
 			bindToController: true,
-			templateUrl: "js/seatManagement/html/seatmapcanvas.tpl.html",
+			templateUrl: "js/seatManagement/html/seatmapcanvas.html",
 			link: linkFunction
 		};
 	};

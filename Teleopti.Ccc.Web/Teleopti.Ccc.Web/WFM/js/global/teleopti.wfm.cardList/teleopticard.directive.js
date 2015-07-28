@@ -26,7 +26,7 @@
 			controllerAs: 'vm',
 			bindToController: true,
 			scope: {},
-			templateUrl: "js/global/teleopti.wfm.cardList/teleopticard.tpl.html",
+			templateUrl: "js/global/teleopti.wfm.cardList/teleopticard.html",
 			transclude: true,
 			require: ['teleoptiCard', '^teleoptiCardList'],
 			link: function (scope, elem, attr, ctrl, transcludeFn) {

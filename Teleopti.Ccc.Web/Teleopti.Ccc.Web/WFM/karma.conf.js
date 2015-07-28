@@ -44,8 +44,7 @@ module.exports = function(config) {
 		'vendor/c3/c3-angular.min.js',
 		'js/ABmetrics.min.js',
 		'dist/main.min.js', 
-		'tests/**/*.js',
-		'../**/*.tpl.html'
+		'tests/**/*.js'
 	],
 
 
@@ -54,17 +53,10 @@ module.exports = function(config) {
 		'**/Gruntfile.js'
 	],
 
+
 	// preprocess matching files before serving them to the browser
 	// available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
 	preprocessors: {
-		// generate js files from html templates
-		'../**/*.tpl.html': 'ng-html2js'
-	},
-
-	ngHtml2JsPreprocessor: {
-		
-		// can load all  templates using module('wfm.templates')
-		moduleName: 'wfm.templates'
 	},
 
 
