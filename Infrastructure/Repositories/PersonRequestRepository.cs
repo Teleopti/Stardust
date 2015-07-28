@@ -293,7 +293,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			#endregion
 
-			return requestsCreatedByPerson.Union(shiftTradeRequestsWithPerson).OrderBy(x => x.UpdatedOn);
+			return requestsCreatedByPerson.Union(shiftTradeRequestsWithPerson).OrderByDescending(x => x.UpdatedOn);
 		}
 
 		private void applyPeriodRestriction(ICriteria criteria, DateTimePeriod? period)
