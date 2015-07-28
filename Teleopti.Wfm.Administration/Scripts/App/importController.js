@@ -7,6 +7,7 @@
 
 	function importController($http) {
 		var vm = this;
+		var tokenKey = 'accessToken';
 		vm.Tenant = "";
 		vm.AppDatabase = "";
 		vm.AnalyticsDatabase = "";
@@ -21,8 +22,19 @@
 		vm.ImportAppVersion = null;
 		vm.AppVersionOk = null;
 
+		vm.token = sessionStorage.getItem(tokenKey);
+		if (vm.token === null) {
+			return;
+		}
+
+		function getHeaders() {
+			return {
+				headers: { 'Authorization': 'Bearer ' + vm.token }
+			};
+		}
+
 		vm.CheckTenantName = function () {
-			$http.post('./api/Import/IsNewTenant', '"' + vm.Tenant + '"')
+			$http.post('./api/Import/IsNewTenant', '"' + vm.Tenant + '"', getHeaders())
 				.success(function (data) {
 					vm.TenantMessage = data.Message;
 					vm.TenantOk = data.Success;
@@ -34,10 +46,10 @@
 		}
 
 		vm.CheckAppDb = function () {
-			$http.post('./api/Import/DbExists', {
+			$http.post('./api/Import/DbExists',  {
 				DbConnectionString: vm.AppDatabase,
 				DbType: 1
-			})
+			}, getHeaders())
 				.success(function (data) {
 					vm.AppDbOk = data.Exists;
 					vm.AppDbCheckMessage = data.Message;
@@ -53,7 +65,7 @@
 			$http.post('./api/Import/DbExists', {
 				DbConnectionString: vm.AnalyticsDatabase,
 				DbType: 2
-			})
+			}, getHeaders())
 				.success(function (data) {
 					vm.AnalDbOk = data.Exists;
 					vm.AnalDbCheckMessage = data.Message;
@@ -65,7 +77,7 @@
 		vm.CheckVersions = function () {
 			$http.post('./api/UpgradeDatabases/GetVersions', {
 				AppConnectionString: vm.AppDatabase
-			})
+			}, getHeaders())
 				.success(function (data) {
 					vm.HeadVersion = data.HeadVersion;
 					vm.ImportAppVersion = data.ImportAppVersion;
@@ -82,7 +94,7 @@
 			$http.post('./api/Import/Conflicts', {
 				ConnStringAppDatabase: vm.AppDatabase,
 				Tenant: vm.Tenant
-			})
+			}, getHeaders())
 				.success(function (data) {
 					vm.Conflicts = data.ConflictingUserModels;
 					vm.NumberOfConflicting = data.NumberOfConflicting;
@@ -99,7 +111,7 @@
 				ConnStringAppDatabase: vm.AppDatabase,
 				ConnStringAnalyticsDatabase: vm.AnalyticsDatabase,
 				SkipConflicts: vm.SkipConflicts
-			})
+			}, getHeaders())
 				.success(function (data) {
 					vm.Success = data.Success;
 					vm.Message = data.Message;

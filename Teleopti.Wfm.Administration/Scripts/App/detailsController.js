@@ -7,6 +7,7 @@
 
 	function detailsController($http, $routeParams) {
 		var vm = this;
+		var tokenKey = 'accessToken';
 		vm.Tenant = $routeParams.tenant;
 		vm.OriginalName = $routeParams.tenant;
 		vm.AppDatabase = "";
@@ -19,8 +20,19 @@
 		vm.AnalDbOk = false;
 		vm.AnalDbCheckMessage = "Input connection string";
 		
+		vm.token = sessionStorage.getItem(tokenKey);
+		if (vm.token === null) {
+			return;
+		}
+
+		function getHeaders() {
+			return {
+				headers: { 'Authorization': 'Bearer ' + vm.token }
+			};
+		}
+
 		vm.LoadTenant = function () {
-			$http.post('./api/Home/GetOneTenant', '"' + vm.Tenant + '"')
+			$http.post('./api/Home/GetOneTenant', '"' + vm.Tenant + '"', getHeaders())
 				.success(function (data) {
 					vm.TenantMessage = data.Message;
 					vm.TenantOk = data.Success;
@@ -39,7 +51,7 @@
 				NewName: vm.Tenant,
 				AppDatabase: vm.AppDatabase,
 				AnalyticsDatabase: vm.AnalyticsDatabase
-			})
+			}, getHeaders())
 				.success(function (data) {
 					vm.TenantMessage = data.Message;
 					vm.TenantOk = data.Success;
@@ -54,14 +66,14 @@
 			$http.post('./api/Import/DbExists', {
 				DbConnectionString: vm.AppDatabase,
 				DbType: 1
-			})
+			}, getHeaders())
 				.success(function (data) {
 					vm.AppDbOk = data.Exists;
 					vm.AppDbCheckMessage = data.Message;
-					if (vm.AppDbOk) {
-						vm.CheckVersions();
-						vm.CheckUsers();
-					}
+					//display how many maybe
+					//if (vm.AppDbOk) {
+					//	vm.CheckUsers();
+					//}
 				}).error(function (xhr, ajaxOptions, thrownError) {
 					console.log(xhr.status + xhr.responseText + thrownError);
 				});
@@ -72,7 +84,7 @@
 			$http.post('./api/Import/DbExists', {
 				DbConnectionString: vm.AnalyticsDatabase,
 				DbType: 2
-			})
+			}, getHeaders())
 				.success(function (data) {
 					vm.AnalDbOk = data.Exists;
 					vm.AnalDbCheckMessage = data.Message;
@@ -100,7 +112,7 @@
 				NewName: vm.Tenant,
 				AppDatabase: vm.AppDatabase,
 				AnalyticsDatabase: vm.AnalyticsDatabase
-			})
+			}, getHeaders())
 				.success(function (data) {
 					window.location = "#";
 				})

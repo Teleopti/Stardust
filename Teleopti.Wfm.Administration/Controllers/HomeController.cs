@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Results;
+using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Wfm.Administration.Core;
@@ -9,6 +10,8 @@ using Teleopti.Wfm.Administration.Models;
 
 namespace Teleopti.Wfm.Administration.Controllers
 {
+
+	[TenantTokenAuthentication]
 	public class HomeController : ApiController
 	{
 		private readonly ILoadAllTenants _loadAllTenants;

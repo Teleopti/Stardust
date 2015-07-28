@@ -9,6 +9,7 @@ using Teleopti.Wfm.Administration.Models;
 
 namespace Teleopti.Wfm.Administration.Controllers
 {
+	[TenantTokenAuthentication]
 	public class ImportController : ApiController
 	{
 		private readonly DatabaseHelperWrapper _databaseHelperWrapper;
