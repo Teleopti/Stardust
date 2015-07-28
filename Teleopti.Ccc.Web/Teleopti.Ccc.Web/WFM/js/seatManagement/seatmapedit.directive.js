@@ -8,7 +8,7 @@
 			controllerAs: 'vm',
 			bindToController: true,
 			require: ['seatmapEditor','^seatmapCanvas'],
-			templateUrl: "js/seatManagement/html/seatMapEditor.html",
+			templateUrl: "js/seatManagement/html/seatMapEditor.tpl.html",
 			link: linkFunction
 		};
 	};

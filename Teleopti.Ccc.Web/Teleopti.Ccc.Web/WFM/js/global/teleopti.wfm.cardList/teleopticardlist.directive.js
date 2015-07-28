@@ -35,7 +35,7 @@
 				controllerAs: 'vm',
 				bindToController: true,
 				transclude: true,
-				templateUrl: "js/global/teleopti.wfm.cardList/teleopticardlist.html",
+				templateUrl: "js/global/teleopti.wfm.cardList/teleopticardlist.tpl.html",
 				link: linkFunction
 
 			};
