@@ -12,7 +12,13 @@ namespace Teleopti.Wfm.Administration.Core
 {
 	public class TenantTokenAuthenticationAttribute : Attribute, IAuthenticationFilter
 	{
-		public virtual bool AllowMultiple { get; } = false;
+		public virtual bool AllowMultiple
+		{
+			get
+			{
+				return false;
+			} 
+		}
 
 		public Task AuthenticateAsync(HttpAuthenticationContext context, CancellationToken cancellationToken)
 		{
