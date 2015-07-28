@@ -9,7 +9,9 @@
 				dataTab.forEach(function (item) {
 					dataFlat.push(item);
 					if (item.ChildNodes && item.ChildNodes.length != 0) {
-						flatData(item.ChildNodes);
+					    flatData(item.ChildNodes);
+					} else {
+					    item.ChildNodes = [];
 					}
 				});
 			};
@@ -19,6 +21,7 @@
 				roleDataService.organization = { BusinessUnit: [result.BusinessUnit], DynamicOptions: result.DynamicOptions };
 				flatData(roleDataService.organization.BusinessUnit);
 			});
+
 
 			roleDataService.deleteAvailableData = function (selectedRole, type, id) {
 				var data = {};

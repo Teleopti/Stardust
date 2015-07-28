@@ -15,8 +15,7 @@
 			    if (Roles.selectedRole.BuiltIn === false) {
 			        if (node.selected) {
 			            node.selected = false;
-			            RoleDataService.deleteAvailableData($scope.selectedRole, node.Type, node.Id).then(function () {
-			            });
+			            RoleDataService.deleteAvailableData($scope.selectedRole, node.Type, node.Id);
 			        } else {
 			            node.selected = true;
 			            RoleDataService.assignOrganizationSelection($scope.selectedRole, node.Type, node.Id).then(function () {

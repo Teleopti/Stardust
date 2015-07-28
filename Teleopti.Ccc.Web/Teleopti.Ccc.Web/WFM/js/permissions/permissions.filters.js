@@ -41,13 +41,33 @@
     function () {
         return function (nodes, selectedDataToggle) {
             if (!selectedDataToggle) return nodes;
-
             var filteredNodes = [];
-            nodes.forEach(function (node) {
-                if (node.selected || node.nmbSelectedChildren > 0) {
-                    filteredNodes.push(node);
-                }
-            });
+
+            var checkChild = function (node) {
+                
+                node.ChildNodes.forEach(function(subnode) {
+                    if (subnode.ChildNodes.length > 0) {
+                        checkChild(subnode);
+                    }
+                    if (subnode.selected) {
+                        node.show = true;
+                        filteredNodes.push(node);
+                       
+                        
+                    }
+                });
+            }
+                nodes.forEach(function(node) {
+                    if (node.ChildNodes.length > 0) {
+                        checkChild(node);
+
+                    }
+                    if (node.selected) {
+                        node.show = true;
+                        filteredNodes.push(node);
+                        
+                    }
+                });
             return filteredNodes;
         }
     }
