@@ -16,11 +16,11 @@
 						<li ng-repeat="f in vm.files">{{f.name}}</li>
 					</ul>
 					<div ng-show="vm.isImportReady">
-						<pre>{{vm.successfulCount}} users are imported successfully, {{vm.invalidCount}} are invalid. Please export the invalid data to correct it.</pre>
+						<pre>{{vm.successfulCount}} users are imported successfully, {{vm.invalidCount}} are invalid.</pre>
 
-						<button  ng-click="vm.export()">Export</button>
+						<button ng-show="vm.hasDataWithError" ng-click="vm.export()">Export</button>
 
-						<div  ui-grid="vm.gridOptionForImport" ui-grid-importer ui-grid-resize-columns ui-grid-exporter class="grid"></div>
+						<div ng-show="vm.hasDataWithError" ui-grid="vm.gridOptionForImport" ui-grid-importer ui-grid-resize-columns ui-grid-exporter class="grid"></div>
 					</div>
 				</div>
 			</div>

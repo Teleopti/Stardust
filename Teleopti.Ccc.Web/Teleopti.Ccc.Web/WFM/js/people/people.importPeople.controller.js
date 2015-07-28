@@ -47,14 +47,15 @@
 				.$promise.then(function(result) {
 					vm.isImportReady = true;
 					vm.dataWithError = result.InvalidUsers;
+					vm.hasDataWithError = vm.dataWithError.length > 0;
 					vm.successfulCount = result.SuccessfulCount;
 					vm.invalidCount = result.InvalidCount;
-
-					$timeout(function() {
-						vm.gridForImportApi.core.handleWindowResize();
-						vm.export();
-					});
-
+					if (vm.hasDataWithError) {
+						$timeout(function() {
+							vm.gridForImportApi.core.handleWindowResize();
+							vm.export();
+						});
+					}
 
 				});
 		};
@@ -73,7 +74,7 @@
 		};
 
 		vm.export = function() {
-			if (vm.isImportReady) {
+			if (vm.isImportReady && vm.hasDataWithError) {
 				vm.gridForImportApi.exporter.csvExport(uiGridExporterConstants.ALL, uiGridExporterConstants.ALL);
 			}
 
