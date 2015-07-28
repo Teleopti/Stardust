@@ -18,7 +18,8 @@
         	$http.post(getCampaignVisualizationUrl + campaignId) 
 				.success(function (data) {
 					if (successCb != null) successCb(normalizeChartData(data));
-				})
+					console.log("raw data" , data);
+		        })
 				.error(function (data) {
 					if (errorCb != null) errorCb(data);
 				});
@@ -35,11 +36,6 @@
 			var schedules= [];
 			var underDiffs = [];
 			var overDiffs = [];
-			//uiDate = data.Dates.map(function(e) {
-			//	return new moment(e).format("L");
-			//});
-
-			//uiDate[0].unshift('x');
 			console.log('normalizing', data);
 
 			if (!(data.Dates && data.BacklogPersonHours && data.ScheduledPersonHours && data.PlannedPersonHours)) {
@@ -48,14 +44,29 @@
 
 			data.Dates.forEach(function(e, i) { //BacklogPersonHours,Dates,PlannedPersonHours,ScheduledPersonHours
 				dates[i] = new moment(e.Date).format("YYYY-MM-DD");
-				rawBacklogs[i] = data.BacklogPersonHours[i];
+
+				rawBacklogs[i] = Math.round(data.BacklogPersonHours[i]);
+
 				calculatedBacklogs[i] = (data.ScheduledPersonHours[i] > 0 && data.ScheduledPersonHours[i] < data.PlannedPersonHours[i]) ?
-					data.ScheduledPersonHours[i] + data.BacklogPersonHours[i] - data.PlannedPersonHours[i] : data.BacklogPersonHours[i];
-				plans[i] = data.PlannedPersonHours[i];
-				unscheduledPlans[i] = (data.ScheduledPersonHours[i] > 0) ? 0 : data.PlannedPersonHours[i];
-				schedules[i] = data.ScheduledPersonHours[i];
-				underDiffs[i] = (data.ScheduledPersonHours[i] > 0 && data.ScheduledPersonHours[i] < data.PlannedPersonHours[i]) ? data.PlannedPersonHours[i] - data.ScheduledPersonHours[i] : 0;
-				overDiffs[i] = (data.ScheduledPersonHours[i] > 0 && data.ScheduledPersonHours[i] > data.PlannedPersonHours[i]) ? data.ScheduledPersonHours[i] - data.PlannedPersonHours[i] : 0;
+					Math.round(data.ScheduledPersonHours[i] + data.BacklogPersonHours[i] - data.PlannedPersonHours[i]) :
+					Math.round(data.BacklogPersonHours[i]);
+
+				plans[i] = Math.round(data.PlannedPersonHours[i]);
+
+				unscheduledPlans[i] = (data.ScheduledPersonHours[i] > 0) ?
+					0 :
+					Math.round(data.PlannedPersonHours[i]);
+
+				schedules[i] = Math.round(data.ScheduledPersonHours[i]);
+
+				underDiffs[i] = (data.ScheduledPersonHours[i] > 0 && data.ScheduledPersonHours[i] < data.PlannedPersonHours[i]) ?
+					Math.round(data.PlannedPersonHours[i] - data.ScheduledPersonHours[i]) :
+					0;
+
+				overDiffs[i] = (data.ScheduledPersonHours[i] > 0 && data.ScheduledPersonHours[i] > data.PlannedPersonHours[i]) ?
+					Math.round(data.ScheduledPersonHours[i] - data.PlannedPersonHours[i]) :
+					0;
+
 			});
 
 			return {
@@ -70,8 +81,22 @@
 			};
 		}
 
-		function selectDataGroups(viewScheduleDiffToggle) {
-			return (viewScheduleDiffToggle) ? ['calculatedBacklogs', 'underDiffs', 'overDiffs', 'plans'] : ['rawBacklogs', 'schedules', 'unscheduledPlans'];
+		function selectDataGroups(viewScheduleDiffToggle, plannedPhase) {
+			//return (viewScheduleDiffToggle) ? ['calculatedBacklogs', 'underDiffs', 'overDiffs', 'plans'] : ['rawBacklogs', 'schedules', 'unscheduledPlans'];
+			if (viewScheduleDiffToggle) {
+				if (plannedPhase==1) {
+					return ['calculatedBacklogs', 'plans'];
+				} else {
+					return ['calculatedBacklogs', 'underDiffs', 'overDiffs', 'plans'];
+				}
+			} else {
+				if (plannedPhase==1) {
+					return ['rawBacklogs','unscheduledPlans'];
+				} else {
+					return ['rawBacklogs', 'schedules', 'unscheduledPlans'];
+				}
+				
+			}
 		}
 
 		function getDataColor(name) {
@@ -89,11 +114,11 @@
 			return colorMap;
 		}
 
-		function makeGraph(graph, graphId, viewScheduleDiffToggle, graphData) {
+		function makeGraph(graph, graphId, viewScheduleDiffToggle, graphData, plannedPhase) {
 
 			console.log('Graph data', graphData);
-			var currentLabelGroups = selectDataGroups(viewScheduleDiffToggle).map(function (name) { return graphData[name][0]; });
-			var previousLabelGroups = selectDataGroups(!viewScheduleDiffToggle).map(function (name) { return graphData[name][0]; });
+			var currentLabelGroups = selectDataGroups(viewScheduleDiffToggle, plannedPhase).map(function (name) { return graphData[name][0]; });
+			var previousLabelGroups = selectDataGroups(!viewScheduleDiffToggle, plannedPhase).map(function (name) { return graphData[name][0]; });
 
 			var colorMap = {};
 			var dataColor = getDataColor();
@@ -106,18 +131,18 @@
 			if (graph) {
 				console.log('reloading graph', currentLabelGroups);
 				graph.load({
-					columns: selectDataGroups(viewScheduleDiffToggle).map(function (name) { return graphData[name]; }),					
+					columns: selectDataGroups(viewScheduleDiffToggle, plannedPhase).map(function (name) { return graphData[name]; }),
 					unload:  previousLabelGroups
 				});
 			} else {
-				var tmp = [graphData.dates].concat(selectDataGroups(viewScheduleDiffToggle).map(function(name) { return graphData[name]; }));
-				console.log('making graph', tmp);
+				//var tmp = [graphData.dates].concat(selectDataGroups(viewScheduleDiffToggle).map(function(name) { return graphData[name]; }));
+				//console.log('making graph', tmp);
 
 				graph = c3.generate({
 					bindto: graphId ,
 					data: {
 						x: 'x',
-						columns: [graphData.dates].concat(selectDataGroups(viewScheduleDiffToggle).map(function (name) { return graphData[name]; })),
+						columns: [graphData.dates].concat(selectDataGroups(viewScheduleDiffToggle, plannedPhase).map(function (name) { return graphData[name]; })),
 						type: 'bar',						
 						groups: [
 							currentLabelGroups,

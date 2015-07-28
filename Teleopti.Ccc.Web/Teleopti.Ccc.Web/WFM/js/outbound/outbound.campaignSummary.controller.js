@@ -31,10 +31,11 @@
         };
 		
         $scope.generateChart = function (campaign) {
+	        console.log("Status", campaign.Status);
 	        campaign.viewScheduleDiffToggle = false;
 	        outboundService.getCampaignVisualization(campaign.Id, function success(data) {
-		        campaign.chartData = data;
-		        campaign.chart = outboundService.makeGraph(null, '#Chart_' + campaign.Id, campaign.viewScheduleDiffToggle, data);
+	        	campaign.chartData = data;
+	        	campaign.chart = outboundService.makeGraph(null, '#Chart_' + campaign.Id, campaign.viewScheduleDiffToggle, data, campaign.Status);
 
 		        console.log('after drawing', campaign);
 	        });	       
@@ -44,7 +45,7 @@
         	campaign.viewScheduleDiffToggle = !campaign.viewScheduleDiffToggle;
 
 	        console.log('before toggling', campaign);
-	        outboundService.makeGraph(campaign.chart, '#Chart_' + campaign.Id, campaign.viewScheduleDiffToggle, campaign.chartData);
+	        outboundService.makeGraph(campaign.chart, '#Chart_' + campaign.Id, campaign.viewScheduleDiffToggle, campaign.chartData, campaign.Status);
 	    };
 
         $scope.show = function (campaign) {

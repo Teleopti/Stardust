@@ -26,16 +26,11 @@
 				</card-header>
                 <card-body>
 	                <div class="relative">
-						<div class="wfm-switch wfm-switch-campaignfix" ng-click="toggleChartDisplay(campaign)">
-							<input type="checkbox" id="switch_{{campaign.Id}}" />
-							<label for="switch_{{campaign.Id}}">
-								<span class="wfm-switch-label">view scheduled chart</span>
-								<span class="wfm-switch-toggle"></span>
-							</label>
+						<div class="clearfix m-b-10">
+							<p class="campaign-message m-r-5" ng-repeat="info in campaign.WarningInfo"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span translate>{{info.TypeOfRule}}</span></p>
+							<md-switch class="pull-right m-t-0" ng-click="toggleChartDisplay(campaign)" ng-if="campaign.Status!=1">view scheduled details</md-switch>
 						</div>
-		                <p class="campaign-message m-r-5" ng-repeat="info in campaign.WarningInfo"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span translate>{{info.TypeOfRule}}</span></p>
 		                <div class="chart text-center relative">
-			                <!--<div style="position: absolute; top: 40%; left: 45%; height: 40px; background-color: rgba(0,0,0,0.5); color: #fff;line-height:40px;padding:0 10px;">this chart is fake data now</div>-->
 			                <div id="Chart_{{campaign.Id}}"></div>
 		                </div>
 		                <button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="show(campaign)">edit</button>
@@ -62,16 +57,11 @@
 				</card-header>
                 <card-body>
 	                <div class="relative">
-						<div class="wfm-switch wfm-switch-campaignfix" ng-click="toggleChartDisplay(campaign)">
-							<input type="checkbox" id="switch_{{campaign.Id}}" />
-							<label for="switch_{{campaign.Id}}">
-								<span class="wfm-switch-label">view scheduled chart</span>
-								<span class="wfm-switch-toggle"></span>
-							</label>
+						<div class="clearfix m-b-10">
+							<p class="campaign-message m-r-5" ng-repeat="info in campaign.WarningInfo"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span translate>{{info.TypeOfRule}}</span></p>
+							<md-switch class="pull-right m-t-0" ng-click="toggleChartDisplay(campaign)" ng-if="campaign.Status!=1">view scheduled details</md-switch>
 						</div>
-		                <p class="campaign-message m-r-5" ng-repeat="info in campaign.WarningInfo"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span translate>{{info.TypeOfRule}}</span></p>
 		                <div class="chart text-center relative">
-			                <!--<div style="position: absolute; top: 40%; left: 45%; height: 40px; background-color: rgba(0,0,0,0.5); color: #fff;line-height:40px;padding:0 10px;">this chart is fake data now</div>-->
 			                <div id="Chart_{{campaign.Id}}"></div>
 		                </div>
 		                <button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="show(campaign)" translate>Edit</button>
