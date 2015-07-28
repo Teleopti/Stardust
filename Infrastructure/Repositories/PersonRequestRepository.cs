@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	/// </summary>
 	public class PersonRequestRepository : Repository<IPersonRequest>, IPersonRequestRepository
 	{
-
 		public PersonRequestRepository(IUnitOfWork unitOfWork)
 			: base(unitOfWork)
 		{
@@ -170,7 +169,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		private static IEnumerable<Type> resolveTypesToClasses (IEnumerable<RequestType> requestTypes)
 		{
-			var targetRequestTypes = new List<Tuple<RequestType, Type>>()
+			var targetRequestTypes = new List<Tuple<RequestType, Type>>
 			{
 				new Tuple<RequestType, Type> (RequestType.ShiftTradeRequest, typeof (ShiftTradeRequest)),
 				new Tuple<RequestType, Type> (RequestType.TextRequest, typeof (TextRequest)),
@@ -262,8 +261,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		private IEnumerable<IPersonRequest> findAllRequestsForAgent(IPerson person, DateTimePeriod? period)
 		{
-			#region Get all requests created by agent
+			var requestsCreatedByPerson = getRequestsCreatedByAgent(person, period);
+			var shiftTradeRequestsWithPerson = getShiftTradeRequestsWithAgent(person, period);
 
+			return requestsCreatedByPerson.Union(shiftTradeRequestsWithPerson).OrderByDescending(x => x.UpdatedOn);
+		}
+
+		/// <summary>
+		/// Get all requests created by agent
+		/// </summary>
+		private IEnumerable<IPersonRequest> getRequestsCreatedByAgent(IPerson person, DateTimePeriod? period)
+		{
 			var criteriaPersonRequestsCreatedByPerson = Session.CreateCriteria<PersonRequest>()
 				.SetFetchMode("requests", FetchMode.Join)
 				.SetResultTransformer(Transformers.DistinctRootEntity)
@@ -271,12 +279,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			applyPeriodRestriction(criteriaPersonRequestsCreatedByPerson, period);
 
-			var requestsCreatedByPerson = criteriaPersonRequestsCreatedByPerson.List<IPersonRequest>();
+			return criteriaPersonRequestsCreatedByPerson.List<IPersonRequest>();
+		}
 
-			#endregion
-
-			#region Get shift trade request created by other agent but trade with current person
-
+		/// <summary>
+		/// Get shift trade request created by other agent but trade with current person
+		/// </summary>
+		private IEnumerable<IPersonRequest> getShiftTradeRequestsWithAgent(IPerson person, DateTimePeriod? period)
+		{
 			var subQueryShiftTradeRequestsWithPerson = DetachedCriteria.For<ShiftTradeRequest>()
 				.SetProjection(Projections.Property("Parent"))
 				.CreateCriteria("ShiftTradeSwapDetails", "swapDetail", JoinType.InnerJoin)
@@ -289,11 +299,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			applyPeriodRestriction(criteriaShiftTradeRequestsWithPerson, period);
 
-			var shiftTradeRequestsWithPerson = criteriaShiftTradeRequestsWithPerson.List<IPersonRequest>();
-
-			#endregion
-
-			return requestsCreatedByPerson.Union(shiftTradeRequestsWithPerson).OrderByDescending(x => x.UpdatedOn);
+			return criteriaShiftTradeRequestsWithPerson.List<IPersonRequest>();
 		}
 
 		private void applyPeriodRestriction(ICriteria criteria, DateTimePeriod? period)
