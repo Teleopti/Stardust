@@ -34,7 +34,7 @@
 				return;
 			}
 
-			data.Dates.forEach(function(e, i) { //BacklogPersonHours,Dates,PlannedPersonHours,ScheduledPersonHours
+			data.Dates.forEach(function(e, i) {
 				dates[i] = new moment(e.Date).format("YYYY-MM-DD");
 
 				rawBacklogs[i] = Math.round(data.BacklogPersonHours[i]);
@@ -69,7 +69,8 @@
 				unscheduledPlans: ['planned'].concat(unscheduledPlans),
 				schedules: ['scheduled'].concat(schedules),
 				underDiffs: ['underscheduled'].concat(underDiffs),
-				overDiffs: ['overscheduled'].concat(overDiffs)
+				overDiffs: ['overscheduled'].concat(overDiffs),
+				statusLine: ['statusLine'].concat(rawBacklogs)
 			};
 		}
 
@@ -82,9 +83,9 @@
 				}
 			} else {
 				if ($filter('showPhase')(plannedPhase) == 'Planned') {
-					return ['rawBacklogs','unscheduledPlans'];
+					return ['rawBacklogs', 'unscheduledPlans', 'statusLine'];
 				} else {
-					return ['rawBacklogs', 'schedules', 'unscheduledPlans'];
+					return ['rawBacklogs', 'schedules', 'unscheduledPlans', 'statusLine'];
 				}
 				
 			}
@@ -94,6 +95,7 @@
 			var colorMap = {
 				rawBacklogs: '#1F77B4',
 				calculatedBacklogs: '#1F77B4',
+				statusLine: '#2CA02C',
 				plans: '#66C2FF',
 				unscheduledPlans: '#66C2FF',
 				schedules: '#C2E085',
@@ -105,7 +107,7 @@
 			return colorMap;
 		}
 
-		function makeGraph(graph, graphId, viewScheduleDiffToggle, graphData, plannedPhase) {
+		function makeGraph(graph, graphId, viewScheduleDiffToggle, graphData, plannedPhase, warningInfo) {
 			var currentLabelGroups = selectDataGroups(viewScheduleDiffToggle, plannedPhase).map(function (name) { return graphData[name][0]; });
 			var previousLabelGroups = selectDataGroups(!viewScheduleDiffToggle, plannedPhase).map(function (name) { return graphData[name][0]; });
 
@@ -114,6 +116,15 @@
 			for (var name in dataColor) {
 				colorMap[graphData[name][0]] = dataColor[name];
 			}
+			warningInfo.forEach(function (e) {
+				if (e.TypeOfRule == 'OutboundUnderSLARule') {
+					colorMap.statusLine = '#9467BD';
+				}
+				if (e.TypeOfRule == 'OutboundOverstaffRule') {
+					colorMap.statusLine = '#f44336';
+				}
+
+			});
 
 			if (graph) {
 				graph.load({
@@ -128,7 +139,7 @@
 						columns: [graphData.dates].concat(selectDataGroups(viewScheduleDiffToggle, plannedPhase).map(function (name) { return graphData[name]; })),
 						type: 'bar',
 						types: {
-							subtitudeBacklogs: 'line'
+							statusLine: 'line'
 						},
 						groups: [
 							currentLabelGroups,
