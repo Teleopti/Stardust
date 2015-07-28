@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			foreach (var date in campaign.SpanningPeriod.DayCollection())
 			{
 				var plannedHours = incomingTask.GetPlannedTimeOnDate(date);
-				var backlogHours = incomingTask.GetTimeOnDate(date);
+				var backlogHours = incomingTask.GetEstimatedIncomingBacklogOnDate(date);
 				var scheduledHours = incomingTask.GetScheduledTimeOnDate(date);
 
 				visualizationVM.Dates.Add(date);
