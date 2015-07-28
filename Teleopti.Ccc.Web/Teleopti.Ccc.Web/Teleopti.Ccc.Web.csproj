@@ -1242,9 +1242,9 @@
     <Content Include="Content\jalaali-calendar-datepicker\moment-datepicker-jalaali-ext.js" />
     <Content Include="Content\jalaali-calendar-datepicker\moment-jalaali.js" />
     <Content Include="WFM\js\global\teleopti.wfm.cardList\teleopticard.directive.js" />
-    <Content Include="WFM\js\global\teleopti.wfm.cardList\teleopticard.tpl.html" />
+    <Content Include="WFM\js\global\teleopti.wfm.cardList\teleoptiCard.html" />
     <Content Include="WFM\js\global\teleopti.wfm.cardList\teleopticardlist.directive.js" />
-    <Content Include="WFM\js\global\teleopti.wfm.cardList\teleopticardlist.tpl.html" />
+    <Content Include="WFM\js\global\teleopti.wfm.cardList\teleopticardlist.html" />
     <Content Include="WFM\js\outbound\outbound.activity.service.js" />
     <Content Include="WFM\js\outbound\outbound.campaignSummary.controller.js" />
     <Content Include="WFM\js\outbound\outbound.campaignPhase.directive .js" />
@@ -1254,7 +1254,6 @@
     <Content Include="WFM\js\people\people.advanceSearch.directive .js" />
     <Content Include="WFM\js\people\people.importPeople.controller.js" />
     <Content Include="WFM\js\people\people.importPeople.directive.js" />
-    <Content Include="WFM\tests\global\teleopticardlist.directive.spec.js" />
     <Content Include="WFM\vendor\ui-grid\ui-grid-unstable.min.css" />
     <Content Include="WFM\vendor\ui-grid\ui-grid-unstable.min.js" />
     <None Include="WFM\css\_forecasting.scss" />
@@ -1292,7 +1291,7 @@
     <Content Include="WFM\vendor\ui-bootstrap-custom-build\datepicker.directive.ext.js" />
     <Content Include="WFM\js\seatManagement\fabric.fix.js" />
     <Content Include="WFM\js\seatManagement\html\imageLoadWithPreview.html" />
-    <Content Include="WFM\js\seatManagement\html\seatmapeditor.tpl.html" />
+    <Content Include="WFM\js\seatManagement\html\seatmapeditor.html" />
     <Content Include="WFM\js\seatManagement\html\seatplaninit.html" />
     <Content Include="WFM\js\seatManagement\imageloadwithpreview.directive.js" />
     <Content Include="WFM\js\seatManagement\seatmapedit.controller.js" />
@@ -1350,7 +1349,7 @@
     <Content Include="WFM\js\search\search.controller.js" />
     <Content Include="WFM\js\search\search.service.js" />
     <Content Include="WFM\js\seatManagement\html\seatmap.html" />
-    <Content Include="WFM\js\seatManagement\html\seatmapcanvas.tpl.html" />
+    <Content Include="WFM\js\seatManagement\html\seatmapcanvas.html" />
     <Content Include="WFM\js\seatManagement\html\seatplan.html" />
     <Content Include="WFM\js\seatManagement\images\background.svg" />
     <Content Include="WFM\js\seatManagement\images\desk.svg" />
