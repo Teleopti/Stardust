@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -40,6 +39,7 @@ a.parent = p.id
 where a.is_current=1
 and a.Team in (:teams)
 and (p.TerminalDate is null or p.TerminalDate > :now)
+and p.isDeleted = 0
 group by a.Team";
 
 
