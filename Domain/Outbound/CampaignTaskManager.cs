@@ -1,11 +1,8 @@
 ﻿using System;
-using Teleopti.Ccc.Domain.Backlog;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Outbound
 {
-   
-
     public class CampaignTaskManager : IOutboundCampaignTaskManager
     {
         private readonly OutboundProductionPlanFactory _outboundProductionPlanFactory;
@@ -25,8 +22,9 @@ namespace Teleopti.Ccc.Domain.Outbound
             foreach (var dateOnly in incomingTask.SpanningPeriod.DayCollection())
             {
                 var manualTime = campaign.GetManualProductionPlan(dateOnly);
-                if (manualTime.HasValue)
-                    incomingTask.SetTimeOnDate(dateOnly, manualTime.Value, PlannedTimeTypeEnum.Manual);
+                if (manualTime.HasValue)  incomingTask.SetTimeOnDate(dateOnly, manualTime.Value, PlannedTimeTypeEnum.Manual);
+					 incomingTask.SetRealPlannedTimeOnDate(dateOnly, incomingTask.GetPlannedTimeOnDate(dateOnly));
+
                 var scheduled = _outboundScheduledResourcesProvider.GetScheduledTimeOnDate(dateOnly, campaign.Skill);
                 var forecasted = _outboundScheduledResourcesProvider.GetForecastedTimeOnDate(dateOnly, campaign.Skill);
                 if (scheduled != TimeSpan.Zero)

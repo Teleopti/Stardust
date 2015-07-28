@@ -19,6 +19,8 @@ namespace Teleopti.Interfaces.Domain
         void SetIncomingOverflowedWork(double workItems);
         TimeSpan GetTimeOnDate(DateOnly date);
         TimeSpan GetPlannedTimeOnDate(DateOnly date);
+	    TimeSpan GetRealPlannedTimeOnDate(DateOnly date);
+	    void SetRealPlannedTimeOnDate(DateOnly date, TimeSpan time);
         TimeSpan GetScheduledTimeOnDate(DateOnly date);
         PlannedTimeTypeEnum PlannedTimeTypeOnDate(DateOnly date);
         void RecalculateDistribution();

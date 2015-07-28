@@ -45,9 +45,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			campaign.SpanningPeriod = new DateOnlyPeriod(date, date);
 			_campaignRepository.Stub(x => x.Get(id)).Return(campaign);
 			var incomingTask = MockRepository.GenerateMock<IBacklogTask>();
-			incomingTask.Stub(x => x.GetPlannedTimeOnDate(date)).Return(TimeSpan.FromHours(1));
+			incomingTask.Stub(x => x.GetRealPlannedTimeOnDate(date)).Return(TimeSpan.FromHours(1));
 			incomingTask.Stub(x => x.GetScheduledTimeOnDate(date)).Return(TimeSpan.FromHours(1));
-			incomingTask.Stub(x => x.GetEstimatedIncomingBacklogOnDate(date)).Return(TimeSpan.FromHours(1));
+			incomingTask.Stub(x => x.GetEstimatedOutgoingBacklogOnDate(date)).Return(TimeSpan.FromHours(1));
 			_taskManager.Stub(x => x.GetIncomingTaskFromCampaign(campaign)).Return(incomingTask);
 
 			var target = new CampaignVisualizationProvider(_campaignRepository, _taskManager);
@@ -67,9 +67,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			campaign.SpanningPeriod = new DateOnlyPeriod(date, date);
 			_campaignRepository.Stub(x => x.Get(id)).Return(campaign);
 			var incomingTask = MockRepository.GenerateMock<IBacklogTask>();
-			incomingTask.Stub(x => x.GetPlannedTimeOnDate(date)).Return(hour);
+			incomingTask.Stub(x => x.GetRealPlannedTimeOnDate(date)).Return(hour);
 			incomingTask.Stub(x => x.GetScheduledTimeOnDate(date)).Return(TimeSpan.FromHours(1));
-			incomingTask.Stub(x => x.GetEstimatedIncomingBacklogOnDate(date)).Return(TimeSpan.FromHours(1));
+			incomingTask.Stub(x => x.GetEstimatedOutgoingBacklogOnDate(date)).Return(TimeSpan.FromHours(1));
 			_taskManager.Stub(x => x.GetIncomingTaskFromCampaign(campaign)).Return(incomingTask);
 
 			var target = new CampaignVisualizationProvider(_campaignRepository, _taskManager);
@@ -89,9 +89,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			campaign.SpanningPeriod = new DateOnlyPeriod(date, date);
 			_campaignRepository.Stub(x => x.Get(id)).Return(campaign);
 			var incomingTask = MockRepository.GenerateMock<IBacklogTask>();
-			incomingTask.Stub(x => x.GetPlannedTimeOnDate(date)).Return(hour);
+			incomingTask.Stub(x => x.GetRealPlannedTimeOnDate(date)).Return(hour);
 			incomingTask.Stub(x => x.GetScheduledTimeOnDate(date)).Return(TimeSpan.FromHours(1));
-			incomingTask.Stub(x => x.GetEstimatedIncomingBacklogOnDate(date)).Return(hour);
+			incomingTask.Stub(x => x.GetEstimatedOutgoingBacklogOnDate(date)).Return(hour);
 			_taskManager.Stub(x => x.GetIncomingTaskFromCampaign(campaign)).Return(incomingTask);
 
 			var target = new CampaignVisualizationProvider(_campaignRepository, _taskManager);
@@ -111,9 +111,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			campaign.SpanningPeriod = new DateOnlyPeriod(date, date);
 			_campaignRepository.Stub(x => x.Get(id)).Return(campaign);
 			var incomingTask = MockRepository.GenerateMock<IBacklogTask>();
-			incomingTask.Stub(x => x.GetPlannedTimeOnDate(date)).Return(hour);
+			incomingTask.Stub(x => x.GetRealPlannedTimeOnDate(date)).Return(hour);
 			incomingTask.Stub(x => x.GetScheduledTimeOnDate(date)).Return(hour);
-			incomingTask.Stub(x => x.GetEstimatedIncomingBacklogOnDate(date)).Return(hour);
+			incomingTask.Stub(x => x.GetEstimatedOutgoingBacklogOnDate(date)).Return(hour);
 			_taskManager.Stub(x => x.GetIncomingTaskFromCampaign(campaign)).Return(incomingTask);
 
 			var target = new CampaignVisualizationProvider(_campaignRepository, _taskManager);
@@ -133,9 +133,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			campaign.SpanningPeriod = new DateOnlyPeriod(date, date.AddDays(10));
 			_campaignRepository.Stub(x => x.Get(id)).Return(campaign);
 			var incomingTask = MockRepository.GenerateMock<IBacklogTask>();
-			incomingTask.Stub(x => x.GetPlannedTimeOnDate(date)).IgnoreArguments().Return(hour);
+			incomingTask.Stub(x => x.GetRealPlannedTimeOnDate(date)).IgnoreArguments().Return(hour);
 			incomingTask.Stub(x => x.GetScheduledTimeOnDate(date)).IgnoreArguments().Return(hour);
-			incomingTask.Stub(x => x.GetEstimatedIncomingBacklogOnDate(date)).IgnoreArguments().Return(hour);
+			incomingTask.Stub(x => x.GetEstimatedOutgoingBacklogOnDate(date)).IgnoreArguments().Return(hour);
 			_taskManager.Stub(x => x.GetIncomingTaskFromCampaign(campaign)).Return(incomingTask);
 
 			var target = new CampaignVisualizationProvider(_campaignRepository, _taskManager);
