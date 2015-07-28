@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 					var tenantUserData = new PersonInfoModel()
 					{
 						ApplicationLogonName = user.ApplicationUserId,
-						Identity = user.WindowsUser,
+						Identity = user.WindowsUser.IsNullOrEmpty()? null: user.WindowsUser,
 						Password = user.Password,
 						PersonId = person.Id.GetValueOrDefault()
 					};
