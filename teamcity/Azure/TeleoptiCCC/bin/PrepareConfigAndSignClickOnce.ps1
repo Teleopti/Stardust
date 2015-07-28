@@ -290,8 +290,17 @@ Try
 		Remove-Item "$tempTogglesFile"
 	}
 
-    #Set static config for all other params
+
     Add-Content "$fullPathsettingsFile" ""
+	
+	$notFoundAuthenticationSettings = @( Get-Content "$fullPathsettingsFile" | Where-Object { $_.Contains("DEFAULT_IDENTITY_PROVIDER") } ).Count -eq 0
+	if ($notFoundAuthenticationSettings) {
+		Add-Content "$fullPathsettingsFile" "`$(DEFAULT_IDENTITY_PROVIDER)|Teleopti"
+		Add-Content "$fullPathsettingsFile" "`$(WindowsClaimProvider)|"
+		Add-Content "$fullPathsettingsFile" "`$(TeleoptiClaimProvider)|<add identifier=`"urn:Teleopti`" displayName=`"Teleopti`" url=`"https://$DataSourceName.teleopticloud.com/Web/sso/`" protocolHandler=`"RelativeOpenIdHandler`" />"
+	}
+	
+	#Set static config for all other params
     Add-Content "$fullPathsettingsFile" "`$(SDK_CRED_PROT)|None"
     Add-Content "$fullPathsettingsFile" "`$(MATRIX_WEB_SITE_URL)|https://$DataSourceName.teleopticloud.com/Analytics"
     Add-Content "$fullPathsettingsFile" "`$(SDK_SSL_SECURITY_MODE)|Transport"
