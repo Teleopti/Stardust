@@ -15,12 +15,8 @@ var log = function(msg){
 var closeAndThrow = function(msg){
 	log(msg);
 	log('shutdown client.');
-	client.end(function(){
-		log('shutdown selenium server');
-		request('http://localhost:4444/selenium-server/driver/?cmd=shutDownSeleniumServer',function (error, response, body) {
-			throw new Error(msg);
-		});
-	});
+	client.end();
+	throw new Error(msg);
 };	
 
 client.init();
@@ -100,9 +96,5 @@ client.click('#Start-Check')
 	
 log('shutdown client.');
 client.end();
-log('shutdown selenium server');
-client.call(function(){
-	request('http://localhost:4444/selenium-server/driver/?cmd=shutDownSeleniumServer');
-});
 
 
