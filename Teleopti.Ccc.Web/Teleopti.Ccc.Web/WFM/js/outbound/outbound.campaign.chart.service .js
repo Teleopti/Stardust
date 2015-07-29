@@ -192,6 +192,9 @@
 					            return text + "</table>";
 					        else return '';
 					    }
+					},
+					subchart: {
+					    show: true
 					}
 				});
 
