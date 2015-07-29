@@ -121,7 +121,9 @@
 		        plannedPhase = campaign.Status,
 		        warningInfo = campaign.WarningInfo,
 		        endDate = new moment(campaign.EndDate.Date).format("YYYY-MM-DD");
-		
+
+		    var maxPersonHours = (Math.max.apply(Math, graphData.rawBacklogs.slice(1)) + Math.max.apply(Math, graphData.plans.slice(1))) * 1.5;
+		  
 			var currentLabelGroups = selectDataGroups(viewScheduleDiffToggle, plannedPhase).map(function (name) { return graphData[name][0]; });
 			var previousLabelGroups = selectDataGroups(!viewScheduleDiffToggle, plannedPhase).map(function (name) { return graphData[name][0]; });
 
@@ -153,7 +155,7 @@
                 }
 
 				graph = c3.generate({
-					bindto: graphId ,
+				    bindto: graphId,                   
 					data: {
 						x: 'x',
 						columns: [graphData.dates].concat(selectDataGroups(viewScheduleDiffToggle, plannedPhase).map(function (name) { return graphData[name]; })),
@@ -179,7 +181,10 @@
 						y: {							
 							label: {
 							    text: translationDictionary['NeededPersonHours']
-							}
+							},
+							max: maxPersonHours,
+							min: 0,
+						    padding: {bottom:0}
 						}
 					},
 					grid: {
@@ -219,6 +224,11 @@
 					subchart: {
 					    show: true
 					}
+				});
+
+				graph.load({
+				    columns: selectDataGroups(viewScheduleDiffToggle, plannedPhase).map(function (name) { return graphData[name]; }),
+				    unload: currentLabelGroups
 				});
 
 			}

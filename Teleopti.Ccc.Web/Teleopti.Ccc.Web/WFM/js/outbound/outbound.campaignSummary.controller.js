@@ -33,9 +33,10 @@
             $state.go('outbound-create');
         };
 		
-        $scope.generateChart = function (campaign) {
-	        campaign.viewScheduleDiffToggle = false;
-	        outboundChartService.getCampaignVisualization(campaign.Id, function success(data) {
+        $scope.generateChart = function (campaign) {           
+            if (campaign.chart) return;
+            outboundChartService.getCampaignVisualization(campaign.Id, function success(data) {
+                campaign.viewScheduleDiffToggle = false;
 	        	campaign.chartData = data;
 	        	campaign.chart = outboundChartService.makeGraph(null, campaign , campaign.viewScheduleDiffToggle, data);
 	        });	       
