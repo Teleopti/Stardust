@@ -37,13 +37,13 @@
 	        campaign.viewScheduleDiffToggle = false;
 	        outboundChartService.getCampaignVisualization(campaign.Id, function success(data) {
 	        	campaign.chartData = data;
-	        	campaign.chart = outboundChartService.makeGraph(null, '#Chart_' + campaign.Id, campaign.viewScheduleDiffToggle, data, campaign.Status, campaign.WarningInfo);
+	        	campaign.chart = outboundChartService.makeGraph(null, campaign , campaign.viewScheduleDiffToggle, data);
 	        });	       
         };
 
         $scope.toggleChartDisplay = function (campaign) {
         	campaign.viewScheduleDiffToggle = !campaign.viewScheduleDiffToggle;
-        	outboundChartService.makeGraph(campaign.chart, '#Chart_' + campaign.Id, campaign.viewScheduleDiffToggle, campaign.chartData, campaign.Status, campaign.WarningInfo);
+        	outboundChartService.makeGraph(campaign.chart, campaign, campaign.viewScheduleDiffToggle, campaign.chartData);
 	    };
 
         $scope.show = function (campaign) {

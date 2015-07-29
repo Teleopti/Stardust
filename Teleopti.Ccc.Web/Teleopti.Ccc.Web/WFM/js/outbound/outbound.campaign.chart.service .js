@@ -107,7 +107,12 @@
 			return colorMap;
 		}
 
-		function makeGraph(graph, graphId, viewScheduleDiffToggle, graphData, plannedPhase, warningInfo) {
+		function makeGraph(graph, campaign, viewScheduleDiffToggle, graphData) {
+		    var graphId = '#Chart_' + campaign.Id,
+		        plannedPhase = campaign.Status,
+		        warningInfo = campaign.WarningInfo,
+		        endDate = new moment(campaign.EndDate.Date).format("YYYY-MM-DD");
+		
 			var currentLabelGroups = selectDataGroups(viewScheduleDiffToggle, plannedPhase).map(function (name) { return graphData[name][0]; });
 			var previousLabelGroups = selectDataGroups(!viewScheduleDiffToggle, plannedPhase).map(function (name) { return graphData[name][0]; });
 			
@@ -163,6 +168,11 @@
 								text: 'Person hours (h)'								
 							}
 						}
+					},
+					grid: {
+					     x: {
+					         lines: [{ value: endDate, text: 'End Date' }]
+					     }
 					},
 					tooltip: {
 					    contents: function (d, defaultTitleFormat, defaultValueFormat, color) {
