@@ -2,7 +2,7 @@
 {
 	public class PersistPersonInfoFake : IPersistPersonInfo
 	{
-		public void Persist(PersonInfo personInfo)
+		public void Persist(PersonInfo personInfo, string logonName)
 		{
 			LastPersist = personInfo;
 			if (personInfo.ApplicationLogonInfo.LogonName == "existingId")

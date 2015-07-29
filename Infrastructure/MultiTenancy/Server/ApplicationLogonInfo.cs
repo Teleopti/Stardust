@@ -89,8 +89,10 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		}
 
 		//used when importing tenant, we don't want to encrypt what is encrypted already
-		public virtual void ReuseLogonPassword(string oldPassword)
+		// and when updating because we don't get password then
+		public virtual void ReuseLogon(string logonName, string oldPassword)
 		{
+			LogonName = logonName;
 			LogonPassword = oldPassword;
 		}
 	}

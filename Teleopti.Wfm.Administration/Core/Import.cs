@@ -38,9 +38,8 @@ namespace Teleopti.Wfm.Administration.Core
 			{
 				var check = new CheckPasswordStrengthFake();
 				var personInfo = new PersonInfo(newTenant, userModel.PersonId);
-				personInfo.SetApplicationLogonCredentials(check, userModel.AppLogon, "");
 				personInfo.SetIdentity(userModel.Identity);
-				personInfo.ApplicationLogonInfo.ReuseLogonPassword(userModel.AppPassword);
+				personInfo.ApplicationLogonInfo.ReuseLogon(userModel.AppLogon, userModel.AppPassword);
 				_currentTenantSession.CurrentSession().Save(personInfo);
 			}
 		}

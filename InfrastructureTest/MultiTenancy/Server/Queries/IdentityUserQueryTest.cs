@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			existingPerson = new PersonInfo(tenant, Guid.NewGuid());
 			existingPerson.SetIdentity(RandomName.Make());
 			var personInfoPersister = new PersistPersonInfo(_tenantUnitOfWorkManager);
-			personInfoPersister.Persist(existingPerson);
+			personInfoPersister.Persist(existingPerson, "");
 			target = new IdentityUserQuery(_tenantUnitOfWorkManager);
 		}
 
