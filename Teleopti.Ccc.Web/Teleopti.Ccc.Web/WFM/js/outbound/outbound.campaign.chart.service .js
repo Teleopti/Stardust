@@ -2,22 +2,29 @@
     'use strict';
 
     angular.module('outboundServiceModule')
-        .service('outboundChartService', ['$filter', '$http', outboundChartService]);
+        .service('outboundChartService', ['$filter', '$http', '$translate', '$q', outboundChartService]);
 
-    function outboundChartService($filter, $http) {
+    function outboundChartService($filter, $http, $translate, $q) {
 
         var getCampaignVisualizationUrl = '../api/Outbound/Campaign/Visualization/';
 
-        this.getCampaignVisualization = function (campaignId, successCb, errorCb) {
-        	$http.post(getCampaignVisualizationUrl + campaignId) 
-				.success(function (data) {
-					if (successCb != null) successCb(normalizeChartData(data));
-		        })
-				.error(function (data) {
-					if (errorCb != null) errorCb(data);
-				});
-        };
+        var translationKeys = ['Backlog', 'Scheduled', 'Planned', 'Underscheduled', 'Overscheduled', 'Progress', 'NeededPersonHours', 'EndDate'];
+        var translations = translationKeys.map(function (x) { return $translate(x); });
+        var translationDictionary = {};
 
+
+        this.getCampaignVisualization = function (campaignId, successCb, errorCb) {
+
+            var tasks = [$http.post(getCampaignVisualizationUrl + campaignId)].concat(translations);
+
+            $q.all(tasks).then(function (results) {               
+                var campaignData = results.shift().data;
+                for (var i = 0; i < translationKeys.length; i++) {
+                    translationDictionary[translationKeys[i]] = results[i];
+                }
+                if (successCb != null) successCb(normalizeChartData(campaignData));
+            });       
+        };      
 		
 		function normalizeChartData(data) {
 			var data = angular.copy(data);
@@ -63,15 +70,17 @@
 
 			return {
 				dates: ['x'].concat(dates),
-				rawBacklogs: ['Backlog'].concat(rawBacklogs),
-				calculatedBacklogs: ['Backlog '].concat(calculatedBacklogs),
-				plans: ['Planned'].concat(plans),
-				unscheduledPlans: ['Planned'].concat(unscheduledPlans),
-				schedules: ['Scheduled'].concat(schedules),
-				underDiffs: ['Underscheduled'].concat(underDiffs),
-				overDiffs: ['Overscheduled'].concat(overDiffs),
-				statusLine: ['Progress Line'].concat(rawBacklogs)
+				rawBacklogs: [translationDictionary['Backlog']].concat(rawBacklogs),
+				calculatedBacklogs: [translationDictionary['Backlog'] + ' '].concat(calculatedBacklogs),
+				plans: [translationDictionary['Planned']].concat(plans),
+				unscheduledPlans: [translationDictionary['Planned']].concat(unscheduledPlans),
+				schedules: [translationDictionary['Scheduled']].concat(schedules),
+				underDiffs: [translationDictionary['Underscheduled']].concat(underDiffs),
+				overDiffs: [translationDictionary['Overscheduled']].concat(overDiffs),
+				statusLine: [translationDictionary['Progress']].concat(rawBacklogs)
 			};
+
+			
 		}
 
 		function selectDataGroups(viewScheduleDiffToggle, plannedPhase) {
@@ -115,7 +124,7 @@
 		
 			var currentLabelGroups = selectDataGroups(viewScheduleDiffToggle, plannedPhase).map(function (name) { return graphData[name][0]; });
 			var previousLabelGroups = selectDataGroups(!viewScheduleDiffToggle, plannedPhase).map(function (name) { return graphData[name][0]; });
-			
+
 			var dataColor = getDataColor();
 			warningInfo.forEach(function (e) {
 			    if (e.TypeOfRule == 'OutboundUnderSLARule') {			       
@@ -137,15 +146,19 @@
 					unload:  previousLabelGroups
 				});
 			} else {
+                function _specifyAdditionalTypes() {
+                    var obj = {};
+                    obj[translationDictionary['Progress']] = 'line';
+                    return obj;
+                }
+
 				graph = c3.generate({
 					bindto: graphId ,
 					data: {
 						x: 'x',
 						columns: [graphData.dates].concat(selectDataGroups(viewScheduleDiffToggle, plannedPhase).map(function (name) { return graphData[name]; })),
 						type: 'bar',
-						types: {
-						    'Progress Line': 'line'
-						},
+						types: _specifyAdditionalTypes(),
 						groups: [
 							currentLabelGroups,
 							previousLabelGroups
@@ -165,13 +178,13 @@
 						},
 						y: {							
 							label: {
-								text: 'Person hours (h)'								
+							    text: translationDictionary['NeededPersonHours']
 							}
 						}
 					},
 					grid: {
 					     x: {
-					         lines: [{ value: endDate, text: 'End Date' }]
+					         lines: [{ value: endDate, text: translationDictionary['EndDate'] }]
 					     }
 					},
 					tooltip: {

@@ -3315,6 +3315,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Backlog.
+        /// </summary>
+        public static string Backlog {
+            get {
+                return ResourceManager.GetString("Backlog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Back To Legal State.
         /// </summary>
         public static string BackToLegalState {
@@ -17966,6 +17975,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Overscheduled.
+        /// </summary>
+        public static string Overscheduled {
+            get {
+                return ResourceManager.GetString("Overscheduled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Over staff.
         /// </summary>
         public static string OverStaff {
@@ -27822,6 +27840,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string UnderConstruction {
             get {
                 return ResourceManager.GetString("UnderConstruction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Underscheduled.
+        /// </summary>
+        public static string Underscheduled {
+            get {
+                return ResourceManager.GetString("Underscheduled", resourceCulture);
             }
         }
         

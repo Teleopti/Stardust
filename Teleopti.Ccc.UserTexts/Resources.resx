@@ -13358,4 +13358,16 @@ Reduce the complexity to use these shifts.</value>
     <value>production plan</value>
     <comment>for campaigns to modify production plan</comment>
   </data>
+  <data name="Backlog" xml:space="preserve">
+    <value>Backlog</value>
+    <comment>Outbound campaign backlog (remaining work to do)</comment>
+  </data>
+  <data name="Overscheduled" xml:space="preserve">
+    <value>Overscheduled</value>
+    <comment>Scheduled hours is higher than the forecasted hours.</comment>
+  </data>
+  <data name="Underscheduled" xml:space="preserve">
+    <value>Underscheduled</value>
+    <comment>Scheduled hours is lower than forecasted hours.</comment>
+  </data>
 </root>
