@@ -51,3 +51,10 @@ td {
 .dbNotOk {
 	color: red;
 }
+
+.ErrorLabel
+{
+	color: Red;
+	font-size: large;
+	font-weight: bold;
+}

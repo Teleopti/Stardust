@@ -243,6 +243,7 @@
     <Compile Include="MultiTenancy\Admin\LoadAllPersonInfos.cs" />
     <Compile Include="MultiTenancy\Admin\LoadAllTenants.cs" />
     <Compile Include="MultiTenancy\Admin\RegenerateAllTenantPasswords.cs" />
+    <Compile Include="MultiTenancy\Admin\TenantAdminUser.cs" />
     <Compile Include="MultiTenancy\Admin\TenantExists.cs" />
     <Compile Include="MultiTenancy\Client\AuthenticationFromFileQuerier.cs" />
     <Compile Include="MultiTenancy\Client\AuthenticationQuerierResultConverter.cs" />
@@ -701,6 +702,9 @@
     <Content Include="Config\PolicyForPassword.xml">
       <SubType>Designer</SubType>
     </Content>
+    <EmbeddedResource Include="MultiTenancy\Admin\TenantAdminUser.dbconf.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="MultiTenancy\Server\PersonInfo.dbconf.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>

@@ -1,0 +1,35 @@
+﻿<div ng-controller="userdetailsController as vm" style="margin-left: 50px;margin-right: 50px">
+	<div class="row">
+		<div class="col-md-12">
+			<h2>Details - {{vm.OriginalName}}</h2>
+			<p>
+				Showing details of one user. Here you can change the Name and the Email.
+				Later change password and maybe reset the password too (user gets email with new).
+			</p>
+		</div>
+		<div class="col-md-12">
+			<div>
+				<div class="importCaption">Name</div>
+				<input class="form-control" type="text" ng-model="vm.Name" ng-blur="vm.CheckName()" placeholder="name">
+			</div>
+			<label ng-class="(vm.NameOk==true) ? 'dbOk' : 'dbNotOk'">{{vm.NameMessage}}</label>
+			<div>
+				<div class="importCaption">Email</div>
+				<div>
+					<input class="form-control" type="email" ng-model="vm.Email" ng-blur="vm.CheckEmail()" placeholder="Email">
+					<label ng-class="(vm.EmailOk==true) ? 'dbOk' : 'dbNotOk'">{{vm.EmailMessage}}</label>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div style="margin-top: 30px" class="col-md-6">
+			<button class="btn btn-primary btn-default" ng-click="vm.save()">Save</button>
+		</div>
+		<div style="margin-top: 30px" class="col-md-6">
+			<button class="btn btn-danger btn-default" ng-click="vm.delete()">Delete this User</button>
+		</div>
+	</div>
+
+</div>
+

@@ -49,7 +49,8 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 			cfg.AddResources(new[]
 			{
 				"Teleopti.Ccc.Infrastructure.MultiTenancy.Server.PersonInfo.dbconf.xml",
-				"Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Tenant.dbconf.xml"
+				"Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Tenant.dbconf.xml",
+				"Teleopti.Ccc.Infrastructure.MultiTenancy.Admin.TenantAdminUser.dbconf.xml"
 			}, typeof (TenantUnitOfWorkManager).Assembly);
 
 			return new TenantUnitOfWorkManager(cfg.BuildSessionFactory());

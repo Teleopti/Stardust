@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Infrastructure"
+                   namespace="Teleopti.Ccc.Infrastructure.MultiTenancy.Admin"
+									 schema="Tenant">
+	<class name="TenantAdminUser" table="AdminUser" >
+		<id name="Id" >
+			<generator class="identity" />
+		</id>
+		
+		<property name="Name" />
+		<property name="Email" />
+		<property name="Password" />
+		<property name="AccessToken" />
+
+	</class>
+
+	<query name="loadAllTenantUsers">
+		select u from TenantAdminUser u
+	</query>
+
+	<query name="loadOneTenantUser">
+		<![CDATA[
+select u.Id as "Id", u.Name as "Name", u.Email as "Email"
+from TenantAdminUser u
+where u.Id=:id
+]]>
+	</query>
+
+</hibernate-mapping>

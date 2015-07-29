@@ -10,20 +10,20 @@
 		<div class="col-md-6">
 			<div>
 				<div class="importCaption">Tenant name</div>
-				<input type="text" ng-model="importVm.Tenant" ng-blur="importVm.CheckTenantName()" placeholder="Tenant name">
+				<input class="form-control" type="text" ng-model="importVm.Tenant" ng-blur="importVm.CheckTenantName()" placeholder="Tenant name">
 			</div>
 			<label ng-class="(importVm.TenantOk==true) ? 'dbOk' : 'dbNotOk'">{{importVm.TenantMessage}}</label>
 			<div>
 				<div class="importCaption">Application database connections string</div>
 				<div>
 					<!---->
-					<input class="importConnstring" type="text" ng-model="importVm.AppDatabase" ng-blur="importVm.CheckAppDb()" placeholder="Connection string">
+					<input class="importConnstring form-control" type="text" ng-model="importVm.AppDatabase" ng-blur="importVm.CheckAppDb()" placeholder="Connection string">
 					<label ng-class="(importVm.AppDbOk==true) ? 'dbOk' : 'dbNotOk'">{{importVm.AppDbCheckMessage}}</label>
 				</div>
 
 				<div>
 					<div class="importCaption">Analytics database connection string</div>
-					<input class="importConnstring" type="text" ng-model="importVm.AnalyticsDatabase" ng-blur="importVm.CheckAnalDb()" placeholder="Connection string">
+					<input class="importConnstring form-control" type="text" ng-model="importVm.AnalyticsDatabase" ng-blur="importVm.CheckAnalDb()" placeholder="Connection string">
 					<label ng-class="(importVm.AnalDbOk==true) ? 'dbOk' : 'dbNotOk'">{{importVm.AnalDbCheckMessage}}</label>
 				</div>
 				<p></p>

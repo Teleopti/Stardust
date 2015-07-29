@@ -18,33 +18,38 @@
 		var vm = this;
 		vm.loginEmail = "";
 		vm.loginPassword = "";
+		vm.Message = '';
 		vm.user = sessionStorage.getItem(userKey);
 
 		function showError(jqXHR) {
-			vm.result = jqXHR.status + ': ' + jqXHR.statusText;
+			vm.Message = jqXHR.status + ': ' + jqXHR.statusText;
 		}
 
 		vm.login = function () {
-			vm.result = '';
-
+			
 			var loginData = {
 				granttype: 'password',
 				username: vm.loginEmail,
 				password: vm.loginPassword
 			};
 
-			$.ajax({
-				type: 'POST',
-				url: '/Login',
-				data: loginData
-			}).done(function (data) {
+			$http.post('./Login',
+				 loginData
+			).success(function (data) {
+				if (data.Success === false) {
+					//alert(data.Message);
+					vm.Message = data.Message;
+					return;
+				}
 				vm.user = data.userName;
+				vm.Message = 'Successful log in...';
 				// Cache the access token in session storage.
 				sessionStorage.setItem(tokenKey, data.AccessToken);
 				sessionStorage.setItem(userKey, data.UserName);
 				document.location = "#";
 				$('#modal-login').dialog('close');
-			}).fail(showError);
+			}).error(showError);
+			
 		}
 
 		vm.logout = function () {
@@ -52,8 +57,6 @@
 			sessionStorage.removeItem(userKey);
 			vm.user = null;
 		}
-
-		
 	}
 
 })();

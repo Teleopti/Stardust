@@ -27,10 +27,11 @@ namespace Teleopti.Wfm.Administration.Core
 					req.Headers.Authorization.Scheme.Equals(
 							  "Bearer", StringComparison.OrdinalIgnoreCase))
 			{
-				string auth = req.Headers.Authorization.Parameter;
+				var auth = req.Headers.Authorization.Parameter;
 				//Tenant: todo look up so key exists in user db
-				
-				if (!auth.Equals("")) // Just a dumb check
+				var valid = TokenQuerier.TokenIsValid(auth);
+			
+				if (valid)
 				{
 					var claims = new List<Claim>()
 				{
@@ -39,6 +40,12 @@ namespace Teleopti.Wfm.Administration.Core
 					var id = new ClaimsIdentity(claims, "Basic");
 					var principal = new ClaimsPrincipal(new[] { id });
 					context.Principal = principal;
+				}
+				else
+				{
+					context.ErrorResult = new UnauthorizedResult(
+						 new AuthenticationHeaderValue[0],
+											  context.Request);
 				}
 			}
 			else

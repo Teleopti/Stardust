@@ -1,0 +1,47 @@
+﻿<div ng-controller="adduserController as vm" style="margin-left: 50px;margin-right: 50px">
+	<div class="row">
+		<div class="col-md-12">
+			<h2>Add new User</h2>
+			<p>
+				Lets you add a new user to administrate the Tenants.
+			</p>
+		</div>
+		<div class="col-md-12">
+			<div>
+				<div class="importCaption">Name</div>
+				<input class="form-control" type="text" ng-model="vm.Name" ng-blur="vm.CheckName()" placeholder="name">
+			</div>
+			<label ng-class="(vm.NameOk==true) ? 'dbOk' : 'dbNotOk'">{{vm.NameMessage}}</label>
+			<div>
+				<div class="importCaption">Email</div>
+				<div>
+					<input class="form-control" type="email" ng-model="vm.Email" ng-blur="vm.CheckEmail()" placeholder="Email">
+					<label ng-class="(vm.EmailOk==true) ? 'dbOk' : 'dbNotOk'">{{vm.EmailMessage}}</label>
+				</div>
+			</div>
+			<div>
+				<div class="importCaption">Password</div>
+				<div>
+					<input class="form-control" type="password" ng-model="vm.Password" ng-blur="vm.CheckPassword()" placeholder="Password">
+				</div>
+			</div>
+			<div>
+				<div class="importCaption">Confirm Password</div>
+				<div>
+					<input class="form-control" type="password" ng-model="vm.ConfirmPassword" ng-blur="vm.CheckPassword()" placeholder="Confirm password">
+					<label ng-class="(vm.PasswordOk==true) ? 'dbOk' : 'dbNotOk'">{{vm.PasswordMessage}}</label>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div style="margin-top: 30px" class="col-md-6">
+			<button class="btn btn-primary btn-default" ng-click="vm.save()">Save</button>
+			<br/>
+			<label class="ErrorLabel">{{vm.ErrorMessage}}</label>
+		</div>
+
+	</div>
+
+</div>
+

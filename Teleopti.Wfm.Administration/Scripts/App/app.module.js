@@ -19,7 +19,18 @@
 			templateUrl: 'empty.html',
 			controller: 'emptyController'
 		})
-
+		.when('/users', {
+			templateUrl: 'users.html',
+			controller: 'usersController'
+		})
+		.when('/userdetails/:id', {
+			templateUrl: 'userdetails.html',
+			controller: 'userdetailsController'
+		})
+		.when('/adduser', {
+			templateUrl: 'adduser.html',
+			controller: 'adduserController'
+		})
 		.when('/other', {
 			templateUrl: 'other.html',
 			controller: 'otherController'
