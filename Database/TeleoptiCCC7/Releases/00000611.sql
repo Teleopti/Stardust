@@ -5,11 +5,11 @@ CREATE TABLE [Tenant].[AdminUser](
 	[Email] [nvarchar](100) NOT NULL,
 	[Password] [nvarchar](100) NOT NULL,
 	[AccessToken]  [nvarchar](500)  NOT NULL,
- CONSTRAINT [PK_TenantUser] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_AdminUser] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
 ),
- CONSTRAINT [UQ_TenantUser_Email] UNIQUE NONCLUSTERED 
+ CONSTRAINT [UQ_AdminUser_Email] UNIQUE NONCLUSTERED 
 (
 	[Email] ASC
 )
