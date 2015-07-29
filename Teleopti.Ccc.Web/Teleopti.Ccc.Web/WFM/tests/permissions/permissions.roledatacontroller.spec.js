@@ -45,7 +45,7 @@ describe('DataController', function() {
 	it('should toggle the selected property of node from true to false', inject(function ($controller) {
 		var scope = $rootScope.$new();
 		$controller('RoleDataController', { $scope: scope, RoleDataService: mockRoleDataService, Roles: mockRoles });
-		var node = { selected: true };
+		var node = { selected: true, ChildNodes: [] };
 
 		scope.toggleOrganizationSelection(node);
 		scope.$digest();
