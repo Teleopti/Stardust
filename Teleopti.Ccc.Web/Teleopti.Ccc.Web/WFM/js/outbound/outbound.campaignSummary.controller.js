@@ -43,7 +43,7 @@
 
         $scope.toggleChartDisplay = function (campaign) {
         	campaign.viewScheduleDiffToggle = !campaign.viewScheduleDiffToggle;
-        	outboundChartService.makeGraph(campaign.chart, '#Chart_' + campaign.Id, campaign.viewScheduleDiffToggle, campaign.chartData, campaign.Status, campaign.WarningInfo.TypeOfRule);
+        	outboundChartService.makeGraph(campaign.chart, '#Chart_' + campaign.Id, campaign.viewScheduleDiffToggle, campaign.chartData, campaign.Status, campaign.WarningInfo);
 	    };
 
         $scope.show = function (campaign) {
