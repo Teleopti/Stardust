@@ -16,6 +16,11 @@ describe('DataController', function() {
 			return deferred.promise;
 		}
 	};
+    var mockRoles = {
+        selectedRole:{
+        BuiltIn: false
+    }
+}
 
 	beforeEach(function () {
 		module('wfm.permissions');
@@ -28,7 +33,7 @@ describe('DataController', function() {
 
 	it('should toggle the selected property of node from false to true', inject(function ($controller) {
 		var scope = $rootScope.$new();
-		$controller('RoleDataController', { $scope: scope, RoleDataService: mockRoleDataService });
+		$controller('RoleDataController', { $scope: scope, RoleDataService: mockRoleDataService, Roles: mockRoles });
 		var node = { selected: false };
 
 		scope.toggleOrganizationSelection(node);
@@ -39,7 +44,7 @@ describe('DataController', function() {
 
 	it('should toggle the selected property of node from true to false', inject(function ($controller) {
 		var scope = $rootScope.$new();
-		$controller('RoleDataController', { $scope: scope, RoleDataService: mockRoleDataService });
+		$controller('RoleDataController', { $scope: scope, RoleDataService: mockRoleDataService, Roles: mockRoles });
 		var node = { selected: true };
 
 		scope.toggleOrganizationSelection(node);
