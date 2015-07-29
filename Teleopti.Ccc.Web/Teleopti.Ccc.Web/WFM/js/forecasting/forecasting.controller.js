@@ -17,6 +17,20 @@ angular.module('wfm.forecasting')
 					return false;
 			};
 
+			$scope.updateStartDate = function () {
+				$scope.period.startDate = angular.copy($scope.period.startDate);
+			};
+
+			$scope.updateEndDate = function() {
+				if ($scope.period && $scope.period.endDate && $scope.period.startDate) {
+					if ($scope.period.startDate > $scope.period.endDate) {
+						$scope.period.endDate = angular.copy($scope.period.startDate);
+					}
+				}
+
+				$scope.period.endDate = angular.copy($scope.period.endDate);
+			};
+
 			$scope.nextStepAll = function(period) {
 				$state.go('forecasting-runall', { period: period });
 			};
@@ -31,8 +45,8 @@ angular.module('wfm.forecasting')
 					var startDay = new Date($scope.period.startDate).setHours(12, 0, 0, 0);
 					var endDay = new Date($scope.period.endDate).setHours(12, 0, 0, 0);
 
-					if (dayToCheck >= startDay && dayToCheck < endDay) {
-						return 'range';
+					if (dayToCheck >= startDay && dayToCheck <= endDay) {
+						return 'in-date-range';
 					}
 				}
 				return '';
