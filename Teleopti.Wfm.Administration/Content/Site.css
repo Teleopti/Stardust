@@ -9,6 +9,8 @@
     padding-right: 15px;
 }
 
+
+
 /* Override the default bootstrap behavior where horizontal description lists 
    will truncate terms that are too long to fit in the left column 
 */
@@ -57,4 +59,8 @@ td {
 	color: Red;
 	font-size: large;
 	font-weight: bold;
+}
+
+.wait{
+    cursor: wait !important;   
 }

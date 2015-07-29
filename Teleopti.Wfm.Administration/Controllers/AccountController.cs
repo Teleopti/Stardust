@@ -36,7 +36,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			if(!hashed.Equals(user.Password))
 				return new LoginResult { Success = false, Message = "The password is not correct." };
 
-			return new LoginResult {Success = true, UserName = model.UserName, AccessToken = user.AccessToken};
+			return new LoginResult {Success = true, UserName = user.Name, AccessToken = user.AccessToken};
 		}
 
 		[HttpGet]

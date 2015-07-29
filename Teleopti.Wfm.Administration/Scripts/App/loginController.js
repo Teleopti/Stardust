@@ -2,6 +2,7 @@
 	'use strict';
 	var tokenKey = 'accessToken';
 	var userKey = 'userToken';
+	var emailKey = 'lastEmail';
 	var token = sessionStorage.getItem(tokenKey);
 	if (token === null) {
 		$("#modal-login").dialog({
@@ -16,7 +17,7 @@
 
 	function loginController($scope, $http) {
 		var vm = this;
-		vm.loginEmail = "";
+		vm.loginEmail = sessionStorage.getItem(emailKey);
 		vm.loginPassword = "";
 		vm.Message = '';
 		vm.user = sessionStorage.getItem(userKey);
@@ -26,7 +27,7 @@
 		}
 
 		vm.login = function () {
-			
+			$("#modal-login").toggleClass("wait");
 			var loginData = {
 				granttype: 'password',
 				username: vm.loginEmail,
@@ -36,6 +37,7 @@
 			$http.post('./Login',
 				 loginData
 			).success(function (data) {
+				$("#modal-login").toggleClass("wait");
 				if (data.Success === false) {
 					//alert(data.Message);
 					vm.Message = data.Message;
@@ -46,6 +48,7 @@
 				// Cache the access token in session storage.
 				sessionStorage.setItem(tokenKey, data.AccessToken);
 				sessionStorage.setItem(userKey, data.UserName);
+				sessionStorage.setItem(emailKey, vm.loginEmail);
 				document.location = "#";
 				$('#modal-login').dialog('close');
 			}).error(showError);
