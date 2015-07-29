@@ -1,53 +1,53 @@
 ﻿.people-search {
-	padding: 10px 0px;
+	padding: 10px 0;
 }
 
 .pagination-item {
 	display: inline-block;
 }
 
-.pagination li.disabled a {
-	color: rgba(0,0,0,0.26);
-	pointer-events: none;
-}
-
-.pagination li.disabled {
-	cursor: not-allowed;
-}
-
-.pagination li.active {
-	background-color: rgba(0,0,0,0.06);
-}
-
 .pagination li {
+	&.disabled {
+		a {
+			pointer-events: none;
+			color: rgba(0, 0, 0, 0.26);
+		}
+
+		cursor: not-allowed;
+	}
+
+	&.active {
+		background-color: rgba(0, 0, 0, 0.06);
+	}
+
 	padding: 10px;
 	cursor: pointer;
 	background-color: white;
 }
 
 .wfm-list, .ui-grid-menu-items {
-	padding-left: 0px;
-	list-style: none;
-	max-height: 800px;
 	overflow-y: auto;
+	max-height: 800px;
 	margin: 0;
+	padding-left: 0;
+	list-style: none;
 }
 
 .wfm-list label {
 	background-color: #99d6ff;
 }
 
-.dropdown{
-    position:absolute;
-	z-index: 1;
-    top: 5rem;
-    left: 0rem;
-}
-
-.dropdown ul {
-	width: 500px;
+.dropdown {
 	position: absolute;
-	background: #ffffff;
+	z-index: 1;
+	top: 5rem;
+	left: 0rem;
+
+	ul {
+		position: absolute;
+		width: 500px;
+		background: #fff;
+	}
 }
 
 .input-prepend span {
@@ -67,10 +67,10 @@
 	position: relative;
 	float: left;
 	margin-top: 20px;
-}
 
-.people-form-input input[type=text]{
-	height:auto;
+	input[type=text] {
+		height: auto;
+	}
 }
 
 .advanced-input {
@@ -93,25 +93,73 @@
 	color: #999;
 }
 
-.advanced-input:focus ~ label,
-.advanced-input:valid ~ label {
-	font-size: 14px;
-	top: -25px;
-	color: #ec38a3;
+.advanced-input {
+	&:focus ~ label, &:valid ~ label {
+		font-size: 14px;
+		top: -25px;
+		color: #ec38a3;
+	}
 }
 
-.people-list .ui-grid-menu-button,
-.import-people-form .ui-grid-menu-button
- {
-	height: 31px;
+.people-list .ui-grid-menu-button, .import-people-form .ui-grid-menu-button {
 	top: 0;
+	height: 31px;
 }
 
-.people-list.grid {
-	height: 650px;
+.people-list {
+	&.grid {
+		height: 650px;
+	}
+
+	.ui-grid-cell-contents {
+		width: 84%;
+		white-space: normal;
+	}
 }
 
-.people-list .ui-grid-cell-contents {
-	width: 84%;
-	white-space: normal;
+.wfm-panel {
+	position: absolute;
+	top: -8rem;
+	right: 0rem;
+}
+
+.modal-box .modalbg {
+	position: fixed;
+	z-index: 99998;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background: rgba(0, 0, 0, 0.26);
+
+	pre {
+		margin: 10px;
+		border-radius: 0;
+	}
+
+	.export-error-data {
+		margin: 10px;
+	}
+
+	.drop-box {
+		height: 65px;
+		margin: 10px;
+		padding: 9.5px;
+		text-align: center;
+		border: 1px solid #ddd;
+		background: #f8f8f8;
+		border-radius: 0;
+
+		.dragover {
+			border: 1px solid blue;
+		}
+
+		&.dragoverSuccess {
+			border: 5px dashed blue;
+		}
+
+		&.dragover-err {
+			border: 5px dashed red;
+		}
+	}
 }

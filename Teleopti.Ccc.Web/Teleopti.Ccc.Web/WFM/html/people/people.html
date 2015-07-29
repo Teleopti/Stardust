@@ -1,43 +1,4 @@
-﻿<style>
-	.wfm-panel {
-		position: absolute;
-		top: -8rem;
-		right: 0rem;
-	}
-
-	.modal-box .modalbg {
-		position: fixed;
-		top: 0;
-		right: 0;
-		bottom: 0;
-		left: 0;
-		z-index: 99998;
-		background: rgba(0,0,0,.26);
-	}
-
-	.drop-box {
-		background: #F8F8F8;
-		border: 1px solid #DDD;
-		border-radius: 4px;
-		height: 65px;
-		padding: 9.5px;
-		text-align: center;
-		margin: 10px;
-	}
-
-	.dragover {
-		border: 1px solid blue;
-	}
-
-	.drop-box.dragoverSuccess {
-		border: 5px dashed blue;
-	}
-
-	.drop-box.dragover-err {
-		border: 5px dashed red;
-	}
-</style>
-<div>
+﻿<div>
 	<div class="row">
 		<h4 translate>Manage People</h4>
 		<div class="col-md-4">
@@ -46,7 +7,7 @@
 				<input id="simple-search" style="width: 90%; height: 23px;" type="text" placeholder="{{'Search'|translate}}..."
 					   ng-model="keyword" ng-keydown="$event.which === 13 && searchKeyword() || turnOffAdvancedSearch()" ng-change="validateSearchKeywordChanged()"
 					   ng-click="toggleAdvancedSearchOption($event)" />
-				<advance-search class="dropdown" ng-cloak ng-show="showAdvancedSearchOption" outside-click="turnOffAdvancedSearch()"></advance-search>
+				<advance-search class="dropdown" ng-cloak ng-if="isAdvancedSearchEnabled && showAdvancedSearchOption" outside-click="turnOffAdvancedSearch()"></advance-search>
 			</div>
 		</div>
 	</div>
@@ -85,12 +46,11 @@
 				 label="Actions"
 				 toggling-method="click" menu-state="closed">
 				<button mfb-button icon="{{button.icon}}" ng-click="floatingButtonClick()"
-						label="{{button.label}}" ng-repeat="button in buttons"></button>
+				        label="{{button.label}}" ng-repeat="button in buttons"></button>
+				
 			</nav>
 		</div>
 	</div>
 	
-	<div ng-cloak ng-show="showImportPanel" class="modal-box import-people-form" >
-		<import-people ng-show="showImportPanel"></import-people>
-	</div>
+	<import-people ng-show="showImportPanel"></import-people>
 </div>
