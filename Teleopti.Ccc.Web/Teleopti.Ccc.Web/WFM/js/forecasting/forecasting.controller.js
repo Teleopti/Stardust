@@ -25,6 +25,7 @@ angular.module('wfm.forecasting')
 				if ($scope.period && $scope.period.endDate && $scope.period.startDate) {
 					if ($scope.period.startDate > $scope.period.endDate) {
 						$scope.period.endDate = angular.copy($scope.period.startDate);
+						return;
 					}
 				}
 
