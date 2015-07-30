@@ -11,7 +11,7 @@
 		</div>
 		<div class="col-md-4">
 			<h2>Create new empty</h2>
-			<p>Lets you create 2 new databases (one Application and one Analytics) and connect them to a new Tenant.</p>
+			<p>Lets you create new databases to hold Teleopti WFM data and connect them to a new Tenant.</p>
 			<p><a class="btn  btn-info" href="#empty">Create new &raquo;</a></p>
 		</div>
 		<div class="col-md-4">
@@ -29,16 +29,16 @@
 			<table>
 				<thead>
 					<tr>
-						<td>Name</td>
-						<td>Application database</td>
-						<td>Analytics database</td>
+						<td class="paddingTenantList">Name</td>
+						<td  class="paddingTenantList">Application database</td>
+						<td  class="paddingTenantList">Analytics database</td>
 					</tr>
 				</thead>
 				<tbody>
 					<tr ng-repeat="tenant in Tenants" ng-class-odd="'oddRow'">
-						<td><a href="#details\{{tenant.Name}}">{{tenant.Name}}</a>   </td>
-						<td><a href="#details\{{tenant.Name}}">{{tenant.AppDatabase}}</a>   </td>
-						<td><a href="#details\{{tenant.Name}}">{{tenant.AnalyticsDatabase}}</a>   </td>
+						<td  class="paddingTenantList"><a href="#details\{{tenant.Name}}">{{tenant.Name}}</a>   </td>
+						<td  class="paddingTenantList"><a href="#details\{{tenant.Name}}">{{tenant.AppDatabase}}</a>   </td>
+						<td  class="paddingTenantList"><a href="#details\{{tenant.Name}}">{{tenant.AnalyticsDatabase}}</a>   </td>
 					</tr>
 				</tbody>
 			</table>

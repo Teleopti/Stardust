@@ -64,3 +64,13 @@ td {
 .wait{
     cursor: wait !important;   
 }
+
+@media (min-width: 1600px) {
+  .container {
+    width: 1570px;
+  }
+}
+
+.paddingTenantList {
+	padding: 5px;
+}

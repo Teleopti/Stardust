@@ -16,6 +16,8 @@
 
 		vm.NameOk = false;
 		vm.NameMessage = "The name can not be empty";
+		vm.EmailMessage = "The email does not look to be correct";
+		vm.PasswordMessage = "The password can not be empty";
 
 		vm.ErrorMessage = "";
 		vm.token = sessionStorage.getItem(tokenKey);

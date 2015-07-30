@@ -69,6 +69,19 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[Route("SaveUser")]
 		public virtual UpdateUserResultModel SaveUser(UpdateUserModel model)
 		{
+			if (string.IsNullOrEmpty(model.Email))
+				return new UpdateUserResultModel
+				{
+					Success = false,
+					Message = "Email can't be empty."
+				};
+			if (string.IsNullOrEmpty(model.Name))
+				return new UpdateUserResultModel
+				{
+					Success = false,
+					Message = "Name can't be empty."
+				};
+
 			try
 			{
 				var user = _currentTenantSession.CurrentSession().GetNamedQuery("loadAllTenantUsers").List<TenantAdminUser>().FirstOrDefault(x => x.Id.Equals(model.Id));

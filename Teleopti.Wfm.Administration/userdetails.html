@@ -1,6 +1,10 @@
 ﻿<div ng-controller="userdetailsController as vm" style="margin-left: 50px;margin-right: 50px">
 	<div class="row">
+		
+		
 		<div class="col-md-12">
+			<a style="float: left; padding-top: 25px; padding-right: 50px" href="#users"><img alt="back" title="Back to Users" src="Content/images/left_round.png"/></a>
+
 			<h2>Details - {{vm.OriginalName}}</h2>
 			<p>
 				Showing details of one user. Here you can change the Name and the Email.
@@ -26,7 +30,6 @@
 		<div style="margin-top: 30px" class="col-md-6">
 			<button class="btn btn-primary btn-default" ng-click="vm.save()">Save</button>
 		</div>
-	
 		<div style="margin-top: 30px" class="col-md-6" ng-show="loginVm.Id != vm.UserId">
 			<button class="btn btn-danger btn-default" ng-click="vm.delete()">Delete this User</button>
 		</div>

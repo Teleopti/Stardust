@@ -16,6 +16,7 @@
 
 		vm.NameOk = false;
 		vm.NameMessage = "The name can not be empty";
+		vm.EmailMessage = "The email does not look to be correct";
 
 		vm.token = sessionStorage.getItem(tokenKey);
 		if (vm.token === null) {
@@ -36,6 +37,7 @@
 					vm.OriginalName = data.Name;
 					vm.Email = data.Email;
 					vm.CheckName();
+					vm.CheckEmail();
 				}).error(function (xhr, ajaxOptions, thrownError) {
 					console.log(xhr.status + xhr.responseText + thrownError);
 				});
@@ -50,6 +52,16 @@
 			}
 			vm.NameMessage = "Name ok";
 			vm.NameOk = true;
+		}
+
+		vm.CheckEmail = function () {
+			if (vm.Email === undefined) {
+				vm.EmailMessage = "The email does not look to be correct";
+				vm.EmailOk = false;
+				return;
+			}
+			vm.EmailMessage = "Email ok";
+			vm.EmailOk = true;
 		}
 
 		vm.LoadUser();

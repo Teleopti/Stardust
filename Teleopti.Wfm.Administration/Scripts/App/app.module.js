@@ -31,6 +31,10 @@
 			templateUrl: 'adduser.html',
 			controller: 'adduserController'
 		})
+		.when('/changepassword', {
+			templateUrl: 'changePassword.html',
+			controller: 'changePasswordController'
+		})
 		.when('/other', {
 			templateUrl: 'other.html',
 			controller: 'otherController'

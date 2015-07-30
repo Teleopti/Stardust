@@ -44,5 +44,50 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			}
 		}
 
+		[Test]
+		public void ShouldNotAllowEmptyEmail()
+		{
+			//new fresh
+			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
+			int id;
+			using (TenantUnitOfWork.Start())
+			{
+				var user = new TenantAdminUser { AccessToken = "dummy", Email = "ola@teleopti.com", Name = "Ola", Password = "vadsomhelst" };
+				CurrentTenantSession.CurrentSession().Save(user);
+				id = user.Id;
+			}
+			using (TenantUnitOfWork.Start())
+			{
+				var loaded = Target.GetOneUser(id);
+				loaded.Content.Email.Should().Be.EqualTo("ola@teleopti.com");
+				var result = Target.SaveUser(new UpdateUserModel { Email = "", Id = id, Name = "Olle" });
+				result.Success.Should().Be.False();
+				result.Message.Should().Be.EqualTo("Email can't be empty.");
+			}
+			
+		}
+
+		[Test]
+		public void ShouldNotAllowEmptyName()
+		{
+			//new fresh
+			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
+			int id;
+			using (TenantUnitOfWork.Start())
+			{
+				var user = new TenantAdminUser { AccessToken = "dummy", Email = "ola@teleopti.com", Name = "Ola", Password = "vadsomhelst" };
+				CurrentTenantSession.CurrentSession().Save(user);
+				id = user.Id;
+			}
+			using (TenantUnitOfWork.Start())
+			{
+				var loaded = Target.GetOneUser(id);
+				loaded.Content.Email.Should().Be.EqualTo("ola@teleopti.com");
+				var result = Target.SaveUser(new UpdateUserModel { Email = "ola@teleopti.com", Id = id, Name = "" });
+				result.Success.Should().Be.False();
+				result.Message.Should().Be.EqualTo("Name can't be empty.");
+			}
+
+		}
 	}
 }
