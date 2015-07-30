@@ -81,7 +81,7 @@
 			    dates: ['x', beforeStartDate].concat(dates),
 				rawBacklogs: [translationDictionary['Backlog'], 0].concat(rawBacklogs),
 				calculatedBacklogs: [translationDictionary['Backlog'] + ' ', 0].concat(calculatedBacklogs),
-				plans: [translationDictionary['Planned', 0]].concat(plans),
+				plans: [translationDictionary['Planned'], 0].concat(plans),
 				unscheduledPlans: [translationDictionary['Planned'], 0].concat(unscheduledPlans),
 				schedules: [translationDictionary['Scheduled'], 0].concat(schedules),
 				underDiffs: [translationDictionary['Underscheduled'], 0].concat(underDiffs),
