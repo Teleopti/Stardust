@@ -3,10 +3,10 @@
 (function() {
 	angular.module('wfm.people')
 		.controller('ImportPeopleCtrl', [
-			'Upload', 'uiGridExporterConstants', '$timeout', 'PeopleSearch', PeopleImportController
+			'$translate','Upload', 'uiGridExporterConstants', '$timeout', 'PeopleSearch', PeopleImportController
 		]);
 
-	function PeopleImportController(Upload, uiGridExporterConstants, $timeout, SearchSvrc) {
+	function PeopleImportController($translate,Upload, uiGridExporterConstants, $timeout, SearchSvrc) {
 		var vm = this;
 
 		vm.files = [];

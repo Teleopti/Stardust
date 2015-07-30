@@ -20,7 +20,7 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 	$scope.showImportPanel = false;
 
 	$scope.buttons = [{
-		label: 'Import Users',
+		label: 'ImportUsers',
 		icon: 'mdi-file',
 		action: $scope.toggleImportPeople
 	}];
