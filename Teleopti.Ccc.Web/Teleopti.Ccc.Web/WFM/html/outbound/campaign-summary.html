@@ -30,7 +30,7 @@
 							<p class="campaign-message m-r-5" ng-repeat="info in campaign.WarningInfo"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span translate>{{info.TypeOfRule}}</span></p>
 							<md-switch class="pull-right m-t-0" ng-click="toggleChartDisplay(campaign)" ng-if="campaign.Status!=1">Analyze Schedule</md-switch>
 						</div>
-		                <div class="chart text-center relative">
+		                <div class="chart text-center relative chartfix">
 			                <div id="Chart_{{campaign.Id}}"></div>
 		                </div>
 		                <button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="show(campaign)">edit</button>
@@ -61,9 +61,9 @@
 							<p class="campaign-message m-r-5" ng-repeat="info in campaign.WarningInfo"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span translate>{{info.TypeOfRule}}</span></p>
 							<md-switch class="pull-right m-t-0" ng-click="toggleChartDisplay(campaign)" ng-if="hidePlannedAnalyzeButton(campaign.Status)">Analyze Schedule</md-switch>
 						</div>
-		                <div class="chart text-center relative">
-			                <div id="Chart_{{campaign.Id}}"></div>
-		                </div>
+						<div class="chart text-center relative chartfix">
+							<div id="Chart_{{campaign.Id}}"></div>
+						</div>
 		                <button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="show(campaign)" translate>Edit</button>
 		                <button class="wfm-btn wfm-btn-invis-primary pull-right" translate>Schedule</button>
 		                <button class="wfm-btn wfm-btn-invis-primary pull-right" translate>AddBacklog</button>

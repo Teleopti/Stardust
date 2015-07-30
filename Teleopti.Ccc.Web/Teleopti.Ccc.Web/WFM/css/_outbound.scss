@@ -91,9 +91,17 @@
 		top:-5px;
 		right:5%;
 	}
+	.teleopti-card-selected{
+	    width:99%;
+	}
+	.chartfix svg{
+	    width:100%;
+	}
 	.campaign-phase{
 		margin-top:10px;
 		margin-bottom:30px !important;
+		padding-left:0;
+		margin-left:5%;
 	}
 	.campaign-phase li{
 		float:left;	
@@ -159,10 +167,6 @@
 	}
 	p > span.campaign-warning-icon {
 		margin-top: 0 !important;
-	}
-	.campaign-phase{
-	    padding-left:0;
-		margin-left:30px;
 	}
 	.campaign-phase-label{
 		height:100%;

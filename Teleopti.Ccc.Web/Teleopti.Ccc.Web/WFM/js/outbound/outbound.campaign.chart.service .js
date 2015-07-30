@@ -166,7 +166,10 @@
                 }
 
 				graph = c3.generate({
-				    bindto: graphId,                   
+					bindto: graphId,
+					size: {
+							height: 450
+						  },
 					data: {
 						x: 'x',
 						columns: [graphData.dates].concat(selectDataGroups(viewScheduleDiffToggle, plannedPhase).map(function (name) { return graphData[name]; })),
