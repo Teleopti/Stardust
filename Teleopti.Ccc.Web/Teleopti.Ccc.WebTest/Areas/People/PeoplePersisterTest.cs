@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var errorData = (IEnumerable<RawUser>)((dynamic)target).Persist(rawUserData).InvalidUsers;
 			Assert.AreEqual(1, errorData.Count());
 			Assert.AreEqual("Jenny", errorData.First().Firstname);
-			Assert.AreEqual("no application logon account", errorData.First().ErrorMessage);
+			Assert.AreEqual("no application user id", errorData.First().ErrorMessage);
 		}
 
 		[Test]
