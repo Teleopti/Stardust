@@ -170,5 +170,26 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			Assert.Throws<ArgumentException>(() =>
 				target.Persist(new PersonInfo(tenant, Guid.Empty),""));
 		}
+
+		[Test]
+		public void ShouldReuseLogonWhenUpdatingOldIfLogonNameSupplied()
+		{
+			var session = _tenantUnitOfWorkManager.CurrentSession();
+			var id = Guid.NewGuid();
+
+			var personInfo = new PersonInfo(tenant, id);
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), "logonName", "Password");
+
+			target.Persist(personInfo, "");
+
+			var personInfoNew = new PersonInfo(tenant, id);
+			target.Persist(personInfoNew, "newlogonName");
+
+			var loaded = session.Get<PersonInfo>(id);
+			var result = loaded.ApplicationLogonInfo.LogonPassword;
+			result.Should().Be.EqualTo("Password");
+			result = loaded.ApplicationLogonInfo.LogonName;
+			result.Should().Be.EqualTo("newlogonName");
+		}
 	}
 }
