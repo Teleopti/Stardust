@@ -138,10 +138,10 @@
 			var dataColor = getDataColor();
 			warningInfo.forEach(function (e) {
 			    if (e.TypeOfRule == 'OutboundUnderSLARule') {			       
-			        dataColor.statusLine = '#9467BD';
+			        dataColor.statusLine = '#f44336';
 			    }
 			    if (e.TypeOfRule == 'OutboundOverstaffRule') {			       
-			        dataColor.statusLine = '#f44336';
+			        dataColor.statusLine = '#FF7F0E';
 			    }
 			});
 

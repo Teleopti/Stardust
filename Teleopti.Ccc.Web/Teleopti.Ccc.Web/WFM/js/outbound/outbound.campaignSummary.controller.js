@@ -23,9 +23,21 @@
             });
         });
 
+    	$scope.isOverStaffing=function(d) {
+    		var result = d.filter(function (e) {
+			    return (e.TypeOfRule == 'OutboundOverstaffRule') ? true : false;
+    		}).length > 0;
+		    return result;
+
+	    }
+
     	$scope.hidePlannedAnalyzeButton = function (d) {
 		   return ($filter('showPhase')(d) == 'Planned') ? false : true;
-	    };
+    	};
+
+    	$scope.hideWhenDone=function(d) {
+    		return ($filter('showPhase')(d) == 'Done') ? true : false;
+	    }
 
         $scope.activePhaseCode = 4;
 

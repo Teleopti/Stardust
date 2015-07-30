@@ -160,10 +160,26 @@
 	p > span.campaign-warning-icon {
 		margin-top: 0 !important;
 	}
+	.orangefix{
+	    background-color:#FF7F0E !important;
+	}
+	.orangefix .campaign-warning-icon-messagefix{
+	    color:#FF7F0E !important;
+	}
 	.campaign-warning-iconfix{
 		position:absolute;	
 		right: 100px;
 		padding-right:4px;
+		
+	}
+	.campaign-green-iconfix{
+	    position:absolute;	
+		right: 100px;
+		padding-right:4px;
+		background-color:#2CA02C !important;
+		display:inline-block;
+		padding:0 !important;
+		width:20px;
 	}
 	p > span.campaign-warning-icon {
 		margin-top: 0 !important;
@@ -194,12 +210,23 @@
 		color:#fff;
 		box-shadow:0 2px 5px 0 rgba(0,0,0,.26);
 	}
+	.campaign-message-healthyfix{
+	    background-color:#2CA02C !important;
+	}
 
 	.campaign-warning-icon-messagefix{
 		color:#F44336;
 		background-color:#fff;
 		margin-right:10px;
 		padding-right:4px;
+	}
+	.campaign-green-icon-messagefix{
+	    color:#2CA02C;
+		background-color:#fff;
+		margin-right:10px;
+		padding-right:4px; 
+		width:20px;
+		padding-left:0 !important;
 	}
 	.campaign-warning-icon-phasefix{
 		margin-left:10px;
