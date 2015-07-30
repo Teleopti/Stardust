@@ -54,7 +54,8 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				typeof (AuthenticateController),
 				typeof (ChangePasswordController),
 				typeof(PersonInfoController),
-				typeof(ConfigController)
+				typeof(ConfigController),
+				typeof(ReturnController)
 			}));
 		}
 	}

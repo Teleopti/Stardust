@@ -87,13 +87,24 @@ namespace Teleopti.Ccc.Web.Filters
 				return;
 			}
 
+
 			var signIn = new SignInRequestMessage(_authenticationModule.Issuer(filterContext.HttpContext), Realm ?? _authenticationModule.Realm)
 			{
 				Context = "ru=" + filterContext.HttpContext.Request.Path,
 				HomeRealm = _identityProviderProvider.DefaultProvider()
 			};
 
-			filterContext.Result = new RedirectResult(signIn.WriteQueryString());
+			filterContext.Result = new RedirectToRouteResult(
+				new RouteValueDictionary(
+					new
+					{
+						controller = "Return",
+						action = "Hash",
+						area = "Start",
+						redirectUrl = signIn.WriteQueryString()
+					}
+					)
+				);
 		}
 	}
 }

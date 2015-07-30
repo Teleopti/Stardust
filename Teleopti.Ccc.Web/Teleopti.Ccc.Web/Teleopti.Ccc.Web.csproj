@@ -572,6 +572,7 @@
     <Compile Include="Areas\SSO\Core\ISsoAuthenticator.cs" />
     <Compile Include="Areas\SSO\Core\SsoAuthenticator.cs" />
     <Compile Include="Areas\Start\Controllers\ConfigController.cs" />
+    <Compile Include="Areas\Start\Controllers\ReturnController.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\AuthenticatorResult.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\ILogLogonAttempt.cs" />
     <Compile Include="Areas\Start\Core\Config\ISharedSettingsFactory.cs" />
@@ -1257,6 +1258,7 @@
     <Content Include="WFM\js\people\people.importPeople.directive.js" />
     <Content Include="WFM\vendor\ui-grid\ui-grid-unstable.min.css" />
     <Content Include="WFM\vendor\ui-grid\ui-grid-unstable.min.js" />
+    <Content Include="Areas\Start\Views\Return\Hash.cshtml" />
     <None Include="WFM\css\_forecasting.scss" />
     <Content Include="WFM\js\outbound\outbound.campaignCreate.controller.js" />
     <Content Include="WFM\js\outbound\outbound.campaignEdit.controller.js" />
