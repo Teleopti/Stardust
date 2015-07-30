@@ -17,7 +17,7 @@
 		vm.NameOk = false;
 		vm.NameMessage = "The name can not be empty";
 		vm.EmailMessage = "The email does not look to be correct";
-
+		vm.Message = "";
 		vm.token = sessionStorage.getItem(tokenKey);
 		if (vm.token === null) {
 			return;
@@ -55,6 +55,11 @@
 		}
 
 		vm.CheckEmail = function () {
+			if (vm.Email === '') {
+				vm.EmailMessage = "The email can not be empty";
+				vm.EmailOk = false;
+				return;
+			}
 			if (vm.Email === undefined) {
 				vm.EmailMessage = "The email does not look to be correct";
 				vm.EmailOk = false;
@@ -75,6 +80,10 @@
 				Email: vm.Email
 			}, getHeaders())
 				.success(function (data) {
+					if (!data.Success) {
+						vm.Message = data.Message;
+						return;
+					}
 					if (vm.UserId === loggedOnId) {
 						sessionStorage.setItem(userKey, vm.Name);
 						window.location = "#";
