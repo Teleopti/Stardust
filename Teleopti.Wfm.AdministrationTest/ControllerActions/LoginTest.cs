@@ -24,8 +24,8 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
 			using (TenantUnitOfWork.Start())
 			{
-				var addUSerModel = new AddUserModel { ConfirmPassword = "passadej", Email = "ola@teleopti.com", Name = "Ola", Password = "passadej" };
-				Target.AddUser(addUSerModel);
+				var addUserModel = new AddUserModel { ConfirmPassword = "passadej", Email = "ola@teleopti.com", Name = "Ola", Password = "passadej" };
+				Target.AddUser(addUserModel);
 			}
 			var model = new LoginModel {GrantType = "password",Password = "passadej", UserName = "olle@teleopti.com"};
 			using (TenantUnitOfWork.Start())
@@ -43,8 +43,8 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
 			using (TenantUnitOfWork.Start())
 			{
-				var addUSerModel = new AddUserModel { ConfirmPassword = "passadej", Email = "ola@teleopti.com", Name = "Ola", Password = "passadej" };
-				Target.AddUser(addUSerModel);
+				var addUserModel = new AddUserModel { ConfirmPassword = "passadej", Email = "ola@teleopti.com", Name = "Ola", Password = "passadej" };
+				Target.AddUser(addUserModel);
 			}
 			var model = new LoginModel { GrantType = "password", Password = "password", UserName = "ola@teleopti.com" };
 			using (TenantUnitOfWork.Start())
@@ -62,8 +62,8 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
 			using (TenantUnitOfWork.Start())
 			{
-				var addUSerModel = new AddUserModel {ConfirmPassword = "passadej", Email = "ola@teleopti.com", Name = "Ola", Password = "passadej" };
-				Target.AddUser(addUSerModel);
+				var addUserModel = new AddUserModel {ConfirmPassword = "passadej", Email = "ola@teleopti.com", Name = "Ola", Password = "passadej" };
+				Target.AddUser(addUserModel);
 			}
 			var model = new LoginModel { GrantType = "password", Password = "passadej", UserName = "ola@teleopti.com" };
 			using (TenantUnitOfWork.Start())
