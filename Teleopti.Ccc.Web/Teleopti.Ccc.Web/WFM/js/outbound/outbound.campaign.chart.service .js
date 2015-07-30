@@ -128,10 +128,7 @@
 		function makeGraph(graph, campaign, viewScheduleDiffToggle, graphData) {
 		    var graphId = '#Chart_' + campaign.Id,
 		        plannedPhase = campaign.Status,
-		        warningInfo = campaign.WarningInfo,
-		        endDate = new moment(campaign.EndDate.Date).format("YYYY-MM-DD"),
-		        todayDate = new moment().format("YYYY-MM-DD"),
-		        startDate = new moment(campaign.StartDate.Date).format("YYYY-MM-DD");
+		        warningInfo = campaign.WarningInfo;
 
 		    var maxPersonHours = (Math.max.apply(Math, graphData.rawBacklogs.slice(1)) + Math.max.apply(Math, graphData.plans.slice(1))) * 1.5;
 		  
@@ -165,6 +162,23 @@
                     return obj;
                 }
 
+                function _specifyDateHints() {
+                    var endDate = new moment(campaign.EndDate.Date),
+                        todayDate = new moment(),
+                        startDate = new moment(campaign.StartDate.Date);
+
+                    var hints = [
+                        { value: endDate.format("YYYY-MM-DD"), text: translationDictionary['EndDate'] },
+                        { value: startDate.format("YYYY-MM-DD"), text: translationDictionary['Start'] }
+                    ];
+
+                    if (todayDate >= startDate && todayDate <= endDate) {
+                        hints.push({ value: todayDate.format("YYYY-MM-DD"), text: translationDictionary['Today'] });
+                    }
+
+                    return hints;
+                }
+
 				graph = c3.generate({
 					bindto: graphId,
 					size: {
@@ -194,7 +208,8 @@
 						},
 						y: {							
 							label: {
-							    text: translationDictionary['NeededPersonHours']
+							    text: translationDictionary['NeededPersonHours'],
+                                position: 'outer-top'
 							},
 							max: maxPersonHours,
 							min: 0,
@@ -203,11 +218,7 @@
 					},
 					grid: {
 					     x: {
-					         lines: [
-                                 { value: endDate, text: translationDictionary['EndDate'] },
-                                 { value: todayDate, text: translationDictionary['Today'] },
-                                 { value: startDate, text: translationDictionary['Start']}
-					         ]
+					         lines: _specifyDateHints()
 					     }
 					},
 					tooltip: {
