@@ -44,13 +44,13 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 				errorMsgBuilder.Append(Resources.NoLogonAccountErrorMsgSemicolon + " ");
 				isUserValid = false;
 			}
-			else if (string.IsNullOrEmpty(user.ApplicationUserId))
+			else if (string.IsNullOrEmpty(user.ApplicationUserId) && !string.IsNullOrEmpty(user.Password))
 			{
 				errorMsgBuilder.Append(Resources.NoApplicationLogonAccountErrorMsgSemicolon + " ");
 				isUserValid = false;
 			}
 
-			if (string.IsNullOrEmpty(user.Password))
+			if (!string.IsNullOrEmpty(user.ApplicationUserId) &&  string.IsNullOrEmpty(user.Password))
 			{
 				errorMsgBuilder.Append(Resources.EmptyPasswordErrorMsgSemicolon + " ");
 				isUserValid = false;

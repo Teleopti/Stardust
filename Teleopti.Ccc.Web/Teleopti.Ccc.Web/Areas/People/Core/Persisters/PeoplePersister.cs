@@ -17,7 +17,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 {
-	public class PeoplePersister: IPeoplePersister
+	public class PeoplePersister : IPeoplePersister
 	{
 		private readonly IPersistPersonInfo _personInfoPersister;
 		private readonly IPersonInfoMapper _mapper;
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 		private readonly ITenantUnitOfWork _tenantUnitOfWork;
 		private readonly IUserValidator _userValidator;
 
-		public PeoplePersister(IPersistPersonInfo personInfoPersister, IPersonInfoMapper mapper,IPersonRepository personRepository, ILoggedOnUser currentLoggedOnUser,ITenantUnitOfWork tenantUnitOfWork, IUserValidator userValidator)
+		public PeoplePersister(IPersistPersonInfo personInfoPersister, IPersonInfoMapper mapper, IPersonRepository personRepository, ILoggedOnUser currentLoggedOnUser, ITenantUnitOfWork tenantUnitOfWork, IUserValidator userValidator)
 		{
 			_personInfoPersister = personInfoPersister;
 			_mapper = mapper;
@@ -46,16 +46,21 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 
 				if (isUserValid)
 				{
-					var person = new Person { Name = new Name(user.Firstname, user.Lastname) };
+					var person = new Person
+					{
+						Name =
+							new Name(user.Firstname.IsNullOrEmpty() ? " " : user.Firstname,
+								user.Lastname.IsNullOrEmpty() ? " " : user.Lastname)
+					};
 					person.PermissionInformation.SetDefaultTimeZone(
 								_currentLoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone());
-					_userValidator.ValidRoles.ForEach(r =>person.PermissionInformation.AddApplicationRole(r));
+					_userValidator.ValidRoles.ForEach(r => person.PermissionInformation.AddApplicationRole(r));
 					_personRepository.Add(person);
 					var tenantUserData = new PersonInfoModel()
 					{
-						ApplicationLogonName = user.ApplicationUserId,
-						Identity = user.WindowsUser.IsNullOrEmpty()? null: user.WindowsUser,
-						Password = user.Password,
+						ApplicationLogonName = user.ApplicationUserId.IsNullOrEmpty() ? null : user.ApplicationUserId,
+						Identity = user.WindowsUser.IsNullOrEmpty() ? null : user.WindowsUser,
+						Password = user.Password.IsNullOrEmpty() ? null : user.Password,
 						PersonId = person.Id.GetValueOrDefault()
 					};
 
@@ -93,7 +98,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 				user.ErrorMessage = errorMsg;
 				invalidUsers.Add(user);
 			}
-			
+
 			return new
 			{
 				InvalidUsers = invalidUsers,

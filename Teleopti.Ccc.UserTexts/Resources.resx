@@ -5450,7 +5450,7 @@ Availability</value>
     <comment>Person Period couldn't load error</comment>
   </data>
   <data name="People" xml:space="preserve">
-    <value>people</value>
+    <value>People</value>
     <comment>people</comment>
   </data>
   <data name="SwapCannotBePerformed" xml:space="preserve">
@@ -13327,11 +13327,11 @@ Reduce the complexity to use these shifts.</value>
     <comment>invalid user date message in People Import Users</comment>
   </data>
   <data name="PasswordPolicyErrorMsgSemicolon" xml:space="preserve">
-    <value>password does not follow the password policy;</value>
+    <value>invalid password;</value>
     <comment>invalid user date message in People Import Users</comment>
   </data>
   <data name="NoApplicationLogonAccountErrorMsgSemicolon" xml:space="preserve">
-    <value>no application logon account;</value>
+    <value>no application user id;</value>
     <comment>invalid user msg in People-import users</comment>
   </data>
   <data name="AddBacklog" xml:space="preserve">
