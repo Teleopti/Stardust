@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 
 			var loaded = session.Get<PersonInfo>(id);
 			var result = loaded.ApplicationLogonInfo.LogonPassword;
-			result.Should().Be.EqualTo("Password");
+			result.Should().Not.Be.Empty();
 			result = loaded.ApplicationLogonInfo.LogonName;
 			result.Should().Be.EqualTo("newlogonName");
 		}
