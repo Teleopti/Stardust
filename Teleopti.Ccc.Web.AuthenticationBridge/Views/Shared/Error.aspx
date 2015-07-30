@@ -21,7 +21,7 @@
 		if (scope != null)
 		{
 			clearFederationContext();
-			Response.Redirect(scope.Uri.Replace("Test/HandleReturn", ""), true);
+			Response.Redirect(scope.Uri.Replace("Return/HandleReturn", ""), true);
 		}
 	}
 

@@ -230,22 +230,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			return View("Message", viewModel);
 		}
 
-		[ValidateInput(false)]
-		public ActionResult HandleReturn()
-		{
-			WSFederationMessage wsFederationMessage = WSFederationMessage.CreateFromNameValueCollection(WSFederationMessage.GetBaseUrl(ControllerContext.HttpContext.Request.Url), ControllerContext.HttpContext.Request.Form);
-			if (wsFederationMessage.Context != null)
-			{
-				var wctx = HttpUtility.ParseQueryString(wsFederationMessage.Context);
-				string returnUrl = wctx["ru"];
-				if (!returnUrl.EndsWith("/"))
-					returnUrl += "/";
-
-				return new RedirectResult(returnUrl);
-			}
-			return new EmptyResult();
-		}
-
 		private static void cancelHangfireQueue()
 		{
 			var monitoring = JobStorage.Current.GetMonitoringApi();
