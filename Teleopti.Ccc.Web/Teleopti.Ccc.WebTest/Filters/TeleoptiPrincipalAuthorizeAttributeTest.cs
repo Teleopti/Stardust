@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 
 			var result = filterTester.InvokeFilter(target);
 
-			result.Should().Be.OfType<RedirectResult>();
+			result.Should().Be.OfType<RedirectToRouteResult>();
 		}
 
 		[Test, Ignore("Should work without other handling")]
@@ -46,8 +46,8 @@ namespace Teleopti.Ccc.WebTest.Filters
 			var filterTester = new FilterTester();
 			filterTester.IsUser(Thread.CurrentPrincipal);
 
-			var result = filterTester.InvokeFilter(target) as RedirectResult;
-			result.Url.ToUpperInvariant().Should().Contain(Uri.EscapeDataString("urn:ProviderX").ToUpperInvariant());
+			var result = filterTester.InvokeFilter(target) as RedirectToRouteResult;
+			result.RouteValues.Values.Should().Have.SameValuesAs("Return", "Hash", "Start", "http://myissuer/?wa=wsignin1.0&wtrealm=http%3a%2f%2fmytime&wctx=ru%3d&whr=urn%3aProviderX");
 		}
 
 		[Test]
@@ -58,8 +58,8 @@ namespace Teleopti.Ccc.WebTest.Filters
 			filterTester.IsUser(Thread.CurrentPrincipal);
 			filterTester.AddRouteDataToken("area", "MyTime");
 
-			var result = filterTester.InvokeFilter(target) as RedirectResult;
-			result.Url.Should().Contain(new FakeAuthenticationModule().Issuer(null).ToString());
+			var result = filterTester.InvokeFilter(target) as RedirectToRouteResult;
+			result.RouteValues["redirectUrl"].ToString().Should().Contain(new FakeAuthenticationModule().Issuer(null).ToString());
 		}
 
 		[Test]
