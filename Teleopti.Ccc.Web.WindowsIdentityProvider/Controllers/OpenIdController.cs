@@ -63,17 +63,12 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
 			// handles request from browser
 			_providerEndpointWrapper.PendingRequest = (IHostProcessedRequest)request;
 
-			return SignIn();
+			return RedirectToAction("TriggerWindowsAuthorization");
 		}
 
 		private bool isHeadRequest()
 		{
 			return _currentHttpContext.Current().Request.HttpMethod.Equals("HEAD", StringComparison.InvariantCultureIgnoreCase);
-		}
-
-		public ViewResult SignIn()
-		{
-			return View("SignIn");
 		}
 
 		[Authorize]
