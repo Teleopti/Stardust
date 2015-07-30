@@ -8,7 +8,7 @@
 
         var getCampaignVisualizationUrl = '../api/Outbound/Campaign/Visualization/';
 
-        var translationKeys = ['Backlog', 'Scheduled', 'Planned', 'Underscheduled', 'Overscheduled', 'Progress', 'NeededPersonHours', 'EndDate'];
+        var translationKeys = ['Backlog', 'Scheduled', 'Planned', 'Underscheduled', 'Overscheduled', 'Progress', 'NeededPersonHours', 'EndDate', 'Today', 'Start'];
         var translations = translationKeys.map(function (x) { return $translate(x); });
         var translationDictionary = {};
 
@@ -37,12 +37,17 @@
 			var underDiffs = [];
 			var overDiffs = [];
 
+		    var beforeStartDate,
+		        initialBacklog;
+
 			if (!(data.Dates && data.BacklogPersonHours && data.ScheduledPersonHours && data.PlannedPersonHours)) {
 				return;
 			}
 
 			data.Dates.forEach(function(e, i) {
-				dates[i] = new moment(e.Date).format("YYYY-MM-DD");
+			    dates[i] = new moment(e.Date).format("YYYY-MM-DD");
+
+			    if (!beforeStartDate) beforeStartDate = new moment(e.Date).subtract(1, 'days').format("YYYY-MM-DD");
 
 				rawBacklogs[i] = Math.round(data.BacklogPersonHours[i]);
 
@@ -66,18 +71,22 @@
 					Math.round(data.ScheduledPersonHours[i] - data.PlannedPersonHours[i]) :
 					0;
 
+                if (!initialBacklog) {
+                    initialBacklog = rawBacklogs[i] + plans[i] + schedules[i];
+                }
+
 			});
 
 			return {
-				dates: ['x'].concat(dates),
-				rawBacklogs: [translationDictionary['Backlog']].concat(rawBacklogs),
-				calculatedBacklogs: [translationDictionary['Backlog'] + ' '].concat(calculatedBacklogs),
-				plans: [translationDictionary['Planned']].concat(plans),
-				unscheduledPlans: [translationDictionary['Planned']].concat(unscheduledPlans),
-				schedules: [translationDictionary['Scheduled']].concat(schedules),
-				underDiffs: [translationDictionary['Underscheduled']].concat(underDiffs),
-				overDiffs: [translationDictionary['Overscheduled']].concat(overDiffs),
-				statusLine: [translationDictionary['Progress']].concat(rawBacklogs)
+			    dates: ['x', beforeStartDate].concat(dates),
+				rawBacklogs: [translationDictionary['Backlog'], 0].concat(rawBacklogs),
+				calculatedBacklogs: [translationDictionary['Backlog'] + ' ', 0].concat(calculatedBacklogs),
+				plans: [translationDictionary['Planned', 0]].concat(plans),
+				unscheduledPlans: [translationDictionary['Planned'], 0].concat(unscheduledPlans),
+				schedules: [translationDictionary['Scheduled'], 0].concat(schedules),
+				underDiffs: [translationDictionary['Underscheduled'], 0].concat(underDiffs),
+				overDiffs: [translationDictionary['Overscheduled'], 0].concat(overDiffs),
+				statusLine: [translationDictionary['Progress'], initialBacklog].concat(rawBacklogs)
 			};
 
 			
@@ -120,7 +129,9 @@
 		    var graphId = '#Chart_' + campaign.Id,
 		        plannedPhase = campaign.Status,
 		        warningInfo = campaign.WarningInfo,
-		        endDate = new moment(campaign.EndDate.Date).format("YYYY-MM-DD");
+		        endDate = new moment(campaign.EndDate.Date).format("YYYY-MM-DD"),
+		        todayDate = new moment().format("YYYY-MM-DD"),
+		        startDate = new moment(campaign.StartDate.Date).format("YYYY-MM-DD");
 
 		    var maxPersonHours = (Math.max.apply(Math, graphData.rawBacklogs.slice(1)) + Math.max.apply(Math, graphData.plans.slice(1))) * 1.5;
 		  
@@ -189,7 +200,11 @@
 					},
 					grid: {
 					     x: {
-					         lines: [{ value: endDate, text: translationDictionary['EndDate'] }]
+					         lines: [
+                                 { value: endDate, text: translationDictionary['EndDate'] },
+                                 { value: todayDate, text: translationDictionary['Today'] },
+                                 { value: startDate, text: translationDictionary['Start']}
+					         ]
 					     }
 					},
 					tooltip: {

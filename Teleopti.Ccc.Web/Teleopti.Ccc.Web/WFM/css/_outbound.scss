@@ -1,6 +1,9 @@
 ﻿@charset "UTF-8";
 
 .outbound {
+	.c3-line {
+		stroke-width: 3px !important;
+	}
 	.input-prepend {
 		width: 100%;
 	}
