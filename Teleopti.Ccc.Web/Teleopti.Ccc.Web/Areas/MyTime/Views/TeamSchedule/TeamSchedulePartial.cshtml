@@ -77,6 +77,8 @@
 						<!--[if lte IE 8]>
 							<input type="text" class="col-lg-2 form-control add-shifttrade-datepicker" data-bind="value: requestedDate().format(DatePickerFormat())" readonly="readonly"/>
 						<![endif]-->
+
+						<!-- ko if : cultureLoaded -->
 						<span class="input-group-btn">
 							<button class="btn moment-datepicker" data-bind="datepicker: requestedDate, datepickerOptions: { autoHide: true, weekStart: weekStart() }, enable: !isLoading()">
 								<i class="glyphicon glyphicon-calendar"></i>
@@ -85,6 +87,7 @@
 								<i class="glyphicon glyphicon-chevron-right" data-bind="enable: !isLoading()"></i>
 							</button>
 						</span>
+						<!-- /ko -->
 					</div>
 				</div>
 				<!-- ko ifnot: hasError -->

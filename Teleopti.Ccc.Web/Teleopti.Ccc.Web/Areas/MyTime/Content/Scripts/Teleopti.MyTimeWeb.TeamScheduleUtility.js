@@ -5,7 +5,7 @@ Teleopti.MyTimeWeb.DayScheduleMixin = function() {
 	self.openPeriodEndDate = ko.observable();
 	self.DatePickerFormat = ko.observable(Teleopti.MyTimeWeb.Common.DateFormat);
 	
-	self.weekStart = ko.observable(1);
+	self.weekStart = ko.observable();
 
 	var changeHandler = null;
 
@@ -617,8 +617,22 @@ Teleopti.MyTimeWeb.TeamScheduleFilterMixin = function () {
 };
 
 Teleopti.MyTimeWeb.TeamScheduleDataProviderMixin = function(ajax, endpoints) {
-
 	var self = this;
+
+	self.loadCulture = function (success, error) {
+		ajax.Ajax({
+			url: "../UserInfo/Culture",
+			dataType: "json",
+			type: 'GET',
+			contentType: 'application/json; charset=utf-8',
+			success: function (data) {
+				if (success != null) success(data);
+			},
+			error: function (e) {
+				if (error != null) error(e);
+			}
+		});
+	};
 
 	self.loadCurrentDate = function(success, error) {
 		ajax.Ajax({

@@ -8,6 +8,7 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 	self.isShiftTradeBulletinBoardEnabled = ko.observable(false);
 
 	self.isLoading = ko.observable(true);
+	self.cultureLoaded = ko.observable(false); // To delay rendering of date-picker
 
 	self.hasError = ko.observable(false);
 	self.errorMessage = ko.observable();
@@ -52,6 +53,14 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 			null
 		);
 	};
+
+	self.loadCulture(
+		function (data) {
+			self.weekStart(data.WeekStart);
+			self.cultureLoaded(true);
+		},
+		null
+	);
 
 	var loadSchedule = function () {
 		self.loadSchedule(
@@ -108,7 +117,7 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 				self.hasError(true);
 				self.errorMessage(error.Message);
 			}
-		);		
+		);
 	});
 
 	self.setFilterMixinChangeHandler(function (callback) {
@@ -122,7 +131,6 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 		if (data != null) self.setTimeFilters(data);
 		self.activateFilterMixinChangeHandler();
 	});
-
 
 	self.isLocked(self.isLoading());
 	self.isLoading.subscribe(function(newValue) { self.isLocked(newValue);  });
