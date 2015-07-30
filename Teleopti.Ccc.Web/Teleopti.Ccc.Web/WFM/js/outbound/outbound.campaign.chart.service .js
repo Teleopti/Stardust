@@ -72,7 +72,7 @@
 					0;
 
                 if (!initialBacklog) {
-                    initialBacklog = rawBacklogs[i] + plans[i] + schedules[i];
+                    initialBacklog = rawBacklogs[i] + unscheduledPlans[i] + schedules[i];
                 }
 
 			});
