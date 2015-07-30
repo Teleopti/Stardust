@@ -26,17 +26,17 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[HttpPost]
 		[TenantUnitOfWork]
 		[Route("Login")]
-		public virtual LoginResult Login(LoginModel model)
+		public virtual JsonResult<LoginResult> Login(LoginModel model)
 		{
 			var user = _currentTenantSession.CurrentSession().GetNamedQuery("loadAllTenantUsers").List<TenantAdminUser>().FirstOrDefault(x => x.Email.Equals(model.UserName));
 			if(user == null)
-				return new LoginResult {Success = false, Message = "No user with that Email."};
+				return Json(new LoginResult {Success = false, Message = "No user with that Email."});
 
 			var hashed = encryptString(model.Password);
 			if(!hashed.Equals(user.Password))
-				return new LoginResult { Success = false, Message = "The password is not correct." };
+				return Json(new LoginResult { Success = false, Message = "The password is not correct." });
 
-			return new LoginResult {Success = true, UserName = user.Name, AccessToken = user.AccessToken};
+			return Json(new LoginResult {Success = true, UserName = user.Name, AccessToken = user.AccessToken});
 		}
 
 		[HttpGet]
