@@ -130,7 +130,7 @@
 		        plannedPhase = campaign.Status,
 		        warningInfo = campaign.WarningInfo;
 
-		    var maxPersonHours = (Math.max.apply(Math, graphData.rawBacklogs.slice(1)) + Math.max.apply(Math, graphData.plans.slice(1))) * 1.5;
+		    var maxPersonHours = (Math.max.apply(Math, graphData.rawBacklogs.slice(1)) + Math.max.apply(Math, graphData.plans.slice(1))) * 1.1;
 		  
 			var currentLabelGroups = selectDataGroups(viewScheduleDiffToggle, plannedPhase).map(function (name) { return graphData[name][0]; });
 			var previousLabelGroups = selectDataGroups(!viewScheduleDiffToggle, plannedPhase).map(function (name) { return graphData[name][0]; });
