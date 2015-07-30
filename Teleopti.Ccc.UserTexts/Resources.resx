@@ -13370,4 +13370,12 @@ Reduce the complexity to use these shifts.</value>
     <value>Underscheduled</value>
     <comment>Scheduled hours is lower than forecasted hours.</comment>
   </data>
+  <data name="DragAndDropCsvFilesHereOrClickToUpload" xml:space="preserve">
+    <value>Drag and Drop .csv files here or click to upload</value>
+    <comment>Hint to tell user to upload file</comment>
+  </data>
+  <data name="ImportUsers" xml:space="preserve">
+    <value>Import users</value>
+    <comment>Title of web based people user import modal</comment>
+  </data>
 </root>
