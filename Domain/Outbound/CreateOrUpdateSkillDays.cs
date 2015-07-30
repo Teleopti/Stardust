@@ -14,6 +14,8 @@ namespace Teleopti.Ccc.Domain.Outbound
 	{
 		void Create(ISkill skill, DateOnlyPeriod campaignPeriod, int campaignTasks,
 			TimeSpan averageTimeForHandlingTasks, IDictionary<DayOfWeek, TimePeriod> workingHours);
+
+		void UpdateSkillDays(ISkill skill, IBacklogTask incomingTask);
 	}
 
 	public class CreateOrUpdateSkillDays : ICreateOrUpdateSkillDays
@@ -39,10 +41,10 @@ namespace Teleopti.Ccc.Domain.Outbound
 			var incomingTask = _outboundProductionPlanFactory.CreateAndMakeInitialPlan(campaignPeriod, campaignTasks,
 				averageTimeForHandlingTasks, workingHours);
 
-			updateSkillDays(skill, incomingTask);
+			UpdateSkillDays(skill, incomingTask);
 		}
 
-		private void updateSkillDays(ISkill skill, IncomingTask incomingTask)
+		public void UpdateSkillDays(ISkill skill, IBacklogTask incomingTask)
 		{
 			ICollection<ISkillDay> skillDays = _fetchAndFillSkillDays.FindRange(incomingTask.SpanningPeriod, skill);
 			var workload = skill.WorkloadCollection.First();
