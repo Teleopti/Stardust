@@ -36,24 +36,11 @@ Teleopti.SSO.Authentication.AuthenticationState = function (data) {
 					gotoMustChangePassword();
 					return;
 				}
-				self.SetReturnUrlToCookie();
 				self.GotoReturnUrl();
 			}
 		});
 
 		$.ajax(options);
-	};
-
-	var setCookie = function(cname, cvalue) {
-		var d = new Date();
-		d.setTime(d.getTime() + (5 * 60 * 1000));
-		var expires = "expires=" + d.toUTCString();
-		document.cookie = cname + "=" + cvalue + "; " + expires + "; path=/";
-	};
-
-	this.SetReturnUrlToCookie = function () {
-		if (window.location.hash)
-			setCookie("returnHash", window.location.hash);
 	};
 
 	this.GotoReturnUrl = function() {
