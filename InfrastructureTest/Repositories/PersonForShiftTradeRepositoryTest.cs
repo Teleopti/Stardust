@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.InfrastructureTest.Helper;
@@ -67,7 +69,17 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(person1);
 			PersistAndRemoveFromUnitOfWork(person2);
 
+			var businessUnitId = ((ITeleoptiIdentity)ClaimsPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault();
+
+			var populateReadModelQuery = string.Format(@"INSERT INTO [ReadModel].[GroupingReadOnly] 
+                ([PersonId],[FirstName],[LastName],[StartDate],[TeamId],[SiteId],[BusinessUnitId] ,[GroupId],[PageId])
+			 VALUES ('{0}','{1}','{2}','2012-02-02 00:00:00' ,'{3}','{4}','{5}','{6}','11610FE4-0130-4568-97DE-9B5E015B2564')",
+				person1.Id.Value, person1.Name.FirstName, person1.Name.LastName, team.Id.GetValueOrDefault(), site.Id.GetValueOrDefault(), Guid.Parse(businessUnitId.ToString()), team.Id.GetValueOrDefault());
+
+			Session.CreateSQLQuery(populateReadModelQuery).ExecuteUpdate();
+
 			return new PersonRepository(UnitOfWork).Get(person1.Id.Value);
 		}
+
 	}
 }

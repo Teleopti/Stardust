@@ -74,11 +74,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			PersistAndRemoveFromUnitOfWork(per1);
 			PersistAndRemoveFromUnitOfWork(per2);
-			PersistAndRemoveFromUnitOfWork(per3);			
-			
+			PersistAndRemoveFromUnitOfWork(per3);
+
+			PersistReadModel(per1.Id.GetValueOrDefault(), team.Id.GetValueOrDefault(), site.Id.GetValueOrDefault(), team.Id.GetValueOrDefault());
+			PersistReadModel(per2.Id.GetValueOrDefault(), team.Id.GetValueOrDefault(), site.Id.GetValueOrDefault(), team.Id.GetValueOrDefault());
+			PersistReadModel(per3.Id.GetValueOrDefault(), team.Id.GetValueOrDefault(), site.Id.GetValueOrDefault(), team.Id.GetValueOrDefault());
+
 			var result = target.GetPersonFor(new DateOnly(2012, 2, 2), new List<Guid> { team.Id.Value }, "");
 			result.ToArray().Length.Should().Be.EqualTo(3);
 		}
+
 
 		[Test]
 		public void ShouldFilterPersonByNameSegment()
@@ -122,6 +127,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(per1);
 			PersistAndRemoveFromUnitOfWork(per2);
 			PersistAndRemoveFromUnitOfWork(per3);
+			PersistReadModel(per1.Id.GetValueOrDefault(), team.Id.GetValueOrDefault(), site.Id.GetValueOrDefault(), team.Id.GetValueOrDefault());
+			PersistReadModel(per2.Id.GetValueOrDefault(), team.Id.GetValueOrDefault(), site.Id.GetValueOrDefault(), team.Id.GetValueOrDefault());
+			PersistReadModel(per3.Id.GetValueOrDefault(), team.Id.GetValueOrDefault(), site.Id.GetValueOrDefault(), team.Id.GetValueOrDefault());
 
 			var result = target.GetPersonFor(new DateOnly(2012, 2, 2), new List<Guid> {team.Id.Value}, "roger");
 			result.ToArray().Length.Should().Be.EqualTo(1);
@@ -180,12 +188,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var groupId = new Guid("B0E35119-4661-4A1B-8772-9B5E015B2564");
 
-			var populateReadModelQuery = string.Format(	@"INSERT INTO [ReadModel].[GroupingReadOnly] 
-                ([PersonId],[StartDate],[TeamId],[SiteId],[BusinessUnitId] ,[GroupId],[PageId])
-			 VALUES ('{0}','2012-02-02 00:00:00' ,'{1}','{2}','{3}','{4}','11610FE4-0130-4568-97DE-9B5E015B2564')",
-			 per1.Id.Value, team.Id.Value, site.Id.Value, getBusinessUnitId(), groupId);
-
-			Session.CreateSQLQuery(populateReadModelQuery).ExecuteUpdate();
+			PersistReadModel(per1.Id.GetValueOrDefault(), team.Id.GetValueOrDefault(), site.Id.GetValueOrDefault(), groupId);
 
 			var result = target.GetPersonFor(new DateOnly(2012, 2, 2), new List<Guid> { groupId }, "");
 			result.ToArray().Length.Should().Be.EqualTo(1);
@@ -216,6 +219,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			return Guid.Parse(businessUnitId.ToString());
 		}
 
-		
+
+		private void PersistReadModel(Guid personId, Guid teamId, Guid siteId, Guid groupId)
+		{
+			var populateReadModelQuery = string.Format(@"INSERT INTO [ReadModel].[GroupingReadOnly] 
+                ([PersonId],[StartDate],[TeamId],[SiteId],[BusinessUnitId] ,[GroupId],[PageId])
+			 VALUES ('{0}','2012-02-02 00:00:00' ,'{1}','{2}','{3}','{4}','11610FE4-0130-4568-97DE-9B5E015B2564')",
+				personId, teamId, siteId, getBusinessUnitId(), groupId);
+
+			Session.CreateSQLQuery(populateReadModelQuery).ExecuteUpdate();
+		}
 	}
 }
