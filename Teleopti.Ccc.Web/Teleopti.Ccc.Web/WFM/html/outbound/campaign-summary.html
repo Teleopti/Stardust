@@ -25,19 +25,23 @@
 					</div>
 				</card-header>
                 <card-body>
-	                <div class="relative">
-						<div class="clearfix m-b-10">
-							<p class="campaign-message m-r-5" ng-repeat="info in campaign.WarningInfo"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span translate>{{info.TypeOfRule}}</span></p>
-							<md-switch class="pull-right m-t-0" ng-click="toggleChartDisplay(campaign)" ng-if="campaign.Status!=1">Analyze Schedule</md-switch>
-						</div>
-		                <div class="chart text-center relative chartfix">
-			                <div id="Chart_{{campaign.Id}}"></div>
-		                </div>
-		                <button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="show(campaign)">edit</button>
-		                <button class="wfm-btn wfm-btn-invis-primary pull-right">schedule</button>
-		                <button class="wfm-btn wfm-btn-invis-primary pull-right">add backlog</button>
-		                <button class="wfm-btn wfm-btn-invis-primary pull-right">production plan</button>
-	                </div>
+                    <div class="loading-whole-section" ng-show="listCampaignFinished && displayLoading(campaign)">
+                        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                    </div>
+
+                    <div class="relative" ng-show="listCampaignFinished && !displayLoading(campaign)">
+                        <div class="clearfix m-b-10">
+                            <p class="campaign-message m-r-5" ng-repeat="info in campaign.WarningInfo"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span translate>{{info.TypeOfRule}}</span></p>
+                            <md-switch class="pull-right m-t-0" ng-click="toggleChartDisplay(campaign)" ng-if="campaign.Status!=1">Analyze Schedule</md-switch>
+                        </div>
+                        <div class="chart text-center relative chartfix">
+                            <div id="Chart_{{campaign.Id}}"></div>
+                        </div>
+                        <button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="show(campaign)">edit</button>
+                        <button class="wfm-btn wfm-btn-invis-primary pull-right">schedule</button>
+                        <button class="wfm-btn wfm-btn-invis-primary pull-right">add backlog</button>
+                        <button class="wfm-btn wfm-btn-invis-primary pull-right">production plan</button>
+                    </div>
                 </card-body>
             </teleopti-card>
         </teleopti-card-list>
@@ -56,19 +60,23 @@
 					</div>
 				</card-header>
                 <card-body>
-	                <div class="relative">
-						<div class="clearfix m-b-10">
-							<p class="campaign-message m-r-5" ng-repeat="info in campaign.WarningInfo"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span translate>{{info.TypeOfRule}}</span></p>
-							<md-switch class="pull-right m-t-0" ng-click="toggleChartDisplay(campaign)" ng-if="hidePlannedAnalyzeButton(campaign.Status)">Analyze Schedule</md-switch>
-						</div>
-						<div class="chart text-center relative chartfix">
-							<div id="Chart_{{campaign.Id}}"></div>
-						</div>
-		                <button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="show(campaign)" translate>Edit</button>
-		                <button class="wfm-btn wfm-btn-invis-primary pull-right" translate>Schedule</button>
-		                <button class="wfm-btn wfm-btn-invis-primary pull-right" translate>AddBacklog</button>
-		                <button class="wfm-btn wfm-btn-invis-primary pull-right" translate>ProductionPlan</button>
-	                </div>
+                    <div class="loading-whole-section" ng-show="listCampaignFinished && displayLoading(campaign)">
+                        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                    </div>
+
+                    <div class="relative" ng-show="listCampaignFinished && !displayLoading(campaign)">
+                        <div class="clearfix m-b-10">
+                            <p class="campaign-message m-r-5" ng-repeat="info in campaign.WarningInfo"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span translate>{{info.TypeOfRule}}</span></p>
+                            <md-switch class="pull-right m-t-0" ng-click="toggleChartDisplay(campaign)" ng-if="hidePlannedAnalyzeButton(campaign.Status)">Analyze Schedule</md-switch>
+                        </div>
+                        <div class="chart text-center relative chartfix">
+                            <div id="Chart_{{campaign.Id}}"></div>
+                        </div>
+                        <button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="show(campaign)" translate>Edit</button>
+                        <button class="wfm-btn wfm-btn-invis-primary pull-right" translate>Schedule</button>
+                        <button class="wfm-btn wfm-btn-invis-primary pull-right" translate>AddBacklog</button>
+                        <button class="wfm-btn wfm-btn-invis-primary pull-right" translate>ProductionPlan</button>
+                    </div>
                 </card-body>
             </teleopti-card>
         </teleopti-card-list>

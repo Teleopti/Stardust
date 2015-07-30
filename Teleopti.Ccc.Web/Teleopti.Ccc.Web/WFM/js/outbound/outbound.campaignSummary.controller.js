@@ -49,12 +49,18 @@
 
         $scope.show = function (campaign) {
             $state.go('outbound-edit', { Id: campaign.Id });
-        };               
+        };
+
+	    $scope.displayLoading = displayLoading;
 
         function init() {         
             outboundService.getCampaignStatistics(null, function success(data) {
                 $scope.phaseStatistics = data;
             });
+        }
+
+        function displayLoading(campaign) {
+            return !angular.isDefined(campaign.chart);
         }
 
         function clearCampaignList() {
