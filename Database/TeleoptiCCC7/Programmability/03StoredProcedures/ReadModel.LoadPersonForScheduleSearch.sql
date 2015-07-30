@@ -11,6 +11,9 @@ GO
 -- Author:		Fan Zhang, Zhiping Lan, Yanyi Wan
 -- Create date: 2015-02-05
 -- Description:	Filter schedule with search support.
+-- MODIFY: Chundan Xu 2015-07-29 remove the redundant select and union
+--         and add join order to optimize the performance.
+--
 -- =============================================
 CREATE PROCEDURE [ReadModel].[LoadPersonForScheduleSearch] 
 	-- teamIdList should be comma separated uids for team.	
@@ -35,24 +38,14 @@ BEGIN
 	INSERT INTO @teamids
 	SELECT * FROM dbo.SplitStringString(@teamIdList)
 
-	SELECT pp.Parent as PersonId, pp.Team as TeamId, t.Site as SiteId, s.BusinessUnit as BusinessUnitId
-	FROM PersonPeriod pp
-		INNER JOIN Team t ON pp.Team = t.id
-		INNER JOIN Site s ON t.Site = s.Id
-		INNER JOIN Person p ON pp.Parent = p.Id
-		INNER JOIN @teamids tids ON tids.Team = t.id
-	WHERE p.WorkflowControlSet IS NOT NULL		
-		AND (@scheduleDate BETWEEN StartDate AND EndDate) 	
-		AND ((@namesearch is null or @namesearch = '') or ((p.LastName + p.FirstName) like @namesearch) or ((p.FirstName + p.LastName) like @namesearch))	
-	UNION 
 	SELECT gr.PersonId as PersonId,gr.TeamId as TeamId, gr.SiteId as SiteId, gr.BusinessUnitId as BusinessUnitId
 	FROM ReadModel.groupingreadonly gr
-		INNER JOIN @teamids tids ON tids.Team =gr.groupId
 		INNER JOIN Person p ON gr.PersonId = p.Id
+		INNER JOIN @teamids tids ON tids.Team =gr.groupId
 	WHERE gr.Businessunitid = @businessUnitId 
 		AND @scheduleDate BETWEEN gr.StartDate and isnull(gr.EndDate,'2059-12-31') 
 		AND (gr.LeavingDate >= @scheduleDate OR gr.LeavingDate IS NULL)
 		AND p.WorkflowControlSet IS NOT NULL		
 		AND ((@namesearch is null or @namesearch = '') or ((p.LastName + p.FirstName) like @namesearch) or ((p.FirstName + p.LastName) like @namesearch) or ((p.FirstName + ' ' + p.LastName) like @namesearch) or ((p.FirstName + ' ' + p.LastName) like @namesearch))
-				 
+	OPTION	(FORCE ORDER)			 
 END
