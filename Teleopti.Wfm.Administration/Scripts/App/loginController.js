@@ -3,6 +3,8 @@
 	var tokenKey = 'accessToken';
 	var userKey = 'userToken';
 	var emailKey = 'lastEmail';
+	var idKey = 'idToken';
+
 	var token = sessionStorage.getItem(tokenKey);
 	if (token === null) {
 		$("#modal-login").dialog({
@@ -20,6 +22,8 @@
 		vm.loginEmail = sessionStorage.getItem(emailKey);
 		vm.loginPassword = "";
 		vm.Message = '';
+		vm.Id = sessionStorage.getItem(idKey);
+
 		vm.user = sessionStorage.getItem(userKey);
 
 		function showError(jqXHR) {
@@ -27,6 +31,7 @@
 		}
 
 		vm.login = function () {
+			vm.Id = 0;
 			$("#modal-login").toggleClass("wait");
 			var loginData = {
 				granttype: 'password',
@@ -44,11 +49,13 @@
 					return;
 				}
 				vm.user = data.userName;
+				vm.Id = data.Id;
 				vm.Message = 'Successful log in...';
 				// Cache the access token in session storage.
 				sessionStorage.setItem(tokenKey, data.AccessToken);
 				sessionStorage.setItem(userKey, data.UserName);
 				sessionStorage.setItem(emailKey, vm.loginEmail);
+				sessionStorage.setItem(idKey, data.Id);
 				document.location = "#";
 				$('#modal-login').dialog('close');
 			}).error(showError);

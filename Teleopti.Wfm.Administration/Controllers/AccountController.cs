@@ -36,7 +36,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			if(!hashed.Equals(user.Password))
 				return Json(new LoginResult { Success = false, Message = "The password is not correct." });
 
-			return Json(new LoginResult {Success = true, UserName = user.Name, AccessToken = user.AccessToken});
+			return Json(new LoginResult {Success = true,Id = user.Id, UserName = user.Name, AccessToken = user.AccessToken});
 		}
 
 		[HttpGet]
@@ -50,7 +50,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[HttpPost]
 		[TenantUnitOfWork]
 		[Route("User")]
-		public virtual JsonResult<UpdateUserModel> GetOneTenant([FromBody]int id)
+		public virtual JsonResult<UpdateUserModel> GetOneUser([FromBody]int id)
 		{
 			//return Json(_currentTenantSession.CurrentSession()
 			//	.GetNamedQuery("loadAllTenantUsers")

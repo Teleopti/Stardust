@@ -1,6 +1,7 @@
 ﻿(function () {
 	'use strict';
-
+	var idKey = 'idToken';
+	var userKey = 'userToken';
 	angular
 		 .module('adminApp')
 		 .controller('userdetailsController', userdetailsController, []);
@@ -53,7 +54,8 @@
 
 		vm.LoadUser();
 		vm.save = function () {
-			
+					
+			var loggedOnId = parseInt(sessionStorage.getItem(idKey));
 			
 			$http.post('./SaveUser', {
 				Id: vm.UserId,
@@ -61,6 +63,11 @@
 				Email: vm.Email
 			}, getHeaders())
 				.success(function (data) {
+					if (vm.UserId === loggedOnId) {
+						sessionStorage.setItem(userKey, vm.Name);
+						window.location = "#";
+						return;
+					}
 					window.location = "#users";
 				})
 				.error(function (xhr, ajaxOptions, thrownError) {
