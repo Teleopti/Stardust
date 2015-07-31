@@ -160,6 +160,14 @@
 	p > span.campaign-warning-icon {
 		margin-top: 0 !important;
 	}
+	.loading-card-bodyfix{
+	    position:absolute;
+		top:0;
+		left:0;
+		height:100%;
+		width:100%;
+		background-color:rgba(0,0,0,0.5);
+	}
 	.orangefix{
 	    background-color:#FF7F0E !important;
 	}
