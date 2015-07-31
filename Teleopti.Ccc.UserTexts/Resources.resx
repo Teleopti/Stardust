@@ -13347,11 +13347,11 @@ Reduce the complexity to use these shifts.</value>
     <comment>outbound campaigns have error and require action </comment>
   </data>
   <data name="OutboundOverstaffRule" xml:space="preserve">
-    <value>Overstaffing</value>
+    <value>Early</value>
     <comment>campaign error type</comment>
   </data>
   <data name="OutboundUnderSLARule" xml:space="preserve">
-    <value>Under SLA</value>
+    <value>Late</value>
     <comment>campaign error type</comment>
   </data>
   <data name="ProductionPlan" xml:space="preserve">
@@ -13377,5 +13377,9 @@ Reduce the complexity to use these shifts.</value>
   <data name="ImportUsers" xml:space="preserve">
     <value>Import users</value>
     <comment>Title of web based people user import modal</comment>
+  </data>
+  <data name="Healthy" xml:space="preserve">
+    <value>On time</value>
+    <comment>campaign finishes on time</comment>
   </data>
 </root>
