@@ -14,19 +14,21 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Menu
 		{
 			new ApplicationArea
 			{
-				ApplicationFunctionPath =
-					DefinedRaptorApplicationFunctionPaths
-						.MyTimeWeb,
+				ApplicationFunctionPath = DefinedRaptorApplicationFunctionPaths.MyTimeWeb,
 				Area = "MyTime",
 				Name = Resources.MyTime
 			},
 			new ApplicationArea
 			{
-				ApplicationFunctionPath =
-					DefinedRaptorApplicationFunctionPaths
-						.Anywhere,
+				ApplicationFunctionPath = DefinedRaptorApplicationFunctionPaths.Anywhere,
 				Area = "Anywhere",
 				Name = GetMenuText(DefinedRaptorApplicationFunctionPaths.Anywhere)
+			},
+			new ApplicationArea
+			{
+				ApplicationFunctionPath = DefinedRaptorApplicationFunctionPaths.AccessToReports,
+				Area = "Reporting",
+				Name = Resources.Reports
 			}
 		};
 
