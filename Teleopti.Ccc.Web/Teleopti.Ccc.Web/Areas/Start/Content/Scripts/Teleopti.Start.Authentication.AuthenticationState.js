@@ -162,7 +162,7 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 				$.extend(options, {
 					success: function (applicationsData, textState, jqXHR) {
 
-						var areas = ["MyTime", "Anywhere", "Reporting"];
+						var areas = ["MyTime", "Anywhere", "SeatPlanner", "Messages", "Reporting", "WFM"];
 						var areaToGo = ko.utils.arrayFirst(areas, function (a) {
 							var url = "/" + a + "/";
 							return window.location.href.toUpperCase().indexOf(url.toUpperCase()) !== -1;
