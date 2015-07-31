@@ -32,8 +32,8 @@
 
                     <div class="relative" ng-show="listCampaignFinished && !displayLoading(campaign)">
                         <div class="clearfix m-b-10">
-							<p class="campaign-message m-r-5" ng-class="{orangefix: isOverStaffing(campaign.WarningInfo)}" ng-repeat="info in campaign.WarningInfo" ng-hide="hideWhenDone(campaign.Status)"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span translate>{{info.TypeOfRule}}</span></p>
-							<p class="campaign-message campaign-message-healthyfix  m-r-5" ng-if="campaign.WarningInfo.length == 0" ng-hide="hideWhenDone(campaign.Status)"><span class="campaign-warning-icon campaign-green-icon-messagefix"><i class="mdi mdi-check"></i></span><span translate>healthy</span></p>
+							<p class="campaign-message m-r-5" ng-class="{orangefix: isOverStaffing(campaign.WarningInfo)}" ng-repeat="info in campaign.WarningInfo" ><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span translate>{{info.TypeOfRule}}</span></p>
+							<p class="campaign-message campaign-message-healthyfix  m-r-5" ng-if="campaign.WarningInfo.length == 0" ><span class="campaign-warning-icon campaign-green-icon-messagefix"><i class="mdi mdi-check"></i></span><span translate>healthy</span></p>
                             <md-switch class="pull-right m-t-0" ng-click="toggleChartDisplay(campaign)" ng-if="campaign.Status!=1">Analyze Schedule</md-switch>
                         </div>
                         <div class="chart text-center relative chartfix">
@@ -69,8 +69,8 @@
 
                     <div class="relative" ng-show="listCampaignFinished && !displayLoading(campaign)">
                         <div class="clearfix m-b-10">
-							<p class="campaign-message m-r-5" ng-class="{orangefix: isOverStaffing(campaign.WarningInfo)}" ng-repeat="info in campaign.WarningInfo" ng-hide="hideWhenDone(campaign.Status)"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span translate>{{info.TypeOfRule}}</span></p>
-							<p class="campaign-message campaign-message-healthyfix  m-r-5" ng-if="campaign.WarningInfo.length == 0" ng-hide="hideWhenDone(campaign.Status)"><span class="campaign-warning-icon campaign-green-icon-messagefix"><i class="mdi mdi-check"></i></span><span translate>healthy</span></p>
+							<p class="campaign-message m-r-5" ng-class="{orangefix: isOverStaffing(campaign.WarningInfo)}" ng-repeat="info in campaign.WarningInfo"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span translate>{{info.TypeOfRule}}</span></p>
+							<p class="campaign-message campaign-message-healthyfix  m-r-5" ng-if="campaign.WarningInfo.length == 0" ><span class="campaign-warning-icon campaign-green-icon-messagefix"><i class="mdi mdi-check"></i></span><span translate>healthy</span></p>
                             <md-switch class="pull-right m-t-0" ng-click="toggleChartDisplay(campaign)" ng-if="hidePlannedAnalyzeButton(campaign.Status)">Analyze Schedule</md-switch>
                         </div>
                         <div class="chart text-center relative chartfix">
