@@ -22,12 +22,12 @@
         ];
         var self = this;
 
-        this.getCampaignVisualization = tl.applyTranslation(translationKeys, getCampaignVisualization, self);
+        this.getCampaignVisualization = tl.applyTranslation(translationKeys, self.coreGetCampaignVisualization, self);
         this.makeGraph = tl.applyTranslation(translationKeys, makeGraph, self);
         this.buildGraphDataSeqs = buildGraphDataSeqs;
-        this.mapGraphData = mapGraphData;
-
+      
         this.coreGetCampaignVisualization = getCampaignVisualization;
+        this.coreMapGraphData = mapGraphData;
 
         function getCampaignVisualization(campaignId, successCb, errorCb) {         
             $http.get(getCampaignVisualizationUrl + campaignId).success(function (campaignData) {              

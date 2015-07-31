@@ -43,4 +43,98 @@ describe('Outbound Chart Service Test', function() {
         expect(resultData).toBeDefined();
         expect(resultData.Dates).toEqual('2015-07-31');
     });
+
+    it('Basic graph data should be mapped correctly', function() {
+        var input = {
+            Dates: { Date: '2015-07-31' },
+            ScheduledPersonHours: 50,
+            BacklogPersonHours: 100,
+            PlannedPersonHours: 30
+        };
+
+        var resultData = target.coreMapGraphData(input);
+        expect(resultData.dates).toEqual('2015-07-31');
+        expect(resultData.plans).toEqual(30);
+        expect(resultData.unscheduledPlans).toEqual(0);
+        expect(resultData.schedules).toEqual(50);
+        expect(resultData.rawBacklogs).toEqual(100);
+        expect(resultData.progress).toEqual(100);
+
+    });
+
+    it('Overscheduled person hours should be mapped correctly', function() {
+        var input, resultData;
+
+        input = {
+            Dates: { Date: '2015-07-31' },
+            ScheduledPersonHours: 50,
+            BacklogPersonHours: 100,
+            PlannedPersonHours: 30
+        };
+
+        resultData = target.coreMapGraphData(input);
+        expect(resultData.overDiffs).toEqual(20);
+
+        input = {
+            Dates: { Date: '2015-07-31' },
+            ScheduledPersonHours: 20,
+            BacklogPersonHours: 100,
+            PlannedPersonHours: 30
+        }
+
+        resultData = target.coreMapGraphData(input);
+        expect(resultData.overDiffs).toEqual(0);
+
+    });
+
+    it('Underscheduled person hours should be mapped correctly', function () {
+        var input, resultData;
+
+        input = {
+            Dates: { Date: '2015-07-31' },
+            ScheduledPersonHours: 50,
+            BacklogPersonHours: 100,
+            PlannedPersonHours: 30
+        };
+
+        resultData = target.coreMapGraphData(input);
+        expect(resultData.underDiffs).toEqual(0);
+
+        input = {
+            Dates: { Date: '2015-07-31' },
+            ScheduledPersonHours: 20,
+            BacklogPersonHours: 100,
+            PlannedPersonHours: 30
+        }
+
+        resultData = target.coreMapGraphData(input);
+        expect(resultData.underDiffs).toEqual(10);
+
+    });
+
+    it('Calculated backlog should be mapped correctly when there is underschedule', function () {
+        var input, resultData;
+
+        input = {
+            Dates: { Date: '2015-07-31' },
+            ScheduledPersonHours: 50,
+            BacklogPersonHours: 100,
+            PlannedPersonHours: 30
+        };
+
+        resultData = target.coreMapGraphData(input);
+        expect(resultData.calculatedBacklogs).toEqual(100);
+
+        input = {
+            Dates: { Date: '2015-07-31' },
+            ScheduledPersonHours: 20,
+            BacklogPersonHours: 100,
+            PlannedPersonHours: 30
+        }
+
+        resultData = target.coreMapGraphData(input);
+        expect(resultData.calculatedBacklogs).toEqual(90);
+
+    });
+   
 });
