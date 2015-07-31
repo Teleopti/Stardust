@@ -163,6 +163,45 @@ namespace Teleopti.Wfm.Administration.Controllers
 				Message = "Updated the user successfully."
 			};
 		}
+
+		[HttpPost]
+		[TenantUnitOfWork]
+		[Route("ChangePassword")]
+		public virtual JsonResult<UpdateUserResultModel> ChangePassword(ChangePasswordModel model)
+		{
+			var user = _currentTenantSession.CurrentSession().GetNamedQuery("loadAllTenantUsers").List<TenantAdminUser>().FirstOrDefault(x => x.Id.Equals(model.Id));
+			if (user == null)
+				return Json(new UpdateUserResultModel { Success = false, Message = "Can not find the user." });
+
+			var hashed = encryptString(model.OldPassword);
+			if (!hashed.Equals(user.Password))
+				return Json(new UpdateUserResultModel { Success = false, Message = "The password is not correct." });
+
+			if(!model.NewPassword.Equals(model.ConfirmNewPassword))
+				return Json(new UpdateUserResultModel { Success = false, Message = "The new password and confirm password does not match." });
+
+			try
+			{
+				var encryptedPassword = encryptString(model.NewPassword);
+
+				user.Password = encryptedPassword;
+
+				_currentTenantSession.CurrentSession().Save(user);
+
+			}
+			catch (Exception exception)
+			{
+				_currentTenantSession.CurrentSession().Clear();
+				return Json(new UpdateUserResultModel
+				{
+					Success = false,
+					Message = exception.InnerException != null ? exception.InnerException.Message : exception.Message
+				});
+			}
+
+			return Json(new UpdateUserResultModel { Success = true, Message = "Successfully changed password."});
+		}
+
 		private string encryptString(string value)
 		{
 			return string.Concat("###", BitConverter.ToString(hashString(value)).Replace("-", ""), "###");
@@ -175,6 +214,14 @@ namespace Teleopti.Wfm.Administration.Controllers
 				return encryptor.ComputeHash(Encoding.UTF8.GetBytes(stringValue));
 			}			
 		}
+	}
+
+	public class ChangePasswordModel
+	{
+		public int Id { get; set; }
+		public string OldPassword { get; set; }
+		public string NewPassword { get; set; }
+		public string ConfirmNewPassword { get; set; }
 	}
 
 	public class UpdateUserModel
