@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Persisters.Outbound;
@@ -229,7 +230,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			_activityRepository.Stub(x => x.LoadAll()).Return(_activityList);
 			_productionReplanHelper.Stub(x => x.Replan(null)).IgnoreArguments();
 			_outboundPeriodMover.Stub(x => x.Move(null, new DateOnlyPeriod())).IgnoreArguments();
-			_target = new OutboundCampaignPersister(_outboundCampaignRepository, _outboundCampaignMapper, null, null, _activityRepository, null, null, _productionReplanHelper, _outboundPeriodMover);
+			_target = new OutboundCampaignPersister(_outboundCampaignRepository, _outboundCampaignMapper, null, _outboundSkillCreator, _activityRepository, null, null, _productionReplanHelper, _outboundPeriodMover);
 		}
 
 		[Test]
@@ -267,7 +268,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var campaignVM = new CampaignViewModel { Id = new Guid(), Activity = new ActivityViewModel()};
 			var target = new OutboundCampaignPersister(_outboundCampaignRepository, _outboundCampaignMapper, null, null, null, null, null, _productionReplanHelper, _outboundPeriodMover);
 			var expectedCampaign = new Domain.Outbound.Campaign();
-			_outboundCampaignRepository.Stub(x => x.Load((Guid)campaignVM.Id)).Return(expectedCampaign);
+			_outboundCampaignRepository.Stub(x => x.Load((Guid)campaignVM.Id).Clone()).Return(expectedCampaign);
 			_outboundCampaignMapper.Stub(x => x.Map(campaignVM)).Return(expectedCampaign);
 
 			var result = target.Persist(campaignVM);
@@ -285,7 +286,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			newCampaign.SetId(campaignId);
 
 			var campaignVM = new CampaignViewModel { Id = oldCampaign.Id, Activity = new ActivityViewModel() };
-			_outboundCampaignRepository.Stub(x => x.Load((Guid) campaignVM.Id)).Return(oldCampaign);
+			_outboundCampaignRepository.Stub(x => x.Load((Guid)campaignVM.Id).Clone()).Return(oldCampaign);
 			_outboundCampaignMapper.Stub(x => x.Map(campaignVM)).Return(newCampaign);
 
 			_target.Persist(campaignVM);
@@ -303,7 +304,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			newCampaign.SetId(campaignId);
 
 			var campaignVM = new CampaignViewModel { Id = oldCampaign.Id, Activity = new ActivityViewModel()};
-			_outboundCampaignRepository.Stub(x => x.Load((Guid) campaignVM.Id)).Return(oldCampaign);
+			_outboundCampaignRepository.Stub(x => x.Load((Guid)campaignVM.Id).Clone()).Return(oldCampaign);
 			_outboundCampaignMapper.Stub(x => x.Map(campaignVM)).Return(newCampaign);
 
 			_target.Persist(campaignVM);
@@ -321,7 +322,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			newCampaign.SetId(campaignId);
 
 			var campaignVM = new CampaignViewModel { Id = oldCampaign.Id, Activity = new ActivityViewModel()};
-			_outboundCampaignRepository.Stub(x => x.Load((Guid) campaignVM.Id)).Return(oldCampaign);
+			_outboundCampaignRepository.Stub(x => x.Load((Guid)campaignVM.Id).Clone()).Return(oldCampaign);
 			_outboundCampaignMapper.Stub(x => x.Map(campaignVM)).Return(newCampaign);
 
 			_target.Persist(campaignVM);
@@ -339,7 +340,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			newCampaign.SetId(campaignId);
 
 			var campaignVM = new CampaignViewModel { Id = oldCampaign.Id, Activity = new ActivityViewModel() };
-			_outboundCampaignRepository.Stub(x => x.Load((Guid) campaignVM.Id)).Return(oldCampaign);
+			_outboundCampaignRepository.Stub(x => x.Load((Guid)campaignVM.Id).Clone()).Return(oldCampaign);
 			_outboundCampaignMapper.Stub(x => x.Map(campaignVM)).Return(newCampaign);
 
 			_target.Persist(campaignVM);
@@ -357,7 +358,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			newCampaign.SetId(campaignId);
 
 			var campaignVM = new CampaignViewModel { Id = oldCampaign.Id, Activity = new ActivityViewModel() };
-			_outboundCampaignRepository.Stub(x => x.Load((Guid) campaignVM.Id)).Return(oldCampaign);
+			_outboundCampaignRepository.Stub(x => x.Load((Guid)campaignVM.Id).Clone()).Return(oldCampaign);
 			_outboundCampaignMapper.Stub(x => x.Map(campaignVM)).Return(newCampaign);
 
 			_target.Persist(campaignVM);
@@ -375,7 +376,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			newCampaign.SetId(campaignId);
 
 			var campaignVM = new CampaignViewModel { Id = oldCampaign.Id, Activity = new ActivityViewModel() };
-			_outboundCampaignRepository.Stub(x => x.Load((Guid) campaignVM.Id)).Return(oldCampaign);
+			_outboundCampaignRepository.Stub(x => x.Load((Guid)campaignVM.Id).Clone()).Return(oldCampaign);
 			_outboundCampaignMapper.Stub(x => x.Map(campaignVM)).Return(newCampaign);
 
 			_target.Persist(campaignVM);
@@ -393,7 +394,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			newCampaign.SetId(campaignId);
 
 			var campaignVM = new CampaignViewModel { Id = oldCampaign.Id, Activity = new ActivityViewModel() };
-			_outboundCampaignRepository.Stub(x => x.Load((Guid) campaignVM.Id)).Return(oldCampaign);
+			_outboundCampaignRepository.Stub(x => x.Load((Guid)campaignVM.Id).Clone()).Return(oldCampaign);
 			_outboundCampaignMapper.Stub(x => x.Map(campaignVM)).Return(newCampaign);
 
 			_target.Persist(campaignVM);
@@ -411,7 +412,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			newCampaign.SetId(campaignId);
 
 			var campaignVM = new CampaignViewModel { Id = oldCampaign.Id, Activity = new ActivityViewModel() };
-			_outboundCampaignRepository.Stub(x => x.Load((Guid) campaignVM.Id)).Return(oldCampaign);
+			_outboundCampaignRepository.Stub(x => x.Load((Guid)campaignVM.Id).Clone()).Return(oldCampaign);
 			_outboundCampaignMapper.Stub(x => x.Map(campaignVM)).Return(newCampaign);
 
 			var result = _target.Persist(campaignVM);
@@ -432,7 +433,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			newCampaign.SetId(campaignId);
 
 			var campaignVM = new CampaignViewModel { Id = oldCampaign.Id, Activity = new ActivityViewModel() { Id = _activityList.First().Id, Name = _activityList.First().Name} };
-			_outboundCampaignRepository.Stub(x => x.Load((Guid) campaignVM.Id)).Return(oldCampaign);
+			_outboundCampaignRepository.Stub(x => x.Load((Guid)campaignVM.Id).Clone()).Return(oldCampaign);
 			_outboundCampaignMapper.Stub(x => x.Map(campaignVM)).Return(newCampaign);
 
 			var result = _target.Persist(campaignVM);
@@ -452,9 +453,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var newCampaign = new Domain.Outbound.Campaign();
 			newCampaign.SetId(campaignId);
 			newCampaign.SpanningPeriod = new DateOnlyPeriod(new DateOnly(2015,7,4), new DateOnly(2015,8,3));
+			var skill = SkillFactory.CreateSkill("mySkill");
+			skill.AddWorkload(WorkloadFactory.CreateWorkload(skill));
+			newCampaign.Skill = skill;
 
 			var campaignVM = new CampaignViewModel { Id = oldCampaign.Id, Activity = new ActivityViewModel()};
-			_outboundCampaignRepository.Stub(x => x.Load((Guid) campaignVM.Id)).Return(oldCampaign);
+			_outboundCampaignRepository.Stub(x => x.Load((Guid)campaignVM.Id).Clone()).Return(oldCampaign);
 			_outboundCampaignMapper.Stub(x => x.Map(campaignVM)).Return(newCampaign);
 
 			_target.Persist(campaignVM);
@@ -475,7 +479,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			newCampaign.SpanningPeriod = oldPeriod;
 
 			var campaignVM = new CampaignViewModel { Id = oldCampaign.Id, Activity = new ActivityViewModel()};
-			_outboundCampaignRepository.Stub(x => x.Load((Guid) campaignVM.Id)).Return(oldCampaign);
+			_outboundCampaignRepository.Stub(x => x.Load((Guid)campaignVM.Id).Clone()).Return(oldCampaign);
 			_outboundCampaignMapper.Stub(x => x.Map(campaignVM)).Return(newCampaign);
 
 			_target.Persist(campaignVM);
@@ -494,9 +498,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var newCampaign = new Domain.Outbound.Campaign() { SpanningPeriod = new DateOnlyPeriod(new DateOnly(2015, 7, 4), new DateOnly(2015, 8, 3)) };
 			newCampaign.SetId(campaignId);
 			newCampaign.WorkingHours.Add(DayOfWeek.Monday, new TimePeriod());
+			var skill = SkillFactory.CreateSkill("mySkill");
+			skill.AddWorkload(WorkloadFactory.CreateWorkload(skill));
+			newCampaign.Skill = skill;
 
 			var campaignVM = new CampaignViewModel { Id = oldCampaign.Id, Activity = new ActivityViewModel() };
-			_outboundCampaignRepository.Stub(x => x.Load((Guid)campaignVM.Id)).Return(oldCampaign);
+			_outboundCampaignRepository.Stub(x => x.Load((Guid)campaignVM.Id).Clone()).Return(oldCampaign);
 			_outboundCampaignMapper.Stub(x => x.Map(campaignVM)).Return(newCampaign);
 
 			_target.Persist(campaignVM);
@@ -515,9 +522,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var newCampaign = new Domain.Outbound.Campaign() { SpanningPeriod = new DateOnlyPeriod(new DateOnly(2015, 7, 4), new DateOnly(2015, 8, 3)) };
 			newCampaign.SetId(campaignId);
 			newCampaign.WorkingHours.Add(DayOfWeek.Thursday, oldPeriod);
+			var skill = SkillFactory.CreateSkill("mySkill");
+			skill.AddWorkload(WorkloadFactory.CreateWorkload(skill));
+			newCampaign.Skill = skill;
 
 			var campaignVM = new CampaignViewModel { Id = oldCampaign.Id, Activity = new ActivityViewModel() };
-			_outboundCampaignRepository.Stub(x => x.Load((Guid)campaignVM.Id)).Return(oldCampaign);
+			_outboundCampaignRepository.Stub(x => x.Load((Guid)campaignVM.Id).Clone()).Return(oldCampaign);
 			_outboundCampaignMapper.Stub(x => x.Map(campaignVM)).Return(newCampaign);
 
 			_target.Persist(campaignVM);
@@ -536,9 +546,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var newCampaign = new Domain.Outbound.Campaign() { SpanningPeriod = new DateOnlyPeriod(new DateOnly(2015, 7, 4), new DateOnly(2015, 8, 3)) };
 			newCampaign.SetId(campaignId);
 			newCampaign.WorkingHours.Remove(DayOfWeek.Monday);
+			var skill = SkillFactory.CreateSkill("mySkill");
+			skill.AddWorkload(WorkloadFactory.CreateWorkload(skill));
+			newCampaign.Skill = skill;
 
 			var campaignVM = new CampaignViewModel { Id = oldCampaign.Id, Activity = new ActivityViewModel() };
-			_outboundCampaignRepository.Stub(x => x.Load((Guid)campaignVM.Id)).Return(oldCampaign);
+			_outboundCampaignRepository.Stub(x => x.Load((Guid)campaignVM.Id).Clone()).Return(oldCampaign);
 			_outboundCampaignMapper.Stub(x => x.Map(campaignVM)).Return(newCampaign);
 
 			_target.Persist(campaignVM);
