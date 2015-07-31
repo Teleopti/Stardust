@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 			return _outboundCampaignViewModelMapper.Map(campaign);			
 		}
 
-		[HttpPost, Route("api/Outbound/Campaign/Visualization/{Id}"), UnitOfWork]
+		[HttpGet, Route("api/Outbound/Campaign/Visualization/{Id}"), UnitOfWork]
 		public virtual CampaignVisualizationViewModel GetVisualization(Guid id)
 		{
 			return _campaignVisualizationProvider.ProvideVisualization(id);

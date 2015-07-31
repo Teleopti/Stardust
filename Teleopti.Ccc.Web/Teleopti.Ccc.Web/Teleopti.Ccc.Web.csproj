@@ -1253,9 +1253,11 @@
     <Content Include="WFM\js\outbound\outbound.activityPicker.directive.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.TeamScheduleViewModel.Tests.js" />
     <Content Include="Areas\Reporting\Views\Shared\Error.cshtml" />
+    <Content Include="WFM\js\outbound\outbound.translation.service.js" />
     <Content Include="WFM\js\people\people.advanceSearch.directive .js" />
     <Content Include="WFM\js\people\people.importPeople.controller.js" />
     <Content Include="WFM\js\people\people.importPeople.directive.js" />
+    <Content Include="WFM\tests\outbound\outbound.campaign.chart.service.spec.js" />
     <Content Include="WFM\vendor\ui-grid\ui-grid-unstable.min.css" />
     <Content Include="WFM\vendor\ui-grid\ui-grid-unstable.min.js" />
     <Content Include="Areas\Start\Views\Return\Hash.cshtml" />
@@ -1344,7 +1346,6 @@
     <Content Include="WFM\js\rta\html\rta.html" />
     <Content Include="WFM\js\rta\restRtaService.js" />
     <Content Include="WFM\js\rta\rta.controller.js" />
-    <Content Include="WFM\tests\outbound\outbound.service.mock.js" />
     <Content Include="WFM\js\people\people.controller.js" />
     <Content Include="WFM\js\people\peopleSearch.service.js" />
     <Content Include="WFM\js\permissions\permissions.controller.js" />

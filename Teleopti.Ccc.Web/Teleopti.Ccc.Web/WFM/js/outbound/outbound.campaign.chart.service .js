@@ -2,96 +2,118 @@
     'use strict';
 
     angular.module('outboundServiceModule')
-        .service('outboundChartService', ['$filter', '$http', '$translate', '$q', outboundChartService]);
+        .service('outboundChartService', ['$filter', '$http', 'outboundTranslationService', outboundChartService]);
 
-    function outboundChartService($filter, $http, $translate, $q) {
+    function outboundChartService($filter, $http, tl) {
 
-        var getCampaignVisualizationUrl = '../api/Outbound/Campaign/Visualization/';
+        var getCampaignVisualizationUrl = '../api/Outbound/Campaign/Visualization/';      
 
-        var translationKeys = ['Backlog', 'Scheduled', 'Planned', 'Underscheduled', 'Overscheduled', 'Progress', 'NeededPersonHours', 'EndDate', 'Today', 'Start'];
-        var translations = translationKeys.map(function (x) { return $translate(x); });
-        var translationDictionary = {};
+        var translationKeys = [
+           'Backlog',
+           'Scheduled',
+           'Planned',
+           'Underscheduled',
+           'Overscheduled',
+           'Progress',
+           'NeededPersonHours',
+           'EndDate',
+           'Today',
+           'Start'
+        ];
+        var self = this;
 
+        this.getCampaignVisualization = tl.applyTranslation(translationKeys, getCampaignVisualization, self);
+        this.makeGraph = tl.applyTranslation(translationKeys, makeGraph, self);
+        this.buildGraphDataSeqs = buildGraphDataSeqs;
+        this.mapGraphData = mapGraphData;
 
-        this.getCampaignVisualization = function (campaignId, successCb, errorCb) {
+        this.coreGetCampaignVisualization = getCampaignVisualization;
 
-            var tasks = [$http.post(getCampaignVisualizationUrl + campaignId)].concat(translations);
-
-            $q.all(tasks).then(function (results) {               
-                var campaignData = results.shift().data;
-                for (var i = 0; i < translationKeys.length; i++) {
-                    translationDictionary[translationKeys[i]] = results[i];
-                }
-                if (successCb != null) successCb(normalizeChartData(campaignData));
-            });       
+        function getCampaignVisualization(campaignId, successCb, errorCb) {         
+            $http.get(getCampaignVisualizationUrl + campaignId).success(function (campaignData) {              
+                if (successCb != null) successCb(self.buildGraphDataSeqs(campaignData));
+            }).error(function(e) {
+                if (errorCb != null) errorCb(e);
+            });
         };      
-		
-		function normalizeChartData(data) {
-			var data = angular.copy(data);
-			var dates = [];
-			var rawBacklogs = [];
-			var calculatedBacklogs = [];
-			var plans = [];
-			var unscheduledPlans = [];
-			var schedules= [];
-			var underDiffs = [];
-			var overDiffs = [];
 
-		    var beforeStartDate,
-		        initialBacklog;
+        function mapGraphData(data) {            
+            var returnData = {
+                dates: null,
+                rawBacklogs: null,
+                calculatedBacklogs: null,
+                plans: null,
+                unscheduledPlans: null,
+                schedules: null,
+                underDiffs: null,
+                overDiffs: null,
+                progress: null
+            };
+          
+            returnData.dates = new moment(data.Dates.Date).format("YYYY-MM-DD");
+            returnData.rawBacklogs = data.BacklogPersonHours;
+            returnData.calculatedBacklogs = (data.ScheduledPersonHours > 0 && data.ScheduledPersonHours < data.PlannedPersonHours)
+                ? data.ScheduledPersonHours + data.BacklogPersonHours - data.PlannedPersonHours : data.BacklogPersonHours;					
+            returnData.plans = data.PlannedPersonHours;
+            returnData.unscheduledPlans = data.ScheduledPersonHours > 0 ? 0 : data.PlannedPersonHours;
+            returnData.schedules = data.ScheduledPersonHours;
+            returnData.underDiffs = data.ScheduledPersonHours > 0 && data.ScheduledPersonHours < data.PlannedPersonHours
+                ? data.PlannedPersonHours - data.ScheduledPersonHours : 0;
+            returnData.overDiffs = data.ScheduledPersonHours > 0 && data.ScheduledPersonHours > data.PlannedPersonHours
+                ? data.ScheduledPersonHours - data.PlannedPersonHours : 0;
+            returnData.progress = data.BacklogPersonHours;
 
-			if (!(data.Dates && data.BacklogPersonHours && data.ScheduledPersonHours && data.PlannedPersonHours)) {
-				return;
-			}
+            return returnData;
+        }       
 
-			data.Dates.forEach(function(e, i) {
-			    dates[i] = new moment(e.Date).format("YYYY-MM-DD");
+        function getDataLabels() {            
+            return {               
+                dates: 'x',
+                rawBacklogs: self.dictionary['Backlog'], 
+                calculatedBacklogs: self.dictionary['Backlog'] + ' ', 
+                plans: self.dictionary['Planned'], 
+                unscheduledPlans: self.dictionary['Planned'], 
+                schedules: self.dictionary['Scheduled'],
+                underDiffs: self.dictionary['Underscheduled'],
+                overDiffs: self.dictionary['Overscheduled'],
+                progress: self.dictionary['Progress'],
+            };
+        }
 
-			    if (!beforeStartDate) beforeStartDate = new moment(e.Date).subtract(1, 'days').format("YYYY-MM-DD");
+        function buildGraphDataSeqs(data) {
 
-				rawBacklogs[i] = Math.round(data.BacklogPersonHours[i]);
+            var graphDataSeq = zip(data).map(function(d) {
+                return mapGraphData(d);
+            });
 
-				calculatedBacklogs[i] = (data.ScheduledPersonHours[i] > 0 && data.ScheduledPersonHours[i] < data.PlannedPersonHours[i]) ?
-					Math.round(data.ScheduledPersonHours[i] + data.BacklogPersonHours[i] - data.PlannedPersonHours[i]) :
-					Math.round(data.BacklogPersonHours[i]);
+            if (!graphDataSeq || graphDataSeq <= 0) return;
 
-				plans[i] = Math.round(data.PlannedPersonHours[i]);
+            var beforeStartDate = new moment(graphDataSeq[0].dates).subtract(1, 'days').format("YYYY-MM-DD");
 
-				unscheduledPlans[i] = (data.ScheduledPersonHours[i] > 0) ?
-					0 :
-					Math.round(data.PlannedPersonHours[i]);
+            var extrapolatedGraphData = {
+                dates: beforeStartDate,
+                rawBacklogs: 0,
+                calculatedBacklogs: 0,
+                plans: 0,
+                unscheduledPlans: 0,
+                schedules: 0,
+                underDiffs: 0,
+                overDiffs: 0,
+                progress: graphDataSeq[0].rawBacklogs + graphDataSeq[0].unscheduledPlans + graphDataSeq[0].schedules
+            };
 
-				schedules[i] = Math.round(data.ScheduledPersonHours[i]);
+            var labels = getDataLabels();
 
-				underDiffs[i] = (data.ScheduledPersonHours[i] > 0 && data.ScheduledPersonHours[i] < data.PlannedPersonHours[i]) ?
-					Math.round(data.PlannedPersonHours[i] - data.ScheduledPersonHours[i]) :
-					0;
+            var result = unzip([labels, extrapolatedGraphData].concat(graphDataSeq), function(v) {
+                if (!isNaN(v) && isFinite(v))
+                    return Math.round(v);
+                else
+                    return v;
+            });
 
-				overDiffs[i] = (data.ScheduledPersonHours[i] > 0 && data.ScheduledPersonHours[i] > data.PlannedPersonHours[i]) ?
-					Math.round(data.ScheduledPersonHours[i] - data.PlannedPersonHours[i]) :
-					0;
-
-                if (!initialBacklog) {
-                    initialBacklog = rawBacklogs[i] + unscheduledPlans[i] + schedules[i];
-                }
-
-			});
-
-			return {
-			    dates: ['x', beforeStartDate].concat(dates),
-				rawBacklogs: [translationDictionary['Backlog'], 0].concat(rawBacklogs),
-				calculatedBacklogs: [translationDictionary['Backlog'] + ' ', 0].concat(calculatedBacklogs),
-				plans: [translationDictionary['Planned'], 0].concat(plans),
-				unscheduledPlans: [translationDictionary['Planned'], 0].concat(unscheduledPlans),
-				schedules: [translationDictionary['Scheduled'], 0].concat(schedules),
-				underDiffs: [translationDictionary['Underscheduled'], 0].concat(underDiffs),
-				overDiffs: [translationDictionary['Overscheduled'], 0].concat(overDiffs),
-				statusLine: [translationDictionary['Progress'], initialBacklog].concat(rawBacklogs)
-			};
-
-			
-		}
-
+            return result;
+        }
+       
 		function selectDataGroups(viewScheduleDiffToggle, plannedPhase) {
 			if (viewScheduleDiffToggle) {
 				if ($filter('showPhase')(plannedPhase) == 'Planned') {
@@ -101,54 +123,56 @@
 				}
 			} else {
 				if ($filter('showPhase')(plannedPhase) == 'Planned') {
-					return ['rawBacklogs', 'unscheduledPlans', 'statusLine'];
+					return ['rawBacklogs', 'unscheduledPlans', 'progress'];
 				} else {
-					return ['rawBacklogs', 'schedules', 'unscheduledPlans', 'statusLine'];
+					return ['rawBacklogs', 'schedules', 'unscheduledPlans', 'progress'];
 				}
 				
 			}
 		}
 
-		function getDataColor(name) {
+		function getDataColor(campaign) {
 			var colorMap = {
 				rawBacklogs: '#1F77B4',
 				calculatedBacklogs: '#1F77B4',
-				statusLine: '#2CA02C',
+				progress: '#2CA02C',
 				plans: '#66C2FF',
 				unscheduledPlans: '#66C2FF',
-				schedules: '#C2E085',
+				schedules: '#26C6DA',
 				underDiffs: '#9467BD',
 				overDiffs: '#f44336'
 			};
-			if (name)
-				return colorMap[name];
-			return colorMap;
+
+		    if (campaign) {
+		        campaign.WarningInfo.forEach(function(e) {
+		            if (e.TypeOfRule == 'OutboundUnderSLARule') {
+		                colorMap.progress = '#F44336';
+		            }
+		            if (e.TypeOfRule == 'OutboundOverstaffRule') {
+		                colorMap.progress = '#FF7F0E';
+		            }
+		        });
+		    }
+
+		    var dataColor = {};
+		    var labels = getDataLabels();
+
+			for (var name in colorMap) {
+			    dataColor[labels[name]] = colorMap[name];
+			}
+
+			return dataColor;
 		}
 
-		function makeGraph(graph, campaign, viewScheduleDiffToggle, graphData) {
+		function makeGraph(graph, campaign, viewScheduleDiffToggle, graphData, successCb) {
 		    var graphId = '#Chart_' + campaign.Id,
-		        plannedPhase = campaign.Status,
-		        warningInfo = campaign.WarningInfo;
-
-		    var maxPersonHours = (Math.max.apply(Math, graphData.rawBacklogs.slice(1)) + Math.max.apply(Math, graphData.plans.slice(1))) * 1.1;
+		        plannedPhase = campaign.Status;		       
 		  
+
 			var currentLabelGroups = selectDataGroups(viewScheduleDiffToggle, plannedPhase).map(function (name) { return graphData[name][0]; });
 			var previousLabelGroups = selectDataGroups(!viewScheduleDiffToggle, plannedPhase).map(function (name) { return graphData[name][0]; });
 
-			var dataColor = getDataColor();
-			warningInfo.forEach(function (e) {
-			    if (e.TypeOfRule == 'OutboundUnderSLARule') {			       
-			        dataColor.statusLine = '#f44336';
-			    }
-			    if (e.TypeOfRule == 'OutboundOverstaffRule') {			       
-			        dataColor.statusLine = '#FF7F0E';
-			    }
-			});
-
-			var colorMap = {};
-			for (var name in dataColor) {
-				colorMap[graphData[name][0]] = dataColor[name];
-			}
+		    var dataColor = getDataColor(campaign);
 		  
 			if (graph) {
 				graph.load({
@@ -158,8 +182,12 @@
 			} else {
                 function _specifyAdditionalTypes() {
                     var obj = {};
-                    obj[translationDictionary['Progress']] = 'line';
+                    obj[self.dictionary['Progress']] = 'line';
                     return obj;
+                }
+
+                function _specifyVerticalRange() {
+                    return (Math.max.apply(Math, graphData.rawBacklogs.slice(1)) + Math.max.apply(Math, graphData.plans.slice(1))) * 1.1;
                 }
 
                 function _specifyDateHints() {
@@ -168,15 +196,43 @@
                         startDate = new moment(campaign.StartDate.Date);
 
                     var hints = [
-                        { value: endDate.format("YYYY-MM-DD"), text: translationDictionary['EndDate'] },
-                        { value: startDate.format("YYYY-MM-DD"), text: translationDictionary['Start'] }
+                        { value: endDate.format("YYYY-MM-DD"), text: self.dictionary['EndDate'] },
+                        { value: startDate.format("YYYY-MM-DD"), text: self.dictionary['Start'] }
                     ];
 
                     if (todayDate >= startDate && todayDate <= endDate) {
-                        hints.push({ value: todayDate.format("YYYY-MM-DD"), text: translationDictionary['Today'] });
+                        hints.push({ value: todayDate.format("YYYY-MM-DD"), text: self.dictionary['Today'] });
                     }
 
                     return hints;
+                }
+
+                function _customizeTooltipfunction(d, defaultTitleFormat, defaultValueFormat, color) {
+                    var $$ = this, config = $$.config,
+                        titleFormat = config.tooltip_format_title || defaultTitleFormat,
+                        nameFormat = config.tooltip_format_name || function (name) { return name; },
+                        valueFormat = config.tooltip_format_value || defaultValueFormat,
+                        text, i, title, value, name, bgcolor;
+                    for (i = d.length - 1 ; i >= 0; i--) {
+                        if (!(d[i] && (d[i].value))) { continue; }
+
+                        if (!text) {
+                            title = titleFormat ? titleFormat(d[i].x) : d[i].x;
+                            text = "<table class='" + $$.CLASS.tooltip + "'>" + (title || title === 0 ? "<tr><th colspan='2'>" + title + "</th></tr>" : "");
+                        }
+
+                        name = nameFormat(d[i].name);
+                        value = valueFormat(d[i].value, d[i].ratio, d[i].id, d[i].index);
+                        bgcolor = $$.levelColor ? $$.levelColor(d[i].value) : color(d[i].id);
+
+                        text += "<tr class='" + $$.CLASS.tooltipName + "-" + d[i].id + "'>";
+                        text += "<td class='name' style='text-align: left' ><span style='background-color:" + bgcolor + "'></span>" + name + "</td>";
+                        text += "<td class='value'>" + value + "</td>";
+                        text += "</tr>";
+                    }
+                    if (text)
+                        return text + "</table>";
+                    else return '';
                 }
 
 				graph = c3.generate({
@@ -193,7 +249,7 @@
 							currentLabelGroups,
 							previousLabelGroups
 						],
-						colors: colorMap,
+						colors: dataColor,
 						order: 'null'
 					},
 					zoom: {
@@ -208,10 +264,10 @@
 						},
 						y: {							
 							label: {
-							    text: translationDictionary['NeededPersonHours'],
+							    text: self.dictionary['NeededPersonHours'],
                                 position: 'outer-top'
 							},
-							max: maxPersonHours,
+							max: _specifyVerticalRange(),
 							min: 0,
 						    padding: {bottom:0}
 						}
@@ -222,33 +278,7 @@
 					     }
 					},
 					tooltip: {
-					    contents: function (d, defaultTitleFormat, defaultValueFormat, color) {
-					        var $$ = this, config = $$.config,
-                                titleFormat = config.tooltip_format_title || defaultTitleFormat,
-                                nameFormat = config.tooltip_format_name || function (name) { return name; },
-                                valueFormat = config.tooltip_format_value || defaultValueFormat,
-                                text, i, title, value, name, bgcolor;
-					        for (i = d.length - 1 ; i >= 0; i--) {
-					            if (!(d[i] && (d[i].value))) { continue; }
-
-					            if (!text) {
-					                title = titleFormat ? titleFormat(d[i].x) : d[i].x;
-					                text = "<table class='" + $$.CLASS.tooltip + "'>" + (title || title === 0 ? "<tr><th colspan='2'>" + title + "</th></tr>" : "");
-					            }
-
-					            name = nameFormat(d[i].name);
-					            value = valueFormat(d[i].value, d[i].ratio, d[i].id, d[i].index);
-					            bgcolor = $$.levelColor ? $$.levelColor(d[i].value) : color(d[i].id);
-
-					            text += "<tr class='" + $$.CLASS.tooltipName + "-" + d[i].id + "'>";
-					            text += "<td class='name' style='text-align: left' ><span style='background-color:" + bgcolor + "'></span>" + name + "</td>";
-					            text += "<td class='value'>" + value + "</td>";
-					            text += "</tr>";
-					        }
-					        if (text)
-					            return text + "</table>";
-					        else return '';
-					    }
+					    contents: _customizeTooltipfunction
 					},
 					subchart: {
 					    show: true
@@ -261,11 +291,54 @@
 				});
 
 			}
-			return graph;
+
+		    if (successCb) successCb(graph);		
 		}
 
-		this.makeGraph = makeGraph;
+		
 
+		function zip(data) {
+		    var names = [],
+                length = 0,
+                result = [],
+                i;
+
+		    for (var name in data) {
+		        if (!data.hasOwnProperty(name)) continue;
+		        names.push(name);
+		        length = data[name].length;
+		    }
+
+		    for (i = 0; i < length; i++) {
+		        var obj = {};
+		        angular.forEach(names, function (name) {
+		            obj[name] = data[name][i];
+		        });
+		        result.push(obj);
+		    }
+		    return result;
+		}
+
+		function unzip(data, valueFilter) {
+		    if (data.length > 0) {
+		        var names = [],
+                    returnData = {};
+		        for (var name in data[0]) {
+		            if (!data[0].hasOwnProperty(name)) continue;
+		            names.push(name);
+		            returnData[name] = [];
+		        }
+
+		        for (var i = 0; i < data.length; i++) {
+		            angular.forEach(names, function (name) {
+		                returnData[name].push(
+                            valueFilter ? valueFilter(data[i][name]) : data[i][name]
+                        );
+		            });
+		        }
+		        return returnData;
+		    }
+		}
 
     }
 

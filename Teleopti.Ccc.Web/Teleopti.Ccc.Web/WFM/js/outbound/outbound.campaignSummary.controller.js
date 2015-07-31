@@ -50,7 +50,9 @@
             outboundChartService.getCampaignVisualization(campaign.Id, function success(data) {
                 campaign.viewScheduleDiffToggle = false;
 	        	campaign.chartData = data;
-	        	campaign.chart = outboundChartService.makeGraph(null, campaign , campaign.viewScheduleDiffToggle, data);
+	        	outboundChartService.makeGraph(null, campaign , campaign.viewScheduleDiffToggle, data, function(graph) {
+		            campaign.chart = graph;
+		        });
 	        });	       
         };
 
