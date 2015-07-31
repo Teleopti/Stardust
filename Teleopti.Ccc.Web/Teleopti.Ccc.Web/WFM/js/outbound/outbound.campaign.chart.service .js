@@ -22,7 +22,7 @@
         ];
         var self = this;
 
-        this.getCampaignVisualization = tl.applyTranslation(translationKeys, self.coreGetCampaignVisualization, self);
+        this.getCampaignVisualization = tl.applyTranslation(translationKeys, getCampaignVisualization, self);
         this.makeGraph = tl.applyTranslation(translationKeys, makeGraph, self);
         this.buildGraphDataSeqs = buildGraphDataSeqs;
       
@@ -81,7 +81,7 @@
         }
 
         function buildGraphDataSeqs(data) {
-
+      
             var graphDataSeq = zip(data).map(function(d) {
                 return mapGraphData(d);
             });

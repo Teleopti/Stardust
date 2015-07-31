@@ -136,5 +136,72 @@ describe('Outbound Chart Service Test', function() {
         expect(resultData.calculatedBacklogs).toEqual(90);
 
     });
-   
+
+    it('Build graph data seqs should provide seqs with labels', function () {
+        target.dictionary = {
+            'Backlog': 'Backlog',
+            'Scheduled': 'Scheduled',
+            'Planned': 'Planned',
+            'Underscheduled': 'Underscheduled',
+            'Overscheduled': 'Overscheduled',
+            'Progress': 'Progress',
+            'NeededPersonHours': 'NeededPersonHours',
+            'EndDate': 'EndDate',
+            'Today': 'Today',
+            'Start': 'Start',
+            'Backlog ': 'Backlog '
+        };
+
+        var input = {
+            Dates: [{ Date: '2015-07-31' }],
+            ScheduledPersonHours: [50],
+            BacklogPersonHours: [100],
+            PlannedPersonHours: [30]
+        };
+
+
+        var resultData = target.buildGraphDataSeqs(input);
+
+        ['rawBacklogs', 'calculatedBacklogs', 'plans', 'unscheduledPlans', 'schedules', 'underDiffs', 'overDiffs', 'progress']
+            .forEach(function (key) {               
+                expect(resultData[key]).toBeDefined();
+                expect(Object.keys(target.dictionary)).toContain(resultData[key][0]);
+            });
+    });
+
+
+    it('Should build right progress data', function () {
+        target.dictionary = {
+            'Backlog': 'Backlog',
+            'Scheduled': 'Scheduled',
+            'Planned': 'Planned',
+            'Underscheduled': 'Underscheduled',
+            'Overscheduled': 'Overscheduled',
+            'Progress': 'Progress',
+            'NeededPersonHours': 'NeededPersonHours',
+            'EndDate': 'EndDate',
+            'Today': 'Today',
+            'Start': 'Start',
+            'Backlog ': 'Backlog '
+        };
+
+        var input = {
+            Dates: [{ Date: '2015-07-31' }, { Date: '2015-07-32' }],
+            ScheduledPersonHours: [50, 10],
+            BacklogPersonHours: [100, 50],
+            PlannedPersonHours: [30, 20]
+        };
+
+
+        var result = target.buildGraphDataSeqs(input)['progress'];
+        var expectedResult = ['Progress', 150, 100, 50];
+
+        expect(result.length).toEqual(expectedResult.length);
+
+        for (var i = 0; i < expectedResult.length; i++) {
+            expect(result[i]).toEqual(expectedResult[i]);
+        }
+
+    });
+
 });

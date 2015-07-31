@@ -86,7 +86,8 @@ describe('Roles', function() {
 		$httpBackend = _$httpBackend_;
 		$httpBackend.expectGET("../api/Global/Language?lang=en").respond(200, 'en');
 		$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, {Language: 'en', DateFormat: 'en'});
-		
+		$httpBackend.expectGET("html/forecasting/forecasting.html").respond(200);
+
 		}));
 
 	it('should create a role', function(done) {
