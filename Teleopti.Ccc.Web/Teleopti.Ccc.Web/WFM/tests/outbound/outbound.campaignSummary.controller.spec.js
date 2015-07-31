@@ -47,38 +47,49 @@ describe('OutboundCreateCtrl', function () {
 
 	});
 
-	//it('isLoadFinished is true when loading campaigns', function () {
-	//	var test = setUpTarget();
-	//	outboundService.load(function handleSuccess(isLoad) {
-	//		expect(test.scope.isLoadFinished).toBeTruthy();
-	//	});
-		
-	//});
 
-	it('isOverStaffing()', function () {
+	it('should tell the campaign whether it is overstaffing', function () {
 		var test = setUpTarget();
 		var warnings = [{ TypeOfRule: 'OutboundOverstaffRule' }];
-		expect(test.scope.isOverStaffing(warnings)).toBeTruthy();
+		expect(test.scope.isOverStaffing(warnings)==true);
 		var warnings = [{ TypeOfRule: 'OutboundUnderSLARule' }];
-		expect(test.scope.isOverStaffing(warnings)).not.toBeTruthy();
+		expect(test.scope.isOverStaffing(warnings)==false);
 
 	});
 
-	it('hidePlannedAnalyzeButton()', function () {
+	it('should hide the analyze button, when the campaign is at phase planned', function () {
 		var test = setUpTarget();
-		expect(test.scope.hidePlannedAnalyzeButton(1)).not.toBeTruthy();
-		expect(test.scope.hidePlannedAnalyzeButton(2)).toBeTruthy();
+		expect(test.scope.hidePlannedAnalyzeButton(1)==false);
+		expect(test.scope.hidePlannedAnalyzeButton(2)==true);
 
 	});
 
-	it('hideWhenDone()', function () {
+	it('should hide warning sign, when the campaign is at phase done', function () {
 		var test = setUpTarget();
-		expect(test.scope.hideWhenDone(8)).toBeTruthy();
-		expect(test.scope.hideWhenDone(1)).not.toBeTruthy();
+		expect(test.scope.hideWhenDone(8)==true);
+		expect(test.scope.hideWhenDone(1)==false);
 	});
 
+	it('should generate campaign chart', function () {
+		var test = setUpTarget();
+		var campaign = {
+			Id: '1',
+			chart: null
+	    };
+		test.scope.generateChart(campaign);
+		expect(campaign.viewScheduleDiffToggle == false);
+		expect(campaign.chart != null);
+	});
 
-
+	it('should switch to different campaign chart', function () {
+		var test = setUpTarget();
+		var campaign = {
+			viewScheduleDiffToggle: false
+		};
+		test.scope.toggleChartDisplay(campaign);
+		expect(campaign.viewScheduleDiffToggle == true);
+		expect(campaign.chart != null);
+	});
 	
 	function setUpTarget() {
 		var scope = $rootScope.$new();
@@ -115,7 +126,7 @@ describe('OutboundCreateCtrl', function () {
 
 	function fakeOutboundChartService() {
 
-		this.getCampaignVisualization = function () { };
+		this.getCampaignVisualization = function (d,success) { success();};
 
 		this.makeGraph = function() { return {graph:'c3'}};
 	}
