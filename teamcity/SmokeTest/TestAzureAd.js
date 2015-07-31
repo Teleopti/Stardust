@@ -32,12 +32,12 @@ log('try to sign in');
 client.setValue('#Username-input', 'demo')
 	.setValue('#Password-input', 'demo')
 	.click('#Signin-button')
-	.waitForExist('.user-name', 120000, false, function(err, res, response) {
+	.waitForExist('.user-name', 120000, false, function (err, res, response) {
 		if (err || !res) {
 			log('failed to sign in first time. res: ' + res);
 			//second try
 			client.url(webUrl)
-				.waitForExist('.user-name', 120000, false, function(err, res, response) {
+				.waitForExist('.user-name', 120000, false, function (err, res, response) {
 					if (err || !res) {
 						log('failed to sign in second time. res: ' + res);
 						closeAndThrow('failed to sign in. ' + err);
@@ -50,39 +50,39 @@ client.setValue('#Username-input', 'demo')
 		}
 	});
 
+client.pause(10000);
 log('try to sign out');
 client.click('.user-name-link')
-	.click('#signout')
-	.waitForExist('.azuread', 60000, false, function(err, res, response) {
-		client.click('.azuread')
-			.waitForExist('#cred_userid_inputtext', 60000, false, function(err, res, response) {
-				client.setValue('#cred_userid_inputtext', 'demo@teleopti.com')
-					.setValue('#cred_password_inputtext', 'teleoptidemo')
-					.waitForExist('#passwordInput', 120000, false, function(err, res, response) {
-						client.setValue('#passwordInput', 'teleoptidemo')
-							.click('#submitButton')
-							.waitForExist('.user-name', 120000, false, function(err, res, response) {
-								if (err || !res) {
-									log('failed to sign in first time. res: ' + res);
-									//second try
-									client.url(webUrl)
-										.waitForExist('.user-name', 120000, false, function(err, res, response) {
-											if (err || !res) {
-												log('failed to sign in second time. res: ' + res);
-												closeAndThrow('failed to sign in. ' + err);
-											} else {
-												log('sign in succeeded second time:' + res);
-											}
-										});
-								} else {
-									log('sign in succeeded first time:' + res);
-								}
+	.waitForExist('#signout', 60000, false, function(err, res, response) {
+		client.click('#signout')
+			.waitForExist('.azuread', 60000, false, function(err, res, response) {
+				client.click('.azuread')
+					.waitForExist('#cred_userid_inputtext', 60000, false, function(err, res, response) {
+						client.setValue('#cred_userid_inputtext', 'demo@teleopti.com')
+							.setValue('#cred_password_inputtext', 'teleoptidemo')
+							.waitForExist('#passwordInput', 120000, false, function(err, res, response) {
+								client.setValue('#passwordInput', 'teleoptidemo')
+									.click('#submitButton')
+									.waitForExist('.user-name', 120000, false, function(err, res, response) {
+										if (err || !res) {
+											log('failed to sign in first time. res: ' + res);
+											//second try
+											client.url(webUrl)
+												.waitForExist('.user-name', 120000, false, function(err, res, response) {
+													if (err || !res) {
+														log('failed to sign in second time. res: ' + res);
+														closeAndThrow('failed to sign in. ' + err);
+													} else {
+														log('sign in succeeded second time:' + res);
+													}
+												});
+										} else {
+											log('sign in succeeded first time:' + res);
+										}
+									});
 							});
 					});
 			});
 	});
-
 log('shutdown client.');
 client.end();
-
-
