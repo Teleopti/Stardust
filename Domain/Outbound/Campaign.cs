@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Outbound
@@ -170,5 +171,50 @@ namespace Teleopti.Ccc.Domain.Outbound
 
 			return time;
 		}
+
+	    public virtual object Clone()
+	    {
+		    return EntityClone();
+	    }
+
+	    public virtual IOutboundCampaign NoneEntityClone()
+	    {
+			 Campaign retobj = (Campaign)MemberwiseClone();
+			 retobj.SetId(null);
+			 retobj._workingHours = new Dictionary<DayOfWeek, TimePeriod>();
+			 foreach (KeyValuePair<DayOfWeek, TimePeriod> keyValuePair in _workingHours)
+			 {
+				 TimePeriod template = keyValuePair.Value;
+				 retobj._workingHours.Add(keyValuePair.Key, template);
+			 }
+			retobj._skill = Skill.NoneEntityClone();
+			var workloads = Skill.WorkloadCollection;
+			foreach (var workload in workloads)
+			{
+				retobj._skill.AddWorkload(workload.NoneEntityClone());
+			}
+
+			 return retobj;
+	    }
+
+	    public virtual IOutboundCampaign EntityClone()
+	    {
+		    Campaign retobj = (Campaign) MemberwiseClone();
+		    retobj._workingHours = new Dictionary<DayOfWeek, TimePeriod>();
+		    foreach (KeyValuePair<DayOfWeek, TimePeriod> keyValuePair in _workingHours)
+		    {
+			    TimePeriod template = keyValuePair.Value;
+			    retobj._workingHours.Add(keyValuePair.Key, template);
+		    }
+
+		    retobj._skill = Skill.EntityClone();
+		    var workloads = Skill.WorkloadCollection;
+		    foreach (var workload in workloads)
+		    {
+			    retobj._skill.AddWorkload(workload.EntityClone());
+		    }
+
+		    return retobj;
+	    }
 	}
 }

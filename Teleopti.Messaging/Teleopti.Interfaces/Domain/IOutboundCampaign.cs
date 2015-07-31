@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Interfaces.Domain
 {
-    public interface IOutboundCampaign : IAggregateRoot, IDeleteTag
+	public interface IOutboundCampaign : IAggregateRoot, IDeleteTag, ICloneableEntity<IOutboundCampaign>
     {
         string Name { get; set; }
 

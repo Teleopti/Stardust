@@ -10,7 +10,8 @@ namespace Teleopti.Ccc.Domain.Outbound
 {
 	public interface IOutboundSkillCreator
 	{
-        ISkill CreateSkill(IActivity activity, IOutboundCampaign campaign);
+		ISkill CreateSkill(IActivity activity, IOutboundCampaign campaign);
+		void SetOpenHours(IOutboundCampaign campaign, IWorkload workLoad);
 	}
 
 	public class OutboundSkillCreator : IOutboundSkillCreator
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 			};
 		
 			var workLoad = new Workload(skill) {Name = campaign.Name};
-			setOpenHours(campaign, workLoad);
+			SetOpenHours(campaign, workLoad);
 
 			skill.AddWorkload(workLoad);
 
@@ -60,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 			}
 		}
 
-        private static void setOpenHours(IOutboundCampaign campaign, Workload workLoad)
+       public void SetOpenHours(IOutboundCampaign campaign, IWorkload workLoad)
 		{
 			foreach (var workingHour in campaign.WorkingHours)
 			{

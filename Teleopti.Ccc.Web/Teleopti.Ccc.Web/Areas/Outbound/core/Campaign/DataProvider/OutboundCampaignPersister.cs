@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 
 			if (campaignViewModel.Id.HasValue)
 			{
-				var oldCampaign = _outboundCampaignRepository.Load((Guid) campaignViewModel.Id);
+				var oldCampaign = (IOutboundCampaign)_outboundCampaignRepository.Load((Guid) campaignViewModel.Id).Clone();
 				campaign = _outboundCampaignMapper.Map(campaignViewModel);
 
 				if (oldCampaign.Name != campaign.Name)
@@ -124,9 +124,12 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 
 				if (isNeedReplan(oldCampaign, campaign)) _productionReplanHelper.Replan(campaign);
 
-				if (isMovePeriod(oldCampaign, campaign)) _outboundPeriodMover.Move(campaign, oldCampaign.SpanningPeriod);
+				if (isMovePeriod(oldCampaign, campaign))
+				{
+					_outboundPeriodMover.Move(campaign, oldCampaign.SpanningPeriod);
+					_outboundSkillCreator.SetOpenHours(campaign, campaign.Skill.WorkloadCollection.First());
 			}
-
+			}
 			return campaign;
 		}
 
