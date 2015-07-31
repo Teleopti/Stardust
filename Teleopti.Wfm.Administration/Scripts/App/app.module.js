@@ -31,7 +31,7 @@
 			templateUrl: 'adduser.html',
 			controller: 'adduserController'
 		})
-		.when('/changepassword', {
+		.when('/changepassword/:id', {
 			templateUrl: 'changePassword.html',
 			controller: 'changePasswordController'
 		})
