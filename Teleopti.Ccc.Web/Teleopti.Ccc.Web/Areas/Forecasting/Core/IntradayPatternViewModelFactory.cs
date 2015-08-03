@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 			var intradayPatternViewModel = new IntradayPatternViewModel
 			{
 				WorkloadId = workload.Id.Value,
+				WorkloadName = workload.Name,
 				WeekDays = new IntradayPatternDayViewModel[] {}
 			};
 			if (!availableIntradayTemplatePeriod.HasValue)

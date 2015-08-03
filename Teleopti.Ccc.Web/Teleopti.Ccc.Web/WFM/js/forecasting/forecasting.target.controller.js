@@ -3,6 +3,7 @@
 angular.module('wfm.forecasting')
 	.controller('ForecastingTargetCtrl', ['$scope', '$stateParams', '$state', 'Forecasting', '$http',
 		function ($scope, $stateParams, $state, forecasting, $http) {
+			$scope.period = $stateParams.period;
 			$scope.showSelection = true;
 			$scope.skillsDisplayed = [];
 			$scope.all = { Name: 'All', Selected: false, show: true, numberOfSelectedWorkloads: 0 };
@@ -52,11 +53,11 @@ angular.module('wfm.forecasting')
 
 
 			$scope.goToMethodsView = function (workload) {
-				$state.go("forecasting-method", { workloadId: workload.Id, period: $stateParams.period });
+				$state.go("forecasting-method", { workloadId: workload.Id, period: $scope.period });
 			};
 
 			$scope.goToIntradayPatternView = function (workload) {
-				$state.go("forecasting-intraday", { workloadId: workload.Id, period: $stateParams.period });
+				$state.go("forecasting-intraday", { workloadId: workload.Id, period: $scope.period });
 			};
 
 			$scope.openModal = function (workload) {

@@ -48,6 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 	{
 		public Guid WorkloadId { get; set; }
 		public IEnumerable<IntradayPatternDayViewModel> WeekDays { get; set; }
+		public string WorkloadName { get; set; }
 	}
 
 	public class IntradayPatternDayViewModel

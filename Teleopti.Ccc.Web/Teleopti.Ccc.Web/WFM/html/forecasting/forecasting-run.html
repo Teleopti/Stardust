@@ -39,7 +39,7 @@
 											<md-progress-linear md-mode="indeterminate"></md-progress-linear>
 										</div>
 										<div ng-if="modalInfo.loaded" class="wfm-block">
-											<c3chart bindto-id="resultChart" chart-data="modalInfo.resultChartData" chart-columns="modalInfo.resultChartDataColumns" chart-x="modalInfo.dataX" show-subchart="true" enable-zoom="true">
+											<c3chart bindto-id="resultChart" chart-data="modalInfo.resultChartData" chart-columns="modalInfo.resultChartDataColumns" chart-x="modalInfo.dataX" show-subchart="true">
 												<chart-axes values-x="date" y="vc" y2="vaht,vacw" />
 												<chart-axis>
 													<chart-axis-x axis-id="date" axis-type="timeseries">

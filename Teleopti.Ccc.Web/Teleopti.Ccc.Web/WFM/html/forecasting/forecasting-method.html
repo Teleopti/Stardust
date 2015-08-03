@@ -3,6 +3,11 @@
 		<button class="wfm-btn wfm-btn-default" ng-click="back()">{{ 'Back' | translate }}</button>
 	</div>
 	<div class="row">
+		<h3>
+			{{workloadName}}
+		</h3>
+	</div>
+	<div class="row">
 		<div ng-if="loading" class="wfm-block">
 			<md-progress-linear md-mode="indeterminate"></md-progress-linear>
 		</div>
@@ -10,9 +15,6 @@
 			<div class="alert-warning notice-spacer" ng-if="methods.length===0">
 				<i class='mdi mdi-alert'></i> Warning: There is no historical data available.
 			</div>
-			<h3>
-				{{workloadName}}
-			</h3>
 			<div ng-if="methods.length!==0" ng-repeat="method in methods" class="wfm-block">
 				<div class="row">
 					<h3>
@@ -26,7 +28,7 @@
 					</p>
 				</div>
 				<div class="wfm-block">
-					<c3chart bindto-id="{{method.ChartId}}" chart-data="method.Days" chart-columns="chartDataColumns" chart-x="dataX" show-subchart="true" enable-zoom="true">
+					<c3chart bindto-id="{{method.ChartId}}" chart-data="method.Days" chart-columns="chartDataColumns" chart-x="dataX" show-subchart="true">
 						<chart-axis>
 							<chart-axis-x axis-id="date" axis-type="timeseries">
 								<chart-axis-x-tick tick-format="%Y-%m-%d" />

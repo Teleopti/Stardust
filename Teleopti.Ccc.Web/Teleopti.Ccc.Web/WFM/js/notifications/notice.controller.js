@@ -9,17 +9,17 @@ notice.controller('NoticeCtrl', [
 		$scope.triggerCallbacks = function () {
 			growl.warning("<i class='mdi mdi-alert'></i> Warning: Press refresh as the data was updated by another user.", {
 				onclose: function () {
-					$scope.dynamicText = "Trigger Close!"
+					$scope.dynamicText = "Trigger Close!";
 				},
 				onopen: function () {
-					$scope.dynamicText = "Trigger Open!"
+					$scope.dynamicText = "Trigger Open!";
 				},
 				ttl: 8000
 			});
 
 			growl.success("<i class='mdi mdi-thumb-up'></i> Success: User is updated successfully.", {
 				onclose: function () {
-					$scope.dynamicText = "Trigger Close!"
+					$scope.dynamicText = "Trigger Close!";
 				},
 				onopen: function () {
 					$scope.dynamicText = "Trigger Open!"
@@ -30,10 +30,10 @@ notice.controller('NoticeCtrl', [
 
 			growl.info("<i class='mdi mdi-information'></i> Info: A user logged out.", {
 				onclose: function () {
-					$scope.dynamicText = "Trigger Close!"
+					$scope.dynamicText = "Trigger Close!";
 				},
 				onopen: function () {
-					$scope.dynamicText = "Trigger Open!"
+					$scope.dynamicText = "Trigger Open!";
 				},
 				ttl: 5000
 			});
