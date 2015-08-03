@@ -25,7 +25,8 @@
         this.getCampaignVisualization = tl.applyTranslation(translationKeys, getCampaignVisualization, self);
         this.makeGraph = tl.applyTranslation(translationKeys, makeGraph, self);
         this.buildGraphDataSeqs = buildGraphDataSeqs;
-      
+
+        this.zip = zip;
         this.coreGetCampaignVisualization = getCampaignVisualization;
         this.coreMapGraphData = mapGraphData;
 
