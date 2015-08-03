@@ -238,11 +238,11 @@
 				graph = c3.generate({
 					bindto: graphId,
 					size: {
-							height: 450
-						  },
+						height: 450
+					},
 					data: {
 						x: 'x',
-						columns: [graphData.dates].concat(selectDataGroups(viewScheduleDiffToggle, plannedPhase).map(function (name) { return graphData[name]; })),
+						columns: [graphData.dates].concat(selectDataGroups(viewScheduleDiffToggle, plannedPhase).map(function(name) { return graphData[name]; })),
 						type: 'bar',
 						types: _specifyAdditionalTypes(),
 						groups: [
@@ -250,8 +250,11 @@
 							previousLabelGroups
 						],
 						colors: dataColor,
-						order: 'null'
-					},
+						order: 'null',
+						onclick: function(d, ele) {
+							console.log(d);
+						}
+			},
 					zoom: {
 						enabled: true						
 					},

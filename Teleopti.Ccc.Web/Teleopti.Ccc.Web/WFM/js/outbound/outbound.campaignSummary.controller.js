@@ -66,6 +66,10 @@
             $state.go('outbound-edit', { Id: campaign.Id });
         };
 
+		$scope.goToProductionPlan = function(campaign) {
+			$state.go('outbound-production-plan', { Id: campaign.Id });
+		};
+
 	    $scope.displayLoading = displayLoading;
 
         function init() {         
