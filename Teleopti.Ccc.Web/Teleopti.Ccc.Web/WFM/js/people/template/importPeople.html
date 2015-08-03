@@ -7,20 +7,31 @@
 			<div class="modal-inner-content">
 				<div class="wfm-block">
 					<div ngf-drop ngf-select ng-model="vm.files" ng-model-rejected="vm.rejFiles" class="drop-box"
-						 ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" ngf-change="vm.upload($files)" ngf-multiple="true" ngf-allow-dir="true"
-						 accept="'.csv'" ngf-accept="'.csv'" ngf-drop-available="dropAvailable">
+					     ngf-drag-over-class="{accept:'dragover', reject:'dragover-err', delay:100}" ngf-change="vm.upload($files)" ngf-multiple="false" ngf-allow-dir="true"
+					     accept="'.csv'" ngf-accept="'.csv'" ngf-drop-available="dropAvailable">
 						{{'DragAndDropCsvFilesHereOrClickToUpload'|translate}}
+					</div>
+					<div class="import-file-template">
+						{{'ReferToFileTemplate'|translate}}
+						<a href="js/people/fileTemplates/Users.csv">&nbsp;{{'here'|translate}}</a>
 					</div>
 					{{'ImportFileNameColon'|translate}}
 					<ul>
 						<li ng-repeat="f in vm.files">{{f.name}}</li>
 					</ul>
-					<div ng-show="vm.isImportReady">
+
+					<div ng-show="vm.isSuccessful">
 						<pre>{{vm.successfulCount}} {{'wasSuccessful'|translate}}, {{vm.invalidCount}} {{'wasNotSuccessful'|translate}}.</pre>
 
 						<button class="wfm-btn wfm-btn-default export-error-data" ng-show="vm.hasDataWithError" ng-click="vm.export()">{{'Export'|translate}}</button>
 
 						<div ng-show="vm.hasDataWithError" ui-grid="vm.gridOptionForImport" ui-grid-importer ui-grid-resize-columns ui-grid-exporter class="grid"></div>
+					</div>
+					<div ng-show="vm.isFailed">
+						<pre>{{'ImportError'|translate}}! {{vm.errorMsg}}</pre>
+					</div>
+					<div ng-show="vm.hasParsingError">
+						<pre>{{vm.errorMsg}}</pre>
 					</div>
 				</div>
 			</div>

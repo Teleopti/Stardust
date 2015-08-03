@@ -16,7 +16,9 @@
 
 		vm.log = '';
 
-		vm.isImportReady = false;
+		vm.isSuccessful = false;
+		vm.isFailed = false;
+		vm.hasParsingError = false;
 
 		vm.gridOptionForImport = {
 			exporterCsvFilename: 'invalidUsers.csv',
@@ -40,24 +42,50 @@
 
 		};
 
+		var columnHeaders = ['Firstname',
+							'Lastname',
+							'WindowsUser',
+							'ApplicationUserId',
+							'Password',
+							'Role'];
 		vm.gridOptionForImport.importerDataAddCallback = function(grid, newObjects) {
 			vm.rawUsersData = newObjects;
-			var data = { Users: vm.rawUsersData }
-			SearchSvrc.importUsers.post(data)
-				.$promise.then(function(result) {
-					vm.isImportReady = true;
-					vm.dataWithError = result.InvalidUsers;
-					vm.hasDataWithError = vm.dataWithError.length > 0;
-					vm.successfulCount = result.SuccessfulCount;
-					vm.invalidCount = result.InvalidCount;
-					if (vm.hasDataWithError) {
-						$timeout(function() {
-							vm.gridForImportApi.core.handleWindowResize();
-							vm.export();
-						});
+			if (vm.rawUsersData.length > 0) {
+				var rawUser = vm.rawUsersData[0];
+				var columnNotExist = [];
+				angular.forEach(columnHeaders, function(col) {
+					if (!rawUser.hasOwnProperty(col)) {
+						vm.hasParsingError = true;
+						columnNotExist.push(col);
 					}
-
 				});
+				if (vm.hasParsingError) {
+
+					vm.errorMsg = "Following columns are required:" + columnNotExist.join(',');
+				}
+			}
+			if (!vm.hasParsingError) {
+				var data = { Users: vm.rawUsersData }
+				SearchSvrc.importUsers.post(data)
+					.$promise.then(function(result) {
+							vm.isSuccessful = true;
+							vm.dataWithError = result.InvalidUsers;
+							vm.hasDataWithError = vm.dataWithError.length > 0;
+							vm.successfulCount = result.SuccessfulCount;
+							vm.invalidCount = result.InvalidCount;
+							if (vm.hasDataWithError) {
+								$timeout(function() {
+									vm.gridForImportApi.core.handleWindowResize();
+									vm.export();
+								});
+							}
+
+						},
+						function(error) {
+							vm.isFailed = true;
+							vm.errorMsg = error.data.Message;
+						});
+			}
 		};
 
 		vm.toggleImportPeople = function() {
@@ -74,7 +102,7 @@
 		};
 
 		vm.export = function() {
-			if (vm.isImportReady && vm.hasDataWithError) {
+			if (vm.isSuccessful && vm.hasDataWithError) {
 				vm.gridForImportApi.exporter.csvExport(uiGridExporterConstants.ALL, uiGridExporterConstants.ALL);
 			}
 

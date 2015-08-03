@@ -13382,4 +13382,8 @@ Reduce the complexity to use these shifts.</value>
     <value>On time</value>
     <comment>campaign finishes on time</comment>
   </data>
+  <data name="ReferToFileTemplate" xml:space="preserve">
+    <value>Please refer to the file template</value>
+    <comment>Web-people import users: file template notification.</comment>
+  </data>
 </root>
