@@ -12,8 +12,7 @@
 	    		recordItems: '='				
 	    	},
 			require: ['selectableDataGrid'],
-			controller: ['$scope', '$compile', selectableDataGridCtrl],
-	    	templateUrl: 'html/outbound/data-grid-selectable.tpl.html',
+			controller: ['$scope', '$compile', selectableDataGridCtrl],	    
 			transclude: true,
 	    	link: postlink
 
