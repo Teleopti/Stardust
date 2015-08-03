@@ -88,7 +88,7 @@ wfm.config([
 			templateUrl: 'html/outbound/campaign-summary.html',
 			controller: 'OutboundSummaryCtrl'
 		}).state('outbound-production-plan', {
-			url: '/outbound/production-plan',
+			url: '/outbound/production-plan/:Id',
 			templateUrl: 'html/outbound/campaign-production-plan.html',
 			controller: 'OutboundProductionPlanCtrl'
 		}).state('outbound-create', {
