@@ -188,7 +188,7 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 								if (applicationsData.length > 1) {
 									gotoMenuView();
 								} else {
-									errormessage("Obscure amount of applications found.");
+									errormessage($('#Signin-error').data('nopermissiontext'));
 								}
 								return;
 							}

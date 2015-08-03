@@ -37,10 +37,11 @@
 
 		<div id="signin">
 			<div id="Signin-error"
-					 class="alert alert-warning"
-					 data-bind="visible: HasErrorMessage, text: ErrorMessage"
-					 data-nobusinessunitext="@Resources.NoAllowedBusinessUnitFoundInCurrentDatabase"
-					 data-nodatasourcetext="@Resources.NoDatasource">
+				 class="alert alert-warning"
+				 data-bind="visible: HasErrorMessage, text: ErrorMessage"
+				 data-nobusinessunitext="@Resources.NoAllowedBusinessUnitFoundInCurrentDatabase"
+				 data-nodatasourcetext="@Resources.NoDatasource"
+				 data-nopermissiontext="@Resources.InsufficientPermissionForWeb">
 			</div>
 			<div data-bind="if: ShowSignInAsAnotherUser">
 				<a class="btn btn-primary" href="@signOutUrl">@Resources.SignInAsAnotherUser</a>
