@@ -9,8 +9,8 @@
               
         this.translate = translate;
         this.applyTranslation = applyTranslation;
-      
-     
+        this.translateWeekdays = translateWeekdays;
+           
         function loadDictionary(key, dictionary) {
             var keys = angular.isArray(key) ? key : [key];
             var translations = key.map(function(x) { return $translate(x); });
@@ -37,6 +37,23 @@
                     f.apply(target, _arguments);
                 }, target);
             };
+        }
+
+        function translateWeekdays(cb, target) {
+
+            var localeData = moment.localeData($translate.use()),
+                weekdayNames = localeData._weekdaysShort,
+                weekdays = [];
+
+            var startDow = (moment.localeData()._week) ? moment.localeData()._week.dow : 0;
+
+            for (var i = 0; i < 7; i++) {
+                var curDow = (startDow + i) % 7;
+                weekdays.push({ weekday: curDow, weekdayName: weekdayNames[curDow] });
+            }
+           
+            target.weekdays = weekdays;
+            cb.apply(target);
         }
 
     }
