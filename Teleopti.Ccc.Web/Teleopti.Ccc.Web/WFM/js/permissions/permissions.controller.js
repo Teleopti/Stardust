@@ -44,15 +44,7 @@
 				$scope.showRole = function(role) {
 					Roles.selectRole(role);
 					$scope.selectedRole = role.Id;
-					Permissions.rolesPermissions.query({ Id: role.Id }).$promise.then(function(result) {
-						var permsData = result.AvailableBusinessUnits.concat(result.AvailableSites.concat(result.AvailableTeams));
-						$scope.dynamicOptionSelected = result.AvailableDataRange;
-
-						$scope.dataFlat.forEach(function (item) {
-							var availableData = $filter('filter')(permsData, { Id: item.Id });
-							item.selected = availableData.length != 0 ? true : false;
-						});
-					});
+					
 				};
 
 				$scope.nbSelected = function($nodes) {

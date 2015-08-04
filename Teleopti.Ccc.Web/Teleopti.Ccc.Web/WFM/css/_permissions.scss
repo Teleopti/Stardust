@@ -57,7 +57,9 @@ p {
 .wfm-radio input[type=radio]:checked ~ .wfm-radio-toggle {
     background-color: #66c2ff;
 }
-
+.show-label{
+    margin:0!important;
+}
  .toolbar > form > .wfm-radio {
         width: initial;
         display:block;
