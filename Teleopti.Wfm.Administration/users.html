@@ -1,42 +1,36 @@
-﻿<div class="container body-content">
-	
-
+﻿<div ng-controller="usersController as vm" style="margin-left: 50px;margin-right: 50px">
 	<div class="row">
-		<div class="col-md-4">
-			<a style="float: left; padding-top: 25px; padding-right: 50px" href="#"><img alt="back" title="Back to Start" src="Content/images/left_round.png"/></a>
+		<div class="col-md-12">
+			<a style="float: left; padding-top: 25px; padding-right: 50px" href="#"><img alt="back" title="Back to Start" src="Content/images/left_round.png" /></a>
 			<h2>Manage Users</h2>
 			<h3>Add user</h3>
 			<p>
 				Add more users to administrate the Tenants in this installation
 			</p>
-			<p><a class="btn btn-default btn-primary" href="#adduser">Add &raquo;</a>
+			<p>
+				<a class="btn btn-default btn-primary" href="#adduser">Add &raquo;</a>
 			</p>
 		</div>
-		
+
 	</div>
 	<br />
 
 	<h2>Users in this installation</h2>
-
 	<div>
-		<div ng-controller="usersController as vm">
-			<table>
-				<thead>
-					<tr>
-						<td style="padding: 10px">Name</td>
-						<td style="padding: 10px">Email</td>
-					</tr>
-				</thead>
-				<tbody>
-					<tr ng-repeat="user in vm.users" ng-class-odd="'oddRow'">
-						<td style="padding: 10px"><a href="#userdetails\{{user.Id}}">{{user.Name}}</a>   </td>
-						<td style="padding: 10px"><a href="#userdetails\{{user.Id}}">{{user.Email}}</a>   </td>
-						
-					</tr>
-				</tbody>
-			</table>
-		</div>
+		<table>
+			<thead>
+				<tr>
+					<td style="padding: 10px">Name</td>
+					<td style="padding: 10px">Email</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="user in vm.users" ng-class-odd="'oddRow'">
+					<td style="padding: 10px"><a href="#userdetails\{{user.Id}}">{{user.Name}}</a>   </td>
+					<td style="padding: 10px"><a href="#userdetails\{{user.Id}}">{{user.Email}}</a>   </td>
 
+				</tr>
+			</tbody>
+		</table>
 	</div>
-
 </div>

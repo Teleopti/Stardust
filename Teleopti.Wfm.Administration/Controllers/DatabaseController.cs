@@ -9,6 +9,7 @@ using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
+using Teleopti.Support.Security;
 using Teleopti.Wfm.Administration.Core;
 using Teleopti.Wfm.Administration.Models;
 
@@ -51,7 +52,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 				IntegratedSecurity = false
 			};
 
-			var checkServer = checkServerInternal(model, builder);
+			var checkServer = checkServerInternal(builder);
             if (!checkServer.Success)
 				return Json(new CreateTenantResultModel { Message = checkServer.Message, Success = false });
 			
@@ -80,6 +81,11 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 			builder.UserID = model.CreateDbUser;
 			builder.Password = model.CreateDbPassword;
+			var updateViewsConnstringAnalyticsUpdateViews = builder.ConnectionString;
+
+
+			builder.UserID = model.CreateDbUser;
+			builder.Password = model.CreateDbPassword;
 			builder.InitialCatalog = model.Tenant + "_TeleoptiWfmAgg";
 			_databaseHelperWrapper.CreateDatabase(builder.ConnectionString, DatabaseType.TeleoptiCCCAgg, dbPath, model.AppUser);
 
@@ -93,6 +99,8 @@ namespace Teleopti.Wfm.Administration.Controllers
 			// todo handle passwordStrength error this is just to get it to work, the loader is in applicationdata and I don't think it is so good
 			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), model.FirstUser, model.FirstUserPassword);
 			_currentTenantSession.CurrentSession().Save(personInfo);
+
+			UpdateCrossDatabaseView.Execute(updateViewsConnstringAnalyticsUpdateViews, model.Tenant + "_TeleoptiWfmAgg");
 
 			//takes around 30 sek so we should present some feedback to the user meanwhile, signalr?
 			return Json(new CreateTenantResultModel {Success = true, Message = "created databases"});
@@ -111,11 +119,11 @@ namespace Teleopti.Wfm.Administration.Controllers
 				InitialCatalog = "master",
 				IntegratedSecurity = false
 			};
-			var checkServer = checkServerInternal(model, builder);
+			var checkServer = checkServerInternal(builder);
 			return Json(new CreateTenantResultModel { Message = checkServer.Message, Success = checkServer.Success });
 		}
 
-		private CreateTenantResultModel checkServerInternal(CreateTenantModel model, SqlConnectionStringBuilder builder)
+		private CreateTenantResultModel checkServerInternal( SqlConnectionStringBuilder builder)
 		{
 			var connection = new SqlConnection(builder.ConnectionString);
 			try

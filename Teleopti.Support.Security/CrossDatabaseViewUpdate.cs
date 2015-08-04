@@ -11,8 +11,20 @@ namespace Teleopti.Support.Security
 		public int Execute(CommandLineArgument commandLineArgument)
 		{
 			log.Debug("Link Analytics to Agg datatbase ...");
+			
+			UpdateCrossDatabaseView.Execute(commandLineArgument.AnalyticsDbConnectionString(), commandLineArgument.AggDatabase);
+            log.Debug("Link Analytics to Agg datatbase. Done!");
+			return 0;
+		}
+	}
+
+
+	public static class UpdateCrossDatabaseView
+	{
+		public static void Execute(string analyticsDbConnectionString, string aggDatabase)
+		{
 			//Select database version 
-			using (SqlConnection connection = new SqlConnection(commandLineArgument.AnalyticsDbConnectionString()))
+			using (SqlConnection connection = new SqlConnection(analyticsDbConnectionString))
 			{
 				connection.Open();
 
@@ -23,7 +35,7 @@ namespace Teleopti.Support.Security
 					command.CommandType = CommandType.StoredProcedure;
 					command.CommandText = "mart.sys_crossdatabaseview_target_update";
 					command.Parameters.Add(new SqlParameter("@defaultname", "TeleoptiCCCAgg"));
-					command.Parameters.Add(new SqlParameter("@customname", commandLineArgument.AggDatabase));
+					command.Parameters.Add(new SqlParameter("@customname", aggDatabase));
 					command.ExecuteNonQuery();
 
 					command.CommandText = "mart.sys_crossdatabaseview_load";
@@ -35,8 +47,6 @@ namespace Teleopti.Support.Security
 					command.ExecuteNonQuery();
 				}
 			}
-			log.Debug("Link Analytics to Agg datatbase. Done!");
-			return 0;
 		}
 	}
 }

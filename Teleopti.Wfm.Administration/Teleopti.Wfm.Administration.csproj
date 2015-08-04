@@ -254,6 +254,10 @@
       <Project>{DB42D973-9889-4D51-9FC5-BE66AA7F117C}</Project>
       <Name>Teleopti.Ccc.IocCommon</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Support.Security\Teleopti.Support.Security.csproj">
+      <Project>{6030cf98-1346-43dd-a9b6-01cdbeb5a832}</Project>
+      <Name>Teleopti.Support.Security</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

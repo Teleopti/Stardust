@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Results;
@@ -34,9 +35,8 @@ namespace Teleopti.Wfm.Administration.Controllers
 			return Json(_loadAllTenants.Tenants().Select(t => new TenantModel
 			{
 				Name = t.Name,
-				Id = -1000, //behövs denna?
-				AnalyticsDatabase = t.AnalyticsConnectionString,
-				AppDatabase = t.ApplicationConnectionString
+				AnalyticsDatabase = new SqlConnectionStringBuilder( t.AnalyticsConnectionString).InitialCatalog,
+				AppDatabase = new SqlConnectionStringBuilder(t.ApplicationConnectionString).InitialCatalog
 			}));
 		}
 
