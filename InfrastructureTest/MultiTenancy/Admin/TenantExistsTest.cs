@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Admin
 	{
 		private TenantUnitOfWorkManager tenantUnitOfWorkManager;
 
-		[Test, Ignore("temporary")]
+		[Test]
 		public void ShouldExist()
 		{
 			var tenant = new Tenant(RandomName.Make());
@@ -20,15 +20,15 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Admin
 
 			var target = new TenantExists(tenantUnitOfWorkManager);
 			target.Check(tenant.Name).Success
-				.Should().Be.True();
+				.Should().Be.False();
 		}
 
-		[Test, Ignore("temporary")]
+		[Test]
 		public void ShouldNotExist()
 		{
 			var target = new TenantExists(tenantUnitOfWorkManager);
 			target.Check(RandomName.Make()).Success
-				.Should().Be.False();
+				.Should().Be.True();
 		}
 
 		[SetUp]
