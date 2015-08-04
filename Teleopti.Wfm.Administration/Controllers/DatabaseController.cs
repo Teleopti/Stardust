@@ -103,7 +103,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			UpdateCrossDatabaseView.Execute(updateViewsConnstringAnalyticsUpdateViews, model.Tenant + "_TeleoptiWfmAgg");
 
 			//takes around 30 sek so we should present some feedback to the user meanwhile, signalr?
-			return Json(new CreateTenantResultModel {Success = true, Message = "created databases"});
+			return Json(new CreateTenantResultModel {Success = true, Message = "Successfully created a new Tenant."});
 		}
 
 		[HttpPost]

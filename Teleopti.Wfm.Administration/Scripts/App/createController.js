@@ -7,6 +7,7 @@
 
 	function createController($http) {
 		var vm = this;
+		$("#loading").hide();
 		var tokenKey = 'accessToken';
 
 		vm.TenantMessage = "Enter a new name for the Tenant";
@@ -25,7 +26,8 @@
 		vm.BusinessUnit = '';
 		vm.Success = false;
 		vm.Message = '';
-
+		vm.Creating = '';
+		
 		vm.token = sessionStorage.getItem(tokenKey);
 		if (vm.token === null) {
 			return;
@@ -42,8 +44,6 @@
 				.success(function (data) {
 					vm.TenantMessage = data.Message;
 					vm.TenantOk = data.Success;
-					vm.CheckUsers();
-
 				}).error(function (xhr, ajaxOptions, thrownError) {
 					console.log(xhr.status + xhr.responseText + thrownError);
 				});
@@ -65,7 +65,11 @@
 				console.log(xhr.status + xhr.responseText + thrownError);
 			});
 		}
-		vm.Create = function() {
+		vm.Create = function () {
+			vm.Creating = 'Calling server to createe new Tenant...';
+			vm.Message = '';
+			$("#loading").show();
+
 			var model = {
 				Tenant: vm.Tenant,
 				Server: vm.Server,
@@ -82,9 +86,12 @@
 			.success(function (data) {
 				vm.Success = data.Success,
 				vm.Message = data.Message;
+				vm.Creating = '';
+				$("#loading").hide();
 
 			}).error(function (xhr, ajaxOptions, thrownError) {
 				console.log(xhr.status + xhr.responseText + thrownError);
+				$("#loading").hide();
 			});
 		}
 

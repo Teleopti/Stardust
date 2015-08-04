@@ -76,11 +76,17 @@
 			</fieldset>
 		</div>
 	</div>
-	<br/>
-	<button class="btn btn-primary btn-default" ng-click="vm.Create()">Create it</button>
-	<div ng-class="(vm.Success==true) ? 'dbOk' : 'dbNotOk'">
-		{{vm.Message}}
+	<br />
+	<button style="float: left" class="btn btn-primary btn-default" ng-click="vm.Create()">Create it</button>
+	<div id="loading" style="padding-left: 25px; float: left">
+		<img src="Content/images/ajax-loader.gif" />
 	</div>
+	<label style="margin-left: 175px;">
+		{{vm.Creating}}
+	</label>
+	<label style="margin-left: 175px;" ng-class="(vm.Success==true) ? 'dbOk' : 'dbNotOk'">
+		{{vm.Message}}
+	</label>
 </div>
 
 
