@@ -1254,11 +1254,13 @@
     <Content Include="WFM\js\global\teleopti.wfm.cardList\teleopticardlist.directive.js" />
     <Content Include="WFM\js\global\teleopti.wfm.cardList\teleopticardlist.html" />
     <Content Include="WFM\js\outbound\outbound.activity.service.js" />
+    <Content Include="WFM\js\outbound\outbound.campaign.chart.service .js" />
     <Content Include="WFM\js\outbound\outbound.campaignSummary.controller.js" />
     <Content Include="WFM\js\outbound\outbound.campaignPhase.directive .js" />
     <Content Include="WFM\js\outbound\outbound.activityPicker.directive.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.TeamScheduleViewModel.Tests.js" />
     <Content Include="Areas\Reporting\Views\Shared\Error.cshtml" />
+    <Content Include="WFM\js\outbound\outbound.selectableDataGrid.directive.js" />
     <Content Include="WFM\js\outbound\outbound.translation.service.js" />
     <Content Include="WFM\js\people\people.advanceSearch.directive .js" />
     <Content Include="WFM\js\people\people.importPeople.controller.js" />
@@ -2049,7 +2051,6 @@
     <Content Include="WFM\css\_cardlist.scss" />
     <Content Include="WFM\css\_seatplan.scss" />
     <Content Include="WFM\js\outbound\outbound.campaignProductionPlan.controller.js" />
-    <Content Include="WFM\js\outbound\outbound.dataGridSeletable.directive.js" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
