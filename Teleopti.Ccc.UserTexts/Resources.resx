@@ -13386,4 +13386,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Please refer to the file template</value>
     <comment>Web-people import users: file template notification.</comment>
   </data>
+  <data name="RejectedFiles" xml:space="preserve">
+    <value>Rejected files:</value>
+    <comment>rejected file list in import user, People module</comment>
+  </data>
 </root>

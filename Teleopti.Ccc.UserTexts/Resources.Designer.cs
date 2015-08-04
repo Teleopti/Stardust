@@ -20360,6 +20360,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Rejected files:.
+        /// </summary>
+        public static string RejectedFiles {
+            get {
+                return ResourceManager.GetString("RejectedFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Relative difference.
         /// </summary>
         public static string RelativeDifference {
