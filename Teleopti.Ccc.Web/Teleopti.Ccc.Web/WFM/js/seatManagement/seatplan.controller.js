@@ -23,25 +23,6 @@
 		}
 
 
-		vm.getSeatBookingReport = function () {
-
-			var seatBookingReportParams = {
-				
-				startDate: vm.getDateString(vm.selectedDate),
-				endDate: vm.getDateString(vm.selectedDate)
-				//teams: []
-				//locations: []
-				//skip: 0,
-				//take : 0
-			};
-
-			seatPlanService.seatBookingReport
-				.get(seatBookingReportParams)
-				.$promise.then(function (data) {
-					console.log(data);
-				});
-		}
-
 		vm.getPreviousMonthStart = function (dateMoment) {
 			return moment(dateMoment).subtract(1, 'months').startOf('month').format("YYYY-MM-DD");
 		};
