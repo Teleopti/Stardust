@@ -1,5 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Backlog;
 using Teleopti.Interfaces.Domain;
 
@@ -116,6 +117,25 @@ namespace Teleopti.Ccc.DomainTest.Backlog
 			_target.SetTimeOnDate(new DateOnly(2015, 6, 5), TimeSpan.FromHours(10), PlannedTimeTypeEnum.Scheduled);
 
 			Assert.AreEqual(TimeSpan.FromHours(50), _target.GetTimeOutsideSLA());
+		}
+
+		[Test]
+		public void ShouldGetBacklogForLastDay()
+		{
+			setupOpenDays();
+			_target.SetTimeOnDate(new DateOnly(2015, 6, 1), TimeSpan.FromHours(10), PlannedTimeTypeEnum.Scheduled);
+
+			_target.GetBacklogOnDate(new DateOnly(2015, 6, 7)).Should().Be.EqualTo(new TimeSpan(10, 0, 0));
+		}
+
+		[Test]
+		public void ShouldModifyRealPlanTimeIfItExist()
+		{
+			var date = new DateOnly(2015, 6, 1);
+			_target.SetRealPlannedTimeOnDate(date, new TimeSpan(20, 0, 0));
+			_target.SetRealPlannedTimeOnDate(date, new TimeSpan(10, 0, 0));
+
+			_target.GetRealPlannedTimeOnDate(date).Should().Be.EqualTo(new TimeSpan(10, 0, 0));
 		}
 
 		private void setupOpenDays()

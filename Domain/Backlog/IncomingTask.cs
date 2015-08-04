@@ -73,7 +73,14 @@ namespace Teleopti.Ccc.Domain.Backlog
 
 	    public void SetRealPlannedTimeOnDate(DateOnly date, TimeSpan time)
 	    {
-		    _orgPlannedTime.Add(date, time);
+		    if (_orgPlannedTime.ContainsKey(date))
+		    {
+			    _orgPlannedTime[date] = time;
+		    }
+		    else
+		    {
+			    _orgPlannedTime.Add(date, time);
+		    }
 	    }
 
 	    public TimeSpan GetScheduledTimeOnDate(DateOnly date)
