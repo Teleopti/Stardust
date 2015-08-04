@@ -16,7 +16,7 @@ describe("PeopleCtrl", function() {
 
 	var mockUpload = {};
 
-	var mockSearchService = {
+	var mockPeopleService = {
 		isFeatureEnabled: {
 			query: function() {
 				var queryDeferred = $q.defer();
@@ -57,7 +57,7 @@ describe("PeopleCtrl", function() {
 	it("should show agent by search function", inject(function($controller) {
 		var scope = $rootScope.$new();
 
-		$controller("PeopleCtrl", { $scope: scope, PeopleSearch: mockSearchService, Upload: mockUpload });
+		$controller("PeopleCtrl", { $scope: scope, People: mockPeopleService, Upload: mockUpload });
 
 		scope.keyword = "ashley";
 		scope.searchKeyword();
@@ -74,7 +74,7 @@ describe("PeopleCtrl", function() {
 	it("should show my team as default keyword", inject(function($controller) {
 		var scope = $rootScope.$new();
 
-		$controller("PeopleCtrl", { $scope: scope, PeopleSearch: mockSearchService, Upload: mockUpload });
+		$controller("PeopleCtrl", { $scope: scope, People: mockPeopleService, Upload: mockUpload });
 
 		scope.searchKeyword();
 		scope.$digest(); // this is needed to resolve the promise
@@ -85,7 +85,7 @@ describe("PeopleCtrl", function() {
 	it("should show agent by search with option", inject(function($controller) {
 		var scope = $rootScope.$new();
 
-		$controller("PeopleCtrl", { $scope: scope, PeopleSearch: mockSearchService, Upload: mockUpload });
+		$controller("PeopleCtrl", { $scope: scope, People: mockPeopleService, Upload: mockUpload });
 
 		scope.advancedSearchForm = {
 			FirstName: "Ashley Smith",
@@ -110,7 +110,7 @@ describe("PeopleCtrl", function() {
 
 	it("should change the advanced search field according to simple search input", inject(function($controller) {
 		var scope = $rootScope.$new();
-		$controller("PeopleCtrl", { $scope: scope, PeopleSearch: mockSearchService, Upload: mockUpload });
+		$controller("PeopleCtrl", { $scope: scope, People: mockPeopleService, Upload: mockUpload });
 
 		scope.keyword = "FirstName: Ashley Smith, Organization: London Shenzhen";
 

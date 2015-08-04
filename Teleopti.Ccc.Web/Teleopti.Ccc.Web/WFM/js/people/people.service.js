@@ -1,8 +1,8 @@
 ﻿'use strict';
 
 angular
-	.module('peopleSearchService', ['ngResource'])
-	.service('PeopleSearch', [
+	.module('peopleService', ['ngResource'])
+	.service('People', [
 		'$resource', function($resource) {
 			this.search = $resource('../api/Search/People/Keyword', {
 				keyword: "@searchKey",

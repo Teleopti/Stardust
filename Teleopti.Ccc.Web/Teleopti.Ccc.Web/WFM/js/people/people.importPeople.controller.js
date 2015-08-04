@@ -3,10 +3,10 @@
 (function() {
 	angular.module('wfm.people')
 		.controller('ImportPeopleCtrl', [
-			'$translate','Upload', 'uiGridExporterConstants', '$timeout', 'PeopleSearch', PeopleImportController
+			'$translate','Upload', 'uiGridExporterConstants', '$timeout', 'People', PeopleImportController
 		]);
 
-	function PeopleImportController($translate,Upload, uiGridExporterConstants, $timeout, SearchSvrc) {
+	function PeopleImportController($translate,Upload, uiGridExporterConstants, $timeout, peopleSvc) {
 		var vm = this;
 
 		vm.files = [];
@@ -66,7 +66,7 @@
 			}
 			if (!vm.hasParsingError) {
 				var data = { Users: vm.rawUsersData }
-				SearchSvrc.importUsers.post(data)
+				peopleSvc.importUsers.post(data)
 					.$promise.then(function(result) {
 							vm.isSuccessful = true;
 							vm.dataWithError = result.InvalidUsers;

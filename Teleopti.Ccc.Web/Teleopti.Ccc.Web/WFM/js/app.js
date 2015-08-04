@@ -14,7 +14,7 @@ var externalModules = angular.module('externalModules', ['ui.router',
 
 var wfm = angular.module('wfm', [
 	'externalModules',
-	'peopleSearchService',
+	'peopleService',
 	'outboundServiceModule',
 	'restRtaService',
 	'wfmCtrls',

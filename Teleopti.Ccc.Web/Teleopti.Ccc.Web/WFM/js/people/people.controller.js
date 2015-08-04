@@ -4,11 +4,11 @@ angular.module('wfm.people')
 	.constant('chunkSize', 50)
 	.controller('PeopleCtrl', [
 		'$scope', '$filter', '$state', '$document', '$translate', 'Upload', 'i18nService', 'uiGridConstants',
-		'uiGridExporterConstants', '$timeout', '$q', 'PeopleSearch', PeopleController
+		'uiGridExporterConstants', '$timeout', '$q', 'People', PeopleController
 	]);
 
 function PeopleController($scope, $filter, $state, $document, $translate, Upload, i18nService, uiGridConstants,
-	uiGridExporterConstants, $timeout, $q, SearchSvrc) {
+	uiGridExporterConstants, $timeout, $q, peopleSvc) {
 	$scope.searchResult = [];
 	$scope.pageSize = 20;
 	$scope.keyword = '';
@@ -129,15 +129,15 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 
 		var sortColumnList = "";
 		for (var i = 0; i < paginationOptions.sortColumns.length; i++) {
-			var col = paginationOptions.sortColumns[i];
-			sortColumnList = sortColumnList + col.ColumnName + ":" + col.SortASC + ";";
+			var column = paginationOptions.sortColumns[i];
+			sortColumnList = sortColumnList + column.ColumnName + ":" + column.SortASC + ";";
 		};
 
 		if (sortColumnList != "") {
 			sortColumnList = sortColumnList.substring(0, sortColumnList.length - 1);
 		}
 
-		SearchSvrc.search.query({
+		peopleSvc.search.query({
 			keyword: $scope.keyword,
 			pageSize: paginationOptions.pageSize,
 			currentPageIndex: $scope.currentPageIndex,
@@ -237,7 +237,7 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 			sortColumnList = sortColumnList.substring(0, sortColumnList.length - 1);
 		}
 
-		return SearchSvrc.search.query({
+		return peopleSvc.search.query({
 			keyword: $scope.keyword,
 			pageSize: $scope.gridOptions.totalItems,
 			currentPageIndex: 1,
@@ -359,17 +359,17 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 		getPage();
 	}
 
-	var promiseForAdvancedSearchToggle = SearchSvrc.isFeatureEnabled.query({ toggle: 'WfmPeople_AdvancedSearch_32973' }).$promise;
+	var promiseForAdvancedSearchToggle = peopleSvc.isFeatureEnabled.query({ toggle: 'WfmPeople_AdvancedSearch_32973' }).$promise;
 	promiseForAdvancedSearchToggle.then(function (result) {
 		$scope.isAdvancedSearchEnabled = result.IsEnabled;
 	});
 
-	var promiseForImportUserPromiseToggle = SearchSvrc.isFeatureEnabled.query({ toggle: 'WfmPeople_ImportUsers_33665' }).$promise;
+	var promiseForImportUserPromiseToggle = peopleSvc.isFeatureEnabled.query({ toggle: 'WfmPeople_ImportUsers_33665' }).$promise;
 	promiseForImportUserPromiseToggle.then(function (result) {
 		$scope.isImportUsersEnabled = result.IsEnabled;
 	});
 
-	var promiseForAdjustSkillPromiseToggle = SearchSvrc.isFeatureEnabled.query({ toggle: 'WfmPeople_AdjustSkill_34138' }).$promise;
+	var promiseForAdjustSkillPromiseToggle = peopleSvc.isFeatureEnabled.query({ toggle: 'WfmPeople_AdjustSkill_34138' }).$promise;
 	promiseForAdjustSkillPromiseToggle.then(function (result) {
 		$scope.isAdjustSkillEnabled = result.IsEnabled;
 	});
