@@ -3,10 +3,12 @@
 angular.module('wfm.people')
 	.constant('chunkSize', 50)
 	.controller('PeopleCtrl', [
-		'$scope', '$filter', '$state', '$document', '$translate', 'Upload', 'i18nService', 'uiGridConstants','uiGridExporterConstants','$timeout', 'PeopleSearch', PeopleController
+		'$scope', '$filter', '$state', '$document', '$translate', 'Upload', 'i18nService', 'uiGridConstants',
+		'uiGridExporterConstants', '$timeout', '$q', 'PeopleSearch', PeopleController
 	]);
 
-function PeopleController($scope, $filter, $state, $document, $translate, Upload, i18nService, uiGridConstants,uiGridExporterConstants, $timeout, SearchSvrc) {
+function PeopleController($scope, $filter, $state, $document, $translate, Upload, i18nService, uiGridConstants,
+	uiGridExporterConstants, $timeout, $q, SearchSvrc) {
 	$scope.searchResult = [];
 	$scope.pageSize = 20;
 	$scope.keyword = '';
@@ -17,7 +19,10 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 	$scope.searchCriteriaDic = {};
 	$scope.lang = i18nService.getCurrentLang();
 	$scope.isImportUsersEnabled = false;
+	$scope.isAdjustSkillEnabled = false;
 	$scope.showImportPanel = false;
+
+	$scope.dataInitialized = false;
 
 	$scope.buttons = [{
 		label: 'ImportUsers',
@@ -33,6 +38,10 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 		$scope.toggleImportPeople();
 	}
 
+	$scope.rowSelectionEnabled = function () {
+		return $scope.isAdjustSkillEnabled;
+	};
+
 	var dynamicColumnLoaded = false;
 	var paginationOptions = {
 		pageNumber: 1,
@@ -43,6 +52,8 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 		}]
 	};
 	$scope.gridOptions = {
+		enableFullRowSelection: false,
+		enableRowHeaderSelection: false,
 		exporterMenuCsv: true,
 		exporterCsvFilename: 'peoples.csv',
 		exporterOlderExcelCompatibility: true,
@@ -87,6 +98,11 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 			});
 			$scope.gridApi.core.on.sortChanged($scope, $scope.sortChanged);
 		}
+	};
+
+	$scope.toggleRowSelectable = function () {
+		$scope.gridOptions.enableFullRowSelection = $scope.rowSelectionEnabled();
+		$scope.gridOptions.enableRowHeaderSelection = $scope.rowSelectionEnabled();
 	};
 
 	$scope.sortChanged = function (grid, sortColumns) {
@@ -160,8 +176,6 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 		});
 	};
 
-	getPage();
-
 	var allSearchTypes = [
 		"FirstName",
 		"LastName",
@@ -215,8 +229,8 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 	var loadAllResults = function () {
 		var sortColumnList = "";
 		for (var i = 0; i < paginationOptions.sortColumns.length; i++) {
-			var col = paginationOptions.sortColumns[i];
-			sortColumnList = sortColumnList + col.ColumnName + ":" + col.SortASC + ";";
+			var column = paginationOptions.sortColumns[i];
+			sortColumnList = sortColumnList + column.ColumnName + ":" + column.SortASC + ";";
 		};
 
 		if (sortColumnList != "") {
@@ -345,13 +359,24 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 		getPage();
 	}
 
-	SearchSvrc.isFeatureEnabled.query({ toggle: 'WfmPeople_AdvancedSearch_32973' }).$promise.then(function (result) {
+	var promiseForAdvancedSearchToggle = SearchSvrc.isFeatureEnabled.query({ toggle: 'WfmPeople_AdvancedSearch_32973' }).$promise;
+	promiseForAdvancedSearchToggle.then(function (result) {
 		$scope.isAdvancedSearchEnabled = result.IsEnabled;
 	});
 
-	SearchSvrc.isFeatureEnabled.query({ toggle: 'WfmPeople_ImportUsers_33665' }).$promise.then(function (result) {
+	var promiseForImportUserPromiseToggle = SearchSvrc.isFeatureEnabled.query({ toggle: 'WfmPeople_ImportUsers_33665' }).$promise;
+	promiseForImportUserPromiseToggle.then(function (result) {
 		$scope.isImportUsersEnabled = result.IsEnabled;
 	});
 
-	$scope.searchKeyword();
+	var promiseForAdjustSkillPromiseToggle = SearchSvrc.isFeatureEnabled.query({ toggle: 'WfmPeople_AdjustSkill_34138' }).$promise;
+	promiseForAdjustSkillPromiseToggle.then(function (result) {
+		$scope.isAdjustSkillEnabled = result.IsEnabled;
+	});
+
+	$q.all([promiseForAdvancedSearchToggle, promiseForImportUserPromiseToggle, promiseForAdjustSkillPromiseToggle]).then(function () {
+		$scope.toggleRowSelectable();
+		$scope.dataInitialized = true;
+		$scope.searchKeyword();
+	});
 };
