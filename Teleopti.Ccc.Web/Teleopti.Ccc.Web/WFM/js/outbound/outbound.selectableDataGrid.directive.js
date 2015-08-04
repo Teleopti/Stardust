@@ -1,14 +1,66 @@
 ﻿(function () {
 	'use strict';
 
-	angular.module('wfm.outbound').directive('selectableDataGrid', [dataGridSelectable]);
+    angular.module('wfm.outbound')
+        .directive('selectableDataGrid', [selectableDataGrid])
+        .directive('selectableDataGridCell', ['$parse', selectableDataGridCell]);
 
-	function dataGridSelectable() {
+    function selectableDataGridCell($parse) {
+        return {
+            restrict: 'E',
+            scope: {
+                '$item': '=cellContent',
+                '$colIndex': '@colIndex',
+                '$rowIndex': '@rowIndex'
+            },
+            link: postlink
+        };
+
+        function postlink(scope, elem, attrs) {
+
+            elem.addClass('selectable-data-grid-cell');
+
+            var unselectable = false;
+
+            attrs.$observe('unselectable', function (fnCode) {              
+                if (fnCode) {
+                    var unselectablePredicate = $parse(fnCode);
+                    scope.$watch(function () {
+                        return { item: scope.$item, predicate: unselectablePredicate(scope) };
+                    }, function (value) {                      
+                        if (!value.item) return;
+                        unselectable = value.predicate;
+                        if (unselectable) elem.addClass('ng-unselectable');
+                        else elem.removeClass('ng-unselectable');
+                    }, true);
+                }
+            });
+
+            scope.$on('cells.selection.change', function (_scope, data) {          
+                if (!angular.isDefined(scope.$colIndex) || !angular.isDefined(scope.$rowIndex) || !scope.$item) return;
+                if (unselectable) return;
+
+                if (scope.$colIndex >= data.topLeftColIndex
+                    && scope.$colIndex <= data.bottomRightColIndex
+                    && scope.$rowIndex >= data.topLeftRowIndex
+                    && scope.$rowIndex <= data.bottomRightRowIndex)
+                    scope.$item.isSelected = true;
+            });
+
+            scope.$on('cells.selection.reset', function () {
+                if (!angular.isDefined(scope.$colIndex) || !angular.isDefined(scope.$rowIndex) || !scope.$item) return;
+                scope.$item.isSelected = false;
+            });            
+        }
+    }
+
+	function selectableDataGrid() {
 	    return {
+            restrict: 'E',
 	    	scope: {
 	    		startingOffset: '@?',
 	    		itemsPerRow: '@',
-				header: '=?',
+				gridHeaders: '=?',
 	    		recordItems: '='				
 	    	},
 			require: ['selectableDataGrid'],
@@ -20,11 +72,11 @@
 
 	    function postlink(scope, elem, attrs, ctrls, transcludeFn) {
 
-	    	var selectableDataGrid = ctrls[0];
+	    	var gridCtrl = ctrls[0];
 	        elem.addClass('selectable-data-grid');
 	    	       
-	        var partitions = selectableDataGrid.partitionRecordItems(scope.recordItems, parseInt(scope.itemsPerRow), scope.startingOffset ? parseInt(scope.startingOffset) : 0);
-	        elem.append(selectableDataGrid.renderGrid(partitions, cellFn, scope.header));
+	        var partitions = gridCtrl.partitionRecordItems(scope.recordItems, parseInt(scope.itemsPerRow), scope.startingOffset ? parseInt(scope.startingOffset) : 0);
+	        elem.append(gridCtrl.renderGrid(partitions, cellFn, scope.gridHeaders));
 
 	        scope.$watch(function() {
 	            if (!(scope.startPos && scope.endPos)) return;
@@ -42,10 +94,10 @@
 	        }, true);           
 
 	        function cellFn(record) {
-	        	var isolatedScope = scope.$new(true);
+	        	var iscope = scope.$new();
 	        	var returnElem;
-	        	isolatedScope.$record = record;
-	        	transcludeFn(isolatedScope, function (clone) {
+	        	iscope.$item = record;
+	        	transcludeFn(iscope, function (clone) {
 	        		returnElem = clone;
 	        	});
 
@@ -70,12 +122,12 @@
 	        $scope.isDragging = true;
 	    }
 
-	    $scope.mouseup = function () {
-	    	$scope.isDragging = false;	    	
+	    $scope.mouseup = function (d, e) {
+            $scope.isDragging = false;	    	
 	    }
 
 	    $scope.mouseenter = function (d, e) {	    	
-	    	if (!$scope.isDragging) return;	   
+	        if (!$scope.isDragging) return;
 	    	$scope.endPos = { colIndex: d.colIndex, rowIndex: d.rowIndex };
 	    }
 
@@ -85,7 +137,6 @@
 		    var curIndex = 0,
 		        rowIndex = 0;
 
-
 		    partitions.push(takeN(firstRowNumber, rowIndex, firstRowOffset) );
 
 		    while (curIndex < recordItems.length) {
@@ -94,7 +145,6 @@
 			}
 
 			return partitions;
-
 			function takeN(n, rowNum, pad) {
 				var partition = [];
 				var i;
@@ -125,41 +175,36 @@
 			    table.append(hrow);
 			}
 			
-
 		    angular.forEach(partitions, function(rowData) {
 		    	var row = angular.element('<tr></tr>');		        
 		        angular.forEach(rowData, function (cellData) {
 		        	var iscope = $scope.$new();
 		        	iscope.$data = cellData;
+		            iscope.cellContent = cellData.data;
 		        	iscope.mousedown = $scope.mousedown;
 		        	iscope.mouseup = $scope.mouseup;
 		        	iscope.mouseenter = $scope.mouseenter;
-							           
-		            var cell = $compile(angular.element(
-						'<td ' +
-						'ng-mousedown="mousedown($data, $event)" ' +
-						'ng-mouseup="mouseup($data, $event)"' +
-						'ng-mouseenter="mouseenter($data, $event)"' +
-						'ng-class="{\'selected\': $data.data && $data.data.isSelected}" >' +
-						'</td>'))(iscope);
 
-		            if (cellData.data !== null) {
-		                iscope.$on('cells.selection.change', function(_scope, data) {		                  
-		                    if (cellData.colIndex >= data.topLeftColIndex
-		                        && cellData.colIndex <= data.bottomRightColIndex
-		                        && cellData.rowIndex >= data.topLeftRowIndex
-		                        && cellData.rowIndex <= data.bottomRightRowIndex)
-		                        cellData.data.isSelected = true;
-		                });
+		            var cellContainer = angular.element(
+		                '<td ' +
+		                'ng-mousedown="mousedown($data, $event)" ' +
+		                'ng-mouseup="mouseup($data, $event)"' +
+		                'ng-mouseenter="mouseenter($data, $event)"' +
+		                'ng-class="{\'selected\': $data.data && $data.data.isSelected}" >' +
+		                '</td>');
 
-		                iscope.$on('cells.selection.reset', function() {
-		                    cellData.data.isSelected = false;                          
-		                });
-		            }
-		            cell.attr('col-index', cellData.colIndex);
-		            cell.attr('row-index', cellData.rowIndex);		        
-
-		            cell.append(cellData.data === null? '': cellFn(cellData.data));
+                    if (cellData.data !== null) {
+                        var _cellContent = cellFn(cellData.data);
+                        var wrapper = angular.element('<div></div>');
+                        wrapper.append(_cellContent);
+                        var cellContent = wrapper.find('selectable-data-grid-cell');
+                        cellContent.attr('col-index', cellData.colIndex);
+                        cellContent.attr('row-index', cellData.rowIndex);
+                        cellContent.attr('cell-content', 'cellContent');
+                        cellContainer.append(cellContent);
+                    }
+		      
+		            var cell = $compile(cellContainer)(iscope); 		            
 		            row.append(cell);
 		        });
 
@@ -167,10 +212,6 @@
 		    });
 		    return table;
 		}
-
-
 	}
-
-
 
 })();

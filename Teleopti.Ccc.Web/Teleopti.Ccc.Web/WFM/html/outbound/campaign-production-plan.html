@@ -18,10 +18,12 @@
 
     <div class="material-block-content">
         <div ng-if="isReady">
-            <div selectable-data-grid record-items="recordItems" items-per-row="{{weekDays.length}}" starting-offset="2" header="weekDays">
-                <div class="sub-header">{{$record.dates}}</div>
-                <div>{{$record.plans}}</div>
-            </div>
+            <selectable-data-grid record-items="recordItems" items-per-row="{{weekDays.length}}" starting-offset="2" grid-headers="weekDays">
+                <selectable-data-grid-cell unselectable=" $colIndex == 1">
+                    <div class="sub-header">{{$item.dates}}</div>
+                    <div>{{$item.plans}}</div>
+                </selectable-data-grid-cell>
+            </selectable-data-grid>
         </div>
     </div>
 
