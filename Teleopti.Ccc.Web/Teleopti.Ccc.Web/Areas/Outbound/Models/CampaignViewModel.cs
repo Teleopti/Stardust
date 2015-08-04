@@ -104,4 +104,16 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 		public IList<double> BacklogPersonHours;
 		public IList<double> ScheduledPersonHours;
 	}
+
+	public class ManualViewModel
+	{
+		public DateOnly Date;
+		public double Time;
+	}
+
+	public class ManualProductionPlanViewModel
+	{
+		public Guid CampaignId;
+		public IEnumerable<ManualViewModel> ManualProductionPlan;
+	}
 }

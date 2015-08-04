@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Ajax.Utilities;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -559,5 +560,46 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			_outboundPeriodMover.AssertWasCalled(x => x.Move(newCampaign, oldCampaign.SpanningPeriod));
 		}
 
+		[Test]
+		public void ShouldPersistFromDoubleToTimeSpan()
+		{
+			var id = new Guid();
+			var date = new DateOnly(2015, 7, 20);
+			var campaign = new Domain.Outbound.Campaign() { SpanningPeriod = new DateOnlyPeriod(new DateOnly(2015, 7, 4), new DateOnly(2015, 8, 3)) };
+			var manualProductionPlan = new ManualProductionPlanViewModel()
+			{
+				CampaignId = id,
+				ManualProductionPlan = new List<ManualViewModel>()
+				{
+					new ManualViewModel() {Date = date, Time = 26.56}
+				}
+			};
+			_outboundCampaignRepository.Stub(x => x.Get(id)).Return(campaign);
+
+			_target.PersistManualProductionPlan(manualProductionPlan);
+
+			campaign.GetManualProductionPlan(date).Should().Be.EqualTo(new TimeSpan(1, 2, 33, 35));
+		}
+
+		[Test]
+		public void ShouldNotPersistWhenDateIsOutOfSpanningPeriod()
+		{
+			var id = new Guid();
+			var date = new DateOnly(2015, 7, 3);
+			var campaign = new Domain.Outbound.Campaign() { SpanningPeriod = new DateOnlyPeriod(new DateOnly(2015, 7, 4), new DateOnly(2015, 8, 3)) };
+			var manualProductionPlan = new ManualProductionPlanViewModel()
+			{
+				CampaignId = id,
+				ManualProductionPlan = new List<ManualViewModel>()
+				{
+					new ManualViewModel() {Date = date, Time = 26.56}
+				}
+			};
+			_outboundCampaignRepository.Stub(x => x.Get(id)).Return(campaign);
+
+			_target.PersistManualProductionPlan(manualProductionPlan);
+
+			campaign.GetManualProductionPlan(date).Should().Be.EqualTo(null);
+		}
 	}
 }

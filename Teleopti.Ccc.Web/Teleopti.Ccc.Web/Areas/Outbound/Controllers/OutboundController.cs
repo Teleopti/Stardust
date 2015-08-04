@@ -104,5 +104,12 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 			_campaignSummaryViewModelFactory.Load();
 			return true;
 		}
+
+		[HttpPost, Route("api/Outbound/Campaign/ManualPlan"), UnitOfWork]
+		public virtual bool ManualPlan([FromBody] ManualProductionPlanViewModel manualProductionPlan)
+		{
+			_outboundCampaignPersister.PersistManualProductionPlan(manualProductionPlan);
+			return true;
+		}
 	}
 }
