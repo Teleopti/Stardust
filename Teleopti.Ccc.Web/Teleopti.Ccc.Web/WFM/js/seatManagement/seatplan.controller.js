@@ -4,17 +4,17 @@
 
 	angular.module('wfm.seatPlan').controller('SeatPlanCtrl', seatPlanDirectiveController);
 
-	seatPlanDirectiveController.$inject = ['ResourcePlannerSvrc', 'seatPlanService', '$translate','$stateParams'];
+	seatPlanDirectiveController.$inject = ['ResourcePlannerSvrc', 'seatPlanService', '$translate', '$stateParams'];
 
 	function seatPlanDirectiveController(resourcePlannerService, seatPlanService, translate, params) {
 
 		var vm = this;
-		
+
 		vm.setupTranslatedStrings = function () {
 
 			vm.translatedStrings = {};
 			vm.setupTranslatedString("LoadingSeatPlanStatus");
-			
+
 			vm.seatPlanStatus = {};
 			vm.translateSeatPlanStatus(0, 'SeatPlanStatusOK');
 			vm.translateSeatPlanStatus(2, 'SeatPlanStatusError');
@@ -22,6 +22,25 @@
 			vm.translateSeatPlanStatus(3, 'SeatPlanStatusNoSeatPlanned');
 		}
 
+
+		vm.getSeatBookingReport = function () {
+
+			var seatBookingReportParams = {
+				
+				startDate: vm.getDateString(vm.selectedDate),
+				endDate: vm.getDateString(vm.selectedDate)
+				//teams: []
+				//locations: []
+				//skip: 0,
+				//take : 0
+			};
+
+			seatPlanService.seatBookingReport
+				.get(seatBookingReportParams)
+				.$promise.then(function (data) {
+					console.log(data);
+				});
+		}
 
 		vm.getPreviousMonthStart = function (dateMoment) {
 			return moment(dateMoment).subtract(1, 'months').startOf('month').format("YYYY-MM-DD");
@@ -45,7 +64,7 @@
 			});
 		};
 
-		
+
 		vm.loadMonthDetails = function (dateMoment) {
 
 			vm.currentMonth = dateMoment.month();
@@ -160,7 +179,7 @@
 		} else {
 			vm.loadMonthDetails(moment());
 		}
-	
+
 	}
 }());
 

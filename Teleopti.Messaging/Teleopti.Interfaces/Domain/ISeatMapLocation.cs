@@ -10,7 +10,7 @@ namespace Teleopti.Interfaces.Domain
 		bool IncludeInSeatPlan { get; set; }
 		string SeatMapJsonData { get; set; }
 		string Name { get; set; }
-
+		
 		IList<ISeat> Seats { get; }
 		
 

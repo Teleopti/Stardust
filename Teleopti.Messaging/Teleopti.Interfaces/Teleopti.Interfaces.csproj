@@ -162,6 +162,8 @@
     <Compile Include="Domain\ISchedulePeriodListShiftCategoryBackToLegalStateService.cs" />
     <Compile Include="Domain\ISeat.cs" />
     <Compile Include="Domain\ISeatBooking.cs" />
+    <Compile Include="Domain\ISeatBookingReportCommand.cs" />
+    <Compile Include="Domain\ISeatBookingReportRowModel.cs" />
     <Compile Include="Domain\ISeatMapLocation.cs" />
     <Compile Include="Domain\ISeatPlan.cs" />
     <Compile Include="Domain\ISeatPlanner.cs" />

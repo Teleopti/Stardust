@@ -8,13 +8,10 @@ namespace Teleopti.Interfaces.Domain
 		DateOnly BelongsToDate { get; set; }
 		DateTime StartDateTime { get; set; }
 		DateTime EndDateTime { get; set; }
-		
+
 		ISeat Seat { get; set; }
-		bool Intersects (ISeatBooking booking);
-		bool Intersects (DateTimePeriod period);
-		void Book (ISeat seat);
+		bool Intersects(ISeatBooking booking);
+		bool Intersects(DateTimePeriod period);
+		void Book(ISeat seat);
 	}
-
-	
-
 }

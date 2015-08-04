@@ -357,6 +357,7 @@
     <Compile Include="Core\Requests\Mapping\ShiftTradeScheduleViewModelMapperByFakeTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftTradeSwapDetailViewModelMappingProfileTest.cs" />
     <Compile Include="Core\Requests\ViewModelFactory\RequestsShiftTradebulletinViewModelFactoryTest.cs" />
+    <Compile Include="Core\SeatPlanner\Provider\SeatBookingReportProviderTest.cs" />
     <Compile Include="Core\SeatPlanner\Provider\SeatPlanProviderTest.cs" />
     <Compile Include="Core\Startup\AuthenticationProviderTaskTest.cs" />
     <Compile Include="Core\Startup\BundleScriptsTest.cs" />

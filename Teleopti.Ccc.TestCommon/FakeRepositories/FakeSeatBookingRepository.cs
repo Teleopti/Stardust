@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.SeatPlanning;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -92,6 +94,26 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public IList<ISeatBooking> GetSeatBookingsForSeat (ISeat seat)
 		{
 			return _seatBookings.Where(booking => booking.Seat == seat).ToList();
+		}
+
+		public ISeatBookingReportModel LoadSeatBookingsReport (ISeatBookingReportCriteria criteria, Paging paging)
+		{
+			var seatBookings = LoadSeatBookingsForDateOnlyPeriod ( criteria.Period);
+			var bookingModels =  (from booking in seatBookings 
+								  where criteria.Locations.Contains (booking.Seat.Parent) && 
+										criteria.Teams.Contains (booking.Person.MyTeam (booking.BelongsToDate))
+									  select booking);
+			if (paging != null)
+			{
+				bookingModels = bookingModels.Take (paging.Take).Skip (paging.Skip);
+			}
+
+			return new SeatBookingReportModel()
+			{
+				RecordCount = bookingModels.Count(),
+				SeatBookings = bookingModels
+			};
+
 		}
 
 		public IEnumerator<ISeatBooking> GetEnumerator()

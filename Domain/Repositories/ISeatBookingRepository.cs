@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 		void RemoveSeatBookingsForSeats(IEnumerable<ISeat> seats);
 		void RemoveSeatBookingsForSeat (ISeat seat);
 		IList<ISeatBooking> GetSeatBookingsForSeat (ISeat seat);
+		ISeatBookingReportModel LoadSeatBookingsReport (ISeatBookingReportCriteria criteria, Paging paging);
 
 	}
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SeatPlanning;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 {
@@ -49,31 +50,40 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 
 		private static void buildBreadCrumbInformation(LocationViewModel seatMapLocationViewModel, SeatMapLocation seatMapLocation)
 		{
-			if (seatMapLocation != null)
+			if (seatMapLocation == null) return;
+
+			seatMapLocationViewModel.BreadcrumbInfo = buildBreadCrumbList(seatMapLocation);
+		}
+
+		public static String GetLocationPath (ISeatMapLocation seatMapLocation)
+		{
+			return String.Join ("/", buildBreadCrumbList (seatMapLocation as SeatMapLocation).Select (breadCrumb => breadCrumb.Name));
+		}
+
+		private static IEnumerable<SeatMapLocationBreadcrumbInfo> buildBreadCrumbList (SeatMapLocation seatMapLocation)
+		{
+			var breadcrumbList = new List<SeatMapLocationBreadcrumbInfo>()
 			{
-				var breadcrumbList = new List<SeatMapLocationBreadcrumbInfo>()
+				new SeatMapLocationBreadcrumbInfo()
 				{
-					new SeatMapLocationBreadcrumbInfo()
-					{
-						Id = seatMapLocation.Id.Value,
-						Name = seatMapLocation.Name
-					}
-				};
-
-				var parentLocation = seatMapLocation.ParentLocation;
-
-				while (parentLocation != null)
-				{
-					breadcrumbList.Add(new SeatMapLocationBreadcrumbInfo(){
-											Id = parentLocation.Id.Value,
-											Name = parentLocation.Name
-										});
-
-					parentLocation = parentLocation.ParentLocation;
+					Id = seatMapLocation.Id.Value,
+					Name = seatMapLocation.Name
 				}
+			};
 
-				seatMapLocationViewModel.BreadcrumbInfo = Enumerable.Reverse(breadcrumbList);
+			var parentLocation = seatMapLocation.ParentLocation;
+
+			while (parentLocation != null)
+			{
+				breadcrumbList.Add (new SeatMapLocationBreadcrumbInfo()
+				{
+					Id = parentLocation.Id.Value,
+					Name = parentLocation.Name
+				});
+
+				parentLocation = parentLocation.ParentLocation;
 			}
+			return Enumerable.Reverse(breadcrumbList);
 		}
 	}
 }

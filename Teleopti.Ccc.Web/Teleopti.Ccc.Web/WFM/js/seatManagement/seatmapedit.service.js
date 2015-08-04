@@ -234,7 +234,7 @@ angular.module('wfm.seatMap')
 			}
 
 			var seatObj = {
-				name: 'Unnamed seat',
+				name: seatPriority.toString(),
 				priority: seatPriority,
 				id: getTemporaryId()
 			};
