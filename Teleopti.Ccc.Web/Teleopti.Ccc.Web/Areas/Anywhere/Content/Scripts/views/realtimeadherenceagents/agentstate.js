@@ -1,17 +1,26 @@
 ﻿define([
     'resources',
     'knockout',
-    'helpers'
+    'helpers',
+    'navigation'
 ],
-    function (resources, ko, helpers
+    function (
+        resources,
+        ko,
+        helpers,
+        navigation
         ) {
         return function () {
 
         	var that = {};
 
-        	that.PersonId = ko.observable();
-        	that.Name = ko.observable();
+        	that.PersonId = "";
+        	that.Name = "";
+        	that.TeamId = "";
         	that.TeamName = ko.observable();
+        	that.SiteId = "";
+        	that.SiteName = "";
+            that.BusinessUnitId = "";
 
             that.TimeInState = ko.observable();
             that.AlarmTime = ko.observable();
@@ -37,11 +46,16 @@
             that.DisplayAdherencePercentage = ko.observable(false);
 
             that.SelectedToSendMessage = ko.observable(false);
+            that.ScheduleChangeUrl = "";
 
 	        that.fill = function (data) {
-            	that.PersonId(data.PersonId);
-            	that.Name(data.Name);
-            	that.TeamName(data.TeamName);
+	            that.PersonId = data.PersonId;
+	            that.Name = data.Name;
+            	that.TeamId = data.TeamId;
+            	that.TeamName = data.TeamName;
+            	that.SiteId = data.SiteId;
+            	that.SiteName = data.SiteName;
+	            that.BusinessUnitId = data.BusinessUnitId;
                 that.State(data.State);
                 that.Activity(data.Activity);
                 that.NextActivity(data.NextActivity);
@@ -59,7 +73,9 @@
                 }
                 that.Alarm(data.Alarm);
                 that.refreshColor(data.AlarmColor);
-            };
+
+                that.ScheduleChangeUrl = navigation.UrlForChangingSchedule(that.BusinessUnitId, that.TeamId, that.PersonId, moment());
+	        };
             
             that.refreshAlarmTime = function() {
                 if (!that.EnteredCurrentAlarm()) return;

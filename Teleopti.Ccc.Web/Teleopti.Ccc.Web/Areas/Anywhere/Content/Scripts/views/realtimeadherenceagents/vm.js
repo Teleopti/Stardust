@@ -40,7 +40,7 @@
 			that.siteURI = ko.observable();
 			that.filter = ko.observable();
 			that.groupId = ko.observable();
-			that.BusinessUnitId = ko.observable();
+			that.BusinessUnitId = "";
 			that.rootURI = ko.observable();
 			that.agentAdherenceEnabled = ko.observable(false);
 			that.agentAdherenceDetailsEnabled = ko.observable(false);
@@ -48,8 +48,8 @@
 			that.AgentAdherence = ko.observable();
 
 			that.SetViewOptions = function (options) {
-				that.BusinessUnitId(options.buid);
-				that.rootURI('#realtimeadherencesites/' + that.BusinessUnitId());
+				that.BusinessUnitId = options.buid;
+				that.rootURI('#realtimeadherencesites/' + that.BusinessUnitId);
 			};
 
 			that.filteredAgents = ko.computed(function () {
@@ -61,12 +61,12 @@
 						return filterService().match(
 						[
 							item.Alarm(),
-							item.Name(),
+							item.Name,
 							item.State(),
 							item.Activity(),
 							item.NextActivity(),
 							item.NextActivityStartTime(),
-							item.TeamName()
+							item.TeamName
 						], filter);
 
 					});
@@ -92,7 +92,7 @@
 					.filter(function (x) {
 						return x.SelectedToSendMessage();
 					}).map(function (e) {
-						return e.PersonId();
+						return e.PersonId;
 					}).join(",");
 				window.open("Messages#" + selectedAgentIds, '_blank');
 			};
@@ -118,41 +118,58 @@
 				}
 
 				that.siteId(data.SiteId);
-				that.siteURI('#realtimeadherenceteams/' + that.BusinessUnitId() + '/' + that.siteId());
+				that.siteURI('#realtimeadherenceteams/' + that.BusinessUnitId + '/' + that.siteId());
 			};
 
-			var fillData = function(data) {
-				var theAgent = that.getAgent(data.PersonId);
+			var fillData = function (data, is) {
+			    var theAgent = that.getAgent(data.PersonId);
+
+			    if (!theAgent && !is)
+			        return;
+
+			    data.BusinessUnitId = that.BusinessUnitId;
+
 				if (!theAgent) {
 					theAgent = agent();
 					theAgent.fill(data);
 					that.agents.push(theAgent);
-				}
-				var theAgentState = that.getAgentState(data.PersonId);
-				if (!theAgentState) {
-					theAgentState = agentstate();
-					that.agentStates.push(theAgentState);
-				}
+                }
+
 				data.Name = theAgent.Name;
 				data.TimeZoneOffset = theAgent.TimeZoneOffset;
 				data.TeamName = theAgent.TeamName;
+
+				var theAgentState = that.getAgentState(data.PersonId);
+				if (!theAgentState) {
+				    theAgentState = agentstate();
+				    theAgentState.fill(data);
+				    that.agentStates.push(theAgentState);
+				    return;
+				}
+
 				theAgentState.fill(data);
 			};
+
+            var sort = function() {
+                that.agentStates
+                    .sort(function (left, right) { return left.Name == right.Name ? 0 : (left.Name < right.Name ? -1 : 1); });
+            }
 
 			that.fillAgents = function (data) {
 				if (!data || data.length == 0)
 					return;
 				fillSiteAndTeam(data[0]);
 				for (var i = 0; i < data.length; i++) {
-					fillData(data[i]);
+					fillData(data[i], true);
 				}
+			    sort();
 			};
 
 			that.fillAgentsStates = function (data) {
 				for (var i = 0; i < data.length; i++) {
-					fillData(data[i]);
+					fillData(data[i], false);
 				}
-				that.agentStates.sort(function (left, right) { return left.Name() == right.Name() ? 0 : (left.Name() < right.Name() ? -1 : 1); });
+				sort();
 			};
 
 			that.getAgent = function (id) {
@@ -165,7 +182,7 @@
 			};
 			that.getAgentState = function (id) {
 				var agentState = that.agentStates().filter(function (item) {
-					return item.PersonId() === id;
+					return item.PersonId === id;
 				});
 				if (agentState.length == 0)
 					return null;
@@ -191,13 +208,13 @@
 			};
 
 			that.urlForChangingSchedule = function(data) {
-				var a = that.getAgent(data.PersonId());
-				return navigation.UrlForChangingSchedule(that.BusinessUnitId(), a.TeamId, a.PersonId, moment((new Date).getTime()));
+				var a = that.getAgent(data.PersonId);
+				return navigation.UrlForChangingSchedule(that.BusinessUnitId, a.TeamId, a.PersonId, moment((new Date).getTime()));
 			};
 
 			that.urlForAdherenceDetails = function(data) {
-				var a = that.getAgent(data.PersonId());
-				return navigation.UrlForAdherenceDetails(that.BusinessUnitId(), a.PersonId);
+				var a = that.getAgent(data.PersonId);
+				return navigation.UrlForAdherenceDetails(that.BusinessUnitId, a.PersonId);
 			};
 
 			that.SelectAgent = function (agentStateClicked) {
@@ -211,7 +228,7 @@
 						agentStateClicked.DisplayAdherencePercentage(data.AdherencePercent != undefined || data.LastTimestamp != undefined);
 						agentStateClicked.HistoricalAdherence(data.AdherencePercent == undefined ? '-' : data.AdherencePercent + '%');
 						agentStateClicked.LastAdherenceUpdate(data.LastTimestamp);
-					}, agentStateClicked.PersonId());
+					}, agentStateClicked.PersonId);
 				}
 				agentStateClicked.Selected(!agentStateClicked.Selected());
 

@@ -5,18 +5,12 @@ define('resources', {
 	FixedDateTimeFormatForMoment: "YYYY-MM-DD HH:mm",
 	DateTimeFormatForMoment: "YYYY-MM-DD HH:mm",
 	FixedTimeFormatForMoment: "HH:mm",
-	TimeZoneOffsetMinutes: 0,
+	TimeZoneOffsetMinutes: 0
 });
 
 define('window', {
 	setLocationHash: function () { },
-	locationReplace: function () { },
-	baseLocation: function () {
-		if (!window.location.origin) {
-			window.location.origin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
-		}
-		return window.location.origin + window.location.pathname;
-	}
+	locationReplace: function () { }
 });
 
 var testCases = [
