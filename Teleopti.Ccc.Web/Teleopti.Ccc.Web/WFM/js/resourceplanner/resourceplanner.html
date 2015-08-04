@@ -11,7 +11,8 @@
 	<div class="card-group">
 		<div class="wfm-card" ng-repeat="p in planningPeriods" ng-click="selectedPlanningPeriod(p)">
 			<p>
-				{{p.StartDate |  amDateFormat:"L"}}-{{p.EndDate | amDateFormat:"L"}}
+				<!--{{p.StartDate |  amDateFormat:"L"}}-{{p.EndDate | amDateFormat:"L"}} <i style="vertical-align: middle;" title="Scheduled" ng-if="p.State == 'Scheduled'" class="mdi mdi-timetable"></i>-->
+				{{p.StartDate |  amDateFormat:"L"}}-{{p.EndDate | amDateFormat:"L"}} <i title="Scheduled" ng-if="p.State == 'Scheduled'" class="mdi mdi-timetable"></i>
 			</p>
 		</div>
 		
