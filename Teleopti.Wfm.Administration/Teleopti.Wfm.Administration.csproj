@@ -145,7 +145,7 @@
     <Content Include="Scripts\App\userdetailsController.js" />
     <Content Include="users.html" />
     <Content Include="other.html" />
-    <Content Include="empty.html" />
+    <Content Include="create.html" />
     <Content Include="import.html" />
     <Content Include="Index.html" />
     <Content Include="list.html" />
@@ -153,7 +153,7 @@
     <Content Include="Scripts\angular.min.js" />
     <Content Include="Content\Site.css" />
     <Content Include="Global.asax" />
-    <Content Include="Scripts\App\emptyController.js" />
+    <Content Include="Scripts\App\createController.js" />
     <Content Include="Scripts\App\detailsController.js" />
     <Content Include="Scripts\App\importController.js" />
     <Content Include="Scripts\App\app.module.js" />
@@ -191,8 +191,11 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\DatabaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Core\DbPathProvider.cs" />
+    <Compile Include="Core\DbPathProviderFake.cs" />
     <Compile Include="Core\TokenQuerier.cs" />
     <Compile Include="Models\LoginResult.cs" />
     <Compile Include="Models\LoginModel.cs" />
@@ -213,7 +216,6 @@
     <Compile Include="Models\VersionCheckModel.cs" />
     <Compile Include="Models\DbCheckModel.cs" />
     <Compile Include="Models\DbCheckResultModel.cs" />
-    <Compile Include="Models\ImportTenantResultModel.cs" />
     <Compile Include="Models\TenantModel.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

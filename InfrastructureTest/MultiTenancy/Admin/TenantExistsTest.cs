@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Admin
 			tenantUnitOfWorkManager.CurrentSession().Save(tenant);
 
 			var target = new TenantExists(tenantUnitOfWorkManager);
-			target.Check(tenant.Name)
+			target.Check(tenant.Name).Success
 				.Should().Be.True();
 		}
 
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Admin
 		public void ShouldNotExist()
 		{
 			var target = new TenantExists(tenantUnitOfWorkManager);
-			target.Check(RandomName.Make())
+			target.Check(RandomName.Make()).Success
 				.Should().Be.False();
 		}
 

@@ -15,9 +15,9 @@
 			templateUrl: 'import.html',
 			controller: 'importController'
 		})
-		.when('/empty', {
-			templateUrl: 'empty.html',
-			controller: 'emptyController'
+		.when('/create', {
+			templateUrl: 'create.html',
+			controller: 'createController'
 		})
 		.when('/users', {
 			templateUrl: 'users.html',

@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.DBManager.Library
 		public DatabaseType DatabaseType { get; private set; }
 		public string DatabaseName { get; private set; }
 
+		public string DbManagerFolderPath { get; set; }
 		public bool Exists()
 		{
 			var databaseId = executeScalarOnMaster("SELECT database_id FROM sys.databases WHERE Name = '{0}'", 0, DatabaseName);
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.DBManager.Library
 		public void CreateByDbManager()
 		{
 			dropIfExists();
-			var databaseFolder = new DatabaseFolder(new DbManagerFolder());
+			var databaseFolder = new DatabaseFolder(new DbManagerFolder(DbManagerFolderPath));
 			using (var conn = openConnection(true))
 			{
 				var creator = new DatabaseCreator(databaseFolder, conn);
@@ -41,6 +42,57 @@ namespace Teleopti.Ccc.DBManager.Library
 			}
 		}
 
+		public void CreateLogin(string login, string password)
+		{
+			var sql = string.Format(@"IF NOT EXISTS (SELECT * FROM syslogins WHERE name = '{0}')
+			BEGIN	
+				CREATE LOGIN [{0}]
+				WITH PASSWORD=N'{1}',
+				DEFAULT_DATABASE=[master],
+				DEFAULT_LANGUAGE=[us_english],
+				CHECK_EXPIRATION=OFF,
+				CHECK_POLICY=OFF
+			END",login, password);
+			executeNonQueryOnMaster(sql);
+		}
+
+		public void AddPermissions(string login)
+		{
+			var sql = string.Format(@"
+CREATE USER [{0}] FOR LOGIN [{0}] 
+
+IF NOT EXISTS (SELECT * FROM sys.database_principals WHERE name = N'db_executor' AND type = 'R')
+	CREATE ROLE [db_executor] AUTHORIZATION [dbo]
+
+	EXEC sp_addrolemember @rolename=N'db_executor', @membername=[{0}]
+	EXEC sp_addrolemember @rolename='db_datawriter', @membername=[{0}]
+	EXEC sp_addrolemember @rolename='db_datareader', @membername=[{0}]
+
+	GRANT EXECUTE TO db_executor", login);
+			executeNonQuery(sql);
+		}
+		public bool HasCreateDbPermission()
+		{
+			return executeScalar("SELECT IS_SRVROLEMEMBER( 'dbcreator')", 0) > 0;
+		}
+
+		public void AddInitialPerson(Guid personId)
+		{
+			var sql = string.Format(@"INSERT INTO Person 
+(Id, [Version], UpdatedBy, UpdatedOn, Email, Note, EmploymentNumber,FirstName, LastName, DefaultTimeZone,IsDeleted,FirstDayOfWeek)
+VALUES('{0}', 1, '3F0886AB-7B25-4E95-856A-0D726EDC2A67',  GETUTCDATE(), '', '', '', 'First', 'User', 'UTC', 0, 1)
+INSERT INTO PersonInApplicationRole
+SELECT '{0}', '193AD35C-7735-44D7-AC0C-B8EDA0011E5F' , GETUTCDATE()",
+				personId);
+			executeNonQuery(sql);
+		}
+
+		public void AddBusinessUnit(string name)
+		{
+			var sql = string.Format(@"INSERT INTO BusinessUnit
+SELECT NEWID(),1, '3F0886AB-7B25-4E95-856A-0D726EDC2A67' , GETUTCDATE(), '{0}', null, 0", name);
+			executeNonQuery(sql);
+		}
 		public void CleanByAnalyticsProcedure()
 		{
 			executeNonQuery("EXEC [mart].[etl_data_mart_delete] @DeleteAll=1");
@@ -48,7 +100,7 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		public void CreateSchemaByDbManager()
 		{
-			var databaseFolder = new DatabaseFolder(new DbManagerFolder());
+			var databaseFolder = new DatabaseFolder(new DbManagerFolder(DbManagerFolderPath));
 			using (var conn = openConnection())
 			{
 				var databaseVersionInformation = new DatabaseVersionInformation(databaseFolder, conn);

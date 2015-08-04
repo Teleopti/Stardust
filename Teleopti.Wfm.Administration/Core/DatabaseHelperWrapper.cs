@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.SqlClient;
+using System.Web.UI.WebControls;
 using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Wfm.Administration.Models;
 
@@ -46,6 +47,50 @@ namespace Teleopti.Wfm.Administration.Core
 			//later check so it is not used in other Tenants?
 			return new DbCheckResultModel {Exists = true, Message =  string.Format("{0} exists.",dbType)};
 			
+		}
+
+		public void CreateDatabase(string connectionToNewDb, DatabaseType databaseType, string dbPath, string login)
+		{
+			//if it already exists - return a Message!
+			try
+			{
+				new SqlConnectionStringBuilder(connectionToNewDb);
+			}
+			catch (Exception)
+			{
+				//return new DbCheckResultModel { Exists = false, Message = string.Format("The connection string for {0} is not in the correct format!") };
+				//
+			}
+			var helper = new DatabaseHelper(connectionToNewDb, databaseType);
+			helper.DbManagerFolderPath = dbPath;
+			helper.CreateByDbManager();
+			helper.CreateSchemaByDbManager();
+			helper.AddPermissions(login);
+		}
+
+		public void AddInitialPerson(string connectionToNewDb, Guid personId)
+		{
+			var helper = new DatabaseHelper(connectionToNewDb, DatabaseType.TeleoptiCCC7);
+			helper.AddInitialPerson(personId);
+		}
+
+		public void AddBusinessUnit(string connectionToNewDb, string name)
+		{
+			var helper = new DatabaseHelper(connectionToNewDb, DatabaseType.TeleoptiCCC7);
+			helper.AddBusinessUnit(name);
+		}
+
+        public void CreateLogin(string connectionToNewDb, string login, string password)
+		{
+			// type does not mather now
+			var helper = new DatabaseHelper(connectionToNewDb, DatabaseType.TeleoptiCCC7);
+			helper.CreateLogin(login,password);
+		}
+
+		public bool HasCreateDbPermission(string connctionstring)
+		{
+			var helper = new DatabaseHelper(connctionstring, DatabaseType.TeleoptiCCC7);
+			return helper.HasCreateDbPermission();
 		}
 	}
 }

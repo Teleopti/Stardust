@@ -1,0 +1,86 @@
+﻿<div ng-controller="createController as vm" style="margin-left: 30px">
+
+	<div class="row">
+		<div class="col-md-12">
+			<a style="float: left; padding-top: 25px; padding-right: 50px" href="#"><img alt="back" title="Back to Start" src="Content/images/left_round.png" /></a>
+			<h2>Create new Tenant</h2>
+			<p>
+				Lets you create new Tenant. You need to supply wich database server that will hold the databases and a user that have permissions to create database on that server.
+				You should also provide a user and a password that will be used connecting to the databases by the application. If the user/login does not exist it will be created.
+			</p>
+			<div>
+				<div class="importCaption">Tenant name</div>
+				<input class="form-control" type="text" ng-model="vm.Tenant" ng-blur="vm.CheckTenantName()" placeholder="Tenant name">
+				<label ng-class="(vm.TenantOk==true) ? 'dbOk' : 'dbNotOk'">{{vm.TenantMessage}}</label>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+
+		<div class="col-md-4">
+			<fieldset>
+				<legend ng-class="(vm.SqlUserOk==true) ? 'dbOk' : 'dbNotOk'">Database credentials to create databases</legend>
+				<div>
+					<div class="importCaption">SQL Server Instance</div>
+					<div>
+						<input class=" form-control" type="text" ng-model="vm.Server" ng-blur="vm.CheckServer()" placeholder="SQL Server Instance">
+					</div>
+					<div class="importCaption">SQL User Name (that have permissions to create database on that server)</div>
+					<div>
+						<input class=" form-control" type="text" ng-model="vm.CreateDbUser" ng-blur="vm.CheckServer()" placeholder="SQL User Name">
+					</div>
+					<div>
+						<div class="importCaption">SQL Password</div>
+						<input class="form-control" type="password" ng-model="vm.CreateDbPassword" ng-blur="vm.CheckServer()" placeholder="SQL Password">
+						<label ng-class="(vm.SqlUserOk==true) ? 'dbOk' : 'dbNotOk'">{{vm.SqlUserOkMessage}}</label>
+					</div>
+				</div>
+			</fieldset>
+		</div>
+		<div class="col-md-4">
+			<fieldset>
+				<legend>Database credentials for the application</legend>
+				<div>
+					<div class="importCaption">User / Login</div>
+					<div>
+						<input class=" form-control" type="text" ng-model="vm.AppUser" ng-blur="vm.CheckAppUser" placeholder="User">
+					</div>
+					<div>
+						<div class="importCaption">Password</div>
+						<input class="form-control" type="password" ng-model="vm.AppPassword" ng-blur="vm.CheckAppPassword()" placeholder="Password">
+						<label ng-class="(vm.UserOk==true) ? 'dbOk' : 'dbNotOk'">{{vm.UserOkMessage}}</label>
+					</div>
+				</div>
+			</fieldset>
+
+		</div>
+		<div class="col-md-4">
+			<fieldset>
+				<legend>Initial data</legend>
+				<div>
+					<div class="importCaption">Name of the first Business Unit</div>
+					<div>
+						<input class=" form-control" type="text" ng-model="vm.BusinessUnit" ng-blur="vm.CheckBU" placeholder="Business Unit">
+					</div>
+					Should we add poss. to give first name last name?
+					<div class="importCaption">First user logon (must have an unique name)</div>
+					<div>
+						<input class=" form-control" type="text" ng-model="vm.FirstUser" ng-blur="vm.CheckFirstUser" placeholder="Logon name">
+					</div>
+					<div>
+						<div class="importCaption">Password</div>
+						<input class="form-control" type="password" ng-model="vm.FirstUserPassword" ng-blur="vm.CheckFirstUser()" placeholder="Password">
+						<label ng-class="(vm.FirstUserOk==true) ? 'dbOk' : 'dbNotOk'">{{vm.FirstUserOkMessage}}</label>
+					</div>
+				</div>
+			</fieldset>
+		</div>
+	</div>
+	<br/>
+	<button class="btn btn-primary btn-default" ng-click="vm.Create()">Create it</button>
+	<div ng-class="(vm.Success==true) ? 'dbOk' : 'dbNotOk'">
+		{{vm.Message}}
+	</div>
+</div>
+
+

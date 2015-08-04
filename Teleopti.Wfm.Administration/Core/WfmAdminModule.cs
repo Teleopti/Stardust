@@ -28,7 +28,8 @@ namespace Teleopti.Wfm.Administration.Core
 			builder.RegisterType<LoadAllPersonInfos>().SingleInstance();
 			builder.RegisterType<Import>().SingleInstance();
 			builder.RegisterType<SaveTenant>().SingleInstance();
-
+			builder.RegisterType<DbPathProvider>().As<IDbPathProvider>().SingleInstance();
+			builder.RegisterType<CheckPasswordStrength>().As<ICheckPasswordStrength>().SingleInstance();
 
 			// OPTIONAL: Enable property injection into action filters.
 			builder.RegisterFilterProvider();

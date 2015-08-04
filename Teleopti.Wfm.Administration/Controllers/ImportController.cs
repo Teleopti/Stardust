@@ -87,13 +87,8 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 		private JsonResult<ImportTenantResultModel> isNewTenantName(string tenant)
 		{
-			if (string.IsNullOrEmpty(tenant))
-				return Json(new ImportTenantResultModel { Message = "You must enter a new name for the Tenant!", Success = false });
-
-			if (_tenantExists.Check(tenant))
-				return Json(new ImportTenantResultModel { Message = "There is already a Tenant with this name!", Success = false });
-
-			return Json(new ImportTenantResultModel { Message = "There is no other Tenant with this name!", Success = true });
+			return Json(_tenantExists.Check(tenant));
+			
 		}
 	}
 }

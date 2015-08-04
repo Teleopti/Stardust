@@ -1,12 +1,12 @@
 ﻿body {
-    padding-top: 50px;
-    padding-bottom: 20px;
+	padding-top: 50px;
+	padding-bottom: 20px;
 }
 
 /* Set padding to keep content from hitting the edges */
 .body-content {
-    padding-left: 15px;
-    padding-right: 15px;
+	padding-left: 15px;
+	padding-right: 15px;
 }
 
 
@@ -15,26 +15,27 @@
    will truncate terms that are too long to fit in the left column 
 */
 .dl-horizontal dt {
-    white-space: normal;
+	white-space: normal;
 }
 
 /* Set width on the form input elements since they're 100% wide by default */
 input,
 select,
 textarea {
-    max-width: 280px;
+	max-width: 280px;
 }
 
 thead {
 	font-weight: bold;
 	font-size: 16px;
-
 }
+
 td {
 	padding: 0 10px 0 10px;
 }
+
 .oddRow {
-	background-color:oldlace;
+	background-color: oldlace;
 }
 
 .importCaption {
@@ -43,34 +44,52 @@ td {
 }
 
 .importConnstring {
-	width:100%;
+	width: 100%;
 	max-width: 100%;
 }
 
 .dbOk {
 	color: green;
 }
+
 .dbNotOk {
 	color: red;
 }
 
-.ErrorLabel
-{
+.ErrorLabel {
 	color: Red;
 	font-size: large;
 	font-weight: bold;
 }
 
-.wait{
-    cursor: wait !important;   
+.wait {
+	cursor: wait !important;
 }
 
 @media (min-width: 1600px) {
-  .container {
-    width: 1570px;
-  }
+	.container {
+		width: 1570px;
+	}
 }
 
 .paddingTenantList {
 	padding: 5px;
+}
+
+fieldset {
+	border: 1px solid silver;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+	padding: 10px;
+	padding-top: 0;
+}
+
+legend {
+	padding-left: 4px;
+	padding-right: 4px;
+	border-bottom: none;
+	font-size: 15px;
+	margin-bottom: 0;
+	width: initial;
 }
