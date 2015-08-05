@@ -26,7 +26,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		[Test]
 		public void ShouldReturnSuccessFalseIfFirstUserIsEmpty()
 		{
-			var model = new CreateTenantModel ();
+			var model = new CreateTenantModel { AppUser = "user", AppPassword = "password" };
 			var result = Target.CreateDatabases(model).Content;
 			result.Success.Should().Be.False();
 			result.Message.Should().Be.EqualTo("The user name can not be empty.");
@@ -35,7 +35,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		[Test]
 		public void ShouldReturnSuccessFalseIfBusinessUnitIsEmpty()
 		{
-			var model = new CreateTenantModel {FirstUser = "thefirst", FirstUserPassword = "password"};
+			var model = new CreateTenantModel {FirstUser = "thefirst", FirstUserPassword = "password", AppUser = "user", AppPassword = "password",  };
 			var result = Target.CreateDatabases(model).Content;
 			result.Success.Should().Be.False();
 			result.Message.Should().Be.EqualTo("The Business Unit can not be empty.");
@@ -75,7 +75,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 
             DatabaseHelperWrapper.CreateLogin(connStringBuilder.ConnectionString,"nodbcreator", "password");
 
-			var model = new CreateTenantModel { Tenant = "New Tenant", CreateDbUser = "nodbcreator", CreateDbPassword = "password", };
+			var model = new CreateTenantModel { Tenant = "New Tenant", CreateDbUser = "nodbcreator", CreateDbPassword = "password", AppUser = "user", AppPassword = "password", FirstUser = "user", FirstUserPassword = "password", BusinessUnit = "BU"};
 
 			var result = Target.CreateDatabases(model).Content;
 			result.Success.Should().Be.False();
