@@ -42,6 +42,12 @@ namespace Teleopti.Ccc.DBManager.Library
 			}
 		}
 
+		public bool LoginExists(string login)
+		{
+			var sql = string.Format(@"SELECT 1 FROM syslogins WHERE name = '{0}'", login);
+			var result = executeScalarOnMaster(sql, 0);
+			return result > 0;
+		}
 		public void CreateLogin(string login, string password)
 		{
 			var sql = string.Format(@"IF NOT EXISTS (SELECT * FROM syslogins WHERE name = '{0}')
