@@ -283,13 +283,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var criteria = new SeatBookingReportCriteria()
 			{
-				Period = new DateOnlyPeriod(new DateOnly(2015, 10, 1), new DateOnly(2015, 10, 30))
+				Period = new DateOnlyPeriod(new DateOnly(2015, 10, 1), new DateOnly(2015, 10, 19))
 			};
 
 			var viewModel = repo.LoadSeatBookingsReport(criteria, new Paging() { Skip = 4, Take = 4 });
 
 			Assert.AreEqual(4, viewModel.SeatBookings.Count());
-			Assert.AreEqual(40, viewModel.RecordCount);
+			Assert.AreEqual(38, viewModel.RecordCount); //38 as criteria stops on the 19th October
 			Assert.IsTrue(viewModel.SeatBookings.First().BelongsToDate == new DateOnly(2015, 10, 3));
 
 		}

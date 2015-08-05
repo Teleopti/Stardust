@@ -77,16 +77,45 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public ISeatBookingReportModel LoadSeatBookingsReport (ISeatBookingReportCriteria criteria, Paging paging = null)
 		{
-			var rowCount = applyRowCountProjection (criteria);
+			var rowCountCriteria = createRowCountCriteria (criteria);
 			var bookingCriteria = createSeatBookingCriteria (criteria);
 
-			return getResult (bookingCriteria, rowCount, paging);
+			return getResult (bookingCriteria, rowCountCriteria, paging);
 		}
 
 		private ICriteria createSeatBookingCriteria (ISeatBookingReportCriteria criteria)
 		{
 			var seatBookingCriteria = applyBasicReportCriteria (criteria);
+			applyAdditionalCriteria(criteria, seatBookingCriteria);
+			return seatBookingCriteria;
+		}
 
+		private ICriteria applyBasicReportCriteria(ISeatBookingReportCriteria criteria)
+		{
+			var seatBookingCriteria = Session.CreateCriteria<SeatBooking>()
+				.SetResultTransformer(Transformers.DistinctRootEntity)
+				.Add(Restrictions.Between("BelongsToDate", criteria.Period.StartDate, criteria.Period.EndDate))
+				.AddOrder(Order.Asc("StartDateTime"));
+			return seatBookingCriteria;
+		}
+
+		private IFutureValue<int> createRowCountCriteria(ISeatBookingReportCriteria criteria)
+		{
+			var rowCountCritiera = applyBasicRowCountCriteria(criteria);
+			applyAdditionalCriteria(criteria, rowCountCritiera);
+			return rowCountCritiera.FutureValue<int>();
+		}
+
+		private ICriteria applyBasicRowCountCriteria(ISeatBookingReportCriteria criteria)
+		{
+			return Session.CreateCriteria<SeatBooking>()
+				.SetResultTransformer(Transformers.DistinctRootEntity)
+				.Add(Restrictions.Between("BelongsToDate", criteria.Period.StartDate, criteria.Period.EndDate))
+				.SetProjection(Projections.RowCount());
+		}
+		
+		private static void applyAdditionalCriteria (ISeatBookingReportCriteria criteria, ICriteria seatBookingCriteria)
+		{
 			if (!criteria.Locations.IsNullOrEmpty())
 			{
 				applyLocationFilter (criteria, seatBookingCriteria);
@@ -96,18 +125,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			{
 				applyTeamFilter (criteria, seatBookingCriteria);
 			}
-
-			return seatBookingCriteria;
 		}
 
-		private ICriteria applyBasicReportCriteria (ISeatBookingReportCriteria criteria)
-		{
-			var seatBookingCriteria = Session.CreateCriteria<SeatBooking>()
-				.SetResultTransformer (Transformers.DistinctRootEntity)
-				.Add (Restrictions.Between ("BelongsToDate", criteria.Period.StartDate, criteria.Period.EndDate))
-				.AddOrder (Order.Asc ("StartDateTime"));
-			return seatBookingCriteria;
-		}
 
 		private static void applyLocationFilter (ISeatBookingReportCriteria criteria, ICriteria seatBookingCriteria)
 		{
@@ -137,14 +156,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.Add (Restrictions.Le ("StartDate", dateOnlyPeriod.StartDate))));
 		}
 
-		private IFutureValue<int> applyRowCountProjection (ISeatBookingReportCriteria criteria)
-		{
-			return Session.CreateCriteria<SeatBooking>()
-				.SetResultTransformer (Transformers.DistinctRootEntity)
-				.Add (Restrictions.Between ("BelongsToDate", criteria.Period.StartDate, criteria.Period.EndDate))
-				.SetProjection (Projections.RowCount())
-				.FutureValue<int>();
-		}
+		
 
 		private static ISeatBookingReportModel getResult (ICriteria bookingCriteria, IFutureValue<int> rowCount, Paging paging)
 		{
