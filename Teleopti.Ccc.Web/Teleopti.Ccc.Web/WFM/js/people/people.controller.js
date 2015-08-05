@@ -4,11 +4,11 @@ angular.module('wfm.people')
 	.constant('chunkSize', 50)
 	.controller('PeopleCtrl', [
 		'$scope', '$filter', '$state', '$document', '$translate', 'Upload', 'i18nService', 'uiGridConstants',
-		'uiGridExporterConstants', '$timeout', '$q', 'People', PeopleController
+		'uiGridExporterConstants', '$timeout', '$q', 'Toggle', 'People', PeopleController
 	]);
 
 function PeopleController($scope, $filter, $state, $document, $translate, Upload, i18nService, uiGridConstants,
-	uiGridExporterConstants, $timeout, $q, peopleSvc) {
+	uiGridExporterConstants, $timeout, $q, toggleSvc, peopleSvc) {
 	$scope.searchResult = [];
 	$scope.pageSize = 20;
 	$scope.keyword = '';
@@ -359,22 +359,26 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 		getPage();
 	}
 
-	var promiseForAdvancedSearchToggle = peopleSvc.isFeatureEnabled.query({ toggle: 'WfmPeople_AdvancedSearch_32973' }).$promise;
+	var promisesForDataInitialization = [];
+	var promiseForAdvancedSearchToggle = toggleSvc.isFeatureEnabled.query({ toggle: 'WfmPeople_AdvancedSearch_32973' }).$promise;
 	promiseForAdvancedSearchToggle.then(function (result) {
 		$scope.isAdvancedSearchEnabled = result.IsEnabled;
 	});
+	promisesForDataInitialization.push(promiseForAdvancedSearchToggle);
 
-	var promiseForImportUserPromiseToggle = peopleSvc.isFeatureEnabled.query({ toggle: 'WfmPeople_ImportUsers_33665' }).$promise;
-	promiseForImportUserPromiseToggle.then(function (result) {
+	var promiseForImportUsersToggle = toggleSvc.isFeatureEnabled.query({ toggle: 'WfmPeople_ImportUsers_33665' }).$promise;
+	promiseForImportUsersToggle.then(function (result) {
 		$scope.isImportUsersEnabled = result.IsEnabled;
 	});
+	promisesForDataInitialization.push(promiseForImportUsersToggle);
 
-	var promiseForAdjustSkillPromiseToggle = peopleSvc.isFeatureEnabled.query({ toggle: 'WfmPeople_AdjustSkill_34138' }).$promise;
-	promiseForAdjustSkillPromiseToggle.then(function (result) {
+	var promiseForAdjustSkillToggle = toggleSvc.isFeatureEnabled.query({ toggle: 'WfmPeople_AdjustSkill_34138' }).$promise;
+	promiseForAdjustSkillToggle.then(function (result) {
 		$scope.isAdjustSkillEnabled = result.IsEnabled;
 	});
+	promisesForDataInitialization.push(promiseForAdjustSkillToggle);
 
-	$q.all([promiseForAdvancedSearchToggle, promiseForImportUserPromiseToggle, promiseForAdjustSkillPromiseToggle]).then(function () {
+	$q.all(promisesForDataInitialization).then(function () {
 		$scope.toggleRowSelectable();
 		$scope.dataInitialized = true;
 		$scope.searchKeyword();

@@ -17,17 +17,6 @@ angular
 				}
 			});
 
-			this.isFeatureEnabled = $resource('../ToggleHandler/IsEnabled?toggle=:toggle',
-			{
-				toggle: "@toggle"
-			}, {
-				query: {
-					method: 'GET',
-					params: {},
-					isArray: false
-				}
-			});
-
 			this.importUsers = $resource('../api/People/ImportPeople', {}, {
 				post: {
 					method: 'POST',

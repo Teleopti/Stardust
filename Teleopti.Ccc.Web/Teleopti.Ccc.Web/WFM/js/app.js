@@ -14,7 +14,7 @@ var externalModules = angular.module('externalModules', ['ui.router',
 
 var wfm = angular.module('wfm', [
 	'externalModules',
-	'peopleService',
+	'toggleService',
 	'outboundServiceModule',
 	'restRtaService',
 	'wfmCtrls',
@@ -32,11 +32,9 @@ var wfm = angular.module('wfm', [
 	'wfm.help',
 	'wfm.rta'
 ]);
+
 wfm.config([
 	'$stateProvider', '$urlRouterProvider', '$translateProvider', function ($stateProvider, $urlRouterProvider, $translateProvider) {
-
-
-
 		$urlRouterProvider.otherwise("forecasting");
 		$stateProvider.state('main', {
 			url: '/',
@@ -120,7 +118,8 @@ wfm.config([
 		$translateProvider.preferredLanguage('en');
 	}
 ]).run([
-	'$rootScope', '$http', '$state', '$translate', 'i18nService', 'amMoment', 'HelpService', function ($rootScope, $http, $state, $translate, i18nService, angularMoment, HelpService) {
+	'$rootScope', '$http', '$state', '$translate', 'i18nService', 'amMoment', 'HelpService',
+	function ($rootScope, $http, $state, $translate, i18nService, angularMoment, HelpService) {
 		var timeout = Date.now() + 10000;
 		$rootScope.isAuthenticated = false;
 
