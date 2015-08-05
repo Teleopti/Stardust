@@ -44,7 +44,7 @@
 
 
 			this.assignOrganizationSelection = $resource('../api/Permissions/Roles/:Id/AvailableData', { Id: "@Id" }, {
-				postData: { method: 'POST', params: { BusinessUnits: [], Sites: [], Teams: [], People: [], RangeOption: [] }, isArray: true }
+				postData: { method: 'POST', params: { BusinessUnits: [], Sites: [], Teams: [], RangeOption: [] }, isArray: true }
 			});
 
 		}

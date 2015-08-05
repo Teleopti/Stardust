@@ -9,7 +9,7 @@
         <form class="permission-radio-buttons">
             <div class="wfm-radio">
                 <label>
-                    <span class="wfm-radio-label" style="margin:0!important;">Show: </span>
+                    <span class="wfm-radio-label permission-filter-label">Show: </span>
                 </label>
             </div>
             <div class="wfm-radio">
@@ -36,10 +36,9 @@
         </form>
 
     <div class="data-auth">
-        <label translate>AddGlobalAuthorizationLabel</label>{{dynamicOptionSelected}}
+        <label translate>AddGlobalAuthorizationLabel</label>
         <select ng-model="dynamicOptionSelected" ng-init="dynamicOptionSelected" ng-change="changeOption(dynamicOptionSelected) " ng-options="dynamic.RangeOption as dynamic.Name for dynamic in organization.DynamicOptions" style="padding: 0;">
         </select>
-        {{organization.DynamicOptions}}
     </div>
 </div>
 

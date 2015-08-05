@@ -32,48 +32,42 @@
 			            node[i].selected = false;
 			        else {
 			            node[i].selected = false;
-			            $scope.loopAround(node[i]);
+			            traverseNodes(node[i].ChildNodes);
 			        }
 			    }
 
 			}
 			$scope.toggleOrganizationSelection = function (node) {
+
 			    if (Roles.selectedRole.BuiltIn) return;
 			  
 			    var dataNode = node.$modelValue;
-			        if (dataNode.selected) {
-			            RoleDataService.deleteAvailableData($scope.selectedRole, dataNode.Type, dataNode.Id).
-			            then(function() {
-			                dataNode.selected = false;
-			                $scope.loopAround = function(a) {
-			                    var childs = a.ChildNodes;
-			                    traverseNodes(childs);
-
-			                }
-			                var rootNode = dataNode.ChildNodes;
-			                traverseNodes(rootNode);
-			            });
-			        } else {
-			            dataNode.selected = true;
+			    if (dataNode.selected) {
+			        RoleDataService.deleteAvailableData($scope.selectedRole, dataNode.Type, dataNode.Id).
+			        then(function() {
+			            dataNode.selected = false;      
+			            // $scope.loopAround = function(a) {
+			                // traverseNodes(a.ChildNodes);
+			            //  }			         
+			            traverseNodes(dataNode.ChildNodes);
+			        });
+			    } else {
+			        dataNode.selected = true;
                         
-			            var dataNodes = [];
-			            dataNodes.push({ type: dataNode.Type, id: dataNode.Id });
-			            if (node.$nodeScope.$parentNodeScope !== null) {
-			                var parent = node.$nodeScope.$parentNodeScope;
-			                while (parent !== null) {
-			                    if (!parent.$modelValue.selected) {
-			                        parent.$modelValue.selected = true;
-			                        dataNodes.push({type:parent.$modelValue.Type, id: parent.$modelValue.Id });
-
-			                    }
-			                    parent = parent.$parentNodeScope;
+			        var dataNodes = [];
+			        dataNodes.push({ type: dataNode.Type, id: dataNode.Id });
+			        if (node.$parentNodeScope !== null) {
+			            var parent = node.$parentNodeScope;
+			            while (parent !== null) {
+			                if (!parent.$modelValue.selected) {
+			                    parent.$modelValue.selected = true;
+			                    dataNodes.push({type:parent.$modelValue.Type, id: parent.$modelValue.Id });
 			                }
+			                parent = parent.$parentNodeScope;
 			            }
-			            RoleDataService.assignOrganizationSelection($scope.selectedRole, dataNodes).then(function () {
-
-			            });
-			           
 			        }
+			        RoleDataService.assignOrganizationSelection($scope.selectedRole, dataNodes);
+			    }
 			    
 			};
 			$scope.changeOption = function (option) {

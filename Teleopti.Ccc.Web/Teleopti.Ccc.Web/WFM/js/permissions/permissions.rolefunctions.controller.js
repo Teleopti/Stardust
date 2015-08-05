@@ -36,7 +36,7 @@
                 
             }
             $scope.toggleFunctionForRole = function (node) {
-                console.log(node);
+                
                 if ($scope.selectedRole.BuiltIn === false) {
                     var functionNode = node.$modelValue;
                     $scope.deselecteNode = function (childNode) {

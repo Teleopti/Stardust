@@ -17,12 +17,6 @@
 					}
 				});
 			};
-				/*var parseData = function(dataTab, selectedDataNodes) {
-					dataTab.forEach(function(item) {
-						console.log(item);
-						var availableData = $filter('filter')(selectedDataNodes, { id: item });
-					});
-				}*/
 			var roleDataService = {};
 			roleDataService.dynamicOptionSelected = {};
 			roleDataService.organization = { BusinessUnit: [{ BusinessUnit: { Sites: [] } }], DynamicOptions: [] };

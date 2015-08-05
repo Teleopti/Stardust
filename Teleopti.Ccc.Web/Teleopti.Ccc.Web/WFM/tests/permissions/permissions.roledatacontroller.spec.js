@@ -16,10 +16,10 @@ describe('DataController', function() {
 			return deferred.promise;
 		}
 	};
-    var mockRoles = {
-        selectedRole:{
-        BuiltIn: false
-    }
+	var mockRoles = {
+		selectedRole:{
+		BuiltIn: false
+	}
 }
 
 	beforeEach(function () {
@@ -34,22 +34,25 @@ describe('DataController', function() {
 	it('should toggle the selected property of node from false to true', inject(function ($controller) {
 		var scope = $rootScope.$new();
 		$controller('RoleDataController', { $scope: scope, RoleDataService: mockRoleDataService, Roles: mockRoles });
-		var node = { selected: false };
+		var node = {
+		    $modelValue: { selected: false }, $parentNodeScope : null
+	
+	    };
 
 		scope.toggleOrganizationSelection(node);
 		scope.$digest();
 
-		expect(node.selected).toBe(true);
+		expect(node.$modelValue.selected).toBe(true);
 	}));
 
 	it('should toggle the selected property of node from true to false', inject(function ($controller) {
 		var scope = $rootScope.$new();
 		$controller('RoleDataController', { $scope: scope, RoleDataService: mockRoleDataService, Roles: mockRoles });
-		var node = { selected: true, ChildNodes: [] };
+		var node = {$modelValue:{ selected: true, ChildNodes: [] }};
 
 		scope.toggleOrganizationSelection(node);
 		scope.$digest();
 
-		expect(node.selected).toBe(false);
+		expect(node.$modelValue.selected).toBe(false);
 	}));
 });
