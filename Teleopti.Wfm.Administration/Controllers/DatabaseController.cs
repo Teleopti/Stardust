@@ -40,6 +40,17 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[Route("CreateTenant")]
 		public virtual JsonResult<CreateTenantResultModel> CreateDatabases(CreateTenantModel model)
 		{
+			//actually if the login already exists we could skip the password
+			if(string.IsNullOrEmpty(model.AppUser) || string.IsNullOrEmpty(model.AppPassword))
+				return Json(new CreateTenantResultModel { Message = "Both name and password for the login must be filled in.", Success = false });
+
+			var checkFirstuser = checkFirstUserInternal(model.FirstUser, model.FirstUserPassword);
+			if(!checkFirstuser.Success)
+				return Json(new CreateTenantResultModel { Message = checkFirstuser.Message, Success = false });
+
+			if(string.IsNullOrEmpty(model.BusinessUnit))
+				return Json(new CreateTenantResultModel { Message = "The Business Unit can not be empty.", Success = false });
+
 			var checkName = _tenantExists.Check(model.Tenant);
 			if (!checkName.Success)
 				return Json(new CreateTenantResultModel {Message = checkName.Message, Success = false});
@@ -144,6 +155,36 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 		[HttpPost]
 		[TenantUnitOfWork]
+		[Route("CheckLogin")]
+		public virtual JsonResult<CreateTenantResultModel> CheckLogin(CreateTenantModel model)
+		{
+			var builder = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
+			{
+				UserID = model.CreateDbUser,
+				Password = model.CreateDbPassword,
+				InitialCatalog = "master",
+				IntegratedSecurity = false
+			};
+			if (_databaseHelperWrapper.LoginExists(builder.ConnectionString, model.AppUser))
+				return
+					Json(new CreateTenantResultModel
+					{
+						Success = true,
+						Message = "The login already exists, the password will NOT be changed!"
+					});
+
+			return
+					Json(new CreateTenantResultModel
+					{
+						Success = true,
+						Message = "The login does not exists, it will be created."
+					});
+
+		}
+
+
+		[HttpPost]
+		[TenantUnitOfWork]
 		[Route("CheckFirstUser")]
 		public virtual JsonResult<CreateTenantResultModel> CheckFirstUser(CreateTenantModel model)
 		{
@@ -152,6 +193,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 		private CreateTenantResultModel checkFirstUserInternal(string name, string password)
 		{
+
 			if (string.IsNullOrEmpty(name))
 				return new CreateTenantResultModel { Success = false, Message = "The user name can not be empty." };
 			if (string.IsNullOrEmpty(password))
@@ -160,9 +202,22 @@ namespace Teleopti.Wfm.Administration.Controllers
 			var mainUsers = _currentTenantSession.CurrentSession()
 				.GetNamedQuery("loadAll")
 				.List<PersonInfo>();
-			var exists = mainUsers.FirstOrDefault(m => m.ApplicationLogonInfo.LogonName.Equals(name));
+			var exists = mainUsers.FirstOrDefault(m => m.ApplicationLogonInfo.LogonName.Equals(name,StringComparison.InvariantCultureIgnoreCase));
 			if (exists != null)
 				return new CreateTenantResultModel { Success = false, Message = "The user already exists." };
+
+			return new CreateTenantResultModel { Success = true, Message = "The user name is ok." };
+		}
+
+		private CreateTenantResultModel checkAppUserInternal(string name, string password)
+		{
+
+			if (string.IsNullOrEmpty(name))
+				return new CreateTenantResultModel { Success = false, Message = "The login can not be empty." };
+			if (string.IsNullOrEmpty(password))
+				return new CreateTenantResultModel { Success = false, Message = "The login password can not be empty." };
+
+			
 
 			return new CreateTenantResultModel { Success = true, Message = "The user name is ok." };
 		}

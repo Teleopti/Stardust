@@ -12,12 +12,12 @@
 				<div class="importCaption">Name</div>
 				<input class="form-control" type="text" ng-model="vm.Name" ng-blur="vm.CheckName()" placeholder="name">
 			</div>
-			<label ng-class="(vm.NameOk==true) ? 'dbOk' : 'dbNotOk'">{{vm.NameMessage}}</label>
+			<label ng-class="(vm.NameOk==true) ? 'dataIsOk' : 'dataIsNotOk'">{{vm.NameMessage}}</label>
 			<div>
 				<div class="importCaption">Email</div>
 				<div>
 					<input class="form-control" type="email" ng-model="vm.Email" ng-blur="vm.CheckEmail()" placeholder="Email">
-					<label ng-class="(vm.EmailOk==true) ? 'dbOk' : 'dbNotOk'">{{vm.EmailMessage}}</label>
+					<label ng-class="(vm.EmailOk==true) ? 'dataIsOk' : 'dataIsNotOk'">{{vm.EmailMessage}}</label>
 				</div>
 			</div>
 			<div>
@@ -30,7 +30,7 @@
 				<div class="importCaption">Confirm Password</div>
 				<div>
 					<input class="form-control" type="password" ng-model="vm.ConfirmPassword" ng-blur="vm.CheckPassword()" placeholder="Confirm password">
-					<label ng-class="(vm.PasswordOk==true) ? 'dbOk' : 'dbNotOk'">{{vm.PasswordMessage}}</label>
+					<label ng-class="(vm.PasswordOk==true) ? 'dataIsOk' : 'dataIsNotOk'">{{vm.PasswordMessage}}</label>
 				</div>
 			</div>
 		</div>

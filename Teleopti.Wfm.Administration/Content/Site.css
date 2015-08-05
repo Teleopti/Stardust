@@ -48,11 +48,11 @@ td {
 	max-width: 100%;
 }
 
-.dbOk {
+.dataIsOk {
 	color: green;
 }
 
-.dbNotOk {
+.dataIsNotOk {
 	color: red;
 }
 
@@ -90,6 +90,7 @@ legend {
 	padding-right: 4px;
 	border-bottom: none;
 	font-size: 15px;
+	font-weight: bold;
 	margin-bottom: 0;
 	width: initial;
 }

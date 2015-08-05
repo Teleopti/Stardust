@@ -80,6 +80,12 @@ namespace Teleopti.Wfm.Administration.Core
 			helper.AddBusinessUnit(name);
 		}
 
+		public bool LoginExists(string connectionToNewDb, string login)
+		{
+			var helper = new DatabaseHelper(connectionToNewDb, DatabaseType.TeleoptiCCC7);
+			return(helper.LoginExists(login));
+		}
+
         public void CreateLogin(string connectionToNewDb, string login, string password)
 		{
 			// type does not mather now

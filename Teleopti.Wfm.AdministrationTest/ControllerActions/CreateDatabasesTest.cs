@@ -24,6 +24,23 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public ICurrentTenantSession CurrentTenantSession;
 
 		[Test]
+		public void ShouldReturnSuccessFalseIfFirstUserIsEmpty()
+		{
+			var model = new CreateTenantModel ();
+			var result = Target.CreateDatabases(model).Content;
+			result.Success.Should().Be.False();
+			result.Message.Should().Be.EqualTo("The user name can not be empty.");
+		}
+
+		[Test]
+		public void ShouldReturnSuccessFalseIfBusinessUnitIsEmpty()
+		{
+			var model = new CreateTenantModel {FirstUser = "thefirst", FirstUserPassword = "password"};
+			var result = Target.CreateDatabases(model).Content;
+			result.Success.Should().Be.False();
+			result.Message.Should().Be.EqualTo("The Business Unit can not be empty.");
+		}
+		[Test]
 		public void ShouldReturnSuccessFalseIfTenantExists()
 		{
 			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");

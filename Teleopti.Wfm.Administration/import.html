@@ -13,26 +13,26 @@
 				<div class="importCaption">Tenant name</div>
 				<input class="form-control" type="text" ng-model="importVm.Tenant" ng-blur="importVm.CheckTenantName()" placeholder="Tenant name">
 			</div>
-			<label ng-class="(importVm.TenantOk==true) ? 'dbOk' : 'dbNotOk'">{{importVm.TenantMessage}}</label>
+			<label ng-class="(importVm.TenantOk==true) ? 'dataIsOk' : 'dataIsNotOk'">{{importVm.TenantMessage}}</label>
 			<div>
 				<div class="importCaption">Application database connections string</div>
 				<div>
 					<!---->
 					<input class="importConnstring form-control" type="text" ng-model="importVm.AppDatabase" ng-blur="importVm.CheckAppDb()" placeholder="Connection string">
-					<label ng-class="(importVm.AppDbOk==true) ? 'dbOk' : 'dbNotOk'">{{importVm.AppDbCheckMessage}}</label>
+					<label ng-class="(importVm.AppdataIsOk==true) ? 'dataIsOk' : 'dataIsNotOk'">{{importVm.AppDbCheckMessage}}</label>
 				</div>
 
 				<div>
 					<div class="importCaption">Analytics database connection string</div>
 					<input class="importConnstring form-control" type="text" ng-model="importVm.AnalyticsDatabase" ng-blur="importVm.CheckAnalDb()" placeholder="Connection string">
-					<label ng-class="(importVm.AnalDbOk==true) ? 'dbOk' : 'dbNotOk'">{{importVm.AnalDbCheckMessage}}</label>
+					<label ng-class="(importVm.AnaldataIsOk==true) ? 'dataIsOk' : 'dataIsNotOk'">{{importVm.AnalDbCheckMessage}}</label>
 				</div>
 				<p></p>
 				<div>
 					<h3>Version information</h3>
 					<label>Head version:</label><span>{{importVm.HeadVersion}}</span><br />
 					<label>Import version:</label><span>{{importVm.ImportAppVersion}}</span><br />
-					<label ng-class="(importVm.AppVersionOk==true) ? 'dbOk' : 'dbNotOk'">The versions are OK ?:</label><span>{{importVm.AppVersionOk}}</span><br />
+					<label ng-class="(importVm.AppVersionOk==true) ? 'dataIsOk' : 'dataIsNotOk'">The versions are OK ?:</label><span>{{importVm.AppVersionOk}}</span><br />
 				</div>
 
 				<br/>
@@ -40,7 +40,7 @@
 				<p>
 					<button class="btn btn-primary btn-default" ng-click="importVm.startImport()">Start import</button>
 				</p>
-				<div ng-class="(importVm.Success==true) ? 'dbOk' : 'dbNotOk'">
+				<div ng-class="(importVm.Success==true) ? 'dataIsOk' : 'dataIsNotOk'">
 					{{importVm.Message}}
 				</div>
 			</div>
