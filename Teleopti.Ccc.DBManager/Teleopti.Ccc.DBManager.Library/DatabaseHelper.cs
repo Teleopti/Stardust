@@ -75,7 +75,11 @@ IF NOT EXISTS (SELECT * FROM sys.database_principals WHERE name = N'db_executor'
 		{
 			return executeScalar("SELECT IS_SRVROLEMEMBER( 'dbcreator')", 0) > 0;
 		}
-
+		
+		public bool HasCreateViewPermission()
+		{
+			return executeScalar("SELECT IS_SRVROLEMEMBER( 'securityadmin')", 0) > 0;
+		}
 		public void AddInitialPerson(Guid personId)
 		{
 			var sql = string.Format(@"INSERT INTO Person 

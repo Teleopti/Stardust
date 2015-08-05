@@ -21,11 +21,7 @@
 			<fieldset>
 				<legend ng-class="(vm.SqlUserOk==true) ? 'dbOk' : 'dbNotOk'">Database credentials to create databases</legend>
 				<div>
-					<div class="importCaption">SQL Server Instance</div>
-					<div>
-						<input class=" form-control" type="text" ng-model="vm.Server" ng-blur="vm.CheckServer()" placeholder="SQL Server Instance">
-					</div>
-					<div class="importCaption">SQL User Name (that have permissions to create database on that server)</div>
+					<div class="importCaption">SQL User Name (that have permissions to create database and views on that server)</div>
 					<div>
 						<input class=" form-control" type="text" ng-model="vm.CreateDbUser" ng-blur="vm.CheckServer()" placeholder="SQL User Name">
 					</div>
@@ -56,7 +52,7 @@
 		</div>
 		<div class="col-md-4">
 			<fieldset>
-				<legend>Initial data</legend>
+				<legend ng-class="(vm.FirstUserOk==true) ? 'dbOk' : 'dbNotOk'">Initial data</legend>
 				<div>
 					<div class="importCaption">Name of the first Business Unit</div>
 					<div>
@@ -65,7 +61,7 @@
 					Should we add poss. to give first name last name?
 					<div class="importCaption">First user logon (must have an unique name)</div>
 					<div>
-						<input class=" form-control" type="text" ng-model="vm.FirstUser" ng-blur="vm.CheckFirstUser" placeholder="Logon name">
+						<input class=" form-control" type="text" ng-model="vm.FirstUser" ng-blur="vm.CheckFirstUser()" placeholder="Logon name">
 					</div>
 					<div>
 						<div class="importCaption">Password</div>

@@ -4,6 +4,8 @@ using System.Data.SqlClient;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.DBManager.Library;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData;
@@ -18,23 +20,30 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 	{
 		public DatabaseController Target;
 		public DatabaseHelperWrapper DatabaseHelperWrapper;
+		public ITenantUnitOfWork TenantUnitOfWork;
+		public ICurrentTenantSession CurrentTenantSession;
 
 		[Test]
 		public void ShouldReturnSuccessFalseIfTenantExists()
 		{
 			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
-			var model = new CreateTenantModel { Tenant = "TestData" };
+			using (TenantUnitOfWork.Start())
+			{
+				var tenant = new Tenant("Old One");
+				CurrentTenantSession.CurrentSession().Save(tenant);
+			}
+			var model = new CreateTenantModel { Tenant = "Old One" };
 			bool result = Target.CreateDatabases(model).Content.Success;
 			result.Should().Be.False();
 		}
 
 		[Test]
-		public void ShouldReturnFalseIfWrongCredentialsOrServer()
+		public void ShouldReturnFalseIfWrongCredentials()
 		{
 			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
 
 
-			var model = new CreateTenantModel { Tenant = "New Tenant",CreateDbUser = "dummy", Server = "dummy", CreateDbPassword = "dummy"};
+			var model = new CreateTenantModel { Tenant = "New Tenant",CreateDbUser = "dummy", CreateDbPassword = "dummy"};
 
 			bool result = Target.CreateDatabases(model).Content.Success;
 			result.Should().Be.False();
@@ -49,7 +58,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 
             DatabaseHelperWrapper.CreateLogin(connStringBuilder.ConnectionString,"nodbcreator", "password");
 
-			var model = new CreateTenantModel { Tenant = "New Tenant", CreateDbUser = "nodbcreator", Server = connStringBuilder.DataSource, CreateDbPassword = "password", };
+			var model = new CreateTenantModel { Tenant = "New Tenant", CreateDbUser = "nodbcreator", CreateDbPassword = "password", };
 
 			var result = Target.CreateDatabases(model).Content;
 			result.Success.Should().Be.False();
@@ -81,7 +90,6 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			{
 				Tenant = "New Tenant",
 				CreateDbUser = "dbcreatorperson",
-				Server = connStringBuilder.DataSource,
 				CreateDbPassword = "password",
 				AppUser = "new TenantAppUser",
 				AppPassword = "NewTenantAppPassword",

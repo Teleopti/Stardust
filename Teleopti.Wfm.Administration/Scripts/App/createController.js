@@ -14,20 +14,21 @@
 		vm.TenantOk = false;
 
 		vm.Tenant = '';
-		vm.Server = '';
 		vm.CreateDbUser = '';
 		vm.CreateDbPassword = '';
 		vm.SqlUserOkMessage = '';
 		vm.SqlUserOk = false;
 		vm.AppUser = '';
 		vm.AppPassword = '';
-		vm.PersonUser = '';
-		vm.PersonUserPassword = '';
+		vm.FirstUser = '';
+		vm.FirstUserPassword = '';
 		vm.BusinessUnit = '';
 		vm.Success = false;
 		vm.Message = '';
 		vm.Creating = '';
-		
+		vm.FirstUserOk = false;
+		vm.FirstUserOkMessage = '';
+
 		vm.token = sessionStorage.getItem(tokenKey);
 		if (vm.token === null) {
 			return;
@@ -51,12 +52,11 @@
 
 		vm.CheckServer = function () {
 			var model = {
-				Server: vm.Server,
 				CreateDbUser: vm.CreateDbUser,
 				CreateDbPassword: vm.CreateDbPassword
 			}
 
-			$http.post('./CheckServer', model, getHeaders())
+			$http.post('./CheckCreateDb', model, getHeaders())
 			.success(function (data) {
 				vm.SqlUserOk = data.Success,
 				vm.SqlUserOkMessage = data.Message;
@@ -94,8 +94,21 @@
 				$("#loading").hide();
 			});
 		}
+		vm.CheckFirstUser = function () {
+			var model = {
+				FirstUser: vm.FirstUser,
+				FirstUserPassword: vm.FirstUserPassword
+			}
 
+			$http.post('./CheckFirstUser', model, getHeaders())
+			.success(function (data) {
+				vm.FirstUserOk = data.Success,
+				vm.FirstUserOkMessage = data.Message;
 
+			}).error(function (xhr, ajaxOptions, thrownError) {
+				console.log(xhr.status + xhr.responseText + thrownError);
+			});
+		}
 	}
 
 })();

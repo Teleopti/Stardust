@@ -92,5 +92,11 @@ namespace Teleopti.Wfm.Administration.Core
 			var helper = new DatabaseHelper(connctionstring, DatabaseType.TeleoptiCCC7);
 			return helper.HasCreateDbPermission();
 		}
+
+		public bool HasCreateViewPermission(string connctionstring)
+		{
+			var helper = new DatabaseHelper(connctionstring, DatabaseType.TeleoptiCCC7);
+			return helper.HasCreateViewPermission();
+		}
 	}
 }

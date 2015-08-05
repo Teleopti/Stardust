@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Results;
@@ -45,16 +46,15 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 			var builder = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
 			{
-				DataSource = model.Server,
 				UserID = model.CreateDbUser,
 				Password = model.CreateDbPassword,
 				InitialCatalog = "master",
 				IntegratedSecurity = false
 			};
 
-			var checkServer = checkServerInternal(builder);
-            if (!checkServer.Success)
-				return Json(new CreateTenantResultModel { Message = checkServer.Message, Success = false });
+			var checkCreate = checkCreateDbInternal(builder);
+            if (!checkCreate.Success)
+				return Json(new CreateTenantResultModel { Message = checkCreate.Message, Success = false });
 			
 			
 			var dbPath = _dbPathProvider.GetDbPath();
@@ -108,22 +108,20 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 		[HttpPost]
 		[TenantUnitOfWork]
-		[Route("CheckServer")]
-		public virtual JsonResult<CreateTenantResultModel> CheckServer(CreateTenantModel model)
+		[Route("CheckCreateDb")]
+		public virtual JsonResult<CreateTenantResultModel> CheckCreateDb(CreateTenantModel model)
 		{
 			var builder = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
 			{
-				DataSource = model.Server,
 				UserID = model.CreateDbUser,
 				Password = model.CreateDbPassword,
 				InitialCatalog = "master",
 				IntegratedSecurity = false
 			};
-			var checkServer = checkServerInternal(builder);
-			return Json(new CreateTenantResultModel { Message = checkServer.Message, Success = checkServer.Success });
+			return Json(checkCreateDbInternal(builder));
 		}
 
-		private CreateTenantResultModel checkServerInternal( SqlConnectionStringBuilder builder)
+		private CreateTenantResultModel checkCreateDbInternal( SqlConnectionStringBuilder builder)
 		{
 			var connection = new SqlConnection(builder.ConnectionString);
 			try
@@ -138,14 +136,42 @@ namespace Teleopti.Wfm.Administration.Controllers
 			if (!_databaseHelperWrapper.HasCreateDbPermission(builder.ConnectionString))
 				return new CreateTenantResultModel { Success = false, Message = "The user does not have permission to create database." };
 
-			return new CreateTenantResultModel { Success = true, Message = "The user does have permission to create database." };
+			if (!_databaseHelperWrapper.HasCreateDbPermission(builder.ConnectionString))
+				return new CreateTenantResultModel { Success = false, Message = "The user does not have permission to create views." };
+
+			return new CreateTenantResultModel { Success = true, Message = "The user does have permission to create database and views." };
 		}
-    }
+
+		[HttpPost]
+		[TenantUnitOfWork]
+		[Route("CheckFirstUser")]
+		public virtual JsonResult<CreateTenantResultModel> CheckFirstUser(CreateTenantModel model)
+		{
+			return Json(checkFirstUserInternal(model.FirstUser, model.FirstUserPassword));
+		}
+
+		private CreateTenantResultModel checkFirstUserInternal(string name, string password)
+		{
+			if (string.IsNullOrEmpty(name))
+				return new CreateTenantResultModel { Success = false, Message = "The user name can not be empty." };
+			if (string.IsNullOrEmpty(password))
+				return new CreateTenantResultModel { Success = false, Message = "The password can not be empty." };
+
+			var mainUsers = _currentTenantSession.CurrentSession()
+				.GetNamedQuery("loadAll")
+				.List<PersonInfo>();
+			var exists = mainUsers.FirstOrDefault(m => m.ApplicationLogonInfo.LogonName.Equals(name));
+			if (exists != null)
+				return new CreateTenantResultModel { Success = false, Message = "The user already exists." };
+
+			return new CreateTenantResultModel { Success = true, Message = "The user name is ok." };
+		}
+	}
 
 	public class CreateTenantModel
 	{
 		public string Tenant { get; set; }
-		public string Server { get; set; }
+
 		public string CreateDbUser { get; set; }
 		public string CreateDbPassword { get; set; }
 		public string AppUser { get; set; }
