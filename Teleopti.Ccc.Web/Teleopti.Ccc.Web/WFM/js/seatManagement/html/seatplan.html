@@ -1,7 +1,11 @@
 ﻿
+
 <div id="seatPlan" ui-view>
 
-	<div style="padding:10px" class="row">
+	<seat-plan-report ng-show="!seatplan.isReportOpened" toggle="seatplan.isReportOpened = !seatplan.isReportOpened"
+					  selected-period="seatplan.planningPeriods[0]" get-day-class="seatplan.getDayClass(date,mode)"></seat-plan-report>
+
+	<div class="row" ng-show="seatplan.isReportOpened" style="margin: 0; padding: 0;">
 
 		<div class="col-sm-12" style="width: 350px; padding-bottom: 10px;">
 
@@ -13,40 +17,43 @@
 			            on-change-of-month="seatplan.onChangeOfMonth(date)"
 			            ng-change="seatplan.onChangeOfDate()" class="wfm-datepicker"
 			            custom-class="seatplan.getDayClass(date,mode)">
-				
 			</datepicker>
 		</div>
 
 		<div class="planningDayDetail col-sm-12 col-md-6" ng-if="seatplan.selectedDate!=null">
-			<h3 style="padding:0 10px">{{seatplan.getDateString(seatplan.selectedDate)}}</h3>
+			<button class="wfm-fab info pull-right" ng-click="seatplan.isReportOpened = !seatplan.isReportOpened">
+				<i class="mdi mdi-file-document"></i>
+			</button>
+			<h3 style="padding: 0 10px">{{seatplan.getDateString(seatplan.selectedDate)}}</h3>
 			<md-divider md-insert></md-divider>
-			<p style="padding:10px 10px">{{seatplan.getToDayInfo()}}</p>
+			<p>{{seatplan.getToDayInfo()}}</p>
 		</div>
 
+
+		<div class="col-sm-12">
+			<h3 class="planningPeriodTitle">{{ 'PlanningPeriodsFor' | translate }} {{seatplan.getSelectedMonthName()}} {{seatplan.selectedDate.year()}}</h3>
+
+			<md-divider md-insert></md-divider>
+
+			<div class="planningPeriodProgressBar" ng-show="seatplan.isLoadingPlanningPeriods">
+				<md-progress-linear md-mode="indeterminate"></md-progress-linear>
+			</div>
+
+			<teleopti-card-list ng-hide="seatplan.isLoadingPlanningPeriods">
+				<teleopti-card ng-repeat="period in seatplan.planningPeriods">
+					<card-header>
+
+						<span id="planningPeriodHeader">{{period.StartDate |  amDateFormat:"L"}} - {{period.EndDate | amDateFormat:"L"}}</span>
+						<span style="float: right;"><i class="mdi mdi-chevron-right"></i></span>
+
+					</card-header>
+					<card-body>
+						<seat-plan-init start={{period.StartDate}} end="{{period.EndDate}}" on-seat-plan-complete="seatplan.onSeatPlanComplete()"></seat-plan-init>
+					</card-body>
+				</teleopti-card>
+			</teleopti-card-list>
+		</div>
 	</div>
-
-	<h3 class="planningPeriodTitle">{{ 'PlanningPeriodsFor' | translate }} {{seatplan.getSelectedMonthName()}} {{seatplan.selectedDate.year()}}</h3>
-
-	<md-divider md-insert></md-divider>
-
-	<div class="planningPeriodProgressBar" ng-show="seatplan.isLoadingPlanningPeriods">
-		<md-progress-linear md-mode="indeterminate"></md-progress-linear>
-	</div>
-
-	<teleopti-card-list ng-hide="seatplan.isLoadingPlanningPeriods">
-		<teleopti-card ng-repeat="period in seatplan.planningPeriods">
-			<card-header>
-
-				<span id="planningPeriodHeader">{{period.StartDate |  amDateFormat:"L"}} - {{period.EndDate | amDateFormat:"L"}}</span>
-				<span style="float: right;"><i class="mdi mdi-chevron-right"></i></span>
-
-			</card-header>
-			<card-body>
-				<seat-plan-init start={{period.StartDate}} end="{{period.EndDate}}" on-seat-plan-complete="seatplan.onSeatPlanComplete()"></seat-plan-init>
-			</card-body>
-		</teleopti-card>
-	</teleopti-card-list>
-
 </div>
 
 <div class="clearfix"></div>

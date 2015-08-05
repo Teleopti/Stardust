@@ -1266,6 +1266,8 @@
     <Content Include="WFM\js\people\people.advanceSearch.directive .js" />
     <Content Include="WFM\js\people\people.importPeople.controller.js" />
     <Content Include="WFM\js\people\people.importPeople.directive.js" />
+    <Content Include="WFM\js\seatManagement\html\seatplanreport.html" />
+    <Content Include="WFM\js\seatManagement\seatplanreport.directive.js" />
     <Content Include="WFM\tests\outbound\outbound.campaign.chart.service.spec.js" />
     <Content Include="WFM\tests\outbound\outbound.campaignSummary.controller.spec.js" />
     <Content Include="WFM\vendor\ui-grid\ui-grid.min.css" />

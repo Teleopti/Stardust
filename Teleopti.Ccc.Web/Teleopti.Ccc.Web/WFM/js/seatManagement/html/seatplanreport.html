@@ -1,0 +1,55 @@
+﻿<div class="row seatPlanReport">
+	<div class="seatPlanReportHeader material-depth-1">
+		<button class="wfm-btn pull-left" ng-click="vm.toggle()">
+			<i class="mdi mdi-arrow-left-bold-circle"></i>
+		</button>
+		<button class="wfm-btn wfm-btn-invis-primary pull-left" ng-click="vm.isFilterOpened = !vm.isFilterOpened">
+			<i class="mdi mdi-filter"></i>
+			Filter
+		</button>
+		<button class="wfm-fab info pull-right" ng-show="!vm.isFilterOpened" ng-click="vm.preview(1)">
+			<i class="mdi mdi-printer"></i>
+		</button>
+		<span class="blank" ng-click="vm.isFilterOpened = false"></span>
+	</div>
+
+	<div class="seatPlanReportContent" ng-click="vm.isFilterOpened = false">
+		<table>
+			<tr ng-repeat-start="bookingByDate in vm.seatBookings" class="tr-date">
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td>{{vm.getDisplayDateString(bookingByDate.Date.Date)}}</td>
+			</tr>
+
+			<tr ng-repeat-start="team in bookingByDate.Teams"></tr>
+
+			<tr ng-show="$first">
+				<th class="td-team">Team</th>
+				<th class="td-agent">Agent</th>
+				<th class="td-location">Location</th>
+				<th class="td-seat">Seat</th>
+				<th class="td-time">Time</th>
+			</tr>
+
+			<tr ng-repeat="booking in team.SeatBookings" ng-class="[$index % 2== 0 ? 'tr-color':'' ]">
+				<td class="td-team">{{ $first ? team.Team.Name : ''}}</td>
+				<td class="td-agent">{{ booking.FirstName }}&nbsp;{{ booking.LastName }}</td>
+				<td class="td-location">{{ booking.LocationPath }}</td>
+				<td class="td-seat">{{ booking.SeatName }}</td>
+				<td class="td-time">{{ vm.getDisplayTimeString(booking.StartDateTime,booking.EndDateTime) }}</td>
+			</tr>
+
+			<tr ng-repeat-end>
+				<td><br/></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr ng-repeat-end></tr>
+		</table>
+	</div>
+
+</div>

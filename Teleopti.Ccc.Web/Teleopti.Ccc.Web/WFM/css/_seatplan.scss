@@ -13,10 +13,6 @@
 	height: 139px;
 }
 
-.planningPeriodTitle {
-	margin-left: 30px;
-}
-
 .seatplan-status-success button span {
 	background-color: lightgreen;
 	padding: 3px;
@@ -32,4 +28,110 @@
 	padding: 3px;
 }
 
+.seatPlanReport{
+	padding: 0px;
+	margin: -10px;
+}
+
+.seatPlanReport .material-depth-1{
+	height: 40px;
+	position:relative;
+	z-index:10;
+}
+
+.seatPlanReport .wfm-btn{
+	height:100%;
+	margin:0px;
+	border-radius:0px;
+	text-transform:none;
+	background:#ffffff;
+}
+
+.seatPlanReport .wfm-btn:hover{
+	background:#09e;
+	color:#ffffff;
+}
+
+
+.seatPlanReport .wfm-fab{
+	transition-duration:0s;
+}
+
+.seatPlanReportHeader{
+	clear:both;
+	margin-bottom:20px;
+}
+
+.seatPlanReportHeader .blank{
+	width: 100%; 
+	height: 100%;
+	z-index:-1;
+	position:absolute;
+	display:inline-block;
+	left:0;
+	top:0;
+}
+
+.seatPlanReportContent{
+	clear:both;
+	z-index:1;
+	padding-left:10px;
+	padding-right:10px;
+}
+
+.seatPlanReportContent table{
+	width:100%;
+	
+}
+.seatPlanReportContent table .tr-head{
+	height:30px;
+	background:#f1f2f3;
+}
+
+.seatPlanReportContent .tr-break{
+	height:40px;
+	vertical-align:bottom;
+	border-bottom:1px #e1e2e3 solid;
+}
+
+.seatPlanReportContent .tr-color{
+	background:#e1e2e3!important;
+	-webkit-print-color-adjust: exact;
+}
+
+.seatPlanReportContent .tr-show{
+	height:40px;
+	vertical-align:bottom;
+	border-bottom:1px #e1e2e3 solid;
+}
+
+.seatPlanReportContent .tr-date td{
+	text-align:right;
+	border-bottom:1px #e1e2e3 solid;
+}
+
+.seatPlanReportContent table th, .seatPlanReportContent table td{
+	text-align:left;
+	word-break:break-word;	
+}
+
+.seatPlanReportContent table tr .td-team{
+	width:20%;
+}
+
+.seatPlanReportContent table tr .td-agent{
+	width:20%;
+}
+
+.seatPlanReportContent table tr .td-location{
+	width:30%;
+}
+
+.seatPlanReportContent table tr .td-seat{
+	width:15%;
+}
+
+.seatPlanReportContent table tr .td-time{
+	width:15%;
+}
 
