@@ -32,6 +32,16 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return 	Session.Query<ISeatPlan>().SingleOrDefault(seatPlan => seatPlan.Date == date );
 		}
 
+		public void RemoveSeatPlanForDate (DateOnly date)
+		{
+			var seatPlan = GetSeatPlanForDate (date);
+			if (seatPlan != null)
+			{
+				Remove(seatPlan);
+			}
+		}
+
+
 		public void Update (ISeatPlan existingSeatPlan)
 		{
 			Session.Update (existingSeatPlan);

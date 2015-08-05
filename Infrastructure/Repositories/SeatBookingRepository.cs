@@ -199,10 +199,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 	public class SeatBookingReportCriteria : ISeatBookingReportCriteria
 	{
+
+		public IEnumerable<ISeatMapLocation> Locations { get; set; }
+		public IEnumerable<ITeam> Teams { get; set; }
+		public DateOnlyPeriod Period { get; set; }
+
 		public SeatBookingReportCriteria()
 		{
 		}
-
 		public SeatBookingReportCriteria (IEnumerable<ISeatMapLocation> locations, IEnumerable<ITeam> teams,
 			DateOnlyPeriod period)
 		{
@@ -210,9 +214,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			Teams = teams;
 			Period = period;
 		}
-
-		public IEnumerable<ISeatMapLocation> Locations { get; set; }
-		public IEnumerable<ITeam> Teams { get; set; }
-		public DateOnlyPeriod Period { get; set; }
+		
 	}
 }

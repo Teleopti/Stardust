@@ -306,9 +306,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void ShouldNotDeleteSeatPlanWhenDeletingLocationRemovesASubsetOfSeatBookingsForDay()
 		{
 
-
 			var seatMapLocation = new SeatMapLocation();
-			
 			var belongsToDate = new DateOnly(2015, 03, 02);
 
 			const string seatMapData = @"{""objects"":[{""type"":""seat"",""originX"":""left"",""originY"":""top"",""left"":589.55,""top"":345.74,""width"":35.9,""height"":46.52,""fill"":""rgb(0,0,0)"",""stroke"":null,""strokeWidth"":1,""strokeDashArray"":null,""strokeLineCap"":""butt"",""strokeLineJoin"":""miter"",""strokeMiterLimit"":10,""scaleX"":1,""scaleY"":1,""angle"":0,""flipX"":false,""flipY"":false,""opacity"":1,""shadow"":null,""visible"":true,""clipTo"":null,""backgroundColor"":"""",""fillRule"":""nonzero"",""globalCompositeOperation"":""source-over"",""src"":""http://localhost:52858/wfm/js/SeatManagement/Images/seat.svg"",""filters"":[],""crossOrigin"":"""",""alignX"":""none"",""alignY"":""none"",""meetOrSlice"":""meet"",""id"":""09d00b0b-f366-4fa9-bd94-fa2af9025d7e"",""name"":""Unnamed seat"",""priority"":1},{""type"":""seat"",""originX"":""left"",""originY"":""top"",""left"":645.45,""top"":345.74,""width"":35.9,""height"":46.52,""fill"":""rgb(0,0,0)"",""stroke"":null,""strokeWidth"":1,""strokeDashArray"":null,""strokeLineCap"":""butt"",""strokeLineJoin"":""miter"",""strokeMiterLimit"":10,""scaleX"":1,""scaleY"":1,""angle"":0,""flipX"":false,""flipY"":false,""opacity"":1,""shadow"":null,""visible"":true,""clipTo"":null,""backgroundColor"":"""",""fillRule"":""nonzero"",""globalCompositeOperation"":""source-over"",""src"":""http://localhost:52858/wfm/js/SeatManagement/Images/seat.svg"",""filters"":[],""crossOrigin"":"""",""alignX"":""none"",""alignY"":""none"",""meetOrSlice"":""meet"",""id"":""0af609cb-ba3e-fd55-4bc2-df0ec0dbfd77"",""name"":""Unnamed seat"",""priority"":2}],""background"":""""}";

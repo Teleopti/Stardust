@@ -72,7 +72,15 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Update (ISeatPlan seatPlan)
 		{
-			//_seatPlans.Select (plan => plan.Date==seatPlan.Date)
+		}
+
+		public void RemoveSeatPlanForDate (DateOnly date)
+		{
+			var seatPlan = GetSeatPlanForDate (date);
+			if (seatPlan != null)
+			{
+				Remove (seatPlan);
+			}
 		}
 
 		public ISeatPlan GetSeatPlanForDate (DateOnly date)

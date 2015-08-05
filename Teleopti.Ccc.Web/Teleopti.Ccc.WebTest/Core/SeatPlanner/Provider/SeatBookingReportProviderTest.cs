@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.SeatPlanning;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -89,8 +88,6 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 			Assert.IsTrue(result.SeatBookingsByDate[0].Date == startDate);
 			Assert.IsTrue(result.SeatBookingsByDate[1].Date == startDate.AddDays(1));
 		}
-
-
 
 		[Test]
 		public void ShouldGroupBookingsByTeam()
