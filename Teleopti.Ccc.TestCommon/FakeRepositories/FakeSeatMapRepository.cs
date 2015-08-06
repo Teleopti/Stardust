@@ -65,6 +65,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _seatMaps.FirstOrDefault();
 		}
 
+		public IList<ISeatMapLocation> FindLocations(IList<Guid> locations)
+		{
+			throw new NotImplementedException();
+		}
+
 		public ISeatMapLocation LoadAggregate (Guid id)
 		{
 			throw new NotImplementedException();

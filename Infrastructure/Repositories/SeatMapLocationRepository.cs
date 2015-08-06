@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using NHibernate.Linq;
 using Teleopti.Ccc.Domain.Repositories;
@@ -40,7 +41,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			return Session.Query<ISeatMapLocation>().FirstOrDefault();
 		}
-		
-		
+
+		public IList<ISeatMapLocation> FindLocations (IList<Guid> locations)
+		{
+			return Session.Query<ISeatMapLocation>()
+				.Where(seatMapLoc => locations.Contains(seatMapLoc.Id.Value)).ToList();
+		}
 	}
 }

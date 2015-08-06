@@ -1,4 +1,7 @@
 using System.Linq;
+using NHibernate.Proxy;
+using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
@@ -10,10 +13,32 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 	{
 
 		private readonly ISeatBookingRepository _seatBookingRepository;
+		private readonly ISeatMapLocationRepository _locationRepository;
+		private readonly ITeamRepository _teamRepository;
 
-		public SeatBookingReportProvider (ISeatBookingRepository seatBookingRepository)
+		public SeatBookingReportProvider (ISeatBookingRepository seatBookingRepository, ISeatMapLocationRepository locationRepository, ITeamRepository teamRepository)
 		{
 			_seatBookingRepository = seatBookingRepository;
+			_locationRepository = locationRepository;
+			_teamRepository = teamRepository;
+		}
+
+		public SeatBookingReportViewModel Get (SeatBookingReportCommand command)
+		{
+			var crtieria = new SeatBookingReportCriteria()
+			{
+				Teams = command.Teams.IsNullOrEmpty()? null : _teamRepository.FindTeams (command.Teams),
+				Locations = command.Locations.IsNullOrEmpty()? null : _locationRepository.FindLocations (command.Locations.ToList()),
+				Period = new DateOnlyPeriod (new DateOnly (command.StartDate), new DateOnly (command.EndDate))
+			};
+
+			if (command.Take != 0)
+			{
+				return Get(crtieria, new Paging() { Skip = command.Skip, Take = command.Take });
+			};
+
+			return Get (crtieria);
+
 		}
 
 		public SeatBookingReportViewModel Get (SeatBookingReportCriteria criteria, Paging paging = null)

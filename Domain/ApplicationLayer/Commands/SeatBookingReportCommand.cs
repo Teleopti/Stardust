@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		}
 
 		public SeatBookingReportCommand(
-			IEnumerable<ISeatMapLocation> locations, IEnumerable<ITeam> teams, DateTime startDate, DateTime endDate, int skip, int take)
+			IEnumerable<Guid> locations, IEnumerable<Guid> teams, DateTime startDate, DateTime endDate, int skip, int take)
 		{
 			Locations = locations;
 			Teams = teams;
@@ -22,8 +22,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			Take = take;
 		}
 
-		public IEnumerable<ISeatMapLocation> Locations { get; set; }
-		public IEnumerable<ITeam> Teams { get; set; }
+		public IEnumerable<Guid> Locations { get; set; }
+		public IEnumerable<Guid> Teams { get; set; }
 		public DateTime StartDate { get; set; }
 		public DateTime EndDate { get; set; }
 		public int Skip { get; set; }

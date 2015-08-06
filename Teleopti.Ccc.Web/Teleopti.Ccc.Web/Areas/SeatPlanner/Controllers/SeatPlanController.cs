@@ -67,21 +67,10 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers
 		[UnitOfWork, Route("api/SeatPlanner/SeatBookingReport"), HttpPost]
 		public virtual SeatBookingReportViewModel Get([FromBody]SeatBookingReportCommand command)
 		{
-			var criteria = new SeatBookingReportCriteria()
-			{
-				Locations = command.Locations,
-				Teams = command.Teams,
-				Period = new DateOnlyPeriod (new DateOnly (command.StartDate), new DateOnly (command.EndDate))
-			};
-
-			if (command.Take != 0)
-			{
-				return _seatBookingReportProvider.Get(criteria, new Paging() { Skip = command.Skip, Take = command.Take });
-			};
-
-			return _seatBookingReportProvider.Get(criteria);
-
+			return _seatBookingReportProvider.Get(command);
 		}
+
+		
 
 	}
 }
