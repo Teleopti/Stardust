@@ -253,7 +253,6 @@
 						colors: dataColor,
 						order: 'null',
 						onclick: function(d, ele) {
-							console.log(d);
 						}
 			},
 					zoom: {
