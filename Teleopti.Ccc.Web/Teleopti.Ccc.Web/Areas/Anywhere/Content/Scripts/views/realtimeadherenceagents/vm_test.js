@@ -1,24 +1,30 @@
 ﻿define([
     'buster',
     'views/realtimeadherenceagents/vm',
+    'moment',
     'window',
     'resources',
     'lazy'
 ], function(
     buster,
     viewModel,
+    moment,
     window,
     resources,
     lazy) {
 
-    return function() {
+    return function () {
 
         var agentById = function(vm, id) {
             return lazy(vm.Agents())
                 .find(function(a) { return a.PersonId === id; });
         }
 
-        buster.testCase("=> real time adherence agents viewmodel", {
+        var now = function(time) {
+            return moment(time).toDate().getTime();
+        }
+
+        buster.testCase("real time adherence agents viewmodel", {
             "should have no agents if none filled": function() {
                 var vm = viewModel();
 
@@ -251,7 +257,7 @@
                 ]);
 
                 var expectedUrl = "#teamschedule/buId/teamId/personId/" + moment().format("YYYYMMDD");
-                assert.match(vm.Agents()[0].ScheduleChangeUrl, expectedUrl);
+                assert.match(vm.Agents()[0].ScheduleChangeUrl(), expectedUrl);
             },
 
             "should generate change schedule url for an agent with state": function () {
@@ -273,9 +279,32 @@
                 ]);
 
                 var expectedUrl = "#teamschedule/buId/teamId/personId/" + moment().format("YYYYMMDD");
-                assert.match(vm.Agents()[0].ScheduleChangeUrl, expectedUrl);
+                assert.match(vm.Agents()[0].ScheduleChangeUrl(), expectedUrl);
             },
 
+            "should update schedule change url based on time": function () {
+                this.clock = this.useFakeTimers(now("2015-08-06 08:00"));
+                var vm = viewModel();
+
+                vm.SetViewOptions({
+                    buid: 'buId'
+                });
+                vm.fillAgents([
+                    {
+                        PersonId: "personId",
+                        TeamId: "teamId"
+                    }
+                ]);
+
+                this.clock.tick(24 * 60 * 60 * 1000);
+                vm.refreshAlarmTime();
+
+                var expectedUrl = "#teamschedule/buId/teamId/personId/20150807";
+                assert.match(vm.Agents()[0].ScheduleChangeUrl(), expectedUrl);
+
+
+                this.clock.restore();
+            },
 
             "filtering:": {
                 " should only display matching name": function() {

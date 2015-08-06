@@ -46,7 +46,7 @@
             that.DisplayAdherencePercentage = ko.observable(false);
 
             that.SelectedToSendMessage = ko.observable(false);
-            that.ScheduleChangeUrl = "";
+            that.ScheduleChangeUrl = ko.observable();
 
 	        that.fill = function (data) {
 	            that.PersonId = data.PersonId;
@@ -63,7 +63,11 @@
 				that.EnteredCurrentAlarm(data.StateStart);
                 that.refreshAlarmTime();
 
-                that.AlarmStart(data.AlarmStart ? moment.utc(data.AlarmStart).add(resources.TimeZoneOffsetMinutes, 'minutes').format(resources.FixedDateTimeWithSecondsFormatForMoment) : '');
+	            that.AlarmStart(data.AlarmStart
+	                ? moment.utc(data.AlarmStart)
+	                    .add(resources.TimeZoneOffsetMinutes, 'minutes')
+	                    .format(resources.FixedDateTimeWithSecondsFormatForMoment)
+	                : '');
 
                 if (that.shouldWaitWithUpdatingAlarm(data.AlarmStart)) {
                     that.HaveNewAlarm = true;
@@ -74,11 +78,11 @@
                 that.Alarm(data.Alarm);
                 that.refreshColor(data.AlarmColor);
 
-                that.ScheduleChangeUrl = navigation.UrlForChangingSchedule(that.BusinessUnitId, that.TeamId, that.PersonId, moment());
                 that.AdherenceDetailsUrl = navigation.UrlForAdherenceDetails(that.BusinessUnitId, that.PersonId);
 	        };
-            
-            that.refreshAlarmTime = function() {
+
+            that.refreshAlarmTime = function () {
+                that.ScheduleChangeUrl(navigation.UrlForChangingSchedule(that.BusinessUnitId, that.TeamId, that.PersonId, moment()));
                 if (!that.EnteredCurrentAlarm()) return;
                 var duration = moment.duration(((new Date).getTime() - moment.utc(that.EnteredCurrentAlarm())));
                 if (that.Alarm() === '') that.AlarmTime('');
