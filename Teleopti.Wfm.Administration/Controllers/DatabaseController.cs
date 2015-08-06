@@ -66,15 +66,16 @@ namespace Teleopti.Wfm.Administration.Controllers
 			var checkCreate = checkCreateDbInternal(builder);
             if (!checkCreate.Success)
 				return Json(new CreateTenantResultModel { Message = checkCreate.Message, Success = false });
-			
-			
-			var dbPath = _dbPathProvider.GetDbPath();
+
+			var isAzure = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME"));
+
+         var dbPath = _dbPathProvider.GetDbPath();
 			
 			_databaseHelperWrapper.CreateLogin(builder.ConnectionString, model.AppUser, model.AppPassword);
 
 			builder.InitialCatalog = model.Tenant + "_TeleoptiWfmApp";
 			
-			_databaseHelperWrapper.CreateDatabase(builder.ConnectionString,DatabaseType.TeleoptiCCC7, dbPath, model.AppUser);
+			_databaseHelperWrapper.CreateDatabase(builder.ConnectionString,DatabaseType.TeleoptiCCC7, dbPath, model.AppUser, isAzure);
 			var personId = Guid.NewGuid();
 			_databaseHelperWrapper.AddInitialPerson(builder.ConnectionString, personId);
 			_databaseHelperWrapper.AddBusinessUnit(builder.ConnectionString, model.BusinessUnit);
@@ -85,7 +86,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			builder.UserID = model.CreateDbUser;
 			builder.Password = model.CreateDbPassword;
 			builder.InitialCatalog = model.Tenant + "_TeleoptiWfmAnalytics";
-			_databaseHelperWrapper.CreateDatabase(builder.ConnectionString, DatabaseType.TeleoptiAnalytics, dbPath, model.AppUser);
+			_databaseHelperWrapper.CreateDatabase(builder.ConnectionString, DatabaseType.TeleoptiAnalytics, dbPath, model.AppUser, isAzure);
 			builder.UserID = model.AppUser;
 			builder.Password = model.AppPassword;
 			var connstringAnalytics = builder.ConnectionString;
@@ -98,7 +99,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			builder.UserID = model.CreateDbUser;
 			builder.Password = model.CreateDbPassword;
 			builder.InitialCatalog = model.Tenant + "_TeleoptiWfmAgg";
-			_databaseHelperWrapper.CreateDatabase(builder.ConnectionString, DatabaseType.TeleoptiCCCAgg, dbPath, model.AppUser);
+			_databaseHelperWrapper.CreateDatabase(builder.ConnectionString, DatabaseType.TeleoptiCCCAgg, dbPath, model.AppUser, isAzure);
 
 			var newTenant = new Tenant(model.Tenant);
 			newTenant.SetApplicationConnectionString(connstringApp);
@@ -111,9 +112,11 @@ namespace Teleopti.Wfm.Administration.Controllers
 			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), model.FirstUser, model.FirstUserPassword);
 			_currentTenantSession.CurrentSession().Save(personInfo);
 
-			UpdateCrossDatabaseView.Execute(updateViewsConnstringAnalyticsUpdateViews, model.Tenant + "_TeleoptiWfmAgg");
+			if(isAzure)
+				UpdateCrossDatabaseView.Execute(updateViewsConnstringAnalyticsUpdateViews, model.Tenant + "_TeleoptiWfmAnalytics");
+			else
+				UpdateCrossDatabaseView.Execute(updateViewsConnstringAnalyticsUpdateViews, model.Tenant + "_TeleoptiWfmAgg");
 
-			//takes around 30 sek so we should present some feedback to the user meanwhile, signalr?
 			return Json(new CreateTenantResultModel {Success = true, Message = "Successfully created a new Tenant."});
 		}
 

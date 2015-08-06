@@ -42,6 +42,20 @@ namespace Teleopti.Ccc.DBManager.Library
 			}
 		}
 
+		public void CreateInAzureByDbManager()
+		{
+			var databaseFolder = new DatabaseFolder(new DbManagerFolder(DbManagerFolderPath));
+			using (var conn = openConnection(true))
+			{
+				var creator = new DatabaseCreator(databaseFolder, conn);
+				creator.CreateAzureDatabase(DatabaseType, DatabaseName);
+			}
+			using (var conn = openConnection())
+			{
+				var databaseVersionInformation = new DatabaseVersionInformation(databaseFolder, conn);
+				databaseVersionInformation.CreateTable();
+			}
+		}
 		public bool LoginExists(string login)
 		{
 			var sql = string.Format(@"SELECT 1 FROM syslogins WHERE name = '{0}'", login);

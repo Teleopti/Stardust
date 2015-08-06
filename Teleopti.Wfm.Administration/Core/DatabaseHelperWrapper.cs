@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.SqlClient;
+using System.Runtime.Remoting.Messaging;
 using System.Web.UI.WebControls;
 using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Wfm.Administration.Models;
@@ -49,11 +50,41 @@ namespace Teleopti.Wfm.Administration.Core
 			
 		}
 
-		public void CreateDatabase(string connectionToNewDb, DatabaseType databaseType, string dbPath, string login)
+		public void CreateDatabase(string connectionToNewDb, DatabaseType databaseType, string dbPath, string login, bool isAzure)
 		{
 			//if it already exists - return a Message!
+
+			if (isAzure && databaseType.Equals(DatabaseType.TeleoptiCCCAgg))
+				return;
+
 			try
 			{
+				new SqlConnectionStringBuilder(connectionToNewDb);
+			}
+			catch (Exception)
+			{
+				//return new DbCheckResultModel { Exists = false, Message = string.Format("The connection string for {0} is not in the correct format!") };
+				//
+			}
+			var helper = new DatabaseHelper(connectionToNewDb, databaseType);
+			helper.DbManagerFolderPath = dbPath;
+			
+			if(isAzure)
+				helper.CreateInAzureByDbManager();
+			else
+				helper.CreateByDbManager();
+
+			helper.CreateSchemaByDbManager();
+			helper.AddPermissions(login);
+		}
+
+		public void CreateAzureDatabase(string connectionToNewDb, DatabaseType databaseType, string dbPath, string login)
+		{
+			//if it already exists - return a Message!
+			if(databaseType.Equals(DatabaseType.TeleoptiCCCAgg))
+				return;
+			try
+         {
 				new SqlConnectionStringBuilder(connectionToNewDb);
 			}
 			catch (Exception)
