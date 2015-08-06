@@ -1,6 +1,9 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage<System.Web.Mvc.HandleErrorInfo>" %>
 <%@ Import Namespace="AuthBridge.Configuration" %>
 
+
+
+
 <script runat="server">
 
 	protected void Page_Load(object sender, EventArgs e)
@@ -11,17 +14,27 @@
 		exMessage.Text = ex.Message;
 		exTrace.Text = ex.StackTrace;
 
-		returnToScopeApplication();
+		returnToScopeApplication(ex);
 	}
 
-	private void returnToScopeApplication()
+	private void returnToScopeApplication(Exception exception)
 	{
 		var configuration = ConfigurationManager.GetSection("authBridge/multiProtocolIssuer") as MultiProtocolIssuerSection;
 		var scope = configuration.Scopes.OfType<ScopeElement>().FirstOrDefault();
 		if (scope != null)
 		{
 			clearFederationContext();
-			Response.Redirect(scope.Uri.Replace("Return/HandleReturn", ""), true);
+			if (exception.StackTrace.Contains("AzureAdOAuthHandler"))
+			{
+				var tokenEndpoint= configuration.ClaimProviders["urn:AzureAd"].Params["tokenEndpoint"].Value;
+				var signoutUrl = tokenEndpoint.Replace("token", "logout") + "?post_logout_redirect_uri=" + HttpUtility.UrlEncode(scope.Uri.Replace("Start/Return/HandleReturn", ""));
+				Response.AppendHeader("Refresh", "5;url=" + signoutUrl);
+				exMessage.Text = "You don't have permission, you will be signed out in 5 seconds, please sign in using another account.";
+			}
+			else
+			{
+				Response.Redirect(scope.Uri.Replace("Return/HandleReturn", ""), true);
+			}
 		}
 	}
 
