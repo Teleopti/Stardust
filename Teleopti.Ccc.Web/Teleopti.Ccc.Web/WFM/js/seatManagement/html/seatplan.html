@@ -2,8 +2,8 @@
 
 <div id="seatPlan" ui-view>
 
-	<seat-plan-report ng-show="seatplan.isReportOpened" toggle="seatplan.isReportOpened = !seatplan.isReportOpened"
-					  selected-period="seatplan.planningPeriods[0]" get-day-class="seatplan.getDayClass(date,mode)"></seat-plan-report>
+	<seat-plan-report ng-if="seatplan.isReportOpened" toggle="seatplan.isReportOpened = !seatplan.isReportOpened"
+	                  selected-period="seatplan.planningPeriods[0]"></seat-plan-report>
 
 	<div class="row" ng-show="!seatplan.isReportOpened" style="margin: 0; padding: 0;">
 

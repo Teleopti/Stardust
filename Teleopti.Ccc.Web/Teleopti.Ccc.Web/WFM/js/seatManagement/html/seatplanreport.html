@@ -7,14 +7,75 @@
 			<i class="mdi mdi-filter"></i>
 			Filter
 		</button>
-		<button class="wfm-fab info pull-right" ng-show="!vm.isFilterOpened" ng-click="vm.preview(1)">
+		<button class="wfm-fab info pull-right" ng-show="!vm.isFilterOpened">
 			<i class="mdi mdi-printer"></i>
 		</button>
 		<span class="blank" ng-click="vm.isFilterOpened = false"></span>
-	</div>
 
+		<div class="seatPlanReportFilter wfm-slide-tabs material-depth-2" ng-show="vm.isFilterOpened">
+			<div class="header-bar">
+				<button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.toggleFilter('date')">Date</button>
+				<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.toggleFilter('team')">Team</button>
+				<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.toggleFilter('location')">Location</button>
+			</div>
+
+			<div class="filter-content">
+				<div class="date-picker" ng-show="vm.isDatePickerOpened">
+					<datepicker class="wfm-datepicker" ng-model="vm.selectedPeriod.StartDate"
+								ng-change="vm.$parent.seatplan.onChangeOfDate()" custom-class="vm.setRangeClass(date,mode)" max-date="vm.selectedPeriod.EndDate">
+					</datepicker>
+					<datepicker class="wfm-datepicker" ng-model="vm.selectedPeriod.EndDate"
+								ng-change="vm.$parent.seatplan.onChangeOfDate()" custom-class="vm.setRangeClass(date,mode)" min-date="vm.selectedPeriod.StartDate">
+					</datepicker>
+				</div>
+
+				<div class="team-picker" ng-show="vm.isTeamPickerOpened">
+					<div class="input-prepend">
+						<i class="mdi mdi-filter-outline"></i>
+						<input type="text" name="filterTeams" ng-model="searchTeams" placeholder="{{ 'FilterTeams' | translate }}"/>
+					</div>
+
+					<div class="tree">
+						<div ui-tree data-drag-enabled=" false">
+							<ol ui-tree-nodes="" ng-model="vm.teams" id="tree-root-teams" class="tree-line" toggle-focus>
+								<li ng-repeat="node in vm.teams | filter:searchTeams" ui-tree-node ng-include="'teams_renderer.html'"></li>
+							</ol>
+						</div>
+					</div>
+				</div>
+
+				<div class="location-picker" ng-show="vm.isLocationPickerOpened">
+					<div class="input-prepend">
+						<i class="mdi mdi-filter-outline"></i>
+						<input type="text" name="filterLocations" ng-model="searchLocations" placeholder="{{ 'FilterLocations' | translate }}"/>
+					</div>
+
+					<div class="tree">
+						<div ui-tree data-drag-enabled="false">
+							<ol ui-tree-nodes="" ng-model="vm.locations" id="tree-root-locations" class="tree-line" toggle-focus>
+								<li ng-repeat="node in vm.locations | filter:searchLocations" ui-tree-node ng-include=" 'locations_renderer.html' "></li>
+							</ol>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+			<div class="bottom-bar">
+				<button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="vm.isFilterOpened=false;vm.applyFilter()">Apply</button>
+				<button class="wfm-btn wfm-btn-invis-default pull-right" ng-click="vm.isFilterOpened=false">Cancel</button>
+			</div>
+		</div>
+	</div>
 	<div class="seatPlanReportContent" ng-click="vm.isFilterOpened = false">
-		<table>
+
+		<div ng-show="vm.isLoadingReport" class="report-spinner">
+			<md-progress-circular md-mode="indeterminate"></md-progress-circular>
+		</div>
+
+		<h1 ng-if="!vm.isLoadingReport">{{ vm.seatBookings.length == 0 ? 'No report for selected period' : 'Seat Plan Report' }}</h1>
+
+		<table ng-if="!vm.isLoadingReport">
 			<tr ng-repeat-start="bookingByDate in vm.seatBookings" class="tr-date">
 				<td></td>
 				<td></td>
