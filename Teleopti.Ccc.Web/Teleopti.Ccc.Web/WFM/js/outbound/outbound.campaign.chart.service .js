@@ -289,11 +289,6 @@
 					}
 				});
 
-				graph.load({
-				    columns: selectDataGroups(viewScheduleDiffToggle, plannedPhase).map(function (name) { return graphData[name]; }),
-				    unload: currentLabelGroups
-				});
-
 			}
 
 		    if (successCb) successCb(graph);		
