@@ -4,9 +4,9 @@
 	angular.module('wfm.permissions').controller('RoleDataController', [
 		'$scope', '$filter', 'RoleDataService','Roles',
 	        function($scope, $filter, RoleDataService, Roles) {
-	            $scope.organization = { DynamicOptions: []};
-
-	            $scope.dynamicOptionSelected = null;
+	        	$scope.organization = { DynamicOptions: [] };
+	        	
+		        $scope.dynamicOptionSelected = { data: 0 };
 	            $scope.$watch(function() { return Roles.selectedRole; },
 	                function(newSelectedRole) {
 	                    if (!newSelectedRole.Id) return;                  
@@ -14,15 +14,15 @@
 	                }
 	            );
 
-	            $scope.$watch(function () { return RoleDataService.organization },
+	            $scope.$watch(function () { return RoleDataService.organization; },
                    function (organization) {
                        $scope.organization = organization;
-                       $scope.dynamicOptionSelected = RoleDataService.dynamicOptionSelected;;
+                       $scope.dynamicOptionSelected.data = RoleDataService.dynamicOptionSelected;
                    }
-           );  
-	            $scope.$watch(function () { return RoleDataService.dynamicOptionSelected; },
+           );
+	            $scope.$watch(function() {return RoleDataService.dynamicOptionSelected;},
                        function (option) {
-                           $scope.dynamicOptionSelected = option;      //fixme                   
+                       	$scope.dynamicOptionSelected.data = option;                
                        }
                     );
 			

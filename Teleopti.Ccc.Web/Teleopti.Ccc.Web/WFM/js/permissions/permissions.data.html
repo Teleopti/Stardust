@@ -35,11 +35,10 @@
             </div>
         </form>
 
-    <div class="data-auth">
-        <label translate>AddGlobalAuthorizationLabel</label>
-        <select ng-model="dynamicOptionSelected" ng-init="dynamicOptionSelected" ng-change="changeOption(dynamicOptionSelected) " ng-options="dynamic.RangeOption as dynamic.Name for dynamic in organization.DynamicOptions" style="padding: 0;">
-        </select>
-    </div>
+	<div class="data-auth">
+		<label translate>AddGlobalAuthorizationLabel</label> 
+		<select ng-model="dynamicOptionSelected.data" ng-init="dynamicOptionSelected.data" ng-change="changeOption(dynamicOptionSelected.data) " ng-options="dynamic.RangeOption as dynamic.Name for dynamic in organization.DynamicOptions" style="padding: 0;"></select>
+	</div>
 </div>
 
 

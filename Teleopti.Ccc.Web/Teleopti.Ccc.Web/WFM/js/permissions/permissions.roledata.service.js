@@ -18,7 +18,7 @@
 				});
 			};
 			var roleDataService = {};
-			roleDataService.dynamicOptionSelected = {};
+			roleDataService.dynamicOptionSelected = 0;
 			roleDataService.organization = { BusinessUnit: [{ BusinessUnit: { Sites: [] } }], DynamicOptions: [] };
 			roleDataService.displayedData = {};
 			PermissionsService.organizationSelections.query().$promise.then(function (result) {
@@ -58,7 +58,7 @@
 				var data = {};
 				data.Id = selectedRole;
 				data['RangeOption'] = option;
-			    roleDataService.dynamicOptionSelected = option;
+			  roleDataService.dynamicOptionSelected = option;
 				PermissionsService.assignOrganizationSelection.postData(data);
 			}
 
