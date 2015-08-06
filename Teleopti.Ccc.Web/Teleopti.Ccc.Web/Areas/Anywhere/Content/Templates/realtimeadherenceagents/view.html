@@ -40,7 +40,7 @@
 					<th data-bind="text: resources.TimeInAlarm"></th>
 				</tr>
 			</thead>
-			<tbody data-bind="foreach: filteredAgents">
+			<tbody data-bind="foreach: Agents">
 				<tr class="agent-state" data-bind="style:  { backgroundColor: AlarmColor, 'transition': 'background-color 2000ms linear', fontWeight: TextWeight, fontColor: TextColor}, click: $root.SelectAgent">
 					<td class="selectable-agent" data-bind="if: $parent.notifyViaSMSEnabled"><input type="checkbox" data-bind="checked: SelectedToSendMessage, stopBubble: true"></td>
 					<td class="agent-name" data-bind="text: Name"></td>
@@ -58,14 +58,17 @@
 						<div class="agent-menu">
 							<div class="btn-group">
 								<!-- ko if: $root.permissionAddActivity -->
-								<a class="btn btn-sm change-schedule" data-bind="attr: { href: $root.urlForChangingSchedule($data)}"><i class="glyphicon glyphicon-pencil"></i> <span data-bind="    text: $root.Resources.ModifySchedule"></span></a>
+							    <a class="btn btn-sm change-schedule" data-bind="attr: { href: ScheduleChangeUrl }">
+							        <i class="glyphicon glyphicon-pencil"></i> 
+                                    <span data-bind="text: $root.Resources.ModifySchedule"></span>
+							    </a>
 								<!-- /ko -->
 							</div>
 							<!-- ko if: $root.agentAdherenceEnabled -->
 							<!-- ko if: DisplayAdherencePercentage -->
 							<div class="adherence btn-group">
 								<!-- ko if: $root.agentAdherenceDetailsEnabled -->
-								<a class="btn" data-bind="attr: { href: $root.urlForAdherenceDetails($data)}">
+								<a class="btn" data-bind="attr: { href: AdherenceDetailsUrl }">
 									<span data-bind="text: $root.resources.Adherence"></span>
 									<span class="historical-adherence" data-bind="text: HistoricalAdherence"></span>
 								</a>
@@ -89,29 +92,3 @@
 		</table>
 	</div>
 </div>
-
-		<script id="layerTemplate" type="text/html">
-			<!-- ko if: OverlapsTimeLine -->
-			<div class="layer absolute floatleft" data-bind="
-    style: {
-        left: StartPixels() + 'px',
-        width: LengthPixels() + 'px',
-        backgroundColor: Color
-    },
-    attr: {
-        'data-start-time': StartTime,
-        'data-length-minutes': LengthMinutes(),
-    },
-    click: function () {
-        return $root.SelectLayer($data, $parent.PersonId);
-    },
-    clickBubble: false
-	">
-				<!-- ko if: IsFullDayAbsence && $parent.Layers().length == 1 -->
-				<!-- ko if: $root.DisplayDescriptions -->
-				<span class="label label-default layer-description" data-bind="text: Description"></span>
-				<!-- /ko -->
-				<!-- /ko -->
-			</div>
-			<!-- /ko -->
-		</script>
