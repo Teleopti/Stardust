@@ -44,7 +44,11 @@
 	margin:0px;
 	border-radius:0px;
 	text-transform:none;
-	background:#ffffff;
+}
+
+.seatPlanReport .wfm-btn-invis-primary{
+	background:#09e;
+	color:#ffffff;
 }
 
 .seatPlanReport .wfm-btn:hover{
@@ -128,12 +132,6 @@
 	padding:3px 9px;
 }
 
-.seatPlanReportFilter .bottom-bar 
-
-.wfm-btn-invis-primary{
-	background:#09e;
-	color:#ffffff;
-}
 .seatPlanReportFilter .bottom-bar .wfm-btn-invis-default{
 	background:#f1f2f3;
 }
