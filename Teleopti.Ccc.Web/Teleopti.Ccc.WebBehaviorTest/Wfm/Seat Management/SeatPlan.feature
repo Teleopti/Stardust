@@ -25,15 +25,17 @@ Background:
 		| Name		| "Location1"	|
 	And I am swedish
 	
+@ignore
 Scenario: display seat plan planning period list
 	When I view Seat plan on "2015-05-01"
 	Then I should see planning period available for seat planning from '2015-05-10'to '2015-06-09'
-	
 
+@ignore
 Scenario: display seat plan status for day
 	When I view Seat plan on "2015-05-02"
 	Then I should see a Seat plan status of "All chosen agents were allocated seats"
 	
+@ignore
 Scenario: select planning period to begin seat planning
 	When I view Seat plan on "2015-05-01"
 	And I choose the planning period beginning on '2015-05-10' for seat planning

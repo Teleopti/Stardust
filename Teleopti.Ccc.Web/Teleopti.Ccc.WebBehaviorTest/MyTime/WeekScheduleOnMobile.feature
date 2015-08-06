@@ -105,7 +105,8 @@ Scenario: View when you have full day absence
    | Field | Value      |
    | Name  | Illness    |
    | Date  | 2014-04-15 |
-
+   
+@ignore
 Scenario: View when you have a full day absence on working day
    Given I have the role 'Full access to mytime'
    And I have the workflow control set 'Published schedule'
@@ -145,6 +146,7 @@ Scenario: View when you are in absence on day off
    | Name  | Illness    |
    | Date  | 2014-04-15 |
 
+@ignore
 Scenario: Do not show unpublished schedule
    Given I have the role 'Full access to mytime'
    And I have the workflow control set 'Published schedule until 2014-04-30'
