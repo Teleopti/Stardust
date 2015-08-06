@@ -92,7 +92,11 @@
 			vm.parentVm.toggleImportPeople();
 		};
 
-		vm.upload = function(files) {
+		vm.upload = function (files) {
+			vm.isSuccessful = false;
+			vm.isFailed = false;
+			vm.hasParsingError = false;
+			vm.errorMsg = '';
 			if (files && files.length) {
 				for (var i = 0; i < files.length; i++) {
 					var file = files[i];
