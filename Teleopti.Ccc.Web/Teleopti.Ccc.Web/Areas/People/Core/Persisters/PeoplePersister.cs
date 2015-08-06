@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Persisters
 					{
 						using (_tenantUnitOfWork.Start())
 						{
-							_personInfoPersister.Persist(_mapper.Map(tenantUserData), tenantUserData.ApplicationLogonName);
+							_personInfoPersister.Persist(_mapper.Map(tenantUserData), tenantUserData.ApplicationLogonName, string.IsNullOrEmpty(tenantUserData.Password));
 						}
 					}
 					catch (PasswordStrengthException)

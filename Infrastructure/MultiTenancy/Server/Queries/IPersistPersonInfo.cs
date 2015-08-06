@@ -2,6 +2,6 @@
 {
 	public interface IPersistPersonInfo
 	{
-		void Persist(PersonInfo personInfo, string logonName);
+		void Persist(PersonInfo personInfo, string logonName, bool noNewPassword);
 	}
 }

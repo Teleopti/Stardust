@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 		[TenantUnitOfWork]
 		protected virtual void PersistInternal(PersonInfoModel personInfoModel)
 		{
-			_persister.Persist(_mapper.Map(personInfoModel), personInfoModel.ApplicationLogonName);
+			_persister.Persist(_mapper.Map(personInfoModel), personInfoModel.ApplicationLogonName, string.IsNullOrEmpty(personInfoModel.Password));
 		}
 
 		[HttpPost]
