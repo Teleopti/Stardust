@@ -205,7 +205,10 @@ namespace Teleopti.Wfm.Administration.Controllers
 			var mainUsers = _currentTenantSession.CurrentSession()
 				.GetNamedQuery("loadAll")
 				.List<PersonInfo>();
-			var exists = mainUsers.FirstOrDefault(m => m.ApplicationLogonInfo.LogonName.Equals(name,StringComparison.InvariantCultureIgnoreCase));
+
+			mainUsers = mainUsers.Where(m => m.ApplicationLogonInfo.LogonName != null).ToList();
+
+         var exists = mainUsers.FirstOrDefault(m => m.ApplicationLogonInfo.LogonName.Equals(name,StringComparison.InvariantCultureIgnoreCase));
 			if (exists != null)
 				return new CreateTenantResultModel { Success = false, Message = "The user already exists." };
 
