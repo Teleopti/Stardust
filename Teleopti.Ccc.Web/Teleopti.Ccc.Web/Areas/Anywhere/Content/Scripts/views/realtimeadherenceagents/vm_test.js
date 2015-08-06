@@ -14,15 +14,15 @@
     return function() {
 
         var agentById = function(vm, id) {
-            return lazy(vm.Agents())
+            return lazy(vm.filteredAgents())
                 .find(function(a) { return a.PersonId === id; });
         }
 
-        buster.testCase("=> real time adherence agents viewmodel", {
+        buster.testCase("=>real time adherence agents viewmodel", {
             "should have no agents if none filled": function() {
                 var vm = viewModel();
 
-                assert.equals(vm.Agents(), []);
+                assert.equals(vm.filteredAgents(), []);
             },
 
             "should update root uri": function() {
@@ -49,12 +49,12 @@
                     }
                 ]);
 
-                assert.equals(vm.Agents()[0].PersonId, "guid");
-                assert.equals(vm.Agents()[0].Name, "Bill");
-                assert.equals(vm.Agents()[0].SiteId, "gui1");
-                assert.equals(vm.Agents()[0].SiteName, "site");
-                assert.equals(vm.Agents()[0].TeamId, "guid2");
-                assert.equals(vm.Agents()[0].TeamName, "team");
+                assert.equals(vm.filteredAgents()[0].PersonId, "guid");
+                assert.equals(vm.filteredAgents()[0].Name, "Bill");
+                assert.equals(vm.filteredAgents()[0].SiteId, "gui1");
+                assert.equals(vm.filteredAgents()[0].SiteName, "site");
+                assert.equals(vm.filteredAgents()[0].TeamId, "guid2");
+                assert.equals(vm.filteredAgents()[0].TeamName, "team");
             },
 
             "should fill agent state data": function() {
@@ -135,7 +135,7 @@
                     }
                 ]);
                 
-                assert.equals(vm.Agents().length, 0);
+                assert.equals(vm.filteredAgents().length, 0);
             },
 
             "should fill next activity start for last activity": function() {
@@ -165,7 +165,7 @@
                 vm.fillAgents([{ PersonId: "guid1" }]);
                 vm.fillAgentsStates([{ PersonId: "guid1" }]);
 
-                assert.equals(vm.Agents().length, 1);
+                assert.equals(vm.filteredAgents().length, 1);
             },
 
             "should order by agent name": function() {
@@ -181,8 +181,8 @@
                     }
                 ]);
 
-                assert.equals(vm.Agents()[0].Name, "Bill");
-                assert.equals(vm.Agents()[1].Name, "John");
+                assert.equals(vm.filteredAgents()[0].Name, "Bill");
+                assert.equals(vm.filteredAgents()[1].Name, "John");
             },
 
             "should display alarmtime based on when agent entered current alarm": function() {
@@ -202,7 +202,7 @@
                     }
                 ]);
 
-                assert.equals(vm.Agents()[0].AlarmTime(), "0:00:10");
+                assert.equals(vm.filteredAgents()[0].AlarmTime(), "0:00:10");
             },
 
             "should not display alarm until alarm start": function() {
@@ -224,7 +224,7 @@
                     }
                 ]);
 
-                assert.equals(vm.Agents()[0].Alarm(), undefined);
+                assert.equals(vm.filteredAgents()[0].Alarm(), undefined);
             },
 
             "should select an agent": function() {
@@ -251,29 +251,7 @@
                 ]);
 
                 var expectedUrl = "#teamschedule/buId/teamId/personId/" + moment().format("YYYYMMDD");
-                assert.match(vm.Agents()[0].ScheduleChangeUrl, expectedUrl);
-            },
-
-            "should generate change schedule url for an agent with state": function () {
-                var vm = viewModel();
-
-                vm.SetViewOptions({
-                    buid: 'buId'
-                });
-                vm.fillAgents([
-                    {
-                        PersonId: "personId",
-                        TeamId: "teamId"
-                    }
-                ]);
-                vm.fillAgentsStates([
-                    {
-                        PersonId: 'personId'
-                    }
-                ]);
-
-                var expectedUrl = "#teamschedule/buId/teamId/personId/" + moment().format("YYYYMMDD");
-                assert.match(vm.Agents()[0].ScheduleChangeUrl, expectedUrl);
+                assert.match(vm.filteredAgents()[0].ScheduleChangeUrl, expectedUrl);
             },
 
 
@@ -292,8 +270,8 @@
 
                     vm.filter("Kurt");
 
-                    assert.equals(vm.Agents().length, 1);
-                    assert.equals(vm.Agents()[0].Name, "Kurt");
+                    assert.equals(vm.filteredAgents().length, 1);
+                    assert.equals(vm.filteredAgents()[0].Name, "Kurt");
                 },
 
                 "should only display matching activity": function() {
@@ -319,8 +297,8 @@
 
                     vm.filter("Phone");
 
-                    assert.equals(vm.Agents().length, 1);
-                    assert.equals(vm.Agents()[0].Name, "Kurt");
+                    assert.equals(vm.filteredAgents().length, 1);
+                    assert.equals(vm.filteredAgents()[0].Name, "Kurt");
                 },
 
                 "should only display matching alarm": function() {
@@ -346,8 +324,8 @@
 
                     vm.filter("Positive");
 
-                    assert.equals(vm.Agents().length, 1);
-                    assert.equals(vm.Agents()[0].Name, "Kurt");
+                    assert.equals(vm.filteredAgents().length, 1);
+                    assert.equals(vm.filteredAgents()[0].Name, "Kurt");
                 },
 
 
@@ -374,8 +352,8 @@
 
                     vm.filter('13:45');
 
-                    assert.equals(vm.Agents().length, 1);
-                    assert.equals(vm.Agents()[0].Name, "Kurt");
+                    assert.equals(vm.filteredAgents().length, 1);
+                    assert.equals(vm.filteredAgents()[0].Name, "Kurt");
                 },
 
                 "should only display agent matching multi filter criteria": function() {
@@ -394,9 +372,9 @@
 
                     vm.filter("Kurt BTeam");
 
-                    assert.equals(vm.Agents().length, 1);
-                    assert.equals(vm.Agents()[0].Name, "Kurt");
-                    assert.equals(vm.Agents()[0].TeamName, "BTeam");
+                    assert.equals(vm.filteredAgents().length, 1);
+                    assert.equals(vm.filteredAgents()[0].Name, "Kurt");
+                    assert.equals(vm.filteredAgents()[0].TeamName, "BTeam");
                 },
 
                 "should only display agent matching single quote filter criteria": function() {
@@ -413,8 +391,8 @@
 
                     vm.filter("'Kurt Karlsson'");
 
-                    assert.equals(vm.Agents().length, 1);
-                    assert.equals(vm.Agents()[0].Name, "Kurt Karlsson");
+                    assert.equals(vm.filteredAgents().length, 1);
+                    assert.equals(vm.filteredAgents()[0].Name, "Kurt Karlsson");
                 },
 
                 "should only display agent matching double quote filter criteria": function() {
@@ -431,8 +409,8 @@
 
                     vm.filter('"Kurt Karlsson"');
 
-                    assert.equals(vm.Agents().length, 1);
-                    assert.equals(vm.Agents()[0].Name, "Kurt Karlsson");
+                    assert.equals(vm.filteredAgents().length, 1);
+                    assert.equals(vm.filteredAgents()[0].Name, "Kurt Karlsson");
                 },
 
                 "should only display agent exactly matching quote filter criteria": function() {
@@ -449,8 +427,8 @@
 
                     vm.filter('"Kurt Karlsson"');
 
-                    assert.equals(vm.Agents().length, 1);
-                    assert.equals(vm.Agents()[0].Name, "Kurt Karlsson");
+                    assert.equals(vm.filteredAgents().length, 1);
+                    assert.equals(vm.filteredAgents()[0].Name, "Kurt Karlsson");
                 },
 
                 "should only display agent not matching when negating filter word with multiple words": function() {
@@ -473,8 +451,8 @@
 
                     vm.filter("Kurt !BTeam");
 
-                    assert.equals(vm.Agents().length, 1);
-                    assert.equals(vm.Agents()[0].Name, "Kurt Karlsson");
+                    assert.equals(vm.filteredAgents().length, 1);
+                    assert.equals(vm.filteredAgents()[0].Name, "Kurt Karlsson");
                 },
 
                 "should only display agents thats not matching negating quoted searchwords": function() {
@@ -491,8 +469,8 @@
 
                     vm.filter("!'Kurt Karlsson'");
 
-                    assert.equals(vm.Agents().length, 1);
-                    assert.equals(vm.Agents()[0].Name, "Kurt A Karlsson");
+                    assert.equals(vm.filteredAgents().length, 1);
+                    assert.equals(vm.filteredAgents()[0].Name, "Kurt A Karlsson");
                 },
 
                 "should display all matching agents when using OR between searchwords": function() {
@@ -512,9 +490,9 @@
 
                     vm.filter("Arne OR Glen");
 
-                    assert.equals(vm.Agents().length, 2);
-                    assert.equals(vm.Agents()[0].Name, "Arne");
-                    assert.equals(vm.Agents()[1].Name, "Glen");
+                    assert.equals(vm.filteredAgents().length, 2);
+                    assert.equals(vm.filteredAgents()[0].Name, "Arne");
+                    assert.equals(vm.filteredAgents()[1].Name, "Glen");
                 },
 
                 "should display all matching agents when using OR and match other words normally": function() {
@@ -529,7 +507,7 @@
                             Name: "Glen",
                             TeamName: "Team B"
                         }, {
-                            PersonId: "guid3",
+                            PersonId: "guid2",
                             Name: "Arne",
                             TeamName: "Team B"
                         }
@@ -537,8 +515,8 @@
 
                     vm.filter("Kurt or Glen 'Team B'");
 
-                    assert.equals(vm.Agents().length, 1);
-                    assert.equals(vm.Agents()[0].Name, "Glen");
+                    assert.equals(vm.filteredAgents().length, 1);
+                    assert.equals(vm.filteredAgents()[0].Name, "Glen");
                 },
 
                 "should display all agents not matching negated OR": function() {
@@ -558,9 +536,9 @@
 
                     vm.filter("Kurt OR !Arne");
 
-                    assert.equals(vm.Agents().length, 2);
-                    assert.equals(vm.Agents()[0].Name, "Glen");
-                    assert.equals(vm.Agents()[1].Name, "Kurt");
+                    assert.equals(vm.filteredAgents().length, 2);
+                    assert.equals(vm.filteredAgents()[0].Name, "Glen");
+                    assert.equals(vm.filteredAgents()[1].Name, "Kurt");
                 },
 
                 "should display all agents not matching negated with dash negation": function() {
@@ -580,9 +558,9 @@
 
                     vm.filter("-Arne");
 
-                    assert.equals(vm.Agents().length, 2);
-                    assert.equals(vm.Agents()[0].Name, "Glen");
-                    assert.equals(vm.Agents()[1].Name, "Kurt");
+                    assert.equals(vm.filteredAgents().length, 2);
+                    assert.equals(vm.filteredAgents()[0].Name, "Glen");
+                    assert.equals(vm.filteredAgents()[1].Name, "Kurt");
                 },
 
                 "should display agents matching more than two OR searchwords": function() {
@@ -605,10 +583,10 @@
 
                     vm.filter("Kurt or Glen or Arne");
 
-                    assert.equals(vm.Agents().length, 3);
-                    assert.equals(vm.Agents()[0].Name, "Arne");
-                    assert.equals(vm.Agents()[1].Name, "Glen");
-                    assert.equals(vm.Agents()[2].Name, "Kurt");
+                    assert.equals(vm.filteredAgents().length, 3);
+                    assert.equals(vm.filteredAgents()[0].Name, "Arne");
+                    assert.equals(vm.filteredAgents()[1].Name, "Glen");
+                    assert.equals(vm.filteredAgents()[2].Name, "Kurt");
                 },
 
                 "should display agents matching symbols": function() {
@@ -625,18 +603,18 @@
 
                     vm.filter(",");
 
-                    assert.equals(vm.Agents().length, 1);
-                    assert.equals(vm.Agents()[0].PersonId, "guid1");
+                    assert.equals(vm.filteredAgents().length, 1);
+                    assert.equals(vm.filteredAgents()[0].PersonId, "guid1");
 
                     vm.filter(">");
 
-                    assert.equals(vm.Agents().length, 1);
-                    assert.equals(vm.Agents()[0].PersonId, "guid1");
+                    assert.equals(vm.filteredAgents().length, 1);
+                    assert.equals(vm.filteredAgents()[0].PersonId, "guid1");
 
                     vm.filter("$");
 
-                    assert.equals(vm.Agents().length, 1);
-                    assert.equals(vm.Agents()[0].PersonId, "guid1");
+                    assert.equals(vm.filteredAgents().length, 1);
+                    assert.equals(vm.filteredAgents()[0].PersonId, "guid1");
                 },
 
                 "should display agents matching arabic name like 'اختبار' searchwords": function() {
@@ -653,8 +631,8 @@
 
                     vm.filter("ار");
 
-                    assert.equals(vm.Agents().length, 1);
-                    assert.equals(vm.Agents()[0].Name, "اختبار");
+                    assert.equals(vm.filteredAgents().length, 1);
+                    assert.equals(vm.filteredAgents()[0].Name, "اختبار");
                 },
 
                 "should matching multiple search words, #30352": function() {
@@ -671,7 +649,7 @@
 
                     vm.filter("Kurt Andersson");
 
-                    assert.equals(vm.Agents().length, 0);
+                    assert.equals(vm.filteredAgents().length, 0);
                 }
             },
 
@@ -688,7 +666,7 @@
 
                     vm.SelectAgent("guid1");
 
-                    assert.equals(vm.Agents()[0].HistoricalAdherence(), '12%');
+                    assert.equals(vm.filteredAgents()[0].HistoricalAdherence(), '12%');
                 },
 
                 "should only fetch historical data if agentAdherence is enabled": function() {
@@ -715,7 +693,7 @@
 
                     vm.SelectAgent("guid1");
 
-                    assert.equals(vm.Agents()[0].LastAdherenceUpdate(), "0:10:00");
+                    assert.equals(vm.filteredAgents()[0].LastAdherenceUpdate(), "0:10:00");
                 },
 
                 "should hide adherence percentage if no data": function() {
@@ -727,7 +705,7 @@
 
                     vm.SelectAgent("guid1");
 
-                    refute(vm.Agents()[0].DisplayAdherencePercentage());
+                    refute(vm.filteredAgents()[0].DisplayAdherencePercentage());
                 },
 
                 "should display adherence percentage if data": function() {
@@ -741,7 +719,7 @@
 
                     vm.SelectAgent("guid1");
 
-                    assert(vm.Agents()[0].DisplayAdherencePercentage());
+                    assert(vm.filteredAgents()[0].DisplayAdherencePercentage());
                 },
 
                 "should keep the historical adherence when new state is pushed": function() {
@@ -758,25 +736,9 @@
                     vm.SelectAgent("guid1");
                     vm.fillAgentsStates([{ PersonId: "guid1" }]);
 
-                    assert.equals(vm.Agents()[0].HistoricalAdherence(), '21%');
-                },
-
-                "should generate historical adherence url": function () {
-                    var vm = viewModel();
-
-                    vm.SetViewOptions({
-                        buid: 'buId'
-                    });
-                    vm.fillAgents([
-                        {
-                            PersonId: "personId",
-                            TeamId: "teamId"
-                        }
-                    ]);
-
-                    var expectedUrl = "#manageadherence/buid/personId";
-                    assert.match(vm.Agents()[0].AdherenceDetailsUrl, expectedUrl);
+                    assert.equals(vm.filteredAgents()[0].HistoricalAdherence(), '21%');
                 }
+
             }
         });
     };
