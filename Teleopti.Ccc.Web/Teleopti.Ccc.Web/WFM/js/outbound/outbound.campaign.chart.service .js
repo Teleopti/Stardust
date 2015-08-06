@@ -107,7 +107,7 @@
 
             var result = unzip([labels, extrapolatedGraphData].concat(graphDataSeq), function(v) {
                 if (!isNaN(v) && isFinite(v))
-                    return Math.round(v);
+                	return Math.round(v * 10) / 10;
                 else
                     return v;
             });
