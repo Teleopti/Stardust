@@ -105,8 +105,7 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 
 	function _initTeamPickerSelection() {
 		vm = new teamScheduleViewModel(_currentUrlDate());
-
-		//return $.ajax({
+		
 		ajax.Ajax({
 	        url: "Team/TeamsAndOrGroupings/" + _currentUrlDate(),
 			dataType: "json",
