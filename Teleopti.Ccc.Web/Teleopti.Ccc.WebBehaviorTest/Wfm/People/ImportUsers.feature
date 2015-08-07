@@ -16,7 +16,6 @@ Scenario: can open action panel
 	And I open the action panel
 	Then I should see import user command
 
-@ignore
 Scenario: can open import panel
 	When I view people
 	And I open the action panel
