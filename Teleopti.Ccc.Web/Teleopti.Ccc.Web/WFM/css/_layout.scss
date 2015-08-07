@@ -139,3 +139,77 @@ md-tooltip {
 .locked{
 	color: rgba(0,0,0,.06)!important;
 }
+
+/*start (main)*/
+	.start-wrapper {
+		width: 75%;
+		margin: 0 auto;
+		max-height: 50%;
+	}
+
+	.start-content {
+		position: relative;
+		top: -200px;
+		background: white;
+	}
+
+	.start-panel {
+		margin:0 5px;
+		display: inline-block;
+		background: white;
+	}
+
+	.start-intro {
+		position: relative;
+		color: white;
+		top: -220px;
+	}
+
+	.social-footer {
+		padding: 5px 0;
+	} 
+	
+	.bubble-wrap {
+		position: relative;
+		top: 0;
+		left: 0;
+		width: 100%;
+		Height: 20vh;
+		background: white;
+		overflow: hidden;
+	}
+
+	.start-spacer-down {
+		margin-bottom: 15px;
+	}
+
+	.start-blog-btn {
+		margin-top: 3rem;
+	}
+
+	.bubble {
+		height: 60px;
+		width: 60px;
+		background-color: #0099FF;
+		top: 15vh;
+		right: 50%;
+		position: absolute;
+		border-radius: 50%;
+		-webkit-transform: scale(60);
+		-webkit-animation: bg-in 3s cubic-bezier(0.2, 0.3, 0, 1);
+		animation: bg-in 3s cubic-bezier(0.2, 0.3, 0, 1);
+	}
+
+	@-webkit-keyframes bg-in {
+		from {
+			-webkit-transform: scale(0);
+			transform: scale(0);
+		}
+	}
+
+	@keyframes bg-in {
+		from {
+			-webkit-transform: scale(0);
+			transform: scale(0);
+		}
+	}

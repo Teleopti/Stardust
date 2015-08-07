@@ -30,7 +30,8 @@ var wfm = angular.module('wfm', [
 	'wfm.notice',
 	'wfm.areas',
 	'wfm.help',
-	'wfm.rta'
+	'wfm.rta',
+	'wfm.start'
 ]);
 
 wfm.config([
