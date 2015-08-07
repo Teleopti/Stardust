@@ -11,7 +11,6 @@ Background:
     | Field      | Value      |	
 	| Start date | 2013-06-01 |
 
-@ignore
 Scenario: Should see running services
 	When I am viewing the health check view
 	Then I should see the 'services' ''
