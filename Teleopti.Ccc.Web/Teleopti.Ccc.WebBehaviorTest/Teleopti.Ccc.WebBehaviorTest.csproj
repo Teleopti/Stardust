@@ -1190,6 +1190,8 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PreferencesFeedbackRefact.feature.cs</LastGenOutput>
     </None>
+    <None Include="Testing\TestRun.Task.TheTask.bat" />
+    <None Include="Testing\TestRun.Task.bat" />
     <None Include="Toggle\Toggle.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Toggle.feature.cs</LastGenOutput>
@@ -1318,9 +1320,7 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>TeamSchedule.feature.cs</LastGenOutput>
     </None>
-    <None Include="Testing\TestRunParallel.appconfig" />
-    <None Include="Testing\TestRunParallel.bat" />
-    <None Include="Testing\TestRun.bat" />
+    <None Include="Testing\TestRun.Console.bat" />
     <None Include="MyTime\TextRequestFromRequests.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>TextRequestFromRequests.feature.cs</LastGenOutput>
