@@ -53,13 +53,15 @@
           
             returnData.dates = new moment(data.Dates.Date).format("YYYY-MM-DD");
             returnData.rawBacklogs = data.BacklogPersonHours;
-            returnData.calculatedBacklogs = (data.ScheduledPersonHours > 0 && data.ScheduledPersonHours < data.PlannedPersonHours)
-                ? data.ScheduledPersonHours + data.BacklogPersonHours - data.PlannedPersonHours : data.BacklogPersonHours;					
+            returnData.calculatedBacklogs = (data.BacklogPersonHours > 0)? 
+                ((data.ScheduledPersonHours > 0 && data.ScheduledPersonHours < data.PlannedPersonHours)
+                ? data.ScheduledPersonHours + data.BacklogPersonHours - data.PlannedPersonHours : data.BacklogPersonHours)
+                : 0;					
             returnData.plans = data.PlannedPersonHours;
             returnData.unscheduledPlans = data.ScheduledPersonHours > 0 ? 0 : data.PlannedPersonHours;
             returnData.schedules = data.ScheduledPersonHours;
-            returnData.underDiffs = data.ScheduledPersonHours > 0 && data.ScheduledPersonHours < data.PlannedPersonHours
-                ? data.PlannedPersonHours - data.ScheduledPersonHours : 0;
+            returnData.underDiffs = data.ScheduledPersonHours > 0 && data.ScheduledPersonHours < data.PlannedPersonHours ?
+                data.PlannedPersonHours - data.ScheduledPersonHours : 0;
             returnData.overDiffs = data.ScheduledPersonHours > 0 && data.ScheduledPersonHours > data.PlannedPersonHours
                 ? data.ScheduledPersonHours - data.PlannedPersonHours : 0;
             returnData.progress = data.BacklogPersonHours;
