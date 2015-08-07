@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			{
 				var plannedHours = incomingTask.GetRealPlannedTimeOnDate(date);
 				var backlogHours = incomingTask.GetBacklogOnDate(date);
-				var scheduledHours = incomingTask.GetScheduledTimeOnDate(date);
+				var scheduledHours = incomingTask.GetRealScheduledTimeOnDate(date);
 
 				visualizationVM.Dates.Add(date);
 				visualizationVM.PlannedPersonHours.Add(plannedHours.Days*24 + plannedHours.Hours + (double)plannedHours.Minutes / 60);

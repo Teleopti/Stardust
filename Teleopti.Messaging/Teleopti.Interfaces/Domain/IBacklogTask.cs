@@ -33,5 +33,7 @@ namespace Teleopti.Interfaces.Domain
         TimeSpan GetOverstaffTimeOnDate(DateOnly date);
         TimeSpan GetTimeOutsideSLA();
 	    TimeSpan GetBacklogOnDate(DateOnly date);
+	    TimeSpan GetRealScheduledTimeOnDate(DateOnly date);
+	    void SetRealScheduledTimeOnDate(DateOnly date, TimeSpan time);
     }
 }

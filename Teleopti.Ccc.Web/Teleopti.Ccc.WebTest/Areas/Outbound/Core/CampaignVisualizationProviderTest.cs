@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			_campaignRepository.Stub(x => x.Get(id)).Return(campaign);
 			var incomingTask = MockRepository.GenerateMock<IBacklogTask>();
 			incomingTask.Stub(x => x.GetRealPlannedTimeOnDate(date)).Return(TimeSpan.FromHours(1));
-			incomingTask.Stub(x => x.GetScheduledTimeOnDate(date)).Return(TimeSpan.FromHours(1));
+			incomingTask.Stub(x => x.GetRealScheduledTimeOnDate(date)).Return(TimeSpan.FromHours(1));
 			incomingTask.Stub(x => x.GetBacklogOnDate(date)).Return(TimeSpan.FromHours(1));
 			_taskManager.Stub(x => x.GetIncomingTaskFromCampaign(campaign)).Return(incomingTask);
 
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			_campaignRepository.Stub(x => x.Get(id)).Return(campaign);
 			var incomingTask = MockRepository.GenerateMock<IBacklogTask>();
 			incomingTask.Stub(x => x.GetRealPlannedTimeOnDate(date)).Return(hour);
-			incomingTask.Stub(x => x.GetScheduledTimeOnDate(date)).Return(TimeSpan.FromHours(1));
+			incomingTask.Stub(x => x.GetRealScheduledTimeOnDate(date)).Return(TimeSpan.FromHours(1));
 			incomingTask.Stub(x => x.GetBacklogOnDate(date)).Return(TimeSpan.FromHours(1));
 			_taskManager.Stub(x => x.GetIncomingTaskFromCampaign(campaign)).Return(incomingTask);
 
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			_campaignRepository.Stub(x => x.Get(id)).Return(campaign);
 			var incomingTask = MockRepository.GenerateMock<IBacklogTask>();
 			incomingTask.Stub(x => x.GetRealPlannedTimeOnDate(date)).Return(hour);
-			incomingTask.Stub(x => x.GetScheduledTimeOnDate(date)).Return(TimeSpan.FromHours(1));
+			incomingTask.Stub(x => x.GetRealScheduledTimeOnDate(date)).Return(TimeSpan.FromHours(1));
 			incomingTask.Stub(x => x.GetBacklogOnDate(date)).Return(hour);
 			_taskManager.Stub(x => x.GetIncomingTaskFromCampaign(campaign)).Return(incomingTask);
 
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			_campaignRepository.Stub(x => x.Get(id)).Return(campaign);
 			var incomingTask = MockRepository.GenerateMock<IBacklogTask>();
 			incomingTask.Stub(x => x.GetRealPlannedTimeOnDate(date)).Return(hour);
-			incomingTask.Stub(x => x.GetScheduledTimeOnDate(date)).Return(hour);
+			incomingTask.Stub(x => x.GetRealScheduledTimeOnDate(date)).Return(hour);
 			incomingTask.Stub(x => x.GetBacklogOnDate(date)).Return(hour);
 			_taskManager.Stub(x => x.GetIncomingTaskFromCampaign(campaign)).Return(incomingTask);
 
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			_campaignRepository.Stub(x => x.Get(id)).Return(campaign);
 			var incomingTask = MockRepository.GenerateMock<IBacklogTask>();
 			incomingTask.Stub(x => x.GetRealPlannedTimeOnDate(date)).IgnoreArguments().Return(hour);
-			incomingTask.Stub(x => x.GetScheduledTimeOnDate(date)).IgnoreArguments().Return(hour);
+			incomingTask.Stub(x => x.GetRealScheduledTimeOnDate(date)).IgnoreArguments().Return(hour);
 			incomingTask.Stub(x => x.GetBacklogOnDate(date)).IgnoreArguments().Return(hour);
 			_taskManager.Stub(x => x.GetIncomingTaskFromCampaign(campaign)).Return(incomingTask);
 

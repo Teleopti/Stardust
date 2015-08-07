@@ -136,6 +136,16 @@ namespace Teleopti.Ccc.DomainTest.Backlog
 			_target.SetRealPlannedTimeOnDate(date, new TimeSpan(10, 0, 0));
 
 			_target.GetRealPlannedTimeOnDate(date).Should().Be.EqualTo(new TimeSpan(10, 0, 0));
+		}		
+		
+		[Test]
+		public void ShouldModifyRealScheduledTimeIfItExist()
+		{
+			var date = new DateOnly(2015, 6, 1);
+			_target.SetRealScheduledTimeOnDate(date, new TimeSpan(20, 0, 0));
+			_target.SetRealScheduledTimeOnDate(date, new TimeSpan(10, 0, 0));
+
+			_target.GetRealScheduledTimeOnDate(date).Should().Be.EqualTo(new TimeSpan(10, 0, 0));
 		}
 
 		private void setupOpenDays()

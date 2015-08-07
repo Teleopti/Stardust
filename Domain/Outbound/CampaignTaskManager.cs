@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 					 incomingTask.SetRealPlannedTimeOnDate(dateOnly, incomingTask.GetTimeOnDate(dateOnly));
 
                 var scheduled = _outboundScheduledResourcesProvider.GetScheduledTimeOnDate(dateOnly, campaign.Skill);
+					 incomingTask.SetRealScheduledTimeOnDate(dateOnly, scheduled);
                 //var forecasted = _outboundScheduledResourcesProvider.GetForecastedTimeOnDate(dateOnly, campaign.Skill);
                 if (scheduled != TimeSpan.Zero)
                     incomingTask.SetTimeOnDate(dateOnly, scheduled, PlannedTimeTypeEnum.Scheduled);
