@@ -19,6 +19,12 @@
 		vm.isSuccessful = false;
 		vm.isFailed = false;
 		vm.hasParsingError = false;
+		var columnHeaders = ['Firstname',
+							'Lastname',
+							'WindowsUser',
+							'ApplicationUserId',
+							'Password',
+							'Role'];
 
 		vm.gridOptionForImport = {
 			exporterCsvFilename: 'invalidUsers.csv',
@@ -38,17 +44,24 @@
 			onRegisterApi: function(gridApi) {
 				vm.gridForImportApi = gridApi;
 			},
-			data: 'vm.dataWithError'
+			importerProcessHeaders: function (grid, headerRow) {
+				var headers = [];
 
+				headerRow.forEach(function (value) {
+					if(columnHeaders.indexOf(value.toString()) != -1){
+						headers.push(value.toString());
+					} else {
+						headers.push(null);
+					}
+				});
+				return headers;
+			},
+			data: 'vm.dataWithError'
 		};
 
-		var columnHeaders = ['Firstname',
-							'Lastname',
-							'WindowsUser',
-							'ApplicationUserId',
-							'Password',
-							'Role'];
-		vm.gridOptionForImport.importerDataAddCallback = function(grid, newObjects) {
+
+		
+		vm.gridOptionForImport.importerDataAddCallback = function (grid, newObjects) {
 			vm.rawUsersData = newObjects;
 			if (vm.rawUsersData.length > 0) {
 				var rawUser = vm.rawUsersData[0];
