@@ -3,7 +3,6 @@ using System.Runtime.Caching;
 using Autofac;
 using MbCache.Configuration;
 using MbCache.ProxyImpl.LinFu;
-using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.IocCommon.Configuration;

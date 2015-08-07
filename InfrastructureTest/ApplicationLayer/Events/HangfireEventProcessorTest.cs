@@ -1,32 +1,26 @@
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Autofac;
-using Autofac.Extras.DynamicProxy2;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
+namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 {
 	[TestFixture]
-	[IoCTestAttribute]
+	[InfrastructureTest]
 	public class HangfireEventProcessorTest : ISetup
 	{
 		public AHandler Handler;
 		public AnotherHandler Another;
-		public AspectedHandler aspected;
+		public AspectedHandler Aspected;
 		public IHangfireEventProcessor Target;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
@@ -35,14 +29,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 			system.AddService<AnotherHandler>();
 			system.AddService<AspectedHandler>();
 			system.AddService<NonConcurrenctSafeHandler>();
-
-			system.UseTestDouble(new FakeConfigReader
-			{
-				ConnectionStrings_DontUse = new ConnectionStringSettingsCollection
-				{
-					new ConnectionStringSettings("RtaApplication", ConnectionStringHelper.ConnectionStringUsedInTests)
-				}
-			}).For<IConfigReader>();
 		}
 
 		[Test]
@@ -75,7 +61,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 		{
 			Target.Process(null, typeof(AnEvent).AssemblyQualifiedName, "{}", typeof(AspectedHandler).AssemblyQualifiedName);
 
-			aspected.HandledEvents.Single().Should().Be.OfType<AnEvent>();
+			Aspected.HandledEvents.Single().Should().Be.OfType<AnEvent>();
 		}
 
 		[Test]

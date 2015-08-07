@@ -10,18 +10,18 @@ namespace Teleopti.Ccc.TestCommon
 	{
 		public FakeMessageSender()
 		{
-			AllNotifications = new List<Interfaces.MessageBroker.Message>();
+			AllNotifications = new List<Message>();
 		}
 
-		public ICollection<Interfaces.MessageBroker.Message> AllNotifications;
+		public ICollection<Message> AllNotifications;
 
-		public void Send(Interfaces.MessageBroker.Message message)
+		public void Send(Message message)
 		{
 			lock (AllNotifications)
 				AllNotifications.Add(message);
 		}
 
-		public IEnumerable<Interfaces.MessageBroker.Message> NotificationsOfDomainType<T>()
+		public IEnumerable<Message> NotificationsOfDomainType<T>()
 		{
 			return AllNotifications.Where(n => n.DomainType.Equals(typeof(T).Name));
 		}

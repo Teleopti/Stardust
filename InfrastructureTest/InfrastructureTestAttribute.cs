@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Web;
@@ -11,18 +12,27 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Web;
-using Teleopti.Interfaces.Infrastructure;
-using IMessageSender = Teleopti.Interfaces.MessageBroker.Client.IMessageSender;
 
 namespace Teleopti.Ccc.InfrastructureTest
 {
 	public class InfrastructureTestAttribute : IoCTestAttribute
 	{
 		public IMessageSendersScope MessageSendersScope;
-		public IEnumerable<Infrastructure.UnitOfWork.IMessageSender> MessageSenders;
+		public IEnumerable<IMessageSender> MessageSenders;
 		private IDisposable _scope;
 		public FakeMessageSender MessageSender;
 
+		//
+		// Should fake:
+		// Config
+		// Http
+		//
+		// Should NOT fake:
+		// Database
+		// Hangfire
+		// Bus
+		//
+		// ... we guess ...
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			base.Setup(system, configuration);
@@ -40,8 +50,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 
 			system.UseTestDouble<MutableFakeCurrentHttpContext>().For<ICurrentHttpContext>();
 
-			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
-			system.UseTestDouble<FakeMessageSender>().For<IMessageSender>();
+			system.UseTestDouble<FakeMessageSender>().For<Interfaces.MessageBroker.Client.IMessageSender>(); // Does not fake all message senders, just adds one to the list
 		}
 
 		protected override void BeforeTest()

@@ -41,9 +41,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 		public void BeforeTestSuite()
 		{
 			var builder = new ContainerBuilder();
-			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()) { PublishEventsToServiceBus = false, FeatureToggle = "http://notinuse" }, new FalseToggleManager())));
-			builder.RegisterType<FakeEventPublisher>().As<IEventPublisher>().SingleInstance();
-			builder.RegisterType<NoMessageSender>().As<Interfaces.MessageBroker.Client.IMessageSender>().SingleInstance();
+			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()) { FeatureToggle = "http://notinuse" }, new FalseToggleManager())));
 			var container = builder.Build();
 
 			IDictionary<string, string> appSettings = new Dictionary<string, string>();

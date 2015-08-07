@@ -1,12 +1,15 @@
 ﻿using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -14,7 +17,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.MessageSenders
 {
 	[TestFixture]
 	[PrincipalAndStateTest]
-	public class EventsTest
+	public class EventsTest : ISetup
 	{
 		public ICurrentUnitOfWorkFactory Uow;
 		public FakeEventPublisher EventsPublisher;
@@ -22,6 +25,11 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.MessageSenders
 		public IPersonRepository PersonRepository;
 		public IPersonAssignmentRepository PersonAssignmentRepository;
 		public IActivityRepository ActivityRepository;
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
+		}
 
 		[Test]
 		public void ShouldPublishEvents()
@@ -48,5 +56,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.MessageSenders
 			EventsPublisher.PublishedEvents.OfType<ActivityAddedEvent>()
 				.Should().Have.Count.GreaterThan(0);
 		}
+
 	}
 }

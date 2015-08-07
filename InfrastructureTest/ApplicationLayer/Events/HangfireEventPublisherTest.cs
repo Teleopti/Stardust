@@ -1,8 +1,8 @@
-using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Infrastructure.Aop;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -10,19 +10,20 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
+namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 {
 	[TestFixture]
-	[IoCTest]
+	[InfrastructureTest]
+	[Toggle(Toggles.RTA_HangfireEventProcessing_31237)]
 	public class HangfireEventPublisherTest : ISetup
 	{
 		public FakeHangfireEventClient JobClient;
-		public IHangfireEventPublisher Target;
+		public IEventPublisher Target;
 		public IJsonSerializer Serializer;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble(new FakeHangfireEventClient()).For<IHangfireEventClient>();
+			system.UseTestDouble<FakeHangfireEventClient>().For<IHangfireEventClient>();
 
 			system.AddService<TestHandler>();
 			system.AddService<TestMultiHandler1>();
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 		[Test]
 		public void ShouldEnqueue()
 		{
-			Target.Publish(new Event());
+			Target.Publish(new HangfireTestEvent());
 
 			JobClient.WasEnqueued.Should().Be.True();
 		}
@@ -41,7 +42,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 		[Test]
 		public void ShouldSerializeTheEvent()
 		{
-			Target.Publish(new Event());
+			Target.Publish(new HangfireTestEvent());
 
 			JobClient.SerializedEvent.Should().Be.EqualTo(Serializer.SerializeObject(new Event()));
 		}
@@ -49,23 +50,23 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 		[Test]
 		public void ShouldPassEventType()
 		{
-			Target.Publish(new Event());
+			Target.Publish(new HangfireTestEvent());
 
-			JobClient.EventType.Should().Be.EqualTo(typeof(Event).AssemblyQualifiedName);
+			JobClient.EventType.Should().Be.EqualTo(typeof(HangfireTestEvent).AssemblyQualifiedName);
 		}
 
 		[Test]
 		public void ShouldPassEventTypeInDisplayName()
 		{
-			Target.Publish(new Event());
+			Target.Publish(new HangfireTestEvent());
 
-			JobClient.DisplayName.Should().Contain(typeof(Event).Name);
+			JobClient.DisplayName.Should().Contain(typeof(HangfireTestEvent).Name);
 		}
 
 		[Test]
 		public void ShouldPassHandlerTypeInDisplayName()
 		{
-			Target.Publish(new Event());
+			Target.Publish(new HangfireTestEvent());
 
 			JobClient.DisplayName.Should().Contain(typeof(TestHandler).Name);
 		}
@@ -73,7 +74,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 		[Test]
 		public void ShouldPassHandlerType()
 		{
-			Target.Publish(new TestEvent());
+			Target.Publish(new HangfireTestEvent());
 
 			JobClient.HandlerType.Should().Be(typeof(TestHandler).AssemblyQualifiedName);
 		}
@@ -103,17 +104,13 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 				.Have.SameValuesAs(new[] { typeof(TestMultiHandler1).AssemblyQualifiedName, typeof(TestMultiHandler2).AssemblyQualifiedName });
 		}
 
-		public class TestEvent : IEvent
+		public class UnknownTestEvent : IEvent, IGoToHangfire
 		{
 		}
 
-		public class UnknownTestEvent : IEvent
+		public class TestHandler : IHandleEvent<HangfireTestEvent>, IHandleEvent<Event>
 		{
-		}
-
-		public class TestHandler : IHandleEvent<TestEvent>, IHandleEvent<Event>
-		{
-			public void Handle(TestEvent @event)
+			public void Handle(HangfireTestEvent @event)
 			{
 			}
 
@@ -122,7 +119,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 			}
 		}
 
-		public class MultiHandlerTestEvent : IEvent
+		public class MultiHandlerTestEvent : IEvent, IGoToHangfire
 		{
 		}
 
@@ -140,7 +137,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 			}
 		}
 
-		public class AspectedHandlerTestEvent : IEvent
+		public class AspectedHandlerTestEvent : IEvent, IGoToHangfire
 		{
 			
 		}

@@ -1,5 +1,4 @@
 using System.Linq;
-using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -9,25 +8,25 @@ using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
+namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 {
 	[TestFixture]
-	[IoCTest]
+	[InfrastructureTest]
 	[Toggle(Toggles.RTA_HangfireEventProcessing_31237)]
 	public class HangfireOrBusEventPublisherTest : ISetup
 	{
-		public FakeHangfireEventClient hangfire;
-		public FakeServiceBusSender bus;
-		public IEventPublisher target;
+		public FakeHangfireEventClient Hangfire;
+		public FakeServiceBusSender Bus;
+		public IEventPublisher Target;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble(new FakeHangfireEventClient()).For<IHangfireEventClient>();
 			system.UseTestDouble(new FakeServiceBusSender()).For<IServiceBusSender>();
+
 			system.UseTestDouble(new HangfireEventHandler())
-				.For<IHandleEvent<HangfireEvent>,
+				.For<IHandleEvent<HangfireTestEvent>,
 					IHandleEvent<PersonShiftStartEvent>,
 					IHandleEvent<PersonShiftEndEvent>,
 					IHandleEvent<PersonActivityStartEvent>,
@@ -40,9 +39,9 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 		[Test]
 		public void ShouldPublishHangfireEventsToHangfire()
 		{
-			target.Publish(new HangfireEvent());
+			Target.Publish(new HangfireTestEvent());
 
-			hangfire.WasEnqueued.Should().Be.True();
+			Hangfire.WasEnqueued.Should().Be.True();
 		}
 
 		[Test]
@@ -50,35 +49,31 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 		{
 			var @event = new Event();
 
-			target.Publish(@event);
+			Target.Publish(@event);
 
-			bus.SentMessages.Single().Should().Be.SameInstanceAs(@event);
+			Bus.SentMessages.Single().Should().Be.SameInstanceAs(@event);
 		}
 
 		[Test]
 		public void ShouldPublishRtaEventsToHangfire()
 		{
-			target.Publish(new PersonShiftStartEvent());
-			target.Publish(new PersonShiftEndEvent());
-			target.Publish(new PersonActivityStartEvent());
-			target.Publish(new PersonStateChangedEvent());
-			target.Publish(new PersonInAdherenceEvent());
-			target.Publish(new PersonOutOfAdherenceEvent());
+			Target.Publish(new PersonShiftStartEvent());
+			Target.Publish(new PersonShiftEndEvent());
+			Target.Publish(new PersonActivityStartEvent());
+			Target.Publish(new PersonStateChangedEvent());
+			Target.Publish(new PersonInAdherenceEvent());
+			Target.Publish(new PersonOutOfAdherenceEvent());
 
-			hangfire.EventTypes.Should().Contain(typeof(PersonShiftStartEvent).AssemblyQualifiedName);
-			hangfire.EventTypes.Should().Contain(typeof(PersonShiftEndEvent).AssemblyQualifiedName);
-			hangfire.EventTypes.Should().Contain(typeof(PersonActivityStartEvent).AssemblyQualifiedName);
-			hangfire.EventTypes.Should().Contain(typeof(PersonStateChangedEvent).AssemblyQualifiedName);
-			hangfire.EventTypes.Should().Contain(typeof(PersonInAdherenceEvent).AssemblyQualifiedName);
-			hangfire.EventTypes.Should().Contain(typeof(PersonOutOfAdherenceEvent).AssemblyQualifiedName);
-		}
-
-		public class HangfireEvent : IEvent, IGoToHangfire
-		{
+			Hangfire.EventTypes.Should().Contain(typeof(PersonShiftStartEvent).AssemblyQualifiedName);
+			Hangfire.EventTypes.Should().Contain(typeof(PersonShiftEndEvent).AssemblyQualifiedName);
+			Hangfire.EventTypes.Should().Contain(typeof(PersonActivityStartEvent).AssemblyQualifiedName);
+			Hangfire.EventTypes.Should().Contain(typeof(PersonStateChangedEvent).AssemblyQualifiedName);
+			Hangfire.EventTypes.Should().Contain(typeof(PersonInAdherenceEvent).AssemblyQualifiedName);
+			Hangfire.EventTypes.Should().Contain(typeof(PersonOutOfAdherenceEvent).AssemblyQualifiedName);
 		}
 
 		public class HangfireEventHandler :
-			IHandleEvent<HangfireEvent>,
+			IHandleEvent<HangfireTestEvent>,
 			IHandleEvent<PersonShiftStartEvent>,
 			IHandleEvent<PersonShiftEndEvent>,
 			IHandleEvent<PersonActivityStartEvent>,
@@ -86,7 +81,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 			IHandleEvent<PersonInAdherenceEvent>,
 			IHandleEvent<PersonOutOfAdherenceEvent>
 		{
-			public void Handle(HangfireEvent @event)
+			public void Handle(HangfireTestEvent @event)
 			{
 			}
 
@@ -115,5 +110,4 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 			}
 		}
 	}
-
 }

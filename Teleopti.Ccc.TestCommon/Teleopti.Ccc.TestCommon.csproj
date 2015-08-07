@@ -199,6 +199,7 @@
     <Compile Include="IoC\IoCTestAttribute.cs" />
     <Compile Include="IoC\IoCTestTest.cs" />
     <Compile Include="IoC\ISetup.cs" />
+    <Compile Include="IoC\SettingAttribute.cs" />
     <Compile Include="IoC\ToggleOffAttribute.cs" />
     <Compile Include="LinqPerumationExtension.cs" />
     <Compile Include="TestData\Analytics\DimDayOff.cs" />

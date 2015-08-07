@@ -1,22 +1,17 @@
 ﻿using System;
-using System.Configuration;
 using System.Threading;
-using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.DistributedLock;
-using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.DistributedLock;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.DistributedLock
 {
 	[TestFixture]
-	[IoCTest]
+	[InfrastructureTest]
 	public class DistributedLockTest : ISetup
 	{
 		public IDistributedLockAcquirer Target;
@@ -25,16 +20,6 @@ namespace Teleopti.Ccc.InfrastructureTest.DistributedLock
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble(
-				new FakeConfigReader
-				{
-					ConnectionStrings_DontUse = new ConnectionStringSettingsCollection
-					{
-						new ConnectionStringSettings("RtaApplication", ConnectionStringHelper.ConnectionStringUsedInTests)
-					}
-				})
-				.For<IConfigReader>();
-
 			system.AddService<Lock1>();
 		}
 
