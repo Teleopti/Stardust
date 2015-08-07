@@ -23,6 +23,7 @@
 			seatPlanService.seatBookingReport.get(seatBookingReportParams).$promise.then(function (data) {
 				vm.seatBookings = data.SeatBookingsByDate;
 				vm.isLoadingReport = false;
+				vm.totalPages = Math.ceil(data.TotalRecordCount / vm.take);
 			});
 		};
 
@@ -31,6 +32,30 @@
 		vm.teams = [];
 		vm.isDatePickerOpened = true;
 		vm.selectedPeriod = vm.selectedPeriod == undefined ? { StartDate: '2015-01-01', EndDate: '2015-01-01' } : vm.selectedPeriod;
+		vm.currentPage = 1;
+		vm.take = 50;
+		vm.totalPages = 1;
+
+		vm.paging = function (goToPage) {
+
+			if (goToPage > vm.totalPages) {
+				goToPage = vm.totalPages;
+			} else if (goToPage < 1) {
+				goToPage = 1;
+			}
+
+			if (vm.currentPage != goToPage) {
+				getSeatBookings({
+					startDate: vm.selectedPeriod.StartDate,
+					endDate: vm.selectedPeriod.EndDate,
+					teams: seatplanTeamAndLocationService.GetSelectedTeamsFromTeamList(vm.teams),
+					locations: seatplanTeamAndLocationService.GetSelectedLocationsFromLocationList(vm.locations),
+					skip: (goToPage - 1) * vm.take,
+					take: vm.take
+				});
+				vm.currentPage = goToPage;
+			}
+		};
 
 		vm.toggleFilter = function (tabName) {
 			vm.isDatePickerOpened = false;
@@ -52,7 +77,7 @@
 			return moment(startTime).format('HH:mm') + ' - ' + moment(endTime).format('HH:mm');
 		};
 
-		vm.getDisplayDateString = function(date) {
+		vm.getDisplayDateString = function (date) {
 			return moment(date).format('L');
 		};
 
@@ -61,8 +86,11 @@
 				startDate: vm.selectedPeriod.StartDate,
 				endDate: vm.selectedPeriod.EndDate,
 				teams: seatplanTeamAndLocationService.GetSelectedTeamsFromTeamList(vm.teams),
-				locations: seatplanTeamAndLocationService.GetSelectedLocationsFromLocationList(vm.locations)
+				locations: seatplanTeamAndLocationService.GetSelectedLocationsFromLocationList(vm.locations),
+				skip: vm.page,
+				take: vm.take
 			});
+			vm.currentPage = 1;
 		};
 		vm.setRangeClass = function (date, mode) {
 			if (mode === 'day') {
@@ -88,9 +116,10 @@
 		getSeatBookings({
 			startDate: vm.selectedPeriod == null ? null : vm.selectedPeriod.StartDate,
 			endDate: vm.selectedPeriod == null ? null : vm.selectedPeriod.EndDate,
-			take: 50
+			skip: vm.page,
+			take: vm.take
 
-	});
+		});
 
 		seatPlanService.locations.get().$promise.then(function (locations) {
 			locations.show = true;
@@ -101,7 +130,6 @@
 			teams.show = true;
 			vm.teams.push(teams);
 		});
-
 	};
 })();
 
@@ -115,7 +143,7 @@
 			controller: 'seatPlanReportCtrl',
 			controllerAs: 'vm',
 			bindToController: true,
-			scope: { toggle: '&toggle', selectedPeriod: '=selectedPeriod'},
+			scope: { toggle: '&toggle', selectedPeriod: '=selectedPeriod' },
 			restrict: "E",
 			templateUrl: "js/seatManagement/html/seatplanreport.html"
 		};

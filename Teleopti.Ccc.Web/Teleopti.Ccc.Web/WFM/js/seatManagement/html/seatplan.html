@@ -1,13 +1,11 @@
-﻿
-
-<div id="seatPlan" ui-view>
+﻿<div id="seatPlan" ui-view>
 
 	<seat-plan-report ng-if="seatplan.isReportOpened" toggle="seatplan.isReportOpened = !seatplan.isReportOpened"
 	                  selected-period="seatplan.planningPeriods[0]"></seat-plan-report>
 
-	<div class="row" ng-show="!seatplan.isReportOpened" style="margin: 0; padding: 0;">
+	<div class="row" ng-show="!seatplan.isReportOpened">
 
-		<div class="col-sm-12" style="width: 350px; padding-bottom: 10px;">
+		<div class="col-sm-12 seat-plan-calendar">
 
 			<div class="calendarProgress" ng-show="seatplan.isLoadingCalendar">
 				<md-progress-circular md-mode="indeterminate"></md-progress-circular>
@@ -24,7 +22,7 @@
 			<button class="wfm-fab info pull-right" ng-click="seatplan.isReportOpened = !seatplan.isReportOpened">
 				<i class="mdi mdi-file-document"></i>
 			</button>
-			<h3 style="padding: 0 10px">{{seatplan.getDateString(seatplan.selectedDate)}}</h3>
+			<h3>{{seatplan.getDateString(seatplan.selectedDate)}}</h3>
 			<md-divider md-insert></md-divider>
 			<p>{{seatplan.getToDayInfo()}}</p>
 		</div>
