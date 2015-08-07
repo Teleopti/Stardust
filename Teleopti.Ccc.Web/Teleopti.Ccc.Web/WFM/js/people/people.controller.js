@@ -63,7 +63,7 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 		useExternalSorting: true,
 		enableColumnResizing: true,
 		columnDefs: [
-			{ displayName: 'FirstName', field: 'FirstName', headerCellFilter: 'translate', cellClass: 'first-name',width:100 },
+			{ displayName: 'FirstName', field: 'FirstName', headerCellFilter: 'translate', cellClass: 'first-name' },
 			{
 				displayName: 'LastName',
 				field: 'LastName',
@@ -71,13 +71,12 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 				sort: {
 					direction: uiGridConstants.ASC,
 					priority: 0,
-				},
-				width:100
+				}
 			},
-			{ displayName: 'EmployeeNo', field: 'EmploymentNumber', headerCellFilter: 'translate', width:100 },
-			{ displayName: 'Team', field: 'Team', headerCellFilter: 'translate', enableSorting: false, width: 100 },
-			{ displayName: 'Email', field: 'Email', headerCellFilter: 'translate', enableSorting: false, width: 100 },
-			{ displayName: 'TerminalDate', field: 'LeavingDate', headerCellFilter: 'translate', enableSorting: false, width: 100 }
+			{ displayName: 'EmployeeNo', field: 'EmploymentNumber', headerCellFilter: 'translate' },
+			{ displayName: 'Team', field: 'Team', headerCellFilter: 'translate', enableSorting: false },
+			{ displayName: 'Email', field: 'Email', headerCellFilter: 'translate', enableSorting: false },
+			{ displayName: 'TerminalDate', field: 'LeavingDate', headerCellFilter: 'translate', enableSorting: false }
 		],
 		gridMenuTitleFilter: $translate,
 		exporterAllDataFn: function () {
@@ -162,7 +161,7 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 						}
 					});
 					if (!isFound) {
-						$scope.gridOptions.columnDefs.push({ displayName: col, field: col, headerCellFilter: 'translate', enableSorting: false, width: 100 });
+						$scope.gridOptions.columnDefs.push({ displayName: col, field: col, headerCellFilter: 'translate', enableSorting: false });
 					}
 
 				});
