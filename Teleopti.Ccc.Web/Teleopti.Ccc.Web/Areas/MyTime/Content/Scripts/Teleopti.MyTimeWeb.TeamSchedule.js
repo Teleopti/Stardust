@@ -18,6 +18,8 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 	var portal = Teleopti.MyTimeWeb.Portal;
 	var readyForInteraction = function () { };
 	var completelyLoaded = function () { };
+
+	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var vm;
 
 	var teamScheduleViewModel = function (urlDate) {
@@ -104,8 +106,9 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 	function _initTeamPickerSelection() {
 		vm = new teamScheduleViewModel(_currentUrlDate());
 
-		return $.ajax({
-	        url: "MyTime/Team/TeamsAndOrGroupings/" + _currentUrlDate(),
+		//return $.ajax({
+		ajax.Ajax({
+	        url: "Team/TeamsAndOrGroupings/" + _currentUrlDate(),
 			dataType: "json",
 			type: "GET",
 			global: false,

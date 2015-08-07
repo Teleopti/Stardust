@@ -1,9 +1,11 @@
 ﻿Teleopti.MyTimeWeb.MyReport = (function () {
-	var vm;
 
+	var ajax = new Teleopti.MyTimeWeb.Ajax();
+	var vm;
+	
 	function MyReportViewModel(loadDataMethod, date) {
 		var self = this;
-
+		
 		self.adherence = ko.observable();
 		self.answeredCalls = ko.observable();
 		self.averageAfterCallWork = ko.observable();
@@ -49,8 +51,8 @@
 	}
 
 	function fillData(date) {
-		$.ajax({
-			url: 'MyTime/MyReport/Overview',
+		ajax.Ajax({
+			url: 'MyReport/Overview',
 			dataType: 'json',
 			cache: false,
 			data: { date: Teleopti.MyTimeWeb.Common.FormatServiceDate(date) },

@@ -1,4 +1,6 @@
 ﻿Teleopti.MyTimeWeb.MyQueueMetrics = (function () {
+
+	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var vm;
 
 	function MyQueueMetricsViewModel(loadDataMethod, date) {
@@ -41,8 +43,8 @@
 	}
 
 	function fillData(date) {
-		$.ajax({
-			url: 'MyTime/MyReport/QueueMetricsDetails',
+		ajax.Ajax({
+			url: 'MyReport/QueueMetricsDetails',
 		    dataType: 'json',
 		    cache: false,
 		    data: { date: Teleopti.MyTimeWeb.Common.FormatServiceDate(date) },

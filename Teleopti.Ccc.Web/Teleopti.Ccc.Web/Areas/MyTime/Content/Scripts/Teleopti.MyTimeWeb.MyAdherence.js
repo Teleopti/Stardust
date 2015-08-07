@@ -1,6 +1,8 @@
 ﻿Teleopti.MyTimeWeb.MyAdherence = (function () {
-	var vm;
 
+	var ajax = new Teleopti.MyTimeWeb.Ajax();
+	var vm;
+	
 	function MyAdherenceViewModel(loadDataMethod, date) {
 		var self = this;
 
@@ -105,8 +107,9 @@
 	}
 
 	function fillData(date) {
-		$.ajax({
-			url: 'MyTime/MyReport/AdherenceDetails',
+		
+		ajax.Ajax({
+			url: 'MyReport/AdherenceDetails',
 			dataType: 'json',
 			cache: false,
 			data: { date: Teleopti.MyTimeWeb.Common.FormatServiceDate(date) },
