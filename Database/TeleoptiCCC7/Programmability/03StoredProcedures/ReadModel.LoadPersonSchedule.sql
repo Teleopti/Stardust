@@ -44,10 +44,7 @@ BEGIN
 	DECLARE @scheduleDateEnd smalldatetime;
 
 	SET @maxIndex = @skip + @take;
-	SET @scheduleDateStart = @scheduleDate;
-	
-	SET @scheduleDateStartMax = DATEADD(day, 1, @scheduleDate);
-	SET @scheduleDateEnd = DATEADD(day, 2, @scheduleDate);
+	SET @scheduleDateStart = @scheduleDate;		
 
 	DECLARE @PersonIdList table
 	(
@@ -123,7 +120,7 @@ BEGIN
 			 FROM @PersonIdList p 
 			 JOIN dbo.Person person ON p.Person = person.Id 
 			 LEFT JOIN ReadModel.PersonScheduleDay sd  ON sd.PersonId = p.Person and sd.BelongsToDate = @scheduleDate
-			 LEFT JOIN dbo.PersonAbsence pa ON p.Person = pa.Person and pa.Maximum < @scheduleDateEnd and pa.Minimum >= @scheduleDateStart AND pa.Minimum < @scheduleDateStartMax		 
+			 LEFT JOIN dbo.PersonAbsence pa ON p.Person = pa.Person 
 			 
 			 WHERE 			
 			 -- The following enclosed conditions should be "Or"-ed such that the result is a union of each individual condition
