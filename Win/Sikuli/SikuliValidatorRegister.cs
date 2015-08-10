@@ -41,5 +41,6 @@
 		public const string OptimizeBlockTeamSameShiftCategoryWithinDays = "OptimizeBlockTeamSameShiftCategoryWithinDays";
 		public const string ScheduleBlockTeamSameStartTime = "ScheduleBlockTeamSameStartTime";
 		public const string OptimizeBlockTeamSameStartTime = "OptimizeBlockTeamSameStartTime";
+		public const string MemoryUsage = "MemoryUsage";
 	}
 }

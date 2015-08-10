@@ -802,6 +802,7 @@
     <Compile Include="Sikuli\Validators\RootValidators\OptimizeBlockTeamSameShiftCategoryDaysOffValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\OptimizeBlockTeamSameShiftCategoryWithinDaysValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\OptimizeBlockTeamSameStartTimeValidator.cs" />
+    <Compile Include="Sikuli\Validators\RootValidators\MemoryUsageRootValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\OptimizeTeamSameEndTimeValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\OptimizeTeamSameStartTimeValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\ScheduleBlockTeamSameShiftCategoryValidator.cs" />
@@ -1243,7 +1244,9 @@
     <Compile Include="Common\Configuration\ManageAlarmSituationView.cs" />
     <Compile Include="Common\Configuration\MultiplicatorTypeView.cs" />
     <Compile Include="Common\Configuration\SelectedEntity.cs" />
-    <Compile Include="Common\Controls\Cells\DateTimeCellModel.cs" />
+    <Compile Include="Common\Controls\Cells\DateTimeCellModel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Common\Controls\Cells\DescriptionShortNameCellModel.cs" />
     <Compile Include="Common\Controls\Columns\ColumnCellDisplayChanged.cs" />
     <Compile Include="Common\Controls\DateSelection\DateNavigateControlThinLayout.cs">
@@ -2360,7 +2363,9 @@
     <Compile Include="PeopleAdmin\Views\GridConstructor.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Common\Controls\Cells\GridInCellModel.cs" />
+    <Compile Include="Common\Controls\Cells\GridInCellModel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="PeopleAdmin\Controls\Columns\GridInCellColumn.cs" />
     <Compile Include="PeopleAdmin\Views\GridViewBase.cs" />
     <Compile Include="PeopleAdmin\Controls\Columns\LineColumn.cs" />

@@ -92,6 +92,9 @@ namespace Teleopti.Ccc.Win.Sikuli
 					case SikuliValidatorRegister.OptimizeBlockTeamSameStartTime:
 						return new OptimizeBlockTeamSameStartTimeValidator(schedulerState, totalSkill);
 
+					case SikuliValidatorRegister.MemoryUsage:
+						return new MemoryUsageRootValidator();
+
 					case SikuliValidatorRegister.TestPass:
 						return new SelftestPassValidator();
 

@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 		{
 			AtomicValidators.Add(new SchedulerHoursWeeklyPatternValidator(_schedulerState, _totalSkill));
 			AtomicValidators.Add(new DurationValidator(TimeSpan.FromMinutes(2).Add(TimeSpan.FromSeconds(25)), duration));
-			AtomicValidators.Add(new MemoryUsageValidator(100, MemoryCounter.DefaultInstance()));
 			return ValidateAtomicValidators(AtomicValidators);
 		}
 	}
