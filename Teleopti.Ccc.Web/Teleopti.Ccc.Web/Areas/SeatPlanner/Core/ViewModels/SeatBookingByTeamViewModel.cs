@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Analytics.Portal.Reports.Ccc;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers;
 using Teleopti.Interfaces.Domain;
 
@@ -8,43 +10,41 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels
 {
 	public class SeatBookingByTeamViewModel
 	{
-		public TeamViewModel Team { get; set; }
+		private readonly ISeatMapLocationRepository _locationRepository;
+		public String Name { get; set; }
 		public List<SeatBookingViewModel> SeatBookings { get; set; }
 
-		public SeatBookingByTeamViewModel(IGrouping<ITeam, ISeatBooking> seatBookingReportModels)
+		public SeatBookingByTeamViewModel(IGrouping<string, IPersonScheduleWithSeatBooking> seatBookingReportModels, ISeatMapLocationRepository locationRepository)
 		{
-			var team = seatBookingReportModels.Key;
-
+			_locationRepository = locationRepository;
+			Name = seatBookingReportModels.Key;
 			SeatBookings = new List<SeatBookingViewModel>();
-			Team = new TeamViewModel() {
-				Id = team.Id.GetValueOrDefault().ToString(),
-				Name = team.Description.Name
-			};
+			
 			seatBookingReportModels.ForEach (addSeatBooking);
 		}
 
-		private void addSeatBooking (ISeatBooking seatBookingReportRowModel)
+		private void addSeatBooking (IPersonScheduleWithSeatBooking personScheduleWithSeatBooking)
 		{
-			SeatBookings.Add (mapSeatBookingReportModelToViewModel (seatBookingReportRowModel));
+			SeatBookings.Add(mapSeatBookingReportModelToViewModel(personScheduleWithSeatBooking));
 		}
 
-		private static SeatBookingViewModel mapSeatBookingReportModelToViewModel (ISeatBooking seatBookingReportRowModel)
+		private SeatBookingViewModel mapSeatBookingReportModelToViewModel(IPersonScheduleWithSeatBooking personScheduleWithSeatBooking)
 		{
-			var location = (ISeatMapLocation) seatBookingReportRowModel.Seat.Parent;
+			var location = _locationRepository.Get(personScheduleWithSeatBooking.LocationId);
 
 			return new SeatBookingViewModel()
 			{
-				PersonId = seatBookingReportRowModel.Person.Id.GetValueOrDefault(),
-				FirstName = seatBookingReportRowModel.Person.Name.FirstName,
-				LastName = seatBookingReportRowModel.Person.Name.LastName,
-				LocationId = seatBookingReportRowModel.Seat.Parent.Id.GetValueOrDefault(),
-				LocationName = location.Name,
-				LocationPath = SeatMapProvider.GetLocationPath (location),
-				BelongsToDate = seatBookingReportRowModel.BelongsToDate,
-				StartDateTime = seatBookingReportRowModel.StartDateTime,
-				EndDateTime = seatBookingReportRowModel.EndDateTime,
-				SeatId = seatBookingReportRowModel.Seat.Id.GetValueOrDefault(),
-				SeatName = seatBookingReportRowModel.Seat.Name
+				PersonId = personScheduleWithSeatBooking.PersonId,
+				FirstName = personScheduleWithSeatBooking.FirstName,
+				LastName = personScheduleWithSeatBooking.LastName,
+				LocationId = personScheduleWithSeatBooking.LocationId,
+				LocationName = personScheduleWithSeatBooking.LocationName,
+				LocationPath = location != null ? SeatMapProvider.GetLocationPath (location) : null,
+				BelongsToDate = personScheduleWithSeatBooking.BelongsToDate,
+				StartDateTime = personScheduleWithSeatBooking.SeatBookingStart ?? personScheduleWithSeatBooking.PersonScheduleStart,
+				EndDateTime = personScheduleWithSeatBooking.SeatBookingEnd ?? personScheduleWithSeatBooking.PersonScheduleEnd,
+				SeatId = personScheduleWithSeatBooking.SeatId,
+				SeatName = personScheduleWithSeatBooking.SeatName
 			};
 		}
 	}

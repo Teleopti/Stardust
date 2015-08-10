@@ -98,22 +98,53 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ISeatBookingReportModel LoadSeatBookingsReport (ISeatBookingReportCriteria criteria, Paging paging)
 		{
+			
 			var seatBookings = LoadSeatBookingsForDateOnlyPeriod ( criteria.Period);
-			var bookingModels =  (from booking in seatBookings 
-								  where criteria.Locations.Contains (booking.Seat.Parent) && 
-										criteria.Teams.Contains (booking.Person.MyTeam (booking.BelongsToDate))
-									  select booking);
+			var bookingModels = (from booking in seatBookings
+								 where criteria.Locations.Contains(booking.Seat.Parent) &&
+									   criteria.Teams.Contains(booking.Person.MyTeam(booking.BelongsToDate))
+								 select booking);
 			if (paging != null)
 			{
-				bookingModels = bookingModels.Take (paging.Take).Skip (paging.Skip);
+				bookingModels = bookingModels.Take(paging.Take).Skip(paging.Skip);
 			}
+
+			var personSchedulesWithSeatBookings = new List<IPersonScheduleWithSeatBooking>();
+
+			foreach (var booking in bookingModels)
+			{
+				var personScheduleWithSeatBooking = mapBookingToScheduleWithSeatBooking(booking);
+				personSchedulesWithSeatBookings.Add (personScheduleWithSeatBooking);
+			}
+
 
 			return new SeatBookingReportModel()
 			{
 				RecordCount = bookingModels.Count(),
-				SeatBookings = bookingModels
+				SeatBookings = personSchedulesWithSeatBookings
 			};
 
+		}
+
+		private static PersonScheduleWithSeatBooking mapBookingToScheduleWithSeatBooking (ISeatBooking booking)
+		{
+			var team = booking.Person.MyTeam (booking.BelongsToDate);
+			var personScheduleWithSeatBooking = new PersonScheduleWithSeatBooking()
+			{
+				BelongsToDate = booking.BelongsToDate,
+				FirstName = booking.Person.Name.FirstName,
+				LastName = booking.Person.Name.LastName,
+				LocationId = booking.Seat.Parent.Id.GetValueOrDefault(),
+				LocationName = ((SeatMapLocation) booking.Seat.Parent).Name,
+				PersonId = booking.Person.Id.GetValueOrDefault(),
+				SeatBookingStart = booking.StartDateTime,
+				SeatBookingEnd = booking.EndDateTime,
+				SeatId = booking.Seat.Id.GetValueOrDefault(),
+				SeatName = booking.Seat.Name,
+				TeamId = team.Id.GetValueOrDefault(),
+				TeamName = team.Description.Name
+			};
+			return personScheduleWithSeatBooking;
 		}
 
 		public IEnumerator<ISeatBooking> GetEnumerator()

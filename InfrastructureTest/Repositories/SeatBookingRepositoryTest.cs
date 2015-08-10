@@ -3,15 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SeatPlanning;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
+using Rhino.Mocks;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
@@ -126,8 +130,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 
 			var startDate = new DateOnly(2015, 10, 1);
-			var person = createPerson(startDate);
-			var person2 = createPerson(startDate);
+
+			var team = createTeam ("team");
+
+			var person = createPerson(startDate, team);
+			var person2 = createPerson(startDate, team);
 			var seat = createSeatMapLocationAndSeatInDb();
 			var booking = new SeatBooking(person,
 				new DateOnly(2015, 10, 1),
@@ -143,6 +150,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(booking);
 			PersistAndRemoveFromUnitOfWork(booking2);
 
+			updatePersonScheduleDayFromBooking(booking);
+			updatePersonScheduleDayFromBooking(booking2);
+			
 			var criteria = new SeatBookingReportCriteria()
 			{
 				Period = new DateOnlyPeriod(new DateOnly(2015, 10, 1), new DateOnly(2015, 10, 2))
@@ -151,11 +161,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var viewModel = new SeatBookingRepository(UnitOfWork).LoadSeatBookingsReport(criteria);
 
 			Assert.AreEqual(2, viewModel.SeatBookings.Count());
-			Assert.IsTrue(viewModel.SeatBookings.First().Person.Id == person.Id);
-			Assert.IsTrue(viewModel.SeatBookings.First().Seat.Id == seat.Id);
+			Assert.IsTrue(viewModel.SeatBookings.First().PersonId== person.Id);
+			Assert.IsTrue(viewModel.SeatBookings.First().SeatId == seat.Id);
 
 		}
-		
+
 		[Test]
 		public void ShouldFilterSeatBookingReportByLocation()
 		{
@@ -163,19 +173,17 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var person = createPerson(startDate);
 			var person2 = createPerson(startDate);
-			var rep = new Repository(UnitOfWork);
-
+			
 			var seatMapLocation = new SeatMapLocation();
 			var seatMapLocation2 = new SeatMapLocation();
-			
 			seatMapLocation.SetLocation("{DummyData}", "TestLocation");
 			seatMapLocation2.SetLocation("{DummyData}", "TestLocation2");
 
 			var seatLocation1 = seatMapLocation.AddSeat("Test Seat", 0);
 			var seatLocation2 = seatMapLocation2.AddSeat("Test Seat", 0);
 
-			rep.Add(seatMapLocation);
-			rep.Add(seatMapLocation2);
+			PersistAndRemoveFromUnitOfWork(seatMapLocation);
+			PersistAndRemoveFromUnitOfWork(seatMapLocation2);
 
 			var booking = new SeatBooking(person,
 				new DateOnly(2015, 10, 1),
@@ -188,9 +196,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			booking.Book(seatLocation1);
 			booking2.Book(seatLocation2);
-
+			
 			PersistAndRemoveFromUnitOfWork(booking);
 			PersistAndRemoveFromUnitOfWork(booking2);
+
+			updatePersonScheduleDayFromBooking(booking);
+			updatePersonScheduleDayFromBooking(booking2);
 
 
 			var criteria = new SeatBookingReportCriteria()
@@ -202,8 +213,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var viewModel = new SeatBookingRepository(UnitOfWork).LoadSeatBookingsReport(criteria);
 
 			Assert.AreEqual(1, viewModel.SeatBookings.Count());
-			Assert.AreEqual(viewModel.SeatBookings.First().Person.Id, person2.Id);
-			Assert.AreEqual(viewModel.SeatBookings.First().Seat.Id, seatLocation2.Id);
+			Assert.AreEqual(viewModel.SeatBookings.First().PersonId, person2.Id);
+			Assert.AreEqual(viewModel.SeatBookings.First().SeatId, seatLocation2.Id);
 			Assert.AreEqual (viewModel.RecordCount, 1);
 
 		}
@@ -239,6 +250,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(booking);
 			PersistAndRemoveFromUnitOfWork(booking2);
 
+			updatePersonScheduleDayFromBooking(booking);
+			updatePersonScheduleDayFromBooking(booking2);
+
+
 			var criteria = new SeatBookingReportCriteria()
 			{
 				Teams = new List<Team>() { (Team)person2.MyTeam(new DateOnly(2015, 10, 2)) },
@@ -248,7 +263,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var viewModel = new SeatBookingRepository(UnitOfWork).LoadSeatBookingsReport(criteria);
 
 			Assert.AreEqual(1, viewModel.SeatBookings.Count());
-			Assert.AreEqual(viewModel.SeatBookings.First().Person.Id, person2.Id);
+			Assert.AreEqual(viewModel.SeatBookings.First().PersonId, person2.Id);
 		}
 
 		[Test]
@@ -276,6 +291,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				PersistAndRemoveFromUnitOfWork(morningBooking);
 				PersistAndRemoveFromUnitOfWork(afternoonBooking);
 
+				updatePersonScheduleDayFromBooking(morningBooking);
+				updatePersonScheduleDayFromBooking(afternoonBooking);
+				
 				dateOnly = dateOnly.AddDays(1);
 			});
 
@@ -294,15 +312,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		}
 
-		private IPerson createPerson(DateOnly startDate)
+		private IPerson createPerson(DateOnly startDate, Team team = null)
 		{
-			var site = SiteFactory.CreateSimpleSite("d");
-			PersistAndRemoveFromUnitOfWork(site);
-
-			var team = TeamFactory.CreateSimpleTeam();
-			team.Site = site;
-			team.Description = new Description("Team");
-			PersistAndRemoveFromUnitOfWork(team);
+			team = team ?? createTeam("Team");
 
 			var contract1 = new Contract("contract1");
 			var contract2 = new Contract("contract2");
@@ -315,6 +327,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(person);
 
 			return person;
+		}
+
+		private Team createTeam (String name)
+		{
+			var site = SiteFactory.CreateSimpleSite("d");
+			PersistAndRemoveFromUnitOfWork(site);
+
+
+			var team = TeamFactory.CreateSimpleTeam();
+			team.Site = site;
+			team.Description = new Description (name);
+			PersistAndRemoveFromUnitOfWork (team);
+			return team;
 		}
 
 
@@ -342,6 +367,28 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			seatMapLocation.AddSeat("Test Seat", 0);
 			rep.Add(seatMapLocation);
 			return seatMapLocation.Seats.First();
+		}
+
+		private static void updatePersonScheduleDayFromBooking(SeatBooking booking)
+		{
+			var uow = CurrentUnitOfWork.Make();
+			var target = new PersonScheduleDayReadModelPersister(uow, MockRepository.GenerateMock<IMessageBrokerComposite>(),
+				MockRepository.GenerateMock<ICurrentDataSource>());
+
+			var model = new PersonScheduleDayReadModel
+			{
+				Date = booking.StartDateTime,
+				TeamId = booking.Person.MyTeam(booking.BelongsToDate).Id.GetValueOrDefault(),
+				PersonId = booking.Person.Id.GetValueOrDefault(),
+				BusinessUnitId = booking.BusinessUnit.Id.GetValueOrDefault(),
+				IsDayOff = false,
+				Start = booking.StartDateTime,
+				End = booking.EndDateTime,
+				Model = "{shift: blablabla}",
+			};
+
+			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(model.Date), new DateOnly(model.Date)), model.PersonId,
+				model.BusinessUnitId, new[] { model }, false);
 		}
 
 		protected override Repository<ISeatBooking> TestRepository(IUnitOfWork unitOfWork)

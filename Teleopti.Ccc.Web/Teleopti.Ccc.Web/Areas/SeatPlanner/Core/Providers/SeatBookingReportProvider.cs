@@ -47,13 +47,13 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 			return groupBookings (seatBookingData);
 		}
 
-		private static SeatBookingReportViewModel groupBookings (ISeatBookingReportModel seatBookingReportModel)
+		private SeatBookingReportViewModel groupBookings (ISeatBookingReportModel seatBookingReportModel)
 		{
 			var dateGroupedSeatBookings =
 				from seatBooking in seatBookingReportModel.SeatBookings
 				group seatBooking by seatBooking.BelongsToDate
 				into groupedSeatBookings
-				select new SeatBookingByDateViewModel (groupedSeatBookings);
+					select new SeatBookingByDateViewModel(groupedSeatBookings, _locationRepository);
 
 			return new SeatBookingReportViewModel (dateGroupedSeatBookings, seatBookingReportModel.RecordCount);
 		}

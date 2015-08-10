@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 	class SeatBookingReportProviderTest
 	{
 		private FakeSeatBookingRepository _seatBookingRepository;
+		private FakeSeatMapRepository _seatMapLocationRepository;
 		private SeatBookingReportProvider _seatBookingReportProvider;
 		private Team _team;
 		private SeatMapLocation _location;
@@ -25,11 +26,14 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 		{
 
 			_seatBookingRepository = new FakeSeatBookingRepository();
+			_seatMapLocationRepository = new FakeSeatMapRepository ();
 
-			_seatBookingReportProvider = new SeatBookingReportProvider(_seatBookingRepository,new FakeSeatMapRepository (), new FakeTeamRepository () );
+			_seatBookingReportProvider = new SeatBookingReportProvider(_seatBookingRepository, _seatMapLocationRepository, new FakeTeamRepository());
 			_team = createTeam("Team One");
 			_location = new SeatMapLocation() { Name = "Location" };
 			_location.SetId (Guid.NewGuid());
+
+			_seatMapLocationRepository.Add (_location);
 		}
 
 		[Test]
