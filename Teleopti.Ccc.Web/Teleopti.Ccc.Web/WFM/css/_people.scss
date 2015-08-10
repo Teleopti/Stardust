@@ -119,7 +119,7 @@
 
 .wfm-panel {
 	position: absolute;
-	top: -8rem;
+	top: -9rem;
 	right: 0rem;
 }
 
@@ -155,4 +155,8 @@
 .import-file-template {
 	padding-left: 10px;
 	padding-bottom: 10px;
+}
+
+[ng\:cloak], [ng-cloak], .ng-cloak, .ng-hide {
+		display: none !important;
 }
