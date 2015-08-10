@@ -25,18 +25,18 @@
                        	$scope.dynamicOptionSelected.data = option;                
                        }
                     );
-			
-			var traverseNodes = function (node) {
-			    for (var i = 0; i < node.length; i++) {
-			        if (node[i].ChildNodes.length === 0)
-			            node[i].selected = false;
-			        else {
-			            node[i].selected = false;
-			            traverseNodes(node[i].ChildNodes);
-			        }
-			    }
 
-			}
+		        var traverseNodes = function(node) {
+			        for (var i = 0; i < node.length; i++) {
+				        if (node[i].ChildNodes.length === 0)
+					        node[i].selected = false;
+				        else {
+					        node[i].selected = false;
+					        traverseNodes(node[i].ChildNodes);
+				        }
+			        }
+
+		        };
 			$scope.toggleOrganizationSelection = function (node) {
 
 			    if (Roles.selectedRole.BuiltIn) return;

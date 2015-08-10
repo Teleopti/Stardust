@@ -50,4 +50,45 @@ describe('PermissionsFilters', function() {
 		expect(filteredArray.length).toEqual(2); 
 	}));
 
+	it('shold find matched parent nodes', inject(function($filter) {
+		var nodes = [
+			{
+				Name: "test",
+				ChildNodes: [
+					{ Name: "confirmed" }
+				]
+			},
+			{
+				Name: "thing"
+			}
+		];
+
+		var filter =  $filter('nameFilter');
+
+		var filteredNodes = filter(nodes, "test");
+
+		expect(filteredNodes.length).toEqual(1);
+	}));
+
+
+	it('should find matched child nodes', inject(function($filter) {
+		var nodes = [
+			{
+				Name: "test",
+				ChildNodes: [
+					{ Name: "confirmed" }
+				]
+			},
+			{
+				Name: "thing"
+			}
+		];
+	var filter = $filter('nameFilter');
+
+	var filteredNodes = filter(nodes, "confirmed");
+
+	expect(filteredNodes.length).toEqual(1);
+
+	}));
+
 });
