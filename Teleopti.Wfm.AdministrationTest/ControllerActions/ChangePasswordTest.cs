@@ -16,7 +16,6 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 	{
 		public AccountController Target;
 		public ITenantUnitOfWork TenantUnitOfWork;
-		public ICurrentTenantSession CurrentTenantSession;
 
 		[Test]
 		public void ShouldNotWorkWithUnknownId()
