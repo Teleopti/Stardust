@@ -158,5 +158,10 @@
 }
 
 [ng\:cloak], [ng-cloak], .ng-cloak, .ng-hide {
-		display: none !important;
+	display: none !important;
+}
+
+.mfb-component__wrap {
+	margin-bottom: 0px;
+	padding-bottom: 0px;
 }
