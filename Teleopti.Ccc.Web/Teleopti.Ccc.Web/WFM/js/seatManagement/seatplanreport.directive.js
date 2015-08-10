@@ -7,26 +7,25 @@
 	seatPlanReportCtrl.$inject = ['seatPlanService', 'seatplanTeamAndLocationService'];
 
 	function seatPlanReportCtrl(seatPlanService, seatplanTeamAndLocationService) {
-
 		var vm = this;
 
-		function getSeatBookings(options) {
+		vm.getSeatBookings = function (options) {
 			vm.isLoadingReport = true;
 			var seatBookingReportParams = {
-				startDate: options.startDate != null ? moment(options.startDate).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD'),
-				endDate: options.endDate != null ? moment(options.endDate).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD'),
-				teams: options.teams != null ? options.teams : [],
-				locations: options.locations != null ? options.locations : [],
-				skip: options.skip != null ? options.skip : 0,
-				take: options.take != null ? options.take : 20
+				startDate: vm.selectedPeriod.StartDate != null ? moment(vm.selectedPeriod.StartDate).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD'),
+				endDate: vm.selectedPeriod.EndDate != null ? moment(vm.selectedPeriod.EndDate).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD'),
+				teams: seatplanTeamAndLocationService.GetSelectedTeamsFromTeamList(vm.teams),
+				locations: seatplanTeamAndLocationService.GetSelectedLocationsFromLocationList(vm.locations),
+				skip: options.skip,
+				take: options.take
 			};
 			seatPlanService.seatBookingReport.get(seatBookingReportParams).$promise.then(function (data) {
 				vm.seatBookings = data.SeatBookingsByDate;
 				vm.isLoadingReport = false;
 				vm.totalPages = Math.ceil(data.TotalRecordCount / vm.take);
+				options.callback != null && options.callback();
 			});
 		};
-
 
 		vm.locations = [];
 		vm.teams = [];
@@ -45,11 +44,7 @@
 			}
 
 			if (vm.currentPage != goToPage) {
-				getSeatBookings({
-					startDate: vm.selectedPeriod.StartDate,
-					endDate: vm.selectedPeriod.EndDate,
-					teams: seatplanTeamAndLocationService.GetSelectedTeamsFromTeamList(vm.teams),
-					locations: seatplanTeamAndLocationService.GetSelectedLocationsFromLocationList(vm.locations),
+				vm.getSeatBookings({
 					skip: (goToPage - 1) * vm.take,
 					take: vm.take
 				});
@@ -82,16 +77,13 @@
 		};
 
 		vm.applyFilter = function () {
-			getSeatBookings({
-				startDate: vm.selectedPeriod.StartDate,
-				endDate: vm.selectedPeriod.EndDate,
-				teams: seatplanTeamAndLocationService.GetSelectedTeamsFromTeamList(vm.teams),
-				locations: seatplanTeamAndLocationService.GetSelectedLocationsFromLocationList(vm.locations),
+			vm.getSeatBookings({
 				skip: vm.page,
 				take: vm.take
 			});
 			vm.currentPage = 1;
 		};
+
 		vm.setRangeClass = function (date, mode) {
 			if (mode === 'day') {
 				var dayToCheck = new Date(date).setHours(12, 0, 0, 0);
@@ -112,13 +104,9 @@
 
 		vm.getLocationDisplayText = seatplanTeamAndLocationService.GetLocationDisplayText;
 
-
-		getSeatBookings({
-			startDate: vm.selectedPeriod == null ? null : vm.selectedPeriod.StartDate,
-			endDate: vm.selectedPeriod == null ? null : vm.selectedPeriod.EndDate,
+		vm.getSeatBookings({
 			skip: vm.page,
 			take: vm.take
-
 		});
 
 		seatPlanService.locations.get().$promise.then(function (locations) {
@@ -148,4 +136,44 @@
 			templateUrl: "js/seatManagement/html/seatplanreport.html"
 		};
 	};
+
+	angular.module('wfm.seatPlan').directive('ngPrint', printDirective);
+	printDirective.$inject = ['$timeout'];
+
+	function printDirective() {
+
+		var printSectionDiv = document.createElement('div');
+
+		function printElement(elem, scope) {
+			printSectionDiv = elem.cloneNode(true);
+			printSectionDiv.id = "seatPlanReportContentPrint";
+			document.body.appendChild(printSectionDiv);
+			window.print();
+			console.log('print');
+			document.body.removeChild(printSectionDiv);
+			scope.vm.applyFilter();
+		}
+
+		function link(scope, element, attrs) {
+
+			element.on('click', function () {
+				scope.vm.getSeatBookings({
+					callback: function () {
+						angular.element(document).ready(function () {
+							var elemToPrint = document.getElementById(attrs.printElementId);
+							if (elemToPrint) {
+								printElement(elemToPrint, scope);
+							}
+						});
+					}
+				});
+			});
+		}
+
+		return {
+			link: link,
+			restrict: 'A'
+		};
+	}
 })();
+

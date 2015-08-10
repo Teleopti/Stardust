@@ -4,6 +4,7 @@
 	}
 </style>
 
+
 <div class="row seatPlanReport">
 	<div class="seatPlanReportHeader material-depth-1">
 		<button class="wfm-btn pull-left" ng-click="vm.toggle()">
@@ -13,7 +14,7 @@
 			<i class="mdi mdi-filter"></i>
 			Filter
 		</button>
-		<button class="wfm-fab info pull-right" ng-show="!vm.isFilterOpened">
+		<button class="wfm-fab info pull-right" ng-show="!vm.isFilterOpened" ng-print print-element-id="seatPlanReportContentScreen" is-loading-report="{{vm.isLoadingReport}}">
 			<i class="mdi mdi-printer"></i>
 		</button>
 		<span class="blankForTurnOffFilterPanel1" ng-click="vm.isFilterOpened = false"></span>
@@ -36,7 +37,7 @@
 				<div class="team-picker" ng-show="vm.isTeamPickerOpened">
 					<div class="input-prepend">
 						<i class="mdi mdi-filter-outline"></i>
-						<input type="text" name="filterTeams" ng-model="searchTeams" placeholder="{{ 'FilterTeams' | translate }}"/>
+						<input type="text" name="filterTeams" ng-model="searchTeams" placeholder="{{ 'FilterTeams' | translate }}" />
 					</div>
 
 					<div class="tree">
@@ -51,7 +52,7 @@
 				<div class="location-picker" ng-show="vm.isLocationPickerOpened">
 					<div class="input-prepend">
 						<i class="mdi mdi-filter-outline"></i>
-						<input type="text" name="filterLocations" ng-model="searchLocations" placeholder="{{ 'FilterLocations' | translate }}"/>
+						<input type="text" name="filterLocations" ng-model="searchLocations" placeholder="{{ 'FilterLocations' | translate }}" />
 					</div>
 
 					<div class="tree">
@@ -72,13 +73,11 @@
 		</div>
 	</div>
 	<span class="blankForTurnOffFilterPanel2" ng-click="vm.isFilterOpened = false"></span>
-	<div class="seatPlanReportContent" ng-click="vm.isFilterOpened = false">
-		<div ng-show="vm.isLoadingReport" class="report-spinner">
+	<div class="seatPlanReportContent" ng-click="vm.isFilterOpened = false" id="seatPlanReportContentScreen" >
+		<div ng-if="vm.isLoadingReport" class="report-spinner">
 			<md-progress-circular md-mode="indeterminate"></md-progress-circular>
 		</div>
-
 		<h1 ng-if="!vm.isLoadingReport">{{ vm.seatBookings.length == 0 ? 'No report for selected period' : 'Seat Plan Report' }}</h1>
-
 		<table ng-if="!vm.isLoadingReport">
 			<tr ng-repeat-start="bookingByDate in vm.seatBookings" class="tr-date">
 				<td></td>
@@ -115,6 +114,7 @@
 			</tr>
 			<tr ng-repeat-end></tr>
 		</table>
+	
 		<div class="report-paging material-depth-1 pull-right" ng-if="!vm.isLoadingReport && vm.totalPages !== 0">
 			<i class="mdi mdi-skip-previous" ng-class="{'noclick':(vm.currentPage == 1)}" ng-click="vm.paging(1)"></i>
 			<i class="mdi mdi-chevron-left" ng-class="{'noclick':(vm.currentPage == 1)}" ng-click="vm.paging(vm.currentPage - 1)"></i>
@@ -124,5 +124,4 @@
 			<span>{{'Total Page: '+vm.totalPages}}</span>
 		</div>
 	</div>
-
 </div>

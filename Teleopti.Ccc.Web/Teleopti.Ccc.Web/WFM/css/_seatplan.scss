@@ -180,7 +180,6 @@
 
 .seatPlanReportContent table{
 	width:100%;
-	
 }
 
 .seatPlanReportContent table .tr-head{
@@ -235,6 +234,61 @@
 	width:15%;
 }
 
+@media print{
+	.navbar *{
+		visibility:hidden !important;
+		height:0 !important;
+		width:0 !important;
+	}
+
+	.navbar{
+		visibility:hidden !important;
+		height:0 !important;
+		width:0 !important;
+	}
+
+	.layout-container *{
+		visibility:hidden !important;
+		height:0 !important;
+		width:0 !important;
+	}
+
+	.layout-container {
+		visibility:hidden !important;
+		height:0 !important;
+		width:0 !important;
+	}
+	
+	.wfm-accordion-head{
+		visibility:hidden!important;
+		height:0 !important;
+		width:0 !important;
+	}
+
+	#seatPlanReportContentPrint{
+		width:100%!important;
+		height:auto!important;
+	}
+
+	.wfm-accordion-head{
+		display:none!important;
+	}
+
+	.report-paging{
+		display:none;
+	}
+}
+
+@media screen{
+	#seatPlanReportContentPrint{
+		display:none;
+	}
+
+	#seatPlanReportContentPrint .report-paging{
+		display:none;
+	}
+}
+
 .report-paging {
 	height:28px;
 	background:#ffffff;
@@ -274,4 +328,3 @@
 	margin-top: 3px;
 	vertical-align: top;
 }
-
