@@ -1,8 +1,5 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
@@ -80,8 +77,6 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 				changeResult.Success.Should().Be.False();
 				changeResult.Message.Should().Be.EqualTo("The new password and confirm password does not match.");
 			}
-
-			
 		}
 
 		[Test]

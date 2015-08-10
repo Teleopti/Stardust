@@ -1,17 +1,13 @@
-﻿using System;
-using System.Configuration;
+﻿using System.Configuration;
 using System.Data.SqlClient;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Wfm.Administration.Controllers;
 using Teleopti.Wfm.Administration.Core;
-using Teleopti.Wfm.Administration.Models;
 
 namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 {
