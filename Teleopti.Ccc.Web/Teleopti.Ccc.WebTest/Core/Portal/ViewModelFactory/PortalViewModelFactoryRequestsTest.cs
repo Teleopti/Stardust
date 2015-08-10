@@ -1,3 +1,4 @@
+using System;
 using System.Globalization;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -9,6 +10,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
@@ -16,6 +18,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 {
@@ -25,6 +28,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		private IPersonNameProvider _personNameProvider;
 		private ILoggedOnUser _loggedOnUser;
 		private IUserCulture _userCulture;
+        private ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 
 		[SetUp]
 		public void Setup()
@@ -38,6 +42,16 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 
 			_personNameProvider = MockRepository.GenerateMock<IPersonNameProvider>();
 			_personNameProvider.Stub(x => x.BuildNameFromSetting(_loggedOnUser.CurrentUser().Name)).Return("A B");
+
+            _currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
+            var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+            _currentUnitOfWorkFactory.Stub(x => x.Current())
+                .Return(unitOfWorkFactory);
+            unitOfWorkFactory.Stub(x => x.Name).Return("for test");
+
+            DefinedLicenseDataFactory.SetLicenseActivator(_currentUnitOfWorkFactory.Current().Name, new LicenseActivator("", DateTime.Today.AddDays(100), 1000, 1000,
+                                                                              LicenseType.Agent, new Percent(.10), null, null));
+
 		}
 
 		[Test]
@@ -71,7 +85,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
 				MockRepository.GenerateMock<IToggleManager>(), _personNameProvider,
 				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), MockRepository.GenerateStub<ICurrentTenantUser>(), _userCulture,
-                new FakeCurrentUnitOfWorkFactory());
+                _currentUnitOfWorkFactory);
 			var result = target.CreatePortalViewModel();
 
 			var requestTab = (from i in result.NavigationItems where i.Controller == "Requests" select i).SingleOrDefault();
@@ -88,7 +102,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
 				MockRepository.GenerateMock<IToggleManager>(), _personNameProvider,
 				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), MockRepository.GenerateStub<ICurrentTenantUser>(), _userCulture,
-                new FakeCurrentUnitOfWorkFactory());
+                _currentUnitOfWorkFactory);
 			var result = target.CreatePortalViewModel();
 
 			var requestTab = (from i in result.NavigationItems where i.Controller == "Requests" select i).SingleOrDefault();
