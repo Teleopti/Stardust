@@ -1,6 +1,3 @@
-
-use Source_DemoSales_TeleoptiCCC7
-
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[LoadScheduleAndSeatBookingInfo]') AND type in (N'P', N'PC'))
 DROP PROCEDURE  dbo.[LoadScheduleAndSeatBookingInfo]
 
