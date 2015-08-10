@@ -64,7 +64,7 @@ WHERE personSchedule.BusinessUnitId = @businessUnitId and personSchedule.IsDayOf
 	( personSchedule.BelongsToDate between @startDate and @endDate )
 	
 	AND (EXISTS (select Id from @teamids where personSchedule.TeamId = Id) or @teamIdList IS NULL)
-	AND (EXISTS (select Id from @locationids where loc.Id = Id or Seat is null) or @locationIdList IS NULL)
+	AND (EXISTS (select Id from @locationids where loc.Id = Id) or @locationIdList IS NULL)
   
  ORDER BY personSchedule.BelongsToDate ASC, Team.Name, LastName, FirstName
  
