@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
@@ -21,6 +22,8 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.ViewModelFactory
 			var scheduleProvider = MockRepository.GenerateMock<IScheduleProvider>();
 			var mapper = MockRepository.GenerateMock<IAsmViewModelMapper>();
 			var pushMessageProvider = MockRepository.GenerateMock<IPushMessageProvider>();
+		    var currentUnitOfWorkFactory = new FakeCurrentUnitOfWorkFactory();
+            var permissionProvider = new FakePermissionProvider();
 			var asmZero = new DateTime(2000, 1, 1);
 			var scheduleDays = new List<IScheduleDay>();
 			var viewModel = new AsmViewModel();
@@ -30,7 +33,7 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.ViewModelFactory
 			scheduleProvider.Expect(s => s.GetScheduleForPeriod(expectedPeriod)).Return(scheduleDays);
 			mapper.Expect(m => m.Map(asmZero, scheduleDays,2)).Return(viewModel);
 
-			var target = new AsmViewModelFactory(scheduleProvider, mapper, pushMessageProvider);
+            var target = new AsmViewModelFactory(scheduleProvider, mapper, pushMessageProvider, permissionProvider, currentUnitOfWorkFactory);
 			var result = target.CreateViewModel(asmZero);
 
 			result.Should().Be.SameInstanceAs(viewModel);

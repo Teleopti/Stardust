@@ -12,7 +12,7 @@
 					baseUrl: '@Url.Content("~/MyTime/")',
 					startBaseUrl: '@Url.Content("~/Start/")'
 				});
-			@if(Model.HasAsmPermission)
+			@if(Model.HasAsmLicense && Model.HasAsmPermission)
 			{
 				<text>
 				Teleopti.MyTimeWeb.AlertActivity.StartAlert({

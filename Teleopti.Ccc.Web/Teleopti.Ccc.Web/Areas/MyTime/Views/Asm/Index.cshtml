@@ -1,12 +1,15 @@
 ﻿@using Teleopti.Ccc.UserTexts
 
 <script type="text/javascript">
-	$(function () {
-		Teleopti.MyTimeWeb.AjaxSettings = { baseUrl: '@Url.Content("~/MyTime/")' };
-		Teleopti.MyTimeWeb.Asm.ShowAsm(
-			{
-				baseUrl: '@Url.Content("~/MyTime#")'
-			});
+    $(function() {
+        Teleopti.MyTimeWeb.AjaxSettings = { baseUrl: '@Url.Content("~/MyTime/")' };
+        Teleopti.MyTimeWeb.Asm.ShowAsm(
+        {
+            baseUrl: '@Url.Content("~/MyTime#")'
+        });
+        @if ( ViewBag.HasAsmLicense && ViewBag.HasAsmPermission)
+        {
+            <text>
 		Teleopti.MyTimeWeb.AsmMessage.ListenForMessages(function (data) {
 			Teleopti.MyTimeWeb.AsmMessage.FetchMessageInfo(data.DomainId, Teleopti.MyTimeWeb.Asm.SetMessageCount);
 		});
@@ -23,6 +26,7 @@
 				Teleopti.MyTimeWeb.Asm.ReloadAsmViewModelListener(notification);
 				Teleopti.MyTimeWeb.Asm.NotifyWhenScheduleChangedListener(notification);
 			});
+
 		Teleopti.MyTimeWeb.AlertActivity.StartAlert({
 			comingMessageTemplate: '@Resources.NextActivityComingMessage',
 			endingMessageTemplate: '@Resources.ShiftEndingMessage',
@@ -34,37 +38,39 @@
 			header: '@Resources.Teleopti',
 				timeout: 30000
 		});
-	});
+	</text>
+	}
+    });
 </script>
 
 
 <div class="asm-outer-canvas ui-corner-all">
-	<div class="asm-schedule-canvas ui-corner-all">
-		<div class="asm-time-marker">
-			<div class="asm-time-marker-inner"></div>
-		</div>
-		<div class="asm-sliding-schedules" data-bind="style: { left : canvasPosition }">
-			<span data-bind="foreach: layers">
+    <div class="asm-schedule-canvas ui-corner-all">
+        <div class="asm-time-marker">
+            <div class="asm-time-marker-inner"></div>
+        </div>
+        <div class="asm-sliding-schedules" data-bind="style: { left : canvasPosition }">
+            <span data-bind="foreach: layers">
 				<span class="asm-layer ui-corner-all" data-bind="style: { left : leftPx, backgroundColor : backgroundColor, paddingLeft : paddingLeft}, attr: {'title' : title}"></span>
 			</span>
-			<span data-bind="foreach: hours">
+            <span data-bind="foreach: hours">
 				<span class="asm-timeline-line">
 					<span class="asm-timeline-number ui-corner-all" data-bind="text: $data"></span>
 				</span>
 			</span>
-		</div>
-	</div>
-	<div class="asm-info-canvas ui-corner-all">
-		<div class="relative">
-			<div class="asm-info-canvas-column asm-info-canvas-column-current" data-bind="text: currentLayerString, nonEncodedTitle: '@Html.AttributeEncode(Resources.CurrentActivity)'">
-			</div>
-			<div class="asm-info-canvas-column asm-info-canvas-column-next" data-bind="text: nextLayerString, nonEncodedTitle: '@Html.AttributeEncode(Resources.ActivityNextStart)'">
-			</div>	
-			<div class="asm-info-canvas-column asm-info-canvas-column-messages" data-bind="visible: unreadMessages, click : openMessages">
-				<span class="glyphicon glyphicon-envelope" style="margin-right: 13px; position: relative; margin-top: 0">
+        </div>
+    </div>
+    <div class="asm-info-canvas ui-corner-all">
+        <div class="relative">
+            <div class="asm-info-canvas-column asm-info-canvas-column-current" data-bind="text: currentLayerString, nonEncodedTitle: '@Html.AttributeEncode(Resources.CurrentActivity)'">
+            </div>
+            <div class="asm-info-canvas-column asm-info-canvas-column-next" data-bind="text: nextLayerString, nonEncodedTitle: '@Html.AttributeEncode(Resources.ActivityNextStart)'">
+            </div>
+            <div class="asm-info-canvas-column asm-info-canvas-column-messages" data-bind="visible: unreadMessages, click : openMessages">
+                <span class="glyphicon glyphicon-envelope" style="margin-right: 13px; position: relative; margin-top: 0">
 					<span style="padding-left: 2px; position: relative" data-bind="text: unreadMessageCount" id="message-count" ></span>
 				</span>
-			</div>			
-		</div>
-	</div>
+            </div>
+        </div>
+    </div>
 </div>

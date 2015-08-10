@@ -112,7 +112,7 @@
 						{
 							<li><a href="#" id="change-your-password" data-mytime-action="Settings/Password">@Resources.ChangeYourPassword</a></li>
 						}
-						@if (Model.HasAsmPermission)
+						@if (Model.HasAsmLicense && Model.HasAsmPermission)
 						{
 							<li class="divider"></li>
 							<li><a href="#" id="asm-link">@Resources.OpenASM</a></li>

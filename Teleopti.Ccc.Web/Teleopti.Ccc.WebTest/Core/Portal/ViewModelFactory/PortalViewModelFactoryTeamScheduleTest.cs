@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory;
@@ -56,7 +57,8 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivatorProvider>(),
 				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
 				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
-				MockRepository.GenerateMock<IToggleManager>(), _personNameProvider, MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), MockRepository.GenerateStub<ICurrentTenantUser>(), _userCulture);
+				MockRepository.GenerateMock<IToggleManager>(), _personNameProvider, MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), MockRepository.GenerateStub<ICurrentTenantUser>(), _userCulture,
+                new FakeCurrentUnitOfWorkFactory());
 				
 
 			var result = RelevantTab(target.CreatePortalViewModel());

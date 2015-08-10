@@ -15,6 +15,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 {
@@ -31,6 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 		private readonly ITeamGamificationSettingRepository _teamGamificationSettingRepo;
 		private readonly ICurrentTenantUser _currentTenantUser;
 		private readonly IUserCulture _userCulture;
+        private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 
 		public PortalViewModelFactory(IPermissionProvider permissionProvider,
 			ILicenseActivatorProvider licenseActivatorProviderProvider,
@@ -40,7 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			IToggleManager toggleManager, IPersonNameProvider personNameProvider,
 			ITeamGamificationSettingRepository teamGamificationSettingReop,
 			ICurrentTenantUser currentTenantUser,
-			IUserCulture userCulture)
+			IUserCulture userCulture, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory)
 		{
 			_permissionProvider = permissionProvider;
 			_licenseActivatorProvider = licenseActivatorProviderProvider;
@@ -53,6 +55,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			_teamGamificationSettingRepo = teamGamificationSettingReop;
 			_currentTenantUser = currentTenantUser;
 			_userCulture = userCulture;
+		    _currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 		}
 
 		public PortalViewModel CreatePortalViewModel()
@@ -109,26 +112,30 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			
 			var showBadge = badgeToggleEnabled && badgeFeatureEnabled && hasBadgePermission;
 			var culture = _userCulture == null ? CultureInfo.InvariantCulture : _userCulture.GetCulture();
+             var dataSource = _currentUnitOfWorkFactory.Current().Name;
 
-			return new PortalViewModel
-			{
-				ReportNavigationItems = reportsList,
-				NavigationItems = navigationItems,
-				CustomerName = customerName,
-				CurrentLogonAgentName = _personNameProvider.BuildNameFromSetting(_loggedOnUser.CurrentUser().Name),
-				ShowChangePassword = showChangePassword(),
-				HasAsmPermission =
-					_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger),
-				ShowMeridian = CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern.Contains("t"),
-				UseJalaaliCalendar = CultureInfo.CurrentCulture.IetfLanguageTag == "fa-IR",
-				DateFormat = culture.DateTimeFormat.ShortDatePattern.ToUpper(),
-				TimeFormat = culture.DateTimeFormat.ShortTimePattern,
-				AMDesignator = culture.DateTimeFormat.AMDesignator,
-				PMDesignator = culture.DateTimeFormat.PMDesignator,
-				Badges = showBadge ? _badgeProvider.GetBadges() : null,
-				
-				ShowBadge = showBadge
-			};
+		    return new PortalViewModel
+		    {
+		        ReportNavigationItems = reportsList,
+		        NavigationItems = navigationItems,
+		        CustomerName = customerName,
+		        CurrentLogonAgentName = _personNameProvider.BuildNameFromSetting(_loggedOnUser.CurrentUser().Name),
+		        ShowChangePassword = showChangePassword(),
+		        HasAsmPermission =
+		            _permissionProvider.HasApplicationFunctionPermission(
+		                DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger),
+		        HasAsmLicense = DefinedLicenseDataFactory.GetLicenseActivator(dataSource).EnabledLicenseOptionPaths.Contains(
+		            DefinedLicenseOptionPaths.TeleoptiCccAgentScheduleMessenger),
+		        ShowMeridian = CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern.Contains("t"),
+		        UseJalaaliCalendar = CultureInfo.CurrentCulture.IetfLanguageTag == "fa-IR",
+		        DateFormat = culture.DateTimeFormat.ShortDatePattern.ToUpper(),
+		        TimeFormat = culture.DateTimeFormat.ShortTimePattern,
+		        AMDesignator = culture.DateTimeFormat.AMDesignator,
+		        PMDesignator = culture.DateTimeFormat.PMDesignator,
+		        Badges = showBadge ? _badgeProvider.GetBadges() : null,
+
+		        ShowBadge = showBadge
+		    };
 		}
 
 		private bool showChangePassword()

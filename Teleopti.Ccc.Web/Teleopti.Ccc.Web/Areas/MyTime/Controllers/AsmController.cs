@@ -30,6 +30,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			var layoutViewModel = _layoutBaseViewModelFactory.CreateLayoutBaseViewModel(Resources.AgentScheduleMessenger);
 			layoutViewModel.CultureSpecific.Rtl = false; //for now - asm is always displayed "western style" for now
 			ViewBag.LayoutBase = layoutViewModel;
+
+		    ViewBag.HasAsmPermission = _asmModelFactory.HasAsmPermission();
+		    ViewBag.HasAsmLicense = _asmModelFactory.HasAsmLicense();
 			return View();
 		}
 

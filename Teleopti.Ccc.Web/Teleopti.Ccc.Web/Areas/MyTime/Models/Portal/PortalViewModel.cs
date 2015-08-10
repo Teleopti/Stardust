@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 		public string CustomerName { get; set; }
 		public bool ShowChangePassword { get; set; }
 		public bool HasAsmPermission { get; set; }
+        public bool HasAsmLicense { get; set; }
 		public bool ShowMeridian { get; set; }
 		public bool UseJalaaliCalendar { get; set; }
 		public string DateFormat { get; set; }
