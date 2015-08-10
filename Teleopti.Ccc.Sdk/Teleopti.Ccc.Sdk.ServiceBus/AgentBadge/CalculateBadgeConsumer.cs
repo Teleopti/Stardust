@@ -67,8 +67,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 
 			if (logger.IsDebugEnabled)
 			{
-				logger.DebugFormat("Consume CalculateBadgeMessage with BusinessUnit {0}, DataSource {1} and timezone {2}", message.BusinessUnitId,
-					message.Datasource, message.TimeZoneCode);
+				logger.DebugFormat(
+					"Consume CalculateBadgeMessage (Id=\"{0})\" with BusinessUnit=\"{1}\", DataSource=\"{2}\" and Timezone=\"{3}\"",
+					message.Identity, message.BusinessUnitId, message.Datasource, message.TimeZoneCode);
 			}
 
 			using (var uow = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
@@ -77,7 +78,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				if (!teamSettings.Any())
 				{
 					//error happens
-					logger.Error("No gamification setting applied to any team");
+					logger.Info("No gamification setting applied to any team, no badge calculation will be done");
 					resendMessage(message);
 					return;
 				}
@@ -92,9 +93,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 					{
 						if (logger.IsDebugEnabled)
 						{
-							logger.DebugFormat("No badge type is enabled or setting is deleted. nothing will be done for setting {0} "
-											   + "in BusinessUnit {1}, DataSource {2} and timezone {3} setting status {4}",
-								setting.Id, message.BusinessUnitId, message.Datasource, message.TimeZoneCode,setting.IsDeleted);
+							logger.DebugFormat(
+								"No badge type is enabled or setting is deleted. nothing will be done for BusinessUnit=\"{0}\", DataSource=\"{1}\" and Timezone=\"{2}\""
+								+ "(setting Id=\"{3}\", IsDeleted=\"{4}\")",
+								message.BusinessUnitId, message.Datasource, message.TimeZoneCode, setting.Id, setting.IsDeleted);
 						}
 						continue;
 					}
@@ -219,8 +221,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			if (logger.IsDebugEnabled)
 			{
 				logger.DebugFormat(
-						"Delay Sending CalculateBadgeMessage to Service Bus for Timezone={0} on next calculation time={1:yyyy-MM-dd HH:mm:ss}",
-						newMessage.TimeZoneCode, nextMessageShouldBeProcessed);
+					"Delay Sending CalculateBadgeMessage (Id=\"{0}\") to Service Bus for Timezone=\"{1}\" on next calculation time={2:yyyy-MM-dd HH:mm:ss}",
+					newMessage.Identity, newMessage.TimeZoneCode, nextMessageShouldBeProcessed);
 			}
 		}
 
@@ -446,7 +448,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		{
 			if (logger.IsDebugEnabled)
 			{
-				logger.DebugFormat("Send {3} badge message to agent {0} (ID: {1}) for badge type: {2}", person.Name, person.Id,
+				logger.DebugFormat("Send {3} badge text message to agent {0} (ID: {1}) for badge type: {2}", person.Name, person.Id,
 					badgeType, badgeRank);
 			}
 

@@ -5,9 +5,11 @@ namespace Teleopti.Interfaces.Messages.General
 {
 	public class CalculateBadgeMessage : MessageWithLogOnInfo
 	{
+		private readonly Guid _messageId = Guid.NewGuid();
+
 		public override Guid Identity
 		{
-			get { return Guid.NewGuid(); }
+			get { return _messageId; }
 		}
 
 		public DateTime CalculationDate { get; set; }
