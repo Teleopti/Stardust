@@ -36,8 +36,8 @@
 							<div class="loading-whole-section loading-card-bodyfix" ng-show="listCampaignFinished && displayLoading(campaign)">
 								<md-progress-circular md-mode="indeterminate" style="z-index: 100;"></md-progress-circular>
 							</div>
-			                <div id="Chart_{{campaign.Id}}"></div>
-		                </div>
+							<campaign-chart campaign="campaign"></campaign-chart>
+						</div>
 						<button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="show(campaign)" translate>Edit</button>
 						<button class="wfm-btn wfm-btn-invis-primary pull-right" translate>Schedule</button>
 						<button class="wfm-btn wfm-btn-invis-primary pull-right" translate>AddBacklog</button>
@@ -72,7 +72,7 @@
 							<div class="loading-whole-section loading-card-bodyfix" ng-show="listCampaignFinished && displayLoading(campaign)">
 								<md-progress-circular md-mode="indeterminate" style="z-index: 100;"></md-progress-circular>
 							</div>
-			                <div id="Chart_{{campaign.Id}}"></div>
+							<campaign-chart campaign="campaign"></campaign-chart>
 		                </div>
 		                <button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="show(campaign)" translate>Edit</button>
 		                <button class="wfm-btn wfm-btn-invis-primary pull-right" translate>Schedule</button>

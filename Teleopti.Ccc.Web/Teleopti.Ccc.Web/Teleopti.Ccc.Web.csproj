@@ -1255,6 +1255,7 @@
     <Content Include="WFM\js\global\toggle.service.js" />
     <Content Include="WFM\js\outbound\outbound.activity.service.js" />
     <Content Include="WFM\js\outbound\outbound.campaign.chart.service .js" />
+    <Content Include="WFM\js\outbound\outbound.campaignChart.directive.js" />
     <Content Include="WFM\js\outbound\outbound.campaignSummary.controller.js" />
     <Content Include="WFM\js\outbound\outbound.campaignPhase.directive .js" />
     <Content Include="WFM\js\outbound\outbound.activityPicker.directive.js" />

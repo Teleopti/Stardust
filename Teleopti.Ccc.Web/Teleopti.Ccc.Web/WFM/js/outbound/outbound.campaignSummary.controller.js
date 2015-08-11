@@ -44,18 +44,6 @@
         $scope.gotoCreateCampaign = function() {
             $state.go('outbound-create');
         };
-		
-        $scope.generateChart = function (campaign) {
-        	if (campaign.chart) return;
-        	
-        	outboundChartService.getCampaignVisualization(campaign.Id, function success(data) {
-				campaign.viewScheduleDiffToggle = false;
-	            campaign.chartData = data;
-	        	outboundChartService.makeGraph(null, campaign , campaign.viewScheduleDiffToggle, data, function(graph) {
-		            campaign.chart = graph;
-		        });
-	        });	       
-        };
 
         $scope.toggleChartDisplay = function (campaign) {
         	campaign.viewScheduleDiffToggle = !campaign.viewScheduleDiffToggle;
