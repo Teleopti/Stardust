@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using NHibernate;
-using NHibernate.Criterion;
 using NHibernate.Impl;
 using NHibernate.Linq;
-using NHibernate.SqlCommand;
 using NHibernate.Transform;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.SeatPlanning;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
@@ -86,18 +81,18 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public ISeatBookingReportModel LoadSeatBookingsReport(ISeatBookingReportCriteria criteria, Paging paging = null)
 		{
 
-			var scheduleAndBookingQuery = getScheduleAndBookingInformation(criteria);
-			return getResultNew(scheduleAndBookingQuery, paging);
+			var scheduleAndBookingQuery = getScheduleAndBookingQuery(criteria);
+			return getBookingReportResults(scheduleAndBookingQuery, paging);
 		}
 
-		private static ISeatBookingReportModel getResultNew(IQuery bookingQuery, Paging paging)
+		private static ISeatBookingReportModel getBookingReportResults(IQuery bookingQuery, Paging paging)
 		{
 			return paging != null
-				? getResultWithPaging(bookingQuery, paging)
-				: getResultWithoutPaging(bookingQuery);
+				? getBookingReportResulsWithPaging(bookingQuery, paging)
+				: getBookingReportResultsWithoutPaging(bookingQuery);
 		}
 
-		private static SeatBookingReportModel getResultWithoutPaging(IQuery bookingQuery)
+		private static SeatBookingReportModel getBookingReportResultsWithoutPaging(IQuery bookingQuery)
 		{
 			var seatBookingReportModel = new SeatBookingReportModel
 			{
@@ -108,23 +103,23 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return seatBookingReportModel;
 		}
 
-		private static SeatBookingReportModel getResultWithPaging(IQuery bookingCriteria, Paging paging)
+		private static SeatBookingReportModel getBookingReportResulsWithPaging(IQuery bookingCriteria, Paging paging)
 		{
-			var seatBookingReportModel = new SeatBookingReportModel();
-
-			seatBookingReportModel.SeatBookings = bookingCriteria
-				.SetFirstResult(paging.Skip)
-				.SetMaxResults(paging.Take)
-				.List<PersonScheduleWithSeatBooking>();
+			var seatBookingReportModel = new SeatBookingReportModel
+			{
+				SeatBookings = bookingCriteria
+					.SetFirstResult (paging.Skip)
+					.SetMaxResults (paging.Take)
+					.List<PersonScheduleWithSeatBooking>()
+			};
 
 			var firstBooking = seatBookingReportModel.SeatBookings.FirstOrDefault();
-
 			seatBookingReportModel.RecordCount = firstBooking == null ? 0 : firstBooking.NumberOfRecords; 
 
 			return seatBookingReportModel;
 		}
 
-		private IQuery getScheduleAndBookingInformation(ISeatBookingReportCriteria reportCriteria)
+		private IQuery getScheduleAndBookingQuery(ISeatBookingReportCriteria reportCriteria)
 		{
 
 			var query =  Session.CreateSQLQuery(
@@ -162,86 +157,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			return reportCriteria.Teams.IsNullOrEmpty() ? null : string.Join(",", reportCriteria.Teams.Select(team => team.Id));
 		}
-
-		#region old code
-
-
-		private ICriteria createSeatBookingCriteria(ISeatBookingReportCriteria criteria)
-		{
-			var seatBookingCriteria = applyBasicReportCriteria(criteria);
-			applyAdditionalCriteria(criteria, seatBookingCriteria);
-			return seatBookingCriteria;
-		}
-
-		private ICriteria applyBasicReportCriteria(ISeatBookingReportCriteria criteria)
-		{
-			var seatBookingCriteria = Session.CreateCriteria<SeatBooking>()
-				.SetResultTransformer(Transformers.DistinctRootEntity)
-				.Add(Restrictions.Between("BelongsToDate", criteria.Period.StartDate, criteria.Period.EndDate))
-				.AddOrder(Order.Asc("StartDateTime"));
-
-			return seatBookingCriteria;
-		}
-
-		private IFutureValue<int> createRowCountCriteria(ISeatBookingReportCriteria criteria)
-		{
-			var rowCountCritiera = applyBasicRowCountCriteria(criteria);
-			applyAdditionalCriteria(criteria, rowCountCritiera);
-			return rowCountCritiera.FutureValue<int>();
-		}
-
-		private ICriteria applyBasicRowCountCriteria(ISeatBookingReportCriteria criteria)
-		{
-			return Session.CreateCriteria<SeatBooking>()
-				.SetResultTransformer(Transformers.DistinctRootEntity)
-				.Add(Restrictions.Between("BelongsToDate", criteria.Period.StartDate, criteria.Period.EndDate))
-				.SetProjection(Projections.RowCount());
-		}
-
-		private static void applyAdditionalCriteria(ISeatBookingReportCriteria criteria, ICriteria seatBookingCriteria)
-		{
-			if (!criteria.Locations.IsNullOrEmpty())
-			{
-				applyLocationFilter(criteria, seatBookingCriteria);
-			}
-
-			if (!criteria.Teams.IsNullOrEmpty())
-			{
-				applyTeamFilter(criteria, seatBookingCriteria);
-			}
-		}
-
-
-		private static void applyLocationFilter(ISeatBookingReportCriteria criteria, ICriteria seatBookingCriteria)
-		{
-			seatBookingCriteria.CreateCriteria("Seat")
-				.Add(Restrictions.In("Parent", criteria.Locations.ToList()));
-		}
-
-		private static void applyTeamFilter(ISeatBookingReportCriteria criteria, ICriteria seatBookingCriteria)
-		{
-			seatBookingCriteria
-				.CreateAlias("Person", "person", JoinType.InnerJoin)
-				.Add(Subqueries.Exists(applyPersonPeriodByTeamFilter(criteria.Teams.ToArray(), criteria.Period)));
-		}
-
-		private static DetachedCriteria applyPersonPeriodByTeamFilter(ICollection teams, DateOnlyPeriod dateOnlyPeriod)
-		{
-			return DetachedCriteria.For(typeof(PersonPeriod), "first")
-				.SetProjection(Projections.Id())
-				.Add(Restrictions.Le("StartDate", dateOnlyPeriod.EndDate))
-				.Add(Restrictions.EqProperty("first.Parent", "person.Id"))
-				.Add(Restrictions.In("Team", teams))
-				.Add(Subqueries.NotExists(DetachedCriteria.For<PersonPeriod>()
-					.SetProjection(Projections.Id())
-					.Add(Restrictions.EqProperty("Parent", "first.Parent"))
-					.Add(Restrictions.Le("StartDate", dateOnlyPeriod.EndDate))
-					.Add(Restrictions.GtProperty("StartDate", "first.StartDate"))
-					.Add(Restrictions.Le("StartDate", dateOnlyPeriod.StartDate))));
-		}
-
-		#endregion
-
+		
 	}
 
 	public class SeatBookingReportModel : ISeatBookingReportModel
@@ -249,7 +165,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IEnumerable<IPersonScheduleWithSeatBooking> SeatBookings { get; set; }
 		public int RecordCount { get; set; }
 	}
-
 
 	public class PersonScheduleWithSeatBooking : IPersonScheduleWithSeatBooking
 	{
@@ -269,8 +184,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public Guid TeamId { get; set; }
 		public String TeamName { get; set; }
 		public int NumberOfRecords{ get; set; }
-
-		// map database return value to date only
 		public DateTime BelongsToDateTime
 		{
 			get { return _belongsToDateTime; }
@@ -280,12 +193,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				BelongsToDate = new DateOnly(value);
 			}
 		}
-		
 	}
 	
 	public class SeatBookingReportCriteria : ISeatBookingReportCriteria
 	{
-
 		public IEnumerable<ISeatMapLocation> Locations { get; set; }
 		public IEnumerable<ITeam> Teams { get; set; }
 		public DateOnlyPeriod Period { get; set; }
