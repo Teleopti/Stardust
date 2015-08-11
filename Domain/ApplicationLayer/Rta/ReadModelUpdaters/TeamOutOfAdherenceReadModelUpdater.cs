@@ -8,6 +8,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 {
 	[UseOnToggle(Toggles.RTA_NoBroker_31237)]
 	public class TeamOutOfAdherenceReadModelUpdater : 
+		IRunOnHangfire,
 		IHandleEvent<PersonInAdherenceEvent>, 
 		IHandleEvent<PersonOutOfAdherenceEvent>,
 		IInitializeble,

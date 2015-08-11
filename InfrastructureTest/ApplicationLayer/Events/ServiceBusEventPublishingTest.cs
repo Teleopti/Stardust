@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 {
 	[TestFixture]
 	[InfrastructureTest]
-	public class ServiceBusEventPublisherTest : ISetup
+	public class ServiceBusEventPublishingTest : ISetup
 	{
 		public FakeServiceBusSender Bus;
 		public IEventPublisher Target;
@@ -19,6 +19,8 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<FakeServiceBusSender>().For<IServiceBusSender>();
+
+			//system.AddService<EventHandler>();
 		}
 
 		[Test]
@@ -31,5 +33,11 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			Bus.SentMessages.Single().Should().Be(@event);
 		}
 
+		//public class EventHandler : IHandleEvent<Event>
+		//{
+		//	public void Handle(Event @event)
+		//	{
+		//	}
+		//}
 	}
 }

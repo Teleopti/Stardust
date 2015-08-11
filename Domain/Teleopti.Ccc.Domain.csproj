@@ -177,7 +177,7 @@
     <Compile Include="ApplicationLayer\Event.cs" />
     <Compile Include="ApplicationLayer\Events\ActivityChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\ActivityMovedEvent.cs" />
-    <Compile Include="ApplicationLayer\Events\IGoToHangfire.cs" />
+    <Compile Include="ApplicationLayer\Events\IRunOnHangfire.cs" />
     <Compile Include="ApplicationLayer\Events\ITrackInfo.cs" />
     <Compile Include="ApplicationLayer\Events\PersonAbsenceModifiedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonAbsenceAddedEvent.cs" />

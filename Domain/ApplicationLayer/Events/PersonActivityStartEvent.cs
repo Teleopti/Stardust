@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
-	public class PersonActivityStartEvent : IEvent, ILogOnInfo, IGoToHangfire
+	public class PersonActivityStartEvent : IEvent, ILogOnInfo
 	{
 		public Guid PersonId { get; set; }
 		public DateOnly? BelongsToDate { get; set; }

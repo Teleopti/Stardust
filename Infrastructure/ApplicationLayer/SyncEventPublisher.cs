@@ -24,7 +24,9 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 
 				foreach (var handler in handlers)
 				{
-					var method = handler.GetType().GetMethods()
+					var method = handler
+						.GetType()
+						.GetMethods()
 						.Single(m => m.Name == "Handle" && m.GetParameters().Single().ParameterType == @event.GetType());
 					try
 					{

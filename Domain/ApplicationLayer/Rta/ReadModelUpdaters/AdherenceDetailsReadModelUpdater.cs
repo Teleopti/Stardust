@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 {
 	[UseOnToggle(Toggles.RTA_SeeAdherenceDetailsForOneAgent_31285)]
 	public class AdherenceDetailsReadModelUpdater :
+		IRunOnHangfire,
 		IHandleEvent<PersonActivityStartEvent>,
 		IHandleEvent<PersonStateChangedEvent>,
 		IHandleEvent<PersonShiftEndEvent>,

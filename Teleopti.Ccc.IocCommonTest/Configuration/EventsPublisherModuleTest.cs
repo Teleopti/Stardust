@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			using (var container = buildContainer(Toggles.RTA_HangfireEventProcessing_31237, true))
 			{
-				container.Resolve<IEventPublisher>().Should().Be.OfType<HangfireOrBusEventPublisher>();
+				container.Resolve<IEventPublisher>().Should().Be.OfType<SelectiveEventPublisher>();
 			}
 		}
 

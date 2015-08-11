@@ -1,4 +1,6 @@
+using System.Linq;
 using Castle.DynamicProxy;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
@@ -23,7 +25,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			{
 				var type = @event.GetType();
 				var serialized = _serializer.SerializeObject(@event);
-				var handlers = _resolveEventHandlers.ResolveHandlersForEvent(@event);
+				var handlers = _resolveEventHandlers.ResolveHandlersForEvent(@event).OfType<IRunOnHangfire>();
 
 				foreach (var handler in handlers)
 				{

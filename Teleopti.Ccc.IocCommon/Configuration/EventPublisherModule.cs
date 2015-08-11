@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			if (_configuration.Toggle(Toggles.RTA_HangfireEventProcessing_31237))
 			{
-				builder.RegisterType<HangfireOrBusEventPublisher>().As<IEventPublisher>().SingleInstance();
+				builder.RegisterType<SelectiveEventPublisher>().As<IEventPublisher>().SingleInstance();
 			}
 			else
 			{
@@ -49,31 +49,15 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<CannotSendDelayedMessages>().As<ISendDelayedMessages>().SingleInstance();
 
 
+
+
+
 			if (_configuration.Args().PublishEventsToServiceBus) return;
 			if (_configuration.Toggle(Toggles.RTA_HangfireEventProcessing_31237))
-				builder.RegisterModule<HangfireOrSyncEventsPublisherModule>();
+				builder.RegisterType<SelectiveEventPublisherWithoutBus>().As<IEventPublisher>().SingleInstance();
 			else
-				builder.RegisterModule<SyncEventsPublisherModule>();
-
-		}
-	}
-
-	internal class SyncEventsPublisherModule : Module
-	{
-		protected override void Load(ContainerBuilder builder)
-		{
+				builder.Register(c => c.Resolve<ISyncEventPublisher>()).As<IEventPublisher>().SingleInstance();
 			builder.Register(c => c.Resolve<IEventPopulatingPublisher>() as EventPopulatingPublisher).As<IPublishEventsFromEventHandlers>().SingleInstance();
-			builder.Register(c => c.Resolve<ISyncEventPublisher>()).As<IEventPublisher>().SingleInstance();
-			builder.RegisterType<IgnoreDelayedMessages>().As<ISendDelayedMessages>().SingleInstance();
-		}
-	}
-
-	internal class HangfireOrSyncEventsPublisherModule : Module
-	{
-		protected override void Load(ContainerBuilder builder)
-		{
-			builder.Register(c => c.Resolve<IEventPopulatingPublisher>() as EventPopulatingPublisher).As<IPublishEventsFromEventHandlers>().SingleInstance();
-			builder.RegisterType<HangfireOrSyncEventPublisher>().As<IEventPublisher>().SingleInstance();
 			builder.RegisterType<IgnoreDelayedMessages>().As<ISendDelayedMessages>().SingleInstance();
 		}
 	}

@@ -80,7 +80,10 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			
 		}
 
-		public class FakeHandler : IHandleEvent<TestEvent>, IHandleEvent<TestEventTwo>, IHandleEvent<TestDomainEvent>
+		public class FakeHandler : 
+			IHandleEvent<TestEvent>, 
+			IHandleEvent<TestEventTwo>, 
+			IHandleEvent<TestDomainEvent>
 		{
 			public Event CalledWithEvent;
 			public Event CalledWithEventTwo;

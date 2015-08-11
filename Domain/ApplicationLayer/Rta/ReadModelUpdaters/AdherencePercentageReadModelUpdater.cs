@@ -7,6 +7,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 {
 	public class AdherencePercentageReadModelUpdater :
+		IRunOnHangfire,
 		IHandleEvent<PersonInAdherenceEvent>,
 		IHandleEvent<PersonOutOfAdherenceEvent>,
 		IHandleEvent<PersonNeutralAdherenceEvent>,

@@ -175,10 +175,9 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Aop\Bug32045.cs" />
-    <Compile Include="ApplicationLayer\Events\HangfireTestEvent.cs" />
     <Compile Include="ApplicationLayer\Events\HangfireEventProcessorTest.cs" />
-    <Compile Include="ApplicationLayer\Events\HangfireEventPublisherTest.cs" />
-    <Compile Include="ApplicationLayer\Events\HangfireOrBusEventPublisherTest.cs" />
+    <Compile Include="ApplicationLayer\Events\HangfireEventPublishingTest.cs" />
+    <Compile Include="ApplicationLayer\Events\SelectiveEventPublishingTest.cs" />
     <Compile Include="Authentication\LoadUserUnauthorizedTest.cs" />
     <Compile Include="Bugs\BugShiftExchangeInvalidUpdate.cs" />
     <Compile Include="DistributedLock\DistributedLockTest.cs" />
@@ -216,6 +215,7 @@
     <Compile Include="MultiTenancy\Server\Queries\PersistTenantTest.cs" />
     <Compile Include="MultiTenancy\Client\TenantClientTestAttribute.cs" />
     <Compile Include="Persisters\Schedules\NoUnitOfWorkModifyNoConflictTest.cs" />
+    <Compile Include="Rta\PublishRtaEventsToHangfireTest.cs" />
     <Compile Include="UnitOfWork\MessageSenders\AggregatedScheduleChangeMessageTest.cs" />
     <Compile Include="PrincipalAndStateTestAttribute.cs" />
     <Compile Include="Repositories\ExistingForecastRepositoryTest.cs" />
@@ -527,7 +527,7 @@
     <Compile Include="UnitOfWork\PersonChangedMessageSenderTest.cs" />
     <Compile Include="UnitOfWork\QueryFilterTest.cs" />
     <Compile Include="UnitOfWork\ScheduleMessageSenderTest.cs" />
-    <Compile Include="ApplicationLayer\Events\ServiceBusEventPublisherTest.cs" />
+    <Compile Include="ApplicationLayer\Events\ServiceBusEventPublishingTest.cs" />
     <Compile Include="UnitOfWork\TeamOrSiteChangedMessageSenderTest.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkAndSession.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkAspectTest.cs" />

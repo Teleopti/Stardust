@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 	[TestFixture]
 	[InfrastructureTest]
 	[Toggle(Toggles.RTA_HangfireEventProcessing_31237)]
-	public class HangfireEventPublisherTest : ISetup
+	public class HangfireEventPublishingTest : ISetup
 	{
 		public FakeHangfireEventClient JobClient;
 		public IEventPublisher Target;
@@ -29,6 +29,8 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			system.AddService<TestMultiHandler1>();
 			system.AddService<TestMultiHandler2>();
 			system.AddService<TestAspectedHandler>();
+			system.AddService<TestBothBusHandler>();
+			system.AddService<TestBothHangfireHandler>();
 		}
 
 		[Test]
@@ -96,6 +98,15 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		}
 
 		[Test]
+		public void ShouldNotEnqueueToBusHandler()
+		{
+			Target.Publish(new BothTestEvent());
+
+			JobClient.HandlerTypes.Should()
+				.Have.SameValuesAs(new[] { typeof(TestBothHangfireHandler).AssemblyQualifiedName });
+		}
+
+		[Test]
 		public void ShouldEnqueueForEachHandler()
 		{
 			Target.Publish(new MultiHandlerTestEvent());
@@ -104,11 +115,18 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 				.Have.SameValuesAs(new[] { typeof(TestMultiHandler1).AssemblyQualifiedName, typeof(TestMultiHandler2).AssemblyQualifiedName });
 		}
 
-		public class UnknownTestEvent : IEvent, IGoToHangfire
+		public class UnknownTestEvent : IEvent
 		{
 		}
 
-		public class TestHandler : IHandleEvent<HangfireTestEvent>, IHandleEvent<Event>
+		public class HangfireTestEvent : IEvent
+		{
+		}
+
+		public class TestHandler : 
+			IRunOnHangfire, 
+			IHandleEvent<HangfireTestEvent>, 
+			IHandleEvent<Event>
 		{
 			public void Handle(HangfireTestEvent @event)
 			{
@@ -119,34 +137,62 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			}
 		}
 
-		public class MultiHandlerTestEvent : IEvent, IGoToHangfire
+		public class MultiHandlerTestEvent : IEvent
 		{
 		}
 
-		public class TestMultiHandler1 : IHandleEvent<MultiHandlerTestEvent>
-		{
-			public void Handle(MultiHandlerTestEvent @event)
-			{
-			}
-		}
-
-		public class TestMultiHandler2 : IHandleEvent<MultiHandlerTestEvent>
+		public class TestMultiHandler1 : 
+			IRunOnHangfire, 
+			IHandleEvent<MultiHandlerTestEvent>
 		{
 			public void Handle(MultiHandlerTestEvent @event)
 			{
 			}
 		}
 
-		public class AspectedHandlerTestEvent : IEvent, IGoToHangfire
+		public class TestMultiHandler2 : 
+			IRunOnHangfire, 
+			IHandleEvent<MultiHandlerTestEvent>
+		{
+			public void Handle(MultiHandlerTestEvent @event)
+			{
+			}
+		}
+
+		public class AspectedHandlerTestEvent : IEvent
 		{
 			
 		}
 
-		public class TestAspectedHandler : IHandleEvent<AspectedHandlerTestEvent>
+		public class TestAspectedHandler : 
+			IRunOnHangfire, 
+			IHandleEvent<AspectedHandlerTestEvent>
 		{
 			public void Handle(AspectedHandlerTestEvent @event)
 			{
 			}
 		}
+
+		public class BothTestEvent : IEvent
+		{
+		}
+
+		public class TestBothBusHandler :
+			IHandleEvent<BothTestEvent>
+		{
+			public void Handle(BothTestEvent @event)
+			{
+			}
+		}
+
+		public class TestBothHangfireHandler :
+			IRunOnHangfire,
+			IHandleEvent<BothTestEvent>
+		{
+			public void Handle(BothTestEvent @event)
+			{
+			}
+		}
+
 	}
 }

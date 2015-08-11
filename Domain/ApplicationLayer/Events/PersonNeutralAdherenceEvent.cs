@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
-	public class PersonNeutralAdherenceEvent : IEvent, ILogOnInfo, IGoToHangfire
+	public class PersonNeutralAdherenceEvent : IEvent, ILogOnInfo
 	{
 		public Guid PersonId { get; set; }
 		public DateOnly? BelongsToDate { get; set; }
