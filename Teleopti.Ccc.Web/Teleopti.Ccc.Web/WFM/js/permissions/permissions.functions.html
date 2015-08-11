@@ -38,7 +38,7 @@
 <div class="tree permissions-tree">
 	<div ui-tree data-drag-enabled="false">
 		<ol ui-tree-nodes="" ng-model="functionsDisplayed" id="tree-root" class="tree-line" toggle-focus>
-			<li ng-repeat="node in functionsDisplayed | filter:searchPermissions | selectedFunctions:selectedFunctionsToggle | unselectedFunctions:unselectedFunctionsToggle" ui-tree-node ng-include="'nodes_renderer.html'"></li>
+			<li ng-repeat="node in functionsDisplayed | descriptionFilter:searchPermissions | selectedFunctions:selectedFunctionsToggle | unselectedFunctions:unselectedFunctionsToggle" ui-tree-node ng-include="'nodes_renderer.html'"></li>
 		</ol>
 	</div>
 </div>
@@ -55,7 +55,7 @@
 
 	<ol ui-tree-nodes="" ng-model="node.ChildFunctions" ng-show="node.show">
 		{{$node}}
-		<li ng-repeat="node in node.ChildFunctions | filter:searchPermissions | selectedFunctions:selectedFunctionsToggle | unselectedFunctions:unselectedFunctionsToggle"
+		<li ng-repeat="node in node.ChildFunctions | descriptionFilter:searchPermissions | selectedFunctions:selectedFunctionsToggle | unselectedFunctions:unselectedFunctionsToggle"
 				ui-tree-node ng-include="'nodes_renderer.html'">
 		</li>
 	</ol>

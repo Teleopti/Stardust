@@ -91,4 +91,45 @@ describe('PermissionsFilters', function() {
 
 	}));
 
+    
+	it('shold find matched parent nodes', inject(function ($filter) {
+	    var nodes = [
+			{
+			    LocalizedFunctionDescription: "test",
+			    ChildFunctions: [
+					{ LocalizedFunctionDescription: "confirmed" }
+			    ]
+			},
+			{
+			    LocalizedFunctionDescription: "thing"
+			}
+	    ];
+
+	    var filter = $filter('descriptionFilter');
+
+	    var filteredNodes = filter(nodes, "test");
+
+	    expect(filteredNodes.length).toEqual(1);
+	}));
+
+
+	it('should find matched child nodes', inject(function ($filter) {
+	    var nodes = [
+			{
+			    LocalizedFunctionDescription: "test",
+			    ChildFunctions: [
+					{ LocalizedFunctionDescription: "confirmed" }
+			    ]
+			},
+			{
+			    LocalizedFunctionDescription: "thing"
+			}
+	    ];
+	    var filter = $filter('descriptionFilter');
+
+	    var filteredNodes = filter(nodes, "confirmed");
+
+	    expect(filteredNodes.length).toEqual(1);
+
+	}));
 });

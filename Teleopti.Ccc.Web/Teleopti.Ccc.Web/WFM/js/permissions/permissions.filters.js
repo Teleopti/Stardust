@@ -1,6 +1,7 @@
 ﻿(function() {
 	'use strict';
 	var permissionsFilters = angular.module('wfm.permissions');
+
 	permissionsFilters.filter('selectedFunctions', [
 		function() {
 		    return function (nodes, selectedFunctionToggle) {
@@ -37,7 +38,68 @@
 		}
 	]);
 
-	permissionsFilters.filter('selectedData', [
+    var getChildren = function(child, filterType) {
+        if (filterType === 'descriptionFilter') {
+            return child.ChildFunctions;
+        } else {
+            return child.ChildNodes;
+        }
+    }
+
+    var matchChild = function (node, reg, filterType) {
+        if (filterType === 'descriptionFilter') {
+            return node.LocalizedFunctionDescription.match(reg);
+        } else {
+            return node.Name.match(reg);
+        }
+    }
+
+	var checkChild = function (child, name, filterType) {
+	    var hasChildWithName = 0;
+	    var reg = new RegExp(name, "i");
+	    var thosechildren = getChildren(child, filterType);
+	    if (thosechildren && thosechildren.length > 0) {
+	        thosechildren.forEach(function (node) {
+	            if (checkChild(node, name, filterType))
+	                hasChildWithName++;
+	        });
+	        return (hasChildWithName > 0 || matchChild(child,reg, filterType));
+	    } else {
+	        return matchChild(child, reg, filterType);
+	    }
+	};
+
+    var filterNodes= function(nodes, name, filterType) {
+        var filteredNodes = [];
+
+        nodes.forEach(function (node) {
+            if (checkChild(node, name, filterType)) {
+                filteredNodes.push(node);
+            }
+        });
+
+        return filteredNodes;
+    }
+
+    permissionsFilters.filter('descriptionFilter', [
+		function () {
+		    return function (nodes, name) {
+		        if (!name) return nodes;
+		        return filterNodes(nodes, name, 'descriptionFilter');
+		    };
+		}
+    ]);
+
+    permissionsFilters.filter('nameFilter', [
+		function () {
+		    return function (nodes, name) {
+		        if (!name) return nodes;
+		        return filterNodes(nodes, name, 'nameFilter');
+		    };
+		}
+    ]);
+
+    permissionsFilters.filter('selectedData', [
     function () {
 	    return function(nodes, selectedDataToggle) {
 		    if (!selectedDataToggle) return nodes;
@@ -73,7 +135,7 @@
     }
 	]);
 
-	permissionsFilters.filter('unselectedData', [
+    permissionsFilters.filter('unselectedData', [
 		function () {
 			return function(nodes, unselectedDataToggle) {
 				if (!unselectedDataToggle) return nodes;
@@ -96,47 +158,4 @@
 			};
 		}
 	]);
-
-	var checkChild = function (child, name) {
-		var hasChildWithName = 0;
-		var reg = new RegExp(name, "i");
-		if (child.ChildNodes && child.ChildNodes.length > 0) {
-			child.ChildNodes.forEach(function(node) {
-				if (checkChild(node, name))
-					hasChildWithName ++;
-			});
-			if (hasChildWithName > 0 || child.Name.match(reg)) {
-				return true;
-			} else {
-				return false;
-			}
-		} else {
-			if (child.Name.match(reg)) {
-				return true;
-			} else {
-				return false;
-			}
-		}
-	};
-
-
-	permissionsFilters.filter('nameFilter', [
-		function () {
-			return function (nodes, name) {
-				if (!name) return nodes;
-				var filteredNodes = [];
-
-				nodes.forEach(function(node) {
-					var check = checkChild(node, name);
-
-					if (check) {
-						filteredNodes.push(node);
-					}
-				});
-
-				return filteredNodes;
-			};
-		}
-	]);
-
 })();
