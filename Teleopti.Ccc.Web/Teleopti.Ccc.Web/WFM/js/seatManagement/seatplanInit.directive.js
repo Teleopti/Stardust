@@ -97,9 +97,9 @@
 
 			if (selectedTeams.length == 0 || selectedLocations.length == 0) {
 				onSelectedTeamsLocationsEmpty(vm.translatedStrings["TeamsOrLocationsAreUnselected"]);
-
-			} else {
-
+				vm.processingSeatPlan = false;
+			}
+			else {
 				seatPlanService.addSeatPlan(addSeatPlanCommand).$promise.then(function (result) {
 					onSuccessAddSeatPlan(vm.translatedStrings["SeatPlanSubmittedOK"]);
 					vm.processingSeatPlan = false;
