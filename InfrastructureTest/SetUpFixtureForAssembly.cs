@@ -5,8 +5,6 @@ using System.Configuration;
 using System.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain;
-using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Ccc.Domain.Infrastructure;
 using NHibernate;
@@ -116,7 +114,13 @@ namespace Teleopti.Ccc.InfrastructureTest
 				foreach (var aggregateRoot in allDbRoots)
 				{
 					if (!(aggregateRoot is IPersonWriteProtectionInfo))
-						new Repository(uow).Remove(aggregateRoot);
+					{
+						var deleteTag = aggregateRoot as IDeleteTag;
+						if(deleteTag==null)
+							uow.FetchSession().Delete(aggregateRoot);
+						else
+							deleteTag.SetDeleted();
+					}
 				}
 				uow.PersistAll();
 			}

@@ -2,7 +2,6 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Persisters.WriteProtection;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -55,7 +54,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.WriteProtection
 			person.PersonWriteProtection.PersonWriteProtectedDate = new DateOnly(2000,1,1);
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var rep = new Repository(uow);
+				var rep = new PersonRepository(uow);
 				rep.Add(person);
 				uow.PersistAll();
 			}

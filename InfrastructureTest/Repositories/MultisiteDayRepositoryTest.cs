@@ -188,13 +188,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             //clean up. bara smörja jag gjort här. orkar inte fixa henrys. sen fredag.
             UnitOfWork.Clear();
-            var rep = new Repository(UnitOfWork);
-            rep.Remove(new SkillTypeRepository(UnitOfWork).Load(_skillType.Id.Value));
-            rep.Remove(new ScenarioRepository(UnitOfWork).Load(_scenario.Id.Value));
-            rep.Remove(new ActivityRepository(UnitOfWork).Load(_skill.Activity.Id.Value));
+            new SkillTypeRepository(UnitOfWork).Remove(_skillType);
+	        new ScenarioRepository(UnitOfWork).Remove(_scenario);
+	        new ActivityRepository(UnitOfWork).Remove(_skill.Activity);
             foreach (var childSkill in new SkillRepository(UnitOfWork).LoadAll())
             {
-                rep.Remove(childSkill);
+							Session.Delete(childSkill);
             }
 
 

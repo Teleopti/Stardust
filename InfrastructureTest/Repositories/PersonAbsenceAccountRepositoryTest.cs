@@ -4,7 +4,6 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -32,7 +31,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         private Absence createAbsenceInDb()
         {
-            var rep = new Repository(UnitOfWork);
+            var rep = new AbsenceRepository(UnitOfWork);
             var absence = new Absence {Description = new Description("sdf")};
             rep.Add(absence);
             return absence;
@@ -40,7 +39,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         private Person createPersonInDb()
         {
-            var rep = new Repository(UnitOfWork);
+            var rep = new PersonRepository(UnitOfWork);
             var person=new Person();
             person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Local);
             rep.Add(person);

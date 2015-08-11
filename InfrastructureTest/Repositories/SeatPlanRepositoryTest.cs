@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.SeatPlanning;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -70,7 +69,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		private ISeat createSeatMapLocationAndSeatInDb()
 		{
-			var rep = new Repository(UnitOfWork);
+			var rep = new SeatMapLocationRepository(UnitOfWork);
 			var seatMapLocation = new SeatMapLocation();
 			seatMapLocation.SetLocation("{DummyData}", "TestLocation");
 			seatMapLocation.AddSeat("Test Seat", 0);

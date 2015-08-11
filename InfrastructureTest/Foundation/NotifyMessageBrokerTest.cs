@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             UnitOfWork.PersistAll();
             IActivity obj = new Activity("for test");
 
-            new Repository(uow).Add(obj);
+            new ActivityRepository(uow).Add(obj);
 
             Assert.IsInstanceOf<IDeleteTag>(obj);
             using (mocks.Record())
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
                 uow.PersistAll();
 
                 //delete
-                new Repository(uow).Remove(obj);
+                new ActivityRepository(uow).Remove(obj);
                 uow.PersistAll();
             }
         }
@@ -96,14 +96,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			IPerson per = PersonFactory.CreatePerson("for test");
 			IScenario scenario = ScenarioFactory.CreateScenarioAggregate();
 			IActivity activity = new Activity("Training");
-			new Repository(UnitOfWork).Add(per);
-			new Repository(UnitOfWork).Add(scenario);
-			new Repository(UnitOfWork).Add(activity);
+			new PersonRepository(UnitOfWork).Add(per);
+			new ScenarioRepository(UnitOfWork).Add(scenario);
+			new ActivityRepository(UnitOfWork).Add(activity);
 			UnitOfWork.PersistAll();
 
 			IMeeting obj = new Meeting(per,new [] {new MeetingPerson(per,false)},"subj","location","desc",activity,scenario);
 			obj.StartDate = obj.EndDate = DateOnly.Today;
-			new Repository(uow).Add(obj);
+			new MeetingRepository(uow).Add(obj);
 
 			using (mocks.Record())
 			{
@@ -132,14 +132,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			{
 				uow.PersistAll();
 				//delete
-				new Repository(uow).Remove(obj);
+				new MeetingRepository(uow).Remove(obj);
 				uow.PersistAll();
 			}
 
 			//cleanup
-			new Repository(UnitOfWork).Remove(activity);
-			new Repository(UnitOfWork).Remove(per);
-			new Repository(UnitOfWork).Remove(scenario);
+			new ActivityRepository(UnitOfWork).Remove(activity);
+			new PersonRepository(UnitOfWork).Remove(per);
+			new ScenarioRepository(UnitOfWork).Remove(scenario);
 			UnitOfWork.PersistAll();
 		}
 
@@ -149,8 +149,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             UnitOfWork.PersistAll();
             IPerson per1 = PersonFactory.CreatePerson("1");
             IPerson per2 = PersonFactory.CreatePerson("2");
-            new Repository(uow).Add(per1);
-            new Repository(uow).Add(per2);
+            new PersonRepository(uow).Add(per1);
+            new PersonRepository(uow).Add(per2);
 
             using (mocks.Record())
             {
@@ -179,8 +179,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
                 uow.PersistAll();
 
                 //clean up
-                new Repository(uow).Remove(per1);
-                new Repository(uow).Remove(per2);
+                new PersonRepository(uow).Remove(per1);
+                new PersonRepository(uow).Remove(per2);
                 uow.PersistAll();
             }
         }
@@ -192,11 +192,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             IActivity obj = new Activity("for test");
             Guid moduleId = Guid.NewGuid();
 
-            IEventMessage mess1 = mocks.StrictMock<IEventMessage>();
-            IEventMessage mess2 = mocks.StrictMock<IEventMessage>();
-            IEventMessage mess3 = mocks.StrictMock<IEventMessage>();
             IInitiatorIdentifier identifier = mocks.StrictMock<IInitiatorIdentifier>();
-            new Repository(uow).Add(obj);
+            new ActivityRepository(uow).Add(obj);
 
             using (mocks.Record())
             {
@@ -236,7 +233,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
                 uow.PersistAll(identifier);
 
                 //delete
-                new Repository(uow).Remove(obj);
+                new ActivityRepository(uow).Remove(obj);
                 uow.PersistAll(identifier);
             }
         }

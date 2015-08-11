@@ -5,13 +5,13 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Persisters.Account;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
+using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -71,11 +71,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 			var defaultScenario = new Scenario("persist test") {DefaultScenario = true};
 			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var rep = new Repository(unitOfWork);
-				rep.Add(person);
-				rep.Add(absenceWithTracker);
-				rep.Add(personAbsenceAccount);
-				rep.Add(defaultScenario);
+				var session = unitOfWork.FetchSession();
+				session.Save(person);
+				session.Save(absenceWithTracker);
+				session.Save(personAbsenceAccount);
+				session.Save(defaultScenario);
 				unitOfWork.PersistAll();
 			}
 		}

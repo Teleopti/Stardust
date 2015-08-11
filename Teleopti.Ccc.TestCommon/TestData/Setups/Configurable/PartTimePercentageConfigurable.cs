@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				Name = RandomName.Make();
 			}
 			PartTimePercentage = new PartTimePercentage(Name);
-			var repository = new Repository(uow);
+			var repository = new PartTimePercentageRepository(uow);
 			repository.Add(PartTimePercentage);
 		}
 

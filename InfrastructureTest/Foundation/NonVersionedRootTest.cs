@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.InfrastructureTest.Helper;
+using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -40,7 +41,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             {
                 using(IUnitOfWork uowTemp = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork())
                 {
-                    new Repository(uowTemp).Remove(setting); //hack
+                    uowTemp.FetchSession().Delete(setting);
                     uowTemp.PersistAll();                    
                 }
             }

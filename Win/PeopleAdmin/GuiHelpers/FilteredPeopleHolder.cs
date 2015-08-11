@@ -946,14 +946,14 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
 		public void MarkForRemove(IPerson person)
 		{
-			new Repository(GetUnitOfWork).Remove(person);
+			new PersonRepository(GetUnitOfWork).Remove(person);
 
 			toBeRemovedList.Add(person.Id.GetValueOrDefault());
 		}
 
-		public void MarkForInsert(IAggregateRoot person)
+		public void MarkForInsert(IPerson person)
 		{
-			new Repository(GetUnitOfWork).Add(person);
+			new PersonRepository(GetUnitOfWork).Add(person);
 		}
 
 		public void DeleteAndSavePerson(IPerson person)

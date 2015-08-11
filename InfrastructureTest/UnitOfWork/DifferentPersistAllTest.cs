@@ -43,11 +43,11 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
             {
 				using (IUnitOfWork uowTemp = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork())
 				{
-					var rep = new Repository(uowTemp);
-					rep.Remove(ass);
-					rep.Remove(sc);
-					rep.Remove(pLoad);
-					rep.Remove(ass.Scenario);
+					var session = uowTemp.FetchSession();
+					session.Delete(ass);
+					session.Delete(sc);
+					session.Delete(pLoad);
+					session.Delete(ass.Scenario);
 
 					uowTemp.PersistAll();
 				}

@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.SystemSetting;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
-using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             {
                 using (IUnitOfWork cleanUow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
                 {
-                    new Repository(cleanUow).Remove(((ISettingValue)winner).BelongsTo);
+                    cleanUow.FetchSession().Delete(((ISettingValue)winner).BelongsTo);
                     cleanUow.PersistAll();
                 }
             }
@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             {
                 using (IUnitOfWork cleanUow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
                 {
-                    new Repository(cleanUow).Remove(((ISettingValue)winner).BelongsTo);
+                    cleanUow.FetchSession().Delete(((ISettingValue)winner).BelongsTo);
                     cleanUow.PersistAll();
                 }
             }

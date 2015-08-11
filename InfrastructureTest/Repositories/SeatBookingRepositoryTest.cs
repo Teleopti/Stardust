@@ -226,7 +226,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var person = createPerson(startDate);
 			var person2 = createPerson(startDate);
-			var rep = new Repository(UnitOfWork);
+			var rep = new SeatMapLocationRepository(UnitOfWork);
 
 			var seatMapLocation = new SeatMapLocation();
 
@@ -361,7 +361,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		private ISeat createSeatMapLocationAndSeatInDb()
 		{
-			var rep = new Repository(UnitOfWork);
+			var rep = new SeatMapLocationRepository(UnitOfWork);
 			var seatMapLocation = new SeatMapLocation();
 			seatMapLocation.SetLocation("{DummyData}", "TestLocation");
 			seatMapLocation.AddSeat("Test Seat", 0);

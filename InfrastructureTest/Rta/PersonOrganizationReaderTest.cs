@@ -4,11 +4,10 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
+using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -41,13 +40,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			//cleanup -remove later
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var rep = new Repository(uow);
-				rep.Remove(team);
-				rep.Remove(team.Site);
-				rep.Remove(person);
-				rep.Remove(person.PersonPeriodCollection.Single().PersonContract.ContractSchedule);
-				rep.Remove(person.PersonPeriodCollection.Single().PersonContract.Contract);
-				rep.Remove(person.PersonPeriodCollection.Single().PersonContract.PartTimePercentage);
+				var session = uow.FetchSession();
+				session.Delete(team);
+				session.Delete(team.Site);
+				session.Delete(person);
+				session.Delete(person.PersonPeriodCollection.Single().PersonContract.ContractSchedule);
+				session.Delete(person.PersonPeriodCollection.Single().PersonContract.Contract);
+				session.Delete(person.PersonPeriodCollection.Single().PersonContract.PartTimePercentage);
 				uow.PersistAll();
 			}
 		}
@@ -79,13 +78,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			//cleanup -remove later
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var rep = new Repository(uow);
-				rep.Remove(team);
-				rep.Remove(site);
-				rep.Remove(person);
-				rep.Remove(person.PersonPeriodCollection.Single().PersonContract.ContractSchedule);
-				rep.Remove(person.PersonPeriodCollection.Single().PersonContract.Contract);
-				rep.Remove(person.PersonPeriodCollection.Single().PersonContract.PartTimePercentage);
+				var session = uow.FetchSession();
+				session.Delete(team);
+				session.Delete(site);
+				session.Delete(person);
+				session.Delete(person.PersonPeriodCollection.Single().PersonContract.ContractSchedule);
+				session.Delete(person.PersonPeriodCollection.Single().PersonContract.Contract);
+				session.Delete(person.PersonPeriodCollection.Single().PersonContract.PartTimePercentage);
 				uow.PersistAll();
 			}
 		}

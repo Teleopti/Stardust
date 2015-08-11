@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
+using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -49,14 +48,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var rep = new Repository(uow);
-				rep.Remove(person);
-				rep.Remove(team);
-				rep.Remove(site);
-				rep.Remove(partTimePercentage);
-				rep.Remove(contractSchedule);
-				rep.Remove(contract);
-				rep.Remove(externalLogOn);
+				var session = uow.FetchSession();
+				session.Delete(person);
+				session.Delete(team);
+				session.Delete(site);
+				session.Delete(partTimePercentage);
+				session.Delete(contractSchedule);
+				session.Delete(contract);
+				session.Delete(externalLogOn);
 				uow.PersistAll();
 			}
 		}

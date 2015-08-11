@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Requests
 			Person = PersonFactory.CreatePerson("test person");
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var rep = new Repository(uow);
+				var rep = new PersonRepository(uow);
 				rep.Add(Person);
 				uow.PersistAll();
 			}

@@ -72,11 +72,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         /// Adds the specified entity to repository.
         /// Will be persisted when PersistAll is called (or sooner).
         /// </summary>
-        /// <param name="entity">The entity.</param>
-        public virtual void Add(T entity)
+        public virtual void Add(T root)
         {
-            base.Add(entity);
-        }
+			Session.SaveOrUpdate(root);
+		}
 
         /// <summary>
         /// Adds the specified entity collection to repository.
@@ -87,7 +86,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             foreach (T entity in entityCollection)
             {
-                base.Add(entity);
+                Add(entity);
             }
         }
 
@@ -95,10 +94,23 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         /// Removes the specified entity from repository.
         /// Will be deleted when PersistAll is called (or sooner).
         /// </summary>
-        /// <param name="entity">The entity.</param>
-        public virtual void Remove(T entity)
+        public virtual void Remove(T root)
         {
-            base.Remove(entity);
-        }
+			var delRootInfo = root as IDeleteTag;
+			if (delRootInfo == null)
+			{
+				Session.Delete(root);
+			}
+			else
+			{
+				if (!UnitOfWork.Contains(root))
+				{
+					//ouch! this creates a lot of problem
+					//don't dare to remove it though
+					UnitOfWork.Reassociate(root);
+				}
+				delRootInfo.SetDeleted();
+			}
+		}
     }
 }

@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             Workload wl3 = new Workload(skill1);
             Session.Save(wl3);
-            new Repository(UnitOfWork).Remove(wl3);
+            new WorkloadRepository(UnitOfWork).Remove(wl3);
             Session.Flush();
 
             SkillRepository rep = new SkillRepository(UnitOfWork);

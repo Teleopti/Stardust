@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
@@ -37,20 +38,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             UnitOfWork.Clear();
             using(var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
-                var repRemove = new Repository(uow);
-                repRemove.Remove(_dummyActivity);
-                repRemove.Remove(_dummyCategory);
-                repRemove.Remove(_dummyCat);
-                repRemove.Remove(loaded);
-                repRemove.Remove(_dummyAgent);
-                repRemove.Remove(_dummyAgent2);
-                repRemove.Remove(_dummyScenario);
-                repRemove.Remove(_dummyAgent.PersonPeriodCollection[0].PersonContract.PartTimePercentage);
-                repRemove.Remove(_dummyAgent.PersonPeriodCollection[0].PersonContract.ContractSchedule);
-                repRemove.Remove(_dummyAgent.PersonPeriodCollection[0].PersonContract.Contract);
-                repRemove.Remove(_dummyAgent.PersonPeriodCollection[0].Team);
-                repRemove.Remove(_dummyAgent.PersonPeriodCollection[0].Team.Site);
-                repRemove.Remove(_definitionSet);
+                var session = uow.FetchSession();
+                session.Delete(_dummyActivity);
+                session.Delete(_dummyCategory);
+                session.Delete(_dummyCat);
+                session.Delete(loaded);
+                session.Delete(_dummyAgent);
+                session.Delete(_dummyAgent2);
+                session.Delete(_dummyScenario);
+                session.Delete(_dummyAgent.PersonPeriodCollection[0].PersonContract.PartTimePercentage);
+                session.Delete(_dummyAgent.PersonPeriodCollection[0].PersonContract.ContractSchedule);
+                session.Delete(_dummyAgent.PersonPeriodCollection[0].PersonContract.Contract);
+                session.Delete(_dummyAgent.PersonPeriodCollection[0].Team);
+                session.Delete(_dummyAgent.PersonPeriodCollection[0].Team.Site);
+                session.Delete(_definitionSet);
                 uow.PersistAll();                
             }
         }

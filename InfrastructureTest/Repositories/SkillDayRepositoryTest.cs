@@ -255,15 +255,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             //clean up. bara smörja jag gjort här. orkar inte fixa henrys. sen fredag.
             UnitOfWork.Clear();
-            var rep = new Repository(UnitOfWork);
-            rep.Remove(new SkillRepository(UnitOfWork).Load(_skill.Id.Value));
-            rep.Remove(new SkillTypeRepository(UnitOfWork).Load(_skillType.Id.Value));
-            rep.Remove(new ScenarioRepository(UnitOfWork).Load(_scenario.Id.Value));
-            rep.Remove(new WorkloadRepository(UnitOfWork).Load(_skill.WorkloadCollection.First().Id.Value));
-            rep.Remove(new ActivityRepository(UnitOfWork).Load(_skill.Activity.Id.Value));
+            new SkillTypeRepository(UnitOfWork).Remove(_skillType);
+            new ScenarioRepository(UnitOfWork).Remove(_scenario);
+            new WorkloadRepository(UnitOfWork).Remove(_skill.WorkloadCollection.First());
+            new ActivityRepository(UnitOfWork).Remove(_skill.Activity);
+			new SkillRepository(UnitOfWork).Remove(_skill);
 
-
-            UnitOfWork.PersistAll();
+			UnitOfWork.PersistAll();
         }
 
         /// <summary>
@@ -391,7 +389,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		                                                         new DateOnlyPeriod());
 
 			skillDay.SplitSkillDataPeriods(new List<ISkillDataPeriod>(skillDay.SkillDataPeriodCollection));
-			new Repository(UnitOfWork).Add(skillDay);
+			new SkillDayRepository(UnitOfWork).Add(skillDay);
 
 		    UnitOfWork.PersistAll();
 		    UnitOfWork.Clear();
@@ -401,13 +399,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		    Assert.AreEqual(96, skillDay.SkillDataPeriodCollection.Count);
 
-			var rep = new Repository(UnitOfWork);
-			rep.Remove(new SkillRepository(UnitOfWork).Load(_skill.Id.Value));
-			rep.Remove(new SkillTypeRepository(UnitOfWork).Load(_skillType.Id.Value));
-			rep.Remove(new ScenarioRepository(UnitOfWork).Load(_scenario.Id.Value));
-			rep.Remove(new WorkloadRepository(UnitOfWork).Load(_skill.WorkloadCollection.First().Id.Value));
-			rep.Remove(new ActivityRepository(UnitOfWork).Load(_skill.Activity.Id.Value));
-			rep.Remove(skillDayRepository.Load(skillDay.Id.Value));
+			Session.Delete(new SkillRepository(UnitOfWork).Load(_skill.Id.Value));
+			Session.Delete(new SkillTypeRepository(UnitOfWork).Load(_skillType.Id.Value));
+			Session.Delete(new ScenarioRepository(UnitOfWork).Load(_scenario.Id.Value));
+			Session.Delete(new WorkloadRepository(UnitOfWork).Load(_skill.WorkloadCollection.First().Id.Value));
+			Session.Delete(new ActivityRepository(UnitOfWork).Load(_skill.Activity.Id.Value));
+			Session.Delete(skillDayRepository.Load(skillDay.Id.Value));
 
 			UnitOfWork.PersistAll();
 	    }

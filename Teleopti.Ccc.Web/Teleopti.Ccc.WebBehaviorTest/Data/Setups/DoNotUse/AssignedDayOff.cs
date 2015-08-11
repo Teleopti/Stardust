@@ -30,8 +30,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			if (DayOff == null)
 			{
 				DayOff = DayOffFactory.CreateDayOff(new Description(RandomName.Make(), RandomName.Make()));
-				var activityRepository = new ActivityRepository(uow);
-				activityRepository.Add(DayOff);
+				var repository = new DayOffTemplateRepository(uow);
+				repository.Add(DayOff);
 			}
 
 			var personAssignmentRepository = new PersonAssignmentRepository(uow);

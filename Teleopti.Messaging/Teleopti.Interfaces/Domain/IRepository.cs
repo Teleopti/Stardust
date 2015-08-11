@@ -14,15 +14,13 @@ namespace Teleopti.Interfaces.Domain
 		/// <summary>
 		/// Adds the specified entity to repository.
 		/// </summary>
-		/// <param name="entity">The entity.</param>
-		void Add(T entity);
+		void Add(T root);
 
 
 		/// <summary>
 		/// Removes the specified entity from repository.
 		/// </summary>
-		/// <param name="entity">The entity.</param>
-		void Remove(T entity);
+		void Remove(T root);
 
 		/// <summary>
 		/// Gets entity for the id.

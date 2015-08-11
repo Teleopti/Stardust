@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using NUnit.Framework;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories.Audit;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
@@ -20,7 +19,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 		protected IPersonAbsence PersonAbsence { get; private set; }
 		protected DateTime Today { get; private set; }
 		protected IScenario Scenario { get; private set; }
-		protected Repository Repository { get; private set; }
 		protected IDayOffTemplate DayOffTemplate { get; private set; }
 		protected IMultiplicatorDefinitionSet MultiplicatorDefinitionSet { get; private set; }
 	
@@ -34,21 +32,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			Scenario = PersonAssignment.Scenario;
 			Scenario.DefaultScenario = true;
 			PersonAbsence = PersonAbsenceFactory.CreatePersonAbsence(Agent, Scenario, new DateTimePeriod(Today, Today.AddDays(1)));
-			Repository = new Repository(UnitOfWorkFactory.Current);
 			DayOffTemplate = DayOffFactory.CreateDayOff(new Description("AuditTestDayOff", "ATDO"));
 			MultiplicatorDefinitionSet = MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("AuditTestMultiplicatorDefinitionSet", MultiplicatorType.Overtime);
 
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				Repository.Add(Agent);
-				Repository.Add(Scenario);
-				Repository.Add(PersonAssignment.ShiftCategory);
-				Repository.Add(PersonAssignment.MainActivities().First().Payload);
-				Repository.Add(PersonAbsence.Layer.Payload);
-				Repository.Add(PersonAssignment);
-				Repository.Add(PersonAbsence);
-				Repository.Add(DayOffTemplate);
-				Repository.Add(MultiplicatorDefinitionSet);
+				var session = uow.FetchSession();
+				session.Save(Agent);
+				session.Save(Scenario);
+				session.Save(PersonAssignment.ShiftCategory);
+				session.Save(PersonAssignment.MainActivities().First().Payload);
+				session.Save(PersonAbsence.Layer.Payload);
+				session.Save(PersonAssignment);
+				session.Save(PersonAbsence);
+				session.Save(DayOffTemplate);
+				session.Save(MultiplicatorDefinitionSet);
 				uow.PersistAll();
 			}
 			AuditSetup();

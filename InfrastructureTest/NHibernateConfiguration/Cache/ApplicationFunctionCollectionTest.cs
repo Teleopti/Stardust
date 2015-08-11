@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -78,7 +77,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration.Cache
 		{
 			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 			{
-				new PersonRepository(uow).Remove(applicationFunction);
+				new ApplicationFunctionRepository(uow).Remove(applicationFunction);
 				new ApplicationRoleRepository(uow).Remove(applicationRole);
 				uow.PersistAll();
 			}
