@@ -3,8 +3,8 @@
 	<div class="bubble">
 	</div>
 	<div class="wfm-block start-intro">
-		<div class="hidden-xs">
-			<h3>Hello world!</h3>
+		<div class="hidden-sm hidden-xs">
+			<h2>Hello world!</h2>
 			<p>
 				Lorem ipsum dolor sit amet, consectetuer adipiscing elit,
 				sed diam nonummy nibh euismod tincidunt ut laoreet dolore
@@ -12,15 +12,59 @@
 				ut aliquip ex ea commodo consequat. Duis autem vel eum iriure.
 			</p>
 		</div>
-		<button class="context-menu wfm-btn wfm-btn-default">
-			Lets go
-		</button>
+	</div>
+
+	<div class="tutorial-btn">
+		<div ng-cloak class="modal-box">
+			<button ng-click="modalLaunch2 = !modalLaunch2" class="wfm-btn wfm-btn-default">Get started</button>
+			<div ng-cloak ng-show="modalLaunch2">
+				<div class="modalbg">
+					<div class="dialog">
+						<div class="wfm-slide-tabs">
+							<md-content style="padding:0!important;">
+								<md-tabs md-dynamic-height md-border-bottom>
+									<md-tab label="1. help">
+										<md-content class="md-padding">
+											<h4>Get started!</h4>
+											<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit</p>
+										</md-content>
+									</md-tab>
+									<md-tab label="2. help">
+										<md-content class="md-padding">
+											<h4>Get started!</h4>
+											<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit</p>
+										</md-content>
+									</md-tab>
+									<md-tab label="3. help">
+										<md-content class="md-padding">
+											<h4>Get started!</h4>
+											<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit</p>
+										</md-content>
+									</md-tab>
+									<md-tab label="4. help">
+										<md-content class="md-padding">
+											<h4>Get started!</h4>
+											<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit</p>
+										</md-content>
+									</md-tab>
+								</md-tabs>
+							</md-content>
+						</div>
+						<div class="modal-footer">
+							<aside>
+								<a ng-click="modalLaunch2 = !modalLaunch2" class="wfm-btn wfm-btn-invis-primary">dismiss</a>
+							</aside>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
 
 <div class="start-wrapper">
 	<div class="start-content">
-		<div layout="row">
+		<div layout="row" ng-cloak>
 			<div flex data-ng-controller="FeedCtrl" ng-init="loadFeed($event)">
 				<div class="sub-header">Teleopti blog</div>
 				<div class="material-depth-1 start-spacer-down" ng-repeat="feed in feeds | limitTo: 3">
