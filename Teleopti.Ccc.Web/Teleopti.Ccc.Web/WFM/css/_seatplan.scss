@@ -175,7 +175,7 @@
 	padding-left:10px;
 	padding-right:10px;
 	overflow:auto;
-	height:100%;
+	height:98%;
 	width:100%;
 	position:absolute;
 }
@@ -308,18 +308,18 @@
 }
 
 .report-paging {
-	height:28px;
+	height:32px;
 	background:#ffffff;
 	color: #0099ff; 
 	vertical-align: middle; 
-	margin-bottom:20px;
 	margin-right:-10px;
+	margin-bottom:20px;
 	clear:both;
 	cursor:default!important;
 }
 
 .report-paging .mdi{
-	padding:5px;
+	padding:7px;
 }
 
 .report-paging .mdi:hover{
@@ -343,6 +343,6 @@
 	margin-left:5px;
 	display: inline-block;
 	text-align: left;
-	margin-top: 3px;
+	margin-top: 4px;
 	vertical-align: top;
 }
