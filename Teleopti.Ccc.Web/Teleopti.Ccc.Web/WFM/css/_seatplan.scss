@@ -77,6 +77,11 @@
 	color:#ffffff;
 }
 
+.seatPlanReport .wfm-btn-invis-default:hover{
+	background:#FDFEFF;
+	color:#0099FF;
+}
+
 .seatPlanReport .wfm-fab{
 	transition-duration:0s;
 }
@@ -193,7 +198,8 @@
 .seatPlanReportContent table{
 	width:100%;
 }
-.seatPlanReportContent table td{
+
+.seatPlanReportContent table tr td{
 	vertical-align:top;
 	padding:0px 2px 0px 2px;
 }
@@ -283,7 +289,7 @@
 		width:0;
 	}
 
-	#seatPlanReportContentPrint{
+	#seatPlanReportContentPrintDiv{
 		width:100%;
 		height:auto;
 	}
@@ -295,6 +301,10 @@
 	.report-paging{
 		display:none;
 	}
+	
+	md-tooltip{
+		display:none;
+	}
 }
 
 @media screen{
@@ -302,7 +312,7 @@
 		display:none;
 	}
 
-	#seatPlanReportContentPrint .report-paging{
+	#seatPlanReportContentPrintDiv{
 		display:none;
 	}
 }

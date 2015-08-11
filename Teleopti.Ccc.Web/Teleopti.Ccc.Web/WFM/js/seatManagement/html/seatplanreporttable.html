@@ -1,0 +1,37 @@
+﻿<table>
+	<tr ng-repeat-start="bookingByDate in seatBookings" class="tr-date">
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>{{getDisplayDate(bookingByDate.Date.Date)}}</td>
+	</tr>
+
+	<tr ng-repeat-start="team in bookingByDate.Teams"></tr>
+
+	<tr ng-show="$first">
+		<th class="td-team">Team</th>
+		<th class="td-agent">Agent</th>
+		<th class="td-location">Location</th>
+		<th class="td-seat">Seat</th>
+		<th class="td-time">Time</th>
+	</tr>
+
+	<tr ng-repeat="booking in team.SeatBookings" ng-class="[$index % 2== 0 ? 'tr-color':'' ]">
+		<td class="td-team">{{ $first ? team.Name : ''}}</td>
+		<td class="td-agent">{{ booking.FirstName }}&nbsp;{{ booking.LastName }}</td>
+		<td class="td-location">{{ booking.LocationPath }}</td>
+		<td class="td-seat">{{ booking.SeatName }}</td>
+		<td class="td-time">{{ getDisplayTime(booking.StartDateTime,booking.EndDateTime) }}</td>
+	</tr>
+
+	<tr ng-repeat-end>
+		<td><br /></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+	</tr>
+	<tr ng-repeat-end></tr>
+</table>
+

@@ -35,27 +35,33 @@
 			vm.teams.push(teams);
 		});
 
-		vm.getSeatBookings = function (options) {
-			vm.isLoadingReport = true;
+		vm.getSeatBookingsCallback = function (data) {
+			vm.seatBookings = data.SeatBookingsByDate;
+			vm.isLoadingReport = false;
+			vm.totalPages = Math.ceil(data.TotalRecordCount / vm.take);
+		};
+
+		vm.getSeatBookings = function (options, takeAllPages) {
+			if (!takeAllPages)
+				vm.isLoadingReport = true;
+
 			var seatBookingReportParams = {
-				startDate: vm.selectedPeriod.StartDate != null ? moment(vm.selectedPeriod.StartDate).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD'),
-				endDate: vm.selectedPeriod.EndDate != null ? moment(vm.selectedPeriod.EndDate).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD'),
+				startDate: moment(vm.selectedPeriod.StartDate).format('YYYY-MM-DD'),
+				endDate: moment(vm.selectedPeriod.EndDate).format('YYYY-MM-DD'),
 				teams: seatplanTeamAndLocationService.GetSelectedTeamsFromTeamList(vm.teams),
 				locations: seatplanTeamAndLocationService.GetSelectedLocationsFromLocationList(vm.locations),
 				skip: options.skip,
 				take: options.take
 			};
 			seatPlanService.seatBookingReport.get(seatBookingReportParams).$promise.then(function (data) {
-				vm.seatBookings = data.SeatBookingsByDate;
-				vm.isLoadingReport = false;
-				vm.totalPages = Math.ceil(data.TotalRecordCount / vm.take);
-				options.callback != null && options.callback();
+				options.callback != null && options.callback(data);
 			});
 		};
 
 		vm.getSeatBookings({
 			skip: vm.page,
-			take: vm.take
+			take: vm.take,
+			callback : vm.getSeatBookingsCallback
 		});
 
 		vm.getDisplayTimeString = function (startTime, endTime) {
@@ -65,7 +71,6 @@
 		vm.getDisplayDateString = function (date) {
 			return moment(date).format('L');
 		};
-
 
 		vm.setRangeClass = function (date, mode) {
 			if (mode === 'day') {
@@ -98,7 +103,8 @@
 		vm.applyFilter = function () {
 			vm.getSeatBookings({
 				skip: vm.page,
-				take: vm.take
+				take: vm.take,
+				callback: vm.getSeatBookingsCallback
 			});
 			vm.currentPage = 1;
 		};
@@ -114,7 +120,8 @@
 			if (vm.currentPage != goToPage) {
 				vm.getSeatBookings({
 					skip: (goToPage - 1) * vm.take,
-					take: vm.take
+					take: vm.take,
+					callback: vm.getSeatBookingsCallback
 				});
 				vm.currentPage = goToPage;
 			}
@@ -138,33 +145,49 @@
 		};
 	};
 
+	angular.module('wfm.seatPlan').directive('seatPlanReportTable', seatPlanReportTable);
+
+	function seatPlanReportTable() {
+		return {
+			restrict: "E",
+			scope: {
+				seatBookings: '=',
+				getDisplayDate: '=',
+				getDisplayTime: '='
+			},
+			templateUrl: "js/seatManagement/html/seatplanreporttable.html"
+		};
+	};
+
 	angular.module('wfm.seatPlan').directive('seatPlanReportPrint', seatPlanReportPrint);
 
 	function seatPlanReportPrint() {
 
 		var printSectionDiv = document.createElement('div');
 
-		function printElement(elem, scope) {
+		function printElement(elem) {
 			printSectionDiv = elem.cloneNode(true);
-			printSectionDiv.id = "seatPlanReportContentPrint";
+			printSectionDiv.id = "seatPlanReportContentPrintDiv";
 			document.body.appendChild(printSectionDiv);
 			window.print();
-			document.body.removeChild(printSectionDiv);
-			scope.vm.applyFilter();
+			if (document.getElementById('seatPlanReportContentPrintDiv')) {
+				document.body.removeChild(printSectionDiv);
+			}
 		}
 
 		function link(scope, element, attrs) {
 			element.on('click', function () {
 				scope.vm.getSeatBookings({
-					callback: function () {
+					callback: function (data) {
+						scope.vm.seatBookingsAll = data.SeatBookingsByDate;
 						angular.element(document).ready(function () {
 							var elemToPrint = document.getElementById(attrs.printElementId);
 							if (elemToPrint) {
-								printElement(elemToPrint, scope);
+								printElement(elemToPrint);
 							}
 						});
 					}
-				});
+				}, scope.vm.totalPages);
 			});
 		}
 
@@ -174,4 +197,3 @@
 		};
 	}
 })();
-

@@ -14,8 +14,9 @@
 			<i class="mdi mdi-filter"></i>
 			Filter
 		</button>
-		<button class="wfm-fab info pull-right" ng-show="!vm.isFilterOpened" seat-plan-report-print print-element-id="seatPlanReportContentScreen" is-loading-report="{{vm.isLoadingReport}}">
+		<button class="wfm-fab info pull-right" ng-show="!vm.isFilterOpened" seat-plan-report-print print-element-id="seatPlanReportContentPrint">
 			<i class="mdi mdi-printer"></i>
+			<md-tooltip>Print Report</md-tooltip>
 		</button>
 		<span class="blankForTurnOffFilterPanel1" ng-click="vm.isFilterOpened = false"></span>
 
@@ -25,7 +26,7 @@
 				<button class="wfm-btn wfm-btn-invis-default" ng-class="{'button-active':vm.isTeamPickerOpened}" ng-click="vm.toggleFilter('team')">Team</button>
 				<button class="wfm-btn wfm-btn-invis-default" ng-class="{'button-active':vm.isLocationPickerOpened}" ng-click="vm.toggleFilter('location')">Location</button>
 			</div>
-			
+
 			<div class="filter-content">
 				<div class="date-picker" ng-show="vm.isDatePickerOpened">
 					<datepicker class="wfm-datepicker" ng-model="vm.selectedPeriod.StartDate" custom-class="vm.setRangeClass(date,mode)" max-date="vm.selectedPeriod.EndDate">
@@ -73,47 +74,13 @@
 		</div>
 	</div>
 	<span class="blankForTurnOffFilterPanel2" ng-click="vm.isFilterOpened = false"></span>
+
 	<div class="seatPlanReportContent" ng-click="vm.isFilterOpened = false" id="seatPlanReportContentScreen" >
 		<div ng-if="vm.isLoadingReport" class="report-spinner">
 			<md-progress-circular md-mode="indeterminate"></md-progress-circular>
 		</div>
-		<h2 ng-if="!vm.isLoadingReport">{{ vm.seatBookings.length == 0 ? 'No report for selected condition' : 'Seat Plan Report' }}</h2>
-		<table ng-if="!vm.isLoadingReport">
-			<tr ng-repeat-start="bookingByDate in vm.seatBookings" class="tr-date">
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td>{{vm.getDisplayDateString(bookingByDate.Date.Date)}}</td>
-			</tr>
-
-			<tr ng-repeat-start="team in bookingByDate.Teams"></tr>
-
-			<tr ng-show="$first">
-				<th class="td-team">Team</th>
-				<th class="td-agent">Agent</th>
-				<th class="td-location">Location</th>
-				<th class="td-seat">Seat</th>
-				<th class="td-time">Time</th>
-			</tr>
-
-			<tr ng-repeat="booking in team.SeatBookings" ng-class="[$index % 2== 0 ? 'tr-color':'' ]">
-				<td class="td-team">{{ $first ? team.Name : ''}}</td>
-				<td class="td-agent">{{ booking.FirstName }}&nbsp;{{ booking.LastName }}</td>
-				<td class="td-location">{{ booking.LocationPath }}</td>
-				<td class="td-seat">{{ booking.SeatName }}</td>
-				<td class="td-time">{{ vm.getDisplayTimeString(booking.StartDateTime,booking.EndDateTime) }}</td>
-			</tr>
-
-			<tr ng-repeat-end>
-				<td><br/></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-			</tr>
-			<tr ng-repeat-end></tr>
-		</table>
+		<h2 ng-if="!vm.isLoadingReport">{{ vm.seatBookings.length == 0 ? 'No report' : 'Seat Plan Report' }}</h2>
+		<seat-plan-report-table seat-bookings="vm.seatBookings" get-display-date="vm.getDisplayDateString" get-display-time="vm.getDisplayTimeString" ng-if="!vm.isLoadingReport"></seat-plan-report-table>
 
 		<div class="report-paging material-depth-1 pull-right" ng-if="!vm.isLoadingReport && vm.totalPages != 1">
 			<i class="mdi mdi-skip-previous" ng-class="{'noclick':(vm.currentPage == 1)}" ng-click="vm.paging(1)"></i>
@@ -124,4 +91,11 @@
 			<span>{{'Total Page: '+vm.totalPages}}</span>
 		</div>
 	</div>
+
+	<div class="seatPlanReportContent" id="seatPlanReportContentPrint">
+		<h2>{{ vm.seatBookings.length == 0 ? 'No report' : 'Seat Plan Report' }}</h2>
+		<seat-plan-report-table seat-bookings="vm.seatBookingsAll" get-display-date="vm.getDisplayDateString" get-display-time="vm.getDisplayTimeString"></seat-plan-report-table>
+	</div>
+
+
 </div>
