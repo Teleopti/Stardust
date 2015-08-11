@@ -245,7 +245,7 @@ define([
 			self.Persons([]);
 			var people = [];
 
-			// add schedule data. a person might get more than 1 schedule added
+			
 			for (var i = 0; i < schedules.length; i++) {
 				var schedule = schedules[i];
 				schedule.GroupId = self.GroupId();
@@ -253,7 +253,9 @@ define([
 				schedule.Date = moment.tz(schedule.Date, timezoneCurrent.IanaTimeZone());
 
 				var person = personForId(schedule.PersonId, people);
-				person.AddData(schedule, self.TimeLine);
+				var isSelectedDate = schedule.Date.diff(schedule.Offset) == 0;
+				if (isSelectedDate)//#34239 will now show yesterday's schedule(even it is a night schedule) in add acitivity view 
+					person.AddData(schedule, self.TimeLine);
 			}
 			self.Persons(people);
 

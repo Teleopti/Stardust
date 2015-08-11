@@ -83,6 +83,53 @@
 					}, 2);
 				},
 
+				"should not show yesterday's shift in add avitivty view": function(done) {
+					var vm = new viewModel();
+
+					vm.SetViewOptions({
+						id: 1,
+						date: '20140616'
+					});
+
+					var data = {
+						Schedules: [
+							{
+								Date: '2014-06-15',
+								PersonId: 1,
+								Projection: [
+									{
+										Start: '2014-06-15 23:00',
+										End: '2014-06-16 8:00',
+										Minutes: 0
+									}
+								]
+							},
+							{
+								Date: '2014-06-16',
+								PersonId: 1,
+								Projection: [
+									{
+										Start: '2014-06-16 07:00',
+										Minutes: 420
+									},
+									{
+										Start: '2014-06-16 09:00',
+										Minutes: 540
+									}
+								]
+							}
+						]
+					};
+
+					vm.UpdateData({ PersonId: 1, IanaTimeZoneOther: 'Europe/Berlin' });
+					vm.UpdateSchedules(data);
+
+					setTimeout(function () {
+						assert.equals(vm.Persons()[0].Shifts().length, 1);
+						done();
+					}, 2);
+				},
+
 				"should not consider nightshifts from yesterday when creating timeline": function (done) {
 					var vm = new viewModel();
 
