@@ -111,5 +111,11 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 			_outboundCampaignPersister.PersistManualProductionPlan(manualProductionPlan);
 			return true;
 		}
+
+		[HttpGet, Route("api/Outbound/Campaigns/{Id}"), UnitOfWork]
+		public virtual CampaignSummaryViewModel GetCampaignById(Guid Id)
+		{
+			return _campaignSummaryViewModelFactory.GetCampaignSummary(Id);
+		}
 	}
 }

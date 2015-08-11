@@ -127,6 +127,10 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
                 assembleSummary(campaign, CampaignStatus.Done));
         }
 
+		public CampaignSummary GetCampaignById(Guid Id)
+	    {
+		    return ListCampaign(CampaignStatus.None).FirstOrDefault(c => c.Id == Id);
+	    }
 
         private CampaignSummary assembleSummary(IOutboundCampaign campaign, CampaignStatus status)
         {

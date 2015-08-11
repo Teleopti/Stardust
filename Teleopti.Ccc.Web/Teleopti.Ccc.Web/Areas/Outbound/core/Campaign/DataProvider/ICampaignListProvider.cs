@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Web.Areas.Outbound.Models;
 
@@ -13,5 +14,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 
         CampaignStatistics GetCampaignStatistics();
 	    void LoadData();
+		CampaignSummary GetCampaignById(Guid Id);
     }
 }

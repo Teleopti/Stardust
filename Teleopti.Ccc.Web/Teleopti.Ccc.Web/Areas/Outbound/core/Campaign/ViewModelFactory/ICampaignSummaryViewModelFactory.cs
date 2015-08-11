@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Web.Areas.Outbound.Models;
+﻿using System;
+using Teleopti.Ccc.Web.Areas.Outbound.Models;
 
 namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.ViewModelFactory
 {
@@ -7,5 +8,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.ViewModelFactory
         CampaignSummaryListViewModel GetCampaignSummaryList(CampaignStatus status);
         CampaignStatistics GetCampaignStatistics();
 	    void Load();
+		CampaignSummaryViewModel GetCampaignSummary(Guid id);
     }
 }
