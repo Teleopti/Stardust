@@ -143,13 +143,15 @@ md-tooltip {
 /*start (main)*/
 	.start-wrapper {
 		width: 75%;
-		margin: 0 auto;
+		position:relative;
+		margin-left:auto;
+		margin-right:auto;
+		margin-top:-20px;
 		max-height: 50%;
+		z-index:6;
 	}
 
 	.start-content {
-		position: relative;
-		top: -200px;
 		background: white;
 	}
 
@@ -160,9 +162,11 @@ md-tooltip {
 	}
 
 	.start-intro {
-		position: relative;
 		color: white;
-		top: -220px;
+		width:75%;
+		margin:0 12%;
+		position:absolute;
+		z-index:5;
 	}
 
 	.social-footer {
@@ -195,8 +199,8 @@ md-tooltip {
 		right: 50%;
 		position: absolute;
 		border-radius: 50%;
-		-moz-transform: scale(60);
-		-webkit-transform: scale(60);
+		-moz-transform: scale(80);
+		-webkit-transform: scale(80);
 		-moz-transform: bg-in 3s cubic-bezier(0.2, 0.3, 0, 1);
 		-webkit-animation: bg-in 3s cubic-bezier(0.2, 0.3, 0, 1);
 		animation: bg-in 3s cubic-bezier(0.2, 0.3, 0, 1);
@@ -204,7 +208,7 @@ md-tooltip {
 
 	@-webkit-keyframes bg-in {
 		from {
-		-moz-transform: scale(0);
+			-moz-transform: scale(0);
 			-webkit-transform: scale(0);
 			transform: scale(0);
 		}
@@ -212,7 +216,7 @@ md-tooltip {
 
 	@keyframes bg-in {
 		from {
-		-moz-transform: scale(0);
+			-moz-transform: scale(0);
 			-webkit-transform: scale(0);
 			transform: scale(0);
 		}
