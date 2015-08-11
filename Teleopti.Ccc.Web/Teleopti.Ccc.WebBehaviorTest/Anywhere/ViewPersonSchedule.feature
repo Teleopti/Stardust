@@ -141,6 +141,7 @@ Scenario: View night shift from today
 	| End time   | 1.04:00 |
 	| Color      | Green   |
 
+@ignore
 Scenario: View schedule in my time zone
 	Given I have the role 'Anywhere Team Green'
 	And I am located in Stockholm
