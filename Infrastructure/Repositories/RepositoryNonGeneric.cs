@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	/// Created by: rogerkr
 	/// Created date: 2007-12-21
 	/// </remarks>
-	public class Repository : IRepository
+	public class Repository
 	{
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 

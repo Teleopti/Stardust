@@ -188,7 +188,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             //clean up. bara smörja jag gjort här. orkar inte fixa henrys. sen fredag.
             UnitOfWork.Clear();
-            IRepository rep = new Repository(UnitOfWork);
+            var rep = new Repository(UnitOfWork);
             rep.Remove(new SkillTypeRepository(UnitOfWork).Load(_skillType.Id.Value));
             rep.Remove(new ScenarioRepository(UnitOfWork).Load(_scenario.Id.Value));
             rep.Remove(new ActivityRepository(UnitOfWork).Load(_skill.Activity.Id.Value));

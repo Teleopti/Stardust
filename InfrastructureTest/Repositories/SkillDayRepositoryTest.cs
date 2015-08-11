@@ -255,7 +255,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             //clean up. bara smörja jag gjort här. orkar inte fixa henrys. sen fredag.
             UnitOfWork.Clear();
-            IRepository rep = new Repository(UnitOfWork);
+            var rep = new Repository(UnitOfWork);
             rep.Remove(new SkillRepository(UnitOfWork).Load(_skill.Id.Value));
             rep.Remove(new SkillTypeRepository(UnitOfWork).Load(_skillType.Id.Value));
             rep.Remove(new ScenarioRepository(UnitOfWork).Load(_scenario.Id.Value));
@@ -401,7 +401,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		    Assert.AreEqual(96, skillDay.SkillDataPeriodCollection.Count);
 
-			IRepository rep = new Repository(UnitOfWork);
+			var rep = new Repository(UnitOfWork);
 			rep.Remove(new SkillRepository(UnitOfWork).Load(_skill.Id.Value));
 			rep.Remove(new SkillTypeRepository(UnitOfWork).Load(_skillType.Id.Value));
 			rep.Remove(new ScenarioRepository(UnitOfWork).Load(_scenario.Id.Value));

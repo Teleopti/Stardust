@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 		protected IPersonAbsence PersonAbsence { get; private set; }
 		protected DateTime Today { get; private set; }
 		protected IScenario Scenario { get; private set; }
-		protected IRepository Repository { get; private set; }
+		protected Repository Repository { get; private set; }
 		protected IDayOffTemplate DayOffTemplate { get; private set; }
 		protected IMultiplicatorDefinitionSet MultiplicatorDefinitionSet { get; private set; }
 	

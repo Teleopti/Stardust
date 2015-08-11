@@ -467,7 +467,6 @@
     <Compile Include="Domain\IRecurrentMonthlyByWeekMeeting.cs" />
     <Compile Include="Domain\IRecurrentWeeklyMeeting.cs" />
     <Compile Include="Domain\IRemoveLayerFromSchedule.cs" />
-    <Compile Include="Domain\IRepositoryNonGeneric.cs" />
     <Compile Include="Domain\IRequestApprovalService.cs" />
     <Compile Include="Domain\IRequest.cs" />
     <Compile Include="Domain\IResourceOptimizationHelper.cs" />
