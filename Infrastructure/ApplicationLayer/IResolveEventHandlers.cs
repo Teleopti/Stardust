@@ -1,10 +1,10 @@
-using System.Collections;
+using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
 	public interface IResolveEventHandlers
 	{
-		IEnumerable ResolveHandlersForEvent(IEvent @event);
+		IEnumerable<object> ResolveHandlersForEvent(IEvent @event);
 	}
 }

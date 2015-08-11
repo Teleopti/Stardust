@@ -6,19 +6,19 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
-	public class SelectiveEventPublisher : IEventPublisher
+	public class SelectiveEventPublisherWithoutBus : IEventPublisher
 	{
 		private readonly IHangfireEventPublisher _hangfirePublisher;
-		private readonly IServiceBusEventPublisher _serviceBusPublisher;
+		private readonly ISyncEventPublisher _syncEventPublisher;
 		private readonly IResolveEventHandlers _resolveEventHandlers;
 
-		public SelectiveEventPublisher(
+		public SelectiveEventPublisherWithoutBus(
 			IHangfireEventPublisher hangfirePublisher, 
-			IServiceBusEventPublisher serviceBusPublisher,
+			ISyncEventPublisher syncEventPublisher, 
 			IResolveEventHandlers resolveEventHandlers)
 		{
 			_hangfirePublisher = hangfirePublisher;
-			_serviceBusPublisher = serviceBusPublisher;
+			_syncEventPublisher = syncEventPublisher;
 			_resolveEventHandlers = resolveEventHandlers;
 		}
 
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		{
 			foreach (var @event in events)
 			{
-				var allHandlers = _resolveEventHandlers.ResolveHandlersForEvent(@event).ToArray();
+				var allHandlers = _resolveEventHandlers.ResolveHandlersForEvent(@event).ToList();
 
 				var hasHangfireHandlers = allHandlers.Any(x => x.GetType().IsAssignableTo<IRunOnHangfire>());
 				var hasBusHandlers = allHandlers.Any(x => !x.GetType().IsAssignableTo<IRunOnHangfire>());
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 					_hangfirePublisher.Publish(@event);
 
 				if (hasBusHandlers)
-					_serviceBusPublisher.Publish(@event);
+					_syncEventPublisher.Publish(@event);
 			}
 		}
 	}

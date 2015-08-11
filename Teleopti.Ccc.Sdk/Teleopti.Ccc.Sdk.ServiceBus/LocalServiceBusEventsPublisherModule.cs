@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<LocalServiceBusPublisher>().As<IPublishEventsFromEventHandlers>().As<ISendDelayedMessages>().SingleInstance();
-			builder.Register(c => c.Resolve<ISyncEventPublisher>()).As<IEventPublisher>().SingleInstance();
+			builder.Register(c => c.Resolve<ILocalServiceBusEventPublisher>()).As<IEventPublisher>().SingleInstance();
 		}
 	}
 }
