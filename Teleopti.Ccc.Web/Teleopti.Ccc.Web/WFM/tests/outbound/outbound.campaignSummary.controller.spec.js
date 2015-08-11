@@ -1,5 +1,5 @@
 ﻿'use strict';
-describe('OutboundCreateCtrl', function () {
+describe('OutboundSummaryCtrl', function () {
 	var $q,
 		$rootScope,
 		$controller,
@@ -68,18 +68,7 @@ describe('OutboundCreateCtrl', function () {
 		var test = setUpTarget();
 		expect(test.scope.hideWhenDone(8)==true);
 		expect(test.scope.hideWhenDone(1)==false);
-	});
-
-	it('should generate campaign chart', function () {
-		var test = setUpTarget();
-		var campaign = {
-			Id: '1',
-			chart: null
-	    };
-		test.scope.generateChart(campaign);
-		expect(campaign.viewScheduleDiffToggle == false);
-		expect(campaign.chart != null);
-	});
+	});	
 
 	it('should switch to different campaign chart', function () {
 		var test = setUpTarget();

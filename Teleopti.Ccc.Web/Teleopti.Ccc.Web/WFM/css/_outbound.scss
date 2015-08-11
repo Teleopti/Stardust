@@ -1,6 +1,11 @@
 ﻿@charset "UTF-8";
 
 .outbound {
+	.campaign-chart-switch{
+	    position:absolute;
+		top:-58px;
+		right:0;
+	}
 	.selectable-data-grid {
 	
 		.selectable-data-grid-cell {

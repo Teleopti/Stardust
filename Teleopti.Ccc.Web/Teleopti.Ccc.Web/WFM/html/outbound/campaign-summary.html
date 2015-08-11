@@ -14,7 +14,7 @@
         <div class="loading-whole-section" ng-show="!listCampaignFinished && isLoadFinished"><md-progress-circular md-mode="indeterminate"></md-progress-circular></div>
         <teleopti-card-list multi-select>
             <teleopti-card ng-repeat="campaign in WarningCampaigns">
-				<card-header ng-click="generateChart(campaign)">
+				<card-header ng-click="getGraphData(campaign)">
 					<div class="text-center relative">
 						<span class="campaign-namefix" ng-bind="campaign.Name"></span>
 						<span ng-bind="campaign.StartDate.Date | amDateFormat: 'LL'"></span>
@@ -30,13 +30,14 @@
 		                <div class="clearfix m-b-10">
 			                <p class="campaign-message m-r-5" ng-class="{orangefix: isOverStaffing(campaign.WarningInfo)}" ng-repeat="info in campaign.WarningInfo"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span translate>{{info.TypeOfRule}}</span></p>
 			                <p class="campaign-message campaign-message-healthyfix  m-r-5" ng-if="campaign.WarningInfo.length == 0"><span class="campaign-warning-icon campaign-green-icon-messagefix"><i class="mdi mdi-check"></i></span><span translate>Healthy</span></p>
-			                <md-switch class="pull-right m-t-0" ng-click="toggleChartDisplay(campaign)" ng-if="campaign.Status!=1">Analyze Schedule</md-switch>
 		                </div>
 		                <div class="chart text-center relative chartfix">
 							<div class="loading-whole-section loading-card-bodyfix" ng-show="listCampaignFinished && displayLoading(campaign)">
 								<md-progress-circular md-mode="indeterminate" style="z-index: 100;"></md-progress-circular>
 							</div>
-							<campaign-chart campaign="campaign"></campaign-chart>
+							<div ng-if="!displayLoading(campaign)">
+								<campaign-chart campaign="campaign" graph-data="campaign.graphData" dictionary="campaign.translations"></campaign-chart>
+							</div>
 						</div>
 						<button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="show(campaign)" translate>Edit</button>
 						<button class="wfm-btn wfm-btn-invis-primary pull-right" translate>Schedule</button>
@@ -50,7 +51,7 @@
         <h4 class="border-bottom"><span translate>CampaignsWithoutWarning</span><span ng-bind="Campaigns.length" style="margin-left:5px;"></span></h4>
         <teleopti-card-list multi-select>
             <teleopti-card ng-repeat="campaign in Campaigns">
-				<card-header ng-click="generateChart(campaign)">
+				<card-header ng-click="getGraphData(campaign)">
 					<div class="text-center relative">
 						<span class="campaign-namefix" ng-bind="campaign.Name"></span>
 						<span ng-bind="campaign.StartDate.Date | amDateFormat: 'LL'"></span>
@@ -66,13 +67,14 @@
 		                <div class="clearfix m-b-10">
 			                <p class="campaign-message m-r-5" ng-class="{orangefix: isOverStaffing(campaign.WarningInfo)}" ng-repeat="info in campaign.WarningInfo"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span translate>{{info.TypeOfRule}}</span></p>
 			                <p class="campaign-message campaign-message-healthyfix  m-r-5" ng-if="campaign.WarningInfo.length == 0"><span class="campaign-warning-icon campaign-green-icon-messagefix"><i class="mdi mdi-check"></i></span><span translate>Healthy</span></p>
-			                <md-switch class="pull-right m-t-0" ng-click="toggleChartDisplay(campaign)" ng-if="hidePlannedAnalyzeButton(campaign.Status)">Analyze Schedule</md-switch>
 		                </div>
 		                <div class="chart text-center relative chartfix">
-							<div class="loading-whole-section loading-card-bodyfix" ng-show="listCampaignFinished && displayLoading(campaign)">
-								<md-progress-circular md-mode="indeterminate" style="z-index: 100;"></md-progress-circular>
-							</div>
-							<campaign-chart campaign="campaign"></campaign-chart>
+			                <div class="loading-whole-section loading-card-bodyfix" ng-show="listCampaignFinished && displayLoading(campaign)">
+				                <md-progress-circular md-mode="indeterminate" style="z-index: 100;"></md-progress-circular>
+			                </div>
+			                <div ng-if="!displayLoading(campaign)">
+								<campaign-chart campaign="campaign" graph-data="campaign.graphData" dictionary="campaign.translations"></campaign-chart>
+			                </div>							
 		                </div>
 		                <button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="show(campaign)" translate>Edit</button>
 		                <button class="wfm-btn wfm-btn-invis-primary pull-right" translate>Schedule</button>

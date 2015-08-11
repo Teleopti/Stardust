@@ -7,7 +7,7 @@
             productionPlanCtrl
         ]);
 
-	function productionPlanCtrl($scope, $state, $stateParams, outboundChartService, outboundTranslationService) {
+	function productionPlanCtrl($scope, $state, $stateParams, outboundService, outboundTranslationService) {
 
         // [ToDo Yanyi] Will refactor this futher later.
 
@@ -23,8 +23,8 @@
 	        this.weekDays = this.weekdays.map(function (d) { return d.weekdayName; });
 	        var self = this;
 
-	        outboundChartService.getCampaignVisualization(currentCampaignId, function success(data) {
-	            var records = outboundChartService.zip({
+	        outboundService.getCampaignVisualization(currentCampaignId, function success(data) {
+	            var records = outboundService.zip({
 	                dates: data.dates,
 	                plans: data.plans
 	            });

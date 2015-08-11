@@ -19,7 +19,7 @@ describe('Outbound Chart Service Test', function() {
         $httpBackend = _$httpBackend_;
         $translate = _$translate_;
         $filter = _$filter_;
-        $httpBackend.resetExpectations();
+        $httpBackend.resetExpectations(); 
         target = _outboundChartService_;
     }));
 

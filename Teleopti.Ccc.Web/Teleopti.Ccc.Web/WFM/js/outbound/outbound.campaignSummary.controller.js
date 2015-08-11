@@ -2,7 +2,7 @@
 
 	angular.module('wfm.outbound')
 		.controller('OutboundSummaryCtrl', [
-			'$scope', '$state', '$stateParams', 'outboundService', 'outboundChartService', '$filter',
+			'$scope', '$state', '$stateParams', 'outboundService', 'outboundChartService',  '$filter',
 			summaryCtrl
 		]);
 
@@ -21,7 +21,14 @@
                     $scope.isLoadFinished = true;
                 });
             });
-        });
+    	});
+
+		$scope.getGraphData=function(campaign) {
+			outboundChartService.getCampaignVisualization(campaign.Id, function (data, translations) {
+				campaign.graphData = data;
+				campaign.translations = translations;
+			});
+		}
 
 		$scope.isOverStaffing = function(d) {
 			var result = d.filter(function(e) {
@@ -47,7 +54,7 @@
 
         $scope.toggleChartDisplay = function (campaign) {
         	campaign.viewScheduleDiffToggle = !campaign.viewScheduleDiffToggle;
-        	outboundChartService.makeGraph(campaign.chart, campaign, campaign.viewScheduleDiffToggle, campaign.chartData);
+        	//outboundChartService.makeGraph(campaign.chart, campaign, campaign.viewScheduleDiffToggle, campaign.chartData);
 	    };
 
         $scope.show = function (campaign) {
@@ -67,7 +74,7 @@
         }
 
         function displayLoading(campaign) {
-            return !angular.isDefined(campaign.chart);
+            return !angular.isDefined(campaign.graphData);
         }
 
         function clearCampaignList() {
