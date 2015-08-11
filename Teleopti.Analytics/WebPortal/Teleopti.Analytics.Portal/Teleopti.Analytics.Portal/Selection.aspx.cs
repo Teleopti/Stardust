@@ -11,6 +11,7 @@ namespace Teleopti.Analytics.Portal
 
 		protected void Selector_OnInit(object sender, EventArgs e)
 		{
+			Parameter.UserCode = UserCode;
 		}
 		
 		protected void Page_Load(object sender, EventArgs e)
@@ -25,7 +26,6 @@ namespace Teleopti.Analytics.Portal
 
 			Parameter.ReportId = ReportId;
 			Parameter.GroupPageCode = GroupPageCode;
-			Parameter.UserCode = UserCode;
 			Parameter.BusinessUnitCode = BusinessUnitCode;
 			Parameter.LanguageId = LangId;
 			

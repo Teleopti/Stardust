@@ -24,8 +24,7 @@ namespace Teleopti.Analytics.Parameters
         private IList<SqlParameter> _params;
         private IList<string> _paramTexts;
         private Reader _reader;
-        private bool _isReportPermissionGranted;
-        private Guid _groupPageCode;
+	    private Guid _groupPageCode;
 
         internal static Guid CurrentUserCode;
         internal static Guid BuCode;
@@ -50,19 +49,15 @@ namespace Teleopti.Analytics.Parameters
 
         public static string ErrorMessageValText
         {
-            get { return ReportTexts.Resources.InvalidValueErrorMessage; } // "xx Du har angett ett ogiltigt värde i";
+            get { return ReportTexts.Resources.InvalidValueErrorMessage; }
         }
 
         public static string ErrorMessage
         {
-			get { return ReportTexts.Resources.MissingValueErrorMessage; } //"xxDu har inte angett något i";;
+			get { return ReportTexts.Resources.MissingValueErrorMessage; }
         }
 
-        
 
-        //ola 2005-12-20 lagt till så man kan skicka in en arraylist av parameter
-        // som ska användas till FÖRSTA kontrollen.
-        // Denna är bra om man vill använda selectorn som ett komplement till andra urval
         public IList<SqlParameter> StartParams
         {
             set
@@ -77,16 +72,7 @@ namespace Teleopti.Analytics.Parameters
 
         private Reader DataReader
         {
-            get
-            {
-                if (_reader == null)
-                {
-                    _reader = new Reader(_ConnectionString, LangId);
-                    _isReportPermissionGranted = _reader.IsReportPermissionsGranted(_reportId, CurrentUserCode);
-                }
-
-                return _reader;
-            }
+            get { return _reader ?? (_reader = new Reader(_ConnectionString, LangId)); }
         }
 
         public Guid ReportId
@@ -245,12 +231,7 @@ namespace Teleopti.Analytics.Parameters
         {
             get
             {
-                if (_reader == null)
-                {
-                    _reader = new Reader(_ConnectionString, LangId);
-                    _isReportPermissionGranted = _reader.IsReportPermissionsGranted(_reportId, CurrentUserCode);
-                }
-                return _isReportPermissionGranted;
+	            return DataReader.IsReportPermissionsGranted(_reportId, CurrentUserCode);
             }
         }
 
