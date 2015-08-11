@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 			_ahtAndAcwCalculator = ahtAndAcwCalculator;
 		}
 
-		public override ForecastResult Forecast(ITaskOwnerPeriod historicalData, DateOnlyPeriod futurePeriod)
+		public override ForecastMethodResult Forecast(ITaskOwnerPeriod historicalData, DateOnlyPeriod futurePeriod)
 		{
 			var dateAndTaskList = ForecastNumberOfTasks(historicalData, futurePeriod);
 			var ahtAndAcw = _ahtAndAcwCalculator.Recent3MonthsAverage(historicalData);
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 					AverageTaskTime = ahtAndAcw.Aht,
 					AverageAfterTaskTime = ahtAndAcw.Acw
 				}).ToList<IForecastingTarget>();
-			return new ForecastResult
+			return new ForecastMethodResult
 			{
 				ForecastingTargets = targetForecastingList
 			};

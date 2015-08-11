@@ -127,7 +127,13 @@ angular.module('wfm.forecasting')
 				$http.post('../api/Forecasting/Forecast', JSON.stringify({ ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate, Workloads: [workload] })).
 					success(function (data, status, headers, config) {
 						findWorkload(function (target) {
-							target.IsSuccess = true;
+							if (data.Success) {
+								target.IsSuccess = true;
+							}
+							else {
+								target.IsFailed = true;
+								target.Message = data.Message;
+							}
 						});
 					}).
 					error(function (data, status, headers, config) {
@@ -185,7 +191,13 @@ angular.module('wfm.forecasting')
 				$http.post('../api/Forecasting/Forecast', JSON.stringify({ ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate, Workloads: workloads })).
 					success(function (data, status, headers, config) {
 						findWorkloads(function (target) {
-							target.IsSuccess = true;
+							if (data.Success) {
+								target.IsSuccess = true;
+							}
+							else {
+								target.IsFailed = true;
+								target.Message = data.Message;
+							}
 						});
 					}).
 					error(function (data, status, headers, config) {

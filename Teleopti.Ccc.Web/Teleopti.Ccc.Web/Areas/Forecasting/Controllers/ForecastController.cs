@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Web.Areas.Forecasting.Core;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
@@ -21,6 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		private readonly IForecastViewModelFactory _forecastViewModelFactory;
 		private readonly IForecastResultViewModelFactory _forecastResultViewModelFactory;
 		private readonly IIntradayPatternViewModelFactory _intradayPatternViewModelFactory;
+		private static bool forecastIsRunning;
 
 		public ForecastController(IForecastCreator forecastCreator, ISkillRepository skillRepository, IForecastViewModelFactory forecastViewModelFactory, IForecastResultViewModelFactory forecastResultViewModelFactory, IIntradayPatternViewModelFactory intradayPatternViewModelFactory)
 		{
@@ -69,11 +72,35 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		}
 
 		[HttpPost, Route("api/Forecasting/Forecast"), UnitOfWork]
-		public virtual Task<bool> Forecast(ForecastInput input)
+		public virtual Task<ForecastResultViewModel> Forecast(ForecastInput input)
 		{
-			var futurePeriod = new DateOnlyPeriod(new DateOnly(input.ForecastStart), new DateOnly(input.ForecastEnd));
-			_forecastCreator.CreateForecastForWorkloads(futurePeriod, input.Workloads);
-			return Task.FromResult(true);
+			var failedTask = Task.FromResult(new ForecastResultViewModel
+			{
+				Success = false,
+				Message = "Someone else is doing forecast, please try again later."
+			});
+			if (forecastIsRunning)
+			{
+				return failedTask;
+			}
+			try
+			{
+				forecastIsRunning = true;
+				var futurePeriod = new DateOnlyPeriod(new DateOnly(input.ForecastStart), new DateOnly(input.ForecastEnd));
+				_forecastCreator.CreateForecastForWorkloads(futurePeriod, input.Workloads);
+				return Task.FromResult(new ForecastResultViewModel
+				{
+					Success = true
+				});
+			}
+			catch (OptimisticLockException)
+			{
+				return failedTask;
+			}
+			finally
+			{
+				forecastIsRunning = false;
+			}
 		}
 
 		[HttpPost, Route("api/Forecasting/IntradayPattern"), UnitOfWork]
@@ -81,5 +108,11 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		{
 			return Task.FromResult(_intradayPatternViewModelFactory.Create(input));
 		}
+	}
+
+	public class ForecastResultViewModel
+	{
+		public bool Success { get; set; }
+		public string Message { get; set; }
 	}
 }

@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 			_indexVolumes = indexVolumes;
 		}
 
-		public virtual ForecastResult Forecast(ITaskOwnerPeriod historicalData, DateOnlyPeriod futurePeriod)
+		public virtual ForecastMethodResult Forecast(ITaskOwnerPeriod historicalData, DateOnlyPeriod futurePeriod)
 		{
 			var volumes = _indexVolumes.Create(historicalData);
 			var averageStatistics = new AverageStatistics();
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 				targetForecastingList.Add(forecastingTarget);
 			}
 
-			return new ForecastResult
+			return new ForecastMethodResult
 			{
 				ForecastingTargets = targetForecastingList
 			};

@@ -3,6 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Forecasting.Controllers;
@@ -31,13 +32,21 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		}
 
 		[Test]
+		public void ShouldForecast()
+		{
+			var target = new ForecastController(MockRepository.GenerateMock<IForecastCreator>(), null, null, null, null);
+			var result = target.Forecast(new ForecastInput());
+			result.Result.Success.Should().Be.True();
+		}
+
+		[Test]
 		public void ShouldEvaluate()
 		{
-			var forecastEvaluator = MockRepository.GenerateMock<IForecastViewModelFactory>();
+			var forecastViewModelFactory = MockRepository.GenerateMock<IForecastViewModelFactory>();
 			var evaluateInput = new EvaluateInput();
 			var workloadForecastingViewModel = new WorkloadEvaluateViewModel();
-			forecastEvaluator.Stub(x => x.Evaluate(evaluateInput)).Return(workloadForecastingViewModel);
-			var target = new ForecastController(null, null, forecastEvaluator, null, null);
+			forecastViewModelFactory.Stub(x => x.Evaluate(evaluateInput)).Return(workloadForecastingViewModel);
+			var target = new ForecastController(null, null, forecastViewModelFactory, null, null);
 
 			var result = target.Evaluate(evaluateInput);
 
@@ -48,11 +57,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		[Test]
 		public void ShouldGetQueueStatistics()
 		{
-			var forecastEvaluator = MockRepository.GenerateMock<IForecastViewModelFactory>();
+			var forecastViewModelFactory = MockRepository.GenerateMock<IForecastViewModelFactory>();
 			var queueStatisticsInput = new QueueStatisticsInput();
 			var workloadQueueStatisticsViewModel = new WorkloadQueueStatisticsViewModel();
-			forecastEvaluator.Stub(x => x.QueueStatistics(queueStatisticsInput)).Return(workloadQueueStatisticsViewModel);
-			var target = new ForecastController(null, null, forecastEvaluator, null, null);
+			forecastViewModelFactory.Stub(x => x.QueueStatistics(queueStatisticsInput)).Return(workloadQueueStatisticsViewModel);
+			var target = new ForecastController(null, null, forecastViewModelFactory, null, null);
 
 			var result = target.QueueStatistics(queueStatisticsInput);
 

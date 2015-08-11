@@ -539,7 +539,7 @@
     <Compile Include="Forecasting\Angel\Methods\DateAndTask.cs" />
     <Compile Include="Forecasting\Angel\Methods\ForecastMethodProvider.cs" />
     <Compile Include="Forecasting\Angel\Methods\ForecastMethodType.cs" />
-    <Compile Include="Forecasting\Angel\Methods\ForecastResult.cs" />
+    <Compile Include="Forecasting\Angel\Methods\ForecastMethodResult.cs" />
     <Compile Include="Forecasting\Angel\Methods\IAhtAndAcwCalculator.cs" />
     <Compile Include="Forecasting\Angel\Methods\IForecastMethod.cs" />
     <Compile Include="Forecasting\Angel\Methods\IForecastMethodProvider.cs" />
