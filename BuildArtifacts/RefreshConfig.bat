@@ -32,7 +32,6 @@ taskkill /IM WebDev.WebServer20.EXE /F
 if not exist "%CustomConfig%" (
 ECHO $^(CCC7DB^);main_Demoreg_TeleoptiCCC7>"%CustomConfig%"
 ECHO $^(AnalyticsDB^);main_Demoreg_TeleoptiAnalytics>>"%CustomConfig%"
-ECHO $^(SitePath^);c:\nhib>>"%CustomConfig%"
 )
 goto:eof
 

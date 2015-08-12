@@ -1,19 +1,18 @@
 ﻿using System;
+using System.Configuration;
 using System.IO;
 using System.Linq;
-using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
 	public static class Paths
 	{
-
-		private static Lazy<string> _webPath = new Lazy<string>(() =>
+		public static string SitePath()
 		{
-			var path = IniFileInfo.SitePath;
-			return new DirectoryInfo(path).FullName;
-		});
+			return ConfigurationManager.AppSettings["SitePath"];
+		}
 
+		private static readonly Lazy<string> _webPath = new Lazy<string>(() => new DirectoryInfo(SitePath()).FullName);
 		public static string WebPath()
 		{
 			return _webPath.Value;

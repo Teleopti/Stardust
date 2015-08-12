@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.TestCommon
 		public static string WEB_BROKER_BACKPLANE { get; private set; }
 		public static string ConnectionString { get; private set; }
 		public static string ConnectionStringMatrix { get; private set; }
-		public static string SitePath { get; private set; }
 		public static string SQL_SERVER_NAME { get; private set; }
 		public static string DB_CCC7 { get; private set; }
 		public static string SQL_LOGIN { get; private set; }
@@ -25,7 +24,6 @@ namespace Teleopti.Ccc.TestCommon
 
 		private static void readIniFile()
 		{
-			SitePath = ConfigurationManager.AppSettings["SitePath"];
 			DB_ANALYTICS = ConfigurationManager.AppSettings["DB_ANALYTICS"];
 			DB_CCC7 = ConfigurationManager.AppSettings["DB_CCC7"];
 			SQL_SERVER_NAME = ConfigurationManager.AppSettings["SQL_SERVER_NAME"];
