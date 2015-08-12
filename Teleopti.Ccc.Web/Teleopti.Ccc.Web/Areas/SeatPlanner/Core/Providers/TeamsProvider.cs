@@ -65,11 +65,5 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 			};
 
 		}
-
-		private static int tryGetNumberOfAgents(IDictionary<Guid, int> numberOfAgents, ITeam team)
-		{
-			return numberOfAgents != null && numberOfAgents.ContainsKey(team.Id.Value) ? numberOfAgents[team.Id.Value] : 0;
-		}
-
 	}
 }
