@@ -65,13 +65,7 @@
 		};
 
 		vm.getTeamDisplayText = function (teamHierarchyNode) {
-			if (teamHierarchyNode.NumberOfAgents) {
-				
-				return teamHierarchyNode.Name + " (" + vm.translatedStrings["AgentCountTitle"] + ": {0})".replace("{0}", teamHierarchyNode.NumberOfAgents);
-			} else {
-				return teamHierarchyNode.Name;
-			}
-
+			return teamHierarchyNode.Name;
 		};
 
 		vm.addSeatPlan = function () {
@@ -109,10 +103,16 @@
 			}
 		};
 
-		vm.selectTeam = function (team) {
-			team.selected = team.NumberOfAgents && team.NumberOfAgents > 0 ? !team.selected : team.selected;
+		vm.isTeam = function(team) {
+			return (team.Children === undefined);
 		};
 
+		vm.selectTeam = function (teamHierarchyObj) {
+			if (vm.isTeam(teamHierarchyObj)) {
+				teamHierarchyObj.selected = !teamHierarchyObj.selected;
+			}
+		};
+		
 		vm.selectLocation = function (location) {
 			location.selected = location.Seats && location.Seats.length > 0 ? !location.selected : location.selected;
 		};

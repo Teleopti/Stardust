@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
 using Teleopti.Interfaces.Domain;
 
@@ -12,14 +11,12 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 	public class TeamsProvider : ITeamsProvider
 	{
 		private readonly ISiteRepository _siteRepository;
-		private readonly INumberOfAgentsInTeamReader _numberOfAgentsInTeamReader;
 		private readonly IBusinessUnitRepository _businessUnitRepository;
 		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 
-		public TeamsProvider(ISiteRepository siteRepository, INumberOfAgentsInTeamReader numberOfAgentsInTeamReader, IBusinessUnitRepository businessUnitRepository, ICurrentBusinessUnit currentBusinessUnit)
+		public TeamsProvider(ISiteRepository siteRepository, IBusinessUnitRepository businessUnitRepository, ICurrentBusinessUnit currentBusinessUnit)
 		{
 			_siteRepository = siteRepository;
-			_numberOfAgentsInTeamReader = numberOfAgentsInTeamReader;
 			_businessUnitRepository = businessUnitRepository;
 			_currentBusinessUnit = currentBusinessUnit;
 		}
@@ -33,15 +30,11 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 		private IEnumerable<TeamViewModel> getTeamsForSite(ISite site)
 		{
 			var teams = site.TeamCollection.ToArray();
-			IDictionary<Guid, int> numberOfAgents = new Dictionary<Guid, int>();
-			if (_numberOfAgentsInTeamReader != null)
-				numberOfAgents = _numberOfAgentsInTeamReader.FetchNumberOfAgents(teams);
-
 			return teams.Select(team => new TeamViewModel
 			{
 				Id = team.Id.Value.ToString(),
-				Name = team.Description.Name,
-				NumberOfAgents = tryGetNumberOfAgents(numberOfAgents, team),
+				Name = team.Description.Name
+				
 			});
 		}
 

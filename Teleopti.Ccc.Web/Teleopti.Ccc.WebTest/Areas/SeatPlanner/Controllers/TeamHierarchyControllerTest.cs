@@ -48,9 +48,8 @@ namespace Teleopti.Ccc.WebTest.Areas.SeatPlanner.Controllers
 			site.AddTeam(team);
 
 			siteRepository.Stub(x => x.LoadAll()).Return(new List<ISite>(){site});
-			numberOfAgentsQuery.Stub(x => x.FetchNumberOfAgents(new[] { team })).Return(new Dictionary<Guid, int>() { { team.Id.Value, 2 } });
-
-			ITeamsProvider teamsProvider = new TeamsProvider(siteRepository, numberOfAgentsQuery, businessUnitRepository, currentBusinessUnit);
+			
+			ITeamsProvider teamsProvider = new TeamsProvider(siteRepository, businessUnitRepository, currentBusinessUnit);
 			target = new TeamHierarchyController(teamsProvider);
 			
 			var result = target.Get() as dynamic;
