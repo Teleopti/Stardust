@@ -184,6 +184,7 @@ BEGIN
 	ON p.person_id=fs.person_id
 	WHERE fs.shift_startdate_local_id BETWEEN @start_date_id AND @end_date_id
 		AND fs.scenario_id = @scenario_id
+		AND fs.business_unit_id= @business_unit_id
 	GROUP BY 
 		fs.shift_startdate_local_id,
 		fs.schedule_date_id, 
@@ -399,6 +400,7 @@ BEGIN
 				OR (schedule_date_id = @now_date_id_utc AND schedule_date_id > @from_date_id_utc)
 		)
 		AND fs.scenario_id = @scenario_id
+		AND fs.business_unit_id= @business_unit_id
 		GROUP BY 
 			fs.shift_startdate_local_id,
 			fs.schedule_date_id, 
