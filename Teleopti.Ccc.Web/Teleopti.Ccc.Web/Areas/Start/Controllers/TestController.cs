@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			updateIocNow(null);
 			((IdentityProviderProvider)_identityProviderProvider).SetDefaultProvider(defaultProvider);
 			_loadPasswordPolicyService.ClearFile();
-			_loadPasswordPolicyService.Path = Path.Combine(_physicalApplicationPath.Get(), usePasswordPolicy ? "." : _settings.nhibConfPath());
+			_loadPasswordPolicyService.Path = Path.Combine(_physicalApplicationPath.Get(), usePasswordPolicy ? "." : _settings.ConfigurationFilesPath());
 			UserDataFactory.EnableMyTimeMessageBroker = enableMyTimeMessageBroker;
 			var viewModel = new TestMessageViewModel
 			{

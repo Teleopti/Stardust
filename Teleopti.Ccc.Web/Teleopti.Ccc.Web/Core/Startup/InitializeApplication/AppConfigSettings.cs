@@ -5,10 +5,9 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 {
 	public class AppConfigSettings : ISettings
 	{
-		
-		public string nhibConfPath()
+		public string ConfigurationFilesPath()
 		{
-			return ConfigurationManager.AppSettings["nhibConfPath"];
+			return ConfigurationManager.AppSettings["ConfigurationFilesPath"];
 		}
 
 		public string MessageBroker()

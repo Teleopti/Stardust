@@ -2,7 +2,7 @@
 {
 	public interface ISettings
 	{
-		string nhibConfPath();
+		string ConfigurationFilesPath();
 		string MessageBroker();
 		bool MessageBrokerLongPolling();
 	}
