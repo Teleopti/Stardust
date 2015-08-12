@@ -13390,4 +13390,16 @@ Reduce the complexity to use these shifts.</value>
     <value>Rejected files:</value>
     <comment>rejected file list in import user, People module</comment>
   </data>
+  <data name="GenerateReport" xml:space="preserve">
+    <value>Generate Report</value>
+    <comment>Tooltip for generate report button</comment>
+  </data>
+  <data name="NoReportForCurrentConditions" xml:space="preserve">
+    <value>No Report For Current Conditions</value>
+    <comment>Tooltip for no report of seat plan</comment>
+  </data>
+  <data name="SeatPlanReport" xml:space="preserve">
+    <value>Seat Plan Report</value>
+    <comment>Title of seat plan report</comment>
+  </data>
 </root>
