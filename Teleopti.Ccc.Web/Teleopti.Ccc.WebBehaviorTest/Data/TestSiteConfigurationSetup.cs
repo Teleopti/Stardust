@@ -1,19 +1,13 @@
 ﻿using System;
 using System.IO;
-using Autofac;
 using IISExpressAutomation;
 using Teleopti.Ccc.Domain;
-using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
 	public static class TestSiteConfigurationSetup
 	{
-		private static readonly string TargetTestDataNHibFile = Path.Combine(Paths.WebBinPath(), "TestData.nhib.xml");
-
 		public static int Port = 52858;
 		public static Uri URL;
 		public static int PortAuthenticationBridge = 52857;
@@ -33,7 +27,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			WriteWebConfigs();
 			if (!useIisExpressStartedByVisualStudio)
 				StartIISExpress();
-			GenerateAndWriteTestDataNHibFileFromTemplate();
 		}
 
 		private static IDisposable RandomPortsAndUrls()
@@ -135,16 +128,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			File.WriteAllText(file, "can't touch this");
 			File.Delete(file);
 		}
-
-		private static void GenerateAndWriteTestDataNHibFileFromTemplate()
-		{
-			FileConfigurator.ConfigureByTags(
-				"Data\\TestData.nhib.xml",
-				TargetTestDataNHibFile,
-				new AllTags()
-				);
-		}
-
 	}
 
 }

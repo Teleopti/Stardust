@@ -264,14 +264,6 @@ function Test-SitesAndServicesOk {
 			# $enabled = Get-Authentication $global:SubSite + "/SDK" "anonymousAuthentication"
 			# $enabled | Should Be "False"
 		# }
-
-		#It "Nhib file should exist and contain SQL Auth connection string" {
-		#	$nhibFile = "C:\Program Files (x86)\Teleopti\ConfigurationFiles\TeleoptiCCC7.nhib.xml"
-		#	$computerName=(get-childitem -path env:computername).Value
-		#	$connectionString="Data Source=$computerName;User Id=TeleoptiDemoUser;Password=TeleoptiDemoPwd2;initial Catalog=TeleoptiCCC7_Demo;Current Language=us_english"
-		#	$nhibFile | Should Exist
-		#	$nhibFile | Should Contain "$connectionString"
-		#}
 		
 		It "should have a ETL Service running" {
         $serviceName="TeleoptiETLService"

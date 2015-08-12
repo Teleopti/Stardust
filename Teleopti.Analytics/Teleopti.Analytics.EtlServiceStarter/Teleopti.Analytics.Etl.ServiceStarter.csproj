@@ -116,7 +116,7 @@
     </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PreBuildEvent>if not exist "$(ProjectDir)Debug.nhib.xml" copy "$(ProjectDir)..\..\BuildArtifacts\TeleoptiCCC7.nhib.xml" "$(ProjectDir)Debug.nhib.xml"</PreBuildEvent>
+    <PreBuildEvent></PreBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

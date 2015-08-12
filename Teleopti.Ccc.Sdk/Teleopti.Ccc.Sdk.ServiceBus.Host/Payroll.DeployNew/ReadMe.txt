@@ -13,6 +13,4 @@ If you run a multi-DB environment, you can add sub-folders to Payroll.DeployNew,
 Payrolls in folder "Acme" will only be available for clients having data source name set to "Acme", i.e. <session-factory name="Acme">
 
 *)
-Below is an example of a nhib file with data soruce name set to "Acme"
-see nhib file: C:\Program Files (x86)\Teleopti\ConfigurationFiles\TeleoptiCCC7.nhib.xml
-<session-factory name=" Acme ">
+

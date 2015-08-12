@@ -6,5 +6,4 @@
 ..\Teleopti.Ccc.Web.Broker\web.config;BrokerWeb.config
 ..\Teleopti.Analytics\Teleopti.Analytics.Etl.ConfigTool\App.config;AppETLTool.config
 
-c:\nhib\Debug.nhib.xml;TeleoptiCCC7.nhib.xml
 

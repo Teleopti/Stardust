@@ -1,5 +1,4 @@
 ﻿..\ApplicationConfiguration\CccAppConfig.exe.config,BuildArtifacts\CccAppConfig.config
-..\ConfigurationFiles\TeleoptiCCC7.nhib.xml,BuildArtifacts\TeleoptiCCC7.nhib.xml
 ..\ConfigurationFiles\NotificationConfig.xml.notinuse,BuildArtifacts\NotificationConfig.xml.notinuse
 ..\ConfigurationFiles\PasswordPolicy.xml.notinuse,BuildArtifacts\PasswordPolicy.xml.notinuse
 ..\TeleoptiCCC\Analytics\web.config,BuildArtifacts\AnalyticsWeb.config

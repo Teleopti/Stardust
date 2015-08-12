@@ -42,7 +42,6 @@ IF NOT EXIST "%ROOTDIR%\..\Teleopti.Support.Tool\bin\%Configuration%\Teleopti.Su
 
 ::Deploy new -MODEBUG input for Support.Tool
 SET ConfigFiles=%ROOTDIR%\..\Teleopti.Support.Tool\bin\Release\ConfigFiles\ConfigFiles.txt
-ECHO ..\..\..\Teleopti.Analytics.Etl.ServiceConsoleHost\bin\%Configuration%\TeleoptiCCC7.nhib.xml,BuildArtifacts\TeleoptiCCC7.nhib.xml>"%ConfigFiles%"
 ECHO ..\..\..\Teleopti.Analytics.Etl.ServiceConsoleHost\bin\%Configuration%\Teleopti.Analytics.Etl.ServiceConsoleHost.exe.config,BuildArtifacts\AppETLService.config>>"%ConfigFiles%"
 
 ::Run supportTool to replace all config
