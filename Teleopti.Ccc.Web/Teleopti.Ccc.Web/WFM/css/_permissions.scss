@@ -52,7 +52,10 @@ p {
 .hide-list-actions{
 	transition:none!important;
 }
-
+.optionLocked{
+	pointer-events:none;
+	color:#999!important; 
+}
 
 .wfm-radio input[type=radio]:checked ~ .wfm-radio-toggle {
     background-color: #66c2ff;

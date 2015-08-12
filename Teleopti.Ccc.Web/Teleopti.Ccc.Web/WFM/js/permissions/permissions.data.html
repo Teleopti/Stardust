@@ -1,10 +1,8 @@
 ﻿<div class="toolbar">
-            <div class="input-prepend">
-                <i class="mdi mdi-filter-outline"></i>
-                <input type="text" name="filterDetails" ng-model="searchData" placeholder="{{'DataFilterThreeDots' | translate}}" />
-            </div>
-
-
+	<div class="input-prepend">
+		<i class="mdi mdi-filter-outline"></i>
+		<input type="text" name="filterDetails" ng-model="searchData" placeholder="{{'DataFilterThreeDots' | translate}}"/>
+	</div>
 
         <form class="permission-radio-buttons">
             <div class="wfm-radio">
@@ -36,9 +34,10 @@
         </form>
 
 	<div class="data-auth">
-		<label translate>AddGlobalAuthorizationLabel</label> 
-		<md-select placeholder="Pick" ng-model="dynamicOptionSelected.data" ng-change="changeOption(dynamicOptionSelected.data)" style="padding:0;">
-			           <md-option ng-repeat="dynamic in organization.DynamicOptions" ng-value="dynamic.RangeOption">{{dynamic.Name}}</md-option>
+		
+		<label translate>AddGlobalAuthorizationLabel</label>
+		<md-select placeholder="Pick" ng-model="dynamicOptionSelected.data" ng-change="changeOption(dynamicOptionSelected.data)" ng-class="{optionLocked:dynamicOptionSelected.isBuiltIn}" style="padding: 0;">
+			<md-option ng-repeat="dynamic in organization.DynamicOptions" ng-value="dynamic.RangeOption">{{dynamic.Name}}</md-option>
 		</md-select>
 	</div>
 </div>
@@ -46,7 +45,7 @@
 
 
 <div class="tree permissions-tree">
-
+	
     <div ui-tree data-drag-enabled="false">
         <ol ui-tree-nodes="" ng-model="organization.BusinessUnit" id="tree-root" class="tree-line">
 			<li ng-repeat="node in organization.BusinessUnit | nameFilter: searchData  | selectedData:selectedDataToggle | unselectedData:unselectedDataToggle" ui-tree-node ng-include="'nodes_bu_renderer.html'"></li>
@@ -57,11 +56,12 @@
 <!-- Nested node template for data -->
 <script type="text/ng-template" id="nodes_bu_renderer.html">
 
-
+	
     <div class="tree-toggle-group">
         <div class="toggle-handle" ng-class="{open: node.show}" ng-click="node.show = !node.show"><i ng-show="node.ChildNodes.length > 0" class="mdi mdi-chevron-right"></i></div>
         <div ui-tree-handle class="ui-tree-handle" ng-class="{selected: node.selected}" ng-click="toggleOrganizationSelection(this)">
             {{node.Name}} <!--{{nbSelected(childNodes()) }} / {{childNodes().length}} selected-->
+			
             <span><i class="mdi mdi-check"></i></span>
         </div>
     </div>

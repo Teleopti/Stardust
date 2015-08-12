@@ -5,11 +5,14 @@
 		'$scope', '$filter', 'RoleDataService', 'Roles',
 			function ($scope, $filter, RoleDataService, Roles) {
 				$scope.organization = { DynamicOptions: [] };
-				$scope.dynamicOptionSelected = { data: 0 };
+				$scope.dynamicOptionSelected = { data: 0, isBuiltIn: false };
+
+				
 				$scope.$watch(function () { return Roles.selectedRole; },
 					function (newSelectedRole) {
 						if (!newSelectedRole.Id) return;
 						RoleDataService.refreshpermissions(newSelectedRole.Id);
+						$scope.dynamicOptionSelected.isBuiltIn = Roles.selectedRole.BuiltIn;
 					}
 				);
 
@@ -17,15 +20,17 @@
 				   function (organization) {
 					   $scope.organization = organization;
 					   $scope.dynamicOptionSelected.data = RoleDataService.dynamicOptionSelected;
+
 				   }
 				);
 
 				$scope.$watch(function () { return RoleDataService.dynamicOptionSelected; },
 					function (option) {
 						$scope.dynamicOptionSelected.data = option;
+					
 					}
 				);
-
+				
 				var uiTree = {};
 				uiTree.deselectParent = function (node) {
 				    if (!node.$parentNodeScope) return;
