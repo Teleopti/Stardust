@@ -129,6 +129,14 @@ Scenario: Automatical close pop up notify message
 	When the time is '2030-01-01 10:58:30'
 	Then I should not see pop up notify message
 
+Scenario: Do not show pop up notify message to agent without permission for ASM
+	Given I have the role 'No access to ASM'
+	And the time is '2030-01-01 10:57:59'
+	And Alert Time setting is '120' seconds                      
+	When I am viewing week schedule
+	And the time is '2030-01-01 10:58:00'
+	Then I should not see pop up notify message
+
 Scenario: Should alert agent when now is between 2 shift
 	Given I have the role 'Full access to mytime'
 	And the time is '2030-01-03 14:56:59'
