@@ -45,20 +45,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			builder.RegisterType<FindTenantLogonInfoUnsecured>().As<IFindLogonInfo>().SingleInstance();
 			builder.RegisterType<TenantLogonInfoLoader>().As<ITenantLogonInfoLoader>().SingleInstance();
 			builder.RegisterType<LoadAllTenants>().As<ILoadAllTenants>().SingleInstance();
-			if (_configuration.Toggle(Toggles.Tenant_RemoveNhibFiles_33685))
-			{
-				builder.RegisterType<ReadDataSourceConfiguration>().As<IReadDataSourceConfiguration>().SingleInstance();
-			}
-			else
-			{
-				builder.Register(c =>
-				{
-					var path = ConfigurationManager.AppSettings["nhibConfPath"];
-					if (string.IsNullOrEmpty(path))
-						path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-					return new ReadDataSourceConfigurationFromNhibFiles(new NhibFilePathFixed(path), new ParseNhibFile());
- 				}).As<IReadDataSourceConfiguration>().SingleInstance();
-			}
+			builder.RegisterType<ReadDataSourceConfiguration>().As<IReadDataSourceConfiguration>().SingleInstance();
 		}
 
 		public class TenantLogonInfoLoader : ITenantLogonInfoLoader

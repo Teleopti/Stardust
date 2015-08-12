@@ -163,7 +163,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<ChangePersonPassword>().As<IChangePersonPassword>().SingleInstance();
 			builder.RegisterType<WebTenantAuthentication>().As<ITenantAuthentication>().SingleInstance();
 			builder.RegisterType<CurrentTenantUser>().As<ICurrentTenantUser>().SingleInstance();
-			builder.RegisterType<NHibFilePathInWeb>().As<INhibFilePath>().SingleInstance();
 		}
 	}
 }

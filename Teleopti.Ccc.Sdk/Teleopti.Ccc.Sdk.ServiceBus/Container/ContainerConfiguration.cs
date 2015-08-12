@@ -1,11 +1,8 @@
-﻿using System;
-using System.Configuration;
-using Autofac;
+﻿using Autofac;
 using Rhino.ServiceBus.Internal;
 using Rhino.ServiceBus.Sagas.Persisters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.PulseLoop;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
@@ -13,7 +10,6 @@ using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.ServiceBus.AgentBadge;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 {
@@ -74,23 +70,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 				.As<ITenantUnitOfWork>()
 				.As<ICurrentTenantSession>()
 				.SingleInstance();
-			if (_toggleManager.IsEnabled(Toggles.Tenant_RemoveNhibFiles_33685))
-			{
-				build.RegisterType<ReadDataSourceConfiguration>().As<IReadDataSourceConfiguration>().SingleInstance();
-				build.RegisterType<LoadAllTenants>().As<ILoadAllTenants>().SingleInstance();
-			}
-			else
-			{
-				build.Register(c =>
-				{
-					var xmlPath = ConfigurationManager.AppSettings["ConfigPath"];
-					if (string.IsNullOrWhiteSpace(xmlPath))
-					{
-						xmlPath = AppDomain.CurrentDomain.BaseDirectory;
-					}
-					return new ReadDataSourceConfigurationFromNhibFiles(new NhibFilePathFixed(xmlPath), new ParseNhibFile());
-				}).As<IReadDataSourceConfiguration>().SingleInstance();
-			}
+			build.RegisterType<ReadDataSourceConfiguration>().As<IReadDataSourceConfiguration>().SingleInstance();
+			build.RegisterType<LoadAllTenants>().As<ILoadAllTenants>().SingleInstance();
 
 			build.Update(_container);
 		}

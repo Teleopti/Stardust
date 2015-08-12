@@ -78,8 +78,6 @@
 		WfmForecast_IntradayPatternView_33069,
 
 		Scheduler_OptimizeFlexibleDayOffs_22409,
-
-		Tenant_RemoveNhibFiles_33685
 		// ReSharper restore InconsistentNaming
 	}
 }

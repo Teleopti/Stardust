@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void InitializeApplicationIsWired()
 		{
-			containerBuilder.Register(c => new ReadDataSourceConfigurationFromNhibFiles(new NhibFilePathFixed(""), new ParseNhibFile())).As<IReadDataSourceConfiguration>();
+			containerBuilder.Register(c => new NoDataSourceConfiguration()).As<IReadDataSourceConfiguration>();
 			using (var container = containerBuilder.Build())
 			{
 				var init = container.Resolve<IInitializeApplication>();
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void InitializeApplicationShouldBeSingleton()
 		{
-			containerBuilder.Register(c => new ReadDataSourceConfigurationFromNhibFiles(new NhibFilePathFixed(""), new ParseNhibFile())).As<IReadDataSourceConfiguration>();
+			containerBuilder.Register(c => new NoDataSourceConfiguration()).As<IReadDataSourceConfiguration>();
 			using (var container = containerBuilder.Build())
 			{
 				var init = container.Resolve<IInitializeApplication>();

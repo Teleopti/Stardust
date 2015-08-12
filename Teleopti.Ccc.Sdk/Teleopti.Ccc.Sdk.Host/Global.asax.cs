@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
 using System.Web;
 using System.Xml.Linq;
 using Autofac;
@@ -40,7 +39,6 @@ using Teleopti.Ccc.Sdk.WcfService.Factory;
 using Teleopti.Ccc.Sdk.WcfService.LogOn;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using ConfigReader = Teleopti.Ccc.Domain.Config.ConfigReader;
 
@@ -114,7 +112,6 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			var tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
 			using (tenantUnitOfWorkManager.Start())
 			{
-				var readDataSourceCfg = createDataSourceConfigurationReader(tenantUnitOfWorkManager, container.Resolve<IToggleManager>().IsEnabled(Toggles.Tenant_RemoveNhibFiles_33685));
 				var initializeApplication =
 					new InitializeApplication(
 						new DataSourcesFactory(
@@ -125,7 +122,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 							() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging
 							),
 						messageBroker,
-						readDataSourceCfg);
+						new ReadDataSourceConfiguration(new LoadAllTenants(tenantUnitOfWorkManager)));
 				initializeApplication.Start(new SdkState(), passwordPolicyService, appSettings, messageBrokerEnabled);
 			}
 			tenantUnitOfWorkManager.Dispose();
@@ -135,24 +132,6 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 					messageBroker.Dispose();
 
 			Logger.Info("Initialized application");
-		}
-
-		private static IReadDataSourceConfiguration createDataSourceConfigurationReader(ICurrentTenantSession currentTenantSession, bool readFromDb)
-		{
-			return readFromDb
-				? (IReadDataSourceConfiguration) new ReadDataSourceConfiguration(new LoadAllTenants(currentTenantSession))
-				: new ReadDataSourceConfigurationFromNhibFiles(new NhibFilePathFixed(sitePath()), new ParseNhibFile());
-		}
-
-		private static string sitePath()
-		{
-			var sitePath = ConfigurationManager.AppSettings["SitePath"].Trim();
-			if (string.IsNullOrEmpty(sitePath))
-			{
-				sitePath = AppDomain.CurrentDomain.BaseDirectory;
-			}
-			Logger.InfoFormat("Read site path from configuration. {0}", sitePath);
-			return sitePath;
 		}
 
 		private bool messageBrokerReceiveEnabled()
