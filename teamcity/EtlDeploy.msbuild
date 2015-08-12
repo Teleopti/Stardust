@@ -25,7 +25,6 @@
 		<AS_SERVER_NAME>$(computername)</AS_SERVER_NAME>
 		<AS_DATABASE>$(ETLAnalyticsDB)_$(Computername)</AS_DATABASE>
 		<SQL_AUTH_STRING>Data Source=$(Computername);Integrated Security=SSPI</SQL_AUTH_STRING>
-		<ETL_SERVICE_nhibConfPath>$(WorkingDirectory)\Teleopti.Analytics.Etl.ServiceConsoleHost\bin\$(Configuration)</ETL_SERVICE_nhibConfPath>		
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -106,7 +105,7 @@
 	</Target>
 	
 	<Target Name="PrepareFiles">
-		<Exec Command ='"$(ETLTestConfig)" "$(ETLCCC7DB)" "$(ETLAnalyticsDB)" "$(Configuration)" "$(AS_SERVER_NAME)" "$(AS_DATABASE)" "$(SQL_AUTH_STRING)" "$(ETL_SERVICE_nhibConfPath)"'/>
+		<Exec Command ='"$(ETLTestConfig)" "$(ETLCCC7DB)" "$(ETLAnalyticsDB)" "$(Configuration)" "$(AS_SERVER_NAME)" "$(AS_DATABASE)" "$(SQL_AUTH_STRING)"'/>
 	</Target>
 	
 	<Target Name="CleanUp" DependsOnTargets="DropCube;DropSQLDatabases">

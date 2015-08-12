@@ -6,7 +6,6 @@ SET Configuration=%~3
 SET AS_SERVER_NAME=%~4
 SET AS_DATABASE=%~5
 SET SQL_AUTH_STRING=%~6
-SET ETL_SERVICE_nhibConfPath=%~7
 
 SET ROOTDIR=%~dp0
 SET ROOTDIR=%ROOTDIR:~0,-1%
@@ -26,7 +25,6 @@ ECHO $^(DB_ANALYTICS^)^|%DB_ANALYTICS%>>"%MySettings%"
 ECHO $^(AS_DATABASE^)^|%AS_DATABASE%>>"%MySettings%"
 ECHO $^(SQL_AUTH_STRING^)^|%SQL_AUTH_STRING%>>"%MySettings%"
 ECHO $^(AS_SERVER_NAME^)^|%AS_SERVER_NAME%>>"%MySettings%"
-ECHO $^(ETL_SERVICE_nhibConfPath^)^|%ETL_SERVICE_nhibConfPath%>>"%MySettings%"
 ECHO $^(DATASOURCE_NAME^)^|%DATASOURCE_NAME%>>"%MySettings%"
 ECHO $^(PM_INSTALL^)^|%PM_INSTALL%>>"%MySettings%"
 ECHO $^(WEB_BROKER_FOR_WEB^)^|%WEB_BROKER_FOR_WEB%>>"%MySettings%"
