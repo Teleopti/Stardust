@@ -3,7 +3,7 @@
 (function () {
 
 	angular.module('wfm.seatPlan').controller('seatPlanReportCtrl', seatPlanReportCtrl)
-								  .value('reportTake', 50 );
+								  .value('reportTake', 34 );
 
 	seatPlanReportCtrl.$inject = ['seatPlanService', 'seatplanTeamAndLocationService', 'reportTake'];
 
