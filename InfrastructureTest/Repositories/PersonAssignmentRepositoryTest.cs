@@ -39,10 +39,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             using(var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
                 var session = uow.FetchSession();
-                session.Delete(_dummyActivity);
+				session.Delete(loaded);
+				session.Delete(_dummyActivity);
                 session.Delete(_dummyCategory);
                 session.Delete(_dummyCat);
-                session.Delete(loaded);
                 session.Delete(_dummyAgent);
                 session.Delete(_dummyAgent2);
                 session.Delete(_dummyScenario);

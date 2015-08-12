@@ -228,43 +228,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         }
 
         /// <summary>
-        /// Determines whether this instance [can delete skill days].
-        /// </summary>
-        /// <remarks>
-        /// Created by: henryg
-        /// Created date: 2008-12-11
-        /// </remarks>
-        [Test]
-        public void CanDeleteSkillDays()
-        {
-            CleanUpAfterTest();
-
-            ISkillDay skillDay = CreateAggregateWithCorrectBusinessUnit();
-            PersistAndRemoveFromUnitOfWork(skillDay);
-
-            SkillDayRepository skillDayRepository = new SkillDayRepository(UnitOfWork);
-
-            DateOnlyPeriod dateTimePeriod = new DateOnlyPeriod(skillDay.CurrentDate, skillDay.CurrentDate.AddDays(1));
-            ICollection<ISkillDay> skillDays = skillDayRepository.FindRange(dateTimePeriod, _skill, _scenario);
-            Assert.AreEqual(1, skillDays.Count);
-
-            skillDayRepository.Delete(dateTimePeriod, _skill, _scenario);
-
-            skillDays = skillDayRepository.FindRange(dateTimePeriod, _skill, _scenario);
-            Assert.AreEqual(0, skillDays.Count);
-
-            //clean up. bara smörja jag gjort här. orkar inte fixa henrys. sen fredag.
-            UnitOfWork.Clear();
-            new SkillTypeRepository(UnitOfWork).Remove(_skillType);
-            new ScenarioRepository(UnitOfWork).Remove(_scenario);
-            new WorkloadRepository(UnitOfWork).Remove(_skill.WorkloadCollection.First());
-            new ActivityRepository(UnitOfWork).Remove(_skill.Activity);
-			new SkillRepository(UnitOfWork).Remove(_skill);
-
-			UnitOfWork.PersistAll();
-        }
-
-        /// <summary>
         /// Verifies the get all skill days work without adding to repository.
         /// </summary>
         /// <remarks>
@@ -381,8 +344,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	    [Test]
 	    public void VerifyIntervalsAreRemovedWhenSplitting()
 	    {
-			CleanUpAfterTest();
-
 		    ISkillDay skillDay = CreateAggregateWithCorrectBusinessUnit();
 		    skillDay.SetupSkillDay();
 		    skillDay.SkillDayCalculator = new SkillDayCalculator(_skill, new List<ISkillDay> {skillDay},
@@ -391,22 +352,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			skillDay.SplitSkillDataPeriods(new List<ISkillDataPeriod>(skillDay.SkillDataPeriodCollection));
 			new SkillDayRepository(UnitOfWork).Add(skillDay);
 
-		    UnitOfWork.PersistAll();
-		    UnitOfWork.Clear();
-
 		    var skillDayRepository = TestRepository(UnitOfWork);
 		    skillDay = skillDayRepository.Get(skillDay.Id.Value);
 
 		    Assert.AreEqual(96, skillDay.SkillDataPeriodCollection.Count);
-
-			Session.Delete(new SkillRepository(UnitOfWork).Load(_skill.Id.Value));
-			Session.Delete(new SkillTypeRepository(UnitOfWork).Load(_skillType.Id.Value));
-			Session.Delete(new ScenarioRepository(UnitOfWork).Load(_scenario.Id.Value));
-			Session.Delete(new WorkloadRepository(UnitOfWork).Load(_skill.WorkloadCollection.First().Id.Value));
-			Session.Delete(new ActivityRepository(UnitOfWork).Load(_skill.Activity.Id.Value));
-			Session.Delete(skillDayRepository.Load(skillDay.Id.Value));
-
-			UnitOfWork.PersistAll();
 	    }
 
 	    private static SkillDay createSkillDay(DateOnly skillDate, IWorkload workload, ISkill skill, IScenario scenario)

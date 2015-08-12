@@ -41,12 +41,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var session = uow.FetchSession();
-				session.Delete(team);
-				session.Delete(team.Site);
 				session.Delete(person);
 				session.Delete(person.PersonPeriodCollection.Single().PersonContract.ContractSchedule);
 				session.Delete(person.PersonPeriodCollection.Single().PersonContract.Contract);
 				session.Delete(person.PersonPeriodCollection.Single().PersonContract.PartTimePercentage);
+				session.Delete(team);
+				session.Delete(team.Site);
 				uow.PersistAll();
 			}
 		}
@@ -79,12 +79,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var session = uow.FetchSession();
-				session.Delete(team);
-				session.Delete(site);
 				session.Delete(person);
 				session.Delete(person.PersonPeriodCollection.Single().PersonContract.ContractSchedule);
 				session.Delete(person.PersonPeriodCollection.Single().PersonContract.Contract);
 				session.Delete(person.PersonPeriodCollection.Single().PersonContract.PartTimePercentage);
+				session.Delete(team);
+				session.Delete(site);
 				uow.PersistAll();
 			}
 		}
