@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
@@ -76,24 +75,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			var model = Target.Get(Guid.NewGuid());
 
 			model.Should().Be.Null();
-		}
-
-		[Test]
-		public void ShouldGetSitesForBusinessUnit()
-		{
-			var siteId1 = Guid.NewGuid();
-			var siteId2 = Guid.NewGuid();
-			var siteId3 = Guid.NewGuid();
-			var bu1A = Guid.NewGuid();
-
-			Target.Persist(new SiteOutOfAdherenceReadModel() { SiteId = siteId1, BusinessUnitId = bu1A, Count = 1});
-			Target.Persist(new SiteOutOfAdherenceReadModel() { SiteId = siteId2, BusinessUnitId = bu1A, Count = 2 });
-			Target.Persist(new SiteOutOfAdherenceReadModel() { SiteId = siteId3, BusinessUnitId = Guid.NewGuid(), Count = 3 });
-
-			var models = Reader.Read(bu1A);
-			models.Single(x => x.SiteId == siteId1).Count.Should().Be(1);
-			models.Single(x => x.SiteId == siteId2).Count.Should().Be(2);
-			models.Any(x => x.SiteId == siteId3).Should().Be.False();
 		}
 
 		[Test]
