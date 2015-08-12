@@ -8,32 +8,46 @@
 
 	function seatplanTeamAndLocationService(seatPlanTranslateFactory) {
 
-		var getLocationDisplayText = function (location) {
+		var service = {
+			SelectTeam: selectTeam,
+			SelectLocation: selectLocation,
+			GetSelectedTeamsFromTeamList: getSelectedTeamsFromTeamList,
+			GetSelectedLocationsFromLocationList: getSelectedLocationsFromLocationList,
+			GetLocationDisplayText: getLocationDisplayText,
+			GetTeamDisplayText: getTeamDisplayText
+		};
+
+		function getLocationDisplayText(location) {
 			if (location.Name == undefined) {
 				return seatPlanTranslateFactory.TranslatedStrings["NoLocationsAvailable"];
 			}
 			return location.Name + " (" + seatPlanTranslateFactory.TranslatedStrings["SeatCountTitle"] + ": {0})".replace("{0}", location.Seats.length);
 		};
 
-		var getTeamDisplayText = function (teamHierarchyNode) {
-			return teamHierarchyNode.Name;
+		function getTeamDisplayText(teamHierarchyNode) {
+			if (teamHierarchyNode.NumberOfAgents) {
+				return teamHierarchyNode.Name + " (" + seatPlanTranslateFactory.TranslatedStrings["AgentCountTitle"] +
+					": {0})".replace("{0}", teamHierarchyNode.NumberOfAgents);
+			} else {
+				return teamHierarchyNode.Name;
+			}
 		};
 
-		var isTeam = function (team) {
+		function isTeam(team) {
 			return (team.Children === undefined);
 		};
 
-		var selectTeam = function (teamHierarchyObj) {
+		function selectTeam(teamHierarchyObj) {
 			if (isTeam(teamHierarchyObj)) {
 				teamHierarchyObj.selected = !teamHierarchyObj.selected;
 			}
 		};
 
-		var selectLocation = function (location) {
+		function selectLocation(location) {
 			location.selected = location.Seats && location.Seats.length > 0 ? !location.selected : location.selected;
 		};
 
-		var getSelectedTeamsFromTeamList = function(teamList) {
+		function getSelectedTeamsFromTeamList(teamList) {
 		
 			function getSelectedTeams(teams, result) {
 
@@ -52,7 +66,7 @@
 			return selectedTeams;
 		};
 		
-		var getSelectedLocationsFromLocationList = function(locationList) {
+		function getSelectedLocationsFromLocationList(locationList) {
 
 			function getSelectedLocations(locations,result) {
 				locations.forEach(function (location) {
@@ -70,14 +84,7 @@
 			return selectedLocations;
 		};
 
-		return {
-			SelectTeam: selectTeam,
-			SelectLocation: selectLocation,
-			GetSelectedTeamsFromTeamList: getSelectedTeamsFromTeamList,
-			GetSelectedLocationsFromLocationList: getSelectedLocationsFromLocationList,
-			GetLocationDisplayText: getLocationDisplayText,
-			GetTeamDisplayText: getTeamDisplayText
-		};
+		return service;
 
 	};
 }());

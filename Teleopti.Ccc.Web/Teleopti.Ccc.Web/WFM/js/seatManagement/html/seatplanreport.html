@@ -29,9 +29,9 @@
 
 			<div class="filter-content">
 				<div class="date-picker" ng-show="vm.isDatePickerOpened">
-					<datepicker class="wfm-datepicker" ng-model="vm.selectedPeriod.StartDate" custom-class="vm.setRangeClass(date,mode)" max-date="vm.selectedPeriod.EndDate">
+					<datepicker class="wfm-datepicker" ng-model="vm.selectedPeriod.StartDate" custom-class="vm.setRangeClass(date,mode,vm.selectedPeriod)" max-date="vm.selectedPeriod.EndDate">
 					</datepicker>
-					<datepicker class="wfm-datepicker" ng-model="vm.selectedPeriod.EndDate" custom-class="vm.setRangeClass(date,mode)" min-date="vm.selectedPeriod.StartDate">
+					<datepicker class="wfm-datepicker" ng-model="vm.selectedPeriod.EndDate" custom-class="vm.setRangeClass(date,mode,vm.selectedPeriod)" min-date="vm.selectedPeriod.StartDate">
 					</datepicker>
 				</div>
 
@@ -75,7 +75,7 @@
 	</div>
 	<span class="blankForTurnOffFilterPanel2" ng-click="vm.isFilterOpened = false"></span>
 
-	<div class="seatPlanReportContent" ng-click="vm.isFilterOpened = false" id="seatPlanReportContentScreen" >
+	<div class="seatPlanReportContent" ng-click="vm.isFilterOpened = false" id="seatPlanReportContentScreen" ng-init="vm.init()">
 		<div ng-if="vm.isLoadingReport" class="report-spinner">
 			<md-progress-circular md-mode="indeterminate"></md-progress-circular>
 		</div>
