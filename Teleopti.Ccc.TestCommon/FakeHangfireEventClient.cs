@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.TestCommon
 		public string HandlerType { get { return HandlerTypes.First(); } }
 
 		public bool WasEnqueued { get { return Events.Any(); } }
-
+		
 		public void Enqueue(string displayName, string eventType, string serializedEvent, string handlerType)
 		{
 			DisplayNames.Add(displayName);
@@ -25,5 +25,6 @@ namespace Teleopti.Ccc.TestCommon
 			Events.Add(serializedEvent);
 			HandlerTypes.Add(handlerType);
 		}
+		
 	}
 }

@@ -218,9 +218,10 @@
     <Compile Include="Forecasting\Angel\LinearRegressionTrendCalculator.cs" />
     <Compile Include="Forecasting\Angel\OutlierRemover.cs" />
     <Compile Include="Foundation\CouldNotCreateTransactionException.cs" />
+    <Compile Include="ApplicationLayer\IJsonEventDeserializer.cs" />
+    <Compile Include="ApplicationLayer\IJsonEventSerializer.cs" />
     <Compile Include="Foundation\ITogglesActive.cs" />
     <Compile Include="Foundation\JsonExtensions.cs" />
-    <Compile Include="Foundation\NewtonsoftJsonDeserializer.cs" />
     <Compile Include="Foundation\NewtonsoftJsonSerializer.cs" />
     <Compile Include="Foundation\ReportUrlConstructor.cs" />
     <Compile Include="Foundation\TeleoptiPrincipalCacheableFactory.cs" />

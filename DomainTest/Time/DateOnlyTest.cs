@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.DomainTest.Time
 	    {
 		    var date = new DateOnly(2015, 2, 13);
 		    var json = new NewtonsoftJsonSerializer().SerializeObject(date);
-		    var deserialized = new NewtonsoftJsonDeserializer().DeserializeObject<DateOnly>(json);
+		    var deserialized = new NewtonsoftJsonSerializer().DeserializeObject<DateOnly>(json);
 		    deserialized.Should().Be(date);
 	    }
 
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.DomainTest.Time
 		{
 			var date = new DateOnly(2015, 2, 13);
 			var json = new NewtonsoftJsonSerializer().SerializeObject(date);
-			var deserialized = new NewtonsoftJsonDeserializer().DeserializeObject<Dictionary<string, object>>(json);
+			var deserialized = new NewtonsoftJsonSerializer().DeserializeObject<Dictionary<string, object>>(json);
 			deserialized.Should().Have.Count.EqualTo(1);
 		}
 

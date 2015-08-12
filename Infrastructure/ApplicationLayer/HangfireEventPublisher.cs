@@ -9,10 +9,10 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 	public class HangfireEventPublisher : IHangfireEventPublisher
 	{
 		private readonly IHangfireEventClient _client;
-		private readonly IJsonSerializer _serializer;
+		private readonly IJsonEventSerializer _serializer;
 		private readonly IResolveEventHandlers _resolveEventHandlers;
 
-		public HangfireEventPublisher(IHangfireEventClient client, IJsonSerializer serializer, IResolveEventHandlers resolveEventHandlers)
+		public HangfireEventPublisher(IHangfireEventClient client, IJsonEventSerializer serializer, IResolveEventHandlers resolveEventHandlers)
 		{
 			_client = client;
 			_serializer = serializer;
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			foreach (var @event in events)
 			{
 				var type = @event.GetType();
-				var serialized = _serializer.SerializeObject(@event);
+				var serialized = _serializer.SerializeEvent(@event);
 				var handlers = _resolveEventHandlers.ResolveHandlersForEvent(@event).OfType<IRunOnHangfire>();
 
 				foreach (var handler in handlers)

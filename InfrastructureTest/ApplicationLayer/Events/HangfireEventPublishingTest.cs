@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		public FakeHangfireEventClient JobClient;
 		public IEventPublisher Target;
 		public IJsonSerializer Serializer;
+		public IJsonDeserializer Deserializer;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -46,7 +47,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		{
 			Target.Publish(new HangfireTestEvent());
 
-			JobClient.SerializedEvent.Should().Be.EqualTo(Serializer.SerializeObject(new Event()));
+			JobClient.SerializedEvent.Should().Be.EqualTo(Serializer.SerializeObject(new HangfireTestEvent()));
 		}
 
 		[Test]

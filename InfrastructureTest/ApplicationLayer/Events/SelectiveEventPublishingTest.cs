@@ -23,8 +23,8 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble(new FakeHangfireEventClient()).For<IHangfireEventClient>();
-			system.UseTestDouble(new FakeServiceBusSender()).For<IServiceBusSender>();
+			system.UseTestDouble<FakeHangfireEventClient>().For<IHangfireEventClient>();
+			system.UseTestDouble<FakeServiceBusSender>().For<IServiceBusSender>();
 			
 			system.AddService<HangfireEventHandler>();
 			system.AddService<BusEventHandler>();

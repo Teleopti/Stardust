@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.ShareCalendar
         [Test]
         public void ShouldTransformCalendar()
         {
-            var target = new CalendarTransformer(new NewtonsoftJsonDeserializer());
+            var target = new CalendarTransformer(new NewtonsoftJsonSerializer());
             var result = target.Transform(new[]
             {
                 new PersonScheduleDayReadModel
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.ShareCalendar
         [Test]
         public void ShouldTransformCalendarWithoutShift()
         {
-            var target = new CalendarTransformer(new NewtonsoftJsonDeserializer());
+            var target = new CalendarTransformer(new NewtonsoftJsonSerializer());
             var result = target.Transform(new[]
             {
                 new PersonScheduleDayReadModel
@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.ShareCalendar
         [Test]
         public void ShouldTransformCalendarWithoutModel()
         {
-            var target = new CalendarTransformer(new NewtonsoftJsonDeserializer());
+            var target = new CalendarTransformer(new NewtonsoftJsonSerializer());
             var result = target.Transform(new[]
             {
                 new PersonScheduleDayReadModel

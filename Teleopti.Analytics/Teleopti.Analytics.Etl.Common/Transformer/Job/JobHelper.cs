@@ -28,7 +28,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 				ConfigurationManager.AppSettings["MessageBroker"],
 				new IConnectionKeepAliveStrategy[] { },
 				null,
-				new NewtonsoftJsonSerializer(),new NewtonsoftJsonDeserializer());
+				new NewtonsoftJsonSerializer(),new NewtonsoftJsonSerializer());
 			_messageSender = MessageBrokerContainerDontUse.Sender();
 			_messageClient = MessageBrokerContainerDontUse.SignalRClient();
 		}
