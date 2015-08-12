@@ -119,7 +119,7 @@
 
 		function getSelectedTeams(node, teams) {
 
-			if (node.NumberOfAgents && node.NumberOfAgents > 0 && node.selected) {
+			if (vm.isTeam(node) && node.selected) {
 				teams.push(node.Id);
 			}
 
