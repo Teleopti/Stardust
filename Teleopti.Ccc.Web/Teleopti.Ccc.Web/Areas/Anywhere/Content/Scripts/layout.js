@@ -84,6 +84,7 @@ define([
 
 			_fixBootstrapDropdownForMobileDevices();
 		});
+
 		menu.CurrentBusinessUnitId(routeInfo.buid);
 		menu.CurrentGroupId(routeInfo.id);
 		menu.CurrentDate(routeInfo.date);
@@ -160,6 +161,11 @@ define([
 			new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + guidRegex + ')/(' + guidRegex + ')/(' + dateRegex + ')$', "i"),
 			function (view, buid, groupid, personid, date) {
 				_displayView({ view: view, buid: buid, groupid: groupid, personid: personid, date: date });
+			});
+		crossroads.addRoute(
+			new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + guidRegex + ')/(' + guidRegex + ')$', "i"),
+			function (view, buid, groupid, personid) {
+				_displayView({ view: view, buid: buid, groupid: groupid, personid: personid });
 			});
 		crossroads.addRoute(
 			new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + guidRegex + ')$', "i"),

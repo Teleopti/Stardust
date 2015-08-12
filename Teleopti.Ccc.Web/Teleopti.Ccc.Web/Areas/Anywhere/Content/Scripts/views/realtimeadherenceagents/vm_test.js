@@ -256,7 +256,7 @@
                     }
                 ]);
 
-                var expectedUrl = "#teamschedule/buId/teamId/personId/" + moment().format("YYYYMMDD");
+                var expectedUrl = "#teamschedule/buId/teamId/personId";
                 assert.match(vm.Agents()[0].ScheduleChangeUrl(), expectedUrl);
             },
 
@@ -278,7 +278,7 @@
                     }
                 ]);
 
-                var expectedUrl = "#teamschedule/buId/teamId/personId/" + moment().format("YYYYMMDD");
+                var expectedUrl = "#teamschedule/buId/teamId/personId";
                 assert.match(vm.Agents()[0].ScheduleChangeUrl(), expectedUrl);
             },
 
@@ -299,7 +299,7 @@
                 this.clock.tick(24 * 60 * 60 * 1000);
                 vm.refreshAlarmTime();
 
-                var expectedUrl = "#teamschedule/buId/teamId/personId/20150807";
+                var expectedUrl = "#teamschedule/buId/teamId/personId";
                 assert.match(vm.Agents()[0].ScheduleChangeUrl(), expectedUrl);
 
 

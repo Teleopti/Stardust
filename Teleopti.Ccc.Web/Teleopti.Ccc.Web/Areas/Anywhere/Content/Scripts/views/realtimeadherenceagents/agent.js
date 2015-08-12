@@ -82,7 +82,7 @@
 	        };
 
             that.refreshAlarmTime = function () {
-                that.ScheduleChangeUrl(navigation.UrlForChangingSchedule(that.BusinessUnitId, that.TeamId, that.PersonId, moment()));
+                that.ScheduleChangeUrl(navigation.UrlForChangingSchedule(that.BusinessUnitId, that.TeamId, that.PersonId));
                 if (!that.EnteredCurrentAlarm()) return;
                 var duration = moment.duration(((new Date).getTime() - moment.utc(that.EnteredCurrentAlarm())));
                 if (that.Alarm() === '') that.AlarmTime('');
