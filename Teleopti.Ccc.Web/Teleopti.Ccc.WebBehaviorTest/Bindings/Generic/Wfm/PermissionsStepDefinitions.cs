@@ -18,13 +18,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[Then(@"I should see a role '(.*)' in the list")]
 		public void ThenIShouldSeeARoleInTheList(string p0)
 		{
-			Browser.Interactions.AssertAnyContains(".wfm-list", p0);
+			Browser.Interactions.AssertAnyContains(".wfm-list li", p0);
 		}
 
 		[When(@"I select a role '(.*)'")]
 		public void WhenISelectARole(string p0)
 		{
-			Browser.Interactions.ClickContaining(".wfm-list", p0);
+			Browser.Interactions.ClickContaining(".wfm-list li", p0);
 		}
 
 		[When(@"I select a permission called '(.*)'")]

@@ -10,6 +10,7 @@
             $scope.rolesFunctionsService = RolesFunctionsService;
             $scope.selectedRole = $scope.rolesService.selectedRole;
             $scope.functionsDisplayed = [];
+            var functionNodes = [];
 
             $scope.$watch(function () { return Roles.selectedRole; },
                 function (newSelectedRole) {
@@ -24,54 +25,51 @@
                         $scope.functionsDisplayed = rolesFunctionsData;
                     }
             );
+  
             var traverseNodes = function (node) {
                 for (var i = 0; i < node.length; i++) {
                     if (node[i].ChildFunctions.length === 0)
-                        $scope.deselecteNode(node[i]);
+                        node[i].selected = false; 
                     else {
-                        $scope.deselecteNode(node[i]);
-                        $scope.loopAround(node[i]);
+                        node[i].selected = false;
+                        traverseNodes(node[i].ChildFunctions);
+                    }
+                }
+
+            }
+            var toggleParentNode = function (node) {
+                functionNodes.push(node.$modelValue.FunctionId);
+                if (node.$nodeScope.$parentNodeScope !== null) {
+                    var parent = node.$nodeScope.$parentNodeScope;
+                    while (parent !== null) {
+                        if (!parent.$modelValue.selected) {
+                            parent.$modelValue.selected = true;
+                            functionNodes.push(parent.$modelValue.FunctionId);
+                        }
+                        parent = parent.$parentNodeScope;
                     }
                 }
                 
             }
+    
             $scope.toggleFunctionForRole = function (node) {
                 
                 if ($scope.selectedRole.BuiltIn === false) {
                     var functionNode = node.$modelValue;
-                    $scope.deselecteNode = function (childNode) {
-                        childNode.selected = false;
-                    }
+                    
                     if (functionNode.selected) {
                         RolesFunctionsService.unselectFunction(functionNode.FunctionId, $scope.selectedRole).then(function () {
                             functionNode.selected = false;
-                            
-                            $scope.loopAround = function (a) {
-                                var childs = a.ChildFunctions;
-                                traverseNodes(childs);
-
-                            }
-                            var rootNode = node.$nodeScope.$modelValue.ChildFunctions;
-                            traverseNodes(rootNode);
+                            traverseNodes(functionNode.ChildFunctions);
                             increaseParentNumberOfSelectedNodes(node);
                         });
                     } else {
-                        var nodes = [];
                         functionNode.selected = true;
-                        nodes.push(functionNode.FunctionId);
                         decreaseParentNumberOfSelectedNodes(node);
-                        if (node.$nodeScope.$parentNodeScope !== null) {
-                            var parent = node.$nodeScope.$parentNodeScope;
-                            while (parent !== null) {
-                                if (!parent.$modelValue.selected) {
-                                    nodes.push(parent.$modelValue.FunctionId);
-                                    parent.$modelValue.selected = true;
-                                }
-                                parent = parent.$parentNodeScope;
-                            }
-                        }
-                        RolesFunctionsService.selectFunction(nodes, $scope.selectedRole);
+                        toggleParentNode(node);
+                        RolesFunctionsService.selectFunction(functionNodes, $scope.selectedRole);
                     }
+
 
                 }
     
