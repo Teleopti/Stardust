@@ -1,5 +1,5 @@
 ﻿'use strict';
-describe('ForecastingCtrl', function () {
+describe('ForecastingStartCtrl', function () {
 	var $q,
 	    $rootScope,
 	    $httpBackend;
@@ -18,7 +18,7 @@ describe('ForecastingCtrl', function () {
 		var scope = $rootScope.$new();
 
 		expect(scope.period).toBe(undefined);
-		$controller('ForecastingCtrl', { $scope: scope, $state: {} });
+		$controller('ForecastingStartCtrl', { $scope: scope, $state: {} });
 		expect(scope.period.startDate.toString()).toBe(moment().utc().add(1, 'months').startOf('month').toDate().toString());
 		expect(scope.period.endDate.toString()).toBe(moment().utc().add(2, 'months').startOf('month').toDate().toString());
 	}));

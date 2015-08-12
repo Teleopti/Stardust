@@ -1245,6 +1245,8 @@
     <Content Include="WFM\html\right-sidenav.html" />
     <Content Include="WFM\js\forecasting\forecasting.intraday.controller.js" />
     <Content Include="WFM\js\forecasting\forecasting.method.controller.js" />
+    <Content Include="WFM\js\forecasting\forecasting.runall.controller.js" />
+    <Content Include="WFM\js\forecasting\forecasting.run.controller.js" />
     <Content Include="WFM\js\forecasting\_modules.js" />
     <Content Include="WFM\js\global\help.controller.js" />
     <Content Include="Content\jalaali-calendar-datepicker\moment-datepicker-jalaali-ext.js" />
@@ -1344,7 +1346,7 @@
     <Content Include="WFM\html\outbound\campaign-edit.html" />
     <Content Include="WFM\html\outbound\outbound.html" />
     <Content Include="WFM\html\people\people.html" />
-    <Content Include="WFM\js\forecasting\forecasting.controller.js" />
+    <Content Include="WFM\js\forecasting\forecasting.start.controller.js" />
     <Content Include="WFM\js\forecasting\forecasting.service.js" />
     <Content Include="WFM\js\forecasting\forecasting.target.controller.js" />
     <Content Include="WFM\js\global\areas.controller.js" />
