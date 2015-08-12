@@ -23,11 +23,36 @@
             });
     	});
 
-		$scope.getGraphData=function(campaign) {
-			outboundChartService.getCampaignVisualization(campaign.Id, function (data, translations) {
+		$scope.getGraphData = function(campaign) {
+			outboundChartService.getCampaignVisualization(campaign.Id, function(data, translations) {
 				campaign.graphData = data;
 				campaign.translations = translations;
 			});
+		}
+
+		$scope.showManualPlanContainer = function (campaign) {
+			campaign.showManualPlanContainer = true;
+			//campaign.manualPlanSwitch = true;
+		}
+
+		$scope.delThisDate = function(campaign,d) {
+			var index = campaign.manualPlan.selectedDates.indexOf(d);
+			campaign.manualPlan.selectedDates.splice(index, 1);
+		}
+
+		$scope.addManualPlan = function (campaign) {
+			campaign.showManualPlanContainer = false;
+			campaign.manualPlan.Id = campaign.Id;
+			console.log(campaign.manualPlan);
+			//outboundService.sendManualPlan(campaign.manualPlan, function(campaign) {
+			//	outboundNotificationService.notifyManualPlanModifySuccess(angular.copy(campaign));
+			//  updateChartPlanDate
+			//}, function(error) {
+			//	outboundNotificationService.notifyManualPlanModifyFailure(error);
+			//});
+			campaign.manualPlan = {
+				selectedDates:[]
+			};
 		}
 
 		$scope.isOverStaffing = function(d) {
@@ -37,10 +62,6 @@
 			return result;
 
 		};
-
-    	$scope.hidePlannedAnalyzeButton = function (d) {
-		   return ($filter('showPhase')(d) == 'Planned') ? false : true;
-    	};
 
     	$scope.hideWhenDone=function(d) {
     		return ($filter('showPhase')(d) == 'Done') ? true : false;

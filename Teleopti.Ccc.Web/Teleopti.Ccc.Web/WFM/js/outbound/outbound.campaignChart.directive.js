@@ -6,7 +6,7 @@
 	function campaignChart($filter) {
 		return {
 			controller: ['$scope', '$element', campaignChartCtrl],
-			template: '<md-switch class="campaign-chart-switch" ng-click="onToggleViewScheduleDiff()" >Analyze Schedule</md-switch><div id="Chart_{{campaign.Id}}"></div>',
+			template: '<md-switch class="campaign-chart-switch" ng-click="onToggleViewScheduleDiff()" ng-if="hidePlannedAnalyzeButton(campaign.Status)">Analyze Schedule</md-switch><div id="Chart_{{campaign.Id}}"></div>',
 			scope: {
 				'campaign': '=',
 				'graphData': '=',
@@ -21,16 +21,22 @@
 			$scope.viewScheduleDiff = false;
 			
 			this.toggleViewScheduleDiff = toggleViewScheduleDiff;
-			this.init = init;						
+			this.init = init;
+
+			$scope.campaign.manualPlan = {};
+
+			$scope.campaign.manualPlan.selectedDates = [];
 
 			function selectedDate(d) {
-				var index = selectedDates.indexOf(d);
+				//if ($scope.campaign.manualPlan.selectedDates.length<=0) return;
+				var index = $scope.campaign.manualPlan.selectedDates.indexOf(d);
 				if (index < 0) {
-					selectedDates.push(d);
+					$scope.campaign.manualPlan.selectedDates.push(d);
 				} else {
-					selectedDates.splice(index, 1);
+					$scope.campaign.manualPlan.selectedDates.splice(index, 1);
 				}
-				return selectedDates;
+				$scope.$apply();
+				return $scope.campaign.manualPlan.selectedDates;
 			}
 
 			function init() {
@@ -122,7 +128,9 @@
 					dataColor[labels[name]] = colorMap[name];
 				}
 				return dataColor;
-			}			
+			}
+
+			$scope.campaign.manualPlanSwitch = false;
 
 			function _setChartOption_data() {
 				var dataOption = {
@@ -131,14 +139,20 @@
 					groups: [getDataGroupsLabel(true), getDataGroupsLabel(false)],
 					order: 'null',
 					selection: {
-						enabled: true,
-						grouped: true,
-						draggable: true
+						enabled: true, //$scope.campaign.manualPlanSwitch,
+						grouped: false, //$scope.campaign.manualPlanSwitch,
+						draggable: true //$scope.campaign.manualPlanSwitch
 					},
 					columns: [$scope.graphData.dates].concat(getDataGroupsData($scope.viewScheduleDiff)),
 					//[ToDo Xueli]
-					//onselected: onSelected,
-					//onunselected: onUnselected,
+					onselected: function(d) {
+						var selected = new moment(d.x).format('YYYY-MM-DD');
+						selectedDate(selected);
+					},
+					onunselected: function (d) {
+						var unSelected = new moment(d.x).format('YYYY-MM-DD');
+						selectedDate(unSelected);
+					},
 					colors: _setChartOption_color(),
 					types: {}
 				};
@@ -227,6 +241,9 @@
 				scope.viewScheduleDiff = !scope.viewScheduleDiff;
 				ctrl.toggleViewScheduleDiff();
 			}
+			scope.hidePlannedAnalyzeButton = function (d) {
+				return ($filter('showPhase')(d) == 'Planned') ? false : true;
+			};
 		}
 
 	};

@@ -1,6 +1,31 @@
 ﻿@charset "UTF-8";
 
 .outbound {
+    .manual-plan-input-unit{
+	    margin-top:10px;
+	}
+    .date-label-close-fix:before{
+	    font-size:12px !important;
+	}
+	.date-label-close-fix{
+	    position:relative;
+		right:-3px;
+		cursor:pointer;
+	}
+    .date-label{
+	    padding:3px 10px;
+		background-color:#09F;
+		color:#fff;
+		float:left;
+		margin-right:5px;
+		border-radius:50px;
+		margin-top:1px;
+	}
+    .manual-plan-container{
+	    text-align:left;
+		padding-left:65px;
+		margin-top:10px;
+	}
 	.campaign-chart-switch{
 	    position:absolute;
 		top:-58px;

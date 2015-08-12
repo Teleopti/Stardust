@@ -57,13 +57,6 @@ describe('OutboundSummaryCtrl', function () {
 
 	});
 
-	it('should hide the analyze button, when the campaign is at phase planned', function () {
-		var test = setUpTarget();
-		expect(test.scope.hidePlannedAnalyzeButton(1)==false);
-		expect(test.scope.hidePlannedAnalyzeButton(2)==true);
-
-	});
-
 	it('should hide warning sign, when the campaign is at phase done', function () {
 		var test = setUpTarget();
 		expect(test.scope.hideWhenDone(8)==true);
