@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
-using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
@@ -15,7 +14,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 {
@@ -32,7 +30,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 		private readonly ITeamGamificationSettingRepository _teamGamificationSettingRepo;
 		private readonly ICurrentTenantUser _currentTenantUser;
 		private readonly IUserCulture _userCulture;
-        private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 
 		public PortalViewModelFactory(IPermissionProvider permissionProvider,
 			ILicenseActivatorProvider licenseActivatorProviderProvider,
@@ -42,7 +39,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			IToggleManager toggleManager, IPersonNameProvider personNameProvider,
 			ITeamGamificationSettingRepository teamGamificationSettingReop,
 			ICurrentTenantUser currentTenantUser,
-			IUserCulture userCulture, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory)
+			IUserCulture userCulture)
 		{
 			_permissionProvider = permissionProvider;
 			_licenseActivatorProvider = licenseActivatorProviderProvider;
@@ -55,12 +52,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			_teamGamificationSettingRepo = teamGamificationSettingReop;
 			_currentTenantUser = currentTenantUser;
 			_userCulture = userCulture;
-		    _currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 		}
 
 		public PortalViewModel CreatePortalViewModel()
 		{
-			var navigationItems = new List<NavigationItem> { createWeekScheduleNavigationItem() };
+			var navigationItems = new List<NavigationItem> {createWeekScheduleNavigationItem()};
 			var reportsItems = _reportsNavigationProvider.GetNavigationItems();
 			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TeamSchedule))
 			{
@@ -70,14 +66,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			{
 				navigationItems.Add(createStudentAvailabilityNavigationItem());
 			}
-			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.StandardPreferences) ||
+			if (
+				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.StandardPreferences) ||
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb))
 			{
 				navigationItems.Add(createPreferenceNavigationItem());
 			}
 			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests) ||
-				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb) ||
-				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb))
+			    _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb) ||
+			    _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb))
 			{
 				navigationItems.Add(createRequestsNavigationItem());
 			}
@@ -105,37 +102,35 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 				ITeamGamificationSetting teamSetting = null;
 				if (_loggedOnUser.CurrentUser().MyTeam(DateOnly.Today) != null)
 				{
-					teamSetting = _teamGamificationSettingRepo.FindTeamGamificationSettingsByTeam(_loggedOnUser.CurrentUser().MyTeam(DateOnly.Today));
+					teamSetting =
+						_teamGamificationSettingRepo.FindTeamGamificationSettingsByTeam(_loggedOnUser.CurrentUser().MyTeam(DateOnly.Today));
 				}
 				badgeFeatureEnabled = (teamSetting != null);
 			}
-			
+
 			var showBadge = badgeToggleEnabled && badgeFeatureEnabled && hasBadgePermission;
 			var culture = _userCulture == null ? CultureInfo.InvariantCulture : _userCulture.GetCulture();
-             var dataSource = _currentUnitOfWorkFactory.Current().Name;
 
-		    return new PortalViewModel
-		    {
-		        ReportNavigationItems = reportsList,
-		        NavigationItems = navigationItems,
-		        CustomerName = customerName,
-		        CurrentLogonAgentName = _personNameProvider.BuildNameFromSetting(_loggedOnUser.CurrentUser().Name),
-		        ShowChangePassword = showChangePassword(),
-		        HasAsmPermission =
-		            _permissionProvider.HasApplicationFunctionPermission(
-		                DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger),
-		        HasAsmLicense = DefinedLicenseDataFactory.GetLicenseActivator(dataSource).EnabledLicenseOptionPaths.Contains(
-		            DefinedLicenseOptionPaths.TeleoptiCccAgentScheduleMessenger),
-		        ShowMeridian = CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern.Contains("t"),
-		        UseJalaaliCalendar = CultureInfo.CurrentCulture.IetfLanguageTag == "fa-IR",
-		        DateFormat = culture.DateTimeFormat.ShortDatePattern.ToUpper(),
-		        TimeFormat = culture.DateTimeFormat.ShortTimePattern,
-		        AMDesignator = culture.DateTimeFormat.AMDesignator,
-		        PMDesignator = culture.DateTimeFormat.PMDesignator,
-		        Badges = showBadge ? _badgeProvider.GetBadges() : null,
+			return new PortalViewModel
+			{
+				ReportNavigationItems = reportsList,
+				NavigationItems = navigationItems,
+				CustomerName = customerName,
+				CurrentLogonAgentName = _personNameProvider.BuildNameFromSetting(_loggedOnUser.CurrentUser().Name),
+				ShowChangePassword = showChangePassword(),
+				HasAsmPermission =
+					_permissionProvider.HasApplicationFunctionPermission(
+						DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger),
+				ShowMeridian = CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern.Contains("t"),
+				UseJalaaliCalendar = CultureInfo.CurrentCulture.IetfLanguageTag == "fa-IR",
+				DateFormat = culture.DateTimeFormat.ShortDatePattern.ToUpper(),
+				TimeFormat = culture.DateTimeFormat.ShortTimePattern,
+				AMDesignator = culture.DateTimeFormat.AMDesignator,
+				PMDesignator = culture.DateTimeFormat.PMDesignator,
+				Badges = showBadge ? _badgeProvider.GetBadges() : null,
 
-		        ShowBadge = showBadge
-		    };
+				ShowBadge = showBadge
+			};
 		}
 
 		private bool showChangePassword()
@@ -148,21 +143,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 		private static NavigationItem createTeamScheduleNavigationItem()
 		{
 			return new NavigationItem.TeamScheduleNavigationItem
-						{
-							Action = "Index",
-							Controller = "TeamSchedule",
-							Title = Resources.TeamSchedule
-						};
+			{
+				Action = "Index",
+				Controller = "TeamSchedule",
+				Title = Resources.TeamSchedule
+			};
 		}
 
 		private NavigationItem createRequestsNavigationItem()
 		{
 			return new NavigationItem
-					{
-						Action = "Index",
-						Controller = "Requests",
-						Title = Resources.Requests
-					};
+			{
+				Action = "Index",
+				Controller = "Requests",
+				Title = Resources.Requests
+			};
 		}
 
 		private static NavigationItem createMessageNavigationItem(int unreadMessageCount)
@@ -181,31 +176,31 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 		private static NavigationItem createPreferenceNavigationItem()
 		{
 			return new NavigationItem
-						{
-							Action = "Index",
-							Controller = "Preference",
-							Title = Resources.Preferences,
-						};
+			{
+				Action = "Index",
+				Controller = "Preference",
+				Title = Resources.Preferences,
+			};
 		}
 
 		private static NavigationItem createStudentAvailabilityNavigationItem()
 		{
 			return new NavigationItem
-					{
-						Action = "Index",
-						Controller = "Availability",
-						Title = Resources.Availability,
-					};
+			{
+				Action = "Index",
+				Controller = "Availability",
+				Title = Resources.Availability,
+			};
 		}
 
 		private static NavigationItem createWeekScheduleNavigationItem()
 		{
 			return new NavigationItem
-					{
-						Action = "Week",
-						Controller = "Schedule",
-						Title = Resources.Schedule
-					};
+			{
+				Action = "Week",
+				Controller = "Schedule",
+				Title = Resources.Schedule
+			};
 		}
 	}
 }

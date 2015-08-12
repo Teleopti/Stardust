@@ -11,7 +11,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 		public string CustomerName { get; set; }
 		public bool ShowChangePassword { get; set; }
 		public bool HasAsmPermission { get; set; }
-        public bool HasAsmLicense { get; set; }
 		public bool ShowMeridian { get; set; }
 		public bool UseJalaaliCalendar { get; set; }
 		public string DateFormat { get; set; }
@@ -52,6 +51,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 		public bool IsDivider { get; set; }
 		public Guid Id { get; set; }
 	}
+
 	public class PreferenceOption : Option, IPreferenceOption
 	{
 		public bool Extended { get; set; }
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 		public string Text { get; set; }
 		public string Color { get; set; }
 	}
-	
+
 	public interface IOption
 	{
 		string Value { get; }

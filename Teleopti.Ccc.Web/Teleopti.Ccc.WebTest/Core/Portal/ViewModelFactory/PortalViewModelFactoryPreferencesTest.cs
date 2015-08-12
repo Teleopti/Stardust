@@ -31,13 +31,11 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		private ILoggedOnUser _loggedOnUser;
 		private IUserCulture _userCulture;
 
-        private ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
-
 		[SetUp]
 		public void Setup()
 		{
 			_loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			_loggedOnUser.Stub(x => x.CurrentUser()).Return(new Person { Name = new Name() });
+			_loggedOnUser.Stub(x => x.CurrentUser()).Return(new Person {Name = new Name()});
 
 			var culture = CultureInfo.GetCultureInfo("sv-SE");
 			_userCulture = MockRepository.GenerateMock<IUserCulture>();
@@ -45,16 +43,6 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 
 			_personNameProvider = MockRepository.GenerateMock<IPersonNameProvider>();
 			_personNameProvider.Stub(x => x.BuildNameFromSetting(_loggedOnUser.CurrentUser().Name)).Return("A B");
-
-            _currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
-            var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-            _currentUnitOfWorkFactory.Stub(x => x.Current())
-                .Return(unitOfWorkFactory);
-            unitOfWorkFactory.Stub(x => x.Name).Return("for test");
-
-            DefinedLicenseDataFactory.SetLicenseActivator(_currentUnitOfWorkFactory.Current().Name, new LicenseActivator("", DateTime.Today.AddDays(100), 1000, 1000,
-                                                                              LicenseType.Agent, new Percent(.10), null, null));
-
 		}
 
 		[Test]
@@ -65,8 +53,8 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
 				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
 				MockRepository.GenerateMock<IToggleManager>(), _personNameProvider,
-				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), MockRepository.GenerateStub<ICurrentTenantUser>(), _userCulture,
-                _currentUnitOfWorkFactory);
+				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), MockRepository.GenerateStub<ICurrentTenantUser>(),
+				_userCulture);
 
 			var result = target.CreatePortalViewModel();
 
@@ -81,8 +69,8 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
 				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
 				MockRepository.GenerateMock<IToggleManager>(), _personNameProvider,
-				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), MockRepository.GenerateStub<ICurrentTenantUser>(), _userCulture,
-                _currentUnitOfWorkFactory);
+				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), MockRepository.GenerateStub<ICurrentTenantUser>(),
+				_userCulture);
 
 			var result = target.CreatePortalViewModel();
 
@@ -97,8 +85,9 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
 				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
 				MockRepository.GenerateMock<IToggleManager>(), _personNameProvider,
-				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), MockRepository.GenerateStub<ICurrentTenantUser>(), _userCulture,
-                _currentUnitOfWorkFactory);
+				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), MockRepository.GenerateStub<ICurrentTenantUser>(),
+				_userCulture);
+
 
 			var result = target.CreatePortalViewModel();
 
@@ -108,10 +97,17 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		private IPermissionProvider NoPermissionToPreferences()
 		{
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(Arg<string>.Matches(new PredicateConstraint<string>(s => s != DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb &&
-																																	 s != DefinedRaptorApplicationFunctionPaths.StandardPreferences)))).Return(true);
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb)).Return(false);
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.StandardPreferences)).Return(false);
+			permissionProvider.Stub(
+				x =>
+					x.HasApplicationFunctionPermission(
+						Arg<string>.Matches(
+							new PredicateConstraint<string>(s => s != DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb &&
+							                                     s != DefinedRaptorApplicationFunctionPaths.StandardPreferences))))
+				.Return(true);
+			permissionProvider.Stub(
+				x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb)).Return(false);
+			permissionProvider.Stub(
+				x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.StandardPreferences)).Return(false);
 
 			return permissionProvider;
 		}
@@ -119,16 +115,24 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		private IPermissionProvider NoPermissionToStandardPreferences()
 		{
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(Arg<string>.Is.NotEqual(DefinedRaptorApplicationFunctionPaths.StandardPreferences))).Return(true);
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.StandardPreferences)).Return(false);
+			permissionProvider.Stub(
+				x =>
+					x.HasApplicationFunctionPermission(
+						Arg<string>.Is.NotEqual(DefinedRaptorApplicationFunctionPaths.StandardPreferences))).Return(true);
+			permissionProvider.Stub(
+				x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.StandardPreferences)).Return(false);
 			return permissionProvider;
 		}
 
 		private IPermissionProvider NoPermissionToExtendedPreferences()
 		{
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(Arg<string>.Is.NotEqual(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb))).Return(true);
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb)).Return(false);
+			permissionProvider.Stub(
+				x =>
+					x.HasApplicationFunctionPermission(
+						Arg<string>.Is.NotEqual(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb))).Return(true);
+			permissionProvider.Stub(
+				x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb)).Return(false);
 			return permissionProvider;
 		}
 	}

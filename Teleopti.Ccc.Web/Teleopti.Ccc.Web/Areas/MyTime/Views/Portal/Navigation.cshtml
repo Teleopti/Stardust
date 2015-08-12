@@ -67,19 +67,19 @@
 									<li>
 										<div class="badge-detail">
 											@{
-									var badgeTypeName = string.Empty;
-									switch (badge.BadgeType)
-									{
-										case BadgeType.AnsweredCalls:
-											badgeTypeName = Resources.AnsweredCalls;
-											break;
-										case BadgeType.AverageHandlingTime:
-											badgeTypeName = Resources.AverageHandlingTime;
-											break;
-										case BadgeType.Adherence:
-											badgeTypeName = Resources.Adherence;
-											break;
-									}
+												var badgeTypeName = string.Empty;
+												switch (badge.BadgeType)
+												{
+													case BadgeType.AnsweredCalls:
+														badgeTypeName = Resources.AnsweredCalls;
+														break;
+													case BadgeType.AverageHandlingTime:
+														badgeTypeName = Resources.AverageHandlingTime;
+														break;
+													case BadgeType.Adherence:
+														badgeTypeName = Resources.Adherence;
+														break;
+												}
 											}
 											<div class="badge-type">@badgeTypeName</div>
 											<span class="gold-badge">
@@ -112,13 +112,13 @@
 						{
 							<li><a href="#" id="change-your-password" data-mytime-action="Settings/Password">@Resources.ChangeYourPassword</a></li>
 						}
-						@if (Model.HasAsmLicense && Model.HasAsmPermission)
+						@if (Model.HasAsmPermission)
 						{
 							<li class="divider"></li>
 							<li><a href="#" id="asm-link">@Resources.OpenASM</a></li>
 						}
 						<li class="divider"></li>
-						<li>@Html.ActionLink(@Resources.SignOut, "SignOut", "Authentication", new { area = "Start" }, new { id = "signout" })</li>
+						<li>@Html.ActionLink(@Resources.SignOut, "SignOut", "Authentication", new {area = "Start"}, new {id = "signout"})</li>
 					</ul>
 				</li>
 			</ul>

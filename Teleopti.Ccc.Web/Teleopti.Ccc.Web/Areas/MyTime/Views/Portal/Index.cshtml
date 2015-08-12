@@ -12,7 +12,7 @@
 					baseUrl: '@Url.Content("~/MyTime/")',
 					startBaseUrl: '@Url.Content("~/Start/")'
 				});
-			@if(Model.HasAsmLicense && Model.HasAsmPermission)
+			@if( Model.HasAsmPermission)
 			{
 				<text>
 				Teleopti.MyTimeWeb.AlertActivity.StartAlert({
@@ -44,18 +44,18 @@
 	@Html.Partial("Navigation", Model)
 </header>
 <section id="page" class="fixed-non-responsive">
-<article id="body">
-	<div id="body-inner">
-	</div>
-	<div class="mobile-foot" id="body-bottom">
-		<div>
-			<span id="licensed-to-label"><small>@Resources.LicensedToColon</small></span>
-			<span id="licensed-to-text"><small>@Model.CustomerName</small></span>
+	<article id="body">
+		<div id="body-inner">
 		</div>
-	</div>
-</article>
+		<div class="mobile-foot" id="body-bottom">
+			<div>
+				<span id="licensed-to-label"><small>@Resources.LicensedToColon</small></span>
+				<span id="licensed-to-text"><small>@Model.CustomerName</small></span>
+			</div>
+		</div>
+	</article>
 	<div id="loading">
-		<img src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader.gif")" alt="Loading..." />
+		<img src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader.gif")" alt="Loading..."/>
 	</div>
-	<img id="loading-small-gray-blue" src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")" alt="..." class="template" />
+	<img id="loading-small-gray-blue" src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")" alt="..." class="template"/>
 </section>

@@ -18,7 +18,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly ILayoutBaseViewModelFactory _layoutBaseViewModelFactory;
 		private readonly IGlobalSettingDataRepository _globalSettingDataRepository;
 
-		public AsmController(IAsmViewModelFactory asmModelFactory, ILayoutBaseViewModelFactory layoutBaseViewModelFactory, IGlobalSettingDataRepository globalSettingDataRepository)
+		public AsmController(IAsmViewModelFactory asmModelFactory, ILayoutBaseViewModelFactory layoutBaseViewModelFactory,
+			IGlobalSettingDataRepository globalSettingDataRepository)
 		{
 			_asmModelFactory = asmModelFactory;
 			_layoutBaseViewModelFactory = layoutBaseViewModelFactory;
@@ -31,8 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			layoutViewModel.CultureSpecific.Rtl = false; //for now - asm is always displayed "western style" for now
 			ViewBag.LayoutBase = layoutViewModel;
 
-		    ViewBag.HasAsmPermission = _asmModelFactory.HasAsmPermission();
-		    ViewBag.HasAsmLicense = _asmModelFactory.HasAsmLicense();
+			ViewBag.HasAsmPermission = _asmModelFactory.HasAsmPermission();
 			return View();
 		}
 

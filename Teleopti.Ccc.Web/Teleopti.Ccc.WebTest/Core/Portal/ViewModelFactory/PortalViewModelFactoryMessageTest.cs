@@ -1,17 +1,14 @@
-using System;
 using System.Globalization;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.Toggle;
-using Teleopti.Ccc.Secrets.Licensing;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory;
@@ -19,7 +16,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 {
@@ -29,8 +25,6 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		private IPersonNameProvider _personNameProvider;
 		private ILoggedOnUser _loggedOnUser;
 		private IUserCulture _userCulture;
-
-        private ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 
 		[SetUp]
 		public void Setup()
@@ -45,57 +39,54 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			_personNameProvider = MockRepository.GenerateMock<IPersonNameProvider>();
 			_personNameProvider.Stub(x => x.BuildNameFromSetting(_loggedOnUser.CurrentUser().Name)).Return("A B");
 
-            _currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
-            var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-            _currentUnitOfWorkFactory.Stub(x => x.Current())
-                .Return(unitOfWorkFactory);
-            unitOfWorkFactory.Stub(x => x.Name).Return("for test");
-
-            DefinedLicenseDataFactory.SetLicenseActivator(_currentUnitOfWorkFactory.Current().Name, new LicenseActivator("", DateTime.Today.AddDays(100), 1000, 1000,
-                                                                              LicenseType.Agent, new Percent(.10), null, null));
-
 		}
 
 		[Test]
 		public void ShouldNotHaveMessageNavigationItemIfNotPermission()
 		{
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(Arg<string>.Is.NotEqual(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger))).Return(true);
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger)).Return(false);
+			permissionProvider.Stub(
+				x =>
+					x.HasApplicationFunctionPermission(
+						Arg<string>.Is.NotEqual(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger))).Return(true);
+			permissionProvider.Stub(
+				x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger)).Return(false);
 			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivatorProvider>(),
 				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
 				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
 				MockRepository.GenerateMock<IToggleManager>(),
-				_personNameProvider,MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), MockRepository.GenerateStub<ICurrentTenantUser>(), _userCulture,
-               _currentUnitOfWorkFactory);
+				_personNameProvider, MockRepository.GenerateMock<ITeamGamificationSettingRepository>(),
+				MockRepository.GenerateStub<ICurrentTenantUser>(), _userCulture);
 
 			var result = target.CreatePortalViewModel();
 
 			var message = (from i in result.NavigationItems where i.Controller == "Message" select i).SingleOrDefault();
-            message.Should().Be.Null();
+			message.Should().Be.Null();
 		}
 
-        [Test]
-        public void ShouldPayAttentionToMessageTabDueToUnreadMessages()
-        {
+		[Test]
+		public void ShouldPayAttentionToMessageTabDueToUnreadMessages()
+		{
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			var pushMessageProvider = MockRepository.GenerateMock<IPushMessageProvider>();
 
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger)).Return(true);
+			permissionProvider.Stub(
+				x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger)).Return(true);
 			pushMessageProvider.Stub(x => x.UnreadMessageCount).Return(1);
 
-	        var target = new PortalViewModelFactory(permissionProvider,
-		        MockRepository.GenerateMock<ILicenseActivatorProvider>(), pushMessageProvider,
-				  _loggedOnUser, MockRepository.GenerateMock<IReportsNavigationProvider>(),
+			var target = new PortalViewModelFactory(permissionProvider,
+				MockRepository.GenerateMock<ILicenseActivatorProvider>(), pushMessageProvider,
+				_loggedOnUser, MockRepository.GenerateMock<IReportsNavigationProvider>(),
 				MockRepository.GenerateMock<IBadgeProvider>(),
-		        MockRepository.GenerateMock<IToggleManager>(),
-					_personNameProvider, MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), MockRepository.GenerateStub<ICurrentTenantUser>(), _userCulture,
-                    _currentUnitOfWorkFactory);
+				MockRepository.GenerateMock<IToggleManager>(),
+				_personNameProvider, MockRepository.GenerateMock<ITeamGamificationSettingRepository>(),
+				MockRepository.GenerateStub<ICurrentTenantUser>(), _userCulture);
 
-            var result = target.CreatePortalViewModel();
-			NavigationItem message = (from i in result.NavigationItems where i.Controller == "Message" select i).SingleOrDefault();
+			var result = target.CreatePortalViewModel();
+			NavigationItem message =
+				(from i in result.NavigationItems where i.Controller == "Message" select i).SingleOrDefault();
 			message.PayAttention.Should().Be.True();
-        }
+		}
 
 		[Test]
 		public void ShouldShowNumberOfUnreadMessages()
@@ -103,18 +94,20 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			var pushMessageProvider = MockRepository.GenerateMock<IPushMessageProvider>();
 
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger)).Return(true);
+			permissionProvider.Stub(
+				x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger)).Return(true);
 			pushMessageProvider.Stub(x => x.UnreadMessageCount).Return(1);
 
 			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivatorProvider>(),
 				pushMessageProvider, _loggedOnUser,
 				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
 				MockRepository.GenerateMock<IToggleManager>(),
-				_personNameProvider, MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), MockRepository.GenerateStub<ICurrentTenantUser>(), _userCulture,
-                _currentUnitOfWorkFactory);
+				_personNameProvider, MockRepository.GenerateMock<ITeamGamificationSettingRepository>(),
+				MockRepository.GenerateStub<ICurrentTenantUser>(), _userCulture);
 
 			var result = target.CreatePortalViewModel();
-			NavigationItem message = (from i in result.NavigationItems where i.Controller == "Message" select i).SingleOrDefault();
+			NavigationItem message =
+				(from i in result.NavigationItems where i.Controller == "Message" select i).SingleOrDefault();
 			message.UnreadMessageCount.Should().Be.EqualTo(1);
 		}
 	}

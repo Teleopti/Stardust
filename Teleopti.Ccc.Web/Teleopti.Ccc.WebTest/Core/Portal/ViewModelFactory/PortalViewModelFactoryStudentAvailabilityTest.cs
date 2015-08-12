@@ -29,13 +29,11 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		private ILoggedOnUser _loggedOnUser;
 		private IUserCulture _userCulture;
 
-        private ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
-
 		[SetUp]
 		public void Setup()
 		{
 			_loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			_loggedOnUser.Stub(x => x.CurrentUser()).Return(new Person() { Name = new Name() });
+			_loggedOnUser.Stub(x => x.CurrentUser()).Return(new Person() {Name = new Name()});
 
 			var culture = CultureInfo.GetCultureInfo("sv-SE");
 			_userCulture = MockRepository.GenerateMock<IUserCulture>();
@@ -43,16 +41,6 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 
 			_personNameProvider = MockRepository.GenerateMock<IPersonNameProvider>();
 			_personNameProvider.Stub(x => x.BuildNameFromSetting(_loggedOnUser.CurrentUser().Name)).Return("A B");
-
-            _currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
-            var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-            _currentUnitOfWorkFactory.Stub(x => x.Current())
-                .Return(unitOfWorkFactory);
-            unitOfWorkFactory.Stub(x => x.Name).Return("for test");
-
-            DefinedLicenseDataFactory.SetLicenseActivator(_currentUnitOfWorkFactory.Current().Name, new LicenseActivator("", DateTime.Today.AddDays(100), 1000, 1000,
-                                                                              LicenseType.Agent, new Percent(.10), null, null));
-
 		}
 
 		[Test]
@@ -61,20 +49,22 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			permissionProvider.Stub(
 				x => x.HasApplicationFunctionPermission(
-						Arg<string>.Is.NotEqual(DefinedRaptorApplicationFunctionPaths.StudentAvailability))).Return(true);
+					Arg<string>.Is.NotEqual(DefinedRaptorApplicationFunctionPaths.StudentAvailability))).Return(true);
 			permissionProvider.Stub(
 				x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.StudentAvailability)).Return(false);
 
 			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivatorProvider>(),
-				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser, MockRepository.GenerateMock<IReportsNavigationProvider>(),
+				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
+				MockRepository.GenerateMock<IReportsNavigationProvider>(),
 				MockRepository.GenerateMock<IBadgeProvider>(),
 				MockRepository.GenerateMock<IToggleManager>(), _personNameProvider,
-				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), MockRepository.GenerateStub<ICurrentTenantUser>(), _userCulture,
-                _currentUnitOfWorkFactory);
+				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), MockRepository.GenerateStub<ICurrentTenantUser>(),
+				_userCulture);
 
 			var result = target.CreatePortalViewModel();
 
-			var studentAvailability = (from i in result.NavigationItems where i.Controller == "StudentAvailability" select i).SingleOrDefault();
+			var studentAvailability =
+				(from i in result.NavigationItems where i.Controller == "StudentAvailability" select i).SingleOrDefault();
 			studentAvailability.Should().Be.Null();
 		}
 	}

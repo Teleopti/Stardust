@@ -6,7 +6,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.ViewModelFactory
 	public interface IAsmViewModelFactory
 	{
 		AsmViewModel CreateViewModel(DateTime asmZeroLocal);
-	    bool HasAsmPermission();
-	    bool HasAsmLicense();
+		bool HasAsmPermission();
 	}
 }
