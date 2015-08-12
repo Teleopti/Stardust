@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData;
-using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 {
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		{
 			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
 			var numberOfAgentsQuery = MockRepository.GenerateMock<INumberOfAgentsInSiteReader>();
-			var target = new SitesController(siteRepository, numberOfAgentsQuery,null, null, null);
+			var target = new SitesController(siteRepository, numberOfAgentsQuery,null, null, null,null);
 			var site = new Site("London");
 			site.SetId(Guid.NewGuid());
 			siteRepository.Stub(x => x.LoadAll()).Return(new[] { site });
@@ -37,13 +38,37 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		}
 
 		[Test]
+		public void ShouldGetOnlyPermittedSitesForMyBusinessUnit()
+		{
+			var now = new Now();
+			var site1 = new Site("Permitted");
+			site1.SetId(Guid.NewGuid());
+			var site2 = new Site("NotPermitted");
+			site2.SetId(Guid.NewGuid());
+			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
+			var numberOfAgentsQuery = MockRepository.GenerateMock<INumberOfAgentsInSiteReader>();
+			var personalAvailableDataProvider = MockRepository.GenerateMock<IPersonalAvailableDataProvider>();
+			siteRepository.Stub(x => x.LoadAll()).Return(new[] { site1, site2 });
+			personalAvailableDataProvider.Stub(
+				x => x.AvailableSites(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, now.LocalDateOnly()))
+				.Return(new[] {site1});
+			numberOfAgentsQuery.Stub(x => x.FetchNumberOfAgents(new[] { site1 })).Return(new Dictionary<Guid, int>() { { site1.Id.Value, 0 } });
+			
+			var target = new SitesController(siteRepository, numberOfAgentsQuery, null, null, personalAvailableDataProvider, now);
+			var result = target.Index().Data as IEnumerable<SiteViewModel>;
+			
+			result.Single().Id.Should().Be(site1.Id.Value.ToString());
+			result.Single().Name.Should().Be(site1.Description.Name);
+		}
+
+		[Test]
 		public void ShouldGetNumberOfAgents()
 		{
 			const int expected = 14;
 
 			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
 			var numberOfAgentsQuery = MockRepository.GenerateMock<INumberOfAgentsInSiteReader>();
-			var target = new SitesController(siteRepository, numberOfAgentsQuery, null, null, null);
+			var target = new SitesController(siteRepository, numberOfAgentsQuery, null, null, null,null);
 
 			var site = new Site("London");
 			site.SetId(Guid.NewGuid());
@@ -59,7 +84,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		{
 			var expected = Guid.NewGuid().ToString();
 			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
-			var target = new SitesController(siteRepository, null, null, null, null);
+			var target = new SitesController(siteRepository, null, null, null, null,null);
 			var site = new Site(expected);
 			site.SetId(Guid.NewGuid());
 			siteRepository.Stub(x => x.Get(site.Id.Value)).Return(site);
@@ -78,7 +103,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			var siteAdherenceAggregator = MockRepository.GenerateMock<ISiteAdherenceAggregator>();
 			siteAdherenceAggregator.Stub(x => x.Aggregate(siteId)).Return(expected);
 			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
-			var target = new SitesController(siteRepository, null, siteAdherenceAggregator, null, null);
+			var target = new SitesController(siteRepository, null, siteAdherenceAggregator, null, null,null);
 
 			var result = target.GetOutOfAdherence(siteId.ToString()).Data as SiteOutOfAdherence;
 
@@ -90,7 +115,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		public void ShouldReturnAnEmptySiteWhenNoDataInBu()
 		{
 			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
-			var target = new SitesController(siteRepository, null, null, null, null);
+			var target = new SitesController(siteRepository, null, null, null, null,null);
 
 			var result = target.Index().Data as SiteViewModel;
 			result.Id.Should().Be("");
@@ -106,7 +131,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			site.SetBusinessUnit(bu);
 			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
 			siteRepository.Stub(x => x.Get(site.Id.GetValueOrDefault())).Return(site);
-			var target = new SitesController(siteRepository, null, null, null, null);
+			var target = new SitesController(siteRepository, null, null, null, null,null);
 
 			var result = target.GetBusinessUnitId(site.Id.ToString());
 			result.Data.Should().Be(bu.Id.GetValueOrDefault());
@@ -115,15 +140,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		[Test]
 		public void ShouldGetFromReadModel()
 		{
-			var businessUnitId = Guid.NewGuid();
-			var httpContext = new FakeHttpContext("http://example.com", null);
-			var request = MockRepository.GenerateStub<FakeHttpRequest>("/", new Uri("http://localhost/"), new Uri("http://localhost/"));
-			request.Stub(x => x.Headers).Return(new NameValueCollection { { "X-Business-Unit-Filter", businessUnitId.ToString() } });
-			httpContext.SetRequest(request);
-			var currentHttpContext = new FakeCurrentHttpContext(httpContext);
-
 			var getAdherence = MockRepository.GenerateMock<IGetSiteAdherence>();
-			var target = new SitesController(null, null, null, getAdherence, currentHttpContext);
+			var target = new SitesController(null, null, null, getAdherence, null,null);
 
 			var sites = new List<SiteOutOfAdherence>()
 						{
@@ -131,7 +149,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 							new SiteOutOfAdherence(){Id="Site2",OutOfAdherence = 5}
 						};
 		
-			getAdherence.Stub(g => g.ReadAdherenceForAllSites(businessUnitId)).Return(sites);
+			getAdherence.Stub(g => g.ReadAdherenceForAllPermittedSites()).Return(sites);
 
 			var result = target.GetOutOfAdherenceForAllSites().Data as IEnumerable<SiteOutOfAdherence>;
 

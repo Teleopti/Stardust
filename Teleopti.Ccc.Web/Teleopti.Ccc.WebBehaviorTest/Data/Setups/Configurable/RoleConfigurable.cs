@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public string BusinessUnit { get; set; }
 
 		public string AccessToTeam { get; set; }
+		public string AccessToSite { get; set; }
 		public bool AccessToMyOwn { get; set; }
 		public bool AccessToMySite { get; set; }
 		public bool AccessToEveryone { get; set; }
@@ -133,6 +134,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 				AccessToTeam.Split(',')
 					.Select(t => teamRepository.FindTeamByDescriptionName(t.Trim()).Single())
 					.ForEach(role.AvailableData.AddAvailableTeam);
+			}
+
+			if (!string.IsNullOrEmpty(AccessToSite))
+			{
+				var siteRepository = new SiteRepository(uow);
+				AccessToSite.Split(',')
+					.Select(s => siteRepository.FindSiteByDescriptionName(s.Trim()).Single())
+					.ForEach(role.AvailableData.AddAvailableSite);
 			}
 
 			var businessUnitRepository = new BusinessUnitRepository(uow);

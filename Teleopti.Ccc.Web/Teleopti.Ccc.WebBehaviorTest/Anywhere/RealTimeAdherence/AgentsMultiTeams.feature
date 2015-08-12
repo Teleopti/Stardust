@@ -11,6 +11,7 @@ Scenario: Should be able to see agents for multiple sites
 	And I have a role with
 	| Field                                  | Value                  |
 	| Name                                   | Real time analyst      |
+	| Access to site                         | Paris,London           |
 	| Access to team                         | Team Paris,Team London |
 	| Access to real time adherence overview | True                   |
 	And Pierre Baldi has a person period with

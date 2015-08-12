@@ -103,6 +103,36 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.DataProvider
 		}
 
 		[Test]
+		public void ShouldReturnFalseIfNoSitePermission()
+		{
+			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			var site = new Site(".");
+
+			principalAuthorization.Stub(x => x.IsPermitted("ApplicationFunctionPath", DateOnly.Today, site)).Return(false);
+
+			var target = new PermissionProvider(principalAuthorization);
+
+			var result = target.HasSitePermission("ApplicationFunctionPath", DateOnly.Today, site);
+
+			result.Should().Be(false);
+		}
+
+		[Test]
+		public void ShouldReturnTrueIfSitePermission()
+		{
+			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			var site = new Site(".");
+
+			principalAuthorization.Stub(x => x.IsPermitted("ApplicationFunctionPath", DateOnly.Today, site)).Return(true);
+
+			var target = new PermissionProvider(principalAuthorization);
+
+			var result = target.HasSitePermission("ApplicationFunctionPath", DateOnly.Today, site);
+
+			result.Should().Be(true);
+		}
+
+		[Test]
 		public void ShouldReturnTrueIfScheduleIsPublished()
 		{
 			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();

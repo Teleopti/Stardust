@@ -97,6 +97,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		}
 
 		[Test]
+		public void ShouldGetSiteOutOfAdherenceFromSiteIds()
+		{
+			var siteId1 = Guid.NewGuid();
+			var siteId2 = Guid.NewGuid();
+			var bu1A = Guid.NewGuid();
+
+			Target.Persist(new SiteOutOfAdherenceReadModel { SiteId = siteId1, BusinessUnitId = bu1A, Count = 1 });
+			Target.Persist(new SiteOutOfAdherenceReadModel { SiteId = siteId2, BusinessUnitId = bu1A, Count = 2 });
+			
+			var models = Reader.Read(new []{siteId1, siteId2});
+			models.Should().Have.Count.EqualTo(2);
+			models.Single(x => x.SiteId == siteId1).Count.Should().Be(1);
+			models.Single(x => x.SiteId == siteId2).Count.Should().Be(2);
+		}
+
+		[Test]
 		public void ShouldKnowIfThereIsData()
 		{
 			Target.Persist(new SiteOutOfAdherenceReadModel ());

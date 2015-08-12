@@ -44,5 +44,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			var schedIsPublished = schedulePublishedSpecification.IsSatisfiedBy(dayAndPeriod.DateOnly);
 			return schedIsPublished;
 		}
+
+		public bool HasSitePermission(string applicationfunctionpath, DateOnly today, ISite site)
+		{
+			return _principalAuthorization.IsPermitted(applicationfunctionpath, today, site);
+		}
 	}
 }

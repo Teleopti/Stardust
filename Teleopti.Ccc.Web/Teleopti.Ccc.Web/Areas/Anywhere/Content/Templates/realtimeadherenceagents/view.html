@@ -1,7 +1,9 @@
 ﻿<div class="realtimeadherenceagents container">
 	<ul class="breadcrumb">
 		<li><a data-bind="text: resources.RealTimeAdherence, attr:{href: rootURI}"></a></li>
+		<!-- ko if: $root.siteName -->
 		<li><a data-bind="text: siteName, attr:{href: siteURI}"></a></li>
+		<!-- /ko -->
 		<li class="active" data-bind="text: teamName"></li>
 	</ul>
 	<div class="nav navbar">

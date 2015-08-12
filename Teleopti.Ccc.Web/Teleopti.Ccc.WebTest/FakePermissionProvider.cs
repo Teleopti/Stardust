@@ -53,6 +53,11 @@ namespace Teleopti.Ccc.WebTest
 			return true;
 		}
 
+		public bool HasSitePermission(string applicationfunctionpath, DateOnly today, ISite site)
+		{
+			return true;
+		}
+
 		public bool HasOrganisationDetailPermission(string applicationFunctionPath, DateOnly date,
 			IAuthorizeOrganisationDetail authorizeOrganisationDetail)
 		{

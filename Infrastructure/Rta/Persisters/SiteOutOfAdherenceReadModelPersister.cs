@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NHibernate;
 using NHibernate.Transform;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
-using Teleopti.Ccc.Infrastructure.LiteUnitOfWork;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
 using Teleopti.Interfaces;
 
@@ -100,6 +98,23 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				.SetResultTransformer(Transformers.AliasToBean(typeof(SiteOutOfAdherenceReadModel)))
 				.List()
 				.Cast<SiteOutOfAdherenceReadModel>();
+		}
+
+		public IEnumerable<SiteOutOfAdherenceReadModel> Read(Guid[] siteIds)
+		{
+			return _unitOfWork.Current()
+			.CreateSqlQuery(
+				"SELECT " +
+				"SiteId," +
+				"Count " +
+				"FROM ReadModel.SiteOutOfAdherence " +
+				"WHERE SiteId IN(:siteIds)")
+			.AddScalar("SiteId", NHibernateUtil.Guid)
+			.AddScalar("Count", NHibernateUtil.Int32)
+			.SetParameterList("siteIds", siteIds)
+			.SetResultTransformer(Transformers.AliasToBean(typeof(SiteOutOfAdherenceReadModel)))
+			.List()
+			.Cast<SiteOutOfAdherenceReadModel>();
 		}
 
 		public void Clear()

@@ -3,12 +3,13 @@ using System.Linq;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Rta;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Filters;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 {
@@ -18,21 +19,31 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		private readonly INumberOfAgentsInSiteReader _numberOfAgentsInSiteReader;
 		private readonly ISiteAdherenceAggregator _siteAdherenceAggregator;
 		private readonly IGetSiteAdherence _getAdherence;
-		private readonly ICurrentHttpContext _currentHttpContext;
+		private readonly IPersonalAvailableDataProvider _personalAvailableDataProvider;
+		private readonly INow _now;
 
-		public SitesController(ISiteRepository siteRepository, INumberOfAgentsInSiteReader numberOfAgentsInSiteReader, ISiteAdherenceAggregator siteAdherenceAggregator, IGetSiteAdherence getAdherence, ICurrentHttpContext currentHttpContext)
+		public SitesController(ISiteRepository siteRepository,
+			INumberOfAgentsInSiteReader numberOfAgentsInSiteReader,
+			ISiteAdherenceAggregator siteAdherenceAggregator, 
+			IGetSiteAdherence getAdherence,
+			IPersonalAvailableDataProvider personalAvailableDataProvider, 
+			INow now)
 		{
 			_siteRepository = siteRepository;
 			_numberOfAgentsInSiteReader = numberOfAgentsInSiteReader;
 			_siteAdherenceAggregator = siteAdherenceAggregator;
 			_getAdherence = getAdherence;
-			_currentHttpContext = currentHttpContext;
+			_personalAvailableDataProvider = personalAvailableDataProvider;
+			_now = now;
 		}
 
 		[UnitOfWork, HttpGet]
 		public virtual JsonResult Index()
 		{
-			var sites = _siteRepository.LoadAll();
+			var sites = _personalAvailableDataProvider != null
+				? _personalAvailableDataProvider.AvailableSites(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview,
+					_now.LocalDateOnly())
+				: _siteRepository.LoadAll();
 			if (sites.IsNullOrEmpty())
 			{
 				return Json(new SiteViewModel
@@ -82,11 +93,10 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			return Json(site.BusinessUnit.Id.GetValueOrDefault(), JsonRequestBehavior.AllowGet);
 		}
 
-		[ReadModelUnitOfWork, HttpGet]
+		[ReadModelUnitOfWork, UnitOfWork, HttpGet]
 		public virtual JsonResult GetOutOfAdherenceForAllSites()
 		{
-			var id = UnitOfWorkAspect.BusinessUnitIdForRequest(_currentHttpContext);
-			return Json(_getAdherence.ReadAdherenceForAllSites(id.Value), JsonRequestBehavior.AllowGet);
+			return Json(_getAdherence.ReadAdherenceForAllPermittedSites(), JsonRequestBehavior.AllowGet);
 		}
 	}
 }

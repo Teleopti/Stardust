@@ -9,6 +9,7 @@ Scenario: Show site without always loading status
 	| Field                                  | Value             |
 	| Name                                   | Real time analyst |
 	| Access to real time adherence overview | True              |
+	| Access to everyone                     | True              |
 	And there is a site named 'London'
 	And there is a team named 'Red' on site 'London'
 	And Guy London has a person period with
@@ -24,6 +25,7 @@ Scenario: Show team without always loading status
 	| Field                                  | Value             |
 	| Name                                   | Real time analyst |
 	| Access to real time adherence overview | True              |
+	| Access to everyone                     | True              |
 	And there is a site named 'London'
 	And there is a team named 'Red' on site 'London'
 	And Guy Red has a person period with
@@ -38,6 +40,7 @@ Scenario: View updates of sum of employees not adhering to schedule for each sit
 	| Field                                  | Value             |
 	| Name                                   | Real time analyst |
 	| Access to real time adherence overview | True              |
+	| Access to everyone                     | True              |
 	And there is a datasouce with id 6
 	And there is an activity named 'Phone'
 	And there is a site named 'Paris'
@@ -90,6 +93,7 @@ Scenario: View updates of sum of employees not adhering to schedule for each tea
 	| Field                                  | Value             |
 	| Name                                   | Real time analyst |
 	| Access to real time adherence overview | True              |
+	| Access to everyone                     | True              |
 	And there is a datasouce with id 6
 	And there is an activity named 'Phone'
 	And there is a site named 'Paris'
@@ -157,6 +161,7 @@ Scenario: Should be able to go to Real time adherence overview
 	 | Field                                  | Value              |
 	 | Name                                   | Real time analyist |
 	 | Access to real time adherence overview | True               |
+	 | Access to everyone                     | True               |
 	When I view Anywhere
 	Then I should see Real time adherence overview in the menu
 
@@ -165,6 +170,7 @@ Scenario: View current state of sum of employees not adhering to schedule for ea
 	| Field                                  | Value             |
 	| Name                                   | Real time analyst |
 	| Access to real time adherence overview | True              |
+	| Access to everyone                     | True              |
 	And there is a datasouce with id 6
 	And there is an activity named 'Phone'
 	And there is a site named 'Paris'
@@ -217,6 +223,7 @@ Scenario: View current state of sum of employees not adhering to schedule for ea
 	| Field                                  | Value             |
 	| Name                                   | Real time analyst |
 	| Access to real time adherence overview | True              |
+	| Access to everyone                     | True              |
 	And there is a datasouce with id 6
 	And there is an activity named 'Phone'
 	And there is a site named 'Paris'
