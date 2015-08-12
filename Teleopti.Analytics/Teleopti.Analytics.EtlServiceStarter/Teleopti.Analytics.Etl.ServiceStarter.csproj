@@ -96,11 +96,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Debug.nhib.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus\Teleopti.Ccc.Sdk.ServiceBus.csproj">
       <Project>{9DF2D12C-4895-42D9-A365-6B9F97E787B5}</Project>
       <Name>Teleopti.Ccc.Sdk.ServiceBus</Name>

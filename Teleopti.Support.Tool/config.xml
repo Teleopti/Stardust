@@ -40,13 +40,7 @@
 	
 	<!-- Nothing To Change in \RTATools\Testapplication\Web\Teleopti.Ccc.Rta.TestApplication.exe.config is NOT copied to dubug folder (Do we need to swap)-->
 	<File ipath="\TeleoptiCCC\RTATools\Testapplication\Web\Teleopti.Ccc.Rta.TestApplication.exe.config" dpath="\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.TestApplication\app.config"></File>
-	
-	<!-- Doesent \Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\debug\V7Config.nhib.xml exists then copy a new one. This is only needed in develop environment-->
-	<File ipath="" dpath="\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\debug\V7Config.nhib.xml">
-		<ConnString type="appDB" elementName="connection.connection_string" parentElement="property" dataSourceKey="Data Source=" initialCatalogKey="Initial Catalog=" userKey="User Id=" passwordKey="Password=" ApplicationNameKey="Application Name="></ConnString>
-		<ConnString type="analyticsDB" elementName="" parentElement="connectionString" dataSourceKey="Data source=" initialCatalogKey="Initial Catalog=" userKey="User Id=" passwordKey="Password=" ApplicationNameKey="Application Name="></ConnString>
-		<Schema type="appDB" elementName="default_schema" parentElement="property" ></Schema>
-	</File>
+
 	
 	<!--\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Host\Web.config is NOT copied to dubug folder (Do we need to swap)-->
 	<!--
