@@ -1267,6 +1267,7 @@
     <Content Include="WFM\js\people\people.importPeople.controller.js" />
     <Content Include="WFM\js\people\people.importPeople.directive.js" />
     <Content Include="WFM\js\seatManagement\html\seatplanreport.html" />
+    <Content Include="WFM\js\seatManagement\seatplanreport.controller.js" />
     <Content Include="WFM\js\seatManagement\seatplanreport.directive.js" />
     <Content Include="WFM\js\seatManagement\seatplanteamandlocation.service.js" />
     <Content Include="WFM\js\start\start.controller.js" />
@@ -1304,6 +1305,7 @@
     <Content Include="WFM\js\resourceplanner\resourceplanner.report.controller.js" />
     <Content Include="WFM\js\resourceplanner\_modules.js" />
     <Content Include="WFM\tests\outbound\outbound.filter.spec.js" />
+    <Content Include="WFM\tests\seatmanagement\seatplanreport.controller.spec.js" />
     <Content Include="WFM\vendor\csv-js\csv.js" />
     <Content Include="WFM\vendor\ui-bootstrap-custom-build\datepicker.directive.ext.js" />
     <Content Include="WFM\js\seatManagement\fabric.fix.js" />
