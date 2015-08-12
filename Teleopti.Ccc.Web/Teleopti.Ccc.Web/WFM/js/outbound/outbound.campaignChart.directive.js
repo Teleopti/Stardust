@@ -19,24 +19,23 @@
 		function campaignChartCtrl($scope, $element) {
 
 			$scope.viewScheduleDiff = false;
-			
+			$scope.dates = $scope.graphData['dates'].slice(1);
+
 			this.toggleViewScheduleDiff = toggleViewScheduleDiff;
 			this.init = init;
+			this.getDataIndex = getDataIndex;
 
 			$scope.campaign.manualPlan = {};
 
 			$scope.campaign.manualPlan.selectedDates = [];
 
-			function selectedDate(d) {
-				//if ($scope.campaign.manualPlan.selectedDates.length<=0) return;
-				var index = $scope.campaign.manualPlan.selectedDates.indexOf(d);
-				if (index < 0) {
-					$scope.campaign.manualPlan.selectedDates.push(d);
-				} else {
-					$scope.campaign.manualPlan.selectedDates.splice(index, 1);
-				}
-				$scope.$apply();
-				return $scope.campaign.manualPlan.selectedDates;
+			function graphSelectionChanged() {
+				$scope.campaign.manualPlan.selectedDates = $scope.graph.selected().filter(function(p) {
+					return p.id == $scope.dictionary['Progress'];
+				}).map(function (p) {
+					return $scope.dates[p.index];
+				});
+
 			}
 
 			function init() {
@@ -90,6 +89,9 @@
 				}
 			}
 
+			function getDataIndex(date) {
+				return $scope.dates.indexOf(date);
+			}
 
 			function _setChartOption_label() {
 				var result = {};
@@ -140,18 +142,15 @@
 					order: 'null',
 					selection: {
 						enabled: true, //$scope.campaign.manualPlanSwitch,
-						grouped: false, //$scope.campaign.manualPlanSwitch,
+						grouped: true, //$scope.campaign.manualPlanSwitch,
 						draggable: true //$scope.campaign.manualPlanSwitch
 					},
 					columns: [$scope.graphData.dates].concat(getDataGroupsData($scope.viewScheduleDiff)),
-					//[ToDo Xueli]
-					onselected: function(d) {
-						var selected = new moment(d.x).format('YYYY-MM-DD');
-						selectedDate(selected);
+					onselected: function (d) {
+						$scope.$evalAsync(graphSelectionChanged);
 					},
 					onunselected: function (d) {
-						var unSelected = new moment(d.x).format('YYYY-MM-DD');
-						selectedDate(unSelected);
+						$scope.$evalAsync(graphSelectionChanged);
 					},
 					colors: _setChartOption_color(),
 					types: {}
@@ -244,6 +243,13 @@
 			scope.hidePlannedAnalyzeButton = function (d) {
 				return ($filter('showPhase')(d) == 'Planned') ? false : true;
 			};
+			scope.$watch(function() {
+				return scope.campaign.manualPlan.selectedDates;
+			}, function (newVal, oldVal) {
+				if (!scope.graph) return;
+				scope.graph.select(null, newVal.map(ctrl.getDataIndex), true);
+
+			}, true);
 		}
 
 	};

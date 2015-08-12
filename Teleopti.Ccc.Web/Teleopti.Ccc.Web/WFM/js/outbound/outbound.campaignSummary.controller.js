@@ -38,6 +38,7 @@
 		$scope.delThisDate = function(campaign,d) {
 			var index = campaign.manualPlan.selectedDates.indexOf(d);
 			campaign.manualPlan.selectedDates.splice(index, 1);
+
 		}
 
 		$scope.addManualPlan = function (campaign) {
