@@ -1272,8 +1272,6 @@
     <Content Include="WFM\js\start\start.controller.js" />
     <Content Include="WFM\tests\outbound\outbound.campaign.chart.service.spec.js" />
     <Content Include="WFM\tests\outbound\outbound.campaignSummary.controller.spec.js" />
-    <Content Include="WFM\vendor\ui-grid\ui-grid.min.css" />
-    <Content Include="WFM\vendor\ui-grid\ui-grid.min.js" />
     <Content Include="Areas\Start\Views\Return\Hash.cshtml" />
     <None Include="WFM\css\_forecasting.scss" />
     <Content Include="WFM\js\outbound\outbound.campaignCreate.controller.js" />
