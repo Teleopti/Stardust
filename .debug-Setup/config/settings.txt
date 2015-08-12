@@ -30,7 +30,6 @@ $(WindowsClaimProvider)|<add identifier="urn:Windows" displayName="Windows" url=
 $(TeleoptiClaimProvider)|<add identifier="urn:Teleopti" displayName="Teleopti" url="http://localhost:52858/sso/" protocolHandler="OpenIdHandler" />
 $(UrlAuthenticationBridge)|http://localhost:52857/
 $(URL)|http://localhost:52858/
-$(ETL_TOOL_nhibConfPath)|c:\nhib
 $(AGENTPORTALWEB_nhibConfPath)|c:\nhib
 $(CONFIGURATION_FILES_PATH)|c:\nhib
 <compilation debug="false"|<compilation debug="true"

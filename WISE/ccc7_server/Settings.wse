@@ -543,11 +543,6 @@ item: Insert Line into Text File
 end
 item: Insert Line into Text File
   Pathname=%SUPPORTTOOLS_TMP%settings.txt
-  New Text=$(ETL_TOOL_nhibConfPath)|%INSTALLDIR_TMP%ConfigurationFiles
-  Line Number=0
-end
-item: Insert Line into Text File
-  Pathname=%SUPPORTTOOLS_TMP%settings.txt
   New Text=$(SDK_nhibConfPath)|%INSTALLDIR_TMP%ConfigurationFiles
   Line Number=0
 end
