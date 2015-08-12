@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
         [Test]
         public void VerifyRepositoryIsNotBoundToASpecificUnitOfWork()
         {
-            var rep = new Repository(uowFactory);
+            var rep = new testRepository(uowFactory);
             
             using (var uow = uowFactory.CreateAndOpenUnitOfWork())
             {
@@ -44,5 +44,13 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
                 }
             }
         }
+
+		private class testRepository : Repository
+		{
+			public testRepository(IUnitOfWorkFactory unitOfWorkFactory) : base(unitOfWorkFactory)
+			{
+			}
+		}
+
     }
 }

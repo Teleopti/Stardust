@@ -8,20 +8,12 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-	/// <summary>
-	/// Base class for all repositories. 
-	/// Non generic methods are here
-	/// </summary>
-	/// <remarks>
-	/// Created by: rogerkr
-	/// Created date: 2007-12-21
-	/// </remarks>
-	public class Repository
+	public abstract class Repository
 	{
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 
 		//old way - avoid using this one
-		public Repository(IUnitOfWork unitOfWork)
+		protected Repository(IUnitOfWork unitOfWork)
 		{
 			InParameter.NotNull("unitOfWork", unitOfWork);
 			_currentUnitOfWork = new FixedCurrentUnitOfWork(unitOfWork);
@@ -29,7 +21,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 
 		//old way - don't use this one
-		public Repository(IUnitOfWorkFactory unitOfWorkFactory)
+		protected Repository(IUnitOfWorkFactory unitOfWorkFactory)
 		{
 			_currentUnitOfWork = new justForBackwardCompability(unitOfWorkFactory);
 		}
@@ -49,7 +41,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		}
 
 		//new, safe way
-		public Repository(ICurrentUnitOfWork currentUnitOfWork)
+		protected Repository(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			_currentUnitOfWork = currentUnitOfWork;
 		}
@@ -82,6 +74,5 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			get { return true; }
 		}
-
 	}
 }

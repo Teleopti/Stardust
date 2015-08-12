@@ -210,14 +210,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 
         [Test]
-        public void VerifyUnitOfWorkProperty()
-        {
-            IUnitOfWork uow = Mocks.StrictMock<IUnitOfWork>();
-            var repInternal = new Repository(uow);
-            Assert.AreSame(uow, repInternal.UnitOfWork);
-        }
-
-        [Test]
         public void VerifyRemovedItemsCannotBeRead()
         {
             T root = CreateAggregateWithCorrectBusinessUnit();
