@@ -543,11 +543,6 @@ item: Insert Line into Text File
 end
 item: Insert Line into Text File
   Pathname=%SUPPORTTOOLS_TMP%settings.txt
-  New Text=$(AGENTPORTALWEB_nhibConfPath)|%INSTALLDIR_TMP%ConfigurationFiles
-  Line Number=0
-end
-item: Insert Line into Text File
-  Pathname=%SUPPORTTOOLS_TMP%settings.txt
   New Text=$(CONFIGURATION_FILES_PATH)|%INSTALLDIR_TMP%ConfigurationFiles
   Line Number=0
 end
