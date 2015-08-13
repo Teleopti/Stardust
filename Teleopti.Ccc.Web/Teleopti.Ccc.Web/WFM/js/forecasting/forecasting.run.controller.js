@@ -2,8 +2,8 @@
 
 angular.module('wfm.forecasting')
 	.controller('ForecastingRunCtrl', [
-		'$scope', '$stateParams', '$http', 'Forecasting', '$state',
-		function ($scope, $stateParams, $http, forecasting, $state) {
+		'$scope', '$stateParams', '$http', 'Forecasting', '$state', 'Toggle',
+		function ($scope, $stateParams, $http, forecasting, $state, toggleService) {
 
 			$scope.period = $stateParams.period;
 			$scope.targets = $stateParams.targets;
@@ -22,7 +22,7 @@ angular.module('wfm.forecasting')
 			};
 
 			$scope.isResultViewEnabled = false;
-			forecasting.isToggleEnabled.query({ toggle: 'WfmForecast_ResultView_33605' }).$promise.then(function (result) {
+			toggleService.isFeatureEnabled.query({ toggle: 'WfmForecast_ResultView_33605' }).$promise.then(function (result) {
 				$scope.isResultViewEnabled = result.IsEnabled;
 			});
 

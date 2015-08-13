@@ -1,8 +1,8 @@
 ﻿'use strict';
 
 angular.module('wfm.forecasting')
-	.controller('ForecastingTargetCtrl', ['$scope', '$stateParams', '$state', 'Forecasting', '$http',
-		function ($scope, $stateParams, $state, forecasting, $http) {
+	.controller('ForecastingTargetCtrl', ['$scope', '$stateParams', '$state', 'Forecasting', '$http', 'Toggle',
+		function ($scope, $stateParams, $state, forecasting, $http, toggleService) {
 			$scope.period = $stateParams.period;
 			$scope.showSelection = true;
 			$scope.skillsDisplayed = [];
@@ -21,17 +21,17 @@ angular.module('wfm.forecasting')
 			};
 
 			$scope.isQueueStatisticsEnabled = false;
-			forecasting.isToggleEnabled.query({ toggle: 'WfmForecast_QueueStatistics_32572' }).$promise.then(function (result) {
+			toggleService.isFeatureEnabled.query({ toggle: 'WfmForecast_QueueStatistics_32572' }).$promise.then(function (result) {
 				$scope.isQueueStatisticsEnabled = result.IsEnabled;
 			});
 
 			$scope.isMethodsComparisonViewEnabled = false;
-			forecasting.isToggleEnabled.query({ toggle: 'WfmForecast_MethodsComparisonView_33610' }).$promise.then(function (result) {
+			toggleService.isFeatureEnabled.query({ toggle: 'WfmForecast_MethodsComparisonView_33610' }).$promise.then(function (result) {
 				$scope.isMethodsComparisonViewEnabled = result.IsEnabled;
 			});
 
 			$scope.isIntradayPatternViewEnabled = false;
-			forecasting.isToggleEnabled.query({ toggle: 'WfmForecast_IntradayPatternView_33069' }).$promise.then(function (result) {
+			toggleService.isFeatureEnabled.query({ toggle: 'WfmForecast_IntradayPatternView_33069' }).$promise.then(function (result) {
 				$scope.isIntradayPatternViewEnabled = result.IsEnabled;
 			});
 
