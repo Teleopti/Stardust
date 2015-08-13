@@ -1,6 +1,10 @@
 ﻿@charset "UTF-8";
 
 .outbound {
+    .selected-ope-btn{
+	    box-shadow:inset 0 2px 5px 0 rgba(0,0,0,.26);
+		background-color:#ececec;
+	}
     .manual-plan-input-unit{
 	    margin-top:10px;
 	}

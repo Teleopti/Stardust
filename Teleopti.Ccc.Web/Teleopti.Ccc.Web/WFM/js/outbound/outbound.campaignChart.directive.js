@@ -5,8 +5,8 @@
 
 	function campaignChart($filter) {
 		return {
-			controller: ['$scope', '$element', campaignChartCtrl],
-			template: '<md-switch class="campaign-chart-switch" ng-click="onToggleViewScheduleDiff()" ng-if="hidePlannedAnalyzeButton(campaign.Status)">Analyze Schedule</md-switch><div id="Chart_{{campaign.Id}}"></div>',
+			controller: ['$scope', '$element',  campaignChartCtrl],
+			template: '<md-switch class="campaign-chart-switch" ng-click="onToggleViewScheduleDiff()" ng-if="hidePlannedAnalyzeButton(campaign.Status)" ng-init="campaign.switchSwitch=false" ng-disabled="campaign.switchSwitch">Analyze Schedule</md-switch><div id="Chart_{{campaign.Id}}"></div>',
 			scope: {
 				'campaign': '=',
 				'graphData': '=',
@@ -24,6 +24,7 @@
 			this.toggleViewScheduleDiff = toggleViewScheduleDiff;
 			this.init = init;
 			this.getDataIndex = getDataIndex;
+			this.generateChart = generateChart;
 
 			$scope.campaign.manualPlan = {};
 
@@ -35,7 +36,6 @@
 				}).map(function (p) {
 					return $scope.dates[p.index];
 				});
-
 			}
 
 			function init() {
@@ -48,6 +48,7 @@
 					columns: getDataGroupsData($scope.viewScheduleDiff),
 					unload: getDataGroupsLabel(!$scope.viewScheduleDiff)
 				});
+
 			}
 
 			function generateChart() {
@@ -132,31 +133,29 @@
 				return dataColor;
 			}
 
-			$scope.campaign.manualPlanSwitch = false;
-
+			this._setChartOption_data = _setChartOption_data;
 			function _setChartOption_data() {
 				var dataOption = {
 					x: 'x',
 					type: 'bar',
 					groups: [getDataGroupsLabel(true), getDataGroupsLabel(false)],
-					order: 'null',
-					selection: {
-						enabled: true, //$scope.campaign.manualPlanSwitch,
-						grouped: true, //$scope.campaign.manualPlanSwitch,
-						draggable: true //$scope.campaign.manualPlanSwitch
-					},
-					columns: [$scope.graphData.dates].concat(getDataGroupsData($scope.viewScheduleDiff)),
-					onselected: function (d) {
-						$scope.$evalAsync(graphSelectionChanged);
-					},
-					onunselected: function (d) {
-						$scope.$evalAsync(graphSelectionChanged);
-					},
+					order: 'null',				
+					columns: [$scope.graphData.dates].concat(getDataGroupsData($scope.viewScheduleDiff)),					
 					colors: _setChartOption_color(),
 					types: {}
 				};
 				dataOption.types[$scope.dictionary['Progress']] = 'line';
-
+					dataOption.selection = {
+						enabled: true,
+						grouped: true,
+						draggable: true
+					};
+					dataOption.onselected = function(d) {
+						$scope.$evalAsync(graphSelectionChanged);
+					};
+					dataOption.onunselected = function(d) {
+						$scope.$evalAsync(graphSelectionChanged);
+					};
 				return dataOption;
 			}
 
@@ -237,6 +236,7 @@
 			scope.$evalAsync(ctrl.init);
 			
 			scope.onToggleViewScheduleDiff = function () {
+				if (scope.campaign.switchSwitch) return;
 				scope.viewScheduleDiff = !scope.viewScheduleDiff;
 				ctrl.toggleViewScheduleDiff();
 			}
@@ -245,7 +245,7 @@
 			};
 			scope.$watch(function() {
 				return scope.campaign.manualPlan.selectedDates;
-			}, function (newVal, oldVal) {
+			}, function(newVal, oldVal) {
 				if (!scope.graph) return;
 				scope.graph.select(null, newVal.map(ctrl.getDataIndex), true);
 

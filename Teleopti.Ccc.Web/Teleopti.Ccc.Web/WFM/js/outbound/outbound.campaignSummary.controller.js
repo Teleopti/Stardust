@@ -30,9 +30,13 @@
 			});
 		}
 
-		$scope.showManualPlanContainer = function (campaign) {
-			campaign.showManualPlanContainer = true;
-			//campaign.manualPlanSwitch = true;
+		
+		$scope.switchManualPlan = function (campaign) {
+			campaign.manualPlanswitch = !campaign.manualPlanswitch;
+			campaign.switchSwitch = !campaign.switchSwitch;
+			campaign.manualPlan = {
+				selectedDates: []
+			};			
 		}
 
 		$scope.delThisDate = function(campaign,d) {
@@ -42,9 +46,9 @@
 		}
 
 		$scope.addManualPlan = function (campaign) {
-			campaign.showManualPlanContainer = false;
+			campaign.manualPlanswitch = false;
+			campaign.switchSwitch = false;
 			campaign.manualPlan.Id = campaign.Id;
-			console.log(campaign.manualPlan);
 			//outboundService.sendManualPlan(campaign.manualPlan, function(campaign) {
 			//	outboundNotificationService.notifyManualPlanModifySuccess(angular.copy(campaign));
 			//  updateChartPlanDate
@@ -76,7 +80,6 @@
 
         $scope.toggleChartDisplay = function (campaign) {
         	campaign.viewScheduleDiffToggle = !campaign.viewScheduleDiffToggle;
-        	//outboundChartService.makeGraph(campaign.chart, campaign, campaign.viewScheduleDiffToggle, campaign.chartData);
 	    };
 
         $scope.show = function (campaign) {
