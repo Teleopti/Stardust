@@ -187,22 +187,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return restrictions;
 		}
 
-		private static IEnumerable<Type> resolveTypesToClasses (IEnumerable<RequestType> requestTypes)
-		{
-			var targetRequestTypes = new List<Tuple<RequestType, Type>>
-			{
-				new Tuple<RequestType, Type> (RequestType.ShiftTradeRequest, typeof (ShiftTradeRequest)),
-				new Tuple<RequestType, Type> (RequestType.TextRequest, typeof (TextRequest)),
-				new Tuple<RequestType, Type> (RequestType.AbsenceRequest, typeof (AbsenceRequest)),
-				new Tuple<RequestType, Type> (RequestType.ShiftExchangeOffer, typeof (ShiftExchangeOffer))
-			};
-
-			var foundRequestTypes = targetRequestTypes
-				.Where (requestType => requestTypes.Contains (requestType.Item1))
-				.Select (item => item.Item2);
-			return foundRequestTypes;
-		}
-
 		private static AbstractCriterion getShiftTradeRequestsForAgent(IPerson person)
 		{
 			var shiftTradeDetailsForAgentPersonTo = DetachedCriteria.For<ShiftTradeSwapDetail>()
