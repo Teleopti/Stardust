@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public DateTime ShiftStartTimeForPreviousActivity { get { return _scheduleInfo.ShiftStartTimeForPreviousActivity; } }
 		public DateTime ShiftEndTimeForPreviousActivity { get { return _scheduleInfo.ShiftEndTimeForPreviousActivity; } }
 
-		public AdherenceState AdherenceState { get { return Adherence.CurrentAdherence(); } }
+		public AdherenceState AdherenceState { get { return Adherence.AdherenceState(); } }
 		public AdherenceInfo Adherence { get; private set; }
 
 		public Guid PersonId { get { return _person.PersonId; } }

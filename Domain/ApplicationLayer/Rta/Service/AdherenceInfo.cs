@@ -40,15 +40,26 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_adherenceForNewStateAndPreviousActivity = new Lazy<AdherenceState>(() => adherenceFor(_input.StateCode, _input.ParsedPlatformTypeId(), scheduleInfo.PreviousActivity()));
 		}
 
-		public EventAdherence CurrentAdherenceForEvent()
+		public EventAdherence EventAdherence()
 		{
-			var currentAdherence = Events.EventAdherence.Neutral;
-			if (CurrentAdherence() != AdherenceState.Unknown)
-				return (EventAdherence)Enum.Parse(typeof(EventAdherence), Enum.GetName(typeof(AdherenceState), CurrentAdherence()));
-			return currentAdherence;
+			return ConvertToEventAdherence(AdherenceState());
 		}
 
-		public AdherenceState CurrentAdherence()
+		public EventAdherence EventAdherenceForNewStateAndPreviousActivity()
+		{
+			return ConvertToEventAdherence(_adherenceForNewStateAndPreviousActivity.Value);
+		}
+
+		private EventAdherence ConvertToEventAdherence(AdherenceState adherenceState)
+		{
+			if (adherenceState == Service.AdherenceState.In)
+				return Events.EventAdherence.In;
+			if (adherenceState == Service.AdherenceState.Out)
+				return Events.EventAdherence.Out;
+			return Events.EventAdherence.Neutral;
+		}
+
+		public AdherenceState AdherenceState()
 		{
 			return _adherence.Value;
 		}
@@ -62,15 +73,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			return _adherenceForPreviousStateAndCurrentActivity.Value;
 		}
-
-		public AdherenceState AdherenceForNewStateAndPreviousActivity()
-		{
-			return _adherenceForNewStateAndPreviousActivity.Value;
-		}
 		
 		private AdherenceState adherenceFor(AgentState state)
 		{
-			return state.Adherence.HasValue ? state.Adherence.Value : AdherenceState.Unknown;
+			return state.Adherence.HasValue ? state.Adherence.Value : Service.AdherenceState.Unknown;
 		}
 
 		private AdherenceState adherenceFor(string stateCode, Guid platformTypeId, ScheduleLayer activity)
@@ -84,7 +90,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			var alarm = _stateMapper.AlarmFor(_person.BusinessUnitId, platformTypeId, stateCode, activityId);
 			if (alarm == null)
-				return AdherenceState.Unknown;
+				return Service.AdherenceState.Unknown;
 			return alarm.Adherence;
 		}
 
@@ -92,7 +98,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			AdherenceState adherenceState;
 			if (!Enum.TryParse(adherence.ToString(), out adherenceState))
-				return AdherenceState.Unknown;
+				return Service.AdherenceState.Unknown;
 			return adherenceState;
 		}
 
@@ -101,7 +107,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			var staffingEffect = readModel.StaffingEffect;
 			if (staffingEffect.HasValue)
 				return ConvertAdherence(ByStaffingEffect.ForStaffingEffect(staffingEffect.Value));
-			return AdherenceState.Unknown;
+			return Service.AdherenceState.Unknown;
 		}
 
 	}

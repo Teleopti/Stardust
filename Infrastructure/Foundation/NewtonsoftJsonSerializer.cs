@@ -60,8 +60,9 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 					{"Datasource", "ds"},
 					{"BusinessUnitId", "bu"},
 					{"InAdherence", "in"},
-					{"InOrNeutralAdherenceWithPreviousActivity", "ax"},
 					{"Adherence", "a"},
+					{"AdherenceWithPreviousActivity", "ap"},
+					{"InOrNeutralAdherenceWithPreviousActivity", "ax"},
 				};
 			}
 

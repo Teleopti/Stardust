@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			});
 
 			var @event = publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single();
-			@event.InOrNeutralAdherenceWithPreviousActivity.Should().Be(true);
+			@event.AdherenceWithPreviousActivity.Should().Be(EventAdherence.In);
 		}
 
 		[Test]
@@ -194,9 +194,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			});
 
 			var @event = publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single();
-			@event.InOrNeutralAdherenceWithPreviousActivity.Should().Be(false);
+			@event.AdherenceWithPreviousActivity.Should().Be(EventAdherence.Out);
 		}
-
 
 		[Test]
 		[Toggle(Toggles.RTA_NeutralAdherence_30930)]
@@ -244,7 +243,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 		[Test]
 		[Toggle(Toggles.RTA_NeutralAdherence_30930)]
-		public void ShouldSetInAdhernceWithPreviousActivity()
+		public void ShouldPublishNeutralAdhernceWithPreviousActivity()
 		{
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
@@ -261,7 +260,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			});
 
 			publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single()
-				.InOrNeutralAdherenceWithPreviousActivity.Should().Be(true);
+				.AdherenceWithPreviousActivity.Should().Be(EventAdherence.Neutral);
 		}
 
 	}

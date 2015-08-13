@@ -89,10 +89,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 				{
 					incrementLastUpdate(s, @event.Timestamp);
 					addAdherence(s, @event.Timestamp, adherenceFor(@event), true);
-					if (s.ShiftEndTime.HasValue)
-						if (!s.FirstStateChangeOutOfAdherenceWithLastActivity.HasValue)
-							if (!@event.InOrNeutralAdherenceWithPreviousActivity)
-								s.FirstStateChangeOutOfAdherenceWithLastActivity = @event.Timestamp;
+
+					if (s.ShiftEndTime.HasValue && !s.FirstStateChangeOutOfAdherenceWithLastActivity.HasValue)
+					{
+						if (@event.AdherenceWithPreviousActivity == EventAdherence.Out)
+							s.FirstStateChangeOutOfAdherenceWithLastActivity = @event.Timestamp;
+					}
 				});
 
 			if (_performanceCounter != null && _performanceCounter.IsEnabled)
