@@ -104,7 +104,7 @@ BEGIN
 			End
 		    AS 'RowNumber'
 
-        FROM (SELECT DISTINCT p.Person as PersonId,
+         FROM (SELECT DISTINCT p.Person as PersonId,
 			 sd.TeamId as TeamID, 
 			 sd.SiteId as SiteId, 
 			 sd.BusinessUnitId as BusinessUnitId, 
@@ -115,12 +115,12 @@ BEGIN
 			 sd.[End], 
 			 sd.Model,
 			 sd.IsDayOff AS DayOffFlag,
-			 Case When Start IS NOT NULL AND pa.Id IS NOT NULL   AND sd.Start >= pa.Minimum AND sd.[End] <= pa.Maximum THEN 1 ELSE 0 END AS IsFullDayAbsence,
+			 Case When Start IS NOT NULL AND pa.Id IS NOT NULL THEN 1 ELSE 0 END AS IsFullDayAbsence,
 			 CASE WHEN Start IS NULL THEN 1 ELSE 0 END As IsEmptySchedule
 			 FROM @PersonIdList p 
 			 JOIN dbo.Person person ON p.Person = person.Id 
 			 LEFT JOIN ReadModel.PersonScheduleDay sd  ON sd.PersonId = p.Person and sd.BelongsToDate = @scheduleDate
-			 LEFT JOIN dbo.PersonAbsence pa ON p.Person = pa.Person 
+			 LEFT JOIN dbo.PersonAbsence pa ON p.Person = pa.Person AND sd.Start >= pa.Minimum AND sd.[End] <= pa.Maximum 
 			 
 			 WHERE 			
 			 -- The following enclosed conditions should be "Or"-ed such that the result is a union of each individual condition
