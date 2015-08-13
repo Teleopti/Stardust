@@ -29,69 +29,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		}
 
 		[Test]
-		public void VerifyFileBased()
-		{
-			string correctMatrix = @"<matrix><connectionString>" + ConnectionStringHelper.ConnectionStringUsedInTestsMatrix + @"</connectionString></matrix>";
-			var xElement = xmlText("test", correctMatrix);
-			IDataSource res;
-			bool success = target.TryCreate(xElement, out res);
-			wasSuccess(success);
-			Assert.AreEqual("test", res.Application.Name);
-
-			Assert.IsInstanceOf<NHibernateUnitOfWorkFactory>(res.Application);
-			Assert.IsInstanceOf<NHibernateUnitOfWorkMatrixFactory>(res.Statistic);
-		}
-
-		[Test]
-		public void VerifyXmlBased()
-		{
-			string correctMatrix = @"<matrix><connectionString>" +
-			                       ConnectionStringHelper.ConnectionStringUsedInTestsMatrix + @"</connectionString></matrix>";
-
-			XElement nhibernateXmlConfiguration = xmlText("test", correctMatrix);
-			IDataSource res;
-			target.TryCreate(nhibernateXmlConfiguration, out res);
-			Assert.AreEqual("test", res.Application.Name);
-
-			Assert.IsInstanceOf<NHibernateUnitOfWorkFactory>(res.Application);
-			Assert.IsInstanceOf<NHibernateUnitOfWorkMatrixFactory>(res.Statistic);
-		}
-
-		[Test]
-		public void VerifyXmlBasedWithDistributedTransaction()
-		{
-			target = new DataSourcesFactory(enversConfiguration, new NoMessageSenders(), DataSourceConfigurationSetter.ForTest(), new CurrentHttpContext(), null);
-			string correctMatrix = @"<matrix name=""matrixName""><connectionString>" + ConnectionStringHelper.ConnectionStringUsedInTestsMatrix + @"</connectionString></matrix>";
-
-			var nhibernateXmlConfiguration = xmlText("test", correctMatrix);
-
-			IDataSource res;
-			target.TryCreate(nhibernateXmlConfiguration, out res);
-			var sessionFactory = (ISessionFactoryImplementor)((NHibernateUnitOfWorkFactory)res.Application).SessionFactory;
-			Assert.IsInstanceOf<AdoNetTransactionFactory>(sessionFactory.TransactionFactory);
-		}
-
-		[Test]
-		public void VerifyNoNames()
-		{
-			string matrix = @"<matrix><connectionString>" + ConnectionStringHelper.ConnectionStringUsedInTestsMatrix + @"</connectionString></matrix>";
-
-			IDataSource res;
-			bool success = target.TryCreate(xmlText(string.Empty, matrix), out res);
-			wasSuccess(success);
-			Assert.AreEqual(DataSourceConfigurationSetter.NoDataSourceName, res.Application.Name);
-			Assert.AreEqual(DataSourcesFactory.AnalyticsDataSourceName, res.Statistic.Name);
-		}
-
-		[Test]
-		[ExpectedException(typeof(DataSourceException))]
-		public void VerifyMissingSesssionFactoryElement()
-		{
-			IDataSource res;
-			target.TryCreate(XElement.Parse("<gurka></gurka>"), out res);
-		}
-
-		[Test]
 		public void TestCreateWithDictionaryNoMatrix()
 		{
 			IDataSource res = target.Create(nHibSettings(), string.Empty);
@@ -122,16 +59,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			{
 				appSession.Connection.ConnectionString.Should().Contain("unit tests");
 			}
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pekar"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Hib"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Galet"), Test]
-		public void VerifyNhibWithValidConnectionStringMenDenPekarGalet()
-		{
-			const string authenticationSettings = @"<authentication><logonMode>win</logonMode> <!-- win or mix --></authentication>";
-
-			IDataSource res;
-			target.TryCreate(nonValidXmlTextWithAuthenticationSettings(authenticationSettings), out res)
-				.Should().Be.False();
 		}
 
 		private static IDictionary<string, string> nHibSettings()

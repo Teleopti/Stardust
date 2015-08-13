@@ -1,21 +1,16 @@
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Xml.Linq;
-using System.Linq;
-using log4net;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Dialect;
+using Teleopti.Ccc.Domain.Common.Logging;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Environment = NHibernate.Cfg.Environment;
-using Teleopti.Ccc.Domain.Common.Logging;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
@@ -26,7 +21,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly IDataSourceConfigurationSetter _dataSourceConfigurationSetter;
 		private readonly ICurrentHttpContext _httpContext;
 		private readonly Func<IMessageBrokerComposite> _messageBroker;
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(DataSourcesFactory));
 
 		public const string AnalyticsDataSourceName = "AnalyticsDatasource";
 
@@ -42,47 +36,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_dataSourceConfigurationSetter = dataSourceConfigurationSetter;
 			_httpContext = httpContext;
 			_messageBroker = messageBroker ?? (() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging);
-		}
-
-		private static string isSqlServerOnline(string connectionString)
-		{
-			if (string.IsNullOrEmpty(connectionString)) throw new ArgumentNullException("connectionString");
-
-			var buildedConnectionString = new SqlConnectionStringBuilder(connectionString);
-			try
-			{
-				using (var sqlConnection = new SqlConnection(buildedConnectionString.ToString()))
-				{
-					Logger.DebugFormat("The connection timeout is set to {0}.", sqlConnection.ConnectionTimeout);
-					sqlConnection.Open();
-					return string.Empty;
-				}
-			}
-			catch (SqlException sqlException)
-			{
-				Logger.ErrorFormat("Database {1} on server {0} is unavailable. Exception details below.", buildedConnectionString.DataSource, buildedConnectionString.InitialCatalog);
-				Logger.Error("Could not connect to data source.", sqlException);
-				return sqlException.Message;
-			}
-		}
-
-		public bool TryCreate(XElement nhibernateConfiguration, out IDataSource dataSource)
-		{
-			var nhProperties = createApplicationProperties(nhibernateConfiguration);
-			string connectionString;
-			if (nhProperties.TryGetValue(Environment.ConnectionString, out connectionString))
-			{
-				var resultOfOnline = isSqlServerOnline(connectionString);
-				if (string.IsNullOrEmpty(resultOfOnline))
-				{
-					var matrixElement = nhibernateConfiguration.Elements("matrix").Single();
-					var matrixConnstring = matrixElement.Element("connectionString").Value;
-					dataSource = createDataSource(nhProperties, matrixConnstring);
-					return true;
-				}
-			}
-			dataSource = null;
-			return false;
 		}
 
 		public IDataSource Create(string applicationDataSourceName, string applicationConnectionString, string statisticConnectionString)
@@ -153,17 +106,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			return appCfg;
 		}
 
-		private static IDictionary<string, string> createApplicationProperties(XElement nhibernateConfiguration)
-		{
-			var sessionFactory = nhibernateConfiguration.Descendants(((XNamespace)"urn:nhibernate-configuration-2.2") + "session-factory").SingleOrDefault();
-			if (sessionFactory == null)
-				throw new DataSourceException("Missing session-factory element!");
-			var sessionFactoryProperties = sessionFactory.Elements();
-			var ret = sessionFactoryProperties.ToDictionary(p => p.Attribute("name").Value, p => p.Value);
-			ret[Environment.SessionFactoryName] = sessionFactory.Attribute("name").Value;
-			return ret;
-		}
-
 		private Configuration createStatisticConfiguration(string connectionString)
 		{
 			//REMOVE ME LATER!!!!!!!!!!!!!!!!/((
@@ -189,6 +131,5 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_dataSourceConfigurationSetter.AddDefaultSettingsTo(cfg);
 			_enversConfiguration.Configure(cfg);
 		}
-
 	}
 }

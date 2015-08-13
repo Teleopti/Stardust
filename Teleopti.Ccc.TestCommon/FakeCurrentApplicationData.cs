@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Autofac;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
