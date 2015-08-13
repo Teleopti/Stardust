@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 		}
 
 		[Test]
-		public void TenantsMustHaveUniqueNames()
+		public void MakeSureDataSourceExistsShouldNotAddIfExist()
 		{
 			var dataSourcesFactory = MockRepository.GenerateMock<IDataSourcesFactory>();
 			var dataSourceName = RandomName.Make();
@@ -58,10 +58,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			var dataSource = new FakeDataSource { DataSourceName = dataSourceName };
 			var target = new ApplicationData(new Dictionary<string, string>(), null, null, dataSourcesFactory);
 			target.MakeSureDataSourceExists_UseOnlyFromTests(dataSource);
-			target.Tenant(dataSourceName).Should().Be.SameInstanceAs(dataSource);
-			Assert.Throws<DataSourceException>(() =>
-				target.MakeSureDataSourceExists(dataSourceName, RandomName.Make(), statisticConnString, appNhibConf));
 
+			target.Tenant(dataSourceName).Should().Be.SameInstanceAs(dataSource);
 			dataSourcesFactory.AssertWasNotCalled(x=> x.Create(appNhibConf, statisticConnString));
 		}
 
