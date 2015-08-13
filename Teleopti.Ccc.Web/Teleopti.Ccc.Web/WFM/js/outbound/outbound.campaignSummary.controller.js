@@ -30,19 +30,31 @@
 			});
 		}
 
+		$scope.switchBacklog = function(campaign) {
+			campaign.backlogSwitch = !campaign.backlogSwitch;
+			campaign.manualPlanswitch = false;
+			campaign.switchSwitch = !campaign.switchSwitch;
+			campaign.selectedDates = [];
+		}
 		
 		$scope.switchManualPlan = function (campaign) {
 			campaign.manualPlanswitch = !campaign.manualPlanswitch;
+			campaign.backlogSwitch = false;
 			campaign.switchSwitch = !campaign.switchSwitch;
-			campaign.manualPlan = {
-				selectedDates: []
-			};			
+			campaign.selectedDates = [];
 		}
 
 		$scope.delThisDate = function(campaign,d) {
-			var index = campaign.manualPlan.selectedDates.indexOf(d);
-			campaign.manualPlan.selectedDates.splice(index, 1);
+			var index = campaign.selectedDates.indexOf(d);
+			campaign.selectedDates.splice(index, 1);
 
+		}
+
+		$scope.addBacklog = function(campaign) {
+			campaign.backlogSwitch = false;
+			campaign.switchSwitch = false;
+			campaign.backlog.Id = campaign.Id;
+			campaign.selectedDates = [];
 		}
 
 		$scope.addManualPlan = function (campaign) {
@@ -55,9 +67,7 @@
 			//}, function(error) {
 			//	outboundNotificationService.notifyManualPlanModifyFailure(error);
 			//});
-			campaign.manualPlan = {
-				selectedDates:[]
-			};
+			campaign.selectedDates = [];
 		}
 
 		$scope.isOverStaffing = function(d) {

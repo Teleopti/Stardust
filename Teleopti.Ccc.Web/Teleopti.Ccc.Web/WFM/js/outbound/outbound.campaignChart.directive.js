@@ -27,11 +27,12 @@
 			this.generateChart = generateChart;
 
 			$scope.campaign.manualPlan = {};
+			$scope.campaign.backlog = {};
 
-			$scope.campaign.manualPlan.selectedDates = [];
+			$scope.campaign.selectedDates = [];
 
 			function graphSelectionChanged() {
-				$scope.campaign.manualPlan.selectedDates = $scope.graph.selected().filter(function(p) {
+				$scope.campaign.selectedDates = $scope.graph.selected().filter(function(p) {
 					return p.id == $scope.dictionary['Progress'];
 				}).map(function (p) {
 					return $scope.dates[p.index];
@@ -244,7 +245,7 @@
 				return ($filter('showPhase')(d) == 'Planned') ? false : true;
 			};
 			scope.$watch(function() {
-				return scope.campaign.manualPlan.selectedDates;
+				return scope.campaign.selectedDates;
 			}, function(newVal, oldVal) {
 				if (!scope.graph) return;
 				scope.graph.select(null, newVal.map(ctrl.getDataIndex), true);

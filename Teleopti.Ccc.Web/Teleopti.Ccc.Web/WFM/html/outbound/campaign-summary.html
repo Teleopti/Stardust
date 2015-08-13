@@ -36,7 +36,7 @@
 								<md-progress-circular md-mode="indeterminate" style="z-index: 100;"></md-progress-circular>
 							</div>
 							<div ng-if="!displayLoading(campaign)">
-								<campaign-chart campaign="campaign" graph-data="campaign.graphData" dictionary="campaign.translations" selecteddates="campaign.manualPlan.dates"></campaign-chart>
+								<campaign-chart campaign="campaign" graph-data="campaign.graphData" dictionary="campaign.translations" selecteddates="campaign.dates"></campaign-chart>
 							</div>
 						</div>
 						<button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="show(campaign)" translate>Edit</button>
@@ -73,19 +73,36 @@
 				                <md-progress-circular md-mode="indeterminate" style="z-index: 100;"></md-progress-circular>
 			                </div>
 			                <div ng-if="!displayLoading(campaign)">
-								<campaign-chart campaign="campaign" graph-data="campaign.graphData" dictionary="campaign.translations"></campaign-chart>
+				                <campaign-chart campaign="campaign" graph-data="campaign.graphData" dictionary="campaign.translations"></campaign-chart>
 			                </div>
-							<div class="manual-plan-container" ng-show="campaign.manualPlanswitch">
-								<div class="selected-plan-dates clearfix"><span ng-repeat="date in campaign.manualPlan.selectedDates" class="date-label">{{date | amDateFormat: 'MM-DD'}}<i class="mdi mdi-close date-label-close-fix" ng-click="delThisDate(campaign,date)"></i></span></div>
-								<div class="manual-plan-input-unit">
-									<input type="text" placeholder="plan..." ng-model="campaign.manualPlan.input" />
-									<button class="wfm-btn btn-sm wfm-btn-invis-primary" style="padding: 5px 10px; color: #EC38A3;" ng-click="addManualPlan(campaign)" translate>Save</button>
-								</div>
-							</div>
+			                <!--<div class="chip-container" ng-show="campaign.manualPlanswitch||campaign.backlogSwitch">
+				                <div class="selected-plan-dates clearfix"><span ng-repeat="date in campaign.selectedDates" class="date-label">{{date | amDateFormat: 'MM-DD'}}<i class="mdi mdi-close date-label-close-fix" ng-click="delThisDate(campaign,date)"></i></span></div>
+			                </div>-->
+			                <div class="edit-container">
+				                <div class="input-container" ng-show="campaign.manualPlanswitch">
+					                <input type="text" placeholder="plan..." ng-model="campaign.manualPlan.input"/>
+					                <button class="wfm-btn btn-sm wfm-btn-invis-primary" style="padding: 5px 10px; color: #EC38A3;" ng-click="addManualPlan(campaign)" translate>Save</button>
+				                </div>
+				                <div class="input-container multi-inputfix" ng-show="campaign.backlogSwitch">
+					                <div class="backlog-input-unit">
+						                <input type="text" placeholder="parameter1..."/>
+						                <input type="text" placeholder="parameter2..."/>
+					                </div>
+					                <div class="backlog-input-unit">
+						                <input type="text" placeholder="parameter3..."/>
+						                <input type="text" placeholder="parameter4..."/>
+					                </div>
+					                <div class="backlog-input-unit">
+						                <input type="text" placeholder="parameter5..."/>
+						                <input type="text" placeholder="parameter6..."/>
+					                </div>
+					                <button class="wfm-btn btn-sm wfm-btn-invis-primary" style="padding: 5px 10px; color: #EC38A3;" ng-click="addBacklog(campaign)" translate>Save</button>
+				                </div>
+			                </div>
 		                </div>
 		                <button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="show(campaign)" translate>Edit</button>
 		                <button class="wfm-btn wfm-btn-invis-primary pull-right" translate>Schedule</button>
-		                <button class="wfm-btn wfm-btn-invis-primary pull-right" translate>AddBacklog</button>
+						<button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="switchBacklog(campaign);" ng-class="{'selected-ope-btn': campaign.backlogSwitch}" translate>AddBacklog</button>
 						<button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="switchManualPlan(campaign);" ng-class="{'selected-ope-btn': campaign.manualPlanswitch}" translate>ProductionPlan</button>
 	                </div>
                 </card-body>
