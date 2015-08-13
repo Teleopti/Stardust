@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
@@ -48,7 +49,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		{
 			var identity = RandomName.Make();
 			var datasourceConfiguration = new DataSourceConfiguration();
-			var personInfo = new PersonInfo(new Tenant(RandomName.Make()), Guid.NewGuid());
+			var tenant = new Tenant(RandomName.Make());
+			tenant.DataSourceConfiguration.SetAnalyticsConnectionString(string.Format("Initial Catalog={0}", RandomName.Make()));
+			tenant.DataSourceConfiguration.SetApplicationConnectionString(string.Format("Initial Catalog={0}", RandomName.Make()));
+			var encryptedDataSourceConfiguration = new DataSourceConfigurationEncryption().EncryptConfig(tenant.DataSourceConfiguration);
+			var personInfo = new PersonInfo(tenant, Guid.NewGuid());
 			personInfo.SetIdentity(identity);
 			IdentityUserQuery.Has(personInfo);
 			DataSourceConfigurationProvider.Has(personInfo.Tenant, datasourceConfiguration);
@@ -58,7 +63,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			result.Success.Should().Be.True();
 			result.Tenant.Should().Be.EqualTo(personInfo.Tenant.Name);
 			result.PersonId.Should().Be.EqualTo(personInfo.Id);
-			result.DataSourceConfiguration.Should().Be.SameInstanceAs(datasourceConfiguration);
+			result.DataSourceConfiguration.AnalyticsConnectionString.Should().Be.EqualTo(encryptedDataSourceConfiguration.AnalyticsConnectionString);
+			result.DataSourceConfiguration.ApplicationConnectionString.Should().Be.EqualTo(encryptedDataSourceConfiguration.ApplicationConnectionString);
+			result.DataSourceConfiguration.ApplicationNHibernateConfig.Single().Value
+				.Should().Be.EqualTo(encryptedDataSourceConfiguration.ApplicationNHibernateConfig[tenant.DataSourceConfiguration.ApplicationNHibernateConfig.Single().Key]);
+
 			result.TenantPassword.Should().Be.EqualTo(personInfo.TenantPassword);
 		}
 

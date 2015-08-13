@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;
@@ -90,20 +92,25 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			var logonName = RandomName.Make();
 			var password = RandomName.Make();
 			var tenant = new Tenant(RandomName.Make());
+			tenant.DataSourceConfiguration.SetAnalyticsConnectionString(string.Format("Initial Catalog={0}", RandomName.Make()));
+			tenant.DataSourceConfiguration.SetApplicationConnectionString(string.Format("Initial Catalog={0}", RandomName.Make()));
+			var encryptedDataSourceConfiguration = new DataSourceConfigurationEncryption().EncryptConfig(tenant.DataSourceConfiguration);
+
 			var personInfo = new PersonInfo(tenant, Guid.NewGuid());
 			var dataSourceConfiguration = new DataSourceConfiguration();
 			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), logonName, password);
 			ApplicationUserQuery.Has(personInfo);
 			DataSourceConfigurationProvider.Has(tenant, dataSourceConfiguration);
 
-			var res =
-				Target.ApplicationLogon(new ApplicationLogonModel {UserName = logonName, Password = password})
-					.Result<TenantAuthenticationResult>();
+			var res = Target.ApplicationLogon(new ApplicationLogonModel {UserName = logonName, Password = password}).Result<TenantAuthenticationResult>();
 
 			res.Success.Should().Be.True();
 			res.Tenant.Should().Be.EqualTo(personInfo.Tenant.Name);
 			res.PersonId.Should().Be.EqualTo(personInfo.Id);
-			res.DataSourceConfiguration.Should().Be.SameInstanceAs(dataSourceConfiguration);
+			res.DataSourceConfiguration.AnalyticsConnectionString.Should().Be.EqualTo(encryptedDataSourceConfiguration.AnalyticsConnectionString);
+			res.DataSourceConfiguration.ApplicationConnectionString.Should().Be.EqualTo(encryptedDataSourceConfiguration.ApplicationConnectionString);
+			res.DataSourceConfiguration.ApplicationNHibernateConfig.Single().Value
+				.Should().Be.EqualTo(encryptedDataSourceConfiguration.ApplicationNHibernateConfig[tenant.DataSourceConfiguration.ApplicationNHibernateConfig.Single().Key]);
 			res.TenantPassword.Should().Be.EqualTo(personInfo.TenantPassword);
 		}
 

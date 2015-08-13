@@ -49,8 +49,8 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			var analConnString = string.Format("Data source={0};Initial Catalog={1}", RandomName.Make(), RandomName.Make());
 
 			var tenant = new Tenant(RandomName.Make());
-			tenant.SetApplicationConnectionString(appConnString);
-			tenant.SetAnalyticsConnectionString(analConnString);
+			tenant.DataSourceConfiguration.SetApplicationConnectionString(appConnString);
+			tenant.DataSourceConfiguration.SetAnalyticsConnectionString(analConnString);
 			target.Persist(tenant);
 
 			var result = tenantUnitOfWorkManager.CurrentSession()
@@ -58,8 +58,8 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 				.SetString("name", tenant.Name)
 				.UniqueResult<Tenant>();
 
-			result.ApplicationConnectionString.Should().Be.EqualTo(appConnString);
-			result.AnalyticsConnectionString.Should().Be.EqualTo(analConnString);
+			result.DataSourceConfiguration.ApplicationConnectionString.Should().Be.EqualTo(appConnString);
+			result.DataSourceConfiguration.AnalyticsConnectionString.Should().Be.EqualTo(analConnString);
 		}
 
 		[Test]
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			var value1 = RandomName.Make();
 			var key2 = RandomName.Make();
 			var value2 = RandomName.Make();
-			tenant.ApplicationNHibernateConfig = new Dictionary<string, string>
+			tenant.DataSourceConfiguration.ApplicationNHibernateConfig = new Dictionary<string, string>
 			{
 				{key1, value1},
 				{key2, value2}
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 				.SetString("name", tenant.Name)
 				.UniqueResult<Tenant>();
 
-			result.ApplicationNHibernateConfig
+			result.DataSourceConfiguration.ApplicationNHibernateConfig
 				.Should()
 				.Have.SameValuesAs(new KeyValuePair<string, string>(key1, value1), new KeyValuePair<string, string>(key2, value2));
 		}
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 		{
 			var tenant = new Tenant(RandomName.Make());
 			Assert.Throws<ArgumentException>(() =>
-				tenant.SetApplicationConnectionString(RandomName.Make()));
+				tenant.DataSourceConfiguration.SetApplicationConnectionString(RandomName.Make()));
 		}
 
 		[Test]
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 		{
 			var tenant = new Tenant(RandomName.Make());
 			Assert.Throws<ArgumentException>(() =>
-				tenant.SetAnalyticsConnectionString(RandomName.Make()));
+				tenant.DataSourceConfiguration.SetAnalyticsConnectionString(RandomName.Make()));
 		}
 
 		[Test]
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 				.CreateQuery("select t from Tenant t where t.Name=:name")
 				.SetString("name", tenant.Name)
 				.UniqueResult<Tenant>();
-			result.ApplicationNHibernateConfig.Single(cfg => cfg.Key == Environment.CommandTimeout).Value
+			result.DataSourceConfiguration.ApplicationNHibernateConfig.Single(cfg => cfg.Key == Environment.CommandTimeout).Value
 				.Should().Be.EqualTo("60");
 		}
 

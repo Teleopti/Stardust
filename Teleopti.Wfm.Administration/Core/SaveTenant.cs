@@ -26,8 +26,8 @@ namespace Teleopti.Wfm.Administration.Core
 				var oldTenant = _loadAllTenants.Tenants().FirstOrDefault(x => x.Name.Equals(model.OriginalName));
 				if (oldTenant != null)
 				{
-					oldTenant.SetApplicationConnectionString(model.AppDatabase);
-					oldTenant.SetAnalyticsConnectionString(model.AnalyticsDatabase);
+					oldTenant.DataSourceConfiguration.SetApplicationConnectionString(model.AppDatabase);
+					oldTenant.DataSourceConfiguration.SetAnalyticsConnectionString(model.AnalyticsDatabase);
 					//oldTenant.Name = model.NewName;
 					_currentTenantSession.CurrentSession().Save(oldTenant);
 				}

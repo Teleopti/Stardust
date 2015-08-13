@@ -104,8 +104,8 @@ namespace Teleopti.Wfm.Administration.Controllers
 			_databaseHelperWrapper.CreateDatabase(builder.ConnectionString, DatabaseType.TeleoptiCCCAgg, dbPath, model.AppUser, isAzure);
 
 			var newTenant = new Tenant(model.Tenant);
-			newTenant.SetApplicationConnectionString(connstringApp);
-			newTenant.SetAnalyticsConnectionString(connstringAnalytics);
+			newTenant.DataSourceConfiguration.SetApplicationConnectionString(connstringApp);
+			newTenant.DataSourceConfiguration.SetAnalyticsConnectionString(connstringAnalytics);
 			_currentTenantSession.CurrentSession().Save(newTenant);
 
 			var personInfo = new PersonInfo(newTenant, personId);

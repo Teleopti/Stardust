@@ -6,13 +6,13 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 	public class IdentityAuthentication : IIdentityAuthentication
 	{
 		private readonly IIdentityUserQuery _identityUserQuery;
-		private readonly IDataSourceConfigurationProvider _dataSourceConfigurationProvider;
+		private readonly IDataSourceConfigurationEncryption _dataSourceConfigurationEncryption;
 
 		public IdentityAuthentication(IIdentityUserQuery identityUserQuery,
-			IDataSourceConfigurationProvider dataSourceConfigurationProvider)
+																	IDataSourceConfigurationEncryption dataSourceConfigurationEncryption)
 		{
 			_identityUserQuery = identityUserQuery;
-			_dataSourceConfigurationProvider = dataSourceConfigurationProvider;
+			_dataSourceConfigurationEncryption = dataSourceConfigurationEncryption;
 		}
 
 		public TenantAuthenticationResult Logon(string identity)
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 			if (foundUser==null)
 				return createFailingResult(string.Format(Resources.LogOnFailedIdentityNotFound, identity));
 
-			var nhibConfig = _dataSourceConfigurationProvider.ForTenant(foundUser.Tenant);
+			var nhibConfig = _dataSourceConfigurationEncryption.EncryptConfig(foundUser.Tenant.DataSourceConfiguration);
 			//TODO tenant: no need to keep this when #33685 is done
 			if (nhibConfig==null)
 				return createFailingResult(Resources.NoDatasource);

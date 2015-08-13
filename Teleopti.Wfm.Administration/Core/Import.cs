@@ -18,8 +18,8 @@ namespace Teleopti.Wfm.Administration.Core
 		public ImportTenantResultModel Execute(ImportDatabaseModel model, ConflictModel conflictModel)
 		{
 			var newTenant = new Tenant(model.Tenant);
-			newTenant.SetApplicationConnectionString(model.ConnStringAppDatabase);
-			newTenant.SetAnalyticsConnectionString(model.ConnStringAnalyticsDatabase);
+			newTenant.DataSourceConfiguration.SetApplicationConnectionString(model.ConnStringAppDatabase);
+			newTenant.DataSourceConfiguration.SetAnalyticsConnectionString(model.ConnStringAnalyticsDatabase);
 			_currentTenantSession.CurrentSession().Save(newTenant);
 
 			saveToDb(conflictModel.NotConflicting, newTenant);

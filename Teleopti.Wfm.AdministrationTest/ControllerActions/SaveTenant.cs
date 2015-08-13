@@ -54,8 +54,8 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			using (TenantUnitOfWork.Start())
 			{
 				var tenant = new Tenant("Old One");
-				tenant.SetAnalyticsConnectionString("Integrated Security=true;Initial Catalog=Northwind;server=(local");
-				tenant.SetApplicationConnectionString("Integrated Security=true;Initial Catalog=Northwind;server=(local");
+				tenant.DataSourceConfiguration.SetAnalyticsConnectionString("Integrated Security=true;Initial Catalog=Northwind;server=(local");
+				tenant.DataSourceConfiguration.SetApplicationConnectionString("Integrated Security=true;Initial Catalog=Northwind;server=(local");
 				CurrentTenantSession.CurrentSession().Save(tenant);
 			}
 			using (TenantUnitOfWork.Start())
@@ -72,8 +72,8 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			using (TenantUnitOfWork.Start())
 			{
 				var loadedTenant = LoadAllTenants.Tenants().FirstOrDefault(t => t.Name.Equals("Old One"));
-				loadedTenant.ApplicationConnectionString.Should().Be.EqualTo("Integrated Security=true;Initial Catalog=Southwind;server=(local)");
-				loadedTenant.AnalyticsConnectionString.Should().Be.EqualTo("Integrated Security=true;Initial Catalog=Southwind;server=(local)");
+				loadedTenant.DataSourceConfiguration.ApplicationConnectionString.Should().Be.EqualTo("Integrated Security=true;Initial Catalog=Southwind;server=(local)");
+				loadedTenant.DataSourceConfiguration.AnalyticsConnectionString.Should().Be.EqualTo("Integrated Security=true;Initial Catalog=Southwind;server=(local)");
 			}
 		}
 	}

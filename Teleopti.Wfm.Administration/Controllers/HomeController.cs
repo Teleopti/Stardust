@@ -35,8 +35,8 @@ namespace Teleopti.Wfm.Administration.Controllers
 			return Json(_loadAllTenants.Tenants().Select(t => new TenantModel
 			{
 				Name = t.Name,
-				AnalyticsDatabase = new SqlConnectionStringBuilder( t.AnalyticsConnectionString).InitialCatalog,
-				AppDatabase = new SqlConnectionStringBuilder(t.ApplicationConnectionString).InitialCatalog
+				AnalyticsDatabase = new SqlConnectionStringBuilder( t.DataSourceConfiguration.AnalyticsConnectionString).InitialCatalog,
+				AppDatabase = new SqlConnectionStringBuilder(t.DataSourceConfiguration.ApplicationConnectionString).InitialCatalog
 			}));
 		}
 
@@ -49,8 +49,8 @@ namespace Teleopti.Wfm.Administration.Controllers
 			{
 				Name = t.Name,
 				Id = -1000, //behövs denna?
-				AnalyticsDatabase = t.AnalyticsConnectionString,
-				AppDatabase = t.ApplicationConnectionString
+				AnalyticsDatabase = t.DataSourceConfiguration.AnalyticsConnectionString,
+				AppDatabase = t.DataSourceConfiguration.ApplicationConnectionString
 			}).FirstOrDefault());
 		}
 

@@ -40,8 +40,8 @@ namespace Teleopti.Support.Security
 					return;
 				}
 				var tenant = allTenants.Single();
-				tenant.SetAnalyticsConnectionString(analyticsDbConnectionString);
-				tenant.SetApplicationConnectionString(appDbConnectionString);
+				tenant.DataSourceConfiguration.SetAnalyticsConnectionString(analyticsDbConnectionString);
+				tenant.DataSourceConfiguration.SetApplicationConnectionString(appDbConnectionString);
 			}
 			log.Debug("Updating tenant connection strings. Done!");
 		}

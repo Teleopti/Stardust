@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 
 		public DataSourceConfiguration ForTenant(Tenant tenant)
 		{
+			return _dataSourceConfigurationEncryption.EncryptConfig(tenant.DataSourceConfiguration);
 			if(allConfigs==null)
 				allConfigs = _readDataSourceConfiguration.Read();
 	

@@ -15,9 +15,9 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Config
 		public void ShouldGetDataSourceConfiguration()
 		{
 			var tenant = new Tenant(RandomName.Make());
-			tenant.SetAnalyticsConnectionString(string.Format("Initial Catalog={0}", RandomName.Make()));
-			tenant.SetApplicationConnectionString(string.Format("Initial Catalog={0}", RandomName.Make()));
-			tenant.ApplicationNHibernateConfig["test"] = RandomName.Make();
+			tenant.DataSourceConfiguration.SetAnalyticsConnectionString(string.Format("Initial Catalog={0}", RandomName.Make()));
+			tenant.DataSourceConfiguration.SetApplicationConnectionString(string.Format("Initial Catalog={0}", RandomName.Make()));
+			tenant.DataSourceConfiguration.ApplicationNHibernateConfig["test"] = RandomName.Make();
 			var loadAllTenants = MockRepository.GenerateMock<ILoadAllTenants>();
 			loadAllTenants.Expect(x => x.Tenants()).Return(new[] { tenant });
 
@@ -25,9 +25,9 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Config
 			var result = target.Read().Single();
 
 			result.Key.Should().Be.EqualTo(tenant.Name);
-			result.Value.ApplicationConnectionString.Should().Be.EqualTo(tenant.ApplicationConnectionString);
-			result.Value.AnalyticsConnectionString.Should().Be.EqualTo(tenant.AnalyticsConnectionString);
-			result.Value.ApplicationNHibernateConfig.Should().Have.SameValuesAs(tenant.ApplicationNHibernateConfig);
+			result.Value.ApplicationConnectionString.Should().Be.EqualTo(tenant.DataSourceConfiguration.ApplicationConnectionString);
+			result.Value.AnalyticsConnectionString.Should().Be.EqualTo(tenant.DataSourceConfiguration.AnalyticsConnectionString);
+			result.Value.ApplicationNHibernateConfig.Should().Have.SameValuesAs(tenant.DataSourceConfiguration.ApplicationNHibernateConfig);
 		}
 
 		[Test]
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Config
 		public void ShouldNotUseSameDictionaryInstance()
 		{
 			var tenant = new Tenant(RandomName.Make());
-			tenant.ApplicationNHibernateConfig["something"] = "something";
+			tenant.DataSourceConfiguration.ApplicationNHibernateConfig["something"] = "something";
 			var loadAllTenants = MockRepository.GenerateMock<ILoadAllTenants>();
 			loadAllTenants.Expect(x => x.Tenants()).Return(new[] { tenant });
 
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Config
 			var result = target.Read().Single();
 
 			result.Value.ApplicationNHibernateConfig
-				.Should().Not.Be.SameInstanceAs(tenant.ApplicationNHibernateConfig);
+				.Should().Not.Be.SameInstanceAs(tenant.DataSourceConfiguration.ApplicationNHibernateConfig);
 		}
 	}
 }

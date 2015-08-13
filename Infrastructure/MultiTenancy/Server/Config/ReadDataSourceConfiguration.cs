@@ -20,9 +20,9 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config
 			{
 				ret[tenant.Name] = new DataSourceConfiguration
 				{
-					AnalyticsConnectionString = tenant.AnalyticsConnectionString,
-					ApplicationConnectionString = tenant.ApplicationConnectionString,
-					ApplicationNHibernateConfig = tenant.ApplicationNHibernateConfig.ToDictionary(dic => dic.Key, dic => dic.Value)
+					//AnalyticsConnectionString = tenant.AnalyticsConnectionString,
+					//ApplicationConnectionString = tenant.ApplicationConnectionString,
+					//ApplicationNHibernateConfig = tenant.ApplicationNHibernateConfig.ToDictionary(dic => dic.Key, dic => dic.Value)
 				};
 			}
 			return ret;

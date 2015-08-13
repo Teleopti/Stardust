@@ -9,20 +9,22 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 	public class ApplicationAuthentication : IApplicationAuthentication
 	{
 		private readonly IApplicationUserQuery _applicationUserQuery;
-		private readonly IDataSourceConfigurationProvider _dataSourceConfigurationProvider;
 		private readonly Func<IPasswordPolicy> _passwordPolicy;
 		private readonly INow _now;
 		private readonly IVerifyPasswordPolicy _verifyPasswordPolicy;
+		private readonly IDataSourceConfigurationEncryption _dataSourceConfigurationEncryption;
 
 		public ApplicationAuthentication(IApplicationUserQuery applicationUserQuery,
-			IDataSourceConfigurationProvider dataSourceConfigurationProvider,
-			Func<IPasswordPolicy> passwordPolicy, INow now, IVerifyPasswordPolicy verifyPasswordPolicy)
+																	Func<IPasswordPolicy> passwordPolicy, 
+																	INow now, 
+																	IVerifyPasswordPolicy verifyPasswordPolicy,
+																	IDataSourceConfigurationEncryption dataSourceConfigurationEncryption)
 		{
 			_applicationUserQuery = applicationUserQuery;
-			_dataSourceConfigurationProvider = dataSourceConfigurationProvider;
 			_passwordPolicy = passwordPolicy;
 			_now = now;
 			_verifyPasswordPolicy = verifyPasswordPolicy;
+			_dataSourceConfigurationEncryption = dataSourceConfigurationEncryption;
 		}
 
 		public TenantAuthenticationResult Logon(string userName, string password)
@@ -39,7 +41,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 			if (applicationLogonInfo.IsLocked)
 				return createFailingResult(Resources.LogOnFailedAccountIsLocked);
 
-			var nhibConfig = _dataSourceConfigurationProvider.ForTenant(personInfo.Tenant);
+			var nhibConfig = _dataSourceConfigurationEncryption.EncryptConfig(personInfo.Tenant.DataSourceConfiguration);
 			//TODO tenant: no need to keep this when #33685 is done
 			if (nhibConfig == null)
 				return createFailingResult(Resources.NoDatasource);

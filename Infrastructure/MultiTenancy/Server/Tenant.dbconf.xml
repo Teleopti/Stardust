@@ -8,13 +8,15 @@
 			<generator class="identity" />
 		</id>
 		<property name="Name" />
-		<property name="ApplicationConnectionString" />
-		<property name="AnalyticsConnectionString" />
-		<map name="ApplicationNHibernateConfig" table="TenantApplicationNhibernateConfig" schema="Tenant">
-			<key column="TenantId"/>
-			<index column="ConfigKey" type="string"/>
-			<element column="ConfigValue" />
-		</map>
+		<component name="DataSourceConfiguration">
+			<property name="ApplicationConnectionString" />
+			<property name="AnalyticsConnectionString" />
+			<map name="ApplicationNHibernateConfig" table="TenantApplicationNhibernateConfig" schema="Tenant">
+				<key column="TenantId"/>
+				<index column="ConfigKey" type="string"/>
+				<element column="ConfigValue" />
+			</map>
+		</component>
 	</class>
 
 	<query name="loadAllTenants">
