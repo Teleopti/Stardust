@@ -130,61 +130,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IEnumerable<IPersonRequest> FindAllRequestsForAgentByType(IPerson person, Paging paging, params RequestType[] requestTypes)
 		{
-			var personRequests = Session.CreateCriteria<PersonRequest>()
-				.SetFetchMode("requests", FetchMode.Join)
-				.SetResultTransformer(Transformers.DistinctRootEntity)
-				.AddOrder(Order.Desc("UpdatedOn"));
+			var allRequests = FindAllRequestsForAgent(person);
+			var filteredRequests =
+				allRequests.Where(x => requestTypes.Contains(x.Request.RequestType)).OrderByDescending(x => x.UpdatedOn);
 
-			var parentRequest = DetachedCriteria.For<Request>()
-				.SetProjection(Projections.Property("Parent"));
-
-			personRequests.Add(Subqueries.PropertyIn("Id", parentRequest));
-
-			if (requestTypes.Contains(RequestType.ShiftTradeRequest))
-			{
-				var requestsForAgent = getShiftTradeRequestsForAgent(person);
-				personRequests.Add(requestsForAgent);
-			}
-
-			parentRequest.Add(addRestrictionsForRequestedTypes(requestTypes));
-
-			applyPagingToResults(paging, personRequests);
-
-			return personRequests.List<IPersonRequest>();
-		}
-
-		private static ICriterion addRestrictionsForRequestedTypes(IEnumerable<RequestType> requestTypes)
-		{
-			if (requestTypes == null)
-			{
-				return null;
-			}
-
-			var requestTypeIdList = new HashSet<int>();
-			foreach (var requestType in requestTypes)
-			{
-				switch (requestType)
-				{
-					case RequestType.AbsenceRequest:
-						requestTypeIdList.Add(1);
-						break;
-					case RequestType.ShiftTradeRequest:
-						requestTypeIdList.Add(2);
-						break;
-					case RequestType.TextRequest:
-						requestTypeIdList.Add(3);
-						break;
-					case RequestType.ShiftExchangeOffer:
-						requestTypeIdList.Add(4);
-						break;
-					default:
-						requestTypeIdList.Add(0);
-						break;
-				}
-			}
-
-			var restrictions = Restrictions.In("class", requestTypeIdList.ToList());
-			return restrictions;
+			return paging == null ? filteredRequests : filteredRequests.Skip(paging.Skip).Take(paging.Take);
 		}
 
 		private static AbstractCriterion getShiftTradeRequestsForAgent(IPerson person)
@@ -246,8 +196,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		private IEnumerable<IPersonRequest> findAllRequestsForAgent(IPerson person, DateTimePeriod? period)
 		{
-			var requestsCreatedByPerson = getRequestsCreatedByAgent(person, period);
-			var shiftTradeRequestsWithPerson = getShiftTradeRequestsWithAgent(person, period);
+			var requestsCreatedByPerson = getRequestsCreatedByAgent(person, period).List<IPersonRequest>();
+			var shiftTradeRequestsWithPerson = getShiftTradeRequestsWithAgent(person, period).List<IPersonRequest>();
 
 			return requestsCreatedByPerson.Union(shiftTradeRequestsWithPerson).OrderByDescending(x => x.UpdatedOn);
 		}
@@ -255,7 +205,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		/// <summary>
 		/// Get all requests created by agent
 		/// </summary>
-		private IEnumerable<IPersonRequest> getRequestsCreatedByAgent(IPerson person, DateTimePeriod? period)
+		private ICriteria getRequestsCreatedByAgent(IPerson person, DateTimePeriod? period)
 		{
 			var criteriaPersonRequestsCreatedByPerson = Session.CreateCriteria<PersonRequest>()
 				.SetFetchMode("requests", FetchMode.Join)
@@ -264,13 +214,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			applyPeriodRestriction(criteriaPersonRequestsCreatedByPerson, period);
 
-			return criteriaPersonRequestsCreatedByPerson.List<IPersonRequest>();
+			return criteriaPersonRequestsCreatedByPerson;
 		}
 
 		/// <summary>
 		/// Get shift trade request created by other agent but trade with current person
 		/// </summary>
-		private IEnumerable<IPersonRequest> getShiftTradeRequestsWithAgent(IPerson person, DateTimePeriod? period)
+		private ICriteria getShiftTradeRequestsWithAgent(IPerson person, DateTimePeriod? period)
 		{
 			var subQueryShiftTradeRequestsWithPerson = DetachedCriteria.For<ShiftTradeRequest>()
 				.SetProjection(Projections.Property("Parent"))
@@ -284,7 +234,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			applyPeriodRestriction(criteriaShiftTradeRequestsWithPerson, period);
 
-			return criteriaShiftTradeRequestsWithPerson.List<IPersonRequest>();
+			return criteriaShiftTradeRequestsWithPerson;
 		}
 
 		private void applyPeriodRestriction(ICriteria criteria, DateTimePeriod? period)
