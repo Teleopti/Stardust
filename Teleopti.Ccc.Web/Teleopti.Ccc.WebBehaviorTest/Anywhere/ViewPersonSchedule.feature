@@ -151,7 +151,7 @@ Scenario: View schedule in my time zone
 	| Activity       | Phone            |
 	| Start time     | 2012-12-02 09:00 |
 	| End time       | 2012-12-02 17:00 |
-	When I view person schedule for 'Pierre Baldi' in 'Team green' on '2012-12-04'
+	When I view person schedule for 'Pierre Baldi' in 'Team green' on '2012-12-02'
 	Then I should see a scheduled activity with
 	| Field      | Value |
 	| Start time | 20:00 |
