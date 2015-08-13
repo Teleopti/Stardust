@@ -230,6 +230,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			var criteriaShiftTradeRequestsWithPerson = Session.CreateCriteria<PersonRequest>()
 				.SetFetchMode("requests", FetchMode.Join)
 				.SetResultTransformer(Transformers.DistinctRootEntity)
+				.Add(Restrictions.Not(Restrictions.Eq("requestStatus", 4)))
 				.Add(Subqueries.PropertyIn("requests", subQueryShiftTradeRequestsWithPerson));
 
 			applyPeriodRestriction(criteriaShiftTradeRequestsWithPerson, period);
