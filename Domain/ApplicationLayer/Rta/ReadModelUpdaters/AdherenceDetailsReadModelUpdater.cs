@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		private readonly IAdherenceDetailsReadModelPersister _persister;
 		private readonly IReadModelTransactionSyncronization _readModelTransactionSyncronization;
 		private readonly IPerformanceCounter _performanceCounter;
-		private readonly IComparer<AdherenceState> _adherenceComparer;
+		private readonly IComparer<AdherenceDetailsReadModelAdherence> _adherenceComparer;
 
 		public AdherenceDetailsReadModelUpdater(
 			IAdherenceDetailsReadModelPersister persister,
@@ -35,24 +35,26 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 			_adherenceComparer = new AdherenceStateComparer_DeclarationOrderIsNotToBeTrusted();
 		}
 
-		private static AdherenceState adherenceFor(PersonStateChangedEvent @event)
+		private static AdherenceDetailsReadModelAdherence adherenceFor(PersonStateChangedEvent @event)
 		{
 			if (@event.Adherence == EventAdherence.In)
-				return AdherenceState.In;
+				return AdherenceDetailsReadModelAdherence.In;
 			if (@event.Adherence == EventAdherence.Out)
-				return AdherenceState.Out;
-			return AdherenceState.Neutral;
+				return AdherenceDetailsReadModelAdherence.Out;
+			return AdherenceDetailsReadModelAdherence.Neutral;
 		}
 
-		private static AdherenceState adherenceFor(PersonActivityStartEvent @event)
+		private static AdherenceDetailsReadModelAdherence adherenceFor(PersonActivityStartEvent @event)
 		{
-			if (@event.Adherence != null)
+			if (@event.Adherence.HasValue)
 			{
-				return @event.Adherence.Value == AdherenceState.Unknown
-					? AdherenceState.Neutral
-					: @event.Adherence.Value;
+				if (@event.Adherence == AdherenceState.In)
+					return AdherenceDetailsReadModelAdherence.In;
+				if (@event.Adherence == AdherenceState.Out)
+					return AdherenceDetailsReadModelAdherence.Out;
+				return AdherenceDetailsReadModelAdherence.Neutral;
 			}
-			return @event.InAdherence ? AdherenceState.In : AdherenceState.Out;
+			return @event.InAdherence ? AdherenceDetailsReadModelAdherence.In : AdherenceDetailsReadModelAdherence.Out;
 		}
 
 		[ReadModelUnitOfWork]
@@ -156,7 +158,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 				.ToArray();
 		}
 
-		private void addAdherence(AdherenceDetailsReadModelState model, DateTime time, AdherenceState adherence, bool stateChanged)
+		private void addAdherence(AdherenceDetailsReadModelState model, DateTime time, AdherenceDetailsReadModelAdherence adherence, bool stateChanged)
 		{
 			model.Adherence = model.Adherence
 				.Concat(new[]
@@ -228,7 +230,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 				);
 
 			if (endingAdherenceOfLastActivity != null)
-				if (endingAdherenceOfLastActivity.Adherence == AdherenceState.Out)
+				if (endingAdherenceOfLastActivity.Adherence == AdherenceDetailsReadModelAdherence.Out)
 					return endingAdherenceOfLastActivity.Time;
 
 			if (model.State.FirstStateChangeOutOfAdherenceWithLastActivity.HasValue)
@@ -241,9 +243,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		{
 			if (!model.State.Adherence.IsEmpty())
 			{
-				if (model.State.Adherence.Last().Adherence == AdherenceState.In)
+				if (model.State.Adherence.Last().Adherence == AdherenceDetailsReadModelAdherence.In)
 					return true;
-				if (model.State.Adherence.Last().Adherence == AdherenceState.Out)
+				if (model.State.Adherence.Last().Adherence == AdherenceDetailsReadModelAdherence.Out)
 					return false;
 			}
 			return null;
@@ -307,33 +309,33 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 			return null;
 		}
 
-		private static bool isInOrNeutralAdherence(AdherenceState adherence)
+		private static bool isInOrNeutralAdherence(AdherenceDetailsReadModelAdherence adherence)
 		{
-			return adherence == AdherenceState.In ||
-			       adherence == AdherenceState.Neutral;
+			return adherence == AdherenceDetailsReadModelAdherence.In ||
+			       adherence == AdherenceDetailsReadModelAdherence.Neutral;
 		}
 
-		private static bool fromOutToInOrNeutralAdherence(AdherenceState from, AdherenceState to)
+		private static bool fromOutToInOrNeutralAdherence(AdherenceDetailsReadModelAdherence from, AdherenceDetailsReadModelAdherence to)
 		{
-			if (from == AdherenceState.Out)
-				if (to == AdherenceState.In ||
-					to == AdherenceState.Neutral)
+			if (from == AdherenceDetailsReadModelAdherence.Out)
+				if (to == AdherenceDetailsReadModelAdherence.In ||
+					to == AdherenceDetailsReadModelAdherence.Neutral)
 					return true;
 			return false;
 		}
 
-		private static bool fromNeutralToInAdherence(AdherenceState from, AdherenceState to)
+		private static bool fromNeutralToInAdherence(AdherenceDetailsReadModelAdherence from, AdherenceDetailsReadModelAdherence to)
 		{
-			if (from == AdherenceState.Neutral)
-				if (to == AdherenceState.In)
+			if (from == AdherenceDetailsReadModelAdherence.Neutral)
+				if (to == AdherenceDetailsReadModelAdherence.In)
 					return true;
 			return false;
 		}
 
-		private static bool fromInToNeutralAdherence(AdherenceState from, AdherenceState to)
+		private static bool fromInToNeutralAdherence(AdherenceDetailsReadModelAdherence from, AdherenceDetailsReadModelAdherence to)
 		{
-			if (from == AdherenceState.In)
-				if (to == AdherenceState.Neutral)
+			if (from == AdherenceDetailsReadModelAdherence.In)
+				if (to == AdherenceDetailsReadModelAdherence.Neutral)
 					return true;
 			return false;
 		}
@@ -345,9 +347,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 				.WithPrevious()
 				.Aggregate(TimeSpan.Zero, (current, a) =>
 				{
-					if (a.Previous.Adherence == AdherenceState.Neutral)
+					if (a.Previous.Adherence == AdherenceDetailsReadModelAdherence.Neutral)
 						containsNeutralAdherence = true;
-					if (a.Previous.Adherence == AdherenceState.In)
+					if (a.Previous.Adherence == AdherenceDetailsReadModelAdherence.In)
 						return current + (a.This.Time - a.Previous.Time);
 					return current;
 				});
@@ -363,9 +365,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 				.WithPrevious()
 				.Aggregate(TimeSpan.Zero, (current, a) =>
 				{
-					if (a.Previous.Adherence == AdherenceState.Neutral)
+					if (a.Previous.Adherence == AdherenceDetailsReadModelAdherence.Neutral)
 						containsNeutralAdherence = true;
-					if (a.Previous.Adherence == AdherenceState.Out)
+					if (a.Previous.Adherence == AdherenceDetailsReadModelAdherence.Out)
 						return current + (a.This.Time - a.Previous.Time);
 					return current;
 				});
@@ -428,42 +430,28 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 	/// And specifying order is just ugly
 	/// Might be wrong, edge case stuff
 	/// </summary>
-	public class AdherenceStateComparer_DeclarationOrderIsNotToBeTrusted : IComparer<AdherenceState>
+	public class AdherenceStateComparer_DeclarationOrderIsNotToBeTrusted : IComparer<AdherenceDetailsReadModelAdherence>
 	{
-		public int Compare(AdherenceState x, AdherenceState y)
+		public int Compare(AdherenceDetailsReadModelAdherence x, AdherenceDetailsReadModelAdherence y)
 		{
 
 			if (x == y) return 0;
 
 			const int before = -1;
 			const int after = 1;
-			if (x == AdherenceState.Out && y == AdherenceState.In)
+			if (x == AdherenceDetailsReadModelAdherence.Out && y == AdherenceDetailsReadModelAdherence.In)
 				return before;
-			if (x == AdherenceState.Out && y == AdherenceState.Neutral)
-				return before;
-			if (x == AdherenceState.Out && y == AdherenceState.Unknown)
+			if (x == AdherenceDetailsReadModelAdherence.Out && y == AdherenceDetailsReadModelAdherence.Neutral)
 				return before;
 
-			if (x == AdherenceState.Unknown && y == AdherenceState.Out)
+			if (x == AdherenceDetailsReadModelAdherence.Neutral && y == AdherenceDetailsReadModelAdherence.Out)
 				return after;
-			if (x == AdherenceState.Unknown && y == AdherenceState.Neutral)
-				return before;
-			if (x == AdherenceState.Unknown && y == AdherenceState.In)
+			if (x == AdherenceDetailsReadModelAdherence.Neutral && y == AdherenceDetailsReadModelAdherence.In)
 				return before;
 
-			if (x == AdherenceState.Neutral && y == AdherenceState.Out)
+			if (x == AdherenceDetailsReadModelAdherence.In && y == AdherenceDetailsReadModelAdherence.Out)
 				return after;
-			if (x == AdherenceState.Neutral && y == AdherenceState.Unknown)
-				return after;
-			if (x == AdherenceState.Neutral && y == AdherenceState.In)
-				return before;
-
-
-			if (x == AdherenceState.In && y == AdherenceState.Out)
-				return after;
-			if (x == AdherenceState.In && y == AdherenceState.Neutral)
-				return after;
-			if (x == AdherenceState.In && y == AdherenceState.Unknown)
+			if (x == AdherenceDetailsReadModelAdherence.In && y == AdherenceDetailsReadModelAdherence.Neutral)
 				return after;
 
 			return 0;

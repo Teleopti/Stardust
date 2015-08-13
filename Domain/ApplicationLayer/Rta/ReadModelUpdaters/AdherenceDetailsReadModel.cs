@@ -59,7 +59,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 	public class AdherenceDetailsReadModelAdherenceState
 	{
 		public DateTime Time { get; set; }
-		public AdherenceState Adherence { get; set; }
+		public AdherenceDetailsReadModelAdherence Adherence { get; set; }
 		public bool StateChanged { get; set; }
+	}
+
+	public enum AdherenceDetailsReadModelAdherence
+	{
+		In = 1,
+		Out = 2,
+		Neutral = 3
 	}
 }
