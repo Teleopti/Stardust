@@ -141,7 +141,6 @@ Scenario: View night shift from today
 	| End time   | 1.04:00 |
 	| Color      | Green   |
 
-@ignore
 Scenario: View schedule in my time zone
 	Given I have the role 'Anywhere Team Green'
 	And I am located in Stockholm
@@ -150,11 +149,11 @@ Scenario: View schedule in my time zone
 	| Field          | Value            |
 	| Shift category | Day              |
 	| Activity       | Phone            |
-	| Start time     | 2012-12-02 20:00 |
-	| End time       | 2012-12-03 04:00 |
-	When I view person schedule for 'Pierre Baldi' in 'Team green' on '2012-12-03'
+	| Start time     | 2012-12-02 09:00 |
+	| End time       | 2012-12-02 17:00 |
+	When I view person schedule for 'Pierre Baldi' in 'Team green' on '2012-12-04'
 	Then I should see a scheduled activity with
 	| Field      | Value |
-	| Start time | 07:00 |
-	| End time   | 15:00 |
+	| Start time | 20:00 |
+	| End time   | 04:00 |
 	| Color      | Green |
