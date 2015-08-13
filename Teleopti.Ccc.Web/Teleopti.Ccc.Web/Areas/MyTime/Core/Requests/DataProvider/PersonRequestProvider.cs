@@ -32,24 +32,24 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		{
 			var types = new List<RequestType>
 			{
-				RequestType.AbsenceRequest,RequestType.ShiftExchangeOffer,RequestType.ShiftTradeRequest,RequestType.TextRequest
+				RequestType.AbsenceRequest,
+				RequestType.ShiftExchangeOffer,
+				RequestType.ShiftTradeRequest,
+				RequestType.TextRequest
 			};
-			if (!_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb, DateOnly.Today,
-					_loggedOnUser.CurrentUser()))
+
+			if (!_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb,
+				DateOnly.Today, _loggedOnUser.CurrentUser()))
 			{
 				types.Remove(RequestType.ShiftExchangeOffer);
 				types.Remove(RequestType.ShiftTradeRequest);
 			}
 
-			if (_toggleManager.IsEnabled(Toggles.MyTimeWeb_SeeAnnouncedShifts_31639))
-			{
-				return _repository.FindAllRequestsForAgentByType(_loggedOnUser.CurrentUser(), paging, types.ToArray());
-			}
-			else
+			if (!_toggleManager.IsEnabled(Toggles.MyTimeWeb_SeeAnnouncedShifts_31639))
 			{
 				types.Remove(RequestType.ShiftExchangeOffer);
-				return _repository.FindAllRequestsForAgentByType(_loggedOnUser.CurrentUser(), paging, types.ToArray());
 			}
+			return _repository.FindAllRequestsForAgentByType(_loggedOnUser.CurrentUser(), paging, types.ToArray());
 
 		}
 

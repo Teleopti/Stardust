@@ -155,15 +155,35 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		private static ICriterion addRestrictionsForRequestedTypes(IEnumerable<RequestType> requestTypes)
 		{
-			var requestedClasses = resolveTypesToClasses(requestTypes);
-
-			ICriterion restrictions = null;
-			foreach (var @class in requestedClasses)
+			if (requestTypes == null)
 			{
-				restrictions = restrictions == null
-					? Restrictions.Eq("class", @class)
-					: Restrictions.Or(restrictions, Restrictions.Eq("class", @class));
+				return null;
 			}
+
+			var requestTypeIdList = new HashSet<int>();
+			foreach (var requestType in requestTypes)
+			{
+				switch (requestType)
+				{
+					case RequestType.AbsenceRequest:
+						requestTypeIdList.Add(1);
+						break;
+					case RequestType.ShiftTradeRequest:
+						requestTypeIdList.Add(2);
+						break;
+					case RequestType.TextRequest:
+						requestTypeIdList.Add(3);
+						break;
+					case RequestType.ShiftExchangeOffer:
+						requestTypeIdList.Add(4);
+						break;
+					default:
+						requestTypeIdList.Add(0);
+						break;
+				}
+			}
+
+			var restrictions = Restrictions.In("class", requestTypeIdList.ToList());
 			return restrictions;
 		}
 
