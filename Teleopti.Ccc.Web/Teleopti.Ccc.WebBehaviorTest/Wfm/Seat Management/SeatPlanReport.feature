@@ -63,4 +63,3 @@ Scenario: Should filter report by date when we enter report from planning period
 	When I view Seat plan on "2015-05-01"
 	And I click SeatPlanReport button from planning period
 	Then I should be able to view the report from "2015-05-01" to "2015-05-31"
-
