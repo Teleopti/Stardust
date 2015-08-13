@@ -2,7 +2,7 @@
 using System.Data.SqlClient;
 using NHibernate.Cfg;
 
-namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config
+namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 {
 	public class DataSourceConfiguration
 	{

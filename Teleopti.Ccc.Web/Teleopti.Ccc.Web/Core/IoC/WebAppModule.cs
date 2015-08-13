@@ -2,7 +2,6 @@
 using System.Web.Http;
 using Autofac;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
 
