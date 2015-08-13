@@ -1,4 +1,5 @@
 ﻿<div>
+	<div class="alert-warning notice-spacer" ng-if="runningLock.isLock"><i class='mdi mdi-alert'></i> Warning: Forecast is running, please try later.</div>
 	<div ng-if="!showSelection" class="text-center wfm-block">
 		<div>
 			<md-progress-linear md-mode="indeterminate"></md-progress-linear>
@@ -7,7 +8,7 @@
 	<div class="material-block-content" ng-if="showSelection">
 		<div class="row ">
 			<button class="wfm-btn wfm-btn-default" ng-click="back()">{{ 'Back' | translate }} </button>
-			<button class="wfm-btn apply pull-right" ng-class="{'wfm-btn-primary-disabled': !hasOneSelected(), 'wfm-btn-primary':hasOneSelected()}" ng-click="nextStep()">{{ 'Apply' | translate }}<md-tooltip>Generate forecast</md-tooltip></button>
+			<button class="wfm-btn wfm-btn-primary apply pull-right" ng-disabled="disableApply()" ng-class="{'wfm-btn-primary-disabled': disableApply()}" ng-click="nextStep()">{{ 'Apply' | translate }}<md-tooltip>Generate forecast</md-tooltip></button>
 			<h4>Select forcasting target(s) for period {{period.startDate | date : shortDate}} {{'To' | translate}} {{period.endDate | date : shortDate}}:</h4>
 		</div>
 		<div class="row col-lg-12">

@@ -2,13 +2,14 @@
 
 angular.module('wfm.forecasting')
 	.controller('ForecastingStartCtrl', [
-		'$scope', '$state',
-		function ($scope, $state) {
+		'$scope', '$state', 'RunningLock',
+		function ($scope, $state, runningLock) {
+			$scope.runningLock = runningLock;
 			var startDate = moment().utc().add(1, 'months').startOf('month').toDate();
 			var endDate = moment().utc().add(2, 'months').startOf('month').toDate();
 			$scope.period = { startDate: startDate, endDate: endDate }; //use moment to get first day of next month
 
-			$scope.moreThanTwoYears = function () {
+			var moreThanTwoYears = function () {
 				if ($scope.period && $scope.period.endDate && $scope.period.startDate) {
 					var dateDiff = new Date($scope.period.endDate - $scope.period.startDate);
 					dateDiff.setDate(dateDiff.getDate() - 1);
@@ -36,8 +37,16 @@ angular.module('wfm.forecasting')
 				$state.go('forecasting-runall', { period: period });
 			};
 
+			$scope.disalbeNextStepAll = function () {
+				return moreThanTwoYears() || $scope.runningLock.isLock;
+			};
+
 			$scope.nextStepAdvanced = function (period) {
 				$state.go('forecasting-target', { period: period });
+			};
+
+			$scope.disalbeNextStepAdvanced = function () {
+				return moreThanTwoYears();
 			};
 
 			$scope.setRangeClass = function (date, mode) {

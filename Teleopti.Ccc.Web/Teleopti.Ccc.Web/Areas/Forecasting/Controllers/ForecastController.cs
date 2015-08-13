@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
+using Microsoft.AspNet.SignalR;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
@@ -23,6 +24,8 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		private readonly IForecastViewModelFactory _forecastViewModelFactory;
 		private readonly IForecastResultViewModelFactory _forecastResultViewModelFactory;
 		private readonly IIntradayPatternViewModelFactory _intradayPatternViewModelFactory;
+
+		private readonly Lazy<IHubContext> _forecastHub = new Lazy<IHubContext>(() => GlobalHost.ConnectionManager.GetHubContext<ForecastHub>());
 		private static bool forecastIsRunning;
 
 		public ForecastController(IForecastCreator forecastCreator, ISkillRepository skillRepository, IForecastViewModelFactory forecastViewModelFactory, IForecastResultViewModelFactory forecastResultViewModelFactory, IIntradayPatternViewModelFactory intradayPatternViewModelFactory)
@@ -77,7 +80,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			var failedTask = Task.FromResult(new ForecastResultViewModel
 			{
 				Success = false,
-				Message = "Someone else is doing forecast, please try again later."
+				Message = "Forecast is running, please try later."
 			});
 			if (forecastIsRunning)
 			{
@@ -86,6 +89,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			try
 			{
 				forecastIsRunning = true;
+				_forecastHub.Value.Clients.All.lockForecast();
 				var futurePeriod = new DateOnlyPeriod(new DateOnly(input.ForecastStart), new DateOnly(input.ForecastEnd));
 				_forecastCreator.CreateForecastForWorkloads(futurePeriod, input.Workloads);
 				return Task.FromResult(new ForecastResultViewModel
@@ -100,6 +104,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			finally
 			{
 				forecastIsRunning = false;
+				_forecastHub.Value.Clients.All.unlockForecast();
 			}
 		}
 
