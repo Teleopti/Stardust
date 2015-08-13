@@ -78,17 +78,9 @@ namespace Teleopti.Ccc.WinCode.Main
 						new CurrentHttpContext(),
 						() => messageBroker),
 					messageBroker,
-					new noTenants());
+					new NoTenants());
 
 			initializer.Start(new StateManager(), passwordPolicyService, appSettings, true);
-		}
-	}
-
-	internal class noTenants : ILoadAllTenants
-	{
-		public IEnumerable<Tenant> Tenants()
-		{
-			yield break;
 		}
 	}
 }
