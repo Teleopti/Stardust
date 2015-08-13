@@ -210,16 +210,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return requestsForAgent;
 		}
 
-		public IList<IPersonRequest> FindAllRequestsExceptOffer(IPerson person, Paging paging)
-		{
-			var personRequests = getAllRequests(person);
-
-			excludeShiftExchangeOffers(personRequests);
-			applyPagingToResults(paging, personRequests);
-
-			return personRequests.List<IPersonRequest>();
-		}
-
 		private ICriteria getAllRequests(IPerson person)
 		{
 			var personRequests = Session.CreateCriteria<PersonRequest>()
@@ -230,15 +220,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			personRequests.Add(requestsForAgent);
 			return personRequests;
-		}
-
-		private static void excludeShiftExchangeOffers(ICriteria personRequests)
-		{
-			var requestForPeriod = DetachedCriteria.For<Request>()
-				.SetProjection(Projections.Property("Parent"))
-				.Add(Restrictions.Not(Restrictions.Eq("class", typeof(ShiftExchangeOffer))));
-
-			personRequests.Add(Subqueries.PropertyIn("Id", requestForPeriod));
 		}
 
 		private static void applyPagingToResults(Paging paging, ICriteria personRequests)
