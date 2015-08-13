@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Adheren
 			{
 				PersonId = personId,
 				StartTime = "2014-11-17 8:00".Utc(),
-				InAdherence = true
+				Adherence = EventAdherence.In
 			});
 
 			Persister.Details.Single().ActualStartTime.Should().Be("2014-11-17 7:55".Utc());
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Adheren
 			{
 				PersonId = personId,
 				StartTime = "2014-11-17 8:00".Utc(),
-				InAdherence = false
+				Adherence = EventAdherence.Out
 			});
 			Target.Handle(new PersonStateChangedEvent
 			{
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Adheren
 			{
 				PersonId = personId,
 				StartTime = "2014-11-17 8:00".Utc(),
-				InAdherence = false
+				Adherence = EventAdherence.Out
 			});
 			Target.Handle(new PersonStateChangedEvent
 			{
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Adheren
 			{
 				PersonId = personId,
 				StartTime = "2014-11-17 9:00".Utc(),
-				InAdherence = true
+				Adherence = EventAdherence.In
 			});
 
 			Persister.Details.Last().ActualStartTime.Should().Be("2014-11-17 8:55".Utc());
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Adheren
 			{
 				PersonId = personId,
 				StartTime = "2014-11-17 8:00".Utc(),
-				InAdherence = false
+				Adherence = EventAdherence.Out
 			});
 
 			Persister.Details.Single().ActualStartTime.Should().Be(null);
@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Adheren
 			{
 				PersonId = personId,
 				StartTime = "2014-11-17 8:00".Utc(),
-				InAdherence = false
+				Adherence = EventAdherence.Out
 			});
 			Target.Handle(new PersonStateChangedEvent
 			{
@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Adheren
 			{
 				PersonId = personId,
 				StartTime = "2014-11-17 8:00".Utc(),
-				InAdherence = false
+				Adherence = EventAdherence.Out
 			});
 			Target.Handle(new PersonStateChangedEvent
 			{
@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Adheren
 			{
 				PersonId = personId,
 				StartTime = "2014-11-17 9:00".Utc(),
-				InAdherence = true
+				Adherence = EventAdherence.In
 			});
 
 			Persister.Details.Last().ActualStartTime.Should().Be("2014-11-17 9:00".Utc());
@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Adheren
 			{
 				PersonId = personId,
 				StartTime = "2014-11-17 8:00".Utc(),
-				InAdherence = false
+				Adherence = EventAdherence.Out
 			});
 			Target.Handle(new PersonStateChangedEvent
 			{
@@ -192,7 +192,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Adheren
 			{
 				PersonId = personId,
 				StartTime = "2014-11-17 9:00".Utc(),
-				InAdherence = false
+				Adherence = EventAdherence.Out
 			});
 
 			Persister.Details.Last().ActualStartTime.Should().Be(null);

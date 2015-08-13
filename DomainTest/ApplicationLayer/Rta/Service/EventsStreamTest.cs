@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			});
 
 			publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single().StartTime.Should().Be("2014-10-20 10:00".Utc());
-			publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single().InAdherence.Should().Be(false);
+			publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single().Adherence.Should().Be(EventAdherence.Out);
 			publisher.PublishedEvents.OfType<PersonOutOfAdherenceEvent>().Single().Timestamp.Should().Be("2014-10-20 10:00".Utc());
 			publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single().Timestamp.Should().Be("2014-10-20 10:02".Utc());
 			publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single().Adherence.Should().Be(EventAdherence.In);
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			target.CheckForActivityChange(personId, businessUnitId);
 
 			publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single().StartTime.Should().Be("2014-10-20 9:15".Utc());
-			publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single().InAdherence.Should().Be(true);
+			publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single().Adherence.Should().Be(EventAdherence.In);
 			publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Single().Timestamp.Should().Be("2014-10-20 9:15".Utc());
 		}
 

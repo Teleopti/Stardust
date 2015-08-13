@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Adheren
 		{
 			Target.Handle(new PersonActivityStartEvent
 			{
-				InAdherence = false
+				Adherence = EventAdherence.Out
 			});
 
 			Persister.Model.LastAdherence.Value.Should().Be.False();

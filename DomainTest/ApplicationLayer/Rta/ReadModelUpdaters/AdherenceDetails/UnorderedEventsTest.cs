@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Adheren
 					{
 						PersonId = personId,
 						StartTime = "2015-02-09 08:00:00".Utc(),
-						InAdherence = true
+						Adherence = EventAdherence.In
 					},
 					new PersonStateChangedEvent
 					{

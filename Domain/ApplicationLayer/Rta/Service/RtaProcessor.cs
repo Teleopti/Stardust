@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly IShiftEventPublisher _shiftEventPublisher;
 		private readonly IActivityEventPublisher _activityEventPublisher;
 		private readonly IStateEventPublisher _stateEventPublisher;
+		private readonly IAppliedAdherence _appliedAdherence;
 		private readonly ConcurrentDictionary<Guid, object> personLocks = new ConcurrentDictionary<Guid, object>();
 
 		public RtaProcessor(
@@ -17,7 +18,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IStateMapper stateMapper,
 			IShiftEventPublisher shiftEventPublisher,
 			IActivityEventPublisher activityEventPublisher,
-			IStateEventPublisher stateEventPublisher
+			IStateEventPublisher stateEventPublisher,
+			IAppliedAdherence appliedAdherence
 			)
 		{
 			_scheduleLoader = scheduleLoader;
@@ -25,6 +27,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_shiftEventPublisher = shiftEventPublisher;
 			_activityEventPublisher = activityEventPublisher;
 			_stateEventPublisher = stateEventPublisher;
+			_appliedAdherence = appliedAdherence;
 		}
 
 		public void Process(
@@ -41,7 +44,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 				var scheduleInfo = new ScheduleInfo(_scheduleLoader, context.Person.PersonId, context.CurrentTime);
 				var agentStateInfo = new AgentStateInfo(() => context.PreviousState(scheduleInfo), () => context.CurrentState(scheduleInfo));
-				var adherenceInfo = new AdherenceInfo(input, person, agentStateInfo, scheduleInfo, _stateMapper);
+				var adherenceInfo = new AdherenceInfo(input, person, agentStateInfo, scheduleInfo, _appliedAdherence, _stateMapper);
 				var info = new StateInfo(person, agentStateInfo, scheduleInfo, adherenceInfo);
 
 				context.AgentStateReadModelUpdater.Update(info);

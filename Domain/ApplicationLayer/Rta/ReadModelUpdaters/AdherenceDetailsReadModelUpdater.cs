@@ -46,15 +46,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 
 		private static AdherenceDetailsReadModelAdherence adherenceFor(PersonActivityStartEvent @event)
 		{
-			if (@event.Adherence.HasValue)
-			{
-				if (@event.Adherence == AdherenceState.In)
-					return AdherenceDetailsReadModelAdherence.In;
-				if (@event.Adherence == AdherenceState.Out)
-					return AdherenceDetailsReadModelAdherence.Out;
-				return AdherenceDetailsReadModelAdherence.Neutral;
-			}
-			return @event.InAdherence ? AdherenceDetailsReadModelAdherence.In : AdherenceDetailsReadModelAdherence.Out;
+			if (@event.Adherence == EventAdherence.In)
+				return AdherenceDetailsReadModelAdherence.In;
+			if (@event.Adherence == EventAdherence.Out)
+				return AdherenceDetailsReadModelAdherence.Out;
+			return AdherenceDetailsReadModelAdherence.Neutral;
 		}
 
 		[ReadModelUnitOfWork]

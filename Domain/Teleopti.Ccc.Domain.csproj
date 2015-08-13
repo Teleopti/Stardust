@@ -177,6 +177,7 @@
     <Compile Include="ApplicationLayer\Event.cs" />
     <Compile Include="ApplicationLayer\Events\ActivityChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\ActivityMovedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\EventAdherence.cs" />
     <Compile Include="ApplicationLayer\Events\IRunOnHangfire.cs" />
     <Compile Include="ApplicationLayer\Events\ITrackInfo.cs" />
     <Compile Include="ApplicationLayer\Events\PersonAbsenceModifiedEvent.cs" />
@@ -232,7 +233,6 @@
     <Compile Include="ApplicationLayer\Rta\Service\AdherenceInfo.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherencePercentageReadModel.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherencePercentageReadModelUpdater.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\AdherenceStateDecorator.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\Aggregator\AdherenceAggregator.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\Aggregator\AgentAdherenceAggregator.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\Aggregator\AgentsAdherenceMessage.cs" />

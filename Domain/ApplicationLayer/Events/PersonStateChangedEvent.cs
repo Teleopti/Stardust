@@ -14,11 +14,4 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		public EventAdherence AdherenceWithPreviousActivity { get; set; }
 		public EventAdherence Adherence { get; set; }
 	}
-
-	public enum EventAdherence
-	{
-		In,
-		Out,
-		Neutral
-	}
 }

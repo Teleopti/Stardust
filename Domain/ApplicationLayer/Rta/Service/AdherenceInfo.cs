@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		private readonly ExternalUserStateInputModel _input;
 		private readonly PersonOrganizationData _person;
+		private readonly IAppliedAdherence _appliedAdherence;
 		private readonly IStateMapper _stateMapper;
 		private readonly Lazy<AdherenceState> _adherence;
 		private readonly Lazy<AdherenceState> _adherenceForPreviousState;
@@ -27,10 +28,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			PersonOrganizationData person, 
 			AgentStateInfo agentState, 
 			ScheduleInfo scheduleInfo, 
+			IAppliedAdherence appliedAdherence,
 			IStateMapper stateMapper)
 		{
 			_input = input;
 			_person = person;
+			_appliedAdherence = appliedAdherence;
 			_stateMapper = stateMapper;
 
 
@@ -42,21 +45,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public EventAdherence EventAdherence()
 		{
-			return ConvertToEventAdherence(AdherenceState());
+			return _appliedAdherence.StateToEvent(AdherenceState());
 		}
 
 		public EventAdherence EventAdherenceForNewStateAndPreviousActivity()
 		{
-			return ConvertToEventAdherence(_adherenceForNewStateAndPreviousActivity.Value);
+			return _appliedAdherence.StateToEvent(_adherenceForNewStateAndPreviousActivity.Value);
 		}
 
-		private EventAdherence ConvertToEventAdherence(AdherenceState adherenceState)
+		public EventAdherence AdherenceForPreviousStateAndCurrentActivityForEvent()
 		{
-			if (adherenceState == Service.AdherenceState.In)
-				return Events.EventAdherence.In;
-			if (adherenceState == Service.AdherenceState.Out)
-				return Events.EventAdherence.Out;
-			return Events.EventAdherence.Neutral;
+			return _appliedAdherence.StateToEvent(_adherenceForPreviousStateAndCurrentActivity.Value);
 		}
 
 		public AdherenceState AdherenceState()

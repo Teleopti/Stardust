@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				StartTime = startTime,
 				Name = info.CurrentActivity.Name,
 				BusinessUnitId = info.BusinessUnitId,
-				InAdherence = info.Adherence.AdherenceForPreviousStateAndCurrentActivity() == AdherenceState.In,
+				Adherence = info.Adherence.AdherenceForPreviousStateAndCurrentActivityForEvent(),
 			});
 
 			if (adherenceChanged)
