@@ -880,7 +880,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>SeatPlan.feature</DependentUpon>
     </Compile>
-    <Compile Include="Wfm\Seat Management\SeatPlanReport.feature.cs" />
+    <Compile Include="Wfm\Seat Management\SeatPlanReport1.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SeatPlanReport.feature</DependentUpon>
+    </Compile>
     <Compile Include="Wfm\Seat Management\SeatPlanReportStepDefinitions.cs" />
     <Compile Include="Wfm\Seat Management\SeatPlanStepDefinitions.cs" />
   </ItemGroup>
@@ -1230,6 +1234,10 @@
     <None Include="Wfm\Seat Management\SeatPlan.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>SeatPlan.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Wfm\Seat Management\SeatPlanReport.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>SeatPlanReport1.feature.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
