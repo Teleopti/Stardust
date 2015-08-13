@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
@@ -37,6 +38,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_adherenceForPreviousState = new Lazy<AdherenceState>(() => adherenceFor(agentState.PreviousState()));
 			_adherenceForPreviousStateAndCurrentActivity = new Lazy<AdherenceState>(() => adherenceFor(agentState.PreviousState().StateCode, agentState.PreviousState().PlatformTypeId, agentState.CurrentState().ActivityId));
 			_adherenceForNewStateAndPreviousActivity = new Lazy<AdherenceState>(() => adherenceFor(_input.StateCode, _input.ParsedPlatformTypeId(), scheduleInfo.PreviousActivity()));
+		}
+
+		public EventAdherence CurrentAdherenceForEvent()
+		{
+			var currentAdherence = Events.EventAdherence.Neutral;
+			if (CurrentAdherence() != AdherenceState.Unknown)
+				return (EventAdherence)Enum.Parse(typeof(EventAdherence), Enum.GetName(typeof(AdherenceState), CurrentAdherence()));
+			return currentAdherence;
 		}
 
 		public AdherenceState CurrentAdherence()

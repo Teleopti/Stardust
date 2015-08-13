@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator
 			}
 			, (guid, data) =>
 			{
-				adherenceChanged = !AdherenceInfo.AdherenceFor(data.AgentStateReadModel).Equals(state.Adherence);
+				adherenceChanged = !AdherenceInfo.AdherenceFor(data.AgentStateReadModel).Equals(state.AdherenceState);
 				data.AgentStateReadModel = actualAgentState;
 				data.TeamId = state.TeamId;
 				data.SiteId = state.SiteId;

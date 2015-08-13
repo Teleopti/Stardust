@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Adheren
 			{
 				PersonId = personId,
 				Timestamp = "2014-11-17 9:30".Utc(),
-				InAdherence = false
+				Adherence = EventAdherence.Out
 			});
 
 			Persister.Model.ShiftEndTime.Should().Be("2014-11-17 9:00".Utc());

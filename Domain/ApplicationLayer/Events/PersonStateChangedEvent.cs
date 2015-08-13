@@ -1,5 +1,4 @@
 using System;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages;
 
@@ -12,8 +11,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		public DateTime Timestamp { get; set; }
 		public string Datasource { get; set; }
 		public Guid BusinessUnitId { get; set; }
-		public bool InAdherence { get; set; }
 		public bool InOrNeutralAdherenceWithPreviousActivity { get; set; }
-		public AdherenceState? Adherence { get; set; }
+		public EventAdherence Adherence { get; set; }
+	}
+
+	public enum EventAdherence
+	{
+		In,
+		Out,
+		Neutral
 	}
 }

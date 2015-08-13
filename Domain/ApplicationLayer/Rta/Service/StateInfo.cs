@@ -9,13 +9,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly Lazy<AgentState> _previousState;
 		private readonly Lazy<AgentState> _currentState;
 		private readonly ScheduleInfo _scheduleInfo;
-		private readonly AdherenceInfo _adherenceInfo;
 
-		public StateInfo(PersonOrganizationData person, AgentStateInfo agentState, ScheduleInfo scheduleInfo, AdherenceInfo adherenceInfo)
+		public StateInfo(PersonOrganizationData person, AgentStateInfo agentState, ScheduleInfo scheduleInfo, AdherenceInfo adherence)
 		{
 			_person = person;
 			_scheduleInfo = scheduleInfo;
-			_adherenceInfo = adherenceInfo;
+			Adherence = adherence;
 
 			_previousState = new Lazy<AgentState>(agentState.PreviousState);
 			_currentState = new Lazy<AgentState>(agentState.CurrentState);
@@ -32,11 +31,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public DateTime ShiftStartTimeForPreviousActivity { get { return _scheduleInfo.ShiftStartTimeForPreviousActivity; } }
 		public DateTime ShiftEndTimeForPreviousActivity { get { return _scheduleInfo.ShiftEndTimeForPreviousActivity; } }
-		
-		public AdherenceState Adherence { get { return _adherenceInfo.CurrentAdherence(); } }
-		public AdherenceState AdherenceForPreviousState { get { return _adherenceInfo.AdherenceForPreviousState(); } }
-		public AdherenceState AdherenceForPreviousStateAndCurrentActivity { get { return _adherenceInfo.AdherenceForPreviousStateAndCurrentActivity(); } }
-		public AdherenceState AdherenceForNewStateAndPreviousActivity { get { return _adherenceInfo.AdherenceForNewStateAndPreviousActivity(); } }
+
+		public AdherenceState AdherenceState { get { return Adherence.CurrentAdherence(); } }
+		public AdherenceInfo Adherence { get; private set; }
 
 		public Guid PersonId { get { return _person.PersonId; } }
 		public Guid BusinessUnitId { get { return _person.BusinessUnitId; } }

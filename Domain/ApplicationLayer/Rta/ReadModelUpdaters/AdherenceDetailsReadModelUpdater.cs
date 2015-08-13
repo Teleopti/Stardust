@@ -35,14 +35,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 			_adherenceComparer = new AdherenceStateComparer_DeclarationOrderIsNotToBeTrusted();
 		}
 
+		private static AdherenceState adherenceFor(PersonStateChangedEvent @event)
+		{
+			if (@event.Adherence == EventAdherence.In)
+				return AdherenceState.In;
+			if (@event.Adherence == EventAdherence.Out)
+				return AdherenceState.Out;
+			return AdherenceState.Neutral;
+		}
 
-		private static AdherenceState adherenceFor(dynamic @event)
+		private static AdherenceState adherenceFor(PersonActivityStartEvent @event)
 		{
 			if (@event.Adherence != null)
 			{
-				return @event.Adherence == AdherenceState.Unknown
+				return @event.Adherence.Value == AdherenceState.Unknown
 					? AdherenceState.Neutral
-					: @event.Adherence;
+					: @event.Adherence.Value;
 			}
 			return @event.InAdherence ? AdherenceState.In : AdherenceState.Out;
 		}

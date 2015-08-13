@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			});
 
 			var @event = publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single();
-			@event.InAdherence.Should().Be(true);
+			@event.Adherence.Should().Be(EventAdherence.In);
 		}
 
 		[Test]
@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			});
 
 			var @event = publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single();
-			@event.InAdherence.Should().Be(false);
+			@event.Adherence.Should().Be(EventAdherence.Out);
 		}
 
 		[Test]
@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 		[Test]
 		[Toggle(Toggles.RTA_NeutralAdherence_30930)]
-		public void ShouldSetAdhernce()
+		public void ShouldPublishWithNeutralAdhernce()
 		{
 			var personId = Guid.NewGuid();
 			var admin = Guid.NewGuid();
@@ -217,7 +217,29 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			});
 
 			publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single()
-				.Adherence.Should().Be(AdherenceState.Neutral);
+				.Adherence.Should().Be(EventAdherence.Neutral);
+		}
+
+		[Test]
+		[ToggleOff(Toggles.RTA_NeutralAdherence_30930)]
+		public void ShouldPublishWithoutNeutralAdhernce()
+		{
+			var personId = Guid.NewGuid();
+			var admin = Guid.NewGuid();
+			database
+				.WithUser("usercode", personId)
+				.WithSchedule(personId, admin, "2015-03-13 08:00", "2015-03-13 09:00")
+				.WithAlarm("admin", admin, 0, Adherence.Neutral);
+			now.Is("2015-03-13 08:00");
+
+			target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "admin"
+			});
+
+			publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single()
+				.Adherence.Should().Be(EventAdherence.In);
 		}
 
 		[Test]
@@ -240,27 +262,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 			publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single()
 				.InOrNeutralAdherenceWithPreviousActivity.Should().Be(true);
-		}
-
-		[Test]
-		[ToggleOff(Toggles.RTA_NeutralAdherence_30930)]
-		public void ShouldNotSetAdhernce()
-		{
-			var personId = Guid.NewGuid();
-			var admin = Guid.NewGuid();
-			database
-				.WithUser("usercode", personId)
-				.WithSchedule(personId, admin, "2015-03-13 08:00", "2015-03-13 09:00")
-				.WithAlarm("admin", admin, 0, Adherence.Neutral);
-			now.Is("2015-03-13 08:00");
-
-			target.SaveState(new ExternalUserStateForTest
-			{
-				UserCode = "usercode",
-				StateCode = "admin"
-			});
-
-			publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single().Adherence.Should().Be(null);
 		}
 
 	}

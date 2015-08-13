@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single().InAdherence.Should().Be(false);
 			publisher.PublishedEvents.OfType<PersonOutOfAdherenceEvent>().Single().Timestamp.Should().Be("2014-10-20 10:00".Utc());
 			publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single().Timestamp.Should().Be("2014-10-20 10:02".Utc());
-			publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single().InAdherence.Should().Be(true);
+			publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single().Adherence.Should().Be(EventAdherence.In);
 			publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Single().Timestamp.Should().Be("2014-10-20 10:02".Utc());
 		}
 

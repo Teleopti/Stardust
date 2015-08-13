@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Adheren
 		{
 			Target.Handle(new PersonStateChangedEvent
 			{
-				InAdherence = true
+				Adherence = EventAdherence.In
 			});
 
 			Persister.Model.LastAdherence.Value.Should().Be.True();

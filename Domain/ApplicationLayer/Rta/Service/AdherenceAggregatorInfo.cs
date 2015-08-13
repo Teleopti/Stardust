@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		Guid TeamId { get; }
 		Guid SiteId { get; }
 		Guid BusinessUnitId { get; }
-		AdherenceState Adherence { get; }
+		AdherenceState AdherenceState { get; }
 		AgentStateReadModel MakeActualAgentState();
 	}
 
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public Guid TeamId { get; private set; }
 		public Guid SiteId { get; private set; }
 		public Guid BusinessUnitId { get; private set; }
-		public AdherenceState Adherence { get; set; }
+		public AdherenceState AdherenceState { get; set; }
 
 		public AgentStateReadModel MakeActualAgentState()
 		{

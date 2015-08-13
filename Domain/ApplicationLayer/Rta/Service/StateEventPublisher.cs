@@ -1,3 +1,4 @@
+using System;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
@@ -17,21 +18,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			if (info.CurrentStateId == info.PreviousStateId) return;
 			
-			var adherenceChanged = info.AdherenceForPreviousStateAndCurrentActivity != info.Adherence;
+			var adherenceChanged = info.Adherence.AdherenceForPreviousStateAndCurrentActivity() != info.Adherence.CurrentAdherence();
 
 			_eventPublisher.Publish(info, new PersonStateChangedEvent
 			{
 				PersonId = info.PersonId,
 				Timestamp = info.CurrentTime,
 				BusinessUnitId = info.BusinessUnitId,
-				InAdherence = info.Adherence == AdherenceState.In,
 				InOrNeutralAdherenceWithPreviousActivity =
-					info.AdherenceForNewStateAndPreviousActivity == AdherenceState.In ||
-					info.AdherenceForNewStateAndPreviousActivity == AdherenceState.Neutral,
+					info.Adherence.AdherenceForNewStateAndPreviousActivity() == AdherenceState.In ||
+					info.Adherence.AdherenceForNewStateAndPreviousActivity() == AdherenceState.Neutral,
+				Adherence = info.Adherence.CurrentAdherenceForEvent()
 			});
 
 			if (adherenceChanged)
-				_adherenceEventPublisher.Publish(info, info.CurrentTime, info.Adherence);
+				_adherenceEventPublisher.Publish(info, info.CurrentTime, info.AdherenceState);
 		}
 	}
 }
