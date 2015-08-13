@@ -1311,8 +1311,8 @@
     <Content Include="WFM\tests\outbound\outbound.filter.spec.js" />
     <Content Include="WFM\tests\seatmanagement\seatplanreport.controller.spec.js" />
     <Content Include="WFM\vendor\csv-js\csv.js" />
-    <Content Include="WFM\vendor\jquery-signalR\jquery.signalR-2.0.0.js" />
-    <Content Include="WFM\vendor\jquery\jquery-1.9.1.js" />
+    <Content Include="WFM\vendor\jquery-signalR\jquery.signalR-2.1.2.js" />
+    <Content Include="WFM\vendor\jquery\jquery-1.10.2.js" />
     <Content Include="WFM\vendor\ui-bootstrap-custom-build\datepicker.directive.ext.js" />
     <Content Include="WFM\js\seatManagement\fabric.fix.js" />
     <Content Include="WFM\js\seatManagement\html\imageLoadWithPreview.html" />
