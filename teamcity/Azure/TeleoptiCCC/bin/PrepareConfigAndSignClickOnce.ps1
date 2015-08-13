@@ -311,7 +311,6 @@ Try
     Add-Content "$fullPathsettingsFile" "`$(HTTPSGETENABLED)|true"
     Add-Content "$fullPathsettingsFile" "`$(SDK_SSL_MEX_BINDING)|mexHttpsBinding"
     Add-Content "$fullPathsettingsFile" "`$(RTA_SERVICE)|https://$DataSourceName.teleopticloud.com/RTA/TeleoptiRtaService.svc"
-    Add-Content "$fullPathsettingsFile" "`$(SDK_nhibConfPath)|$DatasourcesPath"
     Add-Content "$fullPathsettingsFile" "`$(AGENTPORTALWEB_nhibConfPath)|$DatasourcesPath"
     Add-Content "$fullPathsettingsFile" "`$(CONFIGURATION_FILES_PATH)|$DatasourcesPath"
     Add-Content "$fullPathsettingsFile" "`$(RTA_STATE_CODE)|ACW,ADMIN,EMAIL,IDLE,InCall,LOGGED ON,OFF,Ready,WEB"
