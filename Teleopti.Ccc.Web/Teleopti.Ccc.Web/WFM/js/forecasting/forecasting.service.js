@@ -14,6 +14,7 @@ angular.module('wfm.forecasting')
 		runningLock.isLock = false;
 
 		var hub = new Hub('forecastHub', {
+			rootPath: "../signalr",
 			listeners: {
 				'lockForecast': function () {
 					runningLock.isLock = true;
