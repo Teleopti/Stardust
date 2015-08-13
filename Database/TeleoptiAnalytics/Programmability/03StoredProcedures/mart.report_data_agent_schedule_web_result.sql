@@ -39,7 +39,7 @@ CREATE TABLE #tmpResult
 	)
 
 INSERT INTO  #tmpResult 
-exec mart.report_data_agent_schedule_result 
+exec mart.report_data_agent_schedule_result
 @date_from=@date_from,
 @date_to=@date_to,
 @interval_from=@interval_from,
@@ -74,6 +74,7 @@ select answered_calls as AnsweredCalls,
 	ready_time_per_scheduled_ready_time as ReadyTimePerScheduledReadyTime,
 	adherence as Adherence
 from #tmpResult
+where answered_calls is not null
 
 DROP TABLE #tmpResult
 
