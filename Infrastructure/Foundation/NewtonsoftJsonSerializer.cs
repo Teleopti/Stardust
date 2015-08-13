@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		IJsonEventSerializer,
 		IJsonEventDeserializer
 	{
+
 		public string SerializeObject(object value)
 		{
 			return JsonConvert.SerializeObject(value);
@@ -30,24 +31,20 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 
 
 
-
 		public string SerializeEvent(object value)
 		{
-			return JsonConvert.SerializeObject(value, eventSerializationSettings());
+			return JsonConvert.SerializeObject(value, _eventSerializationSettings);
 		}
 
 		public object DeserializeEvent(string value, Type type)
 		{
-			return JsonConvert.DeserializeObject(value, type, eventSerializationSettings());
+			return JsonConvert.DeserializeObject(value, type, _eventSerializationSettings);
 		}
 
-		private JsonSerializerSettings eventSerializationSettings()
+		private readonly JsonSerializerSettings _eventSerializationSettings = new JsonSerializerSettings
 		{
-			return new JsonSerializerSettings
-			{
-				ContractResolver = new customContractResolver()
-			};
-		}
+			ContractResolver = new customContractResolver()
+		};
 
 		private class customContractResolver : DefaultContractResolver
 		{
