@@ -2,6 +2,7 @@
 using Autofac;
 using Rhino.ServiceBus;
 using Rhino.ServiceBus.MessageModules;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 		    using (Container.Resolve<ITenantUnitOfWork>().Start())
 		    {
-					var fileConfigurationReader = new FileConfigurationReader(Container.Resolve<IReadDataSourceConfiguration>());
+					var fileConfigurationReader = new FileConfigurationReader(Container.Resolve<ILoadAllTenants>());
 			    fileConfigurationReader.ReadConfiguration(
 					new MessageSenderCreator(new InternalServiceBusSender(() => Container.Resolve<IServiceBus>()),
 						Container.Resolve<IToggleManager>(), 

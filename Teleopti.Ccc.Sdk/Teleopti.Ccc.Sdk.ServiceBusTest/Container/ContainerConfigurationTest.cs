@@ -119,17 +119,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Container
 		}
 
 		[Test]
-		public void ShouldResolveDatabaseConfigurationReader()
-		{
-			var builder = new ContainerBuilder();
-			using (var container = builder.Build())
-			{
-				new ContainerConfiguration(container, new TrueToggleManager()).Configure();
-				container.Resolve<IReadDataSourceConfiguration>().Should().Not.Be.Null();
-			}
-		}
-
-		[Test]
 		public void ShouldResolveEmailConfiguration()
 		{
 			var builder = new ContainerBuilder();

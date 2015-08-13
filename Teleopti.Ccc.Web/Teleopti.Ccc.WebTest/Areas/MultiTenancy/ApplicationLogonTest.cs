@@ -15,7 +15,6 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MultiTenancy;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Model;
-using Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core;
 using Teleopti.Ccc.WebTest.TestHelper;
 
 namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
@@ -26,7 +25,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		public TenantAuthenticationFake TenantAuthentication;
 		public AuthenticateController Target;
 		public ApplicationUserQueryFake ApplicationUserQuery;
-		public DataSourceConfigurationProviderFake DataSourceConfigurationProvider;
 		public LogLogonAttemptFake LogLogonAttempt;
 		public TenantUnitOfWorkFake TenantUnitOfWork;
 		public PasswordPolicyFake PasswordPolicy;
@@ -69,24 +67,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		}
 
 		[Test]
-		public void ShouldFailIfNoDatasource()
-		{
-			var logonName = RandomName.Make();
-			var password = RandomName.Make();
-			var personInfo = new PersonInfo();
-			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), logonName, password);
-			ApplicationUserQuery.Has(personInfo);
-			DataSourceConfigurationProvider.Has(new Tenant("another tenant"), new DataSourceConfiguration());
-
-			var result =
-				Target.ApplicationLogon(new ApplicationLogonModel {UserName = logonName, Password = password})
-					.Result<TenantAuthenticationResult>();
-
-			result.Success.Should().Be.False();
-			result.FailReason.Should().Be.EqualTo(Resources.NoDatasource);
-		}
-
-		[Test]
 		public void ShouldSucceedIfValidCredentials()
 		{
 			var logonName = RandomName.Make();
@@ -97,10 +77,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			var encryptedDataSourceConfiguration = new DataSourceConfigurationEncryption().EncryptConfig(tenant.DataSourceConfiguration);
 
 			var personInfo = new PersonInfo(tenant, Guid.NewGuid());
-			var dataSourceConfiguration = new DataSourceConfiguration();
 			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), logonName, password);
 			ApplicationUserQuery.Has(personInfo);
-			DataSourceConfigurationProvider.Has(tenant, dataSourceConfiguration);
 
 			var res = Target.ApplicationLogon(new ApplicationLogonModel {UserName = logonName, Password = password}).Result<TenantAuthenticationResult>();
 
@@ -121,9 +99,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			var password = RandomName.Make();
 			var personInfo = new PersonInfo();
 			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), logonName, password);
-			var datasourceConfiguration = new DataSourceConfiguration();
 			ApplicationUserQuery.Has(personInfo);
-			DataSourceConfigurationProvider.Has(personInfo.Tenant, datasourceConfiguration);
 
 			Target.ApplicationLogon(new ApplicationLogonModel {UserName = logonName, Password = password})
 				.Result<TenantAuthenticationResult>();
@@ -249,7 +225,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			var personInfo = new PersonInfo(new Tenant(RandomName.Make()), Guid.NewGuid());
 			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), logonName, password);
 			ApplicationUserQuery.Has(personInfo);
-			DataSourceConfigurationProvider.Has(personInfo.Tenant, new DataSourceConfiguration());
 			PasswordPolicy.PasswordValidForDayCount = 1;
 			PasswordPolicy.PasswordExpireWarningDayCount = 2;
 
@@ -268,7 +243,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			var personInfo = new PersonInfo(new Tenant(RandomName.Make()), Guid.NewGuid());
 			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), logonName, password);
 			ApplicationUserQuery.Has(personInfo);
-			DataSourceConfigurationProvider.Has(personInfo.Tenant, new DataSourceConfiguration());
 			PasswordPolicy.PasswordValidForDayCount = 0;
 
 			var result = Target.ApplicationLogon(new ApplicationLogonModel { UserName = logonName, Password = password }).Result<TenantAuthenticationResult>();

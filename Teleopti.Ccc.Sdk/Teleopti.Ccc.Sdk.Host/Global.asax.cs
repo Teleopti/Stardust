@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 							() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging
 							),
 						messageBroker,
-						new ReadDataSourceConfiguration(new LoadAllTenants(tenantUnitOfWorkManager)));
+						new LoadAllTenants(tenantUnitOfWorkManager));
 				initializeApplication.Start(new SdkState(), passwordPolicyService, appSettings, messageBrokerEnabled);
 			}
 			tenantUnitOfWorkManager.Dispose();

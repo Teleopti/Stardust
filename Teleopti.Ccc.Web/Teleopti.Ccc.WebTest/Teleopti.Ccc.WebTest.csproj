@@ -296,8 +296,6 @@
     <Compile Include="Areas\Start\Controllers\ConfigControllerTest.cs" />
     <Compile Include="Areas\Start\Core\Config\SharedSettingsFactoryTest.cs" />
     <Compile Include="Areas\MultiTenancy\Core\VerifyPasswordPolicyTest.cs" />
-    <Compile Include="Areas\MultiTenancy\Core\DataSourceConfigurationProviderFake.cs" />
-    <Compile Include="Areas\MultiTenancy\Core\DataSourceConfigurationProviderTest.cs" />
     <Compile Include="Areas\MultiTenancy\Core\HttpRequestUserAgentFake.cs" />
     <Compile Include="Areas\MultiTenancy\Core\IoCTest.cs" />
     <Compile Include="Areas\MultiTenancy\Core\LogTenancyLogonAttemptTest.cs" />

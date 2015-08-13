@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
@@ -22,7 +23,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 {
 	public class LogOnHelper : ILogOnHelper
 	{
-		private readonly IReadDataSourceConfiguration _readDataSourceConfiguration;
+		private readonly ILoadAllTenants _loadAllTenants;
 		private readonly IAvailableBusinessUnitsProvider _availableBusinessUnitsProvider;
 		private DataSourceContainer _choosenDb;
 		private LogOnService _logonService;
@@ -30,11 +31,11 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		private ILogOnOff _logOnOff;
 		private List<ITenantName> _tenantNames;
 
-		public LogOnHelper(IReadDataSourceConfiguration readDataSourceConfiguration, 
+		public LogOnHelper(ILoadAllTenants loadAllTenants, 
 									ITenantUnitOfWork tenantUnitOfWork,
 									IAvailableBusinessUnitsProvider availableBusinessUnitsProvider)
 		{
-			_readDataSourceConfiguration = readDataSourceConfiguration;
+			_loadAllTenants = loadAllTenants;
 			_availableBusinessUnitsProvider = availableBusinessUnitsProvider;
 			initializeStateHolder(tenantUnitOfWork);
 		}
@@ -91,7 +92,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				new CurrentHttpContext(),
 				() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging
 				);
-			var application = new InitializeApplication(dataSourcesFactory, null, _readDataSourceConfiguration);
+			var application = new InitializeApplication(dataSourcesFactory, null, _loadAllTenants);
 
 			using (tenantUnitOfWork.Start())
 			{

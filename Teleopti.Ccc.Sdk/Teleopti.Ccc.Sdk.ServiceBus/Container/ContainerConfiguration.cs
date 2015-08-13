@@ -70,7 +70,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 				.As<ITenantUnitOfWork>()
 				.As<ICurrentTenantSession>()
 				.SingleInstance();
-			build.RegisterType<ReadDataSourceConfiguration>().As<IReadDataSourceConfiguration>().SingleInstance();
 			build.RegisterType<LoadAllTenants>().As<ILoadAllTenants>().SingleInstance();
 
 			build.Update(_container);

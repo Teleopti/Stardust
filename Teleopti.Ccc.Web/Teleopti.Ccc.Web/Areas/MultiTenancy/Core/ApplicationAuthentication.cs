@@ -41,11 +41,6 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 			if (applicationLogonInfo.IsLocked)
 				return createFailingResult(Resources.LogOnFailedAccountIsLocked);
 
-			var nhibConfig = _dataSourceConfigurationEncryption.EncryptConfig(personInfo.Tenant.DataSourceConfiguration);
-			//TODO tenant: no need to keep this when #33685 is done
-			if (nhibConfig == null)
-				return createFailingResult(Resources.NoDatasource);
-
 			var passwordCheck = _verifyPasswordPolicy.Check(applicationLogonInfo);
 			if (passwordCheck.HasMessage)
 				return new TenantAuthenticationResult
@@ -62,7 +57,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 				Success = true,
 				PersonId = personInfo.Id,
 				Tenant = personInfo.Tenant.Name,
-				DataSourceConfiguration = nhibConfig,
+				DataSourceConfiguration = _dataSourceConfigurationEncryption.EncryptConfig(personInfo.Tenant.DataSourceConfiguration),
 				TenantPassword = personInfo.TenantPassword
 			};
 		}

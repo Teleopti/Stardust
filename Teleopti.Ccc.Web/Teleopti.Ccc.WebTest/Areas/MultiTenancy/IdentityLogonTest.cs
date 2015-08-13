@@ -11,7 +11,6 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MultiTenancy;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Model;
-using Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core;
 using Teleopti.Ccc.WebTest.TestHelper;
 
 namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
@@ -22,7 +21,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		public TenantAuthenticationFake TenantAuthentication;
 		public AuthenticateController Target;
 		public IdentityUserQueryFake IdentityUserQuery;
-		public DataSourceConfigurationProviderFake DataSourceConfigurationProvider;
 		public TenantUnitOfWorkFake TenantUnitOfWork;
 		public LogLogonAttemptFake LogLogonAttempt;
 
@@ -48,7 +46,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		public void ShouldSucceedIfValidCredentials()
 		{
 			var identity = RandomName.Make();
-			var datasourceConfiguration = new DataSourceConfiguration();
 			var tenant = new Tenant(RandomName.Make());
 			tenant.DataSourceConfiguration.SetAnalyticsConnectionString(string.Format("Initial Catalog={0}", RandomName.Make()));
 			tenant.DataSourceConfiguration.SetApplicationConnectionString(string.Format("Initial Catalog={0}", RandomName.Make()));
@@ -56,7 +53,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			var personInfo = new PersonInfo(tenant, Guid.NewGuid());
 			personInfo.SetIdentity(identity);
 			IdentityUserQuery.Has(personInfo);
-			DataSourceConfigurationProvider.Has(personInfo.Tenant, datasourceConfiguration);
 
 			var result = Target.IdentityLogon(new IdentityLogonModel { Identity = identity }).Result<TenantAuthenticationResult>();
 
@@ -72,29 +68,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		}
 
 		[Test]
-		public void ShouldFailIfNoDatasource()
-		{
-			var identity = RandomName.Make();
-			var personInfo = new PersonInfo();
-			personInfo.SetIdentity(identity);
-			IdentityUserQuery.Has(personInfo);
-			DataSourceConfigurationProvider.Has(new Tenant("another tenant"), new DataSourceConfiguration());
-
-			var result = Target.IdentityLogon(new IdentityLogonModel { Identity = identity }).Result<TenantAuthenticationResult>();
-
-			result.Success.Should().Be.False();
-			result.FailReason.Should().Be.EqualTo(Resources.NoDatasource);
-		}
-
-		[Test]
 		public void ShouldLogIdentityLogonSuccessful()
 		{
 			var identity = RandomName.Make();
-			var datasourceConfiguration = new DataSourceConfiguration();
 			var personInfo = new PersonInfo(new Tenant(RandomName.Make()), Guid.NewGuid());
 			personInfo.SetIdentity(identity);
 			IdentityUserQuery.Has(personInfo);
-			DataSourceConfigurationProvider.Has(personInfo.Tenant, datasourceConfiguration);
 
 			Target.IdentityLogon(new IdentityLogonModel { Identity = identity }).Result<TenantAuthenticationResult>();
 

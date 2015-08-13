@@ -4,6 +4,7 @@ using System.Linq;
 using Castle.Core.Internal;
 using log4net;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
@@ -18,13 +19,15 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		private static readonly ILog log = LogManager.GetLogger(typeof (InitializeApplication));
 		private readonly IDataSourcesFactory _dataSourcesFactory;
 		private readonly IMessageBrokerComposite _messageBroker;
-		private readonly IReadDataSourceConfiguration _readDataSourceConfiguration;
+		private readonly ILoadAllTenants _loadAllTenants;
 
-		public InitializeApplication(IDataSourcesFactory dataSourcesFactory, IMessageBrokerComposite messageBroker, IReadDataSourceConfiguration readDataSourceConfiguration)
+		public InitializeApplication(IDataSourcesFactory dataSourcesFactory, 
+											IMessageBrokerComposite messageBroker,
+											ILoadAllTenants loadAllTenants)
 		{
 			_dataSourcesFactory = dataSourcesFactory;
 			_messageBroker = messageBroker;
-			_readDataSourceConfiguration = readDataSourceConfiguration;
+			_loadAllTenants = loadAllTenants;
 		}
 
 		public void Start(IState clientCache, ILoadPasswordPolicyService loadPasswordPolicyService, IDictionary<string, string> appSettings, bool startMessageBroker)
@@ -35,9 +38,12 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 				this.startMessageBroker(appSettings);
 			var appData = new ApplicationData(appSettings, Enumerable.Empty<IDataSource>(), _messageBroker, loadPasswordPolicyService, _dataSourcesFactory);
 			StateHolder.Instance.State.SetApplicationData(appData);
-			_readDataSourceConfiguration.Read().ForEach(dsConf =>
+			_loadAllTenants.Tenants().ForEach(dsConf =>
 			{
-				appData.MakeSureDataSourceExists(dsConf.Key, dsConf.Value.ApplicationConnectionString, dsConf.Value.AnalyticsConnectionString, dsConf.Value.ApplicationNHibernateConfig);
+				appData.MakeSureDataSourceExists(dsConf.Name, 
+					dsConf.DataSourceConfiguration.ApplicationConnectionString,
+					dsConf.DataSourceConfiguration.AnalyticsConnectionString,
+					dsConf.DataSourceConfiguration.ApplicationNHibernateConfig);
 			});
 		}
 

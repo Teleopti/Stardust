@@ -9,7 +9,7 @@ using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using log4net;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Web;
@@ -21,13 +21,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 {
 	public class FileConfigurationReader : IConfigurationReader
 	{
-		private readonly IReadDataSourceConfiguration _readDataSourceConfiguration;
+		private readonly ILoadAllTenants _loadAllTenants;
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(FileConfigurationReader));
 		private static readonly object LockObject = new object();
 
-		public FileConfigurationReader(IReadDataSourceConfiguration readDataSourceConfiguration)
+		public FileConfigurationReader(ILoadAllTenants loadAllTenants)
 		{
-			_readDataSourceConfiguration = readDataSourceConfiguration;
+			_loadAllTenants = loadAllTenants;
 		}
 
 		public void ReadConfiguration(MessageSenderCreator creator, Func<IMessageBrokerComposite> messageBroker)
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 							new CurrentHttpContext(),
 							messageBroker),
 						messageBroker(),
-						_readDataSourceConfiguration);
+						_loadAllTenants);
 				application.Start(new BasicState(), null, ConfigurationManager.AppSettings.ToDictionary(), true);
 
 				Logger.Info("Initialized application");

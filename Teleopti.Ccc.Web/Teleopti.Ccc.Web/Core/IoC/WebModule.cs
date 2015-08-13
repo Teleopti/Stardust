@@ -157,7 +157,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 		{
 			builder.RegisterType<ApplicationAuthentication>().As<IApplicationAuthentication>().SingleInstance();
 			builder.RegisterType<IdentityAuthentication>().As<IIdentityAuthentication>().SingleInstance();
-			builder.RegisterType<DataSourceConfigurationProvider>().As<IDataSourceConfigurationProvider>().SingleInstance();
 			builder.RegisterType<DataSourceConfigurationEncryption>().As<IDataSourceConfigurationEncryption>().SingleInstance();
 			builder.RegisterType<PersonInfoMapper>().As<IPersonInfoMapper>().SingleInstance();
 			builder.RegisterType<ChangePersonPassword>().As<IChangePersonPassword>().SingleInstance();

@@ -15,6 +15,8 @@ using Teleopti.Ccc.WinCode.Common.ServiceBus;
 using Teleopti.Ccc.WinCode.Services;
 using Teleopti.Ccc.Infrastructure.Config;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Config;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces;
@@ -25,7 +27,8 @@ namespace Teleopti.Ccc.WinCode.Main
 {
 	public static class LogonInitializeStateHolder
 	{
-		public static void InitWithoutDataSource(IMessageBrokerComposite messageBroker, SharedSettings settings, IComponentContext container)
+		public static void InitWithoutDataSource(IMessageBrokerComposite messageBroker, SharedSettings settings,
+			IComponentContext container)
 		{
 			LoadPasswordPolicyService passwordPolicyService;
 			if (settings.PasswordPolicy == null)
@@ -60,10 +63,10 @@ namespace Teleopti.Ccc.WinCode.Main
 			};
 			if (container.Resolve<IToggleManager>().IsEnabled(Toggles.MessageBroker_SchedulingScreenMailbox_32733))
 				senders.Add(new AggregatedScheduleChangeMessageSender(
-					messageBroker, 
-					CurrentDataSource.Make(), 
-					businessUnit, 
-					new NewtonsoftJsonSerializer(), 
+					messageBroker,
+					CurrentDataSource.Make(),
+					businessUnit,
+					new NewtonsoftJsonSerializer(),
 					new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make()))
 					);
 			var messageSenders = new CurrentMessageSenders(senders);
@@ -71,14 +74,22 @@ namespace Teleopti.Ccc.WinCode.Main
 				new InitializeApplication(
 					new DataSourcesFactory(
 						new EnversConfiguration(),
-						messageSenders, 
+						messageSenders,
 						DataSourceConfigurationSetter.ForDesktop(),
 						new CurrentHttpContext(),
 						() => messageBroker),
 					messageBroker,
-					new NoDataSourceConfiguration());
+					new noTenants());
 
 			initializer.Start(new StateManager(), passwordPolicyService, appSettings, true);
+		}
+	}
+
+	internal class noTenants : ILoadAllTenants
+	{
+		public IEnumerable<Tenant> Tenants()
+		{
+			yield break;
 		}
 	}
 }

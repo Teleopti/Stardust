@@ -45,7 +45,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			builder.RegisterType<FindTenantLogonInfoUnsecured>().As<IFindLogonInfo>().SingleInstance();
 			builder.RegisterType<TenantLogonInfoLoader>().As<ITenantLogonInfoLoader>().SingleInstance();
 			builder.RegisterType<LoadAllTenants>().As<ILoadAllTenants>().SingleInstance();
-			builder.RegisterType<ReadDataSourceConfiguration>().As<IReadDataSourceConfiguration>().SingleInstance();
 		}
 
 		public class TenantLogonInfoLoader : ITenantLogonInfoLoader

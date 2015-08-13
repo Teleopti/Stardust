@@ -585,8 +585,6 @@
     <Compile Include="Areas\Start\Core\Authentication\Services\ILogLogonAttempt.cs" />
     <Compile Include="Areas\Start\Core\Config\ISharedSettingsFactory.cs" />
     <Compile Include="Areas\Start\Core\Config\SharedSettingsFactory.cs" />
-    <Compile Include="Areas\MultiTenancy\Core\DataSourceConfigurationProvider.cs" />
-    <Compile Include="Areas\MultiTenancy\Core\IDataSourceConfigurationProvider.cs" />
     <Compile Include="Areas\MultiTenancy\Core\IDataSourceConfigurationEncryption.cs" />
     <Compile Include="Areas\MultiTenancy\Core\IPersonInfoMapper.cs" />
     <Compile Include="Areas\MultiTenancy\Core\DataSourceConfigurationEncryption.cs" />
