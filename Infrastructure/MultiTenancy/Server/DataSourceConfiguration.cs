@@ -13,9 +13,18 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 			ApplicationNHibernateConfig = new Dictionary<string, string> { { Environment.CommandTimeout, "60" } };
 		}
 
-		public virtual string AnalyticsConnectionString { get; set; }
-		public virtual string ApplicationConnectionString { get; set; }
-		public virtual IDictionary<string, string> ApplicationNHibernateConfig { get; set; }
+		public DataSourceConfiguration(string applicationConnectionString, 
+										string analyticsConnectionString,
+										IDictionary<string, string> applicationNHibernateConfig)
+		{
+			ApplicationConnectionString = applicationConnectionString;
+			AnalyticsConnectionString = analyticsConnectionString;
+			ApplicationNHibernateConfig = applicationNHibernateConfig;
+		}
+
+		public virtual string AnalyticsConnectionString { get; protected set; }
+		public virtual string ApplicationConnectionString { get; protected set; }
+		public virtual IDictionary<string, string> ApplicationNHibernateConfig { get; protected set; }
 
 		public virtual void SetApplicationConnectionString(string applicationConnectionString)
 		{

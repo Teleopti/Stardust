@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using NHibernate.Exceptions;
 using NUnit.Framework;
@@ -70,11 +69,8 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			var value1 = RandomName.Make();
 			var key2 = RandomName.Make();
 			var value2 = RandomName.Make();
-			tenant.DataSourceConfiguration.ApplicationNHibernateConfig = new Dictionary<string, string>
-			{
-				{key1, value1},
-				{key2, value2}
-			};
+			tenant.DataSourceConfiguration.ApplicationNHibernateConfig[key1] = value1;
+			tenant.DataSourceConfiguration.ApplicationNHibernateConfig[key2] = value2;
 
 			target.Persist(tenant);
 			tenantUnitOfWorkManager.CurrentSession().Flush();
@@ -85,7 +81,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 
 			result.DataSourceConfiguration.ApplicationNHibernateConfig
 				.Should()
-				.Have.SameValuesAs(new KeyValuePair<string, string>(key1, value1), new KeyValuePair<string, string>(key2, value2));
+				.Have.SameValuesAs(tenant.DataSourceConfiguration.ApplicationNHibernateConfig);
 		}
 
 		[Test]

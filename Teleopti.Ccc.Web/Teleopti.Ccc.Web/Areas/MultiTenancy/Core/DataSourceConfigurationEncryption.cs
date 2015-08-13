@@ -9,14 +9,11 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 	{
 		public DataSourceConfiguration EncryptConfig(DataSourceConfiguration dataSourceConfig)
 		{
-			var dic = dataSourceConfig.ApplicationNHibernateConfig.Keys.ToDictionary(key => key, key => Encryption.EncryptStringToBase64(dataSourceConfig.ApplicationNHibernateConfig[key], EncryptionConstants.Image1, EncryptionConstants.Image2));
-			var ret = new DataSourceConfiguration
-			{
-				ApplicationNHibernateConfig = dic,
-				ApplicationConnectionString = Encryption.EncryptStringToBase64(dataSourceConfig.ApplicationConnectionString, EncryptionConstants.Image1, EncryptionConstants.Image2),
-				AnalyticsConnectionString = Encryption.EncryptStringToBase64(dataSourceConfig.AnalyticsConnectionString, EncryptionConstants.Image1, EncryptionConstants.Image2)
-			};
-			return ret;
+			return new DataSourceConfiguration(
+				Encryption.EncryptStringToBase64(dataSourceConfig.ApplicationConnectionString, EncryptionConstants.Image1, EncryptionConstants.Image2),
+				Encryption.EncryptStringToBase64(dataSourceConfig.AnalyticsConnectionString, EncryptionConstants.Image1, EncryptionConstants.Image2),
+				dataSourceConfig.ApplicationNHibernateConfig.Keys.ToDictionary(key => key, key =>
+						Encryption.EncryptStringToBase64(dataSourceConfig.ApplicationNHibernateConfig[key], EncryptionConstants.Image1, EncryptionConstants.Image2)));
 		}
 	}
 }

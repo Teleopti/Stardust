@@ -23,13 +23,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 				{"key3", "a third secret value"}
 			};
 
-			var dataSourceConfig = new DataSourceConfiguration
-			{
-				ApplicationNHibernateConfig = dic,
-				ApplicationConnectionString = RandomName.Make(),
-				AnalyticsConnectionString = "a very secret connectionstring"
-			};
-
+			var dataSourceConfig = new DataSourceConfiguration(RandomName.Make(), "a very secret connectionstring", dic);
 			var encryptedOne = Encryption.EncryptStringToBase64(dic["key1"], EncryptionConstants.Image1, EncryptionConstants.Image2);
 			var encryptedTwo = Encryption.EncryptStringToBase64(dic["key2"], EncryptionConstants.Image1, EncryptionConstants.Image2);
 			var encryptedThree = Encryption.EncryptStringToBase64("a very secret connectionstring", EncryptionConstants.Image1, EncryptionConstants.Image2);
