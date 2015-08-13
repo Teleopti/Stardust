@@ -880,6 +880,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>SeatPlan.feature</DependentUpon>
     </Compile>
+    <Compile Include="Wfm\Seat Management\SeatPlanReport.feature.cs" />
+    <Compile Include="Wfm\Seat Management\SeatPlanReportStepDefinitions.cs" />
     <Compile Include="Wfm\Seat Management\SeatPlanStepDefinitions.cs" />
   </ItemGroup>
   <ItemGroup>
