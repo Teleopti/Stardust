@@ -1,5 +1,7 @@
 ﻿namespace Teleopti.Ccc.Domain.FeatureFlags
 {
+	//Yes, yes, I know. This should be named "Toggle" but too many name collisions
+	//with namespaces if changed now.
 	public enum Toggles
 	{
 		//Don't remove this one - used in tests
