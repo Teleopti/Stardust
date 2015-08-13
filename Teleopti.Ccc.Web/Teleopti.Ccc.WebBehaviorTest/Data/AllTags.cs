@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			Add("SitePath", Paths.WebPath());
 			Add("SitePathAuthenticationBridge", Paths.WebAuthenticationBridgePath());
 			Add("SitePathWindowsIdentityProvider", Paths.WebWindowsIdentityProviderPath());
-			Add("ConfigPath", Paths.WebBinPath());
 			Add("WEB_BROKER_FOR_WEB", TestSiteConfigurationSetup.URL.ToString());
 			Add("DEFAULT_IDENTITY_PROVIDER", "Teleopti");
 			Add("WEB_DEPLOY", bool.FalseString.ToLowerInvariant());
