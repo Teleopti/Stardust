@@ -78,6 +78,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 			var state = new StateNewVersion();
 			var applicationData = new ApplicationData(ConfigurationManager.AppSettings.ToDictionary(), null, null,dataSourcesFactory);
 			applicationData.MakeSureDataSourceExists_UseOnlyFromTests(dataSource); //no threading issues so it should be fine
+			state.SetApplicationData(applicationData);
 			StateHolder.Initialize(state);
 
 			var repositoryFactory = new RepositoryFactory();
