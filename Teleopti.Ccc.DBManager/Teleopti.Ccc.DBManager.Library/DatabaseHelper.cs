@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.DBManager.Library
 					ExecuteSql("DROP DATABASE [" + dbName + "]");
 					return true;
 				}
-				catch (Exception e)
+				catch (Exception)
 				{
 					return false;
 				}
@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.DBManager.Library
 					ExecuteSql("DROP LOGIN [" + login + "]");
 					return true;
 				}
-				catch (Exception e)
+				catch (Exception)
 				{
 					return false;
 				}

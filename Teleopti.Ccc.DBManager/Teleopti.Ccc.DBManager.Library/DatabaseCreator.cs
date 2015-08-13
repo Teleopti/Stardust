@@ -95,15 +95,15 @@ namespace Teleopti.Ccc.DBManager.Library
 		}
 	}
 
-	public class MyLogger : ILog, IDisposable
+	public class MyLogger : ILog //, IDisposable
 	{
-		private readonly TextWriter _logFile;
+		//private readonly TextWriter _logFile;
 
-		public MyLogger()
-		{
-			var nowDateTime = DateTime.Now;
-			//_logfile = new StreamWriter(string.Format(CultureInfo.CurrentCulture, "DBLibrary_{0}_{1}.log", nowDateTime.ToString("yyyyMMdd", CultureInfo.CurrentCulture), nowDateTime.ToString("hhmmss", CultureInfo.CurrentCulture)));
-		}
+		//public MyLogger()
+		//{
+		//	//var nowDateTime = DateTime.Now;
+		//	//_logfile = new StreamWriter(string.Format(CultureInfo.CurrentCulture, "DBLibrary_{0}_{1}.log", nowDateTime.ToString("yyyyMMdd", CultureInfo.CurrentCulture), nowDateTime.ToString("hhmmss", CultureInfo.CurrentCulture)));
+		//}
 
 		public void Write(string message)
 		{
@@ -111,12 +111,12 @@ namespace Teleopti.Ccc.DBManager.Library
 			//gFile.WriteLine(message);
 		}
 
-		public void Dispose()
-		{
-			if (_logFile == null)
-				return;
-			_logFile.Close();
-			_logFile.Dispose();
-		}
+		//public void Dispose()
+		//{
+		//	if (_logFile == null)
+		//		return;
+		//	_logFile.Close();
+		//	_logFile.Dispose();
+		//}
 	}
 }
