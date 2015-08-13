@@ -30,8 +30,10 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 		{
 			var dataSource = MockRepository.GenerateStub<IDataSource>();
 			var licenseVerifierFactory = MockRepository.GenerateStub<ILicenseVerifierFactory>();
+			var applicationData = new ApplicationData(null, null, null, null);
+			applicationData.MakeSureDataSourceExists_UseOnlyFromTests(dataSource);
 			var target = new VerifyLicenseTask(licenseVerifierFactory, new Lazy<IApplicationData>(
-					() => new ApplicationData(null, new[] { dataSource }, null, null, null)), null);
+					() => applicationData), null);
 			var licenseVerifier = MockRepository.GenerateStub<ILicenseVerifier>();
 
 			dataSource.Expect(x => x.DataSourceName).Return(datasourceName);
@@ -49,8 +51,10 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 			var dataSource = MockRepository.GenerateStub<IDataSource>();
 			var uowFactory = MockRepository.GenerateStub<IUnitOfWorkFactory>();
 			var licenseVerifierFactory = MockRepository.GenerateStub<ILicenseVerifierFactory>();
+			var applicationData = new ApplicationData(null, null, null, null);
+			applicationData.MakeSureDataSourceExists_UseOnlyFromTests(dataSource);
 			var target = new VerifyLicenseTask(licenseVerifierFactory, new Lazy<IApplicationData>(
-					() => new ApplicationData(null, new[] { dataSource }, null, null, null)), MockRepository.GenerateMock<ILog>());
+					() => new ApplicationData(null, null, null, null)), MockRepository.GenerateMock<ILog>());
 			var licenseVerifier = new LicenseVerifier(target, uowFactory, null);
 
 			dataSource.Expect(x => x.DataSourceName).Return(datasourceName);
@@ -69,7 +73,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 		{
 			var logger = MockRepository.GenerateMock<ILog>();
 			var target = new VerifyLicenseTask(MockRepository.GenerateStub<ILicenseVerifierFactory>(), new Lazy<IApplicationData>(
-					() => new ApplicationData(null, Enumerable.Empty<IDataSource>(), null, null, null)), logger);
+					() => new ApplicationData(null, null, null, null)), logger);
 
 			target.Warning("should be");
 			target.Error("logged");

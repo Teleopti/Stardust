@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 
 			if (startMessageBroker)
 				this.startMessageBroker(appSettings);
-			var appData = new ApplicationData(appSettings, Enumerable.Empty<IDataSource>(), _messageBroker, loadPasswordPolicyService, _dataSourcesFactory);
+			var appData = new ApplicationData(appSettings, _messageBroker, loadPasswordPolicyService, _dataSourcesFactory);
 			StateHolder.Instance.State.SetApplicationData(appData);
 			_loadAllTenants.Tenants().ForEach(dsConf =>
 			{

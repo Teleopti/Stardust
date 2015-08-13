@@ -52,8 +52,8 @@ namespace Teleopti.Ccc.InfrastructureTest
 
 			MessageBrokerContainerDontUse.Configure(null, null, MessageFilterManager.Instance, new NewtonsoftJsonSerializer(), new NewtonsoftJsonSerializer());
 			ApplicationData = new ApplicationData(appSettings,
-									new ReadOnlyCollection<IDataSource>(new List<IDataSource> { DataSource }),
 									MessageBrokerContainerDontUse.CompositeClient(), null, null);
+			((ApplicationData)ApplicationData).MakeSureDataSourceExists_UseOnlyFromTests(DataSource);
 
 			BusinessUnitFactory.BusinessUnitUsedInTest = BusinessUnitFactory.CreateSimpleBusinessUnit("Business unit used in test");
 			sessionData = StateHolderProxyHelper.CreateSessionData(loggedOnPerson, DataSource, BusinessUnitFactory.BusinessUnitUsedInTest);

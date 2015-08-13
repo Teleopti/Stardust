@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
@@ -17,38 +16,20 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		private readonly IDataSourcesFactory _dataSourcesFactory;
 
 		public ApplicationData(IDictionary<string, string> appSettings,
-			IEnumerable<IDataSource> registeredDataSources,
 			IMessageBrokerComposite messageBroker,
 			ILoadPasswordPolicyService loadPasswordPolicyService,
 			IDataSourcesFactory dataSourcesFactory)
 		{
 			AppSettings = appSettings;
-			_registeredDataSourceCollection = registeredDataSources.ToList();
+			_registeredDataSourceCollection = new List<IDataSource>();
 			_messageBroker = messageBroker;
 			_loadPasswordPolicyService = loadPasswordPolicyService;
 			_dataSourcesFactory = dataSourcesFactory;
-			checkNoDuplicateDataSourceExists(_registeredDataSourceCollection);
 		}
 
 		public ILoadPasswordPolicyService LoadPasswordPolicyService
 		{
 			get { return _loadPasswordPolicyService; }
-		}
-
-		private static void checkNoDuplicateDataSourceExists(IEnumerable<IDataSource> registeredDataSources)
-		{
-			InParameter.NotNull("registeredDataSources", registeredDataSources);
-			IList<string> uniqueNames = new List<string>();
-			foreach (IDataSource dataSource in registeredDataSources)
-			{
-				if(dataSource.Application==null)
-					continue;
-				if (uniqueNames.Contains(dataSource.DataSourceName))
-					throw new DataSourceException(
-						 string.Format(CultureInfo.CurrentCulture, "The data sources '{0}' is registered multiple times.",
-											dataSource.DataSourceName));
-				uniqueNames.Add(dataSource.DataSourceName);
-			}
 		}
 
 		public IDataSource Tenant(string tenantName)
@@ -78,19 +59,21 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		private readonly object addDataSourceLocker = new object();
 		public void MakeSureDataSourceExists(string tenantName, string applicationConnectionString, string analyticsConnectionString, IDictionary<string, string> applicationNhibConfiguration)
 		{
-			var dataSource = Tenant(tenantName);
-			if (dataSource != null)
-				return;
 			lock (addDataSourceLocker)
 			{
-				dataSource = Tenant(tenantName);
-				if (dataSource != null)
-					return;
+				if (Tenant(tenantName) != null)
+					throw new DataSourceException(string.Format("Tenant {0} declared multiple times!", tenantName));
+
 				applicationNhibConfiguration[NHibernate.Cfg.Environment.SessionFactoryName] = tenantName;
 				applicationNhibConfiguration[NHibernate.Cfg.Environment.ConnectionString] = applicationConnectionString;
 				var newDataSource = _dataSourcesFactory.Create(applicationNhibConfiguration, analyticsConnectionString);
 				_registeredDataSourceCollection.Add(newDataSource);
 			}
+		}
+
+		public void MakeSureDataSourceExists_UseOnlyFromTests(IDataSource datasource)
+		{
+			_registeredDataSourceCollection.Add(datasource);
 		}
 
 		public void DoOnAllTenants_AvoidUsingThis(Action<IDataSource> actionOnTenant)

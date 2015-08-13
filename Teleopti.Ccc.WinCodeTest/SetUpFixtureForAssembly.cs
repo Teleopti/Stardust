@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WinCodeTest
     {
         private MockRepository mocks;
         private IPerson loggedOnPerson;
-        private IApplicationData applicationData;
+        private ApplicationData applicationData;
         internal static ISessionData SessionData;
 
         /// <summary>
@@ -46,7 +46,8 @@ namespace Teleopti.Ccc.WinCodeTest
             var dataSource = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("for test"), null, null);
 
             loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
-						applicationData = new ApplicationData(appSettings, new []{dataSource}, mocks.StrictMock<IMessageBrokerComposite>(), null, null);
+						applicationData = new ApplicationData(appSettings, mocks.StrictMock<IMessageBrokerComposite>(), null, null);
+			applicationData.MakeSureDataSourceExists_UseOnlyFromTests(dataSource);
             SessionData = StateHolderProxyHelper.CreateSessionData(loggedOnPerson, dataSource, BusinessUnitFactory.BusinessUnitUsedInTest);
 
             IState stateMock = mocks.StrictMock<IState>();

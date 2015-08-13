@@ -40,9 +40,9 @@ namespace Teleopti.Ccc.TestCommon
 
 			MessageBrokerContainerDontUse.Configure(null, new IConnectionKeepAliveStrategy[] { }, MessageFilterManager.Instance, new NewtonsoftJsonSerializer(), new NewtonsoftJsonSerializer());
 			var signalBroker = MessageBrokerContainerDontUse.CompositeClient();
-			var applicationData = new ApplicationData(appSettings, new[] { dataSource }, signalBroker, null, null);
+			var applicationData = new ApplicationData(appSettings, signalBroker, null, null);
+			applicationData.MakeSureDataSourceExists_UseOnlyFromTests(dataSource);
 			var sessionData = CreateSessionData(person, dataSource, businessUnit, principalContext);
-
 			var state = new FakeState { ApplicationScopeData = applicationData, SessionScopeData = sessionData, IsLoggedIn = true };
 			ClearAndSetStateHolder(state);
 		}
@@ -122,7 +122,8 @@ namespace Teleopti.Ccc.TestCommon
             ConfigurationManager.AppSettings.AllKeys.ToList().ForEach(
                 name => appSettings.Add(name, ConfigurationManager.AppSettings[name]));
 
-            IApplicationData applicationData = new ApplicationData(appSettings, new[]{dataSource}, messageBroker, null, null);
+            var applicationData = new ApplicationData(appSettings, messageBroker, null, null);
+			applicationData.MakeSureDataSourceExists_UseOnlyFromTests(dataSource);
 
             return applicationData;
         }
