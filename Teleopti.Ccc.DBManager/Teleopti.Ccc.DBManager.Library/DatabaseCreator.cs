@@ -1,4 +1,5 @@
-﻿using System.Data.SqlClient;
+﻿using System;
+using System.Data.SqlClient;
 using System.Globalization;
 using System.IO;
 
@@ -25,6 +26,15 @@ namespace Teleopti.Ccc.DBManager.Library
 		{
 			var scriptFile = ScriptFilePath(type, _databaseFolder.AzureCreateScriptsPath());
 			CreateDatabaseByScriptFile(scriptFile, type, name);
+		}
+
+		public   void ApplyAzureStartDDL(DatabaseType type)
+		{
+			string databaseTypeName = type.ToString();
+         var scriptFile = ScriptFilePath(type, _databaseFolder.AzureCreateScriptsPath()).Replace(databaseTypeName + ".sql", databaseTypeName + ".00000329.sql");
+			
+			var script = ReadScriptFile(scriptFile);
+			new SqlBatchExecutor(_connection, new MyLogger()).ExecuteBatchSql(script);
 		}
 
 		private string ScriptFilePath(DatabaseType type, string path)
@@ -82,6 +92,31 @@ namespace Teleopti.Ccc.DBManager.Library
 		private IniFile IniFile(DatabaseType type)
 		{
 			return new IniFile(_databaseFolder + "\\" + type.GetName() + "\\DatabaseSettings.ini");
+		}
+	}
+
+	public class MyLogger : ILog, IDisposable
+	{
+		private readonly TextWriter _logFile;
+
+		public MyLogger()
+		{
+			var nowDateTime = DateTime.Now;
+			//_logfile = new StreamWriter(string.Format(CultureInfo.CurrentCulture, "DBLibrary_{0}_{1}.log", nowDateTime.ToString("yyyyMMdd", CultureInfo.CurrentCulture), nowDateTime.ToString("hhmmss", CultureInfo.CurrentCulture)));
+		}
+
+		public void Write(string message)
+		{
+			Console.Out.WriteLine(message);
+			//gFile.WriteLine(message);
+		}
+
+		public void Dispose()
+		{
+			if (_logFile == null)
+				return;
+			_logFile.Close();
+			_logFile.Dispose();
 		}
 	}
 }

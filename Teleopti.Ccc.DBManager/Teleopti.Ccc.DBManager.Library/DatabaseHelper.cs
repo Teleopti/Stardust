@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 
 namespace Teleopti.Ccc.DBManager.Library
 {
@@ -54,34 +55,42 @@ namespace Teleopti.Ccc.DBManager.Library
 			{
 				var databaseVersionInformation = new DatabaseVersionInformation(databaseFolder, conn);
 				databaseVersionInformation.CreateTable();
+
+				var creator = new DatabaseCreator(databaseFolder, conn);
+				creator.ApplyAzureStartDDL(DatabaseType);
 			}
 		}
-		public bool LoginExists(string login)
+		public bool LoginExists(string login, bool isAzure)
 		{
 			var sql = string.Format(@"SELECT 1 FROM syslogins WHERE name = '{0}'", login);
+			if(isAzure)
+				sql = string.Format(@"SELECT 1 FROM master.sys.sql_logins WHERE name = '{0}'", login);
 			var result = executeScalarOnMaster(sql, 0);
 			return result > 0;
 		}
-		public void CreateLogin(string login, string password)
+		public void CreateLogin(string login, string password, bool isAzure)
 		{
-			var sql = string.Format(@"IF NOT EXISTS (SELECT * FROM syslogins WHERE name = '{0}')
-			BEGIN	
-				CREATE LOGIN [{0}]
+			if(LoginExists(login, isAzure))
+				return;
+
+			var sql = string.Format(@"CREATE LOGIN [{0}]
 				WITH PASSWORD=N'{1}',
 				DEFAULT_DATABASE=[master],
 				DEFAULT_LANGUAGE=[us_english],
 				CHECK_EXPIRATION=OFF,
-				CHECK_POLICY=OFF
-			END",login, password);
+				CHECK_POLICY=OFF",login, password);
+			if(isAzure)
+				sql = string.Format(@"CREATE LOGIN [{0}]
+				WITH PASSWORD=N'{1}'", login, password);
 			executeNonQueryOnMaster(sql);
 		}
 
 		public void AddPermissions(string login)
 		{
-			var sql = string.Format(@"
-CREATE USER [{0}] FOR LOGIN [{0}] 
-
-IF NOT EXISTS (SELECT * FROM sys.database_principals WHERE name = N'db_executor' AND type = 'R')
+			var sql = string.Format(@"CREATE USER [{0}] FOR LOGIN [{0}]", login);
+			executeNonQuery(sql);
+			
+			sql  = string.Format(@"IF NOT EXISTS (SELECT * FROM sys.database_principals WHERE name = N'db_executor' AND type = 'R')
 	CREATE ROLE [db_executor] AUTHORIZATION [dbo]
 
 	EXEC sp_addrolemember @rolename=N'db_executor', @membername=[{0}]
@@ -91,13 +100,48 @@ IF NOT EXISTS (SELECT * FROM sys.database_principals WHERE name = N'db_executor'
 	GRANT EXECUTE TO db_executor", login);
 			executeNonQuery(sql);
 		}
-		public bool HasCreateDbPermission()
+
+		public bool HasCreateDbPermission(bool isAzure)
 		{
+			if (isAzure)
+			{
+				System.Diagnostics.Debug.Write("check create DB perm");
+				var dbName = Guid.NewGuid().ToString();
+				try
+				{
+					ExecuteSql("CREATE DATABASE [" + dbName + "]");
+					ExecuteSql("DROP DATABASE [" + dbName + "]");
+					return true;
+				}
+				catch (Exception e)
+				{
+					return false;
+				}
+			}
+
+			
 			return executeScalar("SELECT IS_SRVROLEMEMBER( 'dbcreator')", 0) > 0;
 		}
 		
-		public bool HasCreateViewPermission()
+		public bool HasCreateViewAndLoginPermission(bool isAzure)
 		{
+			if (isAzure)
+			{
+				System.Diagnostics.Debug.Write("check create view perm");
+				var pwd = "tT12@andSomeMore";
+				var login = Guid.NewGuid().ToString().Replace("-", "#");
+				var createSql = string.Format("CREATE LOGIN [{0}] WITH PASSWORD = N'{1}'", login, pwd);
+				try
+				{
+					ExecuteSql(createSql);
+					ExecuteSql("DROP LOGIN [" + login + "]");
+					return true;
+				}
+				catch (Exception e)
+				{
+					return false;
+				}
+			}
 			return executeScalar("SELECT IS_SRVROLEMEMBER( 'securityadmin')", 0) > 0;
 		}
 		public void AddInitialPerson(Guid personId)

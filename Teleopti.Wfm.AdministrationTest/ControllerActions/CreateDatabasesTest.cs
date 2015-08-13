@@ -69,13 +69,13 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			var connStringBuilder =
 				new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
 
-            DatabaseHelperWrapper.CreateLogin(connStringBuilder.ConnectionString,"nodbcreator", "password");
+            DatabaseHelperWrapper.CreateLogin(connStringBuilder.ConnectionString,"nodbcreator", "password", false);
 
 			var model = new CreateTenantModel { Tenant = "New Tenant", CreateDbUser = "nodbcreator", CreateDbPassword = "password", AppUser = "user", AppPassword = "password", FirstUser = "user", FirstUserPassword = "password", BusinessUnit = "BU"};
 
 			var result = Target.CreateDatabases(model).Content;
 			result.Success.Should().Be.False();
-			result.Message.Should().Be.EqualTo("The user does not have permission to create database.");
+			result.Message.Should().Be.EqualTo("The user does not have permission to create databases.");
 		}
 
 		[Test]
@@ -85,7 +85,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			var connStringBuilder =
 				new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
 
-			DatabaseHelperWrapper.CreateLogin(connStringBuilder.ConnectionString, "dbcreatorperson", "password");
+			DatabaseHelperWrapper.CreateLogin(connStringBuilder.ConnectionString, "dbcreatorperson", "password", false);
 			connStringBuilder.InitialCatalog = "master";
 			using (var conn = new SqlConnection(connStringBuilder.ConnectionString))
 			{

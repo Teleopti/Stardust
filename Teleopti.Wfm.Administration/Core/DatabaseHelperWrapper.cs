@@ -52,7 +52,6 @@ namespace Teleopti.Wfm.Administration.Core
 
 		public void CreateDatabase(string connectionToNewDb, DatabaseType databaseType, string dbPath, string login, bool isAzure)
 		{
-			//if it already exists - return a Message!
 
 			if (isAzure && databaseType.Equals(DatabaseType.TeleoptiCCCAgg))
 				return;
@@ -67,6 +66,8 @@ namespace Teleopti.Wfm.Administration.Core
 				//
 			}
 			var helper = new DatabaseHelper(connectionToNewDb, databaseType);
+			if(helper.Exists())
+				return;
 			helper.DbManagerFolderPath = dbPath;
 			
 			if(isAzure)
@@ -111,29 +112,29 @@ namespace Teleopti.Wfm.Administration.Core
 			helper.AddBusinessUnit(name);
 		}
 
-		public bool LoginExists(string connectionToNewDb, string login)
+		public bool LoginExists(string connectionToNewDb, string login, bool isAzure)
 		{
 			var helper = new DatabaseHelper(connectionToNewDb, DatabaseType.TeleoptiCCC7);
-			return(helper.LoginExists(login));
+			return(helper.LoginExists(login, isAzure));
 		}
 
-        public void CreateLogin(string connectionToNewDb, string login, string password)
+        public void CreateLogin(string connectionToNewDb, string login, string password, bool isAzure)
 		{
 			// type does not mather now
 			var helper = new DatabaseHelper(connectionToNewDb, DatabaseType.TeleoptiCCC7);
-			helper.CreateLogin(login,password);
+			helper.CreateLogin(login,password, isAzure);
 		}
 
-		public bool HasCreateDbPermission(string connctionstring)
+		public bool HasCreateDbPermission(string connctionstring, bool isAzure)
 		{
 			var helper = new DatabaseHelper(connctionstring, DatabaseType.TeleoptiCCC7);
-			return helper.HasCreateDbPermission();
+			return helper.HasCreateDbPermission(isAzure);
 		}
 
-		public bool HasCreateViewPermission(string connctionstring)
+		public bool HasCreateViewAndLoginPermission(string connctionstring, bool isAzure)
 		{
 			var helper = new DatabaseHelper(connctionstring, DatabaseType.TeleoptiCCC7);
-			return helper.HasCreateViewPermission();
+			return helper.HasCreateViewAndLoginPermission(isAzure);
 		}
 	}
 }

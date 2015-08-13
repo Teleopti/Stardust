@@ -25,6 +25,8 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private readonly IDbPathProvider _dbPathProvider;
 		//private readonly ICheckPasswordStrength _checkPasswordStrength;
 
+		private readonly bool isAzure = true; // !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME"));
+
 		public DatabaseController(DatabaseHelperWrapper databaseHelperWrapper,  ICurrentTenantSession currentTenantSession, ITenantExists tenantExists, IDbPathProvider dbPathProvider)
 		{
 			_databaseHelperWrapper = databaseHelperWrapper;
@@ -67,11 +69,11 @@ namespace Teleopti.Wfm.Administration.Controllers
             if (!checkCreate.Success)
 				return Json(new CreateTenantResultModel { Message = checkCreate.Message, Success = false });
 
-			var isAzure = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME"));
+			
 
          var dbPath = _dbPathProvider.GetDbPath();
 			
-			_databaseHelperWrapper.CreateLogin(builder.ConnectionString, model.AppUser, model.AppPassword);
+			_databaseHelperWrapper.CreateLogin(builder.ConnectionString, model.AppUser, model.AppPassword, isAzure);
 
 			builder.InitialCatalog = model.Tenant + "_TeleoptiWfmApp";
 			
@@ -147,13 +149,13 @@ namespace Teleopti.Wfm.Administration.Controllers
 				return new CreateTenantResultModel { Success = false, Message = "Can not connect to the database. " + e.Message };
 			}
 
-			if (!_databaseHelperWrapper.HasCreateDbPermission(builder.ConnectionString))
-				return new CreateTenantResultModel { Success = false, Message = "The user does not have permission to create database." };
+			if (!_databaseHelperWrapper.HasCreateDbPermission(builder.ConnectionString, isAzure))
+				return new CreateTenantResultModel { Success = false, Message = "The user does not have permission to create databases." };
 
-			if (!_databaseHelperWrapper.HasCreateDbPermission(builder.ConnectionString))
-				return new CreateTenantResultModel { Success = false, Message = "The user does not have permission to create views." };
+			if (!_databaseHelperWrapper.HasCreateViewAndLoginPermission(builder.ConnectionString, isAzure))
+				return new CreateTenantResultModel { Success = false, Message = "The user does not have permission to create logins and views." };
 
-			return new CreateTenantResultModel { Success = true, Message = "The user does have permission to create database and views." };
+			return new CreateTenantResultModel { Success = true, Message = "The user does have permission to create databases, logins and views." };
 		}
 
 		[HttpPost]
@@ -168,7 +170,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 				InitialCatalog = "master",
 				IntegratedSecurity = false
 			};
-			if (_databaseHelperWrapper.LoginExists(builder.ConnectionString, model.AppUser))
+			if (_databaseHelperWrapper.LoginExists(builder.ConnectionString, model.AppUser, isAzure))
 				return
 					Json(new CreateTenantResultModel
 					{
