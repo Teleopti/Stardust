@@ -137,9 +137,11 @@
 	vertical-algin:middle;		
 }
 
-.date-picker .wfm-datepicker{
-	width:320px;
+.date-picker .date-picker-from, .date-picker .date-picker-to{
 	display:inline-block;
+	margin:20px;
+	padding-bottom:20px;
+	border:1px #ededed solid;
 }
 
 .seatPlanReportFilter .bottom-bar, .seatPlanReportFilter .filter-header{
