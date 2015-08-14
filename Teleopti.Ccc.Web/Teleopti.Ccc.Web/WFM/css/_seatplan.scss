@@ -133,15 +133,25 @@
 .filter-content .date-picker{
 	height:100%;
 	padding:30px 10px 10px 10px;
-	text-align:center;
+	text-align:left;
 	vertical-algin:middle;		
 }
 
-.date-picker .date-picker-from, .date-picker .date-picker-to{
-	display:inline-block;
-	margin:20px;
-	padding-bottom:20px;
+.date-picker .wfm-datepicker-wrap{
+	box-shadow:none;
 	border:1px #ededed solid;
+}
+
+.date-picker .wfm-datepicker-wrap table{
+	border-collapse: separate;
+	border-spacing: 2px;
+	border-color: grey;
+}
+
+.date-picker .wfm-datepicker-wrap button{
+	padding:1px 6px;
+	font-family:inherit;
+	font-size:100%;
 }
 
 .seatPlanReportFilter .bottom-bar, .seatPlanReportFilter .filter-header{
@@ -312,8 +322,6 @@
 		height:auto;
 	}
 }
-
-
 
 @media screen{
 	#seatPlanReportContentPrint{
