@@ -11,13 +11,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 		private readonly IScheduleProvider _scheduleProvider;
 		private readonly IPreferenceProvider _preferenceProvider;
 		private readonly IUserTimeZone _userTimezone;
+		private readonly IWorkTimeMinMaxCalculator _workTimeMinMaxCalculator; 
 
 
-		public PersonPreferenceDayOccupationFactory(IScheduleProvider scheduleProvider, IPreferenceProvider preferenceProvider, IUserTimeZone userTimezone)
+		public PersonPreferenceDayOccupationFactory(IScheduleProvider scheduleProvider, IPreferenceProvider preferenceProvider, IUserTimeZone userTimezone, IWorkTimeMinMaxCalculator workTimeMinMaxCalculator)
 		{
 			_scheduleProvider = scheduleProvider;
 			_preferenceProvider = preferenceProvider;
 			_userTimezone = userTimezone;
+			_workTimeMinMaxCalculator = workTimeMinMaxCalculator;
 		}
 
 		public PersonPreferenceDayOccupation GetPreferenceDayOccupation(IPerson person, DateOnly date)
@@ -60,12 +62,34 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			if (!(personPreferenceDayOccupation.HasDayOff || personPreferenceDayOccupation.HasShift))
 			{
 				var preference = _preferenceProvider.GetPreferencesForDate(date);
-
+				
 				if (preference != null)
 				{
+					var scheduleDay = _scheduleProvider.GetScheduleForPeriod(new DateOnlyPeriod(date, date)) ?? new IScheduleDay[] { };
+					var minMax = _workTimeMinMaxCalculator.WorkTimeMinMax(date, person, scheduleDay.SingleOrDefault());
+
 					personPreferenceDayOccupation.HasPreference = true;
-					personPreferenceDayOccupation.StartTimeLimitation = preference.Restriction.StartTimeLimitation;
-					personPreferenceDayOccupation.EndTimeLimitation = preference.Restriction.EndTimeLimitation;
+
+					if (preference.Restriction.StartTimeLimitation == new StartTimeLimitation(null, null) &&
+					    minMax.WorkTimeMinMax != null)
+					{
+						personPreferenceDayOccupation.StartTimeLimitation = minMax.WorkTimeMinMax.StartTimeLimitation;
+					}
+					else
+					{
+						personPreferenceDayOccupation.StartTimeLimitation = preference.Restriction.StartTimeLimitation;
+					}
+
+					if (preference.Restriction.EndTimeLimitation == new EndTimeLimitation(null, null) &&
+						minMax.WorkTimeMinMax != null)
+					{
+						personPreferenceDayOccupation.EndTimeLimitation = minMax.WorkTimeMinMax.EndTimeLimitation;
+					}
+					else
+					{
+						personPreferenceDayOccupation.EndTimeLimitation = preference.Restriction.EndTimeLimitation;
+					}
+									
 				}		
 			}
 
