@@ -1,26 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
-using System.Drawing;
-using System.Data;
 using System.IO;
 using System.Linq;
 using System.Management;
 using System.Security.AccessControl;
 using System.Security.Principal;
-using System.Text;
 using System.Windows.Forms;
-using System.Xml.Linq;
+using SevenZip;
+using ProgressEventArgs = SevenZip.ProgressEventArgs;
 
 namespace Teleopti.Support.Tool.Controls.DatabaseDeployment.Pages
 {
 	public partial class ProgressPage : SelectionPage
 	{
 		private readonly DatabaseDeploymentModel _model;
-        //private double _megabytesTransferredPercentage;
-        //private long _totalMegabytesToTransfer;
 
 		public ProgressPage()
 		{
@@ -156,39 +151,7 @@ namespace Teleopti.Support.Tool.Controls.DatabaseDeployment.Pages
 
 		private void createNhibFile()
 		{
-			var nhibFilePath = _model.NHibPath + "\\";
-			var sessionName = _model.SessionName;
-
-			var oldNhib = Directory.GetFiles(nhibFilePath, "*nhib*").First();
-
-			var document = XDocument.Load(oldNhib);
-			XNamespace nameSpace = "urn:nhibernate-configuration-2.2";
-
-			var sessionFactory = document.Descendants(nameSpace + "session-factory").First();
-			if (sessionFactory != null)
-				sessionFactory.SetAttributeValue("name", sessionName);
-
-			var properties = document.Descendants(nameSpace + "property");
-			var connectionString = properties.Single(x => (string)x.Attribute("name") == "connection.connection_string");
-			var connection = new SqlConnectionStringBuilder(connectionString.Value)
-			{
-				InitialCatalog = _model.SelectedAppDatabase.DatabaseName
-			};
-			connectionString.Value = connection.ToString();
-
-			var matrixConnectionString = document.Descendants("connectionString").First();
-			if (matrixConnectionString != null)
-			{
-				var matrixConnection = new SqlConnectionStringBuilder(matrixConnectionString.Value)
-				{
-					InitialCatalog = _model.SelectedAnalyticsDatabase.DatabaseName
-				};
-				matrixConnectionString.Value = matrixConnection.ToString();
-			}
-
-			string fileName = nhibFilePath + "\\" + sessionName + ".nhib.xml";
-			AppendLine("Creating " + fileName);
-			document.Save(fileName);
+			throw new NotSupportedException("Cannot create nhib file. We don't use them any longer.");
 		}
 
 		private void unzipFiles()
@@ -196,8 +159,8 @@ namespace Teleopti.Support.Tool.Controls.DatabaseDeployment.Pages
 			if (_model.GetSelections().All(s => s.DatabaseFromSourceType != DatabaseSourceType.FromArchive) ||
 				string.IsNullOrEmpty(_model.ZipFilePath)) return;
 
-            SevenZip.SevenZipBase.SetLibraryPath(_model.SettingsInRegistry.LocationOf7zDll);
-            SevenZip.SevenZipExtractor extractor = new SevenZip.SevenZipExtractor(_model.ZipFilePath);
+            SevenZipBase.SetLibraryPath(_model.SettingsInRegistry.LocationOf7zDll);
+            SevenZipExtractor extractor = new SevenZipExtractor(_model.ZipFilePath);
             extractor.Extracting += extractor_Extracting;
             extractor.ExtractArchive(_model.UnzipPath);
 
@@ -217,7 +180,7 @@ namespace Teleopti.Support.Tool.Controls.DatabaseDeployment.Pages
             */
 		}
 
-        void extractor_Extracting(object sender, SevenZip.ProgressEventArgs e)
+        void extractor_Extracting(object sender, ProgressEventArgs e)
         {
             if (((e.PercentDone / 10) * 10) == e.PercentDone)
             {
