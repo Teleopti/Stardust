@@ -68,6 +68,23 @@ namespace Teleopti.Ccc.DBManager.Library
 			var result = executeScalarOnMaster(sql, 0);
 			return result > 0;
 		}
+
+		public bool LoginCanBeCreated(string login, string password, bool isAzure, out string message)
+		{
+			try
+			{
+				CreateLogin(login, password, isAzure);
+				var sql = string.Format("DROP LOGIN [{0}]", login);
+				executeNonQueryOnMaster(sql);
+				message = "";
+				return true;
+			}
+			catch (Exception e)
+			{
+				message = e.Message;
+				return false;
+			}
+		}
 		public void CreateLogin(string login, string password, bool isAzure)
 		{
 			if(LoginExists(login, isAzure))
@@ -77,8 +94,7 @@ namespace Teleopti.Ccc.DBManager.Library
 				WITH PASSWORD=N'{1}',
 				DEFAULT_DATABASE=[master],
 				DEFAULT_LANGUAGE=[us_english],
-				CHECK_EXPIRATION=OFF,
-				CHECK_POLICY=OFF",login, password);
+				CHECK_EXPIRATION=OFF",login, password);
 			if(isAzure)
 				sql = string.Format(@"CREATE LOGIN [{0}]
 				WITH PASSWORD=N'{1}'", login, password);
@@ -406,5 +422,7 @@ SELECT NEWID(),1, '3F0886AB-7B25-4E95-856A-0D726EDC2A67' , GETUTCDATE(), '{0}', 
 				}
 			}
 		}
+
+		
 	}
 }

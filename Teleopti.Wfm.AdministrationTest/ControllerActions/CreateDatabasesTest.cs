@@ -81,6 +81,17 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		[Test]
 		public void ShouldReturnTrueCreatedDb()
 		{
+			var model = new CreateTenantModel
+			{
+				Tenant = "New Tenant",
+				CreateDbUser = "dbcreatorperson",
+				CreateDbPassword = "password",
+				AppUser = "new TenantAppUser",
+				AppPassword = "NewTenantAppPassword",
+				FirstUser = "Thefirstone",
+				FirstUserPassword = "Agood@pasw0rd",
+				BusinessUnit = "My First BU"
+			};
 			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
 			var connStringBuilder =
 				new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
@@ -96,20 +107,13 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 					cmd.ExecuteNonQuery();
 					cmd.CommandText = string.Format("EXEC sp_addsrvrolemember @loginame= '{0}', @rolename = 'securityadmin'", "dbcreatorperson");
 					cmd.ExecuteNonQuery();
-				}
+					if (DatabaseHelperWrapper.LoginExists(connStringBuilder.ConnectionString, model.AppUser, false))
+					{
+						cmd.CommandText = string.Format("DROP LOGIN [{0}]", model.AppUser);
+						cmd.ExecuteNonQuery();
+					}
+            }
 			}
-
-			var model = new CreateTenantModel
-			{
-				Tenant = "New Tenant",
-				CreateDbUser = "dbcreatorperson",
-				CreateDbPassword = "password",
-				AppUser = "new TenantAppUser",
-				AppPassword = "NewTenantAppPassword",
-				FirstUser = "Thefirstone",
-				FirstUserPassword = "Agood@pasw0rd",
-				BusinessUnit = "My First BU"
-			};
 
 			var result = Target.CreateDatabases(model).Content;
 			result.Success.Should().Be.True();

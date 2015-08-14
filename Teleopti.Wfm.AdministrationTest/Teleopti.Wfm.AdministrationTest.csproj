@@ -103,6 +103,7 @@
     </Compile>
     <Compile Include="ControllerActions\ChangePasswordTest.cs" />
     <Compile Include="ControllerActions\CheckFirstUser.cs" />
+    <Compile Include="ControllerActions\CheckLoginTests.cs" />
     <Compile Include="ControllerActions\CreateDatabasesTest.cs" />
     <Compile Include="ControllerActions\SaveUserTest.cs" />
     <Compile Include="ControllerActions\LoginTest.cs" />

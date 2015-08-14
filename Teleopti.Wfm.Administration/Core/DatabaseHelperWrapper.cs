@@ -125,16 +125,22 @@ namespace Teleopti.Wfm.Administration.Core
 			helper.CreateLogin(login,password, isAzure);
 		}
 
-		public bool HasCreateDbPermission(string connctionstring, bool isAzure)
+		public bool HasCreateDbPermission(string connectionString, bool isAzure)
 		{
-			var helper = new DatabaseHelper(connctionstring, DatabaseType.TeleoptiCCC7);
+			var helper = new DatabaseHelper(connectionString, DatabaseType.TeleoptiCCC7);
 			return helper.HasCreateDbPermission(isAzure);
 		}
 
-		public bool HasCreateViewAndLoginPermission(string connctionstring, bool isAzure)
+		public bool HasCreateViewAndLoginPermission(string connectionString, bool isAzure)
 		{
-			var helper = new DatabaseHelper(connctionstring, DatabaseType.TeleoptiCCC7);
+			var helper = new DatabaseHelper(connectionString, DatabaseType.TeleoptiCCC7);
 			return helper.HasCreateViewAndLoginPermission(isAzure);
 		}
-	}
+
+		public bool LoginCanBeCreated(string connectionString, string login, string password, bool isAzure, out string message)
+		{
+			var helper = new DatabaseHelper(connectionString, DatabaseType.TeleoptiCCC7);
+			return helper.LoginCanBeCreated(login, password, isAzure, out message);
+		}
+   }
 }
