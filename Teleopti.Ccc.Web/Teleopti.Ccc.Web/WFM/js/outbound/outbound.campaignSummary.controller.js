@@ -23,6 +23,29 @@
             });
     	});
 
+    	$scope.clear = function (campaign) {
+    		campaign.selectedDates = [];
+    	}
+
+    	$scope.addManualPlan = function (campaign) {
+    		campaign.manualPlanswitch = false;
+    		campaign.switchSwitch = false;
+    		campaign.manualPlan.CampaignId = campaign.Id;
+    		campaign.manualPlan.ManualProductionPlan = [];
+    		campaign.selectedDates.forEach(function (date, index) {
+    			campaign.manualPlan.ManualProductionPlan[index] = {
+    				Date: date,
+    				Time: campaign.manualPlanInput
+    			}
+    		});
+    		
+    		outboundChartService.updateManualPlan(campaign.manualPlan, function (data) {
+			    campaign.graphData = data;
+		    }, function (error) {
+    		});
+    		campaign.selectedDates = [];
+	    }
+
 		$scope.getGraphData = function(campaign) {
 			outboundChartService.getCampaignVisualization(campaign.Id, function(data, translations) {
 				campaign.graphData = data;
@@ -34,14 +57,12 @@
 			campaign.backlogSwitch = !campaign.backlogSwitch;
 			campaign.manualPlanswitch = false;
 			campaign.switchSwitch = !campaign.switchSwitch;
-			campaign.selectedDates = [];
 		}
 		
 		$scope.switchManualPlan = function (campaign) {
 			campaign.manualPlanswitch = !campaign.manualPlanswitch;
 			campaign.backlogSwitch = false;
 			campaign.switchSwitch = !campaign.switchSwitch;
-			campaign.selectedDates = [];
 		}
 
 		$scope.delThisDate = function(campaign,d) {
@@ -54,19 +75,6 @@
 			campaign.backlogSwitch = false;
 			campaign.switchSwitch = false;
 			campaign.backlog.Id = campaign.Id;
-			campaign.selectedDates = [];
-		}
-
-		$scope.addManualPlan = function (campaign) {
-			campaign.manualPlanswitch = false;
-			campaign.switchSwitch = false;
-			campaign.manualPlan.Id = campaign.Id;
-			//outboundService.sendManualPlan(campaign.manualPlan, function(campaign) {
-			//	outboundNotificationService.notifyManualPlanModifySuccess(angular.copy(campaign));
-			//  updateChartPlanDate
-			//}, function(error) {
-			//	outboundNotificationService.notifyManualPlanModifyFailure(error);
-			//});
 			campaign.selectedDates = [];
 		}
 

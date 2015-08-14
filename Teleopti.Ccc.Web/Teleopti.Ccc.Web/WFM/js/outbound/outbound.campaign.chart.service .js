@@ -6,7 +6,8 @@
 
     function outboundChartService($filter, $http, tl) {
 
-        var getCampaignVisualizationUrl = '../api/Outbound/Campaign/Visualization/';      
+    	var getCampaignVisualizationUrl = '../api/Outbound/Campaign/Visualization/';
+	    var updateCampaignProductionPlanUrl = '../api/Outbound/Campaign/ManualPlan';
 
         var translationKeys = [
            'Backlog',
@@ -22,6 +23,10 @@
         ];
         var self = this;
 
+        this.updateManualPlan = updateManualPlan;
+
+
+
         this.getCampaignVisualization = tl.applyTranslation(translationKeys, getCampaignVisualization, self);      
         this.buildGraphDataSeqs = buildGraphDataSeqs;
 
@@ -35,7 +40,17 @@
             }).error(function(e) {
                 if (errorCb != null) errorCb(e);
             });
-        };      
+        };
+
+        function updateManualPlan(manualProductionPlan, successCb, errorCb) {
+        	$http.post(updateCampaignProductionPlanUrl, manualProductionPlan).
+                success(function (campaignData) {
+                	if (successCb != null) successCb(self.buildGraphDataSeqs(campaignData));
+                }).
+                error(function (e) {
+                	if (errorCb != null) errorCb(e);
+                });
+        };
 
         function mapGraphData(data) {            
             var returnData = {

@@ -41,13 +41,14 @@
 	}
     .input-container{
 	    box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
-		text-align: right;
+		text-align: left;
 		display: inline-block;
-		padding: 5px 10px;
+		padding-left: 10px;
 	}
 	.multi-inputfix input{
 	    display:inline-block;
 		margin-right:10px;
+		width:100px;
 	}
 	.campaign-chart-switch{
 	    position:absolute;
@@ -311,6 +312,9 @@
 		display:inline-block;
 		color:#fff;
 		box-shadow:0 2px 5px 0 rgba(0,0,0,.26);
+		position:absolute;
+		top:0;
+		left:0;
 	}
 	.campaign-message-healthyfix{
 	    background-color:#2CA02C !important;

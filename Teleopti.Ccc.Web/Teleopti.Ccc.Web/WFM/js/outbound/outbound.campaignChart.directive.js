@@ -18,6 +18,28 @@
 
 		function campaignChartCtrl($scope, $element) {
 
+			$scope.$watch(function() {
+				return $scope.campaign.manualPlanInput;
+			}, function (newVal, oldVal) {
+				console.log('from watch');
+				if (newVal != oldVal) {
+					var planInput = parseFloat(newVal);
+					console.log('float',planInput);
+					if (!planInput) {
+						$scope.campaign.isManualPlanValida = true;
+						console.log('input is not valida');
+					}
+				};
+			});
+
+			$scope.$watch(function() {
+				return $scope.graphData;
+			}, function (newVal, oldVal) {
+				if (newVal != oldVal) {
+					toggleViewScheduleDiff();
+				}
+			},true);
+
 			$scope.viewScheduleDiff = false;
 			$scope.dates = $scope.graphData['dates'].slice(1);
 
@@ -67,7 +89,9 @@
 			}
 	
 			function getDataGroupsData(viewScheduleDiff) {
-				return getDataGroupsKey(viewScheduleDiff).map(function (name) { return $scope.graphData[name]; });
+				return getDataGroupsKey(viewScheduleDiff).map(function(name) {
+					return $scope.graphData[name];
+				});
 			}
 
 			function getDataGroupsLabel(viewScheduleDiff) {
