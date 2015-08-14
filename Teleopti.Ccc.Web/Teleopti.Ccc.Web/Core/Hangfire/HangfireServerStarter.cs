@@ -59,21 +59,37 @@ namespace Teleopti.Ccc.Web.Core.Hangfire
 					GlobalJobFilters.Filters.Add(new StatisticsHistoryAttribute());
 				app.UseHangfireDashboard();
 			}
-			//else
-			//{
-			//	// for optimization, remove some internal handlers because at this time
-			//	// the only thing they do is insert into the Hangfire.Counters table
-			//	GlobalStateHandlers.Handlers.Remove(getHandlerOf(typeof(SucceededState)));
-			//	GlobalStateHandlers.Handlers.Remove(getHandlerOf(typeof(DeletedState)));
-			//}
+			else
+			{
+				// for optimization, remove some internal handlers because at this time
+				// the only thing they do is insert into the Hangfire.Counters table
+				// add handlers that does nothing with the same state name
+				// NOT FUTURE PROOF!
+				GlobalStateHandlers.Handlers.Remove(GlobalStateHandlers.Handlers.Single(x => x.StateName == SucceededState.StateName));
+				GlobalStateHandlers.Handlers.Remove(GlobalStateHandlers.Handlers.Single(x => x.StateName == DeletedState.StateName));
+				GlobalStateHandlers.Handlers.Add(new EmptyHandler(SucceededState.StateName));
+				GlobalStateHandlers.Handlers.Add(new EmptyHandler(DeletedState.StateName));
+			}
 
 		}
+		
+		public class EmptyHandler : IStateHandler
+		{
+			public EmptyHandler(string stateName)
+			{
+				StateName = stateName;
+			}
 
-		//private IStateHandler getHandlerOf(Type type)
-		//{
-		//	var handlerName = type.AssemblyQualifiedName + ".Handler";
-		//	var handlerType = Type.GetType(handlerName);
-		//	return GlobalStateHandlers.Handlers.Single(x => x.GetType() == handlerType);
-		//}
+			public void Apply(ApplyStateContext context, IWriteOnlyTransaction transaction)
+			{
+			}
+
+			public void Unapply(ApplyStateContext context, IWriteOnlyTransaction transaction)
+			{
+			}
+
+			public string StateName { get; set; }
+		}
+
 	}
 }
