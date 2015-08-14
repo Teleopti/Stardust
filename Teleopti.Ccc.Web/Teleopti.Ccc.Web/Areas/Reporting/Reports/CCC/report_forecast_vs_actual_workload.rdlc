@@ -1719,10 +1719,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=code.RoundToLarger(sum(Fields!calculated_calls.Value), 1)</Value>
+                              <Value>=sum(Fields!calculated_calls.Value)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>="#,##0.0"</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1759,10 +1760,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=code.RoundToLarger(sum(Fields!forecasted_calls.Value), 1)</Value>
+                              <Value>=sum(Fields!forecasted_calls.Value)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>="#,##0.0"</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1799,7 +1801,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=code.RoundToLarger(sum(Fields!offered_calls.Value), 1)</Value>
+                              <Value>=sum(Fields!offered_calls.Value)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
@@ -2075,9 +2077,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=code.RoundToLarger(Fields!calculated_calls.Value, 1)</Value>
+                              <Value>=Fields!calculated_calls.Value</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
+                                <Format>="#,##0.0"</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2089,6 +2092,9 @@
                       </Paragraphs>
                       <ZIndex>5</ZIndex>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "WhiteSmoke", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -2107,9 +2113,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=code.RoundToLarger(Fields!forecasted_calls.Value, 1)</Value>
+                              <Value>=Fields!forecasted_calls.Value</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
+                                <Format>="#,##0.0"</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2122,6 +2129,9 @@
                       <rd:DefaultName>textbox11</rd:DefaultName>
                       <ZIndex>5</ZIndex>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "WhiteSmoke", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -2129,6 +2139,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -2140,7 +2151,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=code.RoundToLarger(Fields!offered_calls.Value, 1)</Value>
+                              <Value>=Fields!offered_calls.Value</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
@@ -2380,10 +2391,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=code.RoundToLarger(sum(Fields!calculated_calls.Value), 1)</Value>
+                              <Value>=sum(Fields!calculated_calls.Value)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>="#,##0.0"</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2420,10 +2432,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=code.RoundToLarger(sum(Fields!forecasted_calls.Value), 1)</Value>
+                              <Value>=sum(Fields!forecasted_calls.Value)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>="#,##0.0"</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2461,7 +2474,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=code.RoundToLarger(sum(Fields!offered_calls.Value), 1)</Value>
+                              <Value>=sum(Fields!offered_calls.Value)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
