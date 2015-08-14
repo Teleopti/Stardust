@@ -67,22 +67,42 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 
 	function _deletePreference() {
 		_hideExtendedPanels();
-		var promises = [];
+		var dates = [];
+
 		$('#Preference-body-inner .ui-selected')
 			.each(function (index, cell) {
 				var date = $(cell).data('mytime-date');
-				var promise = preferencesAndScheduleViewModel.DayViewModels[date].DeletePreference();
-				promises.push(promise);
+				dates.push(date);
 			});
-		$.when.apply(null, promises)
-			.done(function() {
-				periodFeedbackViewModel.LoadFeedback();
-				if (toggleShowNightViolation()) {
-					loadNeighborFeedback();
-					periodFeedbackViewModel.PossibleNightRestViolations();
-				}
-			}
-		);
+
+		if (dates.length > 0) {
+			ajax.Ajax({
+				url: "Preference/PreferenceDelete",
+				dataType: "json",
+				contentType: 'application/json; charset=utf-8',
+				type: 'POST',
+				data: JSON.stringify({ dateList: dates }),
+				success: function (data) {
+					_onSuccessDeletePeriod(dates, data);
+				},
+				statusCode404: function () { },
+			});
+		}
+
+	}
+
+	function _onSuccessDeletePeriod(dates, data) {
+
+		for (var idx in dates) {
+			var dayViewModel = preferencesAndScheduleViewModel.DayViewModels[dates[idx]];
+			dayViewModel.ReadPreference({ Color: "" });
+		}
+
+		periodFeedbackViewModel.LoadFeedback();
+		if (toggleShowNightViolation()) {
+			loadNeighborFeedback();
+			periodFeedbackViewModel.PossibleNightRestViolations();
+		}
 	}
 
 	function _deletePreferenceTemplate(templateId) {
@@ -128,7 +148,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			}
 		});
 	}
-	var toggleShowNightViolation = function() {
+	var toggleShowNightViolation = function () {
 		return Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PreferenceShowNightViolation_33152");
 	};
 
@@ -155,33 +175,33 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			});
 		if (promises.length != 0) {
 			$.when.apply(null, promises)
-				.done(function() {
+				.done(function () {
 					periodFeedbackViewModel.LoadFeedback();
 					if (toggleShowNightViolation()) {
 						loadNeighborFeedback();
 						periodFeedbackViewModel.PossibleNightRestViolations();
 					}
-			});
+				});
 		}
 
 	}
 
-	
+
 
 	function loadNeighborFeedback() {
 
 		var dates = [];
-		$("#Preference-body-inner").find('li[data-mytime-date]').each(function (i, e) {			
-			dates.push( $(e).data('mytime-date'));			
+		$("#Preference-body-inner").find('li[data-mytime-date]').each(function (i, e) {
+			dates.push($(e).data('mytime-date'));
 		});
-	
+
 
 		$('#Preference-body-inner .ui-selected').each(function (index, ele) {
 			var date = $(ele).data('mytime-date');
 			var curDateIndex = dates.indexOf(date);
-			
+
 			var previousDayIndex = curDateIndex - 1;
-			var nextDayIndex =curDateIndex + 1;
+			var nextDayIndex = curDateIndex + 1;
 
 			if (nextDayIndex < dates.length) {
 				date = dates[nextDayIndex];
@@ -193,7 +213,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 				date = dates[previousDayIndex];
 				if (preferencesAndScheduleViewModel.DayViewModels[date])
 					preferencesAndScheduleViewModel.DayViewModels[date].LoadFeedback();
-			}			
+			}
 		});
 	}
 
@@ -356,7 +376,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			}
 
 		});
-		
+
 
 
 		var from = $('li[data-mytime-date]').first().data('mytime-date');
@@ -365,7 +385,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		preferencesAndScheduleViewModel = new Teleopti.MyTimeWeb.Preference.PreferencesAndSchedulesViewModel(ajax, dayViewModels);
 		selectionViewModel = new Teleopti.MyTimeWeb.Preference.SelectionViewModel(dayViewModelsInPeriod, $('#Preference-body').data('mytime-maxmusthave'), _setMustHave, _setPreference, _deletePreference);
 		periodFeedbackViewModel = new Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel(ajax, dayViewModelsInPeriod, date, weekViewModels);
-		
+
 
 		var periodFeedbackElement = $('#Preference-period-feedback-view')[0];
 		if (periodFeedbackElement) {

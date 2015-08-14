@@ -143,21 +143,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
-		public void ShouldDeletePreference()
-		{
-			var preferencePersister = MockRepository.GenerateMock<IPreferencePersister>();
-			var target = new PreferenceController(null, null, preferencePersister, null);
-			var resultData = new PreferenceDayViewModel();
-
-			preferencePersister.Stub(x => x.Delete(DateOnly.Today)).Return(resultData);
-
-			var result = target.PreferenceDelete(DateOnly.Today);
-			var data = result.Data as PreferenceDayViewModel;
-
-			data.Should().Be.SameInstanceAs(resultData);
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldPersistPreferenceMustHave()
 		{
 			var preferencePersister = MockRepository.GenerateMock<IPreferencePersister>();

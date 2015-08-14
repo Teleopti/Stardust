@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
@@ -94,14 +96,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return Json(_preferencePersister.MustHave(input));
 		}
 
+		
 		[UnitOfWork]
-		[HttpDelete]
-		[ActionName("Preference")]
-		public virtual JsonResult PreferenceDelete(DateOnly date)
+		[HttpPost]
+		public virtual JsonResult PreferenceDelete(DateOnly[] dateList)
 		{
-			return Json(_preferencePersister.Delete(date));
+			return Json(_preferencePersister.Delete(dateList.ToList()), JsonRequestBehavior.AllowGet);
 		}
-
+		
 		[HttpGet]
 		[UnitOfWork]
 		public virtual  JsonResult GetPreferenceTemplates()

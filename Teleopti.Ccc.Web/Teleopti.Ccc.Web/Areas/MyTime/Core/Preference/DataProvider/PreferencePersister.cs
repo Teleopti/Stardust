@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Web;
 using AutoMapper;
@@ -80,12 +81,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			return preferenceDays;
 		}
 
-		public PreferenceDayViewModel Delete(DateOnly date)
+		public PreferenceDayViewModel Delete(IList<IPreferenceDay> preferences)
 		{
-			var preferences = _preferenceDayRepository.FindAndLock(date, _loggedOnUser.CurrentUser());
-			if (preferences.IsEmpty())
-				throw new HttpException(404, "Preference not found");
-
 			foreach (var preferenceDay in preferences)
 			{
 				_preferenceDayRepository.Remove(preferenceDay);
@@ -93,5 +90,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			return new PreferenceDayViewModel { Color = "" };
 		}
 
+
+		public IEnumerable<PreferenceDayViewModel> Delete(List<DateOnly> dates)
+		{
+			return dates.Select (date => _preferenceDayRepository.FindAndLock (date, _loggedOnUser.CurrentUser()))
+				.Where (preferences => !preferences.IsEmpty())
+				.Select (Delete).ToList();
+		}
 	}
 }
