@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Autofac;
 using Hangfire;
+using Hangfire.SqlServer;
 using Hangfire.States;
 using Hangfire.Storage;
 using Owin;
@@ -13,13 +14,11 @@ namespace Teleopti.Ccc.Web.Core.Hangfire
 	public class HangfireServerStarter : IHangfireServerStarter
 	{
 		private readonly ILifetimeScope _lifetimeScope;
-		private readonly IHangfireServerStorageConfiguration _storageConfiguration;
 		private readonly IConfigReader _config;
 
-		public HangfireServerStarter(ILifetimeScope lifetimeScope, IHangfireServerStorageConfiguration storageConfiguration, IConfigReader config)
+		public HangfireServerStarter(ILifetimeScope lifetimeScope, IConfigReader config)
 		{
 			_lifetimeScope = lifetimeScope;
-			_storageConfiguration = storageConfiguration;
 			_config = config;
 		}
 
@@ -30,38 +29,66 @@ namespace Teleopti.Ccc.Web.Core.Hangfire
 		// - still wont handle the fact that some customers have more than one server running, 
 		//   so you will still have more than one worker
 
+		
+		
+		// GOSH.. Sooo much text...
 		public void Start(IAppBuilder app)
 		{
-			var useDashboard = _config.ReadValue("HangfireDashboard", false);
+			var retries = _config.ReadValue("HangfireAutomaticRetryAttempts", 3);
+			var jobExpiration = _config.ReadValue("HangfireJobExpirationSeconds", 60 * 10);
+			var pollInterval = _config.ReadValue("HangfireQueuePollIntervalSeconds", 2);
+			var jobExpirationCheck = _config.ReadValue("HangfireJobExpirationCheckIntervalSeconds", 60 * 15);
+			var dashboard = _config.ReadValue("HangfireDashboard", true);
+			var dashboardStatistics = _config.ReadValue("HangfireDashboardStatistics", false);
+			var dashboardCounters = _config.ReadValue("HangfireDashboardCounters", false);
 
-			_storageConfiguration.ConfigureStorage(useDashboard);
+			var defaultCountersAggregateInterval = 0;
+			if (dashboardStatistics || dashboardCounters)
+				defaultCountersAggregateInterval = (int)new SqlServerStorageOptions().CountersAggregateInterval.TotalSeconds;
+			else
+			{
+				// for optimization. disable the counter aggregator, 
+				// because we dont have any counters any more
+				// well, today anyway...
+				// NOT FUTURE PROOF! DANGER DANGER!
+				defaultCountersAggregateInterval = 60 * 60 * 24;
+			}
+			var countersAggregateInterval = _config.ReadValue("HangfireCountersAggregateIntervalSeconds", defaultCountersAggregateInterval);
+
+
+
+			GlobalConfiguration.Configuration.UseSqlServerStorage(
+				_config.ConnectionString("Hangfire"),
+				new SqlServerStorageOptions
+				{
+					PrepareSchemaIfNecessary = false,
+					QueuePollInterval = TimeSpan.FromSeconds(pollInterval),
+					JobExpirationCheckInterval = TimeSpan.FromSeconds(jobExpirationCheck),
+					CountersAggregateInterval = TimeSpan.FromSeconds(countersAggregateInterval)
+				});
 
 			GlobalConfiguration.Configuration.UseAutofacActivator(_lifetimeScope);
 
+
+
+			// for optimization, only add the filters that we currently use
+			// NOT FUTURE PROOF! DANGER DANGER!
 			GlobalJobFilters.Filters.Clear();
 			GlobalJobFilters.Filters.Add(new AutomaticRetryAttribute
 			{
-				Attempts = _config.ReadValue("HangfireAutomaticRetryAttempts", 3),
+				Attempts = retries,
 				OnAttemptsExceeded = AttemptsExceededAction.Delete
 			});
 			GlobalJobFilters.Filters.Add(new JobExpirationTimeAttribute
 			{
-				JobExpirationTimeoutSeconds = _config.ReadValue("HangfireJobExpirationSeconds", 60 * 10),
+				JobExpirationTimeoutSeconds = jobExpiration
 			});
+			// for optimization, only add the history counters as extra if explicitly configured so
+			// NOT FUTURE PROOF! DANGER DANGER!
+			if (dashboardStatistics)
+				GlobalJobFilters.Filters.Add(new StatisticsHistoryAttribute());
 
-			app.UseHangfireServer(new BackgroundJobServerOptions
-			{
-				WorkerCount = setThisToOneAndErikWillHuntYouDownAndKillYouSlowlyAndPainfully
-			});
-
-			if (useDashboard)
-			{
-				// for optimization, only add the history counters as extra if explicitly configured so
-				if (_config.ReadValue("HangfireDashboardStatistics", false))
-					GlobalJobFilters.Filters.Add(new StatisticsHistoryAttribute());
-				app.UseHangfireDashboard();
-			}
-			else
+			if (!dashboardCounters)
 			{
 				// for optimization, remove some internal handlers because at this time
 				// the only thing they do is insert into the Hangfire.Counters table
@@ -75,8 +102,20 @@ namespace Teleopti.Ccc.Web.Core.Hangfire
 				GlobalStateHandlers.Handlers.Add(new emptyHandler(DeletedState.StateName));
 			}
 
+
+
+			app.UseHangfireServer(new BackgroundJobServerOptions
+			{
+				WorkerCount = setThisToOneAndErikWillHuntYouDownAndKillYouSlowlyAndPainfully
+			});
+
+
+
+			if (dashboard)
+				app.UseHangfireDashboard();
+
 		}
-		
+
 		private class emptyHandler : IStateHandler
 		{
 			public emptyHandler(string stateName)
