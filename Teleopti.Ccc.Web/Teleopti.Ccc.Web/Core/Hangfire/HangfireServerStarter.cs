@@ -32,7 +32,9 @@ namespace Teleopti.Ccc.Web.Core.Hangfire
 
 		public void Start(IAppBuilder app)
 		{
-			_storageConfiguration.ConfigureStorage();
+			var useDashboard = _config.ReadValue("HangfireDashboard", false);
+
+			_storageConfiguration.ConfigureStorage(useDashboard);
 
 			GlobalConfiguration.Configuration.UseAutofacActivator(_lifetimeScope);
 
@@ -44,7 +46,7 @@ namespace Teleopti.Ccc.Web.Core.Hangfire
 			});
 			GlobalJobFilters.Filters.Add(new JobExpirationTimeAttribute
 			{
-				JobExpirationTimeoutSeconds = _config.ReadValue("HangfireJobExpirationSeconds", 600),
+				JobExpirationTimeoutSeconds = _config.ReadValue("HangfireJobExpirationSeconds", 60 * 10),
 			});
 
 			app.UseHangfireServer(new BackgroundJobServerOptions
@@ -52,7 +54,7 @@ namespace Teleopti.Ccc.Web.Core.Hangfire
 				WorkerCount = setThisToOneAndErikWillHuntYouDownAndKillYouSlowlyAndPainfully
 			});
 
-			if (_config.ReadValue("HangfireDashboard", false))
+			if (useDashboard)
 			{
 				// for optimization, only add the history counters as extra if explicitly configured so
 				if (_config.ReadValue("HangfireDashboardStatistics", false))
@@ -64,18 +66,20 @@ namespace Teleopti.Ccc.Web.Core.Hangfire
 				// for optimization, remove some internal handlers because at this time
 				// the only thing they do is insert into the Hangfire.Counters table
 				// add handlers that does nothing with the same state name
-				// NOT FUTURE PROOF!
+				// if you have read this far, you might want to check the SqlStorageConfiguration
+				// class aswell
+				// NOT FUTURE PROOF! DANGER DANGER!
 				GlobalStateHandlers.Handlers.Remove(GlobalStateHandlers.Handlers.Single(x => x.StateName == SucceededState.StateName));
 				GlobalStateHandlers.Handlers.Remove(GlobalStateHandlers.Handlers.Single(x => x.StateName == DeletedState.StateName));
-				GlobalStateHandlers.Handlers.Add(new EmptyHandler(SucceededState.StateName));
-				GlobalStateHandlers.Handlers.Add(new EmptyHandler(DeletedState.StateName));
+				GlobalStateHandlers.Handlers.Add(new emptyHandler(SucceededState.StateName));
+				GlobalStateHandlers.Handlers.Add(new emptyHandler(DeletedState.StateName));
 			}
 
 		}
 		
-		public class EmptyHandler : IStateHandler
+		private class emptyHandler : IStateHandler
 		{
-			public EmptyHandler(string stateName)
+			public emptyHandler(string stateName)
 			{
 				StateName = stateName;
 			}
