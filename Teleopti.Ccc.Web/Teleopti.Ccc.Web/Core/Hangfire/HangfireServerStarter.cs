@@ -2,8 +2,8 @@ using System;
 using System.Linq;
 using Autofac;
 using Hangfire;
-using Hangfire.Server;
 using Hangfire.States;
+using Hangfire.Storage;
 using Owin;
 using Teleopti.Ccc.Domain.Config;
 
