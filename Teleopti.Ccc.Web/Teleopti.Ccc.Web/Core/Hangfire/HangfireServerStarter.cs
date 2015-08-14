@@ -59,21 +59,21 @@ namespace Teleopti.Ccc.Web.Core.Hangfire
 					GlobalJobFilters.Filters.Add(new StatisticsHistoryAttribute());
 				app.UseHangfireDashboard();
 			}
-			else
-			{
-				// for optimization, remove some internal handlers because at this time
-				// the only thing they do is insert into the Hangfire.Counters table
-				GlobalStateHandlers.Handlers.Remove(getHandlerOf(typeof(SucceededState)));
-				GlobalStateHandlers.Handlers.Remove(getHandlerOf(typeof(DeletedState)));
-			}
+			//else
+			//{
+			//	// for optimization, remove some internal handlers because at this time
+			//	// the only thing they do is insert into the Hangfire.Counters table
+			//	GlobalStateHandlers.Handlers.Remove(getHandlerOf(typeof(SucceededState)));
+			//	GlobalStateHandlers.Handlers.Remove(getHandlerOf(typeof(DeletedState)));
+			//}
 
 		}
 
-		private IStateHandler getHandlerOf(Type type)
-		{
-			var handlerName = type.AssemblyQualifiedName + ".Handler";
-			var handlerType = Type.GetType(handlerName);
-			return GlobalStateHandlers.Handlers.Single(x => x.GetType() == handlerType);
-		}
+		//private IStateHandler getHandlerOf(Type type)
+		//{
+		//	var handlerName = type.AssemblyQualifiedName + ".Handler";
+		//	var handlerType = Type.GetType(handlerName);
+		//	return GlobalStateHandlers.Handlers.Single(x => x.GetType() == handlerType);
+		//}
 	}
 }
