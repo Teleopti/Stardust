@@ -258,54 +258,60 @@
 	text-align:center;
 }
 
-@media print{
-	.navbar *{
-		visibility:hidden;
-		height:0;
-		width:0;
-	}
-
+/*For general container print*/
+@media print {
 	.navbar{
-		visibility:hidden;
-		height:0;
-		width:0;
+		display:none;
 	}
 
-	.layout-container *{
-		visibility:hidden;
-		height:0;
-		width:0;
+	.layout-container{
+		display:block;
+		width:100%;
+		height:100%;
 	}
 
-	.layout-container {
-		visibility:hidden;
-		height:0;
-		width:0;
+	.layout-container .content{
+		flex-basis:100%;
+		height:100%;
+		margin:0px;
+		background:#ffffff!important;
+	}
+
+	.layout-container .sidenav {
+		display:none;
+	}
+
+	.sidenav-toggle{
+		display:none;
 	}
 	
 	.wfm-accordion-head{
-		visibility:hidden;
-		height:0;
-		width:0;
+		display:none;
+	}
+
+	md-tooltip{
+		display:none;
+	}
+}
+
+/*For seat plan report print*/
+@media print{
+
+	body{
+		background:#ffffff!important;
+	}
+
+	.container-noprint{
+		display:none;
 	}
 
 	#seatPlanReportContentPrintDiv{
 		width:100%;
 		height:auto;
 	}
-
-	.wfm-accordion-head{
-		display:none;
-	}
-
-	.report-paging{
-		display:none;
-	}
-	
-	md-tooltip{
-		display:none;
-	}
 }
+
+
 
 @media screen{
 	#seatPlanReportContentPrint{
