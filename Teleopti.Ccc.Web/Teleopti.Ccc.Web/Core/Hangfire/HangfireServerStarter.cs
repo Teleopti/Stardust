@@ -54,7 +54,9 @@ namespace Teleopti.Ccc.Web.Core.Hangfire
 
 			if (_config.ReadValue("HangfireDashboard", false))
 			{
-				GlobalJobFilters.Filters.Add(new StatisticsHistoryAttribute());
+				// for optimization, only add the history counters as extra if explicitly configured so
+				if (_config.ReadValue("HangfireDashboardStatistics", false))
+					GlobalJobFilters.Filters.Add(new StatisticsHistoryAttribute());
 				app.UseHangfireDashboard();
 			}
 			else
