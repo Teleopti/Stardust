@@ -33,6 +33,11 @@ namespace Teleopti.Ccc.TestCommon
 			return AppSettings_DontUse[name];
 		}
 
+		public string ConnectionString(string name)
+		{
+			return ConnectionStrings_DontUse[name].ConnectionString;
+		}
+
 		public NameValueCollection AppSettings_DontUse { get; set; }
 
 		public ConnectionStringSettingsCollection ConnectionStrings_DontUse { get; set; }

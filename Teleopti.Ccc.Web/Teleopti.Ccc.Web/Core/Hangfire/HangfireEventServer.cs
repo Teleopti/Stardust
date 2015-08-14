@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using Hangfire;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 
 namespace Teleopti.Ccc.Web.Core.Hangfire
@@ -14,8 +13,6 @@ namespace Teleopti.Ccc.Web.Core.Hangfire
 		}
 
 		[DisplayName("{0}")]
-		[AutomaticRetry(Attempts = 3, OnAttemptsExceeded = AttemptsExceededAction.Delete)]
-		[JobExpirationTime]
 		public void Process(string displayName, string eventType, string serializedEvent, string handlerType)
 		{
 			_processor.Process(displayName, eventType, serializedEvent, handlerType);

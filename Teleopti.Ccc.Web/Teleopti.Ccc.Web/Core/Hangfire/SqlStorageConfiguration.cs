@@ -2,7 +2,6 @@ using System;
 using Hangfire;
 using Hangfire.SqlServer;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Core.Hangfire
 {
@@ -21,11 +20,10 @@ namespace Teleopti.Ccc.Web.Core.Hangfire
 			var options = new SqlServerStorageOptions
 			{
 				PrepareSchemaIfNecessary = false,
-				QueuePollInterval = TimeSpan.FromSeconds(1),
-				JobExpirationCheckInterval =
-					TimeSpan.FromSeconds(int.Parse(_config.AppSettings_DontUse["HangfireJobExpirationCheckIntervalSeconds"]))
+				QueuePollInterval = TimeSpan.FromSeconds(_config.ReadValue("HangfireQueuePollIntervalSeconds", 2)),
+				JobExpirationCheckInterval = TimeSpan.FromSeconds(_config.ReadValue("HangfireJobExpirationCheckIntervalSeconds", 900))
 			};
-			GlobalConfiguration.Configuration.UseSqlServerStorage(_config.ConnectionStrings_DontUse["Hangfire"].ConnectionString, options);
+			GlobalConfiguration.Configuration.UseSqlServerStorage(_config.ConnectionString("Hangfire"), options);
 		}
 	}
 }

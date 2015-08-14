@@ -25,6 +25,11 @@ namespace Teleopti.Ccc.Domain.Config
 			return retValue;
 		}
 
+		public string ConnectionString(string name)
+		{
+			return _defaultConfigReader.ConnectionString(name);
+		}
+
 		public NameValueCollection AppSettings_DontUse
 		{
 			get { return ConfigurationManager.AppSettings; }
