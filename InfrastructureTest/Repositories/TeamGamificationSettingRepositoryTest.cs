@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
@@ -22,17 +23,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		private ITeam _team;
 
 
-		/// <summary>
-		/// Creates an aggregate using the Bu of logged in user.
-		/// Should be a "full detailed" aggregate
-		/// </summary>
-		/// <returns></returns>
-		protected override ITeamGamificationSetting CreateAggregateWithCorrectBusinessUnit()
-		{
-			ITeamGamificationSetting teamGamificationSetting = new TeamGamificationSetting { Team = _team, GamificationSetting = _gamificationSetting };
-			return teamGamificationSetting;
-		}
-
 		protected override void ConcreteSetup()
 		{
 			_site = SiteFactory.CreateSimpleSite("site");
@@ -40,11 +30,25 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			_team = TeamFactory.CreateSimpleTeam("team");
 			_site.AddTeam(_team);
-			
+
 			PersistAndRemoveFromUnitOfWork(_team);
 
 			_gamificationSetting = new GamificationSetting("gamificationsetting");
 			PersistAndRemoveFromUnitOfWork(_gamificationSetting);
+		}
+		/// <summary>
+		/// Creates an aggregate using the Bu of logged in user.
+		/// Should be a "full detailed" aggregate
+		/// </summary>
+		/// <returns></returns>
+		protected override ITeamGamificationSetting CreateAggregateWithCorrectBusinessUnit()
+		{
+			var team = TeamFactory.CreateSimpleTeam("team");
+			_site.AddTeam(team);
+			PersistAndRemoveFromUnitOfWork(team);
+
+			ITeamGamificationSetting teamGamificationSetting = new TeamGamificationSetting { Team = team, GamificationSetting = _gamificationSetting };
+			return teamGamificationSetting;
 		}
 		
 		[Test]
@@ -81,7 +85,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		protected override void VerifyAggregateGraphProperties(ITeamGamificationSetting loadedAggregateFromDatabase)
 		{
 			ITeamGamificationSetting org = CreateAggregateWithCorrectBusinessUnit();
-			Assert.AreEqual(org.Team, loadedAggregateFromDatabase.Team);
+			Assert.AreEqual(org.GamificationSetting, loadedAggregateFromDatabase.GamificationSetting);
 		}
 
 		protected override Repository<ITeamGamificationSetting> TestRepository(IUnitOfWork unitOfWork)
