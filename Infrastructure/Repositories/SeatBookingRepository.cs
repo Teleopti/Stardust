@@ -183,6 +183,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public String LocationName { get; set; }
 		public Guid TeamId { get; set; }
 		public String TeamName { get; set; }
+		public Guid SiteId { get; set; }
+		public String SiteName { get; set; }
 		public int NumberOfRecords{ get; set; }
 		public DateTime BelongsToDateTime
 		{

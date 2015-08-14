@@ -27,7 +27,11 @@ namespace Teleopti.Interfaces.Domain
 		String LocationName { get; set; }
 		Guid TeamId { get; set; }
 		String TeamName { get; set; }
+		Guid SiteId { get; set; }
+		String SiteName { get; set; }
 		int NumberOfRecords { get; set; }
+		
+		
 	}
 
 	

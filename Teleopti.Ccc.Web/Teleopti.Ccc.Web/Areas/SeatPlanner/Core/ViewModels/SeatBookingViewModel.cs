@@ -12,11 +12,13 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels
 		public String LocationPath { get; set; }
 		public DateTime StartDateTime { get; set; }
 		public DateTime EndDateTime { get; set; }
-		public String SeatName { get; set; }
-		public int SeatPriority { get; set; }
 		public Guid PersonId { get; set; }
 		public DateOnly BelongsToDate { get; set; }
 		public Guid LocationId { get; set; }
+		public Guid SiteId { get; set; }
+		public String SiteName { get; set; }
 		public Guid SeatId { get; set; }
+		public String SeatName { get; set; }
+		public int SeatPriority { get; set; }
 	}
 }

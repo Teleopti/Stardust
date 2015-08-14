@@ -47,6 +47,8 @@ SELECT SeatBooking.StartDateTime as SeatBookingStart
 	  ,loc.Name As LocationName
 	  ,team.Id as TeamId
 	  ,team.Name as TeamName
+	  ,sit.Id as SiteId
+	  ,sit.Name as SiteName
 	  ,personSchedule.Start as PersonScheduleStart
 	  ,[personSchedule].[End] as PersonScheduleEnd
 	  ,NumberOfRecords = Count(*) OVER()
@@ -59,6 +61,7 @@ FROM ReadModel.PersonScheduleDay as personSchedule
 		and personSchedule.BelongsToDate = SeatBooking.BelongsToDate )
   LEFT JOIN Seat as seat on SeatBooking.Seat = seat.Id
   LEFT JOIN SeatMapLocation as loc on loc.Id = seat.Parent
+  LEFT JOIN [Site] as sit on sit.id = personSchedule.SiteId 
     
 WHERE personSchedule.BusinessUnitId = @businessUnitId and personSchedule.IsDayOff = 0 and
 	( personSchedule.BelongsToDate between @startDate and @endDate )

@@ -44,7 +44,9 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels
 				StartDateTime = personScheduleWithSeatBooking.SeatBookingStart ?? personScheduleWithSeatBooking.PersonScheduleStart,
 				EndDateTime = personScheduleWithSeatBooking.SeatBookingEnd ?? personScheduleWithSeatBooking.PersonScheduleEnd,
 				SeatId = personScheduleWithSeatBooking.SeatId,
-				SeatName = personScheduleWithSeatBooking.SeatName
+				SeatName = personScheduleWithSeatBooking.SeatName,
+				SiteId = personScheduleWithSeatBooking.SiteId,
+				SiteName = personScheduleWithSeatBooking.SiteName
 			};
 		}
 	}
