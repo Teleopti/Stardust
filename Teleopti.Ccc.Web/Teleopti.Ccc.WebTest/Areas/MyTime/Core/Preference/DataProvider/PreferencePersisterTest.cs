@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -14,7 +13,6 @@ using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
 using Teleopti.Interfaces.Domain;
-using List = Rhino.Mocks.Constraints.List;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 {
@@ -148,19 +146,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			var result = target.Delete(new List<DateOnly>(){DateOnly.Today});
 
 			result.First().Preference.Should().Be.Null();
-		}
-
-		[Test,Ignore]
-		public void ShouldThrowHttp404OIfPreferenceDoesNotExists()
-		{
-			var preferenceDayRepository = MockRepository.GenerateMock<IPreferenceDayRepository>();
-			var mustHaveRestrictionSetter = MockRepository.GenerateMock<IMustHaveRestrictionSetter>();
-			var target = new PreferencePersister(preferenceDayRepository, null, mustHaveRestrictionSetter, MockRepository.GenerateMock<ILoggedOnUser>());
-
-			preferenceDayRepository.Stub(x => x.FindAndLock(DateOnly.Today, null)).Return(new List<IPreferenceDay>());
-
-			var exception = Assert.Throws<HttpException>(() => target.Delete(new List<DateOnly>() { DateOnly.Today }));
-			exception.GetHttpCode().Should().Be(404);
 		}
 
 		[Test]
