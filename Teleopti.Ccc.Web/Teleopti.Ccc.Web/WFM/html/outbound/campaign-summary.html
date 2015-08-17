@@ -5,7 +5,7 @@
         <h3 class="border-bottom" translate>OutboundCampaigns</h3>
         <button ng-click="gotoCreateCampaign()" class="wfm-fab success create-campaignfix material-depth-1"><i class="mdi mdi-plus"></i></button>
     </div>
-    <div class="material-block-content">
+    <div class="material-block-content campaign-summary">
         <div class="opration-area">
             <phase-picker active-phase-code="activePhaseCode" phase-statistics="phaseStatistics" disable-action="!listCampaignFinished"></phase-picker>
         </div>
@@ -32,10 +32,10 @@
 			                <p class="campaign-message campaign-message-healthyfix  m-r-5" ng-if="campaign.WarningInfo.length == 0"><span class="campaign-warning-icon campaign-green-icon-messagefix"><i class="mdi mdi-check"></i></span><span translate>Healthy</span></p>
 							<div class="edit-container">
 								<div class="input-container relative" ng-show="campaign.manualPlanswitch">
-									<input type="text" placeholder="plan..." ng-model="campaign.manualPlanInput"/>
-									<i class="mdi mdi-information-outline" style="position: absolute; left: 195px; top: 9px; color: #EC38A3;" ng-show="campaign.isManualPlanValida"></i>
-									<button class="wfm-btn btn-sm wfm-btn-invis-primary" style="padding: 5px 10px; color: #EC38A3; margin-right: 0;" ng-click="addManualPlan(campaign)" ng-disabled="campaign.isManualPlanValida" translate>Save</button>
-									<button class="wfm-btn btn-sm wfm-btn-invis-primary" style="padding: 5px 10px; color: #EC38A3; margin-left: 0;" ng-click="clear(campaign)" translate>Clear</button>
+									<input type="text" placeholder="plan..." ng-model="campaign.manualPlanInput" range-validate range-min="0"/>									
+									<i class="mdi mdi-information-outline" style="position: absolute; left: 195px; top: 9px; color: #EC38A3;" ng-show="isManualProductionPlanInvalid(campaign)"></i>									
+									<button class="wfm-btn btn-sm wfm-btn-invis-primary" style="padding: 5px 10px;  margin-right: 0;" ng-click="addManualPlan(campaign)" ng-disabled="isManualProductionPlanInvalid(campaign)" ng-class="{'wfm-btn-invis-disabled': isManualProductionPlanInvalid(campaign)}" translate>Save</button>
+									<button class="wfm-btn btn-sm wfm-btn-invis-default" style="padding: 5px 10px;  margin-left: 0;" ng-click="clearManualPlan(campaign)" translate>Clear</button>
 								</div>
 								<div class="input-container multi-inputfix" ng-show="campaign.backlogSwitch">
 									<input type="text" placeholder="parameter1..." />

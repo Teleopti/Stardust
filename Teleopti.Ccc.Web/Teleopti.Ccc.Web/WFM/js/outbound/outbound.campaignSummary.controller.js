@@ -22,9 +22,10 @@
             });
     	});
 
-    	$scope.clear = function (campaign) {
+    	$scope.clearManualPlan = function (campaign) {
     		campaign.selectedDates = [];
-    	}
+		    campaign.manualPlanInput = null;
+	    }
 
     	$scope.addManualPlan = function (campaign) {
     		campaign.manualPlanswitch = false;
@@ -54,6 +55,10 @@
 				campaign.graphData = data;
 				campaign.translations = translations;
 			});
+		}
+
+		$scope.isManualProductionPlanInvalid = function (campaign) {
+			return !(angular.isDefined(campaign.manualPlanInput) && campaign.manualPlanInput != null && campaign.manualPlanInput >= 0);
 		}
 
 		$scope.switchBacklog = function(campaign) {
