@@ -13346,8 +13346,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Late</value>
     <comment>campaign error type</comment>
   </data>
-  <data name="ProductionPlan" xml:space="preserve">
-    <value>production plan</value>
+  <data name="ManualPlan" xml:space="preserve">
+    <value>manual plan</value>
     <comment>for campaigns to modify production plan</comment>
   </data>
   <data name="Backlog" xml:space="preserve">

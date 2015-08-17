@@ -13525,6 +13525,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to manual plan.
+        /// </summary>
+        public static string ManualPlan {
+            get {
+                return ResourceManager.GetString("ManualPlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Map Destination.
         /// </summary>
         public static string MapDestination {
@@ -19760,15 +19769,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ProductActivationKeyIsInvalidPerhapsForgedPleaseApplyANewOne {
             get {
                 return ResourceManager.GetString("ProductActivationKeyIsInvalidPerhapsForgedPleaseApplyANewOne", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to production plan.
-        /// </summary>
-        public static string ProductionPlan {
-            get {
-                return ResourceManager.GetString("ProductionPlan", resourceCulture);
             }
         }
         
