@@ -107,10 +107,37 @@
 			return (team.Children === undefined);
 		};
 
-		vm.selectTeam = function (teamHierarchyObj) {
-			if (vm.isTeam(teamHierarchyObj)) {
-				teamHierarchyObj.selected = !teamHierarchyObj.selected;
+		function setAllChildrenToOpposite(teamHierarchyObj, value) {
+
+			if (isTeam(teamHierarchyObj)) {
+				teamHierarchyObj.selected = value;
+			} else {
+				teamHierarchyObj.Children.forEach(function (child) {
+					setAllChildrenToOpposite(child, value);
+				});
 			}
+		}
+
+		function setStatuBaseOnChildren(item) {
+			if (item.Children == null) return;
+
+			var isAnyChildrenSelected = false;
+			item.Children.forEach(function (child) {
+				setStatuBaseOnChildren(child);
+				if (child.selected === true) isAnyChildrenSelected = true;
+			});
+			item.selected = isAnyChildrenSelected;
+		}
+
+		vm.selectTeam = function selectTeam(teamHierarchyObj, teams) {
+			if (isTeam(teamHierarchyObj)) {
+				teamHierarchyObj.selected = !teamHierarchyObj.selected;
+			} else {
+				setAllChildrenToOpposite(teamHierarchyObj, !teamHierarchyObj.selected);
+			}
+			teams.forEach(function (item) {
+				setStatuBaseOnChildren(item);
+			});
 		};
 		
 		vm.selectLocation = function (location) {

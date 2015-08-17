@@ -87,7 +87,7 @@
 		<div ng-if="vm.isLoadingReport" class="report-spinner">
 			<md-progress-circular md-mode="indeterminate"></md-progress-circular>
 		</div>
-		<h2>{{ vm.seatBookings.length == 0 ? ('NoReportForCurrentCondition' | translate) : ('SeatPlanReport' | translate) }}</h2>
+		<h2>{{ vm.seatBookings.length == 0 ? ('NoReportForCurrentConditions' | translate) : ('SeatPlanReport' | translate) }}</h2>
 		<seat-plan-report-table seat-bookings="vm.seatBookings" ng-if="!vm.isLoadingReport"></seat-plan-report-table>
 
 		<div class="report-paging material-depth-1 pull-right" ng-if="!vm.isLoadingReport && vm.totalPages != 1 && vm.totalPages != 0">
@@ -101,7 +101,7 @@
 	</div>
 
 	<div class="seatPlanReportContent" id="seatPlanReportContentPrint">
-		<h2>{{ vm.seatBookings.length == 0 ? ('NoReportForCurrentCondition' | translate) : ('SeatPlanReport' | translate) }}</h2>
+		<h2>{{ vm.seatBookings.length == 0 ? ('NoReportForCurrentConditions' | translate) : ('SeatPlanReport' | translate) }}</h2>
 		<seat-plan-report-table seat-bookings="vm.seatBookingsAll" get-display-date="vm.getDisplayDateString" get-display-time="vm.getDisplayTimeString"></seat-plan-report-table>
 	</div>
 
