@@ -22,7 +22,6 @@
 				return $scope.campaign.manualPlanInput;
 			}, function (newVal, oldVal) {
 				if (newVal != oldVal) {
-					console.log('from watch newVal', newVal);
 					if (newVal == undefined) {
 						$scope.campaign.isManualPlanValida = true;
 					}
@@ -31,10 +30,8 @@
 					}
 					
 					var planInput = parseFloat(newVal);
-					console.log('float',planInput);
 					if (!planInput) {
 						$scope.campaign.isManualPlanValida = true;
-						console.log('input is not valida');
 					}
 					if (planInput) {
 						$scope.campaign.isManualPlanValida = false;
