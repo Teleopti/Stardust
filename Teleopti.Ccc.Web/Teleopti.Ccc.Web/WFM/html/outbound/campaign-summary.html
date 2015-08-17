@@ -13,7 +13,7 @@
         <h4 class="border-bottom"><span translate>CampaignsWithWarning</span><span ng-bind="WarningCampaigns.length" style="margin-left:5px;"></span></h4>
         <div class="loading-whole-section" ng-show="!listCampaignFinished && isLoadFinished"><md-progress-circular md-mode="indeterminate"></md-progress-circular></div>
         <teleopti-card-list multi-select>
-            <teleopti-card ng-repeat="campaign in WarningCampaigns">
+			<teleopti-card ng-repeat="campaign in WarningCampaigns">
 				<card-header ng-click="getGraphData(campaign)">
 					<div class="text-center relative">
 						<span class="campaign-namefix" ng-bind="campaign.Name"></span>
@@ -25,27 +25,45 @@
 						<span class="campaign-phase-label" translate>{{campaign.Status | showPhase}}</span>
 					</div>
 				</card-header>
-                <card-body>
-	                <div class="relative" ng-show="listCampaignFinished && !displayLoading(campaign)">
-		                <div class="clearfix m-b-10">
-			                <p class="campaign-message m-r-5" ng-class="{orangefix: isOverStaffing(campaign.WarningInfo)}" ng-repeat="info in campaign.WarningInfo"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span translate>{{info.TypeOfRule}}</span></p>
-			                <p class="campaign-message campaign-message-healthyfix  m-r-5" ng-if="campaign.WarningInfo.length == 0"><span class="campaign-warning-icon campaign-green-icon-messagefix"><i class="mdi mdi-check"></i></span><span translate>Healthy</span></p>
-		                </div>
-		                <div class="chart text-center relative chartfix">
+				<card-body>
+					<div class="relative" ng-show="listCampaignFinished && !displayLoading(campaign)">
+						<div class="clearfix m-b-10 text-center" style="height: 38px;">
+							<p class="campaign-message m-r-5" ng-class="{orangefix: isOverStaffing(campaign.WarningInfo)}" ng-repeat="info in campaign.WarningInfo"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span translate>{{info.TypeOfRule}}</span></p>
+							<p class="campaign-message campaign-message-healthyfix  m-r-5" ng-if="campaign.WarningInfo.length == 0"><span class="campaign-warning-icon campaign-green-icon-messagefix"><i class="mdi mdi-check"></i></span><span translate>Healthy</span></p>
+							<div class="edit-container">
+								<div class="input-container relative" ng-show="campaign.manualPlanswitch">
+									<input type="text" placeholder="plan..." ng-model="campaign.manualPlanInput" />
+									<i class="mdi mdi-information-outline" style="position: absolute; left: 195px; top: 9px; color: #EC38A3;" ng-show="campaign.isManualPlanValida"></i>
+									<button class="wfm-btn btn-sm wfm-btn-invis-primary" style="padding: 5px 10px; color: #EC38A3; margin-right: 0;" ng-click="addManualPlan(campaign)" ng-disabled="campaign.isManualPlanValida" translate>Save</button>
+									<button class="wfm-btn btn-sm wfm-btn-invis-primary" style="padding: 5px 10px; color: #EC38A3; margin-left: 0;" ng-click="clear(campaign)" translate>Clear</button>
+								</div>
+								<div class="input-container multi-inputfix" ng-show="campaign.backlogSwitch">
+									<input type="text" placeholder="parameter1..." />
+									<input type="text" placeholder="parameter2..." />
+									<input type="text" placeholder="parameter3..." />
+									<input type="text" placeholder="parameter4..." />
+									<input type="text" placeholder="parameter5..." />
+									<input type="text" placeholder="parameter6..." />
+									<button class="wfm-btn btn-sm wfm-btn-invis-primary" style="padding: 5px 10px; color: #EC38A3; margin-right: 0;" ng-click="addBacklog(campaign)" translate>Save</button>
+									<button class="wfm-btn btn-sm wfm-btn-invis-primary" style="padding: 5px 10px; color: #EC38A3; margin-left: 0;" ng-click="clear(campaign)" translate>Clear</button>
+								</div>
+							</div>
+						</div>
+						<div class="chart text-center relative chartfix">
 							<div class="loading-whole-section loading-card-bodyfix" ng-show="listCampaignFinished && displayLoading(campaign)">
 								<md-progress-circular md-mode="indeterminate" style="z-index: 100;"></md-progress-circular>
 							</div>
 							<div ng-if="!displayLoading(campaign)">
-								<campaign-chart campaign="campaign" graph-data="campaign.graphData" dictionary="campaign.translations" selecteddates="campaign.dates"></campaign-chart>
+								<campaign-chart campaign="campaign" graph-data="campaign.graphData" dictionary="campaign.translations"></campaign-chart>
 							</div>
 						</div>
 						<button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="show(campaign)" translate>Edit</button>
 						<button class="wfm-btn wfm-btn-invis-primary pull-right" translate>Schedule</button>
-						<button class="wfm-btn wfm-btn-invis-primary pull-right" translate>AddBacklog</button>
-						<button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="goToProductionPlan(campaign)" translate>ProductionPlan</button>
-	                </div>
-                </card-body>
-            </teleopti-card>
+						<button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="switchBacklog(campaign);" ng-class="{'selected-ope-btn': campaign.backlogSwitch}" translate>AddBacklog</button>
+						<button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="switchManualPlan(campaign);" ng-class="{'selected-ope-btn': campaign.manualPlanswitch}" translate>ProductionPlan</button>
+					</div>
+				</card-body>
+			</teleopti-card>
         </teleopti-card-list>
 
         <h4 class="border-bottom"><span translate>CampaignsWithoutWarning</span><span ng-bind="Campaigns.length" style="margin-left:5px;"></span></h4>
@@ -68,9 +86,10 @@
 			                <p class="campaign-message m-r-5" ng-class="{orangefix: isOverStaffing(campaign.WarningInfo)}" ng-repeat="info in campaign.WarningInfo"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span translate>{{info.TypeOfRule}}</span></p>
 			                <p class="campaign-message campaign-message-healthyfix  m-r-5" ng-if="campaign.WarningInfo.length == 0"><span class="campaign-warning-icon campaign-green-icon-messagefix"><i class="mdi mdi-check"></i></span><span translate>Healthy</span></p>
 							<div class="edit-container">
-								<div class="input-container" ng-show="campaign.manualPlanswitch">
-									<input type="text" placeholder="plan..." ng-model="campaign.manualPlanInput" />
-									<button class="wfm-btn btn-sm wfm-btn-invis-primary" style="padding: 5px 10px; color: #EC38A3; margin-right: 0;" ng-click="addManualPlan(campaign)" translate>Save</button>
+								<div class="input-container relative" ng-show="campaign.manualPlanswitch">
+									<input type="text" placeholder="plan..." ng-model="campaign.manualPlanInput"/>
+									<i class="mdi mdi-information-outline" style="position: absolute; left: 195px; top: 9px; color: #EC38A3;" ng-show="campaign.isManualPlanValida"></i>
+									<button class="wfm-btn btn-sm wfm-btn-invis-primary" style="padding: 5px 10px; color: #EC38A3; margin-right: 0;" ng-click="addManualPlan(campaign)" ng-disabled="campaign.isManualPlanValida" translate>Save</button>
 									<button class="wfm-btn btn-sm wfm-btn-invis-primary" style="padding: 5px 10px; color: #EC38A3; margin-left: 0;" ng-click="clear(campaign)" translate>Clear</button>
 								</div>
 								<div class="input-container multi-inputfix" ng-show="campaign.backlogSwitch">
@@ -80,7 +99,7 @@
 									<input type="text" placeholder="parameter4..." />
 									<input type="text" placeholder="parameter5..." />
 									<input type="text" placeholder="parameter6..." />
-									<button class="wfm-btn btn-sm wfm-btn-invis-primary" style="padding: 5px 10px; color: #EC38A3; margin-right: 0;" ng-click="addBacklog(campaign)" nd-disabled="campaign.isManualPlanValida" translate>Save</button>
+									<button class="wfm-btn btn-sm wfm-btn-invis-primary" style="padding: 5px 10px; color: #EC38A3; margin-right: 0;" ng-click="addBacklog(campaign)" translate>Save</button>
 									<button class="wfm-btn btn-sm wfm-btn-invis-primary" style="padding: 5px 10px; color: #EC38A3; margin-left: 0;" ng-click="clear(campaign)" translate>Clear</button>
 								</div>
 							</div>
@@ -89,28 +108,9 @@
 			                <div class="loading-whole-section loading-card-bodyfix" ng-show="listCampaignFinished && displayLoading(campaign)">
 				                <md-progress-circular md-mode="indeterminate" style="z-index: 100;"></md-progress-circular>
 			                </div>
-							<!--<div class="edit-container">
-								<div class="input-container" ng-show="campaign.manualPlanswitch">
-									<input type="text" placeholder="plan..." ng-model="campaign.manualPlaninput" />
-									<button class="wfm-btn btn-sm wfm-btn-invis-primary" style="padding: 5px 10px; color: #EC38A3;" ng-click="addManualPlan(campaign)" translate>Save</button>
-								</div>
-								<div class="input-container multi-inputfix" ng-show="campaign.backlogSwitch">
-									<input type="text" placeholder="parameter1..." />
-									<input type="text" placeholder="parameter2..." />
-									<input type="text" placeholder="parameter3..." />
-									<input type="text" placeholder="parameter4..." />
-									<input type="text" placeholder="parameter5..." />
-									<input type="text" placeholder="parameter6..." />
-									<button class="wfm-btn btn-sm wfm-btn-invis-primary" style="padding: 5px 10px; color: #EC38A3;" ng-click="addBacklog(campaign)" translate>Save</button>
-								</div>
-							</div>-->
 			                <div ng-if="!displayLoading(campaign)">
 				                <campaign-chart campaign="campaign" graph-data="campaign.graphData" dictionary="campaign.translations"></campaign-chart>
 			                </div>
-			                <!--<div class="chip-container" ng-show="campaign.manualPlanswitch||campaign.backlogSwitch">
-				                <div class="selected-plan-dates clearfix"><span ng-repeat="date in campaign.selectedDates" class="date-label">{{date | amDateFormat: 'MM-DD'}}<i class="mdi mdi-close date-label-close-fix" ng-click="delThisDate(campaign,date)"></i></span></div>
-			                </div>-->
-			                
 		                </div>
 		                <button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="show(campaign)" translate>Edit</button>
 		                <button class="wfm-btn wfm-btn-invis-primary pull-right" translate>Schedule</button>
