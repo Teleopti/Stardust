@@ -843,6 +843,11 @@
       <DependentUpon>OutboundCampaignBasicOperations.feature</DependentUpon>
     </Compile>
     <Compile Include="Wfm\Outbound\OutboundCampaignStepDefinitions.cs" />
+    <Compile Include="Wfm\People\AdjustSkillsAfterTraining.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AdjustSkillsAfterTraining.feature</DependentUpon>
+    </Compile>
     <Compile Include="Wfm\People\ImportUsers.feature.cs">
       <DependentUpon>ImportUsers.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -1203,6 +1208,10 @@
       <LastGenOutput>Global.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\Global.feature" />
+    <None Include="Wfm\People\AdjustSkillsAfterTraining.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>AdjustSkillsAfterTraining.feature.cs</LastGenOutput>
+    </None>
     <None Include="Wfm\People\ImportUsers.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ImportUsers.feature.cs</LastGenOutput>
