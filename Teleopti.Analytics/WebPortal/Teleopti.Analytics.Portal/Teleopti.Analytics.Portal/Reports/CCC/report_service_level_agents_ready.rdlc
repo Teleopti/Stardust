@@ -1662,9 +1662,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Avg(Fields!scheduled_agents_ready.Value),1)</Value>
+                              <Value>=Avg(Fields!scheduled_agents_ready.Value)</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>="#,##0.0"</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1701,9 +1702,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Avg(Fields!agents_ready.Value),1)</Value>
+                              <Value>=Avg(Fields!agents_ready.Value)</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>="#,##0.0"</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1740,9 +1742,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Code.CalcRatio(sum(Fields!calls_offered.Value), sum(Fields!scheduled_agents_ready.Value), 0), 1)</Value>
+                              <Value>=Code.CalcRatio(sum(Fields!calls_offered.Value), sum(Fields!scheduled_agents_ready.Value), 0)</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>="#,##0.0"</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1779,9 +1782,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Code.CalcRatio(sum(Fields!calls_offered.Value), sum(Fields!agents_ready.Value), 0), 1)</Value>
+                              <Value>=Code.CalcRatio(sum(Fields!calls_offered.Value), sum(Fields!agents_ready.Value), 0)</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>="#,##0.0"</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1896,17 +1900,16 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(
-
+                              <Value>=
 iif(
 (
  sum(Fields!calls_offered.Value))&gt;0,
  sum(Fields!calls_answered.Value)/(sum(Fields!calls_offered.Value))
  ,0
-)
-,1)</Value>
+)</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>0.0%</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1943,9 +1946,10 @@ iif(
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(code.CalcRatio(sum(Fields!service_level_numerator.Value),sum(Fields!service_level_denominator.Value),0),1)</Value>
+                              <Value>=code.CalcRatio(sum(Fields!service_level_numerator.Value),sum(Fields!service_level_denominator.Value),0)</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>0.0%</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1971,6 +1975,7 @@ iif(
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
               </TablixCells>
@@ -2017,8 +2022,9 @@ iif(
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!scheduled_agents_ready.Value,1)</Value>
+                              <Value>=Fields!scheduled_agents_ready.Value</Value>
                               <Style>
+                                <Format>="#,##0.0"</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2031,6 +2037,9 @@ iif(
                       <rd:DefaultName>textbox24</rd:DefaultName>
                       <ZIndex>7</ZIndex>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "WhiteSmoke", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -2049,8 +2058,9 @@ iif(
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!agents_ready.Value,1)</Value>
+                              <Value>=Fields!agents_ready.Value</Value>
                               <Style>
+                                <Format>="#,##0.0"</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2063,6 +2073,9 @@ iif(
                       <rd:DefaultName>textbox11</rd:DefaultName>
                       <ZIndex>6</ZIndex>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "WhiteSmoke", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -2081,8 +2094,9 @@ iif(
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!calls_offered_per_scheduled_agent.Value,1)</Value>
+                              <Value>=Fields!calls_offered_per_scheduled_agent.Value</Value>
                               <Style>
+                                <Format>="#,##0.0"</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2095,6 +2109,9 @@ iif(
                       <rd:DefaultName>textbox29</rd:DefaultName>
                       <ZIndex>5</ZIndex>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "WhiteSmoke", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -2113,8 +2130,9 @@ iif(
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!calls_offered_per_ready_agent.Value,1)</Value>
+                              <Value>=Fields!calls_offered_per_ready_agent.Value</Value>
                               <Style>
+                                <Format>="#,##0.0"</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2127,6 +2145,9 @@ iif(
                       <rd:DefaultName>textbox21</rd:DefaultName>
                       <ZIndex>4</ZIndex>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "WhiteSmoke", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -2209,8 +2230,9 @@ iif(
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(Fields!answ_rate.Value,1)</Value>
+                              <Value>=Fields!answ_rate.Value</Value>
                               <Style>
+                                <Format>0.0%</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2223,6 +2245,9 @@ iif(
                       <rd:DefaultName>textbox30</rd:DefaultName>
                       <ZIndex>1</ZIndex>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "WhiteSmoke", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -2241,8 +2266,9 @@ iif(
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(Fields!service_level.Value,1)</Value>
+                              <Value>=Fields!service_level.Value</Value>
                               <Style>
+                                <Format>0.0%</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2254,6 +2280,9 @@ iif(
                       </Paragraphs>
                       <rd:DefaultName>textbox36</rd:DefaultName>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "WhiteSmoke", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -2315,9 +2344,10 @@ iif(
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Avg(Fields!scheduled_agents_ready.Value),1)</Value>
+                              <Value>=Avg(Fields!scheduled_agents_ready.Value)</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>="#,##0.0"</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2355,9 +2385,10 @@ iif(
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Avg(Fields!agents_ready.Value),1)</Value>
+                              <Value>=Avg(Fields!agents_ready.Value)</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>="#,##0.0"</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2395,9 +2426,10 @@ iif(
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Code.CalcRatio(sum(Fields!calls_offered.Value), sum(Fields!scheduled_agents_ready.Value), 0), 1)</Value>
+                              <Value>=Code.CalcRatio(sum(Fields!calls_offered.Value), sum(Fields!scheduled_agents_ready.Value), 0)</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>="#,##0.0"</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2434,9 +2466,10 @@ iif(
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Code.CalcRatio(sum(Fields!calls_offered.Value), sum(Fields!agents_ready.Value), 0), 1)</Value>
+                              <Value>=Code.CalcRatio(sum(Fields!calls_offered.Value), sum(Fields!agents_ready.Value), 0)</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>="#,##0.0"</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2554,9 +2587,10 @@ iif(
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(iif(( sum(Fields!calls_offered.Value))&gt;0, sum(Fields!calls_answered.Value)/(sum(Fields!calls_offered.Value)) ,0),1)</Value>
+                              <Value>=iif(( sum(Fields!calls_offered.Value))&gt;0, sum(Fields!calls_answered.Value)/(sum(Fields!calls_offered.Value)) ,0)</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>0.0%</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2594,9 +2628,10 @@ iif(
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(code.CalcRatio(sum(Fields!service_level_numerator.Value),sum(Fields!service_level_denominator.Value),0),1)</Value>
+                              <Value>=code.CalcRatio(sum(Fields!service_level_numerator.Value),sum(Fields!service_level_denominator.Value),0)</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>0.0%</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>

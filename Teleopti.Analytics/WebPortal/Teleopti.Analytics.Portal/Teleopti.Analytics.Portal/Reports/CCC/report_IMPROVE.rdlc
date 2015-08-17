@@ -1007,7 +1007,7 @@
         <KeepTogether>true</KeepTogether>
         <DataSetName>DataSet1</DataSetName>
         <Left>0.25cm</Left>
-        <Height>6.39999cm</Height>
+        <Height>6.4cm</Height>
         <Width>18.44947cm</Width>
         <Style />
       </Tablix>
@@ -1607,9 +1607,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(code.CalcRatio(sum(Fields!service_level_numerator.Value),sum(Fields!service_level_denominator.Value),0),1)</Value>
+                              <Value>=code.CalcRatio(sum(Fields!service_level_numerator.Value),sum(Fields!service_level_denominator.Value),0)</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>0.0%</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1646,9 +1647,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(Code.AdheranceCalc(sum(Fields!adherence_calc_s.Value),sum(Fields!deviation_s.Value)),1)</Value>
+                              <Value>=Code.AdheranceCalc(sum(Fields!adherence_calc_s.Value),sum(Fields!deviation_s.Value))</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>0.0%</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1685,9 +1687,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(code.CalcRatio(sum(Fields!handling_time_s.Value),sum(Fields!scheduled_paid_time_s.Value),0),1)</Value>
+                              <Value>=code.CalcRatio(sum(Fields!handling_time_s.Value),sum(Fields!scheduled_paid_time_s.Value),0)</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>0.0%</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1748,7 +1751,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -1760,8 +1762,9 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(Fields!service_level.Value,1)</Value>
+                              <Value>=Fields!service_level.Value</Value>
                               <Style>
+                                <Format>0.0%</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1773,6 +1776,9 @@
                       </Paragraphs>
                       <rd:DefaultName>textbox36</rd:DefaultName>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "WhiteSmoke", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -1791,8 +1797,9 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(Fields!adherence.Value,1)</Value>
+                              <Value>=Fields!adherence.Value</Value>
                               <Style>
+                                <Format>0.0%</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1804,6 +1811,9 @@
                       </Paragraphs>
                       <rd:DefaultName>textbox19</rd:DefaultName>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "WhiteSmoke", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -1822,8 +1832,9 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(Fields!handling_time_per_scheduled_paid_time.Value,1)</Value>
+                              <Value>=Fields!handling_time_per_scheduled_paid_time.Value</Value>
                               <Style>
+                                <Format>0.0%</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1835,6 +1846,9 @@
                       </Paragraphs>
                       <rd:DefaultName>textbox23</rd:DefaultName>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "WhiteSmoke", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -1896,9 +1910,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(code.CalcRatio(sum(Fields!service_level_numerator.Value),sum(Fields!service_level_denominator.Value),0),1)</Value>
+                              <Value>=code.CalcRatio(sum(Fields!service_level_numerator.Value),sum(Fields!service_level_denominator.Value),0)</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>0.0%</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1936,9 +1951,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(Code.AdheranceCalc(sum(Fields!adherence_calc_s.Value),sum(Fields!deviation_s.Value)),1)</Value>
+                              <Value>=Code.AdheranceCalc(sum(Fields!adherence_calc_s.Value),sum(Fields!deviation_s.Value))</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>0.0%</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1975,9 +1991,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(code.CalcRatio(sum(Fields!handling_time_s.Value),sum(Fields!scheduled_paid_time_s.Value),0),1)</Value>
+                              <Value>=code.CalcRatio(sum(Fields!handling_time_s.Value),sum(Fields!scheduled_paid_time_s.Value),0)</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>0.0%</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2003,6 +2020,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
               </TablixCells>
@@ -2051,7 +2069,7 @@
         <KeepTogether>true</KeepTogether>
         <Top>15.54306cm</Top>
         <Left>4.74999cm</Left>
-        <Height>2.59999cm</Height>
+        <Height>2.6cm</Height>
         <Width>10.50003cm</Width>
         <ZIndex>2</ZIndex>
         <Style />
