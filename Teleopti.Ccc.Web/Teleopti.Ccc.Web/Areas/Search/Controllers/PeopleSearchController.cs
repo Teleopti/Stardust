@@ -103,6 +103,8 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 			{
 				if (index == 0)
 				{
+					index++;
+
 					continue;
 				}
 
@@ -115,7 +117,6 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 						: orderedPerson.ThenByDescending(sortFunc);
 				}
 
-				index++;
 			}
 
 			var resultPeople = orderedPerson.Select(x => new

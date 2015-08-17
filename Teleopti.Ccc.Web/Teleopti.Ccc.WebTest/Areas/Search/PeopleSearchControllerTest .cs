@@ -3,6 +3,7 @@ using Rhino.Mocks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.TestCommon;
@@ -104,6 +105,27 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			Assert.AreEqual(2, peopleList.Count());
 			Assert.AreEqual(person.Name.FirstName, peopleList.First().FirstName);
 			Assert.AreEqual(currentUser.Name.FirstName, peopleList.Last().FirstName);
+		}
+
+		[Test]
+		public void ShouldSortPeopleByThreeCriterials()
+		{
+			var firstPerson = PersonFactory.CreatePersonWithGuid("Ashley", "Andeen");
+			firstPerson.EmploymentNumber = "1";
+			var secondPerson = PersonFactory.CreatePersonWithGuid("Ashley", "Andeen");
+			secondPerson.EmploymentNumber = "3";
+			var thirdPerson = PersonFactory.CreatePersonWithGuid("Ashley", "Andeen");
+			thirdPerson.EmploymentNumber = "2";
+
+			target = new PeopleSearchController(new FakePeopleSearchProvider(new[] { firstPerson, secondPerson, thirdPerson }, new List<IOptionalColumn>()), loggonUser);
+
+			var result = ((dynamic)target).GetResult("a", 10, 1, "lastname:true;firstname:true;employmentnumber:true");
+
+			var peopleList = (IEnumerable<dynamic>)result.Content.People;
+			var pe = peopleList.ToList();
+			Assert.AreEqual(pe[0].EmploymentNumber, "1");
+			Assert.AreEqual(pe[1].EmploymentNumber, "2");
+			Assert.AreEqual(pe[2].EmploymentNumber, "3");
 		}
 
 	}

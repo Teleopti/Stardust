@@ -263,7 +263,7 @@ SELECT * FROM dbo.SplitStringString(@order_by)
 DECLARE @colId INT;
 DECLARE @direction INT;
 
-DECLARE @fullOrderBy NVARCHAR(100)
+DECLARE @fullOrderBy NVARCHAR(500)
 SELECT @fullOrderBy = ''
 
 DECLARE @orderByString NVARCHAR(10)
