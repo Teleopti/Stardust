@@ -58,14 +58,14 @@ INSERT #agents(person_code,name)
 		id		= '00000000-0000-0000-0000-000000000002',
 		name	=  'All'	
 	FROM
-		mart.dim_person d
+		mart.dim_person d WITH (NOLOCK)
 	WHERE person_id=-1 --Not Defined
 
 --Fix translation for "All" + "Not Defined"
 UPDATE #agents
 SET name=l.term_language
 FROM 
-	mart.language_translation l
+	mart.language_translation l WITH (NOLOCK)
 WHERE #agents.name=l.term_english COLLATE database_default
 	AND l.language_id = @language_id
 
@@ -80,10 +80,10 @@ INSERT #agents(person_code,name)
 		person_code	= d.person_code,
 		name		= d.person_name
 	FROM
-		mart.dim_person d
-	INNER JOIN  mart.bridge_group_page_person bridge
+		mart.dim_person d WITH (NOLOCK)
+	INNER JOIN  mart.bridge_group_page_person bridge WITH (NOLOCK)
 		ON bridge.person_id = d.person_id
-	INNER JOIN  mart.dim_group_page dim
+	INNER JOIN  mart.dim_group_page dim WITH (NOLOCK)
 		ON dim.group_page_id = bridge.group_page_id
 	WHERE dim.group_page_code = @group_page_code
 		AND dim.group_id IN (SELECT id FROM #teams)
