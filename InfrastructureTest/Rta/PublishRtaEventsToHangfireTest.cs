@@ -14,10 +14,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 {
 	[TestFixture]
 	[InfrastructureTest]
-	[Toggle(Toggles.RTA_HangfireEventProcessing_31237)]
-	[Toggle(Toggles.RTA_SeeAdherenceDetailsForOneAgent_31285)]
-	[Toggle(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783)]
-	[Toggle(Toggles.RTA_NoBroker_31237)]
+	[Toggle(Toggles.RTA_NewEventHangfireRTA_34333)]
 	public class PublishRtaEventsToHangfireTest : ISetup
 	{
 		public IEventPublisher Target;

@@ -35,7 +35,7 @@
 
 					viewModel.fill(data);
 
-					if (!resources.RTA_NoBroker_31237)
+					if (!resources.RTA_NewEventHangfireRTA_34333)
 						loadCurrentData();
 
 				}

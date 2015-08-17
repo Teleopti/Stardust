@@ -14,10 +14,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 {
 	[RtaTest]
-	[Toggle(Toggles.RTA_SeeAdherenceDetailsForOneAgent_31285)]
-	[Toggle(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783)]
-	[Toggle(Toggles.RTA_NoBroker_31237)]
-	[Toggle(Toggles.RTA_EventStreamInitialization_31237)]
+	[Toggle(Toggles.RTA_NewEventHangfireRTA_34333)]
 	[TestFixture]
 	public class AdherenceDetailsTest
 	{

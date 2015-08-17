@@ -17,8 +17,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		protected override FakeToggleManager Toggles()
 		{
 			var toggles = base.Toggles();
-			toggles.Enable(Domain.FeatureFlags.Toggles.RTA_NoBroker_31237);
-			toggles.Enable(Domain.FeatureFlags.Toggles.RTA_SeeAdherenceDetailsForOneAgent_31285);
+			toggles.Enable(Domain.FeatureFlags.Toggles.RTA_NewEventHangfireRTA_34333);
 			return toggles;
 		}
 

@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RtaProcessor>().SingleInstance();
 			builder.RegisterType<AgentStateReadModelUpdater>().As<IAgentStateReadModelUpdater>().SingleInstance();
 
-			if (_config.Toggle(Toggles.RTA_NoBroker_31237))
+			if (_config.Toggle(Toggles.RTA_NewEventHangfireRTA_34333))
 			{
 				builder.RegisterType<NoMessagge>().As<IAgentStateMessageSender>().SingleInstance();
 				builder.RegisterType<NoAggregation>().As<IAdherenceAggregator>().SingleInstance();
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<OrganizationForPerson>().SingleInstance().As<IOrganizationForPerson>();
 
-			if (_config.Toggle(Toggles.RTA_EventStreamInitialization_31237))
+			if (_config.Toggle(Toggles.RTA_NewEventHangfireRTA_34333))
 				builder.RegisterType<StateStreamSynchronizer>().As<IStateStreamSynchronizer>().SingleInstance();
 			else
 				builder.RegisterType<NoStateStreamSynchronizer>().As<IStateStreamSynchronizer>().SingleInstance();
@@ -86,8 +86,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<AdherenceDetailsViewModelBuilder>().SingleInstance().As<IAdherenceDetailsViewModelBuilder>();
 			builder.RegisterType<RtaDecoratingEventPublisher>().As<IRtaDecoratingEventPublisher>().SingleInstance();
 
-			if (_config.Toggle(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783) ||
-				_config.Toggle(Toggles.RTA_SeeAdherenceDetailsForOneAgent_31285))
+			if (_config.Toggle(Toggles.RTA_NewEventHangfireRTA_34333))
 			{
 				builder.RegisterType<ShiftEventPublisher>().SingleInstance().As<IShiftEventPublisher>();
 				builder.RegisterType<AdherenceEventPublisher>().SingleInstance().As<IAdherenceEventPublisher>();
@@ -98,8 +97,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<NoEvents>().SingleInstance().As<IAdherenceEventPublisher>();
 			}
 
-			if (_config.Toggle(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783) ||
-				_config.Toggle(Toggles.RTA_SeeAdherenceDetailsForOneAgent_31285))
+			if (_config.Toggle(Toggles.RTA_NewEventHangfireRTA_34333))
 			{
 				builder.RegisterType<StateEventPublisher>().SingleInstance().As<IStateEventPublisher>();
 				builder.RegisterType<ActivityEventPublisher>().SingleInstance().As<IActivityEventPublisher>();

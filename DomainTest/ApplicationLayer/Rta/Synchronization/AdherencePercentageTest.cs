@@ -6,17 +6,13 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 {
 	[RtaTest]
-	[Toggle(Toggles.RTA_SeeAdherenceDetailsForOneAgent_31285)]
-	[Toggle(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783)]
-	[Toggle(Toggles.RTA_NoBroker_31237)]
-	[Toggle(Toggles.RTA_EventStreamInitialization_31237)]
+	[Toggle(Toggles.RTA_NewEventHangfireRTA_34333)]
 	[TestFixture]
 	public class AdherencePercentageTest
 	{
@@ -50,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 		}
 
 		[Test]
-		// This happens when RTA_EventStreamInitialization_31237 is turned on and agents are not scheduled
+		// This happens when RTA_NewEventHangfireRTA_34333 is turned on and agents are not scheduled
 		// Resulting in crash at startup when Updater tries to fetch readmodel with DateTime.MinValue
 		public void ShouldNotInitializeWhenNoOngoingShift()
 		{

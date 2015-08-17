@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
 	[TestFixture]
 	[RtaTest]
-	[Toggle(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783)]
+	[Toggle(Toggles.RTA_NewEventHangfireRTA_34333)]
 	[Toggle(Toggles.RTA_CalculatePercentageInAgentTimezone_31236)]
 	public class BelongsToDateTest
 	{

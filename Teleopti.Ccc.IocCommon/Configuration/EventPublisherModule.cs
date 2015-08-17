@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<ResolveEventHandlers>().As<IResolveEventHandlers>().SingleInstance();
 
-			if (_configuration.Toggle(Toggles.RTA_HangfireEventProcessing_31237))
+			if (_configuration.Toggle(Toggles.RTA_NewEventHangfireRTA_34333))
 			{
 				builder.RegisterType<SelectiveEventPublisher>().As<IEventPublisher>().SingleInstance();
 			}
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 
 			if (_configuration.Args().PublishEventsToServiceBus) return;
-			if (_configuration.Toggle(Toggles.RTA_HangfireEventProcessing_31237))
+			if (_configuration.Toggle(Toggles.RTA_NewEventHangfireRTA_34333))
 				builder.RegisterType<SelectiveEventPublisherWithoutBus>().As<IEventPublisher>().SingleInstance();
 			else
 				builder.Register(c => c.Resolve<ISyncEventPublisher>()).As<IEventPublisher>().SingleInstance();

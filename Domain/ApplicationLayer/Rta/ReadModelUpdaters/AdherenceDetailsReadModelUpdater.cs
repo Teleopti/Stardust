@@ -4,14 +4,13 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Performance;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 {
-	[UseOnToggle(Toggles.RTA_SeeAdherenceDetailsForOneAgent_31285)]
+	[UseOnToggle(Toggles.RTA_NewEventHangfireRTA_34333)]
 	public class AdherenceDetailsReadModelUpdater :
 		IRunOnHangfire,
 		IHandleEvent<PersonActivityStartEvent>,

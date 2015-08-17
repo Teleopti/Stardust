@@ -895,7 +895,7 @@
     </Content>
     <Content Include="..\..\packages\WebDriver.ChromeDriver.win32.2.11.0.0\content\chromedriver.exe">
       <Link>chromedriver.exe</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Anywhere\ManageAgentScheduleInOtherTimeZone.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

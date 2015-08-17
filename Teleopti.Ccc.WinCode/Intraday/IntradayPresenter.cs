@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
         public bool? PollingEnabled
         {
-	        get { return _pollingEnabled ?? (_pollingEnabled = _toggleManger.IsEnabled(Toggles.RTA_NoBroker_31237)); }
+	        get { return _pollingEnabled ?? (_pollingEnabled = _toggleManger.IsEnabled(Toggles.RTA_NewEventHangfireRTA_34333)); }
         }
 
         public bool RealTimeAdherenceEnabled

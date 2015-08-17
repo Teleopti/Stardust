@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 {
 	[TestFixture]
 	[InfrastructureTest]
-	[Toggle(Toggles.RTA_HangfireEventProcessing_31237)]
+	[Toggle(Toggles.RTA_NewEventHangfireRTA_34333)]
 	public class HangfireEventPublishingTest : ISetup
 	{
 		public FakeHangfireEventClient JobClient;

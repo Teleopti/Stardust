@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 {
-	[UseOnToggle(Toggles.RTA_NoBroker_31237)]
+	[UseOnToggle(Toggles.RTA_NewEventHangfireRTA_34333)]
 	public class SiteOutOfAdherenceReadModelUpdater : 
 		IRunOnHangfire,
 		IHandleEvent<PersonOutOfAdherenceEvent>, 

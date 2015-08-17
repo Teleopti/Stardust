@@ -62,7 +62,7 @@
 						},
 						success: function(data) {
 							viewModel.fillAgents(data);
-							if (!resources.RTA_NoBroker_31237) {
+							if (!resources.RTA_NewEventHangfireRTA_34333) {
 								loadStates(teamId);
 							}
 						}
@@ -113,8 +113,8 @@
 				viewModel.notifyViaSMSEnabled(resources.RTA_NotifyViaSMS_31567 && viewModel.permissionSendMessage());
 			});
 
-			viewModel.agentAdherenceEnabled(resources.RTA_SeePercentageAdherenceForOneAgent_30783);
-			viewModel.agentAdherenceDetailsEnabled(resources.RTA_SeeAdherenceDetailsForOneAgent_31285);
+			viewModel.agentAdherenceEnabled(resources.RTA_NewEventHangfireRTA_34333);
+			viewModel.agentAdherenceDetailsEnabled(resources.RTA_NewEventHangfireRTA_34333);
 		},
 		dispose: function (options) {
 			subscriptions.unsubscribeAdherence();

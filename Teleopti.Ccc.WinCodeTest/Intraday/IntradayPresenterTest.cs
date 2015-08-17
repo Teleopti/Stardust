@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 		[Test]
 		public void ShouldUnregisterMessageBrokerCallbacks()
 		{
-			_toggleManger.Stub(x => x.IsEnabled(Toggles.RTA_NoBroker_31237)).Return(true);
+			_toggleManger.Stub(x => x.IsEnabled(Toggles.RTA_NewEventHangfireRTA_34333)).Return(true);
 			_target = new IntradayPresenter(_view, _schedulingResultLoader, _messageBroker, _rtaStateHolder, _eventAggregator,
 																					   _scheduleDictionarySaver, _unitOfWorkFactory,
 										   _repositoryFactory, _differenceService, _statisticCommand, _forecastCommand,
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 		[Test]
 		public void ShouldUnregisterMessageBrokerCallbacksWhenPollingDisabled()
 		{
-			_toggleManger.Stub(x => x.IsEnabled(Toggles.RTA_NoBroker_31237)).Return(false);
+			_toggleManger.Stub(x => x.IsEnabled(Toggles.RTA_NewEventHangfireRTA_34333)).Return(false);
 			_target = new IntradayPresenter(_view, _schedulingResultLoader, _messageBroker, _rtaStateHolder, _eventAggregator,
 																					   _scheduleDictionarySaver, _unitOfWorkFactory,
 										   _repositoryFactory, _differenceService, _statisticCommand, _forecastCommand,
@@ -443,7 +443,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 	    [Test]
 	    public void ShouldUsePollForRtaStatesWhenFeatureEnabled()
 	    {
-		    _toggleManger.Stub(x => x.IsEnabled(Toggles.RTA_NoBroker_31237)).Return(true);
+		    _toggleManger.Stub(x => x.IsEnabled(Toggles.RTA_NewEventHangfireRTA_34333)).Return(true);
 		    var poller = MockRepository.GenerateMock<IPoller>();
 			_schedulerStateHolder.RequestedPeriod =
 				new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(DateOnly.Today.AddDays(-2), DateOnly.Today.AddDays(2)), TimeZoneInfo.Utc);
