@@ -19,27 +19,6 @@
 		function campaignChartCtrl($scope, $element) {
 
 			$scope.$watch(function() {
-				return $scope.campaign.manualPlanInput;
-			}, function (newVal, oldVal) {
-				if (newVal != oldVal) {
-					if (newVal == undefined) {
-						$scope.campaign.isManualPlanValida = true;
-					}
-					if (newVal != undefined) {
-						$scope.campaign.isManualPlanValida = false;
-					}
-					
-					var planInput = parseFloat(newVal);
-					if (!planInput) {
-						$scope.campaign.isManualPlanValida = true;
-					}
-					if (planInput) {
-						$scope.campaign.isManualPlanValida = false;
-					}
-				};
-			});
-
-			$scope.$watch(function() {
 				return $scope.graphData;
 			}, function (newVal, oldVal) {
 				if (newVal != oldVal) {
@@ -76,6 +55,7 @@
 				if (!$scope.graph) return;
 				$scope.graph.load({
 					columns: getDataGroupsData($scope.viewScheduleDiff),
+					colors: _setChartOption_color(),
 					unload: getDataGroupsLabel(!$scope.viewScheduleDiff)
 				});
 
@@ -89,8 +69,7 @@
 					data: _setChartOption_data(),
 					axis: _setChartOption_axis(),
 					grid: _setChartOption_verticalLines(),
-					tooltip: _setChartOption_tooltip(),
-					subchart: { show: true }
+					tooltip: { contents: _setChartOption_tooltip() }
 				};
 				return c3.generate(chartOptions);
 			}

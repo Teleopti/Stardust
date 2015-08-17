@@ -39,7 +39,11 @@
     		});
     		
     		outboundChartService.updateManualPlan(campaign.manualPlan, function (data) {
-			    campaign.graphData = data;
+			    outboundService.getCampaignSummary(campaign.Id, function(_campaign) {
+			    	angular.extend(campaign, _campaign);
+				    campaign.graphData = data;
+			    });
+			   
 		    }, function (error) {
     		});
     		campaign.selectedDates = [];
@@ -82,7 +86,6 @@
 				return (e.TypeOfRule == 'OutboundOverstaffRule') ? true : false;
 			}).length > 0;
 			return result;
-
 		};
 
     	$scope.hideWhenDone=function(d) {

@@ -28,6 +28,17 @@
                 });
         };
 
+	    this.getCampaignSummary = function(id, successCb, errorCb) {
+		    $http.get(getFilteredCampaignsUrl + '/' + id).
+			    success(function(data) {
+				    if (successCb != null)
+					    successCb(data);
+			    }).
+			    error(function(data) {
+				    if (errorCb != null) errorCb(data);
+			    });
+	    };
+
         this.listFilteredCampaigns = function(filter, successCb, errorCb) {
             $http.post(getFilteredCampaignsUrl, filter).
                 success(function(data) {

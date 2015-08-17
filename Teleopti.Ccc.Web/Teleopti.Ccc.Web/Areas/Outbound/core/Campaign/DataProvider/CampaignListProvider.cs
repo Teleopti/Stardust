@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
             };
 
             return campaigns.Where(campaignNoSchedulePredicate).Select(campaign =>
-                assembleSummary(campaign, CampaignStatus.Planned));
+				assembleSummary(campaign, CampaignStatus.Planned, _outboundRuleChecker.CheckCampaign(campaign)));
         }
 
 
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
         public IEnumerable<CampaignSummary> ListDoneCampaign()
         {
             return _outboundCampaignRepository.GetDoneCampaigns().Select(campaign =>
-                assembleSummary(campaign, CampaignStatus.Done));
+                assembleSummary(campaign, CampaignStatus.Done, _outboundRuleChecker.CheckCampaign(campaign)));
         }
 
 		public CampaignSummary GetCampaignById(Guid Id)
