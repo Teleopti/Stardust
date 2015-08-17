@@ -13338,14 +13338,6 @@ Reduce the complexity to use these shifts.</value>
     <value>add backlog</value>
     <comment>for campaigns to add backlog</comment>
   </data>
-  <data name="CampaignsWithoutWarning" xml:space="preserve">
-    <value>Campaigns without warning</value>
-    <comment>outbound campaigns without error</comment>
-  </data>
-  <data name="CampaignsWithWarning" xml:space="preserve">
-    <value>Campaigns with warning</value>
-    <comment>outbound campaigns have error and require action </comment>
-  </data>
   <data name="OutboundOverstaffRule" xml:space="preserve">
     <value>Early</value>
     <comment>campaign error type</comment>

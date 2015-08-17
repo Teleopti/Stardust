@@ -15,10 +15,9 @@
             $scope.$watch('activePhaseCode', function(newValue, oldValue) {               
                 clearCampaignList();
                 outboundService.listFilteredCampaigns(newValue, function success(data) {
-                    $scope.Campaigns = data.CampaignsWithoutWarning;
-                    $scope.WarningCampaigns = data.CampaignsWithWarning;                  
-                    $scope.listCampaignFinished = true;
-                    $scope.isLoadFinished = true;
+	                $scope.Campaigns = data;
+	                $scope.listCampaignFinished = true;
+	                $scope.isLoadFinished = true;
                 });
             });
     	});
