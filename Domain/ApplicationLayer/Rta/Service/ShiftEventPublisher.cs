@@ -25,8 +25,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				{
 					PersonId = info.PersonId,
 					ShiftStartTime = info.CurrentShiftStartTime,
-					ShiftEndTime = info.CurrentShiftEndTime,
-					BusinessUnitId = info.BusinessUnitId
+					ShiftEndTime = info.CurrentShiftEndTime
 				});
 			}
 		}
@@ -39,8 +38,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				{
 					PersonId = info.PersonId,
 					ShiftStartTime = info.ShiftStartTimeForPreviousActivity,
-					ShiftEndTime = info.ShiftEndTimeForPreviousActivity,
-					BusinessUnitId = info.BusinessUnitId
+					ShiftEndTime = info.ShiftEndTimeForPreviousActivity
 				});
 			}
 		}

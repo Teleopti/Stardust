@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			{
 				PersonId = info.PersonId,
 				Timestamp = info.CurrentTime,
-				BusinessUnitId = info.BusinessUnitId,
 				AdherenceWithPreviousActivity = info.Adherence.EventAdherenceForNewStateAndPreviousActivity(),
 				Adherence = info.Adherence.EventAdherence()
 			});

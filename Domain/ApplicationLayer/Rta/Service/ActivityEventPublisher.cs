@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				PersonId = info.PersonId,
 				StartTime = startTime,
 				Name = info.CurrentActivity.Name,
-				BusinessUnitId = info.BusinessUnitId,
 				Adherence = info.Adherence.AdherenceForPreviousStateAndCurrentActivityForEvent(),
 			});
 

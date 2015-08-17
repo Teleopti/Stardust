@@ -45,7 +45,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				{
 					PersonId = info.PersonId,
 					Timestamp = time,
-					BusinessUnitId = info.BusinessUnitId,
 					TeamId = info.TeamId,
 					SiteId = info.SiteId
 				});

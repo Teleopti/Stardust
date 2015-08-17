@@ -6,6 +6,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -47,11 +48,11 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		[Test]
 		public void ShouldDeserializePersonStateChangedEvent()
 		{
-			Client.Publish(new PersonStateChangedEvent {Datasource = "datasource"});
+			Client.Publish(new PersonStateChangedEvent {Timestamp = "2015-08-17 15:40".Utc()});
 
 			Server.Process(null, typeof(PersonStateChangedEvent).AssemblyQualifiedName, JobClient.SerializedEvent, typeof(FakeHandler).AssemblyQualifiedName);
 
-			Handler.GotEvent.Datasource.Should().Be("datasource");
+			Handler.GotEvent.Timestamp.Should().Be("2015-08-17 15:40".Utc());
 		}
 
 		[Test]
