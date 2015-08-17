@@ -63,12 +63,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
         }
     }
 
-    public class CampaignSummaryListViewModel
-    {
-        public List<CampaignSummaryViewModel> CampaignsWithWarning;
-        public List<CampaignSummaryViewModel> CampaignsWithoutWarning;
-    }
-
 	public class CampaignViewModel
 	{
 		public Guid? Id;

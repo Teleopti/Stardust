@@ -64,17 +64,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
             target = new CampaignSummaryViewModelFactory(campaignListProvider);
 
             var result = target.GetCampaignSummaryList(CampaignStatus.None);
-            result.CampaignsWithWarning.Count.Should().Be.EqualTo(2);
-            result.CampaignsWithoutWarning.Count.Should().Be.EqualTo(2);
-
-            result.CampaignsWithWarning.ForEach(c =>
-            {
-                new List<string> {"C", "D"}.Should().Contain(c.Name);
-            });
-            result.CampaignsWithoutWarning.ForEach(c =>
-            {
-                new List<string> { "A", "B" }.Should().Contain(c.Name);
-            });
+	        result.Count.Should().Be.EqualTo(4);
+	        result[0].Name.Should().Be.EqualTo("C");
+	        result[1].Name.Should().Be.EqualTo("D");
+	        result[2].Name.Should().Be.EqualTo("A");
+	        result[3].Name.Should().Be.EqualTo("B");
         }
 
         [Test]
@@ -96,9 +90,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
             target = new CampaignSummaryViewModelFactory(campaignListProvider);
 
             var result = target.GetCampaignSummaryList(CampaignStatus.None);
-            result.CampaignsWithWarning.Count.Should().Be.EqualTo(1);
+            result.Count.Should().Be.EqualTo(1);
             
-            result.CampaignsWithWarning.ForEach(c =>
+            result.ForEach(c =>
             {
                 var warnings = c.WarningInfo.ToList();
                 warnings.Count.Should().Be.EqualTo(1);

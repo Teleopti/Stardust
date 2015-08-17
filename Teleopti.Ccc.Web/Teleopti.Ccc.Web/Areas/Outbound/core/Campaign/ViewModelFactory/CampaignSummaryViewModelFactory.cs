@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider;
 using Teleopti.Ccc.Web.Areas.Outbound.Models;
@@ -14,7 +15,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.ViewModelFactory
             _campaignListProvider = campaignListProvider;
         }
 
-        public CampaignSummaryListViewModel GetCampaignSummaryList(CampaignStatus status)
+        public List<CampaignSummaryViewModel> GetCampaignSummaryList(CampaignStatus status)
         {
             Func<CampaignSummary, bool> campaignHasWarningPredicate = campaign => campaign.WarningInfo.Any();
             
@@ -22,11 +23,11 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.ViewModelFactory
             var campaignsWithWarning = campaigns.Where(campaignHasWarningPredicate).ToList();
             var campaignsWithoutWarning = campaigns.Except(campaignsWithWarning);
 
-            return new CampaignSummaryListViewModel
-            {
-                CampaignsWithWarning = campaignsWithWarning.Select(c => new CampaignSummaryViewModel(c)).ToList(),
-                CampaignsWithoutWarning = campaignsWithoutWarning.Select(c => new CampaignSummaryViewModel(c)).ToList()
-            };
+		      var campaings = campaignsWithWarning.Select(c => new CampaignSummaryViewModel(c)).ToList();
+		      var noWarningCampaigns = campaignsWithoutWarning.Select(c => new CampaignSummaryViewModel(c)).ToList();
+				campaings.AddRange(noWarningCampaigns);
+
+	        return campaings;
         }
 
         public CampaignStatistics GetCampaignStatistics()
