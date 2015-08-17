@@ -18,13 +18,7 @@ namespace Teleopti.Support.Security
 
 		public void RegenerateTenantPasswords()
 		{
-			log.Debug("Updating tenant password...");
-			using (_tenantUnitOfWorkManager.Start())
-			{
-				var updatePasswords = new RegenerateAllTenantPasswords(_tenantUnitOfWorkManager);
-				updatePasswords.Modify();
-			}
-			log.Debug("Updating tenant password. Done!");
+			log.Debug("Skip updating passwords due to bug #33838. Do this is some other way instead?");
 		}
 
 		public void UpdateTenantConnectionStrings(string appDbConnectionString, string analyticsDbConnectionString)
