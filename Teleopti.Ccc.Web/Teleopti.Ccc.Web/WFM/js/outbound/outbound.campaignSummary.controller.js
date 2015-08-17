@@ -34,7 +34,7 @@
     		campaign.manualPlan.ManualProductionPlan = [];
     		campaign.selectedDates.forEach(function (date, index) {
     			campaign.manualPlan.ManualProductionPlan[index] = {
-    				Date: date,
+    				Date: {Date: date},
     				Time: campaign.manualPlanInput
     			}
     		});
