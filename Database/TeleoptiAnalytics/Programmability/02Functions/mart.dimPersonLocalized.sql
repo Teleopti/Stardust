@@ -36,7 +36,7 @@ SELECT
 	person_id,
 	valid_from_date_local,
 	valid_to_date_local
-FROM mart.dim_person
+FROM mart.dim_person WITH (NOLOCK)
 WHERE
 --------------
 --Trying to explain the personPeriod filter:
