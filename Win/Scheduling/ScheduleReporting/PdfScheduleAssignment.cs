@@ -126,6 +126,9 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
             Graphics.DrawString(visualLayer.Period.TimePeriod(timeZoneInfo).ToShortTimeString(), font, Brush, timeRect, Format);
             top = top + fontSize + 2;
             var nameRect = new RectangleF(0, top, ColumnWidth, fontSize + 2);
+			Graphics.DrawString(visualLayer.DisplayDescription().Name, font, Brush, nameRect, Format);
+			top = top + fontSize + 2;
+			nameRect = new RectangleF(0, top, ColumnWidth, fontSize + 2);
 
             var meetingPayload = visualLayer.Payload as IMeetingPayload;
             if (meetingPayload != null)
@@ -159,8 +162,8 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
                     else
                         Graphics.DrawString(overtimeText, font, Brush, nameRect, Format);
                 }
-                else
-                    Graphics.DrawString(visualLayer.DisplayDescription().Name, font, Brush, nameRect, Format);
+				//else
+				//	Graphics.DrawString(visualLayer.DisplayDescription().Name, font, Brush, nameRect, Format);
             }
 
             float lineStart = timeRect.Top;
