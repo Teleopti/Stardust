@@ -106,10 +106,10 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		}
 
 		[HttpPost, Route("api/Outbound/Campaign/ManualPlan"), UnitOfWork]
-		public virtual CampaignVisualizationViewModel ManualPlan([FromBody] ManualProductionPlanViewModel manualProductionPlan)
+		public virtual CampaignVisualizationViewModel ManualPlan([FromBody] ManualPlanForm manualPlan)
 		{
-			_outboundCampaignPersister.PersistManualProductionPlan(manualProductionPlan);
-			return _campaignVisualizationProvider.ProvideVisualization(manualProductionPlan.CampaignId);
+			_outboundCampaignPersister.PersistManualProductionPlan(manualPlan);
+			return _campaignVisualizationProvider.ProvideVisualization(manualPlan.CampaignId);
 		}
 
 		[HttpGet, Route("api/Outbound/Campaigns/{Id}"), UnitOfWork]

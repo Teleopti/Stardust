@@ -564,7 +564,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var id = new Guid();
 			var date = new DateOnly(2015, 7, 20);
 			var campaign = new Domain.Outbound.Campaign() { SpanningPeriod = new DateOnlyPeriod(new DateOnly(2015, 7, 4), new DateOnly(2015, 8, 3)) };
-			var manualProductionPlan = new ManualProductionPlanViewModel()
+			var manualProductionPlan = new ManualPlanForm()
 			{
 				CampaignId = id,
 				ManualProductionPlan = new List<ManualViewModel>()
@@ -585,7 +585,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var id = new Guid();
 			var date = new DateOnly(2015, 7, 3);
 			var campaign = new Domain.Outbound.Campaign() { SpanningPeriod = new DateOnlyPeriod(new DateOnly(2015, 7, 4), new DateOnly(2015, 8, 3)) };
-			var manualProductionPlan = new ManualProductionPlanViewModel()
+			var manualProductionPlan = new ManualPlanForm()
 			{
 				CampaignId = id,
 				ManualProductionPlan = new List<ManualViewModel>()

@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 		public double Time;
 	}
 
-	public class ManualProductionPlanViewModel
+	public class ManualPlanForm
 	{
 		public Guid CampaignId;
 		public IEnumerable<ManualViewModel> ManualProductionPlan;

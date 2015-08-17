@@ -133,12 +133,12 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			return campaign;
 		}
 
-		public void PersistManualProductionPlan(ManualProductionPlanViewModel manualProductionPlan)
+		public void PersistManualProductionPlan(ManualPlanForm manualPlan)
 		{
-			var campaign = _outboundCampaignRepository.Get(manualProductionPlan.CampaignId);
+			var campaign = _outboundCampaignRepository.Get(manualPlan.CampaignId);
 			if (campaign == null) return;
 
-			foreach (var manual in manualProductionPlan.ManualProductionPlan)
+			foreach (var manual in manualPlan.ManualProductionPlan)
 			{
 				var days = (int)manual.Time/24;
 				var hours = (int)(manual.Time - days*24);

@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
 			 var id = new Guid();
 			 var visualizationProvider = MockRepository.GenerateMock<ICampaignVisualizationProvider>();
 			 visualizationProvider.Stub(x => x.ProvideVisualization(id)).Return(expectedVisualizationVM);
-			 var manualPlanVM = new ManualProductionPlanViewModel() { CampaignId = id };
+			 var manualPlanVM = new ManualPlanForm() { CampaignId = id };
 			 var campaignPersister = MockRepository.GenerateMock<IOutboundCampaignPersister>();
 
 			 var target = new OutboundController(campaignPersister, null, null, null, null, visualizationProvider);

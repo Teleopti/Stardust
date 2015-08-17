@@ -7,6 +7,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 	{
 		CampaignViewModel Persist(CampaignForm form);
         IOutboundCampaign Persist(CampaignViewModel campaignViewModel);
-		void PersistManualProductionPlan(ManualProductionPlanViewModel manualProductionPlan);
+		void PersistManualProductionPlan(ManualPlanForm manualPlan);
 	}
 }
