@@ -15,6 +15,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 	[TestFixture]
 	public class ForecastControllerTest
 	{
+
+		[Test]
+		public void ShouldReturnRunningState()
+		{
+			var target = new ForecastController(null, null, null, null, null);
+			var result = target.Status();
+			((bool) result.IsRunning).Should().Be.False();
+		}
+
 		[Test]
 		public void ShouldGetSkillsAndWorkloads()
 		{

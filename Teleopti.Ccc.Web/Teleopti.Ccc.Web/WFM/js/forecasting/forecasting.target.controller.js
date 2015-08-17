@@ -20,6 +20,11 @@ angular.module('wfm.forecasting')
 				dataX: { id: "date" }
 			};
 
+			$scope.isForecastRunning = false;
+			forecasting.status.get().$promise.then(function (result) {
+				$scope.isForecastRunning = result.IsRunning;
+			});
+
 			$scope.isQueueStatisticsEnabled = false;
 			toggleService.isFeatureEnabled.query({ toggle: 'WfmForecast_QueueStatistics_32572' }).$promise.then(function (result) {
 				$scope.isQueueStatisticsEnabled = result.IsEnabled;
@@ -108,7 +113,7 @@ angular.module('wfm.forecasting')
 			};
 
 			$scope.disableApply = function () {
-				return $scope.all.numberOfSelectedWorkloads === 0;
+				return $scope.all.numberOfSelectedWorkloads === 0 || $scope.isForecastRunning;
 			};
 
 			$scope.toggleAll = function (selected) {
@@ -155,7 +160,7 @@ angular.module('wfm.forecasting')
 				$scope.all.Selected = allSet;
 			}, true);
 
-			forecasting.skills.query().$promise.then(function (result) {
+			forecasting.skills.get().$promise.then(function (result) {
 				$scope.skillsDisplayed = result;
 				angular.forEach($scope.skillsDisplayed, function (skill) {
 					skill.show = true;

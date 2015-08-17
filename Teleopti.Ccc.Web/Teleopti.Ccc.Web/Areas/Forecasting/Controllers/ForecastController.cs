@@ -110,6 +110,12 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		{
 			return Task.FromResult(_intradayPatternViewModelFactory.Create(input));
 		}
+
+		[HttpGet, Route("api/Forecasting/Status")]
+		public dynamic Status()
+		{
+			return new {IsRunning = forecastIsRunning};
+		}
 	}
 
 	public class ForecastResultViewModel

@@ -5,4 +5,8 @@ angular.module('wfm.forecasting')
 		this.skills = $resource('../api/Forecasting/Skills', {}, {
 			get: { method: 'GET', params: {}, isArray: true }
 		});
+
+		this.status = $resource('../api/Forecasting/Status', {}, {
+			get: { method: 'GET', params: {}, isArray: false }
+		});
 	}]);
