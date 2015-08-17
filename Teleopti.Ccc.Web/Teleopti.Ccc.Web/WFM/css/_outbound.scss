@@ -4,6 +4,30 @@
     .m-t-20{
 	    margin-top:20px;
 	}
+	.c3-shapes-Backlog ._selected_{
+	    stroke:rgb(31, 119, 180) !important;
+		fill:rgb(31, 119, 180) !important;
+	}
+	.c3-shapes-Backlog- ._selected_{
+	    stroke:rgb(31, 119, 180) !important;
+		fill:rgb(31, 119, 180) !important;
+	}
+	.c3-shapes-Scheduled ._selected_{
+	    stroke:rgb(38, 198, 218) !important;
+		fill:rgb(38, 198, 218) !important;
+	}
+	.c3-shapes-Planned ._selected_{
+	    stroke:rgb(102, 194, 255) !important;
+		fill:rgb(102, 194, 255) !important;
+	}
+	.c3-target-Underscheduled ._selected_{
+	    stroke:rgb(148, 103, 189) !important;
+		fill:rgb(148, 103, 189) !important;
+	}
+	.c3-target-Overscheduled ._selected_{
+	    stroke:rgb(244, 67, 54) !important;
+		fill:rgb(244, 67, 54) !important;
+	}
 	.m-b-10{
 	    margin-bottom:10px;
 	}
