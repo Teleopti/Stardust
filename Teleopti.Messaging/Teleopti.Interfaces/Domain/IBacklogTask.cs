@@ -35,5 +35,7 @@ namespace Teleopti.Interfaces.Domain
 	    TimeSpan GetBacklogOnDate(DateOnly date);
 	    TimeSpan GetRealScheduledTimeOnDate(DateOnly date);
 	    void SetRealScheduledTimeOnDate(DateOnly date, TimeSpan time);
+	    TimeSpan GetManualPlannedTimeOnDate(DateOnly date);
+	    void SetManualPlannedTimeOnDate(DateOnly date, TimeSpan time);
     }
 }

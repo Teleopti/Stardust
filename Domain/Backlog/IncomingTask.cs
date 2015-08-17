@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.Domain.Backlog
 		private readonly IDictionary<DateOnly, TaskDay> _taskDays = new Dictionary<DateOnly, TaskDay>();
 		 private IDictionary<DateOnly, TimeSpan> _orgPlannedTime = new Dictionary<DateOnly, TimeSpan>(); 
 		 private IDictionary<DateOnly, TimeSpan> _orgScheduledTime = new Dictionary<DateOnly, TimeSpan>(); 
+		 private IDictionary<DateOnly, TimeSpan> _manualPlannedTime = new Dictionary<DateOnly, TimeSpan>(); 
 		private double _incomingOverflowedWork;
 
 
@@ -94,6 +95,23 @@ namespace Teleopti.Ccc.Domain.Backlog
 		    {
 			    _orgScheduledTime.Add(date, time);
 		    }
+	    }
+
+	    public TimeSpan GetManualPlannedTimeOnDate(DateOnly date)
+	    {
+			 return _manualPlannedTime[date];
+	    }
+
+	    public void SetManualPlannedTimeOnDate(DateOnly date, TimeSpan time)
+	    {
+			 if (_manualPlannedTime.ContainsKey(date))
+			 {
+				 _manualPlannedTime[date] = time;
+			 }
+			 else
+			 {
+				 _manualPlannedTime.Add(date, time);
+			 }
 	    }
 
 	    public TimeSpan GetRealScheduledTimeOnDate(DateOnly date)

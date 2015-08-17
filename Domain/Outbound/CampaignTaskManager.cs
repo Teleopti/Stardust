@@ -14,26 +14,33 @@ namespace Teleopti.Ccc.Domain.Outbound
             _outboundScheduledResourcesProvider = outboundScheduledResourcesProvider;
         }
 
-        public IBacklogTask GetIncomingTaskFromCampaign(IOutboundCampaign campaign)
-        {
-            var incomingTask = _outboundProductionPlanFactory.CreateAndMakeInitialPlan(campaign.SpanningPeriod, campaign.CampaignTasks(),
-                campaign.AverageTaskHandlingTime(), campaign.WorkingHours);
+	    public IBacklogTask GetIncomingTaskFromCampaign(IOutboundCampaign campaign)
+	    {
+		    var incomingTask = _outboundProductionPlanFactory.CreateAndMakeInitialPlan(campaign.SpanningPeriod, campaign.CampaignTasks(), campaign.AverageTaskHandlingTime(), campaign.WorkingHours);
 
-            foreach (var dateOnly in incomingTask.SpanningPeriod.DayCollection())
-            {
-                var manualTime = campaign.GetManualProductionPlan(dateOnly);
-                if (manualTime.HasValue)  incomingTask.SetTimeOnDate(dateOnly, manualTime.Value, PlannedTimeTypeEnum.Manual);
-					 incomingTask.SetRealPlannedTimeOnDate(dateOnly, incomingTask.GetTimeOnDate(dateOnly));
+		    foreach (var dateOnly in incomingTask.SpanningPeriod.DayCollection())
+		    {
+			    var manualTime = campaign.GetManualProductionPlan(dateOnly);
+			    if (manualTime.HasValue)
+			    {
+				    incomingTask.SetTimeOnDate(dateOnly, manualTime.Value, PlannedTimeTypeEnum.Manual);
+				    incomingTask.SetManualPlannedTimeOnDate(dateOnly, manualTime.Value);
+			    }
+			    else
+			    {
+				    incomingTask.SetManualPlannedTimeOnDate(dateOnly, TimeSpan.Zero);
+			    }
+			    incomingTask.SetRealPlannedTimeOnDate(dateOnly, incomingTask.GetTimeOnDate(dateOnly));
 
-                var scheduled = _outboundScheduledResourcesProvider.GetScheduledTimeOnDate(dateOnly, campaign.Skill);
-					 incomingTask.SetRealScheduledTimeOnDate(dateOnly, scheduled);
-                //var forecasted = _outboundScheduledResourcesProvider.GetForecastedTimeOnDate(dateOnly, campaign.Skill);
-                if (scheduled != TimeSpan.Zero)
-                    incomingTask.SetTimeOnDate(dateOnly, scheduled, PlannedTimeTypeEnum.Scheduled);
-					 //else if (forecasted != TimeSpan.Zero && !manualTime.HasValue)
-					 //	 incomingTask.SetTimeOnDate(dateOnly, forecasted, PlannedTimeTypeEnum.Calculated);
-            }
-            return incomingTask;
-        }
+			    var scheduled = _outboundScheduledResourcesProvider.GetScheduledTimeOnDate(dateOnly, campaign.Skill);
+			    incomingTask.SetRealScheduledTimeOnDate(dateOnly, scheduled);
+			    //var forecasted = _outboundScheduledResourcesProvider.GetForecastedTimeOnDate(dateOnly, campaign.Skill);
+			    if (scheduled != TimeSpan.Zero)
+				    incomingTask.SetTimeOnDate(dateOnly, scheduled, PlannedTimeTypeEnum.Scheduled);
+			    //else if (forecasted != TimeSpan.Zero && !manualTime.HasValue)
+			    //	 incomingTask.SetTimeOnDate(dateOnly, forecasted, PlannedTimeTypeEnum.Calculated);
+		    }
+		    return incomingTask;
+	    }
     }
 }
