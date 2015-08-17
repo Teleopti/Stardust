@@ -487,7 +487,7 @@ namespace Teleopti.Ccc.Win.Shifts
 					ExplorerPresenter.NavigationPresenter.RemoveRuleSetBag(ruleSetBagToDelete,workShiftRuleSetToDeleteParent );
 				}
 
-				_defaultTreeView.Nodes.Remove(selectedNode);
+				_defaultTreeView.SelectedNodes.Remove(selectedNode);
 			}
 		}
 
