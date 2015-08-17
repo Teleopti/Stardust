@@ -37,9 +37,6 @@ module.exports = function(config) {
 		'vendor/fabricjs/fabricjs_viewport.js',
 		'vendor/ng-mfb/mfb.directive.js',
 		'vendor/csv-js/csv.js',
-		'vendor/jquery/jquery-1.10.2.js',
-		'vendor/jquery-signalR/jquery.signalR-2.1.2.js',
-		'node_modules/angular-signalr-hub/signalr-hub.js',
 		
 
 		'vendor/ng-image-input-with-preview/ng-image-input-with-preview.js',

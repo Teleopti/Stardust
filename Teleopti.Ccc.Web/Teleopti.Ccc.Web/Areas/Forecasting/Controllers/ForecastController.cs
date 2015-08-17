@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		private readonly IForecastResultViewModelFactory _forecastResultViewModelFactory;
 		private readonly IIntradayPatternViewModelFactory _intradayPatternViewModelFactory;
 
-		private readonly Lazy<IHubContext> _forecastHub = new Lazy<IHubContext>(() => GlobalHost.ConnectionManager.GetHubContext<ForecastHub>());
 		private static bool forecastIsRunning;
 
 		public ForecastController(IForecastCreator forecastCreator, ISkillRepository skillRepository, IForecastViewModelFactory forecastViewModelFactory, IForecastResultViewModelFactory forecastResultViewModelFactory, IIntradayPatternViewModelFactory intradayPatternViewModelFactory)
@@ -89,7 +88,6 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			try
 			{
 				forecastIsRunning = true;
-				_forecastHub.Value.Clients.All.lockForecast();
 				var futurePeriod = new DateOnlyPeriod(new DateOnly(input.ForecastStart), new DateOnly(input.ForecastEnd));
 				_forecastCreator.CreateForecastForWorkloads(futurePeriod, input.Workloads);
 				return Task.FromResult(new ForecastResultViewModel
@@ -104,7 +102,6 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			finally
 			{
 				forecastIsRunning = false;
-				_forecastHub.Value.Clients.All.unlockForecast();
 			}
 		}
 

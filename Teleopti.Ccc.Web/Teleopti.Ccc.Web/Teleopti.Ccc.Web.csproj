@@ -422,7 +422,6 @@
     <Compile Include="Areas\Anywhere\Core\AgentViewModel.cs" />
     <Compile Include="Areas\Anywhere\Core\TeamViewModel.cs" />
     <Compile Include="Areas\Forecasting\Controllers\EvaluateInput.cs" />
-    <Compile Include="Areas\Forecasting\Core\ForecastHub.cs" />
     <Compile Include="Areas\Forecasting\Core\ForecastResultViewModelFactory.cs" />
     <Compile Include="Areas\Forecasting\Core\IForecastViewModelFactory.cs" />
     <Compile Include="Areas\Forecasting\Core\ForecastViewModelFactory.cs" />
@@ -1308,8 +1307,6 @@
     <Content Include="WFM\tests\outbound\outbound.filter.spec.js" />
     <Content Include="WFM\tests\seatmanagement\seatplanreport.controller.spec.js" />
     <Content Include="WFM\vendor\csv-js\csv.js" />
-    <Content Include="WFM\vendor\jquery-signalR\jquery.signalR-2.1.2.js" />
-    <Content Include="WFM\vendor\jquery\jquery-1.10.2.js" />
     <Content Include="WFM\vendor\ui-bootstrap-custom-build\datepicker.directive.ext.js" />
     <Content Include="WFM\js\seatManagement\fabric.fix.js" />
     <Content Include="WFM\js\seatManagement\html\imageLoadWithPreview.html" />

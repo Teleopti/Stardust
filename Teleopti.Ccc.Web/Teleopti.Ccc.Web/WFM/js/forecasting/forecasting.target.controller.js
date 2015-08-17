@@ -1,9 +1,8 @@
 ﻿'use strict';
 
 angular.module('wfm.forecasting')
-	.controller('ForecastingTargetCtrl', ['$scope', '$stateParams', '$state', 'Forecasting', '$http', 'Toggle', 'RunningLock',
-		function ($scope, $stateParams, $state, forecasting, $http, toggleService, runningLock) {
-			$scope.runningLock = runningLock;
+	.controller('ForecastingTargetCtrl', ['$scope', '$stateParams', '$state', 'Forecasting', '$http', 'Toggle',
+		function ($scope, $stateParams, $state, forecasting, $http, toggleService) {
 			$scope.period = $stateParams.period;
 			$scope.showSelection = true;
 			$scope.skillsDisplayed = [];
@@ -109,7 +108,7 @@ angular.module('wfm.forecasting')
 			};
 
 			$scope.disableApply = function () {
-				return $scope.all.numberOfSelectedWorkloads === 0 || $scope.runningLock.isLock;
+				return $scope.all.numberOfSelectedWorkloads === 0;
 			};
 
 			$scope.toggleAll = function (selected) {
