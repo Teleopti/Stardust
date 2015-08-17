@@ -12,7 +12,7 @@
 
 	<div id="seatmapcanvas" style="position: relative; margin-top: 20px;">
 	
-		<seatmap-editor ng-if="!vm.readonly"></seatmap-editor>
+		<seatmap-editor ng-if="vm.showEditor"></seatmap-editor>
 
 		<div style="width:100%;" class="wfm-block material-depth-2">
 			<canvas id="c" ng-mouseenter="vm.scrollListen = true" ng-mouseleave="vm.scrollListen = false"></canvas>

@@ -51,14 +51,6 @@
 			});
 		};
 
-		vm.getDisplayTimeString = function (startTime, endTime) {
-			return moment(startTime).format('HH:mm') + ' - ' + moment(endTime).format('HH:mm');
-		};
-
-		vm.getDisplayDateString = function (date) {
-			return moment(date).format('L');
-		};
-
 		vm.setRangeClass = function (date, mode, period) {
 			if (mode === 'day') {
 				var dayToCheck = new Date(date).setHours(12, 0, 0, 0);

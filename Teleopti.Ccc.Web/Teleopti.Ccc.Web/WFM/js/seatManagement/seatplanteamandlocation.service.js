@@ -111,6 +111,7 @@
 		setupTranslatedString("AgentCountTitle");
 		setupTranslatedString("TeamsOrLocationsAreUnselected");
 		setupTranslatedString("SeatPlanSubmittedOK");
+		setupTranslatedString("DayOff");
 
 		return {
 			TranslatedStrings: translatedStrings

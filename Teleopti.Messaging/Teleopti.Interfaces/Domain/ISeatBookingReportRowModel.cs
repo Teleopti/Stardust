@@ -29,6 +29,7 @@ namespace Teleopti.Interfaces.Domain
 		String TeamName { get; set; }
 		Guid SiteId { get; set; }
 		String SiteName { get; set; }
+		bool IsDayOff { get; set; }
 		int NumberOfRecords { get; set; }
 		
 		

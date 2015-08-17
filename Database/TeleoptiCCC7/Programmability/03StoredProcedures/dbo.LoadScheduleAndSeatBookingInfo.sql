@@ -38,6 +38,7 @@ SET NOCOUNT ON;
 SELECT SeatBooking.StartDateTime as SeatBookingStart
       ,SeatBooking.EndDateTime as SeatBookingEnd
       ,personSchedule.BelongsToDate as BelongsToDateTime
+	  ,personSchedule.IsDayOff
 	  ,seat.Id as SeatId
       ,seat.Name as SeatName
       ,person.Id As PersonId
@@ -63,7 +64,7 @@ FROM ReadModel.PersonScheduleDay as personSchedule
   LEFT JOIN SeatMapLocation as loc on loc.Id = seat.Parent
   LEFT JOIN [Site] as sit on sit.id = personSchedule.SiteId 
     
-WHERE personSchedule.BusinessUnitId = @businessUnitId and personSchedule.IsDayOff = 0 and
+WHERE personSchedule.BusinessUnitId = @businessUnitId and
 	( personSchedule.BelongsToDate between @startDate and @endDate )
 	
 	AND (EXISTS (select Id from @teamids where personSchedule.TeamId = Id) or @teamIdList IS NULL)

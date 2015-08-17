@@ -1269,6 +1269,7 @@
     <Content Include="WFM\js\seatManagement\seatplanreport.controller.js" />
     <Content Include="WFM\js\seatManagement\html\seatplanreporttable.html" />
     <Content Include="WFM\js\seatManagement\seatplanreport.directive.js" />
+    <Content Include="WFM\js\seatManagement\seatplanreporttable.controller.js" />
     <Content Include="WFM\js\seatManagement\seatplanteamandlocation.service.js" />
     <Content Include="WFM\js\start\start.controller.js" />
     <Content Include="WFM\tests\outbound\outbound.campaign.chart.service.spec.js" />

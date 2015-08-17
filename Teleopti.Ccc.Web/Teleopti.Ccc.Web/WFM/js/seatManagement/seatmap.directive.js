@@ -14,7 +14,7 @@
 	};
 
 	function linkFunction(scope, element, attributes, vm) {
-		vm.readonly = 'readonly' in attributes;
+		vm.showEditor = 'edit' in attributes;
 	};
 
 	angular.module('wfm.seatMap')

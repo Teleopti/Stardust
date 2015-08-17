@@ -7,7 +7,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers;
@@ -22,15 +21,13 @@ namespace Teleopti.Ccc.WebTest.Areas.SeatPlanner.Controllers
 		private TeamHierarchyController target;
 		private ISiteRepository siteRepository;
 		private IBusinessUnitRepository businessUnitRepository;
-		private INumberOfAgentsInTeamReader numberOfAgentsQuery;
 		private ICurrentBusinessUnit currentBusinessUnit;
 
 		[SetUp]
 		public void Setup()
 		{
 			siteRepository = MockRepository.GenerateMock<ISiteRepository>();
-			numberOfAgentsQuery = MockRepository.GenerateMock<INumberOfAgentsInTeamReader>();
-
+			
 			var bu1 = BusinessUnitFactory.BusinessUnitUsedInTest;
 			businessUnitRepository = MockRepository.GenerateMock<IBusinessUnitRepository>();
 			currentBusinessUnit = MockRepository.GenerateMock<ICurrentBusinessUnit>();

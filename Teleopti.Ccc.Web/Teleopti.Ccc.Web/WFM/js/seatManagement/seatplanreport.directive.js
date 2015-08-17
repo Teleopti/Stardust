@@ -20,12 +20,13 @@
 
 	function seatPlanReportTable() {
 		return {
-			restrict: "E",
+			controller: 'seatPlanReportTableCtrl',
+			controllerAs: 'vm',
+			bindToController: true,
 			scope: {
-				seatBookings: '=',
-				getDisplayDate: '=',
-				getDisplayTime: '='
+				seatBookings: '='
 			},
+			restrict: "E",
 			templateUrl: "js/seatManagement/html/seatplanreporttable.html"
 		};
 	};

@@ -2,7 +2,7 @@
 (function () {
 
 angular.module('wfm.seatMap')
-	.factory('seatMapCanvasUtilsService', ['seatMapService', function (seatMapService) {
+	.factory('seatMapCanvasUtilsService', ['seatMapService','$timeout', function (seatMapService, timeout) {
 
 		var utils = {
 
@@ -27,20 +27,24 @@ angular.module('wfm.seatMap')
 			canvas.isGrabMode = false;
 			canvas.renderOnAddRemove = true;
 			canvas.stateful = false;
+			drawGrid(canvas);	
 		}
 
-		function resize (canvas, toolbarVisible) {
-			var viewPortHeight = $(document)[0].documentElement.clientHeight ;  
+		function resize(canvas, toolbarVisible) {
+
+			timeout(function(){ doResize(canvas, toolbarVisible) }, 0, true);
+		};
+
+		function doResize(canvas, toolbarVisible) {
+			var viewPortHeight = $(document)[0].documentElement.clientHeight;
 			var width = $('[ui-view]')[0].clientWidth - $('#c').position().left - 30; // 30 = padding
 			var heightReduction = 130; // no reliable element to base this off
-			
 			if (toolbarVisible) {
 				heightReduction += $('#seatMapToolbar')[0].clientHeight + 62;
 			}
-
 			canvas.setHeight((viewPortHeight - heightReduction));
 			canvas.setWidth(width);
-		};
+		}
 
 		function toggleMoveMode(canvas) {
 			canvas.isGrabMode = !canvas.isGrabMode;

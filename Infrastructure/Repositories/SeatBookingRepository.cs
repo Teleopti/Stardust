@@ -186,6 +186,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public Guid SiteId { get; set; }
 		public String SiteName { get; set; }
 		public int NumberOfRecords{ get; set; }
+		public bool IsDayOff { get; set; }
 		public DateTime BelongsToDateTime
 		{
 			get { return _belongsToDateTime; }

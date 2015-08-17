@@ -1,10 +1,10 @@
 ﻿<table>
-	<tr ng-repeat-start="bookingByDate in seatBookings" class="tr-date">
+	<tr ng-repeat-start="bookingByDate in vm.seatBookings" class="tr-date">
 		<td></td>
 		<td></td>
 		<td></td>
 		<td></td>
-		<td>{{getDisplayDate(bookingByDate.Date.Date)}}</td>
+		<td>{{vm.getDisplayDate(bookingByDate.Date.Date)}}</td>
 	</tr>
 
 	<tr ng-repeat-start="team in bookingByDate.Teams"></tr>
@@ -22,7 +22,7 @@
 		<td class="td-agent">{{ booking.FirstName }}&nbsp;{{ booking.LastName }}</td>
 		<td class="td-location">{{ booking.LocationPath }}</td>
 		<td class="td-seat">{{ booking.SeatName }}</td>
-		<td class="td-time">{{ getDisplayTime(booking.StartDateTime,booking.EndDateTime) }}</td>
+		<td class="td-time">{{ vm.getDisplayTime(booking) }}</td>
 	</tr>
 
 	<tr ng-repeat-end>

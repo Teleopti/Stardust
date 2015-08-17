@@ -30,7 +30,7 @@
 			vm.showFileDialog = true;
 			vm.fileCallbackFunction = vm.addChosenImage;
 		};
-
+		
 		vm.addChosenImage = function (image) {
 
 			var imagePreviewElement = document.getElementById('image-preview');

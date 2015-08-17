@@ -6,7 +6,6 @@ angular.module('wfm.seatMap')
 	.factory('seatMapCanvasEditService', ['seatMapCanvasUtilsService', 'seatMapService', function (utils, seatMapService) {
 
 		var editService = {
-
 			addImage: addImage,
 			setBackgroundImage: setBackgroundImage,
 			addSeat: addSeat,
@@ -169,6 +168,7 @@ angular.module('wfm.seatMap')
 					seatPriority++;
 					obj.isNew = true;
 					obj.set('priority', seatPriority);
+					obj.set('name', seatPriority);
 					obj.set('id', getTemporaryId());
 				}
 			}

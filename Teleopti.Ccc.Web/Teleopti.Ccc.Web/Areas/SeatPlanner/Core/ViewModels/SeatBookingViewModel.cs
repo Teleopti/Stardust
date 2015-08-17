@@ -1,5 +1,4 @@
 using System;
-using Teleopti.Ccc.Web.Areas.Messages.Models;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels
@@ -20,5 +19,6 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels
 		public Guid SeatId { get; set; }
 		public String SeatName { get; set; }
 		public int SeatPriority { get; set; }
+		public bool IsDayOff { get; set; }
 	}
 }

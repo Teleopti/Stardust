@@ -46,7 +46,8 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels
 				SeatId = personScheduleWithSeatBooking.SeatId,
 				SeatName = personScheduleWithSeatBooking.SeatName,
 				SiteId = personScheduleWithSeatBooking.SiteId,
-				SiteName = personScheduleWithSeatBooking.SiteName
+				SiteName = personScheduleWithSeatBooking.SiteName,
+				IsDayOff = personScheduleWithSeatBooking.IsDayOff
 			};
 		}
 	}

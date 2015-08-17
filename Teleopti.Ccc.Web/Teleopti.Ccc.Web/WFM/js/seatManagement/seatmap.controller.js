@@ -17,7 +17,7 @@
 		vm.isInEditMode = false;
 		vm.isLoading = true;
 		vm.breadcrumbs = [];
-		vm.readonly = false;
+		vm.showEditor = false;
 		vm.seatMapId = null;
 		vm.parentId = null;
 		vm.newLocationName = '';
