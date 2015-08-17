@@ -28,8 +28,6 @@
 	    }
 
     	$scope.addManualPlan = function (campaign) {
-    		campaign.manualPlanswitch = false;
-    		campaign.switchSwitch = false;
     		campaign.manualPlan.CampaignId = campaign.Id;
     		campaign.manualPlan.ManualProductionPlan = [];
     		campaign.selectedDates.forEach(function (date, index) {
@@ -47,7 +45,6 @@
 			   
 		    }, function (error) {
     		});
-    		campaign.selectedDates = [];
 	    }
 
 		$scope.getGraphData = function(campaign) {
