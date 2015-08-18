@@ -21,7 +21,6 @@
                 });
             });
     	});
-    	});
 
     	$scope.clearManualPlan = function (campaign) {
     		campaign.selectedDates = [];
