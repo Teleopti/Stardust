@@ -6,7 +6,9 @@
 	function campaignChart($filter) {
 		return {
 			controller: ['$scope', '$element',  campaignChartCtrl],
-			template: '<md-switch class="campaign-chart-switch" ng-click="onToggleViewScheduleDiff()" ng-if="hidePlannedAnalyzeButton(campaign.Status)" ng-init="campaign.switchSwitch=false" ng-disabled="campaign.switchSwitch">Analyze Schedule</md-switch><div id="Chart_{{campaign.Id}}"></div>',
+			template: '<md-switch class="campaign-chart-switch" ng-click="onToggleViewScheduleDiff()" ng-if="hidePlannedAnalyzeButton(campaign.Status)" ng-init="campaign.switchSwitch=false" ng-disabled="campaign.switchSwitch">Analyze Schedule</md-switch>' +
+				'<div id="Chart_{{campaign.Id}}"></div>' +
+				'<div class="chart-extra-info"><span ng-repeat="extraInfo in extraInfos"}>{{extraInfo}}</span></div>',
 			scope: {
 				'campaign': '=',
 				'graphData': '=',
@@ -26,11 +28,17 @@
 			this.init = init;
 			this.getDataIndex = getDataIndex;
 			this.generateChart = generateChart;
-
+			this.determineOpenDay = determineOpenDay;
+			
 			$scope.campaign.manualPlan = {};
 			$scope.campaign.backlog = {};
 
 			$scope.campaign.selectedDates = [];
+
+			$scope.extraInfos = [
+				"M: " + $scope.dictionary['ManuallyPlanned'],
+				"C: " + $scope.dictionary['Closed']
+			];
 
 			function graphSelectionChanged() {
 				$scope.campaign.selectedDates = $scope.graph.selected().filter(function(p) {
@@ -52,6 +60,10 @@
 					unload: getDataGroupsLabel(!$scope.viewScheduleDiff)
 				});
 
+			}
+
+			function determineOpenDay(idx) {
+				return $scope.plans[idx] > 0;
 			}
 
 			function generateChart() {
@@ -153,9 +165,13 @@
 							Planned: function (v, id, i) {
 								var rawManualPlan = $scope.campaign.rawManualPlan;
 								var manualPlan = [false].concat(rawManualPlan);
+								
 								if (manualPlan[i]) {
-									return "manual";
+									return 'M';
 								}
+
+								if (!determineOpenDay(i))
+									return 'C';
 							}
 						}
 					}
@@ -263,9 +279,7 @@
 				return scope.campaign.selectedDates;
 			}, function(newVal, oldVal) {
 				if (!scope.graph) return;				
-				scope.graph.select(null, newVal.map(ctrl.getDataIndex).filter(function(i) {
-					return scope.plans[i] > 0;
-				}), true);
+				scope.graph.select(null, newVal.map(ctrl.getDataIndex).filter(ctrl.determineOpenDay), true);
 			}, true);
 
 			scope.$watch(function () {

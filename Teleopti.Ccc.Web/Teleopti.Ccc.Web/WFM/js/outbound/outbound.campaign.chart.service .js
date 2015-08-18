@@ -20,7 +20,9 @@
            'NeededPersonHours',
            'EndDate',
            'Today',
-           'Start'
+           'Start',
+		   'ManuallyPlanned',
+		   'Closed'
         ];
         var self = this;
 

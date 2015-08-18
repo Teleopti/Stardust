@@ -13525,6 +13525,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Manually Planned.
+        /// </summary>
+        public static string ManuallyPlanned {
+            get {
+                return ResourceManager.GetString("ManuallyPlanned", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to manual plan.
         /// </summary>
         public static string ManualPlan {

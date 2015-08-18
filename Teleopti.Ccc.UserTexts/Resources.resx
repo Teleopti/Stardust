@@ -13394,4 +13394,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Seat Plan Report</value>
     <comment>Title of seat plan report</comment>
   </data>
+  <data name="ManuallyPlanned" xml:space="preserve">
+    <value>Manually Planned</value>
+    <comment>Label to indicate whether there are manual production plan for the campaign on the specified date.</comment>
+  </data>
 </root>

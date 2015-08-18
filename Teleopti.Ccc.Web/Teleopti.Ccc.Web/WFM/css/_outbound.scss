@@ -1,6 +1,17 @@
 ﻿@charset "UTF-8";
 
 .outbound {
+	.chart-extra-info {
+		position: absolute;		
+		color: #66C2FF;
+		bottom: 5px;
+		right: 8%;
+
+		span {
+			margin: 0 4px;
+		}
+	}
+
     .m-t-20{
 	    margin-top:20px;
 	}
