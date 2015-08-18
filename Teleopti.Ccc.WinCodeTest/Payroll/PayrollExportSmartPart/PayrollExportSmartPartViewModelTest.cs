@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml;
 using System.Xml.XPath;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
@@ -164,7 +165,8 @@ namespace Teleopti.Ccc.WinCodeTest.Payroll.PayrollExportSmartPart
     {
         public XPathNavigator CreateNavigator()
         {
-            throw new NotImplementedException();
+	        var document = new XmlDocument();
+	        return document.CreateNavigator();
         }
     }
 }
