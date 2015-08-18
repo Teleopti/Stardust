@@ -1528,10 +1528,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(Sum(Fields!calls_answ.Value, "DataSet1")/Sum(Fields!calls_offered.Value, "DataSet1"),1)</Value>
+                              <Value>=Sum(Fields!calls_answ.Value, "DataSet1")/Sum(Fields!calls_offered.Value, "DataSet1")</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>0.0%</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1573,10 +1574,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(Sum(Fields!calls_abnd.Value, "DataSet1")/Sum(Fields!calls_offered.Value, "DataSet1"),1)</Value>
+                              <Value>=Sum(Fields!calls_abnd.Value, "DataSet1")/Sum(Fields!calls_offered.Value, "DataSet1")</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>0.0%</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1618,10 +1620,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent((Sum(Fields!calls_abnd.Value, "DataSet1")-Sum(Fields!short_calls_abnd.Value, "DataSet1"))/Sum(Fields!calls_offered.Value, "DataSet1"),1)</Value>
+                              <Value>=(Sum(Fields!calls_abnd.Value, "DataSet1")-Sum(Fields!short_calls_abnd.Value, "DataSet1"))/Sum(Fields!calls_offered.Value, "DataSet1")</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>0.0%</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1663,10 +1666,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Sum(Fields!sum_answer_time.Value)/Sum(Fields!calls_answ.Value),2)</Value>
+                              <Value>=Sum(Fields!sum_answer_time.Value)/Sum(Fields!calls_answ.Value)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>="#,##0.00"</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1708,10 +1712,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(sum(Fields!sum_abnd_time.Value)/sum(Fields!calls_abnd.Value),2)</Value>
+                              <Value>=sum(Fields!sum_abnd_time.Value)/sum(Fields!calls_abnd.Value)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>="#,##0.00"</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1753,10 +1758,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Max(Fields!longest_delay_answered_calls.Value),2)</Value>
+                              <Value>=Max(Fields!longest_delay_answered_calls.Value)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>="#,##0.00"</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1798,10 +1804,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Max(Fields!longest_delay_abnd_calls.Value),2)</Value>
+                              <Value>=Max(Fields!longest_delay_abnd_calls.Value)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>="#,##0.00"</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1880,9 +1887,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(Fields!answer_rate.Value,1)</Value>
+                              <Value>=Fields!answer_rate.Value</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
+                                <Format>0.0%</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1895,6 +1903,9 @@
                       <rd:DefaultName>answer_rate</rd:DefaultName>
                       <ZIndex>6</ZIndex>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "WhiteSmoke", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -1912,9 +1923,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(Fields!abnd_rate.Value,1)</Value>
+                              <Value>=Fields!abnd_rate.Value</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
+                                <Format>0.0%</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1927,6 +1939,9 @@
                       <rd:DefaultName>abnd_rate</rd:DefaultName>
                       <ZIndex>5</ZIndex>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "WhiteSmoke", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -1944,9 +1959,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(Fields!abnd_rate_excl_short_calls.Value,1)</Value>
+                              <Value>=Fields!abnd_rate_excl_short_calls.Value</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
+                                <Format>0.0%</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1959,6 +1975,9 @@
                       <rd:DefaultName>abnd_rate_excl_short_calls</rd:DefaultName>
                       <ZIndex>4</ZIndex>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "WhiteSmoke", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -1976,9 +1995,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=code.RoundToLarger(Fields!average_speed_answer.Value,2)</Value>
+                              <Value>=Fields!average_speed_answer.Value</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
+                                <Format>="#,##0.00"</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1991,6 +2011,9 @@
                       <rd:DefaultName>average_speed_answer</rd:DefaultName>
                       <ZIndex>3</ZIndex>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "WhiteSmoke", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -2008,9 +2031,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!average_time_to_abnd.Value,2)</Value>
+                              <Value>=Fields!average_time_to_abnd.Value</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
+                                <Format>="#,##0.00"</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2023,6 +2047,9 @@
                       <rd:DefaultName>average_time_to_abnd</rd:DefaultName>
                       <ZIndex>2</ZIndex>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "WhiteSmoke", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -2040,9 +2067,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!longest_delay_answered_calls.Value,2)</Value>
+                              <Value>=Fields!longest_delay_answered_calls.Value</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
+                                <Format>="#,##0.00"</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2055,6 +2083,9 @@
                       <rd:DefaultName>longest_delay_answered_calls</rd:DefaultName>
                       <ZIndex>1</ZIndex>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "WhiteSmoke", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -2072,9 +2103,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!longest_delay_abnd_calls.Value,2)</Value>
+                              <Value>=Fields!longest_delay_abnd_calls.Value</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
+                                <Format>="#,##0.00"</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2086,6 +2118,9 @@
                       </Paragraphs>
                       <rd:DefaultName>longest_delay_abnd_calls</rd:DefaultName>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "WhiteSmoke", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -2148,10 +2183,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(Sum(Fields!calls_answ.Value, "DataSet1")/Sum(Fields!calls_offered.Value, "DataSet1"),1)</Value>
+                              <Value>=Sum(Fields!calls_answ.Value, "DataSet1")/Sum(Fields!calls_offered.Value, "DataSet1")</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>0.0%</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2191,10 +2227,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(Sum(Fields!calls_abnd.Value, "DataSet1")/Sum(Fields!calls_offered.Value, "DataSet1"),1)</Value>
+                              <Value>=Sum(Fields!calls_abnd.Value, "DataSet1")/Sum(Fields!calls_offered.Value, "DataSet1")</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>0.0%</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2234,10 +2271,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent((Sum(Fields!calls_abnd.Value, "DataSet1")-Sum(Fields!short_calls_abnd.Value, "DataSet1"))/Sum(Fields!calls_offered.Value, "DataSet1"),1)</Value>
+                              <Value>=(Sum(Fields!calls_abnd.Value, "DataSet1")-Sum(Fields!short_calls_abnd.Value, "DataSet1"))/Sum(Fields!calls_offered.Value, "DataSet1")</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>0.0%</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2277,10 +2315,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Sum(Fields!sum_answer_time.Value)/Sum(Fields!calls_answ.Value),2)</Value>
+                              <Value>=Sum(Fields!sum_answer_time.Value)/Sum(Fields!calls_answ.Value)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>="#,##0.00"</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2320,10 +2359,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(sum(Fields!sum_abnd_time.Value)/sum(Fields!calls_abnd.Value),2)</Value>
+                              <Value>=sum(Fields!sum_abnd_time.Value)/sum(Fields!calls_abnd.Value)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>="#,##0.00"</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2363,10 +2403,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Max(Fields!longest_delay_answered_calls.Value),2)</Value>
+                              <Value>=Max(Fields!longest_delay_answered_calls.Value)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>="#,##0.00"</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2406,10 +2447,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Max(Fields!longest_delay_abnd_calls.Value),2)</Value>
+                              <Value>=Max(Fields!longest_delay_abnd_calls.Value)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>="#,##0.00"</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2438,6 +2480,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
               </TablixCells>

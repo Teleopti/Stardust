@@ -908,10 +908,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent((sum(Fields!scheduled_agents_m.Value) - sum(Fields!forecasted_agents_m.Value)) / sum(Fields!forecasted_agents_m.Value),1)</Value>
+                              <Value>=(sum(Fields!scheduled_agents_m.Value) - sum(Fields!forecasted_agents_m.Value)) / sum(Fields!forecasted_agents_m.Value)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>0.0%</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -954,10 +955,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent((sum(Fields!scheduled_agents_m.Value) -sum(Fields!forecasted_agents_incl_shrinkage_m.Value)) / sum(Fields!forecasted_agents_incl_shrinkage_m.Value),1)</Value>
+                              <Value>=(sum(Fields!scheduled_agents_m.Value) -sum(Fields!forecasted_agents_incl_shrinkage_m.Value)) / sum(Fields!forecasted_agents_incl_shrinkage_m.Value)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>0.0%</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -999,10 +1001,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(avg(Fields!standard_deviation.Value),2)</Value>
+                              <Value>=Avg(Fields!standard_deviation.Value)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>="#,##0.00"</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1210,10 +1213,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent((sum(Fields!scheduled_agents_m.Value) - sum(Fields!forecasted_agents_m.Value)) / sum(Fields!forecasted_agents_m.Value),1)</Value>
+                              <Value>=(sum(Fields!scheduled_agents_m.Value) - sum(Fields!forecasted_agents_m.Value)) / sum(Fields!forecasted_agents_m.Value)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>0.0%</Format>
                                 <Color>#696969</Color>
                               </Style>
                             </TextRun>
@@ -1250,10 +1254,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent((sum(Fields!scheduled_agents_m.Value) -sum(Fields!forecasted_agents_incl_shrinkage_m.Value)) / sum(Fields!forecasted_agents_incl_shrinkage_m.Value),1)</Value>
+                              <Value>=(sum(Fields!scheduled_agents_m.Value) -sum(Fields!forecasted_agents_incl_shrinkage_m.Value)) / sum(Fields!forecasted_agents_incl_shrinkage_m.Value)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>0.0%</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1289,10 +1294,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(avg(Fields!standard_deviation.Value),2)</Value>
+                              <Value>=Avg(Fields!standard_deviation.Value)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>="#,##0.00"</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1502,10 +1508,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent((sum(Fields!scheduled_agents_m.Value) - sum(Fields!forecasted_agents_m.Value)) / sum(Fields!forecasted_agents_m.Value),1)</Value>
+                              <Value>=(sum(Fields!scheduled_agents_m.Value) - sum(Fields!forecasted_agents_m.Value)) / sum(Fields!forecasted_agents_m.Value)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>0.0%</Format>
                                 <Color>#696969</Color>
                               </Style>
                             </TextRun>
@@ -1518,6 +1525,9 @@
                       <rd:DefaultName>textbox74</rd:DefaultName>
                       <ZIndex>18</ZIndex>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <VerticalAlign>Bottom</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -1536,10 +1546,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent((sum(Fields!scheduled_agents_m.Value) -sum(Fields!forecasted_agents_incl_shrinkage_m.Value)) / sum(Fields!forecasted_agents_incl_shrinkage_m.Value),1)</Value>
+                              <Value>=(sum(Fields!scheduled_agents_m.Value) -sum(Fields!forecasted_agents_incl_shrinkage_m.Value)) / sum(Fields!forecasted_agents_incl_shrinkage_m.Value)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>0.0%</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1551,6 +1562,9 @@
                       </Paragraphs>
                       <ZIndex>17</ZIndex>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <VerticalAlign>Bottom</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -1569,10 +1583,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(avg(Fields!standard_deviation.Value),2)</Value>
+                              <Value>=avg(Fields!standard_deviation.Value)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>="#,##0.00"</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1585,6 +1600,9 @@
                       <rd:DefaultName>textbox75</rd:DefaultName>
                       <ZIndex>16</ZIndex>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <VerticalAlign>Bottom</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -1766,9 +1784,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(Fields!relative_difference.Value,1)</Value>
+                              <Value>=Fields!relative_difference.Value</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
+                                <Format>0.0%</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1781,6 +1800,9 @@
                       <rd:DefaultName>textbox47</rd:DefaultName>
                       <ZIndex>2</ZIndex>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "WhiteSmoke", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -1798,9 +1820,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(Fields!relative_difference_incl_shrinkage.Value,1)</Value>
+                              <Value>=Fields!relative_difference_incl_shrinkage.Value</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
+                                <Format>0.0%</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1812,6 +1835,9 @@
                       </Paragraphs>
                       <ZIndex>1</ZIndex>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "WhiteSmoke", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -1829,9 +1855,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!standard_deviation.Value,2)</Value>
+                              <Value>=Fields!standard_deviation.Value</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
+                                <Format>="#,##0.00"</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1843,6 +1870,9 @@
                       </Paragraphs>
                       <rd:DefaultName>textbox26</rd:DefaultName>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "WhiteSmoke", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -2069,10 +2099,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent((sum(Fields!scheduled_agents_m.Value) - sum(Fields!forecasted_agents_m.Value)) / sum(Fields!forecasted_agents_m.Value),1)</Value>
+                              <Value>=(sum(Fields!scheduled_agents_m.Value) - sum(Fields!forecasted_agents_m.Value)) / sum(Fields!forecasted_agents_m.Value)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>0.0%</Format>
                                 <Color>#696969</Color>
                               </Style>
                             </TextRun>
@@ -2113,10 +2144,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent((sum(Fields!scheduled_agents_m.Value) -sum(Fields!forecasted_agents_incl_shrinkage_m.Value)) / sum(Fields!forecasted_agents_incl_shrinkage_m.Value),1)</Value>
+                              <Value>=(sum(Fields!scheduled_agents_m.Value) -sum(Fields!forecasted_agents_incl_shrinkage_m.Value)) / sum(Fields!forecasted_agents_incl_shrinkage_m.Value)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>0.0%</Format>
                                 <Color>#696969</Color>
                               </Style>
                             </TextRun>
@@ -2156,10 +2188,11 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(avg(Fields!standard_deviation.Value),2)</Value>
+                              <Value>=Avg(Fields!standard_deviation.Value)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>="#,##0.00"</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2189,6 +2222,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
               </TablixCells>

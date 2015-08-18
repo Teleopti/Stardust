@@ -701,9 +701,6 @@
               <KeepTogether>true</KeepTogether>
             </TablixMember>
             <TablixMember>
-              <Visibility>
-                <Hidden>False</Hidden>
-              </Visibility>
               <KeepTogether>true</KeepTogether>
             </TablixMember>
           </TablixMembers>
@@ -1249,13 +1246,13 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(
+                              <Value>=
 iif(sum(Fields!scheduled_ready_time.Value)&gt;0,
-sum(Fields!ready_time_s.Value)/sum(Fields!scheduled_ready_time.Value),0)
-,1)</Value>
+sum(Fields!ready_time_s.Value)/sum(Fields!scheduled_ready_time.Value),0)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>0.0%</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1297,10 +1294,11 @@ sum(Fields!ready_time_s.Value)/sum(Fields!scheduled_ready_time.Value),0)
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(iif(IsNothing(sum(Fields!answered_calls.Value)),0,sum(Fields!answered_calls.Value)),0)</Value>
+                              <Value>=iif(IsNothing(sum(Fields!answered_calls.Value)),0,sum(Fields!answered_calls.Value))</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>0;(0)</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1342,13 +1340,13 @@ sum(Fields!ready_time_s.Value)/sum(Fields!scheduled_ready_time.Value),0)
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(
+                              <Value>=
 iif((sum(Fields!scheduled_ready_time.Value)/3600.0)&gt;0,
-sum(Fields!answered_calls.Value)/(sum(Fields!scheduled_ready_time.Value)/3600.0),0)
-,1)</Value>
+sum(Fields!answered_calls.Value)/(sum(Fields!scheduled_ready_time.Value)/3600.0),0)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>="#,##0.0"</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1390,14 +1388,13 @@ sum(Fields!answered_calls.Value)/(sum(Fields!scheduled_ready_time.Value)/3600.0)
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(
-iif((sum(Fields!ready_time_s.Value)/3600.0)&gt;0,
+                              <Value>=iif((sum(Fields!ready_time_s.Value)/3600.0)&gt;0,
 sum(Fields!answered_calls.Value)/(sum(Fields!ready_time_s.Value)/3600.0)
-,0)
-,1)</Value>
+,0)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>="#,##0.0"</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1438,12 +1435,12 @@ sum(Fields!answered_calls.Value)/(sum(Fields!ready_time_s.Value)/3600.0)
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(
-iif(sum(Fields!ready_time_s.Value)&gt;0,
-sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0),1)</Value>
+                              <Value>=iif(sum(Fields!ready_time_s.Value)&gt;0,
+sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>0.0%</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1485,10 +1482,11 @@ sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0),1)</Value>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(Code.AdheranceCalc(sum(Fields!adherence_calc_s.Value), sum(Fields!deviation_s.Value)),1)</Value>
+                              <Value>=Code.AdheranceCalc(sum(Fields!adherence_calc_s.Value), sum(Fields!deviation_s.Value))</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>0.0%</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1634,13 +1632,12 @@ sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0),1)</Value>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(
-iif(sum(Fields!scheduled_ready_time.Value)&gt;0,
-sum(Fields!ready_time_s.Value)/sum(Fields!scheduled_ready_time.Value),0)
-,1)</Value>
+                              <Value>=iif(sum(Fields!scheduled_ready_time.Value)&gt;0,
+sum(Fields!ready_time_s.Value)/sum(Fields!scheduled_ready_time.Value),0)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>0.0%</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1653,6 +1650,9 @@ sum(Fields!ready_time_s.Value)/sum(Fields!scheduled_ready_time.Value),0)
                       <rd:DefaultName>textbox37</rd:DefaultName>
                       <ZIndex>23</ZIndex>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1670,10 +1670,11 @@ sum(Fields!ready_time_s.Value)/sum(Fields!scheduled_ready_time.Value),0)
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(iif(IsNothing(sum(Fields!answered_calls.Value)),0,sum(Fields!answered_calls.Value)),0)</Value>
+                              <Value>=iif(IsNothing(sum(Fields!answered_calls.Value)),0,sum(Fields!answered_calls.Value))</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>0;(0)</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1686,6 +1687,9 @@ sum(Fields!ready_time_s.Value)/sum(Fields!scheduled_ready_time.Value),0)
                       <rd:DefaultName>textbox40</rd:DefaultName>
                       <ZIndex>22</ZIndex>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1703,13 +1707,13 @@ sum(Fields!ready_time_s.Value)/sum(Fields!scheduled_ready_time.Value),0)
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(
+                              <Value>=
 iif((sum(Fields!scheduled_ready_time.Value)/3600.0)&gt;0,
-sum(Fields!answered_calls.Value)/(sum(Fields!scheduled_ready_time.Value)/3600.0),0)
-,1)</Value>
+sum(Fields!answered_calls.Value)/(sum(Fields!scheduled_ready_time.Value)/3600.0),0)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>="#,##0.0"</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1722,6 +1726,9 @@ sum(Fields!answered_calls.Value)/(sum(Fields!scheduled_ready_time.Value)/3600.0)
                       <rd:DefaultName>textbox46</rd:DefaultName>
                       <ZIndex>21</ZIndex>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1739,14 +1746,14 @@ sum(Fields!answered_calls.Value)/(sum(Fields!scheduled_ready_time.Value)/3600.0)
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(
+                              <Value>=
 iif((sum(Fields!ready_time_s.Value)/3600.0)&gt;0,
 sum(Fields!answered_calls.Value)/(sum(Fields!ready_time_s.Value)/3600.0)
-,0)
-,1)</Value>
+,0)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>="#,##0.0"</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1758,6 +1765,9 @@ sum(Fields!answered_calls.Value)/(sum(Fields!ready_time_s.Value)/3600.0)
                       </Paragraphs>
                       <ZIndex>20</ZIndex>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1775,12 +1785,13 @@ sum(Fields!answered_calls.Value)/(sum(Fields!ready_time_s.Value)/3600.0)
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(
+                              <Value>=
 iif(sum(Fields!ready_time_s.Value)&gt;0,
-sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0),1)</Value>
+sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>0.0%</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1793,6 +1804,9 @@ sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0),1)</Value>
                       <rd:DefaultName>textbox41</rd:DefaultName>
                       <ZIndex>19</ZIndex>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1810,10 +1824,11 @@ sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0),1)</Value>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(Code.AdheranceCalc(sum(Fields!adherence_calc_s.Value), sum(Fields!deviation_s.Value)),1)</Value>
+                              <Value>=Code.AdheranceCalc(sum(Fields!adherence_calc_s.Value), sum(Fields!deviation_s.Value))</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>0.0%</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1826,6 +1841,9 @@ sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0),1)</Value>
                       <rd:DefaultName>textbox42</rd:DefaultName>
                       <ZIndex>18</ZIndex>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1956,9 +1974,10 @@ sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0),1)</Value>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(Fields!ready_time_per_scheduled_ready_time.Value,1)</Value>
+                              <Value>=Fields!ready_time_per_scheduled_ready_time.Value</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
+                                <Format>0.0%</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -1975,6 +1994,9 @@ sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0),1)</Value>
                         <ToggleItem>textbox65</ToggleItem>
                       </Visibility>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "WhiteSmoke", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -1992,9 +2014,10 @@ sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0),1)</Value>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!answered_calls.Value,0)</Value>
+                              <Value>=Fields!answered_calls.Value</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
+                                <Format>0;(0)</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2011,6 +2034,9 @@ sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0),1)</Value>
                         <ToggleItem>textbox65</ToggleItem>
                       </Visibility>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "WhiteSmoke", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -2028,9 +2054,10 @@ sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0),1)</Value>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!avg_answered_calls.Value,1)</Value>
+                              <Value>=Fields!avg_answered_calls.Value</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
+                                <Format>="#,##0.0"</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2047,6 +2074,9 @@ sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0),1)</Value>
                         <ToggleItem>textbox65</ToggleItem>
                       </Visibility>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "WhiteSmoke", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -2064,9 +2094,10 @@ sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0),1)</Value>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!avg_answered_calls_ready_hour.Value,1)</Value>
+                              <Value>=Fields!avg_answered_calls_ready_hour.Value</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
+                                <Format>="#,##0.0"</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2082,6 +2113,9 @@ sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0),1)</Value>
                         <ToggleItem>textbox65</ToggleItem>
                       </Visibility>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "WhiteSmoke", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -2099,9 +2133,10 @@ sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0),1)</Value>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(Fields!occupancy.Value,1)</Value>
+                              <Value>=Fields!occupancy.Value</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
+                                <Format>0.0%</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2118,6 +2153,9 @@ sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0),1)</Value>
                         <ToggleItem>textbox65</ToggleItem>
                       </Visibility>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "WhiteSmoke", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -2135,9 +2173,10 @@ sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0),1)</Value>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(Fields!adherence.Value,1)</Value>
+                              <Value>=Fields!adherence.Value</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
+                                <Format>0.0%</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2153,6 +2192,9 @@ sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0),1)</Value>
                         <ToggleItem>textbox65</ToggleItem>
                       </Visibility>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "WhiteSmoke", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -2293,13 +2335,13 @@ sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0),1)</Value>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(
+                              <Value>=
 iif(sum(Fields!scheduled_ready_time.Value)&gt;0,
-sum(Fields!ready_time_s.Value)/sum(Fields!scheduled_ready_time.Value),0)
-,1)</Value>
+sum(Fields!ready_time_s.Value)/sum(Fields!scheduled_ready_time.Value),0)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>0.0%</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2339,10 +2381,11 @@ sum(Fields!ready_time_s.Value)/sum(Fields!scheduled_ready_time.Value),0)
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(iif(IsNothing(sum(Fields!answered_calls.Value)),0,sum(Fields!answered_calls.Value)),0)</Value>
+                              <Value>=iif(IsNothing(sum(Fields!answered_calls.Value)),0,sum(Fields!answered_calls.Value))</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>0;(0)</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2382,13 +2425,13 @@ sum(Fields!ready_time_s.Value)/sum(Fields!scheduled_ready_time.Value),0)
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(
+                              <Value>=
 iif((sum(Fields!scheduled_ready_time.Value)/3600.0)&gt;0,
-sum(Fields!answered_calls.Value)/(sum(Fields!scheduled_ready_time.Value)/3600.0),0)
-,1)</Value>
+sum(Fields!answered_calls.Value)/(sum(Fields!scheduled_ready_time.Value)/3600.0),0)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>="#,##0.0"</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2428,14 +2471,13 @@ sum(Fields!answered_calls.Value)/(sum(Fields!scheduled_ready_time.Value)/3600.0)
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(
-iif((sum(Fields!ready_time_s.Value)/3600.0)&gt;0,
+                              <Value>=iif((sum(Fields!ready_time_s.Value)/3600.0)&gt;0,
 sum(Fields!answered_calls.Value)/(sum(Fields!ready_time_s.Value)/3600.0)
-,0)
-,1)</Value>
+,0)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>="#,##0.0"</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2474,12 +2516,12 @@ sum(Fields!answered_calls.Value)/(sum(Fields!ready_time_s.Value)/3600.0)
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(
-iif(sum(Fields!ready_time_s.Value)&gt;0,
-sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0),1)</Value>
+                              <Value>=iif(sum(Fields!ready_time_s.Value)&gt;0,
+sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>0.0%</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2519,10 +2561,11 @@ sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0),1)</Value>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(Code.AdheranceCalc(sum(Fields!adherence_calc_s.Value), sum(Fields!deviation_s.Value)),1)</Value>
+                              <Value>=Code.AdheranceCalc(sum(Fields!adherence_calc_s.Value), sum(Fields!deviation_s.Value))</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
+                                <Format>0.0%</Format>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2551,6 +2594,7 @@ sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0),1)</Value>
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
               </TablixCells>
