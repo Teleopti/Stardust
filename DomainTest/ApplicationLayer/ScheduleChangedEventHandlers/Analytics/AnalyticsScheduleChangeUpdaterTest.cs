@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			var scheduleRow = new FactScheduleRow
 			{
 				DatePart = new AnalyticsFactScheduleDate(),
-				PersonPart = new AnalyticsFactSchedulePerson(),
+				PersonPart = new AnalyticsFactSchedulePerson{PersonId = 11},
 				TimePart = new AnalyticsFactScheduleTime()
 			};
 			var factScheduleRows = new List<IFactScheduleRow>{ scheduleRow };
@@ -235,7 +235,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				ScenarioId = scenario.Code
 			};
 			var dayCount = new AnalyticsFactScheduleDayCount();
-			var personPart = new AnalyticsFactSchedulePerson();
+			var personPart = new AnalyticsFactSchedulePerson{PersonId = 11};
 			const int dateId = 0;
 			
 			_analyticsScheduleRepository.Stub(x => x.Scenarios()).Return(new List<IAnalyticsGeneric> { scenario });
