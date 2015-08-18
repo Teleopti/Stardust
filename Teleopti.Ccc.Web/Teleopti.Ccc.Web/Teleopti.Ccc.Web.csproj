@@ -2057,6 +2057,7 @@
     <Content Include="WFM\css\_cardlist.scss" />
     <Content Include="WFM\css\_seatplan.scss" />
     <Content Include="WFM\js\outbound\outbound.campaignProductionPlan.controller.js" />
+    <Content Include="WFM\css\_print.scss" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

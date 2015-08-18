@@ -1,0 +1,34 @@
+﻿@media print {
+	.navbar{
+		display:none;
+	}
+
+	.layout-container{
+		display:block;
+		width:100%;
+		height:100%;
+	}
+
+	.layout-container .content{
+		flex-basis:100%;
+		height:100%;
+		margin:0px;
+		background:#ffffff!important;
+	}
+
+	.layout-container .sidenav {
+		display:none;
+	}
+
+	.sidenav-toggle{
+		display:none;
+	}
+	
+	.wfm-accordion-head{
+		display:none;
+	}
+
+	md-tooltip{
+		display:none;
+	}
+}
