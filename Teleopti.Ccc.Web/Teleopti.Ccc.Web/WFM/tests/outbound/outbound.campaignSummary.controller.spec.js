@@ -3,6 +3,7 @@ describe('OutboundSummaryCtrl', function () {
 	var $q,
 		$rootScope,
 		$controller,
+		$timeout,
 		outboundService,
 		outboundChartService,
 		stateService
@@ -30,12 +31,13 @@ describe('OutboundSummaryCtrl', function () {
 		});
 	});
 
-	beforeEach(inject(function (_$httpBackend_, _$q_, _$rootScope_, _$controller_) {
+	beforeEach(inject(function (_$httpBackend_, _$q_, _$rootScope_, _$controller_, _$timeout_) {
 
 		$q = _$q_;
 		$rootScope = _$rootScope_;
 		var $httpBackend = _$httpBackend_;
 		$controller = _$controller_;
+		$timeout = _$timeout_;
 		$httpBackend.expectGET("../api/Global/Language?lang=en").respond(200, 'mock');
 		$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, 'mock');
 
@@ -72,6 +74,72 @@ describe('OutboundSummaryCtrl', function () {
 		expect(campaign.viewScheduleDiffToggle == true);
 		expect(campaign.chart != null);
 	});
+
+	it('add manual plan should work', function() {
+		var test = setUpTarget();
+		var campaign = {
+			Id: 1,
+			selectedDates: [new Date('2015-07-19'), new Date('2015-07-20')],
+			manualPlan: {}
+		};
+
+		outboundService.prepareCampaignSummary({
+			Id: 1,
+			Status: 1
+		});
+
+		outboundChartService.setCampaignVisualization(1, {
+			Dates: [new Date('2015-07-19'), new Date('2015-07-20')],
+			Plans: [3, 3],
+			ManualPlan: [true, false]
+		});
+		
+		test.scope.addManualPlan(campaign);
+		setTimeout(function () {			
+			expect(campaign.graphData).toBeDefined();
+			expect(campaign.Status).toEqual(1);			
+		}, 100);
+	});
+
+	it('remove manual plan should work', function() {
+		var test = setUpTarget();
+		var campaign = {
+			Id: 1,
+			selectedDates: [new Date('2015-07-19'), new Date('2015-07-20')],
+			manualPlan: {}
+		};
+
+		outboundService.prepareCampaignSummary({
+			Id: 1,
+			Status: 1
+		});
+
+		outboundChartService.setCampaignVisualization(1, {
+			Dates: [new Date('2015-07-19'), new Date('2015-07-20')],
+			Plans: [3, 3],
+			ManualPlan: [true, false]
+		});
+
+
+		test.scope.removeManualPlan(campaign);
+		setTimeout(function() {
+			expect(campaign.graphData).toBeDefined();
+			expect(campaign.Status).toEqual(1);		
+		}, 100);
+
+	});
+
+	it('clear manual plan should work', function() {
+		var test = setUpTarget();
+		var campaign = {
+			selectedDates: [new Date('2015-07-19'), new Date('2015-07-20')],
+			manualPlanInput : 3
+		}
+
+		test.scope.clearManualPlan(campaign);
+		expect(campaign.selectedDates.length).toEqual(0);
+		expect(campaign.manualPlanInput).toBeNull();
+	});
 	
 	function setUpTarget() {
 		var scope = $rootScope.$new();
@@ -90,6 +158,8 @@ describe('OutboundSummaryCtrl', function () {
 	function fakeOutboundService() {
 
 		var campaigns = [];
+		var campaignSummaries = [];
+
 
 		this.getCampaign = function (campaignId, successCb, errorCb) {
 		};
@@ -103,14 +173,45 @@ describe('OutboundSummaryCtrl', function () {
 			return campaign.calculatedPersonHour;
 		}
 
-		this.load = function() {};
+		this.load = function () { };
+
+		this.prepareCampaignSummary = function(summary) {
+			campaignSummaries.push(summary);
+		};
+
+		this.getCampaignSummary = function(id, cb) {
+			var ss = campaignSummaries.filter(function(s) {
+				return s.Id == id;
+			});
+			if (ss.length > 0) cb(ss[0]);
+		}		
 	}
 
 	function fakeOutboundChartService() {
 
-		this.getCampaignVisualization = function (d,success) { success();};
+		var campaignViss = {};
+	
+		this.setCampaignVisualization = function(id, vis) {
+			campaignViss[id] = vis;
+		}
 
-		this.makeGraph = function() { return {graph:'c3'}};
+		this.getCampaignVisualization = function(d, success) {
+			 success();
+		};
+
+		this.makeGraph = function () { return { graph: 'c3' } };
+
+		this.updateManualPlan = function (campaign, cb) {			
+			if (angular.isDefined(campaignViss[campaign.CampaignId])) {
+				cb(campaignViss[campaign.CampaignId], campaignViss[campaign.CampaignId].ManualPlan);							
+			}			
+		};
+
+		this.removeManualPlan = function (campaign, cb) {
+			if (angular.isDefined(campaignViss[campaign.CampaignId])) {
+				cb(campaignViss[campaign.CampaignId], campaignViss[campaign.CampaignId].ManualPlan);
+			}
+		};
 	}
 
 });
