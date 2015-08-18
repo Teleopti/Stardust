@@ -24,12 +24,12 @@ namespace Teleopti.Ccc.Domain.Outbound
 			    if (manualTime.HasValue)
 			    {
 				    incomingTask.SetTimeOnDate(dateOnly, manualTime.Value, PlannedTimeTypeEnum.Manual);
-				    incomingTask.SetManualPlannedTimeOnDate(dateOnly, manualTime.Value);
+					 incomingTask.SetManualPlannedInfoOnDate(dateOnly, true);
 			    }
-			    else
-			    {
-				    incomingTask.SetManualPlannedTimeOnDate(dateOnly, TimeSpan.Zero);
-			    }
+				 else
+				 {
+					 incomingTask.SetManualPlannedInfoOnDate(dateOnly, false);
+				 }
 			    incomingTask.SetRealPlannedTimeOnDate(dateOnly, incomingTask.GetTimeOnDate(dateOnly));
 
 			    var scheduled = _outboundScheduledResourcesProvider.GetScheduledTimeOnDate(dateOnly, campaign.Skill);

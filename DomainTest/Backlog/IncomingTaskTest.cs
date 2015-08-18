@@ -152,10 +152,10 @@ namespace Teleopti.Ccc.DomainTest.Backlog
 		public void ShouldModifyManualPlannedTimeIfItExist()
 		{
 			var date = new DateOnly(2015, 6, 1);
-			_target.SetManualPlannedTimeOnDate(date, new TimeSpan(20, 0, 0));
-			_target.SetManualPlannedTimeOnDate(date, new TimeSpan(10, 0, 0));
+			_target.SetManualPlannedInfoOnDate(date, true);
+			_target.SetManualPlannedInfoOnDate(date, true);
 
-			_target.GetManualPlannedTimeOnDate(date).Should().Be.EqualTo(new TimeSpan(10, 0, 0));
+			_target.GetManualPlannedInfoOnDate(date).Should().Be.True();
 		}
 
 		private void setupOpenDays()
