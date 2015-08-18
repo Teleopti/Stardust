@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			handler.Handle(legacyMessage);
 
-			handler.AssertWasCalled(x => x.Handle(legacyMessage));
+			repository.AssertWasCalled(x => x.UpdateFindPerson(legacyMessage.PersonIdCollection));
 		}
 	}
 }
