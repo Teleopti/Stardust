@@ -47,22 +47,12 @@
 			                <button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="switchManualPlan(campaign);" ng-class="{'selected-ope-btn': campaign.manualPlanswitch}" translate>ManualPlan</button>
 			                
 							<div class="edit-container pull-right" style="margin: 6px 10px 0 65px;">
-								<div class="input-container relative" ng-show="campaign.manualPlanswitch">
-									<input type="text" placeholder="plan..." ng-model="campaign.manualPlanInput" range-validate range-min="0" integer-only="false"/>
+								<div class="input-container relative" ng-show="campaign.manualPlanswitch" style="width:417px;">
+									<input type="text" placeholder="plan..." ng-model="campaign.manualPlanInput" range-validate range-min="0" integer-only="false" style="width: 202px;" />
 									<i class="mdi mdi-information-outline" style="position: absolute; left: 195px; top: 9px; color: #EC38A3;" ng-show="isManualProductionPlanInvalid(campaign)"></i>
 									<button class="wfm-btn btn-sm wfm-btn-invis-primary pink" style="padding: 5px 10px; margin-right: 0;" ng-click="addManualPlan(campaign)" ng-disabled="isManualProductionPlanInvalid(campaign)" ng-class="{'wfm-btn-invis-disabled': isManualProductionPlanInvalid(campaign)}" translate>Save</button>
 									<button class="wfm-btn btn-sm wfm-btn-invis-primary" style="padding: 5px 10px; color: #EC38A3; margin-left: 0; margin-right: 0;" ng-click="removeManualPlan(campaign)" translate>Remove</button>
-									<button class="wfm-btn btn-sm wfm-btn-invis-primary" style="padding: 5px 10px; color: #EC38A3; margin-left: 0;" ng-click="clearManualPlan(campaign)" translate>Clear</button>
-								</div>
-								<div class="input-container multi-inputfix" ng-show="campaign.backlogSwitch">
-									<input type="text" placeholder="parameter1..." />
-									<input type="text" placeholder="parameter2..." />
-									<input type="text" placeholder="parameter3..." />
-									<input type="text" placeholder="parameter4..." />
-									<input type="text" placeholder="parameter5..." />
-									<input type="text" placeholder="parameter6..." />
-									<button class="wfm-btn btn-sm wfm-btn-invis-primary" style="padding: 5px 10px; color: #EC38A3; margin-right: 0;" ng-click="addBacklog(campaign)" translate>Save</button>
-									<button class="wfm-btn btn-sm wfm-btn-invis-primary" style="padding: 5px 10px; color: #EC38A3; margin-left: 0;" ng-click="clear(campaign)" translate>Clear</button>
+									<button class="wfm-btn btn-sm wfm-btn-invis-primary" style="padding: 5px 10px; color: #EC38A3; margin-left: 0;" ng-click="clearManualPlan(campaign)" translate>Reset</button>
 								</div>
 							</div>
 		                </div>
