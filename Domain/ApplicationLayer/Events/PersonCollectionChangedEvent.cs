@@ -1,6 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+
+namespace Teleopti.Interfaces.Messages.Denormalize
+{
+	/// <summary>
+	/// Events are messages. Here we're handling the legacy message type for changed people.
+	/// </summary>
+	public class PersonChangedMessage : PersonCollectionChangedEvent
+	{
+	}
+}
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
@@ -15,18 +26,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		{
 			get
 			{
-				if (_personIdCollection==null)
-				{
-					_personIdCollection = new Collection<Guid>();
-					if (!string.IsNullOrEmpty(_serializedPeople))
-					{
-						var items = _serializedPeople.Split(',');
-						foreach (var item in items)
-						{
-							_personIdCollection.Add(new Guid(item));
-						}
-					}
-				}
+				if (_personIdCollection != null) return _personIdCollection;
+				_personIdCollection = string.IsNullOrEmpty(_serializedPeople)
+					? new List<Guid>()
+					: _serializedPeople.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries).Select(Guid.Parse).ToList();
 				return _personIdCollection;
 			}
 		}
@@ -35,16 +38,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		{
             if (personIdCollection != null)
 			{
-                var stringCollection = new string[personIdCollection.Count];
-                var index = 0;
-                foreach (var guid in personIdCollection)
-                {
-                    stringCollection[index] = guid.ToString();
-                    index++;
-                }
-                _serializedPeople = string.Join(",", stringCollection);
+                _serializedPeople = string.Join(",", personIdCollection.Select(p => p.ToString()));
 			}
-            
 		}
         
         public string SerializedPeople 
@@ -60,4 +55,3 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
         }
 	}
 }
-
