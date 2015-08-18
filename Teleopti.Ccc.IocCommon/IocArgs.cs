@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.IocCommon
 
 		public bool MessageBrokerListeningEnabled { get; set; }
 		public IContainer SharedContainer { get; set; }
-		public ILockObjectGenerator CacheLockObjectGenerator { get; set; }
 		public IDataSourceConfigurationSetter DataSourceConfigurationSetter { get; set; }
 		public bool ClearCache { get; set; }
 

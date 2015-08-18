@@ -1,6 +1,5 @@
 ﻿using System.Web.Http;
 using Autofac;
-using MbCache.Configuration;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.IocCommon;
@@ -16,7 +15,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			var args = new IocArgs(new ConfigReader())
 			{
 				FeatureToggle = featureTogglePath,
-				CacheLockObjectGenerator = new FixedNumberOfLockObjects(100),
 				DataSourceConfigurationSetter = DataSourceConfigurationSetter.ForWeb()
 			};
 			var configuration = new IocConfiguration(args, CommonModule.ToggleManagerForIoc(args));
