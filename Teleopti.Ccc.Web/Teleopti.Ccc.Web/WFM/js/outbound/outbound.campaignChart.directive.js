@@ -48,6 +48,10 @@
 				});
 			}
 
+			function determineOpenDay(idx) {
+				return ! $scope.campaign.closedDays[idx - 1];
+			}
+
 			function init() {
 				if (!$scope.graph) $scope.graph = generateChart();
 			}
@@ -60,10 +64,6 @@
 					unload: getDataGroupsLabel(!$scope.viewScheduleDiff)
 				});
 
-			}
-
-			function determineOpenDay(idx) {
-				return $scope.plans[idx] > 0;
 			}
 
 			function generateChart() {
@@ -162,15 +162,15 @@
 					types: {},
 					labels: {
 						format: {
-							Planned: function (v, id, i) {
-								var rawManualPlan = $scope.campaign.rawManualPlan;
-								var manualPlan = [false].concat(rawManualPlan);
+							Planned: function (v, id, i) {						
+								var manualPlan = [false].concat($scope.campaign.rawManualPlan);
+								var closedDays = [false].concat($scope.campaign.closedDays);
 								
 								if (manualPlan[i]) {
 									return 'M';
 								}
 
-								if (!determineOpenDay(i))
+								if (closedDays[i])
 									return 'C';
 							}
 						}

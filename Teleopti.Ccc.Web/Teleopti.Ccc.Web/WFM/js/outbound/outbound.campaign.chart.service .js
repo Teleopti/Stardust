@@ -48,7 +48,7 @@
 
         function getCampaignVisualization(campaignId, successCb, errorCb) {         
         	$http.get(getCampaignVisualizationUrl + campaignId).success(function (campaignData) {
-        		if (successCb != null) successCb(self.buildGraphDataSeqs(campaignData), self.dictionary, campaignData.IsManualPlanned);
+        		if (successCb != null) successCb(self.buildGraphDataSeqs(campaignData), self.dictionary, campaignData.IsManualPlanned, campaignData.IsCloseDays);
             }).error(function(e) {
                 if (errorCb != null) errorCb(e);
             });

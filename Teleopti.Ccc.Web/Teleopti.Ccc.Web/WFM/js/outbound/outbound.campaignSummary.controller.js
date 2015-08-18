@@ -68,10 +68,11 @@
 	    }
 
 		$scope.getGraphData = function(campaign) {
-			outboundChartService.getCampaignVisualization(campaign.Id, function(data, translations, manualPlan) {
+			outboundChartService.getCampaignVisualization(campaign.Id, function(data, translations, manualPlan, closedDays) {
 				campaign.graphData = data;
 				campaign.rawManualPlan = manualPlan;
 				campaign.translations = translations;
+				campaign.closedDays = closedDays;
 			});
 		}
 
