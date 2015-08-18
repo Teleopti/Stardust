@@ -27,8 +27,24 @@
 		    campaign.manualPlanInput = null;
     	}
 
-		$scope.removeManualPlan = function(campaign) {
-			outboundService.removeManualPlan(campaign.Id, campaign.selectedDates);
+    	$scope.removeManualPlan = function (campaign) {
+    		console.log('selectedDates', campaign.selectedDates);
+		    var dates = [];
+		    campaign.selectedDates.forEach(function(date,index) {
+			    dates[index] = { Date: date };
+		    });
+		    var removeManualPlan = {
+			    CampaignId: campaign.Id,
+			    Dates: dates
+			    
+	    };
+		    outboundChartService.removeManualPlan(removeManualPlan, function (data, manualPlan) {
+		    	outboundService.getCampaignSummary(campaign.Id, function (_campaign) {
+		    		angular.extend(campaign, _campaign);
+		    		campaign.graphData = data;
+		    		campaign.rawManualPlan = manualPlan;
+		    	});
+		    });
 		}
 
     	$scope.addManualPlan = function (campaign) {

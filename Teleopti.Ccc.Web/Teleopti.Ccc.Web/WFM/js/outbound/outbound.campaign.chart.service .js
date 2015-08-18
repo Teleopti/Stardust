@@ -7,7 +7,8 @@
     function outboundChartService($filter, $http, tl) {
 
     	var getCampaignVisualizationUrl = '../api/Outbound/Campaign/Visualization/';
-	    var updateCampaignProductionPlanUrl = '../api/Outbound/Campaign/ManualPlan';
+    	var updateCampaignProductionPlanUrl = '../api/Outbound/Campaign/ManualPlan';
+    	var removeCampaignProductionPlanUrl = '../api/Outbound/Campaign/ManualPlan/Remove';
 
         var translationKeys = [
            'Backlog',
@@ -26,6 +27,17 @@
         this.updateManualPlan = updateManualPlan;
 
 
+        this.removeManualPlan = function (manualProductionPlan, successCb, errorCb) {
+	        console.log('from service submit data', manualProductionPlan);
+        	$http.post(removeCampaignProductionPlanUrl, manualProductionPlan).
+                success(function (campaignData) {
+                	console.log('from service returned data', campaignData);
+                	if (successCb != null) successCb(self.buildGraphDataSeqs(campaignData), campaignData.IsManualPlanned);
+                }).
+                error(function (e) {
+                	if (errorCb != null) errorCb(e);
+                });
+        }
 
         this.getCampaignVisualization = tl.applyTranslation(translationKeys, getCampaignVisualization, self);      
         this.buildGraphDataSeqs = buildGraphDataSeqs;
@@ -40,7 +52,7 @@
             }).error(function(e) {
                 if (errorCb != null) errorCb(e);
             });
-        };
+        }
 
         function updateManualPlan(manualProductionPlan, successCb, errorCb) {
         	$http.post(updateCampaignProductionPlanUrl, manualProductionPlan).
@@ -50,7 +62,7 @@
                 error(function (e) {
                 	if (errorCb != null) errorCb(e);
                 });
-        };
+        }
 
         function mapGraphData(data) {            
             var returnData = {

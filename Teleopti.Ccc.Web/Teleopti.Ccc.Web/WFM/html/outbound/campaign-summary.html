@@ -51,8 +51,8 @@
 									<input type="text" placeholder="plan..." ng-model="campaign.manualPlanInput" range-validate range-min="0" />
 									<i class="mdi mdi-information-outline" style="position: absolute; left: 195px; top: 9px; color: #EC38A3;" ng-show="isManualProductionPlanInvalid(campaign)"></i>
 									<button class="wfm-btn btn-sm wfm-btn-invis-primary pink" style="padding: 5px 10px; margin-right: 0;" ng-click="addManualPlan(campaign)" ng-disabled="isManualProductionPlanInvalid(campaign)" ng-class="{'wfm-btn-invis-disabled': isManualProductionPlanInvalid(campaign)}" translate>Save</button>
-									<button class="wfm-btn btn-sm wfm-btn-invis-primary" style="padding: 5px 10px; color: #EC38A3; margin-left: 0; margin-right: 0;" ng-click="clearManualPlan(campaign)" translate>Clear</button>
-									<button class="wfm-btn btn-sm wfm-btn-invis-primary" style="padding: 5px 10px; color: #EC38A3; margin-left: 0;" ng-click="removeManualPlan(campaign)" translate>Remove</button>
+									<button class="wfm-btn btn-sm wfm-btn-invis-primary" style="padding: 5px 10px; color: #EC38A3; margin-left: 0; margin-right: 0;" ng-click="removeManualPlan(campaign)" translate>Remove</button>
+									<button class="wfm-btn btn-sm wfm-btn-invis-primary" style="padding: 5px 10px; color: #EC38A3; margin-left: 0;" ng-click="clearManualPlan(campaign)" translate>Clear</button>
 								</div>
 								<div class="input-container multi-inputfix" ng-show="campaign.backlogSwitch">
 									<input type="text" placeholder="parameter1..." />
