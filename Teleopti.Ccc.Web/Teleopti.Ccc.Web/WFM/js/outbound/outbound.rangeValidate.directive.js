@@ -7,7 +7,8 @@
             require: "ngModel",
             scope: {
                 'rangeMin': '@?',
-                'rangeMax': '@?'
+                'rangeMax': '@?',
+				'integerOnly': '@?'
             },
             link: postLink
         };
@@ -26,8 +27,12 @@
                 return true;
             };
 
-            ngModel.$validators.number = function (modelValue, viewValue) {
-                if (!/^\s*[-+]?[0-9]*\s*$/.test(viewValue)) return false;
+            ngModel.$validators.number = function (modelValue, viewValue) {            
+	            if (angular.isDefined(scope.integerOnly) && scope.integerOnly !== 'true') {		         
+            		if (!/^\s*[-+]?[0-9.]*\s*$/.test(viewValue)) return false;					
+				} else {
+            		if (!/^\s*[-+]?[0-9]*\s*$/.test(viewValue)) return false;
+				}										
                 var parsedvv = parseInt(viewValue);
                 if (isNaN(parsedvv)) return false;
                 return true;
