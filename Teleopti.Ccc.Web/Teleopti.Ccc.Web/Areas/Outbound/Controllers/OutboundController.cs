@@ -110,6 +110,13 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		{
 			_outboundCampaignPersister.PersistManualProductionPlan(manualPlan);
 			return _campaignVisualizationProvider.ProvideVisualization(manualPlan.CampaignId);
+		}		
+		
+		[HttpPost, Route("api/Outbound/Campaign/ManualPlan/Remove"), UnitOfWork]
+		public virtual CampaignVisualizationViewModel RemoveManualPlan([FromBody] RemoveManualPlanForm manualPlan)
+		{
+			_outboundCampaignPersister.RemoveManualProductionPlan(manualPlan);
+			return _campaignVisualizationProvider.ProvideVisualization(manualPlan.CampaignId);
 		}
 
 		[HttpGet, Route("api/Outbound/Campaigns/{Id}"), UnitOfWork]

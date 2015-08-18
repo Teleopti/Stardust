@@ -111,4 +111,10 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 		public Guid CampaignId;
 		public IEnumerable<ManualViewModel> ManualProductionPlan;
 	}
+
+	public class RemoveManualPlanForm
+	{
+		public Guid CampaignId;
+		public IEnumerable<DateOnly> Dates;
+	}
 }

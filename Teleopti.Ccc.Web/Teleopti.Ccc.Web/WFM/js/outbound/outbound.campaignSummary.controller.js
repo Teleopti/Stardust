@@ -25,7 +25,11 @@
     	$scope.clearManualPlan = function (campaign) {
     		campaign.selectedDates = [];
 		    campaign.manualPlanInput = null;
-	    }
+    	}
+
+		$scope.removeManualPlan = function(campaign) {
+			outboundService.removeManualPlan(campaign.Id, campaign.selectedDates);
+		}
 
     	$scope.addManualPlan = function (campaign) {
     		campaign.manualPlan.CampaignId = campaign.Id;

@@ -149,6 +149,17 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			}
 		}
 
+		public void RemoveManualProductionPlan(RemoveManualPlanForm manualPlan)
+		{
+			var campaign = _outboundCampaignRepository.Get(manualPlan.CampaignId);
+			if (campaign == null) return;
+
+			foreach (var date in manualPlan.Dates)
+			{
+				campaign.ClearProductionPlan(date);
+			}
+		}
+
 		private bool isWorkingHoursUpdated(IDictionary<DayOfWeek, TimePeriod> oldWorkingHours, IDictionary<DayOfWeek, TimePeriod> newWorkingHours)
 		{
 			for (var weekDay = DayOfWeek.Sunday; weekDay <= DayOfWeek.Saturday; ++weekDay)
