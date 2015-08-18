@@ -1,7 +1,7 @@
-using System;
 using System.Collections.Generic;
+using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Interfaces.Infrastructure
 {
 	public interface ISeatBookingReportCriteria
 	{

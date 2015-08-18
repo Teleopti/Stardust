@@ -50,8 +50,9 @@ SELECT SeatBooking.StartDateTime as SeatBookingStart
 	  ,team.Name as TeamName
 	  ,sit.Id as SiteId
 	  ,sit.Name as SiteName
+	  ,personSchedule.Model as PersonScheduleModelSerialized
 	  ,personSchedule.Start as PersonScheduleStart
-	  ,[personSchedule].[End] as PersonScheduleEnd
+	  ,[personSchedule].[End] as PersonScheduleEnd 
 	  ,NumberOfRecords = Count(*) OVER()
 	  
 FROM ReadModel.PersonScheduleDay as personSchedule

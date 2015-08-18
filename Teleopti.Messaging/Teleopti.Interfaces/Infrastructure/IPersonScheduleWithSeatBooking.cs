@@ -1,19 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
+using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Interfaces.Infrastructure
 {
-	public interface ISeatBookingReportModel
-	{
-		IEnumerable<IPersonScheduleWithSeatBooking> SeatBookings { get; set; }
-		int RecordCount { get; set; }
-	}
-
 	public interface IPersonScheduleWithSeatBooking
 	{
-
 		DateTime PersonScheduleStart { get; set; }
 		DateTime PersonScheduleEnd { get; set; }
+		string PersonScheduleModelSerialized { get; set; }
 		DateTime? SeatBookingStart { get; set; }
 		DateTime? SeatBookingEnd { get; set; }
 		DateOnly BelongsToDate { get; set; }
@@ -31,9 +25,5 @@ namespace Teleopti.Interfaces.Domain
 		String SiteName { get; set; }
 		bool IsDayOff { get; set; }
 		int NumberOfRecords { get; set; }
-		
-		
 	}
-
-	
 }

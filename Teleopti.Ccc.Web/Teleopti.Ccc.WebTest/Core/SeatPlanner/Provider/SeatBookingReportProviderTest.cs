@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.SeatPlanning;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.SeatManagement;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers;

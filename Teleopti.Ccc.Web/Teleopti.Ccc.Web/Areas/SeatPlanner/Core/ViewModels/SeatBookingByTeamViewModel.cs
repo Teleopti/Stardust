@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 using Teleopti.Analytics.Portal.Reports.Ccc;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels
 {
@@ -31,6 +33,10 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels
 		private SeatBookingViewModel mapSeatBookingReportModelToViewModel(IPersonScheduleWithSeatBooking personScheduleWithSeatBooking)
 		{
 			var location = _locationRepository.Get(personScheduleWithSeatBooking.LocationId);
+			
+			var shiftReadModel = personScheduleWithSeatBooking.PersonScheduleModelSerialized!= null
+				? JsonConvert.DeserializeObject<Model>(personScheduleWithSeatBooking.PersonScheduleModelSerialized)
+				: null;
 
 			return new SeatBookingViewModel()
 			{
@@ -47,7 +53,8 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels
 				SeatName = personScheduleWithSeatBooking.SeatName,
 				SiteId = personScheduleWithSeatBooking.SiteId,
 				SiteName = personScheduleWithSeatBooking.SiteName,
-				IsDayOff = personScheduleWithSeatBooking.IsDayOff
+				IsDayOff = personScheduleWithSeatBooking.IsDayOff,
+				IsFullDayAbsence = shiftReadModel != null && shiftReadModel.Shift.IsFullDayAbsence
 			};
 		}
 	}

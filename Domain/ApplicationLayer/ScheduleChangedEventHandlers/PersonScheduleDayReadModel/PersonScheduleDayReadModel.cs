@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 		public IList<SimpleLayer> Projection { get; set; }
 	}
 
-	public class SimpleLayer
+	public class SimpleLayer 
 	{
 		public string Color { get; set; }
 		public DateTime Start { get; set; }

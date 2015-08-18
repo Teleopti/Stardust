@@ -20,5 +20,6 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels
 		public String SeatName { get; set; }
 		public int SeatPriority { get; set; }
 		public bool IsDayOff { get; set; }
+		public bool IsFullDayAbsence { get; set; }
 	}
 }

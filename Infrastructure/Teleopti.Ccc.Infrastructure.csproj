@@ -335,8 +335,11 @@
     <Compile Include="Repositories\LoaderDeciderResult.cs" />
     <Compile Include="Repositories\OutboundCampaignRepository.cs" />
     <Compile Include="Repositories\PayrollFormatRepository.cs" />
+    <Compile Include="SeatManagement\PersonScheduleWithSeatBooking.cs" />
     <Compile Include="Repositories\PlanningPeriodRepository.cs" />
     <Compile Include="Repositories\PlanningPeriodSuggestions.cs" />
+    <Compile Include="SeatManagement\SeatBookingReportCriteria.cs" />
+    <Compile Include="SeatManagement\SeatBookingReportModel.cs" />
     <Compile Include="Repositories\SeatBookingRepository.cs" />
     <Compile Include="Repositories\SeatPlanRepository.cs" />
     <Compile Include="Rta\CacheInvalidator.cs" />

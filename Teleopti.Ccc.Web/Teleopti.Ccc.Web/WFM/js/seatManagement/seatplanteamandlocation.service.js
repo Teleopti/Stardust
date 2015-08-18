@@ -145,6 +145,7 @@
 		setupTranslatedString("TeamsOrLocationsAreUnselected");
 		setupTranslatedString("SeatPlanSubmittedOK");
 		setupTranslatedString("DayOff");
+		setupTranslatedString("FullDayAbsence");
 
 		return {
 			TranslatedStrings: translatedStrings

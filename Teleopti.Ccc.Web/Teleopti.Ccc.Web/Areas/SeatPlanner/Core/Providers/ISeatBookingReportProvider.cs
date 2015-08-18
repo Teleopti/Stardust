@@ -1,6 +1,7 @@
 ﻿using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.SeatManagement;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
 
 namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers

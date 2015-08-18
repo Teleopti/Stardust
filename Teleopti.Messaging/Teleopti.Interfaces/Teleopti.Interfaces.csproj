@@ -162,8 +162,6 @@
     <Compile Include="Domain\ISchedulePeriodListShiftCategoryBackToLegalStateService.cs" />
     <Compile Include="Domain\ISeat.cs" />
     <Compile Include="Domain\ISeatBooking.cs" />
-    <Compile Include="Domain\ISeatBookingReportCommand.cs" />
-    <Compile Include="Domain\ISeatBookingReportRowModel.cs" />
     <Compile Include="Domain\ISeatMapLocation.cs" />
     <Compile Include="Domain\ISeatPlan.cs" />
     <Compile Include="Domain\ISeatPlanner.cs" />
@@ -723,6 +721,7 @@
     <Compile Include="Infrastructure\IMultiplicatorDefinitionSetRepository.cs" />
     <Compile Include="Infrastructure\IMultiplicatorRepository.cs" />
     <Compile Include="Infrastructure\IPeopleAndSkillLoaderDecider.cs" />
+    <Compile Include="Infrastructure\IPersonScheduleWithSeatBooking.cs" />
     <Compile Include="Infrastructure\IPlanningPeriodRepository.cs" />
     <Compile Include="Infrastructure\IPlanningPeriodSuggestions.cs" />
     <Compile Include="Infrastructure\IQueryFilter.cs" />
@@ -804,6 +803,8 @@
     <Compile Include="Domain\WorkTime.cs" />
     <Compile Include="Domain\WorkTimeDirective.cs" />
     <Compile Include="Infrastructure\IInitiatorIdentifier.cs" />
+    <Compile Include="Infrastructure\ISeatBookingReportCommand.cs" />
+    <Compile Include="Infrastructure\ISeatBookingReportModel.cs" />
     <Compile Include="Infrastructure\ISessionData.cs" />
     <Compile Include="Infrastructure\TransactionIsolationLevel.cs" />
     <Compile Include="Infrastructure\IStatelessUnitOfWork.cs" />

@@ -1,11 +1,11 @@
 using System.Linq;
-using NHibernate.Proxy;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.SeatManagement;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 {
