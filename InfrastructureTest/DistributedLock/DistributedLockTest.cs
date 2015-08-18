@@ -113,9 +113,9 @@ namespace Teleopti.Ccc.InfrastructureTest.DistributedLock
 		}
 
 		[Test]
+		[Setting("DistributedLockTimeout", 100)]
 		public void ShouldNotRunOnTimeout()
 		{
-			ConfigReader.AppSettings_DontUse.Add("DistributedLockTimeout", ((int)TimeSpan.FromMilliseconds(100).TotalMilliseconds).ToString());
 			var isLocking = new ManualResetEvent(false);
 			var ran = false;
 
@@ -140,9 +140,9 @@ namespace Teleopti.Ccc.InfrastructureTest.DistributedLock
 		}
 
 		[Test]
+		[Setting("DistributedLockTimeout", 100)]
 		public void ShouldThrowOnTimeout()
 		{
-			ConfigReader.AppSettings_DontUse.Add("DistributedLockTimeout", ((int)TimeSpan.FromMilliseconds(100).TotalMilliseconds).ToString());
 			var isLocking = new ManualResetEvent(false);
 
 			var locking = onAnotherThread(() =>

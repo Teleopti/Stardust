@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
@@ -8,38 +9,69 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public class FakeConfigReader : IConfigReader
 	{
+		private readonly IDictionary<string, string> _settings = new Dictionary<string, string>();
+		private readonly IDictionary<string, string> _connectionStrings = new Dictionary<string, string>();
+		 
 		public FakeConfigReader(IEnumerable<KeyValuePair<string, string>> config)
 		{
-			AppSettings_DontUse = new NameValueCollection();
-			config.ForEach(x => AppSettings_DontUse[x.Key] = x.Value);
-			ConnectionStrings_DontUse = new ConnectionStringSettingsCollection();
+			config.ForEach(x => _connectionStrings[x.Key] = x.Value);
 		}
 
 		public FakeConfigReader()
 		{
-			AppSettings_DontUse = new NameValueCollection();
-			ConnectionStrings_DontUse = new ConnectionStringSettingsCollection();
 		}
 
 		public FakeConfigReader(string name, string value)
 		{
-			AppSettings_DontUse = new NameValueCollection();
-			AppSettings_DontUse[name] = value;
-			ConnectionStrings_DontUse = new ConnectionStringSettingsCollection();
+			FakeSetting(name, value);
+		}
+
+		public void FakeSetting(string name, string value)
+		{
+			_settings[name] = value;
+		}
+
+		public void FakeConnectionString(string name, string connectionString)
+		{
+			_connectionStrings[name] = connectionString;
 		}
 
 		public string AppConfig(string name)
 		{
-			return AppSettings_DontUse[name];
+			return _settings.ContainsKey(name) ? _settings[name] : null;
 		}
 
 		public string ConnectionString(string name)
 		{
-			return ConnectionStrings_DontUse[name].ConnectionString;
+			return _connectionStrings.ContainsKey(name) ? _connectionStrings[name] : null;
 		}
 
-		public NameValueCollection AppSettings_DontUse { get; set; }
+		public NameValueCollection AppSettings_DontUse
+		{
+			get
+			{
+				var result = new NameValueCollection();
+				_settings.ForEach(x => result.Add(x.Key, x.Value));
+				return result;
+			}
+		}
 
-		public ConnectionStringSettingsCollection ConnectionStrings_DontUse { get; set; }
+		public ConnectionStringSettingsCollection ConnectionStrings_DontUse
+		{
+			get
+			{
+				var result = new ConnectionStringSettingsCollection();
+				_connectionStrings.ForEach(x => result.Add(new ConnectionStringSettings(x.Key, x.Value)));
+				return result;
+			}
+			set
+			{
+				foreach (ConnectionStringSettings connectionString in value)
+				{
+					_connectionStrings[connectionString.Name] = connectionString.ConnectionString;
+				}
+			}
+		}
+
 	}
 }

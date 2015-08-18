@@ -19,5 +19,11 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			Setting = setting;
 			Value = value.ToString();
 		}
+
+		public SettingAttribute(string setting, int value)
+		{
+			Setting = setting;
+			Value = value.ToString();
+		}
 	}
 }

@@ -22,6 +22,14 @@ namespace Teleopti.Ccc.InfrastructureTest
 		private IDisposable _scope;
 		public FakeMessageSender MessageSender;
 
+		protected override FakeConfigReader Config()
+		{
+			var config = base.Config();
+			config.FakeConnectionString("RtaApplication", ConnectionStringHelper.ConnectionStringUsedInTests);
+			config.FakeConnectionString("MessageBroker", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
+			return config;
+		}
+
 		//
 		// Should fake:
 		// Config
@@ -39,14 +47,14 @@ namespace Teleopti.Ccc.InfrastructureTest
 
 			system.UseTestDouble(new FakeDatabaseConnectionStringHandler()).For<IDatabaseConnectionStringHandler>();
 
-			system.UseTestDouble(new FakeConfigReader
-			{
-				ConnectionStrings_DontUse = new ConnectionStringSettingsCollection
-				{
-					new ConnectionStringSettings("RtaApplication", ConnectionStringHelper.ConnectionStringUsedInTests),
-					new ConnectionStringSettings("MessageBroker", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix)
-				}
-			}).For<IConfigReader>();
+			//system.UseTestDouble(new FakeConfigReader
+			//{
+			//	ConnectionStrings_DontUse = new ConnectionStringSettingsCollection
+			//	{
+			//		new ConnectionStringSettings("RtaApplication", ConnectionStringHelper.ConnectionStringUsedInTests),
+			//		new ConnectionStringSettings("MessageBroker", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix)
+			//	}
+			//}).For<IConfigReader>();
 
 			system.UseTestDouble<MutableFakeCurrentHttpContext>().For<ICurrentHttpContext>();
 

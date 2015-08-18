@@ -83,6 +83,21 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			worker2.Exception.Should().Be.Null();
 		}
 
+		[Test]
+		public void ShouldAcceptTypeNameWithoutVersionCultureAndPublicKeyToken()
+		{
+			var handlerType = typeof(AHandler).FullName + ", " + typeof(AHandler).Assembly.GetName().Name;
+			var eventType = typeof(AnEvent).FullName + ", " + typeof(AnEvent).Assembly.GetName().Name;
+			// I know... testing the test...
+			handlerType.Should().Not.Contain("Version");
+			handlerType.Should().Not.Contain("Culture");
+			handlerType.Should().Not.Contain("PublicKeyToken");
+
+			Target.Process(null, eventType, "{}", handlerType);
+
+			Handler.HandledEvents.Single().Should().Be.OfType<AnEvent>();
+		}
+		
 		public class AnEvent : Event
 		{
 			public string Data { get; set; }

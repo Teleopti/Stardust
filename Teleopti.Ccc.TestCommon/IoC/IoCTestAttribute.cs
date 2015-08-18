@@ -51,16 +51,21 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			return toggles;
 		}
 
-		protected IConfigReader Config()
+		protected virtual FakeConfigReader Config()
 		{
+			var config = new FakeConfigReader();
+
 			var settingsFixture = _fixtureType.GetCustomAttributes(typeof(SettingAttribute), false).Cast<SettingAttribute>();
 			var settingsTest = _method.GetCustomAttributes(typeof(SettingAttribute), false).Cast<SettingAttribute>();
-			var settings = settingsFixture.Union(settingsTest).ToArray();
+			var settingsAttribute = this.GetType().GetCustomAttributes(typeof(SettingAttribute), false).Cast<SettingAttribute>();
+			var settings = settingsFixture
+				.Union(settingsTest)
+				.Union(settingsAttribute)
+				.ToArray();
 
-			if (settings.IsEmpty())
-				return new ConfigReader();
+			settings.ForEach(x => config.FakeSetting(x.Setting, x.Value));
 
-			return new ConfigOverrider(new ConfigReader(), settings.ToDictionary(x => x.Setting, x => x.Value));
+			return config;
 		}
 
 		protected virtual void Setup(ISystem system, IIocConfiguration configuration)
@@ -115,7 +120,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			builder.RegisterInstance(new MutableNow("2014-12-18 13:31")).As<INow>().AsSelf();
 			builder.RegisterInstance(new FakeUserTimeZone(TimeZoneInfo.Utc)).As<IUserTimeZone>().AsSelf().SingleInstance();
 			builder.RegisterInstance(new FakeUserCulture(CultureInfoFactory.CreateSwedishCulture())).As<IUserCulture>().AsSelf().SingleInstance();
-			builder.RegisterInstance(configReader).As<IConfigReader>();
+			builder.RegisterInstance(configReader).AsSelf().As<IConfigReader>();
 			builder.RegisterInstance(this).As<IIoCTestContext>();
 			var system = new ContainerBuilderWrapper(builder);
 			Setup(system, configuration);

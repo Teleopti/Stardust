@@ -1,3 +1,4 @@
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -51,14 +52,15 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		}
 
 		[Test]
-		public void ShouldPassEventType()
+		public void ShouldPassEventTypeShortName()
 		{
 			Target.Publish(new HangfireTestEvent());
 
-			JobClient.EventType.Should().Be.EqualTo(typeof(HangfireTestEvent).AssemblyQualifiedName);
+			JobClient.EventType.Should().Be.EqualTo(typeof(HangfireTestEvent).FullName + ", " + typeof(HangfireTestEvent).Assembly.GetName().Name);
 		}
 
 		[Test]
+		[Setting("HangfireDashboardDisplayNames", true)]
 		public void ShouldPassEventTypeInDisplayName()
 		{
 			Target.Publish(new HangfireTestEvent());
@@ -67,6 +69,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		}
 
 		[Test]
+		[Setting("HangfireDashboardDisplayNames", true)]
 		public void ShouldPassHandlerTypeInDisplayName()
 		{
 			Target.Publish(new HangfireTestEvent());
@@ -75,11 +78,19 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		}
 
 		[Test]
-		public void ShouldPassHandlerType()
+		public void ShouldNotPassDisplayNameByDefault()
 		{
 			Target.Publish(new HangfireTestEvent());
 
-			JobClient.HandlerType.Should().Be(typeof(TestHandler).AssemblyQualifiedName);
+			JobClient.DisplayName.Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldPassHandlerTypeShortName()
+		{
+			Target.Publish(new HangfireTestEvent());
+
+			JobClient.HandlerType.Should().Be(typeof(TestHandler).FullName + ", " + typeof(TestHandler).Assembly.GetName().Name);
 		}
 
 		[Test]
@@ -87,7 +98,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		{
 			Target.Publish(new AspectedHandlerTestEvent());
 
-			JobClient.HandlerType.Should().Be(typeof(TestAspectedHandler).AssemblyQualifiedName);
+			JobClient.HandlerType.Should().Be(typeof(TestAspectedHandler).FullName + ", " + typeof(TestAspectedHandler).Assembly.GetName().Name);
 		}
 
 		[Test]
@@ -103,8 +114,8 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		{
 			Target.Publish(new BothTestEvent());
 
-			JobClient.HandlerTypes.Should()
-				.Have.SameValuesAs(new[] { typeof(TestBothHangfireHandler).AssemblyQualifiedName });
+			JobClient.HandlerTypes.Should().Have.Count.EqualTo(1);
+			JobClient.HandlerTypes.ElementAt(0).Should().Contain(typeof(TestBothHangfireHandler).FullName);
 		}
 
 		[Test]
@@ -112,8 +123,9 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		{
 			Target.Publish(new MultiHandlerTestEvent());
 
-			JobClient.HandlerTypes.Should()
-				.Have.SameValuesAs(new[] { typeof(TestMultiHandler1).AssemblyQualifiedName, typeof(TestMultiHandler2).AssemblyQualifiedName });
+			JobClient.HandlerTypes.Should().Have.Count.EqualTo(2);
+			JobClient.HandlerTypes.ElementAt(0).Should().Contain(typeof (TestMultiHandler2).FullName);
+			JobClient.HandlerTypes.ElementAt(1).Should().Contain(typeof (TestMultiHandler1).FullName);
 		}
 
 		public class UnknownTestEvent : IEvent
