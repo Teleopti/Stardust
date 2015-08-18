@@ -1,4 +1,5 @@
-﻿using System.Xml.XPath;
+﻿using System.Xml;
+using System.Xml.XPath;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
 
@@ -6,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Payroll
 {
     public class XmlResult : AggregateEntity, IXmlResult
     {
-        private IXPathNavigable _xPathNavigable;
+        private string _xPathNavigable;
 
         protected XmlResult()
         {
@@ -20,12 +21,17 @@ namespace Teleopti.Ccc.Domain.Payroll
 
         public virtual IXPathNavigable XPathNavigable
         {
-            get { return _xPathNavigable; }
+	        get
+	        {
+		        var doc = new XmlDocument();
+				doc.LoadXml(_xPathNavigable);
+		        return doc;
+	        }
         }
 
         public virtual void AddResult(IXPathNavigable xmlResult)
         {
-            _xPathNavigable = xmlResult;
+            _xPathNavigable = xmlResult.CreateNavigator().OuterXml;
             ((IPayrollResult) Parent).FinishedOk = true;
         }
     }

@@ -373,7 +373,6 @@
     <Compile Include="NHibernateConfiguration\TeleoptiDriverConnectionProviderTest.cs" />
     <Compile Include="NHibernateConfiguration\TrackerByteTest.cs" />
     <Compile Include="Foundation\WriteStringToFileTest.cs" />
-    <Compile Include="NHibernateConfiguration\XmlTypeTest.cs" />
     <Compile Include="Helper\DatabaseTest.cs" />
     <Compile Include="Licensing\TooManyActiveAgentsExceptionTest.cs" />
     <Compile Include="Licensing\LicenseExpiredExceptionTest.cs" />

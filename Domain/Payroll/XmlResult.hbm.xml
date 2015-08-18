@@ -16,8 +16,7 @@
 
     <property name="XPathNavigable"
           not-null="false"
-           type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.XmlType, Teleopti.Ccc.Infrastructure"/>
-
+               type="string" length="1000000" />
 
     <one-to-one name ="Parent"
             class="PayrollResult"
