@@ -1,9 +1,9 @@
 ﻿(function () {
 
 	angular.module('wfm.seatPlan').controller('SeatPlanInitCtrl', seatPlanInitDirectiveController);
-	seatPlanInitDirectiveController.$inject = ['seatPlanService', 'growl', '$translate'];
+	seatPlanInitDirectiveController.$inject = ['seatPlanService', 'growl', 'seatPlanTranslatorFactory'];
 
-	function seatPlanInitDirectiveController(seatPlanService, growl, translate) {
+	function seatPlanInitDirectiveController(seatPlanService, growl, seatPlanTranslatorFactory) {
 
 		var vm = this;
 
@@ -36,32 +36,12 @@
 			}
 		};
 
-		vm.setupTranslatedStrings = function() {
-			
-			vm.translatedStrings = {};
-
-			vm.setupTranslatedString("NoLocationsAvailable");
-			vm.setupTranslatedString("SeatCountTitle");
-			vm.setupTranslatedString("AgentCountTitle");
-			vm.setupTranslatedString("TeamsOrLocationsAreUnselected");
-			vm.setupTranslatedString("SeatPlanSubmittedOK");
-		}
-
-		vm.setupTranslatedString = function(key) {
-			translate(key).then(function (result) {
-				vm.translatedStrings[key] = result;
-			});
-		};
-
-
-		vm.setupTranslatedStrings();
 		vm.loadDefaultDates();
-
 		vm.getLocationDisplayText = function (location) {
 			if (location.Name == undefined) {
-				return vm.translatedStrings["NoLocationsAvailable"];
+				return seatPlanTranslatorFactory.TranslatedStrings["NoLocationsAvailable"];
 			}
-			return location.Name + " ("+ vm.translatedStrings["SeatCountTitle"]+": {0})".replace("{0}", location.Seats.length);
+			return location.Name + " (" + seatPlanTranslatorFactory.TranslatedStrings["SeatCountTitle"] + ": {0})".replace("{0}", location.Seats.length);
 		};
 
 		vm.getTeamDisplayText = function (teamHierarchyNode) {
@@ -90,16 +70,15 @@
 			};
 
 			if (selectedTeams.length == 0 || selectedLocations.length == 0) {
-				onSelectedTeamsLocationsEmpty(vm.translatedStrings["TeamsOrLocationsAreUnselected"]);
+				onSelectedTeamsLocationsEmpty(seatPlanTranslatorFactory.TranslatedStrings["TeamsOrLocationsAreUnselected"]);
 				vm.processingSeatPlan = false;
 			}
 			else {
 				seatPlanService.addSeatPlan(addSeatPlanCommand).$promise.then(function (result) {
-					onSuccessAddSeatPlan(vm.translatedStrings["SeatPlanSubmittedOK"]);
+					onSuccessAddSeatPlan(seatPlanTranslatorFactory.TranslatedStrings["SeatPlanSubmittedOK"]);
 					vm.processingSeatPlan = false;
 					vm.onSeatPlanComplete();
 				});
-
 			}
 		};
 

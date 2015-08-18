@@ -4,9 +4,9 @@
 
 	angular.module('wfm.seatPlan').service('seatplanTeamAndLocationService', seatplanTeamAndLocationService);
 
-	seatplanTeamAndLocationService.$inject = ['seatPlanTranslateFactory'];
+	seatplanTeamAndLocationService.$inject = ['seatPlanTranslatorFactory'];
 
-	function seatplanTeamAndLocationService(seatPlanTranslateFactory) {
+	function seatplanTeamAndLocationService(seatPlanTranslatorFactory) {
 
 		var service = {
 			SelectTeam: selectTeam,
@@ -19,14 +19,14 @@
 
 		function getLocationDisplayText(location) {
 			if (location.Name == undefined) {
-				return seatPlanTranslateFactory.TranslatedStrings["NoLocationsAvailable"];
+				return seatPlanTranslatorFactory.TranslatedStrings["NoLocationsAvailable"];
 			}
-			return location.Name + " (" + seatPlanTranslateFactory.TranslatedStrings["SeatCountTitle"] + ": {0})".replace("{0}", location.Seats.length);
+			return location.Name + " (" + seatPlanTranslatorFactory.TranslatedStrings["SeatCountTitle"] + ": {0})".replace("{0}", location.Seats.length);
 		};
 
 		function getTeamDisplayText(teamHierarchyNode) {
 			if (teamHierarchyNode.NumberOfAgents) {
-				return teamHierarchyNode.Name + " (" + seatPlanTranslateFactory.TranslatedStrings["AgentCountTitle"] +
+				return teamHierarchyNode.Name + " (" + seatPlanTranslatorFactory.TranslatedStrings["AgentCountTitle"] +
 					": {0})".replace("{0}", teamHierarchyNode.NumberOfAgents);
 			} else {
 				return teamHierarchyNode.Name;
@@ -118,38 +118,6 @@
 		};
 
 		return service;
-
 	};
-}());
-
-
-(function () {
-
-	angular.module('wfm.seatPlan').factory('seatPlanTranslateFactory', seatPlanTranslateFactory);
-
-	seatPlanTranslateFactory.$inject = ['$translate'];
-
-	function seatPlanTranslateFactory(translate) {
-
-		var translatedStrings = {};
-
-		var setupTranslatedString = function (key) {
-			translate(key).then(function (result) {
-				translatedStrings[key] = result;
-			});
-		};
-
-		setupTranslatedString("NoLocationsAvailable");
-		setupTranslatedString("SeatCountTitle");
-		setupTranslatedString("AgentCountTitle");
-		setupTranslatedString("TeamsOrLocationsAreUnselected");
-		setupTranslatedString("SeatPlanSubmittedOK");
-		setupTranslatedString("DayOff");
 		setupTranslatedString("FullDayAbsence");
-
-		return {
-			TranslatedStrings: translatedStrings
-		}
-	};
-
 }());
