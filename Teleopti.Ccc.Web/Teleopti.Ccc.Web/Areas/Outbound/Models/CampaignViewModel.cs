@@ -98,6 +98,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 		public IList<double> BacklogPersonHours;
 		public IList<double> ScheduledPersonHours;
 		public IList<bool> IsManualPlanned;
+		public IList<bool> IsCloseDays;
 	}
 
 	public class ManualViewModel

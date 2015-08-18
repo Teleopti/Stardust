@@ -25,7 +25,8 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 				PlannedPersonHours = new List<double>(),
 				BacklogPersonHours = new List<double>(),
 				ScheduledPersonHours = new List<double>(),
-				IsManualPlanned = new List<bool>()
+				IsManualPlanned = new List<bool>(),
+				IsCloseDays = new List<bool>()
 			};
 
 			IOutboundCampaign campaign = _campaignRepository.Get(id);
@@ -43,6 +44,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 				visualizationVM.BacklogPersonHours.Add(backlogHours.Days*24 + backlogHours.Hours + (double)backlogHours.Minutes/60);
 				visualizationVM.ScheduledPersonHours.Add(scheduledHours.Days*24 + scheduledHours.Hours + (double)scheduledHours.Minutes / 60);
 				visualizationVM.IsManualPlanned.Add(incomingTask.GetManualPlannedInfoOnDate(date));
+				visualizationVM.IsCloseDays.Add(incomingTask.PlannedTimeTypeOnDate(date) == PlannedTimeTypeEnum.Closed);
 			}
 			
 			return visualizationVM;

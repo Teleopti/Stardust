@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			result.BacklogPersonHours.Count.Should().Be.EqualTo(0);
 			result.ScheduledPersonHours.Count.Should().Be.EqualTo(0);
 			result.IsManualPlanned.Count.Should().Be.EqualTo(0);
+			result.IsCloseDays.Count.Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -49,7 +50,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			incomingTask.Stub(x => x.GetRealPlannedTimeOnDate(date)).Return(TimeSpan.FromHours(1));
 			incomingTask.Stub(x => x.GetRealScheduledTimeOnDate(date)).Return(TimeSpan.FromHours(1));
 			incomingTask.Stub(x => x.GetBacklogOnDate(date)).Return(TimeSpan.FromHours(1));
-			incomingTask.Stub(x => x.GetManualPlannedInfoOnDate(date)).Return(false);
 			_taskManager.Stub(x => x.GetIncomingTaskFromCampaign(campaign)).Return(incomingTask);
 
 			var target = new CampaignVisualizationProvider(_campaignRepository, _taskManager);
@@ -72,7 +72,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			incomingTask.Stub(x => x.GetRealPlannedTimeOnDate(date)).Return(hour);
 			incomingTask.Stub(x => x.GetRealScheduledTimeOnDate(date)).Return(TimeSpan.FromHours(1));
 			incomingTask.Stub(x => x.GetBacklogOnDate(date)).Return(TimeSpan.FromHours(1));
-			incomingTask.Stub(x => x.GetManualPlannedInfoOnDate(date)).Return(false);
 			_taskManager.Stub(x => x.GetIncomingTaskFromCampaign(campaign)).Return(incomingTask);
 
 			var target = new CampaignVisualizationProvider(_campaignRepository, _taskManager);
@@ -95,7 +94,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			incomingTask.Stub(x => x.GetRealPlannedTimeOnDate(date)).Return(hour);
 			incomingTask.Stub(x => x.GetRealScheduledTimeOnDate(date)).Return(TimeSpan.FromHours(1));
 			incomingTask.Stub(x => x.GetBacklogOnDate(date)).Return(hour);
-			incomingTask.Stub(x => x.GetManualPlannedInfoOnDate(date)).Return(false);
 			_taskManager.Stub(x => x.GetIncomingTaskFromCampaign(campaign)).Return(incomingTask);
 
 			var target = new CampaignVisualizationProvider(_campaignRepository, _taskManager);
@@ -118,7 +116,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			incomingTask.Stub(x => x.GetRealPlannedTimeOnDate(date)).Return(hour);
 			incomingTask.Stub(x => x.GetRealScheduledTimeOnDate(date)).Return(hour);
 			incomingTask.Stub(x => x.GetBacklogOnDate(date)).Return(hour);
-			incomingTask.Stub(x => x.GetManualPlannedInfoOnDate(date)).Return(false);
 			_taskManager.Stub(x => x.GetIncomingTaskFromCampaign(campaign)).Return(incomingTask);
 
 			var target = new CampaignVisualizationProvider(_campaignRepository, _taskManager);
@@ -149,6 +146,52 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 
 			result.IsManualPlanned.Count.Should().Be.EqualTo(1);
 			result.IsManualPlanned[0].Should().Be.True();
+		}			
+		
+		[Test]
+		public void ShouldGetTrueWhenCloseDay()
+		{
+			var id = new Guid();
+			var campaign = new Domain.Outbound.Campaign();
+			var date = new DateOnly(2015, 7, 24);
+			var hour = TimeSpan.FromHours(1);
+			campaign.SpanningPeriod = new DateOnlyPeriod(date, date);
+			_campaignRepository.Stub(x => x.Get(id)).Return(campaign);
+			var incomingTask = MockRepository.GenerateMock<IBacklogTask>();
+			incomingTask.Stub(x => x.GetRealPlannedTimeOnDate(date)).Return(hour);
+			incomingTask.Stub(x => x.GetRealScheduledTimeOnDate(date)).Return(hour);
+			incomingTask.Stub(x => x.GetBacklogOnDate(date)).Return(hour);
+			incomingTask.Stub(x => x.PlannedTimeTypeOnDate(date)).Return(PlannedTimeTypeEnum.Closed);
+			_taskManager.Stub(x => x.GetIncomingTaskFromCampaign(campaign)).Return(incomingTask);
+
+			var target = new CampaignVisualizationProvider(_campaignRepository, _taskManager);
+			var result = target.ProvideVisualization(id);
+
+			result.IsCloseDays.Count.Should().Be.EqualTo(1);
+			result.IsCloseDays[0].Should().Be.True();
+		}		
+		
+		[Test]
+		public void ShouldGetFalseWhenNotCloseDay()
+		{
+			var id = new Guid();
+			var campaign = new Domain.Outbound.Campaign();
+			var date = new DateOnly(2015, 7, 24);
+			var hour = TimeSpan.FromHours(1);
+			campaign.SpanningPeriod = new DateOnlyPeriod(date, date);
+			_campaignRepository.Stub(x => x.Get(id)).Return(campaign);
+			var incomingTask = MockRepository.GenerateMock<IBacklogTask>();
+			incomingTask.Stub(x => x.GetRealPlannedTimeOnDate(date)).Return(hour);
+			incomingTask.Stub(x => x.GetRealScheduledTimeOnDate(date)).Return(hour);
+			incomingTask.Stub(x => x.GetBacklogOnDate(date)).Return(hour);
+			incomingTask.Stub(x => x.PlannedTimeTypeOnDate(date)).Return(PlannedTimeTypeEnum.Scheduled);
+			_taskManager.Stub(x => x.GetIncomingTaskFromCampaign(campaign)).Return(incomingTask);
+
+			var target = new CampaignVisualizationProvider(_campaignRepository, _taskManager);
+			var result = target.ProvideVisualization(id);
+
+			result.IsCloseDays.Count.Should().Be.EqualTo(1);
+			result.IsCloseDays[0].Should().Be.False();
 		}		
 		
 		[Test]
@@ -174,6 +217,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			result.PlannedPersonHours.Count.Should().Be.EqualTo(result.BacklogPersonHours.Count);
 			result.BacklogPersonHours.Count.Should().Be.EqualTo(result.ScheduledPersonHours.Count);
 			result.ScheduledPersonHours.Count.Should().Be.EqualTo(result.IsManualPlanned.Count);
+			result.IsManualPlanned.Count.Should().Be.EqualTo(result.IsCloseDays.Count);
 		}
 	}
 }
