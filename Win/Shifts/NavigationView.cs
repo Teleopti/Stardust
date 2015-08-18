@@ -450,47 +450,45 @@ namespace Teleopti.Ccc.Win.Shifts
 		{
 			if (ExplorerView.AskForDelete())
 			{
-				deleteSelected();
+				deleteSelectedWorkShiftsAndBags();
 				RefreshView();
 			}
 		}
 
-		private void deleteSelected()
+		private void deleteSelectedWorkShiftsAndBags()
 		{
-			int selectedNodeCount = (_defaultTreeView.SelectedNodes.Count - 1);
-			for (int i = selectedNodeCount; i >= 0; i--)
+			int selectedNodeIndex = (_defaultTreeView.SelectedNodes.Count - 1);
+			for (int i = selectedNodeIndex; i >= 0; i--)
 			{
 				TreeNodeAdv selectedNode = _defaultTreeView.SelectedNodes[i];
-				var workShiftRuleSetToDelete = selectedNode.TagObject as IWorkShiftRuleSet;
-				var ruleSetBagToDelete = selectedNode.TagObject as IRuleSetBag;
-				bool designatedView = (_currentView == ShiftCreatorViewType.RuleSet && workShiftRuleSetToDelete != null) ||
-									  (_currentView == ShiftCreatorViewType.RuleSetBag && ruleSetBagToDelete != null);
+				var ruleSetToDelete = selectedNode.TagObject as IWorkShiftRuleSet;
 
-				IWorkShiftRuleSet workShiftRuleSetToDeleteParent = null;
-				IRuleSetBag ruleSetBagToDeleteParent= null;
-				if (!designatedView &&
-					selectedNode.Parent!=null)
+				if (ruleSetToDelete != null)
 				{
-					workShiftRuleSetToDeleteParent = selectedNode.Parent.TagObject as IWorkShiftRuleSet;
-					ruleSetBagToDeleteParent = selectedNode.Parent.TagObject as IRuleSetBag;
+					var parentBag = selectedNode.Parent.TagObject as IRuleSetBag;
+					ExplorerPresenter.NavigationPresenter.RemoveRuleSet(ruleSetToDelete, parentBag);
+					if (parentBag != null)
+						_eventAggregator.GetEvent<RuleSetBagChanged>().Publish(parentBag);
 				}
-
-				if (workShiftRuleSetToDelete != null)
+			}
+			for (int i = selectedNodeIndex; i >= 0; i--)
+			{
+				TreeNodeAdv selectedNode = _defaultTreeView.SelectedNodes[i];
+				var bagToDelete = selectedNode.TagObject as IRuleSetBag;
+				if (bagToDelete != null)
 				{
-					ExplorerPresenter.NavigationPresenter.RemoveRuleSet(workShiftRuleSetToDelete, ruleSetBagToDeleteParent);
-					if(ruleSetBagToDeleteParent != null)
-						_eventAggregator.GetEvent<RuleSetBagChanged>().Publish(ruleSetBagToDeleteParent);
+					ExplorerPresenter.NavigationPresenter.RemoveRuleSetBag(bagToDelete);
+					_eventAggregator.GetEvent<RuleSetBagChanged>().Publish(bagToDelete);
 				}
-
-				if (ruleSetBagToDelete != null)
-				{
-					ExplorerPresenter.NavigationPresenter.RemoveRuleSetBag(ruleSetBagToDelete,workShiftRuleSetToDeleteParent );
-				}
-
+			}
+			for (int i = selectedNodeIndex; i >= 0; i--)
+			{
+				TreeNodeAdv selectedNode = _defaultTreeView.SelectedNodes[i];
 				_defaultTreeView.SelectedNodes.Remove(selectedNode);
 			}
 		}
 
+		
 		/// <summary>
 		/// Refreshes the view.
 		/// </summary>
@@ -516,7 +514,7 @@ namespace Teleopti.Ccc.Win.Shifts
 		public override void Cut()
 		{
 			Copy();
-			deleteSelected();
+			deleteSelectedWorkShiftsAndBags();
 		}
 
 		public override void Copy()

@@ -36,13 +36,8 @@ namespace Teleopti.Ccc.WinCode.Shifts.Presenters
             DataWorkHelper.Delete(ruleSet);
         }
 
-        public void RemoveRuleSetBag(IRuleSetBag ruleSetBag, IWorkShiftRuleSet parentWorkShiftRuleSet)
+        public void RemoveRuleSetBag(IRuleSetBag ruleSetBag)
         {
-            if (parentWorkShiftRuleSet!=null)
-            {
-                parentWorkShiftRuleSet.RemoveRuleSetBag(ruleSetBag);
-                return;
-            }
             for (int index = ruleSetBag.RuleSetCollection.Count - 1; index >= 0; index--)
             {
                 IWorkShiftRuleSet current = ruleSetBag.RuleSetCollection[index];

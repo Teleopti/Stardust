@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.WinCode.Shifts.Interfaces
         void RemoveRuleSet(IWorkShiftRuleSet ruleSet, IRuleSetBag parentRuleSetBag);
 
 
-        void RemoveRuleSetBag(IRuleSetBag ruleSetBag, IWorkShiftRuleSet parentWorkShiftRuleSet);
+        void RemoveRuleSetBag(IRuleSetBag ruleSetBag);
 
 
     }

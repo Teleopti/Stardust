@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.WinCodeTest.Shifts
             {
                 _ruleSetBagCollection[0].AddRuleSet(_newRuleSet);
                 Assert.AreEqual(1, _ruleSetBagCollection[0].RuleSetCollection.Count);
-                _target.RemoveRuleSetBag(_ruleSetBagCollection[0], null);
+                _target.RemoveRuleSetBag(_ruleSetBagCollection[0]);
                 Assert.AreEqual(0, _ruleSetBagCollection[0].RuleSetCollection.Count);
                 Assert.AreEqual(0, _model.RuleSetBagCollection.Count);
             }
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.WinCodeTest.Shifts
         {
             _newRuleSetBag.AddRuleSet(_newRuleSet);
             Assert.IsTrue(_newRuleSetBag.RuleSetCollection.Contains(_newRuleSet));
-            _target.RemoveRuleSetBag(_newRuleSetBag, _newRuleSet);
+            _target.RemoveRuleSetBag(_newRuleSetBag);
             Assert.IsFalse(_newRuleSetBag.RuleSetCollection.Contains(_newRuleSet));
         }
     }
