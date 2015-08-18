@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -29,6 +30,11 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <value>The restriction date.</value>
         DateOnly RestrictionDate { get; }
+
+		/// <summary>
+		/// Change the availability to this new time range
+		/// </summary>
+	    void Change(TimePeriod range);
     }
     
 }

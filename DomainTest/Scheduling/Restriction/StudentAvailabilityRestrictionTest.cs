@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Interfaces.Domain;
@@ -65,5 +67,28 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restriction
             Assert.AreEqual(_studentRestriction.Id, clone.Id);
         }
 
+	    [Test]
+	    public void ShouldChangeRestrictionDetails()
+	    {
+		    _target.Change(new TimePeriod(8,0,13,0));
+
+		    _target.RestrictionCollection[0].StartTimeLimitation.StartTime.GetValueOrDefault()
+			    .Should()
+			    .Be.EqualTo(TimeSpan.FromHours(8));
+
+			_target.RestrictionCollection[0].EndTimeLimitation.EndTime.GetValueOrDefault()
+				.Should()
+				.Be.EqualTo(TimeSpan.FromHours(13));
+	    }
+
+		[Test]
+		public void ShouldClearPreviousRestrictionDetail()
+		{
+			var before = _target.RestrictionCollection[0];
+
+			_target.Change(new TimePeriod(8, 0, 13, 0));
+
+			_target.RestrictionCollection[0].Should().Not.Be.SameInstanceAs(before);
+		}
     }
 }

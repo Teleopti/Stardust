@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
@@ -27,30 +28,26 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		{
 			if (CanExecute())
 			{
-				_scheduleDay.DeleteStudentAvailabilityRestriction();
-				var studentAvailabilityDay = _studentAvailabilityDayCreator.Create(_scheduleDay, _startTime, _endTime);
-				if (studentAvailabilityDay != null)
-				{
-				    _scheduleDay.Add(studentAvailabilityDay);
+				var studentAvailabilityDay = _scheduleDay.PersistableScheduleDataCollection().OfType<IStudentAvailabilityDay>().First();
 
-                    _scheduleDictionary.Modify(ScheduleModifier.Scheduler, _scheduleDay, NewBusinessRuleCollection.Minimum(), new ResourceCalculationOnlyScheduleDayChangeCallback(),
-                                                  new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
-				}
-			}		
+				studentAvailabilityDay.Change(new TimePeriod(_startTime.GetValueOrDefault(),_endTime.GetValueOrDefault()));
+
+				_scheduleDictionary.Modify(ScheduleModifier.Scheduler, _scheduleDay, NewBusinessRuleCollection.Minimum(),
+					new ResourceCalculationOnlyScheduleDayChangeCallback(),
+					new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
+			}
 		}
 
 		public bool CanExecute()
 		{
-			foreach (var persistableScheduleData in _scheduleDay.PersistableScheduleDataCollection())
+			if (_scheduleDay.PersistableScheduleDataCollection().OfType<IStudentAvailabilityDay>().Any())
 			{
-				if (persistableScheduleData is IStudentAvailabilityDay)
-				{
-					bool startTimeError;
-					bool endTimeError;
-					if (!_studentAvailabilityDayCreator.CanCreate(_startTime, _endTime, out startTimeError, out endTimeError)) return false;
+				bool startTimeError;
+				bool endTimeError;
+				if (!_studentAvailabilityDayCreator.CanCreate(_startTime, _endTime, out startTimeError, out endTimeError))
+					return false;
 
-					return true;
-				}
+				return true;
 			}
 
 			return false;

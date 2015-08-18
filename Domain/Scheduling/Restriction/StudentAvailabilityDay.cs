@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Teleopti.Ccc.Domain.Collection;
@@ -73,6 +72,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restriction
 			get { return _restrictionDate; }
 		}
 
+		public virtual void Change(TimePeriod range)
+		{
+			_restrictionCollection.Clear();
+			var restriction = new StudentAvailabilityRestriction
+			{
+				StartTimeLimitation = new StartTimeLimitation(range.StartTime, null),
+				EndTimeLimitation = new EndTimeLimitation(null, range.EndTime)
+			};
+			restriction.SetParent(this);
+			_restrictionCollection.Add(restriction);
+		}
+
 		public virtual DateTimePeriod Period
 		{
 			get { return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_restrictionDate.Date, _restrictionDate.Date.AddDays(1), _person.PermissionInformation.DefaultTimeZone()); }
@@ -80,12 +91,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restriction
 
 		public virtual object Clone()
 		{
-			StudentAvailabilityDay clone = (StudentAvailabilityDay)MemberwiseClone();
+			var clone = (StudentAvailabilityDay)MemberwiseClone();
 
 			clone._restrictionCollection = new List<IStudentAvailabilityRestriction>();
-			foreach (StudentAvailabilityRestriction studentAvailabilityRestriction in _restrictionCollection)
+			foreach (var studentAvailabilityRestriction in _restrictionCollection)
 			{
-				IStudentAvailabilityRestriction cloneRestriction = (IStudentAvailabilityRestriction)studentAvailabilityRestriction.Clone();
+				var cloneRestriction = (IStudentAvailabilityRestriction)studentAvailabilityRestriction.Clone();
 				cloneRestriction.SetParent(clone);
 				clone._restrictionCollection.Add(cloneRestriction);
 			}
