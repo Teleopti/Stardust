@@ -257,8 +257,8 @@
 				}), true);
 			}, true);
 
-			$scope.$watch(function () {
-				return $scope.graphData;
+			scope.$watch(function () {
+				return scope.graphData;
 			}, function (newVal, oldVal) {
 				if (newVal != oldVal) {
 					toggleViewScheduleDiff();
@@ -267,9 +267,5 @@
 		}
 
 	};
-
-
-
-
 
 })();
