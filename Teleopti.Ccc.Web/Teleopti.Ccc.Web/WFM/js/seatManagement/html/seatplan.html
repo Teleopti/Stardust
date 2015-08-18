@@ -18,7 +18,7 @@
 			</datepicker>
 		</div>
 
-		<div class="planningDayDetail col-sm-12 col-md-6" ng-if="seatplan.selectedDate!=null">
+		<div class="planningDayDetail" ng-if="seatplan.selectedDate!=null">
 			<button class="wfm-fab info pull-right" ng-click="seatplan.isReportOpened = !seatplan.isReportOpened; seatplan.reportPeriod = {StartDate:seatplan.selectedDate,EndDate:seatplan.selectedDate}">
 				<i class="mdi mdi-file-document"></i>
 				<md-tooltip>{{'GenerateReport' | translate}}</md-tooltip>

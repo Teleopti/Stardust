@@ -3,10 +3,18 @@
 }
 
 .seat-plan-calendar{
-	width: 350px;
-	height:240px; 
-	padding-bottom: 10px;
+	width: 320px;
+	padding-bottom: 15px;
 	clear:both;
+}
+
+.seat-plan-calendar table{
+	border-collapse:separate;
+	border-spacing:2px;
+}
+
+.seat-plan-calendar table button{
+	padding:5px 8px;	
 }
 
 .planningPeriodProgressBar {
@@ -36,6 +44,21 @@
 .seatplan-status-error button{
 	background-color: lightcoral !important;
 }
+
+.planningDayDetail{
+	margin-left:320px;
+	padding-left:15px;
+	padding-right:15px;
+}
+
+@media(max-width:1000px){
+	.planningDayDetail{
+		margin:0px;
+		width:100%;
+		clear:left;
+	}
+}
+
 
 .teleopti-card-selected{
 	position:relative;
