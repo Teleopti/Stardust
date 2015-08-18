@@ -20,9 +20,6 @@ namespace Teleopti.Wfm.AdministrationTest
 			system.AddService(service);
 
 			system.AddService<DatabaseHelperWrapper>();
-			system.AddService<AdminTenantAuthentication>();
-			system.AddService<LoadAllPersonInfos>();
-			system.AddService<GetImportUsers>();
 			system.AddService<LoadAllTenants>();
 			system.AddService<DbPathProviderFake>();
 			system.AddService<CheckPasswordStrengthFake>();
