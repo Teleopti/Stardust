@@ -1,4 +1,4 @@
-﻿<style>
+﻿<style media="screen" >
 	.container.content.material-depth-1.material-block.ng-scope {
 		overflow: hidden;
 	}
@@ -14,7 +14,7 @@
 			<i class="mdi mdi-filter"></i>
 			{{'Filter' | translate}}
 		</button>
-		<button class="wfm-fab info pull-right" ng-show="!vm.isFilterOpened" seat-plan-report-print print-element-id="seatPlanReportContentPrint">
+		<button class="wfm-fab info pull-right" ng-show="!vm.isFilterOpened" seat-plan-report-print>
 			<i class="mdi mdi-printer"></i>
 			<md-tooltip>{{'Print' | translate}}</md-tooltip>
 		</button>
@@ -102,7 +102,7 @@
 
 	<div class="seatPlanReportContent" id="seatPlanReportContentPrint">
 		<h2>{{ vm.seatBookings.length == 0 ? ('NoReportForCurrentConditions' | translate) : ('SeatPlanReport' | translate) }}</h2>
-		<seat-plan-report-table seat-bookings="vm.seatBookingsAll" get-display-date="vm.getDisplayDateString" get-display-time="vm.getDisplayTimeString"></seat-plan-report-table>
+		<seat-plan-report-table seat-bookings="vm.seatBookingsAll"></seat-plan-report-table>
 	</div>
 
 

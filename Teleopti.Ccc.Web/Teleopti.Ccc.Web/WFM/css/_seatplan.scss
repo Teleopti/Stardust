@@ -8,15 +8,6 @@
 	clear:both;
 }
 
-.seat-plan-calendar table{
-	border-collapse:separate;
-	border-spacing:2px;
-}
-
-.seat-plan-calendar table button{
-	padding:5px 8px;	
-}
-
 .planningPeriodProgressBar {
 	margin-top: 25px;
 	margin-bottom: 25px;
@@ -165,18 +156,6 @@
 	border:1px #ededed solid;
 }
 
-.date-picker .wfm-datepicker-wrap table{
-	border-collapse: separate;
-	border-spacing: 2px;
-	border-color: grey;
-}
-
-.date-picker .wfm-datepicker-wrap button{
-	padding:1px 6px;
-	font-family:inherit;
-	font-size:100%;
-}
-
 .seatPlanReportFilter .bottom-bar, .seatPlanReportFilter .filter-header{
 	position:absolute;
 	bottom:0px;
@@ -292,18 +271,22 @@
 }
 
 @media print{
-	#seatPlanReportContentPrintDiv{
+	#seatPlanReportContentScreen, .seatPlanReportHeader{
+		display:none;
+	}
+
+	#seatPlanReportContentPrint{
 		width:100%;
 		height:auto;
+	}
+
+	.seatplan-container-print{
+		overflow:visible!important;
 	}
 }
 
 @media screen{
 	#seatPlanReportContentPrint{
-		display:none;
-	}
-
-	#seatPlanReportContentPrintDiv{
 		display:none;
 	}
 }

@@ -10,10 +10,11 @@
 			if (booking.IsDayOff) {
 				return seatPlanTranslatorFactory.TranslatedStrings['DayOff'];
 			}
-			else
-			{
-				return moment(booking.StartDateTime).format('HH:mm') + ' - ' + moment(booking.EndDateTime).format('HH:mm');
+			if (booking.IsFullDayAbsence) {
+				return seatPlanTranslatorFactory.TranslatedStrings['FullDayAbsence'];
 			}
+
+			return moment(booking.StartDateTime).format('HH:mm') + ' - ' + moment(booking.EndDateTime).format('HH:mm');
 		};
 
 		vm.getDisplayDate = function (date) {

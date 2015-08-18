@@ -1266,6 +1266,7 @@
     <Content Include="WFM\js\people\people.importPeople.controller.js" />
     <Content Include="WFM\js\people\people.importPeople.directive.js" />
     <Content Include="WFM\js\seatManagement\html\seatplanreport.html" />
+    <Content Include="WFM\js\seatManagement\seatplanreportprint.directive.js" />
     <Content Include="WFM\js\seatManagement\seatplantranslator.factory.js" />
     <Content Include="WFM\js\seatManagement\seatplanreport.controller.js" />
     <Content Include="WFM\js\seatManagement\html\seatplanreporttable.html" />

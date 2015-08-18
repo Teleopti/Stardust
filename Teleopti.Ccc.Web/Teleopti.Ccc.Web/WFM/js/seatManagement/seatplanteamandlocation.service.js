@@ -119,5 +119,5 @@
 
 		return service;
 	};
-		setupTranslatedString("FullDayAbsence");
+	
 }());
