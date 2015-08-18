@@ -36,7 +36,7 @@
 
         function getCampaignVisualization(campaignId, successCb, errorCb) {         
             $http.get(getCampaignVisualizationUrl + campaignId).success(function (campaignData) {              
-                if (successCb != null) successCb(self.buildGraphDataSeqs(campaignData), self.dictionary);
+                if (successCb != null) successCb(self.buildGraphDataSeqs(campaignData), self.dictionary, campaignData.ManualPlanHours);
             }).error(function(e) {
                 if (errorCb != null) errorCb(e);
             });
@@ -45,7 +45,7 @@
         function updateManualPlan(manualProductionPlan, successCb, errorCb) {
         	$http.post(updateCampaignProductionPlanUrl, manualProductionPlan).
                 success(function (campaignData) {
-                	if (successCb != null) successCb(self.buildGraphDataSeqs(campaignData));
+                	if (successCb != null) successCb(self.buildGraphDataSeqs(campaignData), campaignData.ManualPlanHours);
                 }).
                 error(function (e) {
                 	if (errorCb != null) errorCb(e);

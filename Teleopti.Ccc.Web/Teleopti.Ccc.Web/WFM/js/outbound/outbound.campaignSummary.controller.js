@@ -21,6 +21,7 @@
                 });
             });
     	});
+    	});
 
     	$scope.clearManualPlan = function (campaign) {
     		campaign.selectedDates = [];
@@ -41,10 +42,11 @@
     			}
     		});
     		
-    		outboundChartService.updateManualPlan(campaign.manualPlan, function (data) {
+    		outboundChartService.updateManualPlan(campaign.manualPlan, function (data, manualPlan) {
 			    outboundService.getCampaignSummary(campaign.Id, function(_campaign) {
 			    	angular.extend(campaign, _campaign);
-				    campaign.graphData = data;
+			    	campaign.graphData = data;
+			    	campaign.rawManualPlan = manualPlan;
 			    });
 			   
 		    }, function (error) {
@@ -52,8 +54,9 @@
 	    }
 
 		$scope.getGraphData = function(campaign) {
-			outboundChartService.getCampaignVisualization(campaign.Id, function(data, translations) {
+			outboundChartService.getCampaignVisualization(campaign.Id, function(data, translations, manualPlan) {
 				campaign.graphData = data;
+				campaign.rawManualPlan = manualPlan;
 				campaign.translations = translations;
 			});
 		}

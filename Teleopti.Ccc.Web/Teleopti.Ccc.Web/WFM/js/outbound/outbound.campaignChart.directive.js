@@ -147,7 +147,18 @@
 					order: 'null',				
 					columns: [$scope.graphData.dates].concat(getDataGroupsData($scope.viewScheduleDiff)),					
 					colors: _setChartOption_color(),
-					types: {}
+					types: {},
+					labels: {
+						format: {
+							Planned: function (v, id, i) {
+								var rawManualPlan = $scope.campaign.rawManualPlan;
+								var manualPlan = [0].concat(rawManualPlan);
+								if (manualPlan[i] != 0) {
+									return "manual";
+								}
+							}
+						}
+					}
 				};
 				dataOption.types[$scope.dictionary['Progress']] = 'line';
 					dataOption.selection = {
