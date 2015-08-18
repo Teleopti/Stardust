@@ -272,7 +272,7 @@
 				return scope.graphData;
 			}, function (newVal, oldVal) {
 				if (newVal != oldVal) {
-					toggleViewScheduleDiff();
+					ctrl.toggleViewScheduleDiff();
 				}
 			}, true);
 		}
