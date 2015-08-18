@@ -124,8 +124,12 @@
     <Compile Include="ITeleoptiRtaState.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="SendSettings.cs" />
-    <Compile Include="TeleoptiRtaServiceProxy.cs" />
-    <Compile Include="Web References\TeleoptiRtaService\Reference.cs" />
+    <Compile Include="TeleoptiRtaServiceProxy.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Web References\TeleoptiRtaService\Reference.cs">
+      <SubType>Component</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Teleopti.Ccc.snk">

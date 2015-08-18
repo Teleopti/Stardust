@@ -44,9 +44,7 @@ namespace Teleopti.Ccc.IocCommon
 						.ForEach(x => MemoryCache.Default.Remove(x));
 				}
 				_cacheModule = new CacheBuilder(new LinFuProxyFactory())
-					.SetCache(new InMemoryCache(20))
-					.SetCacheKey(new TeleoptiCacheKey())
-					.SetLockObjectGenerator(CacheLockObjectGenerator);
+					.SetCacheKey(new TeleoptiCacheKey());
 				return _cacheModule;
 			}
 		}
