@@ -2,6 +2,7 @@
 using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure.Analytics;
@@ -52,6 +53,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 				}
 
 				var personPart = _factSchedulePersonHandler.Handle(scheduleDay.PersonPeriodId);
+				if (personPart.PersonId == -1)
+				{
+					Logger.DebugFormat(
+						"PersonPeriodId {0} could not be found. Schedule changes for agent {1} is not saved into Analytics database.",
+						scheduleDay.PersonPeriodId,
+						@event.PersonId);
+					continue;
+				}
+
 				_analyticsScheduleRepository.DeleteFactSchedule(dateId, personPart.PersonId, scenarioId);
 
 				if (!scheduleDay.NotScheduled)

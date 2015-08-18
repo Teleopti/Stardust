@@ -67,6 +67,33 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		}
 
 		[Test]
+		public void ShouldNotTryToSaveScheduleChangeWhenPersonPeriodIdIsEmpty()
+		{
+			var scenario = new AnalyticsGeneric { Code = Guid.NewGuid(), Id = 6 };
+			var scheduleDay = new ProjectionChangedEventScheduleDay
+			{
+				Date = DateTime.Now,
+				PersonPeriodId = Guid.Empty
+			};
+			var @event = new ProjectionChangedEvent
+			{
+				ScheduleDays = new Collection<ProjectionChangedEventScheduleDay> { scheduleDay },
+				ScenarioId = scenario.Code,
+			};
+			var personPart = new AnalyticsFactSchedulePerson();
+
+			_analyticsScheduleRepository.Stub(x => x.Scenarios()).Return(new IAnalyticsGeneric[] { scenario });
+			_personHandler.Stub(x => x.Handle(scheduleDay.PersonPeriodId)).Return(personPart);
+			_analyticsScheduleRepository.Stub(x => x.ShiftCategories()).Return(new List<IAnalyticsGeneric>());
+			const int dateId = 0;
+			_dateHandler.Stub(x => x.MapDateId(Arg<DateOnly>.Is.Anything, out Arg<int>.Out(dateId).Dummy)).Return(true);
+
+			_target.Handle(@event);
+
+			_analyticsScheduleRepository.AssertWasNotCalled(x => x.DeleteFactSchedule(dateId, personPart.PersonId, scenario.Id));
+		}
+
+		[Test]
 		public void ShouldSaveFactScheduleAndFactScheduleDayCount()
 		{
 			var start = new DateTime(2014, 12, 01, 8, 0, 0, DateTimeKind.Utc);

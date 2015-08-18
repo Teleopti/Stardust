@@ -247,9 +247,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 					.SetGuid("code", personPeriodCode)
 					.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsPersonBusinessUnit)))
 					.SetReadOnly(true)
+					//.SetTimeout(120)
 					.UniqueResult<IAnalyticsPersonBusinessUnit>();
 			}
 		}
+
 
 		public IList<IAnalyticsGeneric> Overtimes()
 		{
