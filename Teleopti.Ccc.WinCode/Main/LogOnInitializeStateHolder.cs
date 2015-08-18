@@ -4,7 +4,9 @@ using System.Configuration;
 using System.Xml.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Config;
@@ -39,7 +41,11 @@ namespace Teleopti.Ccc.WinCode.Main
 			}
 
 			var appSettings = settings.AddToAppSettings(ConfigurationManager.AppSettings.ToDictionary());
-
+			var configReader = container.Resolve<IConfigReader>();
+			foreach (var appSetting in appSettings)
+			{
+				configReader.AppSettings_DontUse[appSetting.Key] = appSetting.Value;
+			}
 			var sendToServiceBus = string.IsNullOrEmpty(ConfigurationManager.AppSettings["FreemiumForecast"])
 				? (IServiceBusSender) new ServiceBusSender()
 				: new NoServiceBusSender();

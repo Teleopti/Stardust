@@ -16,8 +16,8 @@ namespace Teleopti.Messaging.Client.Http
 		private readonly EventHandlers _eventHandlers;
 		private readonly IJsonDeserializer _jsonDeserializer;
 		private readonly ITime _time;
+		private readonly IConfigReader _config;
 		private readonly HttpClientM _client;
-		private readonly TimeSpan _interval;
 		private object _timer;
 
 		public HttpListener(
@@ -29,14 +29,18 @@ namespace Teleopti.Messaging.Client.Http
 			_eventHandlers = new EventHandlers();
 			_jsonDeserializer = jsonDeserializer;
 			_time = time;
-			_interval = TimeSpan.FromSeconds(config.ReadValue("MessageBrokerMailboxPollingIntervalInSeconds", 60));
+			_config = config;
 			_client = client;
 		}
 		
 		public void RegisterSubscription(Subscription subscription, EventHandler<EventMessageArgs> eventMessageHandler)
 		{
 			if (_timer == null)
-				_timer = _time.StartTimer(timer, null, _interval, _interval);
+			{
+				var interval = TimeSpan.FromSeconds(_config.ReadValue("MessageBrokerMailboxPollingIntervalInSeconds", 60));
+				_timer = _time.StartTimer(timer, null, interval, interval);
+			}
+				
 			var mailboxAdded = tryAddMailbox(subscription);
 			_eventHandlers.Add(subscription, eventMessageHandler, mailboxAdded);
 		}
