@@ -168,6 +168,23 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
 
 			 campaignPersister.AssertWasCalled(x => x.PersistManualProductionPlan(manualPlanVM));
 			 result.Should().Be.SameInstanceAs(expectedVisualizationVM);
+		 }		 
+		 
+		 [Test]
+		 public void ShouldGetCampaignVisualizationWhenRemoveManuPlan()
+		 {
+			 var expectedVisualizationVM = new CampaignVisualizationViewModel();
+			 var id = new Guid();
+			 var visualizationProvider = MockRepository.GenerateMock<ICampaignVisualizationProvider>();
+			 visualizationProvider.Stub(x => x.ProvideVisualization(id)).Return(expectedVisualizationVM);
+			 var removeManualPlanVM = new RemoveManualPlanForm() { CampaignId = id };
+			 var campaignPersister = MockRepository.GenerateMock<IOutboundCampaignPersister>();
+
+			 var target = new OutboundController(campaignPersister, null, null, null, null, visualizationProvider);
+			 var result = target.RemoveManualPlan(removeManualPlanVM);
+
+			 campaignPersister.AssertWasCalled(x => x.RemoveManualProductionPlan(removeManualPlanVM));
+			 result.Should().Be.SameInstanceAs(expectedVisualizationVM);
 		 }
     }
 }
