@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
-		public void ShouldPublishEventWithLogOnInfo()
+		public void ShouldPublishEventWithBusinessUnitId()
 		{
 			var businessUnitId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
@@ -142,9 +142,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				StateCode = "statecode"
 			});
 
-			var @event = (ILogOnInfo)publisher.PublishedEvents.OfType<PersonOutOfAdherenceEvent>().Single();
+			var @event = publisher.PublishedEvents.OfType<PersonOutOfAdherenceEvent>().Single();
 			@event.BusinessUnitId.Should().Be(businessUnitId);
-			@event.Datasource.Should().Be("datasource");
 		}
 
 		[Test]

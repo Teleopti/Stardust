@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 
 		[Test]
-		public void ShouldPublishEventWithLogOnInfo()
+		public void ShouldPublishEventWithBusinessUnitId()
 		{
 			var personId = Guid.NewGuid();
 			var businessUnitId = Guid.NewGuid();
@@ -216,9 +216,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				StateCode = "admin"
 			});
 
-			var @event = (ILogOnInfo)Publisher.PublishedEvents.OfType<PersonNeutralAdherenceEvent>().Single();
+			var @event = Publisher.PublishedEvents.OfType<PersonNeutralAdherenceEvent>().Single();
 			@event.BusinessUnitId.Should().Be(businessUnitId);
-			@event.Datasource.Should().Be("datasource");
 		}
 	}
 }

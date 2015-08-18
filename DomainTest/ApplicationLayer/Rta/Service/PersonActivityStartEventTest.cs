@@ -85,27 +85,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			@event.StartTime.Should().Be("2014-10-20 10:00".Utc());
 			@event.Name.Should().Be("phone");
 		}
-
-		[Test]
-		public void ShouldPublishWithLogOnInfo()
-		{
-			var personId = Guid.NewGuid();
-			var activityId = Guid.NewGuid();
-			var businessUnitId = Guid.NewGuid();
-			Database
-				.WithDefaultsFromState(new ExternalUserStateForTest())
-				.WithUser("usercode", personId, businessUnitId)
-				.WithSchedule(personId, activityId, "2014-10-20 10:00", "2014-10-20 11:00");
-			DataSource.FakeName("datasource");
-			Now.Is("2014-10-20 10:00");
-
-			Target.CheckForActivityChange(personId, businessUnitId);
-
-			var @event = (ILogOnInfo)Publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single();
-			@event.BusinessUnitId.Should().Be(businessUnitId);
-			@event.Datasource.Should().Be("datasource");
-		}
-
+		
 		[Test]
 		public void ShouldPublishWithInAdherence()
 		{

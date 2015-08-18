@@ -91,28 +91,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var @event = publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single();
 			@event.Timestamp.Should().Be("2014-10-20 10:00".Utc());
 		}
-
-		[Test]
-		public void ShouldPublishWithLogOnInfo()
-		{
-			var personId = Guid.NewGuid();
-			var businessUnitId = Guid.NewGuid();
-			database
-				.WithDefaultsFromState(new ExternalUserStateForTest())
-				.WithUser("usercode", personId, businessUnitId);
-			dataSource.FakeName("datasource");
-
-			target.SaveState(new ExternalUserStateForTest
-			{
-				UserCode = "usercode",
-				StateCode = "statecode"
-			});
-
-			var @event = (ILogOnInfo)publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single();
-			@event.BusinessUnitId.Should().Be(businessUnitId);
-			@event.Datasource.Should().Be("datasource");
-		}
-
+		
 		[Test]
 		public void ShouldPublishWithInAdherence()
 		{
