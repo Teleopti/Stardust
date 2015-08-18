@@ -1,7 +1,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers;
-using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldHandleLegacyMessage()
 		{
-			var repository = MockRepository.GenerateMock<PersonFinderReadOnlyRepository>();
+			var repository = MockRepository.GenerateMock<IPersonFinderReadOnlyRepository>();
 			var handler = new UpdateFindPersonConsumer(repository);
 			var legacyMessage = new PersonChangedMessage();
 
