@@ -18,16 +18,9 @@
 
 		function campaignChartCtrl($scope, $element) {
 
-			$scope.$watch(function() {
-				return $scope.graphData;
-			}, function (newVal, oldVal) {
-				if (newVal != oldVal) {
-					toggleViewScheduleDiff();
-				}
-			},true);
-
 			$scope.viewScheduleDiff = false;
 			$scope.dates = $scope.graphData['dates'].slice(1);
+			$scope.plans = $scope.graphData['plans'].slice(1);
 
 			this.toggleViewScheduleDiff = toggleViewScheduleDiff;
 			this.init = init;
@@ -145,6 +138,7 @@
 			}
 
 			this._setChartOption_data = _setChartOption_data;
+
 			function _setChartOption_data() {
 				var dataOption = {
 					x: 'x',
@@ -257,9 +251,18 @@
 			scope.$watch(function() {
 				return scope.campaign.selectedDates;
 			}, function(newVal, oldVal) {
-				if (!scope.graph) return;
-				scope.graph.select(null, newVal.map(ctrl.getDataIndex), true);
+				if (!scope.graph) return;				
+				scope.graph.select(null, newVal.map(ctrl.getDataIndex).filter(function(i) {
+					return scope.plans[i] > 0;
+				}), true);
+			}, true);
 
+			$scope.$watch(function () {
+				return $scope.graphData;
+			}, function (newVal, oldVal) {
+				if (newVal != oldVal) {
+					toggleViewScheduleDiff();
+				}
 			}, true);
 		}
 
