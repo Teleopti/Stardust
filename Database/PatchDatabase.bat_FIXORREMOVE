@@ -1,80 +1,88 @@
 @ECHO off
+@ECHO off
 
 ::=======================
 ::Init
 ::=======================
 ::Get path to this batchfile
 SET ROOTDIR=%~dp0
-SET ERRORLEVEL=0
-SET CROSSDB=0
-SET /A Silent=0
-SET MyServerInstance=%1
-SET DATABASE=%2
-SET DATABASETYPE=%3
-SET TeleoptiCCCAgg=%4
-SET Conn1=
-SET Conn2=
-SET Conn3=
+SET /A CROSSDB=0
+SET /A ISCCC7=0
+SET TRUNK=-T
 
-IF NOT "%MyServerInstance%"=="" SET /A Silent=1
-IF %Silent% equ 1 GOTO Execute
+COLOR A
+cls
 
 ::Remove trailer slash
 SET ROOTDIR=%ROOTDIR:~0,-1%
 
-IF "%MyServerInstance%"=="" SET /P MyServerInstance=Your SQL Server instance:
+CD "%ROOTDIR%"
+SET DATABASEPATH=%ROOTDIR%
+SET DBMANAGER=%DATABASEPATH%\DBManager.exe
+SET SECURITY=%DATABASEPATH%\Enrypted\Teleopti.Support.Security.exe
+
+SET /P INSTANCE=Your SQL Server instance: 
 
 CHOICE /C yn /M "Do you want to use WinAuth?"
-IF ERRORLEVEL 1 SET /a WinAuth=1
-IF ERRORLEVEL 2 SET /a WinAuth=0
+IF %ERRORLEVEL% EQU 1 SET /a WinAuth=1
+IF %ERRORLEVEL% EQU 2 SET /a WinAuth=0
 
 ::Check input
 IF %WinAuth% equ 1 Call :WinAuth
 IF %WinAuth% equ 0 Call :SQLAuth
 
-IF "%DATABASE%"=="" SET /P DATABASE=Database name to patch: 
-IF "%DATABASETYPE%"=="" SET /P DATABASETYPE=Database type [TeleoptiCCC7,TeleoptiCCCAgg,TeleoptiAnalytics]: 
-
-IF "%DATABASETYPE%"=="TeleoptiAnalytics" (
-IF "%TeleoptiCCCAgg%"=="" SET /P TeleoptiCCCAgg=Analytics is linked to which Agg-database?:
-SET CROSSDB=1
-)
-
+SET /P DATABASEAPP=Application database name to patch:
+SET /P DATABASEANAL=Analytics database name to patch:
+SET /P DATABASEAGG=Agg database name to patch:
 ECHO.
-CHOICE /C yn /M "Would you like to re-add SQL permission for application account?"
-IF ERRORLEVEL 1 SET /a AddSecurity=1
-IF ERRORLEVEL 2 SET /a AddSecurity=0
-
-if %AddSecurity% equ 1 (
 CHOICE /C yn /M "Will end users use SQL Login?"
-IF ERRORLEVEL 1 Call :AddSQLSecurity
-IF ERRORLEVEL 2 Call :AddWinSecurity
-)
-
-ECHO outside
-ECHO %Conn3%
+IF %ERRORLEVEL% EQU 1 Call :AddSQLAppSecurity
+IF %ERRORLEVEL% EQU 2 Call :AddWinAppSecurity
 
 ::Patch DB
-ECHO "%ROOTDIR%\DBManager.exe" -S%MyServerInstance% -D%DATABASE% -O%DATABASETYPE% %Conn1% -T %Conn3%
-"%ROOTDIR%\DBManager.exe" -S%MyServerInstance% -D%DATABASE% -O%DATABASETYPE% %Conn1% -T %Conn3%
-IF %ERRORLEVEL% NEQ 0 GOTO ERROR_Schema
-
-IF "%DATABASETYPE%"=="TeleoptiCCC7" (
-ECHO "%ROOTDIR%\Enrypted\Teleopti.Support.Security.exe" -DS%MyServerInstance% -DD%DATABASE% %Conn2%
-"%ROOTDIR%\Enrypted\Teleopti.Support.Security.exe" -DS%MyServerInstance% -DD%DATABASE% %Conn2%
-if %errorlevel% NEQ 0 goto Security_exe
+::Upgrade DB to latest version, we now always include trunk
+CD "%DBMANAGERPATH%"
+"%DBMANAGER%" -S"%INSTANCE%" %Conn1% -D%DATABASEAPP% -OTeleoptiCCC7 -T %Conn3% -F"%DATABASEPATH%"
+IF %ERRORLEVEL% NEQ 0 (
+SET /A ERRORLEV=2
+GOTO :error
+)
+"%DBMANAGER%" -S"%INSTANCE%" %Conn1% -D%DATABASEANAL% -OTeleoptiAnalytics -T %Conn3% -F"%DATABASEPATH%"
+IF %ERRORLEVEL% NEQ 0 (
+SET /A ERRORLEV=2
+GOTO :error
+)
+"%DBMANAGER%" -S"%INSTANCE%" %Conn1% -D%DATABASEAGG% -OTeleoptiCCCAgg -T %Conn3% -F"%DATABASEPATH%"
+IF %ERRORLEVEL% NEQ 0 (
+SET /A ERRORLEV=2
+GOTO :error
 )
 
-IF %CROSSDB% EQU 1 (
-ECHO "%ROOTDIR%\Enrypted\Teleopti.Support.Security.exe" -DS%MyServerInstance% -DD%DATABASE% -CD"%TeleoptiCCCAgg%" %Conn2%
-"%ROOTDIR%\Enrypted\Teleopti.Support.Security.exe" -DS%MyServerInstance% -DD%DATABASE% -CD"%TeleoptiCCCAgg%" %Conn2%
-if %errorlevel% NEQ 0 goto CROSSVIEW_LOAD
-)
+CD "%ROOTDIR%"
 
+ECHO Running: securityexe
+"%SECURITY%" -DS"%INSTANCE%" -AP"%DATABASEAPP%" -AN"%DATABASEANAL%" -CD"%DATABASEAGG%" -CS"%TenantConnString%" %Conn2%
+if %errorlevel% NEQ 0 (
+SET /A ERRORLEV=1
+GOTO :error
 
 ECHO.
 ECHO upgrade successfull!
+CD "%ROOTDIR%"
 GOTO Finish
+
+:AddSQLAppSecurity
+SET /P SQLAppLogin=SQL Login: 
+SET /P SQLAppPwd=SQL password: 
+SET Conn3=-R -L"%SQLAppLogin%:%SQLAppPwd%"
+SET TenantConnString=Data Source=%INSTANCE%;User Id=%SQLAppLogin%;Password=%SQLAppPwd%
+goto :eof
+
+:AddWinAppSecurity
+SET /P WinAppLogin=Supply an existing Windows group in SQL Server: 
+SET Conn3=-R -W"%WinAppLogin%"
+SET TenantConnString=Data Source=%INSTANCE%;Trusted_Connection=True
+goto :eof
 
 ::Set Auth string
 :WinAuth
@@ -89,46 +97,31 @@ SET Conn1=-U%SQLLogin% -P%SQLPwd%
 SET Conn2=-DU%SQLLogin% -DP%SQLPwd%
 goto :eof
 
-:AddSQLSecurity
-SET /P SQLAppLogin=SQL Login: 
-SET /P SQLAppPwd=SQL password: 
-SET Conn3=-R -L"%SQLAppLogin%:%SQLAppPwd%"
-goto :eof
-
-:AddWinSecurity
-SET /P WinAppLogin=Supply an existing Windows group in SQL Server: 
-SET Conn3=-R -W"%WinAppLogin%"
-goto :eof
-
-:ERROR_Schema
-ECHO Error deploying Schema objects for database: %DATABASE%!!
+:Error
+CD "%ROOTDIR%"
+COLOR C
 ECHO.
-ECHO ---------
-Echo Aborting ...
-ECHO ---------
-SET ERRORLEVEL=1
-GOTO Finish
-
-:Security_exe
-ECHO Error running Teleopti.Support.Security.exe: %DATABASE%!!
+ECHO --------
+IF %ERRORLEV% NEQ 0 ECHO Errors found!
+IF %ERRORLEV% EQU 1 ECHO Could not connect Mart to Agg: EXEC mart.sys_crossdatabaseview_target_update 'TeleoptiCCCAgg', '%Branch%_%Customer%_TeleoptiCCCAgg'
+IF %ERRORLEV% EQU 2 ECHO DB have a release trunk or the database is out of version sync
+IF %ERRORLEV% EQU 5 ECHO Could not create views in Mart: EXEC %Branch%_%Customer%_TeleoptiAnalytics.mart.sys_crossDatabaseView_load
+IF %ERRORLEV% EQU 6 ECHO Could not build DBManager.exe & notepad "%temp%\build.log"
+IF %ERRORLEV% EQU 7 ECHO Could not build Teleopti.Support.Tool & notepad "%temp%\build.log"
+IF %ERRORLEV% EQU 8 ECHO An error occured while changing FirstDayInWeek on Person
+IF %ERRORLEV% EQU 9 ECHO An error occured while changing to Date Only in Forecasts
+IF %ERRORLEV% EQU 10 ECHO An error occured while encrypting
+IF %ERRORLEV% EQU 11 ECHO Could not restore databases
+IF %ERRORLEV% EQU 12 ECHO Could not build Teleopti.Support.Security & notepad "%temp%\build.log"
+IF %ERRORLEV% EQU 13 ECHO Could not apply a product activation key on demoreg database
+IF %ERRORLEV% EQU 14 ECHO Could not create empty Analytics DB
+IF %ERRORLEV% EQU 15 ECHO Could not create empty Agg DB
+IF %ERRORLEV% EQU 17 ECHO Failed to update msgBroker setings in Analytics
 ECHO.
-ECHO ---------
-Echo Aborting ...
-ECHO ---------
-SET ERRORLEVEL=2
-GOTO Finish
+ECHO --------
+PAUSE
+GOTO :EOF
 
-:CROSSVIEW_LOAD
-ECHO Could not deploy crossDB views
-ECHO Check that all need databases and remote table exist!
-ECHO.
-ECHO ---------
-Echo Aborting ...
-ECHO ---------
-SET ERRORLEVEL=3
-GOTO Finish
 
 :Finish
-IF %Silent% NEQ 1 (
 PAUSE
-)
