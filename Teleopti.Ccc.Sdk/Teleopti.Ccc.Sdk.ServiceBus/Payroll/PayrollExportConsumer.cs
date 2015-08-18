@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 				var personDtos = _personBusAssembler.CreatePersonDto(people, _tenantPeopleLoader);
 				try
 				{
-					payrollResult.XmlResult.AddResult(_payrollDataExtractor.Extract(payrollExport, message, personDtos,
+					payrollResult.XmlResult.SetResult(_payrollDataExtractor.Extract(payrollExport, message, personDtos,
 						_serviceBusPayrollExportFeedback));
 				}
 				catch (Exception exception)

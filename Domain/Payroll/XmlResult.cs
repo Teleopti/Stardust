@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.Domain.Payroll
         {
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public XmlResult(IPayrollResult payrollResult) : this()
         {
             SetParent(payrollResult);
@@ -23,13 +22,17 @@ namespace Teleopti.Ccc.Domain.Payroll
         {
 	        get
 	        {
-		        var doc = new XmlDocument();
-				doc.LoadXml(_xPathNavigable);
-		        return doc;
+		        if (!string.IsNullOrEmpty(_xPathNavigable))
+				{
+					var doc = new XmlDocument();
+			        doc.LoadXml(_xPathNavigable);
+					return doc;
+		        }
+		        return null;
 	        }
         }
 
-        public virtual void AddResult(IXPathNavigable xmlResult)
+        public virtual void SetResult(IXPathNavigable xmlResult)
         {
             _xPathNavigable = xmlResult.CreateNavigator().OuterXml;
             ((IPayrollResult) Parent).FinishedOk = true;

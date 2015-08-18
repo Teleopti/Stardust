@@ -137,6 +137,6 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: peterwe
         /// Created date: 2011-02-09
         /// </remarks>
-        void AddResult(IXPathNavigable xmlResult);
+        void SetResult(IXPathNavigable xmlResult);
     }
 }

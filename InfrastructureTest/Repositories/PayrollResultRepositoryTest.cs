@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             XmlDocument result = new XmlDocument();
             result.AppendChild(result.CreateElement("PayrollExportResult").AppendChild(result.CreateElement("Person1")));
 
-            payrollResult.XmlResult.AddResult(result);
+            payrollResult.XmlResult.SetResult(result);
 
             payrollResult.PayrollExport = payrollExport;
 
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                 rootElement.AppendChild(xmlElement);
             }
             
-            result.XmlResult.AddResult(document);
+            result.XmlResult.SetResult(document);
 
             PersistAndRemoveFromUnitOfWork(result);
         }

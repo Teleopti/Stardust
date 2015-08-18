@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.Payroll
 
             XmlDocument document = new XmlDocument();
             document.AppendChild(document.CreateElement("my-large-result"));
-            target.XmlResult.AddResult(document);
+            target.XmlResult.SetResult(document);
 
             Assert.AreEqual(target.XmlResult.XPathNavigable,document);
             Assert.IsFalse(target.HasError());
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.DomainTest.Payroll
         {
             var document = new XmlDocument();
             document.AppendChild(document.CreateElement("my-large-result"));
-            target.XmlResult.AddResult(document);
+            target.XmlResult.SetResult(document);
             target.IsWorking().Should().Be.False();
             target.FinishedOk.Should().Be.True();
             target.HasError().Should().Be.False();

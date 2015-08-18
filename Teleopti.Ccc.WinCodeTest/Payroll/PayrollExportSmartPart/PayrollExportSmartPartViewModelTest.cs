@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WinCodeTest.Payroll.PayrollExportSmartPart
             results.Add(result2);
             _target.LoadPayrollResults(results);
 
-            result1.XmlResult.AddResult(new FakeXml());
+            result1.XmlResult.SetResult(new FakeXml());
             
             _target.PayrollResults.View.MoveCurrentToFirst(); //same as selecting in gui
             _target.SaveAs.OnQueryEnabled(null, args);          //Check that command is enabled

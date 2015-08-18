@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WinCodeTest.Payroll.PayrollExportSmartPart
         public void ShouldHandleResultDone()
         {
             _result.AddDetail(new PayrollResultDetail(DetailLevel.Info, "info!", DateTime.UtcNow, null));
-            _result.XmlResult.AddResult(new FakeXml());
+            _result.XmlResult.SetResult(new FakeXml());
             Assert.IsAssignableFrom<StatusDone>(_target.Status);
             Assert.AreEqual("info!",_target.Progress.Message);
         }

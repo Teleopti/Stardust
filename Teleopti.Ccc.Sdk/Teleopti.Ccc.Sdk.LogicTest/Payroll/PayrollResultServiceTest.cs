@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Payroll
 			result.SetId(resultGuid);
 			var document = new XmlDocument();
 			document.AppendChild(document.CreateElement("TheResultStuffInHere"));
-			result.XmlResult.AddResult(document);
+			result.XmlResult.SetResult(document);
 		}
 
 		[Test]
