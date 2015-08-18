@@ -285,23 +285,13 @@
 
 .seatPlanReportContent table tr .td-seat{
 	width:10%;
-	text-align:center;
 }
 
 .seatPlanReportContent table tr .td-time{
 	width:15%;
-	text-align:center;
 }
 
 @media print{
-	body{
-		background:#ffffff!important;
-	}
-
-	.container-noprint{
-		display:none;
-	}
-
 	#seatPlanReportContentPrintDiv{
 		width:100%;
 		height:auto;
@@ -318,7 +308,7 @@
 	}
 }
 
-.report-paging {
+.seatplan-report-paging {
 	height:32px;
 	background:#ffffff;
 	color: #0099ff; 
@@ -329,27 +319,27 @@
 	cursor:default!important;
 }
 
-.report-paging .mdi{
+.seatplan-report-paging .mdi{
 	padding:7px;
 }
 
-.report-paging .mdi:hover{
+.seatplan-report-paging .mdi:hover{
 	color:#ffffff;
 	background:#0099FF;
 }
 
-.report-paging .noclick:hover{
+.seatplan-report-paging .noclick:hover{
 	color:inherit;
 	background:inherit;
 }
 
-.report-paging .current-page{
+.seatplan-report-paging .current-page{
 	min-width:32px;
 	text-align:center;
 	margin-left:0px;
 }
 
-.report-paging span{
+.seatplan-report-paging span{
 	min-width:110px;
 	margin-left:5px;
 	display: inline-block;

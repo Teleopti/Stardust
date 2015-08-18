@@ -1,4 +1,8 @@
 ﻿@media print {
+	body{
+		background:#ffffff!important;
+	}
+
 	.navbar{
 		display:none;
 	}
@@ -17,6 +21,10 @@
 	}
 
 	.layout-container .sidenav {
+		display:none;
+	}
+	
+	.container-noprint{
 		display:none;
 	}
 
