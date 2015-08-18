@@ -152,8 +152,8 @@
 						format: {
 							Planned: function (v, id, i) {
 								var rawManualPlan = $scope.campaign.rawManualPlan;
-								var manualPlan = [0].concat(rawManualPlan);
-								if (manualPlan[i] != 0) {
+								var manualPlan = [false].concat(rawManualPlan);
+								if (manualPlan[i]) {
 									return "manual";
 								}
 							}
