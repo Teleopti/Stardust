@@ -103,7 +103,7 @@
 			}
 		};
 
-		vm.isTeam = function(team) {
+		function isTeam(team) {
 			return (team.Children === undefined);
 		};
 
@@ -118,26 +118,31 @@
 			}
 		}
 
-		function setStatuBaseOnChildren(item) {
-			if (item.Children == null) return;
+		function updateBuAndSiteStatus(rootTeamHierarchyObjs) {
 
-			var isAnyChildrenSelected = false;
-			item.Children.forEach(function (child) {
-				setStatuBaseOnChildren(child);
-				if (child.selected === true) isAnyChildrenSelected = true;
+			function setBuAndSiteStatus(hierarchyObj) {
+				if (hierarchyObj.Children == null) return;
+
+				var isAnyChildrenSelected = false;
+				hierarchyObj.Children.forEach(function (child) {
+					setBuAndSiteStatus(child);
+					if (child.selected === true) isAnyChildrenSelected = true;
+				});
+				hierarchyObj.selected = isAnyChildrenSelected;
+			}
+
+			rootTeamHierarchyObjs.forEach(function (rootTeamHierarchyObj) {
+				setBuAndSiteStatus(rootTeamHierarchyObj);
 			});
-			item.selected = isAnyChildrenSelected;
-		}
+		};
 
-		vm.selectTeam = function selectTeam(teamHierarchyObj, teams) {
+		vm.selectTeam = function selectTeam(teamHierarchyObj, rootTeamHierarchyObjs) {
 			if (isTeam(teamHierarchyObj)) {
 				teamHierarchyObj.selected = !teamHierarchyObj.selected;
 			} else {
 				setAllChildrenToOpposite(teamHierarchyObj, !teamHierarchyObj.selected);
 			}
-			teams.forEach(function (item) {
-				setStatuBaseOnChildren(item);
-			});
+			updateBuAndSiteStatus(rootTeamHierarchyObjs);
 		};
 		
 		vm.selectLocation = function (location) {
@@ -146,7 +151,7 @@
 
 		function getSelectedTeams(node, teams) {
 
-			if (vm.isTeam(node) && node.selected) {
+			if (isTeam(node) && node.selected) {
 				teams.push(node.Id);
 			}
 
