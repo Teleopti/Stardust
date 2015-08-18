@@ -28,10 +28,8 @@
 
 
         this.removeManualPlan = function (manualProductionPlan, successCb, errorCb) {
-	        console.log('from service submit data', manualProductionPlan);
         	$http.post(removeCampaignProductionPlanUrl, manualProductionPlan).
                 success(function (campaignData) {
-                	console.log('from service returned data', campaignData);
                 	if (successCb != null) successCb(self.buildGraphDataSeqs(campaignData), campaignData.IsManualPlanned);
                 }).
                 error(function (e) {

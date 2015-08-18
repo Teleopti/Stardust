@@ -28,7 +28,6 @@
     	}
 
     	$scope.removeManualPlan = function (campaign) {
-    		console.log('selectedDates', campaign.selectedDates);
 		    var dates = [];
 		    campaign.selectedDates.forEach(function(date,index) {
 			    dates[index] = { Date: date };
