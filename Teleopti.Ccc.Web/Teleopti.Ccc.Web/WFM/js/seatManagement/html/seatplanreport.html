@@ -1,5 +1,5 @@
-﻿<style media="screen" >
-	.container.content.material-depth-1.material-block.ng-scope {
+﻿<style>
+	.container.content {
 		overflow: hidden;
 	}
 </style>
@@ -61,7 +61,7 @@
 	</div>
 	<span class="blankForTurnOffFilterPanel2" ng-click="vm.isFilterOpened = false"></span>
 
-	<div class="seatPlanReportContent" ng-click="vm.isFilterOpened = false" id="seatPlanReportContentScreen" ng-init="vm.init()">
+	<div class="seatPlanReportContent" ng-click="vm.isFilterOpened = false" id="seatplan-report-to-view" ng-init="vm.init()">
 		<div ng-if="vm.isLoadingReport" class="report-spinner">
 			<md-progress-circular md-mode="indeterminate"></md-progress-circular>
 		</div>
@@ -78,7 +78,7 @@
 		</div>
 	</div>
 
-	<div class="seatPlanReportContent" id="seatPlanReportContentPrint">
+	<div class="seatPlanReportContent" id="seatplan-report-to-print">
 		<h2>{{ vm.seatBookings.length == 0 ? ('NoReportForCurrentConditions' | translate) : ('SeatPlanReport' | translate) }}</h2>
 		<seat-plan-report-table seat-bookings="vm.seatBookingsAll"></seat-plan-report-table>
 	</div>

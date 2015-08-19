@@ -270,25 +270,22 @@
 	width:15%;
 }
 
-@media print{
-	#seatPlanReportContentScreen, .seatPlanReportHeader{
-		display:none;
-	}
-
-	#seatPlanReportContentPrint{
-		width:100%;
-		height:auto;
-	}
-
-	.seatplan-container-print{
-		overflow:visible!important;
-	}
+.container-to-print-report{
+	overflow:visible!important;
 }
 
-@media screen{
-	#seatPlanReportContentPrint{
-		display:none;
-	}
+.container-to-print-report #seatplan-report-to-view, .container-to-print-report .seatPlanReportHeader{
+	display:none;
+}
+
+.container-to-print-report #seatplan-report-to-print{
+	width:100%;
+	height:auto;
+	display:block;
+}
+
+#seatplan-report-to-print{
+	display:none;
 }
 
 .seatplan-report-paging {

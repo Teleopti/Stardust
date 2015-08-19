@@ -19,9 +19,9 @@
 					callback: function (data) {
 						scope.vm.seatBookingsAll = data.SeatBookingsByDate;
 						angular.element(document).ready(function () {
-							addContainerOverflowClass(element, 'seatplan-container-print');
+							addContainerOverflowClass(element, 'container-to-print-report');
 							window.print();
-							removeContainerOverflowClass(element, 'seatplan-container-print');
+							removeContainerOverflowClass(element, 'container-to-print-report');
 						});
 					}
 				});
