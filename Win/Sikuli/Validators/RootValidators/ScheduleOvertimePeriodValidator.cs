@@ -17,10 +17,11 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 			_totalSkill = totalSkill;
 		}
 
-		public override SikuliValidationResult Validate(ITestDuration duration)
+		public override SikuliValidationResult Validate(object data)
 		{
 			const double periodStandardDeviationLimit = 0.03d;
 			AtomicValidators.Add(new PeriodStandardDeviationValidator(_schedulerState, _totalSkill, periodStandardDeviationLimit));
+			var duration = data as ITestDuration;
 			AtomicValidators.Add(new DurationValidator(TimeSpan.FromMinutes(1).Add(TimeSpan.FromSeconds(5)), duration));
 			return ValidateAtomicValidators(AtomicValidators);
 		}

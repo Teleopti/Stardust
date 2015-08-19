@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 			get { return "All scheduled hours must be 0."; }
 		}
 
-		public SikuliValidationResult Validate(ITestDuration duration)
+		public SikuliValidationResult Validate(object data)
 		{
 			var result = new SikuliValidationResult(SikuliValidationResult.ResultValue.Pass);
 			var scheduledHours = ValidatorHelper.GetDailyScheduledHoursForFullPeriod(_schedulerState, _totalSkill);

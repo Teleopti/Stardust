@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.SelftestValidators
 			}
 		}
 
-		public override SikuliValidationResult Validate(ITestDuration duration)
+		public override SikuliValidationResult Validate(object data)
 		{
 			AtomicValidators.Add(new SelftestAtomicValidator(SikuliValidationResult.ResultValue.Fail));
 			AtomicValidators.Add(new SelftestAtomicValidator(SikuliValidationResult.ResultValue.Pass));

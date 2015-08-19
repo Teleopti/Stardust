@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 			} 
 		}
 
-		public abstract SikuliValidationResult Validate(ITestDuration duration);
+		public abstract SikuliValidationResult Validate(object data);
 
 		protected IList<IAtomicValidator> AtomicValidators
 		{

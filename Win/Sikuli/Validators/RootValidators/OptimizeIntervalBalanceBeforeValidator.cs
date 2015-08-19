@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 			get { return "At least one 'lowest intra interval balance' value must be between 0 and 0.8 to have a good start point for optimization."; } 
 		}
 
-		public SikuliValidationResult Validate(ITestDuration duration)
+		public SikuliValidationResult Validate(object data)
 		{
 
 			var result = new SikuliValidationResult(SikuliValidationResult.ResultValue.Pass);

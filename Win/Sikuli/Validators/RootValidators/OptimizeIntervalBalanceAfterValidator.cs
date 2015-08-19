@@ -34,10 +34,11 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 			}
 		}
 
-		public SikuliValidationResult Validate(ITestDuration duration)
+		public SikuliValidationResult Validate(object data)
 		{
 			var intradayValidationResult = intradayBalanceValidationResult();
 
+			var duration = data as ITestDuration;
 			var durationValidator = new DurationValidator(TimeSpan.FromMinutes(1), duration);
 			var durationValidatorResult = durationValidator.Validate();
 

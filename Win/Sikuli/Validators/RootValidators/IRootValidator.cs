@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 	/// </summary>
 	public interface IRootValidator
 	{
-		SikuliValidationResult Validate(ITestDuration duration);
+		SikuliValidationResult Validate(object data);
 		string Description { get; }
 	}
 }

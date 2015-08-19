@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 	internal class MemoryUsageRootValidator : RootValidator
 	{
 
-		public override SikuliValidationResult Validate(ITestDuration duration)
+		public override SikuliValidationResult Validate(object data)
 		{
 			AtomicValidators.Add(new MemoryUsageValidator(100, MemoryCounter.DefaultInstance()));
 			return ValidateAtomicValidators(AtomicValidators);

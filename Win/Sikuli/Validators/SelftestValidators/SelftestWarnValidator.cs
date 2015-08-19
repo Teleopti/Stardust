@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.SelftestValidators
 {
 	internal class SelftestWarnValidator : IRootValidator
 	{
-		public SikuliValidationResult Validate(ITestDuration duration)
+		public SikuliValidationResult Validate(object data)
 		{
 			return new SikuliValidationResult(SikuliValidationResult.ResultValue.Warn);
 		}
