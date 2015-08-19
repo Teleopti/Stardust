@@ -42,6 +42,9 @@
 		    		angular.extend(campaign, _campaign);
 		    		campaign.graphData = data;
 		    		campaign.rawManualPlan = manualPlan;
+		    		outboundService.getCampaignStatistics(null, function success(data2) {
+		    			$scope.phaseStatistics = data2;
+		    		});
 		    	});
 		    });
 		}
@@ -61,6 +64,9 @@
 			    	angular.extend(campaign, _campaign);
 			    	campaign.graphData = data;
 			    	campaign.rawManualPlan = manualPlan;
+			    	outboundService.getCampaignStatistics(null, function success(data2) {
+			    		$scope.phaseStatistics = data2;
+				    });
 			    });
 			   
 		    }, function (error) {
