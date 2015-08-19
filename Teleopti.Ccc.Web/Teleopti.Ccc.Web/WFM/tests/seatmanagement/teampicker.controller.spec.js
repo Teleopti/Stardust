@@ -96,21 +96,6 @@ describe('seatplan report controller tests', function () {
 			&& site2.selected).toEqual(true);
 	}));
 
-	//ROBTODO: test to ensure we are only adding teams (not sites or business unit) into the selected teams array?
-	/*it('should send all chosen ids exclude site id', inject(function () {
-		var teamFactory = TeamFactory();
-		var site = teamFactory.CreateTeam('1', true),
-			team1 = teamFactory.CreateTeam('2', true),
-			team2 = teamFactory.CreateTeam('3', false);
-		site.Children = [team1, team2];
-
-		controller.teams = [site];
-		controller.applyFilter();
-
-		expect(seatBookingsReportRequestParams.teams).toEqual(['2']);
-	}));*/
-
-
 	var mockSeatPlanService = {
 		teams: {
 			get: function (param) {
