@@ -51,6 +51,8 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 			SortASC: true
 		}]
 	};
+
+	$scope.selectedPeopleList = [];
 	$scope.gridOptions = {
 		enableFullRowSelection: false,
 		enableRowHeaderSelection: false,
@@ -97,9 +99,33 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 				paginationOptions.pageSize = pageSize;
 				getPage();
 			});
+			gridApi.selection.on.rowSelectionChanged($scope, function (row) {
+				selectPeople([row]);
+			});
+
+			gridApi.selection.on.rowSelectionChangedBatch($scope, function (rows) {
+				selectPeople(rows);
+			});
+
 			$scope.gridApi.core.on.sortChanged($scope, $scope.sortChanged);
 		}
 	};
+
+	var selectPeople = function(rows) {
+		angular.forEach(rows, function (row) {
+			var selectedPerson = row.entity;
+			if (row.isSelected && $scope.selectedPeopleList.indexOf(selectedPerson.PersonId) == -1) {
+				$scope.selectedPeopleList.push(selectedPerson.PersonId);
+			} else if (!row.isSelected && $scope.selectedPeopleList.indexOf(selectedPerson.PersonId) > -1) {
+				for (var i = $scope.selectedPeopleList.length; i--;) {
+					if ($scope.selectedPeopleList[i] === selectedPerson.PersonId) {
+						$scope.selectedPeopleList.splice(i, 1);
+					}
+				}
+			}
+		});
+		$scope.selectedCount = $scope.selectedPeopleList.length;
+	}
 
 	$scope.toggleRowSelectable = function () {
 		$scope.gridOptions.enableFullRowSelection = $scope.rowSelectionEnabled();

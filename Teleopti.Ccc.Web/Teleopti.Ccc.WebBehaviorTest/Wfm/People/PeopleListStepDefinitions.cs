@@ -70,6 +70,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.People
 			Browser.Interactions.AssertExists(".import-people");
 		}
 
+		[When(@"I select '(.*)'")]
+		public void WhenISelect(string name)
+		{
+			Browser.Interactions.ClickContaining(".ui-grid-row", name);
+		}
+
+		[Then(@"I should see an indicator telling me (.*) (person|people) selected")]
+		public void ThenIShouldSeeAnIndicatorTellingMePersonSelected(int count, string personPeople)
+		{
+			Browser.Interactions.AssertAnyContains(".selection-cart-indicator", count.ToString());
+		}
+
 	}
 
 	public class SearchCriteria

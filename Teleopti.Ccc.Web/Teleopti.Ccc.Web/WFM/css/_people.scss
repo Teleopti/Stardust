@@ -165,3 +165,28 @@
 	margin-bottom: 0px;
 	padding-bottom: 0px;
 }
+
+.selection-cart-indicator {
+	position: relative;
+	float: right;
+	top: -72rem;
+	right: -28rem;
+	z-index: 100;
+	background-color: #EE8F7D;
+	color: #FFF;
+	display: block;
+	padding: 4px 0;
+	border-radius: 50%;
+	width: 23px;
+	height: 23px;
+	box-sizing: border-box;
+	line-height: 1.2;
+	text-align: center;
+	font-size: 12px;
+	box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.27);
+	animation: bullet 500ms;
+	animation-fill-mode: both;
+	animation-delay: 1.5s;
+	animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+	font-weight: bold;
+}

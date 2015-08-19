@@ -55,6 +55,9 @@
 				<button mfb-button icon="{{button.icon}}" ng-click="floatingButtonClick()"
 						label="{{button.label|translate}}" ng-repeat="button in buttons"></button>
 			</nav>
+			<span ng-show="rowSelectionEnabled && selectedCount > 0" class="wfm-panel selection-cart-indicator">
+				{{selectedCount}}
+			</span>
 		</div>
 	</div>
 	

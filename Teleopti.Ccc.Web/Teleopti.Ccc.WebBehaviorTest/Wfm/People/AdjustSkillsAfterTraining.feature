@@ -47,12 +47,11 @@ Given there is a site named 'London'
 	| Start date | 2012-06-18 |
 
 
-@ignore
 Scenario: can select people
 	When I view people
-	And I select 'John Smith'
-	And I select 'Ashley Andeen'
-	Then I should see an indicator telling me '2' person selected
+	And I select 'John'
+	And I select 'Ashley'
+	Then I should see an indicator telling me 2 person selected
 
 @ignore
 Scenario: can deselect people
