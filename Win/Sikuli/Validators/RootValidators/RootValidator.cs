@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 	{
 		private IList<IAtomicValidator> _atomicValidators;
 
-		public virtual string Description 
+		public virtual string Description
 		{
 			get
 			{
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 					stringBuilder.Append(" " + validator.Description);
 				}
 				return stringBuilder.ToString();
-			} 
+			}
 		}
 
 		public abstract SikuliValidationResult Validate(object data);

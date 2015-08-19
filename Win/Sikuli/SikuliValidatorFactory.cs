@@ -1,5 +1,4 @@
 ﻿using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.Win.Sikuli.Validators;
 using Teleopti.Ccc.Win.Sikuli.Validators.RootValidators;
 using Teleopti.Ccc.Win.Sikuli.Validators.SelftestValidators;
 using Teleopti.Interfaces.Domain;
@@ -15,13 +14,13 @@ namespace Teleopti.Ccc.Win.Sikuli
 				switch (SikuliHelper.CurrentValidator)
 				{
 					case SikuliValidatorRegister.DeleteAll:
-						return new DeleteAllValidator(schedulerState, totalSkill);
+						return new DeleteAllValidator();
 
 					case SikuliValidatorRegister.OptimizeDaysOff:
-						return new OptimizeDaysOffValidator(schedulerState, totalSkill);
+						return new OptimizeDaysOffValidator();
 
 					case SikuliValidatorRegister.OptimizeBetweenDays:
-						return new OptimizeBetweenDaysValidator(schedulerState, totalSkill);
+						return new OptimizeBetweenDaysValidator();
 
 					case SikuliValidatorRegister.OptimizeWithinDays:
 						return new OptimizeWithinDaysValidator(schedulerState, totalSkill);

@@ -3,7 +3,6 @@ using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.Win.Sikuli.Helpers;
 using Teleopti.Ccc.Win.Sikuli.Validators.RootValidators;
 using Teleopti.Ccc.Win.Sikuli.Views;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Sikuli
 {
@@ -25,8 +24,6 @@ namespace Teleopti.Ccc.Win.Sikuli
 			testView.ShowDialog(owner);
 		}
 
-		private static TestDuration _timer;
-
 		public static bool InteractiveMode { get; private set; }
 
 		public static void SetInteractiveMode(bool mode)
@@ -46,19 +43,20 @@ namespace Teleopti.Ccc.Win.Sikuli
 				if (dialog.DialogResult == DialogResult.OK)
 				{
 					CurrentValidator = dialog.GetValidatorName;
-					_timer = new TestDuration();
-					_timer.SetStart();
 				}
 			}
 		}
 
 		public static void Validate(IRootValidator validator, IWin32Window owner)
 		{
+			Validate(validator, owner, null);
+		}
+
+		public static void Validate(IRootValidator validator, IWin32Window owner, object testData)
+		{
 			if (!InteractiveMode)
 				return;
-			if (_timer != null)
-				_timer.SetEnd();
-			var validationResult = validator.Validate(_timer);
+			var validationResult = validator.Validate(testData);
 			validationResult.Details.AppendLine("Criteria: " + validator.Description);
 			var testView = new SikuliResultView
 			{
