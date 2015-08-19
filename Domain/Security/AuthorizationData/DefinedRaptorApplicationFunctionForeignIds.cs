@@ -120,6 +120,7 @@
 		public const string MoveActivity = "0100";
 		public const string RealTimeAdherenceOverview = "0092";
 		public const string WebForecasts = "0121";
+		public const string WebPermissions = "0122";
 
 		//Seat Planner
 		public const string SeatPlanner = "0107";

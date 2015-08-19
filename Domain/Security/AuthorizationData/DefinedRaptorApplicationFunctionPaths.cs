@@ -108,7 +108,7 @@
 		public const string ViewBadgeLeaderboard = "Raptor/MyTimeWeb/ViewBadgeLeaderboard";
 		public const string AbsenceReport = "Raptor/MyTimeWeb/AbsenceReport";
 
-		// Anywhere
+		// Web
 		public const string MyTeamSchedules = "Raptor/Anywhere/Schedules";
 		public const string AddFullDayAbsence = "Raptor/Anywhere/Schedules/AddFullDayAbsence";
 		public const string AddIntradayAbsence = "Raptor/Anywhere/Schedules/AddIntradayAbsence";
@@ -117,5 +117,6 @@
 		public const string MoveActivity = "Raptor/Anywhere/Schedules/MoveActivity";
 		public const string RealTimeAdherenceOverview = "Raptor/Anywhere/RealTimeAdherenceOverview";
 		public const string WebForecasts = "Raptor/Anywhere/WebForecasts";
+		public const string WebPermissions = "Raptor/Anywhere/WebPermissions";
 	}
 }
