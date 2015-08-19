@@ -98,16 +98,6 @@ namespace Syncfusion.Windows.Forms.Tools
                 }
                 catch { }
             } 
-			/* fix #33580: the base method throws an error in the parent class, which we suppress this way. */
-			else if (((Msg)nMsg) == Msg.WM_NCHITTEST)
-			{
-				try
-				{
-					var method = type.GetMethod("OnWmNcHitTest", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-					method.Invoke(this, new object[] { hWnd, lParam });
-				}
-				catch { }
-			}
 			else
             {
                 var method = type.GetMethod("CallWndProc", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
