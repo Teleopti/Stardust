@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				);
 
 			Log.Info("The real time adherence service is now started");
-			_authenticationKey = configReader.AppSettings_DontUse["AuthenticationKey"];
+			_authenticationKey = configReader.AppConfig("AuthenticationKey");
 			if (string.IsNullOrEmpty(_authenticationKey))
 				_authenticationKey = DefaultAuthenticationKey;
 		}

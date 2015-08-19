@@ -4,7 +4,6 @@ using Castle.DynamicProxy;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.DistributedLock;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.DistributedLock
 {
@@ -32,9 +31,7 @@ namespace Teleopti.Ccc.Infrastructure.DistributedLock
 
 		private TimeSpan timeout()
 		{
-			if (_configReader.AppSettings_DontUse["DistributedLockTimeout"] == null)
-				return TimeSpan.FromSeconds(20);
-			return TimeSpan.FromMilliseconds(int.Parse(_configReader.AppSettings_DontUse["DistributedLockTimeout"]));
+			return TimeSpan.FromMilliseconds(_configReader.ReadValue("DistributedLockTimeout", 20 * 1000));
 		}
 	}
 }
