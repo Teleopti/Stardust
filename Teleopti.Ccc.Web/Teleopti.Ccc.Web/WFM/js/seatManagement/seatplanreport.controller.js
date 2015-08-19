@@ -2,23 +2,21 @@
 
 (function () {
 
-	angular.module('wfm.seatPlan').controller('seatPlanReportCtrl', seatPlanReportCtrl)
-								  .value('reportTake', 34 );
+	angular.module('wfm.seatPlan').controller('seatPlanReportCtrl', seatPlanReportCtrl);
+	seatPlanReportCtrl.$inject = ['seatPlanService'];
 
-	seatPlanReportCtrl.$inject = ['seatPlanService', 'reportTake'];
-
-	function seatPlanReportCtrl(seatPlanService, reportTake) {
+	function seatPlanReportCtrl(seatPlanService) {
 		var vm = this;
 
 		vm.selectedLocations = [];
 		vm.selectedTeams = [];
 		vm.isDatePickerOpened = true;
+		vm.reportTake = 34;
 
-		
 		function getSeatBookingsCallback(data) {
 			vm.seatBookings = data.SeatBookingsByDate;
 			vm.isLoadingReport = false;
-			vm.totalPages = Math.ceil(data.TotalRecordCount / reportTake);
+			vm.totalPages = Math.ceil(data.TotalRecordCount / vm.reportTake);
 		};
 
 		vm.getSeatBookings = function (options) {
@@ -50,25 +48,15 @@
 		};
 
 		vm.toggleFilter = function (tabName) {
-			vm.isDatePickerOpened = false;
-			vm.isTeamPickerOpened = false;
-			vm.isLocationPickerOpened = false;
-
-			if (tabName == 'date') {
-				vm.isDatePickerOpened = true;
-			}
-			if (tabName == 'team') {
-				vm.isTeamPickerOpened = true;
-			}
-			if (tabName == 'location') {
-				vm.isLocationPickerOpened = true;
-			}
+			vm.isDatePickerOpened = tabName == 'date';
+			vm.isTeamPickerOpened = tabName == 'team';
+			vm.isLocationPickerOpened = tabName == 'location';
 		};
 
 		vm.applyFilter = function () {
 			vm.getSeatBookings({
 				skip: vm.page,
-				take: reportTake,
+				take: vm.reportTake,
 				callback: getSeatBookingsCallback,
 				isLoadingReportToDisplay: true
 			});
@@ -85,8 +73,8 @@
 
 			if (vm.currentPage != goToPage) {
 				vm.getSeatBookings({
-					skip: (goToPage - 1) * reportTake,
-					take: reportTake,
+					skip: (goToPage - 1) * vm.reportTake,
+					take: vm.reportTake,
 					callback: getSeatBookingsCallback,
 					isLoadingReportToDisplay: true
 				});
@@ -97,7 +85,7 @@
 		vm.init = function () {
 			vm.getSeatBookings({
 				skip: vm.page,
-				take: reportTake,
+				take: vm.reportTake,
 				callback: getSeatBookingsCallback,
 				isLoadingReportToDisplay: true
 			});
