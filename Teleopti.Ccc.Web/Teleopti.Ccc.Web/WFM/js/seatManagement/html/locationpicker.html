@@ -1,0 +1,33 @@
+﻿<div>
+	<div class="input-prepend">
+		<i class="mdi mdi-filter-outline"></i>
+		<input type="text" name="filterLocations" ng-model="searchLocations" placeholder="{{ 'FilterLocations' | translate }}" />
+	</div>
+
+	<div class="tree">
+		<div ui-tree data-drag-enabled="false">
+			<ol ui-tree-nodes="" ng-model="vm.locations" id="tree-root-locations" class="tree-line" toggle-focus>
+				<li ng-repeat="node in vm.locations | filter:searchLocations" ui-tree-node ng-include=" 'locations_renderer.html' "></li>
+			</ol>
+		</div>
+	</div>
+
+
+	<div class="clearfix"></div>
+
+	<script type="text/ng-template" id="locations_renderer.html">
+		<div class="tree-toggle-group">
+			<div class="toggle-handle" ng-class="{open: node.show}" ng-click="node.show = !node.show"><i ng-show="node.Children.length > 0" class="mdi mdi-chevron-right"></i></div>
+			<div ui-tree-handle ng-class="{selected: node.selected}" ng-click="vm.toggleLocationSelection(node)" ng-hide="checked">
+				fsdsdfsd
+				{{vm.getLocationDisplayText(node)}}
+				<span><i class="mdi mdi-check"></i></span>
+			</div>
+		</div>
+
+		<ol ui-tree-nodes="" ng-model="node.Children" ng-show="node.show">
+			<li ng-repeat="node in node.Children | filter:searchLocations" ui-tree-node ng-include="'locations_renderer.html'">
+			</li>
+		</ol>
+	</script>
+</div>

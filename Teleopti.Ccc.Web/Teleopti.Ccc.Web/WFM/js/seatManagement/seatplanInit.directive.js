@@ -7,18 +7,8 @@
 
 		var vm = this;
 
-		vm.locations = [];
-		vm.teams = [];
-
-		seatPlanService.locations.get().$promise.then(function (locations) {
-			locations.show = true;
-			vm.locations.push(locations);
-		});
-
-		seatPlanService.teams.get().$promise.then(function (teams) {
-			teams.show = true;
-			vm.teams.push(teams);
-		});
+		vm.selectedLocations = [];
+		vm.selectedTeams = [];
 
 		vm.loadDefaultDates = function () {
 			if (vm.start != null) {
@@ -37,39 +27,19 @@
 		};
 
 		vm.loadDefaultDates();
-		vm.getLocationDisplayText = function (location) {
-			if (location.Name == undefined) {
-				return seatPlanTranslatorFactory.TranslatedStrings["NoLocationsAvailable"];
-			}
-			return location.Name + " (" + seatPlanTranslatorFactory.TranslatedStrings["SeatCountTitle"] + ": {0})".replace("{0}", location.Seats.length);
-		};
-
-		vm.getTeamDisplayText = function (teamHierarchyNode) {
-			return teamHierarchyNode.Name;
-		};
-
+		
 		vm.addSeatPlan = function () {
 
 			vm.processingSeatPlan = true;
-
-			var selectedTeams = [];
-			if (vm.teams.length > 0) {
-				getSelectedTeams(vm.teams[0], selectedTeams);
-			}
-
-			var selectedLocations = [];
-			if (vm.locations.length > 0) {
-				getSelectedLocations(vm.locations[0], selectedLocations);
-			}
-
+		
 			var addSeatPlanCommand = {
 				StartDate: vm.period.startDate,
 				EndDate: vm.period.endDate,
-				Teams: selectedTeams,
-				Locations: selectedLocations
+				Teams: vm.selectedTeams,
+				Locations: vm.selectedLocations
 			};
 
-			if (selectedTeams.length == 0 || selectedLocations.length == 0) {
+			if (vm.selectedTeams.length == 0 || vm.selectedLocations.length == 0) {
 				onSelectedTeamsLocationsEmpty(seatPlanTranslatorFactory.TranslatedStrings["TeamsOrLocationsAreUnselected"]);
 				vm.processingSeatPlan = false;
 			}
@@ -82,76 +52,6 @@
 			}
 		};
 
-		function isTeam(team) {
-			return (team.Children === undefined);
-		};
-
-		function setAllChildrenToOpposite(teamHierarchyObj, value) {
-
-			if (isTeam(teamHierarchyObj)) {
-				teamHierarchyObj.selected = value;
-			} else {
-				teamHierarchyObj.Children.forEach(function (child) {
-					setAllChildrenToOpposite(child, value);
-				});
-			}
-		}
-
-		function updateBuAndSiteStatus(rootTeamHierarchyObjs) {
-
-			function setBuAndSiteStatus(hierarchyObj) {
-				if (hierarchyObj.Children == null) return;
-
-				var isAnyChildrenSelected = false;
-				hierarchyObj.Children.forEach(function (child) {
-					setBuAndSiteStatus(child);
-					if (child.selected === true) isAnyChildrenSelected = true;
-				});
-				hierarchyObj.selected = isAnyChildrenSelected;
-			}
-
-			rootTeamHierarchyObjs.forEach(function (rootTeamHierarchyObj) {
-				setBuAndSiteStatus(rootTeamHierarchyObj);
-			});
-		};
-
-		vm.selectTeam = function selectTeam(teamHierarchyObj, rootTeamHierarchyObjs) {
-			if (isTeam(teamHierarchyObj)) {
-				teamHierarchyObj.selected = !teamHierarchyObj.selected;
-			} else {
-				setAllChildrenToOpposite(teamHierarchyObj, !teamHierarchyObj.selected);
-			}
-			updateBuAndSiteStatus(rootTeamHierarchyObjs);
-		};
-		
-		vm.selectLocation = function (location) {
-			location.selected = location.Seats && location.Seats.length > 0 ? !location.selected : location.selected;
-		};
-
-		function getSelectedTeams(node, teams) {
-
-			if (isTeam(node) && node.selected) {
-				teams.push(node.Id);
-			}
-
-			if (node.Children) {
-				for (var i in node.Children) {
-					getSelectedTeams(node.Children[i], teams);
-				}
-			}
-		};
-
-		function getSelectedLocations(node, locations) {
-			if (node.selected && node.Seats && node.Seats.length > 0) {
-				locations.push(node.Id);
-			}
-			if (node.Children) {
-				for (var i in node.Children) {
-					getSelectedLocations(node.Children[i], locations);
-				}
-			}
-
-		};
 
 		function onSuccessAddSeatPlan(message) {
 			growl.success("<i class='mdi mdi-thumb-up'></i> " + message + ".", {

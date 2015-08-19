@@ -44,33 +44,11 @@
 				</div>
 
 				<div class="team-picker" ng-show="vm.isTeamPickerOpened">
-					<div class="input-prepend">
-						<i class="mdi mdi-filter-outline"></i>
-						<input type="text" name="filterTeams" ng-model="searchTeams" placeholder="{{ 'FilterTeams' | translate }}" />
-					</div>
-
-					<div class="tree">
-						<div ui-tree data-drag-enabled=" false">
-							<ol ui-tree-nodes="" ng-model="vm.teams" id="tree-root-teams" class="tree-line" toggle-focus>
-								<li ng-repeat="node in vm.teams | filter:searchTeams" ui-tree-node ng-include="'teams_renderer.html'"></li>
-							</ol>
-						</div>
-					</div>
+					<team-picker selected-teams="vm.selectedTeams"></team-picker>
 				</div>
 
 				<div class="location-picker" ng-show="vm.isLocationPickerOpened">
-					<div class="input-prepend">
-						<i class="mdi mdi-filter-outline"></i>
-						<input type="text" name="filterLocations" ng-model="searchLocations" placeholder="{{ 'FilterLocations' | translate }}" />
-					</div>
-
-					<div class="tree">
-						<div ui-tree data-drag-enabled="false">
-							<ol ui-tree-nodes="" ng-model="vm.locations" id="tree-root-locations" class="tree-line" toggle-focus>
-								<li ng-repeat="node in vm.locations | filter:searchLocations" ui-tree-node ng-include=" 'locations_renderer.html' "></li>
-							</ol>
-						</div>
-					</div>
+					<location-picker selectedlocations="vm.selectedLocations"></location-picker>				
 				</div>
 
 			</div>

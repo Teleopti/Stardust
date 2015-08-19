@@ -5,30 +5,16 @@
 	angular.module('wfm.seatPlan').controller('seatPlanReportCtrl', seatPlanReportCtrl)
 								  .value('reportTake', 34 );
 
-	seatPlanReportCtrl.$inject = ['seatPlanService', 'seatplanTeamAndLocationService', 'reportTake'];
+	seatPlanReportCtrl.$inject = ['seatPlanService', 'reportTake'];
 
-	function seatPlanReportCtrl(seatPlanService, seatplanTeamAndLocationService, reportTake) {
+	function seatPlanReportCtrl(seatPlanService, reportTake) {
 		var vm = this;
 
-		vm.teams = [];
-		vm.locations = [];
+		vm.selectedLocations = [];
+		vm.selectedTeams = [];
 		vm.isDatePickerOpened = true;
 
-		vm.getTeamDisplayText = seatplanTeamAndLocationService.GetTeamDisplayText;
-		vm.getLocationDisplayText = seatplanTeamAndLocationService.GetLocationDisplayText;
-		vm.selectTeam = seatplanTeamAndLocationService.SelectTeam;
-		vm.selectLocation = seatplanTeamAndLocationService.SelectLocation;
-
-		seatPlanService.locations.get().$promise.then(function (locations) {
-			locations.show = true;
-			vm.locations.push(locations);
-		});
-
-		seatPlanService.teams.get().$promise.then(function (teams) {
-			teams.show = true;
-			vm.teams.push(teams);
-		});
-
+		
 		function getSeatBookingsCallback(data) {
 			vm.seatBookings = data.SeatBookingsByDate;
 			vm.isLoadingReport = false;
@@ -40,8 +26,8 @@
 			var seatBookingReportParams = {
 				startDate: moment(vm.selectedPeriod.StartDate).format('YYYY-MM-DD'),
 				endDate: moment(vm.selectedPeriod.EndDate).format('YYYY-MM-DD'),
-				teams: seatplanTeamAndLocationService.GetSelectedTeamsFromTeamList(vm.teams),
-				locations: seatplanTeamAndLocationService.GetSelectedLocationsFromLocationList(vm.locations),
+				teams: vm.selectedTeams,
+				locations: vm.selectedLocations,
 				skip: options.skip,
 				take: options.take
 			};
