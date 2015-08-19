@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Win.Sikuli
 			InteractiveMode = mode;
 		}
 
-		internal static string CurrentValidator { get; private set; }
+		internal static IRootValidator CurrentValidator { get; private set; }
 
 		public static void EnterValidator(IWin32Window owner)
 		{
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Win.Sikuli
 				dialog.ShowDialog(owner);
 				if (dialog.DialogResult == DialogResult.OK)
 				{
-					CurrentValidator = dialog.GetValidatorName;
+					CurrentValidator = SikuliValidatorFactory.Scheduler.CreateValidator(dialog.GetValidatorName);
 				}
 			}
 		}
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Win.Sikuli
 				Details = validationResult.Details.ToString()
 			};
 			testView.ShowDialog(owner);
-			CurrentValidator = SikuliValidatorRegister.None;
+			CurrentValidator = null;
 		}
 	}
 }

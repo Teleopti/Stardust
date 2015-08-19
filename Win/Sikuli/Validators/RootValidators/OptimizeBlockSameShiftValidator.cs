@@ -1,29 +1,16 @@
 ﻿using System;
-using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Win.Sikuli.Helpers;
 using Teleopti.Ccc.Win.Sikuli.Validators.AtomicValidators;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 {
-	internal class OptimizeBlockSameShiftValidator : RootValidator
+	internal class OptimizeBlockSameShiftValidator : SchedulerRootValidator
 	{
-		private readonly ISchedulerStateHolder _schedulerState;
-		private readonly IAggregateSkill _totalSkill;
-
-		public OptimizeBlockSameShiftValidator(ISchedulerStateHolder schedulerState, IAggregateSkill totalSkill)
-		{
-			_schedulerState = schedulerState;
-			_totalSkill = totalSkill;
-		}
-
-
-		public override SikuliValidationResult Validate(object data)
+		protected override SikuliValidationResult Validate(SchedulerTestData data)
 		{
 			const double periodStandardDeviationLimit = 0.05d;
-			AtomicValidators.Add(new PeriodStandardDeviationValidator(_schedulerState, _totalSkill, periodStandardDeviationLimit));
-			var duration = data as ITestDuration;
-			AtomicValidators.Add(new DurationValidator(TimeSpan.FromMinutes(1).Add(TimeSpan.FromSeconds(20)), duration));
+			AtomicValidators.Add(new PeriodStandardDeviationValidator(data.SchedulerState, data.TotalSkill, periodStandardDeviationLimit));
+			AtomicValidators.Add(new DurationValidator(TimeSpan.FromMinutes(1).Add(TimeSpan.FromSeconds(20)), EndTimer()));
 			return ValidateAtomicValidators(AtomicValidators);
 		}
 	}

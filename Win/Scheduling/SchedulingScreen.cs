@@ -2136,7 +2136,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				var skillTabPage = _tabSkillData.TabPages[0];
 				var totalSkill = skillTabPage.Tag as IAggregateSkill;
-				var currentValidator = SikuliValidatorFactory.Scheduler.CreateValidator(_schedulerState, totalSkill);
+				var currentValidator = SikuliHelper.CurrentValidator;
 
 				if (currentValidator != null)
 					SikuliHelper.Validate(currentValidator, this, new SchedulerTestData(_schedulerState, totalSkill));

@@ -30,6 +30,6 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 			return Validate(scheduleTestData);
 		}
 
-		protected abstract SikuliValidationResult Validate(SchedulerTestData schedulerData);
+		protected abstract SikuliValidationResult Validate(SchedulerTestData data);
 	}
 }

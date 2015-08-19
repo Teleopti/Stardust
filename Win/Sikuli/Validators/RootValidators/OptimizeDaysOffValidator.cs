@@ -9,10 +9,10 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 {
 	internal class OptimizeDaysOffValidator : SchedulerRootValidator
 	{
-		protected override SikuliValidationResult Validate(SchedulerTestData schedulerData)
+		protected override SikuliValidationResult Validate(SchedulerTestData data)
 		{
 			const double periodStandardDeviationLimit = 0.05d;
-			AtomicValidators.Add(new PeriodStandardDeviationValidator(schedulerData.SchedulerState, schedulerData.TotalSkill, periodStandardDeviationLimit));
+			AtomicValidators.Add(new PeriodStandardDeviationValidator(data.SchedulerState, data.TotalSkill, periodStandardDeviationLimit));
 			AtomicValidators.Add(new DurationValidator(TimeSpan.FromMinutes(1).Add(TimeSpan.FromSeconds(40)), EndTimer()));
 			return ValidateAtomicValidators(AtomicValidators);
 		}
