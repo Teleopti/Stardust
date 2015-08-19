@@ -88,17 +88,19 @@ describe('OutboundSummaryCtrl', function () {
 			Status: 1
 		});
 
+		outboundService.setPhaseStatistics({PlannedWarning: 2});
+
 		outboundChartService.setCampaignVisualization(1, {
 			Dates: [new Date('2015-07-19'), new Date('2015-07-20')],
 			Plans: [3, 3],
 			ManualPlan: [true, false]
 		});
-		
+
 		test.scope.addManualPlan(campaign);
-		setTimeout(function () {			
-			expect(campaign.graphData).toBeDefined();
-			expect(campaign.Status).toEqual(1);			
-		}, 100);
+
+		expect(campaign.graphData).toBeDefined();
+		expect(campaign.Status).toEqual(1);
+		expect(test.scope.phaseStatistics.PlannedWarning).toEqual(2);
 	});
 
 	it('remove manual plan should work', function() {
@@ -120,13 +122,13 @@ describe('OutboundSummaryCtrl', function () {
 			ManualPlan: [true, false]
 		});
 
+		outboundService.setPhaseStatistics({ PlannedWarning: 2 });
 
 		test.scope.removeManualPlan(campaign);
-		setTimeout(function() {
-			expect(campaign.graphData).toBeDefined();
-			expect(campaign.Status).toEqual(1);		
-		}, 100);
-
+		
+		expect(campaign.graphData).toBeDefined();
+		expect(campaign.Status).toEqual(1);
+		expect(test.scope.phaseStatistics.PlannedWarning).toEqual(2);
 	});
 
 	it('clear manual plan should work', function() {
@@ -159,8 +161,15 @@ describe('OutboundSummaryCtrl', function () {
 
 		var campaigns = [];
 		var campaignSummaries = [];
+		var PhaseStatistics;
 
-		this.getCampaignStatistics=function (){}
+		this.setPhaseStatistics = function (d) {
+			PhaseStatistics = d;
+		}
+
+		this.getCampaignStatistics=function(d,success) {
+			success(PhaseStatistics);
+		}
 
 		this.getCampaign = function (campaignId, successCb, errorCb) {
 		};
