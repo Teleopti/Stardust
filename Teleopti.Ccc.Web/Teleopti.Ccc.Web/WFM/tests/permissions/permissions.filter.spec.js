@@ -24,6 +24,16 @@ describe('PermissionsFilters', function() {
 		expect(filteredArray.length).toEqual(2);
 	}));
 
+	it('should filter on the selected data only', inject(function ($filter) {
+	    var allData = [{ id: 1, selected: true, nmbSelectedChildren: 1, Name: 'Name', Type: 'Site', 
+	             ChildNodes: [{ id: 2, selected: true, Name: 'Name', Type: 'Team' },
+                 { id: 3, selected: false, Name: 'Name', Type: 'Team' }]
+	    }];
+	    var filter = $filter('selectedData');
+
+	    var filteredArray = filter(allData, true);
+	    expect(filteredArray.length).toEqual(1); 
+	}));
 
 	it('should filter on the unselected functions only', inject(function ($filter) {
 		var allFunctions = [
@@ -49,6 +59,24 @@ describe('PermissionsFilters', function() {
 
 		expect(filteredArray.length).toEqual(2); 
 	}));
+
+	/*it('should filter on the unselected data only', inject(function ($filter) {
+	    var allData = [
+		{
+		    id: 1,
+		    Type: 'Site',
+            Name: 'London',
+		    selected: true,		   
+		    ChildNodes: [
+				{ id: 4, selected: false }
+		    ]
+		}];
+	    var filter = $filter('unselectedData');
+
+	    var filteredArray = filter(allData, true);
+
+	    expect(filteredArray.length).toEqual(1);
+	}));*/
 
 	it('shold find matched parent nodes', inject(function($filter) {
 		var nodes = [

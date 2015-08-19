@@ -18,7 +18,7 @@
 
 				$scope.$watch(function () { return RoleDataService.organization; },
 				   function (organization) {
-					   $scope.organization = organization;
+				       $scope.organization = organization;
 					   $scope.dynamicOptionSelected.data = RoleDataService.dynamicOptionSelected;
 
 				   }

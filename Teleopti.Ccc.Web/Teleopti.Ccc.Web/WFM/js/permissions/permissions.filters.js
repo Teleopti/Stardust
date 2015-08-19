@@ -1,105 +1,9 @@
-﻿(function() {
-	'use strict';
-	var permissionsFilters = angular.module('wfm.permissions');
-
-	permissionsFilters.filter('selectedFunctions', [
-		function() {
-		    return function(nodes, selectedFunctionToggle) {
-		        if (!selectedFunctionToggle) return nodes;
-
-		        var filteredNodes = [];
-		        nodes.forEach(function(node) {
-		            if (node.selected || node.nmbSelectedChildren > 0) {
-		                filteredNodes.push(node);
-		            }
-		        });
-		        return filteredNodes;
-		    };
-		}
-	]);
-
-    permissionsFilters.filter('selectedData', [
-    function () {
-	    return function(nodes, selectedDataToggle) {
-		    if (!selectedDataToggle) return nodes;
-		    var filteredNodes = [];
-
-		    var checkChild = function(node) {
-
-			    node.ChildNodes.forEach(function(subnode) {
-				    if (subnode.ChildNodes.length > 0) {
-					    checkChild(subnode);
-				    }
-				    if (subnode.selected) {
-					    node.show = true;
-					    filteredNodes.push(node);
+﻿(function () {
+    'use strict';
+    var permissionsFilters = angular.module('wfm.permissions');
 
 
-				    }
-			    });
-		    }
-		    nodes.forEach(function(node) {
-			    if (node.ChildNodes.length > 0) {
-				    checkChild(node);
-
-			    }
-			    if (node.selected) {
-				    node.show = true;
-				    filteredNodes.push(node);
-
-			    }
-		    });
-		    return filteredNodes;
-	    };
-    }
-    ]);
-
-
-	//permissionsFilters.filter('unselectedFunctions', [
-	//	function() {
-	//	    return function (nodes, unselectedFunctionToggle) {
-	//	        if (!unselectedFunctionToggle) return nodes;
-	//	        var filteredNodes = [];
-	//	        nodes.forEach(function (node) {
-	//	            var hasUnselectedChildren = false;
-	//	            if (node.ChildFunctions && node.ChildFunctions.length > 0
-	//					&& node.nmbSelectedChildren < node.ChildFunctions.length)
-	//	                hasUnselectedChildren = true;
-	//	            console.log("CHILD DDE TOIOLETTE ", getChild(node));
-	//	            if (!node.selected || hasUnselectedChildren) {
-	//	                filteredNodes.push(node);
-	//	            }
-	//	        });
-	//	        return filteredNodes;
-	//	    }
-	//	}
-	//]);
-
-    //permissionsFilters.filter('unselectedData', [
-	//	function () {
-	//		return function(nodes, unselectedDataToggle) {
-	//			if (!unselectedDataToggle) return nodes;
-	//			var filteredNodes = [];
-	//			nodes.forEach(function(node) {
-	//				var hasUnselectedChildren = false;
-	//				if (node.ChildNodes && node.ChildNodes.length > 0
-	//					&& node.nmbSelectedChildren < node.ChildNodes.length)
-	//					hasUnselectedChildren = true;
-
-	//				if (node.nmbSelectedChildren > 0) {
-	//					node.selected
-	//				}
-
-	//				if (!node.selected || hasUnselectedChildren) {
-	//					filteredNodes.push(node);
-	//				}
-	//			});
-	//			return filteredNodes;
-	//		};
-	//	}
-    //]);
-
-    var getChildren = function(child, filterType) {
+    var getChildren = function (child, filterType) {
         if (filterType === 'descriptionFilter') {
             return child.ChildFunctions;
         } else {
@@ -114,27 +18,27 @@
             return node.Name.match(reg);
         }
     }
-    
-    var checkChild = function (child, name, filterType) {
-	    var hasChildWithName = 0;
-	    var reg = new RegExp(name, "i");
-	    var thoseChildren = getChildren(child, filterType);
-	    if (thoseChildren && thoseChildren.length > 0) {
-	        thoseChildren.forEach(function (node) {
-	            if (checkChild(node, name, filterType))
-	                hasChildWithName++;
-	        });
-	        return (hasChildWithName > 0 || matchChild(child, reg, filterType));
-	    } else {
-	        return matchChild(child, reg, filterType);
-	    }
-	};
+
+    var checkName = function (child, name, filterType) {
+        var hasChildWithName = 0;
+        var reg = new RegExp(name, "i");
+        var thoseChildren = getChildren(child, filterType);
+        if (thoseChildren && thoseChildren.length > 0) {
+            thoseChildren.forEach(function (node) {
+                if (checkName(node, name, filterType))
+                    hasChildWithName++;
+            });
+            return (hasChildWithName > 0 || matchChild(child, reg, filterType));
+        } else {
+            return matchChild(child, reg, filterType);
+        }
+    };
 
     var filterNodes = function (nodes, name, filterType) {
         var filteredNodes = [];
 
         nodes.forEach(function (node) {
-            if (checkChild(node, name, filterType)) {
+            if (checkName(node, name, filterType)) {
                 filteredNodes.push(node);
             }
         });
@@ -160,33 +64,123 @@
 		}
     ]);
 
+    permissionsFilters.filter('selectedFunctions', [
+		function () {
+		    return function (nodes, selectedFunctionToggle) {
+		        if (!selectedFunctionToggle) return nodes;
+		        var filteredNodes = [];
+
+		        nodes.forEach(function (node) {
+		            if (node.selected || node.nmbSelectedChildren > 0) {
+		                filteredNodes.push(node);
+		            }
+		        });
+		        return filteredNodes;
+		    };
+		}
+    ]);
+    
+    var checkChild = function (node) {
+        var selectedChildren = 0;
+        node.ChildNodes.forEach(function (subnode) {
+            if (subnode.ChildNodes && subnode.ChildNodes.length > 0) {
+                selectedChildren += checkChild(subnode);
+            }
+            if (subnode.selected) {
+                node.show = true;
+                selectedChildren ++;
+            }
+        });
+        return selectedChildren;
+    }
+     
+    permissionsFilters.filter('selectedData', [
+        function () {
+            return function (nodes, selectedDataToggle) {
+                if (!selectedDataToggle) return nodes;
+                var filteredNodes = [];
+                
+                nodes.forEach(function (node) {
+                    var hasSelectedChildren = 0;
+                    if (node.ChildNodes && node.ChildNodes.length > 0) {
+                        hasSelectedChildren = checkChild(node);
+                    }
+                    if (node.selected || hasSelectedChildren) {
+                        node.show = true;
+                        filteredNodes.push(node);
+                    }
+                });
+                return filteredNodes;
+            };
+        }
+    ]);
+
+
+    //permissionsFilters.filter('unselectedFunctions', [
+    //	function() {
+    //	    return function (nodes, unselectedFunctionToggle) {
+    //	        if (!unselectedFunctionToggle) return nodes;
+    //	        var filteredNodes = [];
+    //	        nodes.forEach(function (node) {
+    //	            var hasUnselectedChildren = false;
+    //	            if (node.ChildFunctions && node.ChildFunctions.length > 0
+    //					&& node.nmbSelectedChildren < node.ChildFunctions.length)
+    //	                hasUnselectedChildren = true;
+    //	            if (!node.selected || hasUnselectedChildren) {
+    //	                filteredNodes.push(node);
+    //	            }
+    //	        });
+    //	        return filteredNodes;
+    //	    }
+    //	}
+    //]);
+
+    //permissionsFilters.filter('unselectedData', [
+    //	function () {
+    //		return function(nodes, unselectedDataToggle) {
+    //			if (!unselectedDataToggle) return nodes;
+    //			var filteredNodes = [];
+    //			nodes.forEach(function(node) {
+    //				var hasUnselectedChildren = false;
+    //				if (node.ChildNodes && node.ChildNodes.length > 0
+    //					&& node.nmbSelectedChildren < node.ChildNodes.length)
+    //					hasUnselectedChildren = true;
+    //				if (node.nmbSelectedChildren > 0) {
+    //					node.selected
+    //				}
+    //				if (!node.selected || hasUnselectedChildren) {
+    //					filteredNodes.push(node);
+    //				}
+    //			});
+    //			return filteredNodes;
+    //		};
+    //	}
+    //]);
+
+
+
     //
-
-
-
-    var unselect = function(nodes, toggle, getChild) {
+    var unselect = function (nodes, toggle, getChild) {
         if (!toggle) return nodes;
         var filteredNodes = [];
         nodes.forEach(function (node) {
             var hasUnselectedChildren = false;
+            debugger;
             if (getChild(node) && getChild(node).length > 0
-                && node.nmbSelectedChildren < getChild(node).length){
-                console.log("NODE ", node);
+                && node.nmbSelectedChildren < getChild(node).length) {
                 hasUnselectedChildren = true;
-                }
-            console.log("CHILD DDE TOIOLETTE ", getChild(node));
+            }
             if (!node.selected || hasUnselectedChildren) {
                 filteredNodes.push(node);
             }
         });
         return filteredNodes;
     };
-   
+
     permissionsFilters.filter('unselectedFunctions', [
-        function() {   
+        function () {
             return function (nodes, unselectedFunctionsToggle) {
                 return unselect(nodes, unselectedFunctionsToggle, function (node) {
-                    console.log("AHHOHOHO CHILD BAGUETTE ", node.ChildFunctions);
                     return node.ChildFunctions;
                 });
             };
@@ -196,7 +190,7 @@
     permissionsFilters.filter('unselectedData', [
         function () {
             return function (nodes, unselectedDataToggle) {
-               return unselect(nodes, unselectedDataToggle, function (node) {
+                return unselect(nodes, unselectedDataToggle, function (node) {
                     return node.ChildNodes;
                 });
             };
