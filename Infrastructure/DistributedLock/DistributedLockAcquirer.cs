@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Infrastructure.DistributedLock
 
 		public IDisposable LockForTypeOf(object lockObject)
 		{
-			var connection = new SqlConnection(_configReader.ConnectionStrings_DontUse["RtaApplication"].ConnectionString);
+			var connection = new SqlConnection(_configReader.ConnectionString("RtaApplication"));
 			connection.Open();
 			var @lock = new SqlServerDistributedLock(ProxyUtil.GetUnproxiedType(lockObject).Name, timeout(), connection);
 			return new GenericDisposable(() =>

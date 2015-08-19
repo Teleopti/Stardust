@@ -31,8 +31,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.Register(c =>
 			{
 				var configReader = c.Resolve<IConfigReader>();
-				var connStringToTenant = configReader.ConnectionStrings_DontUse[tenancyConnectionStringKey];
-				var connstringAsString = connStringToTenant == null ? null : connStringToTenant.ConnectionString;
+				var connstringAsString = configReader.ConnectionString(tenancyConnectionStringKey);
 				return TenantUnitOfWorkManager.CreateInstanceForWeb(connstringAsString);
 			})
 				.As<ITenantUnitOfWork>()

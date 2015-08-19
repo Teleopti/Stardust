@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork.MessageBrokerUnitOfWork
 			var configuration = new Configuration()
 				.DataBaseIntegration(db =>
 				{
-					db.ConnectionString = _configReader.ConnectionStrings_DontUse["MessageBroker"].ConnectionString;
+					db.ConnectionString = _configReader.ConnectionString("MessageBroker");
 					db.Dialect<MsSql2008Dialect>();
 				});
 			_sessionFactory = configuration.BuildSessionFactory();

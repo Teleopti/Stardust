@@ -34,11 +34,5 @@ namespace Teleopti.Ccc.Domain.Config
 		{
 			get { return ConfigurationManager.AppSettings; }
 		}
-
-		public ConnectionStringSettingsCollection ConnectionStrings_DontUse
-		{
-			get { return ConfigurationManager.ConnectionStrings; }
-		}
-
 	}
 }

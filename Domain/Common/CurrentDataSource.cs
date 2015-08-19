@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Common
 
 		private IDataSource dataSourceFromRtaConfiguration()
 		{
-			var configString = new SqlConnectionStringBuilder(_configReader.ConnectionStrings_DontUse["RtaApplication"].ConnectionString);
+			var configString = new SqlConnectionStringBuilder(_configReader.ConnectionString("RtaApplication"));
 			IDataSource dataSource = null;
 			_applicationData.Current().DoOnAllTenants_AvoidUsingThis(tenant =>
 			{

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Configuration;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Config;
 
@@ -54,16 +53,5 @@ namespace Teleopti.Ccc.TestCommon
 				return result;
 			}
 		}
-
-		public ConnectionStringSettingsCollection ConnectionStrings_DontUse
-		{
-			get
-			{
-				var result = new ConnectionStringSettingsCollection();
-				_connectionStrings.ForEach(x => result.Add(new ConnectionStringSettings(x.Key, x.Value)));
-				return result;
-			}
-		}
-
 	}
 }

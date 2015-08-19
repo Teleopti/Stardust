@@ -62,8 +62,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 			build.Register(c =>
 			{
 				var configReader = c.Resolve<IConfigReader>();
-				var connStringToTenant = configReader.ConnectionStrings_DontUse["Tenancy"];
-				var connstringAsString = connStringToTenant == null ? null : connStringToTenant.ConnectionString;
+				var connstringAsString = configReader.ConnectionString("Tenancy");
 				return TenantUnitOfWorkManager.CreateInstanceForThread(connstringAsString);
 			})
 				.As<ITenantUnitOfWork>()

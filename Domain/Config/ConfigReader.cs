@@ -12,18 +12,13 @@ namespace Teleopti.Ccc.Domain.Config
 
 		public string ConnectionString(string name)
 		{
-			return ConfigurationManager.ConnectionStrings[name].ConnectionString;
+			var connectionStringSetting = ConfigurationManager.ConnectionStrings[name];
+			return connectionStringSetting == null ? null : connectionStringSetting.ConnectionString;
 		}
 
 		public NameValueCollection AppSettings_DontUse
 		{
 			get { return ConfigurationManager.AppSettings; }
 		}
-
-		public ConnectionStringSettingsCollection ConnectionStrings_DontUse
-		{
-			get { return ConfigurationManager.ConnectionStrings; }
-		}
-
 	}
 }
