@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Core.Config
 		{
 			var expected = RandomName.Make();
 			var appConfig = new FakeConfigReader();
-			appConfig.AppSettings_DontUse["MessageBroker"] = expected;
+			appConfig.FakeSetting("MessageBroker", expected);
 
 			var target = new SharedSettingsFactory(appConfig, MockRepository.GenerateStub<ILoadPasswordPolicyService>());
 			var result = target.Create();
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Core.Config
 		{
 			const int expected = 123;
 			var appConfig = new FakeConfigReader();
-			appConfig.AppSettings_DontUse["NumberOfDaysToShowNonPendingRequests"] = expected.ToString();
+			appConfig.FakeSetting("NumberOfDaysToShowNonPendingRequests", expected.ToString());
 
 			var target = new SharedSettingsFactory(appConfig, MockRepository.GenerateStub<ILoadPasswordPolicyService>());
 			var result = target.Create();
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Core.Config
 		{
 			var expected = RandomName.Make();
 			var appConfig = new FakeConfigReader();
-			appConfig.AppSettings_DontUse["MessageBrokerLongPolling"] = expected;
+			appConfig.FakeSetting("MessageBrokerLongPolling", expected);
 
 			var target = new SharedSettingsFactory(appConfig, MockRepository.GenerateStub<ILoadPasswordPolicyService>());
 			var result = target.Create();
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Core.Config
 		{
 			var expected = RandomName.Make();
 			var appConfig = new FakeConfigReader();
-			appConfig.AppSettings_DontUse["RtaPollingInterval"] = expected;
+			appConfig.FakeSetting("RtaPollingInterval", expected);
 
 			var target = new SharedSettingsFactory(appConfig, MockRepository.GenerateStub<ILoadPasswordPolicyService>());
 			var result = target.Create();
@@ -68,13 +68,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Core.Config
 		public void ShouldGetQueue()
 		{
 			var expected = RandomName.Make();
-			var appConfig = new FakeConfigReader
-			{
-				ConnectionStrings_DontUse = new ConnectionStringSettingsCollection
-				{
-					new ConnectionStringSettings("Queue", expected)
-				}
-			};
+			var appConfig = new FakeConfigReader();
+			appConfig.FakeConnectionString("Queue", expected);
 			var target = new SharedSettingsFactory(appConfig, MockRepository.GenerateStub<ILoadPasswordPolicyService>());
 			var result = Encryption.DecryptStringFromBase64(target.Create().Queue, EncryptionConstants.Image1, EncryptionConstants.Image2);
 

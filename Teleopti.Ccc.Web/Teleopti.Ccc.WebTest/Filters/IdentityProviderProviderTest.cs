@@ -14,7 +14,9 @@ namespace Teleopti.Ccc.WebTest.Filters
 		{
 			var target =
 				new IdentityProviderProvider(
-					new FakeConfigReader(new Dictionary<string, string> {{"DefaultIdentityProvider", "Windows"}}));
+					new FakeConfigReader(
+						new Dictionary<string, string> {{"DefaultIdentityProvider", "Windows"}}
+						));
 
 			var defaultProvider = target.DefaultProvider();
 

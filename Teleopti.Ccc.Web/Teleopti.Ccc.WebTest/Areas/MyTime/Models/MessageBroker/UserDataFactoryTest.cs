@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Models.MessageBroker
 		public void ShouldSetMessageBrokerUrl()
 		{
 			const string expected = "http://donkeyXXX.com";
-			configReader.AppSettings_DontUse[UserDataFactory.MessageBrokerUrlKey] = expected;
+			configReader.FakeSetting(UserDataFactory.MessageBrokerUrlKey, expected);
 
 			var result = target.CreateViewModel();
 			result.Url.Should().Be.EqualTo(expected);
@@ -63,8 +63,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Models.MessageBroker
 		public void ShouldSetMessageBrokerUrlFromContextWhenSetToReplace()
 		{
 			const string configured = "http://myserver/broker/signalr/";
-			configReader.AppSettings_DontUse[UserDataFactory.MessageBrokerUrlKey] = configured;
-			configReader.AppSettings_DontUse["UseRelativeConfiguration"] = "true";
+			configReader.FakeSetting(UserDataFactory.MessageBrokerUrlKey, configured);
+			configReader.FakeSetting("UseRelativeConfiguration", "true");
 
 			var result = target.CreateViewModel();
 			result.Url.Should().Be.EqualTo("/broker/signalr/");

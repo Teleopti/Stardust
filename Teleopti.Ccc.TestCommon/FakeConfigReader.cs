@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
@@ -11,10 +10,10 @@ namespace Teleopti.Ccc.TestCommon
 	{
 		private readonly IDictionary<string, string> _settings = new Dictionary<string, string>();
 		private readonly IDictionary<string, string> _connectionStrings = new Dictionary<string, string>();
-		 
+
 		public FakeConfigReader(IEnumerable<KeyValuePair<string, string>> config)
 		{
-			config.ForEach(x => _connectionStrings[x.Key] = x.Value);
+			config.ForEach(x => _settings[x.Key] = x.Value);
 		}
 
 		public FakeConfigReader()
@@ -63,13 +62,6 @@ namespace Teleopti.Ccc.TestCommon
 				var result = new ConnectionStringSettingsCollection();
 				_connectionStrings.ForEach(x => result.Add(new ConnectionStringSettings(x.Key, x.Value)));
 				return result;
-			}
-			set
-			{
-				foreach (ConnectionStringSettings connectionString in value)
-				{
-					_connectionStrings[connectionString.Name] = connectionString.ConnectionString;
-				}
 			}
 		}
 

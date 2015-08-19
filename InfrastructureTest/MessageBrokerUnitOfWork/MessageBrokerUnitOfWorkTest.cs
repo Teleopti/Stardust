@@ -36,13 +36,9 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBrokerUnitOfWork
 
 			system.UseTestDouble(new MutableFakeCurrentHttpContext()).For<ICurrentHttpContext>();
 
-			system.UseTestDouble(new FakeConfigReader
-			{
-				ConnectionStrings_DontUse = new ConnectionStringSettingsCollection
-				{
-					new ConnectionStringSettings("MessageBroker", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix)
-				}
-			}).For<IConfigReader>();
+			var config = new FakeConfigReader();
+			config.FakeConnectionString("MessageBroker", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
+			system.UseTestDouble(config).For<IConfigReader>();
 
 		}
 	}
