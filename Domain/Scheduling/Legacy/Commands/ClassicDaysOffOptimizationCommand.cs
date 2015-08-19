@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		public void Execute(IList<IScheduleDay> scheduleDays, DateOnlyPeriod selectedPeriod, IOptimizationPreferences optimizationPreferences, ISchedulerStateHolder schedulerStateHolder, IBackgroundWorkerWrapper backgroundWorker)
 		{
 			
-
+			
 			IList<IScheduleMatrixPro> matrixListForDayOffOptimization = _matrixListFactory.CreateMatrixList(scheduleDays, selectedPeriod);
 			IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForDayOffOptimization =
 				matrixListForDayOffOptimization.Select(matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, _scheduleDayEquator))
@@ -131,9 +131,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
 			{
 				_resourceOptimizationHelperExtended().ResourceCalculateAllDays(backgroundWorker, true);
+				EventHandler<ResourceOptimizerProgressEventArgs> handler = (s, e) => backgroundWorker.ReportProgress(0, e);
+				service.ReportProgress += handler;
 				service.Execute(optimizerContainers);
-			}
-			
+				service.ReportProgress -= handler;
+			}			
 		}
 
 		private IDayOffOptimizerContainer createOptimizer(

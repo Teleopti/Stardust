@@ -10,16 +10,13 @@ using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
-using Teleopti.Ccc.Secrets.DayOffPlanning;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
@@ -39,7 +36,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly IScheduleMatrixListCreator _scheduleMatrixListCreator;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private ResourceOptimizerProgressEventArgs _progressEvent;
-		private readonly IDayOffOptimizationDecisionMakerFactory _dayOffOptimizationDecisionMakerFactory;
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
 		private readonly IScheduleMatrixLockableBitArrayConverterEx _bitArrayConverter;
 
@@ -58,7 +54,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_scheduleMatrixListCreator = _container.Resolve<IScheduleMatrixListCreator>();
 			_optimizerHelperHelper = _container.Resolve<IOptimizerHelperHelper>();
 			_bitArrayConverter = _container.Resolve<IScheduleMatrixLockableBitArrayConverterEx>();
-			_dayOffOptimizationDecisionMakerFactory = container.Resolve<IDayOffOptimizationDecisionMakerFactory>();
 		}
 
 		private void optimizeIntraday(IList<IScheduleMatrixOriginalStateContainer> matrixContainerList,
@@ -137,56 +132,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			service.ReportProgress -= resourceOptimizerPersonOptimized;
 		}
 
-
-		private void optimizeDaysOff(
-			IList<IScheduleMatrixOriginalStateContainer> matrixContainerList,
-			IDayOffTemplate dayOffTemplate,
-			DateOnlyPeriod selectedPeriod,
-			IScheduleService scheduleService)
+		private void classicDaysOffOptimization(IList<IScheduleDay> scheduleDays, DateOnlyPeriod selectedPeriod, IBackgroundWorkerWrapper backgroundWorkerWrapper)
 		{
 			var optimizerPreferences = _container.Resolve<IOptimizationPreferences>();
-
-			ISchedulePartModifyAndRollbackService rollbackService =
-				new SchedulePartModifyAndRollbackService(
-					_stateHolder(),
-					_scheduleDayChangeCallback(),
-					new ScheduleTagSetter(optimizerPreferences.General.ScheduleTag));
-
-			ISchedulePartModifyAndRollbackService rollbackServiceDayOffConflict =
-				new SchedulePartModifyAndRollbackService(
-					_stateHolder(),
-					_scheduleDayChangeCallback(),
-					new ScheduleTagSetter(optimizerPreferences.General.ScheduleTag));
-
-			IList<IDayOffOptimizerContainer> optimizerContainers = new List<IDayOffOptimizerContainer>();
-
-			for (int index = 0; index < matrixContainerList.Count; index++)
-			{
-				IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer = matrixContainerList[index];
-				IScheduleMatrixPro matrix = matrixContainerList[index].ScheduleMatrix;
-				IScheduleResultDataExtractor personalSkillsDataExtractor =
-					_optimizerHelper.CreatePersonalSkillsDataExtractor(optimizerPreferences.Advanced, matrix);
-				IPeriodValueCalculator localPeriodValueCalculator =
-					_optimizerHelperHelper.CreatePeriodValueCalculator(optimizerPreferences.Advanced, personalSkillsDataExtractor);
-				IDayOffOptimizerContainer optimizerContainer =
-					createOptimizer(matrix, optimizerPreferences.DaysOff, optimizerPreferences,
-						rollbackService, dayOffTemplate, scheduleService, localPeriodValueCalculator,
-						rollbackServiceDayOffConflict, matrixOriginalStateContainer);
-				optimizerContainers.Add(optimizerContainer);
-			}
-
-			IScheduleResultDataExtractor allSkillsDataExtractor =
-				_optimizerHelperHelper.CreateAllSkillsDataExtractor(optimizerPreferences.Advanced, selectedPeriod, _stateHolder());
-			IPeriodValueCalculator periodValueCalculator =
-				_optimizerHelperHelper.CreatePeriodValueCalculator(optimizerPreferences.Advanced, allSkillsDataExtractor);
-
-			IDayOffOptimizationService service = new DayOffOptimizationService(periodValueCalculator);
-			service.ReportProgress += resourceOptimizerPersonOptimized;
-			service.Execute(optimizerContainers);
-			service.ReportProgress -= resourceOptimizerPersonOptimized;
+			var classicDaysOffOptimizationCommand = _container.Resolve<IClassicDaysOffOptimizationCommand>();
+			classicDaysOffOptimizationCommand.Execute(scheduleDays, selectedPeriod, optimizerPreferences, _schedulerStateHolder(), backgroundWorkerWrapper);
 		}
-
-		
+	
 		public IEditableShift PrepareAndChooseBestShift(IScheduleDay schedulePart,
 			ISchedulingOptions schedulingOptions,
 			IWorkShiftFinderService finderService)
@@ -401,7 +353,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				if (optimizerPreferences.General.OptimizationStepDaysOff)
 				{
 					runDayOffOptimization(optimizerPreferences, matrixOriginalStateContainerListForDayOffOptimization,
-						selectedPeriod);
+						selectedPeriod, selectedDays);
 					continuedStep = true;
 
 				}
@@ -619,7 +571,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		}
 
 		private void runDayOffOptimization(IOptimizationPreferences optimizerPreferences,
-			IList<IScheduleMatrixOriginalStateContainer> matrixContainerList, DateOnlyPeriod selectedPeriod)
+			IList<IScheduleMatrixOriginalStateContainer> matrixContainerList, DateOnlyPeriod selectedPeriod, IList<IScheduleDay> selectedDays)
 		{
 			if (_backgroundWorker.CancellationPending)
 				return;
@@ -684,10 +636,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				}
 			}
 
-			optimizeDaysOff(validMatrixContainerList,
-				displayList[0],
-				selectedPeriod,
-				scheduleService);
+			classicDaysOffOptimization(selectedDays, selectedPeriod, _backgroundWorker);
 
 			// we create a rollback service and do the changes and check for the case that not all white spots can be scheduled
 			rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder(), _scheduleDayChangeCallback(), new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
@@ -734,92 +683,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				retList.Add(new ScheduleMatrixOriginalStateContainer(scheduleMatrixPro, scheduleDayEquator));
 
 			return retList;
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-		private IDayOffOptimizerContainer createOptimizer(
-			IScheduleMatrixPro scheduleMatrix,
-			IDaysOffPreferences daysOffPreferences,
-			IOptimizationPreferences optimizerPreferences,
-			ISchedulePartModifyAndRollbackService rollbackService,
-			IDayOffTemplate dayOffTemplate,
-			IScheduleService scheduleService,
-			IPeriodValueCalculator periodValueCalculatorForAllSkills,
-			ISchedulePartModifyAndRollbackService rollbackServiceDayOffConflict,
-			IScheduleMatrixOriginalStateContainer originalStateContainer)
-		{
-			IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateService =
-				_optimizerHelper.CreateWorkShiftBackToLegalStateServicePro(_container);
-
-			ILockableBitArray scheduleMatrixArray = _bitArrayConverter.Convert(scheduleMatrix, daysOffPreferences.ConsiderWeekBefore, daysOffPreferences.ConsiderWeekAfter);
-
-			// create decisionmakers
-			var decisionMakers = _dayOffOptimizationDecisionMakerFactory.CreateDecisionMakers(scheduleMatrixArray, optimizerPreferences);
-			var scheduleResultDataExtractor = _optimizerHelper.CreatePersonalSkillsDataExtractor(optimizerPreferences.Advanced, scheduleMatrix);
-
-			ISmartDayOffBackToLegalStateService dayOffBackToLegalStateService =
-				new SmartDayOffBackToLegalStateService(
-					_container.Resolve<IDayOffBackToLegalStateFunctions>(),
-					daysOffPreferences,
-					25,
-					_container.Resolve<IDayOffDecisionMaker>());
-
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, true);
-
-			var dayOffOptimizerConflictHandler = new DayOffOptimizerConflictHandler(scheduleMatrix, scheduleService,
-				_container.Resolve<IEffectiveRestrictionCreator>(),
-				rollbackServiceDayOffConflict,
-				resourceCalculateDelayer);
-
-			var restrictionChecker = new RestrictionChecker();
-			var optimizationUserPreferences = _container.Resolve<IOptimizationPreferences>();
-			var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(restrictionChecker, optimizationUserPreferences, originalStateContainer);
-
-			var optimizationLimits = new OptimizationLimits(optimizerOverLimitDecider, _container.Resolve<IMinWeekWorkTimeRule>());
-
-			var resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
-			IDeleteAndResourceCalculateService deleteAndResourceCalculateService =
-				new DeleteAndResourceCalculateService(new DeleteSchedulePartService(_stateHolder), resourceOptimizationHelper);
-			INightRestWhiteSpotSolverService nightRestWhiteSpotSolverService =
-				new NightRestWhiteSpotSolverService(new NightRestWhiteSpotSolver(),
-					deleteAndResourceCalculateService,
-					scheduleService, ()=>WorkShiftFinderResultHolder,
-					resourceCalculateDelayer);
-			var mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
-			var dailySkillForecastAndScheduledValueCalculator = new DailySkillForecastAndScheduledValueCalculator(_stateHolder);
-			var deviationStatisticData = new DeviationStatisticData();
-			var dayOffOptimizerPreMoveResultPredictor =
-				new DayOffOptimizerPreMoveResultPredictor(dailySkillForecastAndScheduledValueCalculator, deviationStatisticData);
-
-			IDayOffDecisionMakerExecuter dayOffDecisionMakerExecuter
-				= new DayOffDecisionMakerExecuter(rollbackService,
-					dayOffBackToLegalStateService,
-					dayOffTemplate,
-					scheduleService,
-					optimizerPreferences,
-					periodValueCalculatorForAllSkills,
-					workShiftBackToLegalStateService,
-					_container.Resolve<IEffectiveRestrictionCreator>(),
-					_resourceOptimizationHelper,
-					new ResourceCalculateDaysDecider(),
-					_container.Resolve<IDayOffOptimizerValidator>(),
-					dayOffOptimizerConflictHandler,
-					originalStateContainer,
-					optimizationLimits,
-					nightRestWhiteSpotSolverService,
-					_container.Resolve<ISchedulingOptionsCreator>(),
-					mainShiftOptimizeActivitySpecificationSetter,
-					dayOffOptimizerPreMoveResultPredictor);
-
-			IDayOffOptimizerContainer optimizerContainer =
-				new DayOffOptimizerContainer(_bitArrayConverter,
-					decisionMakers,
-					scheduleResultDataExtractor,
-					daysOffPreferences,
-					scheduleMatrix,
-					dayOffDecisionMakerExecuter,
-					originalStateContainer);
-			return optimizerContainer;
-		}
+		}	
 	}
 }
