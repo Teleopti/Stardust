@@ -102,7 +102,7 @@ describe('OutboundSummaryCtrl', function () {
 	});
 
 	it('remove manual plan should work', function() {
-		var test = setUpTarget();
+		var test = setUpTarget(); 
 		var campaign = {
 			Id: 1,
 			selectedDates: [new Date('2015-07-19'), new Date('2015-07-20')],
@@ -160,6 +160,7 @@ describe('OutboundSummaryCtrl', function () {
 		var campaigns = [];
 		var campaignSummaries = [];
 
+		this.getCampaignStatistics=function (){}
 
 		this.getCampaign = function (campaignId, successCb, errorCb) {
 		};
