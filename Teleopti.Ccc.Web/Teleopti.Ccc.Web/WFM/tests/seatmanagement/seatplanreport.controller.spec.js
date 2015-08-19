@@ -107,49 +107,7 @@ describe('seatplan report controller tests', function () {
 		}
 	};
 
-	function TeamFactory() {
-
-		function createTeam(id, isSelected) {
-			return {
-				Children: undefined,
-				Id: id,
-				Name: 'team ' + id,
-				selected: isSelected
-			};
-		}
-
-		return {
-			CreateTeam: createTeam
-		};
-	};
-
-	function LocationFactory() {
-
-		function createSeats(numberOfSeats) {
-			var seats = [];
-			for (var i = 0; i < numberOfSeats; i++) {
-				seats[i] = { Id: i, Name: "Seat" + i }
-			}
-			return seats;
-		}
-
-		function createLocation(id, numberOfSeats, isSelected) {
-			return {
-				ParentId: "00000000-0000-0000-0000-000000000000",
-				SeatMapJsonData: null,
-				BreadcrumbInfo: null,
-				Id: id,
-				Name: 'Location ' + id,
-				Children: [],
-				Seats: createSeats(numberOfSeats),
-				selected: isSelected
-			}
-		}
-
-		return {
-			CreateLocation: createLocation
-		}
-	};
+	
 
 	function setUpController($controller) {
 		return $controller('seatPlanReportCtrl',

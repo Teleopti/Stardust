@@ -1312,7 +1312,9 @@
     <Content Include="WFM\js\resourceplanner\resourceplanner.report.controller.js" />
     <Content Include="WFM\js\resourceplanner\_modules.js" />
     <Content Include="WFM\tests\outbound\outbound.filter.spec.js" />
+    <Content Include="WFM\tests\seatmanagement\locationpicker.controller.spec.js" />
     <Content Include="WFM\tests\seatmanagement\seatplanreport.controller.spec.js" />
+    <Content Include="WFM\tests\seatmanagement\teampicker.controller.spec.js" />
     <Content Include="WFM\vendor\csv-js\csv.js" />
     <Content Include="WFM\vendor\ui-bootstrap-custom-build\datepicker.directive.ext.js" />
     <Content Include="WFM\js\seatManagement\fabric.fix.js" />

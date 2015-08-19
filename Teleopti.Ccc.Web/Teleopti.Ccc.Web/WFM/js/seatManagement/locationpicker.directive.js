@@ -9,6 +9,7 @@
 		var vm = this;
 
 		vm.locations = [];
+		vm.selectedLocations = [];
 
 		seatPlanService.locations.get().$promise.then(function (locations) {
 			locations.show = true;
@@ -26,16 +27,16 @@
 
 			location.selected = location.Seats && location.Seats.length > 0 ? !location.selected : location.selected;
 			if (location.selected) {
-				vm.selectedlocations.push(location.Id);
+				vm.selectedLocations.push(location.Id);
 			} else {
 				unselectLocation(location);
 			}
 		};
 
 		function unselectLocation(location) {
-			var index = vm.selectedlocations.indexOf(location.Id);
+			var index = vm.selectedLocations.indexOf(location.Id);
 			if (index != -1) {
-				vm.selectedlocations.splice(index, 1);
+				vm.selectedLocations.splice(index, 1);
 			}
 		};
 	};
@@ -53,7 +54,7 @@
 			controllerAs: 'vm',
 			bindToController: true,
 			scope: {
-				selectedlocations: '='
+				selectedLocations: '='
 			},
 			templateUrl: "js/seatManagement/html/locationpicker.html",
 		};
