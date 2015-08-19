@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Configuration;
 using System.Globalization;
 using System.Text;
 using System.Threading;
@@ -9,6 +10,7 @@ using System.Windows.Markup;
 using Autofac;
 using log4net;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -222,7 +224,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				builder.Register(context => context.Resolve<ICurrentUnitOfWorkFactory>().Current()).ExternallyOwned().As<IUnitOfWorkFactory>();
 				builder.RegisterType<CurrentUnitOfWorkFactory>().As<ICurrentUnitOfWorkFactory>().SingleInstance();
 				//////
-				builder.Register(c => configReader).As<IConfigReader>().SingleInstance();
+				builder.Register(c => new WebConfigReader(() =>
+				{
+					var webSettings = new WebSettings
+					{
+						Settings =
+							c.Resolve<ISharedSettingsQuerier>()
+								.GetSharedSettings()
+								.AddToAppSettings(ConfigurationManager.AppSettings.ToDictionary())
+					};
+					return webSettings;
+				})).As<IConfigReader>().SingleInstance();
 				return builder.Build();
 			}
 		}

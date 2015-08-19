@@ -41,11 +41,6 @@ namespace Teleopti.Ccc.WinCode.Main
 			}
 
 			var appSettings = settings.AddToAppSettings(ConfigurationManager.AppSettings.ToDictionary());
-			var configReader = container.Resolve<IConfigReader>();
-			foreach (var appSetting in appSettings)
-			{
-				configReader.AppSettings_DontUse[appSetting.Key] = appSetting.Value;
-			}
 			var sendToServiceBus = string.IsNullOrEmpty(ConfigurationManager.AppSettings["FreemiumForecast"])
 				? (IServiceBusSender) new ServiceBusSender()
 				: new NoServiceBusSender();
