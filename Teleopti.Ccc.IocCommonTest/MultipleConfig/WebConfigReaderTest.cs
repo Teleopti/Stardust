@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.IocCommonTest.MultipleConfig
 			var value = RandomName.Make();
 			var target = new WebConfigReader(() =>
 			{
-				var settings = new WebSettings();
+				var settings = new WebSettings { Settings = new Dictionary<string, string>() };
 				settings.Settings[key] = value;
 				return settings;
 			});
