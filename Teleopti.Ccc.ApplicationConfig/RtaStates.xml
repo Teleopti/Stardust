@@ -539,4 +539,15 @@
 	<state name="Agent_PhoneState_Idle">2000</state>
 	<state name="Agent_PhoneState_SupervisorDiscreteListening">2011</state>
   </RtaState>
+  <RtaState name="LiveVox 3.3" platformTypeId="7A283F0D-59EA-499D-B054-CDCAC4C9A8D0">
+	<state name="Outbound">42</state>
+	<state name="Transfering">6</state>
+	<state name="Dialing">9</state>
+	<state name="Inbound">41</state>
+	<state name="Wrap Up">5</state>
+	<state name="Not Ready">3</state>
+	<state name="Ready">2</state>
+	<state name="Hold">13</state>
+	<state name="Logoff">LOGGED-OFF</state>
+  </RtaState>
 </Rta>
