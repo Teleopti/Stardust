@@ -28,6 +28,7 @@
 
 		public const string TeleoptiCccMyTeam = DefinedLicenseSchemaCodes.TeleoptiWFMSchema + "/MyTeam";
 
+		public const string TeleoptiWfmVNextPilot = DefinedLicenseSchemaCodes.TeleoptiWFMSchema + "/VNext";
 
         /// <summary>
         /// Constant string for Freemium base option
@@ -47,6 +48,5 @@
         public const string TeleoptiCccPilotCustomersPermissions = DefinedLicenseSchemaCodes.TeleoptiWFMPilotCustomersSchema + "/Permissions";
         public const string TeleoptiCccPilotCustomersReports = DefinedLicenseSchemaCodes.TeleoptiWFMPilotCustomersSchema + "/Reports";
 
-		public const string TeleoptiWfmVNextPilotBase = DefinedLicenseSchemaCodes.TeleoptiWFMVNextPilotSchema + "/Base";
     }
 }

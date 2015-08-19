@@ -81,6 +81,7 @@
 			this.labelRatio = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.chkFreemium = new System.Windows.Forms.CheckBox();
+			this.chkVNextPilot = new System.Windows.Forms.CheckBox();
 			((System.ComponentModel.ISupportInitialize)(this.numMaxActiveAgents)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numMaxActiveAgentsGrace)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numExpirationGracePeriodDays)).BeginInit();
@@ -344,7 +345,7 @@
 			this.grpBoxModules.Controls.Add(this.chkBase);
 			this.grpBoxModules.Location = new System.Drawing.Point(70, 338);
 			this.grpBoxModules.Name = "grpBoxModules";
-			this.grpBoxModules.Size = new System.Drawing.Size(211, 312);
+			this.grpBoxModules.Size = new System.Drawing.Size(211, 332);
 			this.grpBoxModules.TabIndex = 14;
 			this.grpBoxModules.TabStop = false;
 			this.grpBoxModules.Text = "Teleopti WFM options";
@@ -641,11 +642,22 @@
 			this.chkFreemium.UseVisualStyleBackColor = true;
 			this.chkFreemium.CheckedChanged += new System.EventHandler(this.chkFreemium_CheckedChanged);
 			// 
+			// chkVNextPilot
+			// 
+			this.chkVNextPilot.AutoSize = true;
+			this.chkVNextPilot.Location = new System.Drawing.Point(76, 646);
+			this.chkVNextPilot.Name = "chkVNextPilot";
+			this.chkVNextPilot.Size = new System.Drawing.Size(78, 17);
+			this.chkVNextPilot.TabIndex = 20;
+			this.chkVNextPilot.Text = "VNext Pilot";
+			this.chkVNextPilot.UseVisualStyleBackColor = true;
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(639, 682);
+			this.Controls.Add(this.chkVNextPilot);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.labelRatio);
 			this.Controls.Add(this.numericUpDownCountRatio);
@@ -749,6 +761,7 @@
 		private System.Windows.Forms.CheckBox chkCalendarLink;
 		private System.Windows.Forms.CheckBox chkNotify;
 		private System.Windows.Forms.CheckBox chkMyTeam;
+		private System.Windows.Forms.CheckBox chkVNextPilot;
 	}
 }
 

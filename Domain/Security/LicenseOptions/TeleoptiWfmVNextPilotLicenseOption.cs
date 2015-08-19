@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 	public class TeleoptiWfmVNextPilotLicenseOption : LicenseOption
 	{
 		public TeleoptiWfmVNextPilotLicenseOption()
-			: base(DefinedLicenseOptionPaths.TeleoptiWfmVNextPilotBase, DefinedLicenseOptionNames.TeleoptiWfmVNextPilotBase)
+			: base(DefinedLicenseOptionPaths.TeleoptiWfmVNextPilot, DefinedLicenseOptionNames.TeleoptiWfmVNextPilot)
 		{
 		}
 

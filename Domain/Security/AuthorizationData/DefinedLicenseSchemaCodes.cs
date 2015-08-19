@@ -17,7 +17,5 @@
         /// Constant string for Early bird schema
         /// </summary>
         public const string TeleoptiWFMPilotCustomersSchema = "TeleoptiWFMPilotCustomers";
-
-		public const string TeleoptiWFMVNextPilotSchema = "TeleoptiWFMVNextPilot";
     }
 }

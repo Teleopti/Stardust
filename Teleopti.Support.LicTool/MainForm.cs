@@ -118,6 +118,7 @@ namespace Teleopti.Support.LicTool
 			chkPerformanceManager.Checked = false;
 			chkPayrollIntegration.Checked = false;
 			chkMyTeam.Checked = false;
+			chkVNextPilot.Checked = false;
 		}
 
 		private void EnterDemoSettings()
@@ -219,6 +220,7 @@ namespace Teleopti.Support.LicTool
 						if (options.Contains("PerformanceManager")) chkPerformanceManager.Checked = true;
 						if (options.Contains("PayrollIntegration")) chkPayrollIntegration.Checked = true;
 						if (options.Contains("MyTeam")) chkMyTeam.Checked = true;
+						if (options.Contains("VNext")) chkVNextPilot.Checked = true;
 						
 						//Freemium
 						if (options.Contains("Forecasts")) chkFreemium.Checked = true;
@@ -295,6 +297,8 @@ namespace Teleopti.Support.LicTool
 					elmOptions.AppendChild(xdoc.CreateElement("PayrollIntegration")).AppendChild(xdoc.CreateTextNode("true"));
 				if (chkMyTeam.Checked)
 					elmOptions.AppendChild(xdoc.CreateElement("MyTeam")).AppendChild(xdoc.CreateTextNode("true"));
+				if (chkVNextPilot.Checked)
+					elmOptions.AppendChild(xdoc.CreateElement("VNext")).AppendChild(xdoc.CreateTextNode("true"));
 				
 				rootNode.AppendChild(elmOptions);
 			}
