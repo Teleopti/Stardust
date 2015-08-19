@@ -48,7 +48,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		}
 
 		[Test]
-		public void ShouldUpdateExistingTenant()
+		public void ShouldReturnFalseIfCommandTimeoutIsZero()
 		{
 			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
 			using (TenantUnitOfWork.Start())
@@ -66,6 +66,33 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 					OriginalName = "Old One",
 					AnalyticsDatabase = "Integrated Security=true;Initial Catalog=Southwind;server=(local)",
 					AppDatabase = "Integrated Security=true;Initial Catalog=Southwind;server=(local)"
+				};	
+				var result = Target.Save(model);
+				result.Content.Success.Should().Be.False();
+			}
+			
+		}
+
+      [Test]
+		public void ShouldUpdateExistingTenant()
+		{
+			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
+			using (TenantUnitOfWork.Start())
+			{
+				var tenant = new Tenant("Old One");
+				tenant.DataSourceConfiguration.SetAnalyticsConnectionString("Integrated Security=true;Initial Catalog=Northwind;server=(local");
+				tenant.DataSourceConfiguration.SetApplicationConnectionString("Integrated Security=true;Initial Catalog=Northwind;server=(local");
+				CurrentTenantSession.CurrentSession().Save(tenant);
+			}
+			using (TenantUnitOfWork.Start())
+			{
+				var model = new UpdateTenantModel
+				{
+					NewName = "Old One",
+					OriginalName = "Old One",
+					AnalyticsDatabase = "Integrated Security=true;Initial Catalog=Southwind;server=(local)",
+					AppDatabase = "Integrated Security=true;Initial Catalog=Southwind;server=(local)",
+					CommandTimeout = 180
 				};
 				Target.Save(model);
 			}
@@ -74,6 +101,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 				var loadedTenant = LoadAllTenants.Tenants().FirstOrDefault(t => t.Name.Equals("Old One"));
 				loadedTenant.DataSourceConfiguration.ApplicationConnectionString.Should().Be.EqualTo("Integrated Security=true;Initial Catalog=Southwind;server=(local)");
 				loadedTenant.DataSourceConfiguration.AnalyticsConnectionString.Should().Be.EqualTo("Integrated Security=true;Initial Catalog=Southwind;server=(local)");
+				loadedTenant.DataSourceConfiguration.ApplicationNHibernateConfig["command_timeout"].Should().Be.EqualTo("180");
 			}
 		}
 	}

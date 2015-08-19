@@ -19,7 +19,8 @@
 
 		vm.AnalDbOk = false;
 		vm.AnalDbCheckMessage = "Input connection string";
-		
+		vm.CommandTimeout = 0;
+		vm.Message = "";
 		vm.token = sessionStorage.getItem(tokenKey);
 		if (vm.token === null) {
 			return;
@@ -32,12 +33,13 @@
 		}
 
 		vm.LoadTenant = function () {
-			$http.post('./api/Home/GetOneTenant', '"' + vm.Tenant + '"', getHeaders())
+			$http.post('./GetOneTenant', '"' + vm.Tenant + '"', getHeaders())
 				.success(function (data) {
 					vm.TenantMessage = data.Message;
 					vm.TenantOk = data.Success;
 					vm.AnalyticsDatabase = data.AnalyticsDatabase;
 					vm.AppDatabase = data.AppDatabase;
+					vm.CommandTimeout = data.CommandTimeout;
 					vm.CheckAppDb();
 					vm.CheckAnalDb();
 				}).error(function (xhr, ajaxOptions, thrownError) {
@@ -107,13 +109,18 @@
 				return;
 			}
 			
-			$http.post('./api/Home/Save', {
+			$http.post('./UpdateTenant', {
 				OriginalName: vm.OriginalName,
 				NewName: vm.Tenant,
 				AppDatabase: vm.AppDatabase,
-				AnalyticsDatabase: vm.AnalyticsDatabase
+				AnalyticsDatabase: vm.AnalyticsDatabase,
+				CommandTimeout: vm.CommandTimeout
 			}, getHeaders())
 				.success(function (data) {
+					if (data.Success === false) {
+						vm.Message = data.Message;
+						return;
+					}
 					window.location = "#";
 				})
 				.error(function (xhr, ajaxOptions, thrownError) {

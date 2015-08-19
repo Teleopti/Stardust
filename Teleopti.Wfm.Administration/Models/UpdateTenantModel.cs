@@ -6,5 +6,6 @@ namespace Teleopti.Wfm.Administration.Models
 		public string NewName { get; set; }
 		public string AppDatabase { get; set; }
 		public string AnalyticsDatabase { get; set; }
+		public int CommandTimeout { get; set; }
 	}
 }

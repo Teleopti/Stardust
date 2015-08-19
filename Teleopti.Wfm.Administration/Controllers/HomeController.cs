@@ -42,7 +42,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 		[HttpPost]
 		[TenantUnitOfWork]
-		[Route("api/Home/GetOneTenant")]
+		[Route("GetOneTenant")]
 		public virtual JsonResult<TenantModel> GetOneTenant([FromBody]string name)
 		{
 			return Json(_loadAllTenants.Tenants().Where(x => x.Name.Equals(name)).Select(t => new TenantModel
@@ -50,13 +50,14 @@ namespace Teleopti.Wfm.Administration.Controllers
 				Name = t.Name,
 				Id = -1000, //behövs denna?
 				AnalyticsDatabase = t.DataSourceConfiguration.AnalyticsConnectionString,
-				AppDatabase = t.DataSourceConfiguration.ApplicationConnectionString
+				AppDatabase = t.DataSourceConfiguration.ApplicationConnectionString,
+				CommandTimeout = int.Parse(t.DataSourceConfiguration.ApplicationNHibernateConfig["command_timeout"])
 			}).FirstOrDefault());
 		}
 
 		[HttpPost]
 		[TenantUnitOfWork]
-		[Route("api/Home/Save")]
+		[Route("UpdateTenant")]
 		public virtual JsonResult<ImportTenantResultModel> Save(UpdateTenantModel model)
 		{
 			return Json(_saveTenant.Execute(model));

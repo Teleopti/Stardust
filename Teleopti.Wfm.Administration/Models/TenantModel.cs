@@ -6,5 +6,6 @@
 		public string Name { get; set; }
 		public string AppDatabase { get; set; }
 		public string AnalyticsDatabase { get; set; }
+		public int CommandTimeout { get; set; }
 	}
 }

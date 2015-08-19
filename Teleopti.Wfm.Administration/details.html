@@ -17,20 +17,29 @@
 				<div class="importCaption">Application database connections string</div>
 				<div>
 					<input class="form-control importConnstring" type="text" ng-model="detailsVm.AppDatabase" ng-blur="detailsVm.CheckAppDb()" placeholder="Connection string">
-					<label ng-class="(detailsVm.AppdataIsOk==true) ? 'dataIsOk' : 'dataIsNotOk'">{{detailsVm.AppDbCheckMessage}}</label>
+					<label ng-class="(detailsVm.AppDbOk==true) ? 'dataIsOk' : 'dataIsNotOk'">{{detailsVm.AppDbCheckMessage}}</label>
 				</div>
-
+				
 				<div>
 					<div class="importCaption">Analytics database connection string</div>
 					<input class="form-control importConnstring" type="text" ng-model="detailsVm.AnalyticsDatabase" ng-blur="detailsVm.CheckAnalDb()" placeholder="Connection string">
-					<label ng-class="(detailsVm.AnaldataIsOk==true) ? 'dataIsOk' : 'dataIsNotOk'">{{detailsVm.AnalDbCheckMessage}}</label>
+					<label ng-class="(detailsVm.AnalDbOk==true) ? 'dataIsOk' : 'dataIsNotOk'">{{detailsVm.AnalDbCheckMessage}}</label>
 				</div>
+
+				<div>
+					<div class="importCaption">Command timeout</div>
+					<input class="form-control" type="number" min="30" max="600" required ng-model="detailsVm.CommandTimeout"  placeholder="Command timeout">
+					
+				</div>
+
 			</div>
 		</div>
 	</div>
 	<div class="row">
 		<div style="margin-top: 30px" class="col-md-6"><button class="btn btn-primary btn-default" ng-click="detailsVm.save()">Save</button></div>
-		<div  style="margin-top: 30px" class="col-md-6"><button class="btn btn-danger btn-default" ng-click="detailsVm.delete()">Delete this Tenant</button></div>
-	</div>
+		<div style="margin-top: 30px" class="col-md-6"><button class="btn btn-danger btn-default" ng-click="detailsVm.delete()">Delete this Tenant</button>
+		</div>
+		<br />
+		<label class="ErrorLabel">{{detailsVm.Message}}</label></div>
 
 </div>

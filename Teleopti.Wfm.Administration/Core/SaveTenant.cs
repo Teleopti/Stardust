@@ -21,6 +21,14 @@ namespace Teleopti.Wfm.Administration.Core
 
 		public ImportTenantResultModel Execute(UpdateTenantModel model)
 		{
+			if (model.CommandTimeout == 0)
+			{
+				return new ImportTenantResultModel
+				{
+					Success = false,
+					Message = "The command timeout must be a integer between 30 and 600."
+				};
+			}
 			try
 			{
 				var oldTenant = _loadAllTenants.Tenants().FirstOrDefault(x => x.Name.Equals(model.OriginalName));
@@ -28,6 +36,7 @@ namespace Teleopti.Wfm.Administration.Core
 				{
 					oldTenant.DataSourceConfiguration.SetApplicationConnectionString(model.AppDatabase);
 					oldTenant.DataSourceConfiguration.SetAnalyticsConnectionString(model.AnalyticsDatabase);
+					oldTenant.DataSourceConfiguration.ApplicationNHibernateConfig["command_timeout"] = model.CommandTimeout.ToString();
 					//oldTenant.Name = model.NewName;
 					_currentTenantSession.CurrentSession().Save(oldTenant);
 				}
