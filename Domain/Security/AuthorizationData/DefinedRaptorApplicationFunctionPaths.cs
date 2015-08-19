@@ -116,5 +116,6 @@
 		public const string AddActivity = "Raptor/Anywhere/Schedules/AddActivity";
 		public const string MoveActivity = "Raptor/Anywhere/Schedules/MoveActivity";
 		public const string RealTimeAdherenceOverview = "Raptor/Anywhere/RealTimeAdherenceOverview";
+		public const string WebForecasts = "Raptor/Anywhere/Forecast";
 	}
 }

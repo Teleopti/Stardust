@@ -30,6 +30,8 @@
         /// </summary>
         public const string TeleoptiCccPilotCustomersBase = "Teleopti WFM Pilot Customers Base";
 
+		public const string TeleoptiWfmVNextPilotBase = "Teleopti WFM Pilot VNext Base";
+
 		public const string TeleoptiCccSmsLink = "Teleopti WFM SMS Link";
 
 		public const string TeleoptiCccCalendarLink = "Teleopti WFM Calendar Link";

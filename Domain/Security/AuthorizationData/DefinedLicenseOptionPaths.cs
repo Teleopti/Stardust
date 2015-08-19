@@ -46,5 +46,7 @@
         public const string TeleoptiCccPilotCustomersIntraday = DefinedLicenseSchemaCodes.TeleoptiWFMPilotCustomersSchema + "/Intraday";
         public const string TeleoptiCccPilotCustomersPermissions = DefinedLicenseSchemaCodes.TeleoptiWFMPilotCustomersSchema + "/Permissions";
         public const string TeleoptiCccPilotCustomersReports = DefinedLicenseSchemaCodes.TeleoptiWFMPilotCustomersSchema + "/Reports";
+
+		public const string TeleoptiWfmVNextPilotBase = DefinedLicenseSchemaCodes.TeleoptiWFMVNextPilotSchema + "/Base";
     }
 }

@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Security.LicenseOptions
 {
-    [TestFixture]
+	[TestFixture]
     public class TeleoptiCccPilotCustomersBaseLicenseOptionTest
     {
         private TeleoptiCccPilotCustomersBaseLicenseOption _target;

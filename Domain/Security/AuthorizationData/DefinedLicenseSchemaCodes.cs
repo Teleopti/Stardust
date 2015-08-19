@@ -5,7 +5,7 @@
     /// </summary>
     public static class DefinedLicenseSchemaCodes
     {
-        /// <summary>
+	    /// <summary>
         /// Constant string for Raptor schema
         /// </summary>
         public const string TeleoptiWFMSchema = "TeleoptiWFM";
@@ -17,5 +17,7 @@
         /// Constant string for Early bird schema
         /// </summary>
         public const string TeleoptiWFMPilotCustomersSchema = "TeleoptiWFMPilotCustomers";
+
+		public const string TeleoptiWFMVNextPilotSchema = "TeleoptiWFMVNextPilot";
     }
 }

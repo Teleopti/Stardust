@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 {
-    /// <summary>
+	/// <summary>
     /// Represents the Early Ams license option
     /// </summary>
     public class TeleoptiCccPilotCustomersBaseLicenseOption : LicenseOption

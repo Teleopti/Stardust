@@ -110,7 +110,7 @@
 		public const string ViewBadgeLeaderboard = "0102";
 		public const string AbsenceReport = "0103";
 
-		// Anywhere
+		// Web
 		public const string Anywhere = "0080";
 		public const string MyTeamSchedules = "0081";
 		public const string AddFullDayAbsence = "0096";
@@ -119,6 +119,7 @@
 		public const string AddActivity = "0099";
 		public const string MoveActivity = "0100";
 		public const string RealTimeAdherenceOverview = "0092";
+		public const string WebForecasts = "0121";
 
 		//Seat Planner
 		public const string SeatPlanner = "0107";
