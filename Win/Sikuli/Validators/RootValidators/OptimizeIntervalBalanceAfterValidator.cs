@@ -1,28 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Win.Sikuli.Helpers;
 using Teleopti.Ccc.Win.Sikuli.Validators.AtomicValidators;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 {
 	internal class OptimizeIntervalBalanceAfterValidator : IRootValidator
 	{
-		private readonly ISchedulerStateHolder _schedulerState;
-		private readonly IAggregateSkill _totalSkill;
-
-		private const double limit = 0.8d;
-		private const int maxRuleBreaks = 3;
-		private TimeSpan durationLimit;
-
-		public OptimizeIntervalBalanceAfterValidator(ISchedulerStateHolder schedulerState, IAggregateSkill totalSkill)
-		{
-			_schedulerState = schedulerState;
-			_totalSkill = totalSkill;
-			durationLimit = TimeSpan.FromMinutes(1).Add(TimeSpan.FromSeconds(20));
-		}
+		private const double _limit = 0.8d;
+		private const int _maxRuleBreaks = 3;
+		private TimeSpan _durationLimit = TimeSpan.FromMinutes(1).Add(TimeSpan.FromSeconds(20));
 
 		public string Description
 		{
@@ -30,16 +18,24 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 			{
 				return string.Format(
 					"Only {0} 'lowest intra interval balance' value can be under {1}. Duration must be under {2}.",
-					maxRuleBreaks, limit, durationLimit.ToString(@"mm\:ss"));
+					_maxRuleBreaks, _limit, _durationLimit.ToString(@"mm\:ss"));
 			}
 		}
 
 		public SikuliValidationResult Validate(object data)
 		{
-			var intradayValidationResult = intradayBalanceValidationResult();
+			var scheduleTestData = data as SchedulerTestData;
+			if (scheduleTestData == null)
+			{
+				var testDataFail = new SikuliValidationResult(SikuliValidationResult.ResultValue.Fail);
+				testDataFail.Details.AppendLine("Sikuli testdata failure.");
+				return testDataFail;
+			}
+
+			var intradayValidationResult = intradayBalanceValidationResult(scheduleTestData);
 
 			var duration = data as ITestDuration;
-			var durationValidator = new DurationValidator(TimeSpan.FromMinutes(1), duration);
+			var durationValidator = new DurationValidator(_durationLimit, duration);
 			var durationValidatorResult = durationValidator.Validate();
 
 			intradayValidationResult.CombineResultValue(durationValidatorResult);
@@ -48,11 +44,11 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 			return intradayValidationResult;
 		}
 
-		private SikuliValidationResult intradayBalanceValidationResult()
+		private SikuliValidationResult intradayBalanceValidationResult(SchedulerTestData schedulerData)
 		{
 			var result = new SikuliValidationResult(SikuliValidationResult.ResultValue.Pass);
-			var lowestIntervalBalances = ValidatorHelper.GetDailyLowestIntraIntervalBalanceForPeriod(_schedulerState,
-				_totalSkill.AggregateSkills[1]);
+			var lowestIntervalBalances = ValidatorHelper.GetDailyLowestIntraIntervalBalanceForPeriod(schedulerData.SchedulerState,
+				schedulerData.TotalSkill.AggregateSkills[1]);
 			if (lowestIntervalBalances == null)
 			{
 				result.Result = SikuliValidationResult.ResultValue.Fail;
@@ -71,14 +67,14 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 				result.Result = SikuliValidationResult.ResultValue.Warn;
 				result.Details.AppendLine(string.Format("Broken rules: {0}", ruleBreaks));
 			}
-			if (ruleBreaks > maxRuleBreaks)
+			if (ruleBreaks > _maxRuleBreaks)
 				result.Result = SikuliValidationResult.ResultValue.Fail;
 			result.Details.AppendLine(string.Format("Lowest intra interval balance: {0}", result.Result));
 		}
 
 		private int checkInternalBalanceRuleBreaks(IEnumerable<double?> intervalBalances)
 		{
-			int numberOfRuleBreaks = intervalBalances.Count(intervalBalance => intervalBalance < limit);
+			int numberOfRuleBreaks = intervalBalances.Count(intervalBalance => intervalBalance < _limit);
 			return numberOfRuleBreaks;
 		}
 	}

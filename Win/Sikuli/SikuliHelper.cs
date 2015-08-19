@@ -1,6 +1,4 @@
 ﻿using System.Windows.Forms;
-using Teleopti.Ccc.Infrastructure.Util;
-using Teleopti.Ccc.Win.Sikuli.Helpers;
 using Teleopti.Ccc.Win.Sikuli.Validators.RootValidators;
 using Teleopti.Ccc.Win.Sikuli.Views;
 

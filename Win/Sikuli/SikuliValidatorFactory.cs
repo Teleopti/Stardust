@@ -23,13 +23,13 @@ namespace Teleopti.Ccc.Win.Sikuli
 						return new OptimizeBetweenDaysValidator();
 
 					case SikuliValidatorRegister.OptimizeWithinDays:
-						return new OptimizeWithinDaysValidator(schedulerState, totalSkill);
+						return new OptimizeWithinDaysValidator();
 
 					case SikuliValidatorRegister.OptimizeIntervalBalanceBefore:
-						return new OptimizeIntervalBalanceBeforeValidator(schedulerState, totalSkill);
+						return new OptimizeIntervalBalanceBeforeValidator();
 
 					case SikuliValidatorRegister.OptimizeIntervalBalanceAfter:
-						return new OptimizeIntervalBalanceAfterValidator(schedulerState, totalSkill);
+						return new OptimizeIntervalBalanceAfterValidator();
 
 					case SikuliValidatorRegister.ScheduleAllOff:
 						return new ScheduleAllOptionsOffValidator(schedulerState, totalSkill);

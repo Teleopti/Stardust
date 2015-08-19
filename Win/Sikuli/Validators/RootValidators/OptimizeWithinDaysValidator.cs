@@ -1,29 +1,17 @@
 ﻿using System;
-using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Win.Sikuli.Helpers;
 using Teleopti.Ccc.Win.Sikuli.Validators.AtomicValidators;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 {
-	internal class OptimizeWithinDaysValidator : RootValidator
+	internal class OptimizeWithinDaysValidator : SchedulerRootValidator
 	{
-		private readonly ISchedulerStateHolder _schedulerState;
-		private readonly IAggregateSkill _totalSkill;
-
-		public OptimizeWithinDaysValidator(ISchedulerStateHolder schedulerState, IAggregateSkill totalSkill)
-		{
-			_schedulerState = schedulerState;
-			_totalSkill = totalSkill;
-		}
-
-		public override SikuliValidationResult Validate(object data)
+		protected override SikuliValidationResult Validate(SchedulerTestData schedulerData)
 		{
 			const double dailyStandardDeviationSumlimit = 4.65d;
-			AtomicValidators.Add(new DailyStandardDeviationValidator(_schedulerState, _totalSkill, dailyStandardDeviationSumlimit));
-			AtomicValidators.Add(new DayOffAndContractTimeValidator(_schedulerState));
-			var duration = data as ITestDuration;
-			AtomicValidators.Add(new DurationValidator(TimeSpan.FromMinutes(6).Add(TimeSpan.FromSeconds(30)), duration));
+			AtomicValidators.Add(new DailyStandardDeviationValidator(schedulerData.SchedulerState, schedulerData.TotalSkill, dailyStandardDeviationSumlimit));
+			AtomicValidators.Add(new DayOffAndContractTimeValidator(schedulerData.SchedulerState));
+			AtomicValidators.Add(new DurationValidator(TimeSpan.FromMinutes(6).Add(TimeSpan.FromSeconds(30)), EndTimer()));
 			return ValidateAtomicValidators(AtomicValidators);
 		}
 	}

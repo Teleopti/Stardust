@@ -41,6 +41,7 @@ using Teleopti.Ccc.Win.Scheduling.PropertyPanel;
 using Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals;
 using Teleopti.Ccc.Win.Scheduling.SkillResult;
 using Teleopti.Ccc.Win.Sikuli;
+using Teleopti.Ccc.Win.Sikuli.Helpers;
 using Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution;
 using Teleopti.Interfaces.MessageBroker.Events;
 using log4net;
@@ -2138,7 +2139,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				var currentValidator = SikuliValidatorFactory.Scheduler.CreateValidator(_schedulerState, totalSkill);
 
 				if (currentValidator != null)
-					SikuliHelper.Validate(currentValidator, this);
+					SikuliHelper.Validate(currentValidator, this, new SchedulerTestData(_schedulerState, totalSkill));
 				else
 					SikuliHelper.ShowTaskDoneView(this);
 			}

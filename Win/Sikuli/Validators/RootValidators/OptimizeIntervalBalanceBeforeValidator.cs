@@ -1,20 +1,10 @@
 ﻿using System.Linq;
-using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Win.Sikuli.Helpers;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 {
 	internal class OptimizeIntervalBalanceBeforeValidator : IRootValidator
 	{
-		private readonly ISchedulerStateHolder _schedulerState;
-		private readonly IAggregateSkill _totalSkill;
-
-		public OptimizeIntervalBalanceBeforeValidator(ISchedulerStateHolder schedulerState, IAggregateSkill totalSkill)
-		{
-			_schedulerState = schedulerState;
-			_totalSkill = totalSkill;
-		}
 
 		public string Description 
 		{ 
@@ -23,9 +13,16 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 
 		public SikuliValidationResult Validate(object data)
 		{
+			var scheduleTestData = data as SchedulerTestData;
+			if (scheduleTestData == null)
+			{
+				var testDataFail = new SikuliValidationResult(SikuliValidationResult.ResultValue.Fail);
+				testDataFail.Details.AppendLine("Sikuli testdata failure.");
+				return testDataFail;
+			}
 
 			var result = new SikuliValidationResult(SikuliValidationResult.ResultValue.Pass);
-			var lowestIntervalBalances = ValidatorHelper.GetDailyLowestIntraIntervalBalanceForPeriod(_schedulerState, _totalSkill.AggregateSkills[1]);
+			var lowestIntervalBalances = ValidatorHelper.GetDailyLowestIntraIntervalBalanceForPeriod(scheduleTestData.SchedulerState, scheduleTestData.TotalSkill.AggregateSkills[1]);
 			if (lowestIntervalBalances == null)
 			{
 				result.Result = SikuliValidationResult.ResultValue.Fail;
