@@ -6,8 +6,7 @@
 	function campaignChart($filter) {
 		return {
 			controller: ['$scope', '$element',  campaignChartCtrl],
-			template: '<md-switch class="campaign-chart-switch" ng-click="onToggleViewScheduleDiff()" ng-if="hidePlannedAnalyzeButton(campaign.Status)" ng-init="campaign.switchSwitch=false" ng-disabled="campaign.switchSwitch">Analyze Schedule</md-switch>' +
-				'<div id="Chart_{{campaign.Id}}"></div>' +
+			template: '<div id="Chart_{{campaign.Id}}"></div>' +
 				'<div class="chart-extra-info"><span ng-repeat="extraInfo in extraInfos"}>{{extraInfo}}</span></div>',
 			scope: {
 				'campaign': '=',
@@ -19,8 +18,7 @@
 		};
 
 		function campaignChartCtrl($scope, $element) {
-
-			$scope.viewScheduleDiff = false;
+		
 			$scope.dates = $scope.graphData['dates'].slice(1);
 			$scope.plans = $scope.graphData['plans'].slice(1);
 
@@ -59,11 +57,10 @@
 			function toggleViewScheduleDiff() {
 				if (!$scope.graph) return;
 				$scope.graph.load({
-					columns: getDataGroupsData($scope.viewScheduleDiff),
+					columns: getDataGroupsData(),
 					colors: _setChartOption_color(),
-					unload: getDataGroupsLabel(!$scope.viewScheduleDiff)
+					unload: getDataGroupsLabel()
 				});
-
 			}
 
 			function generateChart() {
@@ -79,31 +76,24 @@
 				return c3.generate(chartOptions);
 			}
 	
-			function getDataGroupsData(viewScheduleDiff) {
-				return getDataGroupsKey(viewScheduleDiff).map(function(name) {
+			function getDataGroupsData() {
+				return getDataGroupsKey().map(function(name) {
 					return $scope.graphData[name];
 				});
 			}
 
-			function getDataGroupsLabel(viewScheduleDiff) {
-				return getDataGroupsKey(viewScheduleDiff).map(function(name) { return $scope.graphData[name][0]; });			
+			function getDataGroupsLabel() {
+				return getDataGroupsKey().map(function(name) { return $scope.graphData[name][0]; });			
 			}
 
-			function getDataGroupsKey(viewScheduleDiff) {
+			function getDataGroupsKey() {
 				var plannedPhase = $scope.campaign.Status;
-				if (viewScheduleDiff) {
-					if ($filter('showPhase')(plannedPhase) == 'Planned') {
-						return ['calculatedBacklogs', 'plans'];
-					} else {
-						return ['calculatedBacklogs', 'underDiffs', 'overDiffs', 'plans'];
-					}
+
+				if ($filter('showPhase')(plannedPhase) == 'Planned') {
+					return ['rawBacklogs', 'unscheduledPlans', 'progress'];
 				} else {
-					if ($filter('showPhase')(plannedPhase) == 'Planned') {
-						return ['rawBacklogs', 'unscheduledPlans', 'progress'];
-					} else {
-						return ['rawBacklogs', 'schedules', 'unscheduledPlans', 'progress'];
-					}
-				}
+					return ['rawBacklogs', 'schedules', 'unscheduledPlans', 'progress'];
+				}				
 			}
 
 			function getDataIndex(date) {
@@ -157,7 +147,7 @@
 					type: 'bar',
 					groups: [getDataGroupsLabel(true), getDataGroupsLabel(false)],
 					order: 'null',				
-					columns: [$scope.graphData.dates].concat(getDataGroupsData($scope.viewScheduleDiff)),					
+					columns: [$scope.graphData.dates].concat(getDataGroupsData()),					
 					colors: _setChartOption_color(),
 					types: {},
 					labels: {
@@ -210,7 +200,9 @@
 					}
 				};
 
-				option.y.max = (Math.max.apply(Math, $scope.graphData.rawBacklogs.slice(1)) + Math.max.apply(Math, $scope.graphData.plans.slice(1))) * 1.1;
+				option.y.max = (Math.max.apply(Math, $scope.graphData.rawBacklogs.slice(1)) 
+					+ Math.max.apply(Math, $scope.graphData.schedules.slice(1))
+					+ Math.max.apply(Math, $scope.graphData.unscheduledPlans.slice(1))) * 1.1;
 				return option;
 			}
 
@@ -266,12 +258,7 @@
 			var ctrl = ctrls[0];
 
 			scope.$evalAsync(ctrl.init);
-			
-			scope.onToggleViewScheduleDiff = function () {
-				if (scope.campaign.switchSwitch) return;
-				scope.viewScheduleDiff = !scope.viewScheduleDiff;
-				ctrl.toggleViewScheduleDiff();
-			}
+					
 			scope.hidePlannedAnalyzeButton = function (d) {
 				return ($filter('showPhase')(d) == 'Planned') ? false : true;
 			};
