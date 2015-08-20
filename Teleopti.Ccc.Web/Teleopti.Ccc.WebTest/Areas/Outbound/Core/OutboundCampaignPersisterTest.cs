@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			_outboundCampaignPersister = new OutboundCampaignPersister(_fakeCampaignRepository,
 				new OutboundCampaignMapper(_fakeCampaignRepository), new OutboundCampaignViewModelMapper(),
 				skillCreator, _fakeActivityRepository,
-				new OutboundSkillPersister(_fakeSkillRepository, new FakeWorkloadRepository()), _createOrUpdateSkillDays, null, null, null);
+				new OutboundSkillPersister(_fakeSkillRepository, new FakeWorkloadRepository()), _createOrUpdateSkillDays, null, null, null, null);
 		}
 
 		[Test]
@@ -215,9 +215,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		private IList<IActivity> _activityList;
 		private IOutboundPeriodMover _outboundPeriodMover;
 
-		private Guid _campaignId;
-		private IOutboundCampaign _campaign;
-
 		[SetUp]
 		public void Setup()
 		{
@@ -233,22 +230,23 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			_activityRepository.Stub(x => x.LoadAll()).Return(_activityList);
 			_productionReplanHelper.Stub(x => x.Replan(null)).IgnoreArguments();
 			_outboundPeriodMover.Stub(x => x.Move(null, new DateOnlyPeriod())).IgnoreArguments();
-			_target = new OutboundCampaignPersister(_outboundCampaignRepository, _outboundCampaignMapper, null, _outboundSkillCreator, _activityRepository, null, null, _productionReplanHelper, _outboundPeriodMover, null);
+			_target = new OutboundCampaignPersister(_outboundCampaignRepository, _outboundCampaignMapper, null, _outboundSkillCreator, _activityRepository, null, null, _productionReplanHelper, _outboundPeriodMover, null, null);
 
 		}
-
 
 		[Test]
 		public void ManualReplanShouldDelegateToReplanHelper()
 		{
-			_campaignId = Guid.NewGuid();
-			_campaign = new Domain.Outbound.Campaign();
+			var campaignId = Guid.NewGuid();
+			var campaign = new Domain.Outbound.Campaign();
+			var scheduleResourceProvider = MockRepository.GenerateMock<IOutboundScheduledResourcesProvider>();
+			_outboundCampaignRepository.Stub(x => x.Get(campaignId)).Return(campaign);
 
-			_outboundCampaignRepository.Stub(x => x.Get(_campaignId)).Return(_campaign);
-			_target = new OutboundCampaignPersister(_outboundCampaignRepository, _outboundCampaignMapper, null, _outboundSkillCreator, _activityRepository, null, null, _productionReplanHelper, _outboundPeriodMover, null);
+			_target = new OutboundCampaignPersister(_outboundCampaignRepository, _outboundCampaignMapper, null, _outboundSkillCreator, _activityRepository, null, null, _productionReplanHelper, _outboundPeriodMover, null, scheduleResourceProvider);
+			_target.ManualReplanCampaign(campaignId);
 
-			_target.ManualReplanCampaign(_campaignId);
-			_productionReplanHelper.AssertWasCalled( x => x.Replan(_campaign));
+			_productionReplanHelper.AssertWasCalled(x => x.Replan(campaign));
+			scheduleResourceProvider.AssertWasCalled(x => x.Load(new List<IOutboundCampaign>() { campaign }, campaign.SpanningPeriod), y=>y.IgnoreArguments());
 		}
 
 		[Test]
@@ -258,7 +256,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var createOrUpdateSkillDays = MockRepository.GenerateMock<ICreateOrUpdateSkillDays>();
 			createOrUpdateSkillDays.Stub(x => x.Create(null, new DateOnlyPeriod(), 0, new TimeSpan(), null)).IgnoreArguments();
 			var target = new OutboundCampaignPersister(_outboundCampaignRepository, null, _outboundCampaignViewModelMapper, _outboundSkillCreator, _activityRepository, 
-				_outboundSkillPersister, createOrUpdateSkillDays, null, null, null);
+				_outboundSkillPersister, createOrUpdateSkillDays, null, null, null, null);
 			_outboundCampaignViewModelMapper.Stub(x => x.Map(new Domain.Outbound.Campaign())).IgnoreArguments().Return(expectedVM);
 
 			var result = target.Persist(new CampaignForm()
@@ -285,7 +283,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		public void ShouldUpdateCampaign()
 		{
 			var campaignVM = new CampaignViewModel { Id = new Guid(), Activity = new ActivityViewModel()};
-			var target = new OutboundCampaignPersister(_outboundCampaignRepository, _outboundCampaignMapper, null, null, null, null, null, _productionReplanHelper, _outboundPeriodMover, null);
+			var target = new OutboundCampaignPersister(_outboundCampaignRepository, _outboundCampaignMapper, null, null, null, null, null, _productionReplanHelper, _outboundPeriodMover, null, null);
 			var expectedCampaign = new Domain.Outbound.Campaign();
 			_outboundCampaignRepository.Stub(x => x.Load((Guid)campaignVM.Id).Clone()).Return(expectedCampaign);
 			_outboundCampaignMapper.Stub(x => x.Map(campaignVM)).Return(expectedCampaign);
@@ -604,7 +602,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			};
 			_outboundCampaignRepository.Stub(x => x.Get(id)).Return(campaign);
 
-			_target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, null, null, createOrUpdateSkillDays, null, null, campaignTaskManager);
+			_target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, null, null, createOrUpdateSkillDays, null, null, campaignTaskManager, null);
 			_target.PersistManualProductionPlan(manualProductionPlan);
 
 			campaign.GetManualProductionPlan(date).Should().Be.EqualTo(new TimeSpan(1, 2, 33, 35));
@@ -637,7 +635,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			};
 			_outboundCampaignRepository.Stub(x => x.Get(id)).Return(campaign);
 
-			_target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, null, null, createOrUpdateSkillDays, null, null, campaignTaskManager);
+			_target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, null, null, createOrUpdateSkillDays, null, null, campaignTaskManager, null);
 			_target.PersistManualProductionPlan(manualProductionPlan);
 
 			campaign.GetManualProductionPlan(date).Should().Be.EqualTo(null);
