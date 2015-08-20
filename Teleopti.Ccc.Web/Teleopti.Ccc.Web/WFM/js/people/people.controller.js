@@ -428,8 +428,5 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 		$scope.toggleRowSelectable();
 		$scope.dataInitialized = true;
 		$scope.searchKeyword();
-
-		console.log("$scope.dataInitialized:", $scope.dataInitialized);
-		console.log("$scope.isAdjustSkillEnabled:", $scope.isAdjustSkillEnabled);
 	});
 };
