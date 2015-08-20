@@ -22,11 +22,6 @@
             });
     	});
 
-    	$scope.clearManualPlan = function (campaign) {
-    		campaign.selectedDates = [];
-		    campaign.manualPlanInput = null;
-    	}
-
     	$scope.removeManualPlan = function (campaign) {
 		    var dates = [];
 		    campaign.selectedDates.forEach(function(date,index) {
@@ -58,7 +53,6 @@
     				Time: campaign.manualPlanInput
     			}
     		});
-    		
     		outboundChartService.updateManualPlan(campaign.manualPlan, function (data, manualPlan) {
 			    outboundService.getCampaignSummary(campaign.Id, function(_campaign) {
 			    	angular.extend(campaign, _campaign);
@@ -70,7 +64,9 @@
 			    });
 			   
 		    }, function (error) {
-    		});
+		    });
+    		campaign.selectedDates = [];
+    		campaign.manualPlanInput = null;
 	    }
 
 		$scope.getGraphData = function(campaign) {
