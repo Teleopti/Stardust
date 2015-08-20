@@ -22,6 +22,8 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 			}
 		}
 
+		public bool ExplicitValidation { get { return true; } }
+
 		public SikuliValidationResult Validate(object data)
 		{
 			var scheduleTestData = data as SchedulerTestData;

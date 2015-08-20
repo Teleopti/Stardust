@@ -794,7 +794,6 @@
       <DependentUpon>PublishScheduleDateView.cs</DependentUpon>
     </Compile>
     <Compile Include="Sikuli\Helpers\SchedulerTestData.cs" />
-    <Compile Include="Sikuli\Validators\AtomicValidators\MemoryUsageValidator.cs" />
     <Compile Include="Sikuli\Validators\AtomicValidators\IAtomicValidator.cs" />
     <Compile Include="Sikuli\Validators\AtomicValidators\DailyStandardDeviationValidator.cs" />
     <Compile Include="Sikuli\Validators\AtomicValidators\DayOffAndContractTimeValidator.cs" />
@@ -805,7 +804,7 @@
     <Compile Include="Sikuli\Validators\RootValidators\OptimizeBlockTeamSameShiftCategoryDaysOffValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\OptimizeBlockTeamSameShiftCategoryWithinDaysValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\OptimizeBlockTeamSameStartTimeValidator.cs" />
-    <Compile Include="Sikuli\Validators\RootValidators\MemoryUsageRootValidator.cs" />
+    <Compile Include="Sikuli\Validators\RootValidators\MemoryUsageValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\OptimizeTeamSameEndTimeValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\OptimizeTeamSameStartTimeValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\SchedulerRootValidator.cs" />

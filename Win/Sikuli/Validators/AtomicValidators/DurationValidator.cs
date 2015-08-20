@@ -8,10 +8,11 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.AtomicValidators
 		private readonly TimeSpan _durationLimit;
 		private readonly ITestDuration _testDurationuration;
 
-		public DurationValidator(TimeSpan durationLimit, ITestDuration testDurationuration)
+		public DurationValidator(TimeSpan durationLimit)
 		{
 			_durationLimit = durationLimit;
-			_testDurationuration = testDurationuration;
+			_testDurationuration = new TestDuration();
+			_testDurationuration.SetStart();
 		}
 
 		public string Description
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.AtomicValidators
 		public SikuliValidationResult Validate()
 		{
 			var result = new SikuliValidationResult();
-
+			_testDurationuration.SetEnd();
 			if (_testDurationuration.GetDuration() > _durationLimit)
 				result.Result = SikuliValidationResult.ResultValue.Warn;
 

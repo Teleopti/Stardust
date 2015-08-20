@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using Teleopti.Ccc.Win.Sikuli.Helpers;
 using Teleopti.Ccc.Win.Sikuli.Validators.RootValidators;
 using Teleopti.Ccc.Win.Sikuli.Views;
 
@@ -43,6 +44,8 @@ namespace Teleopti.Ccc.Win.Sikuli
 					CurrentValidator = SikuliValidatorFactory.Scheduler.CreateValidator(dialog.GetValidatorName);
 				}
 			}
+			if (!CurrentValidator.ExplicitValidation)
+				Validate(CurrentValidator, owner);
 		}
 
 		public static void Validate(IRootValidator validator, IWin32Window owner)
@@ -55,6 +58,11 @@ namespace Teleopti.Ccc.Win.Sikuli
 			if (!InteractiveMode)
 				return;
 			var validationResult = validator.Validate(testData);
+			handleValidationResult(validator, owner, validationResult);
+		}
+
+		private static void handleValidationResult(IRootValidator validator, IWin32Window owner, SikuliValidationResult validationResult)
+		{
 			validationResult.Details.AppendLine("Criteria: " + validator.Description);
 			var testView = new SikuliResultView
 			{

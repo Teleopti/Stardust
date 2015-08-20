@@ -5,11 +5,12 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 {
 	internal class DeleteAllValidator : IRootValidator
 	{
-
 		public string Description
 		{
 			get { return "All scheduled hours must be 0."; }
 		}
+
+		public bool ExplicitValidation { get { return true; } }
 
 		public SikuliValidationResult Validate(object data)
 		{

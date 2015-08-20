@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Win.Sikuli
 						return new OptimizeBlockTeamSameStartTimeValidator();
 
 					case SikuliValidatorRegister.MemoryUsage:
-						return new MemoryUsageRootValidator();
+						return new MemoryUsageValidator();
 
 					case SikuliValidatorRegister.TestPass:
 						return new SelftestPassValidator();

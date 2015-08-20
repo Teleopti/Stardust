@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Teleopti.Ccc.Win.Sikuli.Helpers;
@@ -25,6 +24,8 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 				return stringBuilder.ToString();
 			}
 		}
+
+		public bool ExplicitValidation { get { return true; } }
 
 		public abstract SikuliValidationResult Validate(object data);
 
