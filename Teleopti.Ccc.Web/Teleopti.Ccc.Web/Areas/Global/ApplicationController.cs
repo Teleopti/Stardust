@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Web.Areas.Global
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebSchedules,() => UserTexts.Resources.OpenSchedulePage,"resourceplanner", new Link{href = "api/ResourcePlanner/Filter",rel = "filters"}),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebPermissions,() => UserTexts.Resources.OpenPermissionPage,"permissions"),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.Outbound,() => UserTexts.Resources.Outbound,"outbound"),
-			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage,() => "People","people"),
+			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebPeople,() => "People","people"),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.SeatPlanner,() => UserTexts.Resources.SeatPlan,"seatPlan"),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.SeatPlanner,() => UserTexts.Resources.SeatMap,"seatMap"),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview,() => UserTexts.Resources.RealTimeAdherenceOverview,"rta"),
