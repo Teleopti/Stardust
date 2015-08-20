@@ -141,7 +141,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public IWorkShiftCalculatorStaffPeriodData ForActivity(IWorkShiftCalculatableActivity activity)
 		{
 			var key = ((WorkShiftCalculatableActivity)activity).Activity;
-			return _data.ContainsKey(key) ? new WorkShiftCalculatorStaffPeriodData(_data[key]) : null;
+			IDictionary<DateTime, ISkillStaffPeriodDataHolder> content;
+			if (_data.TryGetValue(key, out content))
+			{
+				return new WorkShiftCalculatorStaffPeriodData(content);
+			}
+			return null;
 		}
 
 		public IEnumerable<IWorkShiftCalculatorStaffPeriodData> All()
@@ -161,7 +166,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public IWorkShiftCalculatableSkillStaffPeriod ForTime(DateTime dateTime)
 		{
-			return _data.ContainsKey(dateTime) ? _data[dateTime] : null;
+			ISkillStaffPeriodDataHolder result;
+			_data.TryGetValue(dateTime, out result);
+			return result;
 		}
 
 		public IWorkShiftCalculatableSkillStaffPeriod First()
