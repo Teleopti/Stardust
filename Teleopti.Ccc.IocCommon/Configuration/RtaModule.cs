@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			if (_config.Toggle(Toggles.RTA_NewEventHangfireRTA_34333))
 			{
-				builder.RegisterType<NoMessagge>().As<IAgentStateMessageSender>().SingleInstance();
+				builder.RegisterType<NoMessage>().As<IAgentStateMessageSender>().SingleInstance();
 				builder.RegisterType<NoAggregation>().As<IAdherenceAggregator>().SingleInstance();
 			}
 			else

@@ -6,10 +6,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class RtaProcessContext
 	{
-		private readonly Func<AgentState> _previousState;
-		private readonly Func<StateInfo, RtaProcessContext, AgentState> _currentState;
+		private readonly Func<PreviousAgentState> _previousState;
+		private readonly Func<StateInfo, RtaProcessContext, CurrentAgentState> _currentState;
 		private readonly PersonOrganizationData _person;
-		private AgentState _madePreviousState;
+		private PreviousAgentState _madePreviousState;
 
 		public RtaProcessContext(
 			ExternalUserStateInputModel input,
@@ -20,8 +20,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IAgentStateReadModelUpdater agentStateReadModelUpdater, 
 			IAgentStateMessageSender messageSender, 
 			IAdherenceAggregator adherenceAggregator,
-			Func<AgentState> previousState,
-			Func<StateInfo, RtaProcessContext, AgentState> currentState 
+			Func<PreviousAgentState> previousState,
+			Func<StateInfo, RtaProcessContext, CurrentAgentState> currentState 
 			)
 		{
 			_previousState = previousState;
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			CurrentTime = currentTime;
 			Input = input ?? new ExternalUserStateInputModel();
 			AgentStateReadModelUpdater = agentStateReadModelUpdater ?? new DontUpdateAgentStateReadModel();
-			MessageSender = messageSender ?? new NoMessagge();
+			MessageSender = messageSender ?? new NoMessage();
 			AdherenceAggregator = adherenceAggregator ?? new NoAggregation();
 		}
 
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public IAgentStateMessageSender MessageSender { get; private set; }
 		public IAdherenceAggregator AdherenceAggregator { get; private set; }
 
-		public AgentState PreviousState(StateInfo info)
+		public PreviousAgentState PreviousState(StateInfo info)
 		{
 			if (_madePreviousState != null)
 				return _madePreviousState;
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return _madePreviousState;
 		}
 
-		public AgentState CurrentState(StateInfo info)
+		public CurrentAgentState CurrentState(StateInfo info)
 		{
 			return _currentState.Invoke(info, this);
 		}

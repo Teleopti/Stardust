@@ -7,8 +7,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		private readonly PersonOrganizationData _person;
 		private readonly DateTime _currentTime;
-		private readonly Lazy<AgentState> _previousState;
-		private readonly Lazy<AgentState> _currentState;
+		private readonly Lazy<PreviousAgentState> _previousState;
+		private readonly Lazy<CurrentAgentState> _currentState;
 		private readonly Lazy<Guid> _platformTypeId;
 		private readonly Lazy<string> _stateCode;
 		private readonly Lazy<StateMapping> _stateMapping;
@@ -28,8 +28,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_input = input;
 			_person = person;
 			_currentTime = currentTime;
-			_previousState = new Lazy<AgentState>(() => context.PreviousState(this));
-			_currentState = new Lazy<AgentState>(() => context.CurrentState(this));
+			_previousState = new Lazy<PreviousAgentState>(() => context.PreviousState(this));
+			_currentState = new Lazy<CurrentAgentState>(() => context.CurrentState(this));
 
 			Schedule = new ScheduleInfo(scheduleLoader, _person.PersonId, currentTime);
 			Adherence = new AdherenceInfo(input, _person, () => _previousState.Value, () => _currentState.Value, Schedule, appliedAdherence, stateMapper);
@@ -46,10 +46,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public Guid PlatformTypeId { get { return _platformTypeId.Value; } }
 		public Guid? StateGroupId { get { return _stateMapping.Value.StateGroupId; } }
 		public Guid? AlarmTypeId { get { return _alarmMapping.Value.AlarmTypeId; } }
-		public DateTime? AlarmTypeStartTime
-		{
-			get { return _alarmMapping.Value.AlarmTypeId == _previousState.Value.AlarmTypeId ? _previousState.Value.AlarmTypeStartTime : _currentTime; }
-		}
+		public DateTime? AlarmTypeStartTime { get { return _alarmMapping.Value.AlarmTypeId == _previousState.Value.AlarmTypeId ? _previousState.Value.AlarmTypeStartTime : _currentTime; } }
 		public double? StaffingEffect { get { return _alarmMapping.Value.StaffingEffect; } }
 		public AdherenceState? AdherenceState2 { get { return _alarmMapping.Value.Adherence; } }
 		public string AlarmName { get { return _alarmMapping.Value.AlarmName; } }
@@ -57,10 +54,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public int? AlarmDisplayColor { get { return _alarmMapping.Value.DisplayColor; } }
 		public string StateGroupName { get { return _stateMapping.Value.StateGroupName; } }
 		public DateTime? BatchId { get { return _input.IsSnapshot ? _input.BatchId : _previousState.Value.BatchId; } }
-		public string SourceId
-		{
-			get { return _input.SourceId ?? _previousState.Value.SourceId; }
-		}
+		public string SourceId { get { return _input.SourceId ?? _previousState.Value.SourceId; } }
 		public Guid PersonId { get { return _person.PersonId; } }
 		public Guid BusinessUnitId { get { return _person.BusinessUnitId; } }
 		public Guid TeamId { get { return _person.TeamId; } }
@@ -109,11 +103,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			var state = _currentState.Value;
 			return new AgentStateReadModel
 			{
-				BatchId = state.BatchId,
+				BatchId = BatchId,
 				NextStart = state.NextActivityStartTime,
-				OriginalDataSourceId = state.SourceId,
+				OriginalDataSourceId = SourceId,
 				PersonId = state.PersonId,
-				PlatformTypeId = state.PlatformTypeId,
+				PlatformTypeId = PlatformTypeId,
 				ReceivedTime = state.ReceivedTime,
 				StaffingEffect = state.StaffingEffect,
 				Adherence = (int?) state.Adherence,

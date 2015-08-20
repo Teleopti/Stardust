@@ -5,23 +5,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class AgentStateAssembler
 	{
-		public AgentState MakeEmpty(Guid personId)
+		public PreviousAgentState MakeEmpty(Guid personId)
 		{
-			return new AgentState
+			return new PreviousAgentState
 			{
 				PersonId = personId,
 				StateGroupId = Guid.NewGuid()
 			};
 		}
 
-		public AgentState MakeCurrentStateFromPrevious(AgentStateReadModel fromStorage)
+		public CurrentAgentState MakeCurrentStateFromPrevious(AgentStateReadModel fromStorage)
 		{
-			return new AgentState
+			return new CurrentAgentState
 			{
 				PersonId = fromStorage.PersonId,
-				BatchId = fromStorage.BatchId,
-				PlatformTypeId = fromStorage.PlatformTypeId,
-				SourceId = fromStorage.OriginalDataSourceId,
 				ReceivedTime = fromStorage.ReceivedTime,
 				StateCode = fromStorage.StateCode,
 				StateGroupId = fromStorage.StateId,
@@ -35,11 +32,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			};
 		}
 
-		public AgentState MakePreviousState(Guid personId, AgentStateReadModel fromStorage)
+		public PreviousAgentState MakePreviousState(Guid personId, AgentStateReadModel fromStorage)
 		{
 			if (fromStorage == null)
 				return MakeEmpty(personId);
-			return new AgentState
+			return new PreviousAgentState
 			{
 				PersonId = fromStorage.PersonId,
 				BatchId = fromStorage.BatchId,
@@ -58,14 +55,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			};
 		}
 
-		public AgentState MakeCurrentState(StateInfo info)
+		public CurrentAgentState MakeCurrentState(StateInfo info)
 		{
-			var agentState = new AgentState
+			return new CurrentAgentState
 			{
 				PersonId = info.PersonId,
-				BatchId = info.BatchId,
-				PlatformTypeId = info.PlatformTypeId,
-				SourceId = info.SourceId,
 				ReceivedTime = info.CurrentTime,
 				StateCode = info.StateCode,
 				StateGroupId = info.StateGroupId,
@@ -77,7 +71,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				StaffingEffect = info.StaffingEffect,
 				Adherence = info.AdherenceState2
 			};
-			return agentState;
 		}
 	}
 }

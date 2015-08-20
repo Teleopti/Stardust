@@ -1,5 +1,4 @@
 ﻿using System;
-using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
@@ -13,7 +12,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		void Send(StateInfo state);
 	}
 
-	public class NoMessagge : IAgentStateMessageSender
+	public class NoMessage : IAgentStateMessageSender
 	{
 		public void Send(StateInfo state)
 		{

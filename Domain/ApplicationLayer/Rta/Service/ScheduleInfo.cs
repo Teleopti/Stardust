@@ -18,7 +18,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly Lazy<DateTime> _shiftEndTimeForPreviousActivity;
 		private readonly Lazy<DateOnly?> _belongsToDate;
 
-		public ScheduleInfo(IScheduleLoader scheduleLoader, Guid personId, DateTime currentTime)
+		public ScheduleInfo(
+			IScheduleLoader scheduleLoader, 
+			Guid personId, 
+			DateTime currentTime)
 		{
 			_currentTime = currentTime;
 			_scheduleLayers = new Lazy<IEnumerable<ScheduleLayer>>(() => scheduleLoader.GetCurrentSchedule(personId));

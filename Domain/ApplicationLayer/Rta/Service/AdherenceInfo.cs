@@ -26,8 +26,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public AdherenceInfo(
 			ExternalUserStateInputModel input, 
 			PersonOrganizationData person,
-			Func<AgentState> previousState,
-			Func<AgentState> currentState,
+			Func<PreviousAgentState> previousState,
+			Func<CurrentAgentState> currentState,
 			ScheduleInfo scheduleInfo, 
 			IAppliedAdherence appliedAdherence,
 			IStateMapper stateMapper)
@@ -73,7 +73,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return _adherenceForPreviousStateAndCurrentActivity.Value;
 		}
 		
-		private AdherenceState adherenceFor(AgentState state)
+		private AdherenceState adherenceFor(CurrentAgentState state)
+		{
+			return state.Adherence.HasValue ? state.Adherence.Value : Service.AdherenceState.Unknown;
+		}
+
+		private AdherenceState adherenceFor(PreviousAgentState state)
 		{
 			return state.Adherence.HasValue ? state.Adherence.Value : Service.AdherenceState.Unknown;
 		}
