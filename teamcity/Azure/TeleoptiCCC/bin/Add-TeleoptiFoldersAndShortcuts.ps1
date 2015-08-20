@@ -29,6 +29,20 @@ Function Add-TeleoptiToolsAndServices {
     }
 }
 
+
+Function Add-InstallGoodies {
+    $file="$desktopPublic\InstallGoodies.bat"
+
+    $text = 'choco install google-chrome-x64 -y'
+    $text | Set-Content $file
+
+    $text = 'choco install baretail -y'
+    $text | Add-Content $file
+
+    $text = 'choco install notepadplusplus.install -y'
+    $text | Add-Content $file
+}
+
 Function Add-DesktopShortcuts {
 
     # restart Teleopti
@@ -318,6 +332,11 @@ Try
         log-info "Add-DesktopShortcuts ..."
         Add-DesktopShortcuts;
 
+        #add chocolatey to the instance
+        log-info "Add Chocolatey ..."
+        iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))
+        log-info "Add Goodies batch ..."
+        Add-InstallGoodies;
 }
 
 Catch [Exception]
