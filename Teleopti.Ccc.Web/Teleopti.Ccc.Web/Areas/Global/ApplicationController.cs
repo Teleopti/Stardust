@@ -17,14 +17,13 @@ namespace Teleopti.Ccc.Web.Areas.Global
 
 		private static readonly IEnumerable<AreaWithPermissionPath> _areaWithPermissionPaths = new List<AreaWithPermissionPath>
 		{
-			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebForecasts,() => UserTexts.Resources.OpenForecaster,"forecasting"),
+			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebForecasts,() => UserTexts.Resources.Forecasts,"forecasting"),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebSchedules,() => UserTexts.Resources.OpenSchedulePage,"resourceplanner", new Link{href = "api/ResourcePlanner/Filter",rel = "filters"}),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebPermissions,() => UserTexts.Resources.OpenPermissionPage,"permissions"),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.Outbound,() => UserTexts.Resources.Outbound,"outbound"),
-			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebPeople,() => "People","people"),
+			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebPeople,() => UserTexts.Resources.People,"people"),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.SeatPlanner,() => UserTexts.Resources.SeatPlan,"seatPlan"),
-			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.SeatPlanner,() => UserTexts.Resources.SeatMap,"seatMap"),
-			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview,() => UserTexts.Resources.RealTimeAdherenceOverview,"rta"),
+			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.SeatPlanner,() => UserTexts.Resources.SeatMap,"seatMap")
 		};
 
 		public ApplicationController(IPermissionProvider permissionProvider, IToggleManager toggleManager)
