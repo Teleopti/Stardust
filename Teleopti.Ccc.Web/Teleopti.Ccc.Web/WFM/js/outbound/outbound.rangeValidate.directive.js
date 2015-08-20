@@ -39,7 +39,11 @@
             };
 
             ngModel.$parsers.push(function (viewValue) {
-                return parseInt(viewValue);
+	            if (angular.isDefined(scope.integerOnly) && scope.integerOnly !== 'true') {
+		            return parseFloat(viewValue);
+	            } else {
+	            	return parseInt(viewValue);
+	            }	           
             });
 
             scope.$on("campaign.view.refresh", function () {
