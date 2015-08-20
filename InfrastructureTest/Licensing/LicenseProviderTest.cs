@@ -168,6 +168,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 	            TeleoptiWFMOvertimeAvailabilityEnabled = true;
 	            TeleoptiWFMShiftTraderEnabled = true;
 	            TeleoptiWFMVacationPlannerEnabled = true;
+				TeleoptiWFMVNextEnabled = true;
             }
 
             #region Implementation of IDisposable
@@ -243,6 +244,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 	        public bool TeleoptiWFMLifestyleEnabled { get; private set; }
 	        public bool TeleoptiWFMOvertimeAvailabilityEnabled { get; private set; }
 	        public bool TeleoptiWFMNotifyEnabled { get; private set; }
+	        public bool TeleoptiWFMVNextEnabled { get; private set; }
 	        public bool TeleoptiWFMMyTeamEnabled { get; private set; }
 
 	        #endregion
@@ -282,6 +284,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
                 TeleoptiCccMyTimeWebEnabled = false;
 				TeleoptiCccSmsLinkEnabled = false;
 	            TeleoptiCccCalendarLinkEnabled = false;
+				TeleoptiWFMVNextEnabled = false;
 
                 TeleoptiCccFreemiumForecastsEnabled = true;
             }
@@ -358,6 +361,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 	        public bool TeleoptiWFMLifestyleEnabled { get; private set; }
 	        public bool TeleoptiWFMOvertimeAvailabilityEnabled { get; private set; }
 	        public bool TeleoptiWFMNotifyEnabled { get; private set; }
+	        public bool TeleoptiWFMVNextEnabled { get; private set; }
 	        public bool TeleoptiWFMMyTeamEnabled { get; private set; }
 
 	        public bool TeleoptiCccMyTimeWebEnabled { get; private set; }
@@ -399,6 +403,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
                 TeleoptiCccMyTimeWebEnabled = false;
             	TeleoptiCccSmsLinkEnabled = false;
 	            TeleoptiCccCalendarLinkEnabled = false;
+	            TeleoptiWFMVNextEnabled = false;
 
                 TeleoptiCccFreemiumForecastsEnabled = false;
             }
@@ -475,6 +480,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 	        public bool TeleoptiWFMLifestyleEnabled { get; private set; }
 	        public bool TeleoptiWFMOvertimeAvailabilityEnabled { get; private set; }
 	        public bool TeleoptiWFMNotifyEnabled { get; private set; }
+	        public bool TeleoptiWFMVNextEnabled { get; private set; }
 	        public bool TeleoptiWFMMyTeamEnabled { get; private set; }
 
 	        public bool TeleoptiCccMyTimeWebEnabled { get; private set; }
