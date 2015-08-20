@@ -172,6 +172,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, "xxRealTimeAdherenceOverview", DefinedRaptorApplicationFunctionForeignIds.RealTimeAdherenceOverview, null);
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.WebForecasts, "xxForecasts", DefinedRaptorApplicationFunctionForeignIds.WebForecasts, null);
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.WebPermissions, "xxPermissions", DefinedRaptorApplicationFunctionForeignIds.WebPermissions, null);
+			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.WebSchedules, "xxSchedules", DefinedRaptorApplicationFunctionForeignIds.WebSchedules, null);
 
 			//SeatPlanner
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.SeatPlanner, "xxSeatPlanner", DefinedRaptorApplicationFunctionForeignIds.SeatPlanner, null);
