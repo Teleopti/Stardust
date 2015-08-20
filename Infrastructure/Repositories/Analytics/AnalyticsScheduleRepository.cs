@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
 				return uow.Session().CreateSQLQuery(
-					"select date_id, date_date from mart.dim_date where date_date BETWEEN DATEADD(DAY,-365, GETDATE()) AND  DATEADD(DAY, 365, GETDATE())")
+                    "select date_id, date_date from mart.dim_date WITH (NOLOCK) where date_date BETWEEN DATEADD(DAY,-365, GETDATE()) AND  DATEADD(DAY, 365, GETDATE())")
 					.SetResultTransformer(new CustomDictionaryTransformer()).List<KeyValuePair<DateOnly, int>>();
 			}
 		}
@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
 				return uow.Session().CreateSQLQuery(
-					"select activity_id ActivityId, activity_code ActivityCode, in_paid_time InPaidTime, in_ready_time InReadyTime from mart.dim_activity")
+                    "select activity_id ActivityId, activity_code ActivityCode, in_paid_time InPaidTime, in_ready_time InReadyTime from mart.dim_activity WITH (NOLOCK)")
 					.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsActivity)))
 					.SetReadOnly(true)
 					.List<IAnalyticsActivity>();
@@ -207,7 +207,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
 				return uow.Session().CreateSQLQuery(
-					"select absence_id AbsenceId, absence_code AbsenceCode, in_paid_time InPaidTime from mart.dim_absence")
+                    "select absence_id AbsenceId, absence_code AbsenceCode, in_paid_time InPaidTime from mart.dim_absence WITH (NOLOCK)")
 					.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsAbsence)))
 					.SetReadOnly(true)
 					.List<IAnalyticsAbsence>();
@@ -219,7 +219,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
 				return uow.Session().CreateSQLQuery(
-					"select scenario_id Id, scenario_code Code from mart.dim_scenario")
+                    "select scenario_id Id, scenario_code Code from mart.dim_scenario WITH (NOLOCK)")
 					.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsGeneric)))
 					.SetReadOnly(true)
 					.List<IAnalyticsGeneric>();
@@ -231,7 +231,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
 				return uow.Session().CreateSQLQuery(
-					"select shift_category_id Id, shift_category_code Code from mart.dim_shift_category")
+                    "select shift_category_id Id, shift_category_code Code from mart.dim_shift_category WITH (NOLOCK)")
 					.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsGeneric)))
 					.SetReadOnly(true)
 					.List<IAnalyticsGeneric>();
@@ -243,7 +243,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
 				return uow.Session().CreateSQLQuery(
-					"select person_id PersonId, business_unit_id BusinessUnitId from mart.dim_person WHERE person_period_code =:code")
+                    "select person_id PersonId, business_unit_id BusinessUnitId from mart.dim_person WITH (NOLOCK) WHERE person_period_code =:code ")
 					.SetGuid("code", personPeriodCode)
 					.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsPersonBusinessUnit)))
 					.SetReadOnly(true)
@@ -258,7 +258,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
 				return uow.Session().CreateSQLQuery(
-					"select overtime_id Id, overtime_code Code from mart.dim_overtime")
+                    "select overtime_id Id, overtime_code Code from mart.dim_overtime WITH (NOLOCK)")
 					.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsGeneric)))
 					.SetReadOnly(true)
 					.List<IAnalyticsGeneric>();
@@ -270,7 +270,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
 				return uow.Session().CreateSQLQuery(
-					"select shift_length_id Id, shift_length_m ShiftLength from mart.dim_shift_length")
+                    "select shift_length_id Id, shift_length_m ShiftLength from mart.dim_shift_length WITH (NOLOCK)")
 					.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsShiftLength)))
 					.SetReadOnly(true)
 					.List<IAnalyticsShiftLength>();
