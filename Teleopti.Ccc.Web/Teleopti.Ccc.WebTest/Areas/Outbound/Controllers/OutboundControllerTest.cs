@@ -191,11 +191,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
 		 public void ShouldInvokeCampaignProductionReplan()
 		 {			
 			 var campaignId = new Guid();
+			 var expectedVisualizationVM = new CampaignVisualizationViewModel();
 			 _outboundCampaignPersister.Stub(x => x.ManualReplanCampaign(campaignId));
-
-			 var target = new OutboundController(_outboundCampaignPersister, null, null, null, null, null);
-			 target.CampaignProductionReplan(campaignId);
+			 var visualizationProvider = MockRepository.GenerateMock<ICampaignVisualizationProvider>();
+			 visualizationProvider.Stub(x => x.ProvideVisualization(campaignId)).Return(expectedVisualizationVM);
+			 var target = new OutboundController(_outboundCampaignPersister, null, null, null, null, visualizationProvider);
+			 var result = target.CampaignProductionReplan(campaignId);
 			 _outboundCampaignPersister.AssertWasCalled(x => x.ManualReplanCampaign(campaignId));
+
+			 result.Should().Be.SameInstanceAs(expectedVisualizationVM);
 		 }
     }
 }
