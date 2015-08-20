@@ -252,11 +252,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 											  select f;
 			if (!AccessToResourcePlanner)
 				applicationFunctions = from f in applicationFunctions
-											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.OpenSchedulePage
+											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.WebSchedules
 											  select f;
 			if (!AccessToPeople)
 				applicationFunctions = from f in applicationFunctions
-											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage
+											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.WebPeople
 											  select f;
 
 			if (!AccessToOutbound)
@@ -307,7 +307,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 											  select f;
 			if (!QuickForecaster)
 				applicationFunctions = from f in applicationFunctions
-											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.OpenForecasterPage
+											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.WebForecasts
 											  select f;
 
 			if (!AccessToSeatPlanner)

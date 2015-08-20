@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.Global
 
 		private bool isPathEnabled(string path)
 		{
-			if (path.Equals(DefinedRaptorApplicationFunctionPaths.OpenSchedulePage))
+			if (path.Equals(DefinedRaptorApplicationFunctionPaths.WebSchedules))
 			{
 				return _toggleManager.IsEnabled(Toggles.Wfm_ResourcePlanner_32892);
 			}
