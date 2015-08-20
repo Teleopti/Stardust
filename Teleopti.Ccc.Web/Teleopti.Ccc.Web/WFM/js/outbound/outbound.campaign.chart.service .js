@@ -31,7 +31,6 @@
 
         this.replan = function (campaignId, successCb, errorCb) {
         	$http.get(redoCampaignProductionPlanUrl + campaignId).success(function (campaignData) {
-        		console.log('from server campaignData', campaignData);
 				if (successCb != null) successCb(self.buildGraphDataSeqs(campaignData));
 			}).error(function (e) {
 				if (errorCb != null) errorCb(e);
