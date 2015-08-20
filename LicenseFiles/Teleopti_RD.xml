@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <License>
   <CustomerName>Teleopti_RD</CustomerName>
   <ExpirationDate>2016-06-10T04:39:21</ExpirationDate>
@@ -22,6 +22,7 @@
     <PerformanceManager>true</PerformanceManager>
     <PayrollIntegration>true</PayrollIntegration>
     <MyTeam>true</MyTeam>
+    <VNext>true</VNext>
   </TeleoptiWFM>
   <Agreement>Teleopti.Ccc.Infrastructure.Licensing.Agreements.TeleoptiLic_En_Sw_St.txt</Agreement>
   <Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
@@ -33,9 +34,9 @@
           <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
         </Transforms>
         <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <DigestValue>yrzvGqE0Fk2t6DyUuZ7LxM6NveU=</DigestValue>
+        <DigestValue>mtArPPdJiSI0YlBZqy/HSyNN5/k=</DigestValue>
       </Reference>
     </SignedInfo>
-    <SignatureValue>jOvjv8DB+7r4BRb3qoAdXfAYwkhB3TyVDxupq8dT2PXRIlFKC1vsHZTgqjgp8NaB1Yb8+3VqjdRvxmHNcFI79ionVjtqd+huCf8+U4uas42Qk2vdWDn7NK50USK3ojl2SM0ukX2yWXtqMlxrPYABMr8oPZDJqwrDn8ENeKX3jUM=</SignatureValue>
+    <SignatureValue>EbaWtu9guYzJWnwaQLQhn7xnUMDOBf2J8oepzGZhWCSOKFW1EqX/JpqoYXhSEeOJZa9xEt5TNJMpNtQ4F4dHpO+KkT3xsCpl2r6x9+7RivXUe9MZnRJH5Krw63TuXx9NpJsAIfopnyGzG6bDHIsTAAnTV7V2+nQmxD+CjTukEek=</SignatureValue>
   </Signature>
 </License>
