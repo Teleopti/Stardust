@@ -39,7 +39,6 @@ using Teleopti.Ccc.Win.Permissions;
 using Teleopti.Ccc.Win.Scheduling;
 using Teleopti.Ccc.Win.Shifts;
 using Teleopti.Ccc.Win.Sikuli;
-using Teleopti.Ccc.Win.Sikuli.Helpers;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Common.UI.SmartPartControls.SmartParts;
@@ -67,7 +66,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		readonly int homeCommand = CommandIds.RegisterUserCommand("StartPage");
 		private bool canAccessInternet = true;
 		private bool _webViewLoaded = true;
-		private MemoryCounter _memoryCounter = new MemoryCounter();
 
 		protected SmartClientShellForm()
 		{
