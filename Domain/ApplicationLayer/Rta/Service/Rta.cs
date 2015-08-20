@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using log4net;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Resolvers;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator;
 using Teleopti.Ccc.Domain.Config;
@@ -23,13 +24,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class Rta : IRta
 	{
 		private readonly IAgentStateReadModelReader _agentStateReadModelReader;
-		private readonly RtaDataHandler _rtaDataHandler;
 		private readonly string _authenticationKey;
 		public static string LogOutStateCode = "LOGGED-OFF";
 		private static readonly ILog Log = LogManager.GetLogger(typeof(Rta));
 
 		public static string DefaultAuthenticationKey = "!#¤atAbgT%";
 		private readonly DataSourceResolver _dataSourceResolver;
+		private readonly ICacheInvalidator _cacheInvalidator;
+		private readonly RtaProcessor _processor;
+		private readonly INow _now;
+		private readonly IPersonOrganizationProvider _personOrganizationProvider;
+		private readonly IAgentStateReadModelUpdater _agentStateReadModelUpdater;
+		private readonly IAgentStateMessageSender _messageSender;
+		private readonly AgentStateAssembler _agentStateAssembler;
+		private readonly IAdherenceAggregator _adherenceAggregator;
+		private readonly PersonResolver _personResolver;
+		private readonly IStateMapper _stateMapper;
 
 		public Rta(
 			IAdherenceAggregator adherenceAggregator,
@@ -40,7 +50,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			INow now, 
 			IConfigReader configReader,
 			IAgentStateReadModelUpdater agentStateReadModelUpdater,
-			IAgentStateMessageSender agentStateMessageSender,
+			IAgentStateMessageSender messageSender,
 			IPersonOrganizationProvider personOrganizationProvider,
 			RtaProcessor processor,
 			AgentStateAssembler agentStateAssembler
@@ -48,19 +58,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			_agentStateReadModelReader = agentStateReadModelReader;
 			_dataSourceResolver = new DataSourceResolver(databaseReader);
-			_rtaDataHandler = new RtaDataHandler(
-				adherenceAggregator,
-				databaseReader,
-				_agentStateReadModelReader,
-				stateMapper,
-				cacheInvalidator,
-				processor,
-				agentStateReadModelUpdater,
-				agentStateMessageSender,
-				now,
-				personOrganizationProvider,
-				agentStateAssembler
-				);
+			_stateMapper = stateMapper;
+			_cacheInvalidator = cacheInvalidator;
+			_processor = processor;
+			_now = now;
+			_personOrganizationProvider = personOrganizationProvider;
+			_agentStateReadModelUpdater = agentStateReadModelUpdater;
+			_messageSender = messageSender;
+			_agentStateAssembler = agentStateAssembler;
+			_adherenceAggregator = adherenceAggregator;
+			_personResolver = new PersonResolver(databaseReader);
 
 			Log.Info("The real time adherence service is now started");
 			_authenticationKey = configReader.AppConfig("AuthenticationKey");
@@ -152,16 +159,48 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			int result;
 			if (input.IsSnapshot && string.IsNullOrEmpty(input.UserCode))
 			{
-				result = _rtaDataHandler.CloseSnapshot(input, dataSourceId);
+				result = closeSnapshot(input, dataSourceId);
 			}
 			else
 			{
-				result = _rtaDataHandler.ProcessStateChange(input, dataSourceId);
+				result = processStateChange(input, dataSourceId);
 			}
 
 			Log.InfoFormat("Message handling complete for UserCode: {0}, StateCode: {1}. (MessageId: {2})", input.UserCode, input.StateCode, messageId);
 
 			return result;
+		}
+
+		private int closeSnapshot(ExternalUserStateInputModel input, int dataSourceId)
+		{
+			input.StateCode = "CCC Logged out";
+			input.PlatformTypeId = Guid.Empty.ToString();
+			var missingAgents = _agentStateReadModelReader.GetMissingAgentStatesFromBatch(input.BatchId, input.SourceId);
+			var agentsNotAlreadyLoggedOut = from a in missingAgents
+											let state = _stateMapper.StateFor(a.BusinessUnitId, a.PlatformTypeId, a.StateCode, null)
+											where !state.IsLogOutState
+											select a;
+			foreach (var agent in agentsNotAlreadyLoggedOut)
+				process(input, agent.PersonId, agent.BusinessUnitId);
+			return 1;
+		}
+
+		private int processStateChange(ExternalUserStateInputModel input, int dataSourceId)
+		{
+			IEnumerable<ResolvedPerson> personWithBusinessUnits;
+			if (!_personResolver.TryResolveId(dataSourceId, input.UserCode, out personWithBusinessUnits))
+			{
+				Log.InfoFormat("No person available for datasource id: {0} and UserCode: {1}", dataSourceId, input.UserCode);
+				return 0;
+			}
+
+			//GLHF
+			foreach (var p in personWithBusinessUnits)
+			{
+				Log.DebugFormat("UserCode: {0} is connected to PersonId: {1}", input.UserCode, p.PersonId);
+				process(input, p.PersonId, p.BusinessUnitId);
+			}
+			return 1;
 		}
 
 		private void verifyAuthenticationKey(string authenticationKey, Guid messageId)
@@ -177,14 +216,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			throw new InvalidAuthenticationKeyException("You supplied an invalid authentication key. Please verify the key and try again.");
 		}
 
+		[InfoLog]
 		public void CheckForActivityChange(CheckForActivityChangeInputModel input)
 		{
-			var messageId = Guid.NewGuid();
-			Log.InfoFormat("Schedule check for Person: {0}, BusinessUnit: {1}. (MessgeId= {2})", input.PersonId, input.BusinessUnitId, messageId);
-
-			_rtaDataHandler.CheckForActivityChange(input.PersonId, input.BusinessUnitId);
-
-			Log.InfoFormat("Schedule check complete Person: {0}, BusinessUnit: {1}. (MessageId: {2})", input.PersonId, input.BusinessUnitId, messageId);
+			_cacheInvalidator.InvalidateSchedules(input.PersonId);
+			process(
+				null,
+				input.PersonId,
+				input.BusinessUnitId
+				);
 		}
 
 		private static void verifyBatchNotTooLarge(IEnumerable<ExternalUserStateInputModel> externalUserStateBatch)
@@ -194,9 +234,31 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			throw new BatchTooBigException("Incoming batch too large. Please lower the number of user states in a batch to below 50.");
 		}
 
+		private void process(
+			ExternalUserStateInputModel input,
+			Guid personId,
+			Guid businessUnitId
+			)
+		{
+			var currentTime = _now.UtcDateTime();
+			_processor.Process(
+				new RtaProcessContext(
+					input,
+					personId,
+					businessUnitId,
+					currentTime,
+					_personOrganizationProvider,
+					_agentStateReadModelUpdater,
+					_messageSender,
+					_adherenceAggregator,
+					() => _agentStateAssembler.MakePreviousState(personId, _agentStateReadModelReader.GetCurrentActualAgentState(personId)),
+					(scheduleInfo, context) => _agentStateAssembler.MakeCurrentState(scheduleInfo, context.Input, context.Person, context.PreviousState(scheduleInfo), currentTime)
+					));
+		}
+
 		public void Initialize()
 		{
-			_rtaDataHandler.Initialize();
+			_adherenceAggregator.Initialize();
 		}
 	}
 
