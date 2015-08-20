@@ -9,7 +9,7 @@
 	function summaryCtrl($scope, $state, $stateParams, outboundService, outboundChartService, $filter) {
         $scope.isLoadFinished = false;
         $scope.listCampaignFinished = false;
-       
+        $scope.isReplanLoaderFinished = false;
     	outboundService.load(function handleSuccess(isLoad) {    		
             init();
             $scope.$watch('activePhaseCode', function(newValue, oldValue) {               
@@ -23,6 +23,7 @@
     	});
 
     	$scope.replan = function (campaign) {
+    		$scope.isReplanLoaderFinished = true;
 			outboundChartService.replan(campaign.Id, function() {				
 				outboundService.getCampaignSummary(campaign.Id, function (_campaign) {
 					angular.extend(campaign, _campaign);
@@ -31,6 +32,7 @@
 						campaign.rawManualPlan = manualPlan;
 						campaign.translations = translations;
 						campaign.closedDays = closedDays;
+						$scope.isReplanLoaderFinished = false;
 					});					
 					outboundService.getCampaignStatistics(null, function success(data2) {
 						$scope.phaseStatistics = data2;

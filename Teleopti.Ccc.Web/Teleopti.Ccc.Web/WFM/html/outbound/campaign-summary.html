@@ -27,6 +27,9 @@
 				</card-header>
                 <card-body>
 	                <div class="relative" ng-show="listCampaignFinished && !displayLoading(campaign)">
+						<div class="replan-loader-container" ng-show="isReplanLoaderFinished">
+							<md-progress-circular md-mode="indeterminate" class="replan-loader"></md-progress-circular>
+						</div>
 		                <div class="clearfix m-b-10 text-center" style="height: 38px;">
 			                <p class="campaign-message m-r-5" ng-class="{orangefix: isOverStaffing(campaign.WarningInfo)}" ng-repeat="info in campaign.WarningInfo"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span translate>{{info.TypeOfRule}}</span></p>
 			                <p class="campaign-message campaign-message-healthyfix  m-r-5" ng-if="campaign.WarningInfo.length == 0"><span class="campaign-warning-icon campaign-green-icon-messagefix"><i class="mdi mdi-check"></i></span><span translate>Healthy</span></p>
@@ -40,17 +43,17 @@
 			                </div>
 		                </div>
 		                <div class="relative clearfix">
-							<button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="show(campaign)" translate>Edit</button>
-							<button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="replan(campaign)" translate>Replan</button>
+			                <button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="show(campaign)" translate>Edit</button>
+			                <button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="replan(campaign)" translate>Replan</button>
 			                <button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="switchManualPlan(campaign);" ng-class="{'selected-ope-btn': campaign.manualPlanswitch}" translate>ManualPlan</button>
-							<div class="edit-container pull-right" style="margin: 6px 10px 0 65px;">
-								<div class="input-container relative" ng-show="campaign.manualPlanswitch">
-									<input type="text" placeholder="plan..." ng-model="campaign.manualPlanInput" range-validate range-min="0" integer-only="false" style="width: 202px;" />
-									<i class="mdi mdi-information-outline pink" style="position: absolute; left: 195px; top: 9px;" ng-show="isManualProductionPlanInvalid(campaign)"></i>
-									<button class="wfm-btn btn-sm wfm-btn-invis-primary pink p-5-10 m-r-0"  ng-click="addManualPlan(campaign)" ng-disabled="isManualProductionPlanInvalid(campaign)" ng-class="{'wfm-btn-invis-disabled': isManualProductionPlanInvalid(campaign)}" translate>Save</button>
-									<button class="wfm-btn btn-sm wfm-btn-invis-primary pink p-5-10 m-l-0"  ng-click="removeManualPlan(campaign)" translate>Reset</button>
-								</div>
-							</div>
+			                <div class="edit-container pull-right" style="margin: 6px 10px 0 65px;">
+				                <div class="input-container relative" ng-show="campaign.manualPlanswitch">
+					                <input type="text" placeholder="plan..." ng-model="campaign.manualPlanInput" range-validate range-min="0" integer-only="false" style="width: 202px;"/>
+					                <i class="mdi mdi-information-outline pink" style="position: absolute; left: 195px; top: 9px;" ng-show="isManualProductionPlanInvalid(campaign)"></i>
+					                <button class="wfm-btn btn-sm wfm-btn-invis-primary pink p-5-10 m-r-0" ng-click="addManualPlan(campaign)" ng-disabled="isManualProductionPlanInvalid(campaign)" ng-class="{'wfm-btn-invis-disabled': isManualProductionPlanInvalid(campaign)}" translate>Save</button>
+					                <button class="wfm-btn btn-sm wfm-btn-invis-primary pink p-5-10 m-l-0" ng-click="removeManualPlan(campaign)" translate>Reset</button>
+				                </div>
+			                </div>
 		                </div>
 	                </div>
                 </card-body>
