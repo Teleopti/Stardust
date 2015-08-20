@@ -140,6 +140,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			var campaign = _outboundCampaignRepository.Get(manualPlan.CampaignId);
 			if (campaign == null) return;
 
+			var isUpdateForecasted = false;
 			foreach (var manual in manualPlan.ManualProductionPlan)
 			{
 				var days = (int)manual.Time/24;
@@ -150,9 +151,14 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 				if (campaign.SpanningPeriod.Contains(manual.Date))
 				{
 					campaign.SetManualProductionPlan(manual.Date, time);
-					var incomingTask = _campaignTaskManager.GetIncomingTaskFromCampaign(campaign);
-					_createOrUpdateSkillDays.UpdateSkillDays(campaign.Skill, incomingTask);
+					isUpdateForecasted = true;
 				}
+			}
+
+			if (isUpdateForecasted)
+			{
+				var incomingTask = _campaignTaskManager.GetIncomingTaskFromCampaign(campaign);
+				_createOrUpdateSkillDays.UpdateSkillDays(campaign.Skill, incomingTask);
 			}
 		}
 
