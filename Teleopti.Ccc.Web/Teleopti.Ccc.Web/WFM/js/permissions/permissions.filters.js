@@ -2,7 +2,6 @@
     'use strict';
     var permissionsFilters = angular.module('wfm.permissions');
 
-
     var getChildren = function (child, filterType) {
         if (filterType === 'descriptionFilter') {
             return child.ChildFunctions;
@@ -79,10 +78,10 @@
 		    };
 		}
     ]);
-    
-    var checkChild = function (node) {
+
+    var checkChild = function(node) {
         var selectedChildren = 0;
-        node.ChildNodes.forEach(function (subnode) {
+        node.ChildNodes.forEach(function(subnode) {
             if (subnode.ChildNodes && subnode.ChildNodes.length > 0) {
                 selectedChildren += checkChild(subnode);
             }
@@ -92,7 +91,23 @@
             }
         });
         return selectedChildren;
-    }
+    };
+
+    var checkUnselectedChild = function (node, getChild) {
+        var unselectedChildren = 0;
+        var children = getChild(node);
+        children.forEach(function (subnode) {
+            var child = getChild(subnode);
+            if (child && child.length > 0) {
+                unselectedChildren += checkUnselectedChild(subnode, getChild);
+            }
+            if (!subnode.selected) {
+                node.show = true;
+                unselectedChildren++;
+            }
+        });
+        return unselectedChildren;
+    };
      
     permissionsFilters.filter('selectedData', [
         function () {
@@ -115,60 +130,14 @@
         }
     ]);
 
-
-    //permissionsFilters.filter('unselectedFunctions', [
-    //	function() {
-    //	    return function (nodes, unselectedFunctionToggle) {
-    //	        if (!unselectedFunctionToggle) return nodes;
-    //	        var filteredNodes = [];
-    //	        nodes.forEach(function (node) {
-    //	            var hasUnselectedChildren = false;
-    //	            if (node.ChildFunctions && node.ChildFunctions.length > 0
-    //					&& node.nmbSelectedChildren < node.ChildFunctions.length)
-    //	                hasUnselectedChildren = true;
-    //	            if (!node.selected || hasUnselectedChildren) {
-    //	                filteredNodes.push(node);
-    //	            }
-    //	        });
-    //	        return filteredNodes;
-    //	    }
-    //	}
-    //]);
-
-    //permissionsFilters.filter('unselectedData', [
-    //	function () {
-    //		return function(nodes, unselectedDataToggle) {
-    //			if (!unselectedDataToggle) return nodes;
-    //			var filteredNodes = [];
-    //			nodes.forEach(function(node) {
-    //				var hasUnselectedChildren = false;
-    //				if (node.ChildNodes && node.ChildNodes.length > 0
-    //					&& node.nmbSelectedChildren < node.ChildNodes.length)
-    //					hasUnselectedChildren = true;
-    //				if (node.nmbSelectedChildren > 0) {
-    //					node.selected
-    //				}
-    //				if (!node.selected || hasUnselectedChildren) {
-    //					filteredNodes.push(node);
-    //				}
-    //			});
-    //			return filteredNodes;
-    //		};
-    //	}
-    //]);
-
-
-
-    //
     var unselect = function (nodes, toggle, getChild) {
         if (!toggle) return nodes;
         var filteredNodes = [];
         nodes.forEach(function (node) {
-            var hasUnselectedChildren = false;
-            debugger;
-            if (getChild(node) && getChild(node).length > 0
-                && node.nmbSelectedChildren < getChild(node).length) {
-                hasUnselectedChildren = true;
+            var hasUnselectedChildren = 0;
+            var child = getChild(node);
+            if (child && child.length > 0) {
+                hasUnselectedChildren = checkUnselectedChild(node, getChild);
             }
             if (!node.selected || hasUnselectedChildren) {
                 filteredNodes.push(node);
@@ -196,5 +165,4 @@
             };
         }
     ]);
-
 })();

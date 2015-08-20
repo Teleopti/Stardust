@@ -60,7 +60,7 @@ describe('PermissionsFilters', function() {
 		expect(filteredArray.length).toEqual(2); 
 	}));
 
-	/*it('should filter on the unselected data only', inject(function ($filter) {
+	it('should filter on the unselected data only', inject(function ($filter) {
 	    var allData = [
 		{
 		    id: 1,
@@ -76,7 +76,7 @@ describe('PermissionsFilters', function() {
 	    var filteredArray = filter(allData, true);
 
 	    expect(filteredArray.length).toEqual(1);
-	}));*/
+	}));
 
 	it('shold find matched parent nodes', inject(function($filter) {
 		var nodes = [

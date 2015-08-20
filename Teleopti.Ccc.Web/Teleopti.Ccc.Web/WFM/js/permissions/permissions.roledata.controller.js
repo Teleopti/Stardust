@@ -47,6 +47,7 @@
 						}
 					}
 				};
+
 				uiTree.getChildrenOfParent = function (node) {
 				    var highestLevelNode = [];
 					var selectedChildren = [];
@@ -65,6 +66,7 @@
 					}
 				    return highestLevelNode;
 				};
+
 				uiTree.toggleChildSelection = function (node, state) {
 				    node.forEach(function(child) {
 				        child.selected = state;
@@ -73,6 +75,7 @@
 				        }
 				    });
 				};
+
 				uiTree.toggleParentSelection = function (node) {
 					var dataNodes = [];
 					dataNodes.push({ type: node.$modelValue.Type, id: node.$modelValue.Id });
@@ -105,6 +108,7 @@
 						uiTree.toggleParentSelection(node);
 					}
 				};
+
 				$scope.changeOption = function (option) {
 					RoleDataService.assignAuthorizationLevel($scope.selectedRole, option);
 				};
