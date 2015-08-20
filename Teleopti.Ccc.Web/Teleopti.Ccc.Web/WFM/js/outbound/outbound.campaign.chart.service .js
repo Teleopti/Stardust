@@ -68,28 +68,15 @@
             var returnData = {
                 dates: null,
                 rawBacklogs: null,
-                calculatedBacklogs: null,
-                plans: null,
                 unscheduledPlans: null,
                 schedules: null,
-                underDiffs: null,
-                overDiffs: null,
                 progress: null
             };
           
             returnData.dates = new moment(data.Dates.Date).format("YYYY-MM-DD");
             returnData.rawBacklogs = data.BacklogPersonHours;
-            returnData.calculatedBacklogs = (data.BacklogPersonHours > 0)? 
-                ((data.ScheduledPersonHours > 0 && data.ScheduledPersonHours < data.PlannedPersonHours)
-                ? data.ScheduledPersonHours + data.BacklogPersonHours - data.PlannedPersonHours : data.BacklogPersonHours)
-                : 0;					
-            returnData.plans = data.PlannedPersonHours;
             returnData.unscheduledPlans = data.ScheduledPersonHours > 0 ? 0 : data.PlannedPersonHours;
             returnData.schedules = data.ScheduledPersonHours;
-            returnData.underDiffs = data.ScheduledPersonHours > 0 && data.ScheduledPersonHours < data.PlannedPersonHours ?
-                data.PlannedPersonHours - data.ScheduledPersonHours : 0;
-            returnData.overDiffs = data.ScheduledPersonHours > 0 && data.ScheduledPersonHours > data.PlannedPersonHours
-                ? data.ScheduledPersonHours - data.PlannedPersonHours : 0;
             returnData.progress = data.BacklogPersonHours;
 
             return returnData;
@@ -98,14 +85,10 @@
         function getDataLabels() {            
             return {               
                 dates: 'x',
-                rawBacklogs: self.dictionary['Backlog'], 
-                calculatedBacklogs: self.dictionary['Backlog'] + ' ', 
-                plans: self.dictionary['Planned'], 
+                rawBacklogs: self.dictionary['Backlog'],
                 unscheduledPlans: self.dictionary['Planned'], 
                 schedules: self.dictionary['Scheduled'],
-                underDiffs: self.dictionary['Underscheduled'],
-                overDiffs: self.dictionary['Overscheduled'],
-                progress: self.dictionary['Progress'],
+                progress: self.dictionary['Progress']
             };
         }
 
@@ -122,12 +105,8 @@
             var extrapolatedGraphData = {
                 dates: beforeStartDate,
                 rawBacklogs: 0,
-                calculatedBacklogs: 0,
-                plans: 0,
                 unscheduledPlans: 0,
                 schedules: 0,
-                underDiffs: 0,
-                overDiffs: 0,
                 progress: graphDataSeq[0].rawBacklogs + graphDataSeq[0].unscheduledPlans + graphDataSeq[0].schedules
             };
 

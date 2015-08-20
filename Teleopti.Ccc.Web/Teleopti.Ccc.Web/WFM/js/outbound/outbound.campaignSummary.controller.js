@@ -85,30 +85,10 @@
 		$scope.isManualProductionPlanInvalid = function (campaign) {
 			return !(angular.isDefined(campaign.manualPlanInput) && campaign.manualPlanInput != null && campaign.manualPlanInput >= 0);
 		}
-
-		$scope.switchBacklog = function(campaign) {
-			campaign.backlogSwitch = !campaign.backlogSwitch;
-			campaign.manualPlanswitch = false;
-			campaign.switchSwitch = !campaign.switchSwitch;
-		}
 		
 		$scope.switchManualPlan = function (campaign) {
 			campaign.manualPlanswitch = !campaign.manualPlanswitch;
 			campaign.backlogSwitch = false;
-			campaign.switchSwitch = !campaign.switchSwitch;
-		}
-
-		$scope.delThisDate = function(campaign,d) {
-			var index = campaign.selectedDates.indexOf(d);
-			campaign.selectedDates.splice(index, 1);
-
-		}
-
-		$scope.addBacklog = function(campaign) {
-			campaign.backlogSwitch = false;
-			campaign.switchSwitch = false;
-			campaign.backlog.Id = campaign.Id;
-			campaign.selectedDates = [];
 		}
 
 		$scope.isOverStaffing = function(d) {
