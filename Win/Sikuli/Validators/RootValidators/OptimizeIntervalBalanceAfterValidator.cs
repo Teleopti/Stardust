@@ -11,6 +11,12 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 		private const double _limit = 0.8d;
 		private const int _maxRuleBreaks = 3;
 		private TimeSpan _durationLimit = TimeSpan.FromMinutes(1).Add(TimeSpan.FromSeconds(20));
+		private DurationValidator _durationValidator;
+
+		public OptimizeIntervalBalanceAfterValidator()
+		{
+			_durationValidator = new DurationValidator(_durationLimit);
+		}
 
 		public string Description
 		{
@@ -36,9 +42,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 
 			var intradayValidationResult = intradayBalanceValidationResult(scheduleTestData);
 
-			var duration = data as ITestDuration;
-			var durationValidator = new DurationValidator(_durationLimit, duration);
-			var durationValidatorResult = durationValidator.Validate();
+			var durationValidatorResult = _durationValidator.Validate();
 
 			intradayValidationResult.CombineResultValue(durationValidatorResult);
 			intradayValidationResult.CombineDetails(durationValidatorResult);

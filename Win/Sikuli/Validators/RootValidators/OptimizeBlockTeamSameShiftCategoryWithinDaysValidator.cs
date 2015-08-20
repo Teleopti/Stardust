@@ -6,11 +6,15 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 {
 	internal class OptimizeBlockTeamSameShiftCategoryWithinDaysValidator : SchedulerRootValidator
 	{
+		public OptimizeBlockTeamSameShiftCategoryWithinDaysValidator()
+		{
+			AtomicValidators.Add(new DurationValidator(TimeSpan.FromMinutes(4).Add(TimeSpan.FromSeconds(15))));
+		}
+
 		protected override SikuliValidationResult Validate(SchedulerTestData data)
 		{
 			const double periodStandardDeviationLimit = 0.08d;
 			AtomicValidators.Add(new PeriodStandardDeviationValidator(data.SchedulerState, data.TotalSkill, periodStandardDeviationLimit));
-			AtomicValidators.Add(new DurationValidator(TimeSpan.FromMinutes(4).Add(TimeSpan.FromSeconds(15)), EndTimer()));
 			return ValidateAtomicValidators(AtomicValidators);
 		}
 	}
