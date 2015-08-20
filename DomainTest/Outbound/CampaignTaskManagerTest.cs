@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Outbound
 		}
 
 		[Test]
-		public void ShouldGetRealPlannedTime()
+		public void ShouldGetRealPlannedTimeWithoutForecastedData()
 		{
 			var date = new DateOnly(2015, 8, 18);
 			_outboundScheduledResourcesProvider.Stub(x => x.GetScheduledTimeOnDate(date, _campaign.Skill))
@@ -42,6 +42,24 @@ namespace Teleopti.Ccc.DomainTest.Outbound
 			var result = target.GetIncomingTaskFromCampaign(_campaign);
 
 			result.GetRealPlannedTimeOnDate(date).Should().Be.EqualTo(new TimeSpan(4, 4, 0, 0));
+		}		
+		
+		[Test]
+		public void ShouldGetRealPlannedTimeWithForecastedData()
+		{
+			var date = new DateOnly(2015, 8, 18);
+			var expectedTime = new TimeSpan(1, 0, 0);
+			_outboundScheduledResourcesProvider.Stub(x => x.GetScheduledTimeOnDate(date, _campaign.Skill))
+				.IgnoreArguments()
+				.Return(TimeSpan.Zero);
+			_outboundScheduledResourcesProvider.Stub(x => x.GetForecastedTimeOnDate(date, _campaign.Skill))
+				.IgnoreArguments()
+				.Return(expectedTime);
+
+			var target = new CampaignTaskManager(_outboundProductionPlanFactory, _outboundScheduledResourcesProvider);
+			var result = target.GetIncomingTaskFromCampaign(_campaign);
+
+			result.GetRealPlannedTimeOnDate(date).Should().Be.EqualTo(expectedTime);
 		}
 
 		[Test]
