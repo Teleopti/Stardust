@@ -6,11 +6,13 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 {
 	public class DataSourceConfiguration
 	{
+		private readonly IDictionary<string, string> _applicationNHibernateConfig;
+
 		public DataSourceConfiguration()
 		{
 			ApplicationConnectionString = string.Empty;
 			AnalyticsConnectionString = string.Empty;
-			ApplicationNHibernateConfig = new Dictionary<string, string> { { Environment.CommandTimeout, "60" } };
+			_applicationNHibernateConfig = new Dictionary<string, string> { { Environment.CommandTimeout, "60" } };
 		}
 
 		public DataSourceConfiguration(string applicationConnectionString, 
@@ -19,12 +21,16 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		{
 			ApplicationConnectionString = applicationConnectionString;
 			AnalyticsConnectionString = analyticsConnectionString;
-			ApplicationNHibernateConfig = applicationNHibernateConfig;
+			_applicationNHibernateConfig = applicationNHibernateConfig;
 		}
 
 		public virtual string AnalyticsConnectionString { get; protected set; }
 		public virtual string ApplicationConnectionString { get; protected set; }
-		public virtual IDictionary<string, string> ApplicationNHibernateConfig { get; protected set; }
+
+		public virtual IDictionary<string, string> ApplicationNHibernateConfig
+		{
+			get { return new Dictionary<string, string>(_applicationNHibernateConfig); }
+		}
 
 		public virtual void SetApplicationConnectionString(string applicationConnectionString)
 		{
@@ -36,6 +42,11 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		{
 			new SqlConnectionStringBuilder(analyticsConnectionString);
 			AnalyticsConnectionString = analyticsConnectionString;
+		}
+
+		public void SetNHibernateConfig(string key, string value)
+		{
+			_applicationNHibernateConfig[key] = value;
 		}
 	}
 }

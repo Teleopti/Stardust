@@ -3,6 +3,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Results;
+using NHibernate.Cfg;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
@@ -51,7 +52,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 				Id = -1000, //behövs denna?
 				AnalyticsDatabase = t.DataSourceConfiguration.AnalyticsConnectionString,
 				AppDatabase = t.DataSourceConfiguration.ApplicationConnectionString,
-				CommandTimeout = int.Parse(t.DataSourceConfiguration.ApplicationNHibernateConfig["command_timeout"])
+				CommandTimeout = int.Parse(t.DataSourceConfiguration.ApplicationNHibernateConfig[Environment.CommandTimeout])
 			}).FirstOrDefault());
 		}
 

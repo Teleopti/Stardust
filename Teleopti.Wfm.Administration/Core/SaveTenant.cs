@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Wfm.Administration.Models;
+using Environment = NHibernate.Cfg.Environment;
 
 namespace Teleopti.Wfm.Administration.Core
 {
@@ -36,8 +35,7 @@ namespace Teleopti.Wfm.Administration.Core
 				{
 					oldTenant.DataSourceConfiguration.SetApplicationConnectionString(model.AppDatabase);
 					oldTenant.DataSourceConfiguration.SetAnalyticsConnectionString(model.AnalyticsDatabase);
-					oldTenant.DataSourceConfiguration.ApplicationNHibernateConfig["command_timeout"] = model.CommandTimeout.ToString();
-					//oldTenant.Name = model.NewName;
+					oldTenant.DataSourceConfiguration.SetNHibernateConfig(Environment.CommandTimeout, model.CommandTimeout.ToString());
 					_currentTenantSession.CurrentSession().Save(oldTenant);
 				}
 			}

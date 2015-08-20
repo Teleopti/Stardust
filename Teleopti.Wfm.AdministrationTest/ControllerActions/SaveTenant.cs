@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using NHibernate.Cfg;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
@@ -101,7 +102,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 				var loadedTenant = LoadAllTenants.Tenants().FirstOrDefault(t => t.Name.Equals("Old One"));
 				loadedTenant.DataSourceConfiguration.ApplicationConnectionString.Should().Be.EqualTo("Integrated Security=true;Initial Catalog=Southwind;server=(local)");
 				loadedTenant.DataSourceConfiguration.AnalyticsConnectionString.Should().Be.EqualTo("Integrated Security=true;Initial Catalog=Southwind;server=(local)");
-				loadedTenant.DataSourceConfiguration.ApplicationNHibernateConfig["command_timeout"].Should().Be.EqualTo("180");
+				loadedTenant.DataSourceConfiguration.ApplicationNHibernateConfig[Environment.CommandTimeout].Should().Be.EqualTo("180");
 			}
 		}
 	}

@@ -65,15 +65,11 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 		public void ShouldPersistApplicationNhibernateConfig()
 		{
 			var tenant = new Tenant(RandomName.Make());
-			var key1 = RandomName.Make();
-			var value1 = RandomName.Make();
-			var key2 = RandomName.Make();
-			var value2 = RandomName.Make();
-			tenant.DataSourceConfiguration.ApplicationNHibernateConfig[key1] = value1;
-			tenant.DataSourceConfiguration.ApplicationNHibernateConfig[key2] = value2;
-
+			tenant.DataSourceConfiguration.SetNHibernateConfig(RandomName.Make(), RandomName.Make());
 			target.Persist(tenant);
 			tenantUnitOfWorkManager.CurrentSession().Flush();
+			tenantUnitOfWorkManager.CurrentSession().Clear();
+		
 			var result = tenantUnitOfWorkManager.CurrentSession()
 				.CreateQuery("select t from Tenant t where t.Name=:name")
 				.SetString("name", tenant.Name)
@@ -113,6 +109,19 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 				.UniqueResult<Tenant>();
 			result.DataSourceConfiguration.ApplicationNHibernateConfig.Single(cfg => cfg.Key == Environment.CommandTimeout).Value
 				.Should().Be.EqualTo("60");
+		}
+
+		[Test]
+		public void ModifyingConfigRefShouldNotModifyPersistedData()
+		{
+			var tenant = new Tenant(RandomName.Make());
+			var key = RandomName.Make();
+			var value = RandomName.Make();
+			tenant.DataSourceConfiguration.SetNHibernateConfig(key, value);
+			tenant.DataSourceConfiguration.ApplicationNHibernateConfig[key] = RandomName.Make();
+
+			tenant.DataSourceConfiguration.ApplicationNHibernateConfig[key]
+				.Should().Be.EqualTo(value);
 		}
 
 		[SetUp]
