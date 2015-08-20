@@ -214,7 +214,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		private OutboundCampaignPersister _target;
 		private IList<IActivity> _activityList;
 		private IOutboundPeriodMover _outboundPeriodMover;
-			
+
+		private Guid _campaignId;
+		private IOutboundCampaign _campaign;
+
 		[SetUp]
 		public void Setup()
 		{
@@ -230,7 +233,20 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			_activityRepository.Stub(x => x.LoadAll()).Return(_activityList);
 			_productionReplanHelper.Stub(x => x.Replan(null)).IgnoreArguments();
 			_outboundPeriodMover.Stub(x => x.Move(null, new DateOnlyPeriod())).IgnoreArguments();
+
+			_campaignId = Guid.NewGuid();
+			_campaign = new Domain.Outbound.Campaign();
+
+			_outboundCampaignRepository.Stub(x => x.Get(_campaignId)).Return(_campaign);
 			_target = new OutboundCampaignPersister(_outboundCampaignRepository, _outboundCampaignMapper, null, _outboundSkillCreator, _activityRepository, null, null, _productionReplanHelper, _outboundPeriodMover, null);
+		}
+
+
+		[Test]
+		public void ManualReplanShouldDelegateToReplanHelper()
+		{
+			_target.ManualReplanCampaign(_campaignId);
+			_productionReplanHelper.AssertWasCalled( x => x.Replan(_campaign));
 		}
 
 		[Test]

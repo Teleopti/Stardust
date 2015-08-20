@@ -186,5 +186,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
 			 campaignPersister.AssertWasCalled(x => x.RemoveManualProductionPlan(removeManualPlanVM));
 			 result.Should().Be.SameInstanceAs(expectedVisualizationVM);
 		 }
+
+		 [Test]
+		 public void ShouldInvokeCampaignProductionReplan()
+		 {			
+			 var campaignId = new Guid();
+			 _outboundCampaignPersister.Stub(x => x.ManualReplanCampaign(campaignId));
+
+			 var target = new OutboundController(_outboundCampaignPersister, null, null, null, null, null);
+			 target.CampaignProductionReplan(campaignId);
+			 _outboundCampaignPersister.AssertWasCalled(x => x.ManualReplanCampaign(campaignId));
+		 }
     }
 }
