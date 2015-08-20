@@ -8,6 +8,7 @@ using NHibernate.Linq;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.SeatManagement;
@@ -62,6 +63,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			return Session.Query<ISeatBooking>()
 				.Where(booking => booking.BelongsToDate == date).ToList();
+		}
+
+		public IList<ISeatBooking> LoadSeatBookingsIntersectingDay(DateOnly dateOnly, ISeatMapLocation location)
+		{
+			var requestedDate = new DateTimePeriod(dateOnly.Date, dateOnly.Date.AddDays(1).AddSeconds(-1));
+			return Session.Query<ISeatBooking>()
+				.Where(booking => !((requestedDate.EndDateTime < booking.StartDateTime) || (requestedDate.StartDateTime > booking.EndDateTime))
+					&& location == booking.Seat.Parent)
+				.ToList();
 		}
 
 		public IList<ISeatBooking> GetSeatBookingsForSeat(ISeat seat)
@@ -162,11 +172,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		private void setQueryParameters(ISeatBookingReportCriteria reportCriteria, ISQLQuery query)
 		{
-			query.SetDateOnly ("startDate", reportCriteria.Period.StartDate)
-				.SetDateOnly ("endDate", reportCriteria.Period.EndDate)
-				.SetString ("teamIdList", getTeamCriteria (reportCriteria))
-				.SetString ("locationIdList", getLocationCriteria (reportCriteria))
-				.SetGuid ("businessUnitId", getBusinessUnitId());
+			query.SetDateOnly("startDate", reportCriteria.Period.StartDate)
+				.SetDateOnly("endDate", reportCriteria.Period.EndDate)
+				.SetString("teamIdList", getTeamCriteria(reportCriteria))
+				.SetString("locationIdList", getLocationCriteria(reportCriteria))
+				.SetGuid("businessUnitId", getBusinessUnitId());
 		}
 
 		private Guid getBusinessUnitId()
@@ -189,6 +199,5 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			return reportCriteria.Teams.IsNullOrEmpty() ? null : string.Join(",", reportCriteria.Teams.Select(team => team.Id));
 		}
-
 	}
 }

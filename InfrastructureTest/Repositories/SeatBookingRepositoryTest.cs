@@ -127,6 +127,70 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
+		public void ShouldLoadBookingsThatIntersectWithDay()
+		{
+			var utcStartDateTime = new DateTime (2015, 10, 2, 0, 0, 0, DateTimeKind.Utc);
+			var startDate = new DateOnly(2015,10,1);
+			var person = createPerson(startDate);
+			var seat = createSeatMapLocationAndSeatInDb();
+			var bookingOnCurrentDay = new SeatBooking(person,
+				new DateOnly(2015, 10, 2),
+				new DateTime(2015, 10, 2, 8, 0, 0),
+				new DateTime(2015, 10, 2, 12, 0, 0));
+			var bookingOnPreviousDay = new SeatBooking(person,
+				new DateOnly(2015, 10, 1),
+				new DateTime(2015, 10, 1, 23, 0, 0),
+				new DateTime(2015, 10, 2, 7, 0, 0));
+			var bookingOnNextDay = new SeatBooking(person,
+				new DateOnly(2015, 10, 3),
+				new DateTime(2015, 10, 2, 23, 0, 0),
+				new DateTime(2015, 10, 3, 7, 0, 0));
+
+			bookingOnCurrentDay.Book(seat);
+			bookingOnPreviousDay.Book(seat);
+			bookingOnNextDay.Book(seat);
+
+			PersistAndRemoveFromUnitOfWork(bookingOnCurrentDay);
+			PersistAndRemoveFromUnitOfWork(bookingOnPreviousDay);
+			PersistAndRemoveFromUnitOfWork(bookingOnNextDay);
+
+			var seatBookings = new SeatBookingRepository(UnitOfWork).LoadSeatBookingsIntersectingDay(new DateOnly(utcStartDateTime), seat.Parent as ISeatMapLocation);
+
+			Assert.AreEqual(seatBookings.Count, 3);
+		}
+
+
+		[Test]
+		public void ShouldLoadBookingsIntersectingWithDayForLocation()
+		{
+			var utcStartDateTime = new DateTime(2015, 10, 2, 0, 0, 0, DateTimeKind.Utc);
+			var startDate = new DateOnly(2015, 10, 1);
+			var person = createPerson(startDate);
+			var seat = createSeatMapLocationAndSeatInDb();
+			var seat2 = createSeatMapLocationAndSeatInDb();
+
+			var bookingOnCurrentDay = new SeatBooking(person,
+				new DateOnly(2015, 10, 2),
+				new DateTime(2015, 10, 2, 8, 0, 0),
+				new DateTime(2015, 10, 2, 12, 0, 0));
+			var bookingOnPreviousDay = new SeatBooking(person,
+				new DateOnly(2015, 10, 1),
+				new DateTime(2015, 10, 1, 23, 0, 0),
+				new DateTime(2015, 10, 2, 7, 0, 0));
+
+
+			bookingOnCurrentDay.Book(seat2);
+			bookingOnPreviousDay.Book(seat);
+
+			PersistAndRemoveFromUnitOfWork(bookingOnCurrentDay);
+			PersistAndRemoveFromUnitOfWork(bookingOnPreviousDay);
+
+			var seatBookings = new SeatBookingRepository(UnitOfWork).LoadSeatBookingsIntersectingDay(new DateOnly(utcStartDateTime), seat.Parent as ISeatMapLocation);
+
+			Assert.AreEqual(seatBookings.Count, 1);
+		}
+
+		[Test]
 		public void ShouldFilterSeatBookingReportByPeriod()
 		{
 

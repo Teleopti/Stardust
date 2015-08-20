@@ -61,6 +61,7 @@
 		Portal_DifferentiateBadgeSettingForAgents_31318,
 
 		SeatPlanner_Logon_32003,
+		Wfm_SeatPlan_SeatMapBookingView_32814,
 		MyTeam_MakeTeamScheduleConsistent_31897,
 
 		Wfm_MinimumScaffolding_32659,

@@ -27,7 +27,6 @@ angular.module('wfm.seatMap')
 			canvas.isGrabMode = false;
 			canvas.renderOnAddRemove = true;
 			canvas.stateful = false;
-			drawGrid(canvas);	
 		}
 
 		function resize(canvas, toolbarVisible) {
