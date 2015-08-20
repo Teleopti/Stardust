@@ -102,6 +102,10 @@ wfm.config([
 			url: '/people',
 			templateUrl: 'html/people/people.html',
 			controller: 'PeopleCtrl'
+		}).state('people-selection-cart', {
+			params: { selectedPeopleIds: {}, commandTag: {} },
+			templateUrl: 'html/people/people-selection-cart.html',
+			controller: 'PeopleCartCtrl'
 		}).state('seatPlan', {
 			url: '/seatPlan/:viewDate',
 			templateUrl: 'js/seatManagement/html/seatplan.html',

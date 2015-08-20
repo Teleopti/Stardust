@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.People
 			Browser.Interactions.AssertExists(".import-people");
 		}
 
-		[When(@"I select '(.*)'")]
+		[When(@"I select (.*)")]
 		public void WhenISelect(string name)
 		{
 			Browser.Interactions.ClickContaining(".ui-grid-row", name);
@@ -81,6 +81,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.People
 		{
 			Browser.Interactions.AssertAnyContains(".selection-cart-indicator", count.ToString());
 		}
+
+		[When(@"I open the command (.*)")]
+		public void WhenIOpenTheCommand(string commandName)
+		{
+			var selector = commandName.ToLower().Replace(" ", "");
+			Browser.Interactions.Click("." + selector);
+		}
+
 
 	}
 

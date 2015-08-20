@@ -24,19 +24,30 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 
 	$scope.dataInitialized = false;
 
-	$scope.buttons = [{
+	$scope.buttons = [
+	{
 		label: 'ImportUsers',
 		icon: 'mdi-file',
-		action: $scope.toggleImportPeople
+		action: function() {
+			$scope.toggleImportPeople();
+		},
+		active: function() {
+			return $scope.isImportUsersEnabled;
+		}
+	}, {
+		label: 'AdjustSkill',
+		icon: 'mdi-package',
+		action: function() {
+			$scope.gotoSkillPanel();
+		},
+		active: function() {
+			return $scope.isAdjustSkillEnabled;
+		}
 	}];
 
 	$scope.toggleImportPeople = function() {
 		$scope.showImportPanel = !$scope.showImportPanel;
 	};
-
-	$scope.floatingButtonClick = function () {
-		$scope.toggleImportPeople();
-	}
 
 	$scope.rowSelectionEnabled = function () {
 		return $scope.isAdjustSkillEnabled;
@@ -109,6 +120,13 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 
 			$scope.gridApi.core.on.sortChanged($scope, $scope.sortChanged);
 		}
+	};
+
+	var getSelectedPeople = function() {
+		return $scope.selectedPeopleList;
+	}
+	$scope.gotoSkillPanel = function () {
+		$state.go("people-selection-cart", { selectedPeopleIds: getSelectedPeople, commandTag: 'adjustSkill' });
 	};
 
 	var selectPeople = function(rows) {
@@ -410,5 +428,8 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 		$scope.toggleRowSelectable();
 		$scope.dataInitialized = true;
 		$scope.searchKeyword();
+
+		console.log("$scope.dataInitialized:", $scope.dataInitialized);
+		console.log("$scope.isAdjustSkillEnabled:", $scope.isAdjustSkillEnabled);
 	});
 };

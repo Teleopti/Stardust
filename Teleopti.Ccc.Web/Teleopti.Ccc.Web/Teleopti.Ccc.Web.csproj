@@ -1238,6 +1238,7 @@
     <Content Include="WFM\html\outbound\campaign-summary.html" />
     <Content Include="WFM\html\outbound\phase-picker.tpl.html" />
     <Content Include="WFM\html\outbound\working-hours-picker.tpl.html" />
+    <Content Include="WFM\html\people\people-selection-cart.html" />
     <Content Include="WFM\html\right-sidenav.html" />
     <Content Include="WFM\js\forecasting\forecasting.intraday.controller.js" />
     <Content Include="WFM\js\forecasting\forecasting.method.controller.js" />
@@ -1263,6 +1264,7 @@
     <Content Include="WFM\js\outbound\outbound.selectableDataGrid.directive.js" />
     <Content Include="WFM\js\outbound\outbound.translation.service.js" />
     <Content Include="WFM\js\people\people.advanceSearch.directive .js" />
+    <Content Include="WFM\js\people\people.cart.controller.js" />
     <Content Include="WFM\js\people\people.importPeople.controller.js" />
     <Content Include="WFM\js\people\people.importPeople.directive.js" />
     <Content Include="WFM\js\seatManagement\html\locationpicker.html" />

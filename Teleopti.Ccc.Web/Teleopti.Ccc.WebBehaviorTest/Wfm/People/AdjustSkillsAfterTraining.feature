@@ -49,16 +49,16 @@ Given there is a site named 'London'
 
 Scenario: can select people
 	When I view people
-	And I select 'John'
-	And I select 'Ashley'
+	And I select John
+	And I select Ashley
 	Then I should see an indicator telling me 2 person selected
 
 @ignore
 Scenario: can deselect people
 	When I view people
-	And I select 'John Smith'
-	And I select 'Ashley Andeen'
-	And I open the command to adjust skill
+	And I select John
+	And I select Ashley
+	And I open the command adjust skill
 	And I remove 'John Smith' from my cart
 	And I navigate to search view
 	Then I should see 'John Smith' deselected
