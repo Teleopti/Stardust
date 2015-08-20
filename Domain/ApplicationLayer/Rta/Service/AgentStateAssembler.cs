@@ -65,15 +65,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			};
 		}
 
-		public AgentState MakeCurrentState(StateInfo info, ExternalUserStateInputModel input, PersonOrganizationData person, AgentState previous, DateTime currentTime)
+		public AgentState MakeCurrentState(StateInfo info)
 		{
 			var agentState = new AgentState
 			{
 				PersonId = info.PersonId,
-				BatchId = input.IsSnapshot ? input.BatchId : previous.BatchId,
+				BatchId = info.BatchId,
 				PlatformTypeId = info.PlatformTypeId,
-				SourceId = input.SourceId ?? previous.SourceId,
-				ReceivedTime = currentTime,
+				SourceId = info.SourceId,
+				ReceivedTime = info.CurrentTime,
 				StateCode = info.StateCode,
 				StateGroupId = info.StateGroupId,
 				ActivityId = info.Schedule.CurrentActivityId(),
@@ -89,10 +89,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				var model = ReadModelFromState(agentState);
 				model.AlarmId = info.AlarmTypeId;
 				model.AlarmName = info.AlarmName;
-				model.AlarmStart = currentTime.AddTicks(info.AlarmThresholdTime);
-				model.BusinessUnitId = person.BusinessUnitId;
-				model.SiteId = person.SiteId;
-				model.TeamId = person.TeamId;
+				model.AlarmStart = info.CurrentTime.AddTicks(info.AlarmThresholdTime);
+				model.BusinessUnitId = info.BusinessUnitId;
+				model.SiteId = info.SiteId;
+				model.TeamId = info.TeamId;
 				model.Color = info.AlarmDisplayColor;
 				model.Scheduled = info.Schedule.CurrentActivityName();
 				model.ScheduledId = info.Schedule.CurrentActivityId();

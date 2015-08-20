@@ -252,7 +252,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					_messageSender,
 					_adherenceAggregator,
 					() => _agentStateAssembler.MakePreviousState(personId, _agentStateReadModelReader.GetCurrentActualAgentState(personId)),
-					(scheduleInfo, context) => _agentStateAssembler.MakeCurrentState(scheduleInfo, context.Input, context.Person, context.PreviousState(scheduleInfo), currentTime)
+					(info, context) => _agentStateAssembler.MakeCurrentState(info)
 					));
 		}
 

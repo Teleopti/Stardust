@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly Lazy<string> _stateCode;
 		private readonly Lazy<StateMapping> _stateMapping;
 		private readonly Lazy<AlarmMapping> _alarmMapping;
+		private readonly ExternalUserStateInputModel _input;
 
 		public StateInfo(
 			PersonOrganizationData person, 
@@ -27,6 +28,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_currentTime = currentTime;
 			Schedule = scheduleInfo;
 			Adherence = adherence;
+			_input = input;
 
 			_previousState = new Lazy<AgentState>(agentState.PreviousState);
 			_currentState = new Lazy<AgentState>(agentState.CurrentState);
@@ -38,6 +40,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		}
 
+		public DateTime CurrentTime { get { return _currentTime; } }
 		public string StateCode { get { return _stateCode.Value; } }
 		public Guid PlatformTypeId { get { return _platformTypeId.Value; } }
 		public Guid? StateGroupId { get { return _stateMapping.Value.StateGroupId; } }
@@ -52,6 +55,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public long AlarmThresholdTime { get { return _alarmMapping.Value.ThresholdTime; } }
 		public int? AlarmDisplayColor { get { return _alarmMapping.Value.DisplayColor; } }
 		public string StateGroupName { get { return _stateMapping.Value.StateGroupName; } }
+		public DateTime? BatchId { get { return _input.IsSnapshot ? _input.BatchId : _previousState.Value.BatchId; } }
+		public string SourceId
+		{
+			get { return _input.SourceId ?? _previousState.Value.SourceId; }
+		}
+		public Guid PersonId { get { return _person.PersonId; } }
+		public Guid BusinessUnitId { get { return _person.BusinessUnitId; } }
+		public Guid TeamId { get { return _person.TeamId; } }
+		public Guid SiteId { get { return _person.SiteId; } }
 
 
 
@@ -73,12 +85,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public AdherenceState AdherenceState { get { return Adherence.AdherenceState(); } }
 
-		public Guid PersonId { get { return _person.PersonId; } }
-		public Guid BusinessUnitId { get { return _person.BusinessUnitId; } }
-		public Guid TeamId { get { return _person.TeamId; } }
-		public Guid SiteId { get { return _person.SiteId; } }
-
-		public DateTime CurrentTime { get { return _currentState.Value.ReceivedTime; } }
 		public DateTime PreviousStateTime { get { return _previousState.Value.ReceivedTime; } }
 		public Guid? CurrentStateId { get { return _currentState.Value.StateGroupId; } }
 		public Guid? PreviousStateId { get { return _previousState.Value.StateGroupId; } }
@@ -96,8 +102,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					;
 			}
 		}
-
-
 
 		public AgentStateReadModel MakeActualAgentState()
 		{
