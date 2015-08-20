@@ -97,7 +97,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 
 		public IFakeDataBuilder WithUser(string userCode, Guid personId, Guid? businessUnitId, Guid? teamId, Guid? siteId)
 		{
-			if (!businessUnitId.HasValue) businessUnitId = _businessUnitId;
+			if (businessUnitId.HasValue)
+				WithBusinessUnit(businessUnitId.Value);
+			
 			if (!teamId.HasValue) teamId = Guid.NewGuid();
 			if (!siteId.HasValue) siteId = Guid.NewGuid();
 
@@ -109,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 						new ResolvedPerson
 						{
 							PersonId = personId,
-							BusinessUnitId = businessUnitId.Value
+							BusinessUnitId = _businessUnitId
 						}
 					}));
 

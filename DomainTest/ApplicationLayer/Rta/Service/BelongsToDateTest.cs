@@ -245,6 +245,32 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
+		[Ignore]
+		public void ShouldPublishActivityActualStartEventWithBelongsToDate()
+		{
+			var personId = Guid.NewGuid();
+			var businessUnitId = Guid.NewGuid();
+			var admin = Guid.NewGuid();
+			Database
+				.WithUser("usercode", personId)
+				.WithSchedule(personId, admin, "2015-02-19".Date(), "2015-02-20 1:00", "2015-02-20 7:00")
+				.WithAlarm("admin", admin, 0, Adherence.In)
+				;
+
+			Now.Is("2015-02-20 2:00");
+			Target.CheckForActivityChange(personId, businessUnitId);
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "admin",
+			});
+
+			Publisher.PublishedEvents.OfType<PersonActivityActualStartEvent>()
+				.Single()
+				.BelongsToDate.Should().Be("2015-02-19".Date());
+		}
+
+		[Test]
 		public void ShouldPublishStateChangedEventWithBelongsToDate()
 		{
 			var personId = Guid.NewGuid();

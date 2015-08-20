@@ -14,8 +14,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
 	[TestFixture]
 	[RtaTest]
-	[Toggle(Toggles.RTA_NewEventHangfireRTA_34333)]
 	[Ignore]
+	[Toggle(Toggles.RTA_NewEventHangfireRTA_34333)]
 	public class PersonActivityActualStartEventTest
 	{
 		public FakeRtaDatabase Database;
@@ -135,6 +135,44 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
+		public void ShouldPublishEventWhenInAdherenceEarlier()
+		{
+			var personId = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			var businessUnitId = Guid.NewGuid();
+			Database
+				.WithUser("usercode", personId, businessUnitId)
+				.WithSchedule(personId, phone, "2015-08-19 08:00", "2015-08-19 09:00")
+				.WithAlarm("loggedout", phone, -1, Adherence.Out)
+				.WithAlarm("phone", phone, 0, Adherence.In)
+				.WithAlarm("ready", phone, 0, Adherence.In);
+
+			Now.Is("2015-08-19 07:45");
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "loggedout"
+			});
+			Now.Is("2015-08-19 07:50");
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "ready"
+			});
+			Now.Is("2015-08-19 07:55");
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "phone"
+			});
+			Now.Is("2015-08-19 08:00");
+			Target.CheckForActivityChange(personId, businessUnitId);
+
+			var @event = Publisher.PublishedEvents.OfType<PersonActivityActualStartEvent>().Single();
+			@event.StartTime.Should().Be("2015-08-19 07:50".Utc());
+		}
+
+		[Test]
 		public void ShouldPublishEventWhenInAdherenceAfterActivityStarted()
 		{
 			var personId = Guid.NewGuid();
@@ -157,13 +195,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var @event = Publisher.PublishedEvents.OfType<PersonActivityActualStartEvent>().Single();
 			@event.StartTime.Should().Be("2015-08-19 08:05".Utc());
 		}
-
-		[Test]
-		public void ShouldPersistActualStartTimeWhenStartedEarlier()
-		{
-			// ???
-		}
-
+		
 		[Test]
 		public void ShouldPublishEventWhenAdherenceDoesNotChangeWhenActivityChanges()
 		{
@@ -192,26 +224,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var @event = Publisher.PublishedEvents.OfType<PersonActivityActualStartEvent>().Single();
 			@event.StartTime.Should().Be("2015-08-19 09:00".Utc());
 		}
-
-		[Test]
-		public void ShouldNotPersistActualStartTimeWhenSecondActivityNeverStarted()
-		{
-			// ???
-		}
-
-		[Test]
-		public void BelongsToDate()
-		{
-			// ???
-		}
-
+		
 	}
-
-	public class PersonActivityActualStartEvent : IEvent
-	{
-		public Guid PersonId { get; set; }
-		public DateTime StartTime { get; set; }
-		//public DateOnly? BelongsToDate { get; set; }
-	}
-
 }

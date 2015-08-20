@@ -115,7 +115,12 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		{
 			var builder = new ContainerBuilder();
 			var configReader = Config();
-			var configuration = new IocConfiguration(new IocArgs(configReader) {ClearCache = true}, Toggles());
+			var args = new IocArgs(configReader)
+			{
+				ClearCache = true,
+				ThrottleMessages = false// the throttler shouldnt be started in ioc common at all, but...
+			};
+			var configuration = new IocConfiguration(args, Toggles());
 			builder.RegisterModule(new CommonModule(configuration));
 			builder.RegisterInstance(new MutableNow("2014-12-18 13:31")).As<INow>().AsSelf();
 			builder.RegisterInstance(new FakeUserTimeZone(TimeZoneInfo.Utc)).As<IUserTimeZone>().AsSelf().SingleInstance();
