@@ -5,13 +5,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class AgentStateAssembler
 	{
-		private readonly IStateMapper _stateMapper;
-
-		public AgentStateAssembler(IStateMapper stateMapper)
-		{
-			_stateMapper = stateMapper;
-		}
-
 		public AgentState MakeEmpty(Guid personId)
 		{
 			return new AgentState
@@ -84,42 +77,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				StaffingEffect = info.StaffingEffect,
 				Adherence = info.AdherenceState2
 			};
-			agentState.UseAssembleMethod(() =>
-			{
-				var model = ReadModelFromState(agentState);
-				model.AlarmId = info.AlarmTypeId;
-				model.AlarmName = info.AlarmName;
-				model.AlarmStart = info.CurrentTime.AddTicks(info.AlarmThresholdTime);
-				model.BusinessUnitId = info.BusinessUnitId;
-				model.SiteId = info.SiteId;
-				model.TeamId = info.TeamId;
-				model.Color = info.AlarmDisplayColor;
-				model.Scheduled = info.Schedule.CurrentActivityName();
-				model.ScheduledId = info.Schedule.CurrentActivityId();
-				model.ScheduledNext = info.Schedule.NextActivityName();
-				model.ScheduledNextId = info.Schedule.NextActivityId();
-				model.State = info.StateGroupName;
-				return model;
-			});
 			return agentState;
-		}
-
-		public static AgentStateReadModel ReadModelFromState(AgentState agentState)
-		{
-			return new AgentStateReadModel
-			{
-				BatchId = agentState.BatchId,
-				NextStart = agentState.NextActivityStartTime,
-				OriginalDataSourceId = agentState.SourceId,
-				PersonId = agentState.PersonId,
-				PlatformTypeId = agentState.PlatformTypeId,
-				ReceivedTime = agentState.ReceivedTime,
-				StaffingEffect = agentState.StaffingEffect,
-				Adherence = (int?) agentState.Adherence,
-				StateCode = agentState.StateCode,
-				StateId = agentState.StateGroupId,
-				StateStart = agentState.AlarmTypeStartTime
-			};
 		}
 	}
 }

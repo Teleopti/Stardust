@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator
 		public bool Update(IAdherenceAggregatorInfo state)
 		{
 			var adherenceChanged = false;
-			var actualAgentState = state.MakeActualAgentState();
+			var actualAgentState = state.MakeAgentStateReadModel();
 			_aggregationDatas.AddOrUpdate(state.PersonId, guid =>
 			{
 				adherenceChanged = true;

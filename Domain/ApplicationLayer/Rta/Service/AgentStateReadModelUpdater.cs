@@ -11,7 +11,7 @@
 
 		public void Update(StateInfo info)
 		{
-			var state = info.MakeActualAgentState();
+			var state = info.MakeAgentStateReadModel();
 			_databaseWriter.PersistActualAgentReadModel(state);
 		}
 	}

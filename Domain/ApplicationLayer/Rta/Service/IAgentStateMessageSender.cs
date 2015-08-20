@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			if (!state.Send)
 				return;
 
-			var actualAgentState = state.MakeActualAgentState();
+			var actualAgentState = state.MakeAgentStateReadModel();
 
 			var type = typeof(AgentStateReadModel);
 			var notification = new Message

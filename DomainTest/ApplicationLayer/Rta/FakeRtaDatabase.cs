@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		IFakeDataBuilder WithAlarm(string stateCode, Guid? activityId, Guid? alarmId, int staffingEffect, string name, bool isLoggedOutState, TimeSpan threshold, Adherence? adherence, Guid? platformTypeId);
 		IFakeDataBuilder WithDefaultStateGroup();
 		IFakeDataBuilder WithStateCode(string statecode);
-		IFakeDataBuilder WithExistingState(AgentState state);
+		IFakeDataBuilder WithExistingState(Guid personId, string stateCode);
 		FakeRtaDatabase Make();
 	}
 
@@ -223,9 +223,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			return this;
 		}
 
-		public IFakeDataBuilder WithExistingState(AgentState state)
+		public IFakeDataBuilder WithExistingState(Guid personId, string stateCode)
 		{
-			AgentStateReadModelReader.Has(AgentStateAssembler.ReadModelFromState(state));
+			AgentStateReadModelReader.Has(new AgentStateReadModel
+			{
+				PersonId = personId,
+				StateCode = stateCode
+			});
 			return this;
 		}
 

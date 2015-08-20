@@ -2,6 +2,7 @@ using System;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
@@ -79,11 +80,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithBusinessUnit(businessUnitId)
 				.WithDefaultStateGroup()
 				.WithUser("usercode", personId, businessUnitId)
-				.WithExistingState(new AgentState
-				{
-					PersonId = personId,
-					StateCode = "statecode"
-				});
+				.WithExistingState(personId, "statecode");
 
 			Target.CheckForActivityChange(personId, businessUnitId);
 

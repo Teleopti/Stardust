@@ -1,5 +1,4 @@
 using System;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
@@ -22,20 +21,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public DateTime? AlarmTypeStartTime { get; set; }
 		public double? StaffingEffect { get; set; }
 		public AdherenceState? Adherence { get; set; }
-
-
-		
-		private Func<AgentStateReadModel> _assemble;
-
-		public void UseAssembleMethod(Func<AgentStateReadModel> assembleFunc)
-		{
-			_assemble = assembleFunc;
-		}
-
-		public AgentStateReadModel MakeActualAgentState()
-		{
-			return _assemble.Invoke();
-		}
-
 	}
 }

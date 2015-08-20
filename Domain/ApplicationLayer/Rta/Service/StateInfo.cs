@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_previousState = new Lazy<AgentState>(agentState.PreviousState);
 			_currentState = new Lazy<AgentState>(agentState.CurrentState);
 
-			_platformTypeId = new Lazy<Guid>(() => string.IsNullOrEmpty(input.PlatformTypeId) ? _previousState.Value.PlatformTypeId : input.ParsedPlatformTypeId());
+			_platformTypeId = new Lazy<Guid>(() => String.IsNullOrEmpty(input.PlatformTypeId) ? _previousState.Value.PlatformTypeId : input.ParsedPlatformTypeId());
 			_stateCode = new Lazy<string>(() => input.StateCode ?? _previousState.Value.StateCode);
 			_stateMapping = new Lazy<StateMapping>(() => stateMapper.StateFor(person.BusinessUnitId, _platformTypeId.Value, _stateCode.Value, input.StateDescription));
 			_alarmMapping = new Lazy<AlarmMapping>(() => stateMapper.AlarmFor(person.BusinessUnitId, _platformTypeId.Value, _stateCode.Value, Schedule.CurrentActivityId()) ?? new AlarmMapping());
@@ -103,11 +103,37 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			}
 		}
 
-		public AgentStateReadModel MakeActualAgentState()
+		public AgentStateReadModel MakeAgentStateReadModel()
 		{
-			return _currentState.Value.MakeActualAgentState();
+			var state = _currentState.Value;
+			return new AgentStateReadModel
+			{
+				BatchId = state.BatchId,
+				NextStart = state.NextActivityStartTime,
+				OriginalDataSourceId = state.SourceId,
+				PersonId = state.PersonId,
+				PlatformTypeId = state.PlatformTypeId,
+				ReceivedTime = state.ReceivedTime,
+				StaffingEffect = state.StaffingEffect,
+				Adherence = (int?) state.Adherence,
+				StateCode = state.StateCode,
+				StateId = state.StateGroupId,
+				StateStart = state.AlarmTypeStartTime,
+				AlarmId = AlarmTypeId,
+				AlarmName = AlarmName,
+				AlarmStart = CurrentTime.AddTicks(AlarmThresholdTime),
+				BusinessUnitId = BusinessUnitId,
+				SiteId = SiteId,
+				TeamId = TeamId,
+				Color = AlarmDisplayColor,
+				Scheduled = Schedule.CurrentActivityName(),
+				ScheduledId = Schedule.CurrentActivityId(),
+				ScheduledNext = Schedule.NextActivityName(),
+				ScheduledNextId = Schedule.NextActivityId(),
+				State = StateGroupName
+			};
 		}
-
+		
 	}
 
 }
