@@ -130,18 +130,6 @@ describe('OutboundSummaryCtrl', function () {
 		expect(campaign.Status).toEqual(1);
 		expect(test.scope.phaseStatistics.PlannedWarning).toEqual(2);
 	});
-
-	it('clear manual plan should work', function() {
-		var test = setUpTarget();
-		var campaign = {
-			selectedDates: [new Date('2015-07-19'), new Date('2015-07-20')],
-			manualPlanInput : 3
-		}
-
-		test.scope.clearManualPlan(campaign);
-		expect(campaign.selectedDates.length).toEqual(0);
-		expect(campaign.manualPlanInput).toBeNull();
-	});
 	
 	function setUpTarget() {
 		var scope = $rootScope.$new();
