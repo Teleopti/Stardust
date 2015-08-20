@@ -6,34 +6,72 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class StateInfo : IAdherenceAggregatorInfo
 	{
 		private readonly PersonOrganizationData _person;
+		private readonly DateTime _currentTime;
 		private readonly Lazy<AgentState> _previousState;
 		private readonly Lazy<AgentState> _currentState;
-		private readonly ScheduleInfo _scheduleInfo;
+		private readonly Lazy<Guid> _platformTypeId;
+		private readonly Lazy<string> _stateCode;
+		private readonly Lazy<StateMapping> _stateMapping;
+		private readonly Lazy<AlarmMapping> _alarmMapping;
 
-		public StateInfo(PersonOrganizationData person, AgentStateInfo agentState, ScheduleInfo scheduleInfo, AdherenceInfo adherence)
+		public StateInfo(
+			PersonOrganizationData person, 
+			AgentStateInfo agentState, 
+			ScheduleInfo scheduleInfo, 
+			AdherenceInfo adherence,
+			ExternalUserStateInputModel input,
+			DateTime currentTime,
+			IStateMapper stateMapper)
 		{
 			_person = person;
-			_scheduleInfo = scheduleInfo;
+			_currentTime = currentTime;
+			Schedule = scheduleInfo;
 			Adherence = adherence;
 
 			_previousState = new Lazy<AgentState>(agentState.PreviousState);
 			_currentState = new Lazy<AgentState>(agentState.CurrentState);
+
+			_platformTypeId = new Lazy<Guid>(() => string.IsNullOrEmpty(input.PlatformTypeId) ? _previousState.Value.PlatformTypeId : input.ParsedPlatformTypeId());
+			_stateCode = new Lazy<string>(() => input.StateCode ?? _previousState.Value.StateCode);
+			_stateMapping = new Lazy<StateMapping>(() => stateMapper.StateFor(person.BusinessUnitId, _platformTypeId.Value, _stateCode.Value, input.StateDescription));
+			_alarmMapping = new Lazy<AlarmMapping>(() => stateMapper.AlarmFor(person.BusinessUnitId, _platformTypeId.Value, _stateCode.Value, Schedule.CurrentActivityId()) ?? new AlarmMapping());
+
 		}
+
+		public string StateCode { get { return _stateCode.Value; } }
+		public Guid PlatformTypeId { get { return _platformTypeId.Value; } }
+		public Guid? StateGroupId { get { return _stateMapping.Value.StateGroupId; } }
+		public Guid? AlarmTypeId { get { return _alarmMapping.Value.AlarmTypeId; } }
+		public DateTime? AlarmTypeStartTime
+		{
+			get { return _alarmMapping.Value.AlarmTypeId == _previousState.Value.AlarmTypeId ? _previousState.Value.AlarmTypeStartTime : _currentTime; }
+		}
+		public double? StaffingEffect { get { return _alarmMapping.Value.StaffingEffect; } }
+		public AdherenceState? AdherenceState2 { get { return _alarmMapping.Value.Adherence; } }
+		public string AlarmName { get { return _alarmMapping.Value.AlarmName; } }
+		public long AlarmThresholdTime { get { return _alarmMapping.Value.ThresholdTime; } }
+		public int? AlarmDisplayColor { get { return _alarmMapping.Value.DisplayColor; } }
+		public string StateGroupName { get { return _stateMapping.Value.StateGroupName; } }
+
+
+
+
+		public ScheduleInfo Schedule { get; private set; }
+		public AdherenceInfo Adherence { get; private set; }
 
 		public bool IsScheduled { get { return _currentState.Value.ActivityId != null && CurrentActivity != null; } }
 		public bool WasScheduled { get { return _previousState.Value.ActivityId != null && PreviousActivity != null; } }
 
-		public ScheduleLayer CurrentActivity { get { return _scheduleInfo.CurrentActivity(); } }
-		public ScheduleLayer PreviousActivity { get { return _scheduleInfo.PreviousActivity(); } }
-		public ScheduleLayer NextActivityInShift { get { return _scheduleInfo.NextActivityInShift(); } }
-		public DateTime CurrentShiftStartTime { get { return _scheduleInfo.CurrentShiftStartTime; } }
-		public DateTime CurrentShiftEndTime { get { return _scheduleInfo.CurrentShiftEndTime; } }
+		public ScheduleLayer CurrentActivity { get { return Schedule.CurrentActivity(); } }
+		public ScheduleLayer PreviousActivity { get { return Schedule.PreviousActivity(); } }
+		public ScheduleLayer NextActivityInShift { get { return Schedule.NextActivityInShift(); } }
+		public DateTime CurrentShiftStartTime { get { return Schedule.CurrentShiftStartTime; } }
+		public DateTime CurrentShiftEndTime { get { return Schedule.CurrentShiftEndTime; } }
 
-		public DateTime ShiftStartTimeForPreviousActivity { get { return _scheduleInfo.ShiftStartTimeForPreviousActivity; } }
-		public DateTime ShiftEndTimeForPreviousActivity { get { return _scheduleInfo.ShiftEndTimeForPreviousActivity; } }
+		public DateTime ShiftStartTimeForPreviousActivity { get { return Schedule.ShiftStartTimeForPreviousActivity; } }
+		public DateTime ShiftEndTimeForPreviousActivity { get { return Schedule.ShiftEndTimeForPreviousActivity; } }
 
 		public AdherenceState AdherenceState { get { return Adherence.AdherenceState(); } }
-		public AdherenceInfo Adherence { get; private set; }
 
 		public Guid PersonId { get { return _person.PersonId; } }
 		public Guid BusinessUnitId { get { return _person.BusinessUnitId; } }
@@ -47,11 +85,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public Guid? CurrentActivityId { get { return _currentState.Value.ActivityId; } }
 		public Guid? PreviousActivityId { get { return _previousState.Value.ActivityId; } }
 
-		public DateOnly? BelongsToDate
-		{
-			get { return _scheduleInfo.BelongsToDate; }
-		}
-
 		public bool Send
 		{
 			get
@@ -63,6 +96,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					;
 			}
 		}
+
+
 
 		public AgentStateReadModel MakeActualAgentState()
 		{

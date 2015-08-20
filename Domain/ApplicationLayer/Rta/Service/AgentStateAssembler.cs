@@ -65,44 +65,40 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			};
 		}
 
-		public AgentState MakeCurrentState(ScheduleInfo scheduleInfo, ExternalUserStateInputModel input, PersonOrganizationData person, AgentState previous, DateTime currentTime)
+		public AgentState MakeCurrentState(StateInfo info, ExternalUserStateInputModel input, PersonOrganizationData person, AgentState previous, DateTime currentTime)
 		{
-			var platformTypeId = string.IsNullOrEmpty(input.PlatformTypeId) ?  previous.PlatformTypeId : input.ParsedPlatformTypeId();
-			var stateCode = input.StateCode ?? previous.StateCode;
-			var state = _stateMapper.StateFor(person.BusinessUnitId, platformTypeId, stateCode, input.StateDescription);
-			var alarm = _stateMapper.AlarmFor(person.BusinessUnitId, platformTypeId, stateCode, scheduleInfo.CurrentActivityId()) ?? new AlarmMapping();
 			var agentState = new AgentState
 			{
-				PersonId = person.PersonId,
+				PersonId = info.PersonId,
 				BatchId = input.IsSnapshot ? input.BatchId : previous.BatchId,
-				PlatformTypeId = platformTypeId,
+				PlatformTypeId = info.PlatformTypeId,
 				SourceId = input.SourceId ?? previous.SourceId,
 				ReceivedTime = currentTime,
-				StateCode = stateCode,
-				StateGroupId = state.StateGroupId,
-				ActivityId = scheduleInfo.CurrentActivityId(),
-				AlarmTypeId = alarm.AlarmTypeId,
-				AlarmTypeStartTime = alarm.AlarmTypeId == previous.AlarmTypeId ? previous.AlarmTypeStartTime : currentTime,
-				NextActivityId = scheduleInfo.NextActivityId(),
-				NextActivityStartTime = scheduleInfo.NextActivityStartTime(),
-				StaffingEffect = alarm.StaffingEffect,
-				Adherence = alarm.Adherence
+				StateCode = info.StateCode,
+				StateGroupId = info.StateGroupId,
+				ActivityId = info.Schedule.CurrentActivityId(),
+				AlarmTypeId = info.AlarmTypeId,
+				AlarmTypeStartTime = info.AlarmTypeStartTime,
+				NextActivityId = info.Schedule.NextActivityId(),
+				NextActivityStartTime = info.Schedule.NextActivityStartTime(),
+				StaffingEffect = info.StaffingEffect,
+				Adherence = info.AdherenceState2
 			};
 			agentState.UseAssembleMethod(() =>
 			{
 				var model = ReadModelFromState(agentState);
-				model.AlarmId = alarm.AlarmTypeId;
-				model.AlarmName = alarm.AlarmName;
-				model.AlarmStart = currentTime.AddTicks(alarm.ThresholdTime);
+				model.AlarmId = info.AlarmTypeId;
+				model.AlarmName = info.AlarmName;
+				model.AlarmStart = currentTime.AddTicks(info.AlarmThresholdTime);
 				model.BusinessUnitId = person.BusinessUnitId;
 				model.SiteId = person.SiteId;
 				model.TeamId = person.TeamId;
-				model.Color = alarm.DisplayColor;
-				model.Scheduled = scheduleInfo.CurrentActivityName();
-				model.ScheduledId = scheduleInfo.CurrentActivityId();
-				model.ScheduledNext = scheduleInfo.NextActivityName();
-				model.ScheduledNextId = scheduleInfo.NextActivityId();
-				model.State = state.StateGroupName;
+				model.Color = info.AlarmDisplayColor;
+				model.Scheduled = info.Schedule.CurrentActivityName();
+				model.ScheduledId = info.Schedule.CurrentActivityId();
+				model.ScheduledNext = info.Schedule.NextActivityName();
+				model.ScheduledNextId = info.Schedule.NextActivityId();
+				model.State = info.StateGroupName;
 				return model;
 			});
 			return agentState;

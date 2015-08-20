@@ -42,10 +42,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				var person = context.Person;
 				var input = context.Input;
 
+				StateInfo info = null;
 				var scheduleInfo = new ScheduleInfo(_scheduleLoader, context.Person.PersonId, context.CurrentTime);
-				var agentStateInfo = new AgentStateInfo(() => context.PreviousState(scheduleInfo), () => context.CurrentState(scheduleInfo));
+				var agentStateInfo = new AgentStateInfo(() => context.PreviousState(info), () => context.CurrentState(info));
 				var adherenceInfo = new AdherenceInfo(input, person, agentStateInfo, scheduleInfo, _appliedAdherence, _stateMapper);
-				var info = new StateInfo(person, agentStateInfo, scheduleInfo, adherenceInfo);
+				info = new StateInfo(person, agentStateInfo, scheduleInfo, adherenceInfo, context.Input, context.CurrentTime, _stateMapper);
 
 				context.AgentStateReadModelUpdater.Update(info);
 				context.MessageSender.Send(info);

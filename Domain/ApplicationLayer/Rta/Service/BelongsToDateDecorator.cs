@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public void Decorate(StateInfo info, IEvent @event)
 		{
 			dynamic x = @event;
-			x.BelongsToDate = info.BelongsToDate;
+			x.BelongsToDate = info.Schedule.BelongsToDate;
 			if (@event is PersonShiftEndEvent)
 				x.BelongsToDate = info.PreviousActivity.BelongsToDate;
 		}

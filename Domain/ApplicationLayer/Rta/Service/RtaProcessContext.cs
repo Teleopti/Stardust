@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class RtaProcessContext
 	{
 		private readonly Func<AgentState> _previousState;
-		private readonly Func<ScheduleInfo, RtaProcessContext, AgentState> _currentState;
+		private readonly Func<StateInfo, RtaProcessContext, AgentState> _currentState;
 		private readonly PersonOrganizationData _person;
 		private AgentState _madePreviousState;
 
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IAgentStateMessageSender messageSender, 
 			IAdherenceAggregator adherenceAggregator,
 			Func<AgentState> previousState,
-			Func<ScheduleInfo, RtaProcessContext, AgentState> currentState 
+			Func<StateInfo, RtaProcessContext, AgentState> currentState 
 			)
 		{
 			_previousState = previousState;
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public IAgentStateMessageSender MessageSender { get; private set; }
 		public IAdherenceAggregator AdherenceAggregator { get; private set; }
 
-		public AgentState PreviousState(ScheduleInfo scheduleInfo)
+		public AgentState PreviousState(StateInfo info)
 		{
 			if (_madePreviousState != null)
 				return _madePreviousState;
@@ -53,9 +53,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return _madePreviousState;
 		}
 
-		public AgentState CurrentState(ScheduleInfo scheduleInfo)
+		public AgentState CurrentState(StateInfo info)
 		{
-			return _currentState.Invoke(scheduleInfo, this);
+			return _currentState.Invoke(info, this);
 		}
 	}
 }
