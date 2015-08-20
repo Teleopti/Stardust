@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 			return _campaignSummaryViewModelFactory.GetCampaignSummary(Id);
 		}
 
-		[HttpGet, Route("api/Outbound/Campaign/{Id}/Replan"), UnitOfWork]
+		[HttpGet, Route("api/Outbound/Campaign/Replan/{Id}"), UnitOfWork]
 		public virtual CampaignVisualizationViewModel CampaignProductionReplan(Guid Id)
 		{
 			_outboundCampaignPersister.ManualReplanCampaign(Id);

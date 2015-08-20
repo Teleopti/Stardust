@@ -22,6 +22,12 @@
             });
     	});
 
+    	$scope.replan = function (campaign) {
+			outboundChartService.replan(campaign.Id, function(data) {
+				campaign.graphData = data;
+			});
+		}
+
     	$scope.removeManualPlan = function (campaign) {
 		    var dates = [];
 		    campaign.selectedDates.forEach(function(date,index) {
@@ -42,6 +48,8 @@
 		    		});
 		    	});
 		    });
+		    campaign.selectedDates = [];
+		    campaign.manualPlanInput = null;
 		}
 
     	$scope.addManualPlan = function (campaign) {

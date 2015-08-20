@@ -9,6 +9,7 @@
     	var getCampaignVisualizationUrl = '../api/Outbound/Campaign/Visualization/';
     	var updateCampaignProductionPlanUrl = '../api/Outbound/Campaign/ManualPlan';
     	var removeCampaignProductionPlanUrl = '../api/Outbound/Campaign/ManualPlan/Remove';
+    	var redoCampaignProductionPlanUrl = '../api/Outbound/Campaign/Replan/';
 
         var translationKeys = [
            'Backlog',
@@ -28,6 +29,14 @@
 
         this.updateManualPlan = updateManualPlan;
 
+        this.replan = function (campaignId, successCb, errorCb) {
+        	$http.get(redoCampaignProductionPlanUrl + campaignId).success(function (campaignData) {
+        		console.log('from server campaignData', campaignData);
+				if (successCb != null) successCb(self.buildGraphDataSeqs(campaignData));
+			}).error(function (e) {
+				if (errorCb != null) errorCb(e);
+			});
+		}
 
         this.removeManualPlan = function (manualProductionPlan, successCb, errorCb) {
         	$http.post(removeCampaignProductionPlanUrl, manualProductionPlan).
