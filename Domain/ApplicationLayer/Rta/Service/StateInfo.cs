@@ -16,24 +16,25 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly ExternalUserStateInputModel _input;
 
 		public StateInfo(
-			PersonOrganizationData person, 
-			AgentStateInfo agentState, 
-			ScheduleInfo scheduleInfo, 
-			AdherenceInfo adherence,
+			PersonOrganizationData person,
+			Func<AgentState> previousState,
+			Func<AgentState> currentState,
 			ExternalUserStateInputModel input,
 			DateTime currentTime,
-			IStateMapper stateMapper)
+			IStateMapper stateMapper,
+			IScheduleLoader scheduleLoader,
+			IAppliedAdherence appliedAdherence)
 		{
+			_input = input;
 			_person = person;
 			_currentTime = currentTime;
-			Schedule = scheduleInfo;
-			Adherence = adherence;
-			_input = input;
+			_previousState = new Lazy<AgentState>(previousState);
+			_currentState = new Lazy<AgentState>(currentState);
 
-			_previousState = new Lazy<AgentState>(agentState.PreviousState);
-			_currentState = new Lazy<AgentState>(agentState.CurrentState);
+			Schedule = new ScheduleInfo(scheduleLoader, _person.PersonId, currentTime);
+			Adherence = new AdherenceInfo(input, _person, () => _previousState.Value, () => _currentState.Value, Schedule, appliedAdherence, stateMapper);
 
-			_platformTypeId = new Lazy<Guid>(() => String.IsNullOrEmpty(input.PlatformTypeId) ? _previousState.Value.PlatformTypeId : input.ParsedPlatformTypeId());
+			_platformTypeId = new Lazy<Guid>(() => string.IsNullOrEmpty(input.PlatformTypeId) ? _previousState.Value.PlatformTypeId : input.ParsedPlatformTypeId());
 			_stateCode = new Lazy<string>(() => input.StateCode ?? _previousState.Value.StateCode);
 			_stateMapping = new Lazy<StateMapping>(() => stateMapper.StateFor(person.BusinessUnitId, _platformTypeId.Value, _stateCode.Value, input.StateDescription));
 			_alarmMapping = new Lazy<AlarmMapping>(() => stateMapper.AlarmFor(person.BusinessUnitId, _platformTypeId.Value, _stateCode.Value, Schedule.CurrentActivityId()) ?? new AlarmMapping());
