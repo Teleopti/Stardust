@@ -101,6 +101,7 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="ControllerActions\AddSuperUserTests.cs" />
     <Compile Include="ControllerActions\ChangePasswordTest.cs" />
     <Compile Include="ControllerActions\CheckFirstUser.cs" />
     <Compile Include="ControllerActions\CheckLoginTests.cs" />

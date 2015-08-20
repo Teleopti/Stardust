@@ -103,8 +103,20 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 				conn.Open();
 				using (var cmd = conn.CreateCommand())
 				{
+					if (DatabaseHelperWrapper.LoginExists(connStringBuilder.ConnectionString, "new TenantAppUser", false))
+					{
+						cmd.CommandText = string.Format("DROP LOGIN [{0}]", model.AppUser);
+						cmd.ExecuteNonQuery();
+					}
+					cmd.CommandText = string.Format("SELECT database_id FROM sys.databases WHERE Name = '{0}'", model.Tenant + "_TeleoptiWfmApp");
+					var value = cmd.ExecuteScalar();
+					if (value != null)
+					{
+						cmd.CommandText = string.Format("DROP DATABASE [{0}]",  model.Tenant + "_TeleoptiWfmApp");
+						cmd.ExecuteNonQuery();
+					}
 					cmd.CommandText = string.Format("EXEC sp_addsrvrolemember @loginame= '{0}', @rolename = 'dbcreator'", "dbcreatorperson");
-					cmd.ExecuteNonQuery();
+					
 					cmd.CommandText = string.Format("EXEC sp_addsrvrolemember @loginame= '{0}', @rolename = 'securityadmin'", "dbcreatorperson");
 					cmd.ExecuteNonQuery();
 					if (DatabaseHelperWrapper.LoginExists(connStringBuilder.ConnectionString, model.AppUser, false))
@@ -119,5 +131,6 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			result.Success.Should().Be.True();
 			
 		}
+
 	}
 }

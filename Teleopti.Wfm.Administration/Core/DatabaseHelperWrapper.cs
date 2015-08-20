@@ -100,10 +100,10 @@ namespace Teleopti.Wfm.Administration.Core
 			helper.AddPermissions(login);
 		}
 
-		public void AddInitialPerson(string connectionToNewDb, Guid personId)
+		public void AddSuperUser(string connectionToNewDb, Guid personId, string firstName, string lastName)
 		{
 			var helper = new DatabaseHelper(connectionToNewDb, DatabaseType.TeleoptiCCC7);
-			helper.AddInitialPerson(personId);
+			helper.AddSuperUser(personId, firstName, lastName);
 		}
 
 		public void AddBusinessUnit(string connectionToNewDb, string name)

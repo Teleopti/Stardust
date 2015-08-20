@@ -160,14 +160,13 @@ namespace Teleopti.Ccc.DBManager.Library
 			}
 			return executeScalar("SELECT IS_SRVROLEMEMBER( 'securityadmin')", 0) > 0;
 		}
-		public void AddInitialPerson(Guid personId)
+		public void AddSuperUser(Guid personId, string firstName, string lastName)
 		{
 			var sql = string.Format(@"INSERT INTO Person 
 (Id, [Version], UpdatedBy, UpdatedOn, Email, Note, EmploymentNumber,FirstName, LastName, DefaultTimeZone,IsDeleted,FirstDayOfWeek)
-VALUES('{0}', 1, '3F0886AB-7B25-4E95-856A-0D726EDC2A67',  GETUTCDATE(), '', '', '', 'First', 'User', 'UTC', 0, 1)
+VALUES('{2}', 1, '3F0886AB-7B25-4E95-856A-0D726EDC2A67',  GETUTCDATE(), '', '', '', '{0}', '{1}', 'UTC', 0, 1)
 INSERT INTO PersonInApplicationRole
-SELECT '{0}', '193AD35C-7735-44D7-AC0C-B8EDA0011E5F' , GETUTCDATE()",
-				personId);
+SELECT '{2}', '193AD35C-7735-44D7-AC0C-B8EDA0011E5F' , GETUTCDATE()", firstName, lastName, personId);
 			executeNonQuery(sql);
 		}
 

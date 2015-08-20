@@ -23,16 +23,19 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private readonly ICurrentTenantSession _currentTenantSession;
 		private readonly ITenantExists _tenantExists;
 		private readonly IDbPathProvider _dbPathProvider;
+		private readonly ILoadAllTenants _loadAllTenants;
 		//private readonly ICheckPasswordStrength _checkPasswordStrength;
 
 		private readonly bool isAzure =  !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME"));
 
-		public DatabaseController(DatabaseHelperWrapper databaseHelperWrapper, ICurrentTenantSession currentTenantSession, ITenantExists tenantExists, IDbPathProvider dbPathProvider)
+		public DatabaseController(DatabaseHelperWrapper databaseHelperWrapper, ICurrentTenantSession currentTenantSession,
+			ITenantExists tenantExists, IDbPathProvider dbPathProvider, ILoadAllTenants loadAllTenants)
 		{
 			_databaseHelperWrapper = databaseHelperWrapper;
 			_currentTenantSession = currentTenantSession;
 			_tenantExists = tenantExists;
 			_dbPathProvider = dbPathProvider;
+			_loadAllTenants = loadAllTenants;
 			//_checkPasswordStrength = checkPasswordStrength;
 		}
 
@@ -40,23 +43,22 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[HttpPost]
 		[TenantUnitOfWork]
 		[Route("CreateTenant")]
-		public virtual JsonResult<CreateTenantResultModel> CreateDatabases(CreateTenantModel model)
+		public virtual JsonResult<TenantResultModel> CreateDatabases(CreateTenantModel model)
 		{
 			var result = checkLoginInternal(model);
 			if (!result.Success)
-				return Json(new CreateTenantResultModel { Message = result.Message, Success = false });
-
+				return Json(new TenantResultModel { Message = result.Message, Success = false });
 
 			var checkFirstuser = checkFirstUserInternal(model.FirstUser, model.FirstUserPassword);
 			if (!checkFirstuser.Success)
-				return Json(new CreateTenantResultModel { Message = checkFirstuser.Message, Success = false });
+				return Json(new TenantResultModel { Message = checkFirstuser.Message, Success = false });
 
 			if (string.IsNullOrEmpty(model.BusinessUnit))
-				return Json(new CreateTenantResultModel { Message = "The Business Unit can not be empty.", Success = false });
+				return Json(new TenantResultModel { Message = "The Business Unit can not be empty.", Success = false });
 
 			var checkName = _tenantExists.Check(model.Tenant);
 			if (!checkName.Success)
-				return Json(new CreateTenantResultModel { Message = checkName.Message, Success = false });
+				return Json(new TenantResultModel { Message = checkName.Message, Success = false });
 
 			var builder = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
 			{
@@ -68,9 +70,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 			var checkCreate = checkCreateDbInternal(builder);
 			if (!checkCreate.Success)
-				return Json(new CreateTenantResultModel { Message = checkCreate.Message, Success = false });
-
-
+				return Json(new TenantResultModel { Message = checkCreate.Message, Success = false });
 
 			var dbPath = _dbPathProvider.GetDbPath();
 
@@ -79,8 +79,6 @@ namespace Teleopti.Wfm.Administration.Controllers
 			builder.InitialCatalog = model.Tenant + "_TeleoptiWfmApp";
 
 			_databaseHelperWrapper.CreateDatabase(builder.ConnectionString, DatabaseType.TeleoptiCCC7, dbPath, model.AppUser, isAzure);
-			var personId = Guid.NewGuid();
-			_databaseHelperWrapper.AddInitialPerson(builder.ConnectionString, personId);
 			_databaseHelperWrapper.AddBusinessUnit(builder.ConnectionString, model.BusinessUnit);
 			builder.UserID = model.AppUser;
 			builder.Password = model.AppPassword;
@@ -109,24 +107,20 @@ namespace Teleopti.Wfm.Administration.Controllers
 			newTenant.DataSourceConfiguration.SetAnalyticsConnectionString(connstringAnalytics);
 			_currentTenantSession.CurrentSession().Save(newTenant);
 
-			var personInfo = new PersonInfo(newTenant, personId);
-
-			// todo handle passwordStrength error this is just to get it to work, the loader is in applicationdata and I don't think it is so good
-			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), model.FirstUser, model.FirstUserPassword);
-			_currentTenantSession.CurrentSession().Save(personInfo);
+			addSuperUserToTenantInternal(newTenant, "first", "user", model.FirstUser, model.FirstUserPassword);
 
 			if (isAzure)
 				UpdateCrossDatabaseView.Execute(updateViewsConnstringAnalyticsUpdateViews, model.Tenant + "_TeleoptiWfmAnalytics");
 			else
 				UpdateCrossDatabaseView.Execute(updateViewsConnstringAnalyticsUpdateViews, model.Tenant + "_TeleoptiWfmAgg");
 
-			return Json(new CreateTenantResultModel { Success = true, Message = "Successfully created a new Tenant." });
+			return Json(new TenantResultModel { Success = true, Message = "Successfully created a new Tenant." });
 		}
 
 		[HttpPost]
 		[TenantUnitOfWork]
 		[Route("CheckCreateDb")]
-		public virtual JsonResult<CreateTenantResultModel> CheckCreateDb(CreateTenantModel model)
+		public virtual JsonResult<TenantResultModel> CheckCreateDb(CreateTenantModel model)
 		{
 			var builder = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
 			{
@@ -138,7 +132,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			return Json(checkCreateDbInternal(builder));
 		}
 
-		private CreateTenantResultModel checkCreateDbInternal(SqlConnectionStringBuilder builder)
+		private TenantResultModel checkCreateDbInternal(SqlConnectionStringBuilder builder)
 		{
 			var connection = new SqlConnection(builder.ConnectionString);
 			try
@@ -147,36 +141,36 @@ namespace Teleopti.Wfm.Administration.Controllers
 			}
 			catch (Exception e)
 			{
-				return new CreateTenantResultModel { Success = false, Message = "Can not connect to the database. " + e.Message };
+				return new TenantResultModel { Success = false, Message = "Can not connect to the database. " + e.Message };
 			}
 
 			if (!_databaseHelperWrapper.HasCreateDbPermission(builder.ConnectionString, isAzure))
-				return new CreateTenantResultModel { Success = false, Message = "The user does not have permission to create databases." };
+				return new TenantResultModel { Success = false, Message = "The user does not have permission to create databases." };
 
 			if (!_databaseHelperWrapper.HasCreateViewAndLoginPermission(builder.ConnectionString, isAzure))
-				return new CreateTenantResultModel { Success = false, Message = "The user does not have permission to create logins and views." };
+				return new TenantResultModel { Success = false, Message = "The user does not have permission to create logins and views." };
 
-			return new CreateTenantResultModel { Success = true, Message = "The user does have permission to create databases, logins and views." };
+			return new TenantResultModel { Success = true, Message = "The user does have permission to create databases, logins and views." };
 		}
 
 		[HttpPost]
 		[TenantUnitOfWork]
 		[Route("CheckLogin")]
-		public virtual JsonResult<CreateTenantResultModel> CheckLogin(CreateTenantModel model)
+		public virtual JsonResult<TenantResultModel> CheckLogin(CreateTenantModel model)
 		{
 			return Json(checkLoginInternal(model));
 		}
 
-		private CreateTenantResultModel checkLoginInternal(CreateTenantModel model)
+		private TenantResultModel checkLoginInternal(CreateTenantModel model)
 		{
 			if (string.IsNullOrEmpty(model.AppUser) || string.IsNullOrEmpty(model.AppPassword))
-				new CreateTenantResultModel { Message = "Both name and password for the login must be filled in.", Success = false };
+				new TenantResultModel { Message = "Both name and password for the login must be filled in.", Success = false };
 
 			var builder = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
 			if (_databaseHelperWrapper.LoginExists(builder.ConnectionString, model.AppUser, isAzure))
 			{
 				return
-				new CreateTenantResultModel
+				new TenantResultModel
 				{
 					Success = false,
 					Message = "The login already exists you must create a new one."
@@ -186,7 +180,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			if (!_databaseHelperWrapper.LoginCanBeCreated(builder.ConnectionString, model.AppUser, model.AppPassword, isAzure, out message))
 			{
 				return
-				new CreateTenantResultModel
+				new TenantResultModel
 				{
 					Success = false,
 					Message = "Login can not be created. " + message
@@ -194,7 +188,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			}
 
 			return
-					new CreateTenantResultModel
+					new TenantResultModel
 					{
 						Success = true,
 						Message = "The login does not exists, it will be created."
@@ -205,18 +199,37 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[HttpPost]
 		[TenantUnitOfWork]
 		[Route("CheckFirstUser")]
-		public virtual JsonResult<CreateTenantResultModel> CheckFirstUser(CreateTenantModel model)
+		public virtual JsonResult<TenantResultModel> CheckFirstUser(CreateTenantModel model)
 		{
 			return Json(checkFirstUserInternal(model.FirstUser, model.FirstUserPassword));
 		}
+		//
 
-		private CreateTenantResultModel checkFirstUserInternal(string name, string password)
+		[HttpPost]
+		[TenantUnitOfWork]
+		[Route("AddSuperUserToTenant")]
+		public virtual JsonResult<TenantResultModel> AddSuperUserToTenant(AddSuperUserToTenantModel model)
+		{
+			if (string.IsNullOrEmpty(model.Tenant))
+			{
+				return Json(new TenantResultModel { Success = false, Message = "The Tenant name can not be empty." });
+			}
+			
+			var tenant = _loadAllTenants.Tenants().FirstOrDefault(x => x.Name.Equals(model.Tenant));
+			if (tenant == null)
+			{
+				return Json(new TenantResultModel {Success = false, Message = "Can not find this Tenant in the database."});
+			}
+         return Json(addSuperUserToTenantInternal(tenant,model.FirstName, model.LastName, model.UserName, model.Password));
+		}
+
+		private TenantResultModel checkFirstUserInternal(string name, string password)
 		{
 
 			if (string.IsNullOrEmpty(name))
-				return new CreateTenantResultModel { Success = false, Message = "The user name can not be empty." };
+				return new TenantResultModel { Success = false, Message = "The user name can not be empty." };
 			if (string.IsNullOrEmpty(password))
-				return new CreateTenantResultModel { Success = false, Message = "The password can not be empty." };
+				return new TenantResultModel { Success = false, Message = "The password can not be empty." };
 
 			var mainUsers = _currentTenantSession.CurrentSession()
 				.GetNamedQuery("loadAll")
@@ -226,22 +239,27 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 			var exists = mainUsers.FirstOrDefault(m => m.ApplicationLogonInfo.LogonName.Equals(name, StringComparison.InvariantCultureIgnoreCase));
 			if (exists != null)
-				return new CreateTenantResultModel { Success = false, Message = "The user already exists." };
+				return new TenantResultModel { Success = false, Message = "The user already exists." };
 
-			return new CreateTenantResultModel { Success = true, Message = "The user name is ok." };
+			return new TenantResultModel { Success = true, Message = "The user name is ok." };
 		}
 
-		private CreateTenantResultModel checkAppUserInternal(string name, string password)
+		private TenantResultModel addSuperUserToTenantInternal(Tenant tenant, string firstName, string lastName, string userName, string password)
 		{
+			var checkUser = checkFirstUserInternal(userName, password);
+			if (!checkUser.Success)
+				return checkUser;
 
-			if (string.IsNullOrEmpty(name))
-				return new CreateTenantResultModel { Success = false, Message = "The login can not be empty." };
-			if (string.IsNullOrEmpty(password))
-				return new CreateTenantResultModel { Success = false, Message = "The login password can not be empty." };
+			var personId = Guid.NewGuid();
+			_databaseHelperWrapper.AddSuperUser(tenant.DataSourceConfiguration.ApplicationConnectionString, personId, firstName, lastName);
 
+			var personInfo = new PersonInfo(tenant, personId);
 
+			// todo handle passwordStrength error this is just to get it to work, the loader is in applicationdata and I don't think it is so good
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), userName, password);
+			_currentTenantSession.CurrentSession().Save(personInfo);
 
-			return new CreateTenantResultModel { Success = true, Message = "The user name is ok." };
+			return new TenantResultModel { Success = true, Message = "Created new user." };
 		}
 	}
 
@@ -260,10 +278,19 @@ namespace Teleopti.Wfm.Administration.Controllers
 		public string BusinessUnit { get; set; }
 	}
 
-	public class CreateTenantResultModel
+	public class TenantResultModel
 	{
 		public string Message { get; set; }
 		public bool Success { get; set; }
 
+	}
+
+	public class AddSuperUserToTenantModel
+	{
+		public string Tenant { get; set; }
+		public string FirstName { get; set; }
+		public string LastName { get; set; }
+		public string UserName { get; set; }
+		public string Password { get; set; }
 	}
 }
