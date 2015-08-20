@@ -103,6 +103,9 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
             if (licenseService.TeleoptiCccFreemiumForecastsEnabled)
                 licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccFreemiumForecasts);
 
+			if (licenseService.TeleoptiWFMVNextEnabled)
+				licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiWfmVNextPilot);
+
             return licenseActivator;
         }
 
