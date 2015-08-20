@@ -23,36 +23,47 @@
     	});
 
     	$scope.replan = function (campaign) {
-			outboundChartService.replan(campaign.Id, function(data) {
-				campaign.graphData = data;
+			outboundChartService.replan(campaign.Id, function() {				
+				outboundService.getCampaignSummary(campaign.Id, function (_campaign) {
+					angular.extend(campaign, _campaign);
+					outboundChartService.getCampaignVisualization(campaign.Id, function (data, translations, manualPlan, closedDays) {
+						campaign.graphData = data;
+						campaign.rawManualPlan = manualPlan;
+						campaign.translations = translations;
+						campaign.closedDays = closedDays;
+					});					
+					outboundService.getCampaignStatistics(null, function success(data2) {
+						$scope.phaseStatistics = data2;
+					});
+				});
 			});
 		}
 
-    	$scope.removeManualPlan = function (campaign) {
-		    var dates = [];
-		    campaign.selectedDates.forEach(function(date,index) {
-			    dates[index] = { Date: date };
-		    });
-		    var removeManualPlan = {
-			    CampaignId: campaign.Id,
-			    Dates: dates
-			    
-	    };
-		    outboundChartService.removeManualPlan(removeManualPlan, function (data, manualPlan) {
-		    	outboundService.getCampaignSummary(campaign.Id, function (_campaign) {
-		    		angular.extend(campaign, _campaign);
-		    		campaign.graphData = data;
-		    		campaign.rawManualPlan = manualPlan;
-		    		outboundService.getCampaignStatistics(null, function success(data2) {
-		    			$scope.phaseStatistics = data2;
-		    		});
-		    	});
-		    });
-		    campaign.selectedDates = [];
-		    campaign.manualPlanInput = null;
+    	$scope.removeManualPlan = function(campaign) {
+			var dates = [];
+			campaign.selectedDates.forEach(function(date, index) {
+				dates[index] = { Date: date };
+			});
+			var removeManualPlan = {
+				CampaignId: campaign.Id,
+				Dates: dates
+
+			};
+			outboundChartService.removeManualPlan(removeManualPlan, function(data, manualPlan) {
+				outboundService.getCampaignSummary(campaign.Id, function(_campaign) {
+					angular.extend(campaign, _campaign);
+					campaign.graphData = data;
+					campaign.rawManualPlan = manualPlan;
+					outboundService.getCampaignStatistics(null, function success(data2) {
+						$scope.phaseStatistics = data2;
+					});
+				});
+			});
+			campaign.selectedDates = [];
+			campaign.manualPlanInput = null;
 		}
 
-    	$scope.addManualPlan = function (campaign) {
+		$scope.addManualPlan = function (campaign) {
     		campaign.manualPlan.CampaignId = campaign.Id;
     		campaign.manualPlan.ManualProductionPlan = [];
     		campaign.selectedDates.forEach(function (date, index) {

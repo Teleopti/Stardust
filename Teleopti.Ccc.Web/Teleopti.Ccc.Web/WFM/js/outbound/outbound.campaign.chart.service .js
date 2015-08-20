@@ -30,9 +30,9 @@
         this.updateManualPlan = updateManualPlan;
 
         this.replan = function (campaignId, successCb, errorCb) {
-        	$http.get(redoCampaignProductionPlanUrl + campaignId).success(function (campaignData) {
-				if (successCb != null) successCb(self.buildGraphDataSeqs(campaignData));
-			}).error(function (e) {
+        	$http.get(redoCampaignProductionPlanUrl + campaignId).success(function () {
+		        if (successCb != null) successCb();
+	        }).error(function (e) {
 				if (errorCb != null) errorCb(e);
 			});
 		}
