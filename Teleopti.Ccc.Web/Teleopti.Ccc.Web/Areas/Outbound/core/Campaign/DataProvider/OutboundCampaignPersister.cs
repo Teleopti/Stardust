@@ -27,10 +27,11 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 		private readonly ICreateOrUpdateSkillDays _createOrUpdateSkillDays;
 		private readonly IProductionReplanHelper _productionReplanHelper;
 		private readonly IOutboundPeriodMover _outboundPeriodMover;
+		private readonly IOutboundCampaignTaskManager _campaignTaskManager;
 
 		public OutboundCampaignPersister(IOutboundCampaignRepository outboundCampaignRepository, IOutboundCampaignMapper outboundCampaignMapper, 
 			IOutboundCampaignViewModelMapper outboundCampaignViewModelMapper, IOutboundSkillCreator outboundSkillCreator, IActivityRepository activityRepository, 
-			IOutboundSkillPersister outboundSkillPersister, ICreateOrUpdateSkillDays createOrUpdateSkillDays, IProductionReplanHelper productionReplanHelper, IOutboundPeriodMover outboundPeriodMover)
+			IOutboundSkillPersister outboundSkillPersister, ICreateOrUpdateSkillDays createOrUpdateSkillDays, IProductionReplanHelper productionReplanHelper, IOutboundPeriodMover outboundPeriodMover, IOutboundCampaignTaskManager campaignTaskManager)
 		{
 			_outboundCampaignRepository = outboundCampaignRepository;
 			_outboundCampaignMapper = outboundCampaignMapper;
@@ -41,6 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			_createOrUpdateSkillDays = createOrUpdateSkillDays;
 			_productionReplanHelper = productionReplanHelper;
 			_outboundPeriodMover = outboundPeriodMover;
+			_campaignTaskManager = campaignTaskManager;
 		}
 
 		public CampaignViewModel Persist(CampaignForm form)
@@ -145,7 +147,12 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 				var minutes = (int)((manual.Time - days*24 - hours)*60);
 				var seconds = (int)((manual.Time - days*24 - hours - (double)minutes/60)*60*60);
 				var time = new TimeSpan(days, hours, minutes, seconds);
-				if (campaign.SpanningPeriod.Contains(manual.Date)) campaign.SetManualProductionPlan(manual.Date, time);
+				if (campaign.SpanningPeriod.Contains(manual.Date))
+				{
+					campaign.SetManualProductionPlan(manual.Date, time);
+					var incomingTask = _campaignTaskManager.GetIncomingTaskFromCampaign(campaign);
+					_createOrUpdateSkillDays.UpdateSkillDays(campaign.Skill, incomingTask);
+				}
 			}
 		}
 
