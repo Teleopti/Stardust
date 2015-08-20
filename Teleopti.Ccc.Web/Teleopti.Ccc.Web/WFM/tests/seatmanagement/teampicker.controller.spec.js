@@ -5,21 +5,18 @@ describe('seatplan report controller tests', function () {
 	var $q,
 		$rootScope,
 		$httpBackend,
-		controller,
-		reportTake;
+		controller;
 
 	beforeEach(function () {
 		module('wfm.seatPlan');
 		module('pascalprecht.translate');
 	});
 
-	beforeEach(inject(function (_$httpBackend_, _$q_, _$rootScope_, _$controller_, _reportTake_) {
+	beforeEach(inject(function (_$httpBackend_, _$q_, _$rootScope_, _$controller_) {
 		$q = _$q_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
-		reportTake = _reportTake_;
-		controller = setUpController(_$controller_);
-		
+		controller = setUpController(_$controller_);		
 	}));
 	
 	it('should update parent node when selecting children', inject(function () {
@@ -122,11 +119,10 @@ describe('seatplan report controller tests', function () {
 			CreateTeam: createTeam
 		};
 	};
-
 	
 	function setUpController($controller) {
 		return $controller('TeamPickerCtrl',
-		{ seatPlanService: mockSeatPlanService, reportTake: reportTake });
+		{ seatPlanService: mockSeatPlanService });
 	};
 
 });
