@@ -69,6 +69,8 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.OpenBudgets, "xxBudgets", DefinedRaptorApplicationFunctionForeignIds.OpenBudgets, 70);
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.AccessToPerformanceManager, "xxPerformanceManager", DefinedRaptorApplicationFunctionForeignIds.AccessToPerformanceManager, 80);
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.PayrollIntegration, "xxPayrollIntegration", DefinedRaptorApplicationFunctionForeignIds.PayrollIntegration, 200);
+			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.SeatPlanner, "xxSeatPlanner", DefinedRaptorApplicationFunctionForeignIds.SeatPlanner, null);
+			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.Outbound, "xxOutbound", DefinedRaptorApplicationFunctionForeignIds.Outbound, null);
 
 			// Global
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ModifySchedule, "xxModifySchedule", DefinedRaptorApplicationFunctionForeignIds.ModifySchedule, null);
@@ -108,23 +110,12 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.RequestSchedulerViewAllowance, "xxViewAllowance", DefinedRaptorApplicationFunctionForeignIds.RequestSchedulerViewAllowance, null);
 
 			// Forecaster
-			CreateAndAddApplicationFunction(applicationFunctionList,
-																			DefinedRaptorApplicationFunctionPaths.ExportForecastToOtherBusinessUnit,
-																			"xxExportForecastToOtherBusinessUnit",
-																			DefinedRaptorApplicationFunctionForeignIds.ExportForecastToOtherBusinessUnit, null);
-			CreateAndAddApplicationFunction(applicationFunctionList,
-																DefinedRaptorApplicationFunctionPaths.ImportForecastFromFile,
-																			"xxImportForecastFromFile",
-								DefinedRaptorApplicationFunctionForeignIds.ImportForecastFromFile, null);
-			CreateAndAddApplicationFunction(applicationFunctionList,
-											DefinedRaptorApplicationFunctionPaths.ExportForecastFile,
-											"xxExportToFile",
-											DefinedRaptorApplicationFunctionForeignIds.ExportForecastFile, null);
+			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ExportForecastToOtherBusinessUnit, "xxExportForecastToOtherBusinessUnit", DefinedRaptorApplicationFunctionForeignIds.ExportForecastToOtherBusinessUnit, null);
+			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ImportForecastFromFile, "xxImportForecastFromFile", DefinedRaptorApplicationFunctionForeignIds.ImportForecastFromFile, null);
+			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ExportForecastFile, "xxExportToFile", DefinedRaptorApplicationFunctionForeignIds.ExportForecastFile, null);
+
 			// Budget
-			CreateAndAddApplicationFunction(applicationFunctionList,
-																			DefinedRaptorApplicationFunctionPaths.RequestAllowances,
-																						"xxRequestAllowances",
-																						DefinedRaptorApplicationFunctionForeignIds.RequestAllowances, null);
+			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.RequestAllowances, "xxRequestAllowances", DefinedRaptorApplicationFunctionForeignIds.RequestAllowances, null);
 
 			// Intraday
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.IntradayRealTimeAdherence, "xxRealTimeAdherence", DefinedRaptorApplicationFunctionForeignIds.IntradayRealTimeAdherence, null);
@@ -173,12 +164,6 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.WebForecasts, "xxForecasts", DefinedRaptorApplicationFunctionForeignIds.WebForecasts, null);
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.WebPermissions, "xxPermissions", DefinedRaptorApplicationFunctionForeignIds.WebPermissions, null);
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.WebSchedules, "xxSchedules", DefinedRaptorApplicationFunctionForeignIds.WebSchedules, null);
-
-			//SeatPlanner
-			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.SeatPlanner, "xxSeatPlanner", DefinedRaptorApplicationFunctionForeignIds.SeatPlanner, null);
-
-			//Outbound
-			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.Outbound, "xxOutbound", DefinedRaptorApplicationFunctionForeignIds.Outbound, null);
 
 			return new ReadOnlyCollection<IApplicationFunction>(applicationFunctionList);
 		}
