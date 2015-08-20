@@ -34,11 +34,11 @@ namespace Teleopti.Ccc.Domain.Outbound
 
 			    var scheduled = _outboundScheduledResourcesProvider.GetScheduledTimeOnDate(dateOnly, campaign.Skill);
 			    incomingTask.SetRealScheduledTimeOnDate(dateOnly, scheduled);
-			    //var forecasted = _outboundScheduledResourcesProvider.GetForecastedTimeOnDate(dateOnly, campaign.Skill);
+			    var forecasted = _outboundScheduledResourcesProvider.GetForecastedTimeOnDate(dateOnly, campaign.Skill);
 			    if (scheduled != TimeSpan.Zero)
 				    incomingTask.SetTimeOnDate(dateOnly, scheduled, PlannedTimeTypeEnum.Scheduled);
-			    //else if (forecasted != TimeSpan.Zero && !manualTime.HasValue)
-			    //	 incomingTask.SetTimeOnDate(dateOnly, forecasted, PlannedTimeTypeEnum.Calculated);
+			    else if (forecasted != TimeSpan.Zero && !manualTime.HasValue)
+			    	 incomingTask.SetTimeOnDate(dateOnly, forecasted, PlannedTimeTypeEnum.Calculated);
 		    }
 		    return incomingTask;
 	    }
