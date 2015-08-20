@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.People
 			Browser.Interactions.AssertExists(".import-people");
 		}
 
-		[When(@"I select (.*)")]
+		[When(@"I select (.*) in people list")]
 		public void WhenISelect(string name)
 		{
 			Browser.Interactions.ClickContaining(".ui-grid-row", name);

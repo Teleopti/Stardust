@@ -49,15 +49,15 @@ Given there is a site named 'London'
 
 Scenario: can select people
 	When I view people
-	And I select John
-	And I select Ashley
+	And I select John in people list
+	And I select Ashley in people list
 	Then I should see an indicator telling me 2 person selected
 
 @ignore
 Scenario: can deselect people
 	When I view people
-	And I select John
-	And I select Ashley
+	And I select John in people list
+	And I select Ashley in people list
 	And I open the command adjust skill
 	And I remove 'John Smith' from my cart
 	And I navigate to search view
@@ -67,22 +67,22 @@ Scenario: can deselect people
 @ignore
 Scenario: can empty selection cart
 	When I view people
-	And I select 'John Smith'
-	And I select 'Ashley Andeen'
+	And I select 'John Smith' in people list
+	And I select 'Ashley Andeen' in people list
 	And I clear my cart
 	Then I should not see the people selection indicator
 
 @ignore
 Scenario: can open adjust skill panel for selected people
 	When I view people
-	And I select 'John Smith'
+	And I select 'John Smith' in people list
 	And I open the command to adjust skill
 	Then I should see adjust skill panel and 'John Smith' in my selection cart
 
 @ignore
 Scenario: can change skills for selected people
 	When I view people
-	And I select 'John Smith'
+	And I select 'John Smith' in people list
 	And I open the command to adjust skill
 	Then I should see 'John Smith' has skill 'Direct Sales'
 	When I edit skills from date '2015-09-01' with
@@ -96,7 +96,7 @@ Scenario: can change skills for selected people
 @ignore
 Scenario: can see notification for changing shift bag after assigning skills
 	When I view people
-	And I select 'John Smith'
+	And I select 'John Smith' in people list
 	And I open the command to adjust skill
 	And I edit skills from date '2015-09-01' with
 	| Skill         | Has   |
@@ -108,7 +108,7 @@ Scenario: can see notification for changing shift bag after assigning skills
 @ignore
 Scenario: can change shift bag for selected people
 	When I view people
-	And I select 'John Smith'
+	And I select 'John Smith' in people list
 	And I open the command to change shift bag
 	And I assign shift bag 'Foobar' from date '2015-09-01'
 	Then I should see 'John Smith' has shift bag 'Email' from date '2015-09-01'
