@@ -39,15 +39,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			lock (personLocks.GetOrAdd(context.Person.PersonId, g => new object()))
 			{
-				var person = context.Person;
-
-				StateInfo info = null;
-				info = new StateInfo(
-					person,
-					() => context.PreviousState(info),
-					() => context.CurrentState(info),
-					context.Input,
-					context.CurrentTime,
+				var info = new StateInfo(
+					context,
 					_stateMapper,
 					_scheduleLoader,
 					_appliedAdherence);

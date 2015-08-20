@@ -16,20 +16,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly ExternalUserStateInputModel _input;
 
 		public StateInfo(
-			PersonOrganizationData person,
-			Func<AgentState> previousState,
-			Func<AgentState> currentState,
-			ExternalUserStateInputModel input,
-			DateTime currentTime,
+			RtaProcessContext context,
 			IStateMapper stateMapper,
 			IScheduleLoader scheduleLoader,
 			IAppliedAdherence appliedAdherence)
 		{
+			var input = context.Input;
+			var person = context.Person;
+			var currentTime = context.CurrentTime;
+
 			_input = input;
 			_person = person;
 			_currentTime = currentTime;
-			_previousState = new Lazy<AgentState>(previousState);
-			_currentState = new Lazy<AgentState>(currentState);
+			_previousState = new Lazy<AgentState>(() => context.PreviousState(this));
+			_currentState = new Lazy<AgentState>(() => context.CurrentState(this));
 
 			Schedule = new ScheduleInfo(scheduleLoader, _person.PersonId, currentTime);
 			Adherence = new AdherenceInfo(input, _person, () => _previousState.Value, () => _currentState.Value, Schedule, appliedAdherence, stateMapper);
