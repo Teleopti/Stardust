@@ -25,10 +25,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 	public class CurrentAgentState
 	{
-		public Guid PersonId { get; set; }
-		public DateTime ReceivedTime { get; set; }
-		public string StateCode { get; set; }
-		public Guid? StateGroupId { get; set; }
 		public Guid? ActivityId { get; set; }
 
 		public Guid? NextActivityId { get; set; }

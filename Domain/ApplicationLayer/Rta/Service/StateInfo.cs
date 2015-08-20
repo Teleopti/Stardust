@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public AdherenceState AdherenceState { get { return Adherence.AdherenceState(); } }
 
 		public DateTime PreviousStateTime { get { return _previousState.Value.ReceivedTime; } }
-		public Guid? CurrentStateId { get { return _currentState.Value.StateGroupId; } }
+		public Guid? CurrentStateId { get { return StateGroupId; } }
 		public Guid? PreviousStateId { get { return _previousState.Value.StateGroupId; } }
 		public Guid? CurrentActivityId { get { return _currentState.Value.ActivityId; } }
 		public Guid? PreviousActivityId { get { return _previousState.Value.ActivityId; } }
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			get
 			{
 				return !_currentState.Value.ActivityId.Equals(_previousState.Value.ActivityId) ||
-					   !_currentState.Value.StateGroupId.Equals(_previousState.Value.StateGroupId) ||
+					   !StateGroupId.Equals(_previousState.Value.StateGroupId) ||
 					   !_currentState.Value.NextActivityId.Equals(_previousState.Value.NextActivityId) ||
 					   !_currentState.Value.NextActivityStartTime.Equals(_previousState.Value.NextActivityStartTime)
 					;
@@ -106,13 +106,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				BatchId = BatchId,
 				NextStart = state.NextActivityStartTime,
 				OriginalDataSourceId = SourceId,
-				PersonId = state.PersonId,
+				PersonId = PersonId,
 				PlatformTypeId = PlatformTypeId,
-				ReceivedTime = state.ReceivedTime,
+				ReceivedTime = CurrentTime,
 				StaffingEffect = state.StaffingEffect,
 				Adherence = (int?) state.Adherence,
-				StateCode = state.StateCode,
-				StateId = state.StateGroupId,
+				StateCode = StateCode,
+				StateId = StateGroupId,
 				StateStart = state.AlarmTypeStartTime,
 				AlarmId = AlarmTypeId,
 				AlarmName = AlarmName,

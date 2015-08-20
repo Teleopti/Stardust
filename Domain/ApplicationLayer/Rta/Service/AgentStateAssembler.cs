@@ -18,10 +18,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			return new CurrentAgentState
 			{
-				PersonId = fromStorage.PersonId,
-				ReceivedTime = fromStorage.ReceivedTime,
-				StateCode = fromStorage.StateCode,
-				StateGroupId = fromStorage.StateId,
 				ActivityId = fromStorage.ScheduledId,
 				NextActivityId = fromStorage.ScheduledNextId,
 				NextActivityStartTime = fromStorage.NextStart,
@@ -59,10 +55,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			return new CurrentAgentState
 			{
-				PersonId = info.PersonId,
-				ReceivedTime = info.CurrentTime,
-				StateCode = info.StateCode,
-				StateGroupId = info.StateGroupId,
 				ActivityId = info.Schedule.CurrentActivityId(),
 				AlarmTypeId = info.AlarmTypeId,
 				AlarmTypeStartTime = info.AlarmTypeStartTime,
