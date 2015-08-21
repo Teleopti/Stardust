@@ -20,22 +20,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			Person = context.Person;
 			CurrentTime = context.CurrentTime;
 
-			Previous = context.PreviousStateInfoLoader.Load(context.Person.PersonId);
+			Stored = context.PreviousStateInfoLoader.Load(context.Person.PersonId);
 
 			_stateMapping = new Lazy<StateMapping>(() => stateMapper.StateFor(Person.BusinessUnitId, _platformTypeId.Value, _stateCode.Value, input.StateDescription));
 			_alarmMapping = new Lazy<AlarmMapping>(() => stateMapper.AlarmFor(Person.BusinessUnitId, _platformTypeId.Value, _stateCode.Value, Schedule.CurrentActivityId()) ?? new AlarmMapping());
 
-			Schedule = new ScheduleInfo(scheduleLoader, Person.PersonId, CurrentTime, Previous);
-			Adherence = new AdherenceInfo(input, Person, Previous, _alarmMapping, Schedule, appliedAdherence, stateMapper);
+			Schedule = new ScheduleInfo(scheduleLoader, Person.PersonId, CurrentTime, Stored);
+			Adherence = new AdherenceInfo(input, Person, Stored, _alarmMapping, Schedule, appliedAdherence, stateMapper);
 
-			_platformTypeId = new Lazy<Guid>(() => string.IsNullOrEmpty(input.PlatformTypeId) ? Previous.PlatformTypeId : input.ParsedPlatformTypeId());
-			_stateCode = new Lazy<string>(() => input.StateCode ?? Previous.StateCode);
+			_platformTypeId = new Lazy<Guid>(() => string.IsNullOrEmpty(input.PlatformTypeId) ? Stored.PlatformTypeId : input.ParsedPlatformTypeId());
+			_stateCode = new Lazy<string>(() => input.StateCode ?? Stored.StateCode);
 
 		}
 
 		private ExternalUserStateInputModel input { get; set; }
 		public PersonOrganizationData Person { get; private set; }
-		public PreviousStateInfo Previous { get; private set; }
+		public StoredStateInfo Stored { get; private set; }
 		public ScheduleInfo Schedule { get; private set; }
 		public AdherenceInfo Adherence { get; private set; }
 		public DateTime CurrentTime { get; private set;  }
@@ -43,17 +43,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public AdherenceState AdherenceState { get { return Adherence.AdherenceState(); } }
 
 		public Guid? CurrentStateId { get { return _stateMapping.Value.StateGroupId; } }
-		public Guid? PreviousStateId { get { return Previous.StateGroupId; } }
-		public Guid? PreviousActivityId { get { return Previous.ActivityId; } }
+		public Guid? PreviousActivityId { get { return Stored.ActivityId; } }
 
 		public bool Send
 		{
 			get
 			{
-				return !Schedule.CurrentActivityId().Equals(Previous.ActivityId) ||
-					   !_stateMapping.Value.StateGroupId.Equals(Previous.StateGroupId) ||
-					   !Schedule.NextActivityId().Equals(Previous.NextActivityId) ||
-					   !Schedule.NextActivityStartTime().Equals(Previous.NextActivityStartTime)
+				return !Schedule.CurrentActivityId().Equals(Stored.ActivityId) ||
+					   !_stateMapping.Value.StateGroupId.Equals(Stored.StateGroupId) ||
+					   !Schedule.NextActivityId().Equals(Stored.NextActivityId) ||
+					   !Schedule.NextActivityStartTime().Equals(Stored.NextActivityStartTime)
 					;
 			}
 		}
@@ -64,7 +63,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			{
 				BatchId = batchId(),
 				NextStart = Schedule.NextActivityStartTime(),
-				OriginalDataSourceId = input.SourceId ?? Previous.SourceId,
+				OriginalDataSourceId = input.SourceId ?? Stored.SourceId,
 				PersonId = Person.PersonId,
 				PlatformTypeId = _platformTypeId.Value,
 				ReceivedTime = CurrentTime,
@@ -90,12 +89,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		private DateTime? batchId()
 		{
-			return input.IsSnapshot ? input.BatchId : Previous.BatchId;
+			return input.IsSnapshot ? input.BatchId : Stored.BatchId;
 		}
 
 		private DateTime? stateStart()
 		{
-			return _alarmMapping.Value.AlarmTypeId == Previous.AlarmTypeId ? Previous.AlarmTypeStartTime : CurrentTime;
+			return _alarmMapping.Value.AlarmTypeId == Stored.AlarmTypeId ? Stored.AlarmTypeStartTime : CurrentTime;
 		}
 	}
 

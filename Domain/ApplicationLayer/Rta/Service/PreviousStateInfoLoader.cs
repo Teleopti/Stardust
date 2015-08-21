@@ -11,9 +11,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_reader = reader;
 		}
 
-		public PreviousStateInfo Load(Guid personId)
+		public StoredStateInfo Load(Guid personId)
 		{
-			return new PreviousStateInfo(personId, _reader.GetCurrentActualAgentState(personId));
+			return new StoredStateInfo(personId, _reader.GetCurrentActualAgentState(personId));
 		}
 	}
 }

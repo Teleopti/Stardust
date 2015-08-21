@@ -3,15 +3,15 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
-	public class PreviousStateInfo
+	public class StoredStateInfo
 	{
-		public PreviousStateInfo(Guid personId)
+		public StoredStateInfo(Guid personId)
 		{
 			PersonId = personId;
 			StateGroupId = Guid.NewGuid();
 		}
 
-		public PreviousStateInfo(Guid personId, AgentStateReadModel fromStorage)
+		public StoredStateInfo(Guid personId, AgentStateReadModel fromStorage)
 		{
 			PersonId = personId;
 			StateGroupId = Guid.NewGuid();

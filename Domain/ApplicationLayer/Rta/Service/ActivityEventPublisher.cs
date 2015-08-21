@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			var currentActivity = info.Schedule.CurrentActivity();
 			if (info.Schedule.CurrentActivityId() == info.PreviousActivityId || currentActivity == null) return;
 
-			var previousStateTime = info.Previous.ReceivedTime;
+			var previousStateTime = info.Stored.ReceivedTime;
 			var activityStartedInThePast = currentActivity.StartDateTime < previousStateTime;
 			var startTime = activityStartedInThePast
 				? previousStateTime

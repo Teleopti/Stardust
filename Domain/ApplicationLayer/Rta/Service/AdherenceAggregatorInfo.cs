@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			Person = person;
 		}
 		
-		public PersonOrganizationData Person { get; }
+		public PersonOrganizationData Person { get; private set; }
 		public AdherenceState AdherenceState { get; set; }
 
 		public AgentStateReadModel MakeAgentStateReadModel()

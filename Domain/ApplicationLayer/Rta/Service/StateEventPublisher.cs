@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public void Publish(StateInfo info)
 		{
-			if (info.CurrentStateId == info.PreviousStateId) return;
+			if (info.CurrentStateId == info.Stored.StateGroupId) return;
 			
 			var adherenceChanged = info.Adherence.AdherenceForPreviousStateAndCurrentActivity() != info.Adherence.AdherenceState();
 

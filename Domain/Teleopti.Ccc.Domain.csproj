@@ -247,7 +247,7 @@
     <Compile Include="ApplicationLayer\Rta\Service\Aggregator\SiteAdherenceMessage.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\Aggregator\TeamAdherenceAggregator.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\Aggregator\TeamAdherenceMessage.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\PreviousStateInfo.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\StoredStateInfo.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AgentStateReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AlarmMapping.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AlarmMappingLoader.cs" />

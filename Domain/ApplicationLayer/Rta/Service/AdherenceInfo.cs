@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public AdherenceInfo(
 			ExternalUserStateInputModel input, 
 			PersonOrganizationData person,
-			PreviousStateInfo previous,
+			StoredStateInfo stored,
 			Lazy<AlarmMapping> alarmMapping,
 			ScheduleInfo scheduleInfo, 
 			IAppliedAdherence appliedAdherence,
@@ -38,8 +38,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_appliedAdherence = appliedAdherence;
 			_stateMapper = stateMapper;
 
-			_adherenceForPreviousState = new Lazy<AdherenceState>(() => adherenceFor(previous));
-			_adherenceForPreviousStateAndCurrentActivity = new Lazy<AdherenceState>(() => adherenceFor(previous.StateCode, previous.PlatformTypeId, scheduleInfo.CurrentActivityId()));
+			_adherenceForPreviousState = new Lazy<AdherenceState>(() => adherenceFor(stored));
+			_adherenceForPreviousStateAndCurrentActivity = new Lazy<AdherenceState>(() => adherenceFor(stored.StateCode, stored.PlatformTypeId, scheduleInfo.CurrentActivityId()));
 			_adherenceForNewStateAndPreviousActivity = new Lazy<AdherenceState>(() => adherenceFor(_input.StateCode, _input.ParsedPlatformTypeId(), scheduleInfo.PreviousActivity()));
 		}
 
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return _adherenceForPreviousStateAndCurrentActivity.Value;
 		}
 		
-		private AdherenceState adherenceFor(PreviousStateInfo stateInfo)
+		private AdherenceState adherenceFor(StoredStateInfo stateInfo)
 		{
 			return stateInfo.Adherence.HasValue ? stateInfo.Adherence.Value : Service.AdherenceState.Unknown;
 		}

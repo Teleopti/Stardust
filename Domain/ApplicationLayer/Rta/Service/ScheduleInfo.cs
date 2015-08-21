@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class ScheduleInfo
 	{
 		private readonly DateTime _currentTime;
-		private readonly PreviousStateInfo _previous;
+		private readonly StoredStateInfo _stored;
 		private readonly Lazy<IEnumerable<ScheduleLayer>> _scheduleLayers;
 		private readonly Lazy<ScheduleLayer> _currentActivity;
 		private readonly Lazy<ScheduleLayer> _nextActivityInShift;
@@ -23,11 +23,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IScheduleLoader scheduleLoader, 
 			Guid personId, 
 			DateTime currentTime,
-			PreviousStateInfo previous
+			StoredStateInfo stored
 			)
 		{
 			_currentTime = currentTime;
-			_previous = previous;
+			_stored = stored;
 			_scheduleLayers = new Lazy<IEnumerable<ScheduleLayer>>(() => scheduleLoader.GetCurrentSchedule(personId));
 			_currentActivity = new Lazy<ScheduleLayer>(() => activityForTime(currentTime));
 			_nextActivityInShift = new Lazy<ScheduleLayer>(nextAdjecentActivityToCurrent);
@@ -47,12 +47,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public bool ShiftStarted()
 		{
-			return _previous.ActivityId == null && CurrentActivity() != null;
+			return _stored.ActivityId == null && CurrentActivity() != null;
 		}
 
 		public bool ShiftEnded()
 		{
-			return _previous.ActivityId != null && CurrentActivity() == null;
+			return _stored.ActivityId != null && CurrentActivity() == null;
 		}
 
 		public ScheduleLayer CurrentActivity()
