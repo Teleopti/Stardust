@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 {
-	public interface ISeatMapProvider
+	public interface ISeatOccupancyProvider
 	{
-		LocationViewModel Get(Guid? id, DateOnly? bookingDate = null);
+		IList<OccupancyViewModel> Get (Guid seatId, DateOnly date);
 	}
 }

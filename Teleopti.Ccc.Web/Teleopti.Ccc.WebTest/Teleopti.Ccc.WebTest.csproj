@@ -361,6 +361,7 @@
     <Compile Include="Core\SeatPlanner\Provider\SeatBookingReportProviderTest.cs" />
     <Compile Include="Core\SeatPlanner\Provider\SeatManagementProviderTestUtils.cs" />
     <Compile Include="Core\SeatPlanner\Provider\SeatMapProviderTest.cs" />
+    <Compile Include="Core\SeatPlanner\Provider\SeatOccupancyProviderTest.cs" />
     <Compile Include="Core\SeatPlanner\Provider\SeatPlanProviderTest.cs" />
     <Compile Include="Core\Startup\AuthenticationProviderTaskTest.cs" />
     <Compile Include="Core\Startup\BundleScriptsTest.cs" />

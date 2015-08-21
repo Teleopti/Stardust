@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Http;
@@ -22,13 +23,15 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly ISeatPlanProvider _seatPlanProvider;
 		private readonly ISeatBookingReportProvider _seatBookingReportProvider;
+		private readonly ISeatOccupancyProvider _seatOccupancyProvider;
 
-		public SeatPlanController(ICommandDispatcher commandDispatcher, ILoggedOnUser loggedOnUser, ISeatPlanProvider seatPlanProvider, ISeatBookingReportProvider seatBookingReportProvider)
+		public SeatPlanController(ICommandDispatcher commandDispatcher, ILoggedOnUser loggedOnUser, ISeatPlanProvider seatPlanProvider, ISeatBookingReportProvider seatBookingReportProvider, ISeatOccupancyProvider seatOccupancyProvider)
 		{
 			_commandDispatcher = commandDispatcher;
 			_loggedOnUser = loggedOnUser;
 			_seatPlanProvider = seatPlanProvider;
 			_seatBookingReportProvider = seatBookingReportProvider;
+			_seatOccupancyProvider = seatOccupancyProvider;
 		}
 
 		[HttpPost, Route("api/SeatPlanner/SeatPlan"), UnitOfWork]
@@ -67,6 +70,11 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers
 		{
 			return _seatBookingReportProvider.Get(command);
 		}
-		
+
+		[UnitOfWork, Route ("api/SeatPlanner/SeatPlan"), HttpGet]
+		public virtual ICollection<OccupancyViewModel> Get (Guid seatId, DateTime date)
+		{
+			return _seatOccupancyProvider.Get (seatId, new DateOnly(date)).ToArray();
+		}
 	}
 }

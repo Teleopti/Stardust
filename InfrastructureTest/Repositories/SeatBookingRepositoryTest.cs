@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(bookingOnPreviousDay);
 			PersistAndRemoveFromUnitOfWork(bookingOnNextDay);
 
-			var seatBookings = new SeatBookingRepository(UnitOfWork).LoadSeatBookingsIntersectingDay(new DateOnly(utcStartDateTime), seat.Parent as ISeatMapLocation);
+			var seatBookings = new SeatBookingRepository(UnitOfWork).LoadSeatBookingsIntersectingDay(new DateOnly(utcStartDateTime), seat.Parent.Id.Value);
 
 			Assert.AreEqual(seatBookings.Count, 3);
 		}
@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(bookingOnCurrentDay);
 			PersistAndRemoveFromUnitOfWork(bookingOnPreviousDay);
 
-			var seatBookings = new SeatBookingRepository(UnitOfWork).LoadSeatBookingsIntersectingDay(new DateOnly(utcStartDateTime), seat.Parent as ISeatMapLocation);
+			var seatBookings = new SeatBookingRepository(UnitOfWork).LoadSeatBookingsIntersectingDay(new DateOnly(utcStartDateTime), seat.Parent.Id.Value);
 
 			Assert.AreEqual(seatBookings.Count, 1);
 		}

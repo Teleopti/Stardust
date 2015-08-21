@@ -567,10 +567,13 @@
     <Compile Include="Areas\SeatPlanner\Core\Providers\ILocationHierarchyProvider.cs" />
     <Compile Include="Areas\SeatPlanner\Core\Providers\ISeatBookingReportProvider.cs" />
     <Compile Include="Areas\SeatPlanner\Core\Providers\ISeatMapProvider.cs" />
+    <Compile Include="Areas\SeatPlanner\Core\Providers\ISeatOccupancyProvider.cs" />
     <Compile Include="Areas\SeatPlanner\Core\Providers\ISeatPlanProvider.cs" />
     <Compile Include="Areas\SeatPlanner\Core\Providers\LocationHierarchyProvider.cs" />
+    <Compile Include="Areas\SeatPlanner\Core\ViewModels\OccupancyViewModel.cs" />
     <Compile Include="Areas\SeatPlanner\Core\Providers\SeatBookingReportProvider.cs" />
     <Compile Include="Areas\SeatPlanner\Core\Providers\SeatMapProvider.cs" />
+    <Compile Include="Areas\SeatPlanner\Core\Providers\SeatOccupancyProvider.cs" />
     <Compile Include="Areas\SeatPlanner\Core\Providers\SeatPlanProvider.cs" />
     <Compile Include="Areas\SeatPlanner\Core\ViewModels\BusinessUnitViewModel.cs" />
     <Compile Include="Areas\SeatPlanner\Core\ViewModels\BusinessUnitWithSitesViewModel.cs" />

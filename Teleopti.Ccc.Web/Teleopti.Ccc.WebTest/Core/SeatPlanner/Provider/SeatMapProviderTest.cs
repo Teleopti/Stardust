@@ -1,5 +1,4 @@
 ﻿using System;
-using Antlr.Runtime;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.SeatPlanning;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -29,6 +28,7 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 			var location = new SeatMapLocation() { Name = "Location" };
 			location.SetId (Guid.NewGuid());
 			var seat = location.AddSeat("Seat", 1);
+			location.AddSeat("Seat", 2);
 
 			_seatMapLocationRepository.Add (location);
 
@@ -47,6 +47,8 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 			var locationViewModel = provider.Get (location.Id, bookingDate);
 			
 			Assert.IsTrue(locationViewModel.Seats[0].IsOccupied);
+			Assert.IsFalse(locationViewModel.Seats[1].IsOccupied);
 		}
+
 	}
 }

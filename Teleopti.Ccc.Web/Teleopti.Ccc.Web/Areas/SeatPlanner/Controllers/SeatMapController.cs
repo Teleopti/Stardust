@@ -44,7 +44,12 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers
 		{
 			return _seatMapProvider.Get(null);
 		}
-		
+
+		[UnitOfWork, Route("api/SeatPlanner/SeatMap"), HttpGet]
+		public virtual LocationViewModel Get(Guid? id, DateTime date)
+		{
+			return _seatMapProvider.Get(id, new DateOnly(date));
+		}
 		
 		[UnitOfWork, Route("api/SeatPlanner/SeatMap"), HttpPost]
 		public virtual bool Save([FromBody]SaveSeatMapCommand command)

@@ -116,8 +116,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				var personScheduleWithSeatBooking = mapBookingToScheduleWithSeatBooking(booking);
 				personSchedulesWithSeatBookings.Add (personScheduleWithSeatBooking);
 			}
-
-
+			
 			return new SeatBookingReportModel()
 			{
 				RecordCount = bookingModels.Count(),
@@ -125,14 +124,30 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			};
 
 		}
-
-		public IList<ISeatBooking> LoadSeatBookingsIntersectingDay (DateOnly dateOnly, ISeatMapLocation location)
+		
+		public IList<ISeatBooking> LoadSeatBookingsIntersectingDay(DateOnly date, Guid locationId)
 		{
-			var requestedDate = new DateTimePeriod(dateOnly.Date, dateOnly.Date.AddDays(1).AddSeconds(-1));
+			var requestedDate = getDateTimePeriodFromRequestedDate(date);
 			return _seatBookings
 				.Where(booking => !((requestedDate.EndDateTime < booking.StartDateTime) || (requestedDate.StartDateTime > booking.EndDateTime))
-					&& location == booking.Seat.Parent)
+					&& locationId == booking.Seat.Parent.Id)
 				.ToList();
+		}
+
+		public IList<ISeatBooking> LoadSeatBookingsForSeatIntersectingDay (DateOnly date, Guid seatId)
+		{
+			var requestedDate = getDateTimePeriodFromRequestedDate(date);
+			return _seatBookings
+				.Where(booking => !((requestedDate.EndDateTime < booking.StartDateTime) || (requestedDate.StartDateTime > booking.EndDateTime))
+					&& seatId == booking.Seat.Id)
+				.ToList();
+		}
+
+		private static DateTimePeriod getDateTimePeriodFromRequestedDate(DateOnly dateOnly)
+		{
+			var dateOnlyAsUTCDateTIme = new DateTime(dateOnly.Year, dateOnly.Month, dateOnly.Day, 0, 0, 0, DateTimeKind.Utc);
+			var requestedDate = new DateTimePeriod(dateOnlyAsUTCDateTIme, dateOnlyAsUTCDateTIme.AddDays(1).AddSeconds(-1));
+			return requestedDate;
 		}
 
 		private static PersonScheduleWithSeatBooking mapBookingToScheduleWithSeatBooking (ISeatBooking booking)
