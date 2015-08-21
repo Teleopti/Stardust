@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Ajax.Utilities;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -640,6 +641,29 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 
 			campaign.GetManualProductionPlan(date).Should().Be.EqualTo(null);
 			createOrUpdateSkillDays.AssertWasNotCalled(x=>x.UpdateSkillDays(campaign.Skill, incommingTask));
+		}
+
+		[Test]
+		public void ShouldRemoveManualPlan()
+		{
+			var campaignId = new Guid();
+			var date = new DateOnly(2015, 8, 21);
+			var campaign = new Domain.Outbound.Campaign() { SpanningPeriod = new DateOnlyPeriod(new DateOnly(2015, 8, 21), new DateOnly(2015, 8, 21)) };
+			campaign.SetManualProductionPlan(date, TimeSpan.FromHours(1));
+			
+			var removeManualForm = new RemoveManualPlanForm() {CampaignId = campaignId, Dates = new List<DateOnly>() {date}};
+			var productionPlanFactory = new OutboundProductionPlanFactory(new IncomingTaskFactory(new FlatDistributionSetter()));
+			var incommingTask = productionPlanFactory.CreateAndMakeInitialPlan(campaign.SpanningPeriod, 1000, TimeSpan.FromHours(4), campaign.WorkingHours);
+			var campaignTaskManager = MockRepository.GenerateMock<IOutboundCampaignTaskManager>();
+			campaignTaskManager.Stub(x => x.GetIncomingTaskFromCampaign(new Domain.Outbound.Campaign())).IgnoreArguments().Return(incommingTask);
+			_outboundCampaignRepository.Stub(x => x.Get(campaignId)).Return(campaign); var createOrUpdateSkillDays = MockRepository.GenerateMock<ICreateOrUpdateSkillDays>();
+			createOrUpdateSkillDays.Stub(x => x.Create(null, new DateOnlyPeriod(), 0, new TimeSpan(), null)).IgnoreArguments();
+
+			_target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, null, null, createOrUpdateSkillDays, null, null, campaignTaskManager, null);
+			_target.RemoveManualProductionPlan(removeManualForm);
+
+			(campaign.GetManualProductionPlan(date).Should()==null).Should().Be.True();
+			createOrUpdateSkillDays.AssertWasCalled(x => x.UpdateSkillDays(campaign.Skill, incommingTask));
 		}
 	}
 }

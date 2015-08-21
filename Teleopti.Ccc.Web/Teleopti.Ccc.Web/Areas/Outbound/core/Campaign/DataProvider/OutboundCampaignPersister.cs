@@ -173,6 +173,9 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			{
 				campaign.ClearProductionPlan(date);
 			}
+
+			var incomingTask = _campaignTaskManager.GetIncomingTaskFromCampaign(campaign);
+			_createOrUpdateSkillDays.UpdateSkillDays(campaign.Skill, incomingTask);
 		}
 
 		public void ManualReplanCampaign(Guid campaignId)
