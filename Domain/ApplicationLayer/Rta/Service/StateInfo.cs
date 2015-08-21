@@ -89,8 +89,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			{
 				return !Schedule.CurrentActivityId().Equals(Previous.ActivityId) ||
 					   !StateGroupId.Equals(Previous.StateGroupId) ||
-					   !_currentState.Value.NextActivityId.Equals(Previous.NextActivityId) ||
-					   !_currentState.Value.NextActivityStartTime.Equals(Previous.NextActivityStartTime)
+					   !Schedule.NextActivityId().Equals(Previous.NextActivityId) ||
+					   !Schedule.NextActivityStartTime().Equals(Previous.NextActivityStartTime)
 					;
 			}
 		}
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return new AgentStateReadModel
 			{
 				BatchId = BatchId,
-				NextStart = state.NextActivityStartTime,
+				NextStart = Schedule.NextActivityStartTime(),
 				OriginalDataSourceId = SourceId,
 				PersonId = PersonId,
 				PlatformTypeId = PlatformTypeId,
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				Adherence = (int?) state.Adherence,
 				StateCode = StateCode,
 				StateId = StateGroupId,
-				StateStart = state.AlarmTypeStartTime,
+				StateStart = AlarmTypeStartTime,
 				AlarmId = AlarmTypeId,
 				AlarmName = AlarmName,
 				AlarmStart = CurrentTime.AddTicks(AlarmThresholdTime),

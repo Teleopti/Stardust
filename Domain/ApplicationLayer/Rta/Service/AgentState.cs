@@ -25,11 +25,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 	public class CurrentAgentState
 	{
-		public Guid? NextActivityId { get; set; }
-		public DateTime? NextActivityStartTime { get; set; }
-
-		public Guid? AlarmTypeId { get; set; }
-		public DateTime? AlarmTypeStartTime { get; set; }
 		public double? StaffingEffect { get; set; }
 		public AdherenceState? Adherence { get; set; }
 	}

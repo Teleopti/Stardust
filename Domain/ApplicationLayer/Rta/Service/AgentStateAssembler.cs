@@ -18,10 +18,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			return new CurrentAgentState
 			{
-				NextActivityId = fromStorage.ScheduledNextId,
-				NextActivityStartTime = fromStorage.NextStart,
-				AlarmTypeId = fromStorage.AlarmId,
-				AlarmTypeStartTime = fromStorage.StateStart,
 				StaffingEffect = fromStorage.StaffingEffect,
 				Adherence = (AdherenceState?) fromStorage.Adherence
 			};
@@ -54,10 +50,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			return new CurrentAgentState
 			{
-				AlarmTypeId = info.AlarmTypeId,
-				AlarmTypeStartTime = info.AlarmTypeStartTime,
-				NextActivityId = info.Schedule.NextActivityId(),
-				NextActivityStartTime = info.Schedule.NextActivityStartTime(),
 				StaffingEffect = info.StaffingEffect,
 				Adherence = info.AdherenceState2
 			};
