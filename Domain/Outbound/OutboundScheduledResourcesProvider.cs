@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 		void Load(IList<IOutboundCampaign> campaigns, DateOnlyPeriod period);
 		TimeSpan GetScheduledTimeOnDate(DateOnly date, ISkill skill);
 		TimeSpan GetForecastedTimeOnDate(DateOnly date, ISkill skill);
+		void SetForecastedTimeOnDate(DateOnly date, ISkill skill, TimeSpan time);
 	}
 
 	public class OutboundScheduledResourcesProvider : IOutboundScheduledResourcesProvider
@@ -101,6 +102,21 @@ namespace Teleopti.Ccc.Domain.Outbound
 
 			return
 				TimeSpan.FromHours(SkillStaffPeriodHelper.ScheduledHours(skillDay.SkillStaffPeriodCollection).GetValueOrDefault(0));
+		}
+
+		public void SetForecastedTimeOnDate(DateOnly date, ISkill skill, TimeSpan time)
+		{
+			var skillDay = _schedulerStateHolder().SchedulingResultState.SkillDayOnSkillAndDateOnly(skill, date);
+			if (skillDay == null)
+				return;
+
+			var periodCount = skillDay.SkillStaffPeriodCollection.Count;
+			var timeOnEachPeriod = TimeSpan.FromTicks(time.Ticks/periodCount);
+			foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
+			{
+				var newDemand = timeOnEachPeriod.TotalMinutes/skillStaffPeriod.Period.ElapsedTime().TotalMinutes;
+				((SkillStaff) skillStaffPeriod.Payload).ForecastedIncomingDemand = newDemand;
+			}
 		}
 
 		public TimeSpan GetForecastedTimeOnDate(DateOnly date, ISkill skill)

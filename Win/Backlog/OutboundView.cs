@@ -186,8 +186,10 @@ namespace Teleopti.Ccc.Win.Backlog
 					var forecastingTarget = new ForecastingTarget(dateOnly, new OpenForWork(isOpen, isOpen));
 					if(isOpen)
 					{
-						forecastingTarget.Tasks = incomingTask.GetTimeOnDate(dateOnly).TotalSeconds/incomingTask.AverageWorkTimePerItem.TotalSeconds;
+						var timeOnDate = incomingTask.GetTimeOnDate(dateOnly);
+						forecastingTarget.Tasks = timeOnDate.TotalSeconds / incomingTask.AverageWorkTimePerItem.TotalSeconds;
 						forecastingTarget.AverageTaskTime = incomingTask.AverageWorkTimePerItem;
+						_outboundScheduledResourcesProvider.SetForecastedTimeOnDate(dateOnly, skill, timeOnDate);
 					}
 
 					forecastingTargets.Add(forecastingTarget);
@@ -311,8 +313,7 @@ namespace Teleopti.Ccc.Win.Backlog
 			incomingTask.RecalculateDistribution();
 			//persist productionPlan
 			updateSkillDays(selectedCampaign.Skill, incomingTask, true);
-			loadSchedulesAsync();
-			//no code after loadSchedulesAsync();
+			updateStatusOnCampaigns();
 		}
 
 		private void changePeriodToolStripMenuItem_Click(object sender, EventArgs e)

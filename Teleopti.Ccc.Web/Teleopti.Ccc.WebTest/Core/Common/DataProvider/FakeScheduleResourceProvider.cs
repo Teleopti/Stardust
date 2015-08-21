@@ -28,7 +28,12 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
             throw new NotImplementedException();
         }
 
-        public void SetScheduledTimeOnDate(DateOnly date, ISkill skill, TimeSpan time)
+	    public void SetForecastedTimeOnDate(DateOnly date, ISkill skill, TimeSpan time)
+	    {
+		    throw new NotImplementedException();
+	    }
+
+	    public void SetScheduledTimeOnDate(DateOnly date, ISkill skill, TimeSpan time)
         {
             scheduledTime.Add(new Tuple<DateOnly, string>(date, skill.Name), time);
         }
