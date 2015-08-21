@@ -22,8 +22,36 @@ angular
 					method: 'POST',
 					params: {},
 					isArray: false
-				},
+				}
 
+			});
+
+			this.loadAllSkills = $resource("../api/PeopleData/loadAllSkills", {}, {
+				get: {
+					method: "GET",
+					params: {},
+					isArray: true
+				}
+			});
+
+			this.fetchPeople = $resource("../api/PeopleData/fetchPeople", {
+				InputModel: "@inputModel"
+			}, {
+				post: {
+					method: "GET",
+					params: {},
+					isArray: true
+				}
+			});
+
+			this.updateSkillOnPersons = $resource("../api/PeopleCommand/updateSkillOnPersons", {
+				PeopleCommandInput: "peoples"
+			}, {
+				post: {
+					method: "POST",
+					params: {},
+					isArray: true
+				}
 			});
 		}
 	]);
