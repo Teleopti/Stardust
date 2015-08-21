@@ -28,11 +28,12 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 		private readonly IProductionReplanHelper _productionReplanHelper;
 		private readonly IOutboundPeriodMover _outboundPeriodMover;
 		private readonly IOutboundCampaignTaskManager _campaignTaskManager;
-		private readonly IOutboundScheduledResourcesProvider _scheduledResourcesProvider;
+		private readonly ICampaignListProvider _campaignListProvider;
 
 		public OutboundCampaignPersister(IOutboundCampaignRepository outboundCampaignRepository, IOutboundCampaignMapper outboundCampaignMapper, 
 			IOutboundCampaignViewModelMapper outboundCampaignViewModelMapper, IOutboundSkillCreator outboundSkillCreator, IActivityRepository activityRepository, 
-			IOutboundSkillPersister outboundSkillPersister, ICreateOrUpdateSkillDays createOrUpdateSkillDays, IProductionReplanHelper productionReplanHelper, IOutboundPeriodMover outboundPeriodMover, IOutboundCampaignTaskManager campaignTaskManager, IOutboundScheduledResourcesProvider scheduledResourcesProvider)
+			IOutboundSkillPersister outboundSkillPersister, ICreateOrUpdateSkillDays createOrUpdateSkillDays, IProductionReplanHelper productionReplanHelper, 
+			IOutboundPeriodMover outboundPeriodMover, IOutboundCampaignTaskManager campaignTaskManager, ICampaignListProvider campaignListProvider)
 		{
 			_outboundCampaignRepository = outboundCampaignRepository;
 			_outboundCampaignMapper = outboundCampaignMapper;
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			_productionReplanHelper = productionReplanHelper;
 			_outboundPeriodMover = outboundPeriodMover;
 			_campaignTaskManager = campaignTaskManager;
-			_scheduledResourcesProvider = scheduledResourcesProvider;
+			_campaignListProvider = campaignListProvider;
 		}
 
 		public CampaignViewModel Persist(CampaignForm form)
@@ -183,12 +184,12 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			var campaign = _outboundCampaignRepository.Get(campaignId);
 			_productionReplanHelper.Replan(campaign);
 
-			updateStateHolder(campaign);
+			updateStateHolder();
 		}
 
-		private void updateStateHolder(IOutboundCampaign campaign)
+		private void updateStateHolder()
 		{
-			_scheduledResourcesProvider.Load(new List<IOutboundCampaign>() { campaign }, campaign.SpanningPeriod);
+			_campaignListProvider.LoadData();
 		}
 
 		private bool isWorkingHoursUpdated(IDictionary<DayOfWeek, TimePeriod> oldWorkingHours, IDictionary<DayOfWeek, TimePeriod> newWorkingHours)
