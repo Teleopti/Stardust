@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly RtaProcessor _processor;
 		private readonly IPersonOrganizationProvider _personOrganizationProvider;
 		private readonly IAgentStateReadModelReader _agentStateReadModelReader;
-		private readonly AgentStateAssembler _agentStateAssembler;
 		private readonly IEventPublisherScope _eventPublisherScope;
 		private readonly IEnumerable<IInitializeble> _initializebles;
 		private readonly IEnumerable<IRecreatable> _recreatables;
@@ -41,7 +40,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			RtaProcessor processor,
 			IPersonOrganizationProvider personOrganizationProvider,
 			IAgentStateReadModelReader agentStateReadModelReader,
-			AgentStateAssembler agentStateAssembler,
 			IEventPublisherScope eventPublisherScope,
 			IEnumerable<IInitializeble> initializebles,
 			IEnumerable<IRecreatable> recreatables,
@@ -52,7 +50,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_processor = processor;
 			_personOrganizationProvider = personOrganizationProvider;
 			_agentStateReadModelReader = agentStateReadModelReader;
-			_agentStateAssembler = agentStateAssembler;
 			_eventPublisherScope = eventPublisherScope;
 			_initializebles = initializebles;
 			_recreatables = recreatables;
@@ -92,15 +89,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						new ExternalUserStateInputModel
 						{
 							StateCode = s.StateCode
-						}, 
+						},
 						s.PersonId,
 						s.BusinessUnitId,
 						currentTime,
 						_personOrganizationProvider,
 						null,
-						null, 
 						null,
-						() => _agentStateAssembler.MakeEmpty(s.PersonId)
+						null,
+						new EmptyPreviousStateInfoLoader()
 						);
 					_processor.Process(context);
 				});

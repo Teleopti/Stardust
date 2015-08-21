@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Resolvers;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
@@ -24,6 +23,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class Rta : IRta
 	{
 		private readonly IAgentStateReadModelReader _agentStateReadModelReader;
+		private readonly IPreviousStateInfoLoader _previousStateInfoLoader;
 		private readonly string _authenticationKey;
 		public static string LogOutStateCode = "LOGGED-OFF";
 		private static readonly ILog Log = LogManager.GetLogger(typeof(Rta));
@@ -36,7 +36,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly IPersonOrganizationProvider _personOrganizationProvider;
 		private readonly IAgentStateReadModelUpdater _agentStateReadModelUpdater;
 		private readonly IAgentStateMessageSender _messageSender;
-		private readonly AgentStateAssembler _agentStateAssembler;
 		private readonly IAdherenceAggregator _adherenceAggregator;
 		private readonly PersonResolver _personResolver;
 		private readonly IStateMapper _stateMapper;
@@ -45,6 +44,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IAdherenceAggregator adherenceAggregator,
 			IDatabaseReader databaseReader, 
 			IAgentStateReadModelReader agentStateReadModelReader, 
+			IPreviousStateInfoLoader previousStateInfoLoader, 
 			ICacheInvalidator cacheInvalidator,
 			IStateMapper stateMapper,
 			INow now, 
@@ -52,11 +52,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IAgentStateReadModelUpdater agentStateReadModelUpdater,
 			IAgentStateMessageSender messageSender,
 			IPersonOrganizationProvider personOrganizationProvider,
-			RtaProcessor processor,
-			AgentStateAssembler agentStateAssembler
+			RtaProcessor processor
 			)
 		{
 			_agentStateReadModelReader = agentStateReadModelReader;
+			_previousStateInfoLoader = previousStateInfoLoader;
 			_dataSourceResolver = new DataSourceResolver(databaseReader);
 			_stateMapper = stateMapper;
 			_cacheInvalidator = cacheInvalidator;
@@ -65,7 +65,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_personOrganizationProvider = personOrganizationProvider;
 			_agentStateReadModelUpdater = agentStateReadModelUpdater;
 			_messageSender = messageSender;
-			_agentStateAssembler = agentStateAssembler;
 			_adherenceAggregator = adherenceAggregator;
 			_personResolver = new PersonResolver(databaseReader);
 
@@ -251,7 +250,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					_agentStateReadModelUpdater,
 					_messageSender,
 					_adherenceAggregator,
-					() => _agentStateAssembler.MakePreviousState(personId, _agentStateReadModelReader.GetCurrentActualAgentState(personId))
+					_previousStateInfoLoader
 					));
 		}
 

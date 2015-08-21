@@ -6,9 +6,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class RtaProcessContext
 	{
-		private readonly Func<PreviousStateInfo> _previousState;
 		private readonly PersonOrganizationData _person;
-		private PreviousStateInfo _madePreviousStateInfo;
 
 		public RtaProcessContext(
 			ExternalUserStateInputModel input,
@@ -19,15 +17,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IAgentStateReadModelUpdater agentStateReadModelUpdater, 
 			IAgentStateMessageSender messageSender, 
 			IAdherenceAggregator adherenceAggregator,
-			Func<PreviousStateInfo> previousState
+			IPreviousStateInfoLoader previousStateInfoLoader
 			)
 		{
-			_previousState = previousState;
 			if (!personOrganizationProvider.PersonOrganizationData().TryGetValue(personId, out _person))
 				return;
 			_person.BusinessUnitId = businessUnitId;
 
 			CurrentTime = currentTime;
+			PreviousStateInfoLoader = previousStateInfoLoader;
 			Input = input ?? new ExternalUserStateInputModel();
 			AgentStateReadModelUpdater = agentStateReadModelUpdater ?? new DontUpdateAgentStateReadModel();
 			MessageSender = messageSender ?? new NoMessage();
@@ -38,16 +36,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public PersonOrganizationData Person { get { return _person; } }
 		public DateTime CurrentTime { get; private set; }
 
+		public IPreviousStateInfoLoader PreviousStateInfoLoader { get; private set; }
 		public IAgentStateReadModelUpdater AgentStateReadModelUpdater { get; private set; }
 		public IAgentStateMessageSender MessageSender { get; private set; }
 		public IAdherenceAggregator AdherenceAggregator { get; private set; }
 
-		public PreviousStateInfo PreviousState(StateInfo info)
-		{
-			if (_madePreviousStateInfo != null)
-				return _madePreviousStateInfo;
-			_madePreviousStateInfo = _previousState.Invoke();
-			return _madePreviousStateInfo;
-		}
 	}
 }

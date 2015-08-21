@@ -47,7 +47,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			else
 				builder.RegisterType<NoStateStreamSynchronizer>().As<IStateStreamSynchronizer>().SingleInstance();
 
-			builder.RegisterType<AgentStateAssembler>().SingleInstance();
 			builder.RegisterType<StateMapper>().As<IStateMapper>().SingleInstance();
 
 			builder.RegisterType<DatabaseConnectionStringHandler>().As<IDatabaseConnectionStringHandler>();
@@ -79,6 +78,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IDatabaseReader>();
 			builder.RegisterMbCacheComponent<DatabaseReader, IDatabaseReader>();
 
+			builder.RegisterType<PreviousStateInfoLoader>().As<IPreviousStateInfoLoader>().SingleInstance().ApplyAspects();
 			builder.RegisterType<AgentStateReadModelReader>().As<IAgentStateReadModelReader>().SingleInstance().ApplyAspects();
 			builder.RegisterType<DatabaseWriter>().As<IDatabaseWriter>().SingleInstance().ApplyAspects();
 

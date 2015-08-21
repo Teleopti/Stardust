@@ -221,7 +221,10 @@
     <Compile Include="ApplicationLayer\Commands\MoveActivityCommandHandler.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\UpdateFindPersonConsumer.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\UpdateGroupingReadModelConsumer.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\EmptyPreviousStateInfoLoader.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\IPreviousStateInfoLoader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IScheduleLoader.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\PreviousStateInfoLoader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ScheduleLoader.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModelBuilders\AdherencePercentageViewModel.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ActivityEventPublisher.cs" />
@@ -245,7 +248,6 @@
     <Compile Include="ApplicationLayer\Rta\Service\Aggregator\TeamAdherenceAggregator.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\Aggregator\TeamAdherenceMessage.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\PreviousStateInfo.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\AgentStateAssembler.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AgentStateReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AlarmMapping.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AlarmMappingLoader.cs" />

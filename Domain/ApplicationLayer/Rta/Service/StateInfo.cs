@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
@@ -11,7 +12,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly Lazy<string> _stateCode;
 		private readonly Lazy<StateMapping> _stateMapping;
 		private readonly Lazy<AlarmMapping> _alarmMapping;
-		private readonly ExternalUserStateInputModel _input;
 
 		public StateInfo(
 			RtaProcessContext context,
@@ -23,11 +23,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			var person = context.Person;
 			var currentTime = context.CurrentTime;
 
-			_input = input;
+			Input = input;
 			_person = person;
 			_currentTime = currentTime;
 
-			Previous = context.PreviousState(this);
+			Previous = context.PreviousStateInfoLoader.Load(person.PersonId);
 
 			_stateMapping = new Lazy<StateMapping>(() => stateMapper.StateFor(person.BusinessUnitId, _platformTypeId.Value, _stateCode.Value, input.StateDescription));
 			_alarmMapping = new Lazy<AlarmMapping>(() => stateMapper.AlarmFor(person.BusinessUnitId, _platformTypeId.Value, _stateCode.Value, Schedule.CurrentActivityId()) ?? new AlarmMapping());
@@ -39,6 +39,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_stateCode = new Lazy<string>(() => input.StateCode ?? Previous.StateCode);
 
 		}
+
+		public ExternalUserStateInputModel Input { get; private set; }
+		public PreviousStateInfo Previous { get; private set; }
+		public ScheduleInfo Schedule { get; private set; }
+		public AdherenceInfo Adherence { get; private set; }
 
 		public DateTime CurrentTime { get { return _currentTime; } }
 		public string StateCode { get { return _stateCode.Value; } }
@@ -52,16 +57,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public long AlarmThresholdTime { get { return _alarmMapping.Value.ThresholdTime; } }
 		public int? AlarmDisplayColor { get { return _alarmMapping.Value.DisplayColor; } }
 		public string StateGroupName { get { return _stateMapping.Value.StateGroupName; } }
-
-		public DateTime? BatchId
-		{
-			get
-			{
-				return _input.IsSnapshot ? _input.BatchId : Previous.BatchId;
-			}
-		}
-
-		public string SourceId { get { return _input.SourceId ?? Previous.SourceId; } }
+		public DateTime? BatchId { get { return Input.IsSnapshot ? Input.BatchId : Previous.BatchId; } }
+		public string SourceId { get { return Input.SourceId ?? Previous.SourceId; } }
 		public Guid PersonId { get { return _person.PersonId; } }
 		public Guid BusinessUnitId { get { return _person.BusinessUnitId; } }
 		public Guid TeamId { get { return _person.TeamId; } }
@@ -70,9 +67,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 
 
-		public PreviousStateInfo Previous { get; private set; }
-		public ScheduleInfo Schedule { get; private set; }
-		public AdherenceInfo Adherence { get; private set; }
 
 		public ScheduleLayer CurrentActivity { get { return Schedule.CurrentActivity(); } }
 		public ScheduleLayer PreviousActivity { get { return Schedule.PreviousActivity(); } }
