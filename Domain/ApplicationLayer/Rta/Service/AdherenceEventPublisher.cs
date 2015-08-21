@@ -18,11 +18,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			{
 				_eventPublisher.Publish(info, new PersonInAdherenceEvent
 				{
-					PersonId = info.PersonId,
+					PersonId = info.Person.PersonId,
 					Timestamp = time,
-					BusinessUnitId = info.BusinessUnitId,
-					TeamId = info.TeamId,
-					SiteId = info.SiteId
+					BusinessUnitId = info.Person.BusinessUnitId,
+					TeamId = info.Person.TeamId,
+					SiteId = info.Person.SiteId
 				});
 			}
 
@@ -30,11 +30,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			{
 				_eventPublisher.Publish(info, new PersonOutOfAdherenceEvent
 				{
-					PersonId = info.PersonId,
+					PersonId = info.Person.PersonId,
 					Timestamp = time,
-					BusinessUnitId = info.BusinessUnitId,
-					TeamId = info.TeamId,
-					SiteId = info.SiteId
+					BusinessUnitId = info.Person.BusinessUnitId,
+					TeamId = info.Person.TeamId,
+					SiteId = info.Person.SiteId
 				});
 			}
 
@@ -43,11 +43,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			{
 				_eventPublisher.Publish(info, new PersonNeutralAdherenceEvent
 				{
-					PersonId = info.PersonId,
+					PersonId = info.Person.PersonId,
 					Timestamp = time,
-					BusinessUnitId = info.BusinessUnitId,
-					TeamId = info.TeamId,
-					SiteId = info.SiteId
+					BusinessUnitId = info.Person.BusinessUnitId,
+					TeamId = info.Person.TeamId,
+					SiteId = info.Person.SiteId
 				});
 			}
 		}

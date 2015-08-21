@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			_eventPublisher.Publish(info, new PersonStateChangedEvent
 			{
-				PersonId = info.PersonId,
+				PersonId = info.Person.PersonId,
 				Timestamp = info.CurrentTime,
 				AdherenceWithPreviousActivity = info.Adherence.EventAdherenceForNewStateAndPreviousActivity(),
 				Adherence = info.Adherence.EventAdherence()

@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			_eventPublisher.Publish(info, new PersonActivityStartEvent
 			{
-				PersonId = info.PersonId,
+				PersonId = info.Person.PersonId,
 				StartTime = startTime,
 				Name = info.CurrentActivity.Name,
 				Adherence = info.Adherence.AdherenceForPreviousStateAndCurrentActivityForEvent(),

@@ -14,22 +14,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator
 		{
 			var adherenceChanged = false;
 			var actualAgentState = state.MakeAgentStateReadModel();
-			_aggregationDatas.AddOrUpdate(state.PersonId, guid =>
+			_aggregationDatas.AddOrUpdate(state.Person.PersonId, guid =>
 			{
 				adherenceChanged = true;
 				return new rtaAggregationData
 				{
 					AgentStateReadModel = actualAgentState,
-					SiteId = state.SiteId,
-					TeamId = state.TeamId
+					SiteId = state.Person.SiteId,
+					TeamId = state.Person.TeamId
 				};
 			}
 			, (guid, data) =>
 			{
 				adherenceChanged = !AdherenceInfo.AdherenceFor(data.AgentStateReadModel).Equals(state.AdherenceState);
 				data.AgentStateReadModel = actualAgentState;
-				data.TeamId = state.TeamId;
-				data.SiteId = state.SiteId;
+				data.TeamId = state.Person.TeamId;
+				data.SiteId = state.Person.SiteId;
 				return data;
 			});
 			return adherenceChanged;

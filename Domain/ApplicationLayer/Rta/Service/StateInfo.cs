@@ -1,12 +1,10 @@
 using System;
-using System.Drawing;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class StateInfo : IAdherenceAggregatorInfo
 	{
-		private readonly PersonOrganizationData _person;
 		private readonly DateTime _currentTime;
 		private readonly Lazy<Guid> _platformTypeId;
 		private readonly Lazy<string> _stateCode;
@@ -19,28 +17,25 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IScheduleLoader scheduleLoader,
 			IAppliedAdherence appliedAdherence)
 		{
-			var input = context.Input;
-			var person = context.Person;
-			var currentTime = context.CurrentTime;
+			Input = context.Input;
+			Person = context.Person;
+			_currentTime = context.CurrentTime;
 
-			Input = input;
-			_person = person;
-			_currentTime = currentTime;
+			Previous = context.PreviousStateInfoLoader.Load(context.Person.PersonId);
 
-			Previous = context.PreviousStateInfoLoader.Load(person.PersonId);
+			_stateMapping = new Lazy<StateMapping>(() => stateMapper.StateFor(Person.BusinessUnitId, _platformTypeId.Value, _stateCode.Value, Input.StateDescription));
+			_alarmMapping = new Lazy<AlarmMapping>(() => stateMapper.AlarmFor(Person.BusinessUnitId, _platformTypeId.Value, _stateCode.Value, Schedule.CurrentActivityId()) ?? new AlarmMapping());
 
-			_stateMapping = new Lazy<StateMapping>(() => stateMapper.StateFor(person.BusinessUnitId, _platformTypeId.Value, _stateCode.Value, input.StateDescription));
-			_alarmMapping = new Lazy<AlarmMapping>(() => stateMapper.AlarmFor(person.BusinessUnitId, _platformTypeId.Value, _stateCode.Value, Schedule.CurrentActivityId()) ?? new AlarmMapping());
+			Schedule = new ScheduleInfo(scheduleLoader, Person.PersonId, _currentTime, Previous);
+			Adherence = new AdherenceInfo(Input, Person, Previous, _alarmMapping, Schedule, appliedAdherence, stateMapper);
 
-			Schedule = new ScheduleInfo(scheduleLoader, _person.PersonId, currentTime, Previous);
-			Adherence = new AdherenceInfo(input, _person, Previous, _alarmMapping, Schedule, appliedAdherence, stateMapper);
-
-			_platformTypeId = new Lazy<Guid>(() => string.IsNullOrEmpty(input.PlatformTypeId) ? Previous.PlatformTypeId : input.ParsedPlatformTypeId());
-			_stateCode = new Lazy<string>(() => input.StateCode ?? Previous.StateCode);
+			_platformTypeId = new Lazy<Guid>(() => string.IsNullOrEmpty(Input.PlatformTypeId) ? Previous.PlatformTypeId : Input.ParsedPlatformTypeId());
+			_stateCode = new Lazy<string>(() => Input.StateCode ?? Previous.StateCode);
 
 		}
 
 		public ExternalUserStateInputModel Input { get; private set; }
+		public PersonOrganizationData Person { get; private set; }
 		public PreviousStateInfo Previous { get; private set; }
 		public ScheduleInfo Schedule { get; private set; }
 		public AdherenceInfo Adherence { get; private set; }
@@ -59,12 +54,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public string StateGroupName { get { return _stateMapping.Value.StateGroupName; } }
 		public DateTime? BatchId { get { return Input.IsSnapshot ? Input.BatchId : Previous.BatchId; } }
 		public string SourceId { get { return Input.SourceId ?? Previous.SourceId; } }
-		public Guid PersonId { get { return _person.PersonId; } }
-		public Guid BusinessUnitId { get { return _person.BusinessUnitId; } }
-		public Guid TeamId { get { return _person.TeamId; } }
-		public Guid SiteId { get { return _person.SiteId; } }
-
-
 
 
 
@@ -102,7 +91,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				BatchId = BatchId,
 				NextStart = Schedule.NextActivityStartTime(),
 				OriginalDataSourceId = SourceId,
-				PersonId = PersonId,
+				PersonId = Person.PersonId,
 				PlatformTypeId = PlatformTypeId,
 				ReceivedTime = CurrentTime,
 				StaffingEffect = StaffingEffect,
@@ -113,9 +102,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				AlarmId = AlarmTypeId,
 				AlarmName = AlarmName,
 				AlarmStart = CurrentTime.AddTicks(AlarmThresholdTime),
-				BusinessUnitId = BusinessUnitId,
-				SiteId = SiteId,
-				TeamId = TeamId,
+				BusinessUnitId = Person.BusinessUnitId,
+				SiteId = Person.SiteId,
+				TeamId = Person.TeamId,
 				Color = AlarmDisplayColor,
 				Scheduled = Schedule.CurrentActivityName(),
 				ScheduledId = Schedule.CurrentActivityId(),

@@ -22,11 +22,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator
 
 		public IEnumerable<Interfaces.MessageBroker.Message> CreateNotification(IAdherenceAggregatorInfo state)
 		{
-			var actualAgentStateForTeam = _aggregationState.GetActualAgentStateForTeam(state.TeamId);
+			var actualAgentStateForTeam = _aggregationState.GetActualAgentStateForTeam(state.Person.TeamId);
 			var agentStates = actualAgentStateForTeam.Select(mapFrom);
 			return
 				agentStates.Batch(40)
-					.Select(s => createAgentsNotification(s, state.BusinessUnitId, state.TeamId));
+					.Select(s => createAgentsNotification(s, state.Person.BusinessUnitId, state.Person.TeamId));
 		}
 
 		private static AgentAdherenceStateInfo mapFrom(AgentStateReadModel agentStateReadModel)

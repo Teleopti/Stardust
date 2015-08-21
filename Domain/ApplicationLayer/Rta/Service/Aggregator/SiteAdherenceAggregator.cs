@@ -16,8 +16,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator
 
 		public Interfaces.MessageBroker.Message CreateNotification(IAdherenceAggregatorInfo state)
 		{
-			var numberOfOutOfAdherence = _aggregationState.GetOutOfAdherenceForSite(state.SiteId);
-			return createSiteNotification(numberOfOutOfAdherence, state.BusinessUnitId, state.SiteId);
+			var numberOfOutOfAdherence = _aggregationState.GetOutOfAdherenceForSite(state.Person.SiteId);
+			return createSiteNotification(numberOfOutOfAdherence, state.Person.BusinessUnitId, state.Person.SiteId);
 		}
 
 		private Interfaces.MessageBroker.Message createSiteNotification(int numberOfOutOfAdherence, Guid businessUnitId, Guid siteId)
