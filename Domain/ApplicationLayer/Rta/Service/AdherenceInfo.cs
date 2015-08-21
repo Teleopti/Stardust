@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		private readonly ExternalUserStateInputModel _input;
 		private readonly PersonOrganizationData _person;
-		private readonly Lazy<AlarmMapping> _alarmMapping;
+		private readonly StateAlarmInfo _stateAlarmInfo;
 		private readonly IAppliedAdherence _appliedAdherence;
 		private readonly IStateMapper _stateMapper;
 		private readonly Lazy<AdherenceState> _adherenceForPreviousState;
@@ -27,14 +27,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			ExternalUserStateInputModel input, 
 			PersonOrganizationData person,
 			StoredStateInfo stored,
-			Lazy<AlarmMapping> alarmMapping,
+			StateAlarmInfo stateAlarmInfo,
 			ScheduleInfo scheduleInfo, 
 			IAppliedAdherence appliedAdherence,
 			IStateMapper stateMapper)
 		{
 			_input = input;
 			_person = person;
-			_alarmMapping = alarmMapping;
+			_stateAlarmInfo = stateAlarmInfo;
 			_appliedAdherence = appliedAdherence;
 			_stateMapper = stateMapper;
 
@@ -53,14 +53,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return _appliedAdherence.StateToEvent(_adherenceForNewStateAndPreviousActivity.Value);
 		}
 
-		public EventAdherence AdherenceForPreviousStateAndCurrentActivityForEvent()
+		public EventAdherence EventAdherenceForPreviousStateAndCurrentActivity()
 		{
 			return _appliedAdherence.StateToEvent(_adherenceForPreviousStateAndCurrentActivity.Value);
 		}
 
 		public AdherenceState AdherenceState()
 		{
-			return _alarmMapping.Value.Adherence;
+			return _stateAlarmInfo.Adherence();
 		}
 
 		public AdherenceState AdherenceForPreviousState()

@@ -226,7 +226,7 @@
     <Compile Include="ApplicationLayer\Rta\Service\IScheduleLoader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\PreviousStateInfoLoader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ScheduleLoader.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\StateInfo2.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\StateAlarmInfo.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModelBuilders\AdherencePercentageViewModel.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ActivityEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ActualAgentStateExtension.cs" />
