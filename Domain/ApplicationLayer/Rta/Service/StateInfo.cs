@@ -5,7 +5,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class StateInfo : IAdherenceAggregatorInfo
 	{
-		private readonly DateTime _currentTime;
 		private readonly Lazy<Guid> _platformTypeId;
 		private readonly Lazy<string> _stateCode;
 		private readonly Lazy<StateMapping> _stateMapping;
@@ -17,58 +16,33 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IScheduleLoader scheduleLoader,
 			IAppliedAdherence appliedAdherence)
 		{
-			Input = context.Input;
+			input = context.Input;
 			Person = context.Person;
-			_currentTime = context.CurrentTime;
+			CurrentTime = context.CurrentTime;
 
 			Previous = context.PreviousStateInfoLoader.Load(context.Person.PersonId);
 
-			_stateMapping = new Lazy<StateMapping>(() => stateMapper.StateFor(Person.BusinessUnitId, _platformTypeId.Value, _stateCode.Value, Input.StateDescription));
+			_stateMapping = new Lazy<StateMapping>(() => stateMapper.StateFor(Person.BusinessUnitId, _platformTypeId.Value, _stateCode.Value, input.StateDescription));
 			_alarmMapping = new Lazy<AlarmMapping>(() => stateMapper.AlarmFor(Person.BusinessUnitId, _platformTypeId.Value, _stateCode.Value, Schedule.CurrentActivityId()) ?? new AlarmMapping());
 
-			Schedule = new ScheduleInfo(scheduleLoader, Person.PersonId, _currentTime, Previous);
-			Adherence = new AdherenceInfo(Input, Person, Previous, _alarmMapping, Schedule, appliedAdherence, stateMapper);
+			Schedule = new ScheduleInfo(scheduleLoader, Person.PersonId, CurrentTime, Previous);
+			Adherence = new AdherenceInfo(input, Person, Previous, _alarmMapping, Schedule, appliedAdherence, stateMapper);
 
-			_platformTypeId = new Lazy<Guid>(() => string.IsNullOrEmpty(Input.PlatformTypeId) ? Previous.PlatformTypeId : Input.ParsedPlatformTypeId());
-			_stateCode = new Lazy<string>(() => Input.StateCode ?? Previous.StateCode);
+			_platformTypeId = new Lazy<Guid>(() => string.IsNullOrEmpty(input.PlatformTypeId) ? Previous.PlatformTypeId : input.ParsedPlatformTypeId());
+			_stateCode = new Lazy<string>(() => input.StateCode ?? Previous.StateCode);
 
 		}
 
-		public ExternalUserStateInputModel Input { get; private set; }
+		private ExternalUserStateInputModel input { get; set; }
 		public PersonOrganizationData Person { get; private set; }
 		public PreviousStateInfo Previous { get; private set; }
 		public ScheduleInfo Schedule { get; private set; }
 		public AdherenceInfo Adherence { get; private set; }
-
-		public DateTime CurrentTime { get { return _currentTime; } }
-		public string StateCode { get { return _stateCode.Value; } }
-		public Guid PlatformTypeId { get { return _platformTypeId.Value; } }
-		public Guid? StateGroupId { get { return _stateMapping.Value.StateGroupId; } }
-		public Guid? AlarmTypeId { get { return _alarmMapping.Value.AlarmTypeId; } }
-		public DateTime? AlarmTypeStartTime { get { return _alarmMapping.Value.AlarmTypeId == Previous.AlarmTypeId ? Previous.AlarmTypeStartTime : _currentTime; } }
-		public double? StaffingEffect { get { return _alarmMapping.Value.StaffingEffect; } }
-		public AdherenceState? AdherenceState2 { get { return _alarmMapping.Value.Adherence; } }
-		public string AlarmName { get { return _alarmMapping.Value.AlarmName; } }
-		public long AlarmThresholdTime { get { return _alarmMapping.Value.ThresholdTime; } }
-		public int? AlarmDisplayColor { get { return _alarmMapping.Value.DisplayColor; } }
-		public string StateGroupName { get { return _stateMapping.Value.StateGroupName; } }
-		public DateTime? BatchId { get { return Input.IsSnapshot ? Input.BatchId : Previous.BatchId; } }
-		public string SourceId { get { return Input.SourceId ?? Previous.SourceId; } }
-
-
-
-		public ScheduleLayer CurrentActivity { get { return Schedule.CurrentActivity(); } }
-		public ScheduleLayer PreviousActivity { get { return Schedule.PreviousActivity(); } }
-		public ScheduleLayer NextActivityInShift { get { return Schedule.NextActivityInShift(); } }
-		public DateTime CurrentShiftStartTime { get { return Schedule.CurrentShiftStartTime; } }
-		public DateTime CurrentShiftEndTime { get { return Schedule.CurrentShiftEndTime; } }
-
-		public DateTime ShiftStartTimeForPreviousActivity { get { return Schedule.ShiftStartTimeForPreviousActivity; } }
-		public DateTime ShiftEndTimeForPreviousActivity { get { return Schedule.ShiftEndTimeForPreviousActivity; } }
-
+		public DateTime CurrentTime { get; private set;  }
+		
 		public AdherenceState AdherenceState { get { return Adherence.AdherenceState(); } }
 
-		public Guid? CurrentStateId { get { return StateGroupId; } }
+		public Guid? CurrentStateId { get { return _stateMapping.Value.StateGroupId; } }
 		public Guid? PreviousStateId { get { return Previous.StateGroupId; } }
 		public Guid? PreviousActivityId { get { return Previous.ActivityId; } }
 
@@ -77,7 +51,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			get
 			{
 				return !Schedule.CurrentActivityId().Equals(Previous.ActivityId) ||
-					   !StateGroupId.Equals(Previous.StateGroupId) ||
+					   !_stateMapping.Value.StateGroupId.Equals(Previous.StateGroupId) ||
 					   !Schedule.NextActivityId().Equals(Previous.NextActivityId) ||
 					   !Schedule.NextActivityStartTime().Equals(Previous.NextActivityStartTime)
 					;
@@ -88,32 +62,41 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			return new AgentStateReadModel
 			{
-				BatchId = BatchId,
+				BatchId = batchId(),
 				NextStart = Schedule.NextActivityStartTime(),
-				OriginalDataSourceId = SourceId,
+				OriginalDataSourceId = input.SourceId ?? Previous.SourceId,
 				PersonId = Person.PersonId,
-				PlatformTypeId = PlatformTypeId,
+				PlatformTypeId = _platformTypeId.Value,
 				ReceivedTime = CurrentTime,
-				StaffingEffect = StaffingEffect,
-				Adherence = (int?) AdherenceState2,
-				StateCode = StateCode,
-				StateId = StateGroupId,
-				StateStart = AlarmTypeStartTime,
-				AlarmId = AlarmTypeId,
-				AlarmName = AlarmName,
-				AlarmStart = CurrentTime.AddTicks(AlarmThresholdTime),
+				StaffingEffect = _alarmMapping.Value.StaffingEffect,
+				Adherence = (int?)_alarmMapping.Value.Adherence,
+				StateCode = _stateCode.Value,
+				StateId = _stateMapping.Value.StateGroupId,
+				StateStart = stateStart(),
+				AlarmId = _alarmMapping.Value.AlarmTypeId,
+				AlarmName = _alarmMapping.Value.AlarmName,
+				AlarmStart = CurrentTime.AddTicks(_alarmMapping.Value.ThresholdTime),
 				BusinessUnitId = Person.BusinessUnitId,
 				SiteId = Person.SiteId,
 				TeamId = Person.TeamId,
-				Color = AlarmDisplayColor,
+				Color = _alarmMapping.Value.DisplayColor,
 				Scheduled = Schedule.CurrentActivityName(),
 				ScheduledId = Schedule.CurrentActivityId(),
 				ScheduledNext = Schedule.NextActivityName(),
 				ScheduledNextId = Schedule.NextActivityId(),
-				State = StateGroupName
+				State = _stateMapping.Value.StateGroupName
 			};
 		}
-		
+
+		private DateTime? batchId()
+		{
+			return input.IsSnapshot ? input.BatchId : Previous.BatchId;
+		}
+
+		private DateTime? stateStart()
+		{
+			return _alarmMapping.Value.AlarmTypeId == Previous.AlarmTypeId ? Previous.AlarmTypeStartTime : CurrentTime;
+		}
 	}
 
 }

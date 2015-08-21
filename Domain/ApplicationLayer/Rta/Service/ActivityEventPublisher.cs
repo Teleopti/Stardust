@@ -15,20 +15,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public void Publish(StateInfo info)
 		{
-			if (info.Schedule.CurrentActivityId() == info.PreviousActivityId || info.CurrentActivity == null) return;
+			var currentActivity = info.Schedule.CurrentActivity();
+			if (info.Schedule.CurrentActivityId() == info.PreviousActivityId || currentActivity == null) return;
 
 			var previousStateTime = info.Previous.ReceivedTime;
-			var activityStartedInThePast = info.CurrentActivity.StartDateTime < previousStateTime;
+			var activityStartedInThePast = currentActivity.StartDateTime < previousStateTime;
 			var startTime = activityStartedInThePast
 				? previousStateTime
-				: info.CurrentActivity.StartDateTime;
+				: currentActivity.StartDateTime;
 			var adherenceChanged = info.Adherence.AdherenceForPreviousState() != info.Adherence.AdherenceForPreviousStateAndCurrentActivity();
 
 			_eventPublisher.Publish(info, new PersonActivityStartEvent
 			{
 				PersonId = info.Person.PersonId,
 				StartTime = startTime,
-				Name = info.CurrentActivity.Name,
+				Name = currentActivity.Name,
 				Adherence = info.Adherence.AdherenceForPreviousStateAndCurrentActivityForEvent(),
 			});
 

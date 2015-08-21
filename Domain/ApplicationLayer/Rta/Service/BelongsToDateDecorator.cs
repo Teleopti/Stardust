@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			dynamic x = @event;
 			x.BelongsToDate = info.Schedule.BelongsToDate;
 			if (@event is PersonShiftEndEvent)
-				x.BelongsToDate = info.PreviousActivity.BelongsToDate;
+				x.BelongsToDate = info.Schedule.PreviousActivity().BelongsToDate;
 		}
 	}
 }
