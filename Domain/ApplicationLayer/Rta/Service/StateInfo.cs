@@ -7,7 +7,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		private readonly PersonOrganizationData _person;
 		private readonly DateTime _currentTime;
-		private readonly Lazy<CurrentAgentState> _currentState;
 		private readonly Lazy<Guid> _platformTypeId;
 		private readonly Lazy<string> _stateCode;
 		private readonly Lazy<StateMapping> _stateMapping;
@@ -30,12 +29,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			Previous = context.PreviousState(this);
 
-			_currentState = new Lazy<CurrentAgentState>(() => context.CurrentState(this));
 			_stateMapping = new Lazy<StateMapping>(() => stateMapper.StateFor(person.BusinessUnitId, _platformTypeId.Value, _stateCode.Value, input.StateDescription));
 			_alarmMapping = new Lazy<AlarmMapping>(() => stateMapper.AlarmFor(person.BusinessUnitId, _platformTypeId.Value, _stateCode.Value, Schedule.CurrentActivityId()) ?? new AlarmMapping());
 
 			Schedule = new ScheduleInfo(scheduleLoader, _person.PersonId, currentTime, Previous);
-			Adherence = new AdherenceInfo(input, _person, Previous, () => _currentState.Value, _alarmMapping, Schedule, appliedAdherence, stateMapper);
+			Adherence = new AdherenceInfo(input, _person, Previous, _alarmMapping, Schedule, appliedAdherence, stateMapper);
 
 			_platformTypeId = new Lazy<Guid>(() => string.IsNullOrEmpty(input.PlatformTypeId) ? Previous.PlatformTypeId : input.ParsedPlatformTypeId());
 			_stateCode = new Lazy<string>(() => input.StateCode ?? Previous.StateCode);
@@ -105,7 +103,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public AgentStateReadModel MakeAgentStateReadModel()
 		{
-			var state = _currentState.Value;
 			return new AgentStateReadModel
 			{
 				BatchId = BatchId,

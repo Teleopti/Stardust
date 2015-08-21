@@ -7,7 +7,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class RtaProcessContext
 	{
 		private readonly Func<PreviousStateInfo> _previousState;
-		private readonly Func<StateInfo, RtaProcessContext, CurrentAgentState> _currentState;
 		private readonly PersonOrganizationData _person;
 		private PreviousStateInfo _madePreviousStateInfo;
 
@@ -20,12 +19,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IAgentStateReadModelUpdater agentStateReadModelUpdater, 
 			IAgentStateMessageSender messageSender, 
 			IAdherenceAggregator adherenceAggregator,
-			Func<PreviousStateInfo> previousState,
-			Func<StateInfo, RtaProcessContext, CurrentAgentState> currentState 
+			Func<PreviousStateInfo> previousState
 			)
 		{
 			_previousState = previousState;
-			_currentState = currentState;
 			if (!personOrganizationProvider.PersonOrganizationData().TryGetValue(personId, out _person))
 				return;
 			_person.BusinessUnitId = businessUnitId;
@@ -51,11 +48,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				return _madePreviousStateInfo;
 			_madePreviousStateInfo = _previousState.Invoke();
 			return _madePreviousStateInfo;
-		}
-
-		public CurrentAgentState CurrentState(StateInfo info)
-		{
-			return _currentState.Invoke(info, this);
 		}
 	}
 }

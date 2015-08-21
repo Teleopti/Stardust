@@ -13,12 +13,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				StateGroupId = Guid.NewGuid()
 			};
 		}
-
-		public CurrentAgentState MakeCurrentStateFromPrevious(AgentStateReadModel fromStorage)
-		{
-			return new CurrentAgentState();
-		}
-
+		
 		public PreviousStateInfo MakePreviousState(Guid personId, AgentStateReadModel fromStorage)
 		{
 			if (fromStorage == null)
@@ -40,11 +35,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				StaffingEffect = fromStorage.StaffingEffect,
 				Adherence = (AdherenceState?) fromStorage.Adherence
 			};
-		}
-
-		public CurrentAgentState MakeCurrentState(StateInfo info)
-		{
-			return new CurrentAgentState();
 		}
 	}
 }

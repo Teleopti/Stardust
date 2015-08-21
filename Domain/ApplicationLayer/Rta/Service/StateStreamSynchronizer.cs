@@ -100,8 +100,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						null,
 						null, 
 						null,
-						() => _agentStateAssembler.MakeEmpty(s.PersonId),
-						(a, b) => _agentStateAssembler.MakeCurrentStateFromPrevious(s)
+						() => _agentStateAssembler.MakeEmpty(s.PersonId)
 						);
 					_processor.Process(context);
 				});

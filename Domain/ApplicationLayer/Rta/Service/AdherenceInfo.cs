@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			ExternalUserStateInputModel input, 
 			PersonOrganizationData person,
 			PreviousStateInfo previous,
-			Func<CurrentAgentState> currentState,
 			Lazy<AlarmMapping> alarmMapping,
 			ScheduleInfo scheduleInfo, 
 			IAppliedAdherence appliedAdherence,

@@ -251,8 +251,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					_agentStateReadModelUpdater,
 					_messageSender,
 					_adherenceAggregator,
-					() => _agentStateAssembler.MakePreviousState(personId, _agentStateReadModelReader.GetCurrentActualAgentState(personId)),
-					(info, context) => _agentStateAssembler.MakeCurrentState(info)
+					() => _agentStateAssembler.MakePreviousState(personId, _agentStateReadModelReader.GetCurrentActualAgentState(personId))
 					));
 		}
 
