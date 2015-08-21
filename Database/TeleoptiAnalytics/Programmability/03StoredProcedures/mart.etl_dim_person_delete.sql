@@ -18,6 +18,11 @@ CREATE PROCEDURE [mart].[etl_dim_person_delete]
 	
 AS
 
+create table #top (person_id int)
+
+insert into #top
+select top(10) person_id from mart.dim_person where to_be_deleted = 1
+
 --------------------------------------------------------------------------
 -- Delete all fact for ToBeDeleted dimensions
 -------------------------------------------------------------------------
@@ -25,84 +30,68 @@ AS
 -- fact_schedule
 DELETE FROM mart.fact_schedule 
 FROM mart.fact_schedule AS fact
-    INNER JOIN mart.dim_person AS dim
+    INNER JOIN #top AS dim
     ON fact.person_id = dim.person_id
-WHERE dim.to_be_deleted = 1
-
--- fact_contract
---DELETE FROM mart.fact_contract 
---FROM mart.fact_contract AS fact
---    INNER JOIN mart.dim_person AS dim
---    ON fact.person_id = dim.person_id
---WHERE dim.to_be_deleted = 1
 
 -- fact_schedule_preference
 DELETE FROM mart.fact_schedule_preference
 FROM mart.fact_schedule_preference AS fact
-    INNER JOIN mart.dim_person AS dim
+    INNER JOIN #top AS dim
     ON fact.person_id = dim.person_id
-WHERE dim.to_be_deleted = 1
 
 -- fact_schedule_day_count
 DELETE FROM mart.fact_schedule_day_count
 FROM mart.fact_schedule_day_count AS fact
-    INNER JOIN mart.dim_person AS dim
+    INNER JOIN #top AS dim
     ON fact.person_id = dim.person_id
-WHERE dim.to_be_deleted = 1
 
 -- fact_schedule_deviation
 DELETE FROM mart.fact_schedule_deviation
 FROM mart.fact_schedule_deviation AS fact
-    INNER JOIN mart.dim_person AS dim
+    INNER JOIN #top AS dim
     ON fact.person_id = dim.person_id
-WHERE dim.to_be_deleted = 1
 
 -- bridge_acd_login_person
 DELETE FROM mart.bridge_acd_login_person
-FROM mart.bridge_acd_login_person AS bridge
-    INNER JOIN mart.dim_person AS dim
-    ON bridge.person_id = dim.person_id
-WHERE dim.to_be_deleted = 1
+FROM mart.bridge_acd_login_person AS fact
+    INNER JOIN #top AS dim
+    ON fact.person_id = dim.person_id
 
 --bridge_group_page_person
 DELETE FROM mart.bridge_group_page_person
-FROM mart.bridge_group_page_person AS bridge
-   INNER JOIN mart.dim_person AS dim
-    ON bridge.person_id = dim.person_id
-WHERE dim.to_be_deleted = 1
+FROM mart.bridge_group_page_person AS fact
+    INNER JOIN #top AS dim
+    ON fact.person_id = dim.person_id
 
 DELETE FROM mart.fact_requested_days
 FROM mart.fact_requested_days AS fact
-   INNER JOIN mart.dim_person AS dim
+    INNER JOIN #top AS dim
     ON fact.person_id = dim.person_id
-WHERE dim.to_be_deleted = 1
 
 DELETE FROM mart.fact_request
 FROM mart.fact_request AS fact
-   INNER JOIN mart.dim_person AS dim
+    INNER JOIN #top AS dim
     ON fact.person_id = dim.person_id
-WHERE dim.to_be_deleted = 1
 
 DELETE FROM mart.fact_agent_skill
 FROM mart.fact_agent_skill AS fact
-   INNER JOIN mart.dim_person AS dim
+    INNER JOIN #top AS dim
     ON fact.person_id = dim.person_id
-WHERE dim.to_be_deleted = 1
 
 DELETE FROM mart.fact_agent_state
 FROM mart.fact_agent_state AS fact
-   INNER JOIN mart.dim_person AS dim
+    INNER JOIN #top AS dim
     ON fact.person_id = dim.person_id
-WHERE dim.to_be_deleted = 1
 
 DELETE FROM mart.fact_hourly_availability
 FROM mart.fact_hourly_availability AS fact
-   INNER JOIN mart.dim_person AS dim
+    INNER JOIN #top AS dim
     ON fact.person_id = dim.person_id
-WHERE dim.to_be_deleted = 1
 
 -- dim_person
-DELETE FROM mart.dim_person
-WHERE to_be_deleted = 1
+DELETE mart.dim_person
+FROM mart.dim_person p
+INNER JOIN #top t
+ON p.person_id = t.person_id
 
 GO
