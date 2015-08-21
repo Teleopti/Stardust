@@ -5,9 +5,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class AgentStateAssembler
 	{
-		public PreviousAgentState MakeEmpty(Guid personId)
+		public PreviousStateInfo MakeEmpty(Guid personId)
 		{
-			return new PreviousAgentState
+			return new PreviousStateInfo
 			{
 				PersonId = personId,
 				StateGroupId = Guid.NewGuid()
@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			return new CurrentAgentState
 			{
-				ActivityId = fromStorage.ScheduledId,
 				NextActivityId = fromStorage.ScheduledNextId,
 				NextActivityStartTime = fromStorage.NextStart,
 				AlarmTypeId = fromStorage.AlarmId,
@@ -28,11 +27,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			};
 		}
 
-		public PreviousAgentState MakePreviousState(Guid personId, AgentStateReadModel fromStorage)
+		public PreviousStateInfo MakePreviousState(Guid personId, AgentStateReadModel fromStorage)
 		{
 			if (fromStorage == null)
 				return MakeEmpty(personId);
-			return new PreviousAgentState
+			return new PreviousStateInfo
 			{
 				PersonId = fromStorage.PersonId,
 				BatchId = fromStorage.BatchId,
@@ -55,7 +54,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			return new CurrentAgentState
 			{
-				ActivityId = info.Schedule.CurrentActivityId(),
 				AlarmTypeId = info.AlarmTypeId,
 				AlarmTypeStartTime = info.AlarmTypeStartTime,
 				NextActivityId = info.Schedule.NextActivityId(),

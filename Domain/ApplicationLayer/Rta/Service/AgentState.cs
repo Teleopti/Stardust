@@ -2,7 +2,7 @@ using System;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
-	public class PreviousAgentState
+	public class PreviousStateInfo
 	{
 		public DateTime? BatchId { get; set; }
 		public Guid PlatformTypeId { get; set; }
@@ -25,8 +25,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 	public class CurrentAgentState
 	{
-		public Guid? ActivityId { get; set; }
-
 		public Guid? NextActivityId { get; set; }
 		public DateTime? NextActivityStartTime { get; set; }
 
