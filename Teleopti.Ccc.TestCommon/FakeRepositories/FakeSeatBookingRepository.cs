@@ -126,6 +126,15 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		}
 
+		public IList<ISeatBooking> LoadSeatBookingsIntersectingDay (DateOnly dateOnly, ISeatMapLocation location)
+		{
+			var requestedDate = new DateTimePeriod(dateOnly.Date, dateOnly.Date.AddDays(1).AddSeconds(-1));
+			return _seatBookings
+				.Where(booking => !((requestedDate.EndDateTime < booking.StartDateTime) || (requestedDate.StartDateTime > booking.EndDateTime))
+					&& location == booking.Seat.Parent)
+				.ToList();
+		}
+
 		private static PersonScheduleWithSeatBooking mapBookingToScheduleWithSeatBooking (ISeatBooking booking)
 		{
 			var team = booking.Person.MyTeam (booking.BelongsToDate);

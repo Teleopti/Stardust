@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 			_seatMapLocationRepository = new FakeSeatMapRepository ();
 
 			_seatBookingReportProvider = new SeatBookingReportProvider(_seatBookingRepository, _seatMapLocationRepository, new FakeTeamRepository());
-			_team = createTeam("Team One");
+			_team = SeatManagementProviderTestUtils.CreateTeam ("Team One");
 			_location = new SeatMapLocation() { Name = "Location" };
 			_location.SetId (Guid.NewGuid());
 
@@ -41,9 +41,9 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 		{
 			var startDate = new DateOnly(2015, 03, 02);
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(startDate, _team);
-			var seatBooking = createSeatBooking(person, startDate, new DateTime(2015, 03, 02, 8, 0, 0), new DateTime(2015, 03, 02, 13, 0, 0));
+			var seatBooking = SeatManagementProviderTestUtils.CreateSeatBooking(person, startDate, new DateTime(2015, 03, 02, 8, 0, 0), new DateTime(2015, 03, 02, 13, 0, 0));
 
-			seatBooking.Book(createSeat("Seat One", 1, _location));
+			seatBooking.Book(_location.AddSeat("Seat One", 1));
 			_seatBookingRepository.Add(seatBooking);
 
 			var criteria = new SeatBookingReportCriteria()
@@ -66,11 +66,11 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 		{
 			var startDate = new DateOnly(2015, 03, 02);
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(startDate, _team);
-			var seatBooking = createSeatBooking(person, startDate, new DateTime(2015, 03, 02, 8, 0, 0), new DateTime(2015, 03, 02, 13, 0, 0));
-			var seatBooking2 = createSeatBooking(person, startDate.AddDays(1), new DateTime(2015, 03, 03, 8, 0, 0), new DateTime(2015, 03, 03, 12, 0, 0));
-			var seatBooking3 = createSeatBooking(person, startDate.AddDays(1), new DateTime(2015, 03, 03, 13, 0, 0), new DateTime(2015, 03, 03, 19, 0, 0));
+			var seatBooking = SeatManagementProviderTestUtils.CreateSeatBooking(person, startDate, new DateTime(2015, 03, 02, 8, 0, 0), new DateTime(2015, 03, 02, 13, 0, 0));
+			var seatBooking2 = SeatManagementProviderTestUtils.CreateSeatBooking(person, startDate.AddDays(1), new DateTime(2015, 03, 03, 8, 0, 0), new DateTime(2015, 03, 03, 12, 0, 0));
+			var seatBooking3 = SeatManagementProviderTestUtils.CreateSeatBooking(person, startDate.AddDays(1), new DateTime(2015, 03, 03, 13, 0, 0), new DateTime(2015, 03, 03, 19, 0, 0));
 
-			var seatOne = createSeat("Seat One", 1, _location);
+			var seatOne = _location.AddSeat ("Seat One", 1);
 
 			seatBooking.Book(seatOne);
 			seatBooking2.Book(seatOne);
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 		public void ShouldGroupBookingsByTeam()
 		{
 			var startDate = new DateOnly(2015, 03, 02);
-			var team2 = createTeam("Team Two");
+			var team2 = SeatManagementProviderTestUtils.CreateTeam("Team Two");
 
 			createBookingsForTwoTeams(startDate, team2);
 
@@ -118,25 +118,6 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 		}
 
 
-		private static Team createTeam(String name)
-		{
-			var team = new Team() { Description = new Description(name) };
-			team.SetId(Guid.NewGuid());
-			return team;
-		}
-
-		private static Seat createSeat(String name, int priority, SeatMapLocation location)
-		{
-			return location.AddSeat(name, priority);
-		}
-
-		private static SeatBooking createSeatBooking(IPerson person, DateOnly belongsToDate, DateTime startDateTime, DateTime endDateTime)
-		{
-			var seatBooking = new SeatBooking(person, belongsToDate, startDateTime, endDateTime);
-			seatBooking.SetId(Guid.NewGuid());
-			return seatBooking;
-		}
-
 		private void createBookingsForTwoTeams(DateOnly startDate, Team team2)
 		{
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(startDate, _team);
@@ -145,14 +126,14 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 
 			var seatBookings = new List<SeatBooking>()
 			{
-				createSeatBooking (person, startDate, new DateTime (2015, 03, 02, 8, 0, 0), new DateTime (2015, 03, 02, 13, 0, 0)),
-				createSeatBooking (person2, startDate, new DateTime (2015, 03, 02, 8, 0, 0), new DateTime (2015, 03, 02, 13, 0, 0)),
-				createSeatBooking (person3, startDate, new DateTime (2015, 03, 02, 8, 0, 0), new DateTime (2015, 03, 02, 13, 0, 0))
+				SeatManagementProviderTestUtils.CreateSeatBooking (person, startDate, new DateTime (2015, 03, 02, 8, 0, 0), new DateTime (2015, 03, 02, 13, 0, 0)),
+				SeatManagementProviderTestUtils.CreateSeatBooking (person2, startDate, new DateTime (2015, 03, 02, 8, 0, 0), new DateTime (2015, 03, 02, 13, 0, 0)),
+				SeatManagementProviderTestUtils.CreateSeatBooking (person3, startDate, new DateTime (2015, 03, 02, 8, 0, 0), new DateTime (2015, 03, 02, 13, 0, 0))
 			};
 
-			seatBookings[0].Book(createSeat("Seat One", 1, _location));
-			seatBookings[1].Book(createSeat("Seat Two", 1, _location));
-			seatBookings[2].Book(createSeat("Seat Three", 1, _location));
+			seatBookings[0].Book(_location.AddSeat("Seat One", 1 ));
+			seatBookings[1].Book(_location.AddSeat("Seat Two", 1 ));
+			seatBookings[2].Book(_location.AddSeat("Seat Three", 1));
 
 			_seatBookingRepository.AddRange(seatBookings);
 		}

@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ISeatMapLocation LoadAggregate (Guid id)
 		{
-			throw new NotImplementedException();
+			return Get (id);
 		}
 
 		public IEnumerator<ISeatMapLocation> GetEnumerator()

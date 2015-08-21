@@ -11,43 +11,75 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 	public class SeatMapProvider : ISeatMapProvider
 	{
 		private readonly ISeatMapLocationRepository _seatMapLocationRepository;
+		private readonly ISeatBookingRepository _seatMapBookingRepository;
 
 		protected SeatMapProvider()
 		{
 		}
 
-		public SeatMapProvider(ISeatMapLocationRepository seatMapLocationRepository)
+		public SeatMapProvider(ISeatMapLocationRepository seatMapLocationRepository, ISeatBookingRepository seatMapBookingRepository)
 		{
 			_seatMapLocationRepository = seatMapLocationRepository;
+			_seatMapBookingRepository = seatMapBookingRepository;
 		}
+
 
 		public LocationViewModel Get(Guid? id)
 		{
-			LocationViewModel locationVM = null;
+			var seatMapLocation = getSeatMapLocation(id);
+			return seatMapLocation != null ? buildLocationViewModel(seatMapLocation, false) : null;
+		}
 
+		public LocationViewModel Get(Guid? id, DateOnly bookingDate)
+		{
+			var seatMapLocation = getSeatMapLocation(id);
+			return seatMapLocation != null ? buildLocationViewModel(seatMapLocation, true) : null;
+		
+		}
+
+		private SeatMapLocation getSeatMapLocation(Guid? id)
+		{
 			var seatMapLocation = id.HasValue
 				? _seatMapLocationRepository.LoadAggregate(id.Value) as SeatMapLocation
 				: _seatMapLocationRepository.LoadRootSeatMap() as SeatMapLocation;
+			return seatMapLocation;
+		}
 
-			if (seatMapLocation != null)
+		private static LocationViewModel buildLocationViewModel (SeatMapLocation seatMapLocation, bool includeSeatAndOccupancy)
+		{
+			var parentLocation = seatMapLocation.ParentLocation;
+			var parentId = parentLocation != null ? parentLocation.Id : null;
+
+			var locationVM = new LocationViewModel()
 			{
-				var parentLocation = seatMapLocation.ParentLocation;
-				var parentId = parentLocation != null ? parentLocation.Id : null;
+				Id = seatMapLocation.Id.Value,
+				Name = seatMapLocation.Name,
+				ParentId = parentId != null ? parentId.Value : Guid.Empty,
+				SeatMapJsonData = seatMapLocation.SeatMapJsonData
+			};
 
-				locationVM = new LocationViewModel()
-				{
-					Id = seatMapLocation.Id.Value,
-					Name = seatMapLocation.Name,
-					ParentId = parentId != null ? parentId.Value : Guid.Empty,
-					SeatMapJsonData = seatMapLocation.SeatMapJsonData
-				};
-
-				buildBreadCrumbInformation(locationVM, seatMapLocation);
-
+			if (includeSeatAndOccupancy)
+			{
+				locationVM.Seats = getSeatViewModels (seatMapLocation);
 			}
+			
+			buildBreadCrumbInformation (locationVM, seatMapLocation);
 			return locationVM;
 		}
 
+		private static List<SeatViewModel> getSeatViewModels(ISeatMapLocation location)
+		{
+			if (location.Seats != null)
+			{
+				return location.Seats.Select (seat => new SeatViewModel()
+				{
+					Id = seat.Id.Value, Name = seat.Name
+				}).ToList();
+			}
+
+			return null;
+		}
+		
 		private static void buildBreadCrumbInformation(LocationViewModel seatMapLocationViewModel, SeatMapLocation seatMapLocation)
 		{
 			if (seatMapLocation == null) return;

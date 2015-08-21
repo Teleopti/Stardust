@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SeatPlanner.Controllers
 	internal class SeatMapControllerTest
 	{
 		private ISeatMapLocationRepository _seatMapLocationRepository ;
+		private ISeatBookingRepository _seatBookingRepository;
 		private SeatMapController _seatMapController;
 		private SeatMapProvider _seatMapProvider;
 		private ICommandDispatcher _commandDispatcher;
@@ -25,9 +26,10 @@ namespace Teleopti.Ccc.WebTest.Areas.SeatPlanner.Controllers
 		public void Setup()
 		{
 			_seatMapLocationRepository = MockRepository.GenerateMock<ISeatMapLocationRepository>();
+			_seatBookingRepository = MockRepository.GenerateMock<ISeatBookingRepository>();
 			_commandDispatcher = MockRepository.GenerateMock<ICommandDispatcher>();
 			_loggedOnUser = new FakeLoggedOnUser();
-			_seatMapProvider = new SeatMapProvider(_seatMapLocationRepository);
+			_seatMapProvider = new SeatMapProvider(_seatMapLocationRepository, _seatBookingRepository);
 			_seatMapController = new SeatMapController(_seatMapProvider, _commandDispatcher,_loggedOnUser );
 		}
 

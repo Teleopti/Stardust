@@ -6,5 +6,6 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels
 	{
 		public Guid Id { get; set; }
 		public String Name { get; set; }
+		public bool IsOccupied { get; set; }
 	}
 }
