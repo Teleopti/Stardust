@@ -487,6 +487,11 @@
     <Compile Include="Areas\Outbound\Models\CampaignViewModel.cs" />
     <Compile Include="Areas\Outbound\Controllers\OutboundController.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\IOutboundCampaignPersister.cs" />
+    <Compile Include="Areas\People\Controllers\PeopleCommandController.cs" />
+    <Compile Include="Areas\People\Controllers\PeopleCommandInput.cs" />
+    <Compile Include="Areas\People\Controllers\PeopleDataController.cs" />
+    <Compile Include="Areas\People\Controllers\PersonSkillModel.cs" />
+    <Compile Include="Areas\People\Controllers\ResultModel.cs" />
     <Compile Include="Areas\People\Core\IoC\PeopleAreaModule.cs" />
     <Compile Include="Areas\People\Core\Persisters\IPeoplePersister.cs" />
     <Compile Include="Areas\People\Core\Persisters\IUserValidator.cs" />
@@ -2155,6 +2160,7 @@
   <ItemGroup>
     <Folder Include="Areas\Mart\Views\Shared\" />
     <Folder Include="Areas\MyTime\Core\BadgeLeaderBoardReport\DataProvider\" />
+    <Folder Include="Areas\People\Views\PeopleData\" />
     <Folder Include="Areas\PerformanceTool\Content\Templates\" />
     <Folder Include="Areas\PerformanceTool\Views\Dangerous\" />
     <Folder Include="Areas\ResourcePlanner\Views\Optimization\" />

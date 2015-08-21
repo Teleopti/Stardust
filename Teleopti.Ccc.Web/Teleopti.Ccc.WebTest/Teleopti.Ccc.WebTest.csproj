@@ -261,6 +261,9 @@
     <Compile Include="Areas\Outbound\Core\OutboundCampaignPersisterTest.cs" />
     <Compile Include="Areas\Outbound\Core\Campaign\Mapping\OutboundCampaignViewModelMapperTests.cs" />
     <Compile Include="Areas\Outbound\IoC\OutboundAreaModuleTest.cs" />
+    <Compile Include="Areas\People\PeopleDataControllerTest.cs" />
+    <Compile Include="Areas\People\AdjustSkillControllerTest.cs" />
+    <Compile Include="Areas\People\PeopleCommandTestAttribute.cs" />
     <Compile Include="Areas\People\PeoplePersisterTest.cs" />
     <Compile Include="Areas\People\Providers\PeopleSearchProviderTest.cs" />
     <Compile Include="Areas\Permissions\ApplicationFunctionsControllerTest.cs" />
