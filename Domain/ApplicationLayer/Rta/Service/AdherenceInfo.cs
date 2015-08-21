@@ -16,9 +16,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		private readonly ExternalUserStateInputModel _input;
 		private readonly PersonOrganizationData _person;
+		private readonly Lazy<AlarmMapping> _alarmMapping;
 		private readonly IAppliedAdherence _appliedAdherence;
 		private readonly IStateMapper _stateMapper;
-		private readonly Lazy<AdherenceState> _adherence;
 		private readonly Lazy<AdherenceState> _adherenceForPreviousState;
 		private readonly Lazy<AdherenceState> _adherenceForPreviousStateAndCurrentActivity;
 		private readonly Lazy<AdherenceState> _adherenceForNewStateAndPreviousActivity;
@@ -28,16 +28,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			PersonOrganizationData person,
 			PreviousStateInfo previous,
 			Func<CurrentAgentState> currentState,
+			Lazy<AlarmMapping> alarmMapping,
 			ScheduleInfo scheduleInfo, 
 			IAppliedAdherence appliedAdherence,
 			IStateMapper stateMapper)
 		{
 			_input = input;
 			_person = person;
+			_alarmMapping = alarmMapping;
 			_appliedAdherence = appliedAdherence;
 			_stateMapper = stateMapper;
 
-			_adherence = new Lazy<AdherenceState>(() => adherenceFor(currentState()));
 			_adherenceForPreviousState = new Lazy<AdherenceState>(() => adherenceFor(previous));
 			_adherenceForPreviousStateAndCurrentActivity = new Lazy<AdherenceState>(() => adherenceFor(previous.StateCode, previous.PlatformTypeId, scheduleInfo.CurrentActivityId()));
 			_adherenceForNewStateAndPreviousActivity = new Lazy<AdherenceState>(() => adherenceFor(_input.StateCode, _input.ParsedPlatformTypeId(), scheduleInfo.PreviousActivity()));
@@ -60,7 +61,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public AdherenceState AdherenceState()
 		{
-			return _adherence.Value;
+			return _alarmMapping.Value.Adherence;
 		}
 
 		public AdherenceState AdherenceForPreviousState()
@@ -73,11 +74,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return _adherenceForPreviousStateAndCurrentActivity.Value;
 		}
 		
-		private AdherenceState adherenceFor(CurrentAgentState state)
-		{
-			return state.Adherence.HasValue ? state.Adherence.Value : Service.AdherenceState.Unknown;
-		}
-
 		private AdherenceState adherenceFor(PreviousStateInfo stateInfo)
 		{
 			return stateInfo.Adherence.HasValue ? stateInfo.Adherence.Value : Service.AdherenceState.Unknown;

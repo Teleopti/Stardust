@@ -16,10 +16,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public CurrentAgentState MakeCurrentStateFromPrevious(AgentStateReadModel fromStorage)
 		{
-			return new CurrentAgentState
-			{
-				Adherence = (AdherenceState?) fromStorage.Adherence
-			};
+			return new CurrentAgentState();
 		}
 
 		public PreviousStateInfo MakePreviousState(Guid personId, AgentStateReadModel fromStorage)
@@ -47,10 +44,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public CurrentAgentState MakeCurrentState(StateInfo info)
 		{
-			return new CurrentAgentState
-			{
-				Adherence = info.AdherenceState2
-			};
+			return new CurrentAgentState();
 		}
 	}
 }

@@ -31,14 +31,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			Previous = context.PreviousState(this);
 
 			_currentState = new Lazy<CurrentAgentState>(() => context.CurrentState(this));
+			_stateMapping = new Lazy<StateMapping>(() => stateMapper.StateFor(person.BusinessUnitId, _platformTypeId.Value, _stateCode.Value, input.StateDescription));
+			_alarmMapping = new Lazy<AlarmMapping>(() => stateMapper.AlarmFor(person.BusinessUnitId, _platformTypeId.Value, _stateCode.Value, Schedule.CurrentActivityId()) ?? new AlarmMapping());
 
 			Schedule = new ScheduleInfo(scheduleLoader, _person.PersonId, currentTime, Previous);
-			Adherence = new AdherenceInfo(input, _person, Previous, () => _currentState.Value, Schedule, appliedAdherence, stateMapper);
+			Adherence = new AdherenceInfo(input, _person, Previous, () => _currentState.Value, _alarmMapping, Schedule, appliedAdherence, stateMapper);
 
 			_platformTypeId = new Lazy<Guid>(() => string.IsNullOrEmpty(input.PlatformTypeId) ? Previous.PlatformTypeId : input.ParsedPlatformTypeId());
 			_stateCode = new Lazy<string>(() => input.StateCode ?? Previous.StateCode);
-			_stateMapping = new Lazy<StateMapping>(() => stateMapper.StateFor(person.BusinessUnitId, _platformTypeId.Value, _stateCode.Value, input.StateDescription));
-			_alarmMapping = new Lazy<AlarmMapping>(() => stateMapper.AlarmFor(person.BusinessUnitId, _platformTypeId.Value, _stateCode.Value, Schedule.CurrentActivityId()) ?? new AlarmMapping());
 
 		}
 
@@ -54,7 +54,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public long AlarmThresholdTime { get { return _alarmMapping.Value.ThresholdTime; } }
 		public int? AlarmDisplayColor { get { return _alarmMapping.Value.DisplayColor; } }
 		public string StateGroupName { get { return _stateMapping.Value.StateGroupName; } }
-		public DateTime? BatchId { get { return _input.IsSnapshot ? _input.BatchId : Previous.BatchId; } }
+
+		public DateTime? BatchId
+		{
+			get
+			{
+				return _input.IsSnapshot ? _input.BatchId : Previous.BatchId;
+			}
+		}
+
 		public string SourceId { get { return _input.SourceId ?? Previous.SourceId; } }
 		public Guid PersonId { get { return _person.PersonId; } }
 		public Guid BusinessUnitId { get { return _person.BusinessUnitId; } }
@@ -107,7 +115,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				PlatformTypeId = PlatformTypeId,
 				ReceivedTime = CurrentTime,
 				StaffingEffect = StaffingEffect,
-				Adherence = (int?) state.Adherence,
+				Adherence = (int?) AdherenceState2,
 				StateCode = StateCode,
 				StateId = StateGroupId,
 				StateStart = AlarmTypeStartTime,

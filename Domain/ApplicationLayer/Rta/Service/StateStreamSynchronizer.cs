@@ -89,7 +89,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				states.ForEach(s =>
 				{
 					var context = new RtaProcessContext(
-						null,
+						new ExternalUserStateInputModel
+						{
+							StateCode = s.StateCode
+						}, 
 						s.PersonId,
 						s.BusinessUnitId,
 						currentTime,

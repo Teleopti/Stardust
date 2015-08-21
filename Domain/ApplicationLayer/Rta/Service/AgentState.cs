@@ -25,6 +25,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 	public class CurrentAgentState
 	{
-		public AdherenceState? Adherence { get; set; }
 	}
 }
