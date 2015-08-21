@@ -5,8 +5,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class StateInfo : IAdherenceAggregatorInfo
 	{
-		private readonly Guid _platformTypeId;
-		private readonly string _stateCode;
+		private Guid platformTypeId { get { return string.IsNullOrEmpty(input.PlatformTypeId) ? Stored.PlatformTypeId : input.ParsedPlatformTypeId(); } }
+		private string stateCode { get { return input.StateCode ?? Stored.StateCode; } }
+		private DateTime? stateStart { get { return State.AlarmTypeId() == Stored.AlarmTypeId ? Stored.AlarmTypeStartTime : CurrentTime; } }
+		private DateTime? batchId { get { return input.IsSnapshot ? input.BatchId : Stored.BatchId; } }
 
 		public StateInfo(
 			RtaProcessContext context,
@@ -19,15 +21,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			CurrentTime = context.CurrentTime;
 
 			Stored = context.PreviousStateInfoLoader.Load(context.Person.PersonId);
-
-			_stateCode = input.StateCode ?? Stored.StateCode;
-			_platformTypeId = string.IsNullOrEmpty(input.PlatformTypeId) ? Stored.PlatformTypeId : input.ParsedPlatformTypeId();
-
+			
 			Schedule = new ScheduleInfo(scheduleLoader, Person.PersonId, CurrentTime, Stored);
-			State = new StateAlarmInfo(_stateCode, _platformTypeId, input, Person, Stored, Schedule, stateMapper);
+			State = new StateAlarmInfo(stateCode, platformTypeId, input, Person, Stored, Schedule, stateMapper);
 			Adherence = new AdherenceInfo(input, Person, Stored, State, Schedule, appliedAdherence, stateMapper);
 		}
-
+		
 		private ExternalUserStateInputModel input { get; set; }
 		public PersonOrganizationData Person { get; private set; }
 		public StateAlarmInfo State { get; private set; }
@@ -40,17 +39,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			return new AgentStateReadModel
 			{
-				BatchId = batchId(),
+				BatchId = batchId,
 				NextStart = Schedule.NextActivityStartTime(),
 				OriginalDataSourceId = input.SourceId ?? Stored.SourceId,
 				PersonId = Person.PersonId,
-				PlatformTypeId = _platformTypeId,
+				PlatformTypeId = platformTypeId,
 				ReceivedTime = CurrentTime,
 				StaffingEffect = State.StaffingEffect(),
 				Adherence = (int?)State.Adherence(),
-				StateCode = _stateCode,
+				StateCode = stateCode,
 				StateId = State.StateGroupId(),
-				StateStart = stateStart(),
+				StateStart = stateStart,
 				AlarmId = State.AlarmTypeId(),
 				AlarmName = State.AlarmName(),
 				AlarmStart = CurrentTime.AddTicks(State.AlarmThresholdTime()),
@@ -66,15 +65,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			};
 		}
 
-		private DateTime? batchId()
-		{
-			return input.IsSnapshot ? input.BatchId : Stored.BatchId;
-		}
-
-		private DateTime? stateStart()
-		{
-			return State.AlarmTypeId() == Stored.AlarmTypeId ? Stored.AlarmTypeStartTime : CurrentTime;
-		}
 
 
 
