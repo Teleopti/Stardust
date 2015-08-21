@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -29,9 +26,10 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 		}
 	}
 
-	internal class FakeContractScheduleRepository : IContractScheduleRepository
+	public class FakeContractScheduleRepository : IContractScheduleRepository
 	{
-		private IList<IContractSchedule> contractSchedules = new List<IContractSchedule>(); 
+		private readonly IList<IContractSchedule> contractSchedules = new List<IContractSchedule>();
+
 		public void Add(IContractSchedule root)
 		{
 			contractSchedules.Add(root);
@@ -67,7 +65,8 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			throw new NotImplementedException();
 		}
 
-		public IUnitOfWork UnitOfWork { get; }
+		public IUnitOfWork UnitOfWork { get; private set; }
+
 		public ICollection<IContractSchedule> FindAllContractScheduleByDescription()
 		{
 			throw new NotImplementedException();
@@ -79,9 +78,10 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 		}
 	}
 
-	public class FakePartTimePercentageRepository: IPartTimePercentageRepository
+	public class FakePartTimePercentageRepository : IPartTimePercentageRepository
 	{
 		private IList<IPartTimePercentage> partTimePercentages = new List<IPartTimePercentage>();
+
 		public void Add(IPartTimePercentage root)
 		{
 			partTimePercentages.Add(root);
@@ -117,16 +117,18 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			throw new NotImplementedException();
 		}
 
-		public IUnitOfWork UnitOfWork { get; }
+		public IUnitOfWork UnitOfWork { get; private set; }
+
 		public ICollection<IPartTimePercentage> FindAllPartTimePercentageByDescription()
 		{
 			throw new NotImplementedException();
 		}
 	}
 
-	internal class FakeContractRepository:IContractRepository
+	public class FakeContractRepository : IContractRepository
 	{
-		private IList<IContract> contracts = new List<IContract>(); 
+		private IList<IContract> contracts = new List<IContract>();
+
 		public void Add(IContract root)
 		{
 			contracts.Add(root);
@@ -162,7 +164,8 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			throw new NotImplementedException();
 		}
 
-		public IUnitOfWork UnitOfWork { get; }
+		public IUnitOfWork UnitOfWork { get; private set; }
+
 		public ICollection<IContract> FindAllContractByDescription()
 		{
 			throw new NotImplementedException();
