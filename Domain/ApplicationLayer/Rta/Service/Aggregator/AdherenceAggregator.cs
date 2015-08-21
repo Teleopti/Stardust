@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator
 					continue;
 				var adherenceAggregatorInfo = new AdherenceAggregatorInfo(actualAgentState, person)
 				{
-					AdherenceState = AdherenceInfo.AdherenceFor(actualAgentState)
+					AggregatorAdherence = AdherenceInfo.AdherenceFor(actualAgentState)
 				};
 				aggregate(adherenceAggregatorInfo, false);
 			}

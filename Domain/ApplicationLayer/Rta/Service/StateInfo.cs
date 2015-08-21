@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		private readonly Lazy<Guid> _platformTypeId;
 		private readonly Lazy<string> _stateCode;
-		private readonly Lazy<StateMapping> _stateMapping;
+		private readonly StateMapping _stateMapping;
 		private readonly Lazy<AlarmMapping> _alarmMapping;
 
 		public StateInfo(
@@ -22,39 +22,25 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			Stored = context.PreviousStateInfoLoader.Load(context.Person.PersonId);
 
-			_stateMapping = new Lazy<StateMapping>(() => stateMapper.StateFor(Person.BusinessUnitId, _platformTypeId.Value, _stateCode.Value, input.StateDescription));
+			_stateCode = new Lazy<string>(() => input.StateCode ?? Stored.StateCode);
+			_platformTypeId = new Lazy<Guid>(() => string.IsNullOrEmpty(input.PlatformTypeId) ? Stored.PlatformTypeId : input.ParsedPlatformTypeId());
+
+			_stateMapping = stateMapper.StateFor(Person.BusinessUnitId, _platformTypeId.Value, _stateCode.Value, input.StateDescription);
 			_alarmMapping = new Lazy<AlarmMapping>(() => stateMapper.AlarmFor(Person.BusinessUnitId, _platformTypeId.Value, _stateCode.Value, Schedule.CurrentActivityId()) ?? new AlarmMapping());
 
+			State = new StateInfo2(_stateMapping, Stored);
 			Schedule = new ScheduleInfo(scheduleLoader, Person.PersonId, CurrentTime, Stored);
 			Adherence = new AdherenceInfo(input, Person, Stored, _alarmMapping, Schedule, appliedAdherence, stateMapper);
-
-			_platformTypeId = new Lazy<Guid>(() => string.IsNullOrEmpty(input.PlatformTypeId) ? Stored.PlatformTypeId : input.ParsedPlatformTypeId());
-			_stateCode = new Lazy<string>(() => input.StateCode ?? Stored.StateCode);
-
 		}
 
 		private ExternalUserStateInputModel input { get; set; }
 		public PersonOrganizationData Person { get; private set; }
+		public StateInfo2 State { get; private set; }
 		public StoredStateInfo Stored { get; private set; }
 		public ScheduleInfo Schedule { get; private set; }
 		public AdherenceInfo Adherence { get; private set; }
 		public DateTime CurrentTime { get; private set;  }
 		
-		public AdherenceState AdherenceState { get { return Adherence.AdherenceState(); } }
-		public Guid? CurrentStateId { get { return _stateMapping.Value.StateGroupId; } }
-
-		public bool Send
-		{
-			get
-			{
-				return !Schedule.CurrentActivityId().Equals(Stored.ActivityId) ||
-					   !_stateMapping.Value.StateGroupId.Equals(Stored.StateGroupId) ||
-					   !Schedule.NextActivityId().Equals(Stored.NextActivityId) ||
-					   !Schedule.NextActivityStartTime().Equals(Stored.NextActivityStartTime)
-					;
-			}
-		}
-
 		public AgentStateReadModel MakeAgentStateReadModel()
 		{
 			return new AgentStateReadModel
@@ -68,7 +54,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				StaffingEffect = _alarmMapping.Value.StaffingEffect,
 				Adherence = (int?)_alarmMapping.Value.Adherence,
 				StateCode = _stateCode.Value,
-				StateId = _stateMapping.Value.StateGroupId,
+				StateId = _stateMapping.StateGroupId,
 				StateStart = stateStart(),
 				AlarmId = _alarmMapping.Value.AlarmTypeId,
 				AlarmName = _alarmMapping.Value.AlarmName,
@@ -81,7 +67,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				ScheduledId = Schedule.CurrentActivityId(),
 				ScheduledNext = Schedule.NextActivityName(),
 				ScheduledNextId = Schedule.NextActivityId(),
-				State = _stateMapping.Value.StateGroupName
+				State = _stateMapping.StateGroupName
 			};
 		}
 
@@ -94,6 +80,25 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			return _alarmMapping.Value.AlarmTypeId == Stored.AlarmTypeId ? Stored.AlarmTypeStartTime : CurrentTime;
 		}
-	}
 
+
+
+
+
+
+		public AdherenceState AggregatorAdherence { get { return Adherence.AdherenceState(); } }
+
+		public bool Send
+		{
+			get
+			{
+				return !Schedule.CurrentActivityId().Equals(Stored.ActivityId) ||
+					   !_stateMapping.StateGroupId.Equals(Stored.StateGroupId) ||
+					   !Schedule.NextActivityId().Equals(Stored.NextActivityId) ||
+					   !Schedule.NextActivityStartTime().Equals(Stored.NextActivityStartTime)
+					;
+			}
+		}
+
+	}
 }

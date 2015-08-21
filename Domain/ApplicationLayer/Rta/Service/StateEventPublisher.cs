@@ -16,8 +16,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public void Publish(StateInfo info)
 		{
-			if (info.CurrentStateId == info.Stored.StateGroupId) return;
-			
+			if (!info.State.StateGroupChanged()) return;
+
 			var adherenceChanged = info.Adherence.AdherenceForPreviousStateAndCurrentActivity() != info.Adherence.AdherenceState();
 
 			_eventPublisher.Publish(info, new PersonStateChangedEvent
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			});
 
 			if (adherenceChanged)
-				_adherenceEventPublisher.Publish(info, info.CurrentTime, info.AdherenceState);
+				_adherenceEventPublisher.Publish(info, info.CurrentTime, info.Adherence.AdherenceState());
 		}
 	}
 }
