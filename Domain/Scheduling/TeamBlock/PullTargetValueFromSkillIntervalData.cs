@@ -18,12 +18,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				var aggregatedValues = new List<Double>();
 				foreach (var interval in skillIntervalDataDic)
 				{
-					if (aggregatedMaxSeatIntervals.ContainsKey(interval.Key  ))
+					IntervalLevelMaxSeatInfo value;
+					if (aggregatedMaxSeatIntervals.TryGetValue(interval.Key, out value))
 					{
-						if (aggregatedMaxSeatIntervals[interval.Key ].IsMaxSeatReached)
+						if (value.IsMaxSeatReached)
 						{
 							aggregatedValues.Add(interval.Value.AbsoluteDifference +
-							                     (punishingNumber*aggregatedMaxSeatIntervals[interval.Key ].MaxSeatBoostingFactor));
+							                     (punishingNumber*value.MaxSeatBoostingFactor));
 							continue;
 						}
 					}
@@ -36,12 +37,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				var aggregatedValues = new List<Double>();
 				foreach (var interval in skillIntervalDataDic)
 				{
-					if (aggregatedMaxSeatIntervals.ContainsKey(interval.Key ))
+					IntervalLevelMaxSeatInfo value;
+					if (aggregatedMaxSeatIntervals.TryGetValue(interval.Key, out value))
 					{
-						if (aggregatedMaxSeatIntervals[interval.Key ].IsMaxSeatReached)
+						if (value.IsMaxSeatReached)
 						{
 							aggregatedValues.Add(interval.Value.RelativeDifferenceBoosted() +
-							                     (punishingNumber*aggregatedMaxSeatIntervals[interval.Key ].MaxSeatBoostingFactor));
+							                     (punishingNumber*value.MaxSeatBoostingFactor));
 							continue;
 						}
 					}

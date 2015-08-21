@@ -29,8 +29,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 			foreach (var shiftCategory in totalDistribution.PercentDicionary.Keys)
 			{
 				var myValue = 0d;
-				if (distributionToWorkWith.PercentDicionary.ContainsKey(shiftCategory))
-					myValue = distributionToWorkWith.PercentDicionary[shiftCategory];
+				double percentage;
+				if (distributionToWorkWith.PercentDicionary.TryGetValue(shiftCategory, out percentage))
+					myValue = percentage;
 
 				var allValue = totalDistribution.PercentDicionary[shiftCategory];
 				diffValues.Add(shiftCategory, allValue - myValue);

@@ -45,9 +45,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			foreach (var teamBlockInfo in teamBlocks)
 			{
 				var teamBlockValue = teamBlockInfo.BlockInfo.AverageOfStandardDeviations;
-				if (teamBockDict.ContainsKey(teamBlockValue))
+				IList<ITeamBlockInfo> teamBlockWithSameValue;
+				if (teamBockDict.TryGetValue(teamBlockValue, out teamBlockWithSameValue))
 				{
-					var teamBlockWithSameValue = teamBockDict[teamBlockValue];
 					teamBlockWithSameValue.Add(teamBlockInfo);
 				}
 				else
@@ -87,8 +87,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			var valuesOfOneBlock = new List<double?>();
 			foreach (var blockDay in teamBlock.BlockInfo.BlockPeriod.DayCollection())
 			{
-				if (!standardDeviationData.Data.ContainsKey(blockDay)) continue;
-				var value = standardDeviationData.Data[blockDay];
+				double? value;
+				if (!standardDeviationData.Data.TryGetValue(blockDay, out value)) continue;
 				valuesOfOneBlock.Add(value);
 			}
 			teamBlock.BlockInfo.StandardDeviations = valuesOfOneBlock;

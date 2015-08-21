@@ -35,9 +35,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			foreach (var scheduleDay in list)
 			{
 				DateOnly key = scheduleDay.DateOnlyAsPeriod.DateOnly;
-				if (!dic.ContainsKey(key))
-					dic.Add(key, new List<IScheduleDay>());
-				dic[key].Add(scheduleDay);
+				IList<IScheduleDay> value;
+				if (!dic.TryGetValue(key, out value))
+				{
+					value = new List<IScheduleDay>();
+					dic.Add(key, value);
+				}
+				value.Add(scheduleDay);
 			}
 
 			foreach (var pair in dic)

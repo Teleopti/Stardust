@@ -30,11 +30,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
                 var scheduleDay = scheduleRange.ScheduledDay(dateOnly);
                 if (scheduleDay.PersonAssignment() == null) continue;
                 var shiftCatergoryOnScheduleDay = scheduleDay.PersonAssignment().ShiftCategory;
-                if (shiftCatergoryOnScheduleDay != null && shiftCategoryPoints.ContainsKey(shiftCatergoryOnScheduleDay))
+				int shiftCategoryPoint;
+				if (shiftCatergoryOnScheduleDay != null && shiftCategoryPoints.TryGetValue(shiftCatergoryOnScheduleDay, out shiftCategoryPoint))
                 {
-                    var shiftCategoryPoint = shiftCategoryPoints[shiftCatergoryOnScheduleDay];
                     totalPoints += shiftCategoryPoint;
-
                 }
             }
 

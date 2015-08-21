@@ -46,13 +46,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 				var newIntervalValue = newInterval.Value;
 				if (newIntervalValue.IsMaxSeatReached)
 				{
-					if (aggregatedIntervalsForTheWholeBlock.ContainsKey(baseDatePointer.Date.Add(newIntervalKey)))
+					IntervalLevelMaxSeatInfo info;
+					if (aggregatedIntervalsForTheWholeBlock.TryGetValue(baseDatePointer.Date.Add(newIntervalKey), out info))
 					{
-						if (aggregatedIntervalsForTheWholeBlock[baseDatePointer.Date.Add(newIntervalKey)].IsMaxSeatReached)
+						if (info.IsMaxSeatReached)
 						{
 							var aggregatedInterval = new IntervalLevelMaxSeatInfo(newIntervalValue.IsMaxSeatReached,
 								newIntervalValue.MaxSeatBoostingFactor +
-								aggregatedIntervalsForTheWholeBlock[baseDatePointer.Date.Add(newIntervalKey)].MaxSeatBoostingFactor);
+								info.MaxSeatBoostingFactor);
 							aggregatedIntervalsForTheWholeBlock[baseDatePointer.Date.Add(newIntervalKey)] = aggregatedInterval;
 						}
 						else
@@ -60,12 +61,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 					}
 					else
 					{
-						if (aggregatedIntervalsForTheWholeBlock.ContainsKey(baseDatePointer.Date.Add(newIntervalKey)))
-						{
-							if (newIntervalValue.IsMaxSeatReached)
-								aggregatedIntervalsForTheWholeBlock[baseDatePointer.Date.Add(newIntervalKey)] = newIntervalValue;
-						}
-						else
 							aggregatedIntervalsForTheWholeBlock.Add(baseDatePointer.Date.Add(newIntervalKey), newIntervalValue);
 					}
 				}

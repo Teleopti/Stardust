@@ -53,10 +53,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					if ((dateOnly == day || dateOnly == day.AddDays(1)) || forRoleModel)
 					{
 						var dateDic = skillIntervalDataPerDateAndActivity[dateOnly];
-						if (!dateDic.ContainsKey(activity))
+						IList<ISkillIntervalData> value;
+						if (!dateDic.TryGetValue(activity, out value))
 							continue;
 
-						dateOnlyDicForActivity.Add(dateOnly, dateDic[activity]);
+						dateOnlyDicForActivity.Add(dateOnly, value);
 					}
 				}
 

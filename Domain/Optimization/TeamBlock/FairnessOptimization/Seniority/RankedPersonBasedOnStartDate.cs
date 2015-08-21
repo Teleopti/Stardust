@@ -30,8 +30,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
         {
             var personDictionary = getDictionary(personsToCompareWith);
             var rankedPerson = getPersonValueDictionary(personDictionary);
-            if (rankedPerson.ContainsKey(person))
-                return rankedPerson[person];
+	        int value;
+	        if (rankedPerson.TryGetValue(person, out value))
+                return value;
             return null;
         }
 

@@ -111,16 +111,18 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			var resourceMatrix = _furnessData.ResourceMatrix();
             foreach (var personKey in _dividedActivityData.PersonResources.Keys)
             {
-                int producerIndex = _personIndexRegister[personKey];
+				int producerIndex = _personIndexRegister[personKey];
+				var weightedRelativeKeyedSkillResourceResource = _dividedActivityData.WeightedRelativeKeyedSkillResourceResources[personKey];
+				var keyedSkillResourceEfficiency = _dividedActivityData.KeyedSkillResourceEfficiencies[personKey];
                 foreach (ISkill skillKey in _dividedActivityData.TargetDemands.Keys)
                 {
                     int productIndex = _skillIndexRegister[skillKey];
                     double weightedSkillValue;
-                    if (!_dividedActivityData.WeightedRelativeKeyedSkillResourceResources[personKey].TryGetValue(skillKey, out weightedSkillValue))
+	                if (!weightedRelativeKeyedSkillResourceResource.TryGetValue(skillKey, out weightedSkillValue))
                         weightedSkillValue = 0;
 	                resourceMatrix[producerIndex, productIndex] = weightedSkillValue;
 
-                    double value = _dividedActivityData.KeyedSkillResourceEfficiencies[personKey].ContainsKey(skillKey) ? 1 : 0;
+	                double value = keyedSkillResourceEfficiency.ContainsKey(skillKey) ? 1 : 0;
 	                productivityMatrix[producerIndex, productIndex] = value;
                 }
             }

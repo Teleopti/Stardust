@@ -36,10 +36,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					if (new DateOnly(interval.Key).Equals(baseDate.AddDays(1)))
 						timeSpanKey = timeSpanKey.Add(TimeSpan.FromDays(1));
 
-					if(!temp.ContainsKey(timeSpanKey))
-						temp.Add(timeSpanKey, new List<ISkillIntervalData>());
+					IList<ISkillIntervalData> value;
+					if (!temp.TryGetValue(timeSpanKey, out value))
+					{
+						value = new List<ISkillIntervalData>();
+						temp.Add(timeSpanKey, value);
+					}
 
-					temp[timeSpanKey].Add(interval.Value);
+					value.Add(interval.Value);
 				}
 			}
 

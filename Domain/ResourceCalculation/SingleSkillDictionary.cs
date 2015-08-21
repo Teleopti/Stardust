@@ -82,10 +82,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public bool IsSingleSkill(IPerson person, DateOnly dateOnly)
 		{
 			var kvp = new KeyValuePair<IPerson, DateOnly>(person, dateOnly);
-			if (!_dictionary.ContainsKey(kvp)) 
+			bool result;
+			if (!_dictionary.TryGetValue(kvp, out result)) 
 				return false;
 
-			return _dictionary[kvp];
+			return result;
 		}
 	}
 }

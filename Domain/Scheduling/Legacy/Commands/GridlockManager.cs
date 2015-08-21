@@ -142,12 +142,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
         public void AddLock(IPerson person, DateOnly dateOnly, LockType lockType, DateTimePeriod period)
         {
             string key = GetPersonDateKey(person, dateOnly);
-            
-            if (!_gridlocks.ContainsKey(key))
+
+			GridlockDictionary personDateLocks;
+            if (!_gridlocks.TryGetValue(key, out personDateLocks))
             {
-                _gridlocks.Add(key,new GridlockDictionary());
+				personDateLocks = new GridlockDictionary();
+                _gridlocks.Add(key,personDateLocks);
             }
-            GridlockDictionary personDateLocks = _gridlocks[key];
             Gridlock gridlock = new Gridlock(person, dateOnly, lockType, period);
             if (!personDateLocks.ContainsKey(gridlock.Key))
             {
@@ -264,8 +265,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
         {
             string dummyKey = GetPersonDateKey(person, dateOnly);
 
-            if (_gridlocks.ContainsKey(dummyKey))
-                return _gridlocks[dummyKey];
+	        GridlockDictionary value;
+	        if (_gridlocks.TryGetValue(dummyKey, out value))
+                return value;
             return null;
         }
 

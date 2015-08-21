@@ -29,9 +29,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 					{
 						foreach (var matrixData1 in matrixDataList)
 						{
-						    if (matrixData1.ContainsKey(dateOnly))
+							IScheduleDayData value;
+							if (matrixData1.TryGetValue(dateOnly, out value))
 						    {
-						        if (!matrixData1[dateOnly].IsDayOff)
+						        if (!value.IsDayOff)
 						            return false;
 						    }
 						    else

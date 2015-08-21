@@ -1,18 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 {
 	public interface IMatrixData
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1043:UseIntegralOrStringArgumentForIndexers")]
 		IScheduleDayData this[DateOnly key] { get; }
 		IScheduleMatrixPro Matrix { get; }
 		ReadOnlyCollection<IScheduleDayData> ScheduleDayDataCollection { get; }
 		void Store(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions);
 	    bool ContainsKey(DateOnly key);
+	    bool TryGetValue(DateOnly key, out IScheduleDayData value);
 		int TargetDaysOff { get; }
 	}
 
@@ -37,6 +36,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
         {
             return ScheduleDayDataDictionary.ContainsKey(key);
         }
+
+		public bool TryGetValue(DateOnly key, out IScheduleDayData value)
+		{
+			return ScheduleDayDataDictionary.TryGetValue(key, out value);
+		}
 
 		public int TargetDaysOff { get; protected set; }
 

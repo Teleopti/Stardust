@@ -72,8 +72,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         public virtual void SetPercentage(IChildSkill childSkill, Percent percentage)
         {
-            if (!_distribution.ContainsKey(childSkill) ||
-                _distribution[childSkill] != percentage)
+	        Percent value;
+	        if (!_distribution.TryGetValue(childSkill, out value) || value != percentage)
             {
                 OnChangeMultisitePeriodData();
             }

@@ -23,8 +23,9 @@ namespace Teleopti.Ccc.Domain.Collection
 		{
 			get
 			{
-				if (WrappedDictionary.ContainsKey(key))
-					return WrappedDictionary[key];
+				int value;
+				if (WrappedDictionary.TryGetValue(key, out value))
+					return value;
 
 				return 0;
 			}

@@ -41,11 +41,12 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 				var values = new DistributionReportDataValues();
 				values.All = totalDistribution.PercentDicionary[shiftCategory];
 
-				if (personDistribution.PercentDicionary.ContainsKey(shiftCategory))
-					values.Agent = personDistribution.PercentDicionary[shiftCategory];
+				double percentage;
+				if (personDistribution.PercentDicionary.TryGetValue(shiftCategory, out percentage))
+					values.Agent = percentage;
 
-				if (teamDistribution.PercentDicionary.ContainsKey(shiftCategory))
-					values.Team = teamDistribution.PercentDicionary[shiftCategory];
+				if (teamDistribution.PercentDicionary.TryGetValue(shiftCategory, out percentage))
+					values.Team = percentage;
 
 				report.DistributionDictionary.Add(shiftCategory, values);
 			}

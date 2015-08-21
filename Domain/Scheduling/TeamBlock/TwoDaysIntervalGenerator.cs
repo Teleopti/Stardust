@@ -26,18 +26,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					continue;
 
                 var dic = new Dictionary<DateTime, ISkillIntervalData>();
-                if (dayIntervalData.ContainsKey(dateOnly))
+	            IList<ISkillIntervalData> sourceList;
+                if (dayIntervalData.TryGetValue(dateOnly, out sourceList))
                 {
-                    IList<ISkillIntervalData> sourceList = dayIntervalData[dateOnly];
                     foreach (var skillIntervalData in sourceList)
                     {
 						if (!dic.ContainsKey(skillIntervalData.Period.StartDateTime))
 							dic.Add(skillIntervalData.Period.StartDateTime, skillIntervalData);
                     }
                     if (sourceList.Count == 0) continue;
-                    if (dayIntervalData.ContainsKey(dateOnly.AddDays(1)))
+                    if (dayIntervalData.TryGetValue(dateOnly.AddDays(1), out sourceList))
                     {
-                        sourceList = dayIntervalData[dateOnly.AddDays(1)];
                         foreach (var skillIntervalData in sourceList)
                         {
 							if (!dic.ContainsKey(skillIntervalData.Period.StartDateTime))

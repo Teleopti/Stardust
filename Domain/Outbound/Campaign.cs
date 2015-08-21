@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Outbound
@@ -123,8 +122,9 @@ namespace Teleopti.Ccc.Domain.Outbound
 		public virtual TimeSpan? GetManualProductionPlan(DateOnly date)
 		{
 			TimeSpan? manualTime = null;
-			if(_manualProductionPlanDays.ContainsKey(date))
-				manualTime = _manualProductionPlanDays[date];
+			TimeSpan value;
+			if(_manualProductionPlanDays.TryGetValue(date, out value))
+				manualTime = value;
 				
 			return manualTime;
 		}
@@ -166,8 +166,9 @@ namespace Teleopti.Ccc.Domain.Outbound
 		public virtual TimeSpan? GetActualBacklog(DateOnly date)
 		{
 			TimeSpan? time = null;
-			if (_actualBacklogDays.ContainsKey(date))
-				time = _actualBacklogDays[date];
+			TimeSpan value;
+			if (_actualBacklogDays.TryGetValue(date, out value))
+				time = value;
 
 			return time;
 		}

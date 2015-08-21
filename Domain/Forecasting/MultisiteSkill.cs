@@ -6,7 +6,6 @@ using System.Linq;
 using System;
 using System.Globalization;
 using Teleopti.Ccc.Domain.Collection;
-using System.Reflection;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting
@@ -197,9 +196,12 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
             bool templateExists = (from t in _templateMultisiteWeekCollection.Values
                                    from p in t.TemplateMultisitePeriodCollection
-                                   select p).Any(p => 
-                                       p.Distribution.ContainsKey(childSkill) && 
-                                       p.Distribution[childSkill].Value > 0);
+                                   select p).Any(p =>
+                                   {
+	                                   Percent value;
+	                                   return p.Distribution.TryGetValue(childSkill, out value) &&
+	                                          value.Value > 0;
+                                   });
 
             if (templateExists)
             {

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -33,17 +32,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
                 if (!_authorizationService.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment, tempDayOne.DateOnlyAsPeriod.DateOnly, tempDayOne.Person) || !_authorizationService.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment, tempDayTwo.DateOnlyAsPeriod.DateOnly, tempDayTwo.Person))
                     throw new PermissionException("No permission to change the person assignment");
-                
-                if(locks.ContainsKey(tempDayOne.Person))
+
+				IList<DateOnly> lockedDates;
+				if(locks.TryGetValue(tempDayOne.Person, out lockedDates))
 				{
-					var lockedDates = locks[tempDayOne.Person];
 					if(lockedDates.Contains(tempDayOne.DateOnlyAsPeriod.DateOnly))
 						continue;
 				}
 
-				if (locks.ContainsKey(tempDayTwo.Person))
+				if (locks.TryGetValue(tempDayTwo.Person, out lockedDates))
 				{
-					var lockedDates = locks[tempDayTwo.Person];
 					if (lockedDates.Contains(tempDayTwo.DateOnlyAsPeriod.DateOnly))
 						continue;
 				}
