@@ -46,6 +46,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="assets\css\banner.css" />
     <Content Include="assets\css\main.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

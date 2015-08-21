@@ -7,11 +7,12 @@
 	<title>Teleopti WFM</title>
 	<!-- css -->
 	<link href="assets/css/main.min.css" rel="stylesheet">
+	<link href="assets/css/banner.css" rel="stylesheet">
 	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 	<!--[if lt IE 9]>
-	  <script src="assets/vendor/html5shiv/dist/html5shiv.js"></script>
-	  <script src="assets/vendor/respond/dest/respond.min.js"></script>
+		<script src="assets/vendor/html5shiv/dist/html5shiv.js"></script>
+		<script src="assets/vendor/respond/dest/respond.min.js"></script>
 	<![endif]-->
 </head>
 <body>
@@ -40,7 +41,7 @@
 								isWfmEnabled = false;
 							}
 							toggleLaunchWfm(isWfmEnabled);
-						} 
+						}
 					}
 				};
 				xmlhttp.open("GET", "Web/ToggleHandler/IsEnabled?toggle=Wfm_MinimumScaffolding_32659", true);
@@ -50,9 +51,10 @@
 			function toggleLaunchWfm(isEnabled) {
 				if (!isEnabled) {
 					document.getElementById("webwfm").style.display = "none";
-						document.getElementById("webwfm").style.visibility = "hidden";
+					document.getElementById("webwfm").style.visibility = "hidden";
 				} else {
 					document.getElementById("webwfm").style.visibility = "visible";
+					document.getElementById("webwfm").style.display = "block";
 				}
 
 
@@ -61,6 +63,35 @@
 		</script>
 	</header>
 	<div class="container">
+		<div class="row header-wrap bubble-wrap" id="webwfm">
+			<div class="bubble">
+			</div>
+			<div class="col-md-3"></div>
+			<div class="col-md-6">
+				<div class="card">
+					<span class="card-title">Welcome Test Pilot</span>
+					<p class="card-content">
+						Thank you for joining our pilot project. 
+						<br />
+						Your input and feedback is vital to us to ensure we develop functionality that makes a difference. To access the pilot features, please press the green button.
+						<br />
+						<br />
+						If you only want to access our standard functionality, the four square buttons can be used as normal.
+						Any feedback, no matter how large or small, is appreciated. Thanks once again!
+					</p>
+
+					<a href="/TeleoptiWFM/Web/wfm">
+						<div class="fab">
+							<svg style="width:24px;height:24px" viewBox="0 0 24 24">
+								<path fill="#fff" d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z" />
+							</svg>
+						</div>
+					</a>
+					<div class="card-bottom"></div>
+				</div>
+				<div class="col-md-3"></div>
+			</div>
+		</div>
 		<!-- Blocks -->
 		<div class="client-applications row">
 			<div class="col-md-3">
@@ -88,7 +119,6 @@
 		<div class="row">
 			<div class="col-md-12">
 				<ul class="tools-services">
-					<li class="sdk-service" style="visibility: hidden" id="webwfm"><a href="/TeleoptiWFM/Web/wfm">WFM</a></li>
 					<li class="rta-service"><a href="/TeleoptiWFM/RTA/TeleoptiRtaService.svc">RTA Web Service</a></li>
 					<li class="sdk-service"><a href="/TeleoptiWFM/SDK/TeleoptiCCCSdkService.svc">SDK Web Service</a></li>
 				</ul>
