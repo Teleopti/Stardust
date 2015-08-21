@@ -9,7 +9,7 @@ using Teleopti.Ccc.WebBehaviorTest.Core.Navigation;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Forecasting
+namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 {
 	[Binding]
 	public class QuickForecasterSteps
