@@ -41,9 +41,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public DateTime CurrentTime { get; private set;  }
 		
 		public AdherenceState AdherenceState { get { return Adherence.AdherenceState(); } }
-
 		public Guid? CurrentStateId { get { return _stateMapping.Value.StateGroupId; } }
-		public Guid? PreviousActivityId { get { return Stored.ActivityId; } }
 
 		public bool Send
 		{
