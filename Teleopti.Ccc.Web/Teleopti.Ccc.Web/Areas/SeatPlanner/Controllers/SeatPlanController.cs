@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers
 			return _seatBookingReportProvider.Get(command);
 		}
 
-		[UnitOfWork, Route ("api/SeatPlanner/SeatPlan"), HttpGet]
+		[UnitOfWork, Route ("api/SeatPlanner/Occupancy"), HttpGet]
 		public virtual ICollection<OccupancyViewModel> Get (Guid seatId, DateTime date)
 		{
 			return _seatOccupancyProvider.Get (seatId, new DateOnly(date)).ToArray();
