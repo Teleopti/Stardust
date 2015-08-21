@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Outbound
             {
                 return new OutboundOverstaffRuleConfiguration
                 {
-                    Threshold = 1,
+                    Threshold = 60,
                     ThresholdType = ThresholdType.Absolute                    
                 };
             }
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Outbound
             {
                 return new OutboundUnderSLARuleConfiguration
                 {
-                    Threshold = 1,
+                    Threshold = 60,
                     ThresholdType = ThresholdType.Absolute
                 };
             }

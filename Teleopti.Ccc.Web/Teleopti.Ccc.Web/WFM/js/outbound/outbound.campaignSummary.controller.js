@@ -61,7 +61,7 @@
 					});
 				});
 			});
-			campaign.selectedDates = [];
+		    $scope.$broadcast('campaign.chart.clear.selection', { Id: campaign.Id });
 			campaign.manualPlanInput = null;
 		}
 
@@ -82,11 +82,9 @@
 			    	outboundService.getCampaignStatistics(null, function success(data2) {
 			    		$scope.phaseStatistics = data2;
 				    });
-			    });
-			   
-		    }, function (error) {
+			    });			   
 		    });
-    		campaign.selectedDates = [];
+    		$scope.$broadcast('campaign.chart.clear.selection', { Id: campaign.Id });
     		campaign.manualPlanInput = null;
 	    }
 

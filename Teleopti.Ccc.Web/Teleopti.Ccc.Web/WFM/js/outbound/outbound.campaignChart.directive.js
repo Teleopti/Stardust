@@ -41,13 +41,23 @@
 			function graphSelectionChanged() {
 				$scope.campaign.selectedDates = $scope.graph.selected().filter(function(p) {
 					return p.id == $scope.dictionary['Progress'];
+				}).filter(function(p) {
+					return determineOpenDay(p.index);
 				}).map(function (p) {
 					return $scope.dates[p.index];
 				});
 			}
 
+			function determineScheduledDay(idx) {
+				return $scope.campaign.graphData.schedules[idx + 1] > 0;
+			}
+
 			function determineOpenDay(idx) {
 				return ! $scope.campaign.closedDays[idx - 1];
+			}
+
+			function determineManualPlanDay(idx) {
+				return $scope.campaign.rawManualPlan[idx - 1];
 			}
 
 			function init() {
@@ -60,7 +70,6 @@
 					columns: getDataGroupsData(),
 					colors: _setChartOption_color()
 				});
-
 			}
 
 			function generateChart() {
@@ -137,6 +146,7 @@
 			this._setChartOption_data = _setChartOption_data;
 
 			function _setChartOption_data() {
+				
 				var dataOption = {
 					x: 'x',
 					type: 'bar',
@@ -147,16 +157,9 @@
 					types: {},
 					labels: {
 						format: {
-							Planned: function (v, id, i) {						
-								var manualPlan = [false].concat($scope.campaign.rawManualPlan);
-								var closedDays = [false].concat($scope.campaign.closedDays);
-								
-								if (manualPlan[i]) {
-									return 'M';
-								}
-
-								if (closedDays[i])
-									return 'C';
+							Planned: function (v, id, i) {
+								if (!determineOpenDay(i)) return 'C';
+								if (determineManualPlanDay(i) && ! determineScheduledDay(i)) return 'M';							
 							}
 						}
 					}
@@ -165,7 +168,7 @@
 					dataOption.selection = {
 						enabled: true,
 						grouped: true,
-						draggable: true
+						draggable: true,					
 					};
 					dataOption.onselected = function(d) {
 						$scope.$evalAsync(graphSelectionChanged);
@@ -251,13 +254,6 @@
 			var ctrl = ctrls[0];
 
 			scope.$evalAsync(ctrl.init);
-			
-			scope.$watch(function() {
-				return scope.campaign.selectedDates;
-			}, function(newVal, oldVal) {
-				if (!scope.graph) return;				
-				scope.graph.select(null, newVal.map(ctrl.getDataIndex).filter(ctrl.determineOpenDay), true);
-			}, true);
 
 			scope.$watch(function () {
 				return scope.graphData;
@@ -266,6 +262,12 @@
 					ctrl.loadGraph();
 				}
 			}, true);
+
+			scope.$on('campaign.chart.clear.selection', function(_s, data) {
+				if (scope.campaign.Id == data.Id) {
+					scope.graph.unselect();
+				}
+			});
 		}
 
 	};
