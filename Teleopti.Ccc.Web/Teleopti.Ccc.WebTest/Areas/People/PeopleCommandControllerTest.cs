@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.People.Controllers;
 using Teleopti.Interfaces.Domain;
@@ -19,7 +14,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Areas.People
 {
 	[PeopleCommandTest]
-	public class AdjustSkillControllerTest
+	public class PeopleCommandControllerTest
 	{
 		public PeopleCommandController Target;
 		public IPersonRepository PersonRepository;
@@ -31,11 +26,10 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 
 		private IPerson prepareData(DateTime date)
 		{
-			var person = new Person();
-			person.Name = new Name("John", "Smith");
+			var person = new Person {Name = new Name("John", "Smith")};
 			person.SetId(Guid.NewGuid());
 			PersonRepository.Add(person);
-			
+
 			var period = createPersonPeriod(date);
 			person.AddPersonPeriod(period);
 			return person;
@@ -43,26 +37,20 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 
 		private IPersonPeriod createPersonPeriod(DateTime date)
 		{
-			PartTimePercentage partTimePercentage;
-			ContractSchedule contractSchdule;
-			Team team;
 			var contract = new Contract("test");
 			ContractRepository.Add(contract);
-			partTimePercentage = new PartTimePercentage("test");
+
+			var partTimePercentage = new PartTimePercentage("test");
 			PartTimePercentageRepository.Add(partTimePercentage);
-			contractSchdule = new ContractSchedule("test");
+
+			var contractSchdule = new ContractSchedule("test");
 			ContractScheduleRepository.Add(contractSchdule);
-			team = new Team();
+
+			var team = new Team();
 			TeamRepository.Add(team);
+
 			return new PersonPeriod(new DateOnly(date), new PersonContract(contract, partTimePercentage, contractSchdule), team);
 		}
-
-		//  person
-		//  team 
-		//  site
-		//	skill with type
-		//	contract
-		//  contract schedule
 
 		[Test]
 		public void TargetShouldNotBeNull()
@@ -73,11 +61,11 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 		[Test]
 		public void ShouldCreateNewPersonPeriodOnPersonWithoutPersonPeriod()
 		{
-			DateTime date = new DateTime(2015, 8, 20);
+			var date = new DateTime(2015, 8, 20);
 			var person = prepareData(date.AddDays(10));
-			var result = Target.UpdateSkill(new PeopleCommandInput()
+			Target.UpdateSkill(new PeopleCommandInput
 			{
-				People = new List<PersonSkillModel> { new PersonSkillModel() { PersonId = person.Id.Value } },
+				People = new List<PersonSkillModel> {new PersonSkillModel {PersonId = person.Id.Value}},
 				Date = date
 			});
 			var updatedPerson = PersonRepository.Get(person.Id.GetValueOrDefault());
@@ -85,18 +73,20 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			updatedPerson.PersonPeriodCollection.First().StartDate.Date.Should().Be.EqualTo(date);
 		}
 
-
-
 		[Test]
 		public void ShouldCreatePersonPeriodBasedOnCurrentPeriod()
 		{
-			DateTime date = new DateTime(2015, 8, 20);
+			var date = new DateTime(2015, 8, 20);
 			var person = prepareData(date.AddDays(-10));
 			var skill = SkillFactory.CreateSkillWithId("phone");
 			SkillRepository.Add(skill);
-			var result = Target.UpdateSkill(new PeopleCommandInput()
+			Target.UpdateSkill(new PeopleCommandInput
 			{
-				People = new List<PersonSkillModel> { new PersonSkillModel() { PersonId = person.Id.Value, Skills = new[] { skill.Id.GetValueOrDefault() } } },
+				People =
+					new List<PersonSkillModel>
+					{
+						new PersonSkillModel {PersonId = person.Id.Value, Skills = new[] {skill.Id.GetValueOrDefault()}}
+					},
 				Date = date
 			});
 			var updatedPerson = PersonRepository.Get(person.Id.GetValueOrDefault());
@@ -108,11 +98,11 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 		[Test]
 		public void ShouldNotCreatePersonPeriodWhenCurrentOneStartFromGivenDate()
 		{
-			DateTime date = new DateTime(2015, 8, 20);
+			var date = new DateTime(2015, 8, 20);
 			var person = prepareData(date);
-			var result = Target.UpdateSkill(new PeopleCommandInput()
+			Target.UpdateSkill(new PeopleCommandInput
 			{
-				People = new List<PersonSkillModel> { new PersonSkillModel() { PersonId = person.Id.Value } },
+				People = new List<PersonSkillModel> {new PersonSkillModel {PersonId = person.Id.Value}},
 				Date = date
 			});
 			var updatedPerson = PersonRepository.Get(person.Id.GetValueOrDefault());
@@ -123,12 +113,12 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 		[Test]
 		public void ShouldNotCreatePersonPeriodWhenPersonTerminated()
 		{
-			DateTime date = new DateTime(2015, 8, 20);
+			var date = new DateTime(2015, 8, 20);
 			var person = prepareData(date.AddDays(-2));
 			person.TerminatePerson(new DateOnly(date.AddDays(-1)), new PersonAccountUpdaterDummy());
-			var result = Target.UpdateSkill(new PeopleCommandInput()
+			Target.UpdateSkill(new PeopleCommandInput
 			{
-				People = new List<PersonSkillModel> { new PersonSkillModel() { PersonId = person.Id.Value } },
+				People = new List<PersonSkillModel> {new PersonSkillModel {PersonId = person.Id.Value}},
 				Date = date
 			});
 			var updatedPerson = PersonRepository.Get(person.Id.GetValueOrDefault());
@@ -138,13 +128,17 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 		[Test]
 		public void ShouldAddSkillToPersonNotHavingBefore()
 		{
-			DateTime date = new DateTime(2015, 8, 20);
+			var date = new DateTime(2015, 8, 20);
 			var person = prepareData(date.AddDays(-10));
 			var skill = SkillFactory.CreateSkillWithId("phone");
 			SkillRepository.Add(skill);
-			var result = Target.UpdateSkill(new PeopleCommandInput()
+			Target.UpdateSkill(new PeopleCommandInput
 			{
-				People = new List<PersonSkillModel> { new PersonSkillModel() { PersonId = person.Id.Value, Skills = new List<Guid> { skill.Id.Value } } },
+				People =
+					new List<PersonSkillModel>
+					{
+						new PersonSkillModel {PersonId = person.Id.Value, Skills = new List<Guid> {skill.Id.Value}}
+					},
 				Date = date
 			});
 			var updatedPerson = PersonRepository.Get(person.Id.GetValueOrDefault());
@@ -152,6 +146,5 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var personPeriod = updatedPerson.PersonPeriods(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date))).First();
 			personPeriod.PersonSkillCollection.First().Skill.Id.Should().Be.EqualTo(skill.Id);
 		}
-		
 	}
 }
