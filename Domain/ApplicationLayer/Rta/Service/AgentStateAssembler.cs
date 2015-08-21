@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			return new CurrentAgentState
 			{
-				StaffingEffect = fromStorage.StaffingEffect,
 				Adherence = (AdherenceState?) fromStorage.Adherence
 			};
 		}
@@ -50,7 +49,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			return new CurrentAgentState
 			{
-				StaffingEffect = info.StaffingEffect,
 				Adherence = info.AdherenceState2
 			};
 		}

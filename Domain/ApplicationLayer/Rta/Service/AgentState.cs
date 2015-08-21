@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 	public class CurrentAgentState
 	{
-		public double? StaffingEffect { get; set; }
 		public AdherenceState? Adherence { get; set; }
 	}
 }

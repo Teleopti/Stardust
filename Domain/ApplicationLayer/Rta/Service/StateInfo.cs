@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				PersonId = PersonId,
 				PlatformTypeId = PlatformTypeId,
 				ReceivedTime = CurrentTime,
-				StaffingEffect = state.StaffingEffect,
+				StaffingEffect = StaffingEffect,
 				Adherence = (int?) state.Adherence,
 				StateCode = StateCode,
 				StateId = StateGroupId,
