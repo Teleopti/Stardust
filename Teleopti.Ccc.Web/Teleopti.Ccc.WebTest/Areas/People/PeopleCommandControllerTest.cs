@@ -146,5 +146,27 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var personPeriod = updatedPerson.PersonPeriods(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date))).First();
 			personPeriod.PersonSkillCollection.First().Skill.Id.Should().Be.EqualTo(skill.Id);
 		}
+
+		[Test]
+		public void ShouldAddSkillToSamePeriodIfSameStartDate()
+		{
+			var date = new DateTime(2015, 8, 20);
+			var person = prepareData(date);
+			var skill = SkillFactory.CreateSkillWithId("phone");
+			SkillRepository.Add(skill);
+			Target.UpdateSkill(new PeopleCommandInput
+			{
+				People =
+					new List<PersonSkillModel>
+					{
+						new PersonSkillModel {PersonId = person.Id.Value, Skills = new List<Guid> {skill.Id.Value}}
+					},
+				Date = date
+			});
+			var updatedPerson = PersonRepository.Get(person.Id.GetValueOrDefault());
+			updatedPerson.PersonPeriodCollection.Count.Should().Be.EqualTo(1);
+			var personPeriod = updatedPerson.PersonPeriods(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date))).First();
+			personPeriod.PersonSkillCollection.First().Skill.Id.Should().Be.EqualTo(skill.Id);
+		}
 	}
 }

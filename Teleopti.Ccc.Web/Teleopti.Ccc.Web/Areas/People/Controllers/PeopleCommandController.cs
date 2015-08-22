@@ -53,21 +53,23 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 					continue;
 				}
 				var currentPeriod = periods.First();
+				var currentSkills = currentPeriod.PersonSkillCollection.Select(s => s.Skill.Id.GetValueOrDefault()).ToList();
+				if (!currentSkills.Except(inputSkills).Any() && !inputSkills.Except(currentSkills).Any())
+				{
+					continue;
+				}
 				if (!currentPeriod.StartDate.Equals(new DateOnly(model.Date)))
 				{
-					var currentSkills = currentPeriod.PersonSkillCollection.Select(s => s.Skill.Id.GetValueOrDefault()).ToList();
-
-					if (!currentSkills.Except(inputSkills).Any() && !inputSkills.Except(currentSkills).Any())
-					{
-						continue;
-					}
 
 					var newPeriod = currentPeriod.NoneEntityClone();
 					newPeriod.StartDate = new DateOnly(model.Date);
 					((IPersonPeriodModifySkills) newPeriod).ResetPersonSkill();
 					addSkillToPeriod(inputSkills, newPeriod);
 					person.AddPersonPeriod(newPeriod);
+					continue;
 				}
+				((IPersonPeriodModifySkills)currentPeriod).ResetPersonSkill();
+				addSkillToPeriod(inputSkills, currentPeriod);
 			}
 
 			return Json(new ResultModel());
