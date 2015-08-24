@@ -19,13 +19,13 @@
 				<div>
 					<!---->
 					<input class="importConnstring form-control" type="text" ng-model="importVm.AppDatabase" ng-blur="importVm.CheckAppDb()" placeholder="Connection string">
-					<label ng-class="(importVm.AppdataIsOk==true) ? 'dataIsOk' : 'dataIsNotOk'">{{importVm.AppDbCheckMessage}}</label>
+					<label ng-class="(importVm.AppDbOk==true) ? 'dataIsOk' : 'dataIsNotOk'">{{importVm.AppDbCheckMessage}}</label>
 				</div>
 
 				<div>
 					<div class="importCaption">Analytics database connection string</div>
 					<input class="importConnstring form-control" type="text" ng-model="importVm.AnalyticsDatabase" ng-blur="importVm.CheckAnalDb()" placeholder="Connection string">
-					<label ng-class="(importVm.AnaldataIsOk==true) ? 'dataIsOk' : 'dataIsNotOk'">{{importVm.AnalDbCheckMessage}}</label>
+					<label ng-class="(importVm.AnalDbOk==true) ? 'dataIsOk' : 'dataIsNotOk'">{{importVm.AnalDbCheckMessage}}</label>
 				</div>
 				<p></p>
 				<div>
