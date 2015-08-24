@@ -32,9 +32,9 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 					LastName = p.Name.LastName,
 					Team = currentPeriod.Team.SiteAndTeam,
 					SkillIdList = currentPeriod.PersonSkillCollection.Select(s => s.Skill.Id.GetValueOrDefault()).ToList(),
-					ShiftBag = currentPeriod.RuleSetBag.Description.Name
+					ShiftBag = currentPeriod.RuleSetBag != null?currentPeriod.RuleSetBag.Description.Name:""
 				};
-			});
+			}).ToList();
 
 			return result;
 		}
