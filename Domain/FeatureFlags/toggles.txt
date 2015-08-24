@@ -71,12 +71,13 @@ WfmPeople_AdvancedSearch_32973 = true
 Wfm_Outbound_Campaign_32696 = RC
 SeatPlanner_Logon_32003 = RC
 Wfm_SeatPlan_SeatMapBookingView_32814 = RC
-MyTimeWeb_PreferenceShowNightViolation_33152 = RC
+MyTimeWeb_PreferenceShowNightViolation_33152 = true
+
 Scheduler_OptimizeFlexibleDayOffs_22409 = true
 WfmForecast_QueueStatistics_32572 = RC
-WfmForecast_ResultView_33605 = RC
+WfmForecast_ResultView_33605 = true
 WfmForecast_MethodsComparisonView_33610 = RC
 WfmForecast_IntradayPatternView_33069 = RC
-MyTimeWeb_AutoShiftTradeWithMeetingAndPersonalActivity_33281 = RC
+MyTimeWeb_AutoShiftTradeWithMeetingAndPersonalActivity_33281 = true
 MessageBroker_SchedulingScreenMailbox_32733 = RC
 WfmPeople_ImportUsers_33665 = RC
