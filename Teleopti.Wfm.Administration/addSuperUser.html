@@ -1,0 +1,46 @@
+﻿<div ng-controller="addSuperUserController as addVm" style="margin-left: 50px;margin-right: 50px">
+	<div class="row">
+		<div class="col-md-12">
+			<a style="float: left; padding-top: 25px; padding-right: 50px" href="#details/{{addVm.Tenant}}"><img alt="back" title="Back to Start" src="Content/images/left_round.png" /></a>
+			<h2>Add super user to - {{addVm.Tenant}}</h2>
+			<p>
+				Here you can add a new user that has permissions to everything in the Tenant.
+			</p>
+		</div>
+		<div class="col-md-12">
+			<div class="col-md-4" title="{{addVm.NewUserOkMessage}}">
+				<fieldset>
+					<legend >Enter data for new user</legend>
+					<div>
+						<div class="importCaption">First name</div>
+						<div>
+							<input class=" form-control" type="text" ng-model="addVm.FirstName" placeholder="First name">
+						</div>
+						<div class="importCaption">Last name</div>
+						<div>
+							<input class=" form-control" type="text" ng-model="addVm.LastName" placeholder="Last name">
+						</div>
+						<div class="importCaption">New user logon (must have an unique logon name)</div>
+						<div>
+							<input class=" form-control" type="text" ng-model="addVm.UserName" ng-blur="addVm.CheckUser()" placeholder="Logon name">
+						</div>
+						<div class="importCaption">Password</div>
+						<input class="form-control" type="password" ng-model="addVm.Password" ng-blur="addVm.CheckUser()" placeholder="Password">
+						<label ng-class="(addVm.NewUserOk==true) ? 'dataIsOk' : 'dataIsNotOk'">{{addVm.NewUserOkMessage}}</label>
+
+					</div>
+				</fieldset>
+			</div>
+
+			<div style="margin-top: 30px" class="col-md-12"><button class="btn btn-primary btn-default" ng-click="addVm.save()">Add user</button></div>
+
+			<div style="margin-top: 30px" class="col-md-12">
+				<label class="ErrorLabel">{{addVm.Message}}</label>
+			</div>
+
+		</div>
+
+
+	</div>
+
+</div>

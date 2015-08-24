@@ -11,6 +11,10 @@
 			templateUrl: 'details.html',
 			controller: 'detailsController'
 		})
+		.when('/addSuperUser/:tenant', {
+			templateUrl: 'addSuperUser.html',
+			controller: 'addSuperUserController'
+		})
 		.when('/import', {
 			templateUrl: 'import.html',
 			controller: 'importController'
