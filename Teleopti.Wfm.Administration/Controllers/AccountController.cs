@@ -16,10 +16,12 @@ namespace Teleopti.Wfm.Administration.Controllers
 	public class AccountController : ApiController
 	{
 		private readonly ICurrentTenantSession _currentTenantSession;
+		private readonly FindTenantAdminUserByEmail _findTenantAdminUserByEmail;
 		private const string Salt = "adgvabar4g61qt46gv";
-		public AccountController(  ICurrentTenantSession currentTenantSession)
+		public AccountController(  ICurrentTenantSession currentTenantSession, FindTenantAdminUserByEmail findTenantAdminUserByEmail)
 		{
 			_currentTenantSession = currentTenantSession;
+			_findTenantAdminUserByEmail = findTenantAdminUserByEmail;
 		}
 
 		[OverrideAuthentication]
@@ -28,7 +30,8 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[Route("Login")]
 		public virtual JsonResult<LoginResult> Login(LoginModel model)
 		{
-			var user = _currentTenantSession.CurrentSession().GetNamedQuery("loadAllTenantUsers").List<TenantAdminUser>().FirstOrDefault(x => x.Email.Equals(model.UserName));
+			var user =_findTenantAdminUserByEmail.Find(model.UserName);
+			//var user = _currentTenantSession.CurrentSession().GetNamedQuery("loadAllTenantUsers").List<TenantAdminUser>().FirstOrDefault(x => x.Email.Equals(model.UserName));
 			if(user == null)
 				return Json(new LoginResult {Success = false, Message = "No user with that Email."});
 
