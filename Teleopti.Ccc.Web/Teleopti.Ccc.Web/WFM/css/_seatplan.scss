@@ -1,4 +1,17 @@
-﻿#seatPlan{
+﻿/*For general container height ajustment*/
+.layout-container {
+	overflow: hidden;
+	height: 100%;
+}
+
+.container.content {
+	overflow: hidden;
+	height: 100%;
+	padding-bottom: 72px;
+}
+
+
+#seatPlan{
 	height:100%;
 }
 
@@ -40,6 +53,18 @@
 	margin-left:320px;
 	padding-left:15px;
 	padding-right:15px;
+	min-height: 231px;
+	position: relative;
+}
+
+.planningDayDetail .wfm-btn-invis-primary{
+	text-transform: none;
+	background: #0099ff;
+	color:#ffffff;
+	position: absolute;
+	bottom: 0;
+	right: 15px;
+	padding: 3px 7px;
 }
 
 @media(max-width:1000px){
@@ -49,7 +74,6 @@
 		clear:left;
 	}
 }
-
 
 .teleopti-card-selected{
 	position:relative;
@@ -194,9 +218,10 @@
 	padding-left:10px;
 	padding-right:10px;
 	overflow:auto;
-	height:98%;
+	height:100%;
 	width:100%;
 	position:absolute;
+	padding-bottom:40px;
 }
 .seatPlanReportContent h2{
 	margin-bottom:0px !important;
