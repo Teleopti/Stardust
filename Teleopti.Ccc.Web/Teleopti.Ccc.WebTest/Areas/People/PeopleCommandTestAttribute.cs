@@ -5,6 +5,8 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.Web.Areas.People.Core.IoC;
+using Teleopti.Ccc.Web.Areas.People.Core.Providers;
 using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -16,6 +18,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.AddModule(new WebModule(configuration, null));
+			system.AddModule(new PeopleAreaModule());
 
 			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
 			system.UseTestDouble<FakeContractRepository>().For<IContractRepository>();
@@ -23,6 +26,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			system.UseTestDouble<FakeContractScheduleRepository>().For<IContractScheduleRepository>();
 			system.UseTestDouble<FakeTeamRepository>().For<ITeamRepository>();
 			system.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
+			system.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
 		}
 	}
 

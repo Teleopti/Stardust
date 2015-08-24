@@ -5,47 +5,33 @@ using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Web.Areas.People.Core.Providers;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.People.Controllers
 {
 	public class PeopleDataController : ApiController
 	{
-		private readonly IPersonRepository _personRepo;
+		private readonly IPersonDataProvider _personDataProvider;
 		private readonly ISkillRepository _skillRepo;
 
-		public PeopleDataController(IPersonRepository personRepo, ISkillRepository skillRepo)
+		public PeopleDataController(IPersonDataProvider personDataProvider, ISkillRepository skillRepo)
 		{
-			_personRepo = personRepo;
+			_personDataProvider = personDataProvider;
 			_skillRepo = skillRepo;
 		}
 
-		[UnitOfWork]
-		[HttpPost, Route("fetchPeople")]
-		public JsonResult<IEnumerable<PersonDataModel>> FetchPeople(InputModel inputModel)
+		[UnitOfWork, HttpPost, Route("api/PeopleData/fetchPeople")]
+		public virtual JsonResult<IEnumerable<PersonDataModel>> FetchPeople(InputModel inputModel)
 		{
-			var people = _personRepo.FindPeople(inputModel.PersonIdList);
-			var result = people.Select(p =>
-			{
-				var currentPeriod =
-					p.PersonPeriods(new DateOnlyPeriod(new DateOnly(inputModel.Date), new DateOnly(inputModel.Date))).Single();
-				return new PersonDataModel
-				{
-					PersonId = p.Id.GetValueOrDefault(),
-					FirstName = p.Name.FirstName,
-					LastName = p.Name.LastName,
-					Team = currentPeriod.Team.SiteAndTeam,
-					SkillIdList = currentPeriod.PersonSkillCollection.Select(s => s.Skill.Id.GetValueOrDefault()).ToList(),
-					ShiftBag = currentPeriod.RuleSetBag.Description.Name
-				};
-			});
-
+			var result = _personDataProvider.RetrievePeople(inputModel.Date, inputModel.PersonIdList);
+			
 			return Json(result);
 		}
 
-		[UnitOfWork]
-		[HttpGet, Route("loadAllSkills")]
-		public JsonResult<IEnumerable<SkillDataModel>> LoadAllSkills()
+		[UnitOfWork, HttpGet, Route("api/PeopleData/loadAllSkills")]
+		public virtual JsonResult<IEnumerable<SkillDataModel>> LoadAllSkills()
 		{
 			var skills = _skillRepo.LoadAll();
 			var result = skills.Select(s => new SkillDataModel
