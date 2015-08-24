@@ -68,7 +68,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 
 			var result = Target.CheckFirstUser(new CreateTenantModel { FirstUser = RandomName.Make(), FirstUserPassword = "passande" }).Content;
 			result.Success.Should().Be.True();
-			result.Message.Should().Be.EqualTo("The user name is ok.");
+			result.Message.Should().Be.EqualTo("The user name and password are ok.");
 		}
 
 	}
