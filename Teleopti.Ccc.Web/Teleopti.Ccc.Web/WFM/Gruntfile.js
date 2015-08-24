@@ -1,5 +1,4 @@
 ﻿module.exports = function (grunt) {
-
 	// Project configuration.
 	grunt.initConfig({
 		watch: {
@@ -15,7 +14,21 @@
 				tasks: ['karma']
 			}
 		},
+		iisexpress: {
+			 authBridge: {
+					 options: {
+							 site:'teleopti.ccc.web.authenticationBridge'
+					 }
+			 },
+			 web: {
+					options: {
+						site:'teleopti.ccc.web',
+						openUrl:'http://localhost:52858',
+						open:true
+					}
+			}
 
+	 },
 		karma: {
 			unit: {
 				configFile: 'karma.conf.js',
@@ -66,6 +79,7 @@
 	grunt.loadNpmTasks('grunt-sass');
 	grunt.loadNpmTasks('grunt-karma');
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
+	grunt.loadNpmTasks('grunt-iisexpress');
 
 
 
@@ -74,4 +88,6 @@
 	grunt.registerTask('unitTest', ['watch:test']); // this task watchs the js tests files and run the tests if needed
 
 	grunt.registerTask('dist', ['uglify:dist', 'sass', 'cssmin']); // this task should only be used by the build. It's kind of packaging for production.
+	grunt.registerTask('nova', ['uglify:dev', 'sass', 'cssmin','iisexpress:authBridge','iisexpress:web', 'watch:dev']); // this task run the main task and then watch for file changes
+
 };
