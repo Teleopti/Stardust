@@ -10,7 +10,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 {
-	[UseOnToggle(Toggles.RTA_NewEventHangfireRTA_34333)]
+	[UseOnToggle(Toggles.RTA_AdherenceDetails_34267)]
 	public class AdherenceDetailsReadModelUpdater :
 		IRunOnHangfire,
 		IHandleEvent<PersonActivityStartEvent>,

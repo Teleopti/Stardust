@@ -3,7 +3,7 @@
 	As a real time analyst
 	I want to see whom and when was adhered and not adhered to the schedule
 
-@OnlyRunIfEnabled('RTA_NewEventHangfireRTA_34333')
+@OnlyRunIfEnabled('RTA_AdherenceDetails_34267')
 Scenario: Should be able to see adherence details for one agent within working hour
 	Given there is an activity named 'Phone'
 	And there is a site named 'Paris'
@@ -48,7 +48,7 @@ Scenario: Should be able to see adherence details for one agent within working h
 	Then I should see 'Phone' with adherence of 25%
 	And I should see daily adherence for 'Pierre Baldi' is 25%
 
-@OnlyRunIfEnabled('RTA_NewEventHangfireRTA_34333')
+@OnlyRunIfEnabled('RTA_AdherenceDetails_34267')
 Scenario: Should be able to see adherence details for one agent outside of working hour
 	Given there is an activity named 'Phone'
 	And there is a site named 'Paris'

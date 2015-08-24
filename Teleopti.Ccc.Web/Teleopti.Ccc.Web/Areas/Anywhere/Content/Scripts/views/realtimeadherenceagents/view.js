@@ -114,7 +114,7 @@
 			});
 
 			viewModel.agentAdherenceEnabled(resources.RTA_NewEventHangfireRTA_34333);
-			viewModel.agentAdherenceDetailsEnabled(resources.RTA_NewEventHangfireRTA_34333);
+			viewModel.agentAdherenceDetailsEnabled(resources.RTA_AdherenceDetails_34267);
 		},
 		dispose: function (options) {
 			subscriptions.unsubscribeAdherence();

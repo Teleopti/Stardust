@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 {
 	[RtaTest]
 	[Toggle(Toggles.RTA_NewEventHangfireRTA_34333)]
+	[Toggle(Toggles.RTA_AdherenceDetails_34267)]
 	[TestFixture]
 	public class AdherenceDetailsTest
 	{
