@@ -66,6 +66,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		}
 
 		[Test]
+		[Toggle(Toggles.RTA_AdherenceDetails_34267)]
 		public void ShouldRunAdherenceDetailsReadModelUpdaterOnHangfire()
 		{
 			Target.Publish(new PersonActivityStartEvent());
