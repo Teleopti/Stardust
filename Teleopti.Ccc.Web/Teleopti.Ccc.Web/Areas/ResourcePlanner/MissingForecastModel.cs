@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
+﻿namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 {
 	public class MissingForecastModel
 	{
