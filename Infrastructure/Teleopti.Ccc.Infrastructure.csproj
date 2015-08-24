@@ -448,7 +448,6 @@
     <Compile Include="Foundation\StateHolder.cs" />
     <Compile Include="NHibernateConfiguration\SqlServerExceptionConverter.cs" />
     <Compile Include="NHibernateConfiguration\TeleoptiAuditEventListener.cs" />
-    <Compile Include="NHibernateConfiguration\TeleoptiDatabaseNamingStrategy.cs" />
     <Compile Include="NHibernateConfiguration\TeleoptiDistributedTransactionFactory.cs" />
     <Compile Include="NHibernateConfiguration\TeleoptiDriverConnectionProvider.cs" />
     <Compile Include="NHibernateConfiguration\TrackerByte.cs" />

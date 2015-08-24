@@ -68,7 +68,6 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.Dialect, typeof(MsSql2008Dialect).AssemblyQualifiedName);
 			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.ConnectionProvider, typeof(TeleoptiDriverConnectionProvider).AssemblyQualifiedName);
 			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.DefaultSchema, "dbo");
-			nhConfiguration.SetNamingStrategy(TeleoptiDatabaseNamingStrategy.Instance);
 			nhConfiguration.AddAssembly("Teleopti.Ccc.Domain");
 			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.SqlExceptionConverter, typeof(SqlServerExceptionConverter).AssemblyQualifiedName);
 			if (UseSecondLevelCache)

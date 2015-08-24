@@ -369,7 +369,6 @@
     <Compile Include="Foundation\SessionDataTest.cs" />
     <Compile Include="Foundation\StateTest.cs" />
     <Compile Include="NHibernateConfiguration\SqlServerExceptionConverterTest.cs" />
-    <Compile Include="NHibernateConfiguration\TeleoptiDatabaseNamingStrategyTest.cs" />
     <Compile Include="NHibernateConfiguration\TeleoptiDistributedTransactionFactoryTest.cs" />
     <Compile Include="NHibernateConfiguration\TeleoptiDriverConnectionProviderTest.cs" />
     <Compile Include="NHibernateConfiguration\TrackerByteTest.cs" />
