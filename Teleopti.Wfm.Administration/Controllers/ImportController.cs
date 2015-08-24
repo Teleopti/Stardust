@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Runtime.Remoting.Lifetime;
 using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.DBManager.Library;
@@ -48,12 +49,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 				return Json(new ImportTenantResultModel { Success = false, Message = "The databases does not have the same version." });
 			
 			var conflicts = _getImportUsers.GetConflictionUsers(model.ConnStringAppDatabase, model.Tenant);
-
-
-			if (conflicts.NumberOfNotConflicting + conflicts.NumberOfConflicting == 0)
-				return Json(new ImportTenantResultModel { Success = false, Message = "There are no users to import." });
-
-
+		
 			return Json(_import.Execute(model, conflicts));
 		}
 
