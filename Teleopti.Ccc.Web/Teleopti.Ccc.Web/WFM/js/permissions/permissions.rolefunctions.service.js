@@ -50,11 +50,14 @@
 				return deferred.promise;
 			};
 
-			rolesFunctionsService.refreshFunctions = function(newSelectedRoleId) {
+			rolesFunctionsService.refreshFunctions = function (newSelectedRoleId) {
+				var deferred = $q.defer();
 				PermissionsService.rolesPermissions.query({ Id: newSelectedRoleId }).$promise.then(function(result) {
 					var permsFunc = result.AvailableFunctions;
 					parseFunctions(rolesFunctionsService.functionsDisplayed, permsFunc);
+					deferred.resolve();
 				});
+				return deferred.promise;
 			};
 
 			return rolesFunctionsService;

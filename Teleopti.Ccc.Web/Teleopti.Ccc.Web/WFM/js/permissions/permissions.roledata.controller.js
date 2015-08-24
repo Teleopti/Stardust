@@ -34,7 +34,6 @@
 				var uiTree = {};
 				uiTree.deselectParent = function (node) {
 				    if (!node.$parentNodeScope) return;
-
 				    var childrenOfParent = uiTree.getChildrenOfParent(node);
 					if (childrenOfParent.length > 0) {
 						var bu = $filter("filter")(childrenOfParent, { Type: "BusinessUnit" });
@@ -96,6 +95,7 @@
 					if (Roles.selectedRole.BuiltIn) return;
 					var dataNode = node.$modelValue;
 					if (dataNode.selected) {
+
 						RoleDataService.deleteAvailableData($scope.selectedRole, dataNode.Type, dataNode.Id).
 						then(function () {
 							dataNode.selected = false;

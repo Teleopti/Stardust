@@ -4,39 +4,39 @@
 		<input type="text" name="filterDetails" ng-model="searchData" placeholder="{{'DataFilterThreeDots' | translate}}"/>
 	</div>
 
-        <form class="permission-radio-buttons">
-            <div class="wfm-radio">
-                <label>
-                    <span class="wfm-radio-label permission-filter-label">Show: </span>
-                </label>
-            </div>
-            <div class="wfm-radio">
-                <label ng-click="unselectedDataToggle = false; selectedDataToggle = false">
-                    <input type="radio" checked name="tree-toggle">
-                    <span class="wfm-radio-toggle"></span>
-                    <span class="wfm-radio-label">All</span>
-                </label>
-            </div>
-            <div class="wfm-radio">
-                <label ng-click="unselectedDataToggle = false">
-                    <input type="radio" name="tree-toggle" ng-model="selectedDataToggle" value="true">
-                    <span class="wfm-radio-toggle"></span>
-                    <span class="wfm-radio-label">Selected</span>
-                </label>
-            </div>
-            <div class="wfm-radio">
-                <label ng-click="selectedDataToggle = false">
-                    <input type="radio" name="tree-toggle" ng-model="unselectedDataToggle" value="true">
-                    <span class="wfm-radio-toggle"></span>
-                    <span class="wfm-radio-label">Unselected</span>
-                </label>
-            </div>
-        </form>
+		<form class="permission-radio-buttons">
+			<div class="wfm-radio">
+				<label>
+					<span class="wfm-radio-label permission-filter-label">Show: </span>
+				</label>
+			</div>
+			<div class="wfm-radio">
+				<label ng-click="unselectedDataToggle = false; selectedDataToggle = false">
+					<input type="radio" checked name="tree-toggle">
+					<span class="wfm-radio-toggle"></span>
+					<span class="wfm-radio-label">All</span>
+				</label>
+			</div>
+			<div class="wfm-radio">
+				<label ng-click="unselectedDataToggle = false">
+					<input type="radio" name="tree-toggle" ng-model="selectedDataToggle" value="true">
+					<span class="wfm-radio-toggle"></span>
+					<span class="wfm-radio-label">Selected</span>
+				</label>
+			</div>
+			<div class="wfm-radio">
+				<label ng-click="selectedDataToggle = false">
+					<input type="radio" name="tree-toggle" ng-model="unselectedDataToggle" value="true">
+					<span class="wfm-radio-toggle"></span>
+					<span class="wfm-radio-label">Unselected</span>
+				</label>
+			</div>
+		</form>
 
 	<div class="data-auth">
 		
 		<label translate>AddGlobalAuthorizationLabel</label>
-		<md-select placeholder="Pick" ng-model="dynamicOptionSelected.data" ng-change="changeOption(dynamicOptionSelected.data)" ng-class="{optionLocked:dynamicOptionSelected.isBuiltIn}" style="padding: 0;">
+		<md-select placeholder="Pick" ng-model="dynamicOptionSelected.data" ng-change="changeOption(dynamicOptionSelected.data)" ng-class="{optionLocked:dynamicOptionSelected.isBuiltIn}">
 			<md-option ng-repeat="dynamic in organization.DynamicOptions" ng-value="dynamic.RangeOption">{{dynamic.Name}}</md-option>
 		</md-select>
 	</div>
@@ -46,30 +46,30 @@
 
 <div class="tree permissions-tree">
 	
-    <div ui-tree data-drag-enabled="false">
-        <ol ui-tree-nodes="" ng-model="organization.BusinessUnit" id="tree-root" class="tree-line">
+	<div ui-tree data-drag-enabled="false">
+		<ol ui-tree-nodes="" ng-model="organization.BusinessUnit" id="tree-root" class="tree-line">
 			<li ng-repeat="node in organization.BusinessUnit | nameFilter: searchData  | selectedData:selectedDataToggle | unselectedData:unselectedDataToggle" ui-tree-node ng-include="'nodes_bu_renderer.html'"></li>
-        </ol>
-    </div>
+		</ol>
+	</div>
 </div>
 
 <!-- Nested node template for data -->
 <script type="text/ng-template" id="nodes_bu_renderer.html">
 
 	
-    <div class="tree-toggle-group">
-        <div class="toggle-handle" ng-class="{open: node.show}" ng-click="node.show = !node.show"><i ng-show="node.ChildNodes.length > 0" class="mdi mdi-chevron-right"></i></div>
-        <div ui-tree-handle class="ui-tree-handle" ng-class="{selected: node.selected}" ng-click="toggleOrganizationSelection(this)">
-            {{node.Name}} <!--{{nbSelected(childNodes()) }} / {{childNodes().length}} selected-->
+	<div class="tree-toggle-group">
+		<div class="toggle-handle" ng-class="{open: node.show}" ng-click="node.show = !node.show"><i ng-show="node.ChildNodes.length > 0" class="mdi mdi-chevron-right"></i></div>
+		<div ui-tree-handle class="ui-tree-handle" ng-class="{selected: node.selected}" ng-click="toggleOrganizationSelection(this)">
+			{{node.Name}} <!--{{nbSelected(childNodes()) }} / {{childNodes().length}} selected-->
 			
-            <span><i class="mdi mdi-check"></i></span>
-        </div>
-    </div>
+			<span><i class="mdi mdi-check"></i></span>
+		</div>
+	</div>
 
-    <ol ui-tree-nodes="" ng-model="node.ChildNodes" ng-show="node.show">
+	<ol ui-tree-nodes="" ng-model="node.ChildNodes" ng-show="node.show">
 		<li ng-repeat="node in node.ChildNodes | nameFilter: searchData | selectedData:selectedDataToggle | unselectedData:unselectedDataToggle"
 			ui-tree-node ng-include="'nodes_bu_renderer.html'">
 
 		</li>
-    </ol>
+	</ol>
 </script>
