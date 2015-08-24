@@ -131,5 +131,24 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			@event.ShiftEndTime.Should().Be("2014-10-20 12:00".Utc());
 		}
 		
+		[Test]
+		public void ShouldPublishOnlyOneShiftStartEvent()
+		{
+			var personId = Guid.NewGuid();
+			var activityId = Guid.NewGuid();
+			var businessUnitId = Guid.NewGuid();
+			database
+				.WithDefaultsFromState(new ExternalUserStateForTest())
+				.WithUser("usercode", personId, businessUnitId)
+				.WithSchedule(personId, activityId, "2015-08-21 06:00", "2015-08-21 15:00");
+
+			now.Is("2015-08-21 07:00".Utc());
+			target.CheckForActivityChange(personId, businessUnitId);
+			now.Is("2015-08-21 07:03".Utc());
+			target.CheckForActivityChange(personId, businessUnitId);
+
+			var @event = publisher.PublishedEvents.OfType<PersonShiftStartEvent>().Single();
+			@event.PersonId.Should().Be(personId);
+		}
 	}
 }
