@@ -126,7 +126,7 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 		return $scope.selectedPeopleList;
 	}
 	$scope.gotoSkillPanel = function () {
-		$state.go("people-selection-cart", { selectedPeopleIds: getSelectedPeople, commandTag: 'adjustSkill' });
+		$state.go("people-selection-cart", { selectedPeopleIds: getSelectedPeople(), commandTag: 'adjustSkill' });
 	};
 
 	var selectPeople = function(rows) {

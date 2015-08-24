@@ -3,20 +3,27 @@
 (function () {
 	angular.module('wfm.people')
 		.controller('PeopleCartCtrl', [
-			'$q','$translate', '$stateParams', 'uiGridConstants', 'People', PeopleImportController
+			'$q', '$translate', '$stateParams', 'uiGridConstants', 'People', PeopleCartController
 		]);
 
-	function PeopleImportController($q, $translate, $stateParams, uiGridConstants, peopleSvc) {
+	function PeopleCartController($q, $translate, $stateParams, uiGridConstants, peopleSvc) {
 		var vm = this;
-
 		vm.selectedPeopleIds = $stateParams.selectedPeopleIds;
 		vm.commandName = $stateParams.commandTag;
 		
-		vm.columnMap = [{ tag: "adjustSkill", columns: ["skill", "shiftBag"] }];
+		vm.columnMap = [
+			{
+				tag: "adjustSkill",
+				columns: [
+					{ displayName: 'Skills', field: 'Skills', headerCellFilter: 'translate', minWidth: 100 },
+					{ displayName: 'ShiftBag', field: 'ShiftBag', headerCellFilter: 'translate', minWidth: 100 }
+				]
+			}
+		];
 		vm.constructColumns = function() {
 			angular.forEach(vm.columnMap, function (item) {
 				if (item.tag === vm.commandName) {
-					vm.gridOptions.columnDefs.concat(item.columns);
+					vm.gridOptions.columnDefs = vm.gridOptions.columnDefs.concat(item.columns);
 				}
 			});
 		};
@@ -35,37 +42,40 @@
 					minWidth: 100
 				}
 			],
+
+			data: 'vm.availablePeople'
 			
 		};
 
-		vm.loadSkillPromise = peopleSvc.loadAllSkills.get.$promise;
-		vm.loadSkillPromise.then(function(result) {
+		var loadSkillPromise = peopleSvc.loadAllSkills.get().$promise;
+		loadSkillPromise.then(function(result) {
 			vm.availableSkills = result;
 		});
-
-		vm.fetchPeoplePromise = peopleSvc.fetchPeople(peopleIdList).post.$promise;
-		vm.fetchPeoplePromise.then(function (result) {
+		vm.date = moment().format('YYYY-MM-DD');
+		var fetchPeoplePromise = peopleSvc.fetchPeople.post({ Date: vm.date, PersonIdList: vm.selectedPeopleIds }).$promise;
+		fetchPeoplePromise.then(function (result) {
 			vm.availablePeople = result;
 			vm.gridOptions.data = result;
-			
 		});
 		
 		vm.updateSkillOnPersons = function(peopleList) {
-			peopleSvc.updateSkillOnPersons(peopleList).post.$promise.then(function(result) {
+			peopleSvc.updateSkillOnPersons.post(peopleList).$promise.then(function (result) {
 				vm.updateResult = result.Success;
 			});
 		};
 
 		function initialize() {
-			$q.all([vm.loadSkillPromise, vm.fetchPeoplePromise]).then(function () {
+			$q.all([loadSkillPromise, fetchPeoplePromise]).then(function () {
 				//update people skill info
 				//construct skill list has status
 				//render update grid TODO
 				angular.forEach(vm.availableSkills, function (skill) {
 					var hasCount = 0;
 					skill.Status = "none"; 
-					angular.forEach(vm.availablePeople, function(person) {
-						person.Skills = "";
+					angular.forEach(vm.availablePeople, function (person) {
+						if (person.Skills == undefined) {
+							person.Skills = "";
+						}
 
 						for (var i = 0; i < person.SkillIdList.length; i++) {
 							if (person.SkillIdList[i] === skill.SkillId) {
@@ -83,10 +93,11 @@
 					}
 				});
 				vm.dataInitialized = true;
+				
 			});
 			
 		}
-
+		vm.constructColumns();
 		initialize();
 	};
 }());

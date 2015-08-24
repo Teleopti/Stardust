@@ -38,7 +38,7 @@ angular
 				InputModel: "@inputModel"
 			}, {
 				post: {
-					method: "GET",
+					method: "POST",
 					params: {},
 					isArray: true
 				}
