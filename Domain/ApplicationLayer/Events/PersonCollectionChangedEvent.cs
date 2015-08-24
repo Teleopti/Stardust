@@ -1,17 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-
-namespace Teleopti.Interfaces.Messages.Denormalize
-{
-	/// <summary>
-	/// Events are messages. Here we're handling the legacy message type for changed people.
-	/// </summary>
-	public class PersonChangedMessage : PersonCollectionChangedEvent
-	{
-	}
-}
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {

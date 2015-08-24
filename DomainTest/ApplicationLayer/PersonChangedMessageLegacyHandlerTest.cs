@@ -1,7 +1,10 @@
+using System;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers;
-using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
@@ -12,13 +15,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldHandleLegacyMessage()
 		{
-			var repository = MockRepository.GenerateMock<IPersonFinderReadOnlyRepository>();
-			var handler = new UpdateFindPersonConsumer(repository);
+			var publisher = MockRepository.GenerateMock<IEventPublisher>();
+			var handler = new LegacyUpdateFindPersonConsumer(publisher);
 			var legacyMessage = new PersonChangedMessage();
 
 			handler.Handle(legacyMessage);
 
-			repository.AssertWasCalled(x => x.UpdateFindPerson(legacyMessage.PersonIdCollection));
+			publisher.AssertWasCalled(x => x.Publish(null),
+				o =>
+					o.Constraints(
+						Rhino.Mocks.Constraints.Is.Matching(
+							new Predicate<IEvent[]>(t => t.Length == 1 && t[0] is PersonCollectionChangedEvent))));
 		}
 	}
 }

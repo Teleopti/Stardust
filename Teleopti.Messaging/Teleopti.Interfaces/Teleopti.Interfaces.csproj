@@ -841,6 +841,7 @@
     <Compile Include="MessageBroker\Mailbox.cs" />
     <Compile Include="MessageBroker\Message.cs" />
     <Compile Include="MessageBroker\Subscription.cs" />
+    <Compile Include="Messages\Denormalize\Legacy\PersonChangedMessage.cs" />
     <Compile Include="Messages\Denormalize\ScheduleChanged.cs" />
     <Compile Include="Messages\Denormalize\DenormalizeScheduleProjection.cs" />
     <Compile Include="Messages\Denormalize\GroupPageChangedMessage.cs" />
