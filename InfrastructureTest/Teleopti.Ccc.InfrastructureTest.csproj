@@ -186,6 +186,7 @@
     <Compile Include="MessageBroker\MailboxRepositoryTest.cs" />
     <Compile Include="MessageBroker\MessageBrokerServerTest.cs" />
     <Compile Include="MessageBroker\MessageBrokerTestAttribute.cs" />
+    <Compile Include="MultiTenancy\Admin\DeleteTenantTest.cs" />
     <Compile Include="MultiTenancy\Admin\LoadAllTenantsTest.cs" />
     <Compile Include="MultiTenancy\Admin\RegenerateAllTenantPasswordsTest.cs" />
     <Compile Include="MessageBroker\MessageBrokerUnitOfWorkTestAttribute.cs" />
@@ -212,6 +213,7 @@
     <Compile Include="MultiTenancy\Server\Queries\PersistPersonInfoTest.cs" />
     <Compile Include="MultiTenancy\Server\Queries\PersistTenantTest.cs" />
     <Compile Include="MultiTenancy\Client\TenantClientTestAttribute.cs" />
+    <Compile Include="MultiTenancy\SessionExtension.cs" />
     <Compile Include="Persisters\Schedules\NoUnitOfWorkModifyNoConflictTest.cs" />
     <Compile Include="Rta\PublishRtaEventsToHangfireTest.cs" />
     <Compile Include="UnitOfWork\MessageSenders\AggregatedScheduleChangeMessageTest.cs" />
