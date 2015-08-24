@@ -24,19 +24,19 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private readonly ITenantExists _tenantExists;
 		private readonly IDbPathProvider _dbPathProvider;
 		private readonly ILoadAllTenants _loadAllTenants;
-		//private readonly ICheckPasswordStrength _checkPasswordStrength;
+		private readonly ICheckPasswordStrength _checkPasswordStrength;
 
 		private readonly bool isAzure =  !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME"));
 
 		public DatabaseController(DatabaseHelperWrapper databaseHelperWrapper, ICurrentTenantSession currentTenantSession,
-			ITenantExists tenantExists, IDbPathProvider dbPathProvider, ILoadAllTenants loadAllTenants)
+			ITenantExists tenantExists, IDbPathProvider dbPathProvider, ILoadAllTenants loadAllTenants, ICheckPasswordStrength checkPasswordStrength)
 		{
 			_databaseHelperWrapper = databaseHelperWrapper;
 			_currentTenantSession = currentTenantSession;
 			_tenantExists = tenantExists;
 			_dbPathProvider = dbPathProvider;
 			_loadAllTenants = loadAllTenants;
-			//_checkPasswordStrength = checkPasswordStrength;
+			_checkPasswordStrength = checkPasswordStrength;
 		}
 
 
@@ -240,8 +240,16 @@ namespace Teleopti.Wfm.Administration.Controllers
 			var exists = mainUsers.FirstOrDefault(m => m.ApplicationLogonInfo.LogonName.Equals(name, StringComparison.InvariantCultureIgnoreCase));
 			if (exists != null)
 				return new TenantResultModel { Success = false, Message = "The user already exists." };
+			try
+			{
+				_checkPasswordStrength.Validate(password);
+			}
+			catch (Exception)
+			{
+				return new TenantResultModel { Success = false, Message = "The password does not meet the password strength rules." };
+			}
 
-			return new TenantResultModel { Success = true, Message = "The user name is ok." };
+			return new TenantResultModel { Success = true, Message = "The user name and password are ok." };
 		}
 
 		private TenantResultModel addSuperUserToTenantInternal(Tenant tenant, string firstName, string lastName, string userName, string password)
@@ -256,7 +264,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			var personInfo = new PersonInfo(tenant, personId);
 
 			// todo handle passwordStrength error this is just to get it to work, the loader is in applicationdata and I don't think it is so good
-			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), userName, password);
+			personInfo.SetApplicationLogonCredentials(_checkPasswordStrength, userName, password);
 			_currentTenantSession.CurrentSession().Save(personInfo);
 
 			return new TenantResultModel { Success = true, Message = "Created new user." };
