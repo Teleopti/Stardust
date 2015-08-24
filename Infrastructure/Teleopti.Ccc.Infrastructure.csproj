@@ -245,6 +245,7 @@
     <Compile Include="MessageBroker\Scheduling\MailboxSubscriber.cs" />
     <Compile Include="MessageBroker\Scheduling\SignalRSubscriber.cs" />
     <Compile Include="MultiTenancy\Admin\DeleteTenant.cs" />
+    <Compile Include="MultiTenancy\Admin\FindTenantAdminUserByEmail.cs" />
     <Compile Include="MultiTenancy\Admin\ILoadAllTenants.cs" />
     <Compile Include="MultiTenancy\Admin\ImportTenantResultModel.cs" />
     <Compile Include="MultiTenancy\Admin\IRegenerateAllTenantPasswords.cs" />

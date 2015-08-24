@@ -26,5 +26,8 @@ from TenantAdminUser u
 where u.Id=:id
 ]]>
 	</query>
-
+	<query name="findTenantAdminUserByEmail">
+		select u from TenantAdminUser u
+		where u.Email=:email
+	</query>
 </hibernate-mapping>

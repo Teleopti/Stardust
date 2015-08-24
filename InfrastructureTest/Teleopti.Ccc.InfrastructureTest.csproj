@@ -187,6 +187,7 @@
     <Compile Include="MessageBroker\MessageBrokerServerTest.cs" />
     <Compile Include="MessageBroker\MessageBrokerTestAttribute.cs" />
     <Compile Include="MultiTenancy\Admin\DeleteTenantTest.cs" />
+    <Compile Include="MultiTenancy\Admin\FindTenantAdminUserByEmailTest.cs" />
     <Compile Include="MultiTenancy\Admin\LoadAllTenantsTest.cs" />
     <Compile Include="MultiTenancy\Admin\RegenerateAllTenantPasswordsTest.cs" />
     <Compile Include="MessageBroker\MessageBrokerUnitOfWorkTestAttribute.cs" />
