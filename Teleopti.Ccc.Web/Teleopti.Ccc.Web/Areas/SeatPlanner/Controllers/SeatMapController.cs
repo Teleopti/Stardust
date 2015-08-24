@@ -31,11 +31,11 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers
 			_loggedOnUser = loggedOnUser;
 			_seatMapProvider = seatMapProvider;
 		}
-		
+
 		[UnitOfWork, Route("api/SeatPlanner/SeatMap"), HttpGet]
 		public virtual LocationViewModel Get(Guid? id)
 		{
-			return _seatMapProvider.Get (id);
+			return _seatMapProvider.Get(id);
 		}
 
 
@@ -45,12 +45,20 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers
 			return _seatMapProvider.Get(null);
 		}
 
+
 		[UnitOfWork, Route("api/SeatPlanner/SeatMap"), HttpGet]
-		public virtual LocationViewModel Get(Guid? id, DateTime date)
+		public virtual LocationViewModel Get(DateTime date)
+		{
+			return _seatMapProvider.Get(null, new DateOnly(date));
+		}
+
+
+		[UnitOfWork, Route("api/SeatPlanner/SeatMap"), HttpGet]
+		public virtual LocationViewModel Get(Guid id, DateTime date)
 		{
 			return _seatMapProvider.Get(id, new DateOnly(date));
 		}
-		
+
 		[UnitOfWork, Route("api/SeatPlanner/SeatMap"), HttpPost]
 		public virtual bool Save([FromBody]SaveSeatMapCommand command)
 		{

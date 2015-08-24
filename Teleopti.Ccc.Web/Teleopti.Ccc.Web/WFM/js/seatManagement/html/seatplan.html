@@ -2,8 +2,10 @@
 
 	<seat-plan-report ng-if="seatplan.isReportOpened" toggle="seatplan.isReportOpened = !seatplan.isReportOpened"
 	                  selected-period="seatplan.reportPeriod"></seat-plan-report>
+        
+	<seatmap-canvas occupancy date="seatplan.selectedDate" toggle="seatplan.isSeatMapBookingViewOpened = !seatplan.isSeatMapBookingViewOpened" ng-if="seatplan.isSeatMapBookingViewOpened"></seatmap-canvas>
 
-	<div class="row" ng-show="!seatplan.isReportOpened">
+	<div class="row" ng-show="!seatplan.isReportOpened && !seatplan.isSeatMapBookingViewOpened">
 
 		<div class="col-sm-12 seat-plan-calendar">
 
@@ -12,9 +14,9 @@
 			</div>
 
 			<datepicker ng-hide="seatplan.isLoadingCalendar" ng-model="seatplan.selectedDate"
-			            on-change-of-month="seatplan.onChangeOfMonth(date)"
-			            ng-change="seatplan.onChangeOfDate()" class="wfm-datepicker"
-			            custom-class="seatplan.getDayClass(date,mode)">
+						on-change-of-month="seatplan.onChangeOfMonth(date)"
+						ng-change="seatplan.onChangeOfDate()" class="wfm-datepicker"
+						custom-class="seatplan.getDayClass(date,mode)">
 			</datepicker>
 		</div>
 
@@ -26,6 +28,8 @@
 			<h3>{{seatplan.getDateString(seatplan.selectedDate)}}</h3>
 			<md-divider md-insert></md-divider>
 			<p>{{seatplan.getToDayInfo()}}</p>
+			
+			<button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="seatplan.isSeatMapBookingViewOpened =!seatplan.isSeatMapBookingViewOpened" ng-if="seatplan.showOccupancyView">{{'SeatMapBookingView' | translate}}</button>
 		</div>
 
 

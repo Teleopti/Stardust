@@ -4,13 +4,13 @@
 
 	angular.module('wfm.seatPlan').controller('SeatPlanCtrl', seatPlanDirectiveController);
 
-	seatPlanDirectiveController.$inject = ['ResourcePlannerSvrc', 'seatPlanService', '$translate', '$stateParams'];
+	seatPlanDirectiveController.$inject = ['ResourcePlannerSvrc', 'seatPlanService', '$translate', '$stateParams','Toggle'];
 
-	function seatPlanDirectiveController(resourcePlannerService, seatPlanService, translate, params) {
+	function seatPlanDirectiveController(resourcePlannerService, seatPlanService, translate, params, toggleService) {
 
 		var vm = this;
 
-		vm.setupTranslatedStrings = function () {
+		vm.setupTranslatedStrings = function() {
 
 			vm.translatedStrings = {};
 			vm.setupTranslatedString("LoadingSeatPlanStatus");
@@ -20,9 +20,15 @@
 			vm.translateSeatPlanStatus(2, 'SeatPlanStatusError');
 			vm.translateSeatPlanStatus(1, 'SeatPlanStatusInProgress');
 			vm.translateSeatPlanStatus(3, 'SeatPlanStatusNoSeatPlanned');
-		}
+		};
 
 
+		vm.setupToggles = function() {
+			toggleService.isFeatureEnabled.query({ toggle: 'Wfm_SeatPlan_SeatMapBookingView_32814' }).$promise.then(function(result) {
+				vm.showOccupancyView = result.IsEnabled;
+			});
+		};
+		
 		vm.getPreviousMonthStart = function (dateMoment) {
 			return moment(dateMoment).subtract(1, 'months').startOf('month').format("YYYY-MM-DD");
 		};
@@ -135,13 +141,13 @@
 			return dayInfoString;
 		};
 
-		vm.getDayClass = function (date, mode) {
+		vm.getDayClass = function(date, mode) {
 			if (mode === 'day') {
 
 				var dayClass = '';
 				var dayToCheck = moment(date);
 
-				vm.seatPlanDateStatuses.forEach(function (status) {
+				vm.seatPlanDateStatuses.forEach(function(status) {
 
 					if (dayToCheck.isSame(moment(status.Date), 'day')) {
 						dayClass = vm.seatPlanStatusClass[status.Status];
@@ -149,10 +155,16 @@
 				});
 			}
 			return dayClass;
-		}
+		};
 
-		vm.setupTranslatedStrings();
+		vm.init = function () {
+			
+			vm.setupTranslatedStrings();
+			vm.setupToggles();
+		};
 
+		vm.init();
+		
 		var date = (angular.isDefined(params.viewDate) && params.viewDate != "") ? params.viewDate : null;
 
 		if (date != null) {

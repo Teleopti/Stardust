@@ -20,7 +20,8 @@ angular.module('wfm.seatMap')
 			loadSeatMap: loadSeatMap,
 			resetPosition: resetPosition,
 			scrollZooming : scrollZooming,
-			zoom : zoom
+			zoom: zoom,
+			applyOccupancyColoring: applyOccupancyColoring,
 		};
 		
 		function setupCanvas (canvas) {
@@ -103,19 +104,40 @@ angular.module('wfm.seatMap')
 			}
 		};
 
-		function getObjectsByType (canvas, type) {
-			var canvasObjects = canvas.getObjects();
+	
+		function getObjectsByType(canvas, type) {
+
 			var objectsArray = new Array();
 
+			getObjectByTypeAndAddUsingFunction(canvas, type, function (obj) {
+				objectsArray.push(obj);
+			});
+			
+			return objectsArray;
+		};
+		
+
+		function getObjectsByTypeDict(canvas, type) {
+
+			var objectsDict = {};
+
+			getObjectByTypeAndAddUsingFunction(canvas, type, function (obj) {
+				objectsDict[obj.id] = obj;
+			});
+
+			return objectsDict;
+		};
+		
+		function getObjectByTypeAndAddUsingFunction(canvas, type, addFunction) {
+			var canvasObjects = canvas.getObjects();
 			for (var obj in canvasObjects) {
 				var foundObjs = getObjectsOfTypeFromCanvasObject(canvasObjects[obj], type);
 				if (foundObjs != null) {
 					for (var idx in foundObjs) {
-						objectsArray.push(foundObjs[idx]);
+						addFunction(foundObjs[idx]);
 					}
 				}
 			}
-			return objectsArray;
 		};
 
 		function getObjectsOfTypeFromCanvasObject (obj, type) {
@@ -225,11 +247,13 @@ angular.module('wfm.seatMap')
 			}
 		}
 
-		function loadSeatMap (id, canvas, allowEdit, callbackSuccess, callbackNoJson) {
+		function loadSeatMap (id, date, canvas, allowEdit, callbackSuccess, callbackNoJson) {
 			clearCanvas(canvas);
-			seatMapService.seatMap.get({ id: id }).$promise.then(function (data) {
+			
+			seatMapService.seatMap.get({ id: id, date: date }).$promise.then(function(data) {
 				loadSeatMapData(canvas, data, allowEdit, callbackSuccess, callbackNoJson);
 			});
+			
 		};
 
 		function resetPosition (canvas) {
@@ -299,6 +323,43 @@ angular.module('wfm.seatMap')
 			return true;
 
 		}
+		
+		function applyOccupancyColoring(canvas, seatInfo) {
+		
+			var occupiedSeatObjects = [];
+			var seatDict = getObjectsByTypeDict(canvas, 'seat');
+			var occupancyColourFilter = new fabric.Image.filters.Blend({
+				color: '#C2E085',
+				mode: 'multiply'
+			});
+
+			seatInfo.forEach(function (seat) {
+				if (seat.IsOccupied) {
+					var occupiedSeat = seatDict[seat.Id];
+					occupiedSeat.filters.push(occupancyColourFilter);
+					occupiedSeatObjects.push(occupiedSeat);			
+				}
+			});
+
+			applyFiltersToSeats(canvas, occupiedSeatObjects);
+		};
+		
+		function applyFiltersToSeats(canvas, occupiedSeatObjects) {
+			
+			var i = 0;
+			function onFilterCallBack() {
+				i++;
+				if (i == occupiedSeatObjects.length) {
+					canvas.renderAll.bind(canvas)();
+				}
+			};
+
+			occupiedSeatObjects.forEach(function (seat) {
+				seat.applyFilters(onFilterCallBack);
+			});
+
+		};
+
 
 		return utils;
 

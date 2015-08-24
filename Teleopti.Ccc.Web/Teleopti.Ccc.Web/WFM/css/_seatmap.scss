@@ -1,8 +1,11 @@
 ﻿@charset "UTF-8";
+.location-breadcrumb{
+	height:30px;
+	padding:5px;
+}
 
-.breadbin-inverse{
-	font-size : 85%;
-	margin-left: 10px;
+.breadcrumb-inverse{
+	font-size : 95%;
 }
 
 .breadcrumb-inverse a, .breadcrumb-inverse>.active {
@@ -16,6 +19,12 @@
   margin-right : 5px; 
 }
 
+
+.date-picker{
+	position:absolute;
+	top:42px;
+	left:38px;
+}
 
 a.mfb-component__button--main {
   outline: 0;

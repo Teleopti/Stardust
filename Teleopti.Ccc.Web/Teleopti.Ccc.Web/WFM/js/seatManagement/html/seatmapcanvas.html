@@ -1,17 +1,34 @@
-﻿
-<div>
-	<div position="absolute" class="breadbin-inverse">
+﻿<div class="seatPlanReport">
 
+	<div ng-if="vm.showOccupancy" class="seatPlanReportHeader material-depth-1">
+		<button class="wfm-btn pull-left" ng-click="vm.toggle()">
+			<i class="mdi mdi-reply"></i>
+		</button>
+		<button class="wfm-btn wfm-btn-invis-primary pull-left" ng-class="{'button-active':vm.isFilterOpened}" ng-click="vm.isDatePickerOpened = !vm.isDatePickerOpened">
+			<i class="mdi mdi-calendar"></i>
+			{{vm.getDisplaySelectedDate()}}
+		</button>
+
+		<span class="blankForTurnOffFilterPanel1" ng-click="vm.isDatePickerOpened = false"></span>
+
+		<div class="date-picker">
+
+			<datepicker ng-if="vm.isDatePickerOpened" ng-model="vm.selectedDate"
+						class="wfm-datepicker material-depth-1" ng-change="vm.onChangeOfDate()">
+			</datepicker>
+
+		</div>
+
+	</div>
+	<div class="location-breadcrumb">
 		<span ng-show="!vm.isLoading" class="breadcrumb-inverse fadein" ng-repeat="breadcrumb in vm.breadcrumbs">
 			<a ng-if="!$last" href="" ng-click="vm.handleBreadcrumbClick(breadcrumb.Id)">{{breadcrumb.Name}}</a>
 			<span class="divider" ng-if="!$last">></span>
 			<span ng-if="$last">{{breadcrumb.Name}}</span>
 		</span>
-		<p />
 	</div>
+	<div id="seatmapcanvas" ng-click="vm.isDatePickerOpened = false;">
 
-	<div id="seatmapcanvas" style="position: relative; margin-top: 20px;">
-	
 		<seatmap-editor ng-if="vm.showEditor"></seatmap-editor>
 
 		<div style="width:100%;" class="wfm-block material-depth-2">
@@ -20,14 +37,13 @@
 				<md-progress-circular md-mode="indeterminate"></md-progress-circular>
 			</div>
 		</div>
-		
+
 		<div style="position: absolute; bottom: 0px;margin-left: 1px">
 			<button ng-class="{info:!vm.isMoveMode(),success:vm.isMoveMode()}" style="float:left;" class="wfm-fab mini  " ng-click="vm.toggleMoveMode()">
 				<i class="mdi mdi-gamepad"></i>
 			</button>
 			<md-slider style="width:200px; margin-left:40px;" ng-model="vm.zoomData.zoomValue" min="{{vm.zoomData.min}}" max="{{vm.zoomData.max}}" step="{{vm.zoomData.step}}" ng-change="vm.zoom()"></md-slider>
 		</div>
-
 	</div>
 
 </div>
