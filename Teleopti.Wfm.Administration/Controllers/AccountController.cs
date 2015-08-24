@@ -52,12 +52,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[Route("User")]
 		public virtual JsonResult<UpdateUserModel> GetOneUser([FromBody]int id)
 		{
-			//return Json(_currentTenantSession.CurrentSession()
-			//	.GetNamedQuery("loadAllTenantUsers")
-			//	.SetInt32("id", id)
-			//	.UniqueResult<UpdateUserModel>());
-
-			var user = _currentTenantSession.CurrentSession().GetNamedQuery("loadAllTenantUsers").List<TenantAdminUser>().FirstOrDefault(x => x.Id.Equals(id));
+			var user = _currentTenantSession.CurrentSession().Get<TenantAdminUser>(id);
 			if(user != null)
 				return Json(new UpdateUserModel {Id = user.Id, Email = user.Email, Name = user.Name});
 
@@ -84,7 +79,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 			try
 			{
-				var user = _currentTenantSession.CurrentSession().GetNamedQuery("loadAllTenantUsers").List<TenantAdminUser>().FirstOrDefault(x => x.Id.Equals(model.Id));
+				var user = _currentTenantSession.CurrentSession().Get<TenantAdminUser>(model.Id);
 				if (user != null)
 				{
 					user.Name = model.Name;
@@ -169,7 +164,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[Route("ChangePassword")]
 		public virtual JsonResult<UpdateUserResultModel> ChangePassword(ChangePasswordModel model)
 		{
-			var user = _currentTenantSession.CurrentSession().GetNamedQuery("loadAllTenantUsers").List<TenantAdminUser>().FirstOrDefault(x => x.Id.Equals(model.Id));
+			var user = _currentTenantSession.CurrentSession().Get<TenantAdminUser>(model.Id);
 			if (user == null)
 				return Json(new UpdateUserResultModel { Success = false, Message = "Can not find the user." });
 

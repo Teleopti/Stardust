@@ -21,7 +21,7 @@
 
 	<query name="loadOneTenantUser">
 		<![CDATA[
-select u.Id as "Id", u.Name as "Name", u.Email as "Email"
+select u
 from TenantAdminUser u
 where u.Id=:id
 ]]>
