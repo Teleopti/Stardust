@@ -115,11 +115,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			var role = ApplicationRoleFactory.CreateRole(Name, Description);
 
 			var availableDataRangeOption = NoDataAccess
-														 ? AvailableDataRangeOption.None
-																			: AccessToEveryone ? AvailableDataRangeOption.Everyone
-														 : AccessToMyOwn ? AvailableDataRangeOption.MyOwn
-														 : AccessToMySite ? AvailableDataRangeOption.MySite
-														 : AvailableDataRangeOption.MyTeam;
+				? AvailableDataRangeOption.None
+				: AccessToEveryone
+					? AvailableDataRangeOption.Everyone
+					: AccessToMyOwn
+						? AvailableDataRangeOption.MyOwn
+						: AccessToMySite
+							? AvailableDataRangeOption.MySite
+							: AvailableDataRangeOption.MyTeam;
 			var availableData = new AvailableData
 			{
 				ApplicationRole = role,

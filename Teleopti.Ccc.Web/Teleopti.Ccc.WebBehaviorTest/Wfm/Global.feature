@@ -16,19 +16,27 @@ Scenario: View help widget
 @ignore
 Scenario: See available business units
 	Given I have a role with
-	| Field              | Value       |
-	| Name               | Team leader |
-	| Access to everyone | True        |
-	| Access to people   | true        |
+	| Field                 | Value |
+	| Access to permissions | True  |
+	| Access to everyone    | True  |
 	And there is a business unit with
 	| Field | Value           |
 	| Name  | Business Unit 1 |
 	And there is a business unit with
 	| Field | Value           |
 	| Name  | Business Unit 2 |
-	When I view people
-	And I view available business units
-	Then I should see available business units with
+	And there is a role with
+	| Field         | Value           |
+	| Name          | Role1           |
+	| Description   | Role1           |
+	| Business Unit | Business Unit 1 |
+	And there is a role with
+	| Field         | Value           |
+	| Name          | Role2           |
+	| Description   | Role2           |
+	| Business Unit | Business Unit 2 |
+	When I view Permissions
+	Then I should have available business units with
 	| Name            |
 	| BusinessUnit    |
 	| Business Unit 1 |
@@ -37,34 +45,31 @@ Scenario: See available business units
 @ignore
 Scenario: Select business unit
 	Given I have a role with
-	| Field              | Value       |
-	| Name               | Team leader |
-	| Access to everyone | true        |
-	| Access to people   | true        |
+	| Field                 | Value |
+	| Access to permissions | True  |
+	| Access to everyone    | True  |
 	And there is a business unit with
 	| Field | Value           |
 	| Name  | Business Unit 1 |
 	And there is a business unit with
 	| Field | Value           |
 	| Name  | Business Unit 2 |
-	And there is a site 'Paris' on business unit 'Business Unit 1'
-	And there is a site 'London' on business unit 'Business Unit 2'
-	And there is a team named 'Red' on site 'Paris'
-	And there is a team named 'Green' on site 'London'
-	And Ashley Andeen has a person period with
-	 | Field      | Value      |
-	 | Team       | Red        |
-	 | Start Date | 2015-01-21 |
-	And John Smith has a person period with
-	 | Field      | Value      |
-	 | Team       | Green      |
-	 | Start Date | 2015-01-21 |
-	When I view people
-	And I select business unit 'Business Unit 2'
-	And I search people with keyword 'organization: "Red" "Green"'
-	Then I should not see 'Ashley' in people list
-	And I should see 'John' in people list
-	When I select business unit 'Business Unit 1'
-	And I search people with keyword 'organization: "Red" "Green"'
-	Then I should see 'Ashley' in people list
-	And I should not see 'John' in people list
+	And there is a role with
+	| Field         | Value           |
+	| Name          | Role1           |
+	| Description   | Role1           |
+	| Business Unit | Business Unit 1 |
+	And there is a role with
+	| Field         | Value           |
+	| Name          | Role2           |
+	| Description   | Role2           |
+	| Business Unit | Business Unit 2 |
+	When I view Permissions
+	Then I should not see a role 'Role1' in the list
+	And I should not see a role 'Role2' in the list
+	When I pick business unit 'Business Unit 1'
+	Then I should see a role 'Role1' in the list
+	And I should not see a role 'Role2' in the list
+	When I pick business unit 'Business Unit 2'
+	Then I should not see a role 'Role1' in the list
+	And I should see a role 'Role2' in the list

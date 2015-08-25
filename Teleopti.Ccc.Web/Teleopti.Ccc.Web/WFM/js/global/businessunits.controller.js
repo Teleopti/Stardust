@@ -9,11 +9,11 @@
 					selectedBu: null
 				};
 
-				$scope.changeBusinessUnit = function (selectedBuId) {
-					$http.defaults.headers.common['X-Business-Unit-Filter'] = selectedBuId;
-					$state.go($state.current, { buid: selectedBuId });
+				$scope.changeBusinessUnit = function (selectedBu) {
+					$http.defaults.headers.common['X-Business-Unit-Filter'] = selectedBu.Id;
+					$state.go($state.current, { buid: selectedBu.Id });
 				};
-
+				
 				var getBusinessUnits = $resource('../BusinessUnit', {}, {
 					get: { method: 'GET', params: {}, isArray: true }
 				});
@@ -24,10 +24,10 @@
 						var buid = $location.search().buid;
 						if (buid) {
 							var businessUnit = $filter('filter')(result, function (d) { return d.Id === buid; })[0];
-							$scope.data.selectedBu = businessUnit.Name;
+							$scope.data.selectedBu = businessUnit;
 							$http.defaults.headers.common['X-Business-Unit-Filter'] = businessUnit.Id;
 						} else {
-							$scope.data.selectedBu = result[0].Name;
+							$scope.data.selectedBu = result[0];
 						}
 					});
 				};

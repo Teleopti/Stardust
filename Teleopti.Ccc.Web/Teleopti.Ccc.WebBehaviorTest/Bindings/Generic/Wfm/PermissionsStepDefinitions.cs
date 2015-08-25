@@ -21,6 +21,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			Browser.Interactions.AssertAnyContains(".wfm-list li", p0);
 		}
 
+		[Then(@"I should not see a role '(.*)' in the list")]
+		public void ThenIShouldNotSeeARoleInTheList(string p0)
+		{
+			Browser.Interactions.AssertNoContains(".wfm-list", ".wfm-list li", p0);
+		}
+
 		[When(@"I select a role '(.*)'")]
 		public void WhenISelectARole(string p0)
 		{
