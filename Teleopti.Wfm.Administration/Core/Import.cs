@@ -36,10 +36,10 @@ namespace Teleopti.Wfm.Administration.Core
 		{
 			foreach (var userModel in userModels)
 			{
-				var check = new CheckPasswordStrengthFake();
 				var personInfo = new PersonInfo(newTenant, userModel.PersonId);
 				personInfo.SetIdentity(userModel.Identity);
-				personInfo.ApplicationLogonInfo.ReuseLogon(userModel.AppLogon, userModel.AppPassword);
+				personInfo.SetApplicationLogonCredentials(null, userModel.AppLogon, null);
+				personInfo.ApplicationLogonInfo.SetEncryptedPasswordIfLogonNameExistButNoPassword(userModel.AppPassword);
 				_currentTenantSession.CurrentSession().Save(personInfo);
 			}
 		}

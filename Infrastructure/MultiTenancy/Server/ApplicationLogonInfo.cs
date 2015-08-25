@@ -31,7 +31,8 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 
 		protected internal virtual void SetApplicationLogonCredentialsInternal(ICheckPasswordStrength checkPasswordStrength, string logonName, string password)
 		{
-			setPassword(checkPasswordStrength, password);
+			if(!string.IsNullOrEmpty(password))
+				setPassword(checkPasswordStrength, password);
 			LogonName = logonName;
 			registerPasswordChange();
 		}
@@ -90,10 +91,16 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 
 		//used when importing tenant, we don't want to encrypt what is encrypted already
 		// and when updating because we don't get password then
-		public virtual void ReuseLogon(string logonName, string oldPassword)
+		public void SetEncryptedPasswordIfLogonNameExistButNoPassword(string encryptedPassword)
 		{
-			LogonName = logonName;
-			LogonPassword = oldPassword;
+			if (hasLogonNameButNoPassword())
+				LogonPassword = encryptedPassword;
 		}
+
+		private bool hasLogonNameButNoPassword()
+		{
+			return !string.IsNullOrEmpty(LogonName) && string.IsNullOrEmpty(LogonPassword);
+		}
+
 	}
 }
