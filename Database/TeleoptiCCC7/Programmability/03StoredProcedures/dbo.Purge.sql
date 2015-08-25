@@ -19,9 +19,11 @@ declare @KeepUntil datetime
 declare @BatchSize int
 declare @MaxDate datetime
 declare @SuperRole uniqueidentifier
+declare @Start smalldatetime
 
+set @start = getdate()
 set @SuperRole='193AD35C-7735-44D7-AC0C-B8EDA0011E5F'
-set @BatchSize = 14
+set @BatchSize = 14 --Used to control number of days to delete in one go.
 
 /*
 exec Purge
@@ -51,45 +53,48 @@ select @KeepUntil = dateadd(year,-1*(select isnull(Value,100) from PurgeSetting 
 update person set IsDeleted = 1
 where isnull(TerminalDate,'20591231') < @KeepUntil
 
-delete SchedulePeriodShiftCategoryLimitation
+delete top (100) SchedulePeriodShiftCategoryLimitation
 from SchedulePeriodShiftCategoryLimitation scl
 inner join SchedulePeriod sp on scl.SchedulePeriod = sp.Id
 inner join Person p on sp.Parent = p.Id
 where p.IsDeleted = 1
 
-delete SchedulePeriod
+delete top (100) SchedulePeriod
 from SchedulePeriod sp
 inner join Person p on sp.Parent = p.Id
 where p.IsDeleted = 1
 
-delete ExternalLogOnCollection
+delete top (100) ExternalLogOnCollection
 from ExternalLogOnCollection ex
 inner join PersonPeriod pp on ex.PersonPeriod = pp.Id
 inner join Person p on pp.Parent = p.Id
 where p.IsDeleted = 1
 
-delete PersonSkill
+delete top (100) PersonSkill
 from PersonSkill ps
 inner join PersonPeriod pp on ps.Parent = pp.Id
 inner join Person p on pp.Parent = p.Id
 where p.IsDeleted = 1
 
-delete PersonPeriod
+delete top (100) PersonPeriod
 from PersonPeriod pp
 inner join Person p on pp.Parent = p.Id
 where p.IsDeleted = 1
 
-delete Auditing.Revision
+delete top (100) Auditing.Revision
 from Auditing.Revision r
 inner join Auditing.PersonAssignment_AUD pa on pa.REV = r.Id
 inner join person p on pa.Person = p.Id
 where p.IsDeleted = 1
 
-delete Auditing.Revision
+delete top (100) Auditing.Revision
 from Auditing.Revision r
 inner join Auditing.PersonAbsence_AUD pa on pa.REV = r.Id
 inner join person p on pa.Person = p.Id
 where p.IsDeleted = 1
+
+if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
+	return
 
 /*
 exec Purge
@@ -151,6 +156,8 @@ where 1=1
 and sd.SkillDayDate < @KeepUntil
 and sd.SkillDayDate < @MaxDate
 
+if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
+	return
 
 --Schedule
 select @KeepUntil = dateadd(year,-1*(select isnull(Value,100) from PurgeSetting where [Key] = 'YearsToKeepSchedule'),getdate())
@@ -180,6 +187,9 @@ where 1 = 1
 and ad.TagDate < @KeepUntil
 and ad.TagDate < @MaxDate
 
+if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
+	return
+
 --Remove deleted skills from persons
 delete PersonSkill
 from PersonSkill ps
@@ -198,6 +208,9 @@ update PersonPeriod set BudgetGroup = NULL
 from PersonPeriod pp
 inner join BudgetGroup bg on pp.BudgetGroup = bg.Id
 where bg.IsDeleted = 1
+
+if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
+	return
 
 --Messages
 select @KeepUntil = dateadd(year,-1*(select isnull(Value,100) from PurgeSetting where [Key] = 'YearsToKeepMessage'),getdate())
@@ -223,6 +236,9 @@ delete PushMessage
 from PushMessage pm
 where not exists (select 1 from PushMessageDialogue pmd where pmd.PushMessage = pm.Id)
 
+if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
+	return
+
 --Payroll
 select @KeepUntil = dateadd(year,-1*(select isnull(Value,100) from PurgeSetting where [Key] = 'YearsToKeepPayroll'),getdate())
 select @MaxDate = dateadd(day,@BatchSize,isnull(min(UpdatedOn),'19900101')) from PayrollResult
@@ -237,6 +253,9 @@ delete PayrollResult
 from PayrollResult pr
 where pr.UpdatedOn < @KeepUntil
 and pr.UpdatedOn < @Maxdate
+
+if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
+	return
 
 --Requests
 --AF: Need to remove top (50000) as this caused corrupt data...
@@ -289,6 +308,9 @@ where not exists (
 select 1 from Request r
 where r.Parent = pr.Id)
 
+if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
+	return
+
 --Autodeny requests if not handled in time.
 select @KeepUntil = dateadd(day,-1*(select isnull(Value,120) from PurgeSetting where [Key] = 'DenyPendingRequestsAfterNDays'),getdate())
 
@@ -298,9 +320,15 @@ where r.EndDateTime < @KeepUntil
 and pr.RequestStatus = 0 --Pending
 and pr.IsDeleted = 0
 
+if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
+	return
+
 --New Adherence read models. Purge for now since we have not yet built or tested with lots of historical data.
 delete ReadModel.AdherencePercentage
 where BelongsToDate < dateadd(day,-1,getdate())
+
+if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
+	return
 
 delete ReadModel.AdherenceDetails
 where BelongsToDate < dateadd(day,-1,getdate())
