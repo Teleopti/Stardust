@@ -31,7 +31,8 @@ var wfm = angular.module('wfm', [
 	'wfm.areas',
 	'wfm.help',
 	'wfm.rta',
-	'wfm.start'
+	'wfm.start',
+	'wfm.businessunits'
 ]);
 
 wfm.config([
@@ -39,11 +40,11 @@ wfm.config([
 		$urlRouterProvider.otherwise("forecasting");
 		$urlRouterProvider.when('/outbound', '/outbound/summary');
 		$stateProvider.state('main', {
-			url: '/',
+			url: '/?buid',
 			templateUrl: 'html/main.html',
 			controller: 'MainCtrl'
 		}).state('forecasting', {
-			url: '/forecasting',
+			url: '/forecasting?buid',
 			templateUrl: 'html/forecasting/forecasting.html',
 			controller: 'ForecastingStartCtrl'
 		}).state('forecasting-target', {
@@ -67,20 +68,19 @@ wfm.config([
 			templateUrl: 'html/forecasting/forecasting-intraday.html',
 			controller: 'ForecastingIntradayCtrl'
 		}).state('resourceplanner', {
-				url: '/resourceplanner',
-				templateUrl: 'js/resourceplanner/resourceplanner.html',
-				controller: 'ResourcePlannerCtrl'
+			url: '/resourceplanner?buid',
+			templateUrl: 'js/resourceplanner/resourceplanner.html',
+			controller: 'ResourcePlannerCtrl'
 		}).state('resourceplanner.planningperiod', {
 			url: '/planningperiod/:id',
 			templateUrl: 'js/resourceplanner/planningperiods.html',
 			controller: 'PlanningPeriodsCtrl'
 		}).state('resourceplanner.report', {
-			params: { result: {} },
+			params: { result: {}, buid: {} },
 			templateUrl: 'js/resourceplanner/resourceplanner-report.html',
 			controller: 'ResourceplannerReportCtrl'
 		}).state('permissions', {
-			params: { id: {} },
-			url: '/permissions',
+			url: '/permissions/:id?buid',
 			templateUrl: 'html/permissions/permissions.html',
 			controller: 'PermissionsCtrl'
 		}).state('outbound', {
@@ -96,11 +96,11 @@ wfm.config([
 			templateUrl: 'html/outbound/campaign-create.html',
 			controller: 'OutboundCreateCtrl'
 		}).state('outbound.edit', {
-			url: '/campaign/:Id',
+			url: '/campaign/:Id?buid',
 			templateUrl: 'html/outbound/campaign-edit.html',
 			controller: 'OutboundEditCtrl'
 		}).state('people', {
-			url: '/people',
+			url: '/people?buid',
 			templateUrl: 'html/people/people.html',
 			controller: 'PeopleCtrl'
 		}).state('people-selection-cart', {
@@ -108,14 +108,14 @@ wfm.config([
 			templateUrl: 'html/people/people-selection-cart.html',
 			controller: 'PeopleCartCtrl as vm'
 		}).state('seatPlan', {
-			url: '/seatPlan/:viewDate',
+			url: '/seatPlan/:viewDate?buid',
 			templateUrl: 'js/seatManagement/html/seatplan.html',
 			controller: 'SeatPlanCtrl as seatplan'
 		}).state('seatMap', {
-			url: '/seatMap',
+			url: '/seatMap?buid',
 			templateUrl: 'js/seatManagement/html/seatmap.html'
 		}).state('rta', {
-			url: '/rta',
+			url: '/rta?buid',
 			templateUrl: 'js/rta/html/rta.html',
 			controller: 'RtaCtrl'
 		});
@@ -204,6 +204,7 @@ wfm.config([
 				ab1.sendPageView();
 				HelpService.updateState($state.current.name);
 			});
+
 		});
 	}
 ]);

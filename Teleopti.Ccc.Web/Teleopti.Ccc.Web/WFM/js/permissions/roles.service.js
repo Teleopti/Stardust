@@ -9,6 +9,11 @@
 			roles.selectedRole = {};
 			roles.list = PermissionsService.roles.get();
 
+			roles.refresh = function() {
+				roles.list = PermissionsService.roles.get();
+				return roles.list;
+			};
+
 			roles.createRole = function (roleName) {
 				var deferred = $q.defer();
 				var roleData = { Description: roleName };

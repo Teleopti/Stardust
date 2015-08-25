@@ -1260,6 +1260,7 @@
     <Content Include="WFM\js\global\help.controller.js" />
     <Content Include="Content\jalaali-calendar-datepicker\moment-datepicker-jalaali-ext.js" />
     <Content Include="Content\jalaali-calendar-datepicker\moment-jalaali.js" />
+    <Content Include="WFM\js\global\businessunits.controller.js" />
     <Content Include="WFM\js\global\wfmcardlist\wfmcard.directive.js" />
     <Content Include="WFM\js\global\wfmcardlist\wfmcard.html" />
     <Content Include="WFM\js\global\wfmcardlist\wfmcardlist.directive.js" />
