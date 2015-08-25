@@ -3,10 +3,12 @@
 
 describe('SeatPlanCtrl', function () {
 	var $q,
-	    $rootScope,
-	    $httpBackend;
+		$rootScope,
+		$httpBackend;
 
-	beforeEach(module('wfm'));
+	beforeEach(function() {
+		module('wfm');
+	});
 
 	beforeEach(inject(function (_$httpBackend_, _$q_, _$rootScope_) {
 		$q = _$q_;
@@ -37,11 +39,22 @@ describe('SeatPlanCtrl', function () {
 			},
 		}
 	};
+
+	var mockAllTrueToggleService = {
+		isFeatureEnabled: {
+			query: function(param) {
+				var queryDeferred = $q.defer();
+				var result = { IsEnable: true };
+				queryDeferred.resolve(result);
+				return { $promise: queryDeferred.promise }
+			}
+		}
+	};
 	
 	it('returns the correct class for a seatplan status', inject(function ($controller) {
 		var scope = $rootScope.$new();
-		
-		var controller = $controller('SeatPlanCtrl', { $scope: scope, ResourcePlannerSvrc: mockResourcePlannerService, seatPlanService: mockSeatPlanService });
+
+		var controller = $controller('SeatPlanCtrl', { $scope: scope, ResourcePlannerSvrc: mockResourcePlannerService, seatPlanService: mockSeatPlanService, Toggle: mockAllTrueToggleService });
 		controller.loadMonthDetails(moment("2015/03/02"));
 		scope.$digest();
 		var dayClass = controller.getDayClass("2015/03/02", 'day');
@@ -51,8 +64,8 @@ describe('SeatPlanCtrl', function () {
 	
 	it('returns the correct info for a seatplan status', inject(function ($controller) {
 		var scope = $rootScope.$new();
-		
-		var controller = $controller('SeatPlanCtrl', { $scope: scope, ResourcePlannerSvrc: mockResourcePlannerService, seatPlanService: mockSeatPlanService });
+
+		var controller = $controller('SeatPlanCtrl', { $scope: scope, ResourcePlannerSvrc: mockResourcePlannerService, seatPlanService: mockSeatPlanService, Toggle: mockAllTrueToggleService });
 		
 		controller.loadMonthDetails(moment("2015/03/02"));
 		scope.$digest();
@@ -67,7 +80,7 @@ describe('SeatPlanCtrl', function () {
 
 	it('returns the correct month name for a seatplan status', inject(function ($controller) {
 		var scope = $rootScope.$new();
-		var controller = $controller('SeatPlanCtrl', { $scope: scope, ResourcePlannerSvrc: mockResourcePlannerService, seatPlanService: mockSeatPlanService });
+		var controller = $controller('SeatPlanCtrl', { $scope: scope, ResourcePlannerSvrc: mockResourcePlannerService, seatPlanService: mockSeatPlanService, Toggle: mockAllTrueToggleService });
 
 		controller.loadMonthDetails(moment("2015/03/02"));
 		scope.$digest();
