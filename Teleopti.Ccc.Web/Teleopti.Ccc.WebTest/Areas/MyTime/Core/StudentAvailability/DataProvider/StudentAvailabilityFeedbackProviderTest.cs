@@ -21,11 +21,16 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.DataProvide
 			var workTimeMinMaxCalculator = MockRepository.GenerateMock<IWorkTimeMinMaxCalculator>();
 			var scheduleProvider = MockRepository.GenerateMock<IScheduleProvider>();
 			var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
+			var provider = MockRepository.GenerateMock<IPersonRuleSetBagProvider>();
+			
+			var bag = new RuleSetBag();
+			
 			scheduleProvider.Stub(x => x.GetScheduleForStudentAvailability(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today)))
 				.Return(new[] {scheduleDay});
+			provider.Stub(x => x.ForDate(null, DateOnly.Today)).Return(bag);
 
 			var target = new StudentAvailabilityFeedbackProvider(workTimeMinMaxCalculator,
-				MockRepository.GenerateMock<ILoggedOnUser>(), scheduleProvider, new PersonRuleSetBagProvider(MockRepository.GenerateMock<IRuleSetBagRepository>()));
+				MockRepository.GenerateMock<ILoggedOnUser>(), scheduleProvider, provider);
 			target.WorkTimeMinMaxForDate(DateOnly.Today);
 
 			var restrictionOption = new EffectiveRestrictionOptions
@@ -33,7 +38,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.DataProvide
 				UseStudentAvailability = true
 			};
 
-			workTimeMinMaxCalculator.AssertWasCalled(x => x.WorkTimeMinMax(DateOnly.Today, null, scheduleDay, restrictionOption));
+			workTimeMinMaxCalculator.AssertWasCalled(x => x.WorkTimeMinMax(DateOnly.Today, bag, scheduleDay, restrictionOption));
 		}
 
 		[Test]
@@ -45,16 +50,17 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.DataProvide
 			var provider = MockRepository.GenerateMock<IPersonRuleSetBagProvider>();
 			var workTimeMinMax = new WorkTimeMinMax();
 			var person = new Person();
-			var ruleSetBag = new RuleSetBag();
+			var bag = new RuleSetBag();
+
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
-			provider.Stub(x => x.ForDate(person, DateOnly.Today)).Return(ruleSetBag);
+			provider.Stub(x => x.ForDate(person, DateOnly.Today)).Return(bag);
 
 			var restrictionOption = new EffectiveRestrictionOptions
 			{
 				UseStudentAvailability = true
 			};
 
-			workTimeMinMaxCalculator.Stub(x => x.WorkTimeMinMax(DateOnly.Today, ruleSetBag, scheduleDay, restrictionOption))
+			workTimeMinMaxCalculator.Stub(x => x.WorkTimeMinMax(DateOnly.Today, bag, scheduleDay, restrictionOption))
 				.Return(new WorkTimeMinMaxCalculationResult {WorkTimeMinMax = workTimeMinMax});
 
 			var target = new StudentAvailabilityFeedbackProvider(workTimeMinMaxCalculator, loggedOnUser, null, provider);

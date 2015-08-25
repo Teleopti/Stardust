@@ -27,9 +27,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public WorkTimeMinMaxCalculationResult WorkTimeMinMax(DateOnly date, IRuleSetBag ruleSetBag, IScheduleDay scheduleDay, IEffectiveRestrictionOptions option)
 		{
-			if (ruleSetBag == null) throw new ArgumentNullException("ruleSetBag");
-
 			var result = new WorkTimeMinMaxCalculationResult();
+			if (ruleSetBag == null) return null;
 
 			var createdRestriction = _workTimeMinMaxRestrictionCreator.MakeWorkTimeMinMaxRestriction(scheduleDay, option);
 			if (createdRestriction.Restriction != null)

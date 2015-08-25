@@ -20,14 +20,17 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			var scheduleProvider = MockRepository.GenerateMock<IScheduleProvider>();
 			var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
 			var nightRestChecker = MockRepository.GenerateMock<IPreferenceNightRestChecker>();
+			var personRuleSetBagProvider = MockRepository.GenerateMock<IPersonRuleSetBagProvider>();
+			var bag = new RuleSetBag();
 
 			scheduleProvider.Stub(x => x.GetScheduleForPeriod(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today))).Return(new[] {scheduleDay});
+			personRuleSetBagProvider.Stub(x => x.ForDate(null, DateOnly.Today)).Return(bag);
 
-			var target = new PreferenceFeedbackProvider(workTimeMinMaxCalculator, MockRepository.GenerateMock<ILoggedOnUser>(), scheduleProvider, nightRestChecker, MockRepository.GenerateMock<IPersonRuleSetBagProvider>());
+			var target = new PreferenceFeedbackProvider(workTimeMinMaxCalculator, MockRepository.GenerateMock<ILoggedOnUser>(), scheduleProvider, nightRestChecker, personRuleSetBagProvider);
 
 			target.WorkTimeMinMaxForDate(DateOnly.Today);
 
-			workTimeMinMaxCalculator.AssertWasCalled(x => x.WorkTimeMinMax(DateOnly.Today, null, scheduleDay));
+			workTimeMinMaxCalculator.AssertWasCalled(x => x.WorkTimeMinMax(DateOnly.Today, bag, scheduleDay));
 		}
 
 		[Test]
@@ -44,7 +47,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			var bag = new RuleSetBag();
 
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
-			provider.Stub(x => x.ForDate(person, DateOnly.Today));
+			provider.Stub(x => x.ForDate(person, DateOnly.Today)).Return(bag);
 
 			workTimeMinMaxCalculator.Stub(x => x.WorkTimeMinMax(DateOnly.Today, bag, scheduleDay)).Return(new WorkTimeMinMaxCalculationResult {WorkTimeMinMax = workTimeMinMax});
 

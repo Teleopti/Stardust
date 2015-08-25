@@ -1,5 +1,4 @@
 using System;
-using Autofac;
 using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -34,12 +33,21 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			system.AddService<PreferenceDayFeedbackViewModelMappingProfile>();
 			system.UseTestDouble<FakePreferenceProvider>().For<IPreferenceProvider>();
 			system.UseTestDouble<FakeScheduleProvider>().For<IScheduleProvider>();
+			system.UseTestDouble<FakePersonRuleSetBagProvider>().For<IPersonRuleSetBagProvider>();
 
 			var person = PersonFactory.CreatePersonWithGuid("a", "a");
 			system.AddService(person);
 
 			var toggleManager = new FakeToggleManager(Domain.FeatureFlags.Toggles.MyTimeWeb_PreferenceShowNightViolation_33152);
 			system.AddService(toggleManager);
+		}
+	}
+
+	public class FakePersonRuleSetBagProvider : IPersonRuleSetBagProvider
+	{
+		public IRuleSetBag ForDate(IPerson person, DateOnly date)
+		{
+			return person.Period(date).RuleSetBag;
 		}
 	}
 
@@ -56,8 +64,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		private IScheduleDay buildPersonSchedule(DateOnly date, TimeSpan startTime, TimeSpan endTime)
 		{
 			var schedule = ScheduleDayFactory.Create(date, Person);
-			var start = new DateTime(date.Year, date.Month, date.Day, startTime.Hours, startTime.Minutes, 0 , DateTimeKind.Utc);
-			var end = new DateTime(date.Year, date.Month, date.Day, endTime.Hours, endTime.Minutes, 0, DateTimeKind.Utc);
+			var start = DateTime.SpecifyKind(date.Date.Add(startTime),DateTimeKind.Utc);
+			var end = DateTime.SpecifyKind(date.Date.Add(endTime), DateTimeKind.Utc);
 
 			var assignmentPeriod = new DateTimePeriod(start, end);
 			var personAssignment = new PersonAssignment(schedule.Person, schedule.Scenario, date);
@@ -72,7 +80,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			schedule.CreateAndAddDayOff(DayOffFactory.CreateDayOff());		
 			return schedule;
 		}
-
 
 		private void Setup()
 		{
@@ -97,8 +104,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var personContract1 = PersonContractProvider.GetPersonContractWithSpecifiedNightRest("Fake Contract", nightRest1);
 			var personPeriod1 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2028, 1, 1), personContract1, TeamFactory.CreateSimpleTeam());
 			Person.AddPersonPeriod(personPeriod1);
-
-
 
 			var personContract2 = PersonContractProvider.GetPersonContractWithSpecifiedNightRest("Another Fake Contract", nightRest2);
 			var personPeriod2 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2029, 1, 11), personContract2, TeamFactory.CreateSimpleTeam());
@@ -360,6 +365,5 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 
 			result.FeedbackError.Should().Be(Resources.NoAvailableShifts);
 		}
-
 	}
 }
