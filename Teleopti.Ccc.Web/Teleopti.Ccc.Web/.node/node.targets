@@ -51,9 +51,9 @@
 		<Exec Command="$(NpmInstallFlattenPackages)" ContinueOnError="false" WorkingDirectory="$(NodeDir)" />
 		<Message Text="Flatten Node Packages Command: $(NpmFlattenCmd) /w WorkingDirectory: $(MSBuildProjectDirectory)\WFM" Importance="high" />
 		<Exec Command="$(NpmFlattenCmd)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
-		<!--<Message Text="HACK! Removing directory to get below 260 characters" Importance="high" />
+		<Message Text="HACK! Removing directory to get below 260 characters" Importance="high" />
 		<Exec Command="rmdir /S /Q $(MSBuildProjectDirectory)\WFM\node_modules\node-sass\test" />
-    <Exec Command="mkdir $(MSBuildProjectDirectory)\WFM\node_modules\node-sass\test &amp;&amp; type NUL > $(MSBuildProjectDirectory)\WFM\node_modules\node-sass\test\api.js" />-->
+    <Exec Command="mkdir $(MSBuildProjectDirectory)\WFM\node_modules\node-sass\test &amp;&amp; type NUL > $(MSBuildProjectDirectory)\WFM\node_modules\node-sass\test\api.js" />
 	</Target>
 
 	<!-- Executes Build -->
