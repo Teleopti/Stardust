@@ -23,24 +23,28 @@
 						<input type="text" name="filterRole" ng-model="searchRoles.DescriptionText" placeholder="{{'RoleFilterThreeDots' | translate}}" />
 					</div>
 				</div>
-
-				<div id="searchRoleResults" ng-init="editing=false">
+				
+				<div id="searchRoleResults">
+				
 					<ul class="wfm-list">
-						<li ng-repeat="role in roles | filter:searchRoles" ng-click="showRole(role)" ng-dblclick="editing=true" ng-class="{'active': role.Id == selectedRole}" selection-model>
-							<span ng-hide="editing" class="list-item-container" ng-class="{'text-truncation': editing==false}">{{role.DescriptionText}}</span>
-							<span ng-show="editing">
-								<form ng-submit="editing = false; updateRole(role);">
-									<input type="text" class="inline-role-name" ng-model="role.DescriptionText" placeholder="{{'Name' | translate}}" ng-required />
+						<li ng-repeat="role in roles | filter:searchRoles" ng-click="showRole(role)" ng-dblclick="doubleClickEdit(editing, role)" ng-class="{'active': role.Id == selectedRole}" selection-model>
+							<span ng-hide="role.editing" class="list-item-container" ng-class="{'text-truncation': role.editing==false}">{{role.DescriptionText}}</span>
+							<span ng-show="role.editing" ng-blur="cancelEdit(role)">
+								<form ng-submit="role.editing = false; updateRole(role);">
+									<input type="text" class="inline-role-name" ng-blur="cancelEdit(role)" ng-model="role.DescriptionText" placeholder="{{'Name' | translate}}" ng-required />
+									
 								</form>
 							</span>
-							<div ng-show="!editing" class="wfm-leave-behind" ng-class="{'hide-list-actions': editing==true}">
+							
+							<div ng-show="!role.editing"  ng-if="role.BuiltIn === false" class="wfm-leave-behind" ng-class="{'hide-list-actions': role.editing==true, 'hide-list-actions-none': builtInCheck}">
 								<span>
-									<i ng-click="copyRole(role.Id)" class="mdi mdi-content-copy">
+									
+								    <i ng-click="copyRole(role.Id)" class="mdi mdi-content-copy">
 										<md-tooltip>
 											{{'Copy' | translate}}
 										</md-tooltip>
 									</i>
-									<i ng-click="editing = true" class="mdi mdi-pencil">
+									<i ng-click="role.editing = true" class="mdi mdi-pencil">
 										<md-tooltip>
 											{{'Edit' | translate}}
 										</md-tooltip>

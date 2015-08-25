@@ -52,6 +52,11 @@ p {
 .hide-list-actions{
 	transition:none!important;
 }
+
+.hide-list-actions-none{
+	display:none;
+}
+
 .optionLocked{
 	pointer-events:none;
 	color:#999!important; 

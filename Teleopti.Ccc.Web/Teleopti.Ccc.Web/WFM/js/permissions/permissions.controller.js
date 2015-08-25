@@ -14,7 +14,18 @@
 				$scope.selectedDataToggle = false;
 				$scope.unselectedDataToggle = false;
 				$scope.roles = [];
-				
+
+				$scope.editing = false;
+				$scope.builtInCheck = false;
+
+				$scope.$watch(function () { return Roles.selectedRole; },
+			   function (newSelectedRole) {
+			   	if (!newSelectedRole.Id) return;
+			  
+			   	$scope.builtInCheck = newSelectedRole.BuiltIn;
+			   }
+		   );
+
 				$scope.createRole = function() {
 				    Roles.createRole($scope.roleName).then(function () {
 						//here a notice
@@ -22,7 +33,9 @@
 				        $scope.showRole($scope.roles[0]);
 				    });
 				};
-
+				$scope.test = function (string) {
+					console.log('blur');
+				};
 				$scope.reset = function() {
 					$scope.roleName = "";
 				};
@@ -39,12 +52,18 @@
 
 				$scope.updateRole = function(role) {
 					Permissions.manageRole.update({ Id: role.Id, newDescription: role.DescriptionText });
+
 				};
 
-				$scope.showRole = function(role) {
+				$scope.showRole = function (role) {
+					if (role.Id === $scope.selectedRole) return;
 					Roles.selectRole(role);
 					$scope.selectedRole = role.Id;
-					
+					$scope.builtInCheck = role.BuiltIn;
+					$scope.roles.forEach(function (item) {
+						$scope.cancelEdit(item);
+					});
+
 				};
 
 				$scope.nbSelected = function($nodes) {
@@ -56,8 +75,26 @@
 					return nb;
 				};
 
+				$scope.doubleClickEdit = function (edit, role) {
+					if ($scope.builtInCheck) { return; }
+
+					
+
+					//console.log(role);
+					role.editing = true;
+				};
+
+				$scope.cancelEdit = function (role) {
+
+					role.editing = false;
+					
+
+
+				};
+
 				Roles.list.$promise.then(function (result) {
 					$scope.roles = result;
+					
 					if ($stateParams.id != null) {
 						for (var i = 0; i < result.length; i++) {
 							if ($stateParams.id == result[i].Id) {
