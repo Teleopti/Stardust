@@ -75,7 +75,7 @@ describe('OutboundSummaryCtrl', function () {
 		expect(campaign.chart != null);
 	});
 
-	it('add manual plan should work', function() {
+	xit('add manual plan should work', function() {
 		var test = setUpTarget();
 		var campaign = {
 			Id: 1,
@@ -103,7 +103,7 @@ describe('OutboundSummaryCtrl', function () {
 		expect(test.scope.phaseStatistics.PlannedWarning).toEqual(2);
 	});
 
-	it('remove manual plan should work', function() {
+	xit('remove manual plan should work', function() {
 		var test = setUpTarget(); 
 		var campaign = {
 			Id: 1,
