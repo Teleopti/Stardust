@@ -29,6 +29,34 @@
 			}
 
 	 },
+	 msbuild: {
+		rebuild: {
+				src: ['../../../CruiseControl.sln'],
+				options: {
+						projectConfiguration: 'Debug',
+						targets: ['Rebuild'],
+						version: 14.0,
+						maxCpuCount: null,
+						buildParameters: {
+								WarningLevel: 2
+						},
+						verbosity: 'normal'
+				}
+		},
+		build: {
+				src: ['../../../CruiseControl.sln'],
+				options: {
+						projectConfiguration: 'Debug',
+						targets: ['build'],
+						version: 14.0,
+						maxCpuCount: null,
+						buildParameters: {
+								WarningLevel: 2
+						},
+						verbosity: 'normal'
+				}
+		}
+},
 		karma: {
 			unit: {
 				configFile: 'karma.conf.js',
@@ -80,6 +108,7 @@
 	grunt.loadNpmTasks('grunt-karma');
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
 	grunt.loadNpmTasks('grunt-iisexpress');
+	grunt.loadNpmTasks('grunt-msbuild');
 
 
 
@@ -89,5 +118,7 @@
 
 	grunt.registerTask('dist', ['uglify:dist', 'sass', 'cssmin']); // this task should only be used by the build. It's kind of packaging for production.
 	grunt.registerTask('nova', ['uglify:dev', 'sass', 'cssmin','iisexpress:authBridge','iisexpress:web', 'watch:dev']); // this task run the main task and then watch for file changes
+	grunt.registerTask('rebuild', ['msbuild:rebuild']); // clean and rebuild the solution
+	grunt.registerTask('build', ['msbuild:build']); // build the solution
 
 };
