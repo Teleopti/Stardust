@@ -11,6 +11,26 @@
 		vm.selectedPeopleIds = $stateParams.selectedPeopleIds;
 		vm.commandName = $stateParams.commandTag;
 
+		vm.startDate = new Date();
+		vm.toggleCalendar = function ($event) {
+			vm.status.opened = !vm.status.opened;
+		};
+		vm.closeCalendar = function ($event) {
+			vm.status.opened = false;
+		};
+
+		vm.dateOptions = {
+			formatYear: 'yy',
+			startingDay: 1
+		};
+
+		vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+		vm.format = vm.formats[0];
+
+		vm.status = {
+			opened: false
+		};
+
 		vm.buttons = [
 			{
 				label: 'AdjustSkill',

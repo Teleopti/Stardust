@@ -1,16 +1,23 @@
 ﻿<style>
-	.wfm-checkbox input[type=checkbox]:indeterminate~label .wfm-checkbox-toggle:after {
-    background-color: #66c2ff;
-    text-align: center;
-    color: #fff;
-}
+	.wfm-checkbox input[type=checkbox]:indeterminate ~ label .wfm-checkbox-toggle:after {
+		background-color: #66c2ff;
+		text-align: center;
+		color: #fff;
+	}
 </style>
 <div>
 	<div class="row">
 		<h4 translate>Selected People</h4>
 	</div>
 
-	<div ui-i18n="{{lang}}" ng-if="vm.dataInitialized" class="big-table-wrapper material-depth-1" style="position: relative">
+	<div class="row">
+		<div class="col-md-2" outside-click="vm.closeCalendar()">
+			<button class="wfm-btn wfm-btn-default" ng-click="vm.toggleCalendar()">{{vm.startDate | date:"yyyy-MM-dd"}}</button>
+			<datepicker style="z-index: 100; position: absolute;background-color: white" show-weeks="true" close-on-date-selection="true" ng-model="vm.startDate" class="wfm-datepicker" ng-show="vm.status.opened"></datepicker>
+		</div>
+	</div>
+		<div ui-i18n="{{lang
+}}" ng-if="vm.dataInitialized" class="big-table-wrapper material-depth-1" style="position: relative">
 		<div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-auto-resize ui-grid-pagination ui-grid-resize-columns class="grid people-list"></div>
 		<div>
 			<nav class="wfm-panel action-panel" mfb-menu position="tr" effect="slidein-spring"
@@ -30,11 +37,11 @@
 			<md-content layout-padding style="height: 500px">
 				<div class="input-prepend">
 					<i class="mdi mdi-filter-outline"></i>
-					<input type="text" name="filterRole" ng-model="searchSkills.SkillName"/>
+					<input type="text" name="filterRole" ng-model="searchSkills.SkillName" />
 				</div>
 				<md-list-item ng-repeat="skill in vm.availableSkills|filter:searchSkills">
 					<div class="wfm-checkbox">
-						<input type="checkbox" id="{{skill.SkillId}}" ng-model="skill.Selected" ui-indeterminate="skill.Status =='partial'"/>
+						<input type="checkbox" id="{{skill.SkillId}}" ng-model="skill.Selected" ui-indeterminate="skill.Status =='partial'" />
 						<label for="{{skill.SkillId}}">
 							<span class="wfm-checkbox-toggle"></span>
 							<span class="wfm-checkbox-label">{{skill.SkillName}}</span>
