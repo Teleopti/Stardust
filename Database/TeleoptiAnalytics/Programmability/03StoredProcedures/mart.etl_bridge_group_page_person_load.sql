@@ -46,6 +46,7 @@ INNER JOIN
 	mart.dim_person p
 ON 
 	p.person_code = s.person_code
+	AND p.business_unit_code = s.business_unit_code
 INNER JOIN 
 	mart.dim_group_page g
 ON 
@@ -68,6 +69,7 @@ INNER JOIN
 	mart.dim_person p
 ON 
 	p.person_code = s.person_code
+	AND p.business_unit_code = s.business_unit_code
 INNER JOIN 
 	mart.dim_group_page g
 ON 
@@ -91,6 +93,7 @@ INNER JOIN
 	mart.dim_person p
 ON 
 	p.person_code = s.person_code
+	AND p.business_unit_code = s.business_unit_code
 INNER JOIN 
 	mart.dim_group_page g
 ON 

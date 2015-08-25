@@ -90,6 +90,7 @@ INNER JOIN
 	ON
 	ds.skillset_id = vas.skillset_id AND
 	ds.business_unit_id=vas.business_unit_id
+WHERE ds.business_unit_id = @business_unit_id
 
 
 
