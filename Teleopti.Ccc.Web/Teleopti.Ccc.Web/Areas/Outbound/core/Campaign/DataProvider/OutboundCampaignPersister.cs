@@ -175,21 +175,13 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 				campaign.ClearProductionPlan(date);
 			}
 
-			var incomingTask = _campaignTaskManager.GetIncomingTaskFromCampaign(campaign);
-			_createOrUpdateSkillDays.UpdateSkillDays(campaign.Skill, incomingTask);
+			_productionReplanHelper.Replan(campaign);
 		}
 
 		public void ManualReplanCampaign(Guid campaignId)
 		{
 			var campaign = _outboundCampaignRepository.Get(campaignId);
 			_productionReplanHelper.Replan(campaign);
-
-			updateStateHolder();
-		}
-
-		private void updateStateHolder()
-		{
-			_campaignListProvider.LoadData();
 		}
 
 		private bool isWorkingHoursUpdated(IDictionary<DayOfWeek, TimePeriod> oldWorkingHours, IDictionary<DayOfWeek, TimePeriod> newWorkingHours)

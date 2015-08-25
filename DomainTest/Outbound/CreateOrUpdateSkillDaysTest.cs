@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Outbound
 		private ISkill _skill;
 		private ISkillDay _skillDay;
 		private IWorkloadDay _workLoadDay;
+		private IOutboundScheduledResourcesProvider _outboundScheduledResourcesProvider;
 
 		[SetUp]
 		public void Setup()
@@ -33,8 +34,9 @@ namespace Teleopti.Ccc.DomainTest.Outbound
 			_fetchAndFillSkillDays = MockRepository.GenerateMock<IFetchAndFillSkillDays>();
 			_forecastingTargetMerger = MockRepository.GenerateMock<IForecastingTargetMerger>();
 			_skillDayRepository = MockRepository.GenerateMock<ISkillDayRepository>();
+			_outboundScheduledResourcesProvider = MockRepository.GenerateMock<IOutboundScheduledResourcesProvider>();
 			_target = new CreateOrUpdateSkillDays(outboundProductionPlanFactory, _fetchAndFillSkillDays, _forecastingTargetMerger,
-				_skillDayRepository);
+				_skillDayRepository, _outboundScheduledResourcesProvider);
 			_skill = SkillFactory.CreateSkillWithWorkloadAndSources();
 			_skillDay = MockRepository.GenerateMock<ISkillDay>();
 			_workLoadDay = MockRepository.GenerateMock<IWorkloadDay>();

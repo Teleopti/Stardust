@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Backlog;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
@@ -24,15 +23,17 @@ namespace Teleopti.Ccc.Domain.Outbound
 		private readonly IFetchAndFillSkillDays _fetchAndFillSkillDays;
 		private readonly IForecastingTargetMerger _forecastingTargetMerger;
 		private readonly ISkillDayRepository _skillDayRepository;
+		private readonly IOutboundScheduledResourcesProvider _outboundScheduledResourcesProvider;
 
 		public CreateOrUpdateSkillDays(OutboundProductionPlanFactory outboundProductionPlanFactory,
 			IFetchAndFillSkillDays fetchAndFillSkillDays, IForecastingTargetMerger forecastingTargetMerger,
-			ISkillDayRepository skillDayRepository)
+			ISkillDayRepository skillDayRepository, IOutboundScheduledResourcesProvider outboundScheduledResourcesProvider)
 		{
 			_outboundProductionPlanFactory = outboundProductionPlanFactory;
 			_fetchAndFillSkillDays = fetchAndFillSkillDays;
 			_forecastingTargetMerger = forecastingTargetMerger;
 			_skillDayRepository = skillDayRepository;
+			_outboundScheduledResourcesProvider = outboundScheduledResourcesProvider;
 		}
 
 		public void Create(ISkill skill, DateOnlyPeriod campaignPeriod, int campaignTasks,
@@ -69,9 +70,10 @@ namespace Teleopti.Ccc.Domain.Outbound
 				var forecastingTarget = new ForecastingTarget(dateOnly, new OpenForWork(isOpen, isOpen));
 				if (isOpen)
 				{
-					forecastingTarget.Tasks = incomingTask.GetTimeOnDate(dateOnly).TotalSeconds/
-					                          incomingTask.AverageWorkTimePerItem.TotalSeconds;
+					var timeOnDate = incomingTask.GetTimeOnDate(dateOnly);
+					forecastingTarget.Tasks = timeOnDate.TotalSeconds / incomingTask.AverageWorkTimePerItem.TotalSeconds;
 					forecastingTarget.AverageTaskTime = incomingTask.AverageWorkTimePerItem;
+					_outboundScheduledResourcesProvider.SetForecastedTimeOnDate(dateOnly, skill, timeOnDate);
 				}
 
 				forecastingTargets.Add(forecastingTarget);
