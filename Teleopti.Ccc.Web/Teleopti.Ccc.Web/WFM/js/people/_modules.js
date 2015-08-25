@@ -7,6 +7,7 @@
 		'ngAnimate',
 		'ng-mfb',
 		'ngMaterial',
-		'ngFileUpload'
+		'ngFileUpload',
+		'ui.indeterminate'
 	]);
 })();

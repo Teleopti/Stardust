@@ -3,14 +3,46 @@
 (function () {
 	angular.module('wfm.people')
 		.controller('PeopleCartCtrl', [
-			'$q', '$translate', '$stateParams', 'uiGridConstants', 'People', PeopleCartController
+			'$q', '$translate', '$stateParams', 'uiGridConstants', 'People', 'Toggle', '$mdSidenav', '$mdUtil', PeopleImportController
 		]);
 
-	function PeopleCartController($q, $translate, $stateParams, uiGridConstants, peopleSvc) {
+	function PeopleImportController($q, $translate, $stateParams, uiGridConstants, peopleSvc, toggleSvc, $mdSidenav, $mdUtil) {
 		var vm = this;
 		vm.selectedPeopleIds = $stateParams.selectedPeopleIds;
 		vm.commandName = $stateParams.commandTag;
-		
+
+		vm.buttons = [
+			{
+				label: 'AdjustSkill',
+				icon: 'mdi-package',
+				action: function() {
+					// vm.gotoSkillPanel(); TODO: toggle skill panel
+					vm.toggleSkillPanel();
+				},
+				active: function() {
+					return vm.isAdjustSkillEnabled;
+				}
+			}
+		];
+
+		vm.toggleSkillPanel = buildToggler('right');
+
+		function buildToggler(navID) {
+			var debounceFn = $mdUtil.debounce(function () {
+				$mdSidenav(navID)
+				  .toggle()
+				  .then(function () {
+				  });
+			}, 200);
+			return debounceFn;
+		}
+
+		vm.close = function () {
+			$mdSidenav('right').close()
+			  .then(function () {
+			  });
+		};
+
 		vm.columnMap = [
 			{
 				tag: "adjustSkill",
@@ -20,7 +52,7 @@
 				]
 			}
 		];
-		vm.constructColumns = function() {
+		vm.constructColumns = function () {
 			angular.forEach(vm.columnMap, function (item) {
 				if (item.tag === vm.commandName) {
 					vm.gridOptions.columnDefs = vm.gridOptions.columnDefs.concat(item.columns);
@@ -44,7 +76,22 @@
 			],
 
 			data: 'vm.availablePeople'
-			
+
+		};
+
+		vm.isIndeterminate = function (skill) {
+			if (skill.Status === "indeterminate") {
+				return true;
+			} else {
+				return false;
+			}
+		};
+
+		vm.getSkillStatus = function(skill) {
+			if (skill.Status == 'all')
+				return true;
+			if (skill.Status == 'none')
+				return false;
 		};
 
 		var loadSkillPromise = peopleSvc.loadAllSkills.get().$promise;
@@ -64,14 +111,17 @@
 			});
 		};
 
+		var promiseForAdjustSkillToggle = toggleSvc.isFeatureEnabled.query({ toggle: 'WfmPeople_AdjustSkill_34138' }).$promise;
+		promiseForAdjustSkillToggle.then(function (result) {
+			vm.isAdjustSkillEnabled = result.IsEnabled;
+		});
+
 		function initialize() {
-			$q.all([loadSkillPromise, fetchPeoplePromise]).then(function () {
-				//update people skill info
-				//construct skill list has status
-				//render update grid TODO
+			$q.all([promiseForAdjustSkillToggle, loadSkillPromise, fetchPeoplePromise]).then(function () {
 				angular.forEach(vm.availableSkills, function (skill) {
 					var hasCount = 0;
-					skill.Status = "none"; 
+					skill.Status = "none";
+					skill.Selected = false;
 					angular.forEach(vm.availablePeople, function (person) {
 						if (person.Skills == undefined) {
 							person.Skills = "";
@@ -87,15 +137,18 @@
 					});
 					if (hasCount === vm.availablePeople.length) {
 						skill.Status = "all";
+						skill.Selected = true;
 					}
 					else if (hasCount < vm.availablePeople.length && hasCount > 0) {
 						skill.Status = "partial";
 					}
 				});
 				vm.dataInitialized = true;
-				
+				if (vm.commandName == 'adjustSkill') {
+					vm.toggleSkillPanel();
+				}
 			});
-			
+
 		}
 		vm.constructColumns();
 		initialize();
