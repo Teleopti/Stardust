@@ -1265,6 +1265,7 @@
     <Content Include="WFM\js\global\teleopti.wfm.cardList\teleopticardlist.directive.js" />
     <Content Include="WFM\js\global\teleopti.wfm.cardList\teleopticardlist.html" />
     <Content Include="WFM\js\global\toggle.service.js" />
+    <Content Include="WFM\js\outbound\c3-fix.js" />
     <Content Include="WFM\js\outbound\outbound.activity.service.js" />
     <Content Include="WFM\js\outbound\outbound.campaign.chart.service .js" />
     <Content Include="WFM\js\outbound\outbound.campaignChart.directive.js" />
