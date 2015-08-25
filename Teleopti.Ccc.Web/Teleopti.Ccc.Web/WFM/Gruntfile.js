@@ -62,7 +62,6 @@
 				configFile: 'karma.conf.js',
 			}
 		},
-
 		sass: {
 			dist: {
 				files: {
@@ -104,7 +103,8 @@
 
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
-	grunt.loadNpmTasks('grunt-sass');
+	grunt.loadNpmTasks('grunt-contrib-sass');
+	
 	grunt.loadNpmTasks('grunt-karma');
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
 	grunt.loadNpmTasks('grunt-iisexpress');
