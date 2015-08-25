@@ -38,6 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 				FirstName = booking.Person.Name.FirstName,
 				LastName = booking.Person.Name.LastName,
 				SeatId = booking.Seat.Id.GetValueOrDefault(),
+				SeatName = booking.Seat.Name,
 				BookingId = booking.Id.GetValueOrDefault()
 			};
 		}
