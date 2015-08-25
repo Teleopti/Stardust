@@ -54,10 +54,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				AllSelectedPages.Add(page);
 				page.InitializeDialogControl();
 				page.SetUnitOfWork(UnitOfWork);
-				
-			}
-			if (pageSupported)
-			{
 				if (item == null)
 					page.LoadControl();
 				else
