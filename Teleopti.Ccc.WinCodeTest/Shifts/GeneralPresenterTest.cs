@@ -35,7 +35,6 @@ namespace Teleopti.Ccc.WinCodeTest.Shifts
         public void Setup()
         {
             _mock = new MockRepository();
-            //_uow = _mock.StrictMock<IUnitOfWork>();
             _explorerView = _mock.StrictMock<IExplorerView>();
             _dataHelper = _mock.StrictMock<IDataHelper>();
             _unitOfWorkFactory = _mock.StrictMock<IUnitOfWorkFactory>();
@@ -44,8 +43,8 @@ namespace Teleopti.Ccc.WinCodeTest.Shifts
             _ruleSetCollection = new List<IWorkShiftRuleSet>();
             _ruleSetCollection.Add(WorkShiftRuleSetFactory.Create());
 
-            _ruleSetCollection[0].AddAccessibilityDate(new DateTime(2009, 02, 16).ToUniversalTime());
-            _ruleSetCollection[0].AddAccessibilityDate(new DateTime(2009, 02, 17).ToUniversalTime());
+            _ruleSetCollection[0].AddAccessibilityDate(new DateOnly(2009, 02, 16));
+            _ruleSetCollection[0].AddAccessibilityDate(new DateOnly(2009, 02, 17));
             var model = new ExplorerViewModel { DefaultSegment = 15 };
             model.SetRuleSetCollection(new ReadOnlyCollection<IWorkShiftRuleSet>(_ruleSetCollection));
             model.SetFilteredRuleSetCollection(new ReadOnlyCollection<IWorkShiftRuleSet>(_ruleSetCollection));

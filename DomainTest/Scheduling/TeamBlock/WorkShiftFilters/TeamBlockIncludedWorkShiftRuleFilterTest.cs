@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		public void ShouldNotReturnRuleThatIsNotValidInAllDatesInPeriod()
 		{
 			var workShiftRuleSet = new WorkShiftRuleSet(_generator);
-			workShiftRuleSet.AddAccessibilityDate(new DateTime(2014, 03, 11, 0, 0, 0, DateTimeKind.Utc));
+			workShiftRuleSet.AddAccessibilityDate(new DateOnly(2014, 03, 11));
 			var ruleSetBag = new RuleSetBag();
 			ruleSetBag.AddRuleSet(workShiftRuleSet);
 			var ruleSetBags = new List<IRuleSetBag> { ruleSetBag };

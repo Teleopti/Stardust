@@ -25,21 +25,19 @@ namespace Teleopti.Interfaces.Domain
 		/// Calculate the min/max work times for a day using an alread loaded schedule day
 		/// </summary>
 		/// <param name="date"></param>
-		/// <param name="person"></param>
+		/// <param name="ruleSetBag"></param>
 		/// <param name="scheduleDay"></param>
 		/// <returns></returns>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Date")]
-		WorkTimeMinMaxCalculationResult WorkTimeMinMax(DateOnly date, IPerson person, IScheduleDay scheduleDay);
+		WorkTimeMinMaxCalculationResult WorkTimeMinMax(DateOnly date, IRuleSetBag ruleSetBag, IScheduleDay scheduleDay);
 
 		/// <summary>
 		/// Calculate the min/max work times for a day using an alread loaded schedule day
 		/// </summary>
 		/// <param name="date"></param>
-		/// <param name="person"></param>
+		/// <param name="ruleSetBag"></param>
 		/// <param name="scheduleDay"></param>
 		/// <param name="option"></param>
 		/// <returns></returns>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Date")]
-		WorkTimeMinMaxCalculationResult WorkTimeMinMax(DateOnly date, IPerson person, IScheduleDay scheduleDay, IEffectiveRestrictionOptions option);
+		WorkTimeMinMaxCalculationResult WorkTimeMinMax(DateOnly date, IRuleSetBag ruleSetBag, IScheduleDay scheduleDay, IEffectiveRestrictionOptions option);
 	}
 }

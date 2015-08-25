@@ -1,4 +1,5 @@
 using System.Linq;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Interfaces.Domain;
@@ -10,18 +11,23 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.DataProvider
 		private readonly IWorkTimeMinMaxCalculator _workTimeMinMaxCalculator;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IScheduleProvider _scheduleProvider;
+		private readonly IPersonRuleSetBagProvider _personRuleSetBagProvider;
 
 		public StudentAvailabilityFeedbackProvider(IWorkTimeMinMaxCalculator workTimeMinMaxCalculator,
-			ILoggedOnUser loggedOnUser, IScheduleProvider scheduleProvider)
+			ILoggedOnUser loggedOnUser, IScheduleProvider scheduleProvider, IPersonRuleSetBagProvider personRuleSetBagProvider)
 		{
 			_workTimeMinMaxCalculator = workTimeMinMaxCalculator;
 			_loggedOnUser = loggedOnUser;
 			_scheduleProvider = scheduleProvider;
+			_personRuleSetBagProvider = personRuleSetBagProvider;
 		}
 
 		public WorkTimeMinMaxCalculationResult WorkTimeMinMaxForDate(DateOnly date, IScheduleDay scheduleDay)
 		{
-			return _workTimeMinMaxCalculator.WorkTimeMinMax(date, _loggedOnUser.CurrentUser(), scheduleDay,
+			var bag = _personRuleSetBagProvider.ForDate(_loggedOnUser.CurrentUser(),date);
+			if (bag == null) return null;
+
+			return _workTimeMinMaxCalculator.WorkTimeMinMax(date, bag, scheduleDay,
 				new EffectiveRestrictionOptions {UseStudentAvailability = true});
 		}
 

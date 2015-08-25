@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.WinCode.Shifts.Interfaces;
 using Teleopti.Interfaces.Domain;
@@ -41,16 +40,16 @@ namespace Teleopti.Ccc.WinCode.Shifts.Models
             get { return _dateTime;}
             set
             {
-                DateTime dateTime = value.Date;
+                var dateTime = new DateOnly(value);
 
-                List<DateTime> existingDates = (from p in WorkShiftRuleSet.AccessibilityDates where p.Equals(dateTime) select p).ToList();
+                var existingDates = (from p in WorkShiftRuleSet.AccessibilityDates where p.Equals(dateTime) select p).ToList();
                 existingDates.Sort();
                 if (existingDates.Count == 0)
                 {
-                    WorkShiftRuleSet.RemoveAccessibilityDate(_dateTime);
-                    WorkShiftRuleSet.AddAccessibilityDate(DateTime.SpecifyKind(value, DateTimeKind.Utc));
+                    WorkShiftRuleSet.RemoveAccessibilityDate(new DateOnly(_dateTime));
+                    WorkShiftRuleSet.AddAccessibilityDate(dateTime);
                 }
-                _dateTime = value;
+				_dateTime = dateTime.Date;
 
             }
         }

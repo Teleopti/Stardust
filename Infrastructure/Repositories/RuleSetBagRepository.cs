@@ -1,7 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using NHibernate;
+using NHibernate.Criterion;
+using NHibernate.SqlCommand;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -28,6 +34,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
+	    public RuleSetBagRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
+	    {
+		    
+	    }
+
         public IEnumerable<IRuleSetBag> LoadAllWithRuleSets()
         {
             return Session.CreateCriteria(typeof (IRuleSetBag), "bag")
@@ -35,5 +46,53 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 .SetResultTransformer(Transformers.DistinctRootEntity)
                 .List<IRuleSetBag>();
         }
+
+	    public IRuleSetBag Find(Guid id)
+	    {
+			var mainCrit = DetachedCriteria.For<RuleSetBag>()
+					.Add(Restrictions.Eq("Id", id))
+					.SetFetchMode("RuleSetCollection", FetchMode.Join);
+
+			var subCrit = DetachedCriteria.For<RuleSetBag>("b")
+					.Add(Restrictions.Eq("b.Id", id))
+					.CreateAlias("RuleSetCollection", "r", JoinType.InnerJoin)
+					.SetProjection(Projections.Property("r.Id"));
+
+			var extCrit = DetachedCriteria.For<WorkShiftRuleSet>()
+				.Add(Subqueries.PropertyIn("Id", subCrit))
+					.SetFetchMode("ExtenderCollection", FetchMode.Join);
+
+			var extCritTwo = DetachedCriteria.For<WorkShiftRuleSet>()
+					.Add(Subqueries.PropertyIn("Id", subCrit))
+					.SetFetchMode("AccessibilityDates", FetchMode.Join);
+
+			var extCritThree = DetachedCriteria.For<WorkShiftRuleSet>()
+				.Add(Subqueries.PropertyIn("Id", subCrit))
+			    .SetFetchMode("AccessibilityDaysOfWeek", FetchMode.Join);
+
+			var res = Session.CreateMultiCriteria()
+								.Add(mainCrit)
+								.Add(extCrit)
+								.Add(extCritTwo)
+								.Add(extCritThree)
+								.List();
+
+			var ruleSetBags =
+				CollectionHelper.ToDistinctGenericCollection<IRuleSetBag>(res[0]);
+
+		    return ruleSetBags.FirstOrDefault();
+			
+			
+			
+			/* Session.CreateCriteria(typeof(IRuleSetBag), "bag")
+				.Add(Restrictions.Eq("Id",id))
+				.CreateAlias("RuleSetCollection","r",JoinType.InnerJoin)
+				.CreateAlias("r.LimiterCollection", "l", JoinType.LeftOuterJoin)
+				.CreateAlias("r.ExtenderCollection", "e", JoinType.LeftOuterJoin)
+				.CreateAlias("r.AccessibilityDates", "d", JoinType.LeftOuterJoin)
+				.CreateAlias("r.AccessibilityDaysOfWeek", "w", JoinType.LeftOuterJoin)
+				.SetResultTransformer(Transformers.DistinctRootEntity)
+				.UniqueResult<IRuleSetBag>();*/
+	    }
     }
 }

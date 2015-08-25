@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
+using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
@@ -28,10 +29,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			var date2 = new DateOnly(2029, 1, 3);
 			var date3 = new DateOnly(2029, 1, 5);
 
-
 			person = PersonFactory.CreatePersonWithGuid("a", "a");
 			var schedule = ScheduleDayFactory.Create(date1, person);
 			var schedule3 = ScheduleDayFactory.Create(date3, person);
+			var bag = new RuleSetBag();
+			var provider = MockRepository.GenerateMock<IPersonRuleSetBagProvider>();
 
 			var start1 = new DateTime(2029, 1, 1, 8, 0, 0, DateTimeKind.Utc);
 			var end1 = new DateTime(2029, 1, 1, 17, 0, 0, DateTimeKind.Utc);
@@ -61,22 +63,23 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 
 			var userTimeZone = new FakeUserTimeZone(TimeZoneInfo.Utc);
 
-			IWorkTimeMinMaxCalculator mmc = MockRepository.GenerateMock<IWorkTimeMinMaxCalculator>();
+			var mmc = MockRepository.GenerateMock<IWorkTimeMinMaxCalculator>();
 
-			var workTimeMinMaxResult = new WorkTimeMinMaxCalculationResult();
-
-			workTimeMinMaxResult.WorkTimeMinMax = new WorkTimeMinMax()
+			var workTimeMinMaxResult = new WorkTimeMinMaxCalculationResult
 			{
-				StartTimeLimitation = new StartTimeLimitation(new TimeSpan(5, 0, 0), new TimeSpan(5, 0, 0)),
-				EndTimeLimitation = new EndTimeLimitation(new TimeSpan(12, 0, 0), new TimeSpan(12, 0, 0))
+				WorkTimeMinMax = new WorkTimeMinMax
+				{
+					StartTimeLimitation = new StartTimeLimitation(new TimeSpan(5, 0, 0), new TimeSpan(5, 0, 0)),
+					EndTimeLimitation = new EndTimeLimitation(new TimeSpan(12, 0, 0), new TimeSpan(12, 0, 0))
+				}
 			};
 
-			mmc.Stub(x => x.WorkTimeMinMax(date3, person, schedule3)).Return(workTimeMinMaxResult);
-
+			provider.Stub(x => x.ForDate(person, date3)).Return(bag);
+			mmc.Stub(x => x.WorkTimeMinMax(date3, bag, schedule3)).Return(workTimeMinMaxResult);
 
 			target = new PersonPreferenceDayOccupationFactory(			
 				scheduleProvider, 
-				personPreferenceProvider,
+				personPreferenceProvider, provider, 
 				userTimeZone,
 				mmc);
 		}
@@ -120,6 +123,5 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			occupation.EndTimeLimitation.StartTime.Should().Be.EqualTo(new TimeSpan(15, 0, 0));
 			occupation.EndTimeLimitation.EndTime.Should().Be.EqualTo(new TimeSpan(16, 0, 0));
 		}
-
 	}
 }

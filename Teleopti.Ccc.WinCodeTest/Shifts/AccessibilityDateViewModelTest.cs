@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WinCodeTest.Shifts
         [Test]
         public void VerifySetDate()
         {
-            DateTime setValue = new DateTime(2001, 1, 1, 1, 1, 0, DateTimeKind.Utc);
+            DateTime setValue = new DateTime(2001, 1, 1);
             _target.Date = setValue;
 
             DateTime getValue = _target.Date;

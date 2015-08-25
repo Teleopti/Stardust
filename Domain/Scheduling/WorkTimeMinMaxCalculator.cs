@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Interfaces.Domain;
 
@@ -9,41 +10,33 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly IWorkShiftWorkTime _workShiftWorkTime;
 		private readonly IWorkTimeMinMaxRestrictionCreator _workTimeMinMaxRestrictionCreator;
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "ShiftWork")]
-        public WorkTimeMinMaxCalculator(IWorkShiftWorkTime workShiftWorkTime, IWorkTimeMinMaxRestrictionCreator workTimeMinMaxRestrictionCreator)
+		public WorkTimeMinMaxCalculator(IWorkShiftWorkTime workShiftWorkTime, IWorkTimeMinMaxRestrictionCreator workTimeMinMaxRestrictionCreator)
 		{
 			_workShiftWorkTime = workShiftWorkTime;
 			_workTimeMinMaxRestrictionCreator = workTimeMinMaxRestrictionCreator;
 		}
 
-		public WorkTimeMinMaxCalculationResult WorkTimeMinMax(DateOnly date, IPerson person, IScheduleDay scheduleDay)
+		public WorkTimeMinMaxCalculationResult WorkTimeMinMax(DateOnly date, IRuleSetBag ruleSetBag, IScheduleDay scheduleDay)
 		{
-			return WorkTimeMinMax(date, person, scheduleDay, new EffectiveRestrictionOptions
+			return WorkTimeMinMax(date, ruleSetBag, scheduleDay, new EffectiveRestrictionOptions
 			{
 				UseAvailability = true,
 				UsePreference = true
 			});
 		}
 
-		public WorkTimeMinMaxCalculationResult WorkTimeMinMax(DateOnly date, IPerson person, IScheduleDay scheduleDay, IEffectiveRestrictionOptions option)
+		public WorkTimeMinMaxCalculationResult WorkTimeMinMax(DateOnly date, IRuleSetBag ruleSetBag, IScheduleDay scheduleDay, IEffectiveRestrictionOptions option)
 		{
-			if (person == null) throw new ArgumentNullException("person");
+			if (ruleSetBag == null) throw new ArgumentNullException("ruleSetBag");
+
 			var result = new WorkTimeMinMaxCalculationResult();
-
-			var personPeriod = person.Period(date);
-			if (personPeriod == null)
-				return null;
-
-			var ruleSetBag = personPeriod.RuleSetBag;
-			if (ruleSetBag == null)
-				return null;
 
 			var createdRestriction = _workTimeMinMaxRestrictionCreator.MakeWorkTimeMinMaxRestriction(scheduleDay, option);
 			if (createdRestriction.Restriction != null)
 				result.RestrictionNeverHadThePossibilityToMatchWithShifts = !createdRestriction.Restriction.MayMatchWithShifts();
 			if (createdRestriction.IsAbsenceInContractTime)
 			{
-				result.WorkTimeMinMax = WorkTimeMinMaxForAbsence(scheduleDay);
+				result.WorkTimeMinMax = workTimeMinMaxForAbsence(scheduleDay);
 				return result;
 			}
 
@@ -54,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			return result;
 		}
 
-		private static IWorkTimeMinMax WorkTimeMinMaxForAbsence(IScheduleDay scheduleDay)
+		private static IWorkTimeMinMax workTimeMinMaxForAbsence(IScheduleDay scheduleDay)
 		{
 			var person = scheduleDay.Person;
 			var scheduleDate = scheduleDay.DateOnlyAsPeriod.DateOnly;
@@ -71,5 +64,30 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		}
 	}
 
-	
+	public interface IPersonRuleSetBagProvider
+	{
+		IRuleSetBag ForDate(IPerson person, DateOnly date);
+	}
+
+	public class PersonRuleSetBagProvider : IPersonRuleSetBagProvider
+	{
+		private readonly IRuleSetBagRepository _repository;
+
+		public PersonRuleSetBagProvider(IRuleSetBagRepository repository)
+		{
+			_repository = repository;
+		}
+
+		public IRuleSetBag ForDate(IPerson person, DateOnly date)
+		{
+			if (person == null) return null;
+
+			var personPeriod = person.Period(date);
+			if (personPeriod == null)
+				return null;
+
+			var ruleSetBag = personPeriod.RuleSetBag;
+			return ruleSetBag != null ? _repository.Find(ruleSetBag.Id.GetValueOrDefault()) : null;
+		}
+	}
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Interfaces.Domain;
 
@@ -10,14 +11,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 	{	
 		private readonly IScheduleProvider _scheduleProvider;
 		private readonly IPreferenceProvider _preferenceProvider;
+		private readonly IPersonRuleSetBagProvider _personRuleSetBagProvider;
 		private readonly IUserTimeZone _userTimezone;
 		private readonly IWorkTimeMinMaxCalculator _workTimeMinMaxCalculator; 
 
 
-		public PersonPreferenceDayOccupationFactory(IScheduleProvider scheduleProvider, IPreferenceProvider preferenceProvider, IUserTimeZone userTimezone, IWorkTimeMinMaxCalculator workTimeMinMaxCalculator)
+		public PersonPreferenceDayOccupationFactory(IScheduleProvider scheduleProvider, IPreferenceProvider preferenceProvider, IPersonRuleSetBagProvider personRuleSetBagProvider, IUserTimeZone userTimezone, IWorkTimeMinMaxCalculator workTimeMinMaxCalculator)
 		{
 			_scheduleProvider = scheduleProvider;
 			_preferenceProvider = preferenceProvider;
+			_personRuleSetBagProvider = personRuleSetBagProvider;
 			_userTimezone = userTimezone;
 			_workTimeMinMaxCalculator = workTimeMinMaxCalculator;
 		}
@@ -66,7 +69,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 				if (preference != null)
 				{
 					var scheduleDay = _scheduleProvider.GetScheduleForPeriod(new DateOnlyPeriod(date, date)) ?? new IScheduleDay[] { };
-					var minMax = _workTimeMinMaxCalculator.WorkTimeMinMax(date, person, scheduleDay.SingleOrDefault());
+					var minMax = _workTimeMinMaxCalculator.WorkTimeMinMax(date, _personRuleSetBagProvider.ForDate(person,date), scheduleDay.SingleOrDefault());
 
 					personPreferenceDayOccupation.HasPreference = true;
 

@@ -260,17 +260,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
             Assert.AreEqual(0, _target.AccessibilityDaysOfWeek.Count());
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
-        public void VerifyDateMustBeUtcInAddAccessibilityDate()
-        {
-            _target.AddAccessibilityDate(new DateTime(2008, 12, 24));
-        }
-
         [Test]
         public void VerifyCanAddDatesToDefaultAvailability()
         {
-            var date1 = new DateTime(2008, 7, 1, 0, 0, 0, DateTimeKind.Utc);
-            var date2 = new DateTime(2008, 8, 1, 0, 0, 0, DateTimeKind.Utc);
+            var date1 = new DateOnly(2008, 7, 1);
+            var date2 = new DateOnly(2008, 8, 1);
 
             _target.AddAccessibilityDate(date1);
             _target.AddAccessibilityDate(date2);
@@ -283,7 +277,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
         [Test]
         public void VerifyCannotAddSameDateTwice()
         {
-            var date1 = new DateTime(2008, 7, 1, 0, 0, 0, DateTimeKind.Utc);
+            var date1 = new DateOnly(2008, 7, 1);
             _target.AddAccessibilityDate(date1);
             _target.AddAccessibilityDate(date1);
 
@@ -293,8 +287,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
         [Test]
         public void VerifyCanRemoveDate()
         {
-            var date1 = new DateTime(2008, 7, 1, 0, 0, 0, DateTimeKind.Utc);
-            var date2 = new DateTime(2008, 8, 1, 0, 0, 0, DateTimeKind.Utc);
+            var date1 = new DateOnly(2008, 7, 1);
+            var date2 = new DateOnly(2008, 8, 1);
 
             _target.AddAccessibilityDate(date1);
             _target.AddAccessibilityDate(date2);
@@ -311,24 +305,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
         [Test]
         public void VerifyCanRemoveNonExistingDate()
         {
-            var date1 = new DateTime(2008, 7, 1, 0, 0, 0, DateTimeKind.Utc);
+            var date1 = new DateOnly(2008, 7, 1);
             _target.RemoveAccessibilityDate(date1);
 
             Assert.AreEqual(0, _target.AccessibilityDates.Count());
-        }
-
-        [Test]
-        public void VerifyCanAddDatesWithTimeToDefaultAvailability()
-        {
-            var date1 = new DateTime(2008, 7, 1, 10, 0, 0, DateTimeKind.Utc);
-            var date2 = new DateTime(2008, 8, 1, 7, 0, 0, DateTimeKind.Utc);
-
-            _target.AddAccessibilityDate(date1);
-            _target.AddAccessibilityDate(date2);
-
-            Assert.AreEqual(2, _target.AccessibilityDates.Count());
-            Assert.IsTrue(_target.AccessibilityDates.Contains(date1.Date));
-            Assert.IsTrue(_target.AccessibilityDates.Contains(date2.Date));
         }
 
         [Test]
@@ -336,7 +316,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
         {
 
             var date1 = new DateOnly(2008, 7, 1);
-            var date11 = new DateTime(2008, 7, 1, 0, 0, 0, DateTimeKind.Utc);
+            var date11 = new DateOnly(2008, 7, 1);
             var date2 = new DateOnly(2008, 8, 1);
 
             _target.AddAccessibilityDate(date11);
@@ -376,7 +356,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
             var date1 = new DateOnly(2008, 7, 1);
             var date2 = new DateOnly(2008, 8, 1);
             var date3 = new DateOnly(2008, 8, 2);
-            var date31 = new DateTime(2008, 8, 2, 0, 0, 0, DateTimeKind.Utc);
+            var date31 = new DateOnly(2008, 8, 2);
             _target.AddAccessibilityDayOfWeek(DayOfWeek.Tuesday);
             _target.AddAccessibilityDate(date31);
             _target.DefaultAccessibility = DefaultAccessibility.Included;
