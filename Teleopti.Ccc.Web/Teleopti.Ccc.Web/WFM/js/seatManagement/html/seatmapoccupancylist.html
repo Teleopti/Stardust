@@ -1,0 +1,23 @@
+﻿
+
+<div ng-repeat-start="detail in occupancyDetail"></div>
+
+<div ng-show="$first" class="bottom-header">
+	Seat: {{detail.SeatName}}
+</div>
+<ul class="wfm-list">
+	<li class="active" >
+		<span class="list-item-container" style="max-width: none">
+			{{getDisplayTime (detail.StartDateTime)}}
+			-{{getDisplayTime (detail.EndDateTime)}}
+			&nbsp;&nbsp;{{detail.FirstName}}
+			&nbsp;{{detail.LastName}}
+		</span>
+		<div class="wfm-leave-behind wfm-leave-behind-1">
+			<span><i class="mdi mdi-delete"></i></span>
+		</div>
+	</li>
+</ul>
+
+<div ng-repeat-end></div>
+

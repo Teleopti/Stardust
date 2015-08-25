@@ -22,6 +22,7 @@ angular.module('wfm.seatMap')
 			scrollZooming : scrollZooming,
 			zoom: zoom,
 			applyOccupancyColoring: applyOccupancyColoring,
+			loadSeatDetails: loadSeatDetails
 		};
 		
 		function setupCanvas (canvas) {
@@ -31,7 +32,6 @@ angular.module('wfm.seatMap')
 		}
 
 		function resize(canvas, toolbarVisible) {
-
 			timeout(function(){ doResize(canvas, toolbarVisible) }, 0, true);
 		};
 
@@ -254,6 +254,10 @@ angular.module('wfm.seatMap')
 				loadSeatMapData(canvas, data, allowEdit, callbackSuccess, callbackNoJson);
 			});
 			
+		};
+
+		function loadSeatDetails(seatId, selectedDate) {
+			return seatMapService.occupancy.get({ seatId: seatId, date: selectedDate }).$promise;
 		};
 
 		function resetPosition (canvas) {

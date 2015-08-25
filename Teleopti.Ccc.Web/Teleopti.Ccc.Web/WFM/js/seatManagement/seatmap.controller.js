@@ -5,11 +5,9 @@
 	angular.module('wfm.seatPlan')
 		.controller('SeatMapCanvasCtrl', seatMapCanvasDirectiveController);
 
-	seatMapCanvasDirectiveController.$inject = [
-		'$scope', '$document', '$window', 'seatMapCanvasUtilsService', 'Toggle'
-	];
+	seatMapCanvasDirectiveController.$inject = ['$scope', '$document', '$window', 'seatMapCanvasUtilsService'];
 
-	function seatMapCanvasDirectiveController($scope, $document, $window, canvasUtils, toggleService) {
+	function seatMapCanvasDirectiveController($scope, $document, $window, canvasUtils) {
 
 		var vm = this;
 		var canvas = new fabric.CanvasWithViewport('c');
@@ -26,7 +24,6 @@
 		vm.fileCallbackFunction = null;
 		vm.scrollListen = false;
 		vm.zoomData = { min: 0.1, max: 1, step: 0.05, zoomValue: 1 };
-		vm.toggles = {};
 		
 		init();
 
@@ -41,7 +38,7 @@
 			fabric.Object.prototype.lockScalingFlip = true;
 			fabric.Object.prototype.hasBorders = false;
 			canvasUtils.setupCanvas(canvas);
-			setupHandleLocationClick();
+			setupHandleSeatAndLocationClick();
 
 			angular.element($window).bind('resize', function () {
 				resize();
@@ -109,16 +106,27 @@
 			document.onmousewheel = scrollZooming;
 		};
 
-		function setupHandleLocationClick() {
+		function setupHandleSeatAndLocationClick() {
+			setupClickHandler('location', loadSeatMapOnLocationClick);
+			setupClickHandler('seat', loadOccupancyOnSeatClick);
+		};
 
+		function setupClickHandler(targetName, callback) {
 			canvas.on('mouse:down', function (e) {
-
 				if (!vm.isInEditMode) {
-					var location = canvasUtils.getFirstObjectOfTypeFromCanvasObject(e.target, "location");
-					if (location != null) {
-						loadSeatMapOnLocationClick(location);
+					var target = canvasUtils.getFirstObjectOfTypeFromCanvasObject(e.target, targetName);
+					if (target != null) {
+						callback(target);
 					}
 				};
+			});
+		}
+
+		function loadOccupancyOnSeatClick(seat) {
+			vm.currentSeat = seat;
+			canvasUtils.loadSeatDetails(seat.id, vm.selectedDate).then(function (result) {
+				if (result && result.length) vm.occupancydetails = result;
+				else vm.occupancydetails = undefined;
 			});
 		};
 
@@ -134,11 +142,10 @@
 			vm.breadcrumbs = data.BreadcrumbInfo;
 			resetZoom();
 			vm.isLoading = false;
-
 			if (vm.showOccupancy) {
-
 				canvasUtils.applyOccupancyColoring(canvas, data.Seats);
 			}
+
 			$scope.$apply();
 		};
 
@@ -153,7 +160,6 @@
 			vm.isLoading = false;
 			resetZoom();
 		};
-		
 
 	};
 }());

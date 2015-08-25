@@ -80,3 +80,12 @@ a.mfb-component__button--main {
   }
 }
 							
+#seatmapcanvas {
+	position: relative;
+}
+
+.seatmap-occupancy-detail {
+	display: block;
+	min-height: 120px;
+	background:#FFFFFF;
+}

@@ -1281,8 +1281,10 @@
     <Content Include="WFM\js\people\people.importPeople.controller.js" />
     <Content Include="WFM\js\people\people.importPeople.directive.js" />
     <Content Include="WFM\js\seatManagement\html\locationpicker.html" />
+    <Content Include="WFM\js\seatManagement\html\seatmapoccupancylist.html" />
     <Content Include="WFM\js\seatManagement\html\seatplanreport.html" />
     <Content Include="WFM\js\seatManagement\html\teampicker.html" />
+    <Content Include="WFM\js\seatManagement\seatmapoccupancydetail.directive.js" />
     <Content Include="WFM\js\seatManagement\seatplanreportprint.directive.js" />
     <Content Include="WFM\js\seatManagement\locationpicker.directive.js" />
     <Content Include="WFM\js\seatManagement\seatplantranslator.factory.js" />
@@ -1290,7 +1292,6 @@
     <Content Include="WFM\js\seatManagement\html\seatplanreporttable.html" />
     <Content Include="WFM\js\seatManagement\seatplanreport.directive.js" />
     <Content Include="WFM\js\seatManagement\seatplanreporttable.directive.js" />
-    <Content Include="WFM\js\seatManagement\seatplanteamandlocation.service.js" />
     <Content Include="WFM\js\seatManagement\teampicker.directive.js" />
     <Content Include="WFM\js\start\start.controller.js" />
     <Content Include="WFM\tests\outbound\outbound.campaign.chart.service.spec.js" />
