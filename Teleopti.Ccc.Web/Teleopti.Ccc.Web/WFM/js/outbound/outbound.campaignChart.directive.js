@@ -9,8 +9,7 @@
 			template: '<div id="Chart_{{campaign.Id}}"></div>' +
 				'<div class="chart-extra-info"><span ng-repeat="extraInfo in extraInfos"}>{{extraInfo}}</span></div>',
 			scope: {
-				'campaign': '=',
-				'graphData': '=',
+				'campaign': '=',				
 				'dictionary': '='
 			},
 			require: ['campaignChart'],
@@ -20,7 +19,7 @@
 		function campaignChartCtrl($scope, $element) {
 
 			$scope.viewScheduleDiff = false;
-			$scope.dates = $scope.graphData['dates'].slice(1);
+			$scope.dates = $scope.campaign.graphData['dates'].slice(1);
 
 			this.loadGraph = loadGraph;
 			this.init = init;
@@ -87,12 +86,12 @@
 	
 			function getDataGroupsData() {
 				return getDataGroupsKey().map(function(name) {
-					return $scope.graphData[name];
+					return $scope.campaign.graphData[name];
 				});
 			}
 
 			function getDataGroupsLabel() {
-				return getDataGroupsKey().map(function(name) { return $scope.graphData[name][0]; });			
+				return getDataGroupsKey().map(function (name) { return $scope.campaign.graphData[name][0]; });
 			}
 
 			function getDataGroupsKey() {
@@ -110,10 +109,10 @@
 
 			function _setChartOption_label() {
 				var result = {};
-				for (var key in $scope.graphData) {
+				for (var key in $scope.campaign.graphData) {
 					if (key == 'dates') result['dates'] = 'x';
 					else
-						result[key] = $scope.graphData[key][0];
+						result[key] = $scope.campaign.graphData[key][0];
 				}				
 				return result;
 			}
@@ -152,7 +151,7 @@
 					type: 'bar',
 					groups: [getDataGroupsLabel()],
 					order: 'null',				
-					columns: [$scope.graphData.dates].concat(getDataGroupsData()),					
+					columns: [$scope.campaign.graphData.dates].concat(getDataGroupsData()),
 					colors: _setChartOption_color(),
 					types: {},
 					labels: {
@@ -198,7 +197,7 @@
 					}
 				};
 
-				option.y.max = (Math.max.apply(Math, $scope.graphData.rawBacklogs.slice(1)) + Math.max.apply(Math, $scope.graphData.unscheduledPlans.slice(1))) * 1.1;
+				option.y.max = (Math.max.apply(Math, $scope.campaign.graphData.rawBacklogs.slice(1)) + Math.max.apply(Math, $scope.campaign.graphData.unscheduledPlans.slice(1))) * 1.1;
 				return option;
 			}
 
@@ -253,15 +252,13 @@
 		function postlink(scope, elem, attrs, ctrls) {
 			var ctrl = ctrls[0];
 
-			scope.$evalAsync(ctrl.init);
+			scope.$evalAsync(ctrl.init);			
 
-			scope.$watch(function () {
-				return scope.graphData;
-			}, function (newVal, oldVal) {
-				if (newVal != oldVal) {
-					ctrl.loadGraph();
-				}
-			}, true);
+			scope.$on('campaign.chart.refresh', function (_s, data) {
+				if (scope.campaign.Id == data.Id) {					
+					scope.$evalAsync(ctrl.loadGraph());
+				}				
+			});
 
 			scope.$on('campaign.chart.clear.selection', function(_s, data) {
 				if (scope.campaign.Id == data.Id) {

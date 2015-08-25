@@ -23,22 +23,13 @@
 
     	$scope.replan = function (campaign) {
     		campaign.isReplanLoaderFinished = true;
-			outboundChartService.replan(campaign.Id, function() {				
-				outboundService.getCampaignSummary(campaign.Id, function (_campaign) {
-					angular.extend(campaign, _campaign);
-					outboundChartService.getCampaignVisualization(campaign.Id, function (data, translations, manualPlan, closedDays) {
-						campaign.graphData = data;
-						campaign.rawManualPlan = manualPlan;
-						campaign.translations = translations;
-						campaign.closedDays = closedDays;
-						campaign.isReplanLoaderFinished = false;
-					});					
-					outboundService.getCampaignStatistics(null, function success(data2) {
-						$scope.phaseStatistics = data2;
-					});
-				});
-			});
+    		outboundChartService.replan(campaign.Id, function () {
+			    refreshGraphData(campaign, $scope);
+			    refreshCampaignStatistics($scope);
+		    });
 		}
+
+    	
 
     	$scope.removeManualPlan = function(campaign) {
 			var dates = [];
@@ -48,17 +39,10 @@
 			var removeManualPlan = {
 				CampaignId: campaign.Id,
 				Dates: dates
-
 			};
-			outboundChartService.removeManualPlan(removeManualPlan, function(data, manualPlan) {
-				outboundService.getCampaignSummary(campaign.Id, function(_campaign) {
-					angular.extend(campaign, _campaign);
-					campaign.graphData = data;
-					campaign.rawManualPlan = manualPlan;
-					outboundService.getCampaignStatistics(null, function success(data2) {
-						$scope.phaseStatistics = data2;
-					});
-				});
+			outboundChartService.removeManualPlan(removeManualPlan, function() {
+				refreshGraphData(campaign, $scope);
+				refreshCampaignStatistics($scope);
 			});
 		    $scope.$broadcast('campaign.chart.clear.selection', { Id: campaign.Id });
 			campaign.manualPlanInput = null;
@@ -74,14 +58,8 @@
     			}
     		});
     		outboundChartService.updateManualPlan(campaign.manualPlan, function (data, manualPlan) {
-			    outboundService.getCampaignSummary(campaign.Id, function(_campaign) {
-			    	angular.extend(campaign, _campaign);
-			    	campaign.graphData = data;
-			    	campaign.rawManualPlan = manualPlan;
-			    	outboundService.getCampaignStatistics(null, function success(data2) {
-			    		$scope.phaseStatistics = data2;
-				    });
-			    });			   
+    			refreshGraphData(campaign, $scope);
+    			refreshCampaignStatistics($scope);
 		    });
     		$scope.$broadcast('campaign.chart.clear.selection', { Id: campaign.Id });
     		campaign.manualPlanInput = null;
@@ -152,6 +130,27 @@
             $scope.Campaigns = [];
             $scope.WarningCampaigns = []; 
         }
+
+        function refreshGraphData(campaign, scope) {
+        	outboundService.getCampaignSummary(campaign.Id, function (_campaign) {
+        		angular.extend(campaign, _campaign);
+        		outboundChartService.getCampaignVisualization(campaign.Id, function (data, translations, manualPlan, closedDays) {
+        			campaign.graphData = data;
+        			campaign.rawManualPlan = manualPlan;
+        			campaign.translations = translations;
+        			campaign.closedDays = closedDays;
+        			campaign.isReplanLoaderFinished = false;			       
+        			scope.$broadcast('campaign.chart.refresh', campaign);
+		        });
+        	});
+        }
+
+        function refreshCampaignStatistics(scope) {
+        	outboundService.getCampaignStatistics(null, function success(data) {
+        		scope.phaseStatistics = data;
+        	});
+        }
+
     }
 
 
