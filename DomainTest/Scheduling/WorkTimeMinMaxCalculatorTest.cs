@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		}
 
 		[Test]
-		public void ShouldNotAllowNoRuleSetBag()
+		public void ShouldReturnNullWhenNoRuleSetBag()
 		{
 			var person = MockRepository.GenerateMock<IPerson>();
 			var personPeriod = MockRepository.GenerateMock<IPersonPeriod>();
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			personPeriod.Stub(x => x.RuleSetBag).Return(null);
 
 			var target = new WorkTimeMinMaxCalculator(null, null);
-			Assert.Throws<ArgumentNullException>(()=> target.WorkTimeMinMax(DateOnly.Today, null, scheduleDay));
+			target.WorkTimeMinMax(DateOnly.Today, null, scheduleDay).Should().Be.Null();
 		}
 
 		[Test]
