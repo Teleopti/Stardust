@@ -8,11 +8,11 @@ namespace Teleopti.Support.Security
 	{
 		private static readonly ILog log = LogManager.GetLogger(typeof(Program));
 
-		public int Execute(CommandLineArgument commandLineArgument)
+		public int Execute(IDatabaseArguments commandLineArgument)
 		{
 			log.Debug("Link Analytics to Agg datatbase ...");
 			
-			UpdateCrossDatabaseView.Execute(commandLineArgument.AnalyticsDbConnectionString(), commandLineArgument.AggDatabase);
+			UpdateCrossDatabaseView.Execute(commandLineArgument.AnalyticsDbConnectionString, commandLineArgument.AggDatabase);
             log.Debug("Link Analytics to Agg datatbase. Done!");
 			return 0;
 		}

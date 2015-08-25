@@ -2,6 +2,6 @@
 {
     internal interface ICommandLineCommand
     {
-        int Execute(CommandLineArgument commandLineArgument);
+        int Execute(IDatabaseArguments databaseArguments);
     }
 }

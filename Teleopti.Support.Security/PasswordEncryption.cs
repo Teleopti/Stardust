@@ -8,10 +8,10 @@ namespace Teleopti.Support.Security
 	{
 		private static readonly ILog log = LogManager.GetLogger(typeof(Program));
 
-		public int Execute(CommandLineArgument commandLineArgument)
+		public int Execute(IDatabaseArguments commandLineArgument)
 		{
 			//Select database version 
-			using (SqlConnection connection = new SqlConnection(commandLineArgument.ApplicationDbConnectionString()))
+			using (SqlConnection connection = new SqlConnection(commandLineArgument.ApplicationDbConnectionString))
 			{
 				try
 				{

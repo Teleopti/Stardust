@@ -90,6 +90,8 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="DelayedDataConvert.cs" />
+    <Compile Include="IDatabaseArguments.cs" />
+    <Compile Include="UpgradeRunner.cs" />
     <Compile Include="ReportTextsCommand.cs" />
     <Compile Include="CrossDatabaseViewUpdate.cs" />
     <Compile Include="CommandLineArgument.cs" />

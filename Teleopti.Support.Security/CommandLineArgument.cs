@@ -18,6 +18,18 @@ namespace Teleopti.Support.Security
 						readArguments(argumentCollection);
         }
 
+		public IDatabaseArguments GetDatabaseArguments()
+		{
+			return new DatabaseArguments
+			{
+				AggDatabase = AggDatabase,
+				AnalyticsDbConnectionString = AnalyticsDbConnectionString(),
+				AnalyticsDbConnectionStringToStore = AnalyticsDbConnectionStringToStore(),
+				ApplicationDbConnectionString = ApplicationDbConnectionString(),
+				ApplicationDbConnectionStringToStore = ApplicationDbConnectionStringToStore()
+			};
+		}
+
 		public string AggDatabase { get; private set; }
 
 		public string AnalyticsDbConnectionString()

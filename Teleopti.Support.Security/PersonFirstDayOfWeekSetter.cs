@@ -12,10 +12,10 @@ namespace Teleopti.Support.Security
 		private static readonly ILog log = LogManager.GetLogger(typeof(Program));
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.log.Debug(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.log.Debug(System.String,System.Object)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public int Execute(CommandLineArgument commandLineArgument)
+        public int Execute(IDatabaseArguments commandLineArgument)
         {
             //Select database version 
-					using (var connection = new SqlConnection(commandLineArgument.ApplicationDbConnectionString()))
+					using (var connection = new SqlConnection(commandLineArgument.ApplicationDbConnectionString))
 	        {
 
 		        connection.Open();
