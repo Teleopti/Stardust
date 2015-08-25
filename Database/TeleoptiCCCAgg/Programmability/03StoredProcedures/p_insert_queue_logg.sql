@@ -950,8 +950,35 @@ order by queue,interval/2
 
 END
 
-
-
+--merge 2:1
+IF (@CTI_interval_per_hour=@interval_per_hour*2)
+BEGIN
+select '@CTI_interval_per_hour=@interval_per_hour*2'
+	INSERT INTO queue_logg
+	SELECT      queue,
+	date_from,
+	interval /2,
+	SUM(offd_direct_call_cnt),
+	SUM(overflow_in_call_cnt),
+	SUM(aband_call_cnt),
+	SUM(overflow_out_call_cnt),
+	SUM(answ_call_cnt),
+	SUM(queued_and_answ_call_dur),
+	SUM(queued_and_aband_call_dur),
+	SUM(talking_call_dur),
+	SUM(wrap_up_dur),
+	MAX(queued_answ_longest_que_dur),
+	MAX(queued_aband_longest_que_dur),
+	MAX(avg_avail_member_cnt),
+	SUM(ans_servicelevel_cnt),
+	SUM(wait_dur),
+	SUM(aband_short_call_cnt),
+	SUM(aband_within_sl_cnt)
+	FROM #tmp_queue_logg
+	GROUP BY queue,
+	date_from,
+	interval /2
+END
 
 
 IF (@CTI_interval_per_hour=@interval_per_hour)

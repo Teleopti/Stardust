@@ -1409,6 +1409,52 @@ select '@CTI_interval_per_hour*1.5=@interval_per_hour'
 END
 ---------------------------------------
 
+--Merge 2:1
+IF (@CTI_interval_per_hour=@interval_per_hour*2)
+BEGIN
+select '@CTI_interval_per_hour=@interval_per_hour*2'
+INSERT agent_logg (
+	queue,
+	date_from,
+	interval,
+	agent_id, 
+	agent_name,
+	avail_dur,
+	tot_work_dur,
+	talking_call_dur,	
+	pause_dur,
+	wait_dur,
+	wrap_up_dur,
+	answ_call_cnt,
+	direct_out_call_cnt,
+	direct_out_call_dur,
+	direct_in_call_cnt,
+	direct_in_call_dur,
+	transfer_out_call_cnt,
+	admin_dur )
+SELECT
+	queue,
+	date_from,
+	interval/2,
+	agent_id, 
+	max(agent_name),
+	sum(avail_dur),
+	sum(tot_work_dur),
+	sum(talking_call_dur),	
+	sum(pause_dur),
+	sum(wait_dur),
+	sum(wrap_up_dur),
+	sum(answ_call_cnt),
+	sum(direct_out_call_cnt),
+	sum(direct_out_call_dur),
+	sum(direct_in_call_cnt),
+	sum(direct_in_call_dur),
+	sum(transfer_out_call_cnt),
+	sum(admin_dur)
+	FROM #tmp_alogg
+	GROUP BY queue,date_from,interval/2,agent_id
+END
+
 
 IF (@CTI_interval_per_hour = @interval_per_hour) 
 BEGIN
