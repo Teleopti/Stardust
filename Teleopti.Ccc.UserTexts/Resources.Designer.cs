@@ -17137,11 +17137,11 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to OnGoing.
+        ///   Looks up a localized string similar to Ongoing.
         /// </summary>
-        public static string OnGoing {
+        public static string Ongoing {
             get {
-                return ResourceManager.GetString("OnGoing", resourceCulture);
+                return ResourceManager.GetString("Ongoing", resourceCulture);
             }
         }
         

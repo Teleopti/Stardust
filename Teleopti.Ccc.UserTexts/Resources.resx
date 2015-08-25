@@ -13290,8 +13290,8 @@ Reduce the complexity to use these shifts.</value>
     <value>empty password;</value>
     <comment>error msg for validating data when importing users in People</comment>
   </data>
-  <data name="OnGoing" xml:space="preserve">
-    <value>OnGoing</value>
+  <data name="Ongoing" xml:space="preserve">
+    <value>Ongoing</value>
     <comment>use in web wfm, campaign status</comment>
   </data>
   <data name="NoLogonAccountErrorMsgSemicolon" xml:space="preserve">

@@ -29,7 +29,7 @@
 
             ngModel.$validators.number = function (modelValue, viewValue) {            
 	            if (angular.isDefined(scope.integerOnly) && scope.integerOnly !== 'true') {		         
-            		if (!/^\s*[-+]?[0-9.]*\s*$/.test(viewValue)) return false;					
+            		if (!/^\s*[-+]?[0-9]*(\.[0-9]*)?\s*$/.test(viewValue)) return false;					
 				} else {
             		if (!/^\s*[-+]?[0-9]*\s*$/.test(viewValue)) return false;
 				}										
