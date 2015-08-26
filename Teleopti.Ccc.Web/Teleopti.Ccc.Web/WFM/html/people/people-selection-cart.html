@@ -13,7 +13,7 @@
 	<div class="row">
 		<div class="col-md-2">
 			<p class="input-group">
-				<input type="date" class="form-control" datepicker-popup template-url="'template/datepicker/popup.html'" ng-model="vm.startDate" is-open="vm.status.opened" datepicker-options="vm.dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" show-button-bar="false" show-button-bar="false" />
+				<input type="date" class="form-control" datepicker-popup ng-model="vm.startDate" is-open="vm.status.opened" datepicker-options="vm.dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" show-button-bar="false" />
 				<span class="input-group-btn">
 					<button type="button" class="btn btn-default" ng-click="vm.toggleCalendar()"><i class="glyphicon glyphicon-calendar"></i></button>
 				</span>
@@ -53,16 +53,3 @@
 		</md-sidenav>
 	</div>
 </div>
-
-<script id="template/datepicker/popup.html" type="text/ng-template">
-	<ul class="dropdown-menu" ng-if="isOpen" style="display: block" ng-style="{top: position.top+'px', left: position.left+'px'}" ng-keydown="keydown($event)" ng-click="$event.stopPropagation()">
-		<li class="wfm-datepicker" ng-transclude></li>
-		<li ng-if="showButtonBar" style="padding:10px 9px 2px">
-			<span class="btn-group pull-left">
-				<button type="button" class="btn btn-sm btn-info" ng-click="select('today')">{{ getText('current') }}</button>
-				<button type="button" class="btn btn-sm btn-danger" ng-click="select(null)">{{ getText('clear') }}</button>
-			</span>
-			<button type="button" class="btn btn-sm btn-success pull-right" ng-click="close()">{{ getText('close') }}</button>
-		</li>
-	</ul>
-</script>
