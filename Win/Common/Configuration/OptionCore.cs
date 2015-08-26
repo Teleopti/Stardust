@@ -56,8 +56,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				page.SetUnitOfWork(UnitOfWork);
 				if (item == null)
 					page.LoadControl();
-				else
-					page.LoadFromExternalModule(item);
+			}
+			if (pageSupported && item != null)
+			{
+				page.LoadFromExternalModule(item);
 			}
 			return pageSupported;
 		}

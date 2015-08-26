@@ -513,7 +513,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public void LoadFromExternalModule(SelectedEntity<IAggregateRoot> entity)
 		{
-			LoadControl();
 
 			var selectedAvailability = entity.SelectedEntityObject as IAvailabilityRotation;
 			if (selectedAvailability == null || !_availabilityList.Contains(selectedAvailability)) return;

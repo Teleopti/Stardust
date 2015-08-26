@@ -793,7 +793,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public void LoadFromExternalModule(SelectedEntity<IAggregateRoot> entity)
 		{
-			LoadControl();
 
 			var selectedRotation = entity.SelectedEntityObject as IRotation;
 
