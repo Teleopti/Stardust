@@ -20,12 +20,12 @@
 		};
 
 		vm.dateOptions = {
-			formatYear: 'yy',
+			formatYear: 'yyyy',
 			startingDay: 1
 		};
 
 		vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-		vm.format = vm.formats[0];
+		vm.format = vm.formats[1];
 
 		vm.status = {
 			opened: false
@@ -97,14 +97,6 @@
 
 			data: 'vm.availablePeople'
 
-		};
-
-		vm.isIndeterminate = function (skill) {
-			if (skill.Status === "indeterminate") {
-				return true;
-			} else {
-				return false;
-			}
 		};
 
 		vm.getSkillStatus = function(skill) {

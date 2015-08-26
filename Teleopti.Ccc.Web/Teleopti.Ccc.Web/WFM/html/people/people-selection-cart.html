@@ -12,12 +12,19 @@
 
 	<div class="row">
 		<div class="col-md-2" outside-click="vm.closeCalendar()">
-			<button class="wfm-btn wfm-btn-default" ng-click="vm.toggleCalendar()">{{vm.startDate | date:"yyyy-MM-dd"}}</button>
-			<datepicker style="z-index: 100; position: absolute;background-color: white" show-weeks="true" close-on-date-selection="true" ng-model="vm.startDate" class="wfm-datepicker" ng-show="vm.status.opened"></datepicker>
+			<!--<button class="wfm-btn wfm-btn-default" ng-click="vm.toggleCalendar()">{{vm.startDate | date:"yyyy-MM-dd"}}</button>
+			<datepicker style="z-index: 100; position: absolute; background-color: white;" show-weeks="true" close-on-date-selection="false" ng-model="vm.startDate" class="wfm-datepicker" ng-show="vm.status.opened"></datepicker>-->
+			<div class="col-md-6">
+				<p class="input-group">
+					<input type="date" class="form-control wfm-datepicker" datepicker-popup ng-model="vm.startDate" is-open="vm.status.opened" datepicker-options="vm.dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+					<span class="input-group-btn">
+						<button type="button" class="btn btn-default" ng-click="vm.toggleCalendar()"><i class="glyphicon glyphicon-calendar"></i></button>
+					</span>
+				</p>
+			</div>
 		</div>
 	</div>
-		<div ui-i18n="{{lang
-}}" ng-if="vm.dataInitialized" class="big-table-wrapper material-depth-1" style="position: relative">
+	<div ui-i18n="{{lang}}" ng-if="vm.dataInitialized" class="big-table-wrapper material-depth-1" style="position: relative">
 		<div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-auto-resize ui-grid-pagination ui-grid-resize-columns class="grid people-list"></div>
 		<div>
 			<nav class="wfm-panel action-panel" mfb-menu position="tr" effect="slidein-spring"
@@ -27,13 +34,10 @@
 				 toggling-method="click" menu-state="closed">
 				<button class="{{button.label|lowercase}}" ng-show="button.active" mfb-button icon="{{button.icon}}" ng-click="button.action()"
 						label="{{button.label|translate}}" ng-repeat="button in vm.buttons"></button>
-
 			</nav>
 		</div>
 		<md-sidenav class="md-sidenav-right md-sidenav-skill-panel md-whiteframe-z2" md-component-id="right">
-			<div class="sidenav-header">
-				Skill
-			</div>
+			<div class="sidenav-header">Skill</div>
 			<md-content layout-padding style="height: 500px">
 				<div class="input-prepend">
 					<i class="mdi mdi-filter-outline"></i>
@@ -49,9 +53,7 @@
 					</div>
 				</md-list-item>
 			</md-content>
-			<md-button ng-click="vm.close()" class="md-primary">
-				Close Sidenav Right
-			</md-button>
+			<md-button ng-click="vm.close()" class="md-primary">Close Sidenav Right</md-button>
 		</md-sidenav>
 	</div>
 </div>
