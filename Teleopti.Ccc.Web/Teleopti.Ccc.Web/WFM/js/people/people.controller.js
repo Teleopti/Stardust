@@ -21,7 +21,7 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 	$scope.isImportUsersEnabled = false;
 	$scope.isAdjustSkillEnabled = false;
 	$scope.showImportPanel = false;
-
+	$scope.selectedCount = 0;
 	$scope.dataInitialized = false;
 
 	$scope.buttons = [
@@ -34,14 +34,15 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 		active: function() {
 			return $scope.isImportUsersEnabled;
 		}
-	}, {
+	},
+	{
 		label: 'AdjustSkill',
 		icon: 'mdi-package',
-		action: function() {
+		action: function () {
 			$scope.gotoSkillPanel();
 		},
-		active: function() {
-			return $scope.isAdjustSkillEnabled;
+		active: function () {
+			return $scope.isAdjustSkillEnabled && ($scope.selectedCount > 0);
 		}
 	}];
 

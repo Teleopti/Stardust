@@ -10,8 +10,9 @@
 		var vm = this;
 		vm.selectedPeopleIds = $stateParams.selectedPeopleIds;
 		vm.commandName = $stateParams.commandTag;
+		vm.processing = false;
 
-		vm.startDate = new Date();
+		vm.selectedDate = new Date();
 		vm.toggleCalendar = function ($event) {
 			vm.status.opened = !vm.status.opened;
 		};
@@ -36,7 +37,6 @@
 				label: 'AdjustSkill',
 				icon: 'mdi-package',
 				action: function() {
-					// vm.gotoSkillPanel(); TODO: toggle skill panel
 					vm.toggleSkillPanel();
 				},
 				active: function() {
@@ -67,7 +67,7 @@
 			{
 				tag: "adjustSkill",
 				columns: [
-					{ displayName: 'Skills', field: 'Skills', headerCellFilter: 'translate', minWidth: 100 },
+					{ displayName: 'Skills', field: 'Skills()', headerCellFilter: 'translate'},
 					{ displayName: 'ShiftBag', field: 'ShiftBag', headerCellFilter: 'translate', minWidth: 100 }
 				]
 			}
@@ -103,17 +103,25 @@
 		loadSkillPromise.then(function(result) {
 			vm.availableSkills = result;
 		});
-		vm.date = moment().format('YYYY-MM-DD');
-		var fetchPeoplePromise = peopleSvc.fetchPeople.post({ Date: vm.date, PersonIdList: vm.selectedPeopleIds }).$promise;
+		var fetchPeoplePromise = peopleSvc.fetchPeople.post({ Date: moment(vm.selectedDate).format('YYYY-MM-DD'), PersonIdList: vm.selectedPeopleIds }).$promise;
 		fetchPeoplePromise.then(function (result) {
 			vm.availablePeople = result;
 			vm.gridOptions.data = result;
 		});
-		
-		vm.updateSkillOnPersons = function(peopleList) {
-			peopleSvc.updateSkillOnPersons.post(peopleList).$promise.then(function (result) {
-				vm.updateResult = result.Success;
-			});
+		vm.updateResult = { Success: false};
+		vm.updateSkillOnPersons = function () {
+			vm.processing = true;
+			peopleSvc.updateSkillOnPersons.post({ Date: moment(vm.selectedDate).format('YYYY-MM-DD'), People: vm.availablePeople }).$promise.then(
+				function(result) {
+					vm.updateResult = result;
+					if (vm.updateResult.Success) {
+						var personOrPeople = vm.updateResult.SuccessCount > 1 ? 'people are' : 'person is';
+						vm.updateResult.SuccessInfo = vm.updateResult.SuccessCount + " " + personOrPeople + " " + "updated successfully!"; //TODO: need localization
+					} else {
+						vm.updateResult.ErrorMsg = "Process failed! Error: " + vm.updateResult.ErrorMsg;//TODO: need localization
+					}
+					vm.processing = false;
+				});
 		};
 
 		var promiseForAdjustSkillToggle = toggleSvc.isFeatureEnabled.query({ toggle: 'WfmPeople_AdjustSkill_34138' }).$promise;
@@ -128,17 +136,8 @@
 					skill.Status = "none";
 					skill.Selected = false;
 					angular.forEach(vm.availablePeople, function (person) {
-						if (person.Skills == undefined) {
-							person.Skills = "";
-						}
-
-						for (var i = 0; i < person.SkillIdList.length; i++) {
-							if (person.SkillIdList[i] === skill.SkillId) {
-								person.Skills = person.Skills + skill.SkillName + ",";
-								hasCount++;
-								break;
-							}
-						}
+						var skillIndex = person.SkillIdList.indexOf(skill.SkillId);
+						if (skillIndex > -1) hasCount++;
 					});
 					if (hasCount === vm.availablePeople.length) {
 						skill.Status = "all";
@@ -148,12 +147,37 @@
 						skill.Status = "partial";
 					}
 				});
+
+				angular.forEach(vm.availablePeople, function (person) {
+					person.Skills = function () {
+						var ownSkills = [];
+						angular.forEach(vm.availableSkills, function (skill) {
+							var skillIndex = person.SkillIdList.indexOf(skill.SkillId);
+							if (skillIndex > -1) {
+								ownSkills.push(skill.SkillName);
+							}
+						});
+						return ownSkills.length > 0 ? ownSkills.join(", ") : "";
+					}
+				});
 				vm.dataInitialized = true;
 				if (vm.commandName === 'adjustSkill') {
 					vm.toggleSkillPanel();
 				}
 			});
 
+		}
+
+		 vm.skillSelectedStatusChanged = function(skill) {
+			angular.forEach(vm.availablePeople, function(person) {
+				var skillIndex = person.SkillIdList.indexOf(skill.SkillId);
+				if (skill.Selected && skillIndex === -1) {
+					person.SkillIdList.push(skill.SkillId);
+				}
+				if (skillIndex > -1 && !skill.Selected) {
+					person.SkillIdList.splice(skillIndex, 1);
+				}
+			});
 		}
 		vm.constructColumns();
 		initialize();

@@ -21,21 +21,22 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			var result = new ResultModel();
 			try
 			{
-				InternalUpdateSkills(model);
+				result.SuccessCount = InternalUpdateSkills(model);
 				result.Success = true;
 			}
-			catch (Exception)
+			catch (Exception e)
 			{
 				result.Success = false;
+				result.ErrorMsg = e.Message;
 			}
 
 			return Json(result);
 		}
 
 		[UnitOfWork]
-		protected virtual void InternalUpdateSkills(PeopleCommandInput model)
+		protected virtual int InternalUpdateSkills(PeopleCommandInput model)
 		{
-			_peopleSkillUpdater.UpdateSkills(model);
+			return _peopleSkillUpdater.UpdateSkills(model);
 		}
 	}
 }

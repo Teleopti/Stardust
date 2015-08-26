@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 				People =
 					new List<PersonSkillModel>
 					{
-						new PersonSkillModel {PersonId = person.Id.Value, Skills = new[] {skill.Id.GetValueOrDefault()}}
+						new PersonSkillModel {PersonId = person.Id.Value, SkillIdList = new[] {skill.Id.GetValueOrDefault()}}
 					},
 				Date = date
 			});
@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 				People =
 					new List<PersonSkillModel>
 					{
-						new PersonSkillModel {PersonId = person.Id.Value, Skills = new List<Guid> {skill.Id.Value}}
+						new PersonSkillModel {PersonId = person.Id.Value, SkillIdList = new List<Guid> {skill.Id.Value}}
 					},
 				Date = date
 			});
@@ -154,12 +154,12 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var person = prepareData(date);
 			var skill = SkillFactory.CreateSkillWithId("phone");
 			SkillRepository.Add(skill);
-			Target.UpdateSkill(new PeopleCommandInput
+			var result = Target.UpdateSkill(new PeopleCommandInput
 			{
 				People =
 					new List<PersonSkillModel>
 					{
-						new PersonSkillModel {PersonId = person.Id.Value, Skills = new List<Guid> {skill.Id.Value}}
+						new PersonSkillModel {PersonId = person.Id.Value, SkillIdList = new List<Guid> {skill.Id.Value}}
 					},
 				Date = date
 			});
@@ -167,6 +167,8 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			updatedPerson.PersonPeriodCollection.Count.Should().Be.EqualTo(1);
 			var personPeriod = updatedPerson.PersonPeriods(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date))).First();
 			personPeriod.PersonSkillCollection.First().Skill.Id.Should().Be.EqualTo(skill.Id);
+			result.Content.Success.Should().Be.EqualTo(true);
+			result.Content.SuccessCount.Should().Be.EqualTo(1);
 		}
 	}
 }

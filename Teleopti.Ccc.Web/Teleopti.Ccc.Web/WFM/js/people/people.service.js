@@ -34,9 +34,7 @@ angular
 				}
 			});
 
-			this.fetchPeople = $resource("../api/PeopleData/fetchPeople", {
-				InputModel: "@inputModel"
-			}, {
+			this.fetchPeople = $resource("../api/PeopleData/fetchPeople", {}, {
 				post: {
 					method: "POST",
 					params: {},
@@ -44,13 +42,11 @@ angular
 				}
 			});
 
-			this.updateSkillOnPersons = $resource("../api/PeopleCommand/updateSkillOnPersons", {
-				PeopleCommandInput: "peoples"
-			}, {
+			this.updateSkillOnPersons = $resource("../api/PeopleCommand/updateSkillOnPersons", {}, {
 				post: {
 					method: "POST",
 					params: {},
-					isArray: true
+					isArray: false
 				}
 			});
 		}

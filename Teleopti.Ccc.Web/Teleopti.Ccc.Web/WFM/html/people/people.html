@@ -52,7 +52,7 @@
 				 ng-mouseenter=" hovered()" ng-mouseleave="hovered()"
 				 label="{{'Actions'|translate}}"
 				 toggling-method="click" menu-state="closed">
-				<button class="{{button.label|lowercase}}" ng-show="button.active" mfb-button icon="{{button.icon}}" ng-click="button.action()"
+				<button class="{{button.label|lowercase}}" ng-show="button.active()" mfb-button icon="{{button.icon}}" ng-click="button.action()"
 						label="{{button.label|translate}}" ng-repeat="button in buttons"></button>
 			</nav>
 			<span ng-show="rowSelectionEnabled && selectedCount > 0" class="wfm-panel selection-cart-indicator">

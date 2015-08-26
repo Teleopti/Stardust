@@ -110,11 +110,10 @@
 	&.grid {
 		height: 650px;
 	}
-
-	.ui-grid-cell-contents {
+}
+.people-list .ui-grid-header-cell-primary-focus {
 		width: 84%;
-		white-space: normal;
-	}
+		white-space: normal !important;
 }
 
 .wfm-panel {

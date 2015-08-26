@@ -4,6 +4,11 @@
 		text-align: center;
 		color: #fff;
 	}
+
+	.input-group input[type=text] {
+		height: 34px;
+		border: 1px solid #ccc;
+	}
 </style>
 <div>
 	<div class="row">
@@ -11,9 +16,9 @@
 	</div>
 
 	<div class="row">
-		<div class="col-md-2">
+		<div class="col-md-3">
 			<p class="input-group">
-				<input type="date" class="form-control" datepicker-popup ng-model="vm.startDate" is-open="vm.status.opened" datepicker-options="vm.dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" show-button-bar="false" />
+				<input type="text" class="form-control" datepicker-popup="{{vm.format}}" ng-model="vm.selectedDate" is-open="vm.status.opened" datepicker-options="vm.dateOptions" show-button-bar="false" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
 				<span class="input-group-btn">
 					<button type="button" class="btn btn-default" ng-click="vm.toggleCalendar()"><i class="glyphicon glyphicon-calendar"></i></button>
 				</span>
@@ -21,15 +26,15 @@
 		</div>
 	</div>
 	<div ui-i18n="{{lang}}" ng-if="vm.dataInitialized" class="big-table-wrapper material-depth-1" style="position: relative">
-		<div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-auto-resize ui-grid-pagination ui-grid-resize-columns class="grid people-list"></div>
+		<div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-auto-resize ui-grid-pagination xui-grid-resize-columns class="grid people-list"></div>
 		<div>
 			<nav class="wfm-panel action-panel" mfb-menu position="tr" effect="slidein-spring"
-			     active-icon="mdi-pencil" resting-icon="mdi-plus"
-			     ng-mouseenter=" hovered()" ng-mouseleave="hovered()"
-			     label="{{'Actions'|translate}}"
-			     toggling-method="click" menu-state="closed">
+				 active-icon="mdi-pencil" resting-icon="mdi-plus"
+				 ng-mouseenter=" hovered()" ng-mouseleave="hovered()"
+				 label="{{'Actions'|translate}}"
+				 toggling-method="click" menu-state="closed">
 				<button class="{{button.label|lowercase}}" ng-show="button.active" mfb-button icon="{{button.icon}}" ng-click="button.action()"
-				        label="{{button.label|translate}}" ng-repeat="button in vm.buttons"></button>
+						label="{{button.label|translate}}" ng-repeat="button in vm.buttons"></button>
 			</nav>
 		</div>
 		<md-sidenav class="md-sidenav-right md-sidenav-skill-panel md-whiteframe-z2" md-component-id="right">
@@ -37,11 +42,11 @@
 			<md-content layout-padding style="height: 500px">
 				<div class="input-prepend">
 					<i class="mdi mdi-filter-outline"></i>
-					<input type="text" name="filterRole" ng-model="searchSkills.SkillName"/>
+					<input type="text" name="filterSkill" ng-model="searchSkills.SkillName"/>
 				</div>
 				<md-list-item ng-repeat="skill in vm.availableSkills|filter:searchSkills">
 					<div class="wfm-checkbox">
-						<input type="checkbox" id="{{skill.SkillId}}" ng-model="skill.Selected" ui-indeterminate="skill.Status =='partial'"/>
+						<input type="checkbox" id="{{skill.SkillId}}" ng-model="skill.Selected" ng-change="vm.skillSelectedStatusChanged(skill)" ui-indeterminate="skill.Status =='partial'"/>
 						<label for="{{skill.SkillId}}">
 							<span class="wfm-checkbox-toggle"></span>
 							<span class="wfm-checkbox-label">{{skill.SkillName}}</span>
@@ -49,7 +54,12 @@
 					</div>
 				</md-list-item>
 			</md-content>
-			<md-button ng-click="vm.close()" class="md-primary">Close Sidenav Right</md-button>
+			<!--<md-button ng-click="vm.close()" class="md-primary">Close Sidenav Right</md-button>-->
+			<button class="wfm-btn wfm-btn-primary" ng-click="vm.updateSkillOnPersons()">{{'Apply' | translate}}</button>
 		</md-sidenav>
+		<md-progress-linear ng-show="vm.processing" md-mode="indeterminate"></md-progress-linear>
+		<div ng-if="vm.dataInitialized && !vm.processing && vm.updateResult.Success" class="alert-success notice-spacer"><i class='mdi mdi-thumb-up'></i>{{vm.updateResult.SuccessInfo}}</div>
+		<div ng-if="vm.dataInitialized && !vm.processing && !vm.updateResult.Success && vm.updateResult.ErrorMsg.length > 0" class="alert-error notice-spacer"><i class='mdi mdi-alert-octagon'></i>{{vm.updateResult.ErrorMsg}}</div>
 	</div>
+	
 </div>

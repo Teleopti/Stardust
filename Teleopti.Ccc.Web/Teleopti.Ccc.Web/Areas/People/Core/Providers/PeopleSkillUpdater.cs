@@ -30,14 +30,15 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 			_skillRepository = skillRepository;
 		}
 
-		public void UpdateSkills(PeopleCommandInput model)
+		public int UpdateSkills(PeopleCommandInput model)
 		{
 			var personIdList = model.People.Select(p => p.PersonId);
 			var persons = _personRepository.FindPeople(personIdList);
+			var updatedCount = 0;
 			foreach (var person in persons)
 			{
 				var periods = person.PersonPeriods(new DateOnlyPeriod(new DateOnly(model.Date), new DateOnly(model.Date)));
-				var inputSkills = model.People.Single(x => x.PersonId == person.Id).Skills ?? new List<Guid>();
+				var inputSkills = model.People.Single(x => x.PersonId == person.Id).SkillIdList ?? new List<Guid>();
 				if (!periods.Any())
 				{
 					var newPeriod = new PersonPeriod(new DateOnly(model.Date),
@@ -46,7 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 						_teamRepository.LoadAll().FirstOrDefault());
 					addSkillToPeriod(inputSkills, newPeriod);
 					person.AddPersonPeriod(newPeriod);
-
+					updatedCount++;
 					continue;
 				}
 				var currentPeriod = periods.First();
@@ -63,13 +64,15 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 					((IPersonPeriodModifySkills)newPeriod).ResetPersonSkill();
 					addSkillToPeriod(inputSkills, newPeriod);
 					person.AddPersonPeriod(newPeriod);
+					updatedCount++;
 					continue;
 				}
 				((IPersonPeriodModifySkills)currentPeriod).ResetPersonSkill();
 				addSkillToPeriod(inputSkills, currentPeriod);
+				updatedCount++;
 			}
 
-
+			return updatedCount;
 		}
 
 		private void addSkillToPeriod(IEnumerable<Guid> inputSkills, IPersonPeriod newPeriod)
