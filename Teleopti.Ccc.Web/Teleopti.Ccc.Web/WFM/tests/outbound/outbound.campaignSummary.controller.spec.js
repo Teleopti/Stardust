@@ -75,7 +75,7 @@ describe('OutboundSummaryCtrl', function () {
 		expect(campaign.chart != null);
 	});
 
-	xit('add manual plan should work', function() {
+	it('add manual plan should work', function() {
 		var test = setUpTarget();
 		var campaign = {
 			Id: 1,
@@ -103,7 +103,7 @@ describe('OutboundSummaryCtrl', function () {
 		expect(test.scope.phaseStatistics.PlannedWarning).toEqual(2);
 	});
 
-	xit('remove manual plan should work', function() {
+	it('remove manual plan should work', function() {
 		var test = setUpTarget(); 
 		var campaign = {
 			Id: 1,
@@ -187,14 +187,14 @@ describe('OutboundSummaryCtrl', function () {
 
 	function fakeOutboundChartService() {
 
-		var campaignViss = {};
-	
+		var campaignViss = {};	
+
 		this.setCampaignVisualization = function(id, vis) {
 			campaignViss[id] = vis;
 		}
 
-		this.getCampaignVisualization = function(d, success) {
-			 success();
+		this.getCampaignVisualization = function(id, success) {
+			 success(campaignViss[id]);
 		};
 
 		this.makeGraph = function () { return { graph: 'c3' } };

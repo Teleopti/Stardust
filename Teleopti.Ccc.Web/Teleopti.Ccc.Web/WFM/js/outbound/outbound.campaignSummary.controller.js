@@ -22,7 +22,7 @@
     	});
 
     	$scope.replan = function (campaign) {
-    		campaign.isReplanLoaderFinished = true;
+    		campaign.isLoadingData = true;
     		outboundChartService.replan(campaign.Id, function () {
 			    refreshGraphData(campaign, $scope);
 			    refreshCampaignStatistics($scope);
@@ -40,6 +40,8 @@
 				CampaignId: campaign.Id,
 				Dates: dates
 			};
+
+			campaign.isLoadingData = true;
 			outboundChartService.removeManualPlan(removeManualPlan, function() {
 				refreshGraphData(campaign, $scope);
 				refreshCampaignStatistics($scope);
@@ -57,6 +59,7 @@
     				Time: campaign.manualPlanInput
     			}
     		});
+    		campaign.isLoadingData = true;
     		outboundChartService.updateManualPlan(campaign.manualPlan, function (data, manualPlan) {
     			refreshGraphData(campaign, $scope);
     			refreshCampaignStatistics($scope);
@@ -139,7 +142,7 @@
         			campaign.rawManualPlan = manualPlan;
         			campaign.translations = translations;
         			campaign.closedDays = closedDays;
-        			campaign.isReplanLoaderFinished = false;			       
+        			campaign.isLoadingData = false;
         			scope.$broadcast('campaign.chart.refresh', campaign);
 		        });
         	});
@@ -152,6 +155,4 @@
         }
 
     }
-
-
 })();
