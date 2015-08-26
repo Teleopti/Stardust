@@ -5,7 +5,7 @@ call ..\.node\npm uninstall karma-chrome-launcher
 call ..\.node\npm uninstall karma-jasmine
 call ..\.node\npm uninstall grunt-sass
 
-call ..\.node\npm install -g karma
+call ..\.node\npm install -g karma@0.12.31
 call ..\.node\npm install -g karma-teamcity-reporter
 call ..\.node\npm install -g karma-chrome-launcher@0.1.10
 call ..\.node\npm install -g karma-jasmine
