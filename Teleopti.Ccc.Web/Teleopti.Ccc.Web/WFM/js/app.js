@@ -37,6 +37,7 @@ var wfm = angular.module('wfm', [
 wfm.config([
 	'$stateProvider', '$urlRouterProvider', '$translateProvider', function ($stateProvider, $urlRouterProvider, $translateProvider) {
 		$urlRouterProvider.otherwise("forecasting");
+		$urlRouterProvider.when('/outbound', '/outbound/summary');
 		$stateProvider.state('main', {
 			url: '/',
 			templateUrl: 'html/main.html',
@@ -83,18 +84,18 @@ wfm.config([
 			templateUrl: 'html/permissions/permissions.html',
 			controller: 'PermissionsCtrl'
 		}).state('outbound', {
-			url: '/outbound',
+			url: '/outbound',			
+			templateUrl: 'html/outbound/outbound.html',
+			controller: 'OutboundDefaultCtrl'
+		}).state('outbound.summary', {
+			url: '/summary',
 			templateUrl: 'html/outbound/campaign-summary.html',
 			controller: 'OutboundSummaryCtrl'
-		}).state('outbound-production-plan', {
-			url: '/outbound/production-plan/:Id',
-			templateUrl: 'html/outbound/campaign-production-plan.html',
-			controller: 'OutboundProductionPlanCtrl'
-		}).state('outbound-create', {
-			url: '/outbound/create',
+		}).state('outbound.create', {
+			url: '/create',
 			templateUrl: 'html/outbound/campaign-create.html',
 			controller: 'OutboundCreateCtrl'
-		}).state('outbound-edit', {
+		}).state('outbound.edit', {
 			url: '/campaign/:Id',
 			templateUrl: 'html/outbound/campaign-edit.html',
 			controller: 'OutboundEditCtrl'
@@ -118,7 +119,7 @@ wfm.config([
 			templateUrl: 'js/rta/html/rta.html',
 			controller: 'RtaCtrl'
 		});
-
+		
 		$translateProvider.useUrlLoader('../api/Global/Language');
 		$translateProvider.preferredLanguage('en');
 	}

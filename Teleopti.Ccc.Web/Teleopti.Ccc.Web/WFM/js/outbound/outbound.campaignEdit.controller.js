@@ -83,7 +83,7 @@
         }
 
         function backToList() {
-            $state.go('outbound');
+            $state.go('outbound.summary');
         }
     }
 

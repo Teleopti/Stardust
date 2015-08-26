@@ -1274,6 +1274,7 @@
     <Content Include="WFM\js\outbound\outbound.activityPicker.directive.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.TeamScheduleViewModel.Tests.js" />
     <Content Include="Areas\Reporting\Views\Shared\Error.cshtml" />
+    <Content Include="WFM\js\outbound\outbound.controller.default.js" />
     <Content Include="WFM\js\outbound\outbound.selectableDataGrid.directive.js" />
     <Content Include="WFM\js\outbound\outbound.translation.service.js" />
     <Content Include="WFM\js\people\people.advanceSearch.directive .js" />

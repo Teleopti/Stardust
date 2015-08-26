@@ -48,11 +48,11 @@
         }
 
         function show(campaign) {
-            $state.go('outbound-edit', { Id: campaign.Id });
+            $state.go('outbound.edit', { Id: campaign.Id });
         }
 
         function backToList() {
-            $state.go('outbound');
+            $state.go('outbound.summary');
         }
 
     }

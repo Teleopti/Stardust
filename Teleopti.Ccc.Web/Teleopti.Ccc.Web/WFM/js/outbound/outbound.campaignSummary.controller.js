@@ -101,7 +101,7 @@
         $scope.activePhaseCode = 4;
 
         $scope.gotoCreateCampaign = function() {
-            $state.go('outbound-create');
+            $state.go('outbound.create');
         };
 
         $scope.toggleChartDisplay = function (campaign) {
@@ -109,12 +109,8 @@
 	    };
 
         $scope.show = function (campaign) {
-            $state.go('outbound-edit', { Id: campaign.Id });
+            $state.go('outbound.edit', { Id: campaign.Id });
         };
-
-		$scope.goToProductionPlan = function(campaign) {
-			$state.go('outbound-production-plan', { Id: campaign.Id });
-		};
 
 	    $scope.displayLoading = displayLoading;
 
