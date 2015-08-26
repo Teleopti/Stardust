@@ -24,6 +24,7 @@ module.exports = function(config) {
 		'vendor/ui-bootstrap-custom-build/ui-bootstrap-tpls-0.13.0.min.js',
 		'node_modules/moment/min/moment-with-locales.min.js',
 		'node_modules/angular-moment/angular-moment.min.js',
+		'node_modules/angular-ui-indeterminate/dist/indeterminate.min.js',
 		'vendor/angular-ui-tree/angular-ui-tree.min.js',
 		'vendor/angular-aria/angular-aria.min.js',
 		'vendor/angular-animate/angular-animate.min.js',
