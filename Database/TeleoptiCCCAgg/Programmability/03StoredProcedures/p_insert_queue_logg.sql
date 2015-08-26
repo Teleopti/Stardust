@@ -951,13 +951,13 @@ order by queue,interval/2
 END
 
 --merge 2:1
-IF (@CTI_interval_per_hour=@interval_per_hour*2)
+IF (@CTI_interval_per_hour/2=@interval_per_hour)
 BEGIN
-select '@CTI_interval_per_hour=@interval_per_hour*2'
+select '@CTI_interval_per_hour/2=@interval_per_hour'
 	INSERT INTO queue_logg
 	SELECT      queue,
 	date_from,
-	interval /2,
+	interval/2,
 	SUM(offd_direct_call_cnt),
 	SUM(overflow_in_call_cnt),
 	SUM(aband_call_cnt),
@@ -977,7 +977,7 @@ select '@CTI_interval_per_hour=@interval_per_hour*2'
 	FROM #tmp_queue_logg
 	GROUP BY queue,
 	date_from,
-	interval /2
+	interval/2
 END
 
 

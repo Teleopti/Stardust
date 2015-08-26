@@ -1410,9 +1410,9 @@ END
 ---------------------------------------
 
 --Merge 2:1
-IF (@CTI_interval_per_hour=@interval_per_hour*2)
+IF (@CTI_interval_per_hour/2=@interval_per_hour)
 BEGIN
-select '@CTI_interval_per_hour=@interval_per_hour*2'
+select '@CTI_interval_per_hour/2=@interval_per_hour'
 INSERT agent_logg (
 	queue,
 	date_from,
@@ -1452,9 +1452,12 @@ SELECT
 	sum(transfer_out_call_cnt),
 	sum(admin_dur)
 	FROM #tmp_alogg
-	GROUP BY queue,date_from,interval/2,agent_id
+	GROUP BY
+		queue,
+		date_from,
+		interval/2,
+		agent_id
 END
-
 
 IF (@CTI_interval_per_hour = @interval_per_hour) 
 BEGIN
