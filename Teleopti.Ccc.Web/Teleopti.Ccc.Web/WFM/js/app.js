@@ -124,8 +124,8 @@ wfm.config([
 		$translateProvider.preferredLanguage('en');
 	}
 ]).run([
-	'$rootScope', '$http', '$state', '$translate', '$templateCache', 'i18nService', 'amMoment', 'HelpService',
-	function ($rootScope, $http, $state, $translate, $templateCache, i18nService, angularMoment, HelpService) {
+	'$rootScope', '$http', '$state', '$translate', 'i18nService', 'amMoment', 'HelpService',
+	function ($rootScope, $http, $state, $translate, i18nService, angularMoment, HelpService) {
 		var timeout = Date.now() + 10000;
 		$rootScope.isAuthenticated = false;
 
@@ -146,20 +146,6 @@ wfm.config([
 		var increaseTimeout = function () {
 			timeout = Date.now() + 10000;
 		};
-
-		// Apply customized style to datepicker popup
-		$templateCache.put("template/datepicker/popup.html",
-			"<ul class=\"dropdown-menu\" ng-if=\"isOpen\" style=\"display: block\" ng-style=\"{top: position.top+'px', left: position.left+'px'}\" ng-keydown=\"keydown($event)\" ng-click=\"$event.stopPropagation()\">\n" +
-			"	<li class=\"wfm-datepicker\" ng-transclude></li>\n" +
-			"	<li ng-if=\"showButtonBar\" style=\"padding:10px 9px 2px\">\n" +
-			"		<span class=\"btn-group pull-left\">\n" +
-			"			<button type=\"button\" class=\"btn btn-sm btn-info\" ng-click=\"select('today')\">{{ getText('current') }}</button>\n" +
-			"			<button type=\"button\" class=\"btn btn-sm btn-danger\" ng-click=\"select(null)\">{{ getText('clear') }}</button>\n" +
-			"		</span>\n" +
-			"		<button type=\"button\" class=\"btn btn-sm btn-success pull-right\" ng-click=\"close()\">{{ getText('close') }}</button>\n" +
-			"	</li>\n" +
-			"</ul>\n" +
-			"");
 
 		$rootScope.$on('$stateChangeStart', function (event, next, toParams) {
 
