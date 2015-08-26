@@ -9,6 +9,7 @@
 			<generator class="identity" />
 		</id>
 		<property name="Name" />
+		<property name="RtaKey" />
 		<component name="DataSourceConfiguration">
 			<property name="ApplicationConnectionString" />
 			<property name="AnalyticsConnectionString" />

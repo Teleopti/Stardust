@@ -18,6 +18,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public DatabaseHelperWrapper DatabaseHelperWrapper;
 		public ITenantUnitOfWork TenantUnitOfWork;
 		public ICurrentTenantSession CurrentTenantSession;
+		public TestPolutionCleaner TestPolutionCleaner;
 
 		[Test]
 		public void ShouldReturnSuccessFalseIfFirstUserIsEmpty()
@@ -81,55 +82,16 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		[Test]
 		public void ShouldReturnTrueCreatedDb()
 		{
-			var model = new CreateTenantModel
+			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
+			TestPolutionCleaner.Clean("New Tenant", "new TenantAppUser");
+
+			var result = Target.CreateDatabases(new CreateTenantModelForTest
 			{
 				Tenant = "New Tenant",
-				CreateDbUser = "dbcreatorperson",
-				CreateDbPassword = "password",
 				AppUser = "new TenantAppUser",
-				AppPassword = "NewTenantAppPassword",
-				FirstUser = "Thefirstone",
-				FirstUserPassword = "Agood@pasw0rd",
-				BusinessUnit = "My First BU"
-			};
-			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
-			var connStringBuilder =
-				new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
+			});
 
-			DatabaseHelperWrapper.CreateLogin(connStringBuilder.ConnectionString, "dbcreatorperson", "password", false);
-			connStringBuilder.InitialCatalog = "master";
-			using (var conn = new SqlConnection(connStringBuilder.ConnectionString))
-			{
-				conn.Open();
-				using (var cmd = conn.CreateCommand())
-				{
-					if (DatabaseHelperWrapper.LoginExists(connStringBuilder.ConnectionString, "new TenantAppUser", false))
-					{
-						cmd.CommandText = string.Format("DROP LOGIN [{0}]", model.AppUser);
-						cmd.ExecuteNonQuery();
-					}
-					cmd.CommandText = string.Format("SELECT database_id FROM sys.databases WHERE Name = '{0}'", model.Tenant + "_TeleoptiWfmApp");
-					var value = cmd.ExecuteScalar();
-					if (value != null)
-					{
-						cmd.CommandText = string.Format("DROP DATABASE [{0}]",  model.Tenant + "_TeleoptiWfmApp");
-						cmd.ExecuteNonQuery();
-					}
-					cmd.CommandText = string.Format("EXEC sp_addsrvrolemember @loginame= '{0}', @rolename = 'dbcreator'", "dbcreatorperson");
-					
-					cmd.CommandText = string.Format("EXEC sp_addsrvrolemember @loginame= '{0}', @rolename = 'securityadmin'", "dbcreatorperson");
-					cmd.ExecuteNonQuery();
-					if (DatabaseHelperWrapper.LoginExists(connStringBuilder.ConnectionString, model.AppUser, false))
-					{
-						cmd.CommandText = string.Format("DROP LOGIN [{0}]", model.AppUser);
-						cmd.ExecuteNonQuery();
-					}
-            }
-			}
-
-			var result = Target.CreateDatabases(model).Content;
-			result.Success.Should().Be.True();
-			
+			result.Content.Success.Should().Be.True();
 		}
 
 	}

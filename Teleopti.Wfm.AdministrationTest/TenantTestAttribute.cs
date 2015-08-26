@@ -1,9 +1,11 @@
 ﻿using System.Configuration;
+using System.Data.SqlClient;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Wfm.Administration.Controllers;
 using Teleopti.Wfm.Administration.Core;
 
 namespace Teleopti.Wfm.AdministrationTest
@@ -23,6 +25,71 @@ namespace Teleopti.Wfm.AdministrationTest
 			system.AddService<LoadAllTenants>();
 			system.AddService<DbPathProviderFake>();
 			system.AddService<CheckPasswordStrengthFake>();
+			system.AddService<TestPolutionCleaner>();
+		}
+	}
+
+	public class TestPolutionCleaner
+	{
+		private readonly DatabaseHelperWrapper _databaseHelperWrapper;
+
+		public string TestTenantDatabaseName = "CF0DA4E0-DC93-410B-976B-EED9C8A34639";
+		public string TestTenantAnalyticsDatabaseName = "B1EDB896-9D23-4BCF-A42F-F1F2EE5DD64B";
+
+		public TestPolutionCleaner(DatabaseHelperWrapper databaseHelperWrapper)
+		{
+			_databaseHelperWrapper = databaseHelperWrapper;
+		}
+
+		public void Clean(string tenant, string appUser)
+		{
+			var connStringBuilder = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
+
+			_databaseHelperWrapper.CreateLogin(connStringBuilder.ConnectionString, "dbcreatorperson", "password", false);
+			connStringBuilder.InitialCatalog = "master";
+			using (var conn = new SqlConnection(connStringBuilder.ConnectionString))
+			{
+				conn.Open();
+				using (var cmd = conn.CreateCommand())
+				{
+					if (_databaseHelperWrapper.LoginExists(connStringBuilder.ConnectionString, appUser, false))
+					{
+						cmd.CommandText = string.Format("DROP LOGIN [{0}]", appUser);
+						cmd.ExecuteNonQuery();
+					}
+
+					dropDatabase(tenant + "_TeleoptiWfmApp", conn);
+					dropDatabase(TestTenantDatabaseName, conn);
+					dropDatabase(TestTenantAnalyticsDatabaseName, conn);
+
+					cmd.CommandText = string.Format("EXEC sp_addsrvrolemember @loginame= '{0}', @rolename = 'dbcreator'",
+						"dbcreatorperson");
+
+					cmd.CommandText = string.Format("EXEC sp_addsrvrolemember @loginame= '{0}', @rolename = 'securityadmin'",
+						"dbcreatorperson");
+					cmd.ExecuteNonQuery();
+
+					if (_databaseHelperWrapper.LoginExists(connStringBuilder.ConnectionString, appUser, false))
+					{
+						cmd.CommandText = string.Format("DROP LOGIN [{0}]", appUser);
+						cmd.ExecuteNonQuery();
+					}
+				}
+			}
+		}
+
+		private static void dropDatabase(string database, SqlConnection conn)
+		{
+			using (var cmd = conn.CreateCommand())
+			{
+				cmd.CommandText = string.Format("SELECT database_id FROM sys.databases WHERE Name = '{0}'", database);
+				var value = cmd.ExecuteScalar();
+				if (value != null)
+				{
+					cmd.CommandText = string.Format("DROP DATABASE [{0}]", database);
+					cmd.ExecuteNonQuery();
+				}
+			}
 		}
 	}
 }

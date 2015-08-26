@@ -16,9 +16,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 	public class ImportTenantTest
 	{
 		public ImportController Target;
-
-		const string dummy = "CF0DA4E0-DC93-410B-976B-EED9C8A34639";
-		const string dummyAnal = "B1EDB896-9D23-4BCF-A42F-F1F2EE5DD64B";
+		public TestPolutionCleaner TestPolutionCleaner;
 
 		[Test]
 		public void ShouldReturnSuccessFalseIfAppDatabaseNotCorrectFormat()
@@ -33,7 +31,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		{
 			var connStringBuilder = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
 			{
-				InitialCatalog = dummy
+				InitialCatalog = TestPolutionCleaner.TestTenantDatabaseName
 			};
 			var connString = connStringBuilder.ConnectionString;
 			var helper = new DatabaseHelper(connString, DatabaseType.TeleoptiCCC7);
@@ -69,10 +67,10 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 
 			var connStringBuilder = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
 			{
-				InitialCatalog = dummy
+				InitialCatalog = TestPolutionCleaner.TestTenantDatabaseName
 			};
 			var connString = connStringBuilder.ConnectionString;
-			connStringBuilder.InitialCatalog = dummyAnal;
+			connStringBuilder.InitialCatalog = TestPolutionCleaner.TestTenantAnalyticsDatabaseName;
 			var connStringAnal = connStringBuilder.ConnectionString;
 
 			var helper = new DatabaseHelper(connString, DatabaseType.TeleoptiCCC7);

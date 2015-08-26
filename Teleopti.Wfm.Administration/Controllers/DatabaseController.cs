@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Results;
@@ -37,6 +40,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			_dbPathProvider = dbPathProvider;
 			_loadAllTenants = loadAllTenants;
 			_checkPasswordStrength = checkPasswordStrength;
+
 		}
 
 
