@@ -21,6 +21,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm
 		public void WhenIPickBusinessUnit(string businessUnit)
 		{
 			Browser.Interactions.SelectOptionByTextUsingJQuery(".navbar-left select", businessUnit);
+
+			//need to manually trigger the change event
+			Browser.Interactions.Javascript("angular.element(jQuery('.navbar-left select')).triggerHandler('change');");
 		}
 
 		public class BusinessUnitData
