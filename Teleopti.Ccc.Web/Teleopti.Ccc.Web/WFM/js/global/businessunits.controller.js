@@ -11,7 +11,7 @@
 
 				$scope.changeBusinessUnit = function (selectedBu) {
 					$http.defaults.headers.common['X-Business-Unit-Filter'] = selectedBu.Id;
-					$state.go($state.current, { buid: selectedBu.Id });
+					$location.search({ buid: selectedBu.Id });
 				};
 				
 				var getBusinessUnits = $resource('../BusinessUnit', {}, {
