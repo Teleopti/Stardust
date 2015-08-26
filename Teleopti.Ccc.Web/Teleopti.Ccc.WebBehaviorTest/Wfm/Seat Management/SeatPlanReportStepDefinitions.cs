@@ -29,8 +29,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Seat_Management
 		[When(@"I click SeatPlanReport button from planning period")]
 		public void WhenIClickSeatPlanReportButtonFromPlanningPeriod()
 		{
-			Browser.Interactions.Click("teleopti-card-list card-header");
-			Browser.Interactions.Click("teleopti-card-list card-body .period-report-btn");
+			Browser.Interactions.Click("wfm-card-list card-header");
+			Browser.Interactions.Click("wfm-card-list card-body .period-report-btn");
 		}
 
 		[Then(@"I should be able to view the report from ""(.*)"" to ""(.*)""")]
