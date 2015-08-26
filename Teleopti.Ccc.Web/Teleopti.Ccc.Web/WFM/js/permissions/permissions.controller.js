@@ -92,8 +92,8 @@
 
 				};
 
-Roles.refresh().$promise.then(function (result) {
 
+				Roles.refresh().$promise.then(function (result) {
 					$scope.roles = result;
 					
 					if ($stateParams.id != null) {
