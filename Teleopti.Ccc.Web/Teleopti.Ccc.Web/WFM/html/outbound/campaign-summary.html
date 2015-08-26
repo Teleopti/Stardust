@@ -12,8 +12,8 @@
 
         <div class="loading-whole-section" ng-show="!listCampaignFinished && isLoadFinished"><md-progress-circular md-mode="indeterminate"></md-progress-circular></div>
 
-        <teleopti-card-list multi-select>
-            <teleopti-card ng-repeat="campaign in Campaigns">
+        <wfm-card-list multi-select>
+            <wfm-card ng-repeat="campaign in Campaigns">
 				<card-header ng-click="getGraphData(campaign)">
 					<div class="text-center relative">
 						<span class="campaign-namefix" ng-bind="campaign.Name"></span>
@@ -57,7 +57,7 @@
 		                </div>
 	                </div>
                 </card-body>
-            </teleopti-card>
-        </teleopti-card-list>
+            </wfm-card>
+        </wfm-card-list>
     </div>
 </div>
