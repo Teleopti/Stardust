@@ -1,12 +1,12 @@
 ﻿'use strict';
 
 (function () {
-	angular.module('teleopti.wfm.cardList', []);
+	angular.module('wfm.cardList', []);
 })();
 
 (function () {
 
-	function teleoptiCardDirectiveController() {
+	function wfmCardDirectiveController() {
 
 		var vm = this;
 
@@ -19,16 +19,16 @@
 		}
 	};
 
-	function teleoptiCardDirective() {
+	function wfmCardDirective() {
 
 		return {
-			controller: 'TeleoptiCardCtrl',
+			controller: 'WfmCardCtrl',
 			controllerAs: 'vm',
 			bindToController: true,
 			scope: {},
-			templateUrl: "js/global/teleopti.wfm.cardList/teleopticard.html",
+			templateUrl: "js/global/wfmcardList/wfmcard.html",
 			transclude: true,
-			require: ['teleoptiCard', '^teleoptiCardList'],
+			require: ['wfmCard', '^wfmCardList'],
 			link: function (scope, elem, attr, ctrl, transcludeFn) {
 
 				var vm = ctrl[0];
@@ -69,7 +69,7 @@
 		};
 	};
 
-	angular.module('teleopti.wfm.cardList').controller('TeleoptiCardCtrl', teleoptiCardDirectiveController);
-	angular.module('teleopti.wfm.cardList').directive('teleoptiCard', teleoptiCardDirective);
+	angular.module('wfm.cardList').controller('WfmCardCtrl', wfmCardDirectiveController);
+	angular.module('wfm.cardList').directive('wfmCard', wfmCardDirective);
 
 }());

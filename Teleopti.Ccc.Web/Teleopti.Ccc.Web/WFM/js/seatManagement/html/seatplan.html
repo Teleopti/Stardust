@@ -46,8 +46,8 @@
 				<md-progress-linear md-mode="indeterminate"></md-progress-linear>
 			</div>
 
-			<teleopti-card-list ng-hide="seatplan.isLoadingPlanningPeriods">
-				<teleopti-card ng-repeat="period in seatplan.planningPeriods">
+			<wfm-card-list ng-hide="seatplan.isLoadingPlanningPeriods">
+				<wfm-card ng-repeat="period in seatplan.planningPeriods">
 					<card-header>
 
 						<span id="planningPeriodHeader">{{period.StartDate |  amDateFormat:"L"}} - {{period.EndDate | amDateFormat:"L"}}</span>
@@ -62,8 +62,8 @@
 						</button>
 						<seat-plan-init start={{period.StartDate}} end="{{period.EndDate}}" on-seat-plan-complete="seatplan.onSeatPlanComplete()"></seat-plan-init>
 					</card-body>
-				</teleopti-card>
-			</teleopti-card-list>
+				</wfm-card>
+			</wfm-card-list>
 		</div>
 	</div>
 </div>

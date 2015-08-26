@@ -1,8 +1,8 @@
 ﻿'use strict';
 
 (function () {
-	angular.module('teleopti.wfm.cardList')
-		.controller('TeleoptiCardListCtrl', function () {
+	angular.module('wfm.cardList')
+		.controller('WfmCardListCtrl', function () {
 
 			var vm = this;
 			vm.selectedCards = {};
@@ -28,14 +28,14 @@
 		}
 	);
 
-	angular.module("teleopti.wfm.cardList")
-		.directive("teleoptiCardList", function () {
+	angular.module("wfm.cardList")
+		.directive("wfmCardList", function () {
 			return {
-				controller: 'TeleoptiCardListCtrl',
+				controller: 'WfmCardListCtrl',
 				controllerAs: 'vm',
 				bindToController: true,
 				transclude: true,
-				templateUrl: "js/global/teleopti.wfm.cardList/teleopticardlist.html",
+				templateUrl: "js/global/wfmcardList/wfmcardlist.html",
 				link: linkFunction
 
 			};
@@ -45,5 +45,4 @@
 		vm.allowMultiSelect = 'multiSelect' in attributes;
 	};
 	
-
 }());

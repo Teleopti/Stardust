@@ -1260,10 +1260,10 @@
     <Content Include="WFM\js\global\help.controller.js" />
     <Content Include="Content\jalaali-calendar-datepicker\moment-datepicker-jalaali-ext.js" />
     <Content Include="Content\jalaali-calendar-datepicker\moment-jalaali.js" />
-    <Content Include="WFM\js\global\teleopti.wfm.cardList\teleopticard.directive.js" />
-    <Content Include="WFM\js\global\teleopti.wfm.cardList\teleoptiCard.html" />
-    <Content Include="WFM\js\global\teleopti.wfm.cardList\teleopticardlist.directive.js" />
-    <Content Include="WFM\js\global\teleopti.wfm.cardList\teleopticardlist.html" />
+    <Content Include="WFM\js\global\wfmcardlist\wfmcard.directive.js" />
+    <Content Include="WFM\js\global\wfmcardlist\wfmcard.html" />
+    <Content Include="WFM\js\global\wfmcardlist\wfmcardlist.directive.js" />
+    <Content Include="WFM\js\global\wfmcardlist\wfmcardlist.html" />
     <Content Include="WFM\js\global\toggle.service.js" />
     <Content Include="WFM\js\outbound\c3-fix.js" />
     <Content Include="WFM\js\outbound\outbound.activity.service.js" />
