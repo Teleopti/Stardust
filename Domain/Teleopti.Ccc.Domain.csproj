@@ -2298,7 +2298,6 @@
     <EmbeddedResource Include="Scheduling\Assignment\OvertimeShiftLayer.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Common\General.hbm.xml" />
     <None Include="Common\Groupings.cd" />
   </ItemGroup>
   <ItemGroup>

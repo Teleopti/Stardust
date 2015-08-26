@@ -197,10 +197,4 @@
                                 :StartDateTime)
     ]]>
   </query>
-  <database-object>
-    <create>SELECT 1</create>
-    <drop>
-      ALTER TABLE [dbo].[Person] DROP CONSTRAINT [FK_Person_WorkflowControlSet]
-    </drop>
-  </database-object>
 </hibernate-mapping>
