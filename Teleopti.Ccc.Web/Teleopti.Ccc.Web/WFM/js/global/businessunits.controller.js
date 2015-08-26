@@ -5,6 +5,8 @@
 			'$scope', '$resource', '$location', '$http', '$filter', '$state',
 			function ($scope, $resource, $location, $http, $filter, $state) {
 
+				$scope.show = false;
+
 				$scope.data = {
 					selectedBu: null
 				};
@@ -21,6 +23,7 @@
 				$scope.loadBusinessUnits = function() {
 					getBusinessUnits.get({}).$promise.then(function (result) {
 						$scope.data.businessUnits = result;
+						$scope.show = (result.length > 1);
 						var buid = $location.search().buid;
 						if (buid) {
 							var businessUnit = $filter('filter')(result, function (d) { return d.Id === buid; })[0];
