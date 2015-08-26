@@ -90,7 +90,11 @@ p {
 		width: 90px; 
 		overflow: hidden;
 		text-overflow: ellipsis;
-    }
+		}
+
+		.md-select-label {
+			width: 25%;
+		}
 
 
 	}
