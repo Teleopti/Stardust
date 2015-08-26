@@ -170,9 +170,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			using (UnitOfWork.DisableFilter(QueryFilter.BusinessUnit))
 			{
-				var totalInAllBusinessUnits = (int)Session.GetNamedQuery("ActiveAgents")
-									.SetDateTime("currentDate", now)
-									.UniqueResult<long>();
+				var totalInAllBusinessUnits = Session.GetNamedQuery("ActiveAgents")
+					.SetDateTime("currentDate", now)
+					.UniqueResult<int>();
 				return totalInAllBusinessUnits;
 			}
 		}

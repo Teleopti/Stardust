@@ -137,21 +137,21 @@
 		  condition="IsDeleted = 0" />
 	</class>
 
-	<query name="ActiveAgents">
+	<sql-query name="ActiveAgents">
 		<![CDATA[    
-    select count(p) from Person p
+	select count(p.Id) from Person p WITH (NOLOCK)
       where (p.TerminalDate is null or p.TerminalDate>=:currentDate)
-        and exists(from PersonPeriod pp where pp.Parent=p.Id and pp.StartDate<:currentDate)
-                        and exists(from PersonAssignment pa
-                                    inner join pa.Scenario s
-									inner join s.BusinessUnit bu
-                                where pa.Person = p
+        and exists(select pp.Id from PersonPeriod pp WITH (NOLOCK) where pp.Parent=p.Id and pp.StartDate<:currentDate)
+                        and exists(select pa.Id, s.Id, bu.Id from PersonAssignment pa WITH (NOLOCK)
+                                    inner join dbo.Scenario s on pa.Scenario=s.Id 
+									inner join dbo.BusinessUnit bu on s.BusinessUnit=bu.Id
+                                where pa.Person = p.Id
                                     and pa.ShiftCategory is not null 
                                     and s.DefaultScenario = 1
 									and bu.IsDeleted = 0
 									)
     ]]>
-	</query>
+	</sql-query>
 	<query name="AgentSkillMatrix">
 		<![CDATA[
     select new PersonSkillPair(per.Id, ps.Skill.Id)
