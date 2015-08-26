@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.People.Controllers;
 using Teleopti.Interfaces.Domain;
@@ -17,7 +16,6 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 			_personRepo = personRepo;
 		}
 
-
 		public IEnumerable<PersonDataModel> RetrievePeople(DateTime date, IEnumerable<Guid> personIdList)
 		{
 			var people = _personRepo.FindPeople(personIdList);
@@ -32,7 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 					LastName = p.Name.LastName,
 					Team = currentPeriod.Team.SiteAndTeam,
 					SkillIdList = currentPeriod.PersonSkillCollection.Select(s => s.Skill.Id.GetValueOrDefault()).ToList(),
-					ShiftBag = currentPeriod.RuleSetBag != null?currentPeriod.RuleSetBag.Description.Name:""
+					ShiftBag = currentPeriod.RuleSetBag != null ? currentPeriod.RuleSetBag.Description.Name : ""
 				};
 			}).ToList();
 

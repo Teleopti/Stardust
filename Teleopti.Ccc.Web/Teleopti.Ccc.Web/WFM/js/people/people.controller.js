@@ -83,7 +83,7 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 				headerCellFilter: 'translate',
 				sort: {
 					direction: uiGridConstants.ASC,
-					priority: 0,
+					priority: 0
 				},
 				minWidth: 100
 			},
@@ -132,7 +132,7 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 	var selectPeople = function(rows) {
 		angular.forEach(rows, function (row) {
 			var selectedPerson = row.entity;
-			if (row.isSelected && $scope.selectedPeopleList.indexOf(selectedPerson.PersonId) == -1) {
+			if (row.isSelected && $scope.selectedPeopleList.indexOf(selectedPerson.PersonId) === -1) {
 				$scope.selectedPeopleList.push(selectedPerson.PersonId);
 			} else if (!row.isSelected && $scope.selectedPeopleList.indexOf(selectedPerson.PersonId) > -1) {
 				for (var i = $scope.selectedPeopleList.length; i--;) {
@@ -159,7 +159,7 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 				if (sortColumnName === $scope.gridOptions.columnDefs[j].name) {
 					paginationOptions.sortColumns.push({
 						ColumnName: sortColumnName,
-						SortASC: sortColumns[i].sort.direction == uiGridConstants.ASC
+						SortASC: sortColumns[i].sort.direction === uiGridConstants.ASC
 					});
 					break;
 				}
@@ -178,7 +178,7 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 			sortColumnList = sortColumnList + column.ColumnName + ":" + column.SortASC + ";";
 		};
 
-		if (sortColumnList != "") {
+		if (sortColumnList !== "") {
 			sortColumnList = sortColumnList.substring(0, sortColumnList.length - 1);
 		}
 
@@ -200,7 +200,7 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 				angular.forEach(result.OptionalColumns, function (col) {
 					var isFound = false;
 					angular.forEach($scope.gridOptions.columnDefs, function (colDef) {
-						if (colDef.field == col) {
+						if (colDef.field === col) {
 							isFound = true;
 							return;
 						}
@@ -239,7 +239,7 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 
 	function setSearchFormProperty(searchType, searchValue) {
 		angular.forEach(allSearchTypes, function (propName) {
-			if (propName.toUpperCase() == searchType.toUpperCase()) {
+			if (propName.toUpperCase() === searchType.toUpperCase()) {
 				$scope.advancedSearchForm[propName] = searchValue;
 			}
 		});
@@ -247,7 +247,7 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 
 	function parseSearchKeywordInputted() {
 		$scope.advancedSearchForm = {};
-		if ($scope.keyword.indexOf(':') != -1) {
+		if ($scope.keyword.indexOf(':') !== -1) {
 			var searchTerms = $scope.keyword.split(',');
 			angular.forEach(searchTerms, function (searchTerm) {
 				var termSplitter = searchTerm.indexOf(':');
@@ -279,7 +279,7 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 			sortColumnList = sortColumnList + column.ColumnName + ":" + column.SortASC + ";";
 		};
 
-		if (sortColumnList != "") {
+		if (sortColumnList !== "") {
 			sortColumnList = sortColumnList.substring(0, sortColumnList.length - 1);
 		}
 
@@ -300,7 +300,7 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 			angular.forEach(result.OptionalColumns, function (col) {
 				var isFound = false;
 				angular.forEach($scope.gridOptions.columnDefs, function (colDef) {
-					if (colDef.field == col) {
+					if (colDef.field === col) {
 						isFound = true;
 						return;
 					}
@@ -313,7 +313,7 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 	}
 
 	$scope.defautKeyword = function () {
-		if ($scope.keyword == '' && $scope.gridOptions.data != undefined && $scope.gridOptions.data.length > 0) {
+		if ($scope.keyword === '' && $scope.gridOptions.data !== undefined && $scope.gridOptions.data.length > 0) {
 			return "\"" + $scope.gridOptions.data[0].Team.replace("/", "\" \"") + "\"";
 		}
 		return $scope.keyword;
@@ -381,7 +381,7 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 	};
 
 	function getSearchCriteria(title, value) {
-		return value != undefined && value != "" ? title + ": " + value + ", " : "";
+		return value !== undefined && value !== "" ? title + ": " + value + ", " : "";
 	}
 
 	$scope.advancedSearch = function () {
@@ -394,10 +394,10 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 			keyword += getSearchCriteria(title, $scope.advancedSearchForm[searchType]);
 		});
 
-		if (keyword != "") {
+		if (keyword !== "") {
 			keyword = keyword.substring(0, keyword.length - 2);
 		}
-		if (keyword != "" && keyword != $scope.keyword) {
+		if (keyword !== "" && keyword !== $scope.keyword) {
 			$scope.searchKeywordChanged = true;
 		}
 		$scope.keyword = keyword;

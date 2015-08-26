@@ -45,8 +45,6 @@
 			}
 		];
 
-		vm.toggleSkillPanel = buildToggler('right');
-
 		function buildToggler(navID) {
 			var debounceFn = $mdUtil.debounce(function () {
 				$mdSidenav(navID)
@@ -56,6 +54,8 @@
 			}, 200);
 			return debounceFn;
 		}
+
+		vm.toggleSkillPanel = buildToggler('right');
 
 		vm.close = function () {
 			$mdSidenav('right').close()
@@ -89,7 +89,7 @@
 					headerCellFilter: 'translate',
 					sort: {
 						direction: uiGridConstants.ASC,
-						priority: 0,
+						priority: 0
 					},
 					minWidth: 100
 				}
@@ -97,13 +97,6 @@
 
 			data: 'vm.availablePeople'
 
-		};
-
-		vm.getSkillStatus = function(skill) {
-			if (skill.Status == 'all')
-				return true;
-			if (skill.Status == 'none')
-				return false;
 		};
 
 		var loadSkillPromise = peopleSvc.loadAllSkills.get().$promise;
@@ -156,7 +149,7 @@
 					}
 				});
 				vm.dataInitialized = true;
-				if (vm.commandName == 'adjustSkill') {
+				if (vm.commandName === 'adjustSkill') {
 					vm.toggleSkillPanel();
 				}
 			});
