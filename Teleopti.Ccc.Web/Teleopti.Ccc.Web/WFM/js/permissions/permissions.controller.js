@@ -55,6 +55,13 @@
 
 				};
 
+				$scope.submitRole = function(role){
+					if (role.DescriptionText != '') {
+						role.editing = false; 
+						Permissions.manageRole.update({ Id: role.Id, newDescription: role.DescriptionText });
+					}
+				};
+
 				$scope.showRole = function (role) {
 					if (role.Id === $scope.selectedRole) return;
 					Roles.selectRole(role);
@@ -85,11 +92,9 @@
 				};
 
 				$scope.cancelEdit = function (role) {
-
-					role.editing = false;
-					
-
-
+					if (role.DescriptionText != '') {
+						role.editing = false;
+					}
 				};
 
 

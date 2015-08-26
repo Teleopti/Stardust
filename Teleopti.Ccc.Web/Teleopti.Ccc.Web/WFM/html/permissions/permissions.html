@@ -30,8 +30,8 @@
 						<li ng-repeat="role in roles | filter:searchRoles" ng-click="showRole(role)" ng-dblclick="doubleClickEdit(editing, role)" ng-class="{'active': role.Id == selectedRole}" selection-model>
 							<span ng-hide="role.editing" class="list-item-container" ng-class="{'text-truncation': role.editing==false}">{{role.DescriptionText}}</span>
 							<span ng-show="role.editing" ng-blur="cancelEdit(role)">
-								<form ng-submit="role.editing = false; updateRole(role);">
-									<input type="text" class="inline-role-name" ng-blur="cancelEdit(role)" ng-model="role.DescriptionText" placeholder="{{'Name' | translate}}" ng-required />
+								<form ng-submit="submitRole(role)" name="editRoleForm">
+									<input type="text" class="inline-role-name" ng-blur="cancelEdit(role)" ng-model="role.DescriptionText" ng-required ng-minlength="1" placeholder="{{'Name' | translate}}"  />
 									
 								</form>
 							</span>
