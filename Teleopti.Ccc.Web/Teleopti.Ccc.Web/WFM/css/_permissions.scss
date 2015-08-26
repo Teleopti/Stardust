@@ -84,6 +84,17 @@ p {
         margin-top:15px;
     }
 
+	@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+		.permission-radio-buttons > .wfm-radio label .wfm-radio-label {
+        display: inline-block;
+		width: 90px; 
+		overflow: hidden;
+		text-overflow: ellipsis;
+    }
+
+
+	}
+
     @media only screen and (max-width: 841px) {
         .permission-radio-buttons {
             display: inline;
