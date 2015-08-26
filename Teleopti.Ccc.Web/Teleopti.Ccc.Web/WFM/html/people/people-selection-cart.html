@@ -11,29 +11,25 @@
 	</div>
 
 	<div class="row">
-		<div class="col-md-2" outside-click="vm.closeCalendar()">
-			<!--<button class="wfm-btn wfm-btn-default" ng-click="vm.toggleCalendar()">{{vm.startDate | date:"yyyy-MM-dd"}}</button>
-			<datepicker style="z-index: 100; position: absolute; background-color: white;" show-weeks="true" close-on-date-selection="false" ng-model="vm.startDate" class="wfm-datepicker" ng-show="vm.status.opened"></datepicker>-->
-			<div class="col-md-6">
-				<p class="input-group">
-					<input type="date" class="form-control wfm-datepicker" datepicker-popup ng-model="vm.startDate" is-open="vm.status.opened" datepicker-options="vm.dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
-					<span class="input-group-btn">
-						<button type="button" class="btn btn-default" ng-click="vm.toggleCalendar()"><i class="glyphicon glyphicon-calendar"></i></button>
-					</span>
-				</p>
-			</div>
+		<div class="col-md-2">
+			<p class="input-group">
+				<input type="date" class="form-control" datepicker-popup template-url="'template/datepicker/popup.html'" ng-model="vm.startDate" is-open="vm.status.opened" datepicker-options="vm.dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" show-button-bar="false" show-button-bar="false" />
+				<span class="input-group-btn">
+					<button type="button" class="btn btn-default" ng-click="vm.toggleCalendar()"><i class="glyphicon glyphicon-calendar"></i></button>
+				</span>
+			</p>
 		</div>
 	</div>
 	<div ui-i18n="{{lang}}" ng-if="vm.dataInitialized" class="big-table-wrapper material-depth-1" style="position: relative">
 		<div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-auto-resize ui-grid-pagination ui-grid-resize-columns class="grid people-list"></div>
 		<div>
 			<nav class="wfm-panel action-panel" mfb-menu position="tr" effect="slidein-spring"
-				 active-icon="mdi-pencil" resting-icon="mdi-plus"
-				 ng-mouseenter=" hovered()" ng-mouseleave="hovered()"
-				 label="{{'Actions'|translate}}"
-				 toggling-method="click" menu-state="closed">
+			     active-icon="mdi-pencil" resting-icon="mdi-plus"
+			     ng-mouseenter=" hovered()" ng-mouseleave="hovered()"
+			     label="{{'Actions'|translate}}"
+			     toggling-method="click" menu-state="closed">
 				<button class="{{button.label|lowercase}}" ng-show="button.active" mfb-button icon="{{button.icon}}" ng-click="button.action()"
-						label="{{button.label|translate}}" ng-repeat="button in vm.buttons"></button>
+				        label="{{button.label|translate}}" ng-repeat="button in vm.buttons"></button>
 			</nav>
 		</div>
 		<md-sidenav class="md-sidenav-right md-sidenav-skill-panel md-whiteframe-z2" md-component-id="right">
@@ -41,11 +37,11 @@
 			<md-content layout-padding style="height: 500px">
 				<div class="input-prepend">
 					<i class="mdi mdi-filter-outline"></i>
-					<input type="text" name="filterRole" ng-model="searchSkills.SkillName" />
+					<input type="text" name="filterRole" ng-model="searchSkills.SkillName"/>
 				</div>
 				<md-list-item ng-repeat="skill in vm.availableSkills|filter:searchSkills">
 					<div class="wfm-checkbox">
-						<input type="checkbox" id="{{skill.SkillId}}" ng-model="skill.Selected" ui-indeterminate="skill.Status =='partial'" />
+						<input type="checkbox" id="{{skill.SkillId}}" ng-model="skill.Selected" ui-indeterminate="skill.Status =='partial'"/>
 						<label for="{{skill.SkillId}}">
 							<span class="wfm-checkbox-toggle"></span>
 							<span class="wfm-checkbox-label">{{skill.SkillName}}</span>
@@ -57,3 +53,16 @@
 		</md-sidenav>
 	</div>
 </div>
+
+<script id="template/datepicker/popup.html" type="text/ng-template">
+	<ul class="dropdown-menu" ng-if="isOpen" style="display: block" ng-style="{top: position.top+'px', left: position.left+'px'}" ng-keydown="keydown($event)" ng-click="$event.stopPropagation()">
+		<li class="wfm-datepicker" ng-transclude></li>
+		<li ng-if="showButtonBar" style="padding:10px 9px 2px">
+			<span class="btn-group pull-left">
+				<button type="button" class="btn btn-sm btn-info" ng-click="select('today')">{{ getText('current') }}</button>
+				<button type="button" class="btn btn-sm btn-danger" ng-click="select(null)">{{ getText('clear') }}</button>
+			</span>
+			<button type="button" class="btn btn-sm btn-success pull-right" ng-click="close()">{{ getText('close') }}</button>
+		</li>
+	</ul>
+</script>
