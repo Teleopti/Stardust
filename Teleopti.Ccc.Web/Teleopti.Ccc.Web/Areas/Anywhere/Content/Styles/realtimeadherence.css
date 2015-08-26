@@ -92,3 +92,8 @@
 .realtimeadherenceagents .selectable-agent{
     width: 1%
 }
+
+.realtimeadherenceagents .agent-menu
+{
+    cursor: default;
+}
