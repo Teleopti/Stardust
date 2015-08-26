@@ -38,5 +38,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		public bool IsInitialLoad { get; set; }
 
 		public Guid TrackId { get; set; }
+
+		public int RetriesCount { get; set; }
 	}
 }

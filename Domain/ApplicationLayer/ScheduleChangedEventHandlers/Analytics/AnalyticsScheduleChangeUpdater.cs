@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections.ObjectModel;
+using System.Data.SqlClient;
 using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure.Analytics;
@@ -18,13 +19,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 		private readonly IAnalyticsFactScheduleDateHandler _factScheduleDateHandler;
 		private readonly IAnalyticsFactScheduleDayCountHandler _factScheduleDayCountHandler;
 		private readonly IAnalyticsScheduleRepository _analyticsScheduleRepository;
+		private readonly ISendDelayedMessages _serviceBus;
 
 		public AnalyticsScheduleChangeUpdater(
-			IAnalyticsFactScheduleHandler factScheduleHandler, 
+			IAnalyticsFactScheduleHandler factScheduleHandler,
 			IAnalyticsFactScheduleDateHandler factScheduleDateHandler,
 			IAnalyticsFactSchedulePersonHandler factSchedulePersonHandler,
-			IAnalyticsFactScheduleDayCountHandler factScheduleDayCountHandler, 
-			IAnalyticsScheduleRepository analyticsScheduleRepository)
+			IAnalyticsFactScheduleDayCountHandler factScheduleDayCountHandler,
+			IAnalyticsScheduleRepository analyticsScheduleRepository,
+			ISendDelayedMessages serviceBus)
 
 		{
 			_factScheduleHandler = factScheduleHandler;
@@ -32,13 +35,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			_factSchedulePersonHandler = factSchedulePersonHandler;
 			_factScheduleDayCountHandler = factScheduleDayCountHandler;
 			_analyticsScheduleRepository = analyticsScheduleRepository;
+			_serviceBus = serviceBus;
 		}
 
 		public void Handle(ProjectionChangedEvent @event)
 		{
-			if(!@event.IsDefaultScenario) return;
+			if (!@event.IsDefaultScenario) return;
 			var scenarioId = getScenario(@event.ScenarioId);
-			
+
 			foreach (var scheduleDay in @event.ScheduleDays)
 			{
 				int dateId;
@@ -47,7 +51,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 					//Log that schedule id could not be mapped = Schedule changes is not saved in analytics db.
 					Logger.DebugFormat(
 						"Date {0} could not be mapped to Analytics date_id. Schedule changes for agent {1} is not saved into Analytics database.",
-						scheduleDay.Date, 
+						scheduleDay.Date,
 						@event.PersonId);
 					continue;
 				}
@@ -61,34 +65,68 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 						@event.PersonId);
 					continue;
 				}
-
-				_analyticsScheduleRepository.DeleteFactSchedule(dateId, personPart.PersonId, scenarioId);
-
-				if (!scheduleDay.NotScheduled)
+				try
 				{
-					var shiftCategoryId = -1;
-					if (scheduleDay.Shift != null)
-						shiftCategoryId = getCategory(scheduleDay.ShiftCategoryId);
+					_analyticsScheduleRepository.DeleteFactSchedule(dateId, personPart.PersonId, scenarioId);
 
-					var dayCount = _factScheduleDayCountHandler.Handle(scheduleDay, personPart, scenarioId, shiftCategoryId);
-					if(dayCount != null)
-						_analyticsScheduleRepository.PersistFactScheduleDayCountRow(dayCount);
-
-					var agentDaySchedule = _factScheduleHandler.AgentDaySchedule(scheduleDay, personPart, @event.Timestamp, shiftCategoryId, scenarioId);
-					if (agentDaySchedule == null)
+					if (!scheduleDay.NotScheduled)
 					{
-						_analyticsScheduleRepository.DeleteFactSchedule(dateId, personPart.PersonId, scenarioId);
-						continue;
-					}
-					_analyticsScheduleRepository.PersistFactScheduleBatch(agentDaySchedule);
-				}
+						var shiftCategoryId = -1;
+						if (scheduleDay.Shift != null)
+							shiftCategoryId = getCategory(scheduleDay.ShiftCategoryId);
 
-                if (scheduleDay.Date < DateTime.Now.AddDays(1))
-			    {
-                    _analyticsScheduleRepository.InsertStageScheduleChangedServicebus(new DateOnly(scheduleDay.Date), @event.PersonId,
-                    @event.ScenarioId, @event.BusinessUnitId, DateTime.Now);
-			    }
-				
+						var dayCount = _factScheduleDayCountHandler.Handle(scheduleDay, personPart, scenarioId, shiftCategoryId);
+						if (dayCount != null)
+							_analyticsScheduleRepository.PersistFactScheduleDayCountRow(dayCount);
+
+						var agentDaySchedule = _factScheduleHandler.AgentDaySchedule(scheduleDay, personPart, @event.Timestamp, shiftCategoryId, scenarioId);
+						if (agentDaySchedule == null)
+						{
+							_analyticsScheduleRepository.DeleteFactSchedule(dateId, personPart.PersonId, scenarioId);
+							continue;
+						}
+						_analyticsScheduleRepository.PersistFactScheduleBatch(agentDaySchedule);
+					}
+
+					if (scheduleDay.Date < DateTime.Now.AddDays(1))
+					{
+						_analyticsScheduleRepository.InsertStageScheduleChangedServicebus(new DateOnly(scheduleDay.Date), @event.PersonId,
+						@event.ScenarioId, @event.BusinessUnitId, DateTime.Now);
+					}
+				}
+				catch (SqlException ex)
+				{
+					//debug warn
+					//timeout = -2
+					if (ex.Number != -2)
+					{
+						Logger.Error(ex.Message);
+                  throw;
+					}
+					var numOfRetry = @event.RetriesCount += 1;
+					if (numOfRetry > 5)
+					{
+						Logger.ErrorFormat("Timeout when handling ProjectionChangedEvent on day {0}. Maximim number of retries reached, giving up.", scheduleDay.Date);
+						return;
+					}
+               Logger.WarnFormat("Timeout when handling ProjectionChangedEvent on day {0}. Resending the event for processing later. Retry number {1}", scheduleDay.Date, numOfRetry);
+					var processTime = DateTime.Now.AddSeconds(30*numOfRetry);
+					var @newEvent = new ProjectionChangedEvent
+					{
+						ScheduleDays = new Collection<ProjectionChangedEventScheduleDay> { scheduleDay },
+						ScenarioId = @event.ScenarioId,
+						BusinessUnitId = @event.BusinessUnitId,
+						InitiatorId = @event.InitiatorId,
+						Datasource = @event.Datasource,
+						IsDefaultScenario = @event.IsDefaultScenario,
+						IsInitialLoad = @event.IsInitialLoad,
+						PersonId = @event.PersonId,
+						Timestamp = DateTime.UtcNow,
+						TrackId = @event.TrackId,
+						RetriesCount = numOfRetry
+					};
+					_serviceBus.DelaySend(processTime, @newEvent);
+				}
 			}
 		}
 

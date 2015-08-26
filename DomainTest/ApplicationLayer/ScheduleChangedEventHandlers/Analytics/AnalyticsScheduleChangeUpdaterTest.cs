@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Drawing;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics;
 using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure.Analytics;
 
@@ -22,6 +23,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		private IAnalyticsFactSchedulePersonHandler _personHandler;
 		private IAnalyticsFactScheduleDayCountHandler _scheduleDayCountHandler;
 		private IAnalyticsFactScheduleHandler _factScheduleHandler;
+		private ISendDelayedMessages _sendDelayedMessages;
 
 		[SetUp]
 		public void Setup()
@@ -31,12 +33,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			_personHandler = MockRepository.GenerateMock<IAnalyticsFactSchedulePersonHandler>();
 			_scheduleDayCountHandler = MockRepository.GenerateMock<IAnalyticsFactScheduleDayCountHandler>();
 			_analyticsScheduleRepository = MockRepository.GenerateMock<IAnalyticsScheduleRepository>();
+			_sendDelayedMessages = MockRepository.GenerateMock<ISendDelayedMessages>();
 			_target = new AnalyticsScheduleChangeUpdater(
 				_factScheduleHandler,
 				_dateHandler,
 				_personHandler,
 				_scheduleDayCountHandler,
-				_analyticsScheduleRepository);
+				_analyticsScheduleRepository,
+				_sendDelayedMessages);
 		}
 
 		[Test]
@@ -276,6 +280,71 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			_target.Handle(@event);
 
 			_analyticsScheduleRepository.AssertWasNotCalled(x => x.PersistFactScheduleDayCountRow(null));
+		}
+
+		[Test]
+		public void ShouldResendMessageOnTimeout()
+		{
+			var scheduleDay = new ProjectionChangedEventScheduleDay
+			{
+				DayOff = new ProjectionChangedEventDayOff(),
+				PersonPeriodId = Guid.NewGuid(),
+				Date = new DateTime(2015,8,25)
+			};
+			var scenario = new AnalyticsGeneric { Code = Guid.NewGuid(), Id = 6 };
+			var @event = new ProjectionChangedEvent
+			{
+				ScheduleDays = new Collection<ProjectionChangedEventScheduleDay> { scheduleDay },
+				ScenarioId = scenario.Code
+			};
+			var personPart = new AnalyticsFactSchedulePerson { PersonId = 11 };
+			const int dateId = 0;
+
+			_analyticsScheduleRepository.Stub(x => x.Scenarios()).Return(new List<IAnalyticsGeneric> { scenario });
+
+			_dateHandler.Stub(x => x.MapDateId(Arg<DateOnly>.Is.Anything, out Arg<int>.Out(dateId).Dummy)).Return(true);
+			_personHandler.Stub(x => x.Handle(scheduleDay.PersonPeriodId)).Return(personPart);
+
+			var sqlException = SqlExceptionConstructor.CreateSqlException("Timeout", -2);
+
+			_analyticsScheduleRepository.Stub(a => a.DeleteFactSchedule(dateId, 11,6)).Throw(sqlException);
+
+			_target.Handle(@event);
+
+			_sendDelayedMessages.AssertWasCalled(x => x.DelaySend(Arg<DateTime>.Is.Anything, Arg<ProjectionChangedEventScheduleDay>.Is.Anything));
+		}
+
+		[Test]
+		public void ShouldOnlyResendFiveTimesOnTimeout()
+		{
+			var scheduleDay = new ProjectionChangedEventScheduleDay
+			{
+				DayOff = new ProjectionChangedEventDayOff(),
+				PersonPeriodId = Guid.NewGuid(),
+				Date = new DateTime(2015, 8, 25)
+			};
+			var scenario = new AnalyticsGeneric { Code = Guid.NewGuid(), Id = 6 };
+			var @event = new ProjectionChangedEvent
+			{
+				ScheduleDays = new Collection<ProjectionChangedEventScheduleDay> { scheduleDay },
+				ScenarioId = scenario.Code,
+				RetriesCount = 5
+			};
+			var personPart = new AnalyticsFactSchedulePerson { PersonId = 11 };
+			const int dateId = 0;
+
+			_analyticsScheduleRepository.Stub(x => x.Scenarios()).Return(new List<IAnalyticsGeneric> { scenario });
+
+			_dateHandler.Stub(x => x.MapDateId(Arg<DateOnly>.Is.Anything, out Arg<int>.Out(dateId).Dummy)).Return(true);
+			_personHandler.Stub(x => x.Handle(scheduleDay.PersonPeriodId)).Return(personPart);
+
+			var sqlException = SqlExceptionConstructor.CreateSqlException("Timeout", -2);
+
+			_analyticsScheduleRepository.Stub(a => a.DeleteFactSchedule(dateId, 11, 6)).Throw(sqlException);
+
+			_target.Handle(@event);
+
+			_sendDelayedMessages.AssertWasNotCalled(x => x.DelaySend(Arg<DateTime>.Is.Anything, Arg<ProjectionChangedEventScheduleDay>.Is.Anything));
 		}
 	}
 }
