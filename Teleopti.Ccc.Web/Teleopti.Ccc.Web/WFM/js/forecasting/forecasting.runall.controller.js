@@ -52,7 +52,7 @@ angular.module('wfm.forecasting')
 					error(function (data, status, headers, config) {
 						findWorkloads(function (target) {
 							target.IsFailed = true;
-							target.Message = 'Failed';
+							target.Message = data.Message;
 						});
 					})
 					.finally(function () {
