@@ -54,7 +54,8 @@ p {
 }
 
 .hide-list-actions-none{
-	display:none;
+	pointer-events:none;
+	opacity:0;
 }
 
 .optionLocked{

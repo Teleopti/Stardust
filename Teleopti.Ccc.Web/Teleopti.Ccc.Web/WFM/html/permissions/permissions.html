@@ -26,17 +26,18 @@
 				
 				<div id="searchRoleResults">
 				
+
 					<ul class="wfm-list">
-						<li ng-repeat="role in roles | filter:searchRoles" ng-click="showRole(role)" ng-dblclick="doubleClickEdit(editing, role)" ng-class="{'active': role.Id == selectedRole}" selection-model>
-							<span ng-if="role.editing==false;" class="list-item-container" ng-class="{'text-truncation': role.editing==false}">{{role.DescriptionText}}</span>
-							<span ng-if="role.editing==true;" ng-blur="cancelEdit(role)">
+						<li ng-repeat="role in roles | filter:searchRoles" ng-click="showRole(role)" ng-dblclick="doubleClickEdit(editing, role)" ng-class="{'active': role.Id === selectedRole}" selection-model>
+							<span ng-if="role.editing===false;" class="list-item-container" ng-class="{'text-truncation': role.editing===false}">{{role.DescriptionText}}</span>
+							<span ng-if="role.editing===true;" ng-blur="cancelEdit(role)">
 								<form ng-submit="submitRole(role)" name="editRoleForm" required>
-									<input type="text" class="inline-role-name" ng-blur="cancelEdit(role)" ng-model="role.DescriptionText" ng-required  ng-minlength="1" placeholder="{{'Name' | translate}}"  />
+									<input type="text" class="inline-role-name" ng-blur="cancelEdit(role)" ng-model="role.DescriptionText" placeholder="{{'Name' | translate}}"  />
 									
 								</form>
 							</span>
 							
-							<div ng-show="!role.editing"  ng-if="role.BuiltIn === false" class="wfm-leave-behind" ng-class="{'hide-list-actions': role.editing==true, 'hide-list-actions-none': builtInCheck}">
+							<div ng-show="!role.editing" class="wfm-leave-behind" ng-mousedown="showRole(role)" ng-class="{'hide-list-actions': role.editing===true, 'hide-list-actions-none': role.BuiltIn === true}">
 								<span>
 									
 								    <i ng-click="copyRole(role.Id)" class="mdi mdi-content-copy">
