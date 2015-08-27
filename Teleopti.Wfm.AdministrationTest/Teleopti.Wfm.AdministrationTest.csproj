@@ -107,6 +107,7 @@
     <Compile Include="ControllerActions\CheckLoginTests.cs" />
     <Compile Include="ControllerActions\CreateDatabasesTest.cs" />
     <Compile Include="ControllerActions\CreateTenantModelForTest.cs" />
+    <Compile Include="ControllerActions\DeleteTenantTest.cs" />
     <Compile Include="ControllerActions\GenerateRtaKeyForTenant.cs" />
     <Compile Include="ControllerActions\SaveUserTest.cs" />
     <Compile Include="ControllerActions\LoginTest.cs" />

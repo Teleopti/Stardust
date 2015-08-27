@@ -36,6 +36,7 @@ namespace Teleopti.Wfm.Administration.Core
 			builder.RegisterType<DbPathProvider>().As<IDbPathProvider>().SingleInstance();
 			builder.RegisterType<CheckPasswordStrength>().As<ICheckPasswordStrength>().SingleInstance();
 			builder.RegisterType<FindTenantAdminUserByEmail>().SingleInstance();
+			builder.RegisterType<DeleteTenant>().SingleInstance();
 			
 			builder.Register(c => new LoadPasswordPolicyService(ConfigurationManager.AppSettings["ConfigurationFilesPath"])).SingleInstance().As<ILoadPasswordPolicyService>();
 			builder.RegisterType<PasswordPolicy>().SingleInstance().As<IPasswordPolicy>();

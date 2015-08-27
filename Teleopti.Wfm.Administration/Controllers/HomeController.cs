@@ -1,14 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Results;
-using NHibernate.Cfg;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Wfm.Administration.Core;
 using Teleopti.Wfm.Administration.Models;
+using Environment = NHibernate.Cfg.Environment;
 
 namespace Teleopti.Wfm.Administration.Controllers
 {
@@ -19,12 +21,14 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private readonly ILoadAllTenants _loadAllTenants;
 		private readonly SaveTenant _saveTenant;
 		private readonly ITenantExists _tenantExists;
+		private readonly DeleteTenant _deleteTenant;
 
-		public HomeController(ILoadAllTenants loadAllTenants, SaveTenant saveTenant, ITenantExists tenantExists)
+		public HomeController(ILoadAllTenants loadAllTenants, SaveTenant saveTenant, ITenantExists tenantExists, DeleteTenant deleteTenant)
 		{
 			_loadAllTenants = loadAllTenants;
 			_saveTenant = saveTenant;
 			_tenantExists = tenantExists;
+			_deleteTenant = deleteTenant;
 		}
 
 
@@ -73,6 +77,46 @@ namespace Teleopti.Wfm.Administration.Controllers
 				return Json(new ImportTenantResultModel { Message = "There is another Tenant with this name!", Success = false });
 
 			return Json(new ImportTenantResultModel { Message = "There is no other Tenant with this name!", Success = true });
+		}
+
+		[HttpPost]
+		[TenantUnitOfWork]
+		[Route("TenantCanBeDeleted")]
+		public virtual JsonResult<TenantResultModel> TenantCanBeDeleted([FromBody]string name)
+		{
+			return Json(tenantCanBeDeletedInternal(name));
+		}
+
+		[HttpPost]
+		[TenantUnitOfWork]
+		[Route("DeleteTenant")]
+		public virtual JsonResult<TenantResultModel> DeleteTenant([FromBody]string name)
+		{
+			if (!tenantCanBeDeletedInternal(name).Success)
+				return Json(new TenantResultModel {Success = false, Message = "This Tenant can not be deleted."});
+
+			var tenant = _loadAllTenants.Tenants().FirstOrDefault(x => x.Name.Equals(name));
+			_deleteTenant.Delete(tenant);
+
+			return Json(new TenantResultModel { Success = true, Message = string.Format("Deleted Tenant {0}. The databases are not deleted.", name )});
+		}
+
+		private TenantResultModel tenantCanBeDeletedInternal(string tenantName)
+		{
+			var tenant = _loadAllTenants.Tenants().FirstOrDefault(x => x.Name.Equals(tenantName));
+			if (tenant == null)
+				return new TenantResultModel { Success = false };
+
+			var appDatabase =
+				new SqlConnectionStringBuilder(tenant.DataSourceConfiguration.ApplicationConnectionString).InitialCatalog;
+
+			var localAppDb =
+				new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString).InitialCatalog;
+
+			if (appDatabase.Equals(localAppDb))
+				return new TenantResultModel { Success = false };
+
+			return new TenantResultModel { Success = true };
 		}
 	}
 }
