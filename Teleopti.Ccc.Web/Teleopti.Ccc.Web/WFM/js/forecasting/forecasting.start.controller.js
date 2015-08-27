@@ -13,7 +13,7 @@ angular.module('wfm.forecasting')
 				$scope.isForecastRunning = result.IsRunning;
 			});
 
-			var moreThanTwoYears = function () {
+			$scope.moreThanTwoYears = function () {
 				if ($scope.period && $scope.period.endDate && $scope.period.startDate) {
 					var dateDiff = new Date($scope.period.endDate - $scope.period.startDate);
 					dateDiff.setDate(dateDiff.getDate() - 1);
@@ -42,7 +42,7 @@ angular.module('wfm.forecasting')
 			};
 
 			$scope.disalbeNextStepAll = function () {
-				return moreThanTwoYears() || $scope.isForecastRunning;
+				return $scope.moreThanTwoYears() || $scope.isForecastRunning;
 			};
 
 			$scope.nextStepAdvanced = function (period) {
@@ -50,7 +50,7 @@ angular.module('wfm.forecasting')
 			};
 
 			$scope.disalbeNextStepAdvanced = function () {
-				return moreThanTwoYears();
+				return $scope.moreThanTwoYears();
 			};
 
 			$scope.setRangeClass = function (date, mode) {
