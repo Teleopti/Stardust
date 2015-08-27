@@ -33,7 +33,8 @@ namespace Teleopti.Ccc.WinCode.Common.Clipboard
         public IList<T> DoPaste<T>(GridControl gridControl, ClipHandler<T> clipHandler, IGridPasteAction<T> gridPasteAction, GridRangeInfoList rangeList)
         {
             IList<T> pasteList = new List<T>();
-			
+	        var specialPasteBehaviour = new SpecialPasteBehaviour();
+
             if (clipHandler.ClipList.Count > 0)
             {
                 foreach (GridRangeInfo range in rangeList)
@@ -49,11 +50,24 @@ namespace Teleopti.Ccc.WinCode.Common.Clipboard
                                 foreach (Clip<T> clip in clipHandler.ClipList)
                                 {
                                     //check clip fits inside selected range, rows
-                                    if (IsPasteRangeOk(range, gridControl, clip.RowOffset, clip.ColOffset, row, col))
-                                    {
-                                        IScheduleDay part = clip.ClipValue as IScheduleDay;
+									if (IsPasteRangeOk(range, gridControl, clip.RowOffset, clip.ColOffset, row, col))
+									{
+										var part = clip.ClipValue as IScheduleDay;
 
-                                        T pasteResult;
+										T pasteResult;
+
+										if (!gridPasteAction.PasteOptions.Default)
+										{
+											var reducedPart = specialPasteBehaviour.DoPaste(part);
+
+											Clip<T> reducedClip = new Clip<T>(clip.RowOffset, clip.ColOffset, (T)reducedPart);
+
+											pasteResult = gridPasteAction.Paste(gridControl, reducedClip, row + reducedClip.RowOffset,
+												col + reducedClip.ColOffset);
+											if (pasteResult != null)
+												pasteList.Add(pasteResult);
+											continue;
+										}
 										if(IsFullDayAbsence(part))
 										{
 
@@ -140,7 +154,6 @@ namespace Teleopti.Ccc.WinCode.Common.Clipboard
         //reduce absence period to one day
         protected static IScheduleDay ReducedAbsence(IScheduleDay part)
         {
-
 			IList<IPersonAbsence> allAbsences = new List<IPersonAbsence>(part.PersonAbsenceCollection());
 			foreach (IPersonAbsence personAbsence in part.PersonAbsenceCollection())
 			{
