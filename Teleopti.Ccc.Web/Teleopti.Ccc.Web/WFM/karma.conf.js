@@ -15,7 +15,7 @@ module.exports = function(config) {
 
 	// list of files / patterns to load in the browser
 	files: [
-		'node_modules/angular/angular.min.js',
+		'node_modules/angular/angular.js',
 		'node_modules/angular-mocks/angular-mocks.js',
 		'node_modules/angular-ui-router/release/angular-ui-router.min.js',
 		'node_modules/angular-resource/angular-resource.min.js',
@@ -34,19 +34,17 @@ module.exports = function(config) {
 		'node_modules/angular-ui-grid/ui-grid.min.js',
 		'vendor/hammerjs/hammer.min.js',
 		'vendor/angular-material/angular-material.min.js',
-		'vendor/fabricjs/fabric.min.js',
+		'vendor/fabricjs/fabric.js',
 		'vendor/fabricjs/fabricjs_viewport.js',
 		'vendor/ng-mfb/mfb.directive.js',
 		'vendor/csv-js/csv.js',
-		
-
 		'vendor/ng-image-input-with-preview/ng-image-input-with-preview.js',
 		'vendor/d3/d3.min.js',
 		'vendor/c3/c3.min.js',
 		'vendor/c3/c3-angular.min.js',
-		'js/ABmetrics.min.js',
-		'dist/main.min.js', 
-		'tests/**/*.js'
+		'js/**/*.js', 
+		'dist/templates.js', 
+		'tests/**/*spec.js'
 	],
 
 
@@ -87,11 +85,11 @@ module.exports = function(config) {
 
 	// start these browsers
 	// available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-	browsers: ['Chrome'],
+	browsers: ['PhantomJS'],
 
 
 	// Continuous Integration mode
 	// if true, Karma captures browsers, runs the tests and exits
-	singleRun: false
+	singleRun: true
   });
 };

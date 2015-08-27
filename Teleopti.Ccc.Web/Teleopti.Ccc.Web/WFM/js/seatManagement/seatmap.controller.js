@@ -10,8 +10,6 @@
 	function seatMapCanvasDirectiveController($scope, $document, $window, canvasUtils) {
 
 		var vm = this;
-		var canvas = new fabric.CanvasWithViewport('c');
-		document.getElementById("c").fabric = canvas;
 		vm.isInEditMode = false;
 		vm.isLoading = true;
 		vm.breadcrumbs = [];
@@ -25,6 +23,7 @@
 		vm.scrollListen = false;
 		vm.zoomData = { min: 0.1, max: 1, step: 0.05, zoomValue: 1 };
 		
+		var canvas = new fabric.CanvasWithViewport('c');
 		init();
 
 		function init() {

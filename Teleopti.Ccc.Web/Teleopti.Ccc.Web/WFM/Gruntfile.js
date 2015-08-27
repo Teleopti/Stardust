@@ -3,15 +3,11 @@
 	grunt.initConfig({
 		watch: {
 			dev: {
-				files: ['css/*.scss', 'js/**/*.js'],
-				tasks: ['uglify:dev', 'sass', 'cssmin'],
+				files: ['css/*.scss', 'js/**/*.js', 'tests/**/*.js'],
+				tasks: ['uglify:dev', 'sass', 'cssmin', 'test'],
 				options: {
 					spawn: false,
 				}
-			},
-			test: {
-				files: ['tests/**/*.js', 'js/**/*.js'],
-				tasks: ['karma']
 			}
 		},
 		iisexpress: {
@@ -90,13 +86,23 @@
 				}
 			},
 			dev: {
+				files: {
+					'dist/main.min.js': ['js/**/*.js']
+				},
 				options: {
 					sourceMap: true,
 					beautify: true,
 					mangle: false
-				},
-				files: {
-					'dist/main.min.js': ['js/**/*.js']
+				}
+			}
+		},
+
+		ngtemplates: {
+			'wfm.templates': {
+				src: ['html/**/*.html', 'js/**/*.html'],
+				dest: 'dist/templates.js',
+				options: {
+					standalone: true	
 				}
 			}
 		}
@@ -109,12 +115,12 @@
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
 	grunt.loadNpmTasks('grunt-iisexpress');
 	grunt.loadNpmTasks('grunt-msbuild');
-
-
+	grunt.loadNpmTasks('grunt-angular-templates');
 
 	// Default task(s).
-	grunt.registerTask('default', ['uglify:dev', 'sass', 'cssmin', 'watch:dev']); // this task run the main task and then watch for file changes
-	grunt.registerTask('unitTest', ['watch:test']); // this task watchs the js tests files and run the tests if needed
+	grunt.registerTask('default', ['uglify:dev', 'sass', 'cssmin', 'test', 'watch:dev']); // this task run the main task and then watch for file changes
+	grunt.registerTask('test', ['ngtemplates', 'karma']);
+	grunt.registerTask('unitTest', ['test']);
 
 	grunt.registerTask('dist', ['uglify:dist', 'sass', 'cssmin']); // this task should only be used by the build. It's kind of packaging for production.
 	grunt.registerTask('nova', ['uglify:dev', 'sass', 'cssmin','iisexpress:authBridge','iisexpress:web', 'watch:dev']); // this task run the main task and then watch for file changes
