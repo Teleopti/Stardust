@@ -16,12 +16,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		{
 			_groupPageFactory = groupPageFactory;
 		}
-		
-		public IGroupPagePerDate CreateGroupPagePerDate(ISelectedPeriod currentView, IGroupPageDataProvider groupPageDataProvider, GroupPageLight selectedGrouping)
-		{	
-			var selectedPeriod = currentView.Period();
-			return CreateGroupPagePerDate(selectedPeriod.DayCollection(), groupPageDataProvider, selectedGrouping, false);
-		}
 
 		private void createAndAddGroupPageForDate(IGroupPageDataProvider groupPageDataProvider,
 			GroupPageLight selectedGrouping, DateOnly date, ConcurrentDictionary<DateOnly, IGroupPage> dic)

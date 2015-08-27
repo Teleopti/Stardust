@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
@@ -23,8 +22,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	public class ScheduleCommand : IScheduleCommand
 	{
 		private readonly Func<IPersonSkillProvider> _personSkillProvider;
-		private readonly IGroupPageCreator _groupPageCreator;
-		private readonly IGroupScheduleGroupPageDataProvider _groupScheduleGroupPageDataProvider;
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
 		private readonly ITeamBlockScheduleCommand _teamBlockScheduleCommand;
@@ -35,8 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
 		private readonly IWeeklyRestSolverCommand _weeklyRestSolverCommand;
 
-		public ScheduleCommand(Func<IPersonSkillProvider> personSkillProvider, IGroupPageCreator groupPageCreator,
-			IGroupScheduleGroupPageDataProvider groupScheduleGroupPageDataProvider,
+		public ScheduleCommand(Func<IPersonSkillProvider> personSkillProvider,
 			IResourceOptimizationHelper resourceOptimizationHelper,
 			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
 			ITeamBlockScheduleCommand teamBlockScheduleCommand,
@@ -49,8 +45,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			)
 		{
 			_personSkillProvider = personSkillProvider;
-			_groupPageCreator = groupPageCreator;
-			_groupScheduleGroupPageDataProvider = groupScheduleGroupPageDataProvider;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_teamBlockScheduleCommand = teamBlockScheduleCommand;

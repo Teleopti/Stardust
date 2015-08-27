@@ -8,12 +8,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 {
 	public class FakeGroupPageCreator : IGroupPageCreator
 	{
-		public IGroupPagePerDate CreateGroupPagePerDate(ISelectedPeriod currentView, IGroupPageDataProvider groupPageDataProvider,
-			GroupPageLight selectedGrouping)
-		{
-			throw new NotImplementedException();
-		}
-
 		public IGroupPagePerDate CreateGroupPagePerDate(IList<DateOnly> dates, IGroupPageDataProvider groupPageDataProvider,
 			GroupPageLight selectedGrouping)
 		{
