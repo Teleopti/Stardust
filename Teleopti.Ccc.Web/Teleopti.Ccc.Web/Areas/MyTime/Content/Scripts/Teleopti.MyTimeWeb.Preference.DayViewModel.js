@@ -144,6 +144,8 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
 
 		if (data.Color)
 			self.Color('rgb(' + data.Color + ')');
+		else
+			self.Color('');
 		self.Preference(data.Preference);
 		self.MustHave(data.MustHave);
 		self.ExtendedTitle(data.ExtendedTitle);
