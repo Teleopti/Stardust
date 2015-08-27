@@ -18,7 +18,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public HomeController Target;
 		public ITenantUnitOfWork TenantUnitOfWork;
 		public ICurrentTenantSession CurrentTenantSession;
-		public LoadAllTenants LoadAllTenants;
+		public ILoadAllTenants LoadAllTenants;
 
 		[Test]
 		public void ShouldNotAllowDeleteOnUnknowTenant()
