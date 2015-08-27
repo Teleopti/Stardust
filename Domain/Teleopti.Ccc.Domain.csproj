@@ -1486,7 +1486,6 @@
     <Compile Include="Scheduling\ScheduleService.cs" />
     <Compile Include="Scheduling\SchedulerSkillDayHelper.cs" />
     <Compile Include="Scheduling\ScheduleTagging\AgentDayScheduleTag.cs" />
-    <Compile Include="Scheduling\ScheduleTagging\IScheduleTag.cs" />
     <Compile Include="Scheduling\ScheduleTagging\KeepOriginalScheduleTag.cs" />
     <Compile Include="Scheduling\ScheduleTagging\NullScheduleTag.cs" />
     <Compile Include="Scheduling\ScheduleTagging\ScheduleDayTagExtractor.cs" />
