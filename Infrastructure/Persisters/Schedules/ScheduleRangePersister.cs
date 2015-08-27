@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 				var conflicts = _scheduleRangeConflictCollector.GetConflicts(diff, scheduleRange);
 				if (conflicts.IsNullOrEmpty())
 				{
-					var modified = _scheduleDifferenceSaver.SaveChanges(diff, (IUnvalidatedScheduleRangeUpdate) scheduleRange);
+					_scheduleDifferenceSaver.SaveChanges(diff, (IUnvalidatedScheduleRangeUpdate) scheduleRange);
 				}
 				uow.PersistAll(_initiatorIdentifier);
 				return conflicts;
