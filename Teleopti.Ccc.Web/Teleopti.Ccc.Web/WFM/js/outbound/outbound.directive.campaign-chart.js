@@ -155,13 +155,13 @@
 					colors: _setChartOption_color(),
 					types: {},
 					labels: {
-						format: {
-							Planned: function (v, id, i) {
-								if (!determineOpenDay(i)) return 'C';
-								if (determineManualPlanDay(i) && ! determineScheduledDay(i)) return 'M';							
-							}
-						}
+						format: {}													
 					}
+				};
+
+				dataOption.labels.format[$scope.dictionary['Planned']] = function(v, id, i) {
+					if (!determineOpenDay(i)) return 'C';
+					if (determineManualPlanDay(i) && ! determineScheduledDay(i)) return 'M';
 				};
 				dataOption.types[$scope.dictionary['Progress']] = 'line';
 					dataOption.selection = {
