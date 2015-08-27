@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.WinCode.Common.Clipboard
 
 										T pasteResult;
 
-										if (!gridPasteAction.PasteOptions.Default)
+										if (isSchedulerSpecialPaste(gridPasteAction))
 										{
 											var reducedPart = specialPasteBehaviour.DoPaste(part);
 
@@ -68,6 +68,7 @@ namespace Teleopti.Ccc.WinCode.Common.Clipboard
 												pasteList.Add(pasteResult);
 											continue;
 										}
+
 										if(IsFullDayAbsence(part))
 										{
 
@@ -108,7 +109,21 @@ namespace Teleopti.Ccc.WinCode.Common.Clipboard
             return pasteList;
         }
 
-		protected static void AdjustFullDayAbsenceNextDay<T>(T part)
+	    private static bool isSchedulerSpecialPaste<T>(IGridPasteAction<T> gridPasteAction)
+	    {
+		    return (!gridPasteAction.PasteOptions.Default
+					&& (gridPasteAction.PasteOptions.MainShift
+						|| gridPasteAction.PasteOptions.PersonalShifts
+						|| gridPasteAction.PasteOptions.ShiftAsOvertime
+						|| gridPasteAction.PasteOptions.Preference
+						|| gridPasteAction.PasteOptions.DayOff
+						|| gridPasteAction.PasteOptions.Overtime
+						|| gridPasteAction.PasteOptions.OvertimeAvailability
+						|| gridPasteAction.PasteOptions.StudentAvailability
+						|| gridPasteAction.PasteOptions.Absences == PasteAction.Add ));
+	    }
+
+	    protected static void AdjustFullDayAbsenceNextDay<T>(T part)
 		{
 			var destination = part as IScheduleDay;
 			if (destination == null) return;
