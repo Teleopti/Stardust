@@ -24,17 +24,17 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			WhenOtherHasChanged(otherRange);
 
 			var myRange = LoadScheduleRange();
-			Target.Persist(otherRange, new List<AggregatedScheduleChangedInfo>());
+			Target.Persist(otherRange);
 
 			WhenImChanging(myRange);
 
 			if (ExpectOptimistLockException)
 			{
-				Assert.Throws<OptimisticLockException>(() => Target.Persist(myRange, new List<AggregatedScheduleChangedInfo>()));
+				Assert.Throws<OptimisticLockException>(() => Target.Persist(myRange));
 			}
 			else
 			{
-				var conflicts = Target.Persist(myRange, new List<AggregatedScheduleChangedInfo>());
+				var conflicts = Target.Persist(myRange);
 				Then(conflicts);
 				Then(myRange);
 

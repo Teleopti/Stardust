@@ -27,8 +27,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules.Concurrent
 			WhenOtherIsChanging(otherRange);
 			WhenImChanging(myRange);
 
-			var myTask = Task<IEnumerable<PersistConflict>>.Factory.StartNew(() => Target.Persist(myRange, new List<AggregatedScheduleChangedInfo>()));
-			var otherTask = Task<IEnumerable<PersistConflict>>.Factory.StartNew(() => Target.Persist(otherRange, new List<AggregatedScheduleChangedInfo>()));
+			var myTask = Task<IEnumerable<PersistConflict>>.Factory.StartNew(() => Target.Persist(myRange));
+			var otherTask = Task<IEnumerable<PersistConflict>>.Factory.StartNew(() => Target.Persist(otherRange));
 			Task.WaitAll(myTask, otherTask);
 
 			var myConflicts = myTask.Result.ToList();

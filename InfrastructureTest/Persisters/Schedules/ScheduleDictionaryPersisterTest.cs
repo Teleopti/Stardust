@@ -28,8 +28,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			var target = new ScheduleDictionaryPersister(persister);
 			target.Persist(dic);
 
-			persister.AssertWasCalled(x => x.Persist(sr1, new List<AggregatedScheduleChangedInfo>()));
-			persister.AssertWasCalled(x => x.Persist(sr2, new List<AggregatedScheduleChangedInfo>()));
+			persister.AssertWasCalled(x => x.Persist(sr1));
+			persister.AssertWasCalled(x => x.Persist(sr2));
 		}
 
 		[Test]
@@ -38,8 +38,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			var persister = MockRepository.GenerateMock<IScheduleRangePersister>();
 			var sr1 = MockRepository.GenerateMock<IScheduleRange>();
 			var sr2 = MockRepository.GenerateMock<IScheduleRange>();
-			persister.Expect(x => x.Persist(sr1, new List<AggregatedScheduleChangedInfo>())).Return(new List<PersistConflict> {createConflict(), createConflict()});
-			persister.Expect(x => x.Persist(sr2, new List<AggregatedScheduleChangedInfo>())).Return(new List<PersistConflict> {createConflict()});
+			persister.Expect(x => x.Persist(sr1)).Return(new List<PersistConflict> {createConflict(), createConflict()});
+			persister.Expect(x => x.Persist(sr2)).Return(new List<PersistConflict> {createConflict()});
 			var dic = createScheduleDictionaryWith(sr1, sr2);
 
 			var target = new ScheduleDictionaryPersister(persister);

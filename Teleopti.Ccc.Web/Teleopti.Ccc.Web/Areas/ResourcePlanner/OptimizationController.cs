@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			var conflicts = new List<PersistConflict>();
 			foreach (var schedule in _schedulerStateHolder().Schedules)
 			{
-				conflicts.AddRange(_persister.Persist(schedule.Value, new List<AggregatedScheduleChangedInfo>()));
+				conflicts.AddRange(_persister.Persist(schedule.Value));
 			}
 			planningPeriod.Scheduled();
 			return

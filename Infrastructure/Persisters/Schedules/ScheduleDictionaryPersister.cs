@@ -16,13 +16,12 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 		public IEnumerable<PersistConflict> Persist(IScheduleDictionary scheduleDictionary)
 		{
 			var conflicts = new List<PersistConflict>();
-			var modified = new List<AggregatedScheduleChangedInfo>();
 			foreach (var scheduleRange in scheduleDictionary.Values)
 			{
-				var res = _scheduleRangePersister.Persist(scheduleRange, modified);
+				var res = _scheduleRangePersister.Persist(scheduleRange);
 				if (res != null)
 				{
-					conflicts.AddRange(res);					
+					conflicts.AddRange(res);
 				}
 			}
 			return conflicts;

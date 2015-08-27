@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 
 		protected override void Then(IScheduleRange myScheduleRange)
 		{
-			Target.Persist(myScheduleRange, new List<AggregatedScheduleChangedInfo>());
+			Target.Persist(myScheduleRange);
 		}
 	}
 

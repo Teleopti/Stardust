@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -29,7 +28,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 			_initiatorIdentifier = initiatorIdentifier;
 		}
 
-		public IEnumerable<PersistConflict> Persist(IScheduleRange scheduleRange, List<AggregatedScheduleChangedInfo> modifiedPersonAssignments)
+		public IEnumerable<PersistConflict> Persist(IScheduleRange scheduleRange)
 		{
 			var diff = scheduleRange.DifferenceSinceSnapshot(_differenceCollectionService);
 			if (diff.IsNullOrEmpty())
@@ -42,7 +41,6 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 				if (conflicts.IsNullOrEmpty())
 				{
 					var modified = _scheduleDifferenceSaver.SaveChanges(diff, (IUnvalidatedScheduleRangeUpdate) scheduleRange);
-					modifiedPersonAssignments.AddRange(modified);
 				}
 				uow.PersistAll(_initiatorIdentifier);
 				return conflicts;
