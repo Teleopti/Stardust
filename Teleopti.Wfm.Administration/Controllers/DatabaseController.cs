@@ -1,38 +1,40 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
-using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Web;
 using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Support.Security;
 using Teleopti.Wfm.Administration.Core;
-using Teleopti.Wfm.Administration.Models;
 
 namespace Teleopti.Wfm.Administration.Controllers
 {
 	[TenantTokenAuthentication]
 	public class DatabaseController : ApiController
 	{
-		private readonly DatabaseHelperWrapper _databaseHelperWrapper;
+		private readonly IDatabaseHelperWrapper _databaseHelperWrapper;
 		private readonly ICurrentTenantSession _currentTenantSession;
 		private readonly ITenantExists _tenantExists;
 		private readonly IDbPathProvider _dbPathProvider;
 		private readonly ILoadAllTenants _loadAllTenants;
 		private readonly ICheckPasswordStrength _checkPasswordStrength;
+		private readonly PersistTenant _persistTenant;
 
 		private readonly bool isAzure =  !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME"));
 
-		public DatabaseController(DatabaseHelperWrapper databaseHelperWrapper, ICurrentTenantSession currentTenantSession,
-			ITenantExists tenantExists, IDbPathProvider dbPathProvider, ILoadAllTenants loadAllTenants, ICheckPasswordStrength checkPasswordStrength)
+		public DatabaseController(
+			IDatabaseHelperWrapper databaseHelperWrapper, 
+			ICurrentTenantSession currentTenantSession,
+			ITenantExists tenantExists, 
+			IDbPathProvider dbPathProvider, 
+			ILoadAllTenants loadAllTenants, 
+			ICheckPasswordStrength checkPasswordStrength,
+			PersistTenant persistTenant)
 		{
 			_databaseHelperWrapper = databaseHelperWrapper;
 			_currentTenantSession = currentTenantSession;
@@ -40,7 +42,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			_dbPathProvider = dbPathProvider;
 			_loadAllTenants = loadAllTenants;
 			_checkPasswordStrength = checkPasswordStrength;
-
+			_persistTenant = persistTenant;
 		}
 
 
@@ -63,60 +65,30 @@ namespace Teleopti.Wfm.Administration.Controllers
 			var checkName = _tenantExists.Check(model.Tenant);
 			if (!checkName.Success)
 				return Json(new TenantResultModel { Message = checkName.Message, Success = false });
-
-			var builder = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
-			{
-				UserID = model.CreateDbUser,
-				Password = model.CreateDbPassword,
-				InitialCatalog = "master",
-				IntegratedSecurity = false
-			};
-
-			var checkCreate = checkCreateDbInternal(builder);
+			
+			var checkCreate = checkCreateDbInternal(createLoginConnectionString(model));
 			if (!checkCreate.Success)
 				return Json(new TenantResultModel { Message = checkCreate.Message, Success = false });
 
 			var dbPath = _dbPathProvider.GetDbPath();
 
-			_databaseHelperWrapper.CreateLogin(builder.ConnectionString, model.AppUser, model.AppPassword, isAzure);
-
-			builder.InitialCatalog = model.Tenant + "_TeleoptiWfmApp";
-
-			_databaseHelperWrapper.CreateDatabase(builder.ConnectionString, DatabaseType.TeleoptiCCC7, dbPath, model.AppUser, isAzure);
-			_databaseHelperWrapper.AddBusinessUnit(builder.ConnectionString, model.BusinessUnit);
-			builder.UserID = model.AppUser;
-			builder.Password = model.AppPassword;
-			var connstringApp = builder.ConnectionString;
-
-			builder.UserID = model.CreateDbUser;
-			builder.Password = model.CreateDbPassword;
-			builder.InitialCatalog = model.Tenant + "_TeleoptiWfmAnalytics";
-			_databaseHelperWrapper.CreateDatabase(builder.ConnectionString, DatabaseType.TeleoptiAnalytics, dbPath, model.AppUser, isAzure);
-			builder.UserID = model.AppUser;
-			builder.Password = model.AppPassword;
-			var connstringAnalytics = builder.ConnectionString;
-
-			builder.UserID = model.CreateDbUser;
-			builder.Password = model.CreateDbPassword;
-			var updateViewsConnstringAnalyticsUpdateViews = builder.ConnectionString;
-
-
-			builder.UserID = model.CreateDbUser;
-			builder.Password = model.CreateDbPassword;
-			builder.InitialCatalog = model.Tenant + "_TeleoptiWfmAgg";
-			_databaseHelperWrapper.CreateDatabase(builder.ConnectionString, DatabaseType.TeleoptiCCCAgg, dbPath, model.AppUser, isAzure);
-
-			var newTenant = new Tenant(model.Tenant);
-			newTenant.DataSourceConfiguration.SetApplicationConnectionString(connstringApp);
-			newTenant.DataSourceConfiguration.SetAnalyticsConnectionString(connstringAnalytics);
-			_currentTenantSession.CurrentSession().Save(newTenant);
-
-			addSuperUserToTenantInternal(newTenant, "first", "user", model.FirstUser, model.FirstUserPassword);
+			_databaseHelperWrapper.CreateLogin(createLoginConnectionString(model), model.AppUser, model.AppPassword, isAzure);
+			_databaseHelperWrapper.CreateDatabase(createAppDbConnectionString(model), DatabaseType.TeleoptiCCC7, dbPath, model.AppUser, isAzure);
+			_databaseHelperWrapper.AddBusinessUnit(createAppDbConnectionString(model), model.BusinessUnit);
+			_databaseHelperWrapper.CreateDatabase(createAnalyticsDbConnectionString(model), DatabaseType.TeleoptiAnalytics, dbPath, model.AppUser, isAzure);
+			_databaseHelperWrapper.CreateDatabase(createAggDbConnectionString(model), DatabaseType.TeleoptiCCCAgg, dbPath, model.AppUser, isAzure);
 
 			if (isAzure)
-				UpdateCrossDatabaseView.Execute(updateViewsConnstringAnalyticsUpdateViews, model.Tenant + "_TeleoptiWfmAnalytics");
+				UpdateCrossDatabaseView.Execute(createAnalyticsDbConnectionString(model), model.Tenant + "_TeleoptiWfmAnalytics");
 			else
-				UpdateCrossDatabaseView.Execute(updateViewsConnstringAnalyticsUpdateViews, model.Tenant + "_TeleoptiWfmAgg");
+				UpdateCrossDatabaseView.Execute(createAnalyticsDbConnectionString(model), model.Tenant + "_TeleoptiWfmAgg");
+
+			var newTenant = new Tenant(model.Tenant);
+			newTenant.DataSourceConfiguration.SetApplicationConnectionString(appConnectionString(model));
+			newTenant.DataSourceConfiguration.SetAnalyticsConnectionString(analyticsConnectionString(model));
+			_persistTenant.Persist(newTenant);
+
+			addSuperUserToTenant(newTenant, "first", "user", model.FirstUser, model.FirstUserPassword);
 
 			return Json(new TenantResultModel { Success = true, Message = "Successfully created a new Tenant." });
 		}
@@ -126,19 +98,78 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[Route("CheckCreateDb")]
 		public virtual JsonResult<TenantResultModel> CheckCreateDb(CreateTenantModel model)
 		{
-			var builder = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
+			return Json(checkCreateDbInternal(createLoginConnectionString(model)));
+		}
+
+		private string createLoginConnectionString(CreateTenantModel model)
+		{
+			return new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
 			{
 				UserID = model.CreateDbUser,
 				Password = model.CreateDbPassword,
 				InitialCatalog = "master",
 				IntegratedSecurity = false
-			};
-			return Json(checkCreateDbInternal(builder));
+			}.ConnectionString;
 		}
 
-		private TenantResultModel checkCreateDbInternal(SqlConnectionStringBuilder builder)
+		private string createAppDbConnectionString(CreateTenantModel model)
 		{
-			var connection = new SqlConnection(builder.ConnectionString);
+			return new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
+			{
+				UserID = model.CreateDbUser,
+				Password = model.CreateDbPassword,
+				InitialCatalog = model.Tenant + "_TeleoptiWfmApp",
+				IntegratedSecurity = false,
+			}.ConnectionString;
+		}
+
+		private string createAnalyticsDbConnectionString(CreateTenantModel model)
+		{
+			return new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
+			{
+				UserID = model.CreateDbUser,
+				Password = model.CreateDbPassword,
+				InitialCatalog = model.Tenant + "_TeleoptiWfmAnalytics",
+				IntegratedSecurity = false,
+			}.ConnectionString;
+		}
+
+		private string createAggDbConnectionString(CreateTenantModel model)
+		{
+			return new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
+			{
+				UserID = model.CreateDbUser,
+				Password = model.CreateDbPassword,
+				InitialCatalog = model.Tenant + "_TeleoptiWfmAgg",
+				IntegratedSecurity = false,
+			}.ConnectionString;
+		}
+
+		private string appConnectionString(CreateTenantModel model)
+		{
+			return new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
+			{
+				UserID = model.AppUser,
+				Password = model.AppPassword,
+				InitialCatalog = model.Tenant + "_TeleoptiWfmApp",
+				IntegratedSecurity = false,
+			}.ConnectionString;
+		}
+
+		private string analyticsConnectionString(CreateTenantModel model)
+		{
+			return new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
+			{
+				UserID = model.AppUser,
+				Password = model.AppPassword,
+				InitialCatalog = model.Tenant + "_TeleoptiWfmAnalytics",
+				IntegratedSecurity = false,
+			}.ConnectionString;
+		}
+
+		private TenantResultModel checkCreateDbInternal(string connectionString)
+		{
+			var connection = new SqlConnection(connectionString);
 			try
 			{
 				connection.Open();
@@ -148,10 +179,10 @@ namespace Teleopti.Wfm.Administration.Controllers
 				return new TenantResultModel { Success = false, Message = "Can not connect to the database. " + e.Message };
 			}
 
-			if (!_databaseHelperWrapper.HasCreateDbPermission(builder.ConnectionString, isAzure))
+			if (!_databaseHelperWrapper.HasCreateDbPermission(connectionString, isAzure))
 				return new TenantResultModel { Success = false, Message = "The user does not have permission to create databases." };
 
-			if (!_databaseHelperWrapper.HasCreateViewAndLoginPermission(builder.ConnectionString, isAzure))
+			if (!_databaseHelperWrapper.HasCreateViewAndLoginPermission(connectionString, isAzure))
 				return new TenantResultModel { Success = false, Message = "The user does not have permission to create logins and views." };
 
 			return new TenantResultModel { Success = true, Message = "The user does have permission to create databases, logins and views." };
@@ -224,7 +255,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			{
 				return Json(new TenantResultModel {Success = false, Message = "Can not find this Tenant in the database."});
 			}
-         return Json(addSuperUserToTenantInternal(tenant,model.FirstName, model.LastName, model.UserName, model.Password));
+         return Json(addSuperUserToTenant(tenant,model.FirstName, model.LastName, model.UserName, model.Password));
 		}
 
 		private TenantResultModel checkFirstUserInternal(string name, string password)
@@ -256,7 +287,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			return new TenantResultModel { Success = true, Message = "The user name and password are ok." };
 		}
 
-		private TenantResultModel addSuperUserToTenantInternal(Tenant tenant, string firstName, string lastName, string userName, string password)
+		private TenantResultModel addSuperUserToTenant(Tenant tenant, string firstName, string lastName, string userName, string password)
 		{
 			var checkUser = checkFirstUserInternal(userName, password);
 			if (!checkUser.Success)

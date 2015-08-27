@@ -1,21 +1,26 @@
 ﻿using System;
 using System.Data.SqlClient;
-using System.Runtime.Remoting.Messaging;
-using System.Web.UI.WebControls;
 using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Wfm.Administration.Models;
 
 namespace Teleopti.Wfm.Administration.Core
 {
-	public class DatabaseHelperWrapper
+	public interface IDatabaseHelperWrapper
 	{
-		//private readonly ICurrentTenantSession _currentTenantSession;
+		DbCheckResultModel Exists(string databaseConnectionString, DatabaseType databaseType);
+		void CreateDatabase(string connectionToNewDb, DatabaseType databaseType, string dbPath, string login, bool isAzure);
+		void CreateAzureDatabase(string connectionToNewDb, DatabaseType databaseType, string dbPath, string login);
+		void AddSuperUser(string connectionToNewDb, Guid personId, string firstName, string lastName);
+		void AddBusinessUnit(string connectionToNewDb, string name);
+		bool LoginExists(string connectionToNewDb, string login, bool isAzure);
+		void CreateLogin(string connectionToNewDb, string login, string password, bool isAzure);
+		bool HasCreateDbPermission(string connectionString, bool isAzure);
+		bool HasCreateViewAndLoginPermission(string connectionString, bool isAzure);
+		bool LoginCanBeCreated(string connectionString, string login, string password, bool isAzure, out string message);
+	}
 
-		//public DatabaseHelperWrapper(ICurrentTenantSession currentTenantSession)
-		//{
-		//	_currentTenantSession = currentTenantSession;
-		//}
-
+	public class DatabaseHelperWrapper : IDatabaseHelperWrapper
+	{
 		public DbCheckResultModel Exists(string databaseConnectionString, DatabaseType databaseType)
 		{
 			var dbType = "Teleopti WFM application database";

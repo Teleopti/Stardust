@@ -18,7 +18,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public HomeController Target;
 		public ITenantUnitOfWork TenantUnitOfWork;
 		public ICurrentTenantSession CurrentTenantSession;
-		public LoadAllTenants LoadAllTenants;
+		public ILoadAllTenants Tenants;
 
 		[Test]
 		public void ShouldReturnFalseIfNameAlreadyExists()
@@ -99,7 +99,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			}
 			using (TenantUnitOfWork.Start())
 			{
-				var loadedTenant = LoadAllTenants.Tenants().FirstOrDefault(t => t.Name.Equals("Old One"));
+				var loadedTenant = Tenants.Tenants().FirstOrDefault(t => t.Name.Equals("Old One"));
 				loadedTenant.DataSourceConfiguration.ApplicationConnectionString.Should().Be.EqualTo("Integrated Security=true;Initial Catalog=Southwind;server=(local)");
 				loadedTenant.DataSourceConfiguration.AnalyticsConnectionString.Should().Be.EqualTo("Integrated Security=true;Initial Catalog=Southwind;server=(local)");
 				loadedTenant.DataSourceConfiguration.ApplicationNHibernateConfig[Environment.CommandTimeout].Should().Be.EqualTo("180");

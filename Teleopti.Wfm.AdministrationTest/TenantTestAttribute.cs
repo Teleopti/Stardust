@@ -1,11 +1,9 @@
 ﻿using System.Configuration;
 using System.Data.SqlClient;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Wfm.Administration.Controllers;
 using Teleopti.Wfm.Administration.Core;
 
 namespace Teleopti.Wfm.AdministrationTest
@@ -21,8 +19,6 @@ namespace Teleopti.Wfm.AdministrationTest
 			var service = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
 			system.AddService(service);
 
-			system.AddService<DatabaseHelperWrapper>();
-			system.AddService<LoadAllTenants>();
 			system.AddService<DbPathProviderFake>();
 			system.AddService<CheckPasswordStrengthFake>();
 			system.AddService<TestPolutionCleaner>();
@@ -31,12 +27,12 @@ namespace Teleopti.Wfm.AdministrationTest
 
 	public class TestPolutionCleaner
 	{
-		private readonly DatabaseHelperWrapper _databaseHelperWrapper;
+		private readonly IDatabaseHelperWrapper _databaseHelperWrapper;
 
 		public string TestTenantDatabaseName = "CF0DA4E0-DC93-410B-976B-EED9C8A34639";
 		public string TestTenantAnalyticsDatabaseName = "B1EDB896-9D23-4BCF-A42F-F1F2EE5DD64B";
 
-		public TestPolutionCleaner(DatabaseHelperWrapper databaseHelperWrapper)
+		public TestPolutionCleaner(IDatabaseHelperWrapper databaseHelperWrapper)
 		{
 			_databaseHelperWrapper = databaseHelperWrapper;
 		}

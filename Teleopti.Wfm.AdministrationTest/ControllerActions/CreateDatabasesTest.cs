@@ -15,7 +15,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 	public class CreateDatabasesTest
 	{
 		public DatabaseController Target;
-		public DatabaseHelperWrapper DatabaseHelperWrapper;
+		public IDatabaseHelperWrapper DatabaseHelperWrapper;
 		public ITenantUnitOfWork TenantUnitOfWork;
 		public ICurrentTenantSession CurrentTenantSession;
 		public TestPolutionCleaner TestPolutionCleaner;

@@ -27,10 +27,11 @@ namespace Teleopti.Wfm.Administration.Core
 			builder.RegisterApiControllers(typeof(HomeController).Assembly).ApplyAspects();
 			builder.RegisterModule(new CommonModule(iocConf));
 			builder.RegisterType<AdminTenantAuthentication>().As<ITenantAuthentication>().SingleInstance();
-			builder.RegisterType<DatabaseHelperWrapper>().SingleInstance();
+			builder.RegisterType<DatabaseHelperWrapper>().As<IDatabaseHelperWrapper>().SingleInstance();
 			builder.RegisterType<CheckDatabaseVersions>().SingleInstance();
 			builder.RegisterType<GetImportUsers>().SingleInstance();
 			builder.RegisterType<LoadAllPersonInfos>().SingleInstance();
+			builder.RegisterType<LoadAllTenants>().As<ILoadAllTenants>().SingleInstance();
 			builder.RegisterType<Import>().SingleInstance();
 			builder.RegisterType<SaveTenant>().SingleInstance();
 			builder.RegisterType<DbPathProvider>().As<IDbPathProvider>().SingleInstance();

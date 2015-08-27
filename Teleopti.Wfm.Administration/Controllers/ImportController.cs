@@ -13,13 +13,13 @@ namespace Teleopti.Wfm.Administration.Controllers
 	[TenantTokenAuthentication]
 	public class ImportController : ApiController
 	{
-		private readonly DatabaseHelperWrapper _databaseHelperWrapper;
+		private readonly IDatabaseHelperWrapper _databaseHelperWrapper;
 		private readonly ITenantExists _tenantExists;
 		private readonly GetImportUsers _getImportUsers;
 		private readonly CheckDatabaseVersions _checkDatabaseVersions;
 		private readonly Import _import;
 
-		public ImportController(DatabaseHelperWrapper databaseHelperWrapper, ITenantExists tenantExists,
+		public ImportController(IDatabaseHelperWrapper databaseHelperWrapper, ITenantExists tenantExists,
 			GetImportUsers getImportUsers, CheckDatabaseVersions checkDatabaseVersions, Import import)
 		{
 			_databaseHelperWrapper = databaseHelperWrapper;
