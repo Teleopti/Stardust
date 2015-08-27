@@ -54,8 +54,13 @@
 		}
 },
 		karma: {
-			unit: {
+			options: {
 				configFile: 'karma.conf.js',
+			},
+			unit: {
+			},
+			continuous: {
+				reporters: 'teamcity'
 			}
 		},
 
@@ -119,7 +124,8 @@
 
 	// Default task(s).
 	grunt.registerTask('default', ['uglify:dev', 'sass', 'cssmin', 'test', 'watch:dev']); // this task run the main task and then watch for file changes
-	grunt.registerTask('test', ['ngtemplates', 'karma']);
+	grunt.registerTask('test', ['ngtemplates', 'karma:unit']);
+	grunt.registerTask('test:continuous', ['ngtemplates', 'karma:continuous']);
 	grunt.registerTask('unitTest', ['test']);
 
 	grunt.registerTask('dist', ['uglify:dist', 'sass', 'cssmin']); // this task should only be used by the build. It's kind of packaging for production.

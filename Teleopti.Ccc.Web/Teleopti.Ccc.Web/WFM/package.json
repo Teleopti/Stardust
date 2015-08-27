@@ -4,7 +4,8 @@
   "description": "",
   "scripts": {
     "dev": "grunt",
-    "test": "grunt test"
+    "test": "grunt test",
+    "continuous": "grunt test:continuous"
   },
   "author": "Teleopti",
   "license": "ISC",
