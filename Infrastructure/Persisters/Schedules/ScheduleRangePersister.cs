@@ -31,14 +31,14 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 		public IEnumerable<PersistConflict> Persist(IScheduleRange scheduleRange)
 		{
 			var diff = scheduleRange.DifferenceSinceSnapshot(_differenceCollectionService);
-			if (diff.IsNullOrEmpty())
+			if (diff.IsEmpty())
 			{
 				return Enumerable.Empty<PersistConflict>();
 			}
 			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				var conflicts = _scheduleRangeConflictCollector.GetConflicts(diff, scheduleRange);
-				if (conflicts.IsNullOrEmpty())
+				if (conflicts.IsEmpty())
 				{
 					_scheduleDifferenceSaver.SaveChanges(diff, (IUnvalidatedScheduleRangeUpdate) scheduleRange);
 				}

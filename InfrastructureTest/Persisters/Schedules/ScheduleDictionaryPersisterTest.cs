@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			var sr1 = MockRepository.GenerateMock<IScheduleRange>();
 			var sr2 = MockRepository.GenerateMock<IScheduleRange>();
 			var persister = MockRepository.GenerateMock<IScheduleRangePersister>();
+			persister.Expect(x => x.Persist(null)).IgnoreArguments().Return(Enumerable.Empty<PersistConflict>());
 			var dic = createScheduleDictionaryWith(sr1, sr2);
 			var target = new ScheduleDictionaryPersister(persister);
 			target.Persist(dic);

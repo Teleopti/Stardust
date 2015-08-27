@@ -19,10 +19,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 			foreach (var scheduleRange in scheduleDictionary.Values)
 			{
 				var res = _scheduleRangePersister.Persist(scheduleRange);
-				if (res != null)
-				{
-					conflicts.AddRange(res);
-				}
+				conflicts.AddRange(res);
 			}
 			return conflicts;
 		}
