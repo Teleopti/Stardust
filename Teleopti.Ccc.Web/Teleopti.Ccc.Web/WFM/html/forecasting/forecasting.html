@@ -23,7 +23,7 @@
 			<button class="wfm-btn wfm-btn-primary next-step-all" ng-disabled="disalbeNextStepAll()" ng-class="{'wfm-btn-primary-disabled': disalbeNextStepAll()}" ng-click="nextStepAll(period)">{{ 'ForecastAll' | translate }}</button>
 			<button class="wfm-btn wfm-btn-default next-step-advanced" ng-disabled="disalbeNextStepAdvanced()" ng-class="{'wfm-btn-primary-disabled': disalbeNextStepAdvanced()}" ng-click="nextStepAdvanced(period)">{{ 'Advanced' | translate }}<md-tooltip>Select specific workloads</md-tooltip></button>
 		</div>
-		<div class="alert-warning notice-spacer" ng-if="moreThanTwoYears()"><i class='mdi mdi-alert'></i>Forecast period cannot be more than 2 years.</div>
+		<div class="alert-warning notice-spacer" ng-if="moreThanOneYear()"><i class='mdi mdi-alert'></i>Forecast period cannot be more than 1 year.</div>
 	</div>
 	<div class="clearfix"></div>
 </div>

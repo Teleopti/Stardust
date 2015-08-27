@@ -13,11 +13,11 @@ angular.module('wfm.forecasting')
 				$scope.isForecastRunning = result.IsRunning;
 			});
 
-			$scope.moreThanTwoYears = function () {
+			$scope.moreThanOneYear = function () {
 				if ($scope.period && $scope.period.endDate && $scope.period.startDate) {
 					var dateDiff = new Date($scope.period.endDate - $scope.period.startDate);
 					dateDiff.setDate(dateDiff.getDate() - 1);
-					return dateDiff.getFullYear() - 1970 >= 2;
+					return dateDiff.getFullYear() - 1970 >= 1;
 				} else
 					return false;
 			};
@@ -42,7 +42,7 @@ angular.module('wfm.forecasting')
 			};
 
 			$scope.disalbeNextStepAll = function () {
-				return $scope.moreThanTwoYears() || $scope.isForecastRunning;
+				return $scope.moreThanOneYear() || $scope.isForecastRunning;
 			};
 
 			$scope.nextStepAdvanced = function (period) {
@@ -50,7 +50,7 @@ angular.module('wfm.forecasting')
 			};
 
 			$scope.disalbeNextStepAdvanced = function () {
-				return $scope.moreThanTwoYears();
+				return $scope.moreThanOneYear();
 			};
 
 			$scope.setRangeClass = function (date, mode) {
