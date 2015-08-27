@@ -29,12 +29,8 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		[Test]
 		public void ShouldReturnSuccessFalseIfAnalDatabaseNotCorrectFormat()
 		{
-			var connStringBuilder = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
-			{
-				InitialCatalog = TestPolutionCleaner.TestTenantDatabaseName
-			};
-			var connString = connStringBuilder.ConnectionString;
-			var helper = new DatabaseHelper(connString, DatabaseType.TeleoptiCCC7);
+			var connString = TestPolutionCleaner.TestTenantConnectionString();
+            var helper = new DatabaseHelper(connString, DatabaseType.TeleoptiCCC7);
 			if (!helper.Exists())
 			{
 				helper.CreateByDbManager();
@@ -65,16 +61,8 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		{
 			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
 
-			var connStringBuilder = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
-			{
-				InitialCatalog = TestPolutionCleaner.TestTenantDatabaseName
-			};
-			var connString = connStringBuilder.ConnectionString;
-			connStringBuilder.InitialCatalog = TestPolutionCleaner.TestTenantAnalyticsDatabaseName;
-			var connStringAnal = connStringBuilder.ConnectionString;
-
-			var helper = new DatabaseHelper(connString, DatabaseType.TeleoptiCCC7);
-			var helperAnal = new DatabaseHelper(connStringAnal, DatabaseType.TeleoptiAnalytics);
+			var helper = new DatabaseHelper(TestPolutionCleaner.TestTenantConnectionString(), DatabaseType.TeleoptiCCC7);
+			var helperAnal = new DatabaseHelper(TestPolutionCleaner.TestTenantAnalyticsConnectionString(), DatabaseType.TeleoptiAnalytics);
 
 			//make sure dbs exist
 			if (!helper.Exists())
@@ -87,9 +75,14 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 				helperAnal.CreateByDbManager();
 				helperAnal.CreateSchemaByDbManager();
 			}
-			
 
-			var importModel = new ImportDatabaseModel { ConnStringAppDatabase = connString, ConnStringAnalyticsDatabase = connStringAnal, Tenant = RandomName.Make()};
+			var importModel = new ImportDatabaseModel
+			{
+				ConnStringAppDatabase = TestPolutionCleaner.TestTenantConnectionString(),
+				ConnStringAnalyticsDatabase = TestPolutionCleaner.TestTenantAnalyticsConnectionString(),
+				Tenant = RandomName.Make()
+			};
+
 			Target.ImportExisting(importModel).Content.Success
 				.Should().Be.True();
 		}

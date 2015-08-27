@@ -7,7 +7,12 @@ using Teleopti.Wfm.Administration.Models;
 
 namespace Teleopti.Wfm.Administration.Core
 {
-	public class GetImportUsers
+	public interface IGetImportUsers
+	{
+		ConflictModel GetConflictionUsers(string importConnectionString, string userPrefix);
+	}
+
+	public class GetImportUsers : IGetImportUsers
 	{
 		private readonly ICurrentTenantSession _currentTenantSession;
 

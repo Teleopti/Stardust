@@ -1,6 +1,4 @@
-﻿using System;
-using System.Data.SqlClient;
-using System.Web.Http;
+﻿using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Wfm.Administration.Core;
@@ -10,9 +8,9 @@ namespace Teleopti.Wfm.Administration.Controllers
 {
 	public class UpgradeDatabasesController : ApiController
 	{
-		private readonly CheckDatabaseVersions _checkDatabaseVersions;
+		private readonly ICheckDatabaseVersions _checkDatabaseVersions;
 
-		public UpgradeDatabasesController(CheckDatabaseVersions checkDatabaseVersions)
+		public UpgradeDatabasesController(ICheckDatabaseVersions checkDatabaseVersions)
 		{
 			_checkDatabaseVersions = checkDatabaseVersions;
 		}

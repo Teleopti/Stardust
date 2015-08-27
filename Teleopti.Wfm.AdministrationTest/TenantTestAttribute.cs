@@ -29,8 +29,26 @@ namespace Teleopti.Wfm.AdministrationTest
 	{
 		private readonly IDatabaseHelperWrapper _databaseHelperWrapper;
 
-		public string TestTenantDatabaseName = "CF0DA4E0-DC93-410B-976B-EED9C8A34639";
-		public string TestTenantAnalyticsDatabaseName = "B1EDB896-9D23-4BCF-A42F-F1F2EE5DD64B";
+		private string TestTenantDatabaseName = "CF0DA4E0-DC93-410B-976B-EED9C8A34639";
+		private string TestTenantAnalyticsDatabaseName = "B1EDB896-9D23-4BCF-A42F-F1F2EE5DD64B";
+
+		public string TestTenantConnectionString()
+		{
+			return
+				new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
+				{
+					InitialCatalog = TestTenantDatabaseName
+				}.ConnectionString;
+		}
+
+		public string TestTenantAnalyticsConnectionString()
+		{
+			return
+				new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
+				{
+					InitialCatalog = TestTenantAnalyticsDatabaseName
+				}.ConnectionString;
+		}
 
 		public TestPolutionCleaner(IDatabaseHelperWrapper databaseHelperWrapper)
 		{

@@ -2,12 +2,16 @@
 using System.Configuration;
 using System.Data.SqlClient;
 using Teleopti.Ccc.DBManager.Library;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Wfm.Administration.Models;
 
 namespace Teleopti.Wfm.Administration.Core
 {
-	public class CheckDatabaseVersions
+	public interface ICheckDatabaseVersions
+	{
+		VersionResultModel GetVersions(VersionCheckModel versionCheckModel);
+	}
+
+	public class CheckDatabaseVersions : ICheckDatabaseVersions
 	{
 		public VersionResultModel GetVersions(VersionCheckModel versionCheckModel)
 		{

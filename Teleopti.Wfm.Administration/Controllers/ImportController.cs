@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using System.Runtime.Remoting.Lifetime;
-using System.Web.Http;
+﻿using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
@@ -15,12 +13,16 @@ namespace Teleopti.Wfm.Administration.Controllers
 	{
 		private readonly IDatabaseHelperWrapper _databaseHelperWrapper;
 		private readonly ITenantExists _tenantExists;
-		private readonly GetImportUsers _getImportUsers;
-		private readonly CheckDatabaseVersions _checkDatabaseVersions;
+		private readonly IGetImportUsers _getImportUsers;
+		private readonly ICheckDatabaseVersions _checkDatabaseVersions;
 		private readonly Import _import;
 
-		public ImportController(IDatabaseHelperWrapper databaseHelperWrapper, ITenantExists tenantExists,
-			GetImportUsers getImportUsers, CheckDatabaseVersions checkDatabaseVersions, Import import)
+		public ImportController(
+			IDatabaseHelperWrapper databaseHelperWrapper, 
+			ITenantExists tenantExists,
+			IGetImportUsers getImportUsers, 
+			ICheckDatabaseVersions checkDatabaseVersions, 
+			Import import)
 		{
 			_databaseHelperWrapper = databaseHelperWrapper;
 			_tenantExists = tenantExists;

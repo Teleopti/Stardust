@@ -1,28 +1,34 @@
-﻿using System;
-using System.Configuration;
-using System.Data.SqlClient;
-using System.Linq;
+﻿using System.Linq;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Wfm.Administration.Controllers;
+using Teleopti.Wfm.Administration.Core;
 using Teleopti.Wfm.Administration.Models;
 
 namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 {
 	[TenantTest]
-	public class GenerateRtaKeyForTenant
+	public class GenerateRtaKeyForTenant : ISetup
 	{
 		public DatabaseController Database;
 		public ImportController Import;
 		public ILoadAllTenants Tenants;
 		public ITenantUnitOfWork TenantUnitOfWork;
 		public TestPolutionCleaner TestPolutionCleaner;
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.UseTestDouble<DatabaseHelperWrapperFake>().For<IDatabaseHelperWrapper>();
+			system.UseTestDouble<CheckDatabaseVersionsFake>().For<ICheckDatabaseVersions>();
+			system.UseTestDouble<GetImportUsersFake>().For<IGetImportUsers>();
+		}
 
 		[Test]
 		public void ShouldGenerateRtaKeyWhenCreatingDatabases()
@@ -33,7 +39,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			Database.CreateDatabases(new CreateTenantModelForTest
 			{
 				Tenant = "tenant",
-				AppUser = "appuser",
+				//AppUser = "appuser",
 			});
 
 			using (TenantUnitOfWork.Start())
@@ -46,27 +52,27 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
 			TestPolutionCleaner.Clean("tenant", "appuser");
 
-			var connString = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString) { InitialCatalog = TestPolutionCleaner.TestTenantDatabaseName }.ConnectionString;
-			var helper = new DatabaseHelper(connString, DatabaseType.TeleoptiCCC7);
-			if (!helper.Exists())
-			{
-				helper.CreateByDbManager();
-				helper.CreateSchemaByDbManager();
-			}
+			//var connString = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString) { InitialCatalog = TestPolutionCleaner.TestTenantDatabaseName }.ConnectionString;
+			//var helper = new DatabaseHelper(connString, DatabaseType.TeleoptiCCC7);
+			//if (!helper.Exists())
+			//{
+			//	helper.CreateByDbManager();
+			//	helper.CreateSchemaByDbManager();
+			//}
 
-			var connStringAnal = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString) { InitialCatalog = TestPolutionCleaner.TestTenantAnalyticsDatabaseName }.ConnectionString;
-			var helperAnal = new DatabaseHelper(connStringAnal, DatabaseType.TeleoptiAnalytics);
-			if (!helperAnal.Exists())
-			{
-				helperAnal.CreateByDbManager();
-				helperAnal.CreateSchemaByDbManager();
-			}
+			//var connStringAnal = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString) { InitialCatalog = TestPolutionCleaner.TestTenantAnalyticsDatabaseName }.ConnectionString;
+			//var helperAnal = new DatabaseHelper(connStringAnal, DatabaseType.TeleoptiAnalytics);
+			//if (!helperAnal.Exists())
+			//{
+			//	helperAnal.CreateByDbManager();
+			//	helperAnal.CreateSchemaByDbManager();
+			//}
 
 			Import.ImportExisting(
 				new ImportDatabaseModel
 				{
-					ConnStringAppDatabase = connString,
-					ConnStringAnalyticsDatabase = connStringAnal,
+					ConnStringAppDatabase = TestPolutionCleaner.TestTenantConnectionString(),
+					ConnStringAnalyticsDatabase = TestPolutionCleaner.TestTenantAnalyticsConnectionString(),
 					Tenant = "tenant"
 				});
 
@@ -102,5 +108,6 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 				key1.Should().Not.Be.EqualTo(key2);
 			}
 		}
+
 	}
 }

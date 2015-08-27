@@ -28,8 +28,8 @@ namespace Teleopti.Wfm.Administration.Core
 			builder.RegisterModule(new CommonModule(iocConf));
 			builder.RegisterType<AdminTenantAuthentication>().As<ITenantAuthentication>().SingleInstance();
 			builder.RegisterType<DatabaseHelperWrapper>().As<IDatabaseHelperWrapper>().SingleInstance();
-			builder.RegisterType<CheckDatabaseVersions>().SingleInstance();
-			builder.RegisterType<GetImportUsers>().SingleInstance();
+			builder.RegisterType<CheckDatabaseVersions>().As<ICheckDatabaseVersions>().SingleInstance();
+			builder.RegisterType<GetImportUsers>().As<IGetImportUsers>().SingleInstance();
 			builder.RegisterType<LoadAllPersonInfos>().SingleInstance();
 			builder.RegisterType<LoadAllTenants>().As<ILoadAllTenants>().SingleInstance();
 			builder.RegisterType<Import>().SingleInstance();
