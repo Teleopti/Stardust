@@ -261,6 +261,7 @@
     <Compile Include="Common\Clipboard\ClipHandlerTest.cs" />
     <Compile Include="Common\Clipboard\ClipTest.cs" />
     <Compile Include="Common\AbsenceLayerViewModelTest.cs" />
+    <Compile Include="Common\Clipboard\SpecialPasteBehaviourTest.cs" />
     <Compile Include="Common\Collections\FilterExtensionsTest.cs" />
     <Compile Include="Common\Collections\ShowOnlyCollectionTest.cs" />
     <Compile Include="Common\Commands\ApplicationCommandModelTest.cs" />

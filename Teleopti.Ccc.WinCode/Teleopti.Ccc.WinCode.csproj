@@ -303,6 +303,7 @@
     <Compile Include="Common\AbsenceLayerViewModel.cs" />
     <Compile Include="Common\Clipboard\ClipboardSpecialPresenter.cs" />
     <Compile Include="Common\Clipboard\IClipboardSpecialView.cs" />
+    <Compile Include="Common\Clipboard\SpecialPasteBehaviour.cs" />
     <Compile Include="Common\Commands\CommandBehaviors\ActionExecutionStrategy.cs" />
     <Compile Include="Common\Commands\CommandBehaviors\CommandBehavior.cs" />
     <Compile Include="Common\Commands\CommandBehaviors\CommandBehaviorBinding.cs" />
