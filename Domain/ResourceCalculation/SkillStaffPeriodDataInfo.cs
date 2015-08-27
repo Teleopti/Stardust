@@ -10,8 +10,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     {
         private readonly DateTimePeriod _period;
         private readonly IPeriodDistribution _periodDistribution;
-        private Percent _overstaffingFactor;
-        private readonly double _priorityValue;
         private double _originalDemandInMinutes;
 
         public SkillStaffPeriodDataInfo(int originalDemandInMinutes, int assignedResourceInMinutes, DateTimePeriod period, int minimumPersons, int maximumPersons, double absoluteDifferenceScheduledHeadsAndMinMaxHeads, IPeriodDistribution periodDistribution)
@@ -29,8 +27,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             AbsoluteDifferenceScheduledHeadsAndMinMaxHeads = absoluteDifferenceScheduledHeadsAndMinMaxHeads;
             _periodDistribution = periodDistribution;
 
-            _overstaffingFactor = overstaffingFactor;
-            _priorityValue = priorityValue;
 			TweakedCurrentDemand = SkillStaffPeriodCalculator.GetTweakedCurrentDemand(originalDemandInMinutes, assignedResourceInMinutes, overstaffingFactor.Value, priorityValue);
         }
 

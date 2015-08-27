@@ -16,20 +16,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly Func<IWeeklyRestSolverService> _weeklyRestSolverService;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IGroupPersonBuilderForOptimizationFactory _groupPersonBuilderForOptimizationFactory;
-		private readonly IScheduleCommandToggle _toggleManager;
 		private IBackgroundWorkerWrapper _backgroundWorker;
 
 		public WeeklyRestSolverCommand(ITeamBlockInfoFactory teamBlockInfoFactory,
 			ITeamBlockSchedulingOptions teamBlockSchedulingOptions, Func<IWeeklyRestSolverService> weeklyRestSolverService,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
-			IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory, IScheduleCommandToggle toggleManager)
+			IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory)
 		{
 			_teamBlockInfoFactory = teamBlockInfoFactory;
 			_teamBlockSchedulingOptions = teamBlockSchedulingOptions;
 			_weeklyRestSolverService = weeklyRestSolverService;
 			_schedulerStateHolder = schedulerStateHolder;
 			_groupPersonBuilderForOptimizationFactory = groupPersonBuilderForOptimizationFactory;
-			_toggleManager = toggleManager;
 		}
 
 		public void Execute(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> allVisibleMatrixes, IBackgroundWorkerWrapper backgroundWorker)

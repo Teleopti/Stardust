@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization;
 using Teleopti.Interfaces.Domain;
@@ -8,13 +7,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public class TeamBlockMoveTimeBetweenDaysCommand : ITeamBlockMoveTimeBetweenDaysCommand
 	{
-		private readonly IScheduleCommandToggle _toggleManager;
 		private IBackgroundWorkerWrapper _backgroundWorker;
 		private readonly ITeamBlockMoveTimeBetweenDaysService _teamBlockMoveTimeBetweenDaysService;
 
-		public TeamBlockMoveTimeBetweenDaysCommand(IScheduleCommandToggle toggleManager, ITeamBlockMoveTimeBetweenDaysService teamBlockMoveTimeBetweenDaysService)
+		public TeamBlockMoveTimeBetweenDaysCommand(ITeamBlockMoveTimeBetweenDaysService teamBlockMoveTimeBetweenDaysService)
 		{
-			_toggleManager = toggleManager;
 			_teamBlockMoveTimeBetweenDaysService = teamBlockMoveTimeBetweenDaysService;
 		}
 

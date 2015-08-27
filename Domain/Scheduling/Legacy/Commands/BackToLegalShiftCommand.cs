@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
@@ -22,7 +21,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private readonly IBackToLegalShiftService _backToLegalShiftService;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
-		private readonly IScheduleCommandToggle _toggleManager;
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly IOptimizerHelperHelper _optimizerHelper;
 		private IBackgroundWorkerWrapper _backgroundWorker;
@@ -34,7 +32,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ISchedulingOptionsCreator schedulingOptionsCreator,
 			IBackToLegalShiftService backToLegalShiftService,
 			IScheduleDayChangeCallback scheduleDayChangeCallback,
-			IScheduleCommandToggle toggleManager,
 			IResourceOptimizationHelper resourceOptimizationHelper,
 			IOptimizerHelperHelper optimizerHelper)
 		{
@@ -45,7 +42,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_schedulingOptionsCreator = schedulingOptionsCreator;
 			_backToLegalShiftService = backToLegalShiftService;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
-			_toggleManager = toggleManager;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_optimizerHelper = optimizerHelper;
 		}

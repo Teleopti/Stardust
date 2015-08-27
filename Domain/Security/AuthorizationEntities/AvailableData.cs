@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
@@ -14,7 +13,6 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         private readonly ICollection<IBusinessUnit> _availableBusinessUnits;
         private readonly ICollection<ISite> _availableSites;
         private readonly ICollection<ITeam> _availableTeams;
-        private readonly ICollection<IPerson> _availablePersons;
         private AvailableDataRangeOption _availableDataRange;
         private bool? _permissionToPersonNotPartOfOrganization;
         private bool _isDeleted;
@@ -24,7 +22,6 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         /// </summary>
         public AvailableData()
         {
-            _availablePersons = new List<IPerson>();
             _availableTeams = new List<ITeam>();
             _availableSites = new List<ISite>();
             _availableBusinessUnits = new List<IBusinessUnit>();
