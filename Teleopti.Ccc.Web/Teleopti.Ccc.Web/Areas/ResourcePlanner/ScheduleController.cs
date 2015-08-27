@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
@@ -29,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		private readonly Func<IRequiredScheduleHelper> _requiredScheduleHelper;
 		private readonly Func<IGroupPagePerDateHolder> _groupPagePerDateHolder;
 		private readonly Func<IScheduleTagSetter> _scheduleTagSetter;
-		private readonly IScheduleRangePersister _persister;
+		private readonly IScheduleDictionaryPersister _persister;
 		private readonly Func<IPersonSkillProvider> _personSkillProvider;
 		private readonly ViolatedSchedulePeriodBusinessRule _violatedSchedulePeriodBusinessRule;
 		private readonly DayOffBusinessRuleValidation _dayOffBusinessRuleValidation;
@@ -40,7 +39,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			Func<IScheduleCommand> scheduleCommand, Func<ISchedulerStateHolder> schedulerStateHolder,
 			Func<IRequiredScheduleHelper> requiredScheduleHelper, Func<IGroupPagePerDateHolder> groupPagePerDateHolder,
 			Func<IScheduleTagSetter> scheduleTagSetter,
-			Func<IPersonSkillProvider> personSkillProvider, IScheduleRangePersister persister,
+			Func<IPersonSkillProvider> personSkillProvider, IScheduleDictionaryPersister persister,
 			ViolatedSchedulePeriodBusinessRule violatedSchedulePeriodBusinessRule,
 			DayOffBusinessRuleValidation dayOffBusinessRuleValidation)
 		{
@@ -99,11 +98,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				fixedStaffSchedulingService.DayScheduled -= schedulingServiceOnDayScheduled;
 			}
 
-			var conflicts = new List<PersistConflict>();
-			foreach (var schedule in _schedulerStateHolder().Schedules)
-			{
-				conflicts.AddRange(_persister.Persist(schedule.Value));
-			}
+			var conflicts = _persister.Persist(_schedulerStateHolder().Schedules);
 			var scheduleOfSelectedPeople = _schedulerStateHolder().Schedules.Where(x => people.SelectedPeople.Contains(x.Key)).ToList();
 			var voilatedBusinessRules = new List<BusinessRulesValidationResult>();
 

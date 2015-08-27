@@ -25,14 +25,14 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IClassicDaysOffOptimizationCommand _classicDaysOffOptimizationCommand;
 		private readonly Func<IPersonSkillProvider> _personSkillProvider;
-		private readonly IScheduleRangePersister _persister;
+		private readonly IScheduleDictionaryPersister _persister;
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
 
 		public OptimizationController(SetupStateHolderForWebScheduling setupStateHolderForWebScheduling,
 			FixedStaffLoader fixedStaffLoader, IDayOffTemplateRepository dayOffTemplateRepository,
 			IActivityRepository activityRepository, Func<ISchedulerStateHolder> schedulerStateHolder,
 			IClassicDaysOffOptimizationCommand classicDaysOffOptimizationCommand,
-			Func<IPersonSkillProvider> personSkillProvider, IScheduleRangePersister persister, IPlanningPeriodRepository planningPeriodRepository)
+			Func<IPersonSkillProvider> personSkillProvider, IScheduleDictionaryPersister persister, IPlanningPeriodRepository planningPeriodRepository)
 		{
 			_setupStateHolderForWebScheduling = setupStateHolderForWebScheduling;
 			_fixedStaffLoader = fixedStaffLoader;
@@ -80,11 +80,8 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			};
 			_classicDaysOffOptimizationCommand.Execute(allSchedules, period, optimizationPreferences, _schedulerStateHolder(), new NoBackgroundWorker());
 
-			var conflicts = new List<PersistConflict>();
-			foreach (var schedule in _schedulerStateHolder().Schedules)
-			{
-				conflicts.AddRange(_persister.Persist(schedule.Value));
-			}
+			_persister.Persist(_schedulerStateHolder().Schedules);
+
 			planningPeriod.Scheduled();
 			return
 				Ok("Optimization Done");
