@@ -151,25 +151,17 @@ namespace Teleopti.Ccc.WinCode.Common.Clipboard
 				var payLoad = personAbsence.Layer.Payload;
 				var oldAbsencePeriod = personAbsence.Layer.Period;
 
-				var newAbsencePeriod = CalculateNewPeriod(part, oldAbsencePeriod);
-
-				var shiftPeriod = part.PersonAssignment().Period;
-				if (newAbsencePeriod.StartDateTime < shiftPeriod.StartDateTime && PeriodContains(shiftPeriod, oldAbsencePeriod.StartDateTime))
-					newAbsencePeriod = newAbsencePeriod.ChangeStartTime(oldAbsencePeriod.StartDateTime.Subtract(newAbsencePeriod.StartDateTime));
-				if (newAbsencePeriod.EndDateTime > shiftPeriod.EndDateTime && PeriodContains(shiftPeriod, oldAbsencePeriod.EndDateTime))
-					newAbsencePeriod = newAbsencePeriod.ChangeEndTime(oldAbsencePeriod.EndDateTime.Subtract(newAbsencePeriod.EndDateTime));
+				var newAbsencePeriod = calculateNewAbsencePeriod(part, oldAbsencePeriod);
 
 				IAbsenceLayer newLayer = new AbsenceLayer(payLoad, newAbsencePeriod);
 				IPersonAbsence newPersonAbsence = new PersonAbsence(personAbsence.Person, part.Scenario, newLayer);
 				part.Add(newPersonAbsence);
             }
 
-			
-	
             return part;
         }
 
-	    private static DateTimePeriod CalculateNewPeriod(IScheduleDay part, DateTimePeriod oldPeriod)
+	    private static DateTimePeriod calculateNewAbsencePeriod(IScheduleDay part, DateTimePeriod oldPeriod)
 	    {
 		    var oldLenght = oldPeriod.StartDateTime.Subtract(oldPeriod.EndDateTime);
 		    var shortedLength = oldLenght.Add(TimeSpan.FromDays(1));
@@ -178,11 +170,5 @@ namespace Teleopti.Ccc.WinCode.Common.Clipboard
 		    newPeriod = newPeriod.MovePeriod(newLenght);
 		    return newPeriod;
 	    }
-
-		private static bool PeriodContains(DateTimePeriod period, DateTime time)
-		{
-			//InParameter.VerifyDateIsUtc("date", date);
-			return (period.StartDateTime <= time && period.EndDateTime >= time);
-		}
     }
 }
