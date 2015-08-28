@@ -140,7 +140,7 @@ describe("PeopleCartCtrl", function () {
 	}));
 
 	function setUpController($controller) {
-		var stateParams = { selectedPeopleIds: [], commandTag: {} }
+		var stateParams = { selectedPeopleIds: [], commandTag: "AdjustSkill" }
 		return $controller("PeopleCartCtrl", { $stateParams: stateParams, Toggle: mockToggleService, People: mockPeopleService });
 	};
 });

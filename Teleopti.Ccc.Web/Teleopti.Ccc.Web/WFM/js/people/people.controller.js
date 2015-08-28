@@ -24,27 +24,27 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 	$scope.selectedCount = 0;
 	$scope.dataInitialized = false;
 
-	$scope.buttons = [
-	{
-		label: 'ImportUsers',
-		icon: 'mdi-file',
-		action: function() {
-			$scope.toggleImportPeople();
-		},
-		active: function() {
-			return $scope.isImportUsersEnabled;
+	$scope.commands = [
+		{
+			label: 'ImportUsers',
+			icon: 'mdi-file',
+			action: function() {
+				$scope.toggleImportPeople();
+			},
+			active: function() {
+				return $scope.isImportUsersEnabled;
+			}
+		}, {
+			label: 'AdjustSkill',
+			icon: 'mdi-package',
+			action: function() {
+				$scope.gotoSkillPanel();
+			},
+			active: function() {
+				return $scope.isAdjustSkillEnabled && ($scope.selectedCount > 0);
+			}
 		}
-	},
-	{
-		label: 'AdjustSkill',
-		icon: 'mdi-package',
-		action: function () {
-			$scope.gotoSkillPanel();
-		},
-		active: function () {
-			return $scope.isAdjustSkillEnabled && ($scope.selectedCount > 0);
-		}
-	}];
+	];
 
 	$scope.toggleImportPeople = function() {
 		$scope.showImportPanel = !$scope.showImportPanel;

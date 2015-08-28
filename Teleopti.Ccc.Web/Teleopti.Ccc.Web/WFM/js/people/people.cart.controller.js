@@ -32,7 +32,7 @@
 			opened: false
 		};
 
-		vm.buttons = [
+		vm.commands = [
 			{
 				label: 'AdjustSkill',
 				icon: 'mdi-package',
@@ -41,7 +41,11 @@
 				},
 				active: function() {
 					return vm.isAdjustSkillEnabled;
-				}
+				},
+				columns: [
+					{ displayName: 'Skills', field: 'Skills()', headerCellFilter: 'translate' },
+					{ displayName: 'ShiftBag', field: 'ShiftBag', headerCellFilter: 'translate', minWidth: 100 }
+				]
 			}
 		];
 
@@ -61,23 +65,6 @@
 			$mdSidenav('right').close()
 			  .then(function () {
 			  });
-		};
-
-		vm.columnMap = [
-			{
-				tag: "adjustSkill",
-				columns: [
-					{ displayName: 'Skills', field: 'Skills()', headerCellFilter: 'translate'},
-					{ displayName: 'ShiftBag', field: 'ShiftBag', headerCellFilter: 'translate', minWidth: 100 }
-				]
-			}
-		];
-		vm.constructColumns = function () {
-			angular.forEach(vm.columnMap, function (item) {
-				if (item.tag === vm.commandName) {
-					vm.gridOptions.columnDefs = vm.gridOptions.columnDefs.concat(item.columns);
-				}
-			});
 		};
 
 		vm.gridOptions = {
@@ -109,7 +96,7 @@
 			vm.gridOptions.data = result;
 		});
 		vm.updateResult = { Success: false};
-		vm.updateSkillOnPersons = function () {
+		vm.updateSkillOnPersons = function() {
 			vm.processing = true;
 			peopleSvc.updateSkillOnPersons.post({ Date: moment(vm.selectedDate).format('YYYY-MM-DD'), People: vm.availablePeople }).$promise.then(
 				function(result) {
@@ -118,10 +105,11 @@
 						var personOrPeople = vm.updateResult.SuccessCount > 1 ? 'people are' : 'person is';
 						vm.updateResult.SuccessInfo = vm.updateResult.SuccessCount + " " + personOrPeople + " " + "updated successfully!"; //TODO: need localization
 					} else {
-						vm.updateResult.ErrorMsg = "Process failed! Error: " + vm.updateResult.ErrorMsg;//TODO: need localization
+						vm.updateResult.ErrorMsg = "Process failed! Error: " + vm.updateResult.ErrorMsg; //TODO: need localization
 					}
 					vm.processing = false;
-				});
+				}
+			);
 		};
 
 		var promiseForAdjustSkillToggle = toggleSvc.isFeatureEnabled.query({ toggle: 'WfmPeople_AdjustSkill_34138' }).$promise;
@@ -130,6 +118,16 @@
 		});
 
 		function initialize() {
+			for(var i = 0; i < vm.commands.length; i++) {
+				var cmd = vm.commands[i];
+				if (cmd.label.toLowerCase() === $stateParams.commandTag.toLowerCase()) {
+					vm.currentCommand = cmd;
+					break;
+				}
+			};
+
+			vm.gridOptions.columnDefs = vm.gridOptions.columnDefs.concat(vm.currentCommand.columns);
+
 			$q.all([promiseForAdjustSkillToggle, loadSkillPromise, fetchPeoplePromise]).then(function () {
 				angular.forEach(vm.availableSkills, function (skill) {
 					var hasCount = 0;
@@ -160,12 +158,10 @@
 						return ownSkills.length > 0 ? ownSkills.join(", ") : "";
 					}
 				});
-				vm.dataInitialized = true;
-				if (vm.commandName === 'adjustSkill') {
-					vm.toggleSkillPanel();
-				}
-			});
 
+				vm.dataInitialized = true;
+				vm.currentCommand.action();
+			});
 		}
 
 		 vm.skillSelectedStatusChanged = function(skill) {
@@ -178,8 +174,8 @@
 					person.SkillIdList.splice(skillIndex, 1);
 				}
 			});
-		}
-		vm.constructColumns();
+		 }
+
 		initialize();
 	};
 }());

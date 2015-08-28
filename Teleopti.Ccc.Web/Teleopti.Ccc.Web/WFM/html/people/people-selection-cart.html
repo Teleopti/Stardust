@@ -33,8 +33,8 @@
 				 ng-mouseenter=" hovered()" ng-mouseleave="hovered()"
 				 label="{{'Actions'|translate}}"
 				 toggling-method="click" menu-state="closed">
-				<button class="{{button.label|lowercase}}" ng-show="button.active" mfb-button icon="{{button.icon}}" ng-click="button.action()"
-						label="{{button.label|translate}}" ng-repeat="button in vm.buttons"></button>
+				<button class="{{cmd.label|lowercase}}" ng-show="cmd.active" mfb-button icon="{{cmd.icon}}" ng-click="button.action()"
+						label="{{cmd.label|translate}}" ng-repeat="cmd in vm.commands"></button>
 			</nav>
 		</div>
 		<md-sidenav class="md-sidenav-right md-sidenav-skill-panel md-whiteframe-z2" md-component-id="right">
