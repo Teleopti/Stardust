@@ -34,8 +34,8 @@
 
 		vm.commands = [
 			{
-				label: 'AdjustSkill',
-				icon: 'mdi-package',
+				label: "AdjustSkill",
+				icon: "mdi-package",
 				action: function() {
 					vm.toggleSkillPanel();
 				},
