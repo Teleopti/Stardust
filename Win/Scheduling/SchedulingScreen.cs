@@ -1003,6 +1003,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 				{
 					Log.Error("An error occurred when trying to save settings on closing scheduler.", dataSourceException);
 				}
+				catch (NullReferenceException nullReferenceException)
+				{
+					Log.Error("An error occurred when trying to save settings on closing scheduler.", nullReferenceException);	
+				}
 			}
 
 			Cursor.Current = Cursors.Default;
