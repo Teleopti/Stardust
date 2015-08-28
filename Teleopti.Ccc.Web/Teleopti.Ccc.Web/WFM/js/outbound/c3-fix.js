@@ -77,6 +77,11 @@
 		INCLUDED: '_included_'
 	};
 
+	c3.chart.internal.fn.selectPath = function (target, d) {
+		var $$ = this;
+		$$.config.data_onselected.call($$, d, target.node());
+	};
+
 	c3.chart.internal.fn.drag = function (mouse) {
 		var $$ = this, config = $$.config, main = $$.main, d3 = $$.d3;
 		var sx, sy, mx, my, minX, maxX, minY, maxY;
