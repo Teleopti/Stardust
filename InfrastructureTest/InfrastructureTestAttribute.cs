@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 		{
 			base.Setup(system, configuration);
 
-			system.UseTestDouble(new FakeConnectionStrings()).For<IConnectionStrings>();
+			system.UseTestDouble<FakeConnectionStrings>().For<IConnectionStrings>();
 			system.UseTestDouble<MutableFakeCurrentHttpContext>().For<ICurrentHttpContext>();
 			system.UseTestDouble<FakeMessageSender>().For<Interfaces.MessageBroker.Client.IMessageSender>(); // Does not fake all message senders, just adds one to the list
 		}
