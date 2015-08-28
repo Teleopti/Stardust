@@ -10,6 +10,8 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
@@ -42,6 +44,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		public FakeRtaStateGroupRepository RtaStateGroupRepository = new FakeRtaStateGroupRepository();
 		public FakeStateGroupActivityAlarmRepository StateGroupActivityAlarmRepository = new FakeStateGroupActivityAlarmRepository();
 		public FakeAgentStateReadModelReader AgentStateReadModelReader = new FakeAgentStateReadModelReader();
+		public FakeFindTenantByRtaKey FindTenantByRtaKey = new FakeFindTenantByRtaKey();
 
 		private class scheduleLayer2
 		{
@@ -49,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			public ScheduleLayer ScheduleLayer { get; set; }
 		}
 
-		public AgentStateReadModel PersistedAgentStateReadModel { get; set; }
+		public AgentStateReadModel PersistedAgentState { get; set; }
 
 		public IRtaState AddedStateCode
 		{
@@ -170,7 +173,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 					from g in RtaStateGroupRepository.LoadAll()
 					from s in g.StateCollection
 					where s.StateCode == stateCode &&
-					      s.PlatformTypeId == platformTypeIdGuid
+						  s.PlatformTypeId == platformTypeIdGuid
 					select g
 					).FirstOrDefault();
 				if (stateGroup == null)
@@ -268,13 +271,34 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		public void PersistActualAgentReadModel(AgentStateReadModel model)
 		{
 			AgentStateReadModelReader.Has(model);
-			PersistedAgentStateReadModel = model;
+			PersistedAgentState = model;
 		}
 
 		public IEnumerable<PersonOrganizationData> PersonOrganizationData()
 		{
 			return _personOrganizationData;
 		}
+
+		public void WithTenant(string tenant, string key)
+		{
+			FindTenantByRtaKey.Has(new Tenant(tenant) {RtaKey = key});
+		}
+	}
+
+	public class FakeFindTenantByRtaKey : IFindTenantByRtaKey
+	{
+		private readonly List<Tenant> _data = new List<Tenant>();
+
+		public void Has(Tenant tenant)
+		{
+			_data.Add(tenant);
+		}
+
+		public Tenant Find(string rtaKey)
+		{
+			return _data.SingleOrDefault(x => x.RtaKey == rtaKey);
+		}
+
 	}
 
 	public class FakeStateGroupActivityAlarmRepository : IStateGroupActivityAlarmRepository

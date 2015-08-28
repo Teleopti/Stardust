@@ -1,4 +1,3 @@
-using Autofac;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
@@ -7,6 +6,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.DistributedLock;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -54,6 +54,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			builder.UseTestDouble(database.AgentStateReadModelReader).For<IAgentStateReadModelReader>();
 			builder.UseTestDouble(database.RtaStateGroupRepository).For<IRtaStateGroupRepository>();
 			builder.UseTestDouble(database.StateGroupActivityAlarmRepository).For<IStateGroupActivityAlarmRepository>();
+			builder.UseTestDouble(database.FindTenantByRtaKey).For<IFindTenantByRtaKey>();
 		}
 
 		private static void registerFakePublisher(ISystem builder, IIocConfiguration configuration, FakeEventPublisher publisher)

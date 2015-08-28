@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 	{
 		public ExternalUserStateWebModelForTest()
 		{
-			AuthenticationKey = Domain.ApplicationLayer.Rta.Service.Rta.DefaultAuthenticationKey;
+			AuthenticationKey = Domain.ApplicationLayer.Rta.Service.Rta.LegacyAuthenticationKey;
 			PlatformTypeId = Guid.Empty.ToString();
 			SourceId = "sourceId";
 			IsLoggedOn = true;
