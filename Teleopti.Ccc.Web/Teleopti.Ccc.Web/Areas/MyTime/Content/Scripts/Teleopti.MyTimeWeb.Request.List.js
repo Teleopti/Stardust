@@ -57,25 +57,17 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			return (self.RequestTypeEnum() == 2);
 		};
 		
-		self.GetShiftTradeDisplay = function() {
-			if (self.IsSingleDay()) {
-				return Teleopti.MyTimeWeb.Common.FormatDate(self.StartDateTime());
-			} else {
-				return Teleopti.MyTimeWeb.Common.FormatDatePeriod(self.StartDateTime(), self.EndDateTime(), false);
-			}
-		};
-
 		self.GetDateDisplay = function() {
 			if (!(self.StartDateTime() && self.EndDateTime())) {
 				return null;
 			}
 
-			if (self.IsShiftTradeRequest()) {
-				return self.GetShiftTradeDisplay();
-			} else {
+			if (self.IsSingleDay() && (self.IsShiftTradeRequest() || self.IsFullDay()) ) {
+				return Teleopti.MyTimeWeb.Common.FormatDate(self.StartDateTime());
+			} 
 
-				return Teleopti.MyTimeWeb.Common.FormatDatePeriod(self.StartDateTime(), self.EndDateTime(), !self.IsFullDay());
-			}
+			var showTimes = !self.IsShiftTradeRequest() && !self.IsFullDay();
+			return Teleopti.MyTimeWeb.Common.FormatDatePeriod(self.StartDateTime(), self.EndDateTime(), showTimes );
 		};
 
 		self.Dates = ko.computed(function () {
