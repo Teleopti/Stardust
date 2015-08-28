@@ -9,6 +9,7 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
+using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Support.Security;
 using Teleopti.Wfm.Administration.Core;
 

@@ -1,13 +1,9 @@
 using System.Data;
 using System.Data.SqlClient;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Support.Security
 {
-	public interface IUpdateCrossDatabaseView
-	{
-		void Execute(string analyticsDbConnectionString, string aggDatabase);
-	}
-
 	public class UpdateCrossDatabaseView : IUpdateCrossDatabaseView
 	{
 		public void Execute(string analyticsDbConnectionString, string aggDatabase)

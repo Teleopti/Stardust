@@ -121,6 +121,7 @@
     <Compile Include="ControllerActions\GetImportUsersTest.cs" />
     <Compile Include="ControllerActions\GetVersionsTest.cs" />
     <Compile Include="TenantTestAttribute.cs" />
+    <Compile Include="UpdateCrossDatabaseViewFake.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Infrastructure\Teleopti.Ccc.Infrastructure.csproj">
