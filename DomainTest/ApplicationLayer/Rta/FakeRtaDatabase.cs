@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.TestCommon;
@@ -31,6 +32,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		IFakeDataBuilder WithDefaultStateGroup();
 		IFakeDataBuilder WithStateCode(string statecode);
 		IFakeDataBuilder WithExistingState(Guid personId, string stateCode);
+		IFakeDataBuilder WithTenant(string tenant, string key);
 		FakeRtaDatabase Make();
 	}
 
@@ -44,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		public FakeRtaStateGroupRepository RtaStateGroupRepository = new FakeRtaStateGroupRepository();
 		public FakeStateGroupActivityAlarmRepository StateGroupActivityAlarmRepository = new FakeStateGroupActivityAlarmRepository();
 		public FakeAgentStateReadModelReader AgentStateReadModelReader = new FakeAgentStateReadModelReader();
-		public FakeFindTenantByRtaKey FindTenantByRtaKey = new FakeFindTenantByRtaKey();
+		public FakeTenants Tenants = new FakeTenants();
 
 		private class scheduleLayer2
 		{
@@ -279,13 +281,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			return _personOrganizationData;
 		}
 
-		public void WithTenant(string tenant, string key)
+		public IFakeDataBuilder WithTenant(string tenant, string key)
 		{
-			FindTenantByRtaKey.Has(new Tenant(tenant) {RtaKey = key});
+			Tenants.Has(new Tenant(tenant) {RtaKey = key});
+			return this;
 		}
 	}
 
-	public class FakeFindTenantByRtaKey : IFindTenantByRtaKey
+	public class FakeTenants : IFindTenantByRtaKey, ICountTenants, ILoadAllTenants
 	{
 		private readonly List<Tenant> _data = new List<Tenant>();
 
@@ -299,6 +302,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			return _data.SingleOrDefault(x => x.RtaKey == rtaKey);
 		}
 
+		public int Count()
+		{
+			return _data.Count;
+		}
+
+		public IEnumerable<Tenant> Tenants()
+		{
+			return _data.ToArray();
+		}
 	}
 
 	public class FakeStateGroupActivityAlarmRepository : IStateGroupActivityAlarmRepository

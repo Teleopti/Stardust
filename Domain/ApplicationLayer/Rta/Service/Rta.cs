@@ -32,6 +32,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly DataSourceResolver _dataSourceResolver;
 		private readonly ICacheInvalidator _cacheInvalidator;
 		private readonly RtaProcessor _processor;
+		private readonly IFindTenantForRta _findTenantForRta;
+		private readonly IRtaAuthenticator _rtaAuthenticator;
 		private readonly INow _now;
 		private readonly IPersonOrganizationProvider _personOrganizationProvider;
 		private readonly IAgentStateReadModelUpdater _agentStateReadModelUpdater;
@@ -52,8 +54,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IAgentStateReadModelUpdater agentStateReadModelUpdater,
 			IAgentStateMessageSender messageSender,
 			IPersonOrganizationProvider personOrganizationProvider,
-			RtaProcessor processor
-			)
+			RtaProcessor processor,
+			IRtaAuthenticator rtaAuthenticator
+            )
 		{
 			_agentStateReadModelReader = agentStateReadModelReader;
 			_previousStateInfoLoader = previousStateInfoLoader;
@@ -61,6 +64,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_stateMapper = stateMapper;
 			_cacheInvalidator = cacheInvalidator;
 			_processor = processor;
+			_rtaAuthenticator = rtaAuthenticator;
 			_now = now;
 			_personOrganizationProvider = personOrganizationProvider;
 			_agentStateReadModelUpdater = agentStateReadModelUpdater;
@@ -110,7 +114,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			var messageId = Guid.NewGuid();
 
-			verifyAuthenticationKey(input.AuthenticationKey, messageId);
+			verifyAuthenticationKey(input.AuthenticationKey);
 
 			Log.InfoFormat(CultureInfo.InvariantCulture,
 						   "Incoming message: MessageId: {8}, UserCode: {0}, StateCode: {1}, StateDescription: {2}, IsLoggedOn: {3}, PlatformTypeId: {4}, SourceId: {5}, BatchId: {6}, IsSnapshot: {7}.",
@@ -158,7 +162,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			int result;
 			if (input.IsSnapshot && string.IsNullOrEmpty(input.UserCode))
 			{
-				result = closeSnapshot(input, dataSourceId);
+				result = closeSnapshot(input);
 			}
 			else
 			{
@@ -170,7 +174,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return result;
 		}
 
-		private int closeSnapshot(ExternalUserStateInputModel input, int dataSourceId)
+		private int closeSnapshot(ExternalUserStateInputModel input)
 		{
 			input.StateCode = "CCC Logged out";
 			input.PlatformTypeId = Guid.Empty.ToString();
@@ -202,16 +206,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return 1;
 		}
 
-		private void verifyAuthenticationKey(string authenticationKey, Guid messageId)
+		private void verifyAuthenticationKey(string authenticationKey)
 		{
-			if (authenticationKey == _authenticationKey)
-				return;
+			if (authenticationKey.Remove(2, 1) == LegacyAuthenticationKey.Remove(2, 2))
+				authenticationKey = LegacyAuthenticationKey;
 
-			// for test ShouldAcceptIfThirdAndFourthLetterOfAuthenticationKeyIsCorrupted_BecauseOfEncodingIssuesWithThe3rdLetterOfTheDefaultKey
-			if (authenticationKey.Remove(2, 1) == _authenticationKey.Remove(2, 2))
-				return;
+			if (_rtaAuthenticator.Autenticate(authenticationKey)) return;
 
-			Log.ErrorFormat("An invalid authentication key was supplied. AuthenticationKey: {0}. (MessageId: {1})", authenticationKey, messageId);
 			throw new InvalidAuthenticationKeyException("You supplied an invalid authentication key. Please verify the key and try again.");
 		}
 
@@ -257,20 +258,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public void Initialize()
 		{
 			_adherenceAggregator.Initialize();
-		}
-	}
-
-	public class BatchTooBigException : Exception
-	{
-		public BatchTooBigException(string message) : base(message)
-		{
-		}
-	}
-
-	public class InvalidAuthenticationKeyException : Exception
-	{
-		public InvalidAuthenticationKeyException(string message) : base(message)
-		{
 		}
 	}
 }

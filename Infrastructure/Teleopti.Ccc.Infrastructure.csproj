@@ -270,6 +270,7 @@
     <Compile Include="MultiTenancy\Client\TenantCredentials.cs" />
     <Compile Include="MultiTenancy\Client\TenantLogonDataManager.cs" />
     <Compile Include="MultiTenancy\Client\TenantServerConfiguration.cs" />
+    <Compile Include="MultiTenancy\Server\FindTenantForRta.cs" />
     <Compile Include="MultiTenancy\Server\DataSourceConfiguration.cs" />
     <Compile Include="MultiTenancy\Server\Queries\ApplicationUserQueryFake.cs" />
     <Compile Include="MultiTenancy\Server\CheckPasswordStrength.cs" />
@@ -289,6 +290,7 @@
     <Compile Include="MultiTenancy\Server\ICurrentTenant.cs" />
     <Compile Include="MultiTenancy\Server\ICurrentTenantUser.cs" />
     <Compile Include="MultiTenancy\Server\Queries\FindTenantByRtaKey.cs" />
+    <Compile Include="MultiTenancy\Server\Queries\ICountTenants.cs" />
     <Compile Include="MultiTenancy\Server\Queries\IdentityUserQueryFake.cs" />
     <Compile Include="MultiTenancy\Server\Queries\IFindLogonInfo.cs" />
     <Compile Include="MultiTenancy\Server\Queries\IFindPersonInfo.cs" />

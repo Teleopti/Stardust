@@ -88,6 +88,10 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			{
 				throw new FaultException<InvalidAuthenticationKeyException>(e);
 			}
+			catch (LegacyAuthenticationKeyException e)
+			{
+				throw new FaultException<LegacyAuthenticationKeyException>(e);
+			}
 			catch (BatchTooBigException e)
 			{
 				throw new FaultException<BatchTooBigException>(e);

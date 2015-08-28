@@ -8,6 +8,8 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Aop;
+using Teleopti.Ccc.Infrastructure.MultiTenancy;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Interfaces.Domain;
 
@@ -133,6 +135,16 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterMbCacheComponent<PersonOrganizationProvider, IPersonOrganizationProvider>().SingleInstance();
 
 			builder.RegisterType<PersonOrganizationReader>().SingleInstance().As<IPersonOrganizationReader>();
+
+			if (_config.Toggle(Toggles.RTA_MultiTenancy_32539))
+			{
+				builder.RegisterType<RtaTenantAuthenticator>().As<IRtaAuthenticator>().SingleInstance();
+				builder.RegisterType<FindTenantForRta>().As<IFindTenantForRta>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<RtaAuthenticator>().As<IRtaAuthenticator>().SingleInstance();
+			}
 		}
 	}
 
