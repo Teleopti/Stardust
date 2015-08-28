@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			_team = team;
 			_personSkillCollection = new HashSet<IPersonSkill>();
 			_externalLogOnCollection = new HashSet<IExternalLogOn>();
-			_startDate = _startDate >= new DateOnly(2059, 12, 31) ? new DateOnly(2059, 12, 30) : startDate;
+			_startDate = startDate >= new DateOnly(2059, 12, 31) ? new DateOnly(2059, 12, 30) : startDate;
 		}
 
 		public virtual DateOnly StartDate
