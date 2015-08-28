@@ -41,7 +41,6 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			Database.CreateDatabases(new CreateTenantModelForTest
 			{
 				Tenant = "tenant",
-				//AppUser = "appuser",
 			});
 
 			using (TenantUnitOfWork.Start())
@@ -53,23 +52,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		{
 			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
 			TestPolutionCleaner.Clean("tenant", "appuser");
-
-			//var connString = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString) { InitialCatalog = TestPolutionCleaner.TestTenantDatabaseName }.ConnectionString;
-			//var helper = new DatabaseHelper(connString, DatabaseType.TeleoptiCCC7);
-			//if (!helper.Exists())
-			//{
-			//	helper.CreateByDbManager();
-			//	helper.CreateSchemaByDbManager();
-			//}
-
-			//var connStringAnal = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString) { InitialCatalog = TestPolutionCleaner.TestTenantAnalyticsDatabaseName }.ConnectionString;
-			//var helperAnal = new DatabaseHelper(connStringAnal, DatabaseType.TeleoptiAnalytics);
-			//if (!helperAnal.Exists())
-			//{
-			//	helperAnal.CreateByDbManager();
-			//	helperAnal.CreateSchemaByDbManager();
-			//}
-
+			
 			Import.ImportExisting(
 				new ImportDatabaseModel
 				{
