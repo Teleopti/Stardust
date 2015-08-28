@@ -150,6 +150,56 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
             return retList;
         }
 
+		 public static IList<IPerson> CreatePersonGraphCollectionWithInfinitStart()
+		  {
+			  IList<IPerson> retList = new List<IPerson>();
+
+			  IBusinessUnit businessUnitGraph = BusinessUnitFactory.CreateBusinessUnitWithSitesAndTeams();
+			  businessUnitGraph.SetId(Guid.NewGuid());
+
+			  //Add a scorecard to one of the teams
+			  var _updatedOnDateTime = DateTime.Now;
+			  var scorecards = ScorecardFactory.CreateScorecardCollection(_updatedOnDateTime);
+			  businessUnitGraph.SiteCollection[0].TeamCollection[0].Scorecard = scorecards[0];
+
+			  //Agent with two periods
+			  IPerson person = Ccc.TestCommon.FakeData.PersonFactory.CreatePerson("kalle", "kula");
+			  person.SetId(Guid.NewGuid());
+			  person.EmploymentNumber = "4321";
+			  person.PermissionInformation.SetDefaultTimeZone(
+				  //(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
+					(TimeZoneInfo.FindSystemTimeZoneById("FLE Standard Time")));
+			  //FLE Standard Time
+			  IPersonContract personContract = PersonContractFactory.CreatePersonContract("PartTime", "xxx", "100");
+			  personContract.Contract.SetId(Guid.NewGuid());
+			  personContract.PartTimePercentage.SetId(Guid.NewGuid());
+
+			  //kolla "100"
+		  DateOnly date1 = new DateOnly(5051, 1, 1);
+			  IPersonPeriod personPeriod =
+					PersonPeriodFactory.CreatePersonPeriod(date1, personContract, businessUnitGraph.SiteCollection[0].TeamCollection[0]);
+			  personPeriod.SetId(Guid.NewGuid());
+
+			  person.AddPersonPeriod(personPeriod); //what happens when overlapping periods
+
+			  IPersonSkill skill = PersonSkillFactory.CreatePersonSkill("MySkill", 1);
+			  skill.Skill.SetId(Guid.NewGuid());
+			  person.AddSkill(skill, personPeriod);
+
+			  IExternalLogOn login = ExternalLogOnFactory.CreateExternalLogOn();
+			  person.AddExternalLogOn(login, personPeriod);
+
+			  businessUnitGraph.SiteCollection[0].SetId(Guid.NewGuid());
+			  businessUnitGraph.SiteCollection[1].SetId(Guid.NewGuid());
+			  businessUnitGraph.SiteCollection[0].TeamCollection[0].SetId(Guid.NewGuid());
+			  businessUnitGraph.SiteCollection[1].TeamCollection[0].SetId(Guid.NewGuid());
+			  RaptorTransformerHelper.SetUpdatedOn(person, DateTime.Now);
+			  retList.Add(person);
+
+
+			  return retList;
+		  }
+
         private static IApplicationRole getApplicationRole(string roleName, bool isViewPermission, bool isCreatePermission)
         {
             IList<IApplicationFunction> applicationFunctions = new List<IApplicationFunction>();
