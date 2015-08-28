@@ -76,11 +76,23 @@
 		SELECTED: '_selected_',
 		INCLUDED: '_included_'
 	};
-
-	c3.chart.internal.fn.selectPath = function (target, d) {
-		var $$ = this;
-		$$.config.data_onselected.call($$, d, target.node());
-	};
+	
+	c3.applyFix = function() {
+		c3.chart.internal.fn.selectPath = function (target, d) {
+			var $$ = this;
+			$$.config.data_onselected.call($$, d, target.node());
+		};
+	}
+	c3.restoreFix = function() {
+		c3.chart.internal.fn.selectPath = function (target, d) {
+			var $$ = this;
+			$$.config.data_onselected.call($$, d, target.node());
+			target.transition().duration(100).style("fill",
+			function () {
+				return $$.d3.rgb($$.color(d)).brighter(0.75);
+			});
+		};
+	}
 
 	c3.chart.internal.fn.drag = function (mouse) {
 		var $$ = this, config = $$.config, main = $$.main, d3 = $$.d3;

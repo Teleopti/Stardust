@@ -72,7 +72,7 @@
 			}
 
 			function generateChart() {
-
+				if (c3.applyFix) c3.applyFix();
 				var chartOptions = {
 					bindto: '#Chart_' + $scope.campaign.Id,
 					size: { height: 450 },

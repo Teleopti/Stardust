@@ -114,6 +114,11 @@
 
 	    $scope.displayLoading = displayLoading;
 
+		$scope.$on('$destroy', function() {
+			if (c3.restoreFix) c3.restoreFix();
+		});
+
+
         function init() {         
             outboundService.getCampaignStatistics(null, function success(data) {
                 $scope.phaseStatistics = data;
