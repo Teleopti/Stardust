@@ -82,21 +82,16 @@ namespace Teleopti.Ccc.TestCommon
 			createDatabase(ccc7());
 			createUniqueIndexOnPersonAssignmentBecauseDbManagerIsntRunFromTests();
 			PersistAuditSetting();
-			remove_default_tenant_because_connstrings_arent_set_due_to_securityexe_isnt_run_from_webscenarios();
-			persistDefaultTenant(name);
+			update_default_tenant_because_connstrings_arent_set_due_to_securityexe_isnt_run_from_infra_test_projs(name);
 			backupDatabase(ccc7(), 0);
 		}
 
-		private static void remove_default_tenant_because_connstrings_arent_set_due_to_securityexe_isnt_run_from_webscenarios()
+		private static void update_default_tenant_because_connstrings_arent_set_due_to_securityexe_isnt_run_from_infra_test_projs(string name)
 		{
-			ccc7().ExecuteSql("delete from tenant.tenant");
+			ccc7().ExecuteSql(string.Format("update tenant.tenant set name = '{0}', applicationconnectionstring = '{1}', analyticsconnectionstring = '{2}'",
+				name, ccc7().ConnectionString, analytics().ConnectionString));
 		}
-
-		private static void persistDefaultTenant(string name)
-		{
-			ccc7().ExecuteSql(string.Format("insert into tenant.tenant (name, applicationconnectionstring, analyticsconnectionstring) values ('{0}', '{1}','{2}')", name, ccc7().ConnectionString, analytics().ConnectionString));
-		}
-
+		
 		private static void setupAnalytics()
 		{
 			if (tryRestoreDatabase(analytics(), 0))
