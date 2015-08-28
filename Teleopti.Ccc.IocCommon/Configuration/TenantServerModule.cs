@@ -1,11 +1,9 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
@@ -26,6 +24,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ApplicationUserQuery>().As<IApplicationUserQuery>().SingleInstance();
 			builder.RegisterType<FindPersonInfo>().As<IFindPersonInfo>().SingleInstance();
 			builder.RegisterType<FindPersonInfoByCredentials>().As<IFindPersonInfoByCredentials>().SingleInstance();
+			builder.RegisterType<FindTenantByRtaKey>().As<IFindTenantByRtaKey>().SingleInstance();
 
 			builder.RegisterType<FindPersonInfoByIdentity>().As<IFindPersonInfoByIdentity>().SingleInstance();
 			builder.Register(c =>

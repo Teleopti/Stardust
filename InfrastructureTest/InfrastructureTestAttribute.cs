@@ -1,9 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Configuration;
-using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Web;
@@ -27,6 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 			var config = base.Config();
 			config.FakeConnectionString("RtaApplication", ConnectionStringHelper.ConnectionStringUsedInTests);
 			config.FakeConnectionString("MessageBroker", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
+			config.FakeConnectionString("Tenancy", ConnectionStringHelper.ConnectionStringUsedInTests);
 			return config;
 		}
 
@@ -46,18 +43,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 			base.Setup(system, configuration);
 
 			system.UseTestDouble(new FakeDatabaseConnectionStringHandler()).For<IDatabaseConnectionStringHandler>();
-
-			//system.UseTestDouble(new FakeConfigReader
-			//{
-			//	ConnectionStrings_DontUse = new ConnectionStringSettingsCollection
-			//	{
-			//		new ConnectionStringSettings("RtaApplication", ConnectionStringHelper.ConnectionStringUsedInTests),
-			//		new ConnectionStringSettings("MessageBroker", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix)
-			//	}
-			//}).For<IConfigReader>();
-
 			system.UseTestDouble<MutableFakeCurrentHttpContext>().For<ICurrentHttpContext>();
-
 			system.UseTestDouble<FakeMessageSender>().For<Interfaces.MessageBroker.Client.IMessageSender>(); // Does not fake all message senders, just adds one to the list
 		}
 

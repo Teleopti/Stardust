@@ -209,12 +209,14 @@
     <Compile Include="MultiTenancy\Server\Queries\FindPersonInfoByCredentialsTest.cs" />
     <Compile Include="MultiTenancy\Server\Queries\FindPersonInfoByIdentityTest.cs" />
     <Compile Include="MultiTenancy\Server\Queries\FindPersonInfoTest.cs" />
+    <Compile Include="MultiTenancy\Server\Queries\FindTenantByRtaKeyTest.cs" />
     <Compile Include="MultiTenancy\Server\Queries\IdentityUserQueryTest.cs" />
     <Compile Include="MultiTenancy\Server\Queries\PersistLogonAttemptTest.cs" />
     <Compile Include="MultiTenancy\Server\NHibernate\TenantUnitOfWorkManagerTest.cs" />
     <Compile Include="MultiTenancy\Server\Queries\PersistPersonInfoTest.cs" />
     <Compile Include="MultiTenancy\Server\Queries\PersistTenantTest.cs" />
     <Compile Include="MultiTenancy\Client\TenantClientTestAttribute.cs" />
+    <Compile Include="MultiTenancy\TenantTestAttribute.cs" />
     <Compile Include="MultiTenancy\SessionExtension.cs" />
     <Compile Include="Persisters\Schedules\NoUnitOfWorkModifyNoConflictTest.cs" />
     <Compile Include="Rta\PublishRtaEventsToHangfireTest.cs" />
