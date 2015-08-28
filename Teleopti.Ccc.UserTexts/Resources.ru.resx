@@ -9286,7 +9286,7 @@ Teleopti R&amp;D</value>
     <value>У вас есть право доступа на просмотр ограниченных сценариев, но не для выбранных дат и групп.</value>
   </data>
   <data name="RunningBackgroundJob" xml:space="preserve">
-    <value>Выпоняется фоновая задача</value>
+    <value>Выполняется фоновая задача</value>
   </data>
   <data name="ExtendingAndReducingDaysoff" xml:space="preserve">
     <value>Увеличение или уменьшение выходных для гибких операторов</value>
