@@ -271,15 +271,13 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			PersonInfrastructure.AddColumnsToDataTable(table);
 			AcdLogOnPersonInfrastructure.AddColumnsToDataTable(acdTable);
 			PersonTransformer.Transform(personCollection, _intervalsPerDay, new DateOnly(2000, 1, 1), table, acdTable,
-				_commonNameDescriptionSetting);
+				_commonNameDescriptionSetting,new List<LogonInfo>());
 			var validFromDate = timeZoneInfo.SafeConvertTimeToUtc( new DateTime(2059, 12, 30));
 			Assert.AreEqual(validFromDate, table.Rows[0]["valid_from_date"]);
 			Assert.AreEqual(validFromDate, table.Rows[0]["employment_start_date"]);
 			Assert.AreEqual(new DateTime(2059, 12, 30), table.Rows[0]["valid_from_date_local"]);
 			Assert.AreEqual(validFromDate, acdTable.Rows[0]["start_date"]);
 		}
-
 		
-		}
 	}
 }
