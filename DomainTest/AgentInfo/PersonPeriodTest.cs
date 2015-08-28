@@ -363,5 +363,13 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
             _target.AddPersonNonBlendSkill(personSkill);
             mocks.VerifyAll();
         }
+
+		[Test]
+		public void ShouldModifyStartDateIfInFarFuture()
+		{
+			_target = new PersonPeriod(new DateOnly(5051, 12, 5), PersonContractFactory.CreatePersonContract(), TeamFactory.CreateSimpleTeam("Team2"));
+			Assert.AreEqual(_target.StartDate, new DateOnly(2059,12,30));
+		}
+
 	}
 }

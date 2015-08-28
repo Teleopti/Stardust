@@ -35,8 +35,11 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			ICommonNameDescriptionSetting commonNameDescriptionSetting, IEnumerable<LogonInfo> logonInfos)
 		{
 			DataRow row = table.NewRow();
-
+				
+			  var customEternity = new DateTime(2059, 12, 30);
 			DateTime validFromDate = timeZoneInfo.SafeConvertTimeToUtc(personPeriod.StartDate.Date);
+				if (isDateInFuture(validFromDate))
+					validFromDate = customEternity;
 			DateTime validToDate = getPeriodEndDate(personPeriod.EndDate().Date, timeZoneInfo);
 			row["person_code"] = person.Id;
 			row["valid_from_date"] = validFromDate;
@@ -69,7 +72,10 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			row["business_unit_code"] = personPeriod.Team.BusinessUnitExplicit.Id;
 			row["business_unit_name"] = personPeriod.Team.BusinessUnitExplicit.Name;
 			row["employment_number"] = person.EmploymentNumber;
-			row["employment_start_date"] = timeZoneInfo.SafeConvertTimeToUtc(personPeriod.StartDate.Date);
+				if (isDateInFuture(personPeriod.StartDate.Date))
+					row["employment_start_date"] = customEternity;
+				else
+					row["employment_start_date"] = timeZoneInfo.SafeConvertTimeToUtc(personPeriod.StartDate.Date);
 			row["employment_end_date"] = validToDate;
 			row["is_agent"] = person.IsAgent(insertDate);
 			row["is_user"] = false; //Actually "Not Defined"
@@ -89,10 +95,22 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			var logOn = getLogonInfo(person, logonInfos);
 			row["windows_domain"] = logOn.Item1;
 			row["windows_username"] = logOn.Item2;
-			row["valid_from_date_local"] = personPeriod.StartDate.Date;
-			row["valid_to_date_local"] = personPeriod.EndDate().Date;
+            if (isDateInFuture(personPeriod.StartDate.Date))
+					row["valid_from_date_local"] = customEternity;
+				else	
+					row["valid_from_date_local"] = personPeriod.StartDate.Date;
+				if (isDateInFuture(personPeriod.EndDate().Date))
+					row["valid_to_date_local"] = new DateTime(2059, 12, 31);
+				else
+					row["valid_to_date_local"] = personPeriod.EndDate().Date;
 			table.Rows.Add(row);
 		}
+		
+		private static bool isDateInFuture(DateTime date)
+		{
+			return date >= new DateTime(2059, 12, 31);
+		}
+
 
 		private static Tuple<string, string> getLogonInfo(IPerson person, IEnumerable<LogonInfo> logonInfos)
 		{
@@ -105,6 +123,8 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 		private static void externalLogOnPerson(IPerson person, DataTable acdLoginTable, TimeZoneInfo timeZoneInfo, IPersonPeriod personPeriod)
 		{
 			DateTime validFromDate = timeZoneInfo.SafeConvertTimeToUtc(personPeriod.StartDate.Date);
+				if (isDateInFuture(validFromDate))
+					validFromDate = new DateTime(2059, 12, 30);
 			DateTime validToDate = getPeriodEndDate(personPeriod.EndDate().Date, timeZoneInfo);
 
 			foreach (IExternalLogOn externalLogOn in personPeriod.ExternalLogOnCollection)
