@@ -132,9 +132,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IPersonOrganizationProvider>();
 			builder.RegisterMbCacheComponent<PersonOrganizationProvider, IPersonOrganizationProvider>().SingleInstance();
 
-			//messy for now
-			builder.Register(c => new PersonOrganizationReader(c.Resolve<INow>(), c.Resolve<IConnectionStrings>().Application()))
-				.SingleInstance().As<IPersonOrganizationReader>();
+			builder.RegisterType<PersonOrganizationReader>().SingleInstance().As<IPersonOrganizationReader>();
 		}
 	}
 
