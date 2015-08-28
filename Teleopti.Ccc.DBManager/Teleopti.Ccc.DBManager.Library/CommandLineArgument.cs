@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using Teleopti.Ccc.DBManager.Library;
 
-namespace Teleopti.Ccc.DBManager
+namespace Teleopti.Ccc.DBManager.Library
 {
     public class CommandLineArgument
     {

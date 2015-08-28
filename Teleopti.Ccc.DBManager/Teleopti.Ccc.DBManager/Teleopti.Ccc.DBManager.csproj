@@ -87,7 +87,6 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="CommandLineArgument.cs" />
     <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>

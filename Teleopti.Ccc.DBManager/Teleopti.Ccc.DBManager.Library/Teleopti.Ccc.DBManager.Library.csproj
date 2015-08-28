@@ -71,9 +71,11 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="CommandLineArgument.cs" />
     <Compile Include="DatabaseCreator.cs" />
     <Compile Include="DatabaseFolder.cs" />
     <Compile Include="DatabaseHelper.cs" />
+    <Compile Include="DatabasePatcher.cs" />
     <Compile Include="DatabaseSchemaCreator.cs" />
     <Compile Include="DatabaseType.cs" />
     <Compile Include="DatabaseVersionInformation.cs" />
