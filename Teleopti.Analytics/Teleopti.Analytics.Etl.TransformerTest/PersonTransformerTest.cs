@@ -239,6 +239,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 		  public void ShouldModifyPersonPeriodStartDateIfItsInFarFuture()
 		  {
 			  var personCollection = PersonFactory.CreatePersonGraphCollectionWithInfinitStart();
+			  TimeZoneInfo timeZoneInfo = personCollection[0].PermissionInformation.DefaultTimeZone();
 			  var table = new DataTable();
 			  table.Locale = Thread.CurrentThread.CurrentCulture;
 			  var acdTable = new DataTable();
@@ -246,11 +247,11 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 			  PersonInfrastructure.AddColumnsToDataTable(table);
 			  AcdLogOnPersonInfrastructure.AddColumnsToDataTable(acdTable);
 			  PersonTransformer.Transform(personCollection, _intervalsPerDay, new DateOnly(2000, 1, 1), table, acdTable,
-				  _commonNameDescriptionSetting);
-			  var validFromDate = new DateTime(2059, 12, 30);
+				_commonNameDescriptionSetting);
+			  var validFromDate = timeZoneInfo.SafeConvertTimeToUtc(new DateTime(2059, 12, 30));
 			  Assert.AreEqual(validFromDate, table.Rows[0]["valid_from_date"]);
 			  Assert.AreEqual(validFromDate, table.Rows[0]["employment_start_date"]);
-			  Assert.AreEqual(validFromDate, table.Rows[0]["valid_from_date_local"]);
+			  Assert.AreEqual(new DateTime(2059, 12, 30), table.Rows[0]["valid_from_date_local"]);
 			  Assert.AreEqual(validFromDate, acdTable.Rows[0]["start_date"]);
 		  }
     }
