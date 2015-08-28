@@ -16,7 +16,7 @@ namespace Teleopti.Support.Security
 		private static readonly ICommandLineCommand ForecasterDateAdjustment = new ForecasterDateAdjustment();
 		private static readonly ICommandLineCommand PersonFirstDayOfWeekSetter = new PersonFirstDayOfWeekSetter();
 		private static readonly ICommandLineCommand LicenseStatusChecker = new LicenseStatusChecker();
-		private static readonly ICommandLineCommand CrossDatabaseViewUpdate = new CrossDatabaseViewUpdate();
+		private static readonly ICommandLineCommand CrossDatabaseViewUpdate = new CrossDatabaseViewUpdate(new UpdateCrossDatabaseView());
 		private static readonly ICommandLineCommand DelayedDataConvert = new DelayedDataConvert();
 		private static readonly ICommandLineCommand reportTextCommand = new ReportTextsCommand();
 		private static readonly ILog log = LogManager.GetLogger(typeof(Program));

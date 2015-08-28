@@ -24,6 +24,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private readonly ILoadAllTenants _loadAllTenants;
 		private readonly ICheckPasswordStrength _checkPasswordStrength;
 		private readonly PersistTenant _persistTenant;
+		private readonly IUpdateCrossDatabaseView _updateCrossDatabaseView;
 
 		private readonly bool isAzure =  !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME"));
 
@@ -34,7 +35,8 @@ namespace Teleopti.Wfm.Administration.Controllers
 			IDbPathProvider dbPathProvider, 
 			ILoadAllTenants loadAllTenants, 
 			ICheckPasswordStrength checkPasswordStrength,
-			PersistTenant persistTenant)
+			PersistTenant persistTenant,
+			IUpdateCrossDatabaseView updateCrossDatabaseView)
 		{
 			_databaseHelperWrapper = databaseHelperWrapper;
 			_currentTenantSession = currentTenantSession;
@@ -43,6 +45,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			_loadAllTenants = loadAllTenants;
 			_checkPasswordStrength = checkPasswordStrength;
 			_persistTenant = persistTenant;
+			_updateCrossDatabaseView = updateCrossDatabaseView;
 		}
 
 
@@ -79,9 +82,9 @@ namespace Teleopti.Wfm.Administration.Controllers
 			_databaseHelperWrapper.CreateDatabase(createAggDbConnectionString(model), DatabaseType.TeleoptiCCCAgg, dbPath, model.AppUser, isAzure);
 
 			if (isAzure)
-				UpdateCrossDatabaseView.Execute(createAnalyticsDbConnectionString(model), model.Tenant + "_TeleoptiWfmAnalytics");
+				_updateCrossDatabaseView.Execute(createAnalyticsDbConnectionString(model), model.Tenant + "_TeleoptiWfmAnalytics");
 			else
-				UpdateCrossDatabaseView.Execute(createAnalyticsDbConnectionString(model), model.Tenant + "_TeleoptiWfmAgg");
+				_updateCrossDatabaseView.Execute(createAnalyticsDbConnectionString(model), model.Tenant + "_TeleoptiWfmAgg");
 
 			var newTenant = new Tenant(model.Tenant);
 			newTenant.DataSourceConfiguration.SetApplicationConnectionString(appConnectionString(model));

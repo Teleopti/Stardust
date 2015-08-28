@@ -13,6 +13,7 @@ using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Support.Security;
 using Teleopti.Wfm.Administration.Controllers;
 
 namespace Teleopti.Wfm.Administration.Core
@@ -28,6 +29,7 @@ namespace Teleopti.Wfm.Administration.Core
 			builder.RegisterModule(new CommonModule(iocConf));
 			builder.RegisterType<AdminTenantAuthentication>().As<ITenantAuthentication>().SingleInstance();
 			builder.RegisterType<DatabaseHelperWrapper>().As<IDatabaseHelperWrapper>().SingleInstance();
+			builder.RegisterType<UpdateCrossDatabaseView>().As<IUpdateCrossDatabaseView>().SingleInstance();
 			builder.RegisterType<CheckDatabaseVersions>().As<ICheckDatabaseVersions>().SingleInstance();
 			builder.RegisterType<GetImportUsers>().As<IGetImportUsers>().SingleInstance();
 			builder.RegisterType<LoadAllPersonInfos>().SingleInstance();

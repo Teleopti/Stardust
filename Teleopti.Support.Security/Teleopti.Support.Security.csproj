@@ -91,6 +91,7 @@
     </Compile>
     <Compile Include="DelayedDataConvert.cs" />
     <Compile Include="IDatabaseArguments.cs" />
+    <Compile Include="UpdateCrossDatabaseView.cs" />
     <Compile Include="UpgradeRunner.cs" />
     <Compile Include="ReportTextsCommand.cs" />
     <Compile Include="CrossDatabaseViewUpdate.cs" />
