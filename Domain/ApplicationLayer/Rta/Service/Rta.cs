@@ -32,7 +32,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly DataSourceResolver _dataSourceResolver;
 		private readonly ICacheInvalidator _cacheInvalidator;
 		private readonly RtaProcessor _processor;
-		private readonly IFindTenantForRta _findTenantForRta;
 		private readonly IRtaAuthenticator _rtaAuthenticator;
 		private readonly INow _now;
 		private readonly IPersonOrganizationProvider _personOrganizationProvider;
