@@ -18,32 +18,47 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public ImportController Target;
 		public TestPolutionCleaner TestPolutionCleaner;
 
-		[Test]
-		public void ShouldReturnSuccessFalseIfNotAllPropertiesAreSet()
-		{
-			var importModel = new ImportDatabaseModel { AppDatabase = RandomName.Make(), AnalyticsDatabase = RandomName.Make(), Server = RandomName.Make()};
-			bool result = Target.ImportExisting(importModel).Content.Success;
-			result.Should().Be.False();
-		}
-
+		
 		[Test]
 		public void ShouldReturnSuccessFalseIfAnalDatabaseNotExists()
 		{
-			var connStringBuilder = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
-			
-			var helper = new DatabaseHelper(TestPolutionCleaner.TestTenantConnectionString(), DatabaseType.TeleoptiCCC7);
-			var helperAnal = new DatabaseHelper(TestPolutionCleaner.TestTenantAnalyticsConnectionString(), DatabaseType.TeleoptiAnalytics);
-				AppDatabase = connStringBuilder.InitialCatalog,
-				Server = connStringBuilder.DataSource,
-				UserName = connStringBuilder.UserID,
-				Password = connStringBuilder.Password,
-				AnalyticsDatabase = RandomName.Make()
+			var connStringBuilder = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
+			{
+				UserID = "appuser",
+				Password = "password",
+				IntegratedSecurity = false
+			};
 
 			var importModel = new ImportDatabaseModel
 			{
-				ConnStringAppDatabase = TestPolutionCleaner.TestTenantConnectionString(),
-				ConnStringAnalyticsDatabase = TestPolutionCleaner.TestTenantAnalyticsConnectionString(),
-				Tenant = RandomName.Make()
+				Server = connStringBuilder.DataSource,
+				UserName = connStringBuilder.UserID,
+				Password = connStringBuilder.Password,
+				AppDatabase = connStringBuilder.InitialCatalog,
+				AnalyticsDatabase = RandomName.Make()
+			};
+			Target.ImportExisting(importModel).Content.Success
+				.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldReturnSuccessFalseIfAppDatabaseNotExists()
+		{
+			var connStringBuilder = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
+			{
+				InitialCatalog = Guid.NewGuid().ToString(),
+				UserID = "appuser",
+				Password = "password",
+				IntegratedSecurity = false
+			};
+
+			var importModel = new ImportDatabaseModel
+			{
+				Server = connStringBuilder.DataSource,
+				UserName = connStringBuilder.UserID,
+				Password = connStringBuilder.Password,
+				AppDatabase = RandomName.Make(),
+				AnalyticsDatabase = connStringBuilder.InitialCatalog
 			};
 			Target.ImportExisting(importModel).Content.Success
 				.Should().Be.False();

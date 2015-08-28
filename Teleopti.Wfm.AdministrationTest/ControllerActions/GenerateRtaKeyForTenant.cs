@@ -9,6 +9,7 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Support.Security;
 using Teleopti.Wfm.Administration.Controllers;
 using Teleopti.Wfm.Administration.Core;
 using Teleopti.Wfm.Administration.Models;
@@ -38,7 +39,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
 			TestPolutionCleaner.Clean("tenant", "appuser");
 
-			Database.CreateDatabases(new CreateTenantModelForTest
+			var result = Database.CreateDatabases(new CreateTenantModelForTest
 			{
 				Tenant = "tenant",
 			});
@@ -53,16 +54,14 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
 			TestPolutionCleaner.Clean("tenant", "appuser");
 			
-				helper.AddPermissions("appuser");
-				helperAnal.AddPermissions("appuser");
 			Import.ImportExisting(
 				new ImportDatabaseModel
 				{
-					Server = connStringBuilder.DataSource,
-					AppDatabase = connStringBuilder.InitialCatalog,
-					UserName = "appuser",
-					Password = "SomeG00dpw",
-					AnalyticsDatabase = connStringBuilderAnal.InitialCatalog,
+					Server = TestPolutionCleaner.TestTenantConnection().DataSource,
+					UserName = "dbcreatorperson",
+					Password = "password",
+					AppDatabase = TestPolutionCleaner.TestTenantConnection().InitialCatalog,
+					AnalyticsDatabase = TestPolutionCleaner.TestTenantAnalyticsConnection().InitialCatalog,
 					Tenant = "tenant"
 				});
 

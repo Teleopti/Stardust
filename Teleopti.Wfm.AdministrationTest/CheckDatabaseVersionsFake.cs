@@ -5,7 +5,7 @@ namespace Teleopti.Wfm.AdministrationTest
 {
 	public class CheckDatabaseVersionsFake : ICheckDatabaseVersions
 	{
-		public VersionResultModel GetVersions(VersionCheckModel versionCheckModel)
+		public VersionResultModel GetVersions(string appConnectionString)
 		{
 			return new VersionResultModel {AppVersionOk = true};
 		}

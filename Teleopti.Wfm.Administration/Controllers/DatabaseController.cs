@@ -34,7 +34,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			ICurrentTenantSession currentTenantSession,
 			ITenantExists tenantExists, 
 			IDbPathProvider dbPathProvider, 
-			ILoadAllTenants loadAllTenants, 
+			ILoadAllTenants loadAllTenants,
 			ICheckPasswordStrength checkPasswordStrength,
 			PersistTenant persistTenant,
 			IUpdateCrossDatabaseView updateCrossDatabaseView)

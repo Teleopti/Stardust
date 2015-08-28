@@ -144,6 +144,10 @@
       <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
       <Name>Teleopti.Interfaces</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Support.Security\Teleopti.Support.Security.csproj">
+      <Project>{6030cf98-1346-43dd-a9b6-01cdbeb5a832}</Project>
+      <Name>Teleopti.Support.Security</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Wfm.Administration\Teleopti.Wfm.Administration.csproj">
       <Project>{C7CFBE6B-F899-44FD-BB8D-7ACD7131ACD9}</Project>
       <Name>Teleopti.Wfm.Administration</Name>

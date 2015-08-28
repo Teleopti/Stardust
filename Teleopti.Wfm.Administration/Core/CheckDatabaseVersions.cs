@@ -8,7 +8,7 @@ namespace Teleopti.Wfm.Administration.Core
 {
 	public interface ICheckDatabaseVersions
 	{
-		VersionResultModel GetVersions(VersionCheckModel versionCheckModel);
+		VersionResultModel GetVersions(string connectionString);
 	}
 
 	public class CheckDatabaseVersions : ICheckDatabaseVersions
