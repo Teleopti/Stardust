@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DBManager
   //      private const string AzureEdition = "SQL Azure";
 		//private const string SQL2005SP2 = "9.00.3042"; //http://www.sqlteam.com/article/sql-server-versions
     	private static MyLogger _logger;
-		private static DatabaseVersionInformation _databaseVersionInformation;
+		//private static DatabaseVersionInformation _databaseVersionInformation;
 		//private static SchemaVersionInformation _schemaVersionInformation;
 
     	/// <summary>
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DBManager
                 // hhmmss
                 Version version = Assembly.GetExecutingAssembly().GetName().Version;
                 string versionNumber = version.ToString();
-                bool SafeMode = true;
+               // bool SafeMode = true;
                 
                 logWrite("Teleopti Database Manager version " + versionNumber);
 
