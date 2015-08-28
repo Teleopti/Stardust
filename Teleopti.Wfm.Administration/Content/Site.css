@@ -43,11 +43,6 @@ td {
 	font-weight: bold;
 }
 
-.importConnstring {
-	width: 100%;
-	max-width: 100%;
-}
-
 .dataIsOk {
 	color: green;
 }

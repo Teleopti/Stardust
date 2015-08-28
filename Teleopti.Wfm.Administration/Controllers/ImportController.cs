@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using System.Data.SqlClient;
+using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
@@ -39,32 +40,43 @@ namespace Teleopti.Wfm.Administration.Controllers
 			if (!tenantCheck.Content.Success)
 				return tenantCheck;
 
-			var result = _databaseHelperWrapper.Exists(model.ConnStringAppDatabase, DatabaseType.TeleoptiCCC7);
+			if(string.IsNullOrEmpty(model.Server) || string.IsNullOrEmpty(model.AnalyticsDatabase) || string.IsNullOrEmpty(model.AppDatabase) || string.IsNullOrEmpty(model.UserName) || string.IsNullOrEmpty(model.Password))
+				return Json(new ImportTenantResultModel { Success = false, Message = "All properties must be filled in." });
+
+			var appBuilder = new SqlConnectionStringBuilder {DataSource = model.Server, InitialCatalog = model.AppDatabase, UserID = model.UserName, Password = model.Password};
+			var analBuilder = new SqlConnectionStringBuilder(appBuilder.ConnectionString) {InitialCatalog = model.AnalyticsDatabase};
+
+			var result = _databaseHelperWrapper.Exists(appBuilder.ConnectionString, DatabaseType.TeleoptiCCC7);
 			if(!result.Exists)
 				return Json(new ImportTenantResultModel { Success = false, Message = result.Message});
-			result = _databaseHelperWrapper.Exists(model.ConnStringAnalyticsDatabase, DatabaseType.TeleoptiAnalytics);
+			result = _databaseHelperWrapper.Exists(analBuilder.ConnectionString, DatabaseType.TeleoptiAnalytics);
 			if (!result.Exists)
 				return Json(new ImportTenantResultModel { Success = false, Message = result.Message });
 
-			var versions =  _checkDatabaseVersions.GetVersions(new VersionCheckModel {AppConnectionString = model.ConnStringAppDatabase});
+			var versions =  _checkDatabaseVersions.GetVersions(appBuilder.ConnectionString);
 			if(!versions.AppVersionOk)
 				return Json(new ImportTenantResultModel { Success = false, Message = "The databases does not have the same version." });
 			
-			var conflicts = _getImportUsers.GetConflictionUsers(model.ConnStringAppDatabase, model.Tenant);
+			var conflicts = _getImportUsers.GetConflictionUsers(appBuilder.ConnectionString, model.Tenant);
 		
-			return Json(_import.Execute(model, conflicts));
+			return Json(_import.Execute(model.Tenant, appBuilder.ConnectionString, analBuilder.ConnectionString, conflicts));
 		}
 
 		[HttpPost]
 		[TenantUnitOfWork]
-		[Route("api/Import/DbExists")]
+		[Route("DbExists")]
 		public virtual JsonResult<DbCheckResultModel> DbExists(DbCheckModel model)
 		{
+
+			if (string.IsNullOrEmpty(model.Server) || string.IsNullOrEmpty(model.Database) || string.IsNullOrEmpty(model.UserName) || string.IsNullOrEmpty(model.Password))
+				return Json(new DbCheckResultModel { Exists = false, Message = "All properties must be filled in." });
+
 			var type = DatabaseType.TeleoptiCCC7;
 			if (model.DbType.Equals(2))
 				type = DatabaseType.TeleoptiAnalytics;
+			var appBuilder = new SqlConnectionStringBuilder { DataSource = model.Server, InitialCatalog = model.Database, UserID = model.UserName, Password = model.Password };
 
-			return Json(_databaseHelperWrapper.Exists(model.DbConnectionString, type));
+			return Json(_databaseHelperWrapper.Exists(appBuilder.ConnectionString, type));
 		}
 
 		[HttpPost]
@@ -80,7 +92,8 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[Route("api/Import/Conflicts")]
 		public virtual JsonResult<ConflictModel> Conflicts(ImportDatabaseModel model)
 		{
-			return Json(_getImportUsers.GetConflictionUsers(model.ConnStringAppDatabase, model.Tenant));
+			var appBuilder = new SqlConnectionStringBuilder { DataSource = model.Server, InitialCatalog = model.AppDatabase, UserID = model.UserName, Password = model.Password };
+			return Json(_getImportUsers.GetConflictionUsers(appBuilder.ConnectionString, model.Tenant));
 		}
 
 		private JsonResult<ImportTenantResultModel> isNewTenantName(string tenant)

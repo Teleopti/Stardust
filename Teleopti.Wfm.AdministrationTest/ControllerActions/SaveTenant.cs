@@ -65,8 +65,11 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 				{
 					NewName = "Old One",
 					OriginalName = "Old One",
-					AnalyticsDatabase = "Integrated Security=true;Initial Catalog=Southwind;server=(local)",
-					AppDatabase = "Integrated Security=true;Initial Catalog=Southwind;server=(local)"
+					Server = "(local)",
+					UserName = "ola",
+					Password = "password",
+					AnalyticsDatabase = "Southwind",
+					AppDatabase = "Southwind"
 				};	
 				var result = Target.Save(model);
 				result.Content.Success.Should().Be.False();
@@ -91,8 +94,11 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 				{
 					NewName = "Old One",
 					OriginalName = "Old One",
-					AnalyticsDatabase = "Integrated Security=true;Initial Catalog=Southwind;server=(local)",
-					AppDatabase = "Integrated Security=true;Initial Catalog=Southwind;server=(local)",
+					Server = "(local)",
+					UserName = "ola",
+					Password = "password",
+               AnalyticsDatabase = "Southwind",
+					AppDatabase = "Southwind",
 					CommandTimeout = 180
 				};
 				Target.Save(model);
@@ -100,8 +106,8 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			using (TenantUnitOfWork.Start())
 			{
 				var loadedTenant = Tenants.Tenants().FirstOrDefault(t => t.Name.Equals("Old One"));
-				loadedTenant.DataSourceConfiguration.ApplicationConnectionString.Should().Be.EqualTo("Integrated Security=true;Initial Catalog=Southwind;server=(local)");
-				loadedTenant.DataSourceConfiguration.AnalyticsConnectionString.Should().Be.EqualTo("Integrated Security=true;Initial Catalog=Southwind;server=(local)");
+				loadedTenant.DataSourceConfiguration.ApplicationConnectionString.Should().Contain("Initial Catalog=Southwind");
+				loadedTenant.DataSourceConfiguration.AnalyticsConnectionString.Should().Contain("Initial Catalog=Southwind");
 				loadedTenant.DataSourceConfiguration.ApplicationNHibernateConfig[Environment.CommandTimeout].Should().Be.EqualTo("180");
 			}
 		}

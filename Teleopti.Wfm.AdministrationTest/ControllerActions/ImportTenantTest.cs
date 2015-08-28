@@ -19,62 +19,25 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public TestPolutionCleaner TestPolutionCleaner;
 
 		[Test]
-		public void ShouldReturnSuccessFalseIfAppDatabaseNotCorrectFormat()
+		public void ShouldReturnSuccessFalseIfNotAllPropertiesAreSet()
 		{
-			var importModel = new ImportDatabaseModel { ConnStringAppDatabase = RandomName.Make() };
+			var importModel = new ImportDatabaseModel { AppDatabase = RandomName.Make(), AnalyticsDatabase = RandomName.Make(), Server = RandomName.Make()};
 			bool result = Target.ImportExisting(importModel).Content.Success;
 			result.Should().Be.False();
 		}
 
 		[Test]
-		public void ShouldReturnSuccessFalseIfAnalDatabaseNotCorrectFormat()
-		{
-			var connString = TestPolutionCleaner.TestTenantConnectionString();
-            var helper = new DatabaseHelper(connString, DatabaseType.TeleoptiCCC7);
-			if (!helper.Exists())
-			{
-				helper.CreateByDbManager();
-				helper.CreateSchemaByDbManager();
-			}
-			var importModel = new ImportDatabaseModel { ConnStringAppDatabase = connString, ConnStringAnalyticsDatabase = RandomName.Make() };
-			Target.ImportExisting(importModel).Content.Success
-				.Should().Be.False();
-		}
-
-		[Test]
 		public void ShouldReturnSuccessFalseIfAnalDatabaseNotExists()
 		{
-			var connStringBuilder = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
-			{
-				InitialCatalog = Guid.NewGuid().ToString()
-			};
-			//correct format but does not exist
-			var connString = connStringBuilder.ConnectionString;
-
-			var importModel = new ImportDatabaseModel { ConnStringAppDatabase = connString, ConnStringAnalyticsDatabase = RandomName.Make() };
-			Target.ImportExisting(importModel).Content.Success
-				.Should().Be.False();
-		}
-
-		[Test, Ignore("Stops sometimes on different versions and I don't have time to fix that before vacation and I want to push, Ola.")]
-		public void ShouldReturnFalseWhenNoUsers()
-		{
-			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
-
+			var connStringBuilder = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
+			
 			var helper = new DatabaseHelper(TestPolutionCleaner.TestTenantConnectionString(), DatabaseType.TeleoptiCCC7);
 			var helperAnal = new DatabaseHelper(TestPolutionCleaner.TestTenantAnalyticsConnectionString(), DatabaseType.TeleoptiAnalytics);
-
-			//make sure dbs exist
-			if (!helper.Exists())
-			{
-				helper.CreateByDbManager();
-				helper.CreateSchemaByDbManager();
-			}
-			if (!helperAnal.Exists())
-			{
-				helperAnal.CreateByDbManager();
-				helperAnal.CreateSchemaByDbManager();
-			}
+				AppDatabase = connStringBuilder.InitialCatalog,
+				Server = connStringBuilder.DataSource,
+				UserName = connStringBuilder.UserID,
+				Password = connStringBuilder.Password,
+				AnalyticsDatabase = RandomName.Make()
 
 			var importModel = new ImportDatabaseModel
 			{
@@ -82,9 +45,8 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 				ConnStringAnalyticsDatabase = TestPolutionCleaner.TestTenantAnalyticsConnectionString(),
 				Tenant = RandomName.Make()
 			};
-
 			Target.ImportExisting(importModel).Content.Success
-				.Should().Be.True();
+				.Should().Be.False();
 		}
 	}
 }

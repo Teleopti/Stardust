@@ -73,6 +73,8 @@ namespace Teleopti.Wfm.AdministrationTest
 					}
 
 					dropDatabase(tenant + "_TeleoptiWfmApp", conn);
+					dropDatabase(tenant + "_TeleoptiWfmAnalytics", conn);
+					dropDatabase(tenant + "_TeleoptiWfmAgg", conn);
 					dropDatabase(TestTenantDatabaseName, conn);
 					dropDatabase(TestTenantAnalyticsDatabaseName, conn);
 

@@ -205,33 +205,51 @@ namespace Teleopti.Wfm.Administration.Controllers
 			if (string.IsNullOrEmpty(model.AppUser) || string.IsNullOrEmpty(model.AppPassword))
 				new TenantResultModel { Message = "Both name and password for the login must be filled in.", Success = false };
 
-			var builder = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
-			if (_databaseHelperWrapper.LoginExists(builder.ConnectionString, model.AppUser, isAzure))
+			var builder = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
 			{
-				return
-				new TenantResultModel
-				{
-					Success = false,
-					Message = "The login already exists you must create a new one."
-				};
-			}
-			var message = "";
-			if (!_databaseHelperWrapper.LoginCanBeCreated(builder.ConnectionString, model.AppUser, model.AppPassword, isAzure, out message))
+				IntegratedSecurity = false,
+				UserID = model.CreateDbUser,
+				Password = model.CreateDbPassword
+			};
+			try
 			{
-				return
-				new TenantResultModel
+				if (_databaseHelperWrapper.LoginExists(builder.ConnectionString, model.AppUser, isAzure))
 				{
-					Success = false,
-					Message = "Login can not be created. " + message
-				};
-			}
-
-			return
+					return
 					new TenantResultModel
 					{
-						Success = true,
-						Message = "The login does not exists, it will be created."
+						Success = false,
+						Message = "The login already exists you must create a new one."
 					};
+				}
+				var message = "";
+				if (!_databaseHelperWrapper.LoginCanBeCreated(builder.ConnectionString, model.AppUser, model.AppPassword, isAzure, out message))
+				{
+					return
+					new TenantResultModel
+					{
+						Success = false,
+						Message = "Login can not be created. " + message
+					};
+				}
+
+				return
+						new TenantResultModel
+						{
+							Success = true,
+							Message = "The login does not exists, it will be created."
+						};
+			}
+			catch (Exception exception)
+			{
+				return
+					new TenantResultModel
+					{
+						Success = false,
+						Message = "Login can not be created. " + exception.Message
+					};
+			}
+			
 
 		}
 
@@ -253,7 +271,10 @@ namespace Teleopti.Wfm.Administration.Controllers
 			{
 				return Json(new TenantResultModel { Success = false, Message = "The Tenant name can not be empty." });
 			}
-			
+			var checkUser = checkFirstUserInternal(model.UserName, model.Password);
+			if (!checkUser.Success)
+				return Json(checkUser);
+
 			var tenant = _loadAllTenants.Tenants().FirstOrDefault(x => x.Name.Equals(model.Tenant));
 			if (tenant == null)
 			{

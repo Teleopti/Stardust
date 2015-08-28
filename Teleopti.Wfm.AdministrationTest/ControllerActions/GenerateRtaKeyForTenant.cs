@@ -53,11 +53,16 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
 			TestPolutionCleaner.Clean("tenant", "appuser");
 			
+				helper.AddPermissions("appuser");
+				helperAnal.AddPermissions("appuser");
 			Import.ImportExisting(
 				new ImportDatabaseModel
 				{
-					ConnStringAppDatabase = TestPolutionCleaner.TestTenantConnectionString(),
-					ConnStringAnalyticsDatabase = TestPolutionCleaner.TestTenantAnalyticsConnectionString(),
+					Server = connStringBuilder.DataSource,
+					AppDatabase = connStringBuilder.InitialCatalog,
+					UserName = "appuser",
+					Password = "SomeG00dpw",
+					AnalyticsDatabase = connStringBuilderAnal.InitialCatalog,
 					Tenant = "tenant"
 				});
 

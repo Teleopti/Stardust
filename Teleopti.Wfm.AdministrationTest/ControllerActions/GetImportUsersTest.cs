@@ -37,12 +37,15 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 				{
 					InitialCatalog = dummy
 				};
+
 			string connString = connStringBuilder.ConnectionString;
 			var helper = new DatabaseHelper(connString, DatabaseType.TeleoptiCCC7);
+			helper.CreateLogin("appuser", "SomeG00dpw", false);
 			if (!helper.Exists())
 			{
 				helper.CreateByDbManager();
 				helper.CreateSchemaByDbManager();
+				helper.AddPermissions("appuser");
 			}
 
 			// another
@@ -80,7 +83,15 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 				personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), randomName, RandomName.Make());
 			CurrentTenantSession.CurrentSession().Save(personInfo);
 			TenantUnitOfWork.CommitAndDisposeCurrent();
-			var conflicting = Target.Conflicts(new ImportDatabaseModel { ConnStringAppDatabase = connString, Tenant = "Importing" });
+			var conflicting =
+				Target.Conflicts(new ImportDatabaseModel
+				{
+					Server = connStringBuilder.DataSource,
+					AppDatabase = connStringBuilder.InitialCatalog,
+					UserName = "appuser",
+					Password = "SomeG00dpw",
+					Tenant = "Importing"
+				});
 			conflicting.Content.ConflictingUserModels.Count().Should().Be.GreaterThan(0);
 
 		}

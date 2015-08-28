@@ -23,7 +23,12 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		[Test]
 		public void ShouldReturnSuccessFalseIfFirstUserIsEmpty()
 		{
-			var model = new CreateTenantModel { AppUser = "user", AppPassword = "password" };
+			var model = new CreateTenantModelForTest
+			{
+				BusinessUnit = "BU",
+				AppUser = "somenewnotthere",
+				FirstUser = ""
+			};
 			var result = Target.CreateDatabases(model).Content;
 			result.Success.Should().Be.False();
 			result.Message.Should().Be.EqualTo("The user name can not be empty.");
@@ -32,7 +37,14 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		[Test]
 		public void ShouldReturnSuccessFalseIfBusinessUnitIsEmpty()
 		{
-			var model = new CreateTenantModel {FirstUser = "thefirst", FirstUserPassword = "password", AppUser = "user", AppPassword = "password",  };
+			TestPolutionCleaner.Clean("tenant","appuser");
+			var model = new CreateTenantModelForTest
+			{
+				BusinessUnit = "",
+				AppUser = "somenewnotthere",
+				FirstUser = "somenewnotthere"
+			};
+         
 			var result = Target.CreateDatabases(model).Content;
 			result.Success.Should().Be.False();
 			result.Message.Should().Be.EqualTo("The Business Unit can not be empty.");
@@ -46,7 +58,14 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 				var tenant = new Tenant("Old One");
 				CurrentTenantSession.CurrentSession().Save(tenant);
 			}
-			var model = new CreateTenantModel { Tenant = "Old One" };
+			
+			var model = new CreateTenantModelForTest
+			{
+				Tenant = "Old One",
+            BusinessUnit = "BU",
+				AppUser = "somenewnotthere",
+				FirstUser = "somenewnotthere"
+			};
 			bool result = Target.CreateDatabases(model).Content.Success;
 			result.Should().Be.False();
 		}
@@ -76,7 +95,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 
 			var result = Target.CreateDatabases(model).Content;
 			result.Success.Should().Be.False();
-			result.Message.Should().Be.EqualTo("The user does not have permission to create databases.");
+			result.Message.Should().Contain("Login can not be created.");
 		}
 
 		[Test]

@@ -20,7 +20,11 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[Route("api/UpgradeDatabases/GetVersions")]
 		public virtual JsonResult<VersionResultModel> GetVersions(VersionCheckModel model)
 		{
-			return Json(_checkDatabaseVersions.GetVersions(model));
+			if (string.IsNullOrEmpty(model.Server) || string.IsNullOrEmpty(model.AppDatabase) || string.IsNullOrEmpty(model.UserName) || string.IsNullOrEmpty(model.Password))
+				return Json(new VersionResultModel {   AppVersionOk= false, Error = "All properties must be filled in." });
+
+			var appBuilder = new SqlConnectionStringBuilder { DataSource = model.Server, InitialCatalog = model.AppDatabase, UserID = model.UserName, Password = model.Password };
+			return Json(_checkDatabaseVersions.GetVersions(appBuilder.ConnectionString));
 
 		}
 	}

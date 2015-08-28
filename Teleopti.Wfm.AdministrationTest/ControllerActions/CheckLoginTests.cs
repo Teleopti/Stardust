@@ -19,11 +19,13 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public IDatabaseHelperWrapper DatabaseHelperWrapper;
 		public ITenantUnitOfWork TenantUnitOfWork;
 		public ICurrentTenantSession CurrentTenantSession;
+		public TestPolutionCleaner TestPolutionCleaner;
 
 		[Test]
 		public void ShouldReturnFalseIfLoginExist()
 		{
 			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
+			TestPolutionCleaner.Clean("tenant", "appuser");
 			var builder =
 				new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
 
@@ -32,7 +34,9 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			var model = new CreateTenantModel
 			{
 				AppUser = "alogin",
-				AppPassword = "password"
+				AppPassword = "password",
+				CreateDbUser = "dbcreatorperson",
+				CreateDbPassword = "password"
 			};
 
 			var result = Target.CheckLogin(model).Content;
@@ -44,13 +48,16 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public void ShouldReturnFalseIfBadPassword()
 		{
 			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
+			TestPolutionCleaner.Clean("tenant", "appuser");
 			var builder =
 				new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
 
 			var model = new CreateTenantModel
 			{
 				AppUser = RandomName.Make(),
-				AppPassword = "p"
+				AppPassword = "p",
+				CreateDbUser = "dbcreatorperson",
+				CreateDbPassword = "password"
 			};
 
 			var result = Target.CheckLogin(model).Content;
@@ -62,13 +69,16 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public void ShouldReturnTrueIfCorrectNewLogin()
 		{
 			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
+			TestPolutionCleaner.Clean("tenant", "appuser");
 			var builder =
 				new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
 
 			var model = new CreateTenantModel
 			{
 				AppUser = RandomName.Make(),
-				AppPassword = "S0meG0odpassword"
+				AppPassword = "S0meG0odpassword",
+				CreateDbUser = "dbcreatorperson",
+				CreateDbPassword = "password"
 			};
 
 			var result = Target.CheckLogin(model).Content;

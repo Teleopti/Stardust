@@ -13,7 +13,7 @@ namespace Teleopti.Wfm.Administration.Core
 
 	public class CheckDatabaseVersions : ICheckDatabaseVersions
 	{
-		public VersionResultModel GetVersions(VersionCheckModel versionCheckModel)
+		public VersionResultModel GetVersions(string appConnectionString)
 		{
 			var result = new VersionResultModel { AppVersionOk = false };
 			try
@@ -28,7 +28,7 @@ namespace Teleopti.Wfm.Administration.Core
                     sqlConn.Close();
 				}
 
-				builder = new SqlConnectionStringBuilder(versionCheckModel.AppConnectionString);
+				builder = new SqlConnectionStringBuilder(appConnectionString);
 				using (var sqlConn = new SqlConnection(builder.ConnectionString))
 				{
 					sqlConn.Open();

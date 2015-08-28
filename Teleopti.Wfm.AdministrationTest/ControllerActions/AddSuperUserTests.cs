@@ -23,7 +23,8 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		[Test]
 		public void ShouldReturnFalseWhenNoTenantInDb()
 		{
-			var result = Target.AddSuperUserToTenant(new AddSuperUserToTenantModel {Tenant = "tenantThatNotExists"});
+			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
+			var result = Target.AddSuperUserToTenant(new AddSuperUserToTenantModel {Tenant = "tenantThatNotExists", UserName = "userName", Password = "PassaDej0"});
 			result.Content.Success.Should().Be.False();
 			//if this happen we do it wrong in the javascript
 			result.Content.Message.Should().Be.EqualTo("Can not find this Tenant in the database.");
@@ -32,7 +33,6 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		[Test]
 		public void ShouldReturnFalseWhenNoUsernameOrPassword()
 		{
-			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
 			var result = Target.AddSuperUserToTenant(new AddSuperUserToTenantModel { Tenant = "TestData" });
 			result.Content.Success.Should().Be.False();
 			result.Content.Message.Should().Be.EqualTo("The user name can not be empty.");
@@ -51,8 +51,9 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 					UserName = "Kilroy",
 					Password = "WasHere"
 				});
-			result.Content.Success.Should().Be.True();
 			result.Content.Message.Should().Be.EqualTo("Created new user.");
+			result.Content.Success.Should().Be.True();
+			
 		}
 	}
 }

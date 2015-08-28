@@ -10,15 +10,18 @@
 		var tokenKey = 'accessToken';
 		vm.Tenant = $routeParams.tenant;
 		vm.OriginalName = $routeParams.tenant;
+		vm.Server = "";
+		vm.UserName = "";
+		vm.Password = "";
 		vm.AppDatabase = "";
 		vm.AnalyticsDatabase = "";
 		vm.TenantMessage = "Enter a new name for the Tenant";
 		vm.TenantOk = false;
 		vm.AppDbOk = false;
-		vm.AppDbCheckMessage = "Input connection string";
+		vm.AppDbCheckMessage = "Input Application database";
 
 		vm.AnalDbOk = false;
-		vm.AnalDbCheckMessage = "Input connection string";
+		vm.AnalDbCheckMessage = "Input Analytics database";
 		vm.CommandTimeout = 0;
 		vm.Message = "";
 		vm.AllowDelete = false;
@@ -38,6 +41,9 @@
 				.success(function (data) {
 					vm.TenantMessage = data.Message;
 					vm.TenantOk = data.Success;
+					vm.Server = data.Server;
+					vm.UserName = data.UserName;
+					vm.Password = data.Password;
 					vm.AnalyticsDatabase = data.AnalyticsDatabase;
 					vm.AppDatabase = data.AppDatabase;
 					vm.CommandTimeout = data.CommandTimeout;
@@ -89,8 +95,11 @@
 		vm.CheckAppDb = function () {
 			vm.AppDbOk = false;
 			vm.AppDbCheckMessage = "Checking database.....";
-			$http.post('./api/Import/DbExists', {
-				DbConnectionString: vm.AppDatabase,
+			$http.post('./DbExists', {
+				Server: vm.Server,
+				UserName: vm.UserName,
+				Password: vm.Password,
+				Database: vm.AppDatabase,
 				DbType: 1
 			}, getHeaders())
 				.success(function (data) {
@@ -107,8 +116,11 @@
 		vm.CheckAnalDb = function () {
 			vm.AnalDbOk = false;
 			vm.AnalDbCheckMessage = "Checking database.....";
-			$http.post('./api/Import/DbExists', {
-				DbConnectionString: vm.AnalyticsDatabase,
+			$http.post('./DbExists', {
+				Server: vm.Server,
+				UserName: vm.UserName,
+				Password: vm.Password,
+				Database: vm.AnalyticsDatabase,
 				DbType: 2
 			}, getHeaders())
 				.success(function (data) {
@@ -121,23 +133,26 @@
 		vm.LoadTenant();
 		vm.save = function () {
 			if (vm.AppDbOk === false) {
-				alert("Fix the connections string to the Application database.");
+				alert("Fix the settings to the Application database.");
 				return;
 			}
 			if (vm.AnalDbOk === false) {
-				alert("Fix the connections string to the Analytics database.");
+				alert("Fix the settingsto the Analytics database.");
 				return;
 			}
 			if (vm.TenantOk === false) {
 				alert("The new name of the Tenant must be changed before saving.");
 				return;
 			}
-			
+
 			$http.post('./UpdateTenant', {
 				OriginalName: vm.OriginalName,
 				NewName: vm.Tenant,
 				AppDatabase: vm.AppDatabase,
 				AnalyticsDatabase: vm.AnalyticsDatabase,
+				Server: vm.Server,
+				UserName: vm.UserName,
+				Password: vm.Password,
 				CommandTimeout: vm.CommandTimeout
 			}, getHeaders())
 				.success(function (data) {

@@ -9,15 +9,18 @@
 		var vm = this;
 		var tokenKey = 'accessToken';
 		vm.Tenant = "";
+		vm.Server = "";
+		vm.UserName = "";
+		vm.Password = "";
 		vm.AppDatabase = "";
 		vm.AnalyticsDatabase = "";
 		vm.TenantMessage = "Enter a new name for the Tenant";
 		vm.TenantOk = false;
 		vm.AppDbOk = false;
-		vm.AppDbCheckMessage = "Input connection string";
+		vm.AppDbCheckMessage = "Input Application database";
 
 		vm.AnalDbOk = false;
-		vm.AnalDbCheckMessage = "Input connection string";
+		vm.AnalDbCheckMessage = "Input Analytics database";
 		vm.HeadVersion = null;
 		vm.ImportAppVersion = null;
 		vm.AppVersionOk = null;
@@ -46,8 +49,11 @@
 		}
 
 		vm.CheckAppDb = function () {
-			$http.post('./api/Import/DbExists',  {
-				DbConnectionString: vm.AppDatabase,
+			$http.post('./DbExists', {
+				Server: vm.Server,
+				UserName: vm.UserName,
+				Password: vm.Password,
+				Database: vm.AppDatabase,
 				DbType: 1
 			}, getHeaders())
 				.success(function (data) {
@@ -62,8 +68,11 @@
 				});
 		}
 		vm.CheckAnalDb = function () {
-			$http.post('./api/Import/DbExists', {
-				DbConnectionString: vm.AnalyticsDatabase,
+			$http.post('./DbExists', {
+				Server: vm.Server,
+				UserName: vm.UserName,
+				Password: vm.Password,
+				Database: vm.AnalyticsDatabase,
 				DbType: 2
 			}, getHeaders())
 				.success(function (data) {
@@ -76,7 +85,10 @@
 
 		vm.CheckVersions = function () {
 			$http.post('./api/UpgradeDatabases/GetVersions', {
-				AppConnectionString: vm.AppDatabase
+				Server: vm.Server,
+				UserName: vm.UserName,
+				Password: vm.Password,
+				AppDatabase: vm.AppDatabase
 			}, getHeaders())
 				.success(function (data) {
 					vm.HeadVersion = data.HeadVersion;
@@ -108,9 +120,11 @@
 		vm.startImport = function () {
 			$http.post('./api/Import/ImportExisting', {
 				Tenant: vm.Tenant,
-				ConnStringAppDatabase: vm.AppDatabase,
-				ConnStringAnalyticsDatabase: vm.AnalyticsDatabase,
-				SkipConflicts: vm.SkipConflicts
+				Server: vm.Server,
+				UserName: vm.UserName,
+				Password: vm.Password,
+				AnalyticsDatabase: vm.AnalyticsDatabase,
+				AppDatabase: vm.AppDatabase,
 			}, getHeaders())
 				.success(function (data) {
 					vm.Success = data.Success;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.SqlClient;
 using System.Linq;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
@@ -33,8 +34,10 @@ namespace Teleopti.Wfm.Administration.Core
 				var oldTenant = _loadAllTenants.Tenants().FirstOrDefault(x => x.Name.Equals(model.OriginalName));
 				if (oldTenant != null)
 				{
-					oldTenant.DataSourceConfiguration.SetApplicationConnectionString(model.AppDatabase);
-					oldTenant.DataSourceConfiguration.SetAnalyticsConnectionString(model.AnalyticsDatabase);
+					var appBuilder = new SqlConnectionStringBuilder { DataSource = model.Server, InitialCatalog = model.AppDatabase, UserID = model.UserName, Password = model.Password };
+					var analBuilder = new SqlConnectionStringBuilder(appBuilder.ConnectionString) { InitialCatalog = model.AnalyticsDatabase };
+					oldTenant.DataSourceConfiguration.SetApplicationConnectionString(appBuilder.ConnectionString);
+					oldTenant.DataSourceConfiguration.SetAnalyticsConnectionString(analBuilder.ConnectionString);
 					oldTenant.DataSourceConfiguration.SetNHibernateConfig(Environment.CommandTimeout, model.CommandTimeout.ToString());
 					_currentTenantSession.CurrentSession().Save(oldTenant);
 				}

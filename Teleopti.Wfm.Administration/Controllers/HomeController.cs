@@ -50,14 +50,20 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[Route("GetOneTenant")]
 		public virtual JsonResult<TenantModel> GetOneTenant([FromBody]string name)
 		{
-			return Json(_loadAllTenants.Tenants().Where(x => x.Name.Equals(name)).Select(t => new TenantModel
+			var tenant = _loadAllTenants.Tenants().Single(x => x.Name.Equals(name));
+			var builder = new SqlConnectionStringBuilder(tenant.DataSourceConfiguration.ApplicationConnectionString);
+			var builderAnal = new SqlConnectionStringBuilder(tenant.DataSourceConfiguration.AnalyticsConnectionString);
+
+         return Json(new TenantModel
 			{
-				Name = t.Name,
-				Id = -1000, //behövs denna?
-				AnalyticsDatabase = t.DataSourceConfiguration.AnalyticsConnectionString,
-				AppDatabase = t.DataSourceConfiguration.ApplicationConnectionString,
-				CommandTimeout = int.Parse(t.DataSourceConfiguration.ApplicationNHibernateConfig[Environment.CommandTimeout])
-			}).FirstOrDefault());
+				Name = tenant.Name,
+				UserName = builder.UserID,
+				Password = builder.Password,
+				AppDatabase = builder.InitialCatalog,
+				AnalyticsDatabase = builderAnal.InitialCatalog,
+				Server =  builder.DataSource,
+				CommandTimeout = int.Parse(tenant.DataSourceConfiguration.ApplicationNHibernateConfig[Environment.CommandTimeout])
+			});
 		}
 
 		[HttpPost]
