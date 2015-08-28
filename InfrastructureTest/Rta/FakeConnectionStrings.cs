@@ -3,14 +3,14 @@ using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta
 {
-	public class FakeDatabaseConnectionStringHandler : IDatabaseConnectionStringHandler
+	public class FakeConnectionStrings : IConnectionStrings
 	{
-		public string AppConnectionString()
+		public string Application()
 		{
 			return ConnectionStringHelper.ConnectionStringUsedInTests;
 		}
 
-		public string DataStoreConnectionString()
+		public string Analytics()
 		{
 			return ConnectionStringHelper.ConnectionStringUsedInTestsMatrix;
 		}

@@ -370,12 +370,10 @@
     <Compile Include="Rta\Persisters\SiteOutOfAdherenceReadModelPersister.cs" />
     <Compile Include="Rta\Persisters\TeamOutOfAdherenceReadModelPersister.cs" />
     <Compile Include="Repositories\TeamGamificationSettingRepository.cs" />
-    <Compile Include="Rta\DatabaseConnectionFactory.cs" />
-    <Compile Include="Rta\DatabaseConnectionStringHandler.cs" />
+    <Compile Include="Rta\ConnectionStrings.cs" />
     <Compile Include="Rta\DatabaseReader.cs" />
     <Compile Include="Rta\DatabaseWriter.cs" />
-    <Compile Include="Rta\IDatabaseConnectionFactory.cs" />
-    <Compile Include="Rta\IDatabaseConnectionStringHandler.cs" />
+    <Compile Include="Rta\IConnectionStrings.cs" />
     <Compile Include="Rta\AgentStateReadModelReader.cs" />
     <Compile Include="Rta\SqlDataReaderExtensions.cs" />
     <Compile Include="SystemCheck\CheckMessageBrokerMailBox.cs" />

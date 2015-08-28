@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Aop;
@@ -16,16 +17,13 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 {
 	public class AgentStateReadModelReader : IAgentStateReadModelReader
 	{
-		private readonly IDatabaseConnectionFactory _databaseConnectionFactory;
-		private readonly IDatabaseConnectionStringHandler _databaseConnectionStringHandler;
+		private readonly IConnectionStrings _connectionStrings;
 
 		public AgentStateReadModelReader(
-			IDatabaseConnectionFactory databaseConnectionFactory,
-			IDatabaseConnectionStringHandler databaseConnectionStringHandler
+			IConnectionStrings connectionStrings
 			)
 		{
-			_databaseConnectionFactory = databaseConnectionFactory;
-			_databaseConnectionStringHandler = databaseConnectionStringHandler;
+			_connectionStrings = connectionStrings;
 		}
 
 		public IList<AgentStateReadModel> Load(IEnumerable<IPerson> persons)
@@ -179,8 +177,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		private IEnumerable<AgentStateReadModel> queryActualAgentStates2(string sql, IEnumerable<parameters> parameters)
 		{
 			using (
-				var connection =
-					_databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.DataStoreConnectionString()))
+				var connection = new SqlConnection(_connectionStrings.Analytics()))
 			{
 				var command = connection.CreateCommand();
 				command.CommandType = CommandType.Text;

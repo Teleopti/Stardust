@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 
 		protected override void SetupForRepositoryTest()
 		{
-			target = new AgentStateReadModelReader(null, null);
+			target = new AgentStateReadModelReader(null);
 		}
 
 		[Test]
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				TeamId = teamId, 
 				PersonId = personId
 			};
-			new DatabaseWriter(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler())
+			new DatabaseWriter(new FakeConnectionStrings())
 				.PersistActualAgentReadModel(state);
 			var result = target.LoadForTeam(teamId);
 
@@ -67,8 +67,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var state1 = new AgentStateReadModelForTest { TeamId =teamId, PersonId = personId1};
 			var state2 = new AgentStateReadModelForTest { TeamId =teamId, PersonId = personId2};
 			var state3 = new AgentStateReadModelForTest { TeamId =Guid.Empty, PersonId = personId3};
-			var dbWritter = new DatabaseWriter(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler());
-			dbWritter.PersistActualAgentReadModel(state1);
+			var dbWritter = new DatabaseWriter(new FakeConnectionStrings());
+            dbWritter.PersistActualAgentReadModel(state1);
 			dbWritter.PersistActualAgentReadModel(state2);
 			dbWritter.PersistActualAgentReadModel(state3);
 
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				PersonId = personId,
 				Adherence = (int) AdherenceState.Out
 			};
-			new DatabaseWriter(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler())
+			new DatabaseWriter(new FakeConnectionStrings())
 				.PersistActualAgentReadModel(state);
 
 			target.Load(new[] {personId}).Single().Adherence.Should().Be(AdherenceState.Out);

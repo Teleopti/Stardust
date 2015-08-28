@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IAgentStateReadModelReader CreateRtaRepository()
 		{
-			return new AgentStateReadModelReader(null, null);
+			return new AgentStateReadModelReader(null);
 		}
 
 		/// <summary>

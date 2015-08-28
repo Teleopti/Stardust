@@ -264,7 +264,7 @@
     <Compile Include="Rta\AgentStateReadModelForTest.cs" />
     <Compile Include="Rta\DatabaseReaderAgentStateTest.cs" />
     <Compile Include="Rta\ActualAgentStateReadModelPersistingTest.cs" />
-    <Compile Include="Rta\FakeDatabaseConnectionStringHandler.cs" />
+    <Compile Include="Rta\FakeConnectionStrings.cs" />
     <Compile Include="InfrastructureTestAttribute.cs" />
     <Compile Include="Rta\RtaLoadExternalLogOnProcTest.cs" />
     <Compile Include="Repositories\BusinessUnitFilterOverriderTest.cs" />

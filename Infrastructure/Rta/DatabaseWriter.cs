@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Data.SqlClient;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Interfaces.Domain;
@@ -8,21 +9,17 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 {
 	public class DatabaseWriter : IDatabaseWriter
 	{
-		private readonly IDatabaseConnectionFactory _databaseConnectionFactory;
-		private readonly IDatabaseConnectionStringHandler _databaseConnectionStringHandler;
+		private readonly IConnectionStrings _connectionStrings;
 
-		public DatabaseWriter(IDatabaseConnectionFactory databaseConnectionFactory,
-							  IDatabaseConnectionStringHandler databaseConnectionStringHandler)
+		public DatabaseWriter(IConnectionStrings connectionStrings)
 		{
-			_databaseConnectionFactory = databaseConnectionFactory;
-			_databaseConnectionStringHandler = databaseConnectionStringHandler;
+			_connectionStrings = connectionStrings;
 		}
 
 		[InfoLog]
 		public virtual void PersistActualAgentReadModel(AgentStateReadModel model)
 		{
-			using (
-				var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.DataStoreConnectionString()))
+			using (var connection = new SqlConnection(_connectionStrings.Analytics()))
 			{
 				connection.Open();
 				var command = connection.CreateCommand();

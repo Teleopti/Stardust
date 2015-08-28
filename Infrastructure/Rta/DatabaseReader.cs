@@ -14,18 +14,15 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 {
 	public class DatabaseReader : IDatabaseReader
 	{
-		private readonly IDatabaseConnectionFactory _databaseConnectionFactory;
-		private readonly IDatabaseConnectionStringHandler _databaseConnectionStringHandler;
+		private readonly IConnectionStrings _connectionStrings;
 		private readonly INow _now;
 		private static readonly ILog LoggingSvc = LogManager.GetLogger(typeof(IDatabaseReader));
 
 		public DatabaseReader(
-			IDatabaseConnectionFactory databaseConnectionFactory,
-			IDatabaseConnectionStringHandler databaseConnectionStringHandler,
+			IConnectionStrings connectionStrings,
 			INow now)
 		{
-			_databaseConnectionFactory = databaseConnectionFactory;
-			_databaseConnectionStringHandler = databaseConnectionStringHandler;
+			_connectionStrings = connectionStrings;
 			_now = now;
 		}
 
@@ -38,7 +35,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 											AND BelongsToDate BETWEEN @StartDate AND @EndDate";
 
 			var layers = new List<ScheduleLayer>();
-			using (var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.AppConnectionString()))
+			using (var connection = new SqlConnection(_connectionStrings.Application()))
 			{
 				var command = connection.CreateCommand();
 				command.CommandType = CommandType.Text;
@@ -70,7 +67,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		public ConcurrentDictionary<string, IEnumerable<ResolvedPerson>> ExternalLogOns()
 		{
 			var dictionary = new ConcurrentDictionary<string, IEnumerable<ResolvedPerson>>();
-			using (var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.AppConnectionString()))
+			using (var connection = new SqlConnection(_connectionStrings.Application()))
 			{
 				var command = connection.CreateCommand();
 				command.CommandType = CommandType.StoredProcedure;
@@ -111,7 +108,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		public ConcurrentDictionary<string, int> Datasources()
 		{
 			var dictionary = new ConcurrentDictionary<string, int>();
-			using (var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.DataStoreConnectionString()))
+			using (var connection = new SqlConnection(_connectionStrings.Analytics()))
 			{
 				var command = connection.CreateCommand();
 				command.CommandType = CommandType.StoredProcedure;

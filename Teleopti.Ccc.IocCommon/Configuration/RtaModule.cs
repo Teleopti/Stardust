@@ -49,8 +49,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<StateMapper>().As<IStateMapper>().SingleInstance();
 
-			builder.RegisterType<DatabaseConnectionStringHandler>().As<IDatabaseConnectionStringHandler>();
-			builder.RegisterType<DatabaseConnectionFactory>().As<IDatabaseConnectionFactory>();
+			builder.RegisterType<ConnectionStrings>().As<IConnectionStrings>();
 
 			_config.Args().CacheBuilder
 				.For<AlarmMappingLoader>()
@@ -134,7 +133,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterMbCacheComponent<PersonOrganizationProvider, IPersonOrganizationProvider>().SingleInstance();
 
 			//messy for now
-			builder.Register(c => new PersonOrganizationReader(c.Resolve<INow>(), c.Resolve<IDatabaseConnectionStringHandler>().AppConnectionString()))
+			builder.Register(c => new PersonOrganizationReader(c.Resolve<INow>(), c.Resolve<IConnectionStrings>().Application()))
 				.SingleInstance().As<IPersonOrganizationReader>();
 		}
 	}
