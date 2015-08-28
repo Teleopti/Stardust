@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.SeatPlanning;
 using Teleopti.Ccc.Infrastructure.SeatManagement;
@@ -20,15 +21,21 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 		private SeatBookingReportProvider _seatBookingReportProvider;
 		private Team _team;
 		private SeatMapLocation _location;
+		private IUserTimeZone _userTimeZone;
+		private TimeZoneInfo _timeZone;
 
 		[SetUp]
 		public void Setup()
 		{
 
+			_userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
+			_timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			_userTimeZone.Stub(x => x.TimeZone()).Return(_timeZone);
+			
 			_seatBookingRepository = new FakeSeatBookingRepository();
 			_seatMapLocationRepository = new FakeSeatMapRepository ();
 
-			_seatBookingReportProvider = new SeatBookingReportProvider(_seatBookingRepository, _seatMapLocationRepository, new FakeTeamRepository());
+			_seatBookingReportProvider = new SeatBookingReportProvider(_seatBookingRepository, _seatMapLocationRepository, new FakeTeamRepository(), _userTimeZone);
 			_team = SeatManagementProviderTestUtils.CreateTeam ("Team One");
 			_location = new SeatMapLocation() { Name = "Location" };
 			_location.SetId (Guid.NewGuid());

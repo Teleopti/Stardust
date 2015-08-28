@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
-using System.Runtime;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.SeatPlanning;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -16,10 +16,18 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 	{
 		private FakeSeatBookingRepository _seatBookingRepository;
 		private FakeSeatMapRepository _seatMapLocationRepository;
+		private IUserTimeZone _userTimeZone;
+		private TimeZoneInfo _timeZone;
 
 		[SetUp]
 		public void Setup()
 		{
+
+			_userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
+			_timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			_userTimeZone.Stub(x => x.TimeZone()).Return(_timeZone);
+
+
 			_seatBookingRepository = new FakeSeatBookingRepository();
 			_seatMapLocationRepository = new FakeSeatMapRepository();
 		}
@@ -29,6 +37,7 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 		{
 			var location = new SeatMapLocation() { Name = "Location" };
 			location.SetId(Guid.NewGuid());
+			
 			var seat = location.AddSeat("Seat", 1);
 			var seat2 = location.AddSeat("Seat", 1);
 			_seatMapLocationRepository.Add(location);
@@ -52,17 +61,16 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 
 			_seatBookingRepository.Add(booking);
 			_seatBookingRepository.Add(bookingSeat2);
-			
-			var seatOccupancyProvider = new SeatOccupancyProvider(_seatBookingRepository);
-			var occupancyInformation = seatOccupancyProvider.Get (seat.Id.Value, bookingDate);
 
+			var seatOccupancyProvider = new SeatOccupancyProvider(_seatBookingRepository, _userTimeZone);
+			var occupancyInformation = seatOccupancyProvider.Get (seat.Id.Value, bookingDate);
 			var occupancyInfo = occupancyInformation.Single();
 
-			Assert.IsTrue (occupancyInfo.StartDateTime == booking.StartDateTime);
-			Assert.IsTrue(occupancyInfo.EndDateTime == booking.EndDateTime);
-			Assert.IsTrue(occupancyInfo.PersonId == booking.Person.Id);
-			Assert.IsTrue(occupancyInfo.SeatId == seat.Id);
-			Assert.IsTrue(occupancyInfo.BookingId == booking.Id);
+			occupancyInfo.StartDateTime.Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(booking.StartDateTime, _timeZone));
+			occupancyInfo.EndDateTime.Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(booking.EndDateTime, _timeZone));
+			occupancyInfo.PersonId.Should().Be.EqualTo (booking.Person.Id);
+			occupancyInfo.SeatId.Should().Be.EqualTo (seat.Id);
+			occupancyInfo.BookingId.Should().Be.EqualTo (booking.Id);
 			
 		}
 

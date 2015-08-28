@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
 using Teleopti.Interfaces.Domain;
 
@@ -10,10 +11,12 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 	public class SeatOccupancyProvider : ISeatOccupancyProvider
 	{
 		private readonly ISeatBookingRepository _seatBookingRepository;
+		private readonly IUserTimeZone _userTimeZone;
 
-		public SeatOccupancyProvider(ISeatBookingRepository seatBookingRepository)
+		public SeatOccupancyProvider(ISeatBookingRepository seatBookingRepository, IUserTimeZone userTimeZone)
 		{
 			_seatBookingRepository = seatBookingRepository;
+			_userTimeZone = userTimeZone;
 		}
 
 		public IList<OccupancyViewModel> Get(Guid seatId, DateOnly date)
@@ -22,18 +25,18 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 			return createViewModelsForBookings(bookings);
 		}
 
-		private static List<OccupancyViewModel> createViewModelsForBookings(IEnumerable<ISeatBooking> bookings)
+		private List<OccupancyViewModel> createViewModelsForBookings(IEnumerable<ISeatBooking> bookings)
 		{
 			return bookings.Select(createOccupancyViewModel).ToList();
 			
 		}
 
-		private static OccupancyViewModel createOccupancyViewModel(ISeatBooking booking)
+		private OccupancyViewModel createOccupancyViewModel(ISeatBooking booking)
 		{
 			return new OccupancyViewModel()
 			{
-				StartDateTime = booking.StartDateTime,
-				EndDateTime = booking.EndDateTime,
+				StartDateTime = convertTimeToLocal(booking.StartDateTime),
+				EndDateTime = convertTimeToLocal(booking.EndDateTime),
 				PersonId = booking.Person.Id.GetValueOrDefault(),
 				FirstName = booking.Person.Name.FirstName,
 				LastName = booking.Person.Name.LastName,
@@ -42,5 +45,13 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 				BookingId = booking.Id.GetValueOrDefault()
 			};
 		}
+
+
+		private DateTime convertTimeToLocal(DateTime dateTime)
+		{
+			return TimeZoneInfo.ConvertTimeFromUtc(dateTime, _userTimeZone.TimeZone());
+
+		}
+
 	}
 }

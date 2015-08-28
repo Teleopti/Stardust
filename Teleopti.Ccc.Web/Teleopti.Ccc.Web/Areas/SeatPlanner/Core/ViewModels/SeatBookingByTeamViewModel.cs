@@ -6,6 +6,7 @@ using Teleopti.Analytics.Portal.Reports.Ccc;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels
@@ -13,12 +14,14 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels
 	public class SeatBookingByTeamViewModel
 	{
 		private readonly ISeatMapLocationRepository _locationRepository;
+		private readonly IUserTimeZone _userTimeZone;
 		public String Name { get; set; }
 		public List<SeatBookingViewModel> SeatBookings { get; set; }
 
-		public SeatBookingByTeamViewModel(IGrouping<string, IPersonScheduleWithSeatBooking> seatBookingReportModels, ISeatMapLocationRepository locationRepository)
+		public SeatBookingByTeamViewModel(IGrouping<string, IPersonScheduleWithSeatBooking> seatBookingReportModels, ISeatMapLocationRepository locationRepository, IUserTimeZone userTimeZone)
 		{
 			_locationRepository = locationRepository;
+			_userTimeZone = userTimeZone;
 			Name = seatBookingReportModels.Key;
 			SeatBookings = new List<SeatBookingViewModel>();
 			
@@ -47,8 +50,8 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels
 				LocationName = personScheduleWithSeatBooking.LocationName,
 				LocationPath = location != null ? SeatMapProvider.GetLocationPath (location) : null,
 				BelongsToDate = personScheduleWithSeatBooking.BelongsToDate,
-				StartDateTime = personScheduleWithSeatBooking.SeatBookingStart ?? personScheduleWithSeatBooking.PersonScheduleStart,
-				EndDateTime = personScheduleWithSeatBooking.SeatBookingEnd ?? personScheduleWithSeatBooking.PersonScheduleEnd,
+				StartDateTime = convertTimeToLocal(personScheduleWithSeatBooking.SeatBookingStart ?? personScheduleWithSeatBooking.PersonScheduleStart),
+				EndDateTime = convertTimeToLocal(personScheduleWithSeatBooking.SeatBookingEnd ?? personScheduleWithSeatBooking.PersonScheduleEnd),
 				SeatId = personScheduleWithSeatBooking.SeatId,
 				SeatName = personScheduleWithSeatBooking.SeatName,
 				SiteId = personScheduleWithSeatBooking.SiteId,
@@ -57,5 +60,13 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels
 				IsFullDayAbsence = shiftReadModel != null && shiftReadModel.Shift.IsFullDayAbsence
 			};
 		}
+
+
+		private DateTime convertTimeToLocal(DateTime dateTime)
+		{
+			return TimeZoneInfo.ConvertTimeFromUtc(dateTime, _userTimeZone.TimeZone());
+
+		}
+
 	}
 }
