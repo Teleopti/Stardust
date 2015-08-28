@@ -94,6 +94,35 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.TeamAdh
 		}
 
 		[Test]
+		public void ShouldCountPersonAsNeutralAdherenceWhenGoingOutNeutral()
+		{
+			var teamId = Guid.NewGuid();
+			var personId = Guid.NewGuid();
+			var persister = new FakeTeamOutOfAdherenceReadModelPersister();
+			var target = new TeamOutOfAdherenceReadModelUpdater(persister);
+
+			target.Handle(new PersonOutOfAdherenceEvent {TeamId = teamId, PersonId = personId});
+			target.Handle(new PersonNeutralAdherenceEvent {TeamId = teamId, PersonId = personId});
+
+			persister.Get(teamId).Count.Should().Be(0);
+		}
+
+		[Test]
+		public void ShouldCountPersonAsOutOfAdherenceWhenGoingOutNeutralOut()
+		{
+			var teamId = Guid.NewGuid();
+			var personId = Guid.NewGuid();
+			var persister = new FakeTeamOutOfAdherenceReadModelPersister();
+			var target = new TeamOutOfAdherenceReadModelUpdater(persister);
+
+			target.Handle(new PersonOutOfAdherenceEvent { TeamId = teamId, PersonId = personId });
+			target.Handle(new PersonNeutralAdherenceEvent { TeamId = teamId, PersonId = personId });
+			target.Handle(new PersonOutOfAdherenceEvent { TeamId = teamId, PersonId = personId });
+
+			persister.Get(teamId).Count.Should().Be(1);
+		}
+
+		[Test]
 		public void ShouldSummarizePersonsOutOfAdherence()
 		{
 			var teamId = Guid.NewGuid();

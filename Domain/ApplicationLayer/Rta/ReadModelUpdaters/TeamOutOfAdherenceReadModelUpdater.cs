@@ -41,6 +41,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 				}));
 		}
 
+		[ReadModelUnitOfWork]
+		public void Handle(PersonNeutralAdherenceEvent @event)
+		{
+			handleEvent(@event.TeamId, @event.SiteId, model =>
+				updatePerson(model, @event.PersonId, @event.Timestamp, person =>
+				{
+					person.OutOfAdherence = false;
+				}));
+		}
+
 		private void handleEvent(Guid teamId, Guid siteId, Action<TeamOutOfAdherenceReadModel> mutate)
 		{
 			var model = _persister.Get(teamId) ?? new TeamOutOfAdherenceReadModel
