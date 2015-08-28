@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Data;
 using NUnit.Framework;
@@ -137,6 +138,50 @@ namespace Teleopti.Ccc.WinCodeTest.Converters
 			CollectionAssert.AreEqual(actualSequence, expectedSequence);
 		}
 
+		[Test]
+		public void SortAscending_WhenSortingDateTimes_ShouldPutEmptyDateTimesLast_PBI34510()
+		{
+			var start = new DateTime(2001, 1, 1, 1, 0, 0);
+
+			var sortlist = new List<SomethingThatIsSortable>()
+						   {
+							   new SomethingThatIsSortable() {Number = 1, Date = start},
+							   new SomethingThatIsSortable() {Number = 2, Date = start.AddDays(1)},
+							   new SomethingThatIsSortable() {Number = 3, Date = start.AddDays(-1)},
+							   new SomethingThatIsSortable() {Number = 4 }
+						   };
+			var target = new CustomSorterBlankAlwaysLast() { PropertyPath = "Date", SortDirection = ListSortDirection.Ascending };
+			var view = (ListCollectionView)CollectionViewSource.GetDefaultView(sortlist);
+			view.CustomSort = target;
+			var expectedSequence = new List<int>() { 3, 1, 2, 4 };
+
+			var actualSequence = getSequence(view);
+			CollectionAssert.AreEqual(actualSequence, expectedSequence);
+
+		}
+
+		[Test]
+		public void Sort_WhenSortingDateTimesDescending_ShouldPutEmptyDateTimesLast_PBI34510()
+		{
+			var start = new DateTime(2001, 1, 1, 1, 0, 0);
+
+			var sortlist = new List<SomethingThatIsSortable>()
+						   {
+							   new SomethingThatIsSortable() {Number = 1, Date = start},
+							   new SomethingThatIsSortable() {Number = 2, Date = start.AddDays(1)},
+							   new SomethingThatIsSortable() {Number = 3, Date = start.AddDays(-1)},
+							   new SomethingThatIsSortable() {Number = 4 }
+						   };
+			var target = new CustomSorterBlankAlwaysLast() { PropertyPath = "Date", SortDirection = ListSortDirection.Descending };
+			var view = (ListCollectionView)CollectionViewSource.GetDefaultView(sortlist);
+			view.CustomSort = target;
+			var expectedSequence = new List<int>() { 2, 1, 3, 4 };
+
+			var actualSequence = getSequence(view);
+			CollectionAssert.AreEqual(actualSequence, expectedSequence);
+
+		}
+
 
 		#region helpers
 		
@@ -161,7 +206,8 @@ namespace Teleopti.Ccc.WinCodeTest.Converters
 			public string Name { get; set; }
 
 			public SomethingThatCanBeNull AnObject { get; set; }
-
+			
+			public DateTime Date { get; set; }
 		}
 
 		public class SomethingThatCanBeNull
