@@ -104,7 +104,10 @@
 				return;
 			}
 			$http.post('./api/Import/Conflicts', {
-				ConnStringAppDatabase: vm.AppDatabase,
+				Server: vm.Server,
+				UserName: vm.UserName,
+				Password: vm.Password,
+				AppDatabase: vm.AppDatabase,
 				Tenant: vm.Tenant
 			}, getHeaders())
 				.success(function (data) {

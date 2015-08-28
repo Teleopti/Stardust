@@ -76,6 +76,10 @@
 
 		vm.CheckServer = function () {
 			vm.Message = '';
+			if (vm.CreateDbUser === '' || vm.CreateDbPassword === '') {
+				vm.SqlUserOkMessage = '';
+				return;
+			}
 			var model = {
 				CreateDbUser: vm.CreateDbUser,
 				CreateDbPassword: vm.CreateDbPassword
