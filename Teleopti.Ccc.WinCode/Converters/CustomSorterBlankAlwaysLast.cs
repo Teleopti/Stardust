@@ -46,7 +46,13 @@ namespace Teleopti.Ccc.WinCode.Converters
 		private string getValueAsString(object target)
 		{
 			var val = _reflector.GetValue(target, PropertyPath);
+			if (val is DateTime && (DateTime)val == DateTime.MinValue)
+			{
+				return string.Empty;
+			}
+
 			return val != null ? val.ToString() : string.Empty;
+
 		}
 	}
 
