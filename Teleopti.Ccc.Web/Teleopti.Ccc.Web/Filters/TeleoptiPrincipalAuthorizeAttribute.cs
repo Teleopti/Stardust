@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Microsoft.IdentityModel.Claims;
 using Microsoft.IdentityModel.Protocols.WSFederation;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Core;
 using AuthorizationContext = System.Web.Mvc.AuthorizationContext;
@@ -94,6 +96,11 @@ namespace Teleopti.Ccc.Web.Filters
 				HomeRealm = _identityProviderProvider.DefaultProvider()
 			};
 
+			var uri = new Uri(signIn.WriteQueryString(), UriKind.RelativeOrAbsolute);
+			var redirectUrl = ConfigurationManager.AppSettings.ReadValue("UseRelativeConfiguration")
+				? "/" + new Uri(uri.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped)).MakeRelativeUri(uri)
+				: uri.ToString();
+
 			filterContext.Result = new RedirectToRouteResult(
 				new RouteValueDictionary(
 					new
@@ -101,7 +108,7 @@ namespace Teleopti.Ccc.Web.Filters
 						controller = "Return",
 						action = "Hash",
 						area = "Start",
-						redirectUrl = signIn.WriteQueryString()
+						redirectUrl = redirectUrl
 					}
 					)
 				);
