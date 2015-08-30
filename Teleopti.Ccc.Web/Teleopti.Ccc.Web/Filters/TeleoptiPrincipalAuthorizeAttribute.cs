@@ -96,10 +96,11 @@ namespace Teleopti.Ccc.Web.Filters
 				HomeRealm = _identityProviderProvider.DefaultProvider()
 			};
 
-			var uri = new Uri(signIn.WriteQueryString(), UriKind.RelativeOrAbsolute);
+			var url = signIn.WriteQueryString();
+			var uri = new Uri(url, UriKind.RelativeOrAbsolute);
 			var redirectUrl = ConfigurationManager.AppSettings.ReadValue("UseRelativeConfiguration")
 				? "/" + new Uri(uri.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped)).MakeRelativeUri(uri)
-				: uri.ToString();
+				: url;
 
 			filterContext.Result = new RedirectToRouteResult(
 				new RouteValueDictionary(
