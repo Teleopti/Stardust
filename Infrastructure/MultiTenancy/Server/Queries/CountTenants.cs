@@ -1,3 +1,5 @@
+using System.Linq;
+using NHibernate.Linq;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
@@ -14,8 +16,8 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 		public int Count()
 		{
 			return _tenantSession.CurrentSession()
-				.QueryOver<Tenant>()
-				.RowCount();
+				.Query<Tenant>()
+				.Count();
 		}
 	}
 }

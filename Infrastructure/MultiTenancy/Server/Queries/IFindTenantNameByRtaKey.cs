@@ -1,7 +1,7 @@
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 {
-	public interface IFindTenantByRtaKey
+	public interface IFindTenantNameByRtaKey
 	{
-		Tenant Find(string rtaKey);
+		string Find(string rtaKey);
 	}
 }

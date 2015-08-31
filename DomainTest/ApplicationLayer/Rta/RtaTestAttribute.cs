@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				builder.UseTestDouble(database.AgentStateReadModelReader).For<IAgentStateReadModelReader>();
 				builder.UseTestDouble(database.RtaStateGroupRepository).For<IRtaStateGroupRepository>();
 				builder.UseTestDouble(database.StateGroupActivityAlarmRepository).For<IStateGroupActivityAlarmRepository>();
-				builder.UseTestDouble(database.Tenants).For<IFindTenantByRtaKey, ICountTenants, ILoadAllTenants>();
+				builder.UseTestDouble(database.Tenants).For<IFindTenantNameByRtaKey, ICountTenants, ILoadAllTenants>();
 			}
 			else
 			{
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				builder.UseTestDouble<FakeAgentStateReadModelReader>().For<IAgentStateReadModelReader>();
 				builder.UseTestDouble<FakeRtaStateGroupRepository>().For<IRtaStateGroupRepository>();
 				builder.UseTestDouble<FakeStateGroupActivityAlarmRepository>().For<IStateGroupActivityAlarmRepository>();
-				builder.UseTestDouble<FakeTenants>().For<IFindTenantByRtaKey, ICountTenants, ILoadAllTenants>();
+				builder.UseTestDouble<FakeTenants>().For<IFindTenantNameByRtaKey, ICountTenants, ILoadAllTenants>();
 			}
 		}
 

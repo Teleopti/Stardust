@@ -211,7 +211,7 @@
     <Compile Include="MultiTenancy\Server\Queries\FindPersonInfoByCredentialsTest.cs" />
     <Compile Include="MultiTenancy\Server\Queries\FindPersonInfoByIdentityTest.cs" />
     <Compile Include="MultiTenancy\Server\Queries\FindPersonInfoTest.cs" />
-    <Compile Include="MultiTenancy\Server\Queries\FindTenantByRtaKeyTest.cs" />
+    <Compile Include="MultiTenancy\Server\Queries\FindTenantNameByRtaKeyTest.cs" />
     <Compile Include="MultiTenancy\Server\Queries\IdentityUserQueryTest.cs" />
     <Compile Include="MultiTenancy\Server\Queries\PersistLogonAttemptTest.cs" />
     <Compile Include="MultiTenancy\Server\NHibernate\TenantUnitOfWorkManagerTest.cs" />

@@ -9,23 +9,35 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 {
 	[TestFixture]
 	[TenantTest]
-	public class FindTenantByRtaKeyTest
+	public class FindTenantNameByRtaKeyTest
 	{
 		public ITenantUnitOfWork TenantUnitOfWork;
 		public PersistTenant Persist;
-		public IFindTenantByRtaKey Target;
+		public IFindTenantNameByRtaKey Target;
 
 		[Test]
 		public void ShouldFindTenantByRtaKey()
 		{
 			using (TenantUnitOfWork.Start())
 			{
-				var tenant = new Tenant(RandomName.Make());
+				var name = RandomName.Make();
+				var tenant = new Tenant(name);
 				Persist.Persist(tenant);
 
 				var actual = Target.Find(tenant.RtaKey);
 
-				actual.RtaKey.Should().Be(tenant.RtaKey);
+				actual.Should().Be(name);
+			}
+		}
+
+		[Test]
+		public void ShouldReturnNullWhenNotFound()
+		{
+			using (TenantUnitOfWork.Start())
+			{
+				var actual = Target.Find(new Tenant(RandomName.Make()).RtaKey);
+
+				actual.Should().Be.Null();
 			}
 		}
 

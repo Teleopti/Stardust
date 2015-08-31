@@ -326,7 +326,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		
 	}
 
-	public class FakeTenants : IFindTenantByRtaKey, ICountTenants, ILoadAllTenants
+	public class FakeTenants : IFindTenantNameByRtaKey, ICountTenants, ILoadAllTenants
 	{
 		private readonly List<Tenant> _data = new List<Tenant>();
 
@@ -335,9 +335,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			_data.Add(tenant);
 		}
 
-		public Tenant Find(string rtaKey)
+		public string Find(string rtaKey)
 		{
-			return _data.SingleOrDefault(x => x.RtaKey == rtaKey);
+			var tenant = _data.SingleOrDefault(x => x.RtaKey == rtaKey);
+			if (tenant == null)
+				return null;
+			return tenant.Name;
 		}
 
 		public int Count()
