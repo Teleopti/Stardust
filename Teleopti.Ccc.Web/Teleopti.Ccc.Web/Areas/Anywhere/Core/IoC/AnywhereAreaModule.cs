@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Microsoft.AspNet.SignalR.Hubs;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -61,7 +62,15 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC
 			builder.RegisterType<SeatImpactOnPeriodForProjection>().As<ISeatImpactOnPeriodForProjection>();
 			builder.RegisterType<SingleSkillDictionary>().As<ISingleSkillDictionary>().InstancePerLifetimeScope();
 
-			builder.RegisterType<IntraIntervalFinderService>().As<IIntraIntervalFinderService>();	
+			builder.RegisterType<IntraIntervalFinderService>().As<IIntraIntervalFinderService>();
+			if (_config.Toggle(Toggles.RTA_MultiTenancy_32539))
+			{
+				builder.RegisterType<RtaTenantAuthenticator>().As<IRtaAuthenticator>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<RtaAuthenticator>().As<IRtaAuthenticator>().SingleInstance();
+			}
 		}
 	}
 }
