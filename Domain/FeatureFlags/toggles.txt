@@ -81,4 +81,4 @@ WfmForecast_IntradayPatternView_33069 = RC
 MyTimeWeb_AutoShiftTradeWithMeetingAndPersonalActivity_33281 = true
 MessageBroker_SchedulingScreenMailbox_32733 = RC
 WfmPeople_ImportUsers_33665 = RC
-RTA_MultiTenancy_32539 = DEV
+RTA_MultiTenancy_32539 = false
