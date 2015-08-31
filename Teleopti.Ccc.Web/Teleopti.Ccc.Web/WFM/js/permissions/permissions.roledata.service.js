@@ -21,12 +21,13 @@
 			roleDataService.dynamicOptionSelected = 0;
 			roleDataService.organization = { BusinessUnit: [{ BusinessUnit: { Sites: [] } }], DynamicOptions: [] };
 			roleDataService.displayedData = {};
-			PermissionsService.organizationSelections.query().$promise.then(function (result) {
-				roleDataService.organization = { BusinessUnit: [result.BusinessUnit], DynamicOptions: result.DynamicOptions };
-				flatData(roleDataService.organization.BusinessUnit);
-			   
-			});
-
+			
+			roleDataService.refreshOrganizationSelection = function() {
+				PermissionsService.organizationSelections.query().$promise.then(function (result) {
+					roleDataService.organization = { BusinessUnit: [result.BusinessUnit], DynamicOptions: result.DynamicOptions };
+					flatData(roleDataService.organization.BusinessUnit);
+				});
+			};
 
 			roleDataService.deleteAvailableData = function (selectedRole, type, id) {
 				var data = {};

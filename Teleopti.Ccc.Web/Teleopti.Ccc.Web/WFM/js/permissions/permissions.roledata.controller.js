@@ -113,7 +113,7 @@
 					RoleDataService.assignAuthorizationLevel($scope.selectedRole, option);
 				};
 
-
+				RoleDataService.refreshOrganizationSelection();
 			}
 	]);
 

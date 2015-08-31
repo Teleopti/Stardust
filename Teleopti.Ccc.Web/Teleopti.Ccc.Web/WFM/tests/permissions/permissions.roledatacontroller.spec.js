@@ -19,6 +19,11 @@ describe('DataController', function() {
 			var deferred = $q.defer();
 			deferred.resolve();
 			return deferred.promise;
+		},
+		refreshOrganizationSelection: function () {
+			var deferred = $q.defer();
+			deferred.resolve();
+			return deferred.promise;
 		}   
 	};
 	var mockRoles = {
