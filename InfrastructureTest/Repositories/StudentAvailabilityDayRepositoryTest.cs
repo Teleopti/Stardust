@@ -61,7 +61,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			// create start point
 			var dateOnly = new DateOnly(2009, 2, 3);
-			var period = new DateOnlyPeriod(dateOnly, dateOnly);
 
 			var studentAvailabilityRestriction = new StudentAvailabilityRestriction();
 			studentAvailabilityRestriction.StartTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(8), null);
@@ -72,16 +71,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			
 			// load again
-			IEnumerable<IPerson> persons = new Collection<IPerson> { _person };
-			IList<IStudentAvailabilityDay> days = new StudentAvailabilityDayRepository(UnitOfWork).Find(period, persons);
+			IList<IStudentAvailabilityDay> days = new StudentAvailabilityDayRepository(UnitOfWork).Find(dateOnly, _person);
 
 			var loadedStudentAvailabilityDay = days[0];
 
 			loadedStudentAvailabilityDay.Change(new TimePeriod(TimeSpan.FromHours(9), TimeSpan.FromHours(20)));
 			PersistAndRemoveFromUnitOfWork(loadedStudentAvailabilityDay);
 
-			 
-			IList<IStudentAvailabilityDay> daysAgain = new StudentAvailabilityDayRepository(UnitOfWork).Find(period, persons);
+
+			IList<IStudentAvailabilityDay> daysAgain = new StudentAvailabilityDayRepository(UnitOfWork).Find(dateOnly, _person);
 			var loadedStudentAvailabilityDayAgain = daysAgain[0];
 
 			var restrictionAgain = loadedStudentAvailabilityDayAgain.RestrictionCollection[0];
