@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.TestCommon
 
 		public void DoOnAllTenants_AvoidUsingThis(Action<IDataSource> actionOnTenant)
 		{
-			if (RegisteredDataSources == null)
+			if (!RegisteredDataSources.Any())
 				RegisteredDataSources = new[] {_dataSourcesFactory.Invoke().Create("App", ConnectionStringHelper.ConnectionStringUsedInTests, null)};
 			RegisteredDataSources.ForEach(actionOnTenant);
 		}
