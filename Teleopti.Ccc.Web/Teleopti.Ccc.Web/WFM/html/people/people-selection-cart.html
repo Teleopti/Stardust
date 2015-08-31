@@ -11,12 +11,14 @@
 	}
 </style>
 <div>
-	<div class="row">
+	<div class="row people-cart">
+		<button class="wfm-btn wfm-btn-default" ng-click="vm.back()">{{ 'Back' | translate }} </button>
 		<h4 translate>Selected People</h4>
 	</div>
 
 	<div class="row">
-		<div class="col-md-3">
+		<div class="col-sm-2">
+
 			<p class="input-group">
 				<input type="text" class="form-control" datepicker-popup="{{vm.format}}" ng-model="vm.selectedDate" is-open="vm.status.opened" datepicker-options="vm.dateOptions" show-button-bar="false" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
 				<span class="input-group-btn">
@@ -42,11 +44,11 @@
 			<md-content layout-padding style="height: 500px">
 				<div class="input-prepend">
 					<i class="mdi mdi-filter-outline"></i>
-					<input type="text" name="filterSkill" ng-model="searchSkills.SkillName"/>
+					<input type="text" name="filterSkill" ng-model="searchSkills.SkillName" />
 				</div>
 				<md-list-item ng-repeat="skill in vm.availableSkills|filter:searchSkills">
 					<div class="wfm-checkbox">
-						<input type="checkbox" id="{{skill.SkillId}}" ng-model="skill.Selected" ng-change="vm.skillSelectedStatusChanged(skill)" ui-indeterminate="skill.Status =='partial'"/>
+						<input type="checkbox" id="{{skill.SkillId}}" ng-model="skill.Selected" ng-change="vm.skillSelectedStatusChanged(skill)" ui-indeterminate="skill.Status =='partial'" />
 						<label for="{{skill.SkillId}}">
 							<span class="wfm-checkbox-toggle"></span>
 							<span class="wfm-checkbox-label">{{skill.SkillName}}</span>
@@ -58,8 +60,16 @@
 			<button class="wfm-btn wfm-btn-primary" ng-click="vm.updateSkillOnPersons()">{{'Apply' | translate}}</button>
 		</md-sidenav>
 		<md-progress-linear ng-show="vm.processing" md-mode="indeterminate"></md-progress-linear>
-		<div ng-if="vm.dataInitialized && !vm.processing && vm.updateResult.Success" class="alert-success notice-spacer"><i class='mdi mdi-thumb-up'></i>{{vm.updateResult.SuccessInfo}}</div>
-		<div ng-if="vm.dataInitialized && !vm.processing && !vm.updateResult.Success && vm.updateResult.ErrorMsg.length > 0" class="alert-error notice-spacer"><i class='mdi mdi-alert-octagon'></i>{{vm.updateResult.ErrorMsg}}</div>
+		<div ng-if="vm.dataInitialized && !vm.processing && vm.updateResult.Success" ng-hide="vm.isConfirmCloseNoticeBar" class="alert-success notice-spacer">
+			<i class='mdi mdi-thumb-up'></i>
+			{{vm.updateResult.SuccessInfo}}
+			<i class='mdi mdi-close' ng-click="vm.closeNoticeBar()" style="float: right"></i>
+		</div>
+		<div ng-if="vm.dataInitialized && !vm.processing && !vm.updateResult.Success && vm.updateResult.ErrorMsg.length > 0" ng-hide="vm.isConfirmCloseNoticeBar" class="alert-error notice-spacer">
+			<i class='mdi mdi-alert-octagon'></i>
+			{{vm.updateResult.ErrorMsg}}
+			<i class='mdi mdi-close' ng-click="vm.closeNoticeBar()" style="float: right"></i>
+		</div>
 	</div>
-	
+
 </div>

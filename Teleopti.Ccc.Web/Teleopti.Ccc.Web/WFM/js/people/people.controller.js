@@ -3,15 +3,15 @@
 angular.module('wfm.people')
 	.constant('chunkSize', 50)
 	.controller('PeopleCtrl', [
-		'$scope', '$filter', '$state', '$document', '$translate', 'Upload', 'i18nService', 'uiGridConstants',
-		'uiGridExporterConstants', '$timeout', '$q', 'Toggle', 'People', PeopleController
+		'$scope', '$filter', '$state', '$stateParams', '$translate', 'i18nService', 'uiGridConstants',
+		'uiGridExporterConstants', '$q', 'Toggle', 'People', PeopleController
 	]);
 
-function PeopleController($scope, $filter, $state, $document, $translate, Upload, i18nService, uiGridConstants,
-	uiGridExporterConstants, $timeout, $q, toggleSvc, peopleSvc) {
+function PeopleController($scope, $filter, $state, $stateParams, $translate, i18nService, uiGridConstants,
+	uiGridExporterConstants, $q, toggleSvc, peopleSvc) {
 	$scope.searchResult = [];
 	$scope.pageSize = 20;
-	$scope.keyword = '';
+	$scope.keyword = $stateParams.currentKeyword !== '' ? $stateParams.currentKeyword : "";
 	$scope.totalPages = 0;
 	$scope.currentPageIndex = 1;
 	$scope.searchKeywordChanged = false;
@@ -23,30 +23,30 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 	$scope.showImportPanel = false;
 	$scope.selectedCount = 0;
 	$scope.dataInitialized = false;
-
+	$scope.preSelectedPeopleList = $stateParams.selectedPeopleIds;
 	$scope.commands = [
 		{
 			label: 'ImportUsers',
 			icon: 'mdi-file',
-			action: function() {
+			action: function () {
 				$scope.toggleImportPeople();
 			},
-			active: function() {
+			active: function () {
 				return $scope.isImportUsersEnabled;
 			}
 		}, {
 			label: 'AdjustSkill',
 			icon: 'mdi-package',
-			action: function() {
+			action: function () {
 				$scope.gotoSkillPanel();
 			},
-			active: function() {
+			active: function () {
 				return $scope.isAdjustSkillEnabled && ($scope.selectedCount > 0);
 			}
 		}
 	];
 
-	$scope.toggleImportPeople = function() {
+	$scope.toggleImportPeople = function () {
 		$scope.showImportPanel = !$scope.showImportPanel;
 	};
 
@@ -55,17 +55,23 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 	};
 
 	var dynamicColumnLoaded = false;
+
 	var paginationOptions = {
-		pageNumber: 1,
-		pageSize: 20,
-		sortColumns: [{
-			ColumnName: "LastName",
-			SortASC: true
-		}]
+		pageNumber: $stateParams.paginationOptions.pageNumber != undefined ?$stateParams.paginationOptions.pageNumber: 1,
+		pageSize: $stateParams.paginationOptions.pageSize != undefined ?$stateParams.paginationOptions.pageSize: 20,
+		sortColumns: $stateParams.paginationOptions.sortColumns != undefined ?$stateParams.paginationOptions.sortColumns: [
+			{
+				ColumnName: "LastName",
+				SortASC: true
+			}
+		]
 	};
 
 	$scope.selectedPeopleList = [];
 	$scope.gridOptions = {
+		saveFocus: false,
+		saveScroll: true,
+		saveGroupingExpandedStates: true,
 		enableFullRowSelection: false,
 		enableRowHeaderSelection: false,
 		exporterMenuCsv: true,
@@ -77,7 +83,7 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 		useExternalSorting: true,
 		enableColumnResizing: true,
 		columnDefs: [
-			{ displayName: 'FirstName', field: 'FirstName', headerCellFilter: 'translate', cellClass: 'first-name',minWidth:100 },
+			{ displayName: 'FirstName', field: 'FirstName', headerCellFilter: 'translate', cellClass: 'first-name', minWidth: 100 },
 			{
 				displayName: 'LastName',
 				field: 'LastName',
@@ -123,14 +129,15 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 		}
 	};
 
-	var getSelectedPeople = function() {
+	var getSelectedPeople = function () {
 		return $scope.selectedPeopleList;
 	}
+
 	$scope.gotoSkillPanel = function () {
-		$state.go("people-selection-cart", { selectedPeopleIds: getSelectedPeople(), commandTag: 'adjustSkill' });
+		$state.go("people-selection-cart", { selectedPeopleIds: getSelectedPeople(), commandTag: 'adjustSkill', currentKeyword: $scope.keyword, paginationOptions: paginationOptions });
 	};
 
-	var selectPeople = function(rows) {
+	var selectPeople = function (rows) {
 		angular.forEach(rows, function (row) {
 			var selectedPerson = row.entity;
 			if (row.isSelected && $scope.selectedPeopleList.indexOf(selectedPerson.PersonId) === -1) {
@@ -144,6 +151,16 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 			}
 		});
 		$scope.selectedCount = $scope.selectedPeopleList.length;
+	}
+
+	var setPeopleSelectionStatus = function () {
+		for (var i = 0; i < $scope.gridOptions.data.length; i++) {
+			var personId = $scope.gridOptions.data[i].PersonId;
+			if ($scope.preSelectedPeopleList.indexOf(personId) > -1) {
+				$scope.gridApi.grid.modifyRows($scope.gridOptions.data);
+				$scope.gridApi.selection.selectRow($scope.gridOptions.data[i]);
+			}
+		}
 	}
 
 	$scope.toggleRowSelectable = function () {
@@ -168,9 +185,10 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 		}
 
 		getPage();
+
 	};
 
-	var getPage = function () {
+	function getPage() {
 		$scope.currentPageIndex = $scope.searchKeywordChanged ? 1 : paginationOptions.pageNumber;
 
 		var sortColumnList = "";
@@ -195,6 +213,7 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 				angular.forEach(person.OptionalColumnValues, function (val) {
 					person[val.Key] = val.Value;
 				});
+
 			});
 
 			if (!dynamicColumnLoaded) {
@@ -207,14 +226,14 @@ function PeopleController($scope, $filter, $state, $document, $translate, Upload
 						}
 					});
 					if (!isFound) {
-						$scope.gridOptions.columnDefs.push({ displayName: col, field: col, headerCellFilter: 'translate', enableSorting: false, minWidth: 100 });
+						$scope.gridOptions.columnDefs.push({ name: col, displayName: col, field: col, headerCellFilter: 'translate', enableSorting: false, minWidth: 100 });
 					}
 
 				});
-				
+
 				dynamicColumnLoaded = true;
 			}
-
+			setPeopleSelectionStatus();
 			$scope.optionalColumns = result.OptionalColumns;
 			$scope.totalPages = result.TotalPages;
 			$scope.keyword = $scope.defautKeyword();

@@ -3,15 +3,16 @@
 (function () {
 	angular.module('wfm.people')
 		.controller('PeopleCartCtrl', [
-			'$q', '$translate', '$stateParams', 'uiGridConstants', 'People', 'Toggle', '$mdSidenav', '$mdUtil', PeopleCartController
+			'$q', '$translate', '$stateParams', 'uiGridConstants', 'People', 'Toggle', '$mdSidenav', '$mdUtil', '$state', PeopleCartController
 		]);
 
-	function PeopleCartController($q, $translate, $stateParams, uiGridConstants, peopleSvc, toggleSvc, $mdSidenav, $mdUtil) {
+	function PeopleCartController($q, $translate, $stateParams, uiGridConstants, peopleSvc, toggleSvc, $mdSidenav, $mdUtil, $state) {
 		var vm = this;
 		vm.selectedPeopleIds = $stateParams.selectedPeopleIds;
 		vm.commandName = $stateParams.commandTag;
+		console.log("cart start:", $stateParams);
 		vm.processing = false;
-
+		vm.isConfirmCloseNoticeBar = false;
 		vm.selectedDate = new Date();
 		vm.toggleCalendar = function ($event) {
 			vm.status.opened = !vm.status.opened;
@@ -36,10 +37,10 @@
 			{
 				label: "AdjustSkill",
 				icon: "mdi-package",
-				action: function() {
+				action: function () {
 					vm.toggleSkillPanel();
 				},
-				active: function() {
+				active: function () {
 					return vm.isAdjustSkillEnabled;
 				},
 				columns: [
@@ -49,12 +50,13 @@
 			}
 		];
 
+		vm.back = function () {
+			$state.go('people', $stateParams);
+		}
+
 		function buildToggler(navID) {
 			var debounceFn = $mdUtil.debounce(function () {
-				$mdSidenav(navID)
-				  .toggle()
-				  .then(function () {
-				  });
+				$mdSidenav(navID).toggle().then(function () { });
 			}, 200);
 			return debounceFn;
 		}
@@ -62,10 +64,12 @@
 		vm.toggleSkillPanel = buildToggler('right');
 
 		vm.close = function () {
-			$mdSidenav('right').close()
-			  .then(function () {
-			  });
+			$mdSidenav('right').close().then(function () { });
 		};
+
+		vm.closeNoticeBar = function () {
+			vm.isConfirmCloseNoticeBar = true;
+		}
 
 		vm.gridOptions = {
 			columnDefs: [
@@ -87,7 +91,7 @@
 		};
 
 		var loadSkillPromise = peopleSvc.loadAllSkills.get().$promise;
-		loadSkillPromise.then(function(result) {
+		loadSkillPromise.then(function (result) {
 			vm.availableSkills = result;
 		});
 		var fetchPeoplePromise = peopleSvc.fetchPeople.post({ Date: moment(vm.selectedDate).format('YYYY-MM-DD'), PersonIdList: vm.selectedPeopleIds }).$promise;
@@ -95,11 +99,11 @@
 			vm.availablePeople = result;
 			vm.gridOptions.data = result;
 		});
-		vm.updateResult = { Success: false};
-		vm.updateSkillOnPersons = function() {
+		vm.updateResult = { Success: false };
+		vm.updateSkillOnPersons = function () {
 			vm.processing = true;
 			peopleSvc.updateSkillOnPersons.post({ Date: moment(vm.selectedDate).format('YYYY-MM-DD'), People: vm.availablePeople }).$promise.then(
-				function(result) {
+				function (result) {
 					vm.updateResult = result;
 					if (vm.updateResult.Success) {
 						var personOrPeople = vm.updateResult.SuccessCount > 1 ? 'people are' : 'person is';
@@ -118,7 +122,7 @@
 		});
 
 		function initialize() {
-			for(var i = 0; i < vm.commands.length; i++) {
+			for (var i = 0; i < vm.commands.length; i++) {
 				var cmd = vm.commands[i];
 				if (cmd.label.toLowerCase() === $stateParams.commandTag.toLowerCase()) {
 					vm.currentCommand = cmd;
@@ -164,8 +168,8 @@
 			});
 		}
 
-		 vm.skillSelectedStatusChanged = function(skill) {
-			angular.forEach(vm.availablePeople, function(person) {
+		vm.skillSelectedStatusChanged = function (skill) {
+			angular.forEach(vm.availablePeople, function (person) {
 				var skillIndex = person.SkillIdList.indexOf(skill.SkillId);
 				if (skill.Selected && skillIndex === -1) {
 					person.SkillIdList.push(skill.SkillId);
@@ -174,7 +178,7 @@
 					person.SkillIdList.splice(skillIndex, 1);
 				}
 			});
-		 }
+		}
 
 		initialize();
 	};

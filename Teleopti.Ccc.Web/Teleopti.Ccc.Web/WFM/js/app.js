@@ -100,11 +100,12 @@ wfm.config([
 			templateUrl: 'html/outbound/campaign-edit.html',
 			controller: 'OutboundEditCtrl'
 		}).state('people', {
-			url: '/people?buid',
+			url: '/people',
+			params: { selectedPeopleIds: [], currentKeyword: '', paginationOptions: {} },
 			templateUrl: 'html/people/people.html',
 			controller: 'PeopleCtrl'
 		}).state('people-selection-cart', {
-			params: { selectedPeopleIds: {}, commandTag: {} },
+			params: { selectedPeopleIds: [], commandTag: {}, currentKeyword: '', paginationOptions: {} },
 			templateUrl: 'html/people/people-selection-cart.html',
 			controller: 'PeopleCartCtrl as vm'
 		}).state('seatPlan', {
@@ -119,7 +120,7 @@ wfm.config([
 			templateUrl: 'js/rta/html/rta.html',
 			controller: 'RtaCtrl'
 		});
-		
+
 		$translateProvider.useUrlLoader('../api/Global/Language');
 		$translateProvider.preferredLanguage('en');
 	}
