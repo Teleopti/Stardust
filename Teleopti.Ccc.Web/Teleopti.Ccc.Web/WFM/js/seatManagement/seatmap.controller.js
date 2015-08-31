@@ -84,6 +84,7 @@
 
 		vm.onChangeOfDate = function() {
 			vm.refreshSeatMap();
+			vm.isDatePickerOpened = false;
 		};
 
 		function resize() {
@@ -134,30 +135,35 @@
 			canvasUtils.loadSeatMap(location.id, vm.selectedDate, canvas, false, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
 		};
 
-		function onLoadSeatMapSuccess(data) {
 
-			vm.parentId = data.ParentId;
-			vm.seatMapId = data.Id;
-			vm.breadcrumbs = data.BreadcrumbInfo;
-			resetZoom();
-			vm.isLoading = false;
-			if (vm.showOccupancy) {
-				canvasUtils.applyOccupancyColoring(canvas, data.Seats);
-			}
-
-			$scope.$apply();
-		};
-
-		function onLoadSeatMapNoSeatMapJson(data) {
-
+		function resetOnLoad(data) {
+			
 			if (data) {
 				vm.parentId = data.ParentId;
 				vm.seatMapId = data.Id;
 				vm.breadcrumbs = data.BreadcrumbInfo;
 			}
 
-			vm.isLoading = false;
+			vm.currentSeat = null;
+			vm.occupancydetails = undefined;
+
 			resetZoom();
+			vm.isLoading = false;
+		};
+
+		function onLoadSeatMapSuccess(data) {
+
+			if (vm.showOccupancy) {
+				canvasUtils.applyOccupancyColoring(canvas, data.Seats);
+			}
+
+			resetOnLoad(data);
+
+			$scope.$apply();
+		};
+
+		function onLoadSeatMapNoSeatMapJson(data) {
+			resetOnLoad(data);
 		};
 
 	};
