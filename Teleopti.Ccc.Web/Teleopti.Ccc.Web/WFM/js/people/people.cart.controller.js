@@ -106,10 +106,7 @@
 			peopleSvc.updateSkillOnPersons.post({ Date: moment(vm.selectedDate).format('YYYY-MM-DD'), People: vm.availablePeople }).$promise.then(
 				function (result) {
 					vm.updateResult = result;
-					if (vm.updateResult.Success) {
-						var personOrPeople = vm.updateResult.SuccessCount > 1 ? 'people are' : 'person is';
-						vm.updateResult.SuccessInfo = vm.updateResult.SuccessCount + " " + personOrPeople + " " + "updated successfully!"; //TODO: need localization
-					} else {
+					if (!vm.updateResult.Success) {
 						vm.updateResult.ErrorMsg = "Process failed! Error: " + vm.updateResult.ErrorMsg; //TODO: need localization
 					}
 					vm.processing = false;

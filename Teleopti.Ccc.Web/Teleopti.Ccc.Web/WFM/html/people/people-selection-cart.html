@@ -35,20 +35,20 @@
 				 ng-mouseenter=" hovered()" ng-mouseleave="hovered()"
 				 label="{{'Actions'|translate}}"
 				 toggling-method="click" menu-state="closed">
-				<button class="{{cmd.label|lowercase}}" ng-show="cmd.active" mfb-button icon="{{cmd.icon}}" ng-click="button.action()"
+				<button class="{{cmd.label|lowercase}}" ng-show="cmd.active" mfb-button icon="{{cmd.icon}}" ng-click="cmd.action()"
 						label="{{cmd.label|translate}}" ng-repeat="cmd in vm.commands"></button>
 			</nav>
 		</div>
 		<md-sidenav class="md-sidenav-right md-sidenav-skill-panel md-whiteframe-z2" md-component-id="right">
-			<div class="sidenav-header">Skill</div>
-			<md-content layout-padding style="height: 500px">
+			<div class="sidenav-header">{{'Skill'|translate}}</div>
+			<md-content layout-padding style="height: 550px">
 				<div class="input-prepend">
 					<i class="mdi mdi-filter-outline"></i>
-					<input type="text" name="filterSkill" ng-model="searchSkills.SkillName" />
+					<input type="text" name="filterSkill" ng-model="searchSkills.SkillName"/>
 				</div>
 				<md-list-item ng-repeat="skill in vm.availableSkills|filter:searchSkills">
 					<div class="wfm-checkbox">
-						<input type="checkbox" id="{{skill.SkillId}}" ng-model="skill.Selected" ng-change="vm.skillSelectedStatusChanged(skill)" ui-indeterminate="skill.Status =='partial'" />
+						<input type="checkbox" id="{{skill.SkillId}}" ng-model="skill.Selected" ng-change="vm.skillSelectedStatusChanged(skill)" ui-indeterminate="skill.Status =='partial'"/>
 						<label for="{{skill.SkillId}}">
 							<span class="wfm-checkbox-toggle"></span>
 							<span class="wfm-checkbox-label">{{skill.SkillName}}</span>
@@ -56,18 +56,20 @@
 					</div>
 				</md-list-item>
 			</md-content>
-			<!--<md-button ng-click="vm.close()" class="md-primary">Close Sidenav Right</md-button>-->
-			<button class="wfm-btn wfm-btn-primary" ng-click="vm.updateSkillOnPersons()">{{'Apply' | translate}}</button>
+			<div style="float: right">
+				<button ng-if="vm.dataInitialized && !vm.processing && vm.updateResult.Success && vm.updateResult.SuccessCount > 0" class="wfm-btn wfm-btn-primary" >{{'Shift Bag' | translate}}</button>
+				<button class="wfm-btn wfm-btn-primary" ng-click="vm.updateSkillOnPersons()">{{'Apply' | translate}}</button>
+			</div>
 		</md-sidenav>
 		<md-progress-linear ng-show="vm.processing" md-mode="indeterminate"></md-progress-linear>
 		<div ng-if="vm.dataInitialized && !vm.processing && vm.updateResult.Success" ng-hide="vm.isConfirmCloseNoticeBar" class="alert-success notice-spacer">
 			<i class='mdi mdi-thumb-up'></i>
-			{{vm.updateResult.SuccessInfo}}
+			{{'SuccessfullyUpdatedPeopleCountColon'|translate}}{{vm.updateResult.SuccessCount}}   You might need to change the shift bag accordingly.
 			<i class='mdi mdi-close' ng-click="vm.closeNoticeBar()" style="float: right"></i>
 		</div>
 		<div ng-if="vm.dataInitialized && !vm.processing && !vm.updateResult.Success && vm.updateResult.ErrorMsg.length > 0" ng-hide="vm.isConfirmCloseNoticeBar" class="alert-error notice-spacer">
 			<i class='mdi mdi-alert-octagon'></i>
-			{{vm.updateResult.ErrorMsg}}
+			{{'ProcessFailedErrorColon'|translate}}{{vm.updateResult.ErrorMsg}}
 			<i class='mdi mdi-close' ng-click="vm.closeNoticeBar()" style="float: right"></i>
 		</div>
 	</div>

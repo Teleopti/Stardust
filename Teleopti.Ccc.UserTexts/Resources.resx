@@ -13398,4 +13398,16 @@ Reduce the complexity to use these shifts.</value>
     <value>Manually Planned</value>
     <comment>Label to indicate whether there are manual production plan for the campaign on the specified date.</comment>
   </data>
+  <data name="SelectAllMatchedPeople" xml:space="preserve">
+    <value>Select all matched people</value>
+    <comment>Select all matched people in search view</comment>
+  </data>
+  <data name="ProcessFailedErrorColon" xml:space="preserve">
+    <value>Process failed! Error:</value>
+    <comment>error msg after skills update procedure fail</comment>
+  </data>
+  <data name="SuccessfullyUpdatedPeopleCountColon" xml:space="preserve">
+    <value>Successfully updated people count:</value>
+    <comment>count of people successfully update skills</comment>
+  </data>
 </root>
