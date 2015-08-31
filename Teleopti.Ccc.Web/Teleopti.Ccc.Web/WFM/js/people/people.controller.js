@@ -21,9 +21,11 @@ function PeopleController($scope, $filter, $state, $stateParams, $translate, i18
 	$scope.isImportUsersEnabled = false;
 	$scope.isAdjustSkillEnabled = false;
 	$scope.showImportPanel = false;
-	$scope.selectedCount = 0;
+	$scope.selectedCount = function () {
+		return $scope.selectedPeopleList.length;
+	};
 	$scope.dataInitialized = false;
-	$scope.preSelectedPeopleList = $stateParams.selectedPeopleIds;
+	$scope.selectAllVisible = false;
 	$scope.commands = [
 		{
 			label: 'ImportUsers',
@@ -41,7 +43,7 @@ function PeopleController($scope, $filter, $state, $stateParams, $translate, i18
 				$scope.gotoSkillPanel();
 			},
 			active: function () {
-				return $scope.isAdjustSkillEnabled && ($scope.selectedCount > 0);
+				return $scope.isAdjustSkillEnabled && ($scope.selectedCount() > 0);
 			}
 		}
 	];
@@ -67,7 +69,7 @@ function PeopleController($scope, $filter, $state, $stateParams, $translate, i18
 		]
 	};
 
-	$scope.selectedPeopleList = [];
+	$scope.selectedPeopleList = $stateParams.selectedPeopleIds !== undefined ? $stateParams.selectedPeopleIds : [];
 	$scope.gridOptions = {
 		saveFocus: false,
 		saveScroll: true,
@@ -101,10 +103,31 @@ function PeopleController($scope, $filter, $state, $stateParams, $translate, i18
 		],
 		gridMenuTitleFilter: $translate,
 		exporterAllDataFn: function () {
-			return loadAllResults()
-			.then(function () {
-				getPage();
-			});
+			return loadAllResults(function (result) {
+				$scope.gridOptions.data = result.People;
+
+				angular.forEach($scope.gridOptions.data, function (person) {
+					angular.forEach(person.OptionalColumnValues, function (val) {
+						person[val.Key] = val.Value;
+					});
+				});
+
+				angular.forEach(result.OptionalColumns, function (col) {
+					var isFound = false;
+					angular.forEach($scope.gridOptions.columnDefs, function (colDef) {
+						if (colDef.field === col) {
+							isFound = true;
+							return;
+						}
+					});
+					if (!isFound) {
+						$scope.gridOptions.columnDefs.push({ displayName: col, field: col, headerCellFilter: 'translate', enableSorting: false, minWidth: 100 });
+					}
+				});
+			})
+				.then(function () {
+					getPage();
+				});
 		},
 		paginationPageSize: 20,
 		useExternalPagination: true,
@@ -123,6 +146,11 @@ function PeopleController($scope, $filter, $state, $stateParams, $translate, i18
 
 			gridApi.selection.on.rowSelectionChangedBatch($scope, function (rows) {
 				selectPeople(rows);
+				if (rows.length > 0 && rows.length === $scope.gridOptions.data.length && rows[0].isSelected && $scope.totalPages > 1) {
+					$scope.selectAllVisible = true;
+				} else {
+					$scope.selectAllVisible = false;
+				}
 			});
 
 			$scope.gridApi.core.on.sortChanged($scope, $scope.sortChanged);
@@ -150,13 +178,22 @@ function PeopleController($scope, $filter, $state, $stateParams, $translate, i18
 				}
 			}
 		});
-		$scope.selectedCount = $scope.selectedPeopleList.length;
+	}
+
+	$scope.selectAllMatch = function () {
+		loadAllResults(function (result) {
+			angular.forEach(result.People, function (person) {
+				if ($scope.selectedPeopleList.indexOf(person.PersonId) === -1)
+					$scope.selectedPeopleList.push(person.PersonId);
+			});
+			$scope.selectAllVisible = false;
+		});
 	}
 
 	var setPeopleSelectionStatus = function () {
 		for (var i = 0; i < $scope.gridOptions.data.length; i++) {
 			var personId = $scope.gridOptions.data[i].PersonId;
-			if ($scope.preSelectedPeopleList.indexOf(personId) > -1) {
+			if ($scope.selectedPeopleList.indexOf(personId) > -1) {
 				$scope.gridApi.grid.modifyRows($scope.gridOptions.data);
 				$scope.gridApi.selection.selectRow($scope.gridOptions.data[i]);
 			}
@@ -209,6 +246,7 @@ function PeopleController($scope, $filter, $state, $stateParams, $translate, i18
 		}).$promise.then(function (result) {
 			$scope.searchResult = result.People;
 			$scope.gridOptions.data = result.People;
+			$scope.gridOptions.paginationCurrentPage = $scope.currentPageIndex
 			angular.forEach($scope.searchResult, function (person) {
 				angular.forEach(person.OptionalColumnValues, function (val) {
 					person[val.Key] = val.Value;
@@ -292,7 +330,7 @@ function PeopleController($scope, $filter, $state, $stateParams, $translate, i18
 		getPage();
 	};
 
-	var loadAllResults = function () {
+	var loadAllResults = function (successCallback) {
 		var sortColumnList = "";
 		for (var i = 0; i < paginationOptions.sortColumns.length; i++) {
 			var column = paginationOptions.sortColumns[i];
@@ -309,27 +347,9 @@ function PeopleController($scope, $filter, $state, $stateParams, $translate, i18
 			currentPageIndex: 1,
 			sortColumns: sortColumnList
 		}).$promise.then(function (result) {
-			$scope.gridOptions.data = result.People;
-
-			angular.forEach($scope.gridOptions.data, function (person) {
-				angular.forEach(person.OptionalColumnValues, function (val) {
-					person[val.Key] = val.Value;
-				});
-			});
-
-			angular.forEach(result.OptionalColumns, function (col) {
-				var isFound = false;
-				angular.forEach($scope.gridOptions.columnDefs, function (colDef) {
-					if (colDef.field === col) {
-						isFound = true;
-						return;
-					}
-				});
-				if (!isFound) {
-					$scope.gridOptions.columnDefs.push({ displayName: col, field: col, headerCellFilter: 'translate', enableSorting: false, minWidth: 100 });
-				}
-			});
-		});
+			successCallback(result);
+		}
+		);
 	}
 
 	$scope.defautKeyword = function () {

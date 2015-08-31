@@ -3,7 +3,6 @@
 		padding: 0px 0;
 		margin: 0px 0;
 	}
-	
 </style>
 <div>
 	<div class="row">
@@ -16,6 +15,10 @@
 					   ng-click="toggleAdvancedSearchOption($event)" />
 				<advance-search class="dropdown" ng-cloak ng-if="isAdvancedSearchEnabled && showAdvancedSearchOption" outside-click="turnOffAdvancedSearch()"></advance-search>
 			</div>
+
+		</div>
+		<div ng-show="selectAllVisible" class="col-md-4">
+			<div class="alert-detail notice-spacer" ng-click="selectAllMatch()"><a href="javascript: void(0);">Select all matched people</a></div>
 		</div>
 	</div>
 
@@ -55,11 +58,11 @@
 				<button class="{{cmd.label|lowercase}}" ng-show="cmd.active()" mfb-button icon="{{cmd.icon}}" ng-click="cmd.action()"
 						label="{{cmd.label|translate}}" ng-repeat="cmd in commands"></button>
 			</nav>
-			<span ng-show="rowSelectionEnabled && selectedCount > 0" class="wfm-panel selection-cart-indicator">
-				{{selectedCount}}
+			<span ng-show="rowSelectionEnabled && selectedCount() > 0" class="wfm-panel selection-cart-indicator">
+				{{selectedCount()}}
 			</span>
 		</div>
 	</div>
-	
+
 	<import-people ng-if="showImportPanel" ng-cloak></import-people>
 </div>

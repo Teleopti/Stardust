@@ -71,6 +71,8 @@
 		}
 
 		vm.gridOptions = {
+			paginationPageSizes: [20, 60, 100],
+			paginationPageSize: 20,
 			columnDefs: [
 				{ displayName: 'FirstName', field: 'FirstName', headerCellFilter: 'translate', cellClass: 'first-name', minWidth: 100 },
 				{
