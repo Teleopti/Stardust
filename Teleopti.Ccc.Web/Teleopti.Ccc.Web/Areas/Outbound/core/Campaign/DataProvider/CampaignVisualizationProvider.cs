@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.Outbound.Models;
 using Teleopti.Interfaces.Domain;
@@ -25,6 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 				PlannedPersonHours = new List<double>(),
 				BacklogPersonHours = new List<double>(),
 				ScheduledPersonHours = new List<double>(),
+				OverstaffPersonHours = new List<double>(),
 				IsManualPlanned = new List<bool>(),
 				IsCloseDays = new List<bool>()
 			};
@@ -33,21 +35,46 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			if (campaign == null) return visualizationVM;
 
 			var incomingTask = _campaignTaskManager.GetIncomingTaskFromCampaign(campaign);
+			TimeSpan backlogPreviousDay = TimeSpan.Zero;
+
 			foreach (var date in campaign.SpanningPeriod.DayCollection())
 			{
 				var plannedHours = incomingTask.GetRealPlannedTimeOnDate(date);
 				var backlogHours = incomingTask.GetBacklogOnDate(date);
 				var scheduledHours = incomingTask.GetRealScheduledTimeOnDate(date);
+				var overstaffHours = TimeSpan.Zero;
 
 				visualizationVM.Dates.Add(date);
-				visualizationVM.PlannedPersonHours.Add(plannedHours.Days*24 + plannedHours.Hours + (double)plannedHours.Minutes / 60);
-				visualizationVM.BacklogPersonHours.Add(backlogHours.Days*24 + backlogHours.Hours + (double)backlogHours.Minutes/60);
-				visualizationVM.ScheduledPersonHours.Add(scheduledHours.Days*24 + scheduledHours.Hours + (double)scheduledHours.Minutes / 60);
+				
+				if (backlogHours == TimeSpan.Zero)
+				{
+					overstaffHours = (scheduledHours > TimeSpan.Zero)
+						? scheduledHours - backlogPreviousDay
+						: plannedHours - backlogPreviousDay;
+
+					if (overstaffHours > TimeSpan.Zero)
+					{						
+						if (scheduledHours > TimeSpan.Zero) scheduledHours -= overstaffHours;
+						else plannedHours -= overstaffHours;
+					}
+				}
+													
+				visualizationVM.PlannedPersonHours.Add(convertTimespanToDouble(plannedHours));
+				visualizationVM.BacklogPersonHours.Add(convertTimespanToDouble(backlogHours));
+				visualizationVM.ScheduledPersonHours.Add(convertTimespanToDouble(scheduledHours));
 				visualizationVM.IsManualPlanned.Add(incomingTask.GetManualPlannedInfoOnDate(date));
 				visualizationVM.IsCloseDays.Add(incomingTask.PlannedTimeTypeOnDate(date) == PlannedTimeTypeEnum.Closed);
+				visualizationVM.OverstaffPersonHours.Add(convertTimespanToDouble(overstaffHours));
+
+				backlogPreviousDay = backlogHours;
 			}
 			
 			return visualizationVM;
+		}
+
+		private double convertTimespanToDouble(TimeSpan t)
+		{
+			return t.Days*24 + t.Hours + (double) t.Minutes/60;
 		}
 	}
 }

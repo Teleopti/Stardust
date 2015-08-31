@@ -104,6 +104,37 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		}
 
 		[Test]
+		public void ShouldGetOverstaffHours()
+		{
+			var id = new Guid();
+			var campaign = new Domain.Outbound.Campaign();
+			var date = new DateOnly(2015, 7, 24);
+			var endDate = new DateOnly(2015, 7, 25);
+			
+			campaign.SpanningPeriod = new DateOnlyPeriod(date, endDate);
+
+			_campaignRepository.Stub(x => x.Get(id)).Return(campaign);
+			var incomingTask = MockRepository.GenerateMock<IBacklogTask>();
+			incomingTask.Stub(x => x.GetRealPlannedTimeOnDate(date)).Return(TimeSpan.FromHours(10));
+			incomingTask.Stub(x => x.GetRealScheduledTimeOnDate(date)).Return(TimeSpan.FromHours(0));
+			incomingTask.Stub(x => x.GetBacklogOnDate(date)).Return(TimeSpan.FromHours(5));
+			incomingTask.Stub(x => x.GetRealPlannedTimeOnDate(endDate)).Return(TimeSpan.FromHours(10));
+			incomingTask.Stub(x => x.GetRealScheduledTimeOnDate(endDate)).Return(TimeSpan.FromHours(0));
+			incomingTask.Stub(x => x.GetBacklogOnDate(endDate)).Return(TimeSpan.FromHours(0));
+
+			_taskManager.Stub(x => x.GetIncomingTaskFromCampaign(campaign)).Return(incomingTask);
+
+			var target = new CampaignVisualizationProvider(_campaignRepository, _taskManager);
+			var result = target.ProvideVisualization(id);
+
+			result.OverstaffPersonHours.Count.Should().Be.EqualTo(2);
+			result.OverstaffPersonHours[0].Should().Be.EqualTo(0);
+			result.OverstaffPersonHours[1].Should().Be.EqualTo(5);
+			result.PlannedPersonHours[1].Should().Be.EqualTo(5);
+
+		}
+
+		[Test]
 		public void ShouldGetScheduledHours()
 		{
 			var id = new Guid();
