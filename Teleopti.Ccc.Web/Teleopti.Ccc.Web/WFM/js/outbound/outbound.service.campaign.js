@@ -5,7 +5,7 @@
         .service('outboundService', ['$filter', '$http', outboundService]);
 
     function outboundService($filter, $http) {
-
+    	
         var createCampaignCommandUrl = '../api/Outbound/Campaign';
         var getCampaignCommandUrl = '../api/Outbound/Campaign/';
         var getCampaignLoadUrl = '../api/Outbound/Campaign/Load';
@@ -19,7 +19,7 @@
 			});
 		}
 
-        this.getCampaignStatistics = function(filter, successCb, errorCb) {
+		this.getCampaignStatistics = function (filter, successCb, errorCb) {			
             $http.get(getCampaignStatisticsUrl).success(function(data) {
                     if (successCb != null) successCb(data);
                 }).
@@ -70,8 +70,8 @@
 				});
         };
 
-        this.editCampaign = function (campaign, successCb, errorCb) {
-            $http.put(editCampaignCommandUrl + campaign.Id, normalizeCampaign(campaign))
+        this.editCampaign = function (campaign, successCb, errorCb) {        
+        	$http.put(editCampaignCommandUrl + campaign.Id, normalizeCampaign(campaign))	     
 				.success(function (data) {
 				    if (successCb != null) successCb(data);
 				})
@@ -104,6 +104,9 @@
             var campaign = angular.copy(campaign);
 
             var formattedWorkingHours = [];
+	    
+	        campaign.StartDate.Date = naiveToUtc(campaign.StartDate.Date);
+            campaign.EndDate.Date = naiveToUtc(campaign.EndDate.Date);
 
             campaign.WorkingHours.forEach(function (d) {
                 d.WeekDaySelections.forEach(function (e) {
@@ -125,6 +128,28 @@
             return $filter('date')(dtObj, 'HH:mm');
         }
 
+		function naiveToUtc(d) {
+			var year = d.getFullYear(),
+				month = d.getMonth(),
+				date = d.getDate(),
+				dayObj = new Date();
+
+			dayObj.setUTCFullYear(year, month, date);
+			return dayObj;
+		}
+
+		function naiveFromUtc(dateString) {
+			var match = /(\d{4})-(\d{2})-(\d{2})/.exec(dateString);
+			if (match) {
+				var year = parseInt(match[1]),
+					month = parseInt(match[2]) - 1,
+					date = parseInt(match[3]),
+					dateObj = new Date();
+				dateObj.setFullYear(year, month, date);
+				return dateObj;
+			}
+		}
+
         function parseTimespanString(t) {
             if (!angular.isString(t)) return t;
             var parts = t.match(/^(\d{1,2}):(\d{1,2})(:|$)/);
@@ -134,17 +159,17 @@
                 d.setMinutes(parts[2]);
                 return d;
             }
-
         }
 
         function denormalizeCampaign(campaign) {
             var campaign = angular.copy(campaign);
 
-            if (campaign.StartDate) campaign.StartDate.Date = new Date(campaign.StartDate.Date);
-            if (campaign.EndDate) campaign.EndDate.Date = new Date(campaign.EndDate.Date);
-
+            if (campaign.StartDate) campaign.StartDate.Date = naiveFromUtc(campaign.StartDate.Date);
+            if (campaign.EndDate) campaign.EndDate.Date = naiveFromUtc(campaign.EndDate.Date);
+           
             var reformattedWorkingHours = [];
 
+			
 
             campaign.WorkingHours.forEach(function (a) {
 
