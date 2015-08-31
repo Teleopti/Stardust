@@ -57,9 +57,9 @@ function PeopleController($scope, $filter, $state, $stateParams, $translate, i18
 	var dynamicColumnLoaded = false;
 
 	var paginationOptions = {
-		pageNumber: $stateParams.paginationOptions.pageNumber != undefined ?$stateParams.paginationOptions.pageNumber: 1,
-		pageSize: $stateParams.paginationOptions.pageSize != undefined ?$stateParams.paginationOptions.pageSize: 20,
-		sortColumns: $stateParams.paginationOptions.sortColumns != undefined ?$stateParams.paginationOptions.sortColumns: [
+		pageNumber: $stateParams.paginationOptions.pageNumber != undefined ? $stateParams.paginationOptions.pageNumber : 1,
+		pageSize: $stateParams.paginationOptions.pageSize != undefined ? $stateParams.paginationOptions.pageSize : 20,
+		sortColumns: $stateParams.paginationOptions.sortColumns != undefined ? $stateParams.paginationOptions.sortColumns : [
 			{
 				ColumnName: "LastName",
 				SortASC: true

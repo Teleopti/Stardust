@@ -10,7 +10,6 @@
 		var vm = this;
 		vm.selectedPeopleIds = $stateParams.selectedPeopleIds;
 		vm.commandName = $stateParams.commandTag;
-		console.log("cart start:", $stateParams);
 		vm.processing = false;
 		vm.isConfirmCloseNoticeBar = false;
 		vm.selectedDate = new Date();

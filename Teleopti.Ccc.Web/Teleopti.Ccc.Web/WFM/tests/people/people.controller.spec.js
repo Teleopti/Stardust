@@ -3,15 +3,17 @@ describe("PeopleCtrl", function() {
 	var $q,
 		$rootScope,
 		$httpBackend;
+	var stateParams = { selectedPeopleIds: [], commandTag: "AdjustSkill", currentKeyword: '', paginationOptions: {} };
 
 	beforeEach(module('wfm'));
 
-	beforeEach(inject(function(_$httpBackend_, _$q_, _$rootScope_) {
+	beforeEach(inject(function(_$httpBackend_, _$q_, _$rootScope_, _$controller_) {
 		$q = _$q_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
 		$httpBackend.expectGET("../api/Global/Language?lang=en").respond(200, 'mock');
 		$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, 'mock');
+		
 	}));
 
 	var mockUpload = {};
@@ -57,9 +59,9 @@ describe("PeopleCtrl", function() {
 
 	it("should show agent by search function", inject(function($controller) {
 		var scope = $rootScope.$new();
-
-		$controller("PeopleCtrl", { $scope: scope, Toggle: mockToggleService, People: mockPeopleService, Upload: mockUpload });
-
+		
+		$controller("PeopleCtrl", { $scope: scope, $stateParams: stateParams, Toggle: mockToggleService, People: mockPeopleService });
+		
 		scope.keyword = "ashley";
 		scope.searchKeyword();
 		scope.$digest(); // this is needed to resolve the promise
@@ -74,9 +76,8 @@ describe("PeopleCtrl", function() {
 
 	it("should show my team as default keyword", inject(function($controller) {
 		var scope = $rootScope.$new();
-
-		$controller("PeopleCtrl", { $scope: scope, Toggle: mockToggleService, People: mockPeopleService, Upload: mockUpload });
-
+		$controller("PeopleCtrl", { $scope: scope, $stateParams: stateParams, Toggle: mockToggleService, People: mockPeopleService });
+		
 		scope.searchKeyword();
 		scope.$digest(); // this is needed to resolve the promise
 
@@ -85,8 +86,8 @@ describe("PeopleCtrl", function() {
 
 	it("should show agent by search with option", inject(function($controller) {
 		var scope = $rootScope.$new();
-
-		$controller("PeopleCtrl", { $scope: scope, Toggle: mockToggleService, People: mockPeopleService, Upload: mockUpload });
+		$controller("PeopleCtrl", { $scope: scope, $stateParams: stateParams, Toggle: mockToggleService, People: mockPeopleService });
+		
 
 		scope.advancedSearchForm = {
 			FirstName: "Ashley Smith",
@@ -111,7 +112,7 @@ describe("PeopleCtrl", function() {
 
 	it("should change the advanced search field according to simple search input", inject(function($controller) {
 		var scope = $rootScope.$new();
-		$controller("PeopleCtrl", { $scope: scope, Toggle: mockToggleService, People: mockPeopleService, Upload: mockUpload });
+		$controller("PeopleCtrl", { $scope: scope, $stateParams: stateParams, Toggle: mockToggleService, People: mockPeopleService });
 
 		scope.keyword = "FirstName: Ashley Smith, Organization: London Shenzhen";
 
@@ -126,4 +127,5 @@ describe("PeopleCtrl", function() {
 		expect(scope.advancedSearchForm.FirstName).toEqual("John King");
 		expect(scope.advancedSearchForm.Organization).toEqual(undefined);
 	}));
+	
 });
