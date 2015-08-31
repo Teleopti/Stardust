@@ -37,6 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 			{
 				StartDateTime = convertTimeToLocal(booking.StartDateTime),
 				EndDateTime = convertTimeToLocal(booking.EndDateTime),
+				BelongsToDate = booking.BelongsToDate,
 				PersonId = booking.Person.Id.GetValueOrDefault(),
 				FirstName = booking.Person.Name.FirstName,
 				LastName = booking.Person.Name.LastName,

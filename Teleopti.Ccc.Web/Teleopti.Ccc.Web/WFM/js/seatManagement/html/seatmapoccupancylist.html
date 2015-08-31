@@ -1,6 +1,6 @@
 ﻿
 
-<div ng-repeat-start="detail in occupancyDetail"></div>
+<div ng-repeat-start="detail in vm.occupancyDetail"></div>
 
 <div ng-show="$first" class="bottom-header">
 	Seat: {{detail.SeatName}}
@@ -8,8 +8,8 @@
 <ul class="wfm-list">
 	<li class="active" >
 		<span class="list-item-container" style="max-width: none">
-			{{getDisplayTime (detail.StartDateTime)}}
-			-{{getDisplayTime (detail.EndDateTime)}}
+			<!--{{getDisplayTime (detail.StartDateTime)}} - {{getDisplayTime (detail.EndDateTime)}}-->
+			{{vm.getDisplayTime(detail)}}
 			&nbsp;&nbsp;{{detail.FirstName}}
 			&nbsp;{{detail.LastName}}
 		</span>

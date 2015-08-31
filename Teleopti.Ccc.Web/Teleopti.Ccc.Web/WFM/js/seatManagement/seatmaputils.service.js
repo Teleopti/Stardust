@@ -15,6 +15,7 @@ angular.module('wfm.seatMap')
 			getFirstObjectOfTypeFromCanvasObject: getFirstObjectOfTypeFromCanvasObject,
 			getLocations: getLocations,
 			getSeats: getSeats,
+			getSeatBookingTimeDisplay: getSeatBookingTimeDisplay,
 			getHighestSeatPriority: getHighestSeatPriority,
 			clearCanvas : clearCanvas,
 			loadSeatMap: loadSeatMap,
@@ -361,7 +362,26 @@ angular.module('wfm.seatMap')
 			});
 
 		};
+		
+		function getTimeZoneAdjustmentDisplay(booking) {
 
+			var belongsToDateMoment = moment(booking.BelongsToDate.Date);
+			var startDateMoment = moment(booking.StartDateTime);
+			var timeZoneAdjustment = "";
+
+			if (startDateMoment.isAfter(belongsToDateMoment, 'day')) {
+				timeZoneAdjustment += " (+1)";
+			}
+			if (startDateMoment.isBefore(belongsToDateMoment, 'day')) {
+				timeZoneAdjustment += " (-1)";
+			}
+
+			return timeZoneAdjustment;
+		}
+		
+		function getSeatBookingTimeDisplay(booking) {
+			return moment(booking.StartDateTime).format('LT') + " - " + moment(booking.EndDateTime).format('LT') + getTimeZoneAdjustmentDisplay(booking);
+		}
 
 		return utils;
 
