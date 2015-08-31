@@ -7,12 +7,14 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Common
 {
-	public class CurrentDataSource : ICurrentDataSource
+	public class CurrentDataSource : ICurrentDataSource, IDataSourceScope
 	{
 		private readonly ICurrentIdentity _currentIdentity;
 		private readonly IConfigReader _configReader;
 		private readonly ICurrentApplicationData _applicationData;
 		private readonly Lazy<IDataSource> _rtaConfigurationDataSource;
+		[ThreadStatic]
+		private static IDataSource _threadDataSource;
  
 		public static ICurrentDataSource Make()
 		{
@@ -30,6 +32,9 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public IDataSource Current()
 		{
+			if (_threadDataSource != null)
+				return _threadDataSource;
+
 			var identity = _currentIdentity.Current();
 			if (identity != null)
 				return identity.DataSource;
@@ -62,5 +67,13 @@ namespace Teleopti.Ccc.Domain.Common
 			return Current().DataSourceName;
 		}
 
+		public IDisposable OnThisThreadUse(IDataSource dataSource)
+		{
+			_threadDataSource = dataSource;
+			return new GenericDisposable(() =>
+			{
+				_threadDataSource = null;
+			});
+		}
 	}
 }

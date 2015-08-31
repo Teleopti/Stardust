@@ -10,6 +10,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
@@ -51,6 +52,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 		public IDataSourcesFactory DataSourcesFactory;
 		public FakeCurrentApplicationData ApplicationData;
 		public FakeConfigReader ConfigReader;
+		public IDataSourceScope DataSource;
 
 		[Test]
 		[TestTable("TestTable")]
@@ -236,6 +238,39 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 			TheService.DoesUpdate("INSERT INTO TestTable (Value) VALUES (0)");
 
 			TestTable.Values("TestTable").Count().Should().Be(1);
+		}
+
+		[Test]
+		public void ShouldProduceUnitOfWorkForDataSourceOnThread()
+		{
+			using (new TestTable("TestTable1", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix))
+			using (new TestTable("TestTable2", ConnectionStringHelper.ConnectionStringUsedInTests))
+			{
+				var dataSource1 = DataSourcesFactory.Create("One", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, null);
+				var dataSource2 = DataSourcesFactory.Create("Two", ConnectionStringHelper.ConnectionStringUsedInTests, null);
+
+				var thread1 = onAnotherThread(() =>
+				{
+					using (DataSource.OnThisThreadUse(dataSource1))
+					{
+						TheService.Does(uow => 1000.Times(i => uow.CreateSqlQuery("INSERT INTO TestTable1 (Value) VALUES (0)").ExecuteUpdate()));
+					}
+				});
+
+				var thread2 = onAnotherThread(() =>
+				{
+					using (DataSource.OnThisThreadUse(dataSource2))
+					{
+						TheService.Does(uow => 1000.Times(i => uow.CreateSqlQuery("INSERT INTO TestTable2 (Value) VALUES (0)").ExecuteUpdate()));
+					}
+				});
+
+				thread1.Join();
+				thread2.Join();
+
+				TestTable.Values("TestTable1", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix).Count().Should().Be(1000);
+				TestTable.Values("TestTable2", ConnectionStringHelper.ConnectionStringUsedInTests).Count().Should().Be(1000);
+			}
 		}
 
 		[Test]
