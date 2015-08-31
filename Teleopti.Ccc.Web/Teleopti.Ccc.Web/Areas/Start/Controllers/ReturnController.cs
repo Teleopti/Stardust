@@ -1,6 +1,8 @@
-﻿using System.Web;
+﻿using System.Configuration;
+using System.Web;
 using System.Web.Mvc;
 using Microsoft.IdentityModel.Protocols.WSFederation;
+using Teleopti.Ccc.Domain.Config;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 {
@@ -9,7 +11,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 	{
 		public ViewResult Hash()
 		{
-			return View();
+			return View(new ReturnModel { UseRelative = ConfigurationManager.AppSettings.ReadValue("UseRelativeConfiguration") });
 		}
 
 		[ValidateInput(false)]
@@ -27,5 +29,10 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			}
 			return new EmptyResult();
 		}
+	}
+
+	public class ReturnModel
+	{
+		public bool UseRelative { get; set; }
 	}
 }

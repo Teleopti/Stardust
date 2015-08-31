@@ -1,6 +1,8 @@
-﻿@{
+﻿@model Teleopti.Ccc.Web.Areas.Start.Controllers.ReturnModel
+@{
 	Layout = null;
 }
+<html>
 <head>
 	<meta charset="UTF-8">
 	<script type="text/javascript">
@@ -19,7 +21,16 @@
 		}
 
 		function redirect() {
-			window.location.replace(getParameterByName('redirectUrl'));
+			var redirectUrl = getParameterByName('redirectUrl');
+			if (@Json.Encode(Model.UseRelative)) {
+				var pat = /^https?:\/\//i;
+				if (pat.test(redirectUrl))
+				{
+					window.location.replace(redirectUrl.replace(/^(?:\/\/|[^\/]+)*\//, ""));
+					return;
+				}
+			} 
+			window.location.replace(redirectUrl);
 		}
 
 		redirect();
@@ -28,3 +39,4 @@
 <body>
 	If you are not redirected automatically, follow the <a href="javascript:void(0)" onclick="redirect();">link</a>
 </body>
+</html>
