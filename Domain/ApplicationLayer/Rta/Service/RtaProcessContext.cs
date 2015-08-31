@@ -1,6 +1,7 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.PulseLoop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
@@ -9,32 +10,31 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly PersonOrganizationData _person;
 
 		public RtaProcessContext(
-			ExternalUserStateInputModel input,
-			Guid personId,
-			Guid businessUnitId,
-			DateTime currentTime,
-			IPersonOrganizationProvider personOrganizationProvider,
+			ExternalUserStateInputModel input, 
+			PersonOrganizationData person, 
+			INow now,
+			IPersonOrganizationProvider personOrganizationProvider, 
 			IAgentStateReadModelUpdater agentStateReadModelUpdater, 
 			IAgentStateMessageSender messageSender, 
-			IAdherenceAggregator adherenceAggregator,
-			IPreviousStateInfoLoader previousStateInfoLoader
-			)
+			IAdherenceAggregator adherenceAggregator, 
+			IPreviousStateInfoLoader previousStateInfoLoader)
 		{
-			if (!personOrganizationProvider.PersonOrganizationData().TryGetValue(personId, out _person))
+			if (!personOrganizationProvider.PersonOrganizationData().TryGetValue(person.PersonId, out _person))
 				return;
-			_person.BusinessUnitId = businessUnitId;
-
-			CurrentTime = currentTime;
-			PreviousStateInfoLoader = previousStateInfoLoader;
+			_person.BusinessUnitId = person.BusinessUnitId;
+			_person.Tenant = person.Tenant;
 			Input = input ?? new ExternalUserStateInputModel();
+			CurrentTime = now.UtcDateTime();
+
+			PreviousStateInfoLoader = previousStateInfoLoader;
 			AgentStateReadModelUpdater = agentStateReadModelUpdater ?? new DontUpdateAgentStateReadModel();
 			MessageSender = messageSender ?? new NoMessage();
 			AdherenceAggregator = adherenceAggregator ?? new NoAggregation();
 		}
 
-		public ExternalUserStateInputModel Input { get; private set; }
 		public PersonOrganizationData Person { get { return _person; } }
-		public DateTime CurrentTime { get; private set; }
+		public ExternalUserStateInputModel Input { get; private set; }
+		public DateTime CurrentTime { get; set; }
 
 		public IPreviousStateInfoLoader PreviousStateInfoLoader { get; private set; }
 		public IAgentStateReadModelUpdater AgentStateReadModelUpdater { get; private set; }

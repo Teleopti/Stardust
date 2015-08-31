@@ -14,11 +14,12 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 			_countTenants = countTenants;
 		}
 
-		public bool Find(string rtaKey)
+		public string Find(string rtaKey)
 		{
 			if (_countTenants.Count() > 1 && rtaKey == Domain.ApplicationLayer.Rta.Service.Rta.LegacyAuthenticationKey)
 				throw new LegacyAuthenticationKeyException("Using the default authentication key with more than one tenant is not allowed");
-            return _findTenantByRtaKey.Find(rtaKey) != null;
+			var tenant = _findTenantByRtaKey.Find(rtaKey);
+			return tenant != null ? tenant.Name : null;
 		}
 	}
 }

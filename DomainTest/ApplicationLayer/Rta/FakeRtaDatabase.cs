@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 	{
 		IFakeDataBuilder WithDefaultsFromState(ExternalUserStateForTest state);
 		IFakeDataBuilder WithDataFromState(ExternalUserStateForTest state);
+		IFakeDataBuilder WithTenant(string name, string key);
 		IFakeDataBuilder WithSource(string sourceId);
 		IFakeDataBuilder WithBusinessUnit(Guid businessUnitId);
 		IFakeDataBuilder WithUser(string userCode, Guid personId, Guid? businessUnitId, Guid? teamId, Guid? siteId);
@@ -34,7 +35,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		IFakeDataBuilder WithDefaultStateGroup();
 		IFakeDataBuilder WithStateCode(string statecode);
 		IFakeDataBuilder WithExistingState(Guid personId, string stateCode);
-		IFakeDataBuilder WithTenant(string key);
 		FakeRtaDatabase Make();
 	}
 
@@ -113,14 +113,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			return this.WithUser(state.UserCode, Guid.NewGuid());
 		}
 
-		public IFakeDataBuilder WithTenant(string key)
+		public IFakeDataBuilder WithTenant(string name, string key)
 		{
 			_applicationData.RegisteredDataSources =
-				new IDataSource[] {new FakeDataSource(key) }
+				new IDataSource[] {new FakeDataSource(name) }
 					.Union(_applicationData.RegisteredDataSources)
 					.Randomize()
 					.ToArray();
-			Tenants.Has(new Tenant(key) {RtaKey = key});
+			Tenants.Has(new Tenant(name) {RtaKey = key});
 			return this;
 		}
 
@@ -501,6 +501,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 
 	public static class FakeDatabaseBuilderExtensions
 	{
+		public static IFakeDataBuilder WithTenant(this IFakeDataBuilder fakeDataBuilder, string key)
+		{
+			return fakeDataBuilder.WithTenant(key, key);
+		}
+
 		public static IFakeDataBuilder WithUser(this IFakeDataBuilder fakeDataBuilder, string userCode)
 		{
 			return fakeDataBuilder.WithUser(userCode, Guid.NewGuid(), null, null, null);

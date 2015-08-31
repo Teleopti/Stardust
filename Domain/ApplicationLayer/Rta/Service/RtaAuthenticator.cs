@@ -13,9 +13,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				_authenticationKey = Rta.LegacyAuthenticationKey;
 		}
 
-		public bool Autenticate(string authenticationKey)
+		public string Autenticate(string authenticationKey)
 		{
-			return authenticationKey == _authenticationKey;
+			return authenticationKey == _authenticationKey ? "ok" : null;
 		}
 	}
 }

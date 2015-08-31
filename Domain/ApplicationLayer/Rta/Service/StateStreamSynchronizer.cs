@@ -58,27 +58,25 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		
 		public void Sync()
 		{
-			var currentTime = _now.UtcDateTime();
 			var states = _agentStateReadModelReader.GetActualAgentStates();
 			_recreatables.ForEach(s =>
 			{
 				s.DeleteAll();
-				processStatesTo(s, states, currentTime);
+				processStatesTo(s, states);
 			});
 		}
 
 		public virtual void Initialize()
 		{
-			var currentTime = _now.UtcDateTime();
 			var states = _agentStateReadModelReader.GetActualAgentStates();
 			_initializebles.ForEach(s =>
 			{
 				if (!s.Initialized())
-					processStatesTo(s, states, currentTime);
+					processStatesTo(s, states);
 			});
 		}
 
-		private void processStatesTo(object handler, IEnumerable<AgentStateReadModel> states, DateTime currentTime)
+		private void processStatesTo(object handler, IEnumerable<AgentStateReadModel> states)
 		{	
 			using (_distributedLockAcquirer.LockForTypeOf(handler))
 			using (_eventPublisherScope.OnThisThreadPublishTo(new SyncPublishTo(handler)))
@@ -90,9 +88,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						{
 							StateCode = s.StateCode
 						},
-						s.PersonId,
-						s.BusinessUnitId,
-						currentTime,
+						new PersonOrganizationData
+						{
+							Tenant = null,
+							BusinessUnitId = s.BusinessUnitId,
+							PersonId = s.PersonId
+						}, 
+						_now,
 						_personOrganizationProvider,
 						null,
 						null,

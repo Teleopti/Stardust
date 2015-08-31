@@ -11,21 +11,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IScheduleLoader scheduleLoader,
 			IAppliedAdherence appliedAdherence)
 		{
-			input = context.Input;
+			Input = context.Input;
 			Person = context.Person;
 			CurrentTime = context.CurrentTime;
 			Stored = context.PreviousStateInfoLoader.Load(context.Person.PersonId);
 			Schedule = new ScheduleInfo(scheduleLoader, Person.PersonId, CurrentTime, Stored);
-			State = new StateAlarmInfo(stateCode, platformTypeId, input, Person, Stored, Schedule, stateMapper);
-			Adherence = new AdherenceInfo(input, Person, Stored, State, Schedule, appliedAdherence, stateMapper);
+			State = new StateAlarmInfo(stateCode, platformTypeId, Input, Person, Stored, Schedule, stateMapper);
+			Adherence = new AdherenceInfo(Input, Person, Stored, State, Schedule, appliedAdherence, stateMapper);
 		}
 
-		private Guid platformTypeId { get { return string.IsNullOrEmpty(input.PlatformTypeId) ? Stored.PlatformTypeId : input.ParsedPlatformTypeId(); } }
-		private string stateCode { get { return input.StateCode ?? Stored.StateCode; } }
+		private Guid platformTypeId { get { return string.IsNullOrEmpty(Input.PlatformTypeId) ? Stored.PlatformTypeId : Input.ParsedPlatformTypeId(); } }
+		private string stateCode { get { return Input.StateCode ?? Stored.StateCode; } }
 		private DateTime? stateStart { get { return State.AlarmTypeId() == Stored.AlarmTypeId ? Stored.AlarmTypeStartTime : CurrentTime; } }
-		private DateTime? batchId { get { return input.IsSnapshot ? input.BatchId : Stored.BatchId; } }
+		private DateTime? batchId { get { return Input.IsSnapshot ? Input.BatchId : Stored.BatchId; } }
 
-		private ExternalUserStateInputModel input { get; set; }
+		public ExternalUserStateInputModel Input { get; set; }
 		public PersonOrganizationData Person { get; private set; }
 		public StateAlarmInfo State { get; private set; }
 		public StoredStateInfo Stored { get; private set; }
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			{
 				BatchId = batchId,
 				NextStart = Schedule.NextActivityStartTime(),
-				OriginalDataSourceId = input.SourceId ?? Stored.SourceId,
+				OriginalDataSourceId = Input.SourceId ?? Stored.SourceId,
 				PersonId = Person.PersonId,
 				PlatformTypeId = platformTypeId,
 				ReceivedTime = CurrentTime,

@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_findTenantForRta = findTenantForRta;
 		}
 
-		public bool Autenticate(string authenticationKey)
+		public string Autenticate(string authenticationKey)
 		{
 			return _findTenantForRta.Find(authenticationKey);
 		}
