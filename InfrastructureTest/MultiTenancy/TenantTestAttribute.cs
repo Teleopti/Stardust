@@ -6,7 +6,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 {
-	public class TenantTestAttribute : InfrastructureTestAttribute
+	public class TenantTestAttribute : DatabaseTestAttribute
 	{
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{

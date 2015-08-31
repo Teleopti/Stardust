@@ -278,6 +278,7 @@
     <Compile Include="MultiTenancy\Server\CurrentTenant.cs" />
     <Compile Include="MultiTenancy\Server\CurrentTenantUserFake.cs" />
     <Compile Include="MultiTenancy\Server\CurrentTenantFake.cs" />
+    <Compile Include="MultiTenancy\Server\Queries\CountTenants.cs" />
     <Compile Include="MultiTenancy\Server\Queries\DeletePersonInfoFake.cs" />
     <Compile Include="MultiTenancy\Server\DuplicateApplicationLogonNameException.cs" />
     <Compile Include="MultiTenancy\Server\DuplicateIdentityException.cs" />

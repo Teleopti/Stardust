@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<FindPersonInfo>().As<IFindPersonInfo>().SingleInstance();
 			builder.RegisterType<FindPersonInfoByCredentials>().As<IFindPersonInfoByCredentials>().SingleInstance();
 			builder.RegisterType<FindTenantByRtaKey>().As<IFindTenantByRtaKey>().SingleInstance();
+			builder.RegisterType<CountTenants>().As<ICountTenants>().SingleInstance();
 
 			builder.RegisterType<FindPersonInfoByIdentity>().As<IFindPersonInfoByIdentity>().SingleInstance();
 			builder.Register(c =>
@@ -48,6 +49,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<TenantExists>().As<ITenantExists>().SingleInstance();
 			builder.RegisterType<LoadAllPersonInfos>().SingleInstance();
 			builder.RegisterType<PersistTenant>().SingleInstance();
+			builder.RegisterType<DeleteTenant>().SingleInstance();
 		}
 	}
 }

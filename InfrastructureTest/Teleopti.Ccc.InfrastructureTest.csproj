@@ -181,6 +181,7 @@
     <Compile Include="ApplicationLayer\Events\SelectiveEventPublishingTest.cs" />
     <Compile Include="Authentication\LoadUserUnauthorizedTest.cs" />
     <Compile Include="Bugs\BugShiftExchangeInvalidUpdate.cs" />
+    <Compile Include="DatabaseTestAttribute.cs" />
     <Compile Include="DistributedLock\DistributedLockTest.cs" />
     <Compile Include="Foundation\CouldNotCreateTransactionExceptionTest.cs" />
     <Compile Include="MessageBrokerUnitOfWork\MessageBrokerUnitOfWorkTest.cs" />
@@ -204,6 +205,7 @@
     <Compile Include="MultiTenancy\Server\Queries\ApplicationUserQueryTest.cs" />
     <Compile Include="MultiTenancy\Client\AuthenticationQuerierTest.cs" />
     <Compile Include="MultiTenancy\Server\CheckPasswordStrengthTest.cs" />
+    <Compile Include="MultiTenancy\Server\Queries\CountTenantsTest.cs" />
     <Compile Include="MultiTenancy\Server\Queries\DeletePersonInfoTest.cs" />
     <Compile Include="MultiTenancy\Server\Queries\FindLogonInfoTest.cs" />
     <Compile Include="MultiTenancy\Server\Queries\FindPersonInfoByCredentialsTest.cs" />
