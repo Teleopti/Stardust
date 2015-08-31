@@ -4,7 +4,7 @@
 		watch: {
 			dev: {
 				files: ['css/*.scss', 'js/**/*.js', 'tests/**/*.js'],
-				tasks: ['uglify:dev', 'sass', 'cssmin', 'test'],
+				tasks: ['uglify:dev', 'sass', 'cssmin'],
 				options: {
 					spawn: false,
 				}
