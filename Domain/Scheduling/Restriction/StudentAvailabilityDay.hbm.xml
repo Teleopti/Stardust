@@ -35,7 +35,7 @@
 
     <list name="RestrictionCollection"  
             inverse="true"
-            cascade="all">
+            cascade="all-delete-orphan">
       <key column ="Parent" on-delete="cascade" />
       <index type="int" column="RestrictionIndex" />
       <one-to-many class="Teleopti.Ccc.Domain.Scheduling.Restriction.StudentAvailabilityRestriction" />

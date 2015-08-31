@@ -55,6 +55,40 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.IsFalse(days[0].NotAvailable);
         }
 
+
+		[Test]
+		public void CanChangeStudentAvailabilityDays()
+		{
+			// create start point
+			var dateOnly = new DateOnly(2009, 2, 3);
+			var period = new DateOnlyPeriod(dateOnly, dateOnly);
+
+			var studentAvailabilityRestriction = new StudentAvailabilityRestriction();
+			studentAvailabilityRestriction.StartTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(8), null);
+			studentAvailabilityRestriction.EndTimeLimitation = new EndTimeLimitation(null, TimeSpan.FromHours(20));
+            var studentAvailabilityRestrictions = new List<IStudentAvailabilityRestriction> { studentAvailabilityRestriction };
+            var studentAvailabilityDay = new StudentAvailabilityDay(_person, dateOnly, studentAvailabilityRestrictions);
+			PersistAndRemoveFromUnitOfWork(studentAvailabilityDay);
+
+			
+			// load again
+			IEnumerable<IPerson> persons = new Collection<IPerson> { _person };
+			IList<IStudentAvailabilityDay> days = new StudentAvailabilityDayRepository(UnitOfWork).Find(period, persons);
+
+			var loadedStudentAvailabilityDay = days[0];
+
+			loadedStudentAvailabilityDay.Change(new TimePeriod(TimeSpan.FromHours(9), TimeSpan.FromHours(20)));
+			PersistAndRemoveFromUnitOfWork(loadedStudentAvailabilityDay);
+
+			 
+			IList<IStudentAvailabilityDay> daysAgain = new StudentAvailabilityDayRepository(UnitOfWork).Find(period, persons);
+			var loadedStudentAvailabilityDayAgain = daysAgain[0];
+
+			var restrictionAgain = loadedStudentAvailabilityDayAgain.RestrictionCollection[0];
+			var index = ((StudentAvailabilityDay) restrictionAgain.Parent).IndexInCollection(restrictionAgain);
+			Assert.AreEqual(0, index);
+		}
+
         /// <summary>
         /// Cants the find student days between dates and on persons when person list is empty.
         /// Bug 9184
