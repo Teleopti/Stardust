@@ -71,9 +71,6 @@ function PeopleController($scope, $filter, $state, $stateParams, $translate, i18
 
 	$scope.selectedPeopleList = $stateParams.selectedPeopleIds !== undefined ? $stateParams.selectedPeopleIds : [];
 	$scope.gridOptions = {
-		saveFocus: false,
-		saveScroll: true,
-		saveGroupingExpandedStates: true,
 		enableFullRowSelection: false,
 		enableRowHeaderSelection: false,
 		exporterMenuCsv: true,

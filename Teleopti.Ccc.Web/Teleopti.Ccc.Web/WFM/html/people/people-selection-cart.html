@@ -35,7 +35,7 @@
 				 ng-mouseenter=" hovered()" ng-mouseleave="hovered()"
 				 label="{{'Actions'|translate}}"
 				 toggling-method="click" menu-state="closed">
-				<button class="{{cmd.label|lowercase}}" ng-show="cmd.active" mfb-button icon="{{cmd.icon}}" ng-click="cmd.action()"
+				<button class="{{cmd.label|lowercase}}" ng-if="cmd.active" mfb-button icon="{{cmd.icon}}" ng-click="cmd.action()"
 						label="{{cmd.label|translate}}" ng-repeat="cmd in vm.commands"></button>
 			</nav>
 		</div>
