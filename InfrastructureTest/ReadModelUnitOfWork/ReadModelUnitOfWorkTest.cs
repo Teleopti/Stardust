@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 
 			system.UseTestDouble(new MutableFakeCurrentHttpContext()).For<ICurrentHttpContext>();
 			system.UseTestDouble(new MutableFakeCurrentTeleoptiPrincipal()).For<ICurrentTeleoptiPrincipal>();
-			system.UseTestDouble<FakeCurrentApplicationData>().For<ICurrentApplicationData>();
+			system.UseTestDouble<FakeApplicationData>().For<ICurrentApplicationData>();
 		}
 	}
 
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 		public ICurrentReadModelUnitOfWork UnitOfWork;
 		public MutableFakeCurrentTeleoptiPrincipal Principal;
 		public IDataSourcesFactory DataSourcesFactory;
-		public FakeCurrentApplicationData ApplicationData;
+		public FakeApplicationData ApplicationData;
 		public FakeConfigReader ConfigReader;
 		public IDataSourceScope DataSource;
 

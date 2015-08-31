@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
@@ -14,6 +15,7 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -32,21 +34,30 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		IFakeDataBuilder WithDefaultStateGroup();
 		IFakeDataBuilder WithStateCode(string statecode);
 		IFakeDataBuilder WithExistingState(Guid personId, string stateCode);
-		IFakeDataBuilder WithTenant(string tenant, string key);
+		IFakeDataBuilder WithTenant(string key);
 		FakeRtaDatabase Make();
 	}
 
 	public class FakeRtaDatabase : IDatabaseReader, IDatabaseWriter, IPersonOrganizationReader, IFakeDataBuilder
 	{
+		private readonly ICurrentDataSource _currentDataSource;
+
+		public readonly FakeAgentStateReadModelReader AgentStateReadModelReader;
+		public readonly FakeRtaStateGroupRepository RtaStateGroupRepository;
+		public readonly FakeStateGroupActivityAlarmRepository StateGroupActivityAlarmRepository;
+		public readonly FakeTenants Tenants;
+		private readonly FakeApplicationData _applicationData;
+
+		private BusinessUnit _businessUnit;
+		private Guid _businessUnitId;
+		private string _platformTypeId;
+
 		private readonly List<KeyValuePair<string, int>> _datasources = new List<KeyValuePair<string, int>>();
 		private readonly List<KeyValuePair<string, IEnumerable<ResolvedPerson>>> _externalLogOns = new List<KeyValuePair<string, IEnumerable<ResolvedPerson>>>();
 		private readonly List<scheduleLayer2> _schedules = new List<scheduleLayer2>();
 		private readonly List<PersonOrganizationData> _personOrganizationData = new List<PersonOrganizationData>();
-
-		public FakeRtaStateGroupRepository RtaStateGroupRepository = new FakeRtaStateGroupRepository();
-		public FakeStateGroupActivityAlarmRepository StateGroupActivityAlarmRepository = new FakeStateGroupActivityAlarmRepository();
-		public FakeAgentStateReadModelReader AgentStateReadModelReader = new FakeAgentStateReadModelReader();
-		public FakeTenants Tenants = new FakeTenants();
+		private readonly IList<AgentStateReadModel> _persistedAgentStates = new List<AgentStateReadModel>();
+		private readonly IList<string> _persistedOnTenants = new List<string>();
 
 		private class scheduleLayer2
 		{
@@ -54,21 +65,39 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			public ScheduleLayer ScheduleLayer { get; set; }
 		}
 
+		public FakeRtaDatabase(
+			FakeAgentStateReadModelReader agentStateReadModelReader,
+			FakeRtaStateGroupRepository rtaStateGroupRepository,
+			FakeStateGroupActivityAlarmRepository stateGroupActivityAlarmRepository,
+			FakeTenants tenants,
+			FakeApplicationData applicationData,
+			ICurrentDataSource currentDataSource)
+		{
+			AgentStateReadModelReader = agentStateReadModelReader;
+			RtaStateGroupRepository = rtaStateGroupRepository;
+			StateGroupActivityAlarmRepository = stateGroupActivityAlarmRepository;
+			Tenants = tenants;
+			_applicationData = applicationData;
+			_currentDataSource = currentDataSource;
+			WithBusinessUnit(Guid.NewGuid());
+			WithDefaultsFromState(new ExternalUserStateForTest());
+		}
+
 		public AgentStateReadModel PersistedAgentState { get; set; }
+
+		public IEnumerable<AgentStateReadModel> PersistedAgentStates
+		{
+			get { return _persistedAgentStates; }
+		}
+
+		public IEnumerable<string> PersistedOnTenants
+		{
+			get { return _persistedOnTenants; }
+		}
 
 		public IRtaState AddedStateCode
 		{
 			get { return RtaStateGroupRepository.LoadAll().Single(x => x.DefaultStateGroup).StateCollection.SingleOrDefault(); }
-		}
-
-		private BusinessUnit _businessUnit;
-		private Guid _businessUnitId;
-		private string _platformTypeId;
-
-		public FakeRtaDatabase()
-		{
-			WithBusinessUnit(Guid.NewGuid());
-			WithDefaultsFromState(new ExternalUserStateForTest());
 		}
 
 		public IFakeDataBuilder WithDefaultsFromState(ExternalUserStateForTest state)
@@ -82,6 +111,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		{
 			WithDefaultsFromState(state);
 			return this.WithUser(state.UserCode, Guid.NewGuid());
+		}
+
+		public IFakeDataBuilder WithTenant(string key)
+		{
+			_applicationData.RegisteredDataSources =
+				new IDataSource[] {new FakeDataSource(key) }
+					.Union(_applicationData.RegisteredDataSources)
+					.Randomize()
+					.ToArray();
+			Tenants.Has(new Tenant(key) {RtaKey = key});
+			return this;
 		}
 
 		public IFakeDataBuilder WithSource(string sourceId)
@@ -274,6 +314,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		{
 			AgentStateReadModelReader.Has(model);
 			PersistedAgentState = model;
+			_persistedAgentStates.Add(model);
+			_persistedOnTenants.Add(_currentDataSource.CurrentName());
 		}
 
 		public IEnumerable<PersonOrganizationData> PersonOrganizationData()
@@ -281,11 +323,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			return _personOrganizationData;
 		}
 
-		public IFakeDataBuilder WithTenant(string tenant, string key)
-		{
-			Tenants.Has(new Tenant(tenant) {RtaKey = key});
-			return this;
-		}
+		
 	}
 
 	public class FakeTenants : IFindTenantByRtaKey, ICountTenants, ILoadAllTenants

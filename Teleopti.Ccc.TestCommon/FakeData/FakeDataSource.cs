@@ -11,6 +11,15 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		public IReadModelUnitOfWorkFactory ReadModel { get; private set; }
 		public string DataSourceName { get; set; }
 
+		public FakeDataSource()
+		{
+		}
+
+		public FakeDataSource(string name)
+		{
+			DataSourceName = name;
+		}
+
 		public void ResetStatistic()
 		{
 			throw new NotImplementedException();

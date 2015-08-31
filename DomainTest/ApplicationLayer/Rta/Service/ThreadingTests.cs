@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public FakeRtaDatabase Database;
 		public FakeEventPublisher Publisher;
 		public IRta Target;
+		public IAgentStateReadModelReader AgentStateReadModelReader;
 
 		[Test]
 		public void ShouldNotSendDuplicateEvents()
@@ -62,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			});
 			Task.WaitAll(tasks.ToArray());
 
-			Database.AgentStateReadModelReader.GetActualAgentStates().Should().Have.Count.EqualTo(100);
+			AgentStateReadModelReader.GetActualAgentStates().Should().Have.Count.EqualTo(100);
 			Publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Should().Have.Count.EqualTo(100);
 		}
 	}

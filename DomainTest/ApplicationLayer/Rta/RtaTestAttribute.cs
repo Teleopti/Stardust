@@ -1,3 +1,4 @@
+using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
@@ -20,10 +21,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 	{
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble(new FakeMessageSender()).For<IMessageSender>();
-			system.UseTestDouble(new FakeCurrentDatasource()).For<ICurrentDataSource>();
+			system.UseTestDouble<FakeMessageSender>().For<IMessageSender>();
+			system.UseTestDouble<FakeApplicationData>().For<IApplicationData, ICurrentApplicationData>();
+			system.UseTestDouble<FakeCurrentDatasource>().For<ICurrentDataSource, IDataSourceScope>();
 			registerFakePublisher(system, configuration, new FakeEventPublisher());
-			registerFakeDatabase(system, configuration, new FakeRtaDatabase());
+			registerFakeDatabase(system, configuration, null);
 
 			system.UseTestDouble(new FakeReadModelUnitOfWorkAspect()).For<IReadModelUnitOfWorkAspect>();
 			system.UseTestDouble(new FakeAllBusinessUnitsUnitOfWorkAspect()).For<IAllBusinessUnitsUnitOfWorkAspect>();
@@ -49,13 +51,22 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 
 		private static void registerFakeDatabase(ISystem builder, IIocConfiguration configuration, FakeRtaDatabase database)
 		{
-			builder.UseTestDouble(database)
-				.For<IDatabaseReader, IDatabaseWriter, IPersonOrganizationReader>()
-				;
-			builder.UseTestDouble(database.AgentStateReadModelReader).For<IAgentStateReadModelReader>();
-			builder.UseTestDouble(database.RtaStateGroupRepository).For<IRtaStateGroupRepository>();
-			builder.UseTestDouble(database.StateGroupActivityAlarmRepository).For<IStateGroupActivityAlarmRepository>();
-			builder.UseTestDouble(database.Tenants).For<IFindTenantByRtaKey, ICountTenants, ILoadAllTenants>();
+			if (database != null)
+			{
+				builder.UseTestDouble(database).For<IDatabaseReader, IDatabaseWriter, IPersonOrganizationReader>();
+				builder.UseTestDouble(database.AgentStateReadModelReader).For<IAgentStateReadModelReader>();
+				builder.UseTestDouble(database.RtaStateGroupRepository).For<IRtaStateGroupRepository>();
+				builder.UseTestDouble(database.StateGroupActivityAlarmRepository).For<IStateGroupActivityAlarmRepository>();
+				builder.UseTestDouble(database.Tenants).For<IFindTenantByRtaKey, ICountTenants, ILoadAllTenants>();
+			}
+			else
+			{
+				builder.UseTestDouble<FakeRtaDatabase>().For<IDatabaseReader, IDatabaseWriter, IPersonOrganizationReader>();
+				builder.UseTestDouble<FakeAgentStateReadModelReader>().For<IAgentStateReadModelReader>();
+				builder.UseTestDouble<FakeRtaStateGroupRepository>().For<IRtaStateGroupRepository>();
+				builder.UseTestDouble<FakeStateGroupActivityAlarmRepository>().For<IStateGroupActivityAlarmRepository>();
+				builder.UseTestDouble<FakeTenants>().For<IFindTenantByRtaKey, ICountTenants, ILoadAllTenants>();
+			}
 		}
 
 		private static void registerFakePublisher(ISystem builder, IIocConfiguration configuration, FakeEventPublisher publisher)

@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 			var settingsFixture = _fixtureType.GetCustomAttributes(typeof(SettingAttribute), false).Cast<SettingAttribute>();
 			var settingsTest = _method.GetCustomAttributes(typeof(SettingAttribute), false).Cast<SettingAttribute>();
-			var settingsAttribute = this.GetType().GetCustomAttributes(typeof(SettingAttribute), false).Cast<SettingAttribute>();
+			var settingsAttribute = GetType().GetCustomAttributes(typeof(SettingAttribute), false).Cast<SettingAttribute>();
 			var settings = settingsFixture
 				.Union(settingsTest)
 				.Union(settingsAttribute)

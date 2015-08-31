@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -9,13 +10,14 @@ using Teleopti.Interfaces.MessageBroker.Client.Composite;
 
 namespace Teleopti.Ccc.TestCommon
 {
-	public class FakeCurrentApplicationData : ICurrentApplicationData, IApplicationData
+	public class FakeApplicationData : ICurrentApplicationData, IApplicationData
 	{
 		private readonly Func<IDataSourcesFactory> _dataSourcesFactory;
 
-		public FakeCurrentApplicationData(Func<IDataSourcesFactory> dataSourcesFactory)
+		public FakeApplicationData(Func<IDataSourcesFactory> dataSourcesFactory)
 		{
 			_dataSourcesFactory = dataSourcesFactory;
+			RegisteredDataSources = new IDataSource[] {};
 		}
 
 		public IEnumerable<IDataSource> RegisteredDataSources { get; set; }
@@ -26,7 +28,7 @@ namespace Teleopti.Ccc.TestCommon
 
 		public IDataSource Tenant(string tenantName)
 		{
-			throw new NotImplementedException();
+			return RegisteredDataSources.SingleOrDefault(x => x.DataSourceName.Equals(tenantName));
 		}
 
 		public IMessageBrokerComposite Messaging { get; private set; }

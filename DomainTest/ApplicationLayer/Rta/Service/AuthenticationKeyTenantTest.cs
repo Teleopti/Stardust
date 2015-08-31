@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			Database
 				.WithUser("user")
-				.WithTenant("tenant", "key");
+				.WithTenant("key");
 
 			Target.SaveState(new ExternalUserStateForTest
 			{
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			Database
 				.WithUser("user")
-				.WithTenant("tenant", Domain.ApplicationLayer.Rta.Service.Rta.LegacyAuthenticationKey);
+				.WithTenant(Domain.ApplicationLayer.Rta.Service.Rta.LegacyAuthenticationKey);
 
 			Target.SaveState(new ExternalUserStateForTest
 			{
@@ -62,8 +62,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		[Test]
 		public void ShouldNotAcceptLegacyAuthenticationKeyIf2Tenants()
 		{
-			Database.WithTenant("tenant", Domain.ApplicationLayer.Rta.Service.Rta.LegacyAuthenticationKey);
-			Database.WithTenant("tenant2", "key");
+			Database.WithTenant(Domain.ApplicationLayer.Rta.Service.Rta.LegacyAuthenticationKey);
+			Database.WithTenant("key");
 			var state = new ExternalUserStateForTest
 			{
 				AuthenticationKey = Domain.ApplicationLayer.Rta.Service.Rta.LegacyAuthenticationKey
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			Database
 				.WithUser("user")
-				.WithTenant("tenant", Domain.ApplicationLayer.Rta.Service.Rta.LegacyAuthenticationKey);
+				.WithTenant(Domain.ApplicationLayer.Rta.Service.Rta.LegacyAuthenticationKey);
 
 			Target.SaveState(new ExternalUserStateForTest
 			{
@@ -93,8 +93,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		[Test]
 		public void ShouldNotAcceptIfThirdAndFourthLetterOfAuthenticationKeyIsCorrupted_BecauseOfEncodingIssuesWithThe3rdLetterOfTheDefaultKeyAndWeAreNotAllowedToChangeTheDefault()
 		{
-			Database.WithTenant("tenant", Domain.ApplicationLayer.Rta.Service.Rta.LegacyAuthenticationKey);
-			Database.WithTenant("tenant2", "key");
+			Database.WithTenant(Domain.ApplicationLayer.Rta.Service.Rta.LegacyAuthenticationKey);
+			Database.WithTenant("key");
 
 			var state = new ExternalUserStateForTest
 			{
@@ -106,5 +106,4 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database.PersistedAgentState.Should().Be.Null();
 		}
 	}
-
 }
