@@ -25,7 +25,7 @@ namespace Teleopti.Interfaces.Domain
 
         IEnumerable<DayOfWeek> AccessibilityDaysOfWeek { get; }
 
-        IEnumerable<DateTime> AccessibilityDates { get; }
+        IEnumerable<DateOnly> AccessibilityDates { get; }
 
 		void AddAccessibilityDayOfWeek(DayOfWeek dayOfWeek);
 
@@ -41,9 +41,9 @@ namespace Teleopti.Interfaces.Domain
 
         void DeleteLimiter(IWorkShiftLimiter limiter);
 
-        void AddAccessibilityDate(DateTime dateTime);
+        void AddAccessibilityDate(DateOnly date);
 
-        void RemoveAccessibilityDate(DateTime dateTime);
+        void RemoveAccessibilityDate(DateOnly date);
 
         bool IsValidDate(DateOnly dateToCheck);
 

@@ -1,5 +1,5 @@
 using System;
-using System.Linq;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Interfaces.Domain;
 
@@ -17,25 +17,18 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_workTimeMinMaxRestrictionCreator = workTimeMinMaxRestrictionCreator;
 		}
 
-		public WorkTimeMinMaxCalculationResult WorkTimeMinMax(DateOnly date, IPerson person, IScheduleDay scheduleDay)
+		public WorkTimeMinMaxCalculationResult WorkTimeMinMax(DateOnly date, IRuleSetBag ruleSetBag, IScheduleDay scheduleDay)
 		{
-			if (person == null) throw new ArgumentNullException("person");
-			var result = new WorkTimeMinMaxCalculationResult();
-
-			var personPeriod = person.Period(date);
-			if (personPeriod == null)
-				return null;
-
-			var ruleSetBag = personPeriod.RuleSetBag;
 			if (ruleSetBag == null)
 				return null;
 
+			var result = new WorkTimeMinMaxCalculationResult();
 			var createdRestriction = _workTimeMinMaxRestrictionCreator.MakeWorkTimeMinMaxRestriction(scheduleDay, EffectiveRestrictionOptions.UseAll());
 			if (createdRestriction.Restriction != null)
 				result.RestrictionNeverHadThePossibilityToMatchWithShifts = !createdRestriction.Restriction.MayMatchWithShifts();
 			if (createdRestriction.IsAbsenceInContractTime)
 			{
-				result.WorkTimeMinMax = WorkTimeMinMaxForAbsence(scheduleDay);
+				result.WorkTimeMinMax = workTimeMinMaxForAbsence(scheduleDay);
 				return result;
 			}
 
@@ -46,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			return result;
 		}
 
-		private static IWorkTimeMinMax WorkTimeMinMaxForAbsence(IScheduleDay scheduleDay)
+		private static IWorkTimeMinMax workTimeMinMaxForAbsence(IScheduleDay scheduleDay)
 		{
 			var person = scheduleDay.Person;
 			var scheduleDate = scheduleDay.DateOnlyAsPeriod.DateOnly;
@@ -63,5 +56,30 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		}
 	}
 
-	
+	public interface IPersonRuleSetBagProvider
+	{
+		IRuleSetBag ForDate(IPerson person, DateOnly date);
+	}
+
+	public class PersonRuleSetBagProvider : IPersonRuleSetBagProvider
+	{
+		private readonly IRuleSetBagRepository _repository;
+
+		public PersonRuleSetBagProvider(IRuleSetBagRepository repository)
+		{
+			_repository = repository;
+		}
+
+		public IRuleSetBag ForDate(IPerson person, DateOnly date)
+		{
+			if (person == null) return null;
+
+			var personPeriod = person.Period(date);
+			if (personPeriod == null)
+				return null;
+
+			var ruleSetBag = personPeriod.RuleSetBag;
+			return ruleSetBag != null ? _repository.Find(ruleSetBag.Id.GetValueOrDefault()) : null;
+		}
+	}
 }

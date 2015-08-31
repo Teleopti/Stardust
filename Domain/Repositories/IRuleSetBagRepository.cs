@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
@@ -13,5 +14,6 @@ namespace Teleopti.Ccc.Domain.Repositories
     public interface IRuleSetBagRepository : IRepository<IRuleSetBag>
     {
         IEnumerable<IRuleSetBag> LoadAllWithRuleSets();
+	    IRuleSetBag Find(Guid id);
     }
 }

@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
             {
                 foreach (DateTime excludedDate in oldEntity.ExcludedDateCollection)
                 {
-                    ruleSet.AddAccessibilityDate(DateTime.SpecifyKind(excludedDate, DateTimeKind.Utc));
+                    ruleSet.AddAccessibilityDate(new DateOnly(excludedDate));
                 }
             }
             if (oldEntity.ActivityMinTimeCollection!=null)

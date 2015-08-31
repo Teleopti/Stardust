@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 
 		//change to ISet when https://nhibernate.jira.com/browse/NH-3590 is fixed
 		private IList<DayOfWeek> _accessibilityDaysOfWeek;
-		private IList<DateTime> _accessibilityDates;
+		private IList<DateOnly> _accessibilityDates;
 		///
 		private Description _description;
 		private bool _onlyForRestrictions;
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
             _ruleSetBagCollection = new List<IRuleSetBag>();
             _templateGenerator = generator;
 						_accessibilityDaysOfWeek = new List<DayOfWeek>();
-			_accessibilityDates = new List<DateTime>();
+			_accessibilityDates = new List<DateOnly>();
 
         }
 
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
             get { return _accessibilityDaysOfWeek; }
         }
 
-				public virtual IEnumerable<DateTime> AccessibilityDates
+				public virtual IEnumerable<DateOnly> AccessibilityDates
         {
             get { return _accessibilityDates; }
         }
@@ -173,22 +173,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
             _accessibilityDaysOfWeek.Remove(dayOfWeek);
         }
 
-        public virtual void AddAccessibilityDate(DateTime dateTime)
+        public virtual void AddAccessibilityDate(DateOnly dateTime)
         {
-            InParameter.VerifyDateIsUtc("dateTime",dateTime);
-            dateTime = dateTime.Date;
-					if(!_accessibilityDates.Contains(dateTime))
+            		if(!_accessibilityDates.Contains(dateTime))
 						_accessibilityDates.Add(dateTime);
         }
 
-        public virtual void RemoveAccessibilityDate(DateTime dateTime)
+        public virtual void RemoveAccessibilityDate(DateOnly dateTime)
         {
-            _accessibilityDates.Remove(DateTime.SpecifyKind(dateTime.Subtract(dateTime.TimeOfDay), DateTimeKind.Utc));
+            _accessibilityDates.Remove(dateTime);
         }
 
         public virtual bool IsValidDate(DateOnly dateToCheck)
         {
-            var dateInList = _accessibilityDates.Contains(dateToCheck.Date);
+            var dateInList = _accessibilityDates.Contains(dateToCheck);
             var dayOfWeekInList = _accessibilityDaysOfWeek.Contains(dateToCheck.DayOfWeek);
             var availableByDefault = (_defaultAccessibility == DefaultAccessibility.Included);
 
@@ -213,7 +211,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
         private void reinitializeFields()
         {
             _accessibilityDaysOfWeek = new List<DayOfWeek>();
-            _accessibilityDates = new List<DateTime>();
+            _accessibilityDates = new List<DateOnly>();
         }
         #endregion Methods 
 
@@ -255,7 +253,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
             foreach(DayOfWeek dayOfWeek in _accessibilityDaysOfWeek)
                 retobj.AddAccessibilityDayOfWeek(dayOfWeek);
 
-            foreach (DateTime date in _accessibilityDates)
+            foreach (var date in _accessibilityDates)
                 retobj.AddAccessibilityDate(date);
 
             retobj._ruleSetBagCollection = new List<IRuleSetBag>();

@@ -56,15 +56,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                 new AutoPositionedActivityExtender(act, new TimePeriodWithSegment(1, 2, 3, 4, 5),
                                                    new TimeSpan(22)));
             root.AddLimiter(new ContractTimeLimiter(new TimePeriod(1,2,3,4), new TimeSpan()));
-            //root.AddLimiter(new ActivityTimeLimiter(act, new TimePeriod(10,1,11,1), OperatorLimiter.LessThen));
             root.AddLimiter(new ActivityTimeLimiter(act, TimeSpan.FromHours(1), OperatorLimiter.LessThen));
             root.Description = new Description("test");
             root.DefaultAccessibility = DefaultAccessibility.Excluded;
             root.AddAccessibilityDayOfWeek(DayOfWeek.Sunday);
             root.AddAccessibilityDayOfWeek(DayOfWeek.Saturday);
-            root.AddAccessibilityDate(new DateTime(2007, 12, 24,0,0,0,DateTimeKind.Utc));
-            root.AddAccessibilityDate(new DateTime(2008, 12, 24, 0, 0, 0, DateTimeKind.Utc));
-            root.AddAccessibilityDate(new DateTime(2009, 12, 24, 0, 0, 0, DateTimeKind.Utc));
+            root.AddAccessibilityDate(new DateOnly(2007, 12, 24));
+            root.AddAccessibilityDate(new DateOnly(2008, 12, 24));
+            root.AddAccessibilityDate(new DateOnly(2009, 12, 24));
             return root;
         }
 
@@ -100,9 +99,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.IsTrue(loadedAggregateFromDatabase.AccessibilityDaysOfWeek.Contains(DayOfWeek.Sunday));
 
             Assert.AreEqual(3, loadedAggregateFromDatabase.AccessibilityDates.Count());
-            Assert.IsTrue(loadedAggregateFromDatabase.AccessibilityDates.Contains(new DateTime(2007, 12, 24, 0, 0, 0, DateTimeKind.Utc)));
-            Assert.IsTrue(loadedAggregateFromDatabase.AccessibilityDates.Contains(new DateTime(2008, 12, 24, 0, 0, 0, DateTimeKind.Utc)));
-            Assert.IsTrue(loadedAggregateFromDatabase.AccessibilityDates.Contains(new DateTime(2009, 12, 24, 0, 0, 0, DateTimeKind.Utc)));
+            Assert.IsTrue(loadedAggregateFromDatabase.AccessibilityDates.Contains(new DateOnly(2007, 12, 24)));
+            Assert.IsTrue(loadedAggregateFromDatabase.AccessibilityDates.Contains(new DateOnly(2008, 12, 24)));
+            Assert.IsTrue(loadedAggregateFromDatabase.AccessibilityDates.Contains(new DateOnly(2009, 12, 24)));
         }
 
 

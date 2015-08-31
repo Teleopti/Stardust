@@ -47,8 +47,8 @@ namespace Teleopti.Ccc.WinCodeTest.Shifts
             _ruleSetCollection.Add(WorkShiftRuleSetFactory.Create());
             _ruleSetBagCollection.Add(_newRuleSetBag);
 
-            _ruleSetCollection[0].AddAccessibilityDate(new DateTime(2009, 02, 16).ToUniversalTime());
-            _ruleSetCollection[0].AddAccessibilityDate(new DateTime(2009, 02, 17).ToUniversalTime());
+            _ruleSetCollection[0].AddAccessibilityDate(new DateOnly(2009, 02, 16));
+            _ruleSetCollection[0].AddAccessibilityDate(new DateOnly(2009, 02, 17));
 
             _model.SetActivityCollection(_activities);
             _model.SetCategoryCollection(_categories);

@@ -25,9 +25,9 @@ namespace Teleopti.Ccc.WinCode.Shifts.Presenters
 
                 foreach (IWorkShiftRuleSet ruleSet in filteredRuleSetCollection)
                 {
-                    foreach (DateTime date in ruleSet.AccessibilityDates)
+                    foreach (var date in ruleSet.AccessibilityDates)
                     {
-                        IAccessibilityDateViewModel model = new AccessibilityDateViewModel(ruleSet, date);
+                        IAccessibilityDateViewModel model = new AccessibilityDateViewModel(ruleSet, date.Date);
                         AddToModelCollection(model);
                     }
                 }
@@ -42,13 +42,13 @@ namespace Teleopti.Ccc.WinCode.Shifts.Presenters
             {
                 foreach (IWorkShiftRuleSet ruleSet in filteredRuleSetCollection)
                 {
-                    DateTime dateTime = DateTime.UtcNow;
+                    var dateTime = DateOnly.Today;
 
-                    List<DateTime> existingDates = ruleSet.AccessibilityDates.ToList();
+                    var existingDates = ruleSet.AccessibilityDates.ToList();
                     existingDates.Sort();
                     if (existingDates.Count > 0)
-                        dateTime = existingDates[existingDates.Count - 1].Add(TimeSpan.FromDays(1));
-                    IAccessibilityDateViewModel model = new AccessibilityDateViewModel(ruleSet, dateTime);
+                        dateTime = existingDates[existingDates.Count - 1].AddDays(1);
+                    IAccessibilityDateViewModel model = new AccessibilityDateViewModel(ruleSet, dateTime.Date);
                     AddToModelCollection(model);
                     ruleSet.AddAccessibilityDate(dateTime);
                 }
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.WinCode.Shifts.Presenters
                         if ((ruleSetIndex = filteredRuleSetCollection.IndexOf(accessDates.WorkShiftRuleSet)) >= 0)
                         {
                             IWorkShiftRuleSet ruleSet = filteredRuleSetCollection[ruleSetIndex];
-                            ruleSet.RemoveAccessibilityDate(accessDates.Date);
+                            ruleSet.RemoveAccessibilityDate(new DateOnly(accessDates.Date));
                             toBeDeleted.Add(accessDates);
                         }
                     }

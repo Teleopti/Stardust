@@ -142,6 +142,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<RestrictionCombiner>().As<IEffectiveRestrictionCombiner>();
 			builder.RegisterType<RestrictionRetrievalOperation>().As<IRestrictionRetrievalOperation>();
 			builder.RegisterType<WorkTimeMinMaxCalculator>().As<IWorkTimeMinMaxCalculator>();
+			builder.RegisterType<PersonRuleSetBagProvider>().As<IPersonRuleSetBagProvider>();
 			builder.RegisterType<SchedulePeriodTargetDayOffCalculator>().As<ISchedulePeriodTargetDayOffCalculator>().SingleInstance();
 			builder.RegisterType<PeriodScheduledAndRestrictionDaysOff>().As<IPeriodScheduledAndRestrictionDaysOff>().SingleInstance();
 			builder.RegisterType<SchedulePeriodTargetTimeCalculator>().As<ISchedulePeriodTargetTimeCalculator>().SingleInstance();

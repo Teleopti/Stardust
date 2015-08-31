@@ -1,5 +1,4 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -25,7 +24,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Bugs
 
 			PersistAndRemoveFromUnitOfWork(activity);
 			PersistAndRemoveFromUnitOfWork(shiftCategory);
-			workShiftRuleSet.AddAccessibilityDate(new DateTime(2000,1,1,0,0,0,DateTimeKind.Utc));
+			workShiftRuleSet.AddAccessibilityDate(new DateOnly(2000,1,1));
 			PersistAndRemoveFromUnitOfWork(workShiftRuleSet);
 
 			UnitOfWork.PersistAll();
@@ -34,7 +33,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Bugs
 		[Test]
 		public void ShouldPersistAddedAccessibilityDate()
 		{
-			workShiftRuleSet.AddAccessibilityDate(DateTime.UtcNow);
+			workShiftRuleSet.AddAccessibilityDate(DateOnly.Today);
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var rep = new WorkShiftRuleSetRepository(uow);
