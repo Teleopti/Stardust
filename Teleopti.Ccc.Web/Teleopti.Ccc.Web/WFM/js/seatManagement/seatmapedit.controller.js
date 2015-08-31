@@ -137,9 +137,8 @@
 				vm.menuState = 'closed';
 				refreshSeatMap();
 			} 
-
 			
-			utils.resize(canvas(), vm.isInEditMode);
+			utils.resize(canvas());
 		};
 
 		vm.delete = function () {

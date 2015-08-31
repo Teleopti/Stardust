@@ -29,7 +29,7 @@
 
 		<seatmap-editor ng-if="vm.showEditor"></seatmap-editor>
 
-		<div style="width: 100%;" class="wfm-block" ng-class="{'material-depth-2':!vm.showOccupancy}">
+		<div style="width: 100%;" class="wfm-block">
 			<canvas id="c" ng-mouseenter="vm.scrollListen = true" ng-mouseleave="vm.scrollListen = false"></canvas>
 			<div ng-show="vm.isLoading" style="position: absolute; left: 50%; top: 50%; margin-left: -32px; margin-top: -62px;">
 				<md-progress-circular md-mode="indeterminate"></md-progress-circular>

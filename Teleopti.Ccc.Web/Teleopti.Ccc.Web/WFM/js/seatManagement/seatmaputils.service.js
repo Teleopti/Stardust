@@ -31,17 +31,15 @@ angular.module('wfm.seatMap')
 			canvas.stateful = false;
 		}
 
-		function resize(canvas, toolbarVisible) {
-			timeout(function(){ doResize(canvas, toolbarVisible) }, 0, true);
+		function resize(canvas) {
+			timeout(function(){ doResize(canvas) }, 0, true);
 		};
 
-		function doResize(canvas, toolbarVisible) {
+		function doResize(canvas) {
 			var viewPortHeight = $(document)[0].documentElement.clientHeight;
 			var width = $('[ui-view]')[0].clientWidth - $('#c').position().left - 30; // 30 = padding
 			var heightReduction = 130; // no reliable element to base this off
-			if (toolbarVisible) {
-				heightReduction += $('#seatMapToolbar')[0].clientHeight + 62;
-			}
+			
 			canvas.setHeight((viewPortHeight - heightReduction));
 			canvas.setWidth(width);
 		}

@@ -88,6 +88,12 @@ a.mfb-component__button--main {
 	position: relative;
 }
 
+seatmap-editor{
+	position:absolute;
+	width:100%;
+	z-index:100;
+}
+
 .seatmap-occupancy-detail {
 	display: block;
 	min-height: 120px;

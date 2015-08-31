@@ -87,7 +87,7 @@
 		};
 
 		function resize() {
-			canvasUtils.resize(canvas, false);
+			canvasUtils.resize(canvas);
 		};
 
 		function scrollZooming() {
