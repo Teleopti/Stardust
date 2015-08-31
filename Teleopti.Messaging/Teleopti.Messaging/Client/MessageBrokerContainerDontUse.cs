@@ -65,10 +65,11 @@ namespace Teleopti.Messaging.Client
 
 		public static IMessageBrokerComposite CompositeClient()
 		{
-			return _compositeClient ?? (_compositeClient = new MessageBrokerCompositeClient(messageFilter(), SignalRClient(), Sender(), _jsonDeserializer, new Time(new Now()), null, httpClient()));
+		    var signalRClient = SignalRClient();
+		    return _compositeClient ?? (_compositeClient = new MessageBrokerCompositeClient(messageFilter(), signalRClient, Sender(), _jsonDeserializer, new Time(new Now()), null, httpClient(), signalRClient));
 		}
 
-		public static IMessageSender Sender()
+	    public static IMessageSender Sender()
 		{
 			return _sender ?? (_sender = new HttpSender(httpClient()));
 		}

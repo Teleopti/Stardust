@@ -28,12 +28,13 @@ namespace Teleopti.Messaging.Client.Composite
 			IJsonDeserializer deserializer, 
 			ITime time, 
 			IConfigReader config, 
-			HttpClientM client)
+			HttpClientM client, 
+            IMessageBrokerUrl url)
 		{
 			_signalRClient = signalRClient;
 			_messageSender = messageSender;
 			_signalRMessageListener = new SignalRListener(_signalRClient);
-			_mailboxListener = new HttpListener(deserializer, time, config, client);
+			_mailboxListener = new HttpListener(deserializer, time, config, client, url);
 			_messageCreator = new MessageCreator(messageSender, typeFilter);
 		}
 
