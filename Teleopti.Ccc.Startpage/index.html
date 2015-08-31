@@ -7,6 +7,7 @@
 	<title>Teleopti WFM</title>
 	<!-- css -->
 	<link href="assets/css/main.min.css" rel="stylesheet">
+		<link href="assets/css/banner.css" rel="stylesheet">
 	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 	<!--[if lt IE 9]>
@@ -82,7 +83,7 @@
 			<div class="col-md-3" style="overflow:hidden;">
 				<a class="block orange"  href="/TeleoptiWFM/Client/Teleopti.Ccc.SmartClientPortal.Shell.application" id="launcher">
 					<span>Resource Planners</span>
-					<a class="wfm-block-overlay" href="/TeleoptiWFM/Web/wfm">
+					<a class="wfm-block-overlay" style="visibility: hidden" id="webwfm" href="/TeleoptiWFM/Web/wfm">
 						<span>Web</span>
 						<p>Thank you for joining our pilot project. 
 						Your input and feedback is vital to us to ensure we develop functionality that makes a difference. Click here to access the pilot features.
@@ -92,8 +93,7 @@
 						Any feedback, no matter how large or small, is appreciated. Thanks once again!</p>
 					</a>
 				</a>
-				
-				<!--style="visibility: hidden" id="webwfm"-->
+
 			</div>
 		</div>
 		<!-- bottom links -->
@@ -113,39 +113,4 @@
 	</div>
 </body>
 </html>
-
-<style>
-.wfm-block-overlay{
-	position:absolute;
-	right:0;
-	left:15px;
-	right:15px;
-	background:#66C2FF;
-	bottom:15px;
-	top:0;
-	margin-top:200px;
-	color:white;
-	text-decoration:none!important;
-    line-height: 1.1em;
-    display: block;
-	padding:15px;
-	padding-top:22px;
-	transition:1s all ease-in-out;
-}
-
-.wfm-block-overlay:hover{
-		margin-top:0;
-		color:white;
-	
-}
-
-.wfm-block-overlay span{
-	font-family: Arial;
-	width:100%;
-    font-size: 28px;
-}
-
-
-
-</style>
 
