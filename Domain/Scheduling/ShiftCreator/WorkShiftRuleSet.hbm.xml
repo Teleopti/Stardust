@@ -117,7 +117,7 @@
 
     <bag name="AccessibilityDates">
       <key column="RuleSet" foreign-key="FK_AccessibilityDates_WorkShiftRuleSet"/>
-      <element column="Date" type="UtcDateTime"/>
+      <element column="Date" type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"/>
     </bag>
     
     <many-to-one name="BusinessUnit"
