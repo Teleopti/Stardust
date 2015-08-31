@@ -5,7 +5,8 @@
 describe('FunctionController', function() {
 
     var $q,
-        $rootScope;
+        $rootScope,
+		$filter;
 
     var mockRoleFunctionService = {
         selectFunction:function(selectedRole, Type, Id) {
@@ -31,26 +32,23 @@ describe('FunctionController', function() {
         }
     };
 
-    var mockGrowl = {
-
-
-    };
+    var mockGrowl = {};
 
     beforeEach(function () {
         module('wfm.permissions');
     });
 
-    beforeEach(inject(function (_$q_, _$rootScope_) {
+    beforeEach(inject(function (_$q_, _$rootScope_, _$filter_) {
         $q = _$q_;
         $rootScope = _$rootScope_;
+        $filter = _$filter_;
     }));
 
     it('should toggle the selected property of node from false to true', inject(function ($controller) {
         var scope = $rootScope.$new();
-        $controller('RoleFunctionController', { $scope: scope, RolesFunctionsService: mockRoleFunctionService, Roles: mockRoles, growl: mockGrowl });
+        $controller('RoleFunctionsController', { $scope: scope, $filter: $filter, RolesFunctionsService: mockRoleFunctionService, Roles: mockRoles, growl: mockGrowl });
         var node = {
-            $modelValue: { selected: false, Type: 'Team' ,ChildNodes:[]}, $parentNodeScope: null
-
+        	$modelValue: { selected: false, Type: 'Team', ChildNodes: [] }, $nodeScope: { $parentNodeScope: null }
         };
 
         scope.toggleFunctionForRole(node);

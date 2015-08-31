@@ -36,7 +36,7 @@
 	<div class="data-auth">
 		
 		<label translate>AddGlobalAuthorizationLabel</label>
-		<md-select placeholder="Pick" ng-model="dynamicOptionSelected.data" ng-change="changeOption(dynamicOptionSelected.data)" ng-class="{optionLocked:dynamicOptionSelected.isBuiltIn}">
+		<md-select placeholder="Pick" ng-model="dynamicOptionSelected.data" ng-change="changeOption(dynamicOptionSelected.data)" ng-class="{'option-locked':dynamicOptionSelected.isBuiltIn}">
 			<md-option ng-repeat="dynamic in organization.DynamicOptions" ng-value="dynamic.RangeOption">{{dynamic.Name}}</md-option>
 		</md-select>
 	</div>

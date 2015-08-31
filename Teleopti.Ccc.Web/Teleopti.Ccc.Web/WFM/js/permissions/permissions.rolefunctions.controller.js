@@ -12,46 +12,32 @@
 			$scope.functionsDisplayed = [];
 			$scope.nodeAllFunction = [];
 			$scope.toggleState = false;
-			$scope.allToggleElement = false;
+			$scope.allToggleElement = {is: false};
 			$scope.functionNodes = [];
-			
+
+			var message;
 			$scope.$watch(function () { return Roles.selectedRole; },
 				function (newSelectedRole) {
 					if (!newSelectedRole.Id) return;
 					$scope.selectedRole = newSelectedRole;
-					RolesFunctionsService.refreshFunctions(newSelectedRole.Id).then(function() {
-						if ($scope.functionsDisplayed.length > 0) {
-							$scope.functionsDisplayed.forEach(function (nodeTree) {
-								console.log('nodetree', nodeTree);
-								if (nodeTree.FunctionCode === 'All') {
-									var i = $scope.functionsDisplayed.indexOf(nodeTree);
-									$scope.nodeAllFunction = $scope.functionsDisplayed.slice(i, 1);
-									$scope.allToggleElement = $scope.nodeAllFunction[0].selected;
-								}
-							});
-						}
+					if ($scope.selectedRole.BuiltIn) {
+						message = growl.warning("<i class='mdi mdi-alert'></i>Changes are disabled for predefined roles.", {
+							disableCountDown: true
+						});
+					}
+					else if (message) {
+						message.destroy();
+					} 
+
+					RolesFunctionsService.refreshFunctions(newSelectedRole.Id).then(function () {
+						$scope.allToggleElement.is = RolesFunctionsService.allFunctions;
 					});
-					console.log('watch2');
-		
 				}
 			);
 
 			$scope.$watch(function () { return RolesFunctionsService.functionsDisplayed; },
 					function (rolesFunctionsData) { 
 						$scope.functionsDisplayed = rolesFunctionsData;
-						
-						console.log('watch',rolesFunctionsData);
-						if ($scope.functionsDisplayed.length > 0) {
-							$scope.functionsDisplayed.forEach(function(nodeTree) {
-								if (nodeTree.FunctionCode === 'All') {
-									var i = $scope.functionsDisplayed.indexOf(nodeTree);
-									console.log(i);
-									$scope.nodeAllFunction = $scope.functionsDisplayed.splice(i, 1);
-									$scope.allToggleElement = $scope.nodeAllFunction[0].selected;
-								}
-								
-							});
-						}
 					}
 			);
   
@@ -64,59 +50,52 @@
 						traverseNodes(node[i].ChildFunctions);
 					}
 				}
-
 			}
+
 			var toggleParentNode = function (node) {
-				functionNodes.push(node.$modelValue.FunctionId);
+				$scope.functionNodes.push(node.$modelValue.FunctionId);
 				if (node.$nodeScope.$parentNodeScope !== null) {
 					var parent = node.$nodeScope.$parentNodeScope;
 					while (parent !== null) {
 						if (!parent.$modelValue.selected) {
 							parent.$modelValue.selected = true;
-							functionNodes.push(parent.$modelValue.FunctionId);
+							$scope.functionNodes.push(parent.$modelValue.FunctionId);
 						}
 						parent = parent.$parentNodeScope;
 					}
 				}
-				
 			}
 	
 			$scope.toggleFunctionForRole = function (node) {
-				console.log(node, "hello, this is a test!");
-				if ($scope.selectedRole.BuiltIn === false) {
-					var functionNode = node.$modelValue;
+				if ($scope.selectedRole.BuiltIn) return;
+				var functionNode = node.$modelValue;
 					
-					if (functionNode.selected) {
-						RolesFunctionsService.unselectFunction(functionNode.FunctionId, $scope.selectedRole).then(function () {
-							functionNode.selected = false;
-							traverseNodes(functionNode.ChildFunctions);
-							increaseParentNumberOfSelectedNodes(node);
-						});
-					} else {
-						functionNode.selected = true;
-						decreaseParentNumberOfSelectedNodes(node);
-						toggleParentNode(node);
-						RolesFunctionsService.selectFunction(functionNodes, $scope.selectedRole);
-					}
-
-
+				if (functionNode.selected) {
+					RolesFunctionsService.unselectFunction(functionNode.FunctionId, $scope.selectedRole).then(function () {
+						functionNode.selected = false;
+						traverseNodes(functionNode.ChildFunctions);
+						increaseParentNumberOfSelectedNodes(node);
+					});
+				} else {
+					functionNode.selected = true;
+					decreaseParentNumberOfSelectedNodes(node);
+					toggleParentNode(node);
+					RolesFunctionsService.selectFunction($scope.functionNodes, $scope.selectedRole);
 				}
-	
-				
-
 			};
 
-			$scope.toggleAllNode = function(state) {
-				$scope.toggleState = state;
-				if (!state) { return };
-				console.log(state);	        	
+			$scope.toggleAllNode = function (state) {
 
+				if (!state.is) { return };
+
+			
+				$scope.toggleState = state.is;
+				$scope.allToggleElement.is = state.is;
+				
 				growl.info("<i class='mdi mdi-thumb-up'></i> All functions are enabled.", {
 					ttl: 5000,
 					disableCountDown: true
 				});
-
-
 			};
 
 			var increaseParentNumberOfSelectedNodes = function(node) {
