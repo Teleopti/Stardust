@@ -8366,8 +8366,8 @@ Schedule</value>
   <data name="Optimisation" xml:space="preserve">
     <value>Optimization</value>
   </data>
-  <data name="OverStaff" xml:space="preserve">
-    <value>Over staff</value>
+  <data name="Overstaff" xml:space="preserve">
+    <value>Overstaff</value>
   </data>
   <data name="PriorityColon" xml:space="preserve">
     <value>Priority:</value>

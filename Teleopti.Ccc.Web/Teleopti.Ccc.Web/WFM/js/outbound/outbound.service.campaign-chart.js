@@ -23,7 +23,8 @@
            'Today',
            'Start',
 		   'ManuallyPlanned',
-		   'Closed'
+		   'Closed',
+		   'Overstaff'
         ];
         var self = this;
 
@@ -78,25 +79,28 @@
                 rawBacklogs: null,
                 unscheduledPlans: null,
                 schedules: null,
-                progress: null
-            };
+                progress: null,
+                overStaff: null
+        };
           
             returnData.dates = new moment(data.Dates.Date).format("YYYY-MM-DD");
             returnData.rawBacklogs = data.BacklogPersonHours;
             returnData.unscheduledPlans = data.ScheduledPersonHours > 0 ? 0 : data.PlannedPersonHours;
             returnData.schedules = data.ScheduledPersonHours;
             returnData.progress = data.BacklogPersonHours;
+            returnData.overStaff = data.OverstaffPersonHours;
 
             return returnData;
         }       
 
-        function getDataLabels() {            
+        function getDataLabels() {
             return {               
                 dates: 'x',
                 rawBacklogs: self.dictionary['Backlog'],
                 unscheduledPlans: self.dictionary['Planned'], 
                 schedules: self.dictionary['Scheduled'],
-                progress: self.dictionary['Progress']
+                progress: self.dictionary['Progress'],
+				overStaff: self.dictionary['Overstaff']
             };
         }
 
@@ -115,7 +119,8 @@
                 rawBacklogs: 0,
                 unscheduledPlans: 0,
                 schedules: 0,
-                progress: graphDataSeq[0].rawBacklogs + graphDataSeq[0].unscheduledPlans + graphDataSeq[0].schedules
+                progress: graphDataSeq[0].rawBacklogs + graphDataSeq[0].unscheduledPlans + graphDataSeq[0].schedules,
+				overStaff:0
             };
 
             var labels = getDataLabels();

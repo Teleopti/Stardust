@@ -18029,11 +18029,11 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Over staff.
+        ///   Looks up a localized string similar to Overstaff.
         /// </summary>
-        public static string OverStaff {
+        public static string Overstaff {
             get {
-                return ResourceManager.GetString("OverStaff", resourceCulture);
+                return ResourceManager.GetString("Overstaff", resourceCulture);
             }
         }
         

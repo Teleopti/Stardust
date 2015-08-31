@@ -97,9 +97,9 @@
 			function getDataGroupsKey() {
 				var plannedPhase = $scope.campaign.Status;
 				if ($filter('showPhase')(plannedPhase) == 'Planned') {
-					return ['rawBacklogs', 'unscheduledPlans', 'progress'];
+					return ['rawBacklogs', 'unscheduledPlans', 'progress','overStaff'];
 				} else {
-					return ['rawBacklogs', 'schedules', 'unscheduledPlans', 'progress'];
+					return ['rawBacklogs', 'schedules', 'unscheduledPlans', 'progress','overStaff'];
 				}
 			}
 
@@ -122,7 +122,8 @@
 					rawBacklogs: '#1F77B4',
 					progress: '#2CA02C',
 					unscheduledPlans: '#66C2FF',
-					schedules: '#26C6DA'
+					schedules: '#26C6DA',
+					overStaff: '#FF7F0E'
 				};
 
 				$scope.campaign.WarningInfo.forEach(function (e) {
@@ -159,7 +160,7 @@
 					}
 				};
 
-				dataOption.labels.format[$scope.dictionary['Planned']] = function(v, id, i) {
+				dataOption.labels.format[$scope.dictionary['Overstaff']] = function(v, id, i) {
 					if (!determineOpenDay(i)) return 'C';
 					if (determineManualPlanDay(i) && ! determineScheduledDay(i)) return 'M';
 				};
