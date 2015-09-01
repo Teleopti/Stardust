@@ -13,6 +13,24 @@ angular.module('wfm.forecasting')
 				$scope.isForecastRunning = result.IsRunning;
 			});
 
+			$scope.workloads = [];
+			forecasting.skills.query().$promise.then(function (result) {
+				$scope.skills = result;
+				angular.forEach($scope.skills, function (skill) {
+					angular.forEach(skill.Workloads, function (workload) {
+						$scope.workloads.push({ Id: workload.Id, Name: skill.Name + " - " + workload.Name });
+					});
+				});
+			});
+
+			$scope.modalLaunch = false;
+			$scope.displayModal = function() {
+				$scope.modalLaunch = true;
+			};
+			$scope.cancelModal = function () {
+				$scope.modalLaunch = false;
+			};
+
 			$scope.moreThanOneYear = function () {
 				if ($scope.period && $scope.period.endDate && $scope.period.startDate) {
 					var dateDiff = new Date($scope.period.endDate - $scope.period.startDate);
