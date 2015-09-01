@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web.Http;
 using System.Web.Http.Results;
+using System.Web.Routing;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Wfm.Administration.Core;
@@ -16,12 +18,11 @@ namespace Teleopti.Wfm.Administration.Controllers
 	public class AccountController : ApiController
 	{
 		private readonly ICurrentTenantSession _currentTenantSession;
-		private readonly FindTenantAdminUserByEmail _findTenantAdminUserByEmail;
 		private const string Salt = "adgvabar4g61qt46gv";
-		public AccountController(  ICurrentTenantSession currentTenantSession, FindTenantAdminUserByEmail findTenantAdminUserByEmail)
+
+		public AccountController(  ICurrentTenantSession currentTenantSession)
 		{
 			_currentTenantSession = currentTenantSession;
-			_findTenantAdminUserByEmail = findTenantAdminUserByEmail;
 		}
 
 		[OverrideAuthentication]
@@ -30,16 +31,29 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[Route("Login")]
 		public virtual JsonResult<LoginResult> Login(LoginModel model)
 		{
-			var user =_findTenantAdminUserByEmail.Find(model.UserName);
-			//var user = _currentTenantSession.CurrentSession().GetNamedQuery("loadAllTenantUsers").List<TenantAdminUser>().FirstOrDefault(x => x.Email.Equals(model.UserName));
-			if(user == null)
-				return Json(new LoginResult {Success = false, Message = "No user with that Email."});
-
 			var hashed = encryptString(model.Password);
-			if(!hashed.Equals(user.Password))
-				return Json(new LoginResult { Success = false, Message = "The password is not correct." });
+			
+			string sql = "SELECT Id, Name, AccessToken FROM Tenant.AdminUser WHERE  Email=@email AND Password=@password";
+			using (var sqlConnection = new SqlConnection(_currentTenantSession.CurrentSession().Connection.ConnectionString))
+			{
+				sqlConnection.Open();
+				using (var sqlCommand = new SqlCommand(sql, sqlConnection))
+				{
+					sqlCommand.Parameters.AddWithValue("@email", model.UserName);
+					sqlCommand.Parameters.AddWithValue("@password", hashed);
+					var reader = sqlCommand.ExecuteReader();
+					if (reader.HasRows)
+					{
+						while (reader.Read())
+						{
+							return Json(new LoginResult { Success = true, Id = reader.GetInt32(0), UserName = reader.GetString(1), AccessToken = reader.GetString(2) });
+						}
+						
+					}
+					return Json(new LoginResult { Success = false, Message = "No user found with that email and password." });
+				}
+			}
 
-			return Json(new LoginResult {Success = true,Id = user.Id, UserName = user.Name, AccessToken = user.AccessToken});
 		}
 
 		[HttpGet]
