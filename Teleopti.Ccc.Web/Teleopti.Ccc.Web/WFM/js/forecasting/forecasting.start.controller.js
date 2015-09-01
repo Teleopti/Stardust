@@ -2,8 +2,8 @@
 
 angular.module('wfm.forecasting')
 	.controller('ForecastingStartCtrl', [
-		'$scope', '$state', 'Forecasting',
-		function ($scope, $state, forecasting) {
+		'$scope', '$state', 'Forecasting', '$http',
+		function ($scope, $state, forecasting, $http) {
 			var startDate = moment().utc().add(1, 'months').startOf('month').toDate();
 			var endDate = moment().utc().add(2, 'months').startOf('month').toDate();
 			$scope.period = { startDate: startDate, endDate: endDate }; //use moment to get first day of next month
@@ -18,7 +18,7 @@ angular.module('wfm.forecasting')
 				$scope.skills = result;
 				angular.forEach($scope.skills, function (skill) {
 					angular.forEach(skill.Workloads, function (workload) {
-						$scope.workloads.push({ Id: workload.Id, Name: skill.Name + " - " + workload.Name });
+						$scope.workloads.push({ Id: workload.Id, Name: skill.Name + " - " + workload.Name, ChartId: "chart"+workload.Id });
 					});
 				});
 			});
@@ -29,6 +29,36 @@ angular.module('wfm.forecasting')
 			};
 			$scope.cancelModal = function () {
 				$scope.modalLaunch = false;
+			};
+
+			$scope.chartInfo = {
+				resultChartDataColumns: [
+					{ id: "vc", type: "line", name: "Calls" },
+					{ id: "vaht", type: "bar", name: "Talk time" },
+					{ id: "vacw", type: "bar", name: "ACW" }
+				],
+				dataX: { id: "date" }
+			};
+
+
+			$scope.getForecastResult = function(workload) {
+				workload.forecastResultLoaded = false;
+
+				$scope.resultChartData = [];
+				var resultStartDate = moment().utc().add(1, 'days');
+				var resultEndDate = moment(resultStartDate).add(1, 'months');
+				$http.post("../api/Forecasting/ForecastResult", JSON.stringify({ ForecastStart: resultStartDate.toDate(), ForecastEnd: resultEndDate.toDate(), WorkloadId: workload.Id })).
+					success(function (data, status, headers, config) {
+						angular.forEach(data.Days, function (day) {
+							day.date = new Date(Date.parse(day.date));
+						});
+						workload.resultChartData = data.Days;
+						workload.forecastResultLoaded = true;
+					}).
+					error(function (data, status, headers, config) {
+						$scope.error = { message: "Failed to get forecast result." };
+						workload.forecastResultLoaded = true;
+					});
 			};
 
 			$scope.moreThanOneYear = function () {
@@ -56,10 +86,13 @@ angular.module('wfm.forecasting')
 			};
 
 			$scope.nextStepAll = function (period) {
+				if ($scope.disableNextStepAll()) {
+					return;
+				}
 				$state.go('forecasting-runall', { period: period });
 			};
 
-			$scope.disalbeNextStepAll = function () {
+			$scope.disableNextStepAll = function () {
 				return $scope.moreThanOneYear() || $scope.isForecastRunning;
 			};
 
