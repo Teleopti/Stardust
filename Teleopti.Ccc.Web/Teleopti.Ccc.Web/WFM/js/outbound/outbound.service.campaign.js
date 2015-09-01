@@ -140,8 +140,13 @@
         function denormalizeCampaign(campaign) {
             var campaign = angular.copy(campaign);
 
-            if (campaign.StartDate) campaign.StartDate.Date = new Date(campaign.StartDate.Date);
-            if (campaign.EndDate) campaign.EndDate.Date = new Date(campaign.EndDate.Date);
+            var dStart = new Date(campaign.StartDate.Date);
+            var dEnd = new Date(campaign.EndDate.Date);
+            dStart.setTime(dStart.getTime() + dStart.getTimezoneOffset() * 60 * 1000);
+            dEnd.setTime(dEnd.getTime() + dEnd.getTimezoneOffset() * 60 * 1000);
+            if (campaign.StartDate) campaign.StartDate.Date = dStart;
+            if (campaign.EndDate) campaign.EndDate.Date = dEnd;
+            
 
             var reformattedWorkingHours = [];
 
