@@ -9,6 +9,7 @@
 	function summaryCtrl($scope, $state, $stateParams, outboundService, outboundChartService, $filter) {
         $scope.isLoadFinished = false;
         $scope.listCampaignFinished = false;
+
     	outboundService.load(function handleSuccess(isLoad) {    		
             init();
             $scope.$watch('activePhaseCode', function(newValue, oldValue) {               
@@ -28,7 +29,6 @@
 			    refreshCampaignStatistics($scope);
 		    });
 		}
-
     	
 
     	$scope.removeManualPlan = function(campaign) {
@@ -90,7 +90,9 @@
 		$scope.addManualPlan = function (campaign) {
     		campaign.manualPlan.CampaignId = campaign.Id;
     		campaign.manualPlan.ManualProductionPlan = [];
-    		campaign.selectedDates.forEach(function (date, index) {
+			campaign.selectedDates.filter(function (d) {			
+    			return campaign.selectedDatesClosed.indexOf(d) < 0;
+		    }).forEach(function (date, index) {
     			campaign.manualPlan.ManualProductionPlan[index] = {
     				Date: {Date: date},
     				Time: campaign.manualPlanInput

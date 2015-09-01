@@ -10,8 +10,7 @@
 				'<div class="chart-extra-info"><p ng-repeat="extraInfo in extraInfos"}>{{extraInfo}}</p></div>',
 			scope: {
 				'campaign': '=',				
-				'dictionary': '=',
-				'excludeClosed': '='
+				'dictionary': '='
 			},
 			require: ['campaignChart'],
 			link: postlink
@@ -29,9 +28,9 @@
 			this.determineOpenDay = determineOpenDay;
 			
 			$scope.campaign.manualPlan = {};
-			$scope.campaign.backlog = {};
-
+			$scope.campaign.backlog = {};		
 			$scope.campaign.selectedDates = [];
+			$scope.campaign.selectedDatesClosed = [];
 
 			$scope.extraInfos = [
 				"M: " + $scope.dictionary['ManuallyPlanned'],
@@ -40,10 +39,14 @@
 			];
 
 			function graphSelectionChanged() {
-				$scope.campaign.selectedDates = $scope.graph.selected().filter(function(p) {
+				var selectedData = $scope.graph.selected().filter(function(p) {
 					return p.id == $scope.dictionary['Progress'];
-				}).filter(function(p) {
-					return !$scope.excludeClosed || determineOpenDay(p.index);
+				});
+				$scope.campaign.selectedDates = selectedData.map(function (p) {
+					return $scope.dates[p.index];
+				});
+				$scope.campaign.selectedDatesClosed = selectedData.filter(function(p) {
+					return !determineOpenDay(p.index);
 				}).map(function (p) {
 					return $scope.dates[p.index];
 				});
