@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public FakeRtaDatabase database;
 		public FakeEventPublisher publisher;
 		public MutableNow now;
-		public IRta target;
+		public Domain.ApplicationLayer.Rta.Service.Rta target;
 
 		[Test]
 		public void ShouldPublishShiftStartBeforeActivityStart()

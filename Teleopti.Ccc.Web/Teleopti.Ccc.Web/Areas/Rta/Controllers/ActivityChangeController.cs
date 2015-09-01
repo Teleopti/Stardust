@@ -6,9 +6,9 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 {
 	public class ActivityChangeController : Controller
 	{
-		private readonly IRta _rta;
+		private readonly Domain.ApplicationLayer.Rta.Service.Rta _rta;
 
-		public ActivityChangeController(IRta rta)
+		public ActivityChangeController(Domain.ApplicationLayer.Rta.Service.Rta rta)
 		{
 			_rta = rta;
 		}

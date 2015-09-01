@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public FakeRtaDatabase Database;
 		public MutableNow Now;
 		public FakeMessageSender Sender;
-		public IRta Target;
+		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 
 		[Test]
 		public void ShouldSendMessageForTeam()

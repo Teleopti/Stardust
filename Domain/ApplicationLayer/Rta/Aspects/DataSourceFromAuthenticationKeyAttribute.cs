@@ -4,9 +4,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Aspects
 {
 	public class DataSourceFromAuthenticationKeyAttribute : AspectAttribute
 	{
-		public DataSourceFromAuthenticationKeyAttribute() : base(typeof(DataSourceFromAuthenticationKeyAspect))
+		public DataSourceFromAuthenticationKeyAttribute() : base(typeof(IDataSourceFromAuthenticationKeyAspect))
 		{
 		}
 	}
-	
 }

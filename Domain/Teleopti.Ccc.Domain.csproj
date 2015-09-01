@@ -223,6 +223,8 @@
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\UpdateGroupingReadModelConsumer.cs" />
     <Compile Include="ApplicationLayer\Rta\Aspects\DataSourceFromAuthenticationKeyAspect.cs" />
     <Compile Include="ApplicationLayer\Rta\Aspects\DataSourceFromAuthenticationKeyAttribute.cs" />
+    <Compile Include="ApplicationLayer\Rta\Aspects\IDataSourceFromAuthenticationKeyAspect.cs" />
+    <Compile Include="ApplicationLayer\Rta\Aspects\NoDataSourceFromAuthenticationKeyAspect.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\BatchTooBigException.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\EmptyPreviousStateInfoLoader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IAuthenticator.cs" />

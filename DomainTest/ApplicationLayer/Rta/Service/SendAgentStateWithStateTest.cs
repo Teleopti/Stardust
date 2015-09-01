@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 	[TestFixture]
 	public class SendAgentStateWithStateTest
 	{
-		public IRta Target;
+		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 		public FakeMessageSender Sender;
 		public FakeRtaDatabase Database;
 		public MutableNow Now;

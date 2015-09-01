@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Aspects
 {
-	public class DataSourceFromAuthenticationKeyAspect : IAspect
+	public class DataSourceFromAuthenticationKeyAspect : IDataSourceFromAuthenticationKeyAspect
 	{
 		private readonly IDataSourceScope _dataSource;
 		private readonly IApplicationData _applicationData;

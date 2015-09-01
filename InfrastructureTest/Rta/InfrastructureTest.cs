@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public IPrincipalAndStateContext Context;
 		public MutableNow Now;
 		public TheServiceImpl TheService;
-		public IRta Target;
+		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{

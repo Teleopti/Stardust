@@ -1,7 +1,4 @@
-using System;
-using System.Data.SqlClient;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {

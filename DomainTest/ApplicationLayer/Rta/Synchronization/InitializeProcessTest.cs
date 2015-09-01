@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 		public FakeRtaDatabase Database;
 		public IStateStreamSynchronizer Target;
 		public FakeAdherencePercentageReadModelPersister Persister;
-		public IRta Rta;
+		public Domain.ApplicationLayer.Rta.Service.Rta Rta;
 		public MutableNow Now;
 		public FakeMessageSender MessageSender;
 		public FakeEventPublisher EventPublisher;

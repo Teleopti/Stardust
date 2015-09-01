@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 	public class AuthenticationKeyTest
 	{
 		public FakeRtaDatabase Database;
-		public IRta Target;
+		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 
 		[Test]
 		public void ShouldThrowIfAuthenticationKeyIsIncorrect()

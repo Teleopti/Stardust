@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public MutableNow Now;
 		public FakeRtaDatabase Database;
 		public FakeEventPublisher Publisher;
-		public IRta Target;
+		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 		public IAgentStateReadModelReader AgentStateReadModelReader;
 
 		[Test]

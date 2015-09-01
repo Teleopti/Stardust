@@ -8,9 +8,9 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 {
 	public class StateController : Controller
 	{
-		private readonly IRta _rta;
+		private readonly Domain.ApplicationLayer.Rta.Service.Rta _rta;
 
-		public StateController(IRta rta)
+		public StateController(Domain.ApplicationLayer.Rta.Service.Rta rta)
 		{
 			_rta = rta;
 		}

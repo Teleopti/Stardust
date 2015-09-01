@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 	{
 		public FakeRtaDatabase Database;
 		public IStateStreamSynchronizer Target;
-		public IRta Rta;
+		public Domain.ApplicationLayer.Rta.Service.Rta Rta;
 		public FakeAdherencePercentageReadModelPersister Persister;
 		public MutableNow Now;
 

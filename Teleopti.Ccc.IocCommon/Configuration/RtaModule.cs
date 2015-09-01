@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Aspects;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
@@ -23,7 +22,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<Rta>().As<IRta>().SingleInstance();
+			builder.RegisterType<Rta>().SingleInstance().ApplyAspects();
 			builder.RegisterType<CacheInvalidator>().As<ICacheInvalidator>().SingleInstance();
 			builder.RegisterType<RtaProcessor>().SingleInstance();
 			builder.RegisterType<AgentStateReadModelUpdater>().As<IAgentStateReadModelUpdater>().SingleInstance();
@@ -130,7 +129,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			else
 				builder.RegisterType<ConfiguredKeyAuthenticator>().As<IAuthenticator>().SingleInstance();
 
-			builder.RegisterType<DataSourceFromAuthenticationKeyAspect>().SingleInstance();
+			if (_config.Toggle(Toggles.RTA_MultiTenancy_32539))
+				builder.RegisterType<DataSourceFromAuthenticationKeyAspect>().As<IDataSourceFromAuthenticationKeyAspect>().SingleInstance();
+			else
+				builder.RegisterType<NoDataSourceFromAuthenticationKeyAspect>().As<IDataSourceFromAuthenticationKeyAspect>().SingleInstance();
 		}
 	}
 }

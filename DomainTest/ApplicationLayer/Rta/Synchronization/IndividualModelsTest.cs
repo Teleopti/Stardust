@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 		public IStateStreamSynchronizer Target;
 		public FakeSiteOutOfAdherenceReadModelPersister SiteOutOfAdherenceReadModel;
 		public FakeTeamOutOfAdherenceReadModelPersister TeamOutOfAdherenceReadModel;
-		public IRta Rta;
+		public Domain.ApplicationLayer.Rta.Service.Rta Rta;
 		public MutableNow Now;
 
 		[Test]

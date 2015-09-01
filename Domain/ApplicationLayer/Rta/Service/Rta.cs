@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Aspects;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Resolvers;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator;
 using Teleopti.Ccc.Domain.Config;
@@ -11,16 +12,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
-	public interface IRta
-	{
-		int SaveState(ExternalUserStateInputModel input);
-		int SaveStateBatch(IEnumerable<ExternalUserStateInputModel> states);
-		int SaveStateSnapshot(IEnumerable<ExternalUserStateInputModel> states);
-		void CheckForActivityChange(CheckForActivityChangeInputModel input);
-		void Initialize();
-	}
-
-	public class Rta : IRta
+	public class Rta
 	{
 		private readonly IAgentStateReadModelReader _agentStateReadModelReader;
 		private readonly IPreviousStateInfoLoader _previousStateInfoLoader;
@@ -76,7 +68,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				_authenticationKey = LegacyAuthenticationKey;
 		}
 
-		public int SaveStateSnapshot(IEnumerable<ExternalUserStateInputModel> states)
+		[DataSourceFromAuthenticationKey]
+		public virtual int SaveStateSnapshot(IEnumerable<ExternalUserStateInputModel> states)
 		{
 			var state = states.First();
 			SaveStateBatch(states);
@@ -91,7 +84,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			});
 		}
 
-		public int SaveStateBatch(IEnumerable<ExternalUserStateInputModel> states)
+		[DataSourceFromAuthenticationKey]
+		public virtual int SaveStateBatch(IEnumerable<ExternalUserStateInputModel> states)
 		{
 			if (states.Count() > 50)
 			{
@@ -112,7 +106,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return result;
 		}
 
-		public int SaveState(ExternalUserStateInputModel input)
+		[DataSourceFromAuthenticationKey]
+		public virtual int SaveState(ExternalUserStateInputModel input)
 		{
 			var messageId = Guid.NewGuid();
 
@@ -221,7 +216,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 		[InfoLog]
-		public void CheckForActivityChange(CheckForActivityChangeInputModel input)
+		public virtual void CheckForActivityChange(CheckForActivityChangeInputModel input)
 		{
 			_cacheInvalidator.InvalidateSchedules(input.PersonId);
 			process(

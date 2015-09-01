@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public FakeEventPublisher publisher;
 		public MutableNow now;
 		public FakeCurrentDatasource dataSource;
-		public IRta target;
+		public Domain.ApplicationLayer.Rta.Service.Rta target;
 
 		[Test]
 		public void ShouldPublishEvent()

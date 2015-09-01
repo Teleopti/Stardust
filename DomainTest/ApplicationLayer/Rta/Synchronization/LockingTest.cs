@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 	{
 		public FakeRtaDatabase Database;
 		public MutableNow Now;
-		public IRta Rta;
+		public Domain.ApplicationLayer.Rta.Service.Rta Rta;
 		public IStateStreamSynchronizer Target;
 		public IDistributedLockAcquirer DistributedLock;
 		public NonConcurrenctSafeHandler Handler;

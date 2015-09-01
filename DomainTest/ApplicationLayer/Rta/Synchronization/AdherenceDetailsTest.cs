@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 		public IStateStreamSynchronizer Target;
 		public FakeAdherenceDetailsReadModelPersister Persister;
 		public MutableNow Now;
-		public IRta Rta;
+		public Domain.ApplicationLayer.Rta.Service.Rta Rta;
 
 		[Test]
 		public void ShouldInitializeAdherenceDetails()

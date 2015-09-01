@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 	[Toggle(Toggles.RTA_NewEventHangfireRTA_34333)]
 	public class NoBrokerTest
 	{
-		public IRta target;
+		public Domain.ApplicationLayer.Rta.Service.Rta target;
 		public FakeMessageSender sender;
 		public FakeRtaDatabase database;
 

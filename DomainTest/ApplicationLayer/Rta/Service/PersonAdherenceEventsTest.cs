@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public FakeRtaDatabase database;
 		public MutableNow now;
 		public FakeEventPublisher publisher;
-		public IRta target ;
+		public Domain.ApplicationLayer.Rta.Service.Rta target ;
 		public RtaTestAttribute context;
 
 		[Test]

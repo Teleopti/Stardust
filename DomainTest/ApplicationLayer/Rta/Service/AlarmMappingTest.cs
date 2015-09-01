@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 	public class AlarmMappingTest
 	{
 		public FakeRtaDatabase Database;
-		public IRta Target;
+		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 		public MutableNow Now;
 		public FakeEventPublisher EventPublisher;
 

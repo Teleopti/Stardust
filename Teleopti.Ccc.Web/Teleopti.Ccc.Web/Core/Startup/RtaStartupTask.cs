@@ -9,10 +9,10 @@ namespace Teleopti.Ccc.Web.Core.Startup
 	[TaskPriority(15)]
 	public class RtaStartupTask : IBootstrapperTask
 	{
-		private readonly IRta _initializor;
+		private readonly Domain.ApplicationLayer.Rta.Service.Rta _initializor;
 		private readonly IStateStreamSynchronizer _synchronizer;
 
-		public RtaStartupTask(IRta initializor, IStateStreamSynchronizer synchronizer)
+		public RtaStartupTask(Domain.ApplicationLayer.Rta.Service.Rta initializor, IStateStreamSynchronizer synchronizer)
 		{
 			_initializor = initializor;
 			_synchronizer = synchronizer;

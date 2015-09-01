@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.Aggregator
 		public FakeRtaDatabase Database;
 		public FakeMessageSender Sender;
 		public MutableNow Now;
-		public IRta Target;
+		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 
 		[Test]
 		public void ShouldReadPersistedAggregatedState()

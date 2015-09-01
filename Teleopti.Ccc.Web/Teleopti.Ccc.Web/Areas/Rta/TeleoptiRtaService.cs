@@ -13,9 +13,9 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 	 AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
 	public class TeleoptiRtaService : ITeleoptiRtaService
 	{
-		private readonly IRta _rta;
+		private readonly Domain.ApplicationLayer.Rta.Service.Rta _rta;
 
-		public TeleoptiRtaService(IRta rta)
+		public TeleoptiRtaService(Domain.ApplicationLayer.Rta.Service.Rta rta)
 		{
 			_rta = rta;
 		}

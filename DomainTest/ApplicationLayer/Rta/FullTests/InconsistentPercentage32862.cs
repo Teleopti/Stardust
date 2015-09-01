@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.FullTests
 	{
 		public FakeRtaDatabase Database;
 		public MutableNow Now;
-		public IRta Target;
+		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 		public FakeAdherenceDetailsReadModelPersister Details;
 		public FakeAdherencePercentageReadModelPersister Percentage;
 		public IAdherenceDetailsViewModelBuilder DetailsView;
