@@ -1,5 +1,5 @@
 ﻿using System;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using System.Data.SqlClient;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Common
 		public CurrentDataSource(ICurrentIdentity currentIdentity, IConfigReader configReader, ICurrentApplicationData applicationData)
 		{
 			_currentIdentity = currentIdentity;
-			_rtaConfigurationDataSource = new Lazy<IDataSource>(() => ConfiguredKeyAuthenticator.DataSourceFromRtaConfiguration(configReader, applicationData));
+			_rtaConfigurationDataSource = new Lazy<IDataSource>(() => dataSourceFromRtaConfiguration(configReader, applicationData));
 		}
 
 		public IDataSource Current()
@@ -47,5 +47,31 @@ namespace Teleopti.Ccc.Domain.Common
 				_threadDataSource = null;
 			});
 		}
+
+
+
+
+		private static IDataSource dataSourceFromRtaConfiguration(IConfigReader configReader, ICurrentApplicationData applicationData)
+		{
+			if (configReader == null)
+				return null;
+			if (applicationData == null)
+				return null;
+
+			var configString = new SqlConnectionStringBuilder(configReader.ConnectionString("RtaApplication"));
+			IDataSource dataSource = null;
+			applicationData.Current().DoOnAllTenants_AvoidUsingThis(tenant =>
+			{
+				var c = new SqlConnectionStringBuilder(tenant.Application.ConnectionString);
+				if (c.DataSource == configString.DataSource &&
+					c.InitialCatalog == configString.InitialCatalog)
+				{
+					dataSource = tenant;
+				}
+			});
+
+			return dataSource;
+		}
+
 	}
 }

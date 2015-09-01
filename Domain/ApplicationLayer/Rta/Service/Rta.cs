@@ -160,17 +160,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			input.UserCode = input.UserCode.Trim();
 
 			input.FixAuthenticationKey();
-			var tenant = _authenticator.TenantForKey(input.AuthenticationKey);
-			if (tenant == null)
+			if (!_authenticator.Authenticate(input.AuthenticationKey))
 				throw new InvalidAuthenticationKeyException("You supplied an invalid authentication key. Please verify the key and try again.");
 
 			if (input.IsSnapshot && string.IsNullOrEmpty(input.UserCode))
-				return closeSnapshot(input, tenant);
+				return closeSnapshot(input);
 
-			return processStateChange(input, dataSourceId, tenant);
+			return processStateChange(input, dataSourceId);
 		}
 
-		private int closeSnapshot(ExternalUserStateInputModel input, string tenant)
+		private int closeSnapshot(ExternalUserStateInputModel input)
 		{
 			input.StateCode = "CCC Logged out";
 			input.PlatformTypeId = Guid.Empty.ToString();
@@ -185,7 +184,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					input,
 					new PersonOrganizationData
 					{
-						Tenant = tenant,
 						PersonId = agent.PersonId,
 						BusinessUnitId = agent.BusinessUnitId
 					});
@@ -195,7 +193,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return 1;
 		}
 
-		private int processStateChange(ExternalUserStateInputModel input, int dataSourceId, string tenant)
+		private int processStateChange(ExternalUserStateInputModel input, int dataSourceId)
 		{
 			IEnumerable<ResolvedPerson> personWithBusinessUnits;
 			if (!_personResolver.TryResolveId(dataSourceId, input.UserCode, out personWithBusinessUnits))
@@ -212,7 +210,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					input,
 					new PersonOrganizationData
 					{
-						Tenant = tenant,
 						PersonId = p.PersonId,
 						BusinessUnitId = p.BusinessUnitId
 					});

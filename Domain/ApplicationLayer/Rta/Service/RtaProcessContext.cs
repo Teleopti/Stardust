@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			if (!personOrganizationProvider.PersonOrganizationData().TryGetValue(person.PersonId, out _person))
 				return;
 			_person.BusinessUnitId = person.BusinessUnitId;
-			_person.Tenant = person.Tenant;
 			Input = input ?? new ExternalUserStateInputModel();
 			CurrentTime = now.UtcDateTime();
 

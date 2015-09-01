@@ -90,7 +90,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						},
 						new PersonOrganizationData
 						{
-							Tenant = null,
 							BusinessUnitId = s.BusinessUnitId,
 							PersonId = s.PersonId
 						}, 

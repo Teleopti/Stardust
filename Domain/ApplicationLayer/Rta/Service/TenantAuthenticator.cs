@@ -13,11 +13,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_countTenants = countTenants;
 		}
 
-		public string TenantForKey(string authenticationKey)
+		public bool Authenticate(string authenticationKey)
 		{
 			if (_countTenants.Count() > 1 && authenticationKey == Rta.LegacyAuthenticationKey)
 				throw new LegacyAuthenticationKeyException("Using the default authentication key with more than one tenant is not allowed");
-			return _findTenantByRtaKey.Find(authenticationKey);
+			return _findTenantByRtaKey.Find(authenticationKey) != null;
 		}
 	}
 }

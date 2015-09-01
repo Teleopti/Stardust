@@ -58,7 +58,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		private readonly List<scheduleLayer2> _schedules = new List<scheduleLayer2>();
 		private readonly List<PersonOrganizationData> _personOrganizationData = new List<PersonOrganizationData>();
 		private readonly IList<AgentStateReadModel> _persistedAgentStates = new List<AgentStateReadModel>();
-		private readonly IList<string> _persistedOnTenants = new List<string>();
 
 		private class scheduleLayer2
 		{
@@ -90,12 +89,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		{
 			get { return _persistedAgentStates; }
 		}
-
-		public IEnumerable<string> PersistedOnTenants
-		{
-			get { return _persistedOnTenants; }
-		}
-
+		
 		public IRtaState AddedStateCode
 		{
 			get { return RtaStateGroupRepository.LoadAll().Single(x => x.DefaultStateGroup).StateCollection.SingleOrDefault(); }
@@ -316,7 +310,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			AgentStateReadModelReader.Has(model);
 			PersistedAgentState = model;
 			_persistedAgentStates.Add(model);
-			_persistedOnTenants.Add(_currentDataSource.CurrentName());
 		}
 
 		public IEnumerable<PersonOrganizationData> PersonOrganizationData()
