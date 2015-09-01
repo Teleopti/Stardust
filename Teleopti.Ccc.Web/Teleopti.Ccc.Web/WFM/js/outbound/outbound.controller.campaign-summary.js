@@ -50,6 +50,24 @@
 			campaign.manualPlanInput = null;
 		}
 
+    	$scope.addBacklog = function (campaign) {
+    		campaign.backlog.CampaignId = campaign.Id;
+    		campaign.backlog.ActualBacklog = [];
+    		campaign.selectedDates.forEach(function (date, index) {
+    			campaign.backlog.ActualBacklog[index] = {
+    				Date: { Date: date },
+    				Time: campaign.backlogInput
+    			}
+    		});
+    		campaign.isLoadingData = true;
+    		outboundChartService.updateBacklog(campaign.backlog, function () {
+    			refreshGraphData(campaign, $scope);
+    			refreshCampaignStatistics($scope);
+    		});
+    		$scope.$broadcast('campaign.chart.clear.selection', { Id: campaign.Id });
+    		campaign.backlogInput = null;
+    	}
+
 		$scope.addManualPlan = function (campaign) {
     		campaign.manualPlan.CampaignId = campaign.Id;
     		campaign.manualPlan.ManualProductionPlan = [];
@@ -60,7 +78,7 @@
     			}
     		});
     		campaign.isLoadingData = true;
-    		outboundChartService.updateManualPlan(campaign.manualPlan, function (data, manualPlan) {
+    		outboundChartService.updateManualPlan(campaign.manualPlan, function () {
     			refreshGraphData(campaign, $scope);
     			refreshCampaignStatistics($scope);
 		    });
@@ -85,6 +103,11 @@
 			campaign.manualPlanswitch = !campaign.manualPlanswitch;
 			campaign.backlogSwitch = false;
 			campaign.manualPlanInput = null;
+		}
+
+		$scope.switchBacklog = function(campaign) {
+			campaign.backlogSwitch = !campaign.backlogSwitch;
+			campaign.manualPlanswitch = false;
 		}
 
 		$scope.isOverStaffing = function(d) {
