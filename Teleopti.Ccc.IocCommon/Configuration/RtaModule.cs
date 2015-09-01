@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using Autofac;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Aspects;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator;
@@ -125,7 +127,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<TenantAuthenticator>().As<IAuthenticator>().SingleInstance();
 			else
 				builder.RegisterType<ConfiguredKeyAuthenticator>().As<IAuthenticator>().SingleInstance();
+
+			builder.RegisterType<DataSourceFromAuthenticationKeyAspect>().SingleInstance();
 		}
 	}
-
 }

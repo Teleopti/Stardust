@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IDatabaseLoader databaseLoader,
 			RtaProcessor processor,
 			IAuthenticator authenticator
-            )
+			)
 		{
 			_agentStateReadModelReader = agentStateReadModelReader;
 			_previousStateInfoLoader = previousStateInfoLoader;
