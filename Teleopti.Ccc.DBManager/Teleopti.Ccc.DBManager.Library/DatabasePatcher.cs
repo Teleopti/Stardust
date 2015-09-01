@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		private const string AzureEdition = "SQL Azure";
 		private const string SQL2005SP2 = "9.00.3042"; //http://www.sqlteam.com/article/sql-server-versions
-		private MyLogger _logger;
+		public ILog Logger;
 		private DatabaseVersionInformation _databaseVersionInformation;
 		private SchemaVersionInformation _schemaVersionInformation;
 
@@ -32,7 +32,8 @@ namespace Teleopti.Ccc.DBManager.Library
 
 			try
 			{
-				_logger = new MyLogger();
+				if( Logger == null)
+					Logger = new MyLogger();
 				
 				bool SafeMode = true;
 
@@ -184,7 +185,7 @@ namespace Teleopti.Ccc.DBManager.Library
 							}
 
 							var dbCreator = new DatabaseSchemaCreator(_databaseVersionInformation,
-								_schemaVersionInformation, _sqlConnection, _databaseFolder, _logger);
+								_schemaVersionInformation, _sqlConnection, _databaseFolder, Logger);
 							dbCreator.Create(_commandLineArgument.TargetDatabaseType);
 						}
 						else
@@ -217,7 +218,7 @@ namespace Teleopti.Ccc.DBManager.Library
 			}
 			finally
 			{
-				_logger.Dispose();
+				Logger.Dispose();
 			}
 
 		}
@@ -229,10 +230,10 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		private void logWrite(string s)
 		{
-			_logger.Write(s);
+			Logger.Write(s);
 		}
 
-		public class MyLogger : ILog, IDisposable
+		public class MyLogger : ILog
 		{
 			private readonly TextWriter _logFile;
 
@@ -275,7 +276,7 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		private void executeBatchSql(string sql)
 		{
-			new SqlBatchExecutor(_sqlConnection, _logger).ExecuteBatchSql(sql);
+			new SqlBatchExecutor(_sqlConnection, Logger).ExecuteBatchSql(sql);
 		}
 
 		private int getDatabaseBuildNumber() { return _databaseVersionInformation.GetDatabaseVersion(); }

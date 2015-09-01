@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.DBManager.Library
         private bool _willCreateNewDatabase;
         private string _businessUnitName;
         private bool _patchMode;
-        private string _pathToDbManager = string.Empty;
 
         public CommandLineArgument(string[] args)
         {
@@ -85,7 +84,7 @@ namespace Teleopti.Ccc.DBManager.Library
                     //    _schemaName = switchValue;
                     //    break;
                     case "-F":
-                        _pathToDbManager = switchValue;
+                        PathToDbManager = switchValue;
                         break;
                     case "-R":
                         _permissionMode = true;
@@ -95,12 +94,9 @@ namespace Teleopti.Ccc.DBManager.Library
             }
         }
 
-        public string PathToDbManager
-        {
-            get { return _pathToDbManager; }
-        }
+	    public string PathToDbManager { get; set; }
 
-        public string ConnectionString
+	    public string ConnectionString
         {
             get
             {

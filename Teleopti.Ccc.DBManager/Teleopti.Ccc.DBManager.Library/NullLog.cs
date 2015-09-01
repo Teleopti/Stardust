@@ -6,5 +6,10 @@ namespace Teleopti.Ccc.DBManager.Library
 		{
 			
 		}
+
+		public void Dispose()
+		{
+			
+		}
 	}
 }

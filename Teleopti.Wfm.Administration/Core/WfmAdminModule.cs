@@ -2,6 +2,7 @@
 using Autofac;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.WebApi;
+using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Infrastructure.Aop;
@@ -41,6 +42,10 @@ namespace Teleopti.Wfm.Administration.Core
 			builder.RegisterType<FindTenantAdminUserByEmail>().SingleInstance();
 			builder.RegisterType<DeleteTenant>().SingleInstance();
 			builder.RegisterType<UpdateCrossDatabaseView>().SingleInstance();
+			builder.RegisterType<DatabaseUpgrader>().SingleInstance();
+			builder.RegisterType<DatabasePatcher>().SingleInstance();
+			builder.RegisterType<TenantUpgrader>().SingleInstance();
+			builder.RegisterType<UpgradeRunner>().SingleInstance();
 			
 			builder.Register(c => new LoadPasswordPolicyService(ConfigurationManager.AppSettings["ConfigurationFilesPath"])).SingleInstance().As<ILoadPasswordPolicyService>();
 			builder.RegisterType<PasswordPolicy>().SingleInstance().As<IPasswordPolicy>();

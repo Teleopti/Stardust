@@ -29,7 +29,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			{
 				var result = Target.Login(model).Content;
 				result.Success.Should().Be.False();
-				result.Message.Should().Be.EqualTo("No user with that Email.");
+				result.Message.Should().Be.EqualTo("No user found with that email and password.");
 			}
 		}
 
@@ -48,7 +48,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			{
 				var result = Target.Login(model).Content;
 				result.Success.Should().Be.False();
-				result.Message.Should().Be.EqualTo("The password is not correct.");
+				result.Message.Should().Be.EqualTo("No user found with that email and password.");
 			}
 		}
 

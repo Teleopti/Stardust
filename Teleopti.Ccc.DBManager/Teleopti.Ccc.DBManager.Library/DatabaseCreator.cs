@@ -111,12 +111,12 @@ namespace Teleopti.Ccc.DBManager.Library
 			//gFile.WriteLine(message);
 		}
 
-		//public void Dispose()
-		//{
+		public void Dispose()
+		{
 		//	if (_logFile == null)
 		//		return;
 		//	_logFile.Close();
 		//	_logFile.Dispose();
-		//}
+		}
 	}
 }

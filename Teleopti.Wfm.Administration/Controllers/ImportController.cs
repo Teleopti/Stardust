@@ -17,19 +17,23 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private readonly IGetImportUsers _getImportUsers;
 		private readonly ICheckDatabaseVersions _checkDatabaseVersions;
 		private readonly Import _import;
+		//private readonly DatabaseUpgrader _databaseUpgrader;
 
 		public ImportController(
 			IDatabaseHelperWrapper databaseHelperWrapper, 
 			ITenantExists tenantExists,
 			IGetImportUsers getImportUsers, 
 			ICheckDatabaseVersions checkDatabaseVersions, 
-			Import import)
+			Import import 
+			//DatabaseUpgrader databaseUpgrader
+			)
 		{
 			_databaseHelperWrapper = databaseHelperWrapper;
 			_tenantExists = tenantExists;
 			_getImportUsers = getImportUsers;
 			_checkDatabaseVersions = checkDatabaseVersions;
 			_import = import;
+			//_databaseUpgrader = databaseUpgrader;
 		}
 
 		[HttpPost]
@@ -54,9 +58,12 @@ namespace Teleopti.Wfm.Administration.Controllers
 				return Json(new ImportTenantResultModel { Success = false, Message = result.Message });
 
 			var versions =  _checkDatabaseVersions.GetVersions(appBuilder.ConnectionString);
-			if(!versions.AppVersionOk)
+			if (!versions.AppVersionOk)
+			{
+				//_databaseUpgrader.Upgrade(model.Server, model.AppDatabase, DatabaseType.TeleoptiCCC7, "sa", "cadadi");
 				return Json(new ImportTenantResultModel { Success = false, Message = "The databases does not have the same version." });
-			
+			}
+
 			var conflicts = _getImportUsers.GetConflictionUsers(appBuilder.ConnectionString, model.Tenant);
 		
 			return Json(_import.Execute(model.Tenant, appBuilder.ConnectionString, analBuilder.ConnectionString, conflicts));

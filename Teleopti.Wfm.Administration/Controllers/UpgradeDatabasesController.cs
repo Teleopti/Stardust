@@ -1,6 +1,8 @@
 ﻿using System.Data.SqlClient;
+using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Results;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Wfm.Administration.Core;
 using Teleopti.Wfm.Administration.Models;
@@ -9,11 +11,15 @@ namespace Teleopti.Wfm.Administration.Controllers
 {
 	public class UpgradeDatabasesController : ApiController
 	{
+		private readonly ILoadAllTenants _loadAllTenants;
 		private readonly ICheckDatabaseVersions _checkDatabaseVersions;
+		private readonly TenantUpgrader _tenantUpgrader;
 
-		public UpgradeDatabasesController(ICheckDatabaseVersions checkDatabaseVersions)
+		public UpgradeDatabasesController(ILoadAllTenants loadAllTenants, ICheckDatabaseVersions checkDatabaseVersions, TenantUpgrader tenantUpgrader)
 		{
+			_loadAllTenants = loadAllTenants;
 			_checkDatabaseVersions = checkDatabaseVersions;
+			_tenantUpgrader = tenantUpgrader;
 		}
 
 		[HttpPost]
@@ -28,5 +34,22 @@ namespace Teleopti.Wfm.Administration.Controllers
 			return Json(_checkDatabaseVersions.GetVersions(appBuilder.ConnectionString));
 
 		}
+
+		[HttpPost]
+		[TenantUnitOfWork]
+		[Route("UpgradeTenant")]
+		public virtual JsonResult<TenantResultModel> UpgradeTenant(UpgradeTenantModel model)
+		{
+			var tenant = _loadAllTenants.Tenants().Single(x => x.Name.Equals(model.Tenant));
+			_tenantUpgrader.Upgrade(tenant, model.AdminUserName, model.AdminPassword);
+			return Json(new TenantResultModel {Success = true, Message = "Upgraded databases for tenant " + tenant.Name});
+		}
+   }
+
+	public class UpgradeTenantModel
+	{
+		public string Tenant { get; set; }
+		public string AdminUserName { get; set; }
+		public string AdminPassword { get; set; }
 	}
 }

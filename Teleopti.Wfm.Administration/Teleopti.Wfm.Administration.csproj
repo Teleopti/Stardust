@@ -199,8 +199,11 @@
     <Compile Include="Controllers\DatabaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Core\DatabaseUpgrader.cs" />
     <Compile Include="Core\DbPathProvider.cs" />
     <Compile Include="Core\DbPathProviderFake.cs" />
+    <Compile Include="Core\TenantLogger.cs" />
+    <Compile Include="Core\TenantUpgrader.cs" />
     <Compile Include="Core\TokenQuerier.cs" />
     <Compile Include="Models\LoginResult.cs" />
     <Compile Include="Models\LoginModel.cs" />
@@ -244,6 +247,10 @@
     <ProjectReference Include="..\Infrastructure\Teleopti.Ccc.Infrastructure.csproj">
       <Project>{aa4a5374-77af-44f0-85c1-6cabc6701352}</Project>
       <Name>Teleopti.Ccc.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\ReportTexts\Teleopti.Analytics.ReportTexts.csproj">
+      <Project>{7c7067a8-c9ff-462e-8469-78e886c2e002}</Project>
+      <Name>Teleopti.Analytics.ReportTexts</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.Library\Teleopti.Ccc.DBManager.Library.csproj">
       <Project>{cf33f7a6-78d3-4167-a42d-20e453f8b1b6}</Project>
