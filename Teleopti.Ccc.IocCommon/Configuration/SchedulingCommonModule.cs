@@ -14,7 +14,6 @@ using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityD
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization;
 using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.Domain.Outbound.Rules;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -131,6 +130,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<GroupPagePerDateHolder>().As<IGroupPagePerDateHolder>().InstancePerLifetimeScope();
 			builder.RegisterType<DesiredShiftLengthCalculator>().As<IDesiredShiftLengthCalculator>().InstancePerLifetimeScope();
 			builder.RegisterType<ShiftLengthDecider>().As<IShiftLengthDecider>().InstancePerLifetimeScope();
+			builder.RegisterType<PersonSkillDayCreator>().As<IPersonSkillDayCreator>().InstancePerLifetimeScope();
 			builder.RegisterType<WorkShiftFinderService>().As<IWorkShiftFinderService>().InstancePerLifetimeScope();
 
 			builder.RegisterType<SkillVisualLayerCollectionDictionaryCreator>()

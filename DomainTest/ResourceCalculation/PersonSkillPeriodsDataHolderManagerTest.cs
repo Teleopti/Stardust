@@ -13,140 +13,110 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
     public class PersonSkillPeriodsDataHolderManagerTest
     {
         private IPersonSkillPeriodsDataHolderManager _target;
-        private MockRepository _mocks;
         private ISchedulingResultStateHolder _schedulingResultStateHolder;
         private ISkillStaffPeriodHolder _skillStafPeriodHolder;
         private IDictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> _theDictionary;
         private IPerson _person;
         private IVirtualSchedulePeriod _schedulePeriod;
         
-
         [SetUp]
         public void Setup()
         {
-            _mocks = new MockRepository();
-            _schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
+            _schedulingResultStateHolder = MockRepository.GenerateMock<ISchedulingResultStateHolder>();
             _target = new PersonSkillPeriodsDataHolderManager(()=>_schedulingResultStateHolder);
-            _skillStafPeriodHolder = _mocks.StrictMock<ISkillStaffPeriodHolder>();
-            _schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
-            _theDictionary = _mocks.StrictMock<IDictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>>>();    
-            
+			_skillStafPeriodHolder = MockRepository.GenerateMock<ISkillStaffPeriodHolder>();
+			_schedulePeriod = MockRepository.GenerateMock<IVirtualSchedulePeriod>();
+			_theDictionary = MockRepository.GenerateMock<IDictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>>>();
         }
 
-        [Test]
-       public void CanGetPersonSkillPeriodsDataHolderDictionary()
-        {
-            TimeZoneInfo timeZoneInfo =
-                (TimeZoneInfo.FindSystemTimeZoneById("Jordan Standard Time"));
-            ISkill skill = SkillFactory.CreateSkill("Skill");
-            IList<ISkill> skills = new List<ISkill>{skill};
+	    [Test]
+	    public void CanGetPersonSkillPeriodsDataHolderDictionary()
+	    {
+		    var dateOnly = new DateOnly(2009, 2, 2);
+		    var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Jordan Standard Time");
+		    var skill = SkillFactory.CreateSkill("Skill");
+		    var skills = new List<ISkill> {skill};
 
-            _person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(), new List<ISkill>());
-            _person.AddSkill(new PersonSkill(skill, new Percent(1)), _person.Period(new DateOnly()));
-            _person.PermissionInformation.SetDefaultTimeZone(timeZoneInfo);
-            
-            var dateOnly = new DateOnly(2009,2,2);
-            using (_mocks.Record())
-            {
-                Expect.Call(_schedulePeriod.Person).Return(_person).Repeat.Twice();
-                Expect.Call(_schedulingResultStateHolder.SkillStaffPeriodHolder).Return(_skillStafPeriodHolder);
-                Expect.Call(_skillStafPeriodHolder.SkillStaffDataPerActivity(new DateTimePeriod(), skills)).Return(_theDictionary).IgnoreArguments();
-            }
+		    _person = PersonFactory.CreatePersonWithPersonPeriod(dateOnly, new List<ISkill>());
+		    _person.AddSkill(new PersonSkill(skill, new Percent(1)), _person.Period(dateOnly));
+		    _person.PermissionInformation.SetDefaultTimeZone(timeZoneInfo);
 
-            using (_mocks.Playback())
-            {
-				var ret = _target.GetPersonSkillPeriodsDataHolderDictionary(dateOnly, _schedulePeriod);
-                Assert.IsNotNull(ret);
-            }
-        }
+		    _schedulePeriod.Stub(x => x.Person).Return(_person);
+		    _schedulingResultStateHolder.Stub(x => x.SkillStaffPeriodHolder).Return(_skillStafPeriodHolder);
+		    _skillStafPeriodHolder.Stub(x => x.SkillStaffDataPerActivity(new DateTimePeriod(), skills)).Return(_theDictionary).IgnoreArguments();
 
-        [Test]
-        public void ShouldReturnEmptyPersonMaxSeatSkillSkillStaffPeriodsWhenMaxSeatIsNull()
-        {
-            var site = _mocks.StrictMock<ISite>();
-            var dateOnly = new DateOnly(2009, 2, 2);
-            _person = _mocks.StrictMock<IPerson>();
-            var personPeriod = _mocks.StrictMock<IPersonPeriod>();
-            var team = _mocks.StrictMock<ITeam>();
+		    var personSkillDay = new PersonSkillDayCreator().Create(dateOnly, _schedulePeriod);
+		    var ret = _target.GetPersonSkillPeriodsDataHolderDictionary(personSkillDay);
+		    
+			Assert.IsNotNull(ret);
+	    }
 
-            using (_mocks.Record())
-            {
-                Expect.Call(_schedulePeriod.Person).Return(_person);
-                Expect.Call(_person.Period(dateOnly)).Return(personPeriod);
-                Expect.Call(personPeriod.Team).Return(team);
-                Expect.Call(team.Site).Return(site);
-                //Expect.Call(_schedulePeriod.Site).Return(site);
-                Expect.Call(site.MaxSeatSkill).Return(null);
-                }
+	    [Test]
+	    public void ShouldReturnEmptyPersonMaxSeatSkillSkillStaffPeriodsWhenMaxSeatIsNull()
+	    {
+		    var dateOnly = new DateOnly(2009, 2, 2);
+		    var team = TeamFactory.CreateTeam("Team 1", "Paris");
+		    team.Site.MaxSeatSkill = null;
+		    _person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(dateOnly, team);
+		    _person.AddSkill(new PersonSkill(SkillFactory.CreateSkill("Test"), new Percent(1)), _person.Period(dateOnly));
 
-            using (_mocks.Playback())
-            {
-                var ret = _target.GetPersonMaxSeatSkillSkillStaffPeriods(dateOnly, _schedulePeriod);
-                Assert.IsNotNull(ret);
-            }
-        }
+		    _schedulePeriod.Stub(x => x.Person).Return(_person);
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
-        public void CanGetPersonMaxSeatSkillSkillStaffPeriods()
-        {
-            var site = _mocks.StrictMock<ISite>();
-            TimeZoneInfo timeZoneInfo =
-                (TimeZoneInfo.FindSystemTimeZoneById("Jordan Standard Time"));
-            ISkill skill = SkillFactory.CreateSiteSkill("siteSkill");
-            IList<ISkill> skills = new List<ISkill> { skill };
-            var team = _mocks.StrictMock<ITeam>();
+		    var personSkillDay = new PersonSkillDayCreator().Create(dateOnly, _schedulePeriod);
+		    var ret = _target.GetPersonMaxSeatSkillSkillStaffPeriods(personSkillDay);
+		    Assert.IsNotNull(ret);
+	    }
 
-            _person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(), new List<ISkill>());
-            _person.Period(new DateOnly()).AddPersonMaxSeatSkill(new PersonSkill(skill, new Percent(1)));
-            _person.PermissionInformation.SetDefaultTimeZone(timeZoneInfo);
-            _person.Period(new DateOnly()).Team = team;
+	    [Test]
+	    public void CanGetPersonMaxSeatSkillSkillStaffPeriods()
+	    {
+		    var dateOnly = new DateOnly(2009, 2, 2);
+		    var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Jordan Standard Time");
+		    var skill = SkillFactory.CreateSiteSkill("siteSkill");
+		    var skills = new List<ISkill> {skill};
+		    var team = TeamFactory.CreateTeam("Team 1", "Paris");
+		    team.Site.MaxSeatSkill = skill;
 
-            var dateOnly = new DateOnly(2009, 2, 2);
-            using (_mocks.Record())
-            {
-                Expect.Call(_schedulePeriod.Person).Return(_person);
-                Expect.Call(team.Site).Return(site);
-                //Expect.Call(_schedulePeriod.Site).Return(site);
-                Expect.Call(site.MaxSeatSkill).Return(skill);
-                Expect.Call(_schedulePeriod.Person).Return(_person).Repeat.Twice();
-                Expect.Call(_schedulingResultStateHolder.SkillStaffPeriodHolder).Return(_skillStafPeriodHolder);
-                Expect.Call(_skillStafPeriodHolder.SkillStaffPeriodDictionary(skills,new DateTimePeriod())).Return(new Dictionary<ISkill, ISkillStaffPeriodDictionary>()).IgnoreArguments();
-            }
+		    _person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(dateOnly, team);
+		    _person.PermissionInformation.SetDefaultTimeZone(timeZoneInfo);
 
-            using (_mocks.Playback())
-            {
-                var ret = _target.GetPersonMaxSeatSkillSkillStaffPeriods(dateOnly, _schedulePeriod);
-                Assert.IsNotNull(ret);
-            }
-        }
+		    var personPeriod = _person.Period(dateOnly);
+		    personPeriod.AddPersonMaxSeatSkill(new PersonSkill(skill, new Percent(1)));
+		    personPeriod.Team = team;
 
-        [Test]
-        public void CanGetPersonNonBlendSkillSkillStaffPeriods()
-        {
-            TimeZoneInfo timeZoneInfo =
-                (TimeZoneInfo.FindSystemTimeZoneById("Jordan Standard Time"));
-            ISkill skill = SkillFactory.CreateNonBlendSkill("noneBlendSkill");
-            IList<ISkill> skills = new List<ISkill> { skill };
+		    _schedulePeriod.Stub(x => x.Person).Return(_person);
+		    _schedulingResultStateHolder.Stub(x => x.SkillStaffPeriodHolder).Return(_skillStafPeriodHolder);
+		    _skillStafPeriodHolder.Stub(x => x.SkillStaffPeriodDictionary(skills, new DateTimePeriod()))
+			    .Return(new Dictionary<ISkill, ISkillStaffPeriodDictionary>())
+			    .IgnoreArguments();
 
-            _person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(), new List<ISkill>());
-            _person.Period(new DateOnly()).AddPersonNonBlendSkill(new PersonSkill(skill, new Percent(1)));
-            _person.PermissionInformation.SetDefaultTimeZone(timeZoneInfo);
+		    var personSkillDay = new PersonSkillDayCreator().Create(dateOnly, _schedulePeriod);
+		    var ret = _target.GetPersonMaxSeatSkillSkillStaffPeriods(personSkillDay);
+		    
+			Assert.IsNotNull(ret);
+	    }
 
-            var dateOnly = new DateOnly(2009, 2, 2);
-            using (_mocks.Record())
-            {
-                Expect.Call(_schedulePeriod.Person).Return(_person).Repeat.Twice();
-                Expect.Call(_schedulingResultStateHolder.SkillStaffPeriodHolder).Return(_skillStafPeriodHolder);
-                Expect.Call(_skillStafPeriodHolder.SkillStaffPeriodDictionary(skills, new DateTimePeriod())).Return(new Dictionary<ISkill, ISkillStaffPeriodDictionary>()).IgnoreArguments();
-            }
+	    [Test]
+	    public void CanGetPersonNonBlendSkillSkillStaffPeriods()
+	    {
+		    var dateOnly = new DateOnly(2009, 2, 2);
+		    var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Jordan Standard Time");
+		    var skill = SkillFactory.CreateNonBlendSkill("noneBlendSkill");
+		    var skills = new List<ISkill> {skill};
 
-            using (_mocks.Playback())
-            {
-                var ret = _target.GetPersonNonBlendSkillSkillStaffPeriods(dateOnly, _schedulePeriod);
-                Assert.IsNotNull(ret);
-            }
-        }
+		    _person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(dateOnly, TeamFactory.CreateTeam("Team 1", "Paris"));
+			_person.Period(dateOnly).AddPersonNonBlendSkill(new PersonSkill(skill, new Percent(1)));
+		    _person.PermissionInformation.SetDefaultTimeZone(timeZoneInfo);
+
+		    _schedulePeriod.Stub(x => x.Person).Return(_person);
+		    _schedulingResultStateHolder.Stub(x => x.SkillStaffPeriodHolder).Return(_skillStafPeriodHolder);
+		    _skillStafPeriodHolder.Stub(x => x.SkillStaffPeriodDictionary(skills, new DateTimePeriod()))
+			    .Return(new Dictionary<ISkill, ISkillStaffPeriodDictionary>())
+			    .IgnoreArguments();
+
+		    var personSkillDay = new PersonSkillDayCreator().Create(dateOnly, _schedulePeriod);
+		    var ret = _target.GetPersonNonBlendSkillSkillStaffPeriods(personSkillDay);
+		    Assert.IsNotNull(ret);
+	    }
     }
-
-    
 }

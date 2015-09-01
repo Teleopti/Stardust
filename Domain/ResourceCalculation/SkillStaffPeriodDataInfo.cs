@@ -70,10 +70,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 return 0;
 
             double partOfResolution = currentResourceInMinutes/Period.ElapsedTime().TotalMinutes;
-            //double calculatedValue = OldCalculateWorkShiftPeriodValue(OriginalDemandInMinutes*partOfResolution,
-            //                                                       AssignedResourceInMinutes*partOfResolution,
-            //                                                       currentResourceInMinutes);
-
+            
             double calculatedValue = SkillStaffPeriodCalculator.CalculateWorkShiftPeriodValue(OriginalDemandInMinutes*partOfResolution,
                                                                    TweakedCurrentDemand*partOfResolution,
                                                                     currentResourceInMinutes);
@@ -85,8 +82,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				corrFactor = SkillStaffPeriodCalculator.GetCorrectionFactor(useMinimumPersons, useMaximumPersons, AbsoluteDifferenceScheduledHeadsAndMinMaxHeads, MinimumPersons, AssignedResourceInMinutes);
 
             calculatedValue += corrFactor;
-
-			//Debug.Print(_period.ToString() + ";" + OriginalDemandInMinutes + ";" + TweakedCurrentDemand + ";" + calculatedValue);
 
             return calculatedValue;
         }

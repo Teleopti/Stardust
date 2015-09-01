@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
-using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Interfaces.Domain;
 
@@ -136,7 +134,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return person;
 		}
 
-		public static IPerson CreatePersonWithPersonPeriodFromTeam(DateOnly personPeriodStart, Team team)
+		public static IPerson CreatePersonWithPersonPeriodFromTeam(DateOnly personPeriodStart, ITeam team)
 		{
 			var person = CreatePersonWithPersonPeriod(new Person(), personPeriodStart, new ISkill[] { }, team, new Contract("ctr"), new PartTimePercentage("ptc"));
 			person.SetId(Guid.NewGuid());
@@ -175,7 +173,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	        return CreatePersonWithPersonPeriod(person, personPeriodStart, skillsInPersonPeriod, new Team(), contract, partTimePercentage);
         }
 
-		private static IPerson CreatePersonWithPersonPeriod(IPerson person, DateOnly personPeriodStart, IEnumerable<ISkill> skillsInPersonPeriod, Team teamInPersonPeriod, IContract contract, IPartTimePercentage partTimePercentage)
+		private static IPerson CreatePersonWithPersonPeriod(IPerson person, DateOnly personPeriodStart, IEnumerable<ISkill> skillsInPersonPeriod, ITeam teamInPersonPeriod, IContract contract, IPartTimePercentage partTimePercentage)
 		{
 			IPersonPeriod pPeriod = person.Period(personPeriodStart);
 			if (pPeriod == null)

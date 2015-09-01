@@ -7,7 +7,30 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-    public class PersonSkillPeriodsDataHolderManager : IPersonSkillPeriodsDataHolderManager
+	public class PersonSkillDayCreator : IPersonSkillDayCreator
+	{
+		public PersonSkillDay Create(DateOnly date, IVirtualSchedulePeriod currentSchedulePeriod)
+		{
+			var personPeriod = currentSchedulePeriod.Person.Period(date);
+			var skills = (from personSkill in personPeriod.PersonSkillCollection
+					   where !((IDeleteTag)personSkill.Skill).IsDeleted & personSkill.Active
+					   select personSkill.Skill).ToArray();
+
+			var maxSeatSkills = (from personSkill in personPeriod.PersonMaxSeatSkillCollection
+							  where !((IDeleteTag)personSkill.Skill).IsDeleted
+							  select personSkill.Skill).ToArray();
+
+			var nonBlendSkills = (from personSkill in personPeriod.PersonNonBlendSkillCollection
+							   where !((IDeleteTag)personSkill.Skill).IsDeleted
+							   select personSkill.Skill).ToArray();
+
+			var scheduleDayUtc = TimeZoneHelper.ConvertToUtc(date.Date, currentSchedulePeriod.Person.PermissionInformation.DefaultTimeZone());
+			var period = new DateTimePeriod(scheduleDayUtc, scheduleDayUtc.AddDays(2));
+			return new PersonSkillDay(period, personPeriod.Team, skills, maxSeatSkills, nonBlendSkills);
+		}
+	}
+
+	public class PersonSkillPeriodsDataHolderManager : IPersonSkillPeriodsDataHolderManager
     {
         private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 
@@ -16,58 +39,33 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             _schedulingResultStateHolder = schedulingResultStateHolder;
         }
 
-		public IDictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> GetPersonSkillPeriodsDataHolderDictionary(DateOnly scheduleDateOnly, IVirtualSchedulePeriod currentSchedulePeriod)
+		public IDictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> GetPersonSkillPeriodsDataHolderDictionary(PersonSkillDay personSkillDay)
         {
-			InParameter.NotNull("currentSchedulePeriod", currentSchedulePeriod);
-		    var personPeriod = currentSchedulePeriod.Person.Period(scheduleDateOnly);
-            var skills = (from personSkill in personPeriod.PersonSkillCollection
-                                     where !((IDeleteTag) personSkill.Skill).IsDeleted & personSkill.Active
-						  select personSkill.Skill).ToArray();
-
-            var scheduleDayUtc = TimeZoneHelper.ConvertToUtc(scheduleDateOnly.Date,
-																  currentSchedulePeriod.Person.PermissionInformation.DefaultTimeZone());
-            var period = new DateTimePeriod(scheduleDayUtc, scheduleDayUtc.AddDays(2));
-            return _schedulingResultStateHolder().SkillStaffPeriodHolder.SkillStaffDataPerActivity(period, skills);
+            return _schedulingResultStateHolder().SkillStaffPeriodHolder.SkillStaffDataPerActivity(personSkillDay.Period(), personSkillDay.Skills());
         }
 
-        public IDictionary<ISkill, ISkillStaffPeriodDictionary> GetPersonMaxSeatSkillSkillStaffPeriods(DateOnly scheduleDateOnly, IVirtualSchedulePeriod currentSchedulePeriod)
-        {
-            var site = currentSchedulePeriod.Person.Period(scheduleDateOnly).Team.Site;
-			if(site.MaxSeatSkill == null)
+		public IDictionary<ISkill, ISkillStaffPeriodDictionary> GetPersonMaxSeatSkillSkillStaffPeriods(
+			PersonSkillDay personSkillDay)
+		{
+			var site = personSkillDay.Team().Site;
+			if (site.MaxSeatSkill == null)
 				return new Dictionary<ISkill, ISkillStaffPeriodDictionary>();
 
-            var personPeriod = currentSchedulePeriod.Person.Period(scheduleDateOnly);
-            IEnumerable<ISkill> maxSeatSkills = (from personSkill in personPeriod.PersonMaxSeatSkillCollection
-								 where !((IDeleteTag)personSkill.Skill).IsDeleted
-												 select personSkill.Skill).ToArray();
-			
-		if(maxSeatSkills.IsEmpty())
-			return new Dictionary<ISkill, ISkillStaffPeriodDictionary>();
+			var maxSeatSkills = personSkillDay.MaxSeatSkills();
+			if (maxSeatSkills.IsEmpty())
+				return new Dictionary<ISkill, ISkillStaffPeriodDictionary>();
 
-			var scheduleDayUtc = TimeZoneHelper.ConvertToUtc(scheduleDateOnly.Date,
-																  currentSchedulePeriod.Person.PermissionInformation.DefaultTimeZone());
-			var period = new DateTimePeriod(scheduleDayUtc, scheduleDayUtc.AddDays(2));
-
-
-			return _schedulingResultStateHolder().SkillStaffPeriodHolder.SkillStaffPeriodDictionary(maxSeatSkills, period);
+			return _schedulingResultStateHolder()
+				.SkillStaffPeriodHolder.SkillStaffPeriodDictionary(maxSeatSkills, personSkillDay.Period());
 		}
 
-        public IDictionary<ISkill, ISkillStaffPeriodDictionary> GetPersonNonBlendSkillSkillStaffPeriods(DateOnly scheduleDateOnly, IVirtualSchedulePeriod currentSchedulePeriod)
+		public IDictionary<ISkill, ISkillStaffPeriodDictionary> GetPersonNonBlendSkillSkillStaffPeriods(PersonSkillDay personSkillDay)
         {
-            var personPeriod = currentSchedulePeriod.Person.Period(scheduleDateOnly);
-            IEnumerable<ISkill> nonBlendSkills = (from personSkill in personPeriod.PersonNonBlendSkillCollection
-                                                 where !((IDeleteTag)personSkill.Skill).IsDeleted
-                                                 select personSkill.Skill).ToArray();
-
-            if (nonBlendSkills.IsEmpty())
+			var nonBlendSkills = personSkillDay.NonBlendSkills();
+			if (nonBlendSkills.IsEmpty())
                 return new Dictionary<ISkill, ISkillStaffPeriodDictionary>();
 
-            var scheduleDayUtc = TimeZoneHelper.ConvertToUtc(scheduleDateOnly.Date,
-                                                                  currentSchedulePeriod.Person.PermissionInformation.DefaultTimeZone());
-            var period = new DateTimePeriod(scheduleDayUtc, scheduleDayUtc.AddDays(2));
-
-
-            return _schedulingResultStateHolder().SkillStaffPeriodHolder.SkillStaffPeriodDictionary(nonBlendSkills, period);
+            return _schedulingResultStateHolder().SkillStaffPeriodHolder.SkillStaffPeriodDictionary(nonBlendSkills, personSkillDay.Period());
         }
     }
 }

@@ -20,12 +20,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private readonly Func<IWorkShiftMinMaxCalculator> _workShiftMinMaxCalculator;
         private readonly IFairnessAndMaxSeatCalculatorsManager _fairnessAndMaxSeatCalculatorsManager;
     	private readonly IShiftLengthDecider _shiftLengthDecider;
+	    private readonly IPersonSkillDayCreator _personSkillDayCreator;
 
 	    public WorkShiftFinderService(Func<ISchedulingResultStateHolder> resultStateHolder, Func<IPreSchedulingStatusChecker> preSchedulingStatusChecker
             , IShiftProjectionCacheFilter shiftProjectionCacheFilter, Func<IPersonSkillPeriodsDataHolderManager> personSkillPeriodsDataHolderManager,  
             IShiftProjectionCacheManager shiftProjectionCacheManager ,  IWorkShiftCalculatorsManager workShiftCalculatorsManager,  
             Func<IWorkShiftMinMaxCalculator> workShiftMinMaxCalculator, IFairnessAndMaxSeatCalculatorsManager fairnessAndMaxSeatCalculatorsManager,
-			IShiftLengthDecider shiftLengthDecider)
+			IShiftLengthDecider shiftLengthDecider, IPersonSkillDayCreator personSkillDayCreator)
         {
             _resultStateHolder = resultStateHolder;
             _preSchedulingStatusChecker = preSchedulingStatusChecker;
@@ -36,6 +37,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             _workShiftMinMaxCalculator = workShiftMinMaxCalculator;
             _fairnessAndMaxSeatCalculatorsManager = fairnessAndMaxSeatCalculatorsManager;
         	_shiftLengthDecider = shiftLengthDecider;
+		    _personSkillDayCreator = personSkillDayCreator;
         }
 
         public WorkShiftFinderServiceResult FindBestShift(IScheduleDay schedulePart, ISchedulingOptions schedulingOptions, IScheduleMatrixPro matrix, IEffectiveRestriction effectiveRestriction)
@@ -236,9 +238,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             using (PerformanceOutput.ForOperation("Calculating and selecting best shift"))
             {
 	            var personSkillPeriodsDataHolderManager = _personSkillPeriodsDataHolderManager();
-	            var maxSeatPeriods = personSkillPeriodsDataHolderManager.GetPersonMaxSeatSkillSkillStaffPeriods(dateOnly, virtualSchedulePeriod);
-                var nonBlendPeriods = personSkillPeriodsDataHolderManager.GetPersonNonBlendSkillSkillStaffPeriods(dateOnly, virtualSchedulePeriod);
-                var dataholder = personSkillPeriodsDataHolderManager.GetPersonSkillPeriodsDataHolderDictionary(dateOnly, virtualSchedulePeriod);
+	            var personSkillDay = _personSkillDayCreator.Create(dateOnly, virtualSchedulePeriod);
+	            var maxSeatPeriods = personSkillPeriodsDataHolderManager.GetPersonMaxSeatSkillSkillStaffPeriods(personSkillDay);
+                var nonBlendPeriods = personSkillPeriodsDataHolderManager.GetPersonNonBlendSkillSkillStaffPeriods(personSkillDay);
+                var dataholder = personSkillPeriodsDataHolderManager.GetPersonSkillPeriodsDataHolderDictionary(personSkillDay);
 
 				result = findHighestValueMainShift(dateOnly, shiftList, new WorkShiftCalculatorSkillStaffPeriodData(dataholder), maxSeatPeriods, nonBlendPeriods, virtualSchedulePeriod, schedulingOptions, workShiftFinderResult);
             }
