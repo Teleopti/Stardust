@@ -3,22 +3,18 @@
 (function () {
 
 	angular.module('wfm.seatPlan').controller('seatPlanReportCtrl', seatPlanReportCtrl);
-	seatPlanReportCtrl.$inject = ['seatPlanService'];
+	seatPlanReportCtrl.$inject = ['$scope', 'seatPlanService'];
 
-	function seatPlanReportCtrl(seatPlanService) {
+	function seatPlanReportCtrl($scope, seatPlanService) {
 		var vm = this;
 
+		vm.temp = {};
+		
 		vm.selectedLocations = [];
 		vm.selectedTeams = [];
 		vm.isDatePickerOpened = true;
 		vm.reportTake = 34;
-
-		function getSeatBookingsCallback(data) {
-			vm.seatBookings = data.SeatBookingsByDate;
-			vm.isLoadingReport = false;
-			vm.totalPages = Math.ceil(data.TotalRecordCount / vm.reportTake);
-		};
-
+		
 		vm.getSeatBookings = function (options) {
 			vm.isLoadingReport = options.isLoadingReportToDisplay;
 			var seatBookingReportParams = {
@@ -47,17 +43,38 @@
 			return '';
 		};
 
-		vm.dateIsValid = function() {
+		vm.dateFilterIsValid = function() {
 			return (vm.selectedPeriod.StartDate <= vm.selectedPeriod.EndDate);
 		};
-		
+
+		vm.toggleFilterVisibility = function () {
+
+			if (!vm.isFilterOpened) {
+				cacheFilterValuesInCaseOfCancel();
+			} else {
+				reloadCachedFilterValuesAfterCancel();
+			}
+			
+			vm.isFilterOpened = !vm.isFilterOpened;
+		}
+
 		vm.toggleFilter = function (tabName) {
 			vm.isDatePickerOpened = tabName == 'date';
 			vm.isTeamPickerOpened = tabName == 'team';
 			vm.isLocationPickerOpened = tabName == 'location';
+
 		};
 
+		vm.cancelFilter = function() {
+			vm.isFilterOpened = false;
+			reloadCachedFilterValuesAfterCancel();
+		};
+		
+
 		vm.applyFilter = function () {
+
+			vm.isFilterOpened = false;
+			
 			vm.getSeatBookings({
 				skip: vm.page,
 				take: vm.reportTake,
@@ -95,6 +112,26 @@
 			});
 			vm.currentPage = 1;
 		};
+
+
+		function cacheFilterValuesInCaseOfCancel() {
+			vm.temp.selectedTeams = angular.copy(vm.selectedTeams);
+			vm.temp.selectedLocations = angular.copy(vm.selectedLocations);
+			vm.temp.selectedPeriod = angular.copy(vm.selectedPeriod);
+		};
+
+		function reloadCachedFilterValuesAfterCancel() {
+			vm.selectedTeams = angular.copy(vm.temp.selectedTeams);
+			vm.selectedLocations = angular.copy(vm.temp.selectedLocations);
+			angular.copy(vm.temp.selectedPeriod, vm.selectedPeriod);
+		};
+
+		function getSeatBookingsCallback(data) {
+			vm.seatBookings = data.SeatBookingsByDate;
+			vm.isLoadingReport = false;
+			vm.totalPages = Math.ceil(data.TotalRecordCount / vm.reportTake);
+		};
+
 	};
 
 })();

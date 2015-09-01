@@ -2,13 +2,20 @@
 (function () {
 
 	angular.module('wfm.seatPlan').controller('TeamPickerCtrl', teamPickerDirectiveController);
-	teamPickerDirectiveController.$inject = ['seatPlanService'];
+	teamPickerDirectiveController.$inject = ['$scope', 'seatPlanService'];
 
-	function teamPickerDirectiveController(seatPlanService) {
+	function teamPickerDirectiveController($scope, seatPlanService) {
 
 		var vm = this;
 		vm.teams = [];
 		vm.selectedTeams = [];
+
+		$scope.$watch("vm.selectedTeams", function (updatedArray) {
+			if (vm.teams.length > 0) {
+				updateSelectedTeamsAfterExternalUpdate(vm.teams[0], updatedArray);
+				updateBuAndSiteStatus(vm.teams);
+			}
+		});
 
 		seatPlanService.teams.get().$promise.then(function (teams) {
 			teams.show = true;
@@ -90,6 +97,19 @@
 				}
 			}
 		};
+
+		function updateSelectedTeamsAfterExternalUpdate(node, updatedArray) {
+			var index = updatedArray.indexOf(node.Id);
+
+			if (isTeam(node)) {
+				node.selected = index != -1;
+			} else {
+				node.Children.forEach(function (child) {
+					updateSelectedTeamsAfterExternalUpdate(child, updatedArray);
+				});
+			}
+		};
+
 	};
 }());
 

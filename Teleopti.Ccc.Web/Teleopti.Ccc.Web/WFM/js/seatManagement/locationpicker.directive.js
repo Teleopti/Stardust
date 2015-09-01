@@ -2,14 +2,20 @@
 (function () {
 
 	angular.module('wfm.seatPlan').controller('LocationPickerCtrl', locationPickerDirectiveController);
-	locationPickerDirectiveController.$inject = ['seatPlanService', 'seatPlanTranslatorFactory'];
+	locationPickerDirectiveController.$inject = ['$scope','seatPlanService', 'seatPlanTranslatorFactory'];
 
-	function locationPickerDirectiveController(seatPlanService, translator) {
+	function locationPickerDirectiveController($scope, seatPlanService, translator) {
 
 		var vm = this;
-
+		
 		vm.locations = [];
 		vm.selectedLocations = [];
+
+		$scope.$watch("vm.selectedLocations", function (updatedLocationArray) {
+			if (vm.locations.length > 0) {
+				updateSelectedLocationsAfterExternalUpdate(vm.locations[0], updatedLocationArray);
+			}
+		});
 
 		seatPlanService.locations.get().$promise.then(function (locations) {
 			locations.show = true;
@@ -39,6 +45,19 @@
 				vm.selectedLocations.splice(index, 1);
 			}
 		};
+
+		function updateSelectedLocationsAfterExternalUpdate(locationNode, updatedLocationArray) {
+			var index = vm.selectedLocations.indexOf(locationNode.Id);
+			locationNode.selected = (index != -1);
+
+			if (locationNode.Children !== undefined) {
+				locationNode.Children.forEach(function(child) {
+					updateSelectedLocationsAfterExternalUpdate(child, updatedLocationArray);
+				});
+			}
+
+		};
+
 	};
 
 }());
