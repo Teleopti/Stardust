@@ -46,5 +46,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database.PersistedOnTenants.ElementAt(1).Should().Be("tenant2");
 		}
 
+		//[Test]
+		//public void ShouldUseDatasourceForTheTenant()
+		//{
+		//	var person1 = Guid.NewGuid();
+		//	var person2 = Guid.NewGuid();
+		//	Database
+		//		.WithTenant("tenant1", "key1")
+		//		.WithTenant("tenant2", "key2")
+		//		.WithSource("tenant1", "source")
+		//		.WithSource("tenant2", "source")
+		//		.WithUser("user1", person1)
+		//		.WithUser("user2", person2)
+		//		;
+		//}
+
 	}
 }

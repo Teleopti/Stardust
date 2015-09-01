@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		{
 			if (database != null)
 			{
-				builder.UseTestDouble(database).For<IDatabaseReader, IDatabaseWriter, IPersonOrganizationReader>();
+				builder.UseTestDouble(database).For<IDatabaseReader, IDatabaseWriter>();
 				builder.UseTestDouble(database.AgentStateReadModelReader).For<IAgentStateReadModelReader>();
 				builder.UseTestDouble(database.RtaStateGroupRepository).For<IRtaStateGroupRepository>();
 				builder.UseTestDouble(database.StateGroupActivityAlarmRepository).For<IStateGroupActivityAlarmRepository>();
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			}
 			else
 			{
-				builder.UseTestDouble<FakeRtaDatabase>().For<IDatabaseReader, IDatabaseWriter, IPersonOrganizationReader>();
+				builder.UseTestDouble<FakeRtaDatabase>().For<IDatabaseReader, IDatabaseWriter>();
 				builder.UseTestDouble<FakeAgentStateReadModelReader>().For<IAgentStateReadModelReader>();
 				builder.UseTestDouble<FakeRtaStateGroupRepository>().For<IRtaStateGroupRepository>();
 				builder.UseTestDouble<FakeStateGroupActivityAlarmRepository>().For<IStateGroupActivityAlarmRepository>();

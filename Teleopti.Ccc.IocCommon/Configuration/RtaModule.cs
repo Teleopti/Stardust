@@ -1,18 +1,12 @@
 ﻿using System;
-using System.Runtime.Remoting.Messaging;
 using Autofac;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.Aop;
-using Teleopti.Ccc.Infrastructure.MultiTenancy;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.Rta;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
@@ -68,20 +62,18 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<StateCodeAdder>().As<IStateCodeAdder>().SingleInstance().ApplyAspects();
 
 			_config.Args().CacheBuilder
-				.For<ScheduleLoader>()
+				.For<DatabaseLoader>()
 				.CacheMethod(x => x.GetCurrentSchedule(Guid.NewGuid()))
-				.As<IScheduleLoader>();
-			builder.RegisterMbCacheComponent<ScheduleLoader, IScheduleLoader>();
-
-			_config.Args().CacheBuilder
-				.For<DatabaseReader>()
 				.CacheMethod(x => x.Datasources())
 				.CacheMethod(x => x.ExternalLogOns())
-				.As<IDatabaseReader>();
-			builder.RegisterMbCacheComponent<DatabaseReader, IDatabaseReader>();
+				.CacheMethod(x => x.PersonOrganizationData())
+				.As<IDatabaseLoader>();
+			builder.RegisterMbCacheComponent<DatabaseLoader, IDatabaseLoader>();
+			builder.RegisterType<DatabaseReader>().As<IDatabaseReader>().SingleInstance();
 
 			builder.RegisterType<PreviousStateInfoLoader>().As<IPreviousStateInfoLoader>().SingleInstance().ApplyAspects();
 			builder.RegisterType<AgentStateReadModelReader>().As<IAgentStateReadModelReader>().SingleInstance().ApplyAspects();
+
 			builder.RegisterType<DatabaseWriter>().As<IDatabaseWriter>().SingleInstance().ApplyAspects();
 
 			builder.RegisterType<AdherencePercentageViewModelBuilder>().SingleInstance().As<IAdherencePercentageViewModelBuilder>();
@@ -128,15 +120,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<BySetting>().As<IAppliedAdherence>();
 			else
 				builder.RegisterType<ByStaffingEffect>().As<IAppliedAdherence>();
-
-			_config.Args().CacheBuilder
-				.For<PersonOrganizationProvider>()
-				.CacheMethod(svc => svc.PersonOrganizationData())
-				.As<IPersonOrganizationProvider>();
-			builder.RegisterMbCacheComponent<PersonOrganizationProvider, IPersonOrganizationProvider>().SingleInstance();
-
-			builder.RegisterType<PersonOrganizationReader>().SingleInstance().As<IPersonOrganizationReader>();
-
+			
 			if (_config.Toggle(Toggles.RTA_MultiTenancy_32539))
 				builder.RegisterType<TenantAuthenticator>().As<IAuthenticator>().SingleInstance();
 			else

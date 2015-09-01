@@ -6,9 +6,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Resolvers
 {
 	public class PersonResolver
 	{
-		private readonly IDatabaseReader _databaseReader;
+		private readonly IDatabaseLoader _databaseReader;
 		
-		public PersonResolver(IDatabaseReader databaseReader)
+		public PersonResolver(IDatabaseLoader databaseReader)
 		{
 			_databaseReader = databaseReader;
 		}

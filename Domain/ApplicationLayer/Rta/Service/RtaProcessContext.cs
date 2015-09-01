@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			ExternalUserStateInputModel input, 
 			PersonOrganizationData person, 
 			INow now,
-			IPersonOrganizationProvider personOrganizationProvider, 
+			IDatabaseLoader personOrganizationProvider, 
 			IAgentStateReadModelUpdater agentStateReadModelUpdater, 
 			IAgentStateMessageSender messageSender, 
 			IAdherenceAggregator adherenceAggregator, 

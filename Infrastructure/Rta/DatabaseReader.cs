@@ -137,5 +137,32 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			}
 			return dictionary;
 		}
+
+		private const string loadAllPersonsBuSiteTeam = "exec [dbo].[LoadAllPersonsCurrentBuSiteTeam] @now";
+		public IEnumerable<PersonOrganizationData> PersonOrganizationData()
+		{
+			var ret = new List<PersonOrganizationData>();
+			using (var conn = new SqlConnection(_connectionStrings.Application()))
+			{
+				conn.Open();
+				using (var cmd = new SqlCommand(loadAllPersonsBuSiteTeam, conn))
+				{
+					cmd.Parameters.AddWithValue("@now", _now.UtcDateTime());
+					using (var reader = cmd.ExecuteReader())
+					{
+						while (reader.Read())
+						{
+							ret.Add(new PersonOrganizationData
+							{
+								PersonId = reader.GetGuid(reader.GetOrdinal("PersonId")),
+								TeamId = reader.GetGuid(reader.GetOrdinal("TeamId")),
+								SiteId = reader.GetGuid(reader.GetOrdinal("SiteId"))
+							});
+						}
+					}
+				}
+			}
+			return ret;
+		}
 	}
 }

@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		FakeRtaDatabase Make();
 	}
 
-	public class FakeRtaDatabase : IDatabaseReader, IDatabaseWriter, IPersonOrganizationReader, IFakeDataBuilder
+	public class FakeRtaDatabase : IDatabaseReader, IDatabaseWriter, IFakeDataBuilder
 	{
 		private readonly ICurrentDataSource _currentDataSource;
 

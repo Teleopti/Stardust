@@ -4,9 +4,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator
 {
 	public class OrganizationForPerson : IOrganizationForPerson
 	{
-		private readonly IPersonOrganizationProvider _personOrganizationProvider;
+		private readonly IDatabaseLoader _personOrganizationProvider;
 
-		public OrganizationForPerson(IPersonOrganizationProvider personOrganizationProvider)
+		public OrganizationForPerson(IDatabaseLoader personOrganizationProvider)
 		{
 			_personOrganizationProvider = personOrganizationProvider;
 		}

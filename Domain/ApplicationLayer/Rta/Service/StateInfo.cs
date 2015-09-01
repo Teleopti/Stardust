@@ -8,14 +8,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public StateInfo(
 			RtaProcessContext context,
 			IStateMapper stateMapper,
-			IScheduleLoader scheduleLoader,
+			IDatabaseLoader databaseLoader,
 			IAppliedAdherence appliedAdherence)
 		{
 			Input = context.Input;
 			Person = context.Person;
 			CurrentTime = context.CurrentTime;
 			Stored = context.PreviousStateInfoLoader.Load(context.Person.PersonId);
-			Schedule = new ScheduleInfo(scheduleLoader, Person.PersonId, CurrentTime, Stored);
+			Schedule = new ScheduleInfo(databaseLoader, Person.PersonId, CurrentTime, Stored);
 			State = new StateAlarmInfo(stateCode, platformTypeId, Input, Person, Stored, Schedule, stateMapper);
 			Adherence = new AdherenceInfo(Input, Person, Stored, State, Schedule, appliedAdherence, stateMapper);
 		}

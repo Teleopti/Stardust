@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly RtaProcessor _processor;
 		private readonly IAuthenticator _authenticator;
 		private readonly INow _now;
-		private readonly IPersonOrganizationProvider _personOrganizationProvider;
+		private readonly IDatabaseLoader _databaseLoader;
 		private readonly IAgentStateReadModelUpdater _agentStateReadModelUpdater;
 		private readonly IAgentStateMessageSender _messageSender;
 		private readonly IAdherenceAggregator _adherenceAggregator;
@@ -43,7 +43,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public Rta(
 			IAdherenceAggregator adherenceAggregator,
-			IDatabaseReader databaseReader, 
 			IAgentStateReadModelReader agentStateReadModelReader, 
 			IPreviousStateInfoLoader previousStateInfoLoader, 
 			ICacheInvalidator cacheInvalidator,
@@ -52,24 +51,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IConfigReader configReader,
 			IAgentStateReadModelUpdater agentStateReadModelUpdater,
 			IAgentStateMessageSender messageSender,
-			IPersonOrganizationProvider personOrganizationProvider,
+			IDatabaseLoader databaseLoader,
 			RtaProcessor processor,
 			IAuthenticator authenticator
             )
 		{
 			_agentStateReadModelReader = agentStateReadModelReader;
 			_previousStateInfoLoader = previousStateInfoLoader;
-			_dataSourceResolver = new DataSourceResolver(databaseReader);
+			_dataSourceResolver = new DataSourceResolver(databaseLoader);
 			_stateMapper = stateMapper;
 			_cacheInvalidator = cacheInvalidator;
 			_processor = processor;
 			_authenticator = authenticator;
 			_now = now;
-			_personOrganizationProvider = personOrganizationProvider;
+			_databaseLoader = databaseLoader;
 			_agentStateReadModelUpdater = agentStateReadModelUpdater;
 			_messageSender = messageSender;
 			_adherenceAggregator = adherenceAggregator;
-			_personResolver = new PersonResolver(databaseReader);
+			_personResolver = new PersonResolver(databaseLoader);
 
 			Log.Info("The real time adherence service is now started");
 			_authenticationKey = configReader.AppConfig("AuthenticationKey");
@@ -244,7 +243,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					input,
 					person,
 					_now,
-					_personOrganizationProvider,
+					_databaseLoader,
 					_agentStateReadModelUpdater,
 					_messageSender,
 					_adherenceAggregator,

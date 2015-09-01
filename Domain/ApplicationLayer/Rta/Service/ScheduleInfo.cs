@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly Lazy<DateOnly?> _belongsToDate;
 
 		public ScheduleInfo(
-			IScheduleLoader scheduleLoader, 
+			IDatabaseLoader databaseLoader, 
 			Guid personId, 
 			DateTime currentTime,
 			StoredStateInfo stored
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			_currentTime = currentTime;
 			_stored = stored;
-			_scheduleLayers = new Lazy<IEnumerable<ScheduleLayer>>(() => scheduleLoader.GetCurrentSchedule(personId));
+			_scheduleLayers = new Lazy<IEnumerable<ScheduleLayer>>(() => databaseLoader.GetCurrentSchedule(personId));
 			_currentActivity = new Lazy<ScheduleLayer>(() => activityForTime(currentTime));
 			_nextActivityInShift = new Lazy<ScheduleLayer>(nextAdjecentActivityToCurrent);
 			_currentShiftStartTime = new Lazy<DateTime>(() => startTimeOfShift(_currentActivity.Value));

@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		private readonly INow _now;
 		private readonly RtaProcessor _processor;
-		private readonly IPersonOrganizationProvider _personOrganizationProvider;
+		private readonly IDatabaseLoader _databaseLoader;
 		private readonly IAgentStateReadModelReader _agentStateReadModelReader;
 		private readonly IEventPublisherScope _eventPublisherScope;
 		private readonly IEnumerable<IInitializeble> _initializebles;
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public StateStreamSynchronizer(
 			INow now,
 			RtaProcessor processor,
-			IPersonOrganizationProvider personOrganizationProvider,
+			IDatabaseLoader databaseLoader,
 			IAgentStateReadModelReader agentStateReadModelReader,
 			IEventPublisherScope eventPublisherScope,
 			IEnumerable<IInitializeble> initializebles,
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			_now = now;
 			_processor = processor;
-			_personOrganizationProvider = personOrganizationProvider;
+			_databaseLoader = databaseLoader;
 			_agentStateReadModelReader = agentStateReadModelReader;
 			_eventPublisherScope = eventPublisherScope;
 			_initializebles = initializebles;
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							PersonId = s.PersonId
 						}, 
 						_now,
-						_personOrganizationProvider,
+						_databaseLoader,
 						null,
 						null,
 						null,

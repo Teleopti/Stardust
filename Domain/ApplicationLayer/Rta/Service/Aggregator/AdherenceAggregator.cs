@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator
 	{
 		private readonly IMessageSender _messageSender;
 		private readonly IAgentStateReadModelReader _agentStateReadModelReader;
-		private readonly IPersonOrganizationProvider _personOrganizationProvider;
+		private readonly IDatabaseLoader _personOrganizationProvider;
 		private readonly TeamAdherenceAggregator _teamAdherenceAggregator;
 		private readonly SiteAdherenceAggregator _siteAdherenceAggregator;
 		private readonly AgentAdherenceAggregator _agentAdherenceAggregator;
@@ -33,8 +33,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator
 
 		public AdherenceAggregator(
 			IMessageSender messageSender, 
-			IAgentStateReadModelReader agentStateReadModelReader, 
-			IPersonOrganizationProvider personOrganizationProvider,
+			IAgentStateReadModelReader agentStateReadModelReader,
+			IDatabaseLoader personOrganizationProvider,
 			IJsonSerializer jsonSerializer
 			)
 		{

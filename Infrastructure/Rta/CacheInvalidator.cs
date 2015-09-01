@@ -7,22 +7,20 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 	public class CacheInvalidator : ICacheInvalidator
 	{
 		private readonly IMbCacheFactory _cacheFactory;
-		private readonly IScheduleLoader _scheduleLoader;
+		private readonly IDatabaseLoader _databaseLoader;
 
 		public CacheInvalidator(
 			IMbCacheFactory cacheFactory,
-			IScheduleLoader scheduleLoader
+			IDatabaseLoader databaseLoader
 			)
 		{
 			_cacheFactory = cacheFactory;
-			_scheduleLoader = scheduleLoader;
+			_databaseLoader = databaseLoader;
 		}
 
 		public void InvalidateAll()
 		{
-			_cacheFactory.Invalidate<IDatabaseReader>();
-			_cacheFactory.Invalidate<IScheduleLoader>();
-			_cacheFactory.Invalidate<IPersonOrganizationProvider>();
+			_cacheFactory.Invalidate<IDatabaseLoader>();
 			Invalidate();
 		}
 
@@ -34,7 +32,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 		public void InvalidateSchedules(Guid personId)
 		{
-			_cacheFactory.Invalidate(_scheduleLoader, x => x.GetCurrentSchedule(personId), true);
+			_cacheFactory.Invalidate(_databaseLoader, x => x.GetCurrentSchedule(personId), true);
 		}
 	}
 

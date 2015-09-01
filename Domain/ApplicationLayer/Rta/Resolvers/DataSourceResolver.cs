@@ -4,16 +4,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Resolvers
 {
 	public class DataSourceResolver
 	{
-		private readonly IDatabaseReader _databaseReader;
+		private readonly IDatabaseLoader _databaseLoader;
 
-		public DataSourceResolver(IDatabaseReader databaseReader)
+		public DataSourceResolver(IDatabaseLoader databaseLoader)
 		{
-			_databaseReader = databaseReader;
+			_databaseLoader = databaseLoader;
 		}
 
 		public bool TryResolveId(string sourceId, out int dataSourceId)
 		{
-			var dictionary = _databaseReader.Datasources();
+			var dictionary = _databaseLoader.Datasources();
 			return dictionary.TryGetValue(sourceId, out dataSourceId);
 		}
 	}

@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class RtaProcessor
 	{
-		private readonly IScheduleLoader _scheduleLoader;
+		private readonly IDatabaseLoader _databaseLoader;
 		private readonly IStateMapper _stateMapper;
 		private readonly IShiftEventPublisher _shiftEventPublisher;
 		private readonly IActivityEventPublisher _activityEventPublisher;
@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly ConcurrentDictionary<Guid, object> personLocks = new ConcurrentDictionary<Guid, object>();
 
 		public RtaProcessor(
-			IScheduleLoader scheduleLoader,
+			IDatabaseLoader databaseLoader,
 			IStateMapper stateMapper,
 			IShiftEventPublisher shiftEventPublisher,
 			IActivityEventPublisher activityEventPublisher,
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IAppliedAdherence appliedAdherence
 			)
 		{
-			_scheduleLoader = scheduleLoader;
+			_databaseLoader = databaseLoader;
 			_stateMapper = stateMapper;
 			_shiftEventPublisher = shiftEventPublisher;
 			_activityEventPublisher = activityEventPublisher;
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				var info = new StateInfo(
 					context,
 					_stateMapper,
-					_scheduleLoader,
+					_databaseLoader,
 					_appliedAdherence);
 
 				context.AgentStateReadModelUpdater.Update(info);

@@ -236,8 +236,6 @@
     <Compile Include="ApplicationLayer\Rta\Service\ExternalUserStateForTest.cs" />
     <Compile Include="ApplicationLayer\Rta\FakeMessageSender.cs" />
     <Compile Include="ApplicationLayer\Rta\FakeRtaDatabase.cs" />
-    <Compile Include="ApplicationLayer\Rta\ImplementationDetailsTests\DataSourceResolverTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\ImplementationDetailsTests\OrganizationForPersonTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\NoBrokerTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\NotificationExtension.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\PersonActivityStartEventTest.cs" />
@@ -250,7 +248,6 @@
     <Compile Include="ApplicationLayer\Rta\Service\PersonStateChangedEventTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ReturnCodeTest.cs" />
     <Compile Include="ApplicationLayer\Rta\RtaExtensions.cs" />
-    <Compile Include="ApplicationLayer\Rta\RtaModuleTest.cs" />
     <Compile Include="ApplicationLayer\Rta\RtaTestAttribute.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\SendAdherenceMessagesTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\SendAgentStateTest.cs" />

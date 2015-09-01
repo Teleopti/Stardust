@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		ConcurrentDictionary<string, int> Datasources();
 		ConcurrentDictionary<string, IEnumerable<ResolvedPerson>> ExternalLogOns();
 		IList<ScheduleLayer> GetCurrentSchedule(Guid personId);
+		IEnumerable<PersonOrganizationData> PersonOrganizationData();
 	}
 
 }
