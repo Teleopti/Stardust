@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Aspects;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -15,6 +16,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Aspects
 {
 	[RtaTest]
 	[TestFixture]
+	[Toggle(Toggles.RTA_MultiTenancy_32539)]
 	public class DataSourceFromAuthenticationKeyAspectTest : ISetup
 	{
 		public AspectedService TheService;
