@@ -20,6 +20,8 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 		public PeopleDataController Target;
 		public IPersonRepository PersonRepository;
 		public ISkillRepository SkillRepository;
+		public IRuleSetBagRepository RuleSetBagRepository;
+		public IWorkShiftRuleSetRepository WorkShiftRuleSetRepository;
 
 		private IPerson prepareData(DateTime date)
 		{
@@ -89,6 +91,30 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			result.Content.Second().SkillName.Should().Be.EqualTo(skill2.Name);
 			result.Content.First().SkillId.Should().Be.EqualTo(skill1.Id.Value);
 			result.Content.Second().SkillId.Should().Be.EqualTo(skill2.Id.Value);
+		}
+
+		[Test]
+		public void ShouldLoadAllShiftBags()
+		{
+			var workRuleSet = WorkShiftRuleSetFactory.Create();
+			WorkShiftRuleSetRepository.Add(workRuleSet);
+			var shiftbag1 = new RuleSetBag();
+			shiftbag1.SetId(Guid.NewGuid());
+			shiftbag1.AddRuleSet(workRuleSet);
+			var shiftbag2 = new RuleSetBag();
+			shiftbag2.SetId(Guid.NewGuid());
+			shiftbag2.AddRuleSet(workRuleSet);
+
+			RuleSetBagRepository.Add(shiftbag1);
+			RuleSetBagRepository.Add(shiftbag2);
+
+			var result = Target.LoadAllShiftBags();
+
+			result.Content.Count().Should().Be.EqualTo(2);
+			result.Content.First().ShiftBagName.Should().Be.EqualTo(shiftbag1.Description.Name);
+			result.Content.Second().ShiftBagName.Should().Be.EqualTo(shiftbag2.Description.Name);
+			result.Content.First().ShiftBagId.Should().Be.EqualTo(shiftbag1.Id.Value);
+			result.Content.Second().ShiftBagId.Should().Be.EqualTo(shiftbag2.Id.Value);
 		}
 	}
 }

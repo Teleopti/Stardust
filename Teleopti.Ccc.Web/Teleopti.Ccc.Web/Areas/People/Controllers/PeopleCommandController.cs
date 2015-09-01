@@ -8,20 +8,21 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 {
 	public class PeopleCommandController : ApiController
 	{
-		private readonly IPeopleSkillUpdater _peopleSkillUpdater;
+		private readonly IPersonInfoUpdater _personInfoUpdater;
 
-		public PeopleCommandController(IPeopleSkillUpdater peopleSkillUpdater)
+		public PeopleCommandController(IPersonInfoUpdater personInfoUpdater)
 		{
-			_peopleSkillUpdater = peopleSkillUpdater;
+			_personInfoUpdater = personInfoUpdater;
 		}
 
-		[HttpPost, Route("api/PeopleCommand/updateSkillOnPersons")]
-		public virtual JsonResult<ResultModel> UpdateSkill(PeopleCommandInput model)
+		[HttpPost, Route("api/PeopleCommand/updatePeople")]
+		public virtual JsonResult<ResultModel> UpdatePersonInfo(PeopleCommandInput model)
 		{
 			var result = new ResultModel();
 			try
 			{
-				result.SuccessCount = InternalUpdateSkills(model);
+				result.SuccessCount = InternalUpdatePersonInfo(model);
+
 				result.Success = true;
 			}
 			catch (Exception e)
@@ -34,9 +35,9 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 		}
 
 		[UnitOfWork]
-		protected virtual int InternalUpdateSkills(PeopleCommandInput model)
+		protected virtual int InternalUpdatePersonInfo(PeopleCommandInput model)
 		{
-			return _peopleSkillUpdater.UpdateSkills(model);
+			return _personInfoUpdater.UpdatePersonInfo(model);
 		}
 	}
 }

@@ -58,7 +58,7 @@
 			</md-content>
 			<div style="float: right">
 				<button ng-if="vm.dataInitialized && !vm.processing && vm.updateResult.Success && vm.updateResult.SuccessCount > 0" class="wfm-btn wfm-btn-primary">{{'Shift Bag' | translate}}</button>
-				<button class="wfm-btn wfm-btn-primary" ng-click="vm.updateSkillOnPersons()">{{'Apply' | translate}}</button>
+				<button class="wfm-btn wfm-btn-primary" ng-click="vm.updatePeople()">{{'Apply' | translate}}</button>
 			</div>
 		</md-sidenav>
 		<md-sidenav class="md-sidenav-right md-sidenav-skill-panel md-whiteframe-z2" md-component-id="right-shiftbag">
@@ -72,7 +72,7 @@
 				</select>
 			</md-content>
 			<div style="float: right">
-				<button class="wfm-btn wfm-btn-primary" xng-click="vm.updateSkillOnPersons()">{{'Apply' | translate}}</button>
+				<button class="wfm-btn wfm-btn-primary" xng-click="vm.updatePeople()">{{'Apply' | translate}}</button>
 			</div>
 		</md-sidenav>
 		<md-progress-linear ng-show="vm.processing" md-mode="indeterminate"></md-progress-linear>

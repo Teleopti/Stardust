@@ -2,8 +2,8 @@
 
 namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 {
-	public interface IPeopleSkillUpdater
+	public interface IPersonInfoUpdater
 	{
-		int UpdateSkills(PeopleCommandInput model);
+		int UpdatePersonInfo(PeopleCommandInput model);
 	}
 }

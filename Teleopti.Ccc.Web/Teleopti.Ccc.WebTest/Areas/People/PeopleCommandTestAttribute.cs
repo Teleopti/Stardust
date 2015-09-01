@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -27,6 +28,105 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			system.UseTestDouble<FakeTeamRepository>().For<ITeamRepository>();
 			system.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
 			system.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
+			system.UseTestDouble<FakeRuleSetBagRepository>().For<IRuleSetBagRepository>();
+			system.UseTestDouble<FakeWorkShiftRuleSetRepository>().For<IWorkShiftRuleSetRepository>();
+			
+        }
+	}
+
+	public class FakeWorkShiftRuleSetRepository: IWorkShiftRuleSetRepository
+	{
+		private readonly IList<IWorkShiftRuleSet> workShiftRuleSets = new List<IWorkShiftRuleSet>();
+		public void Add(IWorkShiftRuleSet root)
+		{
+			workShiftRuleSets.Add(root);
+        }
+
+		public void Remove(IWorkShiftRuleSet root)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IWorkShiftRuleSet Get(Guid id)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IList<IWorkShiftRuleSet> LoadAll()
+		{
+			throw new NotImplementedException();
+		}
+
+		public IWorkShiftRuleSet Load(Guid id)
+		{
+			throw new NotImplementedException();
+		}
+
+		public long CountAllEntities()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void AddRange(IEnumerable<IWorkShiftRuleSet> entityCollection)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IUnitOfWork UnitOfWork { get; }
+		public ICollection<IWorkShiftRuleSet> FindAllWithLimitersAndExtenders()
+		{
+			throw new NotImplementedException();
+		}
+	}
+
+	public class FakeRuleSetBagRepository : IRuleSetBagRepository
+	{
+		private readonly IList<IRuleSetBag> ruleSetBags = new List<IRuleSetBag>();
+
+		public void Add(IRuleSetBag root)
+		{
+			ruleSetBags.Add(root);
+		}
+
+		public void Remove(IRuleSetBag root)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IRuleSetBag Get(Guid id)
+		{
+			return ruleSetBags.Single(s => s.Id.GetValueOrDefault() == id);
+		}
+
+		public IList<IRuleSetBag> LoadAll()
+		{
+			return ruleSetBags;
+		}
+
+		public IRuleSetBag Load(Guid id)
+		{
+			throw new NotImplementedException();
+		}
+
+		public long CountAllEntities()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void AddRange(IEnumerable<IRuleSetBag> entityCollection)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IUnitOfWork UnitOfWork { get; }
+		public IEnumerable<IRuleSetBag> LoadAllWithRuleSets()
+		{
+			return ruleSetBags;
+		}
+
+		public IRuleSetBag Find(Guid id)
+		{
+			throw new NotImplementedException();
 		}
 	}
 

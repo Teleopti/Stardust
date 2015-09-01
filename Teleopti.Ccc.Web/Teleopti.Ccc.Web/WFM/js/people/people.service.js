@@ -42,11 +42,19 @@ angular
 				}
 			});
 
-			this.updateSkillOnPersons = $resource("../api/PeopleCommand/updateSkillOnPersons", {}, {
+			this.updatePeople = $resource("../api/PeopleCommand/updatePeople", {}, {
 				post: {
 					method: "POST",
 					params: {},
 					isArray: false
+				}
+			});
+
+			this.loadAllShiftBags = $resource("../api/PeopleData/loadAllSkills", {}, {
+				get: {
+					method: "GET",
+					params: {},
+					isArray: true
 				}
 			});
 		}

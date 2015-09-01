@@ -113,9 +113,9 @@
 			vm.gridOptions.data = result;
 		});
 		vm.updateResult = { Success: false };
-		vm.updateSkillOnPersons = function () {
+		vm.updatePeople = function () {
 			vm.processing = true;
-			peopleSvc.updateSkillOnPersons.post({ Date: moment(vm.selectedDate).format('YYYY-MM-DD'), People: vm.availablePeople }).$promise.then(
+			peopleSvc.updatePeople.post({ Date: moment(vm.selectedDate).format('YYYY-MM-DD'), People: vm.availablePeople }).$promise.then(
 				function (result) {
 					vm.updateResult = result;
 					if (!vm.updateResult.Success) {
@@ -125,7 +125,10 @@
 				}
 			);
 		};
-
+		var loadShiftBagPromise = peopleSvc.loadAllShiftBags.get().$promise;
+		loadShiftBagPromise.then(function (result) {
+			vm.availableShiftBags = result;
+		});
 		var promiseForAdjustSkillToggle = toggleSvc.isFeatureEnabled.query({ toggle: 'WfmPeople_AdjustSkill_34138' }).$promise;
 		promiseForAdjustSkillToggle.then(function (result) {
 			vm.isAdjustSkillEnabled = result.IsEnabled;
@@ -142,7 +145,7 @@
 
 			vm.gridOptions.columnDefs = vm.gridOptions.columnDefs.concat(vm.currentCommand.columns);
 
-			$q.all([promiseForAdjustSkillToggle, loadSkillPromise, fetchPeoplePromise]).then(function () {
+			$q.all([promiseForAdjustSkillToggle, loadSkillPromise, fetchPeoplePromise, loadShiftBagPromise]).then(function () {
 				angular.forEach(vm.availableSkills, function (skill) {
 					var hasCount = 0;
 					skill.Status = "none";

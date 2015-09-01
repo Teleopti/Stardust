@@ -44,6 +44,17 @@ describe("PeopleCartCtrl", function () {
 				return { $promise: queryDeferred.promise };
 			}
 		},
+		loadAllShiftBags: {
+			get: function () {
+				var queryDeferred = $q.defer();
+				queryDeferred.resolve(
+					[
+						
+					]
+				);
+				return { $promise: queryDeferred.promise };
+			}
+		},
 		fetchPeople: {
 			post: function () {
 				var queryDeferred = $q.defer();

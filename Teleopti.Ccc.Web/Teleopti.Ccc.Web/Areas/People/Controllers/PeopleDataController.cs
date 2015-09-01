@@ -15,11 +15,13 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 	{
 		private readonly IPersonDataProvider _personDataProvider;
 		private readonly ISkillRepository _skillRepo;
+		private readonly IRuleSetBagRepository _shiftbagRepo;
 
-		public PeopleDataController(IPersonDataProvider personDataProvider, ISkillRepository skillRepo)
+		public PeopleDataController(IPersonDataProvider personDataProvider, ISkillRepository skillRepo, IRuleSetBagRepository shiftbagRepo)
 		{
 			_personDataProvider = personDataProvider;
 			_skillRepo = skillRepo;
+			_shiftbagRepo = shiftbagRepo;
 		}
 
 		[UnitOfWork, HttpPost, Route("api/PeopleData/fetchPeople")]
@@ -41,6 +43,24 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			});
 			return Json(result);
 		}
+
+		[UnitOfWork, HttpGet, Route("api/PeopleData/loadAllShiftBags")]
+		public virtual JsonResult<IEnumerable<ShiftBagDataModel>> LoadAllShiftBags()
+		{
+			var shiftbags = _shiftbagRepo.LoadAll();
+			var result = shiftbags.Select(s => new ShiftBagDataModel
+			{
+				ShiftBagId = s.Id.GetValueOrDefault(),
+				ShiftBagName = s.Description.Name
+			});
+			return Json(result);
+		}
+	}
+
+	public class ShiftBagDataModel
+	{
+		public Guid ShiftBagId { get; set; }
+		public string ShiftBagName { get; set; }
 	}
 
 	public class SkillDataModel
