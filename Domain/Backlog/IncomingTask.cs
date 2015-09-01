@@ -240,7 +240,7 @@ namespace Teleopti.Ccc.Domain.Backlog
 
 		public TimeSpan GetOverstaffTimeOnDate(DateOnly date)
 		{
-			var backlog = GetEstimatedIncomingBacklogOnDate(date);
+			var backlog = GetBacklogOnDate(date);
 			var timeOnDate = GetTimeOnDate(date);
 
 			if (timeOnDate > backlog)
@@ -252,13 +252,21 @@ namespace Teleopti.Ccc.Domain.Backlog
 		public TimeSpan GetTimeOutsideSLA()
 		{
 			var planned = TimeSpan.Zero;
+			var totalWorkTime = TotalWorkTime;
+
 			foreach (var dateOnly in _taskDays.Keys)
-			{
+			{			
 				planned = planned.Add(GetTimeOnDate(dateOnly));
+
+				if (_actualBacklog.ContainsKey(dateOnly))
+				{
+					planned = TimeSpan.Zero;
+					totalWorkTime = _actualBacklog[dateOnly];
+				}
 			}
 
-			if (planned < TotalWorkTime)
-				return TotalWorkTime.Subtract(planned);
+			if (planned < totalWorkTime)
+				return totalWorkTime.Subtract(planned);
 
 			return TimeSpan.Zero;
 		}
