@@ -11,6 +11,7 @@
     	var removeCampaignProductionPlanUrl = '../api/Outbound/Campaign/ManualPlan/Remove';
     	var redoCampaignProductionPlanUrl = '../api/Outbound/Campaign/Replan/';
     	var updateCampaignBacklogUrl = '../api/Outbound/Campaign/ActualBacklog';
+	    var removeCampaignBacklogUrl = '../api/Outbound/Campaign/ActualBacklog/Remove';
 
         var translationKeys = [
            'Backlog',
@@ -50,6 +51,16 @@
                 });
         }
 
+        this.removeActualBacklog = function (actualBacklog, successCb, errorCb) {
+        	$http.post(removeCampaignBacklogUrl, actualBacklog).
+                success(function (campaignData) {
+                	if (successCb != null) successCb(self.buildGraphDataSeqs(campaignData), campaignData.IsManualPlanned);
+                }).
+                error(function (e) {
+                	if (errorCb != null) errorCb(e);
+                });
+        }
+      
         this.getCampaignVisualization = tl.applyTranslation(translationKeys, getCampaignVisualization, self);      
         this.buildGraphDataSeqs = buildGraphDataSeqs;
 

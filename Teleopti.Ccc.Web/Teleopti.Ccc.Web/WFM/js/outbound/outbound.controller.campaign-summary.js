@@ -48,7 +48,26 @@
 			});
 		    $scope.$broadcast('campaign.chart.clear.selection', { Id: campaign.Id });
 			campaign.manualPlanInput = null;
-		}
+    	}
+
+    	$scope.removeBacklog = function (campaign) {
+    		var dates = [];
+    		campaign.selectedDates.forEach(function (date, index) {
+    			dates[index] = { Date: date };
+    		});
+    		var removeActualBacklog = {
+    			CampaignId: campaign.Id,
+    			Dates: dates
+    		};
+
+    		campaign.isLoadingData = true;
+    		outboundChartService.removeActualBacklog(removeActualBacklog, function () {
+    			refreshGraphData(campaign, $scope);
+    			refreshCampaignStatistics($scope);
+    		});
+    		$scope.$broadcast('campaign.chart.clear.selection', { Id: campaign.Id });
+    		campaign.backlogInput = null;
+    	}
 
     	$scope.addBacklog = function (campaign) {
     		campaign.backlog.CampaignId = campaign.Id;
