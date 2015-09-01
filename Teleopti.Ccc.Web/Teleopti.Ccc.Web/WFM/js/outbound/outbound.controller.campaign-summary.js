@@ -130,6 +130,7 @@
 		$scope.switchBacklog = function(campaign) {
 			campaign.backlogSwitch = !campaign.backlogSwitch;
 			campaign.manualPlanswitch = false;
+			campaign.backlogInput = null;
 		}
 
 		$scope.isOverStaffing = function(d) {
