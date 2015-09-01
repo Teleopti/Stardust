@@ -168,8 +168,10 @@ namespace Teleopti.Ccc.Domain.Backlog
 
 			foreach (var dateOnly in _taskDays.Keys)
 			{
-				if (dateOnly <= date)
-					planned = planned.Add(GetTimeOnDate(dateOnly));
+				if (dateOnly > date)
+					break;
+				
+				planned = planned.Add(GetTimeOnDate(dateOnly));
 
 				if (_actualBacklog.ContainsKey(dateOnly))
 				{
