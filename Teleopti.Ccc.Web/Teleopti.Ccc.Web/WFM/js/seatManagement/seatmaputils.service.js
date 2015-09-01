@@ -37,7 +37,7 @@ angular.module('wfm.seatMap')
 
 		function doResize(canvas) {
 			var viewPortHeight = $(document)[0].documentElement.clientHeight;
-			var width = $('[ui-view]')[0].clientWidth - $('#c').position().left - 30; // 30 = padding
+			var width = $('[ui-view]')[0].clientWidth - 20;
 			var heightReduction = 130; // no reliable element to base this off
 			
 			canvas.setHeight((viewPortHeight - heightReduction));

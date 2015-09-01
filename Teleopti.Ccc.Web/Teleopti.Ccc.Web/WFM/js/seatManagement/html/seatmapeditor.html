@@ -1,5 +1,5 @@
 ﻿<div ng-if="!vm.readonly">
-	<div id="seatMapToolbar">
+	<div id="seatmap-toolbar">
 
 		<div ng-show="vm.isInEditMode">
 
@@ -102,30 +102,26 @@
 		</div>
 	</div>
 	
-	<div style="position: relative;">
-
-		<nav mfb-menu position="{{vm.chosen.position}}" effect="{{vm.chosen.effect}}" style=" top: -45px; right: 0px; z-index: 2; position: absolute;"
-		     active-icon="mdi-check" resting-icon="mdi-pencil"
-		     ng-mouseenter=" hovered()" ng-mouseleave="hovered()"
-		     callback="vm.editButtonClick()"
-		     label=""
-		     resting-label="Edit Seat Map"
-		     active-label="Save Seat Map"
-		     toggling-method="{{vm.chosen.method}}" menu-state="vm.menuState">
+	<div class="seatmap-right-toobar" ng-class="{'top-adjust':(vm.isInEditMode)}">
+		<nav mfb-menu position="{{vm.chosen.position}}" effect="{{vm.chosen.effect}}" class="mfb-menu-group"
+			 active-icon="mdi-check" resting-icon="mdi-pencil"
+			 ng-mouseenter=" hovered()" ng-mouseleave="hovered()"
+			 callback="vm.editButtonClick()"
+			 label=""
+			 resting-label="Edit Seat Map"
+			 active-label="Save Seat Map"
+			 toggling-method="{{vm.chosen.method}}" menu-state="vm.menuState">
 			<button mfb-button icon="{{button.icon}}" ng-click="vm.floatingButtonClick(button.action)"
-			        label="{{button.label}}" ng-repeat="button in vm.buttons"></button>
-
+					label="{{button.label}}" ng-repeat="button in vm.buttons"></button>
 		</nav>
 
-		<div style="top: -21px; right: 90px; z-index: 2; position: absolute;">
+		<div class="cancel-changes">
 			<button ng-show="vm.isInEditMode" class="mfb-component__button--main mfb-button-warning" ng-click="vm.toggleEditMode()">
 				<i class="mdi mdi-close" aria-hidden="true"></i>
 				<md-tooltip>
 					Cancel Changes
 				</md-tooltip>
 			</button>
-
-
 		</div>
 
 	</div>

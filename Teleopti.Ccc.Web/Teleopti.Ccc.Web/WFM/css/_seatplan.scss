@@ -1,14 +1,14 @@
-﻿#seatPlan{
+﻿#seatplan{
 	height:100%;
 }
 
-.seat-plan-calendar{
+.seatplan-calendar{
 	width: 320px;
 	padding-bottom: 15px;
 	clear:both;
 }
 
-.planningPeriodProgressBar {
+.planning-period-progress-bar {
 	margin-top: 25px;
 	margin-bottom: 25px;
 	width: 90%;
@@ -16,7 +16,7 @@
 	margin-right: auto !important;
 }
 
-.calendarProgress {
+.calendar-progress {
 	margin-top: 90px;
 	margin-left: 135px;
 	width: 50px;
@@ -36,29 +36,32 @@
 	background-color: lightcoral !important;
 }
 
-.planningDayDetail{
+.planning-day-detail{
 	margin-left:320px;
 	padding-left:15px;
 	padding-right:15px;
 	height:235px;
 	position:relative;
-	.wfm-btn-primary{
-		position:absolute;
-		right:0;
-		bottom:20px;
-	}
+}
+
+.planning-day-detail .wfm-btn-primary{
+	position:absolute;
+	right:0;
+	bottom:20px;
 }
 
 @media(max-width:1000px){
-	.planningDayDetail{
+	.planning-day-detail{
 		margin:0px;
 		width:100%;
 		clear:left;
 	}
 }
 
-.wfm-card-selected{
-	position:relative;
+#seatplan{
+	.wfm-card-selected{
+		position:relative;
+	}	
 }
 
 .period-report-btn{
@@ -67,45 +70,51 @@
 	top: 0px;
 }
 
-.seatPlanReport{
+.seatplan-report{
 	padding: 0px;
 	margin: -10px;
 	height:100%;
 	z-index:0;
 	position:relative;
+
+	.seatplan-report-header{
+		height: 40px;
+		position:relative;
+		z-index:1;
+	}
+
+	.wfm-btn{
+		height:100%;
+		margin:0px;
+		border-radius:0px;
+		text-transform:none;
+	}
+
+	.wfm-btn-invis-primary{
+		color:#0099FF;
+	}
+
+	.wfm-btn:hover{
+		background:#0099FF;
+		color:#ffffff;
+	}
+
+	.wfm-btn-invis-default:hover{
+		background:#FDFEFF;
+		color:#0099FF;
+	}
+
+	.wfm-fab{
+		transition-duration:0s;
+	}
+
+	.button-active{
+		background:#0099FF;
+		color:#ffffff;
+	}
 }
 
-.seatPlanReport .wfm-btn{
-	height:100%;
-	margin:0px;
-	border-radius:0px;
-	text-transform:none;
-}
-
-.seatPlanReport .wfm-btn-invis-primary{
-	color:#0099FF;
-}
-
-.seatPlanReport .wfm-btn:hover{
-	background:#0099FF;
-	color:#ffffff;
-}
-
-.seatPlanReport .wfm-btn-invis-default:hover{
-	background:#FDFEFF;
-	color:#0099FF;
-}
-
-.seatPlanReport .wfm-fab{
-	transition-duration:0s;
-}
-
-.seatPlanReport .button-active{
-	background:#0099FF;
-	color:#ffffff;
-}
-
-.blankForTurnOffFilterPanel1{
+.turn-off-filter-blank1{
 	width: 100%; 
 	height: 40px;
 	z-index:-1;
@@ -116,7 +125,7 @@
 	background:transparent;
 }
 
-.blankForTurnOffFilterPanel2{
+.turn-off-filter-blank2{
 	width: 100%; 
 	height: 100%;
 	z-index:-1;
@@ -128,7 +137,7 @@
 	margin-top:40px;
 }
 
-.seatPlanReportFilter{
+.seatplan-report-filter{
 	top:43px;
 	left:0px;
 	width:100%;
@@ -137,13 +146,13 @@
 	background:#ffffff;
 }
 
-.seatPlanReportHeaderPrintButton {
+.seatplan-report-print-button {
 	position: absolute;
 	top: 12px;
 	right: 16px;
 }
 
-.seatPlanReportFilter .filter-content{
+.seatplan-report-filter .filter-content{
 	overflow:hidden;
 	overflow-y:auto;
 	width:100%;
@@ -157,63 +166,47 @@
 	vertical-algin:middle;		
 }
 
-.date-picker .wfm-datepicker-wrap{
+.datepicker .wfm-datepicker-wrap{
 	box-shadow:none;
 	border:1px #ededed solid;
 }
 
-.seatPlanReportHeaderDatePicker {
-	position: absolute;
-	top: 30px;
-	right: 0;
-	z-index: 1;
+
+.seatplan-report-filter{
+	.bottom-bar, .filter-header{
+		position:absolute;
+		bottom:0px;
+		left:0px;
+		width:100%;
+		border-top:1px #e1e2e3 solid;
+		background:rgb(254,254,254);
+	}
+
+	.header-bar{
+		top:0px;
+		border-bottom:1px #e1e2e3 solid;
+		height:40px;
+		clear:both;
+	}
+
+	.header-bar button{
+		width:30%;
+		margin:0px;
+		max-width:150px;
+	}
+
+	.bottom-bar button{
+		border-radius:3px;
+		margin:3px 7px 5px 0px;
+		padding:3px 9px;
+	}
+
+	.bottom-bar .wfm-btn-invis-default{
+		background:#f1f2f3;
+	}
 }
 
-.seatPlanReportHeader{
-	height: 40px;
-	position:relative;
-	z-index:1;
-}
-
-.seatPlanReportHeaderBackButton {
-	padding: 3px;	
-	height: 30px;
-	vertical-align: top;
-}
-
-.seatPlanReportFilter .bottom-bar, .seatPlanReportFilter .filter-header{
-	position:absolute;
-	bottom:0px;
-	left:0px;
-	width:100%;
-	border-top:1px #e1e2e3 solid;
-	background:rgb(254,254,254);
-}
-
-.seatPlanReportFilter .header-bar{
-	top:0px;
-	border-bottom:1px #e1e2e3 solid;
-	height:40px;
-	clear:both;
-}
-
-.seatPlanReportFilter .header-bar button{
-	width:30%;
-	margin:0px;
-	max-width:150px;
-}
-
-.seatPlanReportFilter .bottom-bar button{
-	border-radius:3px;
-	margin:3px 7px 5px 0px;
-	padding:3px 9px;
-}
-
-.seatPlanReportFilter .bottom-bar .wfm-btn-invis-default{
-	background:#f1f2f3;
-}
-
-.seatPlanReportContent{
+.seatplan-report-content{
 	clear:both;
 	z-index:0;
 	padding-left:10px;
@@ -222,95 +215,102 @@
 	height:98%;
 	width:100%;
 	position:absolute;
-}
-.seatPlanReportContent h2{
-	margin-bottom:0px !important;
-}
-.seatPlanReportContent .report-spinner{
-	width: 100px; 
-	height: 100px; 
-	position: absolute; 
-	left: 50%; 
-	top: 40%;
-}
 
-.seatPlanReportContent table{
-	width:100%;
-}
+	h2{
+		margin-bottom:0px !important;
+	}
 
-.seatPlanReportContent table tr td{
-	vertical-align:top;
-	padding:0px 2px 0px 2px;
-}
+	.report-spinner{
+		width: 100px; 
+		height: 100px; 
+		position: absolute; 
+		left: 50%; 
+		top: 40%;
+	}
 
-.seatPlanReportContent table .tr-head{
-	height:30px;
-	background:#f1f2f3;
-}
+	table{
+		width:100%;
+	}
 
-.seatPlanReportContent .tr-break{
-	height:40px;
-	vertical-align:bottom;
-	border-bottom:1px #e1e2e3 solid;
-}
+	table tr td{
+		vertical-align:top;
+		padding:0px 2px 0px 2px;
+	}
 
-.seatPlanReportContent .tr-color{
-	background:#e1e2e3!important;
-	-webkit-print-color-adjust: exact;
-}
+	table .tr-head{
+		height:30px;
+		background:#f1f2f3;
+	}
 
-.seatPlanReportContent .tr-show{
-	height:40px;
-	vertical-align:bottom;
-	border-bottom:1px #e1e2e3 solid;
-}
+	.tr-break{
+		height:40px;
+		vertical-align:bottom;
+		border-bottom:1px #e1e2e3 solid;
+	}
 
-.seatPlanReportContent .tr-date td{
-	text-align:right;
-	border-bottom:1px #e1e2e3 solid;
-}
+	.tr-color{
+		background:#e1e2e3!important;
+		-webkit-print-color-adjust: exact;
+	}
 
-.seatPlanReportContent table th, .seatPlanReportContent table td{
-	text-align:left;
-	word-break:break-word;	
-}
+	.tr-show{
+		height:40px;
+		vertical-align:bottom;
+		border-bottom:1px #e1e2e3 solid;
+	}
 
-.seatPlanReportContent table tr .td-team{
-	width:20%;
-}
+	.tr-date td{
+		text-align:right;
+		border-bottom:1px #e1e2e3 solid;
+	}
 
-.seatPlanReportContent table tr .td-agent{
-	width:20%;
-}
+	table th, .seatPlanReportContent table td{
+		text-align:left;
+		word-break:break-word;	
+	}
 
-.seatPlanReportContent table tr .td-location{
-	width:35%;
-}
+	table tr .td-team{
+		width:20%;
+	}
 
-.seatPlanReportContent table tr .td-seat{
-	width:10%;
-}
+	table tr .td-agent{
+		width:20%;
+	}
 
-.seatPlanReportContent table tr .td-time{
-	width:15%;
+	table tr .td-location{
+		width:35%;
+	}
+
+	table tr .td-seat{
+		width:10%;
+	}
+
+	table tr .td-time{
+		width:15%;
+	}
 }
 
 .container-to-print-report{
 	overflow:visible!important;
-}
 
-.container-to-print-report #seatplan-report-to-view, .container-to-print-report .seatPlanReportHeader{
-	display:none;
-}
+	#seatplan-report-to-view, .seatplan-report-header{
+		display:none;
+	}
 
-.container-to-print-report #seatplan-report-to-print{
-	width:100%;
-	height:auto;
-	display:block;
+	#seatplan-report-to-print{
+		width:100%;
+		height:auto;
+		display:block;
+	}
 }
 
 #seatplan-report-to-print{
 	display:none;
+}
+
+.seatplan-paging-container{
+	height:60px;
+	margin-right:-10px;
 }
 
 .seatplan-report-paging {
@@ -318,37 +318,35 @@
 	background:#ffffff;
 	color: #0099ff; 
 	vertical-align: middle; 
-	margin-right:-10px;
-	margin-bottom:20px;
 	clear:both;
 	cursor:default!important;
-}
 
-.seatplan-report-paging .mdi{
-	padding:7px;
-}
+	.mdi{
+		padding:7px;
+	}
 
-.seatplan-report-paging .mdi:hover{
-	color:#ffffff;
-	background:#0099FF;
-}
+	.mdi:hover{
+		color:#ffffff;
+		background:#0099FF;
+	}
 
-.seatplan-report-paging .noclick:hover{
-	color:inherit;
-	background:inherit;
-}
+	.noclick:hover{
+		color:inherit;
+		background:inherit;
+	}
 
-.seatplan-report-paging .current-page{
-	min-width:32px;
-	text-align:center;
-	margin-left:0px;
-}
+	.current-page{
+		min-width:32px;
+		text-align:center;
+		margin-left:0px;
+	}
 
-.seatplan-report-paging span{
-	min-width:110px;
-	margin-left:5px;
-	display: inline-block;
-	text-align: left;
-	margin-top: 4px;
-	vertical-align: top;
+	span{
+		min-width:110px;
+		margin-left:5px;
+		display: inline-block;
+		text-align: left;
+		margin-top: 4px;
+		vertical-align: top;
+	}
 }

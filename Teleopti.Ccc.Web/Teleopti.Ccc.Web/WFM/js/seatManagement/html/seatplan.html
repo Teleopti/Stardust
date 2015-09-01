@@ -1,15 +1,15 @@
-﻿<div id="seatPlan" ui-view>
+﻿<div id="seatplan" ui-view>
 
-	<seat-plan-report ng-if="seatplan.isReportOpened" toggle="seatplan.isReportOpened = !seatplan.isReportOpened"
+	<seat-plan-report ng-if="seatplan.isReportOpened" toggle="seatplan.isReportOpened = !seatplan.isReportOpened" 
 					  selected-period="seatplan.reportPeriod"></seat-plan-report>
 
 	<seatmap-canvas occupancy date="seatplan.selectedDate" toggle="seatplan.isSeatMapBookingViewOpened = !seatplan.isSeatMapBookingViewOpened" ng-if="seatplan.isSeatMapBookingViewOpened"></seatmap-canvas>
 
 	<div class="row" ng-show="!seatplan.isReportOpened && !seatplan.isSeatMapBookingViewOpened">
 
-		<div class="col-sm-12 seat-plan-calendar">
+		<div class="col-sm-12 seatplan-calendar">
 
-			<div class="calendarProgress" ng-show="seatplan.isLoadingCalendar">
+			<div class="calendar-progress" ng-show="seatplan.isLoadingCalendar">
 				<md-progress-circular md-mode="indeterminate"></md-progress-circular>
 			</div>
 
@@ -20,8 +20,8 @@
 			</datepicker>
 		</div>
 
-		<div class="planningDayDetail" ng-if="seatplan.selectedDate!=null">
-			<button class="wfm-fab info pull-right" ng-click="seatplan.isReportOpened = !seatplan.isReportOpened; seatplan.reportPeriod = {StartDate:seatplan.selectedDate,EndDate:seatplan.selectedDate}">
+		<div class="planning-day-detail" ng-if="seatplan.selectedDate!=null">
+			<button class="wfm-fab info  material-depth-1 pull-right" ng-click="seatplan.isReportOpened = !seatplan.isReportOpened; seatplan.reportPeriod = {StartDate:seatplan.selectedDate,EndDate:seatplan.selectedDate}">
 				<i class="mdi mdi-file-document"></i>
 				<md-tooltip>{{'GenerateReport' | translate}}</md-tooltip>
 			</button>
@@ -36,13 +36,12 @@
 			</button>
 		</div>
 
-
 		<div class="col-sm-12">
-			<h3 class="planningPeriodTitle">{{ 'PlanningPeriodsFor' | translate }} {{seatplan.getSelectedMonthName()}} {{seatplan.selectedDate.year()}}</h3>
+			<h3 class="planning-period-title">{{ 'PlanningPeriodsFor' | translate }} {{seatplan.getSelectedMonthName()}} {{seatplan.selectedDate.year()}}</h3>
 
 			<md-divider md-insert></md-divider>
 
-			<div class="planningPeriodProgressBar" ng-show="seatplan.isLoadingPlanningPeriods">
+			<div class="planning-period-progress-bar" ng-show="seatplan.isLoadingPlanningPeriods">
 				<md-progress-linear md-mode="indeterminate"></md-progress-linear>
 			</div>
 
@@ -50,7 +49,7 @@
 				<wfm-card ng-repeat="period in seatplan.planningPeriods">
 					<card-header>
 
-						<span id="planningPeriodHeader">{{period.StartDate |  amDateFormat:"L"}} - {{period.EndDate | amDateFormat:"L"}}</span>
+						<span id="planning-period-header">{{period.StartDate |  amDateFormat:"L"}} - {{period.EndDate | amDateFormat:"L"}}</span>
 
 						<span style="float: right;"><i class="mdi mdi-chevron-down"></i></span>
 
@@ -65,6 +64,7 @@
 				</wfm-card>
 			</wfm-card-list>
 		</div>
+
 	</div>
 </div>
 

@@ -1,46 +1,52 @@
-﻿<div class="seatPlanReport">
-	<div class="seatPlanReportHeader">
-		<div class="location-breadcrumb">
-			<button class="wfm-btn seatPlanReportHeaderBackButton" ng-click="vm.toggle()" ng-if="vm.showOccupancy">
-				<i class="mdi mdi-arrow-left"></i>
-			</button>
-			<span ng-show="!vm.isLoading" class="breadcrumb-inverse fadein" ng-repeat="breadcrumb in vm.breadcrumbs">
-				<a ng-if="!$last" href="" ng-click="vm.handleBreadcrumbClick(breadcrumb.Id)">{{breadcrumb.Name}}</a>
-				<span class="divider" ng-if="!$last">></span>
-				<span ng-if="$last">{{breadcrumb.Name}}</span>
-			</span>
-		</div>
-	</div>
+﻿<style type="text/css">
+	.container.content {
+		overflow-x: hidden;
+	}
+</style>
+<div class="seatmap">
+	<div class="seatmap-view-header material-depth-1" ng-if="vm.showOccupancy">
 
-	<div class="seatPlanReportHeaderDatePicker material-depth-1" ng-if="vm.showOccupancy">
-		<button class="wfm-btn wfm-btn-primary" ng-class="{'button-active':vm.isFilterOpened}" ng-click="vm.isDatePickerOpened = !vm.isDatePickerOpened">
-			<i class="mdi mdi-calendar"></i>
-			{{vm.getDisplaySelectedDate()}}
+		<button class="wfm-btn return-button pull-left" ng-click="vm.toggle()">
+			<i class="mdi mdi-reply"></i>
 		</button>
-		<div class="date-picker seatPlanReportHeaderDatePickerWidget">
+
+		<div class="seatmap-view-datepicker">
+			<button class="wfm-btn wfm-btn-invis-primary pull-left" ng-class="{'button-active':vm.isFilterOpened}" ng-click="vm.isDatePickerOpened = !vm.isDatePickerOpened">
+				<i class="mdi mdi-calendar"></i>
+				{{vm.getDisplaySelectedDate()}}
+			</button>
+
 			<datepicker ng-if="vm.isDatePickerOpened" ng-model="vm.selectedDate"
 						class="wfm-datepicker material-depth-1" ng-change="vm.onChangeOfDate()">
 			</datepicker>
 		</div>
 	</div>
 
+	<div class="location-breadcrumb" ng-class="{'location-breadcrumb-edit-mode':(vm.showEditor)}">
+		<span ng-if="!vm.isLoading" class="breadcrumb-inverse" ng-repeat="breadcrumb in vm.breadcrumbs">
+			<a ng-if="!$last" href="" ng-click="vm.handleBreadcrumbClick(breadcrumb.Id)">{{breadcrumb.Name}}</a>
+			<span class="divider" ng-if="!$last">></span>
+			<span ng-if="$last">{{breadcrumb.Name}}</span>
+		</span>
+		<md-divider ng-if="vm.showEditor"></md-divider>
+	</div>
 
-	<div id="seatmapcanvas" ng-click="vm.isDatePickerOpened = false;">
+	<div class="seatmap-canvas" ng-click="vm.isDatePickerOpened = false;">
 
 		<seatmap-editor ng-if="vm.showEditor"></seatmap-editor>
 
-		<div style="width: 100%;" class="wfm-block">
+		<div class="wfm-block">
 			<canvas id="c" ng-mouseenter="vm.scrollListen = true" ng-mouseleave="vm.scrollListen = false"></canvas>
-			<div ng-show="vm.isLoading" style="position: absolute; left: 50%; top: 50%; margin-left: -32px; margin-top: -62px;">
+			<div ng-show="vm.isLoading" class="seatmap-spinner">
 				<md-progress-circular md-mode="indeterminate"></md-progress-circular>
 			</div>
 		</div>
 
-		<div style="position: absolute; bottom: 0px; left: 0; right: 0;">
-			<button ng-class="{info:!vm.isMoveMode(),success:vm.isMoveMode()}" style="float: left;" class="wfm-fab mini  " ng-click="vm.toggleMoveMode()">
+		<div class="seatmap-bottom-bar">
+			<button ng-class="{info:!vm.isMoveMode(),success:vm.isMoveMode()}" class="wfm-fab mini pull-left" ng-click="vm.toggleMoveMode()">
 				<i class="mdi mdi-gamepad"></i>
 			</button>
-			<md-slider style="width: 200px; margin-left: 40px;" ng-model="vm.zoomData.zoomValue" min="{{vm.zoomData.min}}" max="{{vm.zoomData.max}}" step="{{vm.zoomData.step}}" ng-change="vm.zoom()"></md-slider>
+			<md-slider ng-model="vm.zoomData.zoomValue" min="{{vm.zoomData.min}}" max="{{vm.zoomData.max}}" step="{{vm.zoomData.step}}" ng-change="vm.zoom()"></md-slider>
 			<seatmap-occupancy-detail class="seatmap-occupancy-detail" ng-if="vm.occupancydetails" occupancy-detail="vm.occupancydetails"></seatmap-occupancy-detail>
 		</div>
 	</div>

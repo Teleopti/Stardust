@@ -1,10 +1,72 @@
 ﻿@charset "UTF-8";
+
+.seatmap{
+	padding: 0;
+	margin: -10px;
+	height: 100%;
+	z-index: 0;
+	position: relative;	
+
+	.seatmap-view-header{
+		height: 40px;
+		position:relative;
+		z-index:2;
+	}
+
+	.wfm-btn{
+		height:100%;
+		margin:0px;
+		border-radius:0px;
+		text-transform:none;
+	}
+
+	.wfm-btn-invis-primary{
+		color:#0099FF;
+	}
+
+	.wfm-btn:hover{
+		background:#0099FF;
+		color:#ffffff;
+	}
+
+	.wfm-btn-invis-default:hover{
+		background:#FDFEFF;
+		color:#0099FF;
+	}
+
+	.wfm-fab{
+		transition-duration:0s;
+	}
+
+	.button-active{
+		background:#0099FF;
+		color:#ffffff;
+	}
+}
+
+.seatmap-view-datepicker{
+	.wfm-datepicker{
+		background:#ffffff;
+		position:absolute;
+		left:38px;
+		top:41px;
+		z-index:2;
+	}
+}
+
 .location-breadcrumb{
-  position: relative;
+	width:100%;
+	position: absolute;
+	top:41px;
+	left:4px;
 	height:30px;
-  background-color: white;
-  border-top: 1px solid rgba(0,0,0,.06);
-  border-bottom: 1px solid rgba(0,0,0,.06);
+	z-index:1;
+}
+
+.location-breadcrumb-edit-mode{
+	position:relative;
+	top:0px;
+	margin-bottom:1px;
 }
 
 .breadcrumb-inverse{
@@ -12,82 +74,80 @@
 }
 
 .breadcrumb-inverse a, .breadcrumb-inverse>.active {
-  color: #09F !important;
-  padding: 0px;
-  margin-left : 5px; 
+	color: #09F !important;
+	padding: 0px;
+	margin-left : 5px; 
 }
 
 .breadcrumb-inverse span {
-  line-height: 30px;
-  margin-left : 5px; 
+	line-height: 30px;
+	margin-left : 5px; 
 }
 
-.seatPlanReportHeaderDatePickerWidget {
-  position: absolute;
-  top: 40px;
-  right: 0;
-}
-
-.date-picker{
-  background-color: white;
-}
 
 a.mfb-component__button--main {
-  outline: 0;
+	outline: 0;
 }
 
 .mfb-button-warning{
-	  background-color: #FFC285 !important;
-};
-.mfb-component--tr{
-  animation: fromTop 1.3s 1;
-  -webkit-animation: fromTop 1.3s 1;
+	background-color: #FFC285 !important;
 }
+
+.mfb-component--tr{
+	animation: fromTop 1.3s 1;
+	-webkit-animation: fromTop 1.3s 1;
+}
+
 .fadein {
 	animation: fadeIn 1.3s 1;
-  -webkit-animation: fadeIn 1.3s 1;
+	-webkit-animation: fadeIn 1.3s 1;
 }
 
 @keyframes fromTop {
-  0% {
+	0% {
 	transform: translateY(-250px);
-  }
-  100% {
+	}
+	100% {
 	transform: translateY(0);
-  }
+	}
 }
 @-webkit-keyframes fromTop {
-  0% {
+	0% {
 	transform: translateY(-250px);
-  }
-  100% {
+	}
+	100% {
 	transform: translateY(0);
-  }
+	}
 }
 
-
 @-webkit-keyframes fadeIn {
-  0% {
+	0% {
 	opacity: 0;
-  }
+	}
 
-  100% {
+	100% {
 	opacity: 1;
-  }
+	}
 }
 
 @keyframes fadeIn {
-  0% {
+	0% {
 	opacity: 0;
-  }
+	}
 
-  100% {
+	100% {
 	opacity: 1;
-  }
+	}
 }
 							
-#seatmapcanvas {
+.seatmap-canvas {
 	position: relative;
+}
+
+.seatmap-canvas .wfm-block{
+	width: 100%; 
+	margin: 0; 
+	padding: 0 0 0 9px;
 }
 
 seatmap-editor{
@@ -96,8 +156,65 @@ seatmap-editor{
 	z-index:100;
 }
 
+.seatmap-right-toobar{
+	position: relative;
+}
+
+.top-adjust{
+	top:23px;
+}
+
+@media(min-width:1240px){
+	.top-adjust{
+		top:-20px;
+	}
+}
+
+#seatmap-toolbar{
+	padding-left:5px;
+
+	.wfm-btn{
+		margin-top:2px;
+	}
+}
+
+.cancel-changes{
+	position: absolute;
+	top: -21px; 
+	right: 90px; 
+	z-index: 2;
+}
+
+ .mfb-menu-group{
+	top: -45px; 
+	right: 0px; 
+	z-index: 2;
+	position: absolute;
+}
+
+.seatmap-spinner{
+	position: absolute; 
+	left: 50%; 
+	top: 50%; 
+	margin-left: -32px; 
+	margin-top: -62px;
+}
+
+.seatmap-bottom-bar{
+	position: absolute; 
+	bottom: 0px; 
+	left: 0; 
+	right: 0;
+}
+
+.seatmap-bottom-bar md-slider{
+	width: 200px; 
+	margin-left: 40px;
+}
+
 .seatmap-occupancy-detail {
 	display: block;
 	min-height: 120px;
 	background:#FFFFFF;
+	transition:all 0.35s ease-in-out;
 }
