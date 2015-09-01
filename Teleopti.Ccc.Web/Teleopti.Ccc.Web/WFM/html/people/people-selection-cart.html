@@ -64,21 +64,20 @@
 		<md-sidenav class="md-sidenav-right md-sidenav-skill-panel md-whiteframe-z2" md-component-id="right-shiftbag">
 			<div class="sidenav-header">{{'Change Shift Bag'|translate}}</div>
 			<md-content layout-padding style="height: 550px">
-				<select>
-					<option value="" disabled selected>Pick a number...</option>
-					<option>1</option>
-					<option>2</option>
-					<option>3</option>
+				<select ng-model="vm.selectedShiftBag" ng-change="vm.selectedShiftBagChanged(vm.selectedShiftBag)">
+					<option value="" disabled selected="">Pick a shift bag</option>
+					<option value={{shiftBag.ShiftBagId}} ng-repeat="shiftBag in vm.availableShiftBags">{{shiftBag.ShiftBagName}}</option>
 				</select>
 			</md-content>
 			<div style="float: right">
-				<button class="wfm-btn wfm-btn-primary" xng-click="vm.updatePeople()">{{'Apply' | translate}}</button>
+				<button class="wfm-btn wfm-btn-primary" ng-click="vm.updatePeople()">{{'Apply' | translate}}</button>
 			</div>
 		</md-sidenav>
 		<md-progress-linear ng-show="vm.processing" md-mode="indeterminate"></md-progress-linear>
 		<div ng-if="vm.dataInitialized && !vm.processing && vm.updateResult.Success" ng-hide="vm.isConfirmCloseNoticeBar" class="alert-success notice-spacer">
 			<i class='mdi mdi-thumb-up'></i>
-			{{'SuccessfullyUpdatedPeopleCountColon'|translate}}{{vm.updateResult.SuccessCount}}   You might need to change the shift bag accordingly.
+			{{'SuccessfullyUpdatedPeopleCountColon'|translate}}{{vm.updateResult.SuccessCount}}
+			<span xng-if="vm.currentCommand.label=='AdjustSkill'">{{'YouMightNeedToChangeTheShiftBagAccordingly'|translate}}</span>
 			<i class='mdi mdi-close' ng-click="vm.closeNoticeBar()" style="float: right"></i>
 		</div>
 		<div ng-if="vm.dataInitialized && !vm.processing && !vm.updateResult.Success && vm.updateResult.ErrorMsg.length > 0" ng-hide="vm.isConfirmCloseNoticeBar" class="alert-error notice-spacer">

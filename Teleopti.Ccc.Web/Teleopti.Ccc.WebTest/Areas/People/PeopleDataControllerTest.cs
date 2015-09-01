@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			personFirst.SkillIdList.Count.Should().Be.EqualTo(2);
 			personFirst.SkillIdList.Should().Contain(skill.Id.Value);
 			personFirst.SkillIdList.Should().Contain(anotherSkill.Id.Value);
-			personFirst.ShiftBag.Should().Be.EqualTo(period.RuleSetBag.Description.Name);
+			personFirst.ShiftBagId.Should().Be.EqualTo(period.RuleSetBag.Id);
 		}
 
 		[Test]

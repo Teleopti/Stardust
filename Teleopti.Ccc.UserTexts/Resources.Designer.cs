@@ -30331,6 +30331,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You might need to change the shift bag accordingly..
+        /// </summary>
+        public static string YouMightNeedToChangeTheShiftBagAccordingly {
+            get {
+                return ResourceManager.GetString("YouMightNeedToChangeTheShiftBagAccordingly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You must have at least one date in your shift trade request..
         /// </summary>
         public static string YouMustHaveAtLeastOneDateInShiftTradeRequest {

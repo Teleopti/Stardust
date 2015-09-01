@@ -50,7 +50,7 @@ angular
 				}
 			});
 
-			this.loadAllShiftBags = $resource("../api/PeopleData/loadAllSkills", {}, {
+			this.loadAllShiftBags = $resource("../api/PeopleData/loadAllShiftBags", {}, {
 				get: {
 					method: "GET",
 					params: {},

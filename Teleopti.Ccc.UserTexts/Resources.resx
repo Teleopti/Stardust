@@ -13410,4 +13410,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Successfully updated people count:</value>
     <comment>count of people successfully update skills</comment>
   </data>
+  <data name="YouMightNeedToChangeTheShiftBagAccordingly" xml:space="preserve">
+    <value>You might need to change the shift bag accordingly.</value>
+    <comment>alert to change shift bag after skill updated</comment>
+  </data>
 </root>

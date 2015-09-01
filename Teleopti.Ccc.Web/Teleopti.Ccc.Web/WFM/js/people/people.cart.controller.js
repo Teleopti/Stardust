@@ -19,6 +19,7 @@
 		vm.closeCalendar = function ($event) {
 			vm.status.opened = false;
 		};
+		vm.selectedShiftBag ='';
 
 		vm.dateOptions = {
 			formatYear: 'yyyy',
@@ -43,8 +44,8 @@
 					return vm.isAdjustSkillEnabled;
 				},
 				columns: [
-					{ displayName: 'Skills', field: 'Skills()', headerCellFilter: 'translate' },
-					{ displayName: 'ShiftBag', field: 'ShiftBag', headerCellFilter: 'translate', minWidth: 100 }
+					{ displayName: 'Skills', field: 'Skills()', headerCellFilter: 'translate', minWidth: 100 },
+					{ displayName: 'ShiftBag', field: 'ShiftBag()', headerCellFilter: 'translate', minWidth: 100 }
 				]
 			},
 			{
@@ -57,8 +58,9 @@
 					return vm.isAdjustSkillEnabled;
 				},
 				columns: [
-					{ displayName: 'Skills', field: 'Skills()', headerCellFilter: 'translate' },
-					{ displayName: 'ShiftBag', field: 'ShiftBag', headerCellFilter: 'translate', minWidth: 100 }
+					{ displayName: 'ShiftBag', field: 'ShiftBag()', headerCellFilter: 'translate', minWidth: 100 },
+					{ displayName: 'Skills', field: 'Skills()', headerCellFilter: 'translate', minWidth: 100 }
+					
 				]
 			}
 		];
@@ -118,9 +120,6 @@
 			peopleSvc.updatePeople.post({ Date: moment(vm.selectedDate).format('YYYY-MM-DD'), People: vm.availablePeople }).$promise.then(
 				function (result) {
 					vm.updateResult = result;
-					if (!vm.updateResult.Success) {
-						vm.updateResult.ErrorMsg = "Process failed! Error: " + vm.updateResult.ErrorMsg; //TODO: need localization
-					}
 					vm.processing = false;
 				}
 			);
@@ -128,6 +127,9 @@
 		var loadShiftBagPromise = peopleSvc.loadAllShiftBags.get().$promise;
 		loadShiftBagPromise.then(function (result) {
 			vm.availableShiftBags = result;
+			if (vm.availableShiftBags.length > 0) {
+				vm.selectedShiftBag = vm.availableShiftBags[0].ShiftBagId;
+			}
 		});
 		var promiseForAdjustSkillToggle = toggleSvc.isFeatureEnabled.query({ toggle: 'WfmPeople_AdjustSkill_34138' }).$promise;
 		promiseForAdjustSkillToggle.then(function (result) {
@@ -174,6 +176,14 @@
 						});
 						return ownSkills.length > 0 ? ownSkills.join(", ") : "";
 					}
+					person.ShiftBag = function() {
+						for (var i = 0; i < vm.availableShiftBags.length; i++) {
+							if (vm.availableShiftBags[i].ShiftBagId === person.ShiftBagId) {
+								return vm.availableShiftBags[i].ShiftBagName;
+							}
+						}
+						return '';
+					}
 				});
 
 				vm.dataInitialized = true;
@@ -190,6 +200,12 @@
 				if (skillIndex > -1 && !skill.Selected) {
 					person.SkillIdList.splice(skillIndex, 1);
 				}
+			});
+		}
+
+		vm.selectedShiftBagChanged = function(selectedShiftBagId) {
+			angular.forEach(vm.availablePeople, function (person) {
+				person.ShiftBagId = selectedShiftBagId;
 			});
 		}
 

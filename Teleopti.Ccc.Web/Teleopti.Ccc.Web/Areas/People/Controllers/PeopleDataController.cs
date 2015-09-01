@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 		public string LastName { get; set; }
 		public string Team { get; set; }
 		public IList<Guid> SkillIdList { get; set; }
-		public string ShiftBag { get; set; }
+		public Guid? ShiftBagId { get; set; }
 	}
 
 	public class InputModel

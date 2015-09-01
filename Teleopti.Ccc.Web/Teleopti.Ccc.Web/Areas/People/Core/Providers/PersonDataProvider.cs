@@ -23,14 +23,14 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 			{
 				var currentPeriod =
 					p.PersonPeriods(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date))).ToList().Single();
-				return new PersonDataModel
+                return new PersonDataModel
 				{
 					PersonId = p.Id.GetValueOrDefault(),
 					FirstName = p.Name.FirstName,
 					LastName = p.Name.LastName,
 					Team = currentPeriod.Team.SiteAndTeam,
 					SkillIdList = currentPeriod.PersonSkillCollection.Select(s => s.Skill.Id.GetValueOrDefault()).ToList(),
-					ShiftBag = currentPeriod.RuleSetBag != null ? currentPeriod.RuleSetBag.Description.Name : ""
+					ShiftBagId = currentPeriod.RuleSetBag != null ? currentPeriod.RuleSetBag.Id : null
 				};
 			}).ToList();
 
