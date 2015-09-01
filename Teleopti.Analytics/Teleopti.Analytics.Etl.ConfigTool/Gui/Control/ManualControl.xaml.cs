@@ -11,7 +11,7 @@ using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.MultipleDate;
 using Teleopti.Analytics.Etl.ConfigTool.Transformer;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Infrastructure.Foundation;
 
 namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 {
@@ -218,7 +218,8 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 
 		internal void ReloadDataSourceComboBox()
 		{
-			ComboBoxLogDataSource.DataContext = _dataSourceCollection = new DataSourceValidCollection(true, ((DataSourceContainer)ComboBoxDataSource.SelectedItem).DataSource.Statistic.ConnectionString);
+            var dataSource = StateHolder.Instance.StateReader.ApplicationScopeData.Tenant(((ITenantName)ComboBoxDataSource.SelectedItem).DataSourceName);
+			ComboBoxLogDataSource.DataContext = _dataSourceCollection = new DataSourceValidCollection(true, dataSource.Statistic.ConnectionString);
 		}
 
 		public void SetBaseConfiguration(IBaseConfiguration baseConfiguration)

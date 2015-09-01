@@ -85,6 +85,8 @@ BEGIN
 			DELETE FROM mart.dim_date
 			DELETE FROM mart.dim_interval
 			DELETE FROM mart.sys_datasource WHERE datasource_id > 1
+			UPDATE mart.sys_datasource SET time_zone_id = NULL WHERE datasource_id = 1
+			DELETE FROM mart.sys_configuration WHERE [key] IN ('TimeZoneCode','IntervalLengthMinutes','Culture')
 			DELETE FROM mart.etl_job_intraday_settings
 			TRUNCATE TABLE Queue.Messages
 		END
