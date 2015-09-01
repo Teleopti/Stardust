@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Teleopti.Ccc.Domain.Calculation;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
@@ -27,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         private Percent? _estimatedServiceLevelShrinkage; 
         private IPeriodDistribution _periodDistribution;
 
-	    private static readonly object Locker = new object();
+	    private readonly object Locker = new object();
 
 	    public SkillStaffPeriod(DateTimePeriod period, ITask taskData, ServiceAgreement serviceAgreementData, IStaffingCalculatorServiceFacade staffingCalculatorService) : base(new SkillStaff(taskData, serviceAgreementData), period)
         {
@@ -637,43 +635,49 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
             SkillStaff thisSkillStaff = (SkillStaff)Payload;
 
-            if (SortedSegmentCollection.Count == 1)
-            {
-                thisSkillStaff.BookedAgainstIncomingDemand65 = Payload.CalculatedResource;
-                SortedSegmentCollection[0].BookedResource65 = Payload.CalculatedResource;
-            }
+	        if (hasSingleSegment())
+	        {
+				thisSkillStaff.BookedAgainstIncomingDemand65 = thisSkillStaff.CalculatedResource;
+				SortedSegmentCollection[0].BookedResource65 = thisSkillStaff.CalculatedResource;
+	        }
+	        else
+	        {
+				var forecastedIncomingDemand = thisSkillStaff.ForecastedIncomingDemand;
+				
+				thisSkillStaff.BookedAgainstIncomingDemand65 = 0;
+				
+		        foreach (ISkillStaffSegmentPeriod xSegment in SortedSegmentCollection)
+		        {
+			        xSegment.BookedResource65 = 0;
 
-            thisSkillStaff.BookedAgainstIncomingDemand65 = 0;
+			        double diff = forecastedIncomingDemand - thisSkillStaff.BookedAgainstIncomingDemand65;
+			        if (diff > 0)
+			        {
+				        ISkillStaffPeriod ownerSkillStaffPeriod = xSegment.BelongsToY;
+				        ISkillStaff ownerSkillStaff = ownerSkillStaffPeriod.Payload;
+				        var ownerSortedSegmentCollection = ownerSkillStaffPeriod.SortedSegmentCollection;
+				        if (ownerSortedSegmentCollection.Count == 0) continue;
 
-            foreach (ISkillStaffSegmentPeriod xSegment in SortedSegmentCollection)
-            {
-                xSegment.BookedResource65 = 0;
-                
-                double diff = Payload.ForecastedIncomingDemand - Payload.BookedAgainstIncomingDemand65;
-                if (diff > 0)
-                {
+				        double ownerNotBookedResource = ownerSkillStaff.CalculatedResource -
+														(ownerSkillStaffPeriod.BookedResource65 - ownerSortedSegmentCollection[0].BookedResource65);
+				        if (ownerNotBookedResource <= 0) continue;
 
-                    ISkillStaffPeriod ownerSkillStaffPeriod = xSegment.BelongsToY;
-                    ISkillStaff ownerSkillStaff = ownerSkillStaffPeriod.Payload;
-                    var ownerSortedSegmentCollection = ownerSkillStaffPeriod.SortedSegmentCollection;
-                    if (ownerSortedSegmentCollection.Count == 0)
-                        continue;
+				        if (diff >= ownerNotBookedResource)
+					        diff = ownerNotBookedResource;
 
-                    double ownerNotBookedResource = ownerSkillStaff.CalculatedResource -
-                                                (ownerSkillStaffPeriod.BookedResource65 - ownerSortedSegmentCollection[0].BookedResource65);
-                    if (ownerNotBookedResource <= 0)
-                        continue;
+				        thisSkillStaff.BookedAgainstIncomingDemand65 += diff;
+				        xSegment.BookedResource65 = diff;
+					}
+				}
+			}
+		}
 
-                    if (diff >= ownerNotBookedResource)
-                        diff = ownerNotBookedResource;
+	    private bool hasSingleSegment()
+	    {
+		    return SortedSegmentCollection.Count == 1;
+	    }
 
-                    thisSkillStaff.BookedAgainstIncomingDemand65 += diff;
-                    xSegment.BookedResource65 = diff;
-                }
-            }
-        }
-
-        public ISkillStaffPeriod IntersectingResult(DateTimePeriod period)
+	    public ISkillStaffPeriod IntersectingResult(DateTimePeriod period)
         {
             if (!Period.Intersect(period))
                 return null;
