@@ -2,6 +2,10 @@
 	height:100%;
 }
 
+//TODO: Temporary fix while styleguide is updated to remove max height
+.wfm-card-list-container{max-height:none !important}
+
+
 .seatplan-calendar{
 	width: 320px;
 	padding-bottom: 15px;
