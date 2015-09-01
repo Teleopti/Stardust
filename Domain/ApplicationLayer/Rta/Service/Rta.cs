@@ -165,15 +165,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			if (tenant == null)
 				throw new InvalidAuthenticationKeyException("You supplied an invalid authentication key. Please verify the key and try again.");
 
-			int result;
 			if (input.IsSnapshot && string.IsNullOrEmpty(input.UserCode))
-				result = closeSnapshot(input, tenant);
-			else
-				result = processStateChange(input, dataSourceId, tenant);
+				return closeSnapshot(input, tenant);
 
-			Log.InfoFormat("Message handling complete for UserCode: {0}, StateCode: {1}. (MessageId: {2})", input.UserCode, input.StateCode, messageId);
-
-			return result;
+			return processStateChange(input, dataSourceId, tenant);
 		}
 
 		private int closeSnapshot(ExternalUserStateInputModel input, string tenant)
@@ -195,6 +190,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						PersonId = agent.PersonId,
 						BusinessUnitId = agent.BusinessUnitId
 					});
+
+			Log.InfoFormat("Message handling complete for UserCode: {0}, StateCode: {1}. (MessageId: {2})", input.UserCode, input.StateCode);
+
 			return 1;
 		}
 
@@ -220,6 +218,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						BusinessUnitId = p.BusinessUnitId
 					});
 			}
+
+			Log.InfoFormat("Message handling complete for UserCode: {0}, StateCode: {1}. (MessageId: {2})", input.UserCode, input.StateCode);
+
 			return 1;
 		}
 
