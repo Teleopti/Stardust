@@ -22,11 +22,13 @@
   margin-left : 5px; 
 }
 
+.seatPlanReportHeaderDatePickerWidget {
+  position: absolute;
+  top: 40px;
+  right: 0;
+}
 
 .date-picker{
-	position:absolute;
-	top: 40px;
-	right: 0;
   background-color: white;
 }
 

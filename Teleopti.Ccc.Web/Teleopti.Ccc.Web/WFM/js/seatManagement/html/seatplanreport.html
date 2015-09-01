@@ -8,13 +8,13 @@
 <div class="row seatPlanReport">
 	<div class="seatPlanReportHeader material-depth-1">
 		<button class="wfm-btn pull-left" ng-click="vm.toggle()">
-			<i class="mdi mdi-reply"></i>
+			<i class="mdi mdi-arrow-left"></i>
 		</button>
 		<button class="wfm-btn wfm-btn-invis-primary pull-left" ng-class="{'button-active':vm.isFilterOpened}" ng-click="vm.isFilterOpened = !vm.isFilterOpened">
 			<i class="mdi mdi-filter"></i>
 			{{'Filter' | translate}}
 		</button>
-		<button class="wfm-fab info pull-right" ng-show="!vm.isFilterOpened" seat-plan-report-print>
+		<button class="wfm-fab info seatPlanReportHeaderPrintButton" ng-show="!vm.isFilterOpened" seat-plan-report-print>
 			<i class="mdi mdi-printer"></i>
 			<md-tooltip>{{'Print' | translate}}</md-tooltip>
 		</button>

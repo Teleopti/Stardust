@@ -137,6 +137,12 @@
 	background:#ffffff;
 }
 
+.seatPlanReportHeaderPrintButton {
+	position: absolute;
+	top: 12px;
+	right: 16px;
+}
+
 .seatPlanReportFilter .filter-content{
 	overflow:hidden;
 	overflow-y:auto;
@@ -161,6 +167,12 @@
 	top: 30px;
 	right: 0;
 	z-index: 1;
+}
+
+.seatPlanReportHeader{
+	height: 40px;
+	position:relative;
+	z-index:1;
 }
 
 .seatPlanReportHeaderBackButton {
