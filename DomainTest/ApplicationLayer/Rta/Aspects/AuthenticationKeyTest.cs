@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Aspects;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;

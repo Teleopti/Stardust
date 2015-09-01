@@ -1,23 +1,17 @@
-using Teleopti.Ccc.Domain.MultiTenancy;
-
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class TenantAuthenticator : IAuthenticator
 	{
-		private readonly IFindTenantNameByRtaKey _findTenantByRtaKey;
-		private readonly ICountTenants _countTenants;
+		private readonly IDatabaseLoader _databaseLoader;
 
-		public TenantAuthenticator(IFindTenantNameByRtaKey findTenantByRtaKey, ICountTenants countTenants)
+		public TenantAuthenticator(IDatabaseLoader databaseLoader)
 		{
-			_findTenantByRtaKey = findTenantByRtaKey;
-			_countTenants = countTenants;
+			_databaseLoader = databaseLoader;
 		}
 
 		public bool Authenticate(string authenticationKey)
 		{
-			if (_countTenants.Count() > 1 && authenticationKey == Rta.LegacyAuthenticationKey)
-				throw new LegacyAuthenticationKeyException("Using the default authentication key with more than one tenant is not allowed");
-			return _findTenantByRtaKey.Find(authenticationKey) != null;
+			return _databaseLoader.AuthenticateKey(authenticationKey);
 		}
 	}
 }

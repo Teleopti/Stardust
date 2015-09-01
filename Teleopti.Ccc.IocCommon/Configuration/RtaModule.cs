@@ -69,6 +69,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.CacheMethod(x => x.Datasources())
 				.CacheMethod(x => x.ExternalLogOns())
 				.CacheMethod(x => x.PersonOrganizationData())
+				.CacheMethod(x => x.TenantNameByKey(null))
+				.CacheMethod(x => x.AuthenticateKey(null))
 				.As<IDatabaseLoader>();
 			builder.RegisterMbCacheComponent<DatabaseLoader, IDatabaseLoader>();
 			builder.RegisterType<DatabaseReader>().As<IDatabaseReader>().SingleInstance();
