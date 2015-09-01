@@ -112,6 +112,13 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 			return _campaignVisualizationProvider.ProvideVisualization(actualBacklog.CampaignId);
 		}
 
+		[HttpPost, Route("api/Outbound/Campaign/ActualBacklog/Remove"), UnitOfWork]
+		public virtual CampaignVisualizationViewModel RemoveActualBacklog([FromBody] RemoveActualBacklogForm actualBacklog)
+		{
+			_outboundCampaignPersister.RemoveActualBacklog(actualBacklog);
+			return _campaignVisualizationProvider.ProvideVisualization(actualBacklog.CampaignId);
+		}
+
 		[HttpPost, Route("api/Outbound/Campaign/ManualPlan"), UnitOfWork]
 		public virtual CampaignVisualizationViewModel ManualPlan([FromBody] ManualPlanForm manualPlan)
 		{

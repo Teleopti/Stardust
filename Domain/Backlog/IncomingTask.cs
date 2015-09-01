@@ -128,6 +128,15 @@ namespace Teleopti.Ccc.Domain.Backlog
 			}
 		}
 
+		public TimeSpan? GetActualBacklogOnDate(DateOnly date)
+		{
+			if (_actualBacklog.ContainsKey(date))
+			{
+				return _actualBacklog[date];
+			}
+			return null;
+		}
+
 		public TimeSpan GetRealScheduledTimeOnDate(DateOnly date)
 		{
 			return _orgScheduledTime[date];

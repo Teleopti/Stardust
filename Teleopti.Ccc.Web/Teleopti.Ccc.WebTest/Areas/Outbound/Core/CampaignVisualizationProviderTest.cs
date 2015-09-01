@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -226,6 +227,30 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 
 			result.IsCloseDays.Count.Should().Be.EqualTo(1);
 			result.IsCloseDays[0].Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldGetTrueWhenHasActualBacklog()
+		{
+			var id = new Guid();
+			var date = new DateTime(2015, 7, 24, 0, 0, 0, DateTimeKind.Utc);
+			var dateOnly = new DateOnly(date.Date);
+			var hour = TimeSpan.FromHours(1);
+			_campaign.SpanningPeriod = new DateTimePeriod(date, date);
+			_campaignRepository.Stub(x => x.Get(id)).Return(_campaign);
+			var incomingTask = MockRepository.GenerateMock<IBacklogTask>();
+			incomingTask.Stub(x => x.GetRealPlannedTimeOnDate(dateOnly)).Return(hour);
+			incomingTask.Stub(x => x.GetRealScheduledTimeOnDate(dateOnly)).Return(hour);
+			incomingTask.Stub(x => x.GetBacklogOnDate(dateOnly)).Return(hour);
+			incomingTask.Stub(x => x.PlannedTimeTypeOnDate(dateOnly)).Return(PlannedTimeTypeEnum.Scheduled);
+			incomingTask.Stub(x => x.GetActualBacklogOnDate(dateOnly)).Return(hour);
+			_taskManager.Stub(x => x.GetIncomingTaskFromCampaign(_campaign)).Return(incomingTask);
+
+			var target = new CampaignVisualizationProvider(_campaignRepository, _taskManager);
+			var result = target.ProvideVisualization(id);
+
+			result.IsActualBacklog.Count.Should().Be.EqualTo(1);
+			result.IsActualBacklog[0].Should().Be.True();
 		}		
 		
 		[Test]

@@ -28,7 +28,8 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 				ScheduledPersonHours = new List<double>(),
 				OverstaffPersonHours = new List<double>(),
 				IsManualPlanned = new List<bool>(),
-				IsCloseDays = new List<bool>()
+				IsCloseDays = new List<bool>(),
+				IsActualBacklog = new List<bool>()
 			};
 
 			IOutboundCampaign campaign = _campaignRepository.Get(id);
@@ -64,6 +65,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 				visualizationVM.ScheduledPersonHours.Add(convertTimespanToDouble(scheduledHours));
 				visualizationVM.IsManualPlanned.Add(incomingTask.GetManualPlannedInfoOnDate(date));
 				visualizationVM.IsCloseDays.Add(incomingTask.PlannedTimeTypeOnDate(date) == PlannedTimeTypeEnum.Closed);
+				visualizationVM.IsActualBacklog.Add(incomingTask.GetActualBacklogOnDate(date).HasValue);
 				visualizationVM.OverstaffPersonHours.Add(convertTimespanToDouble(overstaffHours));
 
 				backlogPreviousDay = backlogHours;
