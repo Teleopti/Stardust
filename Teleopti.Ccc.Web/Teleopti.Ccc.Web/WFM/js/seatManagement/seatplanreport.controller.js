@@ -30,18 +30,6 @@
 				options.callback != null && options.callback(data);
 			});
 		};
-		
-		// when start or end date are updated, update the other so both datepickers are 
-		// kept up to date
-		$scope.$watch(function () {
-			var startDate = vm.selectedPeriod.StartDate;
-			var endDate = vm.selectedPeriod.EndDate;
-			return { startDate: startDate, endDate: endDate };
-		}, function (value) {
-			vm.selectedPeriod.StartDate =  angular.copy(value.startDate);
-			vm.selectedPeriod.EndDate =  angular.copy(value.endDate);
-		}, true);
-
 
 		vm.setRangeClass = function (date, mode) {
 			if (mode === 'day') {
@@ -85,6 +73,10 @@
 
 		vm.applyFilter = function () {
 
+			if (!vm.dateFilterIsValid()) {
+				return;
+			}
+
 			vm.isFilterOpened = false;
 			
 			vm.getSeatBookings({
@@ -116,6 +108,9 @@
 		};
 
 		vm.init = function () {
+
+			initialiseWatchForDatePickerChanges();
+
 			vm.getSeatBookings({
 				skip: vm.page,
 				take: vm.reportTake,
@@ -129,19 +124,30 @@
 		function cacheFilterValuesInCaseOfCancel() {
 			vm.temp.selectedTeams = angular.copy(vm.selectedTeams);
 			vm.temp.selectedLocations = angular.copy(vm.selectedLocations);
-			//vm.temp.selectedPeriod = angular.copy(vm.selectedPeriod);
+			vm.temp.selectedPeriod = angular.copy(vm.selectedPeriod);
 		};
 
 		function reloadCachedFilterValuesAfterCancel() {
 			vm.selectedTeams = angular.copy(vm.temp.selectedTeams);
 			vm.selectedLocations = angular.copy(vm.temp.selectedLocations);
-			//vm.selectedPeriod = angular.copy(vm.temp.selectedPeriod);
+			vm.selectedPeriod = angular.copy(vm.temp.selectedPeriod);
 		};
 
 		function getSeatBookingsCallback(data) {
 			vm.seatBookings = data.SeatBookingsByDate;
 			vm.isLoadingReport = false;
 			vm.totalPages = Math.ceil(data.TotalRecordCount / vm.reportTake);
+		};
+
+		function keepDatePickersInSync(value) {
+			vm.selectedPeriod.StartDate = angular.copy(value.startDate);
+			vm.selectedPeriod.EndDate = angular.copy(value.endDate);
+		};
+
+		function initialiseWatchForDatePickerChanges() {
+			$scope.$watch(function () {
+				return { startDate: vm.selectedPeriod.StartDate, endDate: vm.selectedPeriod.EndDate };
+			}, keepDatePickersInSync, true);
 		};
 
 	};

@@ -108,8 +108,13 @@ describe('seatplan report controller tests', function () {
 	
 
 	function setUpController($controller) {
+
+		var scope = $rootScope.$new();
 		return $controller('seatPlanReportCtrl',
-		{ seatPlanService: mockSeatPlanService});
+		{
+			$scope : scope,
+			seatPlanService: mockSeatPlanService
+		});
 	};
 
 });

@@ -99,8 +99,13 @@ describe('seatplan report controller tests', function() {
 	};
 
 	function setUpController($controller) {
+		var scope = $rootScope.$new();
 		return $controller('LocationPickerCtrl',
-		{ seatPlanService: mockSeatPlanService, translator: seatPlanTranslatorFactory });
+		{
+			$scope: scope,
+			seatPlanService: mockSeatPlanService,
+			translator: seatPlanTranslatorFactory
+		});
 	};
 
 });
