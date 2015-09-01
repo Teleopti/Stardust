@@ -72,7 +72,8 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			throw new NotImplementedException();
 		}
 
-		public IUnitOfWork UnitOfWork { get; }
+		public IUnitOfWork UnitOfWork { get; private set; }
+
 		public ICollection<IWorkShiftRuleSet> FindAllWithLimitersAndExtenders()
 		{
 			throw new NotImplementedException();
@@ -118,7 +119,8 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			throw new NotImplementedException();
 		}
 
-		public IUnitOfWork UnitOfWork { get; }
+		public IUnitOfWork UnitOfWork { get; private set; }
+
 		public IEnumerable<IRuleSetBag> LoadAllWithRuleSets()
 		{
 			return ruleSetBags;
