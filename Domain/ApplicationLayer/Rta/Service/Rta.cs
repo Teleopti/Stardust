@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly DataSourceResolver _dataSourceResolver;
 		private readonly ICacheInvalidator _cacheInvalidator;
 		private readonly RtaProcessor _processor;
-		private readonly IRtaAuthenticator _rtaAuthenticator;
+		private readonly IAuthenticator _authenticator;
 		private readonly INow _now;
 		private readonly IPersonOrganizationProvider _personOrganizationProvider;
 		private readonly IAgentStateReadModelUpdater _agentStateReadModelUpdater;
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IAgentStateMessageSender messageSender,
 			IPersonOrganizationProvider personOrganizationProvider,
 			RtaProcessor processor,
-			IRtaAuthenticator rtaAuthenticator
+			IAuthenticator authenticator
             )
 		{
 			_agentStateReadModelReader = agentStateReadModelReader;
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_stateMapper = stateMapper;
 			_cacheInvalidator = cacheInvalidator;
 			_processor = processor;
-			_rtaAuthenticator = rtaAuthenticator;
+			_authenticator = authenticator;
 			_now = now;
 			_personOrganizationProvider = personOrganizationProvider;
 			_agentStateReadModelUpdater = agentStateReadModelUpdater;
@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			input.UserCode = input.UserCode.Trim();
 
 			input.FixAuthenticationKey();
-			var tenant = _rtaAuthenticator.Autenticate(input.AuthenticationKey);
+			var tenant = _authenticator.TenantForKey(input.AuthenticationKey);
 			if (tenant == null)
 				throw new InvalidAuthenticationKeyException("You supplied an invalid authentication key. Please verify the key and try again.");
 

@@ -138,9 +138,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<PersonOrganizationReader>().SingleInstance().As<IPersonOrganizationReader>();
 
 			if (_config.Toggle(Toggles.RTA_MultiTenancy_32539))
-				builder.RegisterType<RtaTenantAuthenticator>().As<IRtaAuthenticator>().SingleInstance();
+				builder.RegisterType<TenantAuthenticator>().As<IAuthenticator>().SingleInstance();
 			else
-				builder.RegisterType<RtaAuthenticator>().As<IRtaAuthenticator>().SingleInstance();
+				builder.RegisterType<ConfiguredKeyAuthenticator>().As<IAuthenticator>().SingleInstance();
 		}
 	}
 
