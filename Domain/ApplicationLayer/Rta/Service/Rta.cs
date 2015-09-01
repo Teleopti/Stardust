@@ -94,7 +94,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public int SaveStateBatch(IEnumerable<ExternalUserStateInputModel> states)
 		{
-			verifyBatchNotTooLarge(states);
+			if (states.Count() > 50)
+			{
+				Log.ErrorFormat("The incoming batch contains more than 50 external user states. Reduce the number if states per batch to a number below 50.");
+				throw new BatchTooBigException("Incoming batch too large. Please lower the number of user states in a batch to below 50.");
+			}
 
 			var result = 0;
 
@@ -156,10 +160,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			input.UserCode = input.UserCode.Trim();
 
-			var authenticationKey = input.AuthenticationKey;
-			if (authenticationKey.Remove(2, 1) == LegacyAuthenticationKey.Remove(2, 2))
-				authenticationKey = LegacyAuthenticationKey;
-			var tenant = _rtaAuthenticator.Autenticate(authenticationKey);
+			input.FixAuthenticationKey();
+			var tenant = _rtaAuthenticator.Autenticate(input.AuthenticationKey);
 			if (tenant == null)
 				throw new InvalidAuthenticationKeyException("You supplied an invalid authentication key. Please verify the key and try again.");
 
@@ -233,14 +235,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					PersonId = input.PersonId
 				});
 		}
-
-		private static void verifyBatchNotTooLarge(IEnumerable<ExternalUserStateInputModel> externalUserStateBatch)
-		{
-			if (externalUserStateBatch.Count() <= 50) return;
-			Log.ErrorFormat("The incoming batch contains more than 50 external user states. Reduce the number if states per batch to a number below 50.");
-			throw new BatchTooBigException("Incoming batch too large. Please lower the number of user states in a batch to below 50.");
-		}
-
+		
 		private void process(ExternalUserStateInputModel input, PersonOrganizationData person)
 		{
 			_processor.Process(

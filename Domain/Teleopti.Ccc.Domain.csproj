@@ -224,7 +224,6 @@
     <Compile Include="ApplicationLayer\Rta\Service\BatchTooBigException.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\EmptyPreviousStateInfoLoader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IRtaAuthenticator.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\IFindTenantForRta.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\InvalidAuthenticationKeyException.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IPreviousStateInfoLoader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IScheduleLoader.cs" />
@@ -607,6 +606,8 @@
     <Compile Include="Config\ConfigOverrider.cs" />
     <Compile Include="Config\ConfigReader.cs" />
     <Compile Include="Config\IConfigReader.cs" />
+    <Compile Include="MultiTenancy\ICountTenants.cs" />
+    <Compile Include="MultiTenancy\IFindTenantNameByRtaKey.cs" />
     <Compile Include="Optimization\SchedulePeriodListShiftCategoryBackToLegalStateService.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDayOffsInPeriodValidator.cs" />
     <Compile Include="Outbound\CampaignRuleChecker.cs" />
@@ -2472,7 +2473,6 @@
     <EmbeddedResource Include="Scheduling\Assignment\ShiftLayer.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="MultiTenancy\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>

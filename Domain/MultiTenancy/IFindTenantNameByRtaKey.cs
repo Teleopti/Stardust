@@ -1,4 +1,4 @@
-namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
+namespace Teleopti.Ccc.Domain.MultiTenancy
 {
 	public interface IFindTenantNameByRtaKey
 	{

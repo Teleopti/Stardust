@@ -17,6 +17,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 
 	public static class ExternalUserStateInputModelExtensions
 	{
+		public static void FixAuthenticationKey(this ExternalUserStateInputModel input)
+		{
+			if (input.AuthenticationKey.Remove(2, 1) == Service.Rta.LegacyAuthenticationKey.Remove(2, 2))
+				input.AuthenticationKey = Service.Rta.LegacyAuthenticationKey;
+		}
+
 		public static Guid ParsedPlatformTypeId(this ExternalUserStateInputModel input)
 		{
 			return input.PlatformTypeId != null ? Guid.Parse(input.PlatformTypeId) : Guid.Empty;

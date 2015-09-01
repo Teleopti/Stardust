@@ -1,5 +1,6 @@
 using System.Linq;
 using NHibernate.Linq;
+using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
