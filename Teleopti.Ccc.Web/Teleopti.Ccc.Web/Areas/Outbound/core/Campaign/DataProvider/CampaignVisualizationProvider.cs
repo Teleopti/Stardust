@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			var incomingTask = _campaignTaskManager.GetIncomingTaskFromCampaign(campaign);
 			TimeSpan backlogPreviousDay = TimeSpan.Zero;
 
-			foreach (var date in campaign.SpanningPeriod.DayCollection())
+			foreach (var date in campaign.SpanningPeriod.ToDateOnlyPeriod(campaign.Skill.TimeZone).DayCollection())
 			{
 				var plannedHours = incomingTask.GetRealPlannedTimeOnDate(date);
 				var backlogHours = incomingTask.GetBacklogOnDate(date);

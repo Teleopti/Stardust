@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core.Campaign.Mapping
 		public void Setup()
 		{
 			_createdSkill = SkillFactory.CreateSkillWithId("skill1");
+			_createdSkill.TimeZone = TimeZoneInfo.Utc;
 
 			_campaign = new Domain.Outbound.Campaign {Name = "myCampaign", Skill = _createdSkill};
 			_campaign.WorkingHours.Add(DayOfWeek.Monday, new TimePeriod(new TimeSpan(9,0,0), new TimeSpan(17,0,0)));
@@ -109,14 +110,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core.Campaign.Mapping
 		public void ShouldMapStartDate()
 		{
 			var result = _target.Map(_campaigns);
-			result.First().StartDate.Should().Be.EqualTo(_campaign.SpanningPeriod.StartDate);
-		}		
-		
+			result.First().StartDate.Should().Be.EqualTo(new DateOnly(_campaign.SpanningPeriod.StartDateTime.Date));
+		}
+
 		[Test]
 		public void ShouldMapEndDate()
 		{
 			var result = _target.Map(_campaigns);
-			result.First().EndDate.Should().Be.EqualTo(_campaign.SpanningPeriod.EndDate);
+			result.First().EndDate.Should().Be.EqualTo(new DateOnly(_campaign.SpanningPeriod.EndDateTime.Date));
 		}
 
 		[Test]

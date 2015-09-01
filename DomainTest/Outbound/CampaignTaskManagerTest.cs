@@ -5,6 +5,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Backlog;
 using Teleopti.Ccc.Domain.Outbound;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Outbound
@@ -19,12 +20,14 @@ namespace Teleopti.Ccc.DomainTest.Outbound
 		[SetUp]
 		public void Setup()
 		{
+			var skill = SkillFactory.CreateSkill("mySkill", SkillTypeFactory.CreateSkillType(), 15, TimeZoneInfo.Utc, TimeSpan.Zero);
 			_outboundProductionPlanFactory = new OutboundProductionPlanFactory(new IncomingTaskFactory(new FlatDistributionSetter()));
 			_outboundScheduledResourcesProvider = MockRepository.GenerateMock<IOutboundScheduledResourcesProvider>();
 			_campaign = MockRepository.GenerateMock<IOutboundCampaign>();
-			_campaign.Stub(x => x.SpanningPeriod).Return(new DateOnlyPeriod(2015, 8, 18, 2015, 8, 18));
+			_campaign.Stub(x => x.SpanningPeriod).Return(new DateTimePeriod(2015, 8, 18, 2015, 8, 18));
 			_campaign.Stub(x => x.CampaignTasks()).Return(1000);
 			_campaign.Stub(x => x.AverageTaskHandlingTime()).Return(TimeSpan.FromMinutes(6));
+			_campaign.Stub(x => x.Skill).Return(skill);
 			var workingHours = new Dictionary<DayOfWeek, TimePeriod>();
 			workingHours.Add(DayOfWeek.Tuesday, new TimePeriod(TimeSpan.FromHours(9), TimeSpan.FromHours(17)));
 			_campaign.Stub(x => x.WorkingHours).Return(workingHours);

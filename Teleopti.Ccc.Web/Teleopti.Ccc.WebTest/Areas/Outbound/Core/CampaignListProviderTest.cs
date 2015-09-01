@@ -322,7 +322,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 
         public IOutboundCampaign GetTestCampaign(int index)
         {
-            var today = DateOnly.Today;
+			   var today = new DateTime(DateOnly.Today.Year, DateOnly.Today.Month, DateOnly.Today.Day, 0,0,0, DateTimeKind.Utc);
             var dayAfterOneWeek = today.AddDays(7);
             var dayAfterTwoWeeks = today.AddDays(14);
             var dayAfterThreeWeeks = today.AddDays(21);
@@ -334,26 +334,26 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
                 new Domain.Outbound.Campaign()
                 {
                     Name = "A",
-                    SpanningPeriod = new DateOnlyPeriod(dayAfterOneWeek, dayAfterTwoWeeks),
-                    Skill = CreateSkill("A")
+                    SpanningPeriod = new DateTimePeriod(dayAfterOneWeek.Date, dayAfterTwoWeeks.Date),
+                    Skill = SkillFactory.CreateSkill("A", SkillTypeFactory.CreateSkillType(), 15, TimeZoneInfo.Utc, TimeSpan.Zero),
                 },
                 new Domain.Outbound.Campaign()
                 {
                     Name = "B",
-                    SpanningPeriod = new DateOnlyPeriod(dayAfterOneWeek, dayAfterThreeWeeks),
-                    Skill = CreateSkill("B")
+                    SpanningPeriod = new DateTimePeriod(dayAfterOneWeek.Date, dayAfterThreeWeeks.Date),
+                    Skill = SkillFactory.CreateSkill("B", SkillTypeFactory.CreateSkillType(), 15, TimeZoneInfo.Utc, TimeSpan.Zero)
                 },
                 new Domain.Outbound.Campaign()
                 {
                     Name = "C",
-                    SpanningPeriod = new DateOnlyPeriod(dayBeforeOneWeek, dayAfterOneWeek),
-                    Skill = CreateSkill("C")
+                    SpanningPeriod = new DateTimePeriod(dayBeforeOneWeek.Date, dayAfterOneWeek.Date),
+                    Skill = SkillFactory.CreateSkill("C", SkillTypeFactory.CreateSkillType(), 15, TimeZoneInfo.Utc, TimeSpan.Zero)
                 },
                 new Domain.Outbound.Campaign()
                 {
                     Name = "D",
-                    SpanningPeriod = new DateOnlyPeriod(dayBeforeTwoWeeks, dayBeforeOneWeek),
-                    Skill = CreateSkill("D")
+                    SpanningPeriod = new DateTimePeriod(dayBeforeTwoWeeks.Date, dayBeforeOneWeek.Date),
+                    Skill = SkillFactory.CreateSkill("D", SkillTypeFactory.CreateSkillType(), 15, TimeZoneInfo.Utc, TimeSpan.Zero)
                 }
             };
 

@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 				campaign.ClearProductionPlan(dateOnly);
 			}
 
-			_createOrUpdateSkillDays.Create(campaign.Skill, campaign.SpanningPeriod, campaign.CampaignTasks(), campaign.AverageTaskHandlingTime(),
+			_createOrUpdateSkillDays.Create(campaign.Skill, campaign.SpanningPeriod.ToDateOnlyPeriod(campaign.Skill.TimeZone), campaign.CampaignTasks(), campaign.AverageTaskHandlingTime(),
 				campaign.WorkingHours);
 		}
 	}

@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Win.Backlog
 			// move to method in repository
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				_campaigns = new OutboundCampaignRepository(uow).LoadAll().Where(c => c.SpanningPeriod.EndDate > new DateOnly(DateTime.Now).AddDays(-30)).ToList();
+				_campaigns = new OutboundCampaignRepository(uow).LoadAll().Where(c => c.SpanningPeriod.EndDateTime > DateTime.Now.AddDays(-30)).ToList();
 				foreach (var campaign in _campaigns)
 				{
 					LazyLoadingManager.Initialize(campaign.Skill);
@@ -95,8 +95,8 @@ namespace Teleopti.Ccc.Win.Backlog
 				return;
 			}
 
-				var earliestStart = _campaigns.Min(c => c.SpanningPeriod.StartDate);
-				var latestEnd = _campaigns.Max(c => c.SpanningPeriod.EndDate);
+				var earliestStart = _campaigns.Min(c => new DateOnly(c.SpanningPeriod.StartDateTime));
+				var latestEnd = _campaigns.Max(c =>  new DateOnly(c.SpanningPeriod.EndDateTime));
 				_loadedPeriod = new DateOnlyPeriod(earliestStart, latestEnd);
 
 			
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.Win.Backlog
 				
 				var listItem = listView1.Items.Add(campaign.Name);			
 				listItem.Tag = campaign;
-				listItem.SubItems.Add(campaign.SpanningPeriod.ToShortDateString(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture));
+				listItem.SubItems.Add(campaign.SpanningPeriod.ToDateOnlyPeriod(campaign.Skill.TimeZone).ToShortDateString(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture));
 				listItem.SubItems.Add("Unknown");
 
 				var skillActivityName = campaign.Skill.Activity.Name;
@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.Win.Backlog
         private IncomingTask getIncomingTaskFromCampaign(IOutboundCampaign campaign)
 		{
 			var incomingTaskFactory = _container.Resolve<OutboundProductionPlanFactory>();
-			var incomingTask = incomingTaskFactory.CreateAndMakeInitialPlan(campaign.SpanningPeriod, campaign.CampaignTasks(),
+			var incomingTask = incomingTaskFactory.CreateAndMakeInitialPlan(campaign.SpanningPeriod.ToDateOnlyPeriod(campaign.Skill.TimeZone), campaign.CampaignTasks(),
 				campaign.AverageTaskHandlingTime(), campaign.WorkingHours);
 
 			if (_outboundScheduledResourcesProvider == null)
@@ -229,7 +229,7 @@ namespace Teleopti.Ccc.Win.Backlog
 				}
 
 				listItem.SubItems[1].Text =
-					campaign.SpanningPeriod.ToShortDateString(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
+					campaign.SpanningPeriod.ToDateOnlyPeriod(campaign.Skill.TimeZone).ToShortDateString(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
 			}
 		}
 
@@ -322,12 +322,12 @@ namespace Teleopti.Ccc.Win.Backlog
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var oldPeriod = selectedCampaign.SpanningPeriod;
-				selectedCampaign.SpanningPeriod = new DateOnlyPeriod(oldPeriod.StartDate.AddDays(7), oldPeriod.EndDate.AddDays(7));
+				selectedCampaign.SpanningPeriod = new DateTimePeriod(oldPeriod.StartDateTime.AddDays(7), oldPeriod.EndDateTime.AddDays(7));
 				var outboundCampaignRepo = _container.Resolve<IOutboundCampaignRepository>();
 				outboundCampaignRepo.Add(selectedCampaign);
 
 				var outboundPeriodMover = _container.Resolve<IOutboundPeriodMover>();
-				outboundPeriodMover.Move(selectedCampaign, oldPeriod);
+				outboundPeriodMover.Move(selectedCampaign, oldPeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc));
 
 				uow.PersistAll();
 			}

@@ -5,6 +5,8 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping;
 using Teleopti.Ccc.Web.Areas.Outbound.Models;
 using Teleopti.Interfaces.Domain;
@@ -16,10 +18,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core.Campaign.Mapping
 	{
 		private IOutboundCampaignRepository _outboundCampaignRepository;
 		private CampaignViewModel _campaignViewModel;
+		private IUserTimeZone _userTimeZone;
 
 		[SetUp]
 		public void Setup()
 		{
+			_userTimeZone = new FakeUserTimeZone(TimeZoneInfo.Utc);
 			_outboundCampaignRepository = MockRepository.GenerateMock<IOutboundCampaignRepository>();
 			_campaignViewModel = new CampaignViewModel() { Id = new Guid() };
 		}
@@ -29,7 +33,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core.Campaign.Mapping
 		{
 			_outboundCampaignRepository.Stub(x => x.Get(_campaignViewModel.Id.Value)).IgnoreArguments().Return(null);
 
-			var target = new OutboundCampaignMapper(_outboundCampaignRepository);
+			var target = new OutboundCampaignMapper(_outboundCampaignRepository, _userTimeZone);
 			var result = target.Map(_campaignViewModel);
 
 			result.Should().Be.Null();
@@ -41,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core.Campaign.Mapping
 			_outboundCampaignRepository.Stub(x => x.Get(_campaignViewModel.Id.Value)).Return(new Domain.Outbound.Campaign());
 			_campaignViewModel.Name = "myCampaign";
 
-			var target = new OutboundCampaignMapper(_outboundCampaignRepository);
+			var target = new OutboundCampaignMapper(_outboundCampaignRepository, _userTimeZone);
 			var result = target.Map(_campaignViewModel);
 
 			result.Name.Should().Be.EqualTo(_campaignViewModel.Name);
@@ -53,7 +57,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core.Campaign.Mapping
 			_outboundCampaignRepository.Stub(x => x.Get(_campaignViewModel.Id.Value)).Return(new Domain.Outbound.Campaign());
 			_campaignViewModel.CallListLen = 8;
 
-			var target = new OutboundCampaignMapper(_outboundCampaignRepository);
+			var target = new OutboundCampaignMapper(_outboundCampaignRepository, _userTimeZone);
 			var result = target.Map(_campaignViewModel);
 
 			result.CallListLen.Should().Be.EqualTo(_campaignViewModel.CallListLen);
@@ -65,7 +69,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core.Campaign.Mapping
 			_outboundCampaignRepository.Stub(x => x.Get(_campaignViewModel.Id.Value)).Return(new Domain.Outbound.Campaign());
 			_campaignViewModel.TargetRate = 18;
 
-			var target = new OutboundCampaignMapper(_outboundCampaignRepository);
+			var target = new OutboundCampaignMapper(_outboundCampaignRepository, _userTimeZone);
 			var result = target.Map(_campaignViewModel);
 
 			result.TargetRate.Should().Be.EqualTo(_campaignViewModel.TargetRate);
@@ -77,7 +81,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core.Campaign.Mapping
 			_outboundCampaignRepository.Stub(x => x.Get(_campaignViewModel.Id.Value)).Return(new Domain.Outbound.Campaign());
 			_campaignViewModel.ConnectRate = 28;
 
-			var target = new OutboundCampaignMapper(_outboundCampaignRepository);
+			var target = new OutboundCampaignMapper(_outboundCampaignRepository, _userTimeZone);
 			var result = target.Map(_campaignViewModel);
 
 			result.ConnectRate.Should().Be.EqualTo(_campaignViewModel.ConnectRate);
@@ -89,7 +93,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core.Campaign.Mapping
 			_outboundCampaignRepository.Stub(x => x.Get(_campaignViewModel.Id.Value)).Return(new Domain.Outbound.Campaign());
 			_campaignViewModel.RightPartyAverageHandlingTime = 38;
 
-			var target = new OutboundCampaignMapper(_outboundCampaignRepository);
+			var target = new OutboundCampaignMapper(_outboundCampaignRepository, _userTimeZone);
 			var result = target.Map(_campaignViewModel);
 
 			result.RightPartyAverageHandlingTime.Should().Be.EqualTo(_campaignViewModel.RightPartyAverageHandlingTime);
@@ -101,7 +105,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core.Campaign.Mapping
 			_outboundCampaignRepository.Stub(x => x.Get(_campaignViewModel.Id.Value)).Return(new Domain.Outbound.Campaign());
 			_campaignViewModel.ConnectAverageHandlingTime = 38;
 
-			var target = new OutboundCampaignMapper(_outboundCampaignRepository);
+			var target = new OutboundCampaignMapper(_outboundCampaignRepository, _userTimeZone);
 			var result = target.Map(_campaignViewModel);
 
 			result.ConnectAverageHandlingTime.Should().Be.EqualTo(_campaignViewModel.ConnectAverageHandlingTime);
@@ -113,7 +117,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core.Campaign.Mapping
 			_outboundCampaignRepository.Stub(x => x.Get(_campaignViewModel.Id.Value)).Return(new Domain.Outbound.Campaign());
 			_campaignViewModel.RightPartyConnectRate = 48;
 
-			var target = new OutboundCampaignMapper(_outboundCampaignRepository);
+			var target = new OutboundCampaignMapper(_outboundCampaignRepository, _userTimeZone);
 			var result = target.Map(_campaignViewModel);
 
 			result.RightPartyConnectRate.Should().Be.EqualTo(_campaignViewModel.RightPartyConnectRate);
@@ -125,7 +129,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core.Campaign.Mapping
 			_outboundCampaignRepository.Stub(x => x.Get(_campaignViewModel.Id.Value)).Return(new Domain.Outbound.Campaign());
 			_campaignViewModel.UnproductiveTime = 58;
 
-			var target = new OutboundCampaignMapper(_outboundCampaignRepository);
+			var target = new OutboundCampaignMapper(_outboundCampaignRepository, _userTimeZone);
 			var result = target.Map(_campaignViewModel);
 
 			result.UnproductiveTime.Should().Be.EqualTo(_campaignViewModel.UnproductiveTime);
@@ -134,28 +138,33 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core.Campaign.Mapping
 		[Test]
 		public void ShouldMapStartDate()
 		{
-			_outboundCampaignRepository.Stub(x => x.Get(_campaignViewModel.Id.Value)).Return(new Domain.Outbound.Campaign());
+			var campaign = new Domain.Outbound.Campaign();
+			campaign.Skill = SkillFactory.CreateSkill("mySkill");
+			campaign.Skill.TimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+			_outboundCampaignRepository.Stub(x => x.Get(_campaignViewModel.Id.Value)).Return(campaign);
 			_campaignViewModel.StartDate = new DateOnly(2015, 4, 13);
-			_campaignViewModel.EndDate = new DateOnly(2015, 5, 12);
+			_campaignViewModel.EndDate = new DateOnly(2015, 4, 20);
 
-			var target = new OutboundCampaignMapper(_outboundCampaignRepository);
+			var target = new OutboundCampaignMapper(_outboundCampaignRepository, _userTimeZone);
 			var result = target.Map(_campaignViewModel);
 
-			result.SpanningPeriod.StartDate.Should().Be.EqualTo(_campaignViewModel.StartDate);
-		}		
-		
+			result.SpanningPeriod.StartDateTime.Day.Should().Be.EqualTo(12);
+		}
+
 		[Test]
 		public void ShouldMapEndDate()
 		{
+			var campaign = new Domain.Outbound.Campaign();
+			campaign.Skill = SkillFactory.CreateSkill("mySkill");
+			campaign.Skill.TimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
 			_outboundCampaignRepository.Stub(x => x.Get(_campaignViewModel.Id.Value)).Return(new Domain.Outbound.Campaign());
 			_campaignViewModel.StartDate = new DateOnly(2015, 4, 13);
-			_campaignViewModel.StartDate = new DateOnly(2015, 4, 13);
-			_campaignViewModel.EndDate = new DateOnly(2015, 5, 12);
+			_campaignViewModel.EndDate = new DateOnly(2015, 4, 20);
 
-			var target = new OutboundCampaignMapper(_outboundCampaignRepository);
+			var target = new OutboundCampaignMapper(_outboundCampaignRepository, _userTimeZone);
 			var result = target.Map(_campaignViewModel);
 
-			result.SpanningPeriod.EndDate.Should().Be.EqualTo(_campaignViewModel.EndDate);
+			result.SpanningPeriod.EndDateTime.Day.Should().Be.EqualTo(20);
 		}		
 		
 		[Test]
@@ -173,7 +182,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core.Campaign.Mapping
 				new CampaignWorkingHour(){WeekDay = DayOfWeek.Tuesday, StartTime =new TimeSpan(9,0,0), EndTime = new TimeSpan(17,0,0)}
 			};
 
-			var target = new OutboundCampaignMapper(_outboundCampaignRepository);
+			var target = new OutboundCampaignMapper(_outboundCampaignRepository, _userTimeZone);
 			var result = target.Map(_campaignViewModel);
 
 			result.WorkingHours.Count.Should().Be.EqualTo(2);

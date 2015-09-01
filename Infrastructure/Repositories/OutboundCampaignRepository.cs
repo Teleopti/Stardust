@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IList<IOutboundCampaign> GetPlannedCampaigns()
 		{
 			return Session.CreateCriteria<Campaign>()
-				.Add(Restrictions.Gt("SpanningPeriod.period.Minimum", DateOnly.Today))
+				.Add(Restrictions.Gt("SpanningPeriod.period.Minimum", DateTime.Today))
 				.AddOrder(Order.Asc("SpanningPeriod.period.Minimum"))
 				.List<IOutboundCampaign>();
 		}
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IList<IOutboundCampaign> GetDoneCampaigns()
 		{
 			return Session.CreateCriteria<Campaign>()
-				.Add(Restrictions.Lt("SpanningPeriod.period.Maximum", DateOnly.Today))
+				.Add(Restrictions.Lt("SpanningPeriod.period.Maximum", DateTime.Today))
 				.AddOrder(Order.Desc("SpanningPeriod.period.Minimum"))
 				.List<IOutboundCampaign>();
 		}
@@ -48,8 +49,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			return Session.CreateCriteria<Campaign>()
 				.Add(Restrictions.Conjunction()
-					.Add(Restrictions.Le("SpanningPeriod.period.Minimum", DateOnly.Today))
-					.Add(Restrictions.Ge("SpanningPeriod.period.Maximum", DateOnly.Today)))
+					.Add(Restrictions.Le("SpanningPeriod.period.Minimum", DateTime.Today))
+					.Add(Restrictions.Ge("SpanningPeriod.period.Maximum", DateTime.Today)))
 				.AddOrder(Order.Desc("SpanningPeriod.period.Minimum"))
 				.List<IOutboundCampaign>();
 		}

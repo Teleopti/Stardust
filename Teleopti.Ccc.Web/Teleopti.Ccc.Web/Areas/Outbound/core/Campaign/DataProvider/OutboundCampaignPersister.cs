@@ -28,12 +28,11 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 		private readonly IProductionReplanHelper _productionReplanHelper;
 		private readonly IOutboundPeriodMover _outboundPeriodMover;
 		private readonly IOutboundCampaignTaskManager _campaignTaskManager;
-		private readonly ICampaignListProvider _campaignListProvider;
 
 		public OutboundCampaignPersister(IOutboundCampaignRepository outboundCampaignRepository, IOutboundCampaignMapper outboundCampaignMapper, 
 			IOutboundCampaignViewModelMapper outboundCampaignViewModelMapper, IOutboundSkillCreator outboundSkillCreator, IActivityRepository activityRepository, 
 			IOutboundSkillPersister outboundSkillPersister, ICreateOrUpdateSkillDays createOrUpdateSkillDays, IProductionReplanHelper productionReplanHelper, 
-			IOutboundPeriodMover outboundPeriodMover, IOutboundCampaignTaskManager campaignTaskManager, ICampaignListProvider campaignListProvider)
+			IOutboundPeriodMover outboundPeriodMover, IOutboundCampaignTaskManager campaignTaskManager)
 		{
 			_outboundCampaignRepository = outboundCampaignRepository;
 			_outboundCampaignMapper = outboundCampaignMapper;
@@ -45,7 +44,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			_productionReplanHelper = productionReplanHelper;
 			_outboundPeriodMover = outboundPeriodMover;
 			_campaignTaskManager = campaignTaskManager;
-			_campaignListProvider = campaignListProvider;
 		}
 
 		public CampaignViewModel Persist(CampaignForm form)
@@ -60,7 +58,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 				ConnectAverageHandlingTime = form.ConnectAverageHandlingTime,
 				RightPartyAverageHandlingTime = form.RightPartyAverageHandlingTime,
 				UnproductiveTime = form.UnproductiveTime,
-				SpanningPeriod = new DateOnlyPeriod(form.StartDate, form.EndDate)
 			};
 
 			if (form.WorkingHours != null)
@@ -75,9 +72,14 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			var skill = _outboundSkillCreator.CreateSkill(activity, campaign);
 			_outboundSkillPersister.PersistSkill(skill);
 			campaign.Skill = skill;
+			var startDateTime = new DateTime(form.StartDate.Year, form.StartDate.Month, form.StartDate.Day);
+			startDateTime = TimeZoneHelper.ConvertToUtc(startDateTime, campaign.Skill.TimeZone);
+			var endDateTime = new DateTime(form.EndDate.Year, form.EndDate.Month, form.EndDate.Day, 23, 59, 59);
+			endDateTime = TimeZoneHelper.ConvertToUtc(endDateTime, campaign.Skill.TimeZone);
+			campaign.SpanningPeriod = new DateTimePeriod(startDateTime, endDateTime);
 
 			_outboundCampaignRepository.Add(campaign);
-			_createOrUpdateSkillDays.Create(campaign.Skill, campaign.SpanningPeriod, campaign.CampaignTasks(),
+			_createOrUpdateSkillDays.Create(campaign.Skill, campaign.SpanningPeriod.ToDateOnlyPeriod(campaign.Skill.TimeZone), campaign.CampaignTasks(),
 				campaign.AverageTaskHandlingTime(), campaign.WorkingHours);
 
 			return _outboundCampaignViewModelMapper.Map(campaign);
@@ -131,7 +133,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 
 				if (isMovePeriod(oldCampaign, campaign))
 				{
-					_outboundPeriodMover.Move(campaign, oldCampaign.SpanningPeriod);
+					_outboundPeriodMover.Move(campaign, oldCampaign.SpanningPeriod.ToDateOnlyPeriod(campaign.Skill.TimeZone));
 					_outboundSkillCreator.SetOpenHours(campaign, campaign.Skill.WorkloadCollection.First());
 				}
 			}
@@ -146,7 +148,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			foreach (var backlog in actualBacklog.ActualBacklog)
 			{
 				var time = doubleToTimeSpan(backlog.Time);
-				if (campaign.SpanningPeriod.Contains(backlog.Date))
+				if (campaign.SpanningPeriod.ToDateOnlyPeriod(campaign.Skill.TimeZone).Contains(backlog.Date))
 				{
 					campaign.SetActualBacklog(backlog.Date, time);					
 				}
@@ -173,7 +175,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			foreach (var manual in manualPlan.ManualProductionPlan)
 			{				
 				var time = doubleToTimeSpan(manual.Time);
-				if (campaign.SpanningPeriod.Contains(manual.Date))
+				if (campaign.SpanningPeriod.ToDateOnlyPeriod(campaign.Skill.TimeZone).Contains(manual.Date))
 				{
 					campaign.SetManualProductionPlan(manual.Date, time);
 					isUpdateForecasted = true;

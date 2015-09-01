@@ -7,12 +7,14 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping
 {
 	public class OutboundCampaignViewModelMapper : IOutboundCampaignViewModelMapper
 	{
-        public CampaignViewModel Map(IOutboundCampaign campaign)
+		public CampaignViewModel Map(IOutboundCampaign campaign)
 		{
 			if (campaign == null) return null;
 
 			var workingHours = campaign.WorkingHours.Select(workingHour => new CampaignWorkingHour() { WeekDay = workingHour.Key, StartTime = workingHour.Value.StartTime, EndTime = workingHour.Value.EndTime });
 
+	      var startDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(campaign.SpanningPeriod.StartDateTime, campaign.Skill.TimeZone).Date);
+			var endDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(campaign.SpanningPeriod.EndDateTime, campaign.Skill.TimeZone).Date);
 			var campaignVm = new CampaignViewModel
 			{
 				Id = campaign.Id,
@@ -25,15 +27,15 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping
 				ConnectAverageHandlingTime = campaign.ConnectAverageHandlingTime,
 				RightPartyAverageHandlingTime = campaign.RightPartyAverageHandlingTime,
 				UnproductiveTime = campaign.UnproductiveTime,
-				StartDate = campaign.SpanningPeriod.StartDate,
-				EndDate = campaign.SpanningPeriod.EndDate,
+				StartDate = startDate,
+				EndDate = endDate,
 				WorkingHours = workingHours
 			};
 
 			return campaignVm;
 		}
 
-        public IEnumerable<CampaignViewModel> Map(IEnumerable<IOutboundCampaign> campaigns)
+		public IEnumerable<CampaignViewModel> Map(IEnumerable<IOutboundCampaign> campaigns)
 		{
 			return campaigns.Select(Map);
 		}

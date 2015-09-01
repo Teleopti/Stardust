@@ -27,8 +27,8 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 	    {
 		    var campaigns = _outboundCampaignRepository.LoadAll();
 		    if (campaigns.Count == 0) return;
-		    var earliestStart = campaigns.Min(c => c.SpanningPeriod.StartDate);
-		    var latestEnd = campaigns.Max(c => c.SpanningPeriod.EndDate);
+		    var earliestStart = campaigns.Min(c => c.SpanningPeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc).StartDate);
+			 var latestEnd = campaigns.Max(c => c.SpanningPeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc).EndDate);
 		    var period = new DateOnlyPeriod(earliestStart, latestEnd);
 
 		    _scheduledResourcesProvider.Load(campaigns, period);
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 
             Func<IOutboundCampaign, bool> campaignHasSchedulePredicate = campaign =>
             {
-                return campaign.SpanningPeriod.DayCollection().Any(
+					return campaign.SpanningPeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc).DayCollection().Any(
                     date => 
                         _scheduledResourcesProvider.GetScheduledTimeOnDate(date, campaign.Skill) > TimeSpan.Zero);               
             };
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 
             Func<IOutboundCampaign, bool> campaignNoSchedulePredicate = campaign =>
             {
-                return campaign.SpanningPeriod.DayCollection().All(
+					return campaign.SpanningPeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc).DayCollection().All(
                     date =>
                         _scheduledResourcesProvider.GetScheduledTimeOnDate(date, campaign.Skill) == TimeSpan.Zero);
             };
@@ -143,8 +143,8 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
             {
                 Id = campaign.Id,
                 Name = campaign.Name,
-                StartDate = campaign.SpanningPeriod.StartDate,
-                EndDate = campaign.SpanningPeriod.EndDate,
+					 StartDate = campaign.SpanningPeriod.ToDateOnlyPeriod(campaign.Skill.TimeZone).StartDate,
+					 EndDate = campaign.SpanningPeriod.ToDateOnlyPeriod(campaign.Skill.TimeZone).EndDate,
                 Status = status,
                 WarningInfo = warnings
             };

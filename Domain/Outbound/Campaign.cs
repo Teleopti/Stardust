@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 		private IDictionary<DateOnly, TimeSpan> _actualBacklogDays = new Dictionary<DateOnly, TimeSpan>(); 
 		private bool _isDeleted;
 		private IDictionary<DayOfWeek, TimePeriod> _workingHours = new Dictionary<DayOfWeek, TimePeriod>();
-		private DateOnlyPeriod _spanningPeriod;
+		private DateTimePeriod _spanningPeriod;
 
 		public virtual string Name 
 		{
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 			set { _workingHours = value; }
 		}
 
-		public virtual DateOnlyPeriod SpanningPeriod
+		public virtual DateTimePeriod SpanningPeriod
 		{
 			get { return _spanningPeriod; }
 			set { _spanningPeriod = value; }

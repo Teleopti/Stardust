@@ -55,17 +55,17 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		public IUnitOfWork UnitOfWork { get; private set; }
         public IList<IOutboundCampaign> GetPlannedCampaigns()
         {
-            return _campaigns.Where(c => c.SpanningPeriod.StartDate.Date > DateOnly.Today.Date).ToList();
+            return _campaigns.Where(c => c.SpanningPeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc).StartDate.Date > DateOnly.Today.Date).ToList();
         }
 
         public IList<IOutboundCampaign> GetDoneCampaigns()
         {
-            return _campaigns.Where(c => c.SpanningPeriod.EndDate.Date < DateOnly.Today.Date).ToList();
+			  return _campaigns.Where(c => c.SpanningPeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc).EndDate.Date < DateOnly.Today.Date).ToList();
         }
 
         public IList<IOutboundCampaign> GetOnGoingCampaigns()
         {
-            return _campaigns.Where(c => c.SpanningPeriod.Contains(DateOnly.Today)).ToList();
+			  return _campaigns.Where(c => c.SpanningPeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc).Contains(DateOnly.Today)).ToList();
         }
 	}
 }

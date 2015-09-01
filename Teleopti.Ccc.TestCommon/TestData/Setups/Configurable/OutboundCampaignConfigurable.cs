@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				ConnectAverageHandlingTime = 30,
 				RightPartyAverageHandlingTime = 120,
 				UnproductiveTime = 30,
-				SpanningPeriod = new DateOnlyPeriod(new DateOnly(StartDate), new DateOnly(EndDate))
+				SpanningPeriod = new DateTimePeriod(new DateTime(StartDate.Year, StartDate.Month, StartDate.Day), new DateTime(EndDate.Year, EndDate.Month, EndDate.Day))
 			};
 
 			new OutboundCampaignRepository(uow).Add(Campaign);

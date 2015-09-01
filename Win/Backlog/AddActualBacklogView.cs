@@ -42,10 +42,10 @@ namespace Teleopti.Ccc.Win.Backlog
 
 		private void AddActualBacklogView_Load(object sender, EventArgs e)
 		{
-			monthCalendar1.MinDate = _campaign.SpanningPeriod.StartDate.Date;
-			monthCalendar1.MaxDate = _campaign.SpanningPeriod.EndDate.Date;
+			monthCalendar1.MinDate = _campaign.SpanningPeriod.StartDateTime;
+			monthCalendar1.MaxDate = _campaign.SpanningPeriod.EndDateTime;
 
-			foreach (var dateOnly in _campaign.SpanningPeriod.DayCollection())
+			foreach (var dateOnly in _campaign.SpanningPeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc).DayCollection())
 			{
 				var manualTime = _campaign.GetActualBacklog(dateOnly);
 				if (manualTime.HasValue)
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Win.Backlog
 
 		private void button2_Click(object sender, EventArgs e)
 		{
-			foreach (var dateOnly in _campaign.SpanningPeriod.DayCollection())
+			foreach (var dateOnly in _campaign.SpanningPeriod.ToDateOnlyPeriod(_campaign.Skill.TimeZone).DayCollection())
 			{
 				_campaign.ClearActualBacklog(dateOnly);
 				if (_actualBacklogDays.ContainsKey(dateOnly))

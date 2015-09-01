@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -16,11 +17,12 @@ namespace Teleopti.Ccc.DomainTest.Outbound
 		private IScenarioRepository _scenarioRepository;
 		private ICreateOrUpdateSkillDays _createOrUpdateSkillDays;
 		private IScenario _defultScenario;
-        private IOutboundCampaign _campaign;
+      private IOutboundCampaign _campaign;
 
 		[SetUp]
 		public void Setup()
 		{
+			var skill = SkillFactory.CreateSkill("mySkill", SkillTypeFactory.CreateSkillType(), 15, TimeZoneInfo.Utc, TimeSpan.Zero);
 			_skillDayRepository = MockRepository.GenerateMock<ISkillDayRepository>();
 			_scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
 			_createOrUpdateSkillDays = MockRepository.GenerateMock<ICreateOrUpdateSkillDays>();
@@ -36,11 +38,12 @@ namespace Teleopti.Ccc.DomainTest.Outbound
 				ConnectRate = 20,
 				RightPartyAverageHandlingTime = 120,
 				UnproductiveTime = 30,
-				ConnectAverageHandlingTime = (int)TimeSpan.FromMinutes(100).TotalSeconds
+				ConnectAverageHandlingTime = (int)TimeSpan.FromMinutes(100).TotalSeconds,
+				Skill = skill
 			};
 
 			_campaign.WorkingHours.Add(DayOfWeek.Friday, new TimePeriod(10, 0, 15, 0));
-			_campaign.SpanningPeriod = new DateOnlyPeriod(2015, 6, 15, 2015, 6, 15);
+			_campaign.SpanningPeriod = new DateTimePeriod(2015, 6, 15, 2015, 6, 15);
 		}
 
 		[Test]
@@ -48,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.Outbound
 		{
 			_scenarioRepository.Stub(x => x.LoadDefaultScenario()).Return(_defultScenario);
 			_createOrUpdateSkillDays.Stub(
-				x => x.Create(_campaign.Skill, _campaign.SpanningPeriod, _campaign.CampaignTasks(), _campaign.AverageTaskHandlingTime(), _campaign.WorkingHours));
+				x => x.Create(_campaign.Skill, _campaign.SpanningPeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc), _campaign.CampaignTasks(), _campaign.AverageTaskHandlingTime(), _campaign.WorkingHours));
 
 			_target.Move(_campaign, new DateOnlyPeriod(2015, 6, 8, 2015, 6, 8));
 
@@ -66,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.Outbound
 
 			_scenarioRepository.Stub(x => x.LoadDefaultScenario()).Return(_defultScenario);
 			_createOrUpdateSkillDays.Stub(
-				x => x.Create(_campaign.Skill, _campaign.SpanningPeriod, _campaign.CampaignTasks(), _campaign.AverageTaskHandlingTime(), _campaign.WorkingHours));
+				x => x.Create(_campaign.Skill, _campaign.SpanningPeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc), _campaign.CampaignTasks(), _campaign.AverageTaskHandlingTime(), _campaign.WorkingHours));
 
 			_target.Move(_campaign, new DateOnlyPeriod(2015, 6, 8, 2015, 6, 8));
 

@@ -72,10 +72,10 @@
 			</composite-element>	
       </map>
 
-		<component name="SpanningPeriod" class="Teleopti.Interfaces.Domain.DateOnlyPeriod, Teleopti.Interfaces">
-			<component class ="Teleopti.Interfaces.Domain.MinMax`1[Teleopti.Interfaces.Domain.DateOnly, Teleopti.Interfaces], Teleopti.Interfaces" name="period" access="field">
-				<property name="Minimum" column="StartDate" not-null="true" type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"/>
-				<property name="Maximum" column="EndDate" not-null="true" type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"/>
+		<component name="SpanningPeriod" class="Teleopti.Interfaces.Domain.DateTimePeriod, Teleopti.Interfaces">
+			<component name="period" access="field">
+				<property name="Minimum" column="StartDate" not-null="true" type="UtcDateTime"/>
+				<property name="Maximum" column="EndDate" not-null="true" type="UtcDateTime"/>
 			</component>
 		</component>
 		
