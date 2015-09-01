@@ -83,9 +83,11 @@
 		};
 
 		vm.onChangeOfDate = function() {
+
 			vm.refreshSeatMap();
 			vm.isDatePickerOpened = false;
 		};
+
 
 		function resize() {
 			canvasUtils.resize(canvas);

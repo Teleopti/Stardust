@@ -47,6 +47,10 @@
 			return '';
 		};
 
+		vm.dateIsValid = function() {
+			return (vm.selectedPeriod.StartDate <= vm.selectedPeriod.EndDate);
+		};
+		
 		vm.toggleFilter = function (tabName) {
 			vm.isDatePickerOpened = tabName == 'date';
 			vm.isTeamPickerOpened = tabName == 'team';

@@ -13410,7 +13410,13 @@ Reduce the complexity to use these shifts.</value>
     <value>Successfully updated people count:</value>
     <comment>count of people successfully update skills</comment>
   </data>
-  <data name="YouMightNeedToChangeTheShiftBagAccordingly" xml:space="preserve">
+  <data name="StartDateMustBeEqualToOrEarlierThanEndDate" xml:space="preserve">
+    <value>Start Date must be equal to or earlier than End Date</value>
+  </data>
+  <data name="StartDateAndEndDateMustBeSet" xml:space="preserve">
+    <value>Must set the start and end dates.</value>
+  </data>
+   <data name="YouMightNeedToChangeTheShiftBagAccordingly" xml:space="preserve">
     <value>You might need to change the shift bag accordingly.</value>
     <comment>alert to change shift bag after skill updated</comment>
   </data>

@@ -25799,11 +25799,29 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Must set the start and end dates..
+        /// </summary>
+        public static string StartDateAndEndDateMustBeSet {
+            get {
+                return ResourceManager.GetString("StartDateAndEndDateMustBeSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start date must be end date or earlier.
         /// </summary>
         public static string StartDateMustBeEndDateOrSmaller {
             get {
                 return ResourceManager.GetString("StartDateMustBeEndDateOrSmaller", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start Date must be equal to or earlier than End Date.
+        /// </summary>
+        public static string StartDateMustBeEqualToOrEarlierThanEndDate {
+            get {
+                return ResourceManager.GetString("StartDateMustBeEqualToOrEarlierThanEndDate", resourceCulture);
             }
         }
         

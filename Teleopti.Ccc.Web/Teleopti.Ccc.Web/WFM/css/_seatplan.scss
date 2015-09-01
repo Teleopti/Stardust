@@ -354,3 +354,17 @@
 		vertical-align: top;
 	}
 }
+
+.seatplan-report-date-validation{
+	
+	right:10px;
+
+	.success {
+		position:relative;
+		color: #c2e085 !important ;	
+	}
+	.fail {
+		position:relative;
+		color: #ee8f7d !important;
+	}
+}
