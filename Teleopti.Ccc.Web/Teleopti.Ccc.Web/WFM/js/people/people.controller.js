@@ -40,7 +40,16 @@ function PeopleController($scope, $filter, $state, $stateParams, $translate, i18
 			label: 'AdjustSkill',
 			icon: 'mdi-package',
 			action: function () {
-				$scope.gotoSkillPanel();
+				$scope.gotoCartView('AdjustSkill');
+			},
+			active: function () {
+				return $scope.isAdjustSkillEnabled && ($scope.selectedCount() > 0);
+			}
+		}, {
+			label: "ChangeShiftBag",
+			icon: "mdi-package",
+			action: function () {
+				$scope.gotoCartView('ChangeShiftBag');
 			},
 			active: function () {
 				return $scope.isAdjustSkillEnabled && ($scope.selectedCount() > 0);
@@ -158,8 +167,8 @@ function PeopleController($scope, $filter, $state, $stateParams, $translate, i18
 		return $scope.selectedPeopleList;
 	}
 
-	$scope.gotoSkillPanel = function () {
-		$state.go("people-selection-cart", { selectedPeopleIds: getSelectedPeople(), commandTag: 'adjustSkill', currentKeyword: $scope.keyword, paginationOptions: paginationOptions });
+	$scope.gotoCartView = function (commandTag) {
+		$state.go("people-selection-cart", { selectedPeopleIds: getSelectedPeople(), commandTag: commandTag, currentKeyword: $scope.keyword, paginationOptions: paginationOptions });
 	};
 
 	var selectPeople = function (rows) {

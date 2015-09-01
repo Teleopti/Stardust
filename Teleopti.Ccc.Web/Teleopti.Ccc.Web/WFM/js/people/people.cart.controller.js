@@ -46,6 +46,20 @@
 					{ displayName: 'Skills', field: 'Skills()', headerCellFilter: 'translate' },
 					{ displayName: 'ShiftBag', field: 'ShiftBag', headerCellFilter: 'translate', minWidth: 100 }
 				]
+			},
+			{
+				label: "ChangeShiftBag",
+				icon: "mdi-package",
+				action: function () {
+					vm.toggleShiftBagPanel();
+				},
+				active: function () {
+					return vm.isAdjustSkillEnabled;
+				},
+				columns: [
+					{ displayName: 'Skills', field: 'Skills()', headerCellFilter: 'translate' },
+					{ displayName: 'ShiftBag', field: 'ShiftBag', headerCellFilter: 'translate', minWidth: 100 }
+				]
 			}
 		];
 
@@ -60,11 +74,9 @@
 			return debounceFn;
 		}
 
-		vm.toggleSkillPanel = buildToggler('right');
+		vm.toggleSkillPanel = buildToggler('right-skill');
 
-		vm.close = function () {
-			$mdSidenav('right').close().then(function () { });
-		};
+		vm.toggleShiftBagPanel = buildToggler('right-shiftbag');
 
 		vm.closeNoticeBar = function () {
 			vm.isConfirmCloseNoticeBar = true;
