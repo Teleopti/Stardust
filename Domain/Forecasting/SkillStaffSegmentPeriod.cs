@@ -100,10 +100,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 return Math.Round(BookedResource65 - (incommingDifference / BelongsTo.SortedSegmentCollection.Count), 3);
             }
 
-            double devider = BelongsTo.Payload.BookedAgainstIncomingDemand65;
-            if(devider > 0)
+            double divider = BelongsTo.Payload.BookedAgainstIncomingDemand65;
+            if(divider > 0)
             {
-                return Math.Round((BookedResource65/devider) *
+                return Math.Round((BookedResource65/divider) *
                              BelongsTo.Payload.ForecastedIncomingDemand, 3);
             }
 

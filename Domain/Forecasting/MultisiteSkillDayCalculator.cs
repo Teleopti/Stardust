@@ -104,8 +104,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                     IDictionary<DateTime, ISkillStaffPeriod> foundSkillStaffPeriods;
                     if (!_childSkillStaffPeriods.TryGetValue(childSkill, out foundSkillStaffPeriods))
                     {
-                        foundSkillStaffPeriods =
-                            new Dictionary<DateTime, ISkillStaffPeriod>(new DateTimeAsLongEqualityComparer());
+                        foundSkillStaffPeriods = new Dictionary<DateTime, ISkillStaffPeriod>();
                         foreach (
                             var skillStaffPeriod in
                                 _childSkillDays[childSkill].SelectMany(

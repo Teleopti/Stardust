@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         private bool _isCalculatedWithinDay;
         private DateOnlyPeriod _visiblePeriod;
         private readonly Dictionary<IWorkload, SortedList<DateOnly, IWorkloadDay>> _workloadDaysCache;
-        private readonly IDictionary<DateTime, ISkillStaffPeriod> _skillStaffPeriods = new Dictionary<DateTime, ISkillStaffPeriod>(new DateTimeAsLongEqualityComparer());
+        private readonly IDictionary<DateTime, ISkillStaffPeriod> _skillStaffPeriods = new Dictionary<DateTime, ISkillStaffPeriod>();
 
         public SkillDayCalculator(ISkill skill, IEnumerable<ISkillDay> skillDays, DateOnlyPeriod visiblePeriod)
         {
@@ -275,19 +275,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
             var newSkillDays = _skillDays.Select(skillDay => skillDay.NoneEntityClone(scenario)).ToList();
             var skillDayCalculator = new SkillDayCalculator(_skill, newSkillDays, _visiblePeriod);
             return skillDayCalculator;
-        }
-    }
-
-    internal class DateTimeAsLongEqualityComparer : IEqualityComparer<DateTime>
-    {
-        public bool Equals(DateTime x, DateTime y)
-        {
-            return y.Ticks.Equals(x.Ticks);
-        }
-
-        public int GetHashCode(DateTime obj)
-        {
-            return obj.GetHashCode();
         }
     }
 }

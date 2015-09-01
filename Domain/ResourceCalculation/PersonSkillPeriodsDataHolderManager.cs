@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		    var personPeriod = currentSchedulePeriod.Person.Period(scheduleDateOnly);
             var skills = (from personSkill in personPeriod.PersonSkillCollection
                                      where !((IDeleteTag) personSkill.Skill).IsDeleted & personSkill.Active
-                                     select personSkill.Skill).ToList();
+						  select personSkill.Skill).ToArray();
 
             var scheduleDayUtc = TimeZoneHelper.ConvertToUtc(scheduleDateOnly.Date,
 																  currentSchedulePeriod.Person.PermissionInformation.DefaultTimeZone());
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             var personPeriod = currentSchedulePeriod.Person.Period(scheduleDateOnly);
             IEnumerable<ISkill> maxSeatSkills = (from personSkill in personPeriod.PersonMaxSeatSkillCollection
 								 where !((IDeleteTag)personSkill.Skill).IsDeleted
-								 select personSkill.Skill).ToList();
+												 select personSkill.Skill).ToArray();
 			
 		if(maxSeatSkills.IsEmpty())
 			return new Dictionary<ISkill, ISkillStaffPeriodDictionary>();
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             var personPeriod = currentSchedulePeriod.Person.Period(scheduleDateOnly);
             IEnumerable<ISkill> nonBlendSkills = (from personSkill in personPeriod.PersonNonBlendSkillCollection
                                                  where !((IDeleteTag)personSkill.Skill).IsDeleted
-                                                 select personSkill.Skill).ToList();
+                                                 select personSkill.Skill).ToArray();
 
             if (nonBlendSkills.IsEmpty())
                 return new Dictionary<ISkill, ISkillStaffPeriodDictionary>();

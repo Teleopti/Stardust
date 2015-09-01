@@ -183,7 +183,14 @@ namespace Teleopti.Ccc.Domain.Forecasting
                     if (_isAggregate)
 							  return ((IAggregateSkillStaffPeriod)this).AggregatedFStaff;
 
-	                return _segmentInThisCollection.Sum(ySegment => ySegment.FStaff());
+	                double sum = 0;
+	                var segmentCount = _segmentInThisCollection.Count;
+	                for (int index = 0; index < segmentCount; index++)
+	                {
+		                ISkillStaffSegmentPeriod ySegment = _segmentInThisCollection[index];
+		                sum += ySegment.FStaff();
+	                }
+	                return sum;
                 }
             }
         }

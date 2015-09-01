@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     public class SkillStaffPeriodHolder : ISkillStaffPeriodHolder
     {
         private ISkillSkillStaffPeriodExtendedDictionary _internalDictionary;
-        private static readonly object Locker = new object();
+        private readonly object Locker = new object();
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
         public SkillStaffPeriodHolder(IEnumerable<KeyValuePair<ISkill, IList<ISkillDay>>> skillDays)
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 ISkillStaffPeriodDictionary skillStaffPeriods;
                 if (_internalDictionary.TryGetValue(skill, out skillStaffPeriods))
                 {
-                    var dataHolders = new Dictionary<DateTime, ISkillStaffPeriodDataHolder>(new DateTimeAsLongEqualityComparer());
+                    var dataHolders = new Dictionary<DateTime, ISkillStaffPeriodDataHolder>();
 
                     foreach (KeyValuePair<DateTimePeriod, ISkillStaffPeriod> pair in skillStaffPeriods)
                     {
@@ -49,16 +49,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                             int maximumPersons = skillStaffPeriod.Payload.SkillPersonData.MaximumPersons;
                             int minimumPersons = skillStaffPeriod.Payload.SkillPersonData.MinimumPersons;
 
-                            //if (skill.Name == "B2C Orders Spanish")
-                            //{
-                                //if (skillStaffPeriod.Period.StartDateTime.TimeOfDay == TimeSpan.FromHours(11))
-                                //{
-                                //    string foo = string.Empty;
-                                //}
-                            //}
-							//skill.SkillType.ForecastSource
                             double absoluteDifferenceScheduledHeadsAndMinMaxHeads = skillStaffPeriod.AbsoluteDifferenceScheduledHeadsAndMinMaxHeads(true);
-                            //int origDemand = (int) Math.Round(skillStaffPeriod.ForecastedIncomingDemand().TotalMinutes);
                             var origDemand = skillStaffPeriod.FStaffTime().TotalMinutes;
                             var assignedResource =skillStaffPeriod.Payload.CalculatedResource*
                                            skillStaffPeriod.Period.ElapsedTime().TotalMinutes;
@@ -136,7 +127,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                     lastKey = null;
                 }
             }
-            return new Dictionary<DateTime, ISkillStaffPeriodDataHolder>(sortedDataHolders, new DateTimeAsLongEqualityComparer());
+            return new Dictionary<DateTime, ISkillStaffPeriodDataHolder>(sortedDataHolders);
         }
 
         private static Dictionary<DateTime, ISkillStaffPeriodDataHolder> CombineSkillStaffPeriodDataHolder(Dictionary<DateTime, ISkillStaffPeriodDataHolder> dictionaryTo, Dictionary<DateTime, ISkillStaffPeriodDataHolder> dictionaryFrom)

@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.Collection
                 }
             }
 
-            DateTimePeriod? returnValue = (minTime == null || maxTime == null)
+            DateTimePeriod? returnValue = (!minTime.HasValue || !maxTime.HasValue)
                                               ? (DateTimePeriod?)null
                                               : new DateTimePeriod(minTime.Value, maxTime.Value);
             return returnValue;
