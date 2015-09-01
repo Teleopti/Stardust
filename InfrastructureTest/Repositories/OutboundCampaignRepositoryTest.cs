@@ -308,6 +308,33 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			result[0].Id.Should().Be.EqualTo(campaign2.Id);
 		}
 
+		[Test]
+		public void ShouldSaveActualBacklog()
+		{
+			var campaign = CreateAggregateWithCorrectBusinessUnit();
+			campaign.SetActualBacklog(DateOnly.Today, TimeSpan.FromHours(10));
+			PersistAndRemoveFromUnitOfWork(campaign);
+
+			var repository = new OutboundCampaignRepository(UnitOfWork);
+			var loadedCampaign = repository.Get(campaign.Id.GetValueOrDefault());
+
+			loadedCampaign.GetActualBacklog(DateOnly.Today).Should().Be.EqualTo(TimeSpan.FromHours(10));
+		}
+
+		[Test]
+		public void ShouldRemoveActualBacklog()
+		{
+			var campaign = CreateAggregateWithCorrectBusinessUnit();
+			campaign.SetActualBacklog(DateOnly.Today, TimeSpan.FromHours(10));
+			campaign.ClearActualBacklog(DateOnly.Today);
+			PersistAndRemoveFromUnitOfWork(campaign);
+
+			var repository = new OutboundCampaignRepository(UnitOfWork);
+			var loadedCampaign = repository.Get(campaign.Id.GetValueOrDefault());
+
+			loadedCampaign.GetActualBacklog(DateOnly.Today).Should().Be.EqualTo(null);
+		}
+
 		private void deleteCampaign(IOutboundCampaignRepository repository, IOutboundCampaign campaign)
 		{
 			repository.Remove(campaign);

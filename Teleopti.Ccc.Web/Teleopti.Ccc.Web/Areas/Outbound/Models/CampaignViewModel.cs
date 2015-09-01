@@ -114,7 +114,19 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 		public IEnumerable<ManualViewModel> ManualProductionPlan;
 	}
 
+	public class ActualBacklogForm
+	{
+		public Guid CampaignId;
+		public IEnumerable<ManualViewModel> ActualBacklog;
+	}
+
 	public class RemoveManualPlanForm
+	{
+		public Guid CampaignId;
+		public IEnumerable<DateOnly> Dates;
+	}
+
+	public class RemoveActualBacklogForm
 	{
 		public Guid CampaignId;
 		public IEnumerable<DateOnly> Dates;

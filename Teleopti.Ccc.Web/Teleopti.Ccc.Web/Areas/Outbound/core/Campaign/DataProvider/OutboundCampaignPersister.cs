@@ -138,6 +138,32 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			return campaign;
 		}
 
+		public void PersistActualBacklog(ActualBacklogForm actualBacklog)
+		{
+			var campaign = _outboundCampaignRepository.Get(actualBacklog.CampaignId);
+			if (campaign == null) return;
+
+			foreach (var backlog in actualBacklog.ActualBacklog)
+			{
+				var time = doubleToTimeSpan(backlog.Time);
+				if (campaign.SpanningPeriod.Contains(backlog.Date))
+				{
+					campaign.SetActualBacklog(backlog.Date, time);					
+				}
+			}
+		}
+
+		public void RemoveActualBacklog(RemoveActualBacklogForm manualPlan)
+		{
+			var campaign = _outboundCampaignRepository.Get(manualPlan.CampaignId);
+			if (campaign == null) return;
+
+			foreach (var date in manualPlan.Dates)
+			{
+				campaign.ClearActualBacklog(date);
+			}			
+		}
+
 		public void PersistManualProductionPlan(ManualPlanForm manualPlan)
 		{
 			var campaign = _outboundCampaignRepository.Get(manualPlan.CampaignId);
@@ -145,12 +171,8 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 
 			var isUpdateForecasted = false;
 			foreach (var manual in manualPlan.ManualProductionPlan)
-			{
-				var days = (int)manual.Time/24;
-				var hours = (int)(manual.Time - days*24);
-				var minutes = (int)((manual.Time - days*24 - hours)*60);
-				var seconds = (int)((manual.Time - days*24 - hours - (double)minutes/60)*60*60);
-				var time = new TimeSpan(days, hours, minutes, seconds);
+			{				
+				var time = doubleToTimeSpan(manual.Time);
 				if (campaign.SpanningPeriod.Contains(manual.Date))
 				{
 					campaign.SetManualProductionPlan(manual.Date, time);
@@ -222,6 +244,15 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 				}
 
 			return false;
+		}
+
+		private TimeSpan doubleToTimeSpan(double x)
+		{
+			var days = (int)x / 24;
+			var hours = (int)(x - days * 24);
+			var minutes = (int)((x - days * 24 - hours) * 60);
+			var seconds = (int)((x - days * 24 - hours - (double)minutes / 60) * 60 * 60);
+			return new TimeSpan(days, hours, minutes, seconds);
 		}
 	}
 }

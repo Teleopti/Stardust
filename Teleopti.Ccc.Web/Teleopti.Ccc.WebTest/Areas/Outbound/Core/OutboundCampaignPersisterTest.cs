@@ -659,5 +659,22 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			(campaign.GetManualProductionPlan(date)==null).Should().Be.True();
 			_productionReplanHelper.AssertWasCalled(x=>x.Replan(campaign));
 		}
+
+		[Test]
+		public void ShouldRemoveActualBacklog()
+		{
+			var campaignId = new Guid();
+			var date = new DateOnly(2015, 8, 21);
+			var campaign = new Domain.Outbound.Campaign() { SpanningPeriod = new DateOnlyPeriod(new DateOnly(2015, 8, 21), new DateOnly(2015, 8, 21)) };
+			campaign.SetActualBacklog(date, TimeSpan.FromHours(1));
+
+			var removeForm = new RemoveActualBacklogForm() { CampaignId = campaignId, Dates = new List<DateOnly>() { date } };
+			_outboundCampaignRepository.Stub(x => x.Get(campaignId)).Return(campaign);
+
+			_target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, null, null, null, _productionReplanHelper, null, null, null);
+			_target.RemoveActualBacklog(removeForm);
+
+			(campaign.GetActualBacklog(date) == null).Should().Be.True();			
+		}
 	}
 }

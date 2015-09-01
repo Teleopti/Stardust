@@ -105,6 +105,13 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 			return true;
 		}
 
+		[HttpPost, Route("api/Outbound/Campaign/ActualBacklog"), UnitOfWork]
+		public virtual CampaignVisualizationViewModel AddActualBacklog([FromBody] ActualBacklogForm actualBacklog)
+		{
+			_outboundCampaignPersister.PersistActualBacklog(actualBacklog);
+			return _campaignVisualizationProvider.ProvideVisualization(actualBacklog.CampaignId);
+		}
+
 		[HttpPost, Route("api/Outbound/Campaign/ManualPlan"), UnitOfWork]
 		public virtual CampaignVisualizationViewModel ManualPlan([FromBody] ManualPlanForm manualPlan)
 		{

@@ -4,21 +4,23 @@ using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Backlog
-{   
-    public class IncomingTask : IBacklogTask
-    {
+{
+	public class IncomingTask : IBacklogTask
+	{
 		private readonly DateOnlyPeriod _spanningPeriod;
 		private readonly int _totalWorkItems;
 		private readonly TimeSpan _averageWorkTimePerItem;
 		private readonly FlatDistributionSetter _distributionSetter;
 		private readonly IDictionary<DateOnly, TaskDay> _taskDays = new Dictionary<DateOnly, TaskDay>();
-		 private IDictionary<DateOnly, TimeSpan> _orgPlannedTime = new Dictionary<DateOnly, TimeSpan>(); 
-		 private IDictionary<DateOnly, TimeSpan> _orgScheduledTime = new Dictionary<DateOnly, TimeSpan>(); 
-		 private IDictionary<DateOnly, bool> _manualPlannedTime = new Dictionary<DateOnly, bool>(); 
+		private IDictionary<DateOnly, TimeSpan> _orgPlannedTime = new Dictionary<DateOnly, TimeSpan>();
+		private IDictionary<DateOnly, TimeSpan> _orgScheduledTime = new Dictionary<DateOnly, TimeSpan>();
+		private IDictionary<DateOnly, bool> _manualPlannedTime = new Dictionary<DateOnly, bool>();
+		private IDictionary<DateOnly, TimeSpan> _actualBacklog = new Dictionary<DateOnly, TimeSpan>();
 		private double _incomingOverflowedWork;
 
 
-		public IncomingTask(DateOnlyPeriod spanningPeriod, int totalWorkItems, TimeSpan averageWorkTimePerItem, FlatDistributionSetter distributionSetter)
+		public IncomingTask(DateOnlyPeriod spanningPeriod, int totalWorkItems, TimeSpan averageWorkTimePerItem,
+			FlatDistributionSetter distributionSetter)
 		{
 			_spanningPeriod = spanningPeriod;
 			_totalWorkItems = totalWorkItems;
@@ -42,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Backlog
 
 		public TimeSpan TotalWorkTime
 		{
-			get { return new TimeSpan((long)TotalWorkItems*AverageWorkTimePerItem.Ticks);}
+			get { return new TimeSpan((long) TotalWorkItems*AverageWorkTimePerItem.Ticks); }
 		}
 
 		public TimeSpan AverageWorkTimePerItem
@@ -68,58 +70,70 @@ namespace Teleopti.Ccc.Domain.Backlog
 			return TimeSpan.Zero;
 		}
 
-	    public TimeSpan GetRealPlannedTimeOnDate(DateOnly date)
-	    {
-		    return _orgPlannedTime[date];
-	    }
+		public TimeSpan GetRealPlannedTimeOnDate(DateOnly date)
+		{
+			return _orgPlannedTime[date];
+		}
 
-	    public void SetRealPlannedTimeOnDate(DateOnly date, TimeSpan time)
-	    {
-		    if (_orgPlannedTime.ContainsKey(date))
-		    {
-			    _orgPlannedTime[date] = time;
-		    }
-		    else
-		    {
-			    _orgPlannedTime.Add(date, time);
-		    }
-	    }
+		public void SetRealPlannedTimeOnDate(DateOnly date, TimeSpan time)
+		{
+			if (_orgPlannedTime.ContainsKey(date))
+			{
+				_orgPlannedTime[date] = time;
+			}
+			else
+			{
+				_orgPlannedTime.Add(date, time);
+			}
+		}
 
-	    public void SetRealScheduledTimeOnDate(DateOnly date, TimeSpan time)
-	    {
-			 if (_orgScheduledTime.ContainsKey(date))
-		    {
-			    _orgScheduledTime[date] = time;
-		    }
-		    else
-		    {
-			    _orgScheduledTime.Add(date, time);
-		    }
-	    }
+		public void SetRealScheduledTimeOnDate(DateOnly date, TimeSpan time)
+		{
+			if (_orgScheduledTime.ContainsKey(date))
+			{
+				_orgScheduledTime[date] = time;
+			}
+			else
+			{
+				_orgScheduledTime.Add(date, time);
+			}
+		}
 
-	    public bool GetManualPlannedInfoOnDate(DateOnly date)
-	    {
-			 return _manualPlannedTime[date];
-	    }
+		public bool GetManualPlannedInfoOnDate(DateOnly date)
+		{
+			return _manualPlannedTime[date];
+		}
 
-	    public void SetManualPlannedInfoOnDate(DateOnly date, bool isManualPlanned)
-	    {
-			 if (_manualPlannedTime.ContainsKey(date))
-			 {
-				 _manualPlannedTime[date] = isManualPlanned;
-			 }
-			 else
-			 {
-				 _manualPlannedTime.Add(date, isManualPlanned);
-			 }
-	    }
+		public void SetManualPlannedInfoOnDate(DateOnly date, bool isManualPlanned)
+		{
+			if (_manualPlannedTime.ContainsKey(date))
+			{
+				_manualPlannedTime[date] = isManualPlanned;
+			}
+			else
+			{
+				_manualPlannedTime.Add(date, isManualPlanned);
+			}
+		}
 
-	    public TimeSpan GetRealScheduledTimeOnDate(DateOnly date)
-	    {
-		    return _orgScheduledTime[date];
-	    }
+		public void SetActualBacklogOnDate(DateOnly date, TimeSpan backlog)
+		{
+			if (_actualBacklog.ContainsKey(date))
+			{
+				_actualBacklog[date] = backlog;
+			}
+			else
+			{
+				_actualBacklog.Add(date, backlog);
+			}
+		}
 
-	    public TimeSpan GetScheduledTimeOnDate(DateOnly date)
+		public TimeSpan GetRealScheduledTimeOnDate(DateOnly date)
+		{
+			return _orgScheduledTime[date];
+		}
+
+		public TimeSpan GetScheduledTimeOnDate(DateOnly date)
 		{
 			if (PlannedTimeTypeOnDate(date) == PlannedTimeTypeEnum.Scheduled)
 				return GetTimeOnDate(date).Subtract(GetOverstaffTimeOnDate(date));
@@ -148,19 +162,27 @@ namespace Teleopti.Ccc.Domain.Backlog
 		}
 
 		public TimeSpan GetBacklogOnDate(DateOnly date)
-	    {
-			 var planned = TimeSpan.Zero;
-			 foreach (var dateOnly in _taskDays.Keys)
-			 {
-				 if (dateOnly <= date)
-					 planned = planned.Add(GetTimeOnDate(dateOnly));
-			 }
+		{
+			var planned = TimeSpan.Zero;
+			var totalWorkTime = TotalWorkTime;
 
-			 if (planned < TotalWorkTime)
-				 return TotalWorkTime.Subtract(planned);
+			foreach (var dateOnly in _taskDays.Keys)
+			{
+				if (dateOnly <= date)
+					planned = planned.Add(GetTimeOnDate(dateOnly));
 
-			 return TimeSpan.Zero;
-	    }
+				if (_actualBacklog.ContainsKey(dateOnly))
+				{
+					planned = TimeSpan.Zero;
+					totalWorkTime = _actualBacklog[dateOnly];
+				}
+			}
+
+			if (planned < totalWorkTime)
+				return totalWorkTime.Subtract(planned);
+
+			return TimeSpan.Zero;
+		}
 
 		public TimeSpan GetEstimatedOutgoingBacklogOnDate(DateOnly date)
 		{

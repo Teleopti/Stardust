@@ -11,5 +11,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 		void PersistManualProductionPlan(ManualPlanForm manualPlan);
 		void RemoveManualProductionPlan(RemoveManualPlanForm manualPlan);
 		void ManualReplanCampaign(Guid campaignId);
+		void PersistActualBacklog(ActualBacklogForm actualBacklog);
+		void RemoveActualBacklog(RemoveActualBacklogForm removeBacklog);
 	}
 }
