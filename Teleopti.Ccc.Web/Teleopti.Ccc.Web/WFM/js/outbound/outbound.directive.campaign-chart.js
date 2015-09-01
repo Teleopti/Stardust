@@ -10,7 +10,8 @@
 				'<div class="chart-extra-info"><p ng-repeat="extraInfo in extraInfos"}>{{extraInfo}}</p></div>',
 			scope: {
 				'campaign': '=',				
-				'dictionary': '='
+				'dictionary': '=',
+				'excludeClosed': '='
 			},
 			require: ['campaignChart'],
 			link: postlink
@@ -42,7 +43,7 @@
 				$scope.campaign.selectedDates = $scope.graph.selected().filter(function(p) {
 					return p.id == $scope.dictionary['Progress'];
 				}).filter(function(p) {
-					return determineOpenDay(p.index);
+					return !$scope.excludeClosed || determineOpenDay(p.index);
 				}).map(function (p) {
 					return $scope.dates[p.index];
 				});
