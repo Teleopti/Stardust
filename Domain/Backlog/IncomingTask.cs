@@ -157,7 +157,18 @@ namespace Teleopti.Ccc.Domain.Backlog
 
 		public void RecalculateDistribution()
 		{
-			_distributionSetter.Distribute(_taskDays.Values.ToList(), TotalWorkTime);
+			if (_actualBacklog.Keys.Count > 0)
+			{
+				var maxActualBacklogDate = _actualBacklog.Keys.Max();
+				var totalWorkload = _actualBacklog[maxActualBacklogDate];
+				var replanPeriod = _taskDays.Keys.Where(d => d > maxActualBacklogDate).ToList();
+				if (replanPeriod.Count == 0) return;
+				_distributionSetter.Distribute(replanPeriod.Select(d => _taskDays[d]).ToList(), totalWorkload);
+			}
+			else
+			{
+				_distributionSetter.Distribute(_taskDays.Values.ToList(), TotalWorkTime);
+			}
 		}
 
 		public void Close(DateOnly date)
