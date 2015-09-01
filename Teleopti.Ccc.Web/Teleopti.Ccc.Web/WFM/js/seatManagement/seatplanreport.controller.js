@@ -30,12 +30,24 @@
 				options.callback != null && options.callback(data);
 			});
 		};
+		
+		// when start or end date are updated, update the other so both datepickers are 
+		// kept up to date
+		$scope.$watch(function () {
+			var startDate = vm.selectedPeriod.StartDate;
+			var endDate = vm.selectedPeriod.EndDate;
+			return { startDate: startDate, endDate: endDate };
+		}, function (value) {
+			vm.selectedPeriod.StartDate =  angular.copy(value.startDate);
+			vm.selectedPeriod.EndDate =  angular.copy(value.endDate);
+		}, true);
 
-		vm.setRangeClass = function (date, mode, period) {
+
+		vm.setRangeClass = function (date, mode) {
 			if (mode === 'day') {
 				var dayToCheck = new Date(date).setHours(12, 0, 0, 0);
-				var startDay = new Date(period.StartDate).setHours(12, 0, 0, 0);
-				var endDay = new Date(period.EndDate).setHours(12, 0, 0, 0);
+				var startDay = new Date(vm.selectedPeriod.StartDate).setHours(12, 0, 0, 0);
+				var endDay = new Date(vm.selectedPeriod.EndDate).setHours(12, 0, 0, 0);
 				if (dayToCheck >= startDay && dayToCheck <= endDay) {
 					return 'seatplan-status-success';
 				}
@@ -117,13 +129,13 @@
 		function cacheFilterValuesInCaseOfCancel() {
 			vm.temp.selectedTeams = angular.copy(vm.selectedTeams);
 			vm.temp.selectedLocations = angular.copy(vm.selectedLocations);
-			vm.temp.selectedPeriod = angular.copy(vm.selectedPeriod);
+			//vm.temp.selectedPeriod = angular.copy(vm.selectedPeriod);
 		};
 
 		function reloadCachedFilterValuesAfterCancel() {
 			vm.selectedTeams = angular.copy(vm.temp.selectedTeams);
 			vm.selectedLocations = angular.copy(vm.temp.selectedLocations);
-			angular.copy(vm.temp.selectedPeriod, vm.selectedPeriod);
+			//vm.selectedPeriod = angular.copy(vm.temp.selectedPeriod);
 		};
 
 		function getSeatBookingsCallback(data) {

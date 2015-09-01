@@ -11,9 +11,9 @@
 		vm.locations = [];
 		vm.selectedLocations = [];
 
-		$scope.$watch("vm.selectedLocations", function (updatedLocationArray) {
+		$scope.$watch("vm.selectedLocations", function (updatedLocations) {
 			if (vm.locations.length > 0) {
-				updateSelectedLocationsAfterExternalUpdate(vm.locations[0], updatedLocationArray);
+				updateSelectedLocationsAfterExternalUpdate(vm.locations[0], updatedLocations);
 			}
 		});
 
@@ -46,20 +46,17 @@
 			}
 		};
 
-		function updateSelectedLocationsAfterExternalUpdate(locationNode, updatedLocationArray) {
-			var index = vm.selectedLocations.indexOf(locationNode.Id);
+		function updateSelectedLocationsAfterExternalUpdate(locationNode, updatedLocations) {
+			var index = updatedLocations.indexOf(locationNode.Id);
 			locationNode.selected = (index != -1);
 
 			if (locationNode.Children !== undefined) {
 				locationNode.Children.forEach(function(child) {
-					updateSelectedLocationsAfterExternalUpdate(child, updatedLocationArray);
+					updateSelectedLocationsAfterExternalUpdate(child, updatedLocations);
 				});
 			}
-
 		};
-
 	};
-
 }());
 
 

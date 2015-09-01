@@ -10,9 +10,9 @@
 		vm.teams = [];
 		vm.selectedTeams = [];
 
-		$scope.$watch("vm.selectedTeams", function (updatedArray) {
+		$scope.$watch("vm.selectedTeams", function (updatedTeams) {
 			if (vm.teams.length > 0) {
-				updateSelectedTeamsAfterExternalUpdate(vm.teams[0], updatedArray);
+				updateSelectedTeamsAfterExternalUpdate(vm.teams[0], updatedTeams);
 				updateBuAndSiteStatus(vm.teams);
 			}
 		});
@@ -98,14 +98,14 @@
 			}
 		};
 
-		function updateSelectedTeamsAfterExternalUpdate(node, updatedArray) {
-			var index = updatedArray.indexOf(node.Id);
+		function updateSelectedTeamsAfterExternalUpdate(node, updatedTeams) {
+			var index = updatedTeams.indexOf(node.Id);
 
 			if (isTeam(node)) {
 				node.selected = index != -1;
 			} else {
 				node.Children.forEach(function (child) {
-					updateSelectedTeamsAfterExternalUpdate(child, updatedArray);
+					updateSelectedTeamsAfterExternalUpdate(child, updatedTeams);
 				});
 			}
 		};
