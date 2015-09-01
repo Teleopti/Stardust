@@ -106,9 +106,10 @@
 	    }
 
 		$scope.getGraphData = function(campaign) {
-			outboundChartService.getCampaignVisualization(campaign.Id, function(data, translations, manualPlan, closedDays) {
+			outboundChartService.getCampaignVisualization(campaign.Id, function(data, translations, manualPlan, closedDays, backlog) {
 				campaign.graphData = data;
 				campaign.rawManualPlan = manualPlan;
+				campaign.isManualBacklog = backlog;
 				campaign.translations = translations;
 				campaign.closedDays = closedDays;
 			});
@@ -180,9 +181,10 @@
         function refreshGraphData(campaign, scope) {
         	outboundService.getCampaignSummary(campaign.Id, function (_campaign) {
         		angular.extend(campaign, _campaign);
-        		outboundChartService.getCampaignVisualization(campaign.Id, function (data, translations, manualPlan, closedDays) {
+        		outboundChartService.getCampaignVisualization(campaign.Id, function (data, translations, manualPlan, closedDays, backlog) {
         			campaign.graphData = data;
         			campaign.rawManualPlan = manualPlan;
+        			campaign.isManualBacklog = backlog;
         			campaign.translations = translations;
         			campaign.closedDays = closedDays;
         			campaign.isLoadingData = false;

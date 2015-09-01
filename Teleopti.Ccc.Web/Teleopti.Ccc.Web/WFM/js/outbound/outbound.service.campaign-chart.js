@@ -70,7 +70,7 @@
 
         function getCampaignVisualization(campaignId, successCb, errorCb) {         
         	$http.get(getCampaignVisualizationUrl + campaignId).success(function (campaignData) {
-        		if (successCb != null) successCb(self.buildGraphDataSeqs(campaignData), self.dictionary, campaignData.IsManualPlanned, campaignData.IsCloseDays);
+		        if (successCb != null) successCb(self.buildGraphDataSeqs(campaignData), self.dictionary, campaignData.IsManualPlanned, campaignData.IsCloseDays, campaignData.IsActualBacklog);
             }).error(function(e) {
                 if (errorCb != null) errorCb(e);
             });
@@ -79,7 +79,7 @@
         function updateManualPlan(manualProductionPlan, successCb, errorCb) {
         	$http.post(updateCampaignProductionPlanUrl, manualProductionPlan).
                 success(function (campaignData) {
-                	if (successCb != null) successCb(self.buildGraphDataSeqs(campaignData), campaignData.IsManualPlanned);
+                	if (successCb != null) successCb(self.buildGraphDataSeqs(campaignData));
                 }).
                 error(function (e) {
                 	if (errorCb != null) errorCb(e);
@@ -89,7 +89,7 @@
         function updateBacklog(backlog, successCb, errorCb) {
         	$http.post(updateCampaignBacklogUrl, backlog).
                 success(function (campaignData) {
-                	if (successCb != null) successCb(self.buildGraphDataSeqs(campaignData), campaignData.IsManualPlanned);
+                	if (successCb != null) successCb(self.buildGraphDataSeqs(campaignData));
                 }).
                 error(function (e) {
                 	if (errorCb != null) errorCb(e);

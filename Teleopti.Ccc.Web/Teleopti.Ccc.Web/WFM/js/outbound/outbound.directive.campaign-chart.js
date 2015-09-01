@@ -7,7 +7,7 @@
 		return {
 			controller: ['$scope', '$element',  campaignChartCtrl],
 			template: '<div id="Chart_{{campaign.Id}}"></div>' +
-				'<div class="chart-extra-info"><span ng-repeat="extraInfo in extraInfos"}>{{extraInfo}}</span></div>',
+				'<div class="chart-extra-info"><p ng-repeat="extraInfo in extraInfos"}>{{extraInfo}}</p></div>',
 			scope: {
 				'campaign': '=',				
 				'dictionary': '='
@@ -34,7 +34,8 @@
 
 			$scope.extraInfos = [
 				"M: " + $scope.dictionary['ManuallyPlanned'],
-				"C: " + $scope.dictionary['Closed']
+				"C: " + $scope.dictionary['Closed'],
+				"B: " + $scope.dictionary['Backlog']
 			];
 
 			function graphSelectionChanged() {
@@ -57,6 +58,10 @@
 
 			function determineManualPlanDay(idx) {
 				return $scope.campaign.rawManualPlan[idx - 1];
+			}
+
+			function determineManualBacklogDay(idx) {
+				return $scope.campaign.isManualBacklog[idx - 1];
 			}
 
 			function init() {
@@ -162,7 +167,10 @@
 
 				dataOption.labels.format[$scope.dictionary['Overstaff']] = function(v, id, i) {
 					if (!determineOpenDay(i)) return 'C';
-					if (determineManualPlanDay(i) && ! determineScheduledDay(i)) return 'M';
+					if (determineManualPlanDay(i) && !determineScheduledDay(i)) return 'M';
+				};
+				dataOption.labels.format[$scope.dictionary['Backlog']] = function (v, id, i) {
+					if (determineManualBacklogDay(i)) return "B";
 				};
 				dataOption.types[$scope.dictionary['Progress']] = 'line';
 					dataOption.selection = {

@@ -4,15 +4,18 @@
 	.chart-extra-info {
 		position: absolute;		
 		color: #66C2FF;
-		bottom: 5px;
+		top: 5px;
 		right: 8%;
-
-		span {
-			margin: 0 4px;
+		text-align:left;
+		p {
+		    margin-bottom:0;
 		}
 	}
 	.c3-chart-texts .c3-text{
 	    fill:rgb(102, 194, 255) !important;
+	}
+	.c3-chart-texts .c3-chart-text:first-child .c3-text{
+	    fill:rgb(31, 119, 180) !important;
 	}
 	.replan-loader-container{
 	    position:absolute;
