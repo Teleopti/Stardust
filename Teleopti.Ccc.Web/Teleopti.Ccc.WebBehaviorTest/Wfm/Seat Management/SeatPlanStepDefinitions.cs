@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Runtime.Remoting.Messaging;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
-using Teleopti.Ccc.WebBehaviorTest.Core.Navigation;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Wfm
+namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Seat_Management
 {
 	[Binding]
 	internal class SeatPlanStepDefinitions
@@ -43,17 +40,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm
 		public void ThenIShouldSeeAPlanningPeriodAvailableForSeatPlanning(DateTime fromDate, DateTime toDate)
 		{
 			Browser.Interactions.AssertExists ("card-header");
-			Browser.Interactions.AssertExists("#planningPeriodHeader");
+			Browser.Interactions.AssertExists("#planning-period-header");
 
-			Browser.Interactions.AssertAnyContains("#planningPeriodHeader", fromDate.ToString("yyyy-MM-dd"));
-			Browser.Interactions.AssertAnyContains("#planningPeriodHeader", toDate.ToString("yyyy-MM-dd"));
+			Browser.Interactions.AssertAnyContains("#planning-period-header", fromDate.ToString("yyyy-MM-dd"));
+			Browser.Interactions.AssertAnyContains("#planning-period-header", toDate.ToString("yyyy-MM-dd"));
 		}
 
 
 		[When(@"I choose the planning period beginning on '(.*)' for seat planning"), SetCulture("sv-SE")]
 		public void WhenIChooseThePlanningPeriodBeginningOnForSeatPlanning(DateTime date)
 		{
-			Browser.Interactions.ClickContaining("#planningPeriodHeader", date.ToString("yyyy-MM-dd"));
+			Browser.Interactions.ClickContaining("#planning-period-header", date.ToString("yyyy-MM-dd"));
 		}
 
 
@@ -73,7 +70,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm
 		[Then(@"I should see a Seat plan status of ""(.*)""")]
 		public void ThenIShouldSeeASeatPlanStatusOf(string status)
 		{
-			Browser.Interactions.AssertAnyContains(".planningDayDetail p", status);
+			Browser.Interactions.AssertAnyContains(".planning-day-detail p", status);
 		}
 
 
