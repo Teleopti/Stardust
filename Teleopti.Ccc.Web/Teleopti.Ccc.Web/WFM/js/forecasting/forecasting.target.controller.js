@@ -1,8 +1,8 @@
 ﻿'use strict';
 
 angular.module('wfm.forecasting')
-	.controller('ForecastingTargetCtrl', ['$scope', '$stateParams', '$state', 'Forecasting', '$http', 'Toggle', '$location',
-		function ($scope, $stateParams, $state, forecasting, $http, toggleService, $location) {
+	.controller('ForecastingTargetCtrl', ['$scope', '$stateParams', '$state', 'Forecasting', '$http', 'Toggle',
+		function ($scope, $stateParams, $state, forecasting, $http, toggleService) {
 			$scope.period = $stateParams.period;
 			$scope.showSelection = true;
 			$scope.skillsDisplayed = [];
@@ -186,7 +186,7 @@ angular.module('wfm.forecasting')
 			};
 
 			$scope.back = function () {
-				$state.go("forecasting", { buid: $location.search().buid });
+				$state.go("forecasting");
 			};
 		}
 	]

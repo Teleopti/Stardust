@@ -100,7 +100,7 @@ wfm.config([
 			templateUrl: 'html/outbound/campaign-edit.html',
 			controller: 'OutboundEditCtrl'
 		}).state('people', {
-			url: '/people?buid',
+			url: '/people',
 			params: { selectedPeopleIds: [], currentKeyword: '', paginationOptions: {} },
 			templateUrl: 'html/people/people.html',
 			controller: 'PeopleCtrl'
