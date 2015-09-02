@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		IRunOnHangfire,
 		IHandleEvent<PersonOutOfAdherenceEvent>, 
 		IHandleEvent<PersonInAdherenceEvent>,
+		IHandleEvent<PersonNeutralAdherenceEvent>,
 		IInitializeble,
 		IRecreatable
 	{
