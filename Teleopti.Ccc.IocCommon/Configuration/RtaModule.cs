@@ -5,12 +5,8 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders;
-using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.Aop;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Infrastructure.Rta;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
@@ -26,17 +22,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<FindTenantNameByRtaKey>().As<IFindTenantNameByRtaKey>().SingleInstance();
-			builder.RegisterType<CountTenants>().As<ICountTenants>().SingleInstance();
-			builder.Register(c =>
-			{
-				var configReader = c.Resolve<IConfigReader>();
-				var connstringAsString = configReader.ConnectionString("Tenancy");
-				return TenantUnitOfWorkManager.CreateInstanceForThread(connstringAsString);
-			}).As<ITenantUnitOfWork>()
-			.As<ICurrentTenantSession>()
-			.SingleInstance();
-
 			builder.RegisterType<Rta>().SingleInstance().ApplyAspects();
 			builder.RegisterType<CacheInvalidator>().As<ICacheInvalidator>().SingleInstance();
 			builder.RegisterType<RtaProcessor>().SingleInstance();
@@ -143,7 +128,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<TenantAuthenticator>().As<IAuthenticator>().SingleInstance();
 			else
 				builder.RegisterType<ConfiguredKeyAuthenticator>().As<IAuthenticator>().SingleInstance();
-
+			
 			if (_config.Toggle(Toggles.RTA_MultiTenancy_32539))
 				builder.RegisterType<DataSourceFromAuthenticationKeyAspect>().As<IDataSourceFromAuthenticationKeyAspect>().SingleInstance();
 			else

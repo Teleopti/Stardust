@@ -218,7 +218,6 @@
     <Compile Include="MultiTenancy\Server\Queries\PersistPersonInfoTest.cs" />
     <Compile Include="MultiTenancy\Server\Queries\PersistTenantTest.cs" />
     <Compile Include="MultiTenancy\Client\TenantClientTestAttribute.cs" />
-    <Compile Include="MultiTenancy\TenantTestAttribute.cs" />
     <Compile Include="MultiTenancy\SessionExtension.cs" />
     <Compile Include="Persisters\Schedules\NoUnitOfWorkModifyNoConflictTest.cs" />
     <Compile Include="Rta\PublishRtaEventsToHangfireTest.cs" />

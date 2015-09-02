@@ -9,7 +9,7 @@ using Teleopti.Ccc.TestCommon.TestData;
 namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 {
 	[TestFixture]
-	[TenantTest]
+	[DatabaseTest]
 	public class FindTenantNameByRtaKeyTest
 	{
 		public ITenantUnitOfWork TenantUnitOfWork;

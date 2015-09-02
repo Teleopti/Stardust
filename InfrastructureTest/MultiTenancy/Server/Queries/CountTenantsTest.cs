@@ -13,7 +13,7 @@ using Teleopti.Ccc.TestCommon.TestData;
 namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 {
 	[TestFixture]
-	[TenantTest]
+	[DatabaseTest]
 	public class CountTenantsTest
 	{
 		public ITenantUnitOfWork TenantUnitOfWork;
