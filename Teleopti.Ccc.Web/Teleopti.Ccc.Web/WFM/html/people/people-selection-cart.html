@@ -74,16 +74,15 @@
 			</div>
 		</md-sidenav>
 		<md-progress-linear ng-show="vm.processing" md-mode="indeterminate"></md-progress-linear>
-		<div ng-if="vm.dataInitialized && !vm.processing && vm.updateResult.Success" ng-hide="vm.isConfirmCloseNoticeBar" class="alert-success notice-spacer">
+		<div ng-if="vm.dataInitialized && !vm.processing && vm.updateResult.Success" ng-show="vm.isConfirmCloseNoticeBar" class="alert-success notice-spacer">
 			<i class='mdi mdi-thumb-up'></i>
 			{{'SuccessfullyUpdatedPeopleCountColon'|translate}}{{vm.updateResult.SuccessCount}}
-			<span xng-if="vm.currentCommand.label=='AdjustSkill'">{{'YouMightNeedToChangeTheShiftBagAccordingly'|translate}}</span>
-			<i class='mdi mdi-close' ng-click="vm.closeNoticeBar()" style="float: right"></i>
+			<span ng-if="vm.currentCommand().label=='AdjustSkill'">{{'YouMightNeedToChangeTheShiftBagAccordingly'|translate}}</span>
 		</div>
-		<div ng-if="vm.dataInitialized && !vm.processing && !vm.updateResult.Success && vm.updateResult.ErrorMsg.length > 0" ng-hide="vm.isConfirmCloseNoticeBar" class="alert-error notice-spacer">
+		
+		<div ng-if="vm.dataInitialized && !vm.processing && !vm.updateResult.Success && vm.updateResult.ErrorMsg.length > 0" ng-show="vm.isConfirmCloseNoticeBar" class="alert-error notice-spacer">
 			<i class='mdi mdi-alert-octagon'></i>
 			{{'ProcessFailedErrorColon'|translate}}{{vm.updateResult.ErrorMsg}}
-			<i class='mdi mdi-close' ng-click="vm.closeNoticeBar()" style="float: right"></i>
 		</div>
 	</div>
 

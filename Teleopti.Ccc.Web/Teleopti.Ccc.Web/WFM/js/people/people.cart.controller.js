@@ -3,19 +3,19 @@
 (function () {
 	angular.module('wfm.people')
 		.controller('PeopleCartCtrl', [
-			'$q', '$translate', '$stateParams', 'uiGridConstants', 'People', 'Toggle', '$mdSidenav', '$mdUtil', '$state', PeopleCartController
+			'$q', '$translate', '$stateParams', 'uiGridConstants', 'People', 'Toggle', '$mdSidenav', '$mdUtil', '$state','$interval', PeopleCartController
 		]);
 
-	function PeopleCartController($q, $translate, $stateParams, uiGridConstants, peopleSvc, toggleSvc, $mdSidenav, $mdUtil, $state) {
+	function PeopleCartController($q, $translate, $stateParams, uiGridConstants, peopleSvc, toggleSvc, $mdSidenav, $mdUtil, $state, $interval) {
 		var vm = this;
 		vm.selectedPeopleIds = $stateParams.selectedPeopleIds;
-		vm.commandName = $stateParams.commandTag;
 		vm.processing = false;
 		vm.isConfirmCloseNoticeBar = false;
 		vm.selectedDate = new Date();
 		vm.toggleCalendar = function ($event) {
 			vm.status.opened = !vm.status.opened;
 		};
+		
 		vm.closeCalendar = function ($event) {
 			vm.status.opened = false;
 		};
@@ -38,6 +38,7 @@
 				label: "AdjustSkill",
 				icon: "mdi-package",
 				action: function () {
+					vm.commandName = "AdjustSkill";
 					vm.toggleSkillPanel();
 				},
 				active: function () {
@@ -52,6 +53,7 @@
 				label: "ChangeShiftBag",
 				icon: "mdi-package",
 				action: function () {
+					vm.commandName = "ChangeShiftBag";
 					vm.toggleShiftBagPanel();
 				},
 				active: function () {
@@ -79,10 +81,6 @@
 		vm.toggleSkillPanel = buildToggler('right-skill');
 
 		vm.toggleShiftBagPanel = buildToggler('right-shiftbag');
-
-		vm.closeNoticeBar = function () {
-			vm.isConfirmCloseNoticeBar = true;
-		}
 
 		vm.gridOptions = {
 			paginationPageSizes: [20, 60, 100],
@@ -121,6 +119,11 @@
 				function (result) {
 					vm.updateResult = result;
 					vm.processing = false;
+					vm.isConfirmCloseNoticeBar = true;
+					$interval(function () {
+						vm.isConfirmCloseNoticeBar = false;
+					}, 3000, 1);
+					
 				}
 			);
 		};
@@ -136,16 +139,20 @@
 			vm.isAdjustSkillEnabled = result.IsEnabled;
 		});
 
-		function initialize() {
+		vm.currentCommand = function() {
 			for (var i = 0; i < vm.commands.length; i++) {
 				var cmd = vm.commands[i];
-				if (cmd.label.toLowerCase() === $stateParams.commandTag.toLowerCase()) {
-					vm.currentCommand = cmd;
-					break;
+				if (cmd.label.toLowerCase() === vm.commandName.toLowerCase()) {
+					return cmd;
 				}
 			};
+		};
 
-			vm.gridOptions.columnDefs = vm.gridOptions.columnDefs.concat(vm.currentCommand.columns);
+
+		function initialize() {
+			vm.commandName = $stateParams.commandTag;
+
+			vm.gridOptions.columnDefs = vm.gridOptions.columnDefs.concat(vm.currentCommand().columns);
 
 			$q.all([promiseForAdjustSkillToggle, loadSkillPromise, fetchPeoplePromise, loadShiftBagPromise]).then(function () {
 				angular.forEach(vm.availableSkills, function (skill) {
@@ -187,7 +194,7 @@
 				});
 
 				vm.dataInitialized = true;
-				vm.currentCommand.action();
+				vm.currentCommand().action();
 			});
 		}
 
