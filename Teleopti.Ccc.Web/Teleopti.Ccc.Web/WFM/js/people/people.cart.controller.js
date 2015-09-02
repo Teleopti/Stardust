@@ -68,7 +68,10 @@
 		vm.back = function () {
 			$state.go('people', $stateParams);
 		}
-
+		vm.clearCart = function() {
+			vm.selectedPeopleIds = [];
+			$state.go('people', { selectedPeopleIds: [], currentKeyword: $stateParams.currentKeyword, paginationOptions: $stateParams.paginationOptions });
+		}
 		function buildToggler(navID) {
 			var debounceFn = $mdUtil.debounce(function () {
 				$mdSidenav(navID).toggle().then(function () { });

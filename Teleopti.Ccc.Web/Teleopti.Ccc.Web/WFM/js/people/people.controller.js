@@ -79,6 +79,7 @@ function PeopleController($scope, $filter, $state, $stateParams, $translate, i18
 	};
 
 	$scope.selectedPeopleList = $stateParams.selectedPeopleIds !== undefined ? $stateParams.selectedPeopleIds : [];
+	
 	$scope.gridOptions = {
 		enableFullRowSelection: false,
 		enableRowHeaderSelection: false,
@@ -204,6 +205,11 @@ function PeopleController($scope, $filter, $state, $stateParams, $translate, i18
 				$scope.gridApi.selection.selectRow($scope.gridOptions.data[i]);
 			}
 		}
+	}
+
+	$scope.clearCart = function () {
+		$scope.selectedPeopleList = [];
+		$scope.gridApi.selection.clearSelectedRows();
 	}
 
 	$scope.toggleRowSelectable = function () {

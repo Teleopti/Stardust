@@ -11,25 +11,26 @@
 	}
 </style>
 <div>
-	<div class="row people-cart">
-		<button class="wfm-btn wfm-btn-default" ng-click="vm.back()">{{ 'Back' | translate }} </button>
+
+	<div class="row people-cart" style="position: relative">
 		<h4 translate>Selected People</h4>
-	</div>
-
-	<div class="row">
-		<div class="col-sm-2">
-
+		<div class="col-sm-2" style="padding-left:0">
+			<p>
+				<button class="wfm-btn wfm-btn-default" style="padding-top: 5px;margin: 0 5px;padding-bottom: 5px;" ng-click="vm.back()">{{ 'Back' | translate }} </button>
+			</p>
+			
+		</div>
+		<div class="col-sm-3">
 			<p class="input-group">
-				<input type="text" class="form-control" datepicker-popup="{{vm.format}}" ng-model="vm.selectedDate" is-open="vm.status.opened" datepicker-options="vm.dateOptions" show-button-bar="false" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+				<input type="text" class="form-control" datepicker-popup="{{vm.format}}" ng-model="vm.selectedDate" is-open="vm.status.opened" datepicker-options="vm.dateOptions" show-button-bar="false" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close"/>
 				<span class="input-group-btn">
 					<button type="button" class="btn btn-default" ng-click="vm.toggleCalendar()"><i class="glyphicon glyphicon-calendar"></i></button>
 				</span>
 			</p>
+
 		</div>
-	</div>
-	<div ui-i18n="{{lang}}" ng-if="vm.dataInitialized" class="big-table-wrapper material-depth-1" style="position: relative">
-		<div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-auto-resize ui-grid-pagination xui-grid-resize-columns class="grid people-list"></div>
 		<div>
+			<button class="wfm-fab wfm-panel-delete material-depth-1" ng-click="vm.clearCart()"><i class="mdi mdi-delete"></i></button>
 			<nav class="wfm-panel action-panel" mfb-menu position="tr" effect="slidein-spring"
 				 active-icon="mdi-pencil" resting-icon="mdi-plus"
 				 ng-mouseenter=" hovered()" ng-mouseleave="hovered()"
@@ -39,6 +40,10 @@
 						label="{{cmd.label|translate}}" ng-repeat="cmd in vm.commands"></button>
 			</nav>
 		</div>
+	</div>
+	<div ui-i18n="{{lang}}" ng-if="vm.dataInitialized" class="big-table-wrapper material-depth-1" style="position: relative">
+		<div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-auto-resize ui-grid-pagination xui-grid-resize-columns class="grid people-list"></div>
+		
 		<md-sidenav class="md-sidenav-right md-sidenav-skill-panel md-whiteframe-z2" md-component-id="right-skill">
 			<div class="sidenav-header">{{'Skill'|translate}}</div>
 			<md-content layout-padding style="height: 550px">
@@ -79,7 +84,6 @@
 			{{'SuccessfullyUpdatedPeopleCountColon'|translate}}{{vm.updateResult.SuccessCount}}
 			<span ng-if="vm.currentCommand().label=='AdjustSkill'">{{'YouMightNeedToChangeTheShiftBagAccordingly'|translate}}</span>
 		</div>
-		
 		<div ng-if="vm.dataInitialized && !vm.processing && !vm.updateResult.Success && vm.updateResult.ErrorMsg.length > 0" ng-show="vm.isConfirmCloseNoticeBar" class="alert-error notice-spacer">
 			<i class='mdi mdi-alert-octagon'></i>
 			{{'ProcessFailedErrorColon'|translate}}{{vm.updateResult.ErrorMsg}}

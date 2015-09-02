@@ -117,9 +117,9 @@
 }
 
 .wfm-panel {
-	position: absolute;
-	top: -9rem;
-	right: 0rem;
+    position: absolute;
+	top: -1rem;
+    right: 0rem;
 }
 
 .modal-box .modalbg {
@@ -168,8 +168,8 @@
 .selection-cart-indicator {
 	position: relative;
 	float: right;
-	top: -62rem;
-	right: -19rem;
+	top: -3rem;
+    right: 2rem;
 	z-index: 100;
 	background-color: #EE8F7D;
 	color: #FFF;
@@ -189,3 +189,9 @@
 	animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
 	font-weight: bold;
 }
+.wfm-panel-delete{
+    position: absolute;
+    top: 1.5rem;
+    right: 9rem;
+}
+    
