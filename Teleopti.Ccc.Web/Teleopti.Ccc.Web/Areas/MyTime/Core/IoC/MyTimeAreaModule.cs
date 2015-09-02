@@ -99,10 +99,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<SettingsViewModelFactory>().As<ISettingsViewModelFactory>().SingleInstance();
 			builder.RegisterType<CalendarLinkSettingsPersisterAndProvider>().As<ISettingsPersisterAndProvider<CalendarLinkSettings>>().SingleInstance();
 
-			_config.Args().CacheBuilder
+			_config.Args().Cache(b => b
 				.For<NameFormatSettingsPersisterAndProvider>()
 				.CacheMethod(x => x.Get())
-				.As<ISettingsPersisterAndProvider<NameFormatSettings>>();
+				.As<ISettingsPersisterAndProvider<NameFormatSettings>>()
+				);
 			builder.RegisterMbCacheComponent<NameFormatSettingsPersisterAndProvider, ISettingsPersisterAndProvider<NameFormatSettings>>().SingleInstance();
 			builder.RegisterType<NameFormatSettingsPersisterAndProvider>().As<ISettingsPersisterAndProvider<NameFormatSettings>>().SingleInstance();
 

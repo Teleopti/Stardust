@@ -44,19 +44,20 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterMbCacheComponent<WorkShiftWorkTime, IWorkShiftWorkTime>()
 					.SingleInstance();
 			}
-			_configuration.Args().CacheBuilder
+			_configuration.Args().Cache(b => b
 				.For<RuleSetProjectionService>("RSPS")
-					.CacheMethod(m => m.ProjectionCollection(null,null))
-					.PerInstance()
-					.As<IRuleSetProjectionService>()
+				.CacheMethod(m => m.ProjectionCollection(null, null))
+				.PerInstance()
+				.As<IRuleSetProjectionService>()
 				.For<RuleSetProjectionEntityService>("RSPES")
-					.CacheMethod(m => m.ProjectionCollection(null, null))
-					.PerInstance()
-					.As<IRuleSetProjectionEntityService>()
+				.CacheMethod(m => m.ProjectionCollection(null, null))
+				.PerInstance()
+				.As<IRuleSetProjectionEntityService>()
 				.For<WorkShiftWorkTime>("WSWT")
-					.CacheMethod(m => m.CalculateMinMax(null, null))
-					.PerInstance()
-					.As<IWorkShiftWorkTime>();
+				.CacheMethod(m => m.CalculateMinMax(null, null))
+				.PerInstance()
+				.As<IWorkShiftWorkTime>()
+				);
 		}
 	}
 }

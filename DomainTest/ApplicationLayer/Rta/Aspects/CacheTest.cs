@@ -1,10 +1,11 @@
 using Autofac;
+using Autofac.Core;
+using MbCache.Core;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -40,12 +41,25 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Aspects
 			{
 				builder.RegisterType<OuterService>().SingleInstance().ApplyAspects();
 
-				_configuration.Args().CacheBuilder
-					.For<CachedServiceImpl>()
-					.CacheMethod(x => x.GetDataSourceName())
-					.As<CachedServiceImpl>();
-				builder.RegisterConcreteMbCacheComponent<CachedServiceImpl>()
-					.SingleInstance();
+				builder.RegisterType<CachedServiceImpl>().SingleInstance();
+				_configuration.Args().Cache(
+					b => b
+						.For<CachedServiceImpl>()
+						.CacheMethod(x => x.GetDataSourceName())
+						.As<CachedServiceImpl>()
+					);
+			}
+
+			protected override void AttachToComponentRegistration(IComponentRegistry componentRegistry, IComponentRegistration registration)
+			{
+				registration.Activating += (s, e) =>
+				{
+					if (e.Instance is CachedServiceImpl)
+					{
+						var typed = e.Instance as CachedServiceImpl;
+						e.ReplaceInstance(e.Context.Resolve<IMbCacheFactory>().ToCachedComponent(typed));
+					}
+				};
 			}
 		}
 

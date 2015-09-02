@@ -21,13 +21,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IRetrievePersonNameForPerson>()
 				.SingleInstance();
 
-			_configuration.Args().CacheBuilder
+			_configuration.Args().Cache(b => b
 				.For<TeleoptiPrincipalInternalsFactory>()
 				.CacheMethod(m => m.MakeOrganisationMembership(null))
 				.CacheMethod(m => m.MakeRegionalFromPerson(null))
 				.CacheMethod(m => m.NameForPerson(null))
 				.AsImplemented()
-				;
+				);
 		}
 	}
 }

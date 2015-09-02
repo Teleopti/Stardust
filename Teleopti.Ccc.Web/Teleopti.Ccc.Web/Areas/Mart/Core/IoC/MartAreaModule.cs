@@ -20,13 +20,14 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Core.IoC
 			builder.RegisterType<QueueStatRepository>().As<IQueueStatRepository>().SingleInstance();
 			builder.RegisterType<DatabaseConnectionHandler>().As<IDatabaseConnectionHandler>().SingleInstance();
 
-			_configuration.Args().CacheBuilder
+			_configuration.Args().Cache(b => b
 				.For<QueueStatRepository>()
 				.CacheMethod(x => x.GetLogObject(1, ""))
-				.CacheMethod(x => x.GetQueueId("","",0,""))
+				.CacheMethod(x => x.GetQueueId("", "", 0, ""))
 				.CacheMethod(x => x.GetDateId(new DateTime(), ""))
 				.CacheMethod(x => x.GetIntervalLength(""))
-				.As<IQueueStatRepository>();
+				.As<IQueueStatRepository>()
+				);
 			builder.RegisterMbCacheComponent<QueueStatRepository, IQueueStatRepository>();
 		}
 	}

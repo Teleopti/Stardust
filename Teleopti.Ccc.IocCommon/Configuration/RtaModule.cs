@@ -49,20 +49,22 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<ConnectionStrings>().As<IConnectionStrings>();
 
-			_config.Args().CacheBuilder
+			_config.Args().Cache(b => b
 				.For<AlarmMappingLoader>()
 				.CacheMethod(x => x.Load())
-				.AsImplemented();
-			_config.Args().CacheBuilder
+				.AsImplemented()
+				);
+			_config.Args().Cache(b => b
 				.For<StateMappingLoader>()
 				.CacheMethod(x => x.Load())
-				.AsImplemented();
+				.AsImplemented()
+				);
 			builder.RegisterConcreteMbCacheComponent<AlarmMappingLoader>().As<IAlarmMappingLoader>().ApplyAspects();
 			builder.RegisterConcreteMbCacheComponent<StateMappingLoader>().As<IStateMappingLoader>().ApplyAspects();
 
 			builder.RegisterType<StateCodeAdder>().As<IStateCodeAdder>().SingleInstance().ApplyAspects();
 
-			_config.Args().CacheBuilder
+			_config.Args().Cache(b => b
 				.For<DatabaseLoader>()
 				.CacheMethod(x => x.GetCurrentSchedule(Guid.NewGuid()))
 				.CacheMethod(x => x.Datasources())
@@ -70,7 +72,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.CacheMethod(x => x.PersonOrganizationData())
 				.CacheMethod(x => x.TenantNameByKey(null))
 				.CacheMethod(x => x.AuthenticateKey(null))
-				.As<IDatabaseLoader>();
+				.As<IDatabaseLoader>()
+				);
 			builder.RegisterMbCacheComponent<DatabaseLoader, IDatabaseLoader>();
 			builder.RegisterType<DatabaseReader>().As<IDatabaseReader>().SingleInstance();
 

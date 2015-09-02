@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Caching;
 using Autofac;
@@ -26,18 +28,11 @@ namespace Teleopti.Ccc.IocCommon
 		public IContainer SharedContainer { get; set; }
 		public IDataSourceConfigurationSetter DataSourceConfigurationSetter { get; set; }
 
-		private CacheBuilder _cacheModule;
-
-		public CacheBuilder CacheBuilder
+		public bool ClearCache { get; set; }
+		public List<Action<CacheBuilder>> CacheRegistrations = new List<Action<CacheBuilder>>(); 
+		public void Cache(Action<CacheBuilder> builder)
 		{
-			get
-			{
-				if (_cacheModule != null)
-					return _cacheModule;
-				_cacheModule = new CacheBuilder(new LinFuProxyFactory())
-					.SetCacheKey(new TeleoptiCacheKey());
-				return _cacheModule;
-			}
+			CacheRegistrations.Add(builder);
 		}
 
 		public IocArgs(IConfigReader configReader)
