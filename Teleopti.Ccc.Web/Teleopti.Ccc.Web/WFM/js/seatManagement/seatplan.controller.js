@@ -120,8 +120,6 @@
 		};
 
 		vm.showReport = function (period) {
-			console.log('SeatPlan Controller Show Report');
-
 			vm.isReportOpened = !vm.isReportOpened;
 			vm.reportPeriod = period;
 		};
