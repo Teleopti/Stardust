@@ -3,12 +3,11 @@
 
 	angular
 		 .module('adminApp')
-		 .controller('createController', createController, []);
+		 .controller('createController', createController, ['tokenHeaderService']);
 
-	function createController($http) {
+	function createController($http, tokenHeaderService) {
 		var vm = this;
 		$("#loading").hide();
-		var tokenKey = 'accessToken';
 
 		vm.TenantMessage = "Enter a new name for the Tenant";
 		vm.TenantOk = false;
@@ -36,18 +35,7 @@
 		vm.Success = false;
 		vm.Message = '';
 		vm.Creating = '';
-
-		vm.token = sessionStorage.getItem(tokenKey);
-		if (vm.token === null) {
-			return;
-		}
-
-		function getHeaders() {
-			return {
-				headers: { 'Authorization': 'Bearer ' + vm.token }
-			};
-		}
-
+		
 		vm.BuAndUserOk = function () {
 			return vm.FirstUserOk === true && vm.BusinessUnitOk === true;
 		}
@@ -65,7 +53,7 @@
 
 		vm.CheckTenantName = function () {
 			vm.Message = '';
-			$http.post('./api/Import/IsNewTenant', '"' + vm.Tenant + '"', getHeaders())
+			$http.post('./api/Import/IsNewTenant', '"' + vm.Tenant + '"', tokenHeaderService.getHeaders())
 				.success(function (data) {
 					vm.TenantMessage = data.Message;
 					vm.TenantOk = data.Success;
@@ -85,7 +73,7 @@
 				CreateDbPassword: vm.CreateDbPassword
 			}
 
-			$http.post('./CheckCreateDb', model, getHeaders())
+			$http.post('./CheckCreateDb', model, tokenHeaderService.getHeaders())
 			.success(function (data) {
 				vm.SqlUserOk = data.Success,
 				vm.SqlUserOkMessage = data.Message;
@@ -115,7 +103,7 @@
 				AppPassword: vm.AppPassword
 			}
 
-			$http.post('./CheckLogin', model, getHeaders())
+			$http.post('./CheckLogin', model, tokenHeaderService.getHeaders())
 			.success(function (data) {
 				vm.UserOk = data.Success,
 				vm.UserOkMessage = data.Message;
@@ -141,7 +129,7 @@
 				BusinessUnit: vm.BusinessUnit
 			}
 
-			$http.post('./CreateTenant', model, getHeaders())
+			$http.post('./CreateTenant', model, tokenHeaderService.getHeaders())
 			.success(function (data) {
 				vm.Success = data.Success,
 				vm.Message = data.Message;
@@ -159,7 +147,7 @@
 				FirstUserPassword: vm.FirstUserPassword
 			}
 
-			$http.post('./CheckFirstUser', model, getHeaders())
+			$http.post('./CheckFirstUser', model, tokenHeaderService.getHeaders())
 			.success(function (data) {
 				vm.FirstUserOk = data.Success,
 				vm.FirstUserOkMessage = data.Message;

@@ -3,11 +3,10 @@
 
 	angular
 		 .module('adminApp')
-		 .controller('addSuperUserController', addSuperUserController, []);
+		 .controller('addSuperUserController', addSuperUserController, ['tokenHeaderService']);
 
-	function addSuperUserController($http, $routeParams) {
+	function addSuperUserController($http, $routeParams, tokenHeaderService) {
 		var vm = this;
-		var tokenKey = 'accessToken';
 		vm.Tenant = $routeParams.tenant;
 		vm.FirstName = "";
 		vm.LastName = "";
@@ -18,24 +17,13 @@
 		vm.NewUserOk = false;
 		vm.NewUserOkMessage = "";
 
-		vm.token = sessionStorage.getItem(tokenKey);
-		if (vm.token === null) {
-			return;
-		}
-
-		function getHeaders() {
-			return {
-				headers: { 'Authorization': 'Bearer ' + vm.token }
-			};
-		}
-
 		vm.CheckUser = function () {
 			var model = {
 				FirstUser: vm.UserName,
 				FirstUserPassword: vm.Password
 			}
 
-			$http.post('./CheckFirstUser', model, getHeaders())
+			$http.post('./CheckFirstUser', model, tokenHeaderService.getHeaders())
 			.success(function (data) {
 				vm.NewUserOk = data.Success,
 				vm.NewUserOkMessage = data.Message;

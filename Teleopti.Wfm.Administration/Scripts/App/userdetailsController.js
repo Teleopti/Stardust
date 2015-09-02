@@ -4,11 +4,11 @@
 	var userKey = 'userToken';
 	angular
 		 .module('adminApp')
-		 .controller('userdetailsController', userdetailsController, []);
+		 .controller('userdetailsController', userdetailsController, ['tokenHeaderService']);
 
-	function userdetailsController($http, $routeParams) {
+	function userdetailsController($http, $routeParams, tokenHeaderService) {
 		var vm = this;
-		var tokenKey = 'accessToken';
+
 		vm.UserId = $routeParams.id;
 		vm.Name = "";
 		vm.OriginalName = "";
@@ -18,19 +18,9 @@
 		vm.NameMessage = "The name can not be empty";
 		vm.EmailMessage = "The email does not look to be correct";
 		vm.Message = "";
-		vm.token = sessionStorage.getItem(tokenKey);
-		if (vm.token === null) {
-			return;
-		}
-
-		function getHeaders() {
-			return {
-				headers: { 'Authorization': 'Bearer ' + vm.token }
-			};
-		}
 
 		vm.LoadUser = function () {
-			$http.post('./User', vm.UserId, getHeaders())
+			$http.post('./User', vm.UserId, tokenHeaderService.getHeaders())
 				.success(function (data) {
 					vm.UserId = data.Id;
 					vm.Name = data.Name;
@@ -78,7 +68,7 @@
 				Id: vm.UserId,
 				Name: vm.Name,
 				Email: vm.Email
-			}, getHeaders())
+			}, tokenHeaderService.getHeaders())
 				.success(function (data) {
 					if (!data.Success) {
 						vm.Message = data.Message;

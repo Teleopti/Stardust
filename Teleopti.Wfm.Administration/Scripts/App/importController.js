@@ -3,11 +3,11 @@
 
 	angular
 		 .module('adminApp')
-		 .controller('importController', importController, []);
+		 .controller('importController', importController, ['tokenHeaderService']);
 
-	function importController($http) {
+	function importController($http, tokenHeaderService) {
 		var vm = this;
-		var tokenKey = 'accessToken';
+
 		vm.Tenant = "";
 		vm.Server = "";
 		vm.UserName = "";
@@ -25,19 +25,8 @@
 		vm.ImportAppVersion = null;
 		vm.AppVersionOk = null;
 
-		vm.token = sessionStorage.getItem(tokenKey);
-		if (vm.token === null) {
-			return;
-		}
-
-		function getHeaders() {
-			return {
-				headers: { 'Authorization': 'Bearer ' + vm.token }
-			};
-		}
-
 		vm.CheckTenantName = function () {
-			$http.post('./api/Import/IsNewTenant', '"' + vm.Tenant + '"', getHeaders())
+			$http.post('./api/Import/IsNewTenant', '"' + vm.Tenant + '"', tokenHeaderService.getHeaders())
 				.success(function (data) {
 					vm.TenantMessage = data.Message;
 					vm.TenantOk = data.Success;
@@ -55,7 +44,7 @@
 				Password: vm.Password,
 				Database: vm.AppDatabase,
 				DbType: 1
-			}, getHeaders())
+			}, tokenHeaderService.getHeaders())
 				.success(function (data) {
 					vm.AppDbOk = data.Exists;
 					vm.AppDbCheckMessage = data.Message;
@@ -74,7 +63,7 @@
 				Password: vm.Password,
 				Database: vm.AnalyticsDatabase,
 				DbType: 2
-			}, getHeaders())
+			}, tokenHeaderService.getHeaders())
 				.success(function (data) {
 					vm.AnalDbOk = data.Exists;
 					vm.AnalDbCheckMessage = data.Message;
@@ -89,7 +78,7 @@
 				UserName: vm.UserName,
 				Password: vm.Password,
 				AppDatabase: vm.AppDatabase
-			}, getHeaders())
+			}, tokenHeaderService.getHeaders())
 				.success(function (data) {
 					vm.HeadVersion = data.HeadVersion;
 					vm.ImportAppVersion = data.ImportAppVersion;
@@ -109,7 +98,7 @@
 				Password: vm.Password,
 				AppDatabase: vm.AppDatabase,
 				Tenant: vm.Tenant
-			}, getHeaders())
+			}, tokenHeaderService.getHeaders())
 				.success(function (data) {
 					vm.Conflicts = data.ConflictingUserModels;
 					vm.NumberOfConflicting = data.NumberOfConflicting;
@@ -128,7 +117,7 @@
 				Password: vm.Password,
 				AnalyticsDatabase: vm.AnalyticsDatabase,
 				AppDatabase: vm.AppDatabase,
-			}, getHeaders())
+			}, tokenHeaderService.getHeaders())
 				.success(function (data) {
 					vm.Success = data.Success;
 					vm.Message = data.Message;

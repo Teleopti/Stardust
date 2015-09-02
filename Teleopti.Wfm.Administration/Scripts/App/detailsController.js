@@ -3,11 +3,11 @@
 
 	angular
 		 .module('adminApp')
-		 .controller('detailsController', detailsController, []);
+		 .controller('detailsController', detailsController, ['tokenHeaderService']);
 
-	function detailsController($http, $routeParams) {
+	function detailsController($http, $routeParams, tokenHeaderService) {
 		var vm = this;
-		var tokenKey = 'accessToken';
+
 		vm.Tenant = $routeParams.tenant;
 		vm.OriginalName = $routeParams.tenant;
 		vm.Server = "";
@@ -25,19 +25,9 @@
 		vm.CommandTimeout = 0;
 		vm.Message = "";
 		vm.AllowDelete = false;
-		vm.token = sessionStorage.getItem(tokenKey);
-		if (vm.token === null) {
-			return;
-		}
-
-		function getHeaders() {
-			return {
-				headers: { 'Authorization': 'Bearer ' + vm.token }
-			};
-		}
-
+		
 		vm.LoadTenant = function () {
-			$http.post('./GetOneTenant', '"' + vm.Tenant + '"', getHeaders())
+			$http.post('./GetOneTenant', '"' + vm.Tenant + '"', tokenHeaderService.getHeaders())
 				.success(function (data) {
 					vm.TenantMessage = data.Message;
 					vm.TenantOk = data.Success;
@@ -61,7 +51,7 @@
 				NewName: vm.Tenant,
 				AppDatabase: vm.AppDatabase,
 				AnalyticsDatabase: vm.AnalyticsDatabase
-			}, getHeaders())
+			}, tokenHeaderService.getHeaders())
 				.success(function (data) {
 					vm.TenantMessage = data.Message;
 					vm.TenantOk = data.Success;
@@ -71,7 +61,7 @@
 		}
 
 		vm.CheckDelete = function () {
-			$http.post('./TenantCanBeDeleted', '"' + vm.OriginalName + '"', getHeaders())
+			$http.post('./TenantCanBeDeleted', '"' + vm.OriginalName + '"', tokenHeaderService.getHeaders())
 				.success(function (data) {
 					vm.AllowDelete = data.Success;
 				}).error(function (xhr, ajaxOptions, thrownError) {
@@ -80,7 +70,7 @@
 		}
 
 		vm.Delete = function () {
-			$http.post('./DeleteTenant', '"' + vm.OriginalName + '"', getHeaders())
+			$http.post('./DeleteTenant', '"' + vm.OriginalName + '"', tokenHeaderService.getHeaders())
 				.success(function (data) {
 					if (data.Success === false) {
 						vm.Message = data.Message;
@@ -101,7 +91,7 @@
 				Password: vm.Password,
 				Database: vm.AppDatabase,
 				DbType: 1
-			}, getHeaders())
+			}, tokenHeaderService.getHeaders())
 				.success(function (data) {
 					vm.AppDbOk = data.Exists;
 					vm.AppDbCheckMessage = data.Message;
@@ -122,7 +112,7 @@
 				Password: vm.Password,
 				Database: vm.AnalyticsDatabase,
 				DbType: 2
-			}, getHeaders())
+			}, tokenHeaderService.getHeaders())
 				.success(function (data) {
 					vm.AnalDbOk = data.Exists;
 					vm.AnalDbCheckMessage = data.Message;
@@ -154,7 +144,7 @@
 				UserName: vm.UserName,
 				Password: vm.Password,
 				CommandTimeout: vm.CommandTimeout
-			}, getHeaders())
+			}, tokenHeaderService.getHeaders())
 				.success(function (data) {
 					if (data.Success === false) {
 						vm.Message = data.Message;

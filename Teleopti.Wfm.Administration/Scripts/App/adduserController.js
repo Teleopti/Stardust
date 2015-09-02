@@ -3,12 +3,11 @@
 
 	angular
 		 .module('adminApp')
-		 .controller('adduserController', adduserController, []);
+		 .controller('adduserController', adduserController, ['tokenHeaderService']);
 
-	function adduserController($http) {
+	function adduserController($http, tokenHeaderService) {
 		var vm = this;
-		var tokenKey = 'accessToken';
-
+		
 		vm.Name = "";
 		vm.Email = "";
 		vm.Password = "";
@@ -20,17 +19,7 @@
 		vm.PasswordMessage = "The password can not be empty";
 
 		vm.ErrorMessage = "";
-		vm.token = sessionStorage.getItem(tokenKey);
-		if (vm.token === null) {
-			return;
-		}
-
-		function getHeaders() {
-			return {
-				headers: { 'Authorization': 'Bearer ' + vm.token }
-			};
-		}
-
+		
 		vm.CheckName = function () {
 			if(vm.Name === '')
 			{
@@ -74,7 +63,7 @@
 				Email: vm.Email,
 				Password: vm.Password,
 				ConfirmPassword: vm.ConfirmPassword
-			}, getHeaders())
+			}, tokenHeaderService.getHeaders())
 				.success(function (data) {
 					if (!data.Success) {
 						vm.ErrorMessage = data.Message;

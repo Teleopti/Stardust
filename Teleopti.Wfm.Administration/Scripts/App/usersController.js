@@ -3,25 +3,13 @@
 
 	angular
 		 .module('adminApp')
-		 .controller('usersController', usersController, []);
+		 .controller('usersController', usersController, ['tokenHeaderService']);
 
-	function usersController($http) {
+	function usersController($http, tokenHeaderService) {
 		var vm = this;
-		var tokenKey = 'accessToken';
-
-		vm.token = sessionStorage.getItem(tokenKey);
-		if (vm.token === null) {
-			return;
-		}
-
-		function getHeaders() {
-			return {
-				headers: { 'Authorization': 'Bearer ' + vm.token }
-			};
-		}
 
 		vm.LoadUsers = function () {
-			$http.get('./Users', getHeaders())
+			$http.get('./Users', tokenHeaderService.getHeaders())
 				.success(function (data) {
 					vm.users = data;
 					

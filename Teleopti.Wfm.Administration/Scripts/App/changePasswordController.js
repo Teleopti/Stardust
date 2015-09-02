@@ -3,11 +3,10 @@
 
 	angular
 		 .module('adminApp')
-		 .controller('changePasswordController', changePasswordController, []);
+		 .controller('changePasswordController', changePasswordController, ['tokenHeaderService']);
 
-	function changePasswordController($http, $routeParams) {
-		var vm = this;
-		var tokenKey = 'accessToken';
+	function changePasswordController($http, $routeParams, tokenHeaderService) {
+		var vm = this;;
 		vm.UserId = $routeParams.id;
 		vm.OldPassword = "";
 		vm.Password = "";
@@ -18,17 +17,7 @@
 		vm.PasswordMessage = "The password can not be empty";
 
 		vm.ErrorMessage = "";
-		vm.token = sessionStorage.getItem(tokenKey);
-		if (vm.token === null) {
-			return;
-		}
-
-		function getHeaders() {
-			return {
-				headers: { 'Authorization': 'Bearer ' + vm.token }
-			};
-		}
-
+		
 		vm.CheckOld = function () {
 			if (vm.Name === '') {
 				vm.OldPasswordMessage = "The old password can not be empty";
@@ -61,7 +50,7 @@
 				OldPassword: vm.OldPassword,
 				NewPassword: vm.Password,
 				ConfirmNewPassword: vm.ConfirmPassword
-			}, getHeaders())
+			}, tokenHeaderService.getHeaders())
 				.success(function (data) {
 					if (!data.Success) {
 						vm.ErrorMessage = data.Message;
