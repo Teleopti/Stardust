@@ -55,10 +55,6 @@
 
 					</card-header>
 					<card-body>
-						<!--<button class="wfm-fab info period-report-btn" ng-click="seatplan.isReportOpened = !seatplan.isReportOpened; seatplan.reportPeriod = period">
-					<i class="mdi mdi-file-document"></i>
-					<md-tooltip>{{'GenerateReport' | translate}}</md-tooltip>
-				</button>-->
 						<seat-plan-init start={{period.StartDate}} end="{{period.EndDate}}" on-seat-plan-complete="seatplan.onSeatPlanComplete()" show-report="seatplan.showReport(period)"></seat-plan-init>
 					</card-body>
 				</wfm-card>

@@ -13420,8 +13420,11 @@ Reduce the complexity to use these shifts.</value>
     <value>View Seat Bookings</value>
     <comment>Allows the user to view seat bookings for a day from the seat plan form</comment>
   </data>
-   <data name="YouMightNeedToChangeTheShiftBagAccordingly" xml:space="preserve">
+  <data name="YouMightNeedToChangeTheShiftBagAccordingly" xml:space="preserve">
     <value>You might need to change the shift bag accordingly.</value>
     <comment>alert to change shift bag after skill updated</comment>
-</data>
+  </data>
+  <data name="ViewReport" xml:space="preserve">
+    <value>View Report</value>
+  </data>
 </root>

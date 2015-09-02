@@ -29113,6 +29113,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to View Report.
+        /// </summary>
+        public static string ViewReport {
+            get {
+                return ResourceManager.GetString("ViewReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to View Reports.
         /// </summary>
         public static string ViewReports {
