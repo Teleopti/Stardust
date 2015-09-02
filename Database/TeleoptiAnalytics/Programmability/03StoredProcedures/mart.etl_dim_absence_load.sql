@@ -139,7 +139,7 @@ LEFT JOIN
 WHERE 
 	NOT EXISTS (SELECT absence_id FROM mart.dim_absence d WHERE d.absence_code = s.absence_code and d.datasource_id=1)
 
-
+/*
 ---------------------------------------------------------------------------
 -- insert from stg_schedule_shif absences not known in Absences(deleted)
 -- Kolla om denna verlkigen kan inträffa! OM(?) ETL-koden hämtar alla (även deletade) absences, borde denna kunna tas bort.
@@ -182,6 +182,6 @@ FROM
 WHERE 
 	NOT EXISTS (SELECT absence_id FROM mart.dim_absence d WHERE d.absence_code = s.absence_code and d.datasource_id=1)
 
-
+*/
 
 GO
