@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 {
-	public static class  ProjectionChangedEventShiftExtension
+	public static class ProjectionChangedEventShiftExtension
 	{
 
 		public static IEnumerable<ProjectionChangedEventLayer> FilterLayers(this ProjectionChangedEventShift theShift,

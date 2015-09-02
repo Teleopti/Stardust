@@ -329,7 +329,7 @@
     <Compile Include="ApplicationLayer\Rta\Service\StateStreamSynchronizer.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\TeamOutOfAdherenceReadModel.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\TeamOutOfAdherenceReadModelUpdater.cs" />
-    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ ProjectionChangedEventShiftExtension.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ProjectionChangedEventShiftExtension.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsFactScheduleDate.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsFactScheduleDayCount.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsFactScheduleDayCountHandler.cs" />
