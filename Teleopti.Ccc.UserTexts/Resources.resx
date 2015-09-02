@@ -13416,8 +13416,12 @@ Reduce the complexity to use these shifts.</value>
   <data name="StartDateAndEndDateMustBeSet" xml:space="preserve">
     <value>Must set the start and end dates.</value>
   </data>
+  <data name="ViewSeatBookings" xml:space="preserve">
+    <value>View Seat Bookings</value>
+    <comment>Allows the user to view seat bookings for a day from the seat plan form</comment>
+  </data>
    <data name="YouMightNeedToChangeTheShiftBagAccordingly" xml:space="preserve">
     <value>You might need to change the shift bag accordingly.</value>
     <comment>alert to change shift bag after skill updated</comment>
-  </data>
+</data>
 </root>
