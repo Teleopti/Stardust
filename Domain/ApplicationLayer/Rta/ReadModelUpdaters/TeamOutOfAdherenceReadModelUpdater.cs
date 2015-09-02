@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		}
 
 		[ReadModelUnitOfWork]
-		public void Handle(PersonNeutralAdherenceEvent @event)
+		public virtual void Handle(PersonNeutralAdherenceEvent @event)
 		{
 			handleEvent(@event.TeamId, @event.SiteId, model =>
 				updatePerson(model, @event.PersonId, @event.Timestamp, person =>
