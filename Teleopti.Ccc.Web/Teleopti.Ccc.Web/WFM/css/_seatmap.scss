@@ -56,17 +56,18 @@
 
 .location-breadcrumb{
 	width:100%;
+	background:#ffffff;
 	position: absolute;
-	top:41px;
-	left:4px;
+	top:40px;
+	left:0;
 	height:30px;
 	z-index:1;
+	padding-top:8px;
 }
 
 .location-breadcrumb-edit-mode{
 	position:relative;
 	top:0px;
-	margin-bottom:1px;
 }
 
 .breadcrumb-inverse{
@@ -80,7 +81,6 @@
 }
 
 .breadcrumb-inverse span {
-	line-height: 30px;
 	margin-left : 5px; 
 }
 

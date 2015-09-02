@@ -31,7 +31,7 @@
 				<span class="divider" ng-if="!$last">></span>
 				<span ng-if="$last">{{breadcrumb.Name}}</span>
 			</span>
-			<md-divider ng-if="vm.showEditor"></md-divider>
+			<md-divider ng-if="!vm.isLoading"></md-divider>
 		</div>
 
 		<div class="seatmap-canvas">
