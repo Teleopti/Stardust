@@ -25,8 +25,9 @@
            'Today',
            'Start',
 		   'ManuallyPlanned',
-		   'Closed',
-		   'Overstaff'
+		   'ClosedDay',
+		   'Overstaff',
+		   'AddBacklog'
         ];
         var self = this;
 

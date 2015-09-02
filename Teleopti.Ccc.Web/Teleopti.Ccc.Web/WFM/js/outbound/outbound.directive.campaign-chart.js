@@ -34,8 +34,8 @@
 
 			$scope.extraInfos = [
 				"M: " + $scope.dictionary['ManuallyPlanned'],
-				"C: " + $scope.dictionary['Closed'],
-				"B: " + $scope.dictionary['Backlog']
+				"C: " + $scope.dictionary['ClosedDay'],
+				"B: " + $scope.dictionary['AddBacklog']
 			];
 
 			function graphSelectionChanged() {

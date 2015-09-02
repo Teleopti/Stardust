@@ -727,7 +727,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to add backlog.
+        ///   Looks up a localized string similar to Manual Backlog.
         /// </summary>
         public static string AddBacklog {
             get {
@@ -5125,6 +5125,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Closed {
             get {
                 return ResourceManager.GetString("Closed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Closed Day.
+        /// </summary>
+        public static string ClosedDay {
+            get {
+                return ResourceManager.GetString("ClosedDay", resourceCulture);
             }
         }
         

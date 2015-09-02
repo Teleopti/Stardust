@@ -13335,7 +13335,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>invalid user msg in People-import users</comment>
   </data>
   <data name="AddBacklog" xml:space="preserve">
-    <value>add backlog</value>
+    <value>Manual Backlog</value>
     <comment>for campaigns to add backlog</comment>
   </data>
   <data name="OutboundOverstaffRule" xml:space="preserve">
@@ -13423,6 +13423,10 @@ Reduce the complexity to use these shifts.</value>
   <data name="YouMightNeedToChangeTheShiftBagAccordingly" xml:space="preserve">
     <value>You might need to change the shift bag accordingly.</value>
     <comment>alert to change shift bag after skill updated</comment>
+  </data>
+  <data name="ClosedDay" xml:space="preserve">
+    <value>Closed Day</value>
+    <comment>Day is not open for outbound campaign</comment>
   </data>
   <data name="ViewReport" xml:space="preserve">
     <value>View Report</value>

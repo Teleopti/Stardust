@@ -94,6 +94,83 @@
 		};
 	}
 
+
+	c3.chart.internal.fn.updateGrid = function (duration) {
+		var $$ = this, main = $$.main, config = $$.config,
+			xgridLine, ygridLine, yv;
+
+		// hide if arc type
+		$$.grid.style('visibility', $$.hasArcType() ? 'hidden' : 'visible');
+
+		main.select('line.' + CLASS.xgridFocus).style("visibility", "hidden");
+		if (config.grid_x_show) {
+			$$.updateXGrid();
+		}
+		$$.xgridLines = main.select('.' + CLASS.xgridLines).selectAll('.' + CLASS.xgridLine)
+			.data(config.grid_x_lines);
+		// enter
+		xgridLine = $$.xgridLines.enter().append('g')
+			.attr("class", function (d) { return CLASS.xgridLine + (d['class'] ? ' ' + d['class'] : ''); });
+		
+		xgridLine.append('line')
+			.style("opacity", 0);
+		var xgridLinePositioned = xgridLine.append('text')
+			.attr("text-anchor", $$.gridTextAnchor)
+			.attr("transform", config.axis_rotated ? "" : "rotate(-90)")
+			.attr('dx', $$.gridTextDx)
+			.attr('dy', -5)
+			.style("opacity", 0);
+
+		xgridLinePositioned.filter(function(d) {
+			return d.side && d.side == 'right';
+		}).attr('dy', 10);
+
+		// udpate
+		// done in d3.transition() of the end of this function
+		// exit
+		$$.xgridLines.exit().transition().duration(duration)
+			.style("opacity", 0)
+			.remove();
+
+		// Y-Grid
+		if (config.grid_y_show) {
+			$$.updateYGrid();
+		}
+		$$.ygridLines = main.select('.' + CLASS.ygridLines).selectAll('.' + CLASS.ygridLine)
+			.data(config.grid_y_lines);
+		// enter
+		ygridLine = $$.ygridLines.enter().append('g')
+			.attr("class", function (d) { return CLASS.ygridLine + (d['class'] ? ' ' + d['class'] : ''); });
+		ygridLine.append('line')
+			.style("opacity", 0);
+		ygridLine.append('text')
+			.attr("text-anchor", $$.gridTextAnchor)
+			.attr("transform", config.axis_rotated ? "rotate(-90)" : "")
+			.attr('dx', $$.gridTextDx)
+			.attr('dy', -5)
+			.style("opacity", 0);
+		// update
+		yv = $$.yv.bind($$);
+		$$.ygridLines.select('line')
+		  .transition().duration(duration)
+			.attr("x1", config.axis_rotated ? yv : 0)
+			.attr("x2", config.axis_rotated ? yv : $$.width)
+			.attr("y1", config.axis_rotated ? 0 : yv)
+			.attr("y2", config.axis_rotated ? $$.height : yv)
+			.style("opacity", 1);
+		$$.ygridLines.select('text')
+		  .transition().duration(duration)
+			.attr("x", config.axis_rotated ? $$.xGridTextX.bind($$) : $$.yGridTextX.bind($$))
+			.attr("y", yv)
+			.text(function (d) { return d.text; })
+			.style("opacity", 1);
+		// exit
+		$$.ygridLines.exit().transition().duration(duration)
+			.style("opacity", 0)
+			.remove();
+	};
+
+
 	c3.chart.internal.fn.drag = function (mouse) {
 		var $$ = this, config = $$.config, main = $$.main, d3 = $$.d3;
 		var sx, sy, mx, my, minX, maxX, minY, maxY;
