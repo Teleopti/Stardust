@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
                 ExpectLoadContractSchedule(unitOfWork);
                 ExpectLoadRuleSetBag(unitOfWork);
                 ExpectLoadPerson(unitOfWork);
-                ExpectLoadGroupPage(unitOfWork);
+                //ExpectLoadGroupPage(unitOfWork);
                 ExpectLoadSkill(unitOfWork);
             
             }
@@ -68,17 +68,17 @@ namespace Teleopti.Ccc.WinCodeTest.Common
                 Assert.AreEqual(1, _target.PartTimePercentageCollection.Count());
                 Assert.AreEqual(1, _target.PersonCollection.Count());
                 Assert.AreEqual(1, _target.RuleSetBagCollection.Count());
-                Assert.AreEqual(1, _target.UserDefinedGroupings.Count());
+                Assert.AreEqual(0, _target.UserDefinedGroupings.Count());
                 Assert.AreEqual(1, _target.SkillCollection.Count());
             }
         }
 
-        private void ExpectLoadGroupPage(IUnitOfWork unitOfWork)
-        {
-            IGroupPageRepository groupPageRepository = _mocks.StrictMock<IGroupPageRepository>();
-            Expect.Call(_repositoryFactory.CreateGroupPageRepository(unitOfWork)).Return(groupPageRepository);
-            Expect.Call(groupPageRepository.LoadAllGroupPageWhenPersonCollectionReAssociated()).Return(new List<IGroupPage> { null });
-        }
+        //private void ExpectLoadGroupPage(IUnitOfWork unitOfWork)
+        //{
+        //    IGroupPageRepository groupPageRepository = _mocks.StrictMock<IGroupPageRepository>();
+        //    Expect.Call(_repositoryFactory.CreateGroupPageRepository(unitOfWork)).Return(groupPageRepository);
+        //    Expect.Call(groupPageRepository.LoadAllGroupPageWhenPersonCollectionReAssociated()).Return(new List<IGroupPage> { null });
+        //}
 
         private void ExpectLoadPerson(IUnitOfWork unitOfWork)
         {
