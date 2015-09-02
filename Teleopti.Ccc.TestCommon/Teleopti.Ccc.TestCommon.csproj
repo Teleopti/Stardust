@@ -169,7 +169,6 @@
     <Compile Include="FakeData\PersonScheduleDayReadModelFactory.cs" />
     <Compile Include="FakeEventPublisher.cs" />
     <Compile Include="FakeHangfireEventClient.cs" />
-    <Compile Include="FakeMbCacheFactory.cs" />
     <Compile Include="FakeMessageBrokerUnitOfWorkAspect.cs" />
     <Compile Include="FakeMessageSender.cs" />
     <Compile Include="FakeReadModelUnitOfWorkAspect.cs" />
