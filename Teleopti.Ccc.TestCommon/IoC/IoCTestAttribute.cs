@@ -117,7 +117,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			var configReader = Config();
 			var args = new IocArgs(configReader)
 			{
-				ClearCache = true,
 				ThrottleMessages = false// the throttler shouldnt be started in ioc common at all, but...
 			};
 			var configuration = new IocConfiguration(args, Toggles());

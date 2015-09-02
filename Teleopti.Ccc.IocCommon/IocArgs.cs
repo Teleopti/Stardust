@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.IocCommon
 		public bool MessageBrokerListeningEnabled { get; set; }
 		public IContainer SharedContainer { get; set; }
 		public IDataSourceConfigurationSetter DataSourceConfigurationSetter { get; set; }
-		public bool ClearCache { get; set; }
 
 		private CacheBuilder _cacheModule;
 
@@ -35,13 +34,6 @@ namespace Teleopti.Ccc.IocCommon
 			{
 				if (_cacheModule != null)
 					return _cacheModule;
-				if (ClearCache)
-				{
-					MemoryCache.Default
-						.Select(x => x.Key)
-						.ToList()
-						.ForEach(x => MemoryCache.Default.Remove(x));
-				}
 				_cacheModule = new CacheBuilder(new LinFuProxyFactory())
 					.SetCacheKey(new TeleoptiCacheKey());
 				return _cacheModule;
@@ -61,7 +53,6 @@ namespace Teleopti.Ccc.IocCommon
 			PublishEventsToServiceBus = configReader.ReadValue("PublishEventsToServiceBus", true);
 			DataSourceConfigurationSetter = Infrastructure.NHibernateConfiguration.DataSourceConfigurationSetter.ForWeb();
 			EnableNewResourceCalculation = configReader.ReadValue("EnableNewResourceCalculation", false);
-			ClearCache = false;
 		}
 
 	}
