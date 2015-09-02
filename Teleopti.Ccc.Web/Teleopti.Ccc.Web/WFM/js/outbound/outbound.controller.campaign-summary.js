@@ -120,6 +120,10 @@
 		$scope.isManualProductionPlanInvalid = function (campaign) {
 			return !(angular.isDefined(campaign.manualPlanInput) && campaign.manualPlanInput != null && campaign.manualPlanInput >= 0);
 		}
+
+		$scope.isManualBacklogInvalid = function (campaign) {
+			return !(angular.isDefined(campaign.backlogInput) && campaign.backlogInput != null && campaign.backlogInput >= 0);
+		}
 		
 		$scope.switchManualPlan = function (campaign) {
 			campaign.manualPlanswitch = !campaign.manualPlanswitch;

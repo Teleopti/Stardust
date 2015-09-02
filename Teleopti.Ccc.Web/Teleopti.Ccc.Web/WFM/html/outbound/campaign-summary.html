@@ -56,8 +56,8 @@
 				                </div>
 								<div class="input-container relative" ng-show="campaign.backlogSwitch">
 									<input type="text" placeholder="backlog..." ng-model="campaign.backlogInput" range-validate range-min="0" integer-only="false" style="width: 202px;" />
-									<i class="mdi mdi-information-outline pink" style="position: absolute; left: 195px; top: 9px;" ng-show=""></i>
-									<button class="wfm-btn btn-sm wfm-btn-invis-primary pink p-5-10 m-r-0" ng-click="addBacklog(campaign)" ng-disabled="" ng-class="" translate>Save</button>
+									<i class="mdi mdi-information-outline pink" style="position: absolute; left: 195px; top: 9px;" ng-show="isManualBacklogInvalid(campaign)"></i>
+									<button class="wfm-btn btn-sm wfm-btn-invis-primary pink p-5-10 m-r-0" ng-click="addBacklog(campaign)" ng-disabled="isManualBacklogInvalid(campaign)" ng-class="{'wfm-btn-invis-disabled': isManualBacklogInvalid(campaign)}" translate>Save</button>
 									<button class="wfm-btn btn-sm wfm-btn-invis-primary pink p-5-10 m-l-0" ng-click="removeBacklog(campaign)" translate>Reset</button>
 								</div>
 			                </div>
