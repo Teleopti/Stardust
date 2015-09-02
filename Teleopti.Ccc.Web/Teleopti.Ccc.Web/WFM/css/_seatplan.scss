@@ -65,11 +65,16 @@
 #seatplan{
 	.wfm-card-selected{
 		position:relative;
-	}	
+	}
+	.wfm-card-content	{
+		cursor:default;			
+	}
 }
 
 .planning-period-button-bar{
 	float: right;
+	margin-top:15px;
+	padding:0px 10px;
 }
 
 .seatplan-report{

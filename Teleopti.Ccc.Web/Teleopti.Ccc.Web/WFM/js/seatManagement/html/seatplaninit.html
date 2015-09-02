@@ -1,4 +1,4 @@
-﻿<div>
+﻿<div class="planning-period-content">
 	<div class="row">
 		<div class="col-sm-12 col-md-6">
 			<div class="wfm-datepicker-wrap" ng-show="false">
@@ -12,7 +12,6 @@
 		<div class="col-sm-12 col-md-6">
 			<div class="wfm-datepicker-wrap" ng-show="false">
 				<div class="sub-header">
-					
 					{{ 'To' | translate }} <span class="endDate">{{vm.period.endDate | date : format}}</span>
 				</div>
 				<datepicker class="wfm-datepicker" ng-model="vm.period.endDate" min-date="vm.period.startDate" show-weeks="true"></datepicker>
@@ -28,7 +27,7 @@
 			<team-picker selected-teams="vm.selectedTeams"></team-picker>
 		</div>
 	</div>
-	
+
 	<div class="planning-period-button-bar">
 		<button class="wfm-btn wfm-btn-invis-default next-step" ng-click="vm.showReport(vm.period)" ng-disabled="vm.processingSeatPlan">{{ 'ViewReport' | translate }}</button>
 		<button class="wfm-btn wfm-btn-invis-primary next-step" ng-click="vm.addSeatPlan()" ng-disabled="vm.processingSeatPlan">{{ 'PlanSeats' | translate }}</button>
