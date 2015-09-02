@@ -107,7 +107,7 @@ BEGIN  --Single datasource_id
 	SELECT
 		queue_agg_id,
 		queue_id
-	FROM mart.dim_queue
+	FROM mart.dim_queue 
 	WHERE datasource_id = @datasource_id
 
 	/*Optimize query against agg*/
@@ -115,7 +115,7 @@ BEGIN  --Single datasource_id
 	SELECT
 		acd_login_agg_id,
 		acd_login_id
-	FROM mart.dim_acd_login
+	FROM mart.dim_acd_login 
 	WHERE datasource_id = @datasource_id
 
 
@@ -205,31 +205,42 @@ BEGIN  --Single datasource_id
 		RETURN 0
 	END
 
-	--TODO!!
-	--If Agg is way ahead of Mart limit fetch to 10 days.
---	IF (@source_date_id_utc-@target_date_id_utc > 10)
---	BEGIN
---		SELECT 'Agg is way ahead of Mart limit fetch to 10 days. Not implemented yet. Run ETL.Nighty to catch up'
---		RETURN 0
---	END
+	--If Agg is way ahead of Mart limit fetch to 5 days.
+	IF (@source_date_id_utc-@target_date_id_utc > 5)
+	BEGIN
+		SELECT 'Agg is way ahead of Mart limit fetch to 5 days'
+		
+		SET @source_date_local = DATEADD(DAY,5,@target_date_local)
+		SET @source_interval_local = (select max(interval_id) from mart.dim_interval)
 
+		SELECT	@source_interval_id_utc = interval_id, 
+				@source_date_id_utc = date_id
+				from mart.bridge_time_zone 
+				where time_zone_id=@time_zone_id and 
+				local_date_id= @target_date_id_utc +5 
+				and local_interval_id= @source_interval_local
+	END
+	--select @target_date_id_utc, @source_date_id_utc, @target_date_local,@source_date_local, @source_interval_id_utc, @source_interval_local
+	
 	SET @start_date_id	=	(SELECT date_id FROM dim_date WHERE @target_date_local = date_date)
 	SET @end_date_id	=	(SELECT date_id FROM dim_date WHERE @source_date_local = date_date)
+
 
 	--prepare dates and intervals for this time_zone
 	--note: Get date and intervals grouped so that we do not get duplicates at DST clock shifts
 	INSERT #bridge_time_zone(date_id,time_zone_id,local_date_id,local_interval_id)
 	SELECT	min(date_id),	time_zone_id, 	local_date_id,	local_interval_id
-	FROM mart.bridge_time_zone 
+	FROM mart.bridge_time_zone WITH(NOLOCK)
 	WHERE time_zone_id	= @time_zone_id	
 	AND local_date_id BETWEEN @start_date_id AND @end_date_id
 	GROUP BY time_zone_id, local_date_id,local_interval_id
+	OPTION (RECOMPILE)
 
 	UPDATE temp
 	SET interval_id= bt.interval_id
 	FROM 
 	(SELECT date_id,local_date_id,local_interval_id,interval_id= MIN(interval_id)
-	FROM mart.bridge_time_zone
+	FROM mart.bridge_time_zone WITH(NOLOCK)
 	WHERE time_zone_id=@time_zone_id
 	GROUP BY date_id,local_date_id,local_interval_id)bt
 	INNER JOIN #bridge_time_zone temp
@@ -240,22 +251,38 @@ BEGIN  --Single datasource_id
 	-------------
 	-- Delete rows last known date_id and interval_id
 	-------------
+	--select @source_date_id_utc, @source_interval_id_utc,@target_date_id_utc,@target_interval_id_utc
+	
 	SET NOCOUNT OFF
+
+	IF @source_date_id_utc>@target_date_id_utc
+	BEGIN
+		--middle dates
+		DELETE f
+		FROM mart.fact_agent_queue f
+		WHERE f.date_id between @target_date_id_utc + 1 AND @source_date_id_utc-1
+		AND f.datasource_id = @datasource_id
+		--AND EXISTS (SELECT 1 FROM #agg_queue_ids q WHERE q.queue_id = f.queue_id)
+		OPTION (RECOMPILE)
+	
+		--maxdate
+		DELETE f
+		FROM mart.fact_agent_queue f
+		WHERE f.date_id=@source_date_id_utc
+		AND f.interval_id <= @source_interval_id_utc
+		AND f.datasource_id = @datasource_id
+		--AND EXISTS (SELECT 1 FROM #agg_queue_ids q WHERE q.queue_id = f.queue_id)
+	END
+	
 	--today
 	DELETE f
 	FROM mart.fact_agent_queue f
-	WHERE EXISTS (SELECT 1 FROM #agg_queue_ids q WHERE q.queue_id = f.queue_id)
-	AND	f.date_id=@target_date_id_utc
+	WHERE f.date_id=@target_date_id_utc
 	AND f.interval_id >= @target_interval_id_utc
+	--AND EXISTS (SELECT 1 FROM #agg_queue_ids q WHERE q.queue_id = f.queue_id)
+	AND f.datasource_id = @datasource_id
 	
 	
-	--from today and forward
-	DELETE f
-	FROM mart.fact_agent_queue f
-	WHERE
-		EXISTS (select 1 from #agg_queue_ids q where q.queue_id = f.queue_id)
-		AND f.date_id>@target_date_id_utc
-
 	--------------
 	-- Insert rows
 	--------------
@@ -297,7 +324,8 @@ BEGIN  --Single datasource_id
 		+ '
 		WHERE (date_from = '''+ CAST(@target_date_local as nvarchar(20))+'''
 		AND interval >= '''+ CAST(@target_interval_local as nvarchar(20))+'''
-		) OR (date_from >'''+ CAST(@target_date_local as nvarchar(20))+'''
+		) OR (date_from BETWEEN '''+ CAST(DATEADD(D,1,@target_date_local) as nvarchar(20))+'''
+		 AND '''+ CAST(@source_date_local as nvarchar(20))+'''
 		)
 		) stg
 	INNER JOIN
@@ -316,14 +344,15 @@ BEGIN  --Single datasource_id
 		#bridge_time_zone bridge
 		ON
 			d.date_id		= bridge.local_date_id		AND
-			stg.interval	= bridge.local_interval_id'
+			stg.interval	= bridge.local_interval_id 
+	 '
 
 	--Exec
 	EXEC sp_executesql @sqlstring
 	SET NOCOUNT ON
+	
 	--finally
 	--update with last logged interval
-	
 	UPDATE [mart].[etl_job_intraday_settings]
 	SET
 		target_date		= @source_date_local,

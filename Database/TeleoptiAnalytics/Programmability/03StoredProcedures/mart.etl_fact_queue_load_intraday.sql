@@ -181,13 +181,20 @@ ELSE  --Single datasource_id
 		RETURN 0
 	END
 
-	--TODO!!
-	--If Agg is way ahead of Mart limit fetch to 10 days.
---	IF (@source_date_id_utc-@target_date_id_utc > 10)
---	BEGIN
---		SELECT 'Agg is way ahead of Mart limit fetch to 10 days. Not implemented yet. Run ETL.Nighty to catch up'
---		RETURN 0
---	END
+--If Agg is way ahead of Mart limit fetch to 5 days.
+	IF (@source_date_id_utc-@target_date_id_utc > 5)
+	BEGIN
+		SELECT 'Agg is way ahead of Mart limit fetch to 5 days'
+		SET @source_date_local = DATEADD(DAY,5,@target_date_local)
+		SET @source_interval_local = (select max(interval_id) from mart.dim_interval)
+
+		SELECT	@source_interval_id_utc = interval_id, 
+				@source_date_id_utc = date_id
+				from mart.bridge_time_zone 
+				where time_zone_id=@time_zone_id and 
+				local_date_id=@target_date_id_utc +5 and 
+				local_interval_id= @source_interval_local
+	END
 
 	SET @start_date_id	=	(SELECT date_id FROM dim_date WHERE @target_date_local = date_date)
 	SET @end_date_id	=	(SELECT date_id FROM dim_date WHERE @source_date_local = date_date)
@@ -207,6 +214,7 @@ ELSE  --Single datasource_id
 	WHERE time_zone_id	= @time_zone_id	
 	AND local_date_id BETWEEN @start_date_id AND @end_date_id
 	GROUP BY time_zone_id, local_date_id,local_interval_id
+	OPTION(RECOMPILE)
 
 	UPDATE temp
 	SET interval_id= bt.interval_id
@@ -228,18 +236,33 @@ ELSE  --Single datasource_id
 	-- Delete rows last known date_id and interval_id
 	-------------
 	SET NOCOUNT OFF
-	delete f
-	from mart.fact_queue f
-	where
-		exists (select 1 from #agg_queue_ids q where q.mart_queue_id = f.queue_id)
-		and f.date_id=@target_date_id_utc
-		and f.interval_id >= @target_interval_id_utc
+	IF @source_date_id_utc>@target_date_id_utc
+	BEGIN
+		--MIDDLE DATES
+		DELETE f
+		FROM mart.fact_queue f
+		WHERE f.date_id between @target_date_id_utc + 1 AND @source_date_id_utc-1
+		AND EXISTS (select 1 from #agg_queue_ids q where q.mart_queue_id = f.queue_id)
+		OPTION(RECOMPILE)
 
-	delete f
-	from mart.fact_queue f
-	where
-		EXISTS (select 1 from #agg_queue_ids q where q.mart_queue_id = f.queue_id)
-		AND f.date_id>@target_date_id_utc
+		--maxdate
+		DELETE f
+		FROM mart.fact_queue f
+		WHERE EXISTS (select 1 from #agg_queue_ids q where q.mart_queue_id = f.queue_id)
+		AND f.date_id=@source_date_id_utc
+		AND f.interval_id <= @source_interval_id_utc
+	 END
+
+	--TODAY
+	DELETE f
+	FROM mart.fact_queue f
+	WHERE EXISTS (select 1 from #agg_queue_ids q where q.mart_queue_id = f.queue_id)
+	AND f.date_id=@target_date_id_utc
+	AND f.interval_id >= @target_interval_id_utc
+
+	
+
+	--	AND f.date_id>@target_date_id_utc
 
 	-------------
 	-- Insert rows
@@ -302,7 +325,8 @@ ELSE  --Single datasource_id
 		+ '
 		WHERE (date_from = '''+ CAST(@target_date_local as nvarchar(20))+'''
 		AND interval >= '''+ CAST(@target_interval_local as nvarchar(20))+'''
-		) OR (date_from >'''+ CAST(@target_date_local as nvarchar(20))+'''
+		) OR (date_from BETWEEN '''+ CAST(DATEADD(D,1,@target_date_local) as nvarchar(20))+'''
+		 AND '''+ CAST(@source_date_local as nvarchar(20))+'''
 		)
 		AND EXISTS (SELECT 1 FROM #agg_queue_ids tmp WHERE agg.queue=tmp.queue_agg_id)
 		) stg

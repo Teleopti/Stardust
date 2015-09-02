@@ -194,13 +194,20 @@ BEGIN  --Single datasource_id
 		RETURN 0
 	END
 
-	--TODO!!
-	--If Agg is way ahead of Mart limit fetch to 10 days.
---	IF (@source_date_id_utc-@target_date_id_utc > 10)
---	BEGIN
---		SELECT 'Agg is way ahead of Mart limit fetch to 10 days. Not implemented yet. Run ETL.Nighty to catch up'
---		RETURN 0
---	END
+	--If Agg is way ahead of Mart limit fetch to 3 days.
+	IF (@source_date_id_utc-@target_date_id_utc > 3)
+	BEGIN
+		SELECT 'Agg is way ahead of Mart limit fetch to 3 days'
+		SET @source_date_local = DATEADD(DAY,3,@target_date_local)
+		SET @source_interval_local = (select max(interval_id) from mart.dim_interval)
+
+		SELECT	@source_interval_id_utc = interval_id, 
+				@source_date_id_utc = date_id
+				from mart.bridge_time_zone 
+				where time_zone_id=@time_zone_id and 
+				local_date_id=@target_date_id_utc +3  and 
+				local_interval_id= @source_interval_local
+	END
 
 	SET @start_date_id	=	(SELECT date_id FROM dim_date WHERE @target_date_local = date_date)
 	SET @end_date_id	=	(SELECT date_id FROM dim_date WHERE @source_date_local = date_date)
@@ -209,16 +216,17 @@ BEGIN  --Single datasource_id
 	--note: Get date and intervals grouped so that we do not get duplicates at DST clock shifts
 	INSERT #bridge_time_zone(date_id,time_zone_id,local_date_id,local_interval_id)
 	SELECT	min(date_id),	time_zone_id, 	local_date_id,	local_interval_id
-	FROM mart.bridge_time_zone 
+	FROM mart.bridge_time_zone WITH (NOLOCK)
 	WHERE time_zone_id	= @time_zone_id	
 	AND local_date_id BETWEEN @start_date_id AND @end_date_id
 	GROUP BY time_zone_id, local_date_id,local_interval_id
+	OPTION(RECOMPILE)
 
 	UPDATE temp
 	SET interval_id= bt.interval_id
 	FROM 
 	(SELECT date_id,local_date_id,local_interval_id,interval_id= MIN(interval_id)
-	FROM mart.bridge_time_zone
+	FROM mart.bridge_time_zone WITH (NOLOCK)
 	WHERE time_zone_id=@time_zone_id
 	GROUP BY date_id,local_date_id,local_interval_id)bt
 	INNER JOIN #bridge_time_zone temp
@@ -230,20 +238,31 @@ BEGIN  --Single datasource_id
 	-- Delete rows last known date_id and interval_id
 	-------------
 	SET NOCOUNT OFF
+
+	IF @source_date_id_utc>@target_date_id_utc
+	BEGIN
+		--middle dates
+		DELETE f
+		FROM mart.fact_agent f
+		WHERE f.date_id between @target_date_id_utc + 1 AND @source_date_id_utc-1
+		and datasource_id = @datasource_id 
+		OPTION(RECOMPILE)
+
+		--maxdate
+		DELETE f
+		FROM mart.fact_agent f
+		WHERE f.date_id=@source_date_id_utc
+		AND f.interval_id <= @source_interval_id_utc
+		and datasource_id = @datasource_id 
+
+	END
+		
 	--today
 	DELETE f
 	FROM mart.fact_agent f
 	WHERE f.date_id=@target_date_id_utc
 	AND f.interval_id >= @target_interval_id_utc
-	AND EXISTS(SELECT 1 FROM #agg_acdlogin_ids a WHERE f.acd_login_id = a.mart_acd_login_id)
-	
-
-	--from today and forward
-	DELETE f
-	FROM mart.fact_agent f
-	INNER JOIN #agg_acdlogin_ids a
-		ON f.acd_login_id = a.mart_acd_login_id
-	WHERE f.date_id>@target_date_id_utc
+	and datasource_id = @datasource_id 
 
 	--------------
 	-- Insert rows
@@ -294,7 +313,8 @@ BEGIN  --Single datasource_id
 		END
 		+ ' WHERE (date_from = '''+ CAST(@target_date_local as nvarchar(20))+'''
 	AND interval >= '''+ CAST(@target_interval_local as nvarchar(20))+'''
-	) OR (date_from > '''+ CAST(@target_date_local as nvarchar(20))+'''
+	) OR (date_from BETWEEN '''+ CAST(DATEADD(D,1,@target_date_local) as nvarchar(20))+'''
+		 AND '''+ CAST(@source_date_local as nvarchar(20))+'''
 	)
 	) stg	
 	INNER JOIN
