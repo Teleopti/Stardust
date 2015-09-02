@@ -102,6 +102,33 @@ describe('OutboundSummaryCtrl', function () {
 		expect(campaign.Status).toEqual(1);
 		expect(test.scope.phaseStatistics.PlannedWarning).toEqual(2);
 	});*/
+	it('add backlog should work', function () {
+		var test = setUpTarget();
+		var campaign = {
+			Id: 1,
+			selectedDates: [new Date('2015-07-19'), new Date('2015-07-20')],
+			backlog: {}
+		};
+
+		outboundService.prepareCampaignSummary({
+			Id: 1,
+			Status: 1
+		});
+
+		outboundService.setPhaseStatistics({ PlannedWarning: 2 });
+
+		outboundChartService.setCampaignVisualization(1, {
+			Dates: [new Date('2015-07-19'), new Date('2015-07-20')],
+			Plans: [3, 3],
+			isManualBacklog: [true, false]
+		});
+
+		test.scope.addBacklog(campaign);
+
+		expect(campaign.graphData).toBeDefined();
+		expect(campaign.Status).toEqual(1);
+		expect(test.scope.phaseStatistics.PlannedWarning).toEqual(2);
+	});
 
 	it('remove manual plan should work', function() {
 		var test = setUpTarget(); 
@@ -131,6 +158,34 @@ describe('OutboundSummaryCtrl', function () {
 		expect(test.scope.phaseStatistics.PlannedWarning).toEqual(2);
 	});
 	
+	it('remove backlog should work', function () {
+		var test = setUpTarget();
+		var campaign = {
+			Id: 1,
+			selectedDates: [new Date('2015-07-19'), new Date('2015-07-20')],
+			backlog: {}
+		};
+
+		outboundService.prepareCampaignSummary({
+			Id: 1,
+			Status: 1
+		});
+
+		outboundChartService.setCampaignVisualization(1, {
+			Dates: [new Date('2015-07-19'), new Date('2015-07-20')],
+			Plans: [3, 3],
+			ManualPlan: [true, false]
+		});
+
+		outboundService.setPhaseStatistics({ PlannedWarning: 2 });
+
+		test.scope.removeBacklog(campaign);
+
+		expect(campaign.graphData).toBeDefined();
+		expect(campaign.Status).toEqual(1);
+		expect(test.scope.phaseStatistics.PlannedWarning).toEqual(2);
+	});
+
 	function setUpTarget() {
 		var scope = $rootScope.$new();
 		var target = $controller('OutboundSummaryCtrl', {
@@ -199,15 +254,27 @@ describe('OutboundSummaryCtrl', function () {
 
 		this.makeGraph = function () { return { graph: 'c3' } };
 
+		this.updateBacklog = function (campaign, cb) {
+			if (angular.isDefined(campaignViss[campaign.CampaignId])) {
+				cb(campaignViss[campaign.CampaignId]);
+			}
+		};
+
 		this.updateManualPlan = function (campaign, cb) {			
 			if (angular.isDefined(campaignViss[campaign.CampaignId])) {
-				cb(campaignViss[campaign.CampaignId], campaignViss[campaign.CampaignId].ManualPlan);							
+				cb(campaignViss[campaign.CampaignId]);							
 			}			
 		};
 
 		this.removeManualPlan = function (campaign, cb) {
 			if (angular.isDefined(campaignViss[campaign.CampaignId])) {
-				cb(campaignViss[campaign.CampaignId], campaignViss[campaign.CampaignId].ManualPlan);
+				cb(campaignViss[campaign.CampaignId]);
+			}
+		};
+
+		this.removeActualBacklog = function (campaign, cb) {
+			if (angular.isDefined(campaignViss[campaign.CampaignId])) {
+				cb(campaignViss[campaign.CampaignId]);
 			}
 		};
 	}
