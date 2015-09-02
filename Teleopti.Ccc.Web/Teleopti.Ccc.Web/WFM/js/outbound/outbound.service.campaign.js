@@ -101,7 +101,14 @@
         }
 
         function normalizeCampaign(campaign) {
-            var campaign = angular.copy(campaign);
+				if (campaign.StartDate) {
+        			campaign.StartDate.Date = new Date(Date.UTC(campaign.StartDate.Date.getFullYear(), campaign.StartDate.Date.getMonth(), campaign.StartDate.Date.getDate(), 0, 0, 0));
+				}
+				if (campaign.EndDate) {
+					campaign.EndDate.Date = new Date(Date.UTC(campaign.EndDate.Date.getFullYear(), campaign.EndDate.Date.getMonth(), campaign.EndDate.Date.getDate(), 0, 0, 0));
+				}
+
+	        var campaign = angular.copy(campaign);
 
             var formattedWorkingHours = [];
 
@@ -143,7 +150,7 @@
             if (campaign.StartDate) {
             	var dStart = new Date(campaign.StartDate.Date);
             	dStart.setTime(dStart.getTime() + dStart.getTimezoneOffset() * 60 * 1000);
-	            campaign.StartDate.Date = dStart;
+            	campaign.StartDate.Date = dStart;
             }
             if (campaign.EndDate) {
             	var dEnd = new Date(campaign.EndDate.Date);
