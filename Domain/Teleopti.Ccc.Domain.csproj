@@ -453,7 +453,6 @@
     <Compile Include="Common\IDataSourceScope.cs" />
     <Compile Include="Common\PersonAccountUpdater.cs" />
     <Compile Include="Common\PersonAccountUpdaterDummy.cs" />
-    <Compile Include="Common\CurrentBusinessUnit.cs" />
     <Compile Include="Common\CurrentDataSource.cs" />
     <Compile Include="Common\CurrentIdentity.cs" />
     <Compile Include="Common\EntityExtensions.cs" />

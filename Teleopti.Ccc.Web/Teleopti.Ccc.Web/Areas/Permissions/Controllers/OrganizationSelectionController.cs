@@ -5,8 +5,6 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
@@ -17,31 +15,20 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 	{
 		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 		private readonly ISiteRepository _siteRepository;
-		private readonly ICurrentHttpContext _currentHttpContext;
-		private readonly IBusinessUnitRepository _businessUnitRepository;
 		private const string SiteType = "Site";
 		private const string TeamType = "Team";
 		private const string BusinessUnitType = "BusinessUnit";
 
-		public OrganizationSelectionController(ICurrentBusinessUnit currentBusinessUnit, ISiteRepository siteRepository, ICurrentHttpContext currentHttpContext, IBusinessUnitRepository businessUnitRepository)
+		public OrganizationSelectionController(ICurrentBusinessUnit currentBusinessUnit, ISiteRepository siteRepository)
 		{
 			_currentBusinessUnit = currentBusinessUnit;
 			_siteRepository = siteRepository;
-			_currentHttpContext = currentHttpContext;
-			_businessUnitRepository = businessUnitRepository;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Permissions/OrganizationSelection")]
 		public virtual object GetOrganizationSelection()
 		{
-			IBusinessUnit businessUnit = null;
-			if (_currentHttpContext != null)
-			{
-				var buid = UnitOfWorkAspect.BusinessUnitIdForRequest(_currentHttpContext);
-				if (buid.HasValue) businessUnit = _businessUnitRepository.Load(buid.Value);
-			}
-
-			if (businessUnit == null) businessUnit = _currentBusinessUnit.Current();
+			var businessUnit = _currentBusinessUnit.Current();
 			return
 				new
 				{

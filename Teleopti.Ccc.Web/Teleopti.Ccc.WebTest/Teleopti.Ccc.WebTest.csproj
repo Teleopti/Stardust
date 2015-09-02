@@ -473,7 +473,6 @@
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDayFeedbackViewModelMappingTest.cs" />
     <Compile Include="Core\RequestContext\CurrentDataSourceTest.cs" />
     <Compile Include="Core\RequestContext\CultureProviderTest.cs" />
-    <Compile Include="Core\RequestContext\CurrentBusinessUnitProviderTest.cs" />
     <Compile Include="Core\RequestContext\SessionSpecificDataStringSerializerTest.cs" />
     <Compile Include="Core\Requests\DataProvider\AbsenceRequestPersisterTest.cs" />
     <Compile Include="Core\Requests\Mapping\AbsenceRequestFormMappingTest.cs" />

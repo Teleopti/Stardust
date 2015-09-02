@@ -222,6 +222,7 @@
     <Compile Include="Foundation\CouldNotCreateTransactionException.cs" />
     <Compile Include="ApplicationLayer\IJsonEventDeserializer.cs" />
     <Compile Include="ApplicationLayer\IJsonEventSerializer.cs" />
+    <Compile Include="Foundation\CurrentBusinessUnit.cs" />
     <Compile Include="Foundation\ITogglesActive.cs" />
     <Compile Include="Foundation\JsonExtensions.cs" />
     <Compile Include="Foundation\NewtonsoftJsonSerializer.cs" />
