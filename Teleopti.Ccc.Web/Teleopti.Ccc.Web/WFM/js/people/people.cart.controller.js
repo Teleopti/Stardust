@@ -38,8 +38,7 @@
 				label: "AdjustSkill",
 				icon: "mdi-package",
 				action: function () {
-					vm.commandName = "AdjustSkill";
-					vm.toggleSkillPanel();
+					vm.toggleSkillPanel("AdjustSkill")();
 				},
 				active: function () {
 					return vm.isAdjustSkillEnabled;
@@ -53,8 +52,7 @@
 				label: "ChangeShiftBag",
 				icon: "mdi-package",
 				action: function () {
-					vm.commandName = "ChangeShiftBag";
-					vm.toggleShiftBagPanel();
+					vm.toggleShiftBagPanel("ChangeShiftBag")();
 				},
 				active: function () {
 					return vm.isAdjustSkillEnabled;
@@ -78,9 +76,15 @@
 			return debounceFn;
 		}
 
-		vm.toggleSkillPanel = buildToggler('right-skill');
+		vm.toggleSkillPanel = function (commandName) {
+			vm.commandName = commandName;
+			return buildToggler('right-skill');
+		}
 
-		vm.toggleShiftBagPanel = buildToggler('right-shiftbag');
+		vm.toggleShiftBagPanel = function(commandName) {
+			vm.commandName = commandName;
+			return buildToggler('right-shiftbag');
+		}
 
 		vm.gridOptions = {
 			paginationPageSizes: [20, 60, 100],
