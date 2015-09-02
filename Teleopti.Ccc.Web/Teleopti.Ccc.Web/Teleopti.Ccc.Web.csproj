@@ -1179,6 +1179,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="WFM\vendor\ui-bootstrap-custom-build\ui-bootstrap-0.13.0-csp.css" />
+    <Content Include="WFM\vendor\ui-bootstrap-custom-build\ui-bootstrap-0.13.3.js" />
+    <Content Include="WFM\vendor\ui-bootstrap-custom-build\ui-bootstrap-0.13.3.min.js" />
+    <Content Include="WFM\vendor\ui-bootstrap-custom-build\ui-bootstrap-tpls-0.13.3.js" />
+    <Content Include="WFM\vendor\ui-bootstrap-custom-build\ui-bootstrap-tpls-0.13.3.min.js" />
     <EmbeddedResource Include="tzdb2015e.nzd" />
     <Content Include=".node\Gruntfile.js" />
     <Content Include="Areas\Anywhere\Content\feature.js" />
@@ -1788,10 +1793,6 @@
     <Content Include="WFM\vendor\ng-image-input-with-preview\ng-image-input-with-preview.js" />
     <Content Include="WFM\vendor\ng-image-input-with-preview\ng-image-input-with-preview.min.css" />
     <Content Include="WFM\vendor\ng-image-input-with-preview\ng-image-input-with-preview.min.js" />
-    <Content Include="WFM\vendor\ui-bootstrap-custom-build\ui-bootstrap-custom-0.12.1.js" />
-    <Content Include="WFM\vendor\ui-bootstrap-custom-build\ui-bootstrap-custom-0.12.1.min.js" />
-    <Content Include="WFM\vendor\ui-bootstrap-custom-build\ui-bootstrap-custom-tpls-0.12.1.js" />
-    <Content Include="WFM\vendor\ui-bootstrap-custom-build\ui-bootstrap-custom-tpls-0.12.1.min.js" />
     <Content Include="Content\amplify\amplify.min.js" />
     <Content Include="Content\bootstrap-timepicker\css\bootstrap-timepicker.css" />
     <Content Include="Content\bootstrap-timepicker\css\bootstrap-timepicker.min.css" />
