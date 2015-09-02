@@ -41,6 +41,7 @@ Scenario: See available business units
 	| Business Unit 1 |
 	| Business Unit 2 |
 
+@Ignore
 Scenario: Select business unit
 	Given I have a role with
 	| Field                 | Value |
