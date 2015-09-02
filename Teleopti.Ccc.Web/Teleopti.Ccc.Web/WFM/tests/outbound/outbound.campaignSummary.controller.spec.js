@@ -75,11 +75,12 @@ describe('OutboundSummaryCtrl', function () {
 		expect(campaign.chart != null);
 	});
 
-	/*it('add manual plan should work', function() {
+	it('add manual plan should work', function() {
 		var test = setUpTarget();
 		var campaign = {
 			Id: 1,
 			selectedDates: [new Date('2015-07-19'), new Date('2015-07-20')],
+			selectedDatesClosed: [],
 			manualPlan: {}
 		};
 
@@ -101,7 +102,8 @@ describe('OutboundSummaryCtrl', function () {
 		expect(campaign.graphData).toBeDefined();
 		expect(campaign.Status).toEqual(1);
 		expect(test.scope.phaseStatistics.PlannedWarning).toEqual(2);
-	});*/
+	});
+
 	it('add backlog should work', function () {
 		var test = setUpTarget();
 		var campaign = {
