@@ -48,10 +48,10 @@
 	position:relative;
 }
 
-.planning-day-detail .wfm-btn-primary{
+.planning-day-detail .wfm-btn-invis-primary{
 	position:absolute;
-	right:0;
-	bottom:20px;
+	right:10px;
+	bottom:10px;
 }
 
 @media(max-width:1000px){
@@ -66,6 +66,11 @@
 	.wfm-card-selected{
 		position:relative;
 	}	
+}
+
+
+.planning-period-button-bar{
+	float: right;
 }
 
 .period-report-btn{
@@ -118,29 +123,6 @@
 	}
 }
 
-.turn-off-filter-blank1{
-	width: 100%; 
-	height: 40px;
-	z-index:-1;
-	position:absolute;
-	display:inline-block;
-	left:0;
-	top:0;
-	background:transparent;
-}
-
-.turn-off-filter-blank2{
-	width: 100%; 
-	height: 100%;
-	z-index:-1;
-	position:absolute;
-	display:inline-block;
-	left:0;
-	top:0;
-	background:transparent;
-	margin-top:40px;
-}
-
 .seatplan-report-filter{
 	top:43px;
 	left:0px;
@@ -148,6 +130,13 @@
 	height:500px;
 	position:absolute;
 	background:#ffffff;
+
+	.alert-error{
+		margin-top: 15px;
+		margin-left: 5px;
+		width: 610px;
+	}
+
 }
 
 .seatplan-report-print-button {
@@ -165,16 +154,11 @@
 
 .filter-content .date-picker{
 	height:100%;
+	margin-left: 10px;
 	padding:30px 10px 10px 10px;
 	text-align:left;
 	vertical-algin:middle;		
 }
-
-.datepicker .wfm-datepicker-wrap{
-	box-shadow:none;
-	border:1px #ededed solid;
-}
-
 
 .seatplan-report-filter{
 	.bottom-bar, .filter-header{

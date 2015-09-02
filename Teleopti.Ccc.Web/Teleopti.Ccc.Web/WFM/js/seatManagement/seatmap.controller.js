@@ -21,7 +21,7 @@
 		vm.showLocationDialog = false;
 		vm.fileCallbackFunction = null;
 		vm.scrollListen = false;
-		vm.zoomData = { min: 0.1, max: 1, step: 0.05, zoomValue: 1 };
+		vm.zoomData = { min: 0.1, max: 2, step: 0.05, zoomValue: 1 };
 		
 		var canvas = new fabric.CanvasWithViewport('c');
 		init();
@@ -83,11 +83,9 @@
 		};
 
 		vm.onChangeOfDate = function() {
-
 			vm.refreshSeatMap();
 			vm.isDatePickerOpened = false;
 		};
-
 
 		function resize() {
 			canvasUtils.resize(canvas);

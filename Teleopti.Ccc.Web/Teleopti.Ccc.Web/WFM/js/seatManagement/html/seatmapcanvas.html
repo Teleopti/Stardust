@@ -11,45 +11,47 @@
 		</button>
 
 		<div class="seatmap-view-datepicker">
-			<button class="wfm-btn wfm-btn-invis-primary pull-left" ng-class="{'button-active':vm.isFilterOpened}" ng-click="vm.isDatePickerOpened = !vm.isDatePickerOpened">
-				<i class="mdi mdi-calendar"></i>
-				{{vm.getDisplaySelectedDate()}}
-			</button>
-			<div class="date-picker seatPlanReportHeaderDatePickerWidget">
-				<datepicker ng-if="vm.isDatePickerOpened" ng-model="vm.selectedDate"
-							class="wfm-datepicker material-depth-1" ng-change="vm.onChangeOfDate()">
-				</datepicker>
-			</div>
-		</span>
+			<span outside-click="vm.isDatePickerOpened = false">
+				<button class="wfm-btn wfm-btn-invis-primary pull-left" ng-class="{'button-active':vm.isFilterOpened}" ng-click="vm.isDatePickerOpened = !vm.isDatePickerOpened">
+					<i class="mdi mdi-calendar"></i>
+					{{vm.getDisplaySelectedDate()}}
+				</button>
+				<div class="date-picker seatPlanReportHeaderDatePickerWidget">
+					<datepicker ng-if="vm.isDatePickerOpened" ng-model="vm.selectedDate"
+								class="wfm-datepicker material-depth-1" ng-change="vm.onChangeOfDate()">
+					</datepicker>
+				</div>
+			</span>
+		</div>
 	</div>
+
+		<div class="location-breadcrumb" ng-class="{'location-breadcrumb-edit-mode':(vm.showEditor)}">
+			<span ng-if="!vm.isLoading" class="breadcrumb-inverse" ng-repeat="breadcrumb in vm.breadcrumbs">
+				<a ng-if="!$last" href="" ng-click="vm.handleBreadcrumbClick(breadcrumb.Id)">{{breadcrumb.Name}}</a>
+				<span class="divider" ng-if="!$last">></span>
+				<span ng-if="$last">{{breadcrumb.Name}}</span>
+			</span>
+			<md-divider ng-if="vm.showEditor"></md-divider>
+		</div>
+
+		<div class="seatmap-canvas">
+
+			<seatmap-editor ng-if="vm.showEditor"></seatmap-editor>
+
+			<div class="wfm-block">
+				<canvas id="c" ng-mouseenter="vm.scrollListen = true" ng-mouseleave="vm.scrollListen = false"></canvas>
+				<div ng-show="vm.isLoading" class="seatmap-spinner">
+					<md-progress-circular md-mode="indeterminate"></md-progress-circular>
+				</div>
+			</div>
+
+			<div class="seatmap-bottom-bar">
+				<button ng-class="{info:!vm.isMoveMode(),success:vm.isMoveMode()}" class="wfm-fab mini pull-left" ng-click="vm.toggleMoveMode()">
+					<i class="mdi mdi-gamepad"></i>
+				</button>
+				<md-slider ng-model="vm.zoomData.zoomValue" min="{{vm.zoomData.min}}" max="{{vm.zoomData.max}}" step="{{vm.zoomData.step}}" ng-change="vm.zoom()"></md-slider>
+				<seatmap-occupancy-detail class="seatmap-occupancy-detail" ng-if="vm.occupancydetails" occupancy-detail="vm.occupancydetails"></seatmap-occupancy-detail>
+			</div>
+		</div>
 	
-	<div class="location-breadcrumb" ng-class="{'location-breadcrumb-edit-mode':(vm.showEditor)}">
-		<span ng-if="!vm.isLoading" class="breadcrumb-inverse" ng-repeat="breadcrumb in vm.breadcrumbs">
-			<a ng-if="!$last" href="" ng-click="vm.handleBreadcrumbClick(breadcrumb.Id)">{{breadcrumb.Name}}</a>
-			<span class="divider" ng-if="!$last">></span>
-			<span ng-if="$last">{{breadcrumb.Name}}</span>
-		</span>
-		<md-divider ng-if="vm.showEditor"></md-divider>
-	</div>
-
-	<div class="seatmap-canvas" ng-click="vm.isDatePickerOpened = false;">
-
-		<seatmap-editor ng-if="vm.showEditor"></seatmap-editor>
-
-		<div class="wfm-block">
-			<canvas id="c" ng-mouseenter="vm.scrollListen = true" ng-mouseleave="vm.scrollListen = false"></canvas>
-			<div ng-show="vm.isLoading" class="seatmap-spinner">
-				<md-progress-circular md-mode="indeterminate"></md-progress-circular>
-			</div>
-		</div>
-
-		<div class="seatmap-bottom-bar">
-			<button ng-class="{info:!vm.isMoveMode(),success:vm.isMoveMode()}" class="wfm-fab mini pull-left" ng-click="vm.toggleMoveMode()">
-				<i class="mdi mdi-gamepad"></i>
-			</button>
-			<md-slider ng-model="vm.zoomData.zoomValue" min="{{vm.zoomData.min}}" max="{{vm.zoomData.max}}" step="{{vm.zoomData.step}}" ng-change="vm.zoom()"></md-slider>
-			<seatmap-occupancy-detail class="seatmap-occupancy-detail" ng-if="vm.occupancydetails" occupancy-detail="vm.occupancydetails"></seatmap-occupancy-detail>
-		</div>
-	</div>
 </div>
-

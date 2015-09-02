@@ -119,6 +119,13 @@
 			vm.loadMonthDetails(moment(vm.selectedDate));
 		};
 
+		vm.showReport = function (period) {
+			console.log('SeatPlan Controller Show Report');
+
+			vm.isReportOpened = !vm.isReportOpened;
+			vm.reportPeriod = period;
+		};
+
 		vm.getSelectedMonthName = function () {
 			return moment(vm.selectedDate).format("MMMM");
 		};

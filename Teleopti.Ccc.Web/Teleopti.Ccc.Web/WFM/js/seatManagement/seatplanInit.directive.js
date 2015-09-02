@@ -27,11 +27,11 @@
 		};
 
 		vm.loadDefaultDates();
-		
+
 		vm.addSeatPlan = function () {
 
 			vm.processingSeatPlan = true;
-		
+
 			var addSeatPlanCommand = {
 				StartDate: vm.period.startDate,
 				EndDate: vm.period.endDate,
@@ -51,7 +51,6 @@
 				});
 			}
 		};
-
 
 		function onSuccessAddSeatPlan(message) {
 			growl.success("<i class='mdi mdi-thumb-up'></i> " + message + ".", {
@@ -84,14 +83,15 @@
 			scope: {
 				start: '@',
 				end: '@',
-				onSeatPlanComplete:'&'
+				onSeatPlanComplete: '&',
+				showReport: '&'
 			},
 			templateUrl: "js/seatManagement/html/seatplaninit.html",
-			
+
 		};
 	};
 
 	angular.module('wfm.seatPlan').directive('seatPlanInit', directive);
 
-	
+
 }());

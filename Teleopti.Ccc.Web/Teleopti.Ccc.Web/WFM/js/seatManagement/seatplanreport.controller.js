@@ -43,6 +43,11 @@
 			return '';
 		};
 
+		vm.onChangeOfMonth = function(date) {
+			console.log('On Change of Month called');
+		};
+
+
 		vm.dateFilterIsValid = function() {
 			return (vm.selectedPeriod.StartDate <= vm.selectedPeriod.EndDate);
 		};
