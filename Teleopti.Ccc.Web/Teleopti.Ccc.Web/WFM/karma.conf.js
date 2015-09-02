@@ -32,6 +32,7 @@ module.exports = function(config) {
 		'node_modules/ng-file-upload/dist/ng-file-upload-shim.min.js',
 		'node_modules/ng-file-upload/dist/ng-file-upload.min.js',
 		'node_modules/angular-ui-grid/ui-grid.min.js',
+		'node_modules/ngstorage/ngStorage.min.js',
 		'vendor/hammerjs/hammer.min.js',
 		'vendor/angular-material/angular-material.min.js',
 		'vendor/fabricjs/fabric.js',

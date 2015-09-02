@@ -1,9 +1,9 @@
 ﻿(function() {
 	'use strict';
-	angular.module('wfm.businessunits', ['ngResource'])
+	angular.module('wfm.businessunits', ['ngResource', 'ngStorage'])
 		.controller('BusinessUnitsCtrl', [
-			'$scope', '$resource', '$location', '$http', '$filter', '$state',
-			function ($scope, $resource, $location, $http, $filter, $state) {
+			'$scope', '$resource', '$http', '$filter', '$state', '$sessionStorage', '$window',
+			function ($scope, $resource, $http, $filter, $state, $sessionStorage, $window) {
 
 				$scope.show = false;
 
@@ -13,7 +13,8 @@
 
 				$scope.changeBusinessUnit = function (selectedBu) {
 					$http.defaults.headers.common['X-Business-Unit-Filter'] = selectedBu.Id;
-					$location.search({ buid: selectedBu.Id });
+					$sessionStorage.buid = selectedBu.Id;
+					$window.location.reload();
 				};
 				
 				var getBusinessUnits = $resource('../BusinessUnit', {}, {
@@ -24,7 +25,7 @@
 					getBusinessUnits.get({}).$promise.then(function (result) {
 						$scope.data.businessUnits = result;
 						$scope.show = (result.length > 1);
-						var buid = $location.search().buid;
+						var buid = $sessionStorage.buid;
 						if (buid) {
 							var businessUnit = $filter('filter')(result, function (d) { return d.Id === buid; })[0];
 							$scope.data.selectedBu = businessUnit;

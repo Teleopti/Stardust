@@ -186,7 +186,7 @@ angular.module('wfm.forecasting')
 			};
 
 			$scope.back = function () {
-				$state.go("forecasting", { buid: $location.search().buid });
+				$state.go("forecasting");
 			};
 		}
 	]

@@ -9,7 +9,8 @@ var externalModules = angular.module('externalModules', ['ui.router',
 	'ui.grid',
 	'ui.grid.autoResize',
 	'ui.grid.exporter',
-	'ui.grid.selection'
+	'ui.grid.selection',
+	'ngStorage'
 ]);
 
 var wfm = angular.module('wfm', [
@@ -40,11 +41,11 @@ wfm.config([
 		$urlRouterProvider.otherwise("forecasting");
 		$urlRouterProvider.when('/outbound', '/outbound/summary');
 		$stateProvider.state('main', {
-			url: '/?buid',
+			url: '/',
 			templateUrl: 'html/main.html',
 			controller: 'MainCtrl'
 		}).state('forecasting', {
-			url: '/forecasting?buid',
+			url: '/forecasting',
 			templateUrl: 'html/forecasting/forecasting.html',
 			controller: 'ForecastingStartCtrl'
 		}).state('forecasting-target', {
@@ -68,7 +69,7 @@ wfm.config([
 			templateUrl: 'html/forecasting/forecasting-intraday.html',
 			controller: 'ForecastingIntradayCtrl'
 		}).state('resourceplanner', {
-			url: '/resourceplanner?buid',
+			url: '/resourceplanner',
 			templateUrl: 'js/resourceplanner/resourceplanner.html',
 			controller: 'ResourcePlannerCtrl'
 		}).state('resourceplanner.planningperiod', {
@@ -76,15 +77,15 @@ wfm.config([
 			templateUrl: 'js/resourceplanner/planningperiods.html',
 			controller: 'PlanningPeriodsCtrl'
 		}).state('resourceplanner.report', {
-			params: { result: {}, buid: {} },
+			params: { result: {} },
 			templateUrl: 'js/resourceplanner/resourceplanner-report.html',
 			controller: 'ResourceplannerReportCtrl'
 		}).state('permissions', {
-			url: '/permissions?id&buid',
+			url: '/permissions/:id',
 			templateUrl: 'html/permissions/permissions.html',
 			controller: 'PermissionsCtrl'
 		}).state('outbound', {
-			url: '/outbound?buid',
+			url: '/outbound',
 			templateUrl: 'html/outbound/outbound.html',
 			controller: 'OutboundDefaultCtrl'
 		}).state('outbound.summary', {
@@ -100,7 +101,7 @@ wfm.config([
 			templateUrl: 'html/outbound/campaign-edit.html',
 			controller: 'OutboundEditCtrl'
 		}).state('people', {
-			url: '/people?buid',
+			url: '/people',
 			params: { selectedPeopleIds: [], currentKeyword: '', paginationOptions: {} },
 			templateUrl: 'html/people/people.html',
 			controller: 'PeopleCtrl'
@@ -109,14 +110,14 @@ wfm.config([
 			templateUrl: 'html/people/people-selection-cart.html',
 			controller: 'PeopleCartCtrl as vm'
 		}).state('seatPlan', {
-			url: '/seatPlan/:viewDate?buid',
+			url: '/seatPlan/:viewDate',
 			templateUrl: 'js/seatManagement/html/seatplan.html',
 			controller: 'SeatPlanCtrl as seatplan'
 		}).state('seatMap', {
-			url: '/seatMap?buid',
+			url: '/seatMap',
 			templateUrl: 'js/seatManagement/html/seatmap.html'
 		}).state('rta', {
-			url: '/rta?buid',
+			url: '/rta',
 			templateUrl: 'js/rta/html/rta.html',
 			controller: 'RtaCtrl'
 		});
@@ -125,8 +126,8 @@ wfm.config([
 		$translateProvider.preferredLanguage('en');
 	}
 ]).run([
-	'$rootScope', '$http', '$state', '$translate', 'i18nService', 'amMoment', 'HelpService',
-	function ($rootScope, $http, $state, $translate, i18nService, angularMoment, HelpService) {
+	'$rootScope', '$http', '$state', '$translate', 'i18nService', 'amMoment', 'HelpService', '$sessionStorage',
+	function ($rootScope, $http, $state, $translate, i18nService, angularMoment, HelpService, $sessionStorage) {
 		var timeout = Date.now() + 10000;
 		$rootScope.isAuthenticated = false;
 
@@ -192,6 +193,11 @@ wfm.config([
 				HelpService.updateState($state.current.name);
 			});
 
+
+			var buid = $sessionStorage.buid;
+			if (buid) {
+				$http.defaults.headers.common['X-Business-Unit-Filter'] = buid;
+			}
 		});
 	}
 ]);
