@@ -209,10 +209,34 @@
                     <working-hours-picker working-hours="campaign.WorkingHours"></working-hours-picker>
                 </div>
             </div>
-            <div layout="row" layout-align="center">
-	            <button class="wfm-btn wfm-btn-default material-depth-1" ng-click="reset()"><span translate>Reset</span></button>
-	            <button class="wfm-btn material-depth-1" ng-click="editCampaign()" ng-class="{'wfm-btn-primary-disabled': !isInputValid(), 'wfm-btn-primary': isInputValid()}"><span translate>Save</span></button>
-            </div>
-        </div>
+			  <div layout="row" layout-align="center">
+				  <button class="wfm-btn wfm-btn-default material-depth-1" ng-click="reset()"><span translate>Reset</span></button>
+				  <button class="wfm-btn material-depth-1" ng-click="editCampaign()" ng-class="{'wfm-btn-primary-disabled': !isInputValid(), 'wfm-btn-primary': isInputValid()}"><span translate>Save</span></button>
+				  <button class="wfm-btn wfm-btn-default material-depth-1" ng-click="removeCampaign()"><span translate>Remove</span></button>
+			  </div>
+			  
+			  <div ng-cloak class="modal-box">
+				  <button ng-click="modalLaunch1 = !modalLaunch1" class="wfm-btn wfm-btn-default"><span translate>Remove</span></button>
+				  <div ng-cloak ng-show="showRemoveCampaignConfirmDialog">
+					  <div class="modalbg">
+						  <div class="dialog">
+							  <div class="modal-header">
+								  <span translate>RemoveCampaign</span>
+							  </div>
+							  <div class="modal-inner-content">
+								  <div class="wfm-block"><span translate>ConfirmRemoveCampaign</span></div>
+							  </div>
+							  <div class="modal-footer">
+								  <aside>
+			 						  <a ng-click="showRemoveCampaignConfirmDialog = false" class="wfm-btn wfm-btn-invis-default"><span translate>Cancel</span></a>
+									  <a ng-click="remove()" class="wfm-btn wfm-btn-invis-primary"><span translate>Ok</span></a>
+								  </aside>
+							  </div>
+						  </div>
+					  </div>
+				  </div>
+			  </div>
+
+		  </div>
     </div>
 </div>

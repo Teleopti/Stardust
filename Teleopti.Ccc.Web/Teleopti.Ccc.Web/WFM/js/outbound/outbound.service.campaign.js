@@ -80,6 +80,13 @@
 				});
         };
 
+	    this.removeCampaign = function(campaign, successCb, errorCb) {
+		    $http.delete(getCampaignCommandUrl + campaign.Id)
+			    .success(function(data) {
+			    	if (successCb != null) successCb(data);
+			    });
+	    };	
+
         this.createEmptyWorkingPeriod = createEmptyWorkingPeriod;
         this.calculateCampaignPersonHour = calculateCampaignPersonHour;
 

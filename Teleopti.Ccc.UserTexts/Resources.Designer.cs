@@ -5436,6 +5436,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to It will remove this campaign, are you sure about this?.
+        /// </summary>
+        public static string ConfirmRemoveCampaign {
+            get {
+                return ResourceManager.GetString("ConfirmRemoveCampaign", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirm Role Delete.
         /// </summary>
         public static string ConfirmRoleDelete {
@@ -20500,6 +20509,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Remove {
             get {
                 return ResourceManager.GetString("Remove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove Campaign.
+        /// </summary>
+        public static string RemoveCampaign {
+            get {
+                return ResourceManager.GetString("RemoveCampaign", resourceCulture);
             }
         }
         

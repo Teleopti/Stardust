@@ -13447,4 +13447,12 @@ Reduce the complexity to use these shifts.</value>
     <value>The selected seat has no bookings for this date</value>
     <comment>Used on the view seat bookings page when a seat has no bookings</comment>
   </data>
+  <data name="ConfirmRemoveCampaign" xml:space="preserve">
+    <value>It will remove this campaign, are you sure about this?</value>
+    <comment>use in WFM web outbound module, the message of message box when remove a campaign</comment>
+  </data>
+  <data name="RemoveCampaign" xml:space="preserve">
+    <value>Remove Campaign</value>
+    <comment>use in WFM web outbound module, the title of message box when remove a campaign</comment>
+  </data>
 </root>

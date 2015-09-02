@@ -17,7 +17,10 @@
         $scope.init = init;
         $scope.editCampaign = editCampaign;
         $scope.reset = reset;
-        $scope.backToList = backToList;
+	     $scope.remove = remove;
+	     $scope.backToList = backToList;
+	     $scope.showRemoveCampaignConfirmDialog = false;
+	     $scope.removeCampaign = removeCampaign;
 
         function editCampaign() {
             if (!$scope.isInputValid()) {
@@ -36,6 +39,16 @@
             $scope.campaign = angular.copy(originalCampaign);
             setPristineForms();
         }
+
+		function removeCampaign() {
+			$scope.showRemoveCampaignConfirmDialog = true;
+		}
+        function remove() {
+	        $scope.showRemoveCampaignConfirmDialog = false;
+			outboundService.removeCampaign($scope.campaign, function() {
+
+			});
+		}
 
         function init() {
             $scope.campagin = null;
