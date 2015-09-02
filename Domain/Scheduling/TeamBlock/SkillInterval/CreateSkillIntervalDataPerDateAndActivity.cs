@@ -62,6 +62,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 			var extraDayIntervalDataPerActivity =
 				_createSkillIntervalDatasPerActivtyForDate.CreateFor(blockPeriod.EndDate.AddDays(1), skills,
 				                                                     schedulingResultStateHolder);
+
+			if (hasMaxSeatSkill)
+			{
+				foreach (var keyValuePair in extraDayIntervalDataPerActivity)
+				{
+					if (keyValuePair.Value.Count == 0) continue;
+					var splitedInterval = _intervalDataDivider.SplitSkillIntervalData(keyValuePair.Value.ToList(), 15);
+					keyValuePair.Value.Clear();
+					foreach (var eachSplitedInterval in splitedInterval)
+					{
+						keyValuePair.Value.Add(eachSplitedInterval);
+					}
+				}
+			} 
 			dayIntervalDataPerDateAndActivity.Add(extraDate, extraDayIntervalDataPerActivity);
 			return dayIntervalDataPerDateAndActivity;
 		}

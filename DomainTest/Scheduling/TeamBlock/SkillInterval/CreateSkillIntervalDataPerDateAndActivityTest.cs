@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 		}
 
 		[Test]
-		public void ShouldExecuteSuccessfully()
+		public void ShouldExecuteSuccessfullyWithMaxSeatSkill()
 		{
 			IEnumerable<IPerson> personList = new List<IPerson> {_person1};
 			IEnumerable<ISkill> skillList = new List<ISkill> {_skill1};
@@ -82,14 +82,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 				Expect.Call(_groupPersonSkillAggregator.AggregatedSkills(personList, _blockInfo.BlockPeriod)).Return(skillList);
 				Expect.Call(_maxSeatSkillAggregator.GetAggregatedSkills(personList.ToList(), _blockInfo.BlockPeriod))
 					.Return(maxSeatSkillList);
-
-				
+			
 				Expect.Call(_createSkillIntervalDatasPerActivtyForDate.CreateFor(new DateOnly(2014, 05, 28), skillList.ToList(),
-					_schedulingResultStateHolder)).Return(activityToIntervalList);
-				
+					_schedulingResultStateHolder)).Return(activityToIntervalList);			
 				Expect.Call(_intervalDataDivider.SplitSkillIntervalData(skillIntervalList, 15)).Return(spliedIntervalList);
+
 				Expect.Call(_createSkillIntervalDatasPerActivtyForDate.CreateFor(new DateOnly(2014, 05, 28).AddDays(1), skillList.ToList(),
 					_schedulingResultStateHolder)).Return(activityToIntervalList);
+				Expect.Call(_intervalDataDivider.SplitSkillIntervalData(skillIntervalList, 15)).Return(spliedIntervalList);
 			}
 			using (_mock.Playback() )
 			{
