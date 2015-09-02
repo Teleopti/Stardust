@@ -78,7 +78,10 @@ namespace Teleopti.Ccc.TestCommon
 		private static void setupCcc7(string name)
 		{
 			if (tryRestoreDatabase(ccc7(), 0))
+			{
+				update_default_tenant_because_connstrings_arent_set_due_to_securityexe_isnt_run_from_infra_test_projs(name);
 				return;
+			}
 			createDatabase(ccc7());
 			createUniqueIndexOnPersonAssignmentBecauseDbManagerIsntRunFromTests();
 			PersistAuditSetting();
