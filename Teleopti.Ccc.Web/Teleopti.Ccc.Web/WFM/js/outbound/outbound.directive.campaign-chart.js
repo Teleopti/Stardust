@@ -179,10 +179,9 @@
 
 				dataOption.labels.format[$scope.dictionary['Overstaff']] = function(v, id, i) {
 					if (!determineOpenDay(i)) return 'C';
-					if (determineManualPlanDay(i) && !determineScheduledDay(i)) return 'M';
-				};
-				dataOption.labels.format[$scope.dictionary['Backlog']] = function (v, id, i) {
-					if (determineManualBacklogDay(i)) return "B";
+					if (determineManualPlanDay(i) && !determineScheduledDay(i) && determineManualBacklogDay(i)) return "M,B";
+					else if (determineManualPlanDay(i) && !determineScheduledDay(i)) return 'M';
+					else if (determineManualBacklogDay(i)) return "B";
 				};
 				dataOption.types[$scope.dictionary['Progress']] = 'line';
 					dataOption.selection = {
