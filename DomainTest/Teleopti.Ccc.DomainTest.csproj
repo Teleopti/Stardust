@@ -195,7 +195,8 @@
     <Compile Include="ApplicationLayer\MoveActivityCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\PersonChangedMessageLegacyHandlerTest.cs" />
     <Compile Include="ApplicationLayer\RemoveAbsenceCommandHandlerTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\Aspects\AuthenticationKeyTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\Aspects\DataSourceFromAuthenticationKeyAspectTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\Aspects\CacheTest.cs" />
     <Compile Include="ApplicationLayer\Rta\FakeAdherenceDetailsReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\FakeAdherenceDetailsReadModelReader.cs" />
     <Compile Include="ApplicationLayer\Rta\FakeAdherencePercentageReadModelPersister.cs" />
