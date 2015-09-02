@@ -74,6 +74,14 @@
 
 			function loadGraph() {
 				if (!$scope.graph) return;
+
+				var yMax = _calculateYMax();
+
+				if (yMax >= $scope.campaign.formerOptionYMax || yMax <= $scope.campaign.formerOptionYMax * 0.8) {
+					$scope.graph.axis.max(yMax);
+					$scope.campaign.formerOptionYMax = yMax;
+				}
+
 				$scope.graph.load({
 					columns: getDataGroupsData(),
 					colors: _setChartOption_color()
@@ -191,6 +199,12 @@
 				return dataOption;
 			}
 
+			this._setChartOption_axis = _setChartOption_axis;
+
+			function _calculateYMax() {
+				return (Math.max.apply(Math, $scope.campaign.graphData.rawBacklogs.slice(1)) + Math.max.apply(Math, $scope.campaign.graphData.unscheduledPlans.slice(1))) * 1.1;
+			}
+
 			function _setChartOption_axis() {
 
 				var option = {
@@ -210,7 +224,8 @@
 					}
 				};
 
-				option.y.max = (Math.max.apply(Math, $scope.campaign.graphData.rawBacklogs.slice(1)) + Math.max.apply(Math, $scope.campaign.graphData.unscheduledPlans.slice(1))) * 1.1;
+				$scope.campaign.formerOptionYMax = _calculateYMax();
+				option.y.max = $scope.campaign.formerOptionYMax;
 				return option;
 			}
 
