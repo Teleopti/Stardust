@@ -19,7 +19,7 @@
 			</div>
 		</div>
 	</div>
-	<p />
+
 	<div class="row">
 		<div class="col-sm-12 col-md-6">
 			<location-picker selected-locations="vm.selectedLocations"></location-picker>
@@ -28,9 +28,9 @@
 			<team-picker selected-teams="vm.selectedTeams"></team-picker>
 		</div>
 	</div>
-	<p />
+	
 	<div class="planning-period-button-bar">
-		<button class="wfm-btn wfm-btn-invis-default next-step period-report-btn" ng-click="vm.showReport(vm.period)" ng-disabled="vm.processingSeatPlan">>{{ 'ViewReport' | translate }}</button>
+		<button class="wfm-btn wfm-btn-invis-default next-step" ng-click="vm.showReport(vm.period)" ng-disabled="vm.processingSeatPlan">{{ 'ViewReport' | translate }}</button>
 		<button class="wfm-btn wfm-btn-invis-primary next-step" ng-click="vm.addSeatPlan()" ng-disabled="vm.processingSeatPlan">{{ 'PlanSeats' | translate }}</button>
 	</div>
 </div>
