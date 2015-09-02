@@ -13431,4 +13431,16 @@ Reduce the complexity to use these shifts.</value>
   <data name="ViewReport" xml:space="preserve">
     <value>View Report</value>
   </data>
+  <data name="AdjustSkill" xml:space="preserve">
+    <value>Adjust skill</value>
+    <comment>adjust skill</comment>
+  </data>
+  <data name="ChangeShiftBag" xml:space="preserve">
+    <value>Change shift bag</value>
+    <comment>change shift bag</comment>
+  </data>
+  <data name="PickAShiftBag" xml:space="preserve">
+    <value>Pick a shift bag</value>
+    <comment>state holder for changing shift bag panel select in web people</comment>
+  </data>
 </root>

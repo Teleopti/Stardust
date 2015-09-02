@@ -22,11 +22,10 @@
 			</div>
 		</div>
 		<div ng-if="dataInitialized && (isImportUsersEnabled || isAdjustSkillEnabled)">
-			<button ng-show="rowSelectionEnabled && selectedCount() > 0" class="wfm-fab wfm-panel-delete material-depth-1" ng-click="clearCart()"><i class="mdi mdi-delete"></i></button>
+			<button ng-show="rowSelectionEnabled && selectedCount() > 0" class="wfm-fab wfm-panel-delete material-depth-1" ng-click="clearCart()"><i class="mdi mdi-refresh"></i></button>
 			<nav class="wfm-panel action-panel" mfb-menu position="tr" effect="slidein-spring"
 				 active-icon="mdi-pencil" resting-icon="mdi-plus"
 				 ng-mouseenter=" hovered()" ng-mouseleave="hovered()"
-				 label="{{'Actions'|translate}}"
 				 toggling-method="click" menu-state="closed">
 				<button class="{{cmd.label|lowercase}}" ng-if="cmd.active()" mfb-button icon="{{cmd.icon}}" ng-click="cmd.action()"
 						label="{{cmd.label|translate}}" ng-repeat="cmd in commands"></button>

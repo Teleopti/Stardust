@@ -44,8 +44,8 @@
 					return vm.isAdjustSkillEnabled;
 				},
 				columns: [
-					{ displayName: 'Skills', field: 'Skills()', headerCellFilter: 'translate', minWidth: 100 },
-					{ displayName: 'ShiftBag', field: 'ShiftBag()', headerCellFilter: 'translate', minWidth: 100 }
+					{ displayName: 'PersonSkill', field: 'Skills()', headerCellFilter: 'translate', minWidth: 100 },
+					{ displayName: 'PersonFinderFieldShiftBag', field: 'ShiftBag()', headerCellFilter: 'translate', minWidth: 100 }
 				]
 			},
 			{
@@ -58,8 +58,8 @@
 					return vm.isAdjustSkillEnabled;
 				},
 				columns: [
-					{ displayName: 'ShiftBag', field: 'ShiftBag()', headerCellFilter: 'translate', minWidth: 100 },
-					{ displayName: 'Skills', field: 'Skills()', headerCellFilter: 'translate', minWidth: 100 }
+					{ displayName: 'PersonFinderFieldShiftBag', field: 'ShiftBag()', headerCellFilter: 'translate', minWidth: 100 },
+					{ displayName: 'PersonSkill', field: 'Skills()', headerCellFilter: 'translate', minWidth: 100 }
 					
 				]
 			}
@@ -137,9 +137,6 @@
 		var loadShiftBagPromise = peopleSvc.loadAllShiftBags.get().$promise;
 		loadShiftBagPromise.then(function (result) {
 			vm.availableShiftBags = result;
-			if (vm.availableShiftBags.length > 0) {
-				vm.selectedShiftBag = vm.availableShiftBags[0].ShiftBagId;
-			}
 		});
 		var promiseForAdjustSkillToggle = toggleSvc.isFeatureEnabled.query({ toggle: 'WfmPeople_AdjustSkill_34138' }).$promise;
 		promiseForAdjustSkillToggle.then(function (result) {
