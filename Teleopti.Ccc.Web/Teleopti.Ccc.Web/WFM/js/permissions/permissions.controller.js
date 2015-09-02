@@ -40,8 +40,10 @@
 					$scope.roleName = "";
 				};
 
-				$scope.copyRole = function(roleId) {
-					Roles.copyRole(roleId);
+				$scope.copyRole = function(role) {
+					Roles.copyRole(role.Id).then(function () {
+						$scope.showRole(role);
+					});
 				};
 
 				$scope.removeRole = function(role) {
@@ -116,3 +118,6 @@
 		]
 	);
 })();
+
+
+
