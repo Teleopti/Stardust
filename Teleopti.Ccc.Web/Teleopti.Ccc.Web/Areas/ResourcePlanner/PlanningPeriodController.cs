@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		public virtual IHttpActionResult GetPlanningPeriodSuggestion(Guid id)
 		{
 			var planningPeriod = _planningPeriodRespository.Load(id);
-			var suggestion = _planningPeriodRespository.Suggestions(_now, _currentBusinessUnit);
+			var suggestion = _planningPeriodRespository.Suggestions(_now);
 			var result = suggestion.SuggestedPeriods(planningPeriod.Range);
 			return
 				Ok(

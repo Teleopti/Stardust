@@ -4,6 +4,7 @@ using Autofac.Configuration;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.SignalR;
 using Autofac.Integration.WebApi;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
@@ -128,6 +129,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<ReportsProvider>().As<IReportsProvider>();
 			builder.RegisterType<ReportsNavigationProvider>().As<IReportsNavigationProvider>();
 			builder.RegisterType<BadgeProvider>().As<IBadgeProvider>();
+			builder.RegisterType<HttpRequestTrue>().As<IIsHttpRequest>().SingleInstance();
 		}
 
 		private static void registerPortalTypes(ContainerBuilder builder)

@@ -9,7 +9,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<HttpRequestTrue>().As<IIsHttpRequest>().SingleInstance();
 			builder.RegisterType<CurrentHttpContext>().As<ICurrentHttpContext>().SingleInstance();
 		}
 	}

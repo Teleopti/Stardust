@@ -43,7 +43,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			if(_configuration.Toggle(Toggles.MessageBroker_SchedulingScreenMailbox_32733))
 				builder.RegisterType<AggregatedScheduleChangeMessageSender>().As<IMessageSender>().SingleInstance();
 			builder.RegisterType<CurrentBusinessUnit>().As<ICurrentBusinessUnit>().SingleInstance()
-				.OnActivated(e => CurrentBusinessUnit.InstanceFromContainer = e.Instance);
+				.OnActivated(e => CurrentBusinessUnit.Instance = e.Instance);
+			builder.RegisterType<HttpRequestFalse>().As<IIsHttpRequest>().SingleInstance();
+
 
 			// placed here because at the moment uow is the "owner" of the *current* initiator identifier
 			builder.RegisterType<CurrentInitiatorIdentifier>().As<ICurrentInitiatorIdentifier>();
