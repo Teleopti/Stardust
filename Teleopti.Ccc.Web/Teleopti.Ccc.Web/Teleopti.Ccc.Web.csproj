@@ -1368,7 +1368,6 @@
     <Content Include="WFM\vendor\ng-mfb\mfb.css.map" />
     <Content Include="WFM\css\_mfb.scss" />
     <None Include="WFM\css\_layout.scss" />
-    <Content Include="WFM\css\main.css" />
     <None Include="WFM\css\_outbound.scss" />
     <Content Include="WFM\vendor\ng-mfb\mfb.css" />
     <Content Include="WFM\Gruntfile.js" />
