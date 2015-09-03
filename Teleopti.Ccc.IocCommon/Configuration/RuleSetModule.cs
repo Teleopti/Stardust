@@ -1,5 +1,6 @@
 using System;
 using Autofac;
+using Autofac.Builder;
 using MbCache.Core;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
@@ -26,38 +27,41 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ShiftCreatorService>().As<IShiftCreatorService>().SingleInstance();
 			if (_perLifetimeScope)
 			{
-				builder.RegisterMbCacheComponent<RuleSetProjectionService, IRuleSetProjectionService>()
+				builder.CacheByInterfaceProxy<RuleSetProjectionService, IRuleSetProjectionService>()
 					.InstancePerLifetimeScope()
 					.OnRelease(s => ((ICachingComponent)s).Invalidate());
-				builder.RegisterMbCacheComponent<RuleSetProjectionEntityService, IRuleSetProjectionEntityService>()
+
+				builder.CacheByInterfaceProxy<RuleSetProjectionEntityService, IRuleSetProjectionEntityService>()
 					.InstancePerLifetimeScope()
 					.OnRelease(s => ((ICachingComponent) s).Invalidate());
-				builder.RegisterMbCacheComponent<WorkShiftWorkTime, IWorkShiftWorkTime>()
-					.OnRelease(s => ((ICachingComponent)s).Invalidate());
+
+				builder.CacheByInterfaceProxy<WorkShiftWorkTime, IWorkShiftWorkTime>()
+					.InstancePerLifetimeScope()
+					.OnRelease(s => ((ICachingComponent) s).Invalidate());
 			}
 			else
 			{
-				builder.RegisterMbCacheComponent<RuleSetProjectionService, IRuleSetProjectionService>()
-					.SingleInstance();
-				builder.RegisterMbCacheComponent<RuleSetProjectionEntityService, IRuleSetProjectionEntityService>()
-					.SingleInstance();
-				builder.RegisterMbCacheComponent<WorkShiftWorkTime, IWorkShiftWorkTime>()
-					.SingleInstance();
+				builder.CacheByInterfaceProxy<RuleSetProjectionService, IRuleSetProjectionService>().SingleInstance();
+				builder.CacheByInterfaceProxy<RuleSetProjectionEntityService, IRuleSetProjectionEntityService>().SingleInstance();
+				builder.CacheByInterfaceProxy<WorkShiftWorkTime, IWorkShiftWorkTime>().SingleInstance();
 			}
-			_configuration.Args().Cache(b => b
-				.For<RuleSetProjectionService>("RSPS")
+
+			_configuration.Cache().This<IRuleSetProjectionService>(b => b
 				.CacheMethod(m => m.ProjectionCollection(null, null))
 				.PerInstance()
-				.As<IRuleSetProjectionService>()
-				.For<RuleSetProjectionEntityService>("RSPES")
+				);
+
+			_configuration.Cache().This<IRuleSetProjectionEntityService>(b => b
 				.CacheMethod(m => m.ProjectionCollection(null, null))
 				.PerInstance()
-				.As<IRuleSetProjectionEntityService>()
-				.For<WorkShiftWorkTime>("WSWT")
+				);
+
+			_configuration.Cache().This<IWorkShiftWorkTime>(b => b
 				.CacheMethod(m => m.CalculateMinMax(null, null))
 				.PerInstance()
-				.As<IWorkShiftWorkTime>()
 				);
+
+
 		}
 	}
 }

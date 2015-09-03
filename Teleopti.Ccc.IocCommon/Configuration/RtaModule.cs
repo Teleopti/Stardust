@@ -1,5 +1,6 @@
 ﻿using System;
 using Autofac;
+using MbCache.Core;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Aspects;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
@@ -8,6 +9,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Rta;
+using Teleopti.Interfaces.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
@@ -48,33 +50,27 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<StateMapper>().As<IStateMapper>().SingleInstance();
 
 			builder.RegisterType<ConnectionStrings>().As<IConnectionStrings>();
-
-			_config.Args().Cache(b => b
-				.For<AlarmMappingLoader>()
+			
+			_config.Cache().This<AlarmMappingLoader>(b => b
 				.CacheMethod(x => x.Load())
-				.AsImplemented()
 				);
-			_config.Args().Cache(b => b
-				.For<StateMappingLoader>()
+			_config.Cache().This<StateMappingLoader>(b => b
 				.CacheMethod(x => x.Load())
-				.AsImplemented()
 				);
-			builder.RegisterConcreteMbCacheComponent<AlarmMappingLoader>().As<IAlarmMappingLoader>().ApplyAspects();
-			builder.RegisterConcreteMbCacheComponent<StateMappingLoader>().As<IStateMappingLoader>().ApplyAspects();
+			builder.CacheByClassProxy<AlarmMappingLoader>().As<IAlarmMappingLoader>().ApplyAspects().SingleInstance();
+			builder.CacheByClassProxy<StateMappingLoader>().As<IStateMappingLoader>().ApplyAspects().SingleInstance();
 
 			builder.RegisterType<StateCodeAdder>().As<IStateCodeAdder>().SingleInstance().ApplyAspects();
 
-			_config.Args().Cache(b => b
-				.For<DatabaseLoader>()
+			_config.Cache().This<IDatabaseLoader>(b => b
 				.CacheMethod(x => x.GetCurrentSchedule(Guid.NewGuid()))
 				.CacheMethod(x => x.Datasources())
 				.CacheMethod(x => x.ExternalLogOns())
 				.CacheMethod(x => x.PersonOrganizationData())
 				.CacheMethod(x => x.TenantNameByKey(null))
 				.CacheMethod(x => x.AuthenticateKey(null))
-				.As<IDatabaseLoader>()
 				);
-			builder.RegisterMbCacheComponent<DatabaseLoader, IDatabaseLoader>();
+			builder.CacheByInterfaceProxy<DatabaseLoader, IDatabaseLoader>().SingleInstance();
 			builder.RegisterType<DatabaseReader>().As<IDatabaseReader>().SingleInstance();
 
 			builder.RegisterType<PreviousStateInfoLoader>().As<IPreviousStateInfoLoader>().SingleInstance().ApplyAspects();

@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using AutoMapper;
+using MbCache.Core;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Repositories;
@@ -13,6 +14,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.WebReports;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
+using Teleopti.Ccc.Web.Areas.Mart.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.BadgeLeaderBoardReport.ViewModelFactory;
@@ -99,21 +101,18 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<SettingsViewModelFactory>().As<ISettingsViewModelFactory>().SingleInstance();
 			builder.RegisterType<CalendarLinkSettingsPersisterAndProvider>().As<ISettingsPersisterAndProvider<CalendarLinkSettings>>().SingleInstance();
 
-			_config.Args().Cache(b => b
-				.For<NameFormatSettingsPersisterAndProvider>()
+			_config.Cache().This<ISettingsPersisterAndProvider<NameFormatSettings>>(b => b
 				.CacheMethod(x => x.Get())
-				.As<ISettingsPersisterAndProvider<NameFormatSettings>>()
 				);
-			builder.RegisterMbCacheComponent<NameFormatSettingsPersisterAndProvider, ISettingsPersisterAndProvider<NameFormatSettings>>().SingleInstance();
-			builder.RegisterType<NameFormatSettingsPersisterAndProvider>().As<ISettingsPersisterAndProvider<NameFormatSettings>>().SingleInstance();
+			builder.CacheByInterfaceProxy<NameFormatSettingsPersisterAndProvider, ISettingsPersisterAndProvider<NameFormatSettings>>().SingleInstance();
 
 			builder.RegisterType<CalendarLinkIdGenerator>().As<ICalendarLinkIdGenerator>().SingleInstance();
 			builder.RegisterType<CalendarLinkGenerator>().As<ICalendarLinkGenerator>().SingleInstance();
 			builder.RegisterType<CalendarLinkViewModelFactory>().As<ICalendarLinkViewModelFactory>().SingleInstance();
-            builder.RegisterType<CalendarTransformer>().As<ICalendarTransformer>().SingleInstance();
-            builder.RegisterType<FindSharedCalendarScheduleDays>().As<IFindSharedCalendarScheduleDays>().SingleInstance();
-            builder.RegisterType<CheckCalendarActiveCommand>().As<ICheckCalendarActiveCommand>().SingleInstance();
-            builder.RegisterType<CheckCalendarPermissionCommand>().As<ICheckCalendarPermissionCommand>().SingleInstance();
+			builder.RegisterType<CalendarTransformer>().As<ICalendarTransformer>().SingleInstance();
+			builder.RegisterType<FindSharedCalendarScheduleDays>().As<IFindSharedCalendarScheduleDays>().SingleInstance();
+			builder.RegisterType<CheckCalendarActiveCommand>().As<ICheckCalendarActiveCommand>().SingleInstance();
+			builder.RegisterType<CheckCalendarPermissionCommand>().As<ICheckCalendarPermissionCommand>().SingleInstance();
 			builder.RegisterType<PrincipalAuthorizationFactory>().As<IPrincipalAuthorizationFactory>().SingleInstance();
 		}
 
@@ -239,8 +238,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<DailyMetricsMapper>().As<IDailyMetricsMapper>();
 			builder.RegisterType<DetailedAdherenceMapper>().As<IDetailedAdherenceMapper>();
 			builder.RegisterType<MyReportViewModelFactory>().As<IMyReportViewModelFactory>();
-            builder.RegisterType<QueueMetricsForDayQuery>().As<IQueueMetricsForDayQuery>();
-            builder.RegisterType<QueueMetricsMapper>().As<IQueueMetricsMapper>();
+			builder.RegisterType<QueueMetricsForDayQuery>().As<IQueueMetricsForDayQuery>();
+			builder.RegisterType<QueueMetricsMapper>().As<IQueueMetricsMapper>();
 		}
 
 		private static void registerBadgeLeaderBoardReportTypes(ContainerBuilder builder)

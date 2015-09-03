@@ -1,13 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Caching;
 using Autofac;
-using MbCache.Configuration;
-using MbCache.ProxyImpl.LinFu;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
-using Teleopti.Ccc.IocCommon.Configuration;
 
 namespace Teleopti.Ccc.IocCommon
 {
@@ -29,11 +22,6 @@ namespace Teleopti.Ccc.IocCommon
 		public IDataSourceConfigurationSetter DataSourceConfigurationSetter { get; set; }
 
 		public bool ClearCache { get; set; }
-		public List<Action<CacheBuilder>> CacheRegistrations = new List<Action<CacheBuilder>>(); 
-		public void Cache(Action<CacheBuilder> builder)
-		{
-			CacheRegistrations.Add(builder);
-		}
 
 		public IocArgs(IConfigReader configReader)
 		{

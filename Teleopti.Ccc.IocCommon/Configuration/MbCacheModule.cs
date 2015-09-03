@@ -32,8 +32,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				var cacheBuilder = new CacheBuilder(proxyFactory)
 					.SetCacheKey(cacheKey)
 					;
-				_configuration.Args().CacheRegistrations
-					.ForEach(r => r.Invoke(cacheBuilder));
+				_configuration.Cache().Build(cacheBuilder);
 				return cacheBuilder;
 			}).SingleInstance();
 
@@ -41,5 +40,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IMbCacheFactory>()
 				.SingleInstance();
 		}
+		
 	}
 }

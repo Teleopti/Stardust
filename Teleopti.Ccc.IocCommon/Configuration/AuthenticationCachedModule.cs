@@ -1,4 +1,5 @@
 using Autofac;
+using MbCache.Core;
 using Teleopti.Ccc.Infrastructure.Foundation;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
@@ -15,18 +16,16 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<TeleoptiPrincipalCacheableFactory>().As<IPrincipalFactory>().SingleInstance();
-			builder.RegisterConcreteMbCacheComponent<TeleoptiPrincipalInternalsFactory>()
+
+			builder.CacheByClassProxy<TeleoptiPrincipalInternalsFactory>()
 				.As<IMakeRegionalFromPerson>()
 				.As<IMakeOrganisationMembershipFromPerson>()
 				.As<IRetrievePersonNameForPerson>()
 				.SingleInstance();
-
-			_configuration.Args().Cache(b => b
-				.For<TeleoptiPrincipalInternalsFactory>()
+			_configuration.Cache().This<TeleoptiPrincipalInternalsFactory>(b => b
 				.CacheMethod(m => m.MakeOrganisationMembership(null))
 				.CacheMethod(m => m.MakeRegionalFromPerson(null))
 				.CacheMethod(m => m.NameForPerson(null))
-				.AsImplemented()
 				);
 		}
 	}

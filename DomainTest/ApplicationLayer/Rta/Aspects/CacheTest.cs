@@ -41,26 +41,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Aspects
 			{
 				builder.RegisterType<OuterService>().SingleInstance().ApplyAspects();
 
-				builder.RegisterType<CachedServiceImpl>().SingleInstance();
-				_configuration.Args().Cache(
+				builder.CacheByClassProxy<CachedServiceImpl>().SingleInstance();
+				_configuration.Cache().This<CachedServiceImpl>(
 					b => b
-						.For<CachedServiceImpl>()
 						.CacheMethod(x => x.GetDataSourceName())
-						.As<CachedServiceImpl>()
 					);
 			}
 
-			protected override void AttachToComponentRegistration(IComponentRegistry componentRegistry, IComponentRegistration registration)
-			{
-				registration.Activating += (s, e) =>
-				{
-					if (e.Instance is CachedServiceImpl)
-					{
-						var typed = e.Instance as CachedServiceImpl;
-						e.ReplaceInstance(e.Context.Resolve<IMbCacheFactory>().ToCachedComponent(typed));
-					}
-				};
-			}
 		}
 
 		public class OuterService
@@ -95,6 +82,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Aspects
 				CalledCount++;
 				return _dataSource.CurrentName();
 			}
+		}
+
+		[Test]
+		public void ShouldNotCreateCachingProxy()
+		{
+			ApplicationData.GetType().Should().Be.EqualTo<FakeApplicationData>();
+		}
+
+		[Test]
+		public void ShouldCreateCachingProxy()
+		{
+			CachedService.GetType().Should().Not.Be.EqualTo<CachedServiceImpl>();
 		}
 
 		[Test]

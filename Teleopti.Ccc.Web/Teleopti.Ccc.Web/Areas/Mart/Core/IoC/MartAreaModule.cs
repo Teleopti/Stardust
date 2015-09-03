@@ -1,5 +1,7 @@
 ﻿using System;
 using Autofac;
+using MbCache.Core;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 
@@ -20,15 +22,13 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Core.IoC
 			builder.RegisterType<QueueStatRepository>().As<IQueueStatRepository>().SingleInstance();
 			builder.RegisterType<DatabaseConnectionHandler>().As<IDatabaseConnectionHandler>().SingleInstance();
 
-			_configuration.Args().Cache(b => b
-				.For<QueueStatRepository>()
+			_configuration.Cache().This<IQueueStatRepository>(b => b
 				.CacheMethod(x => x.GetLogObject(1, ""))
 				.CacheMethod(x => x.GetQueueId("", "", 0, ""))
 				.CacheMethod(x => x.GetDateId(new DateTime(), ""))
 				.CacheMethod(x => x.GetIntervalLength(""))
-				.As<IQueueStatRepository>()
 				);
-			builder.RegisterMbCacheComponent<QueueStatRepository, IQueueStatRepository>();
+			builder.CacheByInterfaceProxy<QueueStatRepository, IQueueStatRepository>();
 		}
 	}
 }

@@ -502,9 +502,8 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		{
 			var mbCacheFactory = requestContainer.Resolve<IMbCacheFactory>();
 			mbCacheFactory.ImplementationTypeFor(typeof (IRuleSetProjectionService))
-				.Should().Be.EqualTo<RuleSetProjectionService>();
+				.Should().Be.EqualTo<IRuleSetProjectionService>();
 		}
-
 		
 		[Test]
 		public void ShouldRegisterServiceBusSender()

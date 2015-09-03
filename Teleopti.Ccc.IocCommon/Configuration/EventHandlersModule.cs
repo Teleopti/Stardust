@@ -1,6 +1,8 @@
 ﻿using System.Configuration;
 using System.Linq;
 using Autofac;
+using Autofac.Builder;
+using MbCache.Core;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
@@ -19,6 +21,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
 using Teleopti.Ccc.Infrastructure.Rta.Persisters;
@@ -101,8 +104,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<DontNotifyRtaToCheckForActivityChange>().As<INotifyRtaToCheckForActivityChange>().SingleInstance();
 			builder.RegisterType<DoNotNotify>().As<INotificationValidationCheck>().SingleInstance();
 
-			_config.Args().Cache(b => b
-				.For<AnalyticsScheduleRepository>()
+			_config.Cache().This<IAnalyticsScheduleRepository>(b => b
 				.CacheMethod(x => x.Absences())
 				.CacheMethod(x => x.Activities())
 				.CacheMethod(x => x.Dates())
@@ -110,9 +112,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.CacheMethod(x => x.ShiftCategories())
 				.CacheMethod(x => x.Overtimes())
 				.CacheMethod(x => x.ShiftLengths())
-				.As<IAnalyticsScheduleRepository>()
 				);
-			builder.RegisterMbCacheComponent<AnalyticsScheduleRepository, IAnalyticsScheduleRepository>();
+			builder.CacheByInterfaceProxy<AnalyticsScheduleRepository, IAnalyticsScheduleRepository>();
 
 			// ErikS: Bug 25359
 			if (_config.Args().EnableNewResourceCalculation)
@@ -139,4 +140,5 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		}
 	}
+	
 }

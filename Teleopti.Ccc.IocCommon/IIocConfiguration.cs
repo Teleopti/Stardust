@@ -7,5 +7,6 @@ namespace Teleopti.Ccc.IocCommon
 		//string AppSetting(string setting);
 		bool Toggle(Toggles toggle);
 		IocArgs Args();
+		IocCache Cache();
 	}
 }
