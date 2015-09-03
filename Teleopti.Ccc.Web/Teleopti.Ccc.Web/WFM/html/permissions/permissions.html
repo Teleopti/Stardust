@@ -28,7 +28,7 @@
 				
 
 					<ul class="wfm-list">
-						<li ng-repeat="role in roles | filter:searchRoles" ng-click="showRole(role)" ng-dblclick="doubleClickEdit(editing, role)" ng-init="showRole(role);" ng-class="{'active': role.Id === selectedRole}" selection-model>
+						<li ng-repeat="role in roles | filter:searchRoles" ng-click="showRole(role)" ng-dblclick="doubleClickEdit(editing, role)" ng-class="{'active': role.Id === selectedRole}" selection-model>
 							<span ng-if="role.editing===false;" class="list-item-container" ng-class="{'text-truncation': role.editing===false}">{{role.DescriptionText}}</span>
 							<span ng-if="role.editing===true;" ng-blur="cancelEdit(role)">
 								<form ng-submit="submitRole(role)" name="editRoleForm" required>

@@ -81,7 +81,7 @@ wfm.config([
 			templateUrl: 'js/resourceplanner/resourceplanner-report.html',
 			controller: 'ResourceplannerReportCtrl'
 		}).state('permissions', {
-			url: '/permissions/:id',
+			url: '/permissions',
 			templateUrl: 'html/permissions/permissions.html',
 			controller: 'PermissionsCtrl'
 		}).state('outbound', {
