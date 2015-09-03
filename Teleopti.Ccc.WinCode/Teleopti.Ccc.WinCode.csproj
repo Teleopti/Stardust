@@ -170,11 +170,11 @@
       <HintPath>..\packages\Syncfusion.Core.12.1.0.43\lib\4.0\Syncfusion.Core.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.Grid.Base, Version=12.1451.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Grid.Win.12.1.0.44\lib\4.0\Syncfusion.Grid.Base.dll</HintPath>
+      <HintPath>..\packages\Syncfusion.Grid.Win.12.1.0.45\lib\4.0\Syncfusion.Grid.Base.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Syncfusion.Grid.Windows, Version=12.1451.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Grid.Win.12.1.0.44\lib\4.0\Syncfusion.Grid.Windows.dll</HintPath>
+      <HintPath>..\packages\Syncfusion.Grid.Win.12.1.0.45\lib\4.0\Syncfusion.Grid.Windows.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Syncfusion.Pdf.Base">
@@ -182,19 +182,19 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Syncfusion.Shared.Base, Version=12.1451.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Shared.Base.12.1.0.44\lib\4.0\Syncfusion.Shared.Base.dll</HintPath>
+      <HintPath>..\packages\Syncfusion.Shared.Base.12.1.0.45\lib\4.0\Syncfusion.Shared.Base.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Syncfusion.Shared.Windows, Version=12.1451.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Shared.Win.12.1.0.44\lib\4.0\Syncfusion.Shared.Windows.dll</HintPath>
+      <HintPath>..\packages\Syncfusion.Shared.Win.12.1.0.45\lib\4.0\Syncfusion.Shared.Windows.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Syncfusion.Tools.Base, Version=12.1451.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Tools.Win.12.1.0.54\lib\4.0\Syncfusion.Tools.Base.dll</HintPath>
+      <HintPath>..\packages\Syncfusion.Tools.Win.12.1.0.55\lib\4.0\Syncfusion.Tools.Base.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Syncfusion.Tools.Windows, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Tools.Win.12.1.0.54\lib\4.0\Syncfusion.Tools.Windows.dll</HintPath>
+      <HintPath>..\packages\Syncfusion.Tools.Win.12.1.0.55\lib\4.0\Syncfusion.Tools.Windows.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
