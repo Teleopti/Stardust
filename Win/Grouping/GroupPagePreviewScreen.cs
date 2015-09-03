@@ -186,6 +186,7 @@ namespace Teleopti.Ccc.Win.Grouping
 
 					foreach (TreeNodeAdv node in selectedNodesCollection)
 					{
+						if (!treeViewAdvPreviewTree.FindNodesWithTagObject(node.TagObject).Any()) continue;
 						var nodeInDestinationTree = treeViewAdvPreviewTree.FindNodesWithTagObject(node.TagObject).First();
 
 						switch (dropPosition)
