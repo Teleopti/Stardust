@@ -115,12 +115,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                     minValue = workShiftCalculationResultHolder.Value;
             }
 
-        	IEnumerable<IWorkShiftCalculationResultHolder> foundValues =
+        	var foundValues =
         		_fairnessAndMaxSeatCalculatorsManager.RecalculateFoundValues(allValues, maxValue,
         		                                                             person, dateOnly, maxSeatSkillPeriods,
         		                                                             currentSchedulePeriod.AverageWorkTimePerDay,
-        		                                                             schedulingOptions);
-	        if (!foundValues.Any())
+        		                                                             schedulingOptions).ToArray();
+	        if (foundValues.IsEmpty())
 		        return null;
 
 			// if we only want shifts that don't overstaff
@@ -144,10 +144,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				}
 			}
 
-			foundValues = WorkShiftCalculator.CalculateListForBestImprovementAfterAssignment(foundValues, dataHolders).Cast<IWorkShiftCalculationResultHolder>();
-	        int foundValuesCount = foundValues.Count();
+			foundValues = WorkShiftCalculator.CalculateListForBestImprovementAfterAssignment(foundValues, dataHolders).OfType<IWorkShiftCalculationResultHolder>().ToArray();
+	        int foundValuesCount = foundValues.Length;
 	        if (foundValuesCount == 1)
-		        return foundValues.First();
+		        return foundValues[0];
 
 			IDictionary<int, int> randomResultList = new Dictionary<int, int>(foundValuesCount);
 			for (int i = 0; i < foundValuesCount; i++)
@@ -158,11 +158,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	        for (int i = 0; i < 100; i++)
 	        {
 				var rndResult = foundValues.GetRandom();
-		        var index = foundValues
-					.Select((v, ii) => new {v, ii})
-					.Where(v => v.v == rndResult)
-					.Select(v => v.ii)
-					.First();
+		        var index = Array.IndexOf(foundValues,rndResult);
 		        randomResultList[index] = randomResultList[index] + 1;
 	        }
 
@@ -171,7 +167,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	        foreach (var keyValuePair in randomResultList)
 	        {
 		        if (keyValuePair.Value == winningIndexValue)
-			        return foundValues.ElementAt(keyValuePair.Key);
+			        return foundValues[keyValuePair.Key];
 	        }
 
 	        return null;

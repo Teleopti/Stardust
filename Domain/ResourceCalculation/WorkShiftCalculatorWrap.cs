@@ -11,23 +11,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	{
 		public static double CalculateShiftValue(
 			this IWorkShiftCalculator instance,
-			IVisualLayerCollection mainShiftLayers,
-			IDictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> skillStaffPeriods,
-			WorkShiftLengthHintOption lengthFactor,
-			bool useMinimumPersons,
-			bool useMaximumPersons)
-		{
-			return instance.CalculateShiftValue(
-				new WorkShiftCalculatableVisualLayerCollection(mainShiftLayers),
-				new WorkShiftCalculatorSkillStaffPeriodData(skillStaffPeriods),
-				lengthFactor,
-				useMaximumPersons,
-				useMaximumPersons,
-				TimeHelper.FitToDefaultResolution);
-		}
-
-		public static double CalculateShiftValue(
-			this IWorkShiftCalculator instance,
 			IEnumerable<IWorkShiftCalculatableLayer> mainShiftLayers,
 			IWorkShiftCalculatorSkillStaffPeriodData skillStaffPeriodData,
 			WorkShiftLengthHintOption lengthFactor,
@@ -41,36 +24,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				useMaximumPersons,
 				useMaximumPersons,
 				TimeHelper.FitToDefaultResolution);
-		}
-
-		public static double CalculateShiftValue(
-			this IWorkShiftCalculator instance,
-			IVisualLayerCollection mainShiftLayers,
-			IWorkShiftCalculatorSkillStaffPeriodData skillStaffPeriodData,
-			WorkShiftLengthHintOption lengthFactor,
-			bool useMinimumPersons,
-			bool useMaximumPersons)
-		{
-			return instance.CalculateShiftValue(
-				new WorkShiftCalculatableVisualLayerCollection(mainShiftLayers),
-				skillStaffPeriodData,
-				lengthFactor,
-				useMaximumPersons,
-				useMaximumPersons,
-				TimeHelper.FitToDefaultResolution);
-		}
-
-
-		public static double CalculateDeviationImprovementAfterAssignment(IVisualLayerCollection layerCollection, Dictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> skillStaffPeriods)
-		{
-			return WorkShiftCalculator.CalculateDeviationImprovementAfterAssignment(
-				new WorkShiftCalculatableVisualLayerCollection(layerCollection),
-				new WorkShiftCalculatorSkillStaffPeriodData(skillStaffPeriods));
-		}
-
-		public static IEnumerable<IImprovableWorkShiftCalculation> CalculateListForBestImprovementAfterAssignment(IList<IWorkShiftCalculationResultHolder> cashes, Dictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> skillStaffPeriods)
-		{
-			return WorkShiftCalculator.CalculateListForBestImprovementAfterAssignment(cashes, new WorkShiftCalculatorSkillStaffPeriodData(skillStaffPeriods));
 		}
 	}
 

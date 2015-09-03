@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.DomainTest.Time;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -16,33 +13,23 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 	[TestFixture]
     public class WorkShiftCalculatorTest
     {
-        private DateTime _date;
+        private readonly DateTime _date = new DateTime(2009, 2, 2, 10, 0, 0, DateTimeKind.Utc);
         private IVisualLayerFactory _layerFactory;
-        private MockRepository _mocks;
-    	private IWorkShiftCalculator _target;
+        private IWorkShiftCalculator _target;
     	private IPerson _person;
 
     	[SetUp]
         public void Setup()
         {
-            _date = new DateTime(2009, 2, 2, 10, 0, 0, DateTimeKind.Utc);
         	_person = PersonFactory.CreatePerson();
             _layerFactory = new VisualLayerFactory();
-            _mocks = new MockRepository();
-			_target = MakeTarget();
+			_target = new WorkShiftCalculator();
         }
 
-		private static WorkShiftCalculator MakeTarget()
-		{
-			WorkShiftCalculator calculator = new WorkShiftCalculator();
-			return calculator;
-		}
-	
 		[Test]
         public void VerifyCalculate()
         {
-
-            DateTimePeriod period1 = new DateTimePeriod(_date, _date.AddMinutes(15));
+			var period1 = new DateTimePeriod(_date, _date.AddMinutes(15));
             DateTimePeriod period2 = new DateTimePeriod(_date.AddMinutes(15), _date.AddMinutes(30));
             DateTimePeriod period3 = new DateTimePeriod(_date.AddMinutes(30), _date.AddMinutes(45));
             DateTimePeriod period4 = new DateTimePeriod(_date.AddMinutes(45), _date.AddMinutes(60));
@@ -80,8 +67,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             skillStaffPeriods.Add(activity1, dataHolders);
             skillStaffPeriods.Add(activity2, dataHolders2);
 
-            WorkShiftCalculator calculator = new WorkShiftCalculator();
-			calculator.CalculateShiftValue(layerCollection, skillStaffPeriods, WorkShiftLengthHintOption.Free, true, true);
+            _target.CalculateShiftValue(new WorkShiftCalculatableVisualLayerCollection(layerCollection), new WorkShiftCalculatorSkillStaffPeriodData(skillStaffPeriods), WorkShiftLengthHintOption.Free, true, true);
         }
 
         [Test]
@@ -334,8 +320,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         [Test]
         public void VerifyCalculateWhenRequiresSkill()
         {
-            _date = new DateTime(2009, 2, 2, 10, 0, 0, DateTimeKind.Utc);
-            DateTimePeriod period2 = new DateTimePeriod(_date.AddMinutes(15), _date.AddMinutes(30));
+            var period2 = new DateTimePeriod(_date.AddMinutes(15), _date.AddMinutes(30));
 
 			var activity1 = ActivityFactory.CreateActivity("ittan");
             activity1.RequiresSkill = true;
@@ -350,19 +335,17 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Dictionary<DateTime, ISkillStaffPeriodDataHolder> dataHolders = new Dictionary<DateTime, ISkillStaffPeriodDataHolder>();
             dataHolders.Add(period2.StartDateTime, dataHolder1);
 
-            Dictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> skillStaffPeriods = new Dictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>>();
+            var skillStaffPeriods = new Dictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>>();
             skillStaffPeriods.Add(activity1, dataHolders);
 
-            var calculator = MakeTarget();
-			calculator.CalculateShiftValue(layerCollection, skillStaffPeriods, WorkShiftLengthHintOption.Free, true, true);
+            _target.CalculateShiftValue(new WorkShiftCalculatableVisualLayerCollection(layerCollection), new WorkShiftCalculatorSkillStaffPeriodData(skillStaffPeriods), WorkShiftLengthHintOption.Free, true, true);
 
         }
 
 	    [Test]
         public void VerifyCalculateWhenRequiresSkillOnEnd()
         {
-            _date = new DateTime(2009, 2, 2, 10, 0, 0, DateTimeKind.Utc);
-            DateTimePeriod period1 = new DateTimePeriod(_date, _date.AddMinutes(15));
+            var period1 = new DateTimePeriod(_date, _date.AddMinutes(15));
 
 			var activity1 = ActivityFactory.CreateActivity("ittan");
 			var activity2 = ActivityFactory.CreateActivity("tvåan");
@@ -375,22 +358,20 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             ISkillStaffPeriodDataHolder dataHolder1 = new SkillStaffPeriodDataInfo(5, 80, period1, 1, 5, 0, null);
 
-            Dictionary<DateTime, ISkillStaffPeriodDataHolder> dataHolders = new Dictionary<DateTime, ISkillStaffPeriodDataHolder>();
+            var dataHolders = new Dictionary<DateTime, ISkillStaffPeriodDataHolder>();
             dataHolders.Add(period1.StartDateTime, dataHolder1);
 
-            Dictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> skillStaffPeriods = new Dictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>>();
+            var skillStaffPeriods = new Dictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>>();
             skillStaffPeriods.Add(activity2, dataHolders);
 
-            WorkShiftCalculator calculator = new WorkShiftCalculator();
-			calculator.CalculateShiftValue(layerCollection, skillStaffPeriods, WorkShiftLengthHintOption.Free, true, true);
+            _target.CalculateShiftValue(new WorkShiftCalculatableVisualLayerCollection(layerCollection), new WorkShiftCalculatorSkillStaffPeriodData(skillStaffPeriods), WorkShiftLengthHintOption.Free, true, true);
         }
 
         [Test]
         public void VerifyCalculateWhenNotRequiresSkillInMiddle()
         {
-            _date = new DateTime(2009, 2, 2, 10, 0, 0, DateTimeKind.Utc);
-            DateTimePeriod period1 = new DateTimePeriod(_date, _date.AddMinutes(15));
-            DateTimePeriod period4 = new DateTimePeriod(_date.AddMinutes(45), _date.AddMinutes(60));
+            var period1 = new DateTimePeriod(_date, _date.AddMinutes(15));
+            var period4 = new DateTimePeriod(_date.AddMinutes(45), _date.AddMinutes(60));
 
 			var activity1 = ActivityFactory.CreateActivity("ittan");
             activity1.RequiresSkill = false;
@@ -401,21 +382,19 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IList<IVisualLayer> layers = new List<IVisualLayer> { layer1 };
             IVisualLayerCollection layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
 
-            SkillStaffPeriodDataInfo dataHolder1 = new SkillStaffPeriodDataInfo(5, 80, period1, 1, 5, 0, null);
+            var dataHolder1 = new SkillStaffPeriodDataInfo(5, 80, period1, 1, 5, 0, null);
 
-            SkillStaffPeriodDataInfo dataHolder4 = new SkillStaffPeriodDataInfo(5, 5, period4, 1, 5, 0, null);
+            var dataHolder4 = new SkillStaffPeriodDataInfo(5, 5, period4, 1, 5, 0, null);
 
-            Dictionary<DateTime, ISkillStaffPeriodDataHolder> dataHolders = new Dictionary<DateTime, ISkillStaffPeriodDataHolder>();
+            var dataHolders = new Dictionary<DateTime, ISkillStaffPeriodDataHolder>();
             dataHolders.Add(period1.StartDateTime, dataHolder1);
             //closed
             dataHolders.Add(period4.StartDateTime, dataHolder4);
 
-
-            Dictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> skillStaffPeriods = new Dictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>>();
+            var skillStaffPeriods = new Dictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>>();
             skillStaffPeriods.Add(activity1, dataHolders);
 
-            WorkShiftCalculator calculator = new WorkShiftCalculator();
-			calculator.CalculateShiftValue(layerCollection, skillStaffPeriods, WorkShiftLengthHintOption.Free, true, true);
+            _target.CalculateShiftValue(new WorkShiftCalculatableVisualLayerCollection(layerCollection), new WorkShiftCalculatorSkillStaffPeriodData(skillStaffPeriods), WorkShiftLengthHintOption.Free, true, true);
         }
 
         [Test]
@@ -439,20 +418,19 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             SkillStaffPeriodDataInfo dataHolder3 = new SkillStaffPeriodDataInfo(0, 0, period3, 1, 5, 0, null);
             SkillStaffPeriodDataInfo dataHolder4 = new SkillStaffPeriodDataInfo(5, 5, period4, 1, 5, 0, null);
 
-            Dictionary<DateTime, ISkillStaffPeriodDataHolder> dataHolders = new Dictionary<DateTime, ISkillStaffPeriodDataHolder>();
+            var dataHolders = new Dictionary<DateTime, ISkillStaffPeriodDataHolder>();
             dataHolders.Add(period1.StartDateTime, dataHolder1);
             dataHolders.Add(period3.StartDateTime, dataHolder3);
             dataHolders.Add(period4.StartDateTime, dataHolder4);
 
-            Dictionary<DateTime, ISkillStaffPeriodDataHolder> dataHolders2 = new Dictionary<DateTime, ISkillStaffPeriodDataHolder>();
+            var dataHolders2 = new Dictionary<DateTime, ISkillStaffPeriodDataHolder>();
             dataHolders2.Add(period3.StartDateTime, dataHolder3);
             dataHolders2.Add(period4.StartDateTime, dataHolder4);
 
-            Dictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> skillStaffPeriods = new Dictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>>();
+            var skillStaffPeriods = new Dictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>>();
             skillStaffPeriods.Add(activity1, dataHolders);
 
-            WorkShiftCalculator calculator = MakeTarget();
-			calculator.CalculateShiftValue(layerCollection, skillStaffPeriods, WorkShiftLengthHintOption.Free, true, true);
+            _target.CalculateShiftValue(new WorkShiftCalculatableVisualLayerCollection(layerCollection), new WorkShiftCalculatorSkillStaffPeriodData(skillStaffPeriods), WorkShiftLengthHintOption.Free, true, true);
 
             
         }
@@ -460,11 +438,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         [Test]
         public void VerifyCalculateWhenShortBreakShorterThanPeriod()
         {
-            _date = new DateTime(2009, 2, 2, 10, 0, 0, DateTimeKind.Utc);
-            DateTimePeriod period1 = new DateTimePeriod(_date, _date.AddMinutes(30));
-            DateTimePeriod period2 = new DateTimePeriod(_date.AddMinutes(30), _date.AddMinutes(60));
-            DateTimePeriod period3 = new DateTimePeriod(_date.AddMinutes(60), _date.AddMinutes(90));
-            DateTimePeriod period4 = new DateTimePeriod(_date.AddMinutes(90), _date.AddMinutes(120));
+            var period1 = new DateTimePeriod(_date, _date.AddMinutes(30));
+            var period2 = new DateTimePeriod(_date.AddMinutes(30), _date.AddMinutes(60));
+            var period3 = new DateTimePeriod(_date.AddMinutes(60), _date.AddMinutes(90));
+            var period4 = new DateTimePeriod(_date.AddMinutes(90), _date.AddMinutes(120));
 
 			var activityPhone = ActivityFactory.CreateActivity("phone");
             activityPhone.RequiresSkill = true;
@@ -480,165 +457,39 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IList<IVisualLayer> layers = new List<IVisualLayer> { layerPhone, layerBreak };
             IVisualLayerCollection layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
 
-            SkillStaffPeriodDataInfo dataHolder1 = new SkillStaffPeriodDataInfo(5, 80, period1, 1, 5, 0, null);
-            SkillStaffPeriodDataInfo dataHolder2 = new SkillStaffPeriodDataInfo(5, 80, period2, 1, 5, 0, null);
-            SkillStaffPeriodDataInfo dataHolder3 = new SkillStaffPeriodDataInfo(5, 80, period3, 1, 5, 0, null);
-            SkillStaffPeriodDataInfo dataHolder4 = new SkillStaffPeriodDataInfo(5, 5, period4, 1, 5, 0, null);
+            var dataHolder1 = new SkillStaffPeriodDataInfo(5, 80, period1, 1, 5, 0, null);
+            var dataHolder2 = new SkillStaffPeriodDataInfo(5, 80, period2, 1, 5, 0, null);
+            var dataHolder3 = new SkillStaffPeriodDataInfo(5, 80, period3, 1, 5, 0, null);
+            var dataHolder4 = new SkillStaffPeriodDataInfo(5, 5, period4, 1, 5, 0, null);
 
-            Dictionary<DateTime, ISkillStaffPeriodDataHolder> dataHolders = new Dictionary<DateTime, ISkillStaffPeriodDataHolder>();
+            var dataHolders = new Dictionary<DateTime, ISkillStaffPeriodDataHolder>();
             dataHolders.Add(period1.StartDateTime, dataHolder1);
             dataHolders.Add(period2.StartDateTime, dataHolder2);
             dataHolders.Add(period3.StartDateTime, dataHolder3);
             dataHolders.Add(period4.StartDateTime, dataHolder4);
 
-            Dictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> skillStaffPeriods = new Dictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>>();
+            var skillStaffPeriods = new Dictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>>();
             skillStaffPeriods.Add(activityPhone, dataHolders);
 
-			WorkShiftCalculator calculator = MakeTarget();
-			var result = calculator.CalculateShiftValue(layerCollection, skillStaffPeriods, WorkShiftLengthHintOption.Free, true, true);
+			var result = _target.CalculateShiftValue(new WorkShiftCalculatableVisualLayerCollection(layerCollection),new WorkShiftCalculatorSkillStaffPeriodData(skillStaffPeriods), WorkShiftLengthHintOption.Free, true, true);
 
             Assert.Greater(result, double.MinValue);
 
             layers = new List<IVisualLayer> { layerPhone, layerBreak2 };
             layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
 
-			var result2 = calculator.CalculateShiftValue(layerCollection, skillStaffPeriods, WorkShiftLengthHintOption.Free, true, true);
+			var result2 = _target.CalculateShiftValue(new WorkShiftCalculatableVisualLayerCollection(layerCollection), new WorkShiftCalculatorSkillStaffPeriodData(skillStaffPeriods), WorkShiftLengthHintOption.Free, true, true);
 
             Assert.AreEqual(-3240, result);
             Assert.AreEqual(result, result2);
         }
 
         [Test]
-        public void VerifyCalculateDeviationImprovement()
-        {
-            _date = new DateTime(2009, 2, 2, 10, 0, 0, DateTimeKind.Utc);
-            DateTimePeriod period1 = new DateTimePeriod(_date, _date.AddMinutes(15));
-            DateTimePeriod period2 = new DateTimePeriod(_date.AddMinutes(15), _date.AddMinutes(30));
-            DateTimePeriod period3 = new DateTimePeriod(_date.AddMinutes(30), _date.AddMinutes(450));
-
-			var activityPhone = ActivityFactory.CreateActivity("phone");
-			activityPhone.RequiresSkill = true;
-
-            IVisualLayer layerPhone = _layerFactory.CreateShiftSetupLayer(activityPhone, new DateTimePeriod(_date, _date.AddMinutes(120)),_person);
-            
-            IList<IVisualLayer> layers = new List<IVisualLayer> { layerPhone };
-            IVisualLayerCollection layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
-
-            IPeriodDistribution distr1 = _mocks.StrictMock<IPeriodDistribution>();
-            IPeriodDistribution distr2 = _mocks.StrictMock<IPeriodDistribution>();
-            IPeriodDistribution distr3 = _mocks.StrictMock<IPeriodDistribution>();
-
-            SkillStaffPeriodDataInfo dataHolder1 = new SkillStaffPeriodDataInfo(5, 80, period1, 1, 5, 0, distr1);
-            SkillStaffPeriodDataInfo dataHolder2 = new SkillStaffPeriodDataInfo(5, 80, period2, 1, 5, 0, distr2);
-            SkillStaffPeriodDataInfo dataHolder3 = new SkillStaffPeriodDataInfo(5, 80, period3, 1, 5, 0, distr3);
-            Dictionary<DateTime, ISkillStaffPeriodDataHolder> dataHolders = new Dictionary<DateTime, ISkillStaffPeriodDataHolder>
-                                                                                {
-                                                                                    {period1.StartDateTime, dataHolder1},
-                                                                                    {period2.StartDateTime, dataHolder2},
-                                                                                    {period3.StartDateTime, dataHolder3}
-                                                                                };
-
-            Dictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> skillStaffPeriods = new Dictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>>();
-            skillStaffPeriods.Add(activityPhone, dataHolders);
-
-            using (_mocks.Record())
-            {
-                Expect.Call(distr1.CalculateStandardDeviation()).Return(10).Repeat.AtLeastOnce();
-                Expect.Call(distr2.CalculateStandardDeviation()).Return(20).Repeat.AtLeastOnce();
-                Expect.Call(distr3.CalculateStandardDeviation()).Return(0).Repeat.AtLeastOnce();
-
-                Expect.Call(distr1.DeviationAfterNewLayers(layerCollection)).Return(5).Repeat.AtLeastOnce();
-                Expect.Call(distr2.DeviationAfterNewLayers(layerCollection)).Return(10).Repeat.AtLeastOnce();
-                
-            }
-            using (_mocks.Playback())
-            {
-
-                double result = WorkShiftCalculatorExtensions.CalculateDeviationImprovementAfterAssignment(layerCollection, skillStaffPeriods);
-                
-                Assert.AreEqual(15, result);
-            }
-        }
-
-        [Test]
-        public void VerifyCalculateListForDeviationImprovement()
-        {
-            _date = new DateTime(2009, 2, 2, 10, 0, 0, DateTimeKind.Utc);
-            DateTimePeriod period1 = new DateTimePeriod(_date, _date.AddMinutes(15));
-            DateTimePeriod period2 = new DateTimePeriod(_date.AddMinutes(15), _date.AddMinutes(30));
-            DateTimePeriod period3 = new DateTimePeriod(_date.AddMinutes(30), _date.AddMinutes(450));
-
-			var activityPhone = ActivityFactory.CreateActivity("phone");
-			activityPhone.RequiresSkill = true;
-
-            IVisualLayer layerPhone = _layerFactory.CreateShiftSetupLayer(activityPhone, new DateTimePeriod(_date, _date.AddMinutes(120)),_person);
-
-            IList<IVisualLayer> layers = new List<IVisualLayer> { layerPhone };
-			IVisualLayerCollection layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
-	        IEnumerable<IWorkShiftCalculatableLayer> layerCollectionW = new WorkShiftCalculatableVisualLayerCollection(layerCollection);
-
-            IVisualLayer layerPhone2 = _layerFactory.CreateShiftSetupLayer(activityPhone, new DateTimePeriod(_date, _date.AddMinutes(120)),_person);
-
-            IList<IVisualLayer> layers2 = new List<IVisualLayer> { layerPhone2 };
-            IVisualLayerCollection layerCollection2 = new VisualLayerCollection(null, layers2, new ProjectionPayloadMerger());
-			IEnumerable<IWorkShiftCalculatableLayer> layerCollection2W = new WorkShiftCalculatableVisualLayerCollection(layerCollection2);
-
-            IPeriodDistribution distr1 = _mocks.StrictMock<IPeriodDistribution>();
-            IPeriodDistribution distr2 = _mocks.StrictMock<IPeriodDistribution>();
-            IPeriodDistribution distr3 = _mocks.StrictMock<IPeriodDistribution>();
-
-            SkillStaffPeriodDataInfo dataHolder1 = new SkillStaffPeriodDataInfo(5, 80, period1, 1, 5, 0, distr1);
-            SkillStaffPeriodDataInfo dataHolder2 = new SkillStaffPeriodDataInfo(5, 80, period2, 1, 5, 0, distr2);
-            SkillStaffPeriodDataInfo dataHolder3 = new SkillStaffPeriodDataInfo(5, 80, period3, 1, 5, 0, distr3);
-            Dictionary<DateTime, ISkillStaffPeriodDataHolder> dataHolders = new Dictionary<DateTime, ISkillStaffPeriodDataHolder>
-                                                                                {
-                                                                                    {period1.StartDateTime, dataHolder1},
-                                                                                    {period2.StartDateTime, dataHolder2},
-                                                                                    {period3.StartDateTime, dataHolder3}
-                                                                                };
-
-            Dictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> skillStaffPeriods = new Dictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>>();
-            skillStaffPeriods.Add(activityPhone, dataHolders);
-
-            IShiftProjectionCache cache1 = _mocks.StrictMock<IShiftProjectionCache>();
-            IShiftProjectionCache cache2 = _mocks.StrictMock<IShiftProjectionCache>();
-            IWorkShiftCalculationResultHolder resultHolder1 = new WorkShiftCalculationResult { ShiftProjection = cache1, Value = 1 };
-            IWorkShiftCalculationResultHolder resultHolder2 = new WorkShiftCalculationResult { ShiftProjection = cache2, Value = 2 };
-            IList<IWorkShiftCalculationResultHolder> cashes = new List<IWorkShiftCalculationResultHolder> { resultHolder1, resultHolder2 };
-
-            using (_mocks.Record())
-            {
-				Expect.Call(cache1.WorkShiftCalculatableLayers).Return(layerCollectionW).Repeat.AtLeastOnce();
-				Expect.Call(cache2.WorkShiftCalculatableLayers).Return(layerCollection2W).Repeat.AtLeastOnce();
-
-                Expect.Call(distr1.CalculateStandardDeviation()).Return(10).Repeat.AtLeastOnce();
-                Expect.Call(distr2.CalculateStandardDeviation()).Return(20).Repeat.AtLeastOnce();
-                Expect.Call(distr3.CalculateStandardDeviation()).Return(0).Repeat.AtLeastOnce();
-
-                Expect.Call(distr1.DeviationAfterNewLayers(layerCollection)).Return(5).Repeat.AtLeastOnce();
-                Expect.Call(distr2.DeviationAfterNewLayers(layerCollection)).Return(10).Repeat.AtLeastOnce();
-
-                Expect.Call(distr1.DeviationAfterNewLayers(layerCollection2)).Return(0).Repeat.AtLeastOnce();
-                Expect.Call(distr2.DeviationAfterNewLayers(layerCollection2)).Return(10).Repeat.AtLeastOnce();
-
-            }
-            using (_mocks.Playback())
-            {
-
-                var result = WorkShiftCalculatorExtensions.CalculateListForBestImprovementAfterAssignment(cashes, skillStaffPeriods);
-
-                Assert.AreEqual(1, result.Count());
-                Assert.AreEqual(cache2, result.First().WorkShiftCalculatableProjection);
-            }
-        }
-
-        [Test]
         public void VerifyOutsideOpenHours()
         {
-            _date = new DateTime(2009, 2, 2, 10, 0, 0, DateTimeKind.Utc);
-            DateTimePeriod period1 = new DateTimePeriod(_date, _date.AddMinutes(15));
-            DateTimePeriod period2 = new DateTimePeriod(_date.AddMinutes(15), _date.AddMinutes(30));
-            DateTimePeriod period3 = new DateTimePeriod(_date.AddMinutes(30), _date.AddMinutes(45));
+            var period1 = new DateTimePeriod(_date, _date.AddMinutes(15));
+            var period2 = new DateTimePeriod(_date.AddMinutes(15), _date.AddMinutes(30));
+            var period3 = new DateTimePeriod(_date.AddMinutes(30), _date.AddMinutes(45));
 
 			var activityPhone = ActivityFactory.CreateActivity("phone");
 			activityPhone.RequiresSkill = true;
@@ -648,21 +499,20 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IList<IVisualLayer> layers = new List<IVisualLayer> { layerPhone };
             IVisualLayerCollection layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
 
-            SkillStaffPeriodDataInfo dataHolder1 = new SkillStaffPeriodDataInfo(5, 80, period1, 1, 5, 0, null);
-            SkillStaffPeriodDataInfo dataHolder2 = new SkillStaffPeriodDataInfo(5, 80, period2, 1, 5, 0, null);
-            SkillStaffPeriodDataInfo dataHolder3 = new SkillStaffPeriodDataInfo(5, 80, period3, 1, 5, 0, null);
-            Dictionary<DateTime, ISkillStaffPeriodDataHolder> dataHolders = new Dictionary<DateTime, ISkillStaffPeriodDataHolder>
+            var dataHolder1 = new SkillStaffPeriodDataInfo(5, 80, period1, 1, 5, 0, null);
+            var dataHolder2 = new SkillStaffPeriodDataInfo(5, 80, period2, 1, 5, 0, null);
+            var dataHolder3 = new SkillStaffPeriodDataInfo(5, 80, period3, 1, 5, 0, null);
+            var dataHolders = new Dictionary<DateTime, ISkillStaffPeriodDataHolder>
                                                                                 {
                                                                                     {period1.StartDateTime, dataHolder1},
                                                                                     {period2.StartDateTime, dataHolder2},
                                                                                     {period3.StartDateTime, dataHolder3}
                                                                                 };
 
-            Dictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> skillStaffPeriods = new Dictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>>();
+            var skillStaffPeriods = new Dictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>>();
             skillStaffPeriods.Add(activityPhone, dataHolders);
 
-	        WorkShiftCalculator calculator = MakeTarget();
-            var result = calculator.CalculateShiftValue(layerCollection, skillStaffPeriods, 0, false, false);
+	        var result = _target.CalculateShiftValue(new WorkShiftCalculatableVisualLayerCollection(layerCollection), new WorkShiftCalculatorSkillStaffPeriodData(skillStaffPeriods), 0, false, false);
             
             Assert.AreEqual(double.MinValue, result);
         }

@@ -62,14 +62,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
                     if (effectiveRestriction == null || effectiveRestriction.DayOffTemplate == null) continue;
                     // borde inte detta hanteras när effective restriction skapas och då returnera null??
                     if (EffectiveRestrictionCreator.OptionsConflictWithRestrictions(schedulingOptions, effectiveRestriction)) continue;
-                    try
+	                var schedulePartModifyAndRollbackService = _schedulePartModifyAndRollbackService();
+	                try
                     {
                         part.CreateAndAddDayOff(effectiveRestriction.DayOffTemplate);
-                        _schedulePartModifyAndRollbackService().Modify(part);
+                        schedulePartModifyAndRollbackService.Modify(part);
                     }
                     catch (DayOffOutsideScheduleException)
                     {
-                        _schedulePartModifyAndRollbackService().Rollback();
+                        schedulePartModifyAndRollbackService.Rollback();
                     }
 
                     var eventArgs = new SchedulingServiceSuccessfulEventArgs(part, () => cancel=true);
