@@ -17,16 +17,14 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		private readonly IMissingForecastProvider _missingForecastProvider;
 		private readonly IPlanningPeriodRepository _planningPeriodRespository;
 		private readonly INow _now;
-		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 
 		public PlanningPeriodController(INextPlanningPeriodProvider nextPlanningPeriodProvider,
-			IMissingForecastProvider missingForecastProvider, IPlanningPeriodRepository planningPeriodRespository, INow now, ICurrentBusinessUnit currentBusinessUnit)
+			IMissingForecastProvider missingForecastProvider, IPlanningPeriodRepository planningPeriodRespository, INow now)
 		{
 			_nextPlanningPeriodProvider = nextPlanningPeriodProvider;
 			_missingForecastProvider = missingForecastProvider;
 			_planningPeriodRespository = planningPeriodRespository;
 			_now = now;
-			_currentBusinessUnit = currentBusinessUnit;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod")]

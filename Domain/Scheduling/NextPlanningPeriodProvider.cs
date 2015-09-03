@@ -11,13 +11,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	{
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
 		private readonly INow _now;
-		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 
-		public NextPlanningPeriodProvider(IPlanningPeriodRepository planningPeriodRepository, INow now, ICurrentBusinessUnit currentBusinessUnit)
+		public NextPlanningPeriodProvider(IPlanningPeriodRepository planningPeriodRepository, INow now)
 		{
 			_planningPeriodRepository = planningPeriodRepository;
 			_now = now;
-			_currentBusinessUnit = currentBusinessUnit;
 		}
 		
 		public IPlanningPeriod Current()
