@@ -12267,4 +12267,193 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Optimeringssteg(en) {0} kommer inte att köras om team eller block är valt</value>
     <comment>Optimization step(s) {0} are not executed when team or block are selected.</comment>
   </data>
+  <data name="YouHaveBeenAllocatedSeat" xml:space="preserve">
+    <value>{0} har du följande plats {1}.</value>
+  </data>
+  <data name="YouHaveNotBeenAllocatedSeat" xml:space="preserve">
+    <value>{0} har du inte någon tilldelad plats.</value>
+  </data>
+  <data name="SeatMap" xml:space="preserve">
+    <value>Platskarta</value>
+  </data>
+  <data name="SeatPlan" xml:space="preserve">
+    <value>Platsplan</value>
+  </data>
+  <data name="showMoreHeaderFields" xml:space="preserve">
+    <value>Fler rubrikfält</value>
+  </data>
+  <data name="AdherenceCannotBeEmpty" xml:space="preserve">
+    <value>Fältet Schemauppföljning kan inte vara tomt</value>
+  </data>
+  <data name="ForecastChartIntro" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="GenerateForecastTip" xml:space="preserve">
+    <value>Skapa prognos</value>
+  </data>
+  <data name="PeriodSelectionTip" xml:space="preserve">
+    <value>Periodval</value>
+  </data>
+  <data name="ViewChartTip" xml:space="preserve">
+    <value>Visa metodgraf</value>
+  </data>
+  <data name="ForecastAll" xml:space="preserve">
+    <value>Prognostisera alla</value>
+  </data>
+  <data name="SelectForecastPeriodIntro" xml:space="preserve">
+    <value>Välj en framtida period att prognostisera</value>
+  </data>
+  <data name="ChangePlanningPeriodTo" xml:space="preserve">
+    <value>Ändra planeringsperiod till</value>
+  </data>
+  <data name="HavingRangeOf" xml:space="preserve">
+    <value>med längden </value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteThisCampaign" xml:space="preserve">
+    <value>Är du säker på att du vill ta bort den här kampanjen?</value>
+  </data>
+  <data name="CallListLength" xml:space="preserve">
+    <value>Längd på samtalslista</value>
+  </data>
+  <data name="Campaign" xml:space="preserve">
+    <value>Kampanj</value>
+  </data>
+  <data name="CampaignName" xml:space="preserve">
+    <value>Kampanjnamn</value>
+  </data>
+  <data name="Campaigns" xml:space="preserve">
+    <value>Kampanjer</value>
+  </data>
+  <data name="DeleteCampaign" xml:space="preserve">
+    <value>Ta bort kampanj</value>
+  </data>
+  <data name="WorkingHours" xml:space="preserve">
+    <value>Arbetstid</value>
+  </data>
+  <data name="SchedulePeriodNotInRange" xml:space="preserve">
+    <value>Schemaperioden är inte inom planeringsperioden</value>
+  </data>
+  <data name="ReportTimeoutMessage" xml:space="preserve">
+    <value>Tyvärr är systemet upptaget just nu. Försök med ett smalare rapporturval eller prova igen senare.</value>
+  </data>
+  <data name="SeatPlanStatusError" xml:space="preserve">
+    <value>Vissa agenter kunde inte tilldelas någon plats den här dagen.</value>
+  </data>
+  <data name="SeatPlanStatusInProgress" xml:space="preserve">
+    <value>Platsplanering pågår för den här dagen.</value>
+  </data>
+  <data name="SeatPlanStatusNoSeatPlanned" xml:space="preserve">
+    <value>Inga platser har tilldelats den här dagen.</value>
+  </data>
+  <data name="SeatPlanStatusOK" xml:space="preserve">
+    <value>Alla valda agenter tilldelades platser.</value>
+  </data>
+  <data name="AgentCountTitle" xml:space="preserve">
+    <value>agenter</value>
+  </data>
+  <data name="PlanningPeriodsFor" xml:space="preserve">
+    <value>Planeringsperioder för</value>
+  </data>
+  <data name="SeatCountTitle" xml:space="preserve">
+    <value>platser</value>
+  </data>
+  <data name="CouldNotGetMessagesFromMessageBroker" xml:space="preserve">
+    <value>Kunde inte få meddelanden från message broker</value>
+  </data>
+  <data name="CreateCampaign" xml:space="preserve">
+    <value>Skapa kampanj</value>
+  </data>
+  <data name="EditCampaign" xml:space="preserve">
+    <value>Ändra kampanj</value>
+  </data>
+  <data name="CampaignCreated" xml:space="preserve">
+    <value>Kampanj {0} har skapats.</value>
+  </data>
+  <data name="CampaignFailedCreation" xml:space="preserve">
+    <value>Misslyckades med att skapa kampanj: {0},</value>
+  </data>
+  <data name="CampaignFailedLoading" xml:space="preserve">
+    <value>Misslyckades med att ladda kampanj: {0}.</value>
+  </data>
+  <data name="CampaignFailedUpdate" xml:space="preserve">
+    <value>Misslyckades med att uppdatera kampanj: {0}.</value>
+  </data>
+  <data name="CampaignUpdated" xml:space="preserve">
+    <value>Kampanjen {0} har uppdaterats.</value>
+  </data>
+  <data name="LargeValueRange" xml:space="preserve">
+    <value>0 ~ 1000000</value>
+  </data>
+  <data name="NewActivityName" xml:space="preserve">
+    <value>Nytt aktivitetsnamn</value>
+  </data>
+  <data name="RateRange" xml:space="preserve">
+    <value>1 ~ 100</value>
+  </data>
+  <data name="UseExistingActivity" xml:space="preserve">
+    <value>Använd befintlig aktivitet</value>
+  </data>
+  <data name="ValueRange" xml:space="preserve">
+    <value>0 ~ 9999</value>
+  </data>
+  <data name="NewCampaignName" xml:space="preserve">
+    <value>Nytt kampanjnamn</value>
+  </data>
+  <data name="CampaignNameInvalid" xml:space="preserve">
+    <value>Det angivna kampanjnamnet är inte giltigt. Det kan innehålla max 255 tecken.</value>
+  </data>
+  <data name="EmptyPasswordErrorMsgSemicolon" xml:space="preserve">
+    <value>tomt lösenord;</value>
+  </data>
+  <data name="Ongoing" xml:space="preserve">
+    <value>Pågående</value>
+  </data>
+  <data name="NoLogonAccountErrorMsgSemicolon" xml:space="preserve">
+    <value>inget inloggningskonto;</value>
+  </data>
+  <data name="RoleXNotExistErrorMsgSemicolon" xml:space="preserve">
+    <value>rollen {0} finns inte;</value>
+  </data>
+  <data name="ManualPlan" xml:space="preserve">
+    <value>manuell planering</value>
+  </data>
+  <data name="DragAndDropCsvFilesHereOrClickToUpload" xml:space="preserve">
+    <value>Klicka och dra .csv-filer hit eller klicka för att ladda upp filer</value>
+  </data>
+  <data name="ImportUsers" xml:space="preserve">
+    <value>Importera användare</value>
+  </data>
+  <data name="Healthy" xml:space="preserve">
+    <value>I tid</value>
+  </data>
+  <data name="ReferToFileTemplate" xml:space="preserve">
+    <value>Var god se fil-mallen</value>
+  </data>
+  <data name="GenerateReport" xml:space="preserve">
+    <value>Skapa rapport</value>
+  </data>
+  <data name="ManuallyPlanned" xml:space="preserve">
+    <value>Manuellt planerat</value>
+  </data>
+  <data name="StartDateAndEndDateMustBeSet" xml:space="preserve">
+    <value>Start- och slutdatum måste anges.</value>
+  </data>
+  <data name="YouMightNeedToChangeTheShiftBagAccordingly" xml:space="preserve">
+    <value>Du kan behöva uppdatera skiftpåsen i enlighet med detta.</value>
+  </data>
+  <data name="ClosedDay" xml:space="preserve">
+    <value>Stängd dag.</value>
+  </data>
+  <data name="ViewReport" xml:space="preserve">
+    <value>Visa rapport</value>
+  </data>
+  <data name="AdjustSkill" xml:space="preserve">
+    <value>Justera kompetens</value>
+  </data>
+  <data name="ChangeShiftBag" xml:space="preserve">
+    <value>Ändra skiftpåse</value>
+  </data>
+  <data name="PickAShiftBag" xml:space="preserve">
+    <value>Välj en skiftpåse</value>
+  </data>
 </root>
