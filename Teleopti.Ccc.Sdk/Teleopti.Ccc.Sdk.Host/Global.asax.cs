@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			var passwordPolicyService = new LoadPasswordPolicyService(passwordPolicyDocument);
 
 			var populator = EventContextPopulator.Make();
-			var businessUnit = CurrentBusinessUnit.InstanceFromContainer;
+			var businessUnit = CurrentBusinessUnit.Instance;
 			var messageSender = new MessagePopulatingServiceBusSender(busSender, populator);
 			var eventPublisher = new EventPopulatingPublisher(new ServiceBusEventPublisher(busSender), populator);
 			var senders = new List<IMessageSender>

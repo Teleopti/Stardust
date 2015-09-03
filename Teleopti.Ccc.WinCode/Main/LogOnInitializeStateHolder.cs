@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WinCode.Main
 				? (IServiceBusSender) new ServiceBusSender()
 				: new NoServiceBusSender();
 			var populator = EventContextPopulator.Make();
-			var businessUnit = CurrentBusinessUnit.InstanceFromContainer;
+			var businessUnit = CurrentBusinessUnit.Instance;
 			var messageSender = new MessagePopulatingServiceBusSender(sendToServiceBus, populator);
 			var eventPublisher = new EventPopulatingPublisher(new ServiceBusEventPublisher(sendToServiceBus), populator);
 			var senders = new List<IMessageSender>

@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Common
 		private readonly IIsHttpRequest _isHttpRequest;
 		private static ICurrentBusinessUnit _instanceFromContainer;
 
-		public static ICurrentBusinessUnit InstanceFromContainer
+		public static ICurrentBusinessUnit Instance
 		{
 			get
 			{

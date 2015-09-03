@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		public ICurrentMessageSenders Create()
 		{
 			var populator = EventContextPopulator.Make();
-			var businessUnit = CurrentBusinessUnit.InstanceFromContainer;
+			var businessUnit = CurrentBusinessUnit.Instance;
 			var messageSender = new MessagePopulatingServiceBusSender(_serviceBusSender, populator);
 			var eventPublisher = new EventPopulatingPublisher(new ServiceBusEventPublisher(_serviceBusSender), populator);
 			var senders = new List<IMessageSender>

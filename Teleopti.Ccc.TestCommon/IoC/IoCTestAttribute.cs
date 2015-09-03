@@ -98,6 +98,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		{
 			AfterTest();
 			disposeContainer();
+			CurrentBusinessUnit.Instance = null;
 		}
 
 		private void fixture(TestDetails testDetails)
