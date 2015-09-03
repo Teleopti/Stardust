@@ -101,12 +101,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<SettingsViewModelFactory>().As<ISettingsViewModelFactory>().SingleInstance();
 			builder.RegisterType<CalendarLinkSettingsPersisterAndProvider>().As<ISettingsPersisterAndProvider<CalendarLinkSettings>>().SingleInstance();
 
-			_config.Cache().This<ISettingsPersisterAndProvider<NameFormatSettings>>(b => b
-				.CacheMethod(x => x.Get())
-				);
-			builder.CacheByInterfaceProxy<NameFormatSettingsPersisterAndProvider, ISettingsPersisterAndProvider<NameFormatSettings>>().SingleInstance();
-
-			builder.RegisterType<CalendarLinkIdGenerator>().As<ICalendarLinkIdGenerator>().SingleInstance();
+            builder.RegisterType<NameFormatSettingsPersisterAndProvider>().As<ISettingsPersisterAndProvider<NameFormatSettings>>().SingleInstance();
+		    builder.RegisterType<CalendarLinkIdGenerator>().As<ICalendarLinkIdGenerator>().SingleInstance();
 			builder.RegisterType<CalendarLinkGenerator>().As<ICalendarLinkGenerator>().SingleInstance();
 			builder.RegisterType<CalendarLinkViewModelFactory>().As<ICalendarLinkViewModelFactory>().SingleInstance();
 			builder.RegisterType<CalendarTransformer>().As<ICalendarTransformer>().SingleInstance();
