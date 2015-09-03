@@ -17,14 +17,16 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		private readonly IMissingForecastProvider _missingForecastProvider;
 		private readonly IPlanningPeriodRepository _planningPeriodRespository;
 		private readonly INow _now;
+		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 
 		public PlanningPeriodController(INextPlanningPeriodProvider nextPlanningPeriodProvider,
-			IMissingForecastProvider missingForecastProvider, IPlanningPeriodRepository planningPeriodRespository, INow now)
+			IMissingForecastProvider missingForecastProvider, IPlanningPeriodRepository planningPeriodRespository, INow now, ICurrentBusinessUnit currentBusinessUnit)
 		{
 			_nextPlanningPeriodProvider = nextPlanningPeriodProvider;
 			_missingForecastProvider = missingForecastProvider;
 			_planningPeriodRespository = planningPeriodRespository;
 			_now = now;
+			_currentBusinessUnit = currentBusinessUnit;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod")]
@@ -61,7 +63,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		public virtual IHttpActionResult GetPlanningPeriodSuggestion(Guid id)
 		{
 			var planningPeriod = _planningPeriodRespository.Load(id);
-			var suggestion = _planningPeriodRespository.Suggestions(_now);
+			var suggestion = _planningPeriodRespository.Suggestions(_now, _currentBusinessUnit);
 			var result = suggestion.SuggestedPeriods(planningPeriod.Range);
 			return
 				Ok(

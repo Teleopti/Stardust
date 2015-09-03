@@ -456,7 +456,6 @@
     <Compile Include="Common\CurrentDataSource.cs" />
     <Compile Include="Common\CurrentIdentity.cs" />
     <Compile Include="Common\EntityExtensions.cs" />
-    <Compile Include="Common\ICurrentBusinessUnit.cs" />
     <Compile Include="Common\ICurrentDataSource.cs" />
     <Compile Include="Common\ICurrentIdentity.cs" />
     <Compile Include="Common\IMutateNow.cs" />
@@ -2126,7 +2125,9 @@
     <EmbeddedResource Include="Forecasting\Template\TemplateSkillDataPeriod.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Scheduling\Assignment\SchedulePeriod.hbm.xml" />
+    <EmbeddedResource Include="Scheduling\Assignment\SchedulePeriod.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Infrastructure\Filters.hbm.xml" />

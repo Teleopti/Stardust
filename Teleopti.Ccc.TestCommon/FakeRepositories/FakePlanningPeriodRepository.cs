@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces;
@@ -65,7 +66,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IUnitOfWork UnitOfWork { get; private set; }
 
-		public IPlanningPeriodSuggestions Suggestions(INow now)
+		public IPlanningPeriodSuggestions Suggestions(INow now, ICurrentBusinessUnit currentBusinessUnit)
 		{
 			if (_planningPeriodSuggestions == null)
 				return new PlanningPeriodSuggestions(now, new List<AggregatedSchedulePeriod>());

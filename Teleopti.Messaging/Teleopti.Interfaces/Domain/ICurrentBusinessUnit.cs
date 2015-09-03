@@ -1,6 +1,4 @@
-﻿using Teleopti.Interfaces.Domain;
-
-namespace Teleopti.Ccc.Domain.Common
+﻿namespace Teleopti.Interfaces.Domain
 {
 	public interface ICurrentBusinessUnit
 	{

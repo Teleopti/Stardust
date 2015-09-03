@@ -1,4 +1,5 @@
 using System.Linq;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
@@ -10,11 +11,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	{
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
 		private readonly INow _now;
+		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 
-		public NextPlanningPeriodProvider(IPlanningPeriodRepository planningPeriodRepository, INow now)
+		public NextPlanningPeriodProvider(IPlanningPeriodRepository planningPeriodRepository, INow now, ICurrentBusinessUnit currentBusinessUnit)
 		{
 			_planningPeriodRepository = planningPeriodRepository;
 			_now = now;
+			_currentBusinessUnit = currentBusinessUnit;
 		}
 		
 		public IPlanningPeriod Current()
@@ -26,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					.FirstOrDefault();
 			if (planningPeriodNotFound(result))
 			{
-				var planningPeriodSuggestion = _planningPeriodRepository.Suggestions(_now);
+				var planningPeriodSuggestion = _planningPeriodRepository.Suggestions(_now, _currentBusinessUnit);
 				var planningPeriod = new PlanningPeriod(planningPeriodSuggestion);
 				_planningPeriodRepository.Add(planningPeriod);
 				return planningPeriod;
@@ -48,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			if (planningPeriodNotFound(next))
 			{
 				//refactor
-				var planningPeriodSuggestion = _planningPeriodRepository.Suggestions(_now);
+				var planningPeriodSuggestion = _planningPeriodRepository.Suggestions(_now, _currentBusinessUnit);
 				var planningPeriod = new PlanningPeriod(planningPeriodSuggestion);
 				planningPeriod.ChangeRange(schedulePeriodForRangeCalculation);
 				_planningPeriodRepository.Add(planningPeriod);

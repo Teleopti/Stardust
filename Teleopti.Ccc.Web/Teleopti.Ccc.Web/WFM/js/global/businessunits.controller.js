@@ -12,7 +12,6 @@
 				};
 
 				$scope.changeBusinessUnit = function (selectedBu) {
-					$http.defaults.headers.common['X-Business-Unit-Filter'] = selectedBu.Id;
 					$sessionStorage.buid = selectedBu.Id;
 					$window.location.reload();
 				};

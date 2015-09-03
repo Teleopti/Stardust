@@ -1,5 +1,6 @@
 ﻿using System;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
@@ -21,12 +22,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 		}
 
-		public IPlanningPeriodSuggestions Suggestions(INow now)
+		public IPlanningPeriodSuggestions Suggestions(INow now, ICurrentBusinessUnit currentBusinessUnit)
 		{
 			var uniqueSchedulePeriods = Session.GetNamedQuery("UniqueSchedulePeriods")
 				.SetDateTime("date", now.UtcDateTime())
-				.SetGuid("businessUnit",
-					((ITeleoptiIdentity) TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit.Id.GetValueOrDefault())
+				.SetGuid("businessUnit", currentBusinessUnit.Current().Id.GetValueOrDefault())
 				.SetResultTransformer(new AliasToBeanResultTransformer(typeof(AggregatedSchedulePeriod)))
 				.List<AggregatedSchedulePeriod>();
 
