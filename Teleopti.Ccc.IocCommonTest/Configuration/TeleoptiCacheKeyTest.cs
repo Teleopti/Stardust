@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void ShouldUseBaseClassIfNoEntity()
 		{
-			var target = new exposer(null);
+			var target = new exposer();
 			target.TheKey(3).Should().Be.EqualTo("3");
 		}
 
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			//THIS ONE IS WRONG! Just uses old way for now. GetHashCode doesn't return unique value!
 
-			var target = new exposer(null);
+			var target = new exposer();
 			var restriction = new EffectiveRestriction(new StartTimeLimitation(TimeSpan.FromHours(13), null),
 			                                           new EndTimeLimitation(null, TimeSpan.FromHours(1)),
 			                                           new WorkTimeLimitation(null, null), null, null, null,
@@ -36,9 +36,6 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 
 		private class exposer : TeleoptiCacheKey
 		{
-			public exposer(ICurrentDataSource dataSource) : base(dataSource)
-			{
-			}
 			public string TheKey(object parameter)
 			{
 				return ParameterValue(parameter);

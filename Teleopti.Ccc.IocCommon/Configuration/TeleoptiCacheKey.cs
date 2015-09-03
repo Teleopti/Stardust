@@ -1,27 +1,11 @@
 using System.Globalization;
 using MbCache.Configuration;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	public class TeleoptiCacheKey : ToStringCacheKey
 	{
-		private readonly ICurrentDataSource _dataSource;
-
-		public TeleoptiCacheKey(ICurrentDataSource dataSource)
-		{
-			_dataSource = dataSource;
-		}
-
-		protected override string KeyStart()
-		{
-			var dataSource = _dataSource.Current();
-			if (dataSource != null)
-				return base.KeyStart() + dataSource.DataSourceName;
-			return base.KeyStart();
-		}
-
 		protected override string ParameterValue(object parameter)
 		{
 			var entity = parameter as IEntity;
