@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Security.Cryptography;
@@ -34,7 +35,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			var hashed = encryptString(model.Password);
 			
 			string sql = "SELECT Id, Name, AccessToken FROM Tenant.AdminUser WHERE  Email=@email AND Password=@password";
-			using (var sqlConnection = new SqlConnection(_currentTenantSession.CurrentSession().Connection.ConnectionString))
+			using (var sqlConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString))
 			{
 				sqlConnection.Open();
 				using (var sqlCommand = new SqlCommand(sql, sqlConnection))
