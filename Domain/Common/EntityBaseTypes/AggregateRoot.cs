@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
@@ -16,12 +15,7 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 
 		public virtual IBusinessUnit BusinessUnit
 		{
-			get
-			{
-				if (_businessUnit == null)
-					_businessUnit = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit;
-				return _businessUnit;
-			}
+			get { return _businessUnit ?? (_businessUnit = CurrentBusinessUnit.InstanceFromContainer.Current()); }
 			protected set { _businessUnit = value; }
 		}
 
@@ -45,12 +39,7 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 
 		public virtual IBusinessUnit BusinessUnit
 		{
-			get
-			{
-				if (_businessUnit == null)
-					_businessUnit = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit;
-				return _businessUnit;
-			}
+			get { return _businessUnit ?? (_businessUnit = CurrentBusinessUnit.InstanceFromContainer.Current()); }
 			protected set { _businessUnit = value; }
 		}
 	}
@@ -62,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 
 		public virtual IBusinessUnit BusinessUnit
 		{
-			get { return _businessUnit ?? (_businessUnit = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit); }
+			get { return _businessUnit ?? (_businessUnit = CurrentBusinessUnit.InstanceFromContainer.Current()); }
 			protected set { _businessUnit = value; }
 		}
 	}

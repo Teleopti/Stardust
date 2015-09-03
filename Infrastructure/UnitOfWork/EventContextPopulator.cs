@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			var identity = new CurrentIdentity(new CurrentTeleoptiPrincipal());
 			return new EventContextPopulator(
-				CurrentBusinessUnit.Make(),
+				CurrentBusinessUnit.InstanceFromContainer,
 				new CurrentDataSource(identity, null, null),
 				new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make())
 				);

@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IUnitOfWork UnitOfWork { get; private set; }
 
-		public IPlanningPeriodSuggestions Suggestions(INow now, ICurrentBusinessUnit currentBusinessUnit)
+		public IPlanningPeriodSuggestions Suggestions(INow now)
 		{
 			if (_planningPeriodSuggestions == null)
 				return new PlanningPeriodSuggestions(now, new List<AggregatedSchedulePeriod>());

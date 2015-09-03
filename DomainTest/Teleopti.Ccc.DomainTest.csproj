@@ -327,6 +327,7 @@
     <Compile Include="Collection\TeamCollectionTest.cs" />
     <Compile Include="Common\AgentBadgeTest.cs" />
     <Compile Include="Common\CommonAgentNameProviderTest.cs" />
+    <Compile Include="Common\CurrentBusinessUnitTest.cs" />
     <Compile Include="Common\PeriodExtensionsTest.cs" />
     <Compile Include="Common\LayersExtensionsProjectionTest.cs" />
     <Compile Include="Common\ListAggregatorTest.cs" />

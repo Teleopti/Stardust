@@ -5,6 +5,6 @@ namespace Teleopti.Interfaces.Infrastructure
 {
 	public interface IPlanningPeriodRepository : IRepository<IPlanningPeriod>
 	{
-		IPlanningPeriodSuggestions Suggestions(INow now, ICurrentBusinessUnit currentBusinessUnit);
+		IPlanningPeriodSuggestions Suggestions(INow now);
 	}
 }

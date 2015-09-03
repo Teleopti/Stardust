@@ -445,12 +445,15 @@
     <Compile Include="Common\AgentBadge.cs" />
     <Compile Include="Common\Clip.cs" />
     <Compile Include="Common\ConfigurationManagerExtensions.cs" />
+    <Compile Include="Common\CurrentBusinessUnit.cs" />
     <Compile Include="Common\GamificationSetting.cs" />
     <Compile Include="Common\AgentBadgeTransaction.cs" />
     <Compile Include="Common\AgentBadgeWithRank.cs" />
     <Compile Include="Common\AgentBadgeWithRankTransaction.cs" />
     <Compile Include="Common\CommonAgentNameProvider.cs" />
+    <Compile Include="Common\HttpRequestFalse.cs" />
     <Compile Include="Common\IDataSourceScope.cs" />
+    <Compile Include="Common\IIsHttpRequest.cs" />
     <Compile Include="Common\PersonAccountUpdater.cs" />
     <Compile Include="Common\PersonAccountUpdaterDummy.cs" />
     <Compile Include="Common\CurrentDataSource.cs" />

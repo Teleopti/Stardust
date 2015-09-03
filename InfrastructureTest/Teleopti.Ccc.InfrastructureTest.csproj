@@ -184,7 +184,7 @@
     <Compile Include="DatabaseTestAttribute.cs" />
     <Compile Include="DistributedLock\DistributedLockTest.cs" />
     <Compile Include="Foundation\CouldNotCreateTransactionExceptionTest.cs" />
-    <Compile Include="Foundation\CurrentBusinessUnitTest.cs" />
+    <Compile Include="Foundation\HttpRequestTrueTest.cs" />
     <Compile Include="MessageBrokerUnitOfWork\MessageBrokerUnitOfWorkTest.cs" />
     <Compile Include="MessageBroker\MailboxRepositoryTest.cs" />
     <Compile Include="MessageBroker\MessageBrokerServerTest.cs" />

@@ -7,6 +7,7 @@ using System.Web.Http.Results;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -271,7 +272,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
         public void ShouldDeleteRole()
         {
             var roleRepository = MockRepository.GenerateMock<IApplicationRoleRepository>();
-            var target = new RolesController(roleRepository, null, null, new CurrentBusinessUnit(new FakeCurrentIdentity("Pelle"), null, null));
+            var target = new RolesController(roleRepository, null, null, new CurrentBusinessUnit(new FakeCurrentIdentity("Pelle"), new HttpRequestFalse()));
             var roleId = Guid.NewGuid();
             var role = new ApplicationRole();
             roleRepository.Stub(x => x.Load(roleId)).Return(role);
@@ -283,7 +284,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
         public void ShouldNotDeleteBuiltInRole()
         {
             var roleRepository = MockRepository.GenerateMock<IApplicationRoleRepository>();
-            var target = new RolesController(roleRepository, null, null, new CurrentBusinessUnit(new FakeCurrentIdentity("Pelle"), null, null));
+            var target = new RolesController(roleRepository, null, null, new CurrentBusinessUnit(new FakeCurrentIdentity("Pelle"), new HttpRequestFalse()));
             var roleId = Guid.NewGuid();
 
             var role = new ApplicationRole { BuiltIn = true };

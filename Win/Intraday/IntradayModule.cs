@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Win.Intraday
                    .InstancePerLifetimeScope();
             builder.RegisterType<IntradayMainModel>().InstancePerLifetimeScope();
             builder.RegisterType<HandleIntradayScope>().As<IIntradayViewFactory>();
-	        builder.RegisterInstance(CurrentBusinessUnit.Make()).As<ICurrentBusinessUnit>();
+			builder.RegisterType<HttpRequestFalse>().As<IIsHttpRequest>().SingleInstance();
             builder.RegisterType<IntradayPresenter>().InstancePerLifetimeScope();
         }
 

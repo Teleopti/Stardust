@@ -11,7 +11,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.InfrastructureTest.Foundation
+namespace Teleopti.Ccc.DomainTest.Common
 {
 	[TestFixture]
 	public class CurrentBusinessUnitTest
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 		public void ShouldReturnCurrentBusinessUnit()
 		{
 			var currentTeleoptiPrincipal = MockRepository.GenerateMock<ICurrentTeleoptiPrincipal>();
-			var target = new CurrentBusinessUnit(new CurrentIdentity(currentTeleoptiPrincipal), null, null);
+			var target = new CurrentBusinessUnit(new CurrentIdentity(currentTeleoptiPrincipal), new HttpRequestFalse());
 			var businessUnit = MockRepository.GenerateMock<IBusinessUnit>();
 			var teleoptiPrincipal = new TeleoptiPrincipal(new TeleoptiIdentity("hej", null, businessUnit, null), new Person());
 
@@ -31,21 +31,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 		}
 
 		[Test]
-		public void ShouldConsiderXBusinessUnitFilterFirst()
+		public void ShouldConsiderXBusinessUnitFilterIfItsAHttpRequest()
 		{
 			var currentTeleoptiPrincipal = MockRepository.GenerateMock<ICurrentTeleoptiPrincipal>();
-			var httpContext = new MutableFakeCurrentHttpContext();
 			var businessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit();
 			businessUnit.SetId(Guid.NewGuid());
-			var headers = new NameValueCollection { { "X-Business-Unit-Filter", businessUnit.Id.Value.ToString() } };
-			httpContext.SetContext(new FakeHttpContext(null, null, null, null, null, null, null, headers));
 			var anotherBusinessUnit = MockRepository.GenerateMock<IBusinessUnit>();
 			var teleoptiPrincipal = new TeleoptiPrincipal(new TeleoptiIdentity("hej", null, anotherBusinessUnit, null), new Person());
 			currentTeleoptiPrincipal.Expect(x => x.Current()).Return(teleoptiPrincipal);
 			var businessUnitRepository = MockRepository.GenerateMock<IBusinessUnitRepository>();
 			businessUnitRepository.Stub(x => x.Load(businessUnit.Id.Value)).Return(businessUnit);
 
-			var target = new CurrentBusinessUnit(new CurrentIdentity(currentTeleoptiPrincipal), httpContext, businessUnitRepository);
+			var isHttpRequest = MockRepository.GenerateMock<IIsHttpRequest>();
+			isHttpRequest.Stub(x => x.IsHttpRequest()).Return(true);
+			isHttpRequest.Stub(x => x.BusinessUnitForRequest()).Return(businessUnit);
+			var target = new CurrentBusinessUnit(new CurrentIdentity(currentTeleoptiPrincipal), isHttpRequest);
 			target.Current()
 				.Should().Be.SameInstanceAs(businessUnit);
 		}
@@ -54,11 +54,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 		public void ShouldReturnNullWhenCurrentPrincipalNotDefined()
 		{
 			var currentTeleoptiPrincipal = MockRepository.GenerateMock<ICurrentTeleoptiPrincipal>();
-			var target = new CurrentBusinessUnit(new CurrentIdentity(currentTeleoptiPrincipal), null, null);
+			var target = new CurrentBusinessUnit(new CurrentIdentity(currentTeleoptiPrincipal), new HttpRequestFalse());
 			currentTeleoptiPrincipal.Expect(x => x.Current()).Return(null);
 
 			target.Current()
 				.Should().Be.Null();
 		}
 	}
+
+
 }

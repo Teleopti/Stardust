@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					.FirstOrDefault();
 			if (planningPeriodNotFound(result))
 			{
-				var planningPeriodSuggestion = _planningPeriodRepository.Suggestions(_now, _currentBusinessUnit);
+				var planningPeriodSuggestion = _planningPeriodRepository.Suggestions(_now);
 				var planningPeriod = new PlanningPeriod(planningPeriodSuggestion);
 				_planningPeriodRepository.Add(planningPeriod);
 				return planningPeriod;
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			if (planningPeriodNotFound(next))
 			{
 				//refactor
-				var planningPeriodSuggestion = _planningPeriodRepository.Suggestions(_now, _currentBusinessUnit);
+				var planningPeriodSuggestion = _planningPeriodRepository.Suggestions(_now);
 				var planningPeriod = new PlanningPeriod(planningPeriodSuggestion);
 				planningPeriod.ChangeRange(schedulePeriodForRangeCalculation);
 				_planningPeriodRepository.Add(planningPeriod);

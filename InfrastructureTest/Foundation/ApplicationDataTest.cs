@@ -14,7 +14,7 @@ using Teleopti.Interfaces.MessageBroker.Client.Composite;
 
 namespace Teleopti.Ccc.InfrastructureTest.Foundation
 {
-    [TestFixture]
+	[TestFixture]
     [Category("LongRunning")]
     public class ApplicationDataTest
     {
