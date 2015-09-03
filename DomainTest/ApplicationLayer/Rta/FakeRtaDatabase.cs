@@ -57,7 +57,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		private readonly List<KeyValuePair<string, IEnumerable<ResolvedPerson>>> _externalLogOns = new List<KeyValuePair<string, IEnumerable<ResolvedPerson>>>();
 		private readonly List<scheduleLayer2> _schedules = new List<scheduleLayer2>();
 		private readonly List<PersonOrganizationData> _personOrganizationData = new List<PersonOrganizationData>();
-		private readonly IList<AgentStateReadModel> _persistedAgentStates = new List<AgentStateReadModel>();
 
 		private class scheduleLayer2
 		{
@@ -85,10 +84,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 
 		public AgentStateReadModel PersistedAgentState { get; set; }
 
-		public IEnumerable<AgentStateReadModel> PersistedAgentStates
-		{
-			get { return _persistedAgentStates; }
-		}
 		
 		public IRtaState AddedStateCode
 		{
@@ -309,15 +304,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		{
 			AgentStateReadModelReader.Has(model);
 			PersistedAgentState = model;
-			_persistedAgentStates.Add(model);
 		}
 
 		public IEnumerable<PersonOrganizationData> PersonOrganizationData()
 		{
 			return _personOrganizationData;
 		}
-
-		
 	}
 
 	public class FakeTenants : IFindTenantNameByRtaKey, ICountTenants, ILoadAllTenants
