@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
-using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
@@ -97,9 +96,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 		private double? valueForShift(IDictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>> skillIntervalDataLocalDictionary, IShiftProjectionCache shiftProjectionCache, PeriodValueCalculationParameters parameters, TimeZoneInfo timeZoneInfo)
 		{
 			double? totalForAllActivitesValue = null;
-			foreach (var activity in skillIntervalDataLocalDictionary.Keys)
+			foreach (var skillIntervalPair in skillIntervalDataLocalDictionary)
 			{
-				double? skillValue = valueForActivity(activity, skillIntervalDataLocalDictionary[activity], shiftProjectionCache, parameters, timeZoneInfo);
+				double? skillValue = valueForActivity(skillIntervalPair.Key, skillIntervalPair.Value, shiftProjectionCache, parameters, timeZoneInfo);
 				if (!skillValue.HasValue) return null;  
 				
 				if (totalForAllActivitesValue.HasValue)
@@ -110,7 +109,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 				{
 					totalForAllActivitesValue = skillValue.Value;
 				}
-
 			}
 
 			return totalForAllActivitesValue;

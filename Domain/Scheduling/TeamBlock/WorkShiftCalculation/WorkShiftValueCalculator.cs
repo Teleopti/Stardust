@@ -37,6 +37,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			if (skillIntervalDataDic == null)
 				return null;
 
+			var firstSkillIntervalData = skillIntervalDataDic.Values.FirstOrDefault();
+			int? resolution = firstSkillIntervalData!=null ? (int)firstSkillIntervalData.Resolution().TotalMinutes : (int?)null;
+			
 			double periodValue = 0;
 			int resourceInMinutes = 0;
 
@@ -46,18 +49,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 				if (activity != skillActivity)
 					continue;
 
+				if (!resolution.HasValue) return null;
+
 				var layerPeriod = layer.Period;
 				var layerStartLocal = DateTime.SpecifyKind(layerPeriod.StartDateTimeLocal(timeZoneInfo), DateTimeKind.Utc);
 				var localPeriod = new DateTimePeriod(layerStartLocal,
 					DateTime.SpecifyKind(layerPeriod.EndDateTimeLocal(timeZoneInfo), DateTimeKind.Utc));
 
-				if (!skillIntervalDataDic.Values.Any())
-					return null;
-
-				int resolution = (int) skillIntervalDataDic.Values.FirstOrDefault().Resolution().TotalMinutes;
 				DateTime currentSkillStaffPeriodKey =
 					localPeriod.StartDateTime.Date.Add(
-						TimeHelper.FitToDefaultResolutionRoundDown(layerStartLocal.TimeOfDay, resolution));
+						TimeHelper.FitToDefaultResolutionRoundDown(layerStartLocal.TimeOfDay, resolution.Value));
 
 				ISkillIntervalData currentStaffPeriod;
 				if (!skillIntervalDataDic.TryGetValue(currentSkillStaffPeriodKey, out currentStaffPeriod))
@@ -102,7 +103,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 
 					resourceInMinutes += currentResourceInMinutes;
 
-					currentSkillStaffPeriodKey = currentSkillStaffPeriodKey.AddMinutes(resolution);
+					currentSkillStaffPeriodKey = currentSkillStaffPeriodKey.AddMinutes(resolution.Value);
 					if (!localPeriod.Contains(currentSkillStaffPeriodKey))
 						break;
 
