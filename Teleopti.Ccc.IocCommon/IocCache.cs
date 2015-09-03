@@ -16,17 +16,17 @@ namespace Teleopti.Ccc.IocCommon
 
 		private readonly List<cacheRegistration> _cacheRegistrations = new List<cacheRegistration>();
 
-		public void This<T>(Func<IFluentBuilder<T>, IFluentBuilder<T>> cachedMethods) where T : class
+		public void This<T>(Func<IFluentBuilder<T>, IFluentBuilder<T>> cachedMethods, string cacheKeyForType=null) where T : class
 		{
 			_cacheRegistrations.Add(new cacheRegistration
 			{
 				BuilderAction = b =>
 				{
-					cachedMethods.Invoke(b.For<T>()).As<T>();
+					cachedMethods.Invoke(b.For<T>(cacheKeyForType)).As<T>();
 				}
 			});
 		}
-		
+
 		public void Build(CacheBuilder builder)
 		{
 			_cacheRegistrations.ForEach(c =>
@@ -34,7 +34,6 @@ namespace Teleopti.Ccc.IocCommon
 				c.BuilderAction.Invoke(builder);
 			});
 		}
-		
 	}
 
 	public static class AutofacMbCacheIntegration

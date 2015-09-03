@@ -49,17 +49,17 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			_configuration.Cache().This<IRuleSetProjectionService>(b => b
 				.CacheMethod(m => m.ProjectionCollection(null, null))
 				.PerInstance()
-				);
+				, "RSPS");
 
 			_configuration.Cache().This<IRuleSetProjectionEntityService>(b => b
 				.CacheMethod(m => m.ProjectionCollection(null, null))
 				.PerInstance()
-				);
+				, "RSPES");
 
 			_configuration.Cache().This<IWorkShiftWorkTime>(b => b
 				.CacheMethod(m => m.CalculateMinMax(null, null))
 				.PerInstance()
-				);
+				, "WSWT");
 
 
 		}
