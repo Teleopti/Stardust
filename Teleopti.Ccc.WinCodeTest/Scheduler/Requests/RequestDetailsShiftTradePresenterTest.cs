@@ -109,6 +109,56 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
             }
         }
 
+		[Test]
+		public void ShouldDecideIsDayOff()
+		{
+			var tradingPerson = PersonFactory.CreatePerson("First", "Last");
+			var dateOnly = new DateOnly(2015, 1, 1);
+			var model = new ContactPersonViewModel(tradingPerson);
+			var schedules = _mocks.StrictMock<IScheduleDictionary>();
+			var scheduleRange = _mocks.StrictMock<IScheduleRange>();
+			var scheduleDay = _mocks.StrictMock<IScheduleDay>();
+			_target = new RequestDetailsShiftTradePresenter(null, schedules, null);
+
+			using (_mocks.Record())
+			{
+				Expect.Call(schedules[tradingPerson]).Return(scheduleRange);
+				Expect.Call(scheduleRange.ScheduledDay(dateOnly)).Return(scheduleDay);
+				Expect.Call(scheduleDay.SignificantPart()).Return(SchedulePartView.DayOff);
+			}
+
+			using (_mocks.Playback())
+			{
+				var isDayOff = _target.IsDayOff(model, dateOnly);
+				Assert.IsTrue(isDayOff);
+			}	
+		}
+
+		[Test]
+		public void ShouldDecideIsNotDayOff()
+		{
+			var tradingPerson = PersonFactory.CreatePerson("First", "Last");
+			var dateOnly = new DateOnly(2015, 1, 1);
+			var model = new ContactPersonViewModel(tradingPerson);
+			var schedules = _mocks.StrictMock<IScheduleDictionary>();
+			var scheduleRange = _mocks.StrictMock<IScheduleRange>();
+			var scheduleDay = _mocks.StrictMock<IScheduleDay>();
+			_target = new RequestDetailsShiftTradePresenter(null, schedules, null);
+
+			using (_mocks.Record())
+			{
+				Expect.Call(schedules[tradingPerson]).Return(scheduleRange);
+				Expect.Call(scheduleRange.ScheduledDay(dateOnly)).Return(scheduleDay);
+				Expect.Call(scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
+			}
+
+			using (_mocks.Playback())
+			{
+				var isDayOff = _target.IsDayOff(model, dateOnly);
+				Assert.IsFalse(isDayOff);
+			}
+		}
+
 		private static ScheduleDictionary CreateSchedules()
 		{
 			var scenario = ScenarioFactory.CreateScenarioAggregate();

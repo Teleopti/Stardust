@@ -195,11 +195,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 			internal DateTimePeriod Period { get; set; }
 		}
 
-		public bool IsDayOff(EntityContainer<IPerson> personViewModel, DateTime currentDate)
+		public bool IsDayOff(EntityContainer<IPerson> personViewModel, DateOnly currentDate)
 		{
 			if (personViewModel == null) throw new ArgumentNullException("personViewModel");
 			var scheduleRange = _schedules[personViewModel.ContainedEntity];
-			var scheduleDay = scheduleRange.ScheduledDay(new DateOnly(currentDate));
+			var scheduleDay = scheduleRange.ScheduledDay(currentDate);
 			if (scheduleDay != null)
 			{
 				SchedulePartView schedulePartView = scheduleDay.SignificantPart();

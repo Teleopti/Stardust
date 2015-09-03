@@ -90,8 +90,10 @@ namespace Teleopti.Ccc.Win.Scheduling
                 if (e.ColIndex > 1 && e.RowIndex > 0)
 				{
 					e.Style.Tag = _presenter.CurrentPeriods[e.RowIndex - 1];
-                    ContactPersonViewModel personViewModel = _presenter.ParticipantList[e.RowIndex - 1];
-					if (_presenter.IsDayOff(personViewModel, _presenter.CurrentPeriods[e.RowIndex - 1].StartDateTime.Date))
+                    var personViewModel = _presenter.ParticipantList[e.RowIndex - 1];
+					var dateOnly =_presenter.CurrentPeriods[e.RowIndex - 1].ToDateOnlyPeriod(_presenter.TimeZone).StartDate;
+					
+					if (_presenter.IsDayOff(personViewModel, dateOnly))
                     {
                         e.Style.CellValue = UserTexts.Resources.DayOff;
                         e.Style.Enabled = false;
