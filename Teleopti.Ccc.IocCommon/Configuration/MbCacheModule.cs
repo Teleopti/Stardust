@@ -2,6 +2,7 @@
 using MbCache.Configuration;
 using MbCache.Core;
 using MbCache.ProxyImpl.LinFu;
+using Teleopti.Ccc.Domain.Common;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
@@ -16,12 +17,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		
 		protected override void Load(ContainerBuilder builder)
 		{
+			builder.RegisterType<TeleoptiCacheKey>().SingleInstance();
+			builder.RegisterType<LinFuProxyFactory>().SingleInstance();
 			builder.Register(c =>
 			{
-				var cacheKey = new TeleoptiCacheKey();
-				var proxyFactory = new LinFuProxyFactory();
-				var cacheBuilder = new CacheBuilder(proxyFactory)
-					.SetCacheKey(cacheKey)
+				var cacheBuilder = new CacheBuilder(c.Resolve<LinFuProxyFactory>())
+					.SetCacheKey(c.Resolve<TeleoptiCacheKey>())
 					;
 				_configuration.Cache().Build(cacheBuilder);
 				return cacheBuilder;

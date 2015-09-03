@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Aspects
 
 			protected override void Load(ContainerBuilder builder)
 			{
-				builder.RegisterType<OuterService>().SingleInstance().ApplyAspects();
+				builder.RegisterType<OuterService>().SingleInstance();
 
 				builder.CacheByClassProxy<CachedServiceImpl>().SingleInstance();
 				_configuration.Cache().This<CachedServiceImpl>(
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Aspects
 		[Test]
 		public void ShouldNotCreateCachingProxy()
 		{
-			ApplicationData.GetType().Should().Be.EqualTo<FakeApplicationData>();
+			Service.GetType().Should().Be.EqualTo<OuterService>();
 		}
 
 		[Test]
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Aspects
 			CachedService.CalledCount.Should().Be(1);
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldCachePerDataSource()
 		{
 			IDataSource datasource1 = new FakeDataSource("1");
@@ -125,6 +125,5 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Aspects
 				Service.GetDataSourceName().Should().Be("2");
 
 		}
-
 	}
 }
