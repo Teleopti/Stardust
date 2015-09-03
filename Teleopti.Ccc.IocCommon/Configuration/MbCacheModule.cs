@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using System.Runtime.Caching;
-using Autofac;
+﻿using Autofac;
 using MbCache.Configuration;
 using MbCache.Core;
 using MbCache.ProxyImpl.LinFu;
@@ -20,13 +18,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			builder.Register(c =>
 			{
-				if (_configuration.Args().ClearCache)
-				{
-					MemoryCache.Default
-						.Select(x => x.Key)
-						.ToList()
-						.ForEach(x => MemoryCache.Default.Remove(x));
-				}
 				var cacheKey = new TeleoptiCacheKey();
 				var proxyFactory = new LinFuProxyFactory();
 				var cacheBuilder = new CacheBuilder(proxyFactory)

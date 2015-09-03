@@ -21,8 +21,6 @@ namespace Teleopti.Ccc.IocCommon
 		public IContainer SharedContainer { get; set; }
 		public IDataSourceConfigurationSetter DataSourceConfigurationSetter { get; set; }
 
-		public bool ClearCache { get; set; }
-
 		public IocArgs(IConfigReader configReader)
 		{
 			FeatureToggle = configReader.AppConfig("FeatureToggle");
