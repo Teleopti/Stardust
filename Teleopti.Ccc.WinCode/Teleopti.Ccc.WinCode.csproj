@@ -154,11 +154,11 @@
       <HintPath>..\packages\Rhino.ServiceBus.SqlQueues.1.0.1.16\lib\net40\Rhino.ServiceBus.SqlQueues.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.Chart.Base, Version=12.1451.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Chart.Win.12.1.0.44\lib\4.0\Syncfusion.Chart.Base.dll</HintPath>
+      <HintPath>..\packages\Syncfusion.Chart.Win.12.1.0.45\lib\4.0\Syncfusion.Chart.Base.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Syncfusion.Chart.Windows, Version=12.1451.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Chart.Win.12.1.0.44\lib\4.0\Syncfusion.Chart.Windows.dll</HintPath>
+      <HintPath>..\packages\Syncfusion.Chart.Win.12.1.0.45\lib\4.0\Syncfusion.Chart.Windows.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Syncfusion.Compression.Base">
