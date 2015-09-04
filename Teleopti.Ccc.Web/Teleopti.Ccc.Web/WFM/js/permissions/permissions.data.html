@@ -1,8 +1,8 @@
 ﻿<div class="toolbar">
-	<div class="input-prepend">
-		<i class="mdi mdi-filter-outline"></i>
-		<input type="text" name="filterDetails" ng-model="searchData" placeholder="{{'DataFilterThreeDots' | translate}}"/>
-	</div>
+    <div class="input-prepend">
+        <i class="mdi mdi-filter-outline"></i>
+        <input type="text" name="filterDetails" ng-model="searchData" placeholder="{{'DataFilterThreeDots' | translate}}"/>
+    </div>
 
         <form class="permission-radio-buttons">
             <div class="wfm-radio">
@@ -33,43 +33,50 @@
             </div>
         </form>
 
-	<div class="data-auth">
-		
-		<label translate>AddGlobalAuthorizationLabel</label>
-		<md-select placeholder="Pick" ng-model="dynamicOptionSelected.data" ng-change="changeOption(dynamicOptionSelected.data)" ng-class="{optionLocked:dynamicOptionSelected.isBuiltIn}" style="padding: 0;">
-			<md-option ng-repeat="dynamic in organization.DynamicOptions" ng-value="dynamic.RangeOption">{{dynamic.Name}}</md-option>
-		</md-select>
-	</div>
+    <div class="data-auth">
+        
+        <label translate>AddGlobalAuthorizationLabel</label>
+        <md-select placeholder="Pick" ng-model="dynamicOptionSelected.data" ng-change="changeOption(dynamicOptionSelected.data)" style="padding: 0;">
+            <md-option ng-repeat="dynamic in organization.DynamicOptions" ng-value="dynamic.RangeOption">{{dynamic.Name}}</md-option>
+        </md-select>
+    </div>
 </div>
 
-
-
-<div class="tree permissions-tree">
-	
-    <div ui-tree data-drag-enabled="false">
-        <ol ui-tree-nodes="" ng-model="organization.BusinessUnit" id="tree-root" class="tree-line">
-			<li ng-repeat="node in organization.BusinessUnit | nameFilter: searchData  | selectedData:selectedDataToggle | unselectedData:unselectedDataToggle track by $index" ui-tree-node ng-include="'nodes_bu_renderer.html'"></li>
-        </ol>
-    </div>
+<div ui-tree data-drag-enabled="false">
+    <ol ui-tree-nodes="" ng-model="organization.BusinessUnit" id="tree-root" class="tree-line">
+        <li ng-repeat="node in organization.BusinessUnit | nameFilter: searchData  | selectedData:selectedDataToggle | unselectedData:unselectedDataToggle track by $index" ui-tree-node ng-include="'nodes_bu_renderer.html'"></li>
+    </ol>
 </div>
 
 <!-- Nested node template for data -->
 <script type="text/ng-template" id="nodes_bu_renderer.html">
 
-	
-    <div class="tree-toggle-group">
-        <div class="toggle-handle" ng-class="{open: node.show}" ng-click="node.show = !node.show"><i ng-show="node.ChildNodes.length > 0" class="mdi mdi-chevron-right"></i></div>
-        <div ui-tree-handle class="ui-tree-handle" ng-class="{selected: node.selected}" ng-click="toggleOrganizationSelection(this)">
-            {{node.Name}} <!--{{nbSelected(childNodes()) }} / {{childNodes().length}} selected-->
-			
+    <ul class="wfm-list" >
+        <li ui-tree-handle ng-class="{dataHeader: node.ChildNodes.length > 0, active: node.selected}" ng-click="toggleOrganizationSelection(this)">
+            {{node.Name}}<!--{{nbSelected(childNodes()) }} / {{childNodes().length}} selected-->
+            
             <span><i class="mdi mdi-check"></i></span>
+        </li>
+    </ul>
+
+    <div ui-tree-nodes="" ng-model="node.ChildNodes" style="padding:0!important;">
+        <div ng-repeat="node in node.ChildNodes | nameFilter: searchData | selectedData:selectedDataToggle | unselectedData:unselectedDataToggle track by $index"
+            ui-tree-node ng-include="'nodes_bu_renderer.html'">
+
         </div>
     </div>
-
-    <ol ui-tree-nodes="" ng-model="node.ChildNodes" ng-show="node.show">
-		<li ng-repeat="node in node.ChildNodes | nameFilter: searchData | selectedData:selectedDataToggle | unselectedData:unselectedDataToggle track by $index"
-			ui-tree-node ng-include="'nodes_bu_renderer.html'">
-
-		</li>
-    </ol>
 </script>
+
+<style type="text/css">
+    .dataHeader{
+        margin-top:15px;
+        background-color:transparent!important; 
+        font-size: 18px;
+        border: none!important;
+    }
+
+    .tree-line{
+        max-height: 700px;
+        overflow-y: auto;
+    }
+</style>

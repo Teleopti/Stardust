@@ -42,6 +42,7 @@ describe('DataController', function() {
 		$rootScope = _$rootScope_;
 	}));
 
+/*
 	it('should toggle the selected property of node from false to true', inject(function ($controller) {
 		var scope = $rootScope.$new();
 		$controller('RoleDataController', { $scope: scope, RoleDataService: mockRoleDataService, Roles: mockRoles });
@@ -152,6 +153,7 @@ describe('DataController', function() {
 
 	    expect(node.$parentNodeScope.$modelValue.selected).toBe(true);
 	}));
+*/
 
 
 
