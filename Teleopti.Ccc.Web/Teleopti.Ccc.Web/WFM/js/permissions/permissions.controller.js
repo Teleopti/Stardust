@@ -42,7 +42,7 @@
 
 				$scope.copyRole = function(role) {
 					Roles.copyRole(role.Id).then(function () {
-						$scope.showRole(role);
+						$scope.showRole($scope.roles[0]);
 					});
 				};
 
