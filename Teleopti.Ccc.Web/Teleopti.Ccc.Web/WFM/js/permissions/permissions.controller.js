@@ -61,7 +61,11 @@
 					if (role.DescriptionText != '') {
 						role.editing = false; 
 						Permissions.manageRole.update({ Id: role.Id, newDescription: role.DescriptionText });
-					}
+					}else{
+                        role.DescriptionText = role.Name;
+                        role.editing = false;
+
+                    }
 				};
 
 				$scope.showRole = function (role) {
