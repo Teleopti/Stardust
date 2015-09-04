@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Configuration;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Client;
-using Teleopti.Interfaces.MessageBroker.Client.Composite;
-using Teleopti.Interfaces.MessageBroker.Events;
-using Teleopti.Messaging.Exceptions;
 using log4net;
+using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
+using Teleopti.Messaging.Exceptions;
 
 namespace Teleopti.Ccc.Sdk.WcfService.Factory
 {
@@ -21,7 +19,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
             {
                 _messaging = StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging;
 
-                if (_messaging != null && !MessageBrokerDisabled && !MessageBrokerReceiveEnabled)
+                if (_messaging != null && !MessageBrokerReceiveEnabled)
                 {
                     lock (LockObject)
                     {
@@ -36,21 +34,6 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
                         }
                     }
                 }
-            }
-        }
-
-        private static bool MessageBrokerDisabled
-        {
-            get
-            {
-                var messageBrokerDisabled = false;
-                var messageBrokerDisabledStringValue = ConfigurationManager.AppSettings["MessageBrokerDisabled"];
-                if (!string.IsNullOrEmpty(messageBrokerDisabledStringValue))
-                {
-                    if (!bool.TryParse(messageBrokerDisabledStringValue, out messageBrokerDisabled))
-                        messageBrokerDisabled = false;
-                }
-                return messageBrokerDisabled;
             }
         }
 

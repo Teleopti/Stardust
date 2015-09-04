@@ -106,7 +106,6 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 					CurrentDataSource.Make(), businessUnit, container.Resolve<IJsonSerializer>(),
 					container.Resolve<ICurrentInitiatorIdentifier>()));
 			var messageSenders = new CurrentMessageSenders(senders);
-			var messageBrokerEnabled = !messageBrokerDisabled();
 			//temp hack - sometime in the future -> no tenant db dep here!
 			var tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
 			using (tenantUnitOfWorkManager.Start())
@@ -122,11 +121,11 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 							),
 						messageBroker,
 						new LoadAllTenants(tenantUnitOfWorkManager));
-				initializeApplication.Start(new SdkState(), passwordPolicyService, appSettings, messageBrokerEnabled);
+				initializeApplication.Start(new SdkState(), passwordPolicyService, appSettings, true);
 			}
 			tenantUnitOfWorkManager.Dispose();
 			var messageBrokerReceiveDisabled = !messageBrokerReceiveEnabled();
-			if (messageBrokerEnabled && messageBrokerReceiveDisabled)
+			if (messageBrokerReceiveDisabled)
 				if (messageBroker != null)
 					messageBroker.Dispose();
 
@@ -142,18 +141,6 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 					_messageBrokerReceiveEnabled = false;
 			}
 			return _messageBrokerReceiveEnabled;
-		}
-
-		private bool messageBrokerDisabled()
-		{
-			if (_messageBrokerDisabledConfigurationValue == null)
-			{
-				_messageBrokerDisabledConfigurationValue = ConfigurationManager.AppSettings["MessageBrokerDisabled"];
-				if (!string.IsNullOrEmpty(_messageBrokerDisabledConfigurationValue))
-					if (!bool.TryParse(_messageBrokerDisabledConfigurationValue, out _messageBrokerDisabled))
-						_messageBrokerDisabled = false;
-			}
-			return _messageBrokerDisabled;
 		}
 
 		public static ContainerBuilder BuildIoc()
