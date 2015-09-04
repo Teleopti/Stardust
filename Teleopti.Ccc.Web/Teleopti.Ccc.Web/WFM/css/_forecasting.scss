@@ -18,9 +18,17 @@
 }
 
 .workload-spinner{
+	margin-top: -43px;
+}
+
+.workload-indicator{
     position: absolute;
-    margin-top: -43px;
     right: 9%;
+}
+
+.workload-starttime{
+	position: absolute;
+    right: 15%;
 }
 
 .forecasting-chart-bar {

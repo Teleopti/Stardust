@@ -95,7 +95,7 @@ angular.module('wfm.forecasting')
 					return;
 				}
 				workload.ShowProgress = true;
-
+				workload.StartTime = moment().format();
 				$http.post('../api/Forecasting/Forecast', JSON.stringify({ ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate, Workloads: [workload] })).
 					success(function (data, status, headers, config) {
 						if (data.Success) {
