@@ -3,7 +3,7 @@ IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ReadModel].[
 DROP PROCEDURE [ReadModel].[PersonFinderWithCriteria]
 GO
 
--- EXEC [ReadModel].[PersonFinderWithCriteria] 'FirstName : ashley; pierre, Organization: london', '2001-01-01', 1, 100, '1:1,2:0', 1053
+-- EXEC [ReadModel].[PersonFinderWithCriteria] 'FirstName : ashley; pierre, Organization: london', '2001-01-01', 1, 100, '1:1,2:0', 1053, '928DD0BC-BF40-412E-B970-9B5E015AADEA'
 -- =============================================
 -- Author:      Xinfeng
 -- Create date: 2005-05-09
@@ -21,7 +21,8 @@ CREATE PROCEDURE [ReadModel].[PersonFinderWithCriteria]
 @start_row int,
 @end_row int,
 @order_by nvarchar(30),
-@culture int
+@culture int,
+@business_unit_id uniqueidentifier
 AS
 SET NOCOUNT ON
 
@@ -246,6 +247,7 @@ SELECT DISTINCT a.PersonId, FirstName, LastName, EmploymentNumber, Note, Termina
 FROM ReadModel.FindPerson a
 INNER JOIN #PersonId b
 ON a.PersonId = b.PersonId
+WHERE BusinessUnitId = @business_unit_id
 ORDER BY LastName, FirstName
 
 --get total count

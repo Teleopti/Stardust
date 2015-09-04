@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
@@ -81,13 +82,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			var result = ((NHibernateUnitOfWork) uow).Session.CreateSQLQuery(
 				"exec [ReadModel].PersonFinderWithCriteria @search_criterias=:searchCriterias_string, "
-				+ "@leave_after=:leave_after, @start_row =:start_row, @end_row=:end_row, @order_by=:order_by, @culture=:culture")
+				+ "@leave_after=:leave_after, @start_row =:start_row, @end_row=:end_row, @order_by=:order_by, @culture=:culture, @business_unit_id=:business_unit_id")
 				.SetString("searchCriterias_string", createSearchString(personFinderSearchCriteria.SearchCriterias))
 				.SetDateOnly("leave_after", personFinderSearchCriteria.TerminalDate)
 				.SetInt32("start_row", personFinderSearchCriteria.StartRow)
 				.SetInt32("end_row", personFinderSearchCriteria.EndRow)
 				.SetString("order_by", generateOrderByString(personFinderSearchCriteria.SortColumns))
 				.SetInt32("culture", cultureId)
+				.SetGuid("business_unit_id", CurrentBusinessUnit.Instance.Current().Id.GetValueOrDefault())
 				.SetResultTransformer(Transformers.AliasToBean(typeof (PersonFinderDisplayRow)))
 				.SetReadOnly(true)
 				.List<IPersonFinderDisplayRow>();
