@@ -27,6 +27,19 @@
 	padding-right: 58px;
 }
 
+.dataHeader{
+	margin-top:15px;
+	background-color:transparent!important; 
+	font-size: 18px;
+	border: none!important;
+}
+
+.tree-line{
+	max-height: 700px;
+	overflow-y: auto;
+	border-top: 1px solid #E0E0E0;
+}
+
 .inline-role-name{
 	width:100%;
 }
