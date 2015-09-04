@@ -130,6 +130,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Aspects
 			TheService.RanWithDataSource.Should().Be(expected);
 		}
 
-	}
+		[Test]
+		public void ShouldFindTenantWhenAuthenticationKeyIsSentInWrongEncoding()
+		{
+			IDataSource expected = new FakeDataSource("tenant");
+			ApplicationData.RegisteredDataSources = new[] {expected};
+			Tenants.Has(new Tenant("tenant") {RtaKey = Domain.ApplicationLayer.Rta.Service.Rta.LegacyAuthenticationKey});
 
+			TheService.Does(new Input
+			{
+				AuthenticationKey = Domain.ApplicationLayer.Rta.Service.Rta.LegacyAuthenticationKey.Remove(2, 2).Insert(2, "_")
+			});
+
+			TheService.RanWithDataSource.Should().Be(expected);
+		}
+	}
 }

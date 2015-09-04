@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Aspects
 			dynamic input = enumerable != null ? enumerable.Cast<dynamic>().First() : argument;
 
 			var key = input.AuthenticationKey;
+			key = AuthenticationKeyEncodingFixer.Fix(key);
 			var tenant = _databaseLoader.TenantNameByKey(key);
 			var dataSource = _applicationData.Tenant(tenant);
 			_scope = _dataSource.OnThisThreadUse(dataSource);

@@ -19,13 +19,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 	{
 		public static void FixAuthenticationKey(this ExternalUserStateInputModel input)
 		{
-			if (input.AuthenticationKey.Remove(2, 1) == Service.Rta.LegacyAuthenticationKey.Remove(2, 2))
-				input.AuthenticationKey = Service.Rta.LegacyAuthenticationKey;
+			input.AuthenticationKey = AuthenticationKeyEncodingFixer.Fix(input.AuthenticationKey);
 		}
 
 		public static Guid ParsedPlatformTypeId(this ExternalUserStateInputModel input)
 		{
 			return input.PlatformTypeId != null ? Guid.Parse(input.PlatformTypeId) : Guid.Empty;
+		}
+	}
+
+	public static class AuthenticationKeyEncodingFixer
+	{
+		public static string Fix(string authenticationKey)
+		{
+			return authenticationKey.Remove(2, 1) == Service.Rta.LegacyAuthenticationKey.Remove(2, 2)
+				? Service.Rta.LegacyAuthenticationKey
+				: authenticationKey;
 		}
 	}
 }
