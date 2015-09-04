@@ -58,11 +58,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			try
 			{
-				var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity);
+				var businessUnit = CurrentBusinessUnit.Instance.Current();
 				var personsubQuery = DetachedCriteria.For<PersonPeriod>("personPeriod")
 					 .CreateAlias("Team", "team", JoinType.InnerJoin)
 					 .CreateAlias("team.Site", "site", JoinType.InnerJoin)
-					 .Add(Restrictions.Eq("site.BusinessUnit", identity.BusinessUnit))
+					 .Add(Restrictions.Eq("site.BusinessUnit", businessUnit))
 					 .SetProjection(Projections.Property("personPeriod.Parent"));
 
 				var personPeriodSubQuery = DetachedCriteria.For<Person>("users")
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						  .SetFetchMode("Team.Site.BusinessUnit", FetchMode.Join)
 						  .CreateAlias("Team", "team", JoinType.InnerJoin)
 						  .CreateAlias("team.Site", "site", JoinType.InnerJoin)
-						  .Add(Restrictions.Eq("site.BusinessUnit", identity.BusinessUnit))
+						  .Add(Restrictions.Eq("site.BusinessUnit", businessUnit))
 						  .SetResultTransformer(Transformers.DistinctRootEntity))
 					 .Add(DetachedCriteria.For<PersonPeriod>("personPeriod")
 						  .Add(Subqueries.PropertyIn("personPeriod.Id", personPeriodSubQuery))
@@ -181,11 +181,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			try
 			{
-				var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity);
 				var personsubQuery = DetachedCriteria.For<PersonPeriod>("personPeriod")
 					.CreateAlias("Team", "team", JoinType.InnerJoin)
 					.CreateAlias("team.Site", "site", JoinType.InnerJoin)
-					.Add(Restrictions.Eq("site.BusinessUnit", identity.BusinessUnit))
+					.Add(Restrictions.Eq("site.BusinessUnit", CurrentBusinessUnit.Instance.Current()))
 					.SetProjection(Projections.Property("personPeriod.Parent"));
 
 				var criterias = Session.CreateMultiCriteria()
@@ -217,11 +216,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			try
 			{
-				var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity);
 				var personsubQuery = DetachedCriteria.For<PersonPeriod>("personPeriod")
 					.CreateAlias("Team", "team", JoinType.InnerJoin)
 					.CreateAlias("team.Site", "site", JoinType.InnerJoin)
-					.Add(Restrictions.Eq("site.BusinessUnit", identity.BusinessUnit))
+					.Add(Restrictions.Eq("site.BusinessUnit", CurrentBusinessUnit.Instance.Current()))
 					.SetProjection(Projections.Property("personPeriod.Parent"));
 
 				var criterias = Session.CreateMultiCriteria()
@@ -527,14 +525,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		private static DetachedCriteria findPeriodMatch(DateOnlyPeriod period)
 		{
-			var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity);
 			DetachedCriteria detachedCriteria = DetachedCriteria.For(typeof(PersonPeriod), "first")
 				 .CreateAlias("Team", "team", JoinType.InnerJoin)
 				 .CreateAlias("team.Site", "site", JoinType.InnerJoin)
 				 .SetProjection(Projections.Id())
 				 .Add(Restrictions.Le("StartDate", period.EndDate))
 				 .Add(Restrictions.EqProperty("first.Parent", "per.Id"))
-				 .Add(Restrictions.Eq("site.BusinessUnit", identity.BusinessUnit))
+				 .Add(Restrictions.Eq("site.BusinessUnit", CurrentBusinessUnit.Instance.Current()))
 				 .Add(Subqueries.NotExists(DetachedCriteria.For<PersonPeriod>()
 														  .SetProjection(Projections.Id())
 														  .Add(Restrictions.EqProperty("Parent", "first.Parent"))
@@ -545,9 +542,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IEnumerable<Tuple<Guid, Guid>> PeopleSkillMatrix(IScenario scenario, DateTimePeriod period)
 		{
-			var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity);
 			return Session.GetNamedQuery("AgentSkillMatrix")
-					  .SetEntity("bu", identity.BusinessUnit)
+					  .SetEntity("bu", CurrentBusinessUnit.Instance.Current())
 					  .SetEntity("scenario", scenario)
 					  .SetProperties(period)
 									.List<Tuple<Guid, Guid>>();
@@ -555,9 +551,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IEnumerable<Guid> PeopleSiteMatrix(DateTimePeriod period)
 		{
-			var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity);
 			return Session.GetNamedQuery("AgentSiteMatrix")
-					  .SetEntity("bu", identity.BusinessUnit)
+					  .SetEntity("bu", CurrentBusinessUnit.Instance.Current())
 					  .SetProperties(period)
 					  .List<Guid>();
 		}

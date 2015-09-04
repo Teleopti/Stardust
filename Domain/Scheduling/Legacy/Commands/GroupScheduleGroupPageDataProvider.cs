@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
@@ -215,7 +216,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 						using (var uow = maybeDisposableUnitOfWork.Create(_unitOfWorkFactory))
 						{
 							var repository = _repositoryFactory.CreateBusinessUnitRepository(uow.Uow);
-							var businessUnit = repository.Get(((ITeleoptiIdentity) TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit.Id.GetValueOrDefault());
+							var businessUnit = repository.Get(CurrentBusinessUnit.Instance.Current().Id.GetValueOrDefault());
 							businessUnit = repository.LoadHierarchyInformation(businessUnit);
 							_businessUnitCollection = new List<IBusinessUnit>{businessUnit};
 						}

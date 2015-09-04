@@ -1,9 +1,8 @@
-﻿using NHibernate.Impl;
-using NHibernate.Transform;
+﻿using NHibernate.Transform;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -50,13 +49,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		private Guid getBusinessUnitId()
 		{
-			var filter = (FilterImpl) _currentUnitOfWork.Session().GetEnabledFilter("businessUnitFilter");
-			object businessUnitId;
-			if (!filter.Parameters.TryGetValue("businessUnitParameter", out businessUnitId))
-			{
-				businessUnitId = ((ITeleoptiIdentity) TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit.Id.GetValueOrDefault();
-			}
-			return Guid.Parse(businessUnitId.ToString());
+			return CurrentBusinessUnit.Instance.Current().Id.GetValueOrDefault();
 		}
 
 		public IEnumerable<ReadOnlyGroupDetail> AvailableGroups(ReadOnlyGroupPage groupPage,DateOnly queryDate)

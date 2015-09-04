@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
@@ -67,7 +68,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
             get
             {
                 if (_site == null)
-                    return ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit;
+                    return CurrentBusinessUnit.Instance.Current();
                 return _site.BusinessUnit;
             }
         }

@@ -4,6 +4,7 @@ using System.Linq;
 using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -88,8 +89,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		private static void addBuClauseToNonRootQuery(ICriteria criteria)
 		{
 			if (!typeof (IAggregateRoot).IsAssignableFrom(criteria.GetRootEntityTypeIfAvailable()))
-				criteria.Add(Restrictions.Eq("ass.BusinessUnit",
-				                           ((ITeleoptiIdentity) TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit));
+				criteria.Add(Restrictions.Eq("ass.BusinessUnit", CurrentBusinessUnit.Instance.Current()));
 		}
 
 		private static void addScenarioAndFilterClauses(ICriteria criteria, IScenario scenario, DateOnlyPeriod period)

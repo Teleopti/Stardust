@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Security.Matrix
 
 		private void add(MatrixPermissionHolder holder)
 		{
-			if (holder.Team.BusinessUnitExplicit.Id.Value == ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit.Id.Value)
+			if (holder.Team.BusinessUnitExplicit.Id.Value == CurrentBusinessUnit.Instance.Current().Id.GetValueOrDefault())
 				_result.Add(holder);
 		}
 

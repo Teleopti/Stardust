@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
@@ -26,13 +27,8 @@ namespace Teleopti.Ccc.Domain.SystemSetting
 
         public virtual IBusinessUnit BusinessUnit
         {
-            get
-            {
-                if (_businessUnit == null)
-                    _businessUnit = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit;
-                return _businessUnit;
-            }
-            protected set { _businessUnit = value; }
+            get { return _businessUnit ?? (_businessUnit = CurrentBusinessUnit.Instance.Current()); }
+	        protected set { _businessUnit = value; }
         }
 
         public virtual IPerson CreatedBy
