@@ -2,7 +2,7 @@
 	<div class="alert-warning notice-spacer" ng-if="isForecastRunning"><i class='mdi mdi-alert'></i> Warning: Forecast is running, please try later.</div>
 	<div class="row">
 		<div class="col-lg-12">
-			<h4>Forecasting</h4>
+			<h4>Overview</h4>
 			<div class="forecast-create-fad">
 				<button class="wfm-fab info forecast-create-button" ng-click="displayModal()">
 					<i class="mdi mdi-plus"></i>
@@ -19,6 +19,7 @@
 				<card-header ng-click="getForecastResult(workload)">
 					<div>
 						<span><b>{{workload.Name}}</b></span>
+						<md-progress-circular class="workload-spinner mini-spinner" md-mode="indeterminate" ng-if="workload.ShowProgress"></md-progress-circular>
 						<span class="chevron pull-right"><i class="mdi mdi-chevron-right"></i></span>
 					</div>
 				</card-header>
@@ -40,6 +41,11 @@
 							</chart-axis>
 						</c3chart>
 					</div>
+					<div class="pull-right">
+						<aside>
+							<a class="wfm-btn wfm-btn-invis-default">{{ 'Advanced' | translate }}</a>
+						</aside>
+					</div>
 				</card-body>
 			</wfm-card>
 		</wfm-card-list>
@@ -55,7 +61,7 @@
 					SelectForecastPeriodIntro
 				</div>
 				<div class="modal-inner-content">
-					<div class="wfm-block">
+					<div class="wfm-block forecast-period">
 						<div class="wfm-datepicker-wrap">
 							<div class="sub-header">
 								{{'From' | translate}} <span class="startDate">{{period.startDate | date : format}}</span>

@@ -2,11 +2,15 @@
 
 angular.module('wfm.forecasting')
 	.controller('ForecastingStartCtrl', [
-		'$scope', '$state', 'Forecasting', '$http',
-		function ($scope, $state, forecasting, $http) {
-			var startDate = moment().utc().add(1, 'months').startOf('month').toDate();
-			var endDate = moment().utc().add(2, 'months').startOf('month').toDate();
-			$scope.period = { startDate: startDate, endDate: endDate }; //use moment to get first day of next month
+		'$scope', '$state', 'Forecasting', '$http', '$stateParams',
+		function ($scope, $state, forecasting, $http, $stateParams) {
+			if ($stateParams.period) {
+				$scope.period = $stateParams.period;
+			} else {
+				var startDate = moment().utc().add(1, 'months').startOf('month').toDate();
+				var endDate = moment().utc().add(2, 'months').startOf('month').toDate();
+				$scope.period = { startDate: startDate, endDate: endDate }; //use moment to get first day of next month
+			}
 
 			$scope.isForecastRunning = false;
 			forecasting.status.get().$promise.then(function (result) {
@@ -85,11 +89,42 @@ angular.module('wfm.forecasting')
 				$scope.period.endDate = angular.copy($scope.period.endDate);
 			};
 
+			var forecastForOneWorkload = function (index) {
+				var workload = $scope.workloads[index];
+				if (!workload) {
+					return;
+				}
+				workload.ShowProgress = true;
+
+				$http.post('../api/Forecasting/Forecast', JSON.stringify({ ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate, Workloads: [workload] })).
+					success(function (data, status, headers, config) {
+						if (data.Success) {
+							workload.IsSuccess = true;
+						} else {
+							workload.IsFailed = true;
+							workload.Message = data.Message;
+						}
+					}).
+					error(function (data, status, headers, config) {
+						workload.IsFailed = true;
+						if (data)
+							workload.Message = data.Message;
+						else
+							workload.Message = "Failed";
+					})
+					.finally(function () {
+						forecastForOneWorkload(++index);
+						workload.ShowProgress = false;
+					});
+			};
+
 			$scope.nextStepAll = function (period) {
 				if ($scope.disableNextStepAll()) {
 					return;
 				}
-				$state.go('forecasting-runall', { period: period });
+				$scope.modalLaunch = false;
+
+				forecastForOneWorkload(0);
 			};
 
 			$scope.disableNextStepAll = function () {
