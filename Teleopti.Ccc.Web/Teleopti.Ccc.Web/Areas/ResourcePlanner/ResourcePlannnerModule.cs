@@ -37,6 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			
 			
 			builder.RegisterType<FixedStaffLoader>();
+			builder.RegisterType<ScheduleControllerPrerequisites>().As<IScheduleControllerPrerequisites>();
 			builder.RegisterType<SetupStateHolderForWebScheduling>();
 			builder.RegisterType<ViolatedSchedulePeriodBusinessRule>();
 			builder.RegisterType<DayOffBusinessRuleValidation>();

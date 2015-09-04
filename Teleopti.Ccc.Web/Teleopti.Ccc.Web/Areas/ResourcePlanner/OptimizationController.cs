@@ -5,9 +5,7 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
@@ -20,8 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
     {
 		private readonly SetupStateHolderForWebScheduling _setupStateHolderForWebScheduling;
 		private readonly FixedStaffLoader _fixedStaffLoader;
-		private readonly IDayOffTemplateRepository _dayOffTemplateRepository;
-		private readonly IActivityRepository _activityRepository;
+		private readonly IScheduleControllerPrerequisites _prerequisites;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IClassicDaysOffOptimizationCommand _classicDaysOffOptimizationCommand;
 		private readonly Func<IPersonSkillProvider> _personSkillProvider;
@@ -29,15 +26,13 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
 
 		public OptimizationController(SetupStateHolderForWebScheduling setupStateHolderForWebScheduling,
-			FixedStaffLoader fixedStaffLoader, IDayOffTemplateRepository dayOffTemplateRepository,
-			IActivityRepository activityRepository, Func<ISchedulerStateHolder> schedulerStateHolder,
+			FixedStaffLoader fixedStaffLoader, IScheduleControllerPrerequisites prerequisites, Func<ISchedulerStateHolder> schedulerStateHolder,
 			IClassicDaysOffOptimizationCommand classicDaysOffOptimizationCommand,
 			Func<IPersonSkillProvider> personSkillProvider, IScheduleDictionaryPersister persister, IPlanningPeriodRepository planningPeriodRepository)
 		{
 			_setupStateHolderForWebScheduling = setupStateHolderForWebScheduling;
 			_fixedStaffLoader = fixedStaffLoader;
-			_dayOffTemplateRepository = dayOffTemplateRepository;
-			_activityRepository = activityRepository;
+			_prerequisites = prerequisites;
 			_schedulerStateHolder = schedulerStateHolder;
 			_classicDaysOffOptimizationCommand = classicDaysOffOptimizationCommand;
 			_personSkillProvider = personSkillProvider;
@@ -53,7 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 
 			var period = new DateOnlyPeriod(new DateOnly(planningPeriod.Range.StartDate.Date), new DateOnly(planningPeriod.Range.EndDate.Date));
 
-			makeSurePrereqsAreLoaded();
+			_prerequisites.MakeSureLoaded();
 
 			var people = _fixedStaffLoader.Load(period);
 
@@ -61,10 +56,10 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 
 			var allSchedules = extractAllSchedules(_schedulerStateHolder().SchedulingResultState, people, period);
 			initializePersonSkillProviderBeforeAccessingItFromOtherThreads(period, people.AllPeople);
-			var optimizationPreferences = new OptimizationPreferences()
+			var optimizationPreferences = new OptimizationPreferences
 			{
 				DaysOff =
-					new DaysOffPreferences()
+					new DaysOffPreferences
 					{
 						ConsecutiveDaysOffValue = new MinMax<int>(1, 3),
 						UseConsecutiveDaysOff = true,
@@ -75,7 +70,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 						DaysOffPerWeekValue = new MinMax<int>(1, 3),
 						UseDaysOffPerWeek = true
 					},
-				General = new GeneralPreferences() { ScheduleTag = NullScheduleTag.Instance ,OptimizationStepDaysOff = true}
+				General = new GeneralPreferences { ScheduleTag = NullScheduleTag.Instance ,OptimizationStepDaysOff = true}
 					
 			};
 			_classicDaysOffOptimizationCommand.Execute(allSchedules, period, optimizationPreferences, _schedulerStateHolder(), new NoBackgroundWorker());
@@ -102,12 +97,6 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				}
 			}
 			return allSchedules;
-		}
-
-		private void makeSurePrereqsAreLoaded()
-		{
-			_activityRepository.LoadAll();
-			_dayOffTemplateRepository.LoadAll();
 		}
 
 		private void initializePersonSkillProviderBeforeAccessingItFromOtherThreads(DateOnlyPeriod period,

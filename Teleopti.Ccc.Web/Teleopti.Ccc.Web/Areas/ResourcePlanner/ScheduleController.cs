@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -20,8 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 	{
 		private readonly SetupStateHolderForWebScheduling _setupStateHolderForWebScheduling;
 		private readonly FixedStaffLoader _fixedStaffLoader;
-		private readonly IDayOffTemplateRepository _dayOffTemplateRepository;
-		private readonly IActivityRepository _activityRepository;
+		private readonly IScheduleControllerPrerequisites _prerequisites;
 		private readonly Func<IFixedStaffSchedulingService> _fixedStaffSchedulingService;
 		private readonly Func<IScheduleCommand> _scheduleCommand;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
@@ -34,8 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		private readonly DayOffBusinessRuleValidation _dayOffBusinessRuleValidation;
 
 		public ScheduleController(SetupStateHolderForWebScheduling setupStateHolderForWebScheduling,
-			FixedStaffLoader fixedStaffLoader, IDayOffTemplateRepository dayOffTemplateRepository,
-			IActivityRepository activityRepository, Func<IFixedStaffSchedulingService> fixedStaffSchedulingService,
+			FixedStaffLoader fixedStaffLoader, IScheduleControllerPrerequisites prerequisites, Func<IFixedStaffSchedulingService> fixedStaffSchedulingService,
 			Func<IScheduleCommand> scheduleCommand, Func<ISchedulerStateHolder> schedulerStateHolder,
 			Func<IRequiredScheduleHelper> requiredScheduleHelper, Func<IGroupPagePerDateHolder> groupPagePerDateHolder,
 			Func<IScheduleTagSetter> scheduleTagSetter,
@@ -45,8 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		{
 			_setupStateHolderForWebScheduling = setupStateHolderForWebScheduling;
 			_fixedStaffLoader = fixedStaffLoader;
-			_dayOffTemplateRepository = dayOffTemplateRepository;
-			_activityRepository = activityRepository;
+			_prerequisites = prerequisites;
 			_fixedStaffSchedulingService = fixedStaffSchedulingService;
 			_scheduleCommand = scheduleCommand;
 			_schedulerStateHolder = schedulerStateHolder;
@@ -64,7 +60,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		{
 			var period = new DateOnlyPeriod(new DateOnly(input.StartDate), new DateOnly(input.EndDate));
 
-			makeSurePrereqsAreLoaded();
+			_prerequisites.MakeSureLoaded();
 
 			var people = _fixedStaffLoader.Load(period);
 
@@ -88,7 +84,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 					UsePreferences = true,
 					UseRotations = true,
 					UseStudentAvailability = false,
-					DayOffTemplate = _dayOffTemplateRepository.FindAllDayOffsSortByDescription()[0],
+					DayOffTemplate = _schedulerStateHolder().CommonStateHolder.DefaultDayOffTemplate,
 					ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff,
 					GroupOnGroupPageForTeamBlockPer = new GroupPageLight(UserTexts.Resources.Main, GroupPageType.Hierarchy),
 					TagToUseOnScheduling = NullScheduleTag.Instance
@@ -154,7 +150,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		private static bool isAmongInvalidScheduleRange(List<BusinessRulesValidationResult> schedulePeriodNotInRange,
 			IPerson person)
 		{
-			return schedulePeriodNotInRange.Contains(new BusinessRulesValidationResult()
+			return schedulePeriodNotInRange.Contains(new BusinessRulesValidationResult
 			{
 				BusinessRuleCategory = BusinessRuleCategory.SchedulePeriod,
 				//should be in resource files - not now to prevent translation
@@ -184,12 +180,6 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			var provider = _personSkillProvider();
 			var dayCollection = period.DayCollection();
 			allPeople.ForEach(p => dayCollection.ForEach(d => provider.SkillsOnPersonDate(p, d)));
-		}
-
-		private void makeSurePrereqsAreLoaded()
-		{
-			_activityRepository.LoadAll();
-			_dayOffTemplateRepository.LoadAll();
 		}
 	}
 }
