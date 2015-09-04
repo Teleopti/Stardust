@@ -8,8 +8,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
-using Teleopti.Ccc.Infrastructure.Persisters;
-using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -25,7 +23,6 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		private readonly ISwapAndModifyService _swapAndModifyService;
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
-		private readonly IMessageBrokerEnablerFactory _messageBrokerEnablerFactory;
 		private readonly IDifferenceCollectionService<IPersistableScheduleData> _differenceService;
 		private readonly IGlobalSettingDataRepository _globalSettingDataRepository;
 	    
@@ -36,7 +33,6 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 																								ISwapAndModifyService swapAndModifyService, 
 																								IPersonRequestRepository personRequestRepository, 
 																								ICurrentUnitOfWorkFactory unitOfWorkFactory, 
-																								IMessageBrokerEnablerFactory messageBrokerEnablerFactory,
 																								IDifferenceCollectionService<IPersistableScheduleData> differenceService,
                                                                                                 IGlobalSettingDataRepository globalSettingDataRepository)
 		{
@@ -47,7 +43,6 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 			_swapAndModifyService = swapAndModifyService;
 			_personRequestRepository = personRequestRepository;
 			_unitOfWorkFactory = unitOfWorkFactory;
-			_messageBrokerEnablerFactory = messageBrokerEnablerFactory;
 			_differenceService = differenceService;
 			_globalSettingDataRepository = globalSettingDataRepository;
 		    
@@ -94,10 +89,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 					_scheduleDictionarySaver.SaveChanges(diff, (IUnvalidatedScheduleRangeUpdate) range);
 				}
 
-				using (_messageBrokerEnablerFactory.NewMessageBrokerEnabler())
-				{
-					uow.PersistAll();
-				}
+				uow.PersistAll();
 			}
 			command.Result = new CommandResultDto { AffectedId = command.PersonRequestId, AffectedItems = 1 };
 		}

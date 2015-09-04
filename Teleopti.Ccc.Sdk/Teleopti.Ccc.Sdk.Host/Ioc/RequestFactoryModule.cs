@@ -33,7 +33,6 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Ioc
 			builder.RegisterType<SwapService>().As<ISwapService>().InstancePerDependency();
 			builder.RegisterType<ResourceCalculationOnlyScheduleDayChangeCallback>().As<IScheduleDayChangeCallback>().InstancePerDependency();
 			builder.RegisterType<SaveSchedulePartService>().As<ISaveSchedulePartService>().InstancePerDependency();
-			builder.RegisterType<MessageBrokerEnablerFactory>().As<IMessageBrokerEnablerFactory>().InstancePerDependency();
 		}
 	}
 }

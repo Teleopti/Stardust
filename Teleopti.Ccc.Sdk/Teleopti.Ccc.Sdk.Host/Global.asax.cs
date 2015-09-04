@@ -47,10 +47,6 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 	public class Global : HttpApplication
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(Global));
-		private string _messageBrokerDisabledConfigurationValue;
-		private bool _messageBrokerDisabled;
-		private string _messageBrokerReceiveEnabledConfigurationValue;
-		private bool _messageBrokerReceiveEnabled;
 
 		protected void Application_End(object sender, EventArgs e)
 		{
@@ -124,23 +120,8 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 				initializeApplication.Start(new SdkState(), passwordPolicyService, appSettings, true);
 			}
 			tenantUnitOfWorkManager.Dispose();
-			var messageBrokerReceiveDisabled = !messageBrokerReceiveEnabled();
-			if (messageBrokerReceiveDisabled)
-				if (messageBroker != null)
-					messageBroker.Dispose();
 
 			Logger.Info("Initialized application");
-		}
-
-		private bool messageBrokerReceiveEnabled()
-		{
-			_messageBrokerReceiveEnabledConfigurationValue = ConfigurationManager.AppSettings["MessageBrokerReceiveEnabled"];
-			if (!string.IsNullOrEmpty(_messageBrokerReceiveEnabledConfigurationValue))
-			{
-				if (!bool.TryParse(_messageBrokerReceiveEnabledConfigurationValue, out _messageBrokerReceiveEnabled))
-					_messageBrokerReceiveEnabled = false;
-			}
-			return _messageBrokerReceiveEnabled;
 		}
 
 		public static ContainerBuilder BuildIoc()

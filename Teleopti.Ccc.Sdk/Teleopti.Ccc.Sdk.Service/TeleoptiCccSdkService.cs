@@ -1067,20 +1067,16 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		public void SavePreference(PreferenceRestrictionDto preferenceRestrictionDto)
 		{
 			IRepositoryFactory repositoryFactory = new RepositoryFactory();
-
-			using (new MessageBrokerSendEnabler())
+			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-				{
-					deletePreference(preferenceRestrictionDto, repositoryFactory, uow);
-					IPreferenceDayRepository repository = repositoryFactory.CreatePreferenceDayRepository(uow);
-					var assembler = _factoryProvider.CreatePreferenceDayAssembler();
+				deletePreference(preferenceRestrictionDto, repositoryFactory, uow);
+				IPreferenceDayRepository repository = repositoryFactory.CreatePreferenceDayRepository(uow);
+				var assembler = _factoryProvider.CreatePreferenceDayAssembler();
 
-					preferenceRestrictionDto.Id = null;
-					var preferenceDay = assembler.DtoToDomainEntity(preferenceRestrictionDto);
-					repository.Add(preferenceDay);
-					uow.PersistAll();
-				}
+				preferenceRestrictionDto.Id = null;
+				var preferenceDay = assembler.DtoToDomainEntity(preferenceRestrictionDto);
+				repository.Add(preferenceDay);
+				uow.PersistAll();
 			}
 		}
 
@@ -1088,13 +1084,10 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		{
 			IRepositoryFactory repositoryFactory = new RepositoryFactory();
 
-			using (new MessageBrokerSendEnabler())
+			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-				{
-					deletePreference(preferenceRestrictionDto, repositoryFactory, uow);
-					uow.PersistAll();
-				}
+				deletePreference(preferenceRestrictionDto, repositoryFactory, uow);
+				uow.PersistAll();
 			}
 		}
 
@@ -1117,38 +1110,30 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		{
 			DeleteStudentAvailabilityDay(studentAvailabilityDayDto);
 			IRepositoryFactory repositoryFactory = new RepositoryFactory();
-			using (new MessageBrokerSendEnabler())
+
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-				{
-					IStudentAvailabilityDay studentAvailabilityDay =
-						GetStudentAvailabilityDomainFromDto(studentAvailabilityDayDto);
-					IStudentAvailabilityDayRepository repository =
-						repositoryFactory.CreateStudentAvailabilityDayRepository(uow);
-					repository.Add(studentAvailabilityDay);
-					uow.PersistAll();
-				}
+				var studentAvailabilityDay = GetStudentAvailabilityDomainFromDto(studentAvailabilityDayDto);
+				var repository = repositoryFactory.CreateStudentAvailabilityDayRepository(uow);
+				repository.Add(studentAvailabilityDay);
+				uow.PersistAll();
 			}
 		}
 
 		public void DeleteStudentAvailabilityDay(StudentAvailabilityDayDto studentAvailabilityDayDto)
 		{
-			IRepositoryFactory repositoryFactory = new RepositoryFactory();
-			IStudentAvailabilityDay studentDay = GetStudentAvailabilityDomainFromDto(studentAvailabilityDayDto);
+			var repositoryFactory = new RepositoryFactory();
+			var studentDay = GetStudentAvailabilityDomainFromDto(studentAvailabilityDayDto);
 
-			using (new MessageBrokerSendEnabler())
+			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+				var repository = repositoryFactory.CreateStudentAvailabilityDayRepository(uow);
+				var days = repository.Find(studentDay.RestrictionDate, studentDay.Person);
+				foreach (var day in days)
 				{
-					IStudentAvailabilityDayRepository repository =
-						repositoryFactory.CreateStudentAvailabilityDayRepository(uow);
-					IList<IStudentAvailabilityDay> days = repository.Find(studentDay.RestrictionDate, studentDay.Person);
-					foreach (var day in days)
-					{
-						repository.Remove(day);
-					}
-					uow.PersistAll();
+					repository.Remove(day);
 				}
+				uow.PersistAll();
 			}
 		}
 
@@ -1820,18 +1805,14 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		/// <param name="personDto">The person dto.</param>
 		public void SavePerson(PersonDto personDto)
 		{
-			using (new MessageBrokerSendEnabler())
+			using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-				{
-					PersonAssembler personAssembler = (PersonAssembler)_factoryProvider.CreatePersonAssembler();
-					personAssembler.EnableSaveOrUpdate = true;
-					var person = personAssembler.DtoToDomainEntity(personDto);
-					unitOfWork.PersistAll();
-					_tenantPeopleSaver.SaveTenantData(personDto, person.Id.Value);
-				}
+				PersonAssembler personAssembler = (PersonAssembler)_factoryProvider.CreatePersonAssembler();
+				personAssembler.EnableSaveOrUpdate = true;
+				var person = personAssembler.DtoToDomainEntity(personDto);
+				unitOfWork.PersistAll();
+				_tenantPeopleSaver.SaveTenantData(personDto, person.Id.Value);
 			}
-
 		}
 
 		/// <summary>
@@ -2097,21 +2078,18 @@ namespace Teleopti.Ccc.Sdk.WcfService
 
 		public void SavePushMessageDialogue(PushMessageDialogueDto pushMessageDialogueDto)
 		{
-			using (new MessageBrokerSendEnabler())
+			using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+				IRepositoryFactory repositoryFactory = new RepositoryFactory();
+				IPushMessageDialogueRepository repository =
+					repositoryFactory.CreatePushMessageDialogueRepository(unitOfWork);
+				IPushMessageDialogue pushMessageDialogue = repository.Load(pushMessageDialogueDto.Id.GetValueOrDefault());
+				if (pushMessageDialogue != null)
 				{
-					IRepositoryFactory repositoryFactory = new RepositoryFactory();
-					IPushMessageDialogueRepository repository =
-						repositoryFactory.CreatePushMessageDialogueRepository(unitOfWork);
-					IPushMessageDialogue pushMessageDialogue = repository.Load(pushMessageDialogueDto.Id.GetValueOrDefault());
-					if (pushMessageDialogue != null)
-					{
-						Console.WriteLine(pushMessageDialogue.ToString());
-					}
-
-					unitOfWork.PersistAll();
+					Console.WriteLine(pushMessageDialogue.ToString());
 				}
+
+				unitOfWork.PersistAll();
 			}
 		}
 
@@ -2123,8 +2101,6 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		/// <param name="sender">The sender.</param>
 		public void SetDialogueReply(PushMessageDialogueDto pushMessageDialogueDto, string dialogueReply, PersonDto sender)
 		{
-			using (new MessageBrokerSendEnabler())
-			{
 				using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 				{
 					IRepositoryFactory repositoryFactory = new RepositoryFactory();
@@ -2135,7 +2111,6 @@ namespace Teleopti.Ccc.Sdk.WcfService
 					pushMessageDialogue.DialogueReply(dialogueReply, personAssembler.DtoToDomainEntity(sender));
 					unitOfWork.PersistAll();
 				}
-			}
 		}
 
 		/// <summary>
@@ -2145,18 +2120,15 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		/// <param name="reply">The reply.</param>
 		public void SetReply(PushMessageDialogueDto pushMessageDialogueDto, string reply)
 		{
-			using (new MessageBrokerSendEnabler())
+			using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-				{
-					IRepositoryFactory repositoryFactory = new RepositoryFactory();
-					IPushMessageDialogueRepository pushMessageDialogueRepository =
-						repositoryFactory.CreatePushMessageDialogueRepository(unitOfWork);
-					IPushMessageDialogue pushMessageDialogue =
-						pushMessageDialogueRepository.Load(pushMessageDialogueDto.Id.Value);
-					pushMessageDialogue.SetReply(reply);
-					unitOfWork.PersistAll();
-				}
+				IRepositoryFactory repositoryFactory = new RepositoryFactory();
+				IPushMessageDialogueRepository pushMessageDialogueRepository =
+					repositoryFactory.CreatePushMessageDialogueRepository(unitOfWork);
+				IPushMessageDialogue pushMessageDialogue =
+					pushMessageDialogueRepository.Load(pushMessageDialogueDto.Id.Value);
+				pushMessageDialogue.SetReply(reply);
+				unitOfWork.PersistAll();
 			}
 		}
 

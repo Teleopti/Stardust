@@ -77,12 +77,8 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 
 		public void DeletePersonRequest(PersonRequestDto personRequestDto, IUnitOfWork unitOfWork)
 		{
-			using (new MessageBrokerSendEnabler())
-			{
-				IPersonRequest personRequest =
-					_personRequestRepository.Load(personRequestDto.Id.GetValueOrDefault(Guid.Empty));
-				_personRequestRepository.Remove(personRequest);
-			}
+			var personRequest = _personRequestRepository.Load(personRequestDto.Id.GetValueOrDefault(Guid.Empty));
+			_personRequestRepository.Remove(personRequest);
 		}
 
 		public PersonRequestDto SavePersonRequest(PersonRequestDto personRequestDto, IUnitOfWork unitOfWork)
@@ -239,31 +235,24 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 				personRequestDto.IsDeleted = true;
 				return personRequestDto;
 			}
-			IPersonRequest domainPersonRequest;
-			using (new MessageBrokerSendEnabler())
-			{
-				domainPersonRequest = _personRequestRepository.Load(personRequestDto.Id.GetValueOrDefault(Guid.Empty));
-				domainPersonRequest.TrySetMessage(personRequestDto.Message);
-				domainPersonRequest.Deny(TeleoptiPrincipal.CurrentPrincipal.GetPerson(_personRepository), "RequestDenyReasonOtherPart", new SdkPersonRequestAuthorizationCheck());
-				unitOfWork.PersistAll();
-			}
+			var domainPersonRequest = _personRequestRepository.Load(personRequestDto.Id.GetValueOrDefault(Guid.Empty));
+			domainPersonRequest.TrySetMessage(personRequestDto.Message);
+			domainPersonRequest.Deny(TeleoptiPrincipal.CurrentPrincipal.GetPerson(_personRepository), "RequestDenyReasonOtherPart", new SdkPersonRequestAuthorizationCheck());
+			unitOfWork.PersistAll();
 			return personRequestDto;
 		}
 
 		public PersonRequestDto UpdatePersonRequestMessage(PersonRequestDto personRequestDto, IUnitOfWork unitOfWork)
 		{
-			IPersonRequest domainPersonRequest;
 			if (DomainPersonRequestHasBeenDeleted(personRequestDto.Id.GetValueOrDefault(Guid.Empty)))
 			{
 				personRequestDto.IsDeleted = true;
 				return personRequestDto;
 			}
-			using (new MessageBrokerSendEnabler())
-			{
-				domainPersonRequest = _personRequestRepository.Load(personRequestDto.Id.GetValueOrDefault(Guid.Empty));
-				domainPersonRequest.TrySetMessage(personRequestDto.Message);
-				unitOfWork.PersistAll();
-			}
+
+			var domainPersonRequest = _personRequestRepository.Load(personRequestDto.Id.GetValueOrDefault(Guid.Empty));
+			domainPersonRequest.TrySetMessage(personRequestDto.Message);
+			unitOfWork.PersistAll();
 			return personRequestDto;
 		}
 	}

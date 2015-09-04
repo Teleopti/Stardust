@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private IScenarioRepository _scenarioRepository;
         private IUnitOfWorkFactory _unitOfWorkFactory;
         private ISaveSchedulePartService _saveSchedulePartService;
-        private IMessageBrokerEnablerFactory _messageBrokerEnablerFactory;
         private MockRepository _mock;
         private AddDayOffCommandHandler _target;
         private IPerson _person;
@@ -52,7 +51,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _currentUnitOfWorkFactory = _mock.DynamicMock<ICurrentUnitOfWorkFactory>();
             _unitOfWorkFactory = _mock.StrictMock<IUnitOfWorkFactory>();
             _saveSchedulePartService = _mock.StrictMock<ISaveSchedulePartService>();
-            _messageBrokerEnablerFactory = _mock.DynamicMock<IMessageBrokerEnablerFactory>();
     		_businessRulesForPersonalAccountUpdate = _mock.DynamicMock<IBusinessRulesForPersonalAccountUpdate>();
 			_scheduleTagAssembler = _mock.DynamicMock<IScheduleTagAssembler>();
 
@@ -65,7 +63,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _dayOff = DayOffFactory.CreateDayOff();
             _dayOff.SetId(Guid.NewGuid());
 
-			_target = new AddDayOffCommandHandler(_dayOffRepository, _scheduleRepository, _personRepository, _scenarioRepository, _currentUnitOfWorkFactory, _saveSchedulePartService, _messageBrokerEnablerFactory, _businessRulesForPersonalAccountUpdate, _scheduleTagAssembler);
+			_target = new AddDayOffCommandHandler(_dayOffRepository, _scheduleRepository, _personRepository, _scenarioRepository, _currentUnitOfWorkFactory, _saveSchedulePartService, _businessRulesForPersonalAccountUpdate, _scheduleTagAssembler);
             _schedulePartFactory = new SchedulePartFactoryForDomain(_person, _scenario, _period, SkillFactory.CreateSkill("Test Skill"));
 
             _addAbsenceCommandDto = new AddDayOffCommandDto

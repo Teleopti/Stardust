@@ -22,8 +22,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
         {
             IPersonRequest personRequest;
 
-            using (new MessageBrokerSendEnabler())
-            {
+
                 try
                 {
                     personRequest = _personRequestAssembler.DtoToDomainEntity(personRequestDto);
@@ -39,7 +38,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
                 }
                 handleDomainPersonRequest.Invoke(personRequest);
                 unitOfWork.PersistAll();
-            }
+
             return personRequest;
         }
     }

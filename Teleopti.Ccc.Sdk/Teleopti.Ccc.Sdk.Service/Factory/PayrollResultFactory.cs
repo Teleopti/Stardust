@@ -68,11 +68,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 
 				payrollResult.PayrollExport = payrollExportDomain;
 				_payrollResultRepository.Add(payrollResult);
-
-				using (new MessageBrokerSendEnabler())
-				{
-					unitOfWork.PersistAll();
-				}
+				unitOfWork.PersistAll();
 				return payrollResult.Id.GetValueOrDefault();
 			}
 		}

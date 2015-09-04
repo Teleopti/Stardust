@@ -8,7 +8,6 @@ using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.Requests;
 
 namespace Teleopti.Ccc.Sdk.WcfService.Factory
@@ -32,31 +31,28 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 
 		public void Execute()
 		{
-			IPersonRequest domainPersonRequest;
-			using (new MessageBrokerSendEnabler())
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-				{
-					var shiftTradeRequestSetChecksum = new ShiftTradeRequestSetChecksum(_currentScenario, _scheduleRepository);
+				var shiftTradeRequestSetChecksum = new ShiftTradeRequestSetChecksum(_currentScenario, _scheduleRepository);
 
-					domainPersonRequest = _personRequestRepository.Load(_personRequestDto.Id.GetValueOrDefault(Guid.Empty));
-					try
-					{
-						domainPersonRequest.Request.Accept(domainPersonRequest.Person, shiftTradeRequestSetChecksum, new SdkPersonRequestAuthorizationCheck());
-						domainPersonRequest.TrySetMessage(_personRequestDto.Message);
-					}
-					catch (ShiftTradeRequestStatusException exception)
-					{
-						throw new FaultException(
-							new FaultReason(
-								new FaultReasonText(string.Format(CultureInfo.InvariantCulture,
-																  "The accept action failed. The error was: {0}.",
-																  exception.Message),
-													CultureInfo.InvariantCulture)));
-					}
-					uow.PersistAll();
+				var domainPersonRequest = _personRequestRepository.Load(_personRequestDto.Id.GetValueOrDefault(Guid.Empty));
+				try
+				{
+					domainPersonRequest.Request.Accept(domainPersonRequest.Person, shiftTradeRequestSetChecksum, new SdkPersonRequestAuthorizationCheck());
+					domainPersonRequest.TrySetMessage(_personRequestDto.Message);
 				}
+				catch (ShiftTradeRequestStatusException exception)
+				{
+					throw new FaultException(
+						new FaultReason(
+							new FaultReasonText(string.Format(CultureInfo.InvariantCulture,
+																"The accept action failed. The error was: {0}.",
+																exception.Message),
+												CultureInfo.InvariantCulture)));
+				}
+				uow.PersistAll();
 			}
+
 			var message = new NewShiftTradeRequestCreated
 				{
 					PersonRequestId =

@@ -13,14 +13,12 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         private readonly IPersonRequestRepository _personRequestRepository;
         private readonly IPersonRequestCheckAuthorization _authorization;
         private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
-    	private readonly IMessageBrokerEnablerFactory _messageBrokerEnablerFactory;
 
-    	public DenyRequestCommandHandler(IPersonRequestRepository personRequestRepository, IPersonRequestCheckAuthorization authorization, ICurrentUnitOfWorkFactory unitOfWorkFactory, IMessageBrokerEnablerFactory messageBrokerEnablerFactory)
+    	public DenyRequestCommandHandler(IPersonRequestRepository personRequestRepository, IPersonRequestCheckAuthorization authorization, ICurrentUnitOfWorkFactory unitOfWorkFactory)
         {
             _personRequestRepository = personRequestRepository;
             _authorization = authorization;
             _unitOfWorkFactory = unitOfWorkFactory;
-        	_messageBrokerEnablerFactory = messageBrokerEnablerFactory;
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -39,10 +37,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 {
                     throw new FaultException(e.Message);
                 }
-                using (_messageBrokerEnablerFactory.NewMessageBrokerEnabler())
-                {
                     uow.PersistAll();
-                }
             }
 			command.Result = new CommandResultDto { AffectedId = command.PersonRequestId, AffectedItems = 1 };
         }

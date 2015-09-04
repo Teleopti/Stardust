@@ -203,7 +203,6 @@
     <Compile Include="CommandHandler\SetPersonAccountForPersonCommandHandler.cs" />
     <Compile Include="CommandHandler\SetPersonOptionalValuesForPersonCommandHandler.cs" />
     <Compile Include="CommandHandler\SetSchedulePeriodWorktimeOverrideCommandHandler.cs" />
-    <Compile Include="IMessageBrokerEnablerFactory.cs" />
     <Compile Include="IServiceLevelCalculator.cs" />
     <Compile Include="IPayrollResultFactory.cs" />
     <Compile Include="IPersistPersonRequest.cs" />

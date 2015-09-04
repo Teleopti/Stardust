@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private IScenarioRepository _scenarioRepository;
         private IUnitOfWorkFactory _unitOfWorkFactory;
         private ISaveSchedulePartService _saveSchedulePartService;
-        private IMessageBrokerEnablerFactory _messageBrokerEnablerFactory;
         private ClearMainShiftCommandHandler _target ;
         private static DateTime _startDate = new DateTime(2012, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 		private readonly DateOnlyDto _dateOnlydto = new DateOnlyDto { DateTime = _startDate.Date };
@@ -43,12 +42,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			_scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
 			_unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			_saveSchedulePartService = MockRepository.GenerateMock<ISaveSchedulePartService>();
-			_messageBrokerEnablerFactory = MockRepository.GenerateMock<IMessageBrokerEnablerFactory>();
 			_businessRulesForPersonalAccountUpdate = MockRepository.GenerateMock<IBusinessRulesForPersonalAccountUpdate>();
 			_currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
 			_scheduleTagAssembler = MockRepository.GenerateMock<IScheduleTagAssembler>();
 
-            _target = new ClearMainShiftCommandHandler(_scheduleTagAssembler, _scheduleRepository,_personRepository,_scenarioRepository,_currentUnitOfWorkFactory,_saveSchedulePartService,_messageBrokerEnablerFactory,_businessRulesForPersonalAccountUpdate);
+            _target = new ClearMainShiftCommandHandler(_scheduleTagAssembler, _scheduleRepository,_personRepository,_scenarioRepository,_currentUnitOfWorkFactory,_saveSchedulePartService, _businessRulesForPersonalAccountUpdate);
 
             _person = PersonFactory.CreatePerson("test");
             _person.SetId(Guid.NewGuid());

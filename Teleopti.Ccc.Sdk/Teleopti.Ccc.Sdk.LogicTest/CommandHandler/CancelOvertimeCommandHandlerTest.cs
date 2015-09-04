@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private IScenarioRepository _scenarioRepository;
         private IUnitOfWorkFactory _unitOfWorkFactory;
         private ISaveSchedulePartService _saveSchedulePartService;
-        private IMessageBrokerEnablerFactory _messageBrokerEnablerFactory;
         private CancelOvertimeCommandHandler _target;
         private IPerson _person;
         private Activity _activity;
@@ -58,11 +57,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _unitOfWorkFactory = _mock.StrictMock<IUnitOfWorkFactory>();
             _currentUnitOfWorkFactory = _mock.DynamicMock<ICurrentUnitOfWorkFactory>();
             _saveSchedulePartService = _mock.DynamicMock<ISaveSchedulePartService>();
-            _messageBrokerEnablerFactory = _mock.DynamicMock<IMessageBrokerEnablerFactory>();
     		_businessRulesForPersonalAccountUpdate = _mock.DynamicMock<IBusinessRulesForPersonalAccountUpdate>();
 			_scheduleTagAssembler = _mock.DynamicMock<IScheduleTagAssembler>();
 
-            _target = new CancelOvertimeCommandHandler(_dateTimePeriodAssembler,_scheduleTagAssembler,_scheduleRepository,_personRepository,_scenarioRepository,_currentUnitOfWorkFactory,_saveSchedulePartService,_messageBrokerEnablerFactory,_businessRulesForPersonalAccountUpdate);
+            _target = new CancelOvertimeCommandHandler(_dateTimePeriodAssembler,_scheduleTagAssembler,_scheduleRepository,_personRepository,_scenarioRepository,_currentUnitOfWorkFactory,_saveSchedulePartService, _businessRulesForPersonalAccountUpdate);
 
             _person = PersonFactory.CreatePerson();
             _person.SetId(Guid.NewGuid());

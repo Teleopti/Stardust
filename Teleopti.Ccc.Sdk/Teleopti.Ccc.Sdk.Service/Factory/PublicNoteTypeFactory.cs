@@ -64,8 +64,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
             if (publicNoteDto.ScheduleNote == null)
                 publicNoteDto.ScheduleNote = string.Empty;
 
-            using (new MessageBrokerSendEnabler())
-            {
+
                 using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
                 {
                     IPublicNote publicNote = new PublicNote(_personAssembler.DtoToDomainEntity(publicNoteDto.Person),
@@ -75,13 +74,11 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
                     _publicNoteRepository.Add(publicNote);
                     uow.PersistAll();
                 }
-            }
         }
 
         public void DeletePublicNote(PublicNoteDto publicNoteDto)
         {
-            using (new MessageBrokerSendEnabler())
-            {
+
                 using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
                 {
                     IPublicNote publicNote = _publicNoteRepository.Find(new DateOnly(publicNoteDto.Date.DateTime),
@@ -93,7 +90,6 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
                     _publicNoteRepository.Remove(publicNote);
                     uow.PersistAll();
                 }
-            }
         }
     }
 }

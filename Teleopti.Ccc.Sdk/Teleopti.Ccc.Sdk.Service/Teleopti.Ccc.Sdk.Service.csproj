@@ -210,14 +210,12 @@
     <Compile Include="Factory\ContractScheduleFactory.cs" />
     <Compile Include="Factory\IAuthorizationProvider.cs" />
     <Compile Include="Factory\LargeForecastsRowCollectionSerializer.cs" />
-    <Compile Include="Factory\MessageBrokerEnablerFactory.cs" />
     <Compile Include="Factory\PersistPersonRequest.cs" />
     <Compile Include="Factory\PlanningTimeBankFactory.cs" />
     <Compile Include="Factory\PreferenceRestrictionConstructor.cs" />
     <Compile Include="Factory\PublicNoteTypeFactory.cs" />
     <Compile Include="Factory\IPersonRequestFactory.cs" />
     <Compile Include="Factory\LargeGuidCollectionSerializer.cs" />
-    <Compile Include="Factory\MessageBrokerSendEnabler.cs" />
     <Compile Include="Factory\OvertimeDefinitionFactory.cs" />
     <Compile Include="Factory\PartTimePercentageFactory.cs" />
     <Compile Include="Factory\PersonRequestedShiftTrade.cs" />

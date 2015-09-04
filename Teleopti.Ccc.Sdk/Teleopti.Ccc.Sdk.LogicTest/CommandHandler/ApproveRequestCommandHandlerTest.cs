@@ -9,9 +9,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
-using Teleopti.Ccc.Sdk.Logic;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -30,7 +28,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private ISwapAndModifyService _swapAndModifyService;
         private IPersonRequestRepository _personRequestRepository;
         private IUnitOfWorkFactory _unitOfWorkFactory;
-        private IMessageBrokerEnablerFactory _messageBrokerEnablerFactory;
         private ApproveRequestCommandHandler _target;
         private IPerson _person;
         private ApproveRequestCommandDto _approveRequestCommandDto;
@@ -56,11 +53,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _personRequestRepository = _mock.StrictMock<IPersonRequestRepository>();
             _unitOfWorkFactory = _mock.StrictMock<IUnitOfWorkFactory>();
             _currentUnitOfWorkFactory = _mock.DynamicMock<ICurrentUnitOfWorkFactory>();
-            _messageBrokerEnablerFactory = _mock.DynamicMock<IMessageBrokerEnablerFactory>();
             _globalSettingDataRepository = _mock.StrictMock<IGlobalSettingDataRepository>();
             _target = new ApproveRequestCommandHandler(_scheduleRepository, _scheduleDictionarySaver, _scenarioRepository,
                                                        _authorization, _swapAndModifyService, _personRequestRepository,
-                                                       _currentUnitOfWorkFactory, _messageBrokerEnablerFactory,
+                                                       _currentUnitOfWorkFactory,
 													   new DifferenceEntityCollectionService<IPersistableScheduleData>(),
                                                        _globalSettingDataRepository);
 

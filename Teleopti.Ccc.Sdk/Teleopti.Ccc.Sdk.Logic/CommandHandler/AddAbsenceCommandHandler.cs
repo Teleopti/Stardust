@@ -20,12 +20,11 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         private readonly IScenarioRepository _scenarioRepository;
         private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
         private readonly ISaveSchedulePartService _saveSchedulePartService;
-    	private readonly IMessageBrokerEnablerFactory _messageBrokerEnablerFactory;
     	private readonly IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
 		private readonly IScheduleTagAssembler _scheduleTagAssembler;
 
 
-		public AddAbsenceCommandHandler(IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler, IAbsenceRepository absenceRepository, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IScenarioRepository scenarioRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, ISaveSchedulePartService saveSchedulePartService, IMessageBrokerEnablerFactory messageBrokerEnablerFactory, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate, IScheduleTagAssembler scheduleTagAssembler)
+		public AddAbsenceCommandHandler(IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler, IAbsenceRepository absenceRepository, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IScenarioRepository scenarioRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, ISaveSchedulePartService saveSchedulePartService, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate, IScheduleTagAssembler scheduleTagAssembler)
         {
             _dateTimePeriodAssembler = dateTimePeriodAssembler;
             _absenceRepository = absenceRepository;
@@ -34,7 +33,6 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             _scenarioRepository = scenarioRepository;
             _unitOfWorkFactory = unitOfWorkFactory;
             _saveSchedulePartService = saveSchedulePartService;
-        	_messageBrokerEnablerFactory = messageBrokerEnablerFactory;
     		_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
 			_scheduleTagAssembler = scheduleTagAssembler;
         }
@@ -60,10 +58,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				
 				var scheduleTagEntity = _scheduleTagAssembler.DtoToDomainEntity(new ScheduleTagDto {Id = command.ScheduleTagId});
                 _saveSchedulePartService.Save(scheduleDay, rules, scheduleTagEntity);
-				using (_messageBrokerEnablerFactory.NewMessageBrokerEnabler())
-				{
 					uow.PersistAll();
-				}
 			}
 			command.Result = new CommandResultDto { AffectedId = command.PersonId, AffectedItems = 1 };
         }
