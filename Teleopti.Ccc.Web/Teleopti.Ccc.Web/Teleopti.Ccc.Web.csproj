@@ -1982,9 +1982,6 @@
     <Content Include="Areas\SSO\Views\OpenId\Identifier.cshtml" />
     <Content Include="Areas\SSO\Views\_ViewStart.cshtml" />
     <Content Include="Areas\SSO\Views\Web.config" />
-    <Content Include="..\..\Teleopti.Ccc.Web.Broker\customTimeoutSettings.config.notinuse">
-      <Link>customTimeoutSettings.config.notinuse</Link>
-    </Content>
     <Content Include="Areas\Start\Views\Test\Message.cshtml" />
     <Content Include="Areas\MyTime\Views\Requests\TextRequestDetailView.cshtml" />
     <Content Include="Areas\Start\Views\Shared\Error.cshtml" />
