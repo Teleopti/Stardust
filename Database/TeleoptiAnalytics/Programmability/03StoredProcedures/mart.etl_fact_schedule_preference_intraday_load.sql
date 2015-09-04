@@ -42,6 +42,7 @@ SET @business_unit_id = (SELECT business_unit_id FROM mart.dim_business_unit WHE
 DECLARE @scenario_id int
 SELECT @scenario_id = scenario_id FROM mart.dim_scenario WHERE scenario_code= @scenario_code
  
+SET NOCOUNT OFF
 -- Delete rows from stage
 DELETE f
 FROM Stage.stg_schedule_preference stg
@@ -65,6 +66,7 @@ INNER JOIN mart.dim_scenario ds
 INNER JOIN mart.fact_schedule_preference f
 	ON f.date_id = dd.date_id
 	AND f.scenario_id = ds.scenario_id
+	AND f.person_id = p.person_id
 
 INSERT INTO mart.fact_schedule_preference
 	(
