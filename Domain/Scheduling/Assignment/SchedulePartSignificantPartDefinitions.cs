@@ -10,24 +10,25 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
     {
         private readonly IScheduleDay _schedulePart;
         private readonly IHasContractDayOffDefinition _hasContractDayOffDefinition;
-        private IVisualLayerCollection _layerCollcetion;
+        private Lazy<IVisualLayerCollection> _layerCollection;
 
         public SchedulePartSignificantPartDefinitions(IScheduleDay schedulePart, IHasContractDayOffDefinition hasContractDayOffDefinition)
         {
             InParameter.NotNull("schedulePart", schedulePart);
             _schedulePart = schedulePart;
 			_hasContractDayOffDefinition = hasContractDayOffDefinition;
+
+			_layerCollection = new Lazy<IVisualLayerCollection>(() => _schedulePart.ProjectionService().CreateProjection());
         }
 
         public IDisposable BeginRead()
         {
-            _layerCollcetion = _schedulePart.ProjectionService().CreateProjection();
             return new SignificantPartReadAction(this);
         }
 
         private void End()
         {
-            _layerCollcetion = null;
+			_layerCollection = new Lazy<IVisualLayerCollection>(() => _schedulePart.ProjectionService().CreateProjection());
         }
 
         public bool HasDayOff()
@@ -51,14 +52,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         public bool HasFullAbsence()
         {
-            IVisualLayerCollection layerCollection = _layerCollcetion ?? _schedulePart.ProjectionService().CreateProjection();
+            IVisualLayerCollection layerCollection = _layerCollection.Value;
             foreach (IVisualLayer layer in layerCollection)
             {
                 if (!(layer.Payload is IAbsence))
                     return false;
             }
 
-            return layerCollection.HasLayers ? true : false;
+            return layerCollection.HasLayers;
         }
 
         public bool HasAbsence()

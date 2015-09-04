@@ -48,7 +48,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			return GetEnumerator();
 		}
-
 	}
 
 	public class WorkShiftCalculatableLayer : IWorkShiftCalculatableLayer
@@ -134,5 +133,4 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return _data.Values;
 		}
 	}
-
 }

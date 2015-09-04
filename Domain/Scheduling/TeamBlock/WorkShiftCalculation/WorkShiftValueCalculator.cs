@@ -53,10 +53,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 
 				var layerPeriod = layer.Period;
 				var layerStartLocal = DateTime.SpecifyKind(layerPeriod.StartDateTimeLocal(timeZoneInfo), DateTimeKind.Utc);
-				var localPeriod = new DateTimePeriod(layerStartLocal,
-					DateTime.SpecifyKind(layerPeriod.EndDateTimeLocal(timeZoneInfo), DateTimeKind.Utc));
+				var localPeriod = new DateTimePeriod(layerStartLocal, layerStartLocal.Add(layerPeriod.ElapsedTime()));
 
-				DateTime currentSkillStaffPeriodKey =
+				var currentSkillStaffPeriodKey =
 					localPeriod.StartDateTime.Date.Add(
 						TimeHelper.FitToDefaultResolutionRoundDown(layerStartLocal.TimeOfDay, resolution.Value));
 

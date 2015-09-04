@@ -1,4 +1,3 @@
-using System;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
@@ -20,22 +19,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
                 || currentMoveToDaySchedule.SignificantPart() != SchedulePartView.MainShift)
                 return false;
 
-            TimeSpan? moveFromWorkShiftLength = null;
-            TimeSpan? moveToWorkShiftLength = null;
-
-
-            if (currentMoveFromDaySchedule != null 
-                && currentMoveFromDaySchedule.ProjectionService() != null)
-                moveFromWorkShiftLength = currentMoveFromDaySchedule.ProjectionService().CreateProjection().ContractTime();
-            if (currentMoveToDaySchedule != null 
-                && currentMoveToDaySchedule.ProjectionService() != null)
-                moveToWorkShiftLength = currentMoveToDaySchedule.ProjectionService().CreateProjection().ContractTime();
-            if (moveFromWorkShiftLength.HasValue
-                && moveToWorkShiftLength.HasValue
-                && moveFromWorkShiftLength.Value > moveToWorkShiftLength.Value)
-                return false;
-
-            return true;
+            var moveFromWorkShiftLength = currentMoveFromDaySchedule.ProjectionService().CreateProjection().ContractTime();
+            var moveToWorkShiftLength = currentMoveToDaySchedule.ProjectionService().CreateProjection().ContractTime();
+            
+			return moveFromWorkShiftLength <= moveToWorkShiftLength;
         }
     }
 }

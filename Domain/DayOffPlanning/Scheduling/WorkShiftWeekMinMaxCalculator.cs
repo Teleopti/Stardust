@@ -88,11 +88,11 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
                 }
 
 
-            	SchedulePartView significant = scheduleDayPro.DaySchedulePart().SignificantPart();
+	            var scheduleDay = scheduleDayPro.DaySchedulePart();
+	            SchedulePartView significant = scheduleDay.SignificantPart();
 				if (significant == SchedulePartView.MainShift || significant == SchedulePartView.FullDayAbsence)
                 {
-                    contractTime =
-                        scheduleDayPro.DaySchedulePart().ProjectionService().CreateProjection().ContractTime();
+                    contractTime = scheduleDay.ProjectionService().CreateProjection().ContractTime();
                     min = min.Add(contractTime);
                     max = max.Add(contractTime);
                 }

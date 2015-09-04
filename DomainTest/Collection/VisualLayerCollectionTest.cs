@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			Assert.IsNull(target.Period());
 
 			internalCollection.Add(createLayer(new DateTimePeriod(2000, 1, 1, 2001, 1, 1), dummyPayload));
+			target = new VisualLayerCollection(dummyPerson, internalCollection, new ProjectionPayloadMerger());
 			Assert.AreEqual(new DateTimePeriod(2000, 1, 1, 2001, 1, 1), target.Period());
 
 			internalCollection.Add(createLayer(new DateTimePeriod(2001, 1, 1, 2002, 1, 1), dummyPayload));

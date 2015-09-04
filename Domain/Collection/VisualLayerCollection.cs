@@ -22,7 +22,8 @@ namespace Teleopti.Ccc.Domain.Collection
 	{
 		private IFilterOnPeriodOptimizer _periodOptimizer;
 		private readonly IProjectionMerger _merger;
-		private DateTimePeriod? _period;
+		private readonly Lazy<DateTimePeriod?> _period;
+		private readonly Lazy<TimeSpan> _contractTime;
 
 		public VisualLayerCollection(IPerson assignedPerson, IList<IVisualLayer> layerCollection, IProjectionMerger merger)
 		{
@@ -30,6 +31,16 @@ namespace Teleopti.Ccc.Domain.Collection
 			Person = assignedPerson;
 			_merger = merger;
 			HasLayers = UnMergedCollection.Count > 0;
+			_period = new Lazy<DateTimePeriod?>(extractPeriod);
+			_contractTime = new Lazy<TimeSpan>(() =>
+			{
+				var ret = TimeSpan.Zero;
+				foreach (VisualLayer layer in UnMergedCollection)
+				{
+					ret = ret.Add(layer.ThisLayerContractTime());
+				}
+				return ret;
+			});
 		}
 
 		public bool HasLayers { get; private set; }
@@ -119,12 +130,7 @@ namespace Teleopti.Ccc.Domain.Collection
 
 		public TimeSpan ContractTime()
 		{
-			var ret = TimeSpan.Zero;
-			foreach (VisualLayer layer in UnMergedCollection)
-			{
-				ret = ret.Add(layer.ThisLayerContractTime());
-			}
-			return ret;
+			return _contractTime.Value;
 		}
 
 		//borde göras om till en IProjectionMerger
@@ -268,11 +274,7 @@ namespace Teleopti.Ccc.Domain.Collection
 
 		public DateTimePeriod? Period()
 		{
-			if (!_period.HasValue)
-			{
-				_period = extractPeriod();
-			}
-			return _period;
+			return _period.Value;
 		}
 
 		private DateTimePeriod? extractPeriod()

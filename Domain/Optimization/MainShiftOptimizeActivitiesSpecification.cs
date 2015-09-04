@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IEditableShift _originalMainShift;
 		private readonly DateOnly _viewerDate;
         private readonly TimeZoneInfo _viewerTimeZone;
-        private readonly IVisualLayerCollection _visualLayerColl;
+        private readonly Lazy<IVisualLayerCollection> _visualLayerColl;
 
 		public MainShiftOptimizeActivitiesSpecification(IOptimizerActivitiesPreferences optimizerActivitiesPreferences, IEditableShift originalMainShift, DateOnly viewerDate, TimeZoneInfo viewerTimeZone)
         {
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_viewerDate = viewerDate;
 			_viewerTimeZone = viewerTimeZone;
 
-			_visualLayerColl = _originalMainShift.ProjectionService().CreateProjection();
+			_visualLayerColl = new Lazy<IVisualLayerCollection>(()=>_originalMainShift.ProjectionService().CreateProjection());
         }
 
 		public override bool IsSatisfiedBy(IEditableShift shift)
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             if(_optimizerActivitiesPreferences.DoNotMoveActivities.Count == 0)
                 return true;
 
-            return (compareLockedActivities(_visualLayerColl, other) && compareLockedActivities(other, _visualLayerColl));
+            return (compareLockedActivities(_visualLayerColl.Value, other) && compareLockedActivities(other, _visualLayerColl.Value));
 
         }
 
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			if (_optimizerActivitiesPreferences.DoNotAlterLengthOfActivity == null)
 				return true;
 
-			return compareLengthOfStaticLengthActivity(_visualLayerColl, other);
+			return compareLengthOfStaticLengthActivity(_visualLayerColl.Value, other);
 		}
 
 		public bool CorrectShiftCategory(IEditableShift otherShift)
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             if(!_optimizerActivitiesPreferences.KeepStartTime)
                 return true;
 
-            return other.Period().Value.StartDateTime.Equals(_visualLayerColl.Period().Value.StartDateTime);
+            return other.Period().Value.StartDateTime.Equals(_visualLayerColl.Value.Period().Value.StartDateTime);
         }
 
         public bool CorrectEnd(IVisualLayerCollection other)
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             if (!_optimizerActivitiesPreferences.KeepEndTime)
                 return true;
 
-            return other.Period().Value.EndDateTime.Equals(_visualLayerColl.Period().Value.EndDateTime);
+            return other.Period().Value.EndDateTime.Equals(_visualLayerColl.Value.Period().Value.EndDateTime);
         }
 
         public bool CorrectAlteredBetween(IVisualLayerCollection other)
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 other.FilterLayers(periodBefore);
 
             IVisualLayerCollection originalLayersOutsideBefore =
-                _visualLayerColl.FilterLayers(periodBefore);
+                _visualLayerColl.Value.FilterLayers(periodBefore);
 
             return
                 shiftLayersOutsideBefore.IsSatisfiedBy(
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 other.FilterLayers(periodAfter);
 
             IVisualLayerCollection originalLayersOutsideAfter =
-                _visualLayerColl.FilterLayers(periodAfter);
+                _visualLayerColl.Value.FilterLayers(periodAfter);
 
             return
                 shiftLayersOutsideAfter.IsSatisfiedBy(

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Domain;
@@ -54,26 +53,16 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
             IScheduleDayPro currentMoveFromDay = matrix.FullWeeksPeriodDays[currentMoveFromIndex];
             IScheduleDayPro currentMoveToDay = matrix.FullWeeksPeriodDays[currentMoveToIndex];
 
-            if (currentMoveFromDay.DaySchedulePart().SignificantPart() != SchedulePartView.MainShift
-                || currentMoveToDay.DaySchedulePart().SignificantPart() != SchedulePartView.MainShift)
+	        var moveFromDayPart = currentMoveFromDay.DaySchedulePart();
+	        var moveToDayPart = currentMoveToDay.DaySchedulePart();
+	        if (moveFromDayPart.SignificantPart() != SchedulePartView.MainShift
+                || moveToDayPart.SignificantPart() != SchedulePartView.MainShift)
                 return false;
 
-
-            TimeSpan? moveFromWorkShiftLength = null;
-            TimeSpan? moveToWorkShiftLength = null;
-
-            if (currentMoveFromDay.DaySchedulePart() != null
-               && currentMoveFromDay.DaySchedulePart().ProjectionService() != null)
-                moveFromWorkShiftLength = currentMoveFromDay.DaySchedulePart().ProjectionService().CreateProjection().ContractTime();
-            if (currentMoveToDay.DaySchedulePart() != null
-               && currentMoveToDay.DaySchedulePart().ProjectionService() != null)
-                moveToWorkShiftLength = currentMoveToDay.DaySchedulePart().ProjectionService().CreateProjection().ContractTime();
-            if (moveFromWorkShiftLength.HasValue
-                && moveToWorkShiftLength.HasValue
-                && moveFromWorkShiftLength.Value > moveToWorkShiftLength.Value)
-                return false;
-
-            return true;
+            var moveFromWorkShiftLength = moveFromDayPart.ProjectionService().CreateProjection().ContractTime();
+            var moveToWorkShiftLength = moveToDayPart.ProjectionService().CreateProjection().ContractTime();
+            
+			return moveFromWorkShiftLength <= moveToWorkShiftLength;
         }
 
 
@@ -130,8 +119,5 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
         {
             return -1 * x.Value.CompareTo(y.Value);
         }
-
-
-
     }
 }
