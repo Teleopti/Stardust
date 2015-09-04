@@ -1,5 +1,4 @@
 ﻿using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
-using Teleopti.Wfm.Administration.Models;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Admin
 {

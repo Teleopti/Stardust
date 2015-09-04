@@ -1,6 +1,4 @@
-﻿using Teleopti.Wfm.Administration.Models;
-
-namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Admin
+﻿namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Admin
 {
 	public interface ITenantExists
 	{

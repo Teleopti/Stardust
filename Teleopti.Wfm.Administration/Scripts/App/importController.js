@@ -14,6 +14,7 @@
 		vm.Password = "";
 		vm.AppDatabase = "";
 		vm.AnalyticsDatabase = "";
+		vm.AggDatabase = "";
 		vm.TenantMessage = "Enter a new name for the Tenant";
 		vm.TenantOk = false;
 		vm.AppDbOk = false;
@@ -21,9 +22,18 @@
 
 		vm.AnalDbOk = false;
 		vm.AnalDbCheckMessage = "Input Analytics database";
+		
+		vm.AggDbOk = false;
+		vm.AggDbCheckMessage = "Input Aggregation database (this is optional)";
+
 		vm.HeadVersion = null;
 		vm.ImportAppVersion = null;
-		vm.AppVersionOk = null;
+		vm.AppVersionOk = true;
+
+		vm.CreateDbUser = '';
+		vm.CreateDbPassword = '';
+		vm.SqlUserOkMessage = '';
+		vm.SqlUserOk = false;
 
 		vm.CheckTenantName = function () {
 			$http.post('./api/Import/IsNewTenant', '"' + vm.Tenant + '"', tokenHeaderService.getHeaders())
@@ -35,6 +45,30 @@
 				}).error(function (xhr, ajaxOptions, thrownError) {
 					console.log(xhr.status + xhr.responseText + thrownError);
 				});
+		}
+
+		vm.CheckImportAdmin = function () {
+			vm.Message = '';
+			if (vm.CreateDbUser === '' || vm.CreateDbPassword === '' || vm.Server === '') {
+				vm.SqlUserOkMessage = '';
+				vm.SqlUserOk = false;
+				return;
+			}
+			var model = {
+				Server: vm.Server,
+				AdminUser: vm.CreateDbUser,
+				AdminPassword: vm.CreateDbPassword
+			}
+
+			$http.post('./CheckImportAdmin', model, tokenHeaderService.getHeaders())
+			.success(function (data) {
+				vm.SqlUserOk = data.Success,
+				vm.SqlUserOkMessage = data.Message;
+				vm.CheckLogin();
+
+			}).error(function (xhr, ajaxOptions, thrownError) {
+				console.log(xhr.status + xhr.responseText + thrownError);
+			});
 		}
 
 		vm.CheckAppDb = function () {
@@ -67,6 +101,27 @@
 				.success(function (data) {
 					vm.AnalDbOk = data.Exists;
 					vm.AnalDbCheckMessage = data.Message;
+				}).error(function (xhr, ajaxOptions, thrownError) {
+					console.log(xhr.status + xhr.responseText + thrownError);
+				});
+		}
+
+		vm.CheckAggDb = function () {
+			if (vm.AggDatabase === "") {
+				vm.AggDbOk = false;
+				vm.AggDbCheckMessage = "Input Aggregation database (this is optional)";
+				return;
+			}
+			$http.post('./DbExists', {
+				Server: vm.Server,
+				UserName: vm.UserName,
+				Password: vm.Password,
+				Database: vm.AggDatabase,
+				DbType: 3
+			}, tokenHeaderService.getHeaders())
+				.success(function (data) {
+					vm.AggDbOk = data.Exists;
+					vm.AggDbCheckMessage = data.Message;
 				}).error(function (xhr, ajaxOptions, thrownError) {
 					console.log(xhr.status + xhr.responseText + thrownError);
 				});
@@ -110,6 +165,10 @@
 		}
 
 		vm.startImport = function () {
+			if (vm.AppVersionOk != true && vm.SqlUserOk != true) {
+				alert("When importing an older version you must provide a valid account to upgrade the databases.");
+				return;
+			}
 			$http.post('./api/Import/ImportExisting', {
 				Tenant: vm.Tenant,
 				Server: vm.Server,
@@ -117,6 +176,9 @@
 				Password: vm.Password,
 				AnalyticsDatabase: vm.AnalyticsDatabase,
 				AppDatabase: vm.AppDatabase,
+				AggDatabase: vm.AggDatabase,
+				AdminUser: vm.CreateDbUser,
+				AdminPassword: vm.CreateDbPassword
 			}, tokenHeaderService.getHeaders())
 				.success(function (data) {
 					vm.Success = data.Success;

@@ -13,7 +13,7 @@ namespace Teleopti.Wfm.Administration.Core
 			_pathProvider = pathProvider;
 		}
 
-		public int Upgrade(string server, string database, DatabaseType type, string adminUserName, string adminPassword, string appUser, string appPassword)
+		public int Upgrade(string server, string database, DatabaseType type, string adminUserName, string adminPassword, string appUser, string appPassword, bool permissionMode)
 		{
 			var commands = new CommandLineArgument(new string[] {})
 			{
@@ -25,7 +25,8 @@ namespace Teleopti.Wfm.Administration.Core
 				appUserPwd = appPassword,
 				TargetDatabaseType = type,
 				PathToDbManager = _pathProvider.GetDbPath(),
-				PatchMode = true
+				PatchMode = true,
+				PermissionMode = permissionMode
 			};
 			_databasePatcher.Logger = new TenantLogger();
          return _databasePatcher.Run(commands);

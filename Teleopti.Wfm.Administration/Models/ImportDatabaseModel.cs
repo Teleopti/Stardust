@@ -13,5 +13,9 @@
 		public string AppDatabase { get; set; }
 
 		public string AnalyticsDatabase { get; set; }
+		public string AggDatabase { get; set; }
+
+		public string AdminUser { get; set; }
+		public string AdminPassword { get; set; }
 	}
 }

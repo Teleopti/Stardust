@@ -16,19 +16,19 @@ namespace Teleopti.Wfm.Administration.Core
 			_upgradeRunner = upgradeRunner;
 		}
 
-		public void Upgrade(Tenant tenant, string adminUserName, string adminPassword)
+		public void Upgrade(Tenant tenant, string adminUserName, string adminPassword, bool permissionMode)
 		{
 			//dbmanager
 			var builder = new SqlConnectionStringBuilder(tenant.DataSourceConfiguration.ApplicationConnectionString);
 			_databaseUpgrader.Upgrade(builder.DataSource, builder.InitialCatalog, DatabaseType.TeleoptiCCC7, adminUserName,
-				adminPassword, builder.UserID, builder.Password);
+				adminPassword, builder.UserID, builder.Password, permissionMode);
 			builder.UserID = adminUserName;
 			builder.Password = adminPassword;
 			builder.IntegratedSecurity = false;
 			var appConnstring = builder.ConnectionString;
 			builder = new SqlConnectionStringBuilder(tenant.DataSourceConfiguration.AnalyticsConnectionString);
 			_databaseUpgrader.Upgrade(builder.DataSource, builder.InitialCatalog, DatabaseType.TeleoptiAnalytics, adminUserName,
-				adminPassword, builder.UserID, builder.Password);
+				adminPassword, builder.UserID, builder.Password, permissionMode);
 			builder.UserID = adminUserName;
 			builder.Password = adminPassword;
 			builder.IntegratedSecurity = false;
@@ -42,7 +42,7 @@ namespace Teleopti.Wfm.Administration.Core
 				ApplicationDbConnectionStringToStore = appConnstring,
 				AnalyticsDbConnectionString = analConnstring,
 				AnalyticsDbConnectionStringToStore = analConnstring,
-				AggDatabase = "main_clone_DemoSales_TeleoptiCCCAgg"
+				AggDatabase = "main_clone_DemoSales_TeleoptiCCCAgg",
 			};
 			_upgradeRunner.Upgrade(dbArgs);
 

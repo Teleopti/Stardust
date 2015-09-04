@@ -27,7 +27,7 @@
 		vm.user = sessionStorage.getItem(userKey);
 
 		function showError(jqXHR) {
-			vm.Message = jqXHR.status + ': ' + jqXHR.statusText;
+			vm.Message = jqXHR.Message + ': ' + jqXHR.ExceptionMessage;
 		}
 
 		vm.login = function () {
