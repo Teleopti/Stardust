@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			using (new CustomAuthorizationContext(new PrincipalAuthorizationWithFullPermission()))
 			{
 				var result =
-					(OkNegotiatedContentResult<String>)
+					(OkNegotiatedContentResult<OptimizationResultModel>)
 						Target.FixedStaff(id);
 
 				result.Content.Should().Not.Be.Null();

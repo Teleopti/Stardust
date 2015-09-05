@@ -280,6 +280,7 @@
     <Compile Include="Areas\ResourcePlanner\FilterControllerTest.cs" />
     <Compile Include="Areas\ResourcePlanner\MissingForecastProviderTest.cs" />
     <Compile Include="Areas\ResourcePlanner\OptimizationControllerTest.cs" />
+    <Compile Include="Areas\ResourcePlanner\OptimizationResultModelTest.cs" />
     <Compile Include="Areas\ResourcePlanner\PlanningPeriodControllerTest.cs" />
     <Compile Include="Areas\ResourcePlanner\ResourcePlannerModuleTest.cs" />
     <Compile Include="Areas\ResourcePlanner\ResourcePlannerTestAttribute.cs" />

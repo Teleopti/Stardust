@@ -83,8 +83,10 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			_persister.Persist(_schedulerStateHolder().Schedules);
 
 			planningPeriod.Scheduled();
-			return
-				Ok("Optimization Done");
+
+			var result = new OptimizationResultModel();
+			result.Map(_schedulerStateHolder().SchedulingResultState.SkillDays);
+			return Ok(result);
 		}
 
 		private static IList<IScheduleDay> extractAllSchedules(ISchedulingResultStateHolder stateHolder,
