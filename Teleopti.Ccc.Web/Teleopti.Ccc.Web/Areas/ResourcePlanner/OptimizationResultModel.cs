@@ -29,16 +29,19 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				_skillResultList.Add(item);
 				foreach (var skillDay in keyValuePair.Value)
 				{
-					var detail = new OptimizationResultSkillDetail {Date = skillDay.CurrentDate};
-					detail.RelativeDifference =
-						SkillStaffPeriodHelper.RelativeDifference(skillDay.SkillStaffPeriodCollection).GetValueOrDefault(-1);
+					var detail = new OptimizationResultSkillDetail
+					{
+						Date = skillDay.CurrentDate,
+						RelativeDifference =
+							SkillStaffPeriodHelper.RelativeDifference(skillDay.SkillStaffPeriodCollection).GetValueOrDefault(-1)
+					};
 					detail.ColorId = mapColorId(detail.RelativeDifference, skill);
 					item.AddDetail(detail);
 				}
 			}
 		}
 
-		private int mapColorId(double relativeDifference, ISkill skill)
+		private static int mapColorId(double relativeDifference, ISkill skill)
 		{
 			if (relativeDifference > skill.StaffingThresholds.Overstaffing.Value)
 				return 3;
