@@ -22,12 +22,12 @@
 		vm.fileCallbackFunction = null;
 		vm.scrollListen = false;
 		vm.zoomData = { min: 0.1, max: 2, step: 0.05, zoomValue: 1 };
-		
+
 		var canvas = new fabric.CanvasWithViewport('c');
 		init();
 
 		function init() {
-			fabric.util.addListener(document.getElementsByClassName('upper-canvas')[0], 'contextmenu', function (e) {				
+			fabric.util.addListener(document.getElementsByClassName('upper-canvas')[0], 'contextmenu', function (e) {
 				if (e.preventDefault) e.preventDefault();
 				e.returnValue = false;
 				return false;
@@ -49,12 +49,12 @@
 			vm.isLoading = true;
 			canvasUtils.loadSeatMap(null, vm.selectedDate, canvas, false, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
 		};
-		
+
 		vm.getDisplaySelectedDate = function () {
 			return moment(vm.selectedDate).format('L');
 		};
 
-		vm.getCanvas = function() {
+		vm.getCanvas = function () {
 			return canvas;
 		};
 
@@ -68,21 +68,21 @@
 		vm.toggleMoveMode = function () {
 			canvasUtils.toggleMoveMode(canvas);
 		};
-		
+
 		vm.resize = resize;
 
 		vm.handleBreadcrumbClick = function (id) {
 			vm.isLoading = true;
 			canvasUtils.loadSeatMap(id, vm.selectedDate, canvas, false, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
 		};
-		
-		vm.refreshSeatMap = function() {
+
+		vm.refreshSeatMap = function () {
 			vm.isLoading = true;
 			canvasUtils.loadSeatMap(vm.seatMapId, vm.selectedDate, canvas, false, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
 			resize();
 		};
 
-		vm.onChangeOfDate = function() {
+		vm.onChangeOfDate = function () {
 			vm.refreshSeatMap();
 			vm.isDatePickerOpened = false;
 		};
@@ -108,7 +108,7 @@
 
 		function setupHandleSeatAndLocationClick() {
 			setupClickHandler('location', loadSeatMapOnLocationClick);
-			setupClickHandler('seat', loadOccupancyOnSeatClick);
+			setupClickHandler('seat', loadOccupancyForSeat);
 		};
 
 		function setupClickHandler(targetName, callback) {
@@ -120,14 +120,46 @@
 					}
 				};
 			});
-		}
+		};
 
-		function loadOccupancyOnSeatClick(seat) {
+
+		function onSeatOccupancyLoaded(occupancyDetails, seat) {
+
+			if (occupancyDetails && occupancyDetails.length) {
+				vm.occupancydetails = occupancyDetails;
+			} else {
+				createEmptyOccupancyDetail(seat);
+			}
+		};
+
+		function selectSeatToViewOccupancy(seat) {
+			var oldSelection = vm.currentSeat;
+			if (oldSelection !== undefined && oldSelection !== null) {
+				oldSelection.stroke = null;
+				oldSelection.strokeDashArray = [];
+			}
+			seat.stroke = '#ec38a3';
+			seat.strokeDashArray = [5, 5];
+
 			vm.currentSeat = seat;
-			canvasUtils.loadSeatDetails(seat.id, vm.selectedDate).then(function (result) {
-				if (result && result.length) vm.occupancydetails = result;
-				else vm.occupancydetails = undefined;
-			});
+		};
+
+		function loadOccupancyForSeat(seat) {
+			if (vm.showOccupancy) {
+				selectSeatToViewOccupancy(seat);
+
+				canvasUtils.loadSeatDetails(seat.id, vm.selectedDate).then(function (result) {
+					onSeatOccupancyLoaded(result, seat);
+				});
+			}
+		};
+
+		function createEmptyOccupancyDetail(seat) {
+			vm.occupancydetails = [
+			{
+				SeatName: seat.name,
+				IsEmpty: true
+			}];
 		};
 
 		function loadSeatMapOnLocationClick(location) {
@@ -136,16 +168,28 @@
 		};
 
 
+		function selectFirstSeat() {
+			if (vm.showOccupancy) {
+				var seat = canvasUtils.getFirstSeatObject(canvas);
+
+				if (seat != null) {
+					loadOccupancyForSeat(seat);
+				} else {
+					vm.occupancydetails = undefined;
+					vm.currentSeat = null;
+				}
+			}
+		}
+
 		function resetOnLoad(data) {
-			
+
 			if (data) {
 				vm.parentId = data.ParentId;
 				vm.seatMapId = data.Id;
 				vm.breadcrumbs = data.BreadcrumbInfo;
 			}
 
-			vm.currentSeat = null;
-			vm.occupancydetails = undefined;
+			selectFirstSeat();
 
 			resetZoom();
 			vm.isLoading = false;

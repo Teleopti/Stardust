@@ -71,7 +71,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IList<ISeatBooking> LoadSeatBookingsForSeatIntersectingDay (DateOnly date, Guid seatId)
 		{
-			return getSeatBookingsInterceptingDay(date).Where (booking => booking.Seat.Id == seatId).ToList();
+			return getSeatBookingsInterceptingDay(date)
+				.Where (booking => booking.Seat.Id == seatId)
+				.OrderBy (booking => booking.BelongsToDate)
+				.ToList();
 		}
 
 		private IQueryable<ISeatBooking> getSeatBookingsInterceptingDay (DateOnly date)

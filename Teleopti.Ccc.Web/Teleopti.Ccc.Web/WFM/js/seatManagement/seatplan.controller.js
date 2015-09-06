@@ -96,7 +96,7 @@
 		};
 
 		vm.getDateString = function (date) {
-			return moment(date).format('YYYY-MM-DD');
+			return moment(date).format('LL');
 		};
 
 		vm.onChangeOfDate = function () {

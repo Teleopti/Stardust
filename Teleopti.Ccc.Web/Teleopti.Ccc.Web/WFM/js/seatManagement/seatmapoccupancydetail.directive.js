@@ -8,9 +8,20 @@
 	function locationPickerDirectiveController(utils) {
 		var vm = this;
 
-		vm.getDisplayTime = function (booking) {
-			return utils.getSeatBookingTimeDisplay(booking);
-		}
+		vm.getDisplayTime = function(booking) {
+			return utils.getSeatBookingTimeDisplay(booking, vm.scheduleDate);
+		};
+
+		vm.getSeatBookingDetailClass = function (booking) {
+			var belongsToDateMoment = moment(booking.BelongsToDate.Date);
+			var scheduleDateMoment = moment(vm.scheduleDate);
+		
+			if (!belongsToDateMoment.isSame(scheduleDateMoment, 'day')) {
+				return 'seatmap-seatbooking-previousday';
+			}
+
+			return '';
+		};
 	};
 
 })();
@@ -25,9 +36,10 @@
 			controllerAs: 'vm',
 			bindToController: true,
 			scope: {
-				seatName:'=',
-				occupancyDetail:'='
-			},
+				seatName: '=',
+				occupancyDetail: '=',
+				scheduleDate: '='
+	},
 			restrict: "E",
 			templateUrl: "js/seatManagement/html/seatmapoccupancylist.html"
 		};

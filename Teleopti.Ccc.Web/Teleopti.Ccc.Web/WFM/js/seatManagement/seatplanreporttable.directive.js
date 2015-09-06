@@ -19,7 +19,6 @@
 			}
 
 			return utils.getSeatBookingTimeDisplay(booking);
-			
 		};	
 
 		vm.getDisplayDate = function (date) {
