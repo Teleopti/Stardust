@@ -905,6 +905,21 @@ namespace Teleopti.Ccc.Sdk.WcfService
 				return adherenceDto;
 
 			IRepositoryFactory repositoryFactory = new RepositoryFactory();
+			
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var personRepository = repositoryFactory.CreatePersonRepository(uow);
+				var person = personRepository.Get(personDto.Id.Value);
+				var schedulePublishedToDate = person.WorkflowControlSet.SchedulePublishedToDate ?? new DateTime(1900, 01, 01);
+
+				// A quick fix for bug #34706
+				// If dateTime exceed schedule published date, then do not return adherence data.
+				if (dateTime.Date > schedulePublishedToDate.Date)
+				{
+					return adherenceDto;
+				}
+			}
+			
 			IStatisticRepository repository = repositoryFactory.CreateStatisticRepository();
 			int adherenceCalculationId = GetMatrixReportSetting();
 
@@ -1015,10 +1030,31 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			}
 			return agentQueueStatDetailsDtos;
 		}
+
 		public IList<AdherenceInfoDto> GetAdherenceInfo(DateTime startDate, DateTime endDate, string timeZoneId, PersonDto personDto)
 		{
-			IList<AdherenceInfoDto> adherenceInfoDtos = new List<AdherenceInfoDto>();
 			IRepositoryFactory repositoryFactory = new RepositoryFactory();
+
+			IList<AdherenceInfoDto> adherenceInfoDtos = new List<AdherenceInfoDto>();
+			if (!personDto.Id.HasValue)
+			{
+				return adherenceInfoDtos;
+			}
+
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var personRepository = repositoryFactory.CreatePersonRepository(uow);
+				var person = personRepository.Get(personDto.Id.Value);
+				var schedulePublishedToDate = person.WorkflowControlSet.SchedulePublishedToDate ?? new DateTime(1900, 01, 01);
+
+				// A quick fix for bug #34706
+				// If dateTime exceed schedule published date, then do not return adherence data.
+				if (endDate.Date > schedulePublishedToDate.Date)
+				{
+					return adherenceInfoDtos;
+				}
+			}
+
 			IScenario defaultScenario;
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
