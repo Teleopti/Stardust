@@ -32,7 +32,7 @@
 		vm.status = {
 			opened: false
 		};
-
+		vm.menuState = 'open';
 		vm.commands = [
 			{
 				label: "AdjustSkill",

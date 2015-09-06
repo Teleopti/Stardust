@@ -34,7 +34,7 @@
 			<nav class="wfm-panel action-panel" mfb-menu position="tr" effect="slidein-spring"
 				 active-icon="mdi-pencil" resting-icon="mdi-plus"
 				 ng-mouseenter=" hovered()" ng-mouseleave="hovered()"
-				 toggling-method="click" menu-state="closed">
+				 toggling-method="click" menu-state="vm.menuState">
 				<button class="{{cmd.label|lowercase}}" ng-if="cmd.active" mfb-button icon="{{cmd.icon}}" ng-click="cmd.action()"
 						label="{{cmd.label|translate}}" ng-repeat="cmd in vm.commands"></button>
 			</nav>
@@ -42,29 +42,7 @@
 	</div>
 	<div ui-i18n="{{lang}}" ng-if="vm.dataInitialized" class="big-table-wrapper material-depth-1" style="position: relative">
 		<div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-pagination ui-grid-resize-columns class="grid people-list"></div>
-		<div class="pagination pull-right" aria-hidden="false">
-			<ul>
-				<li class="pagination-item" ng-class="{disabled: vm.gridOptions.paginationCurrentPage == 1 || vm.gridApi.pagination.getTotalPages() == 0}">
-					<a href="" ng-click="vm.gridApi.pagination.previousPage()">
-						<i class="mdi mdi-chevron-double-left"></i>
-						{{'RepViewerPreviousPage'| translate}}
-					</a>
-				</li>
-
-				<li class="pagination-item" ng-repeat="n in vm.getVisiblePageNumbers(vm.gridApi.pagination.getTotalPages())"
-					ng-class="{active: n == vm.gridOptions.paginationCurrentPage}"
-					ng-click="vm.gridApi.pagination.seek(n)">
-					<a href="" ng-bind="n"></a>
-				</li>
-
-				<li class="pagination-item" ng-class="{disabled: vm.gridOptions.paginationCurrentPage == vm.gridApi.pagination.getTotalPages() || vm.gridApi.pagination.getTotalPages() == 0}">
-					<a href="" ng-click="vm.gridApi.pagination.nextPage()">
-						{{'RepViewerNextPage'| translate}}
-						<i class="mdi mdi-chevron-double-right"></i>
-					</a>
-				</li>
-			</ul>
-		</div>
+		
 
 		<md-sidenav class="md-sidenav-right md-sidenav-skill-panel md-whiteframe-z2" md-component-id="right-skill">
 			<div class="sidenav-header">{{'Skill'|translate}}</div>
@@ -109,6 +87,29 @@
 		<div ng-if="vm.dataInitialized && !vm.processing && !vm.updateResult.Success && vm.updateResult.ErrorMsg.length > 0" ng-show="vm.isConfirmCloseNoticeBar" class="alert-error notice-spacer">
 			<i class='mdi mdi-alert-octagon'></i>
 			{{'ProcessFailedErrorColon'|translate}}{{vm.updateResult.ErrorMsg}}
+		</div>
+		<div class="pagination pull-right" aria-hidden="false">
+			<ul>
+				<li class="pagination-item" ng-class="{disabled: vm.gridOptions.paginationCurrentPage == 1 || vm.gridApi.pagination.getTotalPages() == 0}">
+					<a href="" ng-click="vm.gridApi.pagination.previousPage()">
+						<i class="mdi mdi-chevron-double-left"></i>
+						{{'RepViewerPreviousPage'| translate}}
+					</a>
+				</li>
+
+				<li class="pagination-item" ng-repeat="n in vm.getVisiblePageNumbers(vm.gridApi.pagination.getTotalPages())"
+					ng-class="{active: n == vm.gridOptions.paginationCurrentPage}"
+					ng-click="vm.gridApi.pagination.seek(n)">
+					<a href="" ng-bind="n"></a>
+				</li>
+
+				<li class="pagination-item" ng-class="{disabled: vm.gridOptions.paginationCurrentPage == vm.gridApi.pagination.getTotalPages() || vm.gridApi.pagination.getTotalPages() == 0}">
+					<a href="" ng-click="vm.gridApi.pagination.nextPage()">
+						{{'RepViewerNextPage'| translate}}
+						<i class="mdi mdi-chevron-double-right"></i>
+					</a>
+				</li>
+			</ul>
 		</div>
 	</div>
 
