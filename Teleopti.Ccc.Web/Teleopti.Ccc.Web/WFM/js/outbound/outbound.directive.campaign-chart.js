@@ -139,7 +139,7 @@
 					rawBacklogs: '#1F77B4',
 					progress: '#2CA02C',
 					unscheduledPlans: '#66C2FF',
-					schedules: '#26C6DA',
+					schedules: '#C2E085',
 					overStaff: '#FF7F0E'
 				};
 
