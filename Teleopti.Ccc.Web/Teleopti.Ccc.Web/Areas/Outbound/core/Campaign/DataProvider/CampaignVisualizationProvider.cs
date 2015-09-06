@@ -52,12 +52,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 					overstaffHours = (scheduledHours > TimeSpan.Zero)
 						? scheduledHours - backlogPreviousDay
 						: plannedHours - backlogPreviousDay;
-
-					if (overstaffHours > TimeSpan.Zero)
-					{						
-						if (scheduledHours > TimeSpan.Zero) scheduledHours -= overstaffHours;
-						else plannedHours -= overstaffHours;
-					}
 				}
 													
 				visualizationVM.PlannedPersonHours.Add(convertTimespanToDouble(plannedHours));

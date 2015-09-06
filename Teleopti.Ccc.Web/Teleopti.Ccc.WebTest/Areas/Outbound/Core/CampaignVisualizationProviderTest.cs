@@ -134,8 +134,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			result.OverstaffPersonHours.Count.Should().Be.EqualTo(2);
 			result.OverstaffPersonHours[0].Should().Be.EqualTo(0);
 			result.OverstaffPersonHours[1].Should().Be.EqualTo(5);
-			result.PlannedPersonHours[1].Should().Be.EqualTo(5);
-
+			
 		}
 
 		[Test]

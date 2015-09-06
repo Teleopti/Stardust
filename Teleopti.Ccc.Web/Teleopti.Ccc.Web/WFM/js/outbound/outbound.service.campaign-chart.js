@@ -97,27 +97,34 @@
                 });
         }
 
-        function mapGraphData(data) {            
-            var returnData = {
-                dates: null,
-                rawBacklogs: null,
-                unscheduledPlans: null,
-                schedules: null,
-                progress: null,
-                overStaff: null
-        };
-          
-            returnData.dates = new moment(data.Dates.Date).format("YYYY-MM-DD");
-            returnData.rawBacklogs = data.BacklogPersonHours;
-            returnData.unscheduledPlans = data.ScheduledPersonHours > 0 ? 0 : data.PlannedPersonHours;
-            returnData.schedules = data.ScheduledPersonHours;
-            returnData.progress = data.BacklogPersonHours;
-            returnData.overStaff = data.OverstaffPersonHours;
+	    function mapGraphData(data) {
+		    var returnData = {
+			    dates: null,
+			    rawBacklogs: null,
+			    unscheduledPlans: null,
+			    schedules: null,
+			    progress: null,
+			    overStaff: null
+		    };
 
-            return returnData;
-        }       
+		    returnData.dates = new moment(data.Dates.Date).format("YYYY-MM-DD");
+		    returnData.rawBacklogs = data.BacklogPersonHours;
+		    returnData.unscheduledPlans = data.PlannedPersonHours;
+		    returnData.schedules = data.ScheduledPersonHours;
+		    returnData.progress = data.BacklogPersonHours;
+		    returnData.overStaff = data.OverstaffPersonHours;
 
-        function getDataLabels() {
+		    if (returnData.schedules > 0) {
+			    returnData.unscheduledPlans = 0;
+			    returnData.schedules -= returnData.overStaff;
+		    } else {
+		    	returnData.unscheduledPlans -= returnData.overStaff;
+		    }
+
+		    return returnData;
+	    }
+
+	    function getDataLabels() {
             return {               
                 dates: 'x',
                 rawBacklogs: self.dictionary['Backlog'],

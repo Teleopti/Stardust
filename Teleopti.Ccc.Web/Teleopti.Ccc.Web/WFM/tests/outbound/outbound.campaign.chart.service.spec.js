@@ -49,7 +49,8 @@ describe('Outbound Chart Service Test', function() {
             Dates: { Date: '2015-07-31' },
             ScheduledPersonHours: 50,
             BacklogPersonHours: 100,
-            PlannedPersonHours: 30
+            PlannedPersonHours: 30,
+        	OverstaffPersonHours: 0
         };
 
         var resultData = target.coreMapGraphData(input);
@@ -60,6 +61,24 @@ describe('Outbound Chart Service Test', function() {
         expect(resultData.progress).toEqual(100);
 
     });
+
+	it('Graph data with overstaff should be mapped correctly', function() {
+		var input = {
+			Dates: { Date: '2015-07-31' },
+			ScheduledPersonHours: 50,
+			BacklogPersonHours: 0,
+			PlannedPersonHours: 30,
+			OverstaffPersonHours: 10
+		};
+
+		var resultData = target.coreMapGraphData(input);
+		expect(resultData.dates).toEqual('2015-07-31');
+		expect(resultData.unscheduledPlans).toEqual(0);
+		expect(resultData.schedules).toEqual(40);
+		expect(resultData.rawBacklogs).toEqual(0);
+		expect(resultData.progress).toEqual(0);
+
+	});
 
     it('Build graph data seqs should provide seqs with labels', function () {
         target.dictionary = {
@@ -107,7 +126,8 @@ describe('Outbound Chart Service Test', function() {
             Dates: [{ Date: '2015-07-31' }, { Date: '2015-07-32' }],
             ScheduledPersonHours: [50, 10],
             BacklogPersonHours: [100, 50],
-            PlannedPersonHours: [30, 20]
+            PlannedPersonHours: [30, 20],
+        	OverstaffPersonHours: [0, 0]
         };
 
 
