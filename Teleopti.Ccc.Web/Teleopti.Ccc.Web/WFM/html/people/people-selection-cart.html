@@ -42,7 +42,30 @@
 	</div>
 	<div ui-i18n="{{lang}}" ng-if="vm.dataInitialized" class="big-table-wrapper material-depth-1" style="position: relative">
 		<div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-auto-resize ui-grid-pagination xui-grid-resize-columns class="grid people-list"></div>
-		
+		<div class="pagination pull-right" aria-hidden="false">
+			<ul>
+				<li class="pagination-item" ng-class="{disabled: vm.gridOptions.paginationCurrentPage == 1 || vm.gridApi.pagination.getTotalPages() == 0}">
+					<a href="" ng-click="vm.gridApi.pagination.previousPage()">
+						<i class="mdi mdi-chevron-double-left"></i>
+						{{'RepViewerPreviousPage'| translate}}
+					</a>
+				</li>
+
+				<li class="pagination-item" ng-repeat="n in vm.getVisiblePageNumbers(vm.gridApi.pagination.getTotalPages())"
+					ng-class="{active: n == vm.gridOptions.paginationCurrentPage}"
+					ng-click="vm.gridApi.pagination.seek(n)">
+					<a href="" ng-bind="n"></a>
+				</li>
+
+				<li class="pagination-item" ng-class="{disabled: vm.gridOptions.paginationCurrentPage == vm.gridApi.pagination.getTotalPages() || vm.gridApi.pagination.getTotalPages() == 0}">
+					<a href="" ng-click="vm.gridApi.pagination.nextPage()">
+						{{'RepViewerNextPage'| translate}}
+						<i class="mdi mdi-chevron-double-right"></i>
+					</a>
+				</li>
+			</ul>
+		</div>
+
 		<md-sidenav class="md-sidenav-right md-sidenav-skill-panel md-whiteframe-z2" md-component-id="right-skill">
 			<div class="sidenav-header">{{'Skill'|translate}}</div>
 			<md-content layout-padding style="height: 550px">

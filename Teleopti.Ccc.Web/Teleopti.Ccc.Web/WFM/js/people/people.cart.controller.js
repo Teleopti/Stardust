@@ -90,6 +90,7 @@
 		}
 
 		vm.gridOptions = {
+			enablePaginationControls: false,
 			paginationPageSizes: [20, 60, 100],
 			paginationPageSize: 20,
 			columnDefs: [
@@ -109,7 +110,40 @@
 			data: 'vm.availablePeople'
 
 		};
+		vm.gridOptions.onRegisterApi = function (gridApi) {
+			vm.gridApi = gridApi;
+		}
+		vm.getVisiblePageNumbers = function (start, end) {
+			var displayPageCount = 5;
+			var ret = [];
+			if (!end) {
+				end = start;
+				start = 1;
+			}
 
+			var leftBoundary = start;
+			var rightBoundary = end;
+			if (end - start >= displayPageCount) {
+				var currentPageIndex = vm.gridOptions.paginationCurrentPage;
+
+				if (currentPageIndex < displayPageCount - 1) {
+					leftBoundary = 1;
+					rightBoundary = displayPageCount;
+				} else if (end - currentPageIndex < 3) {
+					leftBoundary = end - displayPageCount + 1;
+					rightBoundary = end;
+				} else {
+					leftBoundary = currentPageIndex - Math.floor(displayPageCount / 2) > 1 ? currentPageIndex - Math.floor(displayPageCount / 2) : 1;
+					rightBoundary = currentPageIndex + Math.floor(displayPageCount / 2) > end ? end : currentPageIndex + Math.floor(displayPageCount / 2);
+				}
+			}
+
+			for (var i = leftBoundary; i <= rightBoundary ; i++) {
+				ret.push(i);
+			}
+
+			return ret;
+		};
 		var loadSkillPromise = peopleSvc.loadAllSkills.get().$promise;
 		loadSkillPromise.then(function (result) {
 			vm.availableSkills = result;
