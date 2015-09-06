@@ -163,7 +163,7 @@
 					vm.isConfirmCloseNoticeBar = true;
 					$interval(function () {
 						vm.isConfirmCloseNoticeBar = false;
-					}, 3000, 1);
+					}, 10000, 1);
 					
 				}
 			);
