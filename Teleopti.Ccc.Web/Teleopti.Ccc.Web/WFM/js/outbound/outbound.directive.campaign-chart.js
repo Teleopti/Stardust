@@ -178,8 +178,10 @@
 				};
 
 				dataOption.labels.format[$scope.dictionary['Overstaff']] = function(v, id, i) {
-					if (!determineOpenDay(i)) return 'C';
-					if (determineManualPlanDay(i) && !determineScheduledDay(i) && determineManualBacklogDay(i)) return "M,B";
+					if ((!determineOpenDay(i)) && determineManualBacklogDay(i)) return 'C,B';
+					else if (!determineOpenDay(i)) return 'C';
+
+					if (determineManualPlanDay(i) && !determineScheduledDay(i) && determineManualBacklogDay(i)) return 'M,B';
 					else if (determineManualPlanDay(i) && !determineScheduledDay(i)) return 'M';
 					else if (determineManualBacklogDay(i)) return "B";
 				};
