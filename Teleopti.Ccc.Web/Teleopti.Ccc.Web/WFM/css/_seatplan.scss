@@ -4,7 +4,11 @@
 
 //TODO: Temporary fix while styleguide is updated to remove max height
 .wfm-card-list-container{max-height:none !important}
-
+//TODO: Temporary fix.  Should be moved to styleguide - these elements should have default cursor, 
+// overrides for .wfm-card-content, .forecasting-chart should not be used.
+.wfm-card-selected, .wfm-card-unselected {
+    cursor: default;
+}
 
 .seatplan-calendar{
 	width: 320px;
