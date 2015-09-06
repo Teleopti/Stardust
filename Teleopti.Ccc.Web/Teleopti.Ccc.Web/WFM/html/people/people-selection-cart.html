@@ -14,13 +14,13 @@
 
 	<div class="row people-cart" style="position: relative">
 		<h4 translate>Selected People</h4>
-		<div class="col-sm-2" style="padding-left:0">
+		<div class="col-sm-1" style="padding-left:0; padding-right: 0; width: 60px">
 			<p>
 				<button class="wfm-btn wfm-btn-default" style="padding-top: 5px;margin: 0 5px;padding-bottom: 5px;" ng-click="vm.back()">{{ 'Back' | translate }} </button>
 			</p>
 			
 		</div>
-		<div class="col-sm-3">
+		<div class="col-sm-5 col-md-3 col-lg-3">
 			<p class="input-group">
 				<input type="text" class="form-control" datepicker-popup="{{vm.format}}" ng-model="vm.selectedDate" is-open="vm.status.opened" datepicker-options="vm.dateOptions" show-button-bar="false" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close"/>
 				<span class="input-group-btn">
