@@ -29,10 +29,10 @@
 						</span>
                     </div>
                     <div class="row labelfix">
-                        <div class="col-xs-3 w-160">
-                            <span>{{WorkingPeriod.StartTime | date: 'HH:mm'}}</span>
+                        <div class="col-xs-3 w-200">
+                            <span>{{WorkingPeriod.StartTime | amDateFormat: 'LT' }}</span>
                             <span> - </span>
-                            <span>{{WorkingPeriod.EndTime | date: 'HH:mm'}}</span>
+                            <span>{{WorkingPeriod.EndTime | amDateFormat: 'LT' }}</span>
                         </div>
                         <div ng-repeat-start="WeekDay in WorkingPeriod.WeekDaySelections" ng-repeat-end class="col-xs-1">
                             <div class="wfm-checkbox wfm-checkbox-inline ">
@@ -49,20 +49,17 @@
         </div>
         <div class="wfm-block m-t-10">
             <form name="newWorkingPeriodForm" ng-submit="">
-                <div class="inline-fix clearfix">
-                    <button class="wfm-fab mini success" ng-click="addEmptyWorkingPeriod(newWorkingPeriodStartTime, newWorkingPeriodEndTime)"><i class="mdi mdi-plus"></i></button>
-
-                    <div class="wfm-timepicker-wrapper">
-                        <wfm-timepicker ng-model="newWorkingPeriodStartTime" use-meridian="useMeridian" minute-step="15"></wfm-timepicker>
-                    </div>
-                    <div>-</div>
-                    <div class="wfm-timepicker-wrapper m-l-10">
-                        <wfm-timepicker ng-model="newWorkingPeriodEndTime" use-meridian="useMeridian" minute-step="15"></wfm-timepicker>
-                    </div>
-                </div>
-                <div class="error-msg-container invalid-order alert-error notice-spacer m-t-10"><i class='mdi mdi-alert-octagon'></i> <span translate>EndTimeMustBeGreaterOrEqualToStartTime</span></div>
-                <div class="error-msg-container invalid-empty alert-error notice-spacer m-t-10"><i class='mdi mdi-alert-octagon'></i> <span translate>StartTimeAndEndTimeMustBeSet</span></div>
-            </form>
+	            <div class="inline-fix clearfix">
+		            <button class="wfm-fab mini success" ng-click="addEmptyWorkingPeriod(newWorkingPeriodStartTime, newWorkingPeriodEndTime)"><i class="mdi mdi-plus"></i></button>
+					<timepicker-wrap ng-model="newWorkingPeriodStartTime"></timepicker-wrap>							            
+		            <div>-</div>
+					<timepicker-wrap ng-model="newWorkingPeriodEndTime"></timepicker-wrap>							            
+	            </div>
+	            <div class="error-msg-container invalid-order alert-error notice-spacer m-t-10"><i class='mdi mdi-alert-octagon'></i> <span translate>EndTimeMustBeGreaterOrEqualToStartTime</span></div>
+	            <div class="error-msg-container invalid-empty alert-error notice-spacer m-t-10"><i class='mdi mdi-alert-octagon'></i> <span translate>StartTimeAndEndTimeMustBeSet</span></div>
+				
+            
+			</form>
         </div>
     </div>
 </div>

@@ -1180,6 +1180,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="WFM\html\outbound\date-range-picker.tpl.html" />
+    <Content Include="WFM\js\outbound\outbound.directive.date-range-picker.js" />
+    <Content Include="WFM\vendor\ui-bootstrap-custom-build\timepicker.directive.ext.js" />
     <Content Include="WFM\vendor\ui-bootstrap-custom-build\ui-bootstrap-0.13.0-csp.css" />
     <Content Include="WFM\vendor\ui-bootstrap-custom-build\ui-bootstrap-0.13.3.js" />
     <Content Include="WFM\vendor\ui-bootstrap-custom-build\ui-bootstrap-0.13.3.min.js" />

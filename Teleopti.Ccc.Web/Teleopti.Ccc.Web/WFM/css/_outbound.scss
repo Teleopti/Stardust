@@ -402,38 +402,28 @@
 		}
 	}	
 }
-.wfm-timepicker-wrapper {
-  height: 20px;
-  width: 100px;
-  display: inline-block;
 
-  select {	
-	max-width: 40px;
-	padding-top: 0px !important;
-	padding-bottom: 0px !important;
-	margin-left: 3px;
-	border-radius: 0px !important;
-	background-color: white;
-	-webkit-appearance: none;
-	-webkit-border-radius: 0px;
-  }
-  input {
-	padding-left: 5px;
-	height:24px;
-	max-width: 40px;
+.wfm-timepicker-wrap {
+	display: inline-block;
+	position: relative;
+	bottom: -7px;
 
-
-	&.ng-dirty.ng-invalid {
-	  border: 2px solid red;
+	.has-error > input {
+	    border-bottom:2px solid #F44336;
 	}
-	&.ng-pristine.ng-invalid {
-	  border-color: #E0E0E0;
+	input{
+	    width:50px;
+		text-align:center;
+		padding-left: 0 !important;
 	}
-  }
-
-  select::-ms-expand {
-	display: none;
-  }
+	.md-button{
+	 margin:0;
+	 padding:0;
+	 height:25px;
+	 line-height:25px;
+	 min-width:50px;
+	 min-height:25px;
+	}
 }
 
 .displayinline-block{
@@ -557,8 +547,8 @@
 	margin-right:10%;
 }
 
-.w-160{
-	width:160px;
+.w-200{
+	width:200px;
 }
 .labelfix label{
 	display:inline-block !important;
