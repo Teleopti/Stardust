@@ -66,7 +66,6 @@
     			refreshCampaignStatistics($scope);
     		});
     		$scope.$broadcast('campaign.chart.clear.selection', { Id: campaign.Id });
-    		$scope.$broadcast('campaian.backlogInput.reset', { Id: campaign.Id, backlogInput: campaign.backlogInput });
     		campaign.backlogInput = null;
     	}
 
@@ -85,7 +84,6 @@
     			refreshCampaignStatistics($scope);
     		});
     		$scope.$broadcast('campaign.chart.clear.selection', { Id: campaign.Id });
-    		$scope.$broadcast('campaian.backlogInput.save', { Id: campaign.Id, backlogInput: campaign.backlogInput });
     		campaign.backlogInput = null;
     	}
 
