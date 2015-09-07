@@ -485,6 +485,39 @@
 	}
 }
 
+.wfm-date-range-picker-wrap {
+	.wrong-sign {
+		display: none; 
+		color: #ee8f7d ;
+	}
+	.right-sign {
+		display: none;
+		color: #c2e085;
+	}
+	.error-msg-container {
+		display: none;
+		margin-top: 10px;
+	}
+	.ng-valid {		
+		.right-sign {
+			display: block !important; 
+		}
+	}
+	
+	.ng-invalid {
+		&.invalid-order ~ .error-msg-container.invalid-order {
+			display: block !important;
+		}
+		&.invalid-empty ~ .error-msg-container.invalid-empty {
+			display: block !important;
+		}
+		.wrong-sign {
+			display: block !important; 
+		}		
+	}
+	
+}
+
 .campaign-edit {
 	.ng-dirty.ng-valid + .input-validation-sign .right-sign, 
 	.ng-dirty.custom-valid + .input-validation-sign .right-sign,
@@ -514,7 +547,6 @@
 		}
 	}
 }
-
 
 .campaign-create, .campaign-edit {
 

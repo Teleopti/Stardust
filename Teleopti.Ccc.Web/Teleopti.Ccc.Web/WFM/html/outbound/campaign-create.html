@@ -152,37 +152,8 @@
 					<span ng-show="!acToggle2"> <span translate>DateFrom </span><strong>{{campaign.StartDate.Date | amDateFormat: 'LL' }}</strong> <span translate>DateTo</span> <strong>{{campaign.EndDate.Date | amDateFormat: 'LL' }}</strong></span>
 				</div>
 				<div ng-show="acToggle2">
-					<form name="campaignSpanningPeriodForm" class="form-horizontal wfm-block input-group" form-locator>
-
-					    <div class="wfm-block clearfix">
-					        <div class="pull-left">
-					            <div class="wfm-datepicker-wrap campaign-startdate no-boxshadow">
-					                <div class="sub-header relative">
-					                    <span translate>From</span> <strong >{{campaign.StartDate.Date | amDateFormat: 'LL' }}</strong>
-					                    <div class="icon-set  form-validation-sign datepickerfix" expandable>
-					                        <i class="mdi mdi-check success right-sign "></i>
-					                        <i class="mdi mdi-close danger wrong-sign"></i>
-					                    </div>
-					                </div>
-                                    <datepicker ng-model="campaign.StartDate.Date" show-weeks="true" class="wfm-datepicker" custom-class="setRangeClass(date, mode)" ng-disabled="isCreating"></datepicker>
-					            </div>
-					        </div>
-					        <div class="pull-left">
-					            <div class="wfm-datepicker-wrap campaign-enddate no-boxshadow">
-					                <div class="sub-header relative">
-					                    <span translate>To</span> <strong >{{campaign.EndDate.Date | amDateFormat: 'LL' }}</strong>
-					                    <div class="icon-set  form-validation-sign datepickerfix" expandable>
-					                        <i class="mdi mdi-check success right-sign "></i>
-					                        <i class="mdi mdi-close danger wrong-sign"></i>
-					                    </div>
-					                </div>
-                                    <datepicker ng-model="campaign.EndDate.Date" show-weeks="true" class="wfm-datepicker" custom-class="setRangeClass(date, mode)" ng-disabled="isCreating"></datepicker>
-					            </div>
-					        </div>
-					    </div>
-                        <div class="error-msg-container invalid-order alert-error notice-spacer m-t-10"><i class='mdi mdi-alert-octagon'></i> <span translate>StartDateMustBeEqualToOrEarlierThanEndDate</span></div>
-                        <div class="error-msg-container invalid-empty alert-error notice-spacer m-t-10"><i class='mdi mdi-alert-octagon'></i> <span translate>StartDateAndEndDateMustBeSet</span></div>
-
+					<form name="campaignSpanningPeriodForm" class="form-horizontal wfm-block input-group" form-locator>					
+						<date-range-picker start-date="campaign.StartDate.Date" end-date="campaign.EndDate.Date" errors="campaign.spanningPeriodErrors"></date-range-picker>						
 					</form>
 				</div>
 			</div>
