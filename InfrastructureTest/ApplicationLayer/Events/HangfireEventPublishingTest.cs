@@ -3,11 +3,14 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
@@ -22,10 +25,13 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		public IEventPublisher Target;
 		public IJsonSerializer Serializer;
 		public IJsonDeserializer Deserializer;
+		public FakeApplicationData ApplicationData;
+		public IDataSourceScope DataSource;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<FakeHangfireEventClient>().For<IHangfireEventClient>();
+			system.UseTestDouble<FakeApplicationData>().For<IApplicationData>();
 
 			system.AddService<TestHandler>();
 			system.AddService<TestMultiHandler1>();
@@ -126,6 +132,18 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			JobClient.HandlerTypes.Should().Have.Count.EqualTo(2);
 			JobClient.HandlerTypes.ElementAt(0).Should().Contain(typeof (TestMultiHandler2).FullName);
 			JobClient.HandlerTypes.ElementAt(1).Should().Contain(typeof (TestMultiHandler1).FullName);
+		}
+
+		[Test]
+		public void ShouldPassTenant()
+		{
+			var dataSource = new FakeDataSource {DataSourceName = RandomName.Make()};
+			ApplicationData.RegisteredDataSources = new[] {dataSource };
+
+			using (DataSource.OnThisThreadUse(dataSource))
+				Target.Publish(new HangfireTestEvent());
+
+			JobClient.Tenant.Should().Be(dataSource.DataSourceName);
 		}
 
 		public class UnknownTestEvent : IEvent

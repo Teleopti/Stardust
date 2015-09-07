@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		{
 			Client.Publish(new PersonStateChangedEvent {Timestamp = "2015-08-17 15:40".Utc()});
 
-			Server.Process(null, typeof(PersonStateChangedEvent).AssemblyQualifiedName, JobClient.SerializedEvent, typeof(FakeHandler).AssemblyQualifiedName);
+			Server.Process(null, null, typeof(PersonStateChangedEvent).AssemblyQualifiedName, JobClient.SerializedEvent, typeof(FakeHandler).AssemblyQualifiedName);
 
 			Handler.GotEvent.Timestamp.Should().Be("2015-08-17 15:40".Utc());
 		}

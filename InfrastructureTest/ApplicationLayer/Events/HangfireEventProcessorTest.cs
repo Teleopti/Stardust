@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
@@ -22,9 +24,12 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		public AnotherHandler Another;
 		public AspectedHandler Aspected;
 		public IHangfireEventProcessor Target;
+		public FakeApplicationData ApplicationData;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
+			system.UseTestDouble<FakeApplicationData>().For<IApplicationData>();
+
 			system.AddService<AHandler>();
 			system.AddService<AnotherHandler>();
 			system.AddService<AspectedHandler>();
@@ -34,7 +39,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		[Test]
 		public void ShouldPublish()
 		{
-			Target.Process(null, typeof(AnEvent).AssemblyQualifiedName, "{}", typeof(AHandler).AssemblyQualifiedName);
+			Target.Process(null, null, typeof(AnEvent).AssemblyQualifiedName, "{}", typeof(AHandler).AssemblyQualifiedName);
 
 			Handler.HandledEvents.Single().Should().Be.OfType<AnEvent>();
 		}
@@ -42,7 +47,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		[Test]
 		public void ShouldDeserialize()
 		{
-			Target.Process(null, typeof(AnEvent).AssemblyQualifiedName, "{ Data: 'Hello' }", typeof(AHandler).AssemblyQualifiedName);
+			Target.Process(null, null, typeof(AnEvent).AssemblyQualifiedName, "{ Data: 'Hello' }", typeof(AHandler).AssemblyQualifiedName);
 
 			Handler.HandledEvents.OfType<AnEvent>().Single().Data.Should().Be("Hello");
 		}
@@ -50,7 +55,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		[Test]
 		public void ShouldPublishToSpecifiedHandlerOnly()
 		{
-			Target.Process(null, typeof(AnEvent).AssemblyQualifiedName, "{}", typeof(AnotherHandler).AssemblyQualifiedName);
+			Target.Process(null, null, typeof(AnEvent).AssemblyQualifiedName, "{}", typeof(AnotherHandler).AssemblyQualifiedName);
 
 			Handler.HandledEvents.Should().Have.Count.EqualTo(0);
 			Another.HandledEvents.Single().Should().Be.OfType<AnEvent>();
@@ -59,7 +64,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		[Test]
 		public void ShouldPublishToInterceptedHandler()
 		{
-			Target.Process(null, typeof(AnEvent).AssemblyQualifiedName, "{}", typeof(AspectedHandler).AssemblyQualifiedName);
+			Target.Process(null, null, typeof(AnEvent).AssemblyQualifiedName, "{}", typeof(AspectedHandler).AssemblyQualifiedName);
 
 			Aspected.HandledEvents.Single().Should().Be.OfType<AnEvent>();
 		}
@@ -71,7 +76,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			{
 				10.Times(() =>
 				{
-					Target.Process(null, typeof (AnEvent).AssemblyQualifiedName, "{}", typeof (NonConcurrenctSafeHandler).AssemblyQualifiedName);
+					Target.Process(null, null, typeof (AnEvent).AssemblyQualifiedName, "{}", typeof (NonConcurrenctSafeHandler).AssemblyQualifiedName);
 				});
 			};
 			var worker1 = Task.Factory.StartNew(job);
@@ -93,11 +98,21 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			handlerType.Should().Not.Contain("Culture");
 			handlerType.Should().Not.Contain("PublicKeyToken");
 
-			Target.Process(null, eventType, "{}", handlerType);
+			Target.Process(null, null, eventType, "{}", handlerType);
 
 			Handler.HandledEvents.Single().Should().Be.OfType<AnEvent>();
 		}
-		
+
+		[Test]
+		public void ShouldSetCurrentDataSourceFromJob()
+		{
+			ApplicationData.RegisteredDataSources = new[] {new FakeDataSource {DataSourceName = "tenant" } };
+
+			Target.Process(null, "tenant", typeof(AnEvent).AssemblyQualifiedName, "{}", typeof(AHandler).AssemblyQualifiedName);
+
+			Handler.HandledOnDataSource.Should().Be("tenant");
+		}
+
 		public class AnEvent : Event
 		{
 			public string Data { get; set; }
@@ -105,10 +120,18 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 
 		public class AHandler : IHandleEvent<AnEvent>
 		{
+			private readonly ICurrentDataSource _dataSource;
 			public List<IEvent> HandledEvents = new List<IEvent>();
+			public string HandledOnDataSource;
+
+			public AHandler(ICurrentDataSource dataSource)
+			{
+				_dataSource = dataSource;
+			}
 
 			public void Handle(AnEvent @event)
 			{
+				HandledOnDataSource = _dataSource.Current().DataSourceName;
 				HandledEvents.Add(@event);
 			}
 		}

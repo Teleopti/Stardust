@@ -13,9 +13,9 @@ namespace Teleopti.Ccc.Web.Core.Hangfire
 		}
 
 		[DisplayName("{0}")]
-		public void Process(string displayName, string eventType, string serializedEvent, string handlerType)
+		public void Process(string displayName, string tenant, string eventType, string serializedEvent, string handlerType)
 		{
-			_processor.Process(displayName, eventType, serializedEvent, handlerType);
+			_processor.Process(displayName, tenant, eventType, serializedEvent, handlerType);
 		}
 	}
 }
