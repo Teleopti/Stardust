@@ -142,6 +142,7 @@ wfm.config([
 				var expires = 'expires=' + d.toUTCString();
 				document.cookie = 'returnHash' + '=' + window.location.hash + '; ' + expires + '; path=/';
 			}
+			$sessionStorage.$reset();
 			window.location = 'Authentication';
 		};
 

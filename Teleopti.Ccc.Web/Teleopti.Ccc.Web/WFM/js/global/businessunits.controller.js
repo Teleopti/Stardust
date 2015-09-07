@@ -21,7 +21,7 @@
 				});
 
 				$scope.loadBusinessUnits = function() {
-					getBusinessUnits.get({}).$promise.then(function (result) {
+					getBusinessUnits.get().$promise.then(function (result) {
 						$scope.data.businessUnits = result;
 						$scope.show = (result.length > 1);
 						var buid = $sessionStorage.buid;
@@ -31,6 +31,7 @@
 							$http.defaults.headers.common['X-Business-Unit-Filter'] = businessUnit.Id;
 						} else {
 							$scope.data.selectedBu = result[0];
+							$sessionStorage.buid = result[0].Id;
 						}
 					});
 				};
