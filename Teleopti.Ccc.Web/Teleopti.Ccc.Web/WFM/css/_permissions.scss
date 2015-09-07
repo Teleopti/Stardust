@@ -75,32 +75,39 @@ p {
 	opacity:0;
 }
 
-.optionLocked{
+.option-locked{
 	pointer-events:none;
 	color:#999!important; 
 }
 
+.locked {
+	color: rgba(0,0,0,.06)!important;
+	cursor: not-allowed;
+	pointer-events:none;
+}
+
 .wfm-radio input[type=radio]:checked ~ .wfm-radio-toggle {
-    background-color: #66c2ff;
+	background-color: #66c2ff;
 }
 .permission-filter-label{
-    margin:0!important;
+	margin:0!important;
 }
  .toolbar > form > .wfm-radio {
-        width: initial;
-        display:block;
-    }
+		width: initial;
+		display:block;
+	}
 
 
-    .permission-radio-buttons {
-        display: inline-flex;
-        margin-top: 10px;
-    }
+	.permission-radio-buttons {
+		display: inline-flex;
+		margin-top: 10px;
+	}
 
 
-    .data-auth {
-        margin-top:15px;
-    }
+	.data-auth {
+		margin-top:15px;
+		padding:0;
+	}
 
 	@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
 		.permission-radio-buttons > .wfm-radio label .wfm-radio-label {
@@ -117,9 +124,8 @@ p {
 
 	}
 
-    @media only screen and (max-width: 841px) {
-        .permission-radio-buttons {
-            display: inline;
-        }
-    }
-
+	@media only screen and (max-width: 841px) {
+		.permission-radio-buttons {
+			display: inline;
+		}
+	}

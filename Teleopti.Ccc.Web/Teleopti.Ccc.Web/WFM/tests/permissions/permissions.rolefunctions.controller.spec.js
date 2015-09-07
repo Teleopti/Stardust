@@ -53,4 +53,9 @@ describe('FunctionController', function() {
 
         expect(node.$modelValue.selected).toBe(true);
     }));
+});  
+
+
+
+
 });

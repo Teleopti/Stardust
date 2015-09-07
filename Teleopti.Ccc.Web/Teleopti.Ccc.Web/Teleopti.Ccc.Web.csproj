@@ -1342,6 +1342,7 @@
     <Content Include="WFM\js\resourceplanner\_modules.js" />
     <Content Include="WFM\tests\outbound\outbound.filter.spec.js" />
     <Content Include="WFM\tests\people\people.cart.controller.spec.js" />
+    <Content Include="WFM\tests\permissions\permissions.rolefunctions.controller.spec.js" />
     <Content Include="WFM\tests\seatmanagement\locationpicker.controller.spec.js" />
     <Content Include="WFM\tests\seatmanagement\seatplanreport.controller.spec.js" />
     <Content Include="WFM\tests\seatmanagement\teampicker.controller.spec.js" />
