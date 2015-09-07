@@ -1,6 +1,5 @@
 ﻿using System;
 using Autofac;
-using MbCache.Core;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Aspects;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
@@ -9,7 +8,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Rta;
-using Teleopti.Interfaces.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
@@ -25,6 +23,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<Rta>().SingleInstance().ApplyAspects();
+			builder.RegisterType<RtaStarter>().SingleInstance();
 			builder.RegisterType<CacheInvalidator>().As<ICacheInvalidator>().SingleInstance();
 			builder.RegisterType<RtaProcessor>().SingleInstance();
 			builder.RegisterType<AgentStateReadModelUpdater>().As<IAgentStateReadModelUpdater>().SingleInstance();

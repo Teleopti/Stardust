@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly ICacheInvalidator _cacheInvalidator;
 		private readonly RtaProcessor _processor;
 		private readonly IAuthenticator _authenticator;
+		private readonly RtaStarter _starter;
 		private readonly INow _now;
 		private readonly IDatabaseLoader _databaseLoader;
 		private readonly IAgentStateReadModelUpdater _agentStateReadModelUpdater;
@@ -45,7 +46,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IAgentStateMessageSender messageSender,
 			IDatabaseLoader databaseLoader,
 			RtaProcessor processor,
-			IAuthenticator authenticator
+			IAuthenticator authenticator,
+			RtaStarter starter
 			)
 		{
 			_agentStateReadModelReader = agentStateReadModelReader;
@@ -55,6 +57,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_cacheInvalidator = cacheInvalidator;
 			_processor = processor;
 			_authenticator = authenticator;
+			_starter = starter;
 			_now = now;
 			_databaseLoader = databaseLoader;
 			_agentStateReadModelUpdater = agentStateReadModelUpdater;
@@ -71,6 +74,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		[DataSourceFromAuthenticationKey]
 		public virtual int SaveStateSnapshot(IEnumerable<ExternalUserStateInputModel> states)
 		{
+			_starter.EnsureTenantInitialized();
+
 			var state = states.First();
 			SaveStateBatch(states);
 			return SaveState(new ExternalUserStateInputModel
@@ -87,6 +92,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		[DataSourceFromAuthenticationKey]
 		public virtual int SaveStateBatch(IEnumerable<ExternalUserStateInputModel> states)
 		{
+			_starter.EnsureTenantInitialized();
+
 			if (states.Count() > 50)
 			{
 				Log.ErrorFormat("The incoming batch contains more than 50 external user states. Reduce the number if states per batch to a number below 50.");
@@ -109,6 +116,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		[DataSourceFromAuthenticationKey]
 		public virtual int SaveState(ExternalUserStateInputModel input)
 		{
+			_starter.EnsureTenantInitialized();
+
 			var messageId = Guid.NewGuid();
 
 			Log.InfoFormat(CultureInfo.InvariantCulture,
@@ -219,6 +228,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		[InfoLog]
 		public virtual void CheckForActivityChange(CheckForActivityChangeInputModel input)
 		{
+			_starter.EnsureTenantInitialized();
 			_cacheInvalidator.InvalidateSchedules(input.PersonId);
 			process(
 				null,
@@ -243,10 +253,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					_previousStateInfoLoader
 					));
 		}
-
-		public void Initialize()
-		{
-			_adherenceAggregator.Initialize();
-		}
+		
 	}
 }
