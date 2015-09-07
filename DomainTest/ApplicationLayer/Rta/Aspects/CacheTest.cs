@@ -1,10 +1,7 @@
 using Autofac;
-using Autofac.Core;
-using MbCache.Core;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -111,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Aspects
 			CachedService.CalledCount.Should().Be(1);
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldCachePerDataSource()
 		{
 			IDataSource datasource1 = new FakeDataSource("1");
