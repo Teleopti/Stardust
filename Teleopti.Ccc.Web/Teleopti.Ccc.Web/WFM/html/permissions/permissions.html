@@ -23,10 +23,8 @@
 						<input type="text" name="filterRole" ng-model="searchRoles.DescriptionText" placeholder="{{'RoleFilterThreeDots' | translate}}" />
 					</div>
 				</div>
-				
-				<div id="searchRoleResults">
-				
 
+				<div id="searchRoleResults">
 					<ul class="wfm-list">
 						<li ng-repeat="role in roles | filter:searchRoles" ng-click="showRole(role)" ng-dblclick="doubleClickEdit(editing, role)" ng-class="{'active': role.Id === selectedRole}" selection-model>
 							<span ng-if="role.editing===false;" class="list-item-container" ng-class="{'text-truncation': role.editing===false}">{{role.DescriptionText}}</span>
@@ -64,8 +62,6 @@
 		</div>
 
 
-
-
 		<div class="col-lg-8">
 			<div class="wfm-slide-tabs ">
 				<md-content class="material-depth-1" style="padding:0!important;">
@@ -79,7 +75,6 @@
 						</md-tab>
 						<md-tab label="Data" ng-show="roleDetails=='dataAvailable'">
 							<md-content class="md-padding">
-
 
 								<div class="data-container" ng-include="'js/permissions/permissions.data.html'" ng-controller="RoleDataController"></div>
 

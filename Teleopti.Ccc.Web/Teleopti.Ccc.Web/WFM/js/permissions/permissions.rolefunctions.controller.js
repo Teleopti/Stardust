@@ -62,18 +62,29 @@
                             functionNode.selected = false;
                             traverseNodes(functionNode.ChildFunctions);
                             increaseParentNumberOfSelectedNodes(node);
+
                         });
                     } else {
                         functionNode.selected = true;
                         decreaseParentNumberOfSelectedNodes(node);
                         toggleParentNode(node);
                         RolesFunctionsService.selectFunction(functionNodes, $scope.selectedRole);
+					//console.log('Function nodes: ', $scope.functionNodes);
                     }
 
 
-                }
+				if (!state.is) {
     
-                
+					RolesFunctionsService.unselectAllFunctions($scope.selectedRole);
+					growl.warning("<i class='mdi mdi-alert'></i> All functions are disabled.", {
+						ttl: 5000,
+						disableCountDown: true
+					});
+					return;
+				}
+
+
+				RolesFunctionsService.selectAllFunctions($scope.selectedRole);
 
             };
             var increaseParentNumberOfSelectedNodes = function(node) {

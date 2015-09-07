@@ -33,6 +33,7 @@
 				</label>
 			</div>
 	</form>
+			<input type="checkbox" ng-model="allToggleElement.is" ng-disabled="selectedRole.BuiltIn" ng-class="{'disabled-checkbox': selectedRole.BuiltIn}" ng-click="toggleAllNode(allToggleElement)" id="switchAll" />
 </div>
 
 <div class="tree permissions-tree">
