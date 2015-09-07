@@ -20,58 +20,9 @@ BEGIN
 	SET @end_date	= CONVERT(smalldatetime,CONVERT(nvarchar(30), @end_date, 112))
 	SET @end_date	= DATEADD(d, 1, @end_date)
 
-	CREATE TABLE #result
-					(
-						job_execution_id int,
-						job_name varchar(50),
-						business_unit_name nvarchar(100),
-						job_start_time datetime,
-						job_end_time datetime,
-						job_duration_s int,
-						job_affected_rows int,
-						schedule_id int,
-						schedule_name nvarchar(150),
-						jobstep_execution_id int,
-						jobstep_name nvarchar(200),
-						jobstep_duration_s int,
-						jobstep_affected_rows int,
-						exception_msg text,
-						exception_trace text,
-						inner_exception_msg text,
-						inner_exception_trace text
-					)
-	CREATE TABLE #job_error
-					(
-						job_execution_id int
-					)
-
     IF @show_only_errors = 1
     BEGIN
-		INSERT INTO #job_error
-		SELECT 
-			je.job_execution_id
-		FROM
-			mart.etl_job_execution je
-		INNER JOIN 
-			mart.etl_jobstep_execution jse
-		ON
-			je.job_execution_id = jse.job_execution_id
-		LEFT OUTER JOIN
-			mart.etl_jobstep_error er
-		ON
-			jse.jobstep_error_id = er.jobstep_error_id	
-		WHERE
-			(je.job_start_time >= @start_date)
-			AND
-			(je.job_end_time < @end_date)
-			AND
-			(je.business_unit_code = @business_unit_id 
-			Or
-			@business_unit_id = '00000000-0000-0000-0000-000000000002')
-			AND 
-			jse.jobstep_error_id IS NOT NULL
-			
-		INSERT INTO #result
+
 		SELECT
 			je.job_execution_id,
 			j.job_name,
@@ -113,12 +64,34 @@ BEGIN
 		ON
 			jse.jobstep_error_id = er.jobstep_error_id	
 		WHERE
-			je.job_execution_id IN (SELECT job_execution_id FROM #job_error)
-		
+			je.job_execution_id IN	(SELECT je.job_execution_id
+									FROM
+										mart.etl_job_execution je
+									INNER JOIN 
+										mart.etl_jobstep_execution jse
+									ON
+										je.job_execution_id = jse.job_execution_id
+									LEFT OUTER JOIN
+										mart.etl_jobstep_error er
+									ON
+										jse.jobstep_error_id = er.jobstep_error_id	
+									WHERE
+										(je.job_start_time >= @start_date)
+										AND
+										(je.job_end_time < @end_date)
+										AND
+										(je.business_unit_code = @business_unit_id 
+										Or
+										@business_unit_id = '00000000-0000-0000-0000-000000000002')
+										AND 
+										jse.jobstep_error_id IS NOT NULL)
+		ORDER BY 
+		job_execution_id desc,
+		jobstep_execution_id
     END
     ELSE
     BEGIN
-		INSERT INTO #result
+
 		SELECT 
 			je.job_execution_id,
 			j.job_name,
@@ -171,13 +144,7 @@ BEGIN
 			je.job_execution_id desc,
 			jse.jobstep_execution_id
     END
-    
-    SELECT * 
-    FROM 
-		#result
-    ORDER BY 
-		job_execution_id desc,
-		jobstep_execution_id
+
 END
 
 GO

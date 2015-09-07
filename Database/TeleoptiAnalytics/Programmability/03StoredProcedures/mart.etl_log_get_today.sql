@@ -9,13 +9,14 @@ BEGIN
 	SET NOCOUNT ON;
 
     SELECT [schedule_id]
-      ,[job_start_time]
-      ,[job_end_time]
+      ,max([job_start_time]) as job_start_time
+      ,max([job_end_time]) as job_end_time
 	FROM Mart.etl_job_execution
 	WHERE
 		[schedule_id] IS NOT NULL AND
 		[job_start_time] IS NOT NULL AND
 		[job_end_time] IS NOT NULL
+	GROUP BY [schedule_id]
 END
 
 
