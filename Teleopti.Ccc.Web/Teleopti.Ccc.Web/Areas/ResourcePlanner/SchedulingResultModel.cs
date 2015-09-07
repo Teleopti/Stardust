@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		public int ConflictCount { get; set; }
 		public int ScheduledAgentsCount { get; set; }
 		public IEnumerable<BusinessRulesValidationResult> BusinessRulesValidationResults { get; set; }
+		public BlockToken ThrottleToken { get; set; }
 	}
 
 	public struct BusinessRulesValidationResult : IEquatable<BusinessRulesValidationResult>

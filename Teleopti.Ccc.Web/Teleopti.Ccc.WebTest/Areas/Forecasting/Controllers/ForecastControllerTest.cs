@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Forecasting.Controllers;
 using Teleopti.Ccc.Web.Areas.Forecasting.Core;
+using Teleopti.Ccc.Web.Areas.ResourcePlanner;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
@@ -19,7 +20,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		[Test]
 		public void ShouldReturnRunningState()
 		{
-			var target = new ForecastController(null, null, null, null, null);
+			var target = new ForecastController(null, null, null, null, null, new BasicActionThrottler());
 			var result = target.Status();
 			((bool) result.IsRunning).Should().Be.False();
 		}
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var skill1 = SkillFactory.CreateSkillWithWorkloadAndSources();
 			skill1.SetId(Guid.NewGuid());
 			skillRepository.Stub(x => x.FindSkillsWithAtLeastOneQueueSource()).Return(new[] {skill1});
-			var target = new ForecastController(null, skillRepository, null, null, null);
+			var target = new ForecastController(null, skillRepository, null, null, null,new BasicActionThrottler());
 			var skills = target.Skills();
 			skills.Single().Id.Should().Be.EqualTo(skill1.Id.Value);
 			skills.Single().Name.Should().Be.EqualTo(skill1.Name);
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		[Test]
 		public void ShouldForecast()
 		{
-			var target = new ForecastController(MockRepository.GenerateMock<IForecastCreator>(), null, null, null, null);
+			var target = new ForecastController(MockRepository.GenerateMock<IForecastCreator>(), null, null, null, null, new BasicActionThrottler());
 			var result = target.Forecast(new ForecastInput());
 			result.Result.Success.Should().Be.True();
 		}
@@ -55,7 +56,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var evaluateInput = new EvaluateInput();
 			var workloadForecastingViewModel = new WorkloadEvaluateViewModel();
 			forecastViewModelFactory.Stub(x => x.Evaluate(evaluateInput)).Return(workloadForecastingViewModel);
-			var target = new ForecastController(null, null, forecastViewModelFactory, null, null);
+			var target = new ForecastController(null, null, forecastViewModelFactory, null, null, new BasicActionThrottler());
 
 			var result = target.Evaluate(evaluateInput);
 
@@ -70,7 +71,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var queueStatisticsInput = new QueueStatisticsInput();
 			var workloadQueueStatisticsViewModel = new WorkloadQueueStatisticsViewModel();
 			forecastViewModelFactory.Stub(x => x.QueueStatistics(queueStatisticsInput)).Return(workloadQueueStatisticsViewModel);
-			var target = new ForecastController(null, null, forecastViewModelFactory, null, null);
+			var target = new ForecastController(null, null, forecastViewModelFactory, null, null, new BasicActionThrottler());
 
 			var result = target.QueueStatistics(queueStatisticsInput);
 
@@ -88,7 +89,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			forecastResultViewModelFactory.Stub(
 				x => x.Create(workloadId, new DateOnlyPeriod(new DateOnly(forecastStart), new DateOnly(forecastEnd))))
 				.Return(workloadForecastResultViewModel);
-			var target = new ForecastController(null, null, null, forecastResultViewModelFactory, null);
+			var target = new ForecastController(null, null, null, forecastResultViewModelFactory, null, new BasicActionThrottler());
 
 			var forecastResultInput = new ForecastResultInput
 			{
@@ -111,7 +112,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				WorkloadId = workloadId
 			};
 			intradayPatternViewModelFactory.Stub(x => x.Create(input)).Return(intradayPatternViewModel);
-			var target = new ForecastController(null, null, null, null, intradayPatternViewModelFactory);
+			var target = new ForecastController(null, null, null, null, intradayPatternViewModelFactory, new BasicActionThrottler());
 			
 			var result = target.IntradayPattern(input);
 

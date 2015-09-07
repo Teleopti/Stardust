@@ -285,6 +285,7 @@
     <Compile Include="Areas\ResourcePlanner\ResourcePlannerModuleTest.cs" />
     <Compile Include="Areas\ResourcePlanner\ResourcePlannerTestAttribute.cs" />
     <Compile Include="Areas\ResourcePlanner\ScheduleControllerTest.cs" />
+    <Compile Include="Areas\ResourcePlanner\ThrottleActionTest.cs" />
     <Compile Include="Areas\ResourcePlanner\ViolatedBusinessRulesTest.cs" />
     <Compile Include="Areas\Search\FakeApplicationRoleRepository.cs" />
     <Compile Include="Areas\Search\FakeNextPlanningPeriodProvider.cs" />

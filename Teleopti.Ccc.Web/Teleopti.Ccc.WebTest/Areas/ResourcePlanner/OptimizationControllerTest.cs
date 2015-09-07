@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			{
 				var result =
 					(OkNegotiatedContentResult<OptimizationResultModel>)
-						Target.FixedStaff(id);
+						Target.FixedStaff(id, new BlockToken { Action = "Scheduling" });
 
 				result.Content.Should().Not.Be.Null();
 			}
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			SchedulingResultStateHolder.Schedules = schedules;
 			using (new CustomAuthorizationContext(new PrincipalAuthorizationWithFullPermission()))
 			{
-				Target.FixedStaff(id);
+				Target.FixedStaff(id, new BlockToken{Action = "Scheduling"});
 			}
 			PlanningPeriodRepository.Load(id).State.Should().Be.EqualTo(PlanningPeriodState.Scheduled);
 		}

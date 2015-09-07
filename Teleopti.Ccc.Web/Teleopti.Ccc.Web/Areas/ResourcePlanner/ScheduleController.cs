@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 	{
 		private readonly SetupStateHolderForWebScheduling _setupStateHolderForWebScheduling;
 		private readonly FixedStaffLoader _fixedStaffLoader;
+		private readonly IActionThrottler _actionThrottler;
 		private readonly IScheduleControllerPrerequisites _prerequisites;
 		private readonly Func<IFixedStaffSchedulingService> _fixedStaffSchedulingService;
 		private readonly Func<IScheduleCommand> _scheduleCommand;
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		private readonly DayOffBusinessRuleValidation _dayOffBusinessRuleValidation;
 
 		public ScheduleController(SetupStateHolderForWebScheduling setupStateHolderForWebScheduling,
-			FixedStaffLoader fixedStaffLoader, IScheduleControllerPrerequisites prerequisites, Func<IFixedStaffSchedulingService> fixedStaffSchedulingService,
+			FixedStaffLoader fixedStaffLoader, IActionThrottler actionThrottler, IScheduleControllerPrerequisites prerequisites, Func<IFixedStaffSchedulingService> fixedStaffSchedulingService,
 			Func<IScheduleCommand> scheduleCommand, Func<ISchedulerStateHolder> schedulerStateHolder,
 			Func<IRequiredScheduleHelper> requiredScheduleHelper, Func<IGroupPagePerDateHolder> groupPagePerDateHolder,
 			Func<IScheduleTagSetter> scheduleTagSetter,
@@ -42,6 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		{
 			_setupStateHolderForWebScheduling = setupStateHolderForWebScheduling;
 			_fixedStaffLoader = fixedStaffLoader;
+			_actionThrottler = actionThrottler;
 			_prerequisites = prerequisites;
 			_fixedStaffSchedulingService = fixedStaffSchedulingService;
 			_scheduleCommand = scheduleCommand;
@@ -58,59 +60,69 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		[HttpPost, Route("api/ResourcePlanner/Schedule/FixedStaff"), Authorize, UnitOfWork]
 		public virtual IHttpActionResult FixedStaff([FromBody] FixedStaffSchedulingInput input)
 		{
-			var period = new DateOnlyPeriod(new DateOnly(input.StartDate), new DateOnly(input.EndDate));
-
-			_prerequisites.MakeSureLoaded();
-
-			var people = _fixedStaffLoader.Load(period);
-
-			_setupStateHolderForWebScheduling.Setup(period, people);
-
-			var allSchedules = extractAllSchedules(_schedulerStateHolder().SchedulingResultState, people, period);
-
-			initializePersonSkillProviderBeforeAccessingItFromOtherThreads(period, people.AllPeople);
-			_scheduleTagSetter().ChangeTagToSet(NullScheduleTag.Instance);
-
-			var daysScheduled = 0;
-			if (allSchedules.Any())
+			var token = _actionThrottler.Block(ThrottledAction.Scheduling);
+			try
 			{
-				EventHandler<SchedulingServiceBaseEventArgs> schedulingServiceOnDayScheduled = (sender, args) => daysScheduled++;
-				var fixedStaffSchedulingService = _fixedStaffSchedulingService();
-				fixedStaffSchedulingService.DayScheduled += schedulingServiceOnDayScheduled;
+				var period = new DateOnlyPeriod(new DateOnly(input.StartDate), new DateOnly(input.EndDate));
 
-				_scheduleCommand().Execute(new OptimizerOriginalPreferences(new SchedulingOptions
+				_prerequisites.MakeSureLoaded();
+
+				var people = _fixedStaffLoader.Load(period);
+
+				_setupStateHolderForWebScheduling.Setup(period, people);
+
+				var allSchedules = extractAllSchedules(_schedulerStateHolder().SchedulingResultState, people, period);
+
+				initializePersonSkillProviderBeforeAccessingItFromOtherThreads(period, people.AllPeople);
+				_scheduleTagSetter().ChangeTagToSet(NullScheduleTag.Instance);
+
+				var daysScheduled = 0;
+				if (allSchedules.Any())
 				{
-					UseAvailability = true,
-					UsePreferences = true,
-					UseRotations = true,
-					UseStudentAvailability = false,
-					DayOffTemplate = _schedulerStateHolder().CommonStateHolder.DefaultDayOffTemplate,
-					ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff,
-					GroupOnGroupPageForTeamBlockPer = new GroupPageLight(UserTexts.Resources.Main, GroupPageType.Hierarchy),
-					TagToUseOnScheduling = NullScheduleTag.Instance
-				}), new NoBackgroundWorker(), _schedulerStateHolder(), allSchedules, _groupPagePerDateHolder(),
-					_requiredScheduleHelper(),
-					new OptimizationPreferences());
-				fixedStaffSchedulingService.DayScheduled -= schedulingServiceOnDayScheduled;
+					EventHandler<SchedulingServiceBaseEventArgs> schedulingServiceOnDayScheduled = (sender, args) => daysScheduled++;
+					var fixedStaffSchedulingService = _fixedStaffSchedulingService();
+					fixedStaffSchedulingService.DayScheduled += schedulingServiceOnDayScheduled;
+
+					_scheduleCommand().Execute(new OptimizerOriginalPreferences(new SchedulingOptions
+					{
+						UseAvailability = true,
+						UsePreferences = true,
+						UseRotations = true,
+						UseStudentAvailability = false,
+						DayOffTemplate = _schedulerStateHolder().CommonStateHolder.DefaultDayOffTemplate,
+						ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff,
+						GroupOnGroupPageForTeamBlockPer = new GroupPageLight(UserTexts.Resources.Main, GroupPageType.Hierarchy),
+						TagToUseOnScheduling = NullScheduleTag.Instance
+					}), new NoBackgroundWorker(), _schedulerStateHolder(), allSchedules, _groupPagePerDateHolder(),
+						_requiredScheduleHelper(),
+						new OptimizationPreferences());
+					fixedStaffSchedulingService.DayScheduled -= schedulingServiceOnDayScheduled;
+				}
+
+				var conflicts = _persister.Persist(_schedulerStateHolder().Schedules);
+				var scheduleOfSelectedPeople =
+					_schedulerStateHolder().Schedules.Where(x => people.SelectedPeople.Contains(x.Key)).ToList();
+				var voilatedBusinessRules = new List<BusinessRulesValidationResult>();
+
+				var schedulePeriodNotInRange = _violatedSchedulePeriodBusinessRule.GetResult(people.SelectedPeople, period).ToList();
+				var daysOffValidationResult = getDayOffBusinessRulesValidationResults(scheduleOfSelectedPeople,
+					schedulePeriodNotInRange, period);
+				voilatedBusinessRules.AddRange(schedulePeriodNotInRange);
+				voilatedBusinessRules.AddRange(daysOffValidationResult);
+				return
+					Ok(new SchedulingResultModel
+					{
+						DaysScheduled = daysScheduled,
+						ConflictCount = conflicts.Count(),
+						ScheduledAgentsCount = successfulScheduledAgents(scheduleOfSelectedPeople, period),
+						BusinessRulesValidationResults = voilatedBusinessRules,
+						ThrottleToken = token
+					});
 			}
-
-			var conflicts = _persister.Persist(_schedulerStateHolder().Schedules);
-			var scheduleOfSelectedPeople = _schedulerStateHolder().Schedules.Where(x => people.SelectedPeople.Contains(x.Key)).ToList();
-			var voilatedBusinessRules = new List<BusinessRulesValidationResult>();
-
-			var schedulePeriodNotInRange = _violatedSchedulePeriodBusinessRule.GetResult(people.SelectedPeople, period).ToList();
-			var daysOffValidationResult = getDayOffBusinessRulesValidationResults(scheduleOfSelectedPeople,
-				schedulePeriodNotInRange, period);
-			voilatedBusinessRules.AddRange(schedulePeriodNotInRange);
-			voilatedBusinessRules.AddRange(daysOffValidationResult);
-			return
-				Ok(new SchedulingResultModel
-				{
-					DaysScheduled = daysScheduled,
-					ConflictCount = conflicts.Count(),
-					ScheduledAgentsCount = successfulScheduledAgents(scheduleOfSelectedPeople, period),
-					BusinessRulesValidationResults = voilatedBusinessRules
-				});
+			finally
+			{
+				_actionThrottler.Pause(token, TimeSpan.FromMinutes(1));
+			}
 		}
 
 		private static int successfulScheduledAgents(IEnumerable<KeyValuePair<IPerson, IScheduleRange>> schedules, DateOnlyPeriod periodToCheck)

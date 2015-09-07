@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
-using Microsoft.AspNet.SignalR;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
@@ -11,6 +9,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Web.Areas.Forecasting.Core;
+using Teleopti.Ccc.Web.Areas.ResourcePlanner;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
@@ -24,16 +23,16 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		private readonly IForecastViewModelFactory _forecastViewModelFactory;
 		private readonly IForecastResultViewModelFactory _forecastResultViewModelFactory;
 		private readonly IIntradayPatternViewModelFactory _intradayPatternViewModelFactory;
+		private readonly IActionThrottler _actionThrottler;
 
-		private static bool forecastIsRunning;
-
-		public ForecastController(IForecastCreator forecastCreator, ISkillRepository skillRepository, IForecastViewModelFactory forecastViewModelFactory, IForecastResultViewModelFactory forecastResultViewModelFactory, IIntradayPatternViewModelFactory intradayPatternViewModelFactory)
+		public ForecastController(IForecastCreator forecastCreator, ISkillRepository skillRepository, IForecastViewModelFactory forecastViewModelFactory, IForecastResultViewModelFactory forecastResultViewModelFactory, IIntradayPatternViewModelFactory intradayPatternViewModelFactory, IActionThrottler actionThrottler)
 		{
 			_forecastCreator = forecastCreator;
 			_skillRepository = skillRepository;
 			_forecastViewModelFactory = forecastViewModelFactory;
 			_forecastResultViewModelFactory = forecastResultViewModelFactory;
 			_intradayPatternViewModelFactory = intradayPatternViewModelFactory;
+			_actionThrottler = actionThrottler;
 		}
 
 		[UnitOfWork, Route("api/Forecasting/Skills"), HttpGet]
@@ -81,13 +80,13 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 				Success = false,
 				Message = "Forecast is running, please try later."
 			});
-			if (forecastIsRunning)
+			if (_actionThrottler.IsBlocked(ThrottledAction.Forecasting))
 			{
 				return failedTask;
 			}
+			var token = _actionThrottler.Block(ThrottledAction.Forecasting);
 			try
 			{
-				forecastIsRunning = true;
 				var futurePeriod = new DateOnlyPeriod(new DateOnly(input.ForecastStart), new DateOnly(input.ForecastEnd));
 				_forecastCreator.CreateForecastForWorkloads(futurePeriod, input.Workloads);
 				return Task.FromResult(new ForecastResultViewModel
@@ -101,7 +100,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			}
 			finally
 			{
-				forecastIsRunning = false;
+				_actionThrottler.Finish(token);
 			}
 		}
 
@@ -114,7 +113,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		[HttpGet, Route("api/Forecasting/Status")]
 		public dynamic Status()
 		{
-			return new {IsRunning = forecastIsRunning};
+			return new {IsRunning = _actionThrottler.IsBlocked(ThrottledAction.Forecasting)};
 		}
 	}
 
