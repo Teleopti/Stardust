@@ -69,7 +69,16 @@
 			}
 
 			function init() {
+				setIsOverStaffed($scope);
 				if (!$scope.graph) $scope.graph = generateChart();
+			}
+
+			this.setIsOverStaffed = setIsOverStaffed;
+			function setIsOverStaffed(scope) {
+				var overStaffArr = scope.campaign.graphData.overStaff;
+				var lastOne = overStaffArr[overStaffArr.length - 1];
+				if ((!isNaN(lastOne)) && lastOne != 0) scope.campaign.isOverStaffed = true;
+				else scope.campaign.isOverStaffed = false;
 			}
 
 			function loadGraph() {
@@ -81,11 +90,14 @@
 					$scope.graph.axis.max(yMax);
 					$scope.campaign.formerOptionYMax = yMax;
 				}
-
-				$scope.graph.load({
-					columns: getDataGroupsData(),
+				var obj = {
+					columns: getChartData($scope.campaign.isOverStaffed),
 					colors: _setChartOption_color()
-				});
+				};
+				if (!$scope.campaign.isOverStaffed) {
+					obj.unload = getChartLabel(!$scope.campaign.isOverStaffed);
+				}
+				$scope.graph.load(obj);
 			}
 
 			function generateChart() {
@@ -101,23 +113,32 @@
 				return c3.generate(chartOptions);
 			}
 	
-			function getDataGroupsData() {
-				return getDataGroupsKey().map(function(name) {
-					return $scope.campaign.graphData[name];
+			function getChartData(isOverStaffed) {
+				return getChartDataKey(isOverStaffed).map(function (name) {return $scope.campaign.graphData[name];});
+			}
+
+			function getChartLabel(isOverStaffed) {
+				return getChartDataKey(isOverStaffed).map(function (name) {
+					return $scope.campaign.graphData[name][0];
 				});
 			}
 
-			function getDataGroupsLabel() {
-				return getDataGroupsKey().map(function (name) { return $scope.campaign.graphData[name][0]; });
-			}
-
-			function getDataGroupsKey() {
+			function getChartDataKey(isOverStaffed) {
 				var plannedPhase = $scope.campaign.Status;
-				if ($filter('showPhase')(plannedPhase) == 'Planned') {
-					return ['rawBacklogs', 'unscheduledPlans', 'progress','overStaff'];
+				if (isOverStaffed) {
+					if ($filter('showPhase')(plannedPhase) == 'Planned') {
+						return ['rawBacklogs', 'unscheduledPlans', 'progress', 'overStaff'];
+					} else {
+						return ['rawBacklogs', 'schedules', 'unscheduledPlans', 'progress', 'overStaff'];
+					}
 				} else {
-					return ['rawBacklogs', 'schedules', 'unscheduledPlans', 'progress','overStaff'];
+					if ($filter('showPhase')(plannedPhase) == 'Planned') {
+						return ['rawBacklogs', 'unscheduledPlans', 'progress'];
+					} else {
+						return ['rawBacklogs', 'schedules', 'unscheduledPlans', 'progress'];
+					}
 				}
+				
 			}
 
 			function getDataIndex(date) {
@@ -167,17 +188,16 @@
 				var dataOption = {
 					x: 'x',
 					type: 'bar',
-					groups: [getDataGroupsLabel()],
+					groups: [getChartLabel(true)],
 					order: 'null',				
-					columns: [$scope.campaign.graphData.dates].concat(getDataGroupsData()),
+					columns: [$scope.campaign.graphData.dates].concat(getChartData($scope.campaign.isOverStaffed)),
 					colors: _setChartOption_color(),
 					types: {},
 					labels: {
 						format: {}													
 					}
 				};
-
-				dataOption.labels.format[$scope.dictionary['Overstaff']] = function(v, id, i) {
+				dataOption.labels.format[$scope.dictionary['Planned']] = function(v, id, i) {
 					if ((!determineOpenDay(i)) && determineManualBacklogDay(i)) return 'C,B';
 					else if (!determineOpenDay(i)) return 'C';
 
@@ -281,12 +301,13 @@
 		function postlink(scope, elem, attrs, ctrls) {
 			var ctrl = ctrls[0];
 
-			scope.$evalAsync(ctrl.init);			
+			scope.$evalAsync(ctrl.init);
 
-			scope.$on('campaign.chart.refresh', function (_s, data) {
-				if (scope.campaign.Id == data.Id) {					
+			scope.$on('campaign.chart.refresh', function(_s, data) {
+				ctrl.setIsOverStaffed(scope);
+				if (scope.campaign.Id == data.Id) {
 					scope.$evalAsync(ctrl.loadGraph());
-				}				
+				}
 			});
 
 			scope.$on('campaign.chart.clear.selection', function(_s, data) {
