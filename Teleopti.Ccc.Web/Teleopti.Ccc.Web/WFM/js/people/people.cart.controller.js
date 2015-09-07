@@ -104,6 +104,21 @@
 		};
 		vm.gridOptions.onRegisterApi = function (gridApi) {
 			vm.gridApi = gridApi;
+			var cellTemplate = '<div>' +
+				'<button ng-click="grid.appScope.vm.removePerson(row.entity)" class="wfm-btn wfm-btn-default selection-cart-row-remove-btn">' +
+				'<md-tooltip>Remove</md-tooltip>' +
+				'<i style="magin-left:3px;" class="mdi mdi-delete">' +
+				'</button>' +
+				'</div>';
+			vm.gridApi.core.addRowHeaderColumn({ name: 'rowHeaderCol', displayName: '', width: 30, cellTemplate: cellTemplate });
+		}
+		vm.removePerson= function(person) {
+			for (var i = 0; i < vm.availablePeople.length; i++) {
+				if (person.PersonId === vm.availablePeople[i].PersonId) {
+					vm.availablePeople.splice(i, 1);
+					break;
+				}
+			}
 		}
 		vm.getVisiblePageNumbers = function (start, end) {
 			var displayPageCount = 5;

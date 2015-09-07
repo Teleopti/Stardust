@@ -150,6 +150,20 @@ describe("PeopleCartCtrl", function () {
 		expect(availablePeople[2].Skills()).toEqual("Channel Sales, Direct Sales");
 	}));
 
+	it("should remove person correctly", inject(function () {
+		var scope = $rootScope.$new();
+		scope.$digest(); // this is needed to resolve the promise
+		var person = {
+			"PersonId": "3833e4a7-dbf4-4130-9027-9b5e015b2580",
+		};
+		controller.removePerson(person);
+
+		var availablePeople = controller.availablePeople;
+		expect(availablePeople.length).toEqual(2);
+		expect(availablePeople[0].PersonId).toEqual("71d27b06-30c0-49fd-ae16-9b5e015b2580");
+		expect(availablePeople[1].PersonId).toEqual("1a714f36-ee87-4a06-88d6-9b5e015b2585");
+	}));
+
 	function setUpController($controller) {
 		var stateParams = { selectedPeopleIds: [], commandTag: "AdjustSkill" }
 		return $controller("PeopleCartCtrl", { $stateParams: stateParams, Toggle: mockToggleService, People: mockPeopleService });
