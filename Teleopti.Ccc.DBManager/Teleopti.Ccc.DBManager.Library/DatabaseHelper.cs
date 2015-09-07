@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.DBManager.Library
 			var sql = string.Format(@"SELECT 1 FROM sys.sysusers WHERE name = '{0}'", sqlLogin);
 			if (isAzure)
 				sql = string.Format(@"SELECT 1 FROM sys.sql_logins WHERE name = '{0}'", sqlLogin);
-			var result = executeScalarOnMaster(sql, 0);
+			var result = executeScalar(sql, 0);
 			return result > 0;
 		}
 

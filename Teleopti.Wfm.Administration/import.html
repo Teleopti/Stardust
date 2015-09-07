@@ -71,16 +71,16 @@
 
 
 				</fieldset>
-				<div ng-show="importVm.AppVersionOk != true">
+				<!--<div ng-show="importVm.AppVersionOk != true">-->
 					<div>
-						<h3>Version information</h3>
+						<h3>Upgrade information</h3>
 						<label>Head version:</label><span>{{importVm.HeadVersion}}</span><br />
 						<label>Import version:</label><span>{{importVm.ImportAppVersion}}</span><br />
-						<label ng-class="(importVm.AppVersionOk==true) ? 'dataIsOk' : 'dataIsNotOk'">The versions are OK ?:</label><span>{{importVm.AppVersionOk}}</span><br />
+						<label >If the imported database's version is lower it will be upgraded.</label><br />
 					</div>
 
 
-				</div>
+				<!--</div>  -->
 				<br />
 				<p>
 					<button class="btn btn-primary btn-default" ng-click="importVm.startImport()">Start import</button>

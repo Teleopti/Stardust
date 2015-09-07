@@ -79,6 +79,11 @@
 				vm.AppLoginOk = false;
 				return;
 			}
+			if (vm.UserName === '' || vm.Password === '') {
+				vm.AppLoginOk = false;
+				vm.AppLoginMessage = '';
+				return;
+			}
 			var model = {
 				Server: vm.Server,
 				AdminUser: vm.CreateDbUser,
