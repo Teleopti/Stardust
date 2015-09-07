@@ -109,30 +109,36 @@ function PeopleController($scope, $filter, $state, $stateParams, $translate, i18
 			{ displayName: 'TerminalDate', field: 'LeavingDate', headerCellFilter: 'translate', enableSorting: false, minWidth: 100 }
 		],
 		gridMenuTitleFilter: $translate,
-		exporterAllDataFn: function () {
-			return loadAllResults(function (result) {
-				$scope.gridOptions.data = result.People;
+		exporterAllDataFn: function() {
+			return loadAllResults(function(result) {
+					$scope.gridOptions.data = result.People;
 
-				angular.forEach($scope.gridOptions.data, function (person) {
-					angular.forEach(person.OptionalColumnValues, function (val) {
-						person[val.Key] = val.Value;
+					angular.forEach($scope.gridOptions.data, function(person) {
+						angular.forEach(person.OptionalColumnValues, function(val) {
+							person[val.Key] = val.Value;
+						});
 					});
-				});
 
-				angular.forEach(result.OptionalColumns, function (col) {
-					var isFound = false;
-					angular.forEach($scope.gridOptions.columnDefs, function (colDef) {
-						if (colDef.field === col) {
-							isFound = true;
-							return;
+					angular.forEach(result.OptionalColumns, function(col) {
+						var isFound = false;
+						angular.forEach($scope.gridOptions.columnDefs, function(colDef) {
+							if (colDef.field === col) {
+								isFound = true;
+								return;
+							}
+						});
+						if (!isFound) {
+							$scope.gridOptions.columnDefs.push({
+								displayName: col,
+								field: col,
+								headerCellFilter: 'translate',
+								enableSorting: false,
+								minWidth: 100
+							});
 						}
 					});
-					if (!isFound) {
-						$scope.gridOptions.columnDefs.push({ displayName: col, field: col, headerCellFilter: 'translate', enableSorting: false, minWidth: 100 });
-					}
-				});
-			})
-				.then(function () {
+				})
+				.then(function() {
 					getPage();
 				});
 		},
@@ -153,11 +159,10 @@ function PeopleController($scope, $filter, $state, $stateParams, $translate, i18
 
 			gridApi.selection.on.rowSelectionChangedBatch($scope, function (rows) {
 				selectPeople(rows);
-				if (rows.length > 0 && rows.length === $scope.gridOptions.data.length && rows[0].isSelected && $scope.totalPages > 1) {
-					$scope.selectAllVisible = true;
-				} else {
-					$scope.selectAllVisible = false;
-				}
+				$scope.selectAllVisible = rows.length > 0
+					&& rows.length === $scope.gridOptions.data.length
+					&& rows[0].isSelected
+					&& $scope.totalPages > 1;
 			});
 
 			$scope.gridApi.core.on.sortChanged($scope, $scope.sortChanged);
@@ -169,20 +174,22 @@ function PeopleController($scope, $filter, $state, $stateParams, $translate, i18
 	}
 
 	$scope.gotoCartView = function (commandTag) {
-		$state.go("people-selection-cart", { selectedPeopleIds: getSelectedPeople(), commandTag: commandTag, currentKeyword: $scope.keyword, paginationOptions: paginationOptions });
+		$state.go("people-selection-cart", {
+			selectedPeopleIds: getSelectedPeople(),
+			commandTag: commandTag,
+			currentKeyword: $scope.keyword,
+			paginationOptions: paginationOptions
+		});
 	};
 
 	var selectPeople = function (rows) {
 		angular.forEach(rows, function (row) {
 			var selectedPerson = row.entity;
-			if (row.isSelected && $scope.selectedPeopleList.indexOf(selectedPerson.PersonId) === -1) {
+			var personIndex = $scope.selectedPeopleList.indexOf(selectedPerson.PersonId);
+			if (row.isSelected && personIndex === -1) {
 				$scope.selectedPeopleList.push(selectedPerson.PersonId);
-			} else if (!row.isSelected && $scope.selectedPeopleList.indexOf(selectedPerson.PersonId) > -1) {
-				for (var i = $scope.selectedPeopleList.length; i--;) {
-					if ($scope.selectedPeopleList[i] === selectedPerson.PersonId) {
-						$scope.selectedPeopleList.splice(i, 1);
-					}
-				}
+			} else if (!row.isSelected && personIndex > -1) {
+				$scope.selectedPeopleList.splice(personIndex, 1);
 			}
 		});
 	}
@@ -234,7 +241,6 @@ function PeopleController($scope, $filter, $state, $stateParams, $translate, i18
 		}
 
 		getPage();
-
 	};
 
 	function getPage() {
@@ -276,7 +282,14 @@ function PeopleController($scope, $filter, $state, $stateParams, $translate, i18
 						}
 					});
 					if (!isFound) {
-						$scope.gridOptions.columnDefs.push({ name: col, displayName: col, field: col, headerCellFilter: 'translate', enableSorting: false, minWidth: 100 });
+						$scope.gridOptions.columnDefs.push({
+							name: col,
+							displayName: col,
+							field: col,
+							headerCellFilter: 'translate',
+							enableSorting: false,
+							minWidth: 100
+						});
 					}
 
 				});
