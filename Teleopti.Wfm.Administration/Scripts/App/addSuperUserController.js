@@ -40,7 +40,7 @@
 				LastName: vm.LastName,
 				UserName: vm.UserName,
 				Password: vm.Password
-			}, getHeaders())
+			}, tokenHeaderService.getHeaders())
 				.success(function (data) {
 					if (data.Success === false) {
 						vm.Message = data.Message;
