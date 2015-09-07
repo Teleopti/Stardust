@@ -403,5 +403,36 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
             agentRole.AvailableData.AvailableSites.Should().Have.Count.EqualTo(0);
             agentRole.AvailableData.AvailableTeams.Should().Have.Count.EqualTo(0);
         }
+
+		  [Test]
+		  public void ShouldRemoveFunctionWitChildAndAllParents()
+		  {
+			  var roleId = Guid.NewGuid();
+			  var iamNoParentId = Guid.NewGuid();
+			  var parentOfEverythingId = Guid.NewGuid();
+			  var grandChildId = Guid.NewGuid();
+			  var iAmNoParent = new ApplicationFunction("All");
+			  iAmNoParent.SetId(iamNoParentId);
+			  ApplicationFunctionRepository.Add(iAmNoParent);
+
+			  var parentOfEverything = new ApplicationFunction("Teleopti");
+			  parentOfEverything.SetId(parentOfEverythingId);
+			  ApplicationFunctionRepository.Add(parentOfEverything);
+
+			  var grandChild = new ApplicationFunction("Prog");
+			  grandChild.SetId(grandChildId);
+			  ApplicationFunctionRepository.Add(grandChild);
+			  parentOfEverything.AddChild(grandChild);
+
+			  var agentRole = new ApplicationRole { Name = "Agent" };
+			  ApplicationRoleRepository.Add(agentRole);
+			  agentRole.AddApplicationFunction(iAmNoParent);
+			  agentRole.AddApplicationFunction(parentOfEverything);
+			  agentRole.AddApplicationFunction(grandChild);
+
+			  Target.RemoveFunction(roleId, grandChildId, new FunctionsForRoleInput(){ Functions = new Guid[] { iamNoParentId, parentOfEverythingId }});
+
+			  agentRole.ApplicationFunctionCollection.Count.Should().Be.EqualTo(0);
+		  }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Web.Http;
+using NodaTime.TimeZones;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
@@ -124,7 +125,20 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
             return Ok();
         }
 
+		 [UnitOfWork, Route("api/Permissions/Roles/{roleId}/DeleteFunction/{functionId}"), HttpPost]
+		  public virtual IHttpActionResult RemoveFunction(Guid roleId, Guid functionId, [FromBody]FunctionsForRoleInput parents)
+		  {
+			  var role = _roleRepository.Get(roleId);
+			  if (role.BuiltIn) return BadRequest(CannotModifyBuiltInRoleErrorMessage);
+			  var children = _applicationFunctionRepository.GetChildFunctions(functionId);
+			  foreach (var child in children)
+				  if (child.Id.HasValue) removeChildren(child.Id.Value, role);
 
+			  role.RemoveApplicationFunction(_applicationFunctionRepository.Load(functionId));
+			  parents.Functions.ForEach(x => role.RemoveApplicationFunction(_applicationFunctionRepository.Load(x)));
+			  return Ok();
+		  }
+		 
         private void removeChildren(Guid functionId, IApplicationRole role)
         {
             var functionIds = _applicationFunctionRepository.GetChildFunctions(functionId);
