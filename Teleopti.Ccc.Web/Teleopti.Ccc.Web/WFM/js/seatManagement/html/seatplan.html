@@ -21,7 +21,7 @@
 		</div>
 
 		<div class="planning-day-detail" ng-if="seatplan.selectedDate!=null">
-			<button class="wfm-fab info  material-depth-1 pull-right" ng-click="seatplan.isReportOpened = !seatplan.isReportOpened; seatplan.reportPeriod = {StartDate:seatplan.selectedDate,EndDate:seatplan.selectedDate}">
+			<button class="wfm-fab info  material-depth-1 pull-right" ng-click="seatplan.showReport({StartDate:seatplan.selectedDate,EndDate:seatplan.selectedDate},[],[])">
 				<i class="mdi mdi-file-document"></i>
 				<md-tooltip>{{'GenerateReport' | translate}}</md-tooltip>
 			</button>

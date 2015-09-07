@@ -1,26 +1,6 @@
 ﻿<div class="planning-period-content">
 	<div class="row">
 		<div class="col-sm-12 col-md-6">
-			<div class="wfm-datepicker-wrap" ng-show="false">
-				<div class="sub-header">
-					{{ 'From' | translate }} <span class="startDate">{{vm.period.startDate | date : format}}</span>
-				</div>
-
-				<datepicker class="wfm-datepicker" ng-model="vm.period.startDate" show-weeks="true"></datepicker>
-			</div>
-		</div>
-		<div class="col-sm-12 col-md-6">
-			<div class="wfm-datepicker-wrap" ng-show="false">
-				<div class="sub-header">
-					{{ 'To' | translate }} <span class="endDate">{{vm.period.endDate | date : format}}</span>
-				</div>
-				<datepicker class="wfm-datepicker" ng-model="vm.period.endDate" min-date="vm.period.startDate" show-weeks="true"></datepicker>
-			</div>
-		</div>
-	</div>
-
-	<div class="row">
-		<div class="col-sm-12 col-md-6">
 			<location-picker selected-locations="vm.selectedLocations"></location-picker>
 		</div>
 		<div class="col-sm-12 col-md-6">
