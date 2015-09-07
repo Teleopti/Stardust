@@ -27,6 +27,7 @@ describe('seatplan report controller tests', function() {
 		var location2 = locationFactory.CreateLocation('2', 2, false);
 		
 		controller.locations = [location1, location2];
+		controller.selectedLocations = [];
 		controller.toggleLocationSelection(location1);
 
 		expect(controller.selectedLocations.length).toEqual(1);
@@ -40,6 +41,7 @@ describe('seatplan report controller tests', function() {
 		var location1 = locationFactory.CreateLocation('1', 2, true);
 		
 		controller.locations = [location1];
+		controller.selectedLocations = [];
 		controller.toggleLocationSelection(location1);
 		
 		expect(controller.selectedLocations.length).toEqual(0);
@@ -52,6 +54,7 @@ describe('seatplan report controller tests', function() {
 		var location1 = locationFactory.CreateLocation('1', 0, false);
 
 		controller.locations = [location1];
+		controller.selectedLocations = [];
 		controller.toggleLocationSelection(location1);
 
 		expect(controller.selectedLocations.length).toEqual(0);

@@ -27,6 +27,7 @@ describe('seatplan report controller tests', function () {
 		site.Children = [team1, team2];
 
 		controller.teams = [site];
+		controller.selectedTeams = [];
 		controller.toggleNodeSelection(team1);
 
 		site = controller.teams[0];
@@ -41,6 +42,7 @@ describe('seatplan report controller tests', function () {
 		site.Children = [team1, team2];
 
 		controller.teams = [site];
+		controller.selectedTeams = [];
 		controller.toggleNodeSelection(team1);
 
 		site = controller.teams[0];
@@ -55,6 +57,7 @@ describe('seatplan report controller tests', function () {
 		site.Children = [team1, team2];
 
 		controller.teams = [site];
+		controller.selectedTeams = [];
 		controller.toggleNodeSelection(site);
 
 		site = controller.teams[0],
@@ -78,6 +81,7 @@ describe('seatplan report controller tests', function () {
 		bu.Children = [site1, site2];
 
 		controller.teams = [bu];
+		controller.selectedTeams = [];
 		controller.toggleNodeSelection(bu);
 
 		bu = controller.teams[0],
