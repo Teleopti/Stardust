@@ -35,8 +35,9 @@
 			{
 				label: "AdjustSkill",
 				icon: "mdi-package",
+				panelName: 'right-skill',
 				action: function () {
-					vm.toggleSkillPanel("AdjustSkill")();
+					setCurrentCommand("AdjustSkill")();
 				},
 				active: function () {
 					return vm.isAdjustSkillEnabled;
@@ -49,8 +50,9 @@
 			{
 				label: "ChangeShiftBag",
 				icon: "mdi-package",
+				panelName: 'right-shiftbag',
 				action: function () {
-					vm.toggleShiftBagPanel("ChangeShiftBag")();
+					setCurrentCommand("ChangeShiftBag")();
 				},
 				active: function () {
 					return vm.isAdjustSkillEnabled;
@@ -77,17 +79,6 @@
 			return debounceFn;
 		}
 
-		vm.toggleSkillPanel = function (commandName) {
-			vm.commandName = commandName;
-			vm.updateResult = { Success: false };
-			return buildToggler('right-skill');
-		}
-
-		vm.toggleShiftBagPanel = function(commandName) {
-			vm.commandName = commandName;
-			vm.updateResult = { Success: false };
-			return buildToggler('right-shiftbag');
-		}
 		var basicColumnDefs = [
 			{ displayName: 'FirstName', field: 'FirstName', headerCellFilter: 'translate', cellClass: 'first-name', minWidth: 100 },
 			{
@@ -101,9 +92,7 @@
 				minWidth: 100
 			}
 		];
-		function updateGridColumnDefs(commandColumnDefs) {
-			return basicColumnDefs.concat(commandColumnDefs);
-		}
+
 		vm.gridOptions = {
 			enablePaginationControls: false,
 			paginationPageSizes: [20, 60, 100],
@@ -164,7 +153,6 @@
 				}
 			);
 		};
-		
 
 		vm.currentCommand = function() {
 			for (var i = 0; i < vm.commands.length; i++) {
@@ -175,10 +163,18 @@
 			};
 		};
 
+		var setCurrentCommand = function(cmdName) {
+			vm.commandName = cmdName;
+			vm.updateResult = { Success: false };
+
+			var cmd = vm.currentCommand();
+			vm.gridOptions.columnDefs = basicColumnDefs.concat(cmd.columns);
+			return buildToggler(cmd.panelName);
+		}
+
 
 		function initialize() {
-			vm.commandName = $stateParams.commandTag;
-			vm.gridOptions.columnDefs = updateGridColumnDefs(vm.currentCommand().columns);
+			setCurrentCommand($stateParams.commandTag);
 
 			var loadSkillPromise = peopleSvc.loadAllSkills.get().$promise;
 			loadSkillPromise.then(function (result) {
