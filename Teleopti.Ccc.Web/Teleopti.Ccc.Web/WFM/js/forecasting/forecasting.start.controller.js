@@ -43,7 +43,7 @@ angular.module('wfm.forecasting')
 			}
 
 			$scope.workloads = [];
-			forecasting.skills.query().$promise.then(function (result) {
+			forecasting.skillList.$promise.then(function (result) {
 				$scope.skills = result;
 				angular.forEach($scope.skills, function (skill) {
 					angular.forEach(skill.Workloads, function (workload) {
