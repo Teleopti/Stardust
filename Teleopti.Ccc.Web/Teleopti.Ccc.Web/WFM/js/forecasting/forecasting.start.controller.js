@@ -129,7 +129,8 @@ angular.module('wfm.forecasting')
 					return;
 				}
 				workload.ShowProgress = true;
-				workload.StartTime = moment().format();
+				workload.IsSuccess = false;
+				workload.IsFailed = false;
 				$http.post('../api/Forecasting/Forecast', JSON.stringify({ ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate, Workloads: [workload] })).
 					success(function (data, status, headers, config) {
 						if (data.Success) {
@@ -147,8 +148,8 @@ angular.module('wfm.forecasting')
 							workload.Message = "Failed";
 					})
 					.finally(function () {
-						forecastForOneWorkload(++index);
 						workload.ShowProgress = false;
+						forecastForOneWorkload(++index);
 					});
 			};
 
