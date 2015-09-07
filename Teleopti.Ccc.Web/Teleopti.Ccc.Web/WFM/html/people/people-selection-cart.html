@@ -22,7 +22,7 @@
 		</div>
 		<div class="col-sm-5 col-md-3 col-lg-3">
 			<p class="input-group">
-				<input type="text" class="form-control" datepicker-popup="{{vm.format}}" ng-model="vm.selectedDate" is-open="vm.status.opened" datepicker-options="vm.dateOptions" show-button-bar="false" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close"/>
+				<input type="text" class="form-control" datepicker-popup="{{vm.format}}" ng-model="vm.selectedDate" is-open="vm.datePickerStatus.opened" datepicker-options="vm.dateOptions" show-button-bar="false" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
 				<span class="input-group-btn">
 					<button type="button" class="btn btn-default" ng-click="vm.toggleCalendar()"><i class="glyphicon glyphicon-calendar"></i></button>
 				</span>
@@ -62,12 +62,12 @@
 				</md-list-item>
 			</md-content>
 			<div style="float: right">
-				<button ng-if="vm.dataInitialized && !vm.processing && vm.updateResult.Success && vm.updateResult.SuccessCount > 0" class="wfm-btn wfm-btn-primary" ng-click="vm.toggleShiftBagPanel('ChangeShiftBag')()">{{'Shift Bag' | translate}}</button>
-				<button class="wfm-btn wfm-btn-primary" ng-click="vm.updatePeople()">{{'Apply' | translate}}</button>
+				<button ng-show="vm.dataInitialized && !vm.processing && vm.updateResult.Success && vm.updateResult.SuccessCount > 0" class="wfm-btn wfm-btn-primary" ng-click="vm.toggleShiftBagPanel('ChangeShiftBag')()">{{'PersonFinderFieldShiftBag' | translate}}</button>
+				<button class="wfm-btn" ng-class="{'wfm-btn-primary': vm.dataChanged, 'wfm-btn-primary-disabled': !vm.dataChanged}" ng-disabled="!vm.dataChanged" ng-click="vm.updatePeople()">{{'Apply' | translate}}</button>
 			</div>
 		</md-sidenav>
 		<md-sidenav class="md-sidenav-right md-sidenav-skill-panel md-whiteframe-z2" md-component-id="right-shiftbag">
-			<div class="sidenav-header">{{'Change Shift Bag'|translate}}</div>
+			<div class="sidenav-header">{{'ChangeShiftBag'|translate}}</div>
 			<md-content layout-padding style="height: 550px">
 				<select ng-model="vm.selectedShiftBag" ng-change="vm.selectedShiftBagChanged(vm.selectedShiftBag)">
 					<option value="" disabled selected="">{{'PickAShiftBag'|translate}}</option>
@@ -75,7 +75,7 @@
 				</select>
 			</md-content>
 			<div style="float: right">
-				<button class="wfm-btn wfm-btn-primary" ng-click="vm.updatePeople()">{{'Apply' | translate}}</button>
+				<button class="wfm-btn" ng-class="{'wfm-btn-primary': vm.dataChanged, 'wfm-btn-primary-disabled': !vm.dataChanged}" ng-disabled="!vm.dataChanged" ng-click="vm.updatePeople()">{{'Apply' | translate}}</button>
 			</div>
 		</md-sidenav>
 		<md-progress-linear ng-show="vm.processing" md-mode="indeterminate"></md-progress-linear>

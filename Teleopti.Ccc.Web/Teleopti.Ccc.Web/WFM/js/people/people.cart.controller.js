@@ -12,14 +12,12 @@
 		vm.processing = false;
 		vm.isConfirmCloseNoticeBar = false;
 		vm.selectedDate = new Date();
-		vm.toggleCalendar = function ($event) {
-			vm.status.opened = !vm.status.opened;
+		vm.toggleCalendar = function () {
+			vm.datePickerStatus.opened = !vm.datePickerStatus.opened;
 		};
-		
-		vm.closeCalendar = function ($event) {
-			vm.status.opened = false;
-		};
-		vm.selectedShiftBag ='';
+
+		vm.selectedShiftBag = '';
+		vm.dataChanged = false;
 
 		vm.dateOptions = {
 			formatYear: 'yyyy',
@@ -29,7 +27,7 @@
 		vm.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
 		vm.format = vm.formats[1];
 
-		vm.status = {
+		vm.datePickerStatus = {
 			opened: false
 		};
 		vm.menuState = 'open';
@@ -81,11 +79,13 @@
 
 		vm.toggleSkillPanel = function (commandName) {
 			vm.commandName = commandName;
+			vm.updateResult = { Success: false };
 			return buildToggler('right-skill');
 		}
 
 		vm.toggleShiftBagPanel = function(commandName) {
 			vm.commandName = commandName;
+			vm.updateResult = { Success: false };
 			return buildToggler('right-shiftbag');
 		}
 
@@ -159,6 +159,7 @@
 			peopleSvc.updatePeople.post({ Date: moment(vm.selectedDate).format('YYYY-MM-DD'), People: vm.availablePeople }).$promise.then(
 				function (result) {
 					vm.updateResult = result;
+					vm.dataChanged = false;
 					vm.processing = false;
 					vm.isConfirmCloseNoticeBar = true;
 					$interval(function () {
@@ -237,6 +238,7 @@
 		}
 
 		vm.skillSelectedStatusChanged = function (skill) {
+			vm.dataChanged = true;
 			angular.forEach(vm.availablePeople, function (person) {
 				var skillIndex = person.SkillIdList.indexOf(skill.SkillId);
 				if (skill.Selected && skillIndex === -1) {
@@ -248,7 +250,8 @@
 			});
 		}
 
-		vm.selectedShiftBagChanged = function(selectedShiftBagId) {
+		vm.selectedShiftBagChanged = function (selectedShiftBagId) {
+			vm.dataChanged = true;
 			angular.forEach(vm.availablePeople, function (person) {
 				person.ShiftBagId = selectedShiftBagId;
 			});
