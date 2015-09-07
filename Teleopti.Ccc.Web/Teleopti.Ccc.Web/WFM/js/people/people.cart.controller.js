@@ -88,24 +88,27 @@
 			vm.updateResult = { Success: false };
 			return buildToggler('right-shiftbag');
 		}
-
+		var basicColumnDefs = [
+			{ displayName: 'FirstName', field: 'FirstName', headerCellFilter: 'translate', cellClass: 'first-name', minWidth: 100 },
+			{
+				displayName: 'LastName',
+				field: 'LastName',
+				headerCellFilter: 'translate',
+				sort: {
+					direction: uiGridConstants.ASC,
+					priority: 0
+				},
+				minWidth: 100
+			}
+		];
+		function updateGridColumnDefs(commandColumnDefs) {
+			return basicColumnDefs.concat(commandColumnDefs);
+		}
 		vm.gridOptions = {
 			enablePaginationControls: false,
 			paginationPageSizes: [20, 60, 100],
 			paginationPageSize: 20,
-			columnDefs: [
-				{ displayName: 'FirstName', field: 'FirstName', headerCellFilter: 'translate', cellClass: 'first-name', minWidth: 100 },
-				{
-					displayName: 'LastName',
-					field: 'LastName',
-					headerCellFilter: 'translate',
-					sort: {
-						direction: uiGridConstants.ASC,
-						priority: 0
-					},
-					minWidth: 100
-				}
-			],
+			columnDefs: basicColumnDefs,
 
 			data: 'vm.availablePeople'
 
@@ -144,15 +147,7 @@
 
 			return ret;
 		};
-		var loadSkillPromise = peopleSvc.loadAllSkills.get().$promise;
-		loadSkillPromise.then(function (result) {
-			vm.availableSkills = result;
-		});
-		var fetchPeoplePromise = peopleSvc.fetchPeople.post({ Date: moment(vm.selectedDate).format('YYYY-MM-DD'), PersonIdList: vm.selectedPeopleIds }).$promise;
-		fetchPeoplePromise.then(function (result) {
-			vm.availablePeople = result;
-			vm.gridOptions.data = result;
-		});
+		
 		vm.updateResult = { Success: false };
 		vm.updatePeople = function () {
 			vm.processing = true;
@@ -169,14 +164,7 @@
 				}
 			);
 		};
-		var loadShiftBagPromise = peopleSvc.loadAllShiftBags.get().$promise;
-		loadShiftBagPromise.then(function (result) {
-			vm.availableShiftBags = result;
-		});
-		var promiseForAdjustSkillToggle = toggleSvc.isFeatureEnabled.query({ toggle: 'WfmPeople_AdjustSkill_34138' }).$promise;
-		promiseForAdjustSkillToggle.then(function (result) {
-			vm.isAdjustSkillEnabled = result.IsEnabled;
-		});
+		
 
 		vm.currentCommand = function() {
 			for (var i = 0; i < vm.commands.length; i++) {
@@ -190,47 +178,28 @@
 
 		function initialize() {
 			vm.commandName = $stateParams.commandTag;
+			vm.gridOptions.columnDefs = updateGridColumnDefs(vm.currentCommand().columns);
 
-			vm.gridOptions.columnDefs = vm.gridOptions.columnDefs.concat(vm.currentCommand().columns);
+			var loadSkillPromise = peopleSvc.loadAllSkills.get().$promise;
+			loadSkillPromise.then(function (result) {
+				vm.availableSkills = result;
+			});
+			var fetchPeoplePromise = peopleSvc.fetchPeople.post({ Date: moment(vm.selectedDate).format('YYYY-MM-DD'), PersonIdList: vm.selectedPeopleIds }).$promise;
+			fetchPeoplePromise.then(function (result) {
+				vm.availablePeople = result;
+			});
+			var loadShiftBagPromise = peopleSvc.loadAllShiftBags.get().$promise;
+			loadShiftBagPromise.then(function (result) {
+				vm.availableShiftBags = result;
+			});
+			var promiseForAdjustSkillToggle = toggleSvc.isFeatureEnabled.query({ toggle: 'WfmPeople_AdjustSkill_34138' }).$promise;
+			promiseForAdjustSkillToggle.then(function (result) {
+				vm.isAdjustSkillEnabled = result.IsEnabled;
+			});
 
 			$q.all([promiseForAdjustSkillToggle, loadSkillPromise, fetchPeoplePromise, loadShiftBagPromise]).then(function () {
-				angular.forEach(vm.availableSkills, function (skill) {
-					var hasCount = 0;
-					skill.Status = "none";
-					skill.Selected = false;
-					angular.forEach(vm.availablePeople, function (person) {
-						var skillIndex = person.SkillIdList.indexOf(skill.SkillId);
-						if (skillIndex > -1) hasCount++;
-					});
-					if (hasCount === vm.availablePeople.length) {
-						skill.Status = "all";
-						skill.Selected = true;
-					}
-					else if (hasCount < vm.availablePeople.length && hasCount > 0) {
-						skill.Status = "partial";
-					}
-				});
-
-				angular.forEach(vm.availablePeople, function (person) {
-					person.Skills = function () {
-						var ownSkills = [];
-						angular.forEach(vm.availableSkills, function (skill) {
-							var skillIndex = person.SkillIdList.indexOf(skill.SkillId);
-							if (skillIndex > -1) {
-								ownSkills.push(skill.SkillName);
-							}
-						});
-						return ownSkills.length > 0 ? ownSkills.join(", ") : "";
-					}
-					person.ShiftBag = function() {
-						for (var i = 0; i < vm.availableShiftBags.length; i++) {
-							if (vm.availableShiftBags[i].ShiftBagId === person.ShiftBagId) {
-								return vm.availableShiftBags[i].ShiftBagName;
-							}
-						}
-						return '';
-					}
-				});
+				updateSkillStatus();
+				updatePersonInfo();
 
 				vm.dataInitialized = true;
 				vm.currentCommand().action();
@@ -254,6 +223,56 @@
 			vm.dataChanged = true;
 			angular.forEach(vm.availablePeople, function (person) {
 				person.ShiftBagId = selectedShiftBagId;
+			});
+		}
+		
+		vm.selectedDateChanged = function () {
+			peopleSvc.fetchPeople.post({ Date: moment(vm.selectedDate).format('YYYY-MM-DD'), PersonIdList: vm.selectedPeopleIds }).$promise.then(function (result) {
+				vm.availablePeople = result;
+
+				updateSkillStatus();
+				updatePersonInfo();
+			});
+		}
+
+		function updateSkillStatus() {
+			angular.forEach(vm.availableSkills, function (skill) {
+				var hasCount = 0;
+				skill.Status = "none";
+				skill.Selected = false;
+				angular.forEach(vm.availablePeople, function (person) {
+					var skillIndex = person.SkillIdList.indexOf(skill.SkillId);
+					if (skillIndex > -1) hasCount++;
+				});
+				if (hasCount === vm.availablePeople.length) {
+					skill.Status = "all";
+					skill.Selected = true;
+				}
+				else if (hasCount < vm.availablePeople.length && hasCount > 0) {
+					skill.Status = "partial";
+				}
+			});
+		}
+		function updatePersonInfo() {
+			angular.forEach(vm.availablePeople, function (person) {
+				person.Skills = function () {
+					var ownSkills = [];
+					angular.forEach(vm.availableSkills, function (skill) {
+						var skillIndex = person.SkillIdList.indexOf(skill.SkillId);
+						if (skillIndex > -1) {
+							ownSkills.push(skill.SkillName);
+						}
+					});
+					return ownSkills.length > 0 ? ownSkills.join(", ") : "";
+				}
+				person.ShiftBag = function () {
+					for (var i = 0; i < vm.availableShiftBags.length; i++) {
+						if (vm.availableShiftBags[i].ShiftBagId === person.ShiftBagId) {
+							return vm.availableShiftBags[i].ShiftBagName;
+						}
+					}
+					return '';
+				}
 			});
 		}
 
