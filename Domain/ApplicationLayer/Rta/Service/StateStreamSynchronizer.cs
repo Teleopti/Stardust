@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly IAgentStateReadModelReader _agentStateReadModelReader;
 		private readonly IEventPublisherScope _eventPublisherScope;
 		private readonly IEnumerable<IInitializeble> _initializebles;
-		private readonly IEnumerable<IRecreatable> _recreatables;
 		private readonly IDistributedLockAcquirer _distributedLockAcquirer;
 
 		public StateStreamSynchronizer(
@@ -37,7 +36,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IAgentStateReadModelReader agentStateReadModelReader,
 			IEventPublisherScope eventPublisherScope,
 			IEnumerable<IInitializeble> initializebles,
-			IEnumerable<IRecreatable> recreatables,
 			IDistributedLockAcquirer distributedLockAcquirer
 			)
 		{
@@ -47,7 +45,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_agentStateReadModelReader = agentStateReadModelReader;
 			_eventPublisherScope = eventPublisherScope;
 			_initializebles = initializebles;
-			_recreatables = recreatables;
 			_distributedLockAcquirer = distributedLockAcquirer;
 		}
 		
