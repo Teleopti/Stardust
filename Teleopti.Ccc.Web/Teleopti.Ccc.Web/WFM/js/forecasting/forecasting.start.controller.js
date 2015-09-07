@@ -5,23 +5,23 @@ angular.module('wfm.forecasting')
 		'$scope', '$state', 'Forecasting', '$http', '$stateParams',
 		function ($scope, $state, forecasting, $http, $stateParams) {
 			if ($stateParams.running === true) {
+				$scope.isForecastRunning = true;
 				$scope.period = $stateParams.period;
 			} else {
+				$scope.isForecastRunning = false;
+				forecasting.status.get().$promise.then(function (result) {
+					$scope.isForecastRunning = result.IsRunning;
+				});
 				var startDate = moment().utc().add(1, 'months').startOf('month').toDate();
 				var endDate = moment().utc().add(2, 'months').startOf('month').toDate();
 				$scope.period = { startDate: startDate, endDate: endDate }; //use moment to get first day of next month
 			}
 
-			$scope.isForecastRunning = false;
-			forecasting.status.get().$promise.then(function (result) {
-				$scope.isForecastRunning = result.IsRunning;
-			});
-
-			var forecastForWorkload = function (workload) {
+			var forecastForWorkload = function(workload) {
 				workload.ShowProgress = true;
 				workload.StartTime = moment().format();
 				$http.post('../api/Forecasting/Forecast', JSON.stringify({ ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate, Workloads: [workload.Id] })).
-					success(function (data, status, headers, config) {
+					success(function(data, status, headers, config) {
 						if (data.Success) {
 							workload.IsSuccess = true;
 						} else {
@@ -29,14 +29,15 @@ angular.module('wfm.forecasting')
 							workload.Message = data.Message;
 						}
 					}).
-					error(function (data, status, headers, config) {
+					error(function(data, status, headers, config) {
 						workload.IsFailed = true;
 						if (data)
 							workload.Message = data.Message;
 						else
 							workload.Message = "Failed";
 					})
-					.finally(function () {
+					.finally(function() {
+						$scope.isForecastRunning = false;
 						workload.ShowProgress = false;
 					});
 			}
@@ -76,7 +77,6 @@ angular.module('wfm.forecasting')
 				],
 				dataX: { id: "date" }
 			};
-
 
 			$scope.getForecastResult = function(workload) {
 				workload.forecastResultLoaded = false;
@@ -121,11 +121,10 @@ angular.module('wfm.forecasting')
 				$scope.period.endDate = angular.copy($scope.period.endDate);
 			};
 
-			
-
 			var forecastForOneWorkload = function (index) {
 				var workload = $scope.workloads[index];
 				if (!workload) {
+					$scope.isForecastRunning = false;
 					return;
 				}
 				workload.ShowProgress = true;
@@ -158,6 +157,7 @@ angular.module('wfm.forecasting')
 					return;
 				}
 				$scope.modalLaunch = false;
+				$scope.isForecastRunning = true;
 				forecastForOneWorkload(0);
 			};
 
