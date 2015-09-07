@@ -36,12 +36,12 @@
     <div class="data-auth">
         
         <label translate>AddGlobalAuthorizationLabel</label>
-        <md-select placeholder="Pick" ng-model="dynamicOptionSelected.data" ng-change="changeOption(dynamicOptionSelected.data)" style="padding: 0;">
+        <md-select placeholder="Pick" ng-model="dynamicOptionSelected.data" ng-change="changeOption(dynamicOptionSelected.data)" class="padding-reset">
             <md-option ng-repeat="dynamic in organization.DynamicOptions" ng-value="dynamic.RangeOption">{{dynamic.Name}}</md-option>
         </md-select>
     </div>
 </div>
-
+<div class="permissions-tree">
 <div ui-tree data-drag-enabled="false">
     <ol ui-tree-nodes="" ng-model="organization.BusinessUnit" id="tree-root" class="tree-line">
         <li ng-repeat="node in organization.BusinessUnit | nameFilter: searchData  | selectedData:selectedDataToggle | unselectedData:unselectedDataToggle track by $index" ui-tree-node ng-include="'nodes_bu_renderer.html'"></li>
@@ -59,7 +59,7 @@
         </li>
     </ul>
 
-    <div ui-tree-nodes="" ng-model="node.ChildNodes" style="padding:0!important;">
+    <div ui-tree-nodes="" ng-model="node.ChildNodes" class="padding-reset">
         <div ng-repeat="node in node.ChildNodes | nameFilter: searchData | selectedData:selectedDataToggle | unselectedData:unselectedDataToggle track by $index"
             ui-tree-node ng-include="'nodes_bu_renderer.html'">
 
