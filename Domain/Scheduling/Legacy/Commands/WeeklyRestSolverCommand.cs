@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly Func<IWeeklyRestSolverService> _weeklyRestSolverService;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IGroupPersonBuilderForOptimizationFactory _groupPersonBuilderForOptimizationFactory;
-		private IBackgroundWorkerWrapper _backgroundWorker;
 
 		public WeeklyRestSolverCommand(ITeamBlockInfoFactory teamBlockInfoFactory,
 			ITeamBlockSchedulingOptions teamBlockSchedulingOptions, Func<IWeeklyRestSolverService> weeklyRestSolverService,
@@ -32,7 +31,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		public void Execute(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> allVisibleMatrixes, IBackgroundWorkerWrapper backgroundWorker)
 		{
-			_backgroundWorker = backgroundWorker;
 			var groupPersonBuilderForOptimization = _groupPersonBuilderForOptimizationFactory.Create(schedulingOptions);
 			var teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
 			var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory,
@@ -40,8 +38,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			EventHandler<ResourceOptimizerProgressEventArgs> onResolvingWeek = (sender, e) =>
 			{
-				e.Cancel = _backgroundWorker.CancellationPending;
-				_backgroundWorker.ReportProgress(1, e);
+				e.Cancel = backgroundWorker.CancellationPending;
+				backgroundWorker.ReportProgress(1, e);
 			};
 			var weeklyRestSolverService = _weeklyRestSolverService();
 			weeklyRestSolverService.ResolvingWeek += onResolvingWeek;

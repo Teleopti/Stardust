@@ -38,6 +38,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		    return ret;
 	    }
 
+	    public void Clear()
+	    {
+		    _ruleSetListDictionary.Clear();
+	    }
+
 	    public IList<IShiftProjectionCache> ShiftProjectionCachesFromRuleSetBag(DateOnly scheduleDateOnly,
 		    TimeZoneInfo timeZone, IRuleSetBag bag, bool forRestrictionsOnly, bool checkExcluded)
 	    {
@@ -48,27 +53,27 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			    bag.RuleSetCollection.Where(workShiftRuleSet => workShiftRuleSet.OnlyForRestrictions == forRestrictionsOnly)
 				    .ToList();
 
-		    foreach (IWorkShiftRuleSet ruleSet in ruleSets)
-		    {
-			    if (checkExcluded && !ruleSet.IsValidDate(scheduleDateOnly))
-				    continue;
+			foreach (IWorkShiftRuleSet ruleSet in ruleSets)
+			{
+				if (checkExcluded && !ruleSet.IsValidDate(scheduleDateOnly))
+					continue;
 
-			    if (_ruleSetDeletedActivityChecker.ContainsDeletedActivity(ruleSet))
-				    continue;
+				if (_ruleSetDeletedActivityChecker.ContainsDeletedActivity(ruleSet))
+					continue;
 
-			    if (_rulesSetDeletedShiftCategoryChecker.ContainsDeletedActivity(ruleSet))
-				    continue;
+				if (_rulesSetDeletedShiftCategoryChecker.ContainsDeletedActivity(ruleSet))
+					continue;
 
-			    IEnumerable<IShiftProjectionCache> ruleSetList = getShiftsForRuleSet(ruleSet);
-			    if (ruleSetList == null)
-				    continue;
+				IEnumerable<IShiftProjectionCache> ruleSetList = getShiftsForRuleSet(ruleSet);
+				if (ruleSetList == null)
+					continue;
 
-			    foreach (var projectionCache in ruleSetList)
-			    {
-				    shiftProjectionCaches.Add(projectionCache);
-				    projectionCache.SetDate(scheduleDateOnly, timeZone);
-			    }
-		    }
+				foreach (var projectionCache in ruleSetList)
+				{
+					shiftProjectionCaches.Add(projectionCache);
+					projectionCache.SetDate(scheduleDateOnly, timeZone);
+				}
+			}
 
 		    return shiftProjectionCaches;
 	    }
