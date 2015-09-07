@@ -68,6 +68,10 @@ wfm.config([
 			params: { workloadId: {}, period: {} },
 			templateUrl: 'html/forecasting/forecasting-intraday.html',
 			controller: 'ForecastingIntradayCtrl'
+		}).state('forecasting-advanced', {
+			params: { workloadId: {}},
+			templateUrl: 'html/forecasting/forecasting-advanced.html',
+			controller: 'ForecastingAdvancedCtrl'
 		}).state('resourceplanner', {
 			url: '/resourceplanner',
 			templateUrl: 'js/resourceplanner/resourceplanner.html',

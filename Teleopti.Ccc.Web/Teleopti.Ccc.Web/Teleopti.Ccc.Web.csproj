@@ -1187,6 +1187,8 @@
   <ItemGroup>
     <Content Include="WFM\js\global\daterangepicker\wfm-date-range-picker.directive.js" />
     <Content Include="WFM\js\global\daterangepicker\wfm-date-range-picker.tpl.html" />
+    <Content Include="WFM\html\forecasting\forecasting-advanced.html" />
+    <Content Include="WFM\js\forecasting\forecasting.advanced.controller.js" />
     <Content Include="WFM\vendor\ui-bootstrap-custom-build\timepicker.directive.ext.js" />
     <Content Include="WFM\vendor\ui-bootstrap-custom-build\ui-bootstrap-0.13.0-csp.css" />
     <Content Include="WFM\vendor\ui-bootstrap-custom-build\ui-bootstrap-0.13.3.js" />

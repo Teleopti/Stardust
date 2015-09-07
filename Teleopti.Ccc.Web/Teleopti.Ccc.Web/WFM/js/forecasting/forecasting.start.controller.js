@@ -85,7 +85,6 @@ angular.module('wfm.forecasting')
 						return;
 					}
 				}
-
 				$scope.period.endDate = angular.copy($scope.period.endDate);
 			};
 
@@ -131,8 +130,8 @@ angular.module('wfm.forecasting')
 				return $scope.moreThanOneYear() || $scope.isForecastRunning;
 			};
 
-			$scope.nextStepAdvanced = function (period) {
-				$state.go('forecasting-target', { period: period });
+			$scope.nextStepAdvanced = function (workload) {
+				$state.go('forecasting-advanced', { workloadId: workload.Id });
 			};
 
 			$scope.disalbeNextStepAdvanced = function () {
