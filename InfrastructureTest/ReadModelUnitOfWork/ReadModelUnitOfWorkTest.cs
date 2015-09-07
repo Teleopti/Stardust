@@ -20,6 +20,7 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Web;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 {
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 
 			system.UseTestDouble(new MutableFakeCurrentHttpContext()).For<ICurrentHttpContext>();
 			system.UseTestDouble(new MutableFakeCurrentTeleoptiPrincipal()).For<ICurrentTeleoptiPrincipal>();
-			system.UseTestDouble<FakeApplicationData>().For<ICurrentApplicationData>();
+			system.UseTestDouble<FakeApplicationData>().For<ICurrentApplicationData, IDataSourceForTenant>();
 		}
 	}
 

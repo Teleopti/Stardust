@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<FakeApplicationData>().For<IApplicationData>();
+			system.UseTestDouble<FakeApplicationData>().For<IApplicationData, IDataSourceForTenant>();
 
 			system.AddService<AHandler>();
 			system.AddService<AnotherHandler>();
