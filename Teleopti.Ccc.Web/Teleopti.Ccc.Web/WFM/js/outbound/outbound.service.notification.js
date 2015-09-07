@@ -27,6 +27,12 @@
             ]);
         }
 
+        this.notifyCampaignRemoveFailure = function (error) {
+        	notifyFailure('CampaignFailedRemove', [
+			  (error && error.Message ? error.Message : error)
+        	]);
+        }
+
         this.notifyCampaignUpdateFailure = function (error) {
             notifyFailure('CampaignFailedUpdate', [
                 (error && error.Message ? error.Message : error)

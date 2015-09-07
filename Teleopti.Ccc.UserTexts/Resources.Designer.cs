@@ -4287,6 +4287,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to remove campaign: {0} ..
+        /// </summary>
+        public static string CampaignFailedRemove {
+            get {
+                return ResourceManager.GetString("CampaignFailedRemove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to update campaign: {0} ..
         /// </summary>
         public static string CampaignFailedUpdate {

@@ -21,6 +21,7 @@
 	     $scope.backToList = backToList;
 	     $scope.showRemoveCampaignConfirmDialog = false;
 	     $scope.removeCampaign = removeCampaign;
+		$scope.cancelRemoveCampaign = cancelRemoveCampaign;
 
         function editCampaign() {
             if (!$scope.isInputValid()) {
@@ -43,10 +44,17 @@
 		function removeCampaign() {
 			$scope.showRemoveCampaignConfirmDialog = true;
 		}
+
+		function cancelRemoveCampaign() {
+			$scope.showRemoveCampaignConfirmDialog = false;
+		}
+
         function remove() {
 	        $scope.showRemoveCampaignConfirmDialog = false;
 			outboundService.removeCampaign($scope.campaign, function() {
-
+				$scope.backToList();
+			}, function(error) {
+				outboundNotificationService.notifyCampaignRemoveFailure(error);
 			});
 		}
 
@@ -99,6 +107,4 @@
             $state.go('outbound.summary');
         }
     }
-
-
 })();

@@ -84,6 +84,9 @@
 		    $http.delete(getCampaignCommandUrl + campaign.Id)
 			    .success(function(data) {
 			    	if (successCb != null) successCb(data);
+			    })
+	    		.error(function(data) {
+	    			if (errorCb != null) errorCb(data);
 			    });
 	    };	
 

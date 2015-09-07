@@ -13455,4 +13455,7 @@ Reduce the complexity to use these shifts.</value>
     <value>Remove Campaign</value>
     <comment>use in WFM web outbound module, the title of message box when remove a campaign</comment>
   </data>
+  <data name="CampaignFailedRemove" xml:space="preserve">
+    <value>Failed to remove campaign: {0} .</value>
+  </data>
 </root>
