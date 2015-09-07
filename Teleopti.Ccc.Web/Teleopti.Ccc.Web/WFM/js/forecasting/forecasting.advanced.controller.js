@@ -1,13 +1,18 @@
 ﻿'use strict';
 
 angular.module('wfm.forecasting')
-	.controller('ForecastingAdvancedCtrl', ['$scope', '$state', '$stateParams', '$http', 'Toggle',
-		function ($scope, $state, $stateParams, $http, toggleService) {
+	.controller('ForecastingAdvancedCtrl', ['$scope', '$state', '$stateParams', '$http', 'Toggle', 'Forecasting',
+		function ($scope, $state, $stateParams, $http, toggleService, forecasting) {
 			var startDate = moment().utc().add(1, 'months').startOf('month').toDate();
 			var endDate = moment().utc().add(2, 'months').startOf('month').toDate();
 			$scope.period = { startDate: startDate, endDate: endDate }; //use moment to get first day of next month
-
 			$scope.workloadId = $stateParams.workloadId;
+
+			$scope.isForecastRunning = false;
+			forecasting.status.get().$promise.then(function (result) {
+				$scope.isForecastRunning = result.IsRunning;
+			});
+
 			$scope.chartInfo = {
 				evaluationChartDataColumns: [
 					{ id: "vh", type: "line", name: "Queue Statistics" },
@@ -25,6 +30,9 @@ angular.module('wfm.forecasting')
 			};
 
 			$scope.nextStepOneWorkload = function () {
+				if ($scope.disableNextStepOneWorkload()) {
+					return;
+				}
 				$state.go("forecasting", { period: $scope.period, target: $scope.workloadId, running: true });
 			};
 
@@ -43,6 +51,10 @@ angular.module('wfm.forecasting')
 					return dateDiff.getFullYear() - 1970 >= 1;
 				} else
 					return false;
+			};
+
+			$scope.disableNextStepOneWorkload = function () {
+				return $scope.moreThanOneYear() || $scope.isForecastRunning;
 			};
 
 			$scope.setRangeClass = function (date, mode) {
