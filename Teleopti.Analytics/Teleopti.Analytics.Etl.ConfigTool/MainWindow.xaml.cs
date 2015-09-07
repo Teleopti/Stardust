@@ -82,36 +82,37 @@ namespace Teleopti.Analytics.Etl.ConfigTool
 
 		private void Window_ContentRendered(object sender, EventArgs e)
 		{
-			initializeDataSourceDialog(startConnectionString);
-
+			//initializeDataSourceDialog(startConnectionString);
+			manualEtl.ManualControl.RegisterInitialConfigSetup(initializeDataSourceDialog);
 			// why not use:
 			//_generalFunctions.DataSourceInvalidList
-			var dataSourceInvalidCollection = new DataSourceInvalidCollection(startConnectionString);
-			var dataSourceValidCollection = new DataSourceValidCollection(false, startConnectionString);
+			//var dataSourceInvalidCollection = new DataSourceInvalidCollection(startConnectionString);
+			//var dataSourceValidCollection = new DataSourceValidCollection(false, startConnectionString);
 			
-			if (dataSourceInvalidCollection.Count > 0 || (dataSourceValidCollection.Count + dataSourceInvalidCollection.Count == 0))
-			{
-				// Show config GUI if not ds at all or at least one invalid ds.
-				CanRun = false;
-				showDataSourceDialog();
-				CanRun = true;
-			}
-			else
-			{
-				_dataSourceConfigurationDialog.DetachEvent();
-				_dataSourceConfigurationDialog = null;
-			}
+			//if (dataSourceInvalidCollection.Count > 0 || (dataSourceValidCollection.Count + dataSourceInvalidCollection.Count == 0))
+			//{
+			//	 Show config GUI if not ds at all or at least one invalid ds.
+			//	CanRun = false;
+			//	showDataSourceDialog();
+			//	CanRun = true;
+			//}
+			//else
+			//{
+			//	_dataSourceConfigurationDialog.DetachEvent();
+			//	_dataSourceConfigurationDialog = null;
+			//}
 
 			scheduleControl.SetTreeControl(manualEtl.myTree, _container);
 		}
 
-		private void initializeDataSourceDialog(string connectionString)
+		private bool initializeDataSourceDialog(string connectionString)
 		{
 			_generalFunctions = new GeneralFunctions(connectionString);
 			loadDataSources();
 			_dataSourceConfigurationDialog = new DataSourceConfigurationView(new DataSourceConfigurationModel(_generalFunctions, _baseConfiguration), connectionString);
 			_dataSourceConfigurationDialog.TimeToStartInitialLoad += _timeZoneConfigurationForm_TimeToStartInitialLoad;
 			_dataSourceConfigurationDialog.Initialize();
+			return true;
 		}
 
 		private void showDataSourceDialog()

@@ -112,16 +112,16 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="label2.Text" xml:space="preserve">
     <value>Before it is possible to use the ETL manual tool or background service for processing reporting data a few important decisions must be made. Please select carefully as these, once set, cannot be undone easily without major maintenance work.</value>
   </data>
   <data name="label5.Text" xml:space="preserve">
-    <value>- Interval Length: Highest reporting resolution, typically 15 minutes. This absolutely must match the interval used in the aggregation database TeleoptiAggCCC7, which in it self will most often mirror the interval used in the ACD reports. (If interval length is already in use in Analytics database this option is disabled.)
+    <value>- Interval Length: Highest reporting resolution, typically 15 minutes. This absolutely must match the interval used in the aggregation database, which in it self will most often mirror the interval used in the ACD reports. (If interval length is already in use in Analytics database this option is disabled.)
 
 - Culture: The culture used for some report data, i.e. will decide day names and week numbering for all reporting users. Will not affect the date and numbering formats in reports.
 

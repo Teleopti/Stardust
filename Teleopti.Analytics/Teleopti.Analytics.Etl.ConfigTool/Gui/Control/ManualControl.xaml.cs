@@ -24,6 +24,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 		private IJobMultipleDate _jobMultipleDatePeriods;
 		private IJob _currentJob;
 		private IBaseConfiguration _baseConfiguration;
+		private Func<string, bool> _callBackWithConnectionString;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		public ManualControl()
@@ -101,6 +102,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 			}
 		}
 
+		
 		internal void UpdateControls(IJob job)
 		{
 			StackPanelLogDataSource.IsEnabled = false;
@@ -231,7 +233,9 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 		{
 			try
 			{
-				_baseConfiguration.JobHelper.SelectDataSourceContainer((string)ComboBoxDataSource.SelectedValue);
+            _baseConfiguration.JobHelper.SelectDataSourceContainer((string)ComboBoxDataSource.SelectedValue);
+				_callBackWithConnectionString(_baseConfiguration.JobHelper.SelectedDataSource.Statistic.ConnectionString);
+
 				_dataSourceCollection = new DataSourceValidCollection(true, _baseConfiguration.JobHelper.SelectedDataSource.Statistic.ConnectionString);
 				ComboBoxLogDataSource.DataContext = _dataSourceCollection;
 
@@ -247,6 +251,11 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 				showErrorMessage(msg);
 				Environment.Exit(0);
 			}
+		}
+
+		public void RegisterInitialConfigSetup(Func<string, bool> callBackWithConnectionString)
+		{
+			_callBackWithConnectionString = callBackWithConnectionString;
 		}
 	}
 }

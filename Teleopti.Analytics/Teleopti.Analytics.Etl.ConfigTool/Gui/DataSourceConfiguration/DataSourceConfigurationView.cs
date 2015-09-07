@@ -2,10 +2,14 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Drawing;
+using System.Globalization;
+using System.Threading;
 using System.Windows.Forms;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
+using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Analytics.Etl.ConfigTool.Code.Gui.DataSourceConfiguration;
+using Teleopti.Analytics.Etl.ConfigTool.Gui.StartupConfiguration;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.ConfigTool.Gui.DataSourceConfiguration
@@ -35,29 +39,44 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.DataSourceConfiguration
         {
             _showForm = true;
             _closeApplication = false;
-            MessageBoxProperties msgBoxProps = _presenter.CheckForFirstUse();
-            if (msgBoxProps != null)
-            {
-                // Either it´s the first time ETL Tool is used or it tis in an invalid state - show msgbox.
-                MessageBoxButtons messageBoxButtons = MessageBoxButtons.YesNo;
-                MessageBoxIcon messageBoxIcon = MessageBoxIcon.Question;
 
-                if (!msgBoxProps.IsQuestion)
-                {
-                    // ETL Tool is in an invalid state
-                    messageBoxButtons = MessageBoxButtons.OK;
-                    messageBoxIcon = MessageBoxIcon.Error;
-                }
 
-                DialogResult dialogResult = MessageBox.Show(msgBoxProps.Text, msgBoxProps.Caption, messageBoxButtons,
-                                                            messageBoxIcon);
-                if (dialogResult == DialogResult.No || dialogResult == DialogResult.OK)
-                {
-                    _showForm = false;
-                    _closeApplication = true;
-                    return;
-                }
-            }
+			var configurationHandler = new ConfigurationHandler(new GeneralFunctions(_connectionString));
+
+			if (!configurationHandler.IsConfigurationValid)
+			{
+				var startupConfigurationView = new StartupConfigurationView(configurationHandler);
+				startupConfigurationView.ShowDialog();
+			}
+
+			if (configurationHandler.BaseConfiguration.CultureId != null)
+				Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo(configurationHandler.BaseConfiguration.CultureId.Value).FixPersianCulture();
+
+
+
+			//MessageBoxProperties msgBoxProps = _presenter.CheckForFirstUse();
+   //         if (msgBoxProps != null)
+   //         {
+   //             // Either it´s the first time ETL Tool is used or it tis in an invalid state - show msgbox.
+   //             MessageBoxButtons messageBoxButtons = MessageBoxButtons.YesNo;
+   //             MessageBoxIcon messageBoxIcon = MessageBoxIcon.Question;
+
+   //             if (!msgBoxProps.IsQuestion)
+   //             {
+   //                 // ETL Tool is in an invalid state
+   //                 messageBoxButtons = MessageBoxButtons.OK;
+   //                 messageBoxIcon = MessageBoxIcon.Error;
+   //             }
+
+   //             DialogResult dialogResult = MessageBox.Show(msgBoxProps.Text, msgBoxProps.Caption, messageBoxButtons,
+   //                                                         messageBoxIcon);
+   //             if (dialogResult == DialogResult.No || dialogResult == DialogResult.OK)
+   //             {
+   //                 _showForm = false;
+   //                 _closeApplication = true;
+   //                 return;
+   //             }
+   //         }
             _presenter.Initialize();
         }
 

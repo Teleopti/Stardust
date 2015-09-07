@@ -75,7 +75,6 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.StartupConfiguration
 
 		private void StartupConfigurationView_Load(object sender, EventArgs e)
 		{
-			Font = SystemFonts.DefaultFont;
 			_presenter.Initialize();
 		}
 

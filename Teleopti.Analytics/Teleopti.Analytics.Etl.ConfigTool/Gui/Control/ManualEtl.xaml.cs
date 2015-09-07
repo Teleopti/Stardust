@@ -14,7 +14,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 	{
 		private readonly BackGroundJob _backGroundJob = new BackGroundJob();
 		private IBaseConfiguration _baseConfiguration;
-
+		
 		public event EventHandler<AlarmEventArgs> InitialJobNowAvailable;
 		public event EventHandler<AlarmEventArgs> JobStartedRunning;
 		public event EventHandler<AlarmEventArgs> JobStoppedRunning;
@@ -114,5 +114,10 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 			myControl.SetBaseConfiguration(baseConfiguration);
 			myTree.LoadJobTree(baseConfiguration, container);
 		}
+
+		public ManualControl ManualControl
+		{ get { return myControl; } }
+
+		
 	}
 }
