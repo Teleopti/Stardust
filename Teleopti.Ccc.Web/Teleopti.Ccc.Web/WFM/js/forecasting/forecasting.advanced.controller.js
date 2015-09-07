@@ -3,6 +3,10 @@
 angular.module('wfm.forecasting')
 	.controller('ForecastingAdvancedCtrl', ['$scope', '$state', '$stateParams', '$http', 'Toggle',
 		function ($scope, $state, $stateParams, $http, toggleService) {
+			var startDate = moment().utc().add(1, 'months').startOf('month').toDate();
+			var endDate = moment().utc().add(2, 'months').startOf('month').toDate();
+			$scope.period = { startDate: startDate, endDate: endDate }; //use moment to get first day of next month
+
 			$scope.workloadId = $stateParams.workloadId;
 			$scope.chartInfo = {
 				evaluationChartDataColumns: [
@@ -18,6 +22,40 @@ angular.module('wfm.forecasting')
 
 			$scope.back = function () {
 				$state.go("forecasting");
+			};
+
+			$scope.nextStepOneWorkload = function () {
+				$state.go("forecasting", { period: $scope.period, target: $scope.workloadId, running: true });
+			};
+
+			$scope.modalLaunch = false;
+			$scope.displayModal = function () {
+				$scope.modalLaunch = true;
+			};
+			$scope.cancelModal = function () {
+				$scope.modalLaunch = false;
+			};
+
+			$scope.moreThanOneYear = function () {
+				if ($scope.period && $scope.period.endDate && $scope.period.startDate) {
+					var dateDiff = new Date($scope.period.endDate - $scope.period.startDate);
+					dateDiff.setDate(dateDiff.getDate() - 1);
+					return dateDiff.getFullYear() - 1970 >= 1;
+				} else
+					return false;
+			};
+
+			$scope.setRangeClass = function (date, mode) {
+				if (mode === 'day') {
+					var dayToCheck = new Date(date).setHours(12, 0, 0, 0);
+					var startDay = new Date($scope.period.startDate).setHours(12, 0, 0, 0);
+					var endDay = new Date($scope.period.endDate).setHours(12, 0, 0, 0);
+
+					if (dayToCheck >= startDay && dayToCheck <= endDay) {
+						return 'in-date-range';
+					}
+				}
+				return '';
 			};
 
 			$scope.isQueueStatisticsEnabled = false;

@@ -4,7 +4,7 @@ angular.module('wfm.forecasting')
 	.controller('ForecastingStartCtrl', [
 		'$scope', '$state', 'Forecasting', '$http', '$stateParams',
 		function ($scope, $state, forecasting, $http, $stateParams) {
-			if ($stateParams.period) {
+			if ($stateParams.running === true) {
 				$scope.period = $stateParams.period;
 			} else {
 				var startDate = moment().utc().add(1, 'months').startOf('month').toDate();
@@ -17,14 +17,47 @@ angular.module('wfm.forecasting')
 				$scope.isForecastRunning = result.IsRunning;
 			});
 
+			var forecastForWorkload = function (workload) {
+				workload.ShowProgress = true;
+				workload.StartTime = moment().format();
+				$http.post('../api/Forecasting/Forecast', JSON.stringify({ ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate, Workloads: [workload.Id] })).
+					success(function (data, status, headers, config) {
+						if (data.Success) {
+							workload.IsSuccess = true;
+						} else {
+							workload.IsFailed = true;
+							workload.Message = data.Message;
+						}
+					}).
+					error(function (data, status, headers, config) {
+						workload.IsFailed = true;
+						if (data)
+							workload.Message = data.Message;
+						else
+							workload.Message = "Failed";
+					})
+					.finally(function () {
+						workload.ShowProgress = false;
+					});
+			}
+
 			$scope.workloads = [];
 			forecasting.skills.query().$promise.then(function (result) {
 				$scope.skills = result;
 				angular.forEach($scope.skills, function (skill) {
 					angular.forEach(skill.Workloads, function (workload) {
-						$scope.workloads.push({ Id: workload.Id, Name: skill.Name + " - " + workload.Name, ChartId: "chart"+workload.Id });
+						$scope.workloads.push({ Id: workload.Id, Name: skill.Name + " - " + workload.Name, ChartId: "chart" + workload.Id });
 					});
 				});
+
+				if ($stateParams.running === true) {
+					for (var i = 0, len = $scope.workloads.length; i < len; i++) {
+						if ($scope.workloads[i].Id === $stateParams.target) {
+							forecastForWorkload($scope.workloads[i]);
+							break;
+						}
+					}
+				}
 			});
 
 			$scope.modalLaunch = false;
@@ -88,6 +121,8 @@ angular.module('wfm.forecasting')
 				$scope.period.endDate = angular.copy($scope.period.endDate);
 			};
 
+			
+
 			var forecastForOneWorkload = function (index) {
 				var workload = $scope.workloads[index];
 				if (!workload) {
@@ -117,12 +152,11 @@ angular.module('wfm.forecasting')
 					});
 			};
 
-			$scope.nextStepAll = function (period) {
+			$scope.nextStepAll = function () {
 				if ($scope.disableNextStepAll()) {
 					return;
 				}
 				$scope.modalLaunch = false;
-
 				forecastForOneWorkload(0);
 			};
 

@@ -1,6 +1,16 @@
 <div>
 	<div class="row">
-		<button class="wfm-btn wfm-btn-default" ng-click="back()">{{ 'Back' | translate }}</button>
+		<div class="col-lg-12">
+			<button class="wfm-btn wfm-btn-default" ng-click="back()">{{ 'Back' | translate }}</button>
+			<div class="forecast-create-fad">
+				<button class="wfm-fab info forecast-create-button" ng-click="displayModal()">
+					<i class="mdi mdi-plus"></i>
+					<md-tooltip>
+						Forecast for one workload
+					</md-tooltip>
+				</button>
+			</div>
+		</div>
 	</div>
 	<div class="row">
 		<h3>
@@ -23,6 +33,41 @@
 					</md-tab>
 				</md-tabs>
 			</md-content>
+		</div>
+	</div>
+</div>
+
+<div ng-cloak class="modal-box">
+	<div ng-cloak ng-if="modalLaunch">
+		<div class="modalbg">
+			<div class="dialog">
+				<div class="modal-header" translate>
+					SelectForecastPeriodIntro
+				</div>
+				<div class="modal-inner-content">
+					<div class="wfm-block forecast-period">
+						<div class="wfm-datepicker-wrap">
+							<div class="sub-header">
+								{{'From' | translate}} <span class="startDate">{{period.startDate | date : format}}</span>
+							</div>
+							<datepicker ng-model="period.startDate" show-weeks="true" custom-class="setRangeClass(date, mode)" class="wfm-datepicker" ng-change="updateEndDate()"></datepicker>
+						</div>
+						<div class="wfm-datepicker-wrap">
+							<div class="sub-header">
+								{{'To' | translate}} <span class="endDate">{{period.endDate | date : format}}</span>
+							</div>
+							<datepicker ng-model="period.endDate" show-weeks="true" min-date="period.startDate" custom-class="setRangeClass(date, mode)" class="wfm-datepicker" ng-change="updateStartDate()"></datepicker>
+						</div>
+						<div class="alert-warning notice-spacer" ng-if="moreThanOneYear()"><i class='mdi mdi-alert'></i>Forecast period cannot be more than 1 year.</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<aside>
+						<a class="wfm-btn wfm-btn-invis-default" ng-click="cancelModal()">{{ 'Close' | translate }}</a>
+						<a class="wfm-btn wfm-btn-invis-primary next-step-one-workload" ng-disabled="disableNextStepOneWorkload()" ng-class="{'wfm-btn-invis-disabled': disableNextStepOneWorkload()}" ng-click="nextStepOneWorkload(period)">{{ 'Forecast' | translate }}</a>
+					</aside>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
