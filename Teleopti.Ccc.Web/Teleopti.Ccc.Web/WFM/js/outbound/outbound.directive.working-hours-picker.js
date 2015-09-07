@@ -26,6 +26,9 @@
 		        resetTime(scope.newWorkingPeriodStartTime);
 		        resetTime(scope.newWorkingPeriodEndTime);
 
+		        scope.newWorkingPeriodStartTime.setHours(9);
+			    scope.newWorkingPeriodEndTime.setHours(17);
+
 		        var weekDays = outboundService.createEmptyWorkingPeriod().WeekDaySelections;
 		        var translations = [];
 		        var i;

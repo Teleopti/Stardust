@@ -102,37 +102,6 @@
 		top:-58px;
 		right:0;
 	}
-	.selectable-data-grid {
-	
-		.selectable-data-grid-cell {
-			display: block;
-			height: 100%;
-			width: 100%;
-		}
-		.ng-unselectable {
-			background-color: lightgrey;
-		}
-
-		 cursor: pointer;
-		 -webkit-touch-callout: none;
-		 -webkit-user-select: none;
-		 -khtml-user-select: none;
-		 -moz-user-select: none;
-		 -ms-user-select: none;
-		 user-select: none;
-		
-		td {			
-			width: 8%;
-			height: 50px;
-			text-align: center;
-			vertical-align: middle;
-
-			&.selected {
-				background-color: aquamarine;
-			}
-		}		
-	}
-
 	.disable-default-select {
 		 -webkit-touch-callout: none;
 		 -webkit-user-select: none;
@@ -141,8 +110,6 @@
 		 -ms-user-select: none;
 		 user-select: none;
 	}
-
-
 	.c3-line {
 		stroke-width: 3px !important;
 	}
@@ -401,6 +368,99 @@
 			display: inline-block;
 		}
 	}	
+	.displayinline-block{
+		display:inline-block;
+	}
+	.m-l-40{
+		margin-left:40px;
+	}
+
+	.right-sign {
+		color: #c2e085 ;
+	}
+	.wrong-sign {
+		color: #ee8f7d ;
+	}
+
+	.ng-invalid, .custom-invalid {
+		& + .input-validation-sign {
+			.right-sign {
+				display: none;
+			}
+			.wrong-sign {
+				display: block;
+			}
+		}
+	}
+
+	.ng-valid, .custom-valid {
+		& + .input-validation-sign {
+			.right-sign {
+				display: block;
+			}
+			.wrong-sign {
+				display: none;
+			}
+		}
+	
+	}
+
+	form.ng-invalid {
+		.form-validation-sign {
+			.right-sign {
+				display: none;
+			}
+			.wrong-sign {
+				display: block;
+			}	
+		}	
+		.error-msg-container {
+			display: none;
+		}
+		&.ng-invalid-order  .error-msg-container.ng-invalid-order {
+			display: block;
+		}
+
+		&.ng-invalid-empty  .error-msg-container.ng-invalid-empty {
+			display: block;
+		}	
+	}
+	form.ng-valid {
+		.error-msg-container {
+			display: none;
+		}
+	}
+
+	.input-validation-sign, .form-validation-sign  {
+		&, &.expand {
+			transition: transform 0.3s linear;
+			.wrong-sign {
+				transition: color 0.3s linear;
+			}
+		}
+		&.expand {
+			transform: scale(1.5); 
+			.wrong-sign {
+				color: red !important;
+			}
+		}
+	}
+
+	.campaign-edit {			
+		input:not(.ng-dirty), .custom-input:not(.ng-dirty) {
+			& + .input-validation-sign {
+				.right-sign, .wrong-sign, .error-msg-container {
+					display: none !important;
+				}
+			}		
+		}
+
+		form:not(.ng-dirty) {
+			& > .form-validation-sign .wrong-sign, .form-validation-sign .right-sign, .error-msg-container {
+				display: none !important;
+			}
+		}
+	}
 }
 
 .wfm-timepicker-wrap {
@@ -417,136 +477,16 @@
 		padding-left: 0 !important;
 	}
 	.md-button{
-	 margin:0;
-	 padding:0;
-	 height:25px;
-	 line-height:25px;
-	 min-width:50px;
-	 min-height:25px;
+		 margin:0;
+		 padding:0;
+		 height:25px;
+		 line-height:25px;
+		 min-width:50px;
+		 min-height:25px;
 	}
 }
 
-.displayinline-block{
-	display:inline-block;
-}
-.m-l-40{
-	margin-left:40px;
-}
 
-.wrong-sign, .right-sign {
-	display: none;
-}
-.right-sign {
-	color: #c2e085 ;
-}
-.wrong-sign {
-	color: #ee8f7d ;
-}
-
-.error-msg-container {
-	display: none;
-}
-
-.ng-invalid-order  .error-msg-container.invalid-order {
-	display: block !important;
-}
-
-.ng-invalid-empty  .error-msg-container.invalid-empty {
-	display: block !important;
-}
-
-.campaign-create {
-	.ng-valid + .input-validation-sign .right-sign, 
-	.custom-valid + .input-validation-sign .right-sign,
-	form.ng-valid .form-validation-sign .right-sign {
-		display: block !important;
-	}
-
-	.ng-invalid + .input-validation-sign, 
-	.custom-invalid + .input-validation-sign,
-	form.ng-invalid .form-validation-sign   {
-		.wrong-sign {
-			display: block !important; 
-		}
-
-		&, &.expand {
-			transition: transform 0.3s linear;
-
-			.wrong-sign {
-				transition: color 0.3s linear;
-			}
-		}
-		&.expand {
-		   transform: scale(1.5); 
-		   .wrong-sign {
-				color: red !important;
-		   }
-		}
-	}
-}
-
-.wfm-date-range-picker-wrap {
-	.wrong-sign {
-		display: none; 
-		color: #ee8f7d ;
-	}
-	.right-sign {
-		display: none;
-		color: #c2e085;
-	}
-	.error-msg-container {
-		display: none;
-		margin-top: 10px;
-	}
-	.ng-valid {		
-		.right-sign {
-			display: block !important; 
-		}
-	}
-	
-	.ng-invalid {
-		&.invalid-order ~ .error-msg-container.invalid-order {
-			display: block !important;
-		}
-		&.invalid-empty ~ .error-msg-container.invalid-empty {
-			display: block !important;
-		}
-		.wrong-sign {
-			display: block !important; 
-		}		
-	}
-	
-}
-
-.campaign-edit {
-	.ng-dirty.ng-valid + .input-validation-sign .right-sign, 
-	.ng-dirty.custom-valid + .input-validation-sign .right-sign,
-	form.ng-dirty.ng-valid .form-validation-sign .right-sign {
-		display: block !important;
-	}
-
-	.ng-dirty.ng-invalid + .input-validation-sign, 
-	.ng-dirty.custom-invalid + .input-validation-sign,
-	form.ng-dirty.ng-invalid .form-validation-sign  {
-		.wrong-sign {
-			display: block !important; 
-		}
-
-		&, &.expand {
-			transition: transform 0.3s linear;
-
-			.wrong-sign {
-				transition: color 0.3s linear;
-			}
-		}
-		&.expand {
-		   transform: scale(1.5); 
-		   .wrong-sign {
-				color: red !important;
-		   }
-		}
-	}
-}
 
 .campaign-create, .campaign-edit {
 
@@ -651,9 +591,6 @@ activity-picker {
 		top: 12px;
 	}
 }
-.wfm-datepicker-wrap td.in-date-range button {
-	background-color: #c2e085;
-}
 .outbound {
 	position:relative;
 	height: 100%;
@@ -663,33 +600,34 @@ activity-picker {
 		margin-top: 1px;
 		margin-bottom: 1px;
 	}
-}
 
-.loading-whole-page{
-	position:absolute;
-	top:0;
-	left:0;
-	z-index:1000;
-	height: 100%;
-	width:100%;
-	background-color:rgba(0,0,0,0.5);
-
-	md-progress-circular {
-	position:absolute;
-	top:40%;
-	left:48%;
-	}
-}
-
-.loading-whole-section
-{
-	position:relative;
-	height:100px;
-	width:100%;
-
-	md-progress-circular {
+	.loading-whole-page{
 		position:absolute;
-		top:48%;
+		top:0;
+		left:0;
+		z-index:1000;
+		height: 100%;
+		width:100%;
+		background-color:rgba(0,0,0,0.5);
+
+		md-progress-circular {
+		position:absolute;
+		top:40%;
 		left:48%;
+		}
+	}
+
+	.loading-whole-section
+	{
+		position:relative;
+		height:100px;
+		width:100%;
+
+		md-progress-circular {
+			position:absolute;
+			top:48%;
+			left:48%;
+		}
 	}
 }
+

@@ -1182,8 +1182,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="WFM\html\outbound\date-range-picker.tpl.html" />
-    <Content Include="WFM\js\outbound\outbound.directive.date-range-picker.js" />
+    <Content Include="WFM\js\global\daterangepicker\wfm-date-range-picker.directive.js" />
+    <Content Include="WFM\js\global\daterangepicker\wfm-date-range-picker.tpl.html" />
     <Content Include="WFM\vendor\ui-bootstrap-custom-build\timepicker.directive.ext.js" />
     <Content Include="WFM\vendor\ui-bootstrap-custom-build\ui-bootstrap-0.13.0-csp.css" />
     <Content Include="WFM\vendor\ui-bootstrap-custom-build\ui-bootstrap-0.13.3.js" />
@@ -1310,6 +1310,7 @@
     <Content Include="WFM\tests\outbound\outbound.campaign.chart.service.spec.js" />
     <Content Include="WFM\tests\outbound\outbound.campaignSummary.controller.spec.js" />
     <Content Include="Areas\Start\Views\Return\Hash.cshtml" />
+    <Content Include="WFM\css\_daterangepicker.scss" />
     <None Include="WFM\css\_forecasting.scss" />
     <Content Include="WFM\js\outbound\outbound.controller.campaign-create..js" />
     <Content Include="WFM\js\outbound\outbound.controller.campaign-edit.js" />

@@ -45,23 +45,21 @@
             scope.isInputValid = isInputValid;
             scope.validWorkingHours = validWorkingHours;
             scope.flashErrorIcons = flashErrorIcons;
-            scope.setRangeClass = setDateRangeClass;
 
-            scope.$watch(function () {
-                var startDate = deepPropertyAccess(scope, ['campaign', 'StartDate', 'Date']);
-                var endDate = deepPropertyAccess(scope, ['campaign', 'EndDate', 'Date']);
-                return { startDate: startDate, endDate: endDate };
-            }, function (value) {
-                if (scope.campaignSpanningPeriodForm) {
-                    if (!isDateValid(value.startDate, value.endDate)) {
-                        scope.campaignSpanningPeriodForm.$setValidity('order', false);
-                    } else {
-                        scope.campaignSpanningPeriodForm.$setValidity('order', true);
-                    }
-                }
-                scope.campaign.StartDate = { Date: angular.copy(value.startDate) };
-                scope.campaign.EndDate = { Date: angular.copy(value.endDate) };
-            }, true);
+	        scope.$watch(function() {
+		        return scope.campaign.spanningPeriodErrors;
+	        }, function (newValue, oldValue) {		        
+				if (oldValue && oldValue.length > 0) {
+					angular.forEach(oldValue, function (v) {
+						scope.campaignSpanningPeriodForm.$setValidity(v, true);
+					});
+				}
+	        	if (newValue && newValue.length > 0) {
+					angular.forEach(newValue, function (v) {
+						scope.campaignSpanningPeriodForm.$setValidity(v, false);
+					});
+				}
+	        }, true);
 
             function isInputValid() {
                 if (!scope.campaignGeneralForm) return false;
@@ -72,11 +70,7 @@
                     && scope.campaignWorkloadForm.$valid
                     && scope.campaignSpanningPeriodForm.$valid
                     && validWorkingHours();
-            }
-
-            function isDateValid(startDate, endDate) {
-                return endDate && startDate && startDate <= endDate;
-            }
+            }          
 
             function validWorkingHours() {
                 var i, j;
@@ -86,24 +80,6 @@
                     }
                 }
                 return false;
-            }
-
-            function setDateRangeClass(date, mode) {
-                if (mode === 'day') {
-                    var startDate = deepPropertyAccess(scope, ['campaign', 'StartDate', 'Date']);
-                    var endDate = deepPropertyAccess(scope, ['campaign', 'EndDate', 'Date']);
-
-                    if (startDate && endDate && startDate <= endDate) {
-                        var dayToCheck = new Date(date).setHours(12, 0, 0, 0);
-                        var start = new Date(startDate).setHours(12, 0, 0, 0);
-                        var end = new Date(endDate).setHours(12, 0, 0, 0);
-
-                        if (dayToCheck >= start && dayToCheck <= end) {
-                            return 'in-date-range';
-                        }
-                    }
-                }
-                return '';
             }
 
             function flashErrorIcons() {

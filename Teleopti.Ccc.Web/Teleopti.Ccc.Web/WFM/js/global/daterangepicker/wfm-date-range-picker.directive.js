@@ -1,8 +1,8 @@
-﻿(function() {
+﻿(function () {
 
 	'use strict';
 
-	angular.module('wfm.outbound').directive('dateRangePicker', dateRangePicker);
+	angular.module('wfm.daterangepicker', []).directive('dateRangePicker', dateRangePicker);
 
 	function dateRangePicker() {
 
@@ -16,7 +16,7 @@
 			hideMessageSymbol;
 
 		return {
-			templateUrl: 'html/outbound/date-range-picker.tpl.html',
+			templateUrl: 'js/global/daterangepicker/wfm-date-range-picker.tpl.html',
 			controller: ['$scope', '$attrs', dateRangePickerCtrl],
 			compile: compileFn
 		};
@@ -36,12 +36,12 @@
 
 			var datepickerElements = tElement.find('datepicker');
 			datepickerElements.attr('custom-class', customClassSymbol + '(date, mode)');
-			
+
 			if (disableSymbol) {
 				datepickerElements.attr('ng-disabled', disableSymbol);
 			}
-			angular.forEach(datepickerElements, function (ce) {				
-				var $ce = angular.element(ce);			
+			angular.forEach(datepickerElements, function (ce) {
+				var $ce = angular.element(ce);
 				if ($ce.hasClass('datepicker-start-date'))
 					$ce.attr('ng-model', startDateSymbol);
 				if ($ce.hasClass('datepicker-end-date'))
@@ -60,21 +60,21 @@
 			});
 
 			var childrenElements = tElement.children('div');
-			angular.forEach(childrenElements, function(ce) {
+			angular.forEach(childrenElements, function (ce) {
 				var $ce = angular.element(ce);
 				if ($ce.hasClass('date-range-pickers')) {
 					$ce.attr('ng-class', '{ ' +
 						'"ng-valid" : !' + validityCheckSymbol + '() ' +
 						', "ng-invalid" : ' + validityCheckSymbol + '() ' +
-						', "invalid-order" : ' + errorClassSymbol + '("order") ' +
-						', "invalid-empty" : ' + errorClassSymbol + '("empty") ' +
+						', "ng-invalid-order" : ' + errorClassSymbol + '("order") ' +
+						', "ng-invalid-empty" : ' + errorClassSymbol + '("empty") ' +
 						'} ');
 				} else if ($ce.hasClass('date-range-picker-message')) {
 					$ce.attr('ng-if', '!' + hideMessageSymbol);
 				}
 			});
 
-			return function link(scope, elem, attrs) {				
+			return function link(scope, elem, attrs) {
 
 				scope.$watch(function () {
 					var startDate = readSymbolValue(scope, startDateSymbol),
@@ -90,7 +90,7 @@
 					refreshDatepickers(startDate, endDate);
 				}, true);
 
-				function refreshDatepickers(startDate, endDate) {					
+				function refreshDatepickers(startDate, endDate) {
 					setSymbolValue(scope, startDateSymbol, angular.copy(startDate));
 					setSymbolValue(scope, endDateSymbol, angular.copy(endDate));
 				}
@@ -101,8 +101,8 @@
 						errors.push('empty');
 					} else if (startDate > endDate) {
 						errors.push('order');
-					}				
-					setSymbolValue(scope, errorsSymbol, errors);					
+					}
+					setSymbolValue(scope, errorsSymbol, errors);
 				}
 			};
 		}
@@ -126,14 +126,14 @@
 				return '';
 			};
 
-			$scope[validityCheckSymbol] = function () {				
-				var errors = readSymbolValue($scope, errorsSymbol);			
+			$scope[validityCheckSymbol] = function () {
+				var errors = readSymbolValue($scope, errorsSymbol);
 				return errors && errors.length > 0;
 			};
 
-			$scope[errorClassSymbol] = function(e) {
+			$scope[errorClassSymbol] = function (e) {
 				var errors = readSymbolValue($scope, errorsSymbol);
-				return errors && errors.indexOf(e) >=0;
+				return errors && errors.indexOf(e) >= 0;
 			}
 
 			$scope[hideMessageSymbol] = angular.isDefined($attrs.hideMessage);
@@ -144,7 +144,7 @@
 			var pieces = symbol.split('.'),
 				curObj = obj;
 
-			for (var i = 0; i < pieces.length; i ++) {
+			for (var i = 0; i < pieces.length; i++) {
 				if (angular.isDefined(curObj[pieces[i]])) {
 					curObj = curObj[pieces[i]];
 				} else {
@@ -170,7 +170,7 @@
 			curObj[pieces[pieces.length - 1]] = value;
 			return value;
 		}
-		
+
 	}
 
 })();
