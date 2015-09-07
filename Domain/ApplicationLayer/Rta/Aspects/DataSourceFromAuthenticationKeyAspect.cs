@@ -11,16 +11,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Aspects
 	public class DataSourceFromAuthenticationKeyAspect : IDataSourceFromAuthenticationKeyAspect
 	{
 		private readonly IDataSourceScope _dataSource;
-		private readonly IApplicationData _applicationData;
+		private readonly IDataSourceForTenant _dataSourceForTenant;
 		private readonly IDatabaseLoader _databaseLoader;
 
 		[ThreadStatic]
 		private static IDisposable _scope;
 
-		public DataSourceFromAuthenticationKeyAspect(IDataSourceScope dataSource, IApplicationData applicationData, IDatabaseLoader databaseLoader)
+		public DataSourceFromAuthenticationKeyAspect(IDataSourceScope dataSource, IDataSourceForTenant dataSourceForTenant, IDatabaseLoader databaseLoader)
 		{
 			_dataSource = dataSource;
-			_applicationData = applicationData;
+			_dataSourceForTenant = dataSourceForTenant;
 			_databaseLoader = databaseLoader;
 		}
 
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Aspects
 			var key = input.AuthenticationKey;
 			key = AuthenticationKeyEncodingFixer.Fix(key);
 			var tenant = _databaseLoader.TenantNameByKey(key);
-			var dataSource = _applicationData.Tenant(tenant);
+			var dataSource = _dataSourceForTenant.Tenant(tenant);
 			_scope = _dataSource.OnThisThreadUse(dataSource);
 		}
 

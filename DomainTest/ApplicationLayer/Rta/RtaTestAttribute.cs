@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<FakeMessageSender>().For<IMessageSender>();
-			system.UseTestDouble<FakeApplicationData>().For<IApplicationData, ICurrentApplicationData>();
+			system.UseTestDouble<FakeApplicationData>().For<IApplicationData, ICurrentApplicationData, IDataSourceForTenant>();
 			system.UseTestDouble<FakeCurrentDatasource>().For<ICurrentDataSource, IDataSourceScope>();
 			registerFakePublisher(system, configuration, new FakeEventPublisher());
 			registerFakeDatabase(system, configuration, null);

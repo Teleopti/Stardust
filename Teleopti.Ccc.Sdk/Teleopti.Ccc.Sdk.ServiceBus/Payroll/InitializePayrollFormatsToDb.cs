@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 
 				var formatsToAllDbs = allPayrollFormats.Where(f => f.DataSource.Equals("")).ToList();
 				logger.InfoFormat(CultureInfo.CurrentCulture, "Sending formats to DB");
-				StateHolderReader.Instance.StateReader.ApplicationScopeData.DoOnAllTenants_AvoidUsingThis(tenant =>
+				StateHolderReader.Instance.StateReader.ApplicationScopeData.DataSourceForTenant.DoOnAllTenants_AvoidUsingThis(tenant =>
 				{
 					using (var unitOfWork = tenant.Application.CreateAndOpenUnitOfWork())
 					{

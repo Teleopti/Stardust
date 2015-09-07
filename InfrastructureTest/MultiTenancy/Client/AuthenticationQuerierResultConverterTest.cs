@@ -31,15 +31,15 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 		[Test]
 		public void ShouldDecryptNhibConfigIfSuccessful()
 		{
-			var applicationData = MockRepository.GenerateMock<IApplicationData>();
+			var dataSourceForTenant = MockRepository.GenerateMock<IDataSourceForTenant>();
 			var nhibDecryption = new DataSourceConfigDecryption();
 			var loadUnauthorizedUserDoesntMatter = MockRepository.GenerateStub<ILoadUserUnauthorized>();
 			loadUnauthorizedUserDoesntMatter.Expect(x => x.LoadFullPersonInSeperateTransaction(null, Guid.Empty)).IgnoreArguments().Return(new Person());
-			var target = new AuthenticationQuerierResultConverter(nhibDecryption, () => applicationData, loadUnauthorizedUserDoesntMatter);
+			var target = new AuthenticationQuerierResultConverter(nhibDecryption, () => dataSourceForTenant, loadUnauthorizedUserDoesntMatter);
 			var analyticsdb = RandomName.Make();
 			var appdb = new Dictionary<string, string> { { "test", RandomName.Make() } };
 			var tenantName = RandomName.Make();
-			applicationData.Expect(x => x.Tenant(tenantName)).Return(new FakeDataSource());
+			dataSourceForTenant.Expect(x => x.Tenant(tenantName)).Return(new FakeDataSource());
 			var appConnString = RandomName.Make();
 			var result = target.Convert(new AuthenticationInternalQuerierResult
 				{
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 					DataSourceConfiguration = nhibDecryption.EncryptConfigJustForTest(new DataSourceConfig {AnalyticsConnectionString = analyticsdb, ApplicationNHibernateConfig = appdb, ApplicationConnectionString = appConnString})
 				});
 			result.Success.Should().Be.True();
-			applicationData.AssertWasCalled(x => x.MakeSureDataSourceExists(tenantName, appConnString, analyticsdb, appdb));
+			dataSourceForTenant.AssertWasCalled(x => x.MakeSureDataSourceExists(tenantName, appConnString, analyticsdb, appdb));
 		}
 
 		[Test]

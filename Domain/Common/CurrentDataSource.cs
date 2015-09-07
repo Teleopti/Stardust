@@ -18,10 +18,10 @@ namespace Teleopti.Ccc.Domain.Common
 			return new CurrentDataSource(new CurrentIdentity(new CurrentTeleoptiPrincipal()), null, null);
 		}
 
-		public CurrentDataSource(ICurrentIdentity currentIdentity, IConfigReader configReader, ICurrentApplicationData applicationData)
+		public CurrentDataSource(ICurrentIdentity currentIdentity, IConfigReader configReader, Func<IDataSourceForTenant> dataSourceForTenant)
 		{
 			_currentIdentity = currentIdentity;
-			_rtaConfigurationDataSource = new Lazy<IDataSource>(() => dataSourceFromRtaConfiguration(configReader, applicationData));
+			_rtaConfigurationDataSource = new Lazy<IDataSource>(() => dataSourceFromRtaConfiguration(configReader, dataSourceForTenant));
 		}
 
 		public IDataSource Current()
@@ -48,19 +48,16 @@ namespace Teleopti.Ccc.Domain.Common
 			});
 		}
 
-
-
-
-		private static IDataSource dataSourceFromRtaConfiguration(IConfigReader configReader, ICurrentApplicationData applicationData)
+		private static IDataSource dataSourceFromRtaConfiguration(IConfigReader configReader, Func<IDataSourceForTenant> dataSourceForTenant)
 		{
 			if (configReader == null)
 				return null;
-			if (applicationData == null)
+			if (dataSourceForTenant == null)
 				return null;
 
 			var configString = new SqlConnectionStringBuilder(configReader.ConnectionString("RtaApplication"));
 			IDataSource dataSource = null;
-			applicationData.Current().DoOnAllTenants_AvoidUsingThis(tenant =>
+			dataSourceForTenant().DoOnAllTenants_AvoidUsingThis(tenant =>
 			{
 				var c = new SqlConnectionStringBuilder(tenant.Application.ConnectionString);
 				if (c.DataSource == configString.DataSource &&

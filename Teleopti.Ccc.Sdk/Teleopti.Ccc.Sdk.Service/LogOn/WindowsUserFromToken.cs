@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
 	        var authQuerier = new AuthenticationQuerier(new TenantServerConfiguration(ConfigurationManager.AppSettings["TenantServer"]),
 			        new PostHttpRequest(), new NewtonsoftJsonSerializer(),
 			        new AuthenticationQuerierResultConverter(new DataSourceConfigDecryption(),
-				        () => StateHolder.Instance.StateReader.ApplicationScopeData, new LoadUserUnauthorized()));
+				        () => StateHolder.Instance.StateReader.ApplicationScopeData.DataSourceForTenant, new LoadUserUnauthorized()));
 
 					var result = authQuerier.TryLogon(new IdentityLogonClientModel { Identity = new WebWindowsUserProvider().Identity()}, string.Empty);
             if (result.Success)

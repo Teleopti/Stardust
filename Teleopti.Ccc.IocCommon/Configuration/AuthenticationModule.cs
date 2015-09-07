@@ -60,6 +60,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IApplicationData>().SingleInstance()
 				.ExternallyOwned();
 
+			builder.Register(c => StateHolder.Instance.StateReader.ApplicationScopeData.DataSourceForTenant)
+				.As<IDataSourceForTenant>().SingleInstance()
+				.ExternallyOwned();
+
 			builder.Register(c =>
 			{
 				var passwordPolicyService = c.Resolve<IApplicationData>().LoadPasswordPolicyService;

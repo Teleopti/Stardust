@@ -14,14 +14,14 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 	{
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly ILogOnOff _logOnOff;
-		private readonly IApplicationData _applicationData;
+		private readonly IDataSourceForTenant _dataSourceForTenant;
 		private readonly ISessionSpecificDataProvider _sessionSpecificDataProvider;
 		private readonly IRoleToPrincipalCommand _roleToPrincipalCommand;
 		private readonly ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
 		private readonly IPrincipalAuthorization _principalAuthorization;
 
 		public WebLogOn(ILogOnOff logOnOff,
-										IApplicationData applicationData,
+										IDataSourceForTenant dataSourceForTenant,
 		                IRepositoryFactory repositoryFactory,
 		                ISessionSpecificDataProvider sessionSpecificDataProvider,
 		                IRoleToPrincipalCommand roleToPrincipalCommand,
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 		                IPrincipalAuthorization principalAuthorization)
 		{
 			_logOnOff = logOnOff;
-			_applicationData = applicationData;
+			_dataSourceForTenant = dataSourceForTenant;
 			_repositoryFactory = repositoryFactory;
 			_sessionSpecificDataProvider = sessionSpecificDataProvider;
 			_roleToPrincipalCommand = roleToPrincipalCommand;
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 
 		public void LogOn(string dataSourceName, Guid businessUnitId, Guid personId, string tenantPassword)
 		{
-			var dataSource = _applicationData.Tenant(dataSourceName);
+			var dataSource = _dataSourceForTenant.Tenant(dataSourceName);
 			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 			{
 				var personRep = _repositoryFactory.CreatePersonRepository(uow);

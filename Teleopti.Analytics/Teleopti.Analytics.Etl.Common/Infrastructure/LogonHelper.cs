@@ -104,7 +104,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			_logonService =
 				new LogOnService(_logOnOff, new AvailableBusinessUnitsProvider(new RepositoryFactory()));
 			_tenantNames = new List<ITenantName>();
-			StateHolder.Instance.StateReader.ApplicationScopeData.DoOnAllTenants_AvoidUsingThis(ds =>
+			StateHolder.Instance.StateReader.ApplicationScopeData.DataSourceForTenant.DoOnAllTenants_AvoidUsingThis(ds =>
 			{
 				_tenantNames.Add(new TenantName{DataSourceName = ds.DataSourceName});
 			});
@@ -114,7 +114,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		public bool SelectDataSourceContainer(string dataSourceName)
 		{
 			_buList = null;
-			var dataSource = StateHolder.Instance.StateReader.ApplicationScopeData.Tenant(dataSourceName);
+			var dataSource = StateHolder.Instance.StateReader.ApplicationScopeData.DataSourceForTenant.Tenant(dataSourceName);
 			var person = new LoadUserUnauthorized().LoadFullPersonInSeperateTransaction(dataSource.Application, SuperUser.Id_AvoidUsing_This);
 			_choosenDb = new DataSourceContainer(dataSource, person);
 			if (_choosenDb.User == null)

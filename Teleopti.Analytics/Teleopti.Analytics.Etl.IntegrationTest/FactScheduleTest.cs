@@ -321,7 +321,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			var permission = MockRepository.GenerateMock<IPermissionInformation>();
 			user.Stub(x => x.PermissionInformation).Return(permission);
 			permission.Stub(x => x.HasAccessToAllBusinessUnits()).Return(true);
-			var dataSource = StateHolderReader.Instance.StateReader.ApplicationScopeData.Tenant("TestData");
+			var dataSource = StateHolderReader.Instance.StateReader.ApplicationScopeData.DataSourceForTenant.Tenant("TestData");
 			var jobHelper = new JobHelper(null, null, null,
 				new LogOnHelperFake(dataSource, user));
 			//var jobHelper = new JobHelper(null, null, null,new LogOnHelper(""));

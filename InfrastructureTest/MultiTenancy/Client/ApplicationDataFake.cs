@@ -6,7 +6,7 @@ using Teleopti.Interfaces.MessageBroker.Client.Composite;
 
 namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 {
-	public class ApplicationDataFake :IApplicationData
+	public class ApplicationDataFake :IApplicationData, IDataSourceForTenant
 	{
 		private IDataSource _dataSource;
 
@@ -21,6 +21,11 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 		public IMessageBrokerComposite Messaging { get; private set; }
 		public IDictionary<string, string> AppSettings { get; private set; }
 		public ILoadPasswordPolicyService LoadPasswordPolicyService { get; private set; }
+
+		public IDataSourceForTenant DataSourceForTenant
+		{
+			get { return this; }
+		}
 
 		public void MakeSureDataSourceExists(string tenantName, string applicationConnectionString, string analyticsConnectionString,
 			IDictionary<string, string> applicationNhibConfiguration)

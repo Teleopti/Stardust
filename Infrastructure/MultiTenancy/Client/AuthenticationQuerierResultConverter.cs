@@ -10,13 +10,13 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 	public class AuthenticationQuerierResultConverter : IAuthenticationQuerierResultConverter
 	{
 		private readonly IDataSourceConfigDecryption _dataSourceDecryption;
-		private readonly Func<IApplicationData> _applicationData;
+		private readonly Func<IDataSourceForTenant> _dataSourceForTenant;
 		private readonly ILoadUserUnauthorized _loadUser;
 
-		public AuthenticationQuerierResultConverter(IDataSourceConfigDecryption dataSourceDecryption, Func<IApplicationData> applicationData, ILoadUserUnauthorized loadUser)
+		public AuthenticationQuerierResultConverter(IDataSourceConfigDecryption dataSourceDecryption, Func<IDataSourceForTenant> dataSourceForTenant, ILoadUserUnauthorized loadUser)
 		{
 			_dataSourceDecryption = dataSourceDecryption;
-			_applicationData = applicationData;
+			_dataSourceForTenant = dataSourceForTenant;
 			_loadUser = loadUser;
 		}
 
@@ -29,10 +29,10 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 					FailReason = tenantServerResult.FailReason
 				};
 			
-			var applicationData = _applicationData();
+			var dataSourceForTenant = _dataSourceForTenant();
 			var decryptedConfig = _dataSourceDecryption.DecryptConfig(tenantServerResult.DataSourceConfiguration);
-			applicationData.MakeSureDataSourceExists(tenantServerResult.Tenant, decryptedConfig.ApplicationConnectionString, decryptedConfig.AnalyticsConnectionString, decryptedConfig.ApplicationNHibernateConfig);
-			var dataSource = applicationData.Tenant(tenantServerResult.Tenant);
+			dataSourceForTenant.MakeSureDataSourceExists(tenantServerResult.Tenant, decryptedConfig.ApplicationConnectionString, decryptedConfig.AnalyticsConnectionString, decryptedConfig.ApplicationNHibernateConfig);
+			var dataSource = dataSourceForTenant.Tenant(tenantServerResult.Tenant);
 			var person = _loadUser.LoadFullPersonInSeperateTransaction(dataSource.Application, tenantServerResult.PersonId);
 			if (person.IsTerminated())
 				return new AuthenticationQuerierResult

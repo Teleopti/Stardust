@@ -12,10 +12,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof (DataSourceFactory));
 
-				public static SdkDataSourceResult GetDataSource(IApplicationData applicationData, string tenant, IRepositoryFactory repositoryFactory)
+				public static SdkDataSourceResult GetDataSource(IDataSourceForTenant dataSourceForTenant, string tenant, IRepositoryFactory repositoryFactory)
 				{
 					var ret = new SdkDataSourceResult();
-		    var dataSource = applicationData.Tenant(tenant);
+		    var dataSource = dataSourceForTenant.Tenant(tenant);
 		    if (dataSource == null)
 		    {
 					Logger.ErrorFormat("No datasource matching the name {0} was found.", tenant);

@@ -218,7 +218,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 
 		internal void ReloadDataSourceComboBox()
 		{
-            var dataSource = StateHolder.Instance.StateReader.ApplicationScopeData.Tenant(((ITenantName)ComboBoxDataSource.SelectedItem).DataSourceName);
+            var dataSource = StateHolder.Instance.StateReader.ApplicationScopeData.DataSourceForTenant.Tenant(((ITenantName)ComboBoxDataSource.SelectedItem).DataSourceName);
 			ComboBoxLogDataSource.DataContext = _dataSourceCollection = new DataSourceValidCollection(true, dataSource.Statistic.ConnectionString);
 		}
 

@@ -11,15 +11,15 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 	public class AuthenticationFromFileQuerier : IAuthenticationQuerier
 	{
 		private readonly ITenantServerConfiguration _tenantServerConfiguration;
-		private readonly Func<IApplicationData> _applicationData;
+		private readonly Func<IDataSourceForTenant> _dataSourceForTenant;
 		private readonly ILoadUserUnauthorized _loadUserUnauthorized;
 
-		public AuthenticationFromFileQuerier(ITenantServerConfiguration tenantServerConfiguration, 
-																				Func<IApplicationData> applicationData,
+		public AuthenticationFromFileQuerier(ITenantServerConfiguration tenantServerConfiguration,
+																				Func<IDataSourceForTenant> dataSourceForTenant,
 																				ILoadUserUnauthorized loadUserUnauthorized)
 		{
 			_tenantServerConfiguration = tenantServerConfiguration;
-			_applicationData = applicationData;
+			_dataSourceForTenant = dataSourceForTenant;
 			_loadUserUnauthorized = loadUserUnauthorized;
 		}
 
@@ -41,10 +41,10 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 
 			var json = File.ReadAllText(path);
 
-			var applicationdata = _applicationData();
+			var dataSourceForTenant = _dataSourceForTenant();
 			var result = JsonConvert.DeserializeObject<AuthenticationInternalQuerierResult>(json);
-			applicationdata.MakeSureDataSourceExists(result.Tenant, result.DataSourceConfiguration.ApplicationConnectionString, result.DataSourceConfiguration.AnalyticsConnectionString, new Dictionary<string, string>());
-			var datasource = applicationdata.Tenant(result.Tenant);
+			dataSourceForTenant.MakeSureDataSourceExists(result.Tenant, result.DataSourceConfiguration.ApplicationConnectionString, result.DataSourceConfiguration.AnalyticsConnectionString, new Dictionary<string, string>());
+			var datasource = dataSourceForTenant.Tenant(result.Tenant);
 			var ret = new AuthenticationQuerierResult
 			{
 				Success = true,

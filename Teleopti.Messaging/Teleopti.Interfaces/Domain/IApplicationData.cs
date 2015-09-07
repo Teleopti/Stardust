@@ -10,8 +10,6 @@ namespace Teleopti.Interfaces.Domain
 	/// </summary>
 	public interface IApplicationData : IDisposable
 	{
-		IDataSource Tenant(string tenantName);
-
 		/// <summary>
 		/// Gets the message broker.
 		/// </summary>
@@ -30,7 +28,6 @@ namespace Teleopti.Interfaces.Domain
 		///</summary>
 		ILoadPasswordPolicyService LoadPasswordPolicyService { get; }
 
-		void MakeSureDataSourceExists(string tenantName, string applicationConnectionString, string analyticsConnectionString, IDictionary<string, string> applicationNhibConfiguration);
-		void DoOnAllTenants_AvoidUsingThis(Action<IDataSource> actionOnTenant);
+		IDataSourceForTenant DataSourceForTenant { get; }
 	}
 }

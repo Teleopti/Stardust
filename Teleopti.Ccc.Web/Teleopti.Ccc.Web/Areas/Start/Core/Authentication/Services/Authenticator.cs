@@ -7,17 +7,17 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 {
 	public class Authenticator : IIdentityLogon
 	{
-		private readonly IApplicationData _applicationData;
+		private readonly IDataSourceForTenant _dataSourceForTenant;
 		private readonly ITokenIdentityProvider _tokenIdentityProvider;
 		private readonly IFindPersonInfoByIdentity _findPersonInfoByIdentity;
 		private readonly ILoadUserUnauthorized _loadUserUnauthorized;
 
-		public Authenticator(IApplicationData applicationData,
+		public Authenticator(IDataSourceForTenant dataSourceForTenant,
 									ITokenIdentityProvider tokenIdentityProvider,
 									IFindPersonInfoByIdentity findPersonInfoByIdentity,
 									ILoadUserUnauthorized loadUserUnauthorized)
 		{
-			_applicationData = applicationData;
+			_dataSourceForTenant = dataSourceForTenant;
 			_tokenIdentityProvider = tokenIdentityProvider;
 			_findPersonInfoByIdentity = findPersonInfoByIdentity;
 			_loadUserUnauthorized = loadUserUnauthorized;
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 			if (personInfo == null)
 				return new AuthenticatorResult { Successful = false };
 
-			var dataSource = _applicationData.Tenant(personInfo.Tenant.Name);
+			var dataSource = _dataSourceForTenant.Tenant(personInfo.Tenant.Name);
 			var foundAppUser = _loadUserUnauthorized.LoadFullPersonInSeperateTransaction(dataSource.Application, personInfo.Id);
 			return foundAppUser.IsTerminated() ?
 				new AuthenticatorResult { Successful = false } :

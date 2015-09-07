@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		private SessionPrincipalFactory target;
 		private ISessionSpecificDataProvider sessionSpecificDataProvider;
 		private IRepositoryFactory repositoryFactory;
-		private IApplicationData applicationData;
+		private IDataSourceForTenant dataSourceForTenant;
 		private IRoleToPrincipalCommand roleToPrincipalCommand;
 
 	    [SetUp]
@@ -34,13 +34,13 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			mocks = new MockRepository();
 			sessionSpecificDataProvider = mocks.DynamicMock<ISessionSpecificDataProvider>();
 			repositoryFactory = mocks.DynamicMock<IRepositoryFactory>();
-			applicationData = mocks.DynamicMock<IApplicationData>();
+			dataSourceForTenant = mocks.DynamicMock<IDataSourceForTenant>();
 			roleToPrincipalCommand = mocks.DynamicMock<IRoleToPrincipalCommand>();
 
 			var httpContext = MockRepository.GenerateStub<HttpContextBase>();
 			var currentHttpContext = MockRepository.GenerateMock<ICurrentHttpContext>();
 			currentHttpContext.Stub(x => x.Current()).Return(httpContext);
-			target = new SessionPrincipalFactory(applicationData, sessionSpecificDataProvider, repositoryFactory, roleToPrincipalCommand, new TeleoptiPrincipalFactory(), new TokenIdentityProvider(currentHttpContext));
+			target = new SessionPrincipalFactory(dataSourceForTenant, sessionSpecificDataProvider, repositoryFactory, roleToPrincipalCommand, new TeleoptiPrincipalFactory(), new TokenIdentityProvider(currentHttpContext));
 		}
 
 
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			using (mocks.Record())
 			{
 				Expect.Call(sessionSpecificDataProvider.GrabFromCookie()).Return(sessData);
-				Expect.Call(applicationData.Tenant(sessData.DataSourceName)).Return(dataSource);
+				Expect.Call(dataSourceForTenant.Tenant(sessData.DataSourceName)).Return(dataSource);
 				Expect.Call(dataSource.Application).Return(uowFactory);
 				Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(uow);
 				Expect.Call(repositoryFactory.CreatePersonRepository(uow)).Return(personRepository);

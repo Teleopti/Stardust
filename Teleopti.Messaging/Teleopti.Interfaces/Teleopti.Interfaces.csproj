@@ -146,6 +146,7 @@
     <Compile Include="Domain\IAggregatedScheduleChange.cs" />
     <Compile Include="Domain\IBacklogTask.cs" />
     <Compile Include="Domain\ICurrentBusinessUnit.cs" />
+    <Compile Include="Domain\IDataSourceForTenant.cs" />
     <Compile Include="Domain\IExtractedRestrictionResult.cs" />
     <Compile Include="Domain\IForecastingTarget.cs" />
     <Compile Include="Domain\IGamificationSetting.cs" />

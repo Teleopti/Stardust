@@ -11,18 +11,18 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Core
 
 	public class DatabaseConnectionHandler : IDatabaseConnectionHandler
 	{
-		private readonly IApplicationData _applicationData;
+		private readonly IDataSourceForTenant _dataSourceForTenant;
 
-		public DatabaseConnectionHandler(IApplicationData applicationData)
+		public DatabaseConnectionHandler(IDataSourceForTenant dataSourceForTenant)
 		{
-			_applicationData = applicationData;
+			_dataSourceForTenant = dataSourceForTenant;
 		}
 
 		public SqlConnection MartConnection(string name, int latency)
 		{
 			if (latency > 0)
 				Thread.Sleep(latency);
-			return new SqlConnection(_applicationData.Tenant(name).Statistic.ConnectionString);
+			return new SqlConnection(_dataSourceForTenant.Tenant(name).Statistic.ConnectionString);
 		}
 	}
 }

@@ -8,7 +8,7 @@ using Teleopti.Interfaces.MessageBroker.Client.Composite;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
 {
-	public class ApplicationData : IApplicationData
+	public class ApplicationData : IApplicationData, IDataSourceForTenant
 	{
 		private readonly IList<IDataSource> _registeredDataSourceCollection;
 		private readonly IMessageBrokerComposite _messageBroker;
@@ -30,6 +30,11 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		public ILoadPasswordPolicyService LoadPasswordPolicyService
 		{
 			get { return _loadPasswordPolicyService; }
+		}
+
+		public IDataSourceForTenant DataSourceForTenant
+		{
+			get { return this; }
 		}
 
 		public IDataSource Tenant(string tenantName)

@@ -92,6 +92,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			var builder = new ContainerBuilder();
 			builder.RegisterModule(new WebAppModule(new IocConfiguration(new IocArgs(new ConfigReader()), toggleManager)));
 			builder.RegisterInstance(MockRepository.GenerateMock<IApplicationData>()).As<IApplicationData>();
+			builder.RegisterInstance(MockRepository.GenerateMock<IDataSourceForTenant>()).As<IDataSourceForTenant>();
 			builder.RegisterInstance(new FakeHttpContext("")).As<HttpContextBase>();
 			return builder.Build();
 		}

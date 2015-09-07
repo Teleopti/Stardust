@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 	[TestFixture]
 	public class AuthenticatorTest
 	{
-		private IApplicationData applicationData;
+		private IDataSourceForTenant dataSourceForTenant;
 		private Authenticator target;
 		private ITokenIdentityProvider tokenIdentityProvider;
 		private IFindPersonInfoByIdentity _findPersonInfoByIdentity;
@@ -28,11 +28,11 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 		public void Setup()
 		{
 			tenant = new Tenant(RandomName.Make());
-			applicationData = MockRepository.GenerateMock<IApplicationData>();
+			dataSourceForTenant = MockRepository.GenerateMock<IDataSourceForTenant>();
 			tokenIdentityProvider = MockRepository.GenerateMock<ITokenIdentityProvider>();
 			_findPersonInfoByIdentity = MockRepository.GenerateMock<IFindPersonInfoByIdentity>();
 			loadUserUnauthorized = MockRepository.GenerateStub<ILoadUserUnauthorized>();
-			target = new Authenticator(applicationData, tokenIdentityProvider, _findPersonInfoByIdentity, loadUserUnauthorized);
+			target = new Authenticator(dataSourceForTenant, tokenIdentityProvider, _findPersonInfoByIdentity, loadUserUnauthorized);
 		}
 
 		[Test]
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			var personInfo = new PersonInfo(tenant, Guid.NewGuid());
 			var person = new Person();
 
-			applicationData.Stub(x => x.Tenant(tenant.Name)).Return(dataSource);
+			dataSourceForTenant.Stub(x => x.Tenant(tenant.Name)).Return(dataSource);
 			dataSource.Stub(x => x.Application).Return(unitOfWorkFactory);
 			loadUserUnauthorized.Stub(x => x.LoadFullPersonInSeperateTransaction(unitOfWorkFactory, personInfo.Id)).Return(person);
 			_findPersonInfoByIdentity.Stub(x => x.Find(winAccount.UserIdentifier)).Return(personInfo);
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			var person = new Person();
 			person.TerminatePerson(DateOnly.Today.AddDays(-3), new PersonAccountUpdaterDummy());
 
-			applicationData.Stub(x => x.Tenant(tenant.Name)).Return(dataSource);
+			dataSourceForTenant.Stub(x => x.Tenant(tenant.Name)).Return(dataSource);
 			dataSource.Stub(x => x.Application).Return(unitOfWorkFactory);
 			_findPersonInfoByIdentity.Stub(x => x.Find(winAccount.UserIdentifier)).Return(personInfo);
 			loadUserUnauthorized.Stub(x => x.LoadFullPersonInSeperateTransaction(unitOfWorkFactory, personInfo.Id)).Return(person);

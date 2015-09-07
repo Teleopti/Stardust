@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Owin;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
 using log4net;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Interfaces.Domain;
 
@@ -13,21 +12,21 @@ namespace Teleopti.Ccc.Web.Core.Startup.VerifyLicense
 	public class VerifyLicenseTask : IBootstrapperTask, ILicenseFeedback
 	{
 		private readonly ILicenseVerifierFactory _licenseVerifierFactory;
-		private readonly Lazy<IApplicationData> _applicationData;
+		private readonly Lazy<IDataSourceForTenant> _dataSourceForTenant;
 		private readonly ILog _logger;
 
 		public VerifyLicenseTask(ILicenseVerifierFactory licenseVerifierFactory, 
-								Lazy<IApplicationData> applicationData,
+								Lazy<IDataSourceForTenant> dataSourceForTenant,
 								ILog logger)
 		{
 			_licenseVerifierFactory = licenseVerifierFactory;
-			_applicationData = applicationData;
+			_dataSourceForTenant = dataSourceForTenant;
 			_logger = logger;
 		}
 
 		public Task Execute(IAppBuilder application)
 		{
-			_applicationData.Value.DoOnAllTenants_AvoidUsingThis(tenant =>
+			_dataSourceForTenant.Value.DoOnAllTenants_AvoidUsingThis(tenant =>
 			{
 				var unitOfWorkFactory = tenant.Application;
 				var licenseVerifier = _licenseVerifierFactory.Create(this, unitOfWorkFactory);
