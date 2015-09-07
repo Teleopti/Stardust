@@ -1,8 +1,5 @@
 ﻿using System.Configuration;
 using System.Data.SqlClient;
-using Teleopti.Ccc.DBManager.Library;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 
 namespace Teleopti.Wfm.Administration.Core
 {
@@ -16,8 +13,9 @@ namespace Teleopti.Wfm.Administration.Core
 			{
 				sqlConn.Open();
 				
-                using (var sqlCommand = new SqlCommand(string.Format("SELECT COUNT(*) FROM Tenant.AdminUser where AccessToken ='{0}'",token), sqlConn))
-				{
+                using (var sqlCommand = new SqlCommand("SELECT COUNT(*) FROM Tenant.AdminUser where AccessToken = @AccessToken", sqlConn))
+                {
+	                sqlCommand.Parameters.AddWithValue("@AccessToken", token);
 					cnt = (int)sqlCommand.ExecuteScalar();
 				}
 				sqlConn.Close();
