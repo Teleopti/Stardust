@@ -87,15 +87,15 @@
 					PermissionsService.deleteFunction.query({ Id: selectedRole.Id, FunctionId: item.FunctionId });
 				});
 
-				helperUnselectAllFunctions(rolesFunctionsService.functionsDisplayed, functions);
+				helperUnselectAllFunctions(rolesFunctionsService.functionsDisplayed);
 			};
 
-			var helperUnselectAllFunctions = function (nodes, functions) {
+			var helperUnselectAllFunctions = function (nodes) {
 				nodes.forEach(function (item) {
 
 					item.selected = false;
 					if (item.ChildFunctions && item.ChildFunctions.length !== 0) {
-						helperUnselectAllFunctions(item.ChildFunctions, functions);
+						helperUnselectAllFunctions(item.ChildFunctions);
 					}
 				});
 			};
@@ -110,9 +110,6 @@
 						helperSelectAllFunctions(item.ChildFunctions, functions);
 					}
 				});
-			};
-
-
 			};
 
 			return rolesFunctionsService;

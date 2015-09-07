@@ -50,12 +50,7 @@ describe('FunctionController', function() {
 
         scope.toggleFunctionForRole(node);
         scope.$digest();
-
+		    
         expect(node.$modelValue.selected).toBe(true);
     }));
 });  
-
-
-
-
-});
