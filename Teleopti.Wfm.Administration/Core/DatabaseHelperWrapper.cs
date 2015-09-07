@@ -9,7 +9,6 @@ namespace Teleopti.Wfm.Administration.Core
 	{
 		DbCheckResultModel Exists(string databaseConnectionString, DatabaseType databaseType);
 		void CreateDatabase(string connectionToNewDb, DatabaseType databaseType, string dbPath, string login, bool isAzure);
-		void CreateAzureDatabase(string connectionToNewDb, DatabaseType databaseType, string dbPath, string login);
 		void AddSuperUser(string connectionToNewDb, Guid personId, string firstName, string lastName);
 		void AddBusinessUnit(string connectionToNewDb, string name);
 		bool LoginExists(string connectionToNewDb, string login, bool isAzure);
@@ -17,6 +16,7 @@ namespace Teleopti.Wfm.Administration.Core
 		bool HasCreateDbPermission(string connectionString, bool isAzure);
 		bool HasCreateViewAndLoginPermission(string connectionString, bool isAzure);
 		bool LoginCanBeCreated(string connectionString, string login, string password, bool isAzure, out string message);
+		void AddDatabaseUser(string connectionToNewDb, DatabaseType databaseType, string login, bool isAzure);
 	}
 
 	public class DatabaseHelperWrapper : IDatabaseHelperWrapper
@@ -26,6 +26,9 @@ namespace Teleopti.Wfm.Administration.Core
 			var dbType = "Teleopti WFM application database";
 			if (databaseType.Equals(DatabaseType.TeleoptiAnalytics))
 				dbType = "Teleopti WFM analytics database";
+
+			if (databaseType.Equals(DatabaseType.TeleoptiCCCAgg))
+				dbType = "Teleopti WFM aggregation database";
 			try
 			{
 				new SqlConnectionStringBuilder(databaseConnectionString);
@@ -81,28 +84,13 @@ namespace Teleopti.Wfm.Administration.Core
 				helper.CreateByDbManager();
 
 			helper.CreateSchemaByDbManager();
-			helper.AddPermissions(login);
+			helper.AddPermissions(login, isAzure);
 		}
 
-		public void CreateAzureDatabase(string connectionToNewDb, DatabaseType databaseType, string dbPath, string login)
+		public void AddDatabaseUser(string connectionToNewDb, DatabaseType databaseType, string login, bool isAzure)
 		{
-			//if it already exists - return a Message!
-			if(databaseType.Equals(DatabaseType.TeleoptiCCCAgg))
-				return;
-			try
-         {
-				new SqlConnectionStringBuilder(connectionToNewDb);
-			}
-			catch (Exception)
-			{
-				//return new DbCheckResultModel { Exists = false, Message = string.Format("The connection string for {0} is not in the correct format!") };
-				//
-			}
 			var helper = new DatabaseHelper(connectionToNewDb, databaseType);
-			helper.DbManagerFolderPath = dbPath;
-			helper.CreateByDbManager();
-			helper.CreateSchemaByDbManager();
-			helper.AddPermissions(login);
+			helper.AddPermissions(login, isAzure);
 		}
 
 		public void AddSuperUser(string connectionToNewDb, Guid personId, string firstName, string lastName)

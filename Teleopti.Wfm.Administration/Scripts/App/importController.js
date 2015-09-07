@@ -35,6 +35,9 @@
 		vm.SqlUserOkMessage = '';
 		vm.SqlUserOk = false;
 
+		vm.AppLoginMessage = '';
+		vm.AppLoginOk = false;
+
 		vm.CheckTenantName = function () {
 			$http.post('./api/Import/IsNewTenant', '"' + vm.Tenant + '"', tokenHeaderService.getHeaders())
 				.success(function (data) {
@@ -64,8 +67,30 @@
 			.success(function (data) {
 				vm.SqlUserOk = data.Success,
 				vm.SqlUserOkMessage = data.Message;
-				vm.CheckLogin();
+			}).error(function (xhr, ajaxOptions, thrownError) {
+				console.log(xhr.status + xhr.responseText + thrownError);
+			});
+		}
 
+		vm.CheckAppLogin = function () {
+			vm.Message = '';
+			if (vm.SqlUserOk === false) {
+				vm.AppLoginMessage = '';
+				vm.AppLoginOk = false;
+				return;
+			}
+			var model = {
+				Server: vm.Server,
+				AdminUser: vm.CreateDbUser,
+				AdminPassword: vm.CreateDbPassword,
+				UserName: vm.UserName,
+				Password: vm.Password 
+			}
+
+			$http.post('./CheckAppLogin', model, tokenHeaderService.getHeaders())
+			.success(function (data) {
+				vm.AppLoginOk = data.Success,
+				vm.AppLoginMessage = data.Message;
 			}).error(function (xhr, ajaxOptions, thrownError) {
 				console.log(xhr.status + xhr.responseText + thrownError);
 			});
@@ -74,6 +99,8 @@
 		vm.CheckAppDb = function () {
 			$http.post('./DbExists', {
 				Server: vm.Server,
+				AdminUser: vm.CreateDbUser,
+				AdminPassword: vm.CreateDbPassword,
 				UserName: vm.UserName,
 				Password: vm.Password,
 				Database: vm.AppDatabase,
@@ -93,6 +120,8 @@
 		vm.CheckAnalDb = function () {
 			$http.post('./DbExists', {
 				Server: vm.Server,
+				AdminUser: vm.CreateDbUser,
+				AdminPassword: vm.CreateDbPassword,
 				UserName: vm.UserName,
 				Password: vm.Password,
 				Database: vm.AnalyticsDatabase,
@@ -114,6 +143,8 @@
 			}
 			$http.post('./DbExists', {
 				Server: vm.Server,
+				AdminUser: vm.CreateDbUser,
+				AdminPassword: vm.CreateDbPassword,
 				UserName: vm.UserName,
 				Password: vm.Password,
 				Database: vm.AggDatabase,

@@ -4,17 +4,22 @@
 			<a style="float: left; padding-top: 25px; padding-right: 50px" href="#"><img alt="back" title="Back to Start" src="Content/images/left_round.png" /></a>
 			<h2>Details - {{detailsVm.OriginalName}}</h2>
 			<p>
-				Showing details of one Tenant. Here you can change the name (sooner anyway, not right now) and the connection to the databases.
+				Showing details of one Tenant.
 			</p>
 		</div>
 		<div class="col-md-12">
 			<div class="col-md-6">
-				<div class="importCaption">Tenant name</div>
-				<div>
+				<div class="importCaption">Tenant name: {{detailsVm.Tenant}}</div>
+				<div class="importCaption">User/ login: {{detailsVm.UserName}}</div>
+				<div class="importCaption">Server: {{detailsVm.Server}}</div>
+				<div class="importCaption">Application database: {{detailsVm.AppDatabase}}</div>
+				<div class="importCaption">Analytics database: {{detailsVm.AnalyticsDatabase}}</div>
+				
+				<!--<div>
 					<input class="form-control" type="text" ng-model="detailsVm.Tenant" ng-blur="detailsVm.CheckTenantName()" placeholder="Tenant name">
 				</div>
 				<div><label ng-class="(detailsVm.TenantOk==true) ? 'dataIsOk' : 'dataIsNotOk'">{{detailsVm.TenantMessage}}</label>
-				</div>
+				</div>-->
 			</div>
 
 			<div class="col-md-6" style="margin-top: 30px">
@@ -22,7 +27,7 @@
 			</div>
 
 		</div>
-		<div class="col-md-12">
+		<!--<div class="col-md-12">
 			<div class="col-md-6">
 				<fieldset>
 					<legend>Login and Databases</legend>
@@ -61,15 +66,15 @@
 					</div>
 				</fieldset>
 			</div>
-		</div>
+		</div>-->
 		</div>
 	<div class="row">
-		<div style="margin-top: 30px" class="col-md-6"><button class="btn btn-primary btn-default" ng-click="detailsVm.save()">Save</button></div>
+		<!--<div style="margin-top: 30px" class="col-md-6"><button class="btn btn-primary btn-default" ng-click="detailsVm.save()">Save</button></div>-->
 		<div style="margin-top: 30px" class="col-md-6" ng-show="detailsVm.AllowDelete">
 			<button class="btn btn-danger btn-default" ng-click="detailsVm.Delete()">Delete this Tenant</button>
 		</div>
 		<br />
-		<label class="ErrorLabel">{{detailsVm.Message}}</label>
+		<!--<label class="ErrorLabel">{{detailsVm.Message}}</label>-->
 	</div>
 
 </div>

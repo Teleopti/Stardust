@@ -101,12 +101,14 @@ namespace Teleopti.Ccc.DBManager.Library
 			executeNonQueryOnMaster(sql);
 		}
 
-		public void AddPermissions(string login)
+		public void AddPermissions(string login, bool isAzure)
 		{
 			var sql = string.Format(@"CREATE USER [{0}] FOR LOGIN [{0}]", login);
+			if(DbUserExist(login, isAzure))
+				sql = string.Format( @"ALTER USER [{0}] WITH LOGIN = [{0}]", login);
 			executeNonQuery(sql);
 			
-			sql  = string.Format(@"IF NOT EXISTS (SELECT * FROM sys.database_principals WHERE name = N'db_executor' AND type = 'R')
+			sql = string.Format(@"IF NOT EXISTS (SELECT * FROM sys.database_principals WHERE name = N'db_executor' AND type = 'R')
 	CREATE ROLE [db_executor] AUTHORIZATION [dbo]
 
 	EXEC sp_addrolemember @rolename=N'db_executor', @membername=[{0}]
@@ -115,6 +117,15 @@ namespace Teleopti.Ccc.DBManager.Library
 
 	GRANT EXECUTE TO db_executor", login);
 			executeNonQuery(sql);
+		}
+
+		public bool DbUserExist(string sqlLogin, bool isAzure)
+		{
+			var sql = string.Format(@"SELECT 1 FROM sys.sysusers WHERE name = '{0}'", sqlLogin);
+			if (isAzure)
+				sql = string.Format(@"SELECT 1 FROM sys.sql_logins WHERE name = '{0}'", sqlLogin);
+			var result = executeScalarOnMaster(sql, 0);
+			return result > 0;
 		}
 
 		public bool HasCreateDbPermission(bool isAzure)

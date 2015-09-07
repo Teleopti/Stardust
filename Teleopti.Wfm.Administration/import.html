@@ -39,19 +39,19 @@
 						</div>
 					</fieldset>
 				</div>
-
+			<br/>
 				<fieldset>
 					<legend>Application Login and Databases</legend>
 					<div class="importCaption">User / Login</div>
 					<div>
-						<input class=" form-control" type="text" ng-model="importVm.UserName" placeholder="User">
+						<input class=" form-control" type="text" ng-model="importVm.UserName" ng-blur="importVm.CheckAppLogin()" placeholder="User">
 					</div>
 
 					<div class="importCaption">Password</div>
 					<div>
-						<input class="form-control" type="password" ng-model="importVm.Password" placeholder="Password">
+						<input class="form-control" type="password" ng-model="importVm.Password" ng-blur="importVm.CheckAppLogin()" placeholder="Password">
 					</div>
-
+					<label ng-class="(importVm.SqlUserOk==true) ? 'dataIsOk' : 'dataIsNotOk'">{{importVm.AppLoginMessage}}</label>
 					<div class="importCaption">Application database</div>
 					<div>
 						<input class="form-control" type="text" ng-model="importVm.AppDatabase" ng-blur="importVm.CheckAppDb()" placeholder="Application database">

@@ -16,10 +16,6 @@ namespace Teleopti.Wfm.AdministrationTest
 		{
 		}
 
-		public void CreateAzureDatabase(string connectionToNewDb, DatabaseType databaseType, string dbPath, string login)
-		{
-		}
-
 		public void AddSuperUser(string connectionToNewDb, Guid personId, string firstName, string lastName)
 		{
 		}
@@ -51,6 +47,11 @@ namespace Teleopti.Wfm.AdministrationTest
 		{
 			message = "";
 			return true;
+		}
+
+		public void AddDatabaseUser(string connectionToNewDb, DatabaseType databaseType, string login, bool isAzure)
+		{
+			
 		}
 	}
 }
