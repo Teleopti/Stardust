@@ -9,17 +9,16 @@
 		var vm = this;
 		
 		vm.locations = [];
-		vm.selectedLocations = [];
-
-		$scope.$watch("vm.selectedLocations", function (updatedLocations) {
-			if (vm.locations.length > 0) {
-				updateSelectedLocationsAfterExternalUpdate(vm.locations[0], updatedLocations);
-			}
-		});
 
 		seatPlanService.locations.get().$promise.then(function (locations) {
 			locations.show = true;
 			vm.locations.push(locations);
+
+			$scope.$watch("vm.selectedLocations", function (updatedLocations) {
+				if (vm.locations.length > 0) {
+					updateSelectedLocationsAfterExternalUpdate(vm.locations[0], updatedLocations);
+				}
+			});
 		});
 
 		vm.getLocationDisplayText = function (location) {

@@ -1,7 +1,7 @@
 ﻿<div id="seatplan" ui-view>
 
-	<seat-plan-report ng-if="seatplan.isReportOpened" toggle="seatplan.isReportOpened = !seatplan.isReportOpened" 
-					  selected-period="seatplan.reportPeriod"></seat-plan-report>
+	<seat-plan-report ng-if="seatplan.isReportOpened" toggle="seatplan.isReportOpened = !seatplan.isReportOpened"
+					  selected-period="seatplan.reportPeriod" selected-teams="seatplan.reportSelectedTeams" selected-locations="seatplan.reportSelectedLocations"></seat-plan-report>
 
 	<seatmap-canvas occupancy date="seatplan.selectedDate" toggle="seatplan.isSeatMapBookingViewOpened = !seatplan.isSeatMapBookingViewOpened" ng-if="seatplan.isSeatMapBookingViewOpened"></seatmap-canvas>
 
@@ -55,7 +55,7 @@
 
 					</card-header>
 					<card-body>
-						<seat-plan-init start={{period.StartDate}} end="{{period.EndDate}}" on-seat-plan-complete="seatplan.onSeatPlanComplete()" show-report="seatplan.showReport(period)"></seat-plan-init>
+						<seat-plan-init start={{period.StartDate}} end="{{period.EndDate}}" on-seat-plan-complete="seatplan.onSeatPlanComplete()" show-report="seatplan.showReport"></seat-plan-init>
 					</card-body>
 				</wfm-card>
 			</wfm-card-list>

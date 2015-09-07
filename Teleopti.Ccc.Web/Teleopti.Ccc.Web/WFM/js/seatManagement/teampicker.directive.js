@@ -8,20 +8,19 @@
 
 		var vm = this;
 		vm.teams = [];
-		vm.selectedTeams = [];
-
-		$scope.$watch("vm.selectedTeams", function (updatedTeams) {
-			if (vm.teams.length > 0) {
-				updateSelectedTeamsAfterExternalUpdate(vm.teams[0], updatedTeams);
-				updateBuAndSiteStatus(vm.teams);
-			}
-		});
 
 		seatPlanService.teams.get().$promise.then(function (teams) {
 			teams.show = true;
 			vm.teams.push(teams);
-		});
 
+			$scope.$watch("vm.selectedTeams", function (updatedTeams) {
+				if (vm.teams.length > 0) {
+					updateSelectedTeamsAfterExternalUpdate(vm.teams[0], updatedTeams);
+					updateBuAndSiteStatus(vm.teams);
+				}
+			});
+		});
+		
 		vm.getTeamDisplayText = function (teamHierarchyNode) {
 			return teamHierarchyNode.Name;
 		};

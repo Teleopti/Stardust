@@ -9,9 +9,6 @@
 		var vm = this;
 
 		vm.temp = {};
-		
-		vm.selectedLocations = [];
-		vm.selectedTeams = [];
 		vm.isDatePickerOpened = true;
 		vm.reportTake = 34;
 		

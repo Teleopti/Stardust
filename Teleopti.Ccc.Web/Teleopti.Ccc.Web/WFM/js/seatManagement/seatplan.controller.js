@@ -119,9 +119,11 @@
 			vm.loadMonthDetails(moment(vm.selectedDate));
 		};
 
-		vm.showReport = function (period) {
+		vm.showReport = function (period,teams,locations) {
 			vm.isReportOpened = !vm.isReportOpened;
 			vm.reportPeriod = period;
+			vm.reportSelectedTeams = teams;
+			vm.reportSelectedLocations = locations;
 		};
 
 		vm.getSelectedMonthName = function () {

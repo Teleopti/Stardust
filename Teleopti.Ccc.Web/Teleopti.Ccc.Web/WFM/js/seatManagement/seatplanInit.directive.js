@@ -14,14 +14,14 @@
 			if (vm.start != null) {
 
 				vm.period = {
-					startDate: moment.utc(vm.start).toDate(),
-					endDate: moment.utc(vm.end).toDate()
+					StartDate: moment.utc(vm.start).toDate(),
+					EndDate: moment.utc(vm.end).toDate()
 				};
 			} else {
 
 				var startDate = moment.utc().add(1, 'months').startOf('month').toDate();
 				var endDate = moment.utc().add(2, 'months').startOf('month').toDate();
-				vm.period = { startDate: startDate, endDate: endDate };
+				vm.period = { StartDate: startDate, EndDate: endDate };
 
 			}
 		};
@@ -33,8 +33,8 @@
 			vm.processingSeatPlan = true;
 
 			var addSeatPlanCommand = {
-				StartDate: vm.period.startDate,
-				EndDate: vm.period.endDate,
+				StartDate: vm.period.StartDate,
+				EndDate: vm.period.EndDate,
 				Teams: vm.selectedTeams,
 				Locations: vm.selectedLocations
 			};
@@ -84,7 +84,7 @@
 				start: '@',
 				end: '@',
 				onSeatPlanComplete: '&',
-				showReport: '&'
+				showReport: '='
 			},
 			templateUrl: "js/seatManagement/html/seatplaninit.html",
 
