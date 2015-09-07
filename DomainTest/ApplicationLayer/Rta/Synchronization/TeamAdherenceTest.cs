@@ -99,39 +99,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 			Model.Get(existingTeam).Count.Should().Be(3);
 			Model.Get(stateTeam).Should().Be.Null();
 		}
-
-		[Test]
-		public void ShouldReinitializeTeamAdherenceOnSync()
-		{
-			var teamId1 = Guid.NewGuid();
-			var teamId2 = Guid.NewGuid();
-			var personId = Guid.NewGuid();
-			var phone = Guid.NewGuid();
-			Model.Persist(new TeamOutOfAdherenceReadModel
-			{
-				Count = 3,
-				TeamId = teamId1
-			});
-			Model.Persist(new TeamOutOfAdherenceReadModel
-			{
-				Count = 3,
-				TeamId = teamId2
-			});
-			Database
-				.WithUser("user", personId, null, teamId1, null)
-				.WithSchedule(personId, phone, "2015-01-15 08:00", "2015-01-15 10:00")
-				.WithAlarm("break", phone, 1);
-			Now.Is("2015-01-15 08:00");
-			Rta.SaveState(new ExternalUserStateForTest
-			{
-				UserCode = "user", 
-				StateCode = "break"
-			});
-			Target.Sync();
-
-			Model.Get(teamId1).Count.Should().Be(1);
-			Model.Get(teamId2).Should().Be.Null();
-		}
-
+		
 	}
 }

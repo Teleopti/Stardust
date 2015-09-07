@@ -72,39 +72,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 			Model.Get(existingSite).Count.Should().Be(3);
 			Model.Get(stateSite).Should().Be.Null();
 		}
-
-		[Test]
-		public void ShouldReinitializeSiteAdherenceOnSync()
-		{
-			var siteId1 = Guid.NewGuid();
-			var siteId2 = Guid.NewGuid();
-			var personId = Guid.NewGuid();
-			var phone = Guid.NewGuid();
-			Model.Persist(new SiteOutOfAdherenceReadModel
-			{
-				Count = 3,
-				SiteId = siteId1
-			});
-			Model.Persist(new SiteOutOfAdherenceReadModel
-			{
-				Count = 3,
-				SiteId = siteId2
-			});
-			Database
-				.WithUser("user", personId, null, null, siteId1)
-				.WithSchedule(personId, phone, "2015-01-15 8:00", "2015-01-15 10:00")
-				.WithAlarm("break", phone, 1);
-			Now.Is("2015-01-15 08:00");
-			Rta.SaveState(new ExternalUserStateForTest
-			{
-				UserCode = "user", 
-				StateCode = "break"
-			});
-			
-			Target.Sync();
-
-			Model.Get(siteId1).Count.Should().Be(1);
-			Model.Get(siteId2).Should().Be.Null();
-		}
+		
 	}
 }

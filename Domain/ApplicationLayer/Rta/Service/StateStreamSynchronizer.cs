@@ -9,16 +9,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public interface IStateStreamSynchronizer
 	{
-		void Sync();
 		void Initialize();
 	}
 
 	public class NoStateStreamSynchronizer : IStateStreamSynchronizer
 	{
-		public void Sync()
-		{
-		}
-
 		public void Initialize()
 		{
 		}
@@ -56,16 +51,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_distributedLockAcquirer = distributedLockAcquirer;
 		}
 		
-		public void Sync()
-		{
-			var states = _agentStateReadModelReader.GetActualAgentStates();
-			_recreatables.ForEach(s =>
-			{
-				s.DeleteAll();
-				processStatesTo(s, states);
-			});
-		}
-
 		public virtual void Initialize()
 		{
 			var states = _agentStateReadModelReader.GetActualAgentStates();

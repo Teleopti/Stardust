@@ -565,7 +565,6 @@
     <Compile Include="Areas\ResourcePlanner\SuggestedPlanningPeriodRangeModel.cs" />
     <Compile Include="Areas\Global\ThrottledAction.cs" />
     <Compile Include="Areas\ResourcePlanner\ViolatedSchedulePeriodBusinessRule.cs" />
-    <Compile Include="Areas\Rta\Controllers\SyncController.cs" />
     <Compile Include="Areas\People\Core\Providers\IPeopleSearchProvider.cs" />
     <Compile Include="Areas\Rta\Log4NetWcfLogger.cs" />
     <Compile Include="Areas\Search\Controllers\PeopleSearchController.cs" />
