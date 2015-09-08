@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 							_partTimePercentageRepo.LoadAll().FirstOrDefault(), _contractScheduleRepo.LoadAll().FirstOrDefault()),
 						_teamRepository.LoadAll().FirstOrDefault());
 
-					updatePeriod(inputSkills, newPeriod, inputPerson.ShiftBagId);
+					updatePeriod(person, inputSkills, newPeriod, inputPerson.ShiftBagId);
 
 					person.AddPersonPeriod(newPeriod);
 					updatedCount++;
@@ -67,29 +67,29 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 
 					var newPeriod = currentPeriod.NoneEntityClone();
 					newPeriod.StartDate = new DateOnly(model.Date);
-					((IPersonPeriodModifySkills) newPeriod).ResetPersonSkill();
+					person.ResetPersonSkills(newPeriod);
 
-					updatePeriod(inputSkills, newPeriod, inputPerson.ShiftBagId);
+					updatePeriod(person, inputSkills, newPeriod, inputPerson.ShiftBagId);
 
 					person.AddPersonPeriod(newPeriod);
 					updatedCount++;
 					continue;
 				}
-				((IPersonPeriodModifySkills) currentPeriod).ResetPersonSkill();
+				person.ResetPersonSkills(currentPeriod);
 
-				updatePeriod(inputSkills, currentPeriod, inputPerson.ShiftBagId);
+				updatePeriod(person, inputSkills, currentPeriod, inputPerson.ShiftBagId);
 				updatedCount++;
 			}
 
 			return updatedCount;
 		}
 
-		private void updatePeriod(IEnumerable<Guid> inputSkills, IPersonPeriod period, Guid? shiftBagId)
+		private void updatePeriod(IPerson person, IEnumerable<Guid> inputSkills, IPersonPeriod period, Guid? shiftBagId)
 		{
 			foreach (var skillId in inputSkills)
 			{
 				var skill = _skillRepository.Get(skillId);
-				((IPersonPeriodModifySkills)period).AddPersonSkill(new PersonSkill(skill, new Percent(1)));
+				person.AddSkill(new PersonSkill(skill, new Percent(1)), period);
 			}
 
 			if (shiftBagId.HasValue)
