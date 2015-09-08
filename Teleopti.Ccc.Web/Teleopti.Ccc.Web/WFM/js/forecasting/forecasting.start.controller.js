@@ -193,7 +193,7 @@ angular.module('wfm.forecasting')
 					var endDay = new Date($scope.period.endDate).setHours(12, 0, 0, 0);
 
 					if (dayToCheck >= startDay && dayToCheck <= endDay) {
-						return 'in-date-range';
+						return 'range';
 					}
 				}
 				return '';
