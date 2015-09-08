@@ -62,7 +62,7 @@
 				</md-list-item>
 			</md-content>
 			<div style="float: right">
-				<button ng-show="vm.dataInitialized && !vm.processing && vm.updateResult.Success && vm.updateResult.SuccessCount > 0" class="wfm-btn wfm-btn-primary" ng-click="vm.toggleShiftBagPanel('ChangeShiftBag')()">{{'PersonFinderFieldShiftBag' | translate}}</button>
+				<button ng-show="vm.dataInitialized && !vm.processing && vm.updateResult.Success && vm.updateResult.SuccessCount > 0" class="wfm-btn wfm-btn-primary" ng-click="vm.setCurrentCommand('ChangeShiftBag')()">{{'PersonFinderFieldShiftBag' | translate}}</button>
 				<button class="wfm-btn" ng-class="{'wfm-btn-primary': vm.dataChanged, 'wfm-btn-primary-disabled': !vm.dataChanged}" ng-disabled="!vm.dataChanged" ng-click="vm.updatePeople()">{{'Apply' | translate}}</button>
 			</div>
 		</md-sidenav>

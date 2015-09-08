@@ -57,7 +57,7 @@
 				panelName: 'right-skill',
 				action: function () {
 					vm.toggleMenuState();
-					setCurrentCommand("AdjustSkill")();
+					vm.setCurrentCommand("AdjustSkill")();
 				},
 				active: function () {
 					return vm.isAdjustSkillEnabled;
@@ -73,7 +73,7 @@
 				panelName: 'right-shiftbag',
 				action: function () {
 					vm.toggleMenuState();
-					setCurrentCommand("ChangeShiftBag")();
+					vm.setCurrentCommand("ChangeShiftBag")();
 				},
 				active: function () {
 					return vm.isAdjustSkillEnabled;
@@ -199,7 +199,7 @@
 			};
 		};
 
-		var setCurrentCommand = function(cmdName) {
+		vm.setCurrentCommand = function (cmdName) {
 			vm.commandName = cmdName;
 			vm.updateResult = { Success: false };
 
@@ -213,7 +213,7 @@
 
 
 		function initialize() {
-			setCurrentCommand($stateParams.commandTag);
+			vm.setCurrentCommand($stateParams.commandTag);
 
 			var loadSkillPromise = peopleSvc.loadAllSkills.get().$promise;
 			loadSkillPromise.then(function (result) {
