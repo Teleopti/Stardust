@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		[When(@"Forecast has succeeded")]
 		public void WhenForecastHasSucceeded()
 		{
-			Browser.Interactions.AssertExists(".wfm-list li:last-child span.success");
+			Browser.Interactions.AssertExistsUsingJQuery(".wfm-card-list md-card:last card-header .mdi-check");
 		}
 
 		[Given(@"there is no forecast data")]
@@ -54,8 +54,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		[When(@"I select workload '(.*)'")]
 		public void WhenISelectWorkload(string workload)
 		{
-			Browser.Interactions.ClickContaining(".workload", workload);
-			Browser.Interactions.AssertExistsUsingJQuery(".workload:contains('" + workload + "').selected");
+			Browser.Interactions.ClickContaining("card-header span b", workload);
+		}
+
+		[When(@"I continue with advanced")]
+		public void WhenIContinueWithAdvanced()
+		{
+			Browser.Interactions.Click(".wfm-card-selected .wfm-btn");
+			Browser.Interactions.AssertExists(".back");
 		}
 
 		[When(@"I choose to forecast the selected targets")]
@@ -67,10 +73,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		[When(@"I use default forecast period and forecast for all")]
 		public void WhenIUseDefaultForecastPeriodAndForecastForAll()
 		{
+			Browser.Interactions.Click(".forecast-create-button");
 			ScenarioContext.Current.Add("startdate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText("span.startDate"))));
 			ScenarioContext.Current.Add("enddate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText("span.endDate"))));
 			Browser.Interactions.Click(".next-step-all");
 		}
+
+		[When(@"I use default forecast period and forecast for one workload")]
+		public void WhenIUseDefaultForecastPeriodAndForecastForOneWorkload()
+		{
+			Browser.Interactions.Click(".forecast-create-button");
+			ScenarioContext.Current.Add("startdate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText("span.startDate"))));
+			ScenarioContext.Current.Add("enddate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText("span.endDate"))));
+			Browser.Interactions.Click(".next-step-one-workload");
+		}
+
 
 		[When(@"I use default forecast period and continue with advanced")]
 		public void WhenIClickQuickforecaster()

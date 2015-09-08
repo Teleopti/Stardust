@@ -26,14 +26,14 @@ angular.module('wfm.forecasting')
 			};
 
 			$scope.back = function () {
-				$state.go("forecasting");
+				$state.go("forecasting", { target: { workloadId: $scope.workloadId, selectedMethod: $scope.selectedMethod }, running: false });
 			};
 
 			$scope.nextStepOneWorkload = function () {
 				if ($scope.disableNextStepOneWorkload()) {
 					return;
 				}
-				$state.go("forecasting", { period: $scope.period, target: $scope.workloadId, running: true });
+				$state.go("forecasting", { period: $scope.period, target: { workloadId: $scope.workloadId, selectedMethod: $scope.selectedMethod}, running: true });
 			};
 
 			$scope.modalLaunch = false;
@@ -120,7 +120,7 @@ angular.module('wfm.forecasting')
 						} else {
 							selectedMethod = data.ForecastMethodRecommended.Id;
 						}
-						//workload.selectedMethod = selectedMethod;
+						$scope.selectedMethod = selectedMethod;
 						$scope.ForecastMethodRecommended = data.ForecastMethodRecommended;
 
 						if ($scope.isQueueStatisticsEnabled) {

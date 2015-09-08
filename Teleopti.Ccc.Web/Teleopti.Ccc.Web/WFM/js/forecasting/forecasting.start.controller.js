@@ -20,7 +20,13 @@ angular.module('wfm.forecasting')
 			var forecastForWorkload = function(workload) {
 				workload.ShowProgress = true;
 				workload.StartTime = moment().format();
-				$http.post('../api/Forecasting/Forecast', JSON.stringify({ ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate, Workloads: [workload.Id] })).
+				var workloadToSend = { WorkloadId: workload.Id };
+				if (workload.selectedMethod) {
+					workloadToSend.ForecastMethodId = workload.selectedMethod;
+				} else {
+					workloadToSend.ForecastMethodId = -1;
+				}
+				$http.post('../api/Forecasting/Forecast', JSON.stringify({ ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate, Workloads: [workloadToSend] })).
 					success(function(data, status, headers, config) {
 						if (data.Success) {
 							workload.IsSuccess = true;
@@ -53,7 +59,8 @@ angular.module('wfm.forecasting')
 
 				if ($stateParams.running === true) {
 					for (var i = 0, len = $scope.workloads.length; i < len; i++) {
-						if ($scope.workloads[i].Id === $stateParams.target) {
+						if ($scope.workloads[i].Id === $stateParams.target.workloadId) {
+							$scope.workloads[i].selectedMethod = $stateParams.target.selectedMethod;
 							forecastForWorkload($scope.workloads[i]);
 							break;
 						}
@@ -130,7 +137,13 @@ angular.module('wfm.forecasting')
 				workload.ShowProgress = true;
 				workload.IsSuccess = false;
 				workload.IsFailed = false;
-				$http.post('../api/Forecasting/Forecast', JSON.stringify({ ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate, Workloads: [workload] })).
+				var workloadToSend = { WorkloadId: workload.Id };
+				if (workload.selectedMethod) {
+					workloadToSend.ForecastMethodId = workload.selectedMethod;
+				} else {
+					workloadToSend.ForecastMethodId = -1;
+				}
+				$http.post('../api/Forecasting/Forecast', JSON.stringify({ ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate, Workloads: [workloadToSend] })).
 					success(function (data, status, headers, config) {
 						if (data.Success) {
 							workload.IsSuccess = true;
