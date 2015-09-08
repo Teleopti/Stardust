@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			var worker1 = Task.Factory.StartNew(job);
 			var worker2 = Task.Factory.StartNew(job);
 
-			Exceptions.Ignore(() => Task.WaitAll(worker1, worker2));
+			Exceptions.Ignore(async () => await Task.WhenAll(worker1, worker2));
 
 			worker1.Exception.Should().Be.Null();
 			worker2.Exception.Should().Be.Null();

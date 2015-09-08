@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account.Concurrent
 		protected abstract void ThenPersonAccountWithSolvedConflicts(IPersonAbsenceAccount personAccountWithSolvedConflicts);
 
 		[Test]
-		public void DoTheTest()
+		public async void DoTheTest()
 		{
 			var otherAccounts = FetchPersonAccount();
 			var myAccounts = FetchPersonAccount();
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account.Concurrent
 
 			var myTask = Task<bool>.Factory.StartNew(() => Target.Persist(myAccounts));
 			var otherTask = Task<bool>.Factory.StartNew(() => Target.Persist(otherAccounts));
-			Task.WaitAll(myTask, otherTask);
+			await Task.WhenAll(myTask, otherTask);
 
 			var myHadConflicts = myTask.Result;
 			var otherHadConflicts = otherTask.Result;

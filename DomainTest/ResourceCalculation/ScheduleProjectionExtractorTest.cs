@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         }
 
         [Test]
-        public void VerifyEverythingWorks()
+        public async void VerifyEverythingWorks()
         {
             IPerson p1 = PersonFactory.CreatePerson();
             IPerson p2 = PersonFactory.CreatePerson();
@@ -54,13 +54,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 	        }
 	        using (_mocks.Playback())
 	        {
-		        var retList = _target.CreateRelevantProjectionList(dic);
+		        var retList = await _target.CreateRelevantProjectionList(dic);
 		        Assert.IsTrue(retList.HasItems());
 
-		        retList = _target.CreateRelevantProjectionList(dic, period);
+		        retList = await _target.CreateRelevantProjectionList(dic, period);
 		        Assert.IsTrue(retList.HasItems());
 	        }
         }
-
     }
 }

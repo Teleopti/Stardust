@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 		}
 
 		[Test]
-		public void ShouldPublishEventsWhileInitializing()
+		public async void ShouldPublishEventsWhileInitializing()
 		{
 			var personId = Guid.NewGuid();
 			Database.WithUser("user", personId);
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 					CurrentEventPublisher.Current().Publish(new TestEvent());
 				});
 			});
-			Task.WaitAll(initialize, systemTask);
+			await Task.WhenAll(initialize, systemTask);
 
 			EventPublisher.PublishedEvents.OfType<TestEvent>().Should().Have.Count.EqualTo(100000);
 		}

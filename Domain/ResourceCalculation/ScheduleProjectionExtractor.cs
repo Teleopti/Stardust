@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// Created by: micke
         /// Created date: 2008-05-27
         /// </remarks>
-        public ResourceCalculationDataContainer CreateRelevantProjectionList(IScheduleDictionary scheduleDictionary)
+        public async Task<ResourceCalculationDataContainer> CreateRelevantProjectionList(IScheduleDictionary scheduleDictionary)
         {
 		    using (PerformanceOutput.ForOperation("Creating projection"))
 		    {
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				_extractionTasks.Clear();
 				scheduleDictionary.ExtractAllScheduleData(this);
 
-				Task.WaitAll(_extractionTasks.ToArray());
+				await Task.WhenAll(_extractionTasks.ToArray());
 				_extractionTasks.Clear();
 
 				return retList;
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// Created by: micke
         /// Created date: 2008-05-27
         /// </remarks>
-        public ResourceCalculationDataContainer CreateRelevantProjectionList(IScheduleDictionary scheduleDictionary, DateTimePeriod period)
+        public async Task<ResourceCalculationDataContainer> CreateRelevantProjectionList(IScheduleDictionary scheduleDictionary, DateTimePeriod period)
         {
 	        using (PerformanceOutput.ForOperation("Creating projection"))
 	        {
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				_extractionTasks.Clear();
 		        scheduleDictionary.ExtractAllScheduleData(this, period);
 
-		        Task.WaitAll(_extractionTasks.ToArray());
+		        await Task.WhenAll(_extractionTasks.ToArray());
 				_extractionTasks.Clear();
 
 		        return retList;

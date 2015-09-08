@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules.Concurrent
 			bool myScheduleRangeWasTheOneWithConflicts);
 
 		[Test]
-		public void DoTheTestConcurrent()
+		public async void DoTheTestConcurrent()
 		{
 			var otherRange = LoadScheduleRange();
 			var myRange = LoadScheduleRange();
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules.Concurrent
 
 			var myTask = Task<IEnumerable<PersistConflict>>.Factory.StartNew(() => Target.Persist(myRange));
 			var otherTask = Task<IEnumerable<PersistConflict>>.Factory.StartNew(() => Target.Persist(otherRange));
-			Task.WaitAll(myTask, otherTask);
+			await Task.WhenAll(myTask, otherTask);
 
 			var myConflicts = myTask.Result.ToList();
 			var otherConflicts = otherTask.Result.ToList();

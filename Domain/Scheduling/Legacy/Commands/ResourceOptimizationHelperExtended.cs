@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			var period = new DateOnlyPeriod(stateHolder.RequestedPeriod.DateOnlyPeriod.StartDate.AddDays(-10), stateHolder.RequestedPeriod.DateOnlyPeriod.EndDate.AddDays(2));
 			var extractor = new ScheduleProjectionExtractor(_personSkillProvider(), stateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution));
-			var resources = extractor.CreateRelevantProjectionList(stateHolder.Schedules, period.ToDateTimePeriod(stateHolder.TimeZoneInfo));
+			var resources = extractor.CreateRelevantProjectionList(stateHolder.Schedules, period.ToDateTimePeriod(stateHolder.TimeZoneInfo)).Result;
 			backgroundWorker.ReportProgress(1);
 			using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
 			{
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			}
 		}
 
-		public void ResourceCalculateMarkedDays(IBackgroundWorkerWrapper backgroundWorker, bool considerShortBreaks, bool useOccupancyAdjustment)
+		public  void ResourceCalculateMarkedDays(IBackgroundWorkerWrapper backgroundWorker, bool considerShortBreaks, bool useOccupancyAdjustment)
 		{
 			var stateHolder = _stateHolder();
 			if (!stateHolder.DaysToRecalculate.Any()) return;
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			var period = new DateOnlyPeriod(stateHolder.DaysToRecalculate.Min().AddDays(-1), stateHolder.DaysToRecalculate.Max());
 			var extractor = new ScheduleProjectionExtractor(_personSkillProvider(), stateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution));
-			var resources = extractor.CreateRelevantProjectionList(stateHolder.Schedules, period.ToDateTimePeriod(stateHolder.TimeZoneInfo));
+			var resources = extractor.CreateRelevantProjectionList(stateHolder.Schedules, period.ToDateTimePeriod(stateHolder.TimeZoneInfo)).Result;
 			using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
 			{
 				resourceCalculateDays(backgroundWorker, useOccupancyAdjustment, considerShortBreaks,

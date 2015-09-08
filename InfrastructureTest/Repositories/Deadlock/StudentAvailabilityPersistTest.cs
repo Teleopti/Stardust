@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Deadlock
 		private const int noOfDays = 5;
 
 		[Test]
-		public void ShouldBeAbleToPersistInParallel()
+		public async void ShouldBeAbleToPersistInParallel()
 		{
 			setup();
 
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Deadlock
 				task.Start();
 			}
 
-			Task.WaitAll(tasks.ToArray());
+			await Task.WhenAll(tasks.ToArray());
 		}
 
 		private void setup()

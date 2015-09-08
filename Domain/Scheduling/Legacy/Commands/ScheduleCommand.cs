@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					minutesPerInterval = schedulerStateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution);
 				}
 				var extractor = new ScheduleProjectionExtractor(_personSkillProvider(), minutesPerInterval);
-				var resources = extractor.CreateRelevantProjectionList(schedulerStateHolder.Schedules);
+				var resources = extractor.CreateRelevantProjectionList(schedulerStateHolder.Schedules).Result;
 				using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
 				{
 					if (schedulingOptions.UseBlock || schedulingOptions.UseTeam)

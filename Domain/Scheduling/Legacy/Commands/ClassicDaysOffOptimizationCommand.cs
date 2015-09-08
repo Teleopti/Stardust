@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IDayOffOptimizationService service = new DayOffOptimizationService(periodValueCalculator);
 
 			var extractor = new ScheduleProjectionExtractor(_personSkillProvider(), minutesPerInterval);
-			var resources = extractor.CreateRelevantProjectionList(schedulerStateHolder.Schedules);
+			var resources = extractor.CreateRelevantProjectionList(schedulerStateHolder.Schedules).Result;
 			using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
 			{
 				_resourceOptimizationHelperExtended().ResourceCalculateAllDays(backgroundWorker, true);

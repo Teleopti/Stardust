@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public IAgentStateReadModelReader AgentStateReadModelReader;
 
 		[Test]
-		public void ShouldNotSendDuplicateEvents()
+		public async void ShouldNotSendDuplicateEvents()
 		{
 			Database
 				.WithDefaultStateGroup()
@@ -61,7 +61,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 						StateCode = "AUX1"
 					})));
 			});
-			Task.WaitAll(tasks.ToArray());
+
+			await Task.WhenAll(tasks.ToArray());
 
 			AgentStateReadModelReader.GetActualAgentStates().Should().Have.Count.EqualTo(100);
 			Publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Should().Have.Count.EqualTo(100);
