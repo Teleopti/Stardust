@@ -150,10 +150,10 @@ wfm.config([
 			timeout = Date.now() + 10000;
 		};
 
-		function broadcastEventOnToggle(model, eventName) {
-			$rootScope.$watch(model, function() {
+		function broadcastEventOnToggle() {
+			$rootScope.$watchGroup(['toggleLeftSide', 'toggleRightSide'], function() {
 				$timeout(function() {
-					$rootScope.$broadcast(eventName);
+					$rootScope.$broadcast('sidenav:toggle');
 				}, 500);
 			});
 		}
@@ -171,8 +171,7 @@ wfm.config([
 			}
 		});
 
-		broadcastEventOnToggle('toggleLeftSide', 'leftSidenav:toggle')
-		broadcastEventOnToggle('toggleRightSide', 'rightSidenav:toggle')
+		broadcastEventOnToggle();
 
 		var startContext = checkCurrentUser();
 		startContext.error(userNotAuthenticatedHandler);

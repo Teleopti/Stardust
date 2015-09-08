@@ -43,11 +43,7 @@
 				resize();
 			});
 
-			$scope.$on('leftSidenav:toggle', function() {
-				resize();
-			});
-
-			$scope.$on('rightSidenav:toggle', function() {
+			$scope.$on('sidenav:toggle', function() {
 				resize();
 			});
 
