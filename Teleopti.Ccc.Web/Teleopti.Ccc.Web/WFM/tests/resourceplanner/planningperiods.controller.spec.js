@@ -26,8 +26,14 @@ describe('PlanningPeriodsCtrl', function () {
 					queryDeferred.resolve('true');
 					return { $promise: queryDeferred.promise };
 				}
-			}
-
+			},
+            status: {
+                get: function() {
+                    var queryDeferred = $q.defer();
+                    queryDeferred.resolve({IsRunning:false});
+                    return { $promise: queryDeferred.promise };
+                }
+            }
 		};
 
 		$controller('PlanningPeriodsCtrl', { $scope: scope, PlanningPeriodSvrc: mockPlanningPeriodSvrc });
@@ -48,6 +54,13 @@ describe('PlanningPeriodsCtrl', function () {
 					queryDeferred.resolve('true');
 					return { $promise: queryDeferred.promise };
 				}
+			},
+			status: {
+			    get: function () {
+			        var queryDeferred = $q.defer();
+			        queryDeferred.resolve({ IsRunning: false });
+			        return { $promise: queryDeferred.promise };
+			    }
 			}
 		};
 
@@ -81,6 +94,13 @@ describe('PlanningPeriodsCtrl', function () {
 					queryDeferred.resolve('true');
 					return { $promise: queryDeferred.promise };
 				}
+			},
+			status: {
+			    get: function () {
+			        var queryDeferred = $q.defer();
+			        queryDeferred.resolve({ IsRunning: false });
+			        return { $promise: queryDeferred.promise };
+			    }
 			}
 		};
 
