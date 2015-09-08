@@ -28,11 +28,12 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 		private readonly IProductionReplanHelper _productionReplanHelper;
 		private readonly IOutboundPeriodMover _outboundPeriodMover;
 		private readonly IOutboundCampaignTaskManager _campaignTaskManager;
+		private readonly ISkillRepository _skillRepository;
 
 		public OutboundCampaignPersister(IOutboundCampaignRepository outboundCampaignRepository, IOutboundCampaignMapper outboundCampaignMapper, 
 			IOutboundCampaignViewModelMapper outboundCampaignViewModelMapper, IOutboundSkillCreator outboundSkillCreator, IActivityRepository activityRepository, 
 			IOutboundSkillPersister outboundSkillPersister, ICreateOrUpdateSkillDays createOrUpdateSkillDays, IProductionReplanHelper productionReplanHelper, 
-			IOutboundPeriodMover outboundPeriodMover, IOutboundCampaignTaskManager campaignTaskManager)
+			IOutboundPeriodMover outboundPeriodMover, IOutboundCampaignTaskManager campaignTaskManager, ISkillRepository skillRepository)
 		{
 			_outboundCampaignRepository = outboundCampaignRepository;
 			_outboundCampaignMapper = outboundCampaignMapper;
@@ -44,6 +45,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			_productionReplanHelper = productionReplanHelper;
 			_outboundPeriodMover = outboundPeriodMover;
 			_campaignTaskManager = campaignTaskManager;
+			_skillRepository = skillRepository;
 		}
 
 		public CampaignViewModel Persist(CampaignForm form)
@@ -206,6 +208,35 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 		{
 			var campaign = _outboundCampaignRepository.Get(campaignId);
 			_productionReplanHelper.Replan(campaign);
+		}
+
+		public void RemoveCampaign(IOutboundCampaign campaign)
+		{
+			var shouldRemoveActivity = true;
+			var activity = _activityRepository.Get(campaign.Skill.Activity.Id.Value);
+			if (activity != null)
+			{
+				if (activity.IsOutboundActivity)
+				{
+					var skills = _skillRepository.LoadAll();
+					foreach (var skill in skills)
+					{
+						if (skill.Activity.Equals(activity) && !skill.Equals(campaign.Skill))
+						{
+							shouldRemoveActivity = false;
+							break;
+						}
+					}
+				}
+				else
+				{
+					shouldRemoveActivity = false;
+				}
+			}
+
+			if (shouldRemoveActivity) _activityRepository.Remove(activity);
+			_skillRepository.Remove(campaign.Skill);
+			_outboundCampaignRepository.Remove(campaign);
 		}
 
 		private bool isWorkingHoursUpdated(IDictionary<DayOfWeek, TimePeriod> oldWorkingHours, IDictionary<DayOfWeek, TimePeriod> newWorkingHours)

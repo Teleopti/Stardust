@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			_outboundCampaignPersister = new OutboundCampaignPersister(_fakeCampaignRepository,
 				new OutboundCampaignMapper(_fakeCampaignRepository, _userTimeZone), new OutboundCampaignViewModelMapper(),
 				skillCreator, _fakeActivityRepository,
-				new OutboundSkillPersister(_fakeSkillRepository, new FakeWorkloadRepository()), _createOrUpdateSkillDays, null, null, null);
+				new OutboundSkillPersister(_fakeSkillRepository, new FakeWorkloadRepository()), _createOrUpdateSkillDays, null, null, null, null);
 		}
 
 		[Test]
@@ -220,6 +220,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		private OutboundCampaignPersister _target;
 		private IList<IActivity> _activityList;
 		private IOutboundPeriodMover _outboundPeriodMover;
+		private ISkillRepository _skillRepository;
 
 		[SetUp]
 		public void Setup()
@@ -232,11 +233,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			_outboundSkillPersister = MockRepository.GenerateMock<IOutboundSkillPersister>();
 			_productionReplanHelper = MockRepository.GenerateMock<IProductionReplanHelper>();
 			_outboundPeriodMover = MockRepository.GenerateMock<IOutboundPeriodMover>();
+			_skillRepository = MockRepository.GenerateMock<ISkillRepository>();
 			_activityList = new List<IActivity>() { ActivityFactory.CreateActivity("aa") };
 			_activityRepository.Stub(x => x.LoadAll()).Return(_activityList);
 			_productionReplanHelper.Stub(x => x.Replan(null)).IgnoreArguments();
 			_outboundPeriodMover.Stub(x => x.Move(null, new DateOnlyPeriod())).IgnoreArguments();
-			_target = new OutboundCampaignPersister(_outboundCampaignRepository, _outboundCampaignMapper, null, _outboundSkillCreator, _activityRepository, null, null, _productionReplanHelper, _outboundPeriodMover, null);
+			_skillRepository.Stub(x => x.Get(new Guid()));
+			_target = new OutboundCampaignPersister(_outboundCampaignRepository, _outboundCampaignMapper, null, _outboundSkillCreator,
+				_activityRepository, null, null, _productionReplanHelper, _outboundPeriodMover, null, _skillRepository);
 
 		}
 
@@ -247,7 +251,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var campaign = new Domain.Outbound.Campaign();
 			_outboundCampaignRepository.Stub(x => x.Get(campaignId)).Return(campaign);
 
-			_target = new OutboundCampaignPersister(_outboundCampaignRepository, _outboundCampaignMapper, null, _outboundSkillCreator, _activityRepository, null, null, _productionReplanHelper, _outboundPeriodMover, null);
+			_target = new OutboundCampaignPersister(_outboundCampaignRepository, _outboundCampaignMapper, null, _outboundSkillCreator, _activityRepository, null, null, _productionReplanHelper, _outboundPeriodMover, null, null);
 			_target.ManualReplanCampaign(campaignId);
 
 			_productionReplanHelper.AssertWasCalled(x => x.Replan(campaign));
@@ -263,7 +267,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			skill.TimeZone = TimeZoneInfo.Utc;
 			_outboundSkillCreator.Stub(x=>x.CreateSkill(ActivityFactory.CreateActivity("myActivity"), new Domain.Outbound.Campaign())).IgnoreArguments().Return(skill);
 			var target = new OutboundCampaignPersister(_outboundCampaignRepository, null, _outboundCampaignViewModelMapper, _outboundSkillCreator, _activityRepository,
-				_outboundSkillPersister, createOrUpdateSkillDays, null, null, null);
+				_outboundSkillPersister, createOrUpdateSkillDays, null, null, null, null);
 			_outboundCampaignViewModelMapper.Stub(x => x.Map(new Domain.Outbound.Campaign())).IgnoreArguments().Return(expectedVM);
 
 			var result = target.Persist(new CampaignForm()
@@ -290,7 +294,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		public void ShouldUpdateCampaign()
 		{
 			var campaignVM = new CampaignViewModel { Id = new Guid(), Activity = new ActivityViewModel() };
-			var target = new OutboundCampaignPersister(_outboundCampaignRepository, _outboundCampaignMapper, null, null, null, null, null, _productionReplanHelper, _outboundPeriodMover, null);
+			var target = new OutboundCampaignPersister(_outboundCampaignRepository, _outboundCampaignMapper, null, null, null, null, null, _productionReplanHelper, _outboundPeriodMover, null, null);
 			var expectedCampaign = new Domain.Outbound.Campaign();
 			_outboundCampaignRepository.Stub(x => x.Load((Guid)campaignVM.Id).Clone()).Return(expectedCampaign);
 			_outboundCampaignMapper.Stub(x => x.Map(campaignVM)).Return(expectedCampaign);
@@ -619,7 +623,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			};
 			_outboundCampaignRepository.Stub(x => x.Get(id)).Return(campaign);
 
-			_target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, null, null, createOrUpdateSkillDays, null, null, campaignTaskManager);
+			_target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, null, null, createOrUpdateSkillDays, null, null, campaignTaskManager, null);
 			_target.PersistManualProductionPlan(manualProductionPlan);
 
 			campaign.GetManualProductionPlan(date).Should().Be.EqualTo(new TimeSpan(1, 2, 33, 35));
@@ -655,7 +659,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			};
 			_outboundCampaignRepository.Stub(x => x.Get(id)).Return(campaign);
 
-			_target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, null, null, createOrUpdateSkillDays, null, null, campaignTaskManager);
+			_target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, null, null, createOrUpdateSkillDays, null, null, campaignTaskManager, null);
 			_target.PersistManualProductionPlan(manualProductionPlan);
 
 			campaign.GetManualProductionPlan(date).Should().Be.EqualTo(null);
@@ -673,7 +677,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var removeManualForm = new RemoveManualPlanForm() { CampaignId = campaignId, Dates = new List<DateOnly>() { date } };
 			_outboundCampaignRepository.Stub(x => x.Get(campaignId)).Return(campaign);
 
-			_target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, null, null, null, _productionReplanHelper, null, null);
+			_target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, null, null, null, _productionReplanHelper, null, null, null);
 			_target.RemoveManualProductionPlan(removeManualForm);
 
 			(campaign.GetManualProductionPlan(date)==null).Should().Be.True();
@@ -691,10 +695,101 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var removeForm = new RemoveActualBacklogForm() { CampaignId = campaignId, Dates = new List<DateOnly>() { date } };
 			_outboundCampaignRepository.Stub(x => x.Get(campaignId)).Return(campaign);
 
-			_target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, null, null, null, _productionReplanHelper, null, null);
+			_target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, null, null, null, _productionReplanHelper, null, null, null);
 			_target.RemoveActualBacklog(removeForm);
 
 			(campaign.GetActualBacklog(date) == null).Should().Be.True();			
+		}
+
+		[Test]
+		public void ShouldRemoveActivityWhenItIsOutboundActivity()
+		{
+			var activity = ActivityFactory.CreateActivity("myActivity");
+			activity.SetId(new Guid());
+			activity.IsOutboundActivity = true;
+			var activityRepository = MockRepository.GenerateMock<IActivityRepository>();
+			activityRepository.Stub(x => x.Get(activity.Id.Value)).Return(activity);
+			var skill = SkillFactory.CreateSkill("skill1");
+			skill.Activity = activity;
+			_skillRepository.Stub(x => x.LoadAll()).Return(new List<ISkill>()
+			{
+				skill,
+				SkillFactory.CreateSkill("skill2")
+			});
+			var campaign = new Domain.Outbound.Campaign();
+			campaign.Skill = skill;
+
+			_target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, activityRepository, null, null, null, null, null, _skillRepository);
+			_target.RemoveCampaign(campaign);
+
+			activityRepository.AssertWasCalled(x=>x.Remove(activity));
+			_skillRepository.AssertWasCalled(x=>x.Remove(skill));
+			_outboundCampaignRepository.AssertWasCalled(x=>x.Remove(campaign));
+		}
+
+		[Test]
+		public void ShouldNotRemoveActivityWhenItIsNotOutboundActivity()
+		{
+			var activity = ActivityFactory.CreateActivity("myActivity");
+			activity.SetId(new Guid());
+			activity.IsOutboundActivity = false;
+			var activityRepository = MockRepository.GenerateMock<IActivityRepository>();
+			activityRepository.Stub(x => x.Get(activity.Id.Value)).Return(activity);
+			var skill = SkillFactory.CreateSkill("skill1");
+			skill.Activity = activity;
+			var campaign = new Domain.Outbound.Campaign();
+			campaign.Skill = skill;
+
+			_target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, activityRepository, null, null, null, null, null, _skillRepository);
+			_target.RemoveCampaign(campaign);
+
+			activityRepository.AssertWasNotCalled(x => x.Remove(activity));
+		}
+
+		[Test]
+		public void ShouldNotRemoveActivityWhenItReferencedByOthers()
+		{
+			var activity = ActivityFactory.CreateActivity("myActivity");
+			activity.SetId(new Guid());
+			activity.IsOutboundActivity = true;
+			var activityRepository = MockRepository.GenerateMock<IActivityRepository>();
+			activityRepository.Stub(x => x.Get(activity.Id.Value)).Return(activity);
+			var skill1 = SkillFactory.CreateSkill("skill1");
+			skill1.Activity = activity;
+			var skill2 = SkillFactory.CreateSkill("skill2");
+			skill2.Activity = activity;
+			_skillRepository.Stub(x => x.LoadAll()).Return(new List<ISkill>()
+			{
+				skill1,
+				skill2
+			});
+			var campaign = new Domain.Outbound.Campaign();
+			campaign.Skill = skill1;
+
+			_target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, activityRepository, null, null, null, null, null, _skillRepository);
+			_target.RemoveCampaign(campaign);
+
+			activityRepository.AssertWasNotCalled(x => x.Remove(activity));
+		}
+
+		[Test]
+		public void ShouldRemoveSkillAndCampaign()
+		{
+			var activity = ActivityFactory.CreateActivity("myActivity");
+			activity.SetId(new Guid());
+			activity.IsOutboundActivity = false;
+			var activityRepository = MockRepository.GenerateMock<IActivityRepository>();
+			activityRepository.Stub(x => x.Get(activity.Id.Value)).Return(activity);
+			var skill = SkillFactory.CreateSkill("skill1");
+			skill.Activity = activity;
+			var campaign = new Domain.Outbound.Campaign();
+			campaign.Skill = skill;
+
+			_target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, activityRepository, null, null, null, null, null, _skillRepository);
+			_target.RemoveCampaign(campaign);
+
+			_skillRepository.AssertWasCalled(x => x.Remove(skill));
+			_outboundCampaignRepository.AssertWasCalled(x => x.Remove(campaign));
 		}
 	}
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider;
@@ -24,12 +23,11 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		private readonly IOutboundActivityProvider _outboundActivityProvider;
 		private readonly ICampaignSummaryViewModelFactory _campaignSummaryViewModelFactory;
 		private readonly ICampaignVisualizationProvider _campaignVisualizationProvider;
-		private readonly ISkillRepository _skillRepository;
 	
 
 		public OutboundController(IOutboundCampaignPersister outboundCampaignPersister, IOutboundCampaignRepository outboundCampaignRepository, 
 			IOutboundCampaignViewModelMapper outboundCampaignViewModelMapper, IOutboundActivityProvider outboundActivityProvider, 
-			ICampaignSummaryViewModelFactory campaignSummaryViewModelFactory, ICampaignVisualizationProvider campaignVisualizationProvider, ISkillRepository skillRepository)
+			ICampaignSummaryViewModelFactory campaignSummaryViewModelFactory, ICampaignVisualizationProvider campaignVisualizationProvider)
 		{
 			_outboundCampaignPersister = outboundCampaignPersister;
 			_outboundCampaignRepository = outboundCampaignRepository;
@@ -37,7 +35,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 			_outboundActivityProvider = outboundActivityProvider;
 		    _campaignSummaryViewModelFactory = campaignSummaryViewModelFactory;
 			_campaignVisualizationProvider = campaignVisualizationProvider;
-			_skillRepository = skillRepository;
 		}
 
 		[HttpPost, Route("api/Outbound/Campaign"), UnitOfWork]
@@ -91,8 +88,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 			if (campaign == null)
 				return NotFound();
 
-			_skillRepository.Remove(campaign.Skill);
-			_outboundCampaignRepository.Remove(campaign);
+			_outboundCampaignPersister.RemoveCampaign(campaign);
 			return Ok();
 		}
 
