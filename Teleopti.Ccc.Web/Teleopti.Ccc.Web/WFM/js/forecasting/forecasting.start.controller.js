@@ -202,7 +202,7 @@ angular.module('wfm.forecasting')
 			};
 
 			$scope.nextStepAdvanced = function (workload) {
-				$state.go('forecasting-advanced', { workloadId: workload.Id });
+				$state.go('forecasting-advanced', { workloadId: workload.Id, workloadName: workload.Name });
 			};
 
 			$scope.disalbeNextStepAdvanced = function () {
