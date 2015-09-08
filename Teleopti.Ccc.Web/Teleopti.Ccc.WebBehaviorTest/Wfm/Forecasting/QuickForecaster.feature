@@ -32,7 +32,6 @@ Scenario: Forecast one workload
 	And there is no forecast data
 	When I am viewing quick forecast page
 	And I select workload 'TheWorkload2'
-	And I continue with advanced
 	And I use default forecast period and forecast for one workload
 	And Forecast has succeeded
 	Then there is forecast data for default period for 'TheWorkload2'

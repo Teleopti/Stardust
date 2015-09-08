@@ -76,16 +76,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			Browser.Interactions.Click(".forecast-create-button");
 			ScenarioContext.Current.Add("startdate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText("span.startDate"))));
 			ScenarioContext.Current.Add("enddate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText("span.endDate"))));
-			Browser.Interactions.Click(".next-step-all");
+			Browser.Interactions.Click(".do-forecast");
 		}
 
 		[When(@"I use default forecast period and forecast for one workload")]
 		public void WhenIUseDefaultForecastPeriodAndForecastForOneWorkload()
 		{
-			Browser.Interactions.Click(".forecast-create-button");
+			Browser.Interactions.Click(".wfm-card-selected .info.mini");
 			ScenarioContext.Current.Add("startdate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText("span.startDate"))));
 			ScenarioContext.Current.Add("enddate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText("span.endDate"))));
-			Browser.Interactions.Click(".next-step-one-workload");
+			Browser.Interactions.Click(".do-forecast");
 		}
 
 
