@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Web.Areas.Global;
 using Teleopti.Ccc.Web.Areas.ResourcePlanner;
 
 namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner

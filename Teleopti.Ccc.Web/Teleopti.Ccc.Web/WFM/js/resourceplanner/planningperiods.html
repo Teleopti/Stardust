@@ -1,52 +1,53 @@
 ﻿<div ui-view>
-	<div class="row col-lg-12">
-		<div ng-show="!planningPeriod.$resolved">
-			<md-progress-linear md-mode="indeterminate"></md-progress-linear>
-			<p>{{'CheckingForecastingRequirements' | translate}}</p>
-		</div>
-		<div class="row" ng-show="planningPeriod.$resolved">
-			<div class="wfm-accordion material-depth-2">
-				<div class="next-planning-peroid wfm-accordion-head" ng-click="changeDateToggle = !changeDateToggle;suggestions(planningPeriod.Id)">
-					<h4>{{'NextPlanningPeriodMessage' | translate}} {{planningPeriod.StartDate | amDateFormat:"L"}} {{'ToText' | translate}} {{planningPeriod.EndDate | amDateFormat:"L"}}</h4>
-				</div>
-			</div>
-			<div ng-show="changeDateToggle && isEnabled && !planningPeriod.HasNextPlanningPeriod">
-				{{'ChangePlanningPeriodTo' | translate}}
-				<div ng-repeat="op in suggestedPlanningPeriods">
-					<div class="wfm-radio">
-						<input type="radio" name="changeRangeGroup" id="{{op.PeriodType}}-{{op.Number}}-{{$index}}" ng-click="rangeUpdated(planningPeriod.Id, op)" />
-						<label for="{{op.PeriodType}}-{{op.Number}}-{{$index}}">
-							<span class="wfm-radio-toggle"></span>
-							<span class="wfm-radio-label"> {{op.StartDate |  amDateFormat:"L"}} {{'ToText' | translate}} {{op.EndDate | amDateFormat:"L"}} {{'HavingRangeOf' | translate}} {{op.Number}} {{op.PeriodType}}</span>
-						</label>
-					</div>
-				</div>
-			</div>
+    <div class="alert-warning notice-spacer" ng-if="isScheduleRunning"><i class='mdi mdi-alert'></i> Warning: Server is busy scheduling, please try again later.</div>
+    <div class="row col-lg-12">
+        <div ng-show="!planningPeriod.$resolved">
+            <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+            <p>{{'CheckingForecastingRequirements' | translate}}</p>
+        </div>
+        <div class="row" ng-show="planningPeriod.$resolved">
+            <div class="wfm-accordion material-depth-2">
+                <div class="next-planning-peroid wfm-accordion-head" ng-click="changeDateToggle = !changeDateToggle;suggestions(planningPeriod.Id)">
+                    <h4>{{'NextPlanningPeriodMessage' | translate}} {{planningPeriod.StartDate | amDateFormat:"L"}} {{'ToText' | translate}} {{planningPeriod.EndDate | amDateFormat:"L"}}</h4>
+                </div>
+            </div>
+            <div ng-show="changeDateToggle && isEnabled && !planningPeriod.HasNextPlanningPeriod">
+                {{'ChangePlanningPeriodTo' | translate}}
+                <div ng-repeat="op in suggestedPlanningPeriods">
+                    <div class="wfm-radio">
+                        <input type="radio" name="changeRangeGroup" id="{{op.PeriodType}}-{{op.Number}}-{{$index}}" ng-click="rangeUpdated(planningPeriod.Id, op)" />
+                        <label for="{{op.PeriodType}}-{{op.Number}}-{{$index}}">
+                            <span class="wfm-radio-toggle"></span>
+                            <span class="wfm-radio-label"> {{op.StartDate |  amDateFormat:"L"}} {{'ToText' | translate}} {{op.EndDate | amDateFormat:"L"}} {{'HavingRangeOf' | translate}} {{op.Number}} {{op.PeriodType}}</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
 			
-			<div ng-show="planningPeriod.Skills.length>0 && planningPeriod.State == 'New'">
-				<p>{{'PlanningPeriodMissingMessage' | translate}}</p>
-				{{'MissingSkills' | translate }} 
+            <div ng-show="planningPeriod.Skills.length>0 && planningPeriod.State == 'New'">
+                <p>{{'PlanningPeriodMissingMessage' | translate}}</p>
+                {{'MissingSkills' | translate }} 
 				
-				<ul class="wfm-accordion material-depth-2">
-					<li ng-repeat="skill in planningPeriod.Skills">
-						<div class="wfm-accordion-head" ng-click="skill.toggle = !skill.toggle">
-							{{skill.SkillName}} <i ng-class="{'toggle-icon-open':skill.toggle}" class="mdi mdi-chevron-right"></i>
-							<span class="pull-right" class="text-muted">{{skill.MissingRanges.length}} {{'IssuesText' | translate }}</span>
-						</div>
-						<div class="wfm-accordion-content" ng-cloak ng-show="skill.toggle">
-							<div ng-repeat="range in skill.MissingRanges">{{'MissingForecastFrom' | translate }} {{range.StartDate | amDateFormat:"L"}} {{'ToText' | translate}} {{range.EndDate | amDateFormat:"L"}}</div>
-						</div>
-					</li>
-				</ul>
-			</div>
-			<div ng-if="planningPeriod.State != 'New'" class="text-success">
-				Planning Period is scheduled.
-			</div>
-			<button class="schedule-button wfm-btn wfm-btn-primary" ng-click="launchSchedule(planningPeriod) ; scheduleClicked = 'true'">{{'Schedule' | translate }} </button>
-			<div ng-show="scheduleClicked && !schedulingPerformed">
-				<md-progress-linear md-mode="indeterminate"></md-progress-linear>
-				<p>{{status}} .. </p>
-			</div>
-		</div>
-	</div>
+                <ul class="wfm-accordion material-depth-2">
+                    <li ng-repeat="skill in planningPeriod.Skills">
+                        <div class="wfm-accordion-head" ng-click="skill.toggle = !skill.toggle">
+                            {{skill.SkillName}} <i ng-class="{'toggle-icon-open':skill.toggle}" class="mdi mdi-chevron-right"></i>
+                            <span class="pull-right" class="text-muted">{{skill.MissingRanges.length}} {{'IssuesText' | translate }}</span>
+                        </div>
+                        <div class="wfm-accordion-content" ng-cloak ng-show="skill.toggle">
+                            <div ng-repeat="range in skill.MissingRanges">{{'MissingForecastFrom' | translate }} {{range.StartDate | amDateFormat:"L"}} {{'ToText' | translate}} {{range.EndDate | amDateFormat:"L"}}</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div ng-if="planningPeriod.State != 'New'" class="text-success">
+                Planning Period is scheduled.
+            </div>
+            <button class="schedule-button wfm-btn wfm-btn-primary" ng-click="launchSchedule(planningPeriod) ; scheduleClicked = 'true'">{{'Schedule' | translate }} </button>
+            <div ng-show="scheduleClicked && !schedulingPerformed">
+                <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+                <p>{{status}} .. </p>
+            </div>
+        </div>
+    </div>
 </div>

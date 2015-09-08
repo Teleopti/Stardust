@@ -7,6 +7,12 @@
 			$scope.status = '';
 				$scope.scheduledDays = 0;
 				$scope.schedulingPerformed = false;
+
+				$scope.isScheduleRunning = false;
+				PlanningPeriodSvrc.status.get().$promise.then(function (result) {
+				    $scope.isScheduleRunning = result.IsRunning;
+				});
+
 				$scope.launchSchedule = function(p) {
 					$scope.schedulingPerformed = false;
 					var planningPeriod = { StartDate: p.StartDate, EndDate: p.EndDate };

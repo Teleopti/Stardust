@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Web.Areas.Global;
 
 namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 {

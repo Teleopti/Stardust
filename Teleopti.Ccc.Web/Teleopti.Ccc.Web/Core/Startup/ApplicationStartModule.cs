@@ -1,17 +1,11 @@
 using System;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
-using System.Web.Hosting;
 using System.Web.Mvc;
-using Autofac;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Teleopti.Ccc.Domain;
-using Teleopti.Ccc.Domain.MessageBroker;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Core.RequestContext.Initialize;
 using Teleopti.Ccc.Web.Core.Startup;
-using Teleopti.Interfaces.Domain;
 
 [assembly: PreApplicationStartMethod(typeof(ApplicationStartModule), "RegisterModule")]
 

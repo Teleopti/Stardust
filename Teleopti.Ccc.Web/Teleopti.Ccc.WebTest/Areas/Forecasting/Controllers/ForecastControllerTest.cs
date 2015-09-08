@@ -8,7 +8,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Forecasting.Controllers;
 using Teleopti.Ccc.Web.Areas.Forecasting.Core;
-using Teleopti.Ccc.Web.Areas.ResourcePlanner;
+using Teleopti.Ccc.Web.Areas.Global;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
@@ -16,15 +16,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 	[TestFixture]
 	public class ForecastControllerTest
 	{
-
-		[Test]
-		public void ShouldReturnRunningState()
-		{
-			var target = new ForecastController(null, null, null, null, null, new BasicActionThrottler());
-			var result = target.Status();
-			((bool) result.IsRunning).Should().Be.False();
-		}
-
 		[Test]
 		public void ShouldGetSkillsAndWorkloads()
 		{

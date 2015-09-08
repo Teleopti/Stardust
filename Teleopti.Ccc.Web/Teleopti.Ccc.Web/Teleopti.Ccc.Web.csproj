@@ -432,6 +432,7 @@
     <Compile Include="Areas\Global\AreaWithPermissionPath.cs" />
     <Compile Include="Areas\Global\LanguageController.cs" />
     <Compile Include="Areas\Global\NotificationsController.cs" />
+    <Compile Include="Areas\Global\StatusController.cs" />
     <Compile Include="Areas\Global\WfmAreaRegistration.cs" />
     <Compile Include="Areas\Global\UserController.cs" />
     <Compile Include="Areas\MultiTenancy\ChangePasswordController.cs" />
@@ -538,15 +539,15 @@
     <Compile Include="Areas\Reporting\Index.aspx.designer.cs">
       <DependentUpon>Index.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Areas\ResourcePlanner\BasicActionThrottler.cs" />
-    <Compile Include="Areas\ResourcePlanner\BlockToken.cs" />
+    <Compile Include="Areas\Global\BasicActionThrottler.cs" />
+    <Compile Include="Areas\Global\BlockToken.cs" />
     <Compile Include="Areas\ResourcePlanner\DayOffBusinessRuleValidation.cs" />
     <Compile Include="Areas\ResourcePlanner\FilterController.cs" />
     <Compile Include="Areas\ResourcePlanner\FilterGroup.cs" />
     <Compile Include="Areas\ResourcePlanner\FilterItem.cs" />
     <Compile Include="Areas\ResourcePlanner\FixedStaffLoader.cs" />
     <Compile Include="Areas\ResourcePlanner\FixedStaffSchedulingInput.cs" />
-    <Compile Include="Areas\ResourcePlanner\IActionThrottler.cs" />
+    <Compile Include="Areas\Global\IActionThrottler.cs" />
     <Compile Include="Areas\ResourcePlanner\IScheduleControllerPrerequisites.cs" />
     <Compile Include="Areas\ResourcePlanner\OptimizationController.cs" />
     <Compile Include="Areas\ResourcePlanner\OptimizationResultModel.cs" />
@@ -562,7 +563,7 @@
     <Compile Include="Areas\ResourcePlanner\SchedulingResultModel.cs" />
     <Compile Include="Areas\ResourcePlanner\SetupStateHolderForWebScheduling.cs" />
     <Compile Include="Areas\ResourcePlanner\SuggestedPlanningPeriodRangeModel.cs" />
-    <Compile Include="Areas\ResourcePlanner\ThrottledAction.cs" />
+    <Compile Include="Areas\Global\ThrottledAction.cs" />
     <Compile Include="Areas\ResourcePlanner\ViolatedSchedulePeriodBusinessRule.cs" />
     <Compile Include="Areas\Rta\Controllers\SyncController.cs" />
     <Compile Include="Areas\People\Core\Providers\IPeopleSearchProvider.cs" />

@@ -9,7 +9,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Web.Areas.Forecasting.Core;
-using Teleopti.Ccc.Web.Areas.ResourcePlanner;
+using Teleopti.Ccc.Web.Areas.Global;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
@@ -108,12 +108,6 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		public virtual Task<IntradayPatternViewModel> IntradayPattern(IntradayPatternInput input)
 		{
 			return Task.FromResult(_intradayPatternViewModelFactory.Create(input));
-		}
-
-		[HttpGet, Route("api/Forecasting/Status")]
-		public dynamic Status()
-		{
-			return new {IsRunning = _actionThrottler.IsBlocked(ThrottledAction.Forecasting)};
 		}
 	}
 
