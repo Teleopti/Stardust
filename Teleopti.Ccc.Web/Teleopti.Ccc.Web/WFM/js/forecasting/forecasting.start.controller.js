@@ -12,41 +12,6 @@ angular.module('wfm.forecasting')
 			var endDate = moment().utc().add(2, 'months').startOf('month').toDate();
 			$scope.period = { startDate: startDate, endDate: endDate };
 
-			var forecastForWorkload = function(workload) {
-				workload.ShowProgress = true;
-				workload.IsSuccess = false;
-				workload.IsFailed = false;
-				var workloadToSend = { WorkloadId: workload.Id };
-				if (workload.selectedMethod) {
-					workloadToSend.ForecastMethodId = workload.selectedMethod;
-				} else {
-					workloadToSend.ForecastMethodId = -1;
-				}
-				$http.post('../api/Forecasting/Forecast', JSON.stringify({ ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate, Workloads: [workloadToSend] })).
-					success(function(data, status, headers, config) {
-						if (data.Success) {
-							workload.IsSuccess = true;
-						} else {
-							workload.IsFailed = true;
-							workload.Message = data.Message;
-						}
-					}).
-					error(function(data, status, headers, config) {
-						workload.IsFailed = true;
-						if (data)
-							workload.Message = data.Message;
-						else
-							workload.Message = "Failed";
-					})
-					.finally(function() {
-						$scope.isForecastRunning = false;
-						workload.ShowProgress = false;
-						if (workload.forecastResultLoaded) {
-							$scope.getForecastResult(workload);
-						}
-					});
-			}
-
 			$scope.workloads = [];
 			forecasting.skillList.$promise.then(function(result) {
 				$scope.skills = result;
@@ -77,16 +42,7 @@ angular.module('wfm.forecasting')
 				$scope.modalLaunch = false;
 			};
 
-			$scope.chartInfo = {
-				resultChartDataColumns: [
-					{ id: "vc", type: "line", name: "Calls" },
-					{ id: "vaht", type: "line", name: "Talk time" },
-					{ id: "vacw", type: "line", name: "ACW" }
-				],
-				dataX: { id: "date" }
-			};
-
-			$scope.getForecastResult = function(workload) {
+			$scope.getForecastResult = function (workload) {
 				workload.forecastResultLoaded = false;
 
 				$scope.resultChartData = [];
@@ -106,35 +62,16 @@ angular.module('wfm.forecasting')
 					});
 			};
 
-			$scope.moreThanOneYear = function () {
-				if ($scope.period && $scope.period.endDate && $scope.period.startDate) {
-					var dateDiff = new Date($scope.period.endDate - $scope.period.startDate);
-					dateDiff.setDate(dateDiff.getDate() - 1);
-					return dateDiff.getFullYear() - 1970 >= 1;
-				} else
-					return false;
+			$scope.chartInfo = {
+				resultChartDataColumns: [
+					{ id: "vc", type: "line", name: "Calls" },
+					{ id: "vaht", type: "line", name: "Talk time" },
+					{ id: "vacw", type: "line", name: "ACW" }
+				],
+				dataX: { id: "date" }
 			};
 
-			$scope.updateStartDate = function () {
-				$scope.period.startDate = angular.copy($scope.period.startDate);
-			};
-
-			$scope.updateEndDate = function () {
-				if ($scope.period && $scope.period.endDate && $scope.period.startDate) {
-					if ($scope.period.startDate > $scope.period.endDate) {
-						$scope.period.endDate = angular.copy($scope.period.startDate);
-						return;
-					}
-				}
-				$scope.period.endDate = angular.copy($scope.period.endDate);
-			};
-
-			var forecastForOneWorkload = function (index) {
-				var workload = $scope.workloads[index];
-				if (!workload) {
-					$scope.isForecastRunning = false;
-					return;
-				}
+			var forecastWorkload = function (workload, finallyCallback) {
 				workload.ShowProgress = true;
 				workload.IsSuccess = false;
 				workload.IsFailed = false;
@@ -162,11 +99,22 @@ angular.module('wfm.forecasting')
 					})
 					.finally(function () {
 						workload.ShowProgress = false;
-						forecastForOneWorkload(++index);
 						if (workload.forecastResultLoaded) {
 							$scope.getForecastResult(workload);
 						}
+						finallyCallback();
 					});
+			}
+
+			var forecastAllStartFromIndex = function (index) {
+				var workload = $scope.workloads[index];
+				if (!workload) {
+					$scope.isForecastRunning = false;
+					return;
+				}
+				forecastWorkload(workload, function () {
+					forecastAllStartFromIndex(++index);
+				});
 			};
 
 			$scope.doForecast = function () {
@@ -176,9 +124,11 @@ angular.module('wfm.forecasting')
 				$scope.modalLaunch = false;
 				$scope.isForecastRunning = true;
 				if ($scope.modalInfo.forecastForOneWorkload) {
-					forecastForWorkload($scope.modalInfo.selectedWorkload);
+					forecastWorkload($scope.modalInfo.selectedWorkload, function () {
+						$scope.isForecastRunning = false;
+					});
 				} else {
-					forecastForOneWorkload(0);
+					forecastAllStartFromIndex(0);
 				}
 			};
 
@@ -188,6 +138,15 @@ angular.module('wfm.forecasting')
 
 			$scope.nextStepAdvanced = function (workload) {
 				$state.go('forecasting-advanced', { workloadId: workload.Id, workloadName: workload.Name });
+			};
+
+			$scope.moreThanOneYear = function () {
+				if ($scope.period && $scope.period.endDate && $scope.period.startDate) {
+					var dateDiff = new Date($scope.period.endDate - $scope.period.startDate);
+					dateDiff.setDate(dateDiff.getDate() - 1);
+					return dateDiff.getFullYear() - 1970 >= 1;
+				} else
+					return false;
 			};
 
 			$scope.setRangeClass = function (date, mode) {
@@ -201,6 +160,20 @@ angular.module('wfm.forecasting')
 					}
 				}
 				return '';
+			};
+
+			$scope.updateStartDate = function () {
+				$scope.period.startDate = angular.copy($scope.period.startDate);
+			};
+
+			$scope.updateEndDate = function () {
+				if ($scope.period && $scope.period.endDate && $scope.period.startDate) {
+					if ($scope.period.startDate > $scope.period.endDate) {
+						$scope.period.endDate = angular.copy($scope.period.startDate);
+						return;
+					}
+				}
+				$scope.period.endDate = angular.copy($scope.period.endDate);
 			};
 		}
 	]);
