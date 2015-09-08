@@ -190,16 +190,28 @@
 			);
 		};
 
-		vm.currentCommand = function() {
-			for (var i = 0; i < vm.commands.length; i++) {
-				var cmd = vm.commands[i];
-				if (cmd.label.toLowerCase() === vm.commandName.toLowerCase()) {
-					return cmd;
-				}
-			};
+		vm.currentCommand = function () {
+			if (vm.commandName != undefined) {
+				for (var i = 0; i < vm.commands.length; i++) {
+					var cmd = vm.commands[i];
+					if (cmd.label.toLowerCase() === vm.commandName.toLowerCase()) {
+						return cmd;
+					}
+				};
+			}
+			return undefined;
 		};
 
 		vm.setCurrentCommand = function (cmdName) {
+			var currentCmd = vm.currentCommand();
+			if (currentCmd != undefined && currentCmd.panelName != undefined && currentCmd.panelName.length > 0) {
+				$mdComponentRegistry.when(currentCmd.panelName).then(function (sideNav) {
+					if (sideNav.isOpen()) {
+						sideNav.toggle();
+					}
+				});
+			}
+
 			vm.commandName = cmdName;
 			vm.updateResult = { Success: false };
 
@@ -210,7 +222,6 @@
 			});
 			return buildToggler(cmd.panelName);
 		}
-
 
 		function initialize() {
 			vm.setCurrentCommand($stateParams.commandTag);
