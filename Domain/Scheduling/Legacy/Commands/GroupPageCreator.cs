@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			GroupPageLight selectedGrouping, DateOnly date, ConcurrentDictionary<DateOnly, IGroupPage> dic)
 		{
 			var groupPage = createGroupPageForDate(groupPageDataProvider, selectedGrouping, date, false);
-			dic.GetOrAdd(date, groupPage);
+			dic.AddOrUpdate(date,_=> groupPage, (k,v) => v);
 		}
 
 		public IGroupPagePerDate CreateGroupPagePerDate(IList<DateOnly> dates, IGroupPageDataProvider groupPageDataProvider, GroupPageLight selectedGrouping)
@@ -35,21 +35,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	
 			var concDic = new ConcurrentDictionary<DateOnly, IGroupPage>();
 
-			var tasks = new List<Task>();
-			foreach (var dateOnly in dates)
-			{
-				DateOnly date = dateOnly;
-				tasks.Add(Task.Factory.StartNew(() => createAndAddGroupPageForDate(groupPageDataProvider, selectedGrouping, date, concDic)));
-			}
-			Task.WaitAll(tasks.ToArray());
+			Parallel.ForEach(dates, date => createAndAddGroupPageForDate(groupPageDataProvider, selectedGrouping, date, concDic));
 
-			IDictionary<DateOnly, IGroupPage> dic = new Dictionary<DateOnly, IGroupPage>();
-			foreach (var keyValuePair in concDic)
-			{
-				dic.Add(keyValuePair);
-			}
-
-			return new GroupPagePerDate(dic);
+			return new GroupPagePerDate(concDic);
 		}
 
 		private IGroupPage createGroupPageForDate(IGroupPageDataProvider groupPageDataProvider, GroupPageLight selectedGrouping, DateOnly dateOnly, bool useAllLoadedPersons)

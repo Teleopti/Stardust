@@ -4051,8 +4051,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var requestedPeriod = _schedulerState.RequestedPeriod.DateOnlyPeriod;
 			var outerPeriod = new DateOnlyPeriod(requestedPeriod.StartDate.AddDays(-7), requestedPeriod.EndDate.AddDays(7));
 
-			var toggleManager = _container.Resolve<IToggleManager>();
-			_agentInfoControl = new AgentInfoControl(_workShiftWorkTime, _groupPagesProvider, _container, outerPeriod, requestedPeriod, toggleManager, _restrictionExtractor);
+			_agentInfoControl = new AgentInfoControl(_workShiftWorkTime, _groupPagesProvider, _container, outerPeriod, requestedPeriod, _restrictionExtractor);
 			schedulerSplitters1.InsertAgentInfoControl(_agentInfoControl, _schedulerState,
 				_container.Resolve<IEffectiveRestrictionCreator>(), maxCalculatMinMaxCacheEnries);
 

@@ -5,8 +5,8 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -182,9 +182,8 @@ namespace Teleopti.Ccc.Domain.Collection
         /// </remarks>
 		public IDifferenceCollection<IPersistableScheduleData> DifferenceSinceSnapshot()
         {
-			DifferenceCollection<IPersistableScheduleData> ret = new DifferenceCollection<IPersistableScheduleData>();
-
-            foreach (ScheduleRange range in _dictionary.Values)
+			var ret = new DifferenceCollection<IPersistableScheduleData>();
+            foreach (var range in _dictionary.Values)
             {
                 range.DifferenceSinceSnapshot(DifferenceCollectionService).ForEach(ret.Add);
             }
@@ -201,20 +200,13 @@ namespace Teleopti.Ccc.Domain.Collection
         /// </remarks>
         public void ExtractAllScheduleData(IScheduleExtractor extractor)
         {
-            foreach (IScheduleRange scheduleRange in _dictionary.Values)
-            {
-                scheduleRange.ExtractAllScheduleData(extractor, scheduleRange.Period);
-            }
+			Parallel.ForEach(_dictionary.Values, scheduleRange => scheduleRange.ExtractAllScheduleData(extractor, scheduleRange.Period));
         }
 
         public void ExtractAllScheduleData(IScheduleExtractor extractor, DateTimePeriod period)
         {
-            foreach (IScheduleRange scheduleRange in _dictionary.Values)
-            {
-                scheduleRange.ExtractAllScheduleData(extractor, period);
-            }
+            Parallel.ForEach(_dictionary.Values, scheduleRange => scheduleRange.ExtractAllScheduleData(extractor, period));
         }
-
 
         protected virtual IEnumerable<IBusinessRuleResponse> CheckIfCanModify(Dictionary<IPerson, IScheduleRange> rangeClones, IEnumerable<IScheduleDay> scheduleParts, INewBusinessRuleCollection newBusinessRules)
         {

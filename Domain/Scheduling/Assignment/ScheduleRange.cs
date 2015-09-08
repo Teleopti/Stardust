@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
@@ -62,15 +63,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public void ExtractAllScheduleData(IScheduleExtractor extractor, DateTimePeriod period)
 		{
 			var zone = Person.PermissionInformation.DefaultTimeZone();
-			foreach (var day in period.ToDateOnlyPeriod(zone).DayCollection())
+			Parallel.ForEach(period.ToDateOnlyPeriod(zone).DayCollection(), day =>
 			{
 				var dayAndPeriod = new DateOnlyAsDateTimePeriod(day, zone);
 				var part = ScheduleDay(dayAndPeriod, true, AvailablePeriods());
 				(from data in _scheduleObjectsWithNoPermissions
-					 where data.BelongsToPeriod(dayAndPeriod)
-					 select data).ForEach(data => part.Add((IScheduleData)data.Clone()));
-				extractor.AddSchedulePart(part);    
-			}
+					where data.BelongsToPeriod(dayAndPeriod)
+					select data).ForEach(data => part.Add((IScheduleData) data.Clone()));
+				extractor.AddSchedulePart(part);
+			});
 		}
 
 		public IScheduleDay ReFetch(IScheduleDay schedulePart)

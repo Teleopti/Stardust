@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
@@ -17,8 +16,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private GroupPageCreator _target;
 		private IGroupPageDataProvider _groupPageDataProvider;
         
- 
-
 		[SetUp]
 		public void Setup()
 		{
@@ -33,7 +30,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		public void ShouldThrowIfDatesIsNull()
 		{
 			var grouping = new GroupPageLight();
-			_target.CreateGroupPagePerDate(null as List<DateOnly>, _groupPageDataProvider, grouping);
+			_target.CreateGroupPagePerDate(null, _groupPageDataProvider, grouping);
 		}
 
 		[Test, ExpectedException(typeof(ArgumentNullException))]
@@ -61,8 +58,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_mocks.VerifyAll();
 		}
 
-	
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+		[Test]
 		public void ShouldFactoryShouldProvideAllTypes()
 		{
 			var factory = new GroupPageFactory();
@@ -74,7 +70,4 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			Assert.That(factory.GetRuleSetBagsGroupPageCreator(),Is.Not.Null);
 		}
 	}
-
-	
 }
-

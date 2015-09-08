@@ -5,7 +5,6 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using Autofac;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
@@ -17,7 +16,6 @@ using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.ExceptionHandling;
@@ -44,7 +42,6 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 	    private readonly ILifetimeScope _container;
 	    private readonly DateOnlyPeriod _dateOnlyPeriod;
 	    private readonly DateOnlyPeriod _requestedPeriod;
-	    private readonly IToggleManager _toggleManager;
 	    private readonly IRestrictionExtractor _restrictionExtractor;
 	    private IList<GroupPageLight> _groupPages;
 	    private IGroupPagePerDate _groupPagePerDate;
@@ -62,7 +59,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
         }
 
 	    public AgentInfoControl(IWorkShiftWorkTime workShiftWorkTime, ISchedulerGroupPagesProvider groupPagesProvider,
-	                            ILifetimeScope container, DateOnlyPeriod dateOnlyPeriod, DateOnlyPeriod requestedPeriod, IToggleManager toggleManager, IRestrictionExtractor restrictionExtractor)
+	                            ILifetimeScope container, DateOnlyPeriod dateOnlyPeriod, DateOnlyPeriod requestedPeriod, IRestrictionExtractor restrictionExtractor)
 		    : this()
 	    {
 		    _workShiftWorkTime = workShiftWorkTime;
@@ -70,7 +67,6 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 		    _container = container;
 		    _dateOnlyPeriod = dateOnlyPeriod;
 		    _requestedPeriod = requestedPeriod;
-		    _toggleManager = toggleManager;
 		    _restrictionExtractor = restrictionExtractor;
 	    }
 
@@ -221,7 +217,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 					(GroupPageLight) comboBoxAgentGrouping.SelectedItem);
 		}
 
-		private void updateFairnessData(IPerson person, DateOnly dateOnly, ISchedulingResultStateHolder state)
+	    private void updateFairnessData(IPerson person, DateOnly dateOnly, ISchedulingResultStateHolder state)
 		{
 			perPersonAndGroupListView.Items.Clear();
 

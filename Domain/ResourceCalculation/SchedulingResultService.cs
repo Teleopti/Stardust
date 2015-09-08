@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
@@ -15,7 +14,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private readonly bool _useOccupancyAdjustment;
 		private readonly IPersonSkillProvider _personSkillProvider;
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public SchedulingResultService(ISchedulingResultStateHolder stateHolder,
 			IList<ISkill> allSkills,
 			bool useOccupancyAdjustment,
@@ -81,7 +79,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			int minutesSplit = _allSkills.Min(s => s.DefaultResolution);
 			var resources = new ResourceCalculationDataContainer(_personSkillProvider, minutesSplit);
 
-			var tasks = new List<Task>();
 			foreach (var person in scheduleDictionary.Keys)
 			{
 				var range = scheduleDictionary[person];
@@ -90,13 +87,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 				var scheduleDays =
 					range.ScheduledDayCollection(period.Value.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone()));
-				foreach (var scheduleDay in scheduleDays)
-				{
-					tasks.Add(resources.AddScheduleDayToContainer(scheduleDay, minutesSplit));
-				}
+				Parallel.ForEach(scheduleDays, scheduleDay => resources.AddScheduleDayToContainer(scheduleDay, minutesSplit));
 			}
 
-			Task.WaitAll(tasks.ToArray());
 			return resources;
 		}
 	}
