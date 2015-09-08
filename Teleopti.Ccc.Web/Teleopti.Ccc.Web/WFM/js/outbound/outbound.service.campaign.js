@@ -110,35 +110,35 @@
             return hours;
         }
 
-        function normalizeCampaign(campaign) {
-				if (campaign.StartDate) {
-        			campaign.StartDate.Date = new Date(Date.UTC(campaign.StartDate.Date.getFullYear(), campaign.StartDate.Date.getMonth(), campaign.StartDate.Date.getDate(), 0, 0, 0));
-				}
-				if (campaign.EndDate) {
-					campaign.EndDate.Date = new Date(Date.UTC(campaign.EndDate.Date.getFullYear(), campaign.EndDate.Date.getMonth(), campaign.EndDate.Date.getDate(), 0, 0, 0));
-				}
+	    function normalizeCampaign(campaign) {
+		    if (campaign.StartDate) {
+			    campaign.StartDate.Date = new Date(Date.UTC(campaign.StartDate.Date.getFullYear(), campaign.StartDate.Date.getMonth(), campaign.StartDate.Date.getDate(), 0, 0, 0));
+		    }
+		    if (campaign.EndDate) {
+			    campaign.EndDate.Date = new Date(Date.UTC(campaign.EndDate.Date.getFullYear(), campaign.EndDate.Date.getMonth(), campaign.EndDate.Date.getDate(), 0, 0, 0));
+		    }
 
-	        var campaign = angular.copy(campaign);
+		    var campaign = angular.copy(campaign);
 
-            var formattedWorkingHours = [];
+		    var formattedWorkingHours = [];
 
-            campaign.WorkingHours.forEach(function (d) {
-                d.WeekDaySelections.forEach(function (e) {
-                    if (e.Checked) {
-                        formattedWorkingHours.push({
-                            WeekDay: e.WeekDay,
-                            StartTime: formatTimespanInput(d.StartTime),
-                            EndTime: formatTimespanInput(d.EndTime)
-                        });
-                    }
-                });
-            });
+		    campaign.WorkingHours.forEach(function(d) {
+			    d.WeekDaySelections.forEach(function(e) {
+				    if (e.Checked) {
+					    formattedWorkingHours.push({
+						    WeekDay: e.WeekDay,
+						    StartTime: formatTimespanInput(d.StartTime),
+						    EndTime: formatTimespanInput(d.EndTime)
+					    });
+				    }
+			    });
+		    });
 
-            campaign.WorkingHours = formattedWorkingHours;
-            return campaign;
-        }
+		    campaign.WorkingHours = formattedWorkingHours;
+		    return campaign;
+	    }
 
-        function formatTimespanInput(dtObj) {
+	    function formatTimespanInput(dtObj) {
             return $filter('date')(dtObj, 'HH:mm');
         }
 
@@ -157,14 +157,16 @@
         function denormalizeCampaign(campaign) {
             var campaign = angular.copy(campaign);
 
+            var isIE = false || !!document.documentMode;
             if (campaign.StartDate) {
+
             	var dStart = new Date(campaign.StartDate.Date);
-            	dStart.setTime(dStart.getTime() + dStart.getTimezoneOffset() * 60 * 1000);
+					if (!isIE) dStart.setTime(dStart.getTime() + dStart.getTimezoneOffset() * 60 * 1000);
             	campaign.StartDate.Date = dStart;
             }
             if (campaign.EndDate) {
             	var dEnd = new Date(campaign.EndDate.Date);
-            	dEnd.setTime(dEnd.getTime() + dEnd.getTimezoneOffset() * 60 * 1000);
+            	if (!isIE) dEnd.setTime(dEnd.getTime() + dEnd.getTimezoneOffset() * 60 * 1000);
 	            campaign.EndDate.Date = dEnd;
             }
             
