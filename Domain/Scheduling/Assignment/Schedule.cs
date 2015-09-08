@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             IEnumerable<IScheduleData> retList;
             lock(lockObject)
             {
-                retList = _scheduleDataCollection.ToArray();
+                retList = _scheduleDataCollection.ToArray().AsParallel();
             }
             return retList;
         }
@@ -189,8 +189,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             else
             {
                 var agentTimeZone = Person.PermissionInformation.DefaultTimeZone();
-                
-                filteredData = (from data in ScheduleDataInternalCollection()
+
+				filteredData = (from data in ScheduleDataInternalCollection()
                                 where
                                     data.BelongsToPeriod(dateAndDateTime) &&
                                     (schedulePublishedAnySpecification.IsSatisfiedBy(

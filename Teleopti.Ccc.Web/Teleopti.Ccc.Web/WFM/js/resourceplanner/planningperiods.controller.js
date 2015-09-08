@@ -29,10 +29,9 @@
 	        $scope.launchSchedule = function (p) {
 	            $scope.schedulingPerformed = false;
 	            var planningPeriod = { StartDate: p.StartDate, EndDate: p.EndDate };
+	            cancelPoll();
 	            $scope.status = 'Scheduling';
 	            PlanningPeriodSvrc.launchScheduling.query(JSON.stringify(planningPeriod)).$promise.then(function (scheduleResult) {
-	                cancelPoll();
-
 	                //if not success
 	                $scope.scheduledDays = scheduleResult.DaysScheduled;
 	                //else

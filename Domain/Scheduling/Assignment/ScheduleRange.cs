@@ -40,12 +40,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         public ScheduleRange Snapshot
         {
-            get
-            {
-                if (_snapshot == null)
-                    _snapshot = new ScheduleRange(Owner, this);
-                return _snapshot;
-            }
+            get { return _snapshot ?? (_snapshot = new ScheduleRange(Owner, this)); }
         }
 
         public IEnumerable<DateOnlyPeriod> AvailablePeriods()
@@ -216,8 +211,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         private IFairnessValueResult fairnessValue(DateTimePeriod period)
         {
             IFairnessValueResult ret = new FairnessValueResult();
-            //using(PerformanceOutput.ForOperation("Calculating JusicePoints for " + Person.Name))
-            //{
             foreach (var scheduleData in ScheduleDataInternalCollection())
             {
                 if (!(scheduleData is PersonAssignment))
@@ -226,16 +219,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 if (!period.Contains(scheduleData.Period.StartDateTime))
                     continue;
 
-                IPersonAssignment assignment = (IPersonAssignment)scheduleData;
+				var assignment = (IPersonAssignment)scheduleData;
                 if (assignment.ShiftCategory == null)
                     continue;
 
-                DayOfWeek dow =
-                    TimeZoneHelper.ConvertFromUtc(assignment.Period.StartDateTime,
-                                                  Person.PermissionInformation.DefaultTimeZone()).DayOfWeek;
-                ret.TotalNumberOfShifts += 1;
+				ret.TotalNumberOfShifts += 1;
             }
-            //}
             return ret;
         }
 
