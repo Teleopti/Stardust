@@ -165,7 +165,8 @@ describe("PeopleCartCtrl", function () {
 	}));
 
 	function setUpController($controller) {
+		var scope = $rootScope.$new();
 		var stateParams = { selectedPeopleIds: [], commandTag: "AdjustSkill" }
-		return $controller("PeopleCartCtrl", { $stateParams: stateParams, Toggle: mockToggleService, People: mockPeopleService });
+		return $controller("PeopleCartCtrl", { $scope: scope, $stateParams: stateParams, Toggle: mockToggleService, People: mockPeopleService });
 	};
 });
