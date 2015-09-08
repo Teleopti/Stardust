@@ -7,7 +7,7 @@ angular.module('wfm.forecasting')
 				get: { method: 'GET', params: {}, isArray: true }
 			});
 
-			this.status = $resource('../api/Forecasting/Status', {}, {
+			this.status = $resource('../api/Status/Forecasting', {}, {
 				get: { method: 'GET', params: {}, isArray: false }
 			});
 
