@@ -5,31 +5,25 @@ using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Budgeting;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-    public class ScheduleProjectionReadOnlyRepository : IScheduleProjectionReadOnlyRepository
+    public class ScheduleProjectionReadOnlyRepository : Repository, IScheduleProjectionReadOnlyRepository
     {
-		private readonly ICurrentUnitOfWork _currentUnitOfWork;
-
-		public ScheduleProjectionReadOnlyRepository(ICurrentUnitOfWork currentUnitOfWork)
+		public ScheduleProjectionReadOnlyRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
         {
-			_currentUnitOfWork = currentUnitOfWork;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design",
-            "CA1062:Validate arguments of public methods", MessageId = "1"),
-         System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design",
-             "CA1062:Validate arguments of public methods", MessageId = "2")]
+		public ScheduleProjectionReadOnlyRepository(IUnitOfWorkFactory currentUnitOfWork) : base(currentUnitOfWork)
+		{
+		}
+
         public IEnumerable<PayloadWorkTime> AbsenceTimePerBudgetGroup(DateOnlyPeriod period, IBudgetGroup budgetGroup,
                                                                       IScenario scenario)
         {
-			var uow = _currentUnitOfWork.Current();
-
-            return ((NHibernateUnitOfWork) uow).Session.CreateSQLQuery(
+            return Session.CreateSQLQuery(
                 "exec ReadModel.LoadBudgetAllowanceReadModel @BudgetGroupId	= :budgetGroupId, @ScenarioId = :scenarioId, @DateFrom = :StartDate, @DateTo = :EndDate")
 											   .SetDateOnly("StartDate", period.StartDate)
 											   .SetDateOnly("EndDate", period.EndDate)
@@ -40,12 +34,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                                                .List<PayloadWorkTime>();
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design",
-            "CA1062:Validate arguments of public methods", MessageId = "1")]
         public void ClearPeriodForPerson(DateOnlyPeriod period, Guid scenarioId, Guid personId)
         {
-			var uow = _currentUnitOfWork.Current();
-            ((NHibernateUnitOfWork) uow).Session.CreateSQLQuery(
+			Session.CreateSQLQuery(
                 "DELETE FROM ReadModel.ScheduleProjectionReadOnly WHERE BelongsToDate BETWEEN :StartDate AND :EndDate AND ScenarioId=:scenario AND PersonId=:person")
                                         .SetGuid("person", personId)
                                         .SetGuid("scenario", scenarioId)
@@ -54,13 +45,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                                         .ExecuteUpdate();
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3")]
         public void AddProjectedLayer(DateOnly belongsToDate, Guid scenarioId, Guid personId,
                                       ProjectionChangedEventLayer layer)
         {
-			var uow = _currentUnitOfWork.Current();
-
-            ((NHibernateUnitOfWork) uow).Session.CreateSQLQuery(
+			Session.CreateSQLQuery(
                 "INSERT INTO ReadModel.ScheduleProjectionReadOnly (ScenarioId,PersonId,BelongsToDate,PayloadId,StartDateTime,EndDateTime,WorkTime,ContractTime,Name,ShortName,DisplayColor,PayrollCode,InsertedOn) VALUES (:ScenarioId,:PersonId,:Date,:PayloadId,:StartDateTime,:EndDateTime,:WorkTime,:ContractTime,:Name,:ShortName,:DisplayColor,:PayrollCode,:InsertedOn)")
                                         .SetGuid("ScenarioId", scenarioId)
                                         .SetGuid("PersonId", personId)
@@ -80,8 +68,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
         public bool IsInitialized()
         {
-			var uow = _currentUnitOfWork.Current();
-            var result = ((NHibernateUnitOfWork) uow).Session.CreateSQLQuery(
+			var result = Session.CreateSQLQuery(
                 "SELECT TOP 1 * FROM ReadModel.ScheduleProjectionReadOnly")
                                                      .List();
             return result.Count > 0;
@@ -89,8 +76,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
         public DateTime? GetNextActivityStartTime(DateTime dateTime, Guid personId)
         {
-            var uow = _currentUnitOfWork.Current();
-			var result = ((NHibernateUnitOfWork) uow).Session
+           var result = Session
 				.CreateSQLQuery("exec ReadModel.GetNextActivityStartTime @PersonId=:personId, @UtcNow=:dateTime")
 				.SetDateTime("dateTime", dateTime)
                 .SetGuid("personId", personId)
@@ -109,9 +95,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IEnumerable<ProjectionChangedEventLayer> ForPerson(DateOnly date, Guid personId, Guid scenarioId)
 		{
-			var uow = _currentUnitOfWork.Current();
-
-			return ((NHibernateUnitOfWork)uow).Session.CreateSQLQuery(
+			return Session.CreateSQLQuery(
 				"SELECT PayloadId,StartDateTime,EndDateTime,WorkTime,Name,ShortName,DisplayColor,PayrollCode,ContractTime FROM ReadModel.ScheduleProjectionReadOnly WHERE ScenarioId=:ScenarioId AND PersonId=:PersonId AND BelongsToDate=:Date")
 										.SetGuid("ScenarioId", scenarioId)
 										.SetGuid("PersonId", personId)
@@ -188,9 +172,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IEnumerable<ProjectionChangedEventLayer> ForPerson(DateOnlyPeriod datePeriod, Guid personId, Guid scenarioId)
 		{
-			var uow = _currentUnitOfWork.Current();
-
-			return ((NHibernateUnitOfWork)uow).Session.CreateSQLQuery(
+			return Session.CreateSQLQuery(
                 "SELECT PayloadId,StartDateTime,EndDateTime,WorkTime,Name,ShortName,DisplayColor,PayrollCode,ContractTime FROM ReadModel.ScheduleProjectionReadOnly WHERE ScenarioId=:ScenarioId AND PersonId=:PersonId AND BelongsToDate>=:DateFrom AND BelongsToDate<=:DateTo")
 										.SetGuid("ScenarioId", scenarioId)
 										.SetGuid("PersonId", personId)
@@ -202,8 +184,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 	    public int GetNumberOfAbsencesPerDayAndBudgetGroup(Guid budgetGroupId, DateOnly currentDate)
         {
-            var uow = _currentUnitOfWork.Current();
-
             const string query = @"select sum(NumberOfRequests) as NumberOfRequests, BelongsToDate
                                     from (
 
@@ -228,7 +208,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	                                    ) a
                                     group by BelongsToDate";
 
-            var queryResult = ((NHibernateUnitOfWork)uow).Session.CreateSQLQuery(query)
+            var queryResult = Session.CreateSQLQuery(query)
 														  .SetDateOnly("currentDate", currentDate)
                                                           .SetGuid("budgetGroupId", budgetGroupId)
                                                           .SetResultTransformer(Transformers.AliasToBean(typeof(AbsenceRequestInfo)))
