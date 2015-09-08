@@ -22,9 +22,11 @@
 				loadSeatMap: loadSeatMap,
 				resetPosition: resetPosition,
 				scrollZooming: scrollZooming,
+				ungroupObjects: ungroupObjects,
 				zoom: zoom,
 				applyOccupancyColoring: applyOccupancyColoring,
-				loadSeatDetails: loadSeatDetails
+				loadSeatDetails: loadSeatDetails,
+				ungroupObjectsSoTheyCanBeIndividuallySelected: ungroupObjectsSoTheyCanBeIndividuallySelected
 			};
 
 			function setupCanvas(canvas) {
@@ -392,11 +394,56 @@
 				}
 
 				return timeZoneAdjustment;
-			}
+			};
 
 			function getSeatBookingTimeDisplay(booking) {
 				return moment(booking.StartDateTime).format('LT') + " - " + moment(booking.EndDateTime).format('LT') + getTimeZoneAdjustmentDisplay(booking);
-			}
+			};
+
+
+			function getAllGroups(canvas) {
+				var canvasObjects = canvas.getObjects();
+				var groups = [];
+				canvasObjects.forEach(function (obj) {
+					if (obj.get('type') == 'group') {
+						groups.push(obj);
+					}
+				});
+				return groups;
+			};
+
+			function ungroupObjects(canvas, group) {
+
+				var items = group._objects;
+				// translate the group-relative coordinates to canvas relative ones
+				group._restoreObjectsState();
+				canvas.remove(group);
+				for (var i = 0; i < items.length; i++) {
+					canvas.add(items[i]);
+				}
+			};
+
+			function deepUnGroup(canvas, group) {
+				ungroupObjects(canvas, group);
+				group._objects.forEach(function (childItem) {
+					if (childItem.get('type') == 'group') {
+						deepUnGroup(canvas, childItem);
+					};
+				});
+			};
+
+			function ungroupObjectsSoTheyCanBeIndividuallySelected(canvas) {
+
+				// grouped objects will be ungrouped so they can be selected in the seat map booking view
+				// keep an eye on https://github.com/kangax/fabric.js/issues/485 as if/when this is implemented we
+				// can better handle click events on grouped objects.
+
+				getAllGroups(canvas).forEach(function (group) {
+					deepUnGroup(canvas, group);
+				});
+
+				setSelectionMode(canvas, false);
+			};
 
 			return utils;
 

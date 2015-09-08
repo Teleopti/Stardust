@@ -203,11 +203,12 @@
 
 			if (vm.showOccupancy) {
 				canvasUtils.applyOccupancyColoring(canvas, data.Seats);
+				canvasUtils.ungroupObjectsSoTheyCanBeIndividuallySelected(canvas);
 			}
 
 			resetOnLoad(data);
 
-			$scope.$apply();
+			//$scope.$apply();
 		};
 
 		function onLoadSeatMapNoSeatMapJson(data) {

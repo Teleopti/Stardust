@@ -339,20 +339,10 @@ angular.module('wfm.seatMap')
 		function ungroupActiveObjects(canvas) {
 			var activeObject = canvas.getActiveObject();
 			if (activeObject && activeObject._objects) {
-				ungroupObjects(canvas, activeObject);
+				utils.ungroupObjects(canvas, activeObject);
 			}
 		};
-
-		function ungroupObjects(canvas, group) {
-			var items = group._objects;
-			// translate the group-relative coordinates to canvas relative ones
-			group._restoreObjectsState();
-			canvas.remove(group);
-			for (var i = 0; i < items.length; i++) {
-				canvas.add(items[i]);
-			}
-		};
-
+		
 		//Alignment, Spacing Rotation and Flip
 
 		function alignLeft(canvas) {
