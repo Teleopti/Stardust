@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			if (!toggleManager.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318))
 				return;
 
-			Task.Factory.StartNew(() => StateHolderReader.Instance.StateReader.ApplicationScopeData.DataSourceForTenant.DoOnAllTenants_AvoidUsingThis(tenant =>
+			Task.Factory.StartNew(() => Container.Resolve<IDataSourceForTenant>().DoOnAllTenants_AvoidUsingThis(tenant =>
 			{
 				IList<Guid> businessUnitCollection;
 				using (var unitOfWork = tenant.Application.CreateAndOpenUnitOfWork())

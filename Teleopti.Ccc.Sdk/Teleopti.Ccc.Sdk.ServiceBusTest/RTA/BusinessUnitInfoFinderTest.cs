@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 		[Test]
 		public void ShouldHaveWorkingConstructor()
 		{
-			var result = new BusinessUnitStarter(null);
+			var result = new BusinessUnitStarter(null, null);
 			Assert.IsNotNull(result);
 		}
     }

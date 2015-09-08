@@ -11,17 +11,19 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
     public class BusinessUnitStarter
     {
         private readonly Func<IServiceBus> _serviceBusFinder;
-        
-        public BusinessUnitStarter(Func<IServiceBus> serviceBusFinder)
-        {
-            _serviceBusFinder = serviceBusFinder;
-        }
+	    private readonly IDataSourceForTenant _dataSourceForTenant;
 
-        public void SendMessage()
+	    public BusinessUnitStarter(Func<IServiceBus> serviceBusFinder, IDataSourceForTenant dataSourceForTenant)
+	    {
+		    _serviceBusFinder = serviceBusFinder;
+		    _dataSourceForTenant = dataSourceForTenant;
+	    }
+
+	    public void SendMessage()
 		{
 			var bus = _serviceBusFinder.Invoke();
 
-					StateHolderReader.Instance.StateReader.ApplicationScopeData.DataSourceForTenant.DoOnAllTenants_AvoidUsingThis(tenant =>
+			_dataSourceForTenant.DoOnAllTenants_AvoidUsingThis(tenant =>
 					{
 						IList<Guid> businessUnitCollection;
 						using (var unitOfWork = tenant.Application.CreateAndOpenUnitOfWork())

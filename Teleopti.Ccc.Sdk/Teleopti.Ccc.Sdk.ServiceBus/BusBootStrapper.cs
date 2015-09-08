@@ -18,6 +18,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		{
 		}
 
+	    private static IDataSourceForTenant dataSourceForTenant;
+
 	    protected override void ConfigureBusFacility(Rhino.ServiceBus.Impl.AbstractRhinoServiceBusConfiguration configuration)
 		{
 			base.ConfigureBusFacility(configuration);
@@ -26,6 +28,25 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			build.RegisterType<ApplicationLogOnMessageModule>().As<IMessageModule>().Named<IMessageModule>(typeof(ApplicationLogOnMessageModule).FullName);
 			build.Update(Container);
 
+		  if (dataSourceForTenant == null)
+		  {
+			  initApplicationAndSetDataSourceForTenant();
+		  }
+		  else
+		  {
+			  reuseAlreadyCreatedDataSourceForTenant();
+		  }
+		}
+
+	    private void reuseAlreadyCreatedDataSourceForTenant()
+	    {
+		    var builder = new ContainerBuilder();
+		    builder.RegisterInstance(dataSourceForTenant).As<IDataSourceForTenant>().SingleInstance();
+		    builder.Update(Container);
+	    }
+
+	    private void initApplicationAndSetDataSourceForTenant()
+	    {
 		    using (Container.Resolve<ITenantUnitOfWork>().Start())
 		    {
 			    if (StateHolderReader.IsInitialized)
@@ -40,11 +61,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 				    Logger.Info("Initialized application");
 			    }
+			    dataSourceForTenant = Container.Resolve<IDataSourceForTenant>();
 		    }
-		}
-		    
+	    }
 
-		    protected override bool IsTypeAcceptableForThisBootStrapper(Type t)
+
+	    protected override bool IsTypeAcceptableForThisBootStrapper(Type t)
         {
         	return true;
         }		

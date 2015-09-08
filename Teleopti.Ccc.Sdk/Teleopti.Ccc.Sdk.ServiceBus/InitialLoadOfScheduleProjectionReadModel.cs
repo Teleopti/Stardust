@@ -12,10 +12,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 	public class InitialLoadOfScheduleProjectionReadModel
 	{
 		private readonly Func<IServiceBus> _serviceBusFinder;
+		private readonly IDataSourceForTenant _dataSourceForTenant;
 
-		public InitialLoadOfScheduleProjectionReadModel(Func<IServiceBus> serviceBusFinder)
+		public InitialLoadOfScheduleProjectionReadModel(Func<IServiceBus> serviceBusFinder, IDataSourceForTenant dataSourceForTenant)
 		{
 			_serviceBusFinder = serviceBusFinder;
+			_dataSourceForTenant = dataSourceForTenant;
 		}
 
 		public void Check()
@@ -30,7 +32,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 			var bus = _serviceBusFinder.Invoke();
 
-			StateHolderReader.Instance.StateReader.ApplicationScopeData.DataSourceForTenant.DoOnAllTenants_AvoidUsingThis(tenant =>
+			_dataSourceForTenant.DoOnAllTenants_AvoidUsingThis(tenant =>
 			{
 				IList<Guid> businessUnitCollection;
 				using (var unitOfWork = tenant.Application.CreateAndOpenUnitOfWork())
