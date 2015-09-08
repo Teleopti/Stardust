@@ -3,10 +3,10 @@
 (function () {
 	angular.module('wfm.people')
 		.controller('PeopleCartCtrl', [
-			'$q', '$translate', '$stateParams', 'uiGridConstants', 'People', 'Toggle', '$mdSidenav', '$mdUtil', '$state','$interval', PeopleCartController
+			'$scope','$q', '$translate', '$stateParams', 'uiGridConstants', 'People', 'Toggle', '$mdSidenav', '$mdUtil', '$state','$interval','$mdComponentRegistry', PeopleCartController
 		]);
 
-	function PeopleCartController($q, $translate, $stateParams, uiGridConstants, peopleSvc, toggleSvc, $mdSidenav, $mdUtil, $state, $interval) {
+	function PeopleCartController($scope, $q, $translate, $stateParams, uiGridConstants, peopleSvc, toggleSvc, $mdSidenav, $mdUtil, $state, $interval, $mdComponentRegistry) {
 		var vm = this;
 		vm.selectedPeopleIds = $stateParams.selectedPeopleIds;
 		vm.processing = false;
@@ -31,12 +31,32 @@
 			opened: false
 		};
 		vm.menuState = 'open';
+		vm.toggleMenuState = function () {
+			if (vm.menuState === 'closed') {
+				vm.menuState = 'open';
+				if ($mdSidenav('right-skill').isOpen()) {
+					$mdSidenav('right-skill').toggle();
+				}
+				if ($mdSidenav('right-shiftbag').isOpen()) {
+					$mdSidenav('right-shiftbag').toggle();
+				}
+			} else {
+				vm.menuState = 'closed';
+			}
+		}
+		vm.isOpen = function () { return false; };
+
+		$scope.$watch("vm.isOpen()", function (newValue, oldValue) {
+			vm.menuState = newValue ? 'closed' : 'open';
+		}, true);
+
 		vm.commands = [
 			{
 				label: "AdjustSkill",
 				icon: "mdi-package",
 				panelName: 'right-skill',
 				action: function () {
+					vm.toggleMenuState();
 					setCurrentCommand("AdjustSkill")();
 				},
 				active: function () {
@@ -52,6 +72,7 @@
 				icon: "mdi-package",
 				panelName: 'right-shiftbag',
 				action: function () {
+					vm.toggleMenuState();
 					setCurrentCommand("ChangeShiftBag")();
 				},
 				active: function () {
@@ -184,6 +205,9 @@
 
 			var cmd = vm.currentCommand();
 			vm.gridOptions.columnDefs = basicColumnDefs.concat(cmd.columns);
+			$mdComponentRegistry.when(cmd.panelName).then(function (sideNav) {
+				vm.isOpen = angular.bind(sideNav, sideNav.isOpen);
+			});
 			return buildToggler(cmd.panelName);
 		}
 
