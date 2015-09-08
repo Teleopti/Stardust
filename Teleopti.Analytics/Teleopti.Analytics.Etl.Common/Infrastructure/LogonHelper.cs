@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
@@ -92,8 +91,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				new CurrentHttpContext(),
 				() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging
 				);
-			var dsForTenant = new DataSourceForTenant(dataSourcesFactory);
-			var application = new InitializeApplication(dsForTenant, null, _loadAllTenants);
+			var application = new InitializeApplication(dataSourcesFactory, null, _loadAllTenants);
 
 			using (tenantUnitOfWork.Start())
 			{

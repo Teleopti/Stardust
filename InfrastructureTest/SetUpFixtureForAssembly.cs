@@ -12,7 +12,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
@@ -52,10 +51,9 @@ namespace Teleopti.Ccc.InfrastructureTest
 			loggedOnPerson = PersonFactory.CreatePerson("logged on person");
 
 			MessageBrokerContainerDontUse.Configure(null, null, MessageFilterManager.Instance, new NewtonsoftJsonSerializer(), new NewtonsoftJsonSerializer());
-
-			var dsForTenant = new DataSourceForTenant(null);
-			dsForTenant.MakeSureDataSourceExists_UseOnlyFromTests(DataSource);
-			ApplicationData = new ApplicationData(appSettings, MessageBrokerContainerDontUse.CompositeClient(), null, dsForTenant);
+			ApplicationData = new ApplicationData(appSettings,
+									MessageBrokerContainerDontUse.CompositeClient(), null, null);
+			((ApplicationData)ApplicationData).MakeSureDataSourceExists_UseOnlyFromTests(DataSource);
 
 			BusinessUnitFactory.BusinessUnitUsedInTest = BusinessUnitFactory.CreateSimpleBusinessUnit("Business unit used in test");
 			sessionData = StateHolderProxyHelper.CreateSessionData(loggedOnPerson, DataSource, BusinessUnitFactory.BusinessUnitUsedInTest);

@@ -14,7 +14,6 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -75,11 +74,10 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 				() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging
 				);
 			var dataSource = dataSourcesFactory.Create(databaseHandler.DataSourceSettings(), "");
-			var dsForTenant = new DataSourceForTenant(dataSourcesFactory);
 
 			var state = new StateNewVersion();
-			var applicationData = new ApplicationData(ConfigurationManager.AppSettings.ToDictionary(), null, null, dsForTenant);
-			dsForTenant.MakeSureDataSourceExists_UseOnlyFromTests(dataSource); //no threading issues so it should be fine
+			var applicationData = new ApplicationData(ConfigurationManager.AppSettings.ToDictionary(), null, null,dataSourcesFactory);
+			applicationData.MakeSureDataSourceExists_UseOnlyFromTests(dataSource); //no threading issues so it should be fine
 			state.SetApplicationData(applicationData);
 			StateHolder.Initialize(state);
 

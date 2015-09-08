@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Teleopti.Interfaces.Domain
 {
-	public interface IDataSourceForTenant : IDisposable
+	public interface IDataSourceForTenant
 	{
 		IDataSource Tenant(string tenantName);
 		void MakeSureDataSourceExists(string tenantName, string applicationConnectionString, string analyticsConnectionString, IDictionary<string, string> applicationNhibConfiguration);

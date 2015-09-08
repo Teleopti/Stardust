@@ -9,7 +9,6 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Licensing;
-using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -31,10 +30,10 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 		{
 			var dataSource = MockRepository.GenerateStub<IDataSource>();
 			var licenseVerifierFactory = MockRepository.GenerateStub<ILicenseVerifierFactory>();
-			var dsForTenant = new DataSourceForTenant(null);
-			dsForTenant.MakeSureDataSourceExists_UseOnlyFromTests(dataSource);
+			var applicationData = new ApplicationData(null, null, null, null);
+			applicationData.MakeSureDataSourceExists_UseOnlyFromTests(dataSource);
 			var target = new VerifyLicenseTask(licenseVerifierFactory, new Lazy<IDataSourceForTenant>(
-					() => dsForTenant), null);
+					() => applicationData), null);
 			var licenseVerifier = MockRepository.GenerateStub<ILicenseVerifier>();
 
 			dataSource.Expect(x => x.DataSourceName).Return(datasourceName);
@@ -52,10 +51,10 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 			var dataSource = MockRepository.GenerateStub<IDataSource>();
 			var uowFactory = MockRepository.GenerateStub<IUnitOfWorkFactory>();
 			var licenseVerifierFactory = MockRepository.GenerateStub<ILicenseVerifierFactory>();
-			var dsForTenant = new DataSourceForTenant(null);
-			dsForTenant.MakeSureDataSourceExists_UseOnlyFromTests(dataSource);
+			var applicationData = new ApplicationData(null, null, null, null);
+			applicationData.MakeSureDataSourceExists_UseOnlyFromTests(dataSource);
 			var target = new VerifyLicenseTask(licenseVerifierFactory, new Lazy<IDataSourceForTenant>(
-					() => dsForTenant), MockRepository.GenerateMock<ILog>());
+					() => new ApplicationData(null, null, null, null)), MockRepository.GenerateMock<ILog>());
 			var licenseVerifier = new LicenseVerifier(target, uowFactory, null);
 
 			dataSource.Expect(x => x.DataSourceName).Return(datasourceName);
@@ -74,7 +73,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 		{
 			var logger = MockRepository.GenerateMock<ILog>();
 			var target = new VerifyLicenseTask(MockRepository.GenerateStub<ILicenseVerifierFactory>(), new Lazy<IDataSourceForTenant>(
-					() => new DataSourceForTenant(null)), logger);
+					() => new ApplicationData(null, null, null, null)), logger);
 
 			target.Warning("should be");
 			target.Error("logged");

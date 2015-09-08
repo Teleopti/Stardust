@@ -271,7 +271,6 @@
     <Compile Include="MultiTenancy\Client\TenantCredentials.cs" />
     <Compile Include="MultiTenancy\Client\TenantLogonDataManager.cs" />
     <Compile Include="MultiTenancy\Client\TenantServerConfiguration.cs" />
-    <Compile Include="MultiTenancy\DataSourceForTenant.cs" />
     <Compile Include="MultiTenancy\Server\DataSourceConfiguration.cs" />
     <Compile Include="MultiTenancy\Server\Queries\ApplicationUserQueryFake.cs" />
     <Compile Include="MultiTenancy\Server\CheckPasswordStrength.cs" />
