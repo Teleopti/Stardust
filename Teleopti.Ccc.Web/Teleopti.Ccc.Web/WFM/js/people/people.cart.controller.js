@@ -133,7 +133,11 @@
 				'</div>';
 			vm.gridApi.core.addRowHeaderColumn({ name: 'rowHeaderCol', displayName: '', width: 30, cellTemplate: cellTemplate });
 		}
-		vm.removePerson= function(person) {
+		vm.removePerson = function (person) {
+			var personIndex = vm.selectedPeopleIds.indexOf(person.PersonId);
+			if (personIndex > -1) {
+				vm.selectedPeopleIds.splice(personIndex, 1);
+			}
 			for (var i = 0; i < vm.availablePeople.length; i++) {
 				if (person.PersonId === vm.availablePeople[i].PersonId) {
 					vm.availablePeople.splice(i, 1);
