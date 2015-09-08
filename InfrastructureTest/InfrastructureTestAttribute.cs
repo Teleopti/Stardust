@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using Autofac;
+using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -10,6 +12,7 @@ using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Web;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest
 {
@@ -19,6 +22,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 		public IEnumerable<IMessageSender> MessageSenders;
 		private IDisposable _scope;
 		public FakeMessageSender MessageSender;
+		public IDataSourceForTenant DataSourceForTenant;
 
 		protected override FakeConfigReader Config()
 		{
@@ -43,10 +47,8 @@ namespace Teleopti.Ccc.InfrastructureTest
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			base.Setup(system, configuration);
-
 			system.AddModule(new TenantServerModule(configuration));
 			system.AddService(TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(ConnectionStringHelper.ConnectionStringUsedInTests));
-
 			system.UseTestDouble<FakeConnectionStrings>().For<IConnectionStrings>();
 			system.UseTestDouble<MutableFakeCurrentHttpContext>().For<ICurrentHttpContext>();
 			system.UseTestDouble<FakeMessageSender>().For<Interfaces.MessageBroker.Client.IMessageSender>(); // Does not fake all message senders, just adds one to the list
@@ -55,7 +57,9 @@ namespace Teleopti.Ccc.InfrastructureTest
 		protected override void BeforeTest()
 		{
 			base.BeforeTest();
-
+			var nonFakedDataSourceForTenant = DataSourceForTenant as DataSourceForTenant;
+			if(nonFakedDataSourceForTenant!=null)
+				nonFakedDataSourceForTenant.MakeSureDataSourceExists_UseOnlyFromTests(SetupFixtureForAssembly.DataSource);
 			_scope = MessageSendersScope.GloballyUse(MessageSenders);
 		}
 

@@ -46,11 +46,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			appData.Expect(c => c.LoadPasswordPolicyService).Return(MockRepository.GenerateMock<ILoadPasswordPolicyService>());
 			
 			var builder = new ContainerBuilder();
+			builder.RegisterModule<ServiceBusCommonModule>();
 			builder.RegisterType<ApplicationLogOnMessageModule>().As<IMessageModule>().Named<IMessageModule>("1");
 
 			builder.RegisterModule(CommonModule.ForTest());
 			builder.RegisterInstance(appData);
-			builder.RegisterModule<ServiceBusCommonModule>();
 			builder.RegisterModule<AuthenticationContainerInstaller>();
 			builder.RegisterModule<AuthorizationContainerInstaller>();
 
