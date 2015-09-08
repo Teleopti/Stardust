@@ -4,18 +4,13 @@ angular.module('wfm.forecasting')
 	.controller('ForecastingStartCtrl', [
 		'$scope', '$state', 'Forecasting', '$http', '$stateParams',
 		function($scope, $state, forecasting, $http, $stateParams) {
-			if ($stateParams.running === true) {
-				$scope.isForecastRunning = true;
-				$scope.period = $stateParams.period;
-			} else {
-				$scope.isForecastRunning = false;
-				forecasting.status.get().$promise.then(function(result) {
-					$scope.isForecastRunning = result.IsRunning;
-				});
-				var startDate = moment().utc().add(1, 'months').startOf('month').toDate();
-				var endDate = moment().utc().add(2, 'months').startOf('month').toDate();
-				$scope.period = { startDate: startDate, endDate: endDate }; //use moment to get first day of next month
-			}
+			$scope.isForecastRunning = false;
+			forecasting.status.get().$promise.then(function(result) {
+				$scope.isForecastRunning = result.IsRunning;
+			});
+			var startDate = moment().utc().add(1, 'months').startOf('month').toDate();
+			var endDate = moment().utc().add(2, 'months').startOf('month').toDate();
+			$scope.period = { startDate: startDate, endDate: endDate };
 
 			var forecastForWorkload = function(workload) {
 				workload.ShowProgress = true;
@@ -60,16 +55,6 @@ angular.module('wfm.forecasting')
 						$scope.workloads.push({ Id: workload.Id, Name: skill.Name + " - " + workload.Name, ChartId: "chart" + workload.Id });
 					});
 				});
-
-				if ($stateParams.running === true) {
-					for (var i = 0, len = $scope.workloads.length; i < len; i++) {
-						if ($scope.workloads[i].Id === $stateParams.target.workloadId) {
-							$scope.workloads[i].selectedMethod = $stateParams.target.selectedMethod;
-							forecastForWorkload($scope.workloads[i]);
-							break;
-						}
-					}
-				}
 			});
 
 			$scope.modalInfo = {
@@ -203,10 +188,6 @@ angular.module('wfm.forecasting')
 
 			$scope.nextStepAdvanced = function (workload) {
 				$state.go('forecasting-advanced', { workloadId: workload.Id, workloadName: workload.Name });
-			};
-
-			$scope.disalbeNextStepAdvanced = function () {
-				return $scope.moreThanOneYear();
 			};
 
 			$scope.setRangeClass = function (date, mode) {

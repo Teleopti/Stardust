@@ -46,7 +46,6 @@ wfm.config([
 			controller: 'MainCtrl'
 		}).state('forecasting', {
 			url: '/forecasting',
-			params: { period: {}, target: {}, running: {} },
 			templateUrl: 'html/forecasting/forecasting.html',
 			controller: 'ForecastingStartCtrl'
 		}).state('forecasting-target', {
