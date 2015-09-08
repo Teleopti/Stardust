@@ -1,59 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
-using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
-using log4net;
-using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.MultiTenancy;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Interfaces;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Client.Composite;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
-	public class FileConfigurationReader : IConfigurationReader
-	{
-		private readonly ILoadAllTenants _loadAllTenants;
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(FileConfigurationReader));
-		private static readonly object LockObject = new object();
-
-		public FileConfigurationReader(ILoadAllTenants loadAllTenants)
-		{
-			_loadAllTenants = loadAllTenants;
-		}
-
-		public void ReadConfiguration(MessageSenderCreator creator, Func<IMessageBrokerComposite> messageBroker)
-		{
-			lock (LockObject)
-			{
-				if (StateHolderReader.IsInitialized)
-				{
-					Logger.Info("StateHolder already initialized. This step is skipped.");
-					return;
-				}
-				var dsForTenant = new DataSourceForTenant(new DataSourcesFactory(new EnversConfiguration(),
-					creator.Create(),
-					DataSourceConfigurationSetter.ForServiceBus(),
-					new CurrentHttpContext(),
-					messageBroker));
-        var application =
-					new InitializeApplication(dsForTenant, messageBroker(), _loadAllTenants);
-				application.Start(new BasicState(), null, ConfigurationManager.AppSettings.ToDictionary(), true);
-
-				Logger.Info("Initialized application");
-			}
-		}
-	}
-
 	public class InternalServiceBusSender : IServiceBusSender
 	{
 		private readonly Func<IServiceBus> _serviceBus;
@@ -120,10 +77,5 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 					_initiatorIdentifier));
 			return new CurrentMessageSenders(senders);
 		}
-	}
-
-	public interface IConfigurationReader
-	{
-		void ReadConfiguration(MessageSenderCreator creator, Func<IMessageBrokerComposite> messageBroker);
 	}
 }

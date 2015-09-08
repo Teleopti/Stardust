@@ -163,6 +163,7 @@
     <Compile Include="Forecast\RecalculateForecastOnSkillConsumerTest.cs" />
     <Compile Include="Forecast\SendImportForecastBusMessageTest.cs" />
     <Compile Include="Forecast\StatisticLoaderTest.cs" />
+    <Compile Include="InitializeApplicationResolveTest.cs" />
     <Compile Include="LocalServiceBusPublisherTest.cs" />
     <Compile Include="NewAbsenceReportConsumerTest.cs" />
     <Compile Include="NewAbsenceRequestConsumerTest.cs" />
