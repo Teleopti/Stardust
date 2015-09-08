@@ -2,14 +2,7 @@
 	<div class="row">
 		<div class="col-lg-12">
 			<button class="wfm-btn wfm-btn-default back" ng-click="back()">{{ 'Back' | translate }}</button>
-			<div class="forecast-create-fad">
-				<button class="wfm-fab info forecast-create-button" ng-click="displayModal()">
-					<i class="mdi mdi-plus"></i>
-					<md-tooltip>
-						Forecast for one workload
-					</md-tooltip>
-				</button>
-			</div>
+			
 		</div>
 	</div>
 	<div class="row">
@@ -26,7 +19,7 @@
 							<div ng-include="'first-forecast-tab.html'" ng-init="init()"></div>
 						</md-content>
 					</md-tab>
-					<md-tab label="Queue statistics" ng-if="isQueueStatisticsEnabled">
+					<md-tab label="Outliers" ng-if="isQueueStatisticsEnabled">
 						<md-content class="md-padding">
 							<div ng-include="'second-forecast-tab.html'"></div>
 						</md-content>
@@ -115,13 +108,6 @@
 	</div>
 	<div class="alert-warning notice-spacer" ng-show="noHistoricalDataForForecasting"><i class='mdi mdi-alert'></i> Warning: There is no historical data available for forecasting.</div>
 	<div ng-if="!queueStatisticsLoading && !noHistoricalDataForForecasting">
-		<div class="wfm-block">
-			<div class="row">
-				<div class="col-lg-12">
-					<p>Queue statistics are shown here</p>
-				</div>
-			</div>
-		</div>
 		<c3chart bindto-id="queueStatisticsChart" chart-data="queueStatisticsChartData" chart-columns="chartInfo.queueStatisticsChartDataColumns" chart-x="chartInfo.dataX" show-subchart="true" style="margin-left:-13px;">
 			<chart-axis>
 				<chart-axis-x axis-id="date" axis-type="timeseries">

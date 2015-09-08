@@ -5,9 +5,9 @@
 			<h4>Overview</h4>
 			<div class="forecast-create-fad">
 				<button class="wfm-fab info forecast-create-button" ng-click="displayModal()">
-					<i class="mdi mdi-plus"></i>
+					<i class="mdi mdi-pencil"></i>
 					<md-tooltip>
-						Forecast for all
+						Forecast all
 					</md-tooltip>
 				</button>
 			</div>
@@ -29,23 +29,34 @@
 					<div ng-if="!workload.forecastResultLoaded" class="wfm-block">
 						<md-progress-linear md-mode="indeterminate"></md-progress-linear>
 					</div>
-					<div ng-if="workload.forecastResultLoaded" class="wfm-block">
-						<c3chart bindto-id="{{workload.ChartId}}" chart-data="workload.resultChartData" chart-columns="chartInfo.resultChartDataColumns" chart-x="chartInfo.dataX" show-subchart="true">
-							<chart-axes values-x="date" y="vc" y2="vaht,vacw" />
-							<chart-axis>
-								<chart-axis-x axis-id="date" axis-type="timeseries">
-									<chart-axis-x-tick tick-format="%Y-%m-%d" />
-								</chart-axis-x>
-							</chart-axis>
-							<chart-axis>
-								<chart-axis-y axis-id="y" axis-position="outer-middle" axis-label="Number of Calls" />
-								<chart-axis-y axis-id="y2" axis-position="outer-middle" axis-label="Time Spent" />
-							</chart-axis>
-						</c3chart>
+					<div>
+						<div style="display: inline-block" class="pull-right">
+							<button class="wfm-fab info mini" ng-click="displayModal(workload)">
+								<i class="mdi mdi-pencil"></i>
+								<md-tooltip>
+									Forecast this workload
+								</md-tooltip>
+							</button>
+						</div>
+						<div ng-if="workload.forecastResultLoaded" style="display: inline-block">
+							<c3chart bindto-id="{{workload.ChartId}}" chart-data="workload.resultChartData" chart-columns="chartInfo.resultChartDataColumns" chart-x="chartInfo.dataX" show-subchart="true">
+								<chart-axes values-x="date" y="vc" y2="vaht,vacw" />
+								<chart-axis>
+									<chart-axis-x axis-id="date" axis-type="timeseries">
+										<chart-axis-x-tick tick-format="%Y-%m-%d" />
+									</chart-axis-x>
+								</chart-axis>
+								<chart-axis>
+									<chart-axis-y axis-id="y" axis-position="outer-middle" axis-label="Number of Calls" />
+									<chart-axis-y axis-id="y2" axis-position="outer-middle" axis-label="Time Spent" />
+								</chart-axis>
+							</c3chart>
+						</div>
 					</div>
+					
 					<div class="pull-right">
 						<aside>
-							<a class="wfm-btn wfm-btn-invis-default" ng-click="nextStepAdvanced(workload)">{{ 'Advanced' | translate }}</a>
+							<a class="wfm-btn wfm-btn-invis-default" ng-click="nextStepAdvanced(workload)">{{ 'Statistics' | translate }}</a>
 						</aside>
 					</div>
 				</card-body>
@@ -63,6 +74,12 @@
 					SelectForecastPeriodIntro
 				</div>
 				<div class="modal-inner-content">
+					<div class="wfm-block" ng-if="modalInfo.forecastForAll">
+						<h4>Forecast all</h4>
+					</div>
+					<div class="wfm-block" ng-if="modalInfo.forecastForOneWorkload">
+						<h4>Forecast workload: {{modalInfo.selectedWorkload.Name}}</h4>
+					</div>
 					<div class="wfm-block forecast-period">
 						<div class="wfm-datepicker-wrap">
 							<div class="sub-header">
@@ -82,7 +99,7 @@
 				<div class="modal-footer">
 					<aside>
 						<a class="wfm-btn wfm-btn-invis-default" ng-click="cancelModal()">{{ 'Close' | translate }}</a>
-						<a class="wfm-btn wfm-btn-invis-primary next-step-all" ng-disabled="disableNextStepAll()" ng-class="{'wfm-btn-invis-disabled': disableNextStepAll()}" ng-click="nextStepAll(period)">{{ 'Forecast' | translate }}</a>
+						<a class="wfm-btn wfm-btn-invis-primary next-step-all" ng-disabled="disableDoForecast()" ng-class="{'wfm-btn-invis-disabled': disableDoForecast()}" ng-click="doForecast(period)">{{ 'Forecast' | translate }}</a>
 					</aside>
 				</div>
 			</div>
