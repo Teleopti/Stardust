@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AbandonedCalls" xml:space="preserve">
     <value>放弃的电话</value>
@@ -11552,6 +11552,27 @@ Teleopti R&amp;D</value>
   </data>
   <data name="SetBadgeBronzeThresholdForAnsweredCalls" xml:space="preserve">
     <value>青铜徽章阈值：</value>
+  </data>
+  <data name="ManagePeople" xml:space="preserve">
+    <value>管理人员</value>
+  </data>
+  <data name="AdjustSkill" xml:space="preserve">
+    <value>更新技能</value>
+  </data>
+  <data name="ChangeShiftBag" xml:space="preserve">
+    <value>更改班次包</value>
+  </data>
+  <data name="PickAShiftBag" xml:space="preserve">
+    <value>选择班次包</value>
+  </data>
+  <data name="SuccessfullyUpdatedPeopleCountColon" xml:space="preserve">
+    <value>成功更新人数：</value>
+  </data>
+  <data name="YouMightNeedToChangeTheShiftBagAccordingly" xml:space="preserve">
+    <value>你可能需要相应地更改人员的班次包。</value>
+  </data>
+  <data name="SelectedPeople" xml:space="preserve">
+    <value>当前选中人员</value>
   </data>
   <data name="ResetSelection" xml:space="preserve">
     <value>重置</value>

@@ -13425,6 +13425,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Manage people.
+        /// </summary>
+        public static string ManagePeople {
+            get {
+                return ResourceManager.GetString("ManagePeople", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Manage permissions.
         /// </summary>
         public static string ManagePermissions {
@@ -21433,6 +21442,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reset selection.
+        /// </summary>
+        public static string ResetSelection {
+            get {
+                return ResourceManager.GetString("ResetSelection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Reset templates.
         /// </summary>
         public static string ResetTemplates {
@@ -23560,6 +23578,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SelectedItems {
             get {
                 return ResourceManager.GetString("SelectedItems", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selected people.
+        /// </summary>
+        public static string SelectedPeople {
+            get {
+                return ResourceManager.GetString("SelectedPeople", resourceCulture);
             }
         }
         

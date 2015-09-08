@@ -13431,6 +13431,10 @@ Reduce the complexity to use these shifts.</value>
   <data name="ViewReport" xml:space="preserve">
     <value>View Report</value>
   </data>
+  <data name="ManagePeople" xml:space="preserve">
+    <value>Manage People</value>
+    <comment>Title of WFM web people module</comment>
+  </data>
   <data name="AdjustSkill" xml:space="preserve">
     <value>Adjust skill</value>
     <comment>adjust skill</comment>
@@ -13457,6 +13461,10 @@ Reduce the complexity to use these shifts.</value>
   </data>
   <data name="CampaignFailedRemove" xml:space="preserve">
     <value>Failed to remove campaign: {0} .</value>
+  </data>
+  <data name="SelectedPeople" xml:space="preserve">
+    <value>Selected People</value>
+    <comment>use in WFM web people module</comment>
   </data>
   <data name="ResetSelection" xml:space="preserve">
     <value>Reset selection</value>
