@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Secrets.Furness;
 using Teleopti.Interfaces.Domain;
 
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public void Optimize(DateTimePeriod datePeriodToRecalculate, bool useOccupancyAdjustment)
         {
             var affectedSkills = _personSkillService.AffectedSkills;
-	        Parallel.ForEach(_distinctActivities,
+	        _distinctActivities.ForEach(
 		        currentActivity =>
 			        optimizeActivity(affectedSkills, currentActivity, datePeriodToRecalculate, useOccupancyAdjustment));
         }
