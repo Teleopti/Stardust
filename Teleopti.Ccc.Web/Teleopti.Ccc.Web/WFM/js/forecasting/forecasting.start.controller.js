@@ -46,6 +46,9 @@ angular.module('wfm.forecasting')
 					.finally(function() {
 						$scope.isForecastRunning = false;
 						workload.ShowProgress = false;
+						if (workload.forecastResultLoaded) {
+							$scope.getForecastResult(workload);
+						}
 					});
 			}
 
@@ -92,8 +95,8 @@ angular.module('wfm.forecasting')
 			$scope.chartInfo = {
 				resultChartDataColumns: [
 					{ id: "vc", type: "line", name: "Calls" },
-					{ id: "vaht", type: "bar", name: "Talk time" },
-					{ id: "vacw", type: "bar", name: "ACW" }
+					{ id: "vaht", type: "line", name: "Talk time" },
+					{ id: "vacw", type: "line", name: "ACW" }
 				],
 				dataX: { id: "date" }
 			};
@@ -103,7 +106,7 @@ angular.module('wfm.forecasting')
 
 				$scope.resultChartData = [];
 				var resultStartDate = moment().utc().add(1, 'days');
-				var resultEndDate = moment(resultStartDate).add(1, 'months');
+				var resultEndDate = moment(resultStartDate).add(6, 'months');
 				$http.post("../api/Forecasting/ForecastResult", JSON.stringify({ ForecastStart: resultStartDate.toDate(), ForecastEnd: resultEndDate.toDate(), WorkloadId: workload.Id })).
 					success(function (data, status, headers, config) {
 						angular.forEach(data.Days, function (day) {
@@ -175,6 +178,9 @@ angular.module('wfm.forecasting')
 					.finally(function () {
 						workload.ShowProgress = false;
 						forecastForOneWorkload(++index);
+						if (workload.forecastResultLoaded) {
+							$scope.getForecastResult(workload);
+						}
 					});
 			};
 
