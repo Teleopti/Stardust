@@ -72,6 +72,11 @@ namespace Teleopti.Ccc.TestCommon
 		}
 
 		public TimeSpan CalculatedContractTimeHolder { get; set; }
+		public TimeSpan CalculatedContractTimeHolderOnPeriod(DateOnlyPeriod periodToCheck)
+		{
+			throw new NotImplementedException();
+		}
+
 		public TimeSpan? CalculatedTargetTimeHolder(DateOnlyPeriod periodToCheck)
 		{
 			return TimeSpan.FromHours(8);

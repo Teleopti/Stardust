@@ -622,6 +622,32 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             _target.Snapshot.Snapshot.Should().Not.Be.SameInstanceAs(snapshotBefore);
         }
 
+		[Test]
+		public void ShouldCalculateContractTimeOnPeriod()
+		{
+			var dateOnlyPeriod = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 1);
+			_person = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(_person, dateOnlyPeriod.StartDate);
+			_parameters = new ScheduleParameters(_scenario, _person, new DateTimePeriod(2000, 1, 1, 2000, 1, 1));
+			var activity = ActivityFactory.CreateActivity("activity");
+			activity.InContractTime = true;
+			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity,_person,new DateTimePeriod(2000, 1, 1, 8, 2000, 1, 1, 10),ShiftCategoryFactory.CreateShiftCategory("shiftCategory"),_scenario);	
+			ass.AddActivity(activity, ass.Period);
+			
+			using (_mocks.Record())
+			{
+				Expect.Call(_dic.PermissionsEnabled).Return(true);
+				Expect.Call(_dic.Scenario).Return(_scenario);
+			}
+
+			using (_mocks.Playback())
+			{
+				_target = new scheduleExposingInternalCollections(_dic, _parameters);
+				_target.Add(ass);
+				var result = _target.CalculatedContractTimeHolderOnPeriod(dateOnlyPeriod);
+				Assert.AreEqual(2, result.TotalHours);
+			}
+		}
+
 		private IPersonAbsence createPersonAbsence(DateTimePeriod period)
 		{
 			return PersonAbsenceFactory.CreatePersonAbsence(_person, _scenario, period);

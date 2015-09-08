@@ -61,6 +61,28 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		}
 
 		[Test]
+		public void ShouldCountContractTimeOnPeriod()
+		{
+			using (_mocks.Record())
+			{
+				Expect.Call(_scheduleRange.Person).Return(_person);
+				Expect.Call(_scheduleRange.ScheduledDay(new DateOnly(2015, 5, 20))).Return(_scheduleDay1);
+				Expect.Call(_scheduleDay1.SignificantPartForDisplay()).Return(SchedulePartView.MainShift);
+				Expect.Call(_scheduleDay1.ProjectionService()).Return(_projectionService);
+				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
+				Expect.Call(_visualLayerCollection.ContractTime()).Return(TimeSpan.FromHours(8));
+			}
+
+			using (_mocks.Playback())
+			{
+				var dateOnlyPeriod = _scheduleDateTimePeriod.LoadedPeriod().ToDateOnlyPeriod(_person.PermissionInformation.DefaultTimeZone());
+				var result = _target.GetCurrent(_scheduleRange, dateOnlyPeriod);
+				Assert.AreEqual(TimeSpan.FromHours(8), result.Item1);
+				Assert.AreEqual(0, result.Item2);
+			}	
+		}
+
+		[Test]
 		public void ShouldCountDaysOff()
 		{
 			using (_mocks.Record())

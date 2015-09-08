@@ -259,6 +259,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			}
 		}
 
+	    public TimeSpan CalculatedContractTimeHolderOnPeriod(DateOnlyPeriod periodToCheck)
+	    {
+
+			if (!_calculatedContractTimeHolder.HasValue)
+			{
+				var timeAndDaysOffTuple = new CurrentScheduleSummaryCalculator().GetCurrent(this, periodToCheck);
+				_calculatedContractTimeHolder = timeAndDaysOffTuple.Item1;
+				_calculatedScheduleDaysOff = timeAndDaysOffTuple.Item2;
+			}
+
+			return _calculatedContractTimeHolder.Value;
+	    }
+
 	    public TimeSpan? CalculatedTargetTimeHolder(DateOnlyPeriod periodToCheck)
 	    {
 		    if (!_calculatedTargetTimeHolder.HasValue)

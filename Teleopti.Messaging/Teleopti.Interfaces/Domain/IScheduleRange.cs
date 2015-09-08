@@ -71,6 +71,10 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         TimeSpan CalculatedContractTimeHolder { get;}
 
+
+
+		TimeSpan CalculatedContractTimeHolderOnPeriod(DateOnlyPeriod periodToCheck);
+
 	    /// <summary>
 	    /// Gets or sets the calculated target time holder. Used by the result columns in Scheduler.
 	    /// This field vill be set to null when Modify method is called.
