@@ -34,7 +34,7 @@
 			}
 
 			function resize(canvas) {
-				timeout(function () { doResize(canvas) }, 0, true);
+				timeout(function () { doResize(canvas) }, 50, true);
 			};
 
 			function doResize(canvas) {

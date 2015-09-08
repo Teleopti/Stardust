@@ -10,6 +10,7 @@
 	.seatmap-view-header{
 		height: 40px;
 		position:relative;
+		margin-top:-10px;
 		z-index:2;
 	}
 
@@ -44,10 +45,6 @@
 	}
 }
 
-.seatmap-seatbooking-previousday{
-	color:#a0a0a0; 
-}
-
 
 .seatmap-view-datepicker{
 	.wfm-datepicker{
@@ -65,9 +62,8 @@
 	position: absolute;
 	top:40px;
 	left:0;
-	height:30px;
+	padding-bottom:1px;
 	z-index:1;
-	padding-top:8px;
 }
 
 .location-breadcrumb-edit-mode{
@@ -152,7 +148,7 @@ a.mfb-component__button--main {
 .seatmap-canvas .wfm-block{
 	width: 100%; 
 	margin: 0; 
-	padding: 0 0 0 9px;
+	padding: 0 0 0 10px;
 }
 
 seatmap-editor{
@@ -222,4 +218,9 @@ seatmap-editor{
 	min-height: 120px;
 	background:#FFFFFF;
 	transition:all 0.35s ease-in-out;
+	padding-top:1px;
+}
+
+.seatmap-seatbooking-previousday{
+	color:#a0a0a0; 
 }

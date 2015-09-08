@@ -28,18 +28,6 @@
 			});
 		};
 
-		vm.setRangeClass = function (date, mode) {
-			if (mode === 'day') {
-				var dayToCheck = new Date(date).setHours(12, 0, 0, 0);
-				var startDay = new Date(vm.selectedPeriod.StartDate).setHours(12, 0, 0, 0);
-				var endDay = new Date(vm.selectedPeriod.EndDate).setHours(12, 0, 0, 0);
-				if (dayToCheck >= startDay && dayToCheck <= endDay) {
-					return 'seatplan-status-success';
-				}
-			}
-			return '';
-		};
-
 		vm.dateFilterIsValid = function() {
 			return (vm.selectedPeriod.StartDate <= vm.selectedPeriod.EndDate);
 		};

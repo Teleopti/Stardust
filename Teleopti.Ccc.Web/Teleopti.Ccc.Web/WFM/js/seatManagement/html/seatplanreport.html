@@ -19,7 +19,7 @@
 			<i class="mdi mdi-printer"></i>
 			<md-tooltip>{{'Print' | translate}}</md-tooltip>
 		</button>
-		
+
 		<span class="turn-off-filter-blank" ng-click="vm.isFilterOpened = false"></span>
 
 		<div class="seatplan-report-filter wfm-slide-tabs material-depth-2" ng-show="vm.isFilterOpened">
@@ -31,31 +31,7 @@
 
 			<div class="filter-content">
 				<div class="date-picker" ng-show="vm.isDatePickerOpened">
-					<div class="wfm-datepicker-wrap">
-						<div class="sub-header relative">
-							{{'From' | translate}} <span class="startDate">{{vm.selectedPeriod.StartDate | date : format}}</span>
-							<div class="seatplan-report-date-validation datepickerfix">
-								<i class="mdi mdi-check success" ng-if="vm.dateFilterIsValid()"></i>
-								<i class="mdi mdi-close fail" ng-if="!vm.dateFilterIsValid()"></i>
-							</div>
-						</div>
-						<datepicker ng-model="vm.selectedPeriod.StartDate" custom-class="vm.setRangeClass(date,mode)" class="wfm-datepicker"></datepicker>
-					</div>
-					<div class="wfm-datepicker-wrap">
-						<div class="sub-header relative">
-							{{'To' | translate}} <span class="endDate">{{vm.selectedPeriod.EndDate | date : format}}</span>
-							<div class="seatplan-report-date-validation datepickerfix">
-								<i class="mdi mdi-check success" ng-if="vm.dateFilterIsValid()"></i>
-								<i class="mdi mdi-close fail" ng-if="!vm.dateFilterIsValid()"></i>
-							</div>
-						</div>
-						<datepicker ng-model="vm.selectedPeriod.EndDate" custom-class="vm.setRangeClass(date,mode)" class="wfm-datepicker"></datepicker>
-					</div>
-
-					<div class="alert-error notice-spacer" ng-if="!vm.dateFilterIsValid()">
-						<i class='mdi mdi-alert-octagon'></i><span translate>StartDateMustBeEqualToOrEarlierThanEndDate</span>
-					</div>
-
+					<date-range-picker start-date="vm.selectedPeriod.StartDate" end-date="vm.selectedPeriod.EndDate" errors="vm.selectedPeriod.errors"></date-range-picker>
 				</div>
 
 				<div class="team-picker" ng-show="vm.isTeamPickerOpened">

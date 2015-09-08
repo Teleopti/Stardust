@@ -1,19 +1,14 @@
-﻿
-
-<div ng-repeat="detail in vm.occupancyDetail">
-
-	<div ng-show="$first" class="bottom-header">
-		Seat: {{detail.SeatName}}
-	</div>
-	<ul class="wfm-list">
-		<li class="active">
-			<span class="list-item-container" ng-if="!detail.IsEmpty" style="max-width: none" ng-class="vm.getSeatBookingDetailClass(detail)">
-				{{vm.getDisplayTime(detail)}}
-				&nbsp;&nbsp;{{detail.FirstName}}
-				&nbsp;{{detail.LastName}}
-			</span>
-			<span class="list-item-container" ng-if="detail.IsEmpty" style="max-width: none">{{'SeatHasNoBookings'|translate}}</span>
-		</li>
-	</ul>
-
+﻿<div class="bottom-header">
+	Seat: {{vm.occupancyDetail[0].SeatName}}
 </div>
+
+<ul class="wfm-list">
+	<li class="active" ng-repeat="detail in vm.occupancyDetail">
+		<span class="list-item-container" ng-if="!detail.IsEmpty" style="max-width: none" ng-class="vm.getSeatBookingDetailClass(detail)">
+			{{vm.getDisplayTime(detail)}}
+			&nbsp;&nbsp;{{detail.FirstName}}
+			&nbsp;{{detail.LastName}}
+		</span>
+		<span class="list-item-container" ng-if="detail.IsEmpty" style="max-width: none">{{'SeatHasNoBookings'|translate}}</span>
+	</li>
+</ul>
