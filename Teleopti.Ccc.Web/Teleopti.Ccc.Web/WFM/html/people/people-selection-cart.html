@@ -18,7 +18,6 @@
 			<p>
 				<button class="wfm-btn wfm-btn-default" style="padding-top: 5px;margin: 0 5px;padding-bottom: 5px;" ng-click="vm.back()">{{ 'Back' | translate }} </button>
 			</p>
-			
 		</div>
 		<div class="col-sm-5 col-md-3 col-lg-3">
 			<p class="input-group">
@@ -27,10 +26,12 @@
 					<button type="button" class="btn btn-default" ng-click="vm.toggleCalendar()"><i class="glyphicon glyphicon-calendar"></i></button>
 				</span>
 			</p>
-
 		</div>
 		<div>
-			<button class="wfm-fab wfm-panel-delete material-depth-1" ng-click="vm.clearCart()"><i class="mdi mdi-refresh"></i></button>
+			<button class="wfm-fab wfm-panel-delete material-depth-1" ng-click="vm.clearCart()">
+				<md-tooltip>{{"ResetSelection" | translate}}</md-tooltip>
+				<i class="mdi mdi-refresh"></i>
+			</button>
 			<nav class="wfm-panel action-panel" mfb-menu position="tr" effect="slidein-spring"
 				 active-icon="mdi-pencil" resting-icon="mdi-plus"
 				 ng-mouseenter=" hovered()" ng-mouseleave="hovered()"

@@ -11553,4 +11553,7 @@ Teleopti R&amp;D</value>
   <data name="SetBadgeBronzeThresholdForAnsweredCalls" xml:space="preserve">
     <value>青铜徽章阈值：</value>
   </data>
+  <data name="ResetSelection" xml:space="preserve">
+    <value>重置</value>
+  </data>
 </root>

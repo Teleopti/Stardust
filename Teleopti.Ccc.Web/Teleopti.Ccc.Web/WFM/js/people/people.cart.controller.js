@@ -127,7 +127,7 @@
 			vm.gridApi = gridApi;
 			var cellTemplate = '<div>' +
 				'<button ng-click="grid.appScope.vm.removePerson(row.entity)" class="wfm-btn wfm-btn-default selection-cart-row-remove-btn">' +
-				'<md-tooltip>Remove</md-tooltip>' +
+				'<md-tooltip>{{"Remove" | translate}}</md-tooltip>' +
 				'<i style="magin-left:3px;" class="mdi mdi-delete">' +
 				'</button>' +
 				'</div>';
