@@ -43,6 +43,14 @@
 				resize();
 			});
 
+			$scope.$on('leftSidenav:toggle', function() {
+				resize();
+			});
+
+			$scope.$on('rightSidenav:toggle', function() {
+				resize();
+			});
+
 			resize();
 
 			createDocumentListeners();

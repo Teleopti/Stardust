@@ -126,16 +126,16 @@ wfm.config([
 		$translateProvider.preferredLanguage('en');
 	}
 ]).run([
-	'$rootScope', '$http', '$state', '$translate', 'i18nService', 'amMoment', 'HelpService', '$sessionStorage',
-	function ($rootScope, $http, $state, $translate, i18nService, angularMoment, HelpService, $sessionStorage) {
+	'$rootScope', '$http', '$state', '$translate', 'i18nService', 'amMoment', 'HelpService', '$sessionStorage', '$timeout',
+	function ($rootScope, $http, $state, $translate, i18nService, angularMoment, HelpService, $sessionStorage, $timeout) {
 		var timeout = Date.now() + 10000;
 		$rootScope.isAuthenticated = false;
 
-		var checkCurrentUser = function () {
+		function checkCurrentUser() {
 			return $http.get('../api/Global/User/CurrentUser');
 		};
 
-		var userNotAuthenticatedHandler = function () {
+		function userNotAuthenticatedHandler() {
 			if (window.location.hash) {
 				var d = new Date();
 				d.setTime(d.getTime() + (5 * 60 * 1000));
@@ -146,9 +146,17 @@ wfm.config([
 			window.location = 'Authentication';
 		};
 
-		var increaseTimeout = function () {
+		function increaseTimeout() {
 			timeout = Date.now() + 10000;
 		};
+
+		function broadcastEventOnToggle(model, eventName) {
+			$rootScope.$watch(model, function() {
+				$timeout(function() {
+					$rootScope.$broadcast(eventName);
+				}, 500);
+			});
+		}
 
 		$rootScope.$on('$stateChangeStart', function (event, next, toParams) {
 
@@ -162,6 +170,9 @@ wfm.config([
 				});
 			}
 		});
+
+		broadcastEventOnToggle('toggleLeftSide', 'leftSidenav:toggle')
+		broadcastEventOnToggle('toggleRightSide', 'rightSidenav:toggle')
 
 		var startContext = checkCurrentUser();
 		startContext.error(userNotAuthenticatedHandler);
