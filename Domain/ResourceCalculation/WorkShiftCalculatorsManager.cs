@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Interfaces.Domain;
@@ -31,40 +32,41 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				IDictionary<ISkill, ISkillStaffPeriodDictionary> nonBlendSkillPeriods,
 				ISchedulingOptions schedulingOptions)
 		{
-			IList<IWorkShiftCalculationResultHolder> allValues =
-				new List<IWorkShiftCalculationResultHolder>(shiftProjectionCaches.Count);
-			foreach (IShiftProjectionCache shiftProjection in shiftProjectionCaches)
-			{
-				double? nonBlendValue = null;
-				double thisValue = _workShiftCalculator.CalculateShiftValue(shiftProjection.WorkShiftCalculatableLayers,
-																			dataHolders,
-																			schedulingOptions.WorkShiftLengthHintOption,
-																			schedulingOptions.UseMinimumPersons,
-																			schedulingOptions.UseMaximumPersons);
+			var shouldCalculateNonBlendValue = nonBlendSkillPeriods.Count > 0;
 
-				if (nonBlendSkillPeriods.Count > 0)
-					nonBlendValue = _nonBlendWorkShiftCalculator.CalculateShiftValue(person,
-																					 shiftProjection.MainShiftProjection,
-																					 nonBlendSkillPeriods,
-																					 schedulingOptions.WorkShiftLengthHintOption,
-																					 schedulingOptions.UseMinimumPersons,
-																					 schedulingOptions.UseMaximumPersons);
-				if (nonBlendValue.HasValue)
+			var allValues = shiftProjectionCaches.AsParallel().Select(shiftProjection => new
+			{
+				shiftProjection,
+				shiftValue = _workShiftCalculator.CalculateShiftValue(shiftProjection.WorkShiftCalculatableLayers,
+					dataHolders,
+					schedulingOptions.WorkShiftLengthHintOption,
+					schedulingOptions.UseMinimumPersons,
+					schedulingOptions.UseMaximumPersons),
+				nonBlendValue = shouldCalculateNonBlendValue
+					? _nonBlendWorkShiftCalculator.CalculateShiftValue(person,
+						shiftProjection.MainShiftProjection,
+						nonBlendSkillPeriods,
+						schedulingOptions.WorkShiftLengthHintOption,
+						schedulingOptions.UseMinimumPersons,
+						schedulingOptions.UseMaximumPersons)
+					: null
+			}).Select(v =>
+			{
+				double value = v.shiftValue;
+				if (v.nonBlendValue.HasValue)
 				{
-					if (thisValue.Equals(double.MinValue))
-						thisValue = nonBlendValue.Value;
+					if (v.shiftValue.Equals(double.MinValue))
+					{
+						value = v.nonBlendValue.Value;
+					}
 					else
 					{
-						thisValue += nonBlendValue.Value;
+						value += v.nonBlendValue.Value;
 					}
 				}
+				return (IWorkShiftCalculationResultHolder)new WorkShiftCalculationResult {ShiftProjection = v.shiftProjection, Value = value};
+			}).Where(w => w.Value > double.MinValue).ToList();
 
-				if (thisValue > double.MinValue)
-				{
-					var workShiftFinderResultHolder = new WorkShiftCalculationResult { ShiftProjection = shiftProjection, Value = thisValue };
-					allValues.Add(workShiftFinderResultHolder);
-				}
-			}
 			return allValues;
 		}
 	}

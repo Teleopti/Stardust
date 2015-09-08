@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			double periodValue = 0;
 			int resourceInMinutes = 0;
 
-			foreach (IVisualLayer layer in mainShiftLayers)
+			foreach (IVisualLayer layer in mainShiftLayers.AsParallel())
 			{
 				var activity = (IActivity) layer.Payload;
 				if (activity != skillActivity)

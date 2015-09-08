@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Interfaces.Domain;
@@ -8,7 +9,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 {
 	public interface IWorkShiftSelector
 	{
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
         IShiftProjectionCache SelectShiftProjectionCache(IList<IShiftProjectionCache> shiftList, IDictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>> skillIntervalDataDictionary, PeriodValueCalculationParameters parameters, TimeZoneInfo timeZoneInfo);
 
 		IList<IWorkShiftCalculationResultHolder> SelectAllShiftProjectionCaches(IList<IShiftProjectionCache> shiftList,
@@ -33,32 +33,32 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 		{
 			double? bestShiftValue = null;
 			IShiftProjectionCache bestShift = null;
-			foreach (var shiftProjectionCache in shiftList)
+
+			var shiftsWithValue =
+				shiftList.AsParallel()
+					.Select(s => new {s, value = valueForShift(skillIntervalDataLocalDictionary, s, parameters, timeZoneInfo)});
+
+			foreach (var item in shiftsWithValue)
 			{
-				double? valueForShift = this.valueForShift(skillIntervalDataLocalDictionary, shiftProjectionCache, parameters,
-					timeZoneInfo);
+				if (!item.value.HasValue) continue;
 
-				if (valueForShift.HasValue)
+				if (!bestShiftValue.HasValue)
 				{
-					if (!bestShiftValue.HasValue)
+					bestShiftValue = item.value.Value;
+					bestShift = item.s;
+				}
+				else
+				{
+					if (item.value.Value == bestShiftValue)
 					{
-						bestShiftValue = valueForShift.Value;
-						bestShift = shiftProjectionCache;
-
+						bestShiftValue = item.value.Value;
+						bestShift = _equalWorkShiftValueDecider.Decide(bestShift, item.s);
 					}
-					else
-					{
-						if (valueForShift.Value == bestShiftValue)
-						{
-							bestShiftValue = valueForShift.Value;
-							bestShift = _equalWorkShiftValueDecider.Decide(bestShift, shiftProjectionCache);
-						}
 
-						if (valueForShift.Value > bestShiftValue)
-						{
-							bestShiftValue = valueForShift.Value;
-							bestShift = shiftProjectionCache;
-						}
+					if (item.value.Value > bestShiftValue)
+					{
+						bestShiftValue = item.value.Value;
+						bestShift = item.s;
 					}
 				}
 			}
@@ -71,17 +71,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			PeriodValueCalculationParameters parameters, TimeZoneInfo timeZoneInfo)
 		{
 			IComparer<IWorkShiftCalculationResultHolder> comparer = new WorkShiftCalculationResultComparer();
-			var sortedList = new List<IWorkShiftCalculationResultHolder>();
-
-			foreach (var shiftProjectionCache in shiftList)
-			{
-				double? valueForShift = this.valueForShift(skillIntervalDataLocalDictionary, shiftProjectionCache, parameters, timeZoneInfo);
-				if (!valueForShift.HasValue)
-					continue;
-
-				sortedList.Add(new WorkShiftCalculationResult { ShiftProjection = shiftProjectionCache, Value = valueForShift.Value });
-			}
-
+			var sortedList =
+				shiftList.AsParallel()
+					.Select(s => new {s, value = valueForShift(skillIntervalDataLocalDictionary, s, parameters, timeZoneInfo)})
+					.Where(i => i.value.HasValue)
+					.Select(
+						shiftWithValue =>
+							(IWorkShiftCalculationResultHolder)new WorkShiftCalculationResult { ShiftProjection = shiftWithValue.s, Value = shiftWithValue.value.Value }).ToList();
+			
 			sortedList.Sort(comparer);
 			return sortedList;
 		}
@@ -96,18 +93,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 		private double? valueForShift(IDictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>> skillIntervalDataLocalDictionary, IShiftProjectionCache shiftProjectionCache, PeriodValueCalculationParameters parameters, TimeZoneInfo timeZoneInfo)
 		{
 			double? totalForAllActivitesValue = null;
-			foreach (var skillIntervalPair in skillIntervalDataLocalDictionary)
+			var actvityValue =
+				skillIntervalDataLocalDictionary.AsParallel()
+					.Select(i => valueForActivity(i.Key, i.Value, shiftProjectionCache, parameters, timeZoneInfo));
+			foreach (var value in actvityValue)
 			{
-				double? skillValue = valueForActivity(skillIntervalPair.Key, skillIntervalPair.Value, shiftProjectionCache, parameters, timeZoneInfo);
-				if (!skillValue.HasValue) return null;  
+				if (!value.HasValue) return null;  
 				
 				if (totalForAllActivitesValue.HasValue)
 				{
-					totalForAllActivitesValue = totalForAllActivitesValue + skillValue.Value;
+					totalForAllActivitesValue = totalForAllActivitesValue + value.Value;
 				}
 				else
 				{
-					totalForAllActivitesValue = skillValue.Value;
+					totalForAllActivitesValue = value.Value;
 				}
 			}
 

@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             IEnumerable<IScheduleData> retList;
             lock(lockObject)
             {
-                retList = _scheduleDataCollection.ToArray().AsParallel();
+                retList = _scheduleDataCollection.ToArray();
             }
             return retList;
         }
