@@ -203,6 +203,7 @@
     <Compile Include="MultiTenancy\Client\TenantDataManagerTest.cs" />
     <Compile Include="MultiTenancy\Client\TenantLogonDataManagerTest.cs" />
     <Compile Include="MultiTenancy\Client\TenantServerConfigurationTest.cs" />
+    <Compile Include="MultiTenancy\DataSourceForTenantTest.cs" />
     <Compile Include="MultiTenancy\Server\Queries\ApplicationUserQueryTest.cs" />
     <Compile Include="MultiTenancy\Client\AuthenticationQuerierTest.cs" />
     <Compile Include="MultiTenancy\Server\CheckPasswordStrengthTest.cs" />

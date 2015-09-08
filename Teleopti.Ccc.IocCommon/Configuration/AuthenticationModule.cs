@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Config;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Interfaces.Domain;
@@ -60,10 +61,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IApplicationData>().SingleInstance()
 				.ExternallyOwned();
 
-			builder.Register(c => StateHolder.Instance.StateReader.ApplicationScopeData.DataSourceForTenant)
-				.As<IDataSourceForTenant>().SingleInstance()
-				.ExternallyOwned();
-
+			builder.RegisterType<DataSourceForTenant>().As<IDataSourceForTenant>().SingleInstance();
+			
 			builder.Register(c =>
 			{
 				var passwordPolicyService = c.Resolve<IApplicationData>().LoadPasswordPolicyService;

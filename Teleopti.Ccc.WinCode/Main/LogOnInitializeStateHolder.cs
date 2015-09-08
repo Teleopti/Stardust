@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Config;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
@@ -67,16 +68,13 @@ namespace Teleopti.Ccc.WinCode.Main
 					new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make()))
 					);
 			var messageSenders = new CurrentMessageSenders(senders);
-			var initializer =
-				new InitializeApplication(
-					new DataSourcesFactory(
-						new EnversConfiguration(),
-						messageSenders,
-						DataSourceConfigurationSetter.ForDesktop(),
-						new CurrentHttpContext(),
-						() => messageBroker),
-					messageBroker,
-					new NoTenants());
+			var dsForTenant = new DataSourceForTenant(new DataSourcesFactory(
+				new EnversConfiguration(),
+				messageSenders,
+				DataSourceConfigurationSetter.ForDesktop(),
+				new CurrentHttpContext(),
+				() => messageBroker));
+			var initializer = new InitializeApplication(dsForTenant, messageBroker, new NoTenants());
 
 			initializer.Start(new StateManager(), passwordPolicyService, appSettings, true);
 		}

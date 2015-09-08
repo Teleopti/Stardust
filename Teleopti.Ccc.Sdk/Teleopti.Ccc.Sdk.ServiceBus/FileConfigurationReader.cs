@@ -9,6 +9,7 @@ using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using log4net;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -39,16 +40,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 					Logger.Info("StateHolder already initialized. This step is skipped.");
 					return;
 				}
-
-				var application =
-					new InitializeApplication(
-						new DataSourcesFactory(new EnversConfiguration(), 
-							creator.Create(),
-							DataSourceConfigurationSetter.ForServiceBus(),
-							new CurrentHttpContext(),
-							messageBroker),
-						messageBroker(),
-						_loadAllTenants);
+				var dsForTenant = new DataSourceForTenant(new DataSourcesFactory(new EnversConfiguration(),
+					creator.Create(),
+					DataSourceConfigurationSetter.ForServiceBus(),
+					new CurrentHttpContext(),
+					messageBroker));
+        var application =
+					new InitializeApplication(dsForTenant, messageBroker(), _loadAllTenants);
 				application.Start(new BasicState(), null, ConfigurationManager.AppSettings.ToDictionary(), true);
 
 				Logger.Info("Initialized application");

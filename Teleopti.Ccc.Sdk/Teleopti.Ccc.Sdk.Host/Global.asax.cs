@@ -21,6 +21,7 @@ using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.Config;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
@@ -104,19 +105,17 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			var messageSenders = new CurrentMessageSenders(senders);
 			//temp hack - sometime in the future -> no tenant db dep here!
 			var tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
-			using (tenantUnitOfWorkManager.Start())
-			{
-				var initializeApplication =
-					new InitializeApplication(
-						new DataSourcesFactory(
+			var dsForTenant = new DataSourceForTenant(new DataSourcesFactory(
 							new EnversConfiguration(),
 							messageSenders,
 							DataSourceConfigurationSetter.ForSdk(),
 							new CurrentHttpContext(),
 							() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging
-							),
-						messageBroker,
-						new LoadAllTenants(tenantUnitOfWorkManager));
+							));
+			using (tenantUnitOfWorkManager.Start())
+			{
+				var initializeApplication =
+					new InitializeApplication(dsForTenant, messageBroker, new LoadAllTenants(tenantUnitOfWorkManager));
 				initializeApplication.Start(new SdkState(), passwordPolicyService, appSettings, true);
 			}
 			tenantUnitOfWorkManager.Dispose();
