@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 		}
 
 		[Test]
-		public void ShouldStartMessageBroker()
+		public async void ShouldStartMessageBroker()
 		{
 			var currentHttpContext = CurrentHttpContext("http://localhost", "/");
 			var messageBroker = MockRepository.GenerateMock<IMessageBrokerComposite>();
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 			settings.Stub(x => x.MessageBrokerLongPolling()).Return(true);
 			var target = new MessageBrokerTask(messageBroker, currentHttpContext, settings);
 
-			Task.WaitAll(target.Execute(null));
+			await target.Execute(null);
 
 			messageBroker.AssertWasCalled(x => x.StartBrokerService(true));
 		}
