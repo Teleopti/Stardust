@@ -11,7 +11,7 @@
     	$http.get("./api/Home/GetAllTenants", tokenHeaderService.getHeaders()).success(function (data) {
             $scope.Tenants = data;
         }).error(function (xhr, ajaxOptions, thrownError) {
-            console.log(xhr.status + xhr.responseText + thrownError);
+        	console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
         });
     }
  

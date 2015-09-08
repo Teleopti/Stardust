@@ -58,7 +58,7 @@
 					vm.TenantMessage = data.Message;
 					vm.TenantOk = data.Success;
 				}).error(function (xhr, ajaxOptions, thrownError) {
-					console.log(xhr.status + xhr.responseText + thrownError);
+					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
 		}
 
@@ -80,7 +80,7 @@
 				vm.CheckLogin();
 
 			}).error(function (xhr, ajaxOptions, thrownError) {
-				console.log(xhr.status + xhr.responseText + thrownError);
+				console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 			});
 		}
 
@@ -109,7 +109,7 @@
 				vm.UserOkMessage = data.Message;
 
 			}).error(function (xhr, ajaxOptions, thrownError) {
-				console.log(xhr.status + xhr.responseText + thrownError);
+				console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 			});
 		}
 
@@ -137,7 +137,7 @@
 				$("#loading").hide();
 
 			}).error(function (xhr, ajaxOptions, thrownError) {
-				console.log(xhr.status + xhr.responseText + thrownError);
+				console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				$("#loading").hide();
 			});
 		}
@@ -153,7 +153,7 @@
 				vm.FirstUserOkMessage = data.Message;
 
 			}).error(function (xhr, ajaxOptions, thrownError) {
-				console.log(xhr.status + xhr.responseText + thrownError);
+				console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 			});
 		}
 	}

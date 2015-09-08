@@ -46,7 +46,7 @@
 					vm.CheckUsers();
 
 				}).error(function (xhr, ajaxOptions, thrownError) {
-					console.log(xhr.status + xhr.responseText + thrownError);
+					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
 		}
 
@@ -68,7 +68,7 @@
 				vm.SqlUserOk = data.Success,
 				vm.SqlUserOkMessage = data.Message;
 			}).error(function (xhr, ajaxOptions, thrownError) {
-				console.log(xhr.status + xhr.responseText + thrownError);
+				console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 			});
 		}
 
@@ -97,7 +97,7 @@
 				vm.AppLoginOk = data.Success,
 				vm.AppLoginMessage = data.Message;
 			}).error(function (xhr, ajaxOptions, thrownError) {
-				console.log(xhr.status + xhr.responseText + thrownError);
+				console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 			});
 		}
 
@@ -119,7 +119,7 @@
 						vm.CheckUsers();
 					}
 				}).error(function (xhr, ajaxOptions, thrownError) {
-					console.log(xhr.status + xhr.responseText + thrownError);
+					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
 		}
 		vm.CheckAnalDb = function () {
@@ -136,7 +136,7 @@
 					vm.AnalDbOk = data.Exists;
 					vm.AnalDbCheckMessage = data.Message;
 				}).error(function (xhr, ajaxOptions, thrownError) {
-					console.log(xhr.status + xhr.responseText + thrownError);
+					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
 		}
 
@@ -159,7 +159,7 @@
 					vm.AggDbOk = data.Exists;
 					vm.AggDbCheckMessage = data.Message;
 				}).error(function (xhr, ajaxOptions, thrownError) {
-					console.log(xhr.status + xhr.responseText + thrownError);
+					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
 		}
 
@@ -196,7 +196,7 @@
 					vm.NumberOfNotConflicting = data.NumberOfNotConflicting;
 
 				}).error(function (xhr, ajaxOptions, thrownError) {
-					console.log(xhr.status + xhr.responseText + thrownError);
+					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
 		}
 
@@ -221,9 +221,9 @@
 					vm.Message = data.Message;
 				})
 				.error(function (xhr, ajaxOptions, thrownError) {
-					vm.Message = xhr.status + xhr.responseText + thrownError;
+					vm.Message = xhr.Message + ': ' + xhr.ExceptionMessage;
 					vm.Success = false;
-					console.log(xhr.status + xhr.responseText + thrownError);
+					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
 		};
 	}

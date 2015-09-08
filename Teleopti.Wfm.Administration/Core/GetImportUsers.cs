@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
@@ -40,6 +41,8 @@ namespace Teleopti.Wfm.Administration.Core
 			foreach (var importUser in importUsers)
 			{
 				var checkedImport = checkConflict(mainUsers, importUser, userPrefix);
+				if(checkedImport == null)
+					continue;
 				var importUserModel = new ImportUserModel
 				{
 					AppLogon = checkedImport.AppLogon,
@@ -67,11 +70,17 @@ namespace Teleopti.Wfm.Administration.Core
 		{
 			var logonName = toImport.ApplicationLogonInfo.LogonName;
 			var identity = toImport.Identity;
+			var id = toImport.Id;
+
 			bool conflicting = false;
 			if (logonName != null)
 			{
+				PersonInfo conflictId = allOldOnes.FirstOrDefault(x => x.Id.Equals(id));
+				if (conflictId != null)
+					return null;
+
 				PersonInfo conflictLogonName = allOldOnes.FirstOrDefault(
-					x => x.ApplicationLogonInfo.LogonName != null && x.ApplicationLogonInfo.LogonName.Equals(logonName));
+					x => x.ApplicationLogonInfo.LogonName != null && x.ApplicationLogonInfo.LogonName.Equals(logonName,StringComparison.OrdinalIgnoreCase));
 				if (conflictLogonName != null)
 				{
 					conflicting = true;
@@ -79,7 +88,7 @@ namespace Teleopti.Wfm.Administration.Core
 					//hopefully no conflict now
 					conflictLogonName =
 					allOldOnes.FirstOrDefault(
-						x => x.ApplicationLogonInfo.LogonName != null && x.ApplicationLogonInfo.LogonName.Equals(logonName));
+						x => x.ApplicationLogonInfo.LogonName != null && x.ApplicationLogonInfo.LogonName.Equals(logonName, StringComparison.OrdinalIgnoreCase));
 					if (conflictLogonName != null)
 					{
 						int suffix = 0;
@@ -88,7 +97,7 @@ namespace Teleopti.Wfm.Administration.Core
 							suffix++;
 							logonName = logonName + suffix;
 							conflictLogonName = allOldOnes.FirstOrDefault(
-							x => x.ApplicationLogonInfo.LogonName != null && x.ApplicationLogonInfo.LogonName.Equals(logonName));
+							x => x.ApplicationLogonInfo.LogonName != null && x.ApplicationLogonInfo.LogonName.Equals(logonName, StringComparison.OrdinalIgnoreCase));
 
 						} while (conflictLogonName != null);
 					}
@@ -98,14 +107,14 @@ namespace Teleopti.Wfm.Administration.Core
 
 			if (identity != null)
 			{
-				PersonInfo conflictIdentity = allOldOnes.FirstOrDefault(x => x.Identity != null && x.Identity.Equals(identity));
+				PersonInfo conflictIdentity = allOldOnes.FirstOrDefault(x => x.Identity != null && x.Identity.Equals(identity, StringComparison.OrdinalIgnoreCase));
 				if (conflictIdentity != null)
 				{
 					conflicting = true;
 					identity = tenant + identity;
 					//hopefully no conflict now
 					conflictIdentity =
-					allOldOnes.FirstOrDefault(x => x.Identity != null && x.Identity.Equals(identity));
+					allOldOnes.FirstOrDefault(x => x.Identity != null && x.Identity.Equals(identity, StringComparison.OrdinalIgnoreCase));
 					if (conflictIdentity != null)
 					{
 						int suffix = 0;
@@ -113,7 +122,7 @@ namespace Teleopti.Wfm.Administration.Core
 						{
 							suffix++;
 							identity = identity + suffix;
-							conflictIdentity = allOldOnes.FirstOrDefault(x => x.Identity != null && x.Identity.Equals(identity));
+							conflictIdentity = allOldOnes.FirstOrDefault(x => x.Identity != null && x.Identity.Equals(identity, StringComparison.OrdinalIgnoreCase));
 
 						} while (conflictIdentity != null);
 					}

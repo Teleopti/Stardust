@@ -41,7 +41,7 @@
 					//vm.CheckAnalDb();
 					vm.CheckDelete();
 				}).error(function (xhr, ajaxOptions, thrownError) {
-					console.log(xhr.status + xhr.responseText + thrownError);
+					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
 		}
 
@@ -65,7 +65,7 @@
 				.success(function (data) {
 					vm.AllowDelete = data.Success;
 				}).error(function (xhr, ajaxOptions, thrownError) {
-					console.log(xhr.status + xhr.responseText + thrownError);
+					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
 		}
 
@@ -78,7 +78,7 @@
 					}
 					window.location = "#";
 				}).error(function(xhr, ajaxOptions, thrownError) {
-					console.log(xhr.status + xhr.responseText + thrownError);
+					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
 		}
 

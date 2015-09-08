@@ -14,7 +14,7 @@
 					vm.users = data;
 					
 				}).error(function (xhr, ajaxOptions, thrownError) {
-					console.log(xhr.status + xhr.responseText + thrownError);
+					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
 		}
 
