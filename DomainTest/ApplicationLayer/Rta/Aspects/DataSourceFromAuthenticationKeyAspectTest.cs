@@ -58,11 +58,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Aspects
 				RanWithDataSource = _dataSource.Current();
 			}
 
+			[DataSourceFromAuthenticationKey]
+			public virtual void Does(InputWithTenant inputs)
+			{
+				RanWithDataSource = _dataSource.Current();
+			}
 		}
 
 		public class Input
 		{
 			public string AuthenticationKey { get; set; }
+		}
+
+		public class InputWithTenant
+		{
+			public string Tenant { get; set; }
 		}
 
 		public class GenericInput<T>
@@ -141,6 +151,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Aspects
 			{
 				AuthenticationKey = Domain.ApplicationLayer.Rta.Service.Rta.LegacyAuthenticationKey.Remove(2, 2).Insert(2, "_")
 			});
+
+			TheService.RanWithDataSource.Should().Be(expected);
+		}
+
+
+		[Test]
+		public void ShouldSetCurrentDatasourceFromTenant()
+		{
+			IDataSource expected = new FakeDataSource("tenant");
+			ApplicationData.RegisteredDataSources = new[] { expected };
+			Tenants.Has(new Tenant("tenant"));
+
+			TheService.Does(new InputWithTenant { Tenant = "tenant" });
 
 			TheService.RanWithDataSource.Should().Be(expected);
 		}

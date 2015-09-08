@@ -226,6 +226,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 		[InfoLog]
+		[DataSourceFromAuthenticationKey]
 		public virtual void CheckForActivityChange(CheckForActivityChangeInputModel input)
 		{
 			_starter.EnsureTenantInitialized();

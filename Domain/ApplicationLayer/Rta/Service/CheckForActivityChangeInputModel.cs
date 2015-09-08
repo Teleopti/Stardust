@@ -6,5 +6,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		public Guid PersonId { get; set; }
 		public Guid BusinessUnitId { get; set; }
+		public string Tenant { get; set; }
 	}
 }
