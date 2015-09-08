@@ -66,6 +66,7 @@ FROM ReadModel.PersonScheduleDay as personSchedule
   LEFT JOIN [Site] as sit on sit.id = personSchedule.SiteId 
     
 WHERE personSchedule.BusinessUnitId = @businessUnitId and
+	  personSchedule.Start IS NOT NULL and 
 	( personSchedule.BelongsToDate between @startDate and @endDate )
 	
 	AND (EXISTS (select Id from @teamids where personSchedule.TeamId = Id) or @teamIdList IS NULL)
