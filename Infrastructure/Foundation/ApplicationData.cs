@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			get { return _loadPasswordPolicyService; }
 		}
 
-		public IDataSourceForTenant DataSourceForTenant { get; }
+		public IDataSourceForTenant DataSourceForTenant { get; private set; }
 
 		public IMessageBrokerComposite Messaging
 		{
