@@ -1270,8 +1270,6 @@
     <Content Include="WFM\html\right-sidenav.html" />
     <Content Include="WFM\js\forecasting\forecasting.intraday.controller.js" />
     <Content Include="WFM\js\forecasting\forecasting.method.controller.js" />
-    <Content Include="WFM\js\forecasting\forecasting.runall.controller.js" />
-    <Content Include="WFM\js\forecasting\forecasting.run.controller.js" />
     <Content Include="WFM\js\forecasting\_modules.js" />
     <Content Include="WFM\js\global\help.controller.js" />
     <Content Include="Content\jalaali-calendar-datepicker\moment-datepicker-jalaali-ext.js" />
@@ -1384,13 +1382,11 @@
     <None Include="WFM\css\_outbound.scss" />
     <Content Include="WFM\vendor\ng-mfb\mfb.css" />
     <Content Include="WFM\Gruntfile.js" />
-    <Content Include="WFM\html\forecasting\forecasting-target.html" />
     <Content Include="WFM\html\outbound\campaign-edit.html" />
     <Content Include="WFM\html\outbound\outbound.html" />
     <Content Include="WFM\html\people\people.html" />
     <Content Include="WFM\js\forecasting\forecasting.start.controller.js" />
     <Content Include="WFM\js\forecasting\forecasting.service.js" />
-    <Content Include="WFM\js\forecasting\forecasting.target.controller.js" />
     <Content Include="WFM\js\global\areas.controller.js" />
     <Content Include="WFM\js\global\areas.service.js" />
     <Content Include="WFM\js\notifications\notice.controller.js" />
@@ -1749,7 +1745,6 @@
     <Content Include="Areas\Reporting\Views\Report\Empty.cshtml" />
     <Content Include=".node\package.json" />
     <Content Include=".node\flatten-packages.cmd" />
-    <Content Include="WFM\html\forecasting\forecasting-run.html" />
     <Content Include="WFM\html\forecasting\forecasting.html" />
     <Content Include="WFM\html\main.html" />
     <Content Include="WFM\html\nav.html" />

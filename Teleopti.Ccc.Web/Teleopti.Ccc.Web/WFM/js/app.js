@@ -48,18 +48,6 @@ wfm.config([
 			url: '/forecasting',
 			templateUrl: 'html/forecasting/forecasting.html',
 			controller: 'ForecastingStartCtrl'
-		}).state('forecasting-target', {
-			params: { period: {} },
-			templateUrl: 'html/forecasting/forecasting-target.html',
-			controller: 'ForecastingTargetCtrl'
-		}).state('forecasting-run', {
-			params: { period: {}, targets: {} },
-			templateUrl: 'html/forecasting/forecasting-run.html',
-			controller: 'ForecastingRunCtrl'
-		}).state('forecasting-runall', {
-			params: { period: {} },
-			templateUrl: 'html/forecasting/forecasting-run.html',
-			controller: 'ForecastingRunAllCtrl'
 		}).state('forecasting-method', {
 			params: { workloadId: {}, period: {} },
 			templateUrl: 'html/forecasting/forecasting-method.html',
