@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -145,6 +146,13 @@ namespace Teleopti.Ccc.WinCodeTest.ExceptionHandler
 
 			expectedString.Should().Contain("Product Version: " + Application.ProductVersion);
         }
+
+		[Test]
+	    public void ShouldGetTimeStamp()
+		{
+			var exceptionText = _model.CompleteStackAndAssemblyText();
+			exceptionText.Should().Contain("Timestamp: ");
+		}
 
 		[Test]
 		public void ShouldGetAllExceptionsIfSqlExceptionException()

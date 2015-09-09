@@ -34,7 +34,8 @@ namespace Teleopti.Ccc.WinCode.Common.ExceptionHandling
 			var builder = new StringBuilder();
 
 			builder.AppendLine("Unhandled application exception occured.");
-
+			builder.AppendLine("Timestamp: (UTC)" + DateTime.UtcNow + " (local)" + DateTime.Now);
+	
 			//Note: SQL exceptions are different, we need to loop the Error collection
 			//to get all the information.
 			var sqlException = exception as SqlException;
@@ -57,6 +58,8 @@ namespace Teleopti.Ccc.WinCode.Common.ExceptionHandling
 			var builder = new StringBuilder();
 
 			builder.AppendLine("Unhandled application exception occured.");
+			builder.AppendLine("Timestamp: (UTC)" + DateTime.UtcNow + " (local)" + DateTime.Now);
+			
 
 			//Note: SQL exceptions are different, we need to loop the Error collection
 			//to get all the information.
