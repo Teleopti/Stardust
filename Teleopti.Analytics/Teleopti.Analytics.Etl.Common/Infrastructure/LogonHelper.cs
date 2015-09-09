@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.Security.Authentication;
+using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
+using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Security;
@@ -25,6 +27,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 	{
 		private readonly ILoadAllTenants _loadAllTenants;
 		private readonly IAvailableBusinessUnitsProvider _availableBusinessUnitsProvider;
+		private readonly IDataSourcesFactory _dataSourcesFactory;
 		private DataSourceContainer _choosenDb;
 		private LogOnService _logonService;
 		private IList<IBusinessUnit> _buList;
@@ -33,10 +36,12 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public LogOnHelper(ILoadAllTenants loadAllTenants, 
 									ITenantUnitOfWork tenantUnitOfWork,
-									IAvailableBusinessUnitsProvider availableBusinessUnitsProvider)
+									IAvailableBusinessUnitsProvider availableBusinessUnitsProvider,
+									IDataSourcesFactory dataSourcesFactory)
 		{
 			_loadAllTenants = loadAllTenants;
 			_availableBusinessUnitsProvider = availableBusinessUnitsProvider;
+			_dataSourcesFactory = dataSourcesFactory;
 			initializeStateHolder(tenantUnitOfWork);
 		}
 
@@ -87,7 +92,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		private void initializeStateHolder(ITenantUnitOfWork tenantUnitOfWork)
 		{
 			// Code that runs on application startup
-			var dataSourcesFactory = new DataSourcesFactory(new EnversConfiguration(), new NoMessageSenders(), 
+			var dataSourcesFactory = new DataSourcesFactory(new EnversConfiguration(), new NoMessageSenders(),
 				DataSourceConfigurationSetter.ForEtl(),
 				new CurrentHttpContext(),
 				() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging
@@ -98,25 +103,43 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			using (tenantUnitOfWork.Start())
 			{
 				//RK: why is this if needed!?
-				if (!StateHolder.IsInitialized)
+				//if (!StateHolder.IsInitialized)
 					application.Start(new StateManager(), null, ConfigurationManager.AppSettings.ToDictionary(), false);
+
+				//we need to redo this if we save some that did not have this at startup
+				var tenants = _loadAllTenants.Tenants();
+				var configs = new List<TenantBaseConfig>();
+				_tenantNames = new List<ITenantName>();
+            foreach (var tenant in tenants)
+				{
+					var config = new ConfigurationHandler(new GeneralFunctions(tenant.DataSourceConfiguration.AnalyticsConnectionString));
+					IBaseConfiguration baseconfig = null;
+					if (config.IsConfigurationValid)
+						baseconfig = config.BaseConfiguration;
+					var applicationNhibConfiguration = new Dictionary<string, string>();
+               applicationNhibConfiguration[NHibernate.Cfg.Environment.SessionFactoryName] = tenant.Name;
+					applicationNhibConfiguration[NHibernate.Cfg.Environment.ConnectionString] = tenant.DataSourceConfiguration.ApplicationConnectionString;
+					var newDataSource = _dataSourcesFactory.Create(applicationNhibConfiguration, tenant.DataSourceConfiguration.AnalyticsConnectionString);
+
+
+					configs.Add(new TenantBaseConfig { Tenant = tenant, BaseConfiguration = baseconfig, TenantDataSource = newDataSource });
+					_tenantNames.Add(new TenantName { DataSourceName = tenant.Name });
+				}
+				TenantHolder.Instance.SetTenantBaseConfigs(configs);
 			}
 
 			_logOnOff = new LogOnOff(new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory()));
 			_logonService =
 				new LogOnService(_logOnOff, new AvailableBusinessUnitsProvider(new RepositoryFactory()));
-			_tenantNames = new List<ITenantName>();
-			StateHolder.Instance.StateReader.ApplicationScopeData.DataSourceForTenant.DoOnAllTenants_AvoidUsingThis(ds =>
-			{
-				_tenantNames.Add(new TenantName{DataSourceName = ds.DataSourceName});
-			});
+			
 		}
 
 
 		public bool SelectDataSourceContainer(string dataSourceName)
 		{
 			_buList = null;
-			var dataSource = StateHolder.Instance.StateReader.ApplicationScopeData.DataSourceForTenant.Tenant(dataSourceName);
+			//var dataSource = StateHolder.Instance.StateReader.ApplicationScopeData.DataSourceForTenant.Tenant(dataSourceName);
+			var dataSource = TenantHolder.Instance.TenantDataSource(dataSourceName);
 			var person = new LoadUserUnauthorized().LoadFullPersonInSeperateTransaction(dataSource.Application, SuperUser.Id_AvoidUsing_This);
 			_choosenDb = new DataSourceContainer(dataSource, person);
 			if (_choosenDb.User == null)

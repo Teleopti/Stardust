@@ -5,6 +5,7 @@ using Rhino.Mocks;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -89,7 +90,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job
 
 		protected virtual void ReleaseManagedResources()
 		{
-			_target = new JobHelper(null, null, null, null);
+			_target = new JobHelper(null, null, null, _logOnHelper);
 			_target.Dispose();
 		}
 	}

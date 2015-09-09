@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.MultipleDate;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 {
@@ -34,6 +36,13 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 
 		public int DataSource { get; set; }
 
+		public void SetTenantBaseConfigValues(IBaseConfiguration baseConfiguration)
+		{
+			DefaultTimeZone = TimeZoneInfo.FindSystemTimeZoneById(baseConfiguration.TimeZoneCode);
+			IntervalsPerDay = 1440 / baseConfiguration.IntervalLength.Value;
+			RunIndexMaintenance = baseConfiguration.RunIndexMaintenance;
+			CurrentCulture = CultureInfo.GetCultureInfo(baseConfiguration.CultureId.Value).FixPersianCulture();
+		}
 		public IJobHelper Helper { get; set; }
 
 		public TimeZoneInfo DefaultTimeZone { get; private set; }

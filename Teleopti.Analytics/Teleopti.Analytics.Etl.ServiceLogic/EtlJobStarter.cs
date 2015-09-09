@@ -19,6 +19,7 @@ using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Interfaces.Domain;
 using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult;
@@ -51,7 +52,8 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 				_cube = config.Cube;
 				_pmInstallation = config.PmInstallation;
 				_container = configureContainer();
-				_jobHelper = new JobHelper(_container.Resolve<ILoadAllTenants>(), _container.Resolve<ITenantUnitOfWork>(), _container.Resolve<IAvailableBusinessUnitsProvider>());
+				_jobHelper = new JobHelper(_container.Resolve<ILoadAllTenants>(), _container.Resolve<ITenantUnitOfWork>(),
+					_container.Resolve<IAvailableBusinessUnitsProvider>(), _container.Resolve<IDataSourcesFactory>());
 				_timer = new Timer(10000);
 				_timer.Elapsed += Tick;
 			}

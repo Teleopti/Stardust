@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.MultipleDate;
@@ -58,7 +59,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 			var brush = new SolidColorBrush(Color.FromArgb(color.A, color.R, color.R, color.B));
 
 			foreach (var datePicker in (from StackPanel pickerPanel in boxPanel.Children
-																	select pickerPanel.Children[1]).OfType<System.Windows.Controls.Control>())
+												 select pickerPanel.Children[1]).OfType<System.Windows.Controls.Control>())
 				datePicker.Foreground = brush;
 		}
 
@@ -102,7 +103,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 			}
 		}
 
-		
+
 		internal void UpdateControls(IJob job)
 		{
 			StackPanelLogDataSource.IsEnabled = false;
@@ -220,7 +221,8 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 
 		internal void ReloadDataSourceComboBox()
 		{
-            var dataSource = StateHolder.Instance.StateReader.ApplicationScopeData.DataSourceForTenant.Tenant(((ITenantName)ComboBoxDataSource.SelectedItem).DataSourceName);
+
+			var dataSource = TenantHolder.Instance.TenantDataSource(((ITenantName)ComboBoxDataSource.SelectedItem).DataSourceName);
 			ComboBoxLogDataSource.DataContext = _dataSourceCollection = new DataSourceValidCollection(true, dataSource.Statistic.ConnectionString);
 		}
 
@@ -233,7 +235,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 		{
 			try
 			{
-            _baseConfiguration.JobHelper.SelectDataSourceContainer((string)ComboBoxDataSource.SelectedValue);
+				_baseConfiguration.JobHelper.SelectDataSourceContainer((string)ComboBoxDataSource.SelectedValue);
 				_callBackWithConnectionString(_baseConfiguration.JobHelper.SelectedDataSource.Statistic.ConnectionString);
 
 				_dataSourceCollection = new DataSourceValidCollection(true, _baseConfiguration.JobHelper.SelectedDataSource.Statistic.ConnectionString);

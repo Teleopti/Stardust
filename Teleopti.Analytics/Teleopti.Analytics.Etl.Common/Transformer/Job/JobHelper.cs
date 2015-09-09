@@ -7,10 +7,12 @@ using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Messaging.Client;
 using Teleopti.Messaging.Client.SignalR;
+using IMessageSender = Teleopti.Interfaces.MessageBroker.Client.IMessageSender;
 
 namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 {
@@ -21,14 +23,15 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 		private ISignalRClient _messageClient;
 		private IMessageSender _messageSender;
 
-		public JobHelper(ILoadAllTenants loadAllTenants, ITenantUnitOfWork tenantUnitOfWork, IAvailableBusinessUnitsProvider availableBusinessUnitsProvider)
+		public JobHelper(ILoadAllTenants loadAllTenants, ITenantUnitOfWork tenantUnitOfWork,
+			IAvailableBusinessUnitsProvider availableBusinessUnitsProvider, IDataSourcesFactory dataSourcesFactory)
 		{
-			_logHelp = new LogOnHelper(loadAllTenants, tenantUnitOfWork, availableBusinessUnitsProvider);
+			_logHelp = new LogOnHelper(loadAllTenants, tenantUnitOfWork, availableBusinessUnitsProvider, dataSourcesFactory);
 			MessageBrokerContainerDontUse.Configure(
 				ConfigurationManager.AppSettings["MessageBroker"],
-				new IConnectionKeepAliveStrategy[] { },
+				new IConnectionKeepAliveStrategy[] {},
 				null,
-				new NewtonsoftJsonSerializer(),new NewtonsoftJsonSerializer());
+				new NewtonsoftJsonSerializer(), new NewtonsoftJsonSerializer());
 			_messageSender = MessageBrokerContainerDontUse.Sender();
 			_messageClient = MessageBrokerContainerDontUse.SignalRClient();
 		}

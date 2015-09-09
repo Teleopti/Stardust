@@ -24,7 +24,6 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 		private JobCollectionFactory _jobCollectionFactory;
 		private ObservableCollection<IJob> _jobCollection;
 		private IList<ITenantName> _tenantCollection = new List<ITenantName>();
-		private IBaseConfiguration _baseConfiguration;
 
 		public event EventHandler<AlarmEventArgs> JobRun;
 		public event EventHandler<AlarmEventArgs> JobSelectionChanged;
@@ -165,7 +164,6 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 
 		public void LoadJobTree(IBaseConfiguration baseConfiguration, Autofac.IContainer container)
 		{
-			_baseConfiguration = baseConfiguration;
 			_jobCollectionFactory = new JobCollectionFactory(baseConfiguration, container);
 			_logonWorker.RunWorkerAsync(CultureInfo.CurrentCulture);
 		}

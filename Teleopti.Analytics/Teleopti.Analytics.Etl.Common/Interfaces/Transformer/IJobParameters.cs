@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Ccc.Infrastructure.Toggle;
 
 namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
@@ -23,5 +24,7 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
 		ITenantLogonInfoLoader TenantLogonInfoLoader { get; }
 		DateTime? NowForTestPurpose { get; set; }
 		bool RunIndexMaintenance { get; }
+
+		void SetTenantBaseConfigValues(IBaseConfiguration baseConfiguration);
 	}
 }

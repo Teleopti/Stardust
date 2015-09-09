@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Forms;
 using Autofac;
+using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.ConfigTool.Transformer;
@@ -54,7 +56,11 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 
 		private void etlControlJobRun(object sender, AlarmEventArgs e)
 		{
-			e.Job.StepList[0].JobParameters.DataSource = myControl.LogDataSource;
+			var tenantBaseConfig = TenantHolder.Instance.TenantBaseConfigs.SingleOrDefault(x => x.Tenant.Name.Equals(myControl.TenantName));
+			if(tenantBaseConfig?.BaseConfiguration == null)
+				return;
+			e.Job.StepList[0].JobParameters.SetTenantBaseConfigValues(tenantBaseConfig.BaseConfiguration);
+         e.Job.StepList[0].JobParameters.DataSource = myControl.LogDataSource;
 			_baseConfiguration.JobHelper.SelectDataSourceContainer(myControl.TenantName);
 			//Clear job periods before adding them again
 			e.Job.StepList[0].JobParameters.JobCategoryDates.Clear();
