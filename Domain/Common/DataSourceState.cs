@@ -6,6 +6,17 @@ namespace Teleopti.Ccc.Domain.Common
 	public class DataSourceState
 	{
 		[ThreadStatic]
-		public static IDataSource ThreadDataSource;
+		private static IDataSource _threadDataSource;
+
+		public void SetOnThread(IDataSource dataSource)
+		{
+			_threadDataSource = dataSource;
+		}
+
+		public IDataSource Get()
+		{
+			return _threadDataSource;
+		}
+
 	}
 }

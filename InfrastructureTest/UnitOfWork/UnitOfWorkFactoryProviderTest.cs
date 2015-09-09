@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		public void Setup()
 		{
 			currentTeleoptiPrincipal = MockRepository.GenerateMock<ICurrentTeleoptiPrincipal>();
-			target = new CurrentUnitOfWorkFactory(new CurrentDataSource(new CurrentIdentity(currentTeleoptiPrincipal)));
+			target = new CurrentUnitOfWorkFactory(new CurrentDataSource(new CurrentIdentity(currentTeleoptiPrincipal), new DataSourceState()));
 		}
 
 		[Test]

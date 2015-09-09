@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		public void ShouldReturnCurrentDataSource()
 		{
 			var identityProvider = MockRepository.GenerateMock<ICurrentIdentity>();
-			var target = new CurrentDataSource(identityProvider);
+			var target = new CurrentDataSource(identityProvider, new DataSourceState());
 			var dataSource = MockRepository.GenerateMock<IDataSource>();
 			var identity = new TeleoptiIdentity("hej", dataSource, null, null);
 
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		public void ShouldReturnNullWhenCurrentPrincipalNotDefined()
 		{
 			var identityProvider = MockRepository.GenerateMock<ICurrentIdentity>();
-			var target = new CurrentDataSource(identityProvider);
+			var target = new CurrentDataSource(identityProvider, new DataSourceState());
 
 			identityProvider.Stub(x => x.Current()).Return(null);
 
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		public void ShouldReturnCurrentDataSourceName()
 		{
 			var identityProvider = MockRepository.GenerateMock<ICurrentIdentity>();
-			var target = new CurrentDataSource(identityProvider);
+			var target = new CurrentDataSource(identityProvider, new DataSourceState());
 			var dataSource = MockRepository.GenerateMock<IDataSource>();
 			dataSource.Stub(x => x.DataSourceName).Return("datasource");
 			var identity = new TeleoptiIdentity("hej", dataSource, null, null);

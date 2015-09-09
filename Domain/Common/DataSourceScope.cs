@@ -6,19 +6,18 @@ namespace Teleopti.Ccc.Domain.Common
 	public class DataSourceScope : IDataSourceScope
 	{
 		private readonly IDataSourceForTenant _dataSourceForTenant;
+		private readonly DataSourceState _state;
 
-		public DataSourceScope(IDataSourceForTenant dataSourceForTenant)
+		public DataSourceScope(IDataSourceForTenant dataSourceForTenant, DataSourceState state)
 		{
 			_dataSourceForTenant = dataSourceForTenant;
+			_state = state;
 		}
 
 		public IDisposable OnThisThreadUse(IDataSource dataSource)
 		{
-			DataSourceState.ThreadDataSource = dataSource;
-			return new GenericDisposable(() =>
-			{
-				DataSourceState.ThreadDataSource = null;
-			});
+			_state.SetOnThread(dataSource);
+			return new GenericDisposable(() => _state.SetOnThread(null));
 		}
 
 		public IDisposable OnThisThreadUse(string tenant)

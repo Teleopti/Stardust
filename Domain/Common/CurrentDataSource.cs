@@ -6,21 +6,23 @@ namespace Teleopti.Ccc.Domain.Common
 	public class CurrentDataSource : ICurrentDataSource
 	{
 		private readonly ICurrentIdentity _currentIdentity;
+		private readonly DataSourceState _state;
 
 		public static ICurrentDataSource Make()
 		{
-			return new CurrentDataSource(new CurrentIdentity(new CurrentTeleoptiPrincipal()));
+			return new CurrentDataSource(new CurrentIdentity(new CurrentTeleoptiPrincipal()), new DataSourceState());
 		}
 
-		public CurrentDataSource(ICurrentIdentity currentIdentity)
+		public CurrentDataSource(ICurrentIdentity currentIdentity, DataSourceState state)
 		{
 			_currentIdentity = currentIdentity;
+			_state = state;
 		}
 
 		public IDataSource Current()
 		{
-			if (DataSourceState.ThreadDataSource != null)
-				return DataSourceState.ThreadDataSource;
+			if (_state.Get() != null)
+				return _state.Get();
 			var identity = _currentIdentity.Current();
 			if (identity != null)
 				return identity.DataSource;

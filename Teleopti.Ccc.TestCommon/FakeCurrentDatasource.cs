@@ -6,10 +6,12 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public class FakeCurrentDatasource : ICurrentDataSource
 	{
+		private readonly DataSourceState _state;
 		private IDataSource _current;
 
-		public FakeCurrentDatasource()
+		public FakeCurrentDatasource(DataSourceState state)
 		{
+			_state = state;
 		}
 
 		public FakeCurrentDatasource(string name)
@@ -21,8 +23,8 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			if (_current != null)
 				return _current;
-			if (DataSourceState.ThreadDataSource != null)
-				return DataSourceState.ThreadDataSource;
+			if (_state.Get() != null)
+				return _state.Get();
 			return null;
 		}
 
