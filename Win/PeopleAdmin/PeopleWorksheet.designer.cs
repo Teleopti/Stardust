@@ -320,7 +320,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.shiftCategoryLimitationView.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.shiftCategoryLimitationView.Location = new System.Drawing.Point(0, 0);
 			this.shiftCategoryLimitationView.Name = "shiftCategoryLimitationView";
-			this.shiftCategoryLimitationView.ShiftCategories = ((System.Collections.Generic.IList<Teleopti.Interfaces.Domain.IShiftCategory>)(resources.GetObject("shiftCategoryLimitationView.ShiftCategories")));
 			this.shiftCategoryLimitationView.Size = new System.Drawing.Size(224, 696);
 			this.shiftCategoryLimitationView.TabIndex = 12;
 			// 

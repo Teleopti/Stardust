@@ -208,8 +208,6 @@
 			this.tableLayoutPanelMain.SetColumnSpan(this.fromToTimeDurationPicker1, 2);
 			this.fromToTimeDurationPicker1.Location = new System.Drawing.Point(15, 151);
 			this.fromToTimeDurationPicker1.Margin = new System.Windows.Forms.Padding(12, 10, 10, 10);
-			this.fromToTimeDurationPicker1.MinMaxEndTime = ((Teleopti.Interfaces.Domain.MinMax<System.TimeSpan>)(resources.GetObject("fromToTimeDurationPicker1.MinMaxEndTime")));
-			this.fromToTimeDurationPicker1.MinMaxStartTime = ((Teleopti.Interfaces.Domain.MinMax<System.TimeSpan>)(resources.GetObject("fromToTimeDurationPicker1.MinMaxStartTime")));
 			this.fromToTimeDurationPicker1.Name = "fromToTimeDurationPicker1";
 			this.fromToTimeDurationPicker1.Size = new System.Drawing.Size(289, 31);
 			this.fromToTimeDurationPicker1.TabIndex = 18;
@@ -291,8 +289,6 @@
 			this.tableLayoutPanelMain.SetColumnSpan(this.fromToTimePickerSpecifiedPeriod, 2);
 			this.fromToTimePickerSpecifiedPeriod.Location = new System.Drawing.Point(15, 232);
 			this.fromToTimePickerSpecifiedPeriod.Margin = new System.Windows.Forms.Padding(12, 10, 10, 10);
-			this.fromToTimePickerSpecifiedPeriod.MinMaxEndTime = ((Teleopti.Interfaces.Domain.MinMax<System.TimeSpan>)(resources.GetObject("fromToTimePickerSpecifiedPeriod.MinMaxEndTime")));
-			this.fromToTimePickerSpecifiedPeriod.MinMaxStartTime = ((Teleopti.Interfaces.Domain.MinMax<System.TimeSpan>)(resources.GetObject("fromToTimePickerSpecifiedPeriod.MinMaxStartTime")));
 			this.fromToTimePickerSpecifiedPeriod.Name = "fromToTimePickerSpecifiedPeriod";
 			this.fromToTimePickerSpecifiedPeriod.Size = new System.Drawing.Size(288, 27);
 			this.fromToTimePickerSpecifiedPeriod.TabIndex = 24;

@@ -153,8 +153,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 			this.dateSelectionFromToTarget.Size = new System.Drawing.Size(161, 173);
 			this.dateSelectionFromToTarget.TabIndex = 0;
 			this.dateSelectionFromToTarget.TodayButtonText = "xxToday";
-			this.dateSelectionFromToTarget.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToTarget.WorkPeriodEnd")));
-			this.dateSelectionFromToTarget.WorkPeriodStart = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToTarget.WorkPeriodStart")));
 			this.dateSelectionFromToTarget.DateRangeChanged += new System.EventHandler<Teleopti.Ccc.Win.Common.Controls.DateSelection.DateRangeChangedEventArgs>(this.dualPeriodHandler1_DateRangeChanged);
 			// 
 			// xpTaskBarBoxSpecialEvents

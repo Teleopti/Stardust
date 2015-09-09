@@ -155,8 +155,6 @@
 			this.dateSelectionFromTo1.Size = new System.Drawing.Size(207, 136);
 			this.dateSelectionFromTo1.TabIndex = 14;
 			this.dateSelectionFromTo1.TodayButtonText = "xxToday";
-			this.dateSelectionFromTo1.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromTo1.WorkPeriodEnd")));
-			this.dateSelectionFromTo1.WorkPeriodStart = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromTo1.WorkPeriodStart")));
 			// 
 			// tableLayoutPanel2
 			// 

@@ -205,8 +205,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
 			this.tableLayoutPanelOpenHoursRtl.SetColumnSpan(this.timePicker, 2);
 			this.timePicker.Location = new System.Drawing.Point(4, 21);
 			this.timePicker.Margin = new System.Windows.Forms.Padding(4);
-			this.timePicker.MinMaxEndTime = ((Teleopti.Interfaces.Domain.MinMax<System.TimeSpan>)(resources.GetObject("timePicker.MinMaxEndTime")));
-			this.timePicker.MinMaxStartTime = ((Teleopti.Interfaces.Domain.MinMax<System.TimeSpan>)(resources.GetObject("timePicker.MinMaxStartTime")));
 			this.timePicker.Name = "timePicker";
 			this.timePicker.Size = new System.Drawing.Size(226, 34);
 			this.timePicker.TabIndex = 0;

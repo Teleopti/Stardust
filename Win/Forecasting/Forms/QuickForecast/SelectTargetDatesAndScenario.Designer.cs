@@ -99,8 +99,6 @@
 			this.TargetFromTo.NullString = "xxNoDateIsSelected";
 			this.TargetFromTo.Size = new System.Drawing.Size(214, 61);
 			this.TargetFromTo.TabIndex = 0;
-			this.TargetFromTo.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("TargetFromTo.WorkPeriodEnd")));
-			this.TargetFromTo.WorkPeriodStart = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("TargetFromTo.WorkPeriodStart")));
 			// 
 			// labelScenario
 			// 

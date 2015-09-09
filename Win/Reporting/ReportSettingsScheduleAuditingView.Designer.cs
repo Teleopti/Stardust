@@ -103,8 +103,6 @@
             this.reportDateFromToSelectorChangePeriod.NullString = "xxNoDateIsSelected";
             this.reportDateFromToSelectorChangePeriod.Size = new System.Drawing.Size(400, 60);
             this.reportDateFromToSelectorChangePeriod.TabIndex = 2;
-            this.reportDateFromToSelectorChangePeriod.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("reportDateFromToSelectorChangePeriod.WorkPeriodEnd")));
-            this.reportDateFromToSelectorChangePeriod.WorkPeriodStart = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("reportDateFromToSelectorChangePeriod.WorkPeriodStart")));
             // 
             // reportDateFromToSelectorSchedulePeriod
             // 
@@ -115,8 +113,6 @@
             this.reportDateFromToSelectorSchedulePeriod.NullString = "xxNoDateIsSelected";
             this.reportDateFromToSelectorSchedulePeriod.Size = new System.Drawing.Size(400, 60);
             this.reportDateFromToSelectorSchedulePeriod.TabIndex = 11;
-            this.reportDateFromToSelectorSchedulePeriod.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("reportDateFromToSelectorSchedulePeriod.WorkPeriodEnd")));
-            this.reportDateFromToSelectorSchedulePeriod.WorkPeriodStart = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("reportDateFromToSelectorSchedulePeriod.WorkPeriodStart")));
             // 
             // reportPersonSelector1
             // 

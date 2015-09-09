@@ -64,8 +64,6 @@
 			this.HistoricalFromTo.NullString = "xxNoDateIsSelected";
 			this.HistoricalFromTo.Size = new System.Drawing.Size(251, 71);
 			this.HistoricalFromTo.TabIndex = 0;
-			this.HistoricalFromTo.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("HistoricalFromTo.WorkPeriodEnd")));
-			this.HistoricalFromTo.WorkPeriodStart = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("HistoricalFromTo.WorkPeriodStart")));
 			// 
 			// SelectHistoricalDateRange
 			// 

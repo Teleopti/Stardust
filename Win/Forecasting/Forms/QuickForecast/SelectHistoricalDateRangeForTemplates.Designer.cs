@@ -88,8 +88,6 @@
 			this.TemplatesDatesFromTo.NullString = "xxNoDateIsSelected";
 			this.TemplatesDatesFromTo.Size = new System.Drawing.Size(214, 61);
 			this.TemplatesDatesFromTo.TabIndex = 0;
-			this.TemplatesDatesFromTo.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("TemplatesDatesFromTo.WorkPeriodEnd")));
-			this.TemplatesDatesFromTo.WorkPeriodStart = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("TemplatesDatesFromTo.WorkPeriodStart")));
 			// 
 			// SelectHistoricalDateRangeForTemplates
 			// 

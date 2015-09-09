@@ -691,8 +691,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.dateSelectionFromToStudentAvailability.Size = new System.Drawing.Size(187, 116);
 			this.dateSelectionFromToStudentAvailability.TabIndex = 7;
 			this.dateSelectionFromToStudentAvailability.TodayButtonText = "xxToday";
-			this.dateSelectionFromToStudentAvailability.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToStudentAvailability.WorkPeriodEnd")));
-			this.dateSelectionFromToStudentAvailability.WorkPeriodStart = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToStudentAvailability.WorkPeriodStart")));
 			this.dateSelectionFromToStudentAvailability.Validating += new System.ComponentModel.CancelEventHandler(this.dateSelectionFromToStudentAvailability_Validating);
 			this.dateSelectionFromToStudentAvailability.Validated += new System.EventHandler(this.dateSelectionFromToStudentAvailability_Validated);
 			// 
@@ -713,8 +711,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.dateSelectionFromToIsOpenStudentAvailability.Size = new System.Drawing.Size(187, 116);
 			this.dateSelectionFromToIsOpenStudentAvailability.TabIndex = 8;
 			this.dateSelectionFromToIsOpenStudentAvailability.TodayButtonText = "xxToday";
-			this.dateSelectionFromToIsOpenStudentAvailability.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToIsOpenStudentAvailability.WorkPeriodEnd")));
-			this.dateSelectionFromToIsOpenStudentAvailability.WorkPeriodStart = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToIsOpenStudentAvailability.WorkPeriodStart")));
 			this.dateSelectionFromToIsOpenStudentAvailability.Validating += new System.ComponentModel.CancelEventHandler(this.dateSelectionFromToIsOpenStudentAvailability_Validating);
 			this.dateSelectionFromToIsOpenStudentAvailability.Validated += new System.EventHandler(this.dateSelectionFromToIsOpenStudentAvailability_Validated);
 			// 
@@ -833,7 +829,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// 
 			this.dateOnlyPeriodsVisualizer1.BackColor = System.Drawing.SystemColors.ControlLightLight;
 			this.tableLayoutPanelBasic.SetColumnSpan(this.dateOnlyPeriodsVisualizer1, 2);
-			this.dateOnlyPeriodsVisualizer1.ContainedPeriod = ((Teleopti.Interfaces.Domain.DateOnlyPeriod)(resources.GetObject("dateOnlyPeriodsVisualizer1.ContainedPeriod")));
 			this.dateOnlyPeriodsVisualizer1.Culture = new System.Globalization.CultureInfo("sv-SE");
 			this.dateOnlyPeriodsVisualizer1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.dateOnlyPeriodsVisualizer1.Location = new System.Drawing.Point(0, 0);
@@ -1159,8 +1154,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.dateSelectionFromToPreferencePeriod.Size = new System.Drawing.Size(187, 115);
 			this.dateSelectionFromToPreferencePeriod.TabIndex = 7;
 			this.dateSelectionFromToPreferencePeriod.TodayButtonText = "xxToday";
-			this.dateSelectionFromToPreferencePeriod.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToPreferencePeriod.WorkPeriodEnd")));
-			this.dateSelectionFromToPreferencePeriod.WorkPeriodStart = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToPreferencePeriod.WorkPeriodStart")));
 			this.dateSelectionFromToPreferencePeriod.Validating += new System.ComponentModel.CancelEventHandler(this.dateSelectionFromToPreferencePeriod_Validating);
 			this.dateSelectionFromToPreferencePeriod.Validated += new System.EventHandler(this.dateSelectionFromToPreferencePeriod_Validated);
 			// 
@@ -1181,8 +1174,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.dateSelectionFromToIsOpen.Size = new System.Drawing.Size(187, 115);
 			this.dateSelectionFromToIsOpen.TabIndex = 8;
 			this.dateSelectionFromToIsOpen.TodayButtonText = "xxToday";
-			this.dateSelectionFromToIsOpen.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToIsOpen.WorkPeriodEnd")));
-			this.dateSelectionFromToIsOpen.WorkPeriodStart = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToIsOpen.WorkPeriodStart")));
 			this.dateSelectionFromToIsOpen.Validating += new System.ComponentModel.CancelEventHandler(this.dateSelectionFromToIsOpen_Validating);
 			this.dateSelectionFromToIsOpen.Validated += new System.EventHandler(this.dateSelectionFromToIsOpen_Validated);
 			// 

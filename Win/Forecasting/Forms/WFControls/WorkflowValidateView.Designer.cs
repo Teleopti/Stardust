@@ -168,8 +168,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			this.dateSelectionFromToHistorical.Size = new System.Drawing.Size(182, 208);
 			this.dateSelectionFromToHistorical.TabIndex = 3;
 			this.dateSelectionFromToHistorical.TodayButtonText = "xxToday";
-			this.dateSelectionFromToHistorical.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToHistorical.WorkPeriodEnd")));
-			this.dateSelectionFromToHistorical.WorkPeriodStart = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToHistorical.WorkPeriodStart")));
 			this.dateSelectionFromToHistorical.ValueChanged += new System.EventHandler(this.dateSelectionFromToHistoricalValueChanged);
 			this.dateSelectionFromToHistorical.ButtonClickedNoValidation += new System.EventHandler(this.dateSelectionFromToHistoricalButtonClickedNovalidation);
 			// 
@@ -191,8 +189,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			this.dateSelectionFromToTarget.Size = new System.Drawing.Size(182, 131);
 			this.dateSelectionFromToTarget.TabIndex = 2;
 			this.dateSelectionFromToTarget.TodayButtonText = "xxToday";
-			this.dateSelectionFromToTarget.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToTarget.WorkPeriodEnd")));
-			this.dateSelectionFromToTarget.WorkPeriodStart = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToTarget.WorkPeriodStart")));
 			this.dateSelectionFromToTarget.ValueChanged += new System.EventHandler(this.dateSelectionFromToTargetValueChanged);
 			// 
 			// xpTaskBarBoxDeviations

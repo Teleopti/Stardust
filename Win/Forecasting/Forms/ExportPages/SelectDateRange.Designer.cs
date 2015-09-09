@@ -63,8 +63,6 @@
 			this.reportDateFromToSelector1.NullString = "xxNoDateIsSelected";
 			this.reportDateFromToSelector1.Size = new System.Drawing.Size(261, 69);
 			this.reportDateFromToSelector1.TabIndex = 0;
-			this.reportDateFromToSelector1.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("reportDateFromToSelector1.WorkPeriodEnd")));
-			this.reportDateFromToSelector1.WorkPeriodStart = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("reportDateFromToSelector1.WorkPeriodStart")));
 			// 
 			// label1
 			// 

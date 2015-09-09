@@ -79,7 +79,6 @@
             this.gradientLabelColumnHeader.BorderAppearance = System.Windows.Forms.BorderStyle.FixedSingle;
             this.gradientLabelColumnHeader.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(191)))), ((int)(((byte)(234)))));
             this.gradientLabelColumnHeader.BorderSides = System.Windows.Forms.Border3DSide.Bottom;
-            this.gradientLabelColumnHeader.ContainedPeriod = ((Teleopti.Interfaces.Domain.DateOnlyPeriod)(resources.GetObject("gradientLabelColumnHeader.ContainedPeriod")));
             this.gradientLabelColumnHeader.Culture = new System.Globalization.CultureInfo("sv-SE");
             this.gradientLabelColumnHeader.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gradientLabelColumnHeader.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));

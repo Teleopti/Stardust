@@ -144,8 +144,6 @@
             this.reportDateFromToSelector1.NullString = "xxNoDateIsSelected";
             this.reportDateFromToSelector1.Size = new System.Drawing.Size(467, 60);
             this.reportDateFromToSelector1.TabIndex = 2;
-            this.reportDateFromToSelector1.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("reportDateFromToSelector1.WorkPeriodEnd")));
-            this.reportDateFromToSelector1.WorkPeriodStart = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("reportDateFromToSelector1.WorkPeriodStart")));
             // 
             // ReportSettingsScheduledTimePerActivityView
             // 
