@@ -26,15 +26,17 @@
 	</div>
 
 	<div class="location-breadcrumb" ng-class="{'location-breadcrumb-edit-mode':(vm.showEditor)}">
-		<span ng-if="!vm.isLoading" class="breadcrumb-inverse" ng-repeat="breadcrumb in vm.breadcrumbs">
-			<a ng-if="!$last" href="" ng-click="vm.handleBreadcrumbClick(breadcrumb.Id)">{{breadcrumb.Name}}</a>
-			<span class="divider" ng-if="!$last">></span>
-			<span ng-if="$last">{{breadcrumb.Name}}</span>
-		</span>
+		<div>
+			<span ng-if="!vm.isLoading" class="breadcrumb-inverse" ng-repeat="breadcrumb in vm.breadcrumbs">
+				<a ng-if="!$last" href="" ng-click="vm.handleBreadcrumbClick(breadcrumb.Id)">{{breadcrumb.Name}}</a>
+				<span class="divider" ng-if="!$last">></span>
+				<span ng-if="$last">{{breadcrumb.Name}}</span>
+			</span>
+		</div>
 		<md-divider ng-if="!vm.isLoading"></md-divider>
 	</div>
 
-	<div class="seatmap-canvas">
+	<div class="seatmap-canvas" ng-class="{'seatmap-canvas-edit-mode':(vm.showEditor)}">
 
 		<seatmap-editor ng-if="vm.showEditor"></seatmap-editor>
 
