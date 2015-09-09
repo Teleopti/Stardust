@@ -208,7 +208,7 @@
 
 			resetOnLoad(data);
 
-			//$scope.$apply();
+			$scope.$apply();
 		};
 
 		function onLoadSeatMapNoSeatMapJson(data) {
