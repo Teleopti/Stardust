@@ -39,8 +39,7 @@
 }
 
 .tree-line{
-	max-height: 700px;
-	overflow-y: auto;
+	overflow-y: hidden;
 	border-top: 1px solid #E0E0E0;
 }
 
@@ -50,7 +49,6 @@
 
 .permissions-radio {
 	display: inline; 
-
 }
 
 .permissions-list {
@@ -95,37 +93,35 @@ p {
  .toolbar > form > .wfm-radio {
 		width: initial;
 		display:block;
-	}
+}
 
 
-	.permission-radio-buttons {
-		display: inline-flex;
-		margin-top: 10px;
-	}
+.permission-radio-buttons {
+	display: inline-flex;
+	margin-top: 10px;
+}
 
 
-	.data-auth {
-		margin-top:15px;
-		padding:0;
-	}
+.data-auth {
+	margin-top:15px;
+	padding:0;
+}
 
-	@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-		.permission-radio-buttons > .wfm-radio label .wfm-radio-label {
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+	.permission-radio-buttons > .wfm-radio label .wfm-radio-label {
         display: inline-block;
-		width: 90px; 
-		overflow: hidden;
-		text-overflow: ellipsis;
-		}
-
-		.md-select-label {
-			width: 25%;
-		}
-
-
+	    width: 90px; 
+	    overflow: hidden;
+	    text-overflow: ellipsis;
 	}
 
-	@media only screen and (max-width: 841px) {
-		.permission-radio-buttons {
-			display: inline;
-		}
+	.md-select-label {
+		width: 25%;
 	}
+}
+
+@media only screen and (max-width: 841px) {
+	.permission-radio-buttons {
+		display: inline;
+	}
+}

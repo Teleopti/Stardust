@@ -57,6 +57,7 @@ label {
 
 .container.content{
 	height: 92vh;
+	min-height: calc(-56vh);
 	overflow: auto;
 }
 
