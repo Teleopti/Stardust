@@ -8,6 +8,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Specific;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Analytics.Etl.IntegrationTest
@@ -15,17 +16,19 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 	[SetUpFixture]
 	public class SetupFixtureForAssembly
 	{
+		public static IDataSource DataSource;
+
 		[SetUp]
 		public void Setup()
 		{
-			var dataSource = DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
+			DataSource = DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
 
 			var personThatCreatesTestData = PersonFactory.CreatePerson("UserThatCreatesTestData", "password");
 
 			TestState.BusinessUnit = BusinessUnitFactory.CreateBusinessUnitWithSitesAndTeams();
 			TestState.BusinessUnit.Name = "BusinessUnit";
 
-			StateHolderProxyHelper.SetupFakeState(dataSource, personThatCreatesTestData, TestState.BusinessUnit, new ThreadPrincipalContext(new TeleoptiPrincipalFactory()));
+			StateHolderProxyHelper.SetupFakeState(DataSource, personThatCreatesTestData, TestState.BusinessUnit, new ThreadPrincipalContext(new TeleoptiPrincipalFactory()));
 			var tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(UnitOfWorkFactory.Current.ConnectionString);
 
 			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().Current().CreateAndOpenUnitOfWork())
