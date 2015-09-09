@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
@@ -59,27 +60,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public IList<IScheduleDay> Delete(IList<IScheduleDay> list, DeleteOption options, ISchedulePartModifyAndRollbackService rollbackService, IBackgroundWorkerWrapper backgroundWorker, INewBusinessRuleCollection newBusinessRuleCollection)
 		{
 			InParameter.ListCannotBeEmpty("list", list);
-			IList<IScheduleDay> returnList = new List<IScheduleDay>();
 			if (backgroundWorker == null)
 				throw new ArgumentNullException("backgroundWorker");
 
-			foreach (IScheduleDay part in list)
+			return list.AsParallel().Select(part =>
 			{
-				var clonePart = preparePart(options, part);
-				IList<IScheduleDay> cloneList = new List<IScheduleDay> { clonePart };
-
 				if (backgroundWorker.CancellationPending)
-					return returnList;
+					return null;
 
-				foreach (IScheduleDay scheduleDay in cloneList)
-				{
-					rollbackService.Modify(scheduleDay, newBusinessRuleCollection);
-				}
+				var clonePart = preparePart(options, part);
 
-				returnList.Add(_scheduleResultStateHolder().Schedules[part.Person].ReFetch(part));
-			}
+				rollbackService.Modify(clonePart, newBusinessRuleCollection);
 
-			return returnList;
+				return _scheduleResultStateHolder().Schedules[part.Person].ReFetch(part);
+			}).Where(r => r != null).ToList();
 
 		}
 

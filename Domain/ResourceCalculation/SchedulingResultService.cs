@@ -79,16 +79,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			int minutesSplit = _allSkills.Min(s => s.DefaultResolution);
 			var resources = new ResourceCalculationDataContainer(_personSkillProvider, minutesSplit);
 
-			foreach (var person in scheduleDictionary.Keys)
+			Parallel.ForEach(scheduleDictionary.Keys, person =>
 			{
 				var range = scheduleDictionary[person];
 				var period = range.TotalPeriod();
-				if (!period.HasValue) continue;
+				if (!period.HasValue) return;
 
 				var scheduleDays =
 					range.ScheduledDayCollection(period.Value.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone()));
 				Parallel.ForEach(scheduleDays, scheduleDay => resources.AddScheduleDayToContainer(scheduleDay, minutesSplit));
-			}
+			});
 
 			return resources;
 		}

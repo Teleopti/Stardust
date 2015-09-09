@@ -34,24 +34,25 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			var shouldCalculateNonBlendValue = nonBlendSkillPeriods.Count > 0;
 
-			var allValues = shiftProjectionCaches.AsParallel().Select(shiftProjection => new
+			var allValues = shiftProjectionCaches.AsParallel().Select(shiftProjection =>
 			{
-				shiftProjection,
-				shiftValue = _workShiftCalculator.CalculateShiftValue(shiftProjection.WorkShiftCalculatableLayers,
-					dataHolders,
-					schedulingOptions.WorkShiftLengthHintOption,
-					schedulingOptions.UseMinimumPersons,
-					schedulingOptions.UseMaximumPersons),
-				nonBlendValue = shouldCalculateNonBlendValue
-					? _nonBlendWorkShiftCalculator.CalculateShiftValue(person,
-						shiftProjection.MainShiftProjection,
-						nonBlendSkillPeriods,
+				var v = new
+				{
+					shiftProjection,
+					shiftValue = _workShiftCalculator.CalculateShiftValue(shiftProjection.WorkShiftCalculatableLayers,
+						dataHolders,
 						schedulingOptions.WorkShiftLengthHintOption,
 						schedulingOptions.UseMinimumPersons,
-						schedulingOptions.UseMaximumPersons)
-					: null
-			}).Select(v =>
-			{
+						schedulingOptions.UseMaximumPersons),
+					nonBlendValue = shouldCalculateNonBlendValue
+						? _nonBlendWorkShiftCalculator.CalculateShiftValue(person,
+							shiftProjection.MainShiftProjection,
+							nonBlendSkillPeriods,
+							schedulingOptions.WorkShiftLengthHintOption,
+							schedulingOptions.UseMinimumPersons,
+							schedulingOptions.UseMaximumPersons)
+						: null
+				};
 				double value = v.shiftValue;
 				if (v.nonBlendValue.HasValue)
 				{
@@ -64,7 +65,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 						value += v.nonBlendValue.Value;
 					}
 				}
-				return (IWorkShiftCalculationResultHolder)new WorkShiftCalculationResult {ShiftProjection = v.shiftProjection, Value = value};
+				return (IWorkShiftCalculationResultHolder)new WorkShiftCalculationResult { ShiftProjection = v.shiftProjection, Value = value };
 			}).Where(w => w.Value > double.MinValue).ToList();
 
 			return allValues;
