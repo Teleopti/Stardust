@@ -16,7 +16,7 @@
 
 	<div class="tutorial-btn">
 		<div ng-cloak class="modal-box">
-			<button ng-click="modalLaunch2 = !modalLaunch2" class="wfm-btn wfm-btn-default">Get started</button>
+			<button ng-click="modalLaunch2 = !modalLaunch2" class="wfm-btn wfm-btn-default">Take tour</button>
 			<div ng-cloak ng-show="modalLaunch2">
 				<div class="modalbg">
 					<div class="dialog">
@@ -67,7 +67,7 @@
 		<div layout="row" ng-cloak>
 			<div flex data-ng-controller="FeedCtrl" ng-init="loadFeed($event)">
 				<div class="sub-header">Teleopti blog</div>
-				<div class="material-depth-1 start-spacer-down" ng-repeat="feed in feeds | limitTo: 3">
+				<div class="material-depth-1 start-spacer-down" ng-repeat="feed in feeds | limitTo: 2">
 					<div class="row">
 						<div class="col-md-11">
 							<div class="wfm-block">

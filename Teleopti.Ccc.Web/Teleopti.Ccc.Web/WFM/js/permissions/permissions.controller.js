@@ -15,6 +15,8 @@
 				$scope.unselectedDataToggle = false;
 				$scope.roles = [];
 
+				$scope.tempName = "";
+
 				$scope.editing = false;
 				$scope.builtInCheck = false;
 
@@ -57,15 +59,12 @@
 
 				};
 
-				$scope.submitRole = function(role){
-					if (role.DescriptionText != '') {
-						role.editing = false; 
-						Permissions.manageRole.update({ Id: role.Id, newDescription: role.DescriptionText });
-					}else{
-                        role.DescriptionText = role.Name;
-                        role.editing = false;
-
-                    }
+				$scope.submitRole = function(role, tempName){
+					if (tempName != '') {
+						Permissions.manageRole.update({ Id: role.Id, newDescription: tempName });
+						role.DescriptionText = tempName;
+					}
+					role.editing = false; 
 				};
 
 				$scope.showRole = function (role) {
@@ -90,10 +89,7 @@
 
 				$scope.doubleClickEdit = function (edit, role) {
 					if ($scope.builtInCheck) { return; }
-
-					
-
-					//console.log(role);
+					$scope.tempName = role.DescriptionText;
 					role.editing = true;
 				};
 
@@ -101,6 +97,9 @@
 					if (role.DescriptionText != '') {
 						role.editing = false;
 					}
+					else{
+                        role.editing = false;
+                    }
 				};
 
 
