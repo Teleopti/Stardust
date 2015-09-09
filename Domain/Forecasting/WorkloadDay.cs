@@ -103,10 +103,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 		public override void DistributeTasks(IEnumerable<ITemplateTaskPeriod> sortedTemplateTaskPeriods)
 		{
-			var tasksForDay = Tasks;
+			var originalTasks = Tasks;
 			var originalAverageTaskTime = AverageTaskTime;
 			var originalAfterTaskTime = AverageAfterTaskTime;
-			var tasksSum = 0.0;
 
 			Close();
 			var template = (IWorkloadDayTemplate)Workload.GetTemplateAt(TemplateTarget.Workload, (int)CurrentDate.DayOfWeek);
@@ -138,27 +137,20 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 				foreach (var newTaskPeriod in taskPeriods)
 				{
-					tasksSum += templateTaskPeriod.Task.Tasks;
 					newTaskPeriod.Tasks = templateTaskPeriod.Task.Tasks;
 				}
 			}
 
 			if (isOpenForIncomingWork())
 			{
-				if (Math.Abs(tasksForDay) < 0.0001 )
+				Tasks = originalTasks;
+				AverageTaskTime = originalAverageTaskTime;
+				AverageAfterTaskTime = originalAfterTaskTime;
+
+				if (Math.Abs(Tasks) < 0.0001)
 				{
-					Tasks = tasksSum;
-					if (Math.Abs(tasksSum) < 0.0001)
-					{
-						AverageTaskTime = TimeSpan.Zero;
-						AverageAfterTaskTime = TimeSpan.Zero;
-					}
-				}
-				else
-				{
-					Tasks = tasksForDay;
-					AverageTaskTime = originalAverageTaskTime;
-					AverageAfterTaskTime = originalAfterTaskTime;
+					AverageTaskTime = TimeSpan.Zero;
+					AverageAfterTaskTime = TimeSpan.Zero;
 				}
 			}
 		}
