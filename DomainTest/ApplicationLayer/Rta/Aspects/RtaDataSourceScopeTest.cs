@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Aspects
 	[RtaTest]
 	[TestFixture]
 	[Toggle(Toggles.RTA_MultiTenancy_32539)]
-	public class DataSourceFromAuthenticationKeyAspectTest : ISetup
+	public class RtaDataSourceScopeTest : ISetup
 	{
 		public AspectedService TheService;
 		public FakeApplicationData ApplicationData;
