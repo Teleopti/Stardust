@@ -195,6 +195,7 @@
     <Compile Include="Factory\TeleoptiPayrollExportFactory.cs" />
     <Compile Include="Factory\TeleoptiPayrollExportBuilder.cs" />
     <Compile Include="LogOn\CurrentPersonContainer.cs" />
+    <Compile Include="LogOn\DataSourceForTenantServiceLocator.cs" />
     <Compile Include="LogOn\ICurrentPersonContainer.cs" />
     <Compile Include="LogOn\PersonInRoleCache.cs" />
     <Compile Include="LogOn\PersonInRoleCacheItem.cs" />

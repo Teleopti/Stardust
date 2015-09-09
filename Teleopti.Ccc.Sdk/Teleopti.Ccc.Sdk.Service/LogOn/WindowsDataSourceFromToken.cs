@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
         public void SetDataSource(ITokenWithBusinessUnitAndDataSource customUserNameSecurityToken)
         {
             DataSource =
-                StateHolderReader.Instance.StateReader.ApplicationScopeData.DataSourceForTenant.Tenant(customUserNameSecurityToken.DataSource);
+								DataSourceForTenantServiceLocator.DataSourceForTenant.Tenant(customUserNameSecurityToken.DataSource);
         }
 
 				public IDataSource DataSource { get; private set; }

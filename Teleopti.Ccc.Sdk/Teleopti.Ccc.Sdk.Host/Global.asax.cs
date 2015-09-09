@@ -21,7 +21,6 @@ using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.Config;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
@@ -70,8 +69,6 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 
 			Logger.InfoFormat("The Application is starting. ");
 
-			var busSender = new ServiceBusSender();
-
 			var builder = BuildIoc();
 			var container = builder.Build();
 			AutofacHostFactory.Container = container;
@@ -84,41 +81,16 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			var passwordPolicyDocument = XDocument.Parse(settings.PasswordPolicy);
 			var passwordPolicyService = new LoadPasswordPolicyService(passwordPolicyDocument);
 
-			var populator = EventContextPopulator.Make();
-			var businessUnit = CurrentBusinessUnit.Instance;
-			var messageSender = new MessagePopulatingServiceBusSender(busSender, populator);
-			var eventPublisher = new EventPopulatingPublisher(new ServiceBusEventPublisher(busSender), populator);
-			var senders = new List<IMessageSender>
-			{
-				new ScheduleMessageSender(eventPublisher, new ClearEvents()),
-				new EventsMessageSender(new SyncEventsPublisher(eventPublisher)),
-				new MeetingMessageSender(eventPublisher),
-				new GroupPageChangedMessageSender(messageSender),
-				new TeamOrSiteChangedMessageSender(eventPublisher, businessUnit),
-				new PersonChangedMessageSender(eventPublisher, businessUnit),
-				new PersonPeriodChangedMessageSender(messageSender)
-			};
-			if (container.Resolve<IToggleManager>().IsEnabled(Toggles.MessageBroker_SchedulingScreenMailbox_32733))
-				senders.Add(new AggregatedScheduleChangeMessageSender(container.Resolve<Interfaces.MessageBroker.Client.IMessageSender>(),
-					CurrentDataSource.Make(), businessUnit, container.Resolve<IJsonSerializer>(),
-					container.Resolve<ICurrentInitiatorIdentifier>()));
-			var messageSenders = new CurrentMessageSenders(senders);
 			//temp hack - sometime in the future -> no tenant db dep here!
 			var tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
-			var dsForTenant = new DataSourceForTenant(new DataSourcesFactory(
-							new EnversConfiguration(),
-							messageSenders,
-							DataSourceConfigurationSetter.ForSdk(),
-							new CurrentHttpContext(),
-							() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging
-							));
 			using (tenantUnitOfWorkManager.Start())
 			{
 				var initializeApplication =
-					new InitializeApplication(dsForTenant, messageBroker, new LoadAllTenants(tenantUnitOfWorkManager));
+					new InitializeApplication(container.Resolve<IDataSourceForTenant>(), messageBroker, new LoadAllTenants(tenantUnitOfWorkManager));
 				initializeApplication.Start(new SdkState(), passwordPolicyService, appSettings, true);
 			}
 			tenantUnitOfWorkManager.Dispose();
+			DataSourceForTenantServiceLocator.Set(container.Resolve<IDataSourceForTenant>());
 
 			Logger.Info("Initialized application");
 		}
@@ -147,8 +119,6 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 				 .InstancePerDependency();
 			builder.RegisterModule(SchedulePersistModule.ForOtherModules());
 
-
-
 			registerSdkFactories(builder, configuration);
 
 			builder.RegisterType<LicenseCache>().As<ILicenseCache>();
@@ -157,7 +127,47 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			builder.RegisterType<UserCultureProvider>().As<IUserCultureProvider>().InstancePerLifetimeScope();
 			builder.RegisterType<GroupingReadOnlyRepository>().As<IGroupingReadOnlyRepository>();
 
+			registerDataSourcesFactory(builder);
+
 			return builder;
+		}
+
+		private static void registerDataSourcesFactory(ContainerBuilder builder)
+		{
+			builder.Register(c =>
+			{
+				var busSender = new ServiceBusSender();
+				var populator = EventContextPopulator.Make();
+				var businessUnit = CurrentBusinessUnit.Instance;
+				var messageSender = new MessagePopulatingServiceBusSender(busSender, populator);
+				var eventPublisher = new EventPopulatingPublisher(new ServiceBusEventPublisher(busSender), populator);
+				var senders = new List<IMessageSender>
+			{
+				new ScheduleMessageSender(eventPublisher, new ClearEvents()),
+				new EventsMessageSender(new SyncEventsPublisher(eventPublisher)),
+				new MeetingMessageSender(eventPublisher),
+				new GroupPageChangedMessageSender(messageSender),
+				new TeamOrSiteChangedMessageSender(eventPublisher, businessUnit),
+				new PersonChangedMessageSender(eventPublisher, businessUnit),
+				new PersonPeriodChangedMessageSender(messageSender)
+			};
+				if (c.Resolve<IToggleManager>().IsEnabled(Toggles.MessageBroker_SchedulingScreenMailbox_32733))
+				{
+					senders.Add(
+						new AggregatedScheduleChangeMessageSender(c.Resolve<Interfaces.MessageBroker.Client.IMessageSender>(),
+							CurrentDataSource.Make(), businessUnit, c.Resolve<IJsonSerializer>(),
+							c.Resolve<ICurrentInitiatorIdentifier>()));
+				}
+				return new CurrentMessageSenders(senders);
+			}).As<ICurrentMessageSenders>().SingleInstance();
+
+			builder.Register(c => new DataSourcesFactory(
+				new EnversConfiguration(),
+				c.Resolve<ICurrentMessageSenders>(),
+				DataSourceConfigurationSetter.ForSdk(),
+				new CurrentHttpContext(),
+				() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging
+				)).As<IDataSourcesFactory>().SingleInstance();
 		}
 
 		private static void registerSdkFactories(ContainerBuilder builder, IIocConfiguration configuration)
