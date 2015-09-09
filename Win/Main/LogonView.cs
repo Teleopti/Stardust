@@ -5,7 +5,6 @@ using System.Windows.Forms;
 using Autofac;
 using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Main.LogonScreens;
@@ -58,9 +57,9 @@ namespace Teleopti.Ccc.Win.Main
 			Refresh();
 		}
 
-		public void InitStateHolderWithoutDataSource(IMessageBrokerComposite messageBroker, SharedSettings settings, IComponentContext container)
+		public void InitStateHolderWithoutDataSource(IMessageBrokerComposite messageBroker, SharedSettings settings)
 		{
-			LogonInitializeStateHolder.InitWithoutDataSource(messageBroker, settings, container);
+			LogonInitializeStateHolder.InitWithoutDataSource(messageBroker, settings);
 		}
 
 		private void updatePanel(Control userControl)

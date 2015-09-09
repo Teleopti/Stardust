@@ -3,8 +3,10 @@ using System.Configuration;
 using Autofac;
 using log4net;
 using Rhino.ServiceBus.MessageModules;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Interfaces.Domain;
 
@@ -47,21 +49,26 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 	    private void initApplicationAndSetDataSourceForTenant()
 	    {
-		    using (Container.Resolve<ITenantUnitOfWork>().Start())
+			var dsForTenant = Container.Resolve<IDataSourceForTenant>();
+			using (Container.Resolve<ITenantUnitOfWork>().Start())
 		    {
-			    if (StateHolderReader.IsInitialized)
-			    {
-				    Logger.Info("StateHolder already initialized. This step is skipped.");
-				    return;
-			    }
 			    var application = Container.Resolve<IInitializeApplication>();
 			    using (Container.Resolve<ITenantUnitOfWork>().Start())
 			    {
-				    application.Start(new BasicState(), null, ConfigurationManager.AppSettings.ToDictionary(), true);
+				    var loadAllTenants = Container.Resolve<ILoadAllTenants>();
+						application.Start(new BasicState(), null, ConfigurationManager.AppSettings.ToDictionary(), true);
+					loadAllTenants.Tenants().ForEach(dsConf =>
+					{
+						dsForTenant.MakeSureDataSourceExists(dsConf.Name,
+							dsConf.DataSourceConfiguration.ApplicationConnectionString,
+							dsConf.DataSourceConfiguration.AnalyticsConnectionString,
+							dsConf.DataSourceConfiguration.ApplicationNHibernateConfig);
+					});
 
-				    Logger.Info("Initialized application");
+
+					Logger.Info("Initialized application");
 			    }
-			    dataSourceForTenant = Container.Resolve<IDataSourceForTenant>();
+			    dataSourceForTenant = dsForTenant;
 		    }
 	    }
 

@@ -23,14 +23,13 @@ namespace Teleopti.Ccc.WinCode.Main
 		private readonly IAuthenticationQuerier _authenticationQuerier;
 		private readonly IWindowsUserProvider _windowsUserProvider;
 		private readonly IAvailableBusinessUnitsProvider _availableBusinessUnitsProvider;
-		private readonly IComponentContext _container;
 		public const string UserAgent = "WIN";
 
 
 		public LogonPresenter(ILogonView view, LogonModel model, ILoginInitializer initializer, ILogOnOff logOnOff,
 			IMessageBrokerComposite messageBroker, ISharedSettingsQuerier sharedSettingsQuerier,
 			IAuthenticationQuerier authenticationQuerier, IWindowsUserProvider windowsUserProvider,
-			IAvailableBusinessUnitsProvider availableBusinessUnitsProvider, IComponentContext container)
+			IAvailableBusinessUnitsProvider availableBusinessUnitsProvider)
 		{
 			_view = view;
 			_model = model;
@@ -41,7 +40,6 @@ namespace Teleopti.Ccc.WinCode.Main
 			_authenticationQuerier = authenticationQuerier;
 			_windowsUserProvider = windowsUserProvider;
 			_availableBusinessUnitsProvider = availableBusinessUnitsProvider;
-			_container = container;
 			_model.AuthenticationType = AuthenticationTypeOption.Windows;
 		}
 
@@ -111,7 +109,7 @@ namespace Teleopti.Ccc.WinCode.Main
 			if (!StateHolderReader.IsInitialized)
 			{
 				var settings = _sharedSettingsQuerier.GetSharedSettings();
-				_view.InitStateHolderWithoutDataSource(_messageBroker, settings, _container);
+				_view.InitStateHolderWithoutDataSource(_messageBroker, settings);
 			}
 			if (!_authenticationQuerier.TryLogon(new IdentityLogonClientModel {Identity = _windowsUserProvider.Identity()}, string.Empty).Success)
 			{

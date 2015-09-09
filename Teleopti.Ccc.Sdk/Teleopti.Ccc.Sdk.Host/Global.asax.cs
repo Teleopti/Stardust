@@ -15,6 +15,7 @@ using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.IocCommon;
 using log4net;
 using log4net.Config;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
@@ -85,9 +86,17 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			var tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
 			using (tenantUnitOfWorkManager.Start())
 			{
-				var initializeApplication =
-					new InitializeApplication(container.Resolve<IDataSourceForTenant>(), messageBroker, new LoadAllTenants(tenantUnitOfWorkManager));
+				var loadAllTenants = new LoadAllTenants(tenantUnitOfWorkManager);
+        var initializeApplication = new InitializeApplication(messageBroker);
 				initializeApplication.Start(new SdkState(), passwordPolicyService, appSettings, true);
+				loadAllTenants.Tenants().ForEach(dsConf =>
+				{
+					container.Resolve<IDataSourceForTenant>().MakeSureDataSourceExists(dsConf.Name,
+						dsConf.DataSourceConfiguration.ApplicationConnectionString,
+						dsConf.DataSourceConfiguration.AnalyticsConnectionString,
+						dsConf.DataSourceConfiguration.ApplicationNHibernateConfig);
+				});
+
 			}
 			tenantUnitOfWorkManager.Dispose();
 			DataSourceForTenantServiceLocator.Set(container.Resolve<IDataSourceForTenant>());

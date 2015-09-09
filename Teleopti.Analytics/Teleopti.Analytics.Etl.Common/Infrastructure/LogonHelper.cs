@@ -6,6 +6,7 @@ using System.Security.Authentication;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Security;
@@ -98,16 +99,23 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging
 				);
 			var dsForTenant = new DataSourceForTenant(dataSourcesFactory);
-			var application = new InitializeApplication(dsForTenant, null, _loadAllTenants);
+			var application = new InitializeApplication(null);
 
 			using (tenantUnitOfWork.Start())
 			{
-				//RK: why is this if needed!?
-				//if (!StateHolder.IsInitialized)
-					application.Start(new StateManager(), null, ConfigurationManager.AppSettings.ToDictionary(), false);
+				application.Start(new StateManager(), null, ConfigurationManager.AppSettings.ToDictionary(), false);
 
 				//we need to redo this if we save some that did not have this at startup
 				var tenants = _loadAllTenants.Tenants();
+				tenants.ForEach(dsConf =>
+				{
+					dsForTenant.MakeSureDataSourceExists(dsConf.Name,
+						dsConf.DataSourceConfiguration.ApplicationConnectionString,
+						dsConf.DataSourceConfiguration.AnalyticsConnectionString,
+						dsConf.DataSourceConfiguration.ApplicationNHibernateConfig);
+				});
+
+
 				var configs = new List<TenantBaseConfig>();
 				_tenantNames = new List<ITenantName>();
             foreach (var tenant in tenants)

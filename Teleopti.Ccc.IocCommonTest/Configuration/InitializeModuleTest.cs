@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void InitializeApplicationIsWired()
 		{
-			containerBuilder.Register(c => new NoTenants()).As<ILoadAllTenants>();
 			using (var container = containerBuilder.Build())
 			{
 				var init = container.Resolve<IInitializeApplication>();
@@ -35,7 +34,6 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void InitializeApplicationShouldBeSingleton()
 		{
-			containerBuilder.Register(c => new NoTenants()).As<ILoadAllTenants>();
 			using (var container = containerBuilder.Build())
 			{
 				var init = container.Resolve<IInitializeApplication>();

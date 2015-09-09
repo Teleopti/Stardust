@@ -19,6 +19,6 @@ namespace Teleopti.Ccc.WinCode.Main
 		void HandleKeyPress(Message msg, Keys keyData, bool b);
 		void ButtonLogOnOkClick(object sender, EventArgs e);
 		void BtnBackClick(object sender, EventArgs e);
-		void InitStateHolderWithoutDataSource(IMessageBrokerComposite messageBroker, SharedSettings settings, IComponentContext container);
+		void InitStateHolderWithoutDataSource(IMessageBrokerComposite messageBroker, SharedSettings settings);
 	}
 }

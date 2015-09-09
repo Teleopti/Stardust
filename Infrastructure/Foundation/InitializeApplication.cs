@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Castle.Core.Internal;
 using log4net;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
@@ -14,17 +12,11 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 	public class InitializeApplication : IInitializeApplication
 	{
 		private static readonly ILog log = LogManager.GetLogger(typeof (InitializeApplication));
-		private readonly IDataSourceForTenant _dataSourceForTenant;
 		private readonly IMessageBrokerComposite _messageBroker;
-		private readonly ILoadAllTenants _loadAllTenants;
 
-		public InitializeApplication(IDataSourceForTenant dataSourceForTenant, 
-											IMessageBrokerComposite messageBroker,
-											ILoadAllTenants loadAllTenants)
+		public InitializeApplication(IMessageBrokerComposite messageBroker)
 		{
-			_dataSourceForTenant = dataSourceForTenant;
 			_messageBroker = messageBroker;
-			_loadAllTenants = loadAllTenants;
 		}
 
 		public void Start(IState clientCache, ILoadPasswordPolicyService loadPasswordPolicyService, IDictionary<string, string> appSettings, bool startMessageBroker)
@@ -35,13 +27,6 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 				this.startMessageBroker(appSettings);
 			var appData = new ApplicationData(appSettings, _messageBroker, loadPasswordPolicyService);
 			StateHolder.Instance.State.SetApplicationData(appData);
-			_loadAllTenants.Tenants().ForEach(dsConf =>
-			{
-				_dataSourceForTenant.MakeSureDataSourceExists(dsConf.Name, 
-					dsConf.DataSourceConfiguration.ApplicationConnectionString,
-					dsConf.DataSourceConfiguration.AnalyticsConnectionString,
-					dsConf.DataSourceConfiguration.ApplicationNHibernateConfig);
-			});
 		}
 
 		private void startMessageBroker(IDictionary<string, string> appSettings)
