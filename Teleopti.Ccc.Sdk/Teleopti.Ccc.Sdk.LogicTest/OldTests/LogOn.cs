@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.OldTests
             MockRepository mocks = new MockRepository();
             IState state = mocks.StrictMock<IState>();
 	        var ds = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("for test"), null, null);
-            IApplicationData applicationData = StateHolderProxyHelper.CreateApplicationData(null, ds);
+            IApplicationData applicationData = StateHolderProxyHelper.CreateApplicationData(null);
             IBusinessUnit businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
             
             IPerson per = new Person {Name = new Name("Peter", "Westlin Junior")};

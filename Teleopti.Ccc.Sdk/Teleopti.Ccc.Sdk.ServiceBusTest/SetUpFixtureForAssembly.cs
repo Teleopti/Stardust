@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             IState state = mocks.StrictMock<IState>();
             IMessageBrokerComposite messageBroker = mocks.DynamicMock<IMessageBrokerComposite>();
 	        var ds = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("for test"), null, null);
-            IApplicationData applicationData = StateHolderProxyHelper.CreateApplicationData(messageBroker, ds);
+            IApplicationData applicationData = StateHolderProxyHelper.CreateApplicationData(messageBroker);
             IBusinessUnit businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
 
             Expect.Call(messageBroker.IsAlive).Return(false).Repeat.Any();

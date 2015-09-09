@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest
             var stateMock = mocks.StrictMock<IState>();
 
 						var dataSource = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("for test"), null, null);
-            var applicationData = StateHolderProxyHelper.CreateApplicationData(mocks.StrictMock<IMessageBrokerComposite>(), dataSource);
+            var applicationData = StateHolderProxyHelper.CreateApplicationData(mocks.StrictMock<IMessageBrokerComposite>());
             var loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
             var sessionData = StateHolderProxyHelper.CreateSessionData(loggedOnPerson, dataSource, BusinessUnitFactory.BusinessUnitUsedInTest);
 

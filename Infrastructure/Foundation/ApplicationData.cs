@@ -17,9 +17,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		}
 
 		public ILoadPasswordPolicyService LoadPasswordPolicyService { get; private set; }
-
 		public IMessageBrokerComposite Messaging { get; private set; }
-
 		public IDictionary<string, string> AppSettings { get; private set; }
 
 		public void Dispose()

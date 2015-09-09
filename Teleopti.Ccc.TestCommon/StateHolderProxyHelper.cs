@@ -116,8 +116,7 @@ namespace Teleopti.Ccc.TestCommon
             typeof (StateHolderReader).GetField("_instanceInternal", BindingFlags.NonPublic | BindingFlags.Static).SetValue(null, null);
         }
 
-		//TODO: remove param
-        public static IApplicationData CreateApplicationData(IMessageBrokerComposite messageBroker, IDataSource dataSource)
+        public static IApplicationData CreateApplicationData(IMessageBrokerComposite messageBroker)
         {
             IDictionary<string, string> appSettings = new Dictionary<string, string>();
             ConfigurationManager.AppSettings.AllKeys.ToList().ForEach(

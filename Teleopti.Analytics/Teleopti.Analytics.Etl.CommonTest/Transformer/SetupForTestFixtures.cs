@@ -32,7 +32,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
             _bu.SetId(Guid.NewGuid());
 
 	        var dataSource = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("for test"), null, null);
-					applicationData = StateHolderProxyHelper.CreateApplicationData(mocks.StrictMock<IMessageBrokerComposite>(), dataSource);
+					applicationData = StateHolderProxyHelper.CreateApplicationData(mocks.StrictMock<IMessageBrokerComposite>());
             loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
 						sessionData = StateHolderProxyHelper.CreateSessionData(loggedOnPerson, dataSource, _bu);
 
