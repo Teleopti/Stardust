@@ -49,7 +49,9 @@ describe("PeopleCartCtrl", function () {
 				var queryDeferred = $q.defer();
 				queryDeferred.resolve(
 					[
-						
+						{"ShiftBagId":"f2de1ce1-3c64-4e56-8088-9b5e015ab5bc","ShiftBagName":"Paris Full Time"},
+						{"ShiftBagId":"9b5b5740-8e31-417c-82a6-9b5e015ab5bc","ShiftBagName":"London Part Time 75%"},
+						{"ShiftBagId":"bd1b60fe-5116-4fd5-85a7-9b5e015ab5bc","ShiftBagName":"London Students"}
 					]
 				);
 				return { $promise: queryDeferred.promise };
@@ -66,7 +68,7 @@ describe("PeopleCartCtrl", function () {
 							"LastName": "McMahon",
 							"Team": "Paris/Team 1",
 							"SkillIdList": ["f08d75b3-fdb4-484a-ae4c-9f0800e2f753", "c5fffc8f-bcd6-47f7-9352-9f0800e39578"],
-							"ShiftBag": "Paris Full Time"
+							"ShiftBagId": "f2de1ce1-3c64-4e56-8088-9b5e015ab5bc"
 						},
 						{
 							"PersonId": "71d27b06-30c0-49fd-ae16-9b5e015b2580",
@@ -74,7 +76,7 @@ describe("PeopleCartCtrl", function () {
 							"LastName": "Lueker",
 							"Team": "Paris/Team 1",
 							"SkillIdList": ["c5fffc8f-bcd6-47f7-9352-9f0800e39578", "bc50fc19-c211-4e7a-8a1a-9f0801134e37"],
-							"ShiftBag": "Paris Full Time"
+							"ShiftBagId": "f2de1ce1-3c64-4e56-8088-9b5e015ab5bc"
 						},
 						{
 							"PersonId": "1a714f36-ee87-4a06-88d6-9b5e015b2585",
@@ -82,7 +84,7 @@ describe("PeopleCartCtrl", function () {
 							"LastName": "Novack",
 							"Team": "Paris/Team 1",
 							"SkillIdList": ["c5fffc8f-bcd6-47f7-9352-9f0800e39578"],
-							"ShiftBag": "Paris Full Time"
+							"ShiftBagId": "f2de1ce1-3c64-4e56-8088-9b5e015ab5bc"
 						}
 					]
 				);
@@ -117,6 +119,16 @@ describe("PeopleCartCtrl", function () {
 		expect(availablePeople[1].Skills()).toEqual("Direct Sales, Email");
 		expect(availablePeople[2].Skills()).toEqual("Direct Sales");
 	}));
+	it("should construct person shift bag according to available shift bags", inject(function() {
+		var scope = $rootScope.$new();
+		scope.$digest(); // this is needed to resolve the promise
+		var availablePeople = controller.availablePeople;
+
+		expect(availablePeople.length).toEqual(3);
+		expect(availablePeople[0].ShiftBag()).toEqual("Paris Full Time");
+		expect(availablePeople[1].ShiftBag()).toEqual("Paris Full Time");
+		expect(availablePeople[2].ShiftBag()).toEqual("Paris Full Time");
+	}));
 
 	it("should remove skill from person skills when skill is deselected", inject(function() {
 		var scope = $rootScope.$new();
@@ -148,6 +160,18 @@ describe("PeopleCartCtrl", function () {
 		expect(availablePeople[0].Skills()).toEqual("Channel Sales, Direct Sales");
 		expect(availablePeople[1].Skills()).toEqual("Channel Sales, Direct Sales, Email");
 		expect(availablePeople[2].Skills()).toEqual("Channel Sales, Direct Sales");
+	}));
+
+	it("should change shift bag correctly", inject(function() {
+		var scope = $rootScope.$new();
+		scope.$digest(); // this is needed to resolve the promise
+		var shiftBag = {"ShiftBagId": "9b5b5740-8e31-417c-82a6-9b5e015ab5bc" };
+		controller.selectedShiftBagChanged(shiftBag.ShiftBagId);
+
+		var availablePeople = controller.availablePeople;
+		expect(availablePeople[0].ShiftBag()).toEqual("London Part Time 75%");
+		expect(availablePeople[1].ShiftBag()).toEqual("London Part Time 75%");
+		expect(availablePeople[2].ShiftBag()).toEqual("London Part Time 75%");
 	}));
 
 	it("should remove person correctly", inject(function () {
