@@ -188,6 +188,16 @@ describe("PeopleCartCtrl", function () {
 		expect(availablePeople[1].PersonId).toEqual("1a714f36-ee87-4a06-88d6-9b5e015b2585");
 	}));
 
+	it("should empty the cart when clearing cart", inject(function () {
+		var scope = $rootScope.$new();
+		scope.$digest(); // this is needed to resolve the promise
+
+		controller.clearCart();
+
+		var selectedPeople = controller.selectedPeopleIds;
+		expect(selectedPeople.length).toEqual(0);
+	}));
+
 	function setUpController($controller) {
 		var scope = $rootScope.$new();
 		var stateParams = { selectedPeopleIds: [], commandTag: "AdjustSkill" }
