@@ -171,6 +171,7 @@
     <Compile Include="..\..\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.WebService\ITeleoptiRtaService.cs">
       <Link>Rta\ITeleoptiRtaService.cs</Link>
     </Compile>
+    <Compile Include="AbsenceRequestBudgetGroupValidationHelper.cs" />
     <Compile Include="ApplicationInfrastructureContainerInstaller.cs" />
     <Compile Include="ApplicationLayer\EventsConsumer.cs" />
     <Compile Include="AuthenticationContainerInstaller.cs" />

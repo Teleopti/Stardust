@@ -226,7 +226,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             Expect.Call(_budgetDayRepository.Find(null, null, _defaultDatePeriod))
                   .IgnoreArguments()
                   .Return(new List<IBudgetDay> { budgetDay });
-            Expect.Call(budgetDay.Day).Return(_defaultDay).Repeat.Times(4);
+            Expect.Call(budgetDay.Day).Return(_defaultDay).Repeat.Times(2);
             Expect.Call(budgetDay.IsClosed).Return(false);
             Expect.Call(budgetDay.Allowance).Return(1.5d);
             Expect.Call(
