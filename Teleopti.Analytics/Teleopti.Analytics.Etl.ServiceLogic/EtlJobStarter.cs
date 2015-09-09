@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
+using System.Linq;
 using System.Threading;
 using System.Timers;
 using Autofac;
@@ -162,9 +163,16 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 					Log.InfoFormat(CultureInfo.InvariantCulture, "Scheduled job '{0}' ready to start.", jobToRun.Name);
 					runController.StartEtlJobRunLock(jobToRun.Name, true, etlJobLock);
 					var jobHelper = jobToRun.JobParameters.Helper;
+					jobHelper.RefreshTenantList();
 					var tenantNames = jobHelper.TenantCollection;
 					foreach (var tenantName in tenantNames)
 					{
+						var tenantBaseConfig = TenantHolder.Instance.TenantBaseConfigs.SingleOrDefault(x => x.Tenant.Name.Equals(tenantName.DataSourceName));
+						if (tenantBaseConfig?.BaseConfiguration == null)
+							return false;
+						jobToRun.StepList[0].JobParameters.SetTenantBaseConfigValues(tenantBaseConfig.BaseConfiguration);
+
+
 						IList<IJobResult> jobResultCollection = new List<IJobResult>();
 						jobHelper.SelectDataSourceContainer(tenantName.DataSourceName);
 						IJobRunner jobRunner = new JobRunner();

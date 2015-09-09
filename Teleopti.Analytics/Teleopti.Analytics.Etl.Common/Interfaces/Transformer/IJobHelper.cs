@@ -16,6 +16,7 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
 		bool SetBusinessUnit(IBusinessUnit businessUnit);
 		void LogOffTeleoptiCccDomain();
 		IDataSource SelectedDataSource { get; }
+		void RefreshTenantList();
 	}
 
 	public interface ITenantName

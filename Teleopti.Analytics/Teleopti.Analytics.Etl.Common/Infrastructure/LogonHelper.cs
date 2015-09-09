@@ -27,6 +27,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 	public class LogOnHelper : ILogOnHelper
 	{
 		private readonly ILoadAllTenants _loadAllTenants;
+		private readonly ITenantUnitOfWork _tenantUnitOfWork;
 		private readonly IAvailableBusinessUnitsProvider _availableBusinessUnitsProvider;
 		private readonly IDataSourcesFactory _dataSourcesFactory;
 		private DataSourceContainer _choosenDb;
@@ -41,9 +42,11 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 									IDataSourcesFactory dataSourcesFactory)
 		{
 			_loadAllTenants = loadAllTenants;
+			_tenantUnitOfWork = tenantUnitOfWork;
 			_availableBusinessUnitsProvider = availableBusinessUnitsProvider;
 			_dataSourcesFactory = dataSourcesFactory;
-			initializeStateHolder(tenantUnitOfWork);
+			initializeStateHolder();
+			RefreshTenantList();
 		}
 
 		public IList<IBusinessUnit> GetBusinessUnitCollection()
@@ -90,7 +93,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			return false;
 		}
 
-		private void initializeStateHolder(ITenantUnitOfWork tenantUnitOfWork)
+		private void initializeStateHolder()
 		{
 			// Code that runs on application startup
 			var dataSourcesFactory = new DataSourcesFactory(new EnversConfiguration(), new NoMessageSenders(),
@@ -101,12 +104,9 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			var dsForTenant = new DataSourceForTenant(dataSourcesFactory);
 			var application = new InitializeApplication(null);
 
-			using (tenantUnitOfWork.Start())
+			using (_tenantUnitOfWork.Start())
 			{
 				application.Start(new StateManager(), null, ConfigurationManager.AppSettings.ToDictionary(), false);
-
-				//we need to redo this if we save some that did not have this at startup
-				var tenants = _loadAllTenants.Tenants();
 				tenants.ForEach(dsConf =>
 				{
 					dsForTenant.MakeSureDataSourceExists(dsConf.Name,
@@ -116,24 +116,6 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				});
 
 
-				var configs = new List<TenantBaseConfig>();
-				_tenantNames = new List<ITenantName>();
-            foreach (var tenant in tenants)
-				{
-					var config = new ConfigurationHandler(new GeneralFunctions(tenant.DataSourceConfiguration.AnalyticsConnectionString));
-					IBaseConfiguration baseconfig = null;
-					if (config.IsConfigurationValid)
-						baseconfig = config.BaseConfiguration;
-					var applicationNhibConfiguration = new Dictionary<string, string>();
-               applicationNhibConfiguration[NHibernate.Cfg.Environment.SessionFactoryName] = tenant.Name;
-					applicationNhibConfiguration[NHibernate.Cfg.Environment.ConnectionString] = tenant.DataSourceConfiguration.ApplicationConnectionString;
-					var newDataSource = _dataSourcesFactory.Create(applicationNhibConfiguration, tenant.DataSourceConfiguration.AnalyticsConnectionString);
-
-
-					configs.Add(new TenantBaseConfig { Tenant = tenant, BaseConfiguration = baseconfig, TenantDataSource = newDataSource });
-					_tenantNames.Add(new TenantName { DataSourceName = tenant.Name });
-				}
-				TenantHolder.Instance.SetTenantBaseConfigs(configs);
 			}
 
 			_logOnOff = new LogOnOff(new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory()));
@@ -196,6 +178,32 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		public void LogOff()
 		{
 			_logonService.LogOff();
+		}
+
+		public void RefreshTenantList()
+		{
+			using (_tenantUnitOfWork.Start())
+			{
+				var tenants = _loadAllTenants.Tenants();
+				var configs = new List<TenantBaseConfig>();
+				_tenantNames = new List<ITenantName>();
+				foreach (var tenant in tenants)
+				{
+					var config = new ConfigurationHandler(new GeneralFunctions(tenant.DataSourceConfiguration.AnalyticsConnectionString));
+					IBaseConfiguration baseconfig = null;
+					if (config.IsConfigurationValid)
+						baseconfig = config.BaseConfiguration;
+					var applicationNhibConfiguration = new Dictionary<string, string>();
+					applicationNhibConfiguration[NHibernate.Cfg.Environment.SessionFactoryName] = tenant.Name;
+					applicationNhibConfiguration[NHibernate.Cfg.Environment.ConnectionString] = tenant.DataSourceConfiguration.ApplicationConnectionString;
+					var newDataSource = _dataSourcesFactory.Create(applicationNhibConfiguration, tenant.DataSourceConfiguration.AnalyticsConnectionString);
+
+
+					configs.Add(new TenantBaseConfig { Tenant = tenant, BaseConfiguration = baseconfig, TenantDataSource = newDataSource });
+					_tenantNames.Add(new TenantName { DataSourceName = tenant.Name });
+				}
+				TenantHolder.Instance.SetTenantBaseConfigs(configs);
+			}
 		}
 	}
 }

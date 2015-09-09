@@ -75,6 +75,10 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 		}
 
 		public IDataSource SelectedDataSource { get { return _logHelp.SelectedDataSourceContainer.DataSource; } }
+		public void RefreshTenantList()
+		{
+			_logHelp.RefreshTenantList();
+		}
 
 		public bool SetBusinessUnit(IBusinessUnit businessUnit)
 		{
