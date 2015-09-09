@@ -9,7 +9,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Aspects
 {
-	public class DataSourceFromAuthenticationKeyAspect : IDataSourceFromAuthenticationKeyAspect
+	public class TenantDataSourceScope : IRtaDataSourceScope
 	{
 		private readonly IDataSourceScope _dataSource;
 		private readonly IDataSourceForTenant _dataSourceForTenant;
@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Aspects
 		[ThreadStatic]
 		private static IDisposable _scope;
 
-		public DataSourceFromAuthenticationKeyAspect(IDataSourceScope dataSource, IDataSourceForTenant dataSourceForTenant, IDatabaseLoader databaseLoader)
+		public TenantDataSourceScope(IDataSourceScope dataSource, IDataSourceForTenant dataSourceForTenant, IDatabaseLoader databaseLoader)
 		{
 			_dataSource = dataSource;
 			_dataSourceForTenant = dataSourceForTenant;
@@ -37,8 +37,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Aspects
 				tenant = _databaseLoader.TenantNameByKey(AuthenticationKeyEncodingFixer.Fix(key));
 			else
 				tenant = tryGet(() => input.Tenant);
-			var dataSource = _dataSourceForTenant.Tenant(tenant);
-			_scope = _dataSource.OnThisThreadUse(dataSource);
+			_scope = _dataSource.OnThisThreadUse(tenant);
 		}
 
 		private static string tryGet(Func<string> input)

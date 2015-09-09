@@ -44,5 +44,10 @@ namespace Teleopti.Ccc.TestCommon
 				_current = null;
 			});
 		}
+
+		public IDisposable OnThisThreadUse(string tenant)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

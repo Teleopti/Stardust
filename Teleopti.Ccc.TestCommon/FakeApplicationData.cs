@@ -13,14 +13,23 @@ namespace Teleopti.Ccc.TestCommon
 	public class FakeApplicationData : ICurrentApplicationData, IApplicationData, IDataSourceForTenant
 	{
 		private readonly Func<IDataSourcesFactory> _dataSourcesFactory;
+		private IEnumerable<IDataSource> _registeredDataSources = new IDataSource[] { };
 
 		public FakeApplicationData(Func<IDataSourcesFactory> dataSourcesFactory)
 		{
 			_dataSourcesFactory = dataSourcesFactory;
-			RegisteredDataSources = new IDataSource[] {};
 		}
 
-		public IEnumerable<IDataSource> RegisteredDataSources { get; set; }
+		public IEnumerable<IDataSource> RegisteredDataSources
+		{
+			get
+			{
+				if (!_registeredDataSources.Any())
+					_registeredDataSources = new[] {_dataSourcesFactory.Invoke().Create("App", ConnectionStringHelper.ConnectionStringUsedInTests, null)};
+				return _registeredDataSources;
+			}
+			set { _registeredDataSources = value.ToArray(); }
+		}
 
 		public void Dispose()
 		{
@@ -48,8 +57,6 @@ namespace Teleopti.Ccc.TestCommon
 
 		public void DoOnAllTenants_AvoidUsingThis(Action<IDataSource> actionOnTenant)
 		{
-			if (!RegisteredDataSources.Any())
-				RegisteredDataSources = new[] {_dataSourcesFactory.Invoke().Create("App", ConnectionStringHelper.ConnectionStringUsedInTests, null)};
 			RegisteredDataSources.ForEach(actionOnTenant);
 		}
 

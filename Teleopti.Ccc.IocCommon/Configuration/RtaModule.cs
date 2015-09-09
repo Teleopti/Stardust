@@ -128,9 +128,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<ConfiguredKeyAuthenticator>().As<IAuthenticator>().SingleInstance();
 			
 			if (_config.Toggle(Toggles.RTA_MultiTenancy_32539))
-				builder.RegisterType<DataSourceFromAuthenticationKeyAspect>().As<IDataSourceFromAuthenticationKeyAspect>().SingleInstance();
+				builder.RegisterType<TenantDataSourceScope>().As<IRtaDataSourceScope>().SingleInstance();
 			else
-				builder.RegisterType<NoDataSourceFromAuthenticationKeyAspect>().As<IDataSourceFromAuthenticationKeyAspect>().SingleInstance();
+				builder.RegisterType<ConnectionStringDataSourceScope>().As<IRtaDataSourceScope>().SingleInstance();
 		}
 	}
 }

@@ -28,6 +28,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<CurrentDataSource>()
 				.As<ICurrentDataSource>()
+				.SingleInstance();
+			builder.RegisterType<DataSourceScope>()
 				.As<IDataSourceScope>()
 				.SingleInstance();
 			builder.Register(c => c.Resolve<ICurrentDataSource>().Current())

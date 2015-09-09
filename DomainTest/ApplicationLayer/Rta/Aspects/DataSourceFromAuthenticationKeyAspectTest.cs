@@ -40,25 +40,25 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Aspects
 
 			public IDataSource RanWithDataSource;
 
-			[DataSourceFromAuthenticationKey]
+			[RtaDataSourceScope]
 			public virtual void Does(Input input)
 			{
 				RanWithDataSource = _dataSource.Current();
 			}
 
-			[DataSourceFromAuthenticationKey]
+			[RtaDataSourceScope]
 			public virtual void Does(IEnumerable<Input> inputs)
 			{
 				RanWithDataSource = _dataSource.Current();
 			}
 
-			[DataSourceFromAuthenticationKey]
+			[RtaDataSourceScope]
 			public virtual void Does(GenericInput<object> input)
 			{
 				RanWithDataSource = _dataSource.Current();
 			}
 
-			[DataSourceFromAuthenticationKey]
+			[RtaDataSourceScope]
 			public virtual void Does(InputWithTenant inputs)
 			{
 				RanWithDataSource = _dataSource.Current();

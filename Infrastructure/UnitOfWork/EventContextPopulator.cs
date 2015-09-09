@@ -1,7 +1,6 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages;
 
@@ -18,7 +17,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			var identity = new CurrentIdentity(new CurrentTeleoptiPrincipal());
 			return new EventContextPopulator(
 				CurrentBusinessUnit.Instance,
-				new CurrentDataSource(identity, null, null),
+				new CurrentDataSource(identity),
 				new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make())
 				);
 		}

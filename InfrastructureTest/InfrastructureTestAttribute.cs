@@ -20,9 +20,10 @@ namespace Teleopti.Ccc.InfrastructureTest
 	{
 		public IMessageSendersScope MessageSendersScope;
 		public IEnumerable<IMessageSender> MessageSenders;
-		private IDisposable _scope;
+		private IDisposable _messageSenderScope;
 		public FakeMessageSender MessageSender;
 		public IDataSourceForTenant DataSourceForTenant;
+		public IDataSourcesFactory DataSourcesFactory;
 
 		protected override FakeConfigReader Config()
 		{
@@ -57,17 +58,19 @@ namespace Teleopti.Ccc.InfrastructureTest
 		protected override void BeforeTest()
 		{
 			base.BeforeTest();
+
 			var nonFakedDataSourceForTenant = DataSourceForTenant as DataSourceForTenant;
-			if(nonFakedDataSourceForTenant!=null)
-				nonFakedDataSourceForTenant.MakeSureDataSourceExists_UseOnlyFromTests(SetupFixtureForAssembly.DataSource);
-			_scope = MessageSendersScope.GloballyUse(MessageSenders);
+			if (nonFakedDataSourceForTenant != null)
+				nonFakedDataSourceForTenant.MakeSureDataSourceExists_UseOnlyFromTests(DataSourcesFactory.Create("App", ConnectionStringHelper.ConnectionStringUsedInTests, null));
+				
+			_messageSenderScope = MessageSendersScope.GloballyUse(MessageSenders);
 		}
 
 		protected override void AfterTest()
 		{
 			base.AfterTest();
 
-			_scope.Dispose();
+			_messageSenderScope.Dispose();
 		}
 	}
 }
