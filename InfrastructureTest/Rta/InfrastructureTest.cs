@@ -37,16 +37,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		{
 			private readonly ICurrentUnitOfWork _uow;
 			private readonly IDataSourceScope _dataSource;
-			private readonly IDataSourceForTenant _dataSourceForTenant;
 
 			public TheServiceImpl(
 				ICurrentUnitOfWork uow,
-				IDataSourceScope dataSource,
-				IDataSourceForTenant dataSourceForTenant)
+				IDataSourceScope dataSource)
 			{
 				_uow = uow;
 				_dataSource = dataSource;
-				_dataSourceForTenant = dataSourceForTenant;
 			}
 
 			[UnitOfWork]
