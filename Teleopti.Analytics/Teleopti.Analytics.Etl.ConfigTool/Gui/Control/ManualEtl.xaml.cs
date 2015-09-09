@@ -57,7 +57,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 		private void etlControlJobRun(object sender, AlarmEventArgs e)
 		{
 			var tenantBaseConfig = TenantHolder.Instance.TenantBaseConfigs.SingleOrDefault(x => x.Tenant.Name.Equals(myControl.TenantName));
-			if(tenantBaseConfig.BaseConfiguration == null)
+			if(tenantBaseConfig == null || tenantBaseConfig.BaseConfiguration == null)
 				return;
 			e.Job.StepList[0].JobParameters.SetTenantBaseConfigValues(tenantBaseConfig.BaseConfiguration);
          e.Job.StepList[0].JobParameters.DataSource = myControl.LogDataSource;

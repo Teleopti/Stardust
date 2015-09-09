@@ -181,8 +181,10 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 						{
 							// No license applied - stop service
 							LogInvalidLicense();
-							NeedToStopService(this, null);
-							return false;
+							//we can't stop service now beacuse one tenant don't have a License, just try next
+							//NeedToStopService(this, null);
+							//return false;
+							continue;
 						}
 						jobRunner.SaveResult(jobResults, repository, scheduleId);
 					}

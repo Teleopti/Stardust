@@ -128,7 +128,6 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		public bool SelectDataSourceContainer(string dataSourceName)
 		{
 			_buList = null;
-			//var dataSource = StateHolder.Instance.StateReader.ApplicationScopeData.DataSourceForTenant.Tenant(dataSourceName);
 			var dataSource = TenantHolder.Instance.TenantDataSource(dataSourceName);
 			var person = new LoadUserUnauthorized().LoadFullPersonInSeperateTransaction(dataSource.Application, SuperUser.Id_AvoidUsing_This);
 			_choosenDb = new DataSourceContainer(dataSource, person);
@@ -177,7 +176,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public void LogOff()
 		{
-			_logonService.LogOff();
+			//_logonService.LogOff();
 		}
 
 		public void RefreshTenantList()
@@ -193,11 +192,12 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 					IBaseConfiguration baseconfig = null;
 					if (config.IsConfigurationValid)
 						baseconfig = config.BaseConfiguration;
-					var applicationNhibConfiguration = new Dictionary<string, string>();
-					applicationNhibConfiguration[NHibernate.Cfg.Environment.SessionFactoryName] = tenant.Name;
-					applicationNhibConfiguration[NHibernate.Cfg.Environment.ConnectionString] = tenant.DataSourceConfiguration.ApplicationConnectionString;
+					var applicationNhibConfiguration = new Dictionary<string, string>
+					{
+						[NHibernate.Cfg.Environment.SessionFactoryName] = tenant.Name,
+						[NHibernate.Cfg.Environment.ConnectionString] = tenant.DataSourceConfiguration.ApplicationConnectionString
+					};
 					var newDataSource = _dataSourcesFactory.Create(applicationNhibConfiguration, tenant.DataSourceConfiguration.AnalyticsConnectionString);
-
 
 					configs.Add(new TenantBaseConfig { Tenant = tenant, BaseConfiguration = baseconfig, TenantDataSource = newDataSource });
 					_tenantNames.Add(new TenantName { DataSourceName = tenant.Name });
