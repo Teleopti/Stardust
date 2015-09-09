@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
 
@@ -29,7 +28,7 @@ namespace Teleopti.Ccc.TestCommon
 
 		public void SendMultiple(IEnumerable<Message> messages)
 		{
-			messages.ForEach(AllNotifications.Add);
+			throw new NotImplementedException();
 		}
 	}
 }

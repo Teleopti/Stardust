@@ -36,14 +36,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public class TheServiceImpl
 		{
 			private readonly ICurrentUnitOfWork _uow;
-			private readonly IDataSourceScope _dataSource;
 
-			public TheServiceImpl(
-				ICurrentUnitOfWork uow,
-				IDataSourceScope dataSource)
+			public TheServiceImpl(ICurrentUnitOfWork uow)
 			{
 				_uow = uow;
-				_dataSource = dataSource;
 			}
 
 			[UnitOfWork]
@@ -52,14 +48,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				action(_uow.Current());
 			}
 
-			public virtual void DoesWhileNotLoggedIn(Action<IUnitOfWork> action)
-			{
-				using (_dataSource.OnThisThreadUse("App"))
-					DoesWhileNotLoggedInInner(action);
-			}
-
 			[AllBusinessUnitsUnitOfWork]
-			protected virtual void DoesWhileNotLoggedInInner(Action<IUnitOfWork> action)
+			public virtual void DoesWhileNotLoggedIn(Action<IUnitOfWork> action)
 			{
 				action(_uow.Current());
 			}

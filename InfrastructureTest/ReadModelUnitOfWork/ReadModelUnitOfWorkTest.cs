@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading;
+using NHibernate;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork;
@@ -207,16 +210,37 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 				var dataSource2 = factory.Create("Two", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, null);
 
 				Principal.SetPrincipal(new TeleoptiPrincipal(new TeleoptiIdentity("", dataSource1, null, null), null));
-				TheService.DoesUpdateWithoutDatasource("INSERT INTO TestTable (Value) VALUES (0)");
+				TheService.DoesUpdate("INSERT INTO TestTable (Value) VALUES (0)");
 
 				Principal.SetPrincipal(new TeleoptiPrincipal(new TeleoptiIdentity("", dataSource2, null, null), null));
-				TheService.DoesUpdateWithoutDatasource("INSERT INTO TestTable (Value) VALUES (0)");
+				TheService.DoesUpdate("INSERT INTO TestTable (Value) VALUES (0)");
 
 				TestTable.Values("TestTable", ConnectionStringHelper.ConnectionStringUsedInTests).Count().Should().Be(1);
 				TestTable.Values("TestTable", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix).Count().Should().Be(1);
 			}
 		}
-		
+
+		[Test]
+		[TestTable("TestTable")]
+		public void ShouldProduceUnitOfWorkForDataSourceMatchingRtaConnectionStringIfNoPrincipal()
+		{
+			var rtaConnectionString = new SqlConnectionStringBuilder(ConnectionStringHelper.ConnectionStringUsedInTests).ConnectionString;
+			rtaConnectionString.Should().Not.Be.EqualTo(ConnectionStringHelper.ConnectionStringUsedInTests);
+			ConfigReader.FakeConnectionString("Wrong", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
+			ConfigReader.FakeConnectionString("RtaApplication", rtaConnectionString);
+
+			var factory = DataSourcesFactory;
+			var dataSource1 = factory.Create("Wrong", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, null);
+			var dataSource2 = factory.Create("Correct", ConnectionStringHelper.ConnectionStringUsedInTests, null);
+			ApplicationData.RegisteredDataSources = new[] { dataSource1, dataSource2 }.Randomize();
+
+			Principal.SetPrincipal(null);
+
+			TheService.DoesUpdate("INSERT INTO TestTable (Value) VALUES (0)");
+
+			TestTable.Values("TestTable").Count().Should().Be(1);
+		}
+
 		[Test]
 		public void ShouldProduceUnitOfWorkForDataSourceOnThread()
 		{
@@ -230,7 +254,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 				{
 					using (DataSource.OnThisThreadUse(dataSource1))
 					{
-						TheService.DoesWithoutDatasource(uow => 1000.Times(i => uow.CreateSqlQuery("INSERT INTO TestTable1 (Value) VALUES (0)").ExecuteUpdate()));
+						TheService.Does(uow => 1000.Times(i => uow.CreateSqlQuery("INSERT INTO TestTable1 (Value) VALUES (0)").ExecuteUpdate()));
 					}
 				});
 
@@ -238,7 +262,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 				{
 					using (DataSource.OnThisThreadUse(dataSource2))
 					{
-						TheService.DoesWithoutDatasource(uow => 1000.Times(i => uow.CreateSqlQuery("INSERT INTO TestTable2 (Value) VALUES (0)").ExecuteUpdate()));
+						TheService.Does(uow => 1000.Times(i => uow.CreateSqlQuery("INSERT INTO TestTable2 (Value) VALUES (0)").ExecuteUpdate()));
 					}
 				});
 
@@ -292,9 +316,14 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 			instance.Does(uow => uow.CreateSqlQuery(query).ExecuteUpdate());
 		}
 
-		public static void DoesUpdateWithoutDatasource(this TheService instance, string query)
+		public static T MakesQuery<T>(this TheService instance, string query, Func<ISQLQuery, T> queryAction)
 		{
-			instance.DoesWithoutDatasource(uow => uow.CreateSqlQuery(query).ExecuteUpdate());
+			var result = default(T);
+			instance.Does(uow =>
+			{
+				result = queryAction(uow.CreateSqlQuery(query));
+			});
+			return result;
 		}
 	}
 
@@ -307,40 +336,22 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 		private readonly NestedService1 _nested1;
 		private readonly NestedService2 _nested2;
 		private readonly ICurrentReadModelUnitOfWork _uow;
-		private readonly IDataSourceScope _dataSource;
 
-		public TheService(
-			NestedService1 nested1, 
-			NestedService2 nested2, 
-			ICurrentReadModelUnitOfWork uow, 
-			IDataSourceScope dataSource)
+		public TheService(NestedService1 nested1, NestedService2 nested2, ICurrentReadModelUnitOfWork uow)
 		{
 			_nested1 = nested1;
 			_nested2 = nested2;
 			_uow = uow;
-			_dataSource = dataSource;
-		}
-
-		public virtual void Does(Action<ILiteUnitOfWork> action)
-		{
-			using (_dataSource.OnThisThreadUse("App"))
-				DoesWithoutDatasource(action);
 		}
 
 		[ReadModelUnitOfWork]
-		public virtual void DoesWithoutDatasource(Action<ILiteUnitOfWork> action)
+		public virtual void Does(Action<ILiteUnitOfWork> action)
 		{
 			action(_uow.Current());
 		}
 
-		public virtual void CallNestedServices()
-		{
-			using (_dataSource.OnThisThreadUse("App"))
-				CallNestedServicesWithoutDatasource();
-		}
-
 		[ReadModelUnitOfWork]
-		public virtual void CallNestedServicesWithoutDatasource()
+		public virtual void CallNestedServices()
 		{
 			_nested1.ExecuteAction();
 			_nested2.ExecuteAction();

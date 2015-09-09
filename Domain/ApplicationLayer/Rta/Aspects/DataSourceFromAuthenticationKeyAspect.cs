@@ -5,20 +5,23 @@ using Microsoft.CSharp.RuntimeBinder;
 using Teleopti.Ccc.Domain.Aop.Core;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Aspects
 {
-	public class TenantDataSourceScope : IRtaDataSourceScope
+	public class DataSourceFromAuthenticationKeyAspect : IDataSourceFromAuthenticationKeyAspect
 	{
 		private readonly IDataSourceScope _dataSource;
+		private readonly IDataSourceForTenant _dataSourceForTenant;
 		private readonly IDatabaseLoader _databaseLoader;
 
 		[ThreadStatic]
 		private static IDisposable _scope;
 
-		public TenantDataSourceScope(IDataSourceScope dataSource, IDatabaseLoader databaseLoader)
+		public DataSourceFromAuthenticationKeyAspect(IDataSourceScope dataSource, IDataSourceForTenant dataSourceForTenant, IDatabaseLoader databaseLoader)
 		{
 			_dataSource = dataSource;
+			_dataSourceForTenant = dataSourceForTenant;
 			_databaseLoader = databaseLoader;
 		}
 
@@ -34,7 +37,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Aspects
 				tenant = _databaseLoader.TenantNameByKey(AuthenticationKeyEncodingFixer.Fix(key));
 			else
 				tenant = tryGet(() => input.Tenant);
-			_scope = _dataSource.OnThisThreadUse(tenant);
+			var dataSource = _dataSourceForTenant.Tenant(tenant);
+			_scope = _dataSource.OnThisThreadUse(dataSource);
 		}
 
 		private static string tryGet(Func<string> input)

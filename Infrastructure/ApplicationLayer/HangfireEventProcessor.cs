@@ -15,17 +15,20 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		private readonly IResolveEventHandlers _resolver;
 		private readonly IDistributedLockAcquirer _distributedLockAcquirer;
 		private readonly IDataSourceScope _dataSourceScope;
+		private readonly Func<IDataSourceForTenant> _dataSourceForTenant;
 
 		public HangfireEventProcessor(
 			IJsonEventDeserializer deserializer,
 			IResolveEventHandlers resolver,
 			IDistributedLockAcquirer distributedLockAcquirer,
-			IDataSourceScope dataSourceScope)
+			IDataSourceScope dataSourceScope,
+			Func<IDataSourceForTenant> dataSourceForTenant)
 		{
 			_deserializer = deserializer;
 			_resolver = resolver;
 			_distributedLockAcquirer = distributedLockAcquirer;
 			_dataSourceScope = dataSourceScope;
+			_dataSourceForTenant = dataSourceForTenant;
 		}
 
 		public void Process(string displayName, string tenant, string eventType, string serializedEvent, string handlerType)
@@ -36,7 +39,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			var handlers = _resolver.ResolveHandlersForEvent(@event);
 			var publishTo = handlers.Single(o => ProxyUtil.GetUnproxiedType(o) == handlerT);
 
-			using (_dataSourceScope.OnThisThreadUse(tenant))
+			using (_dataSourceScope.OnThisThreadUse(_dataSourceForTenant().Tenant(tenant)))
 			using (_distributedLockAcquirer.LockForTypeOf(publishTo))
 				new SyncPublishTo(publishTo).Publish(@event);
 		}
