@@ -132,4 +132,18 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 		public Guid CampaignId;
 		public IEnumerable<DateOnly> Dates;
 	}
+
+	public class GanttCampaignViewModel
+	{
+		public Guid Id;
+		public string Name;
+		public DateOnly StartDate;
+		public DateOnly EndDate;
+	}
+
+	public class GanttPeriod
+	{
+		public DateOnly StartDate;
+		public DateOnly EndDate;
+	}
 }

@@ -335,6 +335,78 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			loadedCampaign.GetActualBacklog(DateOnly.Today).Should().Be.EqualTo(null);
 		}
 
+		[Test]
+		public void ShouldGetCampaignStartEarlierThanPeriod()
+		{
+			var campaign = createCampaignWithSpanningPeriod(new DateTimePeriod(new DateTime(DateTime.Today.AddDays(-10).Ticks, DateTimeKind.Utc), 
+																									 new DateTime(DateTime.Today.AddDays(10).Ticks, DateTimeKind.Utc)));
+			var repository = new OutboundCampaignRepository(UnitOfWork);
+			var result = repository.GetCampaigns(new DateTimePeriod(new DateTime(DateTime.Today.AddDays(-5).Ticks, DateTimeKind.Utc),
+																					  new DateTime(DateTime.Today.AddDays(20).Ticks, DateTimeKind.Utc)));
+
+			result[0].Id.Should().Be.EqualTo(campaign.Id);
+		}
+
+		[Test]
+		public void ShouldGetCampaignEndLaterThanPeriod()
+		{
+			var campaign = createCampaignWithSpanningPeriod(new DateTimePeriod(new DateTime(DateTime.Today.AddDays(-10).Ticks, DateTimeKind.Utc),
+																									 new DateTime(DateTime.Today.AddDays(10).Ticks, DateTimeKind.Utc)));
+			var repository = new OutboundCampaignRepository(UnitOfWork);
+			var result = repository.GetCampaigns(new DateTimePeriod(new DateTime(DateTime.Today.AddDays(-15).Ticks, DateTimeKind.Utc),
+																					  new DateTime(DateTime.Today.AddDays(5).Ticks, DateTimeKind.Utc)));
+
+			result[0].Id.Should().Be.EqualTo(campaign.Id);
+		}		
+		
+		[Test]
+		public void ShouldGetCampaignWithinPeriod()
+		{
+			var campaign = createCampaignWithSpanningPeriod(new DateTimePeriod(new DateTime(DateTime.Today.AddDays(-10).Ticks, DateTimeKind.Utc),
+																									 new DateTime(DateTime.Today.AddDays(10).Ticks, DateTimeKind.Utc)));
+			var repository = new OutboundCampaignRepository(UnitOfWork);
+			var result = repository.GetCampaigns(new DateTimePeriod(new DateTime(DateTime.Today.AddDays(-20).Ticks, DateTimeKind.Utc),
+																					  new DateTime(DateTime.Today.AddDays(20).Ticks, DateTimeKind.Utc)));
+
+			result[0].Id.Should().Be.EqualTo(campaign.Id);
+		}			
+		
+		[Test]
+		public void ShouldGetCampaignOverCrossPeriod()
+		{
+			var campaign = createCampaignWithSpanningPeriod(new DateTimePeriod(new DateTime(DateTime.Today.AddDays(-10).Ticks, DateTimeKind.Utc),
+																									 new DateTime(DateTime.Today.AddDays(10).Ticks, DateTimeKind.Utc)));
+			var repository = new OutboundCampaignRepository(UnitOfWork);
+			var result = repository.GetCampaigns(new DateTimePeriod(new DateTime(DateTime.Today.AddDays(-5).Ticks, DateTimeKind.Utc),
+																					  new DateTime(DateTime.Today.AddDays(5).Ticks, DateTimeKind.Utc)));
+
+			result[0].Id.Should().Be.EqualTo(campaign.Id);
+		}		
+		
+		[Test]
+		public void ShouldNotGetCampaignCampleteEarlierThanPeriod()
+		{
+			createCampaignWithSpanningPeriod(new DateTimePeriod(new DateTime(DateTime.Today.AddDays(-10).Ticks, DateTimeKind.Utc),
+																									 new DateTime(DateTime.Today.AddDays(10).Ticks, DateTimeKind.Utc)));
+			var repository = new OutboundCampaignRepository(UnitOfWork);
+			var result = repository.GetCampaigns(new DateTimePeriod(new DateTime(DateTime.Today.AddDays(20).Ticks, DateTimeKind.Utc),
+																					  new DateTime(DateTime.Today.AddDays(30).Ticks, DateTimeKind.Utc)));
+
+			result.Count.Should().Be.EqualTo(0);
+		}		
+		
+		[Test]
+		public void ShouldNotGetCampaignStartLaterThanPeriod()
+		{
+			createCampaignWithSpanningPeriod(new DateTimePeriod(new DateTime(DateTime.Today.AddDays(-10).Ticks, DateTimeKind.Utc),
+																									 new DateTime(DateTime.Today.AddDays(10).Ticks, DateTimeKind.Utc)));
+			var repository = new OutboundCampaignRepository(UnitOfWork);
+			var result = repository.GetCampaigns(new DateTimePeriod(new DateTime(DateTime.Today.AddDays(-20).Ticks, DateTimeKind.Utc),
+																					  new DateTime(DateTime.Today.AddDays(-15).Ticks, DateTimeKind.Utc)));
+
+			result.Count.Should().Be.EqualTo(0);
+		}
+
 		private void deleteCampaign(IOutboundCampaignRepository repository, IOutboundCampaign campaign)
 		{
 			repository.Remove(campaign);

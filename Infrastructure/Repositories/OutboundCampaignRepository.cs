@@ -54,5 +54,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.AddOrder(Order.Desc("SpanningPeriod.period.Minimum"))
 				.List<IOutboundCampaign>();
 		}
+
+		public IList<IOutboundCampaign> GetCampaigns(DateTimePeriod period)
+		{
+			return Session.CreateCriteria<Campaign>()
+				.Add(Restrictions.Conjunction()
+					.Add(Restrictions.Ge("SpanningPeriod.period.Maximum", period.StartDateTime))
+					.Add(Restrictions.Le("SpanningPeriod.period.Minimum", period.EndDateTime)))
+					.AddOrder(Order.Desc("SpanningPeriod.period.Minimum"))
+				.List<IOutboundCampaign>();
+		}
 	}
 }

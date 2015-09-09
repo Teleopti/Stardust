@@ -23,11 +23,12 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		private readonly IOutboundActivityProvider _outboundActivityProvider;
 		private readonly ICampaignSummaryViewModelFactory _campaignSummaryViewModelFactory;
 		private readonly ICampaignVisualizationProvider _campaignVisualizationProvider;
+		private readonly ICampaignListProvider _campaignListProvider;
 	
 
 		public OutboundController(IOutboundCampaignPersister outboundCampaignPersister, IOutboundCampaignRepository outboundCampaignRepository, 
 			IOutboundCampaignViewModelMapper outboundCampaignViewModelMapper, IOutboundActivityProvider outboundActivityProvider, 
-			ICampaignSummaryViewModelFactory campaignSummaryViewModelFactory, ICampaignVisualizationProvider campaignVisualizationProvider)
+			ICampaignSummaryViewModelFactory campaignSummaryViewModelFactory, ICampaignVisualizationProvider campaignVisualizationProvider, ICampaignListProvider campaignListProvider)
 		{
 			_outboundCampaignPersister = outboundCampaignPersister;
 			_outboundCampaignRepository = outboundCampaignRepository;
@@ -35,6 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 			_outboundActivityProvider = outboundActivityProvider;
 		    _campaignSummaryViewModelFactory = campaignSummaryViewModelFactory;
 			_campaignVisualizationProvider = campaignVisualizationProvider;
+			_campaignListProvider = campaignListProvider;
 		}
 
 		[HttpPost, Route("api/Outbound/Campaign"), UnitOfWork]
@@ -49,6 +51,12 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		public virtual List<CampaignSummaryViewModel> GetCamapigns([FromBody]CampaignStatus flag)
 		{
 		    return _campaignSummaryViewModelFactory.GetCampaignSummaryList(flag);
+		}		
+		
+		[HttpPost, Route("api/Outbound/Campaigns"), UnitOfWork]
+		public virtual IEnumerable<GanttCampaignViewModel> GanttGetCamapigns([FromBody]GanttPeriod peroid)
+		{
+			return _campaignListProvider.GetCampaigns(peroid);
 		}
 
 		[HttpGet, Route("api/Outbound/Campaign/Activities"), UnitOfWork]

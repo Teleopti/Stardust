@@ -8,147 +8,168 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 {
-    public class CampaignListProvider : ICampaignListProvider
-    {
-        private readonly IOutboundCampaignRepository _outboundCampaignRepository;
-        private readonly IOutboundScheduledResourcesProvider _scheduledResourcesProvider;
-        private readonly IOutboundRuleChecker _outboundRuleChecker;
-        private readonly ICampaignListOrderProvider _campaignListOrderProvider;
+	public class CampaignListProvider : ICampaignListProvider
+	{
+		private readonly IOutboundCampaignRepository _outboundCampaignRepository;
+		private readonly IOutboundScheduledResourcesProvider _scheduledResourcesProvider;
+		private readonly IOutboundRuleChecker _outboundRuleChecker;
+		private readonly ICampaignListOrderProvider _campaignListOrderProvider;
+		private readonly IUserTimeZone _userTimeZone;
 
-        public CampaignListProvider(IOutboundCampaignRepository outboundCampaignRepository, IOutboundScheduledResourcesProvider scheduledResourcesProvider, IOutboundRuleChecker outboundRuleChecker, ICampaignListOrderProvider campaignListOrderProvider)
-        {
-            _outboundCampaignRepository = outboundCampaignRepository;
-            _scheduledResourcesProvider = scheduledResourcesProvider;
-            _outboundRuleChecker = outboundRuleChecker;
-            _campaignListOrderProvider = campaignListOrderProvider;
-        }
+		public CampaignListProvider(IOutboundCampaignRepository outboundCampaignRepository, IOutboundScheduledResourcesProvider scheduledResourcesProvider, 
+			IOutboundRuleChecker outboundRuleChecker, ICampaignListOrderProvider campaignListOrderProvider, IUserTimeZone userTimeZone)
+		{
+			_outboundCampaignRepository = outboundCampaignRepository;
+			_scheduledResourcesProvider = scheduledResourcesProvider;
+			_outboundRuleChecker = outboundRuleChecker;
+			_campaignListOrderProvider = campaignListOrderProvider;
+			_userTimeZone = userTimeZone;
+		}
 
-	    public void LoadData()
-	    {
-		    var campaigns = _outboundCampaignRepository.LoadAll();
-		    if (campaigns.Count == 0) return;
-		    var earliestStart = campaigns.Min(c => c.SpanningPeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc).StartDate);
-			 var latestEnd = campaigns.Max(c => c.SpanningPeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc).EndDate);
-		    var period = new DateOnlyPeriod(earliestStart, latestEnd);
+		public void LoadData()
+		{
+			var campaigns = _outboundCampaignRepository.LoadAll();
+			if (campaigns.Count == 0) return;
+			var earliestStart = campaigns.Min(c => c.SpanningPeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc).StartDate);
+			var latestEnd = campaigns.Max(c => c.SpanningPeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc).EndDate);
+			var period = new DateOnlyPeriod(earliestStart, latestEnd);
 
-		    _scheduledResourcesProvider.Load(campaigns, period);
-	    }
+			_scheduledResourcesProvider.Load(campaigns, period);
+		}
 
-	    public CampaignStatistics GetCampaignStatistics()
-        {
-            Func<CampaignSummary, bool> campaignHasWarningPredicate = campaign => campaign.WarningInfo.Any();
+		public CampaignStatistics GetCampaignStatistics()
+		{
+			Func<CampaignSummary, bool> campaignHasWarningPredicate = campaign => campaign.WarningInfo.Any();
 
-            var plannedCampaigns = ListPlannedCampaign().ToList();
-            var ongoingCampaigns = ListOngoingCampaign().ToList();
-            var ongoingWarningCampaigns = ongoingCampaigns.Where(campaignHasWarningPredicate).ToList();
-            var scheduledCampaigns = ListScheduledCampaign().ToList();
-            var scheduledWarningCampaigns = scheduledCampaigns.Where(campaignHasWarningPredicate).ToList();
-            var doneCampaigns = ListDoneCampaign().ToList();
-         
-            return new CampaignStatistics()
-            {
-                Planned = plannedCampaigns.Count,
-                OnGoing = ongoingCampaigns.Count,
-                OnGoingWarning = ongoingWarningCampaigns.Count,
-                Scheduled = scheduledCampaigns.Count,
-                ScheduledWarning = scheduledWarningCampaigns.Count,
-                Done = doneCampaigns.Count
-            };
-        }
+			var plannedCampaigns = ListPlannedCampaign().ToList();
+			var ongoingCampaigns = ListOngoingCampaign().ToList();
+			var ongoingWarningCampaigns = ongoingCampaigns.Where(campaignHasWarningPredicate).ToList();
+			var scheduledCampaigns = ListScheduledCampaign().ToList();
+			var scheduledWarningCampaigns = scheduledCampaigns.Where(campaignHasWarningPredicate).ToList();
+			var doneCampaigns = ListDoneCampaign().ToList();
 
-        public IEnumerable<CampaignSummary> ListCampaign(CampaignStatus status)
-        {
-            if (status == CampaignStatus.None)
-            {
-                status = CampaignStatus.Done | CampaignStatus.Ongoing | CampaignStatus.Planned | CampaignStatus.Scheduled;
-            }
+			return new CampaignStatistics()
+			{
+				Planned = plannedCampaigns.Count,
+				OnGoing = ongoingCampaigns.Count,
+				OnGoingWarning = ongoingWarningCampaigns.Count,
+				Scheduled = scheduledCampaigns.Count,
+				ScheduledWarning = scheduledWarningCampaigns.Count,
+				Done = doneCampaigns.Count
+			};
+		}
 
-            switch (status)
-            {
-                case CampaignStatus.Done:
-                    return ListDoneCampaign();
-                case CampaignStatus.Scheduled:
-                    return ListScheduledCampaign();
-                case CampaignStatus.Planned:
-                    return ListPlannedCampaign();
-                case CampaignStatus.Ongoing:
-                    return ListOngoingCampaign();
-                default:
-                    var result = new List<CampaignSummary>();
-                    foreach (var _status in _campaignListOrderProvider.GetCampaignListOrder().Where(_status => status.HasFlag(_status)))
-                    {
-                        result.AddRange(ListCampaign(_status));
-                    }
-                    return result;
-            }
-        }
+		public IEnumerable<CampaignSummary> ListCampaign(CampaignStatus status)
+		{
+			if (status == CampaignStatus.None)
+			{
+				status = CampaignStatus.Done | CampaignStatus.Ongoing | CampaignStatus.Planned | CampaignStatus.Scheduled;
+			}
 
-        public IEnumerable<CampaignSummary> ListScheduledCampaign()
-        {          
-            var campaigns = _outboundCampaignRepository.GetPlannedCampaigns();
+			switch (status)
+			{
+				case CampaignStatus.Done:
+					return ListDoneCampaign();
+				case CampaignStatus.Scheduled:
+					return ListScheduledCampaign();
+				case CampaignStatus.Planned:
+					return ListPlannedCampaign();
+				case CampaignStatus.Ongoing:
+					return ListOngoingCampaign();
+				default:
+					var result = new List<CampaignSummary>();
+					foreach (var _status in _campaignListOrderProvider.GetCampaignListOrder().Where(_status => status.HasFlag(_status)))
+					{
+						result.AddRange(ListCampaign(_status));
+					}
+					return result;
+			}
+		}
 
-            Func<IOutboundCampaign, bool> campaignHasSchedulePredicate = campaign =>
-            {
-					return campaign.SpanningPeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc).DayCollection().Any(
-                    date => 
-                        _scheduledResourcesProvider.GetScheduledTimeOnDate(date, campaign.Skill) > TimeSpan.Zero);               
-            };
+		public IEnumerable<CampaignSummary> ListScheduledCampaign()
+		{
+			var campaigns = _outboundCampaignRepository.GetPlannedCampaigns();
 
-            return campaigns.Where(campaignHasSchedulePredicate).Select(campaign =>
-                assembleSummary(campaign, CampaignStatus.Scheduled, _outboundRuleChecker.CheckCampaign(campaign)));            
-        }
+			Func<IOutboundCampaign, bool> campaignHasSchedulePredicate = campaign =>
+			{
+				return campaign.SpanningPeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc).DayCollection().Any(
+					date =>
+						_scheduledResourcesProvider.GetScheduledTimeOnDate(date, campaign.Skill) > TimeSpan.Zero);
+			};
 
-        public IEnumerable<CampaignSummary> ListPlannedCampaign()
-        {
-            var campaigns = _outboundCampaignRepository.GetPlannedCampaigns();
+			return campaigns.Where(campaignHasSchedulePredicate).Select(campaign =>
+				assembleSummary(campaign, CampaignStatus.Scheduled, _outboundRuleChecker.CheckCampaign(campaign)));
+		}
 
-            Func<IOutboundCampaign, bool> campaignNoSchedulePredicate = campaign =>
-            {
-					return campaign.SpanningPeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc).DayCollection().All(
-                    date =>
-                        _scheduledResourcesProvider.GetScheduledTimeOnDate(date, campaign.Skill) == TimeSpan.Zero);
-            };
+		public IEnumerable<CampaignSummary> ListPlannedCampaign()
+		{
+			var campaigns = _outboundCampaignRepository.GetPlannedCampaigns();
 
-            return campaigns.Where(campaignNoSchedulePredicate).Select(campaign =>
+			Func<IOutboundCampaign, bool> campaignNoSchedulePredicate = campaign =>
+			{
+				return campaign.SpanningPeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc).DayCollection().All(
+					date =>
+						_scheduledResourcesProvider.GetScheduledTimeOnDate(date, campaign.Skill) == TimeSpan.Zero);
+			};
+
+			return campaigns.Where(campaignNoSchedulePredicate).Select(campaign =>
 				assembleSummary(campaign, CampaignStatus.Planned, _outboundRuleChecker.CheckCampaign(campaign)));
-        }
+		}
 
 
-        public IEnumerable<CampaignSummary> ListOngoingCampaign()
-        {
-            return _outboundCampaignRepository.GetOnGoingCampaigns().Select(campaign =>
-                assembleSummary(campaign, CampaignStatus.Ongoing, _outboundRuleChecker.CheckCampaign(campaign)));
-        }
+		public IEnumerable<CampaignSummary> ListOngoingCampaign()
+		{
+			return _outboundCampaignRepository.GetOnGoingCampaigns().Select(campaign =>
+				assembleSummary(campaign, CampaignStatus.Ongoing, _outboundRuleChecker.CheckCampaign(campaign)));
+		}
 
-        public IEnumerable<CampaignSummary> ListDoneCampaign()
-        {
-            return _outboundCampaignRepository.GetDoneCampaigns().Select(campaign =>
-                assembleSummary(campaign, CampaignStatus.Done, _outboundRuleChecker.CheckCampaign(campaign)));
-        }
+		public IEnumerable<CampaignSummary> ListDoneCampaign()
+		{
+			return _outboundCampaignRepository.GetDoneCampaigns().Select(campaign =>
+				assembleSummary(campaign, CampaignStatus.Done, _outboundRuleChecker.CheckCampaign(campaign)));
+		}
 
 		public CampaignSummary GetCampaignById(Guid Id)
-	    {
-		    return ListCampaign(CampaignStatus.None).FirstOrDefault(c => c.Id == Id);
-	    }
+		{
+			return ListCampaign(CampaignStatus.None).FirstOrDefault(c => c.Id == Id);
+		}
 
-        private CampaignSummary assembleSummary(IOutboundCampaign campaign, CampaignStatus status)
-        {
-            return assembleSummary(campaign, status, new List<OutboundRuleResponse>());
-        }
+		public IEnumerable<GanttCampaignViewModel> GetCampaigns(GanttPeriod period)
+		{
+			var start = new DateTime(period.StartDate.Date.Ticks);
+			start = TimeZoneHelper.ConvertToUtc(start, _userTimeZone.TimeZone());
+			var end = new DateTime(period.EndDate.Year, period.EndDate.Month, period.EndDate.Day, 23, 59, 59);
+			end = TimeZoneHelper.ConvertToUtc(end, _userTimeZone.TimeZone());
+			var campaigns = _outboundCampaignRepository.GetCampaigns(new DateTimePeriod(start, end));
+
+			var ganttCampaigns = new List<GanttCampaignViewModel>();
+			foreach (var campaign in campaigns)
+			{
+				var startDate = TimeZoneHelper.ConvertFromUtc(campaign.SpanningPeriod.StartDateTime, _userTimeZone.TimeZone());
+				var endDate = TimeZoneHelper.ConvertFromUtc(campaign.SpanningPeriod.EndDateTime, _userTimeZone.TimeZone());
+				ganttCampaigns.Add(new GanttCampaignViewModel(){Id = (Guid) campaign.Id, Name = campaign.Name, StartDate = new DateOnly(startDate), EndDate = new DateOnly(endDate)});
+			}
+
+			return ganttCampaigns;
+		}
+
+		private CampaignSummary assembleSummary(IOutboundCampaign campaign, CampaignStatus status)
+		{
+			return assembleSummary(campaign, status, new List<OutboundRuleResponse>());
+		}
 
 
-        private CampaignSummary assembleSummary(IOutboundCampaign campaign, CampaignStatus status, IEnumerable<OutboundRuleResponse> warnings)
-        {
-            return new CampaignSummary
-            {
-                Id = campaign.Id,
-                Name = campaign.Name,
-					 StartDate = campaign.SpanningPeriod.ToDateOnlyPeriod(campaign.Skill.TimeZone).StartDate,
-					 EndDate = campaign.SpanningPeriod.ToDateOnlyPeriod(campaign.Skill.TimeZone).EndDate,
-                Status = status,
-                WarningInfo = warnings
-            };
-        }
-
-    }
+		private CampaignSummary assembleSummary(IOutboundCampaign campaign, CampaignStatus status, IEnumerable<OutboundRuleResponse> warnings)
+		{
+			return new CampaignSummary
+			{
+				Id = campaign.Id,
+				Name = campaign.Name,
+				StartDate = campaign.SpanningPeriod.ToDateOnlyPeriod(campaign.Skill.TimeZone).StartDate,
+				EndDate = campaign.SpanningPeriod.ToDateOnlyPeriod(campaign.Skill.TimeZone).EndDate,
+				Status = status,
+				WarningInfo = warnings
+			};
+		}
+	}
 }

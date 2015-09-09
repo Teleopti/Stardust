@@ -15,366 +15,395 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 {
-    [TestFixture]
-    class CampaignListProviderTest
-    {
-        private CampaignListProvider target;
-        
-        private FakeCampaignRepository _outboundCampaignRepository;
-        private FakeScheduleResourceProvider _scheduledResourcesProvider;
-        private FakeOutboundRuleChecker _outboundRuleChecker;
-        private FakeOutboundCampaignListOrderProvider _campaignListOrderProvider;
+	[TestFixture]
+	class CampaignListProviderTest
+	{
+		private CampaignListProvider target;
 
-        private IOutboundCampaign doneCampaign ;
-        private IOutboundCampaign plannedCampaign ;
-        private IOutboundCampaign scheduledCampaign ;
-        private IOutboundCampaign ongoingCampaign ;
+		private FakeCampaignRepository _outboundCampaignRepository;
+		private FakeScheduleResourceProvider _scheduledResourcesProvider;
+		private FakeOutboundRuleChecker _outboundRuleChecker;
+		private FakeOutboundCampaignListOrderProvider _campaignListOrderProvider;
+		private IUserTimeZone _userTimeZone;
 
-        [SetUp]
-        public void SetUp()
-        {
-            _outboundCampaignRepository = new FakeCampaignRepository();
-            _campaignListOrderProvider = new FakeOutboundCampaignListOrderProvider();
-            _scheduledResourcesProvider = new FakeScheduleResourceProvider();
-            _outboundRuleChecker = new FakeOutboundRuleChecker();
+		private IOutboundCampaign doneCampaign;
+		private IOutboundCampaign plannedCampaign;
+		private IOutboundCampaign scheduledCampaign;
+		private IOutboundCampaign ongoingCampaign;
 
-            _scheduledResourcesProvider.SetScheduledTimeOnDate(DateOnly.Today.AddDays(14), CreateSkill("B"), new TimeSpan(4, 0, 0));
+		[SetUp]
+		public void SetUp()
+		{
+			_userTimeZone = new FakeUserTimeZone(TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(2), "", ""));
+			_outboundCampaignRepository = new FakeCampaignRepository();
+			_campaignListOrderProvider = new FakeOutboundCampaignListOrderProvider();
+			_scheduledResourcesProvider = new FakeScheduleResourceProvider();
+			_outboundRuleChecker = new FakeOutboundRuleChecker();
 
-            doneCampaign = GetTestCampaign(3);
-            plannedCampaign = GetTestCampaign(0);
-            scheduledCampaign = GetTestCampaign(1);
-            ongoingCampaign = GetTestCampaign(2);
+			_scheduledResourcesProvider.SetScheduledTimeOnDate(DateOnly.Today.AddDays(14), CreateSkill("B"),
+				new TimeSpan(4, 0, 0));
 
-            _outboundCampaignRepository.Add(doneCampaign);
-            _outboundCampaignRepository.Add(plannedCampaign);
-            _outboundCampaignRepository.Add(scheduledCampaign);
-            _outboundCampaignRepository.Add(ongoingCampaign);
+			doneCampaign = GetTestCampaign(3);
+			plannedCampaign = GetTestCampaign(0);
+			scheduledCampaign = GetTestCampaign(1);
+			ongoingCampaign = GetTestCampaign(2);
 
-            _campaignListOrderProvider.SetCampaignListOrder(new List<CampaignStatus>
-            {
-                CampaignStatus.Ongoing,
-                CampaignStatus.Done,
-                CampaignStatus.Planned,
-                CampaignStatus.Scheduled
-            });
+			_outboundCampaignRepository.Add(doneCampaign);
+			_outboundCampaignRepository.Add(plannedCampaign);
+			_outboundCampaignRepository.Add(scheduledCampaign);
+			_outboundCampaignRepository.Add(ongoingCampaign);
 
-             target = new CampaignListProvider(_outboundCampaignRepository, _scheduledResourcesProvider, _outboundRuleChecker,_campaignListOrderProvider );
-        }
+			_campaignListOrderProvider.SetCampaignListOrder(new List<CampaignStatus>
+			{
+				CampaignStatus.Ongoing,
+				CampaignStatus.Done,
+				CampaignStatus.Planned,
+				CampaignStatus.Scheduled
+			});
 
-        [Test]
-        public void ShouldListDoneCampaigns()
-        {                    
-            var result = target.ListDoneCampaign().ToList();
-            result.Count.Should().Be.EqualTo(1);
-            result.ForEach(c =>
-            {
-                c.Name.Should().Be.EqualTo("D");
-                c.Status.Should().Be.EqualTo(CampaignStatus.Done);
-            });
-        }
+			target = new CampaignListProvider(_outboundCampaignRepository, _scheduledResourcesProvider, _outboundRuleChecker, _campaignListOrderProvider, _userTimeZone);
+		}
 
-        [Test]
-        public void ShouldListOngoingCampaigns()
-        {
-            var result = target.ListOngoingCampaign().ToList();
-            result.Count.Should().Be.EqualTo(1);
-            result.ForEach(c =>
-            {
-                c.Name.Should().Be.EqualTo("C");
-                c.Status.Should().Be.EqualTo(CampaignStatus.Ongoing);
-            });
-        }
+		[Test]
+		public void ShouldGetCampaigns()
+		{
+			_outboundCampaignRepository.Remove(doneCampaign);
+			_outboundCampaignRepository.Remove(plannedCampaign);
+			_outboundCampaignRepository.Remove(scheduledCampaign);
+			_outboundCampaignRepository.Remove(ongoingCampaign);
 
-        [Test]
-        public void ShouldListScheduledCampaigns()
-        {
-          
-            var result = target.ListScheduledCampaign().ToList();
-            result.Count.Should().Be.EqualTo(1);
-            result.ForEach(c =>
-            {
-                c.Name.Should().Be.EqualTo("B");
-                c.Status.Should().Be.EqualTo(CampaignStatus.Scheduled);
-            });
-        }
+			var campaign1 = new Domain.Outbound.Campaign()
+			{
+				Name = "campaign1",
+				SpanningPeriod = new DateTimePeriod(new DateTime(2015, 9, 9, 22, 0, 0, DateTimeKind.Utc),
+															   new DateTime(2015, 9, 19, 21, 59, 59, DateTimeKind.Utc))
+			};
+			campaign1.SetId(Guid.NewGuid());
 
-        [Test]
-        public void ShouldListPlannedCampaigns()
-        {       
-            var result = target.ListPlannedCampaign().ToList();
-            result.Count.Should().Be.EqualTo(1);
-            result.ForEach(c =>
-            {
-                c.Name.Should().Be.EqualTo("A");
-                c.Status.Should().Be.EqualTo(CampaignStatus.Planned);
-            });
-        }
+			_outboundCampaignRepository.Add(campaign1);
 
-        [Test]
-        public void ScheduledCampaignShouldNotBeListedInPlannedCampaigns()
-        {            
-            var result = target.ListPlannedCampaign().ToList();
-            result.ForEach(c => c.Name.Should().Not.Be.EqualTo("B"));
-        }
+			var result = target.GetCampaigns(new GanttPeriod() {StartDate = new DateOnly(2015, 9, 10), EndDate = new DateOnly(2015, 9, 19)});
 
-        [Test]
-        public void ShouldListCampaignsByStatusOngoing()
-        {
-            var result = target.ListCampaign(CampaignStatus.Ongoing).ToList();
-            result.Count.Should().Be.EqualTo(1);
-            result.ForEach(c => c.Name.Should().Be.EqualTo("C"));
-        }
+			result.ToList()[0].Name.Should().Be.EqualTo(campaign1.Name);
+			result.ToList()[0].Id.Should().Be.EqualTo(campaign1.Id);
+			result.ToList()[0].StartDate.Should().Be.EqualTo(new DateOnly(2015, 9, 10));
+			result.ToList()[0].EndDate.Should().Be.EqualTo(new DateOnly(2015, 9, 19));
+		}
 
-        [Test]
-        public void ShouldListCampaignsByStatusDone()
-        {
-            var result = target.ListCampaign(CampaignStatus.Done).ToList();
-            result.Count.Should().Be.EqualTo(1);
-            result.ForEach(c => c.Name.Should().Be.EqualTo("D"));
-        }
+		[Test]
+		public void ShouldListDoneCampaigns()
+		{
+			var result = target.ListDoneCampaign().ToList();
+			result.Count.Should().Be.EqualTo(1);
+			result.ForEach(c =>
+			{
+				c.Name.Should().Be.EqualTo("D");
+				c.Status.Should().Be.EqualTo(CampaignStatus.Done);
+			});
+		}
 
-        [Test]
-        public void ShouldListCampaignsByStatusScheduled()
-        {
-            var result = target.ListCampaign(CampaignStatus.Scheduled).ToList();
-            result.Count.Should().Be.EqualTo(1);
-            result.ForEach(c => c.Name.Should().Be.EqualTo("B"));
-        }
+		[Test]
+		public void ShouldListOngoingCampaigns()
+		{
+			var result = target.ListOngoingCampaign().ToList();
+			result.Count.Should().Be.EqualTo(1);
+			result.ForEach(c =>
+			{
+				c.Name.Should().Be.EqualTo("C");
+				c.Status.Should().Be.EqualTo(CampaignStatus.Ongoing);
+			});
+		}
 
-        [Test]
-        public void ShouldListCampaignsByStatusPlanned()
-        {
-            var result = target.ListCampaign(CampaignStatus.Planned).ToList();
-            result.Count.Should().Be.EqualTo(1);
-            result.ForEach(c => c.Name.Should().Be.EqualTo("A"));
-        }
+		[Test]
+		public void ShouldListScheduledCampaigns()
+		{
 
-        [Test]
-        public void ShouldListAllCampaignsByStatusNone()
-        {            
-            var result = target.ListCampaign(CampaignStatus.None).ToList();
-            result.Count.Should().Be.EqualTo(4);           
-        }
+			var result = target.ListScheduledCampaign().ToList();
+			result.Count.Should().Be.EqualTo(1);
+			result.ForEach(c =>
+			{
+				c.Name.Should().Be.EqualTo("B");
+				c.Status.Should().Be.EqualTo(CampaignStatus.Scheduled);
+			});
+		}
 
-        [Test]
-        public void ShouldListCampaignsByCompositeStatus()
-        {
-            var result = target.ListCampaign(CampaignStatus.Done | CampaignStatus.Scheduled).ToList();
+		[Test]
+		public void ShouldListPlannedCampaigns()
+		{
+			var result = target.ListPlannedCampaign().ToList();
+			result.Count.Should().Be.EqualTo(1);
+			result.ForEach(c =>
+			{
+				c.Name.Should().Be.EqualTo("A");
+				c.Status.Should().Be.EqualTo(CampaignStatus.Planned);
+			});
+		}
 
-            result.Count.Should().Be.EqualTo(2);
-            var expectedNames = new List<string> {"B", "D"};
-            result.ForEach(c => expectedNames.Should().Contain(c.Name));
-        }
+		[Test]
+		public void ScheduledCampaignShouldNotBeListedInPlannedCampaigns()
+		{
+			var result = target.ListPlannedCampaign().ToList();
+			result.ForEach(c => c.Name.Should().Not.Be.EqualTo("B"));
+		}
 
-        [Test]
-        public void ShouldListAllCampaignsByAllStatus()
-        {
-            var result = target.ListCampaign(
-                CampaignStatus.Done | CampaignStatus.Scheduled | CampaignStatus.Planned | CampaignStatus.Ongoing).ToList();
+		[Test]
+		public void ShouldListCampaignsByStatusOngoing()
+		{
+			var result = target.ListCampaign(CampaignStatus.Ongoing).ToList();
+			result.Count.Should().Be.EqualTo(1);
+			result.ForEach(c => c.Name.Should().Be.EqualTo("C"));
+		}
 
-            result.Count.Should().Be.EqualTo(4);
-        }
+		[Test]
+		public void ShouldListCampaignsByStatusDone()
+		{
+			var result = target.ListCampaign(CampaignStatus.Done).ToList();
+			result.Count.Should().Be.EqualTo(1);
+			result.ForEach(c => c.Name.Should().Be.EqualTo("D"));
+		}
 
-        [Test]
-        public void ShouldListCampaignsWithGivenOrder()
-        {
-            _campaignListOrderProvider.SetCampaignListOrder(new List<CampaignStatus>
-            {
-                CampaignStatus.Ongoing,                
-                CampaignStatus.Planned,
-                CampaignStatus.Scheduled,
-                CampaignStatus.Done,
-            });
+		[Test]
+		public void ShouldListCampaignsByStatusScheduled()
+		{
+			var result = target.ListCampaign(CampaignStatus.Scheduled).ToList();
+			result.Count.Should().Be.EqualTo(1);
+			result.ForEach(c => c.Name.Should().Be.EqualTo("B"));
+		}
 
-            var result = target.ListCampaign(CampaignStatus.None);
-            result.Select(c => c.Name).Should().Have.SameSequenceAs(new List<string> {"C", "A", "B", "D"});
-        }
+		[Test]
+		public void ShouldListCampaignsByStatusPlanned()
+		{
+			var result = target.ListCampaign(CampaignStatus.Planned).ToList();
+			result.Count.Should().Be.EqualTo(1);
+			result.ForEach(c => c.Name.Should().Be.EqualTo("A"));
+		}
+
+		[Test]
+		public void ShouldListAllCampaignsByStatusNone()
+		{
+			var result = target.ListCampaign(CampaignStatus.None).ToList();
+			result.Count.Should().Be.EqualTo(4);
+		}
+
+		[Test]
+		public void ShouldListCampaignsByCompositeStatus()
+		{
+			var result = target.ListCampaign(CampaignStatus.Done | CampaignStatus.Scheduled).ToList();
+
+			result.Count.Should().Be.EqualTo(2);
+			var expectedNames = new List<string> {"B", "D"};
+			result.ForEach(c => expectedNames.Should().Contain(c.Name));
+		}
+
+		[Test]
+		public void ShouldListAllCampaignsByAllStatus()
+		{
+			var result = target.ListCampaign(
+				CampaignStatus.Done | CampaignStatus.Scheduled | CampaignStatus.Planned | CampaignStatus.Ongoing).ToList();
+
+			result.Count.Should().Be.EqualTo(4);
+		}
+
+		[Test]
+		public void ShouldListCampaignsWithGivenOrder()
+		{
+			_campaignListOrderProvider.SetCampaignListOrder(new List<CampaignStatus>
+			{
+				CampaignStatus.Ongoing,
+				CampaignStatus.Planned,
+				CampaignStatus.Scheduled,
+				CampaignStatus.Done,
+			});
+
+			var result = target.ListCampaign(CampaignStatus.None);
+			result.Select(c => c.Name).Should().Have.SameSequenceAs(new List<string> {"C", "A", "B", "D"});
+		}
 
 
-        [Test]
-        public void ShouldAttachCorrectRuleCheckResultToOngoingCampaigns()
-        {
-            _outboundRuleChecker.SetCampaignRuleCheckResponse(ongoingCampaign, new List<OutboundRuleResponse>
-            {
-                new OutboundRuleResponse()
-                {
-                    TypeOfRule = typeof(OutboundOverstaffRule)
-                }
-            });
+		[Test]
+		public void ShouldAttachCorrectRuleCheckResultToOngoingCampaigns()
+		{
+			_outboundRuleChecker.SetCampaignRuleCheckResponse(ongoingCampaign, new List<OutboundRuleResponse>
+			{
+				new OutboundRuleResponse()
+				{
+					TypeOfRule = typeof (OutboundOverstaffRule)
+				}
+			});
 
-            var result = target.ListCampaign(CampaignStatus.Ongoing).ToList();
-            result.ForEach(c =>
-            {
-                var warnings = c.WarningInfo.ToList();
-                warnings.Should().Not.Be.Empty();
-                warnings.ForEach(w =>
-                {
-                    w.TypeOfRule.Should().Be.EqualTo(typeof (OutboundOverstaffRule));
-                });
-            });
-        }
+			var result = target.ListCampaign(CampaignStatus.Ongoing).ToList();
+			result.ForEach(c =>
+			{
+				var warnings = c.WarningInfo.ToList();
+				warnings.Should().Not.Be.Empty();
+				warnings.ForEach(w =>
+				{
+					w.TypeOfRule.Should().Be.EqualTo(typeof (OutboundOverstaffRule));
+				});
+			});
+		}
 
-        [Test]
-        public void ShouldAttachCorrectRuleCheckResultToScheduledCampaigns()
-        {
-            _outboundRuleChecker.SetCampaignRuleCheckResponse(scheduledCampaign, new List<OutboundRuleResponse>
-            {
-                new OutboundRuleResponse()
-                {
-                    TypeOfRule = typeof(OutboundOverstaffRule)
-                }
-            });
+		[Test]
+		public void ShouldAttachCorrectRuleCheckResultToScheduledCampaigns()
+		{
+			_outboundRuleChecker.SetCampaignRuleCheckResponse(scheduledCampaign, new List<OutboundRuleResponse>
+			{
+				new OutboundRuleResponse()
+				{
+					TypeOfRule = typeof (OutboundOverstaffRule)
+				}
+			});
 
-            var result = target.ListCampaign(CampaignStatus.Scheduled).ToList();
-            result.ForEach(c =>
-            {
-                var warnings = c.WarningInfo.ToList();
-                warnings.Should().Not.Be.Empty();
-                warnings.ForEach(w =>
-                {
-                    w.TypeOfRule.Should().Be.EqualTo(typeof(OutboundOverstaffRule));
-                });
-            });
-        }
+			var result = target.ListCampaign(CampaignStatus.Scheduled).ToList();
+			result.ForEach(c =>
+			{
+				var warnings = c.WarningInfo.ToList();
+				warnings.Should().Not.Be.Empty();
+				warnings.ForEach(w =>
+				{
+					w.TypeOfRule.Should().Be.EqualTo(typeof (OutboundOverstaffRule));
+				});
+			});
+		}
 
-        [Test]
+		[Test]
 		[Ignore("We may need to check the done campaigns")]
-        public void ShouldNotAttachRuleCheckResultToDoneCampaigns()
-        {
-            _outboundRuleChecker.SetCampaignRuleCheckResponse(doneCampaign, new List<OutboundRuleResponse>
-            {
-                new OutboundRuleResponse()
-                {
-                    TypeOfRule = typeof(OutboundOverstaffRule)
-                }
-            });
+		public void ShouldNotAttachRuleCheckResultToDoneCampaigns()
+		{
+			_outboundRuleChecker.SetCampaignRuleCheckResponse(doneCampaign, new List<OutboundRuleResponse>
+			{
+				new OutboundRuleResponse()
+				{
+					TypeOfRule = typeof (OutboundOverstaffRule)
+				}
+			});
 
-            var result = target.ListCampaign(CampaignStatus.Done).ToList();
-            result.ForEach(c =>
-            {
-                var warnings = c.WarningInfo.ToList();
-                warnings.Should().Be.Empty();               
-            });
-        }
+			var result = target.ListCampaign(CampaignStatus.Done).ToList();
+			result.ForEach(c =>
+			{
+				var warnings = c.WarningInfo.ToList();
+				warnings.Should().Be.Empty();
+			});
+		}
 
-        [Test]
+		[Test]
 		[Ignore("We may need to check the planned campaigns")]
-        public void ShouldNotAttachRuleCheckResultToPlannedCampaigns()
-        {
-            _outboundRuleChecker.SetCampaignRuleCheckResponse(plannedCampaign, new List<OutboundRuleResponse>
-            {
-                new OutboundRuleResponse()
-                {
-                    TypeOfRule = typeof(OutboundOverstaffRule)
-                }
-            });
+		public void ShouldNotAttachRuleCheckResultToPlannedCampaigns()
+		{
+			_outboundRuleChecker.SetCampaignRuleCheckResponse(plannedCampaign, new List<OutboundRuleResponse>
+			{
+				new OutboundRuleResponse()
+				{
+					TypeOfRule = typeof (OutboundOverstaffRule)
+				}
+			});
 
-            var result = target.ListCampaign(CampaignStatus.Planned).ToList();
-            result.ForEach(c =>
-            {
-                var warnings = c.WarningInfo.ToList();
-                warnings.Should().Be.Empty();
-            });
-        }
+			var result = target.ListCampaign(CampaignStatus.Planned).ToList();
+			result.ForEach(c =>
+			{
+				var warnings = c.WarningInfo.ToList();
+				warnings.Should().Be.Empty();
+			});
+		}
 
-        [Test]		
-        public void ShouldReturnCorrectStatisticsWhenThereAreNoWarnings()
-        {
-            var result = target.GetCampaignStatistics();
+		[Test]
+		public void ShouldReturnCorrectStatisticsWhenThereAreNoWarnings()
+		{
+			var result = target.GetCampaignStatistics();
 
-            result.Planned.Should().Be.EqualTo(1);
-            result.Scheduled.Should().Be.EqualTo(1);
-            result.OnGoing.Should().Be.EqualTo(1);
-            result.Done.Should().Be.EqualTo(1);
-            result.ScheduledWarning.Should().Be.EqualTo(0);
-            result.OnGoingWarning.Should().Be.EqualTo(0);
-        }
+			result.Planned.Should().Be.EqualTo(1);
+			result.Scheduled.Should().Be.EqualTo(1);
+			result.OnGoing.Should().Be.EqualTo(1);
+			result.Done.Should().Be.EqualTo(1);
+			result.ScheduledWarning.Should().Be.EqualTo(0);
+			result.OnGoingWarning.Should().Be.EqualTo(0);
+		}
 
-        [Test]
-        public void ShouldReturnCorrectStatisticsWhenThereAreWarnings()
-        {
-            _outboundRuleChecker.SetCampaignRuleCheckResponse(ongoingCampaign, new List<OutboundRuleResponse>
-            {
-                new OutboundRuleResponse()
-                {
-                    TypeOfRule = typeof(OutboundOverstaffRule)
-                }
-            });
+		[Test]
+		public void ShouldReturnCorrectStatisticsWhenThereAreWarnings()
+		{
+			_outboundRuleChecker.SetCampaignRuleCheckResponse(ongoingCampaign, new List<OutboundRuleResponse>
+			{
+				new OutboundRuleResponse()
+				{
+					TypeOfRule = typeof (OutboundOverstaffRule)
+				}
+			});
 
-            _outboundRuleChecker.SetCampaignRuleCheckResponse(scheduledCampaign, new List<OutboundRuleResponse>
-            {
-                new OutboundRuleResponse()
-                {
-                    TypeOfRule = typeof(OutboundOverstaffRule)
-                }
-            });
+			_outboundRuleChecker.SetCampaignRuleCheckResponse(scheduledCampaign, new List<OutboundRuleResponse>
+			{
+				new OutboundRuleResponse()
+				{
+					TypeOfRule = typeof (OutboundOverstaffRule)
+				}
+			});
 
-            var result = target.GetCampaignStatistics();
+			var result = target.GetCampaignStatistics();
 
-            result.Planned.Should().Be.EqualTo(1);
-            result.Scheduled.Should().Be.EqualTo(1);
-            result.OnGoing.Should().Be.EqualTo(1);
-            result.Done.Should().Be.EqualTo(1);
-            result.ScheduledWarning.Should().Be.EqualTo(1);
-            result.OnGoingWarning.Should().Be.EqualTo(1);
-        }
+			result.Planned.Should().Be.EqualTo(1);
+			result.Scheduled.Should().Be.EqualTo(1);
+			result.OnGoing.Should().Be.EqualTo(1);
+			result.Done.Should().Be.EqualTo(1);
+			result.ScheduledWarning.Should().Be.EqualTo(1);
+			result.OnGoingWarning.Should().Be.EqualTo(1);
+		}
 
 
-        public IOutboundCampaign GetTestCampaign(int index)
-        {
-			   var today = new DateTime(DateOnly.Today.Year, DateOnly.Today.Month, DateOnly.Today.Day, 0,0,0, DateTimeKind.Utc);
-            var dayAfterOneWeek = today.AddDays(7);
-            var dayAfterTwoWeeks = today.AddDays(14);
-            var dayAfterThreeWeeks = today.AddDays(21);
-            var dayBeforeOneWeek = today.AddDays(-7);
-            var dayBeforeTwoWeeks = today.AddDays(-14);
+		public IOutboundCampaign GetTestCampaign(int index)
+		{
+			var today = new DateTime(DateOnly.Today.Year, DateOnly.Today.Month, DateOnly.Today.Day, 0, 0, 0, DateTimeKind.Utc);
+			var dayAfterOneWeek = today.AddDays(7);
+			var dayAfterTwoWeeks = today.AddDays(14);
+			var dayAfterThreeWeeks = today.AddDays(21);
+			var dayBeforeOneWeek = today.AddDays(-7);
+			var dayBeforeTwoWeeks = today.AddDays(-14);
 
-            var campaigns = new IOutboundCampaign[4]
-            {
-                new Domain.Outbound.Campaign()
-                {
-                    Name = "A",
-                    SpanningPeriod = new DateTimePeriod(dayAfterOneWeek.Date, dayAfterTwoWeeks.Date),
-                    Skill = SkillFactory.CreateSkill("A", SkillTypeFactory.CreateSkillType(), 15, TimeZoneInfo.Utc, TimeSpan.Zero),
-                },
-                new Domain.Outbound.Campaign()
-                {
-                    Name = "B",
-                    SpanningPeriod = new DateTimePeriod(dayAfterOneWeek.Date, dayAfterThreeWeeks.Date),
-                    Skill = SkillFactory.CreateSkill("B", SkillTypeFactory.CreateSkillType(), 15, TimeZoneInfo.Utc, TimeSpan.Zero)
-                },
-                new Domain.Outbound.Campaign()
-                {
-                    Name = "C",
-                    SpanningPeriod = new DateTimePeriod(dayBeforeOneWeek.Date, dayAfterOneWeek.Date),
-                    Skill = SkillFactory.CreateSkill("C", SkillTypeFactory.CreateSkillType(), 15, TimeZoneInfo.Utc, TimeSpan.Zero)
-                },
-                new Domain.Outbound.Campaign()
-                {
-                    Name = "D",
-                    SpanningPeriod = new DateTimePeriod(dayBeforeTwoWeeks.Date, dayBeforeOneWeek.Date),
-                    Skill = SkillFactory.CreateSkill("D", SkillTypeFactory.CreateSkillType(), 15, TimeZoneInfo.Utc, TimeSpan.Zero)
-                }
-            };
+			var campaigns = new IOutboundCampaign[4]
+			{
+				new Domain.Outbound.Campaign()
+				{
+					Name = "A",
+					SpanningPeriod = new DateTimePeriod(dayAfterOneWeek.Date, dayAfterTwoWeeks.Date),
+					Skill = SkillFactory.CreateSkill("A", SkillTypeFactory.CreateSkillType(), 15, TimeZoneInfo.Utc, TimeSpan.Zero),
+				},
+				new Domain.Outbound.Campaign()
+				{
+					Name = "B",
+					SpanningPeriod = new DateTimePeriod(dayAfterOneWeek.Date, dayAfterThreeWeeks.Date),
+					Skill = SkillFactory.CreateSkill("B", SkillTypeFactory.CreateSkillType(), 15, TimeZoneInfo.Utc, TimeSpan.Zero)
+				},
+				new Domain.Outbound.Campaign()
+				{
+					Name = "C",
+					SpanningPeriod = new DateTimePeriod(dayBeforeOneWeek.Date, dayAfterOneWeek.Date),
+					Skill = SkillFactory.CreateSkill("C", SkillTypeFactory.CreateSkillType(), 15, TimeZoneInfo.Utc, TimeSpan.Zero)
+				},
+				new Domain.Outbound.Campaign()
+				{
+					Name = "D",
+					SpanningPeriod = new DateTimePeriod(dayBeforeTwoWeeks.Date, dayBeforeOneWeek.Date),
+					Skill = SkillFactory.CreateSkill("D", SkillTypeFactory.CreateSkillType(), 15, TimeZoneInfo.Utc, TimeSpan.Zero)
+				}
+			};
 
-            return campaigns[index];
-        }
+			return campaigns[index];
+		}
 
-        public ISkill CreateSkill(string name)
-        {
-            return new Skill(name, "", Color.Blue, 60, new FakeOutboundSkillTypeProvider().OutboundSkillType())
+		public ISkill CreateSkill(string name)
+		{
+			return new Skill(name, "", Color.Blue, 60, new FakeOutboundSkillTypeProvider().OutboundSkillType())
 			{
 				TimeZone = new HawaiiTimeZone().TimeZone()
 			};
-        }
-    }
+		}
+	}
 
-    public class FakeOutboundSkillTypeProvider : IOutboundSkillTypeProvider
-    {
-        public ISkillType OutboundSkillType()
-        {
-            var desc = new Description("SkillTypeOutbound");
-            return new SkillTypeEmail(desc, ForecastSource.OutboundTelephony);
-        }
-    }
+	public class FakeOutboundSkillTypeProvider : IOutboundSkillTypeProvider
+	{
+		public ISkillType OutboundSkillType()
+		{
+			var desc = new Description("SkillTypeOutbound");
+			return new SkillTypeEmail(desc, ForecastSource.OutboundTelephony);
+		}
+	}
 }
