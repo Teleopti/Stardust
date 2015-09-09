@@ -20,7 +20,8 @@
 					options: {
 						site:'teleopti.ccc.web',
 						openUrl:'http://localhost:52858',
-						open:true
+						open:true,
+                        verbose:true
 					}
 			}
 

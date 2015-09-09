@@ -69,7 +69,7 @@ wfm.config([
 			templateUrl: 'js/resourceplanner/planningperiods.html',
 			controller: 'PlanningPeriodsCtrl'
 		}).state('resourceplanner.report', {
-			params: { result: {} },
+			params: { result: {},interResult: [] },
 			templateUrl: 'js/resourceplanner/resourceplanner-report.html',
 			controller: 'ResourceplannerReportCtrl'
 		}).state('permissions', {

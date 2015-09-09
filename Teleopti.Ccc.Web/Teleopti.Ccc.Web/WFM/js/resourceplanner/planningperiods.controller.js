@@ -36,9 +36,10 @@
 	                $scope.scheduledDays = scheduleResult.DaysScheduled;
 	                //else
 	                $scope.status = 'Optimizing days off';
-	                PlanningPeriodSvrc.launchOptimization.query({ id: p.Id }, JSON.stringify(scheduleResult.ThrottleToken)).$promise.then(function() {
+	                PlanningPeriodSvrc.launchOptimization.query({ id: p.Id }, JSON.stringify(scheduleResult.ThrottleToken)).$promise.then(function(result) {
+
 	                    $scope.schedulingPerformed = true;
-	                    $state.go('resourceplanner.report', { result: scheduleResult });
+							$state.go('resourceplanner.report', { result: scheduleResult, interResult:result });
 	                });
 	            });
 	        };
