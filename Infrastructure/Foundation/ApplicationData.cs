@@ -7,37 +7,23 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 {
 	public class ApplicationData : IApplicationData
 	{
-		private readonly IMessageBrokerComposite _messageBroker;
-		private readonly ILoadPasswordPolicyService _loadPasswordPolicyService;
-
 		public ApplicationData(IDictionary<string, string> appSettings,
 			IMessageBrokerComposite messageBroker,
-			ILoadPasswordPolicyService loadPasswordPolicyService,
-			IDataSourceForTenant dataSourceForTenant)
+			ILoadPasswordPolicyService loadPasswordPolicyService)
 		{
 			AppSettings = appSettings;
-			_messageBroker = messageBroker;
-			_loadPasswordPolicyService = loadPasswordPolicyService;
-			DataSourceForTenant = dataSourceForTenant;
+			Messaging = messageBroker;
+			LoadPasswordPolicyService = loadPasswordPolicyService;
 		}
 
-		public ILoadPasswordPolicyService LoadPasswordPolicyService
-		{
-			get { return _loadPasswordPolicyService; }
-		}
+		public ILoadPasswordPolicyService LoadPasswordPolicyService { get; private set; }
 
-		public IDataSourceForTenant DataSourceForTenant { get; private set; }
-
-		public IMessageBrokerComposite Messaging
-		{
-			get { return _messageBroker; }
-		}
+		public IMessageBrokerComposite Messaging { get; private set; }
 
 		public IDictionary<string, string> AppSettings { get; private set; }
 
 		public void Dispose()
 		{
-			DataSourceForTenant.Dispose();
 			if (Messaging != null)
 			{
 				Messaging.Dispose();

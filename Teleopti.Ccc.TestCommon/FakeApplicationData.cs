@@ -44,11 +44,6 @@ namespace Teleopti.Ccc.TestCommon
 		public IDictionary<string, string> AppSettings { get; private set; }
 		public ILoadPasswordPolicyService LoadPasswordPolicyService { get; private set; }
 
-		public IDataSourceForTenant DataSourceForTenant
-		{
-			get { return this; }
-		}
-
 		public void MakeSureDataSourceExists(string tenantName, string applicationConnectionString, string analyticsConnectionString,
 			IDictionary<string, string> applicationNhibConfiguration)
 		{

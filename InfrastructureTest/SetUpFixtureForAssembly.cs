@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Linq;
 using Autofac;
@@ -53,9 +52,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 
 			MessageBrokerContainerDontUse.Configure(null, null, MessageFilterManager.Instance, new NewtonsoftJsonSerializer(), new NewtonsoftJsonSerializer());
 
-			var dsForTenant = new DataSourceForTenant(null);
-			dsForTenant.MakeSureDataSourceExists_UseOnlyFromTests(DataSource);
-			ApplicationData = new ApplicationData(appSettings, MessageBrokerContainerDontUse.CompositeClient(), null, dsForTenant);
+			ApplicationData = new ApplicationData(appSettings, MessageBrokerContainerDontUse.CompositeClient(), null);
 
 			BusinessUnitFactory.BusinessUnitUsedInTest = BusinessUnitFactory.CreateSimpleBusinessUnit("Business unit used in test");
 			sessionData = StateHolderProxyHelper.CreateSessionData(loggedOnPerson, DataSource, BusinessUnitFactory.BusinessUnitUsedInTest);

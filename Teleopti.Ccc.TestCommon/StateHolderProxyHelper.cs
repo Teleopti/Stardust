@@ -41,9 +41,7 @@ namespace Teleopti.Ccc.TestCommon
 
 			MessageBrokerContainerDontUse.Configure(null, new IConnectionKeepAliveStrategy[] { }, MessageFilterManager.Instance, new NewtonsoftJsonSerializer(), new NewtonsoftJsonSerializer());
 			var signalBroker = MessageBrokerContainerDontUse.CompositeClient();
-			var dsForTenant = new DataSourceForTenant(null);
-			dsForTenant.MakeSureDataSourceExists_UseOnlyFromTests(dataSource);
-			var applicationData = new ApplicationData(appSettings, signalBroker, null, dsForTenant);
+			var applicationData = new ApplicationData(appSettings, signalBroker, null);
 			var sessionData = CreateSessionData(person, dataSource, businessUnit, principalContext);
 			var state = new FakeState { ApplicationScopeData = applicationData, SessionScopeData = sessionData, IsLoggedIn = true };
 			ClearAndSetStateHolder(state);
@@ -118,14 +116,13 @@ namespace Teleopti.Ccc.TestCommon
             typeof (StateHolderReader).GetField("_instanceInternal", BindingFlags.NonPublic | BindingFlags.Static).SetValue(null, null);
         }
 
+		//TODO: remove param
         public static IApplicationData CreateApplicationData(IMessageBrokerComposite messageBroker, IDataSource dataSource)
         {
             IDictionary<string, string> appSettings = new Dictionary<string, string>();
             ConfigurationManager.AppSettings.AllKeys.ToList().ForEach(
                 name => appSettings.Add(name, ConfigurationManager.AppSettings[name]));
-			var dsForTenant = new DataSourceForTenant(null);
-			dsForTenant.MakeSureDataSourceExists_UseOnlyFromTests(dataSource);
-			var applicationData = new ApplicationData(appSettings, messageBroker, null, dsForTenant);
+			var applicationData = new ApplicationData(appSettings, messageBroker, null);
 
             return applicationData;
         }

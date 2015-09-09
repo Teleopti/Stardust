@@ -75,11 +75,9 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 				() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging
 				);
 			var dataSource = dataSourcesFactory.Create(databaseHandler.DataSourceSettings(), "");
-			var dsForTenant = new DataSourceForTenant(dataSourcesFactory);
-
+			
 			var state = new StateNewVersion();
-			var applicationData = new ApplicationData(ConfigurationManager.AppSettings.ToDictionary(), null, null, dsForTenant);
-			dsForTenant.MakeSureDataSourceExists_UseOnlyFromTests(dataSource); //no threading issues so it should be fine
+			var applicationData = new ApplicationData(ConfigurationManager.AppSettings.ToDictionary(), null, null);
 			state.SetApplicationData(applicationData);
 			StateHolder.Initialize(state);
 

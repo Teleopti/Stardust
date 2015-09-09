@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 
 			if (startMessageBroker)
 				this.startMessageBroker(appSettings);
-			var appData = new ApplicationData(appSettings, _messageBroker, loadPasswordPolicyService, _dataSourceForTenant);
+			var appData = new ApplicationData(appSettings, _messageBroker, loadPasswordPolicyService);
 			StateHolder.Instance.State.SetApplicationData(appData);
 			_loadAllTenants.Tenants().ForEach(dsConf =>
 			{
