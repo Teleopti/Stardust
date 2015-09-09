@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.InfrastructureTest
 		protected override FakeConfigReader Config()
 		{
 			var config = base.Config();
-			config.FakeConnectionString("RtaApplication", ConnectionStringHelper.ConnectionStringUsedInTests);
 			config.FakeConnectionString("MessageBroker", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
 			config.FakeConnectionString("Tenancy", ConnectionStringHelper.ConnectionStringUsedInTests);
 			return config;

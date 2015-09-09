@@ -5,23 +5,20 @@ using Microsoft.CSharp.RuntimeBinder;
 using Teleopti.Ccc.Domain.Aop.Core;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Aspects
 {
 	public class TenantDataSourceScope : IRtaDataSourceScope
 	{
 		private readonly IDataSourceScope _dataSource;
-		private readonly IDataSourceForTenant _dataSourceForTenant;
 		private readonly IDatabaseLoader _databaseLoader;
 
 		[ThreadStatic]
 		private static IDisposable _scope;
 
-		public TenantDataSourceScope(IDataSourceScope dataSource, IDataSourceForTenant dataSourceForTenant, IDatabaseLoader databaseLoader)
+		public TenantDataSourceScope(IDataSourceScope dataSource, IDatabaseLoader databaseLoader)
 		{
 			_dataSource = dataSource;
-			_dataSourceForTenant = dataSourceForTenant;
 			_databaseLoader = databaseLoader;
 		}
 
