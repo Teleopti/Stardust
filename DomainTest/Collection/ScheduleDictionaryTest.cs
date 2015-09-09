@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
@@ -1228,24 +1229,17 @@ namespace Teleopti.Ccc.DomainTest.Collection
 
 		private class extractor : IScheduleExtractor
 		{
-
-
-			private readonly IList<IScheduleData> _data = new List<IScheduleData>();
-
+			private readonly ConcurrentBag<IScheduleData> _data = new ConcurrentBag<IScheduleData>();
 
 			public IList<IScheduleData> Data
 			{
-				get { return _data; }
+				get { return _data.ToArray(); }
 			}
-
 
 			public void AddSchedulePart(IScheduleDay schedulePart)
 			{
-				schedulePart.PersistableScheduleDataCollection().ForEach(Data.Add);
+				schedulePart.PersistableScheduleDataCollection().ForEach(_data.Add);
 			}
-
-
-
 		}
 
 
