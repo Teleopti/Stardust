@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 
@@ -9,6 +8,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Outbound
 	public interface IOutboundSkillPersister
 	{
 		void PersistSkill(ISkill skill);
+		void RemoveSkill(ISkill skill);
 	}
 
 	public class OutboundSkillPersister : IOutboundSkillPersister
@@ -36,6 +36,12 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Outbound
 		{
 			_skillRepository.Add(skill);
 			_workloadRepository.Add(skill.WorkloadCollection.First());
+		}
+
+		public void RemoveSkill(ISkill skill)
+		{
+			_workloadRepository.Remove(skill.WorkloadCollection.First());
+			_skillRepository.Remove(skill);
 		}
 	}
 }

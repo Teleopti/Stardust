@@ -235,7 +235,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			}
 
 			if (shouldRemoveActivity) _activityRepository.Remove(activity);
-			_skillRepository.Remove(campaign.Skill);
+			_outboundSkillPersister.RemoveSkill(campaign.Skill);
 			_outboundCampaignRepository.Remove(campaign);
 		}
 

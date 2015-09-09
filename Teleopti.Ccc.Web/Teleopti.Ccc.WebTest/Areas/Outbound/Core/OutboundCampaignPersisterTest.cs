@@ -719,12 +719,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var campaign = new Domain.Outbound.Campaign();
 			campaign.Skill = skill;
 
-			_target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, activityRepository, null, null, null, null, null, _skillRepository);
+			_target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, activityRepository, _outboundSkillPersister, null, null, null, null, _skillRepository);
 			_target.RemoveCampaign(campaign);
 
 			activityRepository.AssertWasCalled(x=>x.Remove(activity));
-			_skillRepository.AssertWasCalled(x=>x.Remove(skill));
-			_outboundCampaignRepository.AssertWasCalled(x=>x.Remove(campaign));
 		}
 
 		[Test]
@@ -740,7 +738,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var campaign = new Domain.Outbound.Campaign();
 			campaign.Skill = skill;
 
-			_target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, activityRepository, null, null, null, null, null, _skillRepository);
+			_target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, activityRepository, _outboundSkillPersister, null, null, null, null, _skillRepository);
 			_target.RemoveCampaign(campaign);
 
 			activityRepository.AssertWasNotCalled(x => x.Remove(activity));
@@ -766,7 +764,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var campaign = new Domain.Outbound.Campaign();
 			campaign.Skill = skill1;
 
-			_target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, activityRepository, null, null, null, null, null, _skillRepository);
+			_target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, activityRepository, _outboundSkillPersister, null, null, null, null, _skillRepository);
 			_target.RemoveCampaign(campaign);
 
 			activityRepository.AssertWasNotCalled(x => x.Remove(activity));
@@ -785,10 +783,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var campaign = new Domain.Outbound.Campaign();
 			campaign.Skill = skill;
 
-			_target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, activityRepository, null, null, null, null, null, _skillRepository);
+			_target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, activityRepository, _outboundSkillPersister, null, null, null, null, _skillRepository);
 			_target.RemoveCampaign(campaign);
 
-			_skillRepository.AssertWasCalled(x => x.Remove(skill));
+			_outboundSkillPersister.AssertWasCalled(x => x.RemoveSkill(skill));
 			_outboundCampaignRepository.AssertWasCalled(x => x.Remove(campaign));
 		}
 	}
