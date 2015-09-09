@@ -3,7 +3,7 @@
 (function () {
 	angular.module('wfm.people')
 		.controller('PeopleCartCtrl', [
-			'$scope','$q', '$translate', '$stateParams', 'uiGridConstants', 'People', 'Toggle', '$mdSidenav', '$mdUtil', '$state','$interval','$mdComponentRegistry', PeopleCartController
+			'$scope', '$q', '$translate', '$stateParams', 'uiGridConstants', 'People', 'Toggle', '$mdSidenav', '$mdUtil', '$state', '$interval', '$mdComponentRegistry', PeopleCartController
 		]);
 
 	function PeopleCartController($scope, $q, $translate, $stateParams, uiGridConstants, peopleSvc, toggleSvc, $mdSidenav, $mdUtil, $state, $interval, $mdComponentRegistry) {
@@ -81,7 +81,7 @@
 				columns: [
 					{ displayName: 'PersonFinderFieldShiftBag', field: 'ShiftBag()', headerCellFilter: 'translate', minWidth: 100 },
 					{ displayName: 'PersonSkill', field: 'Skills()', headerCellFilter: 'translate', minWidth: 100 }
-					
+
 				]
 			}
 		];
@@ -89,7 +89,7 @@
 		vm.back = function () {
 			$state.go('people', $stateParams);
 		}
-		vm.clearCart = function() {
+		vm.clearCart = function () {
 			vm.selectedPeopleIds = [];
 			$state.go('people', { selectedPeopleIds: [], currentKeyword: $stateParams.currentKeyword, paginationOptions: $stateParams.paginationOptions });
 		}
@@ -126,10 +126,8 @@
 		vm.gridOptions.onRegisterApi = function (gridApi) {
 			vm.gridApi = gridApi;
 			var cellTemplate = '<div>' +
-				'<button ng-click="grid.appScope.vm.removePerson(row.entity)" class="wfm-btn wfm-btn-default selection-cart-row-remove-btn">' +
 				'<md-tooltip>{{"Remove" | translate}}</md-tooltip>' +
-				'<i style="magin-left:3px;" class="mdi mdi-delete">' +
-				'</button>' +
+				'<i ng-click="grid.appScope.vm.removePerson(row.entity)" style="position: relative;top: 0.5rem;left: 0.5rem;" class="mdi mdi-minus">' +
 				'</div>';
 			vm.gridApi.core.addRowHeaderColumn({ name: 'rowHeaderCol', displayName: '', width: 30, cellTemplate: cellTemplate });
 		}
@@ -176,7 +174,7 @@
 
 			return ret;
 		};
-		
+
 		vm.updateResult = { Success: false };
 		vm.updatePeople = function () {
 			vm.processing = true;
@@ -189,7 +187,7 @@
 					$interval(function () {
 						vm.isConfirmCloseNoticeBar = false;
 					}, 10000, 1);
-					
+
 				}
 			);
 		};
@@ -275,7 +273,7 @@
 				person.ShiftBagId = selectedShiftBagId;
 			});
 		}
-		
+
 		vm.selectedDateChanged = function () {
 			peopleSvc.fetchPeople.post({ Date: moment(vm.selectedDate).format('YYYY-MM-DD'), PersonIdList: vm.selectedPeopleIds }).$promise.then(function (result) {
 				vm.availablePeople = result;

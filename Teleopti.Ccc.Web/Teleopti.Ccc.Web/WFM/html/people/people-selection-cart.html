@@ -15,7 +15,8 @@
 		<h4>{{'SelectedPeople' | translate}}</h4>
 		<div class="col-sm-1" style="padding-left:0; padding-right: 0; width: 60px">
 			<p>
-				<button class="wfm-btn wfm-btn-default" style="padding-top: 5px;margin: 0 5px;padding-bottom: 5px;" ng-click="vm.back()">{{ 'Back' | translate }} </button>
+				<button class="wfm-fab info mini" ng-click="vm.back()"><i class="mdi mdi-reply"></i></button>
+				<md-tooltip>{{ 'Back' | translate }}</md-tooltip>
 			</p>
 		</div>
 		<div class="col-sm-5 col-md-3 col-lg-3">
@@ -29,7 +30,7 @@
 		<div>
 			<button class="wfm-fab wfm-panel-delete material-depth-1" ng-click="vm.clearCart()">
 				<md-tooltip>{{"ResetSelection" | translate}}</md-tooltip>
-				<i class="mdi mdi-refresh"></i>
+				<i class="mdi mdi-minus"></i>
 			</button>
 			<nav class="wfm-panel action-panel" mfb-menu position="tr" effect="slidein-spring"
 				 active-icon="mdi-pencil" resting-icon="mdi-plus"
@@ -42,7 +43,7 @@
 	</div>
 	<div ui-i18n="{{lang}}" ng-if="vm.dataInitialized" class="big-table-wrapper material-depth-1" style="position: relative">
 		<div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-pagination ui-grid-resize-columns class="grid people-list"></div>
-		
+
 
 		<md-sidenav class="md-sidenav-right md-sidenav-skill-panel md-whiteframe-z2" md-component-id="right-skill">
 			<div class="sidenav-header">{{'Skill'|translate}}</div>
@@ -61,7 +62,7 @@
 					</div>
 				</md-list-item>
 			</md-content>
-			<div style="float: right">
+			<div style="position: relative;top: 12rem;float: right;">
 				<button ng-show="vm.dataInitialized && !vm.processing && vm.updateResult.Success && vm.updateResult.SuccessCount > 0" class="wfm-btn wfm-btn-primary" ng-click="vm.setCurrentCommand('ChangeShiftBag')()">{{'PersonFinderFieldShiftBag' | translate}}</button>
 				<button class="wfm-btn" ng-class="{'wfm-btn-primary': vm.dataChanged, 'wfm-btn-primary-disabled': !vm.dataChanged}" ng-disabled="!vm.dataChanged" ng-click="vm.updatePeople()">{{'Apply' | translate}}</button>
 			</div>
@@ -69,12 +70,12 @@
 		<md-sidenav class="md-sidenav-right md-sidenav-skill-panel md-whiteframe-z2" md-component-id="right-shiftbag">
 			<div class="sidenav-header">{{'ChangeShiftBag'|translate}}</div>
 			<md-content layout-padding style="height: 550px">
-				<select ng-model="vm.selectedShiftBag" ng-change="vm.selectedShiftBagChanged(vm.selectedShiftBag)">
+				<select style="font-family: Calibri" ng-model="vm.selectedShiftBag" ng-change="vm.selectedShiftBagChanged(vm.selectedShiftBag)">
 					<option value="" disabled selected="">{{'PickAShiftBag'|translate}}</option>
 					<option value={{shiftBag.ShiftBagId}} ng-repeat="shiftBag in vm.availableShiftBags">{{shiftBag.ShiftBagName}}</option>
 				</select>
 			</md-content>
-			<div style="float: right">
+			<div style="position: relative;top: 12rem;float: right;">
 				<button class="wfm-btn" ng-class="{'wfm-btn-primary': vm.dataChanged, 'wfm-btn-primary-disabled': !vm.dataChanged}" ng-disabled="!vm.dataChanged" ng-click="vm.updatePeople()">{{'Apply' | translate}}</button>
 			</div>
 		</md-sidenav>
@@ -82,7 +83,9 @@
 		<div ng-if="vm.dataInitialized && !vm.processing && vm.updateResult.Success" ng-show="vm.isConfirmCloseNoticeBar" class="alert-success notice-spacer">
 			<i class='mdi mdi-thumb-up'></i>
 			{{'SuccessfullyUpdatedPeopleCountColon'|translate}}{{vm.updateResult.SuccessCount}}
-			<span ng-if="vm.currentCommand().label=='AdjustSkill'">{{'YouMightNeedToChangeTheShiftBagAccordingly'|translate}}</span>
+		</div>
+		<div ng-if="vm.currentCommand().label=='AdjustSkill' && vm.dataInitialized && !vm.processing && vm.updateResult.Success" ng-show="vm.isConfirmCloseNoticeBar" class="alert-info notice-spacer">
+			{{'YouMightNeedToChangeTheShiftBagAccordingly'|translate}}
 		</div>
 		<div ng-if="vm.dataInitialized && !vm.processing && !vm.updateResult.Success && vm.updateResult.ErrorMsg.length > 0" ng-show="vm.isConfirmCloseNoticeBar" class="alert-error notice-spacer">
 			<i class='mdi mdi-alert-octagon'></i>

@@ -24,18 +24,19 @@
 		<div ng-if="dataInitialized && (isImportUsersEnabled || isAdjustSkillEnabled)">
 			<button ng-show="rowSelectionEnabled && selectedCount() > 0" class="wfm-fab wfm-panel-delete material-depth-1" ng-click="clearCart()">
 				<md-tooltip>{{"ResetSelection" | translate}}</md-tooltip>
-				<i class="mdi mdi-refresh"></i>
+				<i class="mdi mdi-minus"></i>
 			</button>
-			<nav class="wfm-panel action-panel" mfb-menu position="tr" effect="slidein-spring"
+			<nav class="action-panel" mfb-menu position="tr" effect="slidein-spring"
+				 style="position: absolute; top: -1rem;"
 				 active-icon="mdi-pencil" resting-icon="mdi-plus"
 				 ng-mouseenter=" hovered()" ng-mouseleave="hovered()"
 				 toggling-method="click" menu-state="closed">
 				<button class="{{cmd.label|lowercase}}" ng-if="cmd.active()" mfb-button icon="{{cmd.icon}}" ng-click="cmd.action()"
 						label="{{cmd.label|translate}}" ng-repeat="cmd in commands"></button>
+				<span ng-show="rowSelectionEnabled && selectedCount() > 0" class="wfm-panel selection-cart-indicator">
+					{{selectedCount()}}
+				</span>
 			</nav>
-			<span ng-show="rowSelectionEnabled && selectedCount() > 0" class="wfm-panel selection-cart-indicator">
-				{{selectedCount()}}
-			</span>
 		</div>
 	</div>
 
