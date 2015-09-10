@@ -168,7 +168,7 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 					foreach (var tenantName in tenantNames)
 					{
 						var tenantBaseConfig = TenantHolder.Instance.TenantBaseConfigs.SingleOrDefault(x => x.Tenant.Name.Equals(tenantName.DataSourceName));
-						if (tenantBaseConfig?.BaseConfiguration == null)
+						if (tenantBaseConfig == null || tenantBaseConfig.BaseConfiguration == null)
 							return false;
 						jobToRun.StepList[0].JobParameters.SetTenantBaseConfigValues(tenantBaseConfig.BaseConfiguration);
 
