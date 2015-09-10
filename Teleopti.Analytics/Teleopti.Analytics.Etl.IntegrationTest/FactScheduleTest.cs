@@ -275,7 +275,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 		}
 
-		[Test]
+		[Test, Ignore("ignore during investigation")]
 		public void TestCtiPlattformUpdate()
 		{
 			var testDate = new DateTime(2013, 06, 15);
