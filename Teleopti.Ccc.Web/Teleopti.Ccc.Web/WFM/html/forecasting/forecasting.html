@@ -15,7 +15,7 @@
 	</div>
 	<div class="material-block-content">
 		<wfm-card-list>
-			<wfm-card ng-repeat="workload in workloads">
+			<wfm-card ng-repeat="workload in workloads | orderBy:'Name'">
 				<card-header ng-click="getForecastResult(workload)">
 					<div>
 						<span><b>{{workload.Name}}</b></span>
