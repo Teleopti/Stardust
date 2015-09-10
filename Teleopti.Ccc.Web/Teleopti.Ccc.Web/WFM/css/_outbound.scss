@@ -1,6 +1,14 @@
 ﻿@charset "UTF-8";
 
 .outbound {
+	.chart {
+		-webkit-touch-callout: none;
+		-webkit-user-select: none;
+		-khtml-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;	
+	}
 	.chart-extra-info {
 		position: absolute;		
 		color: #66C2FF;
