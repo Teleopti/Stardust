@@ -281,7 +281,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Code.Gui.DataSourceConfiguration
                 message += "\r\n";
                 message += "Please contact the Teleopti Support.";
                 _view.ShowErrorMessage(message);
-                _view.CloseView();
+                //_view.CloseView();
                 return;
             }
 
@@ -290,7 +290,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Code.Gui.DataSourceConfiguration
             saveDataSourcesWithTimeZoneSet();
             saveDataSourcesSetInactive();
             _view.IsSaved = true;
-            _view.CloseView();
+            //_view.CloseView();
         }
 
         private void saveDataSourcesSetInactive()
