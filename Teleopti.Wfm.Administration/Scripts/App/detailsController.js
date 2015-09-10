@@ -15,6 +15,7 @@
 		vm.Password = "";
 		vm.AppDatabase = "";
 		vm.AnalyticsDatabase = "";
+		vm.AggregationDatabase = "";
 		vm.TenantMessage = "Enter a new name for the Tenant";
 		vm.TenantOk = false;
 		vm.AppDbOk = false;
@@ -36,6 +37,7 @@
 					vm.Password = data.Password;
 					vm.AnalyticsDatabase = data.AnalyticsDatabase;
 					vm.AppDatabase = data.AppDatabase;
+					vm.AggregationDatabase = data.AggregationDatabase;
 					vm.CommandTimeout = data.CommandTimeout;
 					//vm.CheckAppDb();
 					//vm.CheckAnalDb();

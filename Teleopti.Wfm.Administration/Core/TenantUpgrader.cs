@@ -33,8 +33,13 @@ namespace Teleopti.Wfm.Administration.Core
 			builder.Password = adminPassword;
 			builder.IntegratedSecurity = false;
 			var analConnstring = builder.ConnectionString;
-			// and agg to 
-
+			// and agg to
+			builder = new SqlConnectionStringBuilder(tenant.DataSourceConfiguration.AggregationConnectionString);
+			_databaseUpgrader.Upgrade(builder.DataSource, builder.InitialCatalog, DatabaseType.TeleoptiCCCAgg, adminUserName,
+				adminPassword, builder.UserID, builder.Password, permissionMode);
+			builder.UserID = adminUserName;
+			builder.Password = adminPassword;
+			builder.IntegratedSecurity = false;
 			//security 
 			var dbArgs = new DatabaseArguments
 			{
@@ -42,7 +47,7 @@ namespace Teleopti.Wfm.Administration.Core
 				ApplicationDbConnectionStringToStore = appConnstring,
 				AnalyticsDbConnectionString = analConnstring,
 				AnalyticsDbConnectionStringToStore = analConnstring,
-				AggDatabase = "main_clone_DemoSales_TeleoptiCCCAgg",
+				AggDatabase = builder.ConnectionString,
 			};
 			_upgradeRunner.Upgrade(dbArgs);
 

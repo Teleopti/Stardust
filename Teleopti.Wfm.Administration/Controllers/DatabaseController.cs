@@ -90,6 +90,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			var newTenant = new Tenant(model.Tenant);
 			newTenant.DataSourceConfiguration.SetApplicationConnectionString(appConnectionString(model));
 			newTenant.DataSourceConfiguration.SetAnalyticsConnectionString(analyticsConnectionString(model));
+			newTenant.DataSourceConfiguration.SetAggregationConnectionString(aggConnectionString(model));
 			_persistTenant.Persist(newTenant);
 
 			addSuperUserToTenant(newTenant, "first", "user", model.FirstUser, model.FirstUserPassword);
@@ -167,6 +168,17 @@ namespace Teleopti.Wfm.Administration.Controllers
 				UserID = model.AppUser,
 				Password = model.AppPassword,
 				InitialCatalog = model.Tenant + "_TeleoptiWfmAnalytics",
+				IntegratedSecurity = false,
+			}.ConnectionString;
+		}
+
+		private string aggConnectionString(CreateTenantModel model)
+		{
+			return new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
+			{
+				UserID = model.AppUser,
+				Password = model.AppPassword,
+				InitialCatalog = model.Tenant + "_TeleoptiWfmAgg",
 				IntegratedSecurity = false,
 			}.ConnectionString;
 		}

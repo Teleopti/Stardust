@@ -19,11 +19,12 @@ namespace Teleopti.Wfm.Administration.Core
 			_persistTenant = persistTenant;
 		}
 
-		public ImportTenantResultModel Execute(string tenant, string connStringApp, string connStringAnal, ConflictModel conflictModel)
+		public ImportTenantResultModel Execute(string tenant, string connStringApp, string connStringAnal, string aggConnectionstring, ConflictModel conflictModel)
 		{
 			var newTenant = new Tenant(tenant);
 			newTenant.DataSourceConfiguration.SetApplicationConnectionString(connStringApp);
 			newTenant.DataSourceConfiguration.SetAnalyticsConnectionString(connStringAnal);
+			newTenant.DataSourceConfiguration.SetAggregationConnectionString(aggConnectionstring);
 			_persistTenant.Persist(newTenant);
 
 			saveToDb(conflictModel.NotConflicting, newTenant);

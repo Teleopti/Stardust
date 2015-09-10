@@ -58,7 +58,7 @@ namespace Teleopti.Wfm.Administration.Core
 			var retModel = new ConflictModel
 			{
 				NumberOfConflicting = conflicting.Count,
-				NumberOfNotConflicting = importUsers.Count() - conflicting.Count,
+				NumberOfNotConflicting = notConflicting.Count,
 				ConflictingUserModels = conflicting,
 				NotConflicting = notConflicting
 			};

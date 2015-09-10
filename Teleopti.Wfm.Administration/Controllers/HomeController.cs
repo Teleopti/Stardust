@@ -34,14 +34,15 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 		[HttpGet]
 		[TenantUnitOfWork]
-		[Route("api/Home/GetAllTenants")]
+		[Route("GetAllTenants")]
 		public virtual JsonResult<IEnumerable<TenantModel>> GetAllTenants()
 		{
 			return Json(_loadAllTenants.Tenants().Select(t => new TenantModel
 			{
 				Name = t.Name,
 				AnalyticsDatabase = new SqlConnectionStringBuilder( t.DataSourceConfiguration.AnalyticsConnectionString).InitialCatalog,
-				AppDatabase = new SqlConnectionStringBuilder(t.DataSourceConfiguration.ApplicationConnectionString).InitialCatalog
+				AppDatabase = new SqlConnectionStringBuilder(t.DataSourceConfiguration.ApplicationConnectionString).InitialCatalog,
+				AggregationDatabase = new SqlConnectionStringBuilder(t.DataSourceConfiguration.AggregationConnectionString).InitialCatalog
 			}));
 		}
 
@@ -53,6 +54,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			var tenant = _loadAllTenants.Tenants().Single(x => x.Name.Equals(name));
 			var builder = new SqlConnectionStringBuilder(tenant.DataSourceConfiguration.ApplicationConnectionString);
 			var builderAnal = new SqlConnectionStringBuilder(tenant.DataSourceConfiguration.AnalyticsConnectionString);
+			var builderAgg = new SqlConnectionStringBuilder(tenant.DataSourceConfiguration.AggregationConnectionString);
 
          return Json(new TenantModel
 			{
@@ -61,7 +63,8 @@ namespace Teleopti.Wfm.Administration.Controllers
 				Password = builder.Password,
 				AppDatabase = builder.InitialCatalog,
 				AnalyticsDatabase = builderAnal.InitialCatalog,
-				Server =  builder.DataSource,
+				AggregationDatabase = builderAgg.InitialCatalog,
+            Server =  builder.DataSource,
 				CommandTimeout = int.Parse(tenant.DataSourceConfiguration.ApplicationNHibernateConfig[Environment.CommandTimeout])
 			});
 		}

@@ -103,6 +103,8 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		public void AddPermissions(string login, bool isAzure)
 		{
+			if(login == "sa")
+				return;
 			var sql = string.Format(@"CREATE USER [{0}] FOR LOGIN [{0}]", login);
 			if(DbUserExist(login, isAzure))
 				sql = string.Format( @"ALTER USER [{0}] WITH LOGIN = [{0}]", login);
@@ -414,7 +416,10 @@ SELECT NEWID(),1, '3F0886AB-7B25-4E95-856A-0D726EDC2A67' , GETUTCDATE(), '{0}', 
 			string sql = "SELECT count(*) FROM sys.objects WHERE object_id = OBJECT_ID(N'[Tenant].[PersonInfo]') ";
 			if (DatabaseType.Equals(DatabaseType.TeleoptiAnalytics))
 				sql = "SELECT count(*) FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[dim_person]') ";
-			return executeScalar(sql, 0) > 0;
+			if (DatabaseType.Equals(DatabaseType.TeleoptiCCCAgg))
+				sql = "SELECT count(*) FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[log_object]') ";
+			
+         return executeScalar(sql, 0) > 0;
 		}
 
 		private T executeScalar<T>(string sql, T nullValue, params object[] args)
