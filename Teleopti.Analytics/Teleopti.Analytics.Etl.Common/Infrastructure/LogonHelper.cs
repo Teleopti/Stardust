@@ -173,11 +173,10 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 					IBaseConfiguration baseconfig = null;
 					if (config.IsConfigurationValid)
 						baseconfig = config.BaseConfiguration;
-					var applicationNhibConfiguration = new Dictionary<string, string>
-					{
-						[Environment.SessionFactoryName] = tenant.Name,
-						[Environment.ConnectionString] = tenant.DataSourceConfiguration.ApplicationConnectionString
-					};
+					var applicationNhibConfiguration = new Dictionary<string, string>();
+					applicationNhibConfiguration[Environment.SessionFactoryName] = tenant.Name;
+					applicationNhibConfiguration[Environment.ConnectionString] = tenant.DataSourceConfiguration.ApplicationConnectionString;
+				
 					var newDataSource = dataSourcesFactory.Create(applicationNhibConfiguration, tenant.DataSourceConfiguration.AnalyticsConnectionString);
 					
                configs.Add(new TenantBaseConfig { Tenant = tenant, BaseConfiguration = baseconfig, TenantDataSource = newDataSource });
