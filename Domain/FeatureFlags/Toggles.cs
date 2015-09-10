@@ -73,6 +73,7 @@
 		WfmPeople_ImportUsers_33665,
 		WfmPeople_AdjustSkill_34138,
 		Wfm_Outbound_Campaign_32696,
+		Wfm_Outbound_Campaign_GanttChart_34259,
 		WfmForecast_QueueStatistics_32572,
 		WfmForecast_ResultView_33605,
 		WfmForecast_MethodsComparisonView_33610,
