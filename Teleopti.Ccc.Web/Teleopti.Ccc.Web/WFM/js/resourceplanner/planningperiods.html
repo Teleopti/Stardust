@@ -23,11 +23,11 @@
                     </div>
                 </div>
             </div>
-			
+
             <div ng-show="planningPeriod.Skills.length>0 && planningPeriod.State == 'New'">
                 <p>{{'PlanningPeriodMissingMessage' | translate}}</p>
-                {{'MissingSkills' | translate }} 
-				
+                {{'MissingSkills' | translate }}
+
                 <ul class="wfm-accordion material-depth-2">
                     <li ng-repeat="skill in planningPeriod.Skills">
                         <div class="wfm-accordion-head" ng-click="skill.toggle = !skill.toggle">
@@ -43,10 +43,14 @@
             <div ng-if="planningPeriod.State != 'New'" class="text-success">
                 Planning Period is scheduled.
             </div>
-            <button class="schedule-button wfm-btn wfm-btn-primary" ng-disabled="isScheduleRunning || scheduleClicked" ng-click="launchSchedule(planningPeriod) ; scheduleClicked = 'true'">{{'Schedule' | translate }} </button>
+            <button class="schedule-button wfm-btn wfm-btn-primary" ng-disabled="isScheduleRunning || scheduleClicked" ng-click="launchSchedule(planningPeriod)">{{'Schedule' | translate }} </button>
             <div ng-show="scheduleClicked && !schedulingPerformed">
                 <md-progress-linear md-mode="indeterminate"></md-progress-linear>
                 <p>{{status}} .. </p>
+                <p ng-if="errorMessage">{{errorMessage}}</p>
+            </div>
+            <div ng-if ="errorMessage">
+                <p>{{errorMessage}}</p>
             </div>
         </div>
     </div>

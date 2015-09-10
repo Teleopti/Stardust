@@ -9,6 +9,7 @@
 	        $scope.schedulingPerformed = false;
 
 	        $scope.isScheduleRunning = false;
+	        $scope.scheduleClicked = false;
 
 	        function updateRunningStatus() {
 	            PlanningPeriodSvrc.status.get().$promise.then(function(result) {
@@ -16,8 +17,12 @@
 	            });
 	        }
 
-	        updateRunningStatus();
-	        var stopPolling = $interval(updateRunningStatus, 10 * 1000);
+	        var stopPolling;
+	        function startPoll() {
+	            updateRunningStatus();
+	            stopPolling = $interval(updateRunningStatus, 10 * 1000);
+	        }
+	        startPoll();
 
 	        function cancelPoll() {
 	            $scope.isScheduleRunning = false;
@@ -26,8 +31,20 @@
 	            }
 	        }
 
-	        $scope.launchSchedule = function (p) {
+	        function handleScheduleOrOptimizeError(error) {
+	            startPoll();
+
+	            $scope.errorMessage = "An error occurred. Please try again.";
 	            $scope.schedulingPerformed = false;
+	            $scope.status = '';
+	            $scope.scheduleClicked = false;
+	        }
+
+	        $scope.launchSchedule = function (p) {
+	            $scope.errorMessage = undefined;
+	            $scope.schedulingPerformed = false;
+	            $scope.scheduleClicked = true;
+
 	            var planningPeriod = { StartDate: p.StartDate, EndDate: p.EndDate };
 	            cancelPoll();
 	            $scope.status = 'Scheduling';
@@ -40,8 +57,8 @@
 
 	                    $scope.schedulingPerformed = true;
 							$state.go('resourceplanner.report', { result: scheduleResult, interResult:result });
-	                });
-	            });
+	                }, handleScheduleOrOptimizeError);
+	            }, handleScheduleOrOptimizeError);
 	        };
 
 	        //toggle
