@@ -1,8 +1,8 @@
 ﻿'use strict';
 
 angular.module('wfm.forecasting')
-	.controller('ForecastingAdvancedCtrl', ['$scope', '$state', '$stateParams', '$http', 'Toggle', 'Forecasting',
-		function ($scope, $state, $stateParams, $http, toggleService, forecasting) {
+	.controller('ForecastingAdvancedCtrl', ['$scope', '$state', '$stateParams', '$http', 'Toggle',
+		function ($scope, $state, $stateParams, $http, toggleService) {
 			$scope.workloadId = $stateParams.workloadId;
 			$scope.workloadName = $stateParams.workloadName;
 
@@ -19,9 +19,8 @@ angular.module('wfm.forecasting')
 			};
 
 			$scope.back = function () {
-				$state.go("forecasting", { target: { workloadId: $scope.workloadId, selectedMethod: $scope.selectedMethod }, running: false });
+				$state.go("forecasting");
 			};
-
 			
 			$scope.isQueueStatisticsEnabled = false;
 			toggleService.isFeatureEnabled.query({ toggle: 'WfmForecast_QueueStatistics_32572' }).$promise.then(function (result) {
@@ -82,6 +81,7 @@ angular.module('wfm.forecasting')
 					error(function (data, status, headers, config) {
 						$scope.error = { message: "Failed to do the evaluate." };
 						$scope.evaluationLoading = false;
+						$scope.queueStatisticsLoading = false;
 					});
 			};
 		}
