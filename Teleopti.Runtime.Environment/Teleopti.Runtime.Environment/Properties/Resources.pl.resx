@@ -123,4 +123,7 @@
   <data name="AlwaysOnTop" xml:space="preserve">
     <value>Zawsze na wierzchu</value>
   </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Odśwież</value>
+  </data>
 </root>
