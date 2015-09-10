@@ -23,12 +23,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 		protected override void OnEndStart()
 		{
+			base.OnEndStart();
+
 			var bus = Container.Resolve<IServiceBus>();
 			var toggleManager = Container.Resolve<IToggleManager>();
 			if (!toggleManager.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318))
 				return;
 
-			Task.Factory.StartNew(() => Container.Resolve<IDataSourceForTenant>().DoOnAllTenants_AvoidUsingThis(tenant =>
+			Task.Run(() => Container.Resolve<IDataSourceForTenant>().DoOnAllTenants_AvoidUsingThis(tenant =>
 			{
 				IList<Guid> businessUnitCollection;
 				using (var unitOfWork = tenant.Application.CreateAndOpenUnitOfWork())

@@ -13,7 +13,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 		protected override void OnEndStart()
 		{
-			Task.Factory.StartNew(() =>
+			base.OnEndStart();
+
+			Task.Run(() =>
 			{
 				var initialLoad = new InitialLoadOfScheduleProjectionReadModel(() => Container.Resolve<IServiceBus>(), Container.Resolve<IDataSourceForTenant>());
 				initialLoad.Check();

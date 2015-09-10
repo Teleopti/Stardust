@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 		private static void registerDataSourcesFactoryDependencies(ContainerBuilder builder)
 		{
-			builder.Register(c => new InternalServiceBusSender(c.Resolve<IServiceBus>)).As<IServiceBusSender>().SingleInstance();
+			builder.RegisterType<InternalServiceBusSender>().As<IServiceBusSender>().SingleInstance();
 			builder.RegisterType<MessageSenderCreator>().SingleInstance();
 			builder.Register(c => c.Resolve<MessageSenderCreator>().Create()).As<ICurrentMessageSenders>().SingleInstance();
 			builder.Register(c => DataSourceConfigurationSetter.ForServiceBus())

@@ -14,7 +14,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 		protected override void OnEndStart()
 		{
-			Task.Factory.StartNew(() =>
+			base.OnEndStart();
+
+			Task.Run(() =>
 			{
 				var dbConnection = ConfigurationManager.ConnectionStrings["Queue"];
 				QueueClearMessages.ClearMessages(dbConnection.ConnectionString, "rta");

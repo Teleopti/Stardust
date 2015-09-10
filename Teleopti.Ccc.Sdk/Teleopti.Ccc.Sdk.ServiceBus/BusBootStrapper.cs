@@ -29,16 +29,19 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			var build = new ContainerBuilder();
 			build.RegisterType<ApplicationLogOnMessageModule>().As<IMessageModule>().Named<IMessageModule>(typeof(ApplicationLogOnMessageModule).FullName);
 			build.Update(Container);
-
-		  if (dataSourceForTenant == null)
-		  {
-			  initApplicationAndSetDataSourceForTenant();
-		  }
-		  else
-		  {
-			  reuseAlreadyCreatedDataSourceForTenant();
-		  }
 		}
+
+	    protected override void OnEndStart()
+	    {
+			if (dataSourceForTenant == null)
+			{
+				initApplicationAndSetDataSourceForTenant();
+			}
+			else
+			{
+				reuseAlreadyCreatedDataSourceForTenant();
+			}
+	    }
 
 	    private void reuseAlreadyCreatedDataSourceForTenant()
 	    {
@@ -57,21 +60,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			    {
 				    var loadAllTenants = Container.Resolve<ILoadAllTenants>();
 						application.Start(new BasicState(), null, ConfigurationManager.AppSettings.ToDictionary(), true);
-					loadAllTenants.Tenants().ForEach(dsConf =>
-					{
-						dsForTenant.MakeSureDataSourceExists(dsConf.Name,
-							dsConf.DataSourceConfiguration.ApplicationConnectionString,
-							dsConf.DataSourceConfiguration.AnalyticsConnectionString,
-							dsConf.DataSourceConfiguration.ApplicationNHibernateConfig);
-					});
-
+					loadAllTenants.Tenants().ForEach(dsConf => dsForTenant.MakeSureDataSourceExists(dsConf.Name,
+						dsConf.DataSourceConfiguration.ApplicationConnectionString,
+						dsConf.DataSourceConfiguration.AnalyticsConnectionString,
+						dsConf.DataSourceConfiguration.ApplicationNHibernateConfig));
 
 					Logger.Info("Initialized application");
 			    }
 			    dataSourceForTenant = dsForTenant;
 		    }
 	    }
-
 
 	    protected override bool IsTypeAcceptableForThisBootStrapper(Type t)
         {
