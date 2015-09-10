@@ -38,8 +38,7 @@ var wfm = angular.module('wfm', [
 
 wfm.config([
 	'$stateProvider', '$urlRouterProvider', '$translateProvider', function ($stateProvider, $urlRouterProvider, $translateProvider) {
-		$urlRouterProvider.otherwise("forecasting");
-		$urlRouterProvider.when('/outbound', '/outbound/summary');
+		$urlRouterProvider.otherwise("forecasting");		
 		$stateProvider.state('main', {
 			url: '/',
 			templateUrl: 'html/main.html',
