@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		}		
 		
 		[HttpPost, Route("api/Outbound/Campaigns"), UnitOfWork]
-		public virtual IEnumerable<GanttCampaignViewModel> GanttGetCamapigns([FromBody]GanttPeriod peroid)
+		public virtual IEnumerable<GanttCampaignViewModel> GanttGetCampaigns([FromBody]GanttPeriod peroid)
 		{
 			return _campaignListProvider.GetCampaigns(peroid);
 		}

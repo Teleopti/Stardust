@@ -212,7 +212,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
 		    campaignListProvider.Stub(x => x.GetCampaigns(peroid)).Return(expectedResult);
 
 			 var target = new OutboundController(null, null, null, null, null, null, campaignListProvider);
-		    var result = target.GanttGetCamapigns(peroid);
+			 var result = target.GanttGetCampaigns(peroid);
 
 		    result.Should().Be.SameInstanceAs(expectedResult);
 	    }
