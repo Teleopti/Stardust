@@ -4,11 +4,11 @@
 
 <ul class="wfm-list">
 	<li class="active" ng-repeat="detail in vm.occupancyDetail">
-		<span class="list-item-container" ng-if="!detail.IsEmpty" style="max-width: none" ng-class="vm.getSeatBookingDetailClass(detail)">
+		<span class="list-item-container" ng-if="!detail.IsEmpty" ng-class="vm.getSeatBookingDetailClass(detail)">
 			{{vm.getDisplayTime(detail)}}
 			&nbsp;&nbsp;{{detail.FirstName}}
 			&nbsp;{{detail.LastName}}
 		</span>
-		<span class="list-item-container" ng-if="detail.IsEmpty" style="max-width: none">{{'SeatHasNoBookings'|translate}}</span>
+		<span class="list-item-container" ng-if="detail.IsEmpty" >{{'SeatHasNoBookings'|translate}}</span>
 	</li>
 </ul>

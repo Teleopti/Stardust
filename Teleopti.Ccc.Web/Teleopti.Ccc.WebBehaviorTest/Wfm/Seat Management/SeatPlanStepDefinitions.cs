@@ -35,6 +35,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Seat_Management
 			DataMaker.Data().Apply(planningPeriod);
 		}
 
+		[Given(@"there is a seat in root location with")]
+		public void GivenThereIsASeatInRootLocationWith(Table table)
+		{
+			DataMaker.Data().Apply(table.CreateInstance<SeatConfigurable>());
+		}
 		
 		[Then(@"I should see planning period available for seat planning from '(.*)'to '(.*)'"), SetCulture("sv-SE")]
 		public void ThenIShouldSeeAPlanningPeriodAvailableForSeatPlanning(DateTime fromDate, DateTime toDate)

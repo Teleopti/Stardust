@@ -880,6 +880,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>SeatMap.feature</DependentUpon>
     </Compile>
+    <Compile Include="Wfm\Seat Management\SeatMapBookingView.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SeatMapBookingView.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Wfm\Seat Management\SeatMapBookingViewStepDefinitions.cs" />
     <Compile Include="Wfm\Seat Management\SeatMapStepDefinitions.cs" />
     <Compile Include="Wfm\Seat Management\SeatPlan.feature.cs">
       <AutoGen>True</AutoGen>
@@ -1239,6 +1245,10 @@
     <None Include="Wfm\Seat Management\SeatMap.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>SeatMap.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Wfm\Seat Management\SeatMapBookingView.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>SeatMapBookingView.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\Seat Management\SeatPlan.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

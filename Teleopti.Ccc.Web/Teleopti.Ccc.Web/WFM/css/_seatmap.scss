@@ -236,6 +236,12 @@ seatmap-editor{
 	background:#FFFFFF;
 	transition:all 0.35s ease-in-out;
 	padding-top:1px;
+	margin-left:-10px;
+	margin-right:-10px;
+}
+
+.seatmap-occupancy-detail span{
+	max-width:100%;
 }
 
 .seatmap-seatbooking-previousday{
