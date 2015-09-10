@@ -235,6 +235,12 @@
     <Compile Include="Data\Setups\DoNotUse\Agent.cs" />
     <Compile Include="Data\Setups\Default\IHashableDataSetup.cs" />
     <Compile Include="Data\TenantUnitOfWorkState.cs" />
+    <Compile Include="MultiTenancy\MultiTenancyStepDefinition.cs" />
+    <Compile Include="MultiTenancy\Tenants.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Tenants.feature</DependentUpon>
+    </Compile>
     <Compile Include="Wfm\Forecasting\QuickForecaster.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1004,6 +1010,10 @@
     <None Include="Anywhere\Reports.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Reports.feature.cs</LastGenOutput>
+    </None>
+    <None Include="MultiTenancy\Tenants.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Tenants.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\Forecasting\QuickForecaster.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
