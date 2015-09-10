@@ -1,0 +1,42 @@
+﻿using log4net;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.Infrastructure.Licensing
+{
+	public class SetLicenseActivator : ILicenseFeedback
+	{
+		private readonly ILicenseVerifierFactory _licenseVerifierFactory;
+		private readonly ILog _logger;
+
+		public SetLicenseActivator(ILog logger, ILicenseVerifierFactory licenseVerifierFactory)
+		{
+			_logger = logger;
+			_licenseVerifierFactory = licenseVerifierFactory;
+		}
+
+		public void Execute(IDataSource dataSource)
+		{
+			var licenseVerifier = _licenseVerifierFactory.Create(this, dataSource.Application);
+			var licenseService = licenseVerifier.LoadAndVerifyLicense();
+			if (licenseService != null)
+			{
+				LicenseProvider.ProvideLicenseActivator(dataSource.DataSourceName, licenseService);
+			}
+		}
+
+		public void Warning(string warning)
+		{
+			Warning(warning, "");
+		}
+
+		public void Warning(string warning, string caption)
+		{
+			_logger.Warn(warning);
+		}
+
+		public void Error(string error)
+		{
+			_logger.Error(error);
+		}
+	}
+}

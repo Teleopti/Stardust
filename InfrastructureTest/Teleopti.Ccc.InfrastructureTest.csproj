@@ -185,6 +185,7 @@
     <Compile Include="DistributedLock\DistributedLockTest.cs" />
     <Compile Include="Foundation\CouldNotCreateTransactionExceptionTest.cs" />
     <Compile Include="Foundation\HttpRequestTrueTest.cs" />
+    <Compile Include="Licensing\SetLicenseActivatorTest.cs" />
     <Compile Include="MessageBrokerUnitOfWork\MessageBrokerUnitOfWorkTest.cs" />
     <Compile Include="MessageBroker\MailboxRepositoryTest.cs" />
     <Compile Include="MessageBroker\MessageBrokerServerTest.cs" />
