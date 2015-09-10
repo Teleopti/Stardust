@@ -4,9 +4,12 @@ using Rhino.Mocks;
 using Rhino.ServiceBus;
 using Rhino.ServiceBus.MessageModules;
 using SharpTestsEx;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.Sdk.ServiceBus;
+using Teleopti.Ccc.Sdk.ServiceBus.Container;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.Requests;
@@ -14,7 +17,7 @@ using Teleopti.Interfaces.Messages.Requests;
 namespace Teleopti.Ccc.Sdk.ServiceBusTest
 {
     [TestFixture]
-    public class AbsenceRequestResolveTest
+    public class ContainerTest
     {
         [Test]
         public void ShouldResolveNewAbsenceRequestConsumer()
@@ -56,5 +59,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 				container.Resolve<IMessageModule>().Should().Not.Be.Null();
 			}
 		}
-    }
+
+		[Test]
+		public void ShouldResolveInitializeApplication()
+		{
+			using (var container = new ContainerBuilder().Build())
+			{
+				new ContainerConfiguration(container, new FalseToggleManager()).Configure(null);
+				container.Resolve<IInitializeApplication>().Should().Not.Be.Null();
+			}
+		}
+	}
 }

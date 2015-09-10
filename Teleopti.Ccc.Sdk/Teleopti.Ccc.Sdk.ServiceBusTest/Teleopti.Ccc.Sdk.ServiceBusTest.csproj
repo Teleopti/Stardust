@@ -133,7 +133,7 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AbsenceRequestResolveTest.cs" />
+    <Compile Include="ContainerTest.cs" />
     <Compile Include="AgentBadge\AgentBadgeWithRankCalculatorTest.cs" />
     <Compile Include="AgentBadge\AgentBadgeCalculatorTest.cs" />
     <Compile Include="AgentBadge\BadgeCalculationInitConsumerTest.cs" />
@@ -163,7 +163,6 @@
     <Compile Include="Forecast\RecalculateForecastOnSkillConsumerTest.cs" />
     <Compile Include="Forecast\SendImportForecastBusMessageTest.cs" />
     <Compile Include="Forecast\StatisticLoaderTest.cs" />
-    <Compile Include="InitializeApplicationResolveTest.cs" />
     <Compile Include="LocalServiceBusPublisherTest.cs" />
     <Compile Include="NewAbsenceReportConsumerTest.cs" />
     <Compile Include="NewAbsenceRequestConsumerTest.cs" />
