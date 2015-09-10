@@ -46,10 +46,12 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 		{
 			var appConnString = string.Format("Data source={0};Initial Catalog={1}", RandomName.Make(), RandomName.Make());
 			var analConnString = string.Format("Data source={0};Initial Catalog={1}", RandomName.Make(), RandomName.Make());
+			var aggConnString = string.Format("Data source={0};Initial Catalog={1}", RandomName.Make(), RandomName.Make());
 
 			var tenant = new Tenant(RandomName.Make());
 			tenant.DataSourceConfiguration.SetApplicationConnectionString(appConnString);
 			tenant.DataSourceConfiguration.SetAnalyticsConnectionString(analConnString);
+			tenant.DataSourceConfiguration.SetAggregationConnectionString(aggConnString);
 			target.Persist(tenant);
 
 			var result = tenantUnitOfWorkManager.CurrentSession()
@@ -59,6 +61,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 
 			result.DataSourceConfiguration.ApplicationConnectionString.Should().Be.EqualTo(appConnString);
 			result.DataSourceConfiguration.AnalyticsConnectionString.Should().Be.EqualTo(analConnString);
+			result.DataSourceConfiguration.AggregationConnectionString.Should().Be.EqualTo(aggConnString);
 		}
 
 		[Test]

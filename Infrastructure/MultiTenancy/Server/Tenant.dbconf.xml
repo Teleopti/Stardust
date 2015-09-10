@@ -13,6 +13,7 @@
 		<component name="DataSourceConfiguration">
 			<property name="ApplicationConnectionString" />
 			<property name="AnalyticsConnectionString" />
+			<property name="AggregationConnectionString" />
 			<map name="ApplicationNHibernateConfig" table="TenantApplicationNhibernateConfig" access="field.camelcase-underscore">
 				<key column="TenantId"/>
 				<index column="ConfigKey" type="string"/>

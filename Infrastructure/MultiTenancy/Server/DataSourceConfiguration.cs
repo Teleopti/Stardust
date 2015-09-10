@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		{
 			ApplicationConnectionString = string.Empty;
 			AnalyticsConnectionString = string.Empty;
+			AggregationConnectionString = string.Empty;
 			_applicationNHibernateConfig = new Dictionary<string, string> { { Environment.CommandTimeout, "60" } };
 		}
 
@@ -26,6 +27,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 
 		public virtual string AnalyticsConnectionString { get; protected set; }
 		public virtual string ApplicationConnectionString { get; protected set; }
+		public virtual string AggregationConnectionString { get; protected set; }
 
 		public virtual IDictionary<string, string> ApplicationNHibernateConfig
 		{
@@ -44,6 +46,11 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 			AnalyticsConnectionString = analyticsConnectionString;
 		}
 
+		public virtual void SetAggregationConnectionString(string aggregationConnectionString)
+		{
+			new SqlConnectionStringBuilder(aggregationConnectionString);
+			AggregationConnectionString = aggregationConnectionString;
+		}
 		public void SetNHibernateConfig(string key, string value)
 		{
 			_applicationNHibernateConfig[key] = value;
