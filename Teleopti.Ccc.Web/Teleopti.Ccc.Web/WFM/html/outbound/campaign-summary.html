@@ -44,24 +44,25 @@
 		                </div>
 		                <div class="relative clearfix">
 			                <button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="show(campaign)" translate>Edit</button>
-							<button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="switchBacklog(campaign);" ng-class="{'selected-ope-btn': campaign.backlogSwitch}" translate>AddBacklog</button>
+			                <button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="switchBacklog(campaign);" ng-class="{'selected-ope-btn': campaign.backlogSwitch}" translate>AddBacklog</button>
 			                <button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="replan(campaign)" translate>Replan</button>
 			                <button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="switchManualPlan(campaign);" ng-class="{'selected-ope-btn': campaign.manualPlanswitch}" translate>ManualPlan</button>
 			                <div class="edit-container pull-right" style="margin: 6px 10px 0 65px;">
 				                <div class="input-container relative" ng-show="campaign.manualPlanswitch">
-					                <input type="text" placeholder="plan..." ng-model="campaign.manualPlanInput" range-validate range-min="0" integer-only="false" style="width: 202px;"/>
-					                <i class="mdi mdi-information-outline pink" style="position: absolute; left: 195px; top: 9px;" ng-show="isManualProductionPlanInvalid(campaign)"></i>
+					                <label for="ManualPlanInput" translate>ManualPlan</label>: 
+					                <input id="ManualPlanInput" type="text" placeholder="plan..." ng-model="campaign.manualPlanInput" range-validate range-min="0" integer-only="false"/>
 					                <button class="wfm-btn btn-sm wfm-btn-invis-primary pink p-5-10 m-r-0" ng-click="addManualPlan(campaign)" ng-disabled="isManualProductionPlanInvalid(campaign)" ng-class="{'wfm-btn-invis-disabled': isManualProductionPlanInvalid(campaign)}" translate>Save</button>
 					                <button class="wfm-btn btn-sm wfm-btn-invis-primary pink p-5-10 m-l-0" ng-click="removeManualPlan(campaign)" translate>Reset</button>
 				                </div>
-								<div class="input-container relative" ng-show="campaign.backlogSwitch">
-									<input type="text" placeholder="backlog..." ng-model="campaign.backlogInput" range-validate range-min="0" integer-only="false" style="width: 202px;" />
-									<i class="mdi mdi-information-outline pink" style="position: absolute; left: 195px; top: 9px;" ng-show="isManualBacklogInvalid(campaign)"></i>
-									<button class="wfm-btn btn-sm wfm-btn-invis-primary pink p-5-10 m-r-0" ng-click="addBacklog(campaign)" ng-disabled="isManualBacklogInvalid(campaign)" ng-class="{'wfm-btn-invis-disabled': isManualBacklogInvalid(campaign)}" translate>Save</button>
-									<button class="wfm-btn btn-sm wfm-btn-invis-primary pink p-5-10 m-l-0" ng-click="removeBacklog(campaign)" translate>Reset</button>
-								</div>
+				                <div class="input-container relative" ng-show="campaign.backlogSwitch">
+					                <label for="ActualBacklogInput" translate>AddBacklog</label>: 
+					                <input id="ActualBacklogInput" type="text" placeholder="backlog..." ng-model="campaign.backlogInput" range-validate range-min="0" integer-only="false"/>
+					                <button class="wfm-btn btn-sm wfm-btn-invis-primary pink p-5-10 m-r-0" ng-click="addBacklog(campaign)" ng-disabled="isManualBacklogInvalid(campaign)" ng-class="{'wfm-btn-invis-disabled': isManualBacklogInvalid(campaign)}" translate>Save</button>
+					                <button class="wfm-btn btn-sm wfm-btn-invis-primary pink p-5-10 m-l-0" ng-click="removeBacklog(campaign)" translate>Reset</button>
+				                </div>
 			                </div>
 		                </div>
+						<div class="error-msg-container  alert-warning notice-spacer m-t-10" ng-show="showDateSelectionHint(campaign)" ><i class='mdi mdi-alert'></i> <span translate>SelectDateInChart</span></div>
 	                </div>
                 </card-body>
             </wfm-card>

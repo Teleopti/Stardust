@@ -2,11 +2,11 @@
 
 	angular.module('wfm.outbound')
 		.controller('OutboundSummaryCtrl', [
-			'$scope', '$state', '$stateParams', 'outboundService', 'outboundChartService',  '$filter',
+			'$scope', '$state', '$stateParams', 'outboundService', 'outboundChartService',  '$filter', 'outboundNotificationService',
 			summaryCtrl
 		]);
 
-	function summaryCtrl($scope, $state, $stateParams, outboundService, outboundChartService, $filter) {
+	function summaryCtrl($scope, $state, $stateParams, outboundService, outboundChartService, $filter, outboundNotificationService) {
         $scope.isLoadFinished = false;
         $scope.listCampaignFinished = false;
 
@@ -27,6 +27,7 @@
     		outboundChartService.replan(campaign.Id, function () {
 			    refreshGraphData(campaign, $scope);
 			    refreshCampaignStatistics($scope);
+			    outboundNotificationService.notifyCampaignUpdateSuccess(campaign);
 		    });
 		}
     	
@@ -45,6 +46,7 @@
 			outboundChartService.removeManualPlan(removeManualPlan, function() {
 				refreshGraphData(campaign, $scope);
 				refreshCampaignStatistics($scope);
+				outboundNotificationService.notifyCampaignUpdateSuccess(campaign);
 			});
 		    $scope.$broadcast('campaign.chart.clear.selection', { Id: campaign.Id });
 			campaign.manualPlanInput = null;
@@ -64,6 +66,7 @@
     		outboundChartService.removeActualBacklog(removeActualBacklog, function () {
     			refreshGraphData(campaign, $scope);
     			refreshCampaignStatistics($scope);
+    			outboundNotificationService.notifyCampaignUpdateSuccess(campaign);
     		});
     		$scope.$broadcast('campaign.chart.clear.selection', { Id: campaign.Id });
     		campaign.backlogInput = null;
@@ -82,6 +85,7 @@
     		outboundChartService.updateBacklog(campaign.backlog, function () {
     			refreshGraphData(campaign, $scope);
     			refreshCampaignStatistics($scope);
+    			outboundNotificationService.notifyCampaignUpdateSuccess(campaign);
     		});
     		$scope.$broadcast('campaign.chart.clear.selection', { Id: campaign.Id });
     		campaign.backlogInput = null;
@@ -102,6 +106,7 @@
     		outboundChartService.updateManualPlan(campaign.manualPlan, function () {
     			refreshGraphData(campaign, $scope);
     			refreshCampaignStatistics($scope);
+    			outboundNotificationService.notifyCampaignUpdateSuccess(campaign);
 		    });
     		$scope.$broadcast('campaign.chart.clear.selection', { Id: campaign.Id });
     		campaign.manualPlanInput = null;
@@ -118,11 +123,15 @@
 		}
 
 		$scope.isManualProductionPlanInvalid = function (campaign) {
-			return !(angular.isDefined(campaign.manualPlanInput) && campaign.manualPlanInput != null && campaign.manualPlanInput >= 0);
+			return !(angular.isDefined(campaign.manualPlanInput) && campaign.manualPlanInput != null && campaign.manualPlanInput >= 0 && campaign.selectedDates && campaign.selectedDates.length > 0);
 		}
 
 		$scope.isManualBacklogInvalid = function (campaign) {
-			return !(angular.isDefined(campaign.backlogInput) && campaign.backlogInput != null && campaign.backlogInput >= 0);
+			return !(angular.isDefined(campaign.backlogInput) && campaign.backlogInput != null && campaign.backlogInput >= 0 && campaign.selectedDates && campaign.selectedDates.length > 0);
+		}
+
+		$scope.showDateSelectionHint = function(campaign) {
+			return !campaign.selectedDates || campaign.selectedDates.length == 0 && (campaign.manualPlanswitch || campaign.backlogSwitch);
 		}
 		
 		$scope.switchManualPlan = function (campaign) {
@@ -188,7 +197,7 @@
         function refreshGraphData(campaign, scope) {
         	outboundService.getCampaignSummary(campaign.Id, function (_campaign) {
         		angular.extend(campaign, _campaign);
-        		outboundChartService.getCampaignVisualization(campaign.Id, function (data, translations, manualPlan, closedDays, backlog) {
+        		outboundChartService.getCampaignVisualization(campaign.Id, function (data, translations, manualPlan, closedDays, backlog) {        		
         			campaign.graphData = data;
         			campaign.rawManualPlan = manualPlan;
         			campaign.isManualBacklog = backlog;

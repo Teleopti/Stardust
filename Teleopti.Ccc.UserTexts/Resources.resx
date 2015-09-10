@@ -13347,7 +13347,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>campaign error type</comment>
   </data>
   <data name="ManualPlan" xml:space="preserve">
-    <value>manual plan</value>
+    <value>Manual Plan</value>
     <comment>for campaigns to modify production plan</comment>
   </data>
   <data name="Backlog" xml:space="preserve">
@@ -13469,5 +13469,9 @@ Reduce the complexity to use these shifts.</value>
   <data name="ResetSelection" xml:space="preserve">
     <value>Reset selection</value>
     <comment>use in WFM web people module</comment>
+  </data>
+  <data name="SelectDateInChart" xml:space="preserve">
+    <value>Please select dates in the chart.</value>
+    <comment>Hint to display to ask the user to select dates from the campaign chart (outbound)</comment>
   </data>
 </root>

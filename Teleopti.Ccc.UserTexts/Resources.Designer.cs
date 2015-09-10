@@ -13425,7 +13425,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Manage people.
+        ///   Looks up a localized string similar to Manage People.
         /// </summary>
         public static string ManagePeople {
             get {
@@ -13588,7 +13588,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to manual plan.
+        ///   Looks up a localized string similar to Manual Plan.
         /// </summary>
         public static string ManualPlan {
             get {
@@ -23474,6 +23474,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please select dates in the chart..
+        /// </summary>
+        public static string SelectDateInChart {
+            get {
+                return ResourceManager.GetString("SelectDateInChart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select dates.
         /// </summary>
         public static string SelectDates {
@@ -23582,7 +23591,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Selected people.
+        ///   Looks up a localized string similar to Selected People.
         /// </summary>
         public static string SelectedPeople {
             get {
