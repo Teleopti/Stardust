@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<FindPersonInfo>().As<IFindPersonInfo>().SingleInstance();
 			builder.RegisterType<FindPersonInfoByCredentials>().As<IFindPersonInfoByCredentials>().SingleInstance();
 			builder.RegisterType<FindTenantNameByRtaKey>().As<IFindTenantNameByRtaKey>().SingleInstance();
+			builder.RegisterType<FindTenantByName>().As<IFindTenantByName>().SingleInstance();
 			builder.RegisterType<CountTenants>().As<ICountTenants>().SingleInstance();
 
 			builder.RegisterType<FindPersonInfoByIdentity>().As<IFindPersonInfoByIdentity>().SingleInstance();

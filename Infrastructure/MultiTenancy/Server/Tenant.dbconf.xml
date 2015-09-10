@@ -27,5 +27,8 @@
 select t from Tenant t
 ]]>
 	</query>
+	<query name="findByName">
+select t from Tenant t where t.Name=:name
+	</query>
 	
 </hibernate-mapping>

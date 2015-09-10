@@ -290,6 +290,7 @@
     <Compile Include="MultiTenancy\Server\ICheckPasswordStrength.cs" />
     <Compile Include="MultiTenancy\Server\ICurrentTenant.cs" />
     <Compile Include="MultiTenancy\Server\ICurrentTenantUser.cs" />
+    <Compile Include="MultiTenancy\Server\Queries\FindTenantByName.cs" />
     <Compile Include="MultiTenancy\Server\Queries\FindTenantNameByRtaKey.cs" />
     <Compile Include="MultiTenancy\Server\Queries\IdentityUserQueryFake.cs" />
     <Compile Include="MultiTenancy\Server\Queries\IFindLogonInfo.cs" />
@@ -302,6 +303,7 @@
     <Compile Include="MultiTenancy\Server\NHibernate\TenantNhibernateExceptionConverter.cs" />
     <Compile Include="MultiTenancy\Server\NoTenantAuthenticationAttribute.cs" />
     <Compile Include="MultiTenancy\Server\PasswordStrengthException.cs" />
+    <Compile Include="MultiTenancy\Server\Queries\IFindTenantByName.cs" />
     <Compile Include="MultiTenancy\Server\Queries\PersistPersonInfoFake.cs" />
     <Compile Include="MultiTenancy\Server\Queries\PersistTenant.cs" />
     <Compile Include="MultiTenancy\Server\NHibernate\TenantUnitOfWorkFake.cs" />

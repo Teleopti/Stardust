@@ -41,5 +41,10 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		{
 			TenantPassword = otherPersonInfo.TenantPassword;
 		}
+
+		public virtual void ChangeTenant_OnlyUseInTest(Tenant newTenant)
+		{
+			Tenant = newTenant;
+		}
 	}
 }

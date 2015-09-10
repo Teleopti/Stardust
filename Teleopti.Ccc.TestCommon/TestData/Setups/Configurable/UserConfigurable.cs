@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
@@ -26,6 +27,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string Role { get; set; }
 
 		public bool WindowsAuthentication { get; set; }
+
+		public string Tenant { get; set; }
 
 		public UserConfigurable()
 		{
@@ -63,16 +66,21 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public void Apply(ICurrentTenantSession tenantSession, IPerson user, ILogonName logonName)
 		{
-			if (!WindowsAuthentication && !changedApplicationLogonCredentials()) return;
+			if (!WindowsAuthentication && !changedApplicationLogonCredentials() && Tenant==null) return;
 
 			var personInfo = tenantSession.CurrentSession().Get<PersonInfo>(user.Id.Value);
 			if (personInfo == null)
 			{
-				var tenant = defaultTenant(tenantSession);
-				personInfo = new PersonInfo(tenant, user.Id.Value);
+				personInfo = new PersonInfo(defaultTenant(tenantSession), user.Id.Value);
 				tenantSession.CurrentSession().Save(personInfo);
 			}
 
+
+			if (Tenant != null)
+			{
+				personInfo.ChangeTenant_OnlyUseInTest(new FindTenantByName(tenantSession).Find(Tenant));
+			}
+			
 			if (WindowsAuthentication)
 			{
 				personInfo.SetIdentity(IdentityHelper.Merge(Environment.UserDomainName, Environment.UserName));

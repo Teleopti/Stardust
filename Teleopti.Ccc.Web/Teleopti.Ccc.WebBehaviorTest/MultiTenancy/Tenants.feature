@@ -3,6 +3,11 @@ In order to host multiple customers on a single installation
 As a application owner
 I want to simpler life
 
+Background:
+	Given I have a role with
+	| Field | Value |
+	| Name  | Agent |
+
 @Ignore
 Scenario: Log on to newly added scenario
 	Given There is a tenant called 'NewTenant'
@@ -16,4 +21,3 @@ Scenario: Log on to newly added scenario
 	| UserName | theUser     |
 	| Password | thePassword |
 	Then I should be signed in
-

@@ -213,6 +213,7 @@
     <Compile Include="MultiTenancy\Server\Queries\FindPersonInfoByCredentialsTest.cs" />
     <Compile Include="MultiTenancy\Server\Queries\FindPersonInfoByIdentityTest.cs" />
     <Compile Include="MultiTenancy\Server\Queries\FindPersonInfoTest.cs" />
+    <Compile Include="MultiTenancy\Server\Queries\FindTenantByNameTest.cs" />
     <Compile Include="MultiTenancy\Server\Queries\FindTenantNameByRtaKeyTest.cs" />
     <Compile Include="MultiTenancy\Server\Queries\IdentityUserQueryTest.cs" />
     <Compile Include="MultiTenancy\Server\Queries\PersistLogonAttemptTest.cs" />
