@@ -82,7 +82,8 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			var passwordPolicyDocument = XDocument.Parse(settings.PasswordPolicy);
 			var passwordPolicyService = new LoadPasswordPolicyService(passwordPolicyDocument);
 
-			//temp hack - sometime in the future -> no tenant db dep here!
+			//TODO: temp hack - sometime in the future -> no tenant db dep here!
+			//currently needs to be loaded due to payroll stuff. don't really know why...
 			var tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
 			using (tenantUnitOfWorkManager.Start())
 			{
