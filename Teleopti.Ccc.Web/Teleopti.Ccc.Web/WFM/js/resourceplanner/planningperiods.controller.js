@@ -17,7 +17,7 @@
 	        }
 
 	        updateRunningStatus();
-	        var stopPolling = $interval(updateRunningStatus, 30 * 1000);
+	        var stopPolling = $interval(updateRunningStatus, 10 * 1000);
 
 	        function cancelPoll() {
 	            $scope.isScheduleRunning = false;
