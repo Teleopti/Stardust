@@ -1,4 +1,7 @@
-﻿Feature: SeatMapBookingView
+﻿@OnlyRunIfEnabled('SeatPlanner_Logon_32003')
+@OnlyRunIfEnabled('Wfm_SeatPlan_SeatMapBookingView_32814')
+
+Feature: SeatMapBookingView
 	I want to view the seat bookings
 
 Background: 
