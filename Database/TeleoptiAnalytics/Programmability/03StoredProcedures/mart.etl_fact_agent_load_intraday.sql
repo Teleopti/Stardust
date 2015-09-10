@@ -195,15 +195,12 @@ BEGIN  --Single datasource_id
 	END
 
 	
-	IF @source_date_id_utc>@target_date_id_utc
-	BEGIN
 		--If Agg is way ahead of Mart limit fetch to 3 days.
-		IF (@source_date_id_utc-@target_date_id_utc > 3)
+	IF (@source_date_id_utc-@target_date_id_utc > 3)
 		BEGIN
 			SELECT 'Agg is way ahead of Mart limit fetch to 3 days'
 			SET @source_date_local = DATEADD(DAY,3,@target_date_local)
-		END
-		SET @source_interval_local = (select max(interval_id) from mart.dim_interval)
+			SET @source_interval_local = (select max(interval_id) from mart.dim_interval)
 
 		SELECT	@source_date_id_utc		= b.date_id,
 				@source_interval_id_utc	= b.interval_id
