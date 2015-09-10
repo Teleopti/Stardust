@@ -159,10 +159,6 @@ function PeopleController($scope, $filter, $state, $stateParams, $translate, i18
 
 			gridApi.selection.on.rowSelectionChangedBatch($scope, function (rows) {
 				selectPeople(rows);
-				$scope.selectAllVisible = rows.length > 0
-					&& rows.length === $scope.gridOptions.data.length
-					&& rows[0].isSelected
-					&& $scope.totalPages > 1;
 			});
 
 			$scope.gridApi.core.on.sortChanged($scope, $scope.sortChanged);
@@ -192,6 +188,9 @@ function PeopleController($scope, $filter, $state, $stateParams, $translate, i18
 				$scope.selectedPeopleList.splice(personIndex, 1);
 			}
 		});
+
+		$scope.selectAllVisible = $scope.totalPages > 1
+			&& $scope.gridApi.selection.getSelectedRows().length === $scope.gridOptions.data.length;
 	}
 
 	$scope.selectAllMatch = function () {
