@@ -24,9 +24,9 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 		private IMessageSender _messageSender;
 
 		public JobHelper(ILoadAllTenants loadAllTenants, ITenantUnitOfWork tenantUnitOfWork,
-			IAvailableBusinessUnitsProvider availableBusinessUnitsProvider, IDataSourcesFactory dataSourcesFactory)
+			IAvailableBusinessUnitsProvider availableBusinessUnitsProvider)
 		{
-			_logHelp = new LogOnHelper(loadAllTenants, tenantUnitOfWork, availableBusinessUnitsProvider, dataSourcesFactory);
+			_logHelp = new LogOnHelper(loadAllTenants, tenantUnitOfWork, availableBusinessUnitsProvider);
 			MessageBrokerContainerDontUse.Configure(
 				ConfigurationManager.AppSettings["MessageBroker"],
 				new IConnectionKeepAliveStrategy[] {},

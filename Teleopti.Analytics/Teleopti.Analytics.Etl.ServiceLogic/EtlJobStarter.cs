@@ -54,7 +54,7 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 				_pmInstallation = config.PmInstallation;
 				_container = configureContainer();
 				_jobHelper = new JobHelper(_container.Resolve<ILoadAllTenants>(), _container.Resolve<ITenantUnitOfWork>(),
-					_container.Resolve<IAvailableBusinessUnitsProvider>(), _container.Resolve<IDataSourcesFactory>());
+					_container.Resolve<IAvailableBusinessUnitsProvider>());
 				_timer = new Timer(10000);
 				_timer.Elapsed += Tick;
 			}

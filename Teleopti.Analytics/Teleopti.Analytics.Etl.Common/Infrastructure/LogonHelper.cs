@@ -6,14 +6,12 @@ using System.Security.Authentication;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
@@ -21,6 +19,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Interfaces.Domain;
+using Environment = NHibernate.Cfg.Environment;
 
 namespace Teleopti.Analytics.Etl.Common.Infrastructure
 {
@@ -29,7 +28,6 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		private readonly ILoadAllTenants _loadAllTenants;
 		private readonly ITenantUnitOfWork _tenantUnitOfWork;
 		private readonly IAvailableBusinessUnitsProvider _availableBusinessUnitsProvider;
-		private readonly IDataSourcesFactory _dataSourcesFactory;
 		private DataSourceContainer _choosenDb;
 		private LogOnService _logonService;
 		private IList<IBusinessUnit> _buList;
@@ -38,13 +36,11 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public LogOnHelper(ILoadAllTenants loadAllTenants, 
 									ITenantUnitOfWork tenantUnitOfWork,
-									IAvailableBusinessUnitsProvider availableBusinessUnitsProvider,
-									IDataSourcesFactory dataSourcesFactory)
+									IAvailableBusinessUnitsProvider availableBusinessUnitsProvider)
 		{
 			_loadAllTenants = loadAllTenants;
 			_tenantUnitOfWork = tenantUnitOfWork;
 			_availableBusinessUnitsProvider = availableBusinessUnitsProvider;
-			_dataSourcesFactory = dataSourcesFactory;
 			initializeStateHolder();
 			RefreshTenantList();
 		}
@@ -95,35 +91,13 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		private void initializeStateHolder()
 		{
-			// Code that runs on application startup
-			var dataSourcesFactory = new DataSourcesFactory(new EnversConfiguration(), new NoMessageSenders(),
-				DataSourceConfigurationSetter.ForEtl(),
-				new CurrentHttpContext(),
-				() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging
-				);
-			var dsForTenant = new DataSourceForTenant(dataSourcesFactory);
 			var application = new InitializeApplication(null);
-
-			using (_tenantUnitOfWork.Start())
-			{
-				application.Start(new StateManager(), null, ConfigurationManager.AppSettings.ToDictionary(), false);
-				tenants.ForEach(dsConf =>
-				{
-					dsForTenant.MakeSureDataSourceExists(dsConf.Name,
-						dsConf.DataSourceConfiguration.ApplicationConnectionString,
-						dsConf.DataSourceConfiguration.AnalyticsConnectionString,
-						dsConf.DataSourceConfiguration.ApplicationNHibernateConfig);
-				});
-
-
-			}
+			application.Start(new StateManager(), null, ConfigurationManager.AppSettings.ToDictionary(), false);
 
 			_logOnOff = new LogOnOff(new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory()));
 			_logonService =
 				new LogOnService(_logOnOff, new AvailableBusinessUnitsProvider(new RepositoryFactory()));
-			
 		}
-
 
 		public bool SelectDataSourceContainer(string dataSourceName)
 		{
@@ -142,11 +116,11 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public void Dispose()
 		{
-			Dispose(true);
+			dispose(true);
 			GC.SuppressFinalize(this);
 		}
 
-		private void Dispose(bool disposing)
+		private void dispose(bool disposing)
 		{
 			if (disposing)
 			{
@@ -176,14 +150,21 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 		public void LogOff()
 		{
-			//_logonService.LogOff();
+			_logonService.LogOff();
 		}
 
 		public void RefreshTenantList()
 		{
+			var dataSourcesFactory = new DataSourcesFactory(new EnversConfiguration(), new NoMessageSenders(),
+				DataSourceConfigurationSetter.ForEtl(),
+				new CurrentHttpContext(),
+				() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging
+				);
+
 			using (_tenantUnitOfWork.Start())
 			{
 				var tenants = _loadAllTenants.Tenants();
+				
 				var configs = new List<TenantBaseConfig>();
 				_tenantNames = new List<ITenantName>();
 				foreach (var tenant in tenants)
@@ -194,12 +175,12 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 						baseconfig = config.BaseConfiguration;
 					var applicationNhibConfiguration = new Dictionary<string, string>
 					{
-						[NHibernate.Cfg.Environment.SessionFactoryName] = tenant.Name,
-						[NHibernate.Cfg.Environment.ConnectionString] = tenant.DataSourceConfiguration.ApplicationConnectionString
+						[Environment.SessionFactoryName] = tenant.Name,
+						[Environment.ConnectionString] = tenant.DataSourceConfiguration.ApplicationConnectionString
 					};
-					var newDataSource = _dataSourcesFactory.Create(applicationNhibConfiguration, tenant.DataSourceConfiguration.AnalyticsConnectionString);
-
-					configs.Add(new TenantBaseConfig { Tenant = tenant, BaseConfiguration = baseconfig, TenantDataSource = newDataSource });
+					var newDataSource = dataSourcesFactory.Create(applicationNhibConfiguration, tenant.DataSourceConfiguration.AnalyticsConnectionString);
+					
+               configs.Add(new TenantBaseConfig { Tenant = tenant, BaseConfiguration = baseconfig, TenantDataSource = newDataSource });
 					_tenantNames.Add(new TenantName { DataSourceName = tenant.Name });
 				}
 				TenantHolder.Instance.SetTenantBaseConfigs(configs);

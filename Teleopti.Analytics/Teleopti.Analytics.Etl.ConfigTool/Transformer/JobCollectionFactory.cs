@@ -40,8 +40,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Transformer
 					_baseConfiguration.RunIndexMaintenance
 					);
 				_baseConfiguration.JobHelper = new JobHelper(_container.Resolve<ILoadAllTenants>(),
-					_container.Resolve<ITenantUnitOfWork>(), _container.Resolve<IAvailableBusinessUnitsProvider>(),
-					_container.Resolve<IDataSourcesFactory>());
+					_container.Resolve<ITenantUnitOfWork>(), _container.Resolve<IAvailableBusinessUnitsProvider>());
 				jobParameters.Helper = _baseConfiguration.JobHelper;
 
 				var jobCollection = new JobCollection(jobParameters);
