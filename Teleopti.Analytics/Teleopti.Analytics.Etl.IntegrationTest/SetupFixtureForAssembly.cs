@@ -7,6 +7,7 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
+using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Specific;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -21,7 +22,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		[SetUp]
 		public void Setup()
 		{
-			DataSource = DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");
+			DataSource = DataSourceHelper.CreateDataSource(new NoMessageSenders(), UserConfigurable.DefaultTenantName);
 
 			var personThatCreatesTestData = PersonFactory.CreatePerson("UserThatCreatesTestData", "password");
 
@@ -33,7 +34,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().Current().CreateAndOpenUnitOfWork())
 			{
-				var testDataFactory = new TestDataFactory(defaultTenant(tenantUnitOfWorkManager), action =>
+				var testDataFactory = new TestDataFactory(action =>
 					{
 						action.Invoke(uow);
 						uow.PersistAll();
@@ -51,16 +52,6 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			}
 
 			DataSourceHelper.BackupCcc7Database(123);
-		}
-
-		private static Tenant _defaultTenant;
-		private static Tenant defaultTenant(TenantUnitOfWorkManager tenantUnitOfWorkManager)
-		{
-			using (tenantUnitOfWorkManager.Start())
-			{
-				return _defaultTenant ??
-							 (_defaultTenant = tenantUnitOfWorkManager.CurrentSession().CreateQuery("select t from Tenant t where t.id=1").UniqueResult<Tenant>());
-			}
 		}
 
 		private static void DisposeUnitOfWork()
@@ -84,7 +75,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		{
 			var tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForHostsWithOneUser(UnitOfWorkFactory.Current.ConnectionString);
 
-			TestState.TestDataFactory = new TestDataFactory(defaultTenant(tenantUnitOfWorkManager), UnitOfWorkAction,
+			TestState.TestDataFactory = new TestDataFactory(UnitOfWorkAction,
 					tenantAction =>
 					{
 						tenantAction(tenantUnitOfWorkManager);
