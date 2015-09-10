@@ -6,17 +6,18 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 {
 	public class HistoricalPeriodProvider : IHistoricalPeriodProvider
 	{
-		private readonly IStatisticRepository _statisticRepository;
+		private readonly IRepositoryFactory _repositoryFactory;
 		private const int threeYears = -3;
 
-		public HistoricalPeriodProvider(IStatisticRepository statisticRepository)
+		public HistoricalPeriodProvider(IRepositoryFactory repositoryFactory)
 		{
-			_statisticRepository = statisticRepository;
+			_repositoryFactory = repositoryFactory;
 		}
 
 		public DateOnlyPeriod? AvailablePeriod(IWorkload workload)
 		{
-			var availableHistoricalPeriod = _statisticRepository.QueueStatisticsUpUntilDate(workload.QueueSourceCollection);
+			var statisticRepository = _repositoryFactory.CreateStatisticRepository();
+			var availableHistoricalPeriod = statisticRepository.QueueStatisticsUpUntilDate(workload.QueueSourceCollection);
 			if (!availableHistoricalPeriod.HasValue)
 				return null;
 			var endDate = availableHistoricalPeriod.Value.EndDate;
@@ -26,7 +27,8 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 
 		public DateOnlyPeriod? AvailableIntradayTemplatePeriod(IWorkload workload)
 		{
-			var availableHistoricalPeriod = _statisticRepository.QueueStatisticsUpUntilDate(workload.QueueSourceCollection);
+			var statisticRepository = _repositoryFactory.CreateStatisticRepository();
+			var availableHistoricalPeriod = statisticRepository.QueueStatisticsUpUntilDate(workload.QueueSourceCollection);
 			if (!availableHistoricalPeriod.HasValue)
 				return null;
 			return AvailableIntradayTemplatePeriod(availableHistoricalPeriod.Value);

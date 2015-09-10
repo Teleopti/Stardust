@@ -3,7 +3,7 @@
 angular.module('wfm.forecasting')
 	.controller('ForecastingStartCtrl', [
 		'$scope', '$state', 'Forecasting', '$http', '$stateParams',
-		function($scope, $state, forecasting, $http, $stateParams) {
+		function ($scope, $state, forecasting, $http, $stateParams) {
 			$scope.isForecastRunning = false;
 			forecasting.status.get().$promise.then(function(result) {
 				$scope.isForecastRunning = result.IsRunning;
@@ -13,7 +13,7 @@ angular.module('wfm.forecasting')
 			$scope.period = { startDate: startDate, endDate: endDate };
 
 			$scope.workloads = [];
-			forecasting.skillList.$promise.then(function(result) {
+			forecasting.skills.query().$promise.then(function(result) {
 				$scope.skills = result;
 				angular.forEach($scope.skills, function(skill) {
 					angular.forEach(skill.Workloads, function(workload) {

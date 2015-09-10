@@ -7,16 +7,17 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Historical
 {
 	public class DailyStatisticsProvider : IDailyStatisticsProvider
 	{
-		private readonly IStatisticRepository _statisticRepository;
+		private readonly IRepositoryFactory _repositoryFactory;
 
-		public DailyStatisticsProvider(IStatisticRepository statisticRepository)
+		public DailyStatisticsProvider(IRepositoryFactory repositoryFactory)
 		{
-			_statisticRepository = statisticRepository;
+			_repositoryFactory = repositoryFactory;
 		}
 
 		public IEnumerable<DailyStatistic> LoadDailyStatistics(IWorkload workload, DateOnlyPeriod dateRange)
 		{
-			var statisticTasks = _statisticRepository.LoadDailyStatisticForSpecificDates(workload.QueueSourceCollection,
+			var statisticRepository = _repositoryFactory.CreateStatisticRepository();
+			var statisticTasks = statisticRepository.LoadDailyStatisticForSpecificDates(workload.QueueSourceCollection,
 				dateRange.ToDateTimePeriod(workload.Skill.TimeZone), workload.Skill.TimeZone.Id, workload.Skill.MidnightBreakOffset);
 
 			var calculator = new QueueStatisticsCalculator(workload.QueueAdjustments);

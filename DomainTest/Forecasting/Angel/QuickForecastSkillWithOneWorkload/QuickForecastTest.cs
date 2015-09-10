@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 		[Test]
 		public void DoTheTest()
 		{
+			var repositoryFactory = MockRepository.GenerateMock<IRepositoryFactory>();
 			var statisticRepository = MockRepository.GenerateStub<IStatisticRepository>();
 			statisticRepository.Stub(
 				x =>
@@ -42,7 +43,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 					x.LoadDailyStatisticForSpecificDates(Workload.QueueSourceCollection,
 						HistoricalPeriodForMeasurement.ToDateTimePeriod(SkillTimeZoneInfo()), Workload.Skill.TimeZone.Id, Workload.Skill.MidnightBreakOffset))
 				.Return(StatisticTasksForMeasurement().ToArray());
-			var dailyStatistics = new DailyStatisticsProvider(statisticRepository);
+			repositoryFactory.Stub(x => x.CreateStatisticRepository()).Return(statisticRepository);
+			var dailyStatistics = new DailyStatisticsProvider(repositoryFactory);
 
 			var skillDays = CurrentSkillDays();
 
