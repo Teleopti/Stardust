@@ -4,16 +4,16 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 {
-	public interface IExtractIntervalsVoilatingMaxSeat
+	public interface IExtractIntervalsViolatingMaxSeat
 	{
 		IDictionary<DateTime , IntervalLevelMaxSeatInfo> IdentifyIntervalsWithBrokenMaxSeats(ITeamBlockInfo teamBlockInfo, ISchedulingResultStateHolder schedulingResultStateHolder, TimeZoneInfo timeZone, DateOnly baseDatePointer);
 	}
 
-	public class ExtractIntervalsVoilatingMaxSeat : IExtractIntervalsVoilatingMaxSeat
+	public class ExtractIntervalsViolatingMaxSeat : IExtractIntervalsViolatingMaxSeat
 	{
 		private readonly IMaxSeatInformationGeneratorBasedOnIntervals _maxSeatInformationGeneratorBasedOnIntervals;
 
-		public ExtractIntervalsVoilatingMaxSeat(
+		public ExtractIntervalsViolatingMaxSeat(
 			IMaxSeatInformationGeneratorBasedOnIntervals maxSeatInformationGeneratorBasedOnIntervals)
 		{
 			_maxSeatInformationGeneratorBasedOnIntervals = maxSeatInformationGeneratorBasedOnIntervals;
@@ -77,6 +77,5 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 					
 			}
 		}
-
 	}
 }

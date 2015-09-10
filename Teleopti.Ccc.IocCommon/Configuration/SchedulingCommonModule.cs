@@ -448,7 +448,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<IntervalLevelMaxSeatInfo>();
 			builder.RegisterType<MaxSeatBoostingFactorCalculator>().InstancePerLifetimeScope();
 			builder.RegisterType<PullTargetValueFromSkillIntervalData>().InstancePerLifetimeScope();
-			builder.RegisterType<ExtractIntervalsVoilatingMaxSeat>().As<IExtractIntervalsVoilatingMaxSeat>();
+			builder.RegisterType<ExtractIntervalsViolatingMaxSeat>().As<IExtractIntervalsViolatingMaxSeat>();
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]

@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 	[TestFixture]
 	public class ExtractIntervalsVoilatingMaxSeatTest
 	{
-		private IExtractIntervalsVoilatingMaxSeat _target;
+		private IExtractIntervalsViolatingMaxSeat _target;
 		private ITeamBlockInfo _teamBlockInfo;
 		private IBlockInfo _blockInfo;
 		private MockRepository _mock;
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 		{
 			_mock = new MockRepository();
 			_maxSeatInformationGeneratorBasedOnIntervals = _mock.StrictMock<IMaxSeatInformationGeneratorBasedOnIntervals>();
-			_target = new ExtractIntervalsVoilatingMaxSeat(_maxSeatInformationGeneratorBasedOnIntervals);
+			_target = new ExtractIntervalsViolatingMaxSeat(_maxSeatInformationGeneratorBasedOnIntervals);
 			_teamBlockInfo = _mock.StrictMock<ITeamBlockInfo>();
 			_schedulingResultStateHolder = _mock.StrictMock<ISchedulingResultStateHolder>();
 		}

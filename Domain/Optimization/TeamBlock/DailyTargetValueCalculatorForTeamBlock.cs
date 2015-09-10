@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly ILocateMissingIntervalsIfMidNightBreak _locateMissingIntervalsIfMidNightBreak;
 		private readonly IFilterOutIntervalsAfterMidNight _filterOutIntervalsAfterMidNight;
 		private readonly IMaxSeatSkillAggregator _maxSeatSkillAggregator;
-		private readonly IExtractIntervalsVoilatingMaxSeat _extractIntervalsVoilatingMaxSeat;
+		private readonly IExtractIntervalsViolatingMaxSeat _extractIntervalsViolatingMaxSeat;
 		private readonly PullTargetValueFromSkillIntervalData _pullTargetValueFromSkillIntervalData;
 
 		public DailyTargetValueCalculatorForTeamBlock(ISkillResolutionProvider resolutionProvider,
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			Func<ISchedulingResultStateHolder> schedulingResultStateHolder, IGroupPersonSkillAggregator groupPersonSkillAggregator,
 			ILocateMissingIntervalsIfMidNightBreak locateMissingIntervalsIfMidNightBreak,
 			IFilterOutIntervalsAfterMidNight filterOutIntervalsAfterMidNight, IMaxSeatSkillAggregator maxSeatSkillAggregator,
-			IExtractIntervalsVoilatingMaxSeat extractIntervalsVoilatingMaxSeat,
+			IExtractIntervalsViolatingMaxSeat extractIntervalsViolatingMaxSeat,
 			PullTargetValueFromSkillIntervalData pullTargetValueFromSkillIntervalData)
 		{
 			_resolutionProvider = resolutionProvider;
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_locateMissingIntervalsIfMidNightBreak = locateMissingIntervalsIfMidNightBreak;
 			_filterOutIntervalsAfterMidNight = filterOutIntervalsAfterMidNight;
 			_maxSeatSkillAggregator = maxSeatSkillAggregator;
-			_extractIntervalsVoilatingMaxSeat = extractIntervalsVoilatingMaxSeat;
+			_extractIntervalsViolatingMaxSeat = extractIntervalsViolatingMaxSeat;
 			_pullTargetValueFromSkillIntervalData = pullTargetValueFromSkillIntervalData;
 		}
 
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 		private IDictionary<DateTime, IntervalLevelMaxSeatInfo> getAggregatedIntervalLevelInfo(ITeamBlockInfo teamBlockInfo, DateOnly baseDatePointer)
 		{
-			return _extractIntervalsVoilatingMaxSeat.IdentifyIntervalsWithBrokenMaxSeats(teamBlockInfo,
+			return _extractIntervalsViolatingMaxSeat.IdentifyIntervalsWithBrokenMaxSeats(teamBlockInfo,
 				_schedulingResultStateHolder(),
 				TimeZoneGuard.Instance.TimeZone, baseDatePointer);
 		}
