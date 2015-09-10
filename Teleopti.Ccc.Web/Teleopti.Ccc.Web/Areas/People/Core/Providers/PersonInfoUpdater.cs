@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 			_shiftBagRepository = shiftBagRepository;
 		}
 
-		public int UpdatePersonInfo(PeopleCommandInput model)
+		public int UpdatePersonSkill(PeopleSkillCommandInput model)
 		{
 			var personIdList = model.People.Select(p => p.PersonId);
 			var persons = _personRepository.FindPeople(personIdList);
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 							_partTimePercentageRepo.LoadAll().FirstOrDefault(), _contractScheduleRepo.LoadAll().FirstOrDefault()),
 						_teamRepository.LoadAll().FirstOrDefault());
 
-					updatePeriod(person, inputSkills, newPeriod, inputPerson.ShiftBagId);
+					updatePeriodWithSkill(person, inputSkills, newPeriod);
 
 					person.AddPersonPeriod(newPeriod);
 					updatedCount++;
@@ -57,8 +57,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 				}
 				var currentPeriod = periods.First();
 				var currentSkills = currentPeriod.PersonSkillCollection.Select(s => s.Skill.Id.GetValueOrDefault()).ToList();
-				if (!currentSkills.Except(inputSkills).Any() && !inputSkills.Except(currentSkills).Any() &&
-					!inputPerson.ShiftBagId.HasValue)
+				if (!currentSkills.Except(inputSkills).Any() && !inputSkills.Except(currentSkills).Any())
 				{
 					continue;
 				}
@@ -69,7 +68,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 					newPeriod.StartDate = new DateOnly(model.Date);
 					person.ResetPersonSkills(newPeriod);
 
-					updatePeriod(person, inputSkills, newPeriod, inputPerson.ShiftBagId);
+					updatePeriodWithSkill(person, inputSkills, newPeriod);
 
 					person.AddPersonPeriod(newPeriod);
 					updatedCount++;
@@ -77,24 +76,69 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 				}
 				person.ResetPersonSkills(currentPeriod);
 
-				updatePeriod(person, inputSkills, currentPeriod, inputPerson.ShiftBagId);
+				updatePeriodWithSkill(person, inputSkills, currentPeriod);
+				updatedCount++;
+			}
+
+			return updatedCount;
+		}
+		public int UpdatePersonShiftBag(PeopleShiftBagCommandInput model)
+		{
+			var personIdList = model.People.Select(p => p.PersonId);
+			var persons = _personRepository.FindPeople(personIdList);
+			var updatedCount = 0;
+			foreach (var person in persons)
+			{
+				var inputPerson = model.People.Single(x => x.PersonId == person.Id);
+
+				var inputShiftBag = _shiftBagRepository.Get(inputPerson.ShiftBagId.GetValueOrDefault());
+				var periods = person.PersonPeriods(new DateOnlyPeriod(new DateOnly(model.Date), new DateOnly(model.Date)));
+				if (!periods.Any())
+				{
+					var newPeriod = new PersonPeriod(new DateOnly(model.Date),
+						new PersonContract(_contractRepository.LoadAll().FirstOrDefault(),
+							_partTimePercentageRepo.LoadAll().FirstOrDefault(), _contractScheduleRepo.LoadAll().FirstOrDefault()),
+						_teamRepository.LoadAll().FirstOrDefault());
+
+					newPeriod.RuleSetBag = inputShiftBag;
+
+					person.AddPersonPeriod(newPeriod);
+					updatedCount++;
+					continue;
+				}
+				var currentPeriod = periods.First();
+				if ((currentPeriod.RuleSetBag == null && inputShiftBag == null) || (currentPeriod.RuleSetBag != null && (currentPeriod.RuleSetBag.Id.GetValueOrDefault() == inputShiftBag.Id.GetValueOrDefault())))
+				{
+					continue;
+				}
+				if (!currentPeriod.StartDate.Equals(new DateOnly(model.Date)))
+				{
+
+					var newPeriod = currentPeriod.NoneEntityClone();
+					newPeriod.StartDate = new DateOnly(model.Date);
+					person.ResetPersonSkills(newPeriod);
+
+					newPeriod.RuleSetBag = inputShiftBag;
+
+					person.AddPersonPeriod(newPeriod);
+					updatedCount++;
+					continue;
+				}
+				person.ResetPersonSkills(currentPeriod);
+
+				currentPeriod.RuleSetBag = inputShiftBag;
 				updatedCount++;
 			}
 
 			return updatedCount;
 		}
 
-		private void updatePeriod(IPerson person, IEnumerable<Guid> inputSkills, IPersonPeriod period, Guid? shiftBagId)
+		private void updatePeriodWithSkill(IPerson person, IEnumerable<Guid> inputSkills, IPersonPeriod period)
 		{
 			foreach (var skillId in inputSkills)
 			{
 				var skill = _skillRepository.Get(skillId);
 				person.AddSkill(new PersonSkill(skill, new Percent(1)), period);
-			}
-
-			if (shiftBagId.HasValue)
-			{
-				period.RuleSetBag = _shiftBagRepository.Get(shiftBagId.Value);
 			}
 		}
 	}

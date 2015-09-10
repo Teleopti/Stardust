@@ -15,13 +15,31 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			_personInfoUpdater = personInfoUpdater;
 		}
 
-		[HttpPost, Route("api/PeopleCommand/updatePeople")]
-		public virtual JsonResult<ResultModel> UpdatePersonInfo(PeopleCommandInput model)
+		[HttpPost, Route("api/PeopleCommand/updateSkill")]
+		public virtual JsonResult<ResultModel> UpdatePersonSkills(PeopleSkillCommandInput model)
 		{
 			var result = new ResultModel();
 			try
 			{
-				result.SuccessCount = InternalUpdatePersonInfo(model);
+				result.SuccessCount = InternalUpdatePersonSkill(model);
+
+				result.Success = true;
+			}
+			catch (Exception e)
+			{
+				result.Success = false;
+				result.ErrorMsg = e.Message;
+			}
+
+			return Json(result);
+		}
+		[HttpPost, Route("api/PeopleCommand/updateShiftBag")]
+		public virtual JsonResult<ResultModel> UpdatePersonShiftBag(PeopleShiftBagCommandInput model)
+		{
+			var result = new ResultModel();
+			try
+			{
+				result.SuccessCount = InternalUpdatePersonShiftBag(model);
 
 				result.Success = true;
 			}
@@ -35,9 +53,15 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 		}
 
 		[UnitOfWork]
-		protected virtual int InternalUpdatePersonInfo(PeopleCommandInput model)
+		protected virtual int InternalUpdatePersonSkill(PeopleSkillCommandInput model)
 		{
-			return _personInfoUpdater.UpdatePersonInfo(model);
+			return _personInfoUpdater.UpdatePersonSkill(model);
+		}
+
+		[UnitOfWork]
+		protected virtual int InternalUpdatePersonShiftBag(PeopleShiftBagCommandInput model)
+		{
+			return _personInfoUpdater.UpdatePersonShiftBag(model);
 		}
 	}
 }

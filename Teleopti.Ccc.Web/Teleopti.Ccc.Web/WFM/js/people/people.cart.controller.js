@@ -176,9 +176,24 @@
 		};
 
 		vm.updateResult = { Success: false };
-		vm.updatePeople = function () {
+		vm.updatePeopleWithSkills = function () {
 			vm.processing = true;
-			peopleSvc.updatePeople.post({ Date: moment(vm.selectedDate).format('YYYY-MM-DD'), People: vm.availablePeople }).$promise.then(
+			peopleSvc.updatePeopleWithSkills.post({ Date: moment(vm.selectedDate).format('YYYY-MM-DD'), People: vm.availablePeople }).$promise.then(
+				function (result) {
+					vm.updateResult = result;
+					vm.dataChanged = false;
+					vm.processing = false;
+					vm.isConfirmCloseNoticeBar = true;
+					$interval(function () {
+						vm.isConfirmCloseNoticeBar = false;
+					}, 10000, 1);
+
+				}
+			);
+		};
+		vm.updatePeopleWithShiftBag = function () {
+			vm.processing = true;
+			peopleSvc.updatePeopleWithShiftBag.post({ Date: moment(vm.selectedDate).format('YYYY-MM-DD'), People: vm.availablePeople }).$promise.then(
 				function (result) {
 					vm.updateResult = result;
 					vm.dataChanged = false;

@@ -64,7 +64,7 @@
 			</md-content>
 			<div style="position: relative;top: 12rem;float: right;">
 				<button ng-show="vm.dataInitialized && !vm.processing && vm.updateResult.Success && vm.updateResult.SuccessCount > 0" class="wfm-btn wfm-btn-primary" ng-click="vm.setCurrentCommand('ChangeShiftBag')()">{{'PersonFinderFieldShiftBag' | translate}}</button>
-				<button class="wfm-btn" ng-class="{'wfm-btn-primary': vm.dataChanged, 'wfm-btn-primary-disabled': !vm.dataChanged}" ng-disabled="!vm.dataChanged" ng-click="vm.updatePeople()">{{'Apply' | translate}}</button>
+				<button class="wfm-btn" ng-class="{'wfm-btn-primary': vm.dataChanged, 'wfm-btn-primary-disabled': !vm.dataChanged}" ng-disabled="!vm.dataChanged" ng-click="vm.updatePeopleWithSkills()">{{'Apply' | translate}}</button>
 			</div>
 		</md-sidenav>
 		<md-sidenav class="md-sidenav-right md-sidenav-skill-panel md-whiteframe-z2" md-component-id="right-shiftbag">
@@ -76,7 +76,7 @@
 				</select>
 			</md-content>
 			<div style="position: relative;top: 12rem;float: right;">
-				<button class="wfm-btn" ng-class="{'wfm-btn-primary': vm.dataChanged, 'wfm-btn-primary-disabled': !vm.dataChanged}" ng-disabled="!vm.dataChanged" ng-click="vm.updatePeople()">{{'Apply' | translate}}</button>
+				<button class="wfm-btn" ng-class="{'wfm-btn-primary': vm.dataChanged, 'wfm-btn-primary-disabled': !vm.dataChanged}" ng-disabled="!vm.dataChanged" ng-click="vm.updatePeopleWithShiftBag()">{{'Apply' | translate}}</button>
 			</div>
 		</md-sidenav>
 		<md-progress-linear ng-show="vm.processing" md-mode="indeterminate"></md-progress-linear>

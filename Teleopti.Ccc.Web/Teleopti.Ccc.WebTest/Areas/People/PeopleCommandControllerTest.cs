@@ -67,9 +67,9 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 		{
 			var date = new DateTime(2015, 8, 20);
 			var person = prepareData(date.AddDays(10));
-			Target.UpdatePersonInfo(new PeopleCommandInput
+			Target.UpdatePersonSkills(new PeopleSkillCommandInput
 			{
-				People = new List<PersonCommandInputModel> { new PersonCommandInputModel { PersonId = person.Id.Value } },
+				People = new List<SkillUpdateCommandInputModel> { new SkillUpdateCommandInputModel { PersonId = person.Id.Value } },
 				Date = date
 			});
 			var updatedPerson = PersonRepository.Get(person.Id.GetValueOrDefault());
@@ -84,12 +84,12 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var person = prepareData(date.AddDays(-10));
 			var skill = SkillFactory.CreateSkillWithId("phone");
 			SkillRepository.Add(skill);
-			Target.UpdatePersonInfo(new PeopleCommandInput
+			Target.UpdatePersonSkills(new PeopleSkillCommandInput
 			{
 				People =
-					new List<PersonCommandInputModel>
+					new List<SkillUpdateCommandInputModel>
 					{
-						new PersonCommandInputModel {PersonId = person.Id.Value, SkillIdList = new[] {skill.Id.GetValueOrDefault()}}
+						new SkillUpdateCommandInputModel {PersonId = person.Id.Value, SkillIdList = new[] {skill.Id.GetValueOrDefault()}}
 					},
 				Date = date
 			});
@@ -104,9 +104,9 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 		{
 			var date = new DateTime(2015, 8, 20);
 			var person = prepareData(date);
-			Target.UpdatePersonInfo(new PeopleCommandInput
+			Target.UpdatePersonSkills(new PeopleSkillCommandInput
 			{
-				People = new List<PersonCommandInputModel> { new PersonCommandInputModel { PersonId = person.Id.Value } },
+				People = new List<SkillUpdateCommandInputModel> { new SkillUpdateCommandInputModel { PersonId = person.Id.Value } },
 				Date = date
 			});
 			var updatedPerson = PersonRepository.Get(person.Id.GetValueOrDefault());
@@ -120,9 +120,9 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var date = new DateTime(2015, 8, 20);
 			var person = prepareData(date.AddDays(-2));
 			person.TerminatePerson(new DateOnly(date.AddDays(-1)), new PersonAccountUpdaterDummy());
-			Target.UpdatePersonInfo(new PeopleCommandInput
+			Target.UpdatePersonSkills(new PeopleSkillCommandInput
 			{
-				People = new List<PersonCommandInputModel> { new PersonCommandInputModel { PersonId = person.Id.Value } },
+				People = new List<SkillUpdateCommandInputModel> { new SkillUpdateCommandInputModel { PersonId = person.Id.Value } },
 				Date = date
 			});
 			var updatedPerson = PersonRepository.Get(person.Id.GetValueOrDefault());
@@ -136,12 +136,12 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var person = prepareData(date.AddDays(-10));
 			var skill = SkillFactory.CreateSkillWithId("phone");
 			SkillRepository.Add(skill);
-			Target.UpdatePersonInfo(new PeopleCommandInput
+			Target.UpdatePersonSkills(new PeopleSkillCommandInput
 			{
 				People =
-					new List<PersonCommandInputModel>
+					new List<SkillUpdateCommandInputModel>
 					{
-						new PersonCommandInputModel {PersonId = person.Id.Value, SkillIdList = new List<Guid> {skill.Id.Value}}
+						new SkillUpdateCommandInputModel {PersonId = person.Id.Value, SkillIdList = new List<Guid> {skill.Id.Value}}
 					},
 				Date = date
 			});
@@ -158,12 +158,12 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			var person = prepareData(date);
 			var skill = SkillFactory.CreateSkillWithId("phone");
 			SkillRepository.Add(skill);
-			var result = Target.UpdatePersonInfo(new PeopleCommandInput
+			var result = Target.UpdatePersonSkills(new PeopleSkillCommandInput
 			{
 				People =
-					new List<PersonCommandInputModel>
+					new List<SkillUpdateCommandInputModel>
 					{
-						new PersonCommandInputModel {PersonId = person.Id.Value, SkillIdList = new List<Guid> {skill.Id.Value}}
+						new SkillUpdateCommandInputModel {PersonId = person.Id.Value, SkillIdList = new List<Guid> {skill.Id.Value}}
 					},
 				Date = date
 			});
@@ -188,12 +188,12 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			shiftbag.AddRuleSet(workRuleSet);
 			RuleSetBagRepository.Add(shiftbag);
 
-			var result = Target.UpdatePersonInfo(new PeopleCommandInput
+			var result = Target.UpdatePersonShiftBag(new PeopleShiftBagCommandInput
 			{
 				People =
-					new List<PersonCommandInputModel>
+					new List<ShiftBagUpdateCommandInputModel>
 					{
-						new PersonCommandInputModel
+						new ShiftBagUpdateCommandInputModel
 						{
 							PersonId = person.Id.Value,
 							ShiftBagId = shiftbag.Id.Value

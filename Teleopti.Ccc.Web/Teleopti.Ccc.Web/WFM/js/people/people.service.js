@@ -42,7 +42,15 @@ angular
 				}
 			});
 
-			this.updatePeople = $resource("../api/PeopleCommand/updatePeople", {}, {
+			this.updatePeopleWithSkills = $resource("../api/PeopleCommand/updateSkill", {}, {
+				post: {
+					method: "POST",
+					params: {},
+					isArray: false
+				}
+			});
+
+			this.updatePeopleWithShiftBag = $resource("../api/PeopleCommand/updateShiftBag", {}, {
 				post: {
 					method: "POST",
 					params: {},
