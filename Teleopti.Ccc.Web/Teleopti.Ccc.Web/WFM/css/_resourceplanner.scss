@@ -64,6 +64,21 @@
 		}
 	}
 
+  @media (max-width: 600px) {
+    .floop {
+      height:75px;
+      padding-top:20px;
+    }
+
+    .floop > .dayNode{
+      padding-top: 20px;
+    }
+
+    .legends{
+      display:block;
+    }
+  }
+
 .grid-row{
   padding: 0;
   margin: 0;

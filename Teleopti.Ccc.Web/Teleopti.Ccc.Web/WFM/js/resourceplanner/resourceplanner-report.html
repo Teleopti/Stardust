@@ -22,7 +22,7 @@
 
                 </div>
                 <div  ng-repeat="node in dayBoxes" ng-class="{gridWeekend: box.status ==='weekend',gridNotice: box.status ==='error'}">
-                    <div layout="row">
+                    <div layout-gt-sm="row" layout="column" class="floop">
                         <div flex="20">{{node.SkillName}}</div>
                         <div class="dayNode" flex>
                             <div class="blip" flex ng-repeat="subnode in node.SkillDetails" ng-class="{weekend: subnode.weekend,weekstart: subnode.weekstart,understaffed:subnode.ColorId==1,critUnderstaffed:subnode.ColorId==2,overstaffed:subnode.ColorId==3}">
