@@ -289,7 +289,6 @@ namespace Teleopti.Analytics.Etl.CommonTest.Gui.DataSourceConfiguration
 			_generalFunctions.AssertWasCalled(x => x.SetUtcTimeZoneOnRaptorDataSource());
 			_generalFunctions.AssertWasCalled(x => x.SaveDataSource(1, 1));
 			_view.AssertWasCalled(x => x.IsSaved = true);
-			_view.AssertWasCalled(x => x.CloseView());
 		}
 
 		[Test]
@@ -311,7 +310,6 @@ namespace Teleopti.Analytics.Etl.CommonTest.Gui.DataSourceConfiguration
 				x.ShowErrorMessage(
 					Arg<string>.Matches(
 						y => y.Contains("An error occured while running the 'Initial' job. No changes to the data sources will be saved."))));
-			_view.AssertWasCalled(x => x.CloseView());
 		}
 
 		[Test]
