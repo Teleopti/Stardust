@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Interfaces.Domain;
@@ -11,13 +10,11 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 {
 	public class TestDataFactory
 	{
-		private readonly Tenant _defaultTenant;
 		private readonly Action<Action<IUnitOfWork>> _unitOfWorkAction;
 		private readonly Action<Action<ICurrentTenantSession>> _tenantUnitOfWorkAction;
 
-		public TestDataFactory(Tenant defaultTenant, Action<Action<IUnitOfWork>> unitOfWorkAction, Action<Action<ICurrentTenantSession>> tenantUnitOfWorkAction)
+		public TestDataFactory(Action<Action<IUnitOfWork>> unitOfWorkAction, Action<Action<ICurrentTenantSession>> tenantUnitOfWorkAction)
 		{
-			_defaultTenant = defaultTenant;
 			_unitOfWorkAction = unitOfWorkAction;
 			_tenantUnitOfWorkAction = tenantUnitOfWorkAction;
 			DataFactory = new DataFactory(_unitOfWorkAction);
@@ -38,7 +35,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 
 		public PersonDataFactory Person(string name)
 		{
-			return AddPerson(_defaultTenant, name, new Name("Person", name));
+			return AddPerson(name, new Name("Person", name));
 		}
 
 		public IEnumerable<PersonDataFactory> AllPersons()
@@ -51,7 +48,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 			_persons.Remove(_persons.Keys.Last());
 		}
 
-		protected PersonDataFactory AddPerson(Tenant tenant, string referenceName, Name actualName)
+		protected PersonDataFactory AddPerson(string referenceName, Name actualName)
 		{
 			referenceName = trimName(referenceName);
 
@@ -59,7 +56,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 				return _persons[referenceName];
 
 			var person = new PersonDataFactory(
-				tenant,
 				actualName,
 				new[] { new UserConfigurable { Name = referenceName } },
 				_unitOfWorkAction,

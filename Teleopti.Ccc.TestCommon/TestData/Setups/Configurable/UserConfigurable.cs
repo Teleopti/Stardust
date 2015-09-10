@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -14,6 +15,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 {
 	public class UserConfigurable : ITenantUserSetup
 	{
+		public const string DefaultTenantName = "TestData";
+
 		public string Name { get; set; }
 
 		public DateTime? TerminalDate { get; set; }
@@ -58,13 +61,14 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			return !string.IsNullOrEmpty(UserName);
 		}
 
-		public void Apply(Tenant tenant, ICurrentTenantSession tenantSession, IPerson user, ILogonName logonName)
+		public void Apply(ICurrentTenantSession tenantSession, IPerson user, ILogonName logonName)
 		{
 			if (!WindowsAuthentication && !changedApplicationLogonCredentials()) return;
 
 			var personInfo = tenantSession.CurrentSession().Get<PersonInfo>(user.Id.Value);
 			if (personInfo == null)
 			{
+				var tenant = defaultTenant(tenantSession);
 				personInfo = new PersonInfo(tenant, user.Id.Value);
 				tenantSession.CurrentSession().Save(personInfo);
 			}
@@ -85,6 +89,11 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				personInfo.ApplicationLogonInfo.SetLastPasswordChange_OnlyUseFromTests(lastPasswordChangeBefore);
 				logonName.Set(UserName);
 			}
+		}
+
+		private static Tenant defaultTenant(ICurrentTenantSession tenantSession)
+		{
+			return new LoadAllTenants(tenantSession).Tenants().Single(t => t.Name.Equals(DefaultTenantName));
 		}
 	}
 }

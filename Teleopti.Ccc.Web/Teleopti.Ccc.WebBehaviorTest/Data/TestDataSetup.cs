@@ -8,6 +8,7 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default;
 using Teleopti.Interfaces.Domain;
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			builder.RegisterType<EventsMessageSender>().As<IMessageSender>().SingleInstance();
 			var container = builder.Build();
 
-			datasource = DataSourceHelper.CreateDataSource(container.Resolve<ICurrentMessageSenders>(), TestControllerMethods.TenantName);
+			datasource = DataSourceHelper.CreateDataSource(container.Resolve<ICurrentMessageSenders>(), UserConfigurable.DefaultTenantName);
 			TestSiteConfigurationSetup.StartApplicationAsync();
 
 			StateHolderProxyHelper.SetupFakeState(datasource, DefaultPersonThatCreatesDbData.PersonThatCreatesDbData, DefaultBusinessUnit.BusinessUnitFromFakeState, new ThreadPrincipalContext(new TeleoptiPrincipalFactory()));

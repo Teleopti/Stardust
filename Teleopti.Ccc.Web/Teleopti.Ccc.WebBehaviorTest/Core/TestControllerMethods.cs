@@ -11,8 +11,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 {
 	public static class TestControllerMethods
 	{
-		public const string TenantName = "TestData";
-
 		public static void CreateCorruptCookie()
 		{
 			navigateOrRequest("Test/CorruptMyCookie");

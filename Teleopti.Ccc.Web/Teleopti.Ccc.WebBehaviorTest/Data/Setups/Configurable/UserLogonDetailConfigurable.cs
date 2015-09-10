@@ -1,6 +1,5 @@
 using System;
 using System.Globalization;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.TestCommon.TestData.Core;
@@ -14,7 +13,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public bool? IsLocked { get; set; }
 		public int? LastPasswordChangeXDaysAgo { get; set; }
 
-		public void Apply(Tenant tenant, ICurrentTenantSession tenantSession, IPerson user, ILogonName logonName)
+		public void Apply(ICurrentTenantSession tenantSession, IPerson user, ILogonName logonName)
 		{
 			var applicationUserQuery = new FindPersonInfo(tenantSession);
 			var personInfo = applicationUserQuery.GetById(user.Id.Value);
