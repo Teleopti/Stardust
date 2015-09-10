@@ -37,19 +37,12 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers
 		[HttpPost, Route("api/SeatPlanner/SeatPlan"), UnitOfWork]
 		public virtual IHttpActionResult Add([FromBody]AddSeatPlanCommand command)
 		{
-
-			if (command.TrackedCommandInfo != null)
-				command.TrackedCommandInfo.OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value;
-			try
-			{
-				_commandDispatcher.Execute(command);
-			}
-			catch (TargetInvocationException e)
-			{
-				if (e.InnerException is ArgumentException)
-					throw new HttpException(501, e.InnerException.Message);
-			}
-
+			command.TrackedCommandInfo.OperatedPersonId = command.TrackedCommandInfo != null
+				? _loggedOnUser.CurrentUser().Id.Value
+				: Guid.Empty;
+			
+			_commandDispatcher.Execute(command);
+			
 			return Created(Request.RequestUri, new { });
 		}
 

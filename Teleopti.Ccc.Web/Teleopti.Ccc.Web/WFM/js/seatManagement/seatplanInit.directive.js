@@ -30,6 +30,7 @@
 
 		vm.addSeatPlan = function () {
 
+			vm.onSeatPlanStart();
 			vm.processingSeatPlan = true;
 
 			var addSeatPlanCommand = {
@@ -83,6 +84,7 @@
 			scope: {
 				start: '@',
 				end: '@',
+				onSeatPlanStart: '&',
 				onSeatPlanComplete: '&',
 				showReport: '='
 			},
