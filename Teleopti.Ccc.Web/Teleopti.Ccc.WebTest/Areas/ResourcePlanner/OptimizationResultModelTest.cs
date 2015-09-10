@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		private ISkillDay _skillDay1;
 		private ISkillDay _skillDay2;
 		private Dictionary<ISkill, IList<ISkillDay>> _skillDays;
+		private DateOnlyPeriod _period;
 
 		[SetUp]
 		public void Setup()
@@ -33,6 +34,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			_skillDay2 = SkillDayFactory.CreateSkillDay(_skill1, new DateOnly(2015, 9, 5));
 			_skillDay2.SkillDayCalculator = new SkillDayCalculator(_skill1, new List<ISkillDay> { _skillDay2 }, new DateOnlyPeriod(new DateOnly(2015, 9, 5), new DateOnly(2015, 9, 5)));
 			_skillDays = new Dictionary<ISkill, IList<ISkillDay>>();
+			_period = new DateOnlyPeriod(new DateOnly(2015, 9, 4), new DateOnly(2015, 9, 5));
 		}
 
 		[Test]
@@ -40,7 +42,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		{
 			_skillDays.Add(_skill1, new List<ISkillDay>());
 			_skillDays.Add(_skill2, new List<ISkillDay>());
-			_target.Map(_skillDays);
+			_target.Map(_skillDays, _period);
 			Assert.AreEqual(_skill1.Name, _target.SkillResultList.ToList()[0].SkillName);
 			Assert.AreEqual(_skill2.Name, _target.SkillResultList.ToList()[1].SkillName);
 		}
@@ -49,7 +51,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		public void ShouldMapSkillDaysDate()
 		{
 			_skillDays.Add(_skill1, new List<ISkillDay>{_skillDay1, _skillDay2});
-			_target.Map(_skillDays);
+			_target.Map(_skillDays, _period);
 			Assert.AreEqual(_skillDay1.CurrentDate, _target.SkillResultList.ToList()[0].SkillDetails.ToList()[0].Date);
 			Assert.AreEqual(_skillDay2.CurrentDate, _target.SkillResultList.ToList()[0].SkillDetails.ToList()[1].Date);
 		}
@@ -65,8 +67,9 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			
 			skillDay.Stub(x => x.SkillStaffPeriodCollection)
 				.Return(new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod> { skillStaffPeriod }));
+			skillDay.Stub(x => x.CurrentDate).Return(_period.StartDate);
 
-			_target.Map(_skillDays);
+			_target.Map(_skillDays, _period);
 			Assert.AreEqual(-0.5, _target.SkillResultList.ToList()[0].SkillDetails.ToList()[0].RelativeDifference);
 		}
 
@@ -81,8 +84,9 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 
 			skillDay.Stub(x => x.SkillStaffPeriodCollection)
 				.Return(new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod> { skillStaffPeriod }));
+			skillDay.Stub(x => x.CurrentDate).Return(_period.StartDate);
 
-			_target.Map(_skillDays);
+			_target.Map(_skillDays, _period);
 			Assert.AreEqual(0, _target.SkillResultList.ToList()[0].SkillDetails.ToList()[0].ColorId);
 		}
 
@@ -97,8 +101,9 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 
 			skillDay.Stub(x => x.SkillStaffPeriodCollection)
 				.Return(new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod> { skillStaffPeriod }));
+			skillDay.Stub(x => x.CurrentDate).Return(_period.StartDate);
 
-			_target.Map(_skillDays);
+			_target.Map(_skillDays, _period);
 			Assert.AreEqual(1, _target.SkillResultList.ToList()[0].SkillDetails.ToList()[0].ColorId);
 		}
 
@@ -113,8 +118,9 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 
 			skillDay.Stub(x => x.SkillStaffPeriodCollection)
 				.Return(new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod> { skillStaffPeriod }));
+			skillDay.Stub(x => x.CurrentDate).Return(_period.StartDate);
 
-			_target.Map(_skillDays);
+			_target.Map(_skillDays, _period);
 			Assert.AreEqual(2, _target.SkillResultList.ToList()[0].SkillDetails.ToList()[0].ColorId);
 		}
 
@@ -129,8 +135,9 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 
 			skillDay.Stub(x => x.SkillStaffPeriodCollection)
 				.Return(new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod> { skillStaffPeriod }));
+			skillDay.Stub(x => x.CurrentDate).Return(_period.StartDate);
 
-			_target.Map(_skillDays);
+			_target.Map(_skillDays, _period);
 			Assert.AreEqual(3, _target.SkillResultList.ToList()[0].SkillDetails.ToList()[0].ColorId);
 		}
 
@@ -139,7 +146,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		{
 			_skill1.SkillType.ForecastSource = ForecastSource.MaxSeatSkill;
 			_skillDays.Add(_skill1, new List<ISkillDay>());
-			_target.Map(_skillDays);
+			_target.Map(_skillDays, _period);
 			Assert.AreEqual(0, _target.SkillResultList.Count());
 		}
 
@@ -148,8 +155,22 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		{
 			_skill1.SkillType.ForecastSource = ForecastSource.OutboundTelephony;
 			_skillDays.Add(_skill1, new List<ISkillDay>());
-			_target.Map(_skillDays);
+			_target.Map(_skillDays, _period);
 			Assert.AreEqual(0, _target.SkillResultList.Count());
+		}
+
+		[Test]
+		public void ShouldAddClosedDaysMappedAsWhite()
+		{
+			_period = new DateOnlyPeriod(new DateOnly(2015, 9, 4), new DateOnly(2015, 9, 6));
+			_skillDay2 = SkillDayFactory.CreateSkillDay(_skill1, new DateOnly(2015, 9, 6)); //leaving one missing date
+			_skillDay2.SkillDayCalculator = new SkillDayCalculator(_skill1, new List<ISkillDay> { _skillDay2 }, new DateOnlyPeriod(new DateOnly(2015, 9, 5), new DateOnly(2015, 9, 5)));
+			_skillDays.Add(_skill1, new List<ISkillDay> { _skillDay1, _skillDay2 });
+			_target.Map(_skillDays, _period);
+			Assert.AreEqual(_skillDay1.CurrentDate, _target.SkillResultList.ToList()[0].SkillDetails.ToList()[0].Date);
+			Assert.AreEqual(new DateOnly(2015, 9, 5), _target.SkillResultList.ToList()[0].SkillDetails.ToList()[1].Date);
+			Assert.AreEqual(0, _target.SkillResultList.ToList()[0].SkillDetails.ToList()[1].ColorId);
+			Assert.AreEqual(_skillDay2.CurrentDate, _target.SkillResultList.ToList()[0].SkillDetails.ToList()[2].Date);
 		}
 	}
 }

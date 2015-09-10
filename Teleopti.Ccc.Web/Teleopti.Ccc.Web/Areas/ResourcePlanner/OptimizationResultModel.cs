@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			get { return _skillResultList; }
 		}
 
-		public void Map(IDictionary<ISkill, IList<ISkillDay>> skillDays)
+		public void Map(IDictionary<ISkill, IList<ISkillDay>> skillDays, DateOnlyPeriod period)
 		{
 			foreach (var keyValuePair in skillDays)
 			{
@@ -27,13 +27,18 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 
 				var item = new OptimizationResultSkill {SkillName = skill.Name};
 				_skillResultList.Add(item);
-				foreach (var skillDay in keyValuePair.Value)
+				var skillDaysDic = keyValuePair.Value.ToDictionary(k => k.CurrentDate);
+				foreach (var dateOnly in period.DayCollection())
 				{
+					ISkillDay skillDay;
+					var found = skillDaysDic.TryGetValue(dateOnly, out skillDay);
+					double relativeDifference = !found
+						? 0
+						: SkillStaffPeriodHelper.RelativeDifference(skillDay.SkillStaffPeriodCollection).GetValueOrDefault(-1);
 					var detail = new OptimizationResultSkillDetail
 					{
-						Date = skillDay.CurrentDate,
-						RelativeDifference =
-							SkillStaffPeriodHelper.RelativeDifference(skillDay.SkillStaffPeriodCollection).GetValueOrDefault(-1)
+						Date = dateOnly,
+						RelativeDifference = relativeDifference
 					};
 					detail.ColorId = mapColorId(detail.RelativeDifference, skill);
 					item.AddDetail(detail);

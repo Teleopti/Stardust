@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				planningPeriod.Scheduled();
 
 				var result = new OptimizationResultModel();
-				result.Map(_schedulerStateHolder().SchedulingResultState.SkillDays);
+				result.Map(_schedulerStateHolder().SchedulingResultState.SkillDays, period);
 				return Ok(result);
 			}
 			finally
