@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Interfaces.Domain;
+using Task = Teleopti.Ccc.Domain.Forecasting.Task;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
@@ -204,8 +207,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         }
 		public IList<ISkillStaffPeriod> IntersectingSkillStaffPeriodList(IEnumerable<ISkill> skills, DateTimePeriod utcPeriod)
 		{
-			var skillStaffPeriods = new List<ISkillStaffPeriod>();
-			foreach (ISkill skill in skills)
+			var skillStaffPeriods = new ConcurrentBag<ISkillStaffPeriod>();
+			Parallel.ForEach(skills, skill =>
 			{
 				ISkillStaffPeriodDictionary content;
 				if (_internalDictionary.TryGetValue(skill, out content))
@@ -216,27 +219,27 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 							skillStaffPeriods.Add(dictionary.Value);
 					}
 				}
-			}
-			return skillStaffPeriods;
+			});
+			return skillStaffPeriods.ToArray();
 		}
         public IList<ISkillStaffPeriod> SkillStaffPeriodList(IEnumerable<ISkill> skills, DateTimePeriod utcPeriod)
         {
-            var skillStaffPeriods = new List<ISkillStaffPeriod>();
-            foreach (ISkill skill in skills)
-            {
-                ISkillStaffPeriodDictionary content;
-                if (_internalDictionary.TryGetValue(skill,out content))
-                {
-                    foreach (var dictionary in content)
-                    {
-	                    if (dictionary.Key.EndDateTime <= utcPeriod.StartDateTime) continue;
-	                    if (dictionary.Key.StartDateTime >= utcPeriod.EndDateTime) continue;
+            var skillStaffPeriods = new ConcurrentBag<ISkillStaffPeriod>();
+	        Parallel.ForEach(skills, skill =>
+	        {
+				ISkillStaffPeriodDictionary content;
+				if (_internalDictionary.TryGetValue(skill, out content))
+				{
+					foreach (var dictionary in content)
+					{
+						if (dictionary.Key.EndDateTime <= utcPeriod.StartDateTime) continue;
+						if (dictionary.Key.StartDateTime >= utcPeriod.EndDateTime) continue;
 
-                        skillStaffPeriods.Add(dictionary.Value);
-                    }
-                }
-            }
-            return skillStaffPeriods;
+						skillStaffPeriods.Add(dictionary.Value);
+					}
+				}
+	        });
+            return skillStaffPeriods.ToArray();
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
