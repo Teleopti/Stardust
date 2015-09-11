@@ -35,11 +35,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.ViewModelFactory
             return _campaignListProvider.GetCampaignStatistics();
         }
 
-	    public void Load()
-	    {
-		    _campaignListProvider.LoadData();
-	    }
-
 		public CampaignSummaryViewModel GetCampaignSummary(Guid id)
 	    {
 		    return new CampaignSummaryViewModel(_campaignListProvider.GetCampaignById(id));

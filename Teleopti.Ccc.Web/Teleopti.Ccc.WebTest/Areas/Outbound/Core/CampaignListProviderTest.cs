@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.Domain.Outbound.Rules;
+using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider;
@@ -25,6 +29,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		private FakeOutboundRuleChecker _outboundRuleChecker;
 		private FakeOutboundCampaignListOrderProvider _campaignListOrderProvider;
 		private IUserTimeZone _userTimeZone;
+		private IToggleManager _toggleManager;
 
 		private IOutboundCampaign doneCampaign;
 		private IOutboundCampaign plannedCampaign;
@@ -39,6 +44,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			_campaignListOrderProvider = new FakeOutboundCampaignListOrderProvider();
 			_scheduledResourcesProvider = new FakeScheduleResourceProvider();
 			_outboundRuleChecker = new FakeOutboundRuleChecker();
+			_toggleManager = new FakeToggleManager();
 
 			_scheduledResourcesProvider.SetScheduledTimeOnDate(DateOnly.Today.AddDays(14), CreateSkill("B"),
 				new TimeSpan(4, 0, 0));
@@ -61,7 +67,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 				CampaignStatus.Scheduled
 			});
 
-			target = new CampaignListProvider(_outboundCampaignRepository, _scheduledResourcesProvider, _outboundRuleChecker, _campaignListOrderProvider, _userTimeZone);
+			target = new CampaignListProvider(_outboundCampaignRepository, _scheduledResourcesProvider, _outboundRuleChecker, _campaignListOrderProvider, _userTimeZone, _toggleManager);
 		}
 
 		[Test]
@@ -88,6 +94,18 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			result.ToList()[0].Id.Should().Be.EqualTo(campaign1.Id);
 			result.ToList()[0].StartDate.Should().Be.EqualTo(new DateOnly(2015, 9, 10));
 			result.ToList()[0].EndDate.Should().Be.EqualTo(new DateOnly(2015, 9, 19));
+		}
+
+		[Test]
+		public void ShouldLoadDataWithAllCampaigns()
+		{
+			var scheduledResourcesProvider = MockRepository.GenerateMock<IOutboundScheduledResourcesProvider>();
+			target = new CampaignListProvider(_outboundCampaignRepository, scheduledResourcesProvider, null, null, _userTimeZone, _toggleManager);
+
+			target.LoadData(null);
+
+			var campaigns = _outboundCampaignRepository.LoadAll();
+			scheduledResourcesProvider.AssertWasCalled(x => x.Load(campaigns, getCampaignPeriod(campaigns)));
 		}
 
 		[Test]
@@ -395,6 +413,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			{
 				TimeZone = new HawaiiTimeZone().TimeZone()
 			};
+		}
+
+		private DateOnlyPeriod getCampaignPeriod(IList<IOutboundCampaign> campaigns)
+		{
+			var earliestStart = campaigns.Min(c => c.SpanningPeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc).StartDate);
+			var latestEnd = campaigns.Max(c => c.SpanningPeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc).EndDate);
+			var campaignPeriod = new DateOnlyPeriod(earliestStart, latestEnd);
+
+			return campaignPeriod;
 		}
 	}
 

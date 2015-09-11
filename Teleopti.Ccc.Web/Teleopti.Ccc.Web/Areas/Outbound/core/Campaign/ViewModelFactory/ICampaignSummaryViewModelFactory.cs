@@ -8,7 +8,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.ViewModelFactory
     {
 		 List<CampaignSummaryViewModel> GetCampaignSummaryList(CampaignStatus status);
         CampaignStatistics GetCampaignStatistics();
-	    void Load();
 		CampaignSummaryViewModel GetCampaignSummary(Guid id);
     }
 }

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.Outbound.Models;
 using Teleopti.Interfaces.Domain;
 
@@ -15,26 +17,30 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 		private readonly IOutboundRuleChecker _outboundRuleChecker;
 		private readonly ICampaignListOrderProvider _campaignListOrderProvider;
 		private readonly IUserTimeZone _userTimeZone;
+		private readonly IToggleManager _toggleManager;
 
 		public CampaignListProvider(IOutboundCampaignRepository outboundCampaignRepository, IOutboundScheduledResourcesProvider scheduledResourcesProvider, 
-			IOutboundRuleChecker outboundRuleChecker, ICampaignListOrderProvider campaignListOrderProvider, IUserTimeZone userTimeZone)
+			IOutboundRuleChecker outboundRuleChecker, ICampaignListOrderProvider campaignListOrderProvider, IUserTimeZone userTimeZone, IToggleManager toggleManager)
 		{
 			_outboundCampaignRepository = outboundCampaignRepository;
 			_scheduledResourcesProvider = scheduledResourcesProvider;
 			_outboundRuleChecker = outboundRuleChecker;
 			_campaignListOrderProvider = campaignListOrderProvider;
 			_userTimeZone = userTimeZone;
+			_toggleManager = toggleManager;
 		}
 
-		public void LoadData()
+		public void LoadData(GanttPeriod peroid)
 		{
-			var campaigns = _outboundCampaignRepository.LoadAll();
+			var campaigns = !_toggleManager.IsEnabled(Toggles.Wfm_Outbound_Campaign_GanttChart_34259) ? _outboundCampaignRepository.LoadAll() 
+																																	: _outboundCampaignRepository.GetCampaigns(getUtcPeroid(peroid));
 			if (campaigns.Count == 0) return;
+
 			var earliestStart = campaigns.Min(c => c.SpanningPeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc).StartDate);
 			var latestEnd = campaigns.Max(c => c.SpanningPeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc).EndDate);
-			var period = new DateOnlyPeriod(earliestStart, latestEnd);
+			var campaignPeriod = new DateOnlyPeriod(earliestStart, latestEnd);
 
-			_scheduledResourcesProvider.Load(campaigns, period);
+			_scheduledResourcesProvider.Load(campaigns, campaignPeriod);
 		}
 
 		public CampaignStatistics GetCampaignStatistics()
@@ -136,11 +142,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 
 		public IEnumerable<GanttCampaignViewModel> GetCampaigns(GanttPeriod period)
 		{
-			var start = new DateTime(period.StartDate.Date.Ticks);
-			start = TimeZoneHelper.ConvertToUtc(start, _userTimeZone.TimeZone());
-			var end = new DateTime(period.EndDate.Year, period.EndDate.Month, period.EndDate.Day, 23, 59, 59);
-			end = TimeZoneHelper.ConvertToUtc(end, _userTimeZone.TimeZone());
-			var campaigns = _outboundCampaignRepository.GetCampaigns(new DateTimePeriod(start, end));
+			var campaigns = _outboundCampaignRepository.GetCampaigns(getUtcPeroid(period));
 
 			var ganttCampaigns = new List<GanttCampaignViewModel>();
 			foreach (var campaign in campaigns)
@@ -151,6 +153,16 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			}
 
 			return ganttCampaigns;
+		}
+
+		private DateTimePeriod getUtcPeroid(GanttPeriod period)
+		{
+			var start = new DateTime(period.StartDate.Date.Ticks);
+			start = TimeZoneHelper.ConvertToUtc(start, _userTimeZone.TimeZone());
+			var end = new DateTime(period.EndDate.Year, period.EndDate.Month, period.EndDate.Day, 23, 59, 59);
+			end = TimeZoneHelper.ConvertToUtc(end, _userTimeZone.TimeZone());
+
+			return new DateTimePeriod(start, end);
 		}
 
 		private CampaignSummary assembleSummary(IOutboundCampaign campaign, CampaignStatus status)

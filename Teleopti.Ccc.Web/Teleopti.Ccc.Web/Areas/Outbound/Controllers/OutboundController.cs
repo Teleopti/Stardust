@@ -109,7 +109,14 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		[HttpGet, Route("api/Outbound/Campaign/Load"), UnitOfWork]
 		public virtual bool LoadData()
 		{
-			_campaignSummaryViewModelFactory.Load();
+			_campaignListProvider.LoadData(null);
+			return true;
+		}		
+		
+		[HttpPost, Route("api/Outbound/Campaign/Period/Load"), UnitOfWork]
+		public virtual bool LoadData([FromBody]GanttPeriod period)
+		{
+			_campaignListProvider.LoadData(period);
 			return true;
 		}
 
