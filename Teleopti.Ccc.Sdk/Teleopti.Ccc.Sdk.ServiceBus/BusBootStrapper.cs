@@ -18,8 +18,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		{
 		}
 
-	    private static IDataSourceForTenant dataSourceForTenant;
-
 	    protected override void ConfigureBusFacility(Rhino.ServiceBus.Impl.AbstractRhinoServiceBusConfiguration configuration)
 		{
 			base.ConfigureBusFacility(configuration);
