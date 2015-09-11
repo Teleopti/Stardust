@@ -23,8 +23,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<Rta>().SingleInstance().ApplyAspects();
-			builder.RegisterType<RtaInitializor>().SingleInstance();
-			builder.RegisterType<RtaTenants>().SingleInstance();
+			builder.RegisterType<RtaStarter>().SingleInstance();
 			builder.RegisterType<CacheInvalidator>().As<ICacheInvalidator>().SingleInstance();
 			builder.RegisterType<RtaProcessor>().SingleInstance();
 			builder.RegisterType<AgentStateReadModelUpdater>().As<IAgentStateReadModelUpdater>().SingleInstance();

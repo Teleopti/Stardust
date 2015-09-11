@@ -1,7 +1,6 @@
 using System;
 using MbCache.Core;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
-using Teleopti.Ccc.Domain.Common;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
 {
@@ -9,46 +8,31 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 	{
 		private readonly IMbCacheFactory _cacheFactory;
 		private readonly IDatabaseLoader _databaseLoader;
-		private readonly IDataSourceScope _dataSource;
-		private readonly RtaTenants _tenants;
 
 		public CacheInvalidator(
 			IMbCacheFactory cacheFactory,
-			IDatabaseLoader databaseLoader,
-			IDataSourceScope dataSource,
-			RtaTenants tenants
+			IDatabaseLoader databaseLoader
 			)
 		{
 			_cacheFactory = cacheFactory;
 			_databaseLoader = databaseLoader;
-			_dataSource = dataSource;
-			_tenants = tenants;
 		}
 
-		public void InvalidateAllForCurrentTenant()
+		public void InvalidateAll()
 		{
 			_cacheFactory.Invalidate<IDatabaseLoader>();
-			InvalidateStateForCurrentTenant();
+			Invalidate();
 		}
 
-		public void InvalidateStateForCurrentTenant()
+		public void Invalidate()
 		{
 			_cacheFactory.Invalidate<AlarmMappingLoader>();
 			_cacheFactory.Invalidate<StateMappingLoader>();
 		}
 
-		public void InvalidateSchedulesForCurrentTenant(Guid personId)
+		public void InvalidateSchedules(Guid personId)
 		{
 			_cacheFactory.Invalidate(_databaseLoader, x => x.GetCurrentSchedule(personId), true);
-		}
-
-		public void InvalidateAllForAllTenants()
-		{
-			_tenants.ForAllTenants(t =>
-			{
-				using (_dataSource.OnThisThreadUse(t))
-					InvalidateAllForCurrentTenant();
-			});
 		}
 	}
 
