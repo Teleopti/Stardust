@@ -77,52 +77,52 @@ namespace Teleopti.Interfaces.Domain
 				return culture;
 
 			fixOptionalCalendars(culture, 4);
-			culture = new CultureInfo("fa-IR", false);
+			culture = createNewCultureInfoAndEnsureNotReadOnly();
 
-			var readOnly = (bool)CultureInfoReadOnly.GetValue(culture);
-			if (readOnly)
-			{
-				CultureInfoReadOnly.SetValue(culture, false);
-			}
 			culture.DateTimeFormat = FixPersianDateTimeFormat(culture.DateTimeFormat, true);
 			CultureInfoCalendar.SetValue(culture, new PersianCalendar());
 
-			CultureInfoReadOnly.SetValue(culture, true);
+			makeCultureReadOnly(culture);
 
 			return culture;
 		}
 
-
 		public static CultureInfo FixPersianCulture(this CultureInfo culture, bool onlyTranslateResources)
 		{
+			return onlyTranslateResources ? fixPersianCultureResourcesOnly(culture) : FixPersianCulture(culture);
+		}
 
-			if (onlyTranslateResources)
+		private static CultureInfo createNewCultureInfoAndEnsureNotReadOnly()
+		{
+			var culture = new CultureInfo ("fa-IR", false);
+
+			var readOnly = (bool) CultureInfoReadOnly.GetValue (culture);
+			if (readOnly)
 			{
-				if (culture == null)
-					culture = new CultureInfo("fa-IR", false);
-				if (culture.LCID != 1065)
-					return culture;
+				CultureInfoReadOnly.SetValue (culture, false);
+			}
+			return culture;
+		}
 
-				culture = new CultureInfo("fa-IR", false);
-
-				var readOnly = (bool)CultureInfoReadOnly.GetValue(culture);
-				if (readOnly)
-				{
-					CultureInfoReadOnly.SetValue(culture, false);
-				}
-
-
-				translateCalendarResources(culture.DateTimeFormat);
-
-				CultureInfoReadOnly.SetValue(culture, true);
+		private static CultureInfo fixPersianCultureResourcesOnly (CultureInfo culture)
+		{
+			if (culture == null)
+				culture = new CultureInfo ("fa-IR", false);
+			if (culture.LCID != 1065)
 				return culture;
-			}
-			else
-			{
-				return FixPersianCulture(culture);
-			}
 
+			culture = createNewCultureInfoAndEnsureNotReadOnly();
 
+			translateCalendarResources (culture.DateTimeFormat);
+
+			makeCultureReadOnly(culture);
+
+			return culture;
+		}
+
+		private static void makeCultureReadOnly (CultureInfo culture)
+		{
+			CultureInfoReadOnly.SetValue (culture, true);
 		}
 
 		private static void fixOptionalCalendars(CultureInfo culture, int calendarIndex)

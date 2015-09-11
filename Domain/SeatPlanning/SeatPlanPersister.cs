@@ -11,26 +11,20 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 {
 	public class SeatPlanPersister
 	{
-		private readonly IPublicNoteRepository _publicNoteRepository;
 		private readonly ISeatBookingRepository _seatBookingRepository;
 		private readonly ISeatPlanRepository _seatPlanRepository;
 		private readonly List<SeatPlan> _seatPlansToUpdate = new List<SeatPlan>();
-		private readonly IScenario _scenario;
 
 
-		public SeatPlanPersister(ISeatBookingRepository seatBookingRepository, ISeatPlanRepository seatPlanRepository, IPublicNoteRepository publicNoteRepository, IScenario scenario)
+		public SeatPlanPersister(ISeatBookingRepository seatBookingRepository, ISeatPlanRepository seatPlanRepository)
 		{
 			_seatBookingRepository = seatBookingRepository;
 			_seatPlanRepository = seatPlanRepository;
-			_publicNoteRepository = publicNoteRepository;
-			_scenario = scenario;
 		}
 
 		public void Persist (DateOnlyPeriod period, SeatBookingRequestParameters seatBookingRequestParameters)
 		{
 			prepareSeatPlans(period);
-
-			persistBookings (seatBookingRequestParameters.TeamGroupedBookings);
 
 			_seatBookingRepository.AddRange (seatBookingRequestParameters.TeamGroupedBookings
 				.Where (
@@ -79,37 +73,6 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			}
 
 			return seatPlan as SeatPlan;
-		}
-
-		private void persistBookings(IEnumerable<TeamGroupedBooking> seatBookings)
-		{
-
-			foreach (var bookingWithDateAndTeam in seatBookings)
-			{
-				var booking = bookingWithDateAndTeam.SeatBooking;
-				var date = bookingWithDateAndTeam.SeatBooking.BelongsToDate;
-				var lang = Thread.CurrentThread.CurrentUICulture;
-				var description = booking.Seat != null
-					? String.Format(Resources.YouHaveBeenAllocatedSeat, date.ToShortDateString(lang), ((SeatMapLocation)booking.Seat.Parent).Name + " Seat #" + booking.Seat.Priority)
-					: String.Format(Resources.YouHaveNotBeenAllocatedSeat, date.ToShortDateString(lang));
-
-				tempStoreBookingInfoInPublicNote(date, booking, description);
-			}
-		}
-
-		//ROBTODO: WIP - we need to move booking information out of the public note in the future 
-		private void tempStoreBookingInfoInPublicNote(DateOnly date, ISeatBooking booking, string description)
-		{
-			var existingNote = _publicNoteRepository.Find(date, booking.Person, _scenario);
-			if (existingNote != null)
-			{
-				_publicNoteRepository.Remove(existingNote);
-			}
-			var publicNote = new PublicNote(booking.Person,
-				date, _scenario,
-				description);
-
-			_publicNoteRepository.Add(publicNote);
 		}
 	}
 }

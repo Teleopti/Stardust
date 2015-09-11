@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.SeatPlanning;
 using Teleopti.Ccc.TestCommon;
@@ -43,16 +42,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				new DateTimePeriod(startDate, endDate));
 		}
 
-		private AddSeatPlanCommandHandler setupHandler(ITeam[] teams, IEnumerable<IPerson> people, IPublicNoteRepository publicNoteRepository, IEnumerable<ISeatMapLocation> seatMapLocations, params IPersonAssignment[] personAssignment)
-		{
-			return new AddSeatPlanCommandHandler(new FakeScheduleDataReadScheduleRepository(personAssignment),
-				new FakeTeamRepository(teams), new FakePersonRepository(people.ToArray()), _currentScenario, publicNoteRepository,
-				new FakeSeatMapRepository(seatMapLocations.ToArray()), _seatBookingRepository, _seatPlanRepository);
-		}
-
 		private AddSeatPlanCommandHandler setupHandler(ITeam[] teams, IEnumerable<IPerson> people, IEnumerable<ISeatMapLocation> seatMapLocations, params IPersonAssignment[] personAssignment)
 		{
-			return setupHandler(teams, people, new FakePublicNoteRepository(), seatMapLocations, personAssignment);
+			return new AddSeatPlanCommandHandler(new FakeScheduleDataReadScheduleRepository(personAssignment),
+				new FakeTeamRepository(teams), new FakePersonRepository(people.ToArray()), _currentScenario,
+				new FakeSeatMapRepository(seatMapLocations.ToArray()), _seatBookingRepository, _seatPlanRepository);
 		}
 
 		private static AddSeatPlanCommand addSeatPlanCommand(DateTime startDate, DateTime endDate, IEnumerable<SeatMapLocation> locations, IEnumerable<Team> teams)
@@ -119,17 +113,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDate), team);
 			var personAssignment = addAssignment(person, startDate, endDate);
 
-			var note = new PublicNote(person, new DateOnly(startDate), _currentScenario.Current(), "Original Note");
-			var publicNoteRepository = new FakePublicNoteRepository(note);
 			var seatMapLocation = addLocation("Location", null, new Seat("Seat One", 1));
 
-			var target = setupHandler(new[] { team }, new[] { person }, publicNoteRepository, new[] { seatMapLocation }, personAssignment);
+			var target = setupHandler(new[] { team }, new[] { person }, new[] { seatMapLocation }, personAssignment);
 
 			var command = addSeatPlanCommand(startDate, endDate, new[] { seatMapLocation }, new[] { team });
 			target.Handle(command);
-
-			var updatedNote = publicNoteRepository.Single();
-			updatedNote.GetScheduleNote(new NoFormatting()).Should().Contain(seatMapLocation.Name);
 
 			var seatBooking = _seatBookingRepository.Single() as SeatBooking;
 			seatBooking.StartDateTime.Date.Should().Be(command.StartDate.Date);
@@ -154,7 +143,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			};
 
 			var seatMapLocation = addLocation("Location", null, new Seat("Seat 1", 1));
-			var target = setupHandler(new[] { team }, new[] { person }, new FakePublicNoteRepository(), new[] { seatMapLocation }, personAssignments.ToArray());
+			var target = setupHandler(new[] { team }, new[] { person }, new[] { seatMapLocation }, personAssignments.ToArray());
 
 			var command = addSeatPlanCommand(startDate, endDate, new[] { seatMapLocation }, new[] { team });
 			target.Handle(command);
@@ -628,7 +617,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var publicNoteRepository = new FakePublicNoteRepository(note);
 			var seatMapLocation = addLocation("Location", null, new Seat("Seat One", 1));
 
-			var target = setupHandler(new[] { team }, new[] { person }, publicNoteRepository, new[] { seatMapLocation }, personAssignment, personAssignment2);
+			var target = setupHandler(new[] { team }, new[] { person }, new[] { seatMapLocation }, personAssignment, personAssignment2);
 
 			var command = addSeatPlanCommand(startDate, endDate, new[] { seatMapLocation }, new[] { team });
 			target.Handle(command);
@@ -663,7 +652,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			});
 
-			var target = setupHandler(new[] { team }, new[] { person }, publicNoteRepository, new[] { seatMapLocation }, personAssignment);
+			var target = setupHandler(new[] { team }, new[] { person }, new[] { seatMapLocation }, personAssignment);
 
 			var command = addSeatPlanCommand(startDate, endDate, new[] { seatMapLocation }, new[] { team });
 			target.Handle(command);
@@ -688,7 +677,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var publicNoteRepository = new FakePublicNoteRepository();
 			var seatMapLocation = addLocation("Location", null, null);
 
-			var target = setupHandler(new[] { team }, new[] { person }, publicNoteRepository, new[] { seatMapLocation }, personAssignment);
+			var target = setupHandler(new[] { team }, new[] { person }, new[] { seatMapLocation }, personAssignment);
 
 			var command = addSeatPlanCommand(startDate, endDate, new[] { seatMapLocation }, new[] { team });
 			target.Handle(command);
@@ -718,7 +707,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var publicNoteRepository = new FakePublicNoteRepository();
 			var seatMapLocation = addLocation("Location", null, new Seat("Seat One", 1));
 
-			var target = setupHandler(new[] { team }, new[] { person, person2 }, publicNoteRepository, new[] { seatMapLocation }, new[] { personAssignment, personAssignmentPerson2, personAssignment2 });
+			var target = setupHandler(new[] { team }, new[] { person, person2 }, new[] { seatMapLocation }, new[] { personAssignment, personAssignmentPerson2, personAssignment2 });
 
 			var command = addSeatPlanCommand(startDate1, endDate2, new[] { seatMapLocation }, new[] { team });
 			target.Handle(command);

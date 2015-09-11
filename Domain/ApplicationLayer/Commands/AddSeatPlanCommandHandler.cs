@@ -15,15 +15,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private readonly IScheduleRepository _scheduleRepository;
 		private readonly ITeamRepository _teamRepository;
 		private readonly IPersonRepository _personRepository;
-		private readonly IPublicNoteRepository _publicNoteRepository;
 		private readonly ISeatMapLocationRepository _seatMapLocationRepository;
 		private readonly ISeatBookingRepository _seatBookingRepository;
 		private readonly ISeatPlanRepository _seatPlanRepository;
 
-		public AddSeatPlanCommandHandler(IScheduleRepository scheduleRepository, ITeamRepository teamRepository, IPersonRepository personRepository, ICurrentScenario scenario, IPublicNoteRepository publicNoteRepository, ISeatMapLocationRepository seatMapLocationRepository, ISeatBookingRepository seatBookingRepository, ISeatPlanRepository seatPlanRepository)
+		public AddSeatPlanCommandHandler(	IScheduleRepository scheduleRepository, ITeamRepository teamRepository, 
+											IPersonRepository personRepository, ICurrentScenario scenario, 
+											ISeatMapLocationRepository seatMapLocationRepository, ISeatBookingRepository seatBookingRepository, 
+											ISeatPlanRepository seatPlanRepository)
 		{
 			_scenario = scenario;
-			_publicNoteRepository = publicNoteRepository;
 			_seatMapLocationRepository = seatMapLocationRepository;
 			_seatBookingRepository = seatBookingRepository;
 			_seatPlanRepository = seatPlanRepository;
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			var period = new DateOnlyPeriod(new DateOnly(command.StartDate), new DateOnly(command.EndDate));
 			var teams = _teamRepository.FindTeams (command.Teams);
-			var seatPlanner = new SeatPlanner(_scenario.Current(), _publicNoteRepository, _personRepository, _scheduleRepository, _seatBookingRepository,_seatPlanRepository);
+			var seatPlanner = new SeatPlanner(_scenario.Current(), _personRepository, _scheduleRepository, _seatBookingRepository,_seatPlanRepository);
 
 			seatPlanner.CreateSeatPlansForPeriod (rootLocation, teams, period, command.TrackedCommandInfo);
 

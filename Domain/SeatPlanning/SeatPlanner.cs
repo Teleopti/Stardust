@@ -11,13 +11,12 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		private readonly SeatPlanPersister _seatPlanPersister;
 
 		public SeatPlanner(IScenario currentScenario,
-							IPublicNoteRepository publicNoteRepository,
 							IPersonRepository personRepository,
 							IScheduleRepository scheduleRepository,
 							ISeatBookingRepository seatBookingRepository, ISeatPlanRepository seatPlanRepository)
 		{
 			_seatBookingRequestAssembler = new SeatBookingRequestAssembler(personRepository, scheduleRepository, seatBookingRepository, currentScenario);
-			_seatPlanPersister = new SeatPlanPersister(seatBookingRepository, seatPlanRepository, publicNoteRepository, currentScenario);
+			_seatPlanPersister = new SeatPlanPersister(seatBookingRepository, seatPlanRepository);
 		}
 
 		public void CreateSeatPlansForPeriod(SeatMapLocation rootSeatMapLocation, ICollection<ITeam> teams, DateOnlyPeriod period, TrackedCommandInfo trackedCommandInfo)
