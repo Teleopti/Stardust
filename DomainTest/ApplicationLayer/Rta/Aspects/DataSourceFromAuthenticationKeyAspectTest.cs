@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Aspects
 	[RtaTest]
 	[TestFixture]
 	[Toggle(Toggles.RTA_MultiTenancy_32539)]
-	public class RtaDataSourceScopeTest : ISetup
+	public class DataSourceFromAuthenticationKeyAspectTest : ISetup
 	{
 		public AspectedService TheService;
 		public FakeApplicationData ApplicationData;
@@ -40,25 +40,25 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Aspects
 
 			public IDataSource RanWithDataSource;
 
-			[RtaDataSourceScope]
+			[DataSourceFromAuthenticationKey]
 			public virtual void Does(Input input)
 			{
 				RanWithDataSource = _dataSource.Current();
 			}
 
-			[RtaDataSourceScope]
+			[DataSourceFromAuthenticationKey]
 			public virtual void Does(IEnumerable<Input> inputs)
 			{
 				RanWithDataSource = _dataSource.Current();
 			}
 
-			[RtaDataSourceScope]
+			[DataSourceFromAuthenticationKey]
 			public virtual void Does(GenericInput<object> input)
 			{
 				RanWithDataSource = _dataSource.Current();
 			}
 
-			[RtaDataSourceScope]
+			[DataSourceFromAuthenticationKey]
 			public virtual void Does(InputWithTenant inputs)
 			{
 				RanWithDataSource = _dataSource.Current();

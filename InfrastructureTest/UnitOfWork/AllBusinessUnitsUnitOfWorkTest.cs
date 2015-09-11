@@ -7,7 +7,6 @@ using NHibernate;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.IocCommon;
@@ -32,45 +31,24 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		public IBusinessUnitRepository BusinessUnitRepository;
 		public ISiteRepository SiteRepository;
 		public IPrincipalAndStateContext Context;
-		public IDataSourceScope DataSource;
-		public IDataSourceForTenant DataSourceForTenant;
 
 		public class TheServiceImpl
 		{
 			private readonly ICurrentUnitOfWork _uow;
-			private readonly IDataSourceScope _dataSource;
-			private readonly IDataSourceForTenant _dataSourceForTenant;
 
-			public TheServiceImpl(
-				ICurrentUnitOfWork uow,
-				IDataSourceScope dataSource,
-				IDataSourceForTenant dataSourceForTenant)
+			public TheServiceImpl(ICurrentUnitOfWork uow)
 			{
 				_uow = uow;
-				_dataSource = dataSource;
-				_dataSourceForTenant = dataSourceForTenant;
-			}
-
-			public virtual void Does(Action<IUnitOfWork> action)
-			{
-				using (_dataSource.OnThisThreadUse("App"))
-					DoesInner(action);
 			}
 
 			[UnitOfWork]
-			protected virtual void DoesInner(Action<IUnitOfWork> action)
+			public virtual void Does(Action<IUnitOfWork> action)
 			{
 				action(_uow.Current());
 			}
 
-			public virtual void DoesOnAllBusinessUnits(Action<IUnitOfWork> action)
-			{
-				using (_dataSource.OnThisThreadUse("App"))
-					DoesOnAllBusinessUnitsWithoutDatasource(action);
-			}
-
 			[AllBusinessUnitsUnitOfWork]
-			public virtual void DoesOnAllBusinessUnitsWithoutDatasource(Action<IUnitOfWork> action)
+			public virtual void DoesOnAllBusinessUnits(Action<IUnitOfWork> action)
 			{
 				action(_uow.Current());
 			}
@@ -118,15 +96,11 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		public void ShouldDisposeUnitOfWorkAfterNotFilteringOnBusinessUnit()
 		{
 			Context.Logout();
-			using (DataSource.OnThisThreadUse("App"))
-			{
-				TheService.DoesOnAllBusinessUnitsWithoutDatasource(uow => { });
+			TheService.DoesOnAllBusinessUnits(uow => { });
 
-				// existing beahvior is the HibernateException, although something else would be better
-				//UnitOfWork.Current().Should().Be.Null();
-				Assert.Throws<HibernateException>(() => RepositoryNotValidatingUserLogon.LoadAll());
-			}
-
+			// existing beahvior is the HibernateException, although something else would be better
+			//UnitOfWork.Current().Should().Be.Null();
+			Assert.Throws<HibernateException>(() => RepositoryNotValidatingUserLogon.LoadAll());
 		}
 		
 		[Test]

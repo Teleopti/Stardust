@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				_authenticationKey = LegacyAuthenticationKey;
 		}
 
-		[RtaDataSourceScope]
+		[DataSourceFromAuthenticationKey]
 		public virtual int SaveStateSnapshot(IEnumerable<ExternalUserStateInputModel> states)
 		{
 			_starter.EnsureTenantInitialized();
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			});
 		}
 
-		[RtaDataSourceScope]
+		[DataSourceFromAuthenticationKey]
 		public virtual int SaveStateBatch(IEnumerable<ExternalUserStateInputModel> states)
 		{
 			_starter.EnsureTenantInitialized();
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return result;
 		}
 
-		[RtaDataSourceScope]
+		[DataSourceFromAuthenticationKey]
 		public virtual int SaveState(ExternalUserStateInputModel input)
 		{
 			_starter.EnsureTenantInitialized();
@@ -226,7 +226,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 		[InfoLog]
-		[RtaDataSourceScope]
+		[DataSourceFromAuthenticationKey]
 		public virtual void CheckForActivityChange(CheckForActivityChangeInputModel input)
 		{
 			_starter.EnsureTenantInitialized();
