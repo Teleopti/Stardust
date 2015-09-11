@@ -65,14 +65,6 @@
     .p-l-65{
 	    padding-left:65px;
 	}
-    .edit-container{
-		input {
-			width: 90px;
-		}
-	}
-    .backlog-input-unit{
-	    margin-top:10px;
-	}
     .selected-ope-btn{
 	    box-shadow:inset 0 2px 5px 0 rgba(0,0,0,.26);
 		background-color:#ececec;
@@ -97,11 +89,30 @@
 		border-radius:50px;
 		margin-top:1px;
 	}
-    .input-container{
+	.manual-input-container{
 	    box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
 		text-align: left;
 		display: inline-block;
 		padding-left: 10px;
+		height:40px;
+		width:35%;
+		overflow:hidden;
+		position:relative;
+		bottom:-13px;
+		min-width:290px;
+		white-space:nowrap;
+		input{
+			width:100%;
+			margin-top:10px;
+		}
+		.manual-input-btns{
+			display: inline-block;
+			background-color: #fff;
+			position: absolute;
+			top: 0;
+			right: 0;
+			margin-top: 2px;
+		}
 	}
 	.multi-inputfix input{
 	    display:inline-block;
@@ -381,6 +392,9 @@
 	}	
 	.displayinline-block{
 		display:inline-block;
+	}
+	.inline-block{
+	    display:inline-block;
 	}
 	.m-l-40{
 		margin-left:40px;
