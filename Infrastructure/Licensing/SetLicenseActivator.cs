@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Licensing
 {
-	public class SetLicenseActivator : ILicenseFeedback
+	public class SetLicenseActivator : ISetLicenseActivator
 	{
 		private readonly ILicenseVerifierFactory _licenseVerifierFactory;
 		private readonly ILog _logger;
@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 
 		public void Execute(IDataSource dataSource)
 		{
+			//don't really know what this does - extracted from web startup
 			var licenseVerifier = _licenseVerifierFactory.Create(this, dataSource.Application);
 			var licenseService = licenseVerifier.LoadAndVerifyLicense();
 			if (licenseService != null)

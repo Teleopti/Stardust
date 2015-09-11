@@ -229,6 +229,7 @@
     <Compile Include="Foundation\ReportUrlConstructor.cs" />
     <Compile Include="Foundation\TeleoptiPrincipalCacheableFactory.cs" />
     <Compile Include="Foundation\ThreadPrincipalContext.cs" />
+    <Compile Include="Licensing\ISetLicenseActivator.cs" />
     <Compile Include="Licensing\SetLicenseActivator.cs" />
     <Compile Include="LiteUnitOfWork\MessageBrokerUnitOfWork\ICurrentMessageBrokerUnitOfWork.cs" />
     <Compile Include="LiteUnitOfWork\MessageBrokerUnitOfWork\IMessageBrokerUnitOfWorkScope.cs" />

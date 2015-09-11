@@ -576,7 +576,6 @@
     <Compile Include="Core\Startup\BootStrapperTest.cs" />
     <Compile Include="Core\Startup\RegisterGlobalFiltersTaskTest.cs" />
     <Compile Include="Core\Startup\RegisterRoutesTaskTest.cs" />
-    <Compile Include="Core\Startup\VerifyLicenseTaskTest.cs" />
     <Compile Include="Core\Common\DataProvider\DefaultDateCalculatorTest.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\DataProvider\StudentAvailabilityPersisterTest.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\VirtualSchedulePeriodProviderTest.cs" />
