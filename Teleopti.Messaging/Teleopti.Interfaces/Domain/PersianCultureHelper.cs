@@ -35,25 +35,32 @@ namespace Teleopti.Interfaces.Domain
 			}
 			if (info.Calendar.GetType() == typeof(PersianCalendar))
 			{
-				info.AbbreviatedDayNames = new string[] { "ی", "د", "س", "چ", "پ", "ج", "ش" };
-				info.ShortestDayNames = new string[] { "ی", "د", "س", "چ", "پ", "ج", "ش" };
-				info.DayNames = new string[] { "یکشنبه", "دوشنبه", "ﺳﻪشنبه", "چهارشنبه", "پنجشنبه", "جمعه", "شنبه" };
-				info.AbbreviatedMonthNames = new string[] { "فروردین", "ارديبهشت", "خرداد", "تير", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند", "" };
-				info.AbbreviatedMonthGenitiveNames = new string[] { "فروردین", "ارديبهشت", "خرداد", "تير", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند", "" };
-				info.MonthNames = new string[] { "فروردین", "ارديبهشت", "خرداد", "تير", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند", "" };
-				info.MonthGenitiveNames = new string[] { "فروردین", "ارديبهشت", "خرداد", "تير", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند", "" };
-				info.AMDesignator = "ق.ظ";
-				info.PMDesignator = "ب.ظ";
-				info.FirstDayOfWeek = DayOfWeek.Saturday;
-				info.FullDateTimePattern = "yyyy MMMM dddd, dd HH:mm:ss";
-				info.LongDatePattern = "yyyy MMMM dddd, dd";
-				info.ShortDatePattern = "yyyy/MM/dd";
+				translateCalendarResources(info);
 			}
 			if (readOnly)
 			{
 				DateTimeFormatInfoReadOnly.SetValue(info, true);
 			}
 			return info;
+		}
+
+		private static void translateCalendarResources(DateTimeFormatInfo info)
+		{
+
+			info.AbbreviatedDayNames = new string[] { "ی", "د", "س", "چ", "پ", "ج", "ش" };
+			info.ShortestDayNames = new string[] { "ی", "د", "س", "چ", "پ", "ج", "ش" };
+			info.DayNames = new string[] { "یکشنبه", "دوشنبه", "ﺳﻪشنبه", "چهارشنبه", "پنجشنبه", "جمعه", "شنبه" };
+			info.AbbreviatedMonthNames = new string[] { "فروردین", "ارديبهشت", "خرداد", "تير", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند", "" };
+			info.AbbreviatedMonthGenitiveNames = new string[] { "فروردین", "ارديبهشت", "خرداد", "تير", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند", "" };
+			info.MonthNames = new string[] { "فروردین", "ارديبهشت", "خرداد", "تير", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند", "" };
+			info.MonthGenitiveNames = new string[] { "فروردین", "ارديبهشت", "خرداد", "تير", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند", "" };
+			info.AMDesignator = "ق.ظ";
+			info.PMDesignator = "ب.ظ";
+			info.FirstDayOfWeek = DayOfWeek.Saturday;
+			info.FullDateTimePattern = "yyyy MMMM dddd, dd HH:mm:ss";
+			info.LongDatePattern = "yyyy MMMM dddd, dd";
+			info.ShortDatePattern = "yyyy/MM/dd";
+
 		}
 
 		/// <summary> 
@@ -83,6 +90,39 @@ namespace Teleopti.Interfaces.Domain
 			CultureInfoReadOnly.SetValue(culture, true);
 
 			return culture;
+		}
+
+
+		public static CultureInfo FixPersianCulture(this CultureInfo culture, bool onlyTranslateResources)
+		{
+
+			if (onlyTranslateResources)
+			{
+				if (culture == null)
+					culture = new CultureInfo("fa-IR", false);
+				if (culture.LCID != 1065)
+					return culture;
+
+				culture = new CultureInfo("fa-IR", false);
+
+				var readOnly = (bool)CultureInfoReadOnly.GetValue(culture);
+				if (readOnly)
+				{
+					CultureInfoReadOnly.SetValue(culture, false);
+				}
+
+
+				translateCalendarResources(culture.DateTimeFormat);
+
+				CultureInfoReadOnly.SetValue(culture, true);
+				return culture;
+			}
+			else
+			{
+				return FixPersianCulture(culture);
+			}
+
+
 		}
 
 		private static void fixOptionalCalendars(CultureInfo culture, int calendarIndex)

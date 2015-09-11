@@ -16,12 +16,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		{
 			get
 			{
-				if (!ForceUseGregorianCalendar)
-				{
-					return (CultureLCID == 0 ? CultureInfo.CurrentCulture : CultureInfo.GetCultureInfo(CultureLCID)).FixPersianCulture(); 
-				}
-
-				return (CultureLCID == 0 ? CultureInfo.CurrentCulture : CultureInfo.GetCultureInfo (CultureLCID));
+				return (CultureLCID == 0 ? CultureInfo.CurrentCulture : CultureInfo.GetCultureInfo(CultureLCID)).FixPersianCulture(ForceUseGregorianCalendar); 
 			}
 		}
 
@@ -29,11 +24,8 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		{
 			get
 			{
-				if (!ForceUseGregorianCalendar)
-				{
-					return (UICultureLCID == 0 ? CultureInfo.CurrentUICulture : CultureInfo.GetCultureInfo(UICultureLCID)).FixPersianCulture();
-				}
-				return (UICultureLCID == 0 ? CultureInfo.CurrentUICulture : CultureInfo.GetCultureInfo(UICultureLCID));
+				return (UICultureLCID == 0 ? CultureInfo.CurrentUICulture : CultureInfo.GetCultureInfo(UICultureLCID)).FixPersianCulture(ForceUseGregorianCalendar);
+				
 			}
 		}
 		
