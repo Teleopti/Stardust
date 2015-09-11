@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		{
 			system.UseTestDouble<FakeMessageSender>().For<IMessageSender>();
 			system.UseTestDouble<FakeApplicationData>().For<IApplicationData, ICurrentApplicationData, IDataSourceForTenant>();
-			system.UseTestDouble<FakeCurrentDatasource>().For<ICurrentDataSource, IDataSourceScope>();
+			system.UseTestDouble<FakeCurrentDatasource>().For<ICurrentDataSource>();
 			registerFakePublisher(system, configuration, new FakeEventPublisher());
 			registerFakeDatabase(system, configuration, null);
 

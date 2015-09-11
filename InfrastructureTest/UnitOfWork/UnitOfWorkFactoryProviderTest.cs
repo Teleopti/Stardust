@@ -2,7 +2,6 @@
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -20,7 +19,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		public void Setup()
 		{
 			currentTeleoptiPrincipal = MockRepository.GenerateMock<ICurrentTeleoptiPrincipal>();
-			target = new CurrentUnitOfWorkFactory(new CurrentDataSource(new CurrentIdentity(currentTeleoptiPrincipal), null, null));
+			target = new CurrentUnitOfWorkFactory(new CurrentDataSource(new CurrentIdentity(currentTeleoptiPrincipal), new DataSourceState()));
 		}
 
 		[Test]

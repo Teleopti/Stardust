@@ -1,17 +1,17 @@
-﻿using System;
-using Teleopti.Ccc.Domain;
-using Teleopti.Ccc.Domain.Common;
+﻿using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon
 {
-	public class FakeCurrentDatasource : ICurrentDataSource, IDataSourceScope
+	public class FakeCurrentDatasource : ICurrentDataSource
 	{
+		private readonly DataSourceState _state;
 		private IDataSource _current;
 
-		public FakeCurrentDatasource()
+		public FakeCurrentDatasource(DataSourceState state)
 		{
+			_state = state;
 		}
 
 		public FakeCurrentDatasource(string name)
@@ -21,28 +21,23 @@ namespace Teleopti.Ccc.TestCommon
 
 		public IDataSource Current()
 		{
-			return _current;
+			if (_current != null)
+				return _current;
+			if (_state.Get() != null)
+				return _state.Get();
+			return null;
 		}
 
 		public string CurrentName()
 		{
-			if (_current != null)
-				return _current.DataSourceName;
+			if (Current() != null)
+				return Current().DataSourceName;
 			return null;
 		}
 
 		public void FakeName(string name)
 		{
-			_current = new FakeDataSource() {DataSourceName = name};
-		}
-
-		public IDisposable OnThisThreadUse(IDataSource dataSource)
-		{
-			_current = dataSource;
-			return new GenericDisposable(() =>
-			{
-				_current = null;
-			});
+			_current = new FakeDataSource {DataSourceName = name};
 		}
 	}
 }

@@ -221,10 +221,10 @@
     <Compile Include="ApplicationLayer\Commands\MoveActivityCommandHandler.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\UpdateFindPersonConsumer.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\UpdateGroupingReadModelConsumer.cs" />
-    <Compile Include="ApplicationLayer\Rta\Aspects\DataSourceFromAuthenticationKeyAspect.cs" />
-    <Compile Include="ApplicationLayer\Rta\Aspects\DataSourceFromAuthenticationKeyAttribute.cs" />
-    <Compile Include="ApplicationLayer\Rta\Aspects\IDataSourceFromAuthenticationKeyAspect.cs" />
-    <Compile Include="ApplicationLayer\Rta\Aspects\NoDataSourceFromAuthenticationKeyAspect.cs" />
+    <Compile Include="ApplicationLayer\Rta\Aspects\TenantDataSourceScope.cs" />
+    <Compile Include="ApplicationLayer\Rta\Aspects\RtaDataSourceScopeAttribute.cs" />
+    <Compile Include="ApplicationLayer\Rta\Aspects\IRtaDataSourceScope.cs" />
+    <Compile Include="ApplicationLayer\Rta\Aspects\ConnectionStringDataSourceScope.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\BatchTooBigException.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\EmptyPreviousStateInfoLoader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IAuthenticator.cs" />
@@ -447,6 +447,8 @@
     <Compile Include="Common\Clip.cs" />
     <Compile Include="Common\ConfigurationManagerExtensions.cs" />
     <Compile Include="Common\CurrentBusinessUnit.cs" />
+    <Compile Include="Common\DataSourceScope.cs" />
+    <Compile Include="Common\DataSourceState.cs" />
     <Compile Include="Common\GamificationSetting.cs" />
     <Compile Include="Common\AgentBadgeTransaction.cs" />
     <Compile Include="Common\AgentBadgeWithRank.cs" />

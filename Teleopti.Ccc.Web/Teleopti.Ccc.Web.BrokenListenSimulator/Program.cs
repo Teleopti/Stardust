@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator
 
 
 
-			var currentDatasource = new FakeCurrentDatasource();
+			var currentDatasource = new FakeCurrentDatasource(new DataSourceState());
 			currentDatasource.FakeName(dataSourceName);
 
 			var businessUnit = new BusinessUnit("..");
