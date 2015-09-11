@@ -3,15 +3,16 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.DBManager.Library
 {
 	public class SqlBatchExecutor
 	{
 		private readonly SqlConnection _sqlConnection;
-		private readonly ILog _log;
+		private readonly IUpgradeLog _log;
 
-		public SqlBatchExecutor(SqlConnection sqlConnection, ILog log)
+		public SqlBatchExecutor(SqlConnection sqlConnection, IUpgradeLog log)
 		{
 			_sqlConnection = sqlConnection;
 			_log = log;
@@ -41,9 +42,8 @@ namespace Teleopti.Ccc.DBManager.Library
 					}
 					catch (SqlException e)
 					{
-						_log.Write(e.Message);
-						_log.Write("Failing script:");
-						_log.Write(script);
+						_log.Write(e.Message, "ERROR");
+						_log.Write("Failing script: " + script, "ERROR");
 						transaction.Rollback();
 						throw new ApplicationException("Sql script failed: " + e);
 					}

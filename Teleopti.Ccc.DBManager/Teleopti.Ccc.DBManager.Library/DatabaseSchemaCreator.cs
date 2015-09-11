@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.DBManager.Library
 {
@@ -12,10 +13,10 @@ namespace Teleopti.Ccc.DBManager.Library
 		private readonly SchemaVersionInformation _schemaVersionInformation;
 		private readonly SqlConnection _sqlConnection;
 		private readonly DatabaseFolder _databaseFolder;
-		private readonly ILog _logger;
+		private readonly IUpgradeLog _logger;
 		private const int buildNumberWhenTrunkDisappeared = 500;
 
-		public DatabaseSchemaCreator(DatabaseVersionInformation versionInformation, SchemaVersionInformation schemaVersionInformation, SqlConnection sqlConnection, DatabaseFolder databaseFolder, ILog logger)
+		public DatabaseSchemaCreator(DatabaseVersionInformation versionInformation, SchemaVersionInformation schemaVersionInformation, SqlConnection sqlConnection, DatabaseFolder databaseFolder, IUpgradeLog logger)
 		{
 			_versionInformation = versionInformation;
 			_schemaVersionInformation = schemaVersionInformation;

@@ -1,7 +1,4 @@
-﻿using System.Configuration;
-using System.Data.SqlClient;
-using System.Text;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
@@ -22,7 +19,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public TestPolutionCleaner TestPolutionCleaner;
 		public IDatabaseHelperWrapper DatabaseHelperWrapper;
 
-		[Test, Ignore("Not ready yet")]
+		[Test]
 		public void ShouldUgradeToLatestVersion()
 		{
 			DataSourceHelper.CreateDataSource(new NoMessageSenders(), "TestData");

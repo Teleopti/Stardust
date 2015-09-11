@@ -12,7 +12,7 @@ namespace Teleopti.Wfm.AdministrationTest
 			return new DbCheckResultModel {Exists = true};
 		}
 
-		public void CreateDatabase(string connectionToNewDb, DatabaseType databaseType, string dbPath, string login, bool isAzure)
+		public void CreateDatabase(string connectionToNewDb, DatabaseType databaseType, string dbPath, string login, bool isAzure, string tenant)
 		{
 		}
 

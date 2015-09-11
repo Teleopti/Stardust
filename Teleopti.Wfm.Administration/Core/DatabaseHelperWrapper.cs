@@ -8,7 +8,7 @@ namespace Teleopti.Wfm.Administration.Core
 	public interface IDatabaseHelperWrapper
 	{
 		DbCheckResultModel Exists(string databaseConnectionString, DatabaseType databaseType);
-		void CreateDatabase(string connectionToNewDb, DatabaseType databaseType, string dbPath, string login, bool isAzure);
+		void CreateDatabase(string connectionToNewDb, DatabaseType databaseType, string dbPath, string login, bool isAzure, string tenant);
 		void AddSuperUser(string connectionToNewDb, Guid personId, string firstName, string lastName);
 		void AddBusinessUnit(string connectionToNewDb, string name);
 		bool LoginExists(string connectionToNewDb, string login, bool isAzure);
@@ -58,7 +58,7 @@ namespace Teleopti.Wfm.Administration.Core
 			
 		}
 
-		public void CreateDatabase(string connectionToNewDb, DatabaseType databaseType, string dbPath, string login, bool isAzure)
+		public void CreateDatabase(string connectionToNewDb, DatabaseType databaseType, string dbPath, string login, bool isAzure, string tenant)
 		{
 
 			if (isAzure && databaseType.Equals(DatabaseType.TeleoptiCCCAgg))
@@ -73,7 +73,7 @@ namespace Teleopti.Wfm.Administration.Core
 				//return new DbCheckResultModel { Exists = false, Message = string.Format("The connection string for {0} is not in the correct format!") };
 				//
 			}
-			var helper = new DatabaseHelper(connectionToNewDb, databaseType);
+			var helper = new DatabaseHelper(connectionToNewDb, databaseType) {Logger = new TenantLogger(tenant)};
 			if(helper.Exists())
 				return;
 			helper.DbManagerFolderPath = dbPath;

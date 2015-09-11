@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.DBManager.Library
 {
@@ -14,8 +15,10 @@ namespace Teleopti.Ccc.DBManager.Library
 			ConnectionString = connectionString;
 			DatabaseName = new SqlConnectionStringBuilder(connectionString).InitialCatalog;
 			DatabaseType = databaseType;
-		}
+			Logger = new NullLog();
+      }
 
+		public IUpgradeLog Logger { set; get; }
 		public string ConnectionString { get; private set; }
 		public DatabaseType DatabaseType { get; private set; }
 		public string DatabaseName { get; private set; }
@@ -206,7 +209,7 @@ SELECT NEWID(),1, '3F0886AB-7B25-4E95-856A-0D726EDC2A67' , GETUTCDATE(), '{0}', 
 					schemaVersionInformation,
 					conn,
 					databaseFolder,
-					new NullLog());
+					Logger);
 				schemaCreator.Create(DatabaseType);
 			}
 		}

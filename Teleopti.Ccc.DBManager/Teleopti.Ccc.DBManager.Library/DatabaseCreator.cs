@@ -2,6 +2,7 @@
 using System.Data.SqlClient;
 using System.Globalization;
 using System.IO;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.DBManager.Library
 {
@@ -95,7 +96,7 @@ namespace Teleopti.Ccc.DBManager.Library
 		}
 	}
 
-	public class MyLogger : ILog //, IDisposable
+	public class MyLogger : IUpgradeLog //, IDisposable
 	{
 		//private readonly TextWriter _logFile;
 
@@ -109,6 +110,11 @@ namespace Teleopti.Ccc.DBManager.Library
 		{
 			Console.Out.WriteLine(message);
 			//gFile.WriteLine(message);
+		}
+
+		public void Write(string message, string level)
+		{
+			Write(level + ": " + message);
 		}
 
 		public void Dispose()

@@ -77,10 +77,10 @@ namespace Teleopti.Wfm.Administration.Controllers
 			var dbPath = _dbPathProvider.GetDbPath();
 
 			_databaseHelperWrapper.CreateLogin(createLoginConnectionString(model), model.AppUser, model.AppPassword, isAzure);
-			_databaseHelperWrapper.CreateDatabase(createAppDbConnectionString(model), DatabaseType.TeleoptiCCC7, dbPath, model.AppUser, isAzure);
+			_databaseHelperWrapper.CreateDatabase(createAppDbConnectionString(model), DatabaseType.TeleoptiCCC7, dbPath, model.AppUser, isAzure, model.Tenant);
 			_databaseHelperWrapper.AddBusinessUnit(createAppDbConnectionString(model), model.BusinessUnit);
-			_databaseHelperWrapper.CreateDatabase(createAnalyticsDbConnectionString(model), DatabaseType.TeleoptiAnalytics, dbPath, model.AppUser, isAzure);
-			_databaseHelperWrapper.CreateDatabase(createAggDbConnectionString(model), DatabaseType.TeleoptiCCCAgg, dbPath, model.AppUser, isAzure);
+			_databaseHelperWrapper.CreateDatabase(createAnalyticsDbConnectionString(model), DatabaseType.TeleoptiAnalytics, dbPath, model.AppUser, isAzure, model.Tenant);
+			_databaseHelperWrapper.CreateDatabase(createAggDbConnectionString(model), DatabaseType.TeleoptiCCCAgg, dbPath, model.AppUser, isAzure, model.Tenant);
 
 			if (isAzure)
 				_updateCrossDatabaseView.Execute(createAnalyticsDbConnectionString(model), model.Tenant + "_TeleoptiWfmAnalytics");

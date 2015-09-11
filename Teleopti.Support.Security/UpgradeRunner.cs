@@ -5,8 +5,10 @@ using System.Linq;
 using System.Threading;
 using log4net;
 using log4net.Config;
+using log4net.Core;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Support.Security
 {
@@ -20,6 +22,7 @@ namespace Teleopti.Support.Security
 		private static readonly ICommandLineCommand DelayedDataConvert = new DelayedDataConvert();
 		private static readonly ICommandLineCommand reportTextCommand = new ReportTextsCommand();
 		private static readonly ILog log = LogManager.GetLogger(typeof(Program));
+		public IUpgradeLog Logger = new NullLog();
 
 		public void Upgrade(IDatabaseArguments databaseArguments)
 		{
@@ -28,8 +31,8 @@ namespace Teleopti.Support.Security
 			XmlConfigurator.Configure();
 			//Console.WriteLine("Please be patient, don't close this window!");
 			//Console.WriteLine("");
-			//log.Debug("Starting Teleopti.Support.Security");
-			//log.Debug("Was called with args: " + string.Join(" ", args));
+			//logToLog("Starting Teleopti.Support.Security");
+			//logToLog("Was called with args: " + string.Join(" ", args));
 
 			try
 			{
@@ -60,35 +63,35 @@ namespace Teleopti.Support.Security
 			}
 
 			Thread.Sleep(TimeSpan.FromSeconds(3));
-			log.Debug("Teleopti.Support.Security successful");
+			logToLog("Teleopti.Support.Security successful", Level.Debug);
 			Environment.ExitCode = 0;
 		}
 
-		private static void initAuditData(IDatabaseArguments commandLineArgument)
+		private void initAuditData(IDatabaseArguments commandLineArgument)
 		{
 			const string proc = "[Auditing].[TryInitAuditTables]";
-			log.Debug("Re-init Schedule history ...");
+			logToLog("Re-init Schedule history ...", Level.Debug);
 			callProcInSeparateTransaction(commandLineArgument, proc);
-			log.Debug("Re-init Schedule history. Done!");
+			logToLog("Re-init Schedule history. Done!", Level.Debug);
 		}
 
-		private static void convertDayOffToNewStructure(IDatabaseArguments commandLineArgument)
+		private void convertDayOffToNewStructure(IDatabaseArguments commandLineArgument)
 		{
 			const string proc = "[dbo].[DayOffConverter]";
-			log.Debug("Converting DayOffs ...");
+			logToLog("Converting DayOffs ...", Level.Debug);
 			callProcInSeparateTransaction(commandLineArgument, proc);
-			log.Debug("Converting DayOffs. Done!");
+			logToLog("Converting DayOffs. Done!", Level.Debug);
 		}
 
-		private static void removeDuplicateAssignments(IDatabaseArguments commandLineArgument)
+		private void removeDuplicateAssignments(IDatabaseArguments commandLineArgument)
 		{
 			const string proc = "[dbo].[MergePersonAssignments]";
-			log.Debug("RemoveDuplicateAssignments ...");
+			logToLog("RemoveDuplicateAssignments ...", Level.Debug);
 			callProcInSeparateTransaction(commandLineArgument, proc);
-			log.Debug("RemoveDuplicateAssignments. Done!");
+			logToLog("RemoveDuplicateAssignments. Done!", Level.Debug);
 		}
 
-		private static void callProcInSeparateTransaction(IDatabaseArguments commandLineArgument, string proc)
+		private void callProcInSeparateTransaction(IDatabaseArguments commandLineArgument, string proc)
 		{
 			using (var conn = new SqlConnection(commandLineArgument.ApplicationDbConnectionString))
 			{
@@ -107,18 +110,18 @@ namespace Teleopti.Support.Security
 			}
 		}
 
-		private static void _sqlConnection_InfoMessage(object sender, SqlInfoMessageEventArgs e)
+		private void _sqlConnection_InfoMessage(object sender, SqlInfoMessageEventArgs e)
 		{
-			log.Debug(e.Message);
+			logToLog(e.Message, Level.Debug);
 		}
 
-		private static void setPersonAssignmentDate(IDatabaseArguments commandLineArgument)
+		private void setPersonAssignmentDate(IDatabaseArguments commandLineArgument)
 		{
 			//expects all schedules having thedate set to 1800-1-1
 			var allPersonAndTimeZone = new FetchPersonIdAndTimeZone(commandLineArgument.ApplicationDbConnectionString).ForAllPersons();
 			int counter = allPersonAndTimeZone.Count();
 			int i = 0;
-			log.Debug("Converting schedule data for " + counter + " agents");
+			logToLog("Converting schedule data for " + counter + " agents", Level.Debug);
 
 			var personAssignmentSetter = new PersonAssignmentDateSetter();
 			using (var conn = new SqlConnection(commandLineArgument.ApplicationDbConnectionString))
@@ -136,25 +139,52 @@ namespace Teleopti.Support.Security
 					i++; ;
 					if ((i % 1000) == 0)
 					{
-						log.Debug("   agents left: " + (counter - i));
+						logToLog("   agents left: " + (counter - i), Level.Debug);
 					}
 				}
 			}
-			log.Debug("Converting schedule data. Done!");
+			logToLog("Converting schedule data. Done!", Level.Debug);
 		}
 
-		private static void appDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
+		private void appDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
 		{
 			handleError((Exception)e.ExceptionObject);
 		}
 
-		private static void handleError(Exception e)
+		private void handleError(Exception e)
 		{
-			log.Fatal("Teleopti.Support.Security has exited with fatal error:");
+			logToLog("Teleopti.Support.Security has exited with fatal error: " + e.Message, Level.Fatal);
 			log.Fatal(e.Message);
 			log.Fatal(e.StackTrace);
 			Thread.Sleep(TimeSpan.FromSeconds(5));
 			Environment.Exit(1);
+		}
+
+		private void logToLog(string message, Level level)
+		{
+			if(level.Equals(Level.Debug))
+				log.Debug(message);
+			if (level.Equals(Level.Fatal))
+				log.Fatal(message);
+
+			Logger.Write(message,level.DisplayName);
+      }
+		internal class NullLog : IUpgradeLog
+		{
+			public void Write(string message)
+			{
+
+			}
+
+			public void Write(string message, string level)
+			{
+
+			}
+
+			public void Dispose()
+			{
+
+			}
 		}
 	}
 }

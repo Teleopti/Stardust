@@ -21,14 +21,14 @@ namespace Teleopti.Wfm.Administration.Core
 			//dbmanager
 			var builder = new SqlConnectionStringBuilder(tenant.DataSourceConfiguration.ApplicationConnectionString);
 			_databaseUpgrader.Upgrade(builder.DataSource, builder.InitialCatalog, DatabaseType.TeleoptiCCC7, adminUserName,
-				adminPassword, builder.UserID, builder.Password, permissionMode);
+				adminPassword, builder.UserID, builder.Password, permissionMode, tenant.Name);
 			builder.UserID = adminUserName;
 			builder.Password = adminPassword;
 			builder.IntegratedSecurity = false;
 			var appConnstring = builder.ConnectionString;
 			builder = new SqlConnectionStringBuilder(tenant.DataSourceConfiguration.AnalyticsConnectionString);
 			_databaseUpgrader.Upgrade(builder.DataSource, builder.InitialCatalog, DatabaseType.TeleoptiAnalytics, adminUserName,
-				adminPassword, builder.UserID, builder.Password, permissionMode);
+				adminPassword, builder.UserID, builder.Password, permissionMode, tenant.Name);
 			builder.UserID = adminUserName;
 			builder.Password = adminPassword;
 			builder.IntegratedSecurity = false;
@@ -36,7 +36,7 @@ namespace Teleopti.Wfm.Administration.Core
 			// and agg to
 			builder = new SqlConnectionStringBuilder(tenant.DataSourceConfiguration.AggregationConnectionString);
 			_databaseUpgrader.Upgrade(builder.DataSource, builder.InitialCatalog, DatabaseType.TeleoptiCCCAgg, adminUserName,
-				adminPassword, builder.UserID, builder.Password, permissionMode);
+				adminPassword, builder.UserID, builder.Password, permissionMode, tenant.Name);
 			builder.UserID = adminUserName;
 			builder.Password = adminPassword;
 			builder.IntegratedSecurity = false;
@@ -49,7 +49,8 @@ namespace Teleopti.Wfm.Administration.Core
 				AnalyticsDbConnectionStringToStore = analConnstring,
 				AggDatabase = builder.ConnectionString,
 			};
-			_upgradeRunner.Upgrade(dbArgs);
+			_upgradeRunner.Logger = new TenantLogger(tenant.Name);
+         _upgradeRunner.Upgrade(dbArgs);
 
 		}
 	}

@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.DBManager.Library
 {
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		private const string AzureEdition = "SQL Azure";
 		private const string SQL2005SP2 = "9.00.3042"; //http://www.sqlteam.com/article/sql-server-versions
-		public ILog Logger;
+		public IUpgradeLog Logger;
 		private DatabaseVersionInformation _databaseVersionInformation;
 		private SchemaVersionInformation _schemaVersionInformation;
 
@@ -212,8 +213,7 @@ namespace Teleopti.Ccc.DBManager.Library
 			}
          catch (Exception e)
 			{
-				logWrite("An error occurred:");
-				logWrite(e.ToString());
+				logWrite("An error occurred: " + e.ToString(), "ERROR");
 				return -1;
 			}
 			finally
@@ -228,12 +228,12 @@ namespace Teleopti.Ccc.DBManager.Library
 			logWrite(e.Message);
 		}
 
-		private void logWrite(string s)
+		private void logWrite(string s, string level = "DEBUG")
 		{
-			Logger.Write(s);
+			Logger.Write(s, level);
 		}
 
-		public class MyLogger : ILog
+		public class MyLogger : IUpgradeLog
 		{
 			private readonly TextWriter _logFile;
 
@@ -247,6 +247,11 @@ namespace Teleopti.Ccc.DBManager.Library
 			{
 				Console.Out.WriteLine(message);
 				_logFile.WriteLine(message);
+			}
+
+			public void Write(string message, string level)
+			{
+				Write(message);
 			}
 
 			public void Dispose()
