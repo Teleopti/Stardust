@@ -44,7 +44,7 @@
 <div class="permissions-tree">
 	<div ui-tree data-drag-enabled="false">
 		<ol ui-tree-nodes="" ng-model="organization.BusinessUnit" id="tree-root" class="tree-line">
-        <li ng-repeat="node in organization.BusinessUnit | nameFilter: searchData  | selectedData:selectedDataToggle | unselectedData:unselectedDataToggle track by $index" ui-tree-node ng-include="'nodes_bu_renderer.html'"></li>
+        <li ng-repeat="node in organization.BusinessUnit | orderBy:'Name' | nameFilter: searchData  | selectedData:selectedDataToggle | unselectedData:unselectedDataToggle track by $index" ui-tree-node ng-include="'nodes_bu_renderer.html'"></li>
 		</ol>
 	</div>
 
