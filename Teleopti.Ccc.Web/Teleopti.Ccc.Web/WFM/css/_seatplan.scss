@@ -1,12 +1,4 @@
-﻿//TODO: Temporary fix while styleguide is updated to remove max height
-.wfm-card-list-container{max-height:none !important}
-//TODO: Temporary fix.  Should be moved to styleguide - these elements should have default cursor, 
-// overrides for .wfm-card-content, .forecasting-chart should not be used.
-.wfm-card-selected, .wfm-card-unselected {
-    cursor: default;
-}
-
-#seatplan{
+﻿#seatplan{
 	height:100%;
 }
 
@@ -279,20 +271,6 @@
 		}
 	}
 
-	.container-to-print-report{
-		overflow:visible!important;
-
-		#seatplan-report-to-view, .seatplan-report-header{
-			display:none;
-		}
-
-		#seatplan-report-to-print{
-			width:100%;
-			height:auto;
-			display:block;
-		}
-	}
-
 	#seatplan-report-to-print{
 		display:none;
 	}
@@ -352,5 +330,19 @@
 			position:relative;
 			color: #ee8f7d !important;
 		}
+	}
+}
+
+.container-to-print-report{
+	overflow:visible!important;
+
+	#seatplan-report-to-view, .seatplan-report-header{
+		display:none;
+	}
+
+	#seatplan-report-to-print{
+		width:100%;
+		height:auto;
+		display:block;
 	}
 }
