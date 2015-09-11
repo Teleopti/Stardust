@@ -190,7 +190,7 @@
 		<ItemGroup>
 			<AnalyticsReportsTest Include="$(WorkingDirectory)\Database\Tools\AnalyticsReportsCompile.sql"/>
 		</ItemGroup>
-		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" CommandTimeout="120" Files="@(AnalyticsReportsTest)" ConnectionString="Data Source=$(SQLServerInstance);Initial Catalog=$(MartDB);User Id=$(ApplicationDbLogin);Password=$(ApplicationDbPwd)"/>
+		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" CommandTimeout="180" Files="@(AnalyticsReportsTest)" ConnectionString="Data Source=$(SQLServerInstance);Initial Catalog=$(MartDB);User Id=$(ApplicationDbLogin);Password=$(ApplicationDbPwd)"/>
 	</Target>
 	
 	<Target Name="CleanUpLog">
