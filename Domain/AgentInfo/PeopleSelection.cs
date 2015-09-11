@@ -5,13 +5,13 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 {
 	public class PeopleSelection
 	{
-		public PeopleSelection(IList<IPerson> allPeople, IList<IPerson> selectedPeople)
+		public PeopleSelection(IList<IPerson> allPeople, IList<IPerson> fixedStaffPeople)
 		{
-			SelectedPeople = selectedPeople;
+			FixedStaffPeople = fixedStaffPeople;
 			AllPeople = allPeople;
 		}
 
 		public IList<IPerson> AllPeople { get; private set; } 
-		public IList<IPerson> SelectedPeople { get; private set; } 
+		public IList<IPerson> FixedStaffPeople { get; private set; } 
 	}
 }

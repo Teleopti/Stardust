@@ -102,10 +102,10 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 
 				var conflicts = _persister.Persist(_schedulerStateHolder().Schedules);
 				var scheduleOfSelectedPeople =
-					_schedulerStateHolder().Schedules.Where(x => people.SelectedPeople.Contains(x.Key)).ToList();
+					_schedulerStateHolder().Schedules.Where(x => people.FixedStaffPeople.Contains(x.Key)).ToList();
 				var voilatedBusinessRules = new List<BusinessRulesValidationResult>();
 
-				var schedulePeriodNotInRange = _violatedSchedulePeriodBusinessRule.GetResult(people.SelectedPeople, period).ToList();
+				var schedulePeriodNotInRange = _violatedSchedulePeriodBusinessRule.GetResult(people.FixedStaffPeople, period).ToList();
 				var daysOffValidationResult = getDayOffBusinessRulesValidationResults(scheduleOfSelectedPeople,
 					schedulePeriodNotInRange, period);
 				voilatedBusinessRules.AddRange(schedulePeriodNotInRange);
@@ -135,6 +135,12 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 						(x.Value.CalculatedContractTimeHolder == x.Value.CalculatedTargetTimeHolder(periodToCheck)));
 		}
 
+		private bool isAgentScheduled(IScheduleRange scheduleRange, DateOnlyPeriod periodToCheck)
+		{
+			return scheduleRange.CalculatedTargetTimeHolder(periodToCheck).HasValue &&
+				   (scheduleRange.CalculatedTargetTimeHolder(periodToCheck).Value == scheduleRange.CalculatedContractTimeHolder);
+		}
+
 		private IEnumerable<BusinessRulesValidationResult> getDayOffBusinessRulesValidationResults(
 			IEnumerable<KeyValuePair<IPerson, IScheduleRange>> schedules,
 			List<BusinessRulesValidationResult> schedulePeriodNotInRange,
@@ -146,13 +152,26 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				if (isAmongInvalidScheduleRange(schedulePeriodNotInRange, item.Key)) continue;
 				if (!_dayOffBusinessRuleValidation.Validate(item.Value, periodTocheck))
 				{
-					result.Add(new BusinessRulesValidationResult()
+					result.Add(new BusinessRulesValidationResult
 					{
 						BusinessRuleCategory = BusinessRuleCategory.DayOff,
 						//should be in resource files - not now to prevent translation
 						BusinessRuleCategoryText = "Days off",
 						Message =
 							string.Format(UserTexts.Resources.TargetDayOffNotFulfilledMessage, item.Value.CalculatedTargetScheduleDaysOff(periodTocheck)),
+						Name = item.Key.Name.ToString(NameOrderOption.FirstNameLastName)
+					});
+				}
+				else if (!isAgentScheduled(item.Value, periodTocheck))
+				{
+					result.Add(new BusinessRulesValidationResult
+					{
+						BusinessRuleCategory = BusinessRuleCategory.DayOff,
+						BusinessRuleCategoryText = "Scheduled time",
+						Message =
+							string.Format("Target of {0} scheduled time is not fulfilled",
+								DateHelper.HourMinutesString(
+									item.Value.CalculatedTargetTimeHolder(periodTocheck).GetValueOrDefault(TimeSpan.Zero).TotalMinutes)),
 						Name = item.Key.Name.ToString(NameOrderOption.FirstNameLastName)
 					});
 				}
@@ -179,7 +198,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			var allSchedules = new List<IScheduleDay>();
 			foreach (var schedule in stateHolder.Schedules)
 			{
-				if (people.SelectedPeople.Contains(schedule.Key))
+				if (people.FixedStaffPeople.Contains(schedule.Key))
 				{
 					allSchedules.AddRange(schedule.Value.ScheduledDayCollection(period));
 				}

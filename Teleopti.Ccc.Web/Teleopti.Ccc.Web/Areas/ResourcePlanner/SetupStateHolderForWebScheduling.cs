@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			var allSkills = _skillRepository.FindAllWithSkillDays(period);
 			var dateTimePeriod = period.ToDateTimePeriod(timeZone);
 
-			var deciderResult = _decider.Execute(scenario, dateTimePeriod, people.SelectedPeople);
+			var deciderResult = _decider.Execute(scenario, dateTimePeriod, people.AllPeople);
 			deciderResult.FilterSkills(allSkills);
 			deciderResult.FilterPeople(people.AllPeople);
 
@@ -63,11 +63,11 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			people.AllPeople.ForEach(schedulerStateHolder.AllPermittedPersons.Add);
 			schedulerStateHolder.LoadCommonState(_currentUnitOfWorkFactory.Current().CurrentUnitOfWork(),
 				new RepositoryFactory());
-			stateHolder.AllPersonAccounts = _personAbsenceAccountRepository.FindByUsers(people.SelectedPeople);
+			stateHolder.AllPersonAccounts = _personAbsenceAccountRepository.FindByUsers(people.AllPeople);
 			schedulerStateHolder.ResetFilteredPersons();
 			schedulerStateHolder.LoadSchedules(_scheduleRepository, new PersonsInOrganizationProvider(people.AllPeople),
 				new ScheduleDictionaryLoadOptions(true, false, false),
-				new ScheduleDateTimePeriod(dateTimePeriod, people.SelectedPeople, new SchedulerRangeToLoadCalculator(dateTimePeriod)));
+				new ScheduleDateTimePeriod(dateTimePeriod, people.AllPeople, new SchedulerRangeToLoadCalculator(dateTimePeriod)));
 		}
 	}
 }

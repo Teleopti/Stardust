@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.Outbound
             var result = _target.Load(new List<IOutboundCampaign> { _campaign }, new DateOnlyPeriod());
 
 			result.AllPeople.Should().Equals(new List<IPerson> {person1, person2});
-			result.SelectedPeople.Should().Equals(new List<IPerson> { person2 });
+			result.FixedStaffPeople.Should().Equals(new List<IPerson> { person2 });
 		}
 
 		[Test]
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.Outbound
             var result = _target.Load(new List<IOutboundCampaign> { _campaign }, new DateOnlyPeriod());
 
 			result.AllPeople.Should().Equals(new List<IPerson> { person1, person2 });
-			result.SelectedPeople.Should().Equals(new List<IPerson> { person1 });
+			result.FixedStaffPeople.Should().Equals(new List<IPerson> { person1 });
 		}
 
 	}

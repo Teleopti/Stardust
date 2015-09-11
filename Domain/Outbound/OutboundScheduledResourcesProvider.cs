@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 					campaignSkillsAndRelevantOtherSkills.Add(skill);
 	        }
 
-			var deciderResult = _decider.Execute(scenario, dateTimePeriod, people.SelectedPeople);
+			var deciderResult = _decider.Execute(scenario, dateTimePeriod, people.FixedStaffPeople);
 			deciderResult.FilterSkills(allSkills);
 			deciderResult.FilterPeople(people.AllPeople);
 
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 			schedulerStateHolder.ResetFilteredPersons();
 			schedulerStateHolder.LoadSchedules(_scheduleRepository, new PersonsInOrganizationProvider(people.AllPeople),
 				new ScheduleDictionaryLoadOptions(true, false, false),
-				new ScheduleDateTimePeriod(dateTimePeriod, people.SelectedPeople, new SchedulerRangeToLoadCalculator(dateTimePeriod)));
+				new ScheduleDateTimePeriod(dateTimePeriod, people.FixedStaffPeople, new SchedulerRangeToLoadCalculator(dateTimePeriod)));
 
 			foreach (var dateOnly in period.DayCollection())
 			{

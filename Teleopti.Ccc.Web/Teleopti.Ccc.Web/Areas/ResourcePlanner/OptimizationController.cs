@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			var allSchedules = new List<IScheduleDay>();
 			foreach (var schedule in stateHolder.Schedules)
 			{
-				if (people.SelectedPeople.Contains(schedule.Key))
+				if (people.FixedStaffPeople.Contains(schedule.Key))
 				{
 					allSchedules.AddRange(schedule.Value.ScheduledDayCollection(period));
 				}

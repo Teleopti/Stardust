@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.Linq;
+using NHibernate.Mapping;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -17,7 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		public PeopleSelection Load(DateOnlyPeriod period)
 		{
 			var allPeople = _personRepository.FindPeopleInOrganizationLight(period).ToList();
-			var selectedPeople =
+			var peopleToSchedule =
 				allPeople.Where(
 					p =>
 						p.PersonPeriods(period)
@@ -25,7 +27,8 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 								pp =>
 									pp.PersonContract != null && pp.PersonContract.Contract != null &&
 									pp.PersonContract.Contract.EmploymentType != EmploymentType.HourlyStaff)).ToList();
-			return new PeopleSelection(allPeople, selectedPeople);
+
+			return new PeopleSelection(allPeople, peopleToSchedule);
 		}
 	}
 }
