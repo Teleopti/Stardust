@@ -43,16 +43,14 @@
 	</div>
 	<div ui-i18n="{{lang}}" ng-if="vm.dataInitialized" class="big-table-wrapper material-depth-1" style="position: relative">
 		<div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-pagination ui-grid-resize-columns class="grid people-list"></div>
-
-
 		<md-sidenav class="md-sidenav-right md-sidenav-skill-panel md-whiteframe-z2" md-component-id="right-skill">
 			<div class="sidenav-header">{{'Skill'|translate}}</div>
-			<md-content layout-padding style="height: 550px">
+			<md-content layout-padding style="height: 68rem">
 				<div class="input-prepend">
 					<i class="mdi mdi-filter-outline"></i>
 					<input type="text" name="filterSkill" ng-model="searchSkills.SkillName" />
 				</div>
-				<md-list-item ng-repeat="skill in vm.availableSkills|filter:searchSkills">
+				<md-list-item ng-repeat="skill in vm.availableSkills|filter:searchSkills|orderBy:'SkillName'">
 					<div class="wfm-checkbox">
 						<input type="checkbox" id="{{skill.SkillId}}" ng-model="skill.Selected" ng-change="vm.skillSelectedStatusChanged(skill)" ui-indeterminate="skill.Status =='partial'" />
 						<label for="{{skill.SkillId}}">
@@ -62,20 +60,20 @@
 					</div>
 				</md-list-item>
 			</md-content>
-			<div style="position: relative;top: 12rem;float: right;">
+			<div style="position: relative;float: right;">
 				<button ng-show="vm.dataInitialized && !vm.processing && vm.updateResult.Success && vm.updateResult.SuccessCount > 0" class="wfm-btn wfm-btn-primary" ng-click="vm.setCurrentCommand('ChangeShiftBag')()">{{'PersonFinderFieldShiftBag' | translate}}</button>
 				<button class="wfm-btn" ng-class="{'wfm-btn-primary': vm.dataChanged, 'wfm-btn-primary-disabled': !vm.dataChanged}" ng-disabled="!vm.dataChanged" ng-click="vm.updatePeopleWithSkills()">{{'Apply' | translate}}</button>
 			</div>
 		</md-sidenav>
 		<md-sidenav class="md-sidenav-right md-sidenav-skill-panel md-whiteframe-z2" md-component-id="right-shiftbag">
 			<div class="sidenav-header">{{'ChangeShiftBag'|translate}}</div>
-			<md-content layout-padding style="height: 550px">
+			<md-content layout-padding style="height: 68rem">
 				<select style="font-family: Calibri" ng-model="vm.selectedShiftBag" ng-change="vm.selectedShiftBagChanged(vm.selectedShiftBag)">
 					<option value="" disabled selected="">{{'PickAShiftBag'|translate}}</option>
-					<option value={{shiftBag.ShiftBagId}} ng-repeat="shiftBag in vm.availableShiftBags">{{shiftBag.ShiftBagName}}</option>
+					<option value={{shiftBag.ShiftBagId}} ng-repeat="shiftBag in vm.availableShiftBags|orderBy: 'ShiftBagName'">{{shiftBag.ShiftBagName}}</option>
 				</select>
 			</md-content>
-			<div style="position: relative;top: 12rem;float: right;">
+			<div style="position: relative;float: right;">
 				<button class="wfm-btn" ng-class="{'wfm-btn-primary': vm.dataChanged, 'wfm-btn-primary-disabled': !vm.dataChanged}" ng-disabled="!vm.dataChanged" ng-click="vm.updatePeopleWithShiftBag()">{{'Apply' | translate}}</button>
 			</div>
 		</md-sidenav>

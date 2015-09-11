@@ -46,9 +46,14 @@
 		<div class="pagination pull-right" aria-hidden="false">
 			<ul>
 				<li class="pagination-item" ng-class="{disabled: currentPageIndex == 1 || totalPages == 0}">
-					<a href="" ng-click="gridApi.pagination.previousPage()">
+					<a href="" ng-click="gridApi.pagination.seek(1)">
 						<i class="mdi mdi-chevron-double-left"></i>
-						{{'RepViewerPreviousPage'| translate}}
+					</a>
+				</li>
+
+				<li class="pagination-item" ng-class="{disabled: currentPageIndex == 1 || totalPages == 0}">
+					<a href="" ng-click="gridApi.pagination.previousPage()">
+						<i class="mdi mdi-chevron-left"></i>
 					</a>
 				</li>
 
@@ -60,7 +65,12 @@
 
 				<li class="pagination-item" ng-class="{disabled: currentPageIndex == totalPages || totalPages == 0}">
 					<a href="" ng-click="gridApi.pagination.nextPage()">
-						{{'RepViewerNextPage'| translate}}
+						<i class="mdi mdi-chevron-right"></i>
+					</a>
+				</li>
+
+				<li class="pagination-item" ng-class="{disabled: currentPageIndex == totalPages || totalPages == 0}">
+					<a href="" ng-click="gridApi.pagination.seek(totalPages)">
 						<i class="mdi mdi-chevron-double-right"></i>
 					</a>
 				</li>
