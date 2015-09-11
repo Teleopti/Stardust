@@ -1185,10 +1185,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="WFM\html\outbound\campaign-list-gantt.html" />
+    <Content Include="WFM\html\outbound\outbound-overview.html" />
     <Content Include="WFM\js\global\daterangepicker\wfm-date-range-picker.directive.js" />
     <Content Include="WFM\js\global\daterangepicker\wfm-date-range-picker.tpl.html" />
     <Content Include="WFM\html\forecasting\forecasting-advanced.html" />
     <Content Include="WFM\js\forecasting\forecasting.advanced.controller.js" />
+    <Content Include="WFM\js\outbound\outbound.controller.campaign-list-gantt.js" />
+    <Content Include="WFM\js\outbound\outbound.service.toggles.js" />
     <Content Include="WFM\vendor\ui-bootstrap-custom-build\timepicker.directive.ext.js" />
     <EmbeddedResource Include="tzdb2015e.nzd" />
     <Content Include=".node\Gruntfile.js" />
@@ -1258,7 +1262,7 @@
     <Content Include="WFM\html\outbound\activity-picker.tpl.html" />
     <Content Include="WFM\html\outbound\campaign-create.html" />
     <Content Include="WFM\html\outbound\campaign-production-plan.html" />
-    <Content Include="WFM\html\outbound\campaign-summary.html" />
+    <Content Include="WFM\html\outbound\campaign-list-cards.html" />
     <Content Include="WFM\html\outbound\phase-picker.tpl.html" />
     <Content Include="WFM\html\outbound\working-hours-picker.tpl.html" />
     <Content Include="WFM\html\people\people-selection-cart.html" />
@@ -1279,7 +1283,7 @@
     <Content Include="WFM\js\outbound\outbound.service.activity.js" />
     <Content Include="WFM\js\outbound\outbound.service.campaign-chart.js" />
     <Content Include="WFM\js\outbound\outbound.directive.campaign-chart.js" />
-    <Content Include="WFM\js\outbound\outbound.controller.campaign-summary.js" />
+    <Content Include="WFM\js\outbound\outbound.controller.campaign-list-cards.js" />
     <Content Include="WFM\js\outbound\outbound.directive.campaign-phase .js" />
     <Content Include="WFM\js\outbound\outbound.directive.activity-picker.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.TeamScheduleViewModel.Tests.js" />

@@ -9,6 +9,8 @@
         var createCampaignCommandUrl = '../api/Outbound/Campaign';
         var getCampaignCommandUrl = '../api/Outbound/Campaign/';
         var getCampaignLoadUrl = '../api/Outbound/Campaign/Load';
+	    var postCampaignLoadUrl = '../api/Outbound/Campaign/Period/Load';
+
         var editCampaignCommandUrl = '../api/Outbound/Campaign/';
         var getCampaignStatisticsUrl = '../api/Outbound/Campaign/Statistics';
         var getFilteredCampaignsUrl = '../api/Outbound/Campaigns';
@@ -18,6 +20,17 @@
 				if (successCb != null) successCb(data);
 			});
 		}
+
+		this.loadWithinPeriod = function (successCb) {			
+			var period = {
+				StartDate: { Date: moment().subtract(2, 'w') },
+				EndDate: { Date: moment().add(6, 'w') }
+			};
+
+			$http.post(postCampaignLoadUrl, period).success(function(data) {
+		    	if (successCb != null) successCb(data);
+		    });
+	    };
 
         this.getCampaignStatistics = function(filter, successCb, errorCb) {
             $http.get(getCampaignStatisticsUrl).success(function(data) {

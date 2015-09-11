@@ -190,7 +190,7 @@ describe('OutboundSummaryCtrl', function () {
 
 	function setUpTarget() {
 		var scope = $rootScope.$new();
-		var target = $controller('OutboundSummaryCtrl', {
+		var target = $controller('OutboundListCardsCtrl', {
 			$scope: scope,
 			$state: stateService,
 			outboundService: outboundService,

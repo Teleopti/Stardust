@@ -72,6 +72,7 @@ Wfm_Outbound_Campaign_32696 = RC
 SeatPlanner_Logon_32003 = RC
 Wfm_SeatPlan_SeatMapBookingView_32814 = RC
 MyTimeWeb_PreferenceShowNightViolation_33152 = true
+Wfm_Outbound_Campaign_GanttChart_34259 = dev
 
 Scheduler_OptimizeFlexibleDayOffs_22409 = true
 WfmForecast_QueueStatistics_32572 = true

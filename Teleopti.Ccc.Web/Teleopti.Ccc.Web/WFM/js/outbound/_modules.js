@@ -8,9 +8,8 @@
 			'wfm.daterangepicker',
 			'toggleService',
 			'gantt',
-			'gantt.table'
-			
+			'gantt.table'			
 		]
-	).constant('toggleKeyGantt', 'Wfm_Outbound_Campaign_GanttChart_34259');
+	);
 	angular.module('outboundServiceModule', ['ngResource', 'pascalprecht.translate']);
 })();

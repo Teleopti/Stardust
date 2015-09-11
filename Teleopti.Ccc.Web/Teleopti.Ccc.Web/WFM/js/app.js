@@ -80,9 +80,20 @@ wfm.config([
 			templateUrl: 'html/outbound/outbound.html',
 			controller: 'OutboundDefaultCtrl'
 		}).state('outbound.summary', {
-			url: '/summary',
-			templateUrl: 'html/outbound/campaign-summary.html',
-			controller: 'OutboundSummaryCtrl'
+			url: '/summary',			
+			views: {
+				'': {
+					templateUrl: 'html/outbound/outbound-overview.html'
+				},
+				'cards@outbound.summary': {
+					templateUrl: 'html/outbound/campaign-list-cards.html',
+					controller: 'OutboundListCardsCtrl'
+				},
+				'gantt@outbound.summary': {
+					templateUrl: 'html/outbound/campaign-list-gantt.html',
+					controller: 'CampaignListGanttCtrl'
+				}			
+			}			
 		}).state('outbound.create', {
 			url: '/create',
 			templateUrl: 'html/outbound/campaign-create.html',
