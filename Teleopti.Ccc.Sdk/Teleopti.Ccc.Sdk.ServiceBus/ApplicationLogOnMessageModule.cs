@@ -29,13 +29,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		private readonly IRoleToClaimSetTransformer _roleToClaimSetTransformer;
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly ClaimCache _claimCache;
-		private readonly IDataSourceForTenant _dataSourceForTenant;
+		private readonly DataSourceForTenantWrapper _dataSourceForTenant;
 
 		public ApplicationLogOnMessageModule(ILogOnOff logOnOff, 
 																	IRoleToClaimSetTransformer roleToClaimSetTransformer, 
 																	IRepositoryFactory repositoryFactory, 
 																	ClaimCache claimCache,
-																	IDataSourceForTenant dataSourceForTenant)
+																	DataSourceForTenantWrapper dataSourceForTenant)
 		{
 			_logOnOff = logOnOff;
 			_roleToClaimSetTransformer = roleToClaimSetTransformer;
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 					 arg.MessageId, logOnInfo.Datasource, logOnInfo.BusinessUnitId, DateTime.UtcNow);
 			}
 
-			var dataSourceContainer = DataSourceFactory.GetDataSource(_dataSourceForTenant, logOnInfo.Datasource, _repositoryFactory);
+			var dataSourceContainer = DataSourceFactory.GetDataSource(_dataSourceForTenant.DataSource()(), logOnInfo.Datasource, _repositoryFactory);
 
 			if (Logger.IsInfoEnabled)
 			{

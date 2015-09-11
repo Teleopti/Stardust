@@ -14,8 +14,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 {
     public class BusBootStrapper : AutofacBootStrapper
     {
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(BusBootStrapper));
-
 		public BusBootStrapper(IContainer container) : base(container)
 		{
 		}
@@ -27,53 +25,47 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			base.ConfigureBusFacility(configuration);
 
 			var build = new ContainerBuilder();
+			build.RegisterType<DataSourceForTenantWrapper>().SingleInstance();
 			build.RegisterType<ApplicationLogOnMessageModule>().As<IMessageModule>().Named<IMessageModule>(typeof(ApplicationLogOnMessageModule).FullName);
 			build.Update(Container);
 		}
-
-	    protected override void OnEndStart()
-	    {
-			if (dataSourceForTenant == null)
-			{
-				initApplicationAndSetDataSourceForTenant();
-			}
-			else
-			{
-				reuseAlreadyCreatedDataSourceForTenant();
-			}
-	    }
-
-	    private void reuseAlreadyCreatedDataSourceForTenant()
-	    {
-		    var builder = new ContainerBuilder();
-		    builder.RegisterInstance(dataSourceForTenant).As<IDataSourceForTenant>().SingleInstance();
-		    builder.Update(Container);
-	    }
-
-	    private void initApplicationAndSetDataSourceForTenant()
-	    {
-			var dsForTenant = Container.Resolve<IDataSourceForTenant>();
-			using (Container.Resolve<ITenantUnitOfWork>().Start())
-		    {
-			    var application = Container.Resolve<IInitializeApplication>();
-			    using (Container.Resolve<ITenantUnitOfWork>().Start())
-			    {
-				    var loadAllTenants = Container.Resolve<ILoadAllTenants>();
-						application.Start(new BasicState(), null, ConfigurationManager.AppSettings.ToDictionary(), true);
-					loadAllTenants.Tenants().ForEach(dsConf => dsForTenant.MakeSureDataSourceExists(dsConf.Name,
-						dsConf.DataSourceConfiguration.ApplicationConnectionString,
-						dsConf.DataSourceConfiguration.AnalyticsConnectionString,
-						dsConf.DataSourceConfiguration.ApplicationNHibernateConfig));
-
-					Logger.Info("Initialized application");
-			    }
-			    dataSourceForTenant = dsForTenant;
-		    }
-	    }
 
 	    protected override bool IsTypeAcceptableForThisBootStrapper(Type t)
         {
         	return true;
         }		
     }
+
+	public class DataSourceForTenantWrapper
+	{
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(BusBootStrapper));
+		private static Lazy<IDataSourceForTenant> _lazy;
+
+		public DataSourceForTenantWrapper(Func<IDataSourceForTenant> dataSourceForTenant, ITenantUnitOfWork tenantUnitOfWork,
+			IInitializeApplication initializeApplication, ILoadAllTenants loadAllTenants)
+		{
+			if (_lazy == null)
+			{
+				_lazy = new Lazy<IDataSourceForTenant>(() =>
+				{
+					using (tenantUnitOfWork.Start())
+					{
+						initializeApplication.Start(new BasicState(), null, ConfigurationManager.AppSettings.ToDictionary(), true);
+						loadAllTenants.Tenants().ForEach(dsConf => dataSourceForTenant().MakeSureDataSourceExists(dsConf.Name,
+							dsConf.DataSourceConfiguration.ApplicationConnectionString,
+							dsConf.DataSourceConfiguration.AnalyticsConnectionString,
+							dsConf.DataSourceConfiguration.ApplicationNHibernateConfig));
+
+						Logger.Info("Initialized application");
+					}
+					return dataSourceForTenant();
+				});
+			}
+		}
+
+		public Func<IDataSourceForTenant> DataSource()
+		{
+			return ()=>_lazy.Value;
+		}
+	}
 }
