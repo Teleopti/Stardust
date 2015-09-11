@@ -29,13 +29,14 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 
 		private IEnumerable<TeamViewModel> getTeamsForSite(ISite site)
 		{
-			var teams = site.TeamCollection.ToArray();
-			return teams.Select(team => new TeamViewModel
-			{
-				Id = team.Id.Value.ToString(),
-				Name = team.Description.Name
+			return site.SortedTeamCollection
+				.Where (team => team.IsChoosable)
+				.Select(team => new TeamViewModel
+				{
+						Id = team.Id.Value.ToString(),
+						Name = team.Description.Name
 				
-			});
+				});
 		}
 
 		public BusinessUnitWithSitesViewModel GetTeamHierarchy()
