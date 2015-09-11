@@ -1,8 +1,8 @@
 ﻿(function () {
 	'use strict';
-	angular.module('wfm.rta', [])
+	angular.module('wfm.rta')
 		.controller('RtaCtrl', [
-			'$scope', '$filter', '$interval', 'RtaSvrc', function ($scope, $filter, $interval, RtaSvrc) {
+			'$scope', '$filter','$stateParams', '$interval', 'RtaService', function ($scope, $filter, $stateParams, $interval, RtaService) {
 
 			    var displayAdherence = function (data) { // FIXME get adherence from the server with this first call
 			        data.forEach(function (site) {  
@@ -10,10 +10,10 @@
 			        });
 
 			        $scope.sites = data;
-                    RtaSvrc.getAdherenceForAllSites.query().$promise.then(updateAdherence);
+			        RtaService.getAdherenceForAllSites.query().$promise.then(updateAdherence);
 
                     $interval(function () {
-			            RtaSvrc.getAdherenceForAllSites.query().$promise.then(updateAdherence);
+                    	RtaService.getAdherenceForAllSites.query().$promise.then(updateAdherence);
 			        }, 5000);
                 
 			    }; 
@@ -23,7 +23,8 @@
 			            filteredSite[0].OutOfAdherence = dataSite.OutOfAdherence ? dataSite.OutOfAdherence : 0;
 			        })
 			    };
-			    RtaSvrc.getSites.query().$promise.then(displayAdherence);
-        }  
+
+			    RtaService.getSites.query({ id: $stateParams.id }).$promise.then(displayAdherence);
+        }
 		]);
 })();

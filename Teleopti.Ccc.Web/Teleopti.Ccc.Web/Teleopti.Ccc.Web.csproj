@@ -1191,6 +1191,13 @@
     <Content Include="WFM\js\global\daterangepicker\wfm-date-range-picker.tpl.html" />
     <Content Include="WFM\html\forecasting\forecasting-advanced.html" />
     <Content Include="WFM\js\forecasting\forecasting.advanced.controller.js" />
+    <Content Include="WFM\js\rta\rta-agents.html" />
+    <Content Include="WFM\js\rta\rta-sites.html" />
+    <Content Include="WFM\js\rta\rta-teams.html" />
+    <Content Include="WFM\js\rta\rta.agents.controller.js" />
+    <Content Include="WFM\js\rta\rta.agents.service.js" />
+    <Content Include="WFM\js\rta\rta.service.js" />
+    <Content Include="WFM\js\rta\_modules.js" />
     <Content Include="WFM\js\outbound\outbound.controller.campaign-list-gantt.js" />
     <Content Include="WFM\js\outbound\outbound.service.toggles.js" />
     <Content Include="WFM\vendor\ui-bootstrap-custom-build\timepicker.directive.ext.js" />
@@ -1397,8 +1404,6 @@
     <Content Include="WFM\js\resourceplanner\planningperiods.service.js" />
     <Content Include="WFM\vendor\ng-mfb\mfb.directive.js" />
     <Content Include="WFM\js\seatManagement\seatmap.controller.js" />
-    <Content Include="WFM\js\rta\html\rta.html" />
-    <Content Include="WFM\js\rta\restRtaService.js" />
     <Content Include="WFM\js\rta\rta.controller.js" />
     <Content Include="WFM\js\people\people.controller.js" />
     <Content Include="WFM\js\people\people.service.js" />
@@ -2045,6 +2050,7 @@
     <Content Include="WFM\css\_seatplan.scss" />
     <Content Include="WFM\js\outbound\outbound.controller.campaign-production-plan.js" />
     <Content Include="WFM\css\_print.scss" />
+    <Content Include="WFM\css\_rta.scss" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

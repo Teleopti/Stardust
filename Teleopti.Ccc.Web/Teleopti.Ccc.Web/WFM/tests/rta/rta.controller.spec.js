@@ -57,7 +57,7 @@ describe('RtaCtrl', function () {
 	    };
 	    var scope = $rootScope.$new();
 		
-		$controller('RtaCtrl', { $scope: scope, RtaSvrc: rtaSvrc });
+	    $controller('RtaCtrl', { $scope: scope, RtaService: rtaSvrc });
 		
 
 		scope.$digest(); // this is needed to resolve the promise
@@ -94,7 +94,7 @@ describe('RtaCtrl', function () {
 	        }
 	    };
 	    var scope = $rootScope.$new();
-	    $controller('RtaCtrl', { $scope: scope, RtaSvrc: rtaSvrc });
+	    $controller('RtaCtrl', { $scope: scope, RtaService: rtaSvrc });
 
 	    scope.$digest(); // this is needed to resolve the promise
 
@@ -125,7 +125,7 @@ describe('RtaCtrl', function () {
 	        }
 	    };
 	    var scope = $rootScope.$new();
-	    $controller('RtaCtrl', { $scope: scope, RtaSvrc: rtaSvrc });
+	    $controller('RtaCtrl', { $scope: scope, RtaService: rtaSvrc });
 
 	    scope.$digest(); // this is needed to resolve the promise
 
@@ -164,7 +164,7 @@ describe('RtaCtrl', function () {
 	    };
 	    var scope = $rootScope.$new();
 
-	    $controller('RtaCtrl', { $scope: scope, RtaSvrc: rtaSvrc, $interval: $interval});
+	    $controller('RtaCtrl', { $scope: scope, RtaService: rtaSvrc, $interval: $interval});
 
 	    rtaSvrc.getAdherenceForAllSites = {
 	            query: function () {

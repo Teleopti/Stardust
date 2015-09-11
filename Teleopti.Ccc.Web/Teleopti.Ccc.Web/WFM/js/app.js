@@ -17,7 +17,7 @@ var wfm = angular.module('wfm', [
 	'externalModules',
 	'toggleService',
 	'outboundServiceModule',
-	'restRtaService',
+	'RtaService',
 	'wfmCtrls',
 	'wfm.permissions',
 	'wfm.people',
@@ -118,10 +118,18 @@ wfm.config([
 		}).state('seatMap', {
 			url: '/seatMap',
 			templateUrl: 'js/seatManagement/html/seatmap.html'
-		}).state('rta', {
-			url: '/rta',
-			templateUrl: 'js/rta/html/rta.html',
+		}).state('rta-sites', {
+			url: '/rta/sites:id',
+			templateUrl: 'js/rta/rta-sites.html',
 			controller: 'RtaCtrl'
+		}).state('rta-teams', {
+			url: '/rta/teams',
+			templateUrl: 'js/rta/rta-teams.html',
+			controller: 'RtaCtrl'
+		}).state('rta-agents', {
+			url: '/rta/agents',
+			templateUrl: 'js/rta/rta-agents.html',
+			controller: 'RtaAgentsCtrl'
 		});
 
 		$translateProvider.useUrlLoader('../api/Global/Language');
