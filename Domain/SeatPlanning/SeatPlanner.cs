@@ -13,7 +13,8 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		public SeatPlanner(IScenario currentScenario,
 							IPersonRepository personRepository,
 							IScheduleRepository scheduleRepository,
-							ISeatBookingRepository seatBookingRepository, ISeatPlanRepository seatPlanRepository)
+							ISeatBookingRepository seatBookingRepository, 
+							ISeatPlanRepository seatPlanRepository)
 		{
 			_seatBookingRequestAssembler = new SeatBookingRequestAssembler(personRepository, scheduleRepository, seatBookingRepository, currentScenario);
 			_seatPlanPersister = new SeatPlanPersister(seatBookingRepository, seatPlanRepository);
@@ -26,13 +27,13 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			_seatPlanPersister.Persist(period, seatBookingInformation);
 		}
 		
-		private static void allocateSeatsToRequests (SeatMapLocation rootSeatMapLocation, SeatBookingRequestParameters seatBookingInformation)
+		private static void allocateSeatsToRequests (SeatMapLocation rootSeatMapLocation, ISeatBookingRequestParameters seatBookingInformation)
 		{
 			var groupedRequests = groupByDateAndTeam (seatBookingInformation.TeamGroupedBookings);
 			new SeatAllocator(rootSeatMapLocation).AllocateSeats(groupedRequests);
 		}
 
-		private static SeatBookingRequest[] groupByDateAndTeam(IEnumerable<TeamGroupedBooking> bookingsByTeam)
+		private static SeatBookingRequest[] groupByDateAndTeam(IEnumerable<ITeamGroupedBooking> bookingsByTeam)
 		{
 			var seatBookingsByDateAndTeam = bookingsByTeam
 				.GroupBy(booking => booking.SeatBooking.BelongsToDate)

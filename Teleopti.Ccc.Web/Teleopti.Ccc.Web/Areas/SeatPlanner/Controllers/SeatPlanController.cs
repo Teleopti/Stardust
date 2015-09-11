@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Web;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -25,7 +23,9 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers
 		private readonly ISeatBookingReportProvider _seatBookingReportProvider;
 		private readonly ISeatOccupancyProvider _seatOccupancyProvider;
 
-		public SeatPlanController(ICommandDispatcher commandDispatcher, ILoggedOnUser loggedOnUser, ISeatPlanProvider seatPlanProvider, ISeatBookingReportProvider seatBookingReportProvider, ISeatOccupancyProvider seatOccupancyProvider)
+		public SeatPlanController(ICommandDispatcher commandDispatcher, ILoggedOnUser loggedOnUser,
+									ISeatPlanProvider seatPlanProvider, ISeatBookingReportProvider seatBookingReportProvider,
+									ISeatOccupancyProvider seatOccupancyProvider)
 		{
 			_commandDispatcher = commandDispatcher;
 			_loggedOnUser = loggedOnUser;
@@ -37,15 +37,19 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers
 		[HttpPost, Route("api/SeatPlanner/SeatPlan"), UnitOfWork]
 		public virtual IHttpActionResult Add([FromBody]AddSeatPlanCommand command)
 		{
+			executeCommand(command);
 
+			return Created(Request.RequestUri, new { });
+		}
+
+		private void executeCommand (ITrackableCommand command)
+		{
 			if (command.TrackedCommandInfo != null)
 			{
 				command.TrackedCommandInfo.OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value;
 			}
-			 
-			_commandDispatcher.Execute(command);
-			
-			return Created(Request.RequestUri, new { });
+
+			_commandDispatcher.Execute (command);
 		}
 
 		[UnitOfWork, Route("api/SeatPlanner/SeatPlan"), HttpGet]
@@ -66,10 +70,19 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers
 			return _seatBookingReportProvider.Get(command);
 		}
 
-		[UnitOfWork, Route ("api/SeatPlanner/Occupancy"), HttpGet]
-		public virtual ICollection<OccupancyViewModel> Get (Guid seatId, DateTime date)
+		[UnitOfWork, Route("api/SeatPlanner/Occupancy"), HttpGet]
+		public virtual ICollection<OccupancyViewModel> Get(Guid seatId, DateTime date)
 		{
-			return _seatOccupancyProvider.Get (seatId, new DateOnly(date)).ToArray();
+			return _seatOccupancyProvider.Get(seatId, new DateOnly(date)).ToArray();
 		}
+
+		[HttpDelete, Route("api/SeatPlanner/Occupancy"), UnitOfWork]
+		public virtual IHttpActionResult Delete(Guid Id)
+		{
+			executeCommand (new DeleteSeatBookingCommand() { SeatBookingId = Id });
+
+			return Ok();
+		}
+		
 	}
 }

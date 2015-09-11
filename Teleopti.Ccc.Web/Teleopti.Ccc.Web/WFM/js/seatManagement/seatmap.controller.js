@@ -2,7 +2,7 @@
 
 (function () {
 
-	angular.module('wfm.seatPlan')
+	angular.module('wfm.seatMap')
 		.controller('SeatMapCanvasCtrl', seatMapCanvasDirectiveController);
 
 	seatMapCanvasDirectiveController.$inject = ['$scope', '$document', '$window', 'seatMapCanvasUtilsService'];

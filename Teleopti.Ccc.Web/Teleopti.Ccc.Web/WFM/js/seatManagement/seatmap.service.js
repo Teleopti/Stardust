@@ -9,7 +9,8 @@ angular.module('wfm.seatMap')
 			save: { method: 'POST', params: { Id: {}, Location: {}, SeatMapData: {}, TrackedCommandInfo: {}, ChildLocations: [], Seats: [] }, isArray: false }
 		});
 		seatMapService.occupancy = $resource('../api/SeatPlanner/Occupancy', {}, {
-			get: { method: 'GET', params: {}, isArray: true }
+			get: { method: 'GET', params: {}, isArray: true },
+			remove: { method: 'DELETE', params: {}, isArray: false },
 		});
 
 		return seatMapService;

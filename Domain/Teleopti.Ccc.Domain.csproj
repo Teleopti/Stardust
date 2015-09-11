@@ -165,6 +165,8 @@
     <Compile Include="ApplicationLayer\Commands\AddActivityCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\AddIntradayAbsenceCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\AddIntradayAbsenceCommandHandler.cs" />
+    <Compile Include="ApplicationLayer\Commands\DeleteSeatBookingCommand.cs" />
+    <Compile Include="ApplicationLayer\Commands\DeleteSeatBookingCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\SaveSeatMapCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\AddSeatMapCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\AddSeatPlanCommand.cs" />

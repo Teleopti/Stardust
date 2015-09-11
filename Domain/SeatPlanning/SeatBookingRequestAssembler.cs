@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		private readonly IScheduleRepository _scheduleRepository;
 		private readonly ISeatBookingRepository _seatBookingRepository;
 		private readonly IScenario _scenario;
-		private readonly List<TeamGroupedBooking> _bookingsWithDateAndTeam = new List<TeamGroupedBooking>();
+		private readonly IList<ITeamGroupedBooking> _bookingsWithDateAndTeam = new List<ITeamGroupedBooking>();
 		private IList<ISeatBooking> _existingSeatBookings;
 
 		public SeatBookingRequestAssembler(IPersonRepository personRepository, IScheduleRepository scheduleRepository, ISeatBookingRepository seatBookingRepository, IScenario scenario)
@@ -112,8 +112,8 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			rootSeatMapLocation.ChildLocations.ForEach(loadExistingSeatBookings);
 		}
 	}
-	
-	public class TeamGroupedBooking
+
+	public class TeamGroupedBooking : ITeamGroupedBooking
 	{
 		public ITeam Team { get; private set; }
 		public ISeatBooking SeatBooking { get; private set; }
@@ -124,10 +124,11 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			SeatBooking = seatBooking;
 		}
 	}
-
-	public class SeatBookingRequestParameters 
+	
+	
+	public class SeatBookingRequestParameters : ISeatBookingRequestParameters
 	{
-		public IList<TeamGroupedBooking> TeamGroupedBookings { get; set; }
+		public IList<ITeamGroupedBooking> TeamGroupedBookings { get; set; }
 		public IList<ISeatBooking> ExistingSeatBookings { get; set; }
 	}
 }

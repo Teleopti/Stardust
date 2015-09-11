@@ -1,7 +1,9 @@
 ﻿using Autofac;
 using Microsoft.AspNet.SignalR.Hubs;
+using Teleopti.Ccc.Domain.SeatPlanning;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers;
 using Teleopti.Ccc.Web.Core.Startup;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.IOC
 {
@@ -17,6 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.IOC
 			builder.RegisterType<SeatBookingReportProvider>().As<ISeatBookingReportProvider>().InstancePerLifetimeScope();
 			builder.RegisterType<LocationHierarchyProvider>().As<ILocationHierarchyProvider>().InstancePerLifetimeScope();
 			builder.RegisterType<SeatOccupancyProvider>().As<ISeatOccupancyProvider>().InstancePerLifetimeScope();
+			builder.RegisterType<SeatPlanPersister>().As<ISeatPlanPersister>().InstancePerLifetimeScope();
 		}
 	}
 }

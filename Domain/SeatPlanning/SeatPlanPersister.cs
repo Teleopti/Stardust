@@ -1,15 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.SeatPlanning
 {
-	public class SeatPlanPersister
+	
+
+	public class SeatPlanPersister : ISeatPlanPersister
 	{
 		private readonly ISeatBookingRepository _seatBookingRepository;
 		private readonly ISeatPlanRepository _seatPlanRepository;
@@ -22,7 +21,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			_seatPlanRepository = seatPlanRepository;
 		}
 
-		public void Persist (DateOnlyPeriod period, SeatBookingRequestParameters seatBookingRequestParameters)
+		public void Persist (DateOnlyPeriod period, ISeatBookingRequestParameters seatBookingRequestParameters)
 		{
 			prepareSeatPlans(period);
 
@@ -37,7 +36,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			updateSeatPlanStatus(seatBookingRequestParameters);
 		}
 
-		private void updateSeatPlanStatus(SeatBookingRequestParameters seatBookingRequestParameters)
+		private void updateSeatPlanStatus(ISeatBookingRequestParameters seatBookingRequestParameters)
 		{
 			foreach (var seatPlan in _seatPlansToUpdate )
 			{
@@ -73,6 +72,22 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			}
 
 			return seatPlan as SeatPlan;
+		}
+
+		public void RemoveSeatBooking (Guid seatBookingId)
+		{
+			var seatBooking = _seatBookingRepository.Get (seatBookingId);
+			if (seatBooking == null) return;
+
+			var deleteSeatPlan = _seatBookingRepository.LoadSeatBookingsForDay (seatBooking.BelongsToDate).Count == 1;
+
+			_seatBookingRepository.Remove (seatBooking);
+
+			if (deleteSeatPlan)
+			{
+				_seatPlanRepository.RemoveSeatPlanForDate (seatBooking.BelongsToDate);
+			}
+
 		}
 	}
 }

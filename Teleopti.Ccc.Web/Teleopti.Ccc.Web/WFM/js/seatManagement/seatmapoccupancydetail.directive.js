@@ -3,13 +3,21 @@
 (function () {
 
 	angular.module('wfm.seatPlan').controller('SeatMapOccupancyDetailCtrl', locationPickerDirectiveController);
-	locationPickerDirectiveController.$inject = ['seatMapCanvasUtilsService'];
+	locationPickerDirectiveController.$inject = ['seatMapCanvasUtilsService','seatMapService','growl'];
 
-	function locationPickerDirectiveController(utils) {
+	function locationPickerDirectiveController(utils, seatMapService, growl) {
 		var vm = this;
 
 		vm.getDisplayTime = function(booking) {
 			return utils.getSeatBookingTimeDisplay(booking, vm.scheduleDate);
+		};
+
+		vm.deleteSeatBooking = function (booking) {
+			seatMapService.occupancy.remove({ Id: booking.BookingId }).$promise.then(function () {
+				vm.refreshSeatMap();
+				onSuccessDeleteSeatBooking('The booking of seat '
+					+ booking.SeatName + ' for ' + booking.FirstName + ' ' + booking.LastName + ' was deleted');
+			});
 		};
 
 		vm.getSeatBookingDetailClass = function (booking) {
@@ -21,6 +29,13 @@
 			}
 
 			return '';
+		};
+
+		function onSuccessDeleteSeatBooking(message) {
+			growl.success("<i class='mdi mdi-thumb-up'></i> " + message + ".", {
+				ttl: 5000,
+				disableCountDown: true
+			});
 		};
 	};
 
@@ -38,7 +53,8 @@
 			scope: {
 				seatName: '=',
 				occupancyDetail: '=',
-				scheduleDate: '='
+				scheduleDate: '=',
+				refreshSeatMap : '&'
 	},
 			restrict: "E",
 			templateUrl: "js/seatManagement/html/seatmapoccupancylist.html"

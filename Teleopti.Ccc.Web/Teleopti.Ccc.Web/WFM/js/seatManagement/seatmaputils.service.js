@@ -395,7 +395,7 @@
 
 				return timeZoneAdjustment;
 			};
-
+			
 			function getSeatBookingTimeDisplay(booking) {
 				return moment(booking.StartDateTime).format('LT') + " - " + moment(booking.EndDateTime).format('LT') + getTimeZoneAdjustmentDisplay(booking);
 			};

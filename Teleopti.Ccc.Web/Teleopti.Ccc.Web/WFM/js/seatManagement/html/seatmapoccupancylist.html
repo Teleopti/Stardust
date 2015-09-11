@@ -10,5 +10,9 @@
 			&nbsp;{{detail.LastName}}
 		</span>
 		<span class="list-item-container" ng-if="detail.IsEmpty" >{{'SeatHasNoBookings'|translate}}</span>
+		<div class="wfm-leave-behind wfm-leave-behind-1" ng-if="!detail.IsEmpty">
+			<span ng-click="vm.deleteSeatBooking(detail)"><i class="mdi mdi-delete"></i></span>
+
+		</div>
 	</li>
-</ul>
+</ul>	
