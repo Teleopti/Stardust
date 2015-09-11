@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
                 var statisticsHelper = new StatisticHelper(_repositoryFactory, uow);
-                return statisticsHelper.GetWorkloadDaysWithValidatedStatistics(period, workload, scenario, validatedVolumeDays);
+                return statisticsHelper.GetWorkloadDaysWithValidatedStatistics(period, workload, validatedVolumeDays);
             }
         }
 

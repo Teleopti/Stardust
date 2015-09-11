@@ -16,19 +16,18 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         event EventHandler<StatusChangedEventArgs> StatusChanged;
 
-        /// <summary>
-        /// Gets the workload days with statistics.
-        /// </summary>
-        /// <param name="period">The period.</param>
-        /// <param name="workload">The workload.</param>
-        /// <param name="scenario">The scenario.</param>
-        /// <param name="existingValidatedVolumeDays">The existing validated volume days.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-04-02
-        /// </remarks>
-        IList<ITaskOwner> GetWorkloadDaysWithValidatedStatistics(DateOnlyPeriod period, IWorkload workload, IScenario scenario, IEnumerable<IValidatedVolumeDay> existingValidatedVolumeDays);
+	    /// <summary>
+	    /// Gets the workload days with statistics.
+	    /// </summary>
+	    /// <param name="period">The period.</param>
+	    /// <param name="workload">The workload.</param>
+	    /// <param name="existingValidatedVolumeDays">The existing validated volume days.</param>
+	    /// <returns></returns>
+	    /// <remarks>
+	    /// Created by: robink
+	    /// Created date: 2008-04-02
+	    /// </remarks>
+	    IList<ITaskOwner> GetWorkloadDaysWithValidatedStatistics(DateOnlyPeriod period, IWorkload workload, IEnumerable<IValidatedVolumeDay> existingValidatedVolumeDays);
 
         /// <summary>
         /// Loads and match statistic data.

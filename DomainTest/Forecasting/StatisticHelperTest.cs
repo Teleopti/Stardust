@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
             mocks.ReplayAll();
             target = new StatisticHelper(_factory, _unitOfWork);
-            target.GetWorkloadDaysWithValidatedStatistics(_period, null, _scenario, new List<IValidatedVolumeDay>());
+            target.GetWorkloadDaysWithValidatedStatistics(_period, null, new List<IValidatedVolumeDay>());
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
             mocks.ReplayAll();
             target = new StatisticHelper(_factory, _unitOfWork);
-            target.GetWorkloadDaysWithValidatedStatistics(_period, _workload, null, new List<IValidatedVolumeDay>());
+            target.GetWorkloadDaysWithValidatedStatistics(_period, _workload, new List<IValidatedVolumeDay>());
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
             mocks.ReplayAll();
             target = new StatisticHelper(_factory, _unitOfWork);
-            target.GetWorkloadDaysWithValidatedStatistics(_period, _workload, _scenario, null);
+            target.GetWorkloadDaysWithValidatedStatistics(_period, _workload, null);
         }
         /// <summary>
         /// Verifies the get workload days with statistics.
@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                 statusChangedCount++;
             };
 
-            IList<ITaskOwner> result = target.GetWorkloadDaysWithValidatedStatistics(_period, _workload, _scenario, new List<IValidatedVolumeDay>());
+            IList<ITaskOwner> result = target.GetWorkloadDaysWithValidatedStatistics(_period, _workload, new List<IValidatedVolumeDay>());
             Assert.AreEqual(3, result.Count);
             Assert.AreSame(validatedVolumeDay1, result[0]);
             Assert.AreSame(validatedVolumeDay2, result[1]);
@@ -221,7 +221,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                 statusChangedCount++;
             };
 
-            IList<ITaskOwner> result = target.GetWorkloadDaysWithValidatedStatistics(_period, _workload, _scenario, new List<IValidatedVolumeDay> { existingValidatedVolumeDay });
+            IList<ITaskOwner> result = target.GetWorkloadDaysWithValidatedStatistics(_period, _workload, new List<IValidatedVolumeDay> { existingValidatedVolumeDay });
             Assert.AreEqual(1, result.Count);
             Assert.AreSame(existingValidatedVolumeDay, result[0]);
             Assert.AreEqual(0, statusChangedCount);

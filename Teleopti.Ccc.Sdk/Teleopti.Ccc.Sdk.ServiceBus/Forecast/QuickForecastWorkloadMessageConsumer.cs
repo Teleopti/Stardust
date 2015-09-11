@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 
 					var daysWithValidatedStatistics =
 						statisticHelper.GetWorkloadDaysWithValidatedStatistics(message.StatisticPeriod,
-						                                                       workload, scenario,
+						                                                       workload,
 						                                                       validated);
 					if (!daysWithValidatedStatistics.Any())
 					{

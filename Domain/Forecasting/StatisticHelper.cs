@@ -47,22 +47,20 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         public event EventHandler<StatusChangedEventArgs> StatusChanged;
 
-        /// <summary>
-        /// Gets the workload days with statistics.
-        /// </summary>
-        /// <param name="period">The period.</param>
-        /// <param name="workload">The workload.</param>
-        /// <param name="scenario">The scenario.</param>
-        /// <param name="existingValidatedVolumeDays">The existing validated volume days.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-04-02
-        /// </remarks>
-        public IList<ITaskOwner> GetWorkloadDaysWithValidatedStatistics(DateOnlyPeriod period, IWorkload workload, IScenario scenario, IEnumerable<IValidatedVolumeDay> existingValidatedVolumeDays)
+	    /// <summary>
+	    /// Gets the workload days with statistics.
+	    /// </summary>
+	    /// <param name="period">The period.</param>
+	    /// <param name="workload">The workload.</param>
+	    /// <param name="existingValidatedVolumeDays">The existing validated volume days.</param>
+	    /// <returns></returns>
+	    /// <remarks>
+	    /// Created by: robink
+	    /// Created date: 2008-04-02
+	    /// </remarks>
+	    public IList<ITaskOwner> GetWorkloadDaysWithValidatedStatistics(DateOnlyPeriod period, IWorkload workload, IEnumerable<IValidatedVolumeDay> existingValidatedVolumeDays)
         {
             InParameter.NotNull("workload", workload);
-            InParameter.NotNull("scenario", scenario);
             InParameter.NotNull("existingValidatedVolumeDays", existingValidatedVolumeDays);
 
             IList<IWorkloadDayBase> workloadDays = LoadStatisticData(period, workload);

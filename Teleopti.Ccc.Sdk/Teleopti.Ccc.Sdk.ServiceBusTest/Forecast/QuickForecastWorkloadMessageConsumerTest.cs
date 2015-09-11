@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			validatedRep.Stub(x=> x.FindRange(_statPeriod, workload)).Return(new Collection<IValidatedVolumeDay>());
 			validatedRep.Stub(x => x.MatchDays(workload, new BindingList<ITaskOwner>(), new Collection<IValidatedVolumeDay>())).Return(new List<ITaskOwner>()).IgnoreArguments();
 
-			_statisticHelper.Stub(x => x.GetWorkloadDaysWithValidatedStatistics(_statPeriod, workload, scenario, new List<IValidatedVolumeDay>())).Return(teskOwners);
+			_statisticHelper.Stub(x => x.GetWorkloadDaysWithValidatedStatistics(_statPeriod, workload, new List<IValidatedVolumeDay>())).Return(teskOwners);
 			_forecastClassesCreator.Stub(x => x.GetNewTaskOwnerPeriod(teskOwners)).Return(taskOwnerPeriod);
 			_outlierRep.Stub(x => x.FindByWorkload(workload)).Return(new List<IOutlier>());
 			_skillDayRep.Stub(x => x.GetAllSkillDays(_statPeriod, new List<ISkillDay>(), null, scenario, _ => { })).IgnoreArguments().Return(new Collection<ISkillDay>());
@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			validatedRep.Stub(x => x.FindRange(_statPeriod, workload)).Return(new Collection<IValidatedVolumeDay>());
 			validatedRep.Stub(x => x.MatchDays(workload, new BindingList<ITaskOwner>(), new Collection<IValidatedVolumeDay>())).Return(new List<ITaskOwner>()).IgnoreArguments();
 
-			_statisticHelper.Stub(x => x.GetWorkloadDaysWithValidatedStatistics(_statPeriod, workload, scenario, new List<IValidatedVolumeDay>())).Return(teskOwners);
+			_statisticHelper.Stub(x => x.GetWorkloadDaysWithValidatedStatistics(_statPeriod, workload, new List<IValidatedVolumeDay>())).Return(teskOwners);
 			_forecastClassesCreator.Stub(x => x.GetNewTaskOwnerPeriod(teskOwners)).Return(taskOwnerPeriod);
 			_outlierRep.Stub(x => x.FindByWorkload(workload)).Return(new List<IOutlier>());
 			_skillDayRep.Stub(x => x.GetAllSkillDays(_statPeriod, new List<ISkillDay>(), null, scenario, _ => { })).IgnoreArguments().Return(new Collection<ISkillDay>());
@@ -207,7 +207,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			_target.Consume(_mess);
 
 			_statisticHelper.AssertWasNotCalled(
-				x => x.GetWorkloadDaysWithValidatedStatistics(_statPeriod, workload, scenario, new List<IValidatedVolumeDay>()),
+				x => x.GetWorkloadDaysWithValidatedStatistics(_statPeriod, workload, new List<IValidatedVolumeDay>()),
 				o => o.IgnoreArguments());
 		}
 
