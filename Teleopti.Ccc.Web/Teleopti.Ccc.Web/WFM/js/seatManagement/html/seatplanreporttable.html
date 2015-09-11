@@ -19,7 +19,7 @@
 
 	<tr ng-repeat="booking in team.SeatBookings" ng-class="[$index % 2== 0 ? 'tr-color':'' ]">
 		<td class="td-team">{{ $first ? booking.SiteName + '/' +team.Name : ''}}</td>
-		<td class="td-agent">{{ booking.FirstName }}&nbsp;{{ booking.LastName }}</td>
+		<td class="td-agent">{{ booking.LastName }}&nbsp;{{ booking.FirstName }}</td>
 		<td class="td-location">{{ booking.LocationPath }}</td>
 		<td class="td-seat">{{ booking.SeatName }}</td>
 		<td class="td-time">{{ vm.getDisplayTime(booking) }}</td>

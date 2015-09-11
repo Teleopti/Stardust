@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 		{
 			if (location.ChildLocations != null)
 			{
-				var childLocations = location.ChildLocations;
+				var childLocations = location.ChildLocations.OrderBy (childLocation => childLocation.Name);
 				return childLocations.Select (getLocationViewModel).ToList();
 			}
 

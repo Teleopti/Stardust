@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 		public BusinessUnitWithSitesViewModel GetTeamHierarchy()
 		{
 			var currentBusinessUnit = _businessUnitRepository.Get(_currentBusinessUnit.Current().Id.GetValueOrDefault());
-			var sites = _siteRepository.LoadAll();
+			var sites = _siteRepository.LoadAll().OrderBy (site => site.Description.Name);
 			var siteViewModels = new List<SiteViewModelWithTeams>();
 
 			foreach (var site in sites)
