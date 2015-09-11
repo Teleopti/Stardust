@@ -24,7 +24,7 @@
 			<converters:CustomSorterBlankAlwaysLast x:Key="EnteredCurrentStateComparer" PropertyPath="TimeInCurrentState"/>
 
 			<wpfConverters:ColorConverter x:Key="colorConverter"/>
-
+			<wpfConverters:VisibilityConverter x:Key="visibilityConverter"/>
 			<wpfConverters:DateTimeToLocalAndNotMinValueConverter x:Key="DateTimeToLocalAndNotMinValueConverter"/>
 			<converters:SimpleConverter x:Key="SimpleConverter"/>
 			<converters:ElapsedTimeConverter x:Key="ElapsedTimeConverter" />
@@ -197,6 +197,11 @@
 					<DataGridTextColumn.ClipboardContentBinding>
 						<Binding Path="EnteredCurrentState" Converter="{StaticResource ElapsedTimeConverter}"/>
 					</DataGridTextColumn.ClipboardContentBinding>
+					<DataGridTextColumn.ElementStyle>
+						<Style TargetType="{x:Type TextBlock}">
+							<Setter Property="Visibility" Value="{Binding HasAlarm, Converter={StaticResource visibilityConverter}}"/>
+						</Style>
+					</DataGridTextColumn.ElementStyle>
 				</DataGridTextColumn>
 
 
