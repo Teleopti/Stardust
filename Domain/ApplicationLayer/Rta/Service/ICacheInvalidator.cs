@@ -4,8 +4,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public interface ICacheInvalidator
 	{
-		void InvalidateAll();
-		void Invalidate();
-		void InvalidateSchedules(Guid personId);
+		void InvalidateAllForCurrentTenant();
+		void InvalidateStateForCurrentTenant();
+		void InvalidateSchedulesForCurrentTenant(Guid personId);
+		void InvalidateAllForAllTenants();
 	}
 }

@@ -1,40 +1,42 @@
-using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator;
 using Teleopti.Ccc.Domain.Common;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
-	public class RtaStarter
+	public class RtaInitializor
 	{
 		private readonly IAdherenceAggregator _adherenceAggregator;
 		private readonly IStateStreamSynchronizer _synchronizer;
 		private readonly ICurrentDataSource _dataSource;
-		private readonly IList<string> _initialized = new List<string>();
+		private readonly RtaTenants _tenants;
 		private readonly object _initializeLock = new object();
 
-		public RtaStarter(
+		public RtaInitializor(
 			IAdherenceAggregator adherenceAggregator,
 			IStateStreamSynchronizer synchronizer,
-			ICurrentDataSource dataSource)
+			ICurrentDataSource dataSource,
+			RtaTenants tenants)
 		{
 			_adherenceAggregator = adherenceAggregator;
 			_synchronizer = synchronizer;
 			_dataSource = dataSource;
+			_tenants = tenants;
 		}
 
 		public void EnsureTenantInitialized()
 		{
-			if (_initialized.Contains(_dataSource.CurrentName()))
+			if (_tenants.IsInitialized(_dataSource.CurrentName()))
 				return;
 			lock (_initializeLock)
 			{
-				if (_initialized.Contains(_dataSource.CurrentName()))
+				if (_tenants.IsInitialized(_dataSource.CurrentName()))
 					return;
 
 				_adherenceAggregator.Initialize();
 				_synchronizer.Initialize();
-				_initialized.Add(_dataSource.CurrentName());
+				_tenants.Initialized(_dataSource.CurrentName());
 			}
 		}
+
 	}
 }

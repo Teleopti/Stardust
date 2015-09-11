@@ -47,8 +47,25 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private readonly ISettings _settings;
 		private readonly IPhysicalApplicationPath _physicalApplicationPath;
 		private readonly IFindPersonInfo _findPersonInfo;
+		private readonly RtaTenants _rtaTenants;
 
-		public TestController(IMutateNow mutateNow, ICacheInvalidator cacheInvalidator, ISessionSpecificDataProvider sessionSpecificDataProvider, ISsoAuthenticator authenticator, IWebLogOn logon, IBusinessUnitProvider businessUnitProvider, ICurrentHttpContext httpContext, IFormsAuthentication formsAuthentication, IToggleManager toggleManager, IIdentityProviderProvider identityProviderProvider, ILoadPasswordPolicyService loadPasswordPolicyService, ISettings settings, IPhysicalApplicationPath physicalApplicationPath, IFindPersonInfo findPersonInfo)
+		public TestController(
+			IMutateNow mutateNow, 
+			ICacheInvalidator cacheInvalidator, 
+			ISessionSpecificDataProvider sessionSpecificDataProvider, 
+			ISsoAuthenticator authenticator, 
+			IWebLogOn logon, 
+			IBusinessUnitProvider businessUnitProvider, 
+			ICurrentHttpContext httpContext, 
+			IFormsAuthentication formsAuthentication, 
+			IToggleManager toggleManager, 
+			IIdentityProviderProvider identityProviderProvider, 
+			ILoadPasswordPolicyService loadPasswordPolicyService, 
+			ISettings settings, 
+			IPhysicalApplicationPath physicalApplicationPath, 
+			IFindPersonInfo findPersonInfo,
+			RtaTenants rtaTenants,
+			IDataSourceScope dataSource)
 		{
 			_mutateNow = mutateNow;
 			_cacheInvalidator = cacheInvalidator;
@@ -64,6 +81,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_settings = settings;
 			_physicalApplicationPath = physicalApplicationPath;
 			_findPersonInfo = findPersonInfo;
+			_rtaTenants = rtaTenants;
 		}
 
 		public ViewResult BeforeScenario(bool enableMyTimeMessageBroker, string defaultProvider = null, bool usePasswordPolicy = false)
@@ -78,6 +96,10 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_loadPasswordPolicyService.ClearFile();
 			_loadPasswordPolicyService.Path = Path.Combine(_physicalApplicationPath.Get(), usePasswordPolicy ? "." : _settings.ConfigurationFilesPath());
 			UserDataFactory.EnableMyTimeMessageBroker = enableMyTimeMessageBroker;
+
+			cancelHangfireQueue();
+			waitForHangfireQueue();
+
 			var viewModel = new TestMessageViewModel
 			{
 				Title = "Setting up for scenario",
@@ -90,9 +112,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 					"Setting default implementation for INow"
 				}
 			};
-
-			cancelHangfireQueue();
-			waitForHangfireQueue();
 
 			return View("Message", viewModel);
 		}
@@ -259,7 +278,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private void invalidateRtaCache()
 		{
 			if (_cacheInvalidator != null)
-				_cacheInvalidator.InvalidateAll();
+				_cacheInvalidator.InvalidateAllForAllTenants();
+			_rtaTenants.ForgetInitializedTenants();
 		}
 	}
 }

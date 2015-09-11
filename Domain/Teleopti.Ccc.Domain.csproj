@@ -234,7 +234,8 @@
     <Compile Include="ApplicationLayer\Rta\Service\LegacyAuthenticationKeyException.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\PreviousStateInfoLoader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ConfiguredKeyAuthenticator.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\RtaStarter.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\RtaInitializor.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\RtaTenants.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\TenantAuthenticator.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\DatabaseLoader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\StateAlarmInfo.cs" />
