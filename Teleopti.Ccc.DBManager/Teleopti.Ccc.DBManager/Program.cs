@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 using Teleopti.Ccc.DBManager.Library;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.DBManager
 {
@@ -273,7 +274,7 @@ namespace Teleopti.Ccc.DBManager
 			_logger.Write(s);
 		}
 
-		public class MyLogger : ILog, IDisposable
+		public class MyLogger : IUpgradeLog, IDisposable
 		{
 			private readonly TextWriter _logFile;
 
@@ -284,6 +285,11 @@ namespace Teleopti.Ccc.DBManager
 			}
 
 			public void Write(string message)
+			{
+				Write(message, "DEBUG");
+			}
+
+			public void Write(string message, string level)
 			{
 				Console.Out.WriteLine(message);
 				_logFile.WriteLine(message);

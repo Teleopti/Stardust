@@ -125,6 +125,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
+      <Project>{8d2565f2-7c44-45b7-96ad-2cd900e033a1}</Project>
+      <Name>Teleopti.Interfaces</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.DBManager.Library\Teleopti.Ccc.DBManager.Library.csproj">
       <Project>{CF33F7A6-78D3-4167-A42D-20E453F8B1B6}</Project>
       <Name>Teleopti.Ccc.DBManager.Library</Name>
