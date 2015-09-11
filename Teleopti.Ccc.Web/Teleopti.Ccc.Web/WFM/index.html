@@ -1,6 +1,17 @@
 ﻿<!DOCTYPE html>
 <html ng-app="wfm">
 <head lang="en">
+	<script type="text/javascript">
+		function iAmCalledFromFatClient() {
+			document.getElementById('nav').style.display = 'none';
+			document.getElementById('leftsidenav').style.display = 'none';
+			document.getElementById('rightsidenav').style.display = 'none';
+			document.getElementById('notice').style.display = 'none';
+			document.getElementById('lefttoogle').style.display = 'none';
+			document.getElementById('righttoogle').style.display = 'none';
+		}
+	</script>
+
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>WFM</title>
@@ -61,14 +72,14 @@
 
 </head>
 <body ng-show="isAuthenticated" ng-cloak>
-	<div ng-include="'html/nav.html'" class="material-depth-1 navbar navbar-default navbar-static-top " role="navigation"></div>
+	<div id="nav" ng-include="'html/nav.html'" class="material-depth-1 navbar navbar-default navbar-static-top " role="navigation"></div>
 	<div class="layout-container">
-		<div class="sidenav material-depth-1 left" ng-class="{'is-hidden':toggleLeftSide}">
+		<div id="leftsidenav" class="sidenav material-depth-1 left" ng-class="{'is-hidden':toggleLeftSide}">
 			<div ng-include="'html/left-sidenav.html'"></div>
 		</div>
 
 
-		<div class="sidenav-toggle">
+		<div id="lefttoogle" class="sidenav-toggle">
 			<div class="sidenav-wrapper left">
 				<input type="checkbox" id="nav-left" ng-model="toggleLeftSide" />
 				<label for="nav-left">
@@ -78,7 +89,7 @@
 		</div>
 		<div class="container content material-depth-1 material-block" ui-view></div>
 		<!--move this to a smart place -->
-		<div ng-controller="NoticeCtrl" class="growl-wrapper">
+		<div id="notice" ng-controller="NoticeCtrl" class="growl-wrapper">
 			<div class="container-fluid">
 				<div class="row">
 					<div class="col-md-12">
@@ -88,7 +99,7 @@
 			</div>
 		</div>
 
-		<div class="sidenav-toggle">
+		<div id="righttoogle" class="sidenav-toggle">
 			<div class="sidenav-wrapper right">
 				<input type="checkbox" id="nav-right" ng-model="toggleRightSide" />
 				<label for="nav-right">
@@ -96,7 +107,7 @@
 				</label>
 			</div>
 		</div>
-		<div class="sidenav material-depth-1 right" layout="column" ng-class="{'is-hidden':toggleRightSide}" >
+		<div id="rightsidenav" class="sidenav material-depth-1 right" layout="column" ng-class="{'is-hidden':toggleRightSide}" >
 			<span ng-include="'html/right-sidenav.html'"></span>
 		</div>
 	</div>

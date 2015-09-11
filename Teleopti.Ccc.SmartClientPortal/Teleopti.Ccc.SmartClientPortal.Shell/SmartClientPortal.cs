@@ -66,6 +66,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		readonly int homeCommand = CommandIds.RegisterUserCommand("StartPage");
 		private bool canAccessInternet = true;
 		private bool _webViewLoaded = true;
+		private string _token = null;
+		private const string _permissionModule = "/permissions";
 
 		protected SmartClientShellForm()
 		{
@@ -160,6 +162,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		void webView1_LoadComplete(object sender, NavigationTaskEventArgs e)
 		{
 			_webViewLoaded = true;
+			if (webView1.Url.Contains(_permissionModule))
+			{
+				JSObject window = webView1.GetDOMWindow();
+				var iAmCalledFromFatClient = (JSFunction)webView1.EvalScript("iAmCalledFromFatClient");
+				iAmCalledFromFatClient.Invoke(window, new object[] { });
+				webControl1.Visible = true;
+			}
 		}
 
 		void toolStripButtonHelp_Click(object sender, EventArgs e)
@@ -254,18 +263,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			toolStripStatusLabelLoggedOnUser.Text = toolStripStatusLabelLoggedOnUser.Text +
 													ApplicationTextHelper.LoggedOnUserText;
 
-			if (_toggleManager.IsEnabled(Toggles.Portal_NewLandingpage_29415))
-			{
-				_webViewLoaded = false;
-				if (!canAccessInternet)
-				{
-					goToLocalPage();
-				}
-				else
-				{
-					goToPublicPage(false);
-				}
-			}
+			loadLandingPage();
 
 			setNotifyData(_systemChecker.IsOk());
 
@@ -288,6 +286,22 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			if (_toggleManager.IsEnabled(Toggles.Portal_NewLandingpage_29415)) 
 				backStage1.Controls.Remove(backStageButtonSignCustomerWeb);
 
+		}
+
+		private void loadLandingPage()
+		{
+			if (_toggleManager.IsEnabled(Toggles.Portal_NewLandingpage_29415))
+			{
+				_webViewLoaded = false;
+				if (!canAccessInternet)
+				{
+					goToLocalPage();
+				}
+				else
+				{
+					goToPublicPage(false);
+				}
+			}
 		}
 
 		private void showMem()
@@ -326,24 +340,38 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		{
 			if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPermissionPage))
 			{
-				PermissionsExplorer permissionForm = null;
-				try
+				if (!_toggleManager.IsEnabled(Toggles.WfmPermission_ReplaceOldPermission_34671))
 				{
-					permissionForm = new PermissionsExplorer(_container);
-					permissionForm.LoadDatabaseData();
-					permissionForm.Saved += permissionForm_Saved;
-					permissionForm.Show();
+					PermissionsExplorer permissionForm = null;
+					try
+					{
+						permissionForm = new PermissionsExplorer(_container);
+						permissionForm.LoadDatabaseData();
+						permissionForm.Saved += permissionForm_Saved;
+						permissionForm.Show();
+					}
+					catch (DataSourceException dataSourceException)
+					{
+						using (
+							var view = new SimpleExceptionHandlerView(dataSourceException, UserTexts.Resources.OpenTeleoptiCCC,
+								UserTexts.Resources.ServerUnavailable))
+						{
+							view.ShowDialog(this);
+						}
+						if (permissionForm != null)
+						{
+							permissionForm.Close();
+						}
+					}
 				}
-				catch (DataSourceException dataSourceException)
+				else
 				{
-					using (var view = new SimpleExceptionHandlerView(dataSourceException, UserTexts.Resources.OpenTeleoptiCCC, UserTexts.Resources.ServerUnavailable))
-					{
-						view.ShowDialog(this);
-					}
-					if(permissionForm != null)
-					{
-						permissionForm.Close();
-					}
+					webControl1.Visible = false;
+					backStageViewMain.HideBackStage();
+					string raptorServer = ConfigurationManager.AppSettings.Get("ReportServer");
+					webView1.LoadUrlAndWait(string.Format("{0}WFM/#{1}",raptorServer,_permissionModule));
+					////Call the function
+					//replaceContentInContainer.Invoke(window, new object[] {});
 				}
 			}
 		}
@@ -655,9 +683,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		
 		void webView1LoadFailed(object sender, LoadFailedEventArgs e)
 		{
-			canAccessInternet = false;
-			webControl1.Visible = false;
-			//we can't goto static page in this event, for some reason
+			if (e.FailedUrl != null && !e.FailedUrl.Contains(_permissionModule))
+			{
+				canAccessInternet = false;
+				webControl1.Visible = false;
+				//we can't goto static page in this event, for some reason
+			}
 		}
 
 		private void webView1_BeforeContextMenu(object sender, BeforeContextMenuEventArgs e)
@@ -699,6 +730,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		private void outlookBar1_SelectedItemChanged(object sender, SelectedItemChangedEventArgs e)
 		{
+			updateURLToLandingPage();
 			outlookBarWorkSpace1.SetHeader(e.SelectedItem);
 			ModuleSelected(e.SelectedItem);
 		}
@@ -782,8 +814,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			{
 				try
 				{
-					var token = SingleSignOnHelper.SingleSignOn();
-					webView1.Url = string.Format("http://www.teleopti.com/elogin.aspx?{0}", token);
+					if(_token== null)
+						_token = SingleSignOnHelper.SingleSignOn();
+					webView1.Url = string.Format("http://www.teleopti.com/elogin.aspx?{0}1", _token);
 				}
 				catch (ArgumentException exception)
 				{
@@ -802,6 +835,25 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				
 			}
 			
+		}
+
+		private void updateURLToLandingPage()
+		{
+			if (!webView1.Url.Contains("http://www.teleopti.com/"))
+			{
+				if (_toggleManager.IsEnabled(Toggles.Portal_NewLandingpage_29415))
+				{
+					_webViewLoaded = false;
+					if (!canAccessInternet)
+					{
+						goToLocalPage();
+					}
+					else
+					{
+						goToPublicPage(true);
+					}
+				}
+			}
 		}
 
 		private void openOptionsDialog()
