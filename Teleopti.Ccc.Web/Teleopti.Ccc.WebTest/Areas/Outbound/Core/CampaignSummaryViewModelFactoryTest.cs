@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -101,18 +98,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
                     w.TypeOfRule.Should().Be.EqualTo("OutboundUnderSLARule");
                 });
             });
-        }
-
-
-        [Test]
-        public void ShouldReturnCorrectCampaignStatistics()
-        {
-            var statistics = new CampaignStatistics();
-            campaignListProvider.Stub(x => x.GetCampaignStatistics()).Return(statistics);
-            target = new CampaignSummaryViewModelFactory(campaignListProvider);
-            var result = target.GetCampaignStatistics();
-
-            result.Should().Be.EqualTo(statistics);
         }
     }
 }

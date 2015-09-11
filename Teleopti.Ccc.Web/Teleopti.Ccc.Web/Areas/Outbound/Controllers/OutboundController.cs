@@ -103,7 +103,13 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		[HttpGet, Route("api/Outbound/Campaign/Statistics"), UnitOfWork]
 		public virtual CampaignStatistics GetStatistics()
 		{
-			return _campaignSummaryViewModelFactory.GetCampaignStatistics();
+			return _campaignListProvider.GetCampaignStatistics(null);
+		}
+
+		[HttpPost, Route("api/Outbound/Campaign/Period/Statistics"), UnitOfWork]
+		public virtual CampaignStatistics GetStatistics([FromBody] GanttPeriod period)
+		{
+			return _campaignListProvider.GetCampaignStatistics(period);
 		}		
 		
 		[HttpGet, Route("api/Outbound/Campaign/Load"), UnitOfWork]

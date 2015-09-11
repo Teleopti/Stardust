@@ -55,13 +55,48 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.List<IOutboundCampaign>();
 		}
 
+		public IList<IOutboundCampaign> GetPlannedCampaigns(DateTimePeriod period)
+		{
+			return Session.CreateCriteria<Campaign>()
+				.Add(Restrictions.Conjunction()
+					.Add(Restrictions.Ge("SpanningPeriod.period.Maximum", period.StartDateTime))
+					.Add(Restrictions.Le("SpanningPeriod.period.Minimum", period.EndDateTime))
+					.Add(Restrictions.Gt("SpanningPeriod.period.Minimum", DateTime.Today)))
+				.AddOrder(Order.Asc("SpanningPeriod.period.Minimum"))
+				.List<IOutboundCampaign>();
+		}
+
+		public IList<IOutboundCampaign> GetDoneCampaigns(DateTimePeriod period)
+		{
+			return Session.CreateCriteria<Campaign>()
+				.Add(Restrictions.Conjunction()
+					.Add(Restrictions.Ge("SpanningPeriod.period.Maximum", period.StartDateTime))
+					.Add(Restrictions.Le("SpanningPeriod.period.Minimum", period.EndDateTime))
+					.Add(Restrictions.Lt("SpanningPeriod.period.Maximum", DateTime.Today)))
+				.AddOrder(Order.Desc("SpanningPeriod.period.Minimum"))
+				.List<IOutboundCampaign>();
+		}
+
+		public IList<IOutboundCampaign> GetOnGoingCampaigns(DateTimePeriod period)
+		{
+			return Session.CreateCriteria<Campaign>()
+				.Add(Restrictions.Conjunction()
+					.Add(Restrictions.Ge("SpanningPeriod.period.Maximum", period.StartDateTime))
+					.Add(Restrictions.Le("SpanningPeriod.period.Minimum", period.EndDateTime))
+					.Add(Restrictions.Conjunction()
+						.Add(Restrictions.Le("SpanningPeriod.period.Minimum", DateTime.Today))
+						.Add(Restrictions.Ge("SpanningPeriod.period.Maximum", DateTime.Today))))
+				.AddOrder(Order.Desc("SpanningPeriod.period.Minimum"))
+				.List<IOutboundCampaign>();
+		}
+
 		public IList<IOutboundCampaign> GetCampaigns(DateTimePeriod period)
 		{
 			return Session.CreateCriteria<Campaign>()
 				.Add(Restrictions.Conjunction()
 					.Add(Restrictions.Ge("SpanningPeriod.period.Maximum", period.StartDateTime))
 					.Add(Restrictions.Le("SpanningPeriod.period.Minimum", period.EndDateTime)))
-					.AddOrder(Order.Desc("SpanningPeriod.period.Minimum"))
+				.AddOrder(Order.Desc("SpanningPeriod.period.Minimum"))
 				.List<IOutboundCampaign>();
 		}
 	}

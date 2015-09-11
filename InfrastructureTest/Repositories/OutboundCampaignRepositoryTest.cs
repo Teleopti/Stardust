@@ -270,6 +270,118 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
+		public void ShouldGetPlannedCampaignsInPeriodWithSequence()
+		{
+			var campaign1 = createCampaignWithSpanningPeriod(new DateTimePeriod(new DateTime(DateTime.Today.AddDays(1).Ticks, DateTimeKind.Utc), new DateTime(DateTime.MaxValue.Ticks, DateTimeKind.Utc)));
+			var campaign2 = createCampaignWithSpanningPeriod(new DateTimePeriod(new DateTime(DateTime.Today.AddDays(2).Ticks, DateTimeKind.Utc), new DateTime(DateTime.MaxValue.Ticks, DateTimeKind.Utc)));
+			createCampaignWithSpanningPeriod(new DateTimePeriod(new DateTime(DateTime.Today.Ticks, DateTimeKind.Utc), new DateTime(DateTime.MaxValue.Ticks, DateTimeKind.Utc)));
+			var repository = new OutboundCampaignRepository(UnitOfWork);
+
+			var result = repository.GetPlannedCampaigns(new DateTimePeriod(new DateTime(DateTime.Today.AddDays(-1).Ticks, DateTimeKind.Utc), new DateTime(DateTime.MaxValue.Ticks, DateTimeKind.Utc)));
+
+			result.Count.Should().Be.EqualTo(2);
+			result[0].Id.Should().Be.EqualTo(campaign1.Id);
+			result[1].Id.Should().Be.EqualTo(campaign2.Id);
+		}		
+		
+		[Test]
+		public void ShouldNotGetPlannedCampaignEndEarlierThanPeriod()
+		{
+			createCampaignWithSpanningPeriod(new DateTimePeriod(new DateTime(DateTime.Today.AddDays(1).Ticks, DateTimeKind.Utc), new DateTime(DateTime.Today.AddDays(2).Ticks, DateTimeKind.Utc)));
+			var repository = new OutboundCampaignRepository(UnitOfWork);
+
+			var result = repository.GetPlannedCampaigns(new DateTimePeriod(new DateTime(DateTime.Today.AddDays(3).Ticks, DateTimeKind.Utc), new DateTime(DateTime.MaxValue.Ticks, DateTimeKind.Utc)));
+
+			result.Count.Should().Be.EqualTo(0);
+		}		
+		
+		[Test]
+		public void ShouldNotGetPlannedCampaignStartLaterThanPeriod()
+		{
+			createCampaignWithSpanningPeriod(new DateTimePeriod(new DateTime(DateTime.Today.AddDays(2).Ticks, DateTimeKind.Utc), new DateTime(DateTime.MaxValue.Ticks, DateTimeKind.Utc)));
+			var repository = new OutboundCampaignRepository(UnitOfWork);
+
+			var result = repository.GetPlannedCampaigns(new DateTimePeriod(new DateTime(DateTime.Today.Ticks, DateTimeKind.Utc), new DateTime(DateTime.Today.AddDays(1).Ticks, DateTimeKind.Utc)));
+
+			result.Count.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldGetDoneCampaignsInPeriodWithSequence()
+		{
+			var campaign1 = createCampaignWithSpanningPeriod(new DateTimePeriod(new DateTime(DateTime.Today.AddDays(-10).Ticks, DateTimeKind.Utc), new DateTime(DateTime.Today.AddDays(-8).Ticks, DateTimeKind.Utc)));
+			var campaign2 = createCampaignWithSpanningPeriod(new DateTimePeriod(new DateTime(DateTime.Today.AddDays(-9).Ticks, DateTimeKind.Utc), new DateTime(DateTime.Today.AddDays(-8).Ticks, DateTimeKind.Utc)));
+			createCampaignWithSpanningPeriod(new DateTimePeriod(new DateTime(DateTime.Today.Ticks, DateTimeKind.Utc), new DateTime(DateTime.MaxValue.Ticks, DateTimeKind.Utc)));
+			var repository = new OutboundCampaignRepository(UnitOfWork);
+
+			var result = repository.GetDoneCampaigns(new DateTimePeriod(new DateTime(DateTime.Today.AddDays(-9).Ticks, DateTimeKind.Utc), new DateTime(DateTime.Today.Ticks, DateTimeKind.Utc)));
+
+			result.Count.Should().Be.EqualTo(2);
+			result[0].Id.Should().Be.EqualTo(campaign2.Id);
+			result[1].Id.Should().Be.EqualTo(campaign1.Id);
+		}		
+		
+		[Test]
+		public void ShouldNotGetDoneCampaignStartLaterThanPeriod()
+		{
+			createCampaignWithSpanningPeriod(new DateTimePeriod(new DateTime(DateTime.Today.AddDays(-10).Ticks, DateTimeKind.Utc), new DateTime(DateTime.Today.AddDays(-8).Ticks, DateTimeKind.Utc)));
+			var repository = new OutboundCampaignRepository(UnitOfWork);
+
+			var result = repository.GetDoneCampaigns(new DateTimePeriod(new DateTime(DateTime.Today.AddDays(-30).Ticks, DateTimeKind.Utc), new DateTime(DateTime.Today.AddDays(-20).Ticks, DateTimeKind.Utc)));
+
+			result.Count.Should().Be.EqualTo(0);
+		}		
+		
+		[Test]
+		public void ShouldNotGetDoneCampaignEndEarlierThanPeriod()
+		{
+			createCampaignWithSpanningPeriod(new DateTimePeriod(new DateTime(DateTime.Today.AddDays(-10).Ticks, DateTimeKind.Utc), new DateTime(DateTime.Today.AddDays(-8).Ticks, DateTimeKind.Utc)));
+			var repository = new OutboundCampaignRepository(UnitOfWork);
+
+			var result = repository.GetDoneCampaigns(new DateTimePeriod(new DateTime(DateTime.Today.Ticks, DateTimeKind.Utc), new DateTime(DateTime.Today.AddDays(2).Ticks, DateTimeKind.Utc)));
+
+			result.Count.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldGetOnGoingCampaignsInPeriodWithSequence()
+		{
+			var campaign1 = createCampaignWithSpanningPeriod(new DateTimePeriod(new DateTime(DateTime.Today.AddDays(-10).Ticks, DateTimeKind.Utc), new DateTime(DateTime.Today.Ticks, DateTimeKind.Utc)));
+			var campaign2 = createCampaignWithSpanningPeriod(new DateTimePeriod(new DateTime(DateTime.Today.Ticks, DateTimeKind.Utc), new DateTime(DateTime.MaxValue.Ticks, DateTimeKind.Utc)));
+			createCampaignWithSpanningPeriod(new DateTimePeriod(new DateTime(DateTime.Today.AddDays(-10).Ticks, DateTimeKind.Utc), new DateTime(DateTime.Today.AddDays(-8).Ticks, DateTimeKind.Utc)));
+			createCampaignWithSpanningPeriod(new DateTimePeriod(new DateTime(DateTime.Today.AddDays(8).Ticks, DateTimeKind.Utc), new DateTime(DateTime.Today.AddDays(10).Ticks, DateTimeKind.Utc)));
+			var repository = new OutboundCampaignRepository(UnitOfWork);
+
+			var result = repository.GetOnGoingCampaigns(new DateTimePeriod(new DateTime(DateTime.Today.AddDays(-5).Ticks, DateTimeKind.Utc), new DateTime(DateTime.Today.AddDays(5).Ticks, DateTimeKind.Utc)));
+
+			result.Count.Should().Be.EqualTo(2);
+			result[0].Id.Should().Be.EqualTo(campaign2.Id);
+			result[1].Id.Should().Be.EqualTo(campaign1.Id);
+		}		
+		
+		[Test]
+		public void ShouldNotGetOnGoingCampaignEndEarlierThanPeriod()
+		{
+			createCampaignWithSpanningPeriod(new DateTimePeriod(new DateTime(DateTime.Today.AddDays(-10).Ticks, DateTimeKind.Utc), new DateTime(DateTime.Today.Ticks, DateTimeKind.Utc)));
+			var repository = new OutboundCampaignRepository(UnitOfWork);
+
+			var result = repository.GetOnGoingCampaigns(new DateTimePeriod(new DateTime(DateTime.Today.AddDays(5).Ticks, DateTimeKind.Utc), new DateTime(DateTime.Today.AddDays(15).Ticks, DateTimeKind.Utc)));
+
+			result.Count.Should().Be.EqualTo(0);
+		}		
+		
+		[Test]
+		public void ShouldNotGetOnGoingCampaignStartLaterThanPeriod()
+		{
+			createCampaignWithSpanningPeriod(new DateTimePeriod(new DateTime(DateTime.Today.AddDays(-10).Ticks, DateTimeKind.Utc), new DateTime(DateTime.Today.Ticks, DateTimeKind.Utc)));
+			var repository = new OutboundCampaignRepository(UnitOfWork);
+
+			var result = repository.GetOnGoingCampaigns(new DateTimePeriod(new DateTime(DateTime.Today.AddDays(-20).Ticks, DateTimeKind.Utc), new DateTime(DateTime.Today.AddDays(-15).Ticks, DateTimeKind.Utc)));
+
+			result.Count.Should().Be.EqualTo(0);
+		}
+
+		[Test]
 		public void ShouldNotGetDeletedPlannedCampaign()
 		{
 			var deletedCamapign = createCampaignWithSpanningPeriod(new DateTimePeriod(new DateTime(DateTime.Today.AddDays(1).Ticks, DateTimeKind.Utc), new DateTime(DateTime.MaxValue.Ticks, DateTimeKind.Utc)));

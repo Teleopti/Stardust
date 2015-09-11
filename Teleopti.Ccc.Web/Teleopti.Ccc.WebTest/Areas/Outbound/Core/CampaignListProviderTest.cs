@@ -8,8 +8,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.Domain.Outbound.Rules;
-using Teleopti.Ccc.Infrastructure.Toggle;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider;
@@ -29,7 +27,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		private FakeOutboundRuleChecker _outboundRuleChecker;
 		private FakeOutboundCampaignListOrderProvider _campaignListOrderProvider;
 		private IUserTimeZone _userTimeZone;
-		private IToggleManager _toggleManager;
 
 		private IOutboundCampaign doneCampaign;
 		private IOutboundCampaign plannedCampaign;
@@ -44,7 +41,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			_campaignListOrderProvider = new FakeOutboundCampaignListOrderProvider();
 			_scheduledResourcesProvider = new FakeScheduleResourceProvider();
 			_outboundRuleChecker = new FakeOutboundRuleChecker();
-			_toggleManager = new FakeToggleManager();
 
 			_scheduledResourcesProvider.SetScheduledTimeOnDate(DateOnly.Today.AddDays(14), CreateSkill("B"),
 				new TimeSpan(4, 0, 0));
@@ -54,11 +50,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			scheduledCampaign = GetTestCampaign(1);
 			ongoingCampaign = GetTestCampaign(2);
 
-			_outboundCampaignRepository.Add(doneCampaign);
-			_outboundCampaignRepository.Add(plannedCampaign);
-			_outboundCampaignRepository.Add(scheduledCampaign);
-			_outboundCampaignRepository.Add(ongoingCampaign);
-
 			_campaignListOrderProvider.SetCampaignListOrder(new List<CampaignStatus>
 			{
 				CampaignStatus.Ongoing,
@@ -67,17 +58,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 				CampaignStatus.Scheduled
 			});
 
-			target = new CampaignListProvider(_outboundCampaignRepository, _scheduledResourcesProvider, _outboundRuleChecker, _campaignListOrderProvider, _userTimeZone, _toggleManager);
+			target = new CampaignListProvider(_outboundCampaignRepository, _scheduledResourcesProvider, _outboundRuleChecker, _campaignListOrderProvider, _userTimeZone);
 		}
 
 		[Test]
 		public void ShouldGetCampaigns()
 		{
-			_outboundCampaignRepository.Remove(doneCampaign);
-			_outboundCampaignRepository.Remove(plannedCampaign);
-			_outboundCampaignRepository.Remove(scheduledCampaign);
-			_outboundCampaignRepository.Remove(ongoingCampaign);
-
 			var campaign1 = new Domain.Outbound.Campaign()
 			{
 				Name = "campaign1",
@@ -99,8 +85,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		[Test]
 		public void ShouldLoadDataWithAllCampaigns()
 		{
+			setCampaigns();
 			var scheduledResourcesProvider = MockRepository.GenerateMock<IOutboundScheduledResourcesProvider>();
-			target = new CampaignListProvider(_outboundCampaignRepository, scheduledResourcesProvider, null, null, _userTimeZone, _toggleManager);
+			target = new CampaignListProvider(_outboundCampaignRepository, scheduledResourcesProvider, null, null, _userTimeZone);
 
 			target.LoadData(null);
 
@@ -111,7 +98,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		[Test]
 		public void ShouldListDoneCampaigns()
 		{
-			var result = target.ListDoneCampaign().ToList();
+			setCampaigns();
+			var result = target.ListDoneCampaign(null).ToList();
 			result.Count.Should().Be.EqualTo(1);
 			result.ForEach(c =>
 			{
@@ -123,7 +111,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		[Test]
 		public void ShouldListOngoingCampaigns()
 		{
-			var result = target.ListOngoingCampaign().ToList();
+			setCampaigns();
+			var result = target.ListOngoingCampaign(null).ToList();
 			result.Count.Should().Be.EqualTo(1);
 			result.ForEach(c =>
 			{
@@ -135,8 +124,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		[Test]
 		public void ShouldListScheduledCampaigns()
 		{
-
-			var result = target.ListScheduledCampaign().ToList();
+			setCampaigns();
+			var result = target.ListScheduledCampaign(null).ToList();
 			result.Count.Should().Be.EqualTo(1);
 			result.ForEach(c =>
 			{
@@ -148,7 +137,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		[Test]
 		public void ShouldListPlannedCampaigns()
 		{
-			var result = target.ListPlannedCampaign().ToList();
+			setCampaigns();
+			var result = target.ListPlannedCampaign(null).ToList();
 			result.Count.Should().Be.EqualTo(1);
 			result.ForEach(c =>
 			{
@@ -160,13 +150,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		[Test]
 		public void ScheduledCampaignShouldNotBeListedInPlannedCampaigns()
 		{
-			var result = target.ListPlannedCampaign().ToList();
+			setCampaigns();
+			var result = target.ListPlannedCampaign(null).ToList();
 			result.ForEach(c => c.Name.Should().Not.Be.EqualTo("B"));
 		}
 
 		[Test]
 		public void ShouldListCampaignsByStatusOngoing()
 		{
+			setCampaigns();
 			var result = target.ListCampaign(CampaignStatus.Ongoing).ToList();
 			result.Count.Should().Be.EqualTo(1);
 			result.ForEach(c => c.Name.Should().Be.EqualTo("C"));
@@ -175,6 +167,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		[Test]
 		public void ShouldListCampaignsByStatusDone()
 		{
+			setCampaigns();
 			var result = target.ListCampaign(CampaignStatus.Done).ToList();
 			result.Count.Should().Be.EqualTo(1);
 			result.ForEach(c => c.Name.Should().Be.EqualTo("D"));
@@ -183,6 +176,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		[Test]
 		public void ShouldListCampaignsByStatusScheduled()
 		{
+			setCampaigns();
 			var result = target.ListCampaign(CampaignStatus.Scheduled).ToList();
 			result.Count.Should().Be.EqualTo(1);
 			result.ForEach(c => c.Name.Should().Be.EqualTo("B"));
@@ -191,6 +185,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		[Test]
 		public void ShouldListCampaignsByStatusPlanned()
 		{
+			setCampaigns();
 			var result = target.ListCampaign(CampaignStatus.Planned).ToList();
 			result.Count.Should().Be.EqualTo(1);
 			result.ForEach(c => c.Name.Should().Be.EqualTo("A"));
@@ -199,6 +194,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		[Test]
 		public void ShouldListAllCampaignsByStatusNone()
 		{
+			setCampaigns();
 			var result = target.ListCampaign(CampaignStatus.None).ToList();
 			result.Count.Should().Be.EqualTo(4);
 		}
@@ -206,6 +202,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		[Test]
 		public void ShouldListCampaignsByCompositeStatus()
 		{
+			setCampaigns();
 			var result = target.ListCampaign(CampaignStatus.Done | CampaignStatus.Scheduled).ToList();
 
 			result.Count.Should().Be.EqualTo(2);
@@ -216,6 +213,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		[Test]
 		public void ShouldListAllCampaignsByAllStatus()
 		{
+			setCampaigns();
 			var result = target.ListCampaign(
 				CampaignStatus.Done | CampaignStatus.Scheduled | CampaignStatus.Planned | CampaignStatus.Ongoing).ToList();
 
@@ -225,6 +223,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		[Test]
 		public void ShouldListCampaignsWithGivenOrder()
 		{
+			setCampaigns();
 			_campaignListOrderProvider.SetCampaignListOrder(new List<CampaignStatus>
 			{
 				CampaignStatus.Ongoing,
@@ -241,6 +240,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		[Test]
 		public void ShouldAttachCorrectRuleCheckResultToOngoingCampaigns()
 		{
+			setCampaigns();
 			_outboundRuleChecker.SetCampaignRuleCheckResponse(ongoingCampaign, new List<OutboundRuleResponse>
 			{
 				new OutboundRuleResponse()
@@ -264,6 +264,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		[Test]
 		public void ShouldAttachCorrectRuleCheckResultToScheduledCampaigns()
 		{
+			setCampaigns();
 			_outboundRuleChecker.SetCampaignRuleCheckResponse(scheduledCampaign, new List<OutboundRuleResponse>
 			{
 				new OutboundRuleResponse()
@@ -285,49 +286,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		}
 
 		[Test]
-		[Ignore("We may need to check the done campaigns")]
-		public void ShouldNotAttachRuleCheckResultToDoneCampaigns()
-		{
-			_outboundRuleChecker.SetCampaignRuleCheckResponse(doneCampaign, new List<OutboundRuleResponse>
-			{
-				new OutboundRuleResponse()
-				{
-					TypeOfRule = typeof (OutboundOverstaffRule)
-				}
-			});
-
-			var result = target.ListCampaign(CampaignStatus.Done).ToList();
-			result.ForEach(c =>
-			{
-				var warnings = c.WarningInfo.ToList();
-				warnings.Should().Be.Empty();
-			});
-		}
-
-		[Test]
-		[Ignore("We may need to check the planned campaigns")]
-		public void ShouldNotAttachRuleCheckResultToPlannedCampaigns()
-		{
-			_outboundRuleChecker.SetCampaignRuleCheckResponse(plannedCampaign, new List<OutboundRuleResponse>
-			{
-				new OutboundRuleResponse()
-				{
-					TypeOfRule = typeof (OutboundOverstaffRule)
-				}
-			});
-
-			var result = target.ListCampaign(CampaignStatus.Planned).ToList();
-			result.ForEach(c =>
-			{
-				var warnings = c.WarningInfo.ToList();
-				warnings.Should().Be.Empty();
-			});
-		}
-
-		[Test]
 		public void ShouldReturnCorrectStatisticsWhenThereAreNoWarnings()
 		{
-			var result = target.GetCampaignStatistics();
+			setCampaigns();
+			var result = target.GetCampaignStatistics(null);
 
 			result.Planned.Should().Be.EqualTo(1);
 			result.Scheduled.Should().Be.EqualTo(1);
@@ -335,11 +297,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			result.Done.Should().Be.EqualTo(1);
 			result.ScheduledWarning.Should().Be.EqualTo(0);
 			result.OnGoingWarning.Should().Be.EqualTo(0);
-		}
+		}		
 
 		[Test]
 		public void ShouldReturnCorrectStatisticsWhenThereAreWarnings()
 		{
+			setCampaigns();
+
 			_outboundRuleChecker.SetCampaignRuleCheckResponse(ongoingCampaign, new List<OutboundRuleResponse>
 			{
 				new OutboundRuleResponse()
@@ -356,7 +320,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 				}
 			});
 
-			var result = target.GetCampaignStatistics();
+			var result = target.GetCampaignStatistics(null);
 
 			result.Planned.Should().Be.EqualTo(1);
 			result.Scheduled.Should().Be.EqualTo(1);
@@ -422,6 +386,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var campaignPeriod = new DateOnlyPeriod(earliestStart, latestEnd);
 
 			return campaignPeriod;
+		}
+
+		private void setCampaigns()
+		{
+			_outboundCampaignRepository.Add(doneCampaign);
+			_outboundCampaignRepository.Add(plannedCampaign);
+			_outboundCampaignRepository.Add(scheduledCampaign);
+			_outboundCampaignRepository.Add(ongoingCampaign);
 		}
 	}
 

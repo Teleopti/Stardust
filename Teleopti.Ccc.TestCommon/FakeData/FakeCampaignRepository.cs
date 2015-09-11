@@ -72,6 +72,21 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return _campaigns.Where(c => c.SpanningPeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc).Contains(DateOnly.Today)).ToList();
 		}
 
+		public IList<IOutboundCampaign> GetPlannedCampaigns(DateTimePeriod period)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IList<IOutboundCampaign> GetDoneCampaigns(DateTimePeriod period)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IList<IOutboundCampaign> GetOnGoingCampaigns(DateTimePeriod period)
+		{
+			throw new NotImplementedException();
+		}
+
 		public IList<IOutboundCampaign> GetCampaigns(DateTimePeriod period)
 		{
 			return _campaigns.Where(campaign => period.ContainsPart(campaign.SpanningPeriod)).ToList();

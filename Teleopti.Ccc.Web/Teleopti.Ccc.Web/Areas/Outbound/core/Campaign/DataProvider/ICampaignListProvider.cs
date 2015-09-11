@@ -7,12 +7,12 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 	public interface ICampaignListProvider
 	{
 		IEnumerable<CampaignSummary> ListCampaign(CampaignStatus status);
-		IEnumerable<CampaignSummary> ListScheduledCampaign();
-		IEnumerable<CampaignSummary> ListPlannedCampaign();
-		IEnumerable<CampaignSummary> ListOngoingCampaign();
-		IEnumerable<CampaignSummary> ListDoneCampaign();
+		IEnumerable<CampaignSummary> ListScheduledCampaign(GanttPeriod peroid);
+		IEnumerable<CampaignSummary> ListPlannedCampaign(GanttPeriod peroid);
+		IEnumerable<CampaignSummary> ListOngoingCampaign(GanttPeriod peroid);
+		IEnumerable<CampaignSummary> ListDoneCampaign(GanttPeriod peroid);
 
-		CampaignStatistics GetCampaignStatistics();
+		CampaignStatistics GetCampaignStatistics(GanttPeriod peroid);
 		void LoadData(GanttPeriod peroid);
 		CampaignSummary GetCampaignById(Guid Id);
 		IEnumerable<GanttCampaignViewModel> GetCampaigns(GanttPeriod period);

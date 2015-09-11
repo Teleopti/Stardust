@@ -6,38 +6,33 @@ using Teleopti.Ccc.Web.Areas.Outbound.Models;
 
 namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.ViewModelFactory
 {
-    public class CampaignSummaryViewModelFactory : ICampaignSummaryViewModelFactory
-    {
-        private readonly ICampaignListProvider _campaignListProvider;
+	public class CampaignSummaryViewModelFactory : ICampaignSummaryViewModelFactory
+	{
+		private readonly ICampaignListProvider _campaignListProvider;
 
-        public CampaignSummaryViewModelFactory(ICampaignListProvider campaignListProvider)
-        {
-            _campaignListProvider = campaignListProvider;
-        }
+		public CampaignSummaryViewModelFactory(ICampaignListProvider campaignListProvider)
+		{
+			_campaignListProvider = campaignListProvider;
+		}
 
-        public List<CampaignSummaryViewModel> GetCampaignSummaryList(CampaignStatus status)
-        {
-            Func<CampaignSummary, bool> campaignHasWarningPredicate = campaign => campaign.WarningInfo.Any();
-            
-            var campaigns = _campaignListProvider.ListCampaign(status).ToList();
-            var campaignsWithWarning = campaigns.Where(campaignHasWarningPredicate).ToList();
-            var campaignsWithoutWarning = campaigns.Except(campaignsWithWarning);
+		public List<CampaignSummaryViewModel> GetCampaignSummaryList(CampaignStatus status)
+		{
+			Func<CampaignSummary, bool> campaignHasWarningPredicate = campaign => campaign.WarningInfo.Any();
 
-		      var campaings = campaignsWithWarning.Select(c => new CampaignSummaryViewModel(c)).ToList();
-		      var noWarningCampaigns = campaignsWithoutWarning.Select(c => new CampaignSummaryViewModel(c)).ToList();
-				campaings.AddRange(noWarningCampaigns);
+			var campaigns = _campaignListProvider.ListCampaign(status).ToList();
+			var campaignsWithWarning = campaigns.Where(campaignHasWarningPredicate).ToList();
+			var campaignsWithoutWarning = campaigns.Except(campaignsWithWarning);
 
-	        return campaings;
-        }
+			var campaings = campaignsWithWarning.Select(c => new CampaignSummaryViewModel(c)).ToList();
+			var noWarningCampaigns = campaignsWithoutWarning.Select(c => new CampaignSummaryViewModel(c)).ToList();
+			campaings.AddRange(noWarningCampaigns);
 
-        public CampaignStatistics GetCampaignStatistics()
-        {
-            return _campaignListProvider.GetCampaignStatistics();
-        }
+			return campaings;
+		}
 
 		public CampaignSummaryViewModel GetCampaignSummary(Guid id)
-	    {
-		    return new CampaignSummaryViewModel(_campaignListProvider.GetCampaignById(id));
-	    }
-    }
+		{
+			return new CampaignSummaryViewModel(_campaignListProvider.GetCampaignById(id));
+		}
+	}
 }

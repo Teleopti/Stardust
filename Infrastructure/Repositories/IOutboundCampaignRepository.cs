@@ -8,6 +8,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		IList<IOutboundCampaign> GetPlannedCampaigns();
 		IList<IOutboundCampaign> GetDoneCampaigns();
 		IList<IOutboundCampaign> GetOnGoingCampaigns();
+		IList<IOutboundCampaign> GetPlannedCampaigns(DateTimePeriod period);
+		IList<IOutboundCampaign> GetDoneCampaigns(DateTimePeriod period);
+		IList<IOutboundCampaign> GetOnGoingCampaigns(DateTimePeriod period);
 		IList<IOutboundCampaign> GetCampaigns(DateTimePeriod period);
 	}
 }

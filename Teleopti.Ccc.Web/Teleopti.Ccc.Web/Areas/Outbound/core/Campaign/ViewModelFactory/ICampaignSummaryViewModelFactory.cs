@@ -4,10 +4,9 @@ using Teleopti.Ccc.Web.Areas.Outbound.Models;
 
 namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.ViewModelFactory
 {
-    public interface ICampaignSummaryViewModelFactory
-    {
-		 List<CampaignSummaryViewModel> GetCampaignSummaryList(CampaignStatus status);
-        CampaignStatistics GetCampaignStatistics();
+	public interface ICampaignSummaryViewModelFactory
+	{
+		List<CampaignSummaryViewModel> GetCampaignSummaryList(CampaignStatus status);
 		CampaignSummaryViewModel GetCampaignSummary(Guid id);
-    }
+	}
 }
