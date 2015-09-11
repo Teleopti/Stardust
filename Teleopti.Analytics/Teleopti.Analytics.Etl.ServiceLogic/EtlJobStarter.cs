@@ -180,7 +180,7 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 						if (jobResults == null)
 						{
 							// No license applied - stop service
-							LogInvalidLicense();
+							LogInvalidLicense(tenantName.DataSourceName);
 							//we can't stop service now beacuse one tenant don't have a License, just try next
 							//NeedToStopService(this, null);
 							//return false;
@@ -206,9 +206,9 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 							   etlRunningInformation.StartTime, etlRunningInformation.IsStartedByService);
 		}
 
-		private static void LogInvalidLicense()
+		private static void LogInvalidLicense(string tenant)
 		{
-			Log.Warn("ETL Service was stopped due to invalid license. Please apply a license in the main client and then start the service again.");
+			Log.WarnFormat("ETL Service could not run for tenant {0}. Please log on to that tenant and apply a license in the main client.",tenant);
 		}
 
 		private static void LogInvalidConfiguration(ConfigurationHandler configHandler)
