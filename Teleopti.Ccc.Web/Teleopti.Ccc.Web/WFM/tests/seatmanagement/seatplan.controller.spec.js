@@ -33,7 +33,7 @@ describe('SeatPlanCtrl', function () {
 		seatPlans: {
 			query: function (param) {
 				var queryDeferred = $q.defer();
-				var result = [{ Date: "2015/03/02", Status: "2" }];
+				var result = [{ Date: "2015-03-02", Status: "2" }];
 				queryDeferred.resolve(result);
 				return { $promise: queryDeferred.promise };
 			},
@@ -55,9 +55,9 @@ describe('SeatPlanCtrl', function () {
 		var scope = $rootScope.$new();
 
 		var controller = $controller('SeatPlanCtrl', { $scope: scope, ResourcePlannerSvrc: mockResourcePlannerService, seatPlanService: mockSeatPlanService, Toggle: mockAllTrueToggleService });
-		controller.loadMonthDetails(moment("2015/03/02"));
+		controller.loadMonthDetails(moment("2015-03-02"));
 		scope.$digest();
-		var dayClass = controller.getDayClass("2015/03/02", 'day');
+		var dayClass = controller.getDayClass("2015-03-02", 'day');
 
 		expect(dayClass).toEqual('seatplan-status-error');
 	}));
@@ -67,7 +67,7 @@ describe('SeatPlanCtrl', function () {
 
 		var controller = $controller('SeatPlanCtrl', { $scope: scope, ResourcePlannerSvrc: mockResourcePlannerService, seatPlanService: mockSeatPlanService, Toggle: mockAllTrueToggleService });
 		
-		controller.loadMonthDetails(moment("2015/03/02"));
+		controller.loadMonthDetails(moment("2015-03-02"));
 		scope.$digest();
 
 		var expectedInfo = controller.seatPlanStatus[2];
@@ -82,7 +82,7 @@ describe('SeatPlanCtrl', function () {
 		var scope = $rootScope.$new();
 		var controller = $controller('SeatPlanCtrl', { $scope: scope, ResourcePlannerSvrc: mockResourcePlannerService, seatPlanService: mockSeatPlanService, Toggle: mockAllTrueToggleService });
 
-		controller.loadMonthDetails(moment("2015/03/02"));
+		controller.loadMonthDetails(moment("2015-03-02"));
 		scope.$digest();
 		var info = controller.getSelectedMonthName();
 

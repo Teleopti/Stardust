@@ -19,12 +19,13 @@
 					// set start of week based on locale.
 					ctrl[0].startingDay = moment.localeData()._week.dow;
 
-
 					link.apply(this, arguments);
 					scope.$watch(function() {
 						return ctrl[0].activeDate.getTime();
 					}, function() {
-						scope.onChangeOfMonth({ date: ctrl[0].activeDate });
+						if (scope.onChangeOfMonth != undefined) {
+							scope.onChangeOfMonth({ date: ctrl[0].activeDate });
+						}
 					});
 				}
 			};
