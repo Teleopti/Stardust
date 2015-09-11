@@ -10,7 +10,7 @@ else
 begin
 
 update tenant.tenant 
-set RtaKey = SUBSTRING(master.dbo.fn_varbintohexstr(HashBytes('SHA1', Name)), 3, 10)
+set RtaKey = LOWER(SUBSTRING(convert(nvarchar, cast(HashBytes('SHA1', Name) as varbinary),1), 3, 10))
 where RtaKey = null
 
 end
