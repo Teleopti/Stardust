@@ -1,10 +1,15 @@
-﻿using Autofac;
+﻿using System;
+using System.Collections.Generic;
+using Autofac;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.ServiceBus;
 using Rhino.ServiceBus.MessageModules;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.IocCommon.Toggle;
@@ -47,6 +52,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			
 			var builder = new ContainerBuilder();
 			builder.RegisterModule<ServiceBusCommonModule>();
+			builder.RegisterType<DataSourceForTenantWrapper>().SingleInstance();
+			builder.RegisterType<fakeTenantUnitOfWork>().As<ITenantUnitOfWork>().SingleInstance();
+			builder.RegisterType<fakeLoadAllTenants>().As<ILoadAllTenants>().SingleInstance();
 			builder.RegisterType<ApplicationLogOnMessageModule>().As<IMessageModule>().Named<IMessageModule>("1");
 
 			builder.RegisterModule(CommonModule.ForTest());
@@ -57,6 +65,32 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			using (var container = builder.Build())
 			{
 				container.Resolve<IMessageModule>().Should().Not.Be.Null();
+			}
+		}
+
+	    private class fakeTenantUnitOfWork : ITenantUnitOfWork
+	    {
+		    public IDisposable Start()
+		    {
+			    throw new NotImplementedException();
+		    }
+
+		    public void CancelAndDisposeCurrent()
+		    {
+			    throw new NotImplementedException();
+		    }
+
+		    public void CommitAndDisposeCurrent()
+		    {
+			    throw new NotImplementedException();
+		    }
+	    }
+
+		private class fakeLoadAllTenants : ILoadAllTenants
+		{
+			public IEnumerable<Tenant> Tenants()
+			{
+				throw new NotImplementedException();
 			}
 		}
 
