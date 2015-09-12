@@ -23,11 +23,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         public IList<double?> Values()
         {
-            IList<double?> ret = new List<double?>();
-
             IEnumerable<ISkill> skillList = _personalSkillExtractor.ExtractSkills();
 
-	        return _matrix.EffectivePeriodDays.AsParallel().Select(d => DayValue(skillList, d.Day)).ToList();
+	        return _matrix.EffectivePeriodDays.Select(d => DayValue(skillList, d.Day)).ToList();
         }
 
         private double? DayValue(IEnumerable<ISkill> skillList, DateOnly scheduleDay)
