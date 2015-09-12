@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.Repositories;
+﻿using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
@@ -16,13 +17,15 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Initialize
 		private readonly IRoleToPrincipalCommand _roleToPrincipalCommand;
 		private readonly IPrincipalFactory _principalFactory;
 		private readonly ITokenIdentityProvider _tokenIdentityProvider;
+		private readonly IDataSourceScope _dataSourceScope;
 
 		public SessionPrincipalFactory(IDataSourceForTenant dataSourceForTenant, 
 																ISessionSpecificDataProvider sessionSpecificDataProvider, 
 																IRepositoryFactory repositoryFactory, 
 																IRoleToPrincipalCommand roleToPrincipalCommand, 
 																IPrincipalFactory principalFactory, 
-																ITokenIdentityProvider tokenIdentityProvider)
+																ITokenIdentityProvider tokenIdentityProvider,
+																IDataSourceScope dataSourceScope)
 		{
 			_dataSourceForTenant = dataSourceForTenant;
 			_sessionSpecificDataProvider = sessionSpecificDataProvider;
@@ -30,6 +33,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Initialize
 			_roleToPrincipalCommand = roleToPrincipalCommand;
 			_principalFactory = principalFactory;
 			_tokenIdentityProvider = tokenIdentityProvider;
+			_dataSourceScope = dataSourceScope;
 		}
 
 		public ITeleoptiPrincipal Generate()
@@ -44,18 +48,21 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Initialize
 			if (dataSource == null)
 				return null;
 
-			ITeleoptiPrincipal principal;
-			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
+			using (_dataSourceScope.OnThisThreadUse(dataSource))
 			{
-				var personRepository = _repositoryFactory.CreatePersonRepository(uow);
-				var person = personRepository.Load(sessionData.PersonId);
+				ITeleoptiPrincipal principal;
+				using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
+				{
+					var personRepository = _repositoryFactory.CreatePersonRepository(uow);
+					var person = personRepository.Load(sessionData.PersonId);
 
-				var businessUnitRepository = _repositoryFactory.CreateBusinessUnitRepository(uow);
-				var businessUnit = businessUnitRepository.Get (sessionData.BusinessUnitId);
-				principal = makePrincipalAndHandleThatPersonMightNotExist(dataSource.Application, personRepository, dataSource, businessUnit, person);
+					var businessUnitRepository = _repositoryFactory.CreateBusinessUnitRepository(uow);
+					var businessUnit = businessUnitRepository.Get(sessionData.BusinessUnitId);
+					principal = makePrincipalAndHandleThatPersonMightNotExist(dataSource.Application, personRepository, dataSource, businessUnit, person);
+				}
+				return principal;
 			}
 
-			return principal;
 		}
 
 		private ITeleoptiPrincipal makePrincipalAndHandleThatPersonMightNotExist(IUnitOfWorkFactory unitOfWorkFactory, IPersonRepository personRepository, IDataSource dataSource, IBusinessUnit businessUnit, IPerson person)

@@ -23,7 +23,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<Rta>().SingleInstance().ApplyAspects();
-			builder.RegisterType<RtaStarter>().SingleInstance();
+			builder.RegisterType<RtaInitializor>().SingleInstance();
+			builder.RegisterType<RtaTenants>().SingleInstance();
 			builder.RegisterType<CacheInvalidator>().As<ICacheInvalidator>().SingleInstance();
 			builder.RegisterType<RtaProcessor>().SingleInstance();
 			builder.RegisterType<AgentStateReadModelUpdater>().As<IAgentStateReadModelUpdater>().SingleInstance();
@@ -128,9 +129,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<ConfiguredKeyAuthenticator>().As<IAuthenticator>().SingleInstance();
 			
 			if (_config.Toggle(Toggles.RTA_MultiTenancy_32539))
-				builder.RegisterType<DataSourceFromAuthenticationKeyAspect>().As<IDataSourceFromAuthenticationKeyAspect>().SingleInstance();
+				builder.RegisterType<TenantDataSourceScope>().As<IRtaDataSourceScope>().SingleInstance();
 			else
-				builder.RegisterType<NoDataSourceFromAuthenticationKeyAspect>().As<IDataSourceFromAuthenticationKeyAspect>().SingleInstance();
+				builder.RegisterType<ConnectionStringDataSourceScope>().As<IRtaDataSourceScope>().SingleInstance();
 		}
 	}
 }

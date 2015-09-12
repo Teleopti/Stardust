@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			var match = queryState(businessUnitId, platformTypeId, stateCode);
 			if (match != null) return match;
 			_stateCodeAdder.AddUnknownStateCode(businessUnitId, platformTypeId, stateCode, stateDescription);
-			_cacheInvalidator.Invalidate();
+			_cacheInvalidator.InvalidateStateForCurrentTenant();
 			match = queryState(businessUnitId, platformTypeId, stateCode);
 			return match ?? noMatchState(businessUnitId, platformTypeId, stateCode);
 		}

@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly ICacheInvalidator _cacheInvalidator;
 		private readonly RtaProcessor _processor;
 		private readonly IAuthenticator _authenticator;
-		private readonly RtaStarter _starter;
+		private readonly RtaInitializor _initializor;
 		private readonly INow _now;
 		private readonly IDatabaseLoader _databaseLoader;
 		private readonly IAgentStateReadModelUpdater _agentStateReadModelUpdater;
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IDatabaseLoader databaseLoader,
 			RtaProcessor processor,
 			IAuthenticator authenticator,
-			RtaStarter starter
+			RtaInitializor initializor
 			)
 		{
 			_agentStateReadModelReader = agentStateReadModelReader;
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_cacheInvalidator = cacheInvalidator;
 			_processor = processor;
 			_authenticator = authenticator;
-			_starter = starter;
+			_initializor = initializor;
 			_now = now;
 			_databaseLoader = databaseLoader;
 			_agentStateReadModelUpdater = agentStateReadModelUpdater;
@@ -71,10 +71,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				_authenticationKey = LegacyAuthenticationKey;
 		}
 
-		[DataSourceFromAuthenticationKey]
+		[RtaDataSourceScope]
 		public virtual int SaveStateSnapshot(IEnumerable<ExternalUserStateInputModel> states)
 		{
-			_starter.EnsureTenantInitialized();
+			_initializor.EnsureTenantInitialized();
 
 			var state = states.First();
 			SaveStateBatch(states);
@@ -89,10 +89,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			});
 		}
 
-		[DataSourceFromAuthenticationKey]
+		[RtaDataSourceScope]
 		public virtual int SaveStateBatch(IEnumerable<ExternalUserStateInputModel> states)
 		{
-			_starter.EnsureTenantInitialized();
+			_initializor.EnsureTenantInitialized();
 
 			if (states.Count() > 50)
 			{
@@ -113,10 +113,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return result;
 		}
 
-		[DataSourceFromAuthenticationKey]
+		[RtaDataSourceScope]
 		public virtual int SaveState(ExternalUserStateInputModel input)
 		{
-			_starter.EnsureTenantInitialized();
+			_initializor.EnsureTenantInitialized();
 
 			var messageId = Guid.NewGuid();
 
@@ -226,11 +226,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 		[InfoLog]
-		[DataSourceFromAuthenticationKey]
+		[RtaDataSourceScope]
 		public virtual void CheckForActivityChange(CheckForActivityChangeInputModel input)
 		{
-			_starter.EnsureTenantInitialized();
-			_cacheInvalidator.InvalidateSchedules(input.PersonId);
+			_initializor.EnsureTenantInitialized();
+			_cacheInvalidator.InvalidateSchedulesForCurrentTenant(input.PersonId);
 			process(
 				null,
 				new PersonOrganizationData

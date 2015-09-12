@@ -3,10 +3,14 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
@@ -27,10 +31,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public class TheServiceImpl
 		{
 			private readonly ICurrentUnitOfWork _uow;
+			private readonly IDataSourceScope _dataSource;
 
-			public TheServiceImpl(ICurrentUnitOfWork uow)
+			public TheServiceImpl(
+				ICurrentUnitOfWork uow, 
+				IDataSourceScope dataSource)
 			{
 				_uow = uow;
+				_dataSource = dataSource;
 			}
 
 			[UnitOfWork]
@@ -39,8 +47,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				action(_uow.Current());
 			}
 
-			[AllBusinessUnitsUnitOfWork]
 			public virtual void DoesWhileNotLoggedIn(Action<IUnitOfWork> action)
+			{
+				using (_dataSource.OnThisThreadUse("App"))
+					DoesWhileNotLoggedInInner(action);
+			}
+
+			[AllBusinessUnitsUnitOfWork]
+			protected virtual void DoesWhileNotLoggedInInner(Action<IUnitOfWork> action)
 			{
 				action(_uow.Current());
 			}

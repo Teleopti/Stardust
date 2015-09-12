@@ -13,6 +13,7 @@ using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
@@ -61,7 +62,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 				var data = new CheckForActivityChangeWebModel
 				{
 					PersonId = p.Person.Id.ToString(),
-					BusinessUnitId = DefaultBusinessUnit.BusinessUnitFromFakeState.Id.ToString()
+					BusinessUnitId = DefaultBusinessUnit.BusinessUnitFromFakeState.Id.ToString(),
+					Tenant = UserConfigurable.DefaultTenantName
 				};
 				Http.PostJson( "Rta/ActivityChange/CheckFor", data);
 			});

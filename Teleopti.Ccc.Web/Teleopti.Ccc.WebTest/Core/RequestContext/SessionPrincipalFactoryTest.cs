@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			var httpContext = MockRepository.GenerateStub<HttpContextBase>();
 			var currentHttpContext = MockRepository.GenerateMock<ICurrentHttpContext>();
 			currentHttpContext.Stub(x => x.Current()).Return(httpContext);
-			target = new SessionPrincipalFactory(dataSourceForTenant, sessionSpecificDataProvider, repositoryFactory, roleToPrincipalCommand, new TeleoptiPrincipalFactory(), new TokenIdentityProvider(currentHttpContext));
+			target = new SessionPrincipalFactory(dataSourceForTenant, sessionSpecificDataProvider, repositoryFactory, roleToPrincipalCommand, new TeleoptiPrincipalFactory(), new TokenIdentityProvider(currentHttpContext), new DataSourceScope(dataSourceForTenant, new DataSourceState()));
 		}
 
 

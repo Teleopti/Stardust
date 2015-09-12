@@ -26,13 +26,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<CurrentUnitOfWork>().As<ICurrentUnitOfWork>().SingleInstance();
 			builder.RegisterType<CurrentUnitOfWorkFactory>().As<ICurrentUnitOfWorkFactory>().SingleInstance();
 
-			builder.RegisterType<CurrentDataSource>()
-				.As<ICurrentDataSource>()
-				.As<IDataSourceScope>()
-				.SingleInstance();
-			builder.Register(c => c.Resolve<ICurrentDataSource>().Current())
-				.As<IDataSource>()
-				.ExternallyOwned();
+			builder.RegisterType<CurrentDataSource>().As<ICurrentDataSource>().SingleInstance();
+			builder.RegisterType<DataSourceState>().SingleInstance();
+			builder.RegisterType<DataSourceScope>().As<IDataSourceScope>().SingleInstance();
+			builder.Register(c => c.Resolve<ICurrentDataSource>().Current()).As<IDataSource>().ExternallyOwned();
 
 			builder.RegisterType<CurrentMessageSenders>()
 				.As<ICurrentMessageSenders>()
