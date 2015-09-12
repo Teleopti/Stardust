@@ -207,8 +207,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         }
 		public IList<ISkillStaffPeriod> IntersectingSkillStaffPeriodList(IEnumerable<ISkill> skills, DateTimePeriod utcPeriod)
 		{
-			var skillStaffPeriods = new ConcurrentBag<ISkillStaffPeriod>();
-			Parallel.ForEach(skills, skill =>
+			var skillStaffPeriods = new List<ISkillStaffPeriod>();
+			skills.ForEach(skill =>
 			{
 				ISkillStaffPeriodDictionary content;
 				if (_internalDictionary.TryGetValue(skill, out content))
@@ -220,12 +220,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					}
 				}
 			});
-			return skillStaffPeriods.ToArray();
+			return skillStaffPeriods;
 		}
         public IList<ISkillStaffPeriod> SkillStaffPeriodList(IEnumerable<ISkill> skills, DateTimePeriod utcPeriod)
         {
-            var skillStaffPeriods = new ConcurrentBag<ISkillStaffPeriod>();
-	        Parallel.ForEach(skills, skill =>
+            var skillStaffPeriods = new List<ISkillStaffPeriod>();
+	        skills.ForEach(skill =>
 	        {
 				ISkillStaffPeriodDictionary content;
 				if (_internalDictionary.TryGetValue(skill, out content))
@@ -239,10 +239,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					}
 				}
 	        });
-            return skillStaffPeriods.ToArray();
+            return skillStaffPeriods;
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public IDictionary<ISkill, ISkillStaffPeriodDictionary> SkillStaffPeriodDictionary(IEnumerable<ISkill> skills, DateTimePeriod utcPeriod)
 		{
 			var skillStaffPeriods = new Dictionary<ISkill, ISkillStaffPeriodDictionary>();
@@ -437,6 +436,4 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return skillStaffPeriods;
         }
     }
-
-    
 }
