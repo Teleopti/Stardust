@@ -16,6 +16,7 @@
 		vm.AppDatabase = "";
 		vm.AnalyticsDatabase = "";
 		vm.AggregationDatabase = "";
+		vm.Version = null;
 		vm.TenantMessage = "Enter a new name for the Tenant";
 		vm.TenantOk = false;
 		vm.AppDbOk = false;
@@ -27,6 +28,11 @@
 		vm.Message = "";
 		vm.AllowDelete = false;
 		
+		vm.CreateDbUser = '';
+		vm.CreateDbPassword = '';
+		vm.SqlUserOkMessage = '';
+		vm.SqlUserOk = false;
+
 		vm.LoadTenant = function () {
 			$http.post('./GetOneTenant', '"' + vm.Tenant + '"', tokenHeaderService.getHeaders())
 				.success(function (data) {
@@ -38,6 +44,7 @@
 					vm.AnalyticsDatabase = data.AnalyticsDatabase;
 					vm.AppDatabase = data.AppDatabase;
 					vm.AggregationDatabase = data.AggregationDatabase;
+					vm.Version = data.Version;
 					vm.CommandTimeout = data.CommandTimeout;
 					//vm.CheckAppDb();
 					//vm.CheckAnalDb();
@@ -47,6 +54,32 @@
 				});
 		}
 
+		vm.ShowUpgrade = function() {
+			if (vm.Version === null) return false;
+			return vm.Version.AppVersionOk === false;
+		};
+
+		vm.CheckImportAdmin = function () {
+			vm.Message = '';
+			if (vm.CreateDbUser === '' || vm.CreateDbPassword === '' || vm.Server === '') {
+				vm.SqlUserOkMessage = '';
+				vm.SqlUserOk = false;
+				return;
+			}
+			var model = {
+				Server: vm.Server,
+				AdminUser: vm.CreateDbUser,
+				AdminPassword: vm.CreateDbPassword
+			}
+
+			$http.post('./CheckImportAdmin', model, tokenHeaderService.getHeaders())
+			.success(function (data) {
+				vm.SqlUserOk = data.Success,
+				vm.SqlUserOkMessage = data.Message;
+			}).error(function (xhr, ajaxOptions, thrownError) {
+				console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+			});
+		}
 		//vm.CheckTenantName = function () {
 		//	$http.post('./api/Home/NameIsFree', {
 		//		OriginalName: vm.OriginalName,
@@ -84,6 +117,23 @@
 				});
 		}
 
+		vm.UpgradeTenant = function () {
+			var model = {
+				Tenant: vm.OriginalName,
+				AdminUserName: vm.CreateDbUser,
+				AdminPassword: vm.CreateDbPassword
+			}
+			$http.post('./UpgradeTenant', model, tokenHeaderService.getHeaders())
+				.success(function (data) {
+					if (data.Success === false) {
+						vm.Message = data.Message;
+						return;
+					}
+					window.location = "#";
+				}).error(function (xhr, ajaxOptions, thrownError) {
+					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+				});
+		}
 		vm.LoadTenant();
 
 		//vm.CheckAppDb = function () {
@@ -125,44 +175,44 @@
 		//		});
 		//}
 		
-		//vm.save = function () {
-		//	if (vm.AppDbOk === false) {
-		//		alert("Fix the settings to the Application database.");
-		//		return;
-		//	}
-		//	if (vm.AnalDbOk === false) {
-		//		alert("Fix the settingsto the Analytics database.");
-		//		return;
-		//	}
-		//	if (vm.TenantOk === false) {
-		//		alert("The new name of the Tenant must be changed before saving.");
-		//		return;
-		//	}
+		vm.save = function () {
+			//if (vm.AppDbOk === false) {
+			//	alert("Fix the settings to the Application database.");
+			//	return;
+			//}
+			//if (vm.AnalDbOk === false) {
+			//	alert("Fix the settingsto the Analytics database.");
+			//	return;
+			//}
+			//if (vm.TenantOk === false) {
+			//	alert("The new name of the Tenant must be changed before saving.");
+			//	return;
+			//}
 
-		//			$http.post('./UpdateTenant', {
-		//				OriginalName: vm.OriginalName,
-		//				NewName: vm.Tenant,
-		//				AppDatabase: vm.AppDatabase,
-		//				AnalyticsDatabase: vm.AnalyticsDatabase,
-		//				Server: vm.Server,
-		//				UserName: vm.UserName,
-		//				Password: vm.Password,
-		//				CommandTimeout: vm.CommandTimeout
-		//			}, tokenHeaderService.getHeaders())
-		//				.success(function (data) {
-		//					if (data.Success === false) {
-		//						vm.Message = data.Message;
-		//						return;
-		//					}
-		//					window.location = "#";
-		//				})
-		//				.error(function (xhr, ajaxOptions, thrownError) {
-		//					vm.Message = xhr.status + xhr.responseText + thrownError;
-		//					vm.Success = false;
-		//					console.log(xhr.status + xhr.responseText + thrownError);
-		//				});
+					$http.post('./UpdateTenant', {
+						OriginalName: vm.OriginalName,
+						NewName: vm.Tenant,
+						AppDatabase: vm.AppDatabase,
+						AnalyticsDatabase: vm.AnalyticsDatabase,
+						Server: vm.Server,
+						UserName: vm.UserName,
+						Password: vm.Password,
+						CommandTimeout: vm.CommandTimeout
+					}, tokenHeaderService.getHeaders())
+						.success(function (data) {
+							if (data.Success === false) {
+								vm.Message = data.Message;
+								return;
+							}
+							window.location = "#";
+						})
+						.error(function (xhr, ajaxOptions, thrownError) {
+							vm.Message = xhr.status + xhr.responseText + thrownError;
+							vm.Success = false;
+							console.log(xhr.status + xhr.responseText + thrownError);
+						});
 
-		//	}
+			}
 
 		}
 

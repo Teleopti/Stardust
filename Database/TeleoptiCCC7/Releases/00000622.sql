@@ -1,0 +1,5 @@
+ALTER TABLE Tenant.UpgradeLog ADD CONSTRAINT
+	PK_UpgradeLog PRIMARY KEY CLUSTERED 
+	(
+	Id
+	)

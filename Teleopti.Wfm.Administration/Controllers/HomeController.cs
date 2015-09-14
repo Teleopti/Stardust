@@ -22,13 +22,15 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private readonly SaveTenant _saveTenant;
 		private readonly ITenantExists _tenantExists;
 		private readonly DeleteTenant _deleteTenant;
+		private readonly ICheckDatabaseVersions _checkDatabaseVersions;
 
-		public HomeController(ILoadAllTenants loadAllTenants, SaveTenant saveTenant, ITenantExists tenantExists, DeleteTenant deleteTenant)
+		public HomeController(ILoadAllTenants loadAllTenants, SaveTenant saveTenant, ITenantExists tenantExists, DeleteTenant deleteTenant, ICheckDatabaseVersions checkDatabaseVersions)
 		{
 			_loadAllTenants = loadAllTenants;
 			_saveTenant = saveTenant;
 			_tenantExists = tenantExists;
 			_deleteTenant = deleteTenant;
+			_checkDatabaseVersions = checkDatabaseVersions;
 		}
 
 
@@ -42,7 +44,8 @@ namespace Teleopti.Wfm.Administration.Controllers
 				Name = t.Name,
 				AnalyticsDatabase = new SqlConnectionStringBuilder( t.DataSourceConfiguration.AnalyticsConnectionString).InitialCatalog,
 				AppDatabase = new SqlConnectionStringBuilder(t.DataSourceConfiguration.ApplicationConnectionString).InitialCatalog,
-				AggregationDatabase = new SqlConnectionStringBuilder(t.DataSourceConfiguration.AggregationConnectionString).InitialCatalog
+				AggregationDatabase = new SqlConnectionStringBuilder(t.DataSourceConfiguration.AggregationConnectionString).InitialCatalog,
+				Version = _checkDatabaseVersions.GetVersions(t.DataSourceConfiguration.ApplicationConnectionString)
 			}));
 		}
 
@@ -65,7 +68,8 @@ namespace Teleopti.Wfm.Administration.Controllers
 				AnalyticsDatabase = builderAnal.InitialCatalog,
 				AggregationDatabase = builderAgg.InitialCatalog,
             Server =  builder.DataSource,
-				CommandTimeout = int.Parse(tenant.DataSourceConfiguration.ApplicationNHibernateConfig[Environment.CommandTimeout])
+				Version = _checkDatabaseVersions.GetVersions(tenant.DataSourceConfiguration.ApplicationConnectionString),
+            CommandTimeout = int.Parse(tenant.DataSourceConfiguration.ApplicationNHibernateConfig[Environment.CommandTimeout])
 			});
 		}
 

@@ -9,72 +9,54 @@
 		</div>
 		<div class="col-md-12">
 			<div class="col-md-6">
+				<div class="importCaption">Version: {{detailsVm.Version.ImportAppVersion}}</div>
 				<div class="importCaption">Tenant name: {{detailsVm.Tenant}}</div>
 				<div class="importCaption">User/ login: {{detailsVm.UserName}}</div>
 				<div class="importCaption">Server: {{detailsVm.Server}}</div>
 				<div class="importCaption">Application database: {{detailsVm.AppDatabase}}</div>
 				<div class="importCaption">Analytics database: {{detailsVm.AnalyticsDatabase}}</div>
 				<div class="importCaption">Aggregation database: {{detailsVm.AggregationDatabase}}</div>
-				<!--<div>
-					<input class="form-control" type="text" ng-model="detailsVm.Tenant" ng-blur="detailsVm.CheckTenantName()" placeholder="Tenant name">
+				<div>
+					<div class="importCaption">Command timeout</div>
+					<input class="form-control" type="number" min="30" max="600" required ng-model="detailsVm.CommandTimeout" placeholder="Command timeout">
+
 				</div>
-				<div><label ng-class="(detailsVm.TenantOk==true) ? 'dataIsOk' : 'dataIsNotOk'">{{detailsVm.TenantMessage}}</label>
-				</div>-->
+				<div style="margin-top: 30px">
+					<button class="btn btn-primary btn-default" ng-click="detailsVm.save()">Save</button>
+					<div style="float: right" ng-show="detailsVm.AllowDelete">
+						<button class="btn btn-danger btn-default" ng-click="detailsVm.Delete()">Delete this Tenant</button>
+					</div>
+				</div>
+				
+				<a style="margin-top: 30px" class="btn btn-success " href="#addSuperUser/{{detailsVm.Tenant}}">Add a new super user &raquo;</a>
+				<br />
 			</div>
 
-			<div class="col-md-6" style="margin-top: 30px">
-				<a class="btn btn-success " href="#addSuperUser/{{detailsVm.Tenant}}">Add a new super user &raquo;</a>
+			<div class="col-md-6" ng-show="detailsVm.ShowUpgrade()" style="margin-top: 30px">
+				<div title="{{detailsVm.SqlUserOkMessage}}">
+					<fieldset>
+						<legend ng-class="(detailsVm.SqlUserOk==true) ? 'dataIsOk' : 'dataIsNotOk'">Credentials to upgrade</legend>
+						<div>
+							<div class="importCaption">SQL User Name (that have permissions to upgrade databases on the server)</div>
+							<div>
+								<input class=" form-control" type="text" ng-model="detailsVm.CreateDbUser" ng-blur="detailsVm.CheckImportAdmin()" placeholder="SQL User Name">
+							</div>
+							<div>
+								<div class="importCaption">SQL Password</div>
+								<input class="form-control" type="password" ng-model="detailsVm.CreateDbPassword" ng-blur="detailsVm.CheckImportAdmin()" placeholder="SQL Password">
+								<label ng-class="(detailsVm.SqlUserOk==true) ? 'dataIsOk' : 'dataIsNotOk'">{{detailsVm.SqlUserOkMessage}}</label>
+							</div>
+						</div>
+						<br />
+						<a class="btn btn-warning" ng-show="detailsVm.SqlUserOk" ng-click="detailsVm.UpgradeTenant()">Upgrade Tenant</a>
+					</fieldset>
+					
+				</div>
+
 			</div>
 
 		</div>
-		<!--<div class="col-md-12">
-			<div class="col-md-6">
-				<fieldset>
-					<legend>Login and Databases</legend>
-					<div class="importCaption">User / Login</div>
-					<div>
-						<input class=" form-control" type="text" ng-model="detailsVm.UserName" placeholder="User">
-					</div>
 
-					<div class="importCaption">Password</div>
-					<div>
-						<input class="form-control" type="password" ng-model="detailsVm.Password" placeholder="Password">
-					</div>
-					<div class="importCaption">Sql Server</div>
-					<div>
-						<input class="form-control" type="text" ng-model="detailsVm.Server" placeholder="Sql Server">
-					</div>
-					<div>
-						<div class="importCaption">Application database</div>
-						<div>
-							<input class="form-control" type="text" ng-model="detailsVm.AppDatabase" ng-blur="detailsVm.CheckAppDb()" placeholder="Application database">
-							<label ng-class="(detailsVm.AppDbOk==true) ? 'dataIsOk' : 'dataIsNotOk'">{{detailsVm.AppDbCheckMessage}}</label>
-						</div>
-
-						<div>
-							<div class="importCaption">Analytics database</div>
-							<input class="form-control" type="text" ng-model="detailsVm.AnalyticsDatabase" ng-blur="detailsVm.CheckAnalDb()" placeholder="Analytics database">
-							<label ng-class="(detailsVm.AnalDbOk==true) ? 'dataIsOk' : 'dataIsNotOk'">{{detailsVm.AnalDbCheckMessage}}</label>
-						</div>
-
-						<div>
-							<div class="importCaption">Command timeout</div>
-							<input class="form-control" type="number" min="30" max="600" required ng-model="detailsVm.CommandTimeout" placeholder="Command timeout">
-
-						</div>
-
-					</div>
-				</fieldset>
-			</div>
-		</div>-->
-		</div>
-	<div class="row">
-		<!--<div style="margin-top: 30px" class="col-md-6"><button class="btn btn-primary btn-default" ng-click="detailsVm.save()">Save</button></div>-->
-		<div style="margin-top: 30px" class="col-md-6" ng-show="detailsVm.AllowDelete">
-			<button class="btn btn-danger btn-default" ng-click="detailsVm.Delete()">Delete this Tenant</button>
-		</div>
-		<br />
-		<!--<label class="ErrorLabel">{{detailsVm.Message}}</label>-->
 	</div>
 
 </div>

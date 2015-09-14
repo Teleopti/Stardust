@@ -3,6 +3,7 @@ using System.Data.SqlClient;
 using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.DBManager.Library;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Wfm.Administration.Core;
@@ -19,7 +20,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private readonly ICheckDatabaseVersions _checkDatabaseVersions;
 		private readonly Import _import;
 		private readonly TenantUpgrader _tenantUpgrader;
-		private readonly bool isAzure = !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME"));
+		private readonly bool isAzure = true ; //!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME"));
 
 		public ImportController(
 			IDatabaseHelperWrapper databaseHelperWrapper, 

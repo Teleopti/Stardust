@@ -45,7 +45,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			{
 				helper.CreateByDbManager();
 				helper.CreateSchemaByDbManager();
-				helper.AddPermissions("appuser", false);
+				helper.AddPermissions("appuser");
 			}
 
 			// another

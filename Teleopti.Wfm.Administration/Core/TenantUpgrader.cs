@@ -1,4 +1,5 @@
-﻿using System.Data.SqlClient;
+﻿using System;
+using System.Data.SqlClient;
 using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Support.Security;
@@ -7,6 +8,7 @@ namespace Teleopti.Wfm.Administration.Core
 {
 	public class TenantUpgrader
 	{
+		private readonly bool isAzure = true; //  !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME"));
 		private readonly DatabaseUpgrader _databaseUpgrader;
 		private readonly UpgradeRunner _upgradeRunner;
 
@@ -34,12 +36,16 @@ namespace Teleopti.Wfm.Administration.Core
 			builder.IntegratedSecurity = false;
 			var analConnstring = builder.ConnectionString;
 			// and agg to
-			builder = new SqlConnectionStringBuilder(tenant.DataSourceConfiguration.AggregationConnectionString);
-			_databaseUpgrader.Upgrade(builder.DataSource, builder.InitialCatalog, DatabaseType.TeleoptiCCCAgg, adminUserName,
-				adminPassword, builder.UserID, builder.Password, permissionMode, tenant.Name);
-			builder.UserID = adminUserName;
-			builder.Password = adminPassword;
-			builder.IntegratedSecurity = false;
+			if (!isAzure && !string.IsNullOrEmpty(tenant.DataSourceConfiguration.AggregationConnectionString))
+			{
+				builder = new SqlConnectionStringBuilder(tenant.DataSourceConfiguration.AggregationConnectionString);
+				_databaseUpgrader.Upgrade(builder.DataSource, builder.InitialCatalog, DatabaseType.TeleoptiCCCAgg, adminUserName,
+					adminPassword, builder.UserID, builder.Password, permissionMode, tenant.Name);
+				builder.UserID = adminUserName;
+				builder.Password = adminPassword;
+				builder.IntegratedSecurity = false;
+			}
+			
 			//security 
 			var dbArgs = new DatabaseArguments
 			{

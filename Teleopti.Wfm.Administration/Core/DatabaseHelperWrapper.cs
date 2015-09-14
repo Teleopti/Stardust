@@ -84,13 +84,13 @@ namespace Teleopti.Wfm.Administration.Core
 				helper.CreateByDbManager();
 
 			helper.CreateSchemaByDbManager();
-			helper.AddPermissions(login, isAzure);
+			helper.AddPermissions(login);
 		}
 
 		public void AddDatabaseUser(string connectionToNewDb, DatabaseType databaseType, string login, bool isAzure)
 		{
 			var helper = new DatabaseHelper(connectionToNewDb, databaseType);
-			helper.AddPermissions(login, isAzure);
+			helper.AddPermissions(login);
 		}
 
 		public void AddSuperUser(string connectionToNewDb, Guid personId, string firstName, string lastName)

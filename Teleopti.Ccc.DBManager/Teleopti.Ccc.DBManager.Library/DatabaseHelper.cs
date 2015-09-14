@@ -104,12 +104,12 @@ namespace Teleopti.Ccc.DBManager.Library
 			executeNonQueryOnMaster(sql);
 		}
 
-		public void AddPermissions(string login, bool isAzure)
+		public void AddPermissions(string login)
 		{
 			if(login == "sa")
 				return;
 			var sql = string.Format(@"CREATE USER [{0}] FOR LOGIN [{0}]", login);
-			if(DbUserExist(login, isAzure))
+			if(DbUserExist(login))
 				sql = string.Format( @"ALTER USER [{0}] WITH LOGIN = [{0}]", login);
 			executeNonQuery(sql);
 			
@@ -124,11 +124,9 @@ namespace Teleopti.Ccc.DBManager.Library
 			executeNonQuery(sql);
 		}
 
-		public bool DbUserExist(string sqlLogin, bool isAzure)
+		public bool DbUserExist(string sqlLogin)
 		{
 			var sql = string.Format(@"SELECT 1 FROM sys.sysusers WHERE name = '{0}'", sqlLogin);
-			if (isAzure)
-				sql = string.Format(@"SELECT 1 FROM sys.sql_logins WHERE name = '{0}'", sqlLogin);
 			var result = executeScalar(sql, 0);
 			return result > 0;
 		}
