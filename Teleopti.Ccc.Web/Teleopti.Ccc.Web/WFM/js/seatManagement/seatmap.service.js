@@ -10,7 +10,7 @@ angular.module('wfm.seatMap')
 		});
 		seatMapService.occupancy = $resource('../api/SeatPlanner/Occupancy', {}, {
 			get: { method: 'GET', params: {}, isArray: true },
-			remove: { method: 'DELETE', params: {}, isArray: false },
+			remove: { method: 'DELETE', params: {}, isArray: false }
 		});
 
 		return seatMapService;
