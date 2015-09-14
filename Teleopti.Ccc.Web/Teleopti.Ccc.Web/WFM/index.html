@@ -9,6 +9,9 @@
 			document.getElementById('notice').style.display = 'none';
 			document.getElementById('lefttoogle').style.display = 'none';
 			document.getElementById('righttoogle').style.display = 'none';
+			document.getElementById('materialcontainer').style["margin-top"] = '0';
+			document.getElementById('materialcontainer').style.height = '100vh';
+
 		}
 	</script>
 
@@ -85,11 +88,11 @@
 			<div class="sidenav-wrapper left">
 				<input type="checkbox" id="nav-left" ng-model="toggleLeftSide" />
 				<label for="nav-left">
-					<i class="mdi" ng-class="{'mdi-fast-forward':toggleLeftSide, 'mdi-rewind':!toggleLeftSide}"></i>
+					<i class="mdi" ng-class=" {'mdi-fast-forward':toggleLeftSide, 'mdi-rewind':!toggleLeftSide}"></i>
 				</label>
 			</div>
 		</div>
-		<div class="container content material-depth-1 material-block" ui-view></div>
+		<div id="materialcontainer" class="container content material-depth-1 material-block" ui-view></div>
 		<!--move this to a smart place -->
 		<div id="notice" ng-controller="NoticeCtrl" class="growl-wrapper">
 			<div class="container-fluid">
