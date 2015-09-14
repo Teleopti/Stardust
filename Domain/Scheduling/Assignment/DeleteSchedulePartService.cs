@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			if (backgroundWorker == null)
 				throw new ArgumentNullException("backgroundWorker");
 
-			return list.AsParallel().Select(part =>
+			return list.Select(part =>
 			{
 				if (backgroundWorker.CancellationPending)
 					return null;
