@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -126,6 +127,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			builder.RegisterInstance(new MutableNow("2014-12-18 13:31")).As<INow>().AsSelf();
 			builder.RegisterInstance(new FakeUserTimeZone(TimeZoneInfo.Utc)).As<IUserTimeZone>().AsSelf().SingleInstance();
 			builder.RegisterInstance(new FakeUserCulture(CultureInfoFactory.CreateSwedishCulture())).As<IUserCulture>().AsSelf().SingleInstance();
+			builder.RegisterInstance(new SetNoLicenseActivator()).As<ISetLicenseActivator>().SingleInstance(); //don't check license for every test
 			builder.RegisterInstance(configReader).AsSelf().As<IConfigReader>();
 			builder.RegisterInstance(this).As<IIoCTestContext>();
 			var system = new ContainerBuilderWrapper(builder);
