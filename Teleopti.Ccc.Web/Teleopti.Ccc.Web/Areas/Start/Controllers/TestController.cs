@@ -278,7 +278,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private void invalidateRtaCache()
 		{
 			if (_cacheInvalidator != null)
-				_cacheInvalidator.InvalidateAllForAllTenants();
+				_cacheInvalidator.InvalidateAll();
 			_rtaTenants.ForgetInitializedTenants();
 		}
 	}

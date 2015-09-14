@@ -230,7 +230,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public virtual void CheckForActivityChange(CheckForActivityChangeInputModel input)
 		{
 			_initializor.EnsureTenantInitialized();
-			_cacheInvalidator.InvalidateSchedulesForCurrentTenant(input.PersonId);
+			_cacheInvalidator.InvalidateSchedules(input.PersonId);
 			process(
 				null,
 				new PersonOrganizationData

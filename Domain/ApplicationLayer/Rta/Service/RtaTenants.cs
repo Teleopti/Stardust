@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using Teleopti.Ccc.Domain.Collection;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
@@ -25,6 +26,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public void ForgetInitializedTenants()
 		{
+			if (_initialized.Count > 0 )
+				Thread.Sleep(1000 * 2);
 			_initialized.Clear();
 		}
 

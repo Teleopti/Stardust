@@ -35,10 +35,6 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 
 		private class exposer : TeleoptiCacheKey
 		{
-			public exposer() : base(null)
-			{
-			}
-
 			public string TheKey(object parameter)
 			{
 				return ParameterValue(parameter);
