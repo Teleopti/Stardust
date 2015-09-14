@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			};
 		}
 
-		public IEnumerable<CampaignSummary> ListCampaign(CampaignStatus status)
+		public IEnumerable<CampaignSummary> ListCampaign(CampaignStatus status, GanttPeriod period)
 		{
 			if (status == CampaignStatus.None)
 			{
@@ -71,18 +71,18 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			switch (status)
 			{
 				case CampaignStatus.Done:
-					return ListDoneCampaign(null);
+					return ListDoneCampaign(period);
 				case CampaignStatus.Scheduled:
-					return ListScheduledCampaign(null);
+					return ListScheduledCampaign(period);
 				case CampaignStatus.Planned:
-					return ListPlannedCampaign(null);
+					return ListPlannedCampaign(period);
 				case CampaignStatus.Ongoing:
-					return ListOngoingCampaign(null);
+					return ListOngoingCampaign(period);
 				default:
 					var result = new List<CampaignSummary>();
 					foreach (var _status in _campaignListOrderProvider.GetCampaignListOrder().Where(_status => status.HasFlag(_status)))
 					{
-						result.AddRange(ListCampaign(_status));
+						result.AddRange(ListCampaign(_status, period));
 					}
 					return result;
 			}
@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 
 		public CampaignSummary GetCampaignById(Guid Id)
 		{
-			return ListCampaign(CampaignStatus.None).FirstOrDefault(c => c.Id == Id);
+			return ListCampaign(CampaignStatus.None, null).FirstOrDefault(c => c.Id == Id);
 		}
 
 		public IEnumerable<GanttCampaignViewModel> GetCampaigns(GanttPeriod period)

@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 {
 	public interface ICampaignListProvider
 	{
-		IEnumerable<CampaignSummary> ListCampaign(CampaignStatus status);
+		IEnumerable<CampaignSummary> ListCampaign(CampaignStatus status, GanttPeriod period);
 		IEnumerable<CampaignSummary> ListScheduledCampaign(GanttPeriod peroid);
 		IEnumerable<CampaignSummary> ListPlannedCampaign(GanttPeriod peroid);
 		IEnumerable<CampaignSummary> ListOngoingCampaign(GanttPeriod peroid);

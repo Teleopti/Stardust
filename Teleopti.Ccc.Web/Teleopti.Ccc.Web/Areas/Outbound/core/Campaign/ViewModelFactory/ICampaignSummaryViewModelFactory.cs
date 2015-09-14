@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.ViewModelFactory
 {
 	public interface ICampaignSummaryViewModelFactory
 	{
-		List<CampaignSummaryViewModel> GetCampaignSummaryList(CampaignStatus status);
+		List<CampaignSummaryViewModel> GetCampaignSummaryList(CampaignStatus status, GanttPeriod period);
 		CampaignSummaryViewModel GetCampaignSummary(Guid id);
 	}
 }

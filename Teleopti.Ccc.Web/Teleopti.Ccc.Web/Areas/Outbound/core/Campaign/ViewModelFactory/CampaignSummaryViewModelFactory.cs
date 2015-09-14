@@ -15,11 +15,11 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.ViewModelFactory
 			_campaignListProvider = campaignListProvider;
 		}
 
-		public List<CampaignSummaryViewModel> GetCampaignSummaryList(CampaignStatus status)
+		public List<CampaignSummaryViewModel> GetCampaignSummaryList(CampaignStatus status, GanttPeriod period)
 		{
 			Func<CampaignSummary, bool> campaignHasWarningPredicate = campaign => campaign.WarningInfo.Any();
 
-			var campaigns = _campaignListProvider.ListCampaign(status).ToList();
+			var campaigns = _campaignListProvider.ListCampaign(status, period).ToList();
 			var campaignsWithWarning = campaigns.Where(campaignHasWarningPredicate).ToList();
 			var campaignsWithoutWarning = campaigns.Except(campaignsWithWarning);
 

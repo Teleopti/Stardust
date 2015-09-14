@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
         [Test]
         public void ShouldSeparateWithWarningAndWithoutWarningCampaignsInListSummary()
         {
-            campaignListProvider.Stub(x => x.ListCampaign(CampaignStatus.None)).Return(
+            campaignListProvider.Stub(x => x.ListCampaign(CampaignStatus.None, null)).Return(
                 new List<CampaignSummary>
                 {
                     new CampaignSummary
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 
             target = new CampaignSummaryViewModelFactory(campaignListProvider);
 
-            var result = target.GetCampaignSummaryList(CampaignStatus.None);
+				var result = target.GetCampaignSummaryList(CampaignStatus.None, null);
 	        result.Count.Should().Be.EqualTo(4);
 	        result[0].Name.Should().Be.EqualTo("C");
 	        result[1].Name.Should().Be.EqualTo("D");
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
         [Test]
         public void ShoulProduceCorrectWarningTypeMessageInSummaryListViewModel()
         {
-            campaignListProvider.Stub(x => x.ListCampaign(CampaignStatus.None)).Return(
+			  campaignListProvider.Stub(x => x.ListCampaign(CampaignStatus.None, null)).Return(
                 new List<CampaignSummary>
                 {                   
                     new CampaignSummary
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 
             target = new CampaignSummaryViewModelFactory(campaignListProvider);
 
-            var result = target.GetCampaignSummaryList(CampaignStatus.None);
+				var result = target.GetCampaignSummaryList(CampaignStatus.None, null);
             result.Count.Should().Be.EqualTo(1);
             
             result.ForEach(c =>

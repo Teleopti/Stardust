@@ -146,4 +146,10 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 		public DateOnly StartDate;
 		public DateOnly EndDate;
 	}
+
+	public class PeriodSummaryInfo
+	{
+		public CampaignStatus Status;
+		public GanttPeriod Period;
+	}
 }

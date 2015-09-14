@@ -50,7 +50,13 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		[HttpPost, Route("api/Outbound/Campaigns"), UnitOfWork]
 		public virtual List<CampaignSummaryViewModel> GetCamapigns([FromBody]CampaignStatus flag)
 		{
-		    return _campaignSummaryViewModelFactory.GetCampaignSummaryList(flag);
+		    return _campaignSummaryViewModelFactory.GetCampaignSummaryList(flag, null);
+		}			
+		
+		[HttpPost, Route("api/Outbound/Period/Campaigns"), UnitOfWork]
+		public virtual List<CampaignSummaryViewModel> GetCamapigns([FromBody]PeriodSummaryInfo info)
+		{
+			return _campaignSummaryViewModelFactory.GetCampaignSummaryList(info.Status, info.Period);
 		}		
 		
 		[HttpPost, Route("api/Outbound/Gantt/Campaigns"), UnitOfWork]

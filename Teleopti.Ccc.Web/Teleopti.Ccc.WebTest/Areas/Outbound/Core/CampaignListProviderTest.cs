@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		public void ShouldListCampaignsByStatusOngoing()
 		{
 			setCampaigns();
-			var result = target.ListCampaign(CampaignStatus.Ongoing).ToList();
+			var result = target.ListCampaign(CampaignStatus.Ongoing, null).ToList();
 			result.Count.Should().Be.EqualTo(1);
 			result.ForEach(c => c.Name.Should().Be.EqualTo("C"));
 		}
@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		public void ShouldListCampaignsByStatusDone()
 		{
 			setCampaigns();
-			var result = target.ListCampaign(CampaignStatus.Done).ToList();
+			var result = target.ListCampaign(CampaignStatus.Done, null).ToList();
 			result.Count.Should().Be.EqualTo(1);
 			result.ForEach(c => c.Name.Should().Be.EqualTo("D"));
 		}
@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		public void ShouldListCampaignsByStatusScheduled()
 		{
 			setCampaigns();
-			var result = target.ListCampaign(CampaignStatus.Scheduled).ToList();
+			var result = target.ListCampaign(CampaignStatus.Scheduled, null).ToList();
 			result.Count.Should().Be.EqualTo(1);
 			result.ForEach(c => c.Name.Should().Be.EqualTo("B"));
 		}
@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		public void ShouldListCampaignsByStatusPlanned()
 		{
 			setCampaigns();
-			var result = target.ListCampaign(CampaignStatus.Planned).ToList();
+			var result = target.ListCampaign(CampaignStatus.Planned, null).ToList();
 			result.Count.Should().Be.EqualTo(1);
 			result.ForEach(c => c.Name.Should().Be.EqualTo("A"));
 		}
@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		public void ShouldListAllCampaignsByStatusNone()
 		{
 			setCampaigns();
-			var result = target.ListCampaign(CampaignStatus.None).ToList();
+			var result = target.ListCampaign(CampaignStatus.None, null).ToList();
 			result.Count.Should().Be.EqualTo(4);
 		}
 
@@ -203,7 +203,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		public void ShouldListCampaignsByCompositeStatus()
 		{
 			setCampaigns();
-			var result = target.ListCampaign(CampaignStatus.Done | CampaignStatus.Scheduled).ToList();
+			var result = target.ListCampaign(CampaignStatus.Done | CampaignStatus.Scheduled, null).ToList();
 
 			result.Count.Should().Be.EqualTo(2);
 			var expectedNames = new List<string> {"B", "D"};
@@ -215,7 +215,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		{
 			setCampaigns();
 			var result = target.ListCampaign(
-				CampaignStatus.Done | CampaignStatus.Scheduled | CampaignStatus.Planned | CampaignStatus.Ongoing).ToList();
+				CampaignStatus.Done | CampaignStatus.Scheduled | CampaignStatus.Planned | CampaignStatus.Ongoing, null).ToList();
 
 			result.Count.Should().Be.EqualTo(4);
 		}
@@ -232,7 +232,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 				CampaignStatus.Done,
 			});
 
-			var result = target.ListCampaign(CampaignStatus.None);
+			var result = target.ListCampaign(CampaignStatus.None, null);
 			result.Select(c => c.Name).Should().Have.SameSequenceAs(new List<string> {"C", "A", "B", "D"});
 		}
 
@@ -249,7 +249,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 				}
 			});
 
-			var result = target.ListCampaign(CampaignStatus.Ongoing).ToList();
+			var result = target.ListCampaign(CampaignStatus.Ongoing, null).ToList();
 			result.ForEach(c =>
 			{
 				var warnings = c.WarningInfo.ToList();
@@ -273,7 +273,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 				}
 			});
 
-			var result = target.ListCampaign(CampaignStatus.Scheduled).ToList();
+			var result = target.ListCampaign(CampaignStatus.Scheduled, null).ToList();
 			result.ForEach(c =>
 			{
 				var warnings = c.WarningInfo.ToList();
