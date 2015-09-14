@@ -11,6 +11,8 @@ using Teleopti.Ccc.Web.Areas.MyTime.Models.BadgeLeaderBoardReport;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 {
@@ -32,6 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		private readonly ITeamRepository _teamRepository;
 		private readonly IToggleManager _toggleManager;
 		private readonly IGroupingReadOnlyRepository _groupingRepository;
+		private readonly ISettingsPersisterAndProvider<NameFormatSettings> _nameFormatSettings;
 		private bool toggleEnabled;
 
 		private ReadOnlyGroupDetail[] permittedPersonList;
@@ -45,7 +48,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			IPersonNameProvider personNameProvider,
 			ISiteRepository siteRepository, ITeamRepository teamRepository,
 			IToggleManager toggleManager, IGroupingReadOnlyRepository groupingRepository,
-			ITeamGamificationSettingRepository teamSettingRepository, IPersonRepository personRepo)
+			ITeamGamificationSettingRepository teamSettingRepository, IPersonRepository personRepo, 
+			ISettingsPersisterAndProvider<NameFormatSettings> nameFormatSettings)
 		{
 			_agentBadgeRepository = agentBadgeRepository;
 			_agentBadgeWithRankRepository = agentBadgeWithRankRepository;
@@ -57,6 +61,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			_groupingRepository = groupingRepository;
 			_teamSettingRepository = teamSettingRepository;
 			_personRepo = personRepo;
+			_nameFormatSettings = nameFormatSettings;
 
 			toggleEnabled = _toggleManager.IsEnabled(Toggles.Gamification_NewBadgeCalculation_31185);
 		}
@@ -200,6 +205,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		{
 			var permittedPersons = permittedPersonList.ToList();
 			var dic = new Dictionary<Guid, AgentBadgeOverview>();
+			var nameSetting = _nameFormatSettings.Get();
+
 			foreach (var agentBadge in permittedAgentBadgeList)
 			{
 				var personId = agentBadge.Person;
@@ -210,7 +217,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 					var detail = permittedPersons.First(p => p.PersonId == personId);
 					overview = new AgentBadgeOverview
 					{
-						AgentName = _personNameProvider.BuildNameFromSetting(detail.FirstName, detail.LastName)
+						AgentName = _personNameProvider.BuildNameFromSetting(detail.FirstName, detail.LastName, nameSetting)
 					};
 					dic.Add(personId, overview);
 				}

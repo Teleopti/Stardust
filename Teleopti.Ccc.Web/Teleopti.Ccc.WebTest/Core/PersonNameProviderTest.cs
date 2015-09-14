@@ -56,5 +56,16 @@ namespace Teleopti.Ccc.WebTest.Core
 
 			result.Should().Be.EqualTo(lastNameFirstName);
 		}
+
+		[Test]
+		public void ShouldBuildNamesBaseOnMySettingSoDontHaveToHitPersonRepositoryEveryTime()
+		{
+			var mySettting = new NameFormatSettings() {NameFormatId = 0};
+			var target = new PersonNameProvider(_nameFormatSettingsPersisterAndProvider);
+			var myName = new Name("Agent", "Name");
+
+			var result = target.BuildNameFromSetting(myName.FirstName, myName.LastName, mySettting);
+			result.Should().Be.EqualTo(myName.FirstName + " " + myName.LastName);
+		}
 	}
 }

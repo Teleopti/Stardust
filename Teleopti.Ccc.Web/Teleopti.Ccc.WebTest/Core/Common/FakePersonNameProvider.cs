@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Web.Core;
+﻿using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Common
@@ -8,6 +9,11 @@ namespace Teleopti.Ccc.WebTest.Core.Common
 		public string BuildNameFromSetting(Name name)
 		{
 			return name.LastName + " " + name.FirstName;
+		}
+
+		public string BuildNameFromSetting(string firstName, string lastName, NameFormatSettings setting)
+		{
+			throw new System.NotImplementedException();
 		}
 
 		public string BuildNameFromSetting(string firstName, string lastName)

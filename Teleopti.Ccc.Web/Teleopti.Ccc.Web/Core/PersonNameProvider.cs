@@ -7,6 +7,7 @@ namespace Teleopti.Ccc.Web.Core
 	public interface IPersonNameProvider
 	{
 		string BuildNameFromSetting(Name name);
+		string BuildNameFromSetting(string firstName, string lastName, NameFormatSettings setting);
 		string BuildNameFromSetting(string firstName, string lastName);
 	}
 
@@ -24,24 +25,33 @@ namespace Teleopti.Ccc.Web.Core
 			return BuildNameFromSetting(name.FirstName, name.LastName);
 		}
 
+		public string BuildNameFromSetting(string firstName, string lastName, NameFormatSettings setting)
+		{
+			return buildNameBaseOnSetting(firstName, lastName, setting);
+		}
+
 		public string BuildNameFromSetting(string firstName, string lastName)
 		{
-			string firstLast = firstName + " " + lastName;
-			
 			var persistedNameFormatSettings = _nameFormatSettings.Get();
-			if (persistedNameFormatSettings != null)
+			var nameStringBaseOnSetting = buildNameBaseOnSetting(firstName, lastName, persistedNameFormatSettings);
+			return nameStringBaseOnSetting;
+		}
+
+		private string buildNameBaseOnSetting(string firstName, string lastName, NameFormatSettings setting)
+		{
+			if (setting != null)
 			{
-				if (persistedNameFormatSettings.NameFormatId == 0)
+				if (setting.NameFormatId == 0)
 				{
-					return firstLast;
+					return firstName + " " + lastName;
 				}
-				if (persistedNameFormatSettings.NameFormatId == 1)
+				if (setting.NameFormatId == 1)
 				{
 					return lastName + " " + firstName;
-				}
+				}	
 			}
-
-			return firstLast;
+			string defaultNameString = firstName + " " + lastName;
+			return defaultNameString;
 		}
 	}
 }

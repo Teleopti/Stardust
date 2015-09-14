@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 				new PersonNameProvider(new FakeNameFormatSettingsPersisterAndProvider(new NameFormatSettings {NameFormatId = 0}));
 			target = new LeaderboardSettingBasedBadgeProvider(agentBadgeRepository, agentBadgeWithRankRepository,
 				permissionProvider, nameProvider, siteRepository, teamRepository, _toggleManager, groupingRepository,
-				teamSettingRepository, personRepository);
+				teamSettingRepository, personRepository, new FakeNameFormatSettingsPersisterAndProvider(new NameFormatSettings { NameFormatId = 0 }));
 		}
 
 		[Test]
