@@ -11,6 +11,7 @@ using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces;
 
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		{
 			Client.Publish(new PersonStateChangedEvent {Timestamp = "2015-08-17 15:40".Utc()});
 
-			Server.Process(null, null, typeof(PersonStateChangedEvent).AssemblyQualifiedName, JobClient.SerializedEvent, typeof(FakeHandler).AssemblyQualifiedName);
+			Server.Process(null, RandomName.Make(), typeof(PersonStateChangedEvent).AssemblyQualifiedName, JobClient.SerializedEvent, typeof(FakeHandler).AssemblyQualifiedName);
 
 			Handler.GotEvent.Timestamp.Should().Be("2015-08-17 15:40".Utc());
 		}

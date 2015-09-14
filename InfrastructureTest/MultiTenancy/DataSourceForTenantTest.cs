@@ -75,7 +75,9 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 		public void DoActionOnAllTenants()
 		{
 			var ds1 = MockRepository.GenerateMock<IDataSource>();
+			ds1.Expect(x => x.DataSourceName).Return(RandomName.Make());
 			var ds2 = MockRepository.GenerateMock<IDataSource>();
+			ds2.Expect(x => x.DataSourceName).Return(RandomName.Make());
 			var target = new DataSourceForTenant(null, null);
 			target.MakeSureDataSourceExists_UseOnlyFromTests(ds1);
 			target.MakeSureDataSourceExists_UseOnlyFromTests(ds2);
