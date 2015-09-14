@@ -5,6 +5,7 @@ var externalModules = angular.module('externalModules', ['ui.router',
 	'ui.tree',
 	'ngMaterial',
 	'angularMoment',
+	'ngSanitize',
 	'pascalprecht.translate',
 	'ui.grid',
 	'ui.grid.autoResize',
@@ -132,6 +133,7 @@ wfm.config([
 			controller: 'RtaAgentsCtrl'
 		});
 
+		$translateProvider.useSanitizeValueStrategy('sanitize');
 		$translateProvider.useUrlLoader('../api/Global/Language');
 		$translateProvider.preferredLanguage('en');
 	}

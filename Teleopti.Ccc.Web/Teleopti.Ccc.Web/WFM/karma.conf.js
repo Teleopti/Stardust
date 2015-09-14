@@ -19,6 +19,7 @@ module.exports = function(config) {
 		'node_modules/angular-mocks/angular-mocks.js',
 		'node_modules/angular-ui-router/release/angular-ui-router.min.js',
 		'node_modules/angular-resource/angular-resource.min.js',
+		'node_modules/angular-sanitize/angular-sanitize.min.js',
 		'node_modules/angular-translate/dist/angular-translate.min.js',
 		'node_modules/angular-translate/dist/angular-translate-loader-url/angular-translate-loader-url.min.js',
 		'node_modules/angular-ui-bootstrap/ui-bootstrap-tpls.min.js',
