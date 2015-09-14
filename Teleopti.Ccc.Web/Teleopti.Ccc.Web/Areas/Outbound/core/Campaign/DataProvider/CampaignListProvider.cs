@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 
 		public IEnumerable<GanttCampaignViewModel> GetCampaigns(GanttPeriod period)
 		{
-			var campaigns = _outboundCampaignRepository.GetCampaigns(getUtcPeroid(period));
+			var campaigns = (period == null) ? _outboundCampaignRepository.LoadAll() : _outboundCampaignRepository.GetCampaigns(getUtcPeroid(period));
 
 			var ganttCampaigns = new List<GanttCampaignViewModel>();
 			foreach (var campaign in campaigns)
