@@ -3,8 +3,7 @@
 	As a user
 	I want to be able to do a forecast
 
-
-Scenario: Forecast all
+Background: 
 	Given I have a role with
 	| Field           | Value      |
 	| QuickForecaster | True       |
@@ -12,7 +11,9 @@ Scenario: Forecast all
 	And there is a skill named 'TheSkill1' with activity 'TheActivity1'
 	And there is queue statistics for 'Queue1'
 	And there is a workload 'TheWorkload1' with skill 'TheSkill1' and queue 'Queue1'
-	And there is a workload 'TheWorkload2' with skill 'TheSkill1' and queue 'Queue1'
+
+Scenario: Forecast all
+	Given there is a workload 'TheWorkload2' with skill 'TheSkill1' and queue 'Queue1'
 	And there is no forecast data
 	When I am viewing quick forecast page
 	And I use default forecast period and forecast for all
@@ -21,14 +22,7 @@ Scenario: Forecast all
 	And there is forecast data for default period for 'TheWorkload2'
 
 Scenario: Forecast one workload
-	Given I have a role with
-	| Field           | Value      |
-	| QuickForecaster | True       |
-	And there is an activity named 'TheActivity1'
-	And there is a skill named 'TheSkill1' with activity 'TheActivity1'
-	And there is queue statistics for 'Queue1'
-	And there is a workload 'TheWorkload1' with skill 'TheSkill1' and queue 'Queue1'
-	And there is a workload 'TheWorkload2' with skill 'TheSkill1' and queue 'Queue1'
+	Given there is a workload 'TheWorkload2' with skill 'TheSkill1' and queue 'Queue1'
 	And there is no forecast data
 	When I am viewing quick forecast page
 	And I select workload 'TheWorkload2'
@@ -36,3 +30,17 @@ Scenario: Forecast one workload
 	And Forecast has succeeded
 	Then there is forecast data for default period for 'TheWorkload2'
 	And there is no forecast data for default period for 'TheWorkload1'
+
+Scenario: Add campaign
+	Given I am viewing quick forecast page
+	And I select workload 'TheWorkload1'
+	And I use default forecast period and forecast for one workload
+	And Forecast has succeeded
+	And I am viewing the forecast chart
+	When I select the first day in the forecast chart
+	And I choose to add a campaign
+	And I can see that the selected day is part of the campaign
+	And I increase the day volume to 200 percent
+	And I apply the campaign
+	Then I should see that the forecasted day volume for the first day has doubled
+

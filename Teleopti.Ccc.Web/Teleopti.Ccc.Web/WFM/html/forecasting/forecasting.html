@@ -30,6 +30,8 @@
 						<md-progress-linear md-mode="indeterminate"></md-progress-linear>
 					</div>
 					<div>
+						<div id="{{workload.ChartId}}">
+						</div>
 						<div style="display: inline-block" class="pull-right">
 							<button class="wfm-fab info mini" ng-click="displayModal(workload)">
 								<i class="mdi mdi-pencil"></i>
@@ -39,18 +41,6 @@
 							</button>
 						</div>
 						<div ng-if="workload.forecastResultLoaded" style="display: inline-block">
-							<c3chart bindto-id="{{workload.ChartId}}" chart-data="workload.resultChartData" chart-columns="chartInfo.resultChartDataColumns" chart-x="chartInfo.dataX" show-subchart="true">
-								<chart-axes values-x="date" y="vc" y2="vaht,vacw" />
-								<chart-axis>
-									<chart-axis-x axis-id="date" axis-type="timeseries">
-										<chart-axis-x-tick tick-format="%Y-%m-%d" />
-									</chart-axis-x>
-								</chart-axis>
-								<chart-axis>
-									<chart-axis-y axis-id="y" axis-position="outer-middle" axis-label="Number of Calls" />
-									<chart-axis-y axis-id="y2" axis-position="outer-middle" axis-label="Time Spent" />
-								</chart-axis>
-							</c3chart>
 						</div>
 					</div>
 					

@@ -55,6 +55,53 @@ angular.module('wfm.forecasting')
 						});
 						workload.resultChartData = data.Days;
 						workload.forecastResultLoaded = true;
+						var chart = c3.generate({
+							bindto: "#" + workload.ChartId,
+							data: {
+								json:
+									workload.resultChartData
+								,
+								keys: {
+									// x: 'name', // it's possible to specify 'x' when category axis
+									x: 'date',
+									value: ['vc', 'vaht', 'vacw']
+								},
+								axes: {
+									vaht: 'y2',
+									vacw: 'y2'
+								},
+								selection: {
+									enabled: true,
+									grouped: true,
+									isselectable: function (chartPoint) {
+										if (chartPoint.id === 'vacw' || chartPoint.id === 'vaht')
+											return false;
+										return true;
+									}
+								},
+								names: {
+									vc: 'Calls <',
+									vaht: 'Talk time >',
+									vacw: 'ACW >',
+								}
+							},
+							axis: {
+								x: {
+									type: 'timeseries',
+									tick: {
+										format: '%Y-%m-%d'
+									}
+								},
+								y2: {
+									show: true
+								}
+							},
+							subchart: {
+								show: true
+							}
+						});
+						console.log(chart);
+
 					}).
 					error(function (data, status, headers, config) {
 						$scope.error = { message: "Failed to get forecast result." };
@@ -68,7 +115,9 @@ angular.module('wfm.forecasting')
 					{ id: "vaht", type: "line", name: "Talk time" },
 					{ id: "vacw", type: "line", name: "ACW" }
 				],
-				dataX: { id: "date" }
+				dataX: {
+					 id: "date"
+				}
 			};
 
 			var forecastWorkload = function (workload, finallyCallback) {

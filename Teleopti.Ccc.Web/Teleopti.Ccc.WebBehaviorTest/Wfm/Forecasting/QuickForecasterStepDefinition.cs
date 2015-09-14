@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 				new SkillDayRepository(uow).LoadAll().Any(x => x.CurrentDate == theDate).Should().Be.True());
 		}
 
+		[Given(@"Forecast has succeeded")]
 		[When(@"Forecast has succeeded")]
 		public void WhenForecastHasSucceeded()
 		{
@@ -34,7 +35,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			GlobalUnitOfWorkState.UnitOfWorkAction(uow =>
 				new SkillDayRepository(uow).LoadAll().Any().Should().Be.False());
 		}
-
+		
+		[Given(@"I am viewing quick forecast page")]
 		[When(@"I am viewing quick forecast page")]
 		public void WhenIAmViewingQuickForecastPage()
 		{
@@ -51,6 +53,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			Browser.Interactions.AssertExistsUsingJQuery(".workload:last.selected");
 		}
 
+		[Given(@"I select workload '(.*)'")]
 		[When(@"I select workload '(.*)'")]
 		public void WhenISelectWorkload(string workload)
 		{
@@ -79,6 +82,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			Browser.Interactions.Click(".do-forecast");
 		}
 
+		[Given(@"I use default forecast period and forecast for one workload")]
 		[When(@"I use default forecast period and forecast for one workload")]
 		public void WhenIUseDefaultForecastPeriodAndForecastForOneWorkload()
 		{
@@ -151,6 +155,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 						.Should().Not.Be.Null();
 				}
 			});
+		}
+
+		[Given(@"I am viewing the forecast chart")]
+		public void GivenIAmViewingTheForecastChart()
+		{
+			Browser.Interactions.ClickUsingJQuery("card-header:first()");
 		}
 
 		[Then(@"I should see the accuracy for the forecast method")]
