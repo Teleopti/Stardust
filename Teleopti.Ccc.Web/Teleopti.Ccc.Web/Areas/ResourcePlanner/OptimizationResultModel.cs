@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 					var found = skillDaysDic.TryGetValue(dateOnly, out skillDay);
 					double relativeDifference = !found
 						? 0
-						: SkillStaffPeriodHelper.RelativeDifference(skillDay.SkillStaffPeriodCollection).GetValueOrDefault(-1);
+						: SkillStaffPeriodHelper.RelativeDifference(skillDay.SkillStaffPeriodCollection).GetValueOrDefault(0);
 					var detail = new OptimizationResultSkillDetail
 					{
 						Date = dateOnly,
