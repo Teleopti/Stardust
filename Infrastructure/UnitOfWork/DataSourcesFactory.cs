@@ -59,6 +59,13 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			return createDataSource(settings, statisticConnectionString);
 		}
 
+		public IDataSource Create(string tenantName, string applicationConnectionString, string analyticsConnectionString, IDictionary<string, string> applicationNhibConfiguration)
+		{
+			applicationNhibConfiguration[Environment.SessionFactoryName] = tenantName;
+			applicationNhibConfiguration[Environment.ConnectionString] = applicationConnectionString;
+			return createDataSource(applicationNhibConfiguration, analyticsConnectionString);
+		}
+
 		private IDataSource createDataSource(IDictionary<string, string> settings, string statisticConnectionString)
 		{
 			NHibernateUnitOfWorkMatrixFactory statFactory;

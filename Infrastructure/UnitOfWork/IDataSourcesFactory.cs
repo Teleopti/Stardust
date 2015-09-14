@@ -7,5 +7,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 	{
 		IDataSource Create(string applicationDataSourceName, string applicationConnectionString, string statisticConnectionString);
 		IDataSource Create(IDictionary<string, string> settings, string statisticConnectionString);
+
+		IDataSource Create(string tenantName, string applicationConnectionString, string analyticsConnectionString, IDictionary<string, string> applicationNhibConfiguration);
 	}
 }

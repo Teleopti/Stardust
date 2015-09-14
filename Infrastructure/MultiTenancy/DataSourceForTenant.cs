@@ -37,9 +37,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 				if (Tenant(tenantName) != null)
 					return;
 
-				applicationNhibConfiguration[NHibernate.Cfg.Environment.SessionFactoryName] = tenantName;
-				applicationNhibConfiguration[NHibernate.Cfg.Environment.ConnectionString] = applicationConnectionString;
-				var newDataSource = _dataSourcesFactory.Create(applicationNhibConfiguration, analyticsConnectionString);
+				var newDataSource = _dataSourcesFactory.Create(tenantName, applicationConnectionString, analyticsConnectionString, applicationNhibConfiguration);
 				_setLicenseActivator.Execute(newDataSource);
 				_registeredDataSources[tenantName] = newDataSource;
 			}

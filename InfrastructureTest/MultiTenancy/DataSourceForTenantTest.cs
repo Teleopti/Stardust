@@ -21,11 +21,12 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 			var dataSourceName = RandomName.Make();
 			var appNhibConf = new Dictionary<string, string>();
 			var statisticConnString = RandomName.Make();
-			var dataSource = new FakeDataSource { DataSourceName = dataSourceName };
-			dataSourcesFactory.Expect(x => x.Create(appNhibConf, statisticConnString)).Return(dataSource);
+			var applicationConnectionString = RandomName.Make();
+			var dataSource = new FakeDataSource();
+			dataSourcesFactory.Expect(x => x.Create(dataSourceName, applicationConnectionString, statisticConnString, appNhibConf)).Return(dataSource);
 			var target = new DataSourceForTenant(dataSourcesFactory, new SetNoLicenseActivator());
 			target.Tenant(dataSourceName).Should().Be.EqualTo(null);
-			target.MakeSureDataSourceExists(dataSourceName, RandomName.Make(), statisticConnString, appNhibConf);
+			target.MakeSureDataSourceExists(dataSourceName, applicationConnectionString, statisticConnString, appNhibConf);
 			target.Tenant(dataSourceName).Should().Be.SameInstanceAs(dataSource);
 		}
 
@@ -93,7 +94,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 		{
 			var dataSourcesFactory = MockRepository.GenerateMock<IDataSourcesFactory>();
 			var dataSource = new FakeDataSource();
-			dataSourcesFactory.Expect(x => x.Create(null, null)).IgnoreArguments().Return(dataSource);
+			dataSourcesFactory.Expect(x => x.Create(null, null, null,null)).IgnoreArguments().Return(dataSource);
 			var setLicenseActivator = MockRepository.GenerateMock<ISetLicenseActivator>();
 
 			var target = new DataSourceForTenant(dataSourcesFactory, setLicenseActivator);
