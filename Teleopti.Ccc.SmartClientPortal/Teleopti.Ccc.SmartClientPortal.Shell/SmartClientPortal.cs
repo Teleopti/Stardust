@@ -816,7 +816,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				{
 					if(_token== null)
 						_token = SingleSignOnHelper.SingleSignOn();
-					webView1.Url = string.Format("http://www.teleopti.com/elogin.aspx?{0}1", _token);
+					webView1.Url = string.Format("http://www.teleopti.com/elogin.aspx?{0}", _token);
 				}
 				catch (ArgumentException exception)
 				{
