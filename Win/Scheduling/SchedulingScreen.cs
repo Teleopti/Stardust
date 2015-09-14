@@ -5405,7 +5405,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_schedulerState.Schedules.Clear();
 			}
 			setEventHandlersOff();
-			_container.Resolve<IShiftProjectionCacheManager>().Clear();
 			_container.Dispose();
 			if (_scheduleView != null)
 			{

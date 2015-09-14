@@ -6,12 +6,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
 	public interface IRuleSetDeletedShiftCategoryChecker
 	{
-		bool ContainsDeletedActivity(IWorkShiftRuleSet ruleSet);
+		bool ContainsDeletedShiftCategory(IWorkShiftRuleSet ruleSet);
 	}
 
 	public class RuleSetDeletedShiftCategoryChecker : IRuleSetDeletedShiftCategoryChecker
 	{
-		public bool ContainsDeletedActivity(IWorkShiftRuleSet ruleSet)
+		public bool ContainsDeletedShiftCategory(IWorkShiftRuleSet ruleSet)
 		{
 			if (ruleSet == null)
 				throw new ArgumentNullException("ruleSet");

@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		[Test, ExpectedException(typeof(ArgumentNullException))]
 		public void ShouldThrowExceptionIfRuleSetIsNull()
 		{
-			_ruleSetDeletedShiftCategoryChecker.ContainsDeletedActivity(null);
+			_ruleSetDeletedShiftCategoryChecker.ContainsDeletedShiftCategory(null);
 		}
 
 		[Test]
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			
 			_mocks.ReplayAll();
 
-			var result = _ruleSetDeletedShiftCategoryChecker.ContainsDeletedActivity(_ruleSet);
+			var result = _ruleSetDeletedShiftCategoryChecker.ContainsDeletedShiftCategory(_ruleSet);
 			Assert.That(result, Is.False);
 
 			_mocks.VerifyAll();
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_mocks.ReplayAll();
 
 			((IDeleteTag)_shiftCategory).SetDeleted();
-			var result = _ruleSetDeletedShiftCategoryChecker.ContainsDeletedActivity(_ruleSet);
+			var result = _ruleSetDeletedShiftCategoryChecker.ContainsDeletedShiftCategory(_ruleSet);
 			Assert.That(result, Is.True);
 
 			_mocks.VerifyAll();		

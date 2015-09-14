@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-    public class ShiftProjectionCacheManager : IShiftProjectionCacheManager
+    public class ShiftProjectionCacheManager : IShiftProjectionCacheManager, IDisposable
     {
         private readonly IDictionary<IWorkShiftRuleSet, IList<IShiftProjectionCache>> _ruleSetListDictionary = new Dictionary<IWorkShiftRuleSet, IList<IShiftProjectionCache>>();
         private readonly IShiftFromMasterActivityService _shiftFromMasterActivityService;
@@ -38,11 +38,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		    return ret;
 	    }
 
-	    public void Clear()
-	    {
-		    _ruleSetListDictionary.Clear();
-	    }
-
 	    public IList<IShiftProjectionCache> ShiftProjectionCachesFromRuleSetBag(DateOnly scheduleDateOnly,
 		    TimeZoneInfo timeZone, IRuleSetBag bag, bool forRestrictionsOnly, bool checkExcluded)
 	    {
@@ -61,7 +56,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				if (_ruleSetDeletedActivityChecker.ContainsDeletedActivity(ruleSet))
 					continue;
 
-				if (_rulesSetDeletedShiftCategoryChecker.ContainsDeletedActivity(ruleSet))
+				if (_rulesSetDeletedShiftCategoryChecker.ContainsDeletedShiftCategory(ruleSet))
 					continue;
 
 				IEnumerable<IShiftProjectionCache> ruleSetList = getShiftsForRuleSet(ruleSet);
@@ -112,5 +107,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             }
 			return shiftProjectionCacheList;
         }
+
+	    public void Dispose()
+	    {
+			_ruleSetListDictionary.Clear();
+	    }
     }
 }
