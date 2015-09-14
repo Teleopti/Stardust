@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				using (_dataSource.OnThisThreadUse(t))
 				{
 					InvalidateAllForCurrentTenant();
-					Thread.Sleep(1000);
+					Thread.Sleep(1000 * 3);
 				}
 			});
 		}
