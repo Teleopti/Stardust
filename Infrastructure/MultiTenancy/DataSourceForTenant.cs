@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 
@@ -9,11 +10,13 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 	public class DataSourceForTenant : IDataSourceForTenant
 	{
 		private readonly IDataSourcesFactory _dataSourcesFactory;
+		private readonly ISetLicenseActivator _setLicenseActivator;
 		private readonly IList<IDataSource> _registeredDataSourceCollection;
 
-		public DataSourceForTenant(IDataSourcesFactory dataSourcesFactory)
+		public DataSourceForTenant(IDataSourcesFactory dataSourcesFactory, ISetLicenseActivator setLicenseActivator)
 		{
 			_dataSourcesFactory = dataSourcesFactory;
+			_setLicenseActivator = setLicenseActivator;
 			_registeredDataSourceCollection = new List<IDataSource>();
 		}
 
@@ -35,6 +38,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 				applicationNhibConfiguration[NHibernate.Cfg.Environment.SessionFactoryName] = tenantName;
 				applicationNhibConfiguration[NHibernate.Cfg.Environment.ConnectionString] = applicationConnectionString;
 				var newDataSource = _dataSourcesFactory.Create(applicationNhibConfiguration, analyticsConnectionString);
+				_setLicenseActivator.Execute(newDataSource);
 				_registeredDataSourceCollection.Add(newDataSource);
 			}
 		}

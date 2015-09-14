@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 			var statisticConnString = RandomName.Make();
 			var dataSource = new FakeDataSource { DataSourceName = dataSourceName };
 			dataSourcesFactory.Expect(x => x.Create(appNhibConf, statisticConnString)).Return(dataSource);
-			var target = new DataSourceForTenant(dataSourcesFactory);
+			var target = new DataSourceForTenant(dataSourcesFactory, new SetNoLicenseActivator());
 			target.Tenant(dataSourceName).Should().Be.EqualTo(null);
 			target.MakeSureDataSourceExists(dataSourceName, RandomName.Make(), statisticConnString, appNhibConf);
 			target.Tenant(dataSourceName).Should().Be.SameInstanceAs(dataSource);
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 			var appNhibConf = new Dictionary<string, string>();
 			var statisticConnString = RandomName.Make();
 			var dataSource = new FakeDataSource { DataSourceName = dataSourceName };
-			var target = new DataSourceForTenant(dataSourcesFactory);
+			var target = new DataSourceForTenant(dataSourcesFactory, null);
 			target.MakeSureDataSourceExists_UseOnlyFromTests(dataSource);
 
 			target.Tenant(dataSourceName).Should().Be.SameInstanceAs(dataSource);
@@ -48,7 +49,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 		{
 			var dsName = Guid.NewGuid().ToString();
 			var ds = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory(dsName), null, null);
-			var target = new DataSourceForTenant(null);
+			var target = new DataSourceForTenant(null, null);
 			target.MakeSureDataSourceExists_UseOnlyFromTests(ds);
 			target.Tenant(dsName).Should().Be.SameInstanceAs(ds);
 		}
@@ -58,7 +59,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 		{
 			var dsName = Guid.NewGuid().ToString();
 			var ds = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory(dsName), null, null);
-			var target = new DataSourceForTenant(null);
+			var target = new DataSourceForTenant(null, null);
 			target.MakeSureDataSourceExists_UseOnlyFromTests(ds);
 			target.Tenant("something else").Should().Be.Null();
 		}
@@ -66,7 +67,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 		[Test]
 		public void NoDataSourceTenant()
 		{
-			var target = new DataSourceForTenant(null);
+			var target = new DataSourceForTenant(null, null);
 			target.Tenant("something").Should().Be.Null();
 		}
 
@@ -75,7 +76,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 		{
 			var ds1 = MockRepository.GenerateMock<IDataSource>();
 			var ds2 = MockRepository.GenerateMock<IDataSource>();
-			var target = new DataSourceForTenant(null);
+			var target = new DataSourceForTenant(null, null);
 			target.MakeSureDataSourceExists_UseOnlyFromTests(ds1);
 			target.MakeSureDataSourceExists_UseOnlyFromTests(ds2);
 
@@ -83,6 +84,20 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 
 			ds1.AssertWasCalled(x => x.ResetStatistic());
 			ds2.AssertWasCalled(x => x.ResetStatistic());
+		}
+
+		[Test]
+		public void ShouldCallSetLicenseActivatorWhenNewTenantIsAdded()
+		{
+			var dataSourcesFactory = MockRepository.GenerateMock<IDataSourcesFactory>();
+			var dataSource = new FakeDataSource();
+			dataSourcesFactory.Expect(x => x.Create(null, null)).IgnoreArguments().Return(dataSource);
+			var setLicenseActivator = MockRepository.GenerateMock<ISetLicenseActivator>();
+
+			var target = new DataSourceForTenant(dataSourcesFactory, setLicenseActivator);
+			target.MakeSureDataSourceExists(RandomName.Make(), null, null, new Dictionary<string, string>());
+
+			setLicenseActivator.AssertWasCalled(x => x.Execute(dataSource));
 		}
 	}
 }

@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
+using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Web.Core.Hangfire;
@@ -30,17 +31,18 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			}
 		}
 
-		private ILifetimeScope buildContainer()
+		private static ILifetimeScope buildContainer()
 		{
 			return buildContainer(CommonModule.ToggleManagerForIoc(new IocArgs(new ConfigReader())));
 		}
 
-		private ILifetimeScope buildContainer(IToggleManager toggleManager)
+		private static ILifetimeScope buildContainer(IToggleManager toggleManager)
 		{
 			var builder = new ContainerBuilder();
 			var configuration = new IocConfiguration(new IocArgs(new ConfigReader()), toggleManager);
 			builder.RegisterModule(new CommonModule(configuration));
 			builder.RegisterModule(new HangfireModule(configuration));
+			builder.RegisterType<SetNoLicenseActivator>().As<ISetLicenseActivator>().SingleInstance(); //should probably use infratest attr for these tests instead.
 			return builder.Build();
 		}
 
