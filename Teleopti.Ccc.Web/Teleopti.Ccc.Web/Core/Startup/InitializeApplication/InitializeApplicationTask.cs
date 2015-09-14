@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 			using (_tenantUnitOfWork.Start())
 			{
 				_initializeApplication.Start(new WebState(), new LoadPasswordPolicyService(passwordPolicyPath), ConfigurationManager.AppSettings.ToDictionary(), false);
-				//fix soon
+				//remove when tenants are handled correctly in RTA
 				_loadAllTenants.Tenants().ForEach(dsConf =>
 				{
 					_dataSourceForTenant.MakeSureDataSourceExists(dsConf.Name,
@@ -51,6 +51,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 						dsConf.DataSourceConfiguration.AnalyticsConnectionString,
 						dsConf.DataSourceConfiguration.ApplicationNHibernateConfig);
 				});
+				/////////////////////////////////////////////////
 			}
 			return null;
 		}
