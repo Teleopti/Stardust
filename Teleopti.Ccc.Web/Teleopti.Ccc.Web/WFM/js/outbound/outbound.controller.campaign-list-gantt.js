@@ -3,9 +3,9 @@
 	'use strict';
 
 	angular.module('wfm.outbound')
-		.controller('CampaignListGanttCtrl', ['$scope', 'OutboundToggles', campaignListGanttCtrl]);
+		.controller('CampaignListGanttCtrl', ['$scope', 'OutboundToggles', 'outboundService', campaignListGanttCtrl]);
 
-	function campaignListGanttCtrl($scope, OutboundToggles) {
+	function campaignListGanttCtrl($scope, OutboundToggles, outboundService) {
 
 		$scope.initialized = false;
 		$scope.$watch(function() {
@@ -18,55 +18,49 @@
 
 		function init() {
 			$scope.initialized = true;
+			getGanttVisualization();
+			$scope.ganttOptions = setGanttOptions();
 		}
 
-		$scope.ganttOptions = {
-			headers: ['month', 'day'],
-			fromDate: '2015-9-1',
-			toDate: '2015-10-31'
+		
+
+		function setGanttOptions(startDate,endDate) {
+			var twoWeeksEarly = moment().subtract(2, "weeks").format();
+			var fourWeeksAfter = moment().add(6, "weeks").format();
+			return {
+				headers: ['month', 'day'],
+				fromDate: startDate ? startDate : twoWeeksEarly,
+				toDate: endDate ? endDate : fourWeeksAfter
+			}
 		}
 
-		$scope.ganttData = [
-		 {
-		 	name: "Create concept",
-		 	from: '2015-9-9',
-		 	to: '2015-10-15',
-		 	tasks: [
-			  {
-			  	name: "Create concept",
-			  	content: "<i class=\"fa fa-cog\" ng-click=\"scope.handleTaskIconClick(task.model)\"></i> {{task.model.name}}",
-			  	color: "#09F",
-			  	from: "2015-9-9",
-			  	to: "2015-10-15",
-			  	id: "58916e1c-1c2e-3d39-f5d4-8246b604fed41"
-			  }
-		 	],
-		 	id: "81aea986-5ece-977d-942b-c6dc447baaed2"
-		 }, {
-		 	name: "Create concept234",
-		 	from: '2015-9-10',
-		 	to: '2015-10-16',
-		 	tasks: [
-			  {
-			  	name: "Create concept2",
-			  	content: "<i class=\"fa fa-cog\" ng-click=\"scope.handleTaskIconClick(task.model)\"></i> {{task.model.name}}",
-			  	color: "#F1C232",
-			  	from: "2015-9-10",
-			  	to: "2015-10-1",
-			  	id: "58916e1c-1c2e-3d39-f5d4-8246b604fed43"
-			  },
-			   {
-			   	name: "Create concept2",
-			   	content: "<i class=\"fa fa-cog\" ng-click=\"scope.handleTaskIconClick(task.model)\"></i> {{task.model.name}}",
-			   	color: "#F1C232",
-			   	from: "2015-10-10",
-			   	to: "2015-10-16",
-			   	id: "58916e1c-1c2e-3d39-f5d4-8246b604fed431"
-			   }
-		 	],
-		 	id: "81aea986-5ece-977d-942b-c6dc4472baaed4"
-		 }
-		];
+		function getGanttVisualization(startDate,endDate) {
+			var twoWeeksEarly = moment().subtract(2, "weeks").format();
+			var fourWeeksAfter = moment().add(6, "weeks").format();
+
+			var ganttPeriod = {
+				StartDate: { Date: startDate ? startDate : twoWeeksEarly },
+				EndDate: { Date: endDate ? endDate : fourWeeksAfter }
+			};
+			
+			outboundService.getGanttVisualization(ganttPeriod, function success(data) {
+				var ganttArr = [];
+				if (data) data.forEach(function (ele, ind) {
+					ganttArr[ind] = {};
+					ganttArr[ind].name = ele.Name;
+					ganttArr[ind].id = ele.Id;
+					ganttArr[ind].tasks = [];
+					ganttArr[ind].tasks[0] = {};
+					ganttArr[ind].tasks[0].from = ele.StartDate.Date;
+					ganttArr[ind].tasks[0].to = ele.EndDate.Date;
+					ganttArr[ind].tasks[0].id = ele.Id;
+					ganttArr[ind].tasks[0].color = '#09F';
+				});
+				$scope.ganttData = ganttArr;
+			});
+		}
+
+
 	}
 
 })();
