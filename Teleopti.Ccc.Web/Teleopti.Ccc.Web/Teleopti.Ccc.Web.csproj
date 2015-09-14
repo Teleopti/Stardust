@@ -1185,12 +1185,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="WFM\html\outbound\angular-gantt-custom.tpl.html" />
     <Content Include="WFM\html\outbound\campaign-list-gantt.html" />
     <Content Include="WFM\html\outbound\outbound-overview.html" />
     <Content Include="WFM\js\global\daterangepicker\wfm-date-range-picker.directive.js" />
     <Content Include="WFM\js\global\daterangepicker\wfm-date-range-picker.tpl.html" />
     <Content Include="WFM\html\forecasting\forecasting-advanced.html" />
     <Content Include="WFM\js\forecasting\forecasting.advanced.controller.js" />
+    <Content Include="WFM\js\outbound\angular-gantt.ext.js" />
     <Content Include="WFM\js\rta\rta-agents.html" />
     <Content Include="WFM\js\rta\rta-sites.html" />
     <Content Include="WFM\js\rta\rta-teams.html" />

@@ -21,26 +21,35 @@
 			getGanttVisualization();
 			$scope.ganttOptions = setGanttOptions();
 		}
-
 		
-
+		$scope.headerFormats = {
+			month: 'MMMM YYYY',
+			week: function (column) {				
+				return '<div class="week-days-header">'
+				+ '<div class="week-start-day">' + column.date.format('D') + '</div>'
+				+ '<div></div>'
+				+ '<div class="week-end-day">'  + '</div>'
+				+ '</div>';
+			}
+		};
+		
 		function setGanttOptions(startDate,endDate) {
-			var twoWeeksEarly = moment().subtract(2, "weeks").format();
-			var fourWeeksAfter = moment().add(6, "weeks").format();
+			var periodStart = moment().subtract( 1, "months").date(1).format();
+			var periodEnd = moment().add(2, "months").date(1).subtract(1, 'days').format();		
 			return {
-				headers: ['month', 'day'],
-				fromDate: startDate ? startDate : twoWeeksEarly,
-				toDate: endDate ? endDate : fourWeeksAfter
+				headers: ['month', 'week'],
+				fromDate: startDate ? startDate : periodStart,
+				toDate: endDate ? endDate : periodEnd
 			}
 		}
 
 		function getGanttVisualization(startDate,endDate) {
-			var twoWeeksEarly = moment().subtract(2, "weeks").format();
-			var fourWeeksAfter = moment().add(6, "weeks").format();
+			var periodStart = moment().subtract(1, "months").date(1).format();
+			var periodEnd = moment().add(2, "months").date(1).subtract(1, 'days').format();
 
 			var ganttPeriod = {
-				StartDate: { Date: startDate ? startDate : twoWeeksEarly },
-				EndDate: { Date: endDate ? endDate : fourWeeksAfter }
+				StartDate: { Date: startDate ? startDate : periodStart },
+				EndDate: { Date: endDate ? endDate : periodEnd }
 			};
 			
 			outboundService.getGanttVisualization(ganttPeriod, function success(data) {

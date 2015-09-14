@@ -1,6 +1,20 @@
 ﻿@charset "UTF-8";
 
 .outbound {
+	.outbound-gantt-chart {
+		margin: 70px 0;
+	}
+	gantt-column-header-content {
+		width: 100%;
+		display: block;
+
+		.week-days-header {
+			display: flex;
+			justify-content: space-between;
+		}
+	}
+
+
 	.chart {
 		-webkit-touch-callout: none;
 		-webkit-user-select: none;
