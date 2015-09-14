@@ -26,22 +26,20 @@
 					</div>
 				</card-header>
 				<card-body>
+					
+					<div class="pull-right">
+						<button class="wfm-fab info mini" ng-click="displayModal(workload)">
+							<i class="mdi mdi-pencil"></i>
+							<md-tooltip>
+								Forecast this workload
+							</md-tooltip>
+						</button>
+					</div>
 					<div ng-if="!workload.forecastResultLoaded" class="wfm-block">
 						<md-progress-linear md-mode="indeterminate"></md-progress-linear>
 					</div>
-					<div>
-						<div id="{{workload.ChartId}}">
-						</div>
-						<div style="display: inline-block" class="pull-right">
-							<button class="wfm-fab info mini" ng-click="displayModal(workload)">
-								<i class="mdi mdi-pencil"></i>
-								<md-tooltip>
-									Forecast this workload
-								</md-tooltip>
-							</button>
-						</div>
-						<div ng-if="workload.forecastResultLoaded" style="display: inline-block">
-						</div>
+					<div ng-show="workload.forecastResultLoaded" class="wfm-block">
+						<div id="{{workload.ChartId}}"></div>
 					</div>
 					
 					<div class="pull-right">
