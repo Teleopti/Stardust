@@ -10,11 +10,20 @@
         var getCampaignCommandUrl = '../api/Outbound/Campaign/';
         var getCampaignLoadUrl = '../api/Outbound/Campaign/Load';
 	    var postCampaignLoadUrl = '../api/Outbound/Campaign/Period/Load';
-
         var editCampaignCommandUrl = '../api/Outbound/Campaign/';
         var getCampaignStatisticsUrl = '../api/Outbound/Campaign/Statistics';
+        var getCampaignPeriodStatisticsUrl = '../api/Outbound/Campaign/Period/Statistics';
         var getFilteredCampaignsUrl = '../api/Outbound/Campaigns';
         var getGanttVisualizationUrl = '../api/Outbound/Gantt/Campaigns';
+
+        var self = this;
+
+        self.getVisualizationPeriod = function () {
+        	return {
+        		StartDate: { Date: moment().subtract(1, "months").date(1).format() },
+        		EndDate: { Date: moment().add(2, "months").date(1).subtract(1, 'days').format() }
+        	}
+        }
 
 		this.load = function(successCb) {
 			$http.get(getCampaignLoadUrl).success(function(data) {
@@ -22,15 +31,11 @@
 			});
 		}
 
-		this.loadWithinPeriod = function (successCb) {			
-			var period = {
-				StartDate: { Date: moment().subtract(2, 'w') },
-				EndDate: { Date: moment().add(6, 'w') }
-			};
-
-			$http.post(postCampaignLoadUrl, period).success(function(data) {
-		    	if (successCb != null) successCb(data);
-		    });
+		this.loadWithinPeriod = function (successCb) {
+			var period = self.getVisualizationPeriod();
+			$http.post(postCampaignLoadUrl, period).success(function (data) {
+				if (successCb != null) successCb(data);
+			});
 		};
 
 	    this.getGanttVisualization = function(filter, successCb, errorCb) {
@@ -46,12 +51,24 @@
 
         this.getCampaignStatistics = function(filter, successCb, errorCb) {
             $http.get(getCampaignStatisticsUrl).success(function(data) {
-                    if (successCb != null) successCb(data);
+            	if (successCb != null) successCb(data);
                 }).
                 error(function(data) {
                     if (errorCb != null) errorCb(data);
                 });
         };
+
+        this.getCampaignStatisticsWithinPeriod = function (filter, successCb, errorCb) {
+        	var period = self.getVisualizationPeriod();
+        	$http.post(getCampaignPeriodStatisticsUrl, period).
+			    success(function (data) {
+			    	if (successCb != null)
+			    		successCb(data);
+		        }).
+			    error(function (data) {
+			    	if (errorCb != null) errorCb(data);
+			    });
+        }
 
 	    this.getCampaignSummary = function(id, successCb, errorCb) {
 		    $http.get(getFilteredCampaignsUrl + '/' + id).

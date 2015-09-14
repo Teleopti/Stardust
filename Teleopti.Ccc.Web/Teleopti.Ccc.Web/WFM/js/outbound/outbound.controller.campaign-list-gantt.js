@@ -42,23 +42,20 @@
 			'{{task.isMilestone() === true && getFromLabel() || getFromLabel() + \' - \' + getToLabel()}}' +
 			'</small></div>';
 		
-		function setGanttOptions(startDate,endDate) {
-			var periodStart = moment().subtract( 1, "months").date(1).format();
-			var periodEnd = moment().add(2, "months").date(1).subtract(1, 'days').format();		
+		function setGanttOptions(startDate, endDate) {
+			var visualizationPeriod = outboundService.getVisualizationPeriod();
 			return {
 				headers: ['month', 'week'],
-				fromDate: startDate ? startDate : periodStart,
-				toDate: endDate ? endDate : periodEnd
+				fromDate: startDate ? startDate : visualizationPeriod.StartDate.Date,
+				toDate: endDate ? endDate : visualizationPeriod.EndDate.Date
 			}
 		}
 
 		function getGanttVisualization(startDate,endDate) {
-			var periodStart = moment().subtract(1, "months").date(1).format();
-			var periodEnd = moment().add(2, "months").date(1).subtract(1, 'days').format();
-
+			var visualizationPeriod = outboundService.getVisualizationPeriod();
 			var ganttPeriod = {
-				StartDate: { Date: startDate ? startDate : periodStart },
-				EndDate: { Date: endDate ? endDate : periodEnd }
+				StartDate: { Date: startDate ? startDate : visualizationPeriod.StartDate.Date },
+				EndDate: { Date: endDate ? endDate : visualizationPeriod.EndDate.Date }
 			};
 			
 			outboundService.getGanttVisualization(ganttPeriod, function success(data) {

@@ -19,6 +19,7 @@
 		$scope.isGanttEnabled = false;
 
 		var scheduleLoader;
+		var getCampaignStatistics;
 
 		$scope.$watch(function () {
 			return OutboundToggles.ready;
@@ -26,6 +27,7 @@
 			if (value) {
 				$scope.isGanttEnabled = OutboundToggles.isGanttEnabled();
 				scheduleLoader = $scope.isGanttEnabled ? outboundService.loadWithinPeriod : outboundService.load;
+				getCampaignStatistics = $scope.isGanttEnabled ? outboundService.getCampaignStatisticsWithinPeriod : outboundService.getCampaignStatistics;
 				init();				
 			}
 		});
@@ -36,7 +38,7 @@
         function init() {
 
         	scheduleLoader(function handleSuccess(isLoad) {
-        		outboundService.getCampaignStatistics(null, function success(data) {
+        		getCampaignStatistics(null, function success(data) {
         			$scope.phaseStatistics = data;
         		});
         		$scope.$watch('activePhaseCode', function (newValue, oldValue) {
@@ -231,7 +233,7 @@
         }
 
         function refreshCampaignStatistics(scope) {
-        	outboundService.getCampaignStatistics(null, function success(data) {
+        	getCampaignStatistics(null, function success(data) {
         		scope.phaseStatistics = data;
         	});
         }
