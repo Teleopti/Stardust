@@ -1,23 +1,19 @@
 ﻿using System;
 using System.Globalization;
 using System.Xml;
-using NUnit.Framework;
-using SharpTestsEx;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Bindings.Generic;
+using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Ccc.WebBehaviorTest.Pages;
 using Teleopti.Interfaces.Domain;
-using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
-using Table = TechTalk.SpecFlow.Table;
 
 namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 {
 	[Binding]
 	public class WeekScheduleStepDefinitions
-    {
+	{
 		[When(@"I click the request symbol for date '(.*)'")]
 		public void WhenIClickTheRequestSymbolForDate(DateTime date)
 		{
@@ -28,9 +24,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenIShouldNotSeeAnyShiftsOnDate(DateTime date)
 		{
 			Browser.Interactions.AssertNotExists(".weekview-timeline",
-			                                     string.Format(
-				                                     "'.weekview-day[data-mytime-date='{0}'] .weekview-day-schedule-layer'",
-				                                     date.ToString("yyyy-MM-dd")));
+												 string.Format(
+													 ".weekview-day[data-mytime-date='{0}'] .weekview-day-schedule-layer",
+													 date.ToString("yyyy-MM-dd")));
 		}
 
 		[Then(@"I should see my week schedule for date '(.*)'")]
@@ -122,7 +118,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			var overtimeAvailability = table.CreateInstance<OvertimeAvailabilityTooltipAndBar>();
 			var layerTop =
 				string.Format("return $(\".weekview-day[data-mytime-date='{0}'] .overtime-availability-bar\").position().top",
-				              overtimeAvailability.Date.ToString("yyyy-MM-dd"));
+							  overtimeAvailability.Date.ToString("yyyy-MM-dd"));
 			var layerHeight =
 				string.Format("return $(\".weekview-day[data-mytime-date='{0}'] .overtime-availability-bar\").height()",
 							  overtimeAvailability.Date.ToString("yyyy-MM-dd"));
@@ -172,7 +168,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			Browser.Interactions.AssertNotExists(string.Format(".weekview-day[data-mytime-date='{0}']", date.ToString("yyyy-MM-dd")),
 												 string.Format(".weekview-day[data-mytime-date='{0}'] .weekview-day-schedule-layer",
-			                                                   date.ToString("yyyy-MM-dd")));
+															   date.ToString("yyyy-MM-dd")));
 		}
 		
 		[When(@"My schedule between '(.*)' to '(.*)' reloads")]

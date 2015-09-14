@@ -118,6 +118,7 @@ Scenario: Do not alert agent without permission for ASM
 	And the time is '2030-01-01 10:58:00'
 	Then I should not see any notify
 
+@ignore
 Scenario: Automatical close pop up notify message
 	Given I have the role 'Full access to mytime'
 	And the time is '2030-01-01 10:57:59'

@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 		{
 			var configuration = new SessionConfiguration
 				{
-					AppHost = "about:blank",
+					AppHost = "http://whatever",
 					Port = 80,
 					SSL = false,
 					ConsiderInvisibleElements = true,
@@ -33,7 +33,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 					RetryInterval = retry,
 					Timeout = timeout,
 					Driver = _driverConfiguration,
-					Browser = _browserConfiguration
+					Browser = _browserConfiguration,
+                    Match = Match.First
 				};
 			_browser = new BrowserSession(configuration);
 			_browser.ResizeTo(1200, 1000);	// an element must be in view to selenium to interact with it

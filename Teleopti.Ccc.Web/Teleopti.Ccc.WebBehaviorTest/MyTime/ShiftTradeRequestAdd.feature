@@ -698,6 +698,7 @@ Scenario: The added days should be sorted by date
 	Then I should see 'OtherAgent' for date '2030-01-03' at top of my shift trade list
 
 @OnlyRunIfEnabled('Request_ShiftTradeRequestForMoreDays_20918')
+@ignore
 Scenario: Should cancel the current shift trade when switch to another team to trade
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
