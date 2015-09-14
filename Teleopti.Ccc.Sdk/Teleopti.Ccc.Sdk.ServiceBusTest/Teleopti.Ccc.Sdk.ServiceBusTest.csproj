@@ -133,6 +133,7 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="BootstrapperResolveTest.cs" />
     <Compile Include="ContainerTest.cs" />
     <Compile Include="AgentBadge\AgentBadgeWithRankCalculatorTest.cs" />
     <Compile Include="AgentBadge\AgentBadgeCalculatorTest.cs" />
@@ -186,6 +187,10 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="testQueue.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Teleopti.Ccc.Sdk.ServiceBusTest.dll.Config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml.Linq;
 using Autofac;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.ServiceBus;
+using Rhino.ServiceBus.Hosting;
 using Rhino.ServiceBus.MessageModules;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.Foundation;
