@@ -14,6 +14,7 @@
 
 		<script type="text/javascript" src="../../../../Content/jalaali-calendar-datepicker/moment-jalaali.js"></script>
 		<script type="text/javascript" src="../../../../Content/moment-datepicker/moment-datepicker.js"></script>
+		<script type="text/javascript" src="../../../../Content/jalaali-calendar-datepicker/moment-jalaali-ext.js"></script>
 		<script type="text/javascript" src="../../../../Content/jalaali-calendar-datepicker/moment-datepicker-jalaali-ext.js"></script>
 
 		<script type="text/javascript" src="jquery.ui.calendarselectable.js"></script>

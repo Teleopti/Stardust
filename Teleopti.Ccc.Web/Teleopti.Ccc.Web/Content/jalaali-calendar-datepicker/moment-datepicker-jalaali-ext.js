@@ -1,36 +1,4 @@
 ﻿
-// Use normal numbers for persian display
-(function () {
-	var symbolMap = {
-		'1': '1',
-		'2': '2',
-		'3': '3',
-		'4': '4',
-		'5': '5',
-		'6': '6',
-		'7': '7',
-		'8': '8',
-		'9': '9',
-		'0': '0'
-	};
-
-	moment.locale('fa', {
-		postformat: function (string) {
-			return string.replace(/\d/g, function (match) {
-				return symbolMap[match];
-			}).replace(/,/g, '،');
-		}
-	});
-
-}());
-
-// Moment-jalaali extensions
-moment.fromJalaali = function (year, month, date) {
-
-	var greg = this.jConvert.toGregorian(year, month, date);
-	return moment([greg.gy, greg.gm + 1, greg.gd]);
-}
-
 var datepicker = $.fn.datepicker.Constructor.prototype;
 datepicker.fillMonthsGregorian = datepicker.fillMonths;
 
@@ -43,7 +11,7 @@ datepicker.fillMonthsJalaali = function () {
 		i++;
 	}
 	this.picker.find('.datepicker-months td').append(html);
-}
+};
 
 datepicker.fillMonths = function () {
 	if (!Teleopti.MyTimeWeb.Common.UseJalaaliCalendar) {
