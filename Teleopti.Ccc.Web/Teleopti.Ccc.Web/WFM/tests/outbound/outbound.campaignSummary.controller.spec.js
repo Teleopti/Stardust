@@ -6,8 +6,21 @@ describe('OutboundSummaryCtrl', function () {
 		$timeout,
 		outboundService,
 		outboundChartService,
-		stateService
+		stateService,
+		outboundToggles
 	;
+
+	var mockToggleService = {
+		isFeatureEnabled: {
+			query: function () {
+				var queryDeferred = $q.defer();
+				queryDeferred.resolve({
+					IsEnabled: false
+				});
+				return { $promise: queryDeferred.promise };
+			}
+		},
+	}
 
 	beforeEach(function () {
 		module('wfm');
@@ -15,6 +28,8 @@ describe('OutboundSummaryCtrl', function () {
 		outboundService = new fakeOutboundService();
 
 		outboundChartService = new fakeOutboundChartService();
+
+		outboundToggles = new fakeOutboundToggles();
 
 		module(function ($provide) {
 			$provide.service('outboundService', function () {
@@ -27,6 +42,10 @@ describe('OutboundSummaryCtrl', function () {
 
 			$provide.service('$state', function () {
 				return stateService;
+			});
+
+			$provide.service('OutboundToggles', function () {
+				return outboundToggles;
 			});
 		});
 	});
@@ -77,6 +96,7 @@ describe('OutboundSummaryCtrl', function () {
 
 	it('add manual plan should work', function() {
 		var test = setUpTarget();
+		test.scope.$apply();
 		var campaign = {
 			Id: 1,
 			selectedDates: [new Date('2015-07-19'), new Date('2015-07-20')],
@@ -106,6 +126,7 @@ describe('OutboundSummaryCtrl', function () {
 
 	it('add backlog should work', function () {
 		var test = setUpTarget();
+		test.scope.$apply();
 		var campaign = {
 			Id: 1,
 			selectedDates: [new Date('2015-07-19'), new Date('2015-07-20')],
@@ -133,7 +154,8 @@ describe('OutboundSummaryCtrl', function () {
 	});
 
 	it('remove manual plan should work', function() {
-		var test = setUpTarget(); 
+		var test = setUpTarget();
+		test.scope.$apply();
 		var campaign = {
 			Id: 1,
 			selectedDates: [new Date('2015-07-19'), new Date('2015-07-20')],
@@ -162,6 +184,7 @@ describe('OutboundSummaryCtrl', function () {
 	
 	it('remove backlog should work', function () {
 		var test = setUpTarget();
+		test.scope.$apply();
 		var campaign = {
 			Id: 1,
 			selectedDates: [new Date('2015-07-19'), new Date('2015-07-20')],
@@ -187,14 +210,15 @@ describe('OutboundSummaryCtrl', function () {
 		expect(campaign.Status).toEqual(1);
 		expect(test.scope.phaseStatistics.PlannedWarning).toEqual(2);
 	});
-
+	
 	function setUpTarget() {
 		var scope = $rootScope.$new();
 		var target = $controller('OutboundListCardsCtrl', {
 			$scope: scope,
 			$state: stateService,
 			outboundService: outboundService,
-			outboundChartService: outboundChartService
+			outboundChartService: outboundChartService,
+			OutboundToggles: outboundToggles
 
 		});
 		return { target: target, scope: scope };
@@ -281,6 +305,12 @@ describe('OutboundSummaryCtrl', function () {
 		};
 	}
 
+	function fakeOutboundToggles() {
+		this.ready = true;
+		this.isGanttEnabled = function() {
+			return false;
+		}
+	}
 });
 
 
