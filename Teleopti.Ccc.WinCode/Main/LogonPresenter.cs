@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System.Net;
 using System.Windows.Forms;
-using Autofac;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
@@ -201,6 +200,22 @@ namespace Teleopti.Ccc.WinCode.Main
 			return false;
 		}
 
+		// ReSharper disable once UnusedMember.Local
+		private bool idLogin()
+		{
+			var authenticationResult = _authenticationQuerier.TryLogon(new IdLogonClientModel { Id = _model.PersonId }, UserAgent);
+
+			if (authenticationResult.Success)
+			{
+				_model.SelectedDataSourceContainer = new DataSourceContainer(authenticationResult.DataSource, authenticationResult.Person);
+				WinTenantCredentials.SetCredentials(authenticationResult.Person.Id.Value, authenticationResult.TenantPassword);
+				return true;
+			}
+			_model.Warning = authenticationResult.FailReason;
+			// windows does not work we need to use application
+			_model.AuthenticationType = AuthenticationTypeOption.Application;
+			return false;
+		}
 		private void initApplication()
 		{
 			_view.ClearForm(Resources.InitializingTreeDots);

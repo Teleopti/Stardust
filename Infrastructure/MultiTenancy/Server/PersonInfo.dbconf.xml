@@ -54,4 +54,11 @@ where p.Id=:id and p.TenantPassword=:tenantPassword
 	<query name="loadAll">
 		select p from PersonInfo p
 	</query>
+
+	<query name="idUserQuery">
+		<![CDATA[
+select p from PersonInfo p
+where p.Id = :id
+]]>
+	</query>
 </hibernate-mapping>

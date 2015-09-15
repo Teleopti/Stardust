@@ -11,15 +11,18 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 	{
 		private readonly IApplicationAuthentication _applicationAuthentication;
 		private readonly IIdentityAuthentication _identityAuthentication;
+		private readonly IIdAuthentication _idAuthentication;
 		private readonly ILogLogonAttempt _logLogonAttempt;
 
 
 		public AuthenticateController(IApplicationAuthentication applicationAuthentication, 
 													IIdentityAuthentication identityAuthentication,
+													IIdAuthentication idAuthentication,
 													ILogLogonAttempt logLogonAttempt)
 		{
 			_applicationAuthentication = applicationAuthentication;
 			_identityAuthentication = identityAuthentication;
+			_idAuthentication = idAuthentication;
 			_logLogonAttempt = logLogonAttempt;
 		}
 
@@ -40,6 +43,17 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 		{
 			var res = _identityAuthentication.Logon(identityLogonModel.Identity);
 			_logLogonAttempt.SaveAuthenticateResult(identityLogonModel.Identity, res.PersonId, res.Success);
+			return Json(res);
+		}
+
+		[HttpPost]
+		[TenantUnitOfWork]
+		[NoTenantAuthentication]
+		public virtual JsonResult IdLogon(IdLogonModel idLogonModel)
+		{
+			var res = _idAuthentication.Logon(idLogonModel.Id);
+			// don't think we should do this here because this is called after the actual logon
+			//_logLogonAttempt.SaveAuthenticateResult(idLogonModel.Id.ToString(), res.PersonId, res.Success);
 			return Json(res);
 		}
 	}

@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
@@ -158,6 +159,8 @@ namespace Teleopti.Ccc.Web.Core.IoC
 		{
 			builder.RegisterType<ApplicationAuthentication>().As<IApplicationAuthentication>().SingleInstance();
 			builder.RegisterType<IdentityAuthentication>().As<IIdentityAuthentication>().SingleInstance();
+			builder.RegisterType<IdAuthentication>().As<IIdAuthentication>().SingleInstance();
+			builder.RegisterType<IdUserQuery>().As<IIdUserQuery>().SingleInstance();
 			builder.RegisterType<DataSourceConfigurationEncryption>().As<IDataSourceConfigurationEncryption>().SingleInstance();
 			builder.RegisterType<PersonInfoMapper>().As<IPersonInfoMapper>().SingleInstance();
 			builder.RegisterType<ChangePersonPassword>().As<IChangePersonPassword>().SingleInstance();

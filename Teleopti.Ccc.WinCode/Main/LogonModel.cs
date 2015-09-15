@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Interfaces.Domain;
 
@@ -22,5 +23,6 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		public AuthenticationTypeOption AuthenticationType { get; set; }
 		public string Warning { get; set; }
+		public Guid PersonId { get; set; }
 	}
 }

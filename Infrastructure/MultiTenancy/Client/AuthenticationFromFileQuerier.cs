@@ -33,6 +33,11 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 			return readFile();
 		}
 
+		public AuthenticationQuerierResult TryLogon(IdLogonClientModel idLogonClientModel, string userAgent)
+		{
+			throw new NotImplementedException();
+		}
+
 		private AuthenticationQuerierResult readFile()
 		{
 			var path = _tenantServerConfiguration.FullPath(string.Empty);

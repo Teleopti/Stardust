@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			system.UseTestDouble<DeletePersonInfoFake>().For<IDeletePersonInfo>();
 			system.UseTestDouble<ApplicationUserQueryFake>().For<IApplicationUserQuery>();
 			system.UseTestDouble<IdentityUserQueryFake>().For<IIdentityUserQuery>();
+			system.UseTestDouble<IdUserQueryFake>().For<IIdUserQuery>();
 			system.UseTestDouble<TenantUnitOfWorkFake>().For<ITenantUnitOfWork>();
 			system.UseTestDouble<PasswordPolicyFake>().For<IPasswordPolicy>();
 			system.UseTestDouble<FindLogonInfoFake>().For<IFindLogonInfo>();

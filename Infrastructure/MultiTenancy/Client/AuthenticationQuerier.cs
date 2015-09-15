@@ -31,6 +31,11 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 			return doAuthenticationCall(_tenantServerConfiguration.FullPath("Authenticate/IdentityLogon"), identityLogonClientModel, userAgent);
 		}
 
+		public AuthenticationQuerierResult TryLogon(IdLogonClientModel idLogonClientModel, string userAgent)
+		{
+			return doAuthenticationCall(_tenantServerConfiguration.FullPath("Authenticate/IdLogon"), idLogonClientModel, userAgent);
+		}
+
 		private AuthenticationQuerierResult doAuthenticationCall(string path, object clientModel, string userAgent)
 		{
 			var json = _jsonSerializer.SerializeObject(clientModel);
