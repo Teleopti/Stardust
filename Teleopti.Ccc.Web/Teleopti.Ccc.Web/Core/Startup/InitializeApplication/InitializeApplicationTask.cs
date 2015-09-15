@@ -3,10 +3,12 @@ using System.Threading.Tasks;
 using Owin;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Config;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
 using Teleopti.Interfaces.Domain;
 
@@ -21,13 +23,15 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 		private readonly ITenantUnitOfWork _tenantUnitOfWork;
 		private readonly ILoadAllTenants _loadAllTenants;
 		private readonly IDataSourceForTenant _dataSourceForTenant;
+		private readonly IToggleManager _toggleMananager;
 
 		public InitializeApplicationTask(IInitializeApplication initializeApplication, 
 												ISettings settings, 
 												IPhysicalApplicationPath physicalApplicationPath, 
 												ITenantUnitOfWork tenantUnitOfWork,
 												ILoadAllTenants loadAllTenants,
-												IDataSourceForTenant dataSourceForTenant)
+												IDataSourceForTenant dataSourceForTenant,
+												IToggleManager toggleMananager)
 		{
 			_initializeApplication = initializeApplication;
 			_settings = settings;
@@ -35,6 +39,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 			_tenantUnitOfWork = tenantUnitOfWork;
 			_loadAllTenants = loadAllTenants;
 			_dataSourceForTenant = dataSourceForTenant;
+			_toggleMananager = toggleMananager;
 		}
 
 		public Task Execute(IAppBuilder application)
@@ -43,14 +48,18 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 			using (_tenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				_initializeApplication.Start(new WebState(), new LoadPasswordPolicyService(passwordPolicyPath), ConfigurationManager.AppSettings.ToDictionary(), false);
-				//remove when tenants are handled correctly in RTA
-				_loadAllTenants.Tenants().ForEach(dsConf =>
+
+				//remove this and ctor dependencies when tenants are handled correctly in RTA
+				if (!_toggleMananager.IsEnabled(Toggles.RTA_MultiTenancy_32539))
 				{
-					_dataSourceForTenant.MakeSureDataSourceExists(dsConf.Name,
-						dsConf.DataSourceConfiguration.ApplicationConnectionString,
-						dsConf.DataSourceConfiguration.AnalyticsConnectionString,
-						dsConf.DataSourceConfiguration.ApplicationNHibernateConfig);
-				});
+					_loadAllTenants.Tenants().ForEach(dsConf =>
+					{
+						_dataSourceForTenant.MakeSureDataSourceExists(dsConf.Name,
+							dsConf.DataSourceConfiguration.ApplicationConnectionString,
+							dsConf.DataSourceConfiguration.AnalyticsConnectionString,
+							dsConf.DataSourceConfiguration.ApplicationNHibernateConfig);
+					});
+				}
 				/////////////////////////////////////////////////
 			}
 			return null;
