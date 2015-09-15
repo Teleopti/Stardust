@@ -8,7 +8,8 @@
 			'wfm.daterangepicker',
 			'toggleService',
 			'gantt',
-			'gantt.table'			
+			'gantt.table',
+			'gantt.tooltips'
 		]
 	);
 	angular.module('outboundServiceModule', ['ngResource', 'pascalprecht.translate']);

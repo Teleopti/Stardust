@@ -32,6 +32,11 @@
 				+ '</div>';
 			}
 		};
+
+		$scope.tooltipContent = '<div><div><strong>{{task.model.campaignName}}</strong></div>' +
+			'<small>' +
+			'{{task.isMilestone() === true && getFromLabel() || getFromLabel() + \' - \' + getToLabel()}}' +
+			'</small></div>';
 		
 		function setGanttOptions(startDate,endDate) {
 			var periodStart = moment().subtract( 1, "months").date(1).format();
@@ -64,6 +69,11 @@
 					ganttArr[ind].tasks[0].to = ele.EndDate.Date;
 					ganttArr[ind].tasks[0].id = ele.Id;
 					ganttArr[ind].tasks[0].color = '#09F';
+					ganttArr[ind].tasks[0].tooltips = {
+					'enabled': true,
+					'dateFormat': 'YYYY-MM-DD'					
+					}
+					ganttArr[ind].tasks[0].campaignName = ele.Name;
 				});
 				$scope.ganttData = ganttArr;
 			});

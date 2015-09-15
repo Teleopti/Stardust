@@ -3,6 +3,32 @@
 .outbound {
 	.outbound-gantt-chart {
 		margin: 70px 0;
+	
+
+		.gantt-side-background, .gantt-body-background, .gantt-row {
+			pointer-events: none;
+			.gantt-task-content {
+				pointer-events: auto;
+			}
+		}
+
+		.gantt-body-columns {
+			pointer-events: auto;
+		}
+		
+		.gantt-column {
+		
+			.custom-tooltip {
+				position: relative;
+				display: none;
+			}
+		}
+		.gantt-column:hover {
+			.custom-tooltip {
+				display: block !important;
+			}
+		}
+
 	}
 	gantt-column-header-content {
 		width: 100%;

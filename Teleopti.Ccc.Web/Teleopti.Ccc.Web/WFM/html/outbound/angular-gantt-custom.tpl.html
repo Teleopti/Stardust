@@ -28,8 +28,9 @@
 				<div class="gantt-current-date-line" ng-show="currentDate === 'line' && gantt.currentDateManager.position >= 0 && gantt.currentDateManager.position <= gantt.width" ng-style="{'left': gantt.currentDateManager.position + 'px' }"></div>
 			</gantt-body-foreground>
 			<gantt-body-columns>
-				<gantt-column ng-repeat="column in gantt.columnsManager.visibleColumns">
+				<gantt-column ng-repeat="column in gantt.columnsManager.visibleColumns" data-toggle="tooltip" title="{{column.date.format('MM-DD')}}" data-delay='0'>
 					<gantt-time-frame ng-repeat="timeFrame in column.visibleTimeFrames"></gantt-time-frame>
+
 				</gantt-column>
 			</gantt-body-columns>
 			<div ng-if="gantt.columnsManager.visibleColumns == 0" style="background-color: #808080"></div>
