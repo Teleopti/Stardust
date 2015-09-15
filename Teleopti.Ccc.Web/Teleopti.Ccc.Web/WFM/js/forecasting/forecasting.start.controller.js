@@ -24,25 +24,33 @@ angular.module('wfm.forecasting')
 				$scope.workloads = $filter('orderBy')(workloads, 'Name');
 			});
 
-			$scope.modalInfo = {
+			$scope.modalForecastingInfo = {
 				forecastForAll: false,
 				forecastForOneWorkload: false
 			};
-			$scope.modalLaunch = false;
-			$scope.displayModal = function (workload) {
+			$scope.modalForecastingLaunch = false;
+			$scope.displayForecastingModal = function (workload) {
 				if (workload) {
-					$scope.modalInfo.forecastForAll = false;
-					$scope.modalInfo.forecastForOneWorkload = true;
-					$scope.modalInfo.selectedWorkload = workload;
+					$scope.modalForecastingInfo.forecastForAll = false;
+					$scope.modalForecastingInfo.forecastForOneWorkload = true;
+					$scope.modalForecastingInfo.selectedWorkload = workload;
 				} else {
-					$scope.modalInfo.forecastForAll = true;
-					$scope.modalInfo.forecastForOneWorkload = false;
+					$scope.modalForecastingInfo.forecastForAll = true;
+					$scope.modalForecastingInfo.forecastForOneWorkload = false;
 				}
-				$scope.modalLaunch = true;
+				$scope.modalForecastingLaunch = true;
 			};
-			$scope.cancelModal = function () {
-				$scope.modalLaunch = false;
+			$scope.cancelForecastingModal = function () {
+				$scope.modalForecastingLaunch = false;
 			};
+
+			//$scope.modalCampaignInfo = {
+			//	addCampaign: false
+			//};
+			//$scope.modalCampaignLaunch = false;
+			//$scope.displayCampaignModal = function(workload) {
+
+			//};
 
 			$scope.getForecastResult = function (workload) {
 				workload.forecastResultLoaded = false;

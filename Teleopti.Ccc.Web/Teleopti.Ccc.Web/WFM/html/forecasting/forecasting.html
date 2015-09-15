@@ -4,7 +4,7 @@
 		<div class="col-lg-12">
 			<h4>Overview</h4>
 			<div class="forecast-create-fad">
-				<button class="wfm-fab info forecast-create-button" ng-click="displayModal()">
+				<button class="wfm-fab info forecast-create-button" ng-click="displayForecastingModal()">
 					<i class="mdi mdi-pencil"></i>
 					<md-tooltip>
 						Forecast all
@@ -49,6 +49,11 @@
 						</a>
 						</aside>
 					</div>
+					<div class="pull-right">
+						<aside>
+							<a class="wfm-btn wfm-btn-invis-default" ng-click="nextStepAdvanced(workload)">{{ 'Add campaign' | translate }}</a>
+						</aside>
+					</div>
 				</card-body>
 			</wfm-card>
 		</wfm-card-list>
@@ -57,17 +62,17 @@
 </div>
 
 <div ng-cloak class="modal-box">
-	<div ng-cloak ng-if="modalLaunch">
+	<div ng-cloak ng-if="modalForecastingLaunch">
 		<div class="modalbg">
 			<div class="dialog">
 				<div class="modal-header" translate>
 					SelectForecastPeriodIntro
 				</div>
 				<div class="modal-inner-content">
-					<div class="wfm-block" ng-if="modalInfo.forecastForAll">
+					<div class="wfm-block" ng-if="modalForecastingInfo.forecastForAll">
 						<h4>Forecast all</h4>
 					</div>
-					<div class="wfm-block" ng-if="modalInfo.forecastForOneWorkload">
+					<div class="wfm-block" ng-if="modalForecastingInfo.forecastForOneWorkload">
 						<h4>Forecast workload: {{modalInfo.selectedWorkload.Name}}</h4>
 					</div>
 					<div class="wfm-block forecast-period">
@@ -88,7 +93,7 @@
 				</div>
 				<div class="modal-footer">
 					<aside>
-						<a class="wfm-btn wfm-btn-invis-default" ng-click="cancelModal()">{{ 'Close' | translate }}</a>
+						<a class="wfm-btn wfm-btn-invis-default" ng-click="cancelForecastingModal()">{{ 'Close' | translate }}</a>
 						<a class="wfm-btn wfm-btn-invis-primary do-forecast" ng-disabled="disableDoForecast()" ng-class="{'wfm-btn-invis-disabled': disableDoForecast()}" ng-click="doForecast(period)">{{ 'Forecast' | translate }}</a>
 					</aside>
 				</div>
