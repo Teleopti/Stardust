@@ -181,22 +181,37 @@ ELSE  --Single datasource_id
 		RETURN 0
 	END
 
---If Agg is way ahead of Mart limit fetch to 5 days.
-	
-	IF (@source_date_id_utc-@target_date_id_utc > 5)
+	IF @source_date_id_utc>@target_date_id_utc
 	BEGIN
-		SELECT 'Agg is way ahead of Mart limit fetch to 5 days'
-		SET @source_date_local = DATEADD(DAY,5,@target_date_local)
-		SET @source_interval_local = (select max(interval_id) from mart.dim_interval)
+		--If Agg is way ahead of Mart limit fetch to 5 days.
+		IF (@source_date_id_utc-@target_date_id_utc > 5)
+		BEGIN
+			SELECT 'Agg is way ahead of Mart limit fetch to 5 days'
+			SET @source_date_local = DATEADD(DAY,5,@target_date_local)
+			SET @source_interval_local = (select max(interval_id) from mart.dim_interval)
 
-		SELECT	@source_date_id_utc		= b.date_id,
-				@source_interval_id_utc	= b.interval_id
-		FROM  mart.dim_date d
-		INNER JOIN mart.bridge_time_zone b
-		ON d.date_id = b.local_date_id
-		AND  b.local_interval_id = @source_interval_local
-		AND b.time_zone_id = @time_zone_id
-		AND d.date_date = @source_date_local
+			SELECT	@source_date_id_utc		= b.date_id,
+					@source_interval_id_utc	= b.interval_id
+			FROM  mart.dim_date d
+			INNER JOIN mart.bridge_time_zone b
+			ON d.date_id = b.local_date_id
+			AND  b.local_interval_id = @source_interval_local
+			AND b.time_zone_id = @time_zone_id
+			AND d.date_date = @source_date_local
+		END
+		ELSE
+		BEGIN
+			--reset @source_interval_id_utc only for delete
+			--make sure complete day is deleted BUT keep max source interval if detail_setting date<> max date in agg table to avoid duplicate key error
+			SELECT	@source_date_id_utc		= b.date_id,
+					@source_interval_id_utc	= b.interval_id
+			FROM  mart.dim_date d
+			INNER JOIN mart.bridge_time_zone b
+			ON d.date_id = b.local_date_id
+			AND  b.local_interval_id = (select max(interval_id) from mart.dim_interval)
+			AND b.time_zone_id = @time_zone_id
+			AND d.date_date = @source_date_local
+		END
 	END
 
 	SET @start_date_id	=	(SELECT date_id FROM dim_date WHERE @target_date_local = date_date)
