@@ -1205,6 +1205,7 @@
     <Content Include="WFM\js\rta\_modules.js" />
     <Content Include="WFM\js\outbound\outbound.controller.campaign-list-gantt.js" />
     <Content Include="WFM\js\outbound\outbound.service.toggles.js" />
+    <Content Include="WFM\tests\seatmanagement\seatmapoccupancy.spec.js" />
     <Content Include="WFM\vendor\ui-bootstrap-custom-build\timepicker.directive.ext.js" />
     <EmbeddedResource Include="tzdb2015e.nzd" />
     <Content Include=".node\Gruntfile.js" />
