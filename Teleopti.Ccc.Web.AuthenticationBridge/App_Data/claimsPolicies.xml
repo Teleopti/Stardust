@@ -15,6 +15,7 @@
 	  <issuer uri="urn:Windows" thumbprint="" displayName="Windows"/>
 	  <issuer uri="urn:Teleopti" thumbprint="" displayName="Teleopti"/>
 	  <issuer uri="urn:AzureAd" thumbprint="" displayName="AzureAd"/>
+	  <issuer uri="urn:ADFS3" thumbprint="" displayName="ADFS3"/>
 		<!-- custom section starts here -->
 		<!--<issuer uri="urn:SalesForce" thumbprint="" displayName="SalesForce"/>-->
 		<!-- custom section ends here -->
@@ -36,6 +37,13 @@
 		<rule assertionsMatch="any">
 			<input>
 				<claim type="nameidentifier" issuer="AzureAd" value="*"/>
+			</input>
+			<output type="nameidentifier" copyFrom="INPUT_VALUE"/>
+		</rule>
+
+		<rule assertionsMatch="any">
+			<input>
+				<claim type="nameidentifier" issuer="ADFS3" value="*"/>
 			</input>
 			<output type="nameidentifier" copyFrom="INPUT_VALUE"/>
 		</rule>
