@@ -38,10 +38,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void ShouldPersistAccounts()
 		{
-			IEnumerable<PersistConflict> foo;
 			var accounts = new List<IPersonAbsenceAccount>();
-			target.TryPersist(null, accounts, null, null, null, out foo);
-
+			target.PersistPersonAccounts(accounts);
 			personAccountPersister.AssertWasCalled(x => x.Persist(accounts));
 		}
 
@@ -50,7 +48,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		{
 			IEnumerable<PersistConflict> foo;
 			var requests = new List<IPersonRequest>();
-			target.TryPersist(null, null, requests, null, null, out foo);
+			target.TryPersist(null, requests, null, null, out foo);
 
 			requestPersister.AssertWasCalled(x => x.Persist(requests));
 		}
@@ -60,7 +58,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		{
 			IEnumerable<PersistConflict> foo;
 			var writeProtections = new List<IPersonWriteProtectionInfo>();
-			target.TryPersist(null, null, null, writeProtections, null, out foo);
+			target.TryPersist(null, null, writeProtections, null, out foo);
 
 			writeProtectionPersister.AssertWasCalled(x => x.Persist(writeProtections));
 		}
@@ -70,7 +68,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		{
 			IEnumerable<PersistConflict> foo;
 			var workflowControlSets = new List<IWorkflowControlSet>();
-			target.TryPersist(null, null, null, null, workflowControlSets, out foo);
+			target.TryPersist(null, null, null, workflowControlSets, out foo);
 
 			_workflowControlSetPublishDatePersister.AssertWasCalled(x => x.Persist(workflowControlSets));	
 		}
@@ -80,7 +78,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		{
 			IEnumerable<PersistConflict> conflicts;
 			var dic = MockRepository.GenerateMock<IScheduleDictionary>();
-			target.TryPersist(dic, null, null, null, null, out conflicts);
+			target.TryPersist(dic, null, null, null, out conflicts);
 
 			scheduleDictionaryPersister.AssertWasCalled(x => x.Persist(dic));
 		}
@@ -91,7 +89,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			IEnumerable<PersistConflict> conflicts;
 			var dic = MockRepository.GenerateMock<IScheduleDictionary>();
 			scheduleDictionaryPersister.Expect(x => x.Persist(dic)).Return(new List<PersistConflict>());
-			var res = target.TryPersist(dic, null, null, null, null, out conflicts);
+			var res = target.TryPersist(dic, null, null, null, out conflicts);
 
 			res.Should().Be.True();
 			conflicts.Should().Be.Empty();
@@ -109,7 +107,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 					new PersistConflict(new DifferenceCollectionItem<IPersistableScheduleData>(), MockRepository.GenerateMock<IPersonAssignment>())
 				};
 			scheduleDictionaryPersister.Expect(x => x.Persist(dic)).Return(conflicts);
-			var res = target.TryPersist(dic, null, null, null, null, out returningConflicts);
+			var res = target.TryPersist(dic, null, null, null, out returningConflicts);
 
 			res.Should().Be.False();
 			conflicts.Should().Have.SameValuesAs(conflicts);

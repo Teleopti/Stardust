@@ -3732,7 +3732,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			try
 			{
 				bool success = _container.Resolve<ISchedulingScreenPersister>().TryPersist(_schedulerState.Schedules,
-					_schedulerState.Schedules.ModifiedPersonAccounts,
 					_schedulerState.PersonRequests,
 					_modifiedWriteProtections,
 					_schedulerState.CommonStateHolder.ModifiedWorkflowControlSets,
@@ -3743,6 +3742,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 					handleConflicts(new List<IPersistableScheduleData>(), foundConflicts);
 					doSaveProcess();
 				}
+
+				using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+				{
+					var accountConflictCollector = new PersonAccountConflictCollector(UnitOfWorkFactory.CurrentUnitOfWorkFactory());
+					var accountConflicts = accountConflictCollector.GetConflicts(_schedulerState.Schedules.ModifiedPersonAccounts);
+					if (accountConflicts != null && accountConflicts.Any()) refreshData();	
+				}
+
+				var personAccountPersister = _container.Resolve<IPersonAccountPersister>();
+				personAccountPersister.Persist(_schedulerState.Schedules.ModifiedPersonAccounts);
 
 				//Denna sätts i längre inne i save-loopen. fixa på annat sätt!
 				if (_personAbsenceAccountPersistValidationBusinessRuleResponses.Any())

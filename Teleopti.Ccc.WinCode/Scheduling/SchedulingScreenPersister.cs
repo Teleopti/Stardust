@@ -31,19 +31,23 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		}
 
 		public bool TryPersist(IScheduleDictionary scheduleDictionary,
-														ICollection<IPersonAbsenceAccount> personAbsenceAccounts,
 														IEnumerable<IPersonRequest> personRequests,
 														ICollection<IPersonWriteProtectionInfo> writeProtectionInfos,
 														ICollection<IWorkflowControlSet> workflowControlSets,
 														out IEnumerable<PersistConflict> foundConflicts)
 		{
 			foundConflicts = _scheduleDictionaryPersister.Persist(scheduleDictionary);
-			_personAccountPersister.Persist(personAbsenceAccounts);
 			_requestPersister.Persist(personRequests);
 			_writeProtectionPersister.Persist(writeProtectionInfos);
 			_workflowControlSetPublishDatePersister.Persist(workflowControlSets);
 			
 			return foundConflicts==null || !foundConflicts.Any();
+		}
+
+
+		public void PersistPersonAccounts(ICollection<IPersonAbsenceAccount> personAbsenceAccounts)
+		{
+			_personAccountPersister.Persist(personAbsenceAccounts);
 		}
 	}
 }
