@@ -37,6 +37,16 @@
 			}
 		};
 
+
+
+		$scope.timespans = [
+			{
+				name: "today", // Name shown on top of each timespan.
+				from: moment().format('YYYY-MM-DD'), // Date can be a String, Timestamp, Date object or moment object.
+				to: moment().add(1, 'day').format('YYYY-MM-DD') // Date can be a String, Timestamp, Date object or moment object.
+			}
+		];
+
 		$scope.tooltipContent = '<div><div><strong>{{task.model.campaignName}}</strong></div>' +
 			'<small>' +
 			'{{task.isMilestone() === true && getFromLabel() || getFromLabel() + \' - \' + getToLabel()}}' +

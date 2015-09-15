@@ -1,11 +1,13 @@
 ﻿<div ng-if="isGanttEnabled">
-	<div class="loading-gantt-section" ng-show="!isLoadFinished"><md-progress-circular md-mode="indeterminate"></md-progress-circular></div>
+	<div class="loading-gantt-section" ng-show="!isLoadFinished"><md-progress-circular md-mode="indeterminate"></md-progress-circular>
+	</div>
 	<div class="spacer material-depth-1 outbound-gantt-chart"
-		  gantt
-		  data="ganttData"
-		  options="ganttOptions"
-		  headers-formats="headerFormats"
-		  template-url="html/outbound/angular-gantt-custom.tpl.html">
+		 gantt
+		 data="ganttData"
+		 options="ganttOptions"
+		 timespans="timespans"
+		 headers-formats="headerFormats"
+		 template-url="html/outbound/angular-gantt-custom.tpl.html">
 
 		<gantt-tooltips content="tooltipContent"></gantt-tooltips>
 		<gantt-table></gantt-table>
